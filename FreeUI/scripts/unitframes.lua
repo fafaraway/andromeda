@@ -1517,7 +1517,7 @@ oUF:Factory(function(self)
 		party_height = partyHeight
 	end
 
-	local party = self:SpawnHeader(nil, nil, 'party', 
+	local party = self:SpawnHeader(nil, nil, "custom [@raid6,exists] hide; show", 
 		'showParty', true, 
 		'showPlayer', true and FreeUIConfig.layout == 2 or false, 
 		'showSolo', false, 
@@ -1538,7 +1538,7 @@ oUF:Factory(function(self)
 		party:SetPoint(unpack(C.unitframes.party))
 	end
 
-	local raid = self:SpawnHeader(nil, nil, 'raid',
+	local raid = self:SpawnHeader(nil, nil, "custom [@raid6,exists] show; hide",
 		'showPlayer', true,
 		'showParty', false,
 		'showRaid', true,
