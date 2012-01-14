@@ -1,0 +1,65 @@
+## Interface: 40300
+## Title: FreeUI
+## Notes: Minimalistic user interface.
+## Author: Haleth/Freethinker
+## Version: 4.1.8
+## RequiredDeps: Blizzard_CombatText
+## OptionalDeps: Blizzard_TimeManager, Clique
+## SavedVariables: FreeUIGlobalConfig
+## SavedVariablesPerCharacter: FreeUIConfig
+
+core\core.lua
+core\colours.lua
+core\slash.lua
+
+options.lua
+
+oUF\oUF.xml
+
+scripts\actionbars.lua
+scripts\automation.lua
+scripts\bags.lua
+scripts\bubbles.lua
+scripts\buffreminder.lua
+scripts\buffs.lua
+scripts\buttons.lua
+scripts\chat.lua
+scripts\chattabs.lua
+scripts\combattext.lua
+scripts\combo.lua
+scripts\cooldowns.lua
+scripts\corners.lua
+scripts\disable.lua
+scripts\durability.lua
+scripts\errors.lua
+scripts\events.lua
+scripts\expbar.lua
+scripts\fonts.lua
+scripts\globals.lua
+scripts\interrupt.lua
+scripts\itemglow.lua
+scripts\loot.lua
+scripts\lootroll.lua
+scripts\mail.lua
+scripts\map.lua
+scripts\marking.lua
+scripts\minimap.lua
+scripts\mirrorbars.lua
+scripts\nameplates.lua
+scripts\panel.lua
+scripts\rangecolor.lua
+scripts\sfilter.lua
+scripts\stats.lua
+scripts\tekkrush.lua
+scripts\theme.lua
+scripts\threatmeter.lua
+scripts\tolbarad.lua
+scripts\tooltip.lua
+scripts\unitframes.lua
+scripts\variables.lua
+scripts\watchframe.lua
+scripts\worldmarker.lua
+scripts\worldstateframe.lua
+
+class\rogue.lua
+class\shaman.lua
