@@ -1,10 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
 local f = CreateFrame("Frame")
-f:SetScript("OnEvent", function(self, event, arg1) self[event](self, event, arg1) end)
-
 f:RegisterEvent("MERCHANT_SHOW")
-function f:MERCHANT_SHOW()
+f:SetScript("OnEvent", function()
 	if(CanMerchantRepair() and C.general.autorepair == true) then
 		local cost = GetRepairAllCost()
 		if(cost>0 and CanGuildBankRepair() and C.general.autorepair_guild == true) then
@@ -32,12 +30,12 @@ function f:MERCHANT_SHOW()
 			end
 		end
 	end
-end
-
-if UnitFactionGroup("player") == "Horde" then playerFaction = 0 else playerFaction = 1 end
-local playerRealm = GetRealmName()
+end)
 
 if C.general.auto_accept == true then
+	if UnitFactionGroup("player") == "Horde" then playerFaction = 0 else playerFaction = 1 end
+	local playerRealm = GetRealmName()
+
 	local IsFriend = function(name)
 		for i = 1, GetNumFriends() do if(GetFriendInfo(i)==name) then return true end end
 		if IsInGuild() then for i = 1, GetNumGuildMembers() do if(GetGuildRosterInfo(i)==name) then return true end end end
@@ -49,9 +47,10 @@ if C.general.auto_accept == true then
 			end
 		end
 	end
-	
-	f:RegisterEvent("PARTY_INVITE_REQUEST")
-	function f:PARTY_INVITE_REQUEST(event, name)
+
+	local g = CreateFrame("Frame")
+	g:RegisterEvent("PARTY_INVITE_REQUEST")
+	g:SetScript("OnEvent", function(event, name)
 		if MiniMapLFGFrame:IsShown() then return end
 		if IsFriend(name) then
 			AcceptGroup()
@@ -63,18 +62,17 @@ if C.general.auto_accept == true then
 				end
 			end
 		end
-	end
+	end)
 end
 
 if C.general.auto_loot_switch == true then
-	f:RegisterEvent("LFG_UPDATE")
-	function f:LFG_UPDATE()
-    		local mode, submode = GetLFGMode()
-		if (mode == "lfgparty" or ((mode == "queued" or mode == "rolecheck") and submode == "empowered") or mode == "proposal")
-		and select(2, GetInstanceInfo()) == "raid" then
+	local h = CreateFrame("Frame")
+	h:RegisterEvent("PLAYER_ENTERING_WORLD")
+	h:SetScript("OnEvent", function()
+		if select(2, GetInstanceInfo()) == "raid" then
 			SetCVar("showLootSpam", 0)
 		else
 			SetCVar("showLootSpam", 1)
 		end
-	end
+	end)
 end
