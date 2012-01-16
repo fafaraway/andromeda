@@ -5,7 +5,19 @@ local oUF = ns.oUF
 
 local class = select(2, UnitClass("player"))
 
-local colors = setmetatable({}, {__index = oUF.colors})
+local colors = setmetatable({
+	power = setmetatable({
+		["MANA"] = {.9, .9, .9},
+		["RAGE"] = {.9, .1, .1},
+		["FUEL"] = {0, 0.55, 0.5},
+		["FOCUS"] = {.9, .5, .1},
+		["ENERGY"] = {.9, .9, .1},
+		["AMMOSLOT"] = {0.8, 0.6, 0},
+		["RUNIC_POWER"] = {.1, .9, .9},
+		["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
+		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
+	}, {__index = oUF.colors.power}),
+}, {__index = oUF.colors})
 
 local powerHeight = C.unitframes.power_height
 local altPowerHeight = C.unitframes.altpower_height
@@ -177,32 +189,31 @@ local UpdateHealth = function(self, event, unit)
 			r, g, b = unpack(C.reactioncolours[UnitReaction(unit, "player") or 5])
 		end
 
-		self.Power:SetStatusBarColor(r, g, b)
-		self.Power.bg:SetVertexColor(r/3, g/3, b/3)
-
-		if UnitIsDead(unit) or UnitIsGhost(unit) then
-			self.Healthdef:SetPoint("LEFT", self.Health)
-		else
-			self.Healthdef:SetPoint("LEFT", self.Health, self:GetWidth() * (min/max), 0)
-		end
-
-		if((UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) or not UnitIsConnected(unit)) then
-			self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
-		else
-			self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
-		end
-
-		if not UnitIsConnected(unit) then
-			self.Healthdef:Hide()
-		else
-			self.Healthdef:Show()
-		end
-
 		if FreeUIConfig.layout == 2 then
+			self.Power:SetStatusBarColor(r, g, b)
+			self.Power.bg:SetVertexColor(r/3, g/3, b/3)
+
 			if UnitIsDead(unit) or UnitIsGhost(unit) then
-				self.Healthdef:Hide()
+				self.Healthdef:SetPoint("LEFT", self.Health)
+			else
+				self.Healthdef:SetPoint("LEFT", self.Health, self:GetWidth() * (min/max), 0)
 			end
+
+			if((UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) or not UnitIsConnected(unit)) then
+				self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+			else
+				self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+			end
+
+			if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
+				self.Healthdef:Hide()
+			else
+				self.Healthdef:Show()
+			end
+
 			self.Healthdef:SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
+		else
+			self.Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
 		end
 	end
 end
@@ -314,17 +325,22 @@ local Shared = function(self, unit, isSingle)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameLevel(self:GetFrameLevel()-1)
-	F.CreateBD(bd, 0)
 
 	self.bd = bd
 
-	local gradient = self:CreateTexture(nil, "BACKGROUND")
-	gradient:SetPoint("TOPLEFT")
-	gradient:SetPoint("BOTTOMRIGHT")
-	gradient:SetTexture(C.media.backdrop)
-	gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+	if FreeUIConfig.layout == 2 then
+		local gradient = self:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(C.media.backdrop)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
 
-	self.gradient = gradient
+		self.gradient = gradient
+
+		F.CreateBD(bd, 0)
+	else
+		F.CreateBD(bd)
+	end
 
 	--[[ Health ]]
 
@@ -343,15 +359,16 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Health deficit colour ]]
 
-	local Healthdef = self:CreateTexture(nil, "BORDER")
-	Healthdef:SetPoint("TOPRIGHT", Health)
-	Healthdef:SetPoint("BOTTOMRIGHT", Health)
-	Healthdef:SetPoint("LEFT", Health)
-	Healthdef:SetTexture(C.media.texture)
+	if FreeUIConfig.layout == 2 then 
+		local Healthdef = self:CreateTexture(nil, "BORDER")
+		Healthdef:SetPoint("TOPRIGHT", Health)
+		Healthdef:SetPoint("BOTTOMRIGHT", Health)
+		Healthdef:SetPoint("LEFT", Health)
+		Healthdef:SetTexture(C.media.texture)
+		Healthdef:SetVertexColor(1, 1, 1)
 
-	if FreeUIConfig.layout == 2 then Healthdef:SetVertexColor(1, 1, 1) else Healthdef:SetVertexColor(0, 0, 0, .6) end
-
-	self.Healthdef = Healthdef
+		self.Healthdef = Healthdef
+	end
 
 	--[[ Power ]]
 
@@ -368,6 +385,8 @@ local Shared = function(self, unit, isSingle)
 
 	self.Power = Power
 
+	if FreeUIConfig.layout == 1 then Power.colorPower = true end
+
 	local Powertex = Power:CreateTexture(nil, "OVERLAY")
 	Powertex:SetHeight(1)
 	Powertex:SetPoint("TOPLEFT", 0, 1)
@@ -380,6 +399,7 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetPoint("LEFT")
 	Power.bg:SetPoint("RIGHT")
 	Power.bg:SetTexture(C.media.backdrop)
+	Power.bg:SetVertexColor(0, 0, 0, .25)
 
 	--[[ Alt Power ]]
 
