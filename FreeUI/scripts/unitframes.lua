@@ -328,20 +328,6 @@ local Shared = function(self, unit, isSingle)
 
 	self.bd = bd
 
-	if FreeUIConfig.layout == 2 then
-		local gradient = self:CreateTexture(nil, "BACKGROUND")
-		gradient:SetPoint("TOPLEFT")
-		gradient:SetPoint("BOTTOMRIGHT")
-		gradient:SetTexture(C.media.backdrop)
-		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
-
-		self.gradient = gradient
-
-		F.CreateBD(bd, 0)
-	else
-		F.CreateBD(bd)
-	end
-
 	--[[ Health ]]
 
 	local Health = CreateFrame("StatusBar", nil, self)
@@ -358,10 +344,26 @@ local Shared = function(self, unit, isSingle)
 
 	self.Health = Health
 
+	--[[ Gradient ]]
+
+	if FreeUIConfig.layout == 2 then
+		local gradient = Health:CreateTexture(nil, "BACKGROUND")
+		gradient:SetPoint("TOPLEFT")
+		gradient:SetPoint("BOTTOMRIGHT")
+		gradient:SetTexture(C.media.backdrop)
+		gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+
+		self.gradient = gradient
+
+		F.CreateBD(bd, 0)
+	else
+		F.CreateBD(bd)
+	end
+
 	--[[ Health deficit colour ]]
 
 	if FreeUIConfig.layout == 2 then 
-		local Healthdef = self:CreateTexture(nil, "BORDER")
+		local Healthdef = Health:CreateTexture(nil, "BORDER")
 		Healthdef:SetPoint("TOPRIGHT", Health)
 		Healthdef:SetPoint("BOTTOMRIGHT", Health)
 		Healthdef:SetPoint("LEFT", Health)
