@@ -324,7 +324,7 @@ local Shared = function(self, unit, isSingle)
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
-	bd:SetFrameLevel(self:GetFrameLevel()-1)
+	bd:SetFrameStrata("BACKGROUND")
 
 	self.bd = bd
 
@@ -345,6 +345,7 @@ local Shared = function(self, unit, isSingle)
 	--[[ Health ]]
 
 	local Health = CreateFrame("StatusBar", nil, self)
+	Health:SetFrameStrata("LOW")
 	Health:SetStatusBarTexture(C.media.texture)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
