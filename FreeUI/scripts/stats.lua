@@ -2,13 +2,13 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
-local home, world, memory
+local _, home, world, memory
 local addons = {}
 local n, total = 0, 0
 
 local f = CreateFrame("Button", nil, UIParent)
 f:SetPoint("BOTTOM", UIParent, "BOTTOM")
-f:SetSize(80, 10)
+f:SetSize(200, 10)
 
 local text = F.CreateFS(f, 8)
 text:SetPoint("CENTER")
@@ -23,7 +23,6 @@ f:SetScript("OnUpdate", function(self, elapsed)
 		_, _, home, world = GetNetStats()
 
 		text:SetText("|cffffffff"..ceil(GetFramerate()).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..date("%H:%M"))
-		self:SetWidth(text:GetStringWidth())
 
 		last = 0
 	end
