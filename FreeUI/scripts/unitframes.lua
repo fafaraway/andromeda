@@ -193,7 +193,7 @@ local UpdateHealth = function(self, event, unit)
 
 		if FreeUIConfig.layout == 2 then
 			self.Power:SetStatusBarColor(r, g, b)
-			self.Power.bg:SetVertexColor(r/3, g/3, b/3)
+			self.Power.bg:SetVertexColor(r/2, g/2, b/2)
 
 			if UnitIsDead(unit) or UnitIsGhost(unit) then
 				self.Healthdef:SetPoint("LEFT", self.Health)
@@ -404,7 +404,7 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetPoint("LEFT")
 	Power.bg:SetPoint("RIGHT")
 	Power.bg:SetTexture(C.media.backdrop)
-	Power.bg:SetVertexColor(0, 0, 0, .25)
+	Power.bg:SetVertexColor(0, 0, 0, .5)
 
 	--[[ Alt Power ]]
 
