@@ -177,7 +177,9 @@ local UpdateHealth = function(self, event, unit)
 	if(self.unit == unit) then
 		local r, g, b
 		local min, max = UnitHealth(unit), UnitHealthMax(unit)
-		if(unit == "pet") then
+		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) or not UnitIsConnected(unit)) then
+			r, g, b = .6, .6, .6
+		elseif(unit == "pet") then
 			local _, class = UnitClass("player")
 			r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 		elseif(UnitIsPlayer(unit)) then
