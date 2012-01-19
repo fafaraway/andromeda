@@ -2,7 +2,8 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
-local _, home, world, memory
+local memory
+local _, _, home, world = GetNetStats()
 local addons = {}
 local n, total = 0, 0
 
@@ -14,16 +15,20 @@ local text = F.CreateFS(f, 8)
 text:SetPoint("CENTER")
 text:SetTextColor(r, g, b)
 
-local freq = C.performance.stats
 local last = 0
+local lastLag = 0
 
 f:SetScript("OnUpdate", function(self, elapsed)
 	last = last + elapsed
-	if last >= freq then
+	lastLag = lastLag + elapsed
+
+	if lastLag >= 30 then
 		_, _, home, world = GetNetStats()
+		lastLag = 0
+	end
 
+	if last >= 1 then
 		text:SetText("|cffffffff"..ceil(GetFramerate()).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..date("%H:%M"))
-
 		last = 0
 	end
 end)

@@ -83,7 +83,6 @@ C["performance"] = {
 	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
 	["nameplates"] = .1, 	-- update interval for nameplates in seconds (always)
 	["namethreat"] = .2, 	-- update interval for nameplates threat in seconds (only with nameplates shown)
-	["stats"] = 1, 		-- update interval for data text in seconds (always)
 	["tolbarad"] = 10, 	-- update interval for TB timer in seconds (always)
 }
 
