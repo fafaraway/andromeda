@@ -390,8 +390,6 @@ local Shared = function(self, unit, isSingle)
 
 	self.Power = Power
 
-	if FreeUIConfig.layout == 1 then Power.colorPower = true end
-
 	local Powertex = Power:CreateTexture(nil, "OVERLAY")
 	Powertex:SetHeight(1)
 	Powertex:SetPoint("TOPLEFT", 0, 1)
@@ -405,6 +403,12 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetPoint("RIGHT")
 	Power.bg:SetTexture(C.media.backdrop)
 	Power.bg:SetVertexColor(0, 0, 0, .5)
+
+	-- Colour power by class for dps/tank layout. Because this is brighter, reduce the opacity.
+	if FreeUIConfig.layout == 1 then
+		Power.colorPower = true
+		Power.bg:SetVertexColor(0, 0, 0, .25)
+	end
 
 	--[[ Alt Power ]]
 
