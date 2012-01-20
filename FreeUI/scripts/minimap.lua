@@ -72,7 +72,6 @@ end)
 
 do
 	local frames = {
-		"GuildInstanceDifficulty",
 		"MiniMapInstanceDifficulty",
 		"MiniMapBattlefieldBorder",
 		"MiniMapVoiceChatFrame",
@@ -93,6 +92,7 @@ do
 	end
 end
 
+GuildInstanceDifficulty:SetAlpha(0)
 TimeManagerClockButton:Hide()
 
 GameTimeFrame:ClearAllPoints()
@@ -152,6 +152,12 @@ rd:SetScript("OnEvent", function()
 		end
 	else
 		rdt:SetText("")
+	end
+
+	if GuildInstanceDifficulty:IsShown() then
+		rdt:SetTextColor(0, .9, 0)
+	else
+		rdt:SetTextColor(1, 1, 1)
 	end
 end)
 
