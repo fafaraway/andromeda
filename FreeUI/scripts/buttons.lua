@@ -18,6 +18,19 @@ local function applyBackground(bu)
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 end
 
+
+local function styleExtraActionButton(bu)
+	bu.style:SetTexture(nil)
+
+	local disableTexture = function(self, texture)
+		if texture and string.sub(texture, 1, 9) == "Interface" then
+			self:SetTexture(nil)
+		end
+	end
+
+	hooksecurefunc(bu.style, "SetTexture", disableTexture)
+end
+
 local function stylebars(self)
 	if self.styled then return end
 
@@ -34,6 +47,10 @@ local function stylebars(self)
 	if not nt and not name:match("SpellFlyoutButton") and not name:match("ExtraActionButton") then
 		self.styled = true
 		return
+	end
+
+	if name == "ExtraActionButton1" then
+		styleExtraActionButton(bu)
 	end
 
 	if bo then

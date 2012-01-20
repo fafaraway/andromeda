@@ -326,34 +326,11 @@ local barextra = CreateFrame("Frame", "FreeUI_ExtraActionBar", UIParent, "Secure
 barextra:SetSize(39, 39)
 barextra:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
 
-local f = ExtraActionBarFrame
-f:SetParent(barextra)
-f:ClearAllPoints()
-f:SetPoint("CENTER", 0, 0)
-f.ignoreFramePositionManager = true
+ExtraActionBarFrame:SetParent(barextra)
+ExtraActionBarFrame:ClearAllPoints()
+ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
+ExtraActionBarFrame.ignoreFramePositionManager = true
 
-local b = ExtraActionButton1
-b:SetSize(39, 39)
-b.cooldown:SetAllPoints()
-barextra.button = b
-
-local s = b.style
-s:SetTexture(nil)
-local disableTexture = function(style, texture)
-	if not texture then return end
-	if string.sub(texture, 1, 9) == "Interface" then
-		style:SetTexture(nil)
-	end
-end
-hooksecurefunc(s, "SetTexture", disableTexture)
-
-barextra:RegisterEvent("UPDATE_EXTRA_ACTIONBAR")
-barextra:RegisterEvent("PLAYER_REGEN_ENABLED")
-barextra:SetScript("OnEvent", function(self, event, ...)
-	if HasExtraActionBar() then
-		self:Show()
-		self.button:Show()
-	else
-		self:Hide()
-	end
-end)
+ExtraActionButton1:SetSize(39, 39)
+ExtraActionButton1.cooldown:SetAllPoints()
+barextra.button = ExtraActionButton1
