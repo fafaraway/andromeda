@@ -1352,8 +1352,8 @@ do
 
 		local rc = self:CreateTexture(nil, "OVERLAY")
 		rc:SetPoint("TOPLEFT", Health)
-		rc:SetHeight(16)
-		rc:SetWidth(16)
+		rc:SetSize(16, 16)
+
 		self.ReadyCheck = rc
 
 		local UpdateLFD = function(self, event)
@@ -1361,19 +1361,19 @@ do
 			local role = UnitGroupRolesAssigned(self.unit)
 
 			if role == "DAMAGER" then
-				lfdrole:SetTextColor(1, .1, .1, 1)
+				lfdrole:SetTexture("Interface\\AddOns\\FreeUI\\media\\Dps")
 			elseif role == "TANK" then
-				lfdrole:SetTextColor(.3, .4, 1, 1)
+				lfdrole:SetTexture("Interface\\AddOns\\FreeUI\\media\\Tank")
 			elseif role == "HEALER" then
-				lfdrole:SetTextColor(0, 1, 0, 1)
+				lfdrole:SetTexture("Interface\\AddOns\\FreeUI\\media\\Healer")
 			else
-				lfdrole:SetTextColor(0, 0, 0, 0)
+				lfdrole:SetTexture("")
 			end
 		end
 
-		local lfd = F.CreateFS(Health, 16, "CENTER")
-		lfd:SetPoint("BOTTOM", Health)
-		lfd:SetText(".")
+		local lfd = Health:CreateTexture(nil, "OVERLAY")
+		lfd:SetSize(9, 9)
+		lfd:SetPoint("BOTTOM", Health, 0, 1)
 		lfd.Override = UpdateLFD
 
 		self.LFDRole = lfd
