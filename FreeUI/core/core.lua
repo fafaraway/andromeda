@@ -1,8 +1,8 @@
 local addon, core = ...
 
-core[1] = {} -- F, functions
-core[2] = {} -- C, constants/config
-core[3] = {} -- L, localization
+core[1] = {} -- F, Functions
+core[2] = {} -- C, Constants/Config
+core[3] = {} -- L, Localisation
 
 FreeUI = core
 
