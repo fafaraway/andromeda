@@ -1361,19 +1361,21 @@ do
 			local role = UnitGroupRolesAssigned(self.unit)
 
 			if role == "DAMAGER" then
-				lfdrole:SetTexture("Interface\\AddOns\\FreeUI\\media\\Dps")
+				lfdrole:SetTextColor(1, .1, .1, 1)
+				lfdrole:SetText(".")
 			elseif role == "TANK" then
-				lfdrole:SetTexture("Interface\\AddOns\\FreeUI\\media\\Tank")
+				lfdrole:SetTextColor(.3, .4, 1, 1)
+				lfdrole:SetText("x")
 			elseif role == "HEALER" then
-				lfdrole:SetTexture("Interface\\AddOns\\FreeUI\\media\\Healer")
+				lfdrole:SetTextColor(0, 1, 0, 1)
+				lfdrole:SetText("+")
 			else
-				lfdrole:SetTexture("")
+				lfdrole:SetTextColor(0, 0, 0, 0)
 			end
 		end
 
-		local lfd = Health:CreateTexture(nil, "OVERLAY")
-		lfd:SetSize(9, 9)
-		lfd:SetPoint("BOTTOM", Health, 0, 1)
+		local lfd = F.CreateFS(Health, 8, "CENTER")
+		lfd:SetPoint("BOTTOM", Health, 1, 1)
 		lfd.Override = UpdateLFD
 
 		self.LFDRole = lfd
