@@ -34,6 +34,8 @@ local function UpdateGlow(button, id)
 	end
 end
 
+-- Bags and Bank
+
 hooksecurefunc("ContainerFrame_Update", function(self)
 	local name = self:GetName()
 	local id = self:GetID()
@@ -49,11 +51,15 @@ hooksecurefunc("BankFrameItemButton_Update", function(self)
 	UpdateGlow(self, GetInventoryItemID("player", self:GetInventorySlot()))
 end)
 
+-- Item slots for Character/Inspect Frame
+
 local slots = {
 	"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
 	"SecondaryHand", "Ranged", "Tabard",
 }
+
+-- Character Frame
 
 local updatechar = function(self)
 	if CharacterFrame:IsShown() then
@@ -72,6 +78,8 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("UNIT_INVENTORY_CHANGED")
 f:SetScript("OnEvent", updatechar)
 CharacterFrame:HookScript('OnShow', updatechar)
+
+-- Inspect Frame
 
 local updateinspect = function(self)
 	local unit = InspectFrame.unit
@@ -126,6 +134,8 @@ g:SetScript("OnEvent", function(self, event, addon)
 	g:UnregisterEvent("ADDON_LOADED")
 end)
 
+-- Guild Bank Frame
+
 local h = CreateFrame("Frame")
 h:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
 h:RegisterEvent("GUILDBANKFRAME_OPENED")
@@ -146,6 +156,8 @@ h:SetScript("OnEvent", function()
 		UpdateGlow(slotFrame, slotLink)
 	end
 end)
+
+-- Void Storage Frame
 
 local void = CreateFrame("Frame")
 void:RegisterEvent("ADDON_LOADED")
