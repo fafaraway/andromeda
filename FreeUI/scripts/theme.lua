@@ -3747,14 +3747,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		for i = 1, 16 do
-			local bu = _G["GuildRosterContainerButton"..i]
-			local ic = _G["GuildRosterContainerButton"..i.."Icon"]
-
-			bu:SetHighlightTexture(C.media.texture)
+		local function createButtonBg(bu)
+			bu:SetHighlightTexture(C.media.backdrop)
 			bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
-			bu.bg = F.CreateBG(ic)
+			bu.bg = F.CreateBG(bu.icon)
 		end
 
 		local tcoords = {
@@ -3782,6 +3779,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			for i = 1, numbuttons do
 				local button = GuildRosterContainer.buttons[i]
+
+				if not button.bg then
+					createButtonBg(button)
+				end
+
 				index = offset + i
 				local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
 				if name and index <= visibleMembers then
