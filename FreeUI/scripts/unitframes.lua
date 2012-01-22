@@ -191,7 +191,7 @@ local UpdateHealth = function(self, event, unit)
 			r, g, b = unpack(C.reactioncolours[UnitReaction(unit, "player") or 5])
 		end
 
-		if FreeUIConfig.layout == 2 then
+		if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
 			self.Power:SetStatusBarColor(r, g, b)
 			self.Power.bg:SetVertexColor(r/2, g/2, b/2)
 
@@ -306,9 +306,7 @@ end
 
 local PostUpdatePower = function(Power, unit, min, max)
 	local Health = Power:GetParent().Health
-	if(min == 0 or max == 0 or not UnitIsConnected(unit)) then
-		Power:SetValue(0)
-	elseif(UnitIsDead(unit) or UnitIsGhost(unit)) then
+	if min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		Power:SetValue(0)
 	end
 end
@@ -348,7 +346,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Gradient ]]
 
-	if FreeUIConfig.layout == 2 then
+	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
 		local gradient = Health:CreateTexture(nil, "BACKGROUND")
 		gradient:SetPoint("TOPLEFT")
 		gradient:SetPoint("BOTTOMRIGHT")
@@ -364,7 +362,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Health deficit colour ]]
 
-	if FreeUIConfig.layout == 2 then 
+	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then 
 		local Healthdef = Health:CreateTexture(nil, "BORDER")
 		Healthdef:SetPoint("TOPRIGHT", Health)
 		Healthdef:SetPoint("BOTTOMRIGHT", Health)
@@ -405,7 +403,7 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetVertexColor(0, 0, 0, .5)
 
 	-- Colour power by class for dps/tank layout. Because this is brighter, reduce the opacity.
-	if FreeUIConfig.layout == 1 then
+	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then
 		Power.colorPower = true
 		Power.bg:SetVertexColor(0, 0, 0, .25)
 	end

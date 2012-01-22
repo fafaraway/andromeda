@@ -28,7 +28,8 @@ C["unitframes"] = {
 	["arena_trinkets"] = true,				-- show enemy trinket usage on arena frames
 	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
 	["castbar"] = 1, 					-- 1 = dps/tank cast bar, 2 = caster/healer cast bar
-	["party_name_always"] = false,					-- show name on party/raid frames in dps/tank layout
+	["healer_classcolours"] = false,			-- colour unitframes by class in healer layout
+	["party_name_always"] = false,				-- show name on party/raid frames in dps/tank layout
 	["pvp"] = true, 					-- show pvp icon on player frame
 
 	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105},
