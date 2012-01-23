@@ -50,13 +50,13 @@ if C.general.auto_accept == true then
 
 	local g = CreateFrame("Frame")
 	g:RegisterEvent("PARTY_INVITE_REQUEST")
-	g:SetScript("OnEvent", function(event, name)
+	g:SetScript("OnEvent", function(self, event, name)
 		if MiniMapLFGFrame:IsShown() then return end
 		if IsFriend(name) then
 			AcceptGroup()
 			for i = 1, 4 do
 				local frame = _G["StaticPopup"..i]
-				if(frame:IsVisible() and frame.which=="PARTY_INVITE") then
+				if frame:IsVisible() and frame.which == "PARTY_INVITE" then
 					frame.inviteAccepted = 1
 					return StaticPopup_Hide("PARTY_INVITE")
 				end
