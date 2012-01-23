@@ -9,7 +9,7 @@ local function applyBackground(bu)
 
 	bu.bg = CreateFrame("Frame", nil, bu)
 	bu.bg:SetAllPoints(bu)
-	bu.bg:SetFrameLevel(bu:GetFrameLevel()-1)
+	bu.bg:SetFrameLevel(0)
 
 	bu.bg:SetBackdrop({
 		edgeFile = C.media.backdrop,
