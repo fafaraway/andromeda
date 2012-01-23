@@ -33,6 +33,7 @@ bar1:RegisterEvent("PLAYER_ENTERING_WORLD")
 bar1:RegisterEvent("KNOWN_CURRENCY_TYPES_UPDATE")
 bar1:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
 bar1:RegisterEvent("BAG_UPDATE")
+bar1:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 bar1:SetScript("OnEvent", function(self, event, ...)	if event == "PLAYER_LOGIN" then
 		local button, buttons
 		for i = 1, NUM_ACTIONBAR_BUTTONS do
@@ -67,6 +68,9 @@ bar1:SetScript("OnEvent", function(self, event, ...)	if event == "PLAYER_LOGIN"
    				button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 			end
 		end
+	elseif event == "ACTIVE_TALENT_GROUP_CHANGED" then
+		-- attempt to fix blocked glyph change after switching spec.
+		LoadAddOn("Blizzard_GlyphUI")
 	else
 		MainMenuBar_OnEvent(self, event, ...)
 	end
