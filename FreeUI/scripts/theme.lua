@@ -2374,7 +2374,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		AuctionProgressBarIcon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(AuctionProgressBarIcon)
 
-		AuctionProgressBarText:SetPoint("CENTER")
+		AuctionProgressBarText:ClearAllPoints()
+		AuctionProgressBarText:SetPoint("CENTER", 0, 1)
 
 		ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
 		select(15, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
