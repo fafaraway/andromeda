@@ -1724,8 +1724,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["TradeRecipientItem"..i.."NameFrame"]:Hide()
 
 			bu1:SetNormalTexture("")
+			bu1:SetPushedTexture("")
 			bu1.icon:SetTexCoord(.08, .92, .08, .92)
 			bu2:SetNormalTexture("")
+			bu2:SetPushedTexture("")
 			bu2.icon:SetTexCoord(.08, .92, .08, .92)
 
 			local bg1 = CreateFrame("Frame", nil, bu1)
