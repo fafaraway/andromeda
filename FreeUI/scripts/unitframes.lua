@@ -1006,8 +1006,7 @@ local UnitSpecific = {
 
 		local IconFrame = CreateFrame("Frame", nil, Castbar)
 		IconFrame:SetPoint("LEFT", self, "RIGHT", 3, 0)
-		IconFrame:SetHeight(44)
-		IconFrame:SetWidth(44)
+		IconFrame:SetSize(44, 44)
 
 		local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
 		Icon:SetAllPoints(IconFrame)
