@@ -152,6 +152,8 @@ C["sfilter"] = {
 	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, spellId5 = 85696, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 0, -163}},
 	-- Inquisition
 	{spellId = 84963, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", -95, -163}},
+	-- Judgements of the Pure
+	{spellId = 53657, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", -95, -163}},
 	},
 	["ROGUE"] = {
 	-- Bandit's Guile
