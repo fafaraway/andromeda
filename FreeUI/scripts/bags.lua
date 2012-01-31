@@ -448,6 +448,16 @@ local function FormatMoney(money)
 	return cash
 end
 
+local function Format(currency, money)
+	local current, weekly = strsplit(" ", currency)
+	if current ~= "0" then
+		local currency = format("%4s VP (%s/1000)", current, weekly)
+		return format("%-25s %5s", currency, FormatMoney(money))
+	else
+		return FormatMoney(money)
+	end
+end
+
 local name = UnitName("player")
 local realm = GetRealmName()
 local r, g, b = unpack(C.class)
@@ -457,18 +467,18 @@ local function ShowMoney()
 	GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", -1, 0)
 
 	local total = 0
-	local realmlist = FreeUIGlobalConfig.gold[realm]
+	local goldlist = FreeUIGlobalConfig[realm].gold
 
-	for k, v in pairs(realmlist) do
+	for k, v in pairs(goldlist) do
 		total = total + v
 	end
 
 	GameTooltip:AddDoubleLine(realm, FormatMoney(total), r, g, b, 1, 1, 1)
 	GameTooltip:AddLine(" ")
-	for k, v in pairs(realmlist) do
-		local class = FreeUIGlobalConfig.class[realm][k]
+	for k, v in pairs(goldlist) do
+		local class = FreeUIGlobalConfig[realm].class[k]
 		if v >= 10000 then
-			GameTooltip:AddDoubleLine(k, FormatMoney(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
+			GameTooltip:AddDoubleLine(k, Format(FreeUIGlobalConfig[realm].currency[k], v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
 		end
 	end
 

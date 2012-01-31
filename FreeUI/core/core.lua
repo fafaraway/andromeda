@@ -98,7 +98,6 @@ F.CreatePulse = CreatePulse
 
 if not FreeUIGlobalConfig then FreeUIGlobalConfig = {} end
 if not FreeUIConfig then FreeUIConfig = {} end
-if FreeUIConfig.layout == nil then FreeUIConfig.layout = 1 end
 
 -- [[ High resolution support ]]
 
