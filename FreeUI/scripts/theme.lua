@@ -1423,7 +1423,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBD(line)
 		end
 
-		hooksecurefunc("QuestLog_Update", function()
+		local function updateQuest()
 			local numEntries = GetNumQuestLogEntries()
 
 			local buttons = QuestLogScrollFrame.buttons
@@ -1488,7 +1488,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					end
 				end
 			end
-		end)
+		end
+
+		hooksecurefunc("QuestLog_Update", updateQuest)
+		QuestLogScrollFrame:HookScript("OnVerticalScroll", updateQuest)
+		QuestLogScrollFrame:HookScript("OnMouseWheel", updateQuest)
 
 		-- PVP Frame
 
