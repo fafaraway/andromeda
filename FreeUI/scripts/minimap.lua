@@ -115,8 +115,6 @@ MiniMapLFGFrame:ClearAllPoints()
 MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap)
 TicketStatusFrame:ClearAllPoints()
 TicketStatusFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -49, 0)
-StreamingIcon:ClearAllPoints()
-StreamingIcon:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT")
 LFGSearchStatus:ClearAllPoints()
 LFGSearchStatus:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4.5, -1.5)
 
