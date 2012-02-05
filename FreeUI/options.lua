@@ -15,6 +15,7 @@ C["general"] = {
 	["autoroll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
 	["autosell"] = true,			-- automatically sell greys
 	["buffreminder"] = true, 		-- reminder for selfbuffs
+	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
 	["hotkey"] = false, 			-- show hot keys on buttons
 	["interrupt"] = true,			-- announce your interrupts
 	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)

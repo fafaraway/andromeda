@@ -464,6 +464,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinCheck(LFGInvitePopupRoleButtonHealer:GetChildren())
 		ReskinCheck(LFGInvitePopupRoleButtonDPS:GetChildren())
 
+		if C.general.helmcloakbuttons == true then
+			ReskinCheck(FreeUI_HelmCheckBox)
+			ReskinCheck(FreeUI_CloakCheckBox)
+		end
+
 		-- [[ Backdrop frames ]]
 			
 		SetBD(FriendsFrame)
