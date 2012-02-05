@@ -30,7 +30,7 @@ gold:SetScript("OnEvent", function()
 end)
 
 local currency = CreateFrame("Frame")
-currency:RegisterEvent("CHAT_MSG_CURRENCY")
+currency:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
 currency:RegisterEvent("PLAYER_ENTERING_WORLD")
 currency:SetScript("OnEvent", function()
 	FreeUIGlobalConfig[realm].currency[name] = select(2, GetCurrencyInfo(396)).." "..select(4, GetCurrencyInfo(396))
