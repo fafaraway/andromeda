@@ -1633,7 +1633,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Option panels
 
 		local options = false
-		GameMenuButtonOptions:HookScript("OnClick", function()
+		VideoOptionsFrame:HookScript("OnShow", function()
 			if options == true then return end
 			options = true
 
@@ -1681,7 +1681,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		local interface = false
-		GameMenuButtonUIOptions:HookScript("OnClick", function()
+		InterfaceOptionsFrame:HookScript("OnShow", function()
 			if interface == true then return end
 			interface = true
 
