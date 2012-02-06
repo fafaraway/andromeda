@@ -1,3 +1,5 @@
+local F, C, L = unpack(select(2, ...))
+
 local options = CreateFrame("Frame", "FreeUI_ConfigPanel", UIParent)
 options.name = "FreeUI"
 InterfaceOptions_AddCategory(options)
