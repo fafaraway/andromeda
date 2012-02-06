@@ -2,7 +2,7 @@
 
 local F, C, L = unpack(select(2, ...))
 
-local format, floor, GetTime= string.format, math.floor, GetTime
+local format, floor, GetTime = string.format, math.floor, GetTime
 local Multiplier = 0.8
 
 local function GetFormattedTime(s)
