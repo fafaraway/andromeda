@@ -30,9 +30,12 @@ gold:SetScript("OnEvent", function()
 end)
 
 local currency = CreateFrame("Frame")
-currency:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
-currency:RegisterEvent("PLAYER_ENTERING_WORLD")
-currency:SetScript("OnEvent", function()
+currency:RegisterEvent("VARIABLES_LOADED")
+currency:SetScript("OnEvent", function(self, event)
+	-- Variable data is not available before VARIABLES_LOADED fires
+	if event == "VARIABLES_LOADED" then
+		self:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
+	end
 	FreeUIGlobalConfig[realm].currency[name] = select(2, GetCurrencyInfo(396)).." "..select(4, GetCurrencyInfo(396))
 end)
 
