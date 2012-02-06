@@ -11,6 +11,10 @@ title:SetText("FreeUI v."..GetAddOnMetadata("FreeUI", "Version"))
 local layout = CreateFrame("Button", "FreeUI_ConfigPanel_Layout", options, "UIPanelButtonTemplate")
 layout:SetSize(128, 25)
 layout:SetPoint("TOP", 0, -120)
+
+local layout_desc = layout:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+layout_desc:SetPoint("TOP", layout, "BOTTOM", 0, -8)
+
 layout:RegisterEvent("VARIABLES_LOADED")
 layout:SetScript("OnEvent", function(self)
 	local layoutToUse
@@ -26,11 +30,8 @@ layout:SetScript("OnEvent", function(self)
 		FreeUIConfig.layout = layoutToUse
 		ReloadUI()
 	end)
+	layout_desc:SetText("Switch to the "..( FreeUIConfig.layout==1 and "Healer" or "Dps/Tank").." unitframe layout. This will reload the UI.")
 end)
-
-local layout_desc = layout:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-layout_desc:SetPoint("TOP", layout, "BOTTOM", 0, -8)
-layout_desc:SetText("Switch to the other unitframe layout. This will reload the UI.")
 
 local watchframe = CreateFrame("Button", "FreeUI_ConfigPanel_WatchFrame", options, "UIPanelButtonTemplate")
 watchframe:SetSize(128, 25)
