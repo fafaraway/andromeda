@@ -46,6 +46,7 @@ scripts\marking.lua
 scripts\minimap.lua
 scripts\mirrorbars.lua
 scripts\nameplates.lua
+scripts\options.lua
 scripts\panel.lua
 scripts\rangecolor.lua
 scripts\sfilter.lua
