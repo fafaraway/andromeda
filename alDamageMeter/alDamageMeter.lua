@@ -1,3 +1,5 @@
+if not FreeUI then print("This version of alDamageMeter is to be used with FreeUI only.") return end
+
 local F, C, L = unpack(FreeUI)
 
 local RAID_CLASS_COLORS = C.classcolours
