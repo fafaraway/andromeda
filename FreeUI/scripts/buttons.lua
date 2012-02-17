@@ -4,6 +4,8 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
+local _G = _G
+
 local function applyBackground(bu)
 	if bu:GetFrameLevel() < 1 then bu:SetFrameLevel(1) end
 
@@ -18,24 +20,34 @@ local function applyBackground(bu)
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 end
 
-
 local function styleExtraActionButton(bu)
+	if not bu or (bu and bu.styled) then return end
+
 	bu.style:SetTexture(nil)
 
-	local disableTexture = function(self, texture)
+	hooksecurefunc(bu.style, "SetTexture", function(self, texture)
 		if texture and string.sub(texture, 1, 9) == "Interface" then
 			self:SetTexture(nil)
 		end
-	end
+	end)
 
-	hooksecurefunc(bu.style, "SetTexture", disableTexture)
+	bu:SetPushedTexture("")
+
+	bu.icon:SetTexCoord(.08, .92, .08, .92)
+	bu.icon:SetPoint("TOPLEFT", bu, "TOPLEFT", 1, -1)
+	bu.icon:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
+
+	bu.cooldown:SetAllPoints()
+
+	if not bu.bg then applyBackground(bu) end
+
+	bu.styled = true
 end
 
-local function stylebars(self)
-	if self.styled then return end
+local function styleActionButton(bu)
+	if not bu or (bu and bu.styled) then return end
 
-	local name = self:GetName()
-	local bu  = _G[name]
+	local name = bu:GetName()
 	local bo  = _G[name.."Border"]
 	local ic  = _G[name.."Icon"]
 	local co  = _G[name.."Count"]
@@ -44,18 +56,9 @@ local function stylebars(self)
 	local na  = _G[name.."Name"]
 	local fl  = _G[name.."FloatingBG"]
 
-	if not nt and not name:match("SpellFlyoutButton") and not name:match("ExtraActionButton") then
-		self.styled = true
-		return
-	end
+	na:Hide()
 
-	if name == "ExtraActionButton1" then
-		styleExtraActionButton(bu)
-	end
-
-	if bo then
-		bo:SetTexture(nil)
-	end
+	bo:SetTexture(nil)
 
 	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	co:ClearAllPoints()
@@ -63,15 +66,13 @@ local function stylebars(self)
 	co:SetDrawLayer("OVERLAY")
 
 	if C.general.hotkey == true then
-		ho:ClearAllPoints()
-		ho:SetPoint("BOTTOM", 0, 1)
+		ho:SetAllPoints()
 		ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		ho:SetJustifyH("CENTER")
 		ho:SetDrawLayer("OVERLAY")
 	else
 		ho:Hide()
 	end
-
-	if na then na:Hide() end
 
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
@@ -92,66 +93,60 @@ local function stylebars(self)
 		fl:Hide()
 	end
 
-	applyBackground(bu)
+	if not bu.bg then applyBackground(bu) end
 
-	self.styled = true
+	bu.styled = true
 end
 
-local function updateHotkey(self, actionButtonType)
-	local ho = _G[self:GetName() .. "HotKey"]
-	if C.general.hotkey == false then
-		ho:Hide()
-	end
+local function stylePetButton(bu)
+	if not bu or (bu and bu.styled) then return end
+
+	local name = bu:GetName()
+	local ic  = _G[name.."Icon"]
+	
+	_G[name.."NormalTexture2"]:SetAllPoints(bu)
+	_G[name.."AutoCastable"]:SetAlpha(0)
+
+	bu:SetNormalTexture("")
+	bu:SetCheckedTexture(C.media.checked)
+	bu:SetPushedTexture("")
+
+	hooksecurefunc(bu, "SetNormalTexture", function(self, texture)
+		if texture and texture ~= "" then
+			self:SetNormalTexture("")
+		end
+	end)
+
+	ic:SetTexCoord(.08, .92, .08, .92)
+	ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 1, -1)
+	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
+	ic:SetDrawLayer("OVERLAY")
+
+	if not bu.bg then applyBackground(bu) end
+
+	bu.styled = true
 end
 
-hooksecurefunc("ActionButton_UpdateHotkeys", updateHotkey)
+if C.general.shapeshift == true then
+	local ic
 
-local function fixpet(bu, texture)
-	if texture ~= "" then
+	local function styleShapeShiftButton(bu)
+		if not bu or (bu and bu.styled) then return end
+
+		ic  = _G[bu:GetName().."Icon"]
+
 		bu:SetNormalTexture("")
-	end
-end
-
-local function stylepet()
-	for i = 1, NUM_PET_ACTION_SLOTS do
-		local name = "PetActionButton"..i
-		local bu  = _G[name]
-
-		if bu.styled then return end
-
-		local ic  = _G[name.."Icon"]
-		local nt  = _G[name.."NormalTexture2"]
-
-		nt:SetHeight(bu:GetHeight())
-		nt:SetWidth(bu:GetWidth())
-		nt:SetPoint("Center", 0, 0)
-
-		bu:SetNormalTexture("")
-		bu:SetCheckedTexture(C.media.checked)
 		bu:SetPushedTexture("")
+		bu:SetCheckedTexture(C.media.checked)
 
+		F.CreateBG(bu)
+
+		ic:SetDrawLayer("ARTWORK")
 		ic:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-		ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 1, -1)
-		ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
-
-		hooksecurefunc(bu, "SetNormalTexture", fixpet)
 
 		bu.styled = true
-	end  
+	end
 end
-
-for i=1, NUM_PET_ACTION_SLOTS do
-	local name = "PetActionButton"..i
-	local bu  = _G[name]
-
-	_G[name.."AutoCastable"]:SetAlpha(0)
-	_G[name.."Icon"]:SetDrawLayer("OVERLAY")
-
-	applyBackground(bu)
-end
-
-hooksecurefunc("ActionButton_Update", stylebars)
-hooksecurefunc("PetActionBar_Update", stylepet)
 
 local buttons = 0
 local function flyoutbutton()
@@ -193,32 +188,41 @@ local function styleflyout(self)
 	end
 end
 
-hooksecurefunc("ActionButton_UpdateFlyout", styleflyout)
+local function updateHotkey(self, actionButtonType)
+	local ho = _G[self:GetName() .. "HotKey"]
+	if ho and C.general.hotkey == false then
+		ho:Hide()
+	end
+end
 
-if C.general.shapeshift == true then
-	local bu, ic
 
-	local function styleshift()
+local function init()
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
+		styleActionButton(_G["ActionButton"..i])
+		styleActionButton(_G["VehicleMenuBarActionButton"..i])
+		styleActionButton(_G["BonusActionButton"..i])
+		styleActionButton(_G["MultiBarBottomLeftButton"..i])
+		styleActionButton(_G["MultiBarBottomRightButton"..i])
+		styleActionButton(_G["MultiBarRightButton"..i])
+		styleActionButton(_G["MultiBarLeftButton"..i])
+	end
+
+	for i = 1, NUM_PET_ACTION_SLOTS do
+		stylePetButton(_G["PetActionButton"..i])
+	end
+
+	if C.general.shapeshift == true then
 		for i = 1, NUM_SHAPESHIFT_SLOTS do
-			bu  = _G["ShapeshiftButton"..i]
-
-			if bu:IsShown() and not bu.reskinned then
-				ic  = _G["ShapeshiftButton"..i.."Icon"]
-
-				bu:SetNormalTexture("")
-				bu:SetPushedTexture("")
-				bu:SetCheckedTexture(C.media.checked)
-
-				F.CreateBG(bu)
-
-				ic:SetDrawLayer("ARTWORK")
-				ic:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-
-				bu.reskinned = true
-			end
+			styleShapeShiftButton(_G["ShapeshiftButton"..i])
 		end
 	end
 
-	hooksecurefunc("ShapeshiftBar_Update", styleshift)
-	hooksecurefunc("ShapeshiftBar_UpdateState", styleshift)
+	styleExtraActionButton(_G["ExtraActionButton1"])
+
+	hooksecurefunc("ActionButton_UpdateHotkeys", updateHotkey)
+	hooksecurefunc("ActionButton_UpdateFlyout", styleflyout)
 end
+
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_LOGIN")
+f:SetScript("OnEvent", init)

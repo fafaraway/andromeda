@@ -43,7 +43,7 @@ hooksecurefunc(methods, "SetCooldown", function(self, start, duration)
 		local text = self.text
 		if(not text) then
 			text = F.CreateFS(self, 8, "CENTER")
-			if C.general.hotkey == true then text:SetPoint("CENTER", 1, 0) else text:SetPoint("BOTTOM", 1, -1) end
+			text:SetPoint("BOTTOM", 1, -1)
 			self.text = text
 			self:SetScript("OnUpdate", Timer_OnUpdate)
 		end
