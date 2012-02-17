@@ -336,5 +336,4 @@ ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
 ExtraActionBarFrame.ignoreFramePositionManager = true
 
 ExtraActionButton1:SetSize(39, 39)
-ExtraActionButton1.cooldown:SetAllPoints()
 barextra.button = ExtraActionButton1
