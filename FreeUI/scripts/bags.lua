@@ -422,7 +422,7 @@ BagItemSearchBox:HookScript("OnEnter", function(self)
 end)
 BagItemSearchBox:HookScript("OnLeave", HideSearch)
 
-hooksecurefunc("ContainerFrame_UpdateSearchResults", function(frame)
+local function updateFilter(frame)
 	local id = frame:GetID();
 	local name = frame:GetName().."Item";
 	local itemButton;
@@ -431,13 +431,18 @@ hooksecurefunc("ContainerFrame_UpdateSearchResults", function(frame)
 	for i=1, frame.size, 1 do
 		itemButton = _G[name..i];
 		_, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(id, itemButton:GetID());	
-		if ( isFiltered ) then
-			itemButton.glow:SetAlpha(0);
-		else
-			itemButton.glow:SetAlpha(1);
+		if itemButton.glow then
+			if ( isFiltered ) then
+				itemButton.glow:SetAlpha(0);
+			else
+				itemButton.glow:SetAlpha(1);
+			end
 		end
 	end
-end)
+end
+
+hooksecurefunc("ContainerFrame_UpdateSearchResults", updateFilter)
+hooksecurefunc("ContainerFrame_Update", updateFilter)
 
 -- [[ Money ]]
 

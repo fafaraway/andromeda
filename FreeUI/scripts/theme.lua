@@ -3411,7 +3411,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			nt:SetAlpha(0)
 		end
 
-		hooksecurefunc("GuildBankFrame_UpdateFiltered", function()
+		local function updateFilter()
 			if ( GuildBankFrame.mode == "bank" ) then
 				-- Update the tab items
 				local tab = GetCurrentGuildBankTab();
@@ -3426,14 +3426,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					button = _G["GuildBankColumn"..column.."Button"..index];
 					_, _, _, isFiltered = GetGuildBankItemInfo(tab, i);
 
-					if ( isFiltered ) then
-				button.glow:SetAlpha(0);
-					else
-				button.glow:SetAlpha(1);
+					if GuildBankColumn7Button14.glow then
+						if ( isFiltered ) then
+							button.glow:SetAlpha(0);
+						else
+							button.glow:SetAlpha(1);
+						end
 					end
 				end
 			end
-		end)
+		end
+
+		hooksecurefunc("GuildBankFrame_UpdateFiltered", updateFilter)
+		hooksecurefunc("GuildBankFrame_Update", updateFilter)
 
 		F.Reskin(GuildBankFrameWithdrawButton)
 		F.Reskin(GuildBankFrameDepositButton)
