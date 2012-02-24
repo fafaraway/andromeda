@@ -33,6 +33,8 @@ local function styleExtraActionButton(bu)
 
 	bu:SetPushedTexture("")
 
+	_G[bu:GetName().."HotKey"]:Hide()
+
 	bu.icon:SetTexCoord(.08, .92, .08, .92)
 	bu.icon:SetPoint("TOPLEFT", bu, "TOPLEFT", 1, -1)
 	bu.icon:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
