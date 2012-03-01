@@ -277,7 +277,7 @@ local CreateBar = function()
 	local newbar = CreateFrame("Statusbar", nil, MainFrame)
 	newbar:SetStatusBarTexture(texture)
 	newbar:SetMinMaxValues(0, 100)
-	newbar:SetWidth(width)
+	newbar:SetWidth(MainFrame:GetWidth())
 	newbar:SetHeight(barheight)
 	newbar.left = CreateFS(newbar)
 	newbar.left:SetPoint("LEFT", 2, 0)
@@ -578,20 +578,6 @@ local StartCombat = function()
 	MainFrame:SetScript('OnUpdate', OnUpdate)
 end
 
-local FindShielder = function(destGUID, timestamp)
-	if not shields[destGUID] then return end
-	local found_shielder, found_shield = nil, nil
-	for shield, spells in pairs(shields[destGUID]) do
-		for shielder, ts in pairs(spells) do
-			if ts - timestamp > 0 then
-				found_shielder = shielder
-				found_shield = shield
-			end
-		end
-	end
-	return found_shielder, found_shield
-end
-
 local IsUnitOrPet = function(flags)
 	if band(flags, raidFlags) ~= 0 or band(flags, petFlags) ~= 0 then
 		return true
@@ -633,20 +619,6 @@ local OnEvent = function(self, event, ...)
 					end
 				end
 			end
-			if IsFriendlyUnit(destGUID) then
-				local shielder, shield = FindShielder(destGUID, timestamp)
-				if shielder and absorbed and absorbed > 0 then
-					Add(shielder, absorbed, mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, shield, destName)
-				end
-			end
-		elseif eventType=="SWING_MISSED" or eventType=="RANGE_MISSED" or eventType=="SPELL_MISSED" or eventType=="SPELL_PERIODIC_MISSED" then
-			local misstype, amount = select(eventType=="SWING_MISSED" and 12 or 15, ...)
-			if misstype == "ABSORB" and IsFriendlyUnit(destGUID) then
-				local shielder, shield = FindShielder(destGUID, timestamp)
-				if shielder and amount and amount > 0 then
-					Add(shielder, amount, mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, shield, destName)
-				end
-			end
 		elseif eventType=="SPELL_HEAL" or eventType=="SPELL_PERIODIC_HEAL" then
 			spellId, spellName, spellSchool, amount, over, school, resist = select(12, ...)
 			if IsFriendlyUnit(sourceGUID) and IsFriendlyUnit(destGUID) and combatstarted then
@@ -666,20 +638,36 @@ local OnEvent = function(self, event, ...)
 				sourceGUID = owners[sourceGUID] or sourceGUID
 				Add(sourceGUID, 1, INTERRUPTS, "Interrupt", destName)
 			end
-		elseif eventType=="SPELL_AURA_APPLIED" or eventType=="SPELL_AURA_REFRESH" then
-			local spellId, spellName = select(12, ...)
+		elseif eventType=="SPELL_AURA_APPLIED" then
+			local spellId, spellName, spellSchool, auraType, amount = select(12, ...)
 			sourceGUID = owners[sourceGUID] or sourceGUID
-			if AbsorbSpellDuration[spellId] and IsFriendlyUnit(sourceGUID) and IsFriendlyUnit(destGUID) then
+			if amount and AbsorbSpellDuration[spellId] and IsFriendlyUnit(sourceGUID) and IsFriendlyUnit(destGUID) then
 				shields[destGUID] = shields[destGUID] or {}
 				shields[destGUID][spellName] = shields[destGUID][spellName] or {}
-				shields[destGUID][spellName][sourceGUID] = timestamp + AbsorbSpellDuration[spellId]
+				shields[destGUID][spellName][sourceGUID] = amount
+			end
+		elseif eventType=="SPELL_AURA_REFRESH" then
+			local spellId, spellName, spellSchool, auraType, amount = select(12, ...)
+			sourceGUID = owners[sourceGUID] or sourceGUID
+			if amount and AbsorbSpellDuration[spellId] and IsFriendlyUnit(destGUID) then
+				if shields[destGUID] and shields[destGUID][spellName] and shields[destGUID][spellName][sourceGUID] then
+					local old = shields[destGUID][spellName][sourceGUID]
+					shields[destGUID][spellName][sourceGUID] = amount
+					if old > amount then
+						Add(sourceGUID, old - amount, mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, spellName, destName)
+					end
+				end
 			end
 		elseif eventType=="SPELL_AURA_REMOVED" then
-			local spellId, spellName = select(12, ...)
+			local spellId, spellName, spellSchool, auraType, amount = select(12, ...)
 			sourceGUID = owners[sourceGUID] or sourceGUID
-			if AbsorbSpellDuration[spellId] and IsFriendlyUnit(destGUID) then
-				if shields[destGUID] and shields[destGUID][spellName] and shields[destGUID][spellName][destGUID] then
-					shields[destGUID][spellName][destGUID] = timestamp + 0.1
+			if amount and AbsorbSpellDuration[spellId] and IsFriendlyUnit(destGUID) then
+				if shields[destGUID] and shields[destGUID][spellName] and shields[destGUID][spellName][sourceGUID] then
+					local old = shields[destGUID][spellName][sourceGUID]
+					shields[destGUID][spellName][sourceGUID] = nil
+					if old > amount then
+						Add(sourceGUID, old, mergeHealAbsorbs and SHOW_COMBAT_HEALING or ABSORB, spellName, destName)
+					end
 				end
 			end
 		else
