@@ -2,7 +2,7 @@
 ## Title: !Install
 ## Notes: FreeUI install addon.
 ## Author: Haleth/Freethinker
-## Version: 4.2.1
+## Version: 4.3
 ## RequiredDeps: FreeUI
 
 install.lua
