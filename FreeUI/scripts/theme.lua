@@ -2054,6 +2054,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ItemTextMaterialTopRight:SetAlpha(0)
 		ItemTextMaterialBotLeft:SetAlpha(0)
 		ItemTextMaterialBotRight:SetAlpha(0)
+		QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
+		QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
+		QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
+		QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
 
 		ReadyCheckFrame:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end)
 
