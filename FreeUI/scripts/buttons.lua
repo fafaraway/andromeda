@@ -129,27 +129,6 @@ local function stylePetButton(bu)
 	bu.styled = true
 end
 
-if C.general.shapeshift == true then
-	local ic
-
-	local function styleShapeShiftButton(bu)
-		if not bu or (bu and bu.styled) then return end
-
-		ic  = _G[bu:GetName().."Icon"]
-
-		bu:SetNormalTexture("")
-		bu:SetPushedTexture("")
-		bu:SetCheckedTexture(C.media.checked)
-
-		F.CreateBG(bu)
-
-		ic:SetDrawLayer("ARTWORK")
-		ic:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-
-		bu.styled = true
-	end
-end
-
 local buttons = 0
 local function flyoutbutton()
 	for i = 1, buttons do
@@ -215,7 +194,19 @@ local function init()
 
 	if C.general.shapeshift == true then
 		for i = 1, NUM_SHAPESHIFT_SLOTS do
-			styleShapeShiftButton(_G["ShapeshiftButton"..i])
+			local bu = _G["ShapeshiftButton"..i]
+			if bu then
+				local ic = _G[bu:GetName().."Icon"]
+
+				bu:SetNormalTexture("")
+				bu:SetPushedTexture("")
+				bu:SetCheckedTexture(C.media.checked)
+
+				F.CreateBG(bu)
+
+				ic:SetDrawLayer("ARTWORK")
+				ic:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+			end
 		end
 	end
 
