@@ -24,7 +24,7 @@ local function sFilter_CreateFrame(data)
 			self:SetAlpha(1)
 			for i=1, 40 do
 				local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(data.unitId, i, data.filter)
-				if((data.isMine~=1 or MyUnits[caster]) and (name==GetSpellInfo(data.spellId) or (data.spellId2 and name==GetSpellInfo(data.spellId2)) or (data.spellId3 and name==GetSpellInfo(data.spellId3)) or (data.spellId4 and name==GetSpellInfo(data.spellId4)) or (data.spellId5 and name==GetSpellInfo(data.spellId5)))) then
+				if((data.isMine~=1 or MyUnits[caster]) and(not data.spec or GetPrimaryTalentTree()==data.spec) and (name==GetSpellInfo(data.spellId) or (data.spellId2 and name==GetSpellInfo(data.spellId2)) or (data.spellId3 and name==GetSpellInfo(data.spellId3)) or (data.spellId4 and name==GetSpellInfo(data.spellId4)) or (data.spellId5 and name==GetSpellInfo(data.spellId5)))) then
 					self.found = true
 					self.icon:SetTexture(icon)
 					self.count:SetText(count>1 and count or "")
