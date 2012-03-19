@@ -37,7 +37,7 @@ C["unitframes"] = {
 	["target"] = {"TOP", UIParent, "CENTER", 0, -225},
 	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 280, -105}, 
 	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled
-	["raid"] = {"TOP", UIParent, "CENTER", 0, -160}, 	-- only applies with healer layout enabled
+	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled
 
 	["altpower_height"] = 1,
 	["power_height"] = 1,
