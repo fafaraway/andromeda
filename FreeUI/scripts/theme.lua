@@ -1566,6 +1566,49 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end)
 		end
 
+		-- Achievement popup
+
+		hooksecurefunc("AchievementAlertFrame_FixAnchors", function()
+			for i = 1, MAX_ACHIEVEMENT_ALERTS do
+				local frame = _G["AchievementAlertFrame"..i]
+
+				if frame then			
+					frame:SetAlpha(1)
+					frame.SetAlpha = F.dummy
+
+					if not frame.bg then
+						frame.bg = CreateFrame("Frame", nil, frame)
+						frame.bg:SetPoint("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
+						frame.bg:SetPoint("BOTTOMRIGHT", _G[frame:GetName().."Background"], "BOTTOMRIGHT", -2, 8)
+						frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+						F.CreateBD(frame.bg)
+						
+						frame:HookScript("OnEnter", function()
+							F.CreateBD(frame.bg)
+						end)
+					end
+
+					_G["AchievementAlertFrame"..i.."Glow"]:Hide()
+					_G["AchievementAlertFrame"..i.."Shine"]:Hide()
+					_G["AchievementAlertFrame"..i.."Glow"].Show = F.dummy
+					_G["AchievementAlertFrame"..i.."Shine"].Show = F.dummy
+
+					_G["AchievementAlertFrame"..i.."Background"]:SetTexture(nil)
+
+					_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
+					_G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
+
+					_G["AchievementAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+					_G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()	
+
+					if not frame.iconreskinned then
+						F.CreateBG(_G["AchievementAlertFrame"..i.."IconTexture"])
+						frame.iconreskinned = true
+					end
+				end
+			end
+		end)
+
 		-- Guild challenges
 
 		local challenge = CreateFrame("Frame", nil, GuildChallengeAlertFrame)
