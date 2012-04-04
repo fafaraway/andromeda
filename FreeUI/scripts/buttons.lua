@@ -134,7 +134,7 @@ local function flyoutbutton()
 	for i = 1, buttons do
 		local bu = _G["SpellFlyoutButton"..i]
 		if bu and not bu.styled then
-			stylebars(bu)
+			styleActionButton(bu)
 
 			if bu:GetChecked() then
 				bu:SetChecked(nil)
