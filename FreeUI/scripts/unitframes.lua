@@ -1082,10 +1082,10 @@ local UnitSpecific = {
 		Spark:SetHeight(Health:GetHeight())
 
 		local Debuffs = CreateFrame("Frame", nil, self)
-		Debuffs:SetPoint("CENTER", UIParent, "CENTER", -216, -56)
+		Debuffs:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 4)
 		Debuffs.initialAnchor = "BOTTOMLEFT"
 		Debuffs["growth-x"] = "RIGHT"
-		Debuffs["growth-y"] = "DOWN"
+		Debuffs["growth-y"] = "UP"
 		Debuffs["spacing-x"] = 3
 		Debuffs:SetHeight(22)
 		Debuffs:SetWidth(focusWidth)
