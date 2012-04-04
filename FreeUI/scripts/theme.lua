@@ -4625,7 +4625,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["ClassTrainerScrollFrameButton"..i.."SubText"]:SetParent(bg)
 			_G["ClassTrainerScrollFrameButton"..i.."MoneyFrame"]:SetParent(bg)
 			bu:SetHighlightTexture(nil)
-			select(4, bu:GetRegions()):SetAlpha(0)
+			bu.disabledBG:Hide()
+			bu.disabledBG.Show = F.dummy
 			select(5, bu:GetRegions()):SetAlpha(0)
 
 			local check = select(2, bu:GetRegions())
