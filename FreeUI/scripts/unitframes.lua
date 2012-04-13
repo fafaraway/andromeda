@@ -196,7 +196,7 @@ local UpdateHealth = function(self, event, unit)
 			self.Power.bg:SetVertexColor(r/2, g/2, b/2)
 
 			if UnitIsDead(unit) or UnitIsGhost(unit) then
-				self.Healthdef:SetPoint("LEFT", self.Health)
+				self.Healthdef:SetPoint("LEFT", self.Health, 0, 0)
 			else
 				self.Healthdef:SetPoint("LEFT", self.Health, self:GetWidth() * (min/max), 0)
 			end
@@ -225,6 +225,14 @@ end
 local PostUpdateHealth = function(Health, unit, min, max)
 	if Health.value and unit == "target" then
 		Health.value:SetTextColor(unpack(C.reactioncolours[UnitReaction("player", unit) or 5]))
+	end
+	
+	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then	
+		if(UnitIsDead(unit)) then
+			Health:SetValue(0)
+		elseif(UnitIsGhost(unit)) then
+			Health:SetValue(0)
+		end
 	end
 
 	return UpdateHealth(Health:GetParent(), 'PostUpdateHealth', unit)
