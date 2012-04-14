@@ -173,6 +173,10 @@ C["sfilter"] = {
 C["debuffFilter"] = {
 	[58567] = true, -- Sunder Armor
 	[8647] = true, -- Expose Armor
+	[91565] = true, -- Faerie Fire
+	[95466] = true, -- Corrosive Spit
+	[95467] = true, -- Tear Armor
+	
 	[6343] = true, -- Thunder Clap
 	[54404] = true, -- Dust Cloud
 	[90315] = true, -- Tailspin
@@ -182,10 +186,15 @@ C["debuffFilter"] = {
 	[53696] = true, -- Judgements of the Just
 	[51693] = true, -- Waylay
 	[55095] = true, -- Frost Fever
+	
+	[702] = true, -- Curse of Weakness
 	[1160] = true, -- Demoralizing Shout
 	[99] = true, -- Demoralizing Roar
 	[50256] = true, -- Demoralizing Roar (pet)
+	[24423] = true, -- Demoralizing Screech
+	[81132] = true, -- Scarlet Fever
 	[26017] = true, -- Vindication
+	
 	[118] = true, -- Polymorph (sheep)
 	[61305] = true, -- Polymorph (black cat)
 	[28272] = true, -- Polymorph (pig)
