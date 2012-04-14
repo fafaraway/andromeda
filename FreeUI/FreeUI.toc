@@ -64,3 +64,4 @@ scripts\worldstateframe.lua
 
 class\rogue.lua
 class\shaman.lua
+class\warrior.lua

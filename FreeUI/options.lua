@@ -76,6 +76,7 @@ C["classmod"] = {
 	["rogue_checkthrown"] = false,	-- check thrown weapon for poison
 	["shaman"] = true, 		-- totem bars and maelstrom weapon tracker
 	["warlock"] = true, 		-- soul shards
+	["warrior"] = true, -- thunderstruck tracker
 }
 
 -- lower = smoother = more CPU usage
