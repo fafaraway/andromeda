@@ -174,9 +174,14 @@ C["debuffFilter"] = {
 	[58567] = true, -- Sunder Armor
 	[8647] = true, -- Expose Armor
 	[6343] = true, -- Thunder Clap
+	[54404] = true, -- Dust Cloud
+	[90315] = true, -- Tailspin
+	[8042] = true, -- Earth Shock
 	[58179] = true, -- Infected Wounds 1
 	[58180] = true, -- Infected Wounds 2
-	[59921] = true, -- Frost Fever
+	[53696] = true, -- Judgements of the Just
+	[51693] = true, -- Waylay
+	[55095] = true, -- Frost Fever
 	[1160] = true, -- Demoralizing Shout
 	[99] = true, -- Demoralizing Roar
 	[50256] = true, -- Demoralizing Roar (pet)
@@ -218,6 +223,7 @@ C["debuffFilter"] = {
 	[90933] = true, -- Ragezone
 	[97170] = true, -- Deadzone (1)
 	[97600] = true, -- Deadzone (2)
+	[103527] = true, -- Void Diffusion (test)
 }
 
 -- Buffs to show on enemy players
