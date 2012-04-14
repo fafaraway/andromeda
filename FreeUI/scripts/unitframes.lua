@@ -747,13 +747,10 @@ local UnitSpecific = {
 
 				if i == 1 then
 					runes[i]:SetPoint("LEFT", runes)
-					runes[i]:SetWidth(38)
-				elseif i == 2 then
-					runes[i]:SetPoint("LEFT", runes[i-1], "RIGHT", 1, 0)
-					runes[i]:SetWidth(38)
+					runes[i]:SetWidth(playerWidth/6)
 				else
 					runes[i]:SetPoint("LEFT", runes[i-1], "RIGHT", 1, 0)
-					runes[i]:SetWidth(37)
+					runes[i]:SetWidth((playerWidth/6)-1)
 				end
 			end
 
@@ -929,10 +926,10 @@ local UnitSpecific = {
 
 				if i == 1 then
 					bars[i]:SetPoint("LEFT", bars)
-					bars[i]:SetWidth(75)
+					bars[i]:SetWidth((playerWidth-4)/3)
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 1, 0)
-					bars[i]:SetWidth(76)
+					bars[i]:SetWidth((playerWidth-1)/3)
 				end
 			end
 
