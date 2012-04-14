@@ -259,9 +259,8 @@ end
 
 local vbar = CreateFrame("Frame", "FreeUI_VehicleExit", UIParent, "SecureHandlerStateTemplate")
 local a1, p, a2, x, y = unpack(C.unitframes.player)
-vbar:SetHeight(16)
-vbar:SetWidth(16)
-vbar:SetPoint(a1, p, a2, x-125, y-1)
+vbar:SetSize(C.unitframes.player_height + 2, C.unitframes.player_height + 2)
+vbar:SetPoint(a1, p, a2, x-(C.unitframes.player_width + C.unitframes.player_height + 7) / 2, y - 1) -- 125
 
 local veb = CreateFrame("BUTTON", "FreeUI_ExitVehicle", vbar, "SecureActionButtonTemplate");
 veb:SetAllPoints(vbar)
