@@ -3016,13 +3016,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			hline:SetPoint("LEFT", _G["CalendarDayButton"..i], "TOPLEFT")
 			F.CreateBD(hline)
 		end
+		
+		local tooltips = {CalendarContextMenu, CalendarInviteStatusContextMenu}
 
-		CalendarContextMenu:SetBackdrop(nil)
-		local bg = CreateFrame("Frame", nil, CalendarContextMenu)
-		bg:SetPoint("TOPLEFT")
-		bg:SetPoint("BOTTOMRIGHT")
-		bg:SetFrameLevel(CalendarContextMenu:GetFrameLevel()-1)
-		F.CreateBD(bg)
+		for _, tooltip in pairs(tooltips) do
+			tooltip:SetBackdrop(nil)
+			local bg = CreateFrame("Frame", nil, tooltip)
+			bg:SetPoint("TOPLEFT", 2, -2)
+			bg:SetPoint("BOTTOMRIGHT", -1, 2)
+			bg:SetFrameLevel(tooltip:GetFrameLevel()-1)
+			F.CreateBD(bg)
+		end
 
 		CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 		CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
