@@ -2906,26 +2906,40 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinCheck(KeyBindingFrameCharacterButton)
 	elseif addon == "Blizzard_Calendar" then
 		CalendarFrame:DisableDrawLayer("BORDER")
-		for i = 1, 15 do
-			if i ~= 10 and i ~= 11 and i ~= 12 and i ~= 13 and i ~= 14 then select(i, CalendarViewEventFrame:GetRegions()):Hide() end
+		
+		for i = 1, 9 do
+			select(i, CalendarViewEventFrame:GetRegions()):Hide()
 		end
+		select(15, CalendarViewEventFrame:GetRegions()):Hide()
+		
 		for i = 1, 9 do
 			select(i, CalendarViewHolidayFrame:GetRegions()):Hide()
 			select(i, CalendarViewRaidFrame:GetRegions()):Hide()
 		end
+		
 		for i = 1, 3 do
 			select(i, CalendarCreateEventTitleFrame:GetRegions()):Hide()
 			select(i, CalendarViewEventTitleFrame:GetRegions()):Hide()
 			select(i, CalendarViewHolidayTitleFrame:GetRegions()):Hide()
 			select(i, CalendarViewRaidTitleFrame:GetRegions()):Hide()
 		end
+		
 		for i = 1, 42 do
-			_G["CalendarDayButton"..i]:DisableDrawLayer("BACKGROUND")
 			_G["CalendarDayButton"..i.."DarkFrame"]:SetAlpha(.5)
+			local bu = _G["CalendarDayButton"..i]
+			bu:DisableDrawLayer("BACKGROUND")
+			bu:SetHighlightTexture(C.media.backdrop)
+			local hl = bu:GetHighlightTexture()
+			hl:SetVertexColor(r, g, b, .2)
+			hl.SetAlpha = F.dummy
+			hl:SetPoint("TOPLEFT", -1, 1)
+			hl:SetPoint("BOTTOMRIGHT")
 		end
+		
 		for i = 1, 7 do
 			_G["CalendarWeekday"..i.."Background"]:SetAlpha(0)
 		end
+
 		CalendarViewEventDivider:Hide()
 		CalendarCreateEventDivider:Hide()
 		CalendarViewEventInviteList:GetRegions():Hide()
@@ -2973,6 +2987,22 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBD(CalendarCreateEventInviteList, .25)
 		F.CreateBD(CalendarCreateEventDescriptionContainer, .25)
 		F.CreateBD(CalendarEventPickerFrame, .25)
+		
+		CalendarWeekdaySelectedTexture:SetVertexColor(r, g, b)
+		
+		hooksecurefunc("CalendarFrame_SetToday", function()
+			CalendarTodayFrame:SetAllPoints()
+		end)
+		
+		CalendarTodayFrame:SetScript("OnUpdate", nil)
+		CalendarTodayTextureGlow:Hide()
+		CalendarTodayTexture:Hide()
+		
+		CalendarTodayFrame:SetBackdrop({
+			edgeFile = C.media.backdrop,
+			edgeSize = 1,
+		})
+		CalendarTodayFrame:SetBackdropBorderColor(r, g, b)
 
 		for i, class in ipairs(CLASS_SORT_ORDER) do
 			local bu = _G["CalendarClassButton"..i]
