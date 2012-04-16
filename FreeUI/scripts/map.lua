@@ -1,13 +1,16 @@
+-- Map search function by Wildbreath
+
 local F, C, L = unpack(select(2, ...))
 
 WORLDMAP_WINDOWED_SIZE = 0.82
  
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
 local fontsize = 8 / WORLDMAP_WINDOWED_SIZE
+local panelHeight = 30
 
 local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
-mapbg:SetBackdrop({ 
-	bgFile = C.media.backdrop, 
+mapbg:SetBackdrop({
+	bgFile = C.media.backdrop,
 })
 mapbg:SetBackdropColor(0, 0, 0)
 
@@ -18,18 +21,29 @@ f:RegisterEvent("PLAYER_REGEN_DISABLED")
 local frame = CreateFrame ("Frame", nil, WorldMapButton)
 frame:SetFrameStrata("HIGH")
 
+local panel = CreateFrame("Frame", nil, WorldMapButton)
+panel:EnableMouse(true)
+panel:SetScale(offset)
+panel:SetFrameStrata("BACKGROUND")
+
 local SmallerMapSkin = function()
 	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, -offset, offset)
 	mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, offset, -offset)
 	mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
+	
+	panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, -panelHeight)
+	panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, -panelHeight)
+	panel:SetHeight(panelHeight)
+	F.CreateBD(panel)
  
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:ClearAllPoints()
 	WorldMapDetailFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-	WorldMapTitleButton:Show()	
+	WorldMapTitleButton:Show()
+	WorldMapLevelDropDown:SetParent(panel)
 	WorldMapLevelDropDown:ClearAllPoints()
-	WorldMapLevelDropDown:SetPoint("TOP", Minimap, "TOP", 0, 40)
+	WorldMapLevelDropDown:SetPoint("RIGHT", panel, "RIGHT", 0, -2)
 	WorldMapFrameMiniBorderLeft:Hide()
 	WorldMapFrameMiniBorderRight:Hide()
 	WorldMapFrameTitle:ClearAllPoints()
@@ -38,7 +52,7 @@ local SmallerMapSkin = function()
 	WorldMapFrameTitle:SetTextColor(1, 1, 1)
 	WorldMapFrameTitle:SetShadowColor(0, 0, 0, 0)
 	WorldMapFrameTitle:SetParent(frame)
-	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 0, 0)
+	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT")
 	WorldMapQuestShowObjectives.SetPoint = F.dummy
 	WorldMapQuestShowObjectives:SetFrameStrata("HIGH")
 	WorldMapQuestShowObjectivesText:ClearAllPoints()
@@ -64,9 +78,9 @@ local SmallerMapSkin = function()
 	WorldMapFrameCloseButton:EnableMouse(nil)
 	WorldMapFrameSizeUpButton:SetAlpha(0)
 	WorldMapFrameSizeUpButton:EnableMouse(nil)
+	WorldMapShowDropDown:SetParent(panel)
 	WorldMapShowDropDown:ClearAllPoints()
-	WorldMapShowDropDown:SetPoint("TOPRIGHT", WorldMapDetailFrame, "TOPRIGHT", 14, 0)
-	WorldMapShowDropDown:SetFrameStrata("HIGH")
+	WorldMapShowDropDown:SetPoint("LEFT", panel, "LEFT", 0, -2)
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
@@ -156,3 +170,88 @@ end)
 WorldMapDetailFrame:HookScript("OnHide", function()
 	WorldMapDetailFrame:SetScript("OnUpdate", nil)
 end)
+
+hooksecurefunc("EncounterJournal_AddMapButtons", function()
+	if WorldMapQuestShowObjectives:IsShown() then
+		WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 18)
+	else
+		WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
+	end
+end)
+
+local editbox = CreateFrame("EditBox", "MapSearchBox", panel, "SearchBoxTemplate")
+editbox:SetAutoFocus(false)
+editbox:SetSize(150, 20)
+editbox:SetPoint("CENTER", panel)
+
+editbox.db = {}
+for i=1, select("#", GetMapContinents()), 1 do
+	local zonesdb = {}
+	for j=1, select("#", GetMapZones(i)), 1 do
+		tinsert(zonesdb, {id=j, name=select(j, GetMapZones(i))})
+	end
+	tinsert(editbox.db, {id=i, name=select(i, GetMapContinents()), zones = zonesdb })
+end
+
+editbox:SetScript("OnHide", BagSearch_OnHide)
+
+editbox:SetScript("OnTextChanged", function(self)
+	local searchdata = self:GetText()
+	if searchdata == "" then return end
+	for i, v in pairs(self.db) do
+		if v.name:lower():find(searchdata:lower()) then
+			SetMapZoom(v.id)
+			return
+		end
+		for j, k in pairs(v.zones) do
+			if k.name:lower():find(searchdata:lower()) then
+				SetMapZoom(v.id, k.id)
+				return
+			end
+		end
+	end
+end)
+
+local y = 0
+local opened = false
+local noclose = {editbox, panel, WorldMapButton, WorldMapLevelDropDown, WorldMapShowDropDown, WorldMapLevelDropDownButton}
+
+local function open()
+	if opened == true then return end
+	opened = true
+	panel:SetScript("OnUpdate", function()
+		y = y + 1
+		panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, -panelHeight+y)
+		panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, -panelHeight+y)
+		if y == panelHeight then
+			panel:SetScript("OnUpdate", nil)
+			y = 0
+		end
+	end)
+end
+
+local function close()
+	if not WorldMapFrame:IsShown() then
+		panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, -panelHeight)
+		panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, -panelHeight)
+		opened = false
+		return
+	end
+	for i = 1, #noclose do
+		if GetMouseFocus() == noclose[i] then return end
+	end
+	opened = false
+	panel:SetScript("OnUpdate", function()
+		y = y + 1
+		panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, 0-y)
+		panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, 0-y)
+		if y == panelHeight then
+			panel:SetScript("OnUpdate", nil)
+			y = 0
+		end
+	end)
+end
+
+WorldMapButton:HookScript("OnEnter", open)
+WorldMapButton:HookScript("OnLeave", close)
+panel:HookScript("OnLeave", close)
