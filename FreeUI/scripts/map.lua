@@ -6,7 +6,7 @@ WORLDMAP_WINDOWED_SIZE = 0.82
  
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
 local fontsize = 8 / WORLDMAP_WINDOWED_SIZE
-local panelHeight = 30
+local panelHeight = 26
 
 local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
 mapbg:SetBackdrop({
@@ -214,7 +214,7 @@ end)
 
 local y = 0
 local opened = false
-local noclose = {editbox, panel, WorldMapButton, WorldMapLevelDropDown, WorldMapShowDropDown, WorldMapLevelDropDownButton}
+local noclose = {editbox, panel, WorldMapButton, WorldMapLevelDropDown, WorldMapShowDropDown, WorldMapLevelDropDownButton, WorldMapPlayer}
 
 local function open()
 	if opened == true then return end
@@ -237,8 +237,9 @@ local function close()
 		opened = false
 		return
 	end
+	local name = GetMouseFocus():GetName()
 	for i = 1, #noclose do
-		if GetMouseFocus() == noclose[i] then return end
+		if GetMouseFocus() == noclose[i] or name and(name:find("WorldMapFramePOI") or name:find("WorldMapRaid") or name:find("WorldMapPOIFrame") or name:find("EJMapButton") or DropDownList1:IsShown()) then return end
 	end
 	opened = false
 	panel:SetScript("OnUpdate", function()
