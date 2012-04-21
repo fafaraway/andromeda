@@ -108,13 +108,22 @@ date:SetTextColor(1, 1, 1)
 date:SetFont(C.media.font, 8 / Scale, "OUTLINEMONOCHROME")
 date:SetPoint("CENTER")
 
+MiniMapBattlefieldFrame:SetSize(22, 22)
 MiniMapBattlefieldFrame:ClearAllPoints()
-MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "TOP", 0, 3)
+MiniMapBattlefieldFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6 / Scale, 1 / Scale)
+MiniMapBattlefieldIcon:Hide()
+
+local bgtext = F.CreateFS(MiniMapBattlefieldFrame, 8 / Scale)
+bgtext:SetPoint("CENTER")
+bgtext:SetText(PVP)
+
 MiniMapLFGFrameBorder:SetAlpha(0)
 MiniMapLFGFrame:ClearAllPoints()
 MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap)
+
 TicketStatusFrame:ClearAllPoints()
 TicketStatusFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -49, 0)
+
 LFGSearchStatus:ClearAllPoints()
 LFGSearchStatus:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4.5, -1.5)
 
@@ -161,7 +170,7 @@ end)
 
 HelpOpenTicketButton:SetParent(Minimap)
 HelpOpenTicketButton:ClearAllPoints()
-HelpOpenTicketButton:SetPoint("BOTTOMRIGHT", Minimap, 4 / Scale, -6 / Scale)
+HelpOpenTicketButton:SetPoint("TOP", Minimap, "TOP", 0, 7 / Scale)
 
 HelpOpenTicketButtonTutorial:Hide()
 HelpOpenTicketButtonTutorial.Show = F.dummy
@@ -170,6 +179,6 @@ HelpOpenTicketButton:SetNormalTexture("")
 HelpOpenTicketButton:SetHighlightTexture("")
 HelpOpenTicketButton:SetPushedTexture("")
 
-local text = F.CreateFS(HelpOpenTicketButton, 8 / Scale)
-text:SetPoint("CENTER")
-text:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
+local gmtext = F.CreateFS(HelpOpenTicketButton, 8 / Scale)
+gmtext:SetPoint("CENTER")
+gmtext:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
