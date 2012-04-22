@@ -4,6 +4,7 @@ if(select(2, UnitClass("player")) ~= "WARRIOR" or C.classmod.warrior == false) t
 
 local spellName = GetSpellInfo(87096)
 local name, count
+local active = false
 
 local glow = CreateFrame("Frame", nil, UIParent)
 glow:SetBackdrop({
@@ -38,11 +39,14 @@ glow:SetScript("OnEvent", function(self, event, unit)
 	glow.text:SetText(count)
 
 	if count == 3 then
+		if active == true then return end
+		active = true
 		glow:SetAlpha(1)
 		F.CreatePulse(glow)
 		glow.text:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
 		glow.text:SetTextColor(.2, .5, .9)
 	else
+		active = false
 		glow:SetScript("OnUpdate", nil)
 		glow:SetAlpha(0)
 		glow.text:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
