@@ -396,7 +396,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if bd then
 				F.CreateBD(bd)
 			else
-				print(bds[i].." was not found.")
+				print("FreeUI: "..bds[i].." was not found.")
 			end
 		end
 
@@ -406,7 +406,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if bd then
 				F.CreateBD(bd, .25)
 			else
-				print(lightbds[i].." was not found.")
+				print("FreeUI: "..lightbds[i].." was not found.")
 			end
 		end
 
@@ -418,7 +418,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if scrollbar then
 				ReskinScroll(scrollbar)
 			else
-				print(scrollbars[i].." was not found.")
+				print("FreeUI: "..scrollbars[i].." was not found.")
 			end
 		end
 
@@ -430,7 +430,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if dropdown then
 				ReskinDropDown(dropdown)
 			else
-				print(dropdowns[i].." was not found.")
+				print("FreeUI: "..dropdowns[i].." was not found.")
 			end
 		end
 
@@ -442,7 +442,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if input then
 				ReskinInput(input)
 			else
-				print(inputs[i].." was not found.")
+				print("FreeUI: "..inputs[i].." was not found.")
 			end
 		end
 
@@ -490,7 +490,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if checkbox then
 				ReskinCheck(checkbox)
 			else
-				print(checkboxes[i].." was not found.")
+				print("FreeUI: "..checkboxes[i].." was not found.")
 			end
 		end
 
@@ -525,7 +525,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if radiobutton then
 				ReskinRadio(radiobutton)
 			else
-				print(radiobuttons[i].." was not found.")
+				print("FreeUI: "..radiobuttons[i].." was not found.")
 			end
 		end
 		
@@ -2377,7 +2377,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if reskinbutton then
 				F.Reskin(reskinbutton)
 			else
-				print(buttons[i].." was not found.")
+				print("FreeUI: "..buttons[i].." was not found.")
 			end
 		end
 
