@@ -466,6 +466,8 @@ end
 local name = UnitName("player")
 local realm = GetRealmName()
 local r, g, b = unpack(C.class)
+local keys = {}
+local tableFilled = false
 
 local function ShowMoney()
 	GameTooltip:SetOwner(ContainerFrame1MoneyFrameGoldButton, "ANCHOR_NONE")
@@ -477,11 +479,22 @@ local function ShowMoney()
 	for k, v in pairs(goldlist) do
 		total = total + v
 	end
+	
+	-- create a sorted table of goldlist where keys are index numbers and values are goldlist keys
+	-- only way to properly sort key-value tables
+	if not tableFilled then
+		for n in pairs(goldlist) do
+			table.insert(keys, n)
+		end
+		table.sort(keys)
+		tableFilled = true
+	end
 
 	GameTooltip:AddDoubleLine(realm, FormatMoney(total), r, g, b, 1, 1, 1)
 	GameTooltip:AddLine(" ")
-	for k, v in pairs(goldlist) do
+	for _, k in pairs(keys) do
 		local class = FreeUIGlobalConfig[realm].class[k]
+		local v = goldlist[k]
 		if v >= 10000 then
 			GameTooltip:AddDoubleLine(k, Format(FreeUIGlobalConfig[realm].currency[k], v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
 		end
