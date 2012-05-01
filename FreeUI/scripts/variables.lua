@@ -4,10 +4,12 @@ local name = UnitName("player")
 local realm = GetRealmName()
 
 local f = CreateFrame("Frame")
-f:RegisterEvent("VARIABLES_LOADED")
-f:SetScript("OnEvent", function()
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(_, _, addon)
+	if addon ~= "FreeUI" then return end
+	
 	if FreeUIConfig.layout == nil then FreeUIConfig.layout = 1 end
-
+	
 	if FreeUIConfig.layout == 2 then
 		aThreatMeter:UnregisterAllEvents()
 		aThreatMeter:Hide()
@@ -20,6 +22,8 @@ f:SetScript("OnEvent", function()
 
 	if FreeUIGlobalConfig[realm].class == nil then FreeUIGlobalConfig[realm].class = {} end
 	FreeUIGlobalConfig[realm].class[name] = select(2, UnitClass("player"))
+	
+	f:UnregisterEvent("ADDON_LOADED")
 end)
 
 local gold = CreateFrame("Frame")
