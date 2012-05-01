@@ -48,6 +48,7 @@ end
 
 local function OnClick()
 	FreeUIMailFrame:Hide()
+	MiniMapMailFrame:Hide()
 	if(not processing) then
 		processing = true
 		OnEvent()

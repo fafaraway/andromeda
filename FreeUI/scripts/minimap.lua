@@ -45,6 +45,11 @@ local mt = F.CreateFS(mail, 8 / Scale)
 mt:SetPoint("BOTTOM", Minimap, 0, 6 / Scale)
 mt:SetText("Mail")
 
+MiniMapMailFrame:SetAlpha(0)
+MiniMapMailFrame:SetSize(22, 10)
+MiniMapMailFrame:ClearAllPoints()
+MiniMapMailFrame:SetPoint("CENTER", mt)
+
 ZoneTextString:ClearAllPoints()
 ZoneTextString:SetPoint("CENTER", Minimap)
 ZoneTextString:SetWidth(140)
@@ -76,7 +81,6 @@ do
 		"MiniMapBattlefieldBorder",
 		"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
-		"MiniMapMailFrame",
 		"MiniMapMailBorder",
 		"MinimapBorderTop",
 		"MinimapNorthTag",
