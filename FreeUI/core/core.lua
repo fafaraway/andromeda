@@ -96,8 +96,8 @@ F.CreatePulse = CreatePulse
 
 -- [[ Saved variables ]]
 
-if not FreeUIGlobalConfig then FreeUIGlobalConfig = {} end
-if not FreeUIConfig then FreeUIConfig = {} end
+FreeUIGlobalConfig = {} 
+FreeUIConfig = {}
 
 -- [[ High resolution support ]]
 
