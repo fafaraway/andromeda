@@ -344,6 +344,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
+	Health.Smooth = true
 
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
@@ -387,6 +388,7 @@ local Shared = function(self, unit, isSingle)
 	Power:SetStatusBarTexture(C.media.texture)
 
 	Power.frequentUpdates = true
+	Power.Smooth = true
 
 	Power:SetHeight(powerHeight)
 
@@ -410,7 +412,7 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetTexture(C.media.backdrop)
 	Power.bg:SetVertexColor(0, 0, 0, .5)
 
-	-- Colour power by class for dps/tank layout. Because this is brighter, reduce the opacity.
+	-- Colour power by power type for dps/tank layout. Because this is brighter, make the background darker for contrast.
 	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then
 		Power.colorPower = true
 		Power.bg:SetVertexColor(0, 0, 0, .25)
@@ -449,6 +451,8 @@ local Shared = function(self, unit, isSingle)
 		end)
 
 		self.AltPowerBar = AltPowerBar
+		
+		AltPowerBar.Smooth = true
 
 		AltPowerBar:HookScript("OnShow", function()
 			oUF_FreePlayer.MaxHealthPoints:Hide()
@@ -795,6 +799,8 @@ local UnitSpecific = {
 			LunarBar:SetStatusBarColor(.80, .82, .60)
 			LunarBar:SetFrameStrata("LOW")
 			eclipseBar.LunarBar = LunarBar
+			
+			LunarBar.Smooth = true
 
 			local SolarBar = CreateFrame("StatusBar", nil, eclipseBar)
 			SolarBar:SetPoint("LEFT", LunarBar:GetStatusBarTexture(), "RIGHT")
@@ -803,6 +809,8 @@ local UnitSpecific = {
 			SolarBar:SetStatusBarColor(.30, .52, .90)
 			SolarBar:SetFrameStrata("LOW")
 			eclipseBar.SolarBar = SolarBar
+			
+			SolarBar.Smooth = true
 
 			local eclipseBarText = F.CreateFS(eclipseBar, 24)
 			eclipseBarText:SetPoint("LEFT", self, "RIGHT", 10, 0)
