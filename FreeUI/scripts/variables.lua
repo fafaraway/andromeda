@@ -45,3 +45,4 @@ end)
 
 SetCVar("consolidateBuffs", 0)
 SetCVar("buffDurations", 1)
+SetCVar("enableCombatText", 0)
