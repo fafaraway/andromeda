@@ -102,6 +102,44 @@ local siValue = function(val)
 	end
 end
 
+-- [[ Smooth ]]
+
+local smoothing = {}
+local function Smooth(self, value)
+	local _, max = self:GetMinMaxValues()
+	if value == self:GetValue() or (self._max and self._max ~= max) then
+		smoothing[self] = nil
+		self:SetValue_(value)
+	else
+		smoothing[self] = value
+	end
+	self._max = max
+end
+
+local function SmoothBar(bar)
+	bar.SetValue_ = bar.SetValue
+	bar.SetValue = Smooth
+end
+
+local smoother, min, max = CreateFrame('Frame'), math.min, math.max
+smoother:SetScript('OnUpdate', function()
+	local rate = GetFramerate()
+	local limit = 30/rate
+	for bar, value in pairs(smoothing) do
+		local cur = bar:GetValue()
+		local new = cur + min((value-cur)/3, max(value-cur, limit))
+		if new ~= new then
+			-- Mad hax to prevent QNAN.
+			new = value
+		end
+		bar:SetValue_(new)
+		if cur == value or abs(new - value) < 2 then
+			bar:SetValue_(value)
+			smoothing[bar] = nil
+		end
+	end
+end)
+
 --[[ Tags ]]
 
 oUF.Tags.Methods['free:health'] = function(unit)
@@ -194,11 +232,13 @@ local UpdateHealth = function(self, event, unit)
 		if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
 			self.Power:SetStatusBarColor(r, g, b)
 			self.Power.bg:SetVertexColor(r/2, g/2, b/2)
+			
+			self.Healthdef:SetMinMaxValues(0, max)
 
 			if UnitIsDead(unit) or UnitIsGhost(unit) then
-				self.Healthdef:SetPoint("LEFT", self.Health, 0, 0)
+				self.Healthdef:SetValue(0)
 			else
-				self.Healthdef:SetPoint("LEFT", self.Health, self:GetWidth() * (min/max), 0)
+				self.Healthdef:SetValue(max-min)
 			end
 
 			if((UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) or not UnitIsConnected(unit)) then
@@ -213,7 +253,7 @@ local UpdateHealth = function(self, event, unit)
 				self.Healthdef:Show()
 			end
 
-			self.Healthdef:SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
+			self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 		else
 			self.Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
 		end
@@ -344,7 +384,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
-	Health.Smooth = true
+	SmoothBar(Health)
 
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
@@ -372,12 +412,14 @@ local Shared = function(self, unit, isSingle)
 	--[[ Health deficit colour ]]
 
 	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then 
-		local Healthdef = Health:CreateTexture(nil, "BORDER")
-		Healthdef:SetPoint("TOPRIGHT", Health)
-		Healthdef:SetPoint("BOTTOMRIGHT", Health)
-		Healthdef:SetPoint("LEFT", Health)
-		Healthdef:SetTexture(C.media.texture)
-		Healthdef:SetVertexColor(1, 1, 1)
+		local Healthdef = CreateFrame("StatusBar", nil, self)
+		Healthdef:SetFrameStrata("LOW")
+		Healthdef:SetAllPoints(Health)
+		Healthdef:SetStatusBarTexture(C.media.texture)
+		Healthdef:SetStatusBarColor(1, 1, 1)
+		
+		Healthdef:SetReverseFill(true)
+		SmoothBar(Healthdef)
 
 		self.Healthdef = Healthdef
 	end
@@ -388,7 +430,7 @@ local Shared = function(self, unit, isSingle)
 	Power:SetStatusBarTexture(C.media.texture)
 
 	Power.frequentUpdates = true
-	Power.Smooth = true
+	SmoothBar(Power)
 
 	Power:SetHeight(powerHeight)
 
@@ -452,7 +494,7 @@ local Shared = function(self, unit, isSingle)
 
 		self.AltPowerBar = AltPowerBar
 		
-		AltPowerBar.Smooth = true
+		SmoothBar(AltPowerBar)
 
 		AltPowerBar:HookScript("OnShow", function()
 			oUF_FreePlayer.MaxHealthPoints:Hide()
@@ -800,7 +842,7 @@ local UnitSpecific = {
 			LunarBar:SetFrameStrata("LOW")
 			eclipseBar.LunarBar = LunarBar
 			
-			LunarBar.Smooth = true
+			SmoothBar(LunarBar)
 
 			local SolarBar = CreateFrame("StatusBar", nil, eclipseBar)
 			SolarBar:SetPoint("LEFT", LunarBar:GetStatusBarTexture(), "RIGHT")
@@ -810,7 +852,7 @@ local UnitSpecific = {
 			SolarBar:SetFrameStrata("LOW")
 			eclipseBar.SolarBar = SolarBar
 			
-			SolarBar.Smooth = true
+			SmoothBar(SolarBar)
 
 			local eclipseBarText = F.CreateFS(eclipseBar, 24)
 			eclipseBarText:SetPoint("LEFT", self, "RIGHT", 10, 0)
