@@ -26,13 +26,28 @@ panel:EnableMouse(true)
 panel:SetScale(offset)
 panel:SetFrameStrata("BACKGROUND")
 
+local button = CreateFrame("Frame", nil, WorldMapButton)
+button:EnableMouse(true)
+button:SetSize(16, 16)
+button:SetScale(offset)
+button:SetPoint("BOTTOM", WorldMapDetailFrame)
+
+local text = F.CreateFS(button, 8)
+text:SetPoint("CENTER")
+text:SetText("+")
+
+--[[local arrow = button:CreateTexture(nil, "OVERLAY")
+arrow:SetPoint("CENTER")
+arrow:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+arrow:SetSize(8, 8)]]
+
 local SmallerMapSkin = function()
 	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, -offset, offset)
 	mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, offset, -offset)
 	mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
 	
-	panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, -panelHeight)
-	panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, -panelHeight)
+	panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight)
+	panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight)
 	panel:SetHeight(panelHeight)
 	F.CreateBD(panel)
  
@@ -214,15 +229,17 @@ end)
 
 local y = 0
 local opened = false
-local noclose = {editbox, panel, WorldMapButton, WorldMapLevelDropDown, WorldMapShowDropDown, WorldMapLevelDropDownButton, WorldMapPlayer}
 
-local function open()
-	if opened == true then return end
+panel.open = function()
+	if opened == true then
+		panel.close()
+		return
+	end
 	opened = true
 	panel:SetScript("OnUpdate", function()
 		y = y + 1
-		panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, -panelHeight+y)
-		panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, -panelHeight+y)
+		panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight-y)
+		panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight-y)
 		if y == panelHeight then
 			panel:SetScript("OnUpdate", nil)
 			y = 0
@@ -230,22 +247,12 @@ local function open()
 	end)
 end
 
-local function close()
-	if not WorldMapFrame:IsShown() then
-		panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, -panelHeight)
-		panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, -panelHeight)
-		opened = false
-		return
-	end
-	local name = GetMouseFocus():GetName()
-	for i = 1, #noclose do
-		if GetMouseFocus() == noclose[i] or name and(name:find("WorldMapFramePOI") or name:find("WorldMapRaid") or name:find("WorldMapPOIFrame") or name:find("EJMapButton") or DropDownList1:IsShown()) then return end
-	end
+panel.close = function()
 	opened = false
 	panel:SetScript("OnUpdate", function()
 		y = y + 1
-		panel:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "TOPLEFT", -1, 0-y)
-		panel:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "TOPRIGHT", 1, 0-y)
+		panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, 0+y)
+		panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, 0+y)
 		if y == panelHeight then
 			panel:SetScript("OnUpdate", nil)
 			y = 0
@@ -253,6 +260,4 @@ local function close()
 	end)
 end
 
-WorldMapButton:HookScript("OnEnter", open)
-WorldMapButton:HookScript("OnLeave", close)
-panel:HookScript("OnLeave", close)
+button:HookScript("OnMouseDown", panel.open)
