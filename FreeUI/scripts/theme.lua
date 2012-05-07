@@ -1115,15 +1115,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Merchant Frame
 
-		for i = 1, 12 do
+		for i = 1, MERCHANT_ITEMS_PER_PAGE do
 			local button = _G["MerchantItem"..i]
 			local bu = _G["MerchantItem"..i.."ItemButton"]
 			local ic = _G["MerchantItem"..i.."ItemButtonIconTexture"]
 			local mo = _G["MerchantItem"..i.."MoneyFrame"]
 
 			_G["MerchantItem"..i.."SlotTexture"]:Hide()
-			_G["MerchantItem"..i.."NameFrame"]:Hide()
 			_G["MerchantItem"..i.."Name"]:SetHeight(20)
+			_G["MerchantItem"..i.."NameFrame"]:Hide()
+
 			local a1, p, a2= bu:GetPoint()
 			bu:SetPoint(a1, p, a2, -2, -2)
 			bu:SetNormalTexture("")
@@ -1145,7 +1146,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:ClearAllPoints()
 			ic:SetPoint("TOPLEFT", 1, -1)
 			ic:SetPoint("BOTTOMRIGHT", -1, 1)
+			
+			for j = 1, 3 do
+				F.CreateBG(_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"])
+				_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"]:SetTexCoord(.08, .92, .08, .92)
+			end
 		end
+		
+		hooksecurefunc("MerchantFrame_UpdateMerchantInfo", function()
+			local numMerchantItems = GetMerchantNumItems()
+			for i = 1, MERCHANT_ITEMS_PER_PAGE do
+				local index = ((MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE) + i
+				if index <= numMerchantItems then
+					local name, texture, price, stackCount, numAvailable, isUsable, extendedCost = GetMerchantItemInfo(index)
+					if extendedCost and (price <= 0) then
+						_G["MerchantItem"..i.."AltCurrencyFrame"]:SetPoint("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
+					end
+				end
+			end					
+		end)
 
 		MerchantBuyBackItemSlotTexture:Hide()
 		MerchantBuyBackItemNameFrame:Hide()
