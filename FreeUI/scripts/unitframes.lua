@@ -853,6 +853,12 @@ local UnitSpecific = {
 			eclipseBar.SolarBar = SolarBar
 			
 			SmoothBar(SolarBar)
+			
+			local spark = SolarBar:CreateTexture(nil, "OVERLAY")
+			spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+			spark:SetBlendMode("ADD")
+			spark:SetHeight(4)
+			spark:SetPoint("CENTER", SolarBar:GetStatusBarTexture(), "LEFT")
 
 			local eclipseBarText = F.CreateFS(eclipseBar, 24)
 			eclipseBarText:SetPoint("LEFT", self, "RIGHT", 10, 0)
