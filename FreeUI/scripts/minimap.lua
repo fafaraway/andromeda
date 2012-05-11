@@ -52,11 +52,14 @@ MiniMapMailFrame:SetPoint("CENTER", mt)
 
 ZoneTextString:ClearAllPoints()
 ZoneTextString:SetPoint("CENTER", Minimap)
-ZoneTextString:SetWidth(140)
+ZoneTextString:SetWidth(138)
 ZoneTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 SubZoneTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+SubZoneTextString:SetWidth(138)
 PVPInfoTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+PVPInfoTextString:SetWidth(138)
 PVPArenaTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+PVPArenaTextString:SetWidth(138)
 
 MinimapZoneTextButton:ClearAllPoints()
 MinimapZoneTextButton:SetPoint("CENTER", Minimap)
@@ -95,6 +98,9 @@ do
 		_G[frames[i]].Show = F.dummy
 	end
 end
+
+Minimap:SetArchBlobRingScalar(0)
+Minimap:SetQuestBlobRingScalar(0)
 
 GuildInstanceDifficulty:SetAlpha(0)
 TimeManagerClockButton:Hide()
