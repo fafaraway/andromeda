@@ -4012,37 +4012,40 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		local reskinnedrewards = false
-		GuildFrameTab4:HookScript("OnClick", function()
-			if not reskinnedrewards == true then
-				for i = 1, 8 do
-					local button = "GuildRewardsContainerButton"..i
-					local bu = _G[button]
-					local ic = _G[button.."Icon"]
+		local reskinnedRewards = false
+		hooksecurefunc("GuildRewards_Update", function()
+			if reskinnedRewards == true then return end
+			
+			for i = 1, 8 do
+				local button = "GuildRewardsContainerButton"..i
+				local bu = _G[button]
+				local ic = _G[button.."Icon"]
+				local locked = select(6, bu:GetRegions())
+				local bd = select(7, bu:GetRegions())
 
-					local bg = CreateFrame("Frame", nil, bu)
-					bg:SetPoint("TOPLEFT", 0, -1)
-					bg:SetPoint("BOTTOMRIGHT")
-					F.CreateBD(bg, 0)
+				local bg = CreateFrame("Frame", nil, bu)
+				bg:SetPoint("TOPLEFT", 0, -1)
+				bg:SetPoint("BOTTOMRIGHT")
+				F.CreateBD(bg, 0)
 
-					bu:SetHighlightTexture(C.media.texture)
-					local hl = bu:GetHighlightTexture()
-					hl:SetVertexColor(r, g, b, .2)
-					hl:SetPoint("TOPLEFT", 0, -1)
-					hl:SetPoint("BOTTOMRIGHT")
+				bu:SetHighlightTexture(C.media.texture)
+				local hl = bu:GetHighlightTexture()
+				hl:SetVertexColor(r, g, b, .2)
+				hl:SetPoint("TOPLEFT", 0, -1)
+				hl:SetPoint("BOTTOMRIGHT")
 
-					ic:SetTexCoord(.08, .92, .08, .92)
+				ic:SetTexCoord(.08, .92, .08, .92)
 
-					select(6, bu:GetRegions()):SetAlpha(0)
-					select(7, bu:GetRegions()):SetTexture(C.media.texture)
-					select(7, bu:GetRegions()):SetVertexColor(0, 0, 0, .25)
-					select(7, bu:GetRegions()):SetPoint("TOPLEFT", 0, -1)
-					select(7, bu:GetRegions()):SetPoint("BOTTOMRIGHT", 0, 1)
+				locked:Hide()
+				locked.Show = F.dummy
+				bd:SetTexture(C.media.texture)
+				bd:SetVertexColor(0, 0, 0, .25)
+				bd:SetPoint("TOPLEFT", 0, -1)
+				bd:SetPoint("BOTTOMRIGHT", 0, 1)
 
-					F.CreateBG(ic)
-				end
-				reskinnedrewards = true
+				F.CreateBG(ic)
 			end
+			reskinnedRewards = true
 		end)
 
 		local function createButtonBg(bu)
