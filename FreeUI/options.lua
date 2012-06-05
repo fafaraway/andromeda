@@ -14,15 +14,19 @@ C["general"] = {
 		["autorepair_guild"] = false,		-- use guild funds for auto repairs
 	["autoroll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
 	["autosell"] = true,			-- automatically sell greys
+	["bags_size"] = 37,				-- change the size of the bags/bank, default = 37
 	["buffreminder"] = true, 		-- reminder for selfbuffs
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
-	["hotkey"] = false, 			-- show hot keys on buttons
 	["interrupt"] = true,			-- announce your interrupts
-	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
-	["shapeshift"] = false,			-- enable shapeshift/stance bar
 	["tolbarad"] = true,			-- Tol barad timer on the minimap
 		["tolbarad_always"] = false,		-- show timer on non 85 characters as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
+}
+
+C["actionbars"] = {
+	["hotkey"] = false, 			-- show hot keys on buttons
+	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
+	["shapeshift"] = false,			-- enable shapeshift/stance bar
 }
 
 C["unitframes"] = {

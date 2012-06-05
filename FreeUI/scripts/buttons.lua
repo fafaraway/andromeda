@@ -6,6 +6,22 @@ local r, g, b = unpack(C.class)
 
 local _G = _G
 
+local showHotkey = C.actionbars.hotkey
+
+local function updateHotkey(self)
+	local ho = _G[self:GetName() .. "HotKey"]
+	if not ho then return end
+
+	if showHotkey == true then
+		ho:SetAllPoints()
+		ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		ho:SetJustifyH("CENTER")
+		ho:SetDrawLayer("OVERLAY")
+	else
+		ho:Hide()
+	end
+end
+
 local function applyBackground(bu)
 	if bu:GetFrameLevel() < 1 then bu:SetFrameLevel(1) end
 
@@ -53,7 +69,6 @@ local function styleActionButton(bu)
 	local bo  = _G[name.."Border"]
 	local ic  = _G[name.."Icon"]
 	local co  = _G[name.."Count"]
-	local ho  = _G[name.."HotKey"]
 	local nt  = _G[name.."NormalTexture"]
 	local na  = _G[name.."Name"]
 	local fl  = _G[name.."FloatingBG"]
@@ -66,15 +81,6 @@ local function styleActionButton(bu)
 	co:ClearAllPoints()
 	co:SetPoint("TOP", 1, -2)
 	co:SetDrawLayer("OVERLAY")
-
-	if C.general.hotkey == true then
-		ho:SetAllPoints()
-		ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-		ho:SetJustifyH("CENTER")
-		ho:SetDrawLayer("OVERLAY")
-	else
-		ho:Hide()
-	end
 
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
@@ -95,6 +101,7 @@ local function styleActionButton(bu)
 		fl:Hide()
 	end
 
+	updateHotkey(bu)
 	if not bu.bg then applyBackground(bu) end
 
 	bu.styled = true
@@ -169,14 +176,6 @@ local function styleflyout(self)
 	end
 end
 
-local function updateHotkey(self, actionButtonType)
-	local ho = _G[self:GetName() .. "HotKey"]
-	if ho and C.general.hotkey == false then
-		ho:Hide()
-	end
-end
-
-
 local function init()
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		styleActionButton(_G["ActionButton"..i])
@@ -192,7 +191,7 @@ local function init()
 		stylePetButton(_G["PetActionButton"..i])
 	end
 
-	if C.general.shapeshift == true then
+	if C.actionbars.shapeshift == true then
 		for i = 1, NUM_SHAPESHIFT_SLOTS do
 			local bu = _G["ShapeshiftButton"..i]
 			if bu then

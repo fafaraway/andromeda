@@ -226,7 +226,7 @@ end
 
 --[[ Shapeshift and Totem bar ]]
 
-if C.general.shapeshift == true or (select(2, UnitClass("player")) == "SHAMAN" and C.classmod.shaman == true) then
+if C.actionbars.shapeshift == true or (select(2, UnitClass("player")) == "SHAMAN" and C.classmod.shaman == true) then
 	local numshift = NUM_SHAPESHIFT_SLOTS
 
 	local shiftbar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
@@ -293,7 +293,7 @@ veb:SetAlpha(0)
 
 --[[ Right bars on mouseover ]]
 
-if C.general.rightbars_mouseover == true then
+if C.actionbars.rightbars_mouseover == true then
 	bar4:EnableMouse(true)
 	bar5:EnableMouse(true)
 
