@@ -20,6 +20,7 @@ local _G = _G
 local bu, con, bag, col, row
 local buttons, bankbuttons = {}, {}
 local firstbankopened = 1
+local iconSize = C.general.bags_size
 
 --[[ Function to move buttons ]]
 
@@ -28,7 +29,7 @@ local MoveButtons = function(table, frame, columns)
 	for i = 1, #table do
 		bu = table[i]
 		bu:ClearAllPoints()
-		bu:SetPoint("TOPLEFT", frame, "TOPLEFT", col * (37 + Spacing) + 3, -1 * row * (37 + Spacing) - 3)
+		bu:SetPoint("TOPLEFT", frame, "TOPLEFT", col * (iconSize + Spacing) + 3, -1 * row * (iconSize + Spacing) - 3)
 		if(col > (columns - 2)) then
 			col = 0
 			row = row + 1
@@ -37,8 +38,8 @@ local MoveButtons = function(table, frame, columns)
 		end
 	end
 
-	frame:SetHeight((row + (col==0 and 0 or 1)) * (37 + Spacing) + 19)
-	frame:SetWidth(columns * 37 + Spacing * (columns - 1) + 6)
+	frame:SetHeight((row + (col==0 and 0 or 1)) * (iconSize + Spacing) + 19)
+	frame:SetWidth(columns * iconSize + Spacing * (columns - 1) + 6)
 	col, row = 0, 0
 end
 
@@ -70,6 +71,7 @@ local ReanchorButtons = function()
 		for i = GetContainerNumSlots(f-1), 1, -1  do
 			bu = _G[con.."Item"..i]
 			if not bu.reskinned then
+				bu:SetSize(iconSize, iconSize)
 				bu:SetNormalTexture("")
 				bu:SetPushedTexture("")
 				bu:SetFrameStrata("HIGH")
@@ -109,6 +111,7 @@ local ReanchorBankButtons = function()
 	for i = 1, 28 do
 		bu = _G["BankFrameItem"..i]
 		if not bu.reskinned then
+			bu:SetSize(iconSize, iconSize)
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
 			bu:SetFrameStrata("HIGH")
@@ -152,6 +155,7 @@ local ReanchorBankButtons = function()
 		for i = GetContainerNumSlots(f-1), 1, -1  do
 			bu = _G[con.."Item"..i]
 			if not bu.reskinned then
+				bu:SetSize(iconSize, iconSize)
 				bu:SetNormalTexture("")
 				bu:SetPushedTexture("")
 				bu:SetFrameStrata("HIGH")
