@@ -1,6 +1,7 @@
 -- Originally based on aBags by Alza.
 
 local F, C, L = unpack(select(2, ...))
+local _G = _G
 
 --[[ Get the number of bag and bank container slots used ]]
 
@@ -13,21 +14,59 @@ local function CheckSlots()
 	return 1
 end
 
+-- [[ Function to reskin buttons and hide default bags]]
+
+local iconSize = C.general.bags_size
+
+local ReskinButton = function(buName)
+	local bu = _G[buName]
+	
+	if bu.reskinned then return end
+	
+	local co = _G[buName.."Count"]
+
+	bu:SetSize(iconSize, iconSize)
+	bu:SetNormalTexture("")
+	bu:SetPushedTexture("")
+	bu:SetFrameStrata("HIGH")
+	
+	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	co:ClearAllPoints()
+	co:SetPoint("TOP", bu, 1, -2)
+	
+	_G[buName.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+	_G[buName.."IconQuestTexture"]:SetAlpha(0)
+	
+	bu.reskinned = true
+end
+
+local HideBag = function(bagName)
+	local bag = _G[bagName]
+	
+	if bag.reskinned then return end
+	
+	bag:EnableMouse(false)
+	_G[bagName.."CloseButton"]:Hide()
+	_G[bagName.."PortraitButton"]:EnableMouse(false)
+	for i = 1, 7 do
+		select(i, bag:GetRegions()):SetAlpha(0)
+	end
+	
+	bag.reskinned = true
+end
+
 -- [[ Local stuff ]]
 
 local Spacing = 4
-local _G = _G
 local bu, con, bag, col, row
 local buttons, bankbuttons = {}, {}
-local firstbankopened = 1
-local iconSize = C.general.bags_size
 
 --[[ Function to move buttons ]]
 
 local MoveButtons = function(table, frame, columns)
 	col, row = 0, 0
 	for i = 1, #table do
-		bu = table[i]
+		bu = _G[table[i]]
 		bu:ClearAllPoints()
 		bu:SetPoint("TOPLEFT", frame, "TOPLEFT", col * (iconSize + Spacing) + 3, -1 * row * (iconSize + Spacing) - 3)
 		if(col > (columns - 2)) then
@@ -55,33 +94,11 @@ local ReanchorButtons = function()
 	table.wipe(buttons)
 	for f = 1, CheckSlots() do
 		con = "ContainerFrame"..f
-		bag = _G[con]
-		if not bag.reskinned then
-			bag:EnableMouse(false)
-			_G[con.."CloseButton"]:Hide()
-			_G[con.."PortraitButton"]:EnableMouse(false)
-
-			for i = 1, 7 do
-				select(i, bag:GetRegions()):SetAlpha(0)
-			end
-
-			bag.reskinned = true
-		end
+		HideBag(con)
 
 		for i = GetContainerNumSlots(f-1), 1, -1  do
-			bu = _G[con.."Item"..i]
-			if not bu.reskinned then
-				bu:SetSize(iconSize, iconSize)
-				bu:SetNormalTexture("")
-				bu:SetPushedTexture("")
-				bu:SetFrameStrata("HIGH")
-				_G[con.."Item"..i.."Count"]:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				_G[con.."Item"..i.."Count"]:ClearAllPoints()
-				_G[con.."Item"..i.."Count"]:SetPoint("TOP", bu, 1, -2)
-				_G[con.."Item"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-				_G[con.."Item"..i.."IconQuestTexture"]:SetAlpha(0)
-				bu.reskinned = true
-			end
+			bu = con.."Item"..i
+			ReskinButton(bu)
 			tinsert(buttons, bu)
 		end
 	end
@@ -98,6 +115,7 @@ money:SetPoint("BOTTOMRIGHT", holder, "BOTTOMRIGHT", 12, 2)
 --[[ Bank ]]
 
 local bankholder = CreateFrame("Button", "BagsBankHolder", UIParent)
+bankholder:SetPoint("BOTTOMRIGHT", "BagsHolder", "BOTTOMLEFT", -10 , 0)
 bankholder:SetFrameStrata("HIGH")
 bankholder:Hide()
 F.CreateBD(bankholder, .6)
@@ -109,63 +127,20 @@ purchase:SetText("New bag slot? Type /freeui purchase.")
 local ReanchorBankButtons = function()
 	table.wipe(bankbuttons)
 	for i = 1, 28 do
-		bu = _G["BankFrameItem"..i]
-		if not bu.reskinned then
-			bu:SetSize(iconSize, iconSize)
-			bu:SetNormalTexture("")
-			bu:SetPushedTexture("")
-			bu:SetFrameStrata("HIGH")
-			_G["BankFrameItem"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-			_G["BankFrameItem"..i.."Count"]:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-			_G["BankFrameItem"..i.."Count"]:ClearAllPoints()
-			_G["BankFrameItem"..i.."Count"]:SetPoint("TOP", bu, 1, -2)
-			_G["BankFrameItem"..i.."IconQuestTexture"]:SetAlpha(0)
-			bu.reskinned = true
-		end
+		bu = "BankFrameItem"..i
+		ReskinButton(bu)
 		tinsert(bankbuttons, bu)
-	end
-
-	if(firstbankopened==1) then
-		_G["BankFrame"]:EnableMouse(false)
-		_G["BankCloseButton"]:Hide()
-
-		for f = 1, 5 do
-			select(f, _G["BankFrame"]:GetRegions()):SetAlpha(0)
-		end
-		bankholder:SetPoint("BOTTOMRIGHT", "BagsHolder", "BOTTOMLEFT", -10 , 0)
-		firstbankopened = 0
 	end
 
 	for f = CheckSlots() + 1, CheckSlots() + GetNumBankSlots() + 1, 1 do
 		con = "ContainerFrame"..f
-		bag = _G[con]
-		if not bag.reskinned then
-			bag:EnableMouse(false)
-			bag:SetScale(1)
-			bag.SetScale = F.dummy
-			_G[con.."CloseButton"]:Hide()
-			_G[con.."PortraitButton"]:EnableMouse(false)
-
-			for i = 1, 7 do
-				select(i, bag:GetRegions()):SetAlpha(0)
-			end
-			bag.reskinned = true
-		end
+		
+		HideBag(con)
+		_G[con]:SetScale(1)
 
 		for i = GetContainerNumSlots(f-1), 1, -1  do
-			bu = _G[con.."Item"..i]
-			if not bu.reskinned then
-				bu:SetSize(iconSize, iconSize)
-				bu:SetNormalTexture("")
-				bu:SetPushedTexture("")
-				bu:SetFrameStrata("HIGH")
-				_G[con.."Item"..i.."Count"]:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				_G[con.."Item"..i.."Count"]:ClearAllPoints()
-				_G[con.."Item"..i.."Count"]:SetPoint("TOP", bu, 1, -2)
-				_G[con.."Item"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-				_G[con.."Item"..i.."IconQuestTexture"]:SetAlpha(0)
-				bu.reskinned = true
-			end
+			bu = con.."Item"..i
+			ReskinButton(bu)
 			tinsert(bankbuttons, bu)
 		end
 	end
@@ -182,93 +157,52 @@ money:SetPoint("BOTTOMRIGHT", bankholder, "BOTTOMRIGHT", 12, 2)
 
 --[[ Misc. frames ]]
 
-_G["BankFramePurchaseInfo"]:Hide()
-_G["BankFramePurchaseInfo"].Show = F.dummy
+BankFramePurchaseInfo:Hide()
+BankFramePurchaseInfo.Show = F.dummy
+BankFrame:EnableMouse(false)
+BankCloseButton:Hide()
 
-local BankBagButtons = {
-	BankFrameBag1, 
-	BankFrameBag2, 
-	BankFrameBag3, 
-	BankFrameBag4, 
-	BankFrameBag5, 
-	BankFrameBag6, 
-	BankFrameBag7,
-}
-
-local BagButtons = {
-	CharacterBag0Slot, 
-	CharacterBag1Slot, 
-	CharacterBag2Slot, 
-	CharacterBag3Slot, 
-}
-
+for f = 1, 5 do
+	select(f, BankFrame:GetRegions()):SetAlpha(0)
+end
+	
 local bankbagholder = CreateFrame("Frame", nil, BankFrame)
 bankbagholder:SetSize(289, 43)
 bankbagholder:SetPoint("BOTTOM", bankholder, "TOP", 0, -1)
 F.CreateBD(bankbagholder, .6)
 bankbagholder:SetAlpha(0)
 
-bankbagholder:SetScript("OnEnter", function(self)
-	self:SetAlpha(1)
-	for _, g in pairs(BankBagButtons) do
-		g:SetAlpha(1)
-	end
-end)
-bankbagholder:SetScript("OnLeave", function(self)
-	self:SetAlpha(0)
-	for _, g in pairs(BankBagButtons) do
-		g:SetAlpha(0)
-	end
-end)
-
 local bagholder = CreateFrame("Frame", nil, ContainerFrame1)
 bagholder:SetSize(130, 35)
 bagholder:SetPoint("BOTTOM", holder, "TOP", 0, -1)
 
-bagholder:SetScript("OnEnter", function(self)
-	for _, g in pairs(BagButtons) do
-		g:SetAlpha(1)
+local showBags = function()
+	for i = 0, 3 do
+		_G["CharacterBag"..i.."Slot"]:SetAlpha(1)
 	end
-end)
-bagholder:SetScript("OnLeave", function(self)
-	for _, g in pairs(BagButtons) do
-		g:SetAlpha(0)
-	end
-end)
-
-for i = 1, 7 do
-	local bag = _G["BankFrameBag"..i]
-	local ic = _G["BankFrameBag"..i.."IconTexture"]
-	_G["BankFrameBag"..i.."HighlightFrame"]:Hide()
-
-	bag:SetParent(bankholder)
-	bag:ClearAllPoints()
-
-	if i == 1 then
-		bag:SetPoint("BOTTOM", bankholder, "TOP", -123, 2)
-	else
-		bag:SetPoint("LEFT", _G["BankFrameBag"..i-1], "RIGHT", 4, 0)
-	end
-
-	bag:SetNormalTexture("")
-	bag:SetPushedTexture("")
-
-	ic:SetTexCoord(.08, .92, .08, .92)
-	
-	bag:SetAlpha(0)
-	bag:HookScript("OnEnter", function(self)
-		bankbagholder:SetAlpha(1)
-		for _, g in pairs(BankBagButtons) do
-			g:SetAlpha(1)
-		end
-	end)
-	bag:HookScript("OnLeave", function(self)
-		bankbagholder:SetAlpha(0)
-		for _, g in pairs(BankBagButtons) do
-			g:SetAlpha(0)
-		end
-	end)
 end
+
+local hideBags = function()
+	for i = 0, 3 do
+		_G["CharacterBag"..i.."Slot"]:SetAlpha(0)
+	end
+end
+
+local bankBagAlpha = 0
+
+local setBankBagAlpha = function()
+	bankBagAlpha = 1 - bankBagAlpha
+	
+	bankbagholder:SetAlpha(bankBagAlpha)
+	for i = 1, 7 do
+		_G["BankFrameBag"..i]:SetAlpha(bankBagAlpha)
+	end
+end
+
+bagholder:SetScript("OnEnter", showBags)
+bagholder:SetScript("OnLeave", hideBags)
+bankbagholder:SetScript("OnEnter", setBankBagAlpha)
+bankbagholder:SetScript("OnLeave", setBankBagAlpha)
 
 for i = 0, 3 do
 	local bag = _G["CharacterBag"..i.."Slot"]
@@ -293,16 +227,32 @@ for i = 0, 3 do
 	F.CreateBD(bag)
 
 	bag:SetAlpha(0)
-	bag:HookScript("OnEnter", function(self)
-		for _, g in pairs(BagButtons) do
-			g:SetAlpha(1)
-		end
-	 end)
-	bag:HookScript("OnLeave", function(self)
-		for _, g in pairs(BagButtons) do
-			g:SetAlpha(0)
-		end
-	end)
+	bag:HookScript("OnEnter", showBags)
+	bag:HookScript("OnLeave", hideBags)
+end
+
+for i = 1, 7 do
+	local bag = _G["BankFrameBag"..i]
+	local ic = _G["BankFrameBag"..i.."IconTexture"]
+	_G["BankFrameBag"..i.."HighlightFrame"]:Hide()
+
+	bag:SetParent(bankholder)
+	bag:ClearAllPoints()
+
+	if i == 1 then
+		bag:SetPoint("BOTTOM", bankholder, "TOP", -123, 2)
+	else
+		bag:SetPoint("LEFT", _G["BankFrameBag"..i-1], "RIGHT", 4, 0)
+	end
+
+	bag:SetNormalTexture("")
+	bag:SetPushedTexture("")
+
+	ic:SetTexCoord(.08, .92, .08, .92)
+	
+	bag:SetAlpha(0)
+	bag:HookScript("OnEnter", setBankBagAlpha)
+	bag:HookScript("OnLeave", setBankBagAlpha)
 end
 
 local moneytext = {"ContainerFrame1MoneyFrameGoldButtonText", "ContainerFrame1MoneyFrameSilverButtonText", "ContainerFrame1MoneyFrameCopperButtonText", "BankFrameMoneyFrameGoldButtonText", "BankFrameMoneyFrameSilverButtonText", "BankFrameMoneyFrameCopperButtonText", "BackpackTokenFrameToken1Count", "BackpackTokenFrameToken2Count", "BackpackTokenFrameToken3Count"}
