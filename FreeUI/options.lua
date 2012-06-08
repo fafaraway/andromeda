@@ -37,11 +37,13 @@ C["unitframes"] = {
 	["party_name_always"] = false,				-- show name on party/raid frames in dps/tank layout
 	["pvp"] = true, 					-- show pvp icon on player frame
 
-	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105},
-	["target"] = {"TOP", UIParent, "CENTER", 0, -225},
-	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 280, -105}, 
-	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled
-	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled
+	["auto"] = true,				-- adjust unitframe position based on screen height, ignores user settings
+	
+	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105}, -- only applies when 'auto' is false
+	["target"] = {"TOP", UIParent, "CENTER", 0, -225}, -- only applies when 'auto' is false
+	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105}, 
+	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled and when 'auto' is false
+	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled and when 'auto' is false
 
 	["altpower_height"] = 1,
 	["power_height"] = 1,

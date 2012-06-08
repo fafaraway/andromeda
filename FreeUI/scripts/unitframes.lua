@@ -654,12 +654,11 @@ local UnitSpecific = {
 
 		Health:SetHeight(playerHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, 8)
+		local HealthPoints = F.CreateFS(Health, 8, "LEFT")
 		self.MaxHealthPoints = F.CreateFS(Health, 8, "RIGHT")
 
-		HealthPoints:SetPoint("LEFT", self, "TOPLEFT", 0, 6)
-		HealthPoints:SetJustifyH("LEFT")
-		self.MaxHealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
+		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
+		self.MaxHealthPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
 
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		self:Tag(self.MaxHealthPoints, '[free:maxhealth]')
@@ -1020,10 +1019,9 @@ local UnitSpecific = {
 
 		Health:SetHeight(targetHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, 8)
+		local HealthPoints = F.CreateFS(Health, 8, "LEFT")
 
-		HealthPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
-		HealthPoints:SetJustifyH("LEFT")
+		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
 
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
@@ -1576,12 +1574,32 @@ local spawnHelper = function(self, unit, ...)
 end
 
 oUF:Factory(function(self)
-	spawnHelper(self, 'player', unpack(C.unitframes.player))
-
-	if FreeUIConfig.layout == 1 then
-		spawnHelper(self, 'target', unpack(C.unitframes.target))
+	local playerPos, targetPos, partyPos, raidPos
+	if C.unitframes.auto == true then
+		local height = GetScreenHeight()
+		spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", -275, -(height/13.7))
+		
+		if FreeUIConfig.layout == 1 then
+			spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, -(height/6.4))
+			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
+			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
+		else
+			spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, -(height/13.7))
+			partyPos = {"TOP", UIParent, "CENTER", 0, -(height/6.4)}
+			raidPos = {"TOP", UIParent, "CENTER", 0, -(height/7.6)}
+		end
 	else
-		spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
+		spawnHelper(self, 'player', unpack(C.unitframes.player))
+		
+		if FreeUIConfig.layout == 1 then
+			spawnHelper(self, 'target', unpack(C.unitframes.target))
+			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
+			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
+		else
+			spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
+			partyPos = C.unitframes.party
+			raidPos = C.unitframes.raid
+		end
 	end
 
 	spawnHelper(self, 'focus', "BOTTOMRIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 12)
@@ -1621,11 +1639,7 @@ oUF:Factory(function(self)
 		]]):format(party_height, party_width)
 	)
 
-	if FreeUIConfig.layout == 1 then
-		party:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 50)
-	else
-		party:SetPoint(unpack(C.unitframes.party))
-	end
+	party:SetPoint(unpack(partyPos))
 
 	local raid = self:SpawnHeader(nil, nil, "custom [@raid6,exists] show; hide",
 		'showPlayer', true,
@@ -1647,9 +1661,5 @@ oUF:Factory(function(self)
 		]]):format(party_height, party_width)
 	)
 
-	if FreeUIConfig.layout == 1 then
-		raid:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0)
-	else
-		raid:SetPoint(unpack(C.unitframes.raid))
-	end
+	raid:SetPoint(unpack(raidPos))
 end)
