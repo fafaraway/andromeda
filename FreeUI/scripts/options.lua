@@ -97,7 +97,6 @@ local reset_desc = reset:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 reset_desc:SetPoint("TOP", reset, "BOTTOM", 0, -8)
 reset_desc:SetText("Remove the data saved by FreeUI.")
 
-local credits = options:CreateFontString(nil, "OVERLAY")
-credits:SetFont(C.media.font2, 12, "THINOUTLINE")
+local credits = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 credits:SetText("FreeUI by Freethinker @ Steamwheedle Cartel - EU / Haleth on wowinterface.com")
 credits:SetPoint("TOP", 0, -480)

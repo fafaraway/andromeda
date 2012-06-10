@@ -254,11 +254,7 @@ local function ReskinArrow(f, direction)
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
 	
-	if direction == 1 then
-		tex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-left-active")
-	elseif direction == 2 then
-		tex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-right-active")
-	end
+	tex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-"..direction.."-active")
 end
 
 F.ReskinArrow = ReskinArrow
@@ -458,26 +454,26 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Arrows ]]
 
-		ReskinArrow(SpellBookPrevPageButton, 1)
-		ReskinArrow(SpellBookNextPageButton, 2)
-		ReskinArrow(InboxPrevPageButton, 1)
-		ReskinArrow(InboxNextPageButton, 2)
-		ReskinArrow(MerchantPrevPageButton, 1)
-		ReskinArrow(MerchantNextPageButton, 2)
-		ReskinArrow(CharacterFrameExpandButton, 1)
-		ReskinArrow(PVPTeamManagementFrameWeeklyToggleLeft, 1)
-		ReskinArrow(PVPTeamManagementFrameWeeklyToggleRight, 2)
-		ReskinArrow(PVPBannerFrameCustomization1LeftButton, 1)
-		ReskinArrow(PVPBannerFrameCustomization1RightButton, 2)
-		ReskinArrow(PVPBannerFrameCustomization2LeftButton, 1)
-		ReskinArrow(PVPBannerFrameCustomization2RightButton, 2)
-		ReskinArrow(ItemTextPrevPageButton, 1)
-		ReskinArrow(ItemTextNextPageButton, 2)
-		ReskinArrow(TabardCharacterModelRotateLeftButton, 1)
-		ReskinArrow(TabardCharacterModelRotateRightButton, 2)
+		ReskinArrow(SpellBookPrevPageButton, "left")
+		ReskinArrow(SpellBookNextPageButton, "right")
+		ReskinArrow(InboxPrevPageButton, "left")
+		ReskinArrow(InboxNextPageButton, "right")
+		ReskinArrow(MerchantPrevPageButton, "left")
+		ReskinArrow(MerchantNextPageButton, "right")
+		ReskinArrow(CharacterFrameExpandButton, "left")
+		ReskinArrow(PVPTeamManagementFrameWeeklyToggleLeft, "left")
+		ReskinArrow(PVPTeamManagementFrameWeeklyToggleRight, "right")
+		ReskinArrow(PVPBannerFrameCustomization1LeftButton, "left")
+		ReskinArrow(PVPBannerFrameCustomization1RightButton, "right")
+		ReskinArrow(PVPBannerFrameCustomization2LeftButton, "left")
+		ReskinArrow(PVPBannerFrameCustomization2RightButton, "right")
+		ReskinArrow(ItemTextPrevPageButton, "left")
+		ReskinArrow(ItemTextNextPageButton, "right")
+		ReskinArrow(TabardCharacterModelRotateLeftButton, "left")
+		ReskinArrow(TabardCharacterModelRotateRightButton, "right")
 		for i = 1, 5 do
-			ReskinArrow(_G["TabardFrameCustomization"..i.."LeftButton"], 1)
-			ReskinArrow(_G["TabardFrameCustomization"..i.."RightButton"], 2)
+			ReskinArrow(_G["TabardFrameCustomization"..i.."LeftButton"], "left")
+			ReskinArrow(_G["TabardFrameCustomization"..i.."RightButton"], "right")
 		end
 
 		hooksecurefunc("CharacterFrame_Expand", function()
@@ -624,8 +620,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				PetStableModelRotateRightButton:Hide()
 
 				ReskinClose(PetStableFrameCloseButton)
-				ReskinArrow(PetStablePrevPageButton, 1)
-				ReskinArrow(PetStableNextPageButton, 2)
+				ReskinArrow(PetStablePrevPageButton, "left")
+				ReskinArrow(PetStableNextPageButton, "right")
 
 				for i = 1, 10 do
 					local bu = _G["PetStableStabledPet"..i]
@@ -2488,8 +2484,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinDropDown(ArchaeologyFrameRaceFilter)
 		ReskinClose(ArchaeologyFrameCloseButton)
 		ReskinScroll(ArchaeologyFrameArtifactPageHistoryScrollScrollBar)
-		ReskinArrow(ArchaeologyFrameCompletedPagePrevPageButton, 1)
-		ReskinArrow(ArchaeologyFrameCompletedPageNextPageButton, 2)
+		ReskinArrow(ArchaeologyFrameCompletedPagePrevPageButton, "left")
+		ReskinArrow(ArchaeologyFrameCompletedPageNextPageButton, "right")
 		ArchaeologyFrameCompletedPagePrevPageButtonIcon:Hide()
 		ArchaeologyFrameCompletedPageNextPageButtonIcon:Hide()
 
@@ -2709,8 +2705,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinDropDown(PriceDropDown)
 		ReskinDropDown(DurationDropDown)
 		ReskinInput(BrowseName)
-		ReskinArrow(BrowsePrevPageButton, 1)
-		ReskinArrow(BrowseNextPageButton, 2)
+		ReskinArrow(BrowsePrevPageButton, "left")
+		ReskinArrow(BrowseNextPageButton, "right")
 		ReskinCheck(IsUsableCheckButton)
 		ReskinCheck(ShowOnPlayerCheckButton)
 		
@@ -3044,12 +3040,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(BarberShopFrameOkayButton)
 		F.Reskin(BarberShopFrameCancelButton)
 		F.Reskin(BarberShopFrameResetButton)
-		ReskinArrow(BarberShopFrameSelector1Prev, 1)
-		ReskinArrow(BarberShopFrameSelector1Next, 2)
-		ReskinArrow(BarberShopFrameSelector2Prev, 1)
-		ReskinArrow(BarberShopFrameSelector2Next, 2)
-		ReskinArrow(BarberShopFrameSelector3Prev, 1)
-		ReskinArrow(BarberShopFrameSelector3Next, 2)
+		ReskinArrow(BarberShopFrameSelector1Prev, "left")
+		ReskinArrow(BarberShopFrameSelector1Next, "right")
+		ReskinArrow(BarberShopFrameSelector2Prev, "left")
+		ReskinArrow(BarberShopFrameSelector2Next, "right")
+		ReskinArrow(BarberShopFrameSelector3Prev, "left")
+		ReskinArrow(BarberShopFrameSelector3Next, "right")
 	elseif addon == "Blizzard_BattlefieldMinimap" then
 		SetBD(BattlefieldMinimap, -1, 1, -5, 3)
 		BattlefieldMinimapCorner:Hide()
@@ -3282,8 +3278,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinInput(CalendarCreateEventInviteEdit)
 		ReskinInput(CalendarMassInviteGuildMinLevelEdit)
 		ReskinInput(CalendarMassInviteGuildMaxLevelEdit)
-		ReskinArrow(CalendarPrevMonthButton, 1)
-		ReskinArrow(CalendarNextMonthButton, 2)
+		ReskinArrow(CalendarPrevMonthButton, "left")
+		ReskinArrow(CalendarNextMonthButton, "right")
 		CalendarPrevMonthButton:SetSize(19, 19)
 		CalendarNextMonthButton:SetSize(19, 19)
 		ReskinCheck(CalendarCreateEventLockEventCheck)
@@ -3718,6 +3714,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("GuildBankFrame_UpdateFiltered", updateFilter)
 		hooksecurefunc("GuildBankFrame_Update", updateFilter)
+		
+		for i = 1, NUM_GUILDBANK_ICONS_PER_ROW * NUM_GUILDBANK_ICON_ROWS do
+			local bu = _G["GuildBankPopupButton"..i]
+			
+			select(2, bu:GetRegions()):Hide()
+			
+			_G["GuildBankPopupButton"..i.."Icon"]:SetTexCoord(.08, .92, .08, .92)
+			
+			F.CreateBG(_G["GuildBankPopupButton"..i.."Icon"])
+		end
 
 		F.Reskin(GuildBankFrameWithdrawButton)
 		F.Reskin(GuildBankFrameDepositButton)
@@ -3733,8 +3739,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinScroll(GuildBankPopupScrollFrameScrollBar)
 		ReskinInput(GuildItemSearchBox)
 	elseif addon == "Blizzard_GuildControlUI" then
-		F.CreateBD(GuildControlUI)
-		F.CreateSD(GuildControlUI)
+		SetBD(GuildControlUI, 0, 0, 0, -28)
 		F.CreateBD(GuildControlUIRankBankFrameInset, .25)
 
 		for i = 1, 9 do
@@ -3755,11 +3760,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildControlUIRankBankFrameInsetScrollFrameBottom:SetAlpha(0)
 
 		hooksecurefunc("GuildControlUI_RankOrder_Update", function()
-			if not reskinnedranks then
-				for i = 1, GuildControlGetNumRanks() do
-					ReskinInput(_G["GuildControlUIRankOrderFrameRank"..i.."NameEditBox"], 20)
+			for i = 1, GuildControlGetNumRanks() do
+				local name = "GuildControlUIRankOrderFrameRank"..i
+				local rank = _G[name.."NameEditBox"]
+				if not rank.reskinned then
+					F.ReskinInput(rank, 20)
+					F.ReskinArrow(_G[name.."ShiftUpButton"], "up")
+					_G[name.."ShiftUpButtonIcon"]:Hide()
+					F.ReskinArrow(_G[name.."ShiftDownButton"], "down")
+					_G[name.."ShiftDownButtonIcon"]:Hide()
+					F.ReskinClose(_G[name.."DeleteButton"])
+					_G[name.."DeleteButtonIcon"]:Hide()
+					rank.reskinned = true
 				end
-				reskinnedranks = true
 			end
 		end)
 
@@ -3771,15 +3784,22 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					_G[tab.."Bg"]:Hide()
 					F.CreateBD(bu, .12)
 					F.Reskin(_G[tab.."BuyPurchaseButton"])
+					F.ReskinCheck(_G[tab.."OwnedViewCheck"])
+					F.ReskinCheck(_G[tab.."OwnedDepositCheck"])
+					F.ReskinCheck(_G[tab.."OwnedUpdateInfoCheck"])
 					F.ReskinInput(_G[tab.."OwnedStackBox"])
 
 					bu.reskinned = true
 				end
 			end
 		end)
+		
+		for i = 1, 19 do
+			local checkbox = _G["GuildControlUIRankSettingsFrameCheckbox"..i]
+			if checkbox then F.ReskinCheck(checkbox) end
+		end
 
 		F.Reskin(GuildControlUIRankOrderFrameNewButton)
-
 		ReskinClose(GuildControlUICloseButton)
 		ReskinScroll(GuildControlUIRankBankFrameInsetScrollFrameScrollBar)
 		ReskinDropDown(GuildControlUINavigationDropDown)
@@ -3847,6 +3867,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildRecruitmentCommentFrameBg:Hide()
 		GuildRecruitmentDeclineButton_LeftSeparator:Hide()
 		GuildRecruitmentInviteButton_RightSeparator:Hide()
+		GuildRecruitmentListGuildButton_LeftSeparator:Hide()
 
 		GuildFrame:DisableDrawLayer("BACKGROUND")
 		GuildFrame:DisableDrawLayer("BORDER")
@@ -4109,9 +4130,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(logbutton)
 		local gbuttons = {"GuildAddMemberButton", "GuildViewLogButton", "GuildControlButton", "GuildTextEditFrameAcceptButton", "GuildMemberGroupInviteButton", "GuildMemberRemoveButton", "GuildRecruitmentInviteButton", "GuildRecruitmentMessageButton", "GuildRecruitmentDeclineButton", "GuildPerksToggleButton", "GuildRecruitmentListGuildButton"}
 		for i = 1, #gbuttons do
-			local gbutton = _G[gbuttons[i]]
-			F.Reskin(gbutton)
+			F.Reskin(_G[gbuttons[i]])
 		end
+		
+		local checkboxes = {"GuildRecruitmentQuestButton", "GuildRecruitmentDungeonButton", "GuildRecruitmentRaidButton", "GuildRecruitmentPvPButton", "GuildRecruitmentRPButton", "GuildRecruitmentWeekdaysButton", "GuildRecruitmentWeekendsButton"}
+		for i = 1, #checkboxes do
+			F.ReskinCheck(_G[checkboxes[i]])
+		end
+		
+		F.ReskinCheck(GuildRecruitmentTankButton:GetChildren())
+		F.ReskinCheck(GuildRecruitmentHealerButton:GetChildren())
+		F.ReskinCheck(GuildRecruitmentDamagerButton:GetChildren())
+		
+		F.ReskinRadio(GuildRecruitmentLevelAnyButton)
+		F.ReskinRadio(GuildRecruitmentLevelMaxButton)
 
 		for i = 1, 3 do
 			for j = 1, 6 do
@@ -4801,9 +4833,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinScroll(TradeSkillGuildCraftersFrameScrollBar)
 		ReskinInput(TradeSkillInputBox, nil, nil, -2, 2)
 		ReskinInput(TradeSkillFrameSearchBox)
-		ReskinArrow(TradeSkillDecrementButton, 1)
-		ReskinArrow(TradeSkillIncrementButton, 2)
-		ReskinArrow(TradeSkillLinkButton, 2)
+		ReskinArrow(TradeSkillDecrementButton, "left")
+		ReskinArrow(TradeSkillIncrementButton, "right")
+		ReskinArrow(TradeSkillLinkButton, "right")
 	elseif addon == "Blizzard_TrainerUI" then
 		SetBD(ClassTrainerFrame)
 		ClassTrainerFrame:DisableDrawLayer("BACKGROUND")
