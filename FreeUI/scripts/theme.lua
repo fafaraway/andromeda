@@ -626,13 +626,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if level == 1 then
 				if not anchorName then
 					listFrame:SetPoint("TOPLEFT", dropDownFrame, "BOTTOMLEFT", 16, 9)
-					listFrame:SetPoint("TOPRIGHT", dropDownFrame, "BOTTOMRIGHT", -18, 9)
 				elseif anchorName ~= "cursor" then
 					-- this part might be a bit unreliable
 					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
 					if relPoint == "BOTTOMLEFT" and xOff == 0 and yOff == 5 then
 						listFrame:SetPoint("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
-						listFrame:SetPoint("TOPRIGHT", anchorName, "BOTTOMRIGHT", -18, 9)
 					end
 				end
 			else
