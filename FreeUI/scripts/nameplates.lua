@@ -13,13 +13,52 @@ local tfreq = C.performance.namethreat
 local paladinR, paladinG, paladinB = C.classcolours["PALADIN"].r, C.classcolours["PALADIN"].g, C.classcolours["PALADIN"].b
 local shamanR, shamanG, shamanB = C.classcolours["SHAMAN"].r, C.classcolours["SHAMAN"].g, C.classcolours["SHAMAN"].b
 
-local CreateBG = function(parent, r, g, b, a, layer)
-	local offset = UIParent:GetScale() / parent:GetEffectiveScale()
-	local bg = parent:CreateTexture(nil, layer or "BACKGROUND")
-	bg:SetTexture(r or 0, g or 0, b or 0, a or 1)
-	bg:SetPoint("BOTTOMRIGHT", offset, -offset)
+local CreateBD = function(parent, offset)
+	local left = parent:CreateTexture(nil, "BACKGROUND")
+	left:SetWidth(offset)
+	left:SetTexture(0, 0, 0)
+	left:SetPoint("TOPLEFT", -offset, offset)
+	left:SetPoint("BOTTOMLEFT", -offset, -offset)
+	
+	local right = parent:CreateTexture(nil, "BACKGROUND")
+	right:SetWidth(offset)
+	right:SetTexture(0, 0, 0)
+	right:SetPoint("TOPRIGHT", offset, offset)
+	right:SetPoint("BOTTOMRIGHT", offset, -offset)
+	
+	local top = parent:CreateTexture(nil, "BACKGROUND")
+	top:SetHeight(offset)
+	top:SetTexture(0, 0, 0)
+	top:SetPoint("TOPLEFT", -offset, offset)
+	top:SetPoint("TOPRIGHT", offset, offset)
+	
+	local bottom = parent:CreateTexture(nil, "BACKGROUND")
+	bottom:SetHeight(offset)
+	bottom:SetTexture(0, 0, 0)
+	bottom:SetPoint("BOTTOMLEFT", -offset, -offset)
+	bottom:SetPoint("BOTTOMRIGHT", offset, -offset)
+	
+	local bg = parent:CreateTexture(nil, "BACKGROUND")
+	bg:SetTexture(0, 0, 0, .5)
+	bg:SetPoint("TOPLEFT")
+	bg:SetPoint("BOTTOMRIGHT")
+end
+
+local CreateBG = function(parent, offset)
+	local bg = parent:CreateTexture(nil, "BACKGROUND")
+	bg:SetTexture(0, 0, 0)
 	bg:SetPoint("TOPLEFT", -offset, offset)
+	bg:SetPoint("BOTTOMRIGHT", offset, -offset)
 	return bg
+end
+
+local CreateLine = function(parent, offset, w, h, p1, x1, y1, p2, x2, y2)
+	local line = parent:CreateTexture(nil, layer or "BACKGROUND")
+	line:SetSize(w, h)
+	line:SetTexture(0, 0, 0)
+	line:SetPoint(p1, x1, y1)
+	line:SetPoint(p2, x2, y2)
+	return line
 end
 
 local function IsValidFrame(frame)
@@ -207,8 +246,10 @@ local CreateFrame = function(frame)
 	frame.elapsed = 0
 	frame:SetScript("OnUpdate", ThreatUpdate)
 
-	CreateBG(castBar)
-	CreateBG(healthBar)
+	
+	local offset = UIParent:GetScale() / healthBar:GetEffectiveScale()
+	CreateBD(healthBar, offset)
+	CreateBD(castBar, offset)
 
 	local iconFrame = CreateFrame("Frame", nil, castBar)
 	iconFrame:SetPoint("TOPLEFT", healthBar, "TOPRIGHT", 2, 2)
@@ -216,7 +257,7 @@ local CreateFrame = function(frame)
 	iconFrame:SetWidth(16)
 	iconFrame:SetFrameLevel(0)
 
-	castBar.iconbg = CreateBG(iconFrame)
+	castBar.iconbg = CreateBG(iconFrame, offset)
 
 	spellIconRegion:ClearAllPoints()
 	spellIconRegion:SetAllPoints(iconFrame)
