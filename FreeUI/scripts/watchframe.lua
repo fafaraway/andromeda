@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 local wf = WatchFrame
 
+wf:SetClampedToScreen(false)
 wf:SetMovable(true);
 wf:ClearAllPoints()
 wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -170)
