@@ -54,6 +54,8 @@ local SmallerMapSkin = function()
 	WorldMapLevelDropDown:SetParent(panel)
 	WorldMapLevelDropDown:ClearAllPoints()
 	WorldMapLevelDropDown:SetPoint("RIGHT", panel, "RIGHT", 0, -2)
+	WorldMapLevelDropDown:SetFrameLevel(panel:GetFrameLevel()+1)
+	WorldMapLevelDropDownButton:SetFrameLevel(panel:GetFrameLevel()+1)
 	WorldMapFrameMiniBorderLeft:Hide()
 	WorldMapFrameMiniBorderRight:Hide()
 	WorldMapFrameTitle:ClearAllPoints()
@@ -91,6 +93,7 @@ local SmallerMapSkin = function()
 	WorldMapShowDropDown:SetParent(panel)
 	WorldMapShowDropDown:ClearAllPoints()
 	WorldMapShowDropDown:SetPoint("LEFT", panel, "LEFT", 0, -2)
+	WorldMapShowDropDown:SetFrameStrata("LOW")
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
@@ -237,6 +240,7 @@ panel.open = function()
 		panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight-y)
 		if y == panelHeight then
 			panel:SetScript("OnUpdate", nil)
+			WorldMapShowDropDown:SetFrameStrata("HIGH")
 			y = 0
 		end
 	end)
@@ -244,6 +248,7 @@ end
 
 panel.close = function()
 	opened = false
+	WorldMapShowDropDown:SetFrameStrata("LOW")
 	panel:SetScript("OnUpdate", function()
 		y = y + 1
 		panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, 0+y)
