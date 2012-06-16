@@ -24,7 +24,7 @@ frame:SetFrameStrata("HIGH")
 local panel = CreateFrame("Frame", nil, WorldMapButton)
 panel:EnableMouse(true)
 panel:SetScale(offset)
-panel:SetFrameStrata("BACKGROUND")
+panel:SetFrameLevel(0)
 
 local button = CreateFrame("Frame", nil, WorldMapButton)
 button:EnableMouse(true)
@@ -35,11 +35,6 @@ button:SetPoint("BOTTOM", WorldMapDetailFrame)
 local text = F.CreateFS(button, 8)
 text:SetPoint("CENTER")
 text:SetText("+")
-
---[[local arrow = button:CreateTexture(nil, "OVERLAY")
-arrow:SetPoint("CENTER")
-arrow:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
-arrow:SetSize(8, 8)]]
 
 local SmallerMapSkin = function()
 	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, -offset, offset)
