@@ -56,9 +56,6 @@ SlashCmdList.VOLUME = function(val)
 end
 SLASH_VOLUME1 = "/vol"
 
-local wf = WatchFrame
-local wfmove = false 
-
 SlashCmdList.FREEUI = function(cmd)
 	local cmd, args = strsplit(" ", cmd:lower(), 2)
 	if cmd == "dps" then
@@ -67,19 +64,6 @@ SlashCmdList.FREEUI = function(cmd)
 	elseif(cmd == "heal" or cmd == "healer") then
 		FreeUIConfig.layout = 2
 		ReloadUI()
-	elseif cmd == "watchframe" then
-		if wfmove == false then
-			wfmove = true
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffWatchframe unlocked.", unpack(C.class))
-			wf:EnableMouse(true);
-			wf:RegisterForDrag("LeftButton"); 
-			wf:SetScript("OnDragStart", wf.StartMoving); 
-			wf:SetScript("OnDragStop", wf.StopMovingOrSizing);
-		elseif wfmove == true then
-			wf:EnableMouse(false);
-			wfmove = false
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffWatchframe locked.", unpack(C.class))
-		end
 	elseif cmd == "purchase" then
 		if BankFrame and BankFrame:IsShown() then
 			local _, full = GetNumBankSlots()
@@ -108,7 +92,6 @@ SlashCmdList.FREEUI = function(cmd)
 		end
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r [dps/healer]|cffffffff: Select a unitframe layout|r", unpack(C.class))
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r watchframe|cffffffff: Lock/unlock the watchframe|r", unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r purchase|cffffffff: Buy a new bank slot|r", unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r install|cffffffff: Load the intaller|r", unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r reset|cffffffff: Clear saved settings|r", unpack(C.class))

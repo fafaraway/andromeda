@@ -33,38 +33,9 @@ layout:SetScript("OnEvent", function(self)
 	layout_desc:SetText("Switch to the "..( FreeUIConfig.layout==1 and "Healer" or "Dps/Tank").." unitframe layout. This will reload the UI.")
 end)
 
-local watchframe = CreateFrame("Button", "FreeUI_ConfigPanel_WatchFrame", options, "UIPanelButtonTemplate")
-watchframe:SetSize(128, 25)
-watchframe:SetPoint("TOP", 0, -200)
-watchframe:SetText("Unlock quest tracker")
-
-local wf = WatchFrame
-local wfmove = false
-
-watchframe:SetScript("OnClick", function(self)
-	if wfmove == false then
-		wfmove = true
-		self:SetText("Lock quest tracker")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffQuest tracker unlocked.", unpack(C.class))
-		wf:EnableMouse(true);
-		wf:RegisterForDrag("LeftButton"); 
-		wf:SetScript("OnDragStart", wf.StartMoving); 
-		wf:SetScript("OnDragStop", wf.StopMovingOrSizing);
-	elseif wfmove == true then
-		wf:EnableMouse(false);
-		wfmove = false
-		self:SetText("Unlock quest tracker")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffQuest tracker locked.", unpack(C.class))
-	end
-end)
-
-local watchframe_desc = watchframe:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-watchframe_desc:SetPoint("TOP", watchframe, "BOTTOM", 0, -8)
-watchframe_desc:SetText("Lock/unlock the quest tracker for moving.")
-
 local install = CreateFrame("Button", "FreeUI_ConfigPanel_Install", options, "UIPanelButtonTemplate")
 install:SetSize(128, 25)
-install:SetPoint("TOP", 0, -280)
+install:SetPoint("TOP", 0, -200)
 install:SetText("Installer")
 install:SetScript("OnClick", function()
 	InterfaceOptionsFrame_Show()
@@ -85,7 +56,7 @@ install_desc:SetText("Load the installer/tutorial.")
 
 local reset = CreateFrame("Button", "FreeUI_ConfigPanel_Reset", options, "UIPanelButtonTemplate")
 reset:SetSize(128, 25)
-reset:SetPoint("TOP", 0, -360)
+reset:SetPoint("TOP", 0, -280)
 reset:SetText("Reset")
 reset:SetScript("OnClick", function()
 	FreeUIGlobalConfig = {}
@@ -99,4 +70,4 @@ reset_desc:SetText("Remove the data saved by FreeUI.")
 
 local credits = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 credits:SetText("FreeUI by Freethinker @ Steamwheedle Cartel - EU / Haleth on wowinterface.com")
-credits:SetPoint("TOP", 0, -480)
+credits:SetPoint("TOP", 0, -400)

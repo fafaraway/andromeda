@@ -2,14 +2,18 @@ local F, C, L = unpack(select(2, ...))
 
 local wf = WatchFrame
 
-wf:SetClampedToScreen(false)
-wf:SetMovable(true);
-wf:ClearAllPoints()
-wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -170)
-wf:SetWidth(250)
-wf:SetHeight(700)
-wf:SetUserPlaced(true)
-wf.SetPoint = function() end
+local function moveTracker()
+	if MultiBarLeft:IsShown() then
+		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -100, -150)
+	elseif MultiBarRight:IsShown() then
+		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -70, -150)
+	else
+		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -150)	
+	end
+	wf:SetPoint("BOTTOM", Minimap, "TOP", 0, 10)
+end
+
+hooksecurefunc("UIParent_ManageFramePositions", moveTracker)
 
 WatchFrameCollapseExpandButton:SetSize(15, 15)
 
