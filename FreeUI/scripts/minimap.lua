@@ -16,7 +16,7 @@ end)
 
 Minimap:SetScript("OnMouseUp", function(self, button)
 	if button == "RightButton" then
-		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "Minimap", -34, -79)
+		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, "cursor", -162, 190)
 	else
 		Minimap_OnClick(self)
 	end
