@@ -3640,9 +3640,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBD(GMSurveyCommentFrame, .25)
 		for i = 1, 11 do
 			F.CreateBD(_G["GMSurveyQuestion"..i], .25)
+			for j = 0, 5 do
+				F.ReskinRadio(_G["GMSurveyQuestion"..i.."RadioButton"..j])
+			end
 		end
 
-		for i = 1, 11 do
+		for i = 1, 12 do
 			select(i, GMSurveyFrame:GetRegions()):Hide()
 		end
 		GMSurveyHeaderLeft:Hide()
