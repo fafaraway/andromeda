@@ -30,6 +30,25 @@ local tooltips = {
 	"VoiceMacroMenu",
 }
 
+local backdrop = {
+	bgFile = C.media.backdrop,
+	edgeFile = C.media.backdrop,
+	edgeSize = 1,
+}
+
+-- so other stuff which tries to look like GameTooltip doesn't mess up
+local getBackdrop = function()
+	return backdrop
+end
+
+local getBackdropColor = function()
+	return 0, 0, 0, .6
+end
+
+local getBackdropBorderColor = function()
+	return 0, 0, 0
+end
+
 for i = 1, #tooltips do
 	local t = _G[tooltips[i]]
 	t:SetBackdrop(nil)
@@ -37,7 +56,13 @@ for i = 1, #tooltips do
 	bg:SetPoint("TOPLEFT")
 	bg:SetPoint("BOTTOMRIGHT")
 	bg:SetFrameLevel(t:GetFrameLevel()-1)
-	F.CreateBD(bg, .6)
+	bg:SetBackdrop(backdrop)
+	bg:SetBackdropColor(0, 0, 0, .6)
+	bg:SetBackdropBorderColor(0, 0, 0)
+	
+	t.GetBackdrop = getBackdrop
+	t.GetBackdropColor = getBackdropColor
+	t.GetBackdropBorderColor = getBackdropBorderColor
 end
 
 --[[ Statusbar ]]
