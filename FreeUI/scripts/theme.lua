@@ -314,12 +314,12 @@ local function ReskinRadio(f)
 	local hl = f:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 5, -5)
 	hl:SetPoint("BOTTOMRIGHT", -5, 5)
-	hl:SetVertexColor(r, g, b, .2)
+	hl:SetVertexColor(r, g, b, .3)
 	
 	local ch = f:GetCheckedTexture()
 	ch:SetPoint("TOPLEFT", 5, -5)
 	ch:SetPoint("BOTTOMRIGHT", -5, 5)
-	ch:SetVertexColor(r, g, b, .5)
+	ch:SetVertexColor(r, g, b, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", 4, -4)
@@ -615,15 +615,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					F.CreateBD(backdrop)
 					
 					for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
-						local hl = _G["DropDownList"..i.."Button"..j.."Highlight"]
-						hl:SetTexture(r, g, b, .2)
+						_G["DropDownList"..i.."Button"..j.."Highlight"]:SetTexture(r, g, b, .2)
 					end
 					
 					backdrop.reskinned = true
 				end
 			end
 		end)
-		
+
 		hooksecurefunc("ToggleDropDownMenu", function(level, _, dropDownFrame, anchorName)
 			if not level then level = 1 end	
 			
@@ -635,7 +634,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				elseif anchorName ~= "cursor" then
 					-- this part might be a bit unreliable
 					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
-					if relPoint == "BOTTOMLEFT" and xOff == 0 and yOff == 5 then
+					if relPoint == "BOTTOMLEFT" and xOff == 0 and floor(yOff) == 5 then
 						listFrame:SetPoint("TOPLEFT", anchorName, "BOTTOMLEFT", 16, 9)
 					end
 				end
@@ -656,6 +655,88 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					hl:SetPoint("TOPLEFT", -x + 1, 0)
 					hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
 				end
+			end
+		end)
+		
+		local createBackdrop = function(parent, texture, offset)
+			local bg = parent:CreateTexture(nil, "BACKGROUND")
+			bg:SetTexture(0, 0, 0, .5)
+			bg:SetPoint("CENTER", texture)
+			bg:SetSize(12, 12)
+			parent.bg = bg
+		
+			local left = parent:CreateTexture(nil, "BACKGROUND")
+			left:SetWidth(1)
+			left:SetTexture(0, 0, 0)
+			left:SetPoint("TOPLEFT", bg)
+			left:SetPoint("BOTTOMLEFT", bg)
+			parent.left = left
+			
+			local right = parent:CreateTexture(nil, "BACKGROUND")
+			right:SetWidth(1)
+			right:SetTexture(0, 0, 0)
+			right:SetPoint("TOPRIGHT", bg)
+			right:SetPoint("BOTTOMRIGHT", bg)
+			parent.right = right
+			
+			local top = parent:CreateTexture(nil, "BACKGROUND")
+			top:SetHeight(1)
+			top:SetTexture(0, 0, 0)
+			top:SetPoint("TOPLEFT", bg)
+			top:SetPoint("TOPRIGHT", bg)
+			parent.top = top
+			
+			local bottom = parent:CreateTexture(nil, "BACKGROUND")
+			bottom:SetHeight(1)
+			bottom:SetTexture(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", bg)
+			bottom:SetPoint("BOTTOMRIGHT", bg)
+			parent.bottom = bottom
+		end
+		
+		local toggleBackdrop = function(bu, show)
+			if show then
+				bu.bg:Show()
+				bu.left:Show()
+				bu.right:Show()
+				bu.top:Show()
+				bu.bottom:Show()
+			else
+				bu.bg:Hide()
+				bu.left:Hide()
+				bu.right:Hide()
+				bu.top:Hide()
+				bu.bottom:Hide()
+			end
+		end
+		
+		hooksecurefunc("UIDropDownMenu_AddButton", function(info, level)
+			if not level then level = 1 end
+		
+			local listFrame = _G["DropDownList"..level];
+			local index = listFrame and (listFrame.numButtons) or 1
+			
+			local bu = _G["DropDownList"..level.."Button"..index]
+			if not bu.bg then
+				createBackdrop(bu, _G["DropDownList"..level.."Button"..index.."Check"])
+			end
+		
+			if not info.notCheckable then
+				local check = _G["DropDownList"..level.."Button"..index.."Check"]
+				_G["DropDownList"..level.."Button"..index.."UnCheck"]:SetTexture("")
+				
+				toggleBackdrop(bu, true)
+				check:SetTexCoord(0, 1, 0, 1)
+			
+				if info.isNotRadio then
+					check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+					check:SetSize(20, 20)
+				else
+					check:SetTexture(r, g, b, .6)
+					check:SetSize(10, 10)
+				end
+			else
+				toggleBackdrop(bu, false)
 			end
 		end)
 
