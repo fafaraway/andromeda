@@ -613,6 +613,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if not backdrop.reskinned then
 					F.CreateBD(menu)
 					F.CreateBD(backdrop)
+					
+					for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
+						local hl = _G["DropDownList"..i.."Button"..j.."Highlight"]
+						hl:SetTexture(r, g, b, .2)
+					end
+					
 					backdrop.reskinned = true
 				end
 			end
@@ -639,6 +645,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					listFrame:SetPoint(point, anchor, relPoint, -14, 0)
 				else
 					listFrame:SetPoint(point, anchor, relPoint, 9, 0)
+				end
+			end
+			
+			for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
+				local bu = _G["DropDownList"..level.."Button"..j]
+				local _, _, _, x = bu:GetPoint()
+				if x then
+					local hl = _G["DropDownList"..level.."Button"..j.."Highlight"]
+					hl:SetPoint("TOPLEFT", -x + 1, 0)
+					hl:SetPoint("BOTTOMRIGHT", listFrame:GetWidth() - bu:GetWidth() - x - 1, 0)
 				end
 			end
 		end)
