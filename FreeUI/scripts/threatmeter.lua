@@ -6,8 +6,7 @@ local a1, p, a2, x, y = unpack(C.unitframes.target)
 local f = CreateFrame("StatusBar", "aThreatMeter", UIParent)
 f:SetStatusBarTexture(C.media.texture)
 f:SetMinMaxValues(0, 100)
-f:SetPoint(a1, p, a2, x, y + C.unitframes.target_height)
-f:SetWidth(229)
+f:SetWidth(C.unitframes.target_width)
 f:SetHeight(1)
 f:Hide()
 
@@ -70,6 +69,12 @@ local function UpdateBar()
 		end
 	end
 	f:Hide()
+end
+
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+function f:PLAYER_ENTERING_WORLD()
+	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	f:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 13)
 end
 
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
