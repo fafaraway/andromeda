@@ -243,7 +243,7 @@ end
 
 F.ReskinClose = ReskinClose
 
-local function ReskinInput(f, height, width, leftOff, rightOff)
+local function ReskinInput(f, height, width)
 	local frame = f:GetName()
 	_G[frame.."Left"]:Hide()
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
@@ -251,8 +251,8 @@ local function ReskinInput(f, height, width, leftOff, rightOff)
 	_G[frame.."Right"]:Hide()
 	
 	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", leftOff or -2, 0)
-	bd:SetPoint("BOTTOMRIGHT", rightOff or 0, 0)
+	bd:SetPoint("TOPLEFT", -2, 0)
+	bd:SetPoint("BOTTOMRIGHT")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
 
@@ -470,7 +470,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		ReskinInput(FriendsFrameBroadcastInput, nil, nil, 0)
+		ReskinInput(FriendsFrameBroadcastInput)
 		ReskinInput(StaticPopup1EditBox, 20)
 		ReskinInput(StaticPopup2EditBox, 20)
 		ReskinInput(PVPBannerFrameEditBox, 20)
@@ -4985,7 +4985,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinScroll(TradeSkillDetailScrollFrameScrollBar)
 		ReskinScroll(TradeSkillListScrollFrameScrollBar)
 		ReskinScroll(TradeSkillGuildCraftersFrameScrollBar)
-		ReskinInput(TradeSkillInputBox, nil, nil, -2, 2)
 		ReskinInput(TradeSkillFrameSearchBox)
 		ReskinArrow(TradeSkillDecrementButton, "left")
 		ReskinArrow(TradeSkillIncrementButton, "right")
