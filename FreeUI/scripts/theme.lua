@@ -613,11 +613,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if not backdrop.reskinned then
 					F.CreateBD(menu)
 					F.CreateBD(backdrop)
-					
-					for j = 1, UIDROPDOWNMENU_MAXBUTTONS do
-						_G["DropDownList"..i.."Button"..j.."Highlight"]:SetTexture(r, g, b, .2)
-					end
-					
 					backdrop.reskinned = true
 				end
 			end
@@ -719,11 +714,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local bu = _G["DropDownList"..level.."Button"..index]
 			if not bu.bg then
 				createBackdrop(bu, _G["DropDownList"..level.."Button"..index.."Check"])
+				_G["DropDownList"..level.."Button"..index.."Highlight"]:SetTexture(r, g, b, .2)
+				_G["DropDownList"..level.."Button"..index.."UnCheck"]:SetTexture("")
 			end
 		
 			if not info.notCheckable then
 				local check = _G["DropDownList"..level.."Button"..index.."Check"]
-				_G["DropDownList"..level.."Button"..index.."UnCheck"]:SetTexture("")
 				
 				toggleBackdrop(bu, true)
 				check:SetTexCoord(0, 1, 0, 1)
