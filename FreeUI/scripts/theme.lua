@@ -150,7 +150,7 @@ F.ReskinScroll = ReskinScroll
 
 local function colourArrow(f)
 	if f:IsEnabled() then
-		f.downtex:SetVertexColor(0, .76, 1)
+		f.downtex:SetVertexColor(r, g, b)
 	end
 end
 
@@ -2862,13 +2862,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
 		BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
 		BrowseDropDownButton:SetSize(16, 16)
-		F.Reskin(BrowseDropDownButton)
+		F.Reskin(BrowseDropDownButton, true)
+		
+		BrowseDropDownButton:HookScript("OnEnter", colourArrow)
+		BrowseDropDownButton:HookScript("OnLeave", clearArrow)
 
 		local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
 		downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
+		BrowseDropDownButton.downtex = downtex
 
 		local bg = CreateFrame("Frame", nil, BrowseDropDown)
 		bg:SetPoint("TOPLEFT", 16, -5)
