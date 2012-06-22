@@ -1,5 +1,45 @@
 local F, C, L = unpack(FreeUI)
 
+-- Smooth bars
+
+local smoothing = {}
+local function Smooth(self, value)
+	local _, max = self:GetMinMaxValues()
+	if value == self:GetValue() or (self._max and self._max ~= max) then
+		smoothing[self] = nil
+		self:SetValue_(value)
+	else
+		smoothing[self] = value
+	end
+	self._max = max
+end
+
+local function SmoothBar(bar)
+	bar.SetValue_ = bar.SetValue
+	bar.SetValue = Smooth
+end
+
+local smoother, min, max = CreateFrame('Frame'), math.min, math.max
+smoother:SetScript('OnUpdate', function()
+	local rate = GetFramerate()
+	local limit = 30/rate
+	for bar, value in pairs(smoothing) do
+		local cur = bar:GetValue()
+		local new = cur + min((value-cur)/3, max(value-cur, limit))
+		if new ~= new then
+			-- Mad hax to prevent QNAN.
+			new = value
+		end
+		bar:SetValue_(new)
+		if cur == value or abs(new - value) < 2 then
+			bar:SetValue_(value)
+			smoothing[bar] = nil
+		end
+	end
+end)
+
+-- Create frames
+
 local f = CreateFrame("Frame", "FreeUI_InstallFrame", UIParent)
 f:SetSize(400, 400)
 f:SetPoint("CENTER")
@@ -12,6 +52,7 @@ sb:SetPoint("BOTTOM", f, "BOTTOM", 0, 60)
 sb:SetSize(320, 20)
 sb:SetStatusBarTexture(C.media.texture)
 sb:Hide()
+SmoothBar(sb)
 
 local sbd = CreateFrame("Frame", nil, sb)
 sbd:SetPoint("TOPLEFT", sb, -1, 1)
@@ -57,6 +98,8 @@ close:SetScript("OnClick", function()
 	})
 	DisableAddOn("!Install")
 end)
+
+-- Setup
 
 local scale = min(2, max(.64, 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")))
 if scale > 1 then scale = 1 end
@@ -245,7 +288,7 @@ local function SetupDBM()
 end
 
 local step4 = function()
-	sb:SetValue(4)
+	sb:SetValue(400)
 	PlaySoundFile("Sound\\interface\\LevelUp.wav")
 	header:SetText("Success!")
 	body:SetText("Installation is complete.\n\nPlease click the 'Finish' button to reload the UI.\n\nEnjoy!")
@@ -260,7 +303,7 @@ local step4 = function()
 end
 
 local step3 = function()
-	sb:SetValue(3)
+	sb:SetValue(300)
 	header:SetText("3. DBM")
 	body:SetText("The third and final step applies the DBM settings.\n\nThis step is recommended for any user.\n\nMake sure that DBM is running if you want to apply these settings.")
 	sbt:SetText("3/4")
@@ -273,7 +316,7 @@ local step3 = function()
 end
 
 local step2 = function()
-	sb:SetValue(2)
+	sb:SetValue(200)
 	header:SetText("2. Chat")
 	body:SetText("The second step applies the correct chat setup.\n\nIf you are a new user, this step is recommended. If you are an existing user, you may want to skip this step.\n\nPlease be aware that any custom chat channels will need to be re-enabled through the in-game chat settings.")
 	sbt:SetText("2/4")
@@ -286,9 +329,10 @@ local step2 = function()
 end
 
 local step1 = function()
-	sb:SetMinMaxValues(0, 4)
+	sb:SetMinMaxValues(0, 400)
 	sb:Show()
-	sb:SetValue(1)
+	sb:SetValue(0)
+	sb:SetValue(100)
 	sb:GetStatusBarTexture():SetGradient("VERTICAL", 0.20, .9, 0.12, 0.36, 1, 0.30)
 	header:SetText("1. Core")
 	body:SetText("These steps will apply the correct setup for FreeUI.\n\nThe first step applies the essential settings.\n\nThis is recommended for any user, unless you want to apply only a specific part of the settings.\n\nClick 'Continue' to apply the settings, or click 'Skip' if you wish to skip this step.")
@@ -307,7 +351,7 @@ local step1 = function()
 end
 
 local tut6 = function()
-	sb:SetValue(6)
+	sb:SetValue(600)
 	header:SetText("6. Finished")
 	body:SetText("The tutorial is complete. You can choose to reconsult it at any time by typing |cff00c1ff/freeui install|r.\n\nI suggest you have a look through the options to customize the UI to your needs, or get started straight away if you like the default settings.\n\nYou can now continue to install the UI.")
 
@@ -331,7 +375,7 @@ local tut6 = function()
 end
 
 local tut5 = function()
-	sb:SetValue(5)
+	sb:SetValue(500)
 	header:SetText("5. /Commands")
 	body:SetText("Lastly, FreeUI includes useful slash commands. Below is a list.\n\n|cff00c1ff/freeui|r brings up a list of UI-specific commands (you might want to try this now). |cff00c1ff/en|r and |cff00c1ff/dis|r are used to quickly enable and disable addons. |cff00c1ff/rl|r reloads the UI.\n\n|cff00c1ff/tt|r lets you whisper your target. |cff00c1ff/rc|r initiates a ready check. |cff00c1ff/rd|r disbands a party or raid. |cff00c1ff/rolepoll|r or |cff00c1ff/rolecheck|r initiates a role check.\n\n|cff00c1ff/gm|r toggles the Help frame. |cff00c1ff/vol|r lets you set the master volume (0-1).")
 
@@ -341,7 +385,7 @@ local tut5 = function()
 end
 
 local tut4 = function()
-	sb:SetValue(4)
+	sb:SetValue(400)
 	header:SetText("4. Features (2)")
 	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail. Below it is a Tol Barad timer which is enabled by default for level 85 characters.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
 
@@ -351,7 +395,7 @@ local tut4 = function()
 end
 
 local tut3 = function()
-	sb:SetValue(3)
+	sb:SetValue(300)
 	header:SetText("3. Features")
 	body:SetText("There's a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded sFilter, to monitor buffs; and a selfbuff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options. Examples are included. Selfbuffs are already set up, so no worries.\n\nYou can mark mobs by alt+shift-clicking mobs in the game world and selecting an icon from the dropdown menu.\n\nClicking the bottom left corner of the screen toggles the chat menu. Left/right-clicking the bottom right corner toggles alDamageMeter and DBM respectively.")
 
@@ -361,7 +405,7 @@ local tut3 = function()
 end
 
 local tut2 = function()
-	sb:SetValue(2)
+	sb:SetValue(200)
 	header:SetText("2. Unitframes")
 	body:SetText("FreeUI includes an embedded version of oUF. This handles all of the unitframes on the screen, the buffs and debuffs, and the class-specific elements like Holy Power.\n\nIf you play as a healer, you may want to enable healer unitframes. Type |cff00c1ff/freeui layout dps/heal(er)|r to switch between layouts.\n\nThe source code for the unitframes is located in FreeUI/scripts/unitframes.lua. If you're any good with lua, you can edit them there.\n\nMost of the basics can be changed in the options file, to make it easier.")
 
@@ -371,9 +415,9 @@ local tut2 = function()
 end
 
 local tut1 = function()
-	sb:SetMinMaxValues(0, 6)
+	sb:SetMinMaxValues(0, 600)
 	sb:Show()
-	sb:SetValue(1)
+	sb:SetValue(100)
 	sb:GetStatusBarTexture():SetGradient("VERTICAL", 0, 0.65, .9, .1, .9, 1)
 	header:SetText("1. Essentials")
 	body:SetText("Good! First, here's a few things that's important to know about this UI.\n\nFor starters, the options for this UI can be found in FreeUI/options.lua, and can be opened with any simple text editor.\n\nYou might want to know about the bags as well. It's pretty simple.\n\nYour bags consist of an all-in-one window. To show which bags are equipped, mouseover just above the top of the bag or bank window.\n\nTo search, mouseover just below the bag and click the search box. You can search for item names, or slots; e.g. 'trinket' will highlight both items with 'trinket' in their name as well as all of your trinkets.")
