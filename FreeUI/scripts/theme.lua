@@ -710,7 +710,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					
 					if not bu.bg then
 						createBackdrop(bu, check)
-						check:SetVertexColor(r, g, b)
 						hl:SetTexture(r, g, b, .2)
 						_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
 					end
@@ -723,10 +722,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					
 						if co == 0 then
 							check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
+							check:SetVertexColor(r, g, b)
 							check:SetSize(20, 20)
 							check:SetDesaturated(true)
 						else
-							check:SetTexture(r, g, b, .6)
+							check:SetTexture(C.media.backdrop)
+							check:SetVertexColor(r, g, b, .6)
 							check:SetSize(10, 10)
 							check:SetDesaturated(false)
 						end
