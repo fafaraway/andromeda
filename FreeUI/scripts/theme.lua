@@ -1254,7 +1254,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Merchant Frame
 
-		for i = 1, MERCHANT_ITEMS_PER_PAGE do
+		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			local button = _G["MerchantItem"..i]
 			local bu = _G["MerchantItem"..i.."ItemButton"]
 			local ic = _G["MerchantItem"..i.."ItemButtonIconTexture"]
