@@ -4819,7 +4819,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TradeSkillHorizontalBarLeft:Hide()
 		select(22, TradeSkillFrame:GetRegions()):Hide()
 		for i = 1, 3 do
-			select(i, TradeSkillExpandButtonFrame:GetRegions()):Hide()
+			select(i, TradeSkillExpandButtonFrame:GetRegions()):SetAlpha(0)
 			select(i, TradeSkillFilterButton:GetRegions()):Hide()
 		end
 		for i = 1, 9 do
