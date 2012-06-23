@@ -2025,6 +2025,35 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
 		TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
+		
+		-- Tutorial Frame
+		
+		F.CreateBD(TutorialFrame)
+		F.CreateSD(TutorialFrame)
+		
+		TutorialFrameBackground:Hide()
+		TutorialFrameBackground.Show = F.dummy
+		TutorialFrame:DisableDrawLayer("BORDER")
+		
+		F.Reskin(TutorialFrameOkayButton, true)
+		F.ReskinClose(TutorialFrameCloseButton)
+		F.ReskinArrow(TutorialFramePrevButton, "left")
+		F.ReskinArrow(TutorialFrameNextButton, "right")
+		
+		TutorialFrameOkayButton:ClearAllPoints()
+		TutorialFrameOkayButton:SetPoint("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
+		
+		-- because gradient alpha and OnUpdate doesn't work for some reason...
+		
+		select(15, TutorialFrameOkayButton:GetRegions()):Hide()
+		select(15, TutorialFramePrevButton:GetRegions()):Hide()
+		select(15, TutorialFrameNextButton:GetRegions()):Hide()
+		select(14, TutorialFrameCloseButton:GetRegions()):Hide()
+		TutorialFramePrevButton:SetScript("OnEnter", nil)
+		TutorialFrameNextButton:SetScript("OnEnter", nil)
+		TutorialFrameOkayButton:SetBackdropColor(0, 0, 0, .25)
+		TutorialFramePrevButton:SetBackdropColor(0, 0, 0, .25)
+		TutorialFrameNextButton:SetBackdropColor(0, 0, 0, .25)
 
 		-- [[ Hide regions ]]
 
