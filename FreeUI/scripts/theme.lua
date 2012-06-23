@@ -722,7 +722,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					
 						if co == 0 then
 							check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
-							check:SetVertexColor(r, g, b)
+							check:SetVertexColor(r, g, b, 1)
 							check:SetSize(20, 20)
 							check:SetDesaturated(true)
 						else
