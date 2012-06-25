@@ -316,24 +316,24 @@ local function ReskinRadio(f)
 	f:SetCheckedTexture(C.media.texture)
 	
 	local hl = f:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 5, -5)
-	hl:SetPoint("BOTTOMRIGHT", -5, 5)
+	hl:SetPoint("TOPLEFT", 4, -4)
+	hl:SetPoint("BOTTOMRIGHT", -4, 4)
 	hl:SetVertexColor(r, g, b, .3)
 	
 	local ch = f:GetCheckedTexture()
-	ch:SetPoint("TOPLEFT", 5, -5)
-	ch:SetPoint("BOTTOMRIGHT", -5, 5)
+	ch:SetPoint("TOPLEFT", 4, -4)
+	ch:SetPoint("BOTTOMRIGHT", -4, 4)
 	ch:SetVertexColor(r, g, b, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
-	bd:SetPoint("TOPLEFT", 4, -4)
-	bd:SetPoint("BOTTOMRIGHT", -4, 4)
+	bd:SetPoint("TOPLEFT", 3, -3)
+	bd:SetPoint("BOTTOMRIGHT", -3, 3)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT", 5, -5)
-	tex:SetPoint("BOTTOMRIGHT", -5, 5)
+	tex:SetPoint("TOPLEFT", 4, -4)
+	tex:SetPoint("BOTTOMRIGHT", -4, 4)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 end
@@ -548,7 +548,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		
 		-- [[ Radio buttons ]]
 
-		local radiobuttons = {"ReportPlayerNameDialogPlayerNameCheckButton", "ReportPlayerNameDialogGuildNameCheckButton", "ReportPlayerNameDialogArenaTeamNameCheckButton"}
+		local radiobuttons = {"ReportPlayerNameDialogPlayerNameCheckButton", "ReportPlayerNameDialogGuildNameCheckButton", "ReportPlayerNameDialogArenaTeamNameCheckButton", "SendMailSendMoneyButton", "SendMailCODButton"}
 		for i = 1, #radiobuttons do
 			local radiobutton = _G[radiobuttons[i]]
 			if radiobutton then
