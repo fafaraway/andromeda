@@ -11,7 +11,6 @@ UIErrorsFrame:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 UIErrorsFrame:SetShadowOffset(0, 0)
 
 HelpFrameKnowledgebaseNavBarHomeButtonText:SetFont(font, 12)
--- EncounterJournalNavBarHomeButtonText:SetFont(font, 12)
 
 local Fonts = CreateFrame("Frame", nil, UIParent)
 Fonts:RegisterEvent("ADDON_LOADED")
@@ -70,7 +69,6 @@ Fonts:SetScript("OnEvent", function(self, event, addon)
 	AchievementFont_Small:SetFont(font, 10)
 	GameFont_Gigantic:SetFont(font, 32)
 
-	-- SetFont = nil
 	self:SetScript("OnEvent", nil)
 	self:UnregisterAllEvents()
 	self = nil

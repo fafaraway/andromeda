@@ -81,7 +81,7 @@ end)
 do
 	local frames = {
 		"MiniMapInstanceDifficulty",
-		"MiniMapBattlefieldBorder",
+		--"MiniMapBattlefieldBorder",
 		"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
@@ -118,7 +118,7 @@ date:SetTextColor(1, 1, 1)
 date:SetFont(C.media.font, 8 / Scale, "OUTLINEMONOCHROME")
 date:SetPoint("CENTER")
 
-MiniMapBattlefieldFrame:SetSize(22, 22)
+--[[MiniMapBattlefieldFrame:SetSize(22, 22)
 MiniMapBattlefieldFrame:ClearAllPoints()
 MiniMapBattlefieldFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 6 / Scale, 1 / Scale)
 MiniMapBattlefieldIcon:Hide()
@@ -129,13 +129,13 @@ bgtext:SetText(PVP)
 
 MiniMapLFGFrameBorder:SetAlpha(0)
 MiniMapLFGFrame:ClearAllPoints()
-MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap)
+MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap)]]
 
 TicketStatusFrame:ClearAllPoints()
 TicketStatusFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -49, 0)
 
-LFGSearchStatus:ClearAllPoints()
-LFGSearchStatus:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4.5, -1.5)
+--LFGSearchStatus:ClearAllPoints()
+--LFGSearchStatus:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4.5, -1.5)
 
 local rd = CreateFrame("Frame", nil, Minimap)
 rd:SetSize(24, 8)

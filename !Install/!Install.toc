@@ -1,8 +1,8 @@
-## Interface: 40300
+## Interface: 50000
 ## Title: !Install
 ## Notes: FreeUI install addon.
 ## Author: Haleth/Freethinker
-## Version: 4.4a
+## Version: 5.0
 ## RequiredDeps: FreeUI
 
 install.lua

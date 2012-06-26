@@ -191,9 +191,9 @@ local function init()
 		stylePetButton(_G["PetActionButton"..i])
 	end
 
-	if C.actionbars.shapeshift == true then
-		for i = 1, NUM_SHAPESHIFT_SLOTS do
-			local bu = _G["ShapeshiftButton"..i]
+	if C.actionbars.stancebar == true then
+		for i = 1, NUM_STANCE_SLOTS do
+			local bu = _G["StanceButton"..i]
 			if bu then
 				local ic = _G[bu:GetName().."Icon"]
 

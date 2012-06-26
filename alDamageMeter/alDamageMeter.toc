@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50000
 ## Author: Allez
 ## Title: |cff777777al|rDamageMeter
 ## Version: 40300.8

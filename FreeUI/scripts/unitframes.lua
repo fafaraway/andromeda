@@ -910,10 +910,11 @@ local UnitSpecific = {
 				end
 			end
 		elseif class == "PALADIN" and C.classmod.paladin == true then
+			local maxHolyPower = UnitPowerMax(PaladinPowerBar:GetParent().unit, SPELL_POWER_HOLY_POWER)
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
 				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
-				for i = 1, MAX_HOLY_POWER do
+				for i = 1, maxHolyPower do
 					if(i <= num) then
 						self.glow:SetAlpha(1)
 						F.CreatePulse(self.glow)

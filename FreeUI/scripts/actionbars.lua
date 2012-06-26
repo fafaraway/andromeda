@@ -166,8 +166,8 @@ end
 
 MainMenuBar:SetScale(0.00001)
 MainMenuBar:EnableMouse(false)
-VehicleMenuBar:SetScale(0.00001)
-VehicleMenuBar:EnableMouse(false)
+OverrideActionBar:SetScale(0.00001)
+OverrideActionBar:EnableMouse(false)
 
 SlidingActionBarTexture0:SetAlpha(0)
 SlidingActionBarTexture1:SetAlpha(0)
@@ -176,7 +176,7 @@ local FramesToHide = {
 	MainMenuBar, 
 	MainMenuBarArtFrame, 
 	BonusActionBarFrame, 
-	VehicleMenuBar,
+	OverrideActionBar,
 	PossessBarFrame,
 }
 
@@ -224,35 +224,35 @@ for i = 1, numpet do
 	cd:SetAllPoints(button)
 end
 
---[[ Shapeshift and Totem bar ]]
+--[[ Stance and Totem bar ]]
 
-if C.actionbars.shapeshift == true or (select(2, UnitClass("player")) == "SHAMAN" and C.classmod.shaman == true) then
-	local numshift = NUM_SHAPESHIFT_SLOTS
+if C.actionbars.stancebar == true or (select(2, UnitClass("player")) == "SHAMAN" and C.classmod.shaman == true) then
+	local numshift = NUM_STANCE_SLOTS
 
 	local shiftbar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
-	shiftbar:SetWidth(NUM_SHAPESHIFT_SLOTS * 27 - 1)
+	shiftbar:SetWidth(NUM_STANCE_SLOTS * 27 - 1)
 	shiftbar:SetHeight(26)
 	shiftbar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
      
-	ShapeshiftBarFrame:SetParent(shiftbar)
-	ShapeshiftBarFrame:EnableMouse(false)
+	StanceBarFrame:SetParent(shiftbar)
+	StanceBarFrame:EnableMouse(false)
 
 	for i = 1, numshift do
-		local button = _G["ShapeshiftButton"..i]
+		local button = _G["StanceButton"..i]
 		button:SetSize(26, 26)
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
 		else
-			local previous = _G["ShapeshiftButton"..i-1]      
+			local previous = _G["StanceButton"..i-1]      
 			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 		end
 	end
 
 	local function moveshift()
-		ShapeshiftButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
+		StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
 	end
-	hooksecurefunc("ShapeshiftBar_Update", moveshift)
+	hooksecurefunc("StanceBar_Update", moveshift)
 end
 
 --[[ Vehicle exit button ]]

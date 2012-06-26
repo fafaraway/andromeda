@@ -1,3 +1,7 @@
+RunScript = function(a)
+	loadstring(a)()
+end
+
 local F, C, L = unpack(select(2, ...))
 
 local bottompanel = CreateFrame("Frame", nil, UIParent)
@@ -27,3 +31,13 @@ overlay:SetPoint("TOPLEFT", 0, -1)
 overlay:SetPoint("BOTTOMRIGHT")
 overlay:SetTexture(C.media.backdrop)
 overlay:SetGradientAlpha("VERTICAL", .1, .1, .1, .5, 0, 0, 0, .5)
+
+local last = 0
+local timer = CreateFrame("Frame")
+timer:SetScript("OnUpdate", function(_, elapsed)
+	last = last + elapsed
+	if last >= 1200 then
+		print("20 minutes passed, look away for 20 seconds.")
+		last = 0
+	end
+end)

@@ -160,7 +160,7 @@ money:SetPoint("BOTTOMRIGHT", bankholder, "BOTTOMRIGHT", 12, 2)
 BankFramePurchaseInfo:Hide()
 BankFramePurchaseInfo.Show = F.dummy
 BankFrame:EnableMouse(false)
-BankCloseButton:Hide()
+-- BankCloseButton:Hide()
 
 for f = 1, 5 do
 	select(f, BankFrame:GetRegions()):SetAlpha(0)

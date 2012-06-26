@@ -26,7 +26,7 @@ C["general"] = {
 C["actionbars"] = {
 	["hotkey"] = false, 			-- show hot keys on buttons
 	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
-	["shapeshift"] = false,			-- enable shapeshift/stance bar
+	["stancebar"] = true,			-- enable stance bar
 }
 
 C["unitframes"] = {
@@ -156,8 +156,8 @@ C["sfilter"] = {
 	["PALADIN"] = {
 	-- Divine Plea
 	{spellId = 54428, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 95, -163}},
-	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath, Zealotry
-	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, spellId5 = 85696, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 0, -163}},
+	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath
+	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 0, -163}},
 	-- Inquisition
 	{spellId = 84963, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", -95, -163}},
 	-- Judgements of the Pure

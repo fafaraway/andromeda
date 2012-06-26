@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50000
 ## Title: !dbm
 ## Notes: Modifies DBM. Credits to Wildbreath.
 ## Author: Wildbreath
