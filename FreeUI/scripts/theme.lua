@@ -4856,10 +4856,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		for i = 1, MAX_TRADE_SKILL_REAGENTS do
 			local bu = _G["TradeSkillReagent"..i]
-			local na = _G["TradeSkillReagent"..i.."NameFrame"]
 			local ic = _G["TradeSkillReagent"..i.."IconTexture"]
 
-			na:Hide()
+			_G["TradeSkillReagent"..i.."NameFrame"]:SetAlpha(0)
 
 			ic:SetTexCoord(.08, .92, .08, .92)
 			ic:SetDrawLayer("ARTWORK")
