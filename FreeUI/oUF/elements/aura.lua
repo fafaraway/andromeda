@@ -227,6 +227,7 @@ local UpdateAuras = function(self, event, unit)
 			icon.overlay:Hide()
 			icon.stealable:Hide()
 			icon.count:SetText()
+			icon.bg:Hide()
 			icon:Show()
 
 			if(auras.PostUpdateGapIcon) then
