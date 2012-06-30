@@ -410,8 +410,8 @@ end
 local function Format(currency, money)
 	local current, weekly = strsplit(" ", currency)
 	if current ~= "0" then
-		local currency = format("%4s VP (%s/1000)", current, weekly)
-		return format("%-25s %5s", currency, FormatMoney(money))
+		local currency = format("%s VP (%s/1000)", current, weekly)
+		return format("%-30s %s", currency, FormatMoney(money))
 	else
 		return FormatMoney(money)
 	end
