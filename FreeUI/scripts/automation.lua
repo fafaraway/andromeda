@@ -65,18 +65,6 @@ if C.general.auto_accept == true then
 	end)
 end
 
---[[if C.general.auto_loot_switch == true then
-	local h = CreateFrame("Frame")
-	h:RegisterEvent("PLAYER_ENTERING_WORLD")
-	h:SetScript("OnEvent", function()
-		if select(2, GetInstanceInfo()) == "raid" then
-			SetCVar("showLootSpam", 0)
-		else
-			SetCVar("showLootSpam", 1)
-		end
-	end)
-end]]
-
 if C.general.helmcloakbuttons == true then
 	local helm = CreateFrame("CheckButton", "FreeUI_HelmCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")
 	helm:SetSize(22, 22)

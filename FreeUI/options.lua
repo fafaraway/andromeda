@@ -9,7 +9,6 @@ local realm = GetRealmName()
 
 C["general"] = {
 	["auto_accept"] = true,			-- auto accept invites from friends and guildies
-	["auto_loot_switch"] = true, 		-- auto toggle detailed loot rolls when entering/leaving LFR
 	["autorepair"] = true,			-- automatically repair items
 		["autorepair_guild"] = false,		-- use guild funds for auto repairs
 	["autoroll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
