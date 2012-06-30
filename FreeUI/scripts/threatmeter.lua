@@ -102,13 +102,14 @@ end
 f:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
 function f:UNIT_THREAT_LIST_UPDATE(event, unit)
 	if(unit and UnitExists(unit) and UnitGUID(unit)==tguid) then
-		if(GetNumRaidMembers()>0) then
-			for i=1, GetNumRaidMembers() do
+		local num = GetNumGroupMembers()
+		if num > 5 then
+			for i = 1, num do
 				AddThreat("raid"..i)
 			end
-		elseif(GetNumPartyMembers()>0) then
+		elseif num > 0 then
 			AddThreat("player")
-			for i=1, GetNumPartyMembers() do
+			for i = 1, num do
 				AddThreat("party"..i)
 			end
 		end
