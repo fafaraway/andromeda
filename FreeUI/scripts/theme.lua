@@ -22,6 +22,7 @@ local function StartGlow(f)
 	if not f:IsEnabled() then return end
 	f:SetBackdropColor(r, g, b, .1)
 	f:SetBackdropBorderColor(r, g, b)
+	f.glow:SetAlpha(1)
 	F.CreatePulse(f.glow)
 end
 
@@ -209,11 +210,11 @@ end
 local function ReskinClose(f, a1, p, a2, x, y)
 	f:SetSize(17, 17)
 
-	if not a1 then
-		f:SetPoint("TOPRIGHT", -4, -4)
-	else
+	if a1 then
 		f:ClearAllPoints()
 		f:SetPoint(a1, p, a2, x, y)
+	else
+		f:SetPoint("TOPRIGHT", -4, -4)
 	end
 
 	f:SetNormalTexture("")
@@ -3708,19 +3709,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GlyphFrameBackground:Hide()
 		GlyphFrameSideInset:DisableDrawLayer("BACKGROUND")
 		GlyphFrameSideInset:DisableDrawLayer("BORDER")
-		GlyphFrameClearInfoFrameIcon:SetPoint("TOPLEFT", 1, -1)
-		GlyphFrameClearInfoFrameIcon:SetPoint("BOTTOMRIGHT", -1, 1)
-		F.CreateBD(GlyphFrameClearInfoFrame)
+		F.CreateBG(GlyphFrameClearInfoFrame)
 		GlyphFrameClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
-
-		for i = 1, 3 do
+		
+		for i = 1, 2 do
 			_G["GlyphFrameHeader"..i.."Left"]:Hide()
 			_G["GlyphFrameHeader"..i.."Middle"]:Hide()
 			_G["GlyphFrameHeader"..i.."Right"]:Hide()
 
 		end
 
-		for i = 1, 12 do
+		for i = 1, #GlyphFrame.scrollFrame.buttons do
 			local bu = _G["GlyphFrameScrollFrameButton"..i]
 			local ic = _G["GlyphFrameScrollFrameButton"..i.."Icon"]
 
@@ -3733,7 +3732,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["GlyphFrameScrollFrameButton"..i.."Name"]:SetParent(bg)
 			_G["GlyphFrameScrollFrameButton"..i.."TypeName"]:SetParent(bg)
 			bu:SetHighlightTexture("")
-			select(3, bu:GetRegions()):SetAlpha(0)
+			bu.disabledBG:Hide()
+			bu.disabledBG.Show = F.dummy
 			select(4, bu:GetRegions()):SetAlpha(0)
 
 			local check = select(2, bu:GetRegions())
@@ -4615,12 +4615,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 	elseif addon == "Blizzard_ReforgingUI" then
 		F.CreateBD(ReforgingFrame)
 		F.CreateSD(ReforgingFrame)
+		
 		ReforgingFrame:DisableDrawLayer("BORDER")
 		for i = 15, 25 do
 			select(i, ReforgingFrame:GetRegions()):Hide()
 		end
-		ReforgingFrameLines:SetAlpha(0)
-		ReforgingFrameReceiptBG:SetAlpha(0)		
+		select(27, ReforgingFrame:GetRegions()):Hide()
+		ReforgingFrame.Lines:SetAlpha(0)
+		ReforgingFrame.ReceiptBG:SetAlpha(0)
+		ReforgingFrame.MissingFadeOut:SetAlpha(0)
 		ReforgingFramePortrait:Hide()
 		ReforgingFrameBg:Hide()
 		ReforgingFrameTitleBg:Hide()
@@ -4629,38 +4632,76 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReforgingFrameTopRightCorner:Hide()
 		ReforgingFrameRestoreButton_LeftSeparator:Hide()
 		ReforgingFrameRestoreButton_RightSeparator:Hide()
-		ReforgingFrameButtonFrame:GetRegions():Hide()
-		ReforgingFrameButtonFrameButtonBorder:Hide()
-		ReforgingFrameButtonFrameButtonBottomBorder:Hide()
-		ReforgingFrameButtonFrameMoneyLeft:Hide()
-		ReforgingFrameButtonFrameMoneyRight:Hide()
-		ReforgingFrameButtonFrameMoneyMiddle:Hide()
-		ReforgingFrameMissingFadeOut:SetAlpha(0)
-		ReforgingFrameRestoreMessage:SetTextColor(1, 1, 1)
+		ReforgingFrame.ButtonFrame:GetRegions():Hide()
+		ReforgingFrame.ButtonFrame.ButtonBorder:Hide()
+		ReforgingFrame.ButtonFrame.ButtonBottomBorder:Hide()
+		ReforgingFrame.ButtonFrame.MoneyLeft:Hide()
+		ReforgingFrame.ButtonFrame.MoneyRight:Hide()
+		ReforgingFrame.ButtonFrame.MoneyMiddle:Hide()
+		ReforgingFrame.ItemButton.Frame:Hide()
+		ReforgingFrame.ItemButton.Grabber:Hide()
+		ReforgingFrame.ItemButton.TextFrame:Hide()
+		ReforgingFrame.ItemButton.TextGrabber:Hide()
+		
+		F.CreateBD(ReforgingFrame.ItemButton, .25)
+		ReforgingFrame.ItemButton:SetHighlightTexture("")
+		ReforgingFrame.ItemButton:SetPushedTexture("")
+		
+		ReforgingFrame.ItemButton:HookScript("OnEnter", function(self)
+			self:SetBackdropBorderColor(1, .56, .85)
+		end)
+		ReforgingFrame.ItemButton:HookScript("OnLeave", function(self)
+			self:SetBackdropBorderColor(0, 0, 0)
+		end)
+		
+		local bg = CreateFrame("Frame", nil, ReforgingFrame.ItemButton)
+		bg:SetSize(341, 50)
+		bg:SetPoint("LEFT", ReforgingFrame.ItemButton, "RIGHT", -1, 0)
+		bg:SetFrameLevel(ReforgingFrame.ItemButton:GetFrameLevel()-1)
+		F.CreateBD(bg, .25)
+		
+		ReforgingFrame.RestoreMessage:SetTextColor(.9, .9, .9)
+		
+		hooksecurefunc("ReforgingFrame_Update", function()
+			local _, icon = GetReforgeItemInfo()
+			if not icon then
+				ReforgingFrame.ItemButton.IconTexture:SetTexture("")
+			else
+				ReforgingFrame.ItemButton.IconTexture:SetTexCoord(.08, .92, .08, .92)
+			end
+		end)
+		
+		ReforgingFrameRestoreButton:SetPoint("LEFT", ReforgingFrameMoneyFrame, "RIGHT", 0, 1)
+	
 		F.Reskin(ReforgingFrameRestoreButton)
 		F.Reskin(ReforgingFrameReforgeButton)
-		ReskinClose(ReforgingFrameCloseButton)
+		F.ReskinClose(ReforgingFrameCloseButton)
 	elseif addon == "Blizzard_TalentUI" then
 		SetBD(PlayerTalentFrame)
-		F.Reskin(PlayerTalentFrameToggleSummariesButton)
-		F.Reskin(PlayerTalentFrameLearnButton)
-		F.Reskin(PlayerTalentFrameResetButton)
-		F.Reskin(PlayerTalentFrameActivateButton)
 		PlayerTalentFrame:DisableDrawLayer("BACKGROUND")
 		PlayerTalentFrame:DisableDrawLayer("BORDER")
 		PlayerTalentFrameInset:DisableDrawLayer("BACKGROUND")
 		PlayerTalentFrameInset:DisableDrawLayer("BORDER")
+		PlayerTalentFrameTalents:DisableDrawLayer("BORDER")
 		PlayerTalentFramePortrait:Hide()
 		PlayerTalentFramePortraitFrame:Hide()
 		PlayerTalentFrameTopBorder:Hide()
 		PlayerTalentFrameTopRightCorner:Hide()
-		PlayerTalentFrameToggleSummariesButton_LeftSeparator:Hide()
-		PlayerTalentFrameToggleSummariesButton_RightSeparator:Hide()
-		PlayerTalentFrameLearnButton_LeftSeparator:Hide()
-		PlayerTalentFrameResetButton_LeftSeparator:Hide()
-		--PlayerTalentFrameTitleGlowLeft:SetAlpha(0)
-		--PlayerTalentFrameTitleGlowRight:SetAlpha(0)
-		--PlayerTalentFrameTitleGlowCenter:SetAlpha(0)
+		PlayerTalentFrameTalentsLearnButton_LeftSeparator:Hide()
+		PlayerTalentFrameTalentsLearnButton_RightSeparator:Hide()
+		PlayerTalentFrameSpecializationLearnButton_LeftSeparator:Hide()
+		PlayerTalentFrameSpecializationLearnButton_RightSeparator:Hide()
+		PlayerTalentFrameTalentsBg:Hide()
+		
+		for i = 1, 6 do
+			select(i, PlayerTalentFrameSpecialization:GetRegions()):Hide()
+		end
+		
+		select(7, PlayerTalentFrameSpecialization:GetChildren()):DisableDrawLayer("OVERLAY")
+		
+		for i = 1, 5 do
+			select(i, PlayerTalentFrameSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
+		end
 
 		if class == "HUNTER" then
 			PlayerTalentFramePetPanel:DisableDrawLayer("BORDER")
@@ -4695,78 +4736,99 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			line:SetTexture(C.media.backdrop)
 			line:SetVertexColor(0, 0, 0)
 		end
+		
+		F.CreateBG(PlayerTalentFrameTalentsClearInfoFrame)
+		PlayerTalentFrameTalentsClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
+		
+		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
+		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
 
-		for i = 1, 3 do
+		for i = 1, NUM_TALENT_FRAME_TABS do
 			local tab = _G["PlayerTalentFrameTab"..i]
-			if tab then
-				F.CreateTab(tab)
+			F.CreateTab(tab)
+		end
+		
+		for i = 1, 4 do
+			local bu = _G["PlayerTalentFrameSpecializationSpecButton"..i]
+			
+			bu:SetHighlightTexture("")
+			bu.bg:SetAlpha(0)
+			bu.learnedTex:SetAlpha(0)
+			bu.selectedTex:SetAlpha(0)
+			_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:Hide()
+			_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"].Show = F.dummy
+			
+			F.CreateBD(bu, .25)
+			bu.glowTex = CreateFrame("Frame", nil, bu)
+			bu.glowTex:SetBackdrop({
+				edgeFile = C.media.glow,
+				edgeSize = 5,
+			})
+			bu.glowTex:SetPoint("TOPLEFT", -5, 5)
+			bu.glowTex:SetPoint("BOTTOMRIGHT", 5, -5)
+			bu.glowTex:SetBackdropBorderColor(.90, .88, .06)
+			bu.glowTex:SetFrameLevel(bu:GetFrameLevel()-1)
+			bu.glowTex:Hide()
+		end
+		
+		hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self)
+			for i = 1, GetNumSpecializations(nil, self.isPet) do
+				local bu = self["specButton"..i]
+				if bu.learnedTex:IsShown() then
+					bu:SetBackdropColor(.90, .88, .06, .25)
+				else
+					bu:SetBackdropColor(0, 0, 0, .25)
+				end
+				if bu.selected then
+					bu.glowTex:Show()
+				else
+					bu.glowTex:Hide()
+				end
 			end
+		end)
 
-			local panel = _G["PlayerTalentFramePanel"..i]
-			local icon = _G["PlayerTalentFramePanel"..i.."HeaderIcon"]
-			local num = _G["PlayerTalentFramePanel"..i.."HeaderIconPointsSpent"]
-			local icontexture = _G["PlayerTalentFramePanel"..i.."HeaderIconIcon"]
-
-			for j = 1, 8 do
-				select(j, panel:GetRegions()):Hide()
-			end
-			for j = 14, 21 do
-				select(j, panel:GetRegions()):SetAlpha(0)
-			end
-
-			_G["PlayerTalentFramePanel"..i.."HeaderBackground"]:SetAlpha(0)
-			_G["PlayerTalentFramePanel"..i.."HeaderBorder"]:Hide()
-			_G["PlayerTalentFramePanel"..i.."BgHighlight"]:Hide()
-			_G["PlayerTalentFramePanel"..i.."HeaderIconPrimaryBorder"]:SetAlpha(0)
-			_G["PlayerTalentFramePanel"..i.."HeaderIconSecondaryBorder"]:SetAlpha(0)
-			_G["PlayerTalentFramePanel"..i.."HeaderIconPointsSpentBgGold"]:SetAlpha(0)
-			_G["PlayerTalentFramePanel"..i.."HeaderIconPointsSpentBgSilver"]:SetAlpha(0)
-
-			icontexture:SetTexCoord(.08, .92, .08, .92)
-			icontexture:SetPoint("TOPLEFT", 1, -1)
-			icontexture:SetPoint("BOTTOMRIGHT", -1, 1)
-
-			F.CreateBD(icon)
-
-			icon:SetPoint("TOPLEFT", panel, "TOPLEFT", 4, -1)
-
-			num:ClearAllPoints()
-			num:SetPoint("RIGHT", _G["PlayerTalentFramePanel"..i.."HeaderBackground"], "RIGHT", -40, 0)
-			num:SetFont(C.media.font2, 12)
-			num:SetJustifyH("RIGHT")
-
-			panel.bg = CreateFrame("Frame", nil, panel)
-			panel.bg:SetPoint("TOPLEFT", 4, -39)
-			panel.bg:SetPoint("BOTTOMRIGHT", -4, 4)
-			panel.bg:SetFrameLevel(0)
-			F.CreateBD(panel.bg)
-
-			panel.bg2 = CreateFrame("Frame", nil, panel)
-			panel.bg2:SetSize(200, 36)
-			panel.bg2:SetPoint("TOPLEFT", 4, -1)
-			panel.bg2:SetFrameLevel(0)
-			F.CreateBD(panel.bg2, .25)
-
-			F.Reskin(_G["PlayerTalentFramePanel"..i.."SelectTreeButton"])
-
-			for j = 1, 28 do
-				local bu = _G["PlayerTalentFramePanel"..i.."Talent"..j]
-				local ic = _G["PlayerTalentFramePanel"..i.."Talent"..j.."IconTexture"]
-
-				_G["PlayerTalentFramePanel"..i.."Talent"..j.."Slot"]:SetAlpha(0)
-				_G["PlayerTalentFramePanel"..i.."Talent"..j.."SlotShadow"]:SetAlpha(0)
-				_G["PlayerTalentFramePanel"..i.."Talent"..j.."GoldBorder"]:SetAlpha(0)
-				_G["PlayerTalentFramePanel"..i.."Talent"..j.."GlowBorder"]:SetAlpha(0)
-
-				bu:SetPushedTexture("")
-				bu.SetPushedTexture = F.dummy
+		for i = 1, MAX_NUM_TALENT_TIERS do
+			local row = _G["PlayerTalentFrameTalentsTalentRow"..i]
+			_G["PlayerTalentFrameTalentsTalentRow"..i.."Bg"]:Hide()
+			row:DisableDrawLayer("BORDER")
+			
+			row.TopLine:SetPoint("TOP", 0, 4)
+			row.BottomLine:SetPoint("BOTTOM", 0, -4)
+			
+			for j = 1, NUM_TALENT_COLUMNS do
+				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
+				local ic = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."IconTexture"]
+				
+				_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."Slot"]:Hide()
+				_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."Selection"]:SetAlpha(0)
+				
+				bu:SetHighlightTexture("")
+				
+				ic:SetDrawLayer("ARTWORK")
 				ic:SetTexCoord(.08, .92, .08, .92)
-				ic:SetPoint("TOPLEFT", 1, -1)
-				ic:SetPoint("BOTTOMRIGHT", -1, 1)
-
-				F.CreateBD(bu)
+				F.CreateBG(ic)
+				
+				bu.bg = CreateFrame("Frame", nil, bu)
+				bu.bg:SetPoint("TOPLEFT", 10, 0)
+				bu.bg:SetPoint("BOTTOMRIGHT")
+				bu.bg:SetFrameLevel(bu:GetFrameLevel()-1)
+				F.CreateBD(bu.bg, .25)
 			end
 		end
+		
+		hooksecurefunc("TalentFrame_Update", function()
+			for i = 1, MAX_NUM_TALENT_TIERS do	
+				for j = 1, NUM_TALENT_COLUMNS do
+					local se = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."Selection"]
+					if se:IsShown() then
+						_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j].bg:SetBackdropColor(.90, .88, .06, .25)
+					else
+						_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j].bg:SetBackdropColor(0, 0, 0, .25)
+					end
+				end
+			end
+		end)
+		
 		for i = 1, 2 do
 			_G["PlayerSpecTab"..i.."Background"]:Hide()
 			local tab = _G["PlayerSpecTab"..i]
@@ -4785,6 +4847,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 		end
 
+		F.Reskin(PlayerTalentFrameSpecializationLearnButton)
+		F.Reskin(PlayerTalentFrameTalentsLearnButton)
+		F.Reskin(PlayerTalentFrameActivateButton)
 		ReskinClose(PlayerTalentFrameCloseButton)
 	elseif addon == "Blizzard_TradeSkillUI" then
 		F.CreateBD(TradeSkillFrame)
@@ -5113,9 +5178,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinScroll(ClassTrainerScrollFrameScrollBar)
 		ReskinDropDown(ClassTrainerFrameFilterDropDown)
 	elseif addon == "Blizzard_VoidStorageUI" then
-		SetBD(VoidStorageFrame, 20, 0, 0, 20)
+		F.SetBD(VoidStorageFrame, 20, 0, 0, 20)
 		F.CreateBD(VoidStoragePurchaseFrame)
+		
 		VoidStorageBorderFrame:DisableDrawLayer("BORDER")
+		VoidStorageBorderFrame:DisableDrawLayer("BACKGROUND")
+		VoidStorageBorderFrame:DisableDrawLayer("OVERLAY")
 		VoidStorageDepositFrame:DisableDrawLayer("BACKGROUND")
 		VoidStorageDepositFrame:DisableDrawLayer("BORDER")
 		VoidStorageWithdrawFrame:DisableDrawLayer("BACKGROUND")
@@ -5127,19 +5195,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		VoidStorageFrameMarbleBg:Hide()
 		select(2, VoidStorageFrame:GetRegions()):Hide()
 		VoidStorageFrameLines:Hide()
-		VoidStorageBorderFrameTitleBg:Hide()
-		VoidStorageBorderFrameTopLeftCorner:Hide()
-		VoidStorageBorderFrameTopBorder:Hide()
-		VoidStorageBorderFrameTopRightCorner:Hide()
-		VoidStorageBorderFrameTopEdge:Hide()
-		VoidStorageBorderFrameHeader:Hide()
 		VoidStorageStorageFrameLine1:Hide()
 		VoidStorageStorageFrameLine2:Hide()
 		VoidStorageStorageFrameLine3:Hide()
 		VoidStorageStorageFrameLine4:Hide()
 		select(12, VoidStorageDepositFrame:GetRegions()):Hide()
 		select(12, VoidStorageWithdrawFrame:GetRegions()):Hide()
-		VoidStorageBorderFrameBg:SetAlpha(0)
 		for i = 1, 10 do
 			select(i, VoidStoragePurchaseFrame:GetRegions()):Hide()
 		end
@@ -5196,8 +5257,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(VoidStoragePurchaseButton)
 		F.Reskin(VoidStorageHelpBoxButton)
 		F.Reskin(VoidStorageTransferButton)
-		ReskinClose(VoidStorageBorderFrameCloseButton)
-		ReskinInput(VoidItemSearchBox)
+		F.ReskinClose(VoidStorageBorderFrame:GetChildren(), nil)
+		F.ReskinInput(VoidItemSearchBox)
 	elseif addon == "DBM-Core" then
 		local first = true
 		hooksecurefunc(DBM.RangeCheck, "Show", function()
