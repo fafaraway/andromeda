@@ -46,7 +46,7 @@ addon.slots = {}
 
 local OnEnter = function(self)
 	local slot = self:GetID()
-	if(LootSlotIsItem(slot)) then
+	if GetLootSlotType(slot) == LOOT_SLOT_ITEM then
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 		GameTooltip:SetLootItem(slot)
 		CursorUpdate(self)
@@ -174,7 +174,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 			if texture then
 				local color = ITEM_QUALITY_COLORS[quality]
 
-				if(LootSlotIsCoin(i)) then
+				if GetLootSlotType(i) == LOOT_SLOT_MONEY then
 					item = item:gsub("\n", ", ")
 				end
 
