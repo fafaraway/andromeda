@@ -180,12 +180,7 @@ function Range.UpdateButtonUsable(button)
 		end
 	--out of mana
 	elseif notEnoughMana then
-		--a holy power abilty, and we're less than 3 Holy Power
-		if PLAYER_IS_PALADIN and not(UnitPower('player', SPELL_POWER_HOLY_POWER) >= 3 or UnitBuff('player', HAND_OF_LIGHT)) then
-			Range.SetButtonColor(button, 'ooh')
-		else
-			Range.SetButtonColor(button, 'oom')
-		end
+		Range.SetButtonColor(button, 'oom')
 	--unusable
 	else
 		button.RangeColor = 'unusuable'
