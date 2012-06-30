@@ -160,12 +160,14 @@ money:SetPoint("BOTTOMRIGHT", bankholder, "BOTTOMRIGHT", 12, 2)
 BankFramePurchaseInfo:Hide()
 BankFramePurchaseInfo.Show = F.dummy
 BankFrame:EnableMouse(false)
--- BankCloseButton:Hide()
+BankFrameCloseButton:Hide()
+BankFrame:DisableDrawLayer("BACKGROUND")
+BankFrame:DisableDrawLayer("BORDER")
+BankFrame:DisableDrawLayer("OVERLAY")
+BankPortraitTexture:Hide()
+BankFrameMoneyFrameInset:Hide()
+BankFrameMoneyFrameBorder:Hide()
 
-for f = 1, 5 do
-	select(f, BankFrame:GetRegions()):SetAlpha(0)
-end
-	
 local bankbagholder = CreateFrame("Frame", nil, BankFrame)
 bankbagholder:SetSize(289, 43)
 bankbagholder:SetPoint("BOTTOM", bankholder, "TOP", 0, -1)
