@@ -34,7 +34,8 @@ bar1:RegisterEvent("KNOWN_CURRENCY_TYPES_UPDATE")
 bar1:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
 bar1:RegisterEvent("BAG_UPDATE")
 bar1:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-bar1:SetScript("OnEvent", function(self, event, ...)	if event == "PLAYER_LOGIN" then
+bar1:SetScript("OnEvent", function(self, event, ...)
+	if event == "PLAYER_LOGIN" then
 		local button, buttons
 		for i = 1, NUM_ACTIONBAR_BUTTONS do
 			button = _G["ActionButton"..i]
@@ -47,7 +48,8 @@ bar1:SetScript("OnEvent", function(self, event, ...)	if event == "PLAYER_LOGIN"
 				table.insert(buttons, self:GetFrameRef("ActionButton"..i))
 			end
 		]])
-  		self:SetAttribute("_onstate-page", [[ 
+  
+		self:SetAttribute("_onstate-page", [[ 
 			for i, button in ipairs(buttons) do
 				button:SetAttribute("actionpage", tonumber(newstate))
 			end
@@ -249,12 +251,12 @@ if C.actionbars.stancebar == true or (select(2, UnitClass("player")) == "SHAMAN"
 		end
 	end
 
-	--[[local function moveshift()
+	local function moveshift()
 		if not InCombatLockdown() then
 			StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
 		end
 	end
-	hooksecurefunc("StanceBar_Update", moveshift)]]
+	hooksecurefunc("StanceBar_Update", moveshift)
 end
 
 --[[ Vehicle exit button ]]
