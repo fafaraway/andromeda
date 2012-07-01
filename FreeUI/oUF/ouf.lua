@@ -1,5 +1,5 @@
 local parent, ns = ...
-local global = GetAddOnMetadata(parent, 'X-oUF')
+local global = parent == "oUF" and parent
 local _VERSION = GetAddOnMetadata(parent, 'version')
 
 local oUF = ns.oUF
