@@ -155,8 +155,8 @@ CHAT_YOU_CHANGED_NOTICE = "|Hchannel:%d|h[%s]|h"
 ERR_FRIEND_OFFLINE_S = "%s has gone |cffff0000offline|r."
 ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h has come |cff00ff00online|r."
 ERR_SKILL_UP_SI = "%s |cff1eff00%d|r"
-FACTION_STANDING_DECREASED = "|3-7(%s) -%d"
-FACTION_STANDING_INCREASED = "|3-7(%s) +%d"
+FACTION_STANDING_DECREASED = "%s -%d"
+FACTION_STANDING_INCREASED = "%s +%d"
 
 --[[ Text colours ]]
 
