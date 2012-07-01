@@ -729,7 +729,7 @@ local UnitSpecific = {
 				local pvp = self.PvP
 
 				local factionGroup = UnitFactionGroup(unit)
-				if(UnitIsPVPFreeForAll(unit) or (factionGroup and UnitIsPVP(unit))) then
+				if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
 					pvp:Show()
 				else
 					pvp:Hide()
