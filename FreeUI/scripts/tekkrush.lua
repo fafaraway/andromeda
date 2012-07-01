@@ -11,7 +11,7 @@ end)
 local g = CreateFrame("Frame")
 g:RegisterEvent("LOOT_BIND_CONFIRM")
 g:SetScript("OnEvent", function(self, event, id)
-	if GetNumRaidMembers() == 0 and GetNumPartyMembers() == 0 then
+	if GetNumGroupMembers() == 0 then
 		local elapsed = 0
 		self:SetScript("OnUpdate", function(self, elap)
 			elapsed = elapsed + elap
