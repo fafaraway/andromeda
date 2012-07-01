@@ -414,7 +414,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Simple backdrops ]]
 
-		local bds = {"AutoCompleteBox", "BNToastFrame", "TicketStatusFrameButton", "FriendsTooltip", "GearManagerDialogPopup", "TokenFramePopup", "ReputationDetailFrame", "RaidInfoFrame", "MissingLootFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog"}
+		local bds = {"AutoCompleteBox", "BNToastFrame", "TicketStatusFrameButton", "FriendsTooltip", "GearManagerDialogPopup", "TokenFramePopup", "ReputationDetailFrame", "RaidInfoFrame", "MissingLootFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog", "QueueStatusFrame"}
 
 		for i = 1, #bds do
 			local bd = _G[bds[i]]
@@ -1602,6 +1602,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		QuestDetailScrollFrameTop:Hide()
 		QuestDetailScrollFrameBottom:Hide()
 		QuestDetailScrollFrameMiddle:Hide()
+		QuestProgressScrollFrameTop:Hide()
+		QuestProgressScrollFrameBottom:Hide()
+		QuestProgressScrollFrameMiddle:Hide()
+		QuestRewardScrollFrameTop:Hide()
+		QuestRewardScrollFrameBottom:Hide()
+		QuestRewardScrollFrameMiddle:Hide()
 		QuestDetailLeftBorder:Hide()
 		QuestDetailBotLeftCorner:Hide()
 		QuestDetailTopLeftCorner:Hide()
@@ -1805,12 +1811,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		QuestLogScrollFrame:HookScript("OnMouseWheel", updateQuest)
 		
 		hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, portrait, text, name, x, y)
-			local parent = parentFrame:GetName()
-			if parent == "QuestLogFrame" or parent == "QuestLogDetailFrame" then
-				QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+4, y)
-			else
-				QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+8, y)
-			end
+			QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+4, y)
 		end)
 		
 		local questButtons = {"QuestLogFrameAbandonButton", "QuestLogFramePushQuestButton", "QuestLogFrameTrackButton", "QuestLogFrameCancelButton", "QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton", "QuestLogFrameCompleteButton"}
@@ -2261,6 +2262,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(i, AddFriendNoteFrame:GetRegions()):Hide()
 			select(i, ReportPlayerNameDialogCommentFrame:GetRegions()):Hide()
 			select(i, ReportCheatingDialogCommentFrame:GetRegions()):Hide()
+			select(i, QueueStatusFrame:GetRegions()):Hide()
 		end
 		PVPBannerFramePortrait:Hide()
 		HelpFrameHeader:Hide()
