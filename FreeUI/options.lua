@@ -81,8 +81,8 @@ C["classmod"] = {
 	["priest"] = true,		-- shadow orbs
 	["rogue"] = true,		-- poison reminder
 	["rogue_checkthrown"] = false,	-- check thrown weapon for poison
-	["shaman"] = true, 		-- totem bars and maelstrom weapon tracker
-	["warlock"] = true, 		-- spec bar shards
+	["shaman"] = true, 		-- maelstrom weapon tracker
+	["warlock"] = true, 		-- spec bar
 	["warrior"] = true, -- thunderstruck tracker
 }
 

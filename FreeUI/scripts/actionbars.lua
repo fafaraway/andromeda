@@ -231,7 +231,7 @@ end
 
 --[[ Stance and Totem bar ]]
 
-if C.actionbars.stancebar == true or (select(2, UnitClass("player")) == "SHAMAN" and C.classmod.shaman == true) then
+if C.actionbars.stancebar == true then
 	local numshift = NUM_STANCE_SLOTS
 
 	local shiftbar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
