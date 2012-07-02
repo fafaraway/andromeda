@@ -30,6 +30,7 @@
 	<Script file='elements\altpowerbar.lua' />
 
 	<Script file='oUF_Trinkets\oUF_Trinkets.lua' />
+	<Script file='oUF_CounterBar\oUF_CounterBar.lua' />
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">
