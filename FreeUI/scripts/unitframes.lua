@@ -910,25 +910,24 @@ local UnitSpecific = {
 		elseif class == "PALADIN" and C.classmod.paladin == true then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
+				
 				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
-				for i = 1, MAX_HOLY_POWER do
-					if(i <= num) then
-						self.glow:SetAlpha(1)
-						F.CreatePulse(self.glow)
-						self.count:SetText(num)
-						self.count:SetTextColor(1, 1, 0)
-						self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
-					elseif num == 0 then
-						self.glow:SetScript("OnUpdate", nil)
-						self.glow:SetAlpha(0)
-						self.count:SetText("")
-					else
-						self.glow:SetScript("OnUpdate", nil)
-						self.glow:SetAlpha(0)
-						self.count:SetText(num)
-						self.count:SetTextColor(1, 1, 1)
-						self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
-					end
+				if(num == MAX_HOLY_POWER) then
+					self.glow:SetAlpha(1)
+					F.CreatePulse(self.glow)
+					self.count:SetText(num)
+					self.count:SetTextColor(1, 1, 0)
+					self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+				elseif num == 0 then
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText("")
+				else
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText(num)
+					self.count:SetTextColor(1, 1, 1)
+					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
 				end
 			end
 
