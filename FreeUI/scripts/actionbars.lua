@@ -254,12 +254,8 @@ if C.actionbars.stancebar == true or (select(2, UnitClass("player")) == "SHAMAN"
 		end
 	end
 
-	local function moveshift()
-		if not InCombatLockdown() then
-			StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
-		end
-	end
-	hooksecurefunc("StanceBar_Update", moveshift)
+	StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
+	StanceButton1.SetPoint = F.dummy
 end
 
 --[[ Vehicle exit button ]]
