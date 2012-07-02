@@ -76,6 +76,7 @@ C["unitframes"] = {
 C["classmod"] = {
 	["deathknight"] = true, 	-- runes
 	["druid"] = true, 		-- eclipse bar
+	["monk"] = true, 		-- harmony bar
 	["paladin"] = true, 		-- holy power
 	["rogue"] = true,		-- poison reminder
 	["rogue_checkthrown"] = false,	-- check thrown weapon for poison
