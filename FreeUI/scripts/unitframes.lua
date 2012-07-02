@@ -480,15 +480,13 @@ local Shared = function(self, unit, isSingle)
 
 		local r, g, b
 		local max
-		local texture = AltPowerBar:GetStatusBarTexture()
 
-		AltPowerBar:SetScript("OnValueChanged", function()
-			local cur = AltPowerBar:GetValue()
+		AltPowerBar:SetScript("OnValueChanged", function(_, value)
 			_, max = AltPowerBar:GetMinMaxValues()
-			r, g, b = self.ColorGradient(cur, max, unpack(self.colors.smooth))
-			texture:SetGradient("VERTICAL", r/2, g/2, b/2, r, g, b)
+			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+			AltPowerBar:SetStatusBarColor(r, g, b)
 
-			AltPowerBar.Text:SetText(cur)
+			AltPowerBar.Text:SetText(value)
 			AltPowerBar.Text:SetTextColor(r, g, b)
 		end)
 
@@ -1008,6 +1006,33 @@ local UnitSpecific = {
 			end
 		end)
 
+		local CounterBar = CreateFrame("StatusBar", nil, self)
+		CounterBar:SetWidth(playerWidth)
+		CounterBar:SetHeight(16)
+		CounterBar:SetStatusBarTexture(C.media.texture)
+		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
+
+		local cbd = CreateFrame("Frame", nil, CounterBar)
+		cbd:SetPoint("TOPLEFT", -1, 1)
+		cbd:SetPoint("BOTTOMRIGHT", 1, -1)
+		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
+		F.CreateBD(cbd)
+
+		CounterBar.Text = F.CreateFS(CounterBar, 8)
+		CounterBar.Text:SetPoint("CENTER")
+
+		local r, g, b
+		local max
+
+		CounterBar:SetScript("OnValueChanged", function(_, value)
+			_, max = CounterBar:GetMinMaxValues()
+			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+			CounterBar:SetStatusBarColor(r, g, b)
+
+			CounterBar.Text:SetText(floor(value))
+		end)
+
+		self.CounterBar = CounterBar
 	end,
 
 	target = function(self, ...)
@@ -1199,15 +1224,13 @@ local UnitSpecific = {
 
 		local r, g, b
 		local max
-		local texture = AltPowerBar:GetStatusBarTexture()
 
-		AltPowerBar:SetScript("OnValueChanged", function()
-			local cur = AltPowerBar:GetValue()
+		AltPowerBar:SetScript("OnValueChanged", function(_, value)
 			_, max = AltPowerBar:GetMinMaxValues()
-			r, g, b = self.ColorGradient(cur / max, unpack(self.colors.smooth))
-			texture:SetGradient("VERTICAL", r/2, g/2, b/2, r, g, b)
+			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+			AltPowerBar:SetStatusBarColor(r, g, b)
 
-			AltPowerBar.Text:SetText(cur)
+			AltPowerBar.Text:SetText(value)
 			AltPowerBar.Text:SetTextColor(r, g, b)
 		end)
 
