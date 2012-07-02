@@ -173,6 +173,9 @@ OverrideActionBar:EnableMouse(false)
 
 SlidingActionBarTexture0:SetAlpha(0)
 SlidingActionBarTexture1:SetAlpha(0)
+StanceBarLeft:SetAlpha(0)
+StanceBarMiddle:SetAlpha(0)
+StanceBarRight:SetAlpha(0)
 
 local FramesToHide = {
 	MainMenuBar, 
