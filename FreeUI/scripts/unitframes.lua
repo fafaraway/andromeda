@@ -907,6 +907,33 @@ local UnitSpecific = {
 					end
 				end
 			end
+		elseif class == "MONK" and C.classmod.monk == true then
+			local hb = CreateFrame("Frame", nil, self)
+			hb:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+			hb:SetWidth(playerWidth)
+			hb:SetHeight(2)
+
+			local hbbd = CreateFrame("Frame", nil, hb)
+			hbbd:SetPoint("TOPLEFT", -1, 1)
+			hbbd:SetPoint("BOTTOMRIGHT", 1, -1)
+			hbbd:SetFrameLevel(hb:GetFrameLevel()-1)
+			F.CreateBD(hbbd)
+			
+			for i = 1, 5 do
+				hb[i] = CreateFrame("StatusBar", nil, hb)
+				hb[i]:SetHeight(2)
+				hb[i]:SetStatusBarTexture(C.media.texture)
+				
+				if i == 1 then
+					hb[i]:SetWidth(playerWidth / 5)
+					hb[i]:SetPoint("LEFT", hb, "LEFT", 0, 0)
+				else
+					hb[i]:SetWidth((playerWidth / 5) - 1)
+					hb[i]:SetPoint("LEFT", hb[i-1], "RIGHT", 1, 0)
+				end
+			end
+			
+			self.HarmonyBar = hb
 		elseif class == "PALADIN" and C.classmod.paladin == true then
 			local maxHolyPower = UnitPowerMax(PaladinPowerBar:GetParent().unit, SPELL_POWER_HOLY_POWER)
 			local UpdateHoly = function(self, event, unit, powerType)
@@ -954,7 +981,7 @@ local UnitSpecific = {
 		elseif class == "WARLOCK" and C.classmod.warlock == true then
 			local bars = CreateFrame("Frame", nil, self)
 			bars:SetWidth(playerWidth)
-			bars:SetHeight(1)
+			bars:SetHeight(2)
 			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
 			local bbd = CreateFrame("Frame", nil, bars)
@@ -965,7 +992,7 @@ local UnitSpecific = {
 
 			for i = 1, 4 do
 				bars[i] = CreateFrame("StatusBar", nil, self)
-				bars[i]:SetHeight(1)
+				bars[i]:SetHeight(2)
 				bars[i]:SetStatusBarTexture(C.media.texture)
 
 				local bbd = CreateFrame("Frame", nil, bars[i])
@@ -990,7 +1017,7 @@ local UnitSpecific = {
 		end
 
 		self.AltPowerBar:HookScript("OnShow", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "MONK" and C.classmod.monk == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
 			else
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(5 + altPowerHeight))
@@ -998,7 +1025,7 @@ local UnitSpecific = {
 		end)
 
 		self.AltPowerBar:HookScript("OnHide", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "MONK" and C.classmod.monk == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(7 + altPowerHeight))
 			else
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(3 + altPowerHeight))

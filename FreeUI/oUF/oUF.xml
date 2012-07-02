@@ -31,6 +31,7 @@
 	<Script file='oUF_Trinkets\oUF_Trinkets.lua' />
 	<Script file='oUF_CounterBar\oUF_CounterBar.lua' />
 	<Script file='oUF_WarlockSpecBars\oUF_WarlockSpecBars.lua' />
+	<Script file='oUF_HarmonyBar\oUF_HarmonyBar.lua' />
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">
