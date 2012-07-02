@@ -24,13 +24,13 @@
 	<Script file='elements\lfdrole.lua' />
 	<Script file='elements\healprediction.lua' />
 	<Script file='elements\holypower.lua' />
-	<Script file='elements\soulshards.lua' />
 	<Script file='elements\readycheck.lua' />
 	<Script file='elements\eclipsebar.lua' />
 	<Script file='elements\altpowerbar.lua' />
 
 	<Script file='oUF_Trinkets\oUF_Trinkets.lua' />
 	<Script file='oUF_CounterBar\oUF_CounterBar.lua' />
+	<Script file='oUF_WarlockSpecBars\oUF_WarlockSpecBars.lua' />
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate,SecureHandlerEnterLeaveTemplate">

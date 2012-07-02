@@ -963,11 +963,10 @@ local UnitSpecific = {
 			bbd:SetFrameLevel(bars:GetFrameLevel()-1)
 			F.CreateBD(bbd)
 
-			for i = 1, 3 do
+			for i = 1, 4 do
 				bars[i] = CreateFrame("StatusBar", nil, self)
 				bars[i]:SetHeight(1)
 				bars[i]:SetStatusBarTexture(C.media.texture)
-				bars[i]:SetStatusBarColor(255/255,101/255,101/255)
 
 				local bbd = CreateFrame("Frame", nil, bars[i])
 				bbd:SetBackdrop({
@@ -980,14 +979,14 @@ local UnitSpecific = {
 
 				if i == 1 then
 					bars[i]:SetPoint("LEFT", bars)
-					bars[i]:SetWidth((playerWidth-4)/3)
+					bars[i]:SetWidth((playerWidth/4))
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 1, 0)
-					bars[i]:SetWidth((playerWidth-1)/3)
+					bars[i]:SetWidth((playerWidth/4)-1)
 				end
 			end
 
-			self.SoulShards = bars
+			self.WarlockSpecBars = bars
 		end
 
 		self.AltPowerBar:HookScript("OnShow", function()
