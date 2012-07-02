@@ -978,6 +978,49 @@ local UnitSpecific = {
 
 			self.HolyPower = glow
 			glow.Override = UpdateHoly
+		elseif class == "PRIEST" and C.classmod.priest == true then
+			local UpdateOrbs = function(self, event, unit, powerType)
+				if(self.unit ~= unit or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
+				
+				local numOrbs = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
+
+				if(numOrbs == PRIEST_BAR_NUM_ORBS) then
+					self.glow:SetAlpha(1)
+					F.CreatePulse(self.glow)
+					self.count:SetText(numOrbs)
+					self.count:SetTextColor(.6, 0, 1)
+					self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+				elseif numOrbs == 0 then
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText("")
+				else
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText(numOrbs)
+					self.count:SetTextColor(1, 1, 1)
+					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+				end
+			end
+
+			local glow = CreateFrame("Frame", nil, self)
+			glow:SetBackdrop({
+				edgeFile = C.media.glow,
+				edgeSize = 5,
+			})
+			glow:SetPoint("TOPLEFT", self, -6, 6)
+			glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
+			glow:SetBackdropBorderColor(.6, 0, 1)
+
+			self.glow = glow
+
+			local count = F.CreateFS(self, 24)
+			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
+
+			self.count = count
+
+			self.ShadowOrbsBar = glow
+			glow.Override = UpdateOrbs
 		elseif class == "WARLOCK" and C.classmod.warlock == true then
 			local bars = CreateFrame("Frame", nil, self)
 			bars:SetWidth(playerWidth)
