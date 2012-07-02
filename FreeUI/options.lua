@@ -78,6 +78,7 @@ C["classmod"] = {
 	["druid"] = true, 		-- eclipse bar
 	["monk"] = true, 		-- harmony bar
 	["paladin"] = true, 		-- holy power
+	["priest"] = true,		-- shadow orbs
 	["rogue"] = true,		-- poison reminder
 	["rogue_checkthrown"] = false,	-- check thrown weapon for poison
 	["shaman"] = true, 		-- totem bars and maelstrom weapon tracker
