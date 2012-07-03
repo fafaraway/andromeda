@@ -17,9 +17,10 @@ C["general"] = {
 	["buffreminder"] = true, 		-- reminder for selfbuffs
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
 	["interrupt"] = true,			-- announce your interrupts
-	["tolbarad"] = true,			-- Tol barad timer on the minimap
-		["tolbarad_always"] = false,		-- show timer on non 85 characters as well
+	["tolbarad"] = true,			-- Tol barad timer on the minimap at level 85
+		["tolbarad_always"] = false,		-- show timer on characters lower or higher than 85 as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
+	["undressButton"] = true, 		-- undress button on dressup frame
 }
 
 C["actionbars"] = {
@@ -98,12 +99,11 @@ C["performance"] = {
 
 -- [[ Profiles ]]
 
-if lvl ~= 85 then
+if lvl ~= 90 then
 	C.general.autoroll = false
 end
 
 if realm == "Steamwheedle Cartel" then
-	C.general.tolbarad_always = true
 	C.general.autorepair_guild = true
 end
 

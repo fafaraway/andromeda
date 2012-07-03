@@ -87,3 +87,13 @@ if C.general.helmcloakbuttons == true then
 	helm:SetFrameLevel(31)
 	cloak:SetFrameLevel(31)
 end
+
+if C.general.undressButton == true then
+	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
+	undress:SetSize(80, 22)
+	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
+	undress:SetText("Undress")
+	undress:SetScript("OnClick", function()
+		DressUpModel:Undress()
+	end)
+end
