@@ -1112,16 +1112,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		-- Spellbook
+		-- Spellbook frame
 
 		for i = 1, SPELLS_PER_PAGE do
 			local bu = _G["SpellButton"..i]
 			local ic = _G["SpellButton"..i.."IconTexture"]
-			_G["SpellButton"..i.."Background"]:SetAlpha(0)
-			_G["SpellButton"..i.."TextBackground"]:Hide()
+			
 			_G["SpellButton"..i.."SlotFrame"]:SetAlpha(0)
-			_G["SpellButton"..i.."UnlearnedSlotFrame"]:SetAlpha(0)
 			_G["SpellButton"..i.."Highlight"]:SetAlpha(0)
+			
+			bu.EmptySlot:SetAlpha(0)
+			bu.TextBackground:Hide()
+			bu.TextBackground2:Hide()
+			bu.UnlearnedFrame:SetAlpha(0)
 
 			bu:SetCheckedTexture("")
 			bu:SetPushedTexture("")
@@ -1155,17 +1158,75 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		for i = 1, 5 do
+		for i = 1, GetNumSpellTabs() do
 			local tab = _G["SpellBookSkillLineTab"..i]
+			
 			tab:GetRegions():Hide()
 			tab:SetCheckedTexture(C.media.checked)
+			
 			local a1, p, a2, x, y = tab:GetPoint()
 			tab:SetPoint(a1, p, a2, x + 11, y)
+			
 			F.CreateBG(tab)
 			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+			
 			_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
-			select(4, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 		end
+		
+		for i = 1, GetNumSpecializations() do
+			local tab = SpellBook_GetCoreAbilitySpecTab(i)
+			
+			tab:GetRegions():Hide()
+			tab:SetCheckedTexture(C.media.checked)
+			
+			F.CreateBG(tab)
+			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+	
+			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			
+			if i == 1 then
+				tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
+			end
+		end
+		
+		hooksecurefunc("SpellBook_UpdateCoreAbilitiesTab", function()
+			for i = 1, #SpellBookCoreAbilitiesFrame.Abilities do
+				local bu = SpellBook_GetCoreAbilityButton(i)
+				if not bu.reskinned then
+					bu.EmptySlot:SetAlpha(0)
+					bu.ActiveTexture:SetAlpha(0)
+					bu.FutureTexture:SetAlpha(0)
+					bu.Name:SetTextColor(1, 1, 1)
+
+					bu.iconTexture:SetTexCoord(.08, .92, .08, .92)
+					bu.iconTexture.bg = F.CreateBG(bu.iconTexture)
+					
+					if bu.FutureTexture:IsShown() then
+						bu.iconTexture:SetDesaturated(true)
+						bu.Name:SetTextColor(.8, .8, .8)
+						bu.InfoText:SetTextColor(.7, .7, .7)
+					else
+						bu.Name:SetTextColor(1, 1, 1)
+						bu.InfoText:SetTextColor(.9, .9, .9)
+					end
+					bu.reskinned = true
+				end
+			end
+		end)
+		
+		hooksecurefunc("SpellBook_UpdateWhatHasChangedTab", function()
+			for i = 1, #SpellBookWhatHasChanged.ChangedItems do
+				local bu = SpellBook_GetWhatChangedItem(i)
+				bu.Ring:Hide()
+				select(2, bu:GetRegions()):Hide()
+				bu:SetTextColor(.9, .9, .9)
+				bu.Title:SetTextColor(1, 1, 1)
+			end
+		end)
+			
+		SpellBookFrameTutorialButton.Ring:Hide()
+		SpellBookFrameTutorialButton:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", -12, 12)
 
 		-- Professions
 
@@ -1233,10 +1294,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateSD(MerchantFrame)
 		
 		MerchantFrameInset:DisableDrawLayer("BORDER")
+		MerchantMoneyInset:DisableDrawLayer("BORDER")
 		MerchantFrameBg:Hide()
 		MerchantFrameTitleBg:Hide()
 		MerchantFrameInsetBg:Hide()
 		BuybackBG:SetAlpha(0)
+		MerchantMoneyBg:Hide()
+		MerchantMoneyInsetBg:Hide()
 		
 		F.ReskinClose(MerchantFrameCloseButton)
 		F.ReskinDropDown(MerchantFrameLootFilter)
@@ -2533,6 +2597,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		CurrentQuestsText:SetTextColor(1, 1, 1)
 		CurrentQuestsText.SetTextColor = F.dummy
 		CurrentQuestsText:SetShadowColor(0, 0, 0)
+		CoreAbilityFont:SetTextColor(1, 1, 1)	
 
 		for i = 1, MAX_OBJECTIVES do
 			local objective = _G["QuestInfoObjective"..i]
@@ -3828,8 +3893,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["GlyphFrameScrollFrameButton"..i.."Name"]:SetParent(bg)
 			_G["GlyphFrameScrollFrameButton"..i.."TypeName"]:SetParent(bg)
 			bu:SetHighlightTexture("")
-			bu.disabledBG:Hide()
-			bu.disabledBG.Show = F.dummy
+			bu.disabledBG:SetTexture("")
 			select(4, bu:GetRegions()):SetAlpha(0)
 
 			local check = select(2, bu:GetRegions())
@@ -4765,6 +4829,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MountJournalListScrollFrame:HookScript("OnVerticalScroll", updateScroll)
 		MountJournalListScrollFrame:HookScript("OnMouseWheel", updateScroll)
 		
+		PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
+		
 		F.CreateBD(PetJournalParent)
 		F.CreateSD(PetJournalParent)
 		F.CreateBD(MountJournal.MountCount, .25)
@@ -4845,7 +4911,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(ReforgingFrameReforgeButton)
 		F.ReskinClose(ReforgingFrameCloseButton)
 	elseif addon == "Blizzard_TalentUI" then
-		SetBD(PlayerTalentFrame)
+		F.SetBD(PlayerTalentFrame)
 		PlayerTalentFrame:DisableDrawLayer("BACKGROUND")
 		PlayerTalentFrame:DisableDrawLayer("BORDER")
 		PlayerTalentFrameInset:DisableDrawLayer("BACKGROUND")
@@ -4860,6 +4926,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PlayerTalentFrameSpecializationLearnButton_LeftSeparator:Hide()
 		PlayerTalentFrameSpecializationLearnButton_RightSeparator:Hide()
 		PlayerTalentFrameTalentsBg:Hide()
+		PlayerTalentFramePetSpecializationLearnButton_LeftSeparator:Hide()
+		PlayerTalentFramePetSpecializationLearnButton_RightSeparator:Hide()
 		
 		for i = 1, 6 do
 			select(i, PlayerTalentFrameSpecialization:GetRegions()):Hide()
@@ -4870,76 +4938,79 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, 5 do
 			select(i, PlayerTalentFrameSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
 		end
-
-		if class == "HUNTER" then
-			PlayerTalentFramePetPanel:DisableDrawLayer("BORDER")
-			PlayerTalentFramePetModelBg:Hide()
-			PlayerTalentFramePetShadowOverlay:Hide()
-			PlayerTalentFramePetModelRotateLeftButton:Hide()
-			PlayerTalentFramePetModelRotateRightButton:Hide()
-			PlayerTalentFramePetIconBorder:Hide()
-			PlayerTalentFramePetPanelHeaderIconBorder:Hide()
-			PlayerTalentFramePetPanelHeaderBackground:Hide()
-			PlayerTalentFramePetPanelHeaderBorder:Hide()
-
-			PlayerTalentFramePetIcon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBG(PlayerTalentFramePetIcon)
-
-			PlayerTalentFramePetPanelHeaderIconIcon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBG(PlayerTalentFramePetPanelHeaderIcon)
-
-			PlayerTalentFramePetPanelHeaderIcon:SetPoint("TOPLEFT", PlayerTalentFramePetPanelHeaderBackground, "TOPLEFT", -2, 3)
-			PlayerTalentFramePetPanelName:SetPoint("LEFT", PlayerTalentFramePetPanelHeaderBackground, "LEFT", 62, 8)
-
-			local bg = CreateFrame("Frame", nil, PlayerTalentFramePetPanel)
-			bg:SetPoint("TOPLEFT", 4, -6)
-			bg:SetPoint("BOTTOMRIGHT", -4, 4)
-			bg:SetFrameLevel(0)
-			F.CreateBD(bg, .25)
-
-			local line = PlayerTalentFramePetPanel:CreateTexture(nil, "BACKGROUND")
-			line:SetHeight(1)
-			line:SetPoint("TOPLEFT", 4, -52)
-			line:SetPoint("TOPRIGHT", -4, -52)
-			line:SetTexture(C.media.backdrop)
-			line:SetVertexColor(0, 0, 0)
-		end
 		
 		F.CreateBG(PlayerTalentFrameTalentsClearInfoFrame)
 		PlayerTalentFrameTalentsClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
 		
 		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
 		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
+		
+		if class == "HUNTER" then
+			for i = 1, 6 do
+				select(i, PlayerTalentFramePetSpecialization:GetRegions()):Hide()
+			end
+			select(7, PlayerTalentFramePetSpecialization:GetChildren()):DisableDrawLayer("OVERLAY")
+			for i = 1, 5 do
+				select(i, PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
+			end
+			
+			PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
+			PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
+			
+			for i = 1, GetNumSpecializations(false, true) do
+				local bu = PlayerTalentFramePetSpecialization["specButton"..i]
+				local _, _, _, icon = GetSpecializationInfo(i, false, true);
+				
+				bu.ring:Hide()
+				bu.specIcon:SetTexture(icon)
+				bu.specIcon:SetTexCoord(.08, .92, .08, .92)
+				bu.specIcon:SetSize(58, 58)
+				bu.specIcon:SetPoint("LEFT", bu, "LEFT")
+				F.CreateBG(bu.specIcon)
+			end
+		end
 
 		for i = 1, NUM_TALENT_FRAME_TABS do
 			local tab = _G["PlayerTalentFrameTab"..i]
 			F.CreateTab(tab)
 		end
+	
+		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.ring:Hide()	
+		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.specIcon)
+		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.ring:Hide()	
+		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.specIcon)
 		
-		for i = 1, 4 do
-			local bu = _G["PlayerTalentFrameSpecializationSpecButton"..i]
+		hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self, spec)
+			local playerTalentSpec = GetSpecialization(nil, self.isPet, PlayerSpecTab2:GetChecked() and 2 or 1)
+			local shownSpec = spec or playerTalentSpec or 1
 			
-			bu:SetHighlightTexture("")
-			bu.bg:SetAlpha(0)
-			bu.learnedTex:SetAlpha(0)
-			bu.selectedTex:SetAlpha(0)
-			_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:Hide()
-			_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"].Show = F.dummy
+			local id, _, _, icon = GetSpecializationInfo(shownSpec, nil, self.isPet)
+			local scrollChild = self.spellsScroll.child
 			
-			F.CreateBD(bu, .25)
-			bu.glowTex = CreateFrame("Frame", nil, bu)
-			bu.glowTex:SetBackdrop({
-				edgeFile = C.media.glow,
-				edgeSize = 5,
-			})
-			bu.glowTex:SetPoint("TOPLEFT", -5, 5)
-			bu.glowTex:SetPoint("BOTTOMRIGHT", 5, -5)
-			bu.glowTex:SetBackdropBorderColor(.90, .88, .06)
-			bu.glowTex:SetFrameLevel(bu:GetFrameLevel()-1)
-			bu.glowTex:Hide()
-		end
-		
-		hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self)
+			scrollChild.specIcon:SetTexture(icon)
+			
+			local index = 1
+			local bonuses
+			if self.isPet then
+				bonuses = {GetSpecializationSpells(shownSpec, nil, self.isPet)}
+			else
+				bonuses = SPEC_SPELLS_DISPLAY[id]
+			end
+			for i = 1, #bonuses, 2 do
+				local frame = scrollChild["abilityButton"..index]
+				local _, icon = GetSpellTexture(bonuses[i])
+				frame.icon:SetTexture(icon)
+				if not frame.reskinned then
+					frame.reskinned = true
+					frame.ring:Hide()
+					frame.icon:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(frame.icon)
+				end
+				index = index + 1
+			end
+			
 			for i = 1, GetNumSpecializations(nil, self.isPet) do
 				local bu = self["specButton"..i]
 				if bu.learnedTex:IsShown() then
@@ -4955,6 +5026,45 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		for i = 1, GetNumSpecializations(false, nil) do
+			local bu = PlayerTalentFrameSpecialization["specButton"..i]
+			local _, _, _, icon = GetSpecializationInfo(i, false, nil);
+			
+			bu.ring:Hide()
+			bu.specIcon:SetTexture(icon)
+			bu.specIcon:SetTexCoord(.08, .92, .08, .92)
+			bu.specIcon:SetSize(58, 58)
+			bu.specIcon:SetPoint("LEFT", bu, "LEFT")
+			F.CreateBG(bu.specIcon)
+		end
+		
+		local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
+		
+		for _, name in pairs(buttons) do
+			for i = 1, 4 do
+				local bu = _G[name..i]
+
+				bu:SetHighlightTexture("")
+				bu.bg:SetAlpha(0)
+				bu.learnedTex:SetAlpha(0)
+				bu.selectedTex:SetAlpha(0)
+				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:Hide()
+				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"].Show = F.dummy
+				
+				F.CreateBD(bu, .25)
+				bu.glowTex = CreateFrame("Frame", nil, bu)
+				bu.glowTex:SetBackdrop({
+					edgeFile = C.media.glow,
+					edgeSize = 5,
+				})
+				bu.glowTex:SetPoint("TOPLEFT", -5, 5)
+				bu.glowTex:SetPoint("BOTTOMRIGHT", 5, -5)
+				bu.glowTex:SetBackdropBorderColor(.90, .88, .06)
+				bu.glowTex:SetFrameLevel(bu:GetFrameLevel()-1)
+				bu.glowTex:Hide()
+			end
+		end
+		
 		for i = 1, MAX_NUM_TALENT_TIERS do
 			local row = _G["PlayerTalentFrameTalentsTalentRow"..i]
 			_G["PlayerTalentFrameTalentsTalentRow"..i.."Bg"]:Hide()
@@ -4966,11 +5076,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for j = 1, NUM_TALENT_COLUMNS do
 				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
 				local ic = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."IconTexture"]
-				
-				_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."Slot"]:Hide()
-				_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."Selection"]:SetAlpha(0)
-				
+
 				bu:SetHighlightTexture("")
+				bu.Slot:SetAlpha(0)
+				bu.knownSelection:SetAlpha(0)
+				bu.learnSelection:SetAlpha(0)
 				
 				ic:SetDrawLayer("ARTWORK")
 				ic:SetTexCoord(.08, .92, .08, .92)
@@ -4987,38 +5097,53 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("TalentFrame_Update", function()
 			for i = 1, MAX_NUM_TALENT_TIERS do	
 				for j = 1, NUM_TALENT_COLUMNS do
-					local se = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."Selection"]
-					if se:IsShown() then
-						_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j].bg:SetBackdropColor(.90, .88, .06, .25)
+					local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
+					if bu.knownSelection:IsShown() then
+						bu.bg:SetBackdropColor(.90, .88, .06, .25)
 					else
-						_G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j].bg:SetBackdropColor(0, 0, 0, .25)
+						bu.bg:SetBackdropColor(0, 0, 0, .25)
+					end
+					if bu.learnSelection:IsShown() then
+						bu.bg:SetBackdropBorderColor(.90, .88, .06)
+					else
+						bu.bg:SetBackdropBorderColor(0, 0, 0)
 					end
 				end
 			end
 		end)
 		
 		for i = 1, 2 do
-			_G["PlayerSpecTab"..i.."Background"]:Hide()
 			local tab = _G["PlayerSpecTab"..i]
+			_G["PlayerSpecTab"..i.."Background"]:Hide()
+			
 			tab:SetCheckedTexture(C.media.checked)
+			
 			local bg = CreateFrame("Frame", nil, tab)
 			bg:SetPoint("TOPLEFT", -1, 1)
 			bg:SetPoint("BOTTOMRIGHT", 1, -1)
 			bg:SetFrameLevel(tab:GetFrameLevel()-1)
-			F.CreateBD(bg, 1)
-			local a1, p, a2, x, y = PlayerSpecTab1:GetPoint()
-			hooksecurefunc("PlayerTalentFrame_UpdateTabs", function()
-				PlayerSpecTab1:SetPoint(a1, p, a2, x + 11, y + 10)
-				PlayerSpecTab2:SetPoint("TOP", PlayerSpecTab1, "BOTTOM")
-			end)
+			F.CreateBD(bg)
+			
 			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+
 			select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 		end
+		
+		hooksecurefunc("PlayerTalentFrame_UpdateSpecs", function()
+			PlayerSpecTab1:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", 11, -36)
+			PlayerSpecTab2:SetPoint("TOP", PlayerSpecTab1, "BOTTOM")
+		end)
+		
+		PlayerTalentFrameTalentsTutorialButton.Ring:Hide()
+		PlayerTalentFrameTalentsTutorialButton:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
+		PlayerTalentFrameSpecializationTutorialButton.Ring:Hide()
+		PlayerTalentFrameSpecializationTutorialButton:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
 
 		F.Reskin(PlayerTalentFrameSpecializationLearnButton)
 		F.Reskin(PlayerTalentFrameTalentsLearnButton)
 		F.Reskin(PlayerTalentFrameActivateButton)
-		ReskinClose(PlayerTalentFrameCloseButton)
+		F.Reskin(PlayerTalentFramePetSpecializationLearnButton)
+		F.ReskinClose(PlayerTalentFrameCloseButton)
 	elseif addon == "Blizzard_TradeSkillUI" then
 		F.CreateBD(TradeSkillFrame)
 		F.CreateSD(TradeSkillFrame)
