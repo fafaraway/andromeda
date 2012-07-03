@@ -38,12 +38,11 @@ local ForceUpdate = function(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit, 'SHADOW_ORBS')
 end
 
-local function ShowHide(self, event, unit)
+local function Visibility(self, event, unit)
 	local pb = self.ShadowOrbsBar
 	local spec = GetSpecialization()
-	local level = UnitLevel("player")
 
-	if spec == SPEC_PRIEST_SHADOW and level > SHADOW_ORBS_SHOW_LEVEL then
+	if spec == SPEC_PRIEST_SHADOW then
 		pb:Show()
 	else
 		pb:Hide()
@@ -55,11 +54,10 @@ local function Enable(self, unit)
 	if pb and unit == "player" then
 		pb.__owner = self
 		pb.ForceUpdate = ForceUpdate
-		
-		self:RegisterEvent("PLAYER_LEVEL_UP", ShowHide)
-		self:RegisterEvent("PLAYER_TALENT_UPDATE", ShowHide)
+
+		self:RegisterEvent("UNIT_POWER", Path)
 		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
-		self:RegisterEvent("UNIT_POWER_FREQUENT", Path)
+		self:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility, true)
 		
 		return true
 	end
@@ -67,10 +65,9 @@ end
 
 local function Disable(self)
 	if self.ShadowOrbsBar then
-		self:UnregisterEvent("PLAYER_LEVEL_UP", ShowHide)
-		self:UnregisterEvent("PLAYER_TALENT_UPDATE", ShowHide)
+		self:UnregisterEvent("UNIT_POWER", Path)
 		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
-		self:UnregisterEvent("UNIT_POWER_FREQUENT", Path)
+		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Visibility)
 	end
 end
 

@@ -8,8 +8,7 @@ local Update = function(self, event)
 	end
 
 	local unit = self.unit
-	local isLeader = (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit)
-	if(isLeader) then
+	if (UnitInParty(unit) or UnitInRaid(unit)) and UnitIsGroupLeader(unit) then
 		leader:Show()
 	else
 		leader:Hide()
