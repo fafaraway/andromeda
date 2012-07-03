@@ -129,14 +129,13 @@ LOOT_ROLL_ALL_PASSED = "All passed on %s"
 LOOT_ROLL_PASSED_AUTO = "%s passed %s (auto)"
 LOOT_ROLL_PASSED_AUTO_FEMALE = "%s passed %s (auto)"
 LOOT_ROLL_PASSED_SELF_AUTO = "pass %s (auto)"
-LOOT_ROLL_WON = "%s wins %s"
-LOOT_ROLL_YOU_WON = "You won %s"
---[[LOOT_ROLL_WON_NO_SPAM_DE = "%1$s wins %3$s |cff818181(de %2$d)|r"
-LOOT_ROLL_WON_NO_SPAM_NEED = "%1$s wins %3$s |cff818181(need %2$d)|r"
-LOOT_ROLL_WON_NO_SPAM_GREED = "%1$s wins %3$s |cff818181(greed %2$d)|r"
-LOOT_ROLL_YOU_WON_NO_SPAM_DE = "You won %2$s |cff818181(de %1$d)|r"
-LOOT_ROLL_YOU_WON_NO_SPAM_NEED = "You won %2$s |cff818181(need %1$d)|r"
-LOOT_ROLL_YOU_WON_NO_SPAM_GREED = "You won %2$s |cff818181(greed %1$d)|r"]]
+-- |cff818181 on roll type
+--[[LOOT_ROLL_WON_NO_SPAM_DE = "|HlootHistory:%d|h[Loot]|h: %s (Disenchant - %d) Won: %s"
+LOOT_ROLL_WON_NO_SPAM_GREED = "|HlootHistory:%d|h[Loot]|h: %s (Greed - %d) Won: %s"
+LOOT_ROLL_WON_NO_SPAM_NEED = "|HlootHistory:%d|h[Loot]|h: %s (Need - %d) Won: %s"
+LOOT_ROLL_YOU_WON_NO_SPAM_DE = "|HlootHistory:%d|h[Loot]|h: You (Disenchant - %d) Won: %s"
+LOOT_ROLL_YOU_WON_NO_SPAM_GREED = "|HlootHistory:%d|h[Loot]|h: You (Greed - %d) Won: %s"
+LOOT_ROLL_YOU_WON_NO_SPAM_NEED = "|HlootHistory:%d|h[Loot]|h: You (Need - %d) Won: %s"]]
 
 COPPER_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t"
 SILVER_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t"
