@@ -40,7 +40,7 @@ local UPDATE_VISIBILITY = function(self, event)
 	local spec = GetSpecialization()
 	if spec then
 		if(not form) then
-			if(spec and spec == 1) then -- player has balance spec
+			if spec == 1 then -- player has balance spec
 				showBar = true
 			end
 		elseif(form == MOONKIN_FORM) then
@@ -139,4 +139,4 @@ local function Disable(self)
 	end
 end
 
-oUF:AddElement('EclipseBar', Path, Enable, Disable)
+oUF:AddElement('EclipseBar', Update, Enable, Disable)
