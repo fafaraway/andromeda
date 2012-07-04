@@ -166,7 +166,7 @@ end
 
 --[[ Hide frames ]]
 
-MainMenuBar:SetScale(0.00001)
+--[[MainMenuBar:SetScale(0.00001)
 MainMenuBar:EnableMouse(false)
 OverrideActionBar:SetScale(0.00001)
 OverrideActionBar:EnableMouse(false)
@@ -202,7 +202,16 @@ end
 
 hooksecurefunc("TalentFrame_LoadUI", function()
 	PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-end)
+end)]]
+
+local hider = CreateFrame("Frame")
+hider:Hide()
+MainMenuBar:SetParent(hider)
+PossessBarFrame:SetParent(hider)
+
+StanceBarLeft:SetAlpha(0)
+StanceBarMiddle:SetAlpha(0)
+StanceBarRight:SetAlpha(0)
 
 --[[ Pet bar ]]
 
@@ -229,7 +238,7 @@ for i = 1, numpet do
 	cd:SetAllPoints(button)
 end
 
---[[ Stance and Totem bar ]]
+--[[ Stance bar ]]
 
 if C.actionbars.stancebar == true then
 	local numshift = NUM_STANCE_SLOTS
@@ -255,7 +264,13 @@ if C.actionbars.stancebar == true then
 	end
 
 	StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
-	StanceButton1.SetPoint = F.dummy
+	
+	local function fixStanceButton1(self, a1, af, a2, x, y)
+		if af == "StanceBarFrame" then
+			StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
+		end
+	end
+	hooksecurefunc(StanceButton1, "SetPoint", fixStanceButton1)
 end
 
 --[[ Vehicle exit button ]]
