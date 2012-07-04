@@ -15,14 +15,15 @@ if buffs and buffs[1] then
 				local usable, nomana = IsUsableSpell(name)
 				if (usable or nomana) then
 					self.icon:SetTexture(select(3, GetSpellInfo(buff)))
+					self.hasTexture = true
 					break
 				end
 			end
-			if (not self.icon:GetTexture() and event == "PLAYER_LOGIN") then
+			if (not self.hasTexture and event == "PLAYER_LOGIN") then
 				self:UnregisterAllEvents()
 				self:RegisterEvent("LEARNED_SPELL_IN_TAB")
 				return
-			elseif (self.icon:GetTexture() and event == "LEARNED_SPELL_IN_TAB") then
+			elseif (self.hasTexture and event == "LEARNED_SPELL_IN_TAB") then
 				self:UnregisterAllEvents()
 				self:RegisterEvent("UNIT_AURA")
 				self:RegisterEvent("PLAYER_LOGIN")
