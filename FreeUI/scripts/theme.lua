@@ -1158,37 +1158,48 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		for i = 1, GetNumSpellTabs() do
-			local tab = _G["SpellBookSkillLineTab"..i]
-			
-			tab:GetRegions():Hide()
-			tab:SetCheckedTexture(C.media.checked)
-			
-			local a1, p, a2, x, y = tab:GetPoint()
-			tab:SetPoint(a1, p, a2, x + 11, y)
-			
-			F.CreateBG(tab)
-			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
-			
-			_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
-			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-		end
-		
-		for i = 1, GetNumSpecializations() do
-			local tab = SpellBook_GetCoreAbilitySpecTab(i)
-			
-			tab:GetRegions():Hide()
-			tab:SetCheckedTexture(C.media.checked)
-			
-			F.CreateBG(tab)
-			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
-	
-			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-			
-			if i == 1 then
-				tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
+		local tabsSkinned = false
+		hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
+			if tabsSkinned then return end
+			local num = GetNumSpellTabs()
+			if num > 0 then tabsSkinned = true end
+			for i = 1, num do
+				local tab = _G["SpellBookSkillLineTab"..i]
+				
+				tab:GetRegions():Hide()
+				tab:SetCheckedTexture(C.media.checked)
+				
+				local a1, p, a2, x, y = tab:GetPoint()
+				tab:SetPoint(a1, p, a2, x + 11, y)
+				
+				F.CreateBG(tab)
+				F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+				
+				_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
+				tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 			end
-		end
+		end)
+		
+		local coreTabsSkinned = false
+		hooksecurefunc("SpellBookCoreAbilities_UpdateTabs", function()
+			if coreTabsSkinned then return end
+			coreTabsSkinned = true
+			for i = 1, GetNumSpecializations() do
+				local tab = SpellBookCoreAbilitiesFrame.SpecTabs[i]
+				
+				tab:GetRegions():Hide()
+				tab:SetCheckedTexture(C.media.checked)
+				
+				F.CreateBG(tab)
+				F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+		
+				tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+				
+				if i == 1 then
+					tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
+				end
+			end
+		end)
 		
 		hooksecurefunc("SpellBook_UpdateCoreAbilitiesTab", function()
 			for i = 1, #SpellBookCoreAbilitiesFrame.Abilities do
