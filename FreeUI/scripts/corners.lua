@@ -3,9 +3,14 @@ local F, C, L = unpack(select(2, ...))
 local r, g, b = unpack(C.class)
 
 local last = 0
+local menuShown = false
 
 local function onMouseUp(self)
 	self:SetScript("OnUpdate", nil)
+	if menuShown then 
+		ToggleFrame(DropDownList1)
+		menuShown = false
+	end
 	
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
@@ -35,10 +40,6 @@ f:SetSize(8, 8)
 f:SetPoint("BOTTOMRIGHT")
 f:EnableMouse(true)
 f:SetScript("OnMouseDown", function(self, button)
-	if DropDownList1:IsShown() then 
-		ToggleFrame(DropDownList1)
-		return
-	end
 	if button == "LeftButton" then
 		f:HookScript("OnUpdate", function(self, elapsed)
 			last = last + elapsed
@@ -46,7 +47,13 @@ f:SetScript("OnMouseDown", function(self, button)
 				self:SetScript("OnUpdate", nil)
 				self:SetScript("OnMouseUp", nil)
 				last = 0
-				F.MicroMenu()
+				if menuShown then 
+					ToggleFrame(DropDownList1)
+					menuShown = false
+				else
+					F.MicroMenu()
+					menuShown = true
+				end
 			end
 		end)
 		self:SetScript("OnMouseUp", onMouseUp)
@@ -79,7 +86,7 @@ f:SetScript("OnEnter", function()
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Toggle alDamageMeter", r, g, b, 1, 1, 1)
 		GameTooltip:AddDoubleLine("Right-click:", "Toggle DBM", r, g, b, 1, 1, 1)
-		GameTooltip:AddDoubleLine("Click and hold:", "Open micro menu", r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Click and hold:", "Toggle micro menu", r, g, b, 1, 1, 1)
 		GameTooltip:Show()
 	end
 end)
