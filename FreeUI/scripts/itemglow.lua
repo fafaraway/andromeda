@@ -81,14 +81,35 @@ CharacterFrame:HookScript('OnShow', updatechar)
 
 -- Inspect Frame
 
-local updateinspect = function(self)
+local missing = {}
+local updateMissing = function()
+	if not next(missing) then return end
+
+	local unit = InspectFrame.unit
+	if not unit then table.wipe(missing) end
+
+	for i, slotName in next, missing do
+		local slotLink = GetInventoryItemLink(unit, i)
+		if slotLink then
+			UpdateGlow(_G["Inspect"..slotName.."Slot"], slotLink)
+			missing[i] = nil
+		end
+	end
+end
+
+local updateInspect = function()
 	local unit = InspectFrame.unit
 	if InspectFrame:IsShown() and unit then
 		for key, slotName in ipairs(slots) do
 			local slotID = key % 20
 			local slotFrame = _G["Inspect"..slotName.."Slot"]
 			local slotLink = GetInventoryItemLink(unit, slotID)
-			if slotLink then
+			local slotTexture = GetInventoryItemTexture(unit, slotID)
+			
+			if slotTexture and not slotLink then
+				GetItemInfo(GetInventoryItemID(unit, slotID))
+				missing[key] = slotName
+			elseif slotLink then
 				slotFrame:Show()
 			else
 				slotFrame:Hide()
@@ -96,42 +117,23 @@ local updateinspect = function(self)
 			UpdateGlow(slotFrame, slotLink)
 		end
 	end
-
-end
-
-local last = 0
-local OnUpdate = function(self, elapsed)
-	last = last + elapsed
-	if last >= 1 then
-		self:SetScript("OnUpdate", nil)
-		last = 0
-		updateinspect()
-	end
-end
-
-local startinspect = function()
-	updateinspect()
-	InspectFrame:SetScript("OnUpdate", OnUpdate)
 end
 
 local g = CreateFrame("Frame")
 g:RegisterEvent("ADDON_LOADED")
 g:SetScript("OnEvent", function(self, event, addon)
-	if addon ~= "Blizzard_InspectUI" then return end
+	if event == "ADDON_LOADED" then
+		if addon ~= "Blizzard_InspectUI" then return end
 
-	InspectFrame:HookScript("OnShow", function()
-		g:RegisterEvent("PLAYER_TARGET_CHANGED")
 		g:RegisterEvent("INSPECT_READY")
-		g:SetScript("OnEvent", startinspect)
-	end)
-	InspectFrame:HookScript("OnHide", function()
-		g:UnregisterEvent("PLAYER_TARGET_CHANGED")
-		g:UnregisterEvent("INSPECT_READY")
-			g:SetScript("OnEvent", nil)
-		InspectFrame:SetScript("OnUpdate", nil)
-	end)
-
-	g:UnregisterEvent("ADDON_LOADED")
+		g:RegisterEvent("GET_ITEM_INFO_RECEIVED")
+		
+		g:UnregisterEvent("ADDON_LOADED")
+	elseif event == "INSPECT_READY" then
+		updateInspect()
+	elseif event == "GET_ITEM_INFO_RECEIVED" then
+		updateMissing()
+	end
 end)
 
 -- Guild Bank Frame
