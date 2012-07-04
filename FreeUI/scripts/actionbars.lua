@@ -8,9 +8,23 @@ local bar1 = CreateFrame("Frame", "FreeUI_MainMenuBar", UIParent, "SecureHandler
 bar1:SetWidth(323)
 bar1:SetHeight(26)
 
+for i = 1, NUM_ACTIONBAR_BUTTONS do
+	local button = _G["ActionButton"..i]
+	button:ClearAllPoints()
+	button:SetParent(bar1)
+	button:SetSize(26, 26)
+	if i == 1 then
+		button:SetPoint("BOTTOMLEFT", bar1, "BOTTOMLEFT", 0, 0)
+	else
+		local previous = _G["ActionButton"..i-1]
+		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
+	end
+end
+
 local Page = {
 	["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
 	["WARRIOR"] = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
+	["MONK"] = "[bonusbar:1] 7;",
 	["PRIEST"] = "[bonusbar:1] 7;",
 	["ROGUE"] = "[bonusbar:1] 7; [form:3] 10;",
 	["WARLOCK"] = "[form:2] 7;",
@@ -29,50 +43,29 @@ local function GetBar()
 end
 
 bar1:RegisterEvent("PLAYER_LOGIN")
-bar1:RegisterEvent("PLAYER_ENTERING_WORLD")
-bar1:RegisterEvent("KNOWN_CURRENCY_TYPES_UPDATE")
-bar1:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
-bar1:RegisterEvent("BAG_UPDATE")
-bar1:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 bar1:SetScript("OnEvent", function(self, event, ...)
 	if event == "PLAYER_LOGIN" then
-		local button, buttons
-		for i = 1, NUM_ACTIONBAR_BUTTONS do
-			button = _G["ActionButton"..i]
-			self:SetFrameRef("ActionButton"..i, button)
+		for id = 1, NUM_ACTIONBAR_BUTTONS do
+			local name = "ActionButton"..id
+			self:SetFrameRef(name, _G[name])
 		end
 
-		self:Execute([[
+		self:Execute(([[
 			buttons = table.new()
-			for i = 1, 12 do
-				table.insert(buttons, self:GetFrameRef("ActionButton"..i))
+			for id = 1, %s do
+				buttons[id] = self:GetFrameRef("ActionButton"..id)
 			end
-		]])
+		]]):format(NUM_ACTIONBAR_BUTTONS))
   
-		self:SetAttribute("_onstate-page", [[ 
-			for i, button in ipairs(buttons) do
-				button:SetAttribute("actionpage", tonumber(newstate))
+		self:SetAttribute("_onstate-page", ([[ 
+			if not newstate then return end
+			newstate = tonumber(newstate)
+			for id = 1, %s do
+				buttons[id]:SetAttribute("actionpage", newstate)
 			end
-		]])
+		]]):format(NUM_ACTIONBAR_BUTTONS))
       
 		RegisterStateDriver(self, "page", GetBar())
-	elseif event == "PLAYER_ENTERING_WORLD" then
-		local button
-		for i = 1, 12 do
-			button = _G["ActionButton"..i]
-			button:ClearAllPoints()
-			button:SetParent(self)
-			button:SetSize(26, 26)
-			if i == 1 then
-				button:SetPoint("BOTTOMLEFT", bar1, "BOTTOMLEFT", 0, 0)
-			else
-				local previous = _G["ActionButton"..i-1]
-   				button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
-			end
-		end
-	elseif event == "ACTIVE_TALENT_GROUP_CHANGED" then
-		-- attempt to fix blocked glyph change after switching spec.
-		LoadAddOn("Blizzard_GlyphUI")
 	else
 		MainMenuBar_OnEvent(self, event, ...)
 	end
