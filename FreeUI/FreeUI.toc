@@ -44,6 +44,7 @@ scripts\lootroll.lua
 scripts\mail.lua
 scripts\map.lua
 scripts\marking.lua
+scripts\micromenu.lua
 scripts\minimap.lua
 scripts\mirrorbars.lua
 scripts\nameplates.lua

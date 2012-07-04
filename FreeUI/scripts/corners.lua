@@ -2,6 +2,25 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
+local last = 0
+
+local function onMouseUp(self)
+	self:SetScript("OnUpdate", nil)
+	
+	if IsAddOnLoaded("alDamageMeter") then
+		DisableAddOn("alDamageMeter")
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
+	else
+		EnableAddOn("alDamageMeter")
+		LoadAddOn("alDamageMeter")
+		if IsAddOnLoaded("alDamageMeter") then
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter loaded.|r", unpack(C.class))
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter not found!|r", unpack(C.class))
+		end
+	end
+end
+
 local f = CreateFrame("Frame")
 f:SetBackdrop({
 	bgFile = C.media.backdrop,
@@ -16,15 +35,21 @@ f:SetSize(8, 8)
 f:SetPoint("BOTTOMRIGHT")
 f:EnableMouse(true)
 f:SetScript("OnMouseDown", function(self, button)
+	if DropDownList1:IsShown() then 
+		ToggleFrame(DropDownList1)
+		return
+	end
 	if button == "LeftButton" then
-		if IsAddOnLoaded("alDamageMeter") then
-			DisableAddOn("alDamageMeter")
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
-		else
-			EnableAddOn("alDamageMeter")
-			LoadAddOn("alDamageMeter")
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter loaded.|r", unpack(C.class))
-		end
+		f:HookScript("OnUpdate", function(self, elapsed)
+			last = last + elapsed
+			if last > .5 then
+				self:SetScript("OnUpdate", nil)
+				self:SetScript("OnMouseUp", nil)
+				last = 0
+				F.MicroMenu()
+			end
+		end)
+		self:SetScript("OnMouseUp", onMouseUp)
 	elseif button == "RightButton" then
 		if IsAddOnLoaded("DBM-Core") then
 			DisableAddOn("DBM-Core")
@@ -35,7 +60,11 @@ f:SetScript("OnMouseDown", function(self, button)
 			EnableAddOn("DBM-Core")
 			LoadAddOn("!dbm")
 			LoadAddOn("DBM-Core")
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM loaded.|r", unpack(C.class))
+			if IsAddOnLoaded("DBM-Core") then
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM loaded.|r", unpack(C.class))
+			else
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM not found!|r", unpack(C.class))
+			end
 		end
 	end
 end)
@@ -50,6 +79,7 @@ f:SetScript("OnEnter", function()
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Toggle alDamageMeter", r, g, b, 1, 1, 1)
 		GameTooltip:AddDoubleLine("Right-click:", "Toggle DBM", r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Click and hold:", "Open micro menu", r, g, b, 1, 1, 1)
 		GameTooltip:Show()
 	end
 end)
