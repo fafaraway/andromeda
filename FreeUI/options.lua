@@ -119,10 +119,8 @@ C["selfbuffs"] = {
 		82661, -- fox
 	},
 	PALADIN = {
-		31801, -- seal of truth
-		20154, -- seal of righteousness
-		20165, -- seal of insight
-		20164, -- seal of justice
+		19740, -- blessing of might
+		20217, -- blessing of kings
 	},
 	PRIEST = {
 		588, -- inner fire
