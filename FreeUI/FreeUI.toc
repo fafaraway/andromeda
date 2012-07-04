@@ -62,6 +62,5 @@ scripts\watchframe.lua
 scripts\worldmarker.lua
 scripts\worldstateframe.lua
 
-class\rogue.lua
 class\shaman.lua
 class\warrior.lua

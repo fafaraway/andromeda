@@ -80,8 +80,6 @@ C["classmod"] = {
 	["monk"] = true, 		-- harmony bar
 	["paladin"] = true, 		-- holy power
 	["priest"] = true,		-- shadow orbs
-	["rogue"] = true,		-- poison reminder
-	["rogue_checkthrown"] = false,	-- check thrown weapon for poison
 	["shaman"] = true, 		-- maelstrom weapon tracker
 	["warlock"] = true, 		-- spec bar
 	["warrior"] = true, -- thunderstruck tracker
@@ -129,6 +127,12 @@ C["selfbuffs"] = {
 	PRIEST = {
 		588, -- inner fire
 		73413, -- inner will
+	},
+	ROGUE = {
+		2823, -- deadly poison
+		8679, -- wound poison (from instant)
+		5761, -- mind-numbing poison
+		3408, -- crippling poison
 	},
 	MAGE = {
 		7302, -- frost armor
