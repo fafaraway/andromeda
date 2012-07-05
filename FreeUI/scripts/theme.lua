@@ -1361,10 +1361,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:SetSize(22, 22)
 			ic:SetTexCoord(.15, .85, .15, .85)
 
-			ic:ClearAllPoints()
-			ic:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
-			ic.SetPoint = F.dummy
-
 			inv:SetAlpha(0)
 			inv:EnableMouse(false)
 
@@ -1381,7 +1377,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					F.CreateBD(bu.bg, 0)
 				end
 				if bu.gameIcon:IsShown() then
+					if i == 1 then
+						bu.bg:SetPoint("BOTTOMRIGHT", bu.gameIcon, 0, -1)
+					else
+						bu.bg:SetPoint("BOTTOMRIGHT", bu.gameIcon)
+					end
 					bu.bg:Show()
+					bu.gameIcon:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
 				else
 					bu.bg:Hide()
 				end
