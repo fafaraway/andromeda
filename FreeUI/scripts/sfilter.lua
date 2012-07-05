@@ -13,11 +13,20 @@ local function sFilter_CreateFrame(data)
 	local frame = CreateFrame("Frame", "sFilter_" .. data.unitId .. "_" .. data.spellId, UIParent)
 	frame:SetWidth(data.size)
 	frame:SetHeight(data.size)
-	frame:SetPoint(unpack(data.setPoint))
 	frame:RegisterEvent("UNIT_AURA")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	frame:SetScript("OnEvent", function(self, event, ...)
+		if event == "PLAYER_ENTERING_WORLD" then
+			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			if data.slot == 1 then
+				self:SetPoint("BOTTOMLEFT", oUF_FreeTarget, "TOPLEFT", 0, 42)
+			elseif data.slot == 2 then
+				self:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
+			elseif data.slot == 3 then
+				self:SetPoint("BOTTOMRIGHT", oUF_FreeTarget, "TOPRIGHT", 0, 42)
+			end
+		end
 		local unit = ...
 		if(data.unitId==unit or event=="PLAYER_TARGET_CHANGED" or event=="PLAYER_ENTERING_WORLD") then
 			self.found = false
