@@ -12,14 +12,8 @@ CHAT_FRAME_TAB_ALERTING_MOUSEOVER_ALPHA = 1
 
 local Fane = CreateFrame("Frame")
 
-local updateFS = function(self, inc, flags, ...)
+local updateFS = function(self, _, _, ...)
 	local fstring = self:GetFontString()
-
-	if(inc) then
-		fstring:SetFont(C.media.font, 16, "OUTLINEMONOCHROME")
-	else
-		fstring:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	end
 
 	if((...)) then
 		fstring:SetTextColor(...)
@@ -83,6 +77,8 @@ local faneifyTab = function(frame, sel)
 
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
+		
+		frame:GetFontString():SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 
 		frame.Fane = true
 	end
@@ -102,8 +98,8 @@ end)
 
 hooksecurefunc('FCFTab_UpdateColors', faneifyTab)
 
-for i = 1, 7 do
-	faneifyTab(_G['ChatFrame' .. i .. 'Tab'])
+for i = 1, NUM_CHAT_WINDOWS do
+	faneifyTab(_G['ChatFrame'.. i.."Tab"])
 end
 
 function Fane:ADDON_LOADED(event, addon)

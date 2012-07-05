@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+local _G = _G
+
 DEFAULT_CHATFRAME_ALPHA = 0
 --CHAT_FRAME_FADE_OUT_TIME = 0
 CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME -- speed up fading out
@@ -20,6 +22,23 @@ local function HideForever(f)
 	f:SetScript("OnShow", f.Hide)
 	f:Hide()
 end
+
+HideForever(ChatFrameMenuButton)
+HideForever(FriendsMicroButton)
+HideForever(GeneralDockManagerOverflowButton)
+
+ChatTypeInfo.SAY.sticky = 1
+ChatTypeInfo.EMOTE.sticky = 1
+ChatTypeInfo.YELL.sticky = 1
+ChatTypeInfo.PARTY.sticky = 1
+ChatTypeInfo.GUILD.sticky = 1
+ChatTypeInfo.OFFICER.sticky = 1
+ChatTypeInfo.RAID.sticky = 1
+ChatTypeInfo.RAID_WARNING.sticky = 1
+ChatTypeInfo.BATTLEGROUND.sticky = 1
+ChatTypeInfo.WHISPER.sticky = 1
+ChatTypeInfo.BN_WHISPER.sticky = 1
+ChatTypeInfo.CHANNEL.sticky = 1
 
 local function GetColor(className, isLocal)
 	if isLocal then
@@ -84,30 +103,39 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, messa
 	return false, ("+ |cffffffff|Hcurrency:%d|h%s|h|r%s"):format(currencyID, currencyName, currencyAmount or ""), ...
 end)
 
-for i = 1, NUM_CHAT_WINDOWS do
-	local f = ("ChatFrame%d"):format(i)
+local function toggleDown(f)
+	if f:GetCurrentScroll() > 0 then
+		_G[f:GetName().."ButtonFrameBottomButton"]:Show()
+	else
+		_G[f:GetName().."ButtonFrameBottomButton"]:Hide()
+	end
+end
+
+local function reskinMinimize(f)
+	if f.reskinned then return end
+	f.reskinned = true
+	
+	f:SetSize(16, 16)
+	F.Reskin(f)
+	local minus = F.CreateFS(f, 8)
+	minus:SetPoint("CENTER", 1, 0)
+	minus:SetText("-")
+end
+
+local function StyleWindow(f)
 	local frame = _G[f]
+	if frame.reskinned then return end
+	frame.reskinned = true
+	
 	local down = _G[f.."ButtonFrameBottomButton"]
 	
+	down:SetPoint("BOTTOM")
 	down:Hide()
 	HideForever(_G[f.."ButtonFrameUpButton"])
 	HideForever(_G[f.."ButtonFrameDownButton"])
 
-	frame:HookScript("OnMessageScrollChanged", function(frame)
-		if frame:GetCurrentScroll() > 0 then
-			_G[f.."ButtonFrameBottomButton"]:Show()
-		else
-			_G[f.."ButtonFrameBottomButton"]:Hide()
-		end
-	end)
-
-	down:SetSize(16, 16)
-	down:SetPoint("BOTTOM")
-	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
-	downtex:SetSize(8, 8)
-	downtex:SetPoint("CENTER")
-	downtex:SetVertexColor(1, 1, 1)
+	frame:HookScript("OnMessageScrollChanged", toggleDown)
+	frame:HookScript("OnShow", toggleDown)
 	
 	frame:SetFading(false)
 
@@ -127,7 +155,7 @@ for i = 1, NUM_CHAT_WINDOWS do
 	
 	frame.editBox:SetAltArrowKeyMode(nil)
 
-	local x=({_G["ChatFrame"..i.."EditBox"]:GetRegions()})
+	local x=({_G[f.."EditBox"]:GetRegions()})
 	x[9]:SetAlpha(0)
 	x[10]:SetAlpha(0)
 	x[11]:SetAlpha(0)
@@ -143,55 +171,63 @@ for i = 1, NUM_CHAT_WINDOWS do
 	ebg:SetPoint("BOTTOMRIGHT", frame.editBox, -4, 4)
 	ebg:SetFrameStrata("BACKGROUND")
 	ebg:SetFrameLevel(0)
-
-	-- From Tukui
-	hooksecurefunc("ChatEdit_UpdateHeader", function()
-		local type = frame.editBox:GetAttribute("chatType")
-		if ( type == "CHANNEL" ) then
-			local id = GetChannelName(frame.editBox:GetAttribute("channelTarget"))
-			if id == 0 or id == 1 or id == 2 or id == 3 then
-				ebg:SetBackdropBorderColor(0, 0, 0)
-			else
-				ebg:SetBackdropBorderColor(ChatTypeInfo[type..id].r,ChatTypeInfo[type..id].g,ChatTypeInfo[type..id].b)
-			end
-		elseif (type == "SAY") then
-			ebg:SetBackdropBorderColor(0, 0, 0)
-		else
-			ebg:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
-		end
-	end)
+	frame.editBox.ebg = ebg
 
 	for j = 1, #CHAT_FRAME_TEXTURES do
-		_G["ChatFrame"..i..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
+		_G[f..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
 	end
 	
 	--Hide the new editbox "ghost"
-	_G[("ChatFrame%sEditBoxLeft"):format(i)]:SetAlpha(0)
-	_G[("ChatFrame%sEditBoxRight"):format(i)]:SetAlpha(0)
-	_G[("ChatFrame%sEditBoxMid"):format(i)]:SetAlpha(0)
+	_G[f.."EditBoxLeft"]:SetAlpha(0)
+	_G[f.."EditBoxRight"]:SetAlpha(0)
+	_G[f.."EditBoxMid"]:SetAlpha(0)
 	
 	frame:SetClampRectInsets(0, 0, 0, 0)
+	
+	-- real ID conversation
+	if frame.conversationButton then
+		frame.conversationButton:ClearAllPoints()
+		frame.conversationButton:SetPoint("TOP")
+		frame.conversationButton:SetSize(16, 16)
+		frame.conversationButton.SetPoint = F.dummy
+		F.Reskin(frame.conversationButton)
+		local plus = F.CreateFS(frame.conversationButton, 8)
+		plus:SetPoint("CENTER", 1, 0)
+		plus:SetText("+")
+	end
+	
+	-- minimize button
+	frame.buttonFrame.minimizeButton:HookScript("OnShow", reskinMinimize)
 
 	hooks[frame] = frame.AddMessage
 	frame.AddMessage = AddMessage
 end
 
-HideForever(ChatFrameMenuButton)
-HideForever(FriendsMicroButton)
-HideForever(GeneralDockManagerOverflowButton)
+for i = 1, NUM_CHAT_WINDOWS do
+	StyleWindow(("ChatFrame%d"):format(i))
+end
 
-ChatTypeInfo.SAY.sticky = 1
-ChatTypeInfo.EMOTE.sticky = 1
-ChatTypeInfo.YELL.sticky = 1
-ChatTypeInfo.PARTY.sticky = 1
-ChatTypeInfo.GUILD.sticky = 1
-ChatTypeInfo.OFFICER.sticky = 1
-ChatTypeInfo.RAID.sticky = 1
-ChatTypeInfo.RAID_WARNING.sticky = 1
-ChatTypeInfo.BATTLEGROUND.sticky = 1
-ChatTypeInfo.WHISPER.sticky = 1
-ChatTypeInfo.BN_WHISPER.sticky = 1
-ChatTypeInfo.CHANNEL.sticky = 1
+hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
+	StyleWindow(f:GetName())
+end)
+
+-- From Tukui
+hooksecurefunc("ChatEdit_UpdateHeader", function()
+	local editBox = ChatEdit_ChooseBoxForSend()
+	local mType = editBox:GetAttribute("chatType")
+	if ( mType == "CHANNEL" ) then
+		local id = GetChannelName(editBox:GetAttribute("channelTarget"))
+		if id == 0 or id == 1 or id == 2 or id == 3 then
+			editBox.ebg:SetBackdropBorderColor(0, 0, 0)
+		else
+			editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
+		end
+	elseif (mType == "SAY") then
+		editBox.ebg:SetBackdropBorderColor(0, 0, 0)
+	else
+		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType].r,ChatTypeInfo[mType].g,ChatTypeInfo[mType].b)
+	end
+end)
 
 BNToastFrame:HookScript("OnShow", function(self)
 	self:ClearAllPoints()
@@ -333,4 +369,3 @@ end
 
 ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', AddLinkColors)
 ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER_INFORM', AddLinkColors)
-

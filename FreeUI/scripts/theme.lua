@@ -2054,6 +2054,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TutorialFrameOkayButton:SetBackdropColor(0, 0, 0, .25)
 		TutorialFramePrevButton:SetBackdropColor(0, 0, 0, .25)
 		TutorialFrameNextButton:SetBackdropColor(0, 0, 0, .25)
+		
+		-- BN conversation
+		
+		BNConversationInviteDialogHeader:SetTexture("")
+		
+		F.CreateBD(BNConversationInviteDialog)
+		F.CreateBD(BNConversationInviteDialogList, .25)
+		
+		F.Reskin(BNConversationInviteDialogInviteButton)
+		F.Reskin(BNConversationInviteDialogCancelButton)
+		F.ReskinScroll(BNConversationInviteDialogListScrollFrameScrollBar)
+		for i = 1, BN_CONVERSATION_INVITE_NUM_DISPLAYED do
+			F.ReskinCheck(_G["BNConversationInviteDialogListFriend"..i].checkButton)
+		end
 
 		-- [[ Hide regions ]]
 
@@ -2575,10 +2589,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.Reskin(select(6, PVPBannerFrame:GetChildren()))
-
+		
 		for i = 1, NUM_CHAT_WINDOWS do
-			F.Reskin(_G["ChatFrame"..i.."ButtonFrameBottomButton"])
+			F.ReskinArrow(_G["ChatFrame"..i.."ButtonFrameBottomButton"], "down")
 		end
+		
+		hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
+			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
+		end)
 
 		local closebuttons = {"LFDParentFrameCloseButton", "CharacterFrameCloseButton", "PVPFrameCloseButton", "SpellBookFrameCloseButton", "HelpFrameCloseButton", "PVPBannerFrameCloseButton", "RaidInfoCloseButton", "RolePollPopupCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "WorldStateScoreFrameCloseButton", "LFGDungeonReadyStatusCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton", "FriendsFrameCloseButton", "MissingLootFramePassButton", "LFGDungeonReadyDialogCloseButton", "StaticPopup1CloseButton"}
 		for i = 1, #closebuttons do
