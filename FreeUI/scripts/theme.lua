@@ -2282,6 +2282,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(LootHistoryFrame.CloseButton)
 		F.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
 		
+		-- BN conversation
+		
+		BNConversationInviteDialogHeader:SetTexture("")
+		
+		F.CreateBD(BNConversationInviteDialog)
+		F.CreateBD(BNConversationInviteDialogList, .25)
+		
+		F.Reskin(BNConversationInviteDialogInviteButton)
+		F.Reskin(BNConversationInviteDialogCancelButton)
+		F.ReskinScroll(BNConversationInviteDialogListScrollFrameScrollBar)
+		for i = 1, BN_CONVERSATION_INVITE_NUM_DISPLAYED do
+			F.ReskinCheck(_G["BNConversationInviteDialogListFriend"..i].checkButton)
+		end
+		
 		-- [[ Hide regions ]]
 
 		local bglayers = {"FriendsFrame", "SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrame", "CharacterFrameInset", "CharacterFrameInsetRight", "PVPFrame", "PVPFrameInset", "PVPFrameTopInset", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "WorldStateScoreFrame", "WorldStateScoreFrameInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
@@ -2738,8 +2752,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(select(6, PVPBannerFrame:GetChildren()))
 
 		for i = 1, NUM_CHAT_WINDOWS do
-			F.Reskin(_G["ChatFrame"..i.."ButtonFrameBottomButton"])
+			F.ReskinArrow(_G["ChatFrame"..i.."ButtonFrameBottomButton"], "down")
 		end
+		
+		hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
+			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
+		end)
 
 		local closebuttons = {"CharacterFrameCloseButton", "PVPFrameCloseButton", "SpellBookFrameCloseButton", "HelpFrameCloseButton", "PVPBannerFrameCloseButton", "RaidInfoCloseButton", "RolePollPopupCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "WorldStateScoreFrameCloseButton", "LFGDungeonReadyStatusCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton", "FriendsFrameCloseButton", "MissingLootFramePassButton", "LFGDungeonReadyDialogCloseButton", "StaticPopup1CloseButton"}
 		for i = 1, #closebuttons do
