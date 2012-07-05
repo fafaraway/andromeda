@@ -33,14 +33,16 @@ local function OnEvent()
 		end
 
 		for i = num, 1, -1 do
-			local _, _, _, _, money, COD, _, item = GetInboxHeaderInfo(i)
-			if(item and COD<1) then
-				TakeInboxItem(i)
-				return
-			end
-			if(money>0) then
-				TakeInboxMoney(i)
-				return
+			local _, _, _, _, money, COD, _, itemCount, _, _, _, _, isGM = GetInboxHeaderInfo(i)
+			if not isGM then
+				if(itemCount and COD<1) then
+					AutoLootMailItem(i)
+					return
+				end
+				if(money>0) then
+					TakeInboxMoney(i)
+					return
+				end
 			end
 		end
 	end
