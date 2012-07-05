@@ -151,25 +151,25 @@ C["selfbuffs"] = {
 	},
 }
 
--- sFilter buff tracker
+-- sFilter buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
 C["sfilter"] = {
 	["PALADIN"] = {
 	-- Divine Plea
-	{spellId = 54428, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 95, -163}},
+	{spellId = 54428, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath, Zealotry
-	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, spellId5 = 85696, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 0, -163}},
+	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, spellId5 = 85696, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
 	-- Inquisition
-	{spellId = 84963, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", -95, -163}},
+	{spellId = 84963, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	-- Judgements of the Pure
-	{spellId = 53657, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, setPoint = {"CENTER", UIParent, "CENTER", -95, -163}},
+	{spellId = 53657, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, slot = 1},
 	},
 	["ROGUE"] = {
 	-- Bandit's Guile
-	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 95, -163}},
+	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Recuperate
-	{spellId = 73651, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", 95, -163}},
+	{spellId = 73651, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Slice and dice
-	{spellId = 5171, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", setPoint = {"CENTER", UIParent, "CENTER", -95, -163}},
+	{spellId = 5171, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 }
 
