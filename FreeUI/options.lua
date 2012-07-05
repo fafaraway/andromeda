@@ -86,7 +86,6 @@ C["classmod"] = {
 }
 
 -- lower = smoother = more CPU usage
-
 C["performance"] = {
 	["bubbles"] = .1, 	-- update interval for chat bubbles in seconds (always)
 	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
@@ -94,20 +93,6 @@ C["performance"] = {
 	["namethreat"] = .2, 	-- update interval for nameplates threat in seconds (only with nameplates shown)
 	["tolbarad"] = 10, 	-- update interval for TB timer in seconds (always)
 }
-
--- [[ Profiles ]]
-
-if lvl ~= 90 then
-	C.general.autoroll = false
-end
-
-if realm == "Steamwheedle Cartel" then
-	C.general.autorepair_guild = true
-end
-
-if class == "MAGE" or class == "PRIEST" or class == "WARLOCK" then
-	C.unitframes.castbar = 2
-end
 
 -- Selfbuff reminder
 C["selfbuffs"] = {
@@ -155,25 +140,33 @@ C["selfbuffs"] = {
 }
 
 -- sFilter buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
+-- spellID 1-5, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
+-- if you use multiple spellIDs, first available gets displayed
 C["sfilter"] = {
 	["PALADIN"] = {
 	-- Divine Plea
-	{spellId = 54428, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	{spellId = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath
-	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
+	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
 	-- Inquisition
-	{spellId = 84963, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+	{spellId = 84963, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	-- Judgements of the Pure
-	{spellId = 53657, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, slot = 3},
+	{spellId = 53657, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, slot = 3},
 	},
 	["ROGUE"] = {
 	-- Bandit's Guile
-	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Recuperate
-	{spellId = 73651, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	{spellId = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Slice and dice
-	{spellId = 5171, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+	{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
+	["WARRIOR"] = {
+	-- Last Stand, Shield Wall
+	{spellId = 12975, spellId2 = 871, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+	-- Shield Block
+	{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	}
 }
 
 -- [[ Filters ]]

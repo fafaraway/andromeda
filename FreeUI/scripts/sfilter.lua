@@ -11,15 +11,16 @@ local MyUnits = {
 local function sFilter_CreateFrame(data)
 	local spellName, _, spellIcon = GetSpellInfo(data.spellId)
 	local frame = CreateFrame("Frame", "sFilter_" .. data.unitId .. "_" .. data.spellId, UIParent)
-	frame:SetWidth(data.size)
-	frame:SetHeight(data.size)
+	frame:SetSize(data.size or 39, data.size or 39)
 	frame:RegisterEvent("UNIT_AURA")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	frame:SetScript("OnEvent", function(self, event, ...)
 		if event == "PLAYER_ENTERING_WORLD" then
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			if data.slot == 1 then
+			if data.customPoint then
+				self:SetPoint(unpack(customPoint))
+			elseif data.slot == 1 then
 				self:SetPoint("BOTTOMLEFT", oUF_FreeTarget, "TOPLEFT", 0, 42)
 			elseif data.slot == 2 then
 				self:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
@@ -70,7 +71,8 @@ local function sFilter_CreateFrame(data)
 	frame.cooldown:SetPoint("BOTTOMRIGHT")
 	frame.cooldown:SetReverse()
 
-	F.CreateBG(frame)end
+	F.CreateBG(frame)
+end
 
 local _, class = UnitClass("player")
 if (C.sfilter and C.sfilter[class]) then

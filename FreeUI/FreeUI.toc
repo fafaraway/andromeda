@@ -13,6 +13,7 @@ core\colours.lua
 core\slash.lua
 
 options.lua
+profiles.lua
 
 oUF\oUF.xml
 
