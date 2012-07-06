@@ -190,22 +190,18 @@ local function init()
 	for i = 1, NUM_PET_ACTION_SLOTS do
 		stylePetButton(_G["PetActionButton"..i])
 	end
-
+	
 	if C.actionbars.stancebar == true then
 		for i = 1, NUM_STANCE_SLOTS do
-			local bu = _G["StanceButton"..i]
-			if bu then
-				local ic = _G[bu:GetName().."Icon"]
+			local bu = _G["FreeUIStanceButton"..i]
+			bu:SetNormalTexture("")
+			bu:SetPushedTexture("")
+			bu:SetCheckedTexture(C.media.checked)
 
-				bu:SetNormalTexture("")
-				bu:SetPushedTexture("")
-				bu:SetCheckedTexture(C.media.checked)
+			F.CreateBG(bu)
 
-				F.CreateBG(bu)
-
-				ic:SetDrawLayer("ARTWORK")
-				ic:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-			end
+			bu.icon:SetDrawLayer("ARTWORK")
+			bu.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 		end
 	end
 

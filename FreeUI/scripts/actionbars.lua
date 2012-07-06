@@ -234,36 +234,106 @@ end
 --[[ Stance bar ]]
 
 if C.actionbars.stancebar == true then
-	local numshift = NUM_STANCE_SLOTS
+	local function updateShift()
+		local numForms = GetNumShapeshiftForms()
+		local texture, name, isActive, isCastable
+		local button, icon, cooldown
+		local start, duration, enable
+		for i = 1, NUM_STANCE_SLOTS do
+			buttonName = "FreeUIStanceButton"..i
+			button = _G[buttonName]
+			icon = _G[buttonName.."Icon"]
+			if i <= numForms then
+				texture, name, isActive, isCastable = GetShapeshiftFormInfo(i)
+				icon:SetTexture(texture)
+
+				cooldown = _G[buttonName.."Cooldown"]
+				if texture then
+					cooldown:SetAlpha(1)
+				else
+					cooldown:SetAlpha(0)
+				end
+
+				start, duration, enable = GetShapeshiftFormCooldown(i)
+				CooldownFrame_SetTimer(cooldown, start, duration, enable)
+
+				if isActive then
+					StanceBarFrame.lastSelected = button:GetID()
+					button:SetChecked(1)
+				else
+					button:SetChecked(0)
+				end
+
+				if isCastable then
+					icon:SetVertexColor(1.0, 1.0, 1.0)
+				else
+					icon:SetVertexColor(0.4, 0.4, 0.4)
+				end
+			end
+		end
+	end
 
 	local shiftbar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
 	shiftbar:SetWidth(NUM_STANCE_SLOTS * 27 - 1)
 	shiftbar:SetHeight(26)
 	shiftbar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
-     
-	StanceBarFrame:SetParent(shiftbar)
-	StanceBarFrame:EnableMouse(false)
-
-	for i = 1, numshift do
-		local button = _G["StanceButton"..i]
-		button:SetSize(26, 26)
-		button:ClearAllPoints()
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
+	shiftbar.buttons = {}
+	shiftbar:SetAttribute("_onstate-show", [[
+		if newstate == "hide" then
+			self:Hide();
 		else
-			local previous = _G["StanceButton"..i-1]      
-			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
+			self:Show();
 		end
-	end
+	]])
 
-	StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
-	
-	local function fixStanceButton1(self, a1, af, a2, x, y)
-		if af == "StanceBarFrame" then
-			StanceButton1:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
+	shiftbar:RegisterEvent("PLAYER_LOGIN")
+	shiftbar:RegisterEvent("PLAYER_ENTERING_WORLD")
+	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
+	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_USABLE")
+	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_COOLDOWN")
+	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+	shiftbar:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
+	shiftbar:SetScript("OnEvent", function(self, event, ...)
+		if event == "PLAYER_LOGIN" then
+			for i = 1, NUM_STANCE_SLOTS do
+				if not self.buttons[i] then
+					self.buttons[i] = CreateFrame("CheckButton", format("FreeUIStanceButton%d", i), self, "StanceButtonTemplate")
+					self.buttons[i]:SetID(i)
+				end
+				local button = self.buttons[i]
+				button:ClearAllPoints()
+				button:SetParent(self)
+				button:SetSize(26, 26)
+				button:SetFrameStrata("LOW")
+				if i == 1 then
+					button:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
+				else
+					local previous = _G["FreeUIStanceButton"..i-1]
+					button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
+				end
+				local _, name = GetShapeshiftFormInfo(i)
+				if name then
+					button:Show()
+				else
+					button:Hide()
+				end
+			end
+			RegisterStateDriver(self, "visibility", "show")
+		elseif event == "UPDATE_SHAPESHIFT_FORMS" then
+			if InCombatLockdown() then return end
+			for i = 1, NUM_STANCE_SLOTS do
+				local button = self.buttons[i]
+				local _, name = GetShapeshiftFormInfo(i)
+				if name then
+					button:Show()
+				else
+					button:Hide()
+				end
+			end
+		else
+			updateShift()
 		end
-	end
-	hooksecurefunc(StanceButton1, "SetPoint", fixStanceButton1)
+	end)
 end
 
 --[[ Vehicle exit button ]]
