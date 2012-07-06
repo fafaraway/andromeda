@@ -21,6 +21,7 @@ C["general"] = {
 	["tolbarad"] = true,			-- Tol barad timer on the minimap
 		["tolbarad_always"] = false,		-- show timer on non 85 characters as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
+	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
 }
 
 C["actionbars"] = {
