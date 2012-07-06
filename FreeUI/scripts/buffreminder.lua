@@ -46,8 +46,6 @@ if buffs and buffs[1] then
 	end
 	
 	local frame = CreateFrame("Frame", nil, UIParent)
-	local a1, p, a2, x, y = unpack(C.unitframes.target)
-	frame:SetPoint(a1, p, a2, x, y+90)
 	frame:SetSize(57, 57)
 	
 	frame.icon = frame:CreateTexture(nil, "ARTWORK")
@@ -64,4 +62,12 @@ if buffs and buffs[1] then
 	frame:RegisterEvent("PLAYER_REGEN_DISABLED")
 	
 	frame:SetScript("OnEvent", OnEvent)
+	
+	-- avoid an extra comparison every time UNIT_AURA fires
+	local mover = CreateFrame("Frame")
+	mover:RegisterEvent("PlAYER_LOGIN")
+	mover:SetScript("OnEvent", function()
+		frame:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)	
+		mover = nil
+	end)
 end
