@@ -3,13 +3,13 @@ local F, C, L = unpack(select(2, ...))
 local r, g, b = unpack(C.class)
 
 local last = 0
-local menuShown = false
+F.menuShown = false
 
 local function onMouseUp(self)
 	self:SetScript("OnUpdate", nil)
-	if menuShown then 
+	if F.menuShown then 
 		ToggleFrame(DropDownList1)
-		menuShown = false
+		F.menuShown = false
 	end
 	
 	if IsAddOnLoaded("alDamageMeter") then
@@ -47,12 +47,12 @@ f:SetScript("OnMouseDown", function(self, button)
 				self:SetScript("OnUpdate", nil)
 				self:SetScript("OnMouseUp", nil)
 				last = 0
-				if menuShown then 
+				if F.menuShown then 
 					ToggleFrame(DropDownList1)
-					menuShown = false
+					F.menuShown = false
 				else
 					F.MicroMenu()
-					menuShown = true
+					F.menuShown = true
 				end
 			end
 		end)
