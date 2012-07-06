@@ -140,12 +140,16 @@ local function OnTooltipSetUnit(self)
 	end
 
 	if(UnitIsPlayer(unit)) then
-		local InGuild = GetGuildInfo(unit)
-		if(InGuild) then
-			_G["GameTooltipTextLeft2"]:SetFormattedText("%s", InGuild)
+		local guildName, guildRankName = GetGuildInfo(unit)
+		if(guildName) then
+			if C.general.tooltip_guildranks then
+				_G["GameTooltipTextLeft2"]:SetFormattedText("%s ("..color.."%s|r)", guildName, guildRankName)
+			else
+				_G["GameTooltipTextLeft2"]:SetText(guildName)
+			end
 		end
 
-		local n = InGuild and 3 or 2
+		local n = guildName and 3 or 2
 		_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s", level, race)
 	else
 		for i = 2, lines do

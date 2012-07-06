@@ -20,6 +20,7 @@ C["general"] = {
 	["tolbarad"] = true,			-- Tol barad timer on the minimap at level 85
 		["tolbarad_always"] = false,		-- show timer on characters lower or higher than 85 as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
+	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
 	["undressButton"] = true, 		-- undress button on dressup frame
 }
 
