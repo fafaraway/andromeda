@@ -186,7 +186,18 @@ local function init()
 		styleActionButton(_G["MultiBarRightButton"..i])
 		styleActionButton(_G["MultiBarLeftButton"..i])
 	end
-
+	
+	for i = 1, 6 do
+		styleActionButton(OverrideActionBar["SpellButton"..i])
+	end
+	
+	applyBackground(OverrideActionBarLeaveFrameLeaveButton)
+	OverrideActionBarLeaveFrameLeaveButton:SetHighlightTexture("")
+	local nt = OverrideActionBarLeaveFrameLeaveButton:GetNormalTexture()
+	nt:SetPoint("TOPLEFT", 1, -1)
+	nt:SetPoint("BOTTOMRIGHT", -1, 1)
+	nt:SetTexCoord(0.0959375, 0.1579688, 0.369375, 0.4314063)
+	
 	for i = 1, NUM_PET_ACTION_SLOTS do
 		stylePetButton(_G["PetActionButton"..i])
 	end

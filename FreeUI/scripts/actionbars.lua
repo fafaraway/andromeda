@@ -64,12 +64,14 @@ bar1:SetScript("OnEvent", function(self, event, ...)
 				buttons[id]:SetAttribute("actionpage", newstate)
 			end
 		]]):format(NUM_ACTIONBAR_BUTTONS))
-      
+
 		RegisterStateDriver(self, "page", GetBar())
 	else
 		MainMenuBar_OnEvent(self, event, ...)
 	end
 end)
+
+RegisterStateDriver(bar1, "visibility", "[vehicleui] hide;show")
 
 --[[ Bottom Left bar ]]
 
@@ -86,10 +88,12 @@ for i=1, 12 do
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", bar2, "BOTTOMLEFT", 0, 0)
 	else
-		local previous = _G["MultiBarBottomLeftButton"..i-1]      
+		local previous = _G["MultiBarBottomLeftButton"..i-1]  
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
+
+RegisterStateDriver(bar2, "visibility", "[vehicleui] hide;show")
 
 --[[ Bottom Right bar ]]
 
@@ -106,10 +110,12 @@ for i=1, 12 do
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", bar3, "BOTTOMLEFT", 0, 0)
 	else
-		local previous = _G["MultiBarBottomRightButton"..i-1]      
+		local previous = _G["MultiBarBottomRightButton"..i-1]  
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
+
+RegisterStateDriver(bar3, "visibility", "[vehicleui] hide;show")
 
 bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
@@ -136,6 +142,8 @@ for i=1, 12 do
 	end
 end
 
+RegisterStateDriver(bar4, "visibility", "[vehicleui] hide;show")
+
 --[[ Right bar 2 ]]
 
 local bar5 = CreateFrame("Frame", "FreeUI_MultiBarLeft", UIParent, "SecureHandlerStateTemplate")
@@ -157,59 +165,79 @@ for i=1, 12 do
 	end
 end
 
---[[ Hide frames ]]
+RegisterStateDriver(bar5, "visibility", "[vehicleui] hide;show")
 
---[[MainMenuBar:SetScale(0.00001)
-MainMenuBar:EnableMouse(false)
-OverrideActionBar:SetScale(0.00001)
+-- [[ Override bar ]]
+
+local numOverride = 7
+
+local override = CreateFrame("Frame", "FreeUI_OverrideBar", UIParent, "SecureHandlerStateTemplate")
+override:SetWidth((27 * numOverride) - 1)
+override:SetHeight(26)
+override:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
+
+OverrideActionBar:SetParent(override)
 OverrideActionBar:EnableMouse(false)
+OverrideActionBar:SetScript("OnShow", nil)
 
-SlidingActionBarTexture0:SetAlpha(0)
-SlidingActionBarTexture1:SetAlpha(0)
-StanceBarLeft:SetAlpha(0)
-StanceBarMiddle:SetAlpha(0)
-StanceBarRight:SetAlpha(0)
-
-local FramesToHide = {
-	MainMenuBar, 
-	MainMenuBarArtFrame, 
-	BonusActionBarFrame, 
-	OverrideActionBar,
-	PossessBarFrame,
-}
-
-local noShow = function(self)
-	self:Hide()
+for i = 1, numOverride do
+	local bu = _G["OverrideActionBarButton"..i]
+	if not bu then
+		bu = OverrideActionBar.LeaveButton
+	end
+	bu:ClearAllPoints()
+	bu:SetSize(26, 26)
+	if i == 1 then
+		bu:SetPoint("BOTTOMLEFT", override, "BOTTOMLEFT")
+	else
+		local previous = _G["OverrideActionBarButton"..i-1]
+		bu:SetPoint("LEFT", previous, "RIGHT", 1, 0)
+	end	
 end
 
-for _, f in pairs(FramesToHide) do
-	if f:GetObjectType() == "Frame" then
-		f:UnregisterAllEvents()
-	end
-	if f ~= MainMenuBar then --patch 4.0.6 fix found by tukz
-		hooksecurefunc(f, "Show", noShow)
-		f:Hide()
-	end
-	f:SetAlpha(0)
-end
+RegisterStateDriver(frame, "visibility", "[vehicleui] show;hide")
+RegisterStateDriver(OverrideActionBar, "visibility", "[vehicleui] show;hide")
 
-hooksecurefunc("TalentFrame_LoadUI", function()
-	PlayerTalentFrame:UnregisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-end)]]
+-- [[ Hide stuff ]]
 
 local hider = CreateFrame("Frame")
 hider:Hide()
 MainMenuBar:SetParent(hider)
 PossessBarFrame:SetParent(hider)
+OverrideActionBarExpBar:SetParent(hider)
+OverrideActionBarHealthBar:SetParent(hider)
+OverrideActionBarPowerBar:SetParent(hider)
+OverrideActionBarPitchFrame:SetParent(hider)
 
 StanceBarLeft:SetAlpha(0)
 StanceBarMiddle:SetAlpha(0)
 StanceBarRight:SetAlpha(0)
 
+local textureList = {
+	"_BG",
+	"EndCapL",
+	"EndCapR",
+	"_Boader",
+	"Divider1",
+	"Divider2",
+	"Divider3",
+	"ExitBG",
+	"MicroBGL",
+	"MicroBGR",
+	"_MicroBGMid",
+	"ButtonBGL",
+	"ButtonBGR",
+	"_ButtonBGMid",
+}
+
+for _, tex in pairs(textureList) do
+	OverrideActionBar[tex]:SetAlpha(0)
+end
+
 --[[ Pet bar ]]
 
 local numpet = NUM_PET_ACTION_SLOTS
-    
+
 local petbar = CreateFrame("Frame", "FreeUI_PetBar", UIParent, "SecureHandlerStateTemplate")
 petbar:SetWidth(400)
 petbar:SetHeight(54)
@@ -225,7 +253,7 @@ for i = 1, numpet do
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", petbar, 0,0)
 	else
-		local previous = _G["PetActionButton"..i-1]      
+		local previous = _G["PetActionButton"..i-1]
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 	cd:SetAllPoints(button)
@@ -318,7 +346,7 @@ if C.actionbars.stancebar == true then
 					button:Hide()
 				end
 			end
-			RegisterStateDriver(self, "visibility", "show")
+			RegisterStateDriver(self, "visibility", "[vehicleui] hide; show")
 		elseif event == "UPDATE_SHAPESHIFT_FORMS" then
 			if InCombatLockdown() then return end
 			for i = 1, NUM_STANCE_SLOTS do
@@ -335,42 +363,6 @@ if C.actionbars.stancebar == true then
 		end
 	end)
 end
-
---[[ Vehicle exit button ]]
-
-local vbar = CreateFrame("Frame", "FreeUI_VehicleExit", UIParent, "SecureHandlerStateTemplate")
-local a1, p, a2, x, y = unpack(C.unitframes.player)
-vbar:SetSize(C.unitframes.player_height + 2, C.unitframes.player_height + 2)
-vbar:SetPoint(a1, p, a2, x-(C.unitframes.player_width + C.unitframes.player_height + 7) / 2, y - 1) -- 125
-
-local veb = CreateFrame("BUTTON", "FreeUI_ExitVehicle", vbar, "SecureActionButtonTemplate");
-veb:SetAllPoints(vbar)
-
-local text = F.CreateFS(veb, 8)
-text:SetText("x")
-text:SetPoint("CENTER", 1, 1)
-
-veb:RegisterForClicks("AnyUp")
-veb:SetScript("OnClick", function(self)
-	if IsAltKeyDown() then
-		VehicleExit()
-	else
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffClick and hold down the|r alt |cffffffffkey to exit vehicle.|r", unpack(C.class))
-	end
-end)
-veb:RegisterEvent("UNIT_ENTERING_VEHICLE")
-veb:RegisterEvent("UNIT_ENTERED_VEHICLE")
-veb:RegisterEvent("UNIT_EXITING_VEHICLE")
-veb:RegisterEvent("UNIT_EXITED_VEHICLE")
-veb:SetScript("OnEvent", function(self,event,...)
-	local arg1 = ...;
-	if(((event=="UNIT_ENTERING_VEHICLE") or (event=="UNIT_ENTERED_VEHICLE")) and arg1 == "player") then
-		veb:SetAlpha(1)
-	elseif(((event=="UNIT_EXITING_VEHICLE") or (event=="UNIT_EXITED_VEHICLE")) and arg1 == "player") then
-		veb:SetAlpha(0)
-end
-end)  
-veb:SetAlpha(0)
 
 --[[ Right bars on mouseover ]]
 
