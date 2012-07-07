@@ -4,7 +4,7 @@
 ## Author: Haleth/Freethinker
 ## Version: 4.4.2
 ## RequiredDeps: Blizzard_CombatText
-## OptionalDeps: Blizzard_TimeManager, Clique
+## OptionalDeps: Blizzard_TimeManager, Clique, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 

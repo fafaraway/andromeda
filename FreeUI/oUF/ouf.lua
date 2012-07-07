@@ -2,6 +2,13 @@ local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-oUF')
 local _VERSION = GetAddOnMetadata(parent, 'version')
 
+if IsAddOnLoaded("oUF") then
+	error("oUF is already included in FreeUI.")
+	DisableAddOn("oUF")
+else
+	oUF = ns.oUF
+end
+
 local oUF = ns.oUF
 local Private = oUF.Private
 
