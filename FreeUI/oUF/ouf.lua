@@ -3,8 +3,9 @@ local global = GetAddOnMetadata(parent, 'X-oUF')
 local _VERSION = GetAddOnMetadata(parent, 'version')
 
 if IsAddOnLoaded("oUF") then
-	error("oUF is already included in FreeUI.")
+	error("oUF is already included in FreeUI. Type '/rl' to reload the UI.")
 	DisableAddOn("oUF")
+	return
 else
 	oUF = ns.oUF
 end
