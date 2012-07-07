@@ -2271,7 +2271,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local num = #INTERFACEOPTIONS_ADDONCATEGORIES
 			for i = 1, num do
 				local bu = _G["InterfaceOptionsFrameAddOnsButton"..i.."Toggle"]
-				if not bu.reskinned then
+				if bu and not bu.reskinned then
 					F.ReskinExpandOrCollapse(bu)
 					bu:SetPushedTexture("")
 					bu.SetPushedTexture = F.dummy
@@ -2279,7 +2279,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end)
-		
+
 		hooksecurefunc("OptionsListButtonToggle_OnClick", function(self)
 			if self:GetParent().element.collapsed then
 				self.plus:Show()
