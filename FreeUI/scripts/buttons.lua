@@ -42,7 +42,7 @@ local function styleExtraActionButton(bu)
 	bu.style:SetTexture(nil)
 
 	hooksecurefunc(bu.style, "SetTexture", function(self, texture)
-		if texture and string.sub(texture, 1, 9) == "Interface" then
+		if texture then
 			self:SetTexture(nil)
 		end
 	end)
