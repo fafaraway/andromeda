@@ -51,7 +51,7 @@ if C.general.auto_accept == true then
 	local g = CreateFrame("Frame")
 	g:RegisterEvent("PARTY_INVITE_REQUEST")
 	g:SetScript("OnEvent", function(self, event, name)
-		if MiniMapLFGFrame:IsShown() then return end
+		if QueueStatusMinimapButton:IsShown() then return end
 		if IsFriend(name) then
 			AcceptGroup()
 			for i = 1, 4 do
