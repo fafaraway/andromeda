@@ -212,6 +212,8 @@ OverrideActionBarPitchFrame:SetParent(hider)
 StanceBarLeft:SetAlpha(0)
 StanceBarMiddle:SetAlpha(0)
 StanceBarRight:SetAlpha(0)
+SlidingActionBarTexture0:SetAlpha(0)
+SlidingActionBarTexture1:SetAlpha(0)
 
 local textureList = {
 	"_BG",
