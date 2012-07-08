@@ -1011,7 +1011,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
 		
 		local function onEnter(self)
-			self:SetBackdropColor(r, g, b, .2)
+			self:SetBackdropColor(r, g, b, .4)
 		end
 		
 		local function onLeave(self)
@@ -1022,7 +1022,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local bu = GroupFinderFrame["groupButton"..i]
 
 			bu.ring:Hide()
-			bu.bg:Hide()
+			bu.bg:SetTexture(C.media.texture)
+			bu.bg:SetVertexColor(r, g, b, .2)
+			bu.bg:SetAllPoints()
 			
 			F.Reskin(bu, true)			
 			bu:SetScript("OnEnter", onEnter)
@@ -1035,6 +1037,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu.icon.bg:SetDrawLayer("ARTWORK")
 		end
 		
+		hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
+			local self = GroupFinderFrame
+			for i = 1, 3 do
+				local button = self["groupButton"..i]
+				if i == index then
+					button.bg:Show()
+				else
+					button.bg:Hide()
+				end
+			end
+		end)
+
 		F.SetBD(PVEFrame)
 		F.CreateTab(PVEFrameTab1)
 		F.CreateTab(PVEFrameTab2)
@@ -1080,11 +1094,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinCheck(_G["LFDQueueFrameSpecificListButton"..i].enableButton)
 			F.ReskinExpandOrCollapse(_G["LFDQueueFrameSpecificListButton"..i].expandOrCollapseButton)
 		end
-		
-		--for i = 1, NUM_SCENARIO_CHOICE_BUTTONS do
-			F.ReskinCheck(ScenarioQueueFrameSpecificButton1.enableButton)
-			F.ReskinExpandOrCollapse(ScenarioQueueFrameSpecificButton1.expandOrCollapseButton)		
-		--end
+
+		F.ReskinCheck(ScenarioQueueFrameSpecificButton1.enableButton)
+		F.ReskinExpandOrCollapse(ScenarioQueueFrameSpecificButton1.expandOrCollapseButton)		
 
 		for i = 1, NUM_LFR_CHOICE_BUTTONS do
 			local bu = _G["LFRQueueFrameSpecificListButton"..i].enableButton
@@ -1103,6 +1115,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			else
 				button.expandOrCollapseButton.plus:Hide()
 			end
+			
+			button.enableButton:GetCheckedTexture():SetDesaturated(true)
 		end)
 
 		hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
@@ -1112,6 +1126,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			else
 				button.expandOrCollapseButton.plus:Hide()
 			end
+			
+			button.enableButton:GetCheckedTexture():SetDesaturated(true)
 		end)
 
 		-- Raid Finder
@@ -1469,15 +1485,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		MerchantGuildBankRepairButton:SetPushedTexture("")
 		F.CreateBG(MerchantGuildBankRepairButton)
-		MerchantGuildBankRepairButtonIcon:SetTexCoord(0.595, 0.8125, 0.06, 0.52)
-
+		MerchantGuildBankRepairButtonIcon:SetTexCoord(0.595, 0.8075, 0.05, 0.52)
+		
 		MerchantRepairAllButton:SetPushedTexture("")
 		F.CreateBG(MerchantRepairAllButton)
 		MerchantRepairAllIcon:SetTexCoord(0.31375, 0.53, 0.06, 0.52)
-
+	
 		MerchantRepairItemButton:SetPushedTexture("")
 		F.CreateBG(MerchantRepairItemButton)
-		MerchantRepairItemButton:GetRegions():SetTexCoord(0.035, 0.25125, 0.08, 0.505)
+		local ic = MerchantRepairItemButton:GetRegions()
+		ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
+		ic:SetTexCoord(.08, .92, .08, .92)
 
 		hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
 			for i = 1, MAX_MERCHANT_CURRENCIES do
@@ -2084,6 +2102,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		-- Achievement popup
+		
+		local function fixBg(f)
+			if f:GetObjectType() == "AnimationGroup" then
+				f = f:GetParent()
+			end
+			f.bg:SetBackdropColor(0, 0, 0, .5)
+		end
 
 		hooksecurefunc("AlertFrame_FixAnchors", function()
 			for i = 1, MAX_ACHIEVEMENT_ALERTS do
@@ -2092,40 +2117,44 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if frame then			
 					frame:SetAlpha(1)
 					frame.SetAlpha = F.dummy
+					
+					local ic = _G["AchievementAlertFrame"..i.."Icon"]
+					local texture = _G["AchievementAlertFrame"..i.."IconTexture"]
+
+					ic:ClearAllPoints()
+					ic:SetPoint("LEFT", frame, "LEFT", -26, 0)
 
 					if not frame.bg then
 						frame.bg = CreateFrame("Frame", nil, frame)
-						frame.bg:SetPoint("TOPLEFT", _G[frame:GetName().."Background"], "TOPLEFT", -2, -6)
-						frame.bg:SetPoint("BOTTOMRIGHT", _G[frame:GetName().."Background"], "BOTTOMRIGHT", -2, 8)
+						frame.bg:SetPoint("TOPLEFT", texture, -10, 12)
+						frame.bg:SetPoint("BOTTOMRIGHT", texture, "BOTTOMRIGHT", 240, -12)
 						frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 						F.CreateBD(frame.bg)
 						
-						frame:HookScript("OnEnter", function()
-							F.CreateBD(frame.bg)
-						end)
+						frame:HookScript("OnEnter", fixBg)
+						frame:HookScript("OnShow", fixBg)
+						frame.animIn:HookScript("OnFinished", fixBg)
+						F.CreateBD(frame.bg)
 						
-						frame:HookScript("OnShow", function()
-							F.CreateBD(frame.bg)
-						end)
+						F.CreateBG(texture)
+						
+						_G["AchievementAlertFrame"..i.."GuildBanner"]:Hide()
+						_G["AchievementAlertFrame"..i.."GuildBorder"]:Hide()
 					end
 					
-					_G["AchievementAlertFrame"..i.."Glow"]:Hide()
-					_G["AchievementAlertFrame"..i.."Shine"]:Hide()
-					_G["AchievementAlertFrame"..i.."Glow"].Show = F.dummy
-					_G["AchievementAlertFrame"..i.."Shine"].Show = F.dummy
+					frame.glow:Hide()
+					frame.shine:Hide()
+					frame.glow.Show = F.dummy
+					frame.shine.Show = F.dummy
+					
+					texture:SetTexCoord(.08, .92, .08, .92)
 
 					_G["AchievementAlertFrame"..i.."Background"]:SetTexture(nil)
 
 					_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
 					_G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
 
-					_G["AchievementAlertFrame"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-					_G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()	
-
-					if not frame.iconreskinned then
-						F.CreateBG(_G["AchievementAlertFrame"..i.."IconTexture"])
-						frame.iconreskinned = true
-					end
+					_G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()
 				end
 			end
 		end)
@@ -2138,6 +2167,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		challenge:SetFrameLevel(GuildChallengeAlertFrame:GetFrameLevel()-1)
 		F.CreateBD(challenge)
 		F.CreateBG(GuildChallengeAlertFrameEmblemBackground)
+		
+		GuildChallengeAlertFrameGlow:SetTexture("")
+		GuildChallengeAlertFrameShine:SetTexture("")
+		GuildChallengeAlertFrameEmblemBorder:SetTexture("")
 
 		-- Dungeon completion rewards
 
@@ -2164,13 +2197,121 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for i = 1, 3 do
 				local bu = _G["DungeonCompletionAlertFrame1Reward"..i]
 				if bu and not bu.reskinned then
-					local ic = _G["DungeonCompletionAlertFrame1Reward"..i.."Texture"]
 					_G["DungeonCompletionAlertFrame1Reward"..i.."Border"]:Hide()
 
-					ic:SetTexCoord(.08, .92, .08, .92)
-					F.CreateBG(ic)
+					bu.texture:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(bu.texture)
 
 					bu.rekinned = true
+				end
+			end
+		end)
+		
+		-- Challenge popup
+
+		local function SkinChallengePopUp()
+			local frame = ChallengeModeAlertFrame1
+
+			if frame then
+				frame:SetAlpha(1)
+				frame.SetAlpha = F.dummy
+
+				if not frame.bg then
+					frame.bg = CreateFrame("Frame", nil, frame)
+					frame.bg:SetPoint("TOPLEFT", ChallengeModeAlertFrame1DungeonTexture, -12, 12)
+					frame.bg:SetPoint("BOTTOMRIGHT", ChallengeModeAlertFrame1DungeonTexture, 244, -12)
+					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+					F.CreateBD(frame.bg)
+					
+					frame:HookScript("OnEnter", fixBg)
+					frame:HookScript("OnShow", fixBg)
+					frame.animIn:HookScript("OnFinished", fixBg)
+
+					F.CreateBG(ChallengeModeAlertFrame1DungeonTexture)
+				end
+
+				frame:GetRegions():Hide()
+
+				ChallengeModeAlertFrame1Shine:Hide()
+				ChallengeModeAlertFrame1Shine.Show = F.dummy
+				ChallengeModeAlertFrame1GlowFrame:Hide()
+				ChallengeModeAlertFrame1GlowFrame.Show = F.dummy
+				ChallengeModeAlertFrame1GlowFrame.glow:Hide()
+				ChallengeModeAlertFrame1GlowFrame.Show = F.dummy
+				ChallengeModeAlertFrame1Border:Hide()
+				ChallengeModeAlertFrame1Border.Show = F.dummy
+
+				ChallengeModeAlertFrame1DungeonTexture:SetTexCoord(.08, .92, .08, .92)
+			end
+		end
+		
+		hooksecurefunc("AlertFrame_SetChallengeModeAnchors", SkinChallengePopUp)
+		
+		-- Scenario alert
+
+		hooksecurefunc("AlertFrame_SetScenarioAnchors", function()
+			local frame = ScenarioAlertFrame1
+
+			if frame then
+				frame:SetAlpha(1)
+				frame.SetAlpha = F.dummy
+
+				if not frame.bg then
+					frame.bg = CreateFrame("Frame", nil, frame)
+					frame.bg:SetPoint("TOPLEFT", ScenarioAlertFrame1DungeonTexture, -12, 12)
+					frame.bg:SetPoint("BOTTOMRIGHT", ScenarioAlertFrame1DungeonTexture, 244, -12)
+					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+					F.CreateBD(frame.bg)
+					
+					--frame:HookScript("OnEnter", fixBg)
+					--frame:HookScript("OnShow", fixBg)
+					--frame.animIn:HookScript("OnFinished", fixBg)
+
+					F.CreateBG(ScenarioAlertFrame1DungeonTexture)
+					ScenarioAlertFrame1DungeonTexture:SetDrawLayer("OVERLAY")
+				end
+
+				frame:GetRegions():Hide()
+				select(3, frame:GetRegions()):Hide()
+
+				ScenarioAlertFrame1Shine:Hide()
+				ScenarioAlertFrame1Shine.Show = F.dummy
+				ScenarioAlertFrame1GlowFrame:Hide()
+				ScenarioAlertFrame1GlowFrame.Show = F.dummy
+				ScenarioAlertFrame1GlowFrame.glow:Hide()
+				ScenarioAlertFrame1GlowFrame.Show = F.dummy
+
+				ScenarioAlertFrame1DungeonTexture:SetTexCoord(.08, .92, .08, .92)
+			end
+		end)
+		
+		-- Loot won alert
+		
+		local function fixBg(f)
+			if f:GetObjectType() == "AnimationGroup" then
+				f = f:GetParent()
+			end
+			f:SetBackdropColor(0, 0, 0, .5)
+		end
+		
+		hooksecurefunc("LootWonAlertFrame_ShowAlert", function()
+			for i = 1, #LOOT_WON_ALERT_FRAMES do
+				local frame = LOOT_WON_ALERT_FRAMES[i]
+				if not frame.reskinned then
+					F.CreateBD(frame)
+					
+					frame:HookScript("OnShow", fixBg)
+					frame:HookScript("OnEnter", fixBg)
+				
+					frame.Background:Hide()
+					frame.IconBorder:Hide()
+					frame.glow:SetTexture("")
+					frame.shine:SetTexture("")
+					
+					frame.Icon:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(frame.Icon)
+					
+					frame.reskinned = true
 				end
 			end
 		end)
@@ -4990,8 +5131,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinScroll(MountJournalListScrollFrameScrollBar)
 		F.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateLeftButton, "left")
 		F.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateRightButton, "right")
-	elseif addon == "Blizzard_RaidUI" then
-		F.Reskin(RaidFrameReadyCheckButton)
 	elseif addon == "Blizzard_ReforgingUI" then
 		F.CreateBD(ReforgingFrame)
 		F.CreateSD(ReforgingFrame)
@@ -5096,15 +5235,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
 			
 			for i = 1, GetNumSpecializations(false, true) do
-				local bu = PlayerTalentFramePetSpecialization["specButton"..i]
-				local _, _, _, icon = GetSpecializationInfo(i, false, true);
-				
-				bu.ring:Hide()
-				bu.specIcon:SetTexture(icon)
-				bu.specIcon:SetTexCoord(.08, .92, .08, .92)
-				bu.specIcon:SetSize(58, 58)
-				bu.specIcon:SetPoint("LEFT", bu, "LEFT")
-				F.CreateBG(bu.specIcon)
+				local _, _, _, icon = GetSpecializationInfo(i, false, true)
+				PlayerTalentFramePetSpecialization["specButton"..i].specIcon:SetTexture(icon)
 			end
 		end
 
@@ -5151,11 +5283,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			
 			for i = 1, GetNumSpecializations(nil, self.isPet) do
 				local bu = self["specButton"..i]
-				if bu.learnedTex:IsShown() then
-					bu:SetBackdropColor(.90, .88, .06, .25)
-				else
-					bu:SetBackdropColor(0, 0, 0, .25)
-				end
 				if bu.selected then
 					bu.glowTex:Show()
 				else
@@ -5165,15 +5292,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		for i = 1, GetNumSpecializations(false, nil) do
-			local bu = PlayerTalentFrameSpecialization["specButton"..i]
-			local _, _, _, icon = GetSpecializationInfo(i, false, nil);
-			
-			bu.ring:Hide()
-			bu.specIcon:SetTexture(icon)
-			bu.specIcon:SetTexCoord(.08, .92, .08, .92)
-			bu.specIcon:SetSize(58, 58)
-			bu.specIcon:SetPoint("LEFT", bu, "LEFT")
-			F.CreateBG(bu.specIcon)
+			local _, _, _, icon = GetSpecializationInfo(i, false, nil)
+			PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
 		end
 		
 		local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
@@ -5182,22 +5302,35 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for i = 1, 4 do
 				local bu = _G[name..i]
 
-				bu:SetHighlightTexture("")
 				bu.bg:SetAlpha(0)
-				bu.learnedTex:SetAlpha(0)
-				bu.selectedTex:SetAlpha(0)
+				bu.ring:Hide()
+				bu.learnedTex:SetPoint("TOPLEFT", 1, -1)
+				bu.learnedTex:SetPoint("BOTTOMRIGHT", -1, 1)
 				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:Hide()
 				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"].Show = F.dummy
 				
-				F.CreateBD(bu, .25)
+				F.Reskin(bu, true)
+				
+				bu.selectedTex:SetTexture("")
+				bu.learnedTex:SetTexture(C.media.backdrop)
+				bu.learnedTex:SetVertexColor(r, g, b, .2)
+				bu.learnedTex:SetDrawLayer("BACKGROUND")
+				
+				bu.specIcon:SetTexCoord(.08, .92, .08, .92)
+				bu.specIcon:SetSize(58, 58)
+				bu.specIcon:SetPoint("LEFT", bu, "LEFT")
+				bu.specIcon:SetDrawLayer("OVERLAY")
+				local bg = F.CreateBG(bu.specIcon)
+				bg:SetDrawLayer("BORDER")
+				
 				bu.glowTex = CreateFrame("Frame", nil, bu)
 				bu.glowTex:SetBackdrop({
 					edgeFile = C.media.glow,
 					edgeSize = 5,
 				})
-				bu.glowTex:SetPoint("TOPLEFT", -5, 5)
+				bu.glowTex:SetPoint("TOPLEFT", -6, 5)
 				bu.glowTex:SetPoint("BOTTOMRIGHT", 5, -5)
-				bu.glowTex:SetBackdropBorderColor(.90, .88, .06)
+				bu.glowTex:SetBackdropBorderColor(r, g, b)
 				bu.glowTex:SetFrameLevel(bu:GetFrameLevel()-1)
 				bu.glowTex:Hide()
 			end
@@ -5209,7 +5342,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			row:DisableDrawLayer("BORDER")
 			
 			row.TopLine:SetPoint("TOP", 0, 4)
+			row.TopLine:SetTexture(r, g, b, .3)
 			row.BottomLine:SetPoint("BOTTOM", 0, -4)
+			row.BottomLine:SetTexture(r, g, b, .3)
 			
 			for j = 1, NUM_TALENT_COLUMNS do
 				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
@@ -5237,12 +5372,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				for j = 1, NUM_TALENT_COLUMNS do
 					local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
 					if bu.knownSelection:IsShown() then
-						bu.bg:SetBackdropColor(.90, .88, .06, .25)
+						bu.bg:SetBackdropColor(r, g, b, .2)
 					else
 						bu.bg:SetBackdropColor(0, 0, 0, .25)
 					end
 					if bu.learnSelection:IsShown() then
-						bu.bg:SetBackdropBorderColor(.90, .88, .06)
+						bu.bg:SetBackdropBorderColor(r, g, b)
 					else
 						bu.bg:SetBackdropBorderColor(0, 0, 0)
 					end
