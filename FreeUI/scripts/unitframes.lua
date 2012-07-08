@@ -908,32 +908,55 @@ local UnitSpecific = {
 				end
 			end
 		elseif class == "MONK" and C.classmod.monk == true then
-			local hb = CreateFrame("Frame", nil, self)
-			hb:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
-			hb:SetWidth(playerWidth)
-			hb:SetHeight(2)
-
-			local hbbd = CreateFrame("Frame", nil, hb)
-			hbbd:SetPoint("TOPLEFT", -1, 1)
-			hbbd:SetPoint("BOTTOMRIGHT", 1, -1)
-			hbbd:SetFrameLevel(hb:GetFrameLevel()-1)
-			F.CreateBD(hbbd)
-			
-			for i = 1, 5 do
-				hb[i] = CreateFrame("StatusBar", nil, hb)
-				hb[i]:SetHeight(2)
-				hb[i]:SetStatusBarTexture(C.media.texture)
+			local pulsating = false
+		
+			local UpdateOrbs = function(self, event, unit, powerType)
+				if unit ~= "player" then return end
 				
-				if i == 1 then
-					hb[i]:SetWidth(playerWidth / 5)
-					hb[i]:SetPoint("LEFT", hb, "LEFT", 0, 0)
+				local chi = UnitPower(unit, SPELL_POWER_LIGHT_FORCE)
+
+				if chi == UnitPowerMax(unit, SPELL_POWER_LIGHT_FORCE) then
+					if not pulsating then
+						pulsating = true
+						self.glow:SetAlpha(1)
+						F.CreatePulse(self.glow)
+						self.count:SetText(chi)
+						self.count:SetTextColor(.8, 1, .8)
+						self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+					end
+				elseif chi == 0 then
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText("")
+					pulsating = false
 				else
-					hb[i]:SetWidth((playerWidth / 5) - 1)
-					hb[i]:SetPoint("LEFT", hb[i-1], "RIGHT", 1, 0)
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText(chi)
+					self.count:SetTextColor(1, 1, 1)
+					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+					pulsating = false
 				end
 			end
-			
-			self.HarmonyBar = hb
+
+			local glow = CreateFrame("Frame", nil, self)
+			glow:SetBackdrop({
+				edgeFile = C.media.glow,
+				edgeSize = 5,
+			})
+			glow:SetPoint("TOPLEFT", self, -6, 6)
+			glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
+			glow:SetBackdropBorderColor(.8, 1, .8)
+
+			self.glow = glow
+
+			local count = F.CreateFS(self, 24)
+			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
+
+			self.count = count
+
+			self.Harmony = glow
+			glow.Override = UpdateOrbs
 		elseif class == "PALADIN" and C.classmod.paladin == true then
 			local maxHolyPower = UnitPowerMax(PaladinPowerBar:GetParent().unit, SPELL_POWER_HOLY_POWER)
 			local UpdateHoly = function(self, event, unit, powerType)
@@ -1019,7 +1042,7 @@ local UnitSpecific = {
 
 			self.count = count
 
-			self.ShadowOrbsBar = glow
+			self.ShadowOrbs = glow
 			glow.Override = UpdateOrbs
 		elseif class == "WARLOCK" and C.classmod.warlock == true then
 			local bars = CreateFrame("Frame", nil, self)
@@ -1060,7 +1083,7 @@ local UnitSpecific = {
 		end
 
 		self.AltPowerBar:HookScript("OnShow", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "MONK" and C.classmod.monk == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
 			else
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(5 + altPowerHeight))
@@ -1068,7 +1091,7 @@ local UnitSpecific = {
 		end)
 
 		self.AltPowerBar:HookScript("OnHide", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "MONK" and C.classmod.monk == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(7 + altPowerHeight))
 			else
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(3 + altPowerHeight))
