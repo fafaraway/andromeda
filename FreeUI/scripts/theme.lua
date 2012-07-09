@@ -602,8 +602,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		SetBD(GuildRegistrarFrame, 6, -15, -26, 64)
 		SetBD(PetitionFrame, 6, -15, -26, 64)
 		SetBD(SpellBookFrame)
-		SetBD(CharacterFrame)
-		SetBD(PVPFrame)
 		SetBD(PVPBannerFrame)
 		SetBD(PetStableFrame)
 		SetBD(WorldStateScoreFrame)
@@ -1604,6 +1602,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		-- Character frame
+		
+		F.ReskinPortraitFrame(CharacterFrame, true)
 
 		local slots = {
 			"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
@@ -1978,28 +1978,22 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
 		
 		-- Gossip Frame
-		
-		F.SetBD(GossipFrame)
-		
-		GossipFrame:DisableDrawLayer("BORDER")
-		GossipFrameInset:DisableDrawLayer("BORDER")
-		GossipFrameInsetBg:Hide()
+
 		GossipGreetingScrollFrameTop:Hide()
 		GossipGreetingScrollFrameBottom:Hide()
 		GossipGreetingScrollFrameMiddle:Hide()
-		
-		for i = 1, 7 do
-			select(i, GossipFrame:GetRegions()):Hide()
-		end
 		select(19, GossipFrame:GetRegions()):Hide()
 		
 		GossipGreetingText:SetTextColor(1, 1, 1)
 		
+		F.ReskinPortraitFrame(GossipFrame, true)
 		F.Reskin(GossipFrameGreetingGoodbyeButton)
 		F.ReskinScroll(GossipGreetingScrollFrameScrollBar)
-		F.ReskinClose(GossipFrameCloseButton)
 
 		-- PVP Frame
+		
+		PVPFrameTopInset:DisableDrawLayer("BORDER")
+		PVPFrameTopInsetBg:Hide()
 
 		PVPTeamManagementFrameFlag2Header:SetAlpha(0)
 		PVPTeamManagementFrameFlag3Header:SetAlpha(0)
@@ -2038,6 +2032,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		qbg:SetPoint("BOTTOMRIGHT", 1, 2)
 		qbg:SetFrameLevel(PVPFrameConquestBar:GetFrameLevel()-1)
 		F.CreateBD(qbg, .25)
+		
+		F.ReskinPortraitFrame(PVPFrame, true)
 
 		-- StaticPopup
 
@@ -2519,11 +2515,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Hide regions ]]
 
-		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrame", "CharacterFrameInset", "CharacterFrameInsetRight", "PVPFrame", "PVPFrameInset", "PVPFrameTopInset", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "WorldStateScoreFrame", "WorldStateScoreFrameInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
+		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "WorldStateScoreFrame", "WorldStateScoreFrameInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
 		for i = 1, #bglayers do
 			_G[bglayers[i]]:DisableDrawLayer("BACKGROUND")
 		end
-		local borderlayers = {"WhoFrameListInset", "WhoFrameEditBoxInset", "ChannelFrameLeftInset", "ChannelFrameRightInset", "SpellBookFrame", "SpellBookFrameInset", "LFDParentFrame", "LFDParentFrameInset", "CharacterFrame", "CharacterFrameInset", "CharacterFrameInsetRight", "PVPFrame", "PVPFrameInset", "PVPConquestFrameInfoButton", "PVPFrameTopInset", "PVPTeamManagementFrame", "PVPBannerFrame", "PVPBannerFrameInset", "TabardFrame", "HelpFrame", "HelpFrameLeftInset", "HelpFrameMainInset", "ItemTextFrame", "CharacterModelFrame", "WorldStateScoreFrame", "WorldStateScoreFrameInset", "VideoOptionsFramePanelContainer", "InterfaceOptionsFramePanelContainer", "RaidParentFrame", "RaidParentFrameInset", "RaidFinderFrameRoleInset", "LFRQueueFrameRoleInset", "LFRQueueFrameListInset", "LFRQueueFrameCommentInset"}
+		local borderlayers = {"WhoFrameListInset", "WhoFrameEditBoxInset", "ChannelFrameLeftInset", "ChannelFrameRightInset", "SpellBookFrame", "SpellBookFrameInset", "LFDParentFrame", "LFDParentFrameInset", "CharacterFrameInsetRight", "PVPConquestFrameInfoButton", "PVPTeamManagementFrame", "PVPBannerFrame", "PVPBannerFrameInset", "TabardFrame", "HelpFrame", "HelpFrameLeftInset", "HelpFrameMainInset", "ItemTextFrame", "CharacterModelFrame", "WorldStateScoreFrame", "WorldStateScoreFrameInset", "VideoOptionsFramePanelContainer", "InterfaceOptionsFramePanelContainer", "RaidParentFrame", "RaidParentFrameInset", "RaidFinderFrameRoleInset", "LFRQueueFrameRoleInset", "LFRQueueFrameListInset", "LFRQueueFrameCommentInset"}
 		for i = 1, #borderlayers do
 			_G[borderlayers[i]]:DisableDrawLayer("BORDER")
 		end
@@ -2535,7 +2531,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, #artlayers do
 			_G[artlayers[i]]:DisableDrawLayer("ARTWORK")
 		end
-		CharacterFramePortrait:Hide()
 		for i = 1, 3 do
 			for j = 1, 2 do
 				select(i, _G["PVPBannerFrameCustomization"..j]:GetRegions()):Hide()
@@ -2551,7 +2546,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(i, ScrollOfResurrectionFrameNoteFrame:GetRegions()):Hide()
 		end
 		HelpFrameButton16Selected:SetAlpha(0)
-		PVPFramePortrait:Hide()
 		PVPHonorFrameBGTex:Hide()
 		for i = 1, 5 do
 			_G["TabardFrameCustomization"..i.."Left"]:Hide()
@@ -2660,9 +2654,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			categoryFrame.BgMiddle:Hide()
 			categoryFrame.BgBottom:Hide()
 		end)
-		CharacterFramePortraitFrame:Hide()
-		CharacterFrameTopRightCorner:Hide()
-		CharacterFrameTopBorder:Hide()
 		local titles = false
 		hooksecurefunc("PaperDollTitlesPane_Update", function()
 			if titles == false then
@@ -2678,9 +2669,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MerchantNameText:SetDrawLayer("ARTWORK")
 		SendScrollBarBackgroundTop:Hide()
 		select(4, SendMailScrollFrame:GetRegions()):Hide()
-		PVPFramePortraitFrame:Hide()
-		PVPFrameTopBorder:Hide()
-		PVPFrameTopRightCorner:Hide()
 		PVPBannerFrameCustomizationBorder:Hide()
 		PVPBannerFramePortraitFrame:Hide()
 		PVPBannerFrameTopBorder:Hide()
@@ -2965,7 +2953,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
 		end)
 
-		local closebuttons = {"CharacterFrameCloseButton", "PVPFrameCloseButton", "SpellBookFrameCloseButton", "HelpFrameCloseButton", "PVPBannerFrameCloseButton", "RaidInfoCloseButton", "RolePollPopupCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "WorldStateScoreFrameCloseButton", "LFGDungeonReadyStatusCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton", "MissingLootFramePassButton", "LFGDungeonReadyDialogCloseButton", "StaticPopup1CloseButton"}
+		local closebuttons = {"SpellBookFrameCloseButton", "HelpFrameCloseButton", "PVPBannerFrameCloseButton", "RaidInfoCloseButton", "RolePollPopupCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "WorldStateScoreFrameCloseButton", "LFGDungeonReadyStatusCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton", "MissingLootFramePassButton", "LFGDungeonReadyDialogCloseButton", "StaticPopup1CloseButton"}
 		for i = 1, #closebuttons do
 			ReskinClose(_G[closebuttons[i]])
 		end
@@ -4408,7 +4396,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
 		ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
 	elseif addon == "Blizzard_GuildUI" then
-		SetBD(GuildFrame)
+		F.ReskinPortraitFrame(GuildFrame, true)
 		F.CreateBD(GuildMemberDetailFrame)
 		F.CreateBD(GuildMemberNoteBackground, .25)
 		F.CreateBD(GuildMemberOfficerNoteBackground, .25)
@@ -4465,19 +4453,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildRecruitmentCommentFrameBg:Hide()
 		GuildNewsFrameHeader:SetAlpha(0)
 
-		GuildFrame:DisableDrawLayer("BACKGROUND")
-		GuildFrame:DisableDrawLayer("BORDER")
-		GuildFrameInset:DisableDrawLayer("BACKGROUND")
-		GuildFrameInset:DisableDrawLayer("BORDER")
 		GuildFrameBottomInset:DisableDrawLayer("BACKGROUND")
 		GuildFrameBottomInset:DisableDrawLayer("BORDER")
 		GuildInfoFrameInfoBar1Left:SetAlpha(0)
 		GuildInfoFrameInfoBar2Left:SetAlpha(0)
 		select(2, GuildInfoFrameInfo:GetRegions()):SetAlpha(0)
 		select(4, GuildInfoFrameInfo:GetRegions()):SetAlpha(0)
-		GuildFramePortraitFrame:Hide()
-		GuildFrameTopRightCorner:Hide()
-		GuildFrameTopBorder:Hide()
 		GuildRosterColumnButton1:DisableDrawLayer("BACKGROUND")
 		GuildRosterColumnButton2:DisableDrawLayer("BACKGROUND")
 		GuildRosterColumnButton3:DisableDrawLayer("BACKGROUND")
@@ -4504,7 +4485,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		ReskinClose(GuildFrameCloseButton)
 		ReskinClose(GuildNewsFiltersFrameCloseButton)
 		ReskinClose(GuildLogFrameCloseButton)
 		ReskinClose(GuildMemberDetailCloseButton)
@@ -4836,10 +4816,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(TransmogrifyApplyButton)
 		F.ReskinClose(TransmogrifyArtFrameCloseButton)
 	elseif addon == "Blizzard_ItemSocketingUI" then
-		SetBD(ItemSocketingFrame, 12, -8, -2, 24)
-		F.CreateBD(ItemSocketingScrollFrame, .25)
-		select(2, ItemSocketingFrame:GetRegions()):Hide()
-		ItemSocketingFramePortrait:Hide()
+		ItemSocketingFrame:DisableDrawLayer("BORDER")
+		ItemSocketingFrame:DisableDrawLayer("ARTWORK")
 		ItemSocketingScrollFrameTop:SetAlpha(0)
 		ItemSocketingScrollFrameBottom:SetAlpha(0)
 		ItemSocketingSocket1Left:SetAlpha(0)
@@ -4848,20 +4826,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ItemSocketingSocket2Right:SetAlpha(0)
 		ItemSocketingSocket3Left:SetAlpha(0)
 		ItemSocketingSocket3Right:SetAlpha(0)
-		F.Reskin(ItemSocketingSocketButton)
-		ItemSocketingSocketButton:ClearAllPoints()
-		ItemSocketingSocketButton:SetPoint("BOTTOMRIGHT", ItemSocketingFrame, "BOTTOMRIGHT", -10, 28)
 
 		for i = 1, MAX_NUM_SOCKETS do
 			local bu = _G["ItemSocketingSocket"..i]
-			local ic = _G["ItemSocketingSocket"..i.."IconTexture"]
 
 			_G["ItemSocketingSocket"..i.."BracketFrame"]:Hide()
 			_G["ItemSocketingSocket"..i.."Background"]:SetAlpha(0)
 			select(2, bu:GetRegions()):Hide()
 
 			bu:SetPushedTexture("")
-			ic:SetTexCoord(.08, .92, .08, .92)
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
 
 			local bg = CreateFrame("Frame", nil, bu)
 			bg:SetAllPoints(bu)
@@ -4881,11 +4855,23 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for i = 1, MAX_NUM_SOCKETS do
 				local color = GEM_TYPE_INFO[GetSocketTypes(i)]
 				_G["ItemSocketingSocket"..i].glow:SetBackdropBorderColor(color.r, color.g, color.b)
+				
+			end
+			
+			local num = GetNumSockets()
+			if num == 3 then
+				ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -75, 39)
+			elseif num == 2 then
+				ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", -35, 39)
+			else
+				ItemSocketingSocket1:SetPoint("BOTTOM", ItemSocketingFrame, "BOTTOM", 0, 39)
 			end
 		end)
 
-		ReskinClose(ItemSocketingCloseButton, "TOPRIGHT", ItemSocketingFrame, "TOPRIGHT", -6, -12)
-		ReskinScroll(ItemSocketingScrollFrameScrollBar)
+		F.ReskinPortraitFrame(ItemSocketingFrame, true)
+		F.CreateBD(ItemSocketingScrollFrame, .25)
+		F.Reskin(ItemSocketingSocketButton)
+		F.ReskinScroll(ItemSocketingScrollFrameScrollBar)
 	elseif addon == "Blizzard_LookingForGuildUI" then
 		SetBD(LookingForGuildFrame)
 		F.CreateBD(LookingForGuildInterestFrame, .25)
