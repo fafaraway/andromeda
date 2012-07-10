@@ -1,21 +1,37 @@
 local F, C, L = unpack(select(2, ...))
 
+local IDs = {}
+for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand", "Ranged"}) do 	IDs[slot] = GetInventorySlotInfo(slot .. "Slot")
+end
+
 local f = CreateFrame("Frame")
 f:RegisterEvent("MERCHANT_SHOW")
 f:SetScript("OnEvent", function()
-	if(CanMerchantRepair() and C.general.autorepair == true) then
+	if CanMerchantRepair() and C.general.autorepair == true then
+		local gearRepaired = true -- to work around bug when there's not enough money in guild bank
 		local cost = GetRepairAllCost()
-		if(cost>0 and CanGuildBankRepair() and C.general.autorepair_guild == true) then
+		if cost > 0 and CanGuildBankRepair() and C.general.autorepair_guild == true then
 			if GetGuildBankWithdrawMoney() > cost then
 				RepairAllItems(1)
-				print(format("Repair: %.1fg (Guild)", cost * 0.0001))
+				for slot, id in pairs(IDs) do
+					local dur, maxdur = GetInventoryItemDurability(id)
+					if dur and maxdur and dur < maxdur then
+						gearRepaired = false
+						break
+					end
+				end
+				if gearRepaired then
+					print(format("Repair: %.1fg (Guild)", cost * 0.0001))
+				else
+					print("Your guild cannot afford your repairs.")
+				end
 			else
-				print("Your repair costs are too high for your guild.")
+				print("Your repair costs are higher than your guild permits.")
 			end
-		elseif(cost>0 and GetMoney()>cost) then
+		elseif cost > 0 and GetMoney() > cost then
 			RepairAllItems()
 			print(format("Repair: %.1fg", cost * 0.0001))
-		elseif(GetMoney()<cost) then
+		elseif GetMoney() < cost then
 			print("You are not repaired! (insufficient funds)")
 		end
 	end
