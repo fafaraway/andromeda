@@ -136,6 +136,17 @@ local function stylePetButton(bu)
 	bu.styled = true
 end
 
+local function styleStanceButton(bu)
+	bu:SetNormalTexture("")
+	bu:SetPushedTexture("")
+	bu:SetCheckedTexture(C.media.checked)
+
+	F.CreateBG(bu)
+
+	bu.icon:SetDrawLayer("ARTWORK")
+	bu.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+end
+
 local buttons = 0
 local function flyoutbutton()
 	for i = 1, buttons do
@@ -204,15 +215,10 @@ local function init()
 	
 	if C.actionbars.stancebar == true then
 		for i = 1, NUM_STANCE_SLOTS do
-			local bu = _G["FreeUIStanceButton"..i]
-			bu:SetNormalTexture("")
-			bu:SetPushedTexture("")
-			bu:SetCheckedTexture(C.media.checked)
-
-			F.CreateBG(bu)
-
-			bu.icon:SetDrawLayer("ARTWORK")
-			bu.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+			styleStanceButton(_G["StanceButton"..i])
+		end
+		for i = 1, NUM_POSSESS_SLOTS do
+			styleStanceButton(_G["PossessButton"..i])
 		end
 	end
 

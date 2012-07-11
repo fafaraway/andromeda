@@ -8,6 +8,9 @@ local bar1 = CreateFrame("Frame", "FreeUI_MainMenuBar", UIParent, "SecureHandler
 bar1:SetWidth(323)
 bar1:SetHeight(26)
 
+MainMenuBarArtFrame:SetParent(bar1)
+MainMenuBarArtFrame:EnableMouse(false)
+
 for i = 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["ActionButton"..i]
 	button:ClearAllPoints()
@@ -20,56 +23,6 @@ for i = 1, NUM_ACTIONBAR_BUTTONS do
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
-
-local Page = {
-	["DRUID"] = "[bonusbar:1,nostealth] 7; [bonusbar:1,stealth] 8; [bonusbar:2] 8; [bonusbar:3] 9; [bonusbar:4] 10;",
-	["WARRIOR"] = "[bonusbar:1] 7; [bonusbar:2] 8; [bonusbar:3] 9;",
-	["MONK"] = "[bonusbar:1] 7;",
-	["PRIEST"] = "[bonusbar:1] 7;",
-	["ROGUE"] = "[bonusbar:1] 7; [form:3] 10;",
-	["WARLOCK"] = "[form:2] 7;",
-	["DEFAULT"] = "[bonusbar:5] 11; [bar:2] 2; [bar:3] 3; [bar:4] 4; [bar:5] 5; [bar:6] 6;",
-}
-
-local function GetBar()
-	local condition = Page["DEFAULT"]
-	local class = select(2, UnitClass("player"))
-	local page = Page[class]
-	if page then
-		condition = condition.." "..page
-	end
-	condition = condition.." 1"
-	return condition
-end
-
-bar1:RegisterEvent("PLAYER_LOGIN")
-bar1:SetScript("OnEvent", function(self, event, ...)
-	if event == "PLAYER_LOGIN" then
-		for id = 1, NUM_ACTIONBAR_BUTTONS do
-			local name = "ActionButton"..id
-			self:SetFrameRef(name, _G[name])
-		end
-
-		self:Execute(([[
-			buttons = table.new()
-			for id = 1, %s do
-				buttons[id] = self:GetFrameRef("ActionButton"..id)
-			end
-		]]):format(NUM_ACTIONBAR_BUTTONS))
-  
-		self:SetAttribute("_onstate-page", ([[ 
-			if not newstate then return end
-			newstate = tonumber(newstate)
-			for id = 1, %s do
-				buttons[id]:SetAttribute("actionpage", newstate)
-			end
-		]]):format(NUM_ACTIONBAR_BUTTONS))
-
-		RegisterStateDriver(self, "page", GetBar())
-	else
-		MainMenuBar_OnEvent(self, event, ...)
-	end
-end)
 
 RegisterStateDriver(bar1, "visibility", "[vehicleui] hide;show")
 
@@ -172,7 +125,7 @@ RegisterStateDriver(bar5, "visibility", "[vehicleui] hide;show")
 local numOverride = 7
 
 local override = CreateFrame("Frame", "FreeUI_OverrideBar", UIParent, "SecureHandlerStateTemplate")
-override:SetWidth((27 * numOverride) - 1)
+override:SetWidth(323)
 override:SetHeight(26)
 override:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
 
@@ -180,10 +133,16 @@ OverrideActionBar:SetParent(override)
 OverrideActionBar:EnableMouse(false)
 OverrideActionBar:SetScript("OnShow", nil)
 
+local leaveButtonPlaced = false
+
 for i = 1, numOverride do
 	local bu = _G["OverrideActionBarButton"..i]
-	if not bu then
+	if not bu and not leaveButtonPlaced then
 		bu = OverrideActionBar.LeaveButton
+		leaveButtonPlaced = true
+	end
+	if not bu then
+		break
 	end
 	bu:ClearAllPoints()
 	bu:SetSize(26, 26)
@@ -195,42 +154,35 @@ for i = 1, numOverride do
 	end	
 end
 
-RegisterStateDriver(frame, "visibility", "[vehicleui] show;hide")
+RegisterStateDriver(override, "visibility", "[vehicleui] show;hide")
 RegisterStateDriver(OverrideActionBar, "visibility", "[vehicleui] show;hide")
 
 -- [[ Hide stuff ]]
 
 local hider = CreateFrame("Frame")
 hider:Hide()
-MainMenuBar:SetParent(hider)
-PossessBarFrame:SetParent(hider)
-OverrideActionBarExpBar:SetParent(hider)
-OverrideActionBarHealthBar:SetParent(hider)
-OverrideActionBarPowerBar:SetParent(hider)
-OverrideActionBarPitchFrame:SetParent(hider)
 
-StanceBarLeft:SetAlpha(0)
-StanceBarMiddle:SetAlpha(0)
-StanceBarRight:SetAlpha(0)
-SlidingActionBarTexture0:SetAlpha(0)
-SlidingActionBarTexture1:SetAlpha(0)
+local hideFrames = {MainMenuBar, MainMenuBarPageNumber, ActionBarDownButton, ActionBarUpButton, OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame, CharacterMicroButton, SpellbookMicroButton, TalentMicroButton, AchievementMicroButton, QuestLogMicroButton, GuildMicroButton, PVPMicroButton, LFDMicroButton, CompanionsMicroButton, EJMicroButton, MainMenuMicroButton, HelpMicroButton, MainMenuBarBackpackButton}
+for _, frame in pairs(hideFrames) do
+	frame:SetParent(hider)
+end
 
-local textureList = {
-	"_BG",
-	"EndCapL",
-	"EndCapR",
-	"_Boader",
-	"Divider1",
-	"Divider2",
-	"Divider3",
-	"ExitBG",
-	"MicroBGL",
-	"MicroBGR",
-	"_MicroBGMid",
-	"ButtonBGL",
-	"ButtonBGR",
-	"_ButtonBGMid",
-}
+StanceBarLeft:SetTexture("")
+StanceBarMiddle:SetTexture("")
+StanceBarRight:SetTexture("")
+SlidingActionBarTexture0:SetTexture("")
+SlidingActionBarTexture1:SetTexture("")
+PossessBackground1:SetTexture("")
+PossessBackground2:SetTexture("")
+MainMenuBarTexture0:SetTexture("")
+MainMenuBarTexture1:SetTexture("")
+MainMenuBarTexture2:SetTexture("")
+MainMenuBarTexture3:SetTexture("")
+MainMenuBarLeftEndCap:SetTexture("")
+MainMenuBarRightEndCap:SetTexture("")
+
+
+local textureList = {"_BG","EndCapL","EndCapR","_Boader","Divider1","Divider2","Divider3","ExitBG","MicroBGL","MicroBGR","_MicroBGMid","ButtonBGL","ButtonBGR","_ButtonBGMid"}
 
 for _, tex in pairs(textureList) do
 	OverrideActionBar[tex]:SetAlpha(0)
@@ -264,106 +216,49 @@ end
 --[[ Stance bar ]]
 
 if C.actionbars.stancebar == true then
-	local function updateShift()
-		local numForms = GetNumShapeshiftForms()
-		local texture, name, isActive, isCastable
-		local button, icon, cooldown
-		local start, duration, enable
-		for i = 1, NUM_STANCE_SLOTS do
-			buttonName = "FreeUIStanceButton"..i
-			button = _G[buttonName]
-			icon = _G[buttonName.."Icon"]
-			if i <= numForms then
-				texture, name, isActive, isCastable = GetShapeshiftFormInfo(i)
-				icon:SetTexture(texture)
+	local num = NUM_STANCE_SLOTS
+	local num2 = NUM_POSSESS_SLOTS
 
-				cooldown = _G[buttonName.."Cooldown"]
-				if texture then
-					cooldown:SetAlpha(1)
-				else
-					cooldown:SetAlpha(0)
-				end
-
-				start, duration, enable = GetShapeshiftFormCooldown(i)
-				CooldownFrame_SetTimer(cooldown, start, duration, enable)
-
-				if isActive then
-					StanceBarFrame.lastSelected = button:GetID()
-					button:SetChecked(1)
-				else
-					button:SetChecked(0)
-				end
-
-				if isCastable then
-					icon:SetVertexColor(1.0, 1.0, 1.0)
-				else
-					icon:SetVertexColor(0.4, 0.4, 0.4)
-				end
-			end
+	local stancebar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
+	stancebar:SetWidth(num * 27 - 1)
+	stancebar:SetHeight(26)
+	stancebar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
+	
+	StanceBarFrame:SetParent(stancebar)
+	StanceBarFrame:EnableMouse(false)
+	
+	StanceBarFrame:ClearAllPoints()
+	StanceBarFrame:SetPoint("BOTTOMLEFT", stancebar, -12, -3)
+	StanceBarFrame.ignoreFramePositionManager = true
+	
+	for i = 1, num do
+		local button = _G["StanceButton"..i]
+		button:SetSize(26, 26)
+		button:ClearAllPoints()
+		if i == 1 then
+			button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
+		else
+			local previous = _G["StanceButton"..i-1]
+			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 		end
 	end
-
-	local shiftbar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
-	shiftbar:SetWidth(NUM_STANCE_SLOTS * 27 - 1)
-	shiftbar:SetHeight(26)
-	shiftbar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
-	shiftbar.buttons = {}
-	shiftbar:SetAttribute("_onstate-show", [[
-		if newstate == "hide" then
-			self:Hide();
+	
+	PossessBarFrame:SetParent(stancebar)
+	PossessBarFrame:EnableMouse(false)
+	
+	for i = 1, num2 do
+		local button = _G["PossessButton"..i]
+		button:SetSize(26, 26)
+		button:ClearAllPoints()
+		if i == 1 then
+			button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
 		else
-			self:Show();
+			local previous = _G["PossessButton"..i-1]
+			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 		end
-	]])
-
-	shiftbar:RegisterEvent("PLAYER_LOGIN")
-	shiftbar:RegisterEvent("PLAYER_ENTERING_WORLD")
-	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
-	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_USABLE")
-	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_COOLDOWN")
-	shiftbar:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
-	shiftbar:RegisterEvent("ACTIONBAR_PAGE_CHANGED")
-	shiftbar:SetScript("OnEvent", function(self, event, ...)
-		if event == "PLAYER_LOGIN" then
-			for i = 1, NUM_STANCE_SLOTS do
-				if not self.buttons[i] then
-					self.buttons[i] = CreateFrame("CheckButton", format("FreeUIStanceButton%d", i), self, "StanceButtonTemplate")
-					self.buttons[i]:SetID(i)
-				end
-				local button = self.buttons[i]
-				button:ClearAllPoints()
-				button:SetParent(self)
-				button:SetSize(26, 26)
-				button:SetFrameStrata("LOW")
-				if i == 1 then
-					button:SetPoint("BOTTOMLEFT", shiftbar, 0, 0)
-				else
-					local previous = _G["FreeUIStanceButton"..i-1]
-					button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
-				end
-				local _, name = GetShapeshiftFormInfo(i)
-				if name then
-					button:Show()
-				else
-					button:Hide()
-				end
-			end
-			RegisterStateDriver(self, "visibility", "[vehicleui] hide; show")
-		elseif event == "UPDATE_SHAPESHIFT_FORMS" then
-			if InCombatLockdown() then return end
-			for i = 1, NUM_STANCE_SLOTS do
-				local button = self.buttons[i]
-				local _, name = GetShapeshiftFormInfo(i)
-				if name then
-					button:Show()
-				else
-					button:Hide()
-				end
-			end
-		else
-			updateShift()
-		end
-	end)
+	end
+	
+	RegisterStateDriver(stancebar, "visibility", "[vehicleui] hide; show")
 end
 
 --[[ Right bars on mouseover ]]
@@ -405,9 +300,31 @@ barextra:SetSize(39, 39)
 barextra:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
 
 ExtraActionBarFrame:SetParent(barextra)
+ExtraActionBarFrame:EnableMouse(false)
 ExtraActionBarFrame:ClearAllPoints()
 ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
 ExtraActionBarFrame.ignoreFramePositionManager = true
 
 ExtraActionButton1:SetSize(39, 39)
-barextra.button = ExtraActionButton1
+
+RegisterStateDriver(barextra, "visibility", "[vehicleui] hide; show")
+
+-- [[ Leave vehicle ]]
+
+local leave = CreateFrame("Frame", "FreeUI_LeaveVehicle", UIParent, "SecureHandlerStateTemplate")
+leave:SetSize(26, 26)
+leave:SetPoint("LEFT", bar1, "RIGHT", 1, 0)
+
+local leavebu = CreateFrame("Button", nil, leave, "SecureHandlerClickTemplate, SecureHandlerStateTemplate")
+leavebu:SetAllPoints()
+leavebu:RegisterForClicks("AnyUp")
+leavebu:SetScript("OnClick", VehicleExit)
+
+F.CreateBD(leavebu)
+
+local text = F.CreateFS(leavebu, 8)
+text:SetText("x")
+text:SetPoint("CENTER", 1, 1)
+
+RegisterStateDriver(leavebu, "visibility", "[vehicleui] hide; [@vehicle,exists] show; hide")
+RegisterStateDriver(leave, "visibility", "[vehicleui] hide; show")
