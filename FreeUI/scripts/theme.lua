@@ -5187,46 +5187,83 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 		for i = 1, 9 do
 			select(i, MountJournal.MountCount:GetRegions()):Hide()
+			select(i, PetJournal.PetCount:GetRegions()):Hide()
 		end
 		
 		MountJournal.LeftInset:Hide()
-		MountJournal.RightInset:Hide()
+		MountJournal.RightInset:Hide()		
+		PetJournal.LeftInset:Hide()
+		PetJournal.RightInset:Hide()
 		MountJournal.MountDisplay:GetRegions():Hide()
 		MountJournal.MountDisplay.ShadowOverlay:Hide()
+		PetJournalFilterButtonLeft:Hide()
+		PetJournalFilterButtonRight:Hide()
+		PetJournalFilterButtonMiddle:Hide()
+		PetJournalTutorialButton.Ring:Hide()
 		
-		local buttons = MountJournal.ListScrollFrame.buttons
-		for i = 1, #buttons do
-			local bu = buttons[i]
-			
-			bu:GetRegions():Hide()
-			bu.selectedTexture:SetAlpha(0)
-			bu:SetHighlightTexture("")
-			
-			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", 0, -1)
-			bg:SetPoint("BOTTOMRIGHT", 0, 1)
-			bg:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bg, .25)
-			bu.bg = bg
-			
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
-			bu.icon:SetDrawLayer("OVERLAY")
-			F.CreateBG(bu.icon)
-			
-			bu.name:SetParent(bg)
-			
-			bu.DragButton:GetRegions():SetTexture(C.media.checked)
+		F.CreateBD(PetJournalParent)
+		F.CreateSD(PetJournalParent)
+		F.CreateBD(MountJournal.MountCount, .25)
+		F.CreateBD(PetJournal.PetCount, .25)
+		F.CreateBD(MountJournal.MountDisplay.ModelFrame, .25)
+		
+		F.Reskin(MountJournalMountButton)
+		F.Reskin(PetJournalSummonButton)
+		F.Reskin(PetJournalFindBattle)
+		F.Reskin(PetJournalFilterButton)
+		F.CreateTab(PetJournalParentTab1)
+		F.CreateTab(PetJournalParentTab2)
+		F.ReskinClose(PetJournalParentCloseButton)
+		F.ReskinScroll(MountJournalListScrollFrameScrollBar)
+		F.ReskinScroll(PetJournalListScrollFrameScrollBar)
+		F.ReskinInput(PetJournalSearchBox)
+		F.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateLeftButton, "left")
+		F.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateRightButton, "right")
+		
+		PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
+		
+		PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
+		
+		PetJournalHealPetButtonBorder:Hide()
+		PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(PetJournal.HealPetButton)
+		
+		local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
+		for _, scrollFrame in pairs(scrollFrames) do
+			for i = 1, #scrollFrame do
+				local bu = scrollFrame[i]
+				
+				bu:GetRegions():Hide()
+				bu:SetHighlightTexture("")
+				
+				bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+				bu.selectedTexture:SetPoint("BOTTOMRIGHT", 0, 1)
+				bu.selectedTexture:SetTexture(C.media.backdrop)
+				bu.selectedTexture:SetVertexColor(r, g, b, .2)
+				
+				local bg = CreateFrame("Frame", nil, bu)
+				bg:SetPoint("TOPLEFT", 0, -1)
+				bg:SetPoint("BOTTOMRIGHT", 0, 1)
+				bg:SetFrameLevel(bu:GetFrameLevel()-1)
+				F.CreateBD(bg, .25)
+				bu.bg = bg
+				
+				bu.icon:SetTexCoord(.08, .92, .08, .92)
+				bu.icon:SetDrawLayer("OVERLAY")
+				F.CreateBG(bu.icon)
+				
+				bu.name:SetParent(bg)
+				
+				if bu.DragButton then
+					bu.DragButton:GetRegions():SetTexture(C.media.checked)
+				end
+			end
 		end
 		
 		local function updateScroll()
 			local buttons = MountJournal.ListScrollFrame.buttons
 			for i = 1, #buttons do
 				local bu = buttons[i]
-				if bu.selectedTexture:IsShown() then
-					bu.bg:SetBackdropColor(r, g, b, .25)
-				else
-					bu.bg:SetBackdropColor(0, 0, 0, .25)
-				end
 				if i == 2 then
 					bu:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, -1)
 				elseif i > 2 then
@@ -5238,21 +5275,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("MountJournal_UpdateMountList", updateScroll)
 		MountJournalListScrollFrame:HookScript("OnVerticalScroll", updateScroll)
 		MountJournalListScrollFrame:HookScript("OnMouseWheel", updateScroll)
-		
-		PetJournalParentTab2:SetPoint("LEFT", PetJournalParentTab1, "RIGHT", -15, 0)
-		
-		F.CreateBD(PetJournalParent)
-		F.CreateSD(PetJournalParent)
-		F.CreateBD(MountJournal.MountCount, .25)
-		F.CreateBD(MountJournal.MountDisplay.ModelFrame, .25)
-		
-		F.Reskin(MountJournalMountButton)
-		F.CreateTab(PetJournalParentTab1)
-		F.CreateTab(PetJournalParentTab2)
-		F.ReskinClose(PetJournalParentCloseButton)
-		F.ReskinScroll(MountJournalListScrollFrameScrollBar)
-		F.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateLeftButton, "left")
-		F.ReskinArrow(MountJournal.MountDisplay.ModelFrame.RotateRightButton, "right")
 	elseif addon == "Blizzard_ReforgingUI" then
 		F.CreateBD(ReforgingFrame)
 		F.CreateSD(ReforgingFrame)
