@@ -11,6 +11,3 @@ InterfaceOptionsFrameCategoriesButton13:SetPoint("TOPLEFT", InterfaceOptionsFram
 
 InterfaceOptionsCombatTextPanelEnableFCT:Disable()
 InterfaceOptionsCombatTextPanelEnableFCTText:SetTextColor(.5, .5, .5)
-
-TalentMicroButtonAlert:Hide()
-TalentMicroButtonAlert.Show = F.dummy
