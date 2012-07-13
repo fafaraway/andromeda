@@ -9,7 +9,7 @@
 ## SavedVariablesPerCharacter: FreeUIConfig
 
 core\core.lua
-core\colours.lua
+core\api.lua
 core\slash.lua
 
 options.lua
@@ -26,6 +26,7 @@ scripts\buffs.lua
 scripts\buttons.lua
 scripts\chat.lua
 scripts\chattabs.lua
+scripts\colours.lua
 scripts\combattext.lua
 scripts\combo.lua
 scripts\cooldowns.lua

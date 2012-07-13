@@ -1,34 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
--- easy playerclass colouring: local r, g, b = unpack(C.class)
-
-C.classcolours = {
-	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
-	["DRUID"] = {r = 1, g = 0.49, b = 0.04},
-	["HUNTER"] = {r = 0.58, g = 0.86, b = 0.49},
-	["MAGE"] = {r = 0, g = 0.76, b = 1},
-	["PALADIN"] = {r = 1, g = 0.22, b = 0.52},
-	["PRIEST"] = {r = 0.8, g = 0.87, b = .9},
-	["ROGUE"] = {r = 1, g = 0.91, b = 0.2},
-	["SHAMAN"] = {r = 0, g = 0.6, b = 0.6},
-	["WARLOCK"] = {r = 0.6, g = 0.47, b = 0.85},
-	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
-}
-
-local _, class = UnitClass("player")
-C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
-
-C.reactioncolours = {
-	[1] = {255/255, 30/255, 60/255},
-	[2] = {255/255, 30/255, 60/255},
-	[3] = {255/255, 30/255, 60/255},
-	[4] = {1, 1, 0.3},
-	[5] = {0.26, 1, 0.22},
-	[6] = {0.26, 1, 0.22},
-	[7] = {0.26, 1, 0.22},
-	[8] = {0.26, 1, 0.22},
-}
-
 local parent, ns = ...
 local myname = UnitName'player'
 
