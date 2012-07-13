@@ -37,5 +37,4 @@ F.RegisterEvent("PLAYER_MONEY", updateMoney)
 F.RegisterEvent("PLAYER_ENTERING_WORLD", updateMoney)
 
 SetCVar("consolidateBuffs", 0)
-SetCVar("buffDurations", 1)
 SetCVar("enableCombatText", 0)
