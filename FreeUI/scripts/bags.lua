@@ -310,6 +310,7 @@ end)
 hooksecurefunc(BankFrame, "Hide", CloseBags)
 
 ToggleBackpack = ToggleBags
+ToggleBag = ToggleBags
 OpenAllBags = OpenBags
 OpenBackpack = OpenBags
 CloseAllBags = CloseBags
