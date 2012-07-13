@@ -4543,20 +4543,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 	elseif addon == "Blizzard_InspectUI" then
-		F.SetBD(InspectFrame)
-		InspectFrame:DisableDrawLayer("BACKGROUND")
-		InspectFrame:DisableDrawLayer("BORDER")
-		InspectFrameInset:DisableDrawLayer("BACKGROUND")
-		InspectFrameInset:DisableDrawLayer("BORDER")
 		InspectModelFrame:DisableDrawLayer("OVERLAY")
 		InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
 		InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
 		InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
-		InspectFramePortrait:Hide()
+		
 		InspectGuildFrameBG:Hide()
 		for i = 1, 5 do
 			select(i, InspectModelFrame:GetRegions()):Hide()
 		end
+		InspectPVPFrameBG:SetAlpha(0)
+		InspectPVPFrameBottom:SetAlpha(0)
+		select(9, InspectMainHandSlot:GetRegions()):Hide()
+		select(9, InspectRangedSlot:GetRegions()):Hide()
+		
 		for i = 1, 4 do
 			local tab = _G["InspectFrameTab"..i]
 			F.CreateTab(tab)
@@ -4564,11 +4564,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				tab:SetPoint("LEFT", _G["InspectFrameTab"..i-1], "RIGHT", -15, 0)
 			end
 		end
-		InspectFramePortraitFrame:Hide()
-		InspectFrameTopBorder:Hide()
-		InspectFrameTopRightCorner:Hide()
-		InspectPVPFrameBG:SetAlpha(0)
-		InspectPVPFrameBottom:SetAlpha(0)
 
 		local slots = {
 			"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
@@ -4585,10 +4580,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["Inspect"..slots[i].."SlotIconTexture"]:SetTexCoord(.08, .92, .08, .92)
 		end
 
-		select(9, InspectMainHandSlot:GetRegions()):Hide()
-		select(9, InspectRangedSlot:GetRegions()):Hide()
-
-		F.ReskinClose(InspectFrameCloseButton)
+		F.ReskinPortraitFrame(InspectFrame, true)
 	elseif addon == "Blizzard_ItemAlterationUI" then
 		F.SetBD(TransmogrifyFrame)
 		TransmogrifyArtFrame:DisableDrawLayer("BACKGROUND")
