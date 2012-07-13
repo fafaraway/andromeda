@@ -18,6 +18,18 @@ F.CreateBD(bg)
 
 local nametext = F.CreateFS(f, 8, "LEFT")
 nametext:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 2)
+
+local addonLoaded
+addonLoaded = function(_, _, addon)
+	if addon ~= "FreeUI" then return end
+	if FreeUIConfig.layout == 2 then
+		aThreatMeter:UnregisterAllEvents()
+		aThreatMeter:Hide()
+	end
+	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
+	addonLoaded = nil
+end
+F.RegisterEvent("ADDON_LOADED", addonLoaded)
  
 local format, wipe, sort, tinsert, tremove, ipairs =
 format, table.wipe, sort, tinsert, tremove, ipairs
