@@ -4011,25 +4011,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(GMSurveyCloseButton, "TOPRIGHT", GMSurveyFrame, "TOPRIGHT", -36, -4)
 		F.ReskinScroll(GMSurveyScrollFrameScrollBar)
 	elseif addon == "Blizzard_GuildBankUI" then
-		local bg = CreateFrame("Frame", nil, GuildBankFrame)
-		bg:SetPoint("TOPLEFT", 10, -8)
-		bg:SetPoint("BOTTOMRIGHT", 0, 6)
-		bg:SetFrameLevel(GuildBankFrame:GetFrameLevel()-1)
-		F.CreateBD(bg)
-		F.CreateSD(bg)
-
-		GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
-
-		local bd = CreateFrame("Frame", nil, GuildBankPopupFrame)
-		bd:SetPoint("TOPLEFT")
-		bd:SetPoint("BOTTOMRIGHT", -28, 26)
-		bd:SetFrameLevel(GuildBankPopupFrame:GetFrameLevel()-1)
-		F.CreateBD(bd)
-		F.CreateBD(GuildBankPopupEditBox, .25)
+		GuildBankFrame:DisableDrawLayer("BACKGROUND")
+		GuildBankFrame:DisableDrawLayer("BORDER")
+		GuildBankFrame:DisableDrawLayer("OVERLAY")
+		GuildBankTabTitle:SetDrawLayer("ARTWORK")
 
 		GuildBankEmblemFrame:Hide()
 		GuildBankPopupFrameTopLeft:Hide()
 		GuildBankPopupFrameBottomLeft:Hide()
+		GuildBankMoneyFrameBackground:Hide()
 		select(2, GuildBankPopupFrame:GetRegions()):Hide()
 		select(4, GuildBankPopupFrame:GetRegions()):Hide()
 		GuildBankPopupNameLeft:Hide()
@@ -4037,18 +4027,26 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		GuildBankPopupNameRight:Hide()
 		GuildBankPopupScrollFrame:GetRegions():Hide()
 		select(2, GuildBankPopupScrollFrame:GetRegions()):Hide()
-		GuildBankTabTitleBackground:SetAlpha(0)
-		GuildBankTabTitleBackgroundLeft:SetAlpha(0)
-		GuildBankTabTitleBackgroundRight:SetAlpha(0)
-		GuildBankTabLimitBackground:SetAlpha(0)
-		GuildBankTabLimitBackgroundLeft:SetAlpha(0)
-		GuildBankTabLimitBackgroundRight:SetAlpha(0)
-		GuildBankFrameLeft:Hide()
-		GuildBankFrameRight:Hide()
 		local a, b = GuildBankTransactionsScrollFrame:GetRegions()
 		a:Hide()
 		b:Hide()
-
+		a, b = GuildBankInfoScrollFrame:GetRegions()
+		a:Hide()
+		b:Hide()
+		
+		F.SetBD(GuildBankFrame)
+		F.Reskin(GuildBankFrameWithdrawButton)
+		F.Reskin(GuildBankFrameDepositButton)
+		F.Reskin(GuildBankFramePurchaseButton)
+		F.Reskin(GuildBankPopupOkayButton)
+		F.Reskin(GuildBankPopupCancelButton)
+		F.Reskin(GuildBankInfoSaveButton)
+		F.ReskinClose(GuildBankFrame.CloseButton)
+		F.ReskinScroll(GuildBankTransactionsScrollFrameScrollBar)
+		F.ReskinScroll(GuildBankInfoScrollFrameScrollBar)
+		F.ReskinScroll(GuildBankPopupScrollFrameScrollBar)
+		F.ReskinInput(GuildItemSearchBox)
+		
 		for i = 1, 4 do
 			local tab = _G["GuildBankFrameTab"..i]
 			F.CreateTab(tab)
@@ -4058,7 +4056,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		GuildBankFrameWithdrawButton:ClearAllPoints()
+		local bd = CreateFrame("Frame", nil, GuildBankPopupFrame)
+		bd:SetPoint("TOPLEFT")
+		bd:SetPoint("BOTTOMRIGHT", -28, 26)
+		bd:SetFrameLevel(GuildBankPopupFrame:GetFrameLevel()-1)
+		F.CreateBD(bd)
+		F.CreateBD(GuildBankPopupEditBox, .25)
+		
+		GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
+		
 		GuildBankFrameWithdrawButton:SetPoint("RIGHT", GuildBankFrameDepositButton, "LEFT", -1, 0)
 
 		for i = 1, NUM_GUILDBANK_COLUMNS do
@@ -4127,20 +4133,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			
 			F.CreateBG(_G["GuildBankPopupButton"..i.."Icon"])
 		end
-
-		F.Reskin(GuildBankFrameWithdrawButton)
-		F.Reskin(GuildBankFrameDepositButton)
-		F.Reskin(GuildBankFramePurchaseButton)
-		F.Reskin(GuildBankPopupOkayButton)
-		F.Reskin(GuildBankPopupCancelButton)
-		F.Reskin(GuildBankInfoSaveButton)
-
-		local GuildBankClose = select(14, GuildBankFrame:GetChildren())
-		F.ReskinClose(GuildBankClose, "TOPRIGHT", GuildBankFrame, "TOPRIGHT", -4, -12)
-		F.ReskinScroll(GuildBankTransactionsScrollFrameScrollBar)
-		F.ReskinScroll(GuildBankInfoScrollFrameScrollBar)
-		F.ReskinScroll(GuildBankPopupScrollFrameScrollBar)
-		F.ReskinInput(GuildItemSearchBox)
 	elseif addon == "Blizzard_GuildControlUI" then
 		SetBD(GuildControlUI, 0, 0, 0, -28)
 		F.CreateBD(GuildControlUIRankBankFrameInset, .25)
