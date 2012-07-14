@@ -29,9 +29,9 @@ local _, class = UnitClass("player")
 C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
 
 C.reactioncolours = {
-	[1] = {255/255, 30/255, 60/255},
-	[2] = {255/255, 30/255, 60/255},
-	[3] = {255/255, 30/255, 60/255},
+	[1] = {1, .12, .24},
+	[2] = {1, .12, .24},
+	[3] = {1, .12, .24},
 	[4] = {1, 1, 0.3},
 	[5] = {0.26, 1, 0.22},
 	[6] = {0.26, 1, 0.22},
