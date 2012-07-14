@@ -3671,6 +3671,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(9, ChallengesFrameDetails:GetRegions()):Hide()
 		select(10, ChallengesFrameDetails:GetRegions()):Hide()
 		select(11, ChallengesFrameDetails:GetRegions()):Hide()
+		ChallengesFrameLeaderboard:GetRegions():Hide()
+		
+		F.Reskin(ChallengesFrameLeaderboard)
 		
 		local bg = CreateFrame("Frame", nil, ChallengesFrameDetails)
 		bg:SetPoint("TOPLEFT", 1, -73)
