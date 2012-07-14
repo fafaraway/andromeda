@@ -909,6 +909,8 @@ local UnitSpecific = {
 			end
 		elseif class == "MONK" and C.classmod.monk == true then
 			local pulsating = false
+			
+			local r, g, b = PowerBarColor["LIGHT_FORCE"].r, PowerBarColor["LIGHT_FORCE"].g, PowerBarColor["LIGHT_FORCE"].b
 		
 			local UpdateOrbs = function(self, event, unit, powerType)
 				if unit ~= "player" then return end
@@ -921,7 +923,7 @@ local UnitSpecific = {
 						self.glow:SetAlpha(1)
 						F.CreatePulse(self.glow)
 						self.count:SetText(chi)
-						self.count:SetTextColor(.8, 1, .8)
+						self.count:SetTextColor(r, g, b)
 						self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
 					end
 				elseif chi == 0 then
@@ -946,7 +948,7 @@ local UnitSpecific = {
 			})
 			glow:SetPoint("TOPLEFT", self, -6, 6)
 			glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
-			glow:SetBackdropBorderColor(.8, 1, .8)
+			glow:SetBackdropBorderColor(r, g, b)
 
 			self.glow = glow
 
@@ -1050,25 +1052,16 @@ local UnitSpecific = {
 			bars:SetHeight(2)
 			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
-			local bbd = CreateFrame("Frame", nil, bars)
-			bbd:SetPoint("TOPLEFT", -1, 1)
-			bbd:SetPoint("BOTTOMRIGHT", 1, -1)
-			bbd:SetFrameLevel(bars:GetFrameLevel()-1)
-			F.CreateBD(bbd)
-
 			for i = 1, 4 do
 				bars[i] = CreateFrame("StatusBar", nil, self)
 				bars[i]:SetHeight(2)
 				bars[i]:SetStatusBarTexture(C.media.texture)
 
 				local bbd = CreateFrame("Frame", nil, bars[i])
-				bbd:SetBackdrop({
-					edgeFile = C.media.backdrop,
-					edgeSize = 1,
-				})
-				bbd:SetBackdropBorderColor(0, 0, 0)
 				bbd:SetPoint("TOPLEFT", bars[i], -1, 1)
 				bbd:SetPoint("BOTTOMRIGHT", bars[i], 1, -1)
+				bbd:SetFrameLevel(bars[i]:GetFrameLevel()-1)
+				F.CreateBD(bbd)
 
 				if i == 1 then
 					bars[i]:SetPoint("LEFT", bars)
