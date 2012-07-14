@@ -67,7 +67,7 @@ local function styleActionButton(bu)
 
 	local name = bu:GetName()
 	local bo  = _G[name.."Border"]
-	local ic  = _G[name.."Icon"]
+	local ic  = bu.icon
 	local co  = _G[name.."Count"]
 	local nt  = _G[name.."NormalTexture"]
 	local na  = _G[name.."Name"]
