@@ -51,6 +51,7 @@ scripts\minimap.lua
 scripts\mirrorbars.lua
 scripts\nameplates.lua
 scripts\panel.lua
+scripts\petbattles.lua
 scripts\rangecolor.lua
 scripts\sfilter.lua
 scripts\stats.lua
