@@ -3,6 +3,10 @@ local F, C, L = unpack(select(2, ...))
 -- [[ Constants ]]
 
 C.media = {
+	["arrowUp"] = "Interface\\AddOns\\Aurora\\media\\arrow-up-active",
+	["arrowDown"] = "Interface\\AddOns\\Aurora\\media\\arrow-down-active",
+	["arrowLeft"] = "Interface\\AddOns\\Aurora\\media\\arrow-left-active",
+	["arrowRight"] = "Interface\\AddOns\\Aurora\\media\\arrow-right-active",
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
 	["checked"] = "Interface\\AddOns\\FreeUI\\media\\CheckButtonHilight", -- replace default checked texture
 	["font"] = "Interface\\AddOns\\FreeUI\\media\\Hooge0655.ttf", -- default pixel font
@@ -43,7 +47,7 @@ C.reactioncolours = {
 
 F.dummy = function() end
 
-F.CreateBD = function(f, a)
+local CreateBD = function(f, a)
 	f:SetBackdrop({
 		bgFile = C.media.backdrop, 
 		edgeFile = C.media.backdrop, 
@@ -52,6 +56,8 @@ F.CreateBD = function(f, a)
 	f:SetBackdropColor(0, 0, 0, a or .5)
 	f:SetBackdropBorderColor(0, 0, 0)
 end
+
+F.CreateBD = CreateBD
 
 F.CreateBG = function(frame)
 	local f = frame
@@ -228,13 +234,13 @@ F.ReskinScroll = function(f)
 	dis2:SetDrawLayer("OVERLAY")
 
 	local uptex = up:CreateTexture(nil, "ARTWORK")
-	uptex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-up-active")
+	uptex:SetTexture(C.media.arrowUp)
 	uptex:SetSize(8, 8)
 	uptex:SetPoint("CENTER")
 	uptex:SetVertexColor(1, 1, 1)
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+	downtex:SetTexture(C.media.arrowDown)
 	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
@@ -276,7 +282,7 @@ F.ReskinDropDown = function(f)
 	dis:SetAllPoints()
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+	downtex:SetTexture(C.media.arrowDown)
 	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
@@ -498,4 +504,12 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 	F.CreateBD(f)
 	F.CreateSD(f)
 	F.ReskinClose(_G[name.."CloseButton"])
+end
+
+F.CreateBDFrame = function(f)
+	local bg = CreateFrame("Frame", nil, f)
+	bg:SetPoint("TOPLEFT", -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", 1, -1)
+	bg:SetFrameLevel(f:GetFrameLevel()-1)
+	CreateBD(bg, .25)
 end
