@@ -112,19 +112,19 @@ for index, unit in pairs(extraUnits) do
 	
 	unit:SetSize(36, 36)
 	
-	unit.HealthBarBG:Hide()
+	unit.HealthBarBG:SetAlpha(0)
 	unit.BorderAlive:SetAlpha(0)
 	unit.BorderDead:SetAlpha(0)
-	unit.HealthDivider:Hide()
+	unit.HealthDivider:SetAlpha(0)
 	
 	unit.ActualHealthBar:ClearAllPoints()
-	unit.ActualHealthBar:SetPoint("BOTTOM")
-	
+	unit.ActualHealthBar:SetPoint("BOTTOM", 0, -1)
+
 	unit.bg = CreateFrame("Frame", nil, unit)
 	unit.bg:SetPoint("TOPLEFT", -1, 1)
 	unit.bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	unit.bg:SetFrameLevel(unit:GetFrameLevel()-1)
-	F.CreateBD(unit)
+	F.CreateBD(unit.bg)
 
 	if index < 3 then
 		unit.ActualHealthBar:SetGradient("VERTICAL", .26, 1, .22, .13, .5, .11)
@@ -143,7 +143,6 @@ for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	unit.Icon:SetTexCoord(.08, .92, .08, .92)
 	
 	unit.ActualHealthBar:SetTexture(C.media.backdrop)
-	
 	
 	F.CreateBD(unit)
 end
@@ -193,7 +192,7 @@ hooksecurefunc("PetBattleAuraHolder_Update", function(self)
 			frame.Duration:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 			frame.Duration:SetShadowOffset(0, 0)
 			frame.Duration:ClearAllPoints()
-			frame.Duration:SetPoint("BOTTOM", frame, 1, 16)
+			frame.Duration:SetPoint("BOTTOM", frame, 1, 10)
 
 			if not frame.reskinned then
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
@@ -215,7 +214,7 @@ local framesToHide = {FreeUI_MainMenuBar, FreeUI_MultiBarBottomLeft, FreeUI_Mult
 
 local bar = CreateFrame("Frame", "FreeUIPetBattleActionBar", UIParent)
 bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
-bar:SetSize((NUM_BATTLE_PET_ABILITIES * 27) + (3 * 27), 26)
+bar:SetSize(6 * 27, 26)
 bar:SetFrameStrata("HIGH")
 bar:EnableMouse(true)
 bar:RegisterEvent("PET_BATTLE_OPENING_START")
@@ -314,8 +313,7 @@ local function stylePetBattleButton(bu)
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetHighlightTexture("")
-
-	if bu:GetFrameLevel() < 1 then bu:SetFrameLevel(1) end
+	bu.SelectedHighlight:SetTexture("")
 
 	bu.bg = CreateFrame("Frame", nil, bu)
 	bu.bg:SetAllPoints(bu)
@@ -334,9 +332,6 @@ local function stylePetBattleButton(bu)
 	
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
-
-	bu.SelectedHighlight:SetAllPoints(bu)
-	bu.SelectedHighlight:SetTexture(C.media.checked)
 	
 	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	bu.HotKey:SetPoint("TOP", 1, -2)
@@ -344,7 +339,6 @@ local function stylePetBattleButton(bu)
 	bu.reskinned = true
 end
 
-local first = true
 hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 	for i = 1, NUM_BATTLE_PET_ABILITIES do
 		local bu = bf.abilityButtons[i]
@@ -360,24 +354,21 @@ hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 		end
 	end
 
-	if first then
-		stylePetBattleButton(bf.SwitchPetButton)
-		stylePetBattleButton(bf.CatchButton)
-		stylePetBattleButton(bf.ForfeitButton)
+	stylePetBattleButton(bf.SwitchPetButton)
+	stylePetBattleButton(bf.CatchButton)
+	stylePetBattleButton(bf.ForfeitButton)
 
-		bf.SwitchPetButton:SetParent(bar)
-		bf.SwitchPetButton:SetSize(26, 26)
-		bf.SwitchPetButton:ClearAllPoints()
-		bf.SwitchPetButton:SetPoint("LEFT", bf.abilityButtons[NUM_BATTLE_PET_ABILITIES], "RIGHT", 1, 0)
-		bf.SwitchPetButton:SetCheckedTexture(C.media.checked)
-		bf.CatchButton:SetParent(bar)
-		bf.CatchButton:SetSize(26, 26)
-		bf.CatchButton:ClearAllPoints()
-		bf.CatchButton:SetPoint("LEFT", bf.SwitchPetButton, "RIGHT", 1, 0)
-		bf.ForfeitButton:SetParent(bar)
-		bf.ForfeitButton:SetSize(26, 26)
-		bf.ForfeitButton:ClearAllPoints()
-		bf.ForfeitButton:SetPoint("LEFT", bf.CatchButton, "RIGHT", 1, 0)
-		first = false
-	end
+	bf.SwitchPetButton:SetParent(bar)
+	bf.SwitchPetButton:SetSize(26, 26)
+	bf.SwitchPetButton:ClearAllPoints()
+	bf.SwitchPetButton:SetPoint("LEFT", bf.abilityButtons[NUM_BATTLE_PET_ABILITIES], "RIGHT", 1, 0)
+	bf.SwitchPetButton:SetCheckedTexture(C.media.checked)
+	bf.CatchButton:SetParent(bar)
+	bf.CatchButton:SetSize(26, 26)
+	bf.CatchButton:ClearAllPoints()
+	bf.CatchButton:SetPoint("LEFT", bf.SwitchPetButton, "RIGHT", 1, 0)
+	bf.ForfeitButton:SetParent(bar)
+	bf.ForfeitButton:SetSize(26, 26)
+	bf.ForfeitButton:ClearAllPoints()
+	bf.ForfeitButton:SetPoint("LEFT", bf.CatchButton, "RIGHT", 1, 0)
 end)
