@@ -4835,6 +4835,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinScroll(MacroFrameScrollFrameScrollBar)
 		F.ReskinScroll(MacroPopupScrollFrameScrollBar)
 	elseif addon == "Blizzard_PetJournal" then
+		local PetJournal = PetJournal
+		local MountJournal = MountJournal
+	
 		for i = 1, 14 do
 			if i ~= 8 then
 				select(i, PetJournalParent:GetRegions()):Hide()
@@ -4849,7 +4852,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MountJournal.RightInset:Hide()		
 		PetJournal.LeftInset:Hide()
 		PetJournal.RightInset:Hide()
-		MountJournal.MountDisplay:GetRegions():Hide()
+		PetJournal.PetCardInset:Hide()
+		PetJournal.loadoutBorder:Hide()
+		MountJournal.MountDisplay.YesMountsTex:SetAlpha(0)
+		MountJournal.MountDisplay.NoMountsTex:SetAlpha(0)
 		MountJournal.MountDisplay.ShadowOverlay:Hide()
 		PetJournalFilterButtonLeft:Hide()
 		PetJournalFilterButtonRight:Hide()
@@ -4910,7 +4916,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.name:SetParent(bg)
 				
 				if bu.DragButton then
-					bu.DragButton:GetRegions():SetTexture(C.media.checked)
+					bu.DragButton.ActiveTexture:SetTexture(C.media.checked)
+				else
+					bu.levelBG:SetAlpha(0)
+					bu.level:SetFontObject(GameFontNormal)
+					bu.level:SetTextColor(1, 1, 1)
 				end
 			end
 		end
@@ -4930,6 +4940,130 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("MountJournal_UpdateMountList", updateScroll)
 		MountJournalListScrollFrame:HookScript("OnVerticalScroll", updateScroll)
 		MountJournalListScrollFrame:HookScript("OnMouseWheel", updateScroll)
+		
+		local tooltips = {PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}
+		for _, f in pairs(tooltips) do
+			f:DisableDrawLayer("BACKGROUND")
+			local bg = CreateFrame("Frame", nil, f)
+			bg:SetAllPoints()
+			bg:SetFrameLevel(0)
+			F.CreateBD(bg)
+		end
+		
+		PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
+		PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 2)
+			
+		local card = PetJournalPetCard
+		
+		PetJournalPetCardBG:Hide()
+		card.AbilitiesBG:SetAlpha(0)
+		card.PetInfo.levelBG:SetAlpha(0)
+		
+		card.PetInfo.level:SetFontObject(GameFontNormal)
+		card.PetInfo.level:SetTextColor(1, 1, 1)
+		
+		card.PetInfo.icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(card.PetInfo.icon)
+		
+		F.CreateBD(card, .25)
+		
+		for i = 2, 12 do
+			select(i, card.xpBar:GetRegions()):Hide()
+		end
+		
+		card.xpBar:SetStatusBarTexture(C.media.backdrop)
+		F.CreateBDFrame(card.xpBar)
+		
+		PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
+		PetJournalPetCardHealthFramehealthStatusBarRight:Hide()
+		PetJournalPetCardHealthFramehealthStatusBarMiddle:Hide()
+		PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
+		
+		card.HealthFrame.healthBar:SetStatusBarTexture(C.media.backdrop)
+		F.CreateBDFrame(card.HealthFrame.healthBar)
+		
+		for i = 1, 6 do
+			local bu = card["spell"..i]
+			
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(bu.icon)
+		end
+		
+		for i = 1, 3 do
+			local bu = PetJournal.Loadout["Pet"..i]
+			
+			_G["PetJournalLoadoutPet"..i.."BG"]:Hide()
+
+			bu.iconBorder:SetAlpha(0)
+			bu.levelBG:SetAlpha(0)
+			bu.helpFrame:GetRegions():Hide()
+			
+			bu.level:SetFontObject(GameFontNormal)
+			bu.level:SetTextColor(1, 1, 1)
+			
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			bu.icon.bg = CreateFrame("Frame", nil, bu)
+			bu.icon.bg:SetPoint("TOPLEFT", bu.icon, -1, 1)
+			bu.icon.bg:SetPoint("BOTTOMRIGHT", bu.icon, 1, -1)
+			bu.icon.bg:SetFrameLevel(bu:GetFrameLevel()-1)
+			F.CreateBD(bu.icon.bg, .25)
+			
+			bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
+			bu.setButton:GetRegions():SetPoint("BOTTOMRIGHT", bu.icon, 5, -5)
+			
+			F.CreateBD(bu, .25)
+			
+			for i = 2, 12 do
+				select(i, bu.xpBar:GetRegions()):Hide()
+			end
+			
+			bu.xpBar:SetStatusBarTexture(C.media.backdrop)
+			F.CreateBDFrame(bu.xpBar)
+			
+			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
+			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarRight"]:Hide()
+			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarMiddle"]:Hide()
+			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarBGMiddle"]:Hide()
+			
+			bu.healthFrame.healthBar:SetStatusBarTexture(C.media.backdrop)
+			F.CreateBDFrame(bu.healthFrame.healthBar)
+			
+			for j = 1, 3 do
+				local spell = bu["spell"..j]
+				
+				spell.selected:SetTexture(C.media.checked)
+
+				spell:GetRegions():Hide()
+				
+				spell.FlyoutArrow:SetTexture(C.media.arrowDown)
+				spell.FlyoutArrow:SetSize(8, 8)
+				spell.FlyoutArrow:SetTexCoord(0, 1, 0, 1)
+				
+				spell.icon:SetTexCoord(.08, .92, .08, .92)
+				F.CreateBG(spell.icon)
+			end
+		end
+		
+		hooksecurefunc("PetJournal_UpdatePetLoadOut", function()
+			for i = 1, 3 do
+				local bu = PetJournal.Loadout["Pet"..i]
+				bu.icon.bg:SetShown(not bu.helpFrame:IsShown())
+				bu.dragButton:SetEnabled(not bu.helpFrame:IsShown())
+			end
+		end)
+		
+		PetJournal.SpellSelect.BgEnd:Hide()
+		PetJournal.SpellSelect.BgTiled:Hide()
+		
+		for i = 1, 2 do
+			local bu = PetJournal.SpellSelect["Spell"..i]
+			
+			bu:SetCheckedTexture(C.media.checked)
+			
+			bu.icon:SetDrawLayer("ARTWORK")
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(bu.icon)
+		end
 	elseif addon == "Blizzard_ReforgingUI" then
 		F.CreateBD(ReforgingFrame)
 		F.CreateSD(ReforgingFrame)
