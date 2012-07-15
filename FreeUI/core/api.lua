@@ -506,10 +506,10 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 	F.ReskinClose(_G[name.."CloseButton"])
 end
 
-F.CreateBDFrame = function(f)
+F.CreateBDFrame = function(f, a)
 	local bg = CreateFrame("Frame", nil, f)
 	bg:SetPoint("TOPLEFT", -1, 1)
 	bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
-	CreateBD(bg, .25)
+	CreateBD(bg, a or .5)
 end

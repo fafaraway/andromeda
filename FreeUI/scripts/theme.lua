@@ -1361,9 +1361,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, 9 do
 			select(i, QuestLogCount:GetRegions()):Hide()
 		end
-		
-		QuestLogFrameShowMapButton:Hide()
-		QuestLogFrameShowMapButton.Show = F.dummy
+
 		QuestLogDetailTitleText:SetDrawLayer("OVERLAY")
 		QuestInfoItemHighlight:GetRegions():Hide()
 		QuestInfoSpellObjectiveFrameNameFrame:Hide()
@@ -1377,6 +1375,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		QuestLogFramePushQuestButton:SetWidth(100)
 		QuestLogFrameTrackButton:ClearAllPoints()
 		QuestLogFrameTrackButton:SetPoint("LEFT", QuestLogFramePushQuestButton, "RIGHT", 1, 0)
+		
+		QuestLogFrameShowMapButton.texture:Hide()
+		QuestLogFrameShowMapButtonHighlight:SetAlpha(0)
+		QuestLogFrameShowMapButton:SetSize(QuestLogFrameShowMapButton.text:GetStringWidth() + 14, 22)
+		QuestLogFrameShowMapButton.text:ClearAllPoints()
+		QuestLogFrameShowMapButton.text:SetPoint("CENTER", 1, 0)
+		F.Reskin(QuestLogFrameShowMapButton)
 		
 		local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
 		npcbd:SetPoint("TOPLEFT", 0, 1)
@@ -2292,6 +2297,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			button:DisableDrawLayer("BORDER")
 			button.Arrow:Hide()
 			
+			button:ClearAllPoints()
 			button:SetPoint("BOTTOM", FreeUI_MultiBarBottomRight, "TOP", 0, 12)
 			
 			F.SetBD(button)
@@ -4887,6 +4893,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		
 		PetJournalHealPetButtonBorder:Hide()
 		PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+		PetJournal.HealPetButton:SetPushedTexture("")
 		F.CreateBG(PetJournal.HealPetButton)
 		
 		local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
@@ -4951,7 +4958,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
-		PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 2)
+		PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
 			
 		local card = PetJournalPetCard
 		
@@ -4972,7 +4979,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 		
 		card.xpBar:SetStatusBarTexture(C.media.backdrop)
-		F.CreateBDFrame(card.xpBar)
+		F.CreateBDFrame(card.xpBar, .25)
 		
 		PetJournalPetCardHealthFramehealthStatusBarLeft:Hide()
 		PetJournalPetCardHealthFramehealthStatusBarRight:Hide()
@@ -4980,7 +4987,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PetJournalPetCardHealthFramehealthStatusBarBGMiddle:Hide()
 		
 		card.HealthFrame.healthBar:SetStatusBarTexture(C.media.backdrop)
-		F.CreateBDFrame(card.HealthFrame.healthBar)
+		F.CreateBDFrame(card.HealthFrame.healthBar, .25)
 		
 		for i = 1, 6 do
 			local bu = card["spell"..i]
@@ -5018,7 +5025,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 			
 			bu.xpBar:SetStatusBarTexture(C.media.backdrop)
-			F.CreateBDFrame(bu.xpBar)
+			F.CreateBDFrame(bu.xpBar, .25)
 			
 			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarLeft"]:Hide()
 			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarRight"]:Hide()
@@ -5026,7 +5033,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["PetJournalLoadoutPet"..i.."HealthFramehealthStatusBarBGMiddle"]:Hide()
 			
 			bu.healthFrame.healthBar:SetStatusBarTexture(C.media.backdrop)
-			F.CreateBDFrame(bu.healthFrame.healthBar)
+			F.CreateBDFrame(bu.healthFrame.healthBar, .25)
 			
 			for j = 1, 3 do
 				local spell = bu["spell"..j]
