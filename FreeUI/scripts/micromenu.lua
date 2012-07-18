@@ -27,23 +27,23 @@ local microMenu = {
 	func = function() TogglePetJournal() F.menuShown = false end},
 	{text = SOCIAL_BUTTON,
 	func = function() ToggleFriendsFrame(1) F.menuShown = false end},
-	{text = LFG_TITLE,
+	{text = COMPACT_UNIT_FRAME_PROFILE_AUTOACTIVATEPVE,
 	func = function() PVEFrame_ToggleFrame() F.menuShown = false end},
-	{text = PLAYER_V_PLAYER,
+	{text = COMPACT_UNIT_FRAME_PROFILE_AUTOACTIVATEPVP,
 	func = function() ToggleFrame(PVPFrame) F.menuShown = false end},
 	{text = ACHIEVEMENTS_GUILD_TAB,
 	func = function()
 		if IsInGuild() then
-			if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
+			if not GuildFrame then GuildFrame_LoadUI() end
 			GuildFrame_Toggle()
 		else
-			if not LookingForGuildFrame then LoadAddOn("Blizzard_LookingForGuildUI") end
+			if not LookingForGuildFrame then LookingForGuildFrame_LoadUI() end
 			LookingForGuildFrame_Toggle()
 		end
 		F.menuShown = false
 	end},
 	{text = RAID,
-	func = function() ToggleFrame(RaidParentFrame) F.menuShown = false end},
+	func = function() ToggleFriendsFrame(4) F.menuShown = false end},
 	{text = HELP_BUTTON,
 	func = function() ToggleHelpFrame() F.menuShown = false end},
 	{text = CALENDAR_VIEW_EVENT,
