@@ -20,6 +20,13 @@ for _, f in pairs(tooltips) do
 	F.CreateBD(bg)
 end
 
+PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
+PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
+PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+
 frame.TopVersusText:SetPoint("TOP", frame, "TOP", 0, -46)
 
 frame.WeatherFrame.Icon:Hide()
@@ -141,6 +148,7 @@ for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	unit.HealthDivider:Hide()
 	
 	unit.Icon:SetTexCoord(.08, .92, .08, .92)
+	F.CreateBG(unit.Icon)
 	
 	unit.ActualHealthBar:SetTexture(C.media.backdrop)
 	
@@ -181,22 +189,26 @@ end)
 hooksecurefunc("PetBattleAuraHolder_Update", function(self)
 	if not self.petOwner or not self.petIndex then return end
 
+	local nextFrame = 1
 	for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
-		local frame = self.frames[i]
-		
-		if frame then
-			local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
+		local _, _, turnsRemaining, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
+		if (isBuff and self.displayBuffs) or (not isBuff and self.displayDebuffs) then
+			local frame = self.frames[nextFrame]
 
 			frame.DebuffBorder:Hide()
+			
+			if not frame.reskinned then
+				frame.Icon:SetTexCoord(.08, .92, .08, .92)
+				frame.bg = F.CreateBG(frame.Icon)
+			end
 
 			frame.Duration:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 			frame.Duration:SetShadowOffset(0, 0)
 			frame.Duration:ClearAllPoints()
-			frame.Duration:SetPoint("BOTTOM", frame, 1, 10)
+			frame.Duration:SetPoint("BOTTOM", frame.Icon, 1, -1)
 
-			if not frame.reskinned then
-				frame.Icon:SetTexCoord(.08, .92, .08, .92)
-				frame.bg = F.CreateBG(frame.Icon)
+			if turnsRemaining > 0 then
+				frame.Duration:SetText(turnsRemaining)
 			end
 
 			if isBuff then
@@ -204,58 +216,52 @@ hooksecurefunc("PetBattleAuraHolder_Update", function(self)
 			else
 				frame.bg:SetVertexColor(1, 0, 0)
 			end
+			
+			nextFrame = nextFrame + 1
 		end
 	end
 end)
 
 -- [[ Action bar ]]
 
-local framesToHide = {FreeUI_MainMenuBar, FreeUI_MultiBarBottomLeft, FreeUI_MultiBarBottomRight, oUF_FreePlayer, oUF_FreeTarget}
+local alphaFrames = {FreeUI_MainMenuBar, FreeUI_MultiBarBottomLeft, FreeUI_MultiBarBottomRight}
+local disableFrames = {oUF_FreePlayer, oUF_FreeTarget}
 
 local bar = CreateFrame("Frame", "FreeUIPetBattleActionBar", UIParent)
 bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 bar:SetSize(6 * 27, 26)
 bar:SetFrameStrata("HIGH")
 bar:EnableMouse(true)
-bar:RegisterEvent("PET_BATTLE_OPENING_START")
+bar:RegisterEvent("PET_BATTLE_OPENING_DONE")
 bar:RegisterEvent("PET_BATTLE_CLOSE")
 bar:Hide()
 
-local function hideFrames(self)
-	for _, frame in pairs(framesToHide) do
-		if frame:GetName():match("Bar") then
-			frame:SetAlpha(0)
-		else
-			frame:Hide()
-		end
-	end
-	
-	self:Show()
-end
-
-local function onUpdate(self)
-	if not InCombatLockdown() then
-		print("lol")
-		self:SetScript("OnUpdate", nil)
-		hideFrames(self)
-	end
-end
-
 bar:SetScript("OnEvent", function(self, event)
-	if event == "PET_BATTLE_OPENING_START" then
-		--self:SetScript("OnUpdate", onUpdate)
-		hideFrames(self)
+	if event == "PET_BATTLE_OPENING_DONE" then
+		for _, frame in pairs(disableFrames) do
+			frame:Disable()
+		end
+		
+		self:Show()
 	else
 		self:Hide()
 		
-		for _, frame in pairs(framesToHide) do
-			if frame:GetName():match("Bar") then
-				frame:SetAlpha(1)
-			else
-				frame:Show()
-			end
+		for _, frame in pairs(disableFrames) do
+			frame:Enable()
 		end
 	end
+end)
+
+bar:SetScript("OnShow", function()
+	for _, frame in pairs(alphaFrames) do
+		frame:SetAlpha(0)
+	end	
+end)
+
+bar:SetScript("OnHide", function()
+	for _, frame in pairs(alphaFrames) do
+		frame:SetAlpha(1)
+	end	
 end)
 
 bf.RightEndCap:Hide()
@@ -307,31 +313,33 @@ end)
 
 -- [[ Buttons ]]
 
+local r, g, b = unpack(C.class)
+
 local function stylePetBattleButton(bu)
 	if bu.reskinned then return end
 	
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetHighlightTexture("")
-	bu.SelectedHighlight:SetTexture("")
 
 	bu.bg = CreateFrame("Frame", nil, bu)
 	bu.bg:SetAllPoints(bu)
 	bu.bg:SetFrameLevel(0)
-
 	bu.bg:SetBackdrop({
 		edgeFile = C.media.backdrop,
 		edgeSize = 1,
 	})
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 
-	bu.Icon:SetTexCoord(.08, .92, .08, .92)
-	
+	bu.Icon:SetTexCoord(.08, .92, .08, .92)	
 	bu.Icon:SetPoint("TOPLEFT", bu, 1, -1)
 	bu.Icon:SetPoint("BOTTOMRIGHT", bu, -1, 1)
 	
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
+	
+	bu.SelectedHighlight:SetTexture(r, g, b, .2)
+	bu.SelectedHighlight:SetAllPoints()
 	
 	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	bu.HotKey:SetPoint("TOP", 1, -2)
@@ -339,6 +347,7 @@ local function stylePetBattleButton(bu)
 	bu.reskinned = true
 end
 
+local first = true
 hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 	for i = 1, NUM_BATTLE_PET_ABILITIES do
 		local bu = bf.abilityButtons[i]
@@ -357,6 +366,17 @@ hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 	stylePetBattleButton(bf.SwitchPetButton)
 	stylePetBattleButton(bf.CatchButton)
 	stylePetBattleButton(bf.ForfeitButton)
+	
+	if first then
+		first = false
+		bf.SwitchPetButton:SetScript("OnClick", function()
+			if bf.PetSelectionFrame:IsShown() then
+				PetBattlePetSelectionFrame_Hide(bf.PetSelectionFrame)
+			else
+				PetBattlePetSelectionFrame_Show(bf.PetSelectionFrame)
+			end
+		end)
+	end
 
 	bf.SwitchPetButton:SetParent(bar)
 	bf.SwitchPetButton:SetSize(26, 26)
