@@ -39,11 +39,11 @@ install:SetPoint("TOP", 0, -200)
 install:SetText("Installer")
 install:SetScript("OnClick", function()
 	InterfaceOptionsFrame_Show()
-	if IsAddOnLoaded("!Install") then
+	if IsAddOnLoaded("FreeUI_Install") then
 		FreeUI_InstallFrame:Show()
 	else
-		EnableAddOn("!Install")
-		LoadAddOn("!Install")
+		EnableAddOn("FreeUI_Install")
+		LoadAddOn("FreeUI_Install")
 	end
 	if GameMenuFrame:IsShown() then
 		ToggleFrame(GameMenuFrame)
