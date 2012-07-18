@@ -2716,10 +2716,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 	-- [[ Load on Demand Addons ]]
 
-	elseif addon == "!Install" then
-		F.Reskin(FreeUI_Install_Option1)
-		F.Reskin(FreeUI_Install_Option2)
-		F.ReskinClose(FreeUI_Install_CloseButton)
 	elseif addon == "Blizzard_ArchaeologyUI" then
 		F.SetBD(ArchaeologyFrame)
 		F.Reskin(ArchaeologyFrameArtifactPageSolveFrameSolveButton)
@@ -4925,6 +4921,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if bu.DragButton then
 					bu.DragButton.ActiveTexture:SetTexture(C.media.checked)
 				else
+					bu.dragButton.ActiveTexture:SetTexture(C.media.checked)
 					bu.levelBG:SetAlpha(0)
 					bu.level:SetFontObject(GameFontNormal)
 					bu.level:SetTextColor(1, 1, 1)
