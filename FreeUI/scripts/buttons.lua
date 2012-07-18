@@ -66,16 +66,12 @@ local function styleActionButton(bu)
 	if not bu or (bu and bu.styled) then return end
 
 	local name = bu:GetName()
-	local bo  = _G[name.."Border"]
 	local ic  = bu.icon
 	local co  = _G[name.."Count"]
-	local nt  = _G[name.."NormalTexture"]
-	local na  = _G[name.."Name"]
 	local fl  = _G[name.."FloatingBG"]
 
-	na:Hide()
-
-	bo:SetTexture(nil)
+	_G[name.."Name"]:Hide()
+	_G[name.."Border"]:SetTexture("")
 
 	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	co:ClearAllPoints()
