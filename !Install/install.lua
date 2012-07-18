@@ -157,10 +157,13 @@ local function SetupChat()
 		"CHANNEL5",
 		"CHANNEL6",
 		"CHANNEL7",
+		"CHANNEL8",
+		"CHANNEL9",
+		"CHANNEL10",
 	}
 	
-	for i, v in ipairs(channels) do
-		ToggleChatColorNamesByClassGroup(true, v)
+	for _, channel in next, channels do
+		ToggleChatColorNamesByClassGroup(true, channel)
 	end
 end
 
