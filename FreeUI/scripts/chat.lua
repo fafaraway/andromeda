@@ -112,9 +112,6 @@ local function toggleDown(f)
 end
 
 local function reskinMinimize(f)
-	if f.reskinned then return end
-	f.reskinned = true
-	
 	f:SetSize(16, 16)
 	F.Reskin(f)
 	local minus = F.CreateFS(f, 8)
@@ -197,7 +194,7 @@ local function StyleWindow(f)
 	end
 	
 	-- minimize button
-	frame.buttonFrame.minimizeButton:HookScript("OnShow", reskinMinimize)
+	reskinMinimize(frame.buttonFrame.minimizeButton)
 
 	hooks[frame] = frame.AddMessage
 	frame.AddMessage = AddMessage
@@ -215,14 +212,10 @@ end)
 hooksecurefunc("ChatEdit_UpdateHeader", function()
 	local editBox = ChatEdit_ChooseBoxForSend()
 	local mType = editBox:GetAttribute("chatType")
-	if ( mType == "CHANNEL" ) then
+	if mType == "CHANNEL" then
 		local id = GetChannelName(editBox:GetAttribute("channelTarget"))
-		if id == 0 or id == 1 or id == 2 or id == 3 then
-			editBox.ebg:SetBackdropBorderColor(0, 0, 0)
-		else
-			editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
-		end
-	elseif (mType == "SAY") then
+		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
+	elseif mType == "SAY" then
 		editBox.ebg:SetBackdropBorderColor(0, 0, 0)
 	else
 		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType].r,ChatTypeInfo[mType].g,ChatTypeInfo[mType].b)
