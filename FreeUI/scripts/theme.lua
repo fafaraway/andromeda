@@ -2719,7 +2719,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 	elseif addon == "!Install" then
 		F.Reskin(FreeUI_Install_Option1)
 		F.Reskin(FreeUI_Install_Option2)
-		ReskinClose(FreeUI_Install_CloseButton)
+		F.ReskinClose(FreeUI_Install_CloseButton)
 	elseif addon == "Blizzard_ArchaeologyUI" then
 		F.SetBD(ArchaeologyFrame)
 		F.Reskin(ArchaeologyFrameArtifactPageSolveFrameSolveButton)
