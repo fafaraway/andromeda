@@ -184,8 +184,8 @@ local OnEvent = function(self, event, unit)
 	end
 end
 
-local CreateFrame = function(frame)
-	if frame.done then return end
+local StyleFrame = function(frame)
+	frame.done = true
 
 	frame.nameplate = true
 
@@ -230,8 +230,6 @@ local CreateFrame = function(frame)
 	frame.elite = stateIconRegion
 	frame.boss = bossIconRegion
 
-	frame.done = true
-
 	glowRegion:SetTexture(nil)
 	overlayRegion:SetTexture(nil)
 	shieldedRegion:SetTexture(nil)
@@ -246,7 +244,6 @@ local CreateFrame = function(frame)
 	frame.elapsed = 0
 	frame:SetScript("OnUpdate", ThreatUpdate)
 
-	
 	local offset = UIParent:GetScale() / healthBar:GetEffectiveScale()
 	CreateBD(healthBar, offset)
 	CreateBD(castBar, offset)
@@ -277,8 +274,8 @@ local OnUpdate = function(self, elapsed)
 			for i = 1, select("#", WorldFrame:GetChildren()) do
 				frame = select(i, WorldFrame:GetChildren())
 
-				if IsValidFrame(frame) then
-					CreateFrame(frame)
+				if not frame.done and IsValidFrame(frame) then
+					StyleFrame(frame)
 				end
 			end
 		end
