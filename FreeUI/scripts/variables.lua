@@ -8,7 +8,7 @@ local updateCurrency = function()
 end
 
 local addonLoaded
-addonLoaded = function(_, _, addon)
+addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
 	
 	if FreeUIConfig.layout == nil then FreeUIConfig.layout = 1 end

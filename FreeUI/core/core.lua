@@ -20,9 +20,9 @@ FreeUIConfig = {}
 local eventFrame = CreateFrame("Frame")
 local events = {}
 
-eventFrame:SetScript("OnEvent", function(self, event, ...)
+eventFrame:SetScript("OnEvent", function(_, event, ...)
 	for i = #events[event], 1, -1 do
-		events[event][i](self, event, ...)
+		events[event][i](event, ...)
 	end
 end)
 
@@ -65,7 +65,7 @@ end
 -- [[ High resolution support ]]
 
 local updateScale
-updateScale = function(self, event)
+updateScale = function(event)
 	if not InCombatLockdown() then
 		local scale = 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
 		if scale < .64 then

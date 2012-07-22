@@ -27,12 +27,7 @@ local fontstrings = setmetatable({}, {
 	end,
 })
 
-
-local onEvent
-onEvent = function(_, event, arg1)
-	if event == "ADDON_LOADED" then
-		F.UnregisterEvent("ADDON_LOADED", onEvent)
-	end
+local onEvent = function()
 	for slot, id in pairs(SLOTIDS) do
 		local v1, v2 = GetInventoryItemDurability(id)
 
@@ -47,5 +42,4 @@ onEvent = function(_, event, arg1)
 	end
 end
 
-F.RegisterEvent("ADDON_LOADED", onEvent)
 F.RegisterEvent("UPDATE_INVENTORY_DURABILITY", onEvent)

@@ -11,7 +11,7 @@ bottompanel:SetBackdrop({
 })
 bottompanel:SetBackdropBorderColor(0, 0, 0)
 
-local function onEvent(_, event)
+local function onEvent(event)
 	if event=="PLAYER_REGEN_DISABLED" then
 		bottompanel:SetBackdropBorderColor(1, 0, 0)
 	elseif event=="PLAYER_REGEN_ENABLED" then

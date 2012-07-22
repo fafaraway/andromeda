@@ -20,7 +20,7 @@ local nametext = F.CreateFS(f, 8, "LEFT")
 nametext:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 2)
 
 local addonLoaded
-addonLoaded = function(_, _, addon)
+addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
 	if FreeUIConfig.layout == 2 then
 		aThreatMeter:UnregisterAllEvents()
