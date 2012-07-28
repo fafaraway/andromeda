@@ -4,12 +4,13 @@
 ## Author: Haleth/Freethinker
 ## Version: 5.0 beta 10
 ## RequiredDeps: Blizzard_CombatText
-## OptionalDeps: Blizzard_TimeManager, Clique, oUF
+## OptionalDeps: Blizzard_TimeManager, Clique, FreeUI_Options, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 
 core\core.lua
 core\api.lua
+core\gui.lua
 core\slash.lua
 
 options.lua
@@ -38,7 +39,6 @@ scripts\events.lua
 scripts\expbar.lua
 scripts\fonts.lua
 scripts\globals.lua
-scripts\gui.lua
 scripts\interrupt.lua
 scripts\itemglow.lua
 scripts\loot.lua

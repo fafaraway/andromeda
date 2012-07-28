@@ -1,0 +1,10 @@
+## Interface: 50001
+## Version: 5.0 beta 11
+## Title: FreeUI Options
+## Notes: Options GUI for FreeUI.
+## Author: Haleth/Freethinker
+## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
+## SavedVariablesPerCharacter: FreeUIOptionsPerChar
+
+strings.lua
+core.lua

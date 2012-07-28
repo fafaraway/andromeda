@@ -18,8 +18,7 @@ local F, C, L = unpack(select(2, ...))
 	tremove(C.sfilter.PALADIN, 1)
 ]]
 
--- Uncomment the line below if you want profiles based on character name
--- local n = UnitName("player")
+local n = UnitName("player")
 local lvl = UnitLevel("player")
 local class = select(2, UnitClass("player"))
 local realm = GetRealmName()
@@ -32,4 +31,9 @@ end
 -- Show the extended cast bars for pure caster classes
 if class == "MAGE" or class == "PRIEST" or class == "WARLOCK" then
 	C.unitframes.castbar = 2
+end
+
+-- My personal stuff
+if realm == "Steamwheedle Cartel" and n ~= "Aylian" then
+	C.general.autorepair_guild = true
 end
