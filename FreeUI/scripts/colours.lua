@@ -145,6 +145,7 @@ end)
 local WHITE = {r = 1, g = 1, b = 1}
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%%d', '%%s')
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%$d', '%$s') -- '%2$s %1$d-–≥–æ —É—Ä–æ–≤–Ω—è'
+
 local function friendsFrame()
     local scrollFrame = FriendsFrameFriendsScrollFrame
     local offset = HybridScrollFrame_GetOffset(scrollFrame)
@@ -156,24 +157,24 @@ local function friendsFrame()
         local nameText, infoText
         button = buttons[i]
         index = offset + i
-        if(button:IsShown()) then
-            if ( button.buttonType == FRIENDS_BUTTON_TYPE_WOW ) then
-                local name, level, class, area, connected, status, note = GetFriendInfo(button.id)
-                if(connected) then
+        if button:IsShown() then
+            if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
+                local name, level, class, area, connected = GetFriendInfo(button.id)
+                if connected then
                     nameText = ns.classColor[class] .. name.."|r, "..format(FRIENDS_LEVEL_TEMPLATE, ns.diffColor[level] .. level .. '|r', class)
-                    if(areaName == playerArea) then
+                    if(area == playerArea) then
                         infoText = format('|cff00ff00%s|r', area)
                     end
                 end
-            elseif (button.buttonType == FRIENDS_BUTTON_TYPE_BNET) then
-                local presenceID, givenName, surname, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText = BNGetFriendInfo(button.id)
-                if(isOnline and client==BNET_CLIENT_WOW) then
-                    local hasFocus, toonName, client, realmName, _, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime = BNGetToonInfo(toonID)
+            elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+                local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(button.id)
+                if isOnline and client == BNET_CLIENT_WOW then
+                   local _, _, _, realmName, realmID, faction, race, class, guild, zoneName, level = BNGetToonInfo(toonID)
                     if(givenName and surname and toonName and class) then
                         -- color them all
                        -- if CanCooperateWithToon(toonID) then
                         	nameText = format(BATTLENET_NAME_FORMAT, givenName, surname) ..' '.. FRIENDS_WOW_NAME_COLOR_CODE .. '(' .. ns.classColor[class] .. ns.classColor[class] .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
-			--end
+						--end
                         if(zoneName == playerArea) and CanCooperateWithToon(toonID) then
                             infoText = format('|cff00ff00%s|r', zoneName)
                         end
@@ -190,8 +191,8 @@ local function friendsFrame()
         end
     end
 end
-hooksecurefunc(FriendsFrameFriendsScrollFrame, 'update', friendsFrame)
-hooksecurefunc('FriendsFrame_UpdateFriends', friendsFrame)
+hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", friendsFrame)
+hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
 
 local _VIEW_DEFAULT = 'playerStatus'
 _VIEW = _VIEW_DEFAULT
