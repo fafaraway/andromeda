@@ -24,7 +24,7 @@ for i = 1, NUM_ACTIONBAR_BUTTONS do
 	end
 end
 
-RegisterStateDriver(bar1, "visibility", "[vehicleui] hide;show")
+RegisterStateDriver(bar1, "visibility", "[vehicleui][petbattle] hide; show")
 
 --[[ Bottom Left bar ]]
 
@@ -46,7 +46,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar2, "visibility", "[vehicleui] hide;show")
+RegisterStateDriver(bar2, "visibility", "[vehicleui][petbattle] hide; show")
 
 --[[ Bottom Right bar ]]
 
@@ -68,7 +68,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar3, "visibility", "[vehicleui] hide;show")
+RegisterStateDriver(bar3, "visibility", "[vehicleui][petbattle] hide; show")
 
 bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
@@ -95,7 +95,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar4, "visibility", "[vehicleui] hide;show")
+RegisterStateDriver(bar4, "visibility", "[vehicleui][petbattle] hide; show")
 
 --[[ Right bar 2 ]]
 
@@ -118,7 +118,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar5, "visibility", "[vehicleui] hide;show")
+RegisterStateDriver(bar5, "visibility", "[vehicleui][petbattle] hide; show")
 
 -- [[ Override bar ]]
 
@@ -154,8 +154,7 @@ for i = 1, numOverride do
 	end	
 end
 
-RegisterStateDriver(override, "visibility", "[vehicleui] show;hide")
-RegisterStateDriver(OverrideActionBar, "visibility", "[vehicleui] show;hide")
+RegisterStateDriver(override, "visibility", "[overridebar] show; hide")
 
 -- [[ Hide stuff ]]
 
@@ -257,7 +256,7 @@ if C.actionbars.stancebar == true then
 		end
 	end
 	
-	RegisterStateDriver(stancebar, "visibility", "[vehicleui] hide; show")
+	RegisterStateDriver(stancebar, "visibility", "[vehicleui][petbattle] hide; show")
 end
 
 --[[ Right bars on mouseover ]]
@@ -306,7 +305,7 @@ ExtraActionBarFrame.ignoreFramePositionManager = true
 
 ExtraActionButton1:SetSize(39, 39)
 
-RegisterStateDriver(barextra, "visibility", "[vehicleui] hide; show")
+RegisterStateDriver(barextra, "visibility", "[extrabar] show; hide")
 
 -- [[ Leave vehicle ]]
 

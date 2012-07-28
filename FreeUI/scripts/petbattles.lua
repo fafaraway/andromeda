@@ -224,45 +224,13 @@ end)
 
 -- [[ Action bar ]]
 
-local alphaFrames = {FreeUI_MainMenuBar, FreeUI_MultiBarBottomLeft, FreeUI_MultiBarBottomRight}
-local disableFrames = {oUF_FreePlayer, oUF_FreeTarget}
 
-local bar = CreateFrame("Frame", "FreeUIPetBattleActionBar", UIParent)
+local bar = CreateFrame("Frame", "FreeUIPetBattleActionBar", UIParent, "SecureHandlerStateTemplate")
 bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 bar:SetSize(6 * 27, 26)
 bar:SetFrameStrata("HIGH")
 bar:EnableMouse(true)
-bar:RegisterEvent("PET_BATTLE_OPENING_DONE")
-bar:RegisterEvent("PET_BATTLE_CLOSE")
-bar:Hide()
-
-bar:SetScript("OnEvent", function(self, event)
-	if event == "PET_BATTLE_OPENING_DONE" then
-		for _, frame in pairs(disableFrames) do
-			frame:Disable()
-		end
-		
-		self:Show()
-	else
-		self:Hide()
-		
-		for _, frame in pairs(disableFrames) do
-			frame:Enable()
-		end
-	end
-end)
-
-bar:SetScript("OnShow", function()
-	for _, frame in pairs(alphaFrames) do
-		frame:SetAlpha(0)
-	end	
-end)
-
-bar:SetScript("OnHide", function()
-	for _, frame in pairs(alphaFrames) do
-		frame:SetAlpha(1)
-	end	
-end)
+RegisterStateDriver(bar, "visibility", "[petbattle] show; hide")
 
 bf.RightEndCap:Hide()
 bf.LeftEndCap:Hide()
