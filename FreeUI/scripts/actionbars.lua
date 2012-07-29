@@ -14,7 +14,6 @@ MainMenuBarArtFrame:EnableMouse(false)
 for i = 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["ActionButton"..i]
 	button:ClearAllPoints()
-	button:SetParent(bar1)
 	button:SetSize(26, 26)
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", bar1, "BOTTOMLEFT", 0, 0)
@@ -33,6 +32,7 @@ bar2:SetWidth(323)
 bar2:SetHeight(26)
 
 MultiBarBottomLeft:SetParent(bar2)
+MultiBarBottomLeft:EnableMouse(false)
 
 for i=1, 12 do
 	local button = _G["MultiBarBottomLeftButton"..i]
@@ -55,6 +55,7 @@ bar3:SetWidth(323)
 bar3:SetHeight(26)
 
 MultiBarBottomRight:SetParent(bar3)
+MultiBarBottomRight:EnableMouse(false)
 
 for i=1, 12 do
 	local button = _G["MultiBarBottomRightButton"..i]
@@ -82,6 +83,7 @@ bar4:SetWidth(26)
 bar4:SetPoint("RIGHT", -50, 0)
 
 MultiBarRight:SetParent(bar4)
+MultiBarRight:EnableMouse(false)
 
 for i=1, 12 do
 	local button = _G["MultiBarRightButton"..i]
@@ -105,6 +107,7 @@ bar5:SetWidth(26)
 bar5:SetPoint("RIGHT", -77, 0)
 
 MultiBarLeft:SetParent(bar5)
+MultiBarLeft:EnableMouse(false)
   
 for i=1, 12 do
 	local button = _G["MultiBarLeftButton"..i]
