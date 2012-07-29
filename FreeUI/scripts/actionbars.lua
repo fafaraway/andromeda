@@ -41,7 +41,7 @@ for i=1, 12 do
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", bar2, "BOTTOMLEFT", 0, 0)
 	else
-		local previous = _G["MultiBarBottomLeftButton"..i-1]  
+		local previous = _G["MultiBarBottomLeftButton"..i-1]
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
@@ -64,7 +64,7 @@ for i=1, 12 do
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", bar3, "BOTTOMLEFT", 0, 0)
 	else
-		local previous = _G["MultiBarBottomRightButton"..i-1]  
+		local previous = _G["MultiBarBottomRightButton"..i-1]
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
@@ -108,7 +108,7 @@ bar5:SetPoint("RIGHT", -77, 0)
 
 MultiBarLeft:SetParent(bar5)
 MultiBarLeft:EnableMouse(false)
-  
+
 for i=1, 12 do
 	local button = _G["MultiBarLeftButton"..i]
 	button:ClearAllPoints()
@@ -154,10 +154,11 @@ for i = 1, numOverride do
 	else
 		local previous = _G["OverrideActionBarButton"..i-1]
 		bu:SetPoint("LEFT", previous, "RIGHT", 1, 0)
-	end	
+	end
 end
 
-RegisterStateDriver(override, "visibility", "[overridebar] show; hide")
+RegisterStateDriver(override, "visibility", "[vehicleui] show: hide")
+RegisterStateDriver(OverrideActionBar, "visibility", "[vehicleui] show; hide")
 
 -- [[ Hide stuff ]]
 
@@ -224,14 +225,10 @@ if C.actionbars.stancebar == true then
 	stancebar:SetWidth(num * 27 - 1)
 	stancebar:SetHeight(26)
 	stancebar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
-	
+
 	StanceBarFrame:SetParent(stancebar)
 	StanceBarFrame:EnableMouse(false)
-	
-	StanceBarFrame:ClearAllPoints()
-	StanceBarFrame:SetPoint("BOTTOMLEFT", stancebar, -12, -3)
-	StanceBarFrame.ignoreFramePositionManager = true
-	
+
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
 		button:SetSize(26, 26)
@@ -243,10 +240,10 @@ if C.actionbars.stancebar == true then
 			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 		end
 	end
-	
+
 	PossessBarFrame:SetParent(stancebar)
 	PossessBarFrame:EnableMouse(false)
-	
+
 	for i = 1, num2 do
 		local button = _G["PossessButton"..i]
 		button:SetSize(26, 26)
@@ -258,7 +255,7 @@ if C.actionbars.stancebar == true then
 			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 		end
 	end
-	
+
 	RegisterStateDriver(stancebar, "visibility", "[vehicleui][petbattle] hide; show")
 end
 
@@ -327,5 +324,5 @@ local text = F.CreateFS(leavebu, 8)
 text:SetText("x")
 text:SetPoint("CENTER", 1, 1)
 
-RegisterStateDriver(leavebu, "visibility", "[vehicleui] hide; [@vehicle,exists] show; hide")
-RegisterStateDriver(leave, "visibility", "[vehicleui] hide; show")
+RegisterStateDriver(leavebu, "visibility", "[petbattle][vehicleui] hide; [@vehicle,exists][possessbar] show; hide")
+RegisterStateDriver(leave, "visibility", "[vehicleui][petbattle] hide; show")
