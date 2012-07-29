@@ -960,13 +960,12 @@ local UnitSpecific = {
 			self.Harmony = glow
 			glow.Override = UpdateOrbs
 		elseif class == "PALADIN" and C.classmod.paladin == true then
-			local maxHolyPower = UnitPowerMax(PaladinPowerBar:GetParent().unit, SPELL_POWER_HOLY_POWER)
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
 				
 				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
 				
-				if(num == maxHolyPower) then
+				if(num == UnitPowerMax("player", SPELL_POWER_HOLY_POWER)) then
 					self.glow:SetAlpha(1)
 					F.CreatePulse(self.glow)
 					self.count:SetText(num)
