@@ -5294,10 +5294,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["PlayerTalentFrameTalentsTalentRow"..i.."Bg"]:Hide()
 			row:DisableDrawLayer("BORDER")
 
-			row.TopLine:SetPoint("TOP", 0, 4)
-			row.TopLine:SetTexture(r, g, b, .3)
-			row.BottomLine:SetPoint("BOTTOM", 0, -4)
-			row.BottomLine:SetTexture(r, g, b, .3)
+			row.TopLine:SetDesaturated(true)
+			row.TopLine:SetVertexColor(r, g, b)
+			row.BottomLine:SetDesaturated(true)
+			row.BottomLine:SetVertexColor(r, g, b)
 
 			for j = 1, NUM_TALENT_COLUMNS do
 				local bu = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j]
