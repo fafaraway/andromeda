@@ -39,10 +39,10 @@ C["unitframes"] = {
 	["pvp"] = true, 					-- show pvp icon on player frame
 
 	["auto"] = true,				-- adjust unitframe position based on screen height, ignores user settings
-	
+
 	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105}, -- only applies when 'auto' is false
 	["target"] = {"TOP", UIParent, "CENTER", 0, -225}, -- only applies when 'auto' is false
-	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105}, 
+	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105},
 	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled and when 'auto' is false
 	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled and when 'auto' is false
 
@@ -180,7 +180,7 @@ C["debuffFilter"] = {
 	[91565] = true, -- Faerie Fire
 	[95466] = true, -- Corrosive Spit
 	[95467] = true, -- Tear Armor
-	
+
 	[6343] = true, -- Thunder Clap
 	[54404] = true, -- Dust Cloud
 	[90315] = true, -- Tailspin
@@ -190,7 +190,7 @@ C["debuffFilter"] = {
 	[53696] = true, -- Judgements of the Just
 	[51693] = true, -- Waylay
 	[55095] = true, -- Frost Fever
-	
+
 	[702] = true, -- Curse of Weakness
 	[1160] = true, -- Demoralizing Shout
 	[99] = true, -- Demoralizing Roar
@@ -198,7 +198,7 @@ C["debuffFilter"] = {
 	[24423] = true, -- Demoralizing Screech
 	[81132] = true, -- Scarlet Fever
 	[26017] = true, -- Vindication
-	
+
 	[118] = true, -- Polymorph (sheep)
 	[61305] = true, -- Polymorph (black cat)
 	[28272] = true, -- Polymorph (pig)
@@ -341,6 +341,11 @@ C["myBuffs"] = {
 	[974] = true, -- Earth Shield
 
 	[53563] = true, -- Beacon of Light
+
+	[119611] = true, -- Renewing Mist
+	[116849] = true, -- Life Cocoon
+	[124682] = true, -- Enveloping Mist
+	[124081] = true, -- Zen Sphere
 }
 
 -- Buffs cast by anyone that healers want to see on raid frames
