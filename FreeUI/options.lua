@@ -337,7 +337,6 @@ C["myBuffs"] = {
 	[17] = true, -- Power Word: Shield
 
 	[61295] = true, -- Riptide
-	[16236] = true, -- Ancestral Fortitude
 	[974] = true, -- Earth Shield
 
 	[53563] = true, -- Beacon of Light
