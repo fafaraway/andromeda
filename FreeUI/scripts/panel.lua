@@ -6,15 +6,15 @@ bottompanel:SetHeight(13)
 bottompanel:SetPoint("BOTTOMLEFT", -1, -1)
 bottompanel:SetPoint("BOTTOMRIGHT", 1, -1)
 bottompanel:SetBackdrop({
-	edgeFile = C.media.backdrop, 
-	edgeSize = 1, 
+	edgeFile = C.media.backdrop,
+	edgeSize = 1,
 })
 bottompanel:SetBackdropBorderColor(0, 0, 0)
 
 local function onEvent(event)
-	if event=="PLAYER_REGEN_DISABLED" then
+	if event == "PLAYER_REGEN_DISABLED" then
 		bottompanel:SetBackdropBorderColor(1, 0, 0)
-	elseif event=="PLAYER_REGEN_ENABLED" then
+	else
 		bottompanel:SetBackdropBorderColor(0, 0, 0)
 	end
 end
