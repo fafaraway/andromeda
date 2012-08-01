@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-if not IsAddOnLoaded("FreeUI_OptionsUI") then return end
+if not IsAddOnLoaded("FreeUI_Options") then return end
 
 local realm = GetCVar("realmName")
 local name = UnitName("player")
