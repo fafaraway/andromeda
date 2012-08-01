@@ -1685,6 +1685,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					local ic = _G["AchievementAlertFrame"..i.."Icon"]
 					local texture = _G["AchievementAlertFrame"..i.."IconTexture"]
+					local guildName = _G["AchievementAlertFrame"..i.."GuildName"]
 
 					ic:ClearAllPoints()
 					ic:SetPoint("LEFT", frame, "LEFT", -26, 0)
@@ -1703,8 +1704,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 						F.CreateBG(texture)
 
-						_G["AchievementAlertFrame"..i.."GuildBanner"]:Hide()
-						_G["AchievementAlertFrame"..i.."GuildBorder"]:Hide()
+						_G["AchievementAlertFrame"..i.."Background"]:Hide()
+						_G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()
+						_G["AchievementAlertFrame"..i.."GuildBanner"]:SetTexture("")
+						_G["AchievementAlertFrame"..i.."GuildBorder"]:SetTexture("")
+						_G["AchievementAlertFrame"..i.."OldAchievement"]:SetTexture("")
+
+						guildName:ClearAllPoints()
+						guildName:SetPoint("TOPLEFT", 50, -14)
+						guildName:SetPoint("TOPRIGHT", -50, -14)
+
+						_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
+						_G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
 					end
 
 					frame.glow:Hide()
@@ -1714,12 +1725,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					texture:SetTexCoord(.08, .92, .08, .92)
 
-					_G["AchievementAlertFrame"..i.."Background"]:SetTexture(nil)
-
-					_G["AchievementAlertFrame"..i.."Unlocked"]:SetTextColor(1, 1, 1)
-					_G["AchievementAlertFrame"..i.."Unlocked"]:SetShadowOffset(1, -1)
-
-					_G["AchievementAlertFrame"..i.."IconOverlay"]:Hide()
+					if guildName:IsShown() then
+						_G["AchievementAlertFrame"..i.."Shield"]:SetPoint("TOPRIGHT", -10, -22)
+					end
 				end
 			end
 		end)
