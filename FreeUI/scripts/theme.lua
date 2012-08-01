@@ -675,13 +675,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", ReskinRewards)
 
-		for i = 1, NUM_LFD_CHOICE_BUTTONS do
-			F.ReskinCheck(_G["LFDQueueFrameSpecificListButton"..i].enableButton)
-			F.ReskinExpandOrCollapse(_G["LFDQueueFrameSpecificListButton"..i].expandOrCollapseButton)
-		end
+		hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button, dungeonID)
+			if not button.expandOrCollapseButton.plus then
+				F.ReskinCheck(button.enableButton)
+				F.ReskinExpandOrCollapse(button.expandOrCollapseButton)
+			end
+			if LFGCollapseList[dungeonID] then
+				button.expandOrCollapseButton.plus:Show()
+			else
+				button.expandOrCollapseButton.plus:Hide()
+			end
 
-		F.ReskinCheck(ScenarioQueueFrameSpecificButton1.enableButton)
-		F.ReskinExpandOrCollapse(ScenarioQueueFrameSpecificButton1.expandOrCollapseButton)
+			button.enableButton:GetCheckedTexture():SetDesaturated(true)
+		end)
 
 		for i = 1, NUM_LFR_CHOICE_BUTTONS do
 			local bu = _G["LFRQueueFrameSpecificListButton"..i].enableButton
@@ -692,21 +698,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinExpandOrCollapse(_G["LFRQueueFrameSpecificListButton"..i].expandOrCollapseButton)
 		end
 
-		hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button, dungeonID)
-			local isCollapsed = LFGCollapseList[dungeonID]
-
-			if LFGCollapseList[dungeonID] then
-				button.expandOrCollapseButton.plus:Show()
-			else
-				button.expandOrCollapseButton.plus:Hide()
-			end
-
-			button.enableButton:GetCheckedTexture():SetDesaturated(true)
-		end)
-
 		hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
-			local isCollapsed = LFGCollapseList[dungeonID]
-			if isCollapsed then
+			if LFGCollapseList[dungeonID] then
 				button.expandOrCollapseButton.plus:Show()
 			else
 				button.expandOrCollapseButton.plus:Hide()
