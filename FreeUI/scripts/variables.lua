@@ -10,7 +10,7 @@ end
 local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
-	
+
 	if FreeUIConfig.layout == nil then FreeUIConfig.layout = 1 end
 
 	if FreeUIGlobalConfig[realm] == nil then FreeUIGlobalConfig[realm] = {} end
@@ -20,7 +20,7 @@ addonLoaded = function(_, addon)
 
 	if FreeUIGlobalConfig[realm].class == nil then FreeUIGlobalConfig[realm].class = {} end
 	FreeUIGlobalConfig[realm].class[name] = select(2, UnitClass("player"))
-	
+
 	updateCurrency()
 	F.RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateCurrency)
 	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
@@ -36,5 +36,4 @@ end
 F.RegisterEvent("PLAYER_MONEY", updateMoney)
 F.RegisterEvent("PLAYER_ENTERING_WORLD", updateMoney)
 
-SetCVar("consolidateBuffs", 0)
 SetCVar("enableCombatText", 0)
