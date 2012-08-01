@@ -46,11 +46,11 @@ for index, unit in pairs(units) do
 	unit.HealthBarBG:Hide()
 	unit.HealthBarFrame:Hide()
 	unit.LevelUnderlay:Hide()
-	unit.SpeedUnderlay:SetAlpha(0)	
+	unit.SpeedUnderlay:SetAlpha(0)
 	unit.PetType:Hide()
-	
+
 	unit.ActualHealthBar:SetTexture(C.media.texture)
-	
+
 	unit.Border:SetTexture(C.media.checked)
 	unit.Border:SetTexCoord(0, 1, 0, 1)
 	unit.Border:SetAllPoints(unit.Icon)
@@ -58,30 +58,30 @@ for index, unit in pairs(units) do
 	unit.Border2:SetVertexColor(.89, .88, .06)
 	unit.Border2:SetTexCoord(0, 1, 0, 1)
 	unit.Border2:SetAllPoints(unit.Icon)
-	
+
 	unit.Level:SetFont(C.media.font2, 16)
 	unit.Level:SetTextColor(1, 1, 1)
-	
+
 	local bg = CreateFrame("Frame", nil, unit)
 	bg:SetWidth(unit.healthBarWidth)
 	bg:SetFrameLevel(unit:GetFrameLevel()-1)
 	F.CreateBD(bg)
-	
+
 	unit.HealthText:SetPoint("CENTER", bg, "CENTER")
-	
+
 	unit.PetTypeString = unit:CreateFontString(nil, "ARTWORK")
 	unit.PetTypeString:SetFontObject(GameFontNormalLarge)
-	
+
 	if testmode then
 		unit.Name:SetText("Lol pets")
 		unit.HealthText:SetText("140/200")
 		unit.Level:SetText("5")
 		unit.PetTypeString:SetText("Martian")
 	end
-	
+
 	unit.Name:ClearAllPoints()
 	unit.ActualHealthBar:ClearAllPoints()
-	
+
 	if index == 1 then
 		bg:SetPoint("TOPLEFT", unit.ActualHealthBar, "TOPLEFT", -1, 1)
 		bg:SetPoint("BOTTOMLEFT", unit.ActualHealthBar, "BOTTOMLEFT", -1, -1)
@@ -101,7 +101,7 @@ for index, unit in pairs(units) do
 		unit.PetTypeString:SetPoint("BOTTOMLEFT", bg, "TOPLEFT", 0, 4)
 		unit.PetTypeString:SetJustifyH("LEFT")
 	end
-	
+
 	F.CreateBG(unit.Icon)
 end
 
@@ -114,16 +114,16 @@ local extraUnits = {
 
 for index, unit in pairs(extraUnits) do
 	if testmode then unit:Show() end
-	
+
 	unit.healthBarWidth = 36
-	
+
 	unit:SetSize(36, 36)
-	
+
 	unit.HealthBarBG:SetAlpha(0)
 	unit.BorderAlive:SetAlpha(0)
 	unit.BorderDead:SetAlpha(0)
 	unit.HealthDivider:SetAlpha(0)
-	
+
 	unit.ActualHealthBar:ClearAllPoints()
 	unit.ActualHealthBar:SetPoint("BOTTOM", 0, -1)
 
@@ -142,16 +142,16 @@ end
 
 for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	local unit = bf.PetSelectionFrame["Pet"..i]
-	
+
 	unit.HealthBarBG:Hide()
 	unit.Framing:Hide()
 	unit.HealthDivider:Hide()
-	
+
 	unit.Icon:SetTexCoord(.08, .92, .08, .92)
 	F.CreateBG(unit.Icon)
-	
+
 	unit.ActualHealthBar:SetTexture(C.media.backdrop)
-	
+
 	F.CreateBD(unit)
 end
 
@@ -167,9 +167,9 @@ end)
 
 hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
 	local petOwner = self.petOwner
-	
+
 	if (not petOwner) or self.petIndex > C_PetBattles.GetNumPets(petOwner) then return end
-	
+
 	if self.Icon then
 		if petOwner == LE_BATTLE_PET_ALLY then
 			self.Icon:SetTexCoord(.92, .08, .08, .92)
@@ -196,7 +196,7 @@ hooksecurefunc("PetBattleAuraHolder_Update", function(self)
 			local frame = self.frames[nextFrame]
 
 			frame.DebuffBorder:Hide()
-			
+
 			if not frame.reskinned then
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.bg = F.CreateBG(frame.Icon)
@@ -216,7 +216,7 @@ hooksecurefunc("PetBattleAuraHolder_Update", function(self)
 			else
 				frame.bg:SetVertexColor(1, 0, 0)
 			end
-			
+
 			nextFrame = nextFrame + 1
 		end
 	end
@@ -228,8 +228,6 @@ end)
 local bar = CreateFrame("Frame", "FreeUIPetBattleActionBar", UIParent, "SecureHandlerStateTemplate")
 bar:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 bar:SetSize(6 * 27, 26)
-bar:SetFrameStrata("HIGH")
-bar:EnableMouse(true)
 RegisterStateDriver(bar, "visibility", "[petbattle] show; hide")
 
 bf.RightEndCap:Hide()
@@ -254,6 +252,9 @@ bf.TurnTimer.SkipButton:SetPoint("BOTTOM", bar, "TOP", 0, 2)
 bf.TurnTimer.SkipButton.ClearAllPoints = F.dummy
 bf.TurnTimer.SkipButton.SetPoint = F.dummy
 F.Reskin(bf.TurnTimer.SkipButton)
+
+bf.TurnTimer.Bar:ClearAllPoints()
+bf.TurnTimer.Bar:SetPoint("LEFT")
 
 bf.TurnTimer:SetParent(bar)
 bf.TurnTimer:SetSize(bf.TurnTimer.SkipButton:GetWidth() - 2, bf.TurnTimer.SkipButton:GetHeight())
@@ -285,7 +286,7 @@ local r, g, b = unpack(C.class)
 
 local function stylePetBattleButton(bu)
 	if bu.reskinned then return end
-	
+
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetHighlightTexture("")
@@ -299,19 +300,19 @@ local function stylePetBattleButton(bu)
 	})
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 
-	bu.Icon:SetTexCoord(.08, .92, .08, .92)	
+	bu.Icon:SetTexCoord(.08, .92, .08, .92)
 	bu.Icon:SetPoint("TOPLEFT", bu, 1, -1)
 	bu.Icon:SetPoint("BOTTOMRIGHT", bu, -1, 1)
-	
+
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
-	
+
 	bu.SelectedHighlight:SetTexture(r, g, b, .2)
 	bu.SelectedHighlight:SetAllPoints()
-	
+
 	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	bu.HotKey:SetPoint("TOP", 1, -2)
-	
+
 	bu.reskinned = true
 end
 
@@ -334,7 +335,7 @@ hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
 	stylePetBattleButton(bf.SwitchPetButton)
 	stylePetBattleButton(bf.CatchButton)
 	stylePetBattleButton(bf.ForfeitButton)
-	
+
 	if first then
 		first = false
 		bf.SwitchPetButton:SetScript("OnClick", function()
