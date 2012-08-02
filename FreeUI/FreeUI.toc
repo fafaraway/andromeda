@@ -2,19 +2,20 @@
 ## Title: FreeUI
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Freethinker
-## Version: 5.0 beta 12
+## Version: 5.0 beta 13
 ## RequiredDeps: Blizzard_CombatText
 ## OptionalDeps: Blizzard_TimeManager, Clique, FreeUI_Options, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 
 core\core.lua
-core\api.lua
-core\gui.lua
-core\slash.lua
 
 options.lua
 profiles.lua
+
+core\api.lua
+core\gui.lua
+core\slash.lua
 
 oUF\oUF.xml
 
