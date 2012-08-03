@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 local IDs = {}
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand", "Ranged"}) do 	IDs[slot] = GetInventorySlotInfo(slot .. "Slot")
+for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do 	IDs[slot] = GetInventorySlotInfo(slot .. "Slot")
 end
 
 local cost

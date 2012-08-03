@@ -56,7 +56,7 @@ end)
 local slots = {
 	"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 	"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
-	"SecondaryHand", "Ranged", "Tabard",
+	"SecondaryHand", "Tabard",
 }
 
 -- Character Frame
@@ -105,7 +105,7 @@ local updateInspect = function()
 			local slotFrame = _G["Inspect"..slotName.."Slot"]
 			local slotLink = GetInventoryItemLink(unit, slotID)
 			local slotTexture = GetInventoryItemTexture(unit, slotID)
-			
+
 			if slotTexture and not slotLink then
 				GetItemInfo(GetInventoryItemID(unit, slotID))
 				missing[key] = slotName
@@ -127,7 +127,7 @@ g:SetScript("OnEvent", function(self, event, addon)
 
 		g:RegisterEvent("INSPECT_READY")
 		g:RegisterEvent("GET_ITEM_INFO_RECEIVED")
-		
+
 		g:UnregisterEvent("ADDON_LOADED")
 	elseif event == "INSPECT_READY" then
 		updateInspect()
