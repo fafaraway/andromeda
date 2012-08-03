@@ -4602,7 +4602,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		InspectPVPFrameBG:SetAlpha(0)
 		InspectPVPFrameBottom:SetAlpha(0)
 		select(9, InspectMainHandSlot:GetRegions()):Hide()
-		select(9, InspectRangedSlot:GetRegions()):Hide()
 
 		for i = 1, 4 do
 			local tab = _G["InspectFrameTab"..i]
@@ -4615,7 +4614,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local slots = {
 			"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 			"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
-			"SecondaryHand", "Ranged", "Tabard",
+			"SecondaryHand", "Tabard",
 		}
 
 		for i = 1, #slots do
@@ -4646,7 +4645,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TransmogrifyFrameButtonFrameMoneyRight:Hide()
 		TransmogrifyFrameButtonFrameMoneyMiddle:Hide()
 
-		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "MainHand", "SecondaryHand", "Ranged"}
+		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "MainHand", "SecondaryHand"}
 
 		for i = 1, #slots do
 			local slot = _G["TransmogrifyFrame"..slots[i].."Slot"]
