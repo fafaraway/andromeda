@@ -1790,7 +1790,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				if not frame.bg then
 					frame.bg = CreateFrame("Frame", nil, frame)
 					frame.bg:SetPoint("TOPLEFT", ChallengeModeAlertFrame1DungeonTexture, -12, 12)
-					frame.bg:SetPoint("BOTTOMRIGHT", ChallengeModeAlertFrame1DungeonTexture, 244, -12)
+					frame.bg:SetPoint("BOTTOMRIGHT", ChallengeModeAlertFrame1DungeonTexture, 243, -12)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					F.CreateBD(frame.bg)
 
@@ -1858,21 +1858,23 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Loot won alert
 
-		local function fixBg(f)
-			if f:GetObjectType() == "AnimationGroup" then
-				f = f:GetParent()
-			end
-			f:SetBackdropColor(0, 0, 0, .5)
+		-- I still don't know why I can't parent bg to frame
+		local function showHideBg(self)
+			self.bg:SetShown(self:IsShown())
 		end
 
 		hooksecurefunc("LootWonAlertFrame_ShowAlert", function()
 			for i = 1, #LOOT_WON_ALERT_FRAMES do
 				local frame = LOOT_WON_ALERT_FRAMES[i]
-				if not frame.reskinned then
-					F.CreateBD(frame)
+				if not frame.bg then
+					frame.bg = CreateFrame("Frame", nil, UIParent)
+					frame.bg:SetPoint("TOPLEFT", frame, 10, -10)
+					frame.bg:SetPoint("BOTTOMRIGHT", frame, -10, 10)
+					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+					F.CreateBD(frame.bg)
 
-					frame:HookScript("OnShow", fixBg)
-					frame:HookScript("OnEnter", fixBg)
+					frame:HookScript("OnShow", showHideBg)
+					frame:HookScript("OnHide", showHideBg)
 
 					frame.Background:Hide()
 					frame.IconBorder:Hide()
@@ -1881,8 +1883,38 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame.Icon:SetTexCoord(.08, .92, .08, .92)
 					F.CreateBG(frame.Icon)
+				end
+			end
+		end)
 
-					frame.reskinned = true
+		-- Criteria alert
+
+		hooksecurefunc("CriteriaAlertFrame_ShowAlert", function()
+			for i = 1, MAX_ACHIEVEMENT_ALERTS do
+				local frame = _G["CriteriaAlertFrame"..i]
+				if frame and not frame.bg then
+					local icon = _G["CriteriaAlertFrame"..i.."IconTexture"]
+
+					frame.bg = CreateFrame("Frame", nil, UIParent)
+					frame.bg:SetPoint("TOPLEFT", icon, -10, 12)
+					frame.bg:SetPoint("BOTTOMRIGHT", icon, 240, -12)
+					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+					F.CreateBD(frame.bg)
+
+					frame:SetScript("OnShow", showHideBg)
+					frame:SetScript("OnHide", showHideBg)
+
+					_G["CriteriaAlertFrame"..i.."Background"]:Hide()
+					_G["CriteriaAlertFrame"..i.."IconOverlay"]:Hide()
+					frame.glow:Hide()
+					frame.glow.Show = F.dummy
+					frame.shine:Hide()
+					frame.shine.Show = F.dummy
+
+					_G["CriteriaAlertFrame"..i.."Unlocked"]:SetTextColor(.9, .9, .9)
+
+					icon:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(icon)
 				end
 			end
 		end)
