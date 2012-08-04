@@ -3183,6 +3183,53 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			bu.icon.texture:SetTexCoord(.08, .92, .08, .92)
 			F.CreateBG(bu.icon.texture)
+
+			-- can't get a backdrop frame to appear behind the checked texture for some reason
+
+			local ch = bu.tracked
+
+			ch:SetNormalTexture("")
+			ch:SetPushedTexture("")
+			ch:SetHighlightTexture(C.media.texture)
+
+			local hl = ch:GetHighlightTexture()
+			hl:SetPoint("TOPLEFT", 4, -4)
+			hl:SetPoint("BOTTOMRIGHT", -4, 4)
+			hl:SetVertexColor(r, g, b, .2)
+
+			local check = ch:GetCheckedTexture()
+			check:SetDesaturated(true)
+			check:SetVertexColor(r, g, b)
+
+			local tex = ch:CreateTexture(nil, "BACKGROUND")
+			tex:SetPoint("TOPLEFT", 3, -3)
+			tex:SetPoint("BOTTOMRIGHT", -3, 3)
+			tex:SetTexture(C.media.backdrop)
+			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+
+			local left = ch:CreateTexture(nil, "BACKGROUND")
+			left:SetWidth(1)
+			left:SetTexture(0, 0, 0)
+			left:SetPoint("TOPLEFT", tex)
+			left:SetPoint("BOTTOMLEFT", tex)
+
+			local right = ch:CreateTexture(nil, "BACKGROUND")
+			right:SetWidth(1)
+			right:SetTexture(0, 0, 0)
+			right:SetPoint("TOPRIGHT", tex)
+			right:SetPoint("BOTTOMRIGHT", tex)
+
+			local top = ch:CreateTexture(nil, "BACKGROUND")
+			top:SetHeight(1)
+			top:SetTexture(0, 0, 0)
+			top:SetPoint("TOPLEFT", tex)
+			top:SetPoint("TOPRIGHT", tex)
+
+			local bottom = ch:CreateTexture(nil, "BACKGROUND")
+			bottom:SetHeight(1)
+			bottom:SetTexture(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", tex)
+			bottom:SetPoint("BOTTOMRIGHT", tex)
 		end
 
 		hooksecurefunc("AchievementButton_DisplayAchievement", function(button, category, achievement)
