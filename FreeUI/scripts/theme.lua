@@ -202,7 +202,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		local createBackdrop = function(parent, texture, offset)
+		local createBackdrop = function(parent, texture)
 			local bg = parent:CreateTexture(nil, "BACKGROUND")
 			bg:SetTexture(0, 0, 0, .5)
 			bg:SetPoint("CENTER", texture)
