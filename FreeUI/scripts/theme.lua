@@ -257,6 +257,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("ToggleDropDownMenu", function(level, _, dropDownFrame, anchorName)
 			if not level then level = 1 end
 
+			local uiScale = UIParent:GetScale()
+
 			local listFrame = _G["DropDownList"..level]
 
 			if level == 1 then
@@ -266,7 +268,30 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					local point = dropDownFrame.point and dropDownFrame.point or "TOPLEFT"
 					local relativeTo = dropDownFrame.relativeTo and dropDownFrame.relativeTo or dropDownFrame
 					local relativePoint = dropDownFrame.relativePoint and dropDownFrame.relativePoint or "BOTTOMLEFT"
+
+					listFrame:ClearAllPoints()
 					listFrame:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
+
+					-- make sure it doesn't go off the screen
+					local offLeft = listFrame:GetLeft()/uiScale
+					local offRight = (GetScreenWidth() - listFrame:GetRight())/uiScale
+					local offTop = (GetScreenHeight() - listFrame:GetTop())/uiScale
+					local offBottom = listFrame:GetBottom()/uiScale
+
+					local xAddOffset, yAddOffset = 0, 0
+					if offLeft < 0 then
+						xAddOffset = -offLeft
+					elseif offRight < 0 then
+						xAddOffset = offRight
+					end
+
+					if offTop < 0 then
+						yAddOffset = offTop
+					elseif offBottom < 0 then
+						yAddOffset = -offBottom
+					end
+					listFrame:ClearAllPoints()
+					listFrame:SetPoint(point, relativeTo, relativePoint, xOffset + xAddOffset, yOffset + yAddOffset)
 				elseif anchorName ~= "cursor" then
 					-- this part might be a bit unreliable
 					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
@@ -275,11 +300,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					end
 				end
 			else
-				local point, anchor, relPoint = listFrame:GetPoint()
+				local point, anchor, relPoint, _, y = listFrame:GetPoint()
 				if point:find("RIGHT") then
-					listFrame:SetPoint(point, anchor, relPoint, -14, 0)
+					listFrame:SetPoint(point, anchor, relPoint, -14, y)
 				else
-					listFrame:SetPoint(point, anchor, relPoint, 9, 0)
+					listFrame:SetPoint(point, anchor, relPoint, 9, y)
 				end
 			end
 
