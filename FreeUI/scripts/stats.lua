@@ -28,7 +28,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	end
 
 	if last >= 1 then
-		text:SetText("|cffffffff"..ceil(GetFramerate()).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..date("%H:%M"))
+		text:SetText("|cffffffff"..floor(GetFramerate() + .5).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..GameTime_GetTime(false))
 		last = 0
 	end
 end)
