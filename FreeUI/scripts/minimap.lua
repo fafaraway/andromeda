@@ -102,7 +102,6 @@ Minimap:SetArchBlobRingScalar(0)
 Minimap:SetQuestBlobRingScalar(0)
 
 GuildInstanceDifficulty:SetAlpha(0)
-TimeManagerClockButton:Hide()
 
 GameTimeFrame:ClearAllPoints()
 GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -1 / Scale, -1 / Scale)

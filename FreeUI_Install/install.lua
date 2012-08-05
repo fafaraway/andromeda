@@ -167,7 +167,7 @@ local function SetupChat()
 		"CHANNEL9",
 		"CHANNEL10",
 	}
-	
+
 	for _, channel in next, channels do
 		ToggleChatColorNamesByClassGroup(true, channel)
 	end
@@ -396,7 +396,7 @@ end
 local tut4 = function()
 	sb:SetValue(400)
 	header:SetText("4. Features (2)")
-	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail. Below it is a Tol Barad timer which is enabled by default for level 85 characters.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
+	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail. Below it is a Tol Barad timer which is enabled by default for level 85 characters.\n\nTo show the time manager and stopwatch, click the info text at the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
 
 	sbt:SetText("4/6")
 
@@ -439,7 +439,7 @@ local tut1 = function()
 
 	option2:SetScript("OnClick", tut2)
 end
-	
+
 
 header:SetText("Hello")
 body:SetText("Thank you for choosing FreeUI!\n\nIn just a moment, you can get started. All that's needed is for the correct settings to be applied. Don't worry, none of your personal preferences will be changed.\n\nYou can also take a brief tutorial on some of the features of FreeUI, which is recommended if you're a new user.\n\nPress the 'Tutorial' button to do so now, or press 'Install' to go straight to the setup.")
