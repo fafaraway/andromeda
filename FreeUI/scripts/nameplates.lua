@@ -19,25 +19,25 @@ local CreateBD = function(parent, offset)
 	left:SetTexture(0, 0, 0)
 	left:SetPoint("TOPLEFT", -offset, offset)
 	left:SetPoint("BOTTOMLEFT", -offset, -offset)
-	
+
 	local right = parent:CreateTexture(nil, "BACKGROUND")
 	right:SetWidth(offset)
 	right:SetTexture(0, 0, 0)
 	right:SetPoint("TOPRIGHT", offset, offset)
 	right:SetPoint("BOTTOMRIGHT", offset, -offset)
-	
+
 	local top = parent:CreateTexture(nil, "BACKGROUND")
 	top:SetHeight(offset)
 	top:SetTexture(0, 0, 0)
 	top:SetPoint("TOPLEFT", -offset, offset)
 	top:SetPoint("TOPRIGHT", offset, offset)
-	
+
 	local bottom = parent:CreateTexture(nil, "BACKGROUND")
 	bottom:SetHeight(offset)
 	bottom:SetTexture(0, 0, 0)
 	bottom:SetPoint("BOTTOMLEFT", -offset, -offset)
 	bottom:SetPoint("BOTTOMRIGHT", offset, -offset)
-	
+
 	local bg = parent:CreateTexture(nil, "BACKGROUND")
 	bg:SetTexture(0, 0, 0, .5)
 	bg:SetPoint("TOPLEFT")
@@ -59,11 +59,6 @@ local CreateLine = function(parent, offset, w, h, p1, x1, y1, p2, x2, y2)
 	line:SetPoint(p1, x1, y1)
 	line:SetPoint(p2, x2, y2)
 	return line
-end
-
-local function IsValidFrame(frame)
-	local name = frame:GetName()
-	return name and name:find("NamePlate")
 end
 
 local ThreatUpdate = function(self, elapsed)
@@ -171,7 +166,7 @@ local OnValueChanged = function(self, curValue)
 end
 
 local OnShow = function(self)
-	self.channeling  = UnitChannelInfo("target") 
+	self.channeling  = UnitChannelInfo("target")
 	FixCastbar(self)
 	ColorCastBar(self, self.shieldedRegion:IsShown())
 end
@@ -263,19 +258,23 @@ end
 
 local numKids = 0
 local last = 0
+local index = 1
 local OnUpdate = function(self, elapsed)
 	last = last + elapsed
 
 	if last > freq then
 		last = 0
 
-		if WorldFrame:GetNumChildren() ~= numKids then
+		local newNumKids = WorldFrame:GetNumChildren()
+		if newNumKids ~= numKids then
 			numKids = WorldFrame:GetNumChildren()
-			for i = 1, select("#", WorldFrame:GetChildren()) do
-				frame = select(i, WorldFrame:GetChildren())
+			for i = index, numKids do
+				local frame = select(i, WorldFrame:GetChildren())
+				local name = frame:GetName()
 
-				if not frame.done and IsValidFrame(frame) then
+				if name and name:find("NamePlate") and not frame.done then
 					StyleFrame(frame)
+					index = i
 				end
 			end
 		end
