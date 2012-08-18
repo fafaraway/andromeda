@@ -111,8 +111,6 @@ local scale = min(2, max(.64, 768/string.match(({GetScreenResolutions()})[GetCur
 if scale > 1 then scale = 1 end
 
 local function Setup()
-	SetCVar("useUiScale", 1)
-	SetCVar("uiScale", scale)
 	SetCVar("screenshotFormat", tga)
 	SetCVar("cameraDistanceMax", 50)
 	SetCVar("cameraDistanceMaxFactor", 3.4)
@@ -128,7 +126,7 @@ local function SetupChat()
 
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50)
-	if 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)") < .64 then
+	if C.resolution == 3 then
 		ChatFrame1:SetHeight(145)
 		ChatFrame1:SetWidth(410)
 	else

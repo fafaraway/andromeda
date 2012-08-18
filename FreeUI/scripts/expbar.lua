@@ -27,7 +27,7 @@ end
 
 local function CommaValue(amount)
 	local formatted = amount
-	while true do  
+	while true do
 		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
 		if (k==0) then
 			break
@@ -40,28 +40,32 @@ end
 
 local backdrop = CreateFrame("Frame", nil, UIParent)
 backdrop:SetHeight(6)
-backdrop:SetWidth(128)
 backdrop:SetPoint("BOTTOM", Minimap, "TOP")
+backdrop:SetPoint("BOTTOMLEFT", Minimap, "TOPLEFT", -1, 0)
+backdrop:SetPoint("BOTTOMRIGHT", Minimap, "TOPRIGHT", 1, 0)
 F.CreateBD(backdrop, .6)
-	
+
 local xpBar = CreateFrame("StatusBar", nil, backdrop)
-xpBar:SetWidth(126)
 xpBar:SetHeight(GetWatchedFactionInfo() and 2 or 5)
-xpBar:SetPoint("TOP", backdrop,"TOP", 0, -1)
+xpBar:SetPoint("TOP", backdrop, "TOP", 0, -1)
+xpBar:SetPoint("LEFT", backdrop, 1, 0)
+xpBar:SetPoint("RIGHT", backdrop, -1, 0)
 xpBar:SetStatusBarTexture(C.media.texture)
 xpBar:SetStatusBarColor(.5, 0, .75)
-	
+
 local restedxpBar = CreateFrame("StatusBar", nil, backdrop)
-restedxpBar:SetWidth(126)
 restedxpBar:SetHeight(GetWatchedFactionInfo() and 2 or 5)
-restedxpBar:SetPoint("TOP", backdrop,"TOP", 0, -1)
+restedxpBar:SetPoint("TOP", backdrop, "TOP", 0, -1)
+restedxpBar:SetPoint("LEFT", backdrop, 1, 0)
+restedxpBar:SetPoint("RIGHT", backdrop, -1, 0)
 restedxpBar:SetStatusBarTexture(C.media.texture)
 restedxpBar:SetStatusBarColor(0, .4, .8)
-	
+
 local repBar = CreateFrame("StatusBar", nil, backdrop)
-repBar:SetWidth(126)
 repBar:SetHeight(1)
 repBar:SetPoint("BOTTOM", backdrop, "BOTTOM", 0, 1)
+repBar:SetPoint("LEFT", backdrop, 1, 0)
+repBar:SetPoint("RIGHT", backdrop, -1, 0)
 repBar:SetStatusBarTexture(C.media.texture)
 
 local sep = backdrop:CreateTexture(nil, "BORDER")
@@ -86,7 +90,7 @@ mouseFrame:SetFrameLevel(3)
 local function updateStatus()
 	local XP, maxXP = UnitXP("player"), UnitXPMax("player")
 	local restXP = GetXPExhaustion()
-	
+
 	if UnitLevel("player") == MAX_PLAYER_LEVEL then
 		xpBar:Hide()
 		restedxpBar:Hide()
@@ -97,10 +101,10 @@ local function updateStatus()
 		else
 			backdrop:Show()
 		end
-	else		
+	else
 		xpBar:SetMinMaxValues(min(0, XP), maxXP)
 		xpBar:SetValue(XP)
-			
+
 		if restXP then
 			restedxpBar:Show()
 			restedxpBar:SetMinMaxValues(min(0, XP), maxXP)
@@ -108,7 +112,7 @@ local function updateStatus()
 		else
 			restedxpBar:Hide()
 		end
-		
+
 		if GetWatchedFactionInfo() then
 			xpBar:SetHeight(2)
 			restedxpBar:SetHeight(2)
@@ -122,7 +126,7 @@ local function updateStatus()
 			sep:Hide()
 		end
 	end
-	
+
 	if GetWatchedFactionInfo() then
 		local name, rank, minRep, maxRep, value = GetWatchedFactionInfo()
 		repBar:SetMinMaxValues(minRep, maxRep)
@@ -149,7 +153,7 @@ mouseFrame:SetScript("OnEnter", function()
 	if UnitLevel("player") ~= MAX_PLAYER_LEVEL then
 		GameTooltip:AddLine("Experience:", r, g, b)
 		GameTooltip:AddDoubleLine("Current: ", string.format('%s/%s (%d%%)', CommaValue(XP), CommaValue(maxXP), (XP/maxXP)*100), r, g, b, 1, 1, 1)
-		GameTooltip:AddDoubleLine("Remaining: ", string.format('%s', CommaValue(maxXP-XP)), r, g, b, 1, 1, 1)	
+		GameTooltip:AddDoubleLine("Remaining: ", string.format('%s', CommaValue(maxXP-XP)), r, g, b, 1, 1, 1)
 		if restXP then
 			GameTooltip:AddDoubleLine("Rested: ", string.format('|cffb3e1ff%s (%d%%)', CommaValue(restXP), restXP/maxXP*100), r, g, b)
 		end

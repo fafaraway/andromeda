@@ -12,7 +12,7 @@ local F, C, L = unpack(select(2, ...))
 
 -- [[ Saved variables ]]
 
-FreeUIGlobalConfig = {} 
+FreeUIGlobalConfig = {}
 FreeUIConfig = {}
 
 -- [[ Event handler ]]
@@ -62,17 +62,32 @@ debugEvents = function()
 	end
 end
 
--- [[ High resolution support ]]
+-- [[ Resolution support ]]
+
+C.resolution = 0
 
 local updateScale
 updateScale = function(event)
+	if event == "VARIABLES_LOADED" then
+		local width = GetScreenWidth()
+
+		if width <= 1400 then
+			C.resolution = 1
+		elseif width <= 1920 then
+			C.resolution = 2
+		else
+			C.resolution = 3
+		end
+	end
 	if not InCombatLockdown() then
 		local scale = 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
 		if scale < .64 then
 			UIParent:SetScale(scale)
 			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50)
 		else
-			F.UnregisterAllEvents(updatescale)
+			F.UnregisterAllEvents(updateScale)
+			SetCVar("useUiScale", 1)
+			SetCVar("uiScale", scale)
 		end
 	else
 		F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
