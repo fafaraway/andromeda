@@ -4822,6 +4822,37 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBD(ItemSocketingScrollFrame, .25)
 		F.Reskin(ItemSocketingSocketButton)
 		F.ReskinScroll(ItemSocketingScrollFrameScrollBar)
+	elseif addon == "Blizzard_ItemUpgradeUI" then
+		BackgroundHighlight:Hide()
+		ItemUpgradeFrameShadows:Hide()
+		ItemUpgradeFrame.ItemButton.ItemFrame:Hide()
+		ItemUpgradeFrame.ItemButton.TextureFrameLeft:Hide()
+		ItemUpgradeFrame.ItemButton.TextureFrameMiddle:Hide()
+		ItemUpgradeFrame.ItemButton.TextureFrameRight:Hide()
+		ItemUpgradeFrameMoneyFrameLeft:Hide()
+		ItemUpgradeFrameMoneyFrameMiddle:Hide()
+		ItemUpgradeFrameMoneyFrameRight:Hide()
+
+		F.CreateBD(ItemUpgradeFrame.ItemButton, .25)
+		ItemUpgradeFrame.ItemButton:SetHighlightTexture("")
+		ItemUpgradeFrame.ItemButton:SetPushedTexture("")
+
+		local bg = CreateFrame("Frame", nil, ItemUpgradeFrame.ItemButton)
+		bg:SetSize(341, 50)
+		bg:SetPoint("LEFT", ItemUpgradeFrame.ItemButton, "RIGHT", -1, 0)
+		bg:SetFrameLevel(ItemUpgradeFrame.ItemButton:GetFrameLevel()-1)
+		F.CreateBD(bg, .25)
+
+		hooksecurefunc("ItemUpgradeFrame_Update", function()
+			if GetItemUpgradeItemInfo() then
+				ItemUpgradeFrame.ItemButton.IconTexture:SetTexCoord(.08, .92, .08, .92)
+			else
+				ItemUpgradeFrame.ItemButton.IconTexture:SetTexture("")
+			end
+		end)
+
+		F.ReskinPortraitFrame(ItemUpgradeFrame, true)
+		F.Reskin(ItemUpgradeFrameUpgradeButton)
 	elseif addon == "Blizzard_LookingForGuildUI" then
 		F.SetBD(LookingForGuildFrame)
 		F.CreateBD(LookingForGuildInterestFrame, .25)
