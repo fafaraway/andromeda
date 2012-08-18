@@ -1,4 +1,5 @@
 if select(2, UnitClass("player")) ~= "WARLOCK" then return end
+
 local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, "oUF_WarlockSpecBars was unable to locate oUF install")
@@ -15,10 +16,9 @@ local SPEC_WARLOCK_DEMONOLOGY = SPEC_WARLOCK_DEMONOLOGY
 local LATEST_SPEC = 0
 
 local Colors = {
-	[1] = {109/255, 51/255, 188/255, 1},
-	[2] = {139/255, 51/255, 188/255, 1},
-	[3] = {179/255, 51/255, 188/255, 1},
-	[4] = {209/255, 51/255, 188/255, 1},
+	[1] = {148/255, 130/255, 201/255, 1},
+	[2] = {95/255, 222/255,  95/255, 1},
+	[3] = {222/255, 95/255,  95/255, 1},
 }
 
 local Update = function(self, event, unit, powerType)
@@ -67,6 +67,9 @@ end
 
 local function Visibility(self, event, unit)
 	local wsb = self.WarlockSpecBars
+	local spacing = select(4, wsb[4]:GetPoint())
+	local w = wsb:GetWidth()
+	local s = 0
 
 	local spec = GetSpecialization()
 	if spec then
@@ -74,78 +77,70 @@ local function Visibility(self, event, unit)
 			wsb:Show()
 		end
 
-		-- if we change spec, update bar to default values
-		if LATEST_SPEC ~= spec and (spec == SPEC_WARLOCK_DESTRUCTION or spec == SPEC_WARLOCK_AFFLICTION) then
-			wsb.number = 4
-			wsb[1]:SetWidth(wsb[1].W)
+		if LATEST_SPEC ~= spec then
 			for i = 1, 4 do
 				local max = select(2, wsb[i]:GetMinMaxValues())
-				wsb[i]:SetValue(max)
+				if spec == SPEC_WARLOCK_AFFLICTION then
+					wsb[i]:SetValue(max)
+				else
+					wsb[i]:SetValue(0)
+				end
 				wsb[i]:Show()
+				if wsb[i].bg then wsb[i].bg:SetAlpha(0.15) end
 			end
 		end
 
 		if spec == SPEC_WARLOCK_DESTRUCTION then
-			local EmbersGlyph = false
+			local maxembers = 3
 
 			for i = 1, GetNumGlyphSockets() do
 				local glyphID = select(4, GetGlyphSocketInfo(i))
-				if glyphID == SPEC_WARLOCK_DESTRUCTION_GLYPH_EMBERS then EmbersGlyph = true end
+				if glyphID == SPEC_WARLOCK_DESTRUCTION_GLYPH_EMBERS then maxembers = 4 end
 			end
 
-			if not EmbersGlyph then
-				local spacing = select(4, wsb[4]:GetPoint())
-				wsb[4]:Hide()
-				local w = wsb:GetWidth()
-				local s = 0
-				for i = 1, 3 do
-					if i ~= 3 then
-						wsb[i]:SetWidth(w / 3 - spacing)
-						s = s + (w / 3)
-					else
-						wsb[i]:SetWidth(w - s)
-					end
+			for i = 1, maxembers do
+				if i ~= maxembers then
+					wsb[i]:SetWidth(w / maxembers - spacing)
+					s = s + (w / maxembers)
+				else
+					wsb[i]:SetWidth(w - s)
 				end
-			else
-				wsb[4]:Show()
-				for i = 1, 4 do
-					wsb[i]:SetWidth(wsb[i].W)
-				end
+				wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_DESTRUCTION]))
+				if wsb[i].bg then wsb[i].bg:SetAlpha(0.15) wsb[i].bg:SetTexture(unpack(Colors[SPEC_WARLOCK_DESTRUCTION])) end
 			end
+
+			if maxembers == 3 then wsb[4]:Hide() else wsb[4]:Show() end
 		elseif spec == SPEC_WARLOCK_AFFLICTION then
-			local ShardsGlyph = false
+			local maxshards = 3
 
 			for i = 1, GetNumGlyphSockets() do
 				local glyphID = select(4, GetGlyphSocketInfo(i))
-				if glyphID == SPEC_WARLOCK_AFFLICTION_GLYPH_SHARDS then ShardsGlyph = true end
+				if glyphID == SPEC_WARLOCK_AFFLICTION_GLYPH_SHARDS then maxshards = 4 end
 			end
 
-			if not ShardsGlyph then
-				local spacing = select(4, wsb[4]:GetPoint())
-				wsb[4]:Hide()
-				local w = wsb:GetWidth()
-				local s = 0
-				for i = 1, 3 do
-					if i ~= 3 then
-						wsb[i]:SetWidth(w / 3 - spacing)
-						s = s + (w / 3)
-					else
-						wsb[i]:SetWidth(w - s)
-					end
+			for i = 1, maxshards do
+				if i ~= maxshards then
+					wsb[i]:SetWidth(w / maxshards - spacing)
+					s = s + (w / maxshards)
+				else
+					wsb[i]:SetWidth(w - s)
 				end
-			else
-				wsb[4]:Show()
-				for i = 1, 4 do
-					wsb[i]:SetWidth(wsb[i].W)
-				end
+				wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_AFFLICTION]))
+				if wsb[i].bg then wsb[i].bg:SetAlpha(0) end
 			end
+
+			if maxshards == 3 then wsb[4]:Hide() else wsb[4]:Show() end
 		elseif spec == SPEC_WARLOCK_DEMONOLOGY then
-			wsb.number = 1
 			wsb[2]:Hide()
 			wsb[3]:Hide()
 			wsb[4]:Hide()
 			wsb[1]:SetWidth(wsb:GetWidth())
+			wsb[1]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_DEMONOLOGY]))
+			if wsb[1].bg then wsb[1].bg:SetAlpha(0.15) wsb[1].bg:SetTexture(unpack(Colors[SPEC_WARLOCK_DEMONOLOGY])) end
 		end
+
+		-- force an update each time we respec
+		Update(self, nil, "player")
 	else
 		if wsb:IsShown() then
 			wsb:Hide()
@@ -171,8 +166,8 @@ local function Enable(self)
 
 		self:RegisterEvent("UNIT_POWER", Path)
 		self:RegisterEvent("UNIT_DISPLAYPOWER", Path)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", Visibility)
 		self:RegisterEvent("PLAYER_TALENT_UPDATE", Visibility)
-		Visibility(self, _, "player")
 
 		for i = 1, 4 do
 			local Point = wsb[i]
@@ -180,13 +175,14 @@ local function Enable(self)
 				Point:SetStatusBarTexture([=[Interface\TargetingFrame\UI-StatusBar]=])
 			end
 
-			Point:SetStatusBarColor(unpack(Colors[i]))
 			Point:SetFrameLevel(wsb:GetFrameLevel() + 1)
 			Point:GetStatusBarTexture():SetHorizTile(false)
-			Point.W = Point:GetWidth()
+
+			if Point.bg then
+				Point.bg:SetAllPoints()
+			end
 		end
 
-		wsb.number = 4
 		wsb:Hide()
 
 		return true
@@ -198,6 +194,7 @@ local function Disable(self)
 	if(wsb) then
 		self:UnregisterEvent("UNIT_POWER", Path)
 		self:UnregisterEvent("UNIT_DISPLAYPOWER", Path)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Visibility)
 		self:UnregisterEvent("PLAYER_TALENT_UPDATE", Visibility)
 	end
 end
