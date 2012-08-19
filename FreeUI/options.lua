@@ -37,7 +37,7 @@ C["unitframes"] = {
 	["healer_classcolours"] = false,			-- colour unitframes by class in healer layout
 	["party_name_always"] = false,				-- show name on party/raid frames in dps/tank layout
 	["pvp"] = true, 					-- show pvp icon on player frame
-	["targettarget"] = true, 			-- show target of target frame
+	["targettarget"] = false, 			-- show target of target frame
 
 	["auto"] = true,				-- adjust unitframe position based on screen height, ignores user settings
 
