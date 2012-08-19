@@ -1269,7 +1269,7 @@ local UnitSpecific = {
 		Debuffs.PostUpdateIcon = PostUpdateIcon
 	end,
 
-	targetoftarget = function(self, ...)
+	targettarget = function(self, ...)
 		Shared(self, ...)
 
 		local Health = self.Health
