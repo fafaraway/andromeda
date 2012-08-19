@@ -2,8 +2,7 @@
 
 local F, C, L = unpack(select(2, ...))
 
-local a1, p, a2, x, y = unpack(C.unitframes.target)
-local f = CreateFrame("StatusBar", "aThreatMeter", UIParent)
+local f = CreateFrame("StatusBar", "FreeUIThreatMeter", UIParent)
 f:SetStatusBarTexture(C.media.texture)
 f:SetMinMaxValues(0, 100)
 f:SetWidth(C.unitframes.target_width)
@@ -30,7 +29,7 @@ addonLoaded = function(_, addon)
 	addonLoaded = nil
 end
 F.RegisterEvent("ADDON_LOADED", addonLoaded)
- 
+
 local format, wipe, sort, tinsert, tremove, ipairs =
 format, table.wipe, sort, tinsert, tremove, ipairs
 local pname = UnitName("player")
