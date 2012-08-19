@@ -57,12 +57,16 @@ local microMenu = {
 }
 
 -- spellbook need at least 1 opening else it taint in combat
-local taint = CreateFrame("Frame")
-taint:RegisterEvent("PLAYER_ENTERING_WORLD")
-taint:SetScript("OnEvent", function(self)
+local taint
+taint = function(self, event, addon)
+	if addon ~= "FreeUI" then return end
+
 	ToggleFrame(SpellBookFrame)
-	ToggleFrame(SpellBookFrame)
-end)
+	TogglePetJournal()
+
+	F.UnregisterEvent("ADDON_LOADED", taint)
+end
+F.RegisterEvent("ADDON_LOADED", taint)
 
 F.MicroMenu = function()
 	EasyMenu(microMenu, menuFrame, Minimap, -185, 253, 1)
