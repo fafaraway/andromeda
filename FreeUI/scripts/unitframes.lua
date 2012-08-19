@@ -25,6 +25,8 @@ local playerWidth = C.unitframes.player_width
 local playerHeight = C.unitframes.player_height
 local targetWidth = C.unitframes.target_width
 local targetHeight = C.unitframes.target_height
+local targettargetWidth = C.unitframes.targettarget_width
+local targettargetHeight = C.unitframes.targettarget_height
 local focusWidth = C.unitframes.focus_width
 local focusHeight = C.unitframes.focus_height
 local petWidth = C.unitframes.pet_width
@@ -602,6 +604,8 @@ local Shared = function(self, unit, isSingle)
 			self:SetSize(playerWidth, playerHeight)
 		elseif unit == "target" then
 			self:SetSize(targetWidth, targetHeight)
+		elseif unit == "targettarget" then
+			self:SetSize(targettargetWidth, targettargetHeight)
 		elseif unit:find("arena%d") then
 			self:SetSize(arenaWidth, arenaHeight)
 		elseif unit == "focus" then
@@ -1145,6 +1149,7 @@ local UnitSpecific = {
 
 		local tt = CreateFrame("Frame", nil, self)
 		local a1, p, a2, x, y = Health:GetPoint()
+		if C.unitframes.targettarget then y = y + 10 end
 		tt:SetPoint(a1, p, a2, x+60, y+26)
 		tt:SetWidth(110)
 		tt:SetHeight(12)
@@ -1239,7 +1244,6 @@ local UnitSpecific = {
 		Shared(self, ...)
 
 		local Health = self.Health
-		local Power = self.Power
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
@@ -1265,10 +1269,25 @@ local UnitSpecific = {
 		Debuffs.PostUpdateIcon = PostUpdateIcon
 	end,
 
+	targetoftarget = function(self, ...)
+		Shared(self, ...)
+
+		local Health = self.Health
+		local Castbar = self.Castbar
+		local Spark = Castbar.Spark
+
+		Health:SetHeight(targettargetHeight - powerHeight - 1)
+
+		Castbar:SetAllPoints(Health)
+		Castbar.Width = self:GetWidth()
+
+		Spark:SetHeight(Health:GetHeight())
+	end,
+
 	boss = function(self, ...)
 		Shared(self, ...)
 
-		local Health, Power = self.Health, self.Power
+		local Health = self.Health
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
@@ -1374,7 +1393,7 @@ local UnitSpecific = {
 	arena = function(self, ...)
 		Shared(self, ...)
 
-		local Health, Power = self.Health, self.Power
+		local Health = self.Health
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
@@ -1683,16 +1702,17 @@ end
 
 oUF:Factory(function(self)
 	local playerPos, targetPos, partyPos, raidPos
+	local target
 	if C.unitframes.auto == true then
 		local height = GetScreenHeight()
 		spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", -275, -(height/13.7))
 
 		if FreeUIConfig.layout == 1 then
-			spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, -(height/6.4))
+			target = spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, -(height/6.4))
 			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
 			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 		else
-			spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, -(height/13.7))
+			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, -(height/13.7))
 			partyPos = {"TOP", UIParent, "CENTER", 0, -(height/6.4)}
 			raidPos = {"TOP", UIParent, "CENTER", 0, -(height/7.6)}
 		end
@@ -1700,11 +1720,11 @@ oUF:Factory(function(self)
 		spawnHelper(self, 'player', unpack(C.unitframes.player))
 
 		if FreeUIConfig.layout == 1 then
-			spawnHelper(self, 'target', unpack(C.unitframes.target))
+			target = spawnHelper(self, 'target', unpack(C.unitframes.target))
 			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
 			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 		else
-			spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
+			target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
 			partyPos = C.unitframes.party
 			raidPos = C.unitframes.raid
 		end
@@ -1712,6 +1732,10 @@ oUF:Factory(function(self)
 
 	spawnHelper(self, 'focus', "BOTTOMRIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 12)
 	spawnHelper(self, 'pet', "BOTTOMLEFT", oUF_FreePlayer, "TOPLEFT", 0, 12)
+
+	if C.unitframes.targettarget then
+		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, 15)
+	end
 
 	for n = 1, 4 do
 		spawnHelper(self,'boss' .. n, 'LEFT', 50, 0 - (56 * n))
