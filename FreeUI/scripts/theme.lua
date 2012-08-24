@@ -857,18 +857,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 11, -36)
 
-		for i = 1, GetNumSpellTabs() do
-			local tab = _G["SpellBookSkillLineTab"..i]
+		local tabsSkinned = false
+		hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
+			if tabsSkinned then return end
+			local num = GetNumSpellTabs()
+			if num > 0 then tabsSkinned = true end
+			for i = 1, num do
+				local tab = _G["SpellBookSkillLineTab"..i]
 
-			tab:GetRegions():Hide()
-			tab:SetCheckedTexture(C.media.checked)
+				tab:GetRegions():Hide()
+				tab:SetCheckedTexture(C.media.checked)
 
-			F.CreateBG(tab)
-			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+				F.CreateBG(tab)
+				F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 
-			_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
-			tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
-		end
+				_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
+				tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+			end
+		end)
 
 		local coreTabsSkinned = false
 		hooksecurefunc("SpellBookCoreAbilities_UpdateTabs", function()
