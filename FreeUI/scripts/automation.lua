@@ -1,11 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 local IDs = {}
-<<<<<<< HEAD
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand", "Ranged"}) do 	IDs[slot] = GetInventorySlotInfo(slot .. "Slot")
-=======
 for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do 	IDs[slot] = GetInventorySlotInfo(slot .. "Slot")
->>>>>>> origin/beta
 end
 
 local cost
@@ -82,11 +78,7 @@ if C.general.auto_accept == true then
 	local g = CreateFrame("Frame")
 	g:RegisterEvent("PARTY_INVITE_REQUEST")
 	g:SetScript("OnEvent", function(self, event, name)
-<<<<<<< HEAD
-		if MiniMapLFGFrame:IsShown() then return end
-=======
 		if QueueStatusMinimapButton:IsShown() then return end
->>>>>>> origin/beta
 		if IsFriend(name) then
 			AcceptGroup()
 			for i = 1, 4 do
@@ -97,21 +89,6 @@ if C.general.auto_accept == true then
 				end
 			end
 		end
-<<<<<<< HEAD
-	end)
-end
-
-if C.general.auto_loot_switch == true then
-	local h = CreateFrame("Frame")
-	h:RegisterEvent("PLAYER_ENTERING_WORLD")
-	h:SetScript("OnEvent", function()
-		if select(2, GetInstanceInfo()) == "raid" then
-			SetCVar("showLootSpam", 0)
-		else
-			SetCVar("showLootSpam", 1)
-		end
-=======
->>>>>>> origin/beta
 	end)
 end
 
@@ -136,8 +113,6 @@ if C.general.helmcloakbuttons == true then
 	cloak:SetChecked(ShowingCloak())
 	helm:SetFrameLevel(31)
 	cloak:SetFrameLevel(31)
-<<<<<<< HEAD
-=======
 end
 
 if C.general.undressButton == true then
@@ -148,5 +123,4 @@ if C.general.undressButton == true then
 	undress:SetScript("OnClick", function()
 		DressUpModel:Undress()
 	end)
->>>>>>> origin/beta
 end

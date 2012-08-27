@@ -911,14 +911,6 @@ local UnitSpecific = {
 					end
 				end
 			end
-<<<<<<< HEAD
-		elseif class == "PALADIN" and C.classmod.paladin == true then
-			local UpdateHoly = function(self, event, unit, powerType)
-				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
-				
-				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
-				if(num == MAX_HOLY_POWER) then
-=======
 		elseif class == "MONK" and C.classmod.monk == true then
 			local pulsating = false
 
@@ -978,7 +970,6 @@ local UnitSpecific = {
 				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
 
 				if(num == UnitPowerMax("player", SPELL_POWER_HOLY_POWER)) then
->>>>>>> origin/beta
 					self.glow:SetAlpha(1)
 					F.CreatePulse(self.glow)
 					self.count:SetText(num)

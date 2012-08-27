@@ -268,9 +268,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					local point = dropDownFrame.point and dropDownFrame.point or "TOPLEFT"
 					local relativeTo = dropDownFrame.relativeTo and dropDownFrame.relativeTo or dropDownFrame
 					local relativePoint = dropDownFrame.relativePoint and dropDownFrame.relativePoint or "BOTTOMLEFT"
-<<<<<<< HEAD
-					listFrame:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
-=======
 
 					listFrame:ClearAllPoints()
 					listFrame:SetPoint(point, relativeTo, relativePoint, xOffset, yOffset)
@@ -295,7 +292,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					end
 					listFrame:ClearAllPoints()
 					listFrame:SetPoint(point, relativeTo, relativePoint, xOffset + xAddOffset, yOffset + yAddOffset)
->>>>>>> origin/beta
 				elseif anchorName ~= "cursor" then
 					-- this part might be a bit unreliable
 					local _, _, relPoint, xOff, yOff = listFrame:GetPoint()
@@ -1080,19 +1076,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MerchantGuildBankRepairButton:SetPushedTexture("")
 		F.CreateBG(MerchantGuildBankRepairButton)
 		MerchantGuildBankRepairButtonIcon:SetTexCoord(0.595, 0.8075, 0.05, 0.52)
-<<<<<<< HEAD
-		
-		MerchantRepairAllButton:SetPushedTexture("")
-		F.CreateBG(MerchantRepairAllButton)
-		MerchantRepairAllIcon:SetTexCoord(0.31375, 0.53, 0.06, 0.52)
-	
-=======
 
 		MerchantRepairAllButton:SetPushedTexture("")
 		F.CreateBG(MerchantRepairAllButton)
 		MerchantRepairAllIcon:SetTexCoord(0.31375, 0.53, 0.06, 0.52)
 
->>>>>>> origin/beta
 		MerchantRepairItemButton:SetPushedTexture("")
 		F.CreateBG(MerchantRepairItemButton)
 		local ic = MerchantRepairItemButton:GetRegions()
@@ -2306,31 +2294,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ItemTextMaterialBotLeft:SetAlpha(0)
 		ItemTextMaterialBotRight:SetAlpha(0)
 
-<<<<<<< HEAD
-			F.Reskin(InterfaceOptionsHelpPanelResetTutorials)
-		end)
-		
-		hooksecurefunc("InterfaceOptions_AddCategory", function()
-			local num = #INTERFACEOPTIONS_ADDONCATEGORIES
-			for i = 1, num do
-				local bu = _G["InterfaceOptionsFrameAddOnsButton"..i.."Toggle"]
-				if bu and not bu.reskinned then
-					F.ReskinExpandOrCollapse(bu)
-					bu:SetPushedTexture("")
-					bu.SetPushedTexture = F.dummy
-					bu.reskinned = true
-				end
-			end
-		end)
-		
-		hooksecurefunc("OptionsListButtonToggle_OnClick", function(self)
-			if self:GetParent().element.collapsed then
-				self.plus:Show()
-			else
-				self.plus:Hide()
-			end
-		end)
-=======
 		F.ReskinPortraitFrame(ItemTextFrame, true)
 		F.ReskinScroll(ItemTextScrollFrameScrollBar)
 		F.ReskinArrow(ItemTextPrevPageButton, "left")
@@ -2379,7 +2342,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				F.ReskinCheck(_G["MacOptionsFrameCheckButton"..i])
 			end
 			F.ReskinSlider(MacOptionsFrameQualitySlider)
->>>>>>> origin/beta
 
 			MacOptionsButtonCompress:SetWidth(136)
 
@@ -2417,59 +2379,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinClose(button.CloseButton)
 		end
 
-<<<<<<< HEAD
-		select(4, TradePlayerItem7:GetRegions()):Hide()
-		select(4, TradeRecipientItem7:GetRegions()):Hide()
-
-		TradePlayerInputMoneyFrameSilver:SetPoint("LEFT", TradePlayerInputMoneyFrameGold, "RIGHT", 1, 0)
-		TradePlayerInputMoneyFrameCopper:SetPoint("LEFT", TradePlayerInputMoneyFrameSilver, "RIGHT", 1, 0)
-		
-		-- Tutorial Frame
-		
-		F.CreateBD(TutorialFrame)
-		F.CreateSD(TutorialFrame)
-		
-		TutorialFrameBackground:Hide()
-		TutorialFrameBackground.Show = F.dummy
-		TutorialFrame:DisableDrawLayer("BORDER")
-		
-		F.Reskin(TutorialFrameOkayButton, true)
-		F.ReskinClose(TutorialFrameCloseButton)
-		F.ReskinArrow(TutorialFramePrevButton, "left")
-		F.ReskinArrow(TutorialFrameNextButton, "right")
-		
-		TutorialFrameOkayButton:ClearAllPoints()
-		TutorialFrameOkayButton:SetPoint("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
-		
-		-- because gradient alpha and OnUpdate doesn't work for some reason...
-		
-		select(15, TutorialFrameOkayButton:GetRegions()):Hide()
-		select(15, TutorialFramePrevButton:GetRegions()):Hide()
-		select(15, TutorialFrameNextButton:GetRegions()):Hide()
-		select(14, TutorialFrameCloseButton:GetRegions()):Hide()
-		TutorialFramePrevButton:SetScript("OnEnter", nil)
-		TutorialFrameNextButton:SetScript("OnEnter", nil)
-		TutorialFrameOkayButton:SetBackdropColor(0, 0, 0, .25)
-		TutorialFramePrevButton:SetBackdropColor(0, 0, 0, .25)
-		TutorialFrameNextButton:SetBackdropColor(0, 0, 0, .25)
-		
-		-- BN conversation
-		
-		BNConversationInviteDialogHeader:SetTexture("")
-		
-		F.CreateBD(BNConversationInviteDialog)
-		F.CreateBD(BNConversationInviteDialogList, .25)
-		
-		F.Reskin(BNConversationInviteDialogInviteButton)
-		F.Reskin(BNConversationInviteDialogCancelButton)
-		F.ReskinScroll(BNConversationInviteDialogListScrollFrameScrollBar)
-		for i = 1, BN_CONVERSATION_INVITE_NUM_DISPLAYED do
-			F.ReskinCheck(_G["BNConversationInviteDialogListFriend"..i].checkButton)
-		end
-=======
 		TalentMicroButtonAlert:SetScript("OnMouseUp", ToggleTalentFrame)
 		CompanionsMicroButtonAlert:SetScript("OnMouseUp", TogglePetJournal)
->>>>>>> origin/beta
 
 		-- [[ Hide regions ]]
 
@@ -2862,14 +2773,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.Reskin(select(6, PVPBannerFrame:GetChildren()))
-		
+
 		for i = 1, NUM_CHAT_WINDOWS do
 			F.ReskinArrow(_G["ChatFrame"..i.."ButtonFrameBottomButton"], "down")
 		end
-		
-		hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
-			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
-		end)
 
 		hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
 			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")

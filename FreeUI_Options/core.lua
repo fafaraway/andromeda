@@ -109,28 +109,30 @@ end
 
 options:RegisterEvent("PLAYER_LOGIN")
 options:SetScript("OnEvent", function()
+	if not FreeUI then return end
+
 	F, C, L = unpack(FreeUI)
-	
+
 	local groups = {
-		["general"] = true, 
+		["general"] = true,
 		["actionbars"] = true,
 		["unitframes"] = true,
 		["classmod"] = true,
 		["performance"] = true,
 	}
-	
+
 	local sorted = {"general", "actionbars", "unitframes", "classmod", "performance"}
-	
+
 	for i = 1, #sorted do
 		local group = sorted[i]
 		local groupName = addon.localization[group]
 		local offset = 80
-		
+
 		local category = CreateFrame("Frame", "FreeUIOptionsPanel"..group, UIParent)
 		category.parent = "FreeUI"
 		category.name = groupName
 		InterfaceOptions_AddCategory(category)
-		
+
 		local sortedOptions = {}
 		for option in pairs(C[group]) do
 			table.insert(sortedOptions, option)
@@ -145,16 +147,16 @@ options:SetScript("OnEvent", function()
 				button:SetChecked(value)
 				button:SetScript("OnClick", function(self) SetValue(group,option,(self:GetChecked() and true or false)) end)
 				button:SetPoint("TOPLEFT", 16, -offset)
-				
+
 				F.ReskinCheck(button)
-				
+
 				offset = offset + 24
 			end
 		end
 	end
-	
+
 	updateLayoutButton()
-	
+
 	F.Reskin(layout)
 	F.Reskin(install)
 	F.Reskin(reset)

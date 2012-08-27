@@ -1,9 +1,5 @@
 local parent, ns = ...
-<<<<<<< HEAD
-local global = GetAddOnMetadata(parent, 'X-oUF')
-=======
 local global = parent == "oUF" and parent
->>>>>>> origin/beta
 local _VERSION = GetAddOnMetadata(parent, 'version')
 
 if IsAddOnLoaded("oUF") then

@@ -21,10 +21,7 @@ C["general"] = {
 		["tolbarad_always"] = false,		-- show timer on characters lower or higher than 85 as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
 	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
-<<<<<<< HEAD
-=======
 	["undressButton"] = true, 		-- undress button on dressup frame
->>>>>>> origin/beta
 }
 
 C["actionbars"] = {
@@ -147,26 +144,6 @@ C["selfbuffs"] = {
 }
 
 -- sFilter buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
-<<<<<<< HEAD
-C["sfilter"] = {
-	["PALADIN"] = {
-	-- Divine Plea
-	{spellId = 54428, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath, Zealotry
-	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, spellId5 = 85696, size = 39, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
-	-- Inquisition
-	{spellId = 84963, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-	-- Judgements of the Pure
-	{spellId = 53657, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, slot = 1},
-	},
-	["ROGUE"] = {
-	-- Bandit's Guile
-	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	-- Recuperate
-	{spellId = 73651, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	-- Slice and dice
-	{spellId = 5171, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-=======
 -- spellID 1-5, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
 -- if you use multiple spellIDs, first available gets displayed
 C["sfilter"] = {
@@ -187,7 +164,6 @@ C["sfilter"] = {
 	{spellId = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Slice and dice
 	{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
->>>>>>> origin/beta
 	},
 	["WARRIOR"] = {
 	-- Last Stand, Shield Wall
