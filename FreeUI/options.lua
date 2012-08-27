@@ -1,10 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
-local n = UnitName("player")
-local lvl = UnitLevel("player")
-local class = select(2, UnitClass("player"))
-local realm = GetRealmName()
-
 --[[ Global config ]]
 
 C["general"] = {
@@ -175,68 +170,89 @@ C["sfilter"] = {
 
 -- [[ Filters ]]
 
--- Debuffs by other players you want to show on the target frame
+-- Debuffs by other players or NPCs you want to show on enemy target
 
 C["debuffFilter"] = {
-	[58567] = true, -- Sunder Armor
-	[8647] = true, -- Expose Armor
-	[91565] = true, -- Faerie Fire
-	[95466] = true, -- Corrosive Spit
-	[95467] = true, -- Tear Armor
+	-- Weakened Armor
+	[113746] = true,
 
-	[6343] = true, -- Thunder Clap
-	[54404] = true, -- Dust Cloud
-	[90315] = true, -- Tailspin
-	[8042] = true, -- Earth Shock
-	[58179] = true, -- Infected Wounds 1
-	[58180] = true, -- Infected Wounds 2
-	[53696] = true, -- Judgements of the Just
-	[51693] = true, -- Waylay
-	[55095] = true, -- Frost Fever
+	-- Physical Vulnerability
+	[81326] = true,
 
-	[702] = true, -- Curse of Weakness
-	[1160] = true, -- Demoralizing Shout
-	[99] = true, -- Demoralizing Roar
-	[50256] = true, -- Demoralizing Roar (pet)
-	[24423] = true, -- Demoralizing Screech
-	[81132] = true, -- Scarlet Fever
-	[26017] = true, -- Vindication
+	-- Weakened Blows
+	[115798] = true,
+	[109466] = true, -- Curse of Enfeeblement
 
+	-- Mortal Wounds
+	[115804] = true,
+	[82654] = true, -- Widow Venom
+	[8680] = true, -- Wound Poison
+
+	-- Magic Vulnerability
+	[93068] = true, -- Master Poisoner
+	[1490] = true, -- Curse of the Elements
+
+	-- Slow Casting
+	[73975] = true, -- Necrotic Strike
+	[5760] = true, -- Mind-numbing Poison
+	[109466] = true, -- Curse of Enfeeblement
+
+	-- Stuns
+	[408] = true, -- Kidney Shot
+	[1833] = true, -- Cheap Shot
+	[5211] = true, -- Mighty Bash
+	[853] = true, -- Hammer of Justice
+	[105593] = true, -- Fist of Justice
+	[119381] = true, -- Leg Sweep
+
+	-- Silence
+	[47476] = true, -- Strangulate
+	[15487] = true, -- Silence
+
+	-- Taunt
+	[355] = true, -- Taunt
+	[1161] = true, -- Challenging Shout
+	[21008] = true, -- Mocking Blow
+	[62124] = true, -- Reckoning
+	[49576] = true, -- Death Grip
+	[56222] = true, -- Dark Command
+	[6795] = true, -- Growl
+	[2649] = true, -- Growl (pet)
+	[116189] = true, -- Provoke
+
+	-- Disarm
+	[676] = true, -- Disarm
+	[124539] = true, -- Disarm (Voidwalker)
+	[51722] = true, -- Dismantle
+	[117368] = true, -- Grapple Weapon
+
+	-- Crowd control
 	[118] = true, -- Polymorph (sheep)
 	[61305] = true, -- Polymorph (black cat)
 	[28272] = true, -- Polymorph (pig)
 	[61721] = true, -- Polymorph (rabbit)
 	[28271] = true, -- Polymorph (turtle)
+	[61780] = true, -- Polymorph (turkey)
 	[2094] = true, -- Blind
 	[6770] = true, -- Sap
-	[408] = true, -- Kidney Shot
-	[1833] = true, -- Cheap Shot
-	[5211] = true, -- Bash
-	[853] = true, -- Hammer of Justice
 	[20066] = true, -- Repentance
-	[47476] = true, -- Strangulate
 	[9484] = true, -- Shackle Undead
 	[339] = true, -- Entangling Roots
-	[33786] = true, -- Cyclone
 	[2637] = true, -- Hibernate
 	[710] = true, -- Banish
 	[19386] = true, -- Wyvern Sting
 	[51514] = true, -- Hex
-	[355] = true, -- Taunt
-	[1161] = true, -- Challenging Shout
-	[21008] = true, -- Mocking Blow
-	[62124] = true, -- Hand of Reckoning
-	[49576] = true, -- Death Grip
-	[56222] = true, -- Dark Command
-	[6795] = true, -- Growl
-	[5209] = true, -- Challenging Roar
 	[76780] = true, -- Bind Elemental
 	[5782] = true, -- Fear
 	[1499] = true, -- Freezing Trap (1?)
 	[3355] = true, -- Freezing Trap (2?)
 	[6358] = true, -- Seduction
 	[10326] = true, -- Turn Evil
-	[90933] = true, -- Ragezone
+	[33786] = true, -- Cyclone
+	[115078] = true, -- Paralysis
+
+	-- NPC debuffs
+	[90932] = true, -- Ragezone
 	[97170] = true, -- Deadzone (1)
 	[97600] = true, -- Deadzone (2)
 	[103527] = true, -- Void Diffusion (test)
@@ -323,7 +339,7 @@ C["hideDebuffs"] = {
 	[26218] = true, -- Mistletoe
 }
 
-if class == "PRIEST" then C.hideDebuffs[6788] = false end
+if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end
 
 -- Buffs cast by the player that healers want to see on raid frames
 
