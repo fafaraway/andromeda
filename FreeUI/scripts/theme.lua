@@ -1167,6 +1167,50 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		sorbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		F.CreateBD(sorbg, 0)
 
+		for i = 1, 9 do
+			select(i, BattleTagInviteFrame.NoteFrame:GetRegions()):Hide()
+		end
+
+		F.CreateBD(BattleTagInviteFrame)
+		F.CreateSD(BattleTagInviteFrame)
+		F.CreateBD(BattleTagInviteFrame.NoteFrame, .25)
+
+		local _, send, cancel = BattleTagInviteFrame:GetChildren()
+		F.Reskin(send)
+		F.Reskin(cancel)
+
+		F.ReskinScroll(BattleTagInviteFrameScrollFrameScrollBar)
+
+		FriendsFrameBattlenetFrame:GetRegions():Hide()
+		F.CreateBD(FriendsFrameBattlenetFrame, .25)
+
+		FriendsFrameBattlenetFrame.BroadcastButton:SetSize(22, 22)
+		F.Reskin(FriendsFrameBattlenetFrame.BroadcastButton)
+		FriendsFrameBattlenetFrame.BroadcastButton:SetNormalTexture("Interface\\FriendsFrame\\UI-Toast-ToastIcons")
+		FriendsFrameBattlenetFrame.BroadcastButton.SetNormalTexture = F.dummy
+		FriendsFrameBattlenetFrame.BroadcastButton.SetPushedTexture = F.dummy
+		local nt = FriendsFrameBattlenetFrame.BroadcastButton:GetNormalTexture()
+		nt:SetTexCoord(0, .25, 0, .5)
+		nt:SetVertexColor(BATTLENET_FONT_COLOR.r, BATTLENET_FONT_COLOR.g, BATTLENET_FONT_COLOR.b)
+
+		FriendsFrameBattlenetFrame.BroadcastFrame:SetPoint("TOPLEFT", -109, -24)
+
+		for i = 1, 9 do
+			select(i, FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame:GetRegions()):Hide()
+		end
+
+		-- why?
+		FriendsFrameBattlenetFrame.BroadcastFrame:HookScript("OnShow", function(self)
+			self:GetRegions():Hide()
+		end)
+
+		F.CreateBD(FriendsFrameBattlenetFrame.BroadcastFrame)
+		F.CreateBD(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame, 0)
+		F.CreateGradient(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame)
+		F.Reskin(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.UpdateButton)
+		F.Reskin(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.CancelButton)
+		F.ReskinScroll(FriendsFrameBattlenetFrame.BroadcastFrame.ScrollFrame.ScrollBar)
+
 		-- Nav Bar
 
 		local function navButtonFrameLevel(self)
