@@ -9,7 +9,6 @@ local realm = GetRealmName()
 
 C["general"] = {
 	["auto_accept"] = true,			-- auto accept invites from friends and guildies
-	["auto_loot_switch"] = true, 		-- auto toggle detailed loot rolls when entering/leaving LFR
 	["autorepair"] = true,			-- automatically repair items
 		["autorepair_guild"] = false,		-- use guild funds for auto repairs
 	["autoroll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
@@ -18,16 +17,20 @@ C["general"] = {
 	["buffreminder"] = true, 		-- reminder for selfbuffs
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
 	["interrupt"] = true,			-- announce your interrupts
-	["tolbarad"] = true,			-- Tol barad timer on the minimap
-		["tolbarad_always"] = false,		-- show timer on non 85 characters as well
+	["tolbarad"] = true,			-- Tol barad timer on the minimap at level 85
+		["tolbarad_always"] = false,		-- show timer on characters lower or higher than 85 as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
 	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
+<<<<<<< HEAD
+=======
+	["undressButton"] = true, 		-- undress button on dressup frame
+>>>>>>> origin/beta
 }
 
 C["actionbars"] = {
 	["hotkey"] = false, 			-- show hot keys on buttons
 	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
-	["shapeshift"] = false,			-- enable shapeshift/stance bar
+	["stancebar"] = true,			-- enable stance bar
 }
 
 C["unitframes"] = {
@@ -37,12 +40,13 @@ C["unitframes"] = {
 	["healer_classcolours"] = false,			-- colour unitframes by class in healer layout
 	["party_name_always"] = false,				-- show name on party/raid frames in dps/tank layout
 	["pvp"] = true, 					-- show pvp icon on player frame
+	["targettarget"] = false, 			-- show target of target frame
 
 	["auto"] = true,				-- adjust unitframe position based on screen height, ignores user settings
-	
+
 	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105}, -- only applies when 'auto' is false
 	["target"] = {"TOP", UIParent, "CENTER", 0, -225}, -- only applies when 'auto' is false
-	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105}, 
+	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105},
 	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled and when 'auto' is false
 	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled and when 'auto' is false
 
@@ -53,6 +57,8 @@ C["unitframes"] = {
 	["player_height"] = 14,
 	["target_width"] = 229,
 	["target_height"] = 14,
+	["targettarget_width"] = 229,
+	["targettarget_height"] = 8,
 	["focus_width"] = 113,
 	["focus_height"] = 8,
 	["pet_width"] = 113,
@@ -78,16 +84,15 @@ C["unitframes"] = {
 C["classmod"] = {
 	["deathknight"] = true, 	-- runes
 	["druid"] = true, 		-- eclipse bar
+	["monk"] = true, 		-- harmony bar
 	["paladin"] = true, 		-- holy power
-	["rogue"] = true,		-- poison reminder
-	["rogue_checkthrown"] = false,	-- check thrown weapon for poison
-	["shaman"] = true, 		-- totem bars and maelstrom weapon tracker
-	["warlock"] = true, 		-- soul shards
+	["priest"] = true,		-- shadow orbs
+	["shaman"] = true, 		-- maelstrom weapon tracker
+	["warlock"] = true, 		-- spec bar
 	["warrior"] = true, -- thunderstruck tracker
 }
 
 -- lower = smoother = more CPU usage
-
 C["performance"] = {
 	["bubbles"] = .1, 	-- update interval for chat bubbles in seconds (always)
 	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
@@ -95,21 +100,6 @@ C["performance"] = {
 	["namethreat"] = .2, 	-- update interval for nameplates threat in seconds (only with nameplates shown)
 	["tolbarad"] = 10, 	-- update interval for TB timer in seconds (always)
 }
-
--- [[ Profiles ]]
-
-if lvl ~= 85 then
-	C.general.autoroll = false
-end
-
-if realm == "Steamwheedle Cartel" then
-	C.general.tolbarad_always = true
-	C.general.autorepair_guild = true
-end
-
-if class == "MAGE" or class == "PRIEST" or class == "WARLOCK" then
-	C.unitframes.castbar = 2
-end
 
 -- Selfbuff reminder
 C["selfbuffs"] = {
@@ -121,14 +111,18 @@ C["selfbuffs"] = {
 		82661, -- fox
 	},
 	PALADIN = {
-		31801, -- seal of truth
-		20154, -- seal of righteousness
-		20165, -- seal of insight
-		20164, -- seal of justice
+		19740, -- blessing of might
+		20217, -- blessing of kings
 	},
 	PRIEST = {
 		588, -- inner fire
 		73413, -- inner will
+	},
+	ROGUE = {
+		2823, -- deadly poison
+		8679, -- wound poison (from instant)
+		5761, -- mind-numbing poison
+		3408, -- crippling poison
 	},
 	MAGE = {
 		7302, -- frost armor
@@ -153,6 +147,7 @@ C["selfbuffs"] = {
 }
 
 -- sFilter buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
+<<<<<<< HEAD
 C["sfilter"] = {
 	["PALADIN"] = {
 	-- Divine Plea
@@ -171,7 +166,35 @@ C["sfilter"] = {
 	{spellId = 73651, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Slice and dice
 	{spellId = 5171, size = 39, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+=======
+-- spellID 1-5, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
+-- if you use multiple spellIDs, first available gets displayed
+C["sfilter"] = {
+	["PALADIN"] = {
+	-- Divine Plea
+	{spellId = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath
+	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
+	-- Inquisition
+	{spellId = 84963, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+	-- Judgements of the Pure
+	{spellId = 53657, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, slot = 3},
 	},
+	["ROGUE"] = {
+	-- Bandit's Guile
+	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	-- Recuperate
+	{spellId = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	-- Slice and dice
+	{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+>>>>>>> origin/beta
+	},
+	["WARRIOR"] = {
+	-- Last Stand, Shield Wall
+	{spellId = 12975, spellId2 = 871, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+	-- Shield Block
+	{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	}
 }
 
 -- [[ Filters ]]
@@ -184,7 +207,7 @@ C["debuffFilter"] = {
 	[91565] = true, -- Faerie Fire
 	[95466] = true, -- Corrosive Spit
 	[95467] = true, -- Tear Armor
-	
+
 	[6343] = true, -- Thunder Clap
 	[54404] = true, -- Dust Cloud
 	[90315] = true, -- Tailspin
@@ -194,7 +217,7 @@ C["debuffFilter"] = {
 	[53696] = true, -- Judgements of the Just
 	[51693] = true, -- Waylay
 	[55095] = true, -- Frost Fever
-	
+
 	[702] = true, -- Curse of Weakness
 	[1160] = true, -- Demoralizing Shout
 	[99] = true, -- Demoralizing Roar
@@ -202,7 +225,7 @@ C["debuffFilter"] = {
 	[24423] = true, -- Demoralizing Screech
 	[81132] = true, -- Scarlet Fever
 	[26017] = true, -- Vindication
-	
+
 	[118] = true, -- Polymorph (sheep)
 	[61305] = true, -- Polymorph (black cat)
 	[28272] = true, -- Polymorph (pig)
@@ -341,10 +364,14 @@ C["myBuffs"] = {
 	[17] = true, -- Power Word: Shield
 
 	[61295] = true, -- Riptide
-	[16236] = true, -- Ancestral Fortitude
 	[974] = true, -- Earth Shield
 
 	[53563] = true, -- Beacon of Light
+
+	[119611] = true, -- Renewing Mist
+	[116849] = true, -- Life Cocoon
+	[124682] = true, -- Enveloping Mist
+	[124081] = true, -- Zen Sphere
 }
 
 -- Buffs cast by anyone that healers want to see on raid frames

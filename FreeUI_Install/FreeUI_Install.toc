@@ -1,0 +1,8 @@
+## Interface: 50001
+## Title: FreeUI Install
+## Notes: FreeUI setup addon.
+## Author: Haleth/Freethinker
+## Version: 5.0
+## RequiredDeps: FreeUI
+
+install.lua

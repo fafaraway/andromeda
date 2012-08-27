@@ -42,7 +42,7 @@ local function styleExtraActionButton(bu)
 	bu.style:SetTexture(nil)
 
 	hooksecurefunc(bu.style, "SetTexture", function(self, texture)
-		if texture and string.sub(texture, 1, 9) == "Interface" then
+		if texture then
 			self:SetTexture(nil)
 		end
 	end)
@@ -66,16 +66,12 @@ local function styleActionButton(bu)
 	if not bu or (bu and bu.styled) then return end
 
 	local name = bu:GetName()
-	local bo  = _G[name.."Border"]
-	local ic  = _G[name.."Icon"]
+	local ic  = bu.icon
 	local co  = _G[name.."Count"]
-	local nt  = _G[name.."NormalTexture"]
-	local na  = _G[name.."Name"]
 	local fl  = _G[name.."FloatingBG"]
 
-	na:Hide()
-
-	bo:SetTexture(nil)
+	_G[name.."Name"]:Hide()
+	_G[name.."Border"]:SetTexture("")
 
 	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	co:ClearAllPoints()
@@ -112,7 +108,7 @@ local function stylePetButton(bu)
 
 	local name = bu:GetName()
 	local ic  = _G[name.."Icon"]
-	
+
 	_G[name.."NormalTexture2"]:SetAllPoints(bu)
 	_G[name.."AutoCastable"]:SetAlpha(0)
 
@@ -134,6 +130,17 @@ local function stylePetButton(bu)
 	if not bu.bg then applyBackground(bu) end
 
 	bu.styled = true
+end
+
+local function styleStanceButton(bu)
+	bu:SetNormalTexture("")
+	bu:SetPushedTexture("")
+	bu:SetCheckedTexture(C.media.checked)
+
+	F.CreateBG(bu)
+
+	bu.icon:SetDrawLayer("ARTWORK")
+	bu.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 end
 
 local buttons = 0
@@ -187,29 +194,31 @@ local function init()
 		styleActionButton(_G["MultiBarLeftButton"..i])
 	end
 
+	for i = 1, 6 do
+		styleActionButton(OverrideActionBar["SpellButton"..i])
+	end
+
+	applyBackground(OverrideActionBarLeaveFrameLeaveButton)
+	OverrideActionBarLeaveFrameLeaveButton:SetHighlightTexture("")
+	local nt = OverrideActionBarLeaveFrameLeaveButton:GetNormalTexture()
+	nt:SetPoint("TOPLEFT", 1, -1)
+	nt:SetPoint("BOTTOMRIGHT", -1, 1)
+	nt:SetTexCoord(0.0959375, 0.1579688, 0.369375, 0.4314063)
+
 	for i = 1, NUM_PET_ACTION_SLOTS do
 		stylePetButton(_G["PetActionButton"..i])
 	end
 
-	if C.actionbars.shapeshift == true then
-		for i = 1, NUM_SHAPESHIFT_SLOTS do
-			local bu = _G["ShapeshiftButton"..i]
-			if bu then
-				local ic = _G[bu:GetName().."Icon"]
-
-				bu:SetNormalTexture("")
-				bu:SetPushedTexture("")
-				bu:SetCheckedTexture(C.media.checked)
-
-				F.CreateBG(bu)
-
-				ic:SetDrawLayer("ARTWORK")
-				ic:SetTexCoord(0.08, 0.92, 0.08, 0.92)
-			end
+	if C.actionbars.stancebar == true then
+		for i = 1, NUM_STANCE_SLOTS do
+			styleStanceButton(_G["StanceButton"..i])
+		end
+		for i = 1, NUM_POSSESS_SLOTS do
+			styleStanceButton(_G["PossessButton"..i])
 		end
 	end
 
-	styleExtraActionButton(_G["ExtraActionButton1"])
+	styleExtraActionButton(ExtraActionButton1)
 
 	hooksecurefunc("ActionButton_UpdateHotkeys", updateHotkey)
 	hooksecurefunc("ActionButton_UpdateFlyout", styleflyout)

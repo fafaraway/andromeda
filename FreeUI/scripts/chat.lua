@@ -11,10 +11,10 @@ CHAT_TAB_HIDE_DELAY = CHAT_TAB_SHOW_DELAY -- ditto
 
 local hooks = {}
 local chatEvents = {
-	"CHAT_MSG_CHANNEL_JOIN", 
-	"CHAT_MSG_CHANNEL_LEAVE", 
-	"CHAT_MSG_CHANNEL_NOTICE", 
-	"CHAT_MSG_CHANNEL_NOTICE_USER", 
+	"CHAT_MSG_CHANNEL_JOIN",
+	"CHAT_MSG_CHANNEL_LEAVE",
+	"CHAT_MSG_CHANNEL_NOTICE",
+	"CHAT_MSG_CHANNEL_NOTICE_USER",
 	"CHAT_MSG_CHANNEL_LIST"
 }
 
@@ -73,7 +73,7 @@ local function AddMessage(frame, text, r, g, b, id)
 			break
 		end
 	end
-	
+
 	if(editMessage) then
 		text = text:gsub("%[Guild%]", "g")
 		text = text:gsub("%[Party%]", "p")
@@ -94,7 +94,7 @@ local function AddMessage(frame, text, r, g, b, id)
 		text = text:gsub("(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
 		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h") -- Remove brackets around names (breaks profession links)
 	end
-	
+
 	return hooks[frame](frame, text, r, g, b, id)
 end
 
@@ -112,9 +112,12 @@ local function toggleDown(f)
 end
 
 local function reskinMinimize(f)
+<<<<<<< HEAD
 	if f.reskinned then return end
 	f.reskinned = true
 	
+=======
+>>>>>>> origin/beta
 	f:SetSize(16, 16)
 	F.Reskin(f)
 	local minus = F.CreateFS(f, 8)
@@ -126,9 +129,15 @@ local function StyleWindow(f)
 	local frame = _G[f]
 	if frame.reskinned then return end
 	frame.reskinned = true
+<<<<<<< HEAD
 	
 	local down = _G[f.."ButtonFrameBottomButton"]
 	
+=======
+
+	local down = _G[f.."ButtonFrameBottomButton"]
+
+>>>>>>> origin/beta
 	down:SetPoint("BOTTOM")
 	down:Hide()
 	HideForever(_G[f.."ButtonFrameUpButton"])
@@ -136,7 +145,11 @@ local function StyleWindow(f)
 
 	frame:HookScript("OnMessageScrollChanged", toggleDown)
 	frame:HookScript("OnShow", toggleDown)
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/beta
 	frame:SetFading(false)
 
 	frame:SetFont(C.media.font2, 13, "THINOUTLINE")
@@ -152,7 +165,11 @@ local function StyleWindow(f)
 	frame.editBox.header:SetFont(C.media.font2, 13, "THINOUTLINE")
 	frame.editBox.header:SetShadowColor(0, 0, 0, 0)
 	frame.editBox:SetShadowColor(0, 0, 0, 0)
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/beta
 	frame.editBox:SetAltArrowKeyMode(nil)
 
 	local x=({_G[f.."EditBox"]:GetRegions()})
@@ -161,8 +178,13 @@ local function StyleWindow(f)
 	x[11]:SetAlpha(0)
 
 	local ebg = CreateFrame("Frame", nil, frame.editBox)
+<<<<<<< HEAD
 	ebg:SetBackdrop({ 
 		bgFile = C.media.backdrop, 
+=======
+	ebg:SetBackdrop({
+		bgFile = C.media.backdrop,
+>>>>>>> origin/beta
 		edgeFile = C.media.backdrop,
 		edgeSize = 1,
 	})
@@ -176,12 +198,16 @@ local function StyleWindow(f)
 	for j = 1, #CHAT_FRAME_TEXTURES do
 		_G[f..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
 	end
-	
+
 	--Hide the new editbox "ghost"
 	_G[f.."EditBoxLeft"]:SetAlpha(0)
 	_G[f.."EditBoxRight"]:SetAlpha(0)
 	_G[f.."EditBoxMid"]:SetAlpha(0)
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/beta
 	frame:SetClampRectInsets(0, 0, 0, 0)
 	
 	-- real ID conversation
@@ -199,6 +225,21 @@ local function StyleWindow(f)
 	-- minimize button
 	frame.buttonFrame.minimizeButton:HookScript("OnShow", reskinMinimize)
 
+	-- real ID conversation
+	if frame.conversationButton then
+		frame.conversationButton:ClearAllPoints()
+		frame.conversationButton:SetPoint("TOP")
+		frame.conversationButton:SetSize(16, 16)
+		frame.conversationButton.SetPoint = F.dummy
+		F.Reskin(frame.conversationButton)
+		local plus = F.CreateFS(frame.conversationButton, 8)
+		plus:SetPoint("CENTER", 1, 0)
+		plus:SetText("+")
+	end
+
+	-- minimize button
+	reskinMinimize(frame.buttonFrame.minimizeButton)
+
 	hooks[frame] = frame.AddMessage
 	frame.AddMessage = AddMessage
 end
@@ -215,6 +256,7 @@ end)
 hooksecurefunc("ChatEdit_UpdateHeader", function()
 	local editBox = ChatEdit_ChooseBoxForSend()
 	local mType = editBox:GetAttribute("chatType")
+<<<<<<< HEAD
 	if ( mType == "CHANNEL" ) then
 		local id = GetChannelName(editBox:GetAttribute("channelTarget"))
 		if id == 0 or id == 1 or id == 2 or id == 3 then
@@ -223,6 +265,12 @@ hooksecurefunc("ChatEdit_UpdateHeader", function()
 			editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
 		end
 	elseif (mType == "SAY") then
+=======
+	if mType == "CHANNEL" then
+		local id = GetChannelName(editBox:GetAttribute("channelTarget"))
+		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
+	elseif mType == "SAY" then
+>>>>>>> origin/beta
 		editBox.ebg:SetBackdropBorderColor(0, 0, 0)
 	else
 		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType].r,ChatTypeInfo[mType].g,ChatTypeInfo[mType].b)
@@ -250,10 +298,10 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 		chatType = "CHANNEL"..arg8;
 	end
 	local info = ChatTypeInfo[chatType];
-	
+
 	if ( info and info.colorNameByClass and arg12 ~= "" ) then
 		local localizedClass, englishClass, localizedRace, englishRace, sex = GetPlayerInfoByGUID(arg12)
-		
+
 		if ( englishClass ) then
 			local classColorTable = C.classcolours[englishClass];
 			if ( not classColorTable ) then
@@ -262,7 +310,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 			return string.format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..arg2.."\124r"
 		end
 	end
-	
+
 	return arg2;
 end
 
@@ -288,7 +336,7 @@ editBox:SetWidth(ChatFrame1:GetWidth())
 editBox:SetScript("OnEscapePressed", function() frame:Hide() wipe(lines) end)
 
 local scrollArea = CreateFrame("ScrollFrame", "BCMCopyScroll", frame, "UIPanelScrollFrameTemplate")
-scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
+scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
 scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
 scrollArea:SetScrollChild(editBox)
 
@@ -297,7 +345,7 @@ local function GetLines(...)
 	for i = select("#", ...), 1, -1 do
 		local region = select(i, ...)
 		if(region:GetObjectType()=="FontString") then
-			lines[ct] = tostring(region:GetText())
+			lines[ct] = gsub(tostring(region:GetText()), "\124T.-\124t", "")
 			ct = ct + 1
 		end
 	end

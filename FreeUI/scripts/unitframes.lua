@@ -25,6 +25,8 @@ local playerWidth = C.unitframes.player_width
 local playerHeight = C.unitframes.player_height
 local targetWidth = C.unitframes.target_width
 local targetHeight = C.unitframes.target_height
+local targettargetWidth = C.unitframes.targettarget_width
+local targettargetHeight = C.unitframes.targettarget_height
 local focusWidth = C.unitframes.focus_width
 local focusHeight = C.unitframes.focus_height
 local petWidth = C.unitframes.pet_width
@@ -96,7 +98,7 @@ local siValue = function(val)
 	if(val >= 1e6) then
 		return format("%.2fm", val * 0.000001)
 	elseif(val >= 1e4) then
-		return format("%.1fk", val * 0.001) 
+		return format("%.1fk", val * 0.001)
 	else
 		return val
 	end
@@ -171,10 +173,10 @@ end
 
 oUF.Tags.Methods['free:name'] = function(unit)
 	if not UnitIsConnected(unit) then
-		return "Off" 
+		return "Off"
 	elseif UnitIsDead(unit) then
 		return "Dead"
-	elseif UnitIsGhost(unit) then 
+	elseif UnitIsGhost(unit) then
 		return "Ghost"
 	else
 		return shortName(unit)
@@ -186,10 +188,10 @@ oUF.Tags.Methods['free:missinghealth'] = function(unit)
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
 
 	if not UnitIsConnected(unit) then
-		return "Off" 
+		return "Off"
 	elseif UnitIsDead(unit) then
 		return "Dead"
-	elseif UnitIsGhost(unit) then 
+	elseif UnitIsGhost(unit) then
 		return "Ghost"
 	elseif min ~= max then
 		return siValue(max-min)
@@ -232,7 +234,7 @@ local UpdateHealth = function(self, event, unit)
 		if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
 			self.Power:SetStatusBarColor(r, g, b)
 			self.Power.bg:SetVertexColor(r/2, g/2, b/2)
-			
+
 			self.Healthdef:SetMinMaxValues(0, max)
 
 			if UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -266,8 +268,8 @@ local PostUpdateHealth = function(Health, unit, min, max)
 	if Health.value and unit == "target" then
 		Health.value:SetTextColor(unpack(C.reactioncolours[UnitReaction("player", unit) or 5]))
 	end
-	
-	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then	
+
+	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then
 		if(UnitIsDead(unit)) then
 			Health:SetValue(0)
 		elseif(UnitIsGhost(unit)) then
@@ -319,7 +321,7 @@ local function KillPartyFrame()
 		local name = "CompactPartyFrameMember" .. i
 		local frame = _G[name]
 		frame:UnregisterAllEvents()
-	end			
+	end
 end
 
 for i=1, MAX_PARTY_MEMBERS do
@@ -411,13 +413,13 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Health deficit colour ]]
 
-	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then 
+	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
 		local Healthdef = CreateFrame("StatusBar", nil, self)
 		Healthdef:SetFrameStrata("LOW")
 		Healthdef:SetAllPoints(Health)
 		Healthdef:SetStatusBarTexture(C.media.texture)
 		Healthdef:SetStatusBarColor(1, 1, 1)
-		
+
 		Healthdef:SetReverseFill(true)
 		SmoothBar(Healthdef)
 
@@ -491,7 +493,7 @@ local Shared = function(self, unit, isSingle)
 		end)
 
 		self.AltPowerBar = AltPowerBar
-		
+
 		SmoothBar(AltPowerBar)
 
 		AltPowerBar:HookScript("OnShow", function()
@@ -602,6 +604,8 @@ local Shared = function(self, unit, isSingle)
 			self:SetSize(playerWidth, playerHeight)
 		elseif unit == "target" then
 			self:SetSize(targetWidth, targetHeight)
+		elseif unit == "targettarget" then
+			self:SetSize(targettargetWidth, targettargetHeight)
 		elseif unit:find("arena%d") then
 			self:SetSize(arenaWidth, arenaHeight)
 		elseif unit == "focus" then
@@ -727,7 +731,7 @@ local UnitSpecific = {
 				local pvp = self.PvP
 
 				local factionGroup = UnitFactionGroup(unit)
-				if(UnitIsPVPFreeForAll(unit) or (factionGroup and UnitIsPVP(unit))) then
+				if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
 					pvp:Show()
 				else
 					pvp:Hide()
@@ -838,7 +842,7 @@ local UnitSpecific = {
 			LunarBar:SetStatusBarColor(.80, .82, .60)
 			LunarBar:SetFrameStrata("LOW")
 			eclipseBar.LunarBar = LunarBar
-			
+
 			SmoothBar(LunarBar)
 
 			local SolarBar = CreateFrame("StatusBar", nil, eclipseBar)
@@ -848,9 +852,9 @@ local UnitSpecific = {
 			SolarBar:SetStatusBarColor(.30, .52, .90)
 			SolarBar:SetFrameStrata("LOW")
 			eclipseBar.SolarBar = SolarBar
-			
+
 			SmoothBar(SolarBar)
-			
+
 			local spark = SolarBar:CreateTexture(nil, "OVERLAY")
 			spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 			spark:SetBlendMode("ADD")
@@ -859,7 +863,7 @@ local UnitSpecific = {
 
 			local eclipseBarText = F.CreateFS(eclipseBar, 24)
 			eclipseBarText:SetPoint("LEFT", self, "RIGHT", 10, 0)
-			self:Tag(eclipseBarText, '[pereclipse]')
+			eclipseBarText:Hide()
 
 			self.EclipseBar = eclipseBar
 
@@ -867,11 +871,10 @@ local UnitSpecific = {
 
 			eclipseBar:RegisterEvent("PLAYER_REGEN_ENABLED")
 			eclipseBar:RegisterEvent("PLAYER_REGEN_DISABLED")
-			eclipseBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-			eclipseBar:HookScript("OnEvent", function()
-				if InCombatLockdown() then
+			eclipseBar:HookScript("OnEvent", function(self, event)
+				if event == "PLAYER_REGEN_DISABLED" then
 					eclipseBarText:Show()
-				else
+				elseif event == "PLAYER_REGEN_ENABLED" then
 					eclipseBarText:Hide()
 				end
 			end)
@@ -885,10 +888,11 @@ local UnitSpecific = {
 					eclipseBarText:SetTextColor(1, 1, 1)
 				end
 
-				if UnitPower("player", SPELL_POWER_ECLIPSE) == 0 then
-					eclipseBarText:Hide()
+				local power = UnitPower("player", SPELL_POWER_ECLIPSE)
+				if power == 0 then
+					eclipseBarText:SetText("")
 				else
-					eclipseBarText:Show()
+					eclipseBarText:SetText(math.abs(power))
 				end
 			end
 
@@ -907,12 +911,74 @@ local UnitSpecific = {
 					end
 				end
 			end
+<<<<<<< HEAD
 		elseif class == "PALADIN" and C.classmod.paladin == true then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
 				
 				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
 				if(num == MAX_HOLY_POWER) then
+=======
+		elseif class == "MONK" and C.classmod.monk == true then
+			local pulsating = false
+
+			local r, g, b = PowerBarColor["LIGHT_FORCE"].r, PowerBarColor["LIGHT_FORCE"].g, PowerBarColor["LIGHT_FORCE"].b
+
+			local UpdateOrbs = function(self, event, unit, powerType)
+				if unit ~= "player" then return end
+
+				local chi = UnitPower(unit, SPELL_POWER_LIGHT_FORCE)
+
+				if chi == UnitPowerMax(unit, SPELL_POWER_LIGHT_FORCE) then
+					if not pulsating then
+						pulsating = true
+						self.glow:SetAlpha(1)
+						F.CreatePulse(self.glow)
+						self.count:SetText(chi)
+						self.count:SetTextColor(r, g, b)
+						self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+					end
+				elseif chi == 0 then
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText("")
+					pulsating = false
+				else
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText(chi)
+					self.count:SetTextColor(1, 1, 1)
+					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+					pulsating = false
+				end
+			end
+
+			local glow = CreateFrame("Frame", nil, self)
+			glow:SetBackdrop({
+				edgeFile = C.media.glow,
+				edgeSize = 5,
+			})
+			glow:SetPoint("TOPLEFT", self, -6, 6)
+			glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
+			glow:SetBackdropBorderColor(r, g, b)
+
+			self.glow = glow
+
+			local count = F.CreateFS(self, 24)
+			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
+
+			self.count = count
+
+			self.Harmony = glow
+			glow.Override = UpdateOrbs
+		elseif class == "PALADIN" and C.classmod.paladin == true then
+			local UpdateHoly = function(self, event, unit, powerType)
+				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
+
+				local num = UnitPower(unit, SPELL_POWER_HOLY_POWER)
+
+				if(num == UnitPowerMax("player", SPELL_POWER_HOLY_POWER)) then
+>>>>>>> origin/beta
 					self.glow:SetAlpha(1)
 					F.CreatePulse(self.glow)
 					self.count:SetText(num)
@@ -949,43 +1015,76 @@ local UnitSpecific = {
 
 			self.HolyPower = glow
 			glow.Override = UpdateHoly
-		elseif class == "WARLOCK" and C.classmod.warlock == true then
-			local bars = CreateFrame("Frame", nil, self)
-			bars:SetWidth(playerWidth)
-			bars:SetHeight(1)
-			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+		elseif class == "PRIEST" and C.classmod.priest == true then
+			local UpdateOrbs = function(self, event, unit, powerType)
+				if(self.unit ~= unit or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
 
-			local bbd = CreateFrame("Frame", nil, bars)
-			bbd:SetPoint("TOPLEFT", -1, 1)
-			bbd:SetPoint("BOTTOMRIGHT", 1, -1)
-			bbd:SetFrameLevel(bars:GetFrameLevel()-1)
-			F.CreateBD(bbd)
+				local numOrbs = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
 
-			for i = 1, 3 do
-				bars[i] = CreateFrame("StatusBar", nil, self)
-				bars[i]:SetHeight(1)
-				bars[i]:SetStatusBarTexture(C.media.texture)
-				bars[i]:SetStatusBarColor(255/255,101/255,101/255)
-
-				local bbd = CreateFrame("Frame", nil, bars[i])
-				bbd:SetBackdrop({
-					edgeFile = C.media.backdrop,
-					edgeSize = 1,
-				})
-				bbd:SetBackdropBorderColor(0, 0, 0)
-				bbd:SetPoint("TOPLEFT", bars[i], -1, 1)
-				bbd:SetPoint("BOTTOMRIGHT", bars[i], 1, -1)
-
-				if i == 1 then
-					bars[i]:SetPoint("LEFT", bars)
-					bars[i]:SetWidth((playerWidth-4)/3)
+				if(numOrbs == PRIEST_BAR_NUM_ORBS) then
+					self.glow:SetAlpha(1)
+					F.CreatePulse(self.glow)
+					self.count:SetText(numOrbs)
+					self.count:SetTextColor(.6, 0, 1)
+					self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+				elseif numOrbs == 0 then
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText("")
 				else
-					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 1, 0)
-					bars[i]:SetWidth((playerWidth-1)/3)
+					self.glow:SetScript("OnUpdate", nil)
+					self.glow:SetAlpha(0)
+					self.count:SetText(numOrbs)
+					self.count:SetTextColor(1, 1, 1)
+					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
 				end
 			end
 
-			self.SoulShards = bars
+			local glow = CreateFrame("Frame", nil, self)
+			glow:SetBackdrop({
+				edgeFile = C.media.glow,
+				edgeSize = 5,
+			})
+			glow:SetPoint("TOPLEFT", self, -6, 6)
+			glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
+			glow:SetBackdropBorderColor(.6, 0, 1)
+
+			self.glow = glow
+
+			local count = F.CreateFS(self, 24)
+			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
+
+			self.count = count
+
+			self.ShadowOrbs = glow
+			glow.Override = UpdateOrbs
+		elseif class == "WARLOCK" and C.classmod.warlock == true then
+			local bars = CreateFrame("Frame", nil, self)
+			bars:SetWidth(playerWidth)
+			bars:SetHeight(2)
+			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+
+			for i = 1, 4 do
+				bars[i] = CreateFrame("StatusBar", nil, self)
+				bars[i]:SetHeight(2)
+				bars[i]:SetStatusBarTexture(C.media.texture)
+
+				local bbd = CreateFrame("Frame", nil, bars[i])
+				bbd:SetPoint("TOPLEFT", bars[i], -1, 1)
+				bbd:SetPoint("BOTTOMRIGHT", bars[i], 1, -1)
+				bbd:SetFrameLevel(bars[i]:GetFrameLevel()-1)
+				F.CreateBD(bbd)
+
+				if i == 1 then
+					bars[i]:SetPoint("LEFT", bars)
+					bars[i]:SetWidth((playerWidth/4))
+				else
+					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 1, 0)
+					bars[i]:SetWidth((playerWidth/4)-1)
+				end
+			end
+
+			self.WarlockSpecBars = bars
 		end
 
 		self.AltPowerBar:HookScript("OnShow", function()
@@ -1059,6 +1158,7 @@ local UnitSpecific = {
 
 		local tt = CreateFrame("Frame", nil, self)
 		local a1, p, a2, x, y = Health:GetPoint()
+		if C.unitframes.targettarget then y = y + 10 end
 		tt:SetPoint(a1, p, a2, x+60, y+26)
 		tt:SetWidth(110)
 		tt:SetHeight(12)
@@ -1153,7 +1253,6 @@ local UnitSpecific = {
 		Shared(self, ...)
 
 		local Health = self.Health
-		local Power = self.Power
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
@@ -1179,10 +1278,25 @@ local UnitSpecific = {
 		Debuffs.PostUpdateIcon = PostUpdateIcon
 	end,
 
+	targettarget = function(self, ...)
+		Shared(self, ...)
+
+		local Health = self.Health
+		local Castbar = self.Castbar
+		local Spark = Castbar.Spark
+
+		Health:SetHeight(targettargetHeight - powerHeight - 1)
+
+		Castbar:SetAllPoints(Health)
+		Castbar.Width = self:GetWidth()
+
+		Spark:SetHeight(Health:GetHeight())
+	end,
+
 	boss = function(self, ...)
 		Shared(self, ...)
 
-		local Health, Power = self.Health, self.Power
+		local Health = self.Health
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
@@ -1288,7 +1402,7 @@ local UnitSpecific = {
 	arena = function(self, ...)
 		Shared(self, ...)
 
-		local Health, Power = self.Health, self.Power
+		local Health = self.Health
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
@@ -1597,28 +1711,29 @@ end
 
 oUF:Factory(function(self)
 	local playerPos, targetPos, partyPos, raidPos
+	local target
 	if C.unitframes.auto == true then
 		local height = GetScreenHeight()
 		spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", -275, -(height/13.7))
-		
+
 		if FreeUIConfig.layout == 1 then
-			spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, -(height/6.4))
+			target = spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, -(height/6.4))
 			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
 			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 		else
-			spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, -(height/13.7))
+			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, -(height/13.7))
 			partyPos = {"TOP", UIParent, "CENTER", 0, -(height/6.4)}
 			raidPos = {"TOP", UIParent, "CENTER", 0, -(height/7.6)}
 		end
 	else
 		spawnHelper(self, 'player', unpack(C.unitframes.player))
-		
+
 		if FreeUIConfig.layout == 1 then
-			spawnHelper(self, 'target', unpack(C.unitframes.target))
+			target = spawnHelper(self, 'target', unpack(C.unitframes.target))
 			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
 			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 		else
-			spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
+			target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
 			partyPos = C.unitframes.party
 			raidPos = C.unitframes.raid
 		end
@@ -1626,6 +1741,10 @@ oUF:Factory(function(self)
 
 	spawnHelper(self, 'focus', "BOTTOMRIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 12)
 	spawnHelper(self, 'pet', "BOTTOMLEFT", oUF_FreePlayer, "TOPLEFT", 0, 12)
+
+	if C.unitframes.targettarget then
+		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, 15)
+	end
 
 	for n = 1, 4 do
 		spawnHelper(self,'boss' .. n, 'LEFT', 50, 0 - (56 * n))
@@ -1646,14 +1765,14 @@ oUF:Factory(function(self)
 		party_height = partyHeight
 	end
 
-	local party = self:SpawnHeader(nil, nil, "custom [@raid6,exists] hide; show", 
-		'showParty', true, 
-		'showPlayer', true and FreeUIConfig.layout == 2 or false, 
-		'showSolo', false, 
-		'yoffset', -3, 
-		'maxColumns', 5, 
-		'unitsperColumn', 1, 
-		'columnSpacing', 3, 
+	local party = self:SpawnHeader(nil, nil, "custom [@raid6,exists] hide; show",
+		'showParty', true,
+		'showPlayer', true and FreeUIConfig.layout == 2 or false,
+		'showSolo', false,
+		'yoffset', -3,
+		'maxColumns', 5,
+		'unitsperColumn', 1,
+		'columnSpacing', 3,
 		'columnAnchorPoint', "RIGHT",
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)

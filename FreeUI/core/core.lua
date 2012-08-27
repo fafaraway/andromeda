@@ -1,3 +1,5 @@
+-- [[ Core ]]
+
 local addon, core = ...
 
 core[1] = {} -- F, Functions
@@ -8,116 +10,93 @@ FreeUI = core
 
 local F, C, L = unpack(select(2, ...))
 
-C.media = {
-	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
-	["checked"] = "Interface\\AddOns\\FreeUI\\media\\CheckButtonHilight", -- replace default checked texture
-	["font"] = "Interface\\AddOns\\FreeUI\\media\\Hooge0655.ttf", -- default pixel font
-	["font2"] = "Interface\\AddOns\\FreeUI\\media\\font.ttf", -- default font
-	["glow"] = "Interface\\AddOns\\FreeUI\\media\\glowTex", -- glow/shadow texture
-	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
-}
-
--- [[ Functions ]]
-
-local function dummy() end
-
-local function CreateBD(f, a)
-	f:SetBackdrop({
-		bgFile = C.media.backdrop, 
-		edgeFile = C.media.backdrop, 
-		edgeSize = 1, 
-	})
-	f:SetBackdropColor(0, 0, 0, a or .5)
-	f:SetBackdropBorderColor(0, 0, 0)
-end
-
-local function CreateBG(frame)
-	local f = frame
-	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
-
-	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", frame, -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
-	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0)
-
-	return bg
-end
-
-local function CreateSD(parent, size, r, g, b, alpha, offset)
-	local sd = CreateFrame("Frame", nil, parent)
-	sd.size = size or 5
-	sd.offset = offset or 0
-	sd:SetBackdrop({
-		edgeFile = C.media.glow,
-		edgeSize = sd.size,
-	})
-	sd:SetPoint("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
-	sd:SetPoint("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
-	sd:SetBackdropBorderColor(r or 0, g or 0, b or 0)
-	sd:SetAlpha(alpha or 1)
-end
-
-local function CreateFS(parent, size, justify)
-    local f = parent:CreateFontString(nil, "OVERLAY")
-    f:SetFont(C.media.font, size, "OUTLINEMONOCHROME")
-    f:SetShadowColor(0, 0, 0, 0)
-    if(justify) then f:SetJustifyH(justify) end
-    return f
-end
-
-local function CreatePulse(frame, speed, mult, alpha) -- pulse function originally by nightcracker
-	frame.speed = speed or .05
-	frame.mult = mult or 1
-	frame.alpha = alpha or 1
-	frame.tslu = 0 -- time since last update
-	frame:SetScript("OnUpdate", function(self, elapsed)
-		self.tslu = self.tslu + elapsed
-		if self.tslu > self.speed then
-			self.tslu = 0
-			self:SetAlpha(self.alpha)
-		end
-		self.alpha = self.alpha - elapsed*self.mult
-		if self.alpha < 0 and self.mult > 0 then
-			self.mult = self.mult*-1
-			self.alpha = 0
-		elseif self.alpha > 1 and self.mult < 0 then
-			self.mult = self.mult*-1
-		end
-	end)
-end
-
-F.dummy = dummy
-F.CreateBD = CreateBD
-F.CreateBG = CreateBG
-F.CreateSD = CreateSD
-F.CreateFS = CreateFS
-F.CreatePulse = CreatePulse
-
 -- [[ Saved variables ]]
 
-FreeUIGlobalConfig = {} 
+FreeUIGlobalConfig = {}
 FreeUIConfig = {}
 
--- [[ High resolution support ]]
+-- [[ Event handler ]]
 
-local scaler = CreateFrame("Frame")
-scaler:RegisterEvent("VARIABLES_LOADED")
-scaler:RegisterEvent("UI_SCALE_CHANGED")
-scaler:SetScript("OnEvent", function(self, event)
+local eventFrame = CreateFrame("Frame")
+local events = {}
+
+eventFrame:SetScript("OnEvent", function(_, event, ...)
+	for i = #events[event], 1, -1 do
+		events[event][i](event, ...)
+	end
+end)
+
+F.RegisterEvent = function(event, func)
+	if not events[event] then
+		events[event] = {}
+		eventFrame:RegisterEvent(event)
+	end
+	table.insert(events[event], func)
+end
+
+F.UnregisterEvent = function(event, func)
+	for index, tFunc in ipairs(events[event]) do
+		if tFunc == func then
+			table.remove(events[event], index)
+		end
+	end
+	if #events[event] == 0 then
+		events[event] = nil
+		eventFrame:UnregisterEvent(event)
+	end
+end
+
+F.UnregisterAllEvents = function(func)
+	for event in next, events do
+		for _, tFunc in next, events[event] do
+			if tFunc == func then
+				F.UnregisterEvent(event, func)
+			end
+		end
+	end
+end
+
+debugEvents = function()
+	for event in next, events do
+		print(event..": "..#events[event])
+	end
+end
+
+-- [[ Resolution support ]]
+
+C.resolution = 0
+
+local updateScale
+updateScale = function(event)
+	if event == "VARIABLES_LOADED" then
+		local width = GetScreenWidth()
+
+		if width <= 1400 then
+			C.resolution = 1
+		elseif width <= 1920 then
+			C.resolution = 2
+		else
+			C.resolution = 3
+		end
+	end
 	if not InCombatLockdown() then
 		local scale = 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
 		if scale < .64 then
 			UIParent:SetScale(scale)
 			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50)
 		else
-			self:SetScript("OnEvent", nil)
+			F.UnregisterAllEvents(updateScale)
+			SetCVar("useUiScale", 1)
+			SetCVar("uiScale", scale)
 		end
 	else
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
 	end
 
 	if event == "PLAYER_REGEN_ENABLED" then
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		F.UnregisterEvent("PLAYER_REGEN_ENABLED", updateScale)
 	end
-end)
+end
+
+F.RegisterEvent("VARIABLES_LOADED", updateScale)
+F.RegisterEvent("UI_SCALE_CHANGED", updateScale)

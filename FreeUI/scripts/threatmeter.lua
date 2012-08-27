@@ -2,8 +2,7 @@
 
 local F, C, L = unpack(select(2, ...))
 
-local a1, p, a2, x, y = unpack(C.unitframes.target)
-local f = CreateFrame("StatusBar", "aThreatMeter", UIParent)
+local f = CreateFrame("StatusBar", "FreeUIThreatMeter", UIParent)
 f:SetStatusBarTexture(C.media.texture)
 f:SetMinMaxValues(0, 100)
 f:SetWidth(C.unitframes.target_width)
@@ -18,7 +17,19 @@ F.CreateBD(bg)
 
 local nametext = F.CreateFS(f, 8, "LEFT")
 nametext:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 2)
- 
+
+local addonLoaded
+addonLoaded = function(_, addon)
+	if addon ~= "FreeUI" then return end
+	if FreeUIConfig.layout == 2 then
+		aThreatMeter:UnregisterAllEvents()
+		aThreatMeter:Hide()
+	end
+	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
+	addonLoaded = nil
+end
+F.RegisterEvent("ADDON_LOADED", addonLoaded)
+
 local format, wipe, sort, tinsert, tremove, ipairs =
 format, table.wipe, sort, tinsert, tremove, ipairs
 local pname = UnitName("player")
@@ -102,13 +113,14 @@ end
 f:RegisterEvent("UNIT_THREAT_LIST_UPDATE")
 function f:UNIT_THREAT_LIST_UPDATE(event, unit)
 	if(unit and UnitExists(unit) and UnitGUID(unit)==tguid) then
-		if(GetNumRaidMembers()>0) then
-			for i=1, GetNumRaidMembers() do
+		local num = GetNumGroupMembers()
+		if num > 5 then
+			for i = 1, num do
 				AddThreat("raid"..i)
 			end
-		elseif(GetNumPartyMembers()>0) then
+		elseif num > 0 then
 			AddThreat("player")
-			for i=1, GetNumPartyMembers() do
+			for i = 1, num do
 				AddThreat("party"..i)
 			end
 		end

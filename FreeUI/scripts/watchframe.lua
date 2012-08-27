@@ -14,6 +14,9 @@ local function moveTracker()
 end
 
 hooksecurefunc("UIParent_ManageFramePositions", moveTracker)
+local mover = CreateFrame("Frame")
+mover:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
+mover:SetScript("OnEvent", moveTracker)
 
 WatchFrameCollapseExpandButton:SetSize(15, 15)
 

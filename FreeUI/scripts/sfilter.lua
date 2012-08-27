@@ -11,15 +11,25 @@ local MyUnits = {
 local function sFilter_CreateFrame(data)
 	local spellName, _, spellIcon = GetSpellInfo(data.spellId)
 	local frame = CreateFrame("Frame", "sFilter_" .. data.unitId .. "_" .. data.spellId, UIParent)
+<<<<<<< HEAD
 	frame:SetWidth(data.size)
 	frame:SetHeight(data.size)
+=======
+	frame:SetSize(data.size or 39, data.size or 39)
+>>>>>>> origin/beta
 	frame:RegisterEvent("UNIT_AURA")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 	frame:SetScript("OnEvent", function(self, event, ...)
 		if event == "PLAYER_ENTERING_WORLD" then
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+<<<<<<< HEAD
 			if data.slot == 1 then
+=======
+			if data.customPoint then
+				self:SetPoint(unpack(customPoint))
+			elseif data.slot == 1 then
+>>>>>>> origin/beta
 				self:SetPoint("BOTTOMLEFT", oUF_FreeTarget, "TOPLEFT", 0, 42)
 			elseif data.slot == 2 then
 				self:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
@@ -33,7 +43,7 @@ local function sFilter_CreateFrame(data)
 			self:SetAlpha(1)
 			for i=1, 40 do
 				local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(data.unitId, i, data.filter)
-				if((data.isMine~=1 or MyUnits[caster]) and(not data.spec or GetPrimaryTalentTree()==data.spec) and (name==GetSpellInfo(data.spellId) or (data.spellId2 and name==GetSpellInfo(data.spellId2)) or (data.spellId3 and name==GetSpellInfo(data.spellId3)) or (data.spellId4 and name==GetSpellInfo(data.spellId4)) or (data.spellId5 and name==GetSpellInfo(data.spellId5)))) then
+				if((data.isMine~=1 or MyUnits[caster]) and(not data.spec or GetSpecialization()==data.spec) and (name==GetSpellInfo(data.spellId) or (data.spellId2 and name==GetSpellInfo(data.spellId2)) or (data.spellId3 and name==GetSpellInfo(data.spellId3)) or (data.spellId4 and name==GetSpellInfo(data.spellId4)) or (data.spellId5 and name==GetSpellInfo(data.spellId5)))) then
 					self.found = true
 					self.icon:SetTexture(icon)
 					self.count:SetText(count>1 and count or "")

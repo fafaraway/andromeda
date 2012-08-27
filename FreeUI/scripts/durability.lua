@@ -3,8 +3,7 @@
 local F, C, L = unpack(select(2, ...))
 
 local SLOTIDS = {}
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand", "Ranged"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
-local frame = CreateFrame("Frame", nil, CharacterFrame)
+for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do SLOTIDS[slot] = GetInventorySlotInfo(slot .. "Slot") end
 
 local function RYGColorGradient(perc)
 	local relperc = perc*2 % 1
@@ -28,14 +27,11 @@ local fontstrings = setmetatable({}, {
 	end,
 })
 
-
-function frame:OnEvent(event, arg1)
-	local min = 1
+local onEvent = function()
 	for slot, id in pairs(SLOTIDS) do
 		local v1, v2 = GetInventoryItemDurability(id)
 
 		if v1 and v2 and v2 ~= 0 then
-			min = math.min(v1/v2, min)
 			local str = fontstrings[slot]
 			str:SetTextColor(RYGColorGradient(v1/v2))
 			str:SetText(string.format("%d%%", v1/v2*100))
@@ -44,10 +40,6 @@ function frame:OnEvent(event, arg1)
 			if str then str:SetText(nil) end
 		end
 	end
-
-	local r, g, b = RYGColorGradient(min)
 end
 
-frame:SetScript("OnEvent", frame.OnEvent)
-frame:RegisterEvent("ADDON_LOADED")
-frame:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
+F.RegisterEvent("UPDATE_INVENTORY_DURABILITY", onEvent)

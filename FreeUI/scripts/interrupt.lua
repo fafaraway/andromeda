@@ -5,8 +5,9 @@ if C.general.interrupt == false then return end
 local interrupt = CreateFrame("Frame")
 interrupt:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 interrupt:SetScript("OnEvent", function(_, _, _, subevent, _, _, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
-	local inParty = GetNumPartyMembers() >= 1
-	local inRaid = GetNumRaidMembers() >= 1
+	local num = GetNumGroupMembers()
+	local inParty = num >= 1
+	local inRaid = num > 5
 	if subevent == "SPELL_INTERRUPT" then
 		if sourceName ~= UnitName("player") then return end
 		if GetCurrentMapAreaID() == 708 then return end

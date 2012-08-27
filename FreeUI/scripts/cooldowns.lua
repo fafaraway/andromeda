@@ -3,7 +3,6 @@
 local F, C, L = unpack(select(2, ...))
 
 local format, floor, GetTime = string.format, math.floor, GetTime
-local Multiplier = 0.8
 
 local function GetFormattedTime(s)
 	if s>3600 then
@@ -33,7 +32,7 @@ end
 
 local methods = getmetatable(ActionButton1Cooldown).__index
 hooksecurefunc(methods, "SetCooldown", function(self, start, duration)
-	if(start>0 and duration>2.5) then
+	if start > 0 and duration > 2.5 then
 		if self.noshowcd then return end
 
 		self.start = start
@@ -49,7 +48,7 @@ hooksecurefunc(methods, "SetCooldown", function(self, start, duration)
 		end
 
 		text:Show()
-	elseif(self.text) then
+	elseif self.text then
 		self.text:Hide()
 	end
 end)
@@ -57,19 +56,20 @@ end)
 local hooked = {}
 local active = {}
 
-local abEventWatcher = CreateFrame('Frame'); abEventWatcher:Hide()
-abEventWatcher:SetScript('OnEvent', function(self, event)
+local abEventWatcher = CreateFrame("Frame")
+abEventWatcher:Hide()
+abEventWatcher:SetScript("OnEvent", function(self, event)
 	for cooldown in pairs(active) do
 		local button = cooldown:GetParent()
 		local start, duration, enable = GetActionCooldown(button.action)
 		cooldown:SetCooldown(start, duration)
 	end
 end)
-abEventWatcher:RegisterEvent('ACTIONBAR_UPDATE_COOLDOWN')
+abEventWatcher:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
 
 local function cooldown_OnShow(self)
 	active[self] = true
-    end
+   end
 
 local function cooldown_OnHide(self)
 	active[self] = nil
@@ -78,8 +78,8 @@ end
 local function actionButton_Register(frame)
 	local cooldown = frame.cooldown
 	if not hooked[cooldown] then
-		cooldown:HookScript('OnShow', cooldown_OnShow)
-		cooldown:HookScript('OnHide', cooldown_OnHide)
+		cooldown:HookScript("OnShow", cooldown_OnShow)
+		cooldown:HookScript("OnHide", cooldown_OnHide)
 		hooked[cooldown] = true
 	end
 end
@@ -88,4 +88,4 @@ for i, frame in pairs(ActionBarButtonEventsFrame.frames) do
 	actionButton_Register(frame)
 end
 
-hooksecurefunc('ActionBarButtonEventsFrame_RegisterFrame', actionButton_Register)
+hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", actionButton_Register)

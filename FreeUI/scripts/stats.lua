@@ -28,7 +28,7 @@ f:SetScript("OnUpdate", function(self, elapsed)
 	end
 
 	if last >= 1 then
-		text:SetText("|cffffffff"..ceil(GetFramerate()).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..date("%H:%M"))
+		text:SetText("|cffffffff"..floor(GetFramerate() + .5).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..GameTime_GetTime(false))
 		last = 0
 	end
 end)
@@ -57,14 +57,19 @@ f:SetScript("OnEnter", function()
 	if BagsHolder:IsShown() then
 		GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", -1, 0)
 	else
-		GameTooltip:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, -1)
-	end	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), r, g, b, 1, 1, 1)
+		GameTooltip:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -2, -1)
+	end
+	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), r, g, b, 1, 1, 1)
 
 	GameTooltip:AddLine(" ")
 
 	for _, entry in next, addons do
 		GameTooltip:AddDoubleLine(entry.name, format("%.1f kb", entry.memory), 1, 1, 1, 1, 1, 1)
 	end
+
+	GameTooltip:AddLine(" ")
+
+	GameTooltip:AddLine("Click |cffffffffto show time manager.", r, g, b)
 
 	GameTooltip:Show()
 end)
@@ -73,4 +78,8 @@ f:SetScript("OnLeave", function()
 	GameTooltip:Hide()
 	n, total = 0, 0
 	wipe(addons)
+end)
+
+f:SetScript("OnClick", function()
+	TimeManagerClockButton_OnClick(TimeManagerClockButton)
 end)

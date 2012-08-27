@@ -6,21 +6,21 @@ bottompanel:SetHeight(13)
 bottompanel:SetPoint("BOTTOMLEFT", -1, -1)
 bottompanel:SetPoint("BOTTOMRIGHT", 1, -1)
 bottompanel:SetBackdrop({
-	edgeFile = C.media.backdrop, 
-	edgeSize = 1, 
+	edgeFile = C.media.backdrop,
+	edgeSize = 1,
 })
 bottompanel:SetBackdropBorderColor(0, 0, 0)
 
-bottompanel:SetScript("OnEvent", function(self, event)
-	if event=="PLAYER_REGEN_DISABLED" then
-		self:SetBackdropBorderColor(1, 0, 0)
-	elseif event=="PLAYER_REGEN_ENABLED" then
-		self:SetBackdropBorderColor(0, 0, 0)
+local function onEvent(event)
+	if event == "PLAYER_REGEN_DISABLED" then
+		bottompanel:SetBackdropBorderColor(1, 0, 0)
+	else
+		bottompanel:SetBackdropBorderColor(0, 0, 0)
 	end
-end)
+end
 
-bottompanel:RegisterEvent("PLAYER_REGEN_DISABLED")
-bottompanel:RegisterEvent("PLAYER_REGEN_ENABLED")
+F.RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
+F.RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
 
 local overlay = bottompanel:CreateTexture(nil, "BORDER")
 overlay:SetPoint("TOPLEFT", 0, -1)

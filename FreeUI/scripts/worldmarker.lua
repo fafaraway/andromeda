@@ -10,10 +10,10 @@ CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonLeft:SetAlp
 CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonMiddle:SetAlpha(0)
 CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonRight:SetAlpha(0)
 
-wm:RegisterEvent("PARTY_MEMBERS_CHANGED")
+wm:RegisterEvent("GROUP_ROSTER_UPDATE")
 wm:HookScript("OnEvent", function(self)
-	local raid = GetNumRaidMembers() > 0
-	if (raid and (IsRaidLeader() or IsRaidOfficer())) or (GetNumPartyMembers() > 0 and not raid) then
+	local num = GetNumGroupMembers()
+	if (num > 5 and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (num > 0 and num <= 5) then
 		self:Show()
 	else
 		self:Hide()

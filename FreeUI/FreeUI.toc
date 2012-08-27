@@ -1,22 +1,32 @@
-## Interface: 40300
+## Interface: 50001
 ## Title: FreeUI
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Freethinker
+<<<<<<< HEAD
 ## Version: 4.4.2
 ## RequiredDeps: Blizzard_CombatText
 ## OptionalDeps: Blizzard_TimeManager, Clique, oUF
+=======
+## Version: 5.0
+## RequiredDeps: Blizzard_CombatText
+## OptionalDeps: Clique, FreeUI_Options, oUF
+>>>>>>> origin/beta
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 
 core\core.lua
-core\colours.lua
-core\slash.lua
 
 options.lua
+profiles.lua
+
+core\api.lua
+core\gui.lua
+core\slash.lua
 
 oUF\oUF.xml
 
 scripts\actionbars.lua
+scripts\arena.lua
 scripts\automation.lua
 scripts\bags.lua
 scripts\bubbles.lua
@@ -25,6 +35,7 @@ scripts\buffs.lua
 scripts\buttons.lua
 scripts\chat.lua
 scripts\chattabs.lua
+scripts\colours.lua
 scripts\combattext.lua
 scripts\combo.lua
 scripts\cooldowns.lua
@@ -36,7 +47,6 @@ scripts\events.lua
 scripts\expbar.lua
 scripts\fonts.lua
 scripts\globals.lua
-scripts\gui.lua
 scripts\interrupt.lua
 scripts\itemglow.lua
 scripts\loot.lua
@@ -44,10 +54,12 @@ scripts\lootroll.lua
 scripts\mail.lua
 scripts\map.lua
 scripts\marking.lua
+scripts\micromenu.lua
 scripts\minimap.lua
 scripts\mirrorbars.lua
 scripts\nameplates.lua
 scripts\panel.lua
+scripts\petbattles.lua
 scripts\rangecolor.lua
 scripts\sfilter.lua
 scripts\stats.lua
@@ -62,6 +74,5 @@ scripts\watchframe.lua
 scripts\worldmarker.lua
 scripts\worldstateframe.lua
 
-class\rogue.lua
 class\shaman.lua
 class\warrior.lua

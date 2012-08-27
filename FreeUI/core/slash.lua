@@ -76,11 +76,11 @@ SlashCmdList.FREEUI = function(cmd)
 			print("You need to open your bank first.")
 		end
 	elseif cmd == "install" then
-		if IsAddOnLoaded("!Install") then
+		if IsAddOnLoaded("FreeUI_Install") then
 			FreeUI_InstallFrame:Show()
 		else
-			EnableAddOn("!Install")
-			LoadAddOn("!Install")
+			EnableAddOn("FreeUI_Install")
+			LoadAddOn("FreeUI_Install")
 		end
 	elseif cmd == "reset" then
 		FreeUIGlobalConfig = {}

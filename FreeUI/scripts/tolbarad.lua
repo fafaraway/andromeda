@@ -2,10 +2,10 @@ local F, C, L = unpack(select(2, ...))
 
 if C.general.tolbarad == false or (UnitLevel("player") ~= 85 and C.general.tolbarad_always ~= true) then return end
 
-local frame = CreateFrame("Frame", nil, Minimap)
+local frame = CreateFrame("Frame", nil, UIParent)
 frame:SetSize(100, 10)
-frame:SetPoint("TOP", Minimap, "BOTTOM", 0, -44)
-local text = F.CreateFS(frame, 8 / .9)
+frame:SetPoint("TOP", Minimap, "BOTTOM", 0, -39)
+local text = F.CreateFS(frame, 8)
 text:SetPoint("CENTER")
 text:SetTextColor(unpack(C.class))
 

@@ -50,15 +50,6 @@ local tagStrings = {
 			return 'Offline'
 		end
 	end]],
-
-	['pereclipse'] = [[function(u)
-		local m = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
-		if(m == 0) then
-			return 0
-		else
-			return math.abs(UnitPower('player', SPELL_POWER_ECLIPSE)/m*100)
-		end
-	end]],
 }
 
 local tags = setmetatable(
@@ -113,7 +104,6 @@ local tagEvents = {
 	["name"]                = "UNIT_NAME_UPDATE",
 	["missingpp"]           = 'UNIT_MAXPOWER UNIT_POWER',
 	["offline"]             = "UNIT_HEALTH UNIT_CONNECTION",
-	["pereclipse"]          = 'UNIT_POWER',
 }
 
 local unitlessEvents = {

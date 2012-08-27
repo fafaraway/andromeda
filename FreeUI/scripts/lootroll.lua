@@ -10,14 +10,9 @@ local iconsize = 32
 local grouplootlist, grouplootframes = {}, {}
 
 local function OnEvent(self, event, rollId)
-local _, name, _, quality, bop, _, _, canDE = GetLootRollItemInfo(rollId)
-	if C.general.autoroll == true then
-		if(quality==2 and not bop and not name:find("Amani Charm")) then
-			RollOnLoot(rollId, canDE and 3 or 2)
-		else
-			tinsert(grouplootlist, {rollId = rollId})
-			self:UpdateGroupLoot()
-		end
+	local _, _, _, quality, bop, _, _, canDE = GetLootRollItemInfo(rollId)
+	if C.general.autoroll == true and quality == 2 and not bop then
+		RollOnLoot(rollId, canDE and 3 or 2)
 	else
 		tinsert(grouplootlist, {rollId = rollId})
 		self:UpdateGroupLoot()

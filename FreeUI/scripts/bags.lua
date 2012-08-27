@@ -160,12 +160,14 @@ money:SetPoint("BOTTOMRIGHT", bankholder, "BOTTOMRIGHT", 12, 2)
 BankFramePurchaseInfo:Hide()
 BankFramePurchaseInfo.Show = F.dummy
 BankFrame:EnableMouse(false)
-BankCloseButton:Hide()
+BankFrameCloseButton:Hide()
+BankFrame:DisableDrawLayer("BACKGROUND")
+BankFrame:DisableDrawLayer("BORDER")
+BankFrame:DisableDrawLayer("OVERLAY")
+BankPortraitTexture:Hide()
+BankFrameMoneyFrameInset:Hide()
+BankFrameMoneyFrameBorder:Hide()
 
-for f = 1, 5 do
-	select(f, BankFrame:GetRegions()):SetAlpha(0)
-end
-	
 local bankbagholder = CreateFrame("Frame", nil, BankFrame)
 bankbagholder:SetSize(289, 43)
 bankbagholder:SetPoint("BOTTOM", bankholder, "TOP", 0, -1)
@@ -308,6 +310,7 @@ end)
 hooksecurefunc(BankFrame, "Hide", CloseBags)
 
 ToggleBackpack = ToggleBags
+ToggleBag = ToggleBags
 OpenAllBags = OpenBags
 OpenBackpack = OpenBags
 CloseAllBags = CloseBags
@@ -410,8 +413,8 @@ end
 local function Format(currency, money)
 	local current, weekly = strsplit(" ", currency)
 	if current ~= "0" then
-		local currency = format("%4s VP (%s/1000)", current, weekly)
-		return format("%-25s %5s", currency, FormatMoney(money))
+		local currency = format("%s VP (%s/1000)", current, weekly)
+		return format("%-30s %s", currency, FormatMoney(money))
 	else
 		return FormatMoney(money)
 	end

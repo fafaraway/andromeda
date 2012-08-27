@@ -3,7 +3,7 @@
 local F, C, L = unpack(select(2, ...))
 
 WORLDMAP_WINDOWED_SIZE = 0.82
- 
+
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
 local fontsize = 8 / WORLDMAP_WINDOWED_SIZE
 local panelHeight = 26
@@ -40,12 +40,12 @@ local SmallerMapSkin = function()
 	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, -offset, offset)
 	mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, offset, -offset)
 	mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
-	
+
 	panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight)
 	panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight)
 	panel:SetHeight(panelHeight)
 	F.CreateBD(panel)
- 
+
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:ClearAllPoints()
@@ -99,7 +99,7 @@ hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
 local OnEvent = function(self, event)
 	if event == "PLAYER_REGEN_DISABLED" then
-		WorldMapFrameSizeDownButton:Disable() 
+		WorldMapFrameSizeDownButton:Disable()
 		WorldMapFrameSizeUpButton:Disable()
 		HideUIPanel(WorldMapFrame)
 		WorldMap_ToggleSizeDown()
@@ -113,7 +113,7 @@ local OnEvent = function(self, event)
 		--WorldMapQuestShowObjectives.Show = F.dummy
 		WorldMapTitleButton.Show = F.dummy
 		WorldMapBlobFrame.Show = F.dummy
-		WorldMapPOIFrame.Show = F.dummy       
+		WorldMapPOIFrame.Show = F.dummy
 
 		WatchFrame_Update()
 	elseif event == "PLAYER_REGEN_ENABLED" then
@@ -165,7 +165,7 @@ WorldMapDetailFrame:HookScript("OnShow", function()
 			local centerX, centerY = WorldMapDetailFrame:GetCenter()
 			local x, y = GetCursorPosition()
 			local adjustedX = (x / scale - (centerX - (width/2))) / width
-			local adjustedY = (centerY + (height/2) - y / scale) / height	
+			local adjustedY = (centerY + (height/2) - y / scale) / height
 
 			if (adjustedX >= 0  and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
 				adjustedX = math.floor(100 * adjustedX)
@@ -196,6 +196,7 @@ local editbox = CreateFrame("EditBox", "MapSearchBox", panel, "SearchBoxTemplate
 editbox:SetAutoFocus(false)
 editbox:SetSize(150, 20)
 editbox:SetPoint("CENTER", panel)
+editbox:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 
 editbox.db = {}
 for i=1, select("#", GetMapContinents()), 1 do

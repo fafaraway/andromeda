@@ -499,12 +499,13 @@ end
 
 local CheckRoster = function()
 	wipe(units)
-	if GetNumRaidMembers() > 0 then
-		for i = 1, GetNumRaidMembers(), 1 do
+	local num = GetNumGroupMembers()
+	if num > 5 then
+		for i = 1, num do
 			CheckUnit("raid"..i)
 		end
-	elseif GetNumPartyMembers() > 0 then
-		for i = 1, GetNumPartyMembers(), 1 do
+	elseif num > 0 then
+		for i = 1, num do
 			CheckUnit("party"..i)
 		end
 	end
@@ -512,14 +513,15 @@ local CheckRoster = function()
 end
 
 local IsRaidInCombat = function()
-	if GetNumRaidMembers() > 0 then
-		for i = 1, GetNumRaidMembers(), 1 do
+	local num = GetNumGroupMembers()
+	if num > 5 then
+		for i = 1, num do
 			if UnitExists("raid"..i) and UnitAffectingCombat("raid"..i) then
 				return true
 			end
 		end
-	elseif GetNumPartyMembers() > 0 then
-		for i = 1, GetNumPartyMembers(), 1 do
+	elseif num > 0 then
+		for i = 1, num do
 			if UnitExists("party"..i) and UnitAffectingCombat("party"..i) then
 				return true
 			end
