@@ -22,8 +22,8 @@ local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
 	if FreeUIConfig.layout == 2 then
-		aThreatMeter:UnregisterAllEvents()
-		aThreatMeter:Hide()
+		f:UnregisterAllEvents()
+		f:Hide()
 	end
 	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
 	addonLoaded = nil
