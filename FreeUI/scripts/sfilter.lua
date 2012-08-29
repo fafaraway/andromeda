@@ -19,7 +19,7 @@ local function sFilter_CreateFrame(data)
 		if event == "PLAYER_ENTERING_WORLD" then
 			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			if data.customPoint then
-				self:SetPoint(unpack(customPoint))
+				self:SetPoint(unpack(data.customPoint))
 			elseif data.slot == 1 then
 				self:SetPoint("BOTTOMLEFT", oUF_FreeTarget, "TOPLEFT", 0, 42)
 			elseif data.slot == 2 then
