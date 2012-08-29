@@ -1271,6 +1271,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("PaperDollItemSlotButton_Update", function()
 			for i = 1, #slots do
 				local ic = _G["Character"..slots[i].."SlotIconTexture"]
+
+				if i == 18 then i = 19 end
+
 				if GetInventoryItemLink("player", i) then
 					ic:SetAlpha(1)
 				else

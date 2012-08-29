@@ -66,6 +66,7 @@ local updatechar = function(self)
 		for key, slotName in ipairs(slots) do
 			-- Ammo is located at 0.
 			local slotID = key % 20
+			if slotID == 18 then slotID = 19 end
 			local slotFrame = _G['Character' .. slotName .. 'Slot']
 			local slotLink = GetInventoryItemLink('player', slotID)
 
@@ -102,6 +103,7 @@ local updateInspect = function()
 	if InspectFrame:IsShown() and unit then
 		for key, slotName in ipairs(slots) do
 			local slotID = key % 20
+			if slotID == 18 then slotID = 19 end
 			local slotFrame = _G["Inspect"..slotName.."Slot"]
 			local slotLink = GetInventoryItemLink(unit, slotID)
 			local slotTexture = GetInventoryItemTexture(unit, slotID)
