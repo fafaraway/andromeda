@@ -69,4 +69,3 @@ scripts\worldmarker.lua
 scripts\worldstateframe.lua
 
 class\shaman.lua
-class\warrior.lua
