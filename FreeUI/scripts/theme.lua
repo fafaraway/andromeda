@@ -2143,6 +2143,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TradeRecipientLeftBorder:Hide()
 		select(4, TradePlayerItem7:GetRegions()):Hide()
 		select(4, TradeRecipientItem7:GetRegions()):Hide()
+		TradeFramePlayerPortrait:Hide()
+		TradeFrameRecipientPortrait:Hide()
 
 		F.ReskinPortraitFrame(TradeFrame, true)
 		F.Reskin(TradeFrameTradeButton)
