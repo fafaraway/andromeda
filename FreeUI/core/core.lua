@@ -48,15 +48,11 @@ end
 
 F.UnregisterAllEvents = function(func)
 	for event in next, events do
-		for _, tFunc in next, events[event] do
-			if tFunc == func then
-				F.UnregisterEvent(event, func)
-			end
-		end
+		F.UnregisterEvent(event, func)
 	end
 end
 
-debugEvents = function()
+F.debugEvents = function()
 	for event in next, events do
 		print(event..": "..#events[event])
 	end
@@ -65,6 +61,8 @@ end
 -- [[ Resolution support ]]
 
 C.resolution = 0
+
+local scaleRegistered = false
 
 local updateScale
 updateScale = function(event)
@@ -84,7 +82,13 @@ updateScale = function(event)
 		if scale < .64 then
 			UIParent:SetScale(scale)
 			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50)
+			-- unsupported UI scale, need to manually SetScale() every time WoW changes uiScale cvar
+			if not scaleRegistered then
+				scaleRegistered = true
+				F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
+			end
 		else
+			-- UI scale supported, set scale once then leave it alone
 			F.UnregisterAllEvents(updateScale)
 			SetCVar("useUiScale", 1)
 			SetCVar("uiScale", scale)
@@ -99,4 +103,3 @@ updateScale = function(event)
 end
 
 F.RegisterEvent("VARIABLES_LOADED", updateScale)
-F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
