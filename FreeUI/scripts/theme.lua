@@ -1153,6 +1153,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
 		FriendsFrameFriendsScrollFrame:HookScript("OnVerticalScroll", UpdateScroll)
+		FriendsFrameFriendsScrollFrame:HookScript("OnMouseWheel", UpdateScroll)
+		FriendsFrameFriendsScrollFrameScrollBar:HookScript("OnMouseDown", UpdateScroll)
 
 		local whobg = CreateFrame("Frame", nil, WhoFrameEditBoxInset)
 		whobg:SetPoint("TOPLEFT")
