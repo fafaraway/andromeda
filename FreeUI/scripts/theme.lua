@@ -2390,7 +2390,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinDropDown(MacOptionsFrameFramerateDropDown)
 			F.ReskinDropDown(MacOptionsFrameCodecDropDown)
 
-			for i = 1, 10 do
+			for i = 1, 11 do
 				F.ReskinCheck(_G["MacOptionsFrameCheckButton"..i])
 			end
 			F.ReskinSlider(MacOptionsFrameQualitySlider)
