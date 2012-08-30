@@ -7,11 +7,12 @@ F.menuShown = false
 
 local function onMouseUp(self)
 	self:SetScript("OnUpdate", nil)
-	if F.menuShown then 
+	if F.menuShown then
 		ToggleFrame(DropDownList1)
 		F.menuShown = false
+		return
 	end
-	
+
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
@@ -47,7 +48,7 @@ f:SetScript("OnMouseDown", function(self, button)
 				self:SetScript("OnUpdate", nil)
 				self:SetScript("OnMouseUp", nil)
 				last = 0
-				if F.menuShown then 
+				if F.menuShown then
 					ToggleFrame(DropDownList1)
 					F.menuShown = false
 				else
@@ -58,6 +59,11 @@ f:SetScript("OnMouseDown", function(self, button)
 		end)
 		self:SetScript("OnMouseUp", onMouseUp)
 	elseif button == "RightButton" then
+		if F.menuShown then
+			ToggleFrame(DropDownList1)
+			F.menuShown = false
+			return
+		end
 		if IsAddOnLoaded("DBM-Core") then
 			DisableAddOn("DBM-Core")
 			DisableAddOn("!dbm")
