@@ -33,7 +33,7 @@ end
 local methods = getmetatable(ActionButton1Cooldown).__index
 hooksecurefunc(methods, "SetCooldown", function(self, start, duration, charges)
 	if start > 0 and duration > 2.5 then
-		if self.noshowcd or charges ~= 0 then return end
+		if self.noshowcd or (charges and charges ~= 0) then return end
 
 		self.start = start
 		self.duration = duration
