@@ -1,7 +1,0 @@
-## Interface: 50001
-## Title: !dbm
-## Notes: FreeUI skin for DBM.
-## Author: Haleth/Freethinker
-## RequiredDeps: DBM-Core, FreeUI
-
-dbm.lua

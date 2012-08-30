@@ -66,12 +66,9 @@ f:SetScript("OnMouseDown", function(self, button)
 		end
 		if IsAddOnLoaded("DBM-Core") then
 			DisableAddOn("DBM-Core")
-			DisableAddOn("!dbm")
 			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
 		else
-			EnableAddOn("!dbm")
 			EnableAddOn("DBM-Core")
-			LoadAddOn("!dbm")
 			LoadAddOn("DBM-Core")
 			if IsAddOnLoaded("DBM-Core") then
 				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM loaded.|r", unpack(C.class))

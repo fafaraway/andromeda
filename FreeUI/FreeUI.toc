@@ -35,6 +35,7 @@ scripts\combattext.lua
 scripts\combo.lua
 scripts\cooldowns.lua
 scripts\corners.lua
+scripts\dbm.lua
 scripts\disable.lua
 scripts\durability.lua
 scripts\errors.lua
