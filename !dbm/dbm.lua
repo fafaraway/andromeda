@@ -1,68 +1,84 @@
 local F, C, L = unpack(FreeUI)
 
-if DBM then 
-	hooksecurefunc(DBT, "CreateBar", function(self) 
-		for bar in self:GetBarIterator() do if not bar.styled then
-			local frame = bar.frame 
-			local tbar = getglobal(frame:GetName().."Bar") 
-			local texture = getglobal(frame:GetName().."BarTexture") 
-			local icon1 = getglobal(frame:GetName().."BarIcon1") 
-			local icon2 = getglobal(frame:GetName().."BarIcon2") 
-			local name = getglobal(frame:GetName().."BarName") 
-			local timer = getglobal(frame:GetName().."BarTimer") 
-			tbar:SetHeight(16) 
-			local bg = CreateFrame("Frame", nil, tbar)
-			bg:SetPoint("TOPRIGHT", tbar, 1, 1)
-			bg:SetPoint("BOTTOMLEFT", tbar, -1, -1)
-	 		bg:SetBackdrop({
-				bgFile = "", 
-				edgeFile = C.media.backdrop,
-				edgeSize = 1,
-			})
-			bg:SetBackdropBorderColor(0, 0, 0)
---[[ Left icon start
-			local ibg = CreateFrame("Frame", icon1)
-			ibg:SetPoint("TOPRIGHT", icon1, 1, 1)
-			ibg:SetPoint("BOTTOMLEFT", icon1, -1, -1)
-			ibg:SetBackdrop({
-				bgFile = "", 
-				edgeFile = C.media.backdrop,
-				edgeSize = 1,
-			})
-			ibg:SetBackdropBorderColor(0, 0, 0)
-			ibg:SetParent(tbar)
-Left icon end ]]
+hooksecurefunc(DBT, "CreateBar", function(self)
+	for bar in self:GetBarIterator() do
+		if not bar.styled then
+			local frame = bar.frame
+			local name = frame:GetName()
 
---[[ Right icon start
-			local ibg = CreateFrame("Frame", icon2)
-			ibg:SetPoint("TOPRIGHT", icon2, 1, 1)
-			ibg:SetPoint("BOTTOMLEFT", icon2, -1, -1)
-			ibg:SetBackdrop({
-				bgFile = "", 
-				edgeFile = C.media.backdrop,
-				edgeSize = 1,
-			})
-			ibg:SetBackdropBorderColor(0, 0, 0)
-			ibg:SetParent(tbar)
-Right icon end ]]
-			texture:SetTexture(C.media.texture) 
-			texture.SetTexture = F.dummy 
-			icon1:SetTexCoord(.1,.9,.1,.9) 
-			icon1:ClearAllPoints()
-			icon1:SetPoint("LEFT", tbar, "LEFT", -23, 0)
-			icon2:SetTexCoord(.1,.9,.1,.9) 
-			name:SetPoint("CENTER") 
-			name:SetPoint("LEFT", 4, 0) 
-			name:SetFont(C.media.font, 8, "OUTLINEMONOCHROME") 
-			name:SetShadowColor(0, 0, 0, 0)
-			name.SetFont = F.dummy 
-			timer:SetPoint("CENTER") 
-			timer:SetPoint("RIGHT", -4, 0) 
-			timer:SetFont(C.media.font, 8, "OUTLINEMONOCHROME") 
+			local tbar = _G[name.."Bar"]
+			local texture = _G[name.."BarTexture"]
+			local text = _G[name.."BarName"]
+			local timer = _G[name.."BarTimer"]
+
+			tbar:SetHeight(16)
+
+			F.CreateBDFrame(tbar, 0)
+
+			texture:SetTexture(C.media.texture)
+			texture.SetTexture = F.dummy
+			text:SetPoint("CENTER")
+			text:SetPoint("LEFT", 4, 0)
+			text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			text:SetShadowColor(0, 0, 0, 0)
+			text.SetFont = F.dummy
+			timer:SetPoint("CENTER")
+			timer:SetPoint("RIGHT", -4, 0)
+			timer:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 			timer:SetShadowColor(0, 0, 0, 0)
 			timer.SetFont = F.dummy
 
 			bar.styled = true
-		end end
-	end)
-end  
+		end
+	end
+end)
+
+hooksecurefunc(DBM.BossHealth, "Show", function()
+	local anchor = DBMBossHealthDropdown:GetParent()
+	if not anchor.styled then
+		local header = anchor:GetRegions()
+		if header:IsObjectType("FontString") then
+			header:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			header:SetTextColor(1, 1, 1)
+			header:SetShadowOffset(0, 0)
+			anchor.styled = true
+		end
+	end
+end)
+
+local count = 1
+
+local styleBar = function()
+	local bar = _G[format("DBM_BossHealth_Bar_%d", count)]
+
+	while bar do
+		if not bar.styled then
+			local name = bar:GetName()
+			local sb = _G[name.."Bar"]
+			local text = _G[name.."BarName"]
+			local timer = _G[name.."BarTimer"]
+
+			local prev = _G[format("DBM_BossHealth_Bar_%d", count-1)]
+
+			_G[name.."BarBackground"]:Hide()
+			_G[name.."BarBorder"]:SetNormalTexture("")
+
+			sb:SetStatusBarTexture(C.media.texture)
+
+			text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			text:SetShadowOffset(0, 0)
+			timer:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			timer:SetShadowOffset(0, 0)
+
+			F.CreateBDFrame(sb)
+
+			bar.styled = true
+		end
+
+		count = count + 1
+		bar = _G[format("DBM_BossHealth_Bar_%d", count)]
+	end
+end
+
+hooksecurefunc(DBM.BossHealth, "AddBoss", styleBar)
+hooksecurefunc(DBM.BossHealth, "UpdateSettings", styleBar)

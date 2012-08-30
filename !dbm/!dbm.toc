@@ -1,7 +1,7 @@
 ## Interface: 50001
 ## Title: !dbm
-## Notes: Modifies DBM. Credits to Wildbreath.
-## Author: Wildbreath
+## Notes: FreeUI skin for DBM.
+## Author: Haleth/Freethinker
 ## RequiredDeps: DBM-Core, FreeUI
 
 dbm.lua
