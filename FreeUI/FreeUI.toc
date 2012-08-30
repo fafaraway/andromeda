@@ -26,6 +26,7 @@ scripts\bags.lua
 scripts\bubbles.lua
 scripts\buffreminder.lua
 scripts\buffs.lua
+scripts\bufftracker.lua
 scripts\buttons.lua
 scripts\chat.lua
 scripts\chattabs.lua
@@ -55,7 +56,6 @@ scripts\nameplates.lua
 scripts\panel.lua
 scripts\petbattles.lua
 scripts\rangecolor.lua
-scripts\sfilter.lua
 scripts\stats.lua
 scripts\tekkrush.lua
 scripts\theme.lua

@@ -138,19 +138,17 @@ C["selfbuffs"] = {
 	},
 }
 
--- sFilter buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
+-- buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
 -- spellID 1-5, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
 -- if you use multiple spellIDs, first available gets displayed
-C["sfilter"] = {
+C["buffTracker"] = {
 	["PALADIN"] = {
-	-- Divine Plea
-	{spellId = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	-- Sacred Shield
+	{spellId = 20925, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	-- Divine Shield, Hand of Protection, Divine Protection, Avenging Wrath
 	{spellId = 642, spellId2 = 1022, spellId3 = 498, spellId4 = 31884, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
-	-- Inquisition
-	{spellId = 84963, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-	-- Judgements of the Pure
-	{spellId = 53657, unitId = "player", isMine = 1, filter = "HELPFUL", spec = 1, slot = 3},
+	-- Inquisition, Bastion of Glory, Divine Plea
+	{spellId = 84963, spellId2 = 114637, spellId3 = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["ROGUE"] = {
 	-- Bandit's Guile

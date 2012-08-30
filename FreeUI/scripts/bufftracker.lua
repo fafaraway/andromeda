@@ -1,16 +1,13 @@
--- sFilter by Shantalya, modified.
-
 local F, C, L = unpack(select(2, ...))
 
-local MyUnits = {
+local units = {
 	player = true,
 	vehicle = true,
 	pet = true,
 }
 
-local function sFilter_CreateFrame(data)
-	local spellName, _, spellIcon = GetSpellInfo(data.spellId)
-	local frame = CreateFrame("Frame", "sFilter_" .. data.unitId .. "_" .. data.spellId, UIParent)
+local function createIcon(data)
+	local frame = CreateFrame("Frame", "FreeUIBuffTracker" .. data.unitId .. "_" .. data.spellId, UIParent)
 	frame:SetSize(data.size or 39, data.size or 39)
 	frame:RegisterEvent("UNIT_AURA")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -32,9 +29,9 @@ local function sFilter_CreateFrame(data)
 		if(data.unitId==unit or event=="PLAYER_TARGET_CHANGED" or event=="PLAYER_ENTERING_WORLD") then
 			self.found = false
 			self:SetAlpha(1)
-			for i=1, 40 do
-				local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(data.unitId, i, data.filter)
-				if((data.isMine~=1 or MyUnits[caster]) and(not data.spec or GetSpecialization()==data.spec) and (name==GetSpellInfo(data.spellId) or (data.spellId2 and name==GetSpellInfo(data.spellId2)) or (data.spellId3 and name==GetSpellInfo(data.spellId3)) or (data.spellId4 and name==GetSpellInfo(data.spellId4)) or (data.spellId5 and name==GetSpellInfo(data.spellId5)))) then
+			for i = 1, 40 do
+				local name, rank, icon, count, _, duration, expirationTime, caster, _, _, spellID = UnitAura(data.unitId, i, data.filter)
+				if((data.isMine~=1 or units[caster]) and(not data.spec or GetSpecialization()==data.spec) and (spellID == data.spellId or (data.spellId2 and spellID == data.spellId2) or (data.spellId3 and spellID == data.spellId3) or (data.spellId4 and spellID == data.spellId4) or (data.spellId5 and spellID == data.spellId5))) then
 					self.found = true
 					self.icon:SetTexture(icon)
 					self.count:SetText(count>1 and count or "")
@@ -48,9 +45,8 @@ local function sFilter_CreateFrame(data)
 				end
 			end
 
-			if(not self.found) then
+			if not self.found then
 				self:SetAlpha(0)
-				self.icon:SetTexture(spellIcon)
 				self.count:SetText("")
 				self.cooldown:Hide()
 			end
@@ -60,11 +56,10 @@ local function sFilter_CreateFrame(data)
 
 	frame.icon = frame:CreateTexture("$parentIcon", "ARTWORK")
 	frame.icon:SetAllPoints(frame)
-	frame.icon:SetTexture(spellIcon)
 	frame.icon:SetTexCoord(.08, .92, .08, .92)
 
 	frame.count = F.CreateFS(frame, 8)
-	frame.count:SetPoint("TOP")
+	frame.count:SetPoint("TOP", 1, -2)
 
 	frame.cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
 	frame.cooldown:SetPoint("TOPLEFT")
@@ -75,13 +70,13 @@ local function sFilter_CreateFrame(data)
 end
 
 local _, class = UnitClass("player")
-if (C.sfilter and C.sfilter[class]) then
-	for index in pairs(C.sfilter) do
+if (C.buffTracker and C.buffTracker[class]) then
+	for index in pairs(C.buffTracker) do
 		if index ~= class then
-			C.sfilter[index] = nil
+			C.buffTracker[index] = nil
 		end
 	end
-	for i = 1, #C.sfilter[class], 1 do
-		sFilter_CreateFrame(C.sfilter[class][i])
+	for i = 1, #C.buffTracker[class], 1 do
+		createIcon(C.buffTracker[class][i])
 	end
 end
