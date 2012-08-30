@@ -31,16 +31,16 @@ local function Timer_OnUpdate(self, elapsed)
 end
 
 local methods = getmetatable(ActionButton1Cooldown).__index
-hooksecurefunc(methods, "SetCooldown", function(self, start, duration)
+hooksecurefunc(methods, "SetCooldown", function(self, start, duration, charges)
 	if start > 0 and duration > 2.5 then
-		if self.noshowcd then return end
+		if self.noshowcd or charges ~= 0 then return end
 
 		self.start = start
 		self.duration = duration
 		self.nextUpdate = 0
 
 		local text = self.text
-		if(not text) then
+		if not text then
 			text = F.CreateFS(self, 8, "CENTER")
 			text:SetPoint("BOTTOM", 1, -1)
 			self.text = text
