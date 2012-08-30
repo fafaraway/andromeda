@@ -61,8 +61,8 @@ abEventWatcher:Hide()
 abEventWatcher:SetScript("OnEvent", function(self, event)
 	for cooldown in pairs(active) do
 		local button = cooldown:GetParent()
-		local start, duration, enable = GetActionCooldown(button.action)
-		cooldown:SetCooldown(start, duration)
+		local start, duration, enable, charges, maxCharges = GetActionCooldown(button.action)
+		cooldown:SetCooldown(start, duration, charges, maxCharges)
 	end
 end)
 abEventWatcher:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN")
