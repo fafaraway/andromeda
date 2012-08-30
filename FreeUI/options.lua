@@ -16,6 +16,7 @@ C["general"] = {
 		["tolbarad_always"] = false,		-- show timer on characters lower or higher than 85 as well
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
 	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
+	["uiScaleAuto"] = true,				-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
 }
 

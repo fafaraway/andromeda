@@ -77,6 +77,7 @@ updateScale = function(event)
 			C.resolution = 3
 		end
 	end
+	if not C.general.uiScaleAuto then return end
 	if not InCombatLockdown() then
 		local scale = 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
 		if scale < .64 then
