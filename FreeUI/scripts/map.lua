@@ -197,6 +197,7 @@ editbox:SetAutoFocus(false)
 editbox:SetSize(150, 20)
 editbox:SetPoint("CENTER", panel)
 editbox:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+editbox:SetShadowOffset(0, 0)
 
 editbox.db = {}
 for i=1, select("#", GetMapContinents()), 1 do
