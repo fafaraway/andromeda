@@ -95,49 +95,139 @@ C["performance"] = {
 }
 
 -- Selfbuff reminder
+-- put all possible buffs with the same effect in the same list, even when you can't cast them yourself
+-- outer tables are for buffs that you want together (e.g. an outer table with inner fire and an outer table with PW:F)
+-- tables within those tables are for buffs that are exclusive to each other (e.g. blessing of might and blessing of kings)
 C["selfbuffs"] = {
+	DEATHKNIGHT = {
+		{
+			{
+				57330, -- Horn of Winter
+				6673, -- Battle Shout
+				19506, -- Trueshot Aura
+			},
+		},
+	},
+	DRUID = {
+		{
+			{
+				1126, -- Mark of the Wild
+				20217, -- Blessing of Kings
+				115921, -- Legacy of the Emperor
+			},
+		},
+	},
 	HUNTER = {
-		13165, -- hawk
-		109260, -- iron hawk
-		5118, -- cheetah
-		13159, -- pack
-		20043, -- wild
-		82661, -- fox
-	},
-	PALADIN = {
-		19740, -- blessing of might
-		20217, -- blessing of kings
-	},
-	PRIEST = {
-		588, -- inner fire
-		73413, -- inner will
-	},
-	ROGUE = {
-		2823, -- deadly poison
-		8679, -- wound poison (from instant)
-		5761, -- mind-numbing poison
-		3408, -- crippling poison
+		{
+			{
+				13165, -- Aspect of the Hawk
+				109260, -- Aspect of the Iron Hawk
+				5118, -- Aspect of the Cheetah
+				13159, -- Aspect of the Pack
+				82661, -- Aspect of the Fox
+				85683, -- Aspect of the Beast
+			},
+		},
 	},
 	MAGE = {
-		7302, -- frost armor
-		6117, -- mage armor
-		30482, -- molten armor
+		{
+			{
+				1459, -- Arcane Brilliance
+				77747, -- Burning Wrath
+				109773, -- Dark Intent
+			},
+		},
+		{
+			{
+				7302, -- Frost Armor
+				6117, -- Mage Armor
+				30482, -- Molten Armor
+			},
+		},
 	},
-	WARLOCK = {
-		28176, -- fel armor
-		687, -- demon armor
+	MONK = {
+		{
+			{
+				115921, -- Legacy of the Emperor
+				1126, -- Mark of the Wild
+				20217, -- Blessing of Kings
+			},
+			{
+				116781, -- Legacy of the White Tiger
+				19740, -- Blessing of Might
+				116956, -- Grace of Air
+			},
+		},
+	},
+	PALADIN = {
+		{
+			{
+				20217, -- Blessing of Kings
+				1126, -- Mark of the Wild
+				115921, -- Legacy of the Emperor
+			},
+			{
+				19740, -- Blessing of Might
+				116781, -- Legacy of the White Tiger
+				116956, -- Grace of Air
+			},
+		}
+	},
+	PRIEST = {
+		{
+			{
+				588, -- Inner Fire
+				73413, -- Inner Will
+			},
+		},
+		{
+			{
+				21562, -- Power Word: Fortitude
+				469, -- Commanding Shout
+				103127, -- Imp: Blood Pact
+			},
+		},
+	},
+	ROGUE = {
+		{
+			{
+				2823, -- Deadly Poison
+				8679, -- Wound Poison
+			},
+		},
 	},
 	SHAMAN = {
-		52127, -- water shield
-		324, -- lightning shield
-		974, -- earth shield
+		{
+			{
+				52127, -- Water shield
+				324, -- Lightning shield
+				974, -- Earth shield
+			},
+		},
 	},
-	DEATHKNIGHT = {
-		57330, -- horn of winter
-		31634, -- strength of earth
-		6673, -- battle shout
-		93435, -- roar of courage
+	WARLOCK = {
+		{
+			{
+				109773, -- Dark Intent
+				1459, -- Arcane Brilliance
+				77747, -- Burning Wrath
+			},
+		},
 	},
+	WARRIOR = {
+		{
+			{
+				6673, -- Battle Shout
+				19506, -- Trueshot Aura
+				57330, -- Horn of Winter
+			},
+			{
+				469, -- Commanding Shout
+				21562, -- Power Word: Fortitude
+				103127, -- Imp: Blood Pact
+			},
+		},
+	}
 }
 
 -- buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
