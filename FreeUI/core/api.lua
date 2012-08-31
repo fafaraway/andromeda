@@ -49,9 +49,9 @@ F.dummy = function() end
 
 local CreateBD = function(f, a)
 	f:SetBackdrop({
-		bgFile = C.media.backdrop, 
-		edgeFile = C.media.backdrop, 
-		edgeSize = 1, 
+		bgFile = C.media.backdrop,
+		edgeFile = C.media.backdrop,
+		edgeSize = 1,
 	})
 	f:SetBackdropColor(0, 0, 0, a or .5)
 	f:SetBackdropBorderColor(0, 0, 0)
@@ -219,15 +219,15 @@ F.ReskinScroll = function(f)
 
 	up:SetWidth(17)
 	down:SetWidth(17)
-	
+
 	F.Reskin(up)
 	F.Reskin(down)
-	
+
 	up:SetDisabledTexture(C.media.backdrop)
 	local dis1 = up:GetDisabledTexture()
 	dis1:SetVertexColor(0, 0, 0, .4)
 	dis1:SetDrawLayer("OVERLAY")
-	
+
 	down:SetDisabledTexture(C.media.backdrop)
 	local dis2 = down:GetDisabledTexture()
 	dis2:SetVertexColor(0, 0, 0, .4)
@@ -274,7 +274,7 @@ F.ReskinDropDown = function(f)
 	down:SetPoint("RIGHT", -18, 2)
 
 	F.Reskin(down, true)
-	
+
 	down:SetDisabledTexture(C.media.backdrop)
 	local dis = down:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .4)
@@ -287,7 +287,7 @@ F.ReskinDropDown = function(f)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
 	down.downtex = downtex
-	
+
 	down:HookScript("OnEnter", colourArrow)
 	down:HookScript("OnLeave", clearArrow)
 
@@ -343,7 +343,7 @@ F.ReskinInput = function(f, height, width)
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
 	_G[frame.."Right"]:Hide()
-	
+
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", -2, 0)
 	bd:SetPoint("BOTTOMRIGHT")
@@ -359,7 +359,7 @@ end
 F.ReskinArrow = function(f, direction)
 	f:SetSize(18, 18)
 	F.Reskin(f)
-	
+
 	f:SetDisabledTexture(C.media.backdrop)
 	local dis = f:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .3)
@@ -368,7 +368,7 @@ F.ReskinArrow = function(f, direction)
 	local tex = f:CreateTexture(nil, "ARTWORK")
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
-	
+
 	tex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-"..direction.."-active")
 end
 
@@ -392,7 +392,7 @@ F.ReskinCheck = function(f)
 	tex:SetPoint("BOTTOMRIGHT", -5, 5)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-	
+
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(r, g, b)
@@ -402,12 +402,12 @@ F.ReskinRadio = function(f)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture(C.media.texture)
 	f:SetCheckedTexture(C.media.texture)
-	
+
 	local hl = f:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 4, -4)
 	hl:SetPoint("BOTTOMRIGHT", -4, 4)
 	hl:SetVertexColor(r, g, b, .3)
-	
+
 	local ch = f:GetCheckedTexture()
 	ch:SetPoint("TOPLEFT", 4, -4)
 	ch:SetPoint("BOTTOMRIGHT", -4, 4)
@@ -477,7 +477,7 @@ end
 
 F.ReskinPortraitFrame = function(f, isButtonFrame)
 	local name = f:GetName()
-	
+
 	_G[name.."Bg"]:Hide()
 	_G[name.."TitleBg"]:Hide()
 	_G[name.."Portrait"]:Hide()
@@ -491,12 +491,12 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 	_G[name.."BottomBorder"]:Hide()
 	_G[name.."LeftBorder"]:Hide()
 	_G[name.."RightBorder"]:Hide()
-	
+
 	if isButtonFrame then
 		_G[name.."BtnCornerLeft"]:SetTexture("")
 		_G[name.."BtnCornerRight"]:SetTexture("")
 		_G[name.."ButtonBottomBorder"]:SetTexture("")
-		
+
 		f.Inset.Bg:Hide()
 		f.Inset:DisableDrawLayer("BORDER")
 	end
@@ -507,9 +507,21 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 end
 
 F.CreateBDFrame = function(f, a)
-	local bg = CreateFrame("Frame", nil, f)
-	bg:SetPoint("TOPLEFT", -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	bg:SetFrameLevel(f:GetFrameLevel()-1)
+	local frame
+	if f:GetObjectType() == "Texture" then
+		frame = f:GetParent()
+	else
+		frame = f
+	end
+
+	local lvl = frame:GetFrameLevel()
+
+	local bg = CreateFrame("Frame", nil, frame)
+	bg:SetPoint("TOPLEFT", f, -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", f, 1, -1)
+	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+
 	CreateBD(bg, a or .5)
+
+	return bg
 end
