@@ -4183,7 +4183,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			glyph:HookScript("OnUpdate", onUpdate)
 		end
 
-		hooksecurefunc("GlyphFrame_Update", function()
+		hooksecurefunc("GlyphFrame_Update", function(self)
 			local spec = GetSpecialization(_, _, PlayerTalentFrame.talentGroup)
 			if spec then
 				local _, _, _, icon = GetSpecializationInfo(spec, false, self.isPet)
