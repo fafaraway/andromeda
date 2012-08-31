@@ -98,6 +98,7 @@ C["performance"] = {
 C["selfbuffs"] = {
 	HUNTER = {
 		13165, -- hawk
+		109260, -- iron hawk
 		5118, -- cheetah
 		13159, -- pack
 		20043, -- wild
