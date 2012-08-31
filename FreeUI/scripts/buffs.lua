@@ -91,7 +91,7 @@ f:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -50, -50)
 BuffFrame:SetParent(f)
 BuffFrame:ClearAllPoints()
 BuffFrame:SetPoint("TOPRIGHT")
---BuffFrame.SetPoint = F.dummy
+
 
 ConsolidatedBuffs:SetParent(f)
 ConsolidatedBuffs:ClearAllPoints()
@@ -105,7 +105,27 @@ ConsolidatedBuffsIcon:SetTexCoord(.16, .34, .31, .69)
 ConsolidatedBuffsIcon:SetDrawLayer("BACKGROUND", 1)
 F.CreateBG(ConsolidatedBuffs)
 
+ConsolidatedBuffsTooltip:SetScale(1)
 F.CreateBD(ConsolidatedBuffsTooltip)
+
+for i = 1, NUM_LE_RAID_BUFF_TYPES do
+	local buff = ConsolidatedBuffsTooltip["Buff"..i]
+
+	buff.label:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	buff.label:SetShadowColor(0, 0, 0, 0)
+	buff.icon:SetTexCoord(.08, .92, .08, .92)
+
+	F.CreateBDFrame(buff.icon, .25)
+end
+
+hooksecurefunc("RaidBuffTray_Update", function()
+	if ShouldShowConsolidatedBuffFrame() then
+		for i = 1, NUM_LE_RAID_BUFF_TYPES do
+			local buff = ConsolidatedBuffsTooltip["Buff"..i]
+			if not buff.name then buff.icon:SetTexture("") end
+		end
+	end
+end)
 
 for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 	local bu = _G["TempEnchant"..i]
