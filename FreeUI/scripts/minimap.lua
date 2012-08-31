@@ -125,27 +125,27 @@ local rdt = F.CreateFS(rd, 8, "LEFT")
 rdt:SetPoint("TOPLEFT")
 
 rd:SetScript("OnEvent", function()
-	local inInstance, instanceType = IsInInstance()
-	local _, _, difficultyIndex, _, _, dynamicDifficulty, isDynamic = GetInstanceInfo()
+	local difficulty = GetInstanceDifficulty()
 
-	if inInstance and instanceType == "raid" then
-		if (isDynamic and difficultyIndex == 1 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 1) then
-			rdt:SetText("10")
-		elseif (isDynamic and (difficultyIndex == 3 and dynamicDifficulty == 0) or (difficultyIndex == 1 and dynamicDifficulty == 1)) or (not isDynamic and difficultyIndex == 3) then
-			rdt:SetText("10H")
-		elseif (isDynamic and difficultyIndex == 2 and dynamicDifficulty == 0) or (not isDynamic and difficultyIndex == 2) then
-			rdt:SetText("25")
-		elseif (isDynamic and (difficultyIndex == 2 and dynamicDifficulty == 1) or (difficultyIndex == 4)) or (not isDynamic and difficultyIndex == 4) then
-			rdt:SetText("25H")
-		end
-	elseif inInstance and instanceType == "party" then
-		if difficultyIndex == 1 then
-			rdt:SetText("5")
-		elseif difficultyIndex == 2 then
-			rdt:SetText("5H")
-		end
-	else
+	if difficulty == 1 then
 		rdt:SetText("")
+	elseif difficulty == 2 then
+		rdt:SetText("5")
+	elseif difficulty == 3 then
+		rdt:SetText("5H")
+	elseif difficulty == 4 then
+		rdt:SetText("10")
+	elseif difficulty == 5 then
+		rdt:SetText("10H")
+	elseif difficulty == 6 then
+		rdt:SetText("25")
+	elseif difficulty == 7 then
+		rdt:SetText("25H")
+	elseif difficulty == 8 then
+		rdt:SetText("LFR")
+	--elseif difficulty == 9 then
+	elseif difficulty == 10 then
+		rdt:SetText("40")
 	end
 
 	if GuildInstanceDifficulty:IsShown() then
