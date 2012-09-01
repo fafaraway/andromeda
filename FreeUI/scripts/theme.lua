@@ -4184,7 +4184,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("GlyphFrame_Update", function(self)
-			local spec = GetSpecialization(_, _, PlayerTalentFrame.talentGroup)
+			local spec = GetSpecialization(false, false, PlayerTalentFrame.talentGroup)
 			if spec then
 				local _, _, _, icon = GetSpecializationInfo(spec, false, self.isPet)
 				GlyphFrame.specIcon:SetTexture(icon)
