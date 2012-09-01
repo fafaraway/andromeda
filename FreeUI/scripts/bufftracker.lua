@@ -6,53 +6,56 @@ local units = {
 	pet = true,
 }
 
+local function onEvent(self, event, ...)
+	local data = self.data
+	if event == "PLAYER_ENTERING_WORLD" then
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+		if data.customPoint then
+			self:SetPoint(unpack(data.customPoint))
+		elseif data.slot == 1 then
+			self:SetPoint("BOTTOMLEFT", oUF_FreeTarget, "TOPLEFT", 0, 42)
+		elseif data.slot == 2 then
+			self:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
+		elseif data.slot == 3 then
+			self:SetPoint("BOTTOMRIGHT", oUF_FreeTarget, "TOPRIGHT", 0, 42)
+		end
+	end
+	local unit = ...
+	if data.unitId == unit or event == "PLAYER_TARGET_CHANGED" or event == "PLAYER_ENTERING_WORLD" then
+		self.found = false
+		self:SetAlpha(1)
+		for i = 1, 40 do
+			local name, rank, icon, count, _, duration, expirationTime, caster, _, _, spellID = UnitAura(data.unitId, i, data.filter)
+			if((data.isMine~=1 or units[caster]) and(not data.spec or GetSpecialization()==data.spec) and (spellID == data.spellId or (data.spellId2 and spellID == data.spellId2) or (data.spellId3 and spellID == data.spellId3) or (data.spellId4 and spellID == data.spellId4) or (data.spellId5 and spellID == data.spellId5))) then
+				self.found = true
+				self.icon:SetTexture(icon)
+				self.count:SetText(count>1 and count or "")
+				if duration > 0 then
+					self.cooldown:Show()
+					CooldownFrame_SetTimer(self.cooldown, expirationTime-duration, duration, 1)
+				else
+					self.cooldown:Hide()
+				end
+				break
+			end
+		end
+
+		if not self.found then
+			self:SetAlpha(0)
+			self.count:SetText("")
+			self.cooldown:Hide()
+		end
+	end
+end
+
 local function createIcon(data)
 	local frame = CreateFrame("Frame", "FreeUIBuffTracker" .. data.unitId .. "_" .. data.spellId, UIParent)
+	frame.data = data
 	frame:SetSize(data.size or 39, data.size or 39)
 	frame:RegisterEvent("UNIT_AURA")
 	frame:RegisterEvent("PLAYER_TARGET_CHANGED")
 	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
-	frame:SetScript("OnEvent", function(self, event, ...)
-		if event == "PLAYER_ENTERING_WORLD" then
-			self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			if data.customPoint then
-				self:SetPoint(unpack(data.customPoint))
-			elseif data.slot == 1 then
-				self:SetPoint("BOTTOMLEFT", oUF_FreeTarget, "TOPLEFT", 0, 42)
-			elseif data.slot == 2 then
-				self:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
-			elseif data.slot == 3 then
-				self:SetPoint("BOTTOMRIGHT", oUF_FreeTarget, "TOPRIGHT", 0, 42)
-			end
-		end
-		local unit = ...
-		if(data.unitId==unit or event=="PLAYER_TARGET_CHANGED" or event=="PLAYER_ENTERING_WORLD") then
-			self.found = false
-			self:SetAlpha(1)
-			for i = 1, 40 do
-				local name, rank, icon, count, _, duration, expirationTime, caster, _, _, spellID = UnitAura(data.unitId, i, data.filter)
-				if((data.isMine~=1 or units[caster]) and(not data.spec or GetSpecialization()==data.spec) and (spellID == data.spellId or (data.spellId2 and spellID == data.spellId2) or (data.spellId3 and spellID == data.spellId3) or (data.spellId4 and spellID == data.spellId4) or (data.spellId5 and spellID == data.spellId5))) then
-					self.found = true
-					self.icon:SetTexture(icon)
-					self.count:SetText(count>1 and count or "")
-					if duration > 0 then
-						self.cooldown:Show()
-						CooldownFrame_SetTimer(self.cooldown, expirationTime-duration, duration, 1)
-					else
-						self.cooldown:Hide()
-					end
-					break
-				end
-			end
-
-			if not self.found then
-				self:SetAlpha(0)
-				self.count:SetText("")
-				self.cooldown:Hide()
-			end
-		end
-
-	end)
+	frame:SetScript("OnEvent", onEvent)
 
 	frame.icon = frame:CreateTexture("$parentIcon", "ARTWORK")
 	frame.icon:SetAllPoints(frame)
