@@ -47,6 +47,7 @@ local function styleExtraActionButton(bu)
 		end
 	end)
 
+	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 
 	_G[bu:GetName().."HotKey"]:Hide()
