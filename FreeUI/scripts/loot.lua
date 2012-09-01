@@ -35,7 +35,7 @@ local F, C, L = unpack(select(2, ...))
 
 local iconsize = 32
 local width = 200
-local sq, ss, sn
+local sq, ss, sn, st
 
 local addon = CreateFrame("Button", "Butsu", UIParent)
 addon:SetFrameStrata"HIGH"
@@ -66,6 +66,14 @@ local OnClick = function(self)
 		ss = self:GetID()
 		sq = self.quality
 		sn = self.name:GetText()
+		st = self.icon:GetTexture()
+
+		LootFrame.selectedLootButton = self:GetName();
+		LootFrame.selectedSlot = ss;
+		LootFrame.selectedQuality = sq;
+		LootFrame.selectedItemName = sn;
+		LootFrame.selectedTexture = st;
+
 		LootSlot(ss)
 	end
 end
@@ -185,14 +193,14 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 				end
 
 				slot.quality = quality
-				
+
 				if questItem then
 					slot.name:SetTextColor(.90, .88, .06)
 				else
 					local color = ITEM_QUALITY_COLORS[quality]
 					slot.name:SetTextColor(color.r, color.g, color.b)
 				end
-				
+
 				slot.name:SetText(item)
 				slot.icon:SetTexture(texture)
 
@@ -227,7 +235,7 @@ addon.OPEN_MASTER_LOOT_LIST = function(self)
 end
 
 addon.UPDATE_MASTER_LOOT_LIST = function(self)
-	UIDropDownMenu_Refresh(GroupLootDropDown)
+	MasterLooterFrame_UpdatePlayers()
 end
 
 addon:SetScript("OnEvent", function(self, event, arg1) self[event](self, event, arg1) end)
@@ -241,19 +249,3 @@ addon:Hide()
 
 LootFrame:UnregisterAllEvents()
 table.insert(UISpecialFrames, "Butsu")
-
-function _G.GroupLootDropDown_GiveLoot(self)
-	if ( sq >= MASTER_LOOT_THREHOLD ) then
-		local dialog = StaticPopup_Show("CONFIRM_LOOT_DISTRIBUTION", ITEM_QUALITY_COLORS[sq].hex..sn..FONT_COLOR_CODE_CLOSE, self:GetText())
-		if (dialog) then
-			dialog.data = self.value
-		end
-	else
-		GiveMasterLoot(ss, self.value)
-	end
-	CloseDropDownMenus()
-end
-
-StaticPopupDialogs["CONFIRM_LOOT_DISTRIBUTION"].OnAccept = function(self, data)
-	GiveMasterLoot(ss, data)
-end
