@@ -2233,22 +2233,32 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(LootHistoryFrame.CloseButton)
 		F.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
 
-		hooksecurefunc("LootHistoryFrame_FullUpdate", function()
-			for i = 1, C_LootHistory.GetNumItems() do
-				local frame = LootHistoryFrame.itemFrames[i]
+		hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(_, frame)
+			local collapsed = frame.ToggleButton:GetPushedTexture():GetTexture():find("Plus")
 
-				if not frame.reskinned then
-					frame.NameBorderLeft:Hide()
-					frame.NameBorderRight:Hide()
-					frame.NameBorderMid:Hide()
-					frame.IconBorder:Hide()
+			if not frame.styled then
+				frame.Divider:Hide()
+				frame.NameBorderLeft:Hide()
+				frame.NameBorderRight:Hide()
+				frame.NameBorderMid:Hide()
+				frame.IconBorder:Hide()
 
-					frame.Icon:SetTexCoord(.08, .92, .08, .92)
-					frame.Icon:SetDrawLayer("ARTWORK")
-					F.CreateBG(frame.Icon)
-					frame.reskinned = true
-				end
+				frame.Icon:SetTexCoord(.08, .92, .08, .92)
+				frame.Icon:SetDrawLayer("ARTWORK")
+				frame.bg = F.CreateBG(frame.Icon)
+				frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
+
+				F.ReskinExpandOrCollapse(frame.ToggleButton)
+				frame.ToggleButton:GetNormalTexture():SetAlpha(0)
+				frame.ToggleButton:GetPushedTexture():SetAlpha(0)
+				frame.ToggleButton:GetDisabledTexture():SetAlpha(0)
+
+				frame.styled = true
 			end
+
+			frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
+
+			frame.ToggleButton.plus:SetShown(collapsed)
 		end)
 
 		-- BN conversation
