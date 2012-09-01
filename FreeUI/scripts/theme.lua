@@ -2248,6 +2248,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				frame.ItemName:SetShadowOffset(0, 0)
 				frame.WinnerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 				frame.WinnerName:SetShadowOffset(0, 0)
+				frame.WinnerRoll:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				frame.WinnerRoll:SetShadowOffset(0, 0)
 
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.Icon:SetDrawLayer("ARTWORK")
