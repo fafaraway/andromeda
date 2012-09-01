@@ -2233,15 +2233,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(LootHistoryFrame.CloseButton)
 		F.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
 
-		hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(_, frame)
-			local collapsed = frame.ToggleButton:GetPushedTexture():GetTexture():find("Plus")
-
+		hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(self, frame)
 			if not frame.styled then
 				frame.Divider:Hide()
 				frame.NameBorderLeft:Hide()
 				frame.NameBorderRight:Hide()
 				frame.NameBorderMid:Hide()
 				frame.IconBorder:Hide()
+
+				frame.ItemName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				frame.ItemName:SetShadowOffset(0, 0)
 
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.Icon:SetDrawLayer("ARTWORK")
@@ -2257,8 +2258,77 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 
 			frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
+			frame.ToggleButton.plus:SetShown(not self.expandedRolls[C_LootHistory.GetItem(frame.itemIdx)])
+		end)
 
-			frame.ToggleButton.plus:SetShown(collapsed)
+		hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, frame)
+			if not frame.styled then
+				frame.PlayerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				frame.PlayerName:SetShadowOffset(0, 0)
+
+				frame.styled = true
+			end
+
+			local colour = C.classcolours[select(2, UnitClass(frame.PlayerName:GetText()))]
+			frame.PlayerName:SetTextColor(colour.r, colour.g, colour.b)
+		end)
+
+		-- Master looter frame
+
+		for i = 1, 9 do
+			select(i, MasterLooterFrame:GetRegions()):Hide()
+		end
+
+		MasterLooterFrame.Item.NameBorderLeft:Hide()
+		MasterLooterFrame.Item.NameBorderRight:Hide()
+		MasterLooterFrame.Item.NameBorderMid:Hide()
+		MasterLooterFrame.Item.IconBorder:Hide()
+
+		MasterLooterFrame.Item.ItemName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		MasterLooterFrame.Item.ItemName:SetShadowOffset(0, 0)
+
+		MasterLooterFrame.Item.Icon:SetTexCoord(.08, .92, .08, .92)
+		MasterLooterFrame.Item.Icon:SetDrawLayer("ARTWORK")
+		MasterLooterFrame.Item.bg = F.CreateBG(MasterLooterFrame.Item.Icon)
+
+		MasterLooterFrame:HookScript("OnShow", function(self)
+			self.Item.bg:SetVertexColor(self.Item.IconBorder:GetVertexColor())
+			Butsu:SetAlpha(.4)
+		end)
+
+		MasterLooterFrame:HookScript("OnHide", function(self)
+			Butsu:SetAlpha(1)
+		end)
+
+		F.CreateBD(MasterLooterFrame)
+		F.ReskinClose(select(3, MasterLooterFrame:GetChildren()))
+
+		hooksecurefunc("MasterLooterFrame_UpdatePlayers", function()
+			for i = 1, MAX_RAID_MEMBERS do
+				local playerFrame = MasterLooterFrame["player"..i]
+				if playerFrame then
+					if not playerFrame.styled then
+						playerFrame.Name:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+						playerFrame.Name:SetShadowOffset(0, 0)
+
+						playerFrame.Bg:SetPoint("TOPLEFT", 1, -1)
+						playerFrame.Bg:SetPoint("BOTTOMRIGHT", -1, 1)
+						playerFrame.Highlight:SetPoint("TOPLEFT", 1, -1)
+						playerFrame.Highlight:SetPoint("BOTTOMRIGHT", -1, 1)
+
+						playerFrame.Highlight:SetTexture(C.media.backdrop)
+
+						F.CreateBD(playerFrame, 0)
+
+						playerFrame.styled = true
+					end
+					local colour = C.classcolours[select(2, UnitClass(playerFrame.Name:GetText()))]
+					playerFrame.Name:SetTextColor(colour.r, colour.g, colour.b)
+					playerFrame.Highlight:SetVertexColor(colour.r, colour.g, colour.b, .2)
+				else
+					break
+				end
+			end
 		end)
 
 		-- BN conversation
