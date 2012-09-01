@@ -2234,6 +2234,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
 
 		hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(self, frame)
+			local rollID, _, _, isDone, winnerIdx = C_LootHistory.GetItem(frame.itemIdx)
+			local expanded = self.expandedRolls[rollID]
+
 			if not frame.styled then
 				frame.Divider:Hide()
 				frame.NameBorderLeft:Hide()
@@ -2243,6 +2246,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				frame.ItemName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 				frame.ItemName:SetShadowOffset(0, 0)
+				frame.WinnerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				frame.WinnerName:SetShadowOffset(0, 0)
 
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.Icon:SetDrawLayer("ARTWORK")
@@ -2257,20 +2262,32 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				frame.styled = true
 			end
 
-			frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
-			frame.ToggleButton.plus:SetShown(not self.expandedRolls[C_LootHistory.GetItem(frame.itemIdx)])
-		end)
-
-		hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, frame)
-			if not frame.styled then
-				frame.PlayerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				frame.PlayerName:SetShadowOffset(0, 0)
-
-				frame.styled = true
+			if isDone and not expanded and winnerIdx then
+				local name, class = C_LootHistory.GetPlayerInfo(frame.itemIdx, winnerIdx)
+				if name then
+					local colour = C.classcolours[class]
+					frame.WinnerName:SetVertexColor(colour.r, colour.g, colour.b)
+				end
 			end
 
-			local colour = C.classcolours[select(2, UnitClass(frame.PlayerName:GetText()))]
-			frame.PlayerName:SetTextColor(colour.r, colour.g, colour.b)
+			frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
+			frame.ToggleButton.plus:SetShown(not expandeed)
+		end)
+
+		hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
+			if not playerFrame.styled then
+				playerFrame.PlayerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				playerFrame.PlayerName:SetShadowOffset(0, 0)
+
+				playerFrame.styled = true
+			end
+
+			local name, class = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
+
+			if name then
+				local colour = C.classcolours[class]
+				playerFrame.PlayerName:SetTextColor(colour.r, colour.g, colour.b)
+			end
 		end)
 
 		-- Master looter frame
