@@ -2271,7 +2271,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 
 			frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())
-			frame.ToggleButton.plus:SetShown(not expandeed)
+			frame.ToggleButton.plus:SetShown(not expanded)
 		end)
 
 		hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
