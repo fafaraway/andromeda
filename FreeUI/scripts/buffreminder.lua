@@ -13,7 +13,9 @@ local function OnEvent(self, event, unit)
 	if UnitAffectingCombat("player") and not UnitInVehicle("player") then
 		self.hasTexture = false
 
-		for k, v in pairs(buffs) do -- these are the buffs that can be combined
+		for k, v in pairs(buffs) do -- these are the buffs that caan be combined
+			self.cacheTexture = nil
+			self.cacheCount = nil
 			for i, buffSet in pairs(v) do -- these buffs are exclusive to each other
 				for _, buff in pairs(buffSet) do
 					self.doubleBreak = false
@@ -21,22 +23,33 @@ local function OnEvent(self, event, unit)
 					local name = GetSpellInfo(buff)
 					if name and UnitBuff("player", name) then
 						self.hasTexture = false
+						if self.cacheCount == i then self.cacheTexture = nil end
 						-- if we cast the buff, don't check other exclusive sets (cause it'll prompt us to cast that one and lose the first)
 						-- if we didn't cast it, we check if there's an other buff exclusive to this one that we can cast
 						if select(8, UnitAura("player", name)) == "player" then
 							self.doubleBreak = true
+							self.cacheTexture = nil
 						end
 						break
 					end
 
 					local usable, nomana = IsUsableSpell(name)
 					if not self.hasTexture and (usable or nomana) then
-						self.icon:SetTexture(select(3, GetSpellInfo(buff)))
+						self.cacheTexture = select(3, GetSpellInfo(buff))
+						self.cacheCount = i -- we need to empty cache if we got a buff from current set, but not if we got one from next one
+						self.icon:SetTexture(self.cacheTexture)
 						self.hasTexture = true
 					end
 				end
+
 				if self.doubleBreak then break end
 			end
+
+			if self.cacheTexture and not self.hasTexture then -- in case we lack the first buff, and checked the second one, which is handled by an other class
+				self.icon:SetTexture(self.cacheTexture)
+				self.hasTexture = true
+			end
+
 			if self.hasTexture then
 				self:Show()
 				return
