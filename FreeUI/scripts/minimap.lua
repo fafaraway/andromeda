@@ -136,9 +136,9 @@ rd:SetScript("OnEvent", function()
 	elseif difficulty == 4 then
 		rdt:SetText("10")
 	elseif difficulty == 5 then
-		rdt:SetText("10H")
-	elseif difficulty == 6 then
 		rdt:SetText("25")
+	elseif difficulty == 6 then
+		rdt:SetText("10H")
 	elseif difficulty == 7 then
 		rdt:SetText("25H")
 	elseif difficulty == 8 then
