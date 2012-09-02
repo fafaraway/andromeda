@@ -30,7 +30,6 @@
 	<Script file='elements\harmonyorbs.lua' />
 	<Script file='elements\shadoworbs.lua' />
 
-	<Script file='oUF_Trinkets\oUF_Trinkets.lua' />
 	<Script file='oUF_CounterBar\oUF_CounterBar.lua' />
 	<Script file='oUF_WarlockSpecBars\oUF_WarlockSpecBars.lua' />
 

@@ -1459,22 +1459,6 @@ local UnitSpecific = {
 		Buffs.PostUpdateIcon = PostUpdateIcon
 
 		self.RaidIcon:SetPoint("LEFT", self, "RIGHT", 3, 0)
-
-		if C.unitframes.arena_trinkets == true then
-			local Trinket = CreateFrame("Frame", nil, self)
-			Trinket:SetHeight(22)
-			Trinket:SetWidth(22)
-			Trinket:SetPoint("RIGHT", self, "LEFT", -3, 0)
-			Trinket.trinketUseAnnounce = true
-			Trinket.trinketUpAnnounce = true
-
-			self.Trinket = Trinket
-
-			local f = CreateFrame("Frame", nil, Trinket)
-			f:SetPoint("TOPLEFT", -1, 1)
-			f:SetPoint("BOTTOMRIGHT", 1, -1)
-			F.CreateBD(f, 0)
-		end
 	end,
 }
 

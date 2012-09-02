@@ -27,7 +27,6 @@ C["actionbars"] = {
 }
 
 C["unitframes"] = {
-	["arena_trinkets"] = true,				-- show enemy trinket usage on arena frames
 	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
 	["castbar"] = 1, 					-- 1 = dps/tank cast bar, 2 = caster/healer cast bar
 	["healer_classcolours"] = false,			-- colour unitframes by class in healer layout
