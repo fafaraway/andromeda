@@ -1937,6 +1937,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			self.bg:SetShown(self:IsShown())
 		end
 
+		local function onUpdate(self)
+			self:GetParent().bg:SetAlpha(self:GetParent():GetAlpha())
+		end
+
 		hooksecurefunc("LootWonAlertFrame_ShowAlert", function()
 			for i = 1, #LOOT_WON_ALERT_FRAMES do
 				local frame = LOOT_WON_ALERT_FRAMES[i]
@@ -1950,11 +1954,40 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame:HookScript("OnShow", showHideBg)
 					frame:HookScript("OnHide", showHideBg)
+					frame.animIn:SetScript("OnUpdate", onUpdate)
+					frame.waitAndAnimOut:SetScript("OnUpdate", onUpdate)
 
 					frame.Background:Hide()
 					frame.IconBorder:Hide()
 					frame.glow:SetTexture("")
 					frame.shine:SetTexture("")
+
+					frame.Icon:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(frame.Icon)
+				end
+			end
+		end)
+
+		-- Money won alert
+
+		hooksecurefunc("MoneyWonAlertFrame_ShowAlert", function()
+			for i = 1, #MONEY_WON_ALERT_FRAMES do
+				local frame = MONEY_WON_ALERT_FRAMES[i]
+				if not frame.bg then
+					frame.bg = CreateFrame("Frame", nil, UIParent)
+					frame.bg:SetPoint("TOPLEFT", frame, 10, -10)
+					frame.bg:SetPoint("BOTTOMRIGHT", frame, -10, 10)
+					frame.bg:SetFrameStrata("DIALOG")
+					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+					F.CreateBD(frame.bg)
+
+					frame:HookScript("OnShow", showHideBg)
+					frame:HookScript("OnHide", showHideBg)
+					frame.animIn:SetScript("OnUpdate", onUpdate)
+					frame.waitAndAnimOut:SetScript("OnUpdate", onUpdate)
+
+					frame.Background:Hide()
+					frame.IconBorder:Hide()
 
 					frame.Icon:SetTexCoord(.08, .92, .08, .92)
 					F.CreateBG(frame.Icon)
@@ -1979,6 +2012,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame:SetScript("OnShow", showHideBg)
 					frame:SetScript("OnHide", showHideBg)
+					frame.animIn:SetScript("OnUpdate", onUpdate)
+					frame.waitAndAnimOut:SetScript("OnUpdate", onUpdate)
 
 					_G["CriteriaAlertFrame"..i.."Background"]:Hide()
 					_G["CriteriaAlertFrame"..i.."IconOverlay"]:Hide()
