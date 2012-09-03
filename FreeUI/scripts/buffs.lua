@@ -92,7 +92,6 @@ BuffFrame:SetParent(f)
 BuffFrame:ClearAllPoints()
 BuffFrame:SetPoint("TOPRIGHT")
 
-
 ConsolidatedBuffs:SetParent(f)
 ConsolidatedBuffs:ClearAllPoints()
 ConsolidatedBuffs:SetPoint("TOPRIGHT")
@@ -136,3 +135,11 @@ end
 
 hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", updateBuffAnchors)
 hooksecurefunc("DebuffButton_UpdateAnchors", updateDebuffAnchors)
+
+local function reposition()
+	BuffFrame:ClearAllPoints()
+	BuffFrame:SetPoint("TOPRIGHT")
+end
+
+TicketStatusFrame:HookScript("OnShow", reposition)
+TicketStatusFrame:HookScript("OnHide", reposition)
