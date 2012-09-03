@@ -1,9 +1,10 @@
 ## Interface: 50001
 ## Author: Allez
 ## Title: |cff777777al|rDamageMeter
-## Version: 40300.8
+## Version: 50001.11
 ## Notes: Damage meter
-## OptionalDeps: alInterface
+## RequiredDeps: FreeUI
+## SavedVariables: dmconf
 
 embeds.xml
 alDamageMeter.lua
