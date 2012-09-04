@@ -242,10 +242,10 @@ C["buffTracker"] = {
 	{spellId = 84963, spellId2 = 114637, spellId3 = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["ROGUE"] = {
-	-- Bandit's Guile
-	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	-- Recuperate
-	{spellId = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	-- Bandit's Guile, Recuperate
+	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, spellId4 = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+	-- Adrenaline Rush
+	{spellId = 13750, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 	-- Slice and dice
 	{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
