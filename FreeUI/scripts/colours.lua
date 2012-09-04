@@ -199,7 +199,7 @@ local function viewChanged(view)
 end
 
 local function update()
-	if(_VIEW == 'tradeskill') then return end
+	if _VIEW == "tradeskill" then return end
 
 	local playerArea = GetRealZoneText()
 	local buttons = GuildRosterContainer.buttons
@@ -240,6 +240,8 @@ local loaded = false
 hooksecurefunc('GuildFrame_LoadUI', function()
 	if(loaded) then return end
 	loaded = true
+
+	_VIEW = GetCVar("guildRosterView") or _VIEW_DEFAULT
 
 	hooksecurefunc('GuildRoster_SetView', viewChanged)
 	hooksecurefunc('GuildRoster_Update', update)
