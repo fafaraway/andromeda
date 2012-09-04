@@ -4869,13 +4869,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			reskinnedRewards = true
 		end)
 
-		local function createButtonBg(bu)
-			bu:SetHighlightTexture(C.media.backdrop)
-			bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
-
-			bu.bg = F.CreateBG(bu.icon)
-		end
-
 		local tcoords = {
 			["WARRIOR"]     = {0.02, 0.23, 0.02, 0.23},
 			["MAGE"]        = {0.27, 0.47609375, 0.02, 0.23},
@@ -4901,20 +4894,23 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 
 			for i = 1, numbuttons do
-				local button = GuildRosterContainer.buttons[i]
+				local bu = GuildRosterContainer.buttons[i]
 
-				if not button.bg then
-					createButtonBg(button)
+				if not bu.bg then
+					bu:SetHighlightTexture(C.media.backdrop)
+					bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
+
+					bu.bg = F.CreateBG(bu.icon)
 				end
 
 				index = offset + i
 				local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
 				if name and index <= visibleMembers then
-					if button.icon:IsShown() then
-						button.icon:SetTexCoord(unpack(tcoords[classFileName]))
-						button.bg:Show()
+					if bu.icon:IsShown() then
+						bu.icon:SetTexCoord(unpack(tcoords[classFileName]))
+						bu.bg:Show()
 					else
-						button.bg:Hide()
+						bu.bg:Hide()
 					end
 				end
 			end
@@ -4923,6 +4919,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("GuildRoster_Update", UpdateIcons)
 		GuildRosterContainer:HookScript("OnMouseWheel", UpdateIcons)
 		GuildRosterContainer:HookScript("OnVerticalScroll", UpdateIcons)
+		GuildRosterContainerScrollBarScrollUpButton:HookScript("OnClick", UpdateIcons)
+		GuildRosterContainerScrollBarScrollDownButton:HookScript("OnClick", UpdateIcons)
 
 		GuildLevelFrame:SetAlpha(0)
 		local closebutton = select(4, GuildTextEditFrame:GetChildren())
