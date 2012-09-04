@@ -1740,7 +1740,7 @@ oUF:Factory(function(self)
 		party_height = partyHeight
 	end
 
-	local party = self:SpawnHeader(nil, nil, "custom [@raid6,exists] hide; show",
+	local party = self:SpawnHeader(nil, nil, "party,raid",
 		'showParty', true,
 		'showPlayer', true and FreeUIConfig.layout == 2 or false,
 		'showSolo', false,
@@ -1757,7 +1757,7 @@ oUF:Factory(function(self)
 
 	party:SetPoint(unpack(partyPos))
 
-	local raid = self:SpawnHeader(nil, nil, "custom [@raid6,exists] show; hide",
+	local raid = self:SpawnHeader(nil, nil, "raid",
 		'showPlayer', true,
 		'showParty', false,
 		'showRaid', true,
@@ -1778,4 +1778,19 @@ oUF:Factory(function(self)
 	)
 
 	raid:SetPoint(unpack(raidPos))
+
+	local raidToParty = CreateFrame("Frame")
+	raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
+	raidToParty:RegisterEvent("GROUP_ROSTER_UPDATE")
+	raidToParty:SetScript("OnEvent", function()
+		if GetNumGroupMembers() > 5 then
+			party:SetAttribute("showParty", false)
+			party:SetAttribute("showRaid", false)
+			raid:SetAttribute("showRaid", true)
+		else
+			party:SetAttribute("showParty", true)
+			party:SetAttribute("showRaid", true)
+			raid:SetAttribute("showRaid", false)
+		end
+	end)
 end)
