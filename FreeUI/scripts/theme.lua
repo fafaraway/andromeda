@@ -858,22 +858,21 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 11, -36)
 
-		local tabsSkinned = false
 		hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
-			if tabsSkinned then return end
-			local num = GetNumSpellTabs()
-			if num > 0 then tabsSkinned = true end
-			for i = 1, num do
+			for i = 1, GetNumSpellTabs() do
 				local tab = _G["SpellBookSkillLineTab"..i]
 
-				tab:GetRegions():Hide()
-				tab:SetCheckedTexture(C.media.checked)
+				if not tab.styled then
+					tab:GetRegions():Hide()
+					tab:SetCheckedTexture(C.media.checked)
 
-				F.CreateBG(tab)
-				F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
+					F.CreateBG(tab)
+					F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 
-				_G["SpellBookSkillLineTab"..i.."TabardIconFrame"]:SetTexCoord(.08, .92, .08, .92)
-				tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+					tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+
+					tab.styled = true
+				end
 			end
 		end)
 
@@ -4175,11 +4174,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetShadowOffset(1, -1)
 		EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
 
-		local modelbg = CreateFrame("Frame", nil, EncounterJournalEncounterFrameModelFrame)
-		modelbg:SetPoint("TOPLEFT", -1, 1)
-		modelbg:SetPoint("BOTTOMRIGHT", 1, -1)
-		modelbg:SetFrameLevel(EncounterJournalEncounterFrameModelFrame:GetFrameLevel()-1)
-		F.CreateBD(modelbg, .25)
+		F.CreateBDFrame(EncounterJournalEncounterFrameModelFrame, .25)
 
 		hooksecurefunc("EncounterJournal_DisplayInstance", function()
 			local bossIndex = 1;
