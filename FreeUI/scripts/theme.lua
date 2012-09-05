@@ -1157,11 +1157,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		hooksecurefunc("HybridScrollFrame_Update", function(scrollFrame)
-			if scrollFrame == FriendsFrameFriendsScrollFrame then
-				UpdateScroll()
-			end
-		end)
+		hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
+		FriendsFrameFriendsScrollFrame:HookScript("OnMouseWheel", UpdateScroll)
+		FriendsFrameFriendsScrollFrame:HookScript("OnVerticalScroll", UpdateScroll)
+		FriendsFrameFriendsScrollFrameScrollBarScrollUpButton:HookScript("OnClick", UpdateScroll)
+		FriendsFrameFriendsScrollFrameScrollBarScrollDownButton:HookScript("OnClick", UpdateScroll)
 
 		FriendsFrameStatusDropDown:ClearAllPoints()
 		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
