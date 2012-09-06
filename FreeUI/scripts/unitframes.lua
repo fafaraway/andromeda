@@ -211,73 +211,58 @@ oUF.Tags.Methods['free:power'] = function(unit)
 end
 oUF.Tags.Events['free:power'] = oUF.Tags.Events.missingpp
 
---[[ Update health bar colour ]]
-
-local UpdateHealth = function(self, event, unit)
-	if(self.unit == unit) then
-		local r, g, b
-		local min, max = UnitHealth(unit), UnitHealthMax(unit)
-		if(UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) or not UnitIsConnected(unit)) then
-			r, g, b = .6, .6, .6
-		elseif(unit == "pet") then
-			local _, class = UnitClass("player")
-			r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
-		elseif(UnitIsPlayer(unit)) then
-			local _, class = UnitClass(unit)
-			if class then r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b else r, g, b = 1, 1, 1 end
-		elseif(unit and unit:find("boss%d")) then
-			r, g, b = self.ColorGradient(min, max, unpack(self.colors.smooth))
-		elseif unit then
-			r, g, b = unpack(C.reactioncolours[UnitReaction(unit, "player") or 5])
-		end
-
-		if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
-			self.Power:SetStatusBarColor(r, g, b)
-			self.Power.bg:SetVertexColor(r/2, g/2, b/2)
-
-			self.Healthdef:SetMinMaxValues(0, max)
-
-			if UnitIsDead(unit) or UnitIsGhost(unit) then
-				self.Healthdef:SetValue(0)
-			else
-				self.Healthdef:SetValue(max-min)
-			end
-
-			if((UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) or not UnitIsConnected(unit)) then
-				self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
-			else
-				self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
-			end
-
-			if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
-				self.Healthdef:Hide()
-			else
-				self.Healthdef:Show()
-			end
-
-			self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
-		else
-			self.Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
-		end
-	end
-end
-
 --[[ Update health ]]
 
 local PostUpdateHealth = function(Health, unit, min, max)
-	if Health.value and unit == "target" then
-		Health.value:SetTextColor(unpack(C.reactioncolours[UnitReaction("player", unit) or 5]))
+	local self = Health:GetParent()
+	local r, g, b
+	local reaction = C.reactioncolours[UnitReaction(unit, "player") or 5]
+
+	local offline = not UnitIsConnected(unit)
+	local tapped = UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)
+
+	if tapped or offline then
+		r, g, b = .6, .6, .6
+	elseif unit == "pet" then
+		local _, class = UnitClass("player")
+		r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+	elseif UnitIsPlayer(unit) then
+		local _, class = UnitClass(unit)
+		if class then r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b else r, g, b = 1, 1, 1 end
+	elseif unit:find("boss%d") then
+		r, g, b = self.ColorGradient(min, max, unpack(self.colors.smooth))
+	elseif unit then
+		r, g, b = unpack(reaction)
 	end
 
-	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then
-		if(UnitIsDead(unit)) then
-			Health:SetValue(0)
-		elseif(UnitIsGhost(unit)) then
+	if unit == "target" then
+		Health.value:SetTextColor(unpack(reaction))
+	end
+
+	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
+		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
+			self.Healthdef:Hide()
+		else
+			self.Healthdef:SetMinMaxValues(0, max)
+			self.Healthdef:SetValue(max-min)
+			self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
+			self.Healthdef:Show()
+		end
+
+		self.Power:SetStatusBarColor(r, g, b)
+		self.Power.bg:SetVertexColor(r/2, g/2, b/2)
+
+		if tapped or offline then
+			self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+		else
+			self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		end
+	else
+		if UnitIsDead(unit) or UnitIsGhost(unit) then
 			Health:SetValue(0)
 		end
+		Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
 	end
-
-	return UpdateHealth(Health:GetParent(), 'PostUpdateHealth', unit)
 end
 
 --[[ Hide Blizz frames ]]
