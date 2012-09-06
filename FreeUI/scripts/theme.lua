@@ -1158,10 +1158,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
-		FriendsFrameFriendsScrollFrame:HookScript("OnMouseWheel", UpdateScroll)
-		FriendsFrameFriendsScrollFrame:HookScript("OnVerticalScroll", UpdateScroll)
-		FriendsFrameFriendsScrollFrameScrollBarScrollUpButton:HookScript("OnClick", UpdateScroll)
-		FriendsFrameFriendsScrollFrameScrollBarScrollDownButton:HookScript("OnClick", UpdateScroll)
+		hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
 
 		FriendsFrameStatusDropDown:ClearAllPoints()
 		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
@@ -4917,10 +4914,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("GuildRoster_Update", UpdateIcons)
-		GuildRosterContainer:HookScript("OnMouseWheel", UpdateIcons)
-		GuildRosterContainer:HookScript("OnVerticalScroll", UpdateIcons)
-		GuildRosterContainerScrollBarScrollUpButton:HookScript("OnClick", UpdateIcons)
-		GuildRosterContainerScrollBarScrollDownButton:HookScript("OnClick", UpdateIcons)
+		hooksecurefunc(GuildRosterContainer, "update", UpdateIcons)
 
 		GuildLevelFrame:SetAlpha(0)
 		local closebutton = select(4, GuildTextEditFrame:GetChildren())
