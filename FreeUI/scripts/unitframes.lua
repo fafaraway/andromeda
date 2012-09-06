@@ -1767,7 +1767,13 @@ oUF:Factory(function(self)
 	local raidToParty = CreateFrame("Frame")
 	raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
 	raidToParty:RegisterEvent("GROUP_ROSTER_UPDATE")
-	raidToParty:SetScript("OnEvent", function()
+	raidToParty:SetScript("OnEvent", function(self, event)
+		if InCombatLockdown() then
+			self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			return
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		end
 		if GetNumGroupMembers() > 5 then
 			party:SetAttribute("showParty", false)
 			party:SetAttribute("showRaid", false)
