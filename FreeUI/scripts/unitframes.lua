@@ -1776,11 +1776,9 @@ oUF:Factory(function(self)
 		end
 		if GetNumGroupMembers() > 5 then
 			party:SetAttribute("showParty", false)
-			party:SetAttribute("showRaid", false)
 			raid:SetAttribute("showRaid", true)
 		else
 			party:SetAttribute("showParty", true)
-			party:SetAttribute("showRaid", true)
 			raid:SetAttribute("showRaid", false)
 		end
 	end)
