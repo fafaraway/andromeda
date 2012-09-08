@@ -1,20 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 
-local chatbubblehook = CreateFrame("Frame", nil, UIParent)
-local tslu = 0
-local numkids = 0
-local bubbles = {}
+local f = CreateFrame("Frame")
 
-local function skinbubble(frame)
-	for i=1, frame:GetNumRegions() do
+local function styleBubble(frame)
+	for i = 1, frame:GetNumRegions() do
 		local region = select(i, frame:GetRegions())
 		if region:GetObjectType() == "Texture" then
 			region:SetTexture(nil)
-		elseif region:GetObjectType() == "FontString" then
-			frame.text = region
 		end
 	end
-	
+
 	frame:SetBackdrop({
 		bgFile = C.media.backdrop,
 		edgeFile = C.media.backdrop,
@@ -22,32 +17,32 @@ local function skinbubble(frame)
 	})
 	frame:SetBackdropColor(0, 0, 0, .5)
 	frame:SetBackdropBorderColor(0, 0, 0)
-	
-	tinsert(bubbles, frame)
 end
 
-local function ischatbubble(frame)
+local function isChatBubble(frame)
 	if frame:GetName() then return end
 	if not frame:GetRegions() then return end
 	return frame:GetRegions():GetTexture() == [[Interface\Tooltips\ChatBubble-Background]]
 end
 
 local freq = C.performance.bubbles
+local last = 0
+local numKids = 0
 
-chatbubblehook:SetScript("OnUpdate", function(chatbubblehook, elapsed)
-	tslu = tslu + elapsed
-	if tslu > freq then
-		tslu = 0
-		local newnumkids = WorldFrame:GetNumChildren()
-		if newnumkids ~= numkids then
-			for i=numkids + 1, newnumkids do
+f:SetScript("OnUpdate", function(self, elapsed)
+	last = last + elapsed
+	if last > freq then
+		last = 0
+		local newNumKids = WorldFrame:GetNumChildren()
+		if newNumKids ~= numKids then
+			for i=numKids + 1, newNumKids do
 				local frame = select(i, WorldFrame:GetChildren())
 
-				if ischatbubble(frame) then
-					skinbubble(frame)
+				if isChatBubble(frame) then
+					styleBubble(frame)
 				end
 			end
-			numkids = newnumkids
+			numKids = newNumKids
 		end
 	end
 end)
