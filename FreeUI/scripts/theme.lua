@@ -4540,7 +4540,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBG(_G["GuildBankPopupButton"..i.."Icon"])
 		end
 	elseif addon == "Blizzard_GuildControlUI" then
-		SetBD(GuildControlUI, 0, 0, 0, -28)
+		F.SetBD(GuildControlUI, 0, 0, 0, -28)
 		F.CreateBD(GuildControlUIRankBankFrameInset, .25)
 
 		for i = 1, 9 do
@@ -4601,12 +4601,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.Reskin(GuildControlUIRankOrderFrameNewButton)
-		ReskinClose(GuildControlUICloseButton)
-		ReskinScroll(GuildControlUIRankBankFrameInsetScrollFrameScrollBar)
-		ReskinDropDown(GuildControlUINavigationDropDown)
-		ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
-		ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
-		ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
+		F.ReskinClose(GuildControlUICloseButton)
+		F.ReskinScroll(GuildControlUIRankBankFrameInsetScrollFrameScrollBar)
+		F.ReskinDropDown(GuildControlUINavigationDropDown)
+		F.ReskinDropDown(GuildControlUIRankSettingsFrameRankDropDown)
+		F.ReskinDropDown(GuildControlUIRankBankFrameRankDropDown)
+		F.ReskinInput(GuildControlUIRankSettingsFrameGoldBox, 20)
 	elseif addon == "Blizzard_GuildUI" then
 		F.ReskinPortraitFrame(GuildFrame, true)
 		F.CreateBD(GuildMemberDetailFrame)
