@@ -267,63 +267,15 @@ end
 
 --[[ Hide Blizz frames ]]
 
--- This prevents taint when entering/exiting vehicle while in combat, as well as disabling the raid frame manager
--- CompactRaidFrameManager:UnregisterAllEvents()
--- CompactRaidFrameManager.Show = F.dummy
--- CompactRaidFrameManager:Hide()
--- PetFrame_Update = F.dummy
+CompactRaidFrameManager:SetParent(FreeUIHider)
+CompactUnitFrameProfiles:UnregisterAllEvents()
 
-local function KillRaidFrame()
-	CompactRaidFrameManager:UnregisterAllEvents()
-	if not InCombatLockdown() then CompactRaidFrameManager:Hide() end
+for i = 1, MAX_PARTY_MEMBERS do
+	local pet = "PartyMemberFrame"..i.."PetFrame"
 
-	local shown = CompactRaidFrameManager_GetSetting("IsShown")
-	if shown and shown ~= "0" then
-		CompactRaidFrameManager_SetSetting("IsShown", "0")
-	end
+	_G[pet]:SetParent(FreeUIHider)
+	_G[pet.."HealthBar"]:UnregisterAllEvents()
 end
-
-hooksecurefunc("CompactRaidFrameManager_UpdateShown", function()
-	KillRaidFrame()
-end)
-
-KillRaidFrame()
-
---[[ kill party 1 to 5
-
-local function Kill(object)
-	if object.UnregisterAllEvents then
-		object:UnregisterAllEvents()
-	end
-	object.Show = F.dummy
-	object:Hide()
-end
-
-local function KillPartyFrame()
-	CompactPartyFrame:Kill()
-
-	for i=1, MEMBERS_PER_RAID_GROUP do
-		local name = "CompactPartyFrameMember" .. i
-		local frame = _G[name]
-		frame:UnregisterAllEvents()
-	end
-end
-
-for i=1, MAX_PARTY_MEMBERS do
-	local name = "PartyMemberFrame" .. i
-	local frame = _G[name]
-
-	frame:Kill()
-
-	_G[name .. "HealthBar"]:UnregisterAllEvents()
-	_G[name .. "ManaBar"]:UnregisterAllEvents()
-end
-
-if CompactPartyFrame then
-	KillPartyFrame()
-elseif CompactPartyFrame_Generate then -- 4.1
-	hooksecurefunc("CompactPartyFrame_Generate", KillPartyFrame)
-end]]
 
 --[[ Debuff highlight ]]
 
