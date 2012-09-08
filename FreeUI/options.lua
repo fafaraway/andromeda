@@ -74,14 +74,13 @@ C["unitframes"] = {
 }
 
 C["classmod"] = {
-	["deathknight"] = true, 	-- runes
+	["deathknight"] = true, -- runes
 	["druid"] = true, 		-- eclipse bar
 	["monk"] = true, 		-- harmony bar
-	["paladin"] = true, 		-- holy power
+	["paladin"] = true, 	-- holy power
 	["priest"] = true,		-- shadow orbs
 	["shaman"] = true, 		-- maelstrom weapon tracker
-	["warlock"] = true, 		-- spec bar
-	["warrior"] = true, -- thunderstruck tracker
+	["warlock"] = true, 	-- spec bar
 }
 
 -- lower = smoother = more CPU usage
