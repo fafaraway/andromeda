@@ -1,9 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
-InterfaceOptionsFrameCategoriesButton10:Hide()
-InterfaceOptionsFrameCategoriesButton10.Show = F.dummy
-InterfaceOptionsFrameCategoriesButton11:Hide()
-InterfaceOptionsFrameCategoriesButton11.Show = F.dummy
+InterfaceOptionsFrameCategoriesButton10:SetParent(FreeUIHider)
+InterfaceOptionsFrameCategoriesButton11:SetParent(FreeUIHider)
 
 InterfaceOptionsFrameCategoriesButton12:SetPoint("TOPLEFT", InterfaceOptionsFrameCategoriesButton9, "BOTTOMLEFT")
 

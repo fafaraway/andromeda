@@ -5,6 +5,7 @@ local addon, core = ...
 core[1] = {} -- F, Functions
 core[2] = {} -- C, Constants/Config
 core[3] = {} -- L, Localisation
+core[4] = {} -- G, GUI
 
 FreeUI = core
 
@@ -104,3 +105,8 @@ updateScale = function(event)
 end
 
 F.RegisterEvent("VARIABLES_LOADED", updateScale)
+
+-- [[ For secure frame hiding ]]
+
+local hider = CreateFrame("Frame", "FreeUIHider", UIParent)
+hider:Hide()
