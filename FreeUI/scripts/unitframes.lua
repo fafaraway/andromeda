@@ -1431,8 +1431,8 @@ do
 
 		local Resurrect = CreateFrame("Frame")
 		Resurrect:RegisterEvent("INCOMING_RESURRECT_CHANGED")
-		Resurrect:SetScript("OnEvent", function()
-			if UnitHasIncomingResurrection(self.unit) then
+		Resurrect:SetScript("OnEvent", function(self, event, unit)
+			if UnitHasIncomingResurrection(unit) then
 				Text:SetTextColor(0, 1, 0)
 			else
 				Text:SetTextColor(1, 1, 1)
