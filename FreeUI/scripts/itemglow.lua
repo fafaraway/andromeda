@@ -109,8 +109,8 @@ local updateInspect = function()
 			local slotTexture = GetInventoryItemTexture(unit, slotID)
 
 			if slotTexture and not slotLink then
-				GetItemInfo(GetInventoryItemID(unit, slotID))
 				missing[key] = slotName
+				GetItemInfo(GetInventoryItemID(unit, slotID))
 			elseif slotLink then
 				slotFrame:Show()
 			else
