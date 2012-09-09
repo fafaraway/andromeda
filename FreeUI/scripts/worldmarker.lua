@@ -28,8 +28,8 @@ CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButtonRight:SetAl
 
 wm:RegisterEvent("GROUP_ROSTER_UPDATE")
 wm:HookScript("OnEvent", function(self)
-	local num = GetNumGroupMembers()
-	if (num > 5 and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (num > 0 and num <= 5) then
+	local inRaid = IsInRaid()
+	if (inRaid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (not inRaid and IsInGroup()) then
 		self:Show()
 	else
 		self:Hide()
