@@ -4543,8 +4543,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBG(_G["GuildBankPopupButton"..i.."Icon"])
 		end
 	elseif addon == "Blizzard_GuildControlUI" then
-		F.SetBD(GuildControlUI, 0, 0, 0, -28)
-		F.CreateBD(GuildControlUIRankBankFrameInset, .25)
+		F.CreateBD(GuildControlUI)
+		F.CreateSD(GuildControlUI)
 
 		for i = 1, 9 do
 			select(i, GuildControlUI:GetRegions()):Hide()
@@ -4565,42 +4565,94 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("GuildControlUI_RankOrder_Update", function()
 			for i = 1, GuildControlGetNumRanks() do
-				local name = "GuildControlUIRankOrderFrameRank"..i
-				local rank = _G[name.."NameEditBox"]
-				if not rank.reskinned then
-					F.ReskinInput(rank, 20)
-					F.ReskinArrow(_G[name.."ShiftUpButton"], "up")
-					_G[name.."ShiftUpButtonIcon"]:Hide()
-					F.ReskinArrow(_G[name.."ShiftDownButton"], "down")
-					_G[name.."ShiftDownButtonIcon"]:Hide()
-					F.ReskinClose(_G[name.."DeleteButton"])
-					_G[name.."DeleteButtonIcon"]:Hide()
-					rank.reskinned = true
+				local rank = _G["GuildControlUIRankOrderFrameRank"..i]
+				if not rank.styled then
+					rank.upButton.icon:Hide()
+					rank.downButton.icon:Hide()
+					rank.deleteButton.icon:Hide()
+
+					F.ReskinArrow(rank.upButton, "up")
+					F.ReskinArrow(rank.downButton, "down")
+					F.ReskinClose(rank.deleteButton)
+
+					F.ReskinInput(rank.nameBox, 20)
+
+					rank.styled = true
 				end
 			end
 		end)
 
 		hooksecurefunc("GuildControlUI_BankTabPermissions_Update", function()
-			for i = 1, GetNumGuildBankTabs()+1 do
+			for i = 1, GetNumGuildBankTabs() + 1 do
 				local tab = "GuildControlBankTab"..i
 				local bu = _G[tab]
-				if bu and not bu.reskinned then
-					_G[tab.."Bg"]:Hide()
-					F.CreateBD(bu, .12)
-					F.Reskin(_G[tab.."BuyPurchaseButton"])
-					F.ReskinCheck(_G[tab.."OwnedViewCheck"])
-					F.ReskinCheck(_G[tab.."OwnedDepositCheck"])
-					F.ReskinCheck(_G[tab.."OwnedUpdateInfoCheck"])
-					F.ReskinInput(_G[tab.."OwnedStackBox"])
+				if bu and not bu.styled then
+					local ownedTab = bu.owned
 
-					bu.reskinned = true
+					_G[tab.."Bg"]:Hide()
+
+					ownedTab.tabIcon:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(ownedTab.tabIcon)
+
+					F.CreateBD(bu, .25)
+					F.Reskin(bu.buy.button)
+					F.ReskinInput(ownedTab.editBox)
+
+					for _, ch in pairs({ownedTab.viewCB, ownedTab.depositCB, ownedTab.infoCB}) do
+						-- can't get a backdrop frame to appear behind the checked texture for some reason
+						ch:SetNormalTexture("")
+						ch:SetPushedTexture("")
+						ch:SetHighlightTexture(C.media.backdrop)
+
+						local hl = ch:GetHighlightTexture()
+						hl:SetPoint("TOPLEFT", 5, -5)
+						hl:SetPoint("BOTTOMRIGHT", -5, 5)
+						hl:SetVertexColor(r, g, b, .2)
+
+						local check = ch:GetCheckedTexture()
+						check:SetDesaturated(true)
+						check:SetVertexColor(r, g, b)
+
+						local tex = ch:CreateTexture(nil, "BACKGROUND")
+						tex:SetPoint("TOPLEFT", 5, -5)
+						tex:SetPoint("BOTTOMRIGHT", -5, 5)
+						tex:SetTexture(C.media.backdrop)
+						tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+
+						local left = ch:CreateTexture(nil, "BACKGROUND")
+						left:SetWidth(1)
+						left:SetTexture(0, 0, 0)
+						left:SetPoint("TOPLEFT", tex, -1, 1)
+						left:SetPoint("BOTTOMLEFT", tex, -1, -1)
+
+						local right = ch:CreateTexture(nil, "BACKGROUND")
+						right:SetWidth(1)
+						right:SetTexture(0, 0, 0)
+						right:SetPoint("TOPRIGHT", tex, 1, 1)
+						right:SetPoint("BOTTOMRIGHT", tex, 1, -1)
+
+						local top = ch:CreateTexture(nil, "BACKGROUND")
+						top:SetHeight(1)
+						top:SetTexture(0, 0, 0)
+						top:SetPoint("TOPLEFT", tex, -1, 1)
+						top:SetPoint("TOPRIGHT", tex, 1, 1)
+
+						local bottom = ch:CreateTexture(nil, "BACKGROUND")
+						bottom:SetHeight(1)
+						bottom:SetTexture(0, 0, 0)
+						bottom:SetPoint("BOTTOMLEFT", tex, -1, -1)
+						bottom:SetPoint("BOTTOMRIGHT", tex, 1, -1)
+					end
+
+					bu.styled = true
 				end
 			end
 		end)
 
-		for i = 1, 19 do
-			local checkbox = _G["GuildControlUIRankSettingsFrameCheckbox"..i]
-			if checkbox then F.ReskinCheck(checkbox) end
+		for i = 1, 20 do
+			if i ~= 14 then
+				F.ReskinCheck(_G["GuildControlUIRankSettingsFrameCheckbox"..i])
+			end
 		end
 
 		F.Reskin(GuildControlUIRankOrderFrameNewButton)
