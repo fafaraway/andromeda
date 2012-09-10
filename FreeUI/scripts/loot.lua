@@ -94,6 +94,7 @@ local createSlot = function(id)
 	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetFrameLevel(frame:GetFrameLevel()-1)
 	F.CreateBD(bg)
+	frame.bg = bg
 
 	frame:SetScript("OnClick", OnClick)
 	frame:SetScript("OnEnter", OnEnter)
@@ -111,9 +112,8 @@ local createSlot = function(id)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	icon:SetPoint("TOPLEFT", 1, -1)
 	icon:SetPoint("BOTTOMRIGHT", -1, 1)
-	frame.icon = icon
-
 	F.CreateBG(icon)
+	frame.icon = icon
 
 	local count = F.CreateFS(iconFrame, 8, "CENTER")
 	count:SetPoint("TOP", iconFrame, 1, -2)
@@ -194,11 +194,13 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 
 				slot.quality = quality
 
+				local color = ITEM_QUALITY_COLORS[quality]
+				slot.name:SetTextColor(color.r, color.g, color.b)
+
 				if questItem then
-					slot.name:SetTextColor(.90, .88, .06)
+					slot.bg:SetBackdropColor(.5, 0, 0, .5)
 				else
-					local color = ITEM_QUALITY_COLORS[quality]
-					slot.name:SetTextColor(color.r, color.g, color.b)
+					slot.bg:SetBackdropColor(0, 0, 0, .5)
 				end
 
 				slot.name:SetText(item)
