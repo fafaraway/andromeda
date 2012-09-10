@@ -40,19 +40,20 @@ local UpdateType = function(self, event, rid, alt)
 end
 
 local UpdateRune = function(self, event, rid)
-	local rune = self.Runes[runemap[rid]]
-	if(rune) then
-		local start, duration, runeReady = GetRuneCooldown(rid)
-		if(runeReady) then
-			rune:SetMinMaxValues(0, 1)
-			rune:SetValue(1)
-			rune:SetScript("OnUpdate", nil)
-		else
-			rune.duration = GetTime() - start
-			rune.max = duration
-			rune:SetMinMaxValues(1, duration)
-			rune:SetScript("OnUpdate", OnUpdate)
-		end
+	local runes = self.Runes
+	local rune = runes[runemap[rid]]
+	if(not rune) then return end
+
+	local start, duration, runeReady = GetRuneCooldown(rid)
+	if(runeReady) then
+		rune:SetMinMaxValues(0, 1)
+		rune:SetValue(1)
+		rune:SetScript("OnUpdate", nil)
+	else
+		rune.duration = GetTime() - start
+		rune.max = duration
+		rune:SetMinMaxValues(1, duration)
+		rune:SetScript("OnUpdate", OnUpdate)
 	end
 end
 
@@ -80,7 +81,7 @@ local Enable = function(self, unit)
 
 			-- From my minor testing this is a okey solution. A full login always remove
 			-- the death runes, or at least the clients knowledge about them.
-			UpdateType(self, nil, i, math.floor((runemap[i]+1)/2))
+			UpdateType(self, nil, i, math.floor((i+1)/2))
 		end
 
 		self:RegisterEvent("RUNE_POWER_UPDATE", UpdateRune, true)
