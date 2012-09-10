@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-local myname = UnitName("player")
+local myName = UnitName("player")
 
 local GUILD_INDEX_MAX = 12
 local SMOOTH = {
@@ -106,7 +106,7 @@ hooksecurefunc("WorldStateScoreFrame_Update", function()
 			local n, r = strsplit('-', name, 2)
 			n = classColor[class] .. n .. '|r'
 
-			if (n == myname) and (not r) then
+			if n == myName and not r then
 				n = '> ' .. n .. ' <'
 			end
 
@@ -183,15 +183,15 @@ end
 hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", friendsFrame)
 hooksecurefunc("FriendsFrame_UpdateFriends", friendsFrame)
 
-local _VIEW_DEFAULT = 'playerStatus'
-_VIEW = _VIEW_DEFAULT
+local defaultView = "playerStatus"
+local currentView = defaultView
 
 local function viewChanged(view)
-	_VIEW = view or _VIEW_DEFAULT
+	currentView = view or defaultView
 end
 
-local function updateTradeSkill()
-	if _VIEW == "tradeskill" then return end
+local function updateGuild()
+	if currentView == "tradeskill" then return end
 
 	local playerArea = GetRealZoneText()
 	local buttons = GuildRosterContainer.buttons
@@ -204,23 +204,23 @@ local function updateTradeSkill()
 				name = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255) .. name
 			end
 
-			if(_VIEW == 'playerStatus') then
+			if(currentView == 'playerStatus') then
 				button.string1:SetText(diffColor[level] .. level)
 				button.string2:SetText(displayedName)
 				if(zone == playerArea) then
 					button.string3:SetText('|cff00ff00' .. zone)
 				end
-			elseif(_VIEW == 'guildStatus') then
+			elseif(currentView == 'guildStatus') then
 				button.string1:SetText(displayedName)
 				if(rankIndex and rank) then
 					button.string2:SetText(guildRankColor[rankIndex] .. rank)
 				end
-			elseif(_VIEW == 'achievement') then
+			elseif(currentView == 'achievement') then
 				button.string1:SetText(displayedName)
 				if(classFileName and name) then
 					button.string2:SetText(classColor[classFileName] .. name)
 				end
-			elseif(_VIEW == 'weeklyxp' or _VIEW == 'totalxp') then
+			elseif(currentView == 'weeklyxp' or currentView == 'totalxp') then
 				button.string1:SetText(diffColor[level] .. level)
 				button.string2:SetText(displayedName)
 			end
@@ -233,17 +233,18 @@ hooksecurefunc("GuildFrame_LoadUI", function()
 	if guildLoaded then return end
 	guildLoaded = true
 
-	_VIEW = GetCVar("guildRosterView") or _VIEW_DEFAULT
+	local cvar = GetCVar("guildRosterView")
+	currentView = (cvar ~= "" and cvar) or defaultView
 
 	hooksecurefunc("GuildRoster_SetView", viewChanged)
-	hooksecurefunc("GuildRoster_Update", updateTradeSkill)
-	hooksecurefunc(GuildRosterContainer, 'update', updateTradeSkill)
+	hooksecurefunc("GuildRoster_Update", updateGuild)
+	hooksecurefunc(GuildRosterContainer, "update", updateGuild)
 end)
 
 hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, index)
 	local name, level, areaName, className, comment, partyMembers, status, class, encountersTotal, encountersComplete, isIneligible, isLeader, isTank, isHealer, isDamage = SearchLFGGetResults(index)
 
-	if class and name and level and (name~=myName) then
+	if class and name and level and name ~= myName then
 		button.name:SetText(classColor[class] .. name)
 		button.class:SetText(classColor[class] .. className)
 		button.level:SetText(diffColor[level] .. level)
