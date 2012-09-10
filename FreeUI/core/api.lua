@@ -445,6 +445,8 @@ F.ReskinSlider = function(f)
 end
 
 F.ReskinExpandOrCollapse = function(f)
+	f:SetSize(13, 13)
+
 	F.Reskin(f, true)
 	f.SetNormalTexture = F.dummy
 
