@@ -1,19 +1,24 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 if not IsAddOnLoaded("FreeUI_Options") then return end
 
 local realm = GetCVar("realmName")
 local name = UnitName("player")
 
+-- create the profile boolean
 if not FreeUIOptionsGlobal then FreeUIOptionsGlobal = {} end
-if (FreeUIOptionsGlobal[realm] == nil) then FreeUIOptionsGlobal[realm] = {} end
-if (FreeUIOptionsGlobal[realm][name] == nil) then FreeUIOptionsGlobal[realm][name] = false end
+if FreeUIOptionsGlobal[realm] == nil then FreeUIOptionsGlobal[realm] = {} end
+if FreeUIOptionsGlobal[realm][name] == nil then FreeUIOptionsGlobal[realm][name] = false end
 
-if FreeUIOptionsGlobal[realm][name] == false and not FreeUIOptions then return end
-if FreeUIOptionsGlobal[realm][name] == true and not FreeUIOptionsPerChar then return end
+-- create the main options table
+if FreeUIOptions == nil then FreeUIOptions = {} end
 
 local profile
 if FreeUIOptionsGlobal[realm][name] == true then
+	if FreeUIOptionsPerChar == nil then
+		FreeUIOptionsPerChar = {}
+		CopyTable(FreeUIOptions, FreeUIOptionsPerChar)
+	end
 	profile = FreeUIOptionsPerChar
 else
 	profile = FreeUIOptions
@@ -37,3 +42,5 @@ for group, options in pairs(profile) do
 		profile[group] = nil
 	end
 end
+
+C.options = profile

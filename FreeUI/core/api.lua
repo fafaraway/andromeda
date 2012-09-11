@@ -1,4 +1,4 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 -- [[ Constants ]]
 
@@ -526,4 +526,29 @@ F.CreateBDFrame = function(f, a)
 	CreateBD(bg, a or .5)
 
 	return bg
+end
+
+-- function to copy table by value
+F.CopyTable = function(source, target)
+	for key, value in pairs(source) do
+		if type(value) == "table" then
+			target[key] = {}
+			F.CopyTable(value, target[key])
+		else
+			target[key] = value
+		end
+	end
+end
+
+-- function to copy table only when equivalent keys exist in target table
+F.CopyTableExisting = function(source, target)
+	for key, value in pairs(source) do
+		if target[key] ~= nil then
+			if type(value) == "table" then
+				F.CopyTableExisting(value, target[key])
+			else
+				target[key] = value
+			end
+		end
+	end
 end

@@ -7,4 +7,4 @@
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
 strings.lua
-core.lua
+frames.lua
