@@ -6,5 +6,6 @@
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
-strings.lua
+freeui_options.lua
+localization\english.lua
 frames.lua
