@@ -87,8 +87,8 @@ SlashCmdList.FREEUI = function(cmd)
 		FreeUIConfig = {}
 		ReloadUI()
 	else
-		if not BankFrame:IsShown() then
-			InterfaceOptionsFrame_OpenToCategory("FreeUI")
+		if not BankFrame:IsShown() and FreeUIOptionsPanel then
+			FreeUIOptionsPanel:Show()
 		end
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r [dps/healer]|cffffffff: Select a unitframe layout|r", unpack(C.class))

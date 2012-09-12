@@ -2,15 +2,17 @@ local _, ns = ...
 
 ns.localization = {}
 
+ns.localization.profile = "Character-specific settings"
 ns.localization.install = "Load the installer/tutorial."
-ns.localization.reset = "Remove the data saved by FreeUI.\n To reset these options, press 'Defaults' in the bottom left corner instead."
+ns.localization.reset = "Remove the data saved by FreeUI."
 ns.localization.credits = "FreeUI by Freethinker @ Steamwheedle Cartel - EU / Haleth on wowinterface.com"
 
 ns.localization.general = "General"
+ns.localization.generalSubText = "These options control most of the common settings in the UI."
 ns.localization.generalauto_accept = "Automatically accept invites from friends and guild members"
 ns.localization.generalautorepair = "Automatically repair items"
 ns.localization.generalautorepair_guild = "Use guild funds for automatic repairs"
-ns.localization.generalautoroll = "Automatically roll disenchant (if available) or greed on Bind on Equip Uncommon (green) items"
+ns.localization.generalautoroll = "Automatically roll disenchant (if available) or greed on BoE uncommon items"
 ns.localization.generalautosell = "Automatically sell Poor (grey) quality items"
 ns.localization.generalbags_size = "The size of the item buttons in your bags, determining the size of the bag window"
 ns.localization.generalbuffreminder = "Show a reminder when missing important self-cast buffs in combat"

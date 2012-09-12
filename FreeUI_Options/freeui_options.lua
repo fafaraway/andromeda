@@ -12,6 +12,9 @@ local checkboxes = {}
 local sliders = {}
 local dropdowns = {}
 local editboxes = {}
+local tabs = {}
+
+local r, g, b
 
 local function SaveValue(f, value)
 	if not C.options[f.group] then C.options[f.group] = {} end
@@ -37,6 +40,37 @@ ns.CreateCheckBox = function(parent, name, option)
 	tinsert(checkboxes, f)
 
 	return f
+end
+
+local offset = 160
+local activeTab = nil
+
+local function setActiveTab(tab)
+	activeTab = tab
+	activeTab:SetBackdropColor(r, g, b, .2)
+end
+
+local onTabClick = function(tab)
+	activeTab:SetBackdropColor(0, 0, 0, 0)
+	setActiveTab(tab)
+end
+
+ns.addCategory = function(tag, name)
+	local bu = CreateFrame("Frame", nil, FreeUIOptionsPanel)
+	bu:SetPoint("TOPLEFT", 16, -offset)
+	bu:SetSize(160, 50)
+
+	bu.Text = bu:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	bu.Text:SetPoint("CENTER")
+	bu.Text:SetText(ns.localization[tag])
+
+	bu:SetScript("OnMouseUp", onTabClick)
+
+	FreeUIOptionsPanel[name.."Button"] = bu
+
+	tinsert(tabs, bu)
+
+	offset = offset + 61
 end
 
 -- [[ Callbacks ]]
@@ -76,33 +110,31 @@ init:SetScript("OnEvent", function()
 
 	F, C = unpack(FreeUI)
 
+	r, g, b = unpack(C.class)
+
 	-- in case we hit cancel
 	for _, group in pairs(ns.categories) do
 		old[group] = {}
 		F.CopyTable(C[group], old[group])
 	end
 
-	local layoutToUse
-	local layout = FreeUIOptionsPanelLayout
-	if FreeUIConfig.layout == 1 then
-		layout:SetText("Healer layout")
-		layoutToUse = 2
-	else
-		layout:SetText("Dps/Tank layout")
-		layoutToUse = 1
-	end
-
-	layout:SetScript("OnClick", function()
-		FreeUIConfig.layout = layoutToUse
-		ReloadUI()
-	end)
-	layout.text:SetText("Switch to the "..( FreeUIConfig.layout==1 and "Healer" or "Dps/Tank").." unitframe layout. This will reload the UI.")
-
 	-- styling
 
-	F.Reskin(layout)
+	F.CreateBD(FreeUIOptionsPanel)
+	F.CreateSD(FreeUIOptionsPanel)
+
+	for _, tab in pairs(tabs) do
+		F.CreateBD(tab, 0)
+		F.CreateGradient(tab)
+	end
+
+	setActiveTab(FreeUIOptionsPanel.GeneralButton)
+
+	F.Reskin(FreeUIOptionsPanel.Okay)
 	F.Reskin(FreeUIOptionsPanelInstall)
 	F.Reskin(FreeUIOptionsPanelReset)
+	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
+	F.ReskinCheck(FreeUIOptionsPanel.Profile)
 
 	for _, box in pairs(checkboxes) do
 		F.ReskinCheck(box)
