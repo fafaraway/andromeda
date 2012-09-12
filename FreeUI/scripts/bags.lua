@@ -20,38 +20,38 @@ local iconSize = C.general.bags_size
 
 local ReskinButton = function(buName)
 	local bu = _G[buName]
-	
+
 	if bu.reskinned then return end
-	
+
 	local co = _G[buName.."Count"]
 
 	bu:SetSize(iconSize, iconSize)
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetFrameStrata("HIGH")
-	
+
 	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	co:ClearAllPoints()
 	co:SetPoint("TOP", bu, 1, -2)
-	
+
 	_G[buName.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 	_G[buName.."IconQuestTexture"]:SetAlpha(0)
-	
+
 	bu.reskinned = true
 end
 
 local HideBag = function(bagName)
 	local bag = _G[bagName]
-	
+
 	if bag.reskinned then return end
-	
+
 	bag:EnableMouse(false)
 	_G[bagName.."CloseButton"]:Hide()
 	_G[bagName.."PortraitButton"]:EnableMouse(false)
 	for i = 1, 7 do
 		select(i, bag:GetRegions()):SetAlpha(0)
 	end
-	
+
 	bag.reskinned = true
 end
 
@@ -134,7 +134,7 @@ local ReanchorBankButtons = function()
 
 	for f = CheckSlots() + 1, CheckSlots() + GetNumBankSlots() + 1, 1 do
 		con = "ContainerFrame"..f
-		
+
 		HideBag(con)
 		_G[con]:SetScale(1)
 
@@ -194,7 +194,7 @@ local bankBagAlpha = 0
 
 local setBankBagAlpha = function()
 	bankBagAlpha = 1 - bankBagAlpha
-	
+
 	bankbagholder:SetAlpha(bankBagAlpha)
 	for i = 1, 7 do
 		_G["BankFrameBag"..i]:SetAlpha(bankBagAlpha)
@@ -251,7 +251,7 @@ for i = 1, 7 do
 	bag:SetPushedTexture("")
 
 	ic:SetTexCoord(.08, .92, .08, .92)
-	
+
 	bag:SetAlpha(0)
 	bag:HookScript("OnEnter", setBankBagAlpha)
 	bag:HookScript("OnLeave", setBankBagAlpha)
@@ -264,9 +264,6 @@ for i = 1, 9 do
 end
 
 --[[ Show & Hide functions etc ]]
-
-tinsert(UISpecialFrames, bankholder)
-tinsert(UISpecialFrames, holder)
 
 local CloseBags = function()
 	bankholder:Hide()
@@ -387,7 +384,7 @@ local function updateFilter(frame)
 
 	for i=1, frame.size, 1 do
 		itemButton = _G[name..i];
-		_, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(id, itemButton:GetID());	
+		_, _, _, _, _, _, _, isFiltered = GetContainerItemInfo(id, itemButton:GetID());
 		if itemButton.glow then
 			if ( isFiltered ) then
 				itemButton.glow:SetAlpha(0);
@@ -406,7 +403,7 @@ hooksecurefunc("ContainerFrame_Update", updateFilter)
 local function FormatMoney(money)
 	local gold = abs(money / 10000)
 	local cash = ""
-	cash = format("%.2d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t", gold)		
+	cash = format("%.2d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t", gold)
 	return cash
 end
 
@@ -436,7 +433,7 @@ local function ShowMoney()
 	for k, v in pairs(goldlist) do
 		total = total + v
 	end
-	
+
 	-- create a sorted table of goldlist where keys are index numbers and values are goldlist keys
 	-- only way to properly sort key-value tables
 	if not tableFilled then
