@@ -111,7 +111,7 @@ local scale = min(2, max(.64, 768/string.match(({GetScreenResolutions()})[GetCur
 if scale > 1 then scale = 1 end
 
 local function Setup()
-	SetCVar("screenshotFormat", tga)
+	SetCVar("screenshotQuality", 10)
 	SetCVar("cameraDistanceMax", 50)
 	SetCVar("cameraDistanceMaxFactor", 3.4)
 	SetCVar("nameplateShowFriends", 0)
