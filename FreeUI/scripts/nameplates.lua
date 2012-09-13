@@ -10,9 +10,6 @@ local select = select
 local freq = C.performance.nameplates
 local tfreq = C.performance.namethreat
 
-local paladinR, paladinG, paladinB = C.classcolours["PALADIN"].r, C.classcolours["PALADIN"].g, C.classcolours["PALADIN"].b
-local shamanR, shamanG, shamanB = C.classcolours["SHAMAN"].r, C.classcolours["SHAMAN"].g, C.classcolours["SHAMAN"].b
-
 local CreateBD = function(parent, offset)
 	local left = parent:CreateTexture(nil, "BACKGROUND")
 	left:SetWidth(offset)
@@ -71,6 +68,24 @@ local ThreatUpdate = function(self, elapsed)
 	end
 end
 
+local function Round(x)
+	return floor(x * (10 ^ 2) + .5) / 10 ^ 2
+end
+
+local oldClassColours = RAID_CLASS_COLORS
+local newClassColours = C.classcolours
+
+local function updateClassColour(r, g, b)
+	local nR, nG, nB = Round(r), Round(g), Round(b)
+
+	for class in pairs(oldClassColours) do
+		if nR == oldClassColours[class].r and nG == oldClassColours[class].g and nB == oldClassColours[class].b then
+			return newClassColours[class].r, newClassColours[class].g, newClassColours[class].b
+		end
+	end
+	return r, g, b
+end
+
 local UpdateFrame = function(self)
 	local r, g, b = self.healthBar:GetStatusBarColor()
 	local newr, newg, newb
@@ -86,14 +101,14 @@ local UpdateFrame = function(self)
 	elseif 2 - (r + g) < 0.05 and b == 0 then
 		newr, newg, newb = 1, 1, .3
 		self.healthBar:SetStatusBarColor(1, 1, .3)
-	elseif r > 0.9 and g > 0.5 and g < 0.6 and b > 0.7 and b < 0.8 then
-		newr, newg, newb = paladinR, paladinG, paladinB
-		self.healthBar:SetStatusBarColor(paladinR, paladinG, paladinB)
-	elseif g > 0.4 and g < 0.5 and b > 0.8 and b < 0.9 then
-		newr, newg, newb = shamanR, shamanG, shamanB
-		self.healthBar:SetStatusBarColor(shamanR, shamanG, shamanB)
 	else
-		newr, newg, newb = r, g, b
+		local cR, cG, cB = updateClassColour(r, g, b)
+		if cR then
+			newr, newg, newb = cR, cG, cB
+			self.healthBar:SetStatusBarColor(newr, newg, newb)
+		else
+			newr, newg, newb = r, g, b
+		end
 	end
 
 	self.r, self.g, self.b = newr, newg, newb
