@@ -52,15 +52,6 @@ local CreateBG = function(parent, offset)
 	return bg
 end
 
-local CreateLine = function(parent, offset, w, h, p1, x1, y1, p2, x2, y2)
-	local line = parent:CreateTexture(nil, layer or "BACKGROUND")
-	line:SetSize(w, h)
-	line:SetTexture(0, 0, 0)
-	line:SetPoint(p1, x1, y1)
-	line:SetPoint(p2, x2, y2)
-	return line
-end
-
 local ThreatUpdate = function(self, elapsed)
 	self.elapsed = self.elapsed + elapsed
 	if self.elapsed >= tfreq then
@@ -239,7 +230,7 @@ local StyleFrame = function(frame)
 	frame.elapsed = 0
 	frame:SetScript("OnUpdate", ThreatUpdate)
 
-	local offset = UIParent:GetScale() / healthBar:GetEffectiveScale()
+	local offset = UIParent:GetScale()
 	CreateBD(healthBar, offset)
 	CreateBD(castBar, offset)
 
