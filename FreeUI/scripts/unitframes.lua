@@ -656,7 +656,7 @@ local UnitSpecific = {
 			IconFrame:SetSize(44, 44)
 		end
 
-		if C.unitframes.pvp == true then
+		if C.unitframes.pvp then
 			local PvP = F.CreateFS(self, 8)
 			PvP:SetPoint("RIGHT", self.MaxHealthPoints, "LEFT", -3, 0)
 			PvP:SetText("P")
@@ -681,7 +681,7 @@ local UnitSpecific = {
 
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
-		if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+		if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "DRUID" and C.classmod.druid) or (class == "WARLOCK" and C.classmod.warlock) then
 			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
 		else
 			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -4)
@@ -699,7 +699,7 @@ local UnitSpecific = {
 		self.Debuffs = Debuffs
 		Debuffs.PostUpdateIcon = PostUpdateIcon
 
-		if class == "DEATHKNIGHT" and C.classmod.deathknight == true then
+		if class == "DEATHKNIGHT" and C.classmod.deathknight then
 			local runes = CreateFrame("Frame", nil, self)
 			runes:SetWidth(playerWidth)
 			runes:SetHeight(2)
@@ -739,7 +739,7 @@ local UnitSpecific = {
 			end
 
 			self.Runes = runes
-		elseif class == "DRUID" and C.classmod.druid == true then
+		elseif class == "DRUID" and C.classmod.druid then
 			local eclipseBar = CreateFrame("Frame", nil, self)
 			eclipseBar:SetWidth(playerWidth)
 			eclipseBar:SetHeight(2)
@@ -848,7 +848,7 @@ local UnitSpecific = {
 					end
 				end
 			end
-		elseif class == "MONK" and C.classmod.monk == true then
+		elseif class == "MONK" and C.classmod.monk then
 			local pulsating = false
 
 			local r, g, b = PowerBarColor["LIGHT_FORCE"].r, PowerBarColor["LIGHT_FORCE"].g, PowerBarColor["LIGHT_FORCE"].b
@@ -900,7 +900,7 @@ local UnitSpecific = {
 
 			self.Harmony = glow
 			glow.Override = UpdateOrbs
-		elseif class == "PALADIN" and C.classmod.paladin == true then
+		elseif class == "PALADIN" and C.classmod.paladin then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
 
@@ -943,7 +943,7 @@ local UnitSpecific = {
 
 			self.HolyPower = glow
 			glow.Override = UpdateHoly
-		elseif class == "PRIEST" and C.classmod.priest == true then
+		elseif class == "PRIEST" and C.classmod.priest then
 			local UpdateOrbs = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
 
@@ -986,7 +986,7 @@ local UnitSpecific = {
 
 			self.ShadowOrbs = glow
 			glow.Override = UpdateOrbs
-		elseif class == "WARLOCK" and C.classmod.warlock == true then
+		elseif class == "WARLOCK" and C.classmod.warlock then
 			local bars = CreateFrame("Frame", nil, self)
 			bars:SetWidth(playerWidth)
 			bars:SetHeight(2)
@@ -1016,7 +1016,7 @@ local UnitSpecific = {
 		end
 
 		self.AltPowerBar:HookScript("OnShow", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+			if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "DRUID" and C.classmod.druid) or (class == "WARLOCK" and C.classmod.warlock) then
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
 			else
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(5 + altPowerHeight))
@@ -1024,7 +1024,7 @@ local UnitSpecific = {
 		end)
 
 		self.AltPowerBar:HookScript("OnHide", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight == true) or (class == "DRUID" and C.classmod.druid == true) or (class == "WARLOCK" and C.classmod.warlock == true) then
+			if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "DRUID" and C.classmod.druid) or (class == "WARLOCK" and C.classmod.warlock) then
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(7 + altPowerHeight))
 			else
 				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(3 + altPowerHeight))
@@ -1422,7 +1422,7 @@ do
 
 		else
 			Health:SetHeight(partyHeight - powerHeight - 1)
-			if C.unitframes.party_name_always == true then
+			if C.unitframes.party_name_always then
 				self:Tag(Text, '[free:name]')
 			else
 				self:Tag(Text, '[dead][offline]')
@@ -1624,7 +1624,7 @@ end
 oUF:Factory(function(self)
 	local playerPos, targetPos, partyPos, raidPos
 	local target
-	if C.unitframes.auto == true then
+	if C.unitframes.auto then
 		local height = GetScreenHeight()
 		spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", -275, -(height/13.7))
 
@@ -1679,7 +1679,7 @@ oUF:Factory(function(self)
 
 	local party = self:SpawnHeader(nil, nil, "party,raid",
 		'showParty', true,
-		'showPlayer', true and FreeUIConfig.layout == 2 or false,
+		'showPlayer', FreeUIConfig.layout == 2,
 		'showSolo', false,
 		'yoffset', -3,
 		'maxColumns', 5,
