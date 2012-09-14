@@ -85,7 +85,6 @@ C["classmod"] = {
 
 -- lower = smoother = more CPU usage
 C["performance"] = {
-	["bubbles"] = .1, 	-- update interval for chat bubbles in seconds (always)
 	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
 	["nameplates"] = .1, 	-- update interval for nameplates in seconds (always)
 	["namethreat"] = .2, 	-- update interval for nameplates threat in seconds (only with nameplates shown)
