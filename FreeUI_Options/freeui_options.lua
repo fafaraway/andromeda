@@ -5,14 +5,12 @@ local _, ns = ...
 
 ns.categories = {}
 
-local old = {}
-
 local buttons = {}
 local checkboxes = {}
 local sliders = {}
 local dropdowns = {}
 local editboxes = {}
-local tabs = {}
+local panels = {}
 
 local r, g, b
 
@@ -48,57 +46,50 @@ local activeTab = nil
 local function setActiveTab(tab)
 	activeTab = tab
 	activeTab:SetBackdropColor(r, g, b, .2)
+	activeTab.panel:Show()
 end
 
 local onTabClick = function(tab)
 	activeTab:SetBackdropColor(0, 0, 0, 0)
+	activeTab.panel:Hide()
 	setActiveTab(tab)
 end
 
 ns.addCategory = function(tag, name)
-	local bu = CreateFrame("Frame", nil, FreeUIOptionsPanel)
-	bu:SetPoint("TOPLEFT", 16, -offset)
-	bu:SetSize(160, 50)
+	local panel = CreateFrame("Frame", "FreeUIOptionsPanel"..name, FreeUIOptionsPanel)
+	panel:SetSize(623, 568)
+	panel:SetPoint("RIGHT", -16, 0)
+	panel:Hide()
 
-	bu.Text = bu:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	bu.Text:SetPoint("CENTER")
-	bu.Text:SetText(ns.localization[tag])
+	panel.Title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	panel.Title:SetPoint("TOPLEFT", 8, -8)
+	panel.Title:SetText(ns.localization[tag])
 
-	bu:SetScript("OnMouseUp", onTabClick)
+	panel.subText = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	panel.subText:SetPoint("TOPLEFT", panel.Title, "BOTTOMLEFT", 0, -8)
+	panel.subText:SetJustifyV("TOP")
+	panel.subText:SetHeight(32)
+	panel.subText:SetText(ns.localization[tag.."SubText"])
 
-	FreeUIOptionsPanel[name.."Button"] = bu
+	local tab = CreateFrame("Frame", nil, FreeUIOptionsPanel)
+	tab:SetPoint("TOPLEFT", 16, -offset)
+	tab:SetSize(160, 50)
 
-	tinsert(tabs, bu)
+	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	tab.Text:SetPoint("CENTER")
+	tab.Text:SetText(ns.localization[tag])
+
+	tab:SetScript("OnMouseUp", onTabClick)
+
+	tab.panel = panel
+	panel.tab = tab
+	panel.tag = tag
+
+	FreeUIOptionsPanel[tag] = panel
+
+	tinsert(panels, panel)
 
 	offset = offset + 61
-end
-
--- [[ Callbacks ]]
-
-ns.refresh = function()
-	for _, box in pairs(checkboxes) do
-		box:SetChecked(C[box.group][box.option])
-	end
-end
-
-ns.okay = function()
-	-- refresh the 'old' table for the next options.cancel()
-	F.CopyTable(C.options, old)
-end
-
-ns.cancel = function()
-	-- copy the old values to the saved vars if they exist
-	F.CopyTableExisting(old, C.options)
-	-- also update the table that is actually used by the scripts
-	F.CopyTableExisting(old, C)
-end
-
-ns.default = function()
-	-- clear saved vars to reset to lua options, and set profile boolean to global
-	FreeUIOptions = {}
-	FreeUIOptionsPerChar = {}
-	FreeUIOptionsGlobal[GetCVar("realmName")][UnitName("player")] = false
-	C.options = FreeUIOptions
 end
 
 -- [[ Init ]]
@@ -112,27 +103,23 @@ init:SetScript("OnEvent", function()
 
 	r, g, b = unpack(C.class)
 
-	-- in case we hit cancel
-	for _, group in pairs(ns.categories) do
-		old[group] = {}
-		F.CopyTable(C[group], old[group])
-	end
-
 	-- styling
 
 	F.CreateBD(FreeUIOptionsPanel)
 	F.CreateSD(FreeUIOptionsPanel)
 
-	for _, tab in pairs(tabs) do
-		F.CreateBD(tab, 0)
-		F.CreateGradient(tab)
+	for _, panel in pairs(panels) do
+		F.CreateBD(panel.tab, 0)
+		F.CreateBD(panel, .25)
+		F.CreateGradient(panel.tab)
 	end
 
-	setActiveTab(FreeUIOptionsPanel.GeneralButton)
+	setActiveTab(FreeUIOptionsPanel.general.tab)
 
 	F.Reskin(FreeUIOptionsPanel.Okay)
 	F.Reskin(FreeUIOptionsPanelInstall)
 	F.Reskin(FreeUIOptionsPanelReset)
+	F.Reskin(GameMenuButtonFreeUI)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.Profile)
 

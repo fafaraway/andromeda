@@ -69,6 +69,21 @@ local credits = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 credits:SetText(ns.localization.credits)
 credits:SetPoint("BOTTOM", 0, 16)
 
+local menuButton = CreateFrame("Button", "GameMenuButtonFreeUI", GameMenuFrame, "GameMenuButtonTemplate")
+menuButton:SetSize(144, 21)
+menuButton:SetPoint("TOP", GameMenuButtonUIOptions, "BOTTOM", 0, -1)
+menuButton:SetText("FreeUI")
+
+GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + 22)
+
+GameMenuButtonKeybindings:ClearAllPoints()
+GameMenuButtonKeybindings:SetPoint("TOP", menuButton, "BOTTOM", 0, -1)
+
+menuButton:SetScript("OnClick", function()
+	ToggleFrame(GameMenuFrame)
+	options:Show()
+end)
+
 -- [[ General ]]
 
 ns.addCategory("general", "General")
@@ -78,27 +93,10 @@ ns.addCategory("unitframes", "UnitFrames")
 ns.addCategory("classmod", "ClassSpecific")
 ns.addCategory("performance", "Performance")
 
-if true then return end
-
-local general = CreateFrame("Frame", "FreeUIOptionsPanelGeneral", options)
-general.tag = "general"
-general.parent = "FreeUI"
-general.name = ns.localization.general
-InterfaceOptions_AddCategory(general)
-tinsert(ns.categories, general.tag)
-
-local title = general:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-title:SetPoint("TOPLEFT", 16, -16)
-title:SetText(ns.localization.general)
-
-local subText = general:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-subText:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
-subText:SetJustifyV("TOP")
-subText:SetHeight(32)
-subText:SetText(ns.localization.generalSubText)
+local general = FreeUIOptionsPanel.general
 
 local autoAccept = ns.CreateCheckBox(general, "AutoAccept", "auto_accept")
-autoAccept:SetPoint("TOPLEFT", subText, "BOTTOMLEFT", -2, -8)
+autoAccept:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", -2, -8)
 
 local autoRepair = ns.CreateCheckBox(general, "AutoRepair", "autorepair")
 autoRepair:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
