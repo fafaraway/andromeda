@@ -6,7 +6,7 @@ local font = C.media.font
 local texture = C.media.texture
 
 local defaults = {
-	barheight = 12,
+	barheight = 14,
 	spacing = 1,
 	maxbars = 8,
 	width = 165,
