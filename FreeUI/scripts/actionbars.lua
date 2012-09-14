@@ -11,6 +11,8 @@ bar1:SetHeight(26)
 MainMenuBarArtFrame:SetParent(bar1)
 MainMenuBarArtFrame:EnableMouse(false)
 
+MainMenuBar.slideOut.IsPlaying = function() return true end
+
 for i = 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["ActionButton"..i]
 	button:ClearAllPoints()
