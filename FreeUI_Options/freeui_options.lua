@@ -9,7 +9,6 @@ local buttons = {}
 local checkboxes = {}
 local sliders = {}
 local dropdowns = {}
-local editboxes = {}
 local panels = {}
 
 local r, g, b
@@ -22,12 +21,32 @@ local function SaveValue(f, value)
 	C[f.group][f.option] = value -- and this is from the lua options
 end
 
-local function toggle(f)
-	SaveValue(f, f:GetChecked() == 1)
+local function toggleChild(self)
+	local checked = self:GetChecked()
+
+	self.child:SetEnabled(checked)
+
+	if checked then
+		self.child.Text:SetTextColor(1, 1, 1)
+	else
+		self.child.Text:SetTextColor(.5, .5, .5)
+	end
 end
 
-ns.CreateCheckBox = function(parent, name, option)
-	local f = CreateFrame("CheckButton", parent:GetName()..name, parent, "InterfaceOptionsCheckButtonTemplate")
+local function toggle(self)
+	SaveValue(self, self:GetChecked() == 1)
+
+	if self.child then toggleChild(self) end
+end
+
+local function onCheckBoxChanged(self)
+	if self.child then
+		self.child:SetEnabled(self:GetChecked())
+	end
+end
+
+ns.CreateCheckBox = function(parent, option)
+	local f = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
 
 	f.group = parent.tag
 	f.option = option
@@ -38,6 +57,82 @@ ns.CreateCheckBox = function(parent, name, option)
 	tinsert(checkboxes, f)
 
 	return f
+end
+
+local function onValueChanged(self, value)
+	value = floor(value*100)/100
+
+	if self.textInput then
+		self.textInput:SetText(value)
+	end
+
+	SaveValue(self, value)
+end
+
+local function createSlider(parent, option, lowText, highText, low, high, step)
+	local baseName = "FreeUIOptionsPanel"
+	local f = CreateFrame("Slider", baseName..option, parent, "OptionsSliderTemplate")
+
+	BlizzardOptionsPanel_Slider_Enable(f)
+
+	f.group = parent.tag
+	f.option = option
+
+	_G[baseName..option.."Text"]:SetText(ns.localization[parent.tag..option])
+	_G[baseName..option.."Low"]:SetText(lowText)
+	_G[baseName..option.."High"]:SetText(highText)
+	f:SetMinMaxValues(low, high)
+	f:SetValueStep(step)
+
+	f:SetScript("OnValueChanged", onValueChanged)
+
+	tinsert(sliders, f)
+
+	return f
+end
+
+local function onEscapePressed(self)
+	self:ClearFocus()
+end
+
+local function onEnterPressed(self)
+	local slider = self:GetParent()
+	local min, max = slider:GetMinMaxValues()
+
+	local value = tonumber(self:GetText())
+	if value and value >= floor(min) and value <= floor(max) then
+		slider:SetValue(value)
+	else
+		self:SetText(floor(slider:GetValue()*100)/100)
+	end
+
+	self:ClearFocus()
+end
+
+ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, alignRight)
+	local slider = createSlider(parent, option, lowText, highText, low, high, step)
+
+	local baseName = "FreeUIOptionsPanel"
+
+	local f = CreateFrame("EditBox", baseName..option.."TextInput", slider)
+	f:SetAutoFocus(false)
+	f:SetWidth(60)
+	f:SetHeight(20)
+	f:SetMaxLetters(8)
+	f:SetFontObject(GameFontHighlight)
+
+	if alignRight then
+		slider:SetPoint("RIGHT", f, "LEFT", -20, 0)
+	else
+		f:SetPoint("LEFT", slider, "RIGHT", 20, 0)
+	end
+
+	f:SetScript("OnEscapePressed", onEscapePressed)
+	f:SetScript("OnEnterPressed", onEnterPressed)
+
+	slider.textInput = f
+
+	return slider
 end
 
 local offset = 160
@@ -55,7 +150,9 @@ local onTabClick = function(tab)
 	setActiveTab(tab)
 end
 
-ns.addCategory = function(tag, name)
+ns.addCategory = function(name)
+	local tag = strlower(name)
+
 	local panel = CreateFrame("Frame", "FreeUIOptionsPanel"..name, FreeUIOptionsPanel)
 	panel:SetSize(623, 568)
 	panel:SetPoint("RIGHT", -16, 0)
@@ -103,8 +200,6 @@ init:SetScript("OnEvent", function()
 
 	r, g, b = unpack(C.class)
 
-	-- styling
-
 	F.CreateBD(FreeUIOptionsPanel)
 	F.CreateSD(FreeUIOptionsPanel)
 
@@ -124,6 +219,21 @@ init:SetScript("OnEvent", function()
 	F.ReskinCheck(FreeUIOptionsPanel.Profile)
 
 	for _, box in pairs(checkboxes) do
+		box:SetChecked(C[box.group][box.option])
+		if box.child then toggleChild(box) end
+
 		F.ReskinCheck(box)
 	end
+
+	for _, slider in pairs(sliders) do
+		slider:SetValue(C[slider.group][slider.option])
+
+		if slider.textInput then
+			slider.textInput:SetCursorPosition(0)
+			F.ReskinInput(slider.textInput)
+		end
+
+		F.ReskinSlider(slider)
+	end
+
 end)

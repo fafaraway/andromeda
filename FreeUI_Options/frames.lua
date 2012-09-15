@@ -15,6 +15,9 @@ options.Okay = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 options.Okay:SetPoint("BOTTOMRIGHT", -16, 16)
 options.Okay:SetSize(128, 25)
 options.Okay:SetText(OKAY)
+options.Okay:SetScript("OnClick", function()
+	options:Hide()
+end)
 
 options.Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
 options.Profile:SetPoint("TOPLEFT", 16, -60)
@@ -86,23 +89,57 @@ end)
 
 -- [[ General ]]
 
-ns.addCategory("general", "General")
-ns.activeTab = FreeUIOptionsPanelGeneral
-ns.addCategory("actionbars", "ActionBars")
-ns.addCategory("unitframes", "UnitFrames")
-ns.addCategory("classmod", "ClassSpecific")
-ns.addCategory("performance", "Performance")
+ns.addCategory("General")
+ns.addCategory("ActionBars")
+ns.addCategory("UnitFrames")
+ns.addCategory("ClassMod")
+ns.addCategory("Performance")
 
 local general = FreeUIOptionsPanel.general
 
-local autoAccept = ns.CreateCheckBox(general, "AutoAccept", "auto_accept")
+local autoAccept = ns.CreateCheckBox(general, "auto_accept")
 autoAccept:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", -2, -8)
 
-local autoRepair = ns.CreateCheckBox(general, "AutoRepair", "autorepair")
+local autoRepair = ns.CreateCheckBox(general, "autorepair")
 autoRepair:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
 
-local autoRepairGuild = ns.CreateCheckBox(general, "AutoRepairGuild", "autorepair_guild")
+local autoRepairGuild = ns.CreateCheckBox(general, "autorepair_guild")
 autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
+autoRepair.child = autoRepairGuild
 
-local autoRoll = ns.CreateCheckBox(general, "AutoRoll", "autoroll")
+local autoRoll = ns.CreateCheckBox(general, "autoroll")
 autoRoll:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -42)
+
+local autoSell = ns.CreateCheckBox(general, "autosell")
+autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -8)
+
+local bagsSize = ns.CreateNumberSlider(general, "bags_size", SMALL, LARGE, 8, 100, 1)
+bagsSize:SetPoint("TOPLEFT", autoSell, "BOTTOMLEFT", 18, -24)
+
+local buffReminder = ns.CreateCheckBox(general, "buffreminder")
+buffReminder:SetPoint("TOPLEFT", bagsSize, "BOTTOMLEFT", -18, -24)
+
+local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons")
+helmCloak:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
+
+local interrupt = ns.CreateCheckBox(general, "interrupt")
+interrupt:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
+
+local tolBarad = ns.CreateCheckBox(general, "tolbarad")
+tolBarad:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
+
+local tolBaradAlways = ns.CreateCheckBox(general, "tolbarad_always")
+tolBaradAlways:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 16, -8)
+tolBarad.child = tolBaradAlways
+
+local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
+tooltipCursor:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -42)
+
+local tooltipGuildRanks = ns.CreateCheckBox(general, "tooltip_guildranks")
+tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
+
+local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto")
+uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -8)
+
+local undressButton = ns.CreateCheckBox(general, "undressButton")
+undressButton:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 0, -8)

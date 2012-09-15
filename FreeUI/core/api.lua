@@ -339,10 +339,10 @@ end
 
 F.ReskinInput = function(f, height, width)
 	local frame = f:GetName()
-	_G[frame.."Left"]:Hide()
+	if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
 	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
 	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
-	_G[frame.."Right"]:Hide()
+	if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", -2, 0)
