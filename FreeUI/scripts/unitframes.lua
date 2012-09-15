@@ -204,7 +204,6 @@ oUF.Tags.Events['free:missinghealth'] = oUF.Tags.Events.missinghp
 oUF.Tags.Methods['free:power'] = function(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)
 	local _, class = UnitClass(unit)
-	if class == "DRUID" then min, max = UnitPower(unit, 0), UnitPowerMax(unit, 0) end
 	if(min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
 	return siValue(min)
@@ -681,10 +680,10 @@ local UnitSpecific = {
 
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
-		if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "DRUID" and C.classmod.druid) or (class == "WARLOCK" and C.classmod.warlock) then
+		if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
 			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
 		else
-			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -4)
+			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 		end
 		Debuffs["growth-x"] = "LEFT"
 		Debuffs["growth-y"] = "DOWN"
@@ -740,19 +739,48 @@ local UnitSpecific = {
 
 			self.Runes = runes
 		elseif class == "DRUID" and C.classmod.druid then
-			local eclipseBar = CreateFrame("Frame", nil, self)
+			local DruidMana, eclipseBar
+
+			local function moveDebuffAnchors()
+				if DruidMana:IsShown() or eclipseBar:IsShown() then
+					local offset
+					if DruidMana:IsShown() then
+						offset = 1
+					else
+						offset = 2
+					end
+					if self.AltPowerBar:IsShown() then
+						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(7 + offset + altPowerHeight))
+					else
+						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(6 + offset))
+					end
+				else
+					if self.AltPowerBar:IsShown() then
+						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(4 + altPowerHeight))
+					else
+						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
+					end
+				end
+			end
+
+			DruidMana = CreateFrame("StatusBar", nil, self)
+			DruidMana:SetStatusBarTexture(C.media.backdrop)
+			DruidMana:SetStatusBarColor(0, 0.76, 1)
+			DruidMana:SetSize(playerWidth, 1)
+			DruidMana:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+
+			F.CreateBDFrame(DruidMana, .25)
+
+			self.DruidMana = DruidMana
+
+			DruidMana.PostUpdate = moveDebuffAnchors
+
+			eclipseBar = CreateFrame("Frame", nil, self)
 			eclipseBar:SetWidth(playerWidth)
 			eclipseBar:SetHeight(2)
 			eclipseBar:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
-			local ebd = CreateFrame("Frame", nil, eclipseBar)
-			ebd:SetBackdrop({
-				edgeFile = C.media.backdrop,
-				edgeSize = 1,
-			})
-			ebd:SetBackdropBorderColor(0, 0, 0)
-			ebd:SetPoint("TOPLEFT", -1, 1)
-			ebd:SetPoint("BOTTOMRIGHT", 1, -1)
+			F.CreateBDFrame(eclipseBar, .25)
 
 			local glow = CreateFrame("Frame", nil, eclipseBar)
 			glow:SetBackdrop({
@@ -777,7 +805,6 @@ local UnitSpecific = {
 			LunarBar:SetSize(eclipseBar:GetWidth(), eclipseBar:GetHeight())
 			LunarBar:SetStatusBarTexture(C.media.texture)
 			LunarBar:SetStatusBarColor(.80, .82, .60)
-			LunarBar:SetFrameStrata("LOW")
 			eclipseBar.LunarBar = LunarBar
 
 			SmoothBar(LunarBar)
@@ -787,7 +814,6 @@ local UnitSpecific = {
 			SolarBar:SetSize(eclipseBar:GetWidth(), eclipseBar:GetHeight())
 			SolarBar:SetStatusBarTexture(C.media.texture)
 			SolarBar:SetStatusBarColor(.30, .52, .90)
-			SolarBar:SetFrameStrata("LOW")
 			eclipseBar.SolarBar = SolarBar
 
 			SmoothBar(SolarBar)
@@ -833,21 +859,10 @@ local UnitSpecific = {
 				end
 			end
 
-			self.EclipseBar.PostUpdateVisibility = function()
-				if self.EclipseBar:IsShown() then
-					if self.AltPowerBar:IsShown() then
-						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
-					else
-						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
-					end
-				else
-					if self.AltPowerBar:IsShown() then
-						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(5 + altPowerHeight))
-					else
-						self.Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -4)
-					end
-				end
-			end
+			self.EclipseBar.PostUpdateVisibility = moveDebuffAnchors
+
+			self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
+			self.AltPowerBar:HookScript("OnHide", moveDebuffAnchors)
 		elseif class == "MONK" and C.classmod.monk then
 			local pulsating = false
 
@@ -1015,21 +1030,23 @@ local UnitSpecific = {
 			self.WarlockSpecBars = bars
 		end
 
-		self.AltPowerBar:HookScript("OnShow", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "DRUID" and C.classmod.druid) or (class == "WARLOCK" and C.classmod.warlock) then
-				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
-			else
-				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(5 + altPowerHeight))
-			end
-		end)
+		if class ~= "DRUID" then -- druids have their own update function
+			self.AltPowerBar:HookScript("OnShow", function()
+				if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
+					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
+				else
+					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(4 + altPowerHeight))
+				end
+			end)
 
-		self.AltPowerBar:HookScript("OnHide", function()
-			if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "DRUID" and C.classmod.druid) or (class == "WARLOCK" and C.classmod.warlock) then
-				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(7 + altPowerHeight))
-			else
-				Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(3 + altPowerHeight))
-			end
-		end)
+			self.AltPowerBar:HookScript("OnHide", function()
+				if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
+					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
+				else
+					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
+				end
+			end)
+		end
 
 		local CounterBar = CreateFrame("StatusBar", nil, self)
 		CounterBar:SetWidth(playerWidth)
@@ -1429,15 +1446,17 @@ do
 			end
 		end
 
-		local Resurrect = CreateFrame("Frame")
-		Resurrect:RegisterEvent("INCOMING_RESURRECT_CHANGED")
-		Resurrect:SetScript("OnEvent", function(self, event, unit)
-			if UnitHasIncomingResurrection(unit) then
+		self.ResurrectIcon = CreateFrame("Frame", nil, self)
+
+		self.ResurrectIcon.Override = function()
+			local resurrect = self.ResurrectIcon
+
+			if UnitHasIncomingResurrection(self.unit) then
 				Text:SetTextColor(0, 1, 0)
 			else
 				Text:SetTextColor(1, 1, 1)
 			end
-		end)
+		end
 
 		self.RaidIcon:ClearAllPoints()
 		self.RaidIcon:SetPoint("CENTER", self, "CENTER")
