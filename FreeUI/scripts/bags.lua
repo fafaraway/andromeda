@@ -16,16 +16,15 @@ end
 
 -- [[ Function to reskin buttons and hide default bags]]
 
-local iconSize = C.general.bags_size
-
 local ReskinButton = function(buName)
 	local bu = _G[buName]
+
+	bu:SetSize(C.general.bags_size, C.general.bags_size)
 
 	if bu.reskinned then return end
 
 	local co = _G[buName.."Count"]
 
-	bu:SetSize(iconSize, iconSize)
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetFrameStrata("HIGH")
@@ -64,6 +63,7 @@ local buttons, bankbuttons = {}, {}
 --[[ Function to move buttons ]]
 
 local MoveButtons = function(table, frame, columns)
+	local iconSize = C.general.bags_size
 	col, row = 0, 0
 	for i = 1, #table do
 		bu = _G[table[i]]
