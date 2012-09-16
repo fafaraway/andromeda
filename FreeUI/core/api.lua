@@ -30,7 +30,6 @@ C.classcolours = {
 }
 
 local _, class = UnitClass("player")
-C.myClass = class
 C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
 
 C.reactioncolours = {
@@ -43,6 +42,10 @@ C.reactioncolours = {
 	[7] = {0.26, 1, 0.22},
 	[8] = {0.26, 1, 0.22},
 }
+
+C.myClass = class
+C.myName = UnitName("player")
+C.myRealm = GetCVar("realmName")
 
 -- [[ Functions ]]
 

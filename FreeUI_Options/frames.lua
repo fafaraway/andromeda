@@ -6,6 +6,7 @@ local options = CreateFrame("Frame", "FreeUIOptionsPanel", UIParent)
 options:SetSize(858, 660)
 options:SetPoint("CENTER")
 options:SetFrameStrata("HIGH")
+options:EnableMouse(true)
 
 tinsert(UISpecialFrames, options:GetName())
 
@@ -30,7 +31,7 @@ title:SetText("FreeUI v."..GetAddOnMetadata("FreeUI", "Version"))
 local install = CreateFrame("Button", "FreeUIOptionsPanelInstall", options, "UIPanelButtonTemplate")
 install:SetSize(128, 25)
 install:SetPoint("TOP", 0, -60)
-install:SetText("Installer")
+install:SetText(ns.localization.install)
 install:SetScript("OnClick", function()
 	InterfaceOptionsFrame_Show()
 	if IsAddOnLoaded("FreeUI_Install") then
@@ -47,16 +48,7 @@ end)
 local reset = CreateFrame("Button", "FreeUIOptionsPanelReset", options, "UIPanelButtonTemplate")
 reset:SetSize(128, 25)
 reset:SetPoint("BOTTOMLEFT", 16, 16)
-reset:SetText("Reset")
-reset:SetScript("OnClick", function()
-	FreeUIGlobalConfig = {}
-	FreeUIConfig = {}
-	FreeUIOptions = {}
-	FreeUIOptionsPerChar = {}
-	FreeUIOptionsGlobal[GetCVar("realmName")][UnitName("player")] = false
-	C.options = FreeUIOptions
-	ReloadUI()
-end)
+reset:SetText(RESET)
 
 reset:SetScript("OnEnter", function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT", 4, 4)
@@ -67,6 +59,8 @@ end)
 reset:SetScript("OnLeave", function()
 	GameTooltip:Hide()
 end)
+
+options.Reset = reset
 
 local credits = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 credits:SetText(ns.localization.credits)

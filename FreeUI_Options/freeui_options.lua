@@ -71,6 +71,16 @@ local function onValueChanged(self, value)
 	SaveValue(self, value)
 end
 
+local function onValueChanged(self, value)
+	value = floor(value*1000)/1000
+
+	if self.textInput then
+		self.textInput:SetText(value)
+	end
+
+	SaveValue(self, value)
+end
+
 local function createSlider(parent, option, lowText, highText, low, high, step)
 	local baseName = "FreeUIOptionsPanel"
 	local f = CreateFrame("Slider", baseName..option, parent, "OptionsSliderTemplate")
@@ -194,6 +204,61 @@ end
 
 -- [[ Init ]]
 
+local function copyTable(source, target)
+	for key, value in pairs(source) do
+		if type(value) == "table" then
+			target[key] = {}
+			copyTable(value, target[key])
+		else
+			target[key] = value
+		end
+	end
+end
+
+local function changeProfile()
+	local profile
+	if FreeUIOptionsGlobal[C.myRealm][C.myName] == true then
+		if FreeUIOptionsPerChar == nil then
+			FreeUIOptionsPerChar = {}
+			CopyTable(FreeUIOptions, FreeUIOptionsPerChar)
+		end
+		profile = FreeUIOptionsPerChar
+	else
+		profile = FreeUIOptions
+	end
+
+	local groups = {["general"] = true, ["actionbars"] = true, ["classmod"] = true, ["performance"] = true}
+
+	for group, options in pairs(C) do
+		if groups[group] then
+			if profile[group] == nil then profile[group] = {} end
+
+			for option, value in pairs(options) do
+				if profile[group][option] == nil then
+					profile[group][option] = value
+				else
+					C[group][option] = profile[group][option]
+				end
+			end
+		end
+	end
+
+	C.options = profile
+end
+
+local function displaySettings()
+	for _, box in pairs(checkboxes) do
+		box:SetChecked(C[box.group][box.option])
+		if box.child then toggleChild(box) end
+	end
+
+	for _, slider in pairs(sliders) do
+		slider:SetValue(C[slider.group][slider.option])
+		slider.textInput:SetText(floor(C[slider.group][slider.option]*1000)/1000)
+		slider.textInput:SetCursorPosition(0)
+	end
+end
+
 local init = CreateFrame("Frame")
 init:RegisterEvent("PLAYER_LOGIN")
 init:SetScript("OnEvent", function()
@@ -208,11 +273,28 @@ init:SetScript("OnEvent", function()
 
 	for _, panel in pairs(panels) do
 		F.CreateBD(panel.tab, 0)
-		F.CreateBD(panel, .25)
 		F.CreateGradient(panel.tab)
 	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)
+
+	FreeUIOptionsPanel.Profile:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
+
+	FreeUIOptionsPanel.Reset:SetScript("OnClick", function()
+		FreeUIGlobalConfig = {}
+		FreeUIConfig = {}
+		FreeUIOptions = {}
+		FreeUIOptionsPerChar = {}
+		FreeUIOptionsGlobal[C.myRealm][C.myName] = false
+		C.options = FreeUIOptions
+		ReloadUI()
+	end)
+
+	FreeUIOptionsPanel.Profile:SetScript("OnClick", function(self)
+		FreeUIOptionsGlobal[C.myRealm][C.myName] = self:GetChecked() == 1
+		changeProfile()
+		displaySettings()
+	end)
 
 	F.Reskin(FreeUIOptionsPanel.Okay)
 	F.Reskin(FreeUIOptionsPanelInstall)
@@ -231,10 +313,9 @@ init:SetScript("OnEvent", function()
 	for _, slider in pairs(sliders) do
 		slider:SetValue(C[slider.group][slider.option])
 
-		if slider.textInput then
-			slider.textInput:SetCursorPosition(0)
-			F.ReskinInput(slider.textInput)
-		end
+		slider.textInput:SetText(floor(C[slider.group][slider.option]*1000)/1000)
+		slider.textInput:SetCursorPosition(0)
+		F.ReskinInput(slider.textInput)
 
 		F.ReskinSlider(slider)
 	end

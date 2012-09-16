@@ -2,8 +2,8 @@ local _, ns = ...
 
 ns.localization = {}
 
-ns.localization.profile = "Character-specific settings"
-ns.localization.install = "Load the installer/tutorial."
+ns.localization.profile = "Character Specific settings"
+ns.localization.install = "Installer"
 ns.localization.reset = "Remove the data saved by FreeUI."
 ns.localization.credits = "FreeUI by Freethinker @ Steamwheedle Cartel - EU / Haleth on wowinterface.com"
 

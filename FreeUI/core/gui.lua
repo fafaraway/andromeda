@@ -2,8 +2,8 @@ local F, C = unpack(select(2, ...))
 
 if not IsAddOnLoaded("FreeUI_Options") then return end
 
-local realm = GetCVar("realmName")
-local name = UnitName("player")
+local realm = C.myRealm
+local name = C.myName
 
 -- create the profile boolean
 if not FreeUIOptionsGlobal then FreeUIOptionsGlobal = {} end
@@ -13,6 +13,18 @@ if FreeUIOptionsGlobal[realm][name] == nil then FreeUIOptionsGlobal[realm][name]
 -- create the main options table
 if FreeUIOptions == nil then FreeUIOptions = {} end
 
+local function copyTable(source, target)
+	for key, value in pairs(source) do
+		if type(value) == "table" then
+			target[key] = {}
+			copyTable(value, target[key])
+		else
+			target[key] = value
+		end
+	end
+end
+
+-- determine which settings to use
 local profile
 if FreeUIOptionsGlobal[realm][name] == true then
 	if FreeUIOptionsPerChar == nil then
@@ -24,22 +36,31 @@ else
 	profile = FreeUIOptions
 end
 
-for group, options in pairs(profile) do
+--[[for group, options in pairs(profile) do
 	if C[group] then
-		local hasOptions = false
 		for option, value in pairs(options) do
 			if C[group][option] ~= nil then
-				if C[group][option] == value then
-					profile[group][option] = nil
-				else
-					hasOptions = true
-					C[group][option] = value
-				end
+				C[group][option] = value
 			end
 		end
-		if not hasOptions then profile[group] = nil end
 	else
 		profile[group] = nil
+	end
+end]]
+
+local groups = {["general"] = true, ["actionbars"] = true, ["classmod"] = true, ["performance"] = true}
+
+for group, options in pairs(C) do
+	if groups[group] then
+		if profile[group] == nil then profile[group] = {} end
+
+		for option, value in pairs(options) do
+			if profile[group][option] == nil then
+				profile[group][option] = value
+			else
+				C[group][option] = profile[group][option]
+			end
+		end
 	end
 end
 
