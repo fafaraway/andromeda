@@ -87,13 +87,14 @@ menuButton:SetScript("OnClick", function()
 	options:Show()
 end)
 
--- [[ General ]]
-
 ns.addCategory("General")
 ns.addCategory("ActionBars")
 ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
 ns.addCategory("Performance")
+
+-- [[ General ]]
+
 
 local general = FreeUIOptionsPanel.general
 
@@ -143,3 +144,74 @@ uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -8)
 
 local undressButton = ns.CreateCheckBox(general, "undressButton")
 undressButton:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 0, -8)
+
+-- [[ Action bars ]]
+
+local actionbars = FreeUIOptionsPanel.actionbars
+
+local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
+hotKey:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", -2, -8)
+
+local rightBarsMouseover = ns.CreateCheckBox(actionbars, "rightbars_mouseover")
+rightBarsMouseover:SetPoint("TOPLEFT", hotKey, "BOTTOMLEFT", 0, -8)
+
+local stanceBar = ns.CreateCheckBox(actionbars, "stancebar")
+stanceBar:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -8)
+
+-- [[ Unit frames ]]
+
+local unitframes = FreeUIOptionsPanel.unitframes
+
+local wip = unitframes:CreateFontString(nil, nil, "GameFontNormalLarge")
+wip:SetPoint("CENTER")
+wip:SetText("Coming soon!")
+
+-- [[ Class specific ]]
+
+local classmod = FreeUIOptionsPanel.classmod
+
+ns.classOptions = {}
+
+local deathknight = ns.CreateCheckBox(classmod, "deathknight")
+deathknight:SetPoint("TOPLEFT", classmod.subText, "BOTTOMLEFT", -2, -8)
+tinsert(ns.classOptions, deathknight)
+
+local druid = ns.CreateCheckBox(classmod, "druid")
+druid:SetPoint("TOPLEFT", deathknight, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, druid)
+
+local monk = ns.CreateCheckBox(classmod, "monk")
+monk:SetPoint("TOPLEFT", druid, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, monk)
+
+local paladin = ns.CreateCheckBox(classmod, "paladin")
+paladin:SetPoint("TOPLEFT", monk, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, paladin)
+
+local priest = ns.CreateCheckBox(classmod, "priest")
+priest:SetPoint("TOPLEFT", paladin, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, priest)
+
+local shaman = ns.CreateCheckBox(classmod, "shaman")
+shaman:SetPoint("TOPLEFT", priest, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, shaman)
+
+local warlock = ns.CreateCheckBox(classmod, "warlock")
+warlock:SetPoint("TOPLEFT", shaman, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, warlock)
+
+-- [[ Performance ]]
+
+local performance = FreeUIOptionsPanel.performance
+
+local mapCoords = ns.CreateNumberSlider(performance, "mapcoords", "0.025 sec", "0.5 sec", 0.025, 0.5, 0.025)
+mapCoords:SetPoint("TOPLEFT", performance.subText, "BOTTOMLEFT", 18, -24)
+
+local namePlates = ns.CreateNumberSlider(performance, "nameplates", "0.025 sec", "0.5 sec", 0.025, 0.5, 0.025)
+namePlates:SetPoint("TOPLEFT", mapCoords, "BOTTOMLEFT", 0, -30)
+
+local nameThreat = ns.CreateNumberSlider(performance, "namethreat", "0.025 sec", "0.5 sec", 0.025, 0.5, 0.025)
+nameThreat:SetPoint("TOPLEFT", namePlates, "BOTTOMLEFT", 0, -30)
+
+local tolBaradTimer = ns.CreateNumberSlider(performance, "tolbarad", "1 sec", "30 sec", 1, 30, 1)
+tolBaradTimer:SetPoint("TOPLEFT", nameThreat, "BOTTOMLEFT", 0, -30)

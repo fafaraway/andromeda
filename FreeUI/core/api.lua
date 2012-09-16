@@ -30,6 +30,7 @@ C.classcolours = {
 }
 
 local _, class = UnitClass("player")
+C.myClass = class
 C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
 
 C.reactioncolours = {

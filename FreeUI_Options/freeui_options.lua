@@ -28,8 +28,10 @@ local function toggleChild(self)
 
 	if checked then
 		self.child.Text:SetTextColor(1, 1, 1)
+		PlaySound("igMainMenuOptionCheckBoxOn")
 	else
 		self.child.Text:SetTextColor(.5, .5, .5)
+		PlaySound("igMainMenuOptionCheckBoxOff")
 	end
 end
 
@@ -60,7 +62,7 @@ ns.CreateCheckBox = function(parent, option)
 end
 
 local function onValueChanged(self, value)
-	value = floor(value*100)/100
+	value = floor(value*1000)/1000
 
 	if self.textInput then
 		self.textInput:SetText(value)
@@ -103,7 +105,7 @@ local function onEnterPressed(self)
 	if value and value >= floor(min) and value <= floor(max) then
 		slider:SetValue(value)
 	else
-		self:SetText(floor(slider:GetValue()*100)/100)
+		self:SetText(floor(slider:GetValue()*1000)/1000)
 	end
 
 	self:ClearFocus()
@@ -164,8 +166,9 @@ ns.addCategory = function(name)
 
 	panel.subText = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 	panel.subText:SetPoint("TOPLEFT", panel.Title, "BOTTOMLEFT", 0, -8)
+	panel.subText:SetJustifyH("LEFT")
 	panel.subText:SetJustifyV("TOP")
-	panel.subText:SetHeight(32)
+	panel.subText:SetSize(607, 32)
 	panel.subText:SetText(ns.localization[tag.."SubText"])
 
 	local tab = CreateFrame("Frame", nil, FreeUIOptionsPanel)
@@ -236,4 +239,8 @@ init:SetScript("OnEvent", function()
 		F.ReskinSlider(slider)
 	end
 
+	for _, setting in pairs(ns.classOptions) do
+		local colour = C.classcolours[strupper(setting.option)]
+		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
+	end
 end)

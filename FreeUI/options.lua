@@ -75,7 +75,7 @@ C["unitframes"] = {
 
 C["classmod"] = {
 	["deathknight"] = true, -- runes
-	["druid"] = true, 		-- eclipse bar
+	["druid"] = true, 		-- eclipse bar, shapeshift mana bar
 	["monk"] = true, 		-- harmony bar
 	["paladin"] = true, 	-- holy power
 	["priest"] = true,		-- shadow orbs
