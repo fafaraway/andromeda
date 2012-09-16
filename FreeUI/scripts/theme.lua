@@ -4957,13 +4957,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				index = offset + i
 				local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
-				if name and index <= visibleMembers then
-					if bu.icon:IsShown() then
-						bu.icon:SetTexCoord(unpack(tcoords[classFileName]))
-						bu.bg:Show()
-					else
-						bu.bg:Hide()
-					end
+				if name and index <= visibleMembers and bu.icon:IsShown() then
+					bu.icon:SetTexCoord(unpack(tcoords[classFileName]))
+					bu.bg:Show()
+				else
+					bu.bg:Hide()
 				end
 			end
 		end

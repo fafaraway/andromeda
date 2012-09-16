@@ -190,6 +190,27 @@ local function viewChanged(view)
 	currentView = view or defaultView
 end
 
+local function updateTradeSkills()
+	for i, button in ipairs(GuildRosterContainer.buttons) do
+		if button:IsShown() and button.online and button.guildIndex then
+			local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerName, class, online, zone, skill, classFileName, isMobile, isAway = GetGuildTradeSkillInfo(button.guildIndex)
+			if playerName then
+				playerName = classColor[classFileName]..playerName
+				if isMobile then
+					if isAway == 2 then
+						playerName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..playerName
+					elseif isAway == 1 then
+						playerName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"..playerName
+					else
+						playerName = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..playerName
+					end
+				end
+				button.string1:SetText(playerName)
+			end
+		end
+	end
+end
+
 local function updateGuild()
 	if currentView == "tradeskill" then return end
 
@@ -198,30 +219,37 @@ local function updateGuild()
 
 	for i, button in ipairs(buttons) do
 		if(button:IsShown() and button.online and button.guildIndex) then
-			local name, rank, rankIndex, level, class, zone, note, officernote, online, status, classFileName, achievementPnts, achievementRank, isMobile = GetGuildRosterInfo(button.guildIndex)
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, isAway, classFileName, achievementPnts, achievementRank, isMobile = GetGuildRosterInfo(button.guildIndex)
 			local displayedName = classColor[classFileName] .. name
-			if(isMobile) then
-				name = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255) .. name
+			if isMobile then
+				if isAway == 2 then
+					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..name
+				elseif isAway == 1 then
+					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"..name
+				else
+					name = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..name
+				end
 			end
 
-			if(currentView == 'playerStatus') then
-				button.string1:SetText(diffColor[level] .. level)
+			if currentView == "playerStatus" then
+				button.string1:SetText(diffColor[level]..level)
 				button.string2:SetText(displayedName)
-				if(zone == playerArea) then
-					button.string3:SetText('|cff00ff00' .. zone)
+				if not isMobile and zone == playerArea then
+					button.string3:SetText("|cff00ff00"..zone)
 				end
-			elseif(currentView == 'guildStatus') then
+			elseif currentView == "guildStatus" then
 				button.string1:SetText(displayedName)
-				if(rankIndex and rank) then
-					button.string2:SetText(guildRankColor[rankIndex] .. rank)
+				if rankIndex and rank then
+					button.string2:SetText(guildRankColor[rankIndex]..rank)
 				end
-			elseif(currentView == 'achievement') then
-				button.string1:SetText(displayedName)
-				if(classFileName and name) then
-					button.string2:SetText(classColor[classFileName] .. name)
-				end
-			elseif(currentView == 'weeklyxp' or currentView == 'totalxp') then
-				button.string1:SetText(diffColor[level] .. level)
+			elseif currentView == "achievement" then
+				button.string1:SetText(diffColor[level]..level)
+				button.string2:SetText(displayedName)
+			elseif currentView == "weeklyxp" or currentView == "totalxp" then
+				button.string1:SetText(diffColor[level]..level)
+				button.string2:SetText(displayedName)
+			elseif currentView == "reputation" then
+				button.string1:SetText(diffColor[level]..level)
 				button.string2:SetText(displayedName)
 			end
 		end
@@ -239,6 +267,7 @@ hooksecurefunc("GuildFrame_LoadUI", function()
 	hooksecurefunc("GuildRoster_SetView", viewChanged)
 	hooksecurefunc("GuildRoster_Update", updateGuild)
 	hooksecurefunc(GuildRosterContainer, "update", updateGuild)
+	hooksecurefunc("GuildRoster_UpdateTradeSkills", updateTradeSkills)
 end)
 
 hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, index)
