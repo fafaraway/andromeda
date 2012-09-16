@@ -4,9 +4,11 @@ ns.localization = {}
 
 ns.localization.profile = "Character Specific settings"
 ns.localization.install = "Installer"
-ns.localization.reset = "Remove the data saved by FreeUI."
 ns.localization.credits = "FreeUI by Freethinker @ Steamwheedle Cartel - EU / Haleth on wowinterface.com"
 ns.localization.needReload = "* Requires UI reload"
+ns.localization.reload = "Reload UI"
+ns.localization.resetData = "Remove data"
+ns.localization.resetOptions = "Remove saved options"
 
 ns.localization.general = "General"
 ns.localization.generalSubText = "These options control most of the common settings in the UI."

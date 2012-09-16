@@ -147,7 +147,7 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 	return slider
 end
 
-local offset = 160
+local offset = 60
 local activeTab = nil
 
 local function setActiveTab(tab)
@@ -265,43 +265,51 @@ init:SetScript("OnEvent", function()
 	if not FreeUI then return end
 
 	F, C = unpack(FreeUI)
-
 	r, g, b = unpack(C.class)
-
-	F.CreateBD(FreeUIOptionsPanel)
-	F.CreateSD(FreeUIOptionsPanel)
-
-	for _, panel in pairs(panels) do
-		F.CreateBD(panel.tab, 0)
-		F.CreateGradient(panel.tab)
-	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)
 
-	FreeUIOptionsPanel.Profile:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
-
-	FreeUIOptionsPanel.Reset:SetScript("OnClick", function()
-		FreeUIGlobalConfig = {}
-		FreeUIConfig = {}
-		FreeUIOptions = {}
-		FreeUIOptionsPerChar = {}
-		FreeUIOptionsGlobal[C.myRealm][C.myName] = false
-		C.options = FreeUIOptions
+	local resetFrame = FreeUIOptionsPanel.resetFrame
+	resetFrame.Okay:SetScript("OnClick", function()
+		if resetFrame.Data:GetChecked() then
+			FreeUIGlobalConfig = {}
+			FreeUIConfig = {}
+		end
+		if resetFrame.Options:GetChecked() then
+			FreeUIOptions = {}
+			FreeUIOptionsPerChar = {}
+			FreeUIOptionsGlobal[C.myRealm][C.myName] = false
+			C.options = FreeUIOptions
+		end
 		ReloadUI()
 	end)
 
+	FreeUIOptionsPanel.Profile:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
 	FreeUIOptionsPanel.Profile:SetScript("OnClick", function(self)
 		FreeUIOptionsGlobal[C.myRealm][C.myName] = self:GetChecked() == 1
 		changeProfile()
 		displaySettings()
 	end)
 
+	F.CreateBD(FreeUIOptionsPanel)
+	F.CreateSD(FreeUIOptionsPanel)
+	F.CreateBD(resetFrame)
 	F.Reskin(FreeUIOptionsPanel.Okay)
-	F.Reskin(FreeUIOptionsPanelInstall)
-	F.Reskin(FreeUIOptionsPanelReset)
+	F.Reskin(FreeUIOptionsPanel.Install)
+	F.Reskin(FreeUIOptionsPanel.Reload)
+	F.Reskin(FreeUIOptionsPanel.Reset)
+	F.Reskin(resetFrame.Okay)
+	F.Reskin(resetFrame.Cancel)
 	F.Reskin(GameMenuButtonFreeUI)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.Profile)
+	F.ReskinCheck(resetFrame.Data)
+	F.ReskinCheck(resetFrame.Options)
+
+	for _, panel in pairs(panels) do
+		F.CreateBD(panel.tab, 0)
+		F.CreateGradient(panel.tab)
+	end
 
 	for _, box in pairs(checkboxes) do
 		box:SetChecked(C[box.group][box.option])
