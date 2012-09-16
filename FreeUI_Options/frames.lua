@@ -89,55 +89,64 @@ ns.addCategory("Performance")
 
 -- [[ General ]]
 
-
 local general = FreeUIOptionsPanel.general
 
 local autoAccept = ns.CreateCheckBox(general, "auto_accept")
 autoAccept:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", -2, -8)
 
+local autoSell = ns.CreateCheckBox(general, "autosell")
+autoSell:SetPoint("LEFT", autoAccept, "RIGHT", 340, 0)
+
+local autoRoll = ns.CreateCheckBox(general, "autoroll")
+autoRoll:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
+
+local autoRollMaxLevel = ns.CreateCheckBox(general, "autoroll_maxlevel")
+autoRollMaxLevel:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 16, -8)
+autoRoll.child = autoRollMaxLevel
+
 local autoRepair = ns.CreateCheckBox(general, "autorepair")
-autoRepair:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
+autoRepair:SetPoint("LEFT", autoRoll, "RIGHT", 340, 0)
 
 local autoRepairGuild = ns.CreateCheckBox(general, "autorepair_guild")
 autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
 autoRepair.child = autoRepairGuild
 
-local autoRoll = ns.CreateCheckBox(general, "autoroll")
-autoRoll:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -42)
-
-local autoSell = ns.CreateCheckBox(general, "autosell")
-autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -8)
+local line = general:CreateTexture()
+line:SetSize(550, 1)
+line:SetPoint("TOPLEFT", 8, -184)
+line:SetTexture(1, 1, 1, .2)
 
 local bagsSize = ns.CreateNumberSlider(general, "bags_size", SMALL, LARGE, 8, 100, 1)
-bagsSize:SetPoint("TOPLEFT", autoSell, "BOTTOMLEFT", 18, -24)
+bagsSize:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 18, -80)
 
 local buffReminder = ns.CreateCheckBox(general, "buffreminder")
 buffReminder:SetPoint("TOPLEFT", bagsSize, "BOTTOMLEFT", -18, -24)
 
-local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons")
-helmCloak:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
-
 local interrupt = ns.CreateCheckBox(general, "interrupt")
-interrupt:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
+interrupt:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
 
 local tolBarad = ns.CreateCheckBox(general, "tolbarad")
 tolBarad:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
 
-local tolBaradAlways = ns.CreateCheckBox(general, "tolbarad_always")
-tolBaradAlways:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 16, -8)
-tolBarad.child = tolBaradAlways
-
 local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
-tooltipCursor:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -42)
+tooltipCursor:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -16)
 
 local tooltipGuildRanks = ns.CreateCheckBox(general, "tooltip_guildranks")
 tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
 
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto")
-uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -8)
+uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -16)
+
+local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons")
+helmCloak:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 0, -16)
 
 local undressButton = ns.CreateCheckBox(general, "undressButton")
-undressButton:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 0, -8)
+undressButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
+
+local needReload = general:CreateFontString(nil, nil, "GameFontHighlight")
+needReload:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -16)
+needReload:SetText(ns.localization.needReload)
+needReload:SetTextColor(.7, .7, .7)
 
 -- [[ Action bars ]]
 
