@@ -71,19 +71,17 @@ addon:SetPoint("RIGHT", -50, 0)
 addon:SetWidth(width)
 addon:SetHeight(24)
 
-local positioner = CreateFrame("Frame")
-positioner:RegisterEvent("PLAYER_ENTERING_WORLD")
-positioner:SetScript("OnEvent", function()
-	if MultiBarRight:IsShown() then
-		addon:SetPoint("RIGHT", -150, 0)
-	else
-		addon:SetPoint("RIGHT", -50, 0)
-	end
-end)
-
 function addon:UpdateGroupLoot()
 	sort(grouplootlist, SortFunc)
 	for index, value in next, grouplootframes do value:Hide() end
+
+	if MultiBarLeft:IsShown() then
+		addon:SetPoint("RIGHT", -150, 0)
+	elseif MultiBarRight:IsShown() then
+		addon:SetPoint("RIGHT", -100, 0)
+	else
+		addon:SetPoint("RIGHT", -50, 0)
+	end
 
 	local frame
 	for index, value in next, grouplootlist do
