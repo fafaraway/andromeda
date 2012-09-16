@@ -1,5 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
+-- All exceptions and special rules for these options are in profiles.lua!
+
 --[[ Global config ]]
 
 C["general"] = {
@@ -7,6 +9,7 @@ C["general"] = {
 	["autorepair"] = true,			-- automatically repair items
 		["autorepair_guild"] = false,		-- use guild funds for auto repairs
 	["autoroll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
+		["autoroll_maxlevel"] = true, 		-- only automatically roll on items at max level
 	["autosell"] = true,			-- automatically sell greys
 	["bags_size"] = 37,				-- change the size of the bags/bank, default = 37
 	["buffreminder"] = true, 		-- reminder for selfbuffs

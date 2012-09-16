@@ -9,9 +9,15 @@ local width = 200
 local iconsize = 32
 local grouplootlist, grouplootframes = {}, {}
 
+local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
+
+local function shouldAutoRoll(quality, BoP)
+	return quality == 2 and not BoP and C.general.autoroll and (MAX_LEVEL == UnitLevel("player") or not C.general.autoroll_maxlevel)
+end
+
 local function OnEvent(self, event, rollId)
-	local _, _, _, quality, bop, _, _, canDE = GetLootRollItemInfo(rollId)
-	if C.general.autoroll == true and quality == 2 and not bop then
+	local _, _, _, quality, BoP, _, _, canDE = GetLootRollItemInfo(rollId)
+	if shouldAutoRoll(quality, BoP) then
 		RollOnLoot(rollId, canDE and 3 or 2)
 	else
 		tinsert(grouplootlist, {rollId = rollId})
@@ -105,7 +111,7 @@ function addon:UpdateGroupLoot()
 			frame.pass:SetHighlightTexture("Interface\\Buttons\\UI-GroupLoot-Pass-Down")
 			frame.pass:SetPoint("RIGHT", 0, 1)
 			frame.pass:SetScript("OnClick", ButtonOnClick)
-			
+
 			frame.greed = CreateFrame("Button", nil, frame)
 			frame.greed.type = 2
 			frame.greed.roll = "greed"
@@ -116,7 +122,7 @@ function addon:UpdateGroupLoot()
 			frame.greed:SetHighlightTexture("Interface\\Buttons\\UI-GroupLoot-Coin-Highlight")
 			frame.greed:SetPoint("RIGHT", frame.pass, "LEFT", -1, -4)
 			frame.greed:SetScript("OnClick", ButtonOnClick)
-			
+
 			frame.disenchant = CreateFrame("Button", nil, frame)
 			frame.disenchant.type = 3
 			frame.disenchant.roll = "disenchant"
@@ -138,7 +144,7 @@ function addon:UpdateGroupLoot()
 			frame.need:SetHighlightTexture("Interface\\Buttons\\UI-GroupLoot-Dice-Highlight")
 			frame.need:SetPoint("RIGHT", frame.disenchant, "LEFT", -1, 0)
 			frame.need:SetScript("OnClick", ButtonOnClick)
-			
+
 			frame.text = F.CreateFS(frame, 8, "LEFT")
 			frame.text:SetPoint("LEFT")
 			frame.text:SetPoint("RIGHT", frame.need, "LEFT")
@@ -172,7 +178,7 @@ function addon:UpdateGroupLoot()
 
 		frame.text:SetText(ITEM_QUALITY_COLORS[quality].hex..name)
 
-		frame.icon:SetTexture(texture) 
+		frame.icon:SetTexture(texture)
 
 		frame.rollId = value.rollId
 		frame.rollLink = GetLootRollItemLink(value.rollId)
