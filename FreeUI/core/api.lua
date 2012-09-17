@@ -531,3 +531,9 @@ F.CreateBDFrame = function(f, a)
 
 	return bg
 end
+
+F.AddOptionsCallback = function(category, option, func)
+	if not IsAddOnLoaded("FreeUI_Options") then return end
+
+	FreeUIOptionsPanel[category][option]:HookScript("OnClick", func)
+end

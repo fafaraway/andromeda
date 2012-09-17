@@ -1,18 +1,25 @@
 -- rActionButtonStyler by Roth, modified.
 
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
 local _G = _G
 
-local showHotkey = C.actionbars.hotkey
+local showHotKey = C.actionbars.hotkey
+
+F.AddOptionsCallback("actionbars", "hotKey", function()
+	showHotKey = C.actionbars.hotkey
+	for k, frame in pairs(ActionBarButtonEventsFrame.frames) do
+		ActionButton_UpdateHotkeys(frame, frame.buttonType)
+	end
+end)
 
 local function updateHotkey(self)
 	local ho = _G[self:GetName() .. "HotKey"]
 	if not ho then return end
 
-	if showHotkey == true then
+	if showHotKey then
 		ho:SetAllPoints()
 		ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 		ho:SetJustifyH("CENTER")

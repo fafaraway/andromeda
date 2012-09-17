@@ -5,7 +5,6 @@ local addon, core = ...
 core[1] = {} -- F, Functions
 core[2] = {} -- C, Constants/Config
 core[3] = {} -- L, Localisation
-core[4] = {} -- G, GUI
 
 FreeUI = core
 

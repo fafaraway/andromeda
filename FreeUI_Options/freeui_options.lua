@@ -21,9 +21,7 @@ local function SaveValue(f, value)
 	C[f.group][f.option] = value -- and this is from the lua options
 end
 
-local function toggleChild(self)
-	local checked = self:GetChecked()
-
+local function toggleChild(self, checked)
 	self.child:SetEnabled(checked)
 
 	if checked then
@@ -36,9 +34,10 @@ local function toggleChild(self)
 end
 
 local function toggle(self)
-	SaveValue(self, self:GetChecked() == 1)
+	local checked = self:GetChecked() == 1
 
-	if self.child then toggleChild(self) end
+	SaveValue(self, checked)
+	if self.child then toggleChild(self, checked) end
 end
 
 local function onCheckBoxChanged(self)
