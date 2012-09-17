@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+if not C.general.mailButton then return end
+
 local button = CreateFrame("Button", "aMailButton", InboxFrame, "UIPanelButtonTemplate")
 button:SetPoint("BOTTOM", InboxFrame, "BOTTOM", -10, 92)
 button:SetWidth(128)

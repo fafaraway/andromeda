@@ -1,5 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
+if not C.general.buffTracker then return end
+
 local units = {
 	player = true,
 	vehicle = true,

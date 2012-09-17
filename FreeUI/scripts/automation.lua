@@ -1,7 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
 local IDs = {}
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do 	IDs[slot] = GetInventorySlotInfo(slot .. "Slot")
+for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do
+	IDs[slot] = GetInventorySlotInfo(slot.."Slot")
 end
 
 local cost
@@ -30,9 +31,9 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("MERCHANT_SHOW")
 f:SetScript("OnEvent", function(self, event)
-	if CanMerchantRepair() and C.general.autorepair == true then
+	if CanMerchantRepair() and C.automation.autoRepair == true then
 		cost = GetRepairAllCost()
-		if cost > 0 and CanGuildBankRepair() and C.general.autorepair_guild == true then
+		if cost > 0 and CanGuildBankRepair() and C.automation.autoRepair_guild == true then
 			if GetGuildBankWithdrawMoney() > cost then
 				self:SetScript("OnUpdate", onUpdate) -- to work around bug when there's not enough money in guild bank
 				RepairAllItems(1)
@@ -47,7 +48,7 @@ f:SetScript("OnEvent", function(self, event)
 		end
 	end
 
-	if C.general.autosell == true then
+	if C.automation.autoSell == true then
 		for bag = 0, 4 do
 			for slot = 0, GetContainerNumSlots(bag) do
 				local link = GetContainerItemLink(bag, slot)
@@ -59,7 +60,7 @@ f:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-if C.general.auto_accept == true then
+if C.automation.autoAccept == true then
 	if UnitFactionGroup("player") == "Horde" then playerFaction = 0 else playerFaction = 1 end
 	local playerRealm = GetRealmName()
 

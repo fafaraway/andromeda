@@ -5,21 +5,27 @@ local F, C, L = unpack(select(2, ...))
 --[[ Global config ]]
 
 C["general"] = {
-	["auto_accept"] = true,			-- auto accept invites from friends and guildies
-	["autorepair"] = true,			-- automatically repair items
-		["autorepair_guild"] = false,		-- use guild funds for auto repairs
-	["autoroll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
-		["autoroll_maxlevel"] = true, 		-- only automatically roll on items at max level
-	["autosell"] = true,			-- automatically sell greys
 	["bags_size"] = 37,				-- change the size of the bags/bank, default = 37
 	["buffreminder"] = true, 		-- reminder for selfbuffs
+	["buffTracker"] = true, 		-- track important buffs for some classes (scroll down to buffTracker table to configure)
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
 	["interrupt"] = true,			-- announce your interrupts
+	["mailButton"] = true, 			-- adds a button to the mail frame to collect all attachments
+	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
 	["tolbarad"] = false,			-- Tol barad timer on the minimap
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
 	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
 	["uiScaleAuto"] = true,				-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
+}
+
+C["automation"] = {
+	["autoAccept"] = true,			-- auto accept invites from friends and guildies
+	["autoRepair"] = true,			-- automatically repair items
+		["autoRepair_guild"] = false,		-- use guild funds for auto repairs
+	["autoRoll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
+		["autoRoll_maxLevel"] = true, 		-- only automatically roll on items at max level
+	["autoSell"] = true,			-- automatically sell greys
 }
 
 C["actionbars"] = {

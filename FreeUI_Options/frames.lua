@@ -23,6 +23,7 @@ end)
 options.Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
 options.Profile:SetPoint("BOTTOMLEFT", 16, 16)
 options.Profile.Text:SetText(ns.localization.profile)
+options.Profile.tooltipText = ns.localization.profileTooltip
 
 local title = options:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint("TOP", 0, -26)
@@ -100,12 +101,8 @@ end)
 
 options.Reset = reset
 
-local credits = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-credits:SetText(ns.localization.credits)
-credits:SetPoint("BOTTOM", 0, 20)
-
 local line = options:CreateTexture()
-line:SetSize(1, 550)
+line:SetSize(1, 536)
 line:SetPoint("LEFT", 205, 0)
 line:SetTexture(1, 1, 1, .2)
 
@@ -125,78 +122,92 @@ menuButton:SetScript("OnClick", function()
 end)
 
 ns.addCategory("General")
+ns.addCategory("Automation")
 ns.addCategory("ActionBars")
 ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
 ns.addCategory("Performance")
+ns.addCategory("Credits")
 
 -- [[ General ]]
 
 local general = FreeUIOptionsPanel.general
 
-local autoAccept = ns.CreateCheckBox(general, "auto_accept")
-autoAccept:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", -2, -8)
+local buffReminder = ns.CreateCheckBox(general, "buffreminder", true)
+buffReminder:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
 
-local autoSell = ns.CreateCheckBox(general, "autosell")
-autoSell:SetPoint("LEFT", autoAccept, "RIGHT", 340, 0)
+local buffTracker = ns.CreateCheckBox(general, "buffTracker", true)
+buffTracker:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
 
-local autoRoll = ns.CreateCheckBox(general, "autoroll")
-autoRoll:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
+local interrupt = ns.CreateCheckBox(general, "interrupt", true)
+interrupt:SetPoint("TOPLEFT", buffTracker, "BOTTOMLEFT", 0, -8)
 
-local autoRollMaxLevel = ns.CreateCheckBox(general, "autoroll_maxlevel")
-autoRollMaxLevel:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 16, -8)
-autoRoll.child = autoRollMaxLevel
+local threatMeter = ns.CreateCheckBox(general, "threatMeter", true)
+threatMeter:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
 
-local autoRepair = ns.CreateCheckBox(general, "autorepair")
-autoRepair:SetPoint("LEFT", autoRoll, "RIGHT", 340, 0)
+local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons", true)
+helmCloak:SetPoint("LEFT", buffReminder, "RIGHT", 240, 0)
 
-local autoRepairGuild = ns.CreateCheckBox(general, "autorepair_guild")
-autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
-autoRepair.child = autoRepairGuild
+local mailButton = ns.CreateCheckBox(general, "mailButton", true)
+mailButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
 
-local line = general:CreateTexture()
-line:SetSize(550, 1)
-line:SetPoint("TOPLEFT", 8, -184)
+local tolBarad = ns.CreateCheckBox(general, "tolbarad", true)
+tolBarad:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
+
+local undressButton = ns.CreateCheckBox(general, "undressButton", true)
+undressButton:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -8)
+
+local reloadText = general:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -18)
+reloadText:SetText(ns.localization.needReload)
+
+local line = general:CreateTexture(nil, "ARTWORK")
+line:SetSize(450, 1)
+line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
 line:SetTexture(1, 1, 1, .2)
 
-local bagsSize = ns.CreateNumberSlider(general, "bags_size", SMALL, LARGE, 8, 100, 1)
-bagsSize:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 18, -80)
-
-local buffReminder = ns.CreateCheckBox(general, "buffreminder")
-buffReminder:SetPoint("TOPLEFT", bagsSize, "BOTTOMLEFT", -18, -24)
-
-local interrupt = ns.CreateCheckBox(general, "interrupt")
-interrupt:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
-
-local tolBarad = ns.CreateCheckBox(general, "tolbarad")
-tolBarad:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
-
 local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
-tooltipCursor:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -16)
+tooltipCursor:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -80)
 
 local tooltipGuildRanks = ns.CreateCheckBox(general, "tooltip_guildranks")
 tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
 
-local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto")
-uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -16)
+local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
+uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -8)
 
-local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons")
-helmCloak:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 0, -16)
+local bagsSize = ns.CreateNumberSlider(general, "bags_size", SMALL, LARGE, 8, 100, 1)
+bagsSize:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 18, -42)
 
-local undressButton = ns.CreateCheckBox(general, "undressButton")
-undressButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
+-- [[ Automation ]]
 
-local needReload = general:CreateFontString(nil, nil, "GameFontHighlight")
-needReload:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -16)
-needReload:SetText(ns.localization.needReload)
-needReload:SetTextColor(.7, .7, .7)
+local automation = FreeUIOptionsPanel.automation
+
+local autoAccept = ns.CreateCheckBox(automation, "autoAccept")
+autoAccept:SetPoint("TOPLEFT", automation.subText, "BOTTOMLEFT", 0, -8)
+
+local autoRepair = ns.CreateCheckBox(automation, "autoRepair")
+autoRepair:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
+
+local autoRepairGuild = ns.CreateCheckBox(automation, "autoRepair_guild")
+autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
+autoRepair.child = autoRepairGuild
+
+local autoRoll = ns.CreateCheckBox(automation, "autoRoll")
+autoRoll:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -42)
+
+local autoRollMaxLevel = ns.CreateCheckBox(automation, "autoRoll_maxLevel")
+autoRollMaxLevel:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 16, -8)
+autoRoll.child = autoRollMaxLevel
+
+local autoSell = ns.CreateCheckBox(automation, "autoSell")
+autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
 
 -- [[ Action bars ]]
 
 local actionbars = FreeUIOptionsPanel.actionbars
 
 local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
-hotKey:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", -2, -8)
+hotKey:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", 0, -8)
 actionbars.hotKey = hotKey
 
 local rightBarsMouseover = ns.CreateCheckBox(actionbars, "rightbars_mouseover")
@@ -262,3 +273,53 @@ nameThreat:SetPoint("TOPLEFT", namePlates, "BOTTOMLEFT", 0, -30)
 
 local tolBaradTimer = ns.CreateNumberSlider(performance, "tolbarad", "1 sec", "30 sec", 1, 30, 1)
 tolBaradTimer:SetPoint("TOPLEFT", nameThreat, "BOTTOMLEFT", 0, -30)
+
+-- [[ Credits ]]
+
+local credits = FreeUIOptionsPanel.credits
+
+credits.Title:SetText("")
+
+local author = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
+author:SetPoint("TOP", 0, -80)
+author:SetText(ns.localization.author)
+
+local authorSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+authorSubText:SetPoint("TOP", author, "BOTTOM", 0, -8)
+authorSubText:SetText(ns.localization.authorSubText)
+
+local thankYou = credits:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+thankYou:SetPoint("TOP", authorSubText, "BOTTOM", 0, -40)
+thankYou:SetText(ns.localization.thankYou)
+
+local alza = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
+alza:SetPoint("TOP", thankYou, "BOTTOM", 0, -30)
+alza:SetText("Alza")
+
+local alzaSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+alzaSubText:SetPoint("TOP", alza, "BOTTOM", 0, -8)
+alzaSubText:SetText(ns.localization.alza)
+
+local haste = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
+haste:SetPoint("TOP", alzaSubText, "BOTTOM", 0, -30)
+haste:SetText("Haste")
+
+local hasteSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+hasteSubText:SetPoint("TOP", haste, "BOTTOM", 0, -8)
+hasteSubText:SetText(ns.localization.haste)
+
+local tukz = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
+tukz:SetPoint("TOP", hasteSubText, "BOTTOM", 0, -30)
+tukz:SetText("Tukz")
+
+local tukzSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+tukzSubText:SetPoint("TOP", tukz, "BOTTOM", 0, -8)
+tukzSubText:SetText(ns.localization.tukz)
+
+local zork = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
+zork:SetPoint("TOP", tukzSubText, "BOTTOM", 0, -30)
+zork:SetText("Zork")
+
+local zorkSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+zorkSubText:SetPoint("TOP", zork, "BOTTOM", 0, -8)
+zorkSubText:SetText(ns.localization.zork)

@@ -1,6 +1,8 @@
 -- aThreatmeter by Alza, partially modified.
 
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
+
+if not C.general.threatMeter then return end
 
 local f = CreateFrame("StatusBar", "FreeUIThreatMeter", UIParent)
 f:SetStatusBarTexture(C.media.texture)

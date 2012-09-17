@@ -46,12 +46,14 @@ local function onCheckBoxChanged(self)
 	end
 end
 
-ns.CreateCheckBox = function(parent, option)
+ns.CreateCheckBox = function(parent, option, tooltipText)
 	local f = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
 
 	f.group = parent.tag
 	f.option = option
+
 	f.Text:SetText(ns.localization[parent.tag..option])
+	if tooltipText then f.tooltipText = ns.localization[parent.tag..option.."Tooltip"] end
 
 	f:SetScript("OnClick", toggle)
 
@@ -152,12 +154,12 @@ local activeTab = nil
 local function setActiveTab(tab)
 	activeTab = tab
 	activeTab:SetBackdropColor(r, g, b, .2)
-	activeTab.panel:Show()
+	UIFrameFadeIn(activeTab.panel, .2, 0, 1)
 end
 
 local onTabClick = function(tab)
 	activeTab:SetBackdropColor(0, 0, 0, 0)
-	activeTab.panel:Hide()
+	UIFrameFadeOut(activeTab.panel, .2, 1, 0)
 	setActiveTab(tab)
 end
 
@@ -312,7 +314,7 @@ init:SetScript("OnEvent", function()
 
 	for _, box in pairs(checkboxes) do
 		box:SetChecked(C[box.group][box.option])
-		if box.child then toggleChild(box) end
+		if box.child then toggleChild(box, box:GetChecked()) end
 
 		F.ReskinCheck(box)
 	end

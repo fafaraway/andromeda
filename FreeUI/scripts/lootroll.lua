@@ -12,7 +12,7 @@ local grouplootlist, grouplootframes = {}, {}
 local MAX_LEVEL = MAX_PLAYER_LEVEL_TABLE[GetExpansionLevel()]
 
 local function shouldAutoRoll(quality, BoP)
-	return quality == 2 and not BoP and C.general.autoroll and (MAX_LEVEL == UnitLevel("player") or not C.general.autoroll_maxlevel)
+	return quality == 2 and not BoP and C.automation.autoRoll and (MAX_LEVEL == UnitLevel("player") or not C.automation.autoRoll_maxLevel)
 end
 
 local function OnEvent(self, event, rollId)
