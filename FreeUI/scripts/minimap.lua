@@ -125,27 +125,29 @@ local rdt = F.CreateFS(rd, 8, "LEFT")
 rdt:SetPoint("TOPLEFT")
 
 rd:SetScript("OnEvent", function()
-	local difficulty = GetInstanceDifficulty()
+	local _, _, difficulty, _, maxPlayers = GetInstanceInfo()
 
-	if difficulty == 1 then
+	if difficulty == 0 then
 		rdt:SetText("")
-	elseif difficulty == 2 then
+	elseif maxPlayers == 3 then
+		rdt:SetText("3")
+	elseif difficulty == 1 then
 		rdt:SetText("5")
-	elseif difficulty == 3 then
+	elseif difficulty == 2 then
 		rdt:SetText("5H")
-	elseif difficulty == 4 then
+	elseif difficulty == 3 then
 		rdt:SetText("10")
-	elseif difficulty == 5 then
+	elseif difficulty == 4 then
 		rdt:SetText("25")
-	elseif difficulty == 6 then
+	elseif difficulty == 5 then
 		rdt:SetText("10H")
-	elseif difficulty == 7 then
+	elseif difficulty == 6 then
 		rdt:SetText("25H")
-	elseif difficulty == 8 then
+	elseif difficulty == 7 then
 		rdt:SetText("LFR")
-	elseif difficulty == 9 then
+	elseif difficulty == 8 then
 		rdt:SetText("5CM")
-	elseif difficulty == 10 then
+	elseif difficulty == 9 then
 		rdt:SetText("40")
 	end
 
