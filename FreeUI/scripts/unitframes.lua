@@ -1714,7 +1714,6 @@ oUF:Factory(function(self)
 	party:SetPoint(unpack(partyPos))
 
 	local raid = self:SpawnHeader(nil, nil, "raid",
-		'showPlayer', true,
 		'showParty', false,
 		'showRaid', true,
 		'xoffset', 5,
@@ -1745,12 +1744,24 @@ oUF:Factory(function(self)
 		elseif event == "PLAYER_REGEN_ENABLED" then
 			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		end
-		if GetNumGroupMembers() > 5 then
+
+		local numGroup = GetNumGroupMembers()
+
+		if numGroup > 5 then
 			party:SetAttribute("showParty", false)
+			party:SetAttribute("showRaid", false)
 			raid:SetAttribute("showRaid", true)
 		else
-			party:SetAttribute("showParty", true)
 			raid:SetAttribute("showRaid", false)
+			-- if in a party, or in a raid where everyone is in one party (subgroup), show party
+			-- if in a raid where people are spread across subgroups, show raid
+			if GetNumSubgroupMembers() + 1 < numGroup then
+				party:SetAttribute("showParty", false)
+				party:SetAttribute("showRaid", true)
+			else
+				party:SetAttribute("showParty", true)
+				party:SetAttribute("showRaid", false)
+			end
 		end
 	end)
 end)
