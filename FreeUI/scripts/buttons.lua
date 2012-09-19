@@ -8,7 +8,7 @@ local _G = _G
 
 local showHotKey = C.actionbars.hotkey
 
-F.AddOptionsCallback("actionbars", "hotKey", function()
+F.AddOptionsCallback("actionbars", "hotkey", function()
 	showHotKey = C.actionbars.hotkey
 	for k, frame in pairs(ActionBarButtonEventsFrame.frames) do
 		ActionButton_UpdateHotkeys(frame, frame.buttonType)

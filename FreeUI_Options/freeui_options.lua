@@ -55,7 +55,7 @@ ns.CreateCheckBox = function(parent, option, tooltipText)
 	f.Text:SetText(ns.localization[parent.tag..option])
 	if tooltipText then f.tooltipText = ns.localization[parent.tag..option.."Tooltip"] end
 
-	f:SetScript("OnClick", toggle)
+	parent[option] = f
 
 	tinsert(checkboxes, f)
 
@@ -154,12 +154,12 @@ local activeTab = nil
 local function setActiveTab(tab)
 	activeTab = tab
 	activeTab:SetBackdropColor(r, g, b, .2)
-	UIFrameFadeIn(activeTab.panel, .2, 0, 1)
+	activeTab.panel:Show()
 end
 
 local onTabClick = function(tab)
 	activeTab:SetBackdropColor(0, 0, 0, 0)
-	UIFrameFadeOut(activeTab.panel, .2, 1, 0)
+	activeTab.panel:Hide()
 	setActiveTab(tab)
 end
 

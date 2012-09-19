@@ -58,6 +58,14 @@ F.debugEvents = function()
 	end
 end
 
+-- Options GUI callbacks
+
+F.AddOptionsCallback = function(category, option, func)
+	if not IsAddOnLoaded("FreeUI_Options") then return end
+
+	FreeUIOptionsPanel[category][option]:HookScript("OnClick", func)
+end
+
 -- [[ Resolution support ]]
 
 C.resolution = 0
@@ -104,6 +112,15 @@ updateScale = function(event)
 end
 
 F.RegisterEvent("VARIABLES_LOADED", updateScale)
+
+F.AddOptionsCallback("general", "uiScaleAuto", function()
+	if C.general.uiScaleAuto then
+		scaleRegistered = false
+		updateScale()
+	else
+		F.UnregisterAllEvents(updateScale)
+	end
+end)
 
 -- [[ For secure frame hiding ]]
 

@@ -208,7 +208,6 @@ local actionbars = FreeUIOptionsPanel.actionbars
 
 local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
 hotKey:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", 0, -8)
-actionbars.hotKey = hotKey
 
 local rightBarsMouseover = ns.CreateCheckBox(actionbars, "rightbars_mouseover")
 rightBarsMouseover:SetPoint("TOPLEFT", hotKey, "BOTTOMLEFT", 0, -8)
