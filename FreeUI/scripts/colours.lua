@@ -227,7 +227,7 @@ local function updateGuild()
 				elseif isAway == 1 then
 					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"..displayedName
 				else
-					name = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..displayedName
+					displayedName = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..displayedName
 				end
 			end
 
