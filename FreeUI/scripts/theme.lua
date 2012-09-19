@@ -2403,7 +2403,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("MissingLootFrame_Show", function()
 			for i = 1, GetNumMissingLootItems() do
-				local bu = _G["MissingLootFrameItem"..index]
+				local bu = _G["MissingLootFrameItem"..i]
 
 				if not bu.styled then
 					_G["MissingLootFrameItem"..i.."NameFrame"]:Hide()
