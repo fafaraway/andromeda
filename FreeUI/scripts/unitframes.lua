@@ -1643,35 +1643,21 @@ end
 oUF:Factory(function(self)
 	local playerPos, targetPos, partyPos, raidPos
 	local target
-	if C.unitframes.auto then
-		local height = GetScreenHeight()
-		spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", -275, -(height/13.7))
 
-		if FreeUIConfig.layout == 1 then
-			target = spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, -(height/6.4))
-			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
-			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
-		else
-			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, -(height/13.7))
-			partyPos = {"TOP", UIParent, "CENTER", 0, -(height/6.4)}
-			raidPos = {"TOP", UIParent, "CENTER", 0, -(height/7.6)}
-		end
+	local player = spawnHelper(self, 'player', unpack(C.unitframes.player))
+
+	if FreeUIConfig.layout == 1 then
+		target = spawnHelper(self, 'target', unpack(C.unitframes.target))
+		partyPos = {"BOTTOM", player, "TOP", 0, 50}
+		raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 	else
-		spawnHelper(self, 'player', unpack(C.unitframes.player))
-
-		if FreeUIConfig.layout == 1 then
-			target = spawnHelper(self, 'target', unpack(C.unitframes.target))
-			partyPos = {"BOTTOM", oUF_FreePlayer, "TOP", 0, 50}
-			raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
-		else
-			target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
-			partyPos = C.unitframes.party
-			raidPos = C.unitframes.raid
-		end
+		target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
+		partyPos = C.unitframes.party
+		raidPos = C.unitframes.raid
 	end
 
-	spawnHelper(self, 'focus', "BOTTOMRIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 12)
-	spawnHelper(self, 'pet', "BOTTOMLEFT", oUF_FreePlayer, "TOPLEFT", 0, 12)
+	spawnHelper(self, 'focus', "BOTTOMRIGHT", player, "TOPRIGHT", 0, 12)
+	spawnHelper(self, 'pet', "BOTTOMLEFT", player, "TOPLEFT", 0, 12)
 
 	if C.unitframes.targettarget then
 		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, 15)
@@ -1682,7 +1668,7 @@ oUF:Factory(function(self)
 	end
 
 	for n = 1, 5 do
-		spawnHelper(self, 'arena' .. n, 'TOP', oUF_FreePlayer, 'TOP', 0, 0 - (56 * n))
+		spawnHelper(self, 'arena' .. n, 'TOP', player, 'TOP', 0, 0 - (56 * n))
 	end
 
 	self:SetActiveStyle'Free - Party'

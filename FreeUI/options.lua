@@ -42,8 +42,6 @@ C["unitframes"] = {
 	["pvp"] = true, 					-- show pvp icon on player frame
 	["targettarget"] = false, 			-- show target of target frame
 
-	["auto"] = true,				-- adjust unitframe position based on screen height, ignores user settings
-
 	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105}, -- only applies when 'auto' is false
 	["target"] = {"TOP", UIParent, "CENTER", 0, -225}, -- only applies when 'auto' is false
 	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105},
