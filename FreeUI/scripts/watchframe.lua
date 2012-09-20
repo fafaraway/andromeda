@@ -8,15 +8,16 @@ local function moveTracker()
 	elseif MultiBarRight:IsShown() then
 		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -70, -160)
 	else
-		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -160)	
+		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -160)
 	end
 	wf:SetPoint("BOTTOM", Minimap, "TOP", 0, 10)
 end
 
-hooksecurefunc("UIParent_ManageFramePositions", moveTracker)
-local mover = CreateFrame("Frame")
-mover:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
-mover:SetScript("OnEvent", moveTracker)
+hooksecurefunc(wf, "SetPoint", function(_, _, _, point)
+	if point == "BOTTOMRIGHT" then
+		moveTracker()
+	end
+end)
 
 WatchFrameCollapseExpandButton:SetSize(15, 15)
 
@@ -33,15 +34,13 @@ hooksecurefunc("WatchFrame_Expand", function()
 	text:SetText("x")
 end)
 
--- Top half of code below is by Seerah
-
-local nextline = 1
+local nextLine = 1
 
 WatchFrameTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 WatchFrameTitle:SetShadowColor(0, 0, 0, 0)
 
 hooksecurefunc("WatchFrame_Update", function()
-	for i = nextline, 50 do
+	for i = nextLine, 50 do
 		line = _G["WatchFrameLine"..i]
 		if line then
 			line.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
@@ -50,7 +49,7 @@ hooksecurefunc("WatchFrame_Update", function()
 			line.dash:SetShadowColor(0, 0, 0, 0)
 			line.text:SetSpacing(2)
 		else
-			nextline = i
+			nextLine = i
 			break
 		end
 	end
