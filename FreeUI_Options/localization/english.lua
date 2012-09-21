@@ -62,7 +62,7 @@ for class, localized in pairs(classes) do
 	ns.localization["classmod"..strlower(class)] = localized
 end
 
-ns.localization.classmoddeathknight = ns.localization.classmoddeathknight..":|cffffffff Rune Bar"
+ns.localization.classmoddeathknight = ns.localization.classmoddeathknight..":|cffffffff Rune bars"
 ns.localization.classmoddruid = ns.localization.classmoddruid..":|cffffffff Eclipse bar and shapeshift mana bar"
 ns.localization.classmodmonk = ns.localization.classmodmonk..":|cffffffff Chi orb tracker"
 ns.localization.classmodpaladin = ns.localization.classmodpaladin..":|cffffffff Holy Power tracker"
@@ -83,3 +83,4 @@ ns.localization.alza = "For AlzaUI, which once formed the basis for FreeUI, and 
 ns.localization.haste = "For the oUF framework, without which the unitframes in this UI could not exist"
 ns.localization.tukz = "For allowing the use of his code, and collaboration in UI development"
 ns.localization.zork = "For rActionBarStyler, rActionButtonStyler, and rBuffFrameStyler, three important parts of this UI"
+ns.localization.others = "as well as..."

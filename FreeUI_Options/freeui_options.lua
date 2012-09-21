@@ -55,6 +55,7 @@ ns.CreateCheckBox = function(parent, option, tooltipText)
 	f.Text:SetText(ns.localization[parent.tag..option])
 	if tooltipText then f.tooltipText = ns.localization[parent.tag..option.."Tooltip"] end
 
+	f:SetScript("OnClick", toggle)
 	parent[option] = f
 
 	tinsert(checkboxes, f)
@@ -172,7 +173,7 @@ ns.addCategory = function(name)
 	panel:Hide()
 
 	panel.Title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	panel.Title:SetPoint("TOPLEFT", 8, -8)
+	panel.Title:SetPoint("TOPLEFT", 8, -16)
 	panel.Title:SetText(ns.localization[tag])
 
 	panel.subText = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
@@ -268,8 +269,6 @@ init:SetScript("OnEvent", function()
 	F, C = unpack(FreeUI)
 	r, g, b = unpack(C.class)
 
-	setActiveTab(FreeUIOptionsPanel.general.tab)
-
 	local resetFrame = FreeUIOptionsPanel.resetFrame
 	resetFrame.Okay:SetScript("OnClick", function()
 		if resetFrame.Data:GetChecked() then
@@ -311,6 +310,8 @@ init:SetScript("OnEvent", function()
 		F.CreateBD(panel.tab, 0)
 		F.CreateGradient(panel.tab)
 	end
+
+	setActiveTab(FreeUIOptionsPanel.general.tab)
 
 	for _, box in pairs(checkboxes) do
 		box:SetChecked(C[box.group][box.option])

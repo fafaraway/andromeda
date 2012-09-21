@@ -60,38 +60,44 @@ f:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-if C.automation.autoAccept == true then
-	if UnitFactionGroup("player") == "Horde" then playerFaction = 0 else playerFaction = 1 end
-	local playerRealm = GetRealmName()
+local playerFaction = UnitFactionGroup("player") == "Horde" and 0 or 1
+local playerRealm = C.myRealm
 
-	local IsFriend = function(name)
-		for i = 1, GetNumFriends() do if(GetFriendInfo(i)==name) then return true end end
-		if IsInGuild() then for i = 1, GetNumGuildMembers() do if(GetGuildRosterInfo(i)==name) then return true end end end
-		for i = 1, select(2, BNGetNumFriends()) do
-			local presenceID, _, _, toonName, _, client = BNGetFriendInfo(i)
-			local _, _, _, realmName, faction = BNGetToonInfo(presenceID)
-			if client == "WoW" and realmName == playerRealm and toonName == name then
-				return true
+local IsFriend = function(name)
+	for i = 1, GetNumFriends() do if(GetFriendInfo(i)==name) then return true end end
+	if IsInGuild() then for i = 1, GetNumGuildMembers() do if(GetGuildRosterInfo(i)==name) then return true end end end
+	for i = 1, select(2, BNGetNumFriends()) do
+		local presenceID, _, _, toonName, _, client = BNGetFriendInfo(i)
+		local _, _, _, realmName, faction = BNGetToonInfo(presenceID)
+		if client == "WoW" and realmName == playerRealm and toonName == name then
+			return true
+		end
+	end
+end
+
+local function onInvite(self, event, name)
+	if QueueStatusMinimapButton:IsShown() then return end
+	if IsFriend(name) then
+		AcceptGroup()
+		for i = 1, 4 do
+			local frame = _G["StaticPopup"..i]
+			if frame:IsVisible() and frame.which == "PARTY_INVITE" then
+				frame.inviteAccepted = 1
+				return StaticPopup_Hide("PARTY_INVITE")
 			end
 		end
 	end
-
-	local g = CreateFrame("Frame")
-	g:RegisterEvent("PARTY_INVITE_REQUEST")
-	g:SetScript("OnEvent", function(self, event, name)
-		if QueueStatusMinimapButton:IsShown() then return end
-		if IsFriend(name) then
-			AcceptGroup()
-			for i = 1, 4 do
-				local frame = _G["StaticPopup"..i]
-				if frame:IsVisible() and frame.which == "PARTY_INVITE" then
-					frame.inviteAccepted = 1
-					return StaticPopup_Hide("PARTY_INVITE")
-				end
-			end
-		end
-	end)
 end
+
+if C.automation.autoAccept then F.RegisterEvent("PARTY_INVITE_REQUEST", onInvite) end
+
+F.AddOptionsCallback("automation", "autoAccept", function()
+	if C.automation.autoAccept then
+		F.RegisterEvent("PARTY_INVITE_REQUEST", onInvite)
+	else
+		F.UnregisterEvent("PARTY_INVITE_REQUEST", onInvite)
+	end
+end)
 
 if C.general.helmcloakbuttons == true then
 	local helm = CreateFrame("CheckButton", "FreeUI_HelmCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")

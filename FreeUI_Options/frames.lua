@@ -13,7 +13,7 @@ tinsert(UISpecialFrames, options:GetName())
 options.CloseButton = CreateFrame("Button", nil, options, "UIPanelCloseButton")
 
 options.Okay = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
-options.Okay:SetPoint("BOTTOMRIGHT", -16, 16)
+options.Okay:SetPoint("BOTTOMRIGHT", -6, 6)
 options.Okay:SetSize(128, 25)
 options.Okay:SetText(OKAY)
 options.Okay:SetScript("OnClick", function()
@@ -21,7 +21,7 @@ options.Okay:SetScript("OnClick", function()
 end)
 
 options.Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
-options.Profile:SetPoint("BOTTOMLEFT", 16, 16)
+options.Profile:SetPoint("BOTTOMLEFT", 6, 6)
 options.Profile.Text:SetText(ns.localization.profile)
 options.Profile.tooltipText = ns.localization.profileTooltip
 
@@ -69,7 +69,7 @@ end)
 
 local install = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 install:SetSize(128, 25)
-install:SetPoint("TOPLEFT", 16, -500)
+install:SetPoint("TOPLEFT", 16, -510)
 install:SetText(ns.localization.install)
 install:SetScript("OnClick", function()
 	if IsAddOnLoaded("FreeUI_Install") then
@@ -102,7 +102,7 @@ end)
 options.Reset = reset
 
 local line = options:CreateTexture()
-line:SetSize(1, 536)
+line:SetSize(1, 544)
 line:SetPoint("LEFT", 205, 0)
 line:SetTexture(1, 1, 1, .2)
 
@@ -167,7 +167,7 @@ line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
 line:SetTexture(1, 1, 1, .2)
 
 local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
-tooltipCursor:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -80)
+tooltipCursor:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -66)
 
 local tooltipGuildRanks = ns.CreateCheckBox(general, "tooltip_guildranks")
 tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
@@ -280,7 +280,7 @@ local credits = FreeUIOptionsPanel.credits
 credits.Title:SetText("")
 
 local author = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
-author:SetPoint("TOP", 0, -80)
+author:SetPoint("TOP", 0, -64)
 author:SetText(ns.localization.author)
 
 local authorSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -322,3 +322,11 @@ zork:SetText("Zork")
 local zorkSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 zorkSubText:SetPoint("TOP", zork, "BOTTOM", 0, -8)
 zorkSubText:SetText(ns.localization.zork)
+
+local others = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightHuge")
+others:SetPoint("TOP", zorkSubText, "BOTTOM", 0, -30)
+others:SetText(ns.localization.others)
+
+local othersSubText = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+othersSubText:SetPoint("TOP", others, "BOTTOM", 0, -8)
+othersSubText:SetText("Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath")
