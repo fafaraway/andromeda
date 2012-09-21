@@ -272,9 +272,18 @@ init:SetScript("OnEvent", function()
 	F, C = unpack(FreeUI)
 	r, g, b = unpack(C.class)
 
+	FreeUIOptionsPanel:HookScript("OnShow", function()
+		oUF_FreePlayer:SetAlpha(0)
+		oUF_FreeTarget:SetAlpha(0)
+	end)
+
+	FreeUIOptionsPanel:HookScript("OnHide", function()
+		oUF_FreePlayer:SetAlpha(1)
+		oUF_FreeTarget:SetAlpha(1)
+	end)
+
 	local resetFrame = FreeUIOptionsPanel.resetFrame
 	local layout = FreeUIOptionsPanel.unitframes.Layout
-
 
 	resetFrame.Okay:SetScript("OnClick", function()
 		if resetFrame.Data:GetChecked() then
