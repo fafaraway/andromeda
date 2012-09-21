@@ -59,6 +59,7 @@ f:SetScript("OnMouseDown", function(self, button)
 		end)
 		self:SetScript("OnMouseUp", onMouseUp)
 	elseif button == "RightButton" then
+		self:SetScript("OnMouseUp", nil)
 		if F.menuShown then
 			ToggleFrame(DropDownList1)
 			F.menuShown = false
