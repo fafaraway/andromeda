@@ -2,7 +2,7 @@
 ## Title: FreeUI
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Freethinker
-## Version: 5.0.4
+## Version: 6.0
 ## RequiredDeps: Blizzard_CombatText
 ## OptionalDeps: Clique, FreeUI_Options, oUF
 ## SavedVariables: FreeUIGlobalConfig
