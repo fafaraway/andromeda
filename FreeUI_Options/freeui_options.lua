@@ -21,29 +21,31 @@ local function SaveValue(f, value)
 	C[f.group][f.option] = value -- and this is from the lua options
 end
 
-local function toggleChild(self, checked)
-	self.child:SetEnabled(checked)
-
+local function toggleChildren(self, checked)
+	local tR, tG, tB
 	if checked then
-		self.child.Text:SetTextColor(1, 1, 1)
-		PlaySound("igMainMenuOptionCheckBoxOn")
+		tR, tG, tB = 1, 1, 1
 	else
-		self.child.Text:SetTextColor(.5, .5, .5)
-		PlaySound("igMainMenuOptionCheckBoxOff")
+		tR, tG, tB = .5, .5, .5
+	end
+
+	for _, child in next, self.children do
+		child:SetEnabled(checked)
+		child.Text:SetTextColor(tR, tG, tB)
 	end
 end
 
 local function toggle(self)
 	local checked = self:GetChecked() == 1
 
-	SaveValue(self, checked)
-	if self.child then toggleChild(self, checked) end
-end
-
-local function onCheckBoxChanged(self)
-	if self.child then
-		self.child:SetEnabled(self:GetChecked())
+	if checked then
+		PlaySound("igMainMenuOptionCheckBoxOn")
+	else
+		PlaySound("igMainMenuOptionCheckBoxOff")
 	end
+
+	SaveValue(self, checked)
+	if self.children then toggleChildren(self, checked) end
 end
 
 ns.CreateCheckBox = function(parent, option, tooltipText)
@@ -315,7 +317,9 @@ init:SetScript("OnEvent", function()
 
 	for _, box in pairs(checkboxes) do
 		box:SetChecked(C[box.group][box.option])
-		if box.child then toggleChild(box, box:GetChecked()) end
+		if box.children then
+			toggleChildren(box, box:GetChecked())
+		end
 
 		F.ReskinCheck(box)
 	end

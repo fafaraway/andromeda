@@ -21,8 +21,3 @@ local F, C, L = unpack(select(2, ...))
 local name = C.myName
 local class = C.myClass
 local realm = C.myRealm
-
--- Show the extended cast bars for pure caster classes
-if class == "MAGE" or class == "PRIEST" or class == "WARLOCK" then
-	C.unitframes.castbar = 2
-end

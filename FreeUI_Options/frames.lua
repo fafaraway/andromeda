@@ -190,14 +190,14 @@ autoRepair:SetPoint("TOPLEFT", autoAccept, "BOTTOMLEFT", 0, -8)
 
 local autoRepairGuild = ns.CreateCheckBox(automation, "autoRepair_guild")
 autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
-autoRepair.child = autoRepairGuild
+autoRepair.children = {autoRepairGuild}
 
 local autoRoll = ns.CreateCheckBox(automation, "autoRoll")
 autoRoll:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -42)
 
 local autoRollMaxLevel = ns.CreateCheckBox(automation, "autoRoll_maxLevel")
 autoRollMaxLevel:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 16, -8)
-autoRoll.child = autoRollMaxLevel
+autoRoll.children = {autoRollMaxLevel}
 
 local autoSell = ns.CreateCheckBox(automation, "autoSell")
 autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
@@ -206,22 +206,74 @@ autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
 
 local actionbars = FreeUIOptionsPanel.actionbars
 
-local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
-hotKey:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", 0, -8)
+local enable = ns.CreateCheckBox(actionbars, "enable", true)
+enable:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", 0, -8)
+
+local enableStyle = ns.CreateCheckBox(actionbars, "enableStyle", true)
+enableStyle:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
 local rightBarsMouseover = ns.CreateCheckBox(actionbars, "rightbars_mouseover")
-rightBarsMouseover:SetPoint("TOPLEFT", hotKey, "BOTTOMLEFT", 0, -8)
+rightBarsMouseover:SetPoint("TOPLEFT", enableStyle, "BOTTOMLEFT", 0, -8)
 
-local stanceBar = ns.CreateCheckBox(actionbars, "stancebar")
-stanceBar:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -8)
+enable.children = {rightBarsMouseover}
+
+local reloadText = actionbars:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -18)
+reloadText:SetText(ns.localization.needReload)
+
+local line = actionbars:CreateTexture(nil, "ARTWORK")
+line:SetSize(450, 1)
+line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
+line:SetTexture(1, 1, 1, .2)
+
+local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
+hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -66)
+
+enableStyle.children = {hotKey}
 
 -- [[ Unit frames ]]
 
 local unitframes = FreeUIOptionsPanel.unitframes
 
-local wip = unitframes:CreateFontString(nil, nil, "GameFontNormalLarge")
-wip:SetPoint("CENTER")
-wip:SetText("Coming soon!")
+local enable = ns.CreateCheckBox(unitframes, "enable", true)
+enable:SetPoint("TOPLEFT", unitframes.subText, "BOTTOMLEFT", 0, -8)
+
+local enableGroup = ns.CreateCheckBox(unitframes, "enableGroup", true)
+enableGroup:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+
+local limitRaidSize = ns.CreateCheckBox(unitframes, "limitRaidSize", true)
+limitRaidSize:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
+
+local healerClasscolours = ns.CreateCheckBox(unitframes, "healerClasscolours", true)
+healerClasscolours:SetPoint("TOPLEFT", limitRaidSize, "BOTTOMLEFT", 0, -8)
+
+local partyNameAlways = ns.CreateCheckBox(unitframes, "partyNameAlways", true)
+partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
+
+local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true)
+targettarget:SetPoint("LEFT", enableGroup, "RIGHT", 240, 0)
+
+local pvp = ns.CreateCheckBox(unitframes, "pvp", true)
+pvp:SetPoint("TOPLEFT", targettarget, "BOTTOMLEFT", 0, -8)
+
+local castbarExtended = ns.CreateCheckBox(unitframes, "castbarExtended", true)
+castbarExtended:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
+
+enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
+
+local function toggleUFOptions(self)
+	local shown = enable:GetChecked() == 1
+	enableGroup:SetShown(shown)
+	limitRaidSize:SetShown(shown)
+	healerClasscolours:SetShown(shown)
+	partyNameAlways:SetShown(shown)
+	targettarget:SetShown(shown)
+	pvp:SetShown(shown)
+	castbarExtended:SetShown(shown)
+end
+
+enable:HookScript("OnClick", toggleUFOptions)
+unitframes:HookScript("OnShow", toggleUFOptions)
 
 -- [[ Class specific ]]
 
@@ -256,6 +308,10 @@ tinsert(ns.classOptions, shaman)
 local warlock = ns.CreateCheckBox(classmod, "warlock")
 warlock:SetPoint("TOPLEFT", shaman, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, warlock)
+
+local reloadText = classmod:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("TOPLEFT", warlock, "BOTTOMLEFT", 0, -18)
+reloadText:SetText(ns.localization.needReload)
 
 -- [[ Performance ]]
 

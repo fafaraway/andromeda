@@ -48,17 +48,20 @@ end
 	end
 end]]
 
-local groups = {["general"] = true, ["actionbars"] = true, ["classmod"] = true, ["performance"] = true}
+local groups = {["general"] = true, ["automation"] = true, ["actionbars"] = true, ["unitframes"] = true, ["classmod"] = true, ["performance"] = true}
 
+-- set variables from lua options if they're not saved yet, otherwise load saved option
 for group, options in pairs(C) do
 	if groups[group] then
 		if profile[group] == nil then profile[group] = {} end
 
 		for option, value in pairs(options) do
-			if profile[group][option] == nil then
-				profile[group][option] = value
-			else
-				C[group][option] = profile[group][option]
+			if type(C[group][option]) ~= "table" then
+				if profile[group][option] == nil then
+					profile[group][option] = value
+				else
+					C[group][option] = profile[group][option]
+				end
 			end
 		end
 	end

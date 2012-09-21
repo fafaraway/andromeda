@@ -2,6 +2,8 @@
 
 local F, C = unpack(select(2, ...))
 
+if not C.actionbars.enableStyle then return end
+
 local r, g, b = unpack(C.class)
 
 local _G = _G
@@ -217,13 +219,11 @@ local function init()
 		stylePetButton(_G["PetActionButton"..i])
 	end
 
-	if C.actionbars.stancebar == true then
-		for i = 1, NUM_STANCE_SLOTS do
-			styleStanceButton(_G["StanceButton"..i])
-		end
-		for i = 1, NUM_POSSESS_SLOTS do
-			styleStanceButton(_G["PossessButton"..i])
-		end
+	for i = 1, NUM_STANCE_SLOTS do
+		styleStanceButton(_G["StanceButton"..i])
+	end
+	for i = 1, NUM_POSSESS_SLOTS do
+		styleStanceButton(_G["PossessButton"..i])
 	end
 
 	styleExtraActionButton(ExtraActionButton1)

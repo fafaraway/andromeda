@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+if not C.actionbars.enable then return end
+
 --[[ MainMenuBar ]]
 
 local bar1 = CreateFrame("Frame", "FreeUI_MainMenuBar", UIParent, "SecureHandlerStateTemplate")
@@ -219,49 +221,44 @@ end
 
 RegisterStateDriver(petbar, "visibility", "[petbattle][overridebar][vehicleui] hide; [@pet,exists,nodead] show; hide")
 
---[[ Stance bar ]]
+--[[ Stance/possess bar]]
 
-if C.actionbars.stancebar == true then
-	local num = NUM_STANCE_SLOTS
-	local num2 = NUM_POSSESS_SLOTS
+local stancebar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
+stancebar:SetWidth(NUM_STANCE_SLOTS * 27 - 1)
+stancebar:SetHeight(26)
+stancebar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
 
-	local stancebar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
-	stancebar:SetWidth(num * 27 - 1)
-	stancebar:SetHeight(26)
-	stancebar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
+StanceBarFrame:SetParent(stancebar)
+StanceBarFrame:EnableMouse(false)
 
-	StanceBarFrame:SetParent(stancebar)
-	StanceBarFrame:EnableMouse(false)
-
-	for i = 1, num do
-		local button = _G["StanceButton"..i]
-		button:SetSize(26, 26)
-		button:ClearAllPoints()
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
-		else
-			local previous = _G["StanceButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
-		end
+for i = 1, NUM_STANCE_SLOTS do
+	local button = _G["StanceButton"..i]
+	button:SetSize(26, 26)
+	button:ClearAllPoints()
+	if i == 1 then
+		button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
+	else
+		local previous = _G["StanceButton"..i-1]
+		button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
 	end
-
-	PossessBarFrame:SetParent(stancebar)
-	PossessBarFrame:EnableMouse(false)
-
-	for i = 1, num2 do
-		local button = _G["PossessButton"..i]
-		button:SetSize(26, 26)
-		button:ClearAllPoints()
-		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
-		else
-			local previous = _G["PossessButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
-		end
-	end
-
-	RegisterStateDriver(stancebar, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
 end
+
+PossessBarFrame:SetParent(stancebar)
+PossessBarFrame:EnableMouse(false)
+
+for i = 1, NUM_POSSESS_SLOTS do
+	local button = _G["PossessButton"..i]
+	button:SetSize(26, 26)
+	button:ClearAllPoints()
+	if i == 1 then
+		button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
+	else
+		local previous = _G["PossessButton"..i-1]
+		button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
+	end
+end
+
+RegisterStateDriver(stancebar, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
 
 --[[ Right bars on mouseover ]]
 

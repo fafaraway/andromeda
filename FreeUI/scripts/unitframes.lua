@@ -1,5 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
+if not C.unitframes.enable then return end
+
 local parent, ns = ...
 local oUF = ns.oUF
 
@@ -238,7 +240,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 		Health.value:SetTextColor(unpack(reaction))
 	end
 
-	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
+	if FreeUIConfig.layout == 2 and not C.unitframes.healerClasscolours then
 		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
 			self.Healthdef:Hide()
 		else
@@ -333,7 +335,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Gradient ]]
 
-	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
+	if FreeUIConfig.layout == 2 and not C.unitframes.healerClasscolours then
 		local gradient = Health:CreateTexture(nil, "BACKGROUND")
 		gradient:SetPoint("TOPLEFT")
 		gradient:SetPoint("BOTTOMRIGHT")
@@ -349,7 +351,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Health deficit colour ]]
 
-	if FreeUIConfig.layout == 2 and not C.unitframes.healer_classcolours then
+	if FreeUIConfig.layout == 2 and not C.unitframes.healerClasscolours then
 		local Healthdef = CreateFrame("StatusBar", nil, self)
 		Healthdef:SetFrameStrata("LOW")
 		Healthdef:SetAllPoints(Health)
@@ -393,7 +395,7 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetVertexColor(0, 0, 0, .5)
 
 	-- Colour power by power type for dps/tank layout. Because this is brighter, make the background darker for contrast.
-	if FreeUIConfig.layout == 1 or C.unitframes.healer_classcolours then
+	if FreeUIConfig.layout == 1 or C.unitframes.healerClasscolours then
 		Power.colorPower = true
 		Power.bg:SetVertexColor(0, 0, 0, .25)
 	end
@@ -630,7 +632,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		if C.unitframes.castbar == 2 then
+		if C.unitframes.castbarExtended then
 			Castbar:SetStatusBarTexture(C.media.texture)
 			Castbar:SetStatusBarColor(unpack(C.class))
 			Castbar:SetWidth(self:GetWidth())
@@ -1439,7 +1441,7 @@ do
 
 		else
 			Health:SetHeight(partyHeight - powerHeight - 1)
-			if C.unitframes.party_name_always then
+			if C.unitframes.partyNameAlways then
 				self:Tag(Text, '[free:name]')
 			else
 				self:Tag(Text, '[dead][offline]')
@@ -1671,6 +1673,8 @@ oUF:Factory(function(self)
 		spawnHelper(self, 'arena' .. n, 'TOP', player, 'TOP', 0, 0 - (56 * n))
 	end
 
+	if not C.unitframes.enableGroup then return end
+
 	self:SetActiveStyle'Free - Party'
 
 	local party_width, party_height
@@ -1719,6 +1723,18 @@ oUF:Factory(function(self)
 	)
 
 	raid:SetPoint(unpack(raidPos))
+
+	if C.unitframes.limitRaidSize then
+		raid:SetAttribute("groupFilter", "1,2,3,4,5")
+	end
+
+	--[[F.AddOptionsCallback("unitframes", "limitRaidSize", function()
+		if C.unitframes.limitRaidSize then
+			raid:SetAttribute("groupFilter", "1,2,3,4,5")
+		else
+			raid:SetAttribute("groupFilter", "1,2,3,4,5,6,7,8")
+		end
+	end)]]
 
 	local raidToParty = CreateFrame("Frame")
 	raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")

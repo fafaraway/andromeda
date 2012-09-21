@@ -29,24 +29,30 @@ C["automation"] = {
 }
 
 C["actionbars"] = {
-	["hotkey"] = false, 			-- show hot keys on buttons
+	["enable"] = true,					-- enable the action bars
+	["enableStyle"] = true,				-- style the action bars (might have to be turned off for other addons)
+
+	["hotkey"] = false, 				-- show hot keys on buttons
 	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
-	["stancebar"] = true,			-- enable stance bar
 }
 
 C["unitframes"] = {
-	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
-	["castbar"] = 1, 					-- 1 = dps/tank cast bar, 2 = caster/healer cast bar
-	["healer_classcolours"] = false,			-- colour unitframes by class in healer layout
-	["party_name_always"] = false,				-- show name on party/raid frames in dps/tank layout
-	["pvp"] = true, 					-- show pvp icon on player frame
-	["targettarget"] = false, 			-- show target of target frame
+	["enable"] = true, 						-- enable the unit frames and their included modules
+	["enableGroup"] = true,					-- enable party/raid frames
 
-	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105}, -- only applies when 'auto' is false
-	["target"] = {"TOP", UIParent, "CENTER", 0, -225}, -- only applies when 'auto' is false
+	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
+	["castbarExtended"] = false, 			-- true for a separate player cast bar
+	["healerClasscolours"] = false,		-- colour unitframes by class in healer layout
+	["limitRaidSize"] = false, 				-- show a maximum of 25 players in a raid
+	["partyNameAlways"] = false,			-- show name on party/raid frames in dps/tank layout
+	["pvp"] = true, 						-- show pvp icon on player frame
+	["targettarget"] = false, 				-- show target of target frame
+
+	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105},
+	["target"] = {"TOP", UIParent, "CENTER", 0, -225},
 	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105},
-	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled and when 'auto' is false
-	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled and when 'auto' is false
+	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled
+	["raid"] = {"TOP", UIParent, "CENTER", 0, -190}, 	-- only applies with healer layout enabled
 
 	["altpower_height"] = 1,
 	["power_height"] = 1,
