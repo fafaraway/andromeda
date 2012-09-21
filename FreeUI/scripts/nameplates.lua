@@ -10,6 +10,14 @@ local select = select
 local freq = C.performance.nameplates
 local tfreq = C.performance.namethreat
 
+F.AddOptionsCallback("performance", "nameplates", function()
+	freq = C.performance.nameplates
+end)
+
+F.AddOptionsCallback("performance", "namethreat", function()
+	tfreq = C.performance.namethreat
+end)
+
 local CreateBD = function(parent, offset)
 	local left = parent:CreateTexture(nil, "BACKGROUND")
 	left:SetWidth(offset)

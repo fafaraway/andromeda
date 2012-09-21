@@ -4,8 +4,8 @@ local _, ns = ...
 -- [[ Functions ]]
 
 ns.categories = {}
+ns.buttons = {}
 
-local buttons = {}
 local checkboxes = {}
 local sliders = {}
 local dropdowns = {}
@@ -101,6 +101,7 @@ local function createSlider(parent, option, lowText, highText, low, high, step)
 	f:SetValueStep(step)
 
 	f:SetScript("OnValueChanged", onValueChanged)
+	parent[option] = f
 
 	tinsert(sliders, f)
 
@@ -272,6 +273,9 @@ init:SetScript("OnEvent", function()
 	r, g, b = unpack(C.class)
 
 	local resetFrame = FreeUIOptionsPanel.resetFrame
+	local layout = FreeUIOptionsPanel.unitframes.Layout
+
+
 	resetFrame.Okay:SetScript("OnClick", function()
 		if resetFrame.Data:GetChecked() then
 			FreeUIGlobalConfig = {}
@@ -293,16 +297,15 @@ init:SetScript("OnEvent", function()
 		displaySettings()
 	end)
 
+	layout:SetText((FreeUIConfig.layout == 2) and "Dps/Tank Layout" or "Healer Layout")
+	layout:SetScript("OnClick", function()
+		FreeUIConfig.layout = (FreeUIConfig.layout == 2) and 1 or 2
+		ReloadUI()
+	end)
+
 	F.CreateBD(FreeUIOptionsPanel)
 	F.CreateSD(FreeUIOptionsPanel)
 	F.CreateBD(resetFrame)
-	F.Reskin(FreeUIOptionsPanel.Okay)
-	F.Reskin(FreeUIOptionsPanel.Install)
-	F.Reskin(FreeUIOptionsPanel.Reload)
-	F.Reskin(FreeUIOptionsPanel.Reset)
-	F.Reskin(resetFrame.Okay)
-	F.Reskin(resetFrame.Cancel)
-	F.Reskin(GameMenuButtonFreeUI)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.Profile)
 	F.ReskinCheck(resetFrame.Data)
@@ -314,6 +317,10 @@ init:SetScript("OnEvent", function()
 	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)
+
+	for _, button in pairs(ns.buttons) do
+		F.Reskin(button)
+	end
 
 	for _, box in pairs(checkboxes) do
 		box:SetChecked(C[box.group][box.option])

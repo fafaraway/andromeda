@@ -632,7 +632,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		if C.unitframes.castbarExtended then
+		if C.unitframes.castbarSeparate and (class == "MAGE" or class == "PRIEST" or class == "WARLOCK" or not C.unitframes.castbarSeparateOnlyCasters) then
 			Castbar:SetStatusBarTexture(C.media.texture)
 			Castbar:SetStatusBarColor(unpack(C.class))
 			Castbar:SetWidth(self:GetWidth())

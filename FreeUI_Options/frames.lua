@@ -19,6 +19,7 @@ options.Okay:SetText(OKAY)
 options.Okay:SetScript("OnClick", function()
 	options:Hide()
 end)
+tinsert(ns.buttons, options.Okay)
 
 options.Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
 options.Profile:SetPoint("BOTTOMLEFT", 6, 6)
@@ -58,6 +59,7 @@ resetFrame.Okay = CreateFrame("Button", nil, resetFrame, "UIPanelButtonTemplate"
 resetFrame.Okay:SetSize(128, 25)
 resetFrame.Okay:SetPoint("BOTTOMLEFT", 16, 16)
 resetFrame.Okay:SetText(OKAY)
+tinsert(ns.buttons, resetFrame.Okay)
 
 resetFrame.Cancel = CreateFrame("Button", nil, resetFrame, "UIPanelButtonTemplate")
 resetFrame.Cancel:SetSize(128, 25)
@@ -66,6 +68,7 @@ resetFrame.Cancel:SetText(CANCEL)
 resetFrame.Cancel:SetScript("OnClick", function()
 	resetFrame:Hide()
 end)
+tinsert(ns.buttons, resetFrame.Cancel)
 
 local install = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 install:SetSize(128, 25)
@@ -80,6 +83,7 @@ install:SetScript("OnClick", function()
 	end
 	options:Hide()
 end)
+tinsert(ns.buttons, install)
 
 options.Install = install
 
@@ -88,6 +92,7 @@ reload:SetSize(128, 25)
 reload:SetPoint("TOP", install, "BOTTOM", 0, -8)
 reload:SetText(ns.localization.reload)
 reload:SetScript("OnClick", ReloadUI)
+tinsert(ns.buttons, reload)
 
 options.Reload = reload
 
@@ -98,6 +103,7 @@ reset:SetText(RESET)
 reset:SetScript("OnClick", function()
 	resetFrame:Show()
 end)
+tinsert(ns.buttons, reset)
 
 options.Reset = reset
 
@@ -110,6 +116,7 @@ local menuButton = CreateFrame("Button", "GameMenuButtonFreeUI", GameMenuFrame, 
 menuButton:SetSize(144, 21)
 menuButton:SetPoint("TOP", GameMenuButtonUIOptions, "BOTTOM", 0, -1)
 menuButton:SetText("FreeUI")
+tinsert(ns.buttons, menuButton)
 
 GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + 22)
 
@@ -250,16 +257,35 @@ healerClasscolours:SetPoint("TOPLEFT", limitRaidSize, "BOTTOMLEFT", 0, -8)
 local partyNameAlways = ns.CreateCheckBox(unitframes, "partyNameAlways", true)
 partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
 
+enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
+
 local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true)
 targettarget:SetPoint("LEFT", enableGroup, "RIGHT", 240, 0)
 
 local pvp = ns.CreateCheckBox(unitframes, "pvp", true)
 pvp:SetPoint("TOPLEFT", targettarget, "BOTTOMLEFT", 0, -8)
 
-local castbarExtended = ns.CreateCheckBox(unitframes, "castbarExtended", true)
-castbarExtended:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
+local castbarSeparate = ns.CreateCheckBox(unitframes, "castbarSeparate", true)
+castbarSeparate:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
 
-enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
+local castbarSeparateOnlyCasters = ns.CreateCheckBox(unitframes, "castbarSeparateOnlyCasters", true)
+castbarSeparateOnlyCasters:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 16, -8)
+
+castbarSeparate.children = {castbarSeparateOnlyCasters}
+
+local reloadText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -128)
+reloadText:SetText(ns.localization.needReload)
+
+local line = unitframes:CreateTexture(nil, "ARTWORK")
+line:SetSize(450, 1)
+line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
+line:SetTexture(1, 1, 1, .2)
+
+unitframes.Layout = CreateFrame("Button", nil, unitframes, "UIPanelButtonTemplate")
+unitframes.Layout:SetPoint("TOP", 0, -340)
+unitframes.Layout:SetSize(128, 25)
+tinsert(ns.buttons, unitframes.Layout)
 
 local function toggleUFOptions(self)
 	local shown = enable:GetChecked() == 1
@@ -269,7 +295,11 @@ local function toggleUFOptions(self)
 	partyNameAlways:SetShown(shown)
 	targettarget:SetShown(shown)
 	pvp:SetShown(shown)
-	castbarExtended:SetShown(shown)
+	castbarSeparate:SetShown(shown)
+	reloadText:SetShown(shown)
+	castbarSeparateOnlyCasters:SetShown(shown)
+	line:SetShown(shown)
+	unitframes.Layout:SetShown(shown)
 end
 
 enable:HookScript("OnClick", toggleUFOptions)

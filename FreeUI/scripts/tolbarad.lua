@@ -28,6 +28,10 @@ end
 local last = 0
 local freq = C.performance.tolbarad
 
+F.AddOptionsCallback("performance", "tolbarad", function()
+	freq = C.performance.tolbarad
+end)
+
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:SetScript("OnEvent", timer)
 frame:SetScript("OnUpdate", function(self, elapsed)

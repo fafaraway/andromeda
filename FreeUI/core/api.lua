@@ -122,7 +122,7 @@ end
 local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 
 local CreateGradient = function(f)
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT")
 	tex:SetPoint("BOTTOMRIGHT")
 	tex:SetTexture(C.media.backdrop)

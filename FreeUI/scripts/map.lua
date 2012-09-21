@@ -146,6 +146,10 @@ cursorcoords:SetPoint("BOTTOMLEFT", WorldMapFrameTitle, "TOPLEFT", 0, 4)
 local freq = C.performance.mapcoords
 local last = 0
 
+F.AddOptionsCallback("performance", "mapcoords", function()
+	freq = C.performance.mapcoords
+end)
+
 WorldMapDetailFrame:HookScript("OnUpdate", function(self, elapsed)
 	last = last + elapsed
 	if last >= freq then

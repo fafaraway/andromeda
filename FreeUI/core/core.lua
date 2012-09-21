@@ -63,7 +63,13 @@ end
 F.AddOptionsCallback = function(category, option, func)
 	if not IsAddOnLoaded("FreeUI_Options") then return end
 
-	FreeUIOptionsPanel[category][option]:HookScript("OnClick", func)
+	local frame = FreeUIOptionsPanel[category][option]
+
+	if frame:GetObjectType() == "Slider" then
+		frame:HookScript("OnValueChanged", func)
+	else
+		frame:HookScript("OnClick", func)
+	end
 end
 
 -- [[ Resolution support ]]

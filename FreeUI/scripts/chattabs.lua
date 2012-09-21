@@ -5,7 +5,7 @@ local F, C, L = unpack(select(2, ...))
 CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
 CHAT_FRAME_TAB_ALERTING_NOMOUSE_ALPHA = 1
-	
+
 CHAT_FRAME_TAB_SELECTED_MOUSEOVER_ALPHA = 1
 CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = 1
 CHAT_FRAME_TAB_ALERTING_MOUSEOVER_ALPHA = 1
@@ -77,7 +77,7 @@ local faneifyTab = function(frame, sel)
 
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
-		
+
 		frame:GetFontString():SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 
 		frame.Fane = true

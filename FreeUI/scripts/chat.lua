@@ -1,11 +1,8 @@
--- aChat, BasicChatMods, Alza code + personal code
-
 local F, C, L = unpack(select(2, ...))
 
 local _G = _G
 
 DEFAULT_CHATFRAME_ALPHA = 0
---CHAT_FRAME_FADE_OUT_TIME = 0
 CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME -- speed up fading out
 CHAT_TAB_HIDE_DELAY = CHAT_TAB_SHOW_DELAY -- ditto
 
