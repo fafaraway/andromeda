@@ -36,7 +36,7 @@ frame.WeatherFrame.Icon:Hide()
 frame.WeatherFrame.Name:Hide()
 frame.WeatherFrame.DurationShadow:Hide()
 frame.WeatherFrame.Label:Hide()
-frame.WeatherFrame.Duration:SetPoint("CENTER", self, 0, 8)
+frame.WeatherFrame.Duration:SetPoint("CENTER", frame.WeatherFrame, 0, 8)
 frame.WeatherFrame:ClearAllPoints()
 frame.WeatherFrame:SetPoint("TOP", UIParent, 0, -15)
 
