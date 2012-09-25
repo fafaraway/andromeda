@@ -2011,8 +2011,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					local icon = _G["CriteriaAlertFrame"..i.."IconTexture"]
 
 					frame.bg = CreateFrame("Frame", nil, UIParent)
-					frame.bg:SetPoint("TOPLEFT", icon, -10, 12)
-					frame.bg:SetPoint("BOTTOMRIGHT", icon, 240, -12)
+					frame.bg:SetPoint("TOPLEFT", icon, -10, 5)
+					frame.bg:SetPoint("BOTTOMRIGHT", icon, 240, -8)
 					frame.bg:SetFrameStrata("DIALOG")
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					frame.bg:SetShown(frame:IsShown())
