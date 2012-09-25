@@ -3032,7 +3032,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ArchaeologyFrameCompletedPageTitleMid:SetTextColor(1, 1, 1)
 		ArchaeologyFrameCompletedPagePageText:SetTextColor(1, 1, 1)
 
-		for i = 1, 10 do
+		for i = 1, ARCHAEOLOGY_MAX_RACES do
 			_G["ArchaeologyFrameSummaryPageRace"..i]:GetRegions():SetTextColor(1, 1, 1)
 		end
 
