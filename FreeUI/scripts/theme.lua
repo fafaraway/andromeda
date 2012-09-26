@@ -6034,11 +6034,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("TradeSkillFrame_Update", function()
 			local numTradeSkills = GetNumTradeSkills()
 			local skillOffset = FauxScrollFrame_GetOffset(TradeSkillListScrollFrame)
-			local skillIndex, skillButton
-			local buttonHighlight
+			local skillIndex
 			local diplayedSkills = TRADE_SKILLS_DISPLAYED
 			local hasFilterBar = TradeSkillFilterBar:IsShown()
-			if  hasFilterBar then
+			if hasFilterBar then
 				diplayedSkills = TRADE_SKILLS_DISPLAYED - 1
 			end
 			local buttonIndex = 0
@@ -6052,7 +6051,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					buttonIndex = i
 				end
 
-				skillButton = _G["TradeSkillSkill"..buttonIndex]
+				local skillButton = _G["TradeSkillSkill"..buttonIndex]
 
 				if not skillButton.reskinned then
 					skillButton.reskinned = true
@@ -6060,7 +6059,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton:SetNormalTexture("")
 					skillButton.SetNormalTexture = F.dummy
 					skillButton:SetPushedTexture("")
-					buttonHighlight = _G["TradeSkillSkill"..buttonIndex.."Highlight"]
+
+					local buttonHighlight = _G["TradeSkillSkill"..buttonIndex.."Highlight"]
 					buttonHighlight:SetTexture("")
 					buttonHighlight.SetTexture = F.dummy
 
@@ -6086,6 +6086,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton.plus:SetPoint("CENTER", skillButton.bg)
 					skillButton.plus:SetTexture(C.media.backdrop)
 					skillButton.plus:SetVertexColor(1, 1, 1)
+
+					skillButton.SubSkillRankBar.BorderLeft:Hide()
+					skillButton.SubSkillRankBar.BorderRight:Hide()
+					skillButton.SubSkillRankBar.BorderMid:Hide()
+
+					skillButton.SubSkillRankBar:SetHeight(12)
+					skillButton.SubSkillRankBar:SetStatusBarTexture(C.media.backdrop)
+					skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
+					F.CreateBDFrame(skillButton.SubSkillRankBar, .25)
 				end
 
 				if skillIndex <= numTradeSkills then
