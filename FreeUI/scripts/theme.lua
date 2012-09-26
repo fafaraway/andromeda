@@ -1667,6 +1667,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		GossipGreetingText:SetTextColor(1, 1, 1)
 
+		NPCFriendshipStatusBar:GetRegions():Hide()
+		NPCFriendshipStatusBarNotch1:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch1:SetSize(1, 16)
+		NPCFriendshipStatusBarNotch2:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch2:SetSize(1, 16)
+		NPCFriendshipStatusBarNotch3:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch3:SetSize(1, 16)
+		NPCFriendshipStatusBarNotch4:SetTexture(0, 0, 0)
+		NPCFriendshipStatusBarNotch4:SetSize(1, 16)
+		select(7, NPCFriendshipStatusBar:GetRegions()):Hide()
+
+		NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
+		F.CreateBDFrame(NPCFriendshipStatusBar, .25)
+
 		F.ReskinPortraitFrame(GossipFrame, true)
 		F.Reskin(GossipFrameGreetingGoodbyeButton)
 		F.ReskinScroll(GossipGreetingScrollFrameScrollBar)
