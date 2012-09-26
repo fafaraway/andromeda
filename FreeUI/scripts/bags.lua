@@ -62,8 +62,10 @@ local buttons, bankbuttons = {}, {}
 
 --[[ Function to move buttons ]]
 
-local MoveButtons = function(table, frame, columns)
+local MoveButtons = function(table, frame)
+	local columns = floor(sqrt(#table))
 	local iconSize = C.general.bags_size
+
 	col, row = 0, 0
 	for i = 1, #table do
 		bu = _G[table[i]]
@@ -102,7 +104,8 @@ local ReanchorButtons = function()
 			tinsert(buttons, bu)
 		end
 	end
-	MoveButtons(buttons, holder, CheckSlots() + 4)
+
+	MoveButtons(buttons, holder)
 	holder:Show()
 end
 
@@ -146,7 +149,8 @@ local ReanchorBankButtons = function()
 	end
 	local _, full = GetNumBankSlots()
 	if full then purchase:Hide() end
-	MoveButtons(bankbuttons, bankholder, CheckSlots() + 8)
+
+	MoveButtons(bankbuttons, bankholder)
 	bankholder:Show()
 end
 
