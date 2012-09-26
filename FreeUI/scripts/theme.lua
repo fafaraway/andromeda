@@ -2012,7 +2012,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame.bg = CreateFrame("Frame", nil, UIParent)
 					frame.bg:SetPoint("TOPLEFT", icon, -6, 5)
-					frame.bg:SetPoint("BOTTOMRIGHT", icon, 236, -8)
+					frame.bg:SetPoint("BOTTOMRIGHT", icon, 236, -5)
 					frame.bg:SetFrameStrata("DIALOG")
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					frame.bg:SetShown(frame:IsShown())
