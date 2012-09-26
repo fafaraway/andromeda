@@ -61,8 +61,14 @@ local function styleExtraActionButton(bu)
 	bu:SetHighlightTexture("")
 	bu:SetCheckedTexture(C.media.backdrop)
 
+	local ch = bu:GetCheckedTexture()
+	ch:SetVertexColor(r, g, b)
+	ch:SetDrawLayer("ARTWORK")
+	ch:SetAllPoints(bu)
+
 	_G[bu:GetName().."HotKey"]:Hide()
 
+	bu.icon:SetDrawLayer("OVERLAY")
 	bu.icon:SetTexCoord(.08, .92, .08, .92)
 	bu.icon:SetPoint("TOPLEFT", bu, "TOPLEFT", 1, -1)
 	bu.icon:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
