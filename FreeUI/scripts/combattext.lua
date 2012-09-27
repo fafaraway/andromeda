@@ -12,15 +12,15 @@ for i = 1, 2 do
 	f:SetTimeVisible(3)
 	f:SetMaxLines(100)
 	f:SetSpacing(2)
-	f:SetWidth(84)
+	f:SetWidth(100)
 	f:SetHeight(150)
 
 	if i == 1 then
 		f:SetJustifyH"RIGHT"
-		f:SetPoint("RIGHT", UIParent, "CENTER", -185, 80)
+		f:SetPoint("RIGHT", UIParent, "CENTER", -175, 80)
 	else
 		f:SetJustifyH"LEFT"
-		f:SetPoint("LEFT", UIParent, "CENTER", -365, 80)
+		f:SetPoint("LEFT", UIParent, "CENTER", -375, 80)
 	end
 
 	frames[i] = f
@@ -50,18 +50,18 @@ local info
 local template = "-%s (%s)"
 
 local events = CreateFrame"Frame"
-events:RegisterEvent"COMBAT_TEXT_UPDATE"
+events:RegisterEvent("COMBAT_TEXT_UPDATE")
 events:SetScript("OnEvent", function(self, event, subev, arg2, arg3)
 	info = tbl[subev]
-	if(info) then
+	if info then
 		local msg = info.prefix or ""
-		if(info.spec) then
-			if(arg3) then
+		if info.spec then
+			if arg3 then
 				msg = template:format(arg2, arg3)
 			end
 		else
-			if(info.arg2) then msg = msg..arg2 end
-			if(info.arg3) then msg = msg..arg3 end
+			if info.arg2 then msg = msg..arg2 end
+			if info.arg3 then msg = msg..arg3 end
 		end
 		frames[info.frame]:AddMessage(msg, info.r, info.g, info.b)
 	end
