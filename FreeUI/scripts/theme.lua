@@ -1975,7 +1975,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					frame:HookScript("OnShow", showHideBg)
 					frame:HookScript("OnHide", showHideBg)
 					frame:HookScript("OnUpdate", onUpdate)
-					frame:HookScript("OnUpdate", onUpdate)
 
 					frame.Background:Hide()
 					frame.IconBorder:Hide()
@@ -2005,7 +2004,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					frame:HookScript("OnShow", showHideBg)
 					frame:HookScript("OnHide", showHideBg)
 					frame:HookScript("OnUpdate", onUpdate)
-					frame:HookScript("OnUpdate", onUpdate)
 
 					frame.Background:Hide()
 					frame.IconBorder:Hide()
@@ -2034,7 +2032,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 					frame:SetScript("OnShow", showHideBg)
 					frame:SetScript("OnHide", showHideBg)
-					frame:HookScript("OnUpdate", onUpdate)
 					frame:HookScript("OnUpdate", onUpdate)
 
 					_G["CriteriaAlertFrame"..i.."Background"]:Hide()
