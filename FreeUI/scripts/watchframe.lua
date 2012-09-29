@@ -34,24 +34,22 @@ hooksecurefunc("WatchFrame_Expand", function()
 	text:SetText("x")
 end)
 
-local nextLine = 1
-
 WatchFrameTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 WatchFrameTitle:SetShadowColor(0, 0, 0, 0)
 
+local index = 1
+
 hooksecurefunc("WatchFrame_Update", function()
-	for i = nextLine, 50 do
-		line = _G["WatchFrameLine"..i]
-		if line then
-			line.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-			line.dash:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-			line.text:SetShadowColor(0, 0, 0, 0)
-			line.dash:SetShadowColor(0, 0, 0, 0)
-			line.text:SetSpacing(2)
-		else
-			nextLine = i
-			break
-		end
+	local line = _G["WatchFrameLine"..index]
+	while line do
+		line.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		line.dash:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		line.text:SetShadowColor(0, 0, 0, 0)
+		line.dash:SetShadowColor(0, 0, 0, 0)
+		line.text:SetSpacing(2)
+
+		index = index + 1
+		line = _G["WatchFrameLine"..index]
 	end
 
 	for i = 1, WATCHFRAME_MAXQUESTS do
