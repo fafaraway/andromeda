@@ -138,9 +138,9 @@ local OnEvent = function(self, event)
 end
 f:SetScript("OnEvent", OnEvent)
 
-local coords = F.CreateFS(WorldMapDetailFrame, fontsize)
+local coords = F.CreateFS(frame, fontsize)
 coords:SetPoint("LEFT", WorldMapFrameTitle, "RIGHT")
-local cursorcoords = F.CreateFS(WorldMapDetailFrame, fontsize)
+local cursorcoords = F.CreateFS(frame, fontsize)
 cursorcoords:SetPoint("BOTTOMLEFT", WorldMapFrameTitle, "TOPLEFT", 0, 4)
 
 local freq = C.performance.mapcoords
