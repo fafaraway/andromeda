@@ -669,37 +669,33 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		--LFDQueueFrameRandomScrollFrame:SetWidth(304)
 
-		local function ReskinRewards()
+		hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", function()
 			for i = 1, LFD_MAX_REWARDS do
 				local button = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]
-				local icon = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"]
 
-				if button then
-					if not button.reskinned then
-						local cta = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."ShortageBorder"]
-						local count = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"]
-						local na = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."NameFrame"]
+				if button and not button.styled then
+					local icon = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"]
+					local cta = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."ShortageBorder"]
+					local count = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"]
+					local na = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i.."NameFrame"]
 
-						F.CreateBG(icon)
-						icon:SetTexCoord(.08, .92, .08, .92)
-						icon:SetDrawLayer("OVERLAY")
-						count:SetDrawLayer("OVERLAY")
-						na:SetTexture(0, 0, 0, .25)
-						na:SetSize(118, 39)
-						cta:SetAlpha(0)
+					F.CreateBG(icon)
+					icon:SetTexCoord(.08, .92, .08, .92)
+					icon:SetDrawLayer("OVERLAY")
+					count:SetDrawLayer("OVERLAY")
+					na:SetTexture(0, 0, 0, .25)
+					na:SetSize(118, 39)
+					cta:SetAlpha(0)
 
-						button.bg2 = CreateFrame("Frame", nil, button)
-						button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
-						button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
-						F.CreateBD(button.bg2, 0)
+					button.bg2 = CreateFrame("Frame", nil, button)
+					button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
+					button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
+					F.CreateBD(button.bg2, 0)
 
-						button.reskinned = true
-					end
+					button.styled = true
 				end
 			end
-		end
-
-		hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", ReskinRewards)
+		end)
 
 		hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button, dungeonID)
 			if not button.expandOrCollapseButton.plus then
@@ -743,13 +739,48 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		for i = 1, LFD_MAX_REWARDS do
 			local button = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i]
-			local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
 
 			if button then
-				if not button.reskinned then
-					local cta = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."ShortageBorder"]
-					local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
-					local na = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."NameFrame"]
+				local icon = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."IconTexture"]
+				local cta = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."ShortageBorder"]
+				local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
+				local na = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."NameFrame"]
+
+				F.CreateBG(icon)
+				icon:SetTexCoord(.08, .92, .08, .92)
+				icon:SetDrawLayer("OVERLAY")
+				count:SetDrawLayer("OVERLAY")
+				na:SetTexture(0, 0, 0, .25)
+				na:SetSize(118, 39)
+				cta:SetAlpha(0)
+
+				button.bg2 = CreateFrame("Frame", nil, button)
+				button.bg2:SetPoint("TOPLEFT", na, "TOPLEFT", 10, 0)
+				button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
+				F.CreateBD(button.bg2, 0)
+			end
+		end
+
+		-- Scenario finder
+
+		ScenarioFinderFrameInset:DisableDrawLayer("BORDER")
+		ScenarioFinderFrame.TopTileStreaks:Hide()
+		ScenarioFinderFrameBtnCornerRight:Hide()
+		ScenarioFinderFrameButtonBottomBorder:Hide()
+		ScenarioQueueFrame.Bg:Hide()
+		ScenarioFinderFrameInset:GetRegions():Hide()
+
+		ScenarioQueueFrameRandomScrollFrame:SetWidth(304)
+
+		hooksecurefunc("ScenarioQueueFrameRandom_UpdateFrame", function()
+			for i = 1, 2 do
+				local button = _G["ScenarioQueueFrameRandomScrollFrameChildFrameItem"..i]
+
+				if button and not button.styled then
+					local icon = _G["ScenarioQueueFrameRandomScrollFrameChildFrameItem"..i.."IconTexture"]
+					local cta = _G["ScenarioQueueFrameRandomScrollFrameChildFrameItem"..i.."ShortageBorder"]
+					local count = _G["ScenarioQueueFrameRandomScrollFrameChildFrameItem"..i.."Count"]
+					local na = _G["ScenarioQueueFrameRandomScrollFrameChildFrameItem"..i.."NameFrame"]
 
 					F.CreateBG(icon)
 					icon:SetTexCoord(.08, .92, .08, .92)
@@ -764,19 +795,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					button.bg2:SetPoint("BOTTOMRIGHT", na, "BOTTOMRIGHT")
 					F.CreateBD(button.bg2, 0)
 
-					button.reskinned = true
+					button.styled = true
 				end
 			end
-		end
-
-		-- Scenario finder
-
-		ScenarioFinderFrameInset:DisableDrawLayer("BORDER")
-		ScenarioFinderFrame.TopTileStreaks:Hide()
-		ScenarioFinderFrameBtnCornerRight:Hide()
-		ScenarioFinderFrameButtonBottomBorder:Hide()
-		ScenarioQueueFrame.Bg:Hide()
-		ScenarioFinderFrameInset:GetRegions():Hide()
+		end)
 
 		F.Reskin(ScenarioQueueFrameFindGroupButton)
 		F.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
