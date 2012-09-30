@@ -318,6 +318,7 @@ local function stylePetBattleButton(bu)
 	})
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 
+	bu.Icon:SetDrawLayer("OVERLAY")
 	bu.Icon:SetTexCoord(.08, .92, .08, .92)
 	bu.Icon:SetPoint("TOPLEFT", bu, 1, -1)
 	bu.Icon:SetPoint("BOTTOMRIGHT", bu, -1, 1)
@@ -325,8 +326,9 @@ local function stylePetBattleButton(bu)
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
 
-	bu.SelectedHighlight:SetTexture(r, g, b, .2)
+	bu.SelectedHighlight:SetTexture(r, g, b)
 	bu.SelectedHighlight:SetAllPoints()
+	bu.SelectedHighlight:SetDrawLayer("ARTWORK")
 
 	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	bu.HotKey:SetPoint("TOP", 1, -2)
