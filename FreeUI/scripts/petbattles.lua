@@ -145,17 +145,20 @@ end
 
 for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	local unit = bf.PetSelectionFrame["Pet"..i]
+	local icon = unit.Icon
 
 	unit.HealthBarBG:Hide()
 	unit.Framing:Hide()
 	unit.HealthDivider:Hide()
 
-	unit.Icon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBG(unit.Icon)
+	unit.Name:SetPoint("TOPLEFT", icon, "TOPRIGHT", 3, -3)
+	unit.ActualHealthBar:SetPoint("BOTToMLEFT", icon, "BOTTOMRIGHT", 3, 0)
+
+	icon:SetTexCoord(.08, .92, .08, .92)
+	F.CreateBG(icon)
 
 	unit.ActualHealthBar:SetTexture(C.media.backdrop)
-
-	F.CreateBD(unit)
+	F.CreateBDFrame(unit.ActualHealthBar)
 end
 
 hooksecurefunc("PetBattleUnitFrame_UpdateHealthInstant", function(self)
@@ -263,24 +266,36 @@ bf.TurnTimer:SetParent(bar)
 bf.TurnTimer:SetSize(bf.TurnTimer.SkipButton:GetWidth() - 2, bf.TurnTimer.SkipButton:GetHeight())
 bf.TurnTimer:ClearAllPoints()
 bf.TurnTimer:SetPoint("BOTTOM", bf.TurnTimer.SkipButton, "TOP", 0, 2)
-F.CreateBDFrame(bf.TurnTimer)
+bf.TurnTimer.bg = F.CreateBDFrame(bf.TurnTimer)
 
 bf.xpBar:SetParent(bar)
 bf.xpBar:SetWidth(bar:GetWidth() - 2)
 bf.xpBar:ClearAllPoints()
 bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer, "TOP", 0, 4)
-F.CreateBDFrame(bf.xpBar)
+bf.xpBar:SetStatusBarTexture(C.media.texture)
+F.CreateBDFrame(bf.xpBar, 0)
 
-bf.xpBar:HookScript("OnShow", function(self)
-	for i = 7, 12 do
-		select(i, self:GetRegions()):Hide()
-	end
-	self:SetStatusBarTexture(C.media.texture)
-end)
+for i = 7, 12 do
+	select(i, bf.xpBar:GetRegions()):Hide()
+end
 
 hooksecurefunc("PetBattlePetSelectionFrame_Show", function()
 	bf.PetSelectionFrame:ClearAllPoints()
 	bf.PetSelectionFrame:SetPoint("BOTTOM", bf.xpBar, "TOP", 0, 8)
+end)
+
+hooksecurefunc("PetBattleFrame_UpdatePassButtonAndTimer", function()
+	local pveBattle = C_PetBattles.IsPlayerNPC(LE_BATTLE_PET_ENEMY)
+
+	bf.TurnTimer.bg:SetShown(not pveBattle)
+
+	bf.xpBar:ClearAllPoints()
+
+	if pveBattle then
+		bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer.SkipButton, "TOP", 0, 2)
+	else
+		bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer, "TOP", 0, 4)
+	end
 end)
 
 -- [[ Buttons ]]
