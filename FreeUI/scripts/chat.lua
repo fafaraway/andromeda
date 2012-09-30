@@ -326,6 +326,7 @@ local function GetLinkColor(data)
 		end
 	elseif(type == 'quest') then
 		local _, _, level = string.match(data, '(%w+):(%d+):(%d+)')
+		if not level then level = UnitLevel("player") end -- fix for account wide quests
 		local color = GetQuestDifficultyColor(level)
 		return format('|cff%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)
 	elseif(type == 'spell') then
