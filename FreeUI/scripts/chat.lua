@@ -87,12 +87,19 @@ local function AddMessage(frame, text, r, g, b, id)
 		text = text:gsub("To (|Hplayer.*|h)", "To %1")
 		text = text:gsub("(|Hplayer.*|h) says", "%1")
 		text = text:gsub("(|Hplayer.*|h) yells", "%1")
-		text = text:gsub("(|Hplayer.*|h)", "%1")
 		text = text:gsub("(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
-		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h") -- Remove brackets around names (breaks profession links)
+		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
 	end
 
 	return hooks[frame](frame, text, r, g, b, id)
+end
+
+local Insert = function(self, str, ...)
+	if type(str) == "string" then
+		str = str:gsub("|H(.-)|h[%[]?(.-)[%]]?|h", "|H%1|h[%2]|h")
+	end
+
+	return hooks[self](self, str, ...)
 end
 
 ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, message, ...)
@@ -195,6 +202,9 @@ local function StyleWindow(f)
 
 	hooks[frame] = frame.AddMessage
 	frame.AddMessage = AddMessage
+
+	hooks[frame.editBox] = frame.editBox.Insert
+	frame.editBox.Insert = Insert
 end
 
 for i = 1, NUM_CHAT_WINDOWS do
