@@ -60,7 +60,10 @@ for group, options in pairs(C) do
 				if profile[group][option] == nil then
 					profile[group][option] = value
 				else
-					C[group][option] = profile[group][option]
+					-- temporary fix for non-implemented unitframe options
+					if group ~= "unitframes" or not tonumber(profile[group][option]) then
+						C[group][option] = profile[group][option]
+					end
 				end
 			end
 		end
