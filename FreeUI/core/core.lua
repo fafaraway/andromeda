@@ -76,8 +76,6 @@ end
 
 C.resolution = 0
 
-local scaleRegistered = false
-
 local updateScale
 updateScale = function(event)
 	if event == "VARIABLES_LOADED" then
@@ -91,40 +89,31 @@ updateScale = function(event)
 			C.resolution = 3
 		end
 	end
-	if not C.general.uiScaleAuto then return end
-	if not InCombatLockdown() then
-		local scale = 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")
-		if scale < .64 then
-			UIParent:SetScale(scale)
-			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50)
-			-- unsupported UI scale, need to manually SetScale() every time WoW changes uiScale cvar
-			if not scaleRegistered then
-				scaleRegistered = true
-				F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
-			end
-		else
-			-- UI scale supported, set scale once then leave it alone
-			F.UnregisterAllEvents(updateScale)
-			SetCVar("useUiScale", 1)
-			SetCVar("uiScale", scale)
-		end
-	else
-		F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
-	end
 
-	if event == "PLAYER_REGEN_ENABLED" then
-		F.UnregisterEvent("PLAYER_REGEN_ENABLED", updateScale)
+	if C.general.uiScaleAuto then
+		if not InCombatLockdown() then
+			-- we don't bother with the cvar because of high resolution shenanigans
+			UIParent:SetScale(768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
+			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50)
+		else
+			F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
+		end
+
+		if event == "PLAYER_REGEN_ENABLED" then
+			F.UnregisterEvent("PLAYER_REGEN_ENABLED", updateScale)
+		end
 	end
 end
 
 F.RegisterEvent("VARIABLES_LOADED", updateScale)
+F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
 
 F.AddOptionsCallback("general", "uiScaleAuto", function()
 	if C.general.uiScaleAuto then
-		scaleRegistered = false
+		F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
 		updateScale()
 	else
-		F.UnregisterAllEvents(updateScale)
+		F.UnregisterEvent("UI_SCALE_CHANGED", updateScale)
 	end
 end)
 
