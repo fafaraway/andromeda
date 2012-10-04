@@ -45,7 +45,8 @@ local units = {frame.ActiveAlly, frame.ActiveEnemy}
 for index, unit in pairs(units) do
 	unit.healthBarWidth = 300
 
-	unit.Border:Hide()
+	unit.Border:SetDrawLayer("ARTWORK", 0)
+	unit.Border2:SetDrawLayer("ARTWORK", 1)
 	unit.HealthBarBG:Hide()
 	unit.HealthBarFrame:Hide()
 	unit.LevelUnderlay:Hide()
@@ -66,7 +67,7 @@ for index, unit in pairs(units) do
 	unit.Level:SetTextColor(1, 1, 1)
 
 	local bg = CreateFrame("Frame", nil, unit)
-	bg:SetWidth(unit.healthBarWidth)
+	bg:SetWidth(unit.healthBarWidth + 2)
 	bg:SetFrameLevel(unit:GetFrameLevel()-1)
 	F.CreateBD(bg)
 
@@ -105,6 +106,7 @@ for index, unit in pairs(units) do
 		unit.PetTypeString:SetJustifyH("LEFT")
 	end
 
+	unit.Icon:SetDrawLayer("ARTWORK", 2)
 	F.CreateBG(unit.Icon)
 end
 
@@ -332,6 +334,10 @@ local function stylePetBattleButton(bu)
 
 	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	bu.HotKey:SetPoint("TOP", 1, -2)
+
+	bu.BetterIcon:SetSize(24, 24)
+	bu.BetterIcon:ClearAllPoints()
+	bu.BetterIcon:SetPoint("BOTTOM", 6, -9)
 
 	bu.reskinned = true
 end
