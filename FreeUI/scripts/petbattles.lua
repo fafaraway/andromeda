@@ -57,11 +57,13 @@ for index, unit in pairs(units) do
 
 	unit.Border:SetTexture(C.media.checked)
 	unit.Border:SetTexCoord(0, 1, 0, 1)
-	unit.Border:SetAllPoints(unit.Icon)
+	unit.Border:SetPoint("TOPLEFT", unit.Icon, -1, 1)
+	unit.Border:SetPoint("BOTTOMRIGHT", unit.Icon, 1, -1)
 	unit.Border2:SetTexture(C.media.checked)
 	unit.Border2:SetVertexColor(.89, .88, .06)
 	unit.Border2:SetTexCoord(0, 1, 0, 1)
-	unit.Border2:SetAllPoints(unit.Icon)
+	unit.Border2:SetPoint("TOPLEFT", unit.Icon, -1, 1)
+	unit.Border2:SetPoint("BOTTOMRIGHT", unit.Icon, 1, -1)
 
 	unit.Level:SetFont(C.media.font2, 16)
 	unit.Level:SetTextColor(1, 1, 1)
