@@ -335,7 +335,16 @@ local function stylePetBattleButton(bu)
 	bu.SelectedHighlight:SetAllPoints()
 
 	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	bu.HotKey:SetJustifyH("CENTER")
+	bu.HotKey:ClearAllPoints()
 	bu.HotKey:SetPoint("TOP", 1, -2)
+
+	bu.Cooldown:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	bu.Cooldown:SetJustifyH("CENTER")
+	bu.Cooldown:SetTextColor(1, 1, 1)
+	bu.Cooldown:SetShadowOffset(0, 0)
+	bu.Cooldown:ClearAllPoints()
+	bu.Cooldown:SetPoint("BOTTOM", 1, -1)
 
 	bu.BetterIcon:SetSize(24, 24)
 	bu.BetterIcon:ClearAllPoints()
@@ -343,6 +352,10 @@ local function stylePetBattleButton(bu)
 
 	bu.reskinned = true
 end
+
+hooksecurefunc("PetBattleAbilityButton_UpdateHotKey", function(self)
+	self.HotKey:SetShown(C.actionbars.hotkey and self.HotKey:IsShown())
+end)
 
 local first = true
 hooksecurefunc("PetBattleFrame_UpdateActionBarLayout", function(self)
