@@ -341,6 +341,7 @@ local function stylePetBattleButton(bu)
 
 	bu.Cooldown:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	bu.Cooldown:SetJustifyH("CENTER")
+	bu.Cooldown:SetDrawLayer("OVERLAY", 5)
 	bu.Cooldown:SetTextColor(1, 1, 1)
 	bu.Cooldown:SetShadowOffset(0, 0)
 	bu.Cooldown:ClearAllPoints()
