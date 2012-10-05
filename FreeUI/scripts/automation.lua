@@ -60,30 +60,46 @@ f:SetScript("OnEvent", function(self, event)
 	end
 end)
 
-local playerFaction = UnitFactionGroup("player") == "Horde" and 0 or 1
 local playerRealm = C.myRealm
 
 local IsFriend = function(name)
-	for i = 1, GetNumFriends() do if(GetFriendInfo(i)==name) then return true end end
-	if IsInGuild() then for i = 1, GetNumGuildMembers() do if(GetGuildRosterInfo(i)==name) then return true end end end
+	for i = 1, GetNumFriends() do
+		if GetFriendInfo(i) == name then return true end
+	end
+
+	if IsInGuild() then
+		for i = 1, GetNumGuildMembers() do
+			if GetGuildRosterInfo(i) == name then return true end
+		end
+	end
+
+
 	for i = 1, select(2, BNGetNumFriends()) do
-		local presenceID, _, _, toonName, _, client = BNGetFriendInfo(i)
-		local _, _, _, realmName, faction = BNGetToonInfo(presenceID)
-		if client == "WoW" and realmName == playerRealm and toonName == name then
-			return true
+		local presenceID, _, _, _, toonName, _, client = BNGetFriendInfo(i)
+		if client == "WoW" then
+			local _, _, _, realmName = BNGetToonInfo(presenceID)
+
+			if realmName == playerRealm and toonName == name then
+				return true
+			elseif name:find("-") then
+				local invName, invRealm = strsplit("-", name)
+				if realmName == invRealm and toonName == invName then
+					return true
+				end
+			end
 		end
 	end
 end
 
-local function onInvite(self, event, name)
+local function onInvite(event, name)
 	if QueueStatusMinimapButton:IsShown() then return end
 	if IsFriend(name) then
 		AcceptGroup()
 		for i = 1, 4 do
 			local frame = _G["StaticPopup"..i]
-			if frame:IsVisible() and frame.which == "PARTY_INVITE" then
+			if frame:IsVisible() and frame.which == "PARTY_INVITE" or frame.which == "PARTY_INVITE_XREALM" then
 				frame.inviteAccepted = 1
-				return StaticPopup_Hide("PARTY_INVITE")
+				return StaticPopup_Hide(frame.which)
 			end
 		end
 	end
