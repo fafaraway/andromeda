@@ -211,16 +211,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 			end
 		end
 	else
-		local slot = addon.slots[1] or createSlot(1)
-
-		slot.name:SetText("")
-		slot.icon:SetTexture[[Interface\Icons\INV_Misc_Herb_AncientLichen]]
-
-		items = 1
-
-		slot.count:Hide()
-		slot:Disable()
-		slot:Show()
+		self:Hide()
 	end
 
 	anchorSlots(self)
