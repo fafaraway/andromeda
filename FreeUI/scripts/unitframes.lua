@@ -1177,7 +1177,7 @@ local UnitSpecific = {
 
 		-- complicated filter is complicated
 		-- icon hides if:
-		-- it's a debuff on an enemy target which is cast by a friendly target, isn't yours and isn't in the useful buffs filter
+		-- it's a debuff on an enemy target which isn't yours and isn't in the useful buffs filter
 		-- it's a buff on an enemy player target which is not important
 
 		local playerUnits = {
@@ -1187,7 +1187,7 @@ local UnitSpecific = {
 		}
 
 		Auras.CustomFilter = function(_, unit, icon, _, _, _, _, _, _, _, caster, _, _, spellID)
-			if(not playerUnits[icon.owner] and not C.debuffFilter[spellID] and (not caster or UnitIsFriend("player", caster)) and not UnitIsFriend("player", unit) and icon.isDebuff)
+			if(not playerUnits[icon.owner] and not C.debuffFilter[spellID] and not UnitIsFriend("player", unit) and icon.isDebuff)
 			or(UnitIsPlayer(unit) and not UnitIsFriend("player", unit) and not icon.isDebuff and not C.dangerousBuffs[spellID]) then
 				return false
 			end
