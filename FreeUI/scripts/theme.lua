@@ -5604,6 +5604,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for j = 1, 3 do
 				local spell = bu["spell"..j]
 
+				spell:SetPushedTexture("")
+
 				spell.selected:SetTexture(C.media.checked)
 
 				spell:GetRegions():Hide()
@@ -5632,6 +5634,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local bu = PetJournal.SpellSelect["Spell"..i]
 
 			bu:SetCheckedTexture(C.media.checked)
+			bu:SetPushedTexture("")
 
 			bu.icon:SetDrawLayer("ARTWORK")
 			bu.icon:SetTexCoord(.08, .92, .08, .92)
