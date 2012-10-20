@@ -11,7 +11,7 @@ frame.TopArtLeft:Hide()
 frame.TopArtRight:Hide()
 frame.TopVersus:Hide()
 
-local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip}
+local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
 for _, f in pairs(tooltips) do
 	f:DisableDrawLayer("BACKGROUND")
 	local bg = CreateFrame("Frame", nil, f)
@@ -26,9 +26,14 @@ PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
 PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
 PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
 PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
+FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
+FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
 FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
 FloatingBattlePetTooltip.Delimiter:SetHeight(1)
 F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
+F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
 frame.TopVersusText:SetPoint("TOP", frame, "TOP", 0, -46)
 
