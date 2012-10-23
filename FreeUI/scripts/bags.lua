@@ -63,7 +63,7 @@ local buttons, bankbuttons = {}, {}
 --[[ Function to move buttons ]]
 
 local MoveButtons = function(table, frame)
-	local columns = floor(sqrt(#table))
+	local columns = ceil(sqrt(#table))
 	local iconSize = C.general.bags_size
 
 	col, row = 0, 0
@@ -125,7 +125,7 @@ F.CreateBD(bankholder, .6)
 
 local purchase = F.CreateFS(bankholder, 8)
 purchase:SetPoint("BOTTOMLEFT", bankholder, "BOTTOMLEFT", 4, 4)
-purchase:SetText("New bag slot? Type /freeui purchase.")
+purchase:SetText("Buy slots: /freeui purchase")
 
 local ReanchorBankButtons = function()
 	table.wipe(bankbuttons)
