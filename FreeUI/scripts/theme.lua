@@ -5767,6 +5767,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				local frame = scrollChild["abilityButton"..index]
 				local _, icon = GetSpellTexture(bonuses[i])
 				frame.icon:SetTexture(icon)
+				frame.subText:SetTextColor(.75, .75, .75)
 				if not frame.reskinned then
 					frame.reskinned = true
 					frame.ring:Hide()
