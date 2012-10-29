@@ -148,6 +148,12 @@ C["selfbuffs"] = {
 			},
 		},
 		{
+			1459, -- Arcane Brilliance
+			61316, -- Dalaran Brilliance
+			116781, -- Legacy of the White Tiger
+			17007, -- Leader of the Pack
+		},
+		{
 			{
 				7302, -- Frost Armor
 				6117, -- Mage Armor
@@ -164,8 +170,9 @@ C["selfbuffs"] = {
 			},
 			{
 				116781, -- Legacy of the White Tiger
-				19740, -- Blessing of Might
-				116956, -- Grace of Air
+				1459, -- Arcane Brilliance
+				61316, -- Dalaran Brilliance
+				17007, -- Leader of the Pack
 			},
 		},
 	},
@@ -178,7 +185,6 @@ C["selfbuffs"] = {
 			},
 			{
 				19740, -- Blessing of Might
-				116781, -- Legacy of the White Tiger
 				116956, -- Grace of Air
 			},
 		}
@@ -194,7 +200,6 @@ C["selfbuffs"] = {
 			{
 				21562, -- Power Word: Fortitude
 				469, -- Commanding Shout
-				103127, -- Imp: Blood Pact
 			},
 		},
 	},
@@ -234,7 +239,6 @@ C["selfbuffs"] = {
 			{
 				469, -- Commanding Shout
 				21562, -- Power Word: Fortitude
-				103127, -- Imp: Blood Pact
 			},
 		},
 	}
