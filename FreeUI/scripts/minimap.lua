@@ -1,7 +1,12 @@
 local F, C, L = unpack(select(2, ...))
 
+Minimap:ClearAllPoints()
+Minimap:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 50)
 Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
+F.CreateBG(Minimap)
+
 Minimap:EnableMouseWheel(true)
+MinimapCluster:EnableMouse(false)
 Minimap:SetScript("OnMouseWheel", function(_, zoom)
 	if zoom > 0 then
 		Minimap_ZoomIn()
@@ -18,11 +23,6 @@ Minimap:SetScript("OnMouseUp", function(self, button)
 	end
 end)
 
-MinimapCluster:EnableMouse(false)
-
-local bg = Minimap:CreateTexture(nil, "BACKGROUND")
-bg:SetTexture(0, 0, 0)
-
 local mail = CreateFrame("Frame", "FreeUIMailFrame", Minimap)
 mail:Hide()
 mail:RegisterEvent("UPDATE_PENDING_MAIL")
@@ -36,6 +36,7 @@ end)
 
 local mt = F.CreateFS(mail, 8)
 mt:SetText("Mail")
+mt:SetPoint("BOTTOM", Minimap, 0, 6)
 
 MiniMapMailFrame:SetAlpha(0)
 MiniMapMailFrame:SetSize(22, 10)
@@ -59,6 +60,7 @@ MinimapZoneTextButton:SetFrameStrata("HIGH")
 MinimapZoneTextButton:EnableMouse(false)
 MinimapZoneTextButton:SetAlpha(0)
 MinimapZoneText:SetPoint("CENTER", MinimapZoneTextButton)
+MinimapZoneText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 MinimapZoneText:SetShadowColor(0, 0, 0, 0)
 MinimapZoneText:SetJustifyH("CENTER")
 
@@ -95,6 +97,7 @@ Minimap:SetQuestBlobRingScalar(0)
 GuildInstanceDifficulty:SetAlpha(0)
 
 GameTimeFrame:ClearAllPoints()
+GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -1, -1)
 GameTimeFrame:SetSize(16, 16)
 GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 GameTimeFrame:SetNormalTexture("")
@@ -102,6 +105,7 @@ GameTimeFrame:SetPushedTexture("")
 GameTimeFrame:SetHighlightTexture("")
 
 local _, _, _, _, dateText = GameTimeFrame:GetRegions()
+dateText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 dateText:SetTextColor(1, 1, 1)
 dateText:SetPoint("CENTER")
 
@@ -117,6 +121,7 @@ TicketStatusFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -49, 0)
 
 local rd = CreateFrame("Frame", nil, Minimap)
 rd:SetSize(24, 8)
+rd:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 5, -5)
 rd:RegisterEvent("PLAYER_ENTERING_WORLD")
 rd:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
 rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
@@ -160,6 +165,7 @@ end)
 
 HelpOpenTicketButton:SetParent(Minimap)
 HelpOpenTicketButton:ClearAllPoints()
+HelpOpenTicketButton:SetPoint("TOP", Minimap, "TOP", 0, 7)
 
 HelpOpenTicketButtonTutorial:Hide()
 HelpOpenTicketButtonTutorial.Show = F.dummy
@@ -171,32 +177,3 @@ HelpOpenTicketButton:SetPushedTexture("")
 local gmtext = F.CreateFS(HelpOpenTicketButton, 8)
 gmtext:SetPoint("CENTER")
 gmtext:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
-
-F.RegisterEvent("PLAYER_LOGIN", function()
-	local scale
-
-	if C.resolution == 3 then
-		scale = 1
-	else
-		scale = .9
-	end
-
-	local fontSize = 8 / scale
-
-	Minimap:ClearAllPoints()
-	Minimap:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50 / scale, 50 / scale)
-	MinimapCluster:SetScale(scale)
-	bg:SetPoint("TOPLEFT", Minimap, -1 / scale, 1 / scale)
-	bg:SetPoint("BOTTOMRIGHT", Minimap, 1 / scale, -1 / scale)
-	mt:SetPoint("BOTTOM", Minimap, 0, 6 / scale)
-	mt:SetFont(C.media.font, fontSize, "OUTLINEMONOCHROME")
-	MinimapZoneText:SetFont(C.media.font, fontSize, "OUTLINEMONOCHROME")
-	GameTimeFrame:ClearAllPoints()
-	GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -1 / scale, -1 / scale)
-	dateText:SetFont(C.media.font, fontSize, "OUTLINEMONOCHROME")
-	rd:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 5 / scale, -5 / scale)
-	rdt:SetFont(C.media.font, fontSize, "OUTLINEMONOCHROME")
-	HelpOpenTicketButton:ClearAllPoints()
-	HelpOpenTicketButton:SetPoint("TOP", Minimap, "TOP", 0, 7 / scale)
-	gmtext:SetFont(C.media.font, fontSize, "OUTLINEMONOCHROME")
-end)
