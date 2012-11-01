@@ -2648,6 +2648,21 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(CinematicFrameCloseDialogConfirmButton)
 		F.Reskin(CinematicFrameCloseDialogResumeButton)
 
+		-- Bonus roll
+
+		BonusRollFrame.Background:SetAlpha(0)
+		BonusRollFrame.IconBorder:Hide()
+		BonusRollFrame.BlackBackgroundHoist.Background:Hide()
+
+		BonusRollFrame.PromptFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(BonusRollFrame.PromptFrame.Icon)
+
+		BonusRollFrame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
+		BonusRollFrame.PromptFrame.Timer.Bar:SetGradient("VERTICAL", 1, 1, 0, .7, .7, 0)
+
+		F.CreateBD(BonusRollFrame)
+		F.CreateBDFrame(BonusRollFrame.PromptFrame.Timer, .25)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "PVPTeamManagementFrame", "PVPTeamManagementFrameHeader1", "PVPTeamManagementFrameHeader2", "PVPTeamManagementFrameHeader3", "PVPTeamManagementFrameHeader4", "PVPBannerFrame", "PVPBannerFrameInset", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
