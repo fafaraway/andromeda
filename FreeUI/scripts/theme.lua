@@ -5640,6 +5640,34 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu.icon:SetTexCoord(.08, .92, .08, .92)
 			F.CreateBG(bu.icon)
 		end
+
+		local function ColourPetQuality()
+			local petButtons = PetJournal.listScroll.buttons
+			if petButtons then
+				for i = 1, #petButtons do
+					local index = petButtons[i].index
+					if index then
+						local petID = C_PetJournal.GetPetInfoByIndex(index)
+
+						if petID then
+							local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID)
+							local text = petButtons[i].name
+
+							if rarity then
+								local color = ITEM_QUALITY_COLORS[rarity-1]
+								text:SetTextColor(color.r, color.g, color.b)
+							else
+								text:SetTextColor(1, 1, 1)
+							end
+						end
+					end
+				end
+			end
+		end
+
+		hooksecurefunc("PetJournal_UpdatePetList", ColourPetQuality)
+		PetJournalListScrollFrame:HookScript("OnVerticalScroll", ColourPetQuality)
+		PetJournalListScrollFrame:HookScript("OnMouseWheel", ColourPetQuality)
 	elseif addon == "Blizzard_ReforgingUI" then
 		for i = 15, 25 do
 			select(i, ReforgingFrame:GetRegions()):Hide()
