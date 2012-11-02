@@ -2014,7 +2014,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Money won alert
 
-		hooksecurefunc("MoneyWonAlertFrame_ShowAlert", function()
+		hooksecurefunc("MoneyWonAlertFrame_SetUp", function()
 			for i = 1, #MONEY_WON_ALERT_FRAMES do
 				local frame = MONEY_WON_ALERT_FRAMES[i]
 				if not frame.bg then
@@ -2642,7 +2642,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Cinematic popup
 
-		CinematicFrameCloseDialog:SetScale(UIParent:GetScale())
+		CinematicFrameCloseDialog:HookScript("OnShow", function(self)
+			self:SetScale(UIParent:GetScale())
+		end)
 		F.CreateBD(CinematicFrameCloseDialog)
 		F.CreateSD(CinematicFrameCloseDialog)
 		F.Reskin(CinematicFrameCloseDialogConfirmButton)
