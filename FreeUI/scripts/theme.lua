@@ -1478,6 +1478,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		QuestLogFrameShowMapButton.text:SetPoint("CENTER", 1, 0)
 		F.Reskin(QuestLogFrameShowMapButton)
 
+		local line = QuestFrameGreetingPanel:CreateTexture()
+		line:SetTexture(1, 1, 1, .2)
+		line:SetSize(256, 1)
+		line:SetPoint("CENTER", QuestGreetingFrameHorizontalBreak)
+
+		QuestGreetingFrameHorizontalBreak:SetTexture("")
+
+		QuestFrameGreetingPanel:HookScript("OnShow", function()
+			line:SetShown(QuestGreetingFrameHorizontalBreak:IsShown())
+		end)
+
 		local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
 		npcbd:SetPoint("TOPLEFT", 0, 1)
 		npcbd:SetPoint("RIGHT", 1, 0)
