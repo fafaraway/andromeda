@@ -531,3 +531,19 @@ F.CreateBDFrame = function(f, a)
 
 	return bg
 end
+
+F.ReskinColourSwatch = function(f)
+	local name = f:GetName()
+
+	local bg = _G[name.."SwatchBg"]
+
+	f:SetNormalTexture(C.media.backdrop)
+	local nt = f:GetNormalTexture()
+
+	nt:SetPoint("TOPLEFT", 3, -3)
+	nt:SetPoint("BOTTOMRIGHT", -3, 3)
+
+	bg:SetTexture(0, 0, 0)
+	bg:SetPoint("TOPLEFT", 2, -2)
+	bg:SetPoint("BOTTOMRIGHT", -2, 2)
+end
