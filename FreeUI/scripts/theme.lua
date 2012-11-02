@@ -4001,6 +4001,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					select(3, bu:GetRegions()):Hide()
 
 					bu.Item:SetNormalTexture("")
+					bu.Item:SetPushedTexture("")
 					F.CreateBG(bu.Item)
 
 					local bg = CreateFrame("Frame", nil, bu)
@@ -4023,6 +4024,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					hl:SetPoint("BOTTOMRIGHT", -1, 6)
 
 					bu.reskinned = true
+				end
+
+				if bu:IsShown() then
+					local _, _, quality = GetItemInfo(bu.itemLink)
+					bu.Name:SetTextColor(GetItemQualityColor(quality))
 				end
 			end
 		end)
