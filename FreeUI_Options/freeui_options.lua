@@ -5,6 +5,7 @@ local _, ns = ...
 
 ns.categories = {}
 ns.buttons = {}
+ns.protectOptions = {}
 
 local checkboxes = {}
 local sliders = {}
@@ -353,5 +354,22 @@ init:SetScript("OnEvent", function()
 	for _, setting in pairs(ns.classOptions) do
 		local colour = C.classcolours[strupper(setting.option)]
 		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
+	end
+end)
+
+local protect = CreateFrame("Frame")
+protect:RegisterEvent("PLAYER_REGEN_ENABLED")
+protect:RegisterEvent("PLAYER_REGEN_DISABLED")
+protect:SetScript("OnEvent", function(self, event)
+	if event == "PLAYER_REGEN_ENABLED" then
+		for _, option in next, ns.protectOptions do
+			option.Text:SetTextColor(1, 1, 1)
+			option:Enable()
+		end
+	else
+		for _, option in next, ns.protectOptions do
+			option.Text:SetTextColor(.5, .5, .5)
+			option:Disable()
+		end
 	end
 end)

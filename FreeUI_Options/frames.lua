@@ -250,6 +250,7 @@ enableGroup:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
 local limitRaidSize = ns.CreateCheckBox(unitframes, "limitRaidSize", true)
 limitRaidSize:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
+tinsert(ns.protectOptions, limitRaidSize)
 
 local healerClasscolours = ns.CreateCheckBox(unitframes, "healerClasscolours", true)
 healerClasscolours:SetPoint("TOPLEFT", limitRaidSize, "BOTTOMLEFT", 0, -8)
@@ -275,7 +276,7 @@ castbarSeparate.children = {castbarSeparateOnlyCasters}
 
 local reloadText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 reloadText:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -128)
-reloadText:SetText(ns.localization.needReload)
+reloadText:SetText(ns.localization.noReloadException)
 
 local line = unitframes:CreateTexture(nil, "ARTWORK")
 line:SetSize(450, 1)
