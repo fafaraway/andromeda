@@ -1,5 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
+local r, g, b = unpack(C.class)
+
 Minimap:ClearAllPoints()
 Minimap:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -50, 50)
 Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
@@ -112,9 +114,64 @@ dateText:SetPoint("CENTER")
 QueueStatusMinimapButtonBorder:SetAlpha(0)
 QueueStatusMinimapButton:ClearAllPoints()
 QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", Minimap)
+QueueStatusMinimapButton:SetHighlightTexture("")
+QueueStatusMinimapButton.Eye.texture:SetTexture("")
 
 QueueStatusFrame:ClearAllPoints()
 QueueStatusFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4.5, -1.5)
+
+local dots = {}
+for i = 1, 8 do
+	dots[i] = F.CreateFS(QueueStatusMinimapButton, 16)
+	dots[i]:SetText(".")
+end
+dots[1]:SetPoint("TOP", 2, 3)
+dots[2]:SetPoint("TOPRIGHT", -6, 0)
+dots[3]:SetPoint("RIGHT", -3, 3)
+dots[4]:SetPoint("BOTTOMRIGHT", -6, 5)
+dots[5]:SetPoint("BOTTOM", 2, 2)
+dots[6]:SetPoint("BOTTOMLEFT", 9, 5)
+dots[7]:SetPoint("LEFT", 6, 3)
+dots[8]:SetPoint("TOPLEFT", 9, 0)
+
+local counter = 0
+local last = 0
+
+local function onUpdate(self, elapsed)
+	last = last + elapsed
+	if last >= .1 then
+		counter = counter + 1
+		dots[counter]:SetShown(not dots[counter]:IsShown())
+
+		if counter == 8 then counter = 0 end
+
+		last = 0
+	end
+end
+
+hooksecurefunc("EyeTemplate_StartAnimating", function(eye)
+	QueueStatusMinimapButton:SetScript("OnUpdate", onUpdate)
+end)
+
+hooksecurefunc("EyeTemplate_StopAnimating", function(eye)
+	for i = 1, 8 do
+		dots[i]:Show()
+	end
+	counter = 0
+	last = 0
+end)
+
+QueueStatusMinimapButton:HookScript("OnEnter", function()
+	for i = 1, 8 do
+		dots[i]:SetTextColor(r, g, b)
+	end
+end)
+
+QueueStatusMinimapButton:HookScript("OnLeave", function()
+	for i = 1, 8 do
+		dots[i]:SetTextColor(1, 1, 1)
+	end
+end)
 
 TicketStatusFrame:ClearAllPoints()
 TicketStatusFrame:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -49, 0)
