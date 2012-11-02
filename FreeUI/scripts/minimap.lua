@@ -136,21 +136,28 @@ dots[8]:SetPoint("TOPLEFT", 9, 0)
 
 local counter = 0
 local last = 0
+local interval = .06
+local diff = .014
 
 local function onUpdate(self, elapsed)
 	last = last + elapsed
-	if last >= .1 then
+	if last >= interval then
 		counter = counter + 1
+
 		dots[counter]:SetShown(not dots[counter]:IsShown())
 
-		if counter == 8 then counter = 0 end
+		if counter == 8 then
+			counter = 0
+			diff = diff * -1
+		end
 
+		interval = interval + diff
 		last = 0
 	end
 end
 
 hooksecurefunc("EyeTemplate_StartAnimating", function(eye)
-	QueueStatusMinimapButton:SetScript("OnUpdate", onUpdate)
+	eye:SetScript("OnUpdate", onUpdate)
 end)
 
 hooksecurefunc("EyeTemplate_StopAnimating", function(eye)
@@ -159,6 +166,8 @@ hooksecurefunc("EyeTemplate_StopAnimating", function(eye)
 	end
 	counter = 0
 	last = 0
+	interval = .06
+	diff = .014
 end)
 
 QueueStatusMinimapButton:HookScript("OnEnter", function()
