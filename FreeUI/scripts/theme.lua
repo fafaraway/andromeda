@@ -3240,6 +3240,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			if bu and it then
 				it:SetNormalTexture("")
+				it:SetPushedTexture("")
+
 				ic:SetTexCoord(.08, .92, .08, .92)
 
 				F.CreateBG(it)
@@ -3269,6 +3271,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local ic = _G["BidButton"..i.."ItemIconTexture"]
 
 			it:SetNormalTexture("")
+			it:SetPushedTexture("")
+
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			F.CreateBG(it)
@@ -3297,6 +3301,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local ic = _G["AuctionsButton"..i.."ItemIconTexture"]
 
 			it:SetNormalTexture("")
+			it:SetPushedTexture("")
+
 			ic:SetTexCoord(.08, .92, .08, .92)
 
 			F.CreateBG(it)
