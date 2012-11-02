@@ -1728,13 +1728,13 @@ oUF:Factory(function(self)
 		raid:SetAttribute("groupFilter", "1,2,3,4,5")
 	end
 
-	--[[F.AddOptionsCallback("unitframes", "limitRaidSize", function()
+	F.AddOptionsCallback("unitframes", "limitRaidSize", function()
 		if C.unitframes.limitRaidSize then
 			raid:SetAttribute("groupFilter", "1,2,3,4,5")
 		else
 			raid:SetAttribute("groupFilter", "1,2,3,4,5,6,7,8")
 		end
-	end)]]
+	end)
 
 	local raidToParty = CreateFrame("Frame")
 	raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
