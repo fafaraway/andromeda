@@ -1,5 +1,7 @@
 local F, C = unpack(FreeUI)
 
+if not IsAddOnLoaded("Blizzard_CompactRaidFrames") then return end
+
 local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 
 wm:SetParent("UIParent")

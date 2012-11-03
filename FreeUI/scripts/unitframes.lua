@@ -268,8 +268,10 @@ end
 
 --[[ Hide Blizz frames ]]
 
-CompactRaidFrameManager:SetParent(FreeUIHider)
-CompactUnitFrameProfiles:UnregisterAllEvents()
+if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
+	CompactRaidFrameManager:SetParent(FreeUIHider)
+	CompactUnitFrameProfiles:UnregisterAllEvents()
+end
 
 for i = 1, MAX_PARTY_MEMBERS do
 	local pet = "PartyMemberFrame"..i.."PetFrame"
