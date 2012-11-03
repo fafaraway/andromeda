@@ -131,9 +131,9 @@ end)
 ns.addCategory("General")
 ns.addCategory("Automation")
 ns.addCategory("ActionBars")
+ns.addCategory("Notifications")
 ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
-ns.addCategory("Performance")
 ns.addCategory("Credits")
 
 -- [[ General ]]
@@ -237,6 +237,35 @@ local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
 hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -66)
 
 enableStyle.children = {hotKey}
+
+-- [[ Notifications ]]
+
+local notifications = FreeUIOptionsPanel.notifications
+
+local enable = ns.CreateCheckBox(notifications, "enable", true)
+enable:SetPoint("TOPLEFT", notifications.subText, "BOTTOMLEFT", 0, -8)
+
+local checkMail = ns.CreateCheckBox(notifications, "checkMail", true)
+checkMail:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+
+local checkEvents = ns.CreateCheckBox(notifications, "checkEvents", true)
+checkEvents:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", 0, -8)
+
+local checkGuildEvents = ns.CreateCheckBox(notifications, "checkGuildEvents", true)
+checkGuildEvents:SetPoint("TOPLEFT", checkEvents, "BOTTOMLEFT", 0, -8)
+
+local playSounds = ns.CreateCheckBox(notifications, "playSounds", true)
+playSounds:SetPoint("LEFT", enable, "RIGHT", 240, 0)
+
+local animations = ns.CreateCheckBox(notifications, "animations", true)
+animations:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
+
+local timeShown = ns.CreateNumberSlider(notifications, "timeShown", "1 sec", "10 sec", 1, 10, 1)
+timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 18, -30)
+
+local reloadText = notifications:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("TOPLEFT", checkGuildEvents, "BOTTOMLEFT", 0, -18)
+reloadText:SetText(ns.localization.reloadException)
 
 -- [[ Unit frames ]]
 
@@ -345,22 +374,6 @@ tinsert(ns.classOptions, warlock)
 local reloadText = classmod:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 reloadText:SetPoint("TOPLEFT", warlock, "BOTTOMLEFT", 0, -18)
 reloadText:SetText(ns.localization.needReload)
-
--- [[ Performance ]]
-
-local performance = FreeUIOptionsPanel.performance
-
-local mapCoords = ns.CreateNumberSlider(performance, "mapcoords", "0.025 sec", "0.5 sec", 0.025, 0.5, 0.025)
-mapCoords:SetPoint("TOPLEFT", performance.subText, "BOTTOMLEFT", 18, -24)
-
-local namePlates = ns.CreateNumberSlider(performance, "nameplates", "0.025 sec", "0.5 sec", 0.025, 0.5, 0.025)
-namePlates:SetPoint("TOPLEFT", mapCoords, "BOTTOMLEFT", 0, -30)
-
-local nameThreat = ns.CreateNumberSlider(performance, "namethreat", "0.025 sec", "0.5 sec", 0.025, 0.5, 0.025)
-nameThreat:SetPoint("TOPLEFT", namePlates, "BOTTOMLEFT", 0, -30)
-
-local tolBaradTimer = ns.CreateNumberSlider(performance, "tolbarad", "1 sec", "30 sec", 1, 30, 1)
-tolBaradTimer:SetPoint("TOPLEFT", nameThreat, "BOTTOMLEFT", 0, -30)
 
 -- [[ Credits ]]
 

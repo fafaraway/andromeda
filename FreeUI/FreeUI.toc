@@ -16,6 +16,7 @@ profiles.lua
 core\api.lua
 core\gui.lua
 core\slash.lua
+core\notifications.lua
 
 oUF\oUF.xml
 

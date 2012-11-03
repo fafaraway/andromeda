@@ -36,6 +36,18 @@ C["actionbars"] = {
 	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
 }
 
+C["notifications"] = {
+	["enable"] = true,
+
+	["playSounds"] = true,
+	["animations"] = true,
+	["timeShown"] = 5,
+
+	["checkMail"] = true,
+	["checkEvents"] = true,
+	["checkGuildEvents"] = true,
+}
+
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 	["enableGroup"] = true,					-- enable party/raid frames
