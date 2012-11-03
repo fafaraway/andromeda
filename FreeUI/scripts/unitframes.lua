@@ -916,7 +916,7 @@ local UnitSpecific = {
 
 			self.Harmony = glow
 			glow.Override = UpdateOrbs
-		elseif class == "PALADIN" and C.classmod.paladin then
+		elseif class == "PALADIN" and C.classmod.paladinHP then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
 

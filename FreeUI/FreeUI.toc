@@ -69,4 +69,5 @@ scripts\watchframe.lua
 scripts\worldmarker.lua
 scripts\worldstateframe.lua
 
+class\paladin.lua
 class\shaman.lua

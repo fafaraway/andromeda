@@ -324,12 +324,14 @@ local monk = ns.CreateCheckBox(classmod, "monk")
 monk:SetPoint("TOPLEFT", druid, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, monk)
 
-local paladin = ns.CreateCheckBox(classmod, "paladin")
-paladin:SetPoint("TOPLEFT", monk, "BOTTOMLEFT", 0, -8)
-tinsert(ns.classOptions, paladin)
+local paladinHP = ns.CreateCheckBox(classmod, "paladinHP")
+paladinHP:SetPoint("TOPLEFT", monk, "BOTTOMLEFT", 0, -8)
+
+local paladinRF = ns.CreateCheckBox(classmod, "paladinRF")
+paladinRF:SetPoint("TOPLEFT", paladinHP, "BOTTOMLEFT", 0, -8)
 
 local priest = ns.CreateCheckBox(classmod, "priest")
-priest:SetPoint("TOPLEFT", paladin, "BOTTOMLEFT", 0, -8)
+priest:SetPoint("TOPLEFT", paladinRF, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, priest)
 
 local shaman = ns.CreateCheckBox(classmod, "shaman")

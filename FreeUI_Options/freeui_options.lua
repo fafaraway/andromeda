@@ -355,6 +355,10 @@ init:SetScript("OnEvent", function()
 		local colour = C.classcolours[strupper(setting.option)]
 		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
 	end
+
+	local colour = C.classcolours["PALADIN"]
+	FreeUIOptionsPanel.classmod.paladinHP.Text:SetTextColor(colour.r, colour.g, colour.b)
+	FreeUIOptionsPanel.classmod.paladinRF.Text:SetTextColor(colour.r, colour.g, colour.b)
 end)
 
 local protect = CreateFrame("Frame")
