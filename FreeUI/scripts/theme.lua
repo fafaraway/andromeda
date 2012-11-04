@@ -4032,6 +4032,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end)
+
+		hooksecurefunc("BlackMarketFrame_UpdateHotItem", function(self)
+			local hotDeal = self.HotDeal
+			if hotDeal:IsShown() and hotDeal.itemLink then
+				local _, _, quality = GetItemInfo(hotDeal.itemLink)
+				hotDeal.Name:SetTextColor(GetItemQualityColor(quality))
+			end
+		end)
 	elseif addon == "Blizzard_Calendar" then
 		CalendarFrame:DisableDrawLayer("BORDER")
 
