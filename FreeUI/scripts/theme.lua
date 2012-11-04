@@ -4026,7 +4026,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					bu.reskinned = true
 				end
 
-				if bu:IsShown() then
+				if bu:IsShown() and bu.itemLink then
 					local _, _, quality = GetItemInfo(bu.itemLink)
 					bu.Name:SetTextColor(GetItemQualityColor(quality))
 				end
