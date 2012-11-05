@@ -1078,6 +1078,41 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					if extendedCost and (price <= 0) then
 						_G["MerchantItem"..i.."AltCurrencyFrame"]:SetPoint("BOTTOMLEFT", "MerchantItem"..i.."NameFrame", "BOTTOMLEFT", 0, 35)
 					end
+
+					local bu = _G["MerchantItem"..i.."ItemButton"]
+					local name = _G["MerchantItem"..i.."Name"]
+					if bu.link then
+						local _, _, quality = GetItemInfo(bu.link)
+						local r, g, b = GetItemQualityColor(quality)
+
+						name:SetTextColor(r, g, b)
+					else
+						name:SetTextColor(1, 1, 1)
+					end
+				end
+			end
+
+			local name = GetBuybackItemLink(GetNumBuybackItems())
+			if name then
+				local _, _, quality = GetItemInfo(name)
+				local r, g, b = GetItemQualityColor(quality)
+
+				MerchantBuyBackItemName:SetTextColor(r, g, b)
+			end
+		end)
+
+		hooksecurefunc("MerchantFrame_UpdateBuybackInfo", function()
+			for i = 1, BUYBACK_ITEMS_PER_PAGE do
+				local itemLink = GetBuybackItemLink(i)
+				local name = _G["MerchantItem"..i.."Name"]
+
+				if itemLink then
+					local _, _, quality = GetItemInfo(itemLink)
+					local r, g, b = GetItemQualityColor(quality)
+
+					name:SetTextColor(r, g, b)
+				else
+					name:SetTextColor(1, 1, 1)
 				end
 			end
 		end)
