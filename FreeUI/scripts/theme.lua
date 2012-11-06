@@ -2065,28 +2065,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Money won alert
 
-		hooksecurefunc("MoneyWonAlertFrame_SetUp", function()
-			for i = 1, #MONEY_WON_ALERT_FRAMES do
-				local frame = MONEY_WON_ALERT_FRAMES[i]
-				if not frame.bg then
-					frame.bg = CreateFrame("Frame", nil, UIParent)
-					frame.bg:SetPoint("TOPLEFT", frame, 10, -10)
-					frame.bg:SetPoint("BOTTOMRIGHT", frame, -10, 10)
-					frame.bg:SetFrameStrata("DIALOG")
-					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
-					frame.bg:SetShown(frame:IsShown())
-					F.CreateBD(frame.bg)
+		hooksecurefunc("MoneyWonAlertFrame_SetUp", function(frame)
+			if not frame.bg then
+				frame.bg = CreateFrame("Frame", nil, UIParent)
+				frame.bg:SetPoint("TOPLEFT", frame, 10, -10)
+				frame.bg:SetPoint("BOTTOMRIGHT", frame, -10, 10)
+				frame.bg:SetFrameStrata("DIALOG")
+				frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
+				frame.bg:SetShown(frame:IsShown())
+				F.CreateBD(frame.bg)
 
-					frame:HookScript("OnShow", showHideBg)
-					frame:HookScript("OnHide", showHideBg)
-					frame:HookScript("OnUpdate", onUpdate)
+				frame:HookScript("OnShow", showHideBg)
+				frame:HookScript("OnHide", showHideBg)
+				frame:HookScript("OnUpdate", onUpdate)
 
-					frame.Background:Hide()
-					frame.IconBorder:Hide()
+				frame.Background:Hide()
+				frame.IconBorder:Hide()
 
-					frame.Icon:SetTexCoord(.08, .92, .08, .92)
-					F.CreateBG(frame.Icon)
-				end
+				frame.Icon:SetTexCoord(.08, .92, .08, .92)
+				F.CreateBG(frame.Icon)
 			end
 		end)
 
