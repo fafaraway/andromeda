@@ -3250,10 +3250,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		if C.general.undressButton == true then
-			F.Reskin(DressUpFrameUndressButton)
-		end
-
 		F.Reskin(select(6, PVPBannerFrame:GetChildren()))
 
 		for i = 1, NUM_CHAT_WINDOWS do

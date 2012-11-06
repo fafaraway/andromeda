@@ -146,4 +146,15 @@ if C.general.undressButton == true then
 	undress:SetScript("OnClick", function()
 		DressUpModel:Undress()
 	end)
+
+	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
+	sideUndress:SetSize(80, 22)
+	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
+	sideUndress:SetText("Undress")
+	sideUndress:SetScript("OnClick", function()
+		SideDressUpModel:Undress()
+	end)
+
+	F.Reskin(undress)
+	F.Reskin(sideUndress)
 end
