@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+if not C.general.combatText then return end
+
 local frames = {}
 
 for i = 1, 2 do
@@ -70,3 +72,8 @@ end)
 CombatText:SetScript("OnUpdate", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:UnregisterAllEvents()
+
+InterfaceOptionsCombatTextPanelEnableFCT:Disable()
+InterfaceOptionsCombatTextPanelEnableFCTText:SetTextColor(.5, .5, .5)
+
+SetCVar("enableCombatText", 0)

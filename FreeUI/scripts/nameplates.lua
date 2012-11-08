@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+if not C.general.nameplates then return end
+
 local caelNamePlates = CreateFrame("Frame", nil, UIParent)
 caelNamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 

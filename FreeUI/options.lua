@@ -8,9 +8,11 @@ C["general"] = {
 	["bags_size"] = 37,				-- change the size of the bags/bank, default = 37
 	["buffreminder"] = true, 		-- reminder for selfbuffs
 	["buffTracker"] = true, 		-- track important buffs for some classes (scroll down to buffTracker table to configure)
+	["combatText"] = true, 			-- show incoming damage and healing near player frame
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
 	["interrupt"] = false,			-- announce your interrupts
 	["mailButton"] = true, 			-- adds a button to the mail frame to collect all attachments
+	["nameplates"] = true, 			-- enable nameplates
 	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
 	["tolbarad"] = false,			-- Tol barad timer on the minimap
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor

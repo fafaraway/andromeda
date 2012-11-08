@@ -5,9 +5,6 @@ InterfaceOptionsFrameCategoriesButton11:SetParent(FreeUIHider)
 
 InterfaceOptionsFrameCategoriesButton12:SetPoint("TOPLEFT", InterfaceOptionsFrameCategoriesButton9, "BOTTOMLEFT")
 
-InterfaceOptionsCombatTextPanelEnableFCT:Disable()
-InterfaceOptionsCombatTextPanelEnableFCTText:SetTextColor(.5, .5, .5)
-
 InterfaceOptionsBuffsPanelDispellableDebuffs:Disable()
 InterfaceOptionsBuffsPanelDispellableDebuffsText:SetTextColor(.5, .5, .5)
 InterfaceOptionsBuffsPanelCastableBuffs:Disable()

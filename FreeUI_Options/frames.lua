@@ -146,8 +146,11 @@ buffReminder:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
 local buffTracker = ns.CreateCheckBox(general, "buffTracker", true)
 buffTracker:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
 
+local combatText = ns.CreateCheckBox(general, "combatText", true)
+combatText:SetPoint("TOPLEFT", buffTracker, "BOTTOMLEFT", 0, -8)
+
 local interrupt = ns.CreateCheckBox(general, "interrupt", true)
-interrupt:SetPoint("TOPLEFT", buffTracker, "BOTTOMLEFT", 0, -8)
+interrupt:SetPoint("TOPLEFT", combatText, "BOTTOMLEFT", 0, -8)
 
 local threatMeter = ns.CreateCheckBox(general, "threatMeter", true)
 threatMeter:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
@@ -158,8 +161,11 @@ helmCloak:SetPoint("LEFT", buffReminder, "RIGHT", 240, 0)
 local mailButton = ns.CreateCheckBox(general, "mailButton", true)
 mailButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
 
+local nameplates = ns.CreateCheckBox(general, "nameplates", true)
+nameplates:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
+
 local tolBarad = ns.CreateCheckBox(general, "tolbarad", true)
-tolBarad:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
+tolBarad:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
 
 local undressButton = ns.CreateCheckBox(general, "undressButton", true)
 undressButton:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -8)

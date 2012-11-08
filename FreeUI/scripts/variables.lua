@@ -35,5 +35,3 @@ end
 
 F.RegisterEvent("PLAYER_MONEY", updateMoney)
 F.RegisterEvent("PLAYER_ENTERING_WORLD", updateMoney)
-
-SetCVar("enableCombatText", 0)
