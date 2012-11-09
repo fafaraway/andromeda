@@ -1822,16 +1822,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- DBM
 
 		if IsAddOnLoaded("DBM-Core") then
-			local first = true
+			local firstInfo = true
+			hooksecurefunc(DBM.InfoFrame, "Show", function()
+				if firstInfo then
+					F.CreateBD(DBMInfoFrame)
+					firstInfo = false
+				end
+			end)
+
+			local firstRange = true
 			hooksecurefunc(DBM.RangeCheck, "Show", function()
-				if first == true then
-					DBMRangeCheck:SetBackdrop(nil)
-					local bd = CreateFrame("Frame", nil, DBMRangeCheck)
-					bd:SetPoint("TOPLEFT")
-					bd:SetPoint("BOTTOMRIGHT")
-					bd:SetFrameLevel(DBMRangeCheck:GetFrameLevel()-1)
-					F.CreateBD(bd)
-					first = false
+				if firstRange then
+					F.CreateBD(DBMRangeCheck)
+					firstRange = false
 				end
 			end)
 		end
@@ -6594,16 +6597,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(VoidStorageBorderFrame:GetChildren(), nil)
 		F.ReskinInput(VoidItemSearchBox)
 	elseif addon == "DBM-Core" then
-		local first = true
+		local firstInfo = true
+		hooksecurefunc(DBM.InfoFrame, "Show", function()
+			if firstInfo then
+				F.CreateBD(DBMInfoFrame)
+				firstInfo = false
+			end
+		end)
+
+		local firstRange = true
 		hooksecurefunc(DBM.RangeCheck, "Show", function()
-			if first == true then
-				DBMRangeCheck:SetBackdrop(nil)
-				local bd = CreateFrame("Frame", nil, DBMRangeCheck)
-				bd:SetPoint("TOPLEFT")
-				bd:SetPoint("BOTTOMRIGHT")
-				bd:SetFrameLevel(DBMRangeCheck:GetFrameLevel()-1)
-				F.CreateBD(bd)
-				first = false
+			if firstRange then
+				F.CreateBD(DBMRangeCheck)
+				firstRange = false
 			end
 		end)
 	end
