@@ -163,10 +163,12 @@ C["selfbuffs"] = {
 			},
 		},
 		{
-			1459, -- Arcane Brilliance
-			61316, -- Dalaran Brilliance
-			116781, -- Legacy of the White Tiger
-			17007, -- Leader of the Pack
+			{
+				1459, -- Arcane Brilliance
+				61316, -- Dalaran Brilliance
+				116781, -- Legacy of the White Tiger
+				17007, -- Leader of the Pack
+			},
 		},
 		{
 			{
