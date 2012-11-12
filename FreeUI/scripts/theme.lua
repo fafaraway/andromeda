@@ -1410,6 +1410,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					_G["PaperDollEquipmentManagerPaneButton"..i.."BgMiddle"]:Hide()
 					_G["PaperDollEquipmentManagerPaneButton"..i.."BgBottom"]:SetAlpha(0)
 
+					bu.HighlightBar:SetTexture(r, g, b, .1)
+					bu.HighlightBar:SetDrawLayer("BACKGROUND")
+					bu.SelectedBar:SetTexture(r, g, b, .2)
+					bu.SelectedBar:SetDrawLayer("BACKGROUND")
+
 					bd:Hide()
 					bd.Show = F.dummy
 					ic:SetTexCoord(.08, .92, .08, .92)
