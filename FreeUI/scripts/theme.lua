@@ -6082,6 +6082,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.learnedTex:SetPoint("BOTTOMRIGHT", -1, 1)
 				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:Hide()
 				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"].Show = F.dummy
+				bu.animLearn.Play = F.dummy
 
 				F.Reskin(bu, true)
 
