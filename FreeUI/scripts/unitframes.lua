@@ -144,6 +144,34 @@ smoother:SetScript('OnUpdate', function()
 	end
 end)
 
+-- [[ Update resurrection/selection name colour ]]
+
+local updateNameColour = function(self, unit)
+	if UnitIsUnit(unit, "target") then
+		self.Text:SetTextColor(.1, .7, 1)
+	elseif UnitIsDead(unit) then
+		self.Text:SetTextColor(.6, .6, .6)
+	else
+		self.Text:SetTextColor(1, 1, 1)
+	end
+end
+
+-- to use on child frame
+local updateNameColourAlt = function(self)
+	local frame = self:GetParent()
+	if frame.unit then
+		if UnitIsUnit(frame.unit, "target") then
+			frame.Text:SetTextColor(.1, .7, 1)
+		elseif UnitIsDead(frame.unit) then
+			frame.Text:SetTextColor(.6, .6, .6)
+		else
+			frame.Text:SetTextColor(1, 1, 1)
+		end
+	else
+		frame.Text:SetTextColor(1, 1, 1)
+	end
+end
+
 --[[ Tags ]]
 
 oUF.Tags.Methods['free:health'] = function(unit)
@@ -232,7 +260,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 		if class then r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b else r, g, b = 1, 1, 1 end
 	elseif unit:find("boss%d") then
 		r, g, b = self.ColorGradient(min, max, unpack(self.colors.smooth))
-	elseif unit then
+	else
 		r, g, b = unpack(reaction)
 	end
 
@@ -257,6 +285,10 @@ local PostUpdateHealth = function(Health, unit, min, max)
 			self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
 		else
 			self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		end
+
+		if self.Text then
+			updateNameColour(self, unit)
 		end
 	else
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -298,6 +330,24 @@ local PostUpdatePower = function(Power, unit, min, max)
 	local Health = Power:GetParent().Health
 	if min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		Power:SetValue(0)
+	end
+end
+
+-- [[ Threat update (party) ]]
+
+local UpdateThreat = function(self, event, unit)
+	if(unit ~= self.unit) then return end
+
+	local threat = self.Threat
+
+	unit = unit or self.unit
+	local status = UnitThreatSituation(unit)
+
+	if(status and status > 0) then
+		local r, g, b = GetThreatStatusColor(status)
+		self.bd:SetBackdropBorderColor(r, g, b)
+	else
+		self.bd:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -1282,7 +1332,6 @@ local UnitSpecific = {
 		AltPowerBar.Text = F.CreateFS(AltPowerBar, 8, "CENTER")
 		AltPowerBar.Text:SetPoint("CENTER", self, "TOP", 0, 6)
 
-
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
 			local min, max = AltPowerBar:GetMinMaxValues()
 			local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
@@ -1450,17 +1499,9 @@ do
 			end
 		end
 
-		self.ResurrectIcon = CreateFrame("Frame", nil, self)
-
-		self.ResurrectIcon.Override = function()
-			local resurrect = self.ResurrectIcon
-
-			if UnitHasIncomingResurrection(self.unit) then
-				Text:SetTextColor(0, 1, 0)
-			else
-				Text:SetTextColor(1, 1, 1)
-			end
-		end
+		self.ResurrectIcon = self:CreateTexture(nil, "OVERLAY")
+		self.ResurrectIcon:SetSize(16, 16)
+		self.ResurrectIcon:SetPoint("CENTER")
 
 		self.RaidIcon:ClearAllPoints()
 		self.RaidIcon:SetPoint("CENTER", self, "CENTER")
@@ -1599,25 +1640,15 @@ do
 			end
 		end
 
-		local UpdateThreat = function(self, event, unit)
-			if(unit ~= self.unit) then return end
-
-			local threat = self.Threat
-
-			unit = unit or self.unit
-			local status = UnitThreatSituation(unit)
-
-			if(status and status > 0) then
-				local r, g, b = GetThreatStatusColor(status)
-				self.bd:SetBackdropBorderColor(r, g, b)
-			else
-				self.bd:SetBackdropBorderColor(0, 0, 0)
-			end
-		end
-
 		local Threat = CreateFrame("Frame", nil, self)
 		self.Threat = Threat
 		Threat.Override = UpdateThreat
+
+		if FreeUIConfig.layout == 2 then
+			local select = CreateFrame("Frame", nil, self)
+			select:RegisterEvent("PLAYER_TARGET_CHANGED")
+			select:SetScript("OnEvent", updateNameColourAlt)
+		end
 
 		self.Range = range
 	end
