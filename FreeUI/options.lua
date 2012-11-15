@@ -461,6 +461,7 @@ C["hideDebuffs"] = {
 	[92331] = true, -- Blind Spot (Jar of Ancient Remedies)
 	[71041] = true, -- Dungeon Deserter
 	[26218] = true, -- Mistletoe
+	[117870] = true, -- Touch of the Titans
 }
 
 if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end
