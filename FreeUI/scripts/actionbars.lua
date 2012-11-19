@@ -27,7 +27,7 @@ for i = 1, NUM_ACTIONBAR_BUTTONS do
 	end
 end
 
-RegisterStateDriver(bar1, "visibility", "[overridebar][vehicleui][petbattle] hide; show")
+RegisterStateDriver(bar1, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; show")
 
 --[[ Bottom Left bar ]]
 
@@ -50,7 +50,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar2, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
+RegisterStateDriver(bar2, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
 
 --[[ Bottom Right bar ]]
 
@@ -73,7 +73,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar3, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
+RegisterStateDriver(bar3, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
 
 bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
 bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
@@ -101,7 +101,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar4, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
+RegisterStateDriver(bar4, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
 
 --[[ Right bar 2 ]]
 
@@ -125,7 +125,7 @@ for i=1, 12 do
 	end
 end
 
-RegisterStateDriver(bar5, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
+RegisterStateDriver(bar5, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
 
 -- [[ Override bar ]]
 
@@ -161,8 +161,8 @@ for i = 1, numOverride do
 	end
 end
 
-RegisterStateDriver(override, "visibility", "[petbattle] hide; [overridebar][vehicleui] show; hide")
-RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui] show; hide")
+RegisterStateDriver(override, "visibility", "[petbattle] hide; [overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
+RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")
 
 -- [[ Hide stuff ]]
 
@@ -219,7 +219,7 @@ for i = 1, numpet do
 	cd:SetAllPoints(button)
 end
 
-RegisterStateDriver(petbar, "visibility", "[petbattle][overridebar][vehicleui] hide; [@pet,exists,nodead] show; hide")
+RegisterStateDriver(petbar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists,nodead] show; hide")
 
 --[[ Stance/possess bar]]
 
@@ -258,7 +258,7 @@ for i = 1, NUM_POSSESS_SLOTS do
 	end
 end
 
-RegisterStateDriver(stancebar, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
+RegisterStateDriver(stancebar, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
 
 --[[ Right bars on mouseover ]]
 
@@ -325,5 +325,5 @@ local text = F.CreateFS(leavebu, 8)
 text:SetText("x")
 text:SetPoint("CENTER", 1, 1)
 
-RegisterStateDriver(leavebu, "visibility", "[petbattle][overridebar][vehicleui] hide; [@vehicle,exists][possessbar] show; hide")
-RegisterStateDriver(leave, "visibility", "[vehicleui][overridebar][petbattle] hide; show")
+RegisterStateDriver(leavebu, "visibility", "[petbattle][vehicleui][overridebar] hide; [@vehicle,exists][possessbar] show; hide")
+RegisterStateDriver(leave, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
