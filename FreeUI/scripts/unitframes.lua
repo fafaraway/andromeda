@@ -1398,6 +1398,8 @@ local UnitSpecific = {
 	end,
 
 	arena = function(self, ...)
+		if not C.unitframes.enableArena then return end
+
 		Shared(self, ...)
 
 		local Health = self.Health
@@ -1702,8 +1704,10 @@ oUF:Factory(function(self)
 		spawnHelper(self,'boss' .. n, 'LEFT', 50, 0 - (56 * n))
 	end
 
-	for n = 1, 5 do
-		spawnHelper(self, 'arena' .. n, 'TOP', player, 'TOP', 0, 0 - (56 * n))
+	if C.unitframes.enableArena then
+		for n = 1, 5 do
+			spawnHelper(self, 'arena' .. n, 'TOP', player, 'TOP', 0, 0 - (56 * n))
+		end
 	end
 
 	if not C.unitframes.enableGroup then return end

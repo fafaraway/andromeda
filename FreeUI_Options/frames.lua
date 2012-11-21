@@ -309,8 +309,11 @@ castbarSeparateOnlyCasters:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 16
 
 castbarSeparate.children = {castbarSeparateOnlyCasters}
 
+local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true)
+enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
+
 local reloadText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -128)
+reloadText:SetPoint("TOPLEFT", enableArena, "BOTTOMLEFT", 0, -18)
 reloadText:SetText(ns.localization.noReloadException)
 
 local line = unitframes:CreateTexture(nil, "ARTWORK")
@@ -319,7 +322,7 @@ line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
 line:SetTexture(1, 1, 1, .2)
 
 unitframes.Layout = CreateFrame("Button", nil, unitframes, "UIPanelButtonTemplate")
-unitframes.Layout:SetPoint("TOP", 0, -340)
+unitframes.Layout:SetPoint("TOP", 0, -374)
 unitframes.Layout:SetSize(128, 25)
 tinsert(ns.buttons, unitframes.Layout)
 

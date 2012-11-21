@@ -96,6 +96,8 @@ ns.localization.unitframeshealerClasscolours = "Always use class colours"
 ns.localization.unitframeshealerClasscoloursTooltip = "Enable to use class colours rather than gradient in the healer layout."
 ns.localization.unitframespvp = "PVP Icon"
 ns.localization.unitframespvpTooltip = "Show a small red PVP icon above the player unit frame."
+ns.localization.unitframesenableArena = "Arena/Flag Carrier frames"
+ns.localization.unitframesenableArenaTooltip = "Enables unit frames for arena enemies, and flag carriers in battlegrounds."
 
 ns.localization.classmod = "Class specific"
 ns.localization.classmodSubText = "These options allow you to toggle the class-specific modules in the UI."

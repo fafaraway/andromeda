@@ -53,6 +53,7 @@ C["notifications"] = {
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 	["enableGroup"] = true,					-- enable party/raid frames
+	["enableArena"] = true,					-- enable arena/flag carrier frames
 
 	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
 	["castbarSeparate"] = true, 				-- true for a separate player cast bar
