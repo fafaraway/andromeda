@@ -453,7 +453,7 @@ local function ShowMoney()
 	for _, k in pairs(keys) do
 		local class = FreeUIGlobalConfig[realm].class[k]
 		local v = goldlist[k]
-		if v >= 10000 then
+		if v and v >= 10000 then
 			GameTooltip:AddDoubleLine(k, Format(FreeUIGlobalConfig[realm].currency[k], v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
 		end
 	end
