@@ -31,10 +31,11 @@ title:SetPoint("TOP", 0, -26)
 title:SetText("FreeUI v."..GetAddOnMetadata("FreeUI", "Version"))
 
 local resetFrame = CreateFrame("Frame", nil, UIParent)
-resetFrame:SetSize(320, 140)
+resetFrame:SetSize(320, 200)
 resetFrame:SetPoint("CENTER")
 resetFrame:SetFrameStrata("HIGH")
 resetFrame:SetFrameLevel(5)
+resetFrame:EnableMouse(true)
 resetFrame:Hide()
 
 resetFrame:SetScript("OnShow", function()
@@ -54,6 +55,28 @@ resetFrame.Data.Text:SetText(ns.localization.resetData)
 resetFrame.Options = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
 resetFrame.Options:SetPoint("TOPLEFT", resetFrame.Data, "BOTTOMLEFT", 0, -8)
 resetFrame.Options.Text:SetText(ns.localization.resetOptions)
+
+local charBox = CreateFrame("EditBox", "FreeUIOptionsPanelResetFrameCharBox", resetFrame)
+charBox:SetAutoFocus(false)
+charBox:SetWidth(180)
+charBox:SetHeight(20)
+charBox:SetMaxLetters(12)
+charBox:SetFontObject(GameFontHighlight)
+charBox:SetPoint("TOPLEFT", resetFrame.Options, "BOTTOMLEFT", 6, -34)
+
+charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxLeft")
+charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxRight")
+charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxMiddle")
+
+charBox:SetScript("OnEscapePressed", function(self)
+	self:ClearFocus()
+end)
+
+resetFrame.charBox = charBox
+
+local charBoxLabel = charBox:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+charBoxLabel:SetPoint("BOTTOMLEFT", charBox, "TOPLEFT", 0, 6)
+charBoxLabel:SetText(ns.localization.resetCharBox)
 
 resetFrame.Okay = CreateFrame("Button", nil, resetFrame, "UIPanelButtonTemplate")
 resetFrame.Okay:SetSize(128, 25)

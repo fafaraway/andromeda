@@ -265,6 +265,29 @@ local function displaySettings()
 	end
 end
 
+local function removeCharData(self)
+	self:ClearFocus()
+
+	local realm = C.myRealm
+	local text = self:GetText()
+
+	self:SetText("")
+
+	if text ~= "" then
+		for name in pairs(FreeUIGlobalConfig[realm].class) do
+			if text == name then
+				FreeUIGlobalConfig[realm].class[name] = nil
+				FreeUIGlobalConfig[realm].gold[name] = nil
+				FreeUIGlobalConfig[realm].currency[name] = nil
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..text.." removed.", unpack(C.class))
+				return
+			end
+		end
+
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..text.." not found. Check the spelling of the name.", unpack(C.class))
+	end
+end
+
 local init = CreateFrame("Frame")
 init:RegisterEvent("PLAYER_LOGIN")
 init:SetScript("OnEvent", function()
@@ -287,18 +310,31 @@ init:SetScript("OnEvent", function()
 	local layout = FreeUIOptionsPanel.unitframes.Layout
 
 	resetFrame.Okay:SetScript("OnClick", function()
+		local somethingChecked = false
+
 		if resetFrame.Data:GetChecked() then
 			FreeUIGlobalConfig = {}
 			FreeUIConfig = {}
+			somethingChecked = true
 		end
 		if resetFrame.Options:GetChecked() then
 			FreeUIOptions = {}
 			FreeUIOptionsPerChar = {}
 			FreeUIOptionsGlobal[C.myRealm][C.myName] = false
 			C.options = FreeUIOptions
+			somethingChecked = true
 		end
-		ReloadUI()
+
+		removeCharData(resetFrame.charBox)
+
+		if somethingChecked then
+			ReloadUI()
+		else
+			resetFrame:Hide()
+		end
 	end)
+
+	resetFrame.charBox:SetScript("OnEnterPressed", removeCharData)
 
 	FreeUIOptionsPanel.Profile:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
 	FreeUIOptionsPanel.Profile:SetScript("OnClick", function(self)
@@ -355,6 +391,8 @@ init:SetScript("OnEvent", function()
 		local colour = C.classcolours[strupper(setting.option)]
 		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
 	end
+
+	F.ReskinInput(resetFrame.charBox)
 
 	local colour = C.classcolours["PALADIN"]
 	FreeUIOptionsPanel.classmod.paladinHP.Text:SetTextColor(colour.r, colour.g, colour.b)

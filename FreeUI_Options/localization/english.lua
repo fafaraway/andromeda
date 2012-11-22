@@ -11,6 +11,7 @@ ns.localization.reloadException = "Only settings marked with * require a UI relo
 ns.localization.reload = "Reload UI"
 ns.localization.resetData = "Remove data"
 ns.localization.resetOptions = "Remove saved options"
+ns.localization.resetCharBox = "Remove data for this character:"
 ns.localization.author = "FreeUI by Haleth on wowinterface.com"
 ns.localization.authorSubText = "Freethinker @ Steamwheedle Cartel - EU"
 
