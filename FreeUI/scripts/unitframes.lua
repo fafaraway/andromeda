@@ -1697,7 +1697,7 @@ oUF:Factory(function(self)
 		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, 15)
 	end
 
-	for n = 1, 4 do
+	for n = 1, 5 do
 		spawnHelper(self,'boss' .. n, 'LEFT', 50, 0 - (56 * n))
 	end
 
