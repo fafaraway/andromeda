@@ -8,18 +8,46 @@ local UpdatePower = function(self, event, unit, powerType)
 
 	local altpowerbar = self.AltPowerBar
 
+	--[[ :PreUpdate()
+
+	 Called before the element has been updated.
+
+	 Arguments
+
+	 self - The AltPowerBar element.
+	 ]]
 	if(altpowerbar.PreUpdate) then
 		altpowerbar:PreUpdate()
 	end
 
-	local barType, min = UnitAlternatePowerInfo(unit)
+	local _, r, g, b
+	if(altpowerbar.colorTexture) then
+		_, r, g, b = UnitAlternatePowerTextureInfo(unit, 2)
+	end
+
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
 	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
 
+	local barType, min = UnitAlternatePowerInfo(unit)
 	altpowerbar.barType = barType
 	altpowerbar:SetMinMaxValues(min, max)
 	altpowerbar:SetValue(cur)
 
+	if(b) then
+		altpowerbar:SetStatusBarColor(r, g, b)
+	end
+
+	--[[ :PostUpdate(min, cur, max)
+
+	 Called after the element has been updated.
+
+	 Arguments
+
+	 self - The AltPowerBar element.
+	 min  - The minimum possible power value for the active type.
+	 cur  - The current power value.
+	 max  - The maximum possible power value for the active type.
+	]]
 	if(altpowerbar.PostUpdate) then
 		return altpowerbar:PostUpdate(min, cur, max)
 	end

@@ -470,18 +470,13 @@ local Shared = function(self, unit, isSingle)
 		AltPowerBar.Text = F.CreateFS(AltPowerBar, 8, "RIGHT")
 		AltPowerBar.Text:SetPoint("RIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 6)
 
-		AltPowerBar:SetScript("OnValueChanged", function(_, value)
-			local min, max = AltPowerBar:GetMinMaxValues()
-			local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-			AltPowerBar:SetStatusBarColor(r, g, b)
-			AltPowerBar.Text:SetTextColor(r, g, b)
+		AltPowerBar:SetScript("OnValueChanged", function(self)
+			self.Text:SetTextColor(self:GetStatusBarColor())
 		end)
 
 		AltPowerBar.PostUpdate = function(_, _, cur)
 			AltPowerBar.Text:SetText(cur)
 		end
-
-		self.AltPowerBar = AltPowerBar
 
 		SmoothBar(AltPowerBar)
 
@@ -491,6 +486,10 @@ local Shared = function(self, unit, isSingle)
 		AltPowerBar:HookScript("OnHide", function()
 			oUF_FreePlayer.MaxHealthPoints:Show()
 		end)
+
+		AltPowerBar.colorTexture = true
+
+		self.AltPowerBar = AltPowerBar
 	end
 
 	--[[ Castbar ]]
@@ -1332,17 +1331,15 @@ local UnitSpecific = {
 		AltPowerBar.Text = F.CreateFS(AltPowerBar, 8, "CENTER")
 		AltPowerBar.Text:SetPoint("CENTER", self, "TOP", 0, 6)
 
-		AltPowerBar:SetScript("OnValueChanged", function(_, value)
-			local min, max = AltPowerBar:GetMinMaxValues()
-			local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-
-			AltPowerBar:SetStatusBarColor(r, g, b)
-			AltPowerBar.Text:SetTextColor(r, g, b)
+		AltPowerBar:SetScript("OnValueChanged", function(self)
+			self.Text:SetTextColor(self:GetStatusBarColor())
 		end)
 
 		AltPowerBar.PostUpdate = function(_, _, cur)
 			AltPowerBar.Text:SetText(cur)
 		end
+
+		AltPowerBar.colorTexture = true
 
 		self.AltPowerBar = AltPowerBar
 
