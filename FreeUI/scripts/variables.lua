@@ -3,10 +3,6 @@ local F, C, L = unpack(select(2, ...))
 local name = UnitName("player")
 local realm = GetRealmName()
 
-local updateCurrency = function()
-	FreeUIGlobalConfig[realm].currency[name] = select(2, GetCurrencyInfo(396)).." "..select(4, GetCurrencyInfo(396))
-end
-
 local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
@@ -16,13 +12,9 @@ addonLoaded = function(_, addon)
 	if FreeUIGlobalConfig[realm] == nil then FreeUIGlobalConfig[realm] = {} end
 	if FreeUIGlobalConfig[realm].gold == nil then FreeUIGlobalConfig[realm].gold = {} end
 
-	if FreeUIGlobalConfig[realm].currency == nil then FreeUIGlobalConfig[realm].currency = {} end
-
 	if FreeUIGlobalConfig[realm].class == nil then FreeUIGlobalConfig[realm].class = {} end
 	FreeUIGlobalConfig[realm].class[name] = select(2, UnitClass("player"))
 
-	updateCurrency()
-	F.RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateCurrency)
 	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
 	addonLoaded = nil
 end

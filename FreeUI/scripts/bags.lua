@@ -404,21 +404,8 @@ hooksecurefunc("ContainerFrame_Update", updateFilter)
 
 -- [[ Money ]]
 
-local function FormatMoney(money)
-	local gold = abs(money / 10000)
-	local cash = ""
-	cash = format("%.2d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t", gold)
-	return cash
-end
-
-local function Format(currency, money)
-	local current, weekly = strsplit(" ", currency)
-	if current ~= "0" then
-		local currency = format("%s VP (%s/1000)", current, weekly)
-		return format("%-30s %s", currency, FormatMoney(money))
-	else
-		return FormatMoney(money)
-	end
+local function Format(money)
+	return format("%s\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t", BreakUpLargeNumbers(floor((money / 10000) + .5)))
 end
 
 local name = UnitName("player")
@@ -448,13 +435,13 @@ local function ShowMoney()
 		tableFilled = true
 	end
 
-	GameTooltip:AddDoubleLine(realm, FormatMoney(total), r, g, b, 1, 1, 1)
+	GameTooltip:AddDoubleLine(realm, Format(total), r, g, b, 1, 1, 1)
 	GameTooltip:AddLine(" ")
 	for _, k in pairs(keys) do
 		local class = FreeUIGlobalConfig[realm].class[k]
 		local v = goldlist[k]
 		if v and v >= 10000 then
-			GameTooltip:AddDoubleLine(k, Format(FreeUIGlobalConfig[realm].currency[k], v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
+			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
 		end
 	end
 
