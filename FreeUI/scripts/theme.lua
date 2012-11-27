@@ -2515,12 +2515,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					_G["MissingLootFrameItem"..i.."NameFrame"]:Hide()
 
 					bu.icon:SetTexCoord(.08, .92, .08, .92)
-					bu.icon.bg = F.CreateBG(bu.icon)
+					F.CreateBG(bu.icon)
 
 					bu.styled = true
 				end
-
-				bu.icon.bg:SetVertexColor(bu.name:GetVertexColor())
 			end
 		end)
 
