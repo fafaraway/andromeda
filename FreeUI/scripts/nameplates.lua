@@ -89,6 +89,9 @@ local function updateClassColour(r, g, b)
 end
 
 local UpdateFrame = function(self)
+	self.barFrame:SetScale(1)
+	self.nameFrame:SetScale(1)
+
 	local r, g, b = self.healthBar:GetStatusBarColor()
 	local newr, newg, newb
 	if g + b == 0 then
