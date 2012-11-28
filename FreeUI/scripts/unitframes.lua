@@ -495,7 +495,8 @@ local Shared = function(self, unit, isSingle)
 	--[[ Castbar ]]
 
 	local Castbar = CreateFrame("StatusBar", nil, self)
-	Castbar:SetStatusBarTexture("")
+	Castbar:SetStatusBarTexture(C.media.backdrop)
+	Castbar:SetStatusBarColor(0, 0, 0, 0)
 
 	local Spark = Castbar:CreateTexture(nil, "OVERLAY")
 	Spark:SetBlendMode("ADD")
@@ -918,14 +919,14 @@ local UnitSpecific = {
 		elseif class == "MONK" and C.classmod.monk then
 			local pulsating = false
 
-			local r, g, b = PowerBarColor["LIGHT_FORCE"].r, PowerBarColor["LIGHT_FORCE"].g, PowerBarColor["LIGHT_FORCE"].b
+			local r, g, b = PowerBarColor["CHI"].r, PowerBarColor["CHI"].g, PowerBarColor["CHI"].b
 
 			local UpdateOrbs = function(self, event, unit, powerType)
 				if unit ~= "player" then return end
 
-				local chi = UnitPower(unit, SPELL_POWER_LIGHT_FORCE)
+				local chi = UnitPower(unit, SPELL_POWER_CHI)
 
-				if chi == UnitPowerMax(unit, SPELL_POWER_LIGHT_FORCE) then
+				if chi == UnitPowerMax(unit, SPELL_POWER_CHI) then
 					if not pulsating then
 						pulsating = true
 						self.glow:SetAlpha(1)

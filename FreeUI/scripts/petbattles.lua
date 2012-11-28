@@ -132,12 +132,16 @@ for index, unit in pairs(extraUnits) do
 	unit:SetSize(36, 36)
 
 	unit.HealthBarBG:SetAlpha(0)
-	unit.BorderAlive:SetAlpha(0)
 	unit.BorderDead:SetAlpha(0)
 	unit.HealthDivider:SetAlpha(0)
 
 	unit.ActualHealthBar:ClearAllPoints()
 	unit.ActualHealthBar:SetPoint("BOTTOM", 0, -1)
+
+	unit.BorderAlive:SetTexture(C.media.checked)
+	unit.BorderAlive:SetTexCoord(0, 1, 0, 1)
+	unit.BorderAlive:SetPoint("TOPLEFT", unit.Icon, -1, 1)
+	unit.BorderAlive:SetPoint("BOTTOMRIGHT", unit.Icon, 1, -1)
 
 	unit.bg = CreateFrame("Frame", nil, unit)
 	unit.bg:SetPoint("TOPLEFT", -1, 1)

@@ -1,7 +1,7 @@
 local parent, ns = ...
 local oUF = ns.oUF
 
-local SPELL_POWER_LIGHT_FORCE = SPELL_POWER_LIGHT_FORCE
+local SPELL_POWER_CHI = SPELL_POWER_CHI
 
 local Update = function(self, event, unit)
 	if(unit ~= 'player') then return end
@@ -11,9 +11,9 @@ local Update = function(self, event, unit)
 		element:PreUpdate()
 	end
 
-	local chi = UnitPower(unit, SPELL_POWER_LIGHT_FORCE)
+	local chi = UnitPower(unit, SPELL_POWER_CHI)
 
-	for index = 1, UnitPowerMax(unit, SPELL_POWER_LIGHT_FORCE) do
+	for index = 1, UnitPowerMax(unit, SPELL_POWER_CHI) do
 		if(index <= chi) then
 			element[index]:Show()
 		else

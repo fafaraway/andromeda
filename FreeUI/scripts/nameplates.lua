@@ -189,18 +189,19 @@ end
 
 local StyleFrame = function(frame)
 	frame.done = true
+	
+	frame.barFrame, frame.nameFrame = frame:GetChildren()
 
-	frame.nameplate = true
-
-	frame.healthBar, frame.castBar = frame:GetChildren()
+	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
 	local healthBar, castBar = frame.healthBar, frame.castBar
-	local glowRegion, overlayRegion, highlightRegion, nameTextRegion, levelTextRegion, bossIconRegion, raidIconRegion, stateIconRegion = frame:GetRegions()
+	local glowRegion, overlayRegion, highlightRegion, levelTextRegion, bossIconRegion, raidIconRegion, stateIconRegion = frame.barFrame:GetRegions()
 	local _, castbarOverlay, shieldedRegion, spellIconRegion = castBar:GetRegions()
+	local nameTextRegion = frame.nameFrame:GetRegions()
 
 	frame.oldname = nameTextRegion
 	nameTextRegion:Hide()
 
-	local newNameRegion = F.CreateFS(healthBar, 8 * UIParent:GetScale(), "CENTER")
+	local newNameRegion = F.CreateFS(frame.nameFrame, 8 * UIParent:GetScale(), "CENTER")
 	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 0, 2)
 	newNameRegion:SetWidth(80)
 	newNameRegion:SetHeight(7)
