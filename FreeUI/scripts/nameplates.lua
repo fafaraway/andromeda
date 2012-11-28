@@ -41,6 +41,11 @@ local CreateBD = function(parent, offset)
 	bg:SetTexture(0, 0, 0, .5)
 	bg:SetPoint("TOPLEFT")
 	bg:SetPoint("BOTTOMRIGHT")
+
+	parent.leftTex = left
+	parent.rightTex = right
+	parent.topTex = top
+	parent.bottomTex = bottom
 end
 
 local CreateBG = function(parent, offset)
@@ -89,8 +94,28 @@ local function updateClassColour(r, g, b)
 end
 
 local UpdateFrame = function(self)
-	self.barFrame:SetScale(1)
-	self.nameFrame:SetScale(1)
+	local barScale = self.barFrame:GetScale()
+	local uiScale = UIParent:GetScale()
+
+	local offset = uiScale / barScale
+
+	local left = self.healthBar.leftTex
+	local right = self.healthBar.rightTex
+	local top = self.healthBar.topTex
+	local bottom = self.healthBar.bottomTex
+
+	left:SetWidth(offset)
+	right:SetWidth(offset)
+	top:SetHeight(offset)
+	bottom:SetHeight(offset)
+	left:SetPoint("TOPLEFT", -offset, offset)
+	left:SetPoint("BOTTOMLEFT", -offset, -offset)
+	right:SetPoint("TOPRIGHT", offset, offset)
+	right:SetPoint("BOTTOMRIGHT", offset, -offset)
+	top:SetPoint("TOPLEFT", -offset, offset)
+	top:SetPoint("TOPRIGHT", offset, offset)
+	bottom:SetPoint("BOTTOMLEFT", -offset, -offset)
+	bottom:SetPoint("BOTTOMRIGHT", offset, -offset)
 
 	local r, g, b = self.healthBar:GetStatusBarColor()
 	local newr, newg, newb
@@ -120,13 +145,13 @@ local UpdateFrame = function(self)
 
 	self.healthBar:ClearAllPoints()
 	self.healthBar:SetPoint("CENTER", self.healthBar:GetParent())
-	self.healthBar:SetHeight(5)
-	self.healthBar:SetWidth(80)
+	self.healthBar:SetHeight(5 / barScale)
+	self.healthBar:SetWidth(80 / barScale)
 
 	self.castBar:ClearAllPoints()
-	self.castBar:SetPoint("TOP", self.healthBar, "BOTTOM", 0, -2)
-	self.castBar:SetHeight(5)
-	self.castBar:SetWidth(80)
+	self.castBar:SetPoint("TOP", self.healthBar, "BOTTOM", 0, -2 / barScale)
+	self.castBar:SetHeight(5 / barScale)
+	self.castBar:SetWidth(80 / barScale)
 
 	self.highlight:SetTexture(nil)
 
@@ -134,8 +159,8 @@ local UpdateFrame = function(self)
 
 	local level, elite, mylevel = tonumber(self.level:GetText()), self.elite:IsShown(), UnitLevel("player")
 	self.level:ClearAllPoints()
-	self.level:SetPoint("RIGHT", self.healthBar, "LEFT", -2, 0)
-	self.level:SetFont(C.media.font, 8 * UIParent:GetScale(), "OUTLINEMONOCHROME")
+	self.level:SetPoint("RIGHT", self.healthBar, "LEFT", -2 / barScale, 0)
+	self.level:SetFont(C.media.font, 8 * UIParent:GetScale() / barScale, "OUTLINEMONOCHROME")
 	self.level:SetShadowColor(0, 0, 0, 0)
 	if self.boss:IsShown() then
 		self.level:SetText("B")
@@ -192,7 +217,7 @@ end
 
 local StyleFrame = function(frame)
 	frame.done = true
-	
+
 	frame.barFrame, frame.nameFrame = frame:GetChildren()
 
 	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
@@ -204,7 +229,7 @@ local StyleFrame = function(frame)
 	frame.oldname = nameTextRegion
 	nameTextRegion:Hide()
 
-	local newNameRegion = F.CreateFS(frame.nameFrame, 8 * UIParent:GetScale(), "CENTER")
+	local newNameRegion = F.CreateFS(frame, 8 * UIParent:GetScale(), "CENTER")
 	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 0, 2)
 	newNameRegion:SetWidth(80)
 	newNameRegion:SetHeight(7)
@@ -244,13 +269,6 @@ local StyleFrame = function(frame)
 	stateIconRegion:SetTexture(nil)
 	bossIconRegion:SetTexture(nil)
 
-	UpdateFrame(frame)
-	frame:SetScript("OnShow", UpdateFrame)
-	frame:SetScript("OnHide", OnHide)
-
-	frame.elapsed = 0
-	frame:SetScript("OnUpdate", ThreatUpdate)
-
 	local offset = UIParent:GetScale()
 	CreateBD(healthBar, offset)
 	CreateBD(castBar, offset)
@@ -266,6 +284,13 @@ local StyleFrame = function(frame)
 	spellIconRegion:ClearAllPoints()
 	spellIconRegion:SetAllPoints(iconFrame)
 	spellIconRegion:SetTexCoord(.1, .9, .1, .9)
+
+	UpdateFrame(frame)
+	frame:SetScript("OnShow", UpdateFrame)
+	frame:SetScript("OnHide", OnHide)
+
+	frame.elapsed = 0
+	frame:SetScript("OnUpdate", ThreatUpdate)
 end
 
 local numKids = 0
