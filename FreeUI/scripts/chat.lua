@@ -58,7 +58,7 @@ end
 
 local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
 	local _, charName, _, _, _, _, _, englishClass = BNGetToonInfo(id)
-	if englishClass ~= "" then
+	if englishClass and englishClass ~= "" then
 		fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
 	end
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
