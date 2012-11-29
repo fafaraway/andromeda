@@ -1,6 +1,6 @@
 --[[
 Name: LibBossIDs-1.0
-Revision: $Revision: 74 $
+Revision: $Revision: 81 $
 Author: Elsia
 Website: http://www.wowace.com/addons/libbossids-1-0/
 Documentation:
@@ -10,7 +10,7 @@ Dependencies: LibStub
 License: Public Domain, Absolutely no Warranty.
 ]]
 
-local MAJOR, MINOR = "LibBossIDs-1.0", "$Revision: 74 $"
+local MAJOR, MINOR = "LibBossIDs-1.0", "$Revision: 81 $"
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not lib then return end
@@ -371,7 +371,15 @@ local BossIDs = {
    -------------------------------------------------------------------------------
    [36497]	= true,	-- Bronjahm
    [36502]	= true,	-- Devourer of Souls
-      
+
+   -------------------------------------------------------------------------------
+   -- Gate of the Setting Sun (MoP-Dungeon 5.0.1)
+   -------------------------------------------------------------------------------  
+	[54432]	= true,	--  Gadok
+	[56636]	= true,	--  Rimok
+	[56877]	= true,	--  Raigon
+	[56906]	= true,	--  Kiptilak
+	
    -------------------------------------------------------------------------------
    -- Gnomeregan
    -------------------------------------------------------------------------------
@@ -447,6 +455,16 @@ local BossIDs = {
    [28234]	= true,	-- The Tribunal of Ages
    [27978]	= true,	-- Sjonnir The Ironshaper
 
+    -------------------------------------------------------------------------------
+   -- Heart of Fear (MoP-Raid 5.0.1)
+   -------------------------------------------------------------------------------  
+   [62837]  = true, -- Grand Empress Shek'zeer
+   [63664]  = true, -- Blade Lord Ta'yak
+   [63666]  = true, -- Amber-Shaper Un'sok
+   [63667]  = true, -- Garalon
+   [65501]  = true, -- Wind Lord Mel'jarak
+   [66791]	= true,	-- Zorlok
+   
    -------------------------------------------------------------------------------
    -- Hellfire Citadel: Hellfire Ramparts
    -------------------------------------------------------------------------------
@@ -555,6 +573,12 @@ local BossIDs = {
    [17534]	= true,	-- Julianne
 
    -------------------------------------------------------------------------------
+   -- Kun-Lai Summit: MoP World bosses
+   -------------------------------------------------------------------------------
+   [60491]	= true,	-- Sha of Anger
+   [62346]	= true,	-- Galleon
+
+   -------------------------------------------------------------------------------
    -- Lost City of the Tol'vir
    -------------------------------------------------------------------------------
    [44577]	= true,	-- General Husam
@@ -610,7 +634,33 @@ local BossIDs = {
    [13601]	= true,	-- Tinkerer Gizlock
    [13596]	= true,	-- Rotgrip
    [12201]	= true,	-- Princess Theradras
-
+   
+   -------------------------------------------------------------------------------
+   -- Mogu'Shan Palace (MoP-Dungeon 5.0.1)
+   -------------------------------------------------------------------------------
+   [61442]	= true, -- Kuai the Brute, Trial of the King 
+   [61444]	= true, -- Ming the Cunning, Trial of the King
+   [61445]	= true, -- Haiyan the Unstoppable, Trial of the King
+   [61243]	= true, -- Gekkan
+   [61398]	= true, -- Xin the Weaponmaster
+     
+   -------------------------------------------------------------------------------
+   -- Mogu'Shan Vault (MoP-Raid 5.0.1)
+   -------------------------------------------------------------------------------
+   [59915]	= true, -- Jasper, Stone Guard
+   [60009]	= true, -- Feng the Accursed
+   [60043]	= true, -- Jade, Stone Guard
+   [60047]	= true, -- Amethyst, Stone Guard
+   [60051]	= true, -- Cobalt, Stone Guard
+   [60143]  = true, -- Gara'jal the Spiritbinder
+   [60399]  = true, -- Qin-xi
+   [60400]  = true, -- Jan-xi
+   [60410]  = true, -- Elegon
+   [61421]  = true, -- Zian of the Endless Shadow -- 60701?
+   [61423]  = true, -- Qiang the Merciless -- 60709?
+   [61427]  = true, -- Subetai the Swift -- 60710?
+   [61429]  = true, -- Meng the Demented
+	 
    -------------------------------------------------------------------------------
    -- Molten Core
    -------------------------------------------------------------------------------
@@ -685,6 +735,15 @@ local BossIDs = {
    [16064]	= true,	-- Thane Korth'azz
    [16062]	= true,	-- Highlord Mograine
    [16063]	= true,	-- Sir Zeliek
+   
+   -------------------------------------------------------------------------------
+   -- Nizuao Temple (MoP-Dungeon 5.0.1)
+   -------------------------------------------------------------------------------
+   
+   [61634]	= true,	--  Vojak
+   [61567]	= true,	--  Jinbak
+   [62205]	= true,	--  Neronok
+   [61485]	= true,	--  Pavalak
 
    -------------------------------------------------------------------------------
    -- Obsidian Sanctum
@@ -760,6 +819,13 @@ local BossIDs = {
    [15339]	= true,	-- Ossirian the Unscarred
 
    -------------------------------------------------------------------------------
+   -- Scarlet Halls (MoP Dungeon)
+   -------------------------------------------------------------------------------
+   [58632]  = true, -- Armsmaster Harlan
+   [59150]  = true, -- Flameweaver Koegler
+   [59303]  = true, -- Houndmaster Braun
+   
+   -------------------------------------------------------------------------------
    -- Scarlet Monastery: Armory
    -------------------------------------------------------------------------------
    [3975]	= true,	-- Herod
@@ -770,7 +836,10 @@ local BossIDs = {
    [4542]	= true,	-- High Inquisitor Fairbanks
    [3976]	= true,	-- Scarlet Commander Mograine
    [3977]	= true,	-- High Inquisitor Whitemane
-
+   [59789]	= true, -- Thalnos the Soulrender (MoP Heroic 5.0.1)
+   [59223]	= true, -- Brother Korlof (MoP Heroic 5.0.1)
+   [60040]	= true, -- Commander Durand (MoP Heroic 5.0.1)
+   
    -------------------------------------------------------------------------------
    -- Scarlet Monastery: Graveyard
    -------------------------------------------------------------------------------
@@ -809,12 +878,22 @@ local BossIDs = {
    [10504]	= true,	-- Lord Alexei Barov
    [10502]	= true,	-- Lady Illucia Barov
    [1853]	= true,	-- Darkmaster Gandling
+   [58633]  = true, -- Instructor Chillheart (MoP Heroic)
+   [59200]  = true, -- Lilian Voss (MoP Heroic)
 
    -------------------------------------------------------------------------------
    -- Searing Gorge
    -------------------------------------------------------------------------------
    [9026]	= true,	-- Overmaster Pyron
 
+   -------------------------------------------------------------------------------
+   -- Shado-Pan Monastery (MoP Dungeon)
+   -------------------------------------------------------------------------------
+   [56719]  = true, -- Sha of Violence
+   [56747]  = true, -- Gu Cloudstrike
+   [56884]  = true, -- Taran Zhu
+   [64387]  = true, -- Master Snowdrift
+   
    -------------------------------------------------------------------------------
    -- Shadowfang Keep
    -------------------------------------------------------------------------------
@@ -836,7 +915,7 @@ local BossIDs = {
    -- Shadowmoon Valley
    -------------------------------------------------------------------------------
    [17711]	= true,	-- Doomwalker
-
+   
    -------------------------------------------------------------------------------
    -- Silithus
    -------------------------------------------------------------------------------
@@ -846,6 +925,13 @@ local BossIDs = {
    [15203]	= true,	-- Prince Skaldrenox <Abyssal High Council>
    [14454]	= true,	-- The Windreaver
 
+   -------------------------------------------------------------------------------
+   -- Stormstout Brewery (MoP Dungeon)
+   -------------------------------------------------------------------------------
+   [56717]  = true, -- Hoptallus
+   [57963]  = true, -- Ook-Ook
+   [59479]  = true, -- Yan-Zhu the Unsacked
+   
    -------------------------------------------------------------------------------
    -- Stormwind Stockade
    -------------------------------------------------------------------------------
@@ -1003,6 +1089,26 @@ local BossIDs = {
    [5709]	= true,	-- Shade of Eranikus
 
    -------------------------------------------------------------------------------
+   -- Temple of the Jade Serpent (MoP-Dungeon 5.0.1)
+   -------------------------------------------------------------------------------   
+   [56448]	= true, -- Wise Mari
+   [58826]	= true, -- Zao Sunseeker /Library Event
+   [59051]	= true, -- (Strife /Library Event
+   [59726]	= true, -- (Anger) /Library Event
+   [56732]	= true, -- Liu Flameheart
+   [56439]	= true, -- Sha of Doubt
+   
+   -------------------------------------------------------------------------------
+   -- Terrace of Endless Spring (MoP Raid)
+   -------------------------------------------------------------------------------
+   [60583]  = true, -- Protector Kaolan
+   [60585]  = true, -- Elder Regail
+   [60586]  = true, -- Elder Asani
+   [60999]  = true, -- Sha of Fear
+   [62442]  = true, -- Tsulong
+   [63099]  = true, -- Lei Shi
+   
+   -------------------------------------------------------------------------------
    -- The Bastion of Twilight
    -------------------------------------------------------------------------------
    [45992]	= true,	-- Valiona
@@ -1046,7 +1152,7 @@ local BossIDs = {
    [55312]	= true,	-- Yor'sahj the Unsleeping
    [55689]	= true,	-- Hagara the Binder
    [55294]	= true,	-- Ultraxion
-   [39399]	= true,	-- Warmaster Blackhorn
+   [56427]	= true,	-- Warmaster Blackhorn
    [53879]	= true,	-- Spine Deathwing
    [56173]	= true,	-- Madness Deathwing
    
@@ -1306,7 +1412,7 @@ local BossIDs = {
    [31125]	= true,	-- Archavon the Stone Watcher
    [33993]	= true,	-- Emalon the Storm Watcher
    [35013]	= true,	-- Koralon the Flamewatcher
-   [38433]	= true,	--Toravon the Ice Watcher
+   [38433]	= true,	-- Toravon the Ice Watcher
 
    -------------------------------------------------------------------------------
    -- Well of Eternity 4.3

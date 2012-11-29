@@ -357,7 +357,7 @@ local UpdateBars = function()
 		bar[i].id = i + offset
 		bar[i]:SetValue(100 * cur[sMode].amount / max[sMode].amount)
 		color = C.classcolours[cur.class]
-		if dmconf.classcolorbar then
+		if dmconf.classcolorbar and color then
 			bar[i]:SetStatusBarColor(color.r, color.g, color.b)
 		else
 			bar[i]:SetStatusBarColor(unpack(dmconf.barcolor))
@@ -367,7 +367,7 @@ local UpdateBars = function()
 		else
 			bar[i].right:SetFormattedText("%s", truncate(cur[sMode].amount))
 		end
-		if dmconf.classcolorname then
+		if dmconf.classcolorname and color then
 			bar[i].left:SetFormattedText("%s%s|r", hex(color), cur.name)
 			bar[i].right:SetFormattedText("%s%s|r", hex(color), bar[i].right:GetText())
 		else
@@ -470,7 +470,8 @@ local CreateMenu = function(self, level)
 		wipe(info)
 		info.text = HIDE
 		info.func = function()
-			MainFrame:Hide()
+			MainFrame:SetAlpha(0)
+			MainFrame:EnableMouse(false)
 		end
 		info.notCheckable = 1
 		UIDropDownMenu_AddButton(info, level)
@@ -937,10 +938,12 @@ addon:RegisterEvent("PLAYER_REGEN_DISABLED")
 addon:RegisterEvent("UNIT_PET")
 
 SlashCmdList["alDamage"] = function(msg)
-	if MainFrame:IsShown() then
-		MainFrame:Hide()
+	if MainFrame:GetAlpha() > 0 then
+		MainFrame:SetAlpha(0)
+		MainFrame:EnableMouse(false)
 	else
-		MainFrame:Show()
+		MainFrame:SetAlpha(1)
+		MainFrame:EnableMouse(true)
 	end
 end
 SLASH_alDamage1 = "/dmg"

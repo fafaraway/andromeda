@@ -1,7 +1,7 @@
 ## Interface: 50100
 ## Author: Allez
 ## Title: |cff777777al|rDamageMeter
-## Version: 50001.11
+## Version: 50100.13
 ## Notes: Damage meter
 ## RequiredDeps: FreeUI
 ## SavedVariables: dmconf
