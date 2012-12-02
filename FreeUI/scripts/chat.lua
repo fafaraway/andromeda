@@ -64,7 +64,7 @@ local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
 
-local function AddMessage(frame, text, r, g, b, id)
+local function AddMessage(frame, text, red, green, blue, lineID, addToTop, accessID, extraData)
 	local editMessage = true
 	for i, v in ipairs(chatEvents) do
 		if(event == v) then
@@ -93,7 +93,7 @@ local function AddMessage(frame, text, r, g, b, id)
 		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
 	end
 
-	return hooks[frame](frame, text, r, g, b, id)
+	return hooks[frame](frame, text, red, green, blue, lineID, addToTop, accessID, extraData)
 end
 
 local Insert = function(self, str, ...)
