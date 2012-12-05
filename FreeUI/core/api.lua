@@ -3,10 +3,10 @@ local F, C = unpack(select(2, ...))
 -- [[ Constants ]]
 
 C.media = {
-	["arrowUp"] = "Interface\\AddOns\\Aurora\\media\\arrow-up-active",
-	["arrowDown"] = "Interface\\AddOns\\Aurora\\media\\arrow-down-active",
-	["arrowLeft"] = "Interface\\AddOns\\Aurora\\media\\arrow-left-active",
-	["arrowRight"] = "Interface\\AddOns\\Aurora\\media\\arrow-right-active",
+	["arrowUp"] = "Interface\\AddOns\\FreeUI\\media\\arrow-up-active",
+	["arrowDown"] = "Interface\\AddOns\\FreeUI\\media\\arrow-down-active",
+	["arrowLeft"] = "Interface\\AddOns\\FreeUI\\media\\arrow-left-active",
+	["arrowRight"] = "Interface\\AddOns\\FreeUI\\media\\arrow-right-active",
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
 	["checked"] = "Interface\\AddOns\\FreeUI\\media\\CheckButtonHilight", -- replace default checked texture
 	["font"] = "Interface\\AddOns\\FreeUI\\media\\Hooge0655.ttf", -- default pixel font
