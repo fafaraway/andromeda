@@ -149,6 +149,8 @@ local function SetupChat()
 		"WHISPER",
 		"PARTY",
 		"PARTY_LEADER",
+		"INSTANCE_CHAT",
+		"INSTANCE_CHAT_LEADER",
 		"RAID",
 		"RAID_LEADER",
 		"RAID_WARNING",
