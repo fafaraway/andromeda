@@ -205,7 +205,7 @@ C["selfbuffs"] = {
 				19740, -- Blessing of Might
 				116956, -- Grace of Air
 			},
-		}
+		},
 	},
 	PRIEST = {
 		{
