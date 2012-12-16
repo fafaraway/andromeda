@@ -488,6 +488,7 @@ local Shared = function(self, unit, isSingle)
 		end)
 
 		AltPowerBar.colorTexture = true
+		AltPowerBar:EnableMouse(true)
 
 		self.AltPowerBar = AltPowerBar
 	end
