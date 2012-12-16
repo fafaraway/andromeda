@@ -311,23 +311,23 @@ local Update = function(self, event, unit)
 	if(event == 'ForceUpdate' or not event) then
 		local buffs = self.Buffs
 		if(buffs) then
-			(buffs.SetPosition or SetPosition) (buffs, 0, buffs.createdIcons)
+			(buffs.SetPosition or SetPosition) (buffs, 1, buffs.createdIcons)
 		end
 
 		local debuffs = self.Debuffs
 		if(debuffs) then
-			(debuffs.SetPosition or SetPosition) (debuffs, 0, debuffs.createdIcons)
+			(debuffs.SetPosition or SetPosition) (debuffs, 1, debuffs.createdIcons)
 		end
 
 		local auras = self.Auras
 		if(auras) then
-			(auras.SetPosition or SetPosition) (auras, 0, auras.createdIcons)
+			(auras.SetPosition or SetPosition) (auras, 1, auras.createdIcons)
 		end
 	end
 end
 
 local ForceUpdate = function(element)
-	return UpdateAuras(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Update(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
 local Enable = function(self)
