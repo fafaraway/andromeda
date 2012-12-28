@@ -4076,6 +4076,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					hl:SetPoint("TOPLEFT", 0, -1)
 					hl:SetPoint("BOTTOMRIGHT", -1, 6)
 
+					bu.Selection:ClearAllPoints()
+					bu.Selection:SetPoint("TOPLEFT", 0, -1)
+					bu.Selection:SetPoint("BOTTOMRIGHT", -1, 6)
+					bu.Selection:SetTexture(C.media.backdrop)
+					bu.Selection:SetVertexColor(r, g, b, .1)
+
 					bu.reskinned = true
 				end
 
