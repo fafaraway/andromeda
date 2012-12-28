@@ -135,13 +135,18 @@ local ReanchorBankButtons = function()
 		tinsert(bankbuttons, bu)
 	end
 
-	for f = CheckSlots() + 1, CheckSlots() + GetNumBankSlots() + 1, 1 do
-		con = "ContainerFrame"..f
+	-- if you don't have your bags maxed out but you are upgrading bank, bank bag name will no longer be bag index + 1
+	-- so we use this workaround to find out the name
+	local bagNameCount = 0
+
+	for f = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
+		bagNameCount = bagNameCount + 1
+		con = "ContainerFrame"..CheckSlots() + bagNameCount
 
 		HideBag(con)
 		_G[con]:SetScale(1)
 
-		for i = GetContainerNumSlots(f-1), 1, -1  do
+		for i = GetContainerNumSlots(f), 1, -1  do
 			bu = con.."Item"..i
 			ReskinButton(bu)
 			tinsert(bankbuttons, bu)
