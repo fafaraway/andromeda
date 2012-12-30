@@ -6530,33 +6530,35 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
-		for i = 1, CLASS_TRAINER_SKILLS_DISPLAYED do
-			local bu = _G["ClassTrainerScrollFrameButton"..i]
+		hooksecurefunc("ClassTrainerFrame_Update", function()
+			for _, bu in next, ClassTrainerFrame.scrollFrame.buttons do
+				if not bu.styled then
+					local bg = CreateFrame("Frame", nil, bu)
+					bg:SetPoint("TOPLEFT", 42, -6)
+					bg:SetPoint("BOTTOMRIGHT", 0, 6)
+					bg:SetFrameLevel(bu:GetFrameLevel()-1)
+					F.CreateBD(bg, .25)
 
-			local bg = CreateFrame("Frame", nil, bu)
-			bg:SetPoint("TOPLEFT", 42, -6)
-			bg:SetPoint("BOTTOMRIGHT", 0, 6)
-			bg:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bg, .25)
+					bu.name:SetParent(bg)
+					bu.name:SetPoint("TOPLEFT", bu.icon, "TOPRIGHT", 6, -2)
+					bu.subText:SetParent(bg)
+					bu.money:SetParent(bg)
+					bu.money:SetPoint("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
+					bu:SetNormalTexture("")
+					bu:SetHighlightTexture("")
+					bu.disabledBG:Hide()
+					bu.disabledBG.Show = F.dummy
 
-			bu.name:SetParent(bg)
-			bu.name:SetPoint("TOPLEFT", bu.icon, "TOPRIGHT", 6, -2)
-			bu.subText:SetParent(bg)
-			bu.money:SetParent(bg)
-			bu.money:SetPoint("TOPRIGHT", bu, "TOPRIGHT", 5, -8)
-			bu:SetNormalTexture("")
-			bu:SetHighlightTexture("")
-			bu.disabledBG:Hide()
-			bu.disabledBG.Show = F.dummy
+					bu.selectedTex:SetPoint("TOPLEFT", 43, -6)
+					bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 7)
+					bu.selectedTex:SetTexture(C.media.backdrop)
+					bu.selectedTex:SetVertexColor(r, g, b, .2)
 
-			bu.selectedTex:SetPoint("TOPLEFT", 43, -6)
-			bu.selectedTex:SetPoint("BOTTOMRIGHT", -1, 7)
-			bu.selectedTex:SetTexture(C.media.backdrop)
-			bu.selectedTex:SetVertexColor(r, g, b, .2)
-
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
-			F.CreateBG(bu.icon)
-		end
+					bu.icon:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(bu.icon)
+				end
+			end
+		end)
 
 		ClassTrainerStatusBarLeft:Hide()
 		ClassTrainerStatusBarMiddle:Hide()
