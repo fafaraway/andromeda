@@ -1,6 +1,9 @@
 -- Originally based on aBags by Alza.
 
 local F, C, L = unpack(select(2, ...))
+
+if not C.bags.enable then return end
+
 local _G = _G
 
 local grid
@@ -32,7 +35,7 @@ end
 local ReskinButton = function(buName)
 	local bu = _G[buName]
 
-	bu:SetSize(C.general.bags_size, C.general.bags_size)
+	bu:SetSize(C.bags.size, C.bags.size)
 
 	if bu.restyled then return end
 
@@ -87,7 +90,7 @@ local buttons, bankbuttons = {}, {}
 
 local MoveButtons = function(table, frame)
 	local columns = ceil(sqrt(#table))
-	local iconSize = C.general.bags_size
+	local iconSize = C.bags.size
 
 	col, row = 0, 0
 	for i = 1, #table do
@@ -116,11 +119,23 @@ holder:Hide()
 F.CreateBD(holder, .6)
 
 grid = CreateFrame("Frame", nil, holder)
-grid:Hide()
+grid:SetShown(C.bags.slotsShowAlways)
 grid:SetFrameLevel(0)
-grid:RegisterEvent("CURSOR_UPDATE")
+if not C.bags.slotsShowAlways then
+	grid:RegisterEvent("CURSOR_UPDATE")
+end
 grid:SetScript("OnEvent", function(self)
 	self:SetShown(GetCursorInfo() == "item")
+end)
+
+F.AddOptionsCallback("bags", "slotsShowAlways", function()
+	if C.bags.slotsShowAlways then
+		grid:UnregisterEvent("CURSOR_UPDATE")
+		grid:Show()
+	else
+		grid:RegisterEvent("CURSOR_UPDATE")
+		grid:Hide()
+	end
 end)
 
 local ReanchorButtons = function()

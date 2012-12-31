@@ -189,7 +189,7 @@ ns.addCategory = function(name)
 
 	local tab = CreateFrame("Frame", nil, FreeUIOptionsPanel)
 	tab:SetPoint("TOPLEFT", 16, -offset)
-	tab:SetSize(160, 50)
+	tab:SetSize(160, 44)
 
 	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	tab.Text:SetPoint("CENTER")
@@ -205,7 +205,7 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	offset = offset + 61
+	offset = offset + 54
 end
 
 -- [[ Init ]]

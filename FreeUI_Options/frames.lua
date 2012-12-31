@@ -154,6 +154,7 @@ end)
 ns.addCategory("General")
 ns.addCategory("Automation")
 ns.addCategory("ActionBars")
+ns.addCategory("Bags")
 ns.addCategory("Notifications")
 ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
@@ -211,9 +212,6 @@ tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
 uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -8)
 
-local bagsSize = ns.CreateNumberSlider(general, "bags_size", SMALL, LARGE, 8, 100, 1)
-bagsSize:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 18, -42)
-
 -- [[ Automation ]]
 
 local automation = FreeUIOptionsPanel.automation
@@ -266,6 +264,23 @@ local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
 hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -66)
 
 enableStyle.children = {hotKey}
+
+-- [[ Bags ]]
+
+local bags = FreeUIOptionsPanel.bags
+
+local enable = ns.CreateCheckBox(bags, "enable", true)
+enable:SetPoint("TOPLEFT", bags.subText, "BOTTOMLEFT", 0, -8)
+
+local slotsShowAlways = ns.CreateCheckBox(bags, "slotsShowAlways", true)
+slotsShowAlways:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+
+local size = ns.CreateNumberSlider(bags, "size", SMALL, LARGE, 8, 100, 1)
+size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 18, -42)
+
+local reloadText = bags:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("TOPLEFT", size, "BOTTOMLEFT", -18, -44)
+reloadText:SetText(ns.localization.reloadException)
 
 -- [[ Notifications ]]
 

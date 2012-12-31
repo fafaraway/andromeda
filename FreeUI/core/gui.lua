@@ -48,7 +48,15 @@ end
 	end
 end]]
 
-local groups = {["general"] = true, ["automation"] = true, ["actionbars"] = true, ["notifications"] = true, ["unitframes"] = true, ["classmod"] = true}
+local groups = {
+	["general"] = true,
+	["automation"] = true,
+	["actionbars"] = true,
+	["bags"] = true,
+	["notifications"] = true,
+	["unitframes"] = true,
+	["classmod"] = true
+}
 
 -- set variables from lua options if they're not saved yet, otherwise load saved option
 for group, options in pairs(C) do

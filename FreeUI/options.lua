@@ -38,6 +38,12 @@ C["actionbars"] = {
 	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
 }
 
+C["bags"] = {
+	["enable"] = true,					-- enable the bag addon
+	["size"] = 37,						-- change the size of the bags/bank, default = 37
+	["slotsShowAlways"] = false, 		-- always show the bag item slots
+}
+
 C["notifications"] = {
 	["enable"] = true,
 
