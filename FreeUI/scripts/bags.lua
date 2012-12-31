@@ -118,23 +118,10 @@ F.CreateBD(holder, .6)
 grid = CreateFrame("Frame", nil, holder)
 grid:Hide()
 grid:SetFrameLevel(0)
-
--- boolean comparisons are faster than function calls
-local gridShown = false
-
-holder:SetScript("OnUpdate", function()
-	if GetCursorInfo() == "item" then
-		if not gridShown then
-			grid:Show()
-			gridShown = true
-		end
-	else
-		grid:Hide()
-		gridShown = false
-	end
+grid:RegisterEvent("CURSOR_UPDATE")
+grid:SetScript("OnEvent", function(self)
+	self:SetShown(GetCursorInfo() == "item")
 end)
-
-holder:SetScript("OnLeave", HideGrid)
 
 local ReanchorButtons = function()
 	table.wipe(buttons)
