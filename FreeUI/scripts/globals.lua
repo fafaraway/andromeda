@@ -157,6 +157,9 @@ ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h has come |cff00ff00online|r."
 ERR_SKILL_UP_SI = "%s |cff1eff00%d|r"
 FACTION_STANDING_DECREASED = "%s -%d"
 FACTION_STANDING_INCREASED = "%s +%d"
+FACTION_STANDING_INCREASED_ACH_BONUS = "%s +%d (+%.1f)"
+FACTION_STANDING_INCREASED_BONUS = "%s + %d (+%.1f RAF)"
+FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
 
 --[[ Text colours ]]
 
