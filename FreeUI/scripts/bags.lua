@@ -3,6 +3,9 @@
 local F, C, L = unpack(select(2, ...))
 local _G = _G
 
+local grid
+local r, g, b = unpack(C.class)
+
 --[[ Get the number of bag and bank container slots used ]]
 
 local function CheckSlots()
@@ -14,6 +17,16 @@ local function CheckSlots()
 	return 1
 end
 
+-- [[ Fancy borders when dragging items ]]
+
+local function onEnter(self)
+	self.bg:SetBackdropBorderColor(r, g, b)
+end
+
+local function onLeave(self)
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+end
+
 -- [[ Function to reskin buttons and hide default bags]]
 
 local ReskinButton = function(buName)
@@ -21,12 +34,13 @@ local ReskinButton = function(buName)
 
 	bu:SetSize(C.general.bags_size, C.general.bags_size)
 
-	if bu.reskinned then return end
+	if bu.restyled then return end
 
 	local co = _G[buName.."Count"]
 
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
+	bu:SetHighlightTexture("")
 	bu:SetFrameStrata("HIGH")
 
 	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
@@ -36,13 +50,22 @@ local ReskinButton = function(buName)
 	_G[buName.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 	_G[buName.."IconQuestTexture"]:SetAlpha(0)
 
-	bu.reskinned = true
+	local bg = CreateFrame("Frame", nil, grid)
+	bg:SetPoint("TOPLEFT", bu, -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", bu, 1, -1)
+	F.CreateBD(bg, 0)
+	bu.bg = bg
+
+	bu:HookScript("OnEnter", onEnter)
+	bu:HookScript("OnLeave", onLeave)
+
+	bu.restyled = true
 end
 
 local HideBag = function(bagName)
 	local bag = _G[bagName]
 
-	if bag.reskinned then return end
+	if bag.restyled then return end
 
 	bag:EnableMouse(false)
 	_G[bagName.."CloseButton"]:Hide()
@@ -51,7 +74,7 @@ local HideBag = function(bagName)
 		select(i, bag:GetRegions()):SetAlpha(0)
 	end
 
-	bag.reskinned = true
+	bag.restyled = true
 end
 
 -- [[ Local stuff ]]
@@ -91,6 +114,27 @@ holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -49, 49)
 holder:SetFrameStrata("HIGH")
 holder:Hide()
 F.CreateBD(holder, .6)
+
+grid = CreateFrame("Frame", nil, holder)
+grid:Hide()
+grid:SetFrameLevel(0)
+
+-- boolean comparisons are faster than function calls
+local gridShown = false
+
+holder:SetScript("OnUpdate", function()
+	if GetCursorInfo() == "item" then
+		if not gridShown then
+			grid:Show()
+			gridShown = true
+		end
+	else
+		grid:Hide()
+		gridShown = false
+	end
+end)
+
+holder:SetScript("OnLeave", HideGrid)
 
 local ReanchorButtons = function()
 	table.wipe(buttons)
