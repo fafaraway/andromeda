@@ -200,7 +200,7 @@ local ReanchorBankButtons = function()
 
 		for i = GetContainerNumSlots(f), 1, -1  do
 			bu = con.."Item"..i
-			ReskinButton(bu)
+			ReskinButton(bu, bankGrid)
 			tinsert(bankbuttons, bu)
 		end
 	end
