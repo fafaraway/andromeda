@@ -1228,6 +1228,7 @@ local UnitSpecific = {
 
 		self.Auras = Auras
 
+		Auras.showStealableBuffs = true
 		Auras.PostUpdateIcon = PostUpdateIcon
 
 		-- complicated filter is complicated

@@ -1,5 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
+local r, g, b = C.classcolours["MAGE"].r, C.classcolours["MAGE"].g, C.classcolours["MAGE"].b
+
 local parent, ns = ...
 local oUF = ns.oUF
 
@@ -44,11 +46,10 @@ local createAuraIcon = function(icons, index)
 	overlay:SetTexCoord(.296875, .5703125, 0, .515625)
 	button.overlay = overlay
 
-	local stealable = button:CreateTexture(nil, 'OVERLAY')
-	stealable:SetTexture[[Interface\TargetingFrame\UI-TargetingFrame-Stealable]]
-	stealable:SetPoint('TOPLEFT', -3, 3)
-	stealable:SetPoint('BOTTOMRIGHT', 3, -3)
-	stealable:SetBlendMode'ADD'
+	local stealable = button:CreateTexture(nil, "BACKGROUND", 2)
+	stealable:SetPoint("TOPLEFT", -1, 1)
+	stealable:SetPoint("BOTTOMRIGHT", 1, -1)
+	stealable:SetTexture(r, g, b)
 	button.stealable = stealable
 
 	local bg = button:CreateTexture(nil, "BACKGROUND")
