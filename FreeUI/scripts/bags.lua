@@ -7,6 +7,7 @@ if not C.bags.enable then return end
 local _G = _G
 
 local grid
+local bankGrid
 local r, g, b = unpack(C.class)
 
 --[[ Get the number of bag and bank container slots used ]]
@@ -32,7 +33,7 @@ end
 
 -- [[ Function to reskin buttons and hide default bags]]
 
-local ReskinButton = function(buName)
+local ReskinButton = function(buName, gridFrame)
 	local bu = _G[buName]
 
 	bu:SetSize(C.bags.size, C.bags.size)
@@ -53,7 +54,7 @@ local ReskinButton = function(buName)
 	_G[buName.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 	_G[buName.."IconQuestTexture"]:SetAlpha(0)
 
-	local bg = CreateFrame("Frame", nil, grid)
+	local bg = CreateFrame("Frame", nil, gridFrame)
 	bg:SetPoint("TOPLEFT", bu, -1, 1)
 	bg:SetPoint("BOTTOMRIGHT", bu, 1, -1)
 	F.CreateBD(bg, 0)
@@ -119,24 +120,6 @@ holder:Hide()
 F.CreateBD(holder, .6)
 
 grid = CreateFrame("Frame", nil, holder)
-grid:SetShown(C.bags.slotsShowAlways)
-grid:SetFrameLevel(0)
-if not C.bags.slotsShowAlways then
-	grid:RegisterEvent("CURSOR_UPDATE")
-end
-grid:SetScript("OnEvent", function(self)
-	self:SetShown(GetCursorInfo() == "item")
-end)
-
-F.AddOptionsCallback("bags", "slotsShowAlways", function()
-	if C.bags.slotsShowAlways then
-		grid:UnregisterEvent("CURSOR_UPDATE")
-		grid:Show()
-	else
-		grid:RegisterEvent("CURSOR_UPDATE")
-		grid:Hide()
-	end
-end)
 
 local ReanchorButtons = function()
 	table.wipe(buttons)
@@ -146,7 +129,7 @@ local ReanchorButtons = function()
 
 		for i = GetContainerNumSlots(f-1), 1, -1  do
 			bu = con.."Item"..i
-			ReskinButton(bu)
+			ReskinButton(bu, grid)
 			tinsert(buttons, bu)
 		end
 	end
@@ -169,6 +152,29 @@ bankholder:SetFrameStrata("HIGH")
 bankholder:Hide()
 F.CreateBD(bankholder, .6)
 
+bankGrid = CreateFrame("Frame", nil, bankholder)
+
+for _, gridFrame in pairs({grid, bankGrid}) do
+	gridFrame:SetShown(C.bags.slotsShowAlways)
+	gridFrame:SetFrameLevel(0)
+	if not C.bags.slotsShowAlways then
+		gridFrame:RegisterEvent("CURSOR_UPDATE")
+	end
+	gridFrame:SetScript("OnEvent", function(self)
+		self:SetShown(GetCursorInfo() == "item")
+	end)
+
+	F.AddOptionsCallback("bags", "slotsShowAlways", function()
+		if C.bags.slotsShowAlways then
+			gridFrame:UnregisterEvent("CURSOR_UPDATE")
+			gridFrame:Show()
+		else
+			gridFrame:RegisterEvent("CURSOR_UPDATE")
+			gridFrame:Hide()
+		end
+	end)
+end
+
 local purchase = F.CreateFS(bankholder, 8)
 purchase:SetPoint("BOTTOMLEFT", bankholder, "BOTTOMLEFT", 4, 4)
 purchase:SetText("Buy slots: /freeui purchase")
@@ -177,7 +183,7 @@ local ReanchorBankButtons = function()
 	table.wipe(bankbuttons)
 	for i = 1, 28 do
 		bu = "BankFrameItem"..i
-		ReskinButton(bu)
+		ReskinButton(bu, bankGrid)
 		tinsert(bankbuttons, bu)
 	end
 
