@@ -46,7 +46,8 @@ local createAuraIcon = function(icons, index)
 	overlay:SetTexCoord(.296875, .5703125, 0, .515625)
 	button.overlay = overlay
 
-	local stealable = button:CreateTexture(nil, "BACKGROUND", 2)
+	local stealable = button:CreateTexture()
+	stealable:SetDrawLayer("BACKGROUND", 2)
 	stealable:SetPoint("TOPLEFT", -1, 1)
 	stealable:SetPoint("BOTTOMRIGHT", 1, -1)
 	stealable:SetTexture(r, g, b)
