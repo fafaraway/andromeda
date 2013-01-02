@@ -107,9 +107,7 @@ local Enable = function(self, unit)
 		altpowerbar:Hide()
 
 		if(altpowerbar:IsMouseEnabled()) then
-			if(not altpowerbar:HasScript('OnEnter')) then
-				altpowerbar:SetScript('OnEnter', OnEnter)
-			end
+			altpowerbar:SetScript('OnEnter', OnEnter)
 			altpowerbar:SetScript('OnLeave', OnLeave)
 
 			if(not altpowerbar.UpdateTooltip) then
