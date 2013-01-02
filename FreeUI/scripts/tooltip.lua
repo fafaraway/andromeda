@@ -59,7 +59,7 @@ for i = 1, #tooltips do
 	bg:SetBackdrop(backdrop)
 	bg:SetBackdropColor(0, 0, 0, .6)
 	bg:SetBackdropBorderColor(0, 0, 0)
-	
+
 	t.GetBackdrop = getBackdrop
 	t.GetBackdropColor = getBackdropColor
 	t.GetBackdropBorderColor = getBackdropBorderColor
@@ -103,7 +103,7 @@ local function GetColor(unit)
 	if UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
 		r, g, b = C.classcolours[class or "WARRIOR"].r, C.classcolours[class or "WARRIOR"].g, C.classcolours[class or "WARRIOR"].b
-	elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) or UnitIsDead(unit) then
+	elseif (not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) or UnitIsDead(unit) then
 		r, g, b = .6, .6, .6
 	else
 		r, g, b = unpack(C.reactioncolours[UnitReaction("player", unit) or 5])
@@ -189,7 +189,7 @@ local tex = frame:CreateTexture("ItemRefTooltipIcon", "TOOLTIP")
 tex:SetAllPoints(frame)
 
 F.CreateBG(frame)
-			
+
 local AddItemIcon = function()
 	local frame = _G["ItemRefTooltipIconFrame"]
 	frame:Hide()
