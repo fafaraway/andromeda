@@ -402,15 +402,18 @@ F.ReskinCheck = function(f)
 	ch:SetVertexColor(r, g, b)
 end
 
+local function colourRadio(f)
+	f.bd:SetBackdropBorderColor(r, g, b)
+end
+
+local function clearRadio(f)
+	f.bd:SetBackdropBorderColor(0, 0, 0)
+end
+
 F.ReskinRadio = function(f)
 	f:SetNormalTexture("")
-	f:SetHighlightTexture(C.media.texture)
+	f:SetHighlightTexture("")
 	f:SetCheckedTexture(C.media.texture)
-
-	local hl = f:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 4, -4)
-	hl:SetPoint("BOTTOMRIGHT", -4, 4)
-	hl:SetVertexColor(r, g, b, .3)
 
 	local ch = f:GetCheckedTexture()
 	ch:SetPoint("TOPLEFT", 4, -4)
@@ -422,12 +425,16 @@ F.ReskinRadio = function(f)
 	bd:SetPoint("BOTTOMRIGHT", -3, 3)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
+	f.bd = bd
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
 	tex:SetPoint("TOPLEFT", 4, -4)
 	tex:SetPoint("BOTTOMRIGHT", -4, 4)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+
+	f:HookScript("OnEnter", colourRadio)
+	f:HookScript("OnLeave", clearRadio)
 end
 
 F.ReskinSlider = function(f)
