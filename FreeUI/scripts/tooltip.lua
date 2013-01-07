@@ -112,6 +112,8 @@ local function GetColor(unit)
 	return Hex(r, g, b)
 end
 
+local hasMSP
+
 local function OnTooltipSetUnit(self)
 	local lines = self:NumLines()
 	local _, unit = self:GetUnit()
@@ -176,9 +178,42 @@ local function OnTooltipSetUnit(self)
 
 		self:AddLine(color..text)
 	end
+
+	if msp then
+		hasMSP = false
+
+		if msp.char[unitName].supported then
+			hasMSP = true
+			GameTooltipTextRight1:SetText(GetColor(unit).."MSP")
+			GameTooltipTextRight1:Show()
+			local cu = msp.char[unitName].field["CU"]
+			if cu ~= "" then
+				if cu:len() > 50 then cu = cu:sub(1, 50).."..." end
+				GameTooltip:AddLine("|cffdddddd"..cu)
+			end
+		else
+			msp:Request(unitName, "CU")
+		end
+	end
 end
 
 GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+
+if msp then
+	tinsert(msp.callback.received, function(unitName)
+		if not hasMSP and UnitExists("mouseover") and UnitName("mouseover") == unitName then
+			hasMSP = true
+			GameTooltipTextRight1:SetText(GetColor("mouseover").."MSP")
+			GameTooltipTextRight1:Show()
+			local cu = msp.char[unitName].field["CU"]
+			if cu ~= "" then
+				if cu:len() > 50 then cu = cu:sub(1, 50).."..." end
+				GameTooltip:AddLine("|cffdddddd"..cu)
+			end
+			GameTooltip:Show()
+		end
+	end)
+end
 
 --[[ Item Icons ]]
 local frame = CreateFrame("Frame", "ItemRefTooltipIconFrame", _G["ItemRefTooltip"])

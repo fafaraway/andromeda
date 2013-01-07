@@ -4,7 +4,7 @@
 ## Author: Haleth/Freethinker
 ## Version: 6.2.2
 ## RequiredDeps: Blizzard_CombatText
-## OptionalDeps: Clique, FreeUI_Options, oUF
+## OptionalDeps: Clique, FreeUI_Options, MyRolePlay, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 
