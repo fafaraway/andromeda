@@ -168,6 +168,16 @@ local onTabClick = function(tab)
 	setActiveTab(tab)
 end
 
+local function colourTab(f)
+	f.Text:SetTextColor(1, 1, 1)
+	f:SetBackdropBorderColor(r, g, b)
+end
+
+local function clearTab(f)
+	f.Text:SetTextColor(1, .82, 0)
+	f:SetBackdropBorderColor(0, 0, 0)
+end
+
 ns.addCategory = function(name)
 	local tag = strlower(name)
 
@@ -196,6 +206,8 @@ ns.addCategory = function(name)
 	tab.Text:SetText(ns.localization[tag])
 
 	tab:SetScript("OnMouseUp", onTabClick)
+	tab:SetScript("OnEnter", colourTab)
+	tab:SetScript("OnLeave", clearTab)
 
 	tab.panel = panel
 	panel.tab = tab
