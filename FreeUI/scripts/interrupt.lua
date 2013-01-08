@@ -11,7 +11,7 @@ interrupt:SetScript("OnEvent", function(_, _, _, subevent, _, _, sourceName, _, 
 		if sourceName == playerName and GetNumGroupMembers() > 5 and GetCurrentMapAreaID() ~= 708 then
 			local _, instanceType = IsInInstance()
 			if instanceType ~= "pvp" then
-				SendChatMessage("Interrupted: "..destName.. "'s " ..GetSpellLink(spellID).. ".", "RAID")
+				SendChatMessage("Interrupted: "..destName.. "'s " ..GetSpellLink(spellID).. ".", "INSTANCE_CHAT")
 			end
 		end
 	end
