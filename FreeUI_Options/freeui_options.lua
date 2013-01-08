@@ -290,7 +290,6 @@ local function removeCharData(self)
 			if text == name then
 				FreeUIGlobalConfig[realm].class[name] = nil
 				FreeUIGlobalConfig[realm].gold[name] = nil
-				FreeUIGlobalConfig[realm].currency[name] = nil
 				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..text.." removed.", unpack(C.class))
 				return
 			end
