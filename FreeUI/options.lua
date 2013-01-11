@@ -5,7 +5,6 @@ local F, C, L = unpack(select(2, ...))
 --[[ Global config ]]
 
 C["general"] = {
-	["bags_size"] = 37,				-- change the size of the bags/bank, default = 37
 	["buffreminder"] = true, 		-- reminder for selfbuffs
 	["buffTracker"] = true, 		-- track important buffs for some classes (scroll down to buffTracker table to configure)
 	["combatText"] = true, 			-- show incoming damage and healing near player frame
