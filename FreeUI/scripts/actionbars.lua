@@ -327,3 +327,11 @@ text:SetPoint("CENTER", 1, 1)
 
 RegisterStateDriver(leavebu, "visibility", "[petbattle][vehicleui][overridebar] hide; [@vehicle,exists][possessbar] show; hide")
 RegisterStateDriver(leave, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
+
+-- [[ Bags ]]
+
+if not C.bags.enable then
+	for i = 0, 3 do
+		_G["CharacterBag"..i.."Slot"]:SetParent(FreeUIHider)
+	end
+end
