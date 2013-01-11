@@ -265,6 +265,18 @@ hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -66)
 
 enableStyle.children = {hotKey}
 
+local function toggleActionBarsOptions()
+	local shown = enable:GetChecked() == 1
+	enableStyle:SetShown(shown)
+	rightBarsMouseover:SetShown(shown)
+	reloadText:SetShown(shown)
+	line:SetShown(shown)
+	hotKey:SetShown(shown)
+end
+
+enable:HookScript("OnClick", toggleActionBarsOptions)
+actionbars:HookScript("OnShow", toggleActionBarsOptions)
+
 -- [[ Bags ]]
 
 local bags = FreeUIOptionsPanel.bags
@@ -281,6 +293,16 @@ size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 18, -42)
 local reloadText = bags:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 reloadText:SetPoint("TOPLEFT", size, "BOTTOMLEFT", -18, -44)
 reloadText:SetText(ns.localization.reloadException)
+
+local function toggleBagsOptions()
+	local shown = enable:GetChecked() == 1
+	slotsShowAlways:SetShown(shown)
+	size:SetShown(shown)
+	reloadText:SetShown(shown)
+end
+
+enable:HookScript("OnClick", toggleBagsOptions)
+bags:HookScript("OnShow", toggleBagsOptions)
 
 -- [[ Notifications ]]
 
@@ -310,6 +332,20 @@ timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 18, -30)
 local reloadText = notifications:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 reloadText:SetPoint("TOPLEFT", checkGuildEvents, "BOTTOMLEFT", 0, -18)
 reloadText:SetText(ns.localization.reloadException)
+
+local function toggleNotificationsOptions()
+	local shown = enable:GetChecked() == 1
+	checkMail:SetShown(shown)
+	checkEvents:SetShown(shown)
+	checkGuildEvents:SetShown(shown)
+	playSounds:SetShown(shown)
+	animations:SetShown(shown)
+	timeShown:SetShown(shown)
+	reloadText:SetShown(shown)
+end
+
+enable:HookScript("OnClick", toggleNotificationsOptions)
+notifications:HookScript("OnShow", toggleNotificationsOptions)
 
 -- [[ Unit frames ]]
 
@@ -364,7 +400,7 @@ unitframes.Layout:SetPoint("TOP", 0, -374)
 unitframes.Layout:SetSize(128, 25)
 tinsert(ns.buttons, unitframes.Layout)
 
-local function toggleUFOptions(self)
+local function toggleUFOptions()
 	local shown = enable:GetChecked() == 1
 	enableGroup:SetShown(shown)
 	limitRaidSize:SetShown(shown)
@@ -375,6 +411,7 @@ local function toggleUFOptions(self)
 	castbarSeparate:SetShown(shown)
 	reloadText:SetShown(shown)
 	castbarSeparateOnlyCasters:SetShown(shown)
+	enableArena:SetShown(shown)
 	line:SetShown(shown)
 	unitframes.Layout:SetShown(shown)
 end
