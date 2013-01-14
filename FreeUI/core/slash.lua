@@ -64,17 +64,6 @@ SlashCmdList.FREEUI = function(cmd)
 	elseif(cmd == "heal" or cmd == "healer") then
 		FreeUIConfig.layout = 2
 		ReloadUI()
-	elseif cmd == "purchase" then
-		if BankFrame and BankFrame:IsShown() then
-			local _, full = GetNumBankSlots()
-			if full then
-				print("Can't buy anymore slots.")
-				return
-			end
-			StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
-		else
-			print("You need to open your bank first.")
-		end
 	elseif cmd == "install" then
 		if IsAddOnLoaded("FreeUI_Install") then
 			FreeUI_InstallFrame:Show()
@@ -92,7 +81,6 @@ SlashCmdList.FREEUI = function(cmd)
 		end
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r [dps/healer]|cffffffff: Select a unitframe layout|r", unpack(C.class))
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r purchase|cffffffff: Buy a new bank slot|r", unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r install|cffffffff: Load the intaller|r", unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r reset|cffffffff: Clear saved settings|r", unpack(C.class))
 	end
