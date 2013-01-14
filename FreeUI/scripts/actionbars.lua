@@ -266,30 +266,67 @@ if C.actionbars.rightbars_mouseover == true then
 	bar4:EnableMouse(true)
 	bar5:EnableMouse(true)
 
-	local function mouseover(alpha)
-		for i=1, 12 do
-			local ab1 = _G["MultiBarLeftButton"..i]
-			local ab2 = _G["MultiBarRightButton"..i]
-			ab1:SetAlpha(alpha)
-			ab2:SetAlpha(alpha)
+	local function showButtons()
+		for i = 1, 12 do
+			_G["MultiBarLeftButton"..i]:SetAlpha(1)
+			_G["MultiBarRightButton"..i]:SetAlpha(1)
 		end
 	end
 
-	for i=1, 12 do
-		local ab1 = _G["MultiBarLeftButton"..i]
-		local ab2 = _G["MultiBarRightButton"..i]
-		ab1:SetAlpha(0)
-		ab1:HookScript("OnEnter", function(self) mouseover(1) end)
-		ab1:HookScript("OnLeave", function(self) mouseover(0) end)
-		ab2:SetAlpha(0)
-		ab2:HookScript("OnEnter", function(self) mouseover(1) end)
-		ab2:HookScript("OnLeave", function(self) mouseover(0) end)
+	local function hideButtons()
+		for i = 1, 12 do
+			_G["MultiBarLeftButton"..i]:SetAlpha(0)
+			_G["MultiBarRightButton"..i]:SetAlpha(0)
+		end
 	end
 
-	bar4:HookScript("OnEnter", function(self) mouseover(1) end)
-	bar4:HookScript("OnLeave", function(self) mouseover(0) end)
-	bar5:HookScript("OnEnter", function(self) mouseover(1) end)
-	bar5:HookScript("OnLeave", function(self) mouseover(0) end)
+	for i = 1, 12 do
+		local ab1 = _G["MultiBarLeftButton"..i]
+		local ab2 = _G["MultiBarRightButton"..i]
+
+		ab1:SetAlpha(0)
+		ab1:HookScript("OnEnter", showButtons)
+		ab1:HookScript("OnLeave", hideButtons)
+		ab2:SetAlpha(0)
+		ab2:HookScript("OnEnter", showButtons)
+		ab2:HookScript("OnLeave", hideButtons)
+	end
+
+	bar4:HookScript("OnEnter", showButtons)
+	bar4:HookScript("OnLeave", hideButtons)
+	bar5:HookScript("OnEnter", showButtons)
+	bar5:HookScript("OnLeave", hideButtons)
+
+	local function showButtonsFlyout()
+		local frame = SpellFlyout:GetParent():GetParent():GetParent()
+		if frame and (frame == FreeUI_MultiBarLeft or frame == FreeUI_MultiBarRight) then
+			showButtons()
+		end
+	end
+
+	local function hideButtonsFlyout()
+		local frame = SpellFlyout:GetParent():GetParent():GetParent()
+		if frame and (frame == FreeUI_MultiBarLeft or frame == FreeUI_MultiBarRight) then
+			hideButtons()
+		end
+	end
+
+	SpellFlyout:HookScript("OnShow", function(self)
+		local frame = self:GetParent():GetParent():GetParent()
+		if frame and (frame == FreeUI_MultiBarLeft or frame == FreeUI_MultiBarRight) then
+			for i = 1, 10 do
+				local bu = _G["SpellFlyoutButton"..i]
+				if bu and not bu.isHooked then
+					bu:HookScript("OnEnter", showButtonsFlyout)
+					bu:HookScript("OnLeave", hideButtonsFlyout)
+					bu.isHooked = true
+				end
+			end
+		end
+	end)
+
+	SpellFlyout:HookScript("OnEnter", showButtonsFlyout)
+	SpellFlyout:HookScript("OnLeave", hideButtonsFlyout)
 end
 
 --[[ Extra bar ]]
