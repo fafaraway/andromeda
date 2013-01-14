@@ -177,7 +177,14 @@ end
 
 local purchase = F.CreateFS(bankholder, 8)
 purchase:SetPoint("BOTTOMLEFT", bankholder, "BOTTOMLEFT", 4, 4)
-purchase:SetText("Buy slots: /freeui purchase")
+purchase:SetText("Buy new slots: Click here.")
+
+local purchaseButton = CreateFrame("Frame", nil, bankholder)
+purchaseButton:SetSize(purchase:GetStringWidth(), 8)
+purchaseButton:SetPoint("BOTTOMLEFT", bankholder, "BOTTOMLEFT", 4, 4)
+purchaseButton:SetScript("OnMouseUp", function()
+	StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
+end)
 
 local ReanchorBankButtons = function()
 	table.wipe(bankbuttons)
@@ -205,7 +212,10 @@ local ReanchorBankButtons = function()
 		end
 	end
 	local _, full = GetNumBankSlots()
-	if full then purchase:Hide() end
+	if full then
+		purchase:Hide()
+		purchaseButton:Hide()
+	end
 
 	MoveButtons(bankbuttons, bankholder)
 	bankholder:Show()
