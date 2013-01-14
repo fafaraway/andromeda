@@ -4,9 +4,9 @@ local wf = WatchFrame
 
 local function moveTracker()
 	if MultiBarLeft:IsShown() then
-		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -100, -160)
+		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -105, -160)
 	elseif MultiBarRight:IsShown() then
-		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -70, -160)
+		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -75, -160)
 	else
 		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -160)
 	end
