@@ -314,11 +314,6 @@ C["debuffFilter"] = {
 	[115798] = true,
 	[109466] = true, -- Curse of Enfeeblement
 
-	-- Mortal Wounds
-	[115804] = true,
-	[82654] = true, -- Widow Venom
-	[8680] = true, -- Wound Poison
-
 	-- Magic Vulnerability
 	[93068] = true, -- Master Poisoner
 	[1490] = true, -- Curse of the Elements
