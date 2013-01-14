@@ -5678,6 +5678,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
 
+		MacroNewButton:ClearAllPoints()
+		MacroNewButton:SetPoint("RIGHT", MacroExitButton, "LEFT", -1, 0)
+
 		for i = 1, MAX_ACCOUNT_MACROS do
 			local bu = _G["MacroButton"..i]
 			local ic = _G["MacroButton"..i.."Icon"]
