@@ -178,7 +178,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	if(items > 0) then
 		for i = 1, items do
 			local slot = addon.slots[i] or createSlot(i)
-			local texture, item, quantity, quality, locked, questItem = GetLootSlotInfo(i)
+			local texture, item, quantity, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
 			if texture then
 
 				if GetLootSlotType(i) == LOOT_SLOT_MONEY then
@@ -195,12 +195,16 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 				slot.quality = quality
 
 				local color = ITEM_QUALITY_COLORS[quality]
-				slot.name:SetTextColor(color.r, color.g, color.b)
 
-				if questItem then
+				if questId and not isActive then
 					slot.bg:SetBackdropColor(.5, 0, 0, .5)
+					slot.name:SetTextColor(1, 0, 0)
+				elseif questId or isQuestItem then
+					slot.bg:SetBackdropColor(.5, 0, 0, .5)
+					slot.name:SetTextColor(color.r, color.g, color.b)
 				else
 					slot.bg:SetBackdropColor(0, 0, 0, .5)
+					slot.name:SetTextColor(color.r, color.g, color.b)
 				end
 
 				slot.name:SetText(item)
