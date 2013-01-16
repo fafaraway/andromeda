@@ -2757,7 +2757,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBG(BonusRollFrame.PromptFrame.Icon)
 
 		BonusRollFrame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
-		BonusRollFrame.PromptFrame.Timer.Bar:SetGradient("VERTICAL", 1, 1, 0, .7, .7, 0)
 
 		F.CreateBD(BonusRollFrame)
 		F.CreateBDFrame(BonusRollFrame.PromptFrame.Timer, .25)
