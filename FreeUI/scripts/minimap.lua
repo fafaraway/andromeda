@@ -118,7 +118,7 @@ QueueStatusMinimapButton:SetHighlightTexture("")
 QueueStatusMinimapButton.Eye.texture:SetTexture("")
 
 QueueStatusFrame:ClearAllPoints()
-QueueStatusFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4.5, -1.5)
+QueueStatusFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4, -1)
 
 local dots = {}
 for i = 1, 8 do

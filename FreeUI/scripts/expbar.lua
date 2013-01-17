@@ -148,7 +148,7 @@ mouseFrame:SetScript("OnEnter", function()
 	local XP, maxXP = UnitXP("player"), UnitXPMax("player")
 	local restXP = GetXPExhaustion()
 
-	GameTooltip:SetOwner(mouseFrame, "ANCHOR_BOTTOMLEFT", -3, 5)
+	GameTooltip:SetOwner(mouseFrame, "ANCHOR_BOTTOMLEFT", 0, 7)
 	GameTooltip:ClearLines()
 	if UnitLevel("player") ~= MAX_PLAYER_LEVEL then
 		GameTooltip:AddLine("Experience:", r, g, b)

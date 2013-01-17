@@ -53,8 +53,8 @@ for i = 1, #tooltips do
 	local t = _G[tooltips[i]]
 	t:SetBackdrop(nil)
 	local bg = CreateFrame("Frame", nil, t)
-	bg:SetPoint("TOPLEFT")
-	bg:SetPoint("BOTTOMRIGHT")
+	bg:SetPoint("TOPLEFT", 1, -1)
+	bg:SetPoint("BOTTOMRIGHT", -1, 1)
 	bg:SetFrameLevel(t:GetFrameLevel()-1)
 	bg:SetBackdrop(backdrop)
 	bg:SetBackdropColor(0, 0, 0, .6)
@@ -74,8 +74,8 @@ end)
 local sb = _G["GameTooltipStatusBar"]
 sb:SetHeight(3)
 sb:ClearAllPoints()
-sb:SetPoint("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 1, 1)
-sb:SetPoint("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -1, 1)
+sb:SetPoint("BOTTOMLEFT", GameTooltip, "BOTTOMLEFT", 2, 2)
+sb:SetPoint("BOTTOMRIGHT", GameTooltip, "BOTTOMRIGHT", -2, 2)
 sb:SetStatusBarTexture(C.media.texture)
 
 local sep = GameTooltipStatusBar:CreateTexture(nil, "ARTWORK")
@@ -217,7 +217,7 @@ end
 
 --[[ Item Icons ]]
 local frame = CreateFrame("Frame", "ItemRefTooltipIconFrame", _G["ItemRefTooltip"])
-frame:SetPoint("TOPRIGHT", _G["ItemRefTooltip"], "TOPLEFT", -2, -1)
+frame:SetPoint("TOPRIGHT", _G["ItemRefTooltip"], "TOPLEFT", -1, -2)
 frame:SetSize(32, 32)
 
 local tex = frame:CreateTexture("ItemRefTooltipIcon", "TOOLTIP")
