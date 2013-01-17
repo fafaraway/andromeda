@@ -271,6 +271,10 @@ C["selfbuffs"] = {
 -- spellID 1-5, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
 -- if you use multiple spellIDs, first available gets displayed
 C["buffTracker"] = {
+	["MAGE"] = {
+	-- Alter Time
+	{spellId = 110909, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+	},
 	["MONK"] = {
 	-- Tiger Power
 	{spellId = 125359, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
