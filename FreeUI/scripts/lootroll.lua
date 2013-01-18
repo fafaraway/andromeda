@@ -43,15 +43,34 @@ local function FrameOnClick(self)
 	HandleModifiedItemClick(self.rollLink)
 end
 
+local function onUpdate(self)
+	if GameTooltip:IsOwned(self) then
+		if IsModifiedClick("COMPAREITEMS") or GetCVarBool("alwaysCompareItems") then
+			GameTooltip_ShowCompareItem()
+		else
+			ShoppingTooltip1:Hide()
+			ShoppingTooltip2:Hide()
+			ShoppingTooltip3:Hide()
+		end
+
+		if IsModifiedClick("DRESSUP") then
+			ShowInspectCursor()
+		else
+			ResetCursor()
+		end
+	end
+end
+
 local function FrameOnEnter(self)
 	if(not self.rollId) then return end
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
 	GameTooltip:SetLootRollItem(self.rollId)
-	if IsShiftKeyDown() then GameTooltip_ShowCompareItem() end
+	self:SetScript("OnUpdate", onUpdate)
 	CursorUpdate(self)
 end
 
 local function FrameOnLeave(self)
+	self:SetScript("OnUpdate", nil)
 	GameTooltip:Hide()
 	ResetCursor()
 end
