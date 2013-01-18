@@ -164,6 +164,7 @@ C["selfbuffs"] = {
 		{
 			{
 				1459, -- Arcane Brilliance
+				61316, -- Dalaran Brilliance
 				77747, -- Burning Wrath
 				109773, -- Dark Intent
 			},
