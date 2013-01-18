@@ -272,34 +272,34 @@ C["selfbuffs"] = {
 -- if you use multiple spellIDs, first available gets displayed
 C["buffTracker"] = {
 	["MAGE"] = {
-	-- Alter Time
-	{spellId = 110909, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		-- Alter Time
+		{spellId = 110909, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 	},
 	["MONK"] = {
-	-- Tiger Power
-	{spellId = 125359, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		-- Tiger Power
+		{spellId = 125359, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["PALADIN"] = {
-	-- Sacred Shield
-	{spellId = 20925, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	-- Divine Shield, Hand of Protection, Avenging Wrath, Holy Avenger
-	{spellId = 642, spellId2 = 1022, spellId3 = 31884, spellId4 = 105809, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
-	-- Inquisition, Bastion of Glory, Divine Plea
-	{spellId = 84963, spellId2 = 114637, spellId3 = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		-- Sacred Shield
+		{spellId = 20925, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		-- Divine Shield, Hand of Protection, Avenging Wrath, Holy Avenger
+		{spellId = 642, spellId2 = 1022, spellId3 = 31884, spellId4 = 105809, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
+		-- Inquisition, Bastion of Glory, Divine Plea
+		{spellId = 84963, spellId2 = 114637, spellId3 = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["ROGUE"] = {
-	-- Bandit's Guile, Recuperate
-	{spellId = 84745, spellId2 = 84746, spellId3 = 84747, spellId4 = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	-- Adrenaline Rush
-	{spellId = 13750, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
-	-- Slice and dice
-	{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		-- Bandit's Guile, Recuperate
+		{spellId = 84745, spellId2 = 84746, spellId3 = 84747, spellId4 = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		-- Adrenaline Rush
+		{spellId = 13750, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		-- Slice and dice
+		{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["WARRIOR"] = {
-	-- Last Stand, Shield Wall
-	{spellId = 12975, spellId2 = 871, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
-	-- Shield Block
-	{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		-- Last Stand, Shield Wall
+		{spellId = 12975, spellId2 = 871, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		-- Shield Block
+		{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	}
 }
 
