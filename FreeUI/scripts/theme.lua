@@ -3848,6 +3848,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
 			for i = 1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
 				local bu = _G["AchievementFrameSummaryAchievement"..i]
+
+				if bu.accountWide then
+					bu.label:SetTextColor(0, .6, 1)
+				else
+					bu.label:SetTextColor(.9, .9, .9)
+				end
+
 				if not bu.reskinned then
 					bu:DisableDrawLayer("BORDER")
 
