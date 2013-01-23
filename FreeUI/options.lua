@@ -273,7 +273,9 @@ C["selfbuffs"] = {
 C["buffTracker"] = {
 	["MAGE"] = {
 		-- Alter Time
-		{spellId = 110909, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		{spellId = 110909, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		-- Arcane Power
+		{spellId = 12042, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 	},
 	["MONK"] = {
 		-- Tiger Power
