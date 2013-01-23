@@ -27,3 +27,42 @@ overlay:SetPoint("TOPLEFT", 0, -1)
 overlay:SetPoint("BOTTOMRIGHT")
 overlay:SetTexture(C.media.backdrop)
 overlay:SetGradientAlpha("VERTICAL", .1, .1, .1, .5, 0, 0, 0, .5)
+
+-- Queue popup timer!
+
+local LFD_QUEUE_TIMEOUT = 40
+
+local timer = CreateFrame("StatusBar", nil, bottompanel)
+timer:SetPoint("TOPLEFT")
+timer:SetPoint("TOPRIGHT")
+timer:SetHeight(1)
+timer:SetStatusBarTexture(C.media.backdrop)
+timer:SetStatusBarColor(unpack(C.class))
+timer:SetMinMaxValues(0, LFD_QUEUE_TIMEOUT)
+timer:Hide()
+
+local count = 0
+
+timer:SetScript("OnUpdate", function(self, elapsed)
+	count = count + elapsed
+	if count < LFD_QUEUE_TIMEOUT then
+		timer:SetValue(count)
+	else
+		self:Hide()
+		count = 0
+		self:SetValue(0)
+	end
+end)
+
+timer:RegisterEvent("LFG_PROPOSAL_SHOW")
+timer:RegisterEvent("LFG_PROPOSAL_FAILED")
+timer:RegisterEvent("LFG_PROPOSAL_SUCCEEDED")
+timer:SetScript("OnEvent", function(self, event)
+	if event == "LFG_PROPOSAL_SHOW" then
+		self:Show()
+	else
+		self:Hide()
+		count = 0
+		self:SetValue(0)
+	end
+end)
