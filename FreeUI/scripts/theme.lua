@@ -5488,6 +5488,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
+		TransmogrifyConfirmationPopup:SetScale(UIParent:GetScale())
+
+		F.CreateBD(TransmogrifyConfirmationPopup)
+		F.CreateSD(TransmogrifyConfirmationPopup)
+		F.Reskin(TransmogrifyConfirmationPopup.Button1)
+		F.Reskin(TransmogrifyConfirmationPopup.Button2)
+
+		for i = 1, 2 do
+			local f = TransmogrifyConfirmationPopup["ItemFrame"..i]
+
+			f:SetNormalTexture("")
+			f:SetPushedTexture("")
+
+			f.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(f)
+
+			select(8, f:GetRegions()):Hide()
+		end
+
 		F.Reskin(TransmogrifyApplyButton)
 		F.ReskinClose(TransmogrifyArtFrameCloseButton)
 	elseif addon == "Blizzard_ItemSocketingUI" then
