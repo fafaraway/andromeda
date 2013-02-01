@@ -6334,7 +6334,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		StopwatchTabFrameRight:Hide()
 
 		TimeManagerFrame:ClearAllPoints()
-		TimeManagerFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -10, 0)
+		TimeManagerFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -9, -1)
 
 		TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 		TimeManagerStopwatchCheck:SetCheckedTexture(C.media.checked)
