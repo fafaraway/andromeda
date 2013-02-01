@@ -6337,6 +6337,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
 		F.ReskinPortraitFrame(TimeManagerFrame, true)
+		select(9, TimeManagerFrame:GetChildren()):Hide()
+
 		F.CreateBD(StopwatchFrame)
 		F.ReskinDropDown(TimeManagerAlarmHourDropDown)
 		F.ReskinDropDown(TimeManagerAlarmMinuteDropDown)
