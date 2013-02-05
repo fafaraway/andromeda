@@ -63,12 +63,11 @@ local slots = {
 
 local updatechar = function(self)
 	if CharacterFrame:IsShown() then
-		for key, slotName in ipairs(slots) do
+		for i, slotName in ipairs(slots) do
 			-- Ammo is located at 0.
-			local slotID = key % 20
-			if slotID == 18 then slotID = 19 end
+			if i == 18 then i = 19 end
 			local slotFrame = _G['Character' .. slotName .. 'Slot']
-			local slotLink = GetInventoryItemLink('player', slotID)
+			local slotLink = GetInventoryItemLink('player', i)
 
 			UpdateGlow(slotFrame, slotLink)
 		end
@@ -83,58 +82,72 @@ CharacterFrame:HookScript('OnShow', updatechar)
 -- Inspect Frame
 
 local missing = {}
-local updateMissing = function()
-	if not next(missing) then return end
 
+local pollFrame = CreateFrame("Frame")
+pollFrame:Hide()
+pollFrame:SetScript("OnUpdate", function(self, elapsed)
 	local unit = InspectFrame.unit
-	if not unit then table.wipe(missing) end
+	if not unit then
+		self:Hide()
+		table.wipe(missing)
+	end
 
 	for i, slotName in next, missing do
 		local slotLink = GetInventoryItemLink(unit, i)
 		if slotLink then
-			UpdateGlow(_G["Inspect"..slotName.."Slot"], slotLink)
+			local slotFrame = _G["Inspect"..slotName.."Slot"]
+			UpdateGlow(slotFrame, slotLink)
+			slotFrame:Show()
 			missing[i] = nil
 		end
 	end
-end
+
+	if not next(missing) then
+		self:Hide()
+	end
+end)
 
 local updateInspect = function()
-	local unit = InspectFrame.unit
-	if InspectFrame:IsShown() and unit then
-		for key, slotName in ipairs(slots) do
-			local slotID = key % 20
-			if slotID == 18 then slotID = 19 end
-			local slotFrame = _G["Inspect"..slotName.."Slot"]
-			local slotLink = GetInventoryItemLink(unit, slotID)
-			local slotTexture = GetInventoryItemTexture(unit, slotID)
+	if not InspectFrame or not InspectFrame:IsShown() then return end
 
-			if slotTexture and not slotLink then
-				missing[key] = slotName
-				GetItemInfo(GetInventoryItemID(unit, slotID))
-			elseif slotLink then
-				slotFrame:Show()
-			else
-				slotFrame:Hide()
-			end
-			UpdateGlow(slotFrame, slotLink)
+	local unit = InspectFrame.unit
+
+	for i, slotName in ipairs(slots) do
+		if i == 18 then i = 19 end
+
+		local slotFrame = _G["Inspect"..slotName.."Slot"]
+		local slotLink = GetInventoryItemLink(unit, i)
+		local slotTexture = GetInventoryItemTexture(unit, i)
+
+		if slotTexture and not slotLink then
+			missing[i] = slotName
+			pollFrame:Show()
+		elseif slotLink then
+			slotFrame:Show()
+		else
+			slotFrame:Hide()
+			pollFrame:Show()
 		end
+		UpdateGlow(slotFrame, slotLink)
 	end
 end
 
 local g = CreateFrame("Frame")
 g:RegisterEvent("ADDON_LOADED")
-g:SetScript("OnEvent", function(self, event, addon)
+g:SetScript("OnEvent", function(self, event, ...)
 	if event == "ADDON_LOADED" then
-		if addon ~= "Blizzard_InspectUI" then return end
+		if ... ~= "Blizzard_InspectUI" then return end
 
 		g:RegisterEvent("INSPECT_READY")
-		g:RegisterEvent("GET_ITEM_INFO_RECEIVED")
+		g:RegisterEvent("UNIT_INVENTORY_CHANGED")
 
-		g:UnregisterEvent("ADDON_LOADED")
+		self:UnregisterEvent("ADDON_LOADED")
 	elseif event == "INSPECT_READY" then
 		updateInspect()
-	elseif event == "GET_ITEM_INFO_RECEIVED" then
-		updateMissing()
+	else
+		if InspectFrame.unit == ... then
+			updateInspect()
+		end
 	end
 end)
 
