@@ -10,7 +10,6 @@ caelNamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self,
 local select = select
 
 local freq = C.performance.nameplates
-local tfreq = C.performance.namethreat
 
 local CreateBD = function(parent, offset)
 	local left = parent:CreateTexture(nil, "BACKGROUND")
@@ -56,27 +55,28 @@ local CreateBG = function(parent, offset)
 	return bg
 end
 
-local ThreatUpdate = function(self, elapsed)
-	self.elapsed = self.elapsed + elapsed
-	if self.elapsed >= tfreq then
-		if self.oldglow:IsShown() then
-			local _, green = self.oldglow:GetVertexColor()
-			if(green > .7) then
-				self.healthBar:SetStatusBarColor(1, 1, .3) -- medium threat
-			elseif(green > .1) then
-				self.healthBar:SetStatusBarColor(1, .5, 0) -- losing aggro
-			else
-				self.healthBar:SetStatusBarColor(.3, 1, .3) -- tanking
-			end
-		else
-			self.healthBar:SetStatusBarColor(self.r, self.g, self.b) -- normal colours e.g. not tanking/not NPC
-		end
-		self.elapsed = 0
-	end
-end
-
 local function Round(x)
 	return floor(x * (10 ^ 2) + .5) / 10 ^ 2
+end
+
+local ThreatUpdate = function(self, elapsed)
+	if self.oldglow:IsShown() then
+		local _, green = self.oldglow:GetVertexColor()
+		if(green > .7) then
+			self:SetStatusBarColor(1, 1, .3) -- medium threat
+		elseif(green > .1) then
+			self:SetStatusBarColor(1, .5, 0) -- losing aggro
+		else
+			self:SetStatusBarColor(.3, 1, .3) -- tanking
+		end
+	else
+		local r, g, b = self:GetStatusBarColor()
+		if Round(r) == 0.53 and Round(g) == 0.53 and Round(b) == 1.00 then
+			self:SetStatusBarColor(.6, .6, .6)
+		else
+			self:SetStatusBarColor(self.r, self.g, self.b)
+		end
+	end
 end
 
 local oldClassColours = RAID_CLASS_COLORS
@@ -141,7 +141,7 @@ local UpdateFrame = function(self)
 		end
 	end
 
-	self.r, self.g, self.b = newr, newg, newb
+	self.healthBar.r, self.healthBar.g, self.healthBar.b = newr, newg, newb
 
 	self.healthBar:ClearAllPoints()
 	self.healthBar:SetPoint("CENTER", self.healthBar:GetParent())
@@ -258,9 +258,10 @@ local StyleFrame = function(frame)
 	raidIconRegion:SetHeight(14)
 	raidIconRegion:SetWidth(14)
 
-	frame.oldglow = glowRegion
 	frame.elite = stateIconRegion
 	frame.boss = bossIconRegion
+
+	healthBar.oldglow = glowRegion
 
 	glowRegion:SetTexture(nil)
 	overlayRegion:SetTexture(nil)
@@ -289,8 +290,9 @@ local StyleFrame = function(frame)
 	frame:SetScript("OnShow", UpdateFrame)
 	frame:SetScript("OnHide", OnHide)
 
-	frame.elapsed = 0
-	frame:SetScript("OnUpdate", ThreatUpdate)
+	healthBar:SetScript("OnUpdate", ThreatUpdate)
+	healthBar:Hide()
+	healthBar:Show()
 end
 
 local numKids = 0

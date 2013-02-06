@@ -1728,6 +1728,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x+6, y)
 		end)
 
+		hooksecurefunc(QuestProgressRequiredMoneyText, "SetTextColor", function(self, r, g, b)
+			if r == 0 then
+				self:SetTextColor(.8, .8, .8)
+			elseif r == .2 then
+				self:SetTextColor(1, 1, 1)
+			end
+		end)
+
 		local questButtons = {"QuestLogFrameAbandonButton", "QuestLogFramePushQuestButton", "QuestLogFrameTrackButton", "QuestLogFrameCancelButton", "QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton", "QuestLogFrameCompleteButton"}
 		for i = 1, #questButtons do
 			F.Reskin(_G[questButtons[i]])
@@ -3848,6 +3856,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("AchievementFrameSummary_UpdateAchievements", function()
 			for i = 1, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS do
 				local bu = _G["AchievementFrameSummaryAchievement"..i]
+
+				if bu.accountWide then
+					bu.label:SetTextColor(0, .6, 1)
+				else
+					bu.label:SetTextColor(.9, .9, .9)
+				end
+
 				if not bu.reskinned then
 					bu:DisableDrawLayer("BORDER")
 
@@ -5481,6 +5496,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
+		TransmogrifyConfirmationPopup:SetScale(UIParent:GetScale())
+
+		F.CreateBD(TransmogrifyConfirmationPopup)
+		F.CreateSD(TransmogrifyConfirmationPopup)
+		F.Reskin(TransmogrifyConfirmationPopup.Button1)
+		F.Reskin(TransmogrifyConfirmationPopup.Button2)
+
+		for i = 1, 2 do
+			local f = TransmogrifyConfirmationPopup["ItemFrame"..i]
+
+			f:SetNormalTexture("")
+			f:SetPushedTexture("")
+
+			f.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(f)
+
+			select(8, f:GetRegions()):Hide()
+		end
+
 		F.Reskin(TransmogrifyApplyButton)
 		F.ReskinClose(TransmogrifyArtFrameCloseButton)
 	elseif addon == "Blizzard_ItemSocketingUI" then
@@ -6300,7 +6334,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		StopwatchTabFrameRight:Hide()
 
 		TimeManagerFrame:ClearAllPoints()
-		TimeManagerFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -10, 0)
+		TimeManagerFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -9, -1)
 
 		TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 		TimeManagerStopwatchCheck:SetCheckedTexture(C.media.checked)
@@ -6311,6 +6345,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
 		F.ReskinPortraitFrame(TimeManagerFrame, true)
+		select(9, TimeManagerFrame:GetChildren()):Hide()
+
 		F.CreateBD(StopwatchFrame)
 		F.ReskinDropDown(TimeManagerAlarmHourDropDown)
 		F.ReskinDropDown(TimeManagerAlarmMinuteDropDown)

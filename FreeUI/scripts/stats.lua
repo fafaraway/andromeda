@@ -55,9 +55,9 @@ f:SetScript("OnEnter", function()
 
 	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
 	if BagsHolder:IsShown() then
-		GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", -1, 0)
+		GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", 0, -1)
 	else
-		GameTooltip:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -2, -1)
+		GameTooltip:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -1, -2)
 	end
 	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), r, g, b, 1, 1, 1)
 
