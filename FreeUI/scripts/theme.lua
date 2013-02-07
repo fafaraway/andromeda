@@ -2884,6 +2884,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		-- Movie Frame
+
+		MovieFrame.CloseDialog:HookScript("OnShow", function(self)
+			self:SetScale(UIParent:GetScale())
+		end)
+
+		F.CreateBD(MovieFrame.CloseDialog)
+		F.CreateSD(MovieFrame.CloseDialog)
+		F.Reskin(MovieFrame.CloseDialog.ConfirmButton)
+		F.Reskin(MovieFrame.CloseDialog.ResumeButton)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
