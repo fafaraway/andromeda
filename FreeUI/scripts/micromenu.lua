@@ -30,7 +30,7 @@ local microMenu = {
 	{text = COMPACT_UNIT_FRAME_PROFILE_AUTOACTIVATEPVE,
 	func = function() PVEFrame_ToggleFrame() F.menuShown = false end},
 	{text = COMPACT_UNIT_FRAME_PROFILE_AUTOACTIVATEPVP,
-	func = function() ToggleFrame(PVPFrame) F.menuShown = false end},
+	func = function() TogglePVPUI() F.menuShown = false end},
 	{text = ACHIEVEMENTS_GUILD_TAB,
 	func = function()
 		if IsInGuild() then
