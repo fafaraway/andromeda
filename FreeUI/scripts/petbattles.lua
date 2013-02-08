@@ -1,5 +1,7 @@
 local F, C, L = unpack(FreeUI)
 
+local r, g, b = unpack(C.class)
+
 local testmode = false
 
 local frame = PetBattleFrame
@@ -46,10 +48,6 @@ PetBattlePrimaryUnitTooltip.HealthBG:SetTexture("")
 PetBattlePrimaryUnitTooltip.XPBG:SetTexture("")
 PetBattlePrimaryUnitTooltip.Border:Hide()
 
-PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
-	bg:SetVertexColor(self.Border:GetVertexColor())
-end)
-
 for _, frame in pairs({PetBattlePrimaryUnitTooltip.ActualHealthBar, PetBattlePrimaryUnitTooltip.XPBar}) do
 	local bg = CreateFrame("Frame", nil, frame:GetParent())
 	bg:SetPoint("TOPLEFT", frame, -1, 1)
@@ -58,8 +56,18 @@ for _, frame in pairs({PetBattlePrimaryUnitTooltip.ActualHealthBar, PetBattlePri
 	bg:SetFrameLevel(0)
 	F.CreateBD(bg, .25)
 
+	frame.bg = bg
+
 	frame:SetTexture(C.media.backdrop)
 end
+
+PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
+	bg:SetVertexColor(self.Border:GetVertexColor())
+end)
+
+hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self)
+	self.XPBar.bg:SetShown(self.XPBar:IsShown())
+end)
 
 -- Weather etc
 
@@ -192,6 +200,16 @@ for index, unit in pairs(extraUnits) do
 	end
 end
 
+local function petSelectOnEnter(self)
+	if self.MouseoverHighlight:IsShown() then
+		self.bg:SetBackdropBorderColor(r, g, b)
+	end
+end
+
+local function petSelectOnLeave(self)
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+end
+
 for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	local unit = bf.PetSelectionFrame["Pet"..i]
 	local icon = unit.Icon
@@ -199,16 +217,51 @@ for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	unit.HealthBarBG:Hide()
 	unit.Framing:Hide()
 	unit.HealthDivider:Hide()
+	unit.SelectedTexture:SetTexture("")
+	unit.MouseoverHighlight:SetTexture("")
 
 	unit.Name:SetPoint("TOPLEFT", icon, "TOPRIGHT", 3, -3)
-	unit.ActualHealthBar:SetPoint("BOTToMLEFT", icon, "BOTTOMRIGHT", 3, 0)
+	unit.ActualHealthBar:SetPoint("BOTTOMLEFT", icon, "BOTTOMRIGHT", 3, 0)
+
+	-- Begin frame level and draw layer nightmare
+
+	unit.bg = CreateFrame("Frame", nil, unit)
+	unit.bg:SetSize(168, 37)
+	unit.bg:SetPoint("BOTTOM", 3, 9)
+	F.CreateBD(unit.bg, 0)
+
+	unit.bd = unit:CreateTexture()
+	unit.bd:SetDrawLayer("BACKGROUND", 1)
+	unit.bd:SetTexture(0, 0, 0, .5)
+	unit.bd:SetAllPoints(unit.bg)
+
+	unit.bg.SelectedTexture = unit:CreateTexture()
+	unit.bg.SelectedTexture:SetDrawLayer("BACKGROUND", 2)
+	unit.bg.SelectedTexture:SetTexture(C.media.backdrop)
+	unit.bg.SelectedTexture:SetVertexColor(r, g, b, .2)
+	unit.bg.SelectedTexture:SetPoint("TOPLEFT", unit.bg, 1, -1)
+	unit.bg.SelectedTexture:SetPoint("BOTTOMRIGHT", unit.bg, -1, 1)
 
 	icon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBG(icon)
+	icon.bg = F.CreateBG(icon)
+	icon.bg:SetDrawLayer("BACKGROUND", 3)
 
 	unit.ActualHealthBar:SetTexture(C.media.backdrop)
-	F.CreateBDFrame(unit.ActualHealthBar)
+	unit.ActualHealthBar.bg = CreateFrame("Frame", nil, unit)
+	unit.ActualHealthBar.bg:SetPoint("TOPLEFT", unit.ActualHealthBar, -1, 1)
+	unit.ActualHealthBar.bg:SetPoint("BOTTOMLEFT", unit.ActualHealthBar, -1, -1)
+	unit.ActualHealthBar.bg:SetWidth(130)
+	F.CreateBD(unit.ActualHealthBar.bg, 0)
+
+	unit.ActualHealthBar.bd = unit:CreateTexture()
+	unit.ActualHealthBar.bd:SetDrawLayer("BACKGROUND", 3)
+	unit.ActualHealthBar.bd:SetTexture(0, 0, 0, .25)
+	unit.ActualHealthBar.bd:SetAllPoints(unit.ActualHealthBar.bg)
+
+	unit:HookScript("OnEnter", petSelectOnEnter)
+	unit:HookScript("OnLeave", petSelectOnLeave)
 end
+
 
 hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
 	local petOwner = self.petOwner
@@ -221,6 +274,10 @@ hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
 		else
 			self.Icon:SetTexCoord(.08, .92, .08, .92)
 		end
+	end
+
+	if self.SelectedTexture then
+		self.bg.SelectedTexture:SetShown(self.SelectedTexture:IsShown())
 	end
 end)
 
