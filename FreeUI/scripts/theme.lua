@@ -2895,6 +2895,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(MovieFrame.CloseDialog.ConfirmButton)
 		F.Reskin(MovieFrame.CloseDialog.ResumeButton)
 
+		-- Pet battle queue popoup
+
+		F.CreateBD(PetBattleQueueReadyFrame)
+		F.CreateSD(PetBattleQueueReadyFrame)
+		F.CreateBG(PetBattleQueueReadyFrame.Art)
+		F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
+		F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
