@@ -2895,7 +2895,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(MovieFrame.CloseDialog.ConfirmButton)
 		F.Reskin(MovieFrame.CloseDialog.ResumeButton)
 
-		-- Pet battle queue popoup
+		-- Pet battle queue popup
 
 		F.CreateBD(PetBattleQueueReadyFrame)
 		F.CreateSD(PetBattleQueueReadyFrame)
