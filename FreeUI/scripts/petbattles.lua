@@ -4,6 +4,7 @@ local testmode = false
 
 local frame = PetBattleFrame
 local bf = frame.BottomFrame
+local turnTimer = bf.TurnTimer
 
 if testmode then frame:Show() end
 
@@ -278,9 +279,9 @@ bf.RightEndCap:Hide()
 bf.LeftEndCap:Hide()
 bf.Background:Hide()
 bf.Delimiter:Hide()
-bf.TurnTimer.TimerBG:SetTexture("")
-bf.TurnTimer.ArtFrame:SetTexture("")
-bf.TurnTimer.ArtFrame2:SetTexture("")
+turnTimer.TimerBG:SetTexture("")
+turnTimer.ArtFrame:SetTexture("")
+turnTimer.ArtFrame2:SetTexture("")
 bf.FlowFrame.LeftEndCap:Hide()
 bf.FlowFrame.RightEndCap:Hide()
 select(3, bf.FlowFrame:GetRegions()):Hide()
@@ -289,27 +290,34 @@ PetBattleFrameXPBarLeft:Hide()
 PetBattleFrameXPBarRight:Hide()
 PetBattleFrameXPBarMiddle:Hide()
 
-bf.TurnTimer.SkipButton:SetParent(bar)
-bf.TurnTimer.SkipButton:SetWidth(bar:GetWidth())
-bf.TurnTimer.SkipButton:ClearAllPoints()
-bf.TurnTimer.SkipButton:SetPoint("BOTTOM", bar, "TOP", 0, 2)
-bf.TurnTimer.SkipButton.ClearAllPoints = F.dummy
-bf.TurnTimer.SkipButton.SetPoint = F.dummy
-F.Reskin(bf.TurnTimer.SkipButton)
+turnTimer.SkipButton:SetParent(bar)
+turnTimer.SkipButton:SetWidth(bar:GetWidth())
+turnTimer.SkipButton:ClearAllPoints()
+turnTimer.SkipButton:SetPoint("BOTTOM", bar, "TOP", 0, 2)
+turnTimer.SkipButton.ClearAllPoints = F.dummy
+turnTimer.SkipButton.SetPoint = F.dummy
+F.Reskin(turnTimer.SkipButton)
 
-bf.TurnTimer.Bar:ClearAllPoints()
-bf.TurnTimer.Bar:SetPoint("LEFT")
+turnTimer.Bar:ClearAllPoints()
+turnTimer.Bar:SetPoint("LEFT")
 
-bf.TurnTimer:SetParent(bar)
-bf.TurnTimer:SetSize(bf.TurnTimer.SkipButton:GetWidth() - 2, bf.TurnTimer.SkipButton:GetHeight())
-bf.TurnTimer:ClearAllPoints()
-bf.TurnTimer:SetPoint("BOTTOM", bf.TurnTimer.SkipButton, "TOP", 0, 2)
-bf.TurnTimer.bg = F.CreateBDFrame(bf.TurnTimer)
+turnTimer:SetParent(bar)
+turnTimer:SetSize(turnTimer.SkipButton:GetWidth() - 2, turnTimer.SkipButton:GetHeight())
+turnTimer:ClearAllPoints()
+turnTimer:SetPoint("BOTTOM", turnTimer.SkipButton, "TOP", 0, -1)
+turnTimer.TimerText:ClearAllPoints()
+turnTimer.TimerText:SetPoint("BOTTOM", turnTimer.SkipButton, "TOP", 0, 5)
+
+turnTimer.bg = F.CreateBDFrame(turnTimer.Bar)
+turnTimer.bg:ClearAllPoints()
+turnTimer.bg:SetPoint("TOPLEFT", -1, -1)
+turnTimer.bg:SetPoint("BOTTOMLEFT", -1, 2)
+turnTimer.bg:SetWidth(turnTimer.SkipButton:GetWidth())
 
 bf.xpBar:SetParent(bar)
 bf.xpBar:SetWidth(bar:GetWidth() - 2)
 bf.xpBar:ClearAllPoints()
-bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer, "TOP", 0, 4)
+bf.xpBar:SetPoint("BOTTOM", turnTimer, "TOP", 0, 1)
 bf.xpBar:SetStatusBarTexture(C.media.texture)
 F.CreateBDFrame(bf.xpBar, 0)
 
@@ -325,14 +333,64 @@ end)
 hooksecurefunc("PetBattleFrame_UpdatePassButtonAndTimer", function()
 	local pveBattle = C_PetBattles.IsPlayerNPC(LE_BATTLE_PET_ENEMY)
 
-	bf.TurnTimer.bg:SetShown(not pveBattle)
+	turnTimer.bg:SetShown(not pveBattle)
 
 	bf.xpBar:ClearAllPoints()
 
 	if pveBattle then
-		bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer.SkipButton, "TOP", 0, 2)
+		bf.xpBar:SetPoint("BOTTOM", turnTimer.SkipButton, "TOP", 0, 2)
 	else
-		bf.xpBar:SetPoint("BOTTOM", bf.TurnTimer, "TOP", 0, 4)
+		bf.xpBar:SetPoint("BOTTOM", turnTimer, "TOP", 0, 1)
+	end
+end)
+
+-- Just to resize it, really. Whatever happened to StatusBar that could actually be resized properly?
+local TIMER_BAR_TEXCOORD_LEFT = 0.56347656
+local TIMER_BAR_TEXCOORD_RIGHT = 0.89453125
+local TIMER_BAR_TEXCOORD_TOP = 0.00195313
+local TIMER_BAR_TEXCOORD_BOTTOM = 0.03515625
+
+turnTimer:SetScript("OnUpdate", function(self)
+	if ( ( C_PetBattles.GetBattleState() ~= LE_PET_BATTLE_STATE_WAITING_PRE_BATTLE ) and
+		 ( C_PetBattles.GetBattleState() ~= LE_PET_BATTLE_STATE_ROUND_IN_PROGRESS ) and
+		 ( C_PetBattles.GetBattleState() ~= LE_PET_BATTLE_STATE_WAITING_FOR_FRONT_PETS ) ) then
+		self.Bar:SetAlpha(0);
+		self.TimerText:SetText("");
+	elseif ( self.turnExpires ) then
+		local timeRemaining = self.turnExpires - GetTime();
+
+		--Deal with variable lag from the server without looking weird
+		if ( timeRemaining <= 0.01 ) then
+			timeRemaining = 0.01;
+		end
+
+		local timeRatio = 1.0;
+		if ( self.turnTime > 0.0 ) then
+			timeRatio = timeRemaining / self.turnTime;
+		end
+		local usableSpace = 160;
+
+		self.Bar:SetWidth(timeRatio * usableSpace);
+		self.Bar:SetTexCoord(TIMER_BAR_TEXCOORD_LEFT, TIMER_BAR_TEXCOORD_LEFT + (TIMER_BAR_TEXCOORD_RIGHT - TIMER_BAR_TEXCOORD_LEFT) * timeRatio, TIMER_BAR_TEXCOORD_TOP, TIMER_BAR_TEXCOORD_BOTTOM);
+
+		if ( C_PetBattles.IsWaitingOnOpponent() ) then
+			self.Bar:SetAlpha(0.5);
+			self.TimerText:SetText(PET_BATTLE_WAITING_FOR_OPPONENT);
+		else
+			self.Bar:SetAlpha(1);
+			if ( self.turnTime > 0.0 ) then
+				self.TimerText:SetText(ceil(timeRemaining));
+			else
+				self.TimerText:SetText("")
+			end
+		end
+	else
+		self.Bar:SetAlpha(0);
+		if ( C_PetBattles.IsWaitingOnOpponent() ) then
+			self.TimerText:SetText(PET_BATTLE_WAITING_FOR_OPPONENT);
+		else
+			self.TimerText:SetText(PET_BATTLE_SELECT_AN_ACTION);
+		end
 	end
 end)
 
