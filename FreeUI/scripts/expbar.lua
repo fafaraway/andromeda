@@ -38,7 +38,7 @@ end
 
 -- Create frames
 
-local backdrop = CreateFrame("Frame", nil, UIParent)
+local backdrop = CreateFrame("Frame", nil, Minimap)
 backdrop:SetHeight(6)
 backdrop:SetPoint("BOTTOM", Minimap, "TOP")
 backdrop:SetPoint("BOTTOMLEFT", Minimap, "TOPLEFT", -1, 0)
