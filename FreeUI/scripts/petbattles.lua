@@ -11,6 +11,8 @@ frame.TopArtLeft:Hide()
 frame.TopArtRight:Hide()
 frame.TopVersus:Hide()
 
+-- Tooltips
+
 local tooltips = {PetBattlePrimaryAbilityTooltip, PetBattlePrimaryUnitTooltip, FloatingBattlePetTooltip, BattlePetTooltip, FloatingPetBattleAbilityTooltip}
 for _, f in pairs(tooltips) do
 	f:DisableDrawLayer("BACKGROUND")
@@ -35,6 +37,31 @@ FloatingBattlePetTooltip.Delimiter:SetHeight(1)
 F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
+PetBattlePrimaryUnitTooltip.Icon:SetTexCoord(.08, .92, .08, .92)
+local bg = F.CreateBG(PetBattlePrimaryUnitTooltip.Icon)
+bg:SetDrawLayer("BORDER")
+
+PetBattlePrimaryUnitTooltip.HealthBG:SetTexture("")
+PetBattlePrimaryUnitTooltip.XPBG:SetTexture("")
+PetBattlePrimaryUnitTooltip.Border:Hide()
+
+PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
+	bg:SetVertexColor(self.Border:GetVertexColor())
+end)
+
+for _, frame in pairs({PetBattlePrimaryUnitTooltip.ActualHealthBar, PetBattlePrimaryUnitTooltip.XPBar}) do
+	local bg = CreateFrame("Frame", nil, frame:GetParent())
+	bg:SetPoint("TOPLEFT", frame, -1, 1)
+	bg:SetPoint("BOTTOMLEFT", frame, -1, -1)
+	bg:SetWidth(232)
+	bg:SetFrameLevel(0)
+	F.CreateBD(bg, .25)
+
+	frame:SetTexture(C.media.backdrop)
+end
+
+-- Weather etc
+
 frame.TopVersusText:SetPoint("TOP", frame, "TOP", 0, -46)
 
 frame.WeatherFrame.Icon:Hide()
@@ -44,6 +71,8 @@ frame.WeatherFrame.Label:Hide()
 frame.WeatherFrame.Duration:SetPoint("CENTER", frame.WeatherFrame, 0, 8)
 frame.WeatherFrame:ClearAllPoints()
 frame.WeatherFrame:SetPoint("TOP", UIParent, 0, -15)
+
+-- Units
 
 local units = {frame.ActiveAlly, frame.ActiveEnemy}
 
@@ -132,27 +161,33 @@ for index, unit in pairs(extraUnits) do
 	unit:SetSize(36, 36)
 
 	unit.HealthBarBG:SetAlpha(0)
-	unit.BorderDead:SetAlpha(0)
 	unit.HealthDivider:SetAlpha(0)
 
 	unit.ActualHealthBar:ClearAllPoints()
-	unit.ActualHealthBar:SetPoint("BOTTOM", 0, -1)
+	unit.ActualHealthBar:SetPoint("BOTTOM")
+	unit.ActualHealthBar:SetTexture(C.media.backdrop)
 
-	unit.BorderAlive:SetTexture(C.media.checked)
-	unit.BorderAlive:SetTexCoord(0, 1, 0, 1)
+	unit.BorderAlive:SetTexture(C.media.texture)
 	unit.BorderAlive:SetPoint("TOPLEFT", unit.Icon, -1, 1)
 	unit.BorderAlive:SetPoint("BOTTOMRIGHT", unit.Icon, 1, -1)
+	unit.BorderAlive:SetDrawLayer("BACKGROUND")
+	unit.BorderDead:SetTexture(C.media.texture)
+	unit.BorderDead:SetPoint("TOPLEFT", unit.Icon, -1, 1)
+	unit.BorderDead:SetPoint("BOTTOMRIGHT", unit.Icon, 1, -1)
+	unit.BorderDead:SetDrawLayer("BACKGROUND")
+	unit.BorderDead:SetVertexColor(1, 0, 0)
 
-	unit.bg = CreateFrame("Frame", nil, unit)
-	unit.bg:SetPoint("TOPLEFT", -1, 1)
-	unit.bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	unit.bg:SetFrameLevel(unit:GetFrameLevel()-1)
-	F.CreateBD(unit.bg)
+	unit.HealthBorder = unit:CreateTexture()
+	unit.HealthBorder:SetTexture(0, 0, 0)
+	unit.HealthBorder:SetSize(36, 1)
+	unit.HealthBorder:SetPoint("TOP", unit.ActualHealthBar, 0, 1)
+
+	unit.Icon:SetDrawLayer("BACKGROUND", 2)
 
 	if index < 3 then
-		unit.ActualHealthBar:SetGradient("VERTICAL", .26, 1, .22, .13, .5, .11)
+		unit.ActualHealthBar:SetVertexColor(.26, 1, .22)
 	else
-		unit.ActualHealthBar:SetGradient("VERTICAL", 1, .12, .24, .5, .06, .12)
+		unit.ActualHealthBar:SetVertexColor(1, .12, .24)
 	end
 end
 
@@ -173,16 +208,6 @@ for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 	unit.ActualHealthBar:SetTexture(C.media.backdrop)
 	F.CreateBDFrame(unit.ActualHealthBar)
 end
-
-hooksecurefunc("PetBattleUnitFrame_UpdateHealthInstant", function(self)
-	if self.BorderAlive then
-		if self.BorderAlive:IsShown() then
-			self.bg:SetBackdropBorderColor(.26, 1, .22)
-		else
-			self.bg:SetBackdropBorderColor(1, .12, .24)
-		end
-	end
-end)
 
 hooksecurefunc("PetBattleUnitFrame_UpdateDisplay", function(self)
 	local petOwner = self.petOwner
