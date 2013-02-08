@@ -388,6 +388,7 @@ C["debuffFilter"] = {
 	[97170] = true, -- Deadzone (1)
 	[97600] = true, -- Deadzone (2)
 	[103527] = true, -- Void Diffusion (test)
+	[106648] = true, -- Brew Explosion
 }
 
 -- Buffs to show on enemy players
