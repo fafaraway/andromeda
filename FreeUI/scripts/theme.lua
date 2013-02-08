@@ -2933,7 +2933,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		-- Pet battle queue popoup
+		-- Pet battle queue popup
 
 		F.CreateBD(PetBattleQueueReadyFrame)
 		F.CreateSD(PetBattleQueueReadyFrame)
