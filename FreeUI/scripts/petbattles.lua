@@ -2,17 +2,14 @@ local F, C, L = unpack(FreeUI)
 
 local r, g, b = unpack(C.class)
 
-local testmode = false
-
 local frame = PetBattleFrame
 local bf = frame.BottomFrame
 local turnTimer = bf.TurnTimer
 
-if testmode then frame:Show() end
-
 frame.TopArtLeft:Hide()
 frame.TopArtRight:Hide()
 frame.TopVersus:Hide()
+frame.TopVersusText:Hide()
 
 -- Tooltips
 
@@ -71,8 +68,6 @@ end)
 
 -- Weather etc
 
-frame.TopVersusText:SetPoint("TOP", frame, "TOP", 0, -46)
-
 frame.WeatherFrame.Icon:Hide()
 frame.WeatherFrame.Name:Hide()
 frame.WeatherFrame.DurationShadow:Hide()
@@ -121,13 +116,6 @@ for index, unit in pairs(units) do
 	unit.PetTypeString = unit:CreateFontString(nil, "ARTWORK")
 	unit.PetTypeString:SetFontObject(GameFontNormalLarge)
 
-	if testmode then
-		unit.Name:SetText("Lol pets")
-		unit.HealthText:SetText("140/200")
-		unit.Level:SetText("5")
-		unit.PetTypeString:SetText("Martian")
-	end
-
 	unit.Name:ClearAllPoints()
 	unit.ActualHealthBar:ClearAllPoints()
 
@@ -163,8 +151,6 @@ local extraUnits = {
 }
 
 for index, unit in pairs(extraUnits) do
-	if testmode then unit:Show() end
-
 	unit.healthBarWidth = 36
 
 	unit:SetSize(36, 36)
