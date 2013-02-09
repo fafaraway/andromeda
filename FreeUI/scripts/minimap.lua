@@ -45,6 +45,9 @@ MiniMapMailFrame:SetSize(22, 10)
 MiniMapMailFrame:ClearAllPoints()
 MiniMapMailFrame:SetPoint("CENTER", mt)
 
+ZoneTextFrame:SetFrameStrata("MEDIUM")
+SubZoneTextFrame:SetFrameStrata("MEDIUM")
+
 ZoneTextString:ClearAllPoints()
 ZoneTextString:SetPoint("CENTER", Minimap)
 ZoneTextString:SetWidth(138)
