@@ -6004,6 +6004,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("PetJournal_UpdatePetList", ColourPetQuality)
 		PetJournalListScrollFrame:HookScript("OnVerticalScroll", ColourPetQuality)
 		PetJournalListScrollFrame:HookScript("OnMouseWheel", ColourPetQuality)
+	elseif addon == "Blizzard_QuestChoice" then
+		for i = 1, 18 do
+			select(i, QuestChoiceFrame:GetRegions()):Hide()
+		end
+
+		F.CreateBD(QuestChoiceFrame)
+		F.CreateSD(QuestChoiceFrame)
+		F.Reskin(QuestChoiceFrame.Option1.OptionButton)
+		F.Reskin(QuestChoiceFrame.Option2.OptionButton)
+		F.ReskinClose(QuestChoiceFrame.CloseButton)
 	elseif addon == "Blizzard_ReforgingUI" then
 		for i = 15, 25 do
 			select(i, ReforgingFrame:GetRegions()):Hide()
