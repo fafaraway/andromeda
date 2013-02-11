@@ -20,6 +20,7 @@ for _, f in pairs(tooltips) do
 	bg:SetAllPoints()
 	bg:SetFrameLevel(0)
 	F.CreateBD(bg)
+	f.bg = bg
 end
 
 PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
@@ -38,8 +39,8 @@ F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
 PetBattlePrimaryUnitTooltip.Icon:SetTexCoord(.08, .92, .08, .92)
-local bg = F.CreateBG(PetBattlePrimaryUnitTooltip.Icon)
-bg:SetDrawLayer("BORDER")
+PetBattlePrimaryUnitTooltip.Icon.bg = F.CreateBG(PetBattlePrimaryUnitTooltip.Icon)
+PetBattlePrimaryUnitTooltip.Icon.bg:SetDrawLayer("BORDER")
 
 PetBattlePrimaryUnitTooltip.HealthBG:SetTexture("")
 PetBattlePrimaryUnitTooltip.XPBG:SetTexture("")
@@ -59,7 +60,10 @@ for _, frame in pairs({PetBattlePrimaryUnitTooltip.ActualHealthBar, PetBattlePri
 end
 
 PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
-	bg:SetVertexColor(self.Border:GetVertexColor())
+	PetBattlePrimaryUnitTooltip.Icon.bg:SetVertexColor(self.Border:GetVertexColor())
+	self.bg:SetBackdropColor(0, 0, 0, .5)
+	self.ActualHealthBar.bg:SetBackdropColor(0, 0, 0, .25)
+	self.XPBar.bg:SetBackdropColor(0, 0, 0, .25)
 end)
 
 hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self)
