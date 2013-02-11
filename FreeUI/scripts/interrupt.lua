@@ -8,10 +8,17 @@ local interrupt = CreateFrame("Frame")
 interrupt:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 interrupt:SetScript("OnEvent", function(_, _, _, subevent, _, _, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
 	if subevent == "SPELL_INTERRUPT" then
-		if sourceName == playerName and GetNumGroupMembers() > 5 and GetCurrentMapAreaID() ~= 708 then
+		if sourceName == playerName and GetNumGroupMembers() > 5 then
 			local _, instanceType = IsInInstance()
 			if instanceType ~= "pvp" then
-				SendChatMessage("Interrupted: "..destName.. "'s " ..GetSpellLink(spellID).. ".", "INSTANCE_CHAT")
+				local channel
+				if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+					channel = "INSTANCE_CHAT"
+				else
+					channel = "RAID"
+				end
+
+				SendChatMessage("Interrupted: "..destName.."'s "..GetSpellLink(spellID)..".", channel)
 			end
 		end
 	end
