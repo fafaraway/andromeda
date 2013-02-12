@@ -178,7 +178,7 @@ F.Reskin = function(f, noGlow)
 	end
 end
 
-F.CreateTab = function(f)
+F.ReskinTab = function(f)
 	f:DisableDrawLayer("BACKGROUND")
 
 	local bg = CreateFrame("Frame", nil, f)
