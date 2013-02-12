@@ -650,7 +650,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- LFD frame
 
-		--LFDQueueFrameRandomScrollFrame:SetWidth(304)
+		LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
+		LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
 
 		hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", function()
 			for i = 1, LFD_MAX_REWARDS do
