@@ -123,8 +123,8 @@ local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours
 
 local CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT")
-	tex:SetPoint("BOTTOMRIGHT")
+	tex:SetPoint("TOPLEFT", 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", -1, 1)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 end
@@ -213,8 +213,8 @@ F.ReskinScroll = function(f)
 	F.CreateBD(bu.bg, 0)
 
 	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT", bu.bg)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg)
+	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
