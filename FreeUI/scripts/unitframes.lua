@@ -971,6 +971,76 @@ local UnitSpecific = {
 
 			self.Harmony = glow
 			glow.Override = UpdateOrbs
+
+			-- Brewmaster stagger bar
+
+			local staggerBar = CreateFrame("StatusBar", nil, self)
+			staggerBar:SetSize(playerWidth, 2)
+			staggerBar:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+			staggerBar:SetStatusBarTexture(C.media.texture)
+			staggerBar:Hide()
+			F.CreateBDFrame(staggerBar)
+
+			local BREWMASTER_POWER_BAR_NAME = BREWMASTER_POWER_BAR_NAME
+			local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
+			local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
+
+			local GREEN_INDEX = 1
+			local YELLOW_INDEX = 2
+			local RED_INDEX = 3
+
+			staggerBar:SetScript("OnUpdate", function()
+				local currstagger = UnitStagger(self.unit)
+				if not currstagger then return end
+
+				local unitHealthMax = UnitHealthMax(self.unit)
+
+				staggerBar:SetValue(currstagger)
+				staggerBar:SetMinMaxValues(0, unitHealthMax)
+
+				local percent = currstagger / unitHealthMax
+				local info = PowerBarColor[BREWMASTER_POWER_BAR_NAME]
+
+				if percent > STAGGER_YELLOW_TRANSITION and percent < STAGGER_RED_TRANSITION then
+					info = info[YELLOW_INDEX]
+				elseif percent > STAGGER_RED_TRANSITION then
+					info = info[RED_INDEX]
+				else
+					info = info[GREEN_INDEX]
+				end
+				staggerBar:SetStatusBarColor(info.r, info.g, info.b)
+			end)
+
+			local function moveDebuffAnchors()
+				if staggerBar:IsShown() then
+					if self.AltPowerBar:IsShown() then
+						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
+					else
+						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
+					end
+				else
+					if self.AltPowerBar:IsShown() then
+						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(4 + altPowerHeight))
+					else
+						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
+					end
+				end
+			end
+
+			staggerBar:RegisterEvent("PLAYER_TALENT_UPDATE")
+			staggerBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+			staggerBar:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
+			staggerBar:SetScript("OnEvent", function()
+				if GetSpecialization() == SPEC_MONK_BREWMASTER and not UnitHasVehiclePlayerFrameUI("player") then
+					staggerBar:Show()
+				else
+					staggerBar:Hide()
+				end
+				moveDebuffAnchors()
+			end)
+
+			self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
+			self.AltPowerBar:HookScript("OnHide", moveDebuffAnchors)
 		elseif class == "PALADIN" and C.classmod.paladinHP then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
@@ -1086,7 +1156,7 @@ local UnitSpecific = {
 			self.WarlockSpecBars = bars
 		end
 
-		if class ~= "DRUID" then -- druids have their own update function
+		if class ~= "DRUID" and class ~= "MONK" then -- druids have their own update function cause of show/hide shenanigans
 			self.AltPowerBar:HookScript("OnShow", function()
 				if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
 					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
