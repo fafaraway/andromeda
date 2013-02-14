@@ -177,7 +177,7 @@ local report = function(channel, cn)
 	for i, v in pairs(barguids) do
 		if i > dmconf.reportstrings or display[v][sMode].amount == 0 then return end
 		if sMode == DAMAGE or sMode == SHOW_COMBAT_HEALING then
-			message = string.format("%2d. %s    %s (%.0f)", i, display[v].name, truncate(display[v][sMode].amount), perSecond(display[v]))
+			message = string.format("%2d. %s    %s (%s)", i, display[v].name, truncate(display[v][sMode].amount), truncate(perSecond(display[v])))
 		else
 			message = string.format("%2d. %s    %s", i, display[v].name, truncate(display[v][sMode].amount))
 		end
