@@ -194,6 +194,16 @@ F.ReskinTab = function(f)
 	hl:SetVertexColor(r, g, b, .25)
 end
 
+local function colourScroll(f)
+	if f:IsEnabled() then
+		f.tex:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearScroll(f)
+	f.tex:SetVertexColor(1, 1, 1)
+end
+
 F.ReskinScroll = function(f)
 	local frame = f:GetName()
 
@@ -224,8 +234,8 @@ F.ReskinScroll = function(f)
 	up:SetWidth(17)
 	down:SetWidth(17)
 
-	F.Reskin(up)
-	F.Reskin(down)
+	F.Reskin(up, true)
+	F.Reskin(down, true)
 
 	up:SetDisabledTexture(C.media.backdrop)
 	local dis1 = up:GetDisabledTexture()
@@ -242,12 +252,19 @@ F.ReskinScroll = function(f)
 	uptex:SetSize(8, 8)
 	uptex:SetPoint("CENTER")
 	uptex:SetVertexColor(1, 1, 1)
+	up.tex = uptex
 
 	local downtex = down:CreateTexture(nil, "ARTWORK")
 	downtex:SetTexture(C.media.arrowDown)
 	downtex:SetSize(8, 8)
 	downtex:SetPoint("CENTER")
 	downtex:SetVertexColor(1, 1, 1)
+	down.tex = downtex
+
+	up:HookScript("OnEnter", colourScroll)
+	up:HookScript("OnLeave", clearScroll)
+	down:HookScript("OnEnter", colourScroll)
+	down:HookScript("OnLeave", clearScroll)
 end
 
 local function colourArrow(f)
@@ -305,7 +322,7 @@ F.ReskinDropDown = function(f)
 end
 
 local function colourClose(f)
-	f.text:SetTextColor(1, .1, .1)
+	f.text:SetTextColor(r, g, b)
 end
 
 local function clearClose(f)
@@ -455,6 +472,18 @@ F.ReskinSlider = function(f)
 	slider:SetBlendMode("ADD")
 end
 
+local function colourExpandOrCollapse(f)
+	if f:IsEnabled() then
+		f.plus:SetVertexColor(r, g, b)
+		f.minus:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearExpandOrCollapse(f)
+	f.plus:SetVertexColor(1, 1, 1)
+	f.minus:SetVertexColor(1, 1, 1)
+end
+
 F.ReskinExpandOrCollapse = function(f)
 	f:SetSize(13, 13)
 
@@ -472,6 +501,9 @@ F.ReskinExpandOrCollapse = function(f)
 	f.plus:SetPoint("CENTER")
 	f.plus:SetTexture(C.media.backdrop)
 	f.plus:SetVertexColor(1, 1, 1)
+
+	f:HookScript("OnEnter", colourExpandOrCollapse)
+	f:HookScript("OnLeave", clearExpandOrCollapse)
 end
 
 F.SetBD = function(f, x, y, x2, y2)
