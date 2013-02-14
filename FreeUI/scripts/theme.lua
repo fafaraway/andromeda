@@ -6427,34 +6427,39 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		local all = TradeSkillCollapseAllButton
-		all:SetNormalTexture("")
-		all.SetNormalTexture = F.dummy
-		all:SetHighlightTexture("")
-		all:SetPushedTexture("")
+		local function styleSkillButton(skillButton)
+			skillButton:SetNormalTexture("")
+			skillButton.SetNormalTexture = F.dummy
+			skillButton:SetPushedTexture("")
 
-		all.bg = CreateFrame("Frame", nil, all)
-		all.bg:SetSize(13, 13)
-		all.bg:SetPoint("LEFT", 4, 0)
-		all.bg:SetFrameLevel(all:GetFrameLevel()-1)
-		F.CreateBD(all.bg, 0)
+			skillButton.bg = CreateFrame("Frame", nil, skillButton)
+			skillButton.bg:SetSize(13, 13)
+			skillButton.bg:SetPoint("LEFT", 4, 1)
+			skillButton.bg:SetFrameLevel(skillButton:GetFrameLevel()-1)
+			F.CreateBD(skillButton.bg, 0)
 
-		all.tex = all:CreateTexture(nil, "BACKGROUND")
-		all.tex:SetAllPoints(all.bg)
-		all.tex:SetTexture(C.media.backdrop)
-		all.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+			skillButton.tex = skillButton:CreateTexture(nil, "BACKGROUND")
+			skillButton.tex:SetPoint("TOPLEFT", skillButton.bg, 1, -1)
+			skillButton.tex:SetPoint("BOTTOMRIGHT", skillButton.bg, -1, 1)
+			skillButton.tex:SetTexture(C.media.backdrop)
+			skillButton.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
-		all.minus = all:CreateTexture(nil, "OVERLAY")
-		all.minus:SetSize(7, 1)
-		all.minus:SetPoint("CENTER", all.bg)
-		all.minus:SetTexture(C.media.backdrop)
-		all.minus:SetVertexColor(1, 1, 1)
+			skillButton.minus = skillButton:CreateTexture(nil, "OVERLAY")
+			skillButton.minus:SetSize(7, 1)
+			skillButton.minus:SetPoint("CENTER", skillButton.bg)
+			skillButton.minus:SetTexture(C.media.backdrop)
+			skillButton.minus:SetVertexColor(1, 1, 1)
 
-		all.plus = all:CreateTexture(nil, "OVERLAY")
-		all.plus:SetSize(1, 7)
-		all.plus:SetPoint("CENTER", all.bg)
-		all.plus:SetTexture(C.media.backdrop)
-		all.plus:SetVertexColor(1, 1, 1)
+			skillButton.plus = skillButton:CreateTexture(nil, "OVERLAY")
+			skillButton.plus:SetSize(1, 7)
+			skillButton.plus:SetPoint("CENTER", skillButton.bg)
+			skillButton.plus:SetTexture(C.media.backdrop)
+			skillButton.plus:SetVertexColor(1, 1, 1)
+		end
+
+		styleSkillButton(TradeSkillCollapseAllButton)
+		TradeSkillCollapseAllButton:SetDisabledTexture("")
+		TradeSkillCollapseAllButton:SetHighlightTexture("")
 
 		hooksecurefunc("TradeSkillFrame_Update", function()
 			local numTradeSkills = GetNumTradeSkills()
@@ -6478,39 +6483,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				local skillButton = _G["TradeSkillSkill"..buttonIndex]
 
-				if not skillButton.reskinned then
-					skillButton.reskinned = true
-
-					skillButton:SetNormalTexture("")
-					skillButton.SetNormalTexture = F.dummy
-					skillButton:SetPushedTexture("")
+				if not skillButton.styled then
+					skillButton.styled = true
 
 					local buttonHighlight = _G["TradeSkillSkill"..buttonIndex.."Highlight"]
 					buttonHighlight:SetTexture("")
 					buttonHighlight.SetTexture = F.dummy
-
-					skillButton.bg = CreateFrame("Frame", nil, skillButton)
-					skillButton.bg:SetSize(13, 13)
-					skillButton.bg:SetPoint("LEFT", 4, 0)
-					skillButton.bg:SetFrameLevel(skillButton:GetFrameLevel()-1)
-					F.CreateBD(skillButton.bg, 0)
-
-					skillButton.tex = skillButton:CreateTexture(nil, "BACKGROUND")
-					skillButton.tex:SetAllPoints(skillButton.bg)
-					skillButton.tex:SetTexture(C.media.backdrop)
-					skillButton.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-
-					skillButton.minus = skillButton:CreateTexture(nil, "OVERLAY")
-					skillButton.minus:SetSize(7, 1)
-					skillButton.minus:SetPoint("CENTER", skillButton.bg)
-					skillButton.minus:SetTexture(C.media.backdrop)
-					skillButton.minus:SetVertexColor(1, 1, 1)
-
-					skillButton.plus = skillButton:CreateTexture(nil, "OVERLAY")
-					skillButton.plus:SetSize(1, 7)
-					skillButton.plus:SetPoint("CENTER", skillButton.bg)
-					skillButton.plus:SetTexture(C.media.backdrop)
-					skillButton.plus:SetVertexColor(1, 1, 1)
 
 					skillButton.SubSkillRankBar.BorderLeft:Hide()
 					skillButton.SubSkillRankBar.BorderRight:Hide()
@@ -6520,10 +6498,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					skillButton.SubSkillRankBar:SetStatusBarTexture(C.media.backdrop)
 					skillButton.SubSkillRankBar:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 					F.CreateBDFrame(skillButton.SubSkillRankBar, .25)
+
+					styleSkillButton(skillButton)
 				end
 
 				if skillIndex <= numTradeSkills then
-					if skillType == "header" then
+					if skillType == "header" or skillType == "subheader" then
+						if skillType == "subheader" then
+							skillButton.bg:SetPoint("LEFT", 24, 1)
+						else
+							skillButton.bg:SetPoint("LEFT", 4, 1)
+						end
+
 						skillButton.bg:Show()
 						skillButton.tex:Show()
 						skillButton.minus:Show()
@@ -6547,8 +6533,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end)
-
-		TradeSkillCollapseAllButton:SetDisabledTexture("")
 
 		TradeSkillIncrementButton:SetPoint("RIGHT", TradeSkillCreateButton, "LEFT", -9, 0)
 
