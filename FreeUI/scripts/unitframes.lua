@@ -1134,7 +1134,7 @@ local UnitSpecific = {
 			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
 			for i = 1, 4 do
-				bars[i] = CreateFrame("StatusBar", nil, self)
+				bars[i] = CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetHeight(2)
 				bars[i]:SetStatusBarTexture(C.media.texture)
 
