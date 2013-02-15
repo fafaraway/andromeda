@@ -6305,6 +6305,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PlayerTalentFrameSpecializationTutorialButton.Ring:Hide()
 		PlayerTalentFrameSpecializationTutorialButton:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
 
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim.Play = F.dummy
+		PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
+		PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
+
 		F.ReskinPortraitFrame(PlayerTalentFrame, true)
 		F.Reskin(PlayerTalentFrameSpecializationLearnButton)
 		F.Reskin(PlayerTalentFrameTalentsLearnButton)
