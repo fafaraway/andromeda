@@ -433,8 +433,12 @@ local druid = ns.CreateCheckBox(classmod, "druid")
 druid:SetPoint("TOPLEFT", deathknight, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, druid)
 
+local mage = ns.CreateCheckBox(classmod, "mage")
+mage:SetPoint("TOPLEFT", druid, "BOTTOMLEFT", 0, -8)
+tinsert(ns.classOptions, mage)
+
 local monk = ns.CreateCheckBox(classmod, "monk")
-monk:SetPoint("TOPLEFT", druid, "BOTTOMLEFT", 0, -8)
+monk:SetPoint("TOPLEFT", mage, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, monk)
 
 local paladinHP = ns.CreateCheckBox(classmod, "paladinHP")

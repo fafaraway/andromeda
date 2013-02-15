@@ -916,6 +916,29 @@ local UnitSpecific = {
 
 			self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
 			self.AltPowerBar:HookScript("OnHide", moveDebuffAnchors)
+		elseif class == "MAGE" and C.classmod.mage then
+			local rp = CreateFrame("Frame", nil, self)
+			rp:SetSize(playerWidth, 2)
+			rp:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+
+			for i = 1, 2 do
+				rp[i] = CreateFrame("StatusBar", nil, rp)
+				rp[i]:SetHeight(2)
+				rp[i]:SetStatusBarTexture(C.media.texture)
+
+				F.CreateBDFrame(rp[i])
+
+				if i == 1 then
+					rp[i]:SetPoint("LEFT", rp)
+					rp[i]:SetWidth(playerWidth/2)
+				else
+					rp[i]:SetPoint("LEFT", rp[i-1], "RIGHT", 1, 0)
+					rp[i]:SetWidth((playerWidth/2)-1)
+				end
+			end
+
+			self.RunePower = rp
+			self.SpecialPowerBar = rp
 		elseif class == "MONK" and C.classmod.monk then
 			local pulsating = false
 
@@ -1126,7 +1149,7 @@ local UnitSpecific = {
 
 				if i == 1 then
 					bars[i]:SetPoint("LEFT", bars)
-					bars[i]:SetWidth((playerWidth/4))
+					bars[i]:SetWidth(playerWidth/4)
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 1, 0)
 					bars[i]:SetWidth((playerWidth/4)-1)

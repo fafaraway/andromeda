@@ -109,6 +109,7 @@ C["unitframes"] = {
 C["classmod"] = {
 	["deathknight"] = true, -- runes
 	["druid"] = true, 		-- eclipse bar, shapeshift mana bar
+	["mage"] = true, 		-- rune of power
 	["monk"] = true, 		-- chi, stagger bar
 	["paladinHP"] = true, 	-- holy power
 	["paladinRF"] = true, 	-- righteous fury
