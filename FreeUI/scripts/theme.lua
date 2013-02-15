@@ -6020,6 +6020,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(24, PVPUIFrame:GetRegions()):Hide()
 		select(25, PVPUIFrame:GetRegions()):Hide()
 
+		PVPUIFrameTab2:SetPoint("LEFT", PVPUIFrameTab1, "RIGHT", -15, 0)
+
 		F.ReskinPortraitFrame(PVPUIFrame)
 		F.ReskinTab(PVPUIFrame.Tab1)
 		F.ReskinTab(PVPUIFrame.Tab2)
