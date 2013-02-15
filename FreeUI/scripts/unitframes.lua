@@ -734,13 +734,9 @@ local UnitSpecific = {
 			PvP.Override = UpdatePvP
 		end
 
+		-- We position these later on
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
-		if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
-			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
-		else
-			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
-		end
 		Debuffs["growth-x"] = "LEFT"
 		Debuffs["growth-y"] = "DOWN"
 		Debuffs['spacing-x'] = 3
@@ -794,6 +790,7 @@ local UnitSpecific = {
 			end
 
 			self.Runes = runes
+			self.SpecialPowerBar = runes
 		elseif class == "DRUID" and C.classmod.druid then
 			local DruidMana, eclipseBar
 
@@ -1011,22 +1008,6 @@ local UnitSpecific = {
 				staggerBar:SetStatusBarColor(info.r, info.g, info.b)
 			end)
 
-			local function moveDebuffAnchors()
-				if staggerBar:IsShown() then
-					if self.AltPowerBar:IsShown() then
-						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
-					else
-						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
-					end
-				else
-					if self.AltPowerBar:IsShown() then
-						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(4 + altPowerHeight))
-					else
-						Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
-					end
-				end
-			end
-
 			staggerBar:RegisterEvent("PLAYER_TALENT_UPDATE")
 			staggerBar:RegisterEvent("PLAYER_ENTERING_WORLD")
 			staggerBar:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
@@ -1036,11 +1017,10 @@ local UnitSpecific = {
 				else
 					staggerBar:Hide()
 				end
-				moveDebuffAnchors()
 			end)
 
-			self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
-			self.AltPowerBar:HookScript("OnHide", moveDebuffAnchors)
+
+			self.SpecialPowerBar = staggerBar
 		elseif class == "PALADIN" and C.classmod.paladinHP then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
@@ -1154,25 +1134,32 @@ local UnitSpecific = {
 			end
 
 			self.WarlockSpecBars = bars
+			self.SpecialPowerBar = bars
 		end
 
-		if class ~= "DRUID" and class ~= "MONK" then -- druids have their own update function cause of show/hide shenanigans
-			self.AltPowerBar:HookScript("OnShow", function()
-				if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
+		local function moveDebuffAnchors()
+			if self.SpecialPowerBar and self.SpecialPowerBar:IsShown() then
+				if self.AltPowerBar:IsShown() then
 					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(9 + altPowerHeight))
 				else
-					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(4 + altPowerHeight))
-				end
-			end)
-
-			self.AltPowerBar:HookScript("OnHide", function()
-				if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
 					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
+				end
+			else
+				if self.AltPowerBar:IsShown() then
+					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -(4 + altPowerHeight))
 				else
 					Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
 				end
-			end)
+			end
 		end
+
+		self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
+		self.AltPowerBar:HookScript("OnHide", moveDebuffAnchors)
+		if self.SpecialPowerBar then
+			self.SpecialPowerBar:HookScript("OnShow", moveDebuffAnchors)
+			self.SpecialPowerBar:HookScript("OnHide", moveDebuffAnchors)
+		end
+		moveDebuffAnchors()
 
 		local CounterBar = CreateFrame("StatusBar", nil, self)
 		CounterBar:SetWidth(playerWidth)
