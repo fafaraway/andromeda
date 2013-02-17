@@ -170,12 +170,10 @@ end
 
 local function colourTab(f)
 	f.Text:SetTextColor(1, 1, 1)
-	f:SetBackdropBorderColor(r, g, b)
 end
 
 local function clearTab(f)
 	f.Text:SetTextColor(1, .82, 0)
-	f:SetBackdropBorderColor(0, 0, 0)
 end
 
 ns.addCategory = function(name)
