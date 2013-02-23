@@ -27,22 +27,22 @@ local function onMouseUp(self)
 	end
 end
 
-local f = CreateFrame("Frame")
-f:SetBackdrop({
+local right = CreateFrame("Frame")
+right:SetBackdrop({
 	bgFile = C.media.backdrop,
 	edgeFile = C.media.glow,
 	edgeSize = 3,
 	insets = {left = 3, right = 3, top = 3, bottom = 3},
 })
-f:SetBackdropColor(1, 0, 0)
-f:SetBackdropBorderColor(1, 0, 0)
-f:SetAlpha(0)
-f:SetSize(8, 8)
-f:SetPoint("BOTTOMRIGHT")
-f:EnableMouse(true)
-f:SetScript("OnMouseDown", function(self, button)
+right:SetBackdropColor(1, 0, 0)
+right:SetBackdropBorderColor(1, 0, 0)
+right:SetAlpha(0)
+right:SetSize(8, 8)
+right:SetPoint("BOTTOMRIGHT")
+right:EnableMouse(true)
+right:SetScript("OnMouseDown", function(self, button)
 	if button == "LeftButton" then
-		f:HookScript("OnUpdate", function(self, elapsed)
+		self:HookScript("OnUpdate", function(self, elapsed)
 			last = last + elapsed
 			if last > .5 then
 				self:SetScript("OnUpdate", nil)
@@ -80,12 +80,12 @@ f:SetScript("OnMouseDown", function(self, button)
 	end
 end)
 
-f:SetScript("OnEnter", function()
-	f:SetAlpha(1)
-	F.CreatePulse(f)
+right:SetScript("OnEnter", function(self)
+	self:SetAlpha(1)
+	F.CreatePulse(self)
 	if not InCombatLockdown() then
-		GameTooltip:SetOwner(f, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -14, 14)
+		GameTooltip:SetOwner(self, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -14, 14)
 		GameTooltip:AddLine("FreeUI", unpack(C.class))
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Toggle alDamageMeter", r, g, b, 1, 1, 1)
@@ -95,9 +95,9 @@ f:SetScript("OnEnter", function()
 	end
 end)
 
-f:SetScript("OnLeave", function()
-	f:SetScript("OnUpdate", nil)
-	f:SetAlpha(0)
+right:SetScript("OnLeave", function(self)
+	self:SetScript("OnUpdate", nil)
+	self:SetAlpha(0)
 	GameTooltip:Hide()
 end)
 
@@ -144,20 +144,20 @@ volumeOverlay:SetScript("OnMouseDown", function(self, button)
 	GameTooltip:Hide()
 end)
 
-local g = CreateFrame("Frame")
-g:SetBackdrop({
+local left = CreateFrame("Frame")
+left:SetBackdrop({
 	bgFile = C.media.backdrop,
 	edgeFile = C.media.glow,
 	edgeSize = 3,
 	insets = {left = 3, right = 3, top = 3, bottom = 3},
 })
-g:SetBackdropColor(.4, .6, 1)
-g:SetBackdropBorderColor(.4, .6, 1)
-g:SetAlpha(0)
-g:SetSize(8, 8)
-g:SetPoint("BOTTOMLEFT")
-g:EnableMouse(true)
-g:SetScript("OnMouseDown", function(self, button)
+left:SetBackdropColor(.4, .6, 1)
+left:SetBackdropBorderColor(.4, .6, 1)
+left:SetAlpha(0)
+left:SetSize(8, 8)
+left:SetPoint("BOTTOMLEFT")
+left:EnableMouse(true)
+left:SetScript("OnMouseDown", function(self, button)
 	if button == "LeftButton" then
 		volumeBar:SetMinMaxValues(0, UIParent:GetWidth())
 		volumeOverlay:Show()
@@ -167,12 +167,12 @@ g:SetScript("OnMouseDown", function(self, button)
 	end
 end)
 
-g:SetScript("OnEnter", function()
-	g:SetAlpha(1)
-	F.CreatePulse(g)
+left:SetScript("OnEnter", function(self)
+	self:SetAlpha(1)
+	F.CreatePulse(self)
 	if not InCombatLockdown() then
-		GameTooltip:SetOwner(g, "ANCHOR_NONE")
-		GameTooltip:SetPoint("BOTTOMLEFT", g, "BOTTOMLEFT", 14, 14)
+		GameTooltip:SetOwner(self, "ANCHOR_NONE")
+		GameTooltip:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 14, 14)
 		GameTooltip:AddLine("FreeUI", unpack(C.class))
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Change volume", r, g, b, 1, 1, 1)
@@ -181,8 +181,8 @@ g:SetScript("OnEnter", function()
 	end
 end)
 
-g:SetScript("OnLeave", function()
-	g:SetScript("OnUpdate", nil)
-	g:SetAlpha(0)
+left:SetScript("OnLeave", function()
+	left:SetScript("OnUpdate", nil)
+	left:SetAlpha(0)
 	GameTooltip:Hide()
 end)
