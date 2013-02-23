@@ -322,11 +322,15 @@ F.ReskinDropDown = function(f)
 end
 
 local function colourClose(f)
-	f.text:SetTextColor(r, g, b)
+	for _, pixel in pairs(f.pixels) do
+		pixel:SetVertexColor(r, g, b)
+	end
 end
 
 local function clearClose(f)
-	f.text:SetTextColor(1, 1, 1)
+	for _, pixel in pairs(f.pixels) do
+		pixel:SetVertexColor(1, 1, 1)
+	end
 end
 
 F.ReskinClose = function(f, a1, p, a2, x, y)
@@ -348,11 +352,23 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 
 	CreateGradient(f)
 
-	local text = f:CreateFontString(nil, "OVERLAY")
-	text:SetFont(C.media.font2, 14, "THINOUTLINE")
-	text:SetPoint("CENTER", 1, 1)
-	text:SetText("x")
-	f.text = text
+	f.pixels = {}
+
+	for i = 1, 9 do
+		local tex = f:CreateTexture()
+		tex:SetTexture(1, 1, 1)
+		tex:SetSize(1, 1)
+		tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
+		tinsert(f.pixels, tex)
+	end
+
+	for i = 1, 9 do
+		local tex = f:CreateTexture()
+		tex:SetTexture(1, 1, 1)
+		tex:SetSize(1, 1)
+		tex:SetPoint("TOPLEFT", 3+i, -3-i)
+		tinsert(f.pixels, tex)
+	end
 
 	f:HookScript("OnEnter", colourClose)
  	f:HookScript("OnLeave", clearClose)
