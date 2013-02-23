@@ -5805,7 +5805,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				bu.icon:SetTexCoord(.08, .92, .08, .92)
 				bu.icon:SetDrawLayer("OVERLAY")
-				F.CreateBG(bu.icon)
+				bu.icon.bg = F.CreateBG(bu.icon)
 
 				bu.name:SetParent(bg)
 
@@ -5824,10 +5824,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local buttons = MountJournal.ListScrollFrame.buttons
 			for i = 1, #buttons do
 				local bu = buttons[i]
-				if i == 2 then
-					bu:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, -1)
-				elseif i > 2 then
-					bu:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, 0)
+				if bu.index ~= nil then
+					if i == 1 then
+						bu.bg:SetPoint("TOPLEFT", 0, -1)
+						bu.bg:SetPoint("BOTTOMRIGHT", -1, 1)
+						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+						bu.selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+					else
+						bu.bg:SetPoint("TOPLEFT", 0, -1)
+						bu.bg:SetPoint("BOTTOMRIGHT", 0, 1)
+						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+						bu.selectedTexture:SetPoint("BOTTOMRIGHT", 0, 1)
+					end
+					bu.bg:Show()
+					bu.icon:Show()
+					bu.icon.bg:Show()
+				else
+					bu.bg:Hide()
+					bu.icon:Hide()
+					bu.icon.bg:Hide()
 				end
 			end
 		end
@@ -5985,7 +6000,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local petButtons = PetJournal.listScroll.buttons
 			if petButtons then
 				for i = 1, #petButtons do
-					local index = petButtons[i].index
+					local bu = petButtons[i]
+
+					local index = bu.index
 					if index then
 						local petID, _, isOwned = C_PetJournal.GetPetInfoByIndex(index)
 
@@ -5994,13 +6011,21 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 							if rarity then
 								local color = ITEM_QUALITY_COLORS[rarity-1]
-								petButtons[i].name:SetTextColor(color.r, color.g, color.b)
+								bu.name:SetTextColor(color.r, color.g, color.b)
 							else
-								petButtons[i].name:SetTextColor(1, 1, 1)
+								bu.name:SetTextColor(1, 1, 1)
 							end
 						else
-							petButtons[i].name:SetTextColor(.5, .5, .5)
+							bu.name:SetTextColor(.5, .5, .5)
 						end
+					end
+
+					if i == 1 then
+						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+						bu.selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+					else
+						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+						bu.selectedTexture:SetPoint("BOTTOMRIGHT", 0, 1)
 					end
 				end
 			end
