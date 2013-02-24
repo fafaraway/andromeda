@@ -2,8 +2,6 @@
 
 local F, C, L = unpack(select(2, ...))
 
-PVP_ENABLED = ""
-
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 	if C.general.tooltip_cursor == true then
 		self:SetOwner(parent, "ANCHOR_CURSOR")
@@ -117,16 +115,14 @@ local hasMSP
 local function OnTooltipSetUnit(self)
 	local lines = self:NumLines()
 	local _, unit = self:GetUnit()
-	if(not unit) then return end
+	if not unit then return end
 
-	local race = UnitRace(unit) or ""
 	local level = UnitLevel(unit) or ""
 	local c = UnitClassification(unit)
-	local crtype = UnitCreatureType(unit)
 	local unitName, unitRealm = UnitName(unit)
 
-	if(level and level==-1) then
-		if(c=="worldboss") then
+	if level and level == -1 then
+		if c == "worldboss" then
 			level = "|cffff0000Boss|r"
 		else
 			level = "|cffff0000??|r"
@@ -141,9 +137,12 @@ local function OnTooltipSetUnit(self)
 		_G["GameTooltipTextLeft1"]:SetText(color..unitName)
 	end
 
-	if(UnitIsPlayer(unit)) then
+	if UnitIsPlayer(unit) then
+		local race = UnitRace(unit) or ""
+
 		local guildName, guildRankName = GetGuildInfo(unit)
-		if(guildName) then
+
+		if guildName then
 			if C.general.tooltip_guildranks then
 				_G["GameTooltipTextLeft2"]:SetFormattedText("%s ("..color.."%s|r)", guildName, guildRankName)
 			else
@@ -153,12 +152,23 @@ local function OnTooltipSetUnit(self)
 
 		local n = guildName and 3 or 2
 		_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s", level, race)
-	else
+	elseif UnitIsBattlePet(unit) then
 		for i = 2, lines do
 			local line = _G["GameTooltipTextLeft"..i]
 			local text = line:GetText() or ""
-			if((level and text:find("^"..LEVEL)) or (crtype and text:find("^"..crtype))) then
-				line:SetFormattedText("%s%s %s", level, classification[c] or "", crtype or "")
+			if text:find("%d") then
+				line:SetFormattedText("%s %d %s", PET, UnitBattlePetLevel(unit), PET_TYPE_SUFFIX[UnitBattlePetType(unit)])
+				break
+			end
+		end
+	else
+		local crType = UnitCreatureType(unit)
+
+		for i = 2, lines do
+			local line = _G["GameTooltipTextLeft"..i]
+			local text = line:GetText() or ""
+			if((level and text:find("^"..LEVEL)) or (crType and text:find("^"..crType))) then
+				line:SetFormattedText("%s%s %s", level, classification[c] or "", crType or "")
 				break
 			end
 		end
