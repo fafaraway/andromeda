@@ -13,40 +13,16 @@ if FreeUIOptionsGlobal[realm][name] == nil then FreeUIOptionsGlobal[realm][name]
 -- create the main options table
 if FreeUIOptions == nil then FreeUIOptions = {} end
 
-local function copyTable(source, target)
-	for key, value in pairs(source) do
-		if type(value) == "table" then
-			target[key] = {}
-			copyTable(value, target[key])
-		else
-			target[key] = value
-		end
-	end
-end
-
 -- determine which settings to use
 local profile
 if FreeUIOptionsGlobal[realm][name] == true then
 	if FreeUIOptionsPerChar == nil then
 		FreeUIOptionsPerChar = {}
-		CopyTable(FreeUIOptions, FreeUIOptionsPerChar)
 	end
 	profile = FreeUIOptionsPerChar
 else
 	profile = FreeUIOptions
 end
-
---[[for group, options in pairs(profile) do
-	if C[group] then
-		for option, value in pairs(options) do
-			if C[group][option] ~= nil then
-				C[group][option] = value
-			end
-		end
-	else
-		profile[group] = nil
-	end
-end]]
 
 local groups = {
 	["general"] = true,
@@ -64,6 +40,7 @@ for group, options in pairs(C) do
 		if profile[group] == nil then profile[group] = {} end
 
 		for option, value in pairs(options) do
+			-- not using this yet
 			if type(C[group][option]) ~= "table" then
 				if profile[group][option] == nil then
 					profile[group][option] = value
