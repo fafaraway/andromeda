@@ -219,7 +219,7 @@ for i = 1, numpet do
 	cd:SetAllPoints(button)
 end
 
-RegisterStateDriver(petbar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists,nodead] show; hide")
+RegisterStateDriver(petbar, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists,nomounted] show; hide")
 
 --[[ Stance/possess bar]]
 
