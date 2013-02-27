@@ -406,7 +406,7 @@ end
 local tut3 = function()
 	sb:SetValue(300)
 	header:SetText("3. Features")
-	body:SetText("There's a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a selfbuff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options. Examples are included. Selfbuffs are already set up, so no worries.\n\nYou can mark mobs by alt+shift-clicking mobs in the game world and selecting an icon from the dropdown menu.\n\nClicking the bottom left corner of the screen toggles the chat menu. Left/right-clicking the bottom right corner toggles alDamageMeter and DBM respectively. Clicking and holding the bottom right corner brings up the micro menu.")
+	body:SetText("There's a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a selfbuff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options. Examples are included. Selfbuffs are already set up, so no worries.\n\nYou can mark mobs by alt+shift-clicking mobs in the game world and selecting an icon from the dropdown menu.\n\nLeft-clicking the bottom left corner of the screen lets you change master volume quickly. Right-clicking toggles the chat menu. Left/right-clicking the bottom right corner toggles alDamageMeter and DBM respectively. Clicking and holding the bottom right corner brings up the micro menu.")
 
 	sbt:SetText("3/6")
 
