@@ -40,8 +40,9 @@ local Enable = function(self, unit)
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UNIT_POWER', Path, true)
 		self:RegisterEvent('UNIT_DISPLAYPOWER', Path, true)
+		self:RegisterEvent("UNIT_POWER_FREQUENT", Path)
+		self:RegisterEvent("UNIT_MAXPOWER", Path)
 
 		return true
 	end
@@ -50,8 +51,9 @@ end
 local Disable = function(self)
 	local element = self.Harmony
 	if(element) then
-		self:UnregisterEvent('UNIT_POWER', Path)
 		self:UnregisterEvent('UNIT_DISPLAYPOWER', Path)
+		self:UnregisterEvent('UNIT_POWER_FREQUENT', Path)
+		self:UnregisterEvent('UNIT_MAXPOWER', Path)
 	end
 end
 

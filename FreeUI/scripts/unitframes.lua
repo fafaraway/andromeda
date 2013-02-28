@@ -946,6 +946,11 @@ local UnitSpecific = {
 
 			local UpdateOrbs = function(self, event, unit, powerType)
 				if unit ~= "player" then return end
+				if event == "UNIT_POWER_FREQUENT" then
+					if not (powerType == "CHI" or powerType == "DARK_FORCE") then
+						return
+					end
+				end
 
 				local chi = UnitPower(unit, SPELL_POWER_CHI)
 
