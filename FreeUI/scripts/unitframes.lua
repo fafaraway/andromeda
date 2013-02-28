@@ -545,6 +545,18 @@ local Shared = function(self, unit, isSingle)
 		ohpb:SetStatusBarTexture(C.media.texture)
 		ohpb:SetStatusBarColor(.5, 0, 1, 0.75)
 
+		local absorbBar = CreateFrame("StatusBar", nil, self.Health)
+		absorbBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT")
+		absorbBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
+		absorbBar:SetStatusBarTexture(C.media.texture)
+		absorbBar:SetStatusBarColor(1, .5, 1, 0.75)
+
+		local overAbsorbGlow = self:CreateTexture(nil, "OVERLAY")
+		overAbsorbGlow:SetWidth(16)
+		overAbsorbGlow:SetBlendMode("ADD")
+		overAbsorbGlow:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -7, 0)
+		overAbsorbGlow:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -7, 0)
+
 		if unit == "player" then
 			mhpb:SetWidth(playerWidth)
 			ohpb:SetWidth(playerWidth)
@@ -568,11 +580,9 @@ local Shared = function(self, unit, isSingle)
 		self.HealPrediction = {
 			-- status bar to show my incoming heals
 			myBar = mhpb,
-
-			-- status bar to show other peoples incoming heals
 			otherBar = ohpb,
-
-			-- amount of overflow past the end of the health bar
+			absorbBar = absorbBar,
+			overAbsorbGlow = overAbsorbGlow,
 			maxOverflow = 1,
 		}
 	end
