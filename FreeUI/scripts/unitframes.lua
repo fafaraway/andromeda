@@ -548,7 +548,6 @@ local Shared = function(self, unit, isSingle)
 		local absorbBar = CreateFrame("StatusBar", nil, self.Health)
 		absorbBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT")
 		absorbBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-		absorbBar:SetStatusBarTexture(C.media.texture)
 		absorbBar:SetStatusBarColor(1, .5, 1, 0.75)
 
 		local overAbsorbGlow = self:CreateTexture(nil, "OVERLAY")
