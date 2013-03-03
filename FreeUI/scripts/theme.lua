@@ -2382,6 +2382,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				frame.WinnerName:SetShadowOffset(0, 0)
 				frame.WinnerRoll:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 				frame.WinnerRoll:SetShadowOffset(0, 0)
+				frame.WinnerRoll:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				frame.WinnerRoll:SetShadowOffset(0, 0)
+				frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
 				frame.Icon:SetTexCoord(.08, .92, .08, .92)
 				frame.Icon:SetDrawLayer("ARTWORK")
@@ -2412,16 +2415,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			if not playerFrame.styled then
 				playerFrame.PlayerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 				playerFrame.PlayerName:SetShadowOffset(0, 0)
+				playerFrame.RollText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				playerFrame.RollText:SetShadowOffset(0, 0)
+				playerFrame.RollText:SetTextColor(.9, .9, .9)
+				playerFrame.WinMark:SetDesaturated(true)
 
 				playerFrame.styled = true
 			end
 
 			if playerFrame.playerIdx then
-				local name, class = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
+				local name, class, _, _, isWinner = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
 
 				if name then
 					local colour = C.classcolours[class]
 					playerFrame.PlayerName:SetTextColor(colour.r, colour.g, colour.b)
+
+					if isWinner then
+						playerFrame.WinMark:SetVertexColor(colour.r, colour.g, colour.b)
+					end
 				end
 			end
 		end)
