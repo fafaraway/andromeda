@@ -5173,63 +5173,38 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(5, GuildLatestPerkButton:GetRegions()):Hide()
 		select(6, GuildLatestPerkButton:GetRegions()):Hide()
 
-		local reskinnedperks = false
-		GuildPerksToggleButton:HookScript("OnClick", function()
-			if not reskinnedperks == true then
-				for i = 1, 8 do
-					local button = "GuildPerksContainerButton"..i
-					local bu = _G[button]
-					local ic = _G[button.."IconTexture"]
+		for _, bu in pairs(GuildPerksContainer.buttons) do
+			bu.DisableDrawLayer = F.dummy
 
-					bu:DisableDrawLayer("BACKGROUND")
-					bu:DisableDrawLayer("BORDER")
-					bu.EnableDrawLayer = F.dummy
-					ic:SetTexCoord(.08, .92, .08, .92)
-
-					ic.bg = CreateFrame("Frame", nil, bu)
-					ic.bg:SetPoint("TOPLEFT", ic, -1, 1)
-					ic.bg:SetPoint("BOTTOMRIGHT", ic, 1, -1)
-					F.CreateBD(ic.bg, 0)
-				end
-				reskinnedperks = true
+			for i = 1, 6 do
+				select(i, bu:GetRegions()):SetAlpha(0)
 			end
-		end)
 
-		local reskinnedRewards = false
-		hooksecurefunc("GuildRewards_Update", function()
-			if reskinnedRewards == true then return end
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(bu.icon)
+		end
 
-			for i = 1, 8 do
-				local button = "GuildRewardsContainerButton"..i
-				local bu = _G[button]
-				local ic = _G[button.."Icon"]
-				local locked = select(6, bu:GetRegions())
-				local bd = select(7, bu:GetRegions())
+		GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)
 
-				local bg = CreateFrame("Frame", nil, bu)
-				bg:SetPoint("TOPLEFT", 0, -1)
-				bg:SetPoint("BOTTOMRIGHT")
-				F.CreateBD(bg, 0)
+		for _, bu in pairs(GuildRewardsContainer.buttons) do
+			local nt = bu:GetNormalTexture()
 
-				bu:SetHighlightTexture(C.media.backdrop)
-				local hl = bu:GetHighlightTexture()
-				hl:SetVertexColor(r, g, b, .2)
-				hl:SetPoint("TOPLEFT", 0, -1)
-				hl:SetPoint("BOTTOMRIGHT")
+			bu:SetHighlightTexture("")
+			bu.disabledBG:SetTexture("")
 
-				ic:SetTexCoord(.08, .92, .08, .92)
+			local bg = CreateFrame("Frame", nil, bu)
+			bg:SetPoint("TOPLEFT", 0, -1)
+			bg:SetPoint("BOTTOMRIGHT")
+			F.CreateBD(bg, 0)
 
-				locked:Hide()
-				locked.Show = F.dummy
-				bd:SetTexture(C.media.backdrop)
-				bd:SetVertexColor(0, 0, 0, .25)
-				bd:SetPoint("TOPLEFT", 0, -1)
-				bd:SetPoint("BOTTOMRIGHT", 0, 1)
+			nt:SetTexture(C.media.backdrop)
+			nt:SetVertexColor(0, 0, 0, .25)
+			nt:SetPoint("TOPLEFT", 0, -1)
+			nt:SetPoint("BOTTOMRIGHT", 0, 1)
 
-				F.CreateBG(ic)
-			end
-			reskinnedRewards = true
-		end)
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(bu.icon)
+		end
 
 		local tcoords = {
 			["WARRIOR"]     = {0.02, 0.23, 0.02, 0.23},
