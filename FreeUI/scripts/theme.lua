@@ -5730,6 +5730,30 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local PetJournal = PetJournal
 		local MountJournal = MountJournal
 
+		if IsAddOnLoaded("BattlePetTabs") then
+			PetJournal:HookScript("OnShow", function(self)
+				if not self.styledTabs then
+					BattlePetTabsTab1:SetPoint("TOPLEFT", "$parent", "BOTTOMLEFT", 10, 0)
+					for i = 1, 8 do
+						local bu = _G["BattlePetTabsTab"..i.."Button"]
+
+						_G["BattlePetTabsTab"..i]:GetRegions():Hide()
+
+						bu:SetNormalTexture("")
+						bu:SetPushedTexture("")
+						bu:SetCheckedTexture(C.media.checked)
+
+						F.CreateBG(bu)
+						F.CreateSD(bu, 5, 0, 0, 0, 1, 1)
+
+						_G["BattlePetTabsTab"..i.."ButtonIconTexture"]:SetTexCoord(.08, .92, .08, .92)
+					end
+
+					self.styledTabs = true
+				end
+			end)
+		end
+
 		for i = 1, 14 do
 			if i ~= 8 then
 				select(i, PetJournalParent:GetRegions()):Hide()
