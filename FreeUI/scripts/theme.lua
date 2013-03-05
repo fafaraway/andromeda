@@ -6559,6 +6559,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		PlayerTalentFrameSpecializationLearnButton.FlashAnim.Play = F.dummy
 		PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
+		PlayerTalentFrameTalentsLearnButton.FlashAnim.Play = F.dummy
 		PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
 
 		F.ReskinPortraitFrame(PlayerTalentFrame, true)
