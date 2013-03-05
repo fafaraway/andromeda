@@ -1159,7 +1159,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, FRIENDS_TO_DISPLAY do
 			local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
 			local ic = bu.gameIcon
-			local inv = _G["FriendsFrameFriendsScrollFrameButton"..i.."TravelPassButton"]
+
+			bu.background:Hide()
+			bu.travelPassButton:SetAlpha(0)
+			bu.travelPassButton:EnableMouse(false)
 
 			bu:SetHighlightTexture(C.media.backdrop)
 			bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
@@ -1167,27 +1170,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:SetSize(22, 22)
 			ic:SetTexCoord(.15, .85, .15, .85)
 
-			inv:SetAlpha(0)
-			inv:EnableMouse(false)
-
-			_G["FriendsFrameFriendsScrollFrameButton"..i.."Background"]:Hide()
+			bu.bg = CreateFrame("Frame", nil, bu)
+			bu.bg:SetAllPoints(ic)
+			F.CreateBD(bu.bg, 0)
 		end
 
 		local function UpdateScroll()
 			for i = 1, FRIENDS_TO_DISPLAY do
 				local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
-				if not bu.bg then
-					bu.bg = CreateFrame("Frame", nil, bu)
-					bu.bg:SetPoint("TOPLEFT", bu.gameIcon)
-					bu.bg:SetPoint("BOTTOMRIGHT", bu.gameIcon)
-					F.CreateBD(bu.bg, 0)
-				end
+
 				if bu.gameIcon:IsShown() then
-					if i == 1 then
-						bu.bg:SetPoint("BOTTOMRIGHT", bu.gameIcon, 0, -1)
-					else
-						bu.bg:SetPoint("BOTTOMRIGHT", bu.gameIcon)
-					end
 					bu.bg:Show()
 					bu.gameIcon:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -2, -2)
 				else
@@ -1195,6 +1187,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end
+
+		local bu1 = FriendsFrameFriendsScrollFrameButton1
+		bu1.bg:SetPoint("BOTTOMRIGHT", bu1.gameIcon, 0, -1)
 
 		hooksecurefunc("FriendsFrame_UpdateFriends", UpdateScroll)
 		hooksecurefunc(FriendsFrameFriendsScrollFrame, "update", UpdateScroll)
@@ -5824,17 +5819,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for i = 1, #buttons do
 				local bu = buttons[i]
 				if bu.index ~= nil then
-					if i == 1 then
-						bu.bg:SetPoint("TOPLEFT", 0, -1)
-						bu.bg:SetPoint("BOTTOMRIGHT", -1, 1)
-						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
-						bu.selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
-					else
-						bu.bg:SetPoint("TOPLEFT", 0, -1)
-						bu.bg:SetPoint("BOTTOMRIGHT", 0, 1)
-						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
-						bu.selectedTexture:SetPoint("BOTTOMRIGHT", 0, 1)
-					end
 					bu.bg:Show()
 					bu.icon:Show()
 					bu.icon.bg:Show()
@@ -5846,9 +5830,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
+		local bu1 = MountJournal.ListScrollFrame.buttons[1]
+		bu1.bg:SetPoint("TOPLEFT", 0, -1)
+		bu1.bg:SetPoint("BOTTOMRIGHT", -1, 1)
+		bu1.selectedTexture:SetPoint("TOPLEFT", 0, -1)
+		bu1.selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+
 		hooksecurefunc("MountJournal_UpdateMountList", updateScroll)
-		MountJournalListScrollFrame:HookScript("OnVerticalScroll", updateScroll)
-		MountJournalListScrollFrame:HookScript("OnMouseWheel", updateScroll)
+		hooksecurefunc(MountJournalListScrollFrame, "update", updateScroll)
 
 		local tooltips = {PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}
 		for _, f in pairs(tooltips) do
@@ -6018,21 +6007,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 							bu.name:SetTextColor(.5, .5, .5)
 						end
 					end
-
-					if i == 1 then
-						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
-						bu.selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
-					else
-						bu.selectedTexture:SetPoint("TOPLEFT", 0, -1)
-						bu.selectedTexture:SetPoint("BOTTOMRIGHT", 0, 1)
-					end
 				end
 			end
 		end
 
+		PetJournal.listScroll.buttons[1].selectedTexture:SetPoint("TOPLEFT", 0, -1)
+		PetJournal.listScroll.buttons[1].selectedTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+
 		hooksecurefunc("PetJournal_UpdatePetList", ColourPetQuality)
-		PetJournalListScrollFrame:HookScript("OnVerticalScroll", ColourPetQuality)
-		PetJournalListScrollFrame:HookScript("OnMouseWheel", ColourPetQuality)
+		hooksecurefunc(PetJournalListScrollFrame, "update", ColourPetQuality)
 	elseif addon == "Blizzard_PVPUI" then
 		local PVPUIFrame = PVPUIFrame
 		local PVPQueueFrame = PVPQueueFrame
