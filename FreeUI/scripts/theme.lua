@@ -6022,6 +6022,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local HonorFrame = HonorFrame
 		local ConquestFrame = ConquestFrame
 		local WarGamesFrame = WarGamesFrame
+		local PVPArenaTeamsFrame = PVPArenaTeamsFrame
 
 		PVPUIFrame:DisableDrawLayer("ARTWORK")
 		PVPUIFrame.LeftInset:DisableDrawLayer("BORDER")
@@ -6040,14 +6041,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local icon = bu.Icon
 			local cu = bu.CurrencyIcon
 
-			bu.Background:Hide()
 			bu.Ring:Hide()
 
-			bu.bg = F.CreateBG(bu)
-			bu.bg:SetAllPoints()
-			bu.bg:SetVertexColor(r, g, b, .2)
-
 			F.Reskin(bu, true)
+
+			bu.Background:SetAllPoints()
+			bu.Background:SetTexture(r, g, b, .2)
 
 			icon:SetTexCoord(.08, .92, .08, .92)
 			icon:SetPoint("LEFT", bu, "LEFT")
@@ -6079,9 +6078,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			for i = 1, 3 do
 				local bu = self["CategoryButton"..i]
 				if i == index then
-					bu.bg:Show()
+					bu.Background:Show()
 				else
-					bu.bg:Hide()
+					bu.Background:Hide()
 				end
 			end
 		end)
@@ -6156,6 +6155,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Conquest Frame
 
 		local Inset = ConquestFrame.Inset
+		local ConquestBar = ConquestFrame.ConquestBar
 
 		for i = 1, 9 do
 			select(i, Inset:GetRegions()):Hide()
@@ -6179,6 +6179,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		ConquestFrame.RatedBG.TeamNameText:SetText(UnitName("player"))
 		ConquestFrame.RatedBG.TeamNameText:SetTextColor(r, g, b)
+
+		for i = 1, 4 do
+			select(i, ConquestBar:GetRegions()):Hide()
+			_G["ConquestPointsBarDivider"..i]:Hide()
+		end
+
+		ConquestBar.shadow:Hide()
+
+		ConquestBar.progress:SetTexture(C.media.backdrop)
+		ConquestBar.progress:SetGradient("VERTICAL", .8, 0, 0, 1, 0, 0)
+
+		local bg = F.CreateBDFrame(ConquestBar, .25)
+		bg:SetPoint("TOPLEFT", -1, -2)
+		bg:SetPoint("BOTTOMRIGHT", 1, 2)
 
 		-- War games
 
@@ -6265,6 +6279,159 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			hooksecurefunc(header, "SetNormalTexture", onSetNormalTexture)
 		end
 
+		-- Arena
+
+		local ArenaTeamFrame = ArenaTeamFrame
+		local TopInset = ArenaTeamFrame.TopInset
+		local WeeklyDisplay = ArenaTeamFrame.WeeklyDisplay
+		local BottomInset = ArenaTeamFrame.BottomInset
+
+		for i = 1, 9 do
+			select(i, TopInset:GetRegions()):Hide()
+			select(i, WeeklyDisplay:GetRegions()):Hide()
+			select(i, BottomInset:GetRegions()):Hide()
+		end
+
+		ArenaTeamFrame.TeamNameHeader:Hide()
+		ArenaTeamFrame.ArenaTexture:Hide()
+		ArenaTeamFrame.TopShadowOverlay:Hide()
+
+		for i = 1, 3 do
+			local bu = PVPArenaTeamsFrame["Team"..i]
+
+			bu.Flag.FlagGrabber:Hide()
+			bu.Flag:SetPoint("TOPLEFT", 10, -1)
+
+			bu.Background:SetTexture(r, g, b, .2)
+			bu.Background:SetAllPoints()
+
+			F.Reskin(bu, true)
+		end
+
+		hooksecurefunc("PVPArenaTeamsFrame_SelectButton", function(button)
+			for i = 1, MAX_ARENA_TEAMS do
+				local teamButton = PVPArenaTeamsFrame["Team"..i]
+				if teamButton == button then
+					teamButton.Background:Show()
+				else
+					teamButton.Background:Hide()
+				end
+			end
+		end)
+
+		local function onEnter(self)
+			self.bg:SetBackdropColor(r, g, b, .2)
+		end
+
+		local function onLeave(self)
+			self.bg:SetBackdropColor(0, 0, 0, .25)
+		end
+
+		for i = 1, 4 do
+			local header = ArenaTeamFrame["Header"..i]
+
+			for j = 1, 3 do
+				select(j, header:GetRegions()):Hide()
+			end
+
+			header:SetHighlightTexture("")
+
+			local bg = CreateFrame("Frame", nil, header)
+			bg:SetPoint("TOPLEFT", 2, 0)
+			bg:SetPoint("BOTTOMRIGHT", -1, 0)
+			bg:SetFrameLevel(header:GetFrameLevel()-1)
+			F.CreateBD(bg, .25)
+
+			header.bg = bg
+
+			header:HookScript("OnEnter", onEnter)
+			header:HookScript("OnLeave", onLeave)
+		end
+
+		hooksecurefunc("PVPArenaTeamsFrame_ShowTeam", function(self)
+			local frame = ArenaTeamFrame
+			if not self.selectedButton then
+				return
+			end
+
+			for i = 1, MAX_ARENA_TEAM_MEMBERS do
+				local button = frame["TeamMember"..i]
+
+				if button:IsEnabled() then
+					local name, rank, level, class, online = GetArenaTeamRosterInfo(frame.teamIndex, i);
+					local color = ConvertRGBtoColorString(C.classcolours[class])
+					if online then
+						button.NameText:SetText(color..name..FONT_COLOR_CODE_CLOSE)
+					else
+						button.NameText:SetText(GRAY_FONT_COLOR_CODE..name..FONT_COLOR_CODE_CLOSE)
+					end
+				end
+			end
+		end)
+
+		local INVITE_DROPDOWN = 1;
+		function ArenaInviteMenu_Init(self, level, team)
+			local info = UIDropDownMenu_CreateInfo();
+			info.notCheckable = true;
+			info.value = nil;
+
+			if (level == 1 and (not team or not team[1])) then
+				info.text = INVITE_TEAM_MEMBERS;
+				info.disabled = true;
+				info.func =  nil;
+				info.hasArrow = true;
+				info.value = INVITE_DROPDOWN;
+				UIDropDownMenu_AddButton(info, level)
+
+				info.text = CANCEL
+				info.disabled = nil;
+				info.hasArrow = nil;
+				info.value = nil;
+				info.func = nil
+				UIDropDownMenu_AddButton(info, level)
+				return;
+			end
+
+			if (UIDROPDOWNMENU_MENU_VALUE == INVITE_DROPDOWN) then
+				if (not team) then
+					return
+				end
+				for i=1, #team do
+					if (team[i].online) then
+						local color = C.classcolours[team[i].class]
+						info.text = color..team[i].name..FONT_COLOR_CODE_CLOSE;
+						info.func = function (menu, name) InviteToGroup(name); end
+						info.arg1 = team[i].name;
+						info.disabled = nil;
+					else
+						info.disabled = true;
+						info.text = team[i].name;
+					end
+					UIDropDownMenu_AddButton(info, level)
+				end
+			end
+
+			if (level == 1) then
+				info.text = INVITE_TEAM_MEMBERS;
+				info.func =  nil;
+				info.hasArrow = true;
+				info.value = INVITE_DROPDOWN;
+				info.menuList = team;
+				UIDropDownMenu_AddButton(info, level)
+				info.text = CANCEL
+				info.value = nil;
+				info.hasArrow = nil;
+				info.menuList = nil;
+				UIDropDownMenu_AddButton(info, level)
+			end
+		end
+
+		ArenaTeamFrame.Flag:SetPoint("TOPLEFT", 25, -3)
+
+		F.CreateBD(TopInset, .25)
+		F.ReskinArrow(ArenaTeamFrame.weeklyToggleRight, "RIGHT")
+		F.ReskinArrow(ArenaTeamFrame.weeklyToggleLeft, "LEFT")
+
 		-- Main style
 
 		F.ReskinPortraitFrame(PVPUIFrame)
@@ -6274,6 +6441,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(HonorFrame.GroupQueueButton)
 		F.Reskin(ConquestFrame.JoinButton)
 		F.Reskin(WarGameStartButton)
+		F.Reskin(ArenaTeamFrame.AddMemberButton)
 		F.ReskinDropDown(HonorFrameTypeDropDown)
 		F.ReskinScroll(HonorFrameSpecificFrameScrollBar)
 		F.ReskinScroll(WarGamesFrameScrollFrameScrollBar)
