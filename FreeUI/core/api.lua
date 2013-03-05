@@ -127,6 +127,8 @@ local CreateGradient = function(f)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
 	tex:SetTexture(C.media.backdrop)
 	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+
+	return tex
 end
 
 F.CreateGradient = CreateGradient

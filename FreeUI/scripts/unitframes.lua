@@ -545,6 +545,17 @@ local Shared = function(self, unit, isSingle)
 		ohpb:SetStatusBarTexture(C.media.texture)
 		ohpb:SetStatusBarColor(.5, 0, 1, 0.75)
 
+		local absorbBar = CreateFrame("StatusBar", nil, self.Health)
+		absorbBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT")
+		absorbBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
+		absorbBar:SetStatusBarColor(1, .5, 1, 0.75)
+
+		local overAbsorbGlow = self:CreateTexture(nil, "OVERLAY")
+		overAbsorbGlow:SetWidth(16)
+		overAbsorbGlow:SetBlendMode("ADD")
+		overAbsorbGlow:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -7, 0)
+		overAbsorbGlow:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -7, 0)
+
 		if unit == "player" then
 			mhpb:SetWidth(playerWidth)
 			ohpb:SetWidth(playerWidth)
@@ -568,11 +579,9 @@ local Shared = function(self, unit, isSingle)
 		self.HealPrediction = {
 			-- status bar to show my incoming heals
 			myBar = mhpb,
-
-			-- status bar to show other peoples incoming heals
 			otherBar = ohpb,
-
-			-- amount of overflow past the end of the health bar
+			absorbBar = absorbBar,
+			overAbsorbGlow = overAbsorbGlow,
 			maxOverflow = 1,
 		}
 	end
@@ -734,13 +743,9 @@ local UnitSpecific = {
 			PvP.Override = UpdatePvP
 		end
 
+		-- We position these later on
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
-		if (class == "DEATHKNIGHT" and C.classmod.deathknight) or (class == "WARLOCK" and C.classmod.warlock) then
-			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -8)
-		else
-			Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -3)
-		end
 		Debuffs["growth-x"] = "LEFT"
 		Debuffs["growth-y"] = "DOWN"
 		Debuffs['spacing-x'] = 3
@@ -950,6 +955,11 @@ local UnitSpecific = {
 
 			local UpdateOrbs = function(self, event, unit, powerType)
 				if unit ~= "player" then return end
+				if event == "UNIT_POWER_FREQUENT" then
+					if not (powerType == "CHI" or powerType == "DARK_FORCE") then
+						return
+					end
+				end
 
 				local chi = UnitPower(unit, SPELL_POWER_CHI)
 
@@ -995,6 +1005,59 @@ local UnitSpecific = {
 
 			self.Harmony = glow
 			glow.Override = UpdateOrbs
+
+			-- Brewmaster stagger bar
+
+			local staggerBar = CreateFrame("StatusBar", nil, self)
+			staggerBar:SetSize(playerWidth, 2)
+			staggerBar:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
+			staggerBar:SetStatusBarTexture(C.media.texture)
+			staggerBar:Hide()
+			F.CreateBDFrame(staggerBar)
+
+			local BREWMASTER_POWER_BAR_NAME = BREWMASTER_POWER_BAR_NAME
+			local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
+			local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
+
+			local GREEN_INDEX = 1
+			local YELLOW_INDEX = 2
+			local RED_INDEX = 3
+
+			staggerBar:SetScript("OnUpdate", function()
+				local currstagger = UnitStagger(self.unit)
+				if not currstagger then return end
+
+				local unitHealthMax = UnitHealthMax(self.unit)
+
+				staggerBar:SetValue(currstagger)
+				staggerBar:SetMinMaxValues(0, unitHealthMax)
+
+				local percent = currstagger / unitHealthMax
+				local info = PowerBarColor[BREWMASTER_POWER_BAR_NAME]
+
+				if percent > STAGGER_YELLOW_TRANSITION and percent < STAGGER_RED_TRANSITION then
+					info = info[YELLOW_INDEX]
+				elseif percent > STAGGER_RED_TRANSITION then
+					info = info[RED_INDEX]
+				else
+					info = info[GREEN_INDEX]
+				end
+				staggerBar:SetStatusBarColor(info.r, info.g, info.b)
+			end)
+
+			staggerBar:RegisterEvent("PLAYER_TALENT_UPDATE")
+			staggerBar:RegisterEvent("PLAYER_ENTERING_WORLD")
+			staggerBar:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
+			staggerBar:SetScript("OnEvent", function()
+				if GetSpecialization() == SPEC_MONK_BREWMASTER and not UnitHasVehiclePlayerFrameUI("player") then
+					staggerBar:Show()
+				else
+					staggerBar:Hide()
+				end
+			end)
+
+
+			self.SpecialPowerBar = staggerBar
 		elseif class == "PALADIN" and C.classmod.paladinHP then
 			local UpdateHoly = function(self, event, unit, powerType)
 				if(self.unit ~= unit or (powerType and powerType ~= 'HOLY_POWER')) then return end
@@ -1088,7 +1151,7 @@ local UnitSpecific = {
 			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
 			for i = 1, 4 do
-				bars[i] = CreateFrame("StatusBar", nil, self)
+				bars[i] = CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetHeight(2)
 				bars[i]:SetStatusBarTexture(C.media.texture)
 
@@ -1100,7 +1163,7 @@ local UnitSpecific = {
 
 				if i == 1 then
 					bars[i]:SetPoint("LEFT", bars)
-					bars[i]:SetWidth((playerWidth/4))
+					bars[i]:SetWidth(playerWidth/4)
 				else
 					bars[i]:SetPoint("LEFT", bars[i-1], "RIGHT", 1, 0)
 					bars[i]:SetWidth((playerWidth/4)-1)

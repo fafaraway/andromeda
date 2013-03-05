@@ -119,7 +119,7 @@ end
 ns.localization.classmoddeathknight = ns.localization.classmoddeathknight..":|cffffffff Rune bars"
 ns.localization.classmoddruid = ns.localization.classmoddruid..":|cffffffff Eclipse bar and shapeshift mana bar"
 ns.localization.classmodmage = ns.localization.classmodmage..":|cffffffff Rune of Power tracker"
-ns.localization.classmodmonk = ns.localization.classmodmonk..":|cffffffff Chi orb tracker"
+ns.localization.classmodmonk = ns.localization.classmodmonk..":|cffffffff Chi and Stagger tracker"
 ns.localization.classmodpaladinHP = ns.localization.classmodpaladin..":|cffffffff Holy Power tracker"
 ns.localization.classmodpaladinRF = ns.localization.classmodpaladin..":|cffffffff Righteous Fury reminder"
 ns.localization.classmodpriest = ns.localization.classmodpriest..":|cffffffff Shadow orb tracker"

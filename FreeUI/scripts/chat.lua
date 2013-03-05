@@ -253,7 +253,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	end
 	local info = ChatTypeInfo[chatType];
 
-	if ( info and info.colorNameByClass and arg12 ~= "" ) then
+	if ( info and info.colorNameByClass and arg12 ) then
 		local localizedClass, englishClass, localizedRace, englishRace, sex = GetPlayerInfoByGUID(arg12)
 
 		if ( englishClass ) then

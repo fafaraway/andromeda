@@ -386,7 +386,7 @@ end
 local tut5 = function()
 	sb:SetValue(500)
 	header:SetText("5. /Commands")
-	body:SetText("Lastly, FreeUI includes useful slash commands. Below is a list.\n\n|cff00c1ff/freeui|r brings up a list of UI-specific commands (you might want to try this now). |cff00c1ff/en|r and |cff00c1ff/dis|r are used to quickly enable and disable addons. |cff00c1ff/rl|r reloads the UI.\n\n|cff00c1ff/tt|r lets you whisper your target. |cff00c1ff/rc|r initiates a ready check. |cff00c1ff/rd|r disbands a party or raid. |cff00c1ff/rolepoll|r or |cff00c1ff/rolecheck|r initiates a role check.\n\n|cff00c1ff/gm|r toggles the Help frame.")
+	body:SetText("Lastly, FreeUI includes useful slash commands. Below is a list.\n\n|cff00c1ff/freeui|r brings up a list of UI-specific commands (you might want to try this now). |cff00c1ff/en|r and |cff00c1ff/dis|r are used to quickly enable and disable addons. |cff00c1ff/rl|r reloads the UI.\n\n|cff00c1ff/tt|r lets you whisper your target. |cff00c1ff/rc|r initiates a ready check. |cff00c1ff/rd|r disbands a party or raid. |cff00c1ff/rolepoll|r or |cff00c1ff/rolecheck|r initiates a role check.\n\n|cff00c1ff/gm|r toggles the Help frame. |cff00c1ff/vol|r lets you set the master volume (0-1).")
 
 	sbt:SetText("5/6")
 
