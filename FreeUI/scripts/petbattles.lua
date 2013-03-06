@@ -448,8 +448,13 @@ local r, g, b = unpack(C.class)
 local function stylePetBattleButton(bu)
 	if bu.reskinned then return end
 
+	local pushed = bu:GetPushedTexture()
+	local icon = bu.Icon
+	local ho = bu.HotKey
+	local cd = bu.Cooldown
+	local bi = bu.BetterIcon
+
 	bu:SetNormalTexture("")
-	bu:SetPushedTexture("")
 	bu:SetHighlightTexture("")
 
 	bu.bg = CreateFrame("Frame", nil, bu)
@@ -461,34 +466,34 @@ local function stylePetBattleButton(bu)
 	})
 	bu.bg:SetBackdropBorderColor(0, 0, 0)
 
-	bu.Icon:SetDrawLayer("BACKGROUND", 2)
-	bu.Icon:SetTexCoord(.08, .92, .08, .92)
-	bu.Icon:SetPoint("TOPLEFT", bu, 1, -1)
-	bu.Icon:SetPoint("BOTTOMRIGHT", bu, -1, 1)
+	icon:SetDrawLayer("BACKGROUND", 2)
+	icon:SetTexCoord(.08, .92, .08, .92)
+	icon:SetPoint("TOPLEFT", bu, 1, -1)
+	icon:SetPoint("BOTTOMRIGHT", bu, -1, 1)
 
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
 
-	bu.SelectedHighlight:SetTexture(r, g, b)
-	bu.SelectedHighlight:SetDrawLayer("BACKGROUND")
-	bu.SelectedHighlight:SetAllPoints()
+	pushed:SetTexture(r, g, b)
+	pushed:SetDrawLayer("BACKGROUND")
+	pushed:SetAllPoints()
 
-	bu.HotKey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	bu.HotKey:SetJustifyH("CENTER")
-	bu.HotKey:ClearAllPoints()
-	bu.HotKey:SetPoint("TOP", 1, -2)
+	ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	ho:SetJustifyH("CENTER")
+	ho:ClearAllPoints()
+	ho:SetPoint("TOP", 1, -2)
 
-	bu.Cooldown:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	bu.Cooldown:SetJustifyH("CENTER")
-	bu.Cooldown:SetDrawLayer("OVERLAY", 5)
-	bu.Cooldown:SetTextColor(1, 1, 1)
-	bu.Cooldown:SetShadowOffset(0, 0)
-	bu.Cooldown:ClearAllPoints()
-	bu.Cooldown:SetPoint("BOTTOM", 1, -1)
+	cd:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	cd:SetJustifyH("CENTER")
+	cd:SetDrawLayer("OVERLAY", 5)
+	cd:SetTextColor(1, 1, 1)
+	cd:SetShadowOffset(0, 0)
+	cd:ClearAllPoints()
+	cd:SetPoint("BOTTOM", 1, -1)
 
-	bu.BetterIcon:SetSize(24, 24)
-	bu.BetterIcon:ClearAllPoints()
-	bu.BetterIcon:SetPoint("BOTTOM", 6, -9)
+	bi:SetSize(24, 24)
+	bi:ClearAllPoints()
+	bi:SetPoint("BOTTOM", 6, -9)
 
 	bu.reskinned = true
 end
