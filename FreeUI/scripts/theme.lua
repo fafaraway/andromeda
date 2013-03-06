@@ -703,6 +703,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			button.enableButton:GetCheckedTexture():SetDesaturated(true)
 		end)
 
+		F.Reskin(LFDQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
+		F.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
+
 		-- Raid Finder
 
 		RaidFinderFrameBottomInset:DisableDrawLayer("BORDER")
