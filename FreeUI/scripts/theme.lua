@@ -1148,14 +1148,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		FriendsFrameIcon:Hide()
 
-		F.ReskinPortraitFrame(FriendsFrame, true)
-		F.Reskin(FriendsFrameAddFriendButton)
-		F.Reskin(FriendsFrameSendMessageButton)
-		F.Reskin(FriendsFrameIgnorePlayerButton)
-		F.Reskin(FriendsFrameUnsquelchButton)
-		F.Reskin(FriendsFrameMutePlayerButton)
-		F.ReskinDropDown(FriendsFrameStatusDropDown)
-
 		for i = 1, FRIENDS_TO_DISPLAY do
 			local bu = _G["FriendsFrameFriendsScrollFrameButton"..i]
 			local ic = bu.gameIcon
@@ -1204,6 +1196,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		SoRBg:SetPoint("BOTTOMRIGHT", 1, -1)
 		F.CreateBD(SoRBg, 0)
 
+		F.CreateBD(FriendsFrameBattlenetFrame.UnavailableInfoFrame)
+		FriendsFrameBattlenetFrame.UnavailableInfoFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, -18)
+
 		FriendsFrameBattlenetFrame:GetRegions():Hide()
 		F.CreateBD(FriendsFrameBattlenetFrame, .25)
 
@@ -1237,6 +1232,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		whoBg:SetPoint("BOTTOMRIGHT", -1, 1)
 		whoBg:SetFrameLevel(WhoFrameEditBoxInset:GetFrameLevel()-1)
 		F.CreateBD(whoBg, .25)
+
+		F.ReskinPortraitFrame(FriendsFrame, true)
+		F.Reskin(FriendsFrameAddFriendButton)
+		F.Reskin(FriendsFrameSendMessageButton)
+		F.Reskin(FriendsFrameIgnorePlayerButton)
+		F.Reskin(FriendsFrameUnsquelchButton)
+		F.Reskin(FriendsFrameMutePlayerButton)
+		F.ReskinDropDown(FriendsFrameStatusDropDown)
 
 		-- Battletag invite frame
 
