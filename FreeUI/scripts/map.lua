@@ -94,6 +94,10 @@ local SmallerMapSkin = function()
 	WorldMapShowDropDown:ClearAllPoints()
 	WorldMapShowDropDown:SetPoint("LEFT", panel, "LEFT", 0, -2)
 	WorldMapShowDropDown:SetFrameStrata("LOW")
+	MapBarFrame.Description:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
+	MapBarFrame.Description:SetShadowOffset(0, 0)
+	MapBarFrame.Title:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
+	MapBarFrame.Title:SetShadowOffset(0, 0)
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
