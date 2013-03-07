@@ -1019,8 +1019,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			local button = _G["MerchantItem"..i]
 			local bu = _G["MerchantItem"..i.."ItemButton"]
-			local ic = _G["MerchantItem"..i.."ItemButtonIconTexture"]
 			local mo = _G["MerchantItem"..i.."MoneyFrame"]
+			local ic = bu.icon
+
+			bu:SetHighlightTexture("")
 
 			_G["MerchantItem"..i.."SlotTexture"]:Hide()
 			_G["MerchantItem"..i.."Name"]:SetHeight(20)
