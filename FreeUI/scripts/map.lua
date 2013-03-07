@@ -14,10 +14,6 @@ mapbg:SetBackdrop({
 })
 mapbg:SetBackdropColor(0, 0, 0)
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_REGEN_ENABLED")
-f:RegisterEvent("PLAYER_REGEN_DISABLED")
-
 local frame = CreateFrame ("Frame", nil, WorldMapButton)
 frame:SetFrameStrata("HIGH")
 
@@ -100,48 +96,6 @@ local SmallerMapSkin = function()
 	MapBarFrame.Title:SetShadowOffset(0, 0)
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
-
-local wasChecked
-
-local OnEvent = function(self, event)
-	if event == "PLAYER_REGEN_DISABLED" then
-		WorldMapFrameSizeDownButton:Disable()
-		WorldMapFrameSizeUpButton:Disable()
-		HideUIPanel(WorldMapFrame)
-		WorldMap_ToggleSizeDown()
-		WatchFrame.showObjectives = nil
-		wasChecked = WorldMapQuestShowObjectives:GetChecked()
-		WorldMapQuestShowObjectives:SetChecked(false)
-		WorldMapQuestShowObjectives:Disable()
-		WorldMapTitleButton:Hide()
-		WorldMapBlobFrame:Hide()
-		WorldMapPOIFrame:Hide()
-
-		WorldMapTitleButton.Show = F.dummy
-		WorldMapBlobFrame.Show = F.dummy
-		WorldMapPOIFrame.Show = F.dummy
-
-		WatchFrame_Update()
-	elseif event == "PLAYER_REGEN_ENABLED" then
-		WorldMapFrameSizeDownButton:Enable()
-		WorldMapFrameSizeUpButton:Enable()
-		WorldMapTitleButton.Show = WorldMapTitleButton:Show()
-		WorldMapBlobFrame.Show = WorldMapBlobFrame:Show()
-		WorldMapPOIFrame.Show = WorldMapPOIFrame:Show()
-
-		WorldMapTitleButton:Show()
-
-		WatchFrame.showObjectives = true
-		WorldMapQuestShowObjectives:SetChecked(wasChecked)
-		WorldMapQuestShowObjectives:Enable()
-
-		WorldMapBlobFrame:Show()
-		WorldMapPOIFrame:Show()
-
-		WatchFrame_Update()
-	end
-end
-f:SetScript("OnEvent", OnEvent)
 
 local coords = F.CreateFS(frame, fontsize)
 coords:SetPoint("LEFT", WorldMapFrameTitle, "RIGHT")
