@@ -141,11 +141,6 @@ local function InitStyle()
 		hooksecurefunc(DBM_GUI_OptionsFrame, "DisplayButton", function(button, element)
 			-- bit of a hack, can't get the API to work
 			local pushed = element.toggle:GetPushedTexture():GetTexture()
-			if pushed and pushed:find("Plus") then
-				element.toggle.plusShown = true
-			else
-				element.toggle.plusShown = false
-			end
 
 			if not element.styled then
 				F.ReskinExpandOrCollapse(element.toggle)
@@ -154,7 +149,7 @@ local function InitStyle()
 				element.styled = true
 			end
 
-			element.toggle.plus:SetShown(element.toggle.plusShown)
+			element.toggle.plus:SetShown(pushed and pushed:find("Plus"))
 		end)
 
 		F.CreateBD(DBM_GUI_OptionsFrame)
