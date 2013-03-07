@@ -236,6 +236,17 @@ autoRoll.children = {autoRollMaxLevel}
 local autoSell = ns.CreateCheckBox(automation, "autoSell")
 autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
 
+local autoSetRole = ns.CreateCheckBox(automation, "autoSetRole", true)
+autoSetRole:SetPoint("TOPLEFT", autoSell, "BOTTOMLEFT", 0, -8)
+
+local autoSetRoleUseSpec = ns.CreateCheckBox(automation, "autoSetRole_useSpec", true)
+autoSetRoleUseSpec:SetPoint("TOPLEFT", autoSetRole, "BOTTOMLEFT", 16, -8)
+
+local autoSetRoleVerbose = ns.CreateCheckBox(automation, "autoSetRole_verbose", true)
+autoSetRoleVerbose:SetPoint("TOPLEFT", autoSetRoleUseSpec, "BOTTOMLEFT", 0, -8)
+
+autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
+
 -- [[ Action bars ]]
 
 local actionbars = FreeUIOptionsPanel.actionbars

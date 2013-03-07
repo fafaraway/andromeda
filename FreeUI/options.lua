@@ -27,6 +27,9 @@ C["automation"] = {
 	["autoRoll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
 		["autoRoll_maxLevel"] = true, 		-- only automatically roll on items at max level
 	["autoSell"] = true,			-- automatically sell greys
+	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
+		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
+		["autoSetRole_verbose"] = false,	-- tells you what happens when setting role
 }
 
 C["actionbars"] = {
