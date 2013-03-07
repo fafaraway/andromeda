@@ -15,14 +15,14 @@ local function onMouseUp(self)
 
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
 	else
 		EnableAddOn("alDamageMeter")
 		LoadAddOn("alDamageMeter")
 		if IsAddOnLoaded("alDamageMeter") then
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter loaded.|r", unpack(C.class))
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter loaded.|r", r, g, b)
 		else
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter not found!|r", unpack(C.class))
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter not found!|r", r, g, b)
 		end
 	end
 end
@@ -72,9 +72,9 @@ right:SetScript("OnMouseDown", function(self, button)
 			EnableAddOn("DBM-Core")
 			LoadAddOn("DBM-Core")
 			if IsAddOnLoaded("DBM-Core") then
-				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM loaded.|r", unpack(C.class))
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM loaded.|r", r, g, b)
 			else
-				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM not found!|r", unpack(C.class))
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM not found!|r", r, g, b)
 			end
 		end
 	end
@@ -86,7 +86,7 @@ right:SetScript("OnEnter", function(self)
 	if not InCombatLockdown() then
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
 		GameTooltip:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -14, 14)
-		GameTooltip:AddLine("FreeUI", unpack(C.class))
+		GameTooltip:AddLine("FreeUI", r, g, b)
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Toggle alDamageMeter", r, g, b, 1, 1, 1)
 		GameTooltip:AddDoubleLine("Right-click:", "Toggle DBM", r, g, b, 1, 1, 1)
@@ -173,7 +173,7 @@ left:SetScript("OnEnter", function(self)
 	if not InCombatLockdown() then
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
 		GameTooltip:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 14, 14)
-		GameTooltip:AddLine("FreeUI", unpack(C.class))
+		GameTooltip:AddLine("FreeUI", r, g, b)
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Change volume", r, g, b, 1, 1, 1)
 		GameTooltip:AddDoubleLine("Right-click:", "Toggle chat menu", r, g, b, 1, 1, 1)
