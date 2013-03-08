@@ -1909,16 +1909,21 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		DungeonCompletionAlertFrame1.glow.Show = F.dummy
 
 		hooksecurefunc("DungeonCompletionAlertFrame_ShowAlert", function()
-			for i = 1, 3 do
-				local bu = _G["DungeonCompletionAlertFrame1Reward"..i]
-				if bu and not bu.reskinned then
-					_G["DungeonCompletionAlertFrame1Reward"..i.."Border"]:Hide()
+			local bu = DungeonCompletionAlertFrame1Reward1
+			local index = 1
+
+			while bu do
+				if not bu.styled then
+					_G["DungeonCompletionAlertFrame1Reward"..index.."Border"]:Hide()
 
 					bu.texture:SetTexCoord(.08, .92, .08, .92)
 					F.CreateBG(bu.texture)
 
-					bu.rekinned = true
+					bu.styled = true
 				end
+
+				index = index + 1
+				bu = _G["DungeonCompletionAlertFrame1Reward"..index]
 			end
 		end)
 
@@ -1974,9 +1979,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					frame.bg:SetFrameLevel(frame:GetFrameLevel()-1)
 					F.CreateBD(frame.bg)
 
-					--frame:HookScript("OnEnter", fixBg)
-					--frame:HookScript("OnShow", fixBg)
-					--frame.animIn:HookScript("OnFinished", fixBg)
+					frame:HookScript("OnEnter", fixBg)
+					frame:HookScript("OnShow", fixBg)
+					frame.animIn:HookScript("OnFinished", fixBg)
 
 					F.CreateBG(ScenarioAlertFrame1DungeonTexture)
 					ScenarioAlertFrame1DungeonTexture:SetDrawLayer("OVERLAY")
@@ -1991,6 +1996,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				ScenarioAlertFrame1GlowFrame.Show = F.dummy
 
 				ScenarioAlertFrame1DungeonTexture:SetTexCoord(.08, .92, .08, .92)
+			end
+		end)
+
+		hooksecurefunc("ScenarioAlertFrame_ShowAlert", function()
+			local bu = ScenarioAlertFrame1Reward1
+			local index = 1
+
+			while bu do
+				if not bu.styled then
+					_G["ScenarioAlertFrame1Reward"..index.."Border"]:Hide()
+
+					bu.texture:SetTexCoord(.08, .92, .08, .92)
+					F.CreateBG(bu.texture)
+
+					bu.styled = true
+				end
+
+				index = index + 1
+				bu = _G["ScenarioAlertFrame1Reward"..index]
 			end
 		end)
 
