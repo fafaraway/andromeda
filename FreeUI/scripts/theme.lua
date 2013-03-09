@@ -684,27 +684,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			button.enableButton:GetCheckedTexture():SetDesaturated(true)
 		end)
 
-		for i = 1, NUM_LFR_CHOICE_BUTTONS do
-			local bu = _G["LFRQueueFrameSpecificListButton"..i].enableButton
-			F.ReskinCheck(bu)
-			bu.SetNormalTexture = F.dummy
-			bu.SetPushedTexture = F.dummy
-
-			F.ReskinExpandOrCollapse(_G["LFRQueueFrameSpecificListButton"..i].expandOrCollapseButton)
-		end
-
-		hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
-			if LFGCollapseList[dungeonID] then
-				button.expandOrCollapseButton.plus:Show()
-			else
-				button.expandOrCollapseButton.plus:Hide()
-			end
-
-			button.enableButton:GetCheckedTexture():SetDesaturated(true)
-		end)
+		local bonusValor = LFDQueueFrameRandomScrollFrameChildFrameBonusValor
+		bonusValor.Border:Hide()
+		bonusValor.Icon:SetTexCoord(.08, .92, .08, .92)
+		bonusValor.Icon:SetPoint("CENTER", bonusValor.Border, -3, 0)
+		bonusValor.Icon:SetSize(24, 24)
+		bonusValor.BonusText:SetPoint("LEFT", bonusValor.Border, "RIGHT", -5, -1)
+		F.CreateBG(bonusValor.Icon)
 
 		F.Reskin(LFDQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
-		F.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 
 		-- Raid Finder
 
@@ -784,7 +772,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		local bonusValor = ScenarioQueueFrameRandomScrollFrameChildFrameBonusValor
+		bonusValor.Border:Hide()
+		bonusValor.Icon:SetTexCoord(.08, .92, .08, .92)
+		bonusValor.Icon:SetPoint("CENTER", bonusValor.Border, -3, 0)
+		bonusValor.Icon:SetSize(24, 24)
+		bonusValor.BonusText:SetPoint("LEFT", bonusValor.Border, "RIGHT", -5, -1)
+		F.CreateBG(bonusValor.Icon)
+
 		F.Reskin(ScenarioQueueFrameFindGroupButton)
+		F.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 		F.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
 		F.ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
 
@@ -816,6 +813,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 			select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 		end
+
+		for i = 1, NUM_LFR_CHOICE_BUTTONS do
+			local bu = _G["LFRQueueFrameSpecificListButton"..i].enableButton
+			F.ReskinCheck(bu)
+			bu.SetNormalTexture = F.dummy
+			bu.SetPushedTexture = F.dummy
+
+			F.ReskinExpandOrCollapse(_G["LFRQueueFrameSpecificListButton"..i].expandOrCollapseButton)
+		end
+
+		hooksecurefunc("LFRQueueFrameSpecificListButton_SetDungeon", function(button, dungeonID)
+			if LFGCollapseList[dungeonID] then
+				button.expandOrCollapseButton.plus:Show()
+			else
+				button.expandOrCollapseButton.plus:Hide()
+			end
+
+			button.enableButton:GetCheckedTexture():SetDesaturated(true)
+		end)
 
 		-- Spellbook frame
 
