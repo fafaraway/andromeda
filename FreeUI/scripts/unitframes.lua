@@ -533,48 +533,23 @@ local Shared = function(self, unit, isSingle)
 	-- [[ Heal prediction ]]
 
 	if FreeUIConfig.layout == 2 then
-		local mhpb = CreateFrame("StatusBar", nil, self.Health)
-		mhpb:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT")
-		mhpb:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-		mhpb:SetStatusBarTexture(C.media.texture)
-		mhpb:SetStatusBarColor(0, .5, 1, 0.75)
+		local mhpb = self:CreateTexture()
+		mhpb:SetTexture(C.media.texture)
+		mhpb:SetVertexColor(0, .5, 1)
 
-		local ohpb = CreateFrame("StatusBar", nil, self.Health)
-		ohpb:SetPoint("TOPLEFT", mhpb:GetStatusBarTexture(), "TOPRIGHT")
-		ohpb:SetPoint("BOTTOMLEFT", mhpb:GetStatusBarTexture(), "BOTTOMRIGHT")
-		ohpb:SetStatusBarTexture(C.media.texture)
-		ohpb:SetStatusBarColor(.5, 0, 1, 0.75)
+		local ohpb = self:CreateTexture()
+		ohpb:SetTexture(C.media.texture)
+		ohpb:SetVertexColor(.5, 0, 1)
 
-		local absorbBar = CreateFrame("StatusBar", nil, self.Health)
-		absorbBar:SetPoint("TOPLEFT", self.Health:GetStatusBarTexture(), "TOPRIGHT")
-		absorbBar:SetPoint("BOTTOMLEFT", self.Health:GetStatusBarTexture(), "BOTTOMRIGHT")
-		absorbBar:SetStatusBarColor(1, .5, 1, 0.75)
+		local absorbBar = self:CreateTexture()
+		absorbBar:SetTexture(C.media.texture)
+		absorbBar:SetVertexColor(.8, .34, .8)
 
 		local overAbsorbGlow = self:CreateTexture(nil, "OVERLAY")
 		overAbsorbGlow:SetWidth(16)
 		overAbsorbGlow:SetBlendMode("ADD")
 		overAbsorbGlow:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -7, 0)
 		overAbsorbGlow:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -7, 0)
-
-		if unit == "player" then
-			mhpb:SetWidth(playerWidth)
-			ohpb:SetWidth(playerWidth)
-		elseif unit == "target" then
-			mhpb:SetWidth(targetWidth)
-			ohpb:SetWidth(targetWidth)
-		elseif unit == "focus" then
-			mhpb:SetWidth(focusWidth)
-			ohpb:SetWidth(focusWidth)
-		elseif unit == "pet" then
-			mhpb:SetWidth(petWidth)
-			ohpb:SetWidth(petWidth)
-		else
-			mhpb:SetWidth(partyWidthHealer)
-			ohpb:SetWidth(partyWidthHealer)
-		end
-
-		self.mhpb = mhpb
-		self.ohpb = ohpb
 
 		self.HealPrediction = {
 			-- status bar to show my incoming heals

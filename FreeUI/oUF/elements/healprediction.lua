@@ -1,6 +1,25 @@
 local _, ns = ...
 local oUF = ns.oUF
 
+local function UpdateFillBar(frame, previousTexture, bar, amount)
+	if amount == 0 then
+		bar:Hide()
+		return previousTexture
+	end
+
+	bar:SetPoint("TOPLEFT", previousTexture, "TOPRIGHT", 0, 0)
+	bar:SetPoint("BOTTOMLEFT", previousTexture, "BOTTOMRIGHT", 0, 0)
+
+	local totalWidth, totalHeight = frame.Health:GetSize()
+	local _, totalMax = frame.Health:GetMinMaxValues()
+
+	local barSize = (amount / totalMax) * totalWidth
+	bar:SetWidth(barSize)
+	bar:Show()
+
+	return bar
+end
+
 local function Update(self, event, unit)
 	if(self.unit ~= unit) then return end
 
@@ -31,31 +50,17 @@ local function Update(self, event, unit)
 		end
 		totalAbsorb = max(0, maxHealth - (health + myIncomingHeal + allIncomingHeal))
 	end
-	if(hp.overAbsorbGlow) then
-		if overAbsorb then
-			hp.overAbsorbGlow:Show()
-		else
-			hp.overAbsorbGlow:Hide()
-		end
+	if overAbsorb then
+		hp.overAbsorbGlow:Show()
+	else
+		hp.overAbsorbGlow:Hide()
 	end
 
-	if(hp.myBar) then
-		hp.myBar:SetMinMaxValues(0, maxHealth)
-		hp.myBar:SetValue(myIncomingHeal)
-		hp.myBar:Show()
-	end
+	local previousTexture = self.Health:GetStatusBarTexture()
 
-	if(hp.otherBar) then
-		hp.otherBar:SetMinMaxValues(0, maxHealth)
-		hp.otherBar:SetValue(allIncomingHeal)
-		hp.otherBar:Show()
-	end
-
-	if(hp.absorbBar) then
-		hp.absorbBar:SetMinMaxValues(0, maxHealth)
-		hp.absorbBar:SetValue(totalAbsorb)
-		hp.absorbBar:Show()
-	end
+	previousTexture = UpdateFillBar(self, previousTexture, hp.myBar, myIncomingHeal)
+	previousTexture = UpdateFillBar(self, previousTexture, hp.otherBar, allIncomingHeal)
+	previousTexture = UpdateFillBar(self, previousTexture, hp.absorbBar, totalAbsorb)
 
 	if(hp.PostUpdate) then
 		return hp:PostUpdate(unit)
@@ -81,19 +86,6 @@ local function Enable(self)
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_HEALTH', Path)
 
-		if(not hp.maxOverflow) then
-			hp.maxOverflow = 1.05
-		end
-
-		if(hp.myBar and hp.myBar:IsObjectType'StatusBar' and not hp.myBar:GetStatusBarTexture()) then
-			hp.myBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
-		end
-		if(hp.otherBar and hp.otherBar:IsObjectType'StatusBar' and not hp.otherBar:GetStatusBarTexture()) then
-			hp.otherBar:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
-		end
-		if(hp.absorbBar and hp.absorbBar:IsObjectType'StatusBar' and not hp.absorbBar:GetStatusBarTexture()) then
-			hp.absorbBar:SetStatusBarTexture([[Interface\RaidFrame\Shield-Fill]])
-		end
 		if(hp.overAbsorbGlow and hp.overAbsorbGlow:IsObjectType'Texture' and not hp.overAbsorbGlow:GetTexture()) then
 			hp.overAbsorbGlow:SetTexture([[Interface\RaidFrame\Shield-Overshield]])
 		end
