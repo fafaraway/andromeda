@@ -642,6 +642,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LFDQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
 		LFDQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
 
+		-- this fixes right border of second reward being cut off
+		LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
+
 		hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", function()
 			for i = 1, LFD_MAX_REWARDS do
 				local button = _G["LFDQueueFrameRandomScrollFrameChildFrameItem"..i]
@@ -6489,8 +6492,31 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinScroll(WarGamesFrameScrollFrameScrollBar)
 		F.ReskinScroll(WarGamesFrameInfoScrollFrameScrollBar)
 	elseif addon == "Blizzard_QuestChoice" then
+		local QuestChoiceFrame = QuestChoiceFrame
+
 		for i = 1, 18 do
 			select(i, QuestChoiceFrame:GetRegions()):Hide()
+		end
+
+		for i = 1, 2 do
+			local option = QuestChoiceFrame["Option"..i]
+			local rewards = option.Rewards
+			local icon = rewards.Item.Icon
+			local currencies = rewards.Currencies
+
+			option.OptionText:SetTextColor(.9, .9, .9)
+			rewards.Item.Name:SetTextColor(1, 1, 1)
+
+			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetDrawLayer("BACKGROUND", 1)
+			F.CreateBG(icon)
+
+			for j = 1, 3 do
+				local cu = currencies["Currency"..j]
+
+				cu.Icon:SetTexCoord(.08, .92, .08, .92)
+				F.CreateBG(cu.Icon)
+			end
 		end
 
 		F.CreateBD(QuestChoiceFrame)
