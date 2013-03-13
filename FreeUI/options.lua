@@ -61,14 +61,14 @@ C["notifications"] = {
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 	["enableGroup"] = true,					-- enable party/raid frames
+		["healerClasscolours"] = false,				-- colour unitframes by class in healer layout
+		["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid
+		["partyNameAlways"] = false,				-- show name on party/raid frames in dps/tank layout
 	["enableArena"] = true,					-- enable arena/flag carrier frames
 
 	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
 	["castbarSeparate"] = true, 				-- true for a separate player cast bar
 		["castbarSeparateOnlyCasters"] = true, 		-- separate bar only for mages/warlocks/priests
-	["healerClasscolours"] = false,				-- colour unitframes by class in healer layout
-	["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid
-	["partyNameAlways"] = false,				-- show name on party/raid frames in dps/tank layout
 	["pvp"] = true, 							-- show pvp icon on player frame
 	["targettarget"] = false, 					-- show target of target frame
 
