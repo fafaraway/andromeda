@@ -281,6 +281,8 @@ for i = 0, 3 do
 	local bag = _G["CharacterBag"..i.."Slot"]
 	local ic = _G["CharacterBag"..i.."SlotIconTexture"]
 
+	bag:UnregisterEvent("ITEM_PUSH") -- gets rid of the animation
+
 	bag:SetParent(holder)
 	bag:ClearAllPoints()
 
