@@ -13,7 +13,7 @@ local function OnEvent(self, event, unit)
 	if UnitAffectingCombat("player") and not UnitInVehicle("player") then
 		self.hasTexture = false
 
-		for k, v in pairs(buffs) do -- these are the buffs that caan be combined
+		for k, v in pairs(buffs) do -- these are the buffs that can be combined
 			self.cacheTexture = nil
 			self.cacheCount = nil
 			for i, buffSet in pairs(v) do -- these buffs are exclusive to each other
