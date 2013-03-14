@@ -35,13 +35,13 @@ F.RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function(_, _, subEvent, _, _, so
 			if isInstance then
 				if (instanceType == "party" and enableInParty) then
 					channel = "PARTY"
-				elseif (instanceType == "raid" and enableInRaids) then
+				elseif instanceType == "raid" then
 					channel = "RAID"
 				end
 			elseif enableOutdoors then
 				local num = GetNumGroupMembers()
 
-				if num > 5 and enableInRaids then
+				if num > 5 then
 					channel = "RAID"
 				elseif num > 0 and enableInParty then -- party works
 					channel = "PARTY"
