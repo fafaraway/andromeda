@@ -153,13 +153,9 @@ end)
 
 -- Guild Bank Frame
 
-local h = CreateFrame("Frame")
-h:RegisterEvent("GUILDBANKBAGSLOTS_CHANGED")
-h:RegisterEvent("GUILDBANKFRAME_OPENED")
-h:SetScript("OnEvent", function()
-	if not IsAddOnLoaded("Blizzard_GuildBankUI") then return end
-
+local function updateGuildbank()
 	local tab = GetCurrentGuildBankTab()
+
 	for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
 		local index = math.fmod(i, 14)
 		if index == 0 then
@@ -171,6 +167,16 @@ h:SetScript("OnEvent", function()
 		local slotFrame = _G["GuildBankColumn"..column.."Button"..index]
 
 		UpdateGlow(slotFrame, slotLink)
+	end
+end
+
+local guildbank = CreateFrame("Frame")
+guildbank:RegisterEvent("ADDON_LOADED")
+guildbank:SetScript("OnEvent", function(self, event, addon)
+	if addon == "Blizzard_GuildBankUI" then
+		hooksecurefunc("GuildBankFrame_UpdateFiltered", updateGuildbank)
+		hooksecurefunc("GuildBankFrame_Update", updateGuildbank)
+		self:UnregisterEvent("ADDON_LOADED")
 	end
 end)
 
