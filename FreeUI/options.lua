@@ -158,8 +158,7 @@ C["selfbuffs"] = {
 				109260, -- Aspect of the Iron Hawk
 				5118, -- Aspect of the Cheetah
 				13159, -- Aspect of the Pack
-				82661, -- Aspect of the Fox
-				85683, -- Aspect of the Beast
+				125042, -- Aspect of the Beast
 			},
 		},
 	},
