@@ -6311,6 +6311,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ConquestFrame.RatedBG.TeamNameText:SetText(UnitName("player"))
 		ConquestFrame.RatedBG.TeamNameText:SetTextColor(r, g, b)
 
+		ConquestFrame.ArenaReward.Amount:SetPoint("RIGHT", ConquestFrame.ArenaReward.Icon, "LEFT", -2, 0)
+		ConquestFrame.ArenaReward.Icon:SetTexCoord(.08, .92, .08, .92)
+		ConquestFrame.ArenaReward.Icon:SetSize(16, 16)
+		F.CreateBG(ConquestFrame.ArenaReward.Icon)
+		ConquestFrame.RatedBGReward.Amount:SetPoint("RIGHT", ConquestFrame.RatedBGReward.Icon, "LEFT", -2, 0)
+		ConquestFrame.RatedBGReward.Icon:SetTexCoord(.08, .92, .08, .92)
+		ConquestFrame.RatedBGReward.Icon:SetSize(16, 16)
+		F.CreateBG(ConquestFrame.RatedBGReward.Icon)
+
+		ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
+		ConquestFrame.RatedBGReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
+
 		for i = 1, 4 do
 			select(i, ConquestBar:GetRegions()):Hide()
 			_G["ConquestPointsBarDivider"..i]:Hide()
