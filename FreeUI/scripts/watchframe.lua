@@ -19,19 +19,15 @@ hooksecurefunc(wf, "SetPoint", function(_, _, _, point)
 	end
 end)
 
+F.ReskinExpandOrCollapse(WatchFrameCollapseExpandButton)
 WatchFrameCollapseExpandButton:SetSize(15, 15)
-
-local text = F.CreateFS(WatchFrameCollapseExpandButton, 8)
-text:SetText("x")
-text:SetPoint("CENTER", 1, 1)
+WatchFrameCollapseExpandButton:SetPoint("TOPRIGHT", -12, -3)
 
 hooksecurefunc("WatchFrame_Collapse", function()
-	text:SetPoint("CENTER", 2, 1)
-	text:SetText("+")
+	WatchFrameCollapseExpandButton.plus:Show()
 end)
 hooksecurefunc("WatchFrame_Expand", function()
-	text:SetPoint("CENTER", 1, 1)
-	text:SetText("x")
+	WatchFrameCollapseExpandButton.plus:Hide()
 end)
 
 WatchFrameTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
