@@ -22,6 +22,7 @@ end)
 F.ReskinExpandOrCollapse(WatchFrameCollapseExpandButton)
 WatchFrameCollapseExpandButton:SetSize(15, 15)
 WatchFrameCollapseExpandButton:SetPoint("TOPRIGHT", -12, -3)
+WatchFrameCollapseExpandButton.plus:Hide()
 
 hooksecurefunc("WatchFrame_Collapse", function()
 	WatchFrameCollapseExpandButton.plus:Show()
