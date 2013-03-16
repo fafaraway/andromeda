@@ -1,6 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 -- All exceptions and special rules for these options are in profiles.lua!
+-- Consider using the in-game options instead, accessed through the game menu or by typing /freeui.
 
 --[[ Global config ]]
 
@@ -9,14 +10,18 @@ C["general"] = {
 	["buffTracker"] = true, 		-- track important buffs for some classes (scroll down to buffTracker table to configure)
 	["combatText"] = true, 			-- show incoming damage and healing near player frame
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
-	["interrupt"] = false,			-- announce your interrupts
+	["interrupt"] = true,			-- announce your interrupts
+		["interrupt_party"] = true,		-- enable in 5 mans / scenarios
+		["interrupt_bgs"] = false,		-- enable in battlegrounds
+		["interrupt_lfg"] = true, 		-- enable in dungeon/raid finder/scenario groups
+		["interrupt_outdoors"] = true,	-- enable when not in an instance
 	["mailButton"] = true, 			-- adds a button to the mail frame to collect all attachments
 	["nameplates"] = true, 			-- enable nameplates
 	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
 	["tolbarad"] = false,			-- Tol barad timer on the minimap
 	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
 	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
-	["uiScaleAuto"] = true,				-- force the correct UI scale
+	["uiScaleAuto"] = true,			-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
 }
 
