@@ -176,11 +176,25 @@ combatText:SetPoint("TOPLEFT", buffTracker, "BOTTOMLEFT", 0, -8)
 local interrupt = ns.CreateCheckBox(general, "interrupt", true)
 interrupt:SetPoint("TOPLEFT", combatText, "BOTTOMLEFT", 0, -8)
 
+local interruptParty = ns.CreateCheckBox(general, "interrupt_party", true)
+interruptParty:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 16, -8)
+
+local interruptBGs = ns.CreateCheckBox(general, "interrupt_bgs", true)
+interruptBGs:SetPoint("TOPLEFT", interruptParty, "BOTTOMLEFT", 0, -8)
+
+local interruptLFG = ns.CreateCheckBox(general, "interrupt_lfg", true)
+interruptLFG:SetPoint("TOPLEFT", interruptBGs, "BOTTOMLEFT", 0, -8)
+
+local interruptOutdoors = ns.CreateCheckBox(general, "interrupt_outdoors", true)
+interruptOutdoors:SetPoint("TOPLEFT", interruptLFG, "BOTTOMLEFT", 0, -8)
+
+interrupt.children = {interruptParty, interruptBGs, interruptLFG, interruptOutdoors}
+
 local threatMeter = ns.CreateCheckBox(general, "threatMeter", true)
-threatMeter:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
+threatMeter:SetPoint("LEFT", buffReminder, "RIGHT", 240, 0)
 
 local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons", true)
-helmCloak:SetPoint("LEFT", buffReminder, "RIGHT", 240, 0)
+helmCloak:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -8)
 
 local mailButton = ns.CreateCheckBox(general, "mailButton", true)
 mailButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
@@ -195,8 +209,8 @@ local undressButton = ns.CreateCheckBox(general, "undressButton", true)
 undressButton:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -8)
 
 local reloadText = general:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -18)
-reloadText:SetText(ns.localization.needReload)
+reloadText:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -18)
+reloadText:SetText(ns.localization.noReloadException)
 
 local line = general:CreateTexture(nil, "ARTWORK")
 line:SetSize(450, 1)
@@ -204,7 +218,7 @@ line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
 line:SetTexture(1, 1, 1, .2)
 
 local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
-tooltipCursor:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -66)
+tooltipCursor:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -66)
 
 local tooltipGuildRanks = ns.CreateCheckBox(general, "tooltip_guildranks")
 tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
