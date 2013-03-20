@@ -4889,9 +4889,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, NUM_GUILDBANK_COLUMNS do
 			_G["GuildBankColumn"..i]:GetRegions():Hide()
 			for j = 1, NUM_SLOTS_PER_GUILDBANK_GROUP do
-				_G["GuildBankColumn"..i.."Button"..j]:SetPushedTexture("")
-				_G["GuildBankColumn"..i.."Button"..j.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
-				_G["GuildBankColumn"..i.."Button"..j.."NormalTexture"]:SetAlpha(0)
+				local bu = _G["GuildBankColumn"..i.."Button"..j]
+				local co = bu.count
+
+				bu:SetNormalTexture("")
+				bu:SetPushedTexture("")
+
+				bu.icon:SetTexCoord(.08, .92, .08, .92)
+
+				co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				co:ClearAllPoints()
+				co:SetPoint("TOP", bu, 1, -2)
 			end
 		end
 
