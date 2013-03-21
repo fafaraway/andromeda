@@ -312,6 +312,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 						createBackdrop(bu, check)
 						hl:SetTexture(r, g, b, .2)
 						_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
+
+						local arrow = _G["DropDownList"..level.."Button"..j.."ExpandArrow"]
+						arrow:SetNormalTexture(C.media.arrowRight)
+						arrow:SetSize(8, 8)
 					end
 
 					if not bu.notCheckable then
