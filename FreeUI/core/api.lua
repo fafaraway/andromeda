@@ -271,12 +271,12 @@ end
 
 local function colourArrow(f)
 	if f:IsEnabled() then
-		f.downtex:SetVertexColor(r, g, b)
+		f.tex:SetVertexColor(r, g, b)
 	end
 end
 
 local function clearArrow(f)
-	f.downtex:SetVertexColor(1, 1, 1)
+	f.tex:SetVertexColor(1, 1, 1)
 end
 
 F.ReskinDropDown = function(f)
@@ -304,12 +304,12 @@ F.ReskinDropDown = function(f)
 	dis:SetDrawLayer("OVERLAY")
 	dis:SetAllPoints()
 
-	local downtex = down:CreateTexture(nil, "ARTWORK")
-	downtex:SetTexture(C.media.arrowDown)
-	downtex:SetSize(8, 8)
-	downtex:SetPoint("CENTER")
-	downtex:SetVertexColor(1, 1, 1)
-	down.downtex = downtex
+	local tex = down:CreateTexture(nil, "ARTWORK")
+	tex:SetTexture(C.media.arrowDown)
+	tex:SetSize(8, 8)
+	tex:SetPoint("CENTER")
+	tex:SetVertexColor(1, 1, 1)
+	down.tex = tex
 
 	down:HookScript("OnEnter", colourArrow)
 	down:HookScript("OnLeave", clearArrow)
@@ -397,7 +397,7 @@ end
 
 F.ReskinArrow = function(f, direction)
 	f:SetSize(18, 18)
-	F.Reskin(f)
+	F.Reskin(f, true)
 
 	f:SetDisabledTexture(C.media.backdrop)
 	local dis = f:GetDisabledTexture()
@@ -405,10 +405,13 @@ F.ReskinArrow = function(f, direction)
 	dis:SetDrawLayer("OVERLAY")
 
 	local tex = f:CreateTexture(nil, "ARTWORK")
+	tex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-"..direction.."-active")
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
+	f.tex = tex
 
-	tex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-"..direction.."-active")
+	f:HookScript("OnEnter", colourArrow)
+	f:HookScript("OnLeave", clearArrow)
 end
 
 F.ReskinCheck = function(f)
