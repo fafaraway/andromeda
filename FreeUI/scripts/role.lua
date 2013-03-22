@@ -35,7 +35,7 @@ local function setRoleForSpec(self)
 end
 
 local function autoSetRole(self, event)
-	if event ~= "ROLE_POLL_BEGIN" then return end
+	if event ~= "ROLE_POLL_BEGIN" or InCombatLockdown() then return end
 
 	if isPureClass then
 		UnitSetRole("player", "DAMAGER")
