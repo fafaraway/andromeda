@@ -179,6 +179,10 @@ local FixCastbar = function(self)
 	while self:GetEffectiveScale() < 1 do
 		self:SetScale(self:GetScale() + 0.01)
 	end
+
+	while self:GetEffectiveScale() > 1 do
+		self:SetScale(self:GetScale() - 0.01)
+	end
 end
 
 local ColorCastBar = function(self, shielded)
@@ -201,7 +205,6 @@ local OnValueChanged = function(self, curValue)
 end
 
 local OnShow = function(self)
-	self.channeling  = UnitChannelInfo("target")
 	FixCastbar(self)
 	ColorCastBar(self, self.shieldedRegion:IsShown())
 end
