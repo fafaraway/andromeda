@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+local r, g, b = unpack(C.class)
+
 WORLDMAP_WINDOWED_SIZE = 0.82
 
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
@@ -32,9 +34,9 @@ frame:SetFrameStrata("HIGH")
 local panelHolder = CreateFrame("ScrollFrame", nil, WorldMapButton)
 panelHolder:SetFrameStrata("LOW")
 panelHolder:SetScale(offset)
-panelHolder:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight)
-panelHolder:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight)
-panelHolder:SetHeight(panelHeight * 2)
+panelHolder:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, 0)
+panelHolder:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, 0)
+panelHolder:SetHeight(panelHeight)
 
 local panel = CreateFrame("Frame", nil, panelHolder)
 panel:EnableMouse(true)
@@ -43,6 +45,7 @@ panel:SetHeight(panelHeight)
 F.CreateBD(panel)
 
 panelHolder:SetScrollChild(panel)
+panelHolder:SetVerticalScroll(panelHeight)
 
 local button = CreateFrame("Frame", nil, WorldMapButton)
 button:EnableMouse(true)
@@ -54,24 +57,38 @@ local text = F.CreateFS(button, 8)
 text:SetPoint("CENTER")
 text:SetText("+")
 
+local function colourText()
+	text:SetTextColor(r, g, b)
+end
+
+local function clearText()
+	text:SetTextColor(1, 1, 1)
+end
+
+button:SetScript("OnEnter", colourText)
+button:SetScript("OnLeave", clearText)
+
 local SmallerMapSkin = function()
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:ClearAllPoints()
 	WorldMapDetailFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	WorldMapTitleButton:Show()
+
 	WorldMapLevelDropDown:ClearAllPoints()
 	WorldMapLevelDropDown:SetPoint("RIGHT", panel, "RIGHT", 0, -2)
-	WorldMapLevelDropDown:SetFrameStrata("LOW")
-	WorldMapLevelDropDown:SetFrameLevel(panel:GetFrameLevel()+1)
+	WorldMapLevelDropDown:SetParent(panel)
+
 	WorldMapFrameMiniBorderLeft:Hide()
 	WorldMapFrameMiniBorderRight:Hide()
+
 	WorldMapFrameTitle:ClearAllPoints()
 	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5);
 	WorldMapFrameTitle:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	WorldMapFrameTitle:SetTextColor(1, 1, 1)
 	WorldMapFrameTitle:SetShadowColor(0, 0, 0, 0)
 	WorldMapFrameTitle:SetParent(frame)
+
 	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT")
 	WorldMapQuestShowObjectives.SetPoint = F.dummy
 	WorldMapQuestShowObjectives:SetFrameStrata("HIGH")
@@ -80,12 +97,14 @@ local SmallerMapSkin = function()
 	WorldMapQuestShowObjectivesText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
 	WorldMapQuestShowObjectivesText:SetShadowColor(0, 0, 0, 0)
+
 	WorldMapTrackQuest:SetParent(frame)
 	WorldMapTrackQuest:ClearAllPoints()
 	WorldMapTrackQuest:SetPoint("TOPLEFT", WorldMapDetailFrame, 9, -5)
 	WorldMapTrackQuestText:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	WorldMapTrackQuestText:SetTextColor(1, 1, 1)
 	WorldMapTrackQuestText:SetShadowColor(0, 0, 0, 0)
+
 	WorldMapShowDigSites:ClearAllPoints()
 	WorldMapShowDigSites:SetFrameStrata("HIGH")
 	WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 18)
@@ -94,14 +113,16 @@ local SmallerMapSkin = function()
 	WorldMapShowDigSitesText:SetPoint("RIGHT", WorldMapShowDigSites, "LEFT",-4,1)
 	WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
 	WorldMapShowDigSitesText:SetShadowColor(0, 0, 0, 0)
+
 	WorldMapFrameCloseButton:SetAlpha(0)
 	WorldMapFrameCloseButton:EnableMouse(nil)
 	WorldMapFrameSizeUpButton:SetAlpha(0)
 	WorldMapFrameSizeUpButton:EnableMouse(nil)
+
 	WorldMapShowDropDown:ClearAllPoints()
 	WorldMapShowDropDown:SetPoint("LEFT", panel, "LEFT", 0, -2)
-	WorldMapShowDropDown:SetFrameStrata("LOW")
-	WorldMapShowDropDown:SetFrameLevel(panel:GetFrameLevel()+1)
+	WorldMapShowDropDown:SetParent(panel)
+
 	MapBarFrame.Description:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	MapBarFrame.Description:SetShadowOffset(0, 0)
 	MapBarFrame.Title:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
@@ -176,8 +197,7 @@ editbox:SetSize(150, 20)
 editbox:SetPoint("CENTER", panel)
 editbox:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 editbox:SetShadowOffset(0, 0)
-editbox:SetFrameStrata("LOW")
-editbox:SetFrameLevel(panel:GetFrameLevel()+1)
+editbox:SetParent(panel)
 
 editbox.db = {}
 for i=1, select("#", GetMapContinents()), 1 do
@@ -207,21 +227,21 @@ editbox:SetScript("OnTextChanged", function(self)
 	end
 end)
 
-local y = 0
+local y = panelHeight
 local opened = false
 
 local open = function()
-	y = y + 1
-	panelHolder:SetVerticalScroll(-y)
-	if y == panelHeight then
+	y = y - 1
+	panelHolder:SetVerticalScroll(y)
+	if y == 0 then
 		panel:SetScript("OnUpdate", nil)
 	end
 end
 
 local close = function()
-	y = y - 1
-	panelHolder:SetVerticalScroll(-y)
-	if y == 0 then
+	y = y + 1
+	panelHolder:SetVerticalScroll(y)
+	if y == panelHeight then
 		panel:SetScript("OnUpdate", nil)
 	end
 end
