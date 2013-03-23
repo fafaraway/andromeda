@@ -8,19 +8,41 @@ local offset = 1 / WORLDMAP_WINDOWED_SIZE
 local fontsize = 8 / WORLDMAP_WINDOWED_SIZE
 local panelHeight = 26
 
+select(2, WorldMapPing.Ping:GetAnimations()):SetScale(1.62, 1.62)
+
+WorldMapPing.Ping:SetScript("OnLoop", function(self, loopState)
+	self.loopCount = self.loopCount + 1
+	if self.loopCount >= 2 then
+		self:Stop()
+	end
+end)
+
 local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
 mapbg:SetBackdrop({
 	bgFile = C.media.backdrop,
 })
 mapbg:SetBackdropColor(0, 0, 0)
+mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, -offset, offset)
+mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, offset, -offset)
+mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
 
 local frame = CreateFrame ("Frame", nil, WorldMapButton)
 frame:SetFrameStrata("HIGH")
 
-local panel = CreateFrame("Frame", nil, WorldMapButton)
+local panelHolder = CreateFrame("ScrollFrame", nil, WorldMapButton)
+panelHolder:SetFrameStrata("LOW")
+panelHolder:SetScale(offset)
+panelHolder:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight)
+panelHolder:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight)
+panelHolder:SetHeight(panelHeight * 2)
+
+local panel = CreateFrame("Frame", nil, panelHolder)
 panel:EnableMouse(true)
-panel:SetScale(offset)
-panel:SetFrameLevel(0)
+panel:SetWidth(panelHolder:GetWidth())
+panel:SetHeight(panelHeight)
+F.CreateBD(panel)
+
+panelHolder:SetScrollChild(panel)
 
 local button = CreateFrame("Frame", nil, WorldMapButton)
 button:EnableMouse(true)
@@ -33,25 +55,15 @@ text:SetPoint("CENTER")
 text:SetText("+")
 
 local SmallerMapSkin = function()
-	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, -offset, offset)
-	mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, offset, -offset)
-	mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
-
-	panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight)
-	panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight)
-	panel:SetHeight(panelHeight)
-	F.CreateBD(panel)
-
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:ClearAllPoints()
 	WorldMapDetailFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	WorldMapTitleButton:Show()
-	WorldMapLevelDropDown:SetParent(panel)
 	WorldMapLevelDropDown:ClearAllPoints()
 	WorldMapLevelDropDown:SetPoint("RIGHT", panel, "RIGHT", 0, -2)
+	WorldMapLevelDropDown:SetFrameStrata("LOW")
 	WorldMapLevelDropDown:SetFrameLevel(panel:GetFrameLevel()+1)
-	WorldMapLevelDropDownButton:SetFrameLevel(panel:GetFrameLevel()+1)
 	WorldMapFrameMiniBorderLeft:Hide()
 	WorldMapFrameMiniBorderRight:Hide()
 	WorldMapFrameTitle:ClearAllPoints()
@@ -86,14 +98,21 @@ local SmallerMapSkin = function()
 	WorldMapFrameCloseButton:EnableMouse(nil)
 	WorldMapFrameSizeUpButton:SetAlpha(0)
 	WorldMapFrameSizeUpButton:EnableMouse(nil)
-	WorldMapShowDropDown:SetParent(panel)
 	WorldMapShowDropDown:ClearAllPoints()
 	WorldMapShowDropDown:SetPoint("LEFT", panel, "LEFT", 0, -2)
 	WorldMapShowDropDown:SetFrameStrata("LOW")
+	WorldMapShowDropDown:SetFrameLevel(panel:GetFrameLevel()+1)
 	MapBarFrame.Description:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	MapBarFrame.Description:SetShadowOffset(0, 0)
 	MapBarFrame.Title:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	MapBarFrame.Title:SetShadowOffset(0, 0)
+
+	WorldMapPlayerLower:SetSize(40 / offset, 40 / offset)
+	--WorldMapPlayerLower.icon:SetPoint("TOPLEFT", -2, 2)
+	--WorldMapPlayerLower.icon:SetPoint("BOTTOMRIGHT", 2, -2)
+	WorldMapPlayerUpper:SetSize(40 / offset, 40 / offset)
+	--WorldMapPlayerUpper.icon:SetPoint("TOPLEFT", -2, 2)
+	--WorldMapPlayerUpper.icon:SetPoint("BOTTOMRIGHT", 2, -2)
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
@@ -145,12 +164,14 @@ hooksecurefunc("EncounterJournal_AddMapButtons", function()
 	end
 end)
 
-local editbox = CreateFrame("EditBox", "MapSearchBox", panel, "SearchBoxTemplate")
+local editbox = CreateFrame("EditBox", "MapSearchBox", WorldMapFrame, "SearchBoxTemplate")
 editbox:SetAutoFocus(false)
 editbox:SetSize(150, 20)
 editbox:SetPoint("CENTER", panel)
 editbox:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 editbox:SetShadowOffset(0, 0)
+editbox:SetFrameStrata("LOW")
+editbox:SetFrameLevel(panel:GetFrameLevel()+1)
 
 editbox.db = {}
 for i=1, select("#", GetMapContinents()), 1 do
@@ -183,36 +204,31 @@ end)
 local y = 0
 local opened = false
 
-panel.open = function()
-	if opened == true then
-		panel.close()
-		return
+local open = function()
+	y = y + 1
+	panelHolder:SetVerticalScroll(-y)
+	if y == panelHeight then
+		panel:SetScript("OnUpdate", nil)
 	end
-	opened = true
-	panel:SetScript("OnUpdate", function()
-		y = y + 1
-		panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, panelHeight-y)
-		panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, panelHeight-y)
-		if y == panelHeight then
-			panel:SetScript("OnUpdate", nil)
-			WorldMapShowDropDown:SetFrameStrata("HIGH")
-			y = 0
-		end
-	end)
 end
 
-panel.close = function()
-	opened = false
-	WorldMapShowDropDown:SetFrameStrata("LOW")
-	panel:SetScript("OnUpdate", function()
-		y = y + 1
-		panel:SetPoint("TOPLEFT", WorldMapDetailFrame, "BOTTOMLEFT", -1, 0+y)
-		panel:SetPoint("TOPRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT", 1, 0+y)
-		if y == panelHeight then
-			panel:SetScript("OnUpdate", nil)
-			y = 0
-		end
-	end)
+local close = function()
+	y = y - 1
+	panelHolder:SetVerticalScroll(-y)
+	if y == 0 then
+		panel:SetScript("OnUpdate", nil)
+	end
 end
 
-button:HookScript("OnMouseDown", panel.open)
+panel.toggle = function()
+	if opened then
+		opened = false
+		DropDownList1:Hide()
+		panel:SetScript("OnUpdate", close)
+	else
+		opened = true
+		panel:SetScript("OnUpdate", open)
+	end
+end
+
+button:HookScript("OnMouseDown", panel.toggle)
