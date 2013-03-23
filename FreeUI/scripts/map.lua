@@ -107,12 +107,18 @@ local SmallerMapSkin = function()
 	MapBarFrame.Title:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	MapBarFrame.Title:SetShadowOffset(0, 0)
 
-	WorldMapPlayerLower:SetSize(40 / offset, 40 / offset)
-	--WorldMapPlayerLower.icon:SetPoint("TOPLEFT", -2, 2)
-	--WorldMapPlayerLower.icon:SetPoint("BOTTOMRIGHT", 2, -2)
-	WorldMapPlayerUpper:SetSize(40 / offset, 40 / offset)
-	--WorldMapPlayerUpper.icon:SetPoint("TOPLEFT", -2, 2)
-	--WorldMapPlayerUpper.icon:SetPoint("BOTTOMRIGHT", 2, -2)
+	WorldMapPing:SetSize(64 / offset, 64 / offset)
+	WorldMapPing.centerRing:SetSize(32 / offset, 32 / offset)
+	WorldMapPing.rotatingRing:SetSize(48 / offset, 48 / offset)
+	WorldMapPing.expandingRing:SetSize(32 / offset, 32 / offset)
+
+	WorldMapPlayerLower:SetSize(32 / offset, 32 / offset)
+	WorldMapPlayerLower.icon:SetPoint("TOPLEFT", -4, 4)
+	WorldMapPlayerLower.icon:SetPoint("BOTTOMRIGHT", 4, -4)
+
+	WorldMapPlayerUpper:SetSize(32 / offset, 32 / offset)
+	WorldMapPlayerUpper.icon:SetPoint("TOPLEFT", -4, 4)
+	WorldMapPlayerUpper.icon:SetPoint("BOTTOMRIGHT", 4, -4)
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
