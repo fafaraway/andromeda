@@ -74,19 +74,23 @@ end
 
 -- [[ Resolution support ]]
 
+C.RESOLUTION_SMALL = 1
+C.RESOLUTION_MEDIUM = 2
+C.RESOLUTION_LARGE = 3
+
 C.resolution = 0
 
 local updateScale
 updateScale = function(event)
 	if event == "VARIABLES_LOADED" then
-		local width = GetScreenWidth()
+		local height = GetScreenHeight()
 
-		if width <= 1400 then
-			C.resolution = 1
-		elseif width <= 1920 then
-			C.resolution = 2
+		if height <= 900 then
+			C.resolution = C.RESOLUTION_SMALL
+		elseif height < 1200 then
+			C.resolution = C.RESOLUTION_MEDIUM
 		else
-			C.resolution = 3
+			C.resolution = C.RESOLUTION_LARGE
 		end
 	end
 
