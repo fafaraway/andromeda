@@ -450,7 +450,6 @@ C["dangerousBuffs"] = {
 -- Debuffs healers don't want to see on raid frames
 
 C["hideDebuffs"] = {
-	[25771] = true, -- Forbearance
 	[57724] = true, -- Sated
 	[57723] = true, -- Exhaustion
 	[80354] = true, -- Temporal Displacement
@@ -513,6 +512,7 @@ C["myBuffs"] = {
 
 C["allBuffs"] = {
 	[86657] = true, -- Ancient Guardian
+	[642] = true, -- Divine Shield
 	[47788] = true, -- Guardian Spirit
 	[33206] = true, -- Pain Suppression
 	[31850] = true, -- Ardent Defender
