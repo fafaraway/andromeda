@@ -42,58 +42,6 @@ local partyHeight = C.unitframes.party_height
 local partyWidthHealer = C.unitframes.party_width_healer
 local partyHeightHealer = C.unitframes.party_height_healer
 
---[[ Dropdown menu ]]
-
--- from oUF_Lily
-
-local name, addon = ...
-local dropdown = CreateFrame('Frame', 'oUF_FreeDropDown', UIParent, 'UIDropDownMenuTemplate')
-
-function addon:menu()
-	dropdown:SetParent(self)
-	return ToggleDropDownMenu(1, nil, dropdown, 'cursor', 0, 0)
-end
-
--- Slightly altered version of:
--- FrameXML/CompactUnitFrame.lua:730:CompactUnitFrameDropDown_Initialize
-local init = function(self)
-	local unit = self:GetParent().unit
-	local menu, name, id
-
-	if(not unit) then
-		return
-	end
-
-	if(UnitIsUnit(unit, "player")) then
-		menu = "SELF"
-	elseif(UnitIsUnit(unit, "vehicle")) then
-		-- NOTE: vehicle check must come before pet check for accuracy's sake because
-		-- a vehicle may also be considered your pet
-		menu = "VEHICLE"
-	elseif(UnitIsUnit(unit, "pet")) then
-		menu = "PET"
-	elseif(UnitIsPlayer(unit)) then
-		id = UnitInRaid(unit)
-		if(id) then
-			menu = "RAID_PLAYER"
-			name = GetRaidRosterInfo(id)
-		elseif(UnitInParty(unit)) then
-			menu = "PARTY"
-		else
-			menu = "PLAYER"
-		end
-	else
-		menu = "TARGET"
-		name = RAID_TARGET_ICON
-	end
-
-	if(menu) then
-		UnitPopup_ShowMenu(self, menu, unit, name, id)
-	end
-end
-
-UIDropDownMenu_Initialize(dropdown, init, 'MENU')
-
 --[[ Short values ]]
 
 local siValue = function(val)
@@ -354,8 +302,6 @@ end
 --[[ Global ]]
 
 local Shared = function(self, unit, isSingle)
-	self.menu = addon.menu
-
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
@@ -1773,8 +1719,8 @@ oUF:Factory(function(self)
 		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, 15)
 	end
 
-	for n = 1, 5 do
-		spawnHelper(self,'boss' .. n, 'LEFT', 50, 0 - (56 * n))
+	for n = 1, MAX_BOSS_FRAMES do
+		spawnHelper(self, 'boss' .. n, 'LEFT', 50, 0 - (56 * n))
 	end
 
 	if C.unitframes.enableArena then
