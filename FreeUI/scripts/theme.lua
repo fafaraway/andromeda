@@ -123,24 +123,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		F.ReskinCheck(LFDQueueFrameRoleButtonTank.checkButton)
-		F.ReskinCheck(LFDQueueFrameRoleButtonHealer.checkButton)
-		F.ReskinCheck(LFDQueueFrameRoleButtonDPS.checkButton)
-		F.ReskinCheck(LFDQueueFrameRoleButtonLeader.checkButton)
-		F.ReskinCheck(LFRQueueFrameRoleButtonTank.checkButton)
-		F.ReskinCheck(LFRQueueFrameRoleButtonHealer.checkButton)
-		F.ReskinCheck(LFRQueueFrameRoleButtonDPS.checkButton)
-		F.ReskinCheck(LFDRoleCheckPopupRoleButtonTank.checkButton)
-		F.ReskinCheck(LFDRoleCheckPopupRoleButtonHealer.checkButton)
-		F.ReskinCheck(LFDRoleCheckPopupRoleButtonDPS.checkButton)
-		F.ReskinCheck(RaidFinderQueueFrameRoleButtonTank.checkButton)
-		F.ReskinCheck(RaidFinderQueueFrameRoleButtonHealer.checkButton)
-		F.ReskinCheck(RaidFinderQueueFrameRoleButtonDPS.checkButton)
-		F.ReskinCheck(RaidFinderQueueFrameRoleButtonLeader.checkButton)
-		F.ReskinCheck(LFGInvitePopupRoleButtonTank.checkButton)
-		F.ReskinCheck(LFGInvitePopupRoleButtonHealer.checkButton)
-		F.ReskinCheck(LFGInvitePopupRoleButtonDPS.checkButton)
-
 		if C.general.helmcloakbuttons == true then
 			F.ReskinCheck(FreeUI_HelmCheckBox)
 			F.ReskinCheck(FreeUI_CloakCheckBox)
@@ -638,6 +620,121 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinPortraitFrame(PVEFrame)
 		F.ReskinTab(PVEFrameTab1)
 		F.ReskinTab(PVEFrameTab2)
+
+		-- LFG frame (common)
+
+		for _, roleButton in pairs({LFDQueueFrameRoleButtonTank, LFDQueueFrameRoleButtonHealer, LFDQueueFrameRoleButtonDPS, LFDQueueFrameRoleButtonLeader, LFRQueueFrameRoleButtonTank, LFRQueueFrameRoleButtonHealer, LFRQueueFrameRoleButtonDPS, LFDRoleCheckPopupRoleButtonTank, LFDRoleCheckPopupRoleButtonHealer, LFDRoleCheckPopupRoleButtonDPS, RaidFinderQueueFrameRoleButtonTank, RaidFinderQueueFrameRoleButtonHealer, RaidFinderQueueFrameRoleButtonDPS, RaidFinderQueueFrameRoleButtonLeader, LFGInvitePopupRoleButtonTank, LFGInvitePopupRoleButtonHealer, LFGInvitePopupRoleButtonDPS}) do
+			if roleButton.background then
+				roleButton.background:SetTexture("")
+			end
+
+			roleButton:SetNormalTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
+
+			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
+
+			for i = 1, 2 do
+				local left = roleButton:CreateTexture(nil, "OVERLAY")
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+				left:SetPoint("TOPLEFT", roleButton, 6, -5)
+				left:SetPoint("BOTTOMLEFT", roleButton, 6, 7)
+				roleButton["leftLine"..i] = left
+
+				local right = roleButton:CreateTexture(nil, "OVERLAY")
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+				right:SetPoint("TOPRIGHT", roleButton, -6, -5)
+				right:SetPoint("BOTTOMRIGHT", roleButton, -6, 7)
+				roleButton["rightLine"..i] = right
+
+				local top = roleButton:CreateTexture(nil, "OVERLAY")
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+				top:SetPoint("TOPLEFT", roleButton, 6, -5)
+				top:SetPoint("TOPRIGHT", roleButton, -6, -5)
+				roleButton["topLine"..i] = top
+
+				local bottom = roleButton:CreateTexture(nil, "OVERLAY")
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+				bottom:SetPoint("BOTTOMLEFT", roleButton, 6, 7)
+				bottom:SetPoint("BOTTOMRIGHT", roleButton, -6, 7)
+				roleButton["bottomLine"..i] = bottom
+			end
+
+			local shortageBorder = roleButton.shortageBorder
+			if shortageBorder then
+				local icon = roleButton.incentiveIcon
+
+				shortageBorder:SetTexture("")
+
+				icon.border:SetTexture(0, 0, 0)
+				icon.border:SetDrawLayer("BACKGROUND")
+				icon.border:SetPoint("TOPLEFT", icon.texture, -1, 1)
+				icon.border:SetPoint("BOTTOMRIGHT", icon.texture, 1, -1)
+
+				icon:SetPoint("BOTTOMRIGHT", 3, -3)
+				icon:SetSize(14, 14)
+				icon.texture:SetSize(14, 14)
+				icon.texture:SetTexCoord(.12, .88, .12, .88)
+			end
+
+			F.ReskinCheck(roleButton.checkButton)
+		end
+
+		hooksecurefunc("LFG_SetRoleIconIncentive", function(roleButton, incentiveIndex)
+			if incentiveIndex then
+				local tex
+				if incentiveIndex == LFG_ROLE_SHORTAGE_PLENTIFUL then
+					tex = "Interface\\Icons\\INV_Misc_Coin_19"
+				elseif incentiveIndex == LFG_ROLE_SHORTAGE_UNCOMMON then
+					tex = "Interface\\Icons\\INV_Misc_Coin_18"
+				elseif incentiveIndex == LFG_ROLE_SHORTAGE_RARE then
+					tex = "Interface\\Icons\\INV_Misc_Coin_17"
+				end
+				roleButton.incentiveIcon.texture:SetTexture(tex)
+				roleButton.leftLine2:Show()
+				roleButton.rightLine2:Show()
+				roleButton.topLine2:Show()
+				roleButton.bottomLine2:Show()
+			else
+				roleButton.leftLine2:Hide()
+				roleButton.rightLine2:Hide()
+				roleButton.topLine2:Hide()
+				roleButton.bottomLine2:Hide()
+			end
+		end)
+
+		hooksecurefunc("LFG_PermanentlyDisableRoleButton", function(button)
+			if button.shortageBorder then
+				button.leftLine2:SetVertexColor(.5, .45, .03)
+				button.rightLine2:SetVertexColor(.5, .45, .03)
+				button.topLine2:SetVertexColor(.5, .45, .03)
+				button.bottomLine2:SetVertexColor(.5, .45, .03)
+			end
+		end)
+
+		hooksecurefunc("LFG_DisableRoleButton", function(button)
+			if button.shortageBorder then
+				button.leftLine2:SetVertexColor(.5, .45, .03)
+				button.rightLine2:SetVertexColor(.5, .45, .03)
+				button.topLine2:SetVertexColor(.5, .45, .03)
+				button.bottomLine2:SetVertexColor(.5, .45, .03)
+			end
+		end)
+
+		hooksecurefunc("LFG_EnableRoleButton", function(button)
+			if button.shortageBorder then
+				button.leftLine2:SetVertexColor(1, .9, .06)
+				button.rightLine2:SetVertexColor(1, .9, .06)
+				button.topLine2:SetVertexColor(1, .9, .06)
+				button.bottomLine2:SetVertexColor(1, .9, .06)
+			end
+		end)
 
 		-- LFD frame
 
@@ -3521,8 +3618,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["AuctionFilterButton"..i]:SetNormalTexture("")
 		end
 
-		for i = 1, 3 do
-			F.ReskinTab(_G["AuctionFrameTab"..i])
+		do
+			local i = 1
+			local tab = _G["AuctionFrameTab"..i]
+
+			while tab do
+				F.ReskinTab(tab)
+				i = i + 1
+				tab = _G["AuctionFrameTab"..i]
+			end
 		end
 
 		local abuttons = {"BrowseBidButton", "BrowseBuyoutButton", "BrowseCloseButton", "BrowseSearchButton", "BrowseResetButton", "BidBidButton", "BidBuyoutButton", "BidCloseButton", "AuctionsCloseButton", "AuctionsCancelAuctionButton", "AuctionsCreateAuctionButton", "AuctionsNumStacksMaxButton", "AuctionsStackSizeMaxButton"}
