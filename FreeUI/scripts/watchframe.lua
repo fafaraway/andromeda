@@ -51,12 +51,20 @@ hooksecurefunc("WatchFrame_Update", function()
 
 	for i = 1, WATCHFRAME_MAXQUESTS do
 		local bu = _G["WatchFrameItem"..i]
-		if bu and not bu.reskinned then
+		if bu and not bu.styled then
+			local hotkey = _G["WatchFrameItem"..i.."HotKey"]
 			bu:SetNormalTexture("")
 			bu:SetPushedTexture("")
 			F.CreateBG(bu)
 
 			_G["WatchFrameItem"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+
+			hotkey:ClearAllPoints()
+			hotkey:SetPoint("TOP", bu, -1, 0)
+			hotkey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			hotkey:SetJustifyH("CENTER")
+
+			bu.styled = true
 		end
 	end
 end)
