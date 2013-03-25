@@ -1,8 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if not C.general.interrupt then return end
-
--- it will always be enabled in arena and raid, mention this. Only included necessary options
+-- always enabled in raid and arena
 local enableInParty = C.general.interrupt_party
 local enableInBGs = C.general.interrupt_bgs
 local enableInLFG = C.general.interrupt_lfg
@@ -11,7 +9,7 @@ local enableOutdoors = C.general.interrupt_outdoors
 local playerName = UnitName("player")
 local LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME
 
-F.RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function(_, _, subEvent, _, _, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
+local function OnEvent(_, _, subEvent, _, _, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
 	if subEvent == "SPELL_INTERRUPT" and sourceName == playerName then
 		local channel
 
@@ -50,6 +48,18 @@ F.RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", function(_, _, subEvent, _, _, so
 		if channel then
 			SendChatMessage("Interrupted: "..destName.."'s "..GetSpellLink(spellID)..".", channel)
 		end
+	end
+end
+
+if C.general.interrupt then
+	F.RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", OnEvent)
+end
+
+F.AddOptionsCallback("general", "interrupt", function()
+	if C.general.interrupt then
+		F.RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", OnEvent)
+	else
+		F.UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED", OnEvent)
 	end
 end)
 
