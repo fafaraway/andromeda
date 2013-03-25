@@ -224,11 +224,9 @@ F.ReskinScroll = function(f)
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
 	F.CreateBD(bu.bg, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = CreateGradient(f)
 	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local up = _G[frame.."ScrollUpButton"]
 	local down = _G[frame.."ScrollDownButton"]
@@ -433,11 +431,9 @@ F.ReskinCheck = function(f)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = CreateGradient(f)
 	tex:SetPoint("TOPLEFT", 5, -5)
 	tex:SetPoint("BOTTOMRIGHT", -5, 5)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)
@@ -469,11 +465,9 @@ F.ReskinRadio = function(f)
 	F.CreateBD(bd, 0)
 	f.bd = bd
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = F.CreateGradient(f)
 	tex:SetPoint("TOPLEFT", 4, -4)
 	tex:SetPoint("BOTTOMRIGHT", -4, 4)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 	f:HookScript("OnEnter", colourRadio)
 	f:HookScript("OnLeave", clearRadio)
