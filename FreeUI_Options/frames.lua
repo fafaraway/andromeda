@@ -12,23 +12,66 @@ tinsert(UISpecialFrames, options:GetName())
 
 options.CloseButton = CreateFrame("Button", nil, options, "UIPanelCloseButton")
 
-options.Okay = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
-options.Okay:SetPoint("BOTTOMRIGHT", -6, 6)
-options.Okay:SetSize(128, 25)
-options.Okay:SetText(OKAY)
-options.Okay:SetScript("OnClick", function()
+do
+	local popup = CreateFrame("Frame", nil, UIParent)
+	popup:SetPoint("CENTER")
+	popup:SetSize(320, 120)
+	popup:Hide()
+	options.popup = popup
+
+	local text = popup:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	text:SetWidth(290)
+	text:SetPoint("TOP", 0, -16)
+	text:SetText(ns.localization.needReloadPopup)
+
+	local yes = CreateFrame("Button", nil, popup, "UIPanelButtonTemplate")
+	yes:SetPoint("BOTTOMRIGHT", popup, "BOTTOM", -6, 16)
+	yes:SetSize(128, 25)
+	yes:SetText(YES)
+	yes:SetScript("OnClick", ReloadUI)
+	tinsert(ns.buttons, yes)
+
+	local no = CreateFrame("Button", nil, popup, "UIPanelButtonTemplate")
+	no:SetPoint("BOTTOMLEFT", popup, "BOTTOM", 6, 16)
+	no:SetSize(128, 25)
+	no:SetText(NO)
+	no:SetScript("OnClick", function()
+		PlaySound("igMainMenuClose")
+		popup:Hide()
+	end)
+	tinsert(ns.buttons, no)
+end
+
+local Okay = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
+Okay:SetPoint("BOTTOMRIGHT", -6, 6)
+Okay:SetSize(128, 25)
+Okay:SetText(OKAY)
+Okay:SetScript("OnClick", function()
 	options:Hide()
+	if ns.needReload then
+		PlaySound("igMainMenuOpen")
+		options.popup:Show()
+	end
 end)
+
+options.Okay = Okay
 tinsert(ns.buttons, options.Okay)
 
-options.Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
-options.Profile:SetPoint("BOTTOMLEFT", 6, 6)
-options.Profile.Text:SetText(ns.localization.profile)
-options.Profile.tooltipText = ns.localization.profileTooltip
+local Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
+Profile:SetPoint("BOTTOMLEFT", 6, 6)
+Profile.Text:SetText(ns.localization.profile)
+Profile.tooltipText = ns.localization.profileTooltip
+options.Profile = Profile
 
 local title = options:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint("TOP", 0, -26)
 title:SetText("FreeUI v."..GetAddOnMetadata("FreeUI", "Version"))
+
+local reloadText = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+reloadText:SetPoint("BOTTOM", 0, 14)
+reloadText:SetText(ns.localization.needReload)
+reloadText:Hide()
+options.reloadText = reloadText
 
 local resetFrame = CreateFrame("Frame", nil, UIParent)
 resetFrame:SetSize(320, 200)
@@ -164,13 +207,13 @@ ns.addCategory("Credits")
 
 local general = FreeUIOptionsPanel.general
 
-local buffReminder = ns.CreateCheckBox(general, "buffreminder", true)
+local buffReminder = ns.CreateCheckBox(general, "buffreminder", true, true)
 buffReminder:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
 
-local buffTracker = ns.CreateCheckBox(general, "buffTracker", true)
+local buffTracker = ns.CreateCheckBox(general, "buffTracker", true, true)
 buffTracker:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
 
-local combatText = ns.CreateCheckBox(general, "combatText", true)
+local combatText = ns.CreateCheckBox(general, "combatText", true, true)
 combatText:SetPoint("TOPLEFT", buffTracker, "BOTTOMLEFT", 0, -8)
 
 local interrupt = ns.CreateCheckBox(general, "interrupt", true)
@@ -190,31 +233,27 @@ interruptOutdoors:SetPoint("TOPLEFT", interruptLFG, "BOTTOMLEFT", 0, -8)
 
 interrupt.children = {interruptParty, interruptBGs, interruptLFG, interruptOutdoors}
 
-local threatMeter = ns.CreateCheckBox(general, "threatMeter", true)
+local threatMeter = ns.CreateCheckBox(general, "threatMeter", true, true)
 threatMeter:SetPoint("LEFT", buffReminder, "RIGHT", 240, 0)
 
-local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons", true)
+local helmCloak = ns.CreateCheckBox(general, "helmcloakbuttons", true, true)
 helmCloak:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -8)
 
-local mailButton = ns.CreateCheckBox(general, "mailButton", true)
+local mailButton = ns.CreateCheckBox(general, "mailButton", true, true)
 mailButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
 
-local nameplates = ns.CreateCheckBox(general, "nameplates", true)
+local nameplates = ns.CreateCheckBox(general, "nameplates", true, true)
 nameplates:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
 
-local tolBarad = ns.CreateCheckBox(general, "tolbarad", true)
+local tolBarad = ns.CreateCheckBox(general, "tolbarad", true, true)
 tolBarad:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
 
-local undressButton = ns.CreateCheckBox(general, "undressButton", true)
+local undressButton = ns.CreateCheckBox(general, "undressButton", true, true)
 undressButton:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -8)
-
-local reloadText = general:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -18)
-reloadText:SetText(ns.localization.noReloadException)
 
 local line = general:CreateTexture(nil, "ARTWORK")
 line:SetSize(450, 1)
-line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
+line:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 16, -36)
 line:SetTexture(1, 1, 1, .2)
 
 local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
@@ -265,28 +304,19 @@ autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
 
 local actionbars = FreeUIOptionsPanel.actionbars
 
-local enable = ns.CreateCheckBox(actionbars, "enable", true)
+local enable = ns.CreateCheckBox(actionbars, "enable", true, true)
 enable:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", 0, -8)
 
-local enableStyle = ns.CreateCheckBox(actionbars, "enableStyle", true)
+local enableStyle = ns.CreateCheckBox(actionbars, "enableStyle", true, true)
 enableStyle:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
-local rightBarsMouseover = ns.CreateCheckBox(actionbars, "rightbars_mouseover")
+local rightBarsMouseover = ns.CreateCheckBox(actionbars, "rightbars_mouseover", false, true)
 rightBarsMouseover:SetPoint("TOPLEFT", enableStyle, "BOTTOMLEFT", 0, -8)
 
 enable.children = {rightBarsMouseover}
 
-local reloadText = actionbars:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -18)
-reloadText:SetText(ns.localization.needReload)
-
-local line = actionbars:CreateTexture(nil, "ARTWORK")
-line:SetSize(450, 1)
-line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
-line:SetTexture(1, 1, 1, .2)
-
 local hotKey = ns.CreateCheckBox(actionbars, "hotkey")
-hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -66)
+hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -8)
 
 enableStyle.children = {hotKey}
 
@@ -294,8 +324,6 @@ local function toggleActionBarsOptions()
 	local shown = enable:GetChecked() == 1
 	enableStyle:SetShown(shown)
 	rightBarsMouseover:SetShown(shown)
-	reloadText:SetShown(shown)
-	line:SetShown(shown)
 	hotKey:SetShown(shown)
 end
 
@@ -306,7 +334,7 @@ actionbars:HookScript("OnShow", toggleActionBarsOptions)
 
 local bags = FreeUIOptionsPanel.bags
 
-local enable = ns.CreateCheckBox(bags, "enable", true)
+local enable = ns.CreateCheckBox(bags, "enable", true, true)
 enable:SetPoint("TOPLEFT", bags.subText, "BOTTOMLEFT", 0, -8)
 
 local slotsShowAlways = ns.CreateCheckBox(bags, "slotsShowAlways", true)
@@ -315,15 +343,10 @@ slotsShowAlways:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 local size = ns.CreateNumberSlider(bags, "size", SMALL, LARGE, 8, 100, 1)
 size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 18, -42)
 
-local reloadText = bags:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", size, "BOTTOMLEFT", -18, -44)
-reloadText:SetText(ns.localization.reloadException)
-
 local function toggleBagsOptions()
 	local shown = enable:GetChecked() == 1
 	slotsShowAlways:SetShown(shown)
 	size:SetShown(shown)
-	reloadText:SetShown(shown)
 end
 
 enable:HookScript("OnClick", toggleBagsOptions)
@@ -333,7 +356,7 @@ bags:HookScript("OnShow", toggleBagsOptions)
 
 local notifications = FreeUIOptionsPanel.notifications
 
-local enable = ns.CreateCheckBox(notifications, "enable", true)
+local enable = ns.CreateCheckBox(notifications, "enable", true, true)
 enable:SetPoint("TOPLEFT", notifications.subText, "BOTTOMLEFT", 0, -8)
 
 local checkMail = ns.CreateCheckBox(notifications, "checkMail", true)
@@ -354,10 +377,6 @@ animations:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 local timeShown = ns.CreateNumberSlider(notifications, "timeShown", "1 sec", "10 sec", 1, 10, 1)
 timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 18, -30)
 
-local reloadText = notifications:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", checkGuildEvents, "BOTTOMLEFT", 0, -18)
-reloadText:SetText(ns.localization.reloadException)
-
 local function toggleNotificationsOptions()
 	local shown = enable:GetChecked() == 1
 	checkMail:SetShown(shown)
@@ -366,7 +385,6 @@ local function toggleNotificationsOptions()
 	playSounds:SetShown(shown)
 	animations:SetShown(shown)
 	timeShown:SetShown(shown)
-	reloadText:SetShown(shown)
 end
 
 enable:HookScript("OnClick", toggleNotificationsOptions)
@@ -376,49 +394,44 @@ notifications:HookScript("OnShow", toggleNotificationsOptions)
 
 local unitframes = FreeUIOptionsPanel.unitframes
 
-local enable = ns.CreateCheckBox(unitframes, "enable", true)
+local enable = ns.CreateCheckBox(unitframes, "enable", true, true)
 enable:SetPoint("TOPLEFT", unitframes.subText, "BOTTOMLEFT", 0, -8)
 
-local enableGroup = ns.CreateCheckBox(unitframes, "enableGroup", true)
+local enableGroup = ns.CreateCheckBox(unitframes, "enableGroup", true, true)
 enableGroup:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
 local limitRaidSize = ns.CreateCheckBox(unitframes, "limitRaidSize", true)
 limitRaidSize:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
 tinsert(ns.protectOptions, limitRaidSize)
 
-local healerClasscolours = ns.CreateCheckBox(unitframes, "healerClasscolours", true)
+local healerClasscolours = ns.CreateCheckBox(unitframes, "healerClasscolours", true, true)
 healerClasscolours:SetPoint("TOPLEFT", limitRaidSize, "BOTTOMLEFT", 0, -8)
 
-local partyNameAlways = ns.CreateCheckBox(unitframes, "partyNameAlways", true)
+local partyNameAlways = ns.CreateCheckBox(unitframes, "partyNameAlways", true, true)
 partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
 
 enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
 
-local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true)
+local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true, true)
 targettarget:SetPoint("LEFT", enableGroup, "RIGHT", 240, 0)
 
-local pvp = ns.CreateCheckBox(unitframes, "pvp", true)
+local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
 pvp:SetPoint("TOPLEFT", targettarget, "BOTTOMLEFT", 0, -8)
 
-local castbarSeparate = ns.CreateCheckBox(unitframes, "castbarSeparate", true)
+local castbarSeparate = ns.CreateCheckBox(unitframes, "castbarSeparate", true, true)
 castbarSeparate:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
 
-local castbarSeparateOnlyCasters = ns.CreateCheckBox(unitframes, "castbarSeparateOnlyCasters", true)
+local castbarSeparateOnlyCasters = ns.CreateCheckBox(unitframes, "castbarSeparateOnlyCasters", true, true)
 castbarSeparateOnlyCasters:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 16, -8)
 
 castbarSeparate.children = {castbarSeparateOnlyCasters}
 
-local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true)
+local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
 enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
 
-local reloadText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", enableArena, "BOTTOMLEFT", 0, -18)
-reloadText:SetText(ns.localization.noReloadException)
-
-local line = unitframes:CreateTexture(nil, "ARTWORK")
-line:SetSize(450, 1)
-line:SetPoint("TOPLEFT", reloadText, "BOTTOMLEFT", 0, -18)
-line:SetTexture(1, 1, 1, .2)
+local layoutText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+layoutText:SetPoint("TOP", 0, -340)
+layoutText:SetText(ns.localization.layoutText)
 
 unitframes.Layout = CreateFrame("Button", nil, unitframes, "UIPanelButtonTemplate")
 unitframes.Layout:SetPoint("TOP", 0, -374)
@@ -434,10 +447,9 @@ local function toggleUFOptions()
 	targettarget:SetShown(shown)
 	pvp:SetShown(shown)
 	castbarSeparate:SetShown(shown)
-	reloadText:SetShown(shown)
 	castbarSeparateOnlyCasters:SetShown(shown)
 	enableArena:SetShown(shown)
-	line:SetShown(shown)
+	layoutText:SetShown(shown)
 	unitframes.Layout:SetShown(shown)
 end
 
@@ -450,43 +462,39 @@ local classmod = FreeUIOptionsPanel.classmod
 
 ns.classOptions = {}
 
-local deathknight = ns.CreateCheckBox(classmod, "deathknight")
+local deathknight = ns.CreateCheckBox(classmod, "deathknight", false, true)
 deathknight:SetPoint("TOPLEFT", classmod.subText, "BOTTOMLEFT", -2, -8)
 tinsert(ns.classOptions, deathknight)
 
-local druid = ns.CreateCheckBox(classmod, "druid")
+local druid = ns.CreateCheckBox(classmod, "druid", false, true)
 druid:SetPoint("TOPLEFT", deathknight, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, druid)
 
-local mage = ns.CreateCheckBox(classmod, "mage")
+local mage = ns.CreateCheckBox(classmod, "mage", false, true)
 mage:SetPoint("TOPLEFT", druid, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, mage)
 
-local monk = ns.CreateCheckBox(classmod, "monk")
+local monk = ns.CreateCheckBox(classmod, "monk", false, true)
 monk:SetPoint("TOPLEFT", mage, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, monk)
 
-local paladinHP = ns.CreateCheckBox(classmod, "paladinHP")
+local paladinHP = ns.CreateCheckBox(classmod, "paladinHP", false, true)
 paladinHP:SetPoint("TOPLEFT", monk, "BOTTOMLEFT", 0, -8)
 
-local paladinRF = ns.CreateCheckBox(classmod, "paladinRF")
+local paladinRF = ns.CreateCheckBox(classmod, "paladinRF", false, true)
 paladinRF:SetPoint("TOPLEFT", paladinHP, "BOTTOMLEFT", 0, -8)
 
-local priest = ns.CreateCheckBox(classmod, "priest")
+local priest = ns.CreateCheckBox(classmod, "priest", false, true)
 priest:SetPoint("TOPLEFT", paladinRF, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, priest)
 
-local shaman = ns.CreateCheckBox(classmod, "shaman")
+local shaman = ns.CreateCheckBox(classmod, "shaman", false, true)
 shaman:SetPoint("TOPLEFT", priest, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, shaman)
 
-local warlock = ns.CreateCheckBox(classmod, "warlock")
+local warlock = ns.CreateCheckBox(classmod, "warlock", false, true)
 warlock:SetPoint("TOPLEFT", shaman, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, warlock)
-
-local reloadText = classmod:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-reloadText:SetPoint("TOPLEFT", warlock, "BOTTOMLEFT", 0, -18)
-reloadText:SetText(ns.localization.needReload)
 
 -- [[ Credits ]]
 

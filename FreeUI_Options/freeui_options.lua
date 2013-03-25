@@ -12,6 +12,9 @@ local sliders = {}
 local dropdowns = {}
 local panels = {}
 
+local old = {} -- to keep track of whether or not reload is needed
+local needsReload = false
+
 local r, g, b
 
 local function SaveValue(f, value)
@@ -47,9 +50,25 @@ local function toggle(self)
 
 	SaveValue(self, checked)
 	if self.children then toggleChildren(self, checked) end
+
+	if self.needsReload then
+		if old[self] == nil then
+			old[self] = not checked
+		end
+		for checkbox, value in pairs(old) do
+			if C[checkbox.group][checkbox.option] ~= value then
+				FreeUIOptionsPanel.reloadText:Show()
+				ns.needReload = true -- for the popup when clicking okay
+				break
+			else
+				FreeUIOptionsPanel.reloadText:Hide()
+				ns.needReload = false
+			end
+		end
+	end
 end
 
-ns.CreateCheckBox = function(parent, option, tooltipText)
+ns.CreateCheckBox = function(parent, option, tooltipText, needsReload)
 	local f = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
 
 	f.group = parent.tag
@@ -57,6 +76,12 @@ ns.CreateCheckBox = function(parent, option, tooltipText)
 
 	f.Text:SetText(ns.localization[parent.tag..option])
 	if tooltipText then f.tooltipText = ns.localization[parent.tag..option.."Tooltip"] end
+
+	if needsReload then
+		f.tooltipText = f.tooltipText and format("%s\n\n%s", f.tooltipText, ns.localization.requiresReload) or ns.localization.requiresReload
+	end
+
+	f.needsReload = needsReload
 
 	f:SetScript("OnClick", toggle)
 	parent[option] = f
@@ -308,6 +333,8 @@ init:SetScript("OnEvent", function()
 	F, C = unpack(FreeUI)
 	r, g, b = unpack(C.class)
 
+	local FreeUIOptionsPanel = FreeUIOptionsPanel
+
 	FreeUIOptionsPanel:HookScript("OnShow", function()
 		oUF_FreePlayer:SetAlpha(0)
 		oUF_FreeTarget:SetAlpha(0)
@@ -363,6 +390,8 @@ init:SetScript("OnEvent", function()
 
 	F.CreateBD(FreeUIOptionsPanel)
 	F.CreateSD(FreeUIOptionsPanel)
+	F.CreateBD(FreeUIOptionsPanel.popup)
+	F.CreateSD(FreeUIOptionsPanel.popup)
 	F.CreateBD(resetFrame)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.Profile)
