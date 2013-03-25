@@ -623,6 +623,66 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- LFG frame (common)
 
+		LFGDungeonReadyDialogRoleIconTexture:SetTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
+
+		for i = 1, 2 do
+			local reward = _G["LFGDungeonReadyDialogRewardsFrameReward"..i]
+			local border = _G["LFGDungeonReadyDialogRewardsFrameReward"..i.."Border"]
+
+			reward.texture:SetTexCoord(.08, .92, .08, .92)
+
+			border:SetTexture(0, 0, 0)
+			border:SetDrawLayer("BACKGROUND")
+			border:SetPoint("TOPLEFT", reward.texture, -1, 1)
+			border:SetPoint("BOTTOMRIGHT", reward.texture, 1, -1)
+		end
+
+		do
+			local left = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			left:SetWidth(1)
+			left:SetTexture(C.media.backdrop)
+			left:SetVertexColor(0, 0, 0)
+			left:SetPoint("TOPLEFT", 10, -8)
+			left:SetPoint("BOTTOMLEFT", 10, 11)
+
+			local right = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			right:SetWidth(1)
+			right:SetTexture(C.media.backdrop)
+			right:SetVertexColor(0, 0, 0)
+			right:SetPoint("TOPRIGHT", -9, -8)
+			right:SetPoint("BOTTOMRIGHT", -9, 11)
+
+			local top = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			top:SetHeight(1)
+			top:SetTexture(C.media.backdrop)
+			top:SetVertexColor(0, 0, 0)
+			top:SetPoint("TOPLEFT", 10, -8)
+			top:SetPoint("TOPRIGHT", -9, -8)
+
+			local bottom = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			bottom:SetHeight(1)
+			bottom:SetTexture(C.media.backdrop)
+			bottom:SetVertexColor(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", 10, 11)
+			bottom:SetPoint("BOTTOMRIGHT", -9, 11)
+		end
+
+		hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
+			button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
+		end)
+
+		hooksecurefunc("LFGDungeonReadyDialogReward_SetReward", function(button, dungeonID, rewardIndex, rewardType, rewardArg)
+			local name, texturePath, quantity
+			if rewardType == "reward" then
+				name, texturePath, quantity = GetLFGDungeonRewardInfo(dungeonID, rewardIndex);
+			elseif rewardType == "shortage" then
+				name, texturePath, quantity = GetLFGDungeonShortageRewardInfo(dungeonID, rewardArg, rewardIndex);
+			end
+			if texturePath then
+				button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
+			end
+		end)
+
 		for _, roleButton in pairs({LFDQueueFrameRoleButtonTank, LFDQueueFrameRoleButtonHealer, LFDQueueFrameRoleButtonDPS, LFDQueueFrameRoleButtonLeader, LFRQueueFrameRoleButtonTank, LFRQueueFrameRoleButtonHealer, LFRQueueFrameRoleButtonDPS, LFDRoleCheckPopupRoleButtonTank, LFDRoleCheckPopupRoleButtonHealer, LFDRoleCheckPopupRoleButtonDPS, RaidFinderQueueFrameRoleButtonTank, RaidFinderQueueFrameRoleButtonHealer, RaidFinderQueueFrameRoleButtonDPS, RaidFinderQueueFrameRoleButtonLeader, LFGInvitePopupRoleButtonTank, LFGInvitePopupRoleButtonHealer, LFGInvitePopupRoleButtonDPS}) do
 			if roleButton.background then
 				roleButton.background:SetTexture("")
