@@ -173,8 +173,7 @@ local FixCastbar = function(self)
 
 	self:ClearAllPoints()
 	self:SetPoint("TOP", self.healthBar, "BOTTOM", 0, -2)
-	self:SetWidth(80)
-	self:SetHeight(5)
+	self:SetSize(80, 5)
 
 	while self:GetEffectiveScale() < 1 do
 		self:SetScale(self:GetScale() + 0.01)
