@@ -38,7 +38,8 @@ local width = 200
 local sq, ss, sn, st
 
 local addon = CreateFrame("Button", "Butsu", UIParent)
-addon:SetFrameStrata"HIGH"
+addon:SetFrameStrata("HIGH")
+addon:SetClampedToScreen(true)
 addon:SetWidth(width)
 addon:SetHeight(64)
 
