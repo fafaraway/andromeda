@@ -642,29 +642,29 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			left:SetWidth(1)
 			left:SetTexture(C.media.backdrop)
 			left:SetVertexColor(0, 0, 0)
-			left:SetPoint("TOPLEFT", 10, -8)
-			left:SetPoint("BOTTOMLEFT", 10, 11)
+			left:SetPoint("TOPLEFT", 9, -7)
+			left:SetPoint("BOTTOMLEFT", 9, 10)
 
 			local right = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
 			right:SetWidth(1)
 			right:SetTexture(C.media.backdrop)
 			right:SetVertexColor(0, 0, 0)
-			right:SetPoint("TOPRIGHT", -9, -8)
-			right:SetPoint("BOTTOMRIGHT", -9, 11)
+			right:SetPoint("TOPRIGHT", -8, -7)
+			right:SetPoint("BOTTOMRIGHT", -8, 10)
 
 			local top = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
 			top:SetHeight(1)
 			top:SetTexture(C.media.backdrop)
 			top:SetVertexColor(0, 0, 0)
-			top:SetPoint("TOPLEFT", 10, -8)
-			top:SetPoint("TOPRIGHT", -9, -8)
+			top:SetPoint("TOPLEFT", 9, -7)
+			top:SetPoint("TOPRIGHT", -8, -7)
 
 			local bottom = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
 			bottom:SetHeight(1)
 			bottom:SetTexture(C.media.backdrop)
 			bottom:SetVertexColor(0, 0, 0)
-			bottom:SetPoint("BOTTOMLEFT", 10, 11)
-			bottom:SetPoint("BOTTOMRIGHT", -9, 11)
+			bottom:SetPoint("BOTTOMLEFT", 9, 10)
+			bottom:SetPoint("BOTTOMRIGHT", -8, 10)
 		end
 
 		hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
@@ -679,7 +679,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				name, texturePath, quantity = GetLFGDungeonShortageRewardInfo(dungeonID, rewardArg, rewardIndex);
 			end
 			if texturePath then
-				button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
+				button.texture:SetTexture(texturePath)
 			end
 		end)
 
