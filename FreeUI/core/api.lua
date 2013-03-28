@@ -12,6 +12,7 @@ C.media = {
 	["font"] = "Interface\\AddOns\\FreeUI\\media\\Hooge0655.ttf", -- default pixel font
 	["font2"] = "Interface\\AddOns\\FreeUI\\media\\font.ttf", -- default font
 	["glow"] = "Interface\\AddOns\\FreeUI\\media\\glowTex", -- glow/shadow texture
+	["roleIcons"] = "Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES",
 	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
 }
 

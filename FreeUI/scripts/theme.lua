@@ -619,7 +619,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- LFG frame (common)
 
-		LFGDungeonReadyDialogRoleIconTexture:SetTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
+		LFGDungeonReadyDialogRoleIconTexture:SetTexture(C.media.roleIcons)
 
 		for i = 1, 2 do
 			local reward = _G["LFGDungeonReadyDialogRewardsFrameReward"..i]
@@ -684,8 +684,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				roleButton.background:SetTexture("")
 			end
 
-			roleButton.cover:SetTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
-			roleButton:SetNormalTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
+			roleButton.cover:SetTexture(C.media.roleIcons)
+			roleButton:SetNormalTexture(C.media.roleIcons)
 
 			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
 
@@ -801,8 +801,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(RolePollPopupCloseButton)
 
 		for _, roleButton in pairs({RolePollPopupRoleButtonTank, RolePollPopupRoleButtonHealer, RolePollPopupRoleButtonDPS}) do
-			roleButton.cover:SetTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
-			roleButton:SetNormalTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
+			roleButton.cover:SetTexture(C.media.roleIcons)
+			roleButton:SetNormalTexture(C.media.roleIcons)
 
 			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
 
@@ -5923,8 +5923,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LookingForGuildFrameTopRightCorner:Hide()
 
 		for _, roleButton in pairs({LookingForGuildTankButton, LookingForGuildHealerButton, LookingForGuildDamagerButton}) do
-			roleButton.cover:SetTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
-			roleButton:SetNormalTexture("Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES")
+			roleButton.cover:SetTexture(C.media.roleIcons)
+			roleButton:SetNormalTexture(C.media.roleIcons)
 
 			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
 
