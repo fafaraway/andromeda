@@ -330,8 +330,10 @@ F.ReskinDropDown = function(f)
 end
 
 local function colourClose(f)
-	for _, pixel in pairs(f.pixels) do
-		pixel:SetVertexColor(r, g, b)
+	if f:IsEnabled() then
+		for _, pixel in pairs(f.pixels) do
+			pixel:SetVertexColor(r, g, b)
+		end
 	end
 end
 
@@ -359,6 +361,12 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 	F.CreateBD(f, 0)
 
 	CreateGradient(f)
+
+	f:SetDisabledTexture(C.media.backdrop)
+	local dis = f:GetDisabledTexture()
+	dis:SetVertexColor(0, 0, 0, .4)
+	dis:SetDrawLayer("OVERLAY")
+	dis:SetAllPoints()
 
 	f.pixels = {}
 
