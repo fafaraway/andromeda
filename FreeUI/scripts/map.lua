@@ -258,31 +258,3 @@ panel.toggle = function()
 end
 
 button:HookScript("OnMouseDown", panel.toggle)
-
-local function getEmbeddedFactionIcon()
-	local factionGroup = UnitFactionGroup("player");
-	if ( factionGroup == "Alliance" ) then
-		return "|TInterface\\TargetingFrame\\UI-PVP-ALLIANCE:19:16:0:0:64:64:0:32:0:38|t";
-	elseif ( factionGroup == "Horde" ) then
-		return "|TInterface\\TargetingFrame\\UI-PVP-HORDE:18:19:0:0:64:64:0:38:0:36|t";
-	else --Say what?
-		return "";
-	end
-end
-
-MapBarFrame:SetScript("OnEnter", function(self)
-	local tag = C_MapBar.GetTag()
-	local phase = C_MapBar.GetPhaseIndex()
-	local participation = C_MapBar.GetParticipationPercentage()
-	local minValue, maxValue = C_MapBar.GetCurrentValue(), C_MapBar.GetMaxValue()
-
-	local title = MapBarFrame_GetString("TITLE", tag, phase)
-	local tooltipText = MapBarFrame_GetString("TOOLTIP", tag, phase)
-	local percentage = math.floor(100 * minValue / maxValue)
-	WorldMapTooltip.MB_using = true;
-	WorldMapTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	WorldMapTooltip:SetText(format(MAP_BAR_TOOLTIP_TITLE.." (%s/%s)", title, percentage, BreakUpLargeNumbers(minValue), BreakUpLargeNumbers(maxValue)), 1, 1, 1);
-	WorldMapTooltip:AddLine(tooltipText, nil, nil, nil, true);
-	WorldMapTooltip:AddLine(format(MAP_BAR_PARTICIPATION, getEmbeddedFactionIcon(), participation), 1, 1, 1);
-	WorldMapTooltip:Show();
-end)
