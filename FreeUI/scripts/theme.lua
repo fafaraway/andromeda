@@ -810,6 +810,46 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		do
+			local roleButtons = {LFGDungeonReadyStatusGroupedTank, LFGDungeonReadyStatusGroupedHealerLFGDungeonReadyStatusGroupedDamager}
+
+			for i = 1, 5 do
+				tinsert(roleButtons, _G["LFGDungeonReadyStatusIndividualPlayer"..i])
+			end
+
+			for _, roleButton in pairs(roleButtons) do
+				roleButton.texture:SetTexture(C.media.roleIcons)
+
+				local left = roleButton:CreateTexture(nil, "OVERLAY")
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+				left:SetPoint("TOPLEFT", 7, -6)
+				left:SetPoint("BOTTOMLEFT", 7, 8)
+
+				local right = roleButton:CreateTexture(nil, "OVERLAY")
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+				right:SetPoint("TOPRIGHT", -7, -6)
+				right:SetPoint("BOTTOMRIGHT", -7, 8)
+
+				local top = roleButton:CreateTexture(nil, "OVERLAY")
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+				top:SetPoint("TOPLEFT", 7, -6)
+				top:SetPoint("TOPRIGHT", -7, -6)
+
+				local bottom = roleButton:CreateTexture(nil, "OVERLAY")
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+				bottom:SetPoint("BOTTOMLEFT", 7, 8)
+				bottom:SetPoint("BOTTOMRIGHT", -7, 8)
+			end
+		end
+
 		-- Role poll
 
 		F.CreateBD(RolePollPopup)
