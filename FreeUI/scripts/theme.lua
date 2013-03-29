@@ -696,7 +696,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(LFGDungeonReadyDialogCloseButton)
 		F.ReskinClose(LFGDungeonReadyStatusCloseButton)
 
-		for _, roleButton in pairs({LFDQueueFrameRoleButtonTank, LFDQueueFrameRoleButtonHealer, LFDQueueFrameRoleButtonDPS, LFDQueueFrameRoleButtonLeader, LFRQueueFrameRoleButtonTank, LFRQueueFrameRoleButtonHealer, LFRQueueFrameRoleButtonDPS, LFDRoleCheckPopupRoleButtonTank, LFDRoleCheckPopupRoleButtonHealer, LFDRoleCheckPopupRoleButtonDPS, RaidFinderQueueFrameRoleButtonTank, RaidFinderQueueFrameRoleButtonHealer, RaidFinderQueueFrameRoleButtonDPS, RaidFinderQueueFrameRoleButtonLeader, LFGInvitePopupRoleButtonTank, LFGInvitePopupRoleButtonHealer, LFGInvitePopupRoleButtonDPS}) do
+		for _, roleButton in pairs({LFDQueueFrameRoleButtonTank, LFDQueueFrameRoleButtonHealer, LFDQueueFrameRoleButtonDPS, LFDQueueFrameRoleButtonLeader, LFRQueueFrameRoleButtonTank, LFRQueueFrameRoleButtonHealer, LFRQueueFrameRoleButtonDPS, RaidFinderQueueFrameRoleButtonTank, RaidFinderQueueFrameRoleButtonHealer, RaidFinderQueueFrameRoleButtonDPS, RaidFinderQueueFrameRoleButtonLeader}) do
 			if roleButton.background then
 				roleButton.background:SetTexture("")
 			end
@@ -760,6 +760,89 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinCheck(roleButton.checkButton)
 		end
 
+		for _, roleButton in pairs({LFDRoleCheckPopupRoleButtonTank, LFDRoleCheckPopupRoleButtonHealer, LFDRoleCheckPopupRoleButtonDPS, LFGInvitePopupRoleButtonTank, LFGInvitePopupRoleButtonHealer, LFGInvitePopupRoleButtonDPS}) do
+			roleButton.cover:SetTexture(C.media.roleIcons)
+			roleButton:SetNormalTexture(C.media.roleIcons)
+
+			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
+
+			for i = 1, 2 do
+				local left = roleButton:CreateTexture(nil, "OVERLAY")
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+				left:SetPoint("TOPLEFT", roleButton, 9, -7)
+				left:SetPoint("BOTTOMLEFT", roleButton, 9, 11)
+				roleButton["leftLine"..i] = left
+
+				local right = roleButton:CreateTexture(nil, "OVERLAY")
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+				right:SetPoint("TOPRIGHT", roleButton, -9, -7)
+				right:SetPoint("BOTTOMRIGHT", roleButton, -9, 11)
+				roleButton["rightLine"..i] = right
+
+				local top = roleButton:CreateTexture(nil, "OVERLAY")
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+				top:SetPoint("TOPLEFT", roleButton, 9, -7)
+				top:SetPoint("TOPRIGHT", roleButton, -9, -7)
+				roleButton["topLine"..i] = top
+
+				local bottom = roleButton:CreateTexture(nil, "OVERLAY")
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+				bottom:SetPoint("BOTTOMLEFT", roleButton, 9, 11)
+				bottom:SetPoint("BOTTOMRIGHT", roleButton, -9, 11)
+				roleButton["bottomLine"..i] = bottom
+			end
+
+			F.ReskinCheck(roleButton.checkButton)
+		end
+
+		do
+			local roleButtons = {LFGDungeonReadyStatusGroupedTank, LFGDungeonReadyStatusGroupedHealerLFGDungeonReadyStatusGroupedDamager}
+
+			for i = 1, 5 do
+				tinsert(roleButtons, _G["LFGDungeonReadyStatusIndividualPlayer"..i])
+			end
+
+			for _, roleButton in pairs(roleButtons) do
+				roleButton.texture:SetTexture(C.media.roleIcons)
+
+				local left = roleButton:CreateTexture(nil, "OVERLAY")
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+				left:SetPoint("TOPLEFT", 7, -6)
+				left:SetPoint("BOTTOMLEFT", 7, 8)
+
+				local right = roleButton:CreateTexture(nil, "OVERLAY")
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+				right:SetPoint("TOPRIGHT", -7, -6)
+				right:SetPoint("BOTTOMRIGHT", -7, 8)
+
+				local top = roleButton:CreateTexture(nil, "OVERLAY")
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+				top:SetPoint("TOPLEFT", 7, -6)
+				top:SetPoint("TOPRIGHT", -7, -6)
+
+				local bottom = roleButton:CreateTexture(nil, "OVERLAY")
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+				bottom:SetPoint("BOTTOMLEFT", 7, 8)
+				bottom:SetPoint("BOTTOMRIGHT", -7, 8)
+			end
+		end
+
 		hooksecurefunc("LFG_SetRoleIconIncentive", function(roleButton, incentiveIndex)
 			if incentiveIndex then
 				local tex
@@ -809,46 +892,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				button.bottomLine2:SetVertexColor(1, .9, .06)
 			end
 		end)
-
-		do
-			local roleButtons = {LFGDungeonReadyStatusGroupedTank, LFGDungeonReadyStatusGroupedHealerLFGDungeonReadyStatusGroupedDamager}
-
-			for i = 1, 5 do
-				tinsert(roleButtons, _G["LFGDungeonReadyStatusIndividualPlayer"..i])
-			end
-
-			for _, roleButton in pairs(roleButtons) do
-				roleButton.texture:SetTexture(C.media.roleIcons)
-
-				local left = roleButton:CreateTexture(nil, "OVERLAY")
-				left:SetWidth(1)
-				left:SetTexture(C.media.backdrop)
-				left:SetVertexColor(0, 0, 0)
-				left:SetPoint("TOPLEFT", 7, -6)
-				left:SetPoint("BOTTOMLEFT", 7, 8)
-
-				local right = roleButton:CreateTexture(nil, "OVERLAY")
-				right:SetWidth(1)
-				right:SetTexture(C.media.backdrop)
-				right:SetVertexColor(0, 0, 0)
-				right:SetPoint("TOPRIGHT", -7, -6)
-				right:SetPoint("BOTTOMRIGHT", -7, 8)
-
-				local top = roleButton:CreateTexture(nil, "OVERLAY")
-				top:SetHeight(1)
-				top:SetTexture(C.media.backdrop)
-				top:SetVertexColor(0, 0, 0)
-				top:SetPoint("TOPLEFT", 7, -6)
-				top:SetPoint("TOPRIGHT", -7, -6)
-
-				local bottom = roleButton:CreateTexture(nil, "OVERLAY")
-				bottom:SetHeight(1)
-				bottom:SetTexture(C.media.backdrop)
-				bottom:SetVertexColor(0, 0, 0)
-				bottom:SetPoint("BOTTOMLEFT", 7, 8)
-				bottom:SetPoint("BOTTOMRIGHT", -7, 8)
-			end
-		end
 
 		-- Role poll
 
@@ -953,6 +996,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBG(bonusValor.Icon)
 
 		F.CreateBD(LFDRoleCheckPopup)
+		F.CreateSD(LFDRoleCheckPopup)
 		F.Reskin(LFDRoleCheckPopupAcceptButton)
 		F.Reskin(LFDRoleCheckPopupDeclineButton)
 		F.Reskin(LFDQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
