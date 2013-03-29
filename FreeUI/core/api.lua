@@ -9,12 +9,17 @@ C.media = {
 	["arrowRight"] = "Interface\\AddOns\\FreeUI\\media\\arrow-right-active",
 	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
 	["checked"] = "Interface\\AddOns\\FreeUI\\media\\CheckButtonHilight", -- replace default checked texture
-	["font"] = "Interface\\AddOns\\FreeUI\\media\\Hooge0655.ttf", -- default pixel font
+	-- ["font"] = "Interface\\AddOns\\FreeUI\\media\\PFRondaSeven.ttf", -- default pixel font
+	["font"] = "Interface\\AddOns\\FreeUI\\media\\PFTempestaSeven.ttf", -- default pixel font
 	["font2"] = "Interface\\AddOns\\FreeUI\\media\\font.ttf", -- default font
 	["glow"] = "Interface\\AddOns\\FreeUI\\media\\glowTex", -- glow/shadow texture
 	["roleIcons"] = "Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES",
 	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
 }
+
+if GetLocale() == "ruRU" then
+	C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+end
 
 C.classcolours = {
 	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
