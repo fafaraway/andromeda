@@ -112,6 +112,7 @@ GameTimeFrame:SetHighlightTexture("")
 local _, _, _, _, dateText = GameTimeFrame:GetRegions()
 dateText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 dateText:SetTextColor(1, 1, 1)
+dateText:SetShadowOffset(0, 0)
 dateText:SetPoint("CENTER")
 
 QueueStatusMinimapButtonBorder:SetAlpha(0)
