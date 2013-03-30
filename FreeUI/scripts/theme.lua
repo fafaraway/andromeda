@@ -665,12 +665,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
+			if not button.styled then
+				local border = _G[button:GetName().."Border"]
+
+				button.texture:SetTexCoord(.08, .92, .08, .92)
+
+				border:SetTexture(0, 0, 0)
+				border:SetDrawLayer("BACKGROUND")
+				border:SetPoint("TOPLEFT", button.texture, -1, 1)
+				border:SetPoint("BOTTOMRIGHT", button.texture, 1, -1)
+
+				button.styled = true
+			end
+
 			button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
 		end)
 
 		hooksecurefunc("LFGDungeonReadyDialogReward_SetReward", function(button, dungeonID, rewardIndex, rewardType, rewardArg)
 			if not button.styled then
-				local reward = _G["LFGDungeonReadyDialogRewardsFrameReward"..i]
 				local border = _G[button:GetName().."Border"]
 
 				button.texture:SetTexCoord(.08, .92, .08, .92)
