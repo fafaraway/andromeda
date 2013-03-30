@@ -625,24 +625,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LFGDungeonReadyDialogRoleIconLeaderIcon:SetTexture(C.media.roleIcons)
 		LFGDungeonReadyDialogRoleIconLeaderIcon:SetTexCoord(0, 0.296875, 0.015625, 0.2875)
 
-		do
-			local leaderBg = F.CreateBG(LFGDungeonReadyDialogRoleIconLeaderIcon)
-			leaderBg:SetDrawLayer("ARTWORK", 2)
-			leaderBg:SetPoint("TOPLEFT", LFGDungeonReadyDialogRoleIconLeaderIcon, 2, 0)
-			leaderBg:SetPoint("BOTTOMRIGHT", LFGDungeonReadyDialogRoleIconLeaderIcon, -3, 4)
-		end
+		local leaderBg = F.CreateBG(LFGDungeonReadyDialogRoleIconLeaderIcon)
+		leaderBg:SetDrawLayer("ARTWORK", 2)
+		leaderBg:SetPoint("TOPLEFT", LFGDungeonReadyDialogRoleIconLeaderIcon, 2, 0)
+		leaderBg:SetPoint("BOTTOMRIGHT", LFGDungeonReadyDialogRoleIconLeaderIcon, -3, 4)
 
-		for i = 1, 2 do
-			local reward = _G["LFGDungeonReadyDialogRewardsFrameReward"..i]
-			local border = _G["LFGDungeonReadyDialogRewardsFrameReward"..i.."Border"]
-
-			reward.texture:SetTexCoord(.08, .92, .08, .92)
-
-			border:SetTexture(0, 0, 0)
-			border:SetDrawLayer("BACKGROUND")
-			border:SetPoint("TOPLEFT", reward.texture, -1, 1)
-			border:SetPoint("BOTTOMRIGHT", reward.texture, 1, -1)
-		end
+		hooksecurefunc("LFGDungeonReadyPopup_Update", function()
+			leaderBg:SetShown(LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
+		end)
 
 		do
 			local left = LFGDungeonReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
@@ -679,6 +669,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		hooksecurefunc("LFGDungeonReadyDialogReward_SetReward", function(button, dungeonID, rewardIndex, rewardType, rewardArg)
+			if not button.styled then
+				local reward = _G["LFGDungeonReadyDialogRewardsFrameReward"..i]
+				local border = _G[button:GetName().."Border"]
+
+				button.texture:SetTexCoord(.08, .92, .08, .92)
+
+				border:SetTexture(0, 0, 0)
+				border:SetDrawLayer("BACKGROUND")
+				border:SetPoint("TOPLEFT", button.texture, -1, 1)
+				border:SetPoint("BOTTOMRIGHT", button.texture, 1, -1)
+
+				button.styled = true
+			end
+
 			local name, texturePath, quantity
 			if rewardType == "reward" then
 				name, texturePath, quantity = GetLFGDungeonRewardInfo(dungeonID, rewardIndex);
@@ -821,6 +825,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			for _, roleButton in pairs(roleButtons) do
 				roleButton.texture:SetTexture(C.media.roleIcons)
+				roleButton.statusIcon:SetDrawLayer("OVERLAY", 2)
 
 				local left = roleButton:CreateTexture(nil, "OVERLAY")
 				left:SetWidth(1)
