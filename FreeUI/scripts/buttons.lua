@@ -48,14 +48,6 @@ end
 local function styleExtraActionButton(bu)
 	if not bu or (bu and bu.styled) then return end
 
-	bu.style:SetTexture(nil)
-
-	hooksecurefunc(bu.style, "SetTexture", function(self, texture)
-		if texture then
-			self:SetTexture(nil)
-		end
-	end)
-
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetHighlightTexture("")
