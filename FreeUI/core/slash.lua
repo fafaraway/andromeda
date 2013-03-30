@@ -52,8 +52,9 @@ end
 SLASH_TESTUI1 = "/testui"
 
 SlashCmdList.VOLUME = function(value)
-	if tonumber(value) then
-		SetCVar("Sound_MasterVolume", value)
+	local numValue = tonumber(value)
+	if numValue and 0 <= numValue and numValue <= 1 then
+		SetCVar("Sound_MasterVolume", numValue)
 	end
 end
 SLASH_VOLUME1 = "/vol"
