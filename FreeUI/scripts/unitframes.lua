@@ -134,6 +134,13 @@ oUF.Tags.Methods['free:health'] = function(unit)
 end
 oUF.Tags.Events['free:health'] = oUF.Tags.Events.missinghp
 
+-- boss health requires frequent updates to work
+oUF.Tags.Methods['free:bosshealth'] = function(unit)
+	local val = oUF.Tags.Methods['free:health'](unit)
+	return val or ""
+end
+oUF.Tags.Events['free:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
+
 oUF.Tags.Methods['free:maxhealth'] = function(unit)
 	if(not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
@@ -1324,7 +1331,7 @@ local UnitSpecific = {
 
 		local HealthPoints = F.CreateFS(Health, 8, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
-		self:Tag(HealthPoints, '[dead][free:health]')
+		self:Tag(HealthPoints, '[dead][free:bosshealth]')
 
 		Health.value = HealthPoints
 
