@@ -1337,7 +1337,7 @@ local UnitSpecific = {
 
 		local Name = F.CreateFS(self, 8, "LEFT")
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
-		Name:SetWidth(110)
+		Name:SetWidth((bossWidth / 2) + 10)
 		Name:SetHeight(8)
 
 		self:Tag(Name, '[name]')
