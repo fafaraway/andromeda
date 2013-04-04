@@ -32,21 +32,25 @@ local function updateHotkey(self)
 end
 
 local function applyBackground(bu)
-	if bu:GetFrameLevel() < 1 then bu:SetFrameLevel(1) end
-
-	bu.bg = CreateFrame("Frame", nil, bu)
-	bu.bg:SetAllPoints(bu)
-	bu.bg:SetFrameLevel(0)
-
-	bu.bg:SetBackdrop({
+	bu:SetBackdrop({
 		edgeFile = C.media.backdrop,
 		edgeSize = 1,
 	})
-	bu.bg:SetBackdropBorderColor(0, 0, 0)
+	bu:SetBackdropBorderColor(0, 0, 0)
+
+	bu.bg = true
 end
 
 local function styleExtraActionButton(bu)
 	if not bu or (bu and bu.styled) then return end
+
+	bu.style:SetTexture(nil)
+
+	hooksecurefunc(bu.style, "SetTexture", function(self, texture)
+		if texture then
+			self:SetTexture(nil)
+		end
+	end)
 
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
