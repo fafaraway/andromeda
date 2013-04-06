@@ -390,13 +390,6 @@ C["debuffFilter"] = {
 	[10326] = true, -- Turn Evil
 	[33786] = true, -- Cyclone
 	[115078] = true, -- Paralysis
-
-	-- NPC debuffs
-	[90932] = true, -- Ragezone
-	[97170] = true, -- Deadzone (1)
-	[97600] = true, -- Deadzone (2)
-	[103527] = true, -- Void Diffusion (test)
-	[106784] = true, -- Brew Explosion
 }
 
 -- Buffs to show on enemy players
