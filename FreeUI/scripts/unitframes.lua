@@ -42,65 +42,6 @@ local partyHeight = C.unitframes.party_height
 local partyWidthHealer = C.unitframes.party_width_healer
 local partyHeightHealer = C.unitframes.party_height_healer
 
---[[ Dropdown menu ]]
-
-local _, addon = ...
-
-local dropdown = CreateFrame("Frame", "oUF_FreeDropDown", UIParent, "UIDropDownMenuTemplate")
-
-function addon:menu()
-	dropdown:SetParent(self)
-	return ToggleDropDownMenu(1, nil, dropdown, 'cursor', 0, 0)
-end
-
--- Slightly altered version of:
--- FrameXML/CompactUnitFrame.lua:730:CompactUnitFrameDropDown_Initialize
-local init = function(self)
-	local unit = self:GetParent().unit
-	local menu, name, id
-
-	if(not unit) then
-		return
-	end
-
-	if(UnitIsUnit(unit, "player")) then
-		menu = "SELF"
-	elseif(UnitIsUnit(unit, "vehicle")) then
-		-- NOTE: vehicle check must come before pet check for accuracy's sake because
-		-- a vehicle may also be considered your pet
-		menu = "VEHICLE"
-	elseif(UnitIsUnit(unit, "pet")) then
-		menu = "PET"
-	elseif(UnitIsPlayer(unit)) then
-		id = UnitInRaid(unit)
-		if(id) then
-			menu = "RAID_PLAYER"
-			name = GetRaidRosterInfo(id)
-		else
-			menu = "PLAYER"
-		end
-	end
-
-	if(menu) then
-		UnitPopup_ShowMenu(self, menu, unit, name, id)
-	end
-end
-
-UIDropDownMenu_Initialize(dropdown, init, 'MENU')
-
-local UnitPopupMenus = {UnitPopupMenus["RAID_PLAYER"], UnitPopupMenus["RAID"]}
-
-for _, menu in pairs(UnitPopupMenus) do
-	for index = #menu, 1, -1 do
-		if
-			menu[index] == 'SET_FOCUS' or
-			menu[index] == 'CLEAR_FOCUS'
-		then
-			table.remove(menu, index)
-		end
-	end
-end
-
 --[[ Short values ]]
 
 local siValue = function(val)
@@ -1738,8 +1679,6 @@ do
 		end
 
 		self.Range = range
-
-		self.menu = addon.menu -- until secure menu gets fixed
 	end
 end
 
@@ -1843,7 +1782,6 @@ oUF:Factory(function(self)
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)
-			self:SetAttribute('*type2', 'menu') -- until secure menu gets fixed
 		]]):format(party_height, party_width)
 	)
 
