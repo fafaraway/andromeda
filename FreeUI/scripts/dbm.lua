@@ -34,6 +34,7 @@ local function InitStyle()
 				timer.SetFont = F.dummy
 
 				spark:SetSize(8, 16)
+				spark:SetTexture("Interface\\AddOns\\FreeUI\\media\\DBMSpark")
 
 				icon:ClearAllPoints()
 				icon:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -3, 0)
