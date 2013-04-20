@@ -223,7 +223,11 @@ hooksecurefunc("ChatEdit_UpdateHeader", function()
 	local mType = editBox:GetAttribute("chatType")
 	if mType == "CHANNEL" then
 		local id = GetChannelName(editBox:GetAttribute("channelTarget"))
-		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
+		if id == 0 then
+			editBox.ebg:SetBackdropBorderColor(0, 0, 0)
+		else
+			editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
+		end
 	elseif mType == "SAY" then
 		editBox.ebg:SetBackdropBorderColor(0, 0, 0)
 	else
