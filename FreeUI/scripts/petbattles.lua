@@ -453,6 +453,7 @@ local function stylePetBattleButton(bu)
 	local ho = bu.HotKey
 	local cd = bu.Cooldown
 	local bi = bu.BetterIcon
+	local se = bu.SelectedHighlight
 
 	bu:SetNormalTexture("")
 	bu:SetHighlightTexture("")
@@ -477,6 +478,9 @@ local function stylePetBattleButton(bu)
 	pushed:SetTexture(r, g, b)
 	pushed:SetDrawLayer("BACKGROUND")
 	pushed:SetAllPoints()
+
+	se:SetTexture(r, g, b, .2)
+	se:SetAllPoints()
 
 	ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	ho:SetJustifyH("CENTER")
