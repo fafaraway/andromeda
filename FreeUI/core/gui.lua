@@ -24,34 +24,21 @@ else
 	profile = FreeUIOptions
 end
 
-local groups = {
-	["general"] = true,
-	["automation"] = true,
-	["actionbars"] = true,
-	["bags"] = true,
-	["notifications"] = true,
-	["unitframes"] = true,
-	["classmod"] = true
-}
-
--- set variables from lua options if they're not saved yet, otherwise load saved option
-for group, options in pairs(C) do
-	if groups[group] then
-		if profile[group] == nil then profile[group] = {} end
-
+for group, options in pairs(profile) do
+	if C[group] then
 		for option, value in pairs(options) do
-			-- not using this yet
-			if type(C[group][option]) ~= "table" then
-				if profile[group][option] == nil then
-					profile[group][option] = value
+			if type(profile[group][option]) == "table" or C[group][option] == nil then
+				profile[group][option] = nil
+			else
+				if group == "unitframes" and tonumber(profile[group][option]) then
+					profile[group][option] = nil
 				else
-					-- temporary fix for non-implemented unitframe options
-					if group ~= "unitframes" or not tonumber(profile[group][option]) then
-						C[group][option] = profile[group][option]
-					end
+					C[group][option] = value
 				end
 			end
 		end
+	else
+		profile[group] = nil
 	end
 end
 
