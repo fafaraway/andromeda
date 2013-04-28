@@ -29,9 +29,12 @@ local function OnEvent(_, _, subEvent, _, _, sourceName, _, _, _, destName, _, _
 			local isInstance, instanceType = IsInInstance()
 
 			if isInstance then
-				if (instanceType == "party" and enableInParty) then
+				local isRaidGroup = IsInRaid()
+				local isRaidInstance = instanceType == "raid"
+
+				if (instanceType == "party" and enableInParty) or (isRaidInstance and not isRaidGroup) then
 					channel = "PARTY"
-				elseif instanceType == "raid" then
+				elseif isRaidInstance then
 					channel = "RAID"
 				end
 			elseif enableOutdoors then
