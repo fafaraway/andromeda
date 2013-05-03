@@ -7141,6 +7141,34 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
 		end
 
+		-- Annoying animation stuff
+
+		local function fixGradient(self)
+			select(self.numRegion, self:GetParent():GetRegions()):SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+		end
+
+		local function onPlay(self)
+			self:Stop()
+			self.numRegions = self:GetParent():GetNumRegions()
+			self:SetScript("OnUpdate", fixGradient)
+		end
+
+		local function onFinished(self)
+			self:SetScript("OnUpdate", nil)
+			fixGradient(self)
+		end
+
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim.numRegion = 18
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetScript("OnPlay", onPlay)
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetScript("OnFinished", onFinished)
+		PlayerTalentFrameTalentsLearnButton.FlashAnim.numRegion = 18
+		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetScript("OnPlay", onPlay)
+		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetScript("OnFinished", onFinished)
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetLooping("NONE")
+		PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
+		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetLooping("NONE")
+		PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
+
 		local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 
 		for _, name in pairs(buttons) do
@@ -7151,9 +7179,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.ring:Hide()
 				bu.learnedTex:SetPoint("TOPLEFT", 1, -1)
 				bu.learnedTex:SetPoint("BOTTOMRIGHT", -1, 1)
-				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"]:Hide()
-				_G["PlayerTalentFrameSpecializationSpecButton"..i.."Glow"].Show = F.dummy
-				bu.animLearn.Play = F.dummy
+				_G[name..i.."Glow"]:SetTexture("")
+				bu.animLearn.numRegion = 20
+				bu.animLearn:SetScript("OnPlay", onPlay)
+				bu.animLearn:SetScript("OnFinished", onFinished)
 
 				F.Reskin(bu, true)
 
@@ -7257,11 +7286,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PlayerTalentFrameTalentsTutorialButton:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
 		PlayerTalentFrameSpecializationTutorialButton.Ring:Hide()
 		PlayerTalentFrameSpecializationTutorialButton:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
-
-		PlayerTalentFrameSpecializationLearnButton.FlashAnim.Play = F.dummy
-		PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
-		PlayerTalentFrameTalentsLearnButton.FlashAnim.Play = F.dummy
-		PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
 
 		F.ReskinPortraitFrame(PlayerTalentFrame, true)
 		F.Reskin(PlayerTalentFrameSpecializationLearnButton)
