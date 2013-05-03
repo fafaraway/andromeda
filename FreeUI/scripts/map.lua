@@ -19,6 +19,9 @@ WorldMapPing.Ping:SetScript("OnLoop", function(self, loopState)
 	end
 end)
 
+WorldMapPlayerUpper:EnableMouse(false)
+WorldMapPlayerLower:EnableMouse(false)
+
 local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
 mapbg:SetBackdrop({
 	bgFile = C.media.backdrop,
