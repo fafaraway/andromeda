@@ -7,6 +7,7 @@ if not C.actionbars.enableStyle then return end
 local r, g, b = unpack(C.class)
 
 local _G = _G
+local gsub = gsub
 
 local showHotKey = C.actionbars.hotkey
 
@@ -18,14 +19,38 @@ F.AddOptionsCallback("actionbars", "hotkey", function()
 end)
 
 local function updateHotkey(self)
-	local ho = _G[self:GetName() .. "HotKey"]
-	if not ho then return end
+	local ho = _G[self:GetName().."HotKey"]
 
 	if showHotKey then
-		ho:SetAllPoints()
-		ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-		ho:SetJustifyH("CENTER")
-		ho:SetDrawLayer("OVERLAY")
+		if not self.styledHotkey then
+			ho:ClearAllPoints()
+			ho:SetWidth(0)
+			ho:SetPoint("CENTER", 1, 0)
+			ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			ho:SetJustifyH("RIGHT")
+			ho:SetDrawLayer("OVERLAY")
+			self.styledHotkey = true
+		end
+
+		local text = ho:GetText()
+
+		text = text:gsub("(s%-)", "S")
+		text = text:gsub("(a%-)", "A")
+		text = text:gsub("(c%-)", "C")
+		text = text:gsub("Mouse Button", "M")
+		text = text:gsub("Middle Mouse", "M3")
+		text = text:gsub("Mouse Wheel Up", "MU")
+		text = text:gsub("Mouse Wheel Down", "MD")
+		text = text:gsub("Delete", "Del")
+		text = text:gsub("Num Pad", "N")
+		text = text:gsub("Page Up", "PU")
+		text = text:gsub("Page Down", "PD")
+		text = text:gsub("Spacebar", "SpB")
+		text = text:gsub("Insert", "Ins")
+		text = text:gsub("Num Lock", "NL")
+		text = text:gsub("Home", "Hm")
+
+		ho:SetText("|cffffffff"..text)
 	else
 		ho:Hide()
 	end
