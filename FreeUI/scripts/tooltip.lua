@@ -2,6 +2,8 @@
 
 local F, C, L = unpack(select(2, ...))
 
+PVP_ENABLED = ""
+
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 	if C.general.tooltip_cursor == true then
 		self:SetOwner(parent, "ANCHOR_CURSOR")
@@ -152,6 +154,10 @@ local function OnTooltipSetUnit(self)
 
 		local n = guildName and 3 or 2
 		_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s", level, race)
+
+		if UnitIsPVP(unit) then
+			_G["GameTooltipTextLeft"..n + 1]:SetFormattedText("%s (%s)", UnitFactionGroup(unit), PVP)
+		end
 	elseif UnitIsBattlePet(unit) then
 		for i = 2, lines do
 			local line = _G["GameTooltipTextLeft"..i]
