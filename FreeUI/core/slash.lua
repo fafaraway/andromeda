@@ -45,12 +45,6 @@ SLASH_GROUPDISBAND1 = "/rd"
 SlashCmdList.TICKET = ToggleHelpFrame
 SLASH_TICKET1 = "/gm"
 
-SlashCmdList.TESTUI = function()
-	oUF_FreeBoss1:Show(); oUF_FreeBoss1.Hide = function() end oUF_FreeBoss1.unit = "player"
-	oUF_FreeBoss2:Show(); oUF_FreeBoss2.Hide = function() end oUF_FreeBoss2.unit = "player"
-end
-SLASH_TESTUI1 = "/testui"
-
 SlashCmdList.VOLUME = function(value)
 	local numValue = tonumber(value)
 	if numValue and 0 <= numValue and numValue <= 1 then
