@@ -7,7 +7,6 @@ if IsAddOnLoaded("Aurora") then
 end
 
 local r, g, b = unpack(C.class)
-local buttonR, buttonG, buttonB, buttonA = .15, .15, .15, 1
 
 local _, class = UnitClass("player")
 local Skin = CreateFrame("Frame", nil, UIParent)
@@ -105,11 +104,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinArrow(TabardCharacterModelRotateRightButton, "right")
 
 		hooksecurefunc("CharacterFrame_Expand", function()
-			select(14, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-left-active")
+			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-left-active")
 		end)
 
 		hooksecurefunc("CharacterFrame_Collapse", function()
-			select(14, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-right-active")
+			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-right-active")
 		end)
 
 		-- [[ Check boxes ]]
@@ -2022,7 +2021,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					questLogTitle.tex = questLogTitle:CreateTexture(nil, "BACKGROUND")
 					questLogTitle.tex:SetAllPoints(questLogTitle.bg)
 					questLogTitle.tex:SetTexture(C.media.backdrop)
-					questLogTitle.tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+					questLogTitle.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 					questLogTitle.minus = questLogTitle:CreateTexture(nil, "OVERLAY")
 					questLogTitle.minus:SetSize(7, 1)
@@ -2537,21 +2536,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, 15 do
 			local bu = _G["HelpFrameKnowledgebaseScrollFrameButton"..i]
 			bu:DisableDrawLayer("ARTWORK")
-			F.CreateBD(bu)
-			bu:SetBackdropColor(buttonR, buttonG, buttonB, buttonA)
+			F.CreateBD(bu, 0)
+
+			F.CreateGradient(bu)
 		end
 
 		local function colourTab(f)
 			f.text:SetTextColor(1, 1, 1)
+			f:SetBackdropBorderColor(r, g, b)
 		end
 
 		local function clearTab(f)
 			f.text:SetTextColor(1, .82, 0)
+			f:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		local function styleTab(bu)
-			bu.selected:SetTexture(r / 3, g / 3, b / 3)
-			bu.selected:SetDrawLayer("BACKGROUND", 1)
+			bu.selected:SetTexture(r, g, b, .2)
+			bu.selected:SetDrawLayer("BACKGROUND")
 			bu.text:SetFont(C.media.font2, 14)
 			F.Reskin(bu, true)
 			bu:SetScript("OnEnter", colourTab)
@@ -2759,13 +2761,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TutorialFrameBackground.Show = F.dummy
 		TutorialFrame:DisableDrawLayer("BORDER")
 
-		F.Reskin(TutorialFrameOkayButton)
+		F.Reskin(TutorialFrameOkayButton, true)
 		F.ReskinClose(TutorialFrameCloseButton)
 		F.ReskinArrow(TutorialFramePrevButton, "left")
 		F.ReskinArrow(TutorialFrameNextButton, "right")
 
 		TutorialFrameOkayButton:ClearAllPoints()
 		TutorialFrameOkayButton:SetPoint("BOTTOMLEFT", TutorialFrameNextButton, "BOTTOMRIGHT", 10, 0)
+
+		-- because gradient alpha and OnUpdate doesn't work for some reason...
+
+		select(14, TutorialFrameOkayButton:GetRegions()):Hide()
+		select(15, TutorialFramePrevButton:GetRegions()):Hide()
+		select(15, TutorialFrameNextButton:GetRegions()):Hide()
+		select(14, TutorialFrameCloseButton:GetRegions()):Hide()
+		TutorialFramePrevButton:SetScript("OnEnter", nil)
+		TutorialFrameNextButton:SetScript("OnEnter", nil)
+		TutorialFrameOkayButton:SetBackdropColor(0, 0, 0, .25)
+		TutorialFramePrevButton:SetBackdropColor(0, 0, 0, .25)
+		TutorialFrameNextButton:SetBackdropColor(0, 0, 0, .25)
 
 		-- Loot history
 
@@ -4005,48 +4019,43 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		BrowsePrevPageButton:GetRegions():SetPoint("LEFT", BrowsePrevPageButton, "RIGHT", 2, 0)
 
-		do
-			-- seriously, consistency
-			BrowseDropDownLeft:SetAlpha(0)
-			BrowseDropDownMiddle:SetAlpha(0)
-			BrowseDropDownRight:SetAlpha(0)
+		-- seriously, consistency
+		BrowseDropDownLeft:SetAlpha(0)
+		BrowseDropDownMiddle:SetAlpha(0)
+		BrowseDropDownRight:SetAlpha(0)
 
-			local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
-			BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
-			BrowseDropDownButton:SetSize(16, 16)
-			F.Reskin(BrowseDropDownButton, true)
+		local a1, p, a2, x, y = BrowseDropDownButton:GetPoint()
+		BrowseDropDownButton:SetPoint(a1, p, a2, x, y-4)
+		BrowseDropDownButton:SetSize(16, 16)
+		F.Reskin(BrowseDropDownButton, true)
 
-			local function colourArrow(f)
-				if f:IsEnabled() then
-					f.downtex:SetVertexColor(r, g, b)
-				end
+		local function colourArrow(f)
+			if f:IsEnabled() then
+				f.downtex:SetVertexColor(r, g, b)
 			end
-
-			local function clearArrow(f)
-				f.downtex:SetVertexColor(1, 1, 1)
-			end
-
-			BrowseDropDownButton:HookScript("OnEnter", colourArrow)
-			BrowseDropDownButton:HookScript("OnLeave", clearArrow)
-
-			local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
-			downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
-			downtex:SetSize(8, 8)
-			downtex:SetPoint("CENTER")
-			downtex:SetVertexColor(1, 1, 1)
-			BrowseDropDownButton.downtex = downtex
-
-			local bg = CreateFrame("Frame", nil, BrowseDropDown)
-			bg:SetPoint("TOPLEFT", 16, -5)
-			bg:SetPoint("BOTTOMRIGHT", 109, 11)
-			bg:SetFrameLevel(BrowseDropDown:GetFrameLevel()-1)
-			F.CreateBD(bg, 0)
-
-			local bd = BrowseDropDown:CreateTexture(nil, "BACKGROUND")
-			bd:SetPoint("TOPLEFT", bg, 1, -1)
-			bd:SetPoint("BOTTOMRIGHT", bg, -1, 1)
-			bd:SetTexture(buttonR, buttonG, buttonB, buttonA)
 		end
+
+		local function clearArrow(f)
+			f.downtex:SetVertexColor(1, 1, 1)
+		end
+
+		BrowseDropDownButton:HookScript("OnEnter", colourArrow)
+		BrowseDropDownButton:HookScript("OnLeave", clearArrow)
+
+		local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
+		downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+		downtex:SetSize(8, 8)
+		downtex:SetPoint("CENTER")
+		downtex:SetVertexColor(1, 1, 1)
+		BrowseDropDownButton.downtex = downtex
+
+		local bg = CreateFrame("Frame", nil, BrowseDropDown)
+		bg:SetPoint("TOPLEFT", 16, -5)
+		bg:SetPoint("BOTTOMRIGHT", 109, 11)
+		bg:SetFrameLevel(BrowseDropDown:GetFrameLevel()-1)
+		F.CreateBD(bg, 0)
+
+		F.CreateGradient(bg)
 
 		local inputs = {"BrowseMinLevel", "BrowseMaxLevel", "BrowseBidPriceGold", "BrowseBidPriceSilver", "BrowseBidPriceCopper", "BidBidPriceGold", "BidBidPriceSilver", "BidBidPriceCopper", "StartPriceGold", "StartPriceSilver", "StartPriceCopper", "BuyoutPriceGold", "BuyoutPriceSilver", "BuyoutPriceCopper", "AuctionsStackSizeEntry", "AuctionsNumStacksEntry"}
 		for i = 1, #inputs do
@@ -4171,7 +4180,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			tex:SetPoint("TOPLEFT", 4, -4)
 			tex:SetPoint("BOTTOMRIGHT", -4, 4)
 			tex:SetTexture(C.media.backdrop)
-			tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 			local left = ch:CreateTexture(nil, "BACKGROUND")
 			left:SetWidth(1)
@@ -4662,24 +4671,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			ic:SetTexCoord(tcoords[1] + 0.015, tcoords[2] - 0.02, tcoords[3] + 0.018, tcoords[4] - 0.02)
 		end
 
-		do
-			local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
-			bd:SetPoint("TOPLEFT", 40, 0)
-			bd:SetPoint("BOTTOMRIGHT", -19, 0)
-			bd:SetFrameLevel(CalendarFilterFrame:GetFrameLevel()-1)
-			F.CreateBD(bd, 0)
+		local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
+		bd:SetPoint("TOPLEFT", 40, 0)
+		bd:SetPoint("BOTTOMRIGHT", -19, 0)
+		bd:SetFrameLevel(CalendarFilterFrame:GetFrameLevel()-1)
+		F.CreateBD(bd, 0)
 
-			local bg = CalendarFilterFrame:CreateTexture(nil, "BACKGROUND")
-			bg:SetPoint("TOPLEFT", bd, 1, -1)
-			bg:SetPoint("BOTTOMRIGHT", bd, -1, 1)
-			bg:SetTexture(buttonR, buttonG, buttonB, buttonA)
+		F.CreateGradient(bd)
 
-			local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
-			downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
-			downtex:SetSize(8, 8)
-			downtex:SetPoint("CENTER")
-			downtex:SetVertexColor(1, 1, 1)
-		end
+		local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
+		downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+		downtex:SetSize(8, 8)
+		downtex:SetPoint("CENTER")
+		downtex:SetVertexColor(1, 1, 1)
 
 		for i = 1, 6 do
 			local vline = CreateFrame("Frame", nil, _G["CalendarDayButton"..i])
@@ -5381,7 +5385,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 						tex:SetPoint("TOPLEFT", 5, -5)
 						tex:SetPoint("BOTTOMRIGHT", -5, 5)
 						tex:SetTexture(C.media.backdrop)
-						tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+						tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 						local left = ch:CreateTexture(nil, "BACKGROUND")
 						left:SetWidth(1)
@@ -6622,12 +6626,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBD(bg, 0)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
-			bu.tex = bu:CreateTexture(nil, "BACKGROUND")
-			bu.tex:SetPoint("TOPLEFT", bg, 1, -1)
-			bu.tex:SetPoint("BOTTOMRIGHT", bg, -1, 1)
-			bu.tex:SetTexture(buttonR, buttonG, buttonB, buttonA)
+			bu.tex = F.CreateGradient(bu)
+			bu.tex:SetDrawLayer("BACKGROUND")
+			bu.tex:SetPoint("TOPLEFT", 3, -1)
+			bu.tex:SetPoint("BOTTOMRIGHT", -1, 3)
 
-			bu.SelectedTexture:SetDrawLayer("BACKGROUND", 1)
+			bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 			bu.SelectedTexture:SetTexture(r, g, b, .2)
 			bu.SelectedTexture:SetPoint("TOPLEFT", 2, 0)
 			bu.SelectedTexture:SetPoint("BOTTOMRIGHT", 0, 2)
@@ -6738,12 +6742,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBD(bg, 0)
 			bg:SetFrameLevel(bu:GetFrameLevel()-1)
 
-			local tex = bu:CreateTexture(nil, "BACKGROUND")
-			tex:SetPoint("TOPLEFT", bg, 1, -1)
-			tex:SetPoint("BOTTOMRIGHT", bg, -1, 1)
-			tex:SetTexture(buttonR, buttonG, buttonB, buttonA)
+			local tex = F.CreateGradient(bu)
+			tex:SetDrawLayer("BACKGROUND")
+			tex:SetPoint("TOPLEFT", 3, -1)
+			tex:SetPoint("BOTTOMRIGHT", -2, 3)
 
-			SelectedTexture:SetDrawLayer("BACKGROUND", 1)
+			SelectedTexture:SetDrawLayer("BACKGROUND")
 			SelectedTexture:SetTexture(r, g, b, .2)
 			SelectedTexture:SetPoint("TOPLEFT", 2, 0)
 			SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
@@ -6765,9 +6769,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			headerBg:SetFrameLevel(header:GetFrameLevel()-1)
 			F.CreateBD(headerBg, 0)
 
-			local headerTex = header:CreateTexture(nil, "BACKGROUND")
+			local headerTex = F.CreateGradient(header)
 			headerTex:SetAllPoints(headerBg)
-			headerTex:SetTexture(buttonR, buttonG, buttonB, buttonA)
 
 			local minus = header:CreateTexture(nil, "OVERLAY")
 			minus:SetSize(7, 1)
@@ -7138,7 +7141,32 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
 		end
 
+		-- Annoying animation stuff
+
+		local function fixGradient(self)
+			select(self.numRegion, self:GetParent():GetRegions()):SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+		end
+
+		local function onPlay(self)
+			self:Stop()
+			self.numRegions = self:GetParent():GetNumRegions()
+			self:SetScript("OnUpdate", fixGradient)
+		end
+
+		local function onFinished(self)
+			self:SetScript("OnUpdate", nil)
+			fixGradient(self)
+		end
+
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim.numRegion = 18
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetScript("OnPlay", onPlay)
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetScript("OnFinished", onFinished)
+		PlayerTalentFrameTalentsLearnButton.FlashAnim.numRegion = 18
+		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetScript("OnPlay", onPlay)
+		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetScript("OnFinished", onFinished)
+		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetLooping("NONE")
 		PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
+		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetLooping("NONE")
 		PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
 
 		local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
@@ -7152,6 +7180,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.learnedTex:SetPoint("TOPLEFT", 1, -1)
 				bu.learnedTex:SetPoint("BOTTOMRIGHT", -1, 1)
 				_G[name..i.."Glow"]:SetTexture("")
+				bu.animLearn.numRegion = 20
+				bu.animLearn:SetScript("OnPlay", onPlay)
+				bu.animLearn:SetScript("OnFinished", onFinished)
 
 				F.Reskin(bu, true)
 
@@ -7405,7 +7436,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			skillButton.tex:SetPoint("TOPLEFT", skillButton.bg, 1, -1)
 			skillButton.tex:SetPoint("BOTTOMRIGHT", skillButton.bg, -1, 1)
 			skillButton.tex:SetTexture(C.media.backdrop)
-			skillButton.tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+			skillButton.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 			skillButton.minus = skillButton:CreateTexture(nil, "OVERLAY")
 			skillButton.minus:SetSize(7, 1)

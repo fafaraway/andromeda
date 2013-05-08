@@ -54,8 +54,6 @@ C.myRealm = GetCVar("realmName")
 
 -- [[ Functions ]]
 
-local buttonR, buttonG, buttonB, buttonA = .15, .15, .15, 1
-
 F.dummy = function() end
 
 local CreateBD = function(f, a)
@@ -127,18 +125,34 @@ end
 
 local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 
-local function colourButton(f)
+local CreateGradient = function(f)
+	local tex = f:CreateTexture(nil, "BORDER")
+	tex:SetPoint("TOPLEFT", 1, -1)
+	tex:SetPoint("BOTTOMRIGHT", -1, 1)
+	tex:SetTexture(C.media.backdrop)
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+
+	return tex
+end
+
+F.CreateGradient = CreateGradient
+
+local function StartGlow(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r / 4, g / 4, b / 4, buttonA)
+	f:SetBackdropColor(r, g, b, .1)
 	f:SetBackdropBorderColor(r, g, b)
+	f.glow:SetAlpha(1)
+	F.CreatePulse(f.glow)
 end
 
-local function clearButton(f)
-	f:SetBackdropColor(buttonR, buttonG, buttonB, buttonA)
+local function StopGlow(f)
+	f:SetBackdropColor(0, 0, 0, 0)
 	f:SetBackdropBorderColor(0, 0, 0)
+	f.glow:SetScript("OnUpdate", nil)
+	f.glow:SetAlpha(0)
 end
 
-F.Reskin = function(f, noHighlight)
+F.Reskin = function(f, noGlow)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -150,12 +164,23 @@ F.Reskin = function(f, noHighlight)
 	if f.LeftSeparator then f.LeftSeparator:Hide() end
 	if f.RightSeparator then f.RightSeparator:Hide() end
 
-	F.CreateBD(f)
-	f:SetBackdropColor(buttonR, buttonG, buttonB, buttonA)
+	F.CreateBD(f, 0)
 
-	if not noHighlight then
-		f:HookScript("OnEnter", colourButton)
- 		f:HookScript("OnLeave", clearButton)
+	CreateGradient(f)
+
+	if not noGlow then
+		f.glow = CreateFrame("Frame", nil, f)
+		f.glow:SetBackdrop({
+			edgeFile = C.media.glow,
+			edgeSize = 5,
+		})
+		f.glow:SetPoint("TOPLEFT", -6, 6)
+		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
+		f.glow:SetBackdropBorderColor(r, g, b)
+		f.glow:SetAlpha(0)
+
+		f:HookScript("OnEnter", StartGlow)
+ 		f:HookScript("OnLeave", StopGlow)
 	end
 end
 
@@ -203,10 +228,9 @@ F.ReskinScroll = function(f)
 	bu.bg:SetPoint("BOTTOMRIGHT", bu, 0, 4)
 	F.CreateBD(bu.bg, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = CreateGradient(f)
 	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
-	tex:SetTexture(buttonR, buttonG, buttonB, buttonA)
 
 	local up = _G[frame.."ScrollUpButton"]
 	local down = _G[frame.."ScrollDownButton"]
@@ -298,10 +322,9 @@ F.ReskinDropDown = function(f)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bg, 0)
 
-	local bd = f:CreateTexture(nil, "BACKGROUND")
-	bd:SetPoint("TOPLEFT", bg, 1, -1)
-	bd:SetPoint("BOTTOMRIGHT", bg, -1, 1)
-	bd:SetTexture(buttonR, buttonG, buttonB, buttonA)
+	local gradient = CreateGradient(f)
+	gradient:SetPoint("TOPLEFT", bg, 1, -1)
+	gradient:SetPoint("BOTTOMRIGHT", bg, -1, 1)
 end
 
 local function colourClose(f)
@@ -335,10 +358,7 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 
 	F.CreateBD(f, 0)
 
-	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", 1, -1)
-	bg:SetPoint("BOTTOMRIGHT", -1, 1)
-	bg:SetTexture(buttonR, buttonG, buttonB, buttonA)
+	CreateGradient(f)
 
 	f:SetDisabledTexture(C.media.backdrop)
 	local dis = f:GetDisabledTexture()
@@ -381,10 +401,9 @@ F.ReskinInput = function(f, height, width)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
 
-	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", bd, 1, -1)
-	bg:SetPoint("BOTTOMRIGHT", bd, -1, 1)
-	bg:SetTexture(buttonR, buttonG, buttonB, buttonA)
+	local gradient = CreateGradient(f)
+	gradient:SetPoint("TOPLEFT", bd, 1, -1)
+	gradient:SetPoint("BOTTOMRIGHT", bd, -1, 1)
 
 	if height then f:SetHeight(height) end
 	if width then f:SetWidth(width) end
@@ -424,10 +443,9 @@ F.ReskinCheck = function(f)
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bd, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = CreateGradient(f)
 	tex:SetPoint("TOPLEFT", 5, -5)
 	tex:SetPoint("BOTTOMRIGHT", -5, 5)
-	tex:SetTexture(buttonR, buttonG, buttonB, buttonA)
 
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)
@@ -459,10 +477,9 @@ F.ReskinRadio = function(f)
 	F.CreateBD(bd, 0)
 	f.bd = bd
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
+	local tex = F.CreateGradient(f)
 	tex:SetPoint("TOPLEFT", 4, -4)
 	tex:SetPoint("BOTTOMRIGHT", -4, 4)
-	tex:SetTexture(buttonR, buttonG, buttonB, buttonA)
 
 	f:HookScript("OnEnter", colourRadio)
 	f:HookScript("OnLeave", clearRadio)
@@ -475,14 +492,11 @@ F.ReskinSlider = function(f)
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", 14, -2)
 	bd:SetPoint("BOTTOMRIGHT", -15, 3)
+	bd:SetFrameStrata("BACKGROUND")
 	bd:SetFrameLevel(f:GetFrameLevel()-1)
-	F.CreateBD(bd)
-	bd:SetBackdropColor(buttonR, buttonG, buttonB, buttonA)
+	F.CreateBD(bd, 0)
 
-	local tex = f:CreateTexture(nil, "BACKGROUND")
-	tex:SetPoint("TOPLEFT", bd, 1, -1)
-	tex:SetPoint("BOTTOMRIGHT", bd, -1, 1)
-	tex:SetTexture(buttonR, buttonG, buttonB, buttonA)
+	CreateGradient(bd)
 
 	local slider = select(4, f:GetRegions())
 	slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
