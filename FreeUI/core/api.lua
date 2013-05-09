@@ -140,22 +140,29 @@ end
 
 F.CreateGradient = CreateGradient
 
-local function StartGlow(f)
+local function colourButton(f)
 	if not f:IsEnabled() then return end
-	f:SetBackdropColor(r, g, b, .1)
+
+	if buttonColourGradient then
+		f:SetBackdropColor(r / 4, g / 4, b / 4)
+	else
+		f.tex:SetVertexColor(r / 4, g / 4, b / 4)
+	end
+
 	f:SetBackdropBorderColor(r, g, b)
-	f.glow:SetAlpha(1)
-	F.CreatePulse(f.glow)
 end
 
-local function StopGlow(f)
-	f:SetBackdropColor(0, 0, 0, 0)
+local function clearButton(f)
+	if buttonColourGradient then
+		f:SetBackdropColor(0, 0, 0, 0)
+	else
+		f.tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+	end
+
 	f:SetBackdropBorderColor(0, 0, 0)
-	f.glow:SetScript("OnUpdate", nil)
-	f.glow:SetAlpha(0)
 end
 
-F.Reskin = function(f, noGlow)
+F.Reskin = function(f, noHighlight)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -169,21 +176,11 @@ F.Reskin = function(f, noGlow)
 
 	F.CreateBD(f, 0)
 
-	CreateGradient(f)
+	f.tex = CreateGradient(f)
 
-	if not noGlow then
-		f.glow = CreateFrame("Frame", nil, f)
-		f.glow:SetBackdrop({
-			edgeFile = C.media.glow,
-			edgeSize = 5,
-		})
-		f.glow:SetPoint("TOPLEFT", -6, 6)
-		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
-		f.glow:SetBackdropBorderColor(r, g, b)
-		f.glow:SetAlpha(0)
-
-		f:HookScript("OnEnter", StartGlow)
- 		f:HookScript("OnLeave", StopGlow)
+	if not noHighlight then
+		f:HookScript("OnEnter", colourButton)
+ 		f:HookScript("OnLeave", clearButton)
 	end
 end
 
