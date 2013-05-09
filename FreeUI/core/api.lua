@@ -12,6 +12,7 @@ C.media = {
 	["font"] = "Interface\\AddOns\\FreeUI\\media\\PFRondaSeven.ttf", -- default pixel font
 	["font2"] = "Interface\\AddOns\\FreeUI\\media\\font.ttf", -- default font
 	["glow"] = "Interface\\AddOns\\FreeUI\\media\\glowTex", -- glow/shadow texture
+	["gradient"] = "Interface\\AddOns\\FreeUI\\media\\gradient",
 	["roleIcons"] = "Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES",
 	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
 }
@@ -124,13 +125,14 @@ F.CreatePulse = function(frame) -- pulse function originally by nightcracker
 end
 
 local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+local buttonR, buttonG, buttonB, buttonA = unpack(C.general.buttonColour)
 
 local CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetTexture(C.media.gradient)
+	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
 end

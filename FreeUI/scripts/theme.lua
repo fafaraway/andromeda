@@ -53,7 +53,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		-- [[ Scroll bars ]]
+		-- [[ Scroll bars ]]
 
 		local scrollbars = {"FriendsFrameFriendsScrollFrameScrollBar", "CharacterStatsPaneScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ChannelRosterScrollFrameScrollBar", "ReputationListScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "BCMCopyScrollScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar"}
 		for i = 1, #scrollbars do
@@ -320,7 +320,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		-- [[ Custom skins ]]
+		-- [[ Custom skins ]]
 
 		-- Pet stuff
 
@@ -2018,10 +2018,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					questLogTitle.bg:SetFrameLevel(questLogTitle:GetFrameLevel()-1)
 					F.CreateBD(questLogTitle.bg, 0)
 
-					questLogTitle.tex = questLogTitle:CreateTexture(nil, "BACKGROUND")
+					questLogTitle.tex = F.CreateGradient(questLogTitle)
 					questLogTitle.tex:SetAllPoints(questLogTitle.bg)
-					questLogTitle.tex:SetTexture(C.media.backdrop)
-					questLogTitle.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 					questLogTitle.minus = questLogTitle:CreateTexture(nil, "OVERLAY")
 					questLogTitle.minus:SetSize(7, 1)
@@ -4176,11 +4174,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			check:SetDesaturated(true)
 			check:SetVertexColor(r, g, b)
 
-			local tex = ch:CreateTexture(nil, "BACKGROUND")
+			local tex = F.CreateGradient(ch)
 			tex:SetPoint("TOPLEFT", 4, -4)
 			tex:SetPoint("BOTTOMRIGHT", -4, 4)
-			tex:SetTexture(C.media.backdrop)
-			tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 			local left = ch:CreateTexture(nil, "BACKGROUND")
 			left:SetWidth(1)
@@ -5381,11 +5377,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 						check:SetDesaturated(true)
 						check:SetVertexColor(r, g, b)
 
-						local tex = ch:CreateTexture(nil, "BACKGROUND")
+						local tex = F.CreateGradient(ch)
 						tex:SetPoint("TOPLEFT", 5, -5)
 						tex:SetPoint("BOTTOMRIGHT", -5, 5)
-						tex:SetTexture(C.media.backdrop)
-						tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 						local left = ch:CreateTexture(nil, "BACKGROUND")
 						left:SetWidth(1)
@@ -7141,32 +7135,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
 		end
 
-		-- Annoying animation stuff
-
-		local function fixGradient(self)
-			select(self.numRegion, self:GetParent():GetRegions()):SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-		end
-
-		local function onPlay(self)
-			self:Stop()
-			self.numRegions = self:GetParent():GetNumRegions()
-			self:SetScript("OnUpdate", fixGradient)
-		end
-
-		local function onFinished(self)
-			self:SetScript("OnUpdate", nil)
-			fixGradient(self)
-		end
-
-		PlayerTalentFrameSpecializationLearnButton.FlashAnim.numRegion = 18
-		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetScript("OnPlay", onPlay)
-		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetScript("OnFinished", onFinished)
-		PlayerTalentFrameTalentsLearnButton.FlashAnim.numRegion = 18
-		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetScript("OnPlay", onPlay)
-		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetScript("OnFinished", onFinished)
-		PlayerTalentFrameSpecializationLearnButton.FlashAnim:SetLooping("NONE")
 		PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
-		PlayerTalentFrameTalentsLearnButton.FlashAnim:SetLooping("NONE")
 		PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
 
 		local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
@@ -7180,9 +7149,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.learnedTex:SetPoint("TOPLEFT", 1, -1)
 				bu.learnedTex:SetPoint("BOTTOMRIGHT", -1, 1)
 				_G[name..i.."Glow"]:SetTexture("")
-				bu.animLearn.numRegion = 20
-				bu.animLearn:SetScript("OnPlay", onPlay)
-				bu.animLearn:SetScript("OnFinished", onFinished)
 
 				F.Reskin(bu, true)
 
@@ -7432,11 +7398,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			skillButton.bg:SetFrameLevel(skillButton:GetFrameLevel()-1)
 			F.CreateBD(skillButton.bg, 0)
 
-			skillButton.tex = skillButton:CreateTexture(nil, "BACKGROUND")
+			skillButton.tex = F.CreateGradient(skillButton)
 			skillButton.tex:SetPoint("TOPLEFT", skillButton.bg, 1, -1)
 			skillButton.tex:SetPoint("BOTTOMRIGHT", skillButton.bg, -1, 1)
-			skillButton.tex:SetTexture(C.media.backdrop)
-			skillButton.tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 
 			skillButton.minus = skillButton:CreateTexture(nil, "OVERLAY")
 			skillButton.minus:SetSize(7, 1)
