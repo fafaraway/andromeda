@@ -144,7 +144,7 @@ local function colourButton(f)
 	if not f:IsEnabled() then return end
 
 	if buttonColourGradient then
-		f:SetBackdropColor(r / 4, g / 4, b / 4)
+		f:SetBackdropColor(r, g, b, .3)
 	else
 		f.tex:SetVertexColor(r / 4, g / 4, b / 4)
 	end
