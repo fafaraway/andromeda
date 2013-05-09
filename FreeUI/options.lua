@@ -9,6 +9,7 @@ C["general"] = {
 	["buffreminder"] = true, 		-- reminder for selfbuffs
 	["buffTracker"] = true, 		-- track important buffs for some classes (scroll down to buffTracker table to configure)
 	["buttonColour"] = {.3, .3, .3, .3}, -- determines colour on buttons and other UI elements
+	["buttonColourGradient"] = true, -- gradient or flat texture on buttons
 	["combatText"] = true, 			-- show incoming damage and healing near player frame
 	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
 	["interrupt"] = true,			-- announce your interrupts

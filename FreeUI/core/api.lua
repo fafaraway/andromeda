@@ -126,12 +126,13 @@ end
 
 local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 local buttonR, buttonG, buttonB, buttonA = unpack(C.general.buttonColour)
+local buttonColourGradient = C.general.buttonColourGradient
 
 local CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(C.media.gradient)
+	tex:SetTexture(buttonColourGradient and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
