@@ -267,33 +267,29 @@ if C.actionbars.rightbars_mouseover == true then
 	bar5:EnableMouse(true)
 
 	local function showButtons()
-		for i = 1, 12 do
-			_G["MultiBarLeftButton"..i]:SetAlpha(1)
-			_G["MultiBarRightButton"..i]:SetAlpha(1)
-		end
+		bar4:SetAlpha(1)
+		bar5:SetAlpha(1)
 	end
 
 	local function hideButtons()
-		for i = 1, 12 do
-			_G["MultiBarLeftButton"..i]:SetAlpha(0)
-			_G["MultiBarRightButton"..i]:SetAlpha(0)
-		end
+		bar4:SetAlpha(0)
+		bar5:SetAlpha(0)
 	end
 
 	for i = 1, 12 do
 		local ab1 = _G["MultiBarLeftButton"..i]
 		local ab2 = _G["MultiBarRightButton"..i]
 
-		ab1:SetAlpha(0)
 		ab1:HookScript("OnEnter", showButtons)
 		ab1:HookScript("OnLeave", hideButtons)
-		ab2:SetAlpha(0)
 		ab2:HookScript("OnEnter", showButtons)
 		ab2:HookScript("OnLeave", hideButtons)
 	end
 
+	bar4:SetAlpha(0)
 	bar4:HookScript("OnEnter", showButtons)
 	bar4:HookScript("OnLeave", hideButtons)
+	bar5:SetAlpha(0)
 	bar5:HookScript("OnEnter", showButtons)
 	bar5:HookScript("OnLeave", hideButtons)
 
