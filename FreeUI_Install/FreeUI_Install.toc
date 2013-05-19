@@ -1,4 +1,4 @@
-## Interface: 50200
+## Interface: 50300
 ## Title: FreeUI Install
 ## Notes: FreeUI setup addon.
 ## Author: Haleth/Freethinker

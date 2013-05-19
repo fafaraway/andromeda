@@ -1,8 +1,8 @@
-## Interface: 50200
+## Interface: 50300
 ## Title: FreeUI
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Freethinker
-## Version: 6.4.2
+## Version: 6.5
 ## RequiredDeps: Blizzard_CombatText
 ## OptionalDeps: Clique, FreeUI_Options, MyRolePlay, oUF
 ## SavedVariables: FreeUIGlobalConfig
@@ -13,8 +13,8 @@ core\core.lua
 options.lua
 profiles.lua
 
-core\gui.lua
 core\api.lua
+core\gui.lua
 core\slash.lua
 core\notifications.lua
 

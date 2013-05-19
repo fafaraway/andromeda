@@ -224,7 +224,7 @@ local StyleFrame = function(frame)
 	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
 	local healthBar, castBar = frame.healthBar, frame.castBar
 	local glowRegion, overlayRegion, highlightRegion, levelTextRegion, bossIconRegion, raidIconRegion, stateIconRegion = frame.barFrame:GetRegions()
-	local _, castbarOverlay, shieldedRegion, spellIconRegion = castBar:GetRegions()
+	local _, castbarOverlay, shieldedRegion, spellIconRegion, castTextRegion, castShadowRegion = castBar:GetRegions()
 	local nameTextRegion = frame.nameFrame:GetRegions()
 
 	frame.oldname = nameTextRegion
@@ -244,6 +244,11 @@ local StyleFrame = function(frame)
 	castBar.healthBar = healthBar
 	castBar.shieldedRegion = shieldedRegion
 	castBar:SetStatusBarTexture(C.media.texture)
+
+	castShadowRegion:SetAlpha(0)
+	castTextRegion:SetFont(C.media.font, 8 * UIParent:GetScale(), "OUTLINEMONOCHROME")
+	castTextRegion:ClearAllPoints()
+	castTextRegion:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
 	castBar:HookScript("OnShow", OnShow)
 	castBar:HookScript("OnSizeChanged", OnSizeChanged)

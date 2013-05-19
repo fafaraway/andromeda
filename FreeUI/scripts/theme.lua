@@ -32,7 +32,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Simple backdrops ]]
 
-		local bds = {"AutoCompleteBox", "BNToastFrame", "TicketStatusFrameButton", "FriendsTooltip", "GearManagerDialogPopup", "TokenFramePopup", "ReputationDetailFrame", "RaidInfoFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog", "QueueStatusFrame"}
+		local bds = {"AutoCompleteBox", "BNToastFrame", "TicketStatusFrameButton", "FriendsTooltip", "GearManagerDialogPopup", "TokenFramePopup", "RaidInfoFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog", "QueueStatusFrame"}
 
 		for i = 1, #bds do
 			local bd = _G[bds[i]]
@@ -53,9 +53,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		-- [[ Scroll bars ]]
+		-- [[ Scroll bars ]]
 
-		local scrollbars = {"FriendsFrameFriendsScrollFrameScrollBar", "CharacterStatsPaneScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ChannelRosterScrollFrameScrollBar", "ReputationListScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "BCMCopyScrollScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar"}
+		local scrollbars = {"FriendsFrameFriendsScrollFrameScrollBar", "CharacterStatsPaneScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ChannelRosterScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "BCMCopyScrollScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar"}
 		for i = 1, #scrollbars do
 			local scrollbar = _G[scrollbars[i]]
 			if scrollbar then
@@ -113,7 +113,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Check boxes ]]
 
-		local checkboxes = {"WorldMapShowDigSites", "WorldMapQuestShowObjectives", "WorldMapTrackQuest", "TokenFramePopupInactiveCheckBox", "TokenFramePopupBackpackCheckBox", "ReputationDetailAtWarCheckBox", "ReputationDetailInactiveCheckBox", "ReputationDetailMainScreenCheckBox"}
+		local checkboxes = {"WorldMapTrackQuest", "TokenFramePopupInactiveCheckBox", "TokenFramePopupBackpackCheckBox"}
 		for i = 1, #checkboxes do
 			local checkbox = _G[checkboxes[i]]
 			if checkbox then
@@ -320,7 +320,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		-- [[ Custom skins ]]
+		-- [[ Custom skins ]]
 
 		-- Pet stuff
 
@@ -514,6 +514,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Reputation frame
 
+		ReputationDetailCorner:Hide()
+		ReputationDetailDivider:Hide()
+		ReputationListScrollFrame:GetRegions():Hide()
+		select(2, ReputationListScrollFrame:GetRegions()):Hide()
+
+		ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 1, -28)
+
 		local function UpdateFactionSkins()
 			for i = 1, GetNumFactions() do
 				local statusbar = _G["ReputationBar"..i.."ReputationBar"]
@@ -564,6 +571,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 			end
 		end)
+
+		F.CreateBD(ReputationDetailFrame)
+		F.ReskinClose(ReputationDetailCloseButton)
+		F.ReskinCheck(ReputationDetailAtWarCheckBox)
+		F.ReskinCheck(ReputationDetailInactiveCheckBox)
+		F.ReskinCheck(ReputationDetailMainScreenCheckBox)
+		F.ReskinCheck(ReputationDetailLFGBonusReputationCheckBox)
+		F.ReskinScroll(ReputationListScrollFrameScrollBar)
+
+		select(3, ReputationDetailFrame:GetRegions()):Hide()
 
 		-- PVE frame
 
@@ -2541,12 +2558,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		local function colourTab(f)
 			f.text:SetTextColor(1, 1, 1)
-			f:SetBackdropBorderColor(r, g, b)
 		end
 
 		local function clearTab(f)
 			f.text:SetTextColor(1, .82, 0)
-			f:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		local function styleTab(bu)
@@ -2571,6 +2586,31 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		HelpFrameCharacterStuckHearthstone:SetSize(56, 56)
 		F.CreateBG(HelpFrameCharacterStuckHearthstone)
 		HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(.08, .92, .08, .92)
+
+		F.Reskin(HelpBrowserNavHome)
+		F.Reskin(HelpBrowserNavReload)
+		F.Reskin(HelpBrowserNavStop)
+		F.Reskin(HelpBrowserBrowserSettings)
+		F.ReskinArrow(HelpBrowserNavBack, "left")
+		F.ReskinArrow(HelpBrowserNavForward, "right")
+
+		HelpBrowserNavHome:SetSize(18, 18)
+		HelpBrowserNavReload:SetSize(18, 18)
+		HelpBrowserNavStop:SetSize(18, 18)
+		HelpBrowserBrowserSettings:SetSize(18, 18)
+
+		HelpBrowserNavHome:SetPoint("BOTTOMLEFT", HelpBrowser, "TOPLEFT", 2, 4)
+		HelpBrowserBrowserSettings:SetPoint("TOPRIGHT", HelpFrameCloseButton, "BOTTOMLEFT", -4, -1)
+		LoadingIcon:ClearAllPoints()
+		LoadingIcon:SetPoint("LEFT", HelpBrowserNavStop, "RIGHT")
+
+		for i = 1, 9 do
+			select(i, BrowserSettingsTooltip:GetRegions()):Hide()
+		end
+
+		F.CreateBD(BrowserSettingsTooltip)
+		F.Reskin(BrowserSettingsTooltip.CacheButton)
+		F.Reskin(BrowserSettingsTooltip.CookiesButton)
 
 		-- Option panels
 
@@ -2632,7 +2672,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			line:SetPoint("LEFT", 205, 10)
 			line:SetTexture(1, 1, 1, .2)
 
-			local checkboxes = {"InterfaceOptionsControlsPanelStickyTargeting", "InterfaceOptionsControlsPanelAutoDismount", "InterfaceOptionsControlsPanelAutoClearAFK", "InterfaceOptionsControlsPanelBlockTrades", "InterfaceOptionsControlsPanelBlockGuildInvites", "InterfaceOptionsControlsPanelLootAtMouse", "InterfaceOptionsControlsPanelAutoLootCorpse", "InterfaceOptionsControlsPanelInteractOnLeftClick", "InterfaceOptionsCombatPanelAttackOnAssist", "InterfaceOptionsCombatPanelStopAutoAttack", "InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors", "InterfaceOptionsCombatPanelTargetOfTarget", "InterfaceOptionsCombatPanelShowSpellAlerts", "InterfaceOptionsCombatPanelReducedLagTolerance", "InterfaceOptionsCombatPanelActionButtonUseKeyDown", "InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait", "InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates", "InterfaceOptionsCombatPanelAutoSelfCast", "InterfaceOptionsCombatPanelLossOfControl", "InterfaceOptionsDisplayPanelShowCloak", "InterfaceOptionsDisplayPanelShowHelm", "InterfaceOptionsDisplayPanelShowAggroPercentage", "InterfaceOptionsDisplayPanelPlayAggroSounds", "InterfaceOptionsDisplayPanelShowSpellPointsAvg", "InterfaceOptionsDisplayPanelShowFreeBagSpace", "InterfaceOptionsDisplayPanelCinematicSubtitles", "InterfaceOptionsDisplayPanelRotateMinimap", "InterfaceOptionsDisplayPanelShowAccountAchievments", "InterfaceOptionsObjectivesPanelAutoQuestTracking", "InterfaceOptionsObjectivesPanelMapQuestDifficulty", "InterfaceOptionsObjectivesPanelWatchFrameWidth", "InterfaceOptionsSocialPanelProfanityFilter", "InterfaceOptionsSocialPanelSpamFilter", "InterfaceOptionsSocialPanelChatBubbles", "InterfaceOptionsSocialPanelPartyChat", "InterfaceOptionsSocialPanelChatHoverDelay", "InterfaceOptionsSocialPanelGuildMemberAlert", "InterfaceOptionsSocialPanelChatMouseScroll", "InterfaceOptionsSocialPanelWholeChatWindowClickable", "InterfaceOptionsActionBarsPanelBottomLeft", "InterfaceOptionsActionBarsPanelBottomRight", "InterfaceOptionsActionBarsPanelRight", "InterfaceOptionsActionBarsPanelRightTwo", "InterfaceOptionsActionBarsPanelLockActionBars", "InterfaceOptionsActionBarsPanelAlwaysShowActionBars", "InterfaceOptionsActionBarsPanelSecureAbilityToggle", "InterfaceOptionsNamesPanelMyName", "InterfaceOptionsNamesPanelFriendlyPlayerNames", "InterfaceOptionsNamesPanelFriendlyPets", "InterfaceOptionsNamesPanelFriendlyGuardians", "InterfaceOptionsNamesPanelFriendlyTotems", "InterfaceOptionsNamesPanelUnitNameplatesFriends", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyPets", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyTotems", "InterfaceOptionsNamesPanelGuilds", "InterfaceOptionsNamesPanelGuildTitles", "InterfaceOptionsNamesPanelTitles", "InterfaceOptionsNamesPanelNonCombatCreature", "InterfaceOptionsNamesPanelEnemyPlayerNames", "InterfaceOptionsNamesPanelEnemyPets", "InterfaceOptionsNamesPanelEnemyGuardians", "InterfaceOptionsNamesPanelEnemyTotems", "InterfaceOptionsNamesPanelUnitNameplatesEnemies", "InterfaceOptionsNamesPanelUnitNameplatesEnemyPets", "InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems", "InterfaceOptionsCombatTextPanelTargetDamage", "InterfaceOptionsCombatTextPanelPeriodicDamage", "InterfaceOptionsCombatTextPanelPetDamage", "InterfaceOptionsCombatTextPanelHealing", "InterfaceOptionsCombatTextPanelTargetEffects", "InterfaceOptionsCombatTextPanelOtherTargetEffects", "InterfaceOptionsCombatTextPanelEnableFCT", "InterfaceOptionsCombatTextPanelDodgeParryMiss", "InterfaceOptionsCombatTextPanelDamageReduction", "InterfaceOptionsCombatTextPanelRepChanges", "InterfaceOptionsCombatTextPanelReactiveAbilities", "InterfaceOptionsCombatTextPanelFriendlyHealerNames", "InterfaceOptionsCombatTextPanelCombatState", "InterfaceOptionsCombatTextPanelComboPoints", "InterfaceOptionsCombatTextPanelLowManaHealth", "InterfaceOptionsCombatTextPanelEnergyGains", "InterfaceOptionsCombatTextPanelPeriodicEnergyGains", "InterfaceOptionsCombatTextPanelHonorGains", "InterfaceOptionsCombatTextPanelAuras", "InterfaceOptionsStatusTextPanelPlayer", "InterfaceOptionsStatusTextPanelPet", "InterfaceOptionsStatusTextPanelParty", "InterfaceOptionsStatusTextPanelTarget", "InterfaceOptionsStatusTextPanelAlternateResource", "InterfaceOptionsStatusTextPanelXP", "InterfaceOptionsBuffsPanelDispellableDebuffs", "InterfaceOptionsBuffsPanelCastableBuffs", "InterfaceOptionsBuffsPanelConsolidateBuffs", "InterfaceOptionsBuffsPanelShowAllEnemyDebuffs", "InterfaceOptionsBattlenetPanelOnlineFriends", "InterfaceOptionsBattlenetPanelOfflineFriends", "InterfaceOptionsBattlenetPanelBroadcasts", "InterfaceOptionsBattlenetPanelFriendRequests", "InterfaceOptionsBattlenetPanelConversations", "InterfaceOptionsBattlenetPanelShowToastWindow", "InterfaceOptionsCameraPanelFollowTerrain", "InterfaceOptionsCameraPanelHeadBob", "InterfaceOptionsCameraPanelWaterCollision", "InterfaceOptionsCameraPanelSmartPivot", "InterfaceOptionsMousePanelInvertMouse", "InterfaceOptionsMousePanelClickToMove", "InterfaceOptionsMousePanelWoWMouse", "InterfaceOptionsHelpPanelShowTutorials", "InterfaceOptionsHelpPanelEnhancedTooltips", "InterfaceOptionsHelpPanelShowLuaErrors", "InterfaceOptionsHelpPanelColorblindMode", "InterfaceOptionsHelpPanelMovePad", "InterfaceOptionsControlsPanelAutoOpenLootHistory"}
+			local checkboxes = {"InterfaceOptionsControlsPanelStickyTargeting", "InterfaceOptionsControlsPanelAutoDismount", "InterfaceOptionsControlsPanelAutoClearAFK", "InterfaceOptionsControlsPanelBlockTrades", "InterfaceOptionsControlsPanelBlockGuildInvites", "InterfaceOptionsControlsPanelBlockChatChannelInvites", "InterfaceOptionsControlsPanelLootAtMouse", "InterfaceOptionsControlsPanelAutoLootCorpse", "InterfaceOptionsControlsPanelInteractOnLeftClick", "InterfaceOptionsCombatPanelAttackOnAssist", "InterfaceOptionsCombatPanelStopAutoAttack", "InterfaceOptionsNamesPanelUnitNameplatesNameplateClassColors", "InterfaceOptionsCombatPanelTargetOfTarget", "InterfaceOptionsCombatPanelShowSpellAlerts", "InterfaceOptionsCombatPanelReducedLagTolerance", "InterfaceOptionsCombatPanelActionButtonUseKeyDown", "InterfaceOptionsCombatPanelEnemyCastBarsOnPortrait", "InterfaceOptionsCombatPanelEnemyCastBarsOnNameplates", "InterfaceOptionsCombatPanelEnemyCastBarsOnOnlyTargetNameplates", "InterfaceOptionsCombatPanelEnemyCastBarsNameplateSpellNames", "InterfaceOptionsCombatPanelAutoSelfCast", "InterfaceOptionsCombatPanelLossOfControl", "InterfaceOptionsDisplayPanelShowCloak", "InterfaceOptionsDisplayPanelShowHelm", "InterfaceOptionsDisplayPanelShowAggroPercentage", "InterfaceOptionsDisplayPanelPlayAggroSounds", "InterfaceOptionsDisplayPanelShowSpellPointsAvg", "InterfaceOptionsDisplayPanelShowFreeBagSpace", "InterfaceOptionsDisplayPanelCinematicSubtitles", "InterfaceOptionsDisplayPanelRotateMinimap", "InterfaceOptionsDisplayPanelShowAccountAchievments", "InterfaceOptionsObjectivesPanelAutoQuestTracking", "InterfaceOptionsObjectivesPanelMapQuestDifficulty", "InterfaceOptionsObjectivesPanelWatchFrameWidth", "InterfaceOptionsSocialPanelProfanityFilter", "InterfaceOptionsSocialPanelSpamFilter", "InterfaceOptionsSocialPanelChatBubbles", "InterfaceOptionsSocialPanelPartyChat", "InterfaceOptionsSocialPanelChatHoverDelay", "InterfaceOptionsSocialPanelGuildMemberAlert", "InterfaceOptionsSocialPanelChatMouseScroll", "InterfaceOptionsSocialPanelWholeChatWindowClickable", "InterfaceOptionsActionBarsPanelBottomLeft", "InterfaceOptionsActionBarsPanelBottomRight", "InterfaceOptionsActionBarsPanelRight", "InterfaceOptionsActionBarsPanelRightTwo", "InterfaceOptionsActionBarsPanelLockActionBars", "InterfaceOptionsActionBarsPanelAlwaysShowActionBars", "InterfaceOptionsActionBarsPanelSecureAbilityToggle", "InterfaceOptionsNamesPanelMyName", "InterfaceOptionsNamesPanelFriendlyPlayerNames", "InterfaceOptionsNamesPanelFriendlyPets", "InterfaceOptionsNamesPanelFriendlyGuardians", "InterfaceOptionsNamesPanelFriendlyTotems", "InterfaceOptionsNamesPanelUnitNameplatesFriends", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyPets", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesFriendlyTotems", "InterfaceOptionsNamesPanelGuilds", "InterfaceOptionsNamesPanelGuildTitles", "InterfaceOptionsNamesPanelTitles", "InterfaceOptionsNamesPanelNonCombatCreature", "InterfaceOptionsNamesPanelEnemyPlayerNames", "InterfaceOptionsNamesPanelEnemyPets", "InterfaceOptionsNamesPanelEnemyGuardians", "InterfaceOptionsNamesPanelEnemyTotems", "InterfaceOptionsNamesPanelUnitNameplatesEnemies", "InterfaceOptionsNamesPanelUnitNameplatesEnemyPets", "InterfaceOptionsNamesPanelUnitNameplatesEnemyGuardians", "InterfaceOptionsNamesPanelUnitNameplatesEnemyTotems", "InterfaceOptionsCombatTextPanelTargetDamage", "InterfaceOptionsCombatTextPanelPeriodicDamage", "InterfaceOptionsCombatTextPanelPetDamage", "InterfaceOptionsCombatTextPanelHealing", "InterfaceOptionsCombatTextPanelTargetEffects", "InterfaceOptionsCombatTextPanelOtherTargetEffects", "InterfaceOptionsCombatTextPanelEnableFCT", "InterfaceOptionsCombatTextPanelDodgeParryMiss", "InterfaceOptionsCombatTextPanelDamageReduction", "InterfaceOptionsCombatTextPanelRepChanges", "InterfaceOptionsCombatTextPanelReactiveAbilities", "InterfaceOptionsCombatTextPanelFriendlyHealerNames", "InterfaceOptionsCombatTextPanelCombatState", "InterfaceOptionsCombatTextPanelComboPoints", "InterfaceOptionsCombatTextPanelLowManaHealth", "InterfaceOptionsCombatTextPanelEnergyGains", "InterfaceOptionsCombatTextPanelPeriodicEnergyGains", "InterfaceOptionsCombatTextPanelHonorGains", "InterfaceOptionsCombatTextPanelAuras", "InterfaceOptionsStatusTextPanelPlayer", "InterfaceOptionsStatusTextPanelPet", "InterfaceOptionsStatusTextPanelParty", "InterfaceOptionsStatusTextPanelTarget", "InterfaceOptionsStatusTextPanelAlternateResource", "InterfaceOptionsStatusTextPanelXP", "InterfaceOptionsBuffsPanelDispellableDebuffs", "InterfaceOptionsBuffsPanelCastableBuffs", "InterfaceOptionsBuffsPanelConsolidateBuffs", "InterfaceOptionsBuffsPanelShowAllEnemyDebuffs", "InterfaceOptionsBattlenetPanelOnlineFriends", "InterfaceOptionsBattlenetPanelOfflineFriends", "InterfaceOptionsBattlenetPanelBroadcasts", "InterfaceOptionsBattlenetPanelFriendRequests", "InterfaceOptionsBattlenetPanelConversations", "InterfaceOptionsBattlenetPanelShowToastWindow", "InterfaceOptionsCameraPanelFollowTerrain", "InterfaceOptionsCameraPanelHeadBob", "InterfaceOptionsCameraPanelWaterCollision", "InterfaceOptionsCameraPanelSmartPivot", "InterfaceOptionsMousePanelInvertMouse", "InterfaceOptionsMousePanelClickToMove", "InterfaceOptionsMousePanelWoWMouse", "InterfaceOptionsHelpPanelShowTutorials", "InterfaceOptionsHelpPanelEnhancedTooltips", "InterfaceOptionsHelpPanelShowLuaErrors", "InterfaceOptionsHelpPanelColorblindMode", "InterfaceOptionsHelpPanelMovePad", "InterfaceOptionsControlsPanelAutoOpenLootHistory"}
 			for i = 1, #checkboxes do
 				F.ReskinCheck(_G[checkboxes[i]])
 			end
@@ -3367,6 +3407,54 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinArrow(PVPBannerFrameCustomization2LeftButton, "left")
 		F.ReskinArrow(PVPBannerFrameCustomization2RightButton, "right")
 
+		-- PVP Ready Dialog
+
+		local PVPReadyDialog = PVPReadyDialog
+
+		PVPReadyDialogBackground:Hide()
+		PVPReadyDialogBottomArt:Hide()
+		PVPReadyDialogFiligree:Hide()
+
+		PVPReadyDialogRoleIconTexture:SetTexture(C.media.roleIcons)
+
+		do
+			local left = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			left:SetWidth(1)
+			left:SetTexture(C.media.backdrop)
+			left:SetVertexColor(0, 0, 0)
+			left:SetPoint("TOPLEFT", 9, -7)
+			left:SetPoint("BOTTOMLEFT", 9, 10)
+
+			local right = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			right:SetWidth(1)
+			right:SetTexture(C.media.backdrop)
+			right:SetVertexColor(0, 0, 0)
+			right:SetPoint("TOPRIGHT", -8, -7)
+			right:SetPoint("BOTTOMRIGHT", -8, 10)
+
+			local top = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			top:SetHeight(1)
+			top:SetTexture(C.media.backdrop)
+			top:SetVertexColor(0, 0, 0)
+			top:SetPoint("TOPLEFT", 9, -7)
+			top:SetPoint("TOPRIGHT", -8, -7)
+
+			local bottom = PVPReadyDialogRoleIcon:CreateTexture(nil, "OVERLAY")
+			bottom:SetHeight(1)
+			bottom:SetTexture(C.media.backdrop)
+			bottom:SetVertexColor(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", 9, 10)
+			bottom:SetPoint("BOTTOMRIGHT", -8, 10)
+		end
+
+		F.CreateBD(PVPReadyDialog)
+		PVPReadyDialog.SetBackdrop = F.dummy
+		F.CreateSD(PVPReadyDialog)
+
+		F.Reskin(PVPReadyDialog.enterButton)
+		F.Reskin(PVPReadyDialog.leaveButton)
+		F.ReskinClose(PVPReadyDialogCloseButton)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
@@ -3406,8 +3494,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(i, SideDressUpFrame:GetRegions()):Hide()
 		end
 		StackSplitFrame:GetRegions():Hide()
-		ReputationDetailCorner:Hide()
-		ReputationDetailDivider:Hide()
 		RaidInfoDetailFooter:Hide()
 		RaidInfoDetailHeader:Hide()
 		RaidInfoDetailCorner:Hide()
@@ -3482,9 +3568,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				titles = true
 			end
 		end)
-		ReputationListScrollFrame:GetRegions():Hide()
-		select(2, ReputationListScrollFrame:GetRegions()):Hide()
-		select(3, ReputationDetailFrame:GetRegions()):Hide()
 		MerchantNameText:SetDrawLayer("ARTWORK")
 		SendScrollBarBackgroundTop:Hide()
 		select(4, SendMailScrollFrame:GetRegions()):Hide()
@@ -3646,7 +3729,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ChatConfigFrameDefaultButton:SetWidth(125)
 		ChatConfigFrameDefaultButton:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "BOTTOMLEFT", 0, -4)
 		ChatConfigFrameOkayButton:SetPoint("TOPRIGHT", ChatConfigBackgroundFrame, "BOTTOMRIGHT", 0, -4)
-		ReputationDetailFrame:SetPoint("TOPLEFT", ReputationFrame, "TOPRIGHT", 1, -28)
 		PaperDollEquipmentManagerPaneEquipSet:SetWidth(PaperDollEquipmentManagerPaneEquipSet:GetWidth()-1)
 		PaperDollEquipmentManagerPaneSaveSet:SetPoint("LEFT", PaperDollEquipmentManagerPaneEquipSet, "RIGHT", 1, 0)
 		GearManagerDialogPopup:SetPoint("LEFT", PaperDollFrame, "RIGHT", 1, 0)
@@ -3713,7 +3795,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
 		end)
 
-		local closebuttons = {"SpellBookFrameCloseButton", "HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ReputationDetailCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
+		local closebuttons = {"SpellBookFrameCloseButton", "HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
 		for i = 1, #closebuttons do
 			F.ReskinClose(_G[closebuttons[i]])
 		end
@@ -4851,7 +4933,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			select(i, EncounterJournalInstanceSelectDungeonTab:GetRegions()):SetAlpha(0)
 			select(i, EncounterJournalInstanceSelectRaidTab:GetRegions()):SetAlpha(0)
 		end
-		EncounterJournalEncounterFrameModelFrameShadow:Hide()
+		EncounterJournalEncounterFrameInfoModelFrameShadow:Hide()
+		EncounterJournalEncounterFrameInfoModelFrame.dungeonBG:Hide()
 		EncounterJournalEncounterFrameInfoDifficultyUpLeft:SetAlpha(0)
 		EncounterJournalEncounterFrameInfoDifficultyUpRIGHT:SetAlpha(0)
 		EncounterJournalEncounterFrameInfoDifficultyDownLeft:SetAlpha(0)
@@ -4873,8 +4956,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
 		EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
 		EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
+		EncounterJournalEncounterFrameInfoModelTab:ClearAllPoints()
+		EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -4)
 
-		local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab}
+		local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoModelTab}
 		for _, tab in pairs(tabs) do
 			tab:SetScale(.75)
 
@@ -4895,11 +4980,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1:SetNormalTexture("")
 		EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1:SetHighlightTexture("")
+		EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1:SetPushedTexture("")
 
-		local bg = CreateFrame("Frame", nil, EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1)
-		bg:SetPoint("TOPLEFT", 4, -4)
-		bg:SetPoint("BOTTOMRIGHT", -5, 3)
-		F.CreateBD(bg, 0)
+		do
+			local bg = CreateFrame("Frame", nil, EncounterJournalInstanceSelectScrollFrameScrollChildInstanceButton1)
+			bg:SetPoint("TOPLEFT", 4, -4)
+			bg:SetPoint("BOTTOMRIGHT", -5, 3)
+			F.CreateBD(bg, 0)
+		end
 
 		local index = 2
 
@@ -4910,6 +4998,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				bu:SetNormalTexture("")
 				bu:SetHighlightTexture("")
+				bu:SetPushedTexture("")
 
 				local bg = CreateFrame("Frame", nil, bu)
 				bg:SetPoint("TOPLEFT", 4, -4)
@@ -4929,7 +5018,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollChildDescription:SetShadowOffset(1, -1)
 		EncounterJournalEncounterFrameInfoEncounterTitle:SetTextColor(1, 1, 1)
 
-		F.CreateBDFrame(EncounterJournalEncounterFrameModelFrame, .25)
+		F.CreateBDFrame(EncounterJournalEncounterFrameInfoModelFrame, .25)
 
 		hooksecurefunc("EncounterJournal_DisplayInstance", function()
 			local bossIndex = 1;
@@ -5059,6 +5148,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinInput(EncounterJournalSearchBox)
 		F.ReskinScroll(EncounterJournalInstanceSelectScrollFrameScrollBar)
 		F.ReskinScroll(EncounterJournalEncounterFrameInstanceFrameLoreScrollFrameScrollBar)
+		F.ReskinScroll(EncounterJournalEncounterFrameInfoBossesScrollFrameScrollBar)
 		F.ReskinScroll(EncounterJournalEncounterFrameInfoDetailsScrollFrameScrollBar)
 		F.ReskinScroll(EncounterJournalEncounterFrameInfoLootScrollFrameScrollBar)
 		F.ReskinScroll(EncounterJournalSearchResultsScrollFrameScrollBar)
@@ -5998,8 +6088,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		ItemUpgradeFrame.ItemButton.CurrencyIcon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(ItemUpgradeFrame.ItemButton.CurrencyIcon)
+		ItemUpgradeFrame.ItemButton.Cost.Icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(ItemUpgradeFrame.ItemButton.Cost.Icon)
 
 		local currency = ItemUpgradeFrameMoneyFrame.Currency
 		currency.icon:SetPoint("LEFT", currency.count, "RIGHT", 1, 0)
@@ -6578,9 +6668,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bu.SelectedTexture:SetAllPoints()
 		end
 
-		BonusFrame.CallToArmsButton:SetPoint("TOP", BonusFrame.RandomBGButton, "BOTTOM", 0, -1)
-		BonusFrame.WorldPVP2Button:SetPoint("TOP", BonusFrame.WorldPVP1Button, "BOTTOM", 0, -1)
-
 		BonusFrame.BattlegroundReward1.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward1.Icon, "LEFT", -2, 0)
 		BonusFrame.BattlegroundReward1.Icon:SetTexCoord(.08, .92, .08, .92)
 		BonusFrame.BattlegroundReward1.Icon:SetSize(16, 16)
@@ -6604,6 +6691,65 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				frame.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
 			end
 		end)
+
+		-- Role buttons
+
+		local RoleInset = HonorFrame.RoleInset
+
+		RoleInset:DisableDrawLayer("BACKGROUND")
+		RoleInset:DisableDrawLayer("BORDER")
+
+		for _, roleButton in pairs({RoleInset.HealerIcon, RoleInset.TankIcon, RoleInset.DPSIcon}) do
+			roleButton.cover:SetTexture(C.media.roleIcons)
+			roleButton:SetNormalTexture(C.media.roleIcons)
+
+			roleButton.checkButton:SetFrameLevel(roleButton:GetFrameLevel() + 2)
+
+			for i = 1, 2 do
+				local left = roleButton:CreateTexture()
+				left:SetDrawLayer("OVERLAY", i)
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+				left:SetPoint("TOPLEFT", roleButton, 6, -4)
+				left:SetPoint("BOTTOMLEFT", roleButton, 6, 7)
+				roleButton["leftLine"..i] = left
+
+				local right = roleButton:CreateTexture()
+				right:SetDrawLayer("OVERLAY", i)
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+				right:SetPoint("TOPRIGHT", roleButton, -6, -4)
+				right:SetPoint("BOTTOMRIGHT", roleButton, -6, 7)
+				roleButton["rightLine"..i] = right
+
+				local top = roleButton:CreateTexture()
+				top:SetDrawLayer("OVERLAY", i)
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+				top:SetPoint("TOPLEFT", roleButton, 6, -4)
+				top:SetPoint("TOPRIGHT", roleButton, -6, -4)
+				roleButton["topLine"..i] = top
+
+				local bottom = roleButton:CreateTexture()
+				bottom:SetDrawLayer("OVERLAY", i)
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+				bottom:SetPoint("BOTTOMLEFT", roleButton, 6, 7)
+				bottom:SetPoint("BOTTOMRIGHT", roleButton, -6, 7)
+				roleButton["bottomLine"..i] = bottom
+			end
+
+			roleButton.leftLine2:Hide()
+			roleButton.rightLine2:Hide()
+			roleButton.topLine2:Hide()
+			roleButton.bottomLine2:Hide()
+
+			F.ReskinCheck(roleButton.checkButton)
+		end
 
 		-- Honor frame specific
 

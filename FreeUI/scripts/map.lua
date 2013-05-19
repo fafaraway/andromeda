@@ -92,30 +92,14 @@ local SmallerMapSkin = function()
 	WorldMapFrameTitle:SetShadowColor(0, 0, 0, 0)
 	WorldMapFrameTitle:SetParent(frame)
 
-	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT")
-	WorldMapQuestShowObjectives.SetPoint = F.dummy
-	WorldMapQuestShowObjectives:SetFrameStrata("HIGH")
-	WorldMapQuestShowObjectivesText:ClearAllPoints()
-	WorldMapQuestShowObjectivesText:SetPoint("RIGHT", WorldMapQuestShowObjectives, "LEFT")
-	WorldMapQuestShowObjectivesText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	WorldMapQuestShowObjectivesText:SetTextColor(1, 1, 1)
-	WorldMapQuestShowObjectivesText:SetShadowColor(0, 0, 0, 0)
-
 	WorldMapTrackQuest:SetParent(frame)
 	WorldMapTrackQuest:ClearAllPoints()
-	WorldMapTrackQuest:SetPoint("TOPLEFT", WorldMapDetailFrame, 9, -5)
+	WorldMapTrackQuest:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT")
+	WorldMapTrackQuestText:ClearAllPoints()
+	WorldMapTrackQuestText:SetPoint("RIGHT", WorldMapTrackQuest, "LEFT",-4,1)
 	WorldMapTrackQuestText:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
 	WorldMapTrackQuestText:SetTextColor(1, 1, 1)
 	WorldMapTrackQuestText:SetShadowColor(0, 0, 0, 0)
-
-	WorldMapShowDigSites:ClearAllPoints()
-	WorldMapShowDigSites:SetFrameStrata("HIGH")
-	WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 18)
-	WorldMapShowDigSitesText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	WorldMapShowDigSitesText:ClearAllPoints()
-	WorldMapShowDigSitesText:SetPoint("RIGHT", WorldMapShowDigSites, "LEFT",-4,1)
-	WorldMapShowDigSitesText:SetTextColor(1, 1, 1)
-	WorldMapShowDigSitesText:SetShadowColor(0, 0, 0, 0)
 
 	WorldMapFrameCloseButton:SetAlpha(0)
 	WorldMapFrameCloseButton:EnableMouse(nil)
@@ -183,14 +167,6 @@ WorldMapDetailFrame:HookScript("OnUpdate", function(self, elapsed)
 		end
 
 		last = 0
-	end
-end)
-
-hooksecurefunc("EncounterJournal_AddMapButtons", function()
-	if WorldMapQuestShowObjectives:IsShown() then
-		WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, 18)
-	else
-		WorldMapShowDigSites:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT")
 	end
 end)
 
