@@ -1094,6 +1094,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ScenarioQueueFrameRandomScrollFrameScrollBackground:Hide()
 		ScenarioQueueFrameRandomScrollFrameScrollBackgroundTopLeft:Hide()
 		ScenarioQueueFrameRandomScrollFrameScrollBackgroundBottomRight:Hide()
+		ScenarioQueueFrameSpecificScrollFrameScrollBackgroundTopLeft:Hide()
+		ScenarioQueueFrameSpecificScrollFrameScrollBackgroundBottomRight:Hide()
 		ScenarioQueueFrame.Bg:Hide()
 		ScenarioFinderFrameInset:GetRegions():Hide()
 
@@ -1139,6 +1141,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(ScenarioQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
 		F.ReskinDropDown(ScenarioQueueFrameTypeDropDown)
 		F.ReskinScroll(ScenarioQueueFrameRandomScrollFrameScrollBar)
+		F.ReskinScroll(ScenarioQueueFrameSpecificScrollFrameScrollBar)
 
 		-- Raid frame (social frame)
 
