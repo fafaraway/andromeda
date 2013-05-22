@@ -72,3 +72,16 @@ hooksecurefunc("WatchFrame_Update", function()
 		bu = _G["WatchFrameItem"..itemIndex]
 	end
 end)
+
+hooksecurefunc("WatchFrameScenario_GetCriteriaLine", function(index, parent)
+	local line = _G["WatchFrameScenarioLine"..index]
+	if not line.styled then
+		line.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		line.dash:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		line.text:SetShadowColor(0, 0, 0, 0)
+		line.dash:SetShadowColor(0, 0, 0, 0)
+		line.text:SetSpacing(2)
+
+		line.styled = true
+	end
+end)
