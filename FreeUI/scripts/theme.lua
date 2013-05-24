@@ -6659,8 +6659,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		BonusFrame.WorldPVPHeader:Hide()
 		BonusFrame.ShadowOverlay:Hide()
 
-		--BonusFrame.DiceButton:SetNormalTexture("")
-		--BonusFrame.DiceButton:SetPushedTexture("")
 		F.Reskin(BonusFrame.DiceButton)
 
 		for _, bu in pairs({BonusFrame.RandomBGButton, BonusFrame.CallToArmsButton, BonusFrame.WorldPVP1Button, BonusFrame.WorldPVP2Button}) do
@@ -6694,6 +6692,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				frame.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
 			end
 		end)
+
+		IncludedBattlegroundsDropDown:SetPoint("TOPRIGHT", BonusFrame.DiceButton, 40, 26)
 
 		-- Role buttons
 
