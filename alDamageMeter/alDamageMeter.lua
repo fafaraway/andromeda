@@ -330,7 +330,7 @@ local Add = function(uGUID, amount, mode, spell, target)
 	end
 	current[uGUID][mode].amount = current[uGUID][mode].amount + amount
 	total[uGUID][mode].amount = total[uGUID][mode].amount + amount
-	if spell then
+	if spell and target then
 		current[uGUID][mode].spells[spell] = (current[uGUID][mode].spells[spell] or 0) + amount
 		current[uGUID][mode].targets[target] = (current[uGUID][mode].targets[target] or 0) + amount
 		total[uGUID][mode].spells[spell] = (total[uGUID][mode].spells[spell] or 0) + amount
