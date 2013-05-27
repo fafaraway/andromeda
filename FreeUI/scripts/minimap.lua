@@ -233,32 +233,40 @@ rd:SetScript("OnEvent", function()
 	end
 end)
 
-HelpOpenTicketButton:SetParent(Minimap)
-HelpOpenTicketButton:ClearAllPoints()
-HelpOpenTicketButton:SetPoint("TOP", Minimap, "TOP", 0, 7)
-
 HelpOpenTicketButtonTutorial:Hide()
 HelpOpenTicketButtonTutorial.Show = F.dummy
 
-HelpOpenTicketButton:SetNormalTexture("")
-HelpOpenTicketButton:SetHighlightTexture("")
-HelpOpenTicketButton:SetPushedTexture("")
+local function positionTicketButtons()
+	if HelpOpenTicketButton:IsShown() then
+		if HelpOpenWebTicketButton:IsShown() then
+			HelpOpenTicketButton:ClearAllPoints()
+			HelpOpenTicketButton:SetPoint("TOP", Minimap, "TOP", -17, -5)
+			HelpOpenWebTicketButton:ClearAllPoints()
+			HelpOpenWebTicketButton:SetPoint("TOP", Minimap, "TOP", 17, -5)
+		else
+			HelpOpenTicketButton:ClearAllPoints()
+			HelpOpenTicketButton:SetPoint("TOP", Minimap, "TOP", 0, -5)
+		end
+	elseif HelpOpenWebTicketButton:IsShown() then
+		HelpOpenWebTicketButton:ClearAllPoints()
+		HelpOpenWebTicketButton:SetPoint("TOP", Minimap, "TOP", 0, -5)
+	end
+end
 
-local gmtext = F.CreateFS(HelpOpenTicketButton, 8)
-gmtext:SetPoint("CENTER")
-gmtext:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
+for _, ticketButton in pairs({HelpOpenTicketButton, HelpOpenWebTicketButton}) do
+	ticketButton:SetParent(Minimap)
+	ticketButton:SetHeight(8)
+	ticketButton:SetHitRectInsets(0, 0, 0, 0)
+	ticketButton:ClearAllPoints()
 
-HelpOpenWebTicketButton:SetParent(Minimap)
-HelpOpenWebTicketButton:ClearAllPoints()
-HelpOpenWebTicketButton:SetPoint("TOP", HelpOpenTicketButton, "BOTTOM", 0, -3)
+	ticketButton:SetNormalTexture("")
+	ticketButton:SetHighlightTexture("")
+	ticketButton:SetPushedTexture("")
 
-HelpOpenTicketButtonTutorial:Hide()
-HelpOpenTicketButtonTutorial.Show = F.dummy
+	local gmtext = F.CreateFS(ticketButton, 8)
+	gmtext:SetPoint("CENTER", 2, 0)
+	gmtext:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
 
-HelpOpenWebTicketButton:SetNormalTexture("")
-HelpOpenWebTicketButton:SetHighlightTexture("")
-HelpOpenWebTicketButton:SetPushedTexture("")
-
-local gmtext = F.CreateFS(HelpOpenWebTicketButton, 8)
-gmtext:SetPoint("CENTER")
-gmtext:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
+	ticketButton:HookScript("OnShow", positionTicketButtons)
+	ticketButton:HookScript("OnHide", positionTicketButtons)
+end
