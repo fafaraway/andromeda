@@ -7891,6 +7891,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBD(DBM_GUI_OptionsFrame)
 		F.CreateSD(DBM_GUI_OptionsFrame)
 		F.Reskin(DBM_GUI_OptionsFrameOkay)
+		F.Reskin(DBM_GUI_OptionsFrameWebsiteButton)
 		F.ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)
 	end
 end)
