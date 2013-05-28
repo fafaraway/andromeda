@@ -64,11 +64,14 @@ local function InitStyle()
 	hooksecurefunc(DBM.RangeCheck, "Show", function()
 		if firstRange then
 			DBMRangeCheck:SetBackdrop(nil)
-			local bd = CreateFrame("Frame", nil, DBMRangeCheck)
-			bd:SetPoint("TOPLEFT")
-			bd:SetPoint("BOTTOMRIGHT")
-			bd:SetFrameLevel(DBMRangeCheck:GetFrameLevel()-1)
-			F.CreateBD(bd)
+			F.CreateBDFrame(DBMRangeCheck)
+
+			DBMRangeCheckRadar.background:SetTexture("")
+			F.CreateBDFrame(DBMRangeCheckRadar)
+
+			DBMRangeCheckRadar.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			DBMRangeCheckRadar.text:SetTextColor(1, 1, 1)
+			DBMRangeCheckRadar.text:SetShadowOffset(0, 0)
 
 			firstRange = false
 		end
