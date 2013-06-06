@@ -129,14 +129,14 @@ for i = 1, 8 do
 	dots[i] = F.CreateFS(QueueStatusMinimapButton, 16)
 	dots[i]:SetText(".")
 end
-dots[1]:SetPoint("TOP", 2, 3)
-dots[2]:SetPoint("TOPRIGHT", -6, 0)
-dots[3]:SetPoint("RIGHT", -3, 3)
+dots[1]:SetPoint("TOP", 2, 2)
+dots[2]:SetPoint("TOPRIGHT", -6, -1)
+dots[3]:SetPoint("RIGHT", -3, 2)
 dots[4]:SetPoint("BOTTOMRIGHT", -6, 5)
 dots[5]:SetPoint("BOTTOM", 2, 2)
 dots[6]:SetPoint("BOTTOMLEFT", 9, 5)
-dots[7]:SetPoint("LEFT", 6, 3)
-dots[8]:SetPoint("TOPLEFT", 9, 0)
+dots[7]:SetPoint("LEFT", 6, 2)
+dots[8]:SetPoint("TOPLEFT", 9, -1)
 
 local counter = 0
 local last = 0
