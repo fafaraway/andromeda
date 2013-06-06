@@ -4180,13 +4180,27 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		AchievementFrameComparisonSummaryPlayerBackground:Hide()
 		AchievementFrameComparisonSummaryFriendBackground:Hide()
 
-		local first = 1
+		local first = true
 		hooksecurefunc("AchievementFrameCategories_Update", function()
-			if first == 1 then
+			if first then
 				for i = 1, 19 do
-					_G["AchievementFrameCategoriesContainerButton"..i.."Background"]:Hide()
+					local bu = _G["AchievementFrameCategoriesContainerButton"..i]
+
+					bu.background:SetTexture(0, 0, 0, .25)
+					bu.background:SetPoint("TOPLEFT", 0, -1)
+					bu.background:SetPoint("BOTTOMRIGHT")
+
+					local bg = F.CreateBDFrame(bu, 0)
+					bg:SetPoint("TOPLEFT", 0, -1)
+					bg:SetPoint("BOTTOMRIGHT")
+
+					bu:SetHighlightTexture(C.media.backdrop)
+					local hl = bu:GetHighlightTexture()
+					hl:SetVertexColor(r, g, b, .2)
+					hl:SetPoint("TOPLEFT", 1, -1)
+					hl:SetPoint("BOTTOMRIGHT", -1, 1)
 				end
-				first = 0
+				first = false
 			end
 		end)
 
