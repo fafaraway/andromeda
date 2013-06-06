@@ -125,14 +125,20 @@ F.CreatePulse = function(frame) -- pulse function originally by nightcracker
 end
 
 local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
-local buttonR, buttonG, buttonB, buttonA = unpack(C.general.buttonColour)
-local buttonColourGradient = C.general.buttonColourGradient
+local buttonR, buttonG, buttonB, buttonA
+local useButtonGradientColour = C.general.useButtonGradientColour
+
+if useButtonGradientColour then
+	buttonR, buttonG, buttonB, buttonA = unpack(C.general.buttonGradientColour)
+else
+	buttonR, buttonG, buttonB, buttonA = unpack(C.general.buttonSolidColour)
+end
 
 local CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(buttonColourGradient and C.media.gradient or C.media.backdrop)
+	tex:SetTexture(useButtonGradientColour and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
@@ -143,7 +149,7 @@ F.CreateGradient = CreateGradient
 local function colourButton(f)
 	if not f:IsEnabled() then return end
 
-	if buttonColourGradient then
+	if useButtonGradientColour then
 		f:SetBackdropColor(r, g, b, .3)
 	else
 		f.tex:SetVertexColor(r / 4, g / 4, b / 4)
@@ -153,7 +159,7 @@ local function colourButton(f)
 end
 
 local function clearButton(f)
-	if buttonColourGradient then
+	if useButtonGradientColour then
 		f:SetBackdropColor(0, 0, 0, 0)
 	else
 		f.tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
