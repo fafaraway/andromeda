@@ -94,10 +94,12 @@ options.resetFrame = resetFrame
 resetFrame.Data = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
 resetFrame.Data:SetPoint("TOPLEFT", 16, -16)
 resetFrame.Data.Text:SetText(ns.localization.resetData)
+resetFrame.Data.tooltipText = ns.localization.resetDataTooltip
 
 resetFrame.Options = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
 resetFrame.Options:SetPoint("TOPLEFT", resetFrame.Data, "BOTTOMLEFT", 0, -8)
 resetFrame.Options.Text:SetText(ns.localization.resetOptions)
+resetFrame.Options.tooltipText = ns.localization.resetOptionsTooltip
 
 local charBox = CreateFrame("EditBox", "FreeUIOptionsPanelResetFrameCharBox", resetFrame)
 charBox:SetAutoFocus(false)
