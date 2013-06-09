@@ -1218,15 +1218,23 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local name = self:GetName();
 			local subSpellString = _G[name.."SubSpellName"]
 
+			local isOffSpec = self.offSpecID ~= 0 and SpellBookFrame.bookType == BOOKTYPE_SPELL
+
 			subSpellString:SetTextColor(1, 1, 1)
+
 			if slotType == "FUTURESPELL" then
 				local level = GetSpellAvailableLevel(slot, SpellBookFrame.bookType)
-				if (level and level > UnitLevel("player")) then
-					self.RequiredLevelString:SetTextColor(.7, .7, .7)
+				if level and level > UnitLevel("player") then
 					self.SpellName:SetTextColor(.7, .7, .7)
 					subSpellString:SetTextColor(.7, .7, .7)
 				end
+			else
+				if slotType == "SPELL" and isOffSpec then
+					subSpellString:SetTextColor(.7, .7, .7)
+				end
 			end
+
+			self.RequiredLevelString:SetTextColor(.7, .7, .7)
 
 			local ic = _G[name.."IconTexture"]
 			if not ic.bg then return end
