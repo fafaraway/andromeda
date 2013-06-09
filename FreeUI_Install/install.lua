@@ -116,6 +116,7 @@ local function Setup()
 	SetCVar("cameraDistanceMaxFactor", 3.4)
 	SetCVar("nameplateShowFriends", 0)
 	SetCVar("nameplateShowEnemies", 1)
+	SetCVar("ShowClassColorInNameplate", 1)
 	SetCVar("bloatThreat", 0)
 	SetCVar("miniWorldMap", 1)
 end
