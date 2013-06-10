@@ -288,7 +288,7 @@ local autoRollMaxLevel = ns.CreateCheckBox(automation, "autoRoll_maxLevel")
 autoRollMaxLevel:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 16, -8)
 autoRoll.children = {autoRollMaxLevel}
 
-local autoSell = ns.CreateCheckBox(automation, "autoSell")
+local autoSell = ns.CreateCheckBox(automation, "autoSell", true)
 autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
 
 local autoSetRole = ns.CreateCheckBox(automation, "autoSetRole", true)
