@@ -204,11 +204,16 @@ local function OnTooltipSetUnit(self)
 			GameTooltipTextRight1:Show()
 			local cu = msp.char[unitName].field["CU"]
 			if cu ~= "" then
-				if cu:len() > 50 then cu = cu:sub(1, 50).."..." end
+				local len = cu:len()
+				if len > 50 then
+					cu = format("%s-\n%s", cu:sub(1, 50), cu:sub(51, min(len, 100)))
+					if len > 100 then
+						cu = cu.."..."
+					end
+				end
+
 				GameTooltip:AddLine("|cffdddddd"..cu)
 			end
-		else
-			msp:Request(unitName, "CU")
 		end
 	end
 end
@@ -223,7 +228,14 @@ if msp then
 			GameTooltipTextRight1:Show()
 			local cu = msp.char[unitName].field["CU"]
 			if cu ~= "" then
-				if cu:len() > 50 then cu = cu:sub(1, 50).."..." end
+				local len = cu:len()
+				if len > 50 then
+					cu = format("%s-\n%s", cu:sub(1, 50), cu:sub(51, min(len, 100)))
+					if len > 100 then
+						cu = cu.."..."
+					end
+				end
+
 				GameTooltip:AddLine("|cffdddddd"..cu)
 			end
 			GameTooltip:Show()
