@@ -1214,6 +1214,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		hooksecurefunc("SpellButton_UpdateButton", function(self)
+			if SpellBookFrame.bookType == BOOKTYPE_PROFESSION then return end
+
 			local slot, slotType = SpellBook_GetSpellBookSlot(self);
 			local name = self:GetName();
 			local subSpellString = _G[name.."SubSpellName"]
@@ -2001,6 +2003,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			line:SetPoint("RIGHT", ic, 1, 0)
 			F.CreateBD(line)
 		end
+
+		QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
 
 		for i = 1, MAX_NUM_ITEMS do
 			local bu = _G["QuestInfoItem"..i]
