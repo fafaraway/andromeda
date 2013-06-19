@@ -3476,6 +3476,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(PVPReadyDialog.leaveButton)
 		F.ReskinClose(PVPReadyDialogCloseButton)
 
+		-- Loss of control frame
+
+		LossOfControlFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(LossOfControlFrame.Icon)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
