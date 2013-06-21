@@ -652,7 +652,6 @@ local UnitSpecific = {
 			local PvP = F.CreateFS(self, 8)
 			PvP:SetPoint("RIGHT", self.MaxHealthPoints, "LEFT", -3, 0)
 			PvP:SetText("P")
-			PvP:SetTextColor(1, 0, 0)
 
 			local UpdatePvP = function(self, event, unit)
 				if(unit ~= self.unit) then return end
@@ -661,6 +660,12 @@ local UnitSpecific = {
 
 				local factionGroup = UnitFactionGroup(unit)
 				if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
+					if factionGroup == "Alliance" then
+						PvP:SetTextColor(0, 0.68, 0.94)
+					else
+						PvP:SetTextColor(1, 0, 0)
+					end
+
 					pvp:Show()
 				else
 					pvp:Hide()
