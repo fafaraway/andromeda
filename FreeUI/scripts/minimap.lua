@@ -36,6 +36,11 @@ mail:SetScript("OnEvent", function(self)
 	end
 end)
 
+MiniMapMailFrame:HookScript("OnMouseUp", function(self)
+	self:Hide()
+	mail:Hide()
+end)
+
 local mt = F.CreateFS(mail, 8)
 mt:SetText("Mail")
 mt:SetPoint("BOTTOM", Minimap, 0, 6)
