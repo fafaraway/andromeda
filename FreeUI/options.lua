@@ -311,8 +311,8 @@ C["buffTracker"] = {
 		{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["WARRIOR"] = {
-		-- Last Stand, Shield Wall
-		{spellId = 12975, spellId2 = 871, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		-- Last Stand, Shield Wall, Recklessness
+		{spellId = 12975, spellId2 = 871, spellId3 = 1719, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 		-- Shield Block
 		{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	}
