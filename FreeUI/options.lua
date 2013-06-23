@@ -104,7 +104,7 @@ C["unitframes"] = {
 	["arena_width"] = 229,
 	["arena_height"] = 14,
 	["party_width"] = 38,
-	["party_height"] = 22,
+	["party_height"] = 24,
 	["party_width_healer"] = 56,
 	["party_height_healer"] = 42,
 
