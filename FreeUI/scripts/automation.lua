@@ -158,3 +158,68 @@ if C.general.undressButton == true then
 	F.Reskin(undress)
 	F.Reskin(sideUndress)
 end
+
+if C.automation.questRewardHighlight then
+	local f = CreateFrame("Frame")
+	local highlightFunc
+
+	local last = 0
+	local startIndex = 1
+
+	local maxPrice = 0
+	local maxPriceIndex = 0
+
+	local function onUpdate(self, elapsed)
+		-- print("test")
+		last = last + elapsed
+		if last >= .05 then
+			self:SetScript("OnUpdate", nil)
+			last = 0
+
+			if QuestInfoItem1:IsVisible() then -- protection in case frame is closed early
+				highlightFunc()
+			end
+		end
+	end
+
+	highlightFunc = function()
+		for i = 1, MAX_NUM_ITEMS do
+			_G["QuestInfoItem"..i]:SetBackdropColor(0, 0, 0, .25)
+		end
+
+		local numChoices = GetNumQuestChoices()
+		if numChoices < 2 then return end
+
+		for i = startIndex, numChoices do
+			local link = GetQuestItemLink("choice", i)
+			if link then
+				local _, _, _, _, _, _, _, _, _, _, vendorPrice = GetItemInfo(link)
+
+				if vendorPrice > maxPrice then
+					maxPrice = vendorPrice
+					maxPriceIndex = i
+				end
+			else
+				-- print("scanning")
+				startIndex = i
+				f:SetScript("OnUpdate", onUpdate)
+				return
+			end
+		end
+
+		if maxPriceIndex > 0 then
+			local infoItem = _G["QuestInfoItem"..maxPriceIndex]
+
+			QuestInfoItemHighlight:SetPoint("TOP", infoItem)
+			QuestInfoItemHighlight:Show()
+			infoItem:SetBackdropColor(0.89, 0.88, 0.06, .2)
+		end
+
+		startIndex = 1
+		maxPrice = 0
+		maxPriceIndex = 0
+	end
+
+	f:RegisterEvent("QUEST_COMPLETE")
+	f:SetScript("OnEvent", highlightFunc)
+end
