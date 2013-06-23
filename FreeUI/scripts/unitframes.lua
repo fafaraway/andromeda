@@ -650,7 +650,7 @@ local UnitSpecific = {
 
 		if C.unitframes.pvp then
 			local PvP = F.CreateFS(self, 8)
-			PvP:SetPoint("RIGHT", self.MaxHealthPoints, "LEFT", -3, 0)
+			PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
 			PvP:SetText("P")
 
 			local UpdatePvP = function(self, event, unit)
