@@ -1805,6 +1805,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		-- Equipment flyout
+
+		local navFrame = EquipmentFlyoutFrame.NavigationFrame
+
+		EquipmentFlyoutFrameButtons.bg1:SetAlpha(0)
+		EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
+		Test2:Hide() -- wat
+
+		navFrame:SetWidth(204)
+		navFrame:SetPoint("TOPLEFT", EquipmentFlyoutFrameButtons, "BOTTOMLEFT", 1, 0)
+
 		hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
 			if not button.styled then
 				button:SetNormalTexture("")
@@ -1818,16 +1829,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local location = button.location
 			if not location then return end
-			if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then return end
 
-			local id = EquipmentManager_GetItemInfoByLocation(location)
-			local _, _, quality = GetItemInfo(id)
-			local r, g, b = GetItemQualityColor(quality)
+			local r, g, b
 
-			if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
+			if location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
+				r, g, b = 0, 0, 0
+			else
+				local _, _, quality = GetItemInfo(EquipmentManager_GetItemInfoByLocation(location))
+				r, g, b = GetItemQualityColor(quality)
+
+				if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
+			end
 
 			button.bg:SetVertexColor(r, g, b)
 		end)
+
+		F.CreateBD(EquipmentFlyoutFrame.NavigationFrame)
+		F.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.PrevButton, "left")
+		F.ReskinArrow(EquipmentFlyoutFrame.NavigationFrame.NextButton, "right")
 
 		-- Quest Frame
 
@@ -3490,7 +3509,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Hide regions ]]
 
-		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "EquipmentFlyoutFrameButtons", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
+		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
 		for i = 1, #bglayers do
 			_G[bglayers[i]]:DisableDrawLayer("BACKGROUND")
 		end
@@ -3509,7 +3528,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 			select(i, ScrollOfResurrectionFrameNoteFrame:GetRegions()):Hide()
 		end
-		EquipmentFlyoutFrameButtons:DisableDrawLayer("ARTWORK")
 		OpenStationeryBackgroundLeft:Hide()
 		OpenStationeryBackgroundRight:Hide()
 		for i = 4, 7 do
