@@ -93,22 +93,22 @@ local function updateBarColour(self, r, g, b)
 	return newr, newg, newb
 end
 
-local ThreatUpdate = function(self, elapsed)
+local HealthUpdate = function(self, elapsed)
 	self.lastUpdate = self.lastUpdate + elapsed
 
 	if self.lastUpdate > freqHealth then
-		if self.oldglow:IsShown() then
-			local _, green = self.oldglow:GetVertexColor()
-			if(green > .7) then
-				self:SetStatusBarColor(1, 1, .3) -- medium threat
-			elseif(green > .1) then
-				self:SetStatusBarColor(1, .5, 0) -- losing aggro
+		local r, g, b = self:GetStatusBarColor()
+		if not (Round(r) == 0.53 and Round(g) == 0.53 and Round(b) == 0.53) then -- only set colour if unit is not tagged
+			if self.oldglow:IsShown() then
+				local _, green = self.oldglow:GetVertexColor()
+				if(green > .7) then
+					self:SetStatusBarColor(1, 1, .3) -- medium threat
+				elseif(green > .1) then
+					self:SetStatusBarColor(1, .5, 0) -- losing aggro
+				else
+					self:SetStatusBarColor(.3, 1, .3) -- tanking
+				end
 			else
-				self:SetStatusBarColor(.3, 1, .3) -- tanking
-			end
-		else
-			local r, g, b = self:GetStatusBarColor()
-			if not (Round(r) == 0.53 and Round(g) == 0.53 and Round(b) == 0.53) then -- only set colour if unit is not tagged
 				self:SetStatusBarColor(self.r, self.g, self.b)
 			end
 		end
@@ -298,7 +298,7 @@ local StyleFrame = function(frame)
 	frame:SetScript("OnShow", UpdateFrame)
 	frame:SetScript("OnHide", OnHide)
 
-	healthBar:SetScript("OnUpdate", ThreatUpdate)
+	healthBar:SetScript("OnUpdate", HealthUpdate)
 	healthBar:Hide()
 	healthBar:Show()
 
