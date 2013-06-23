@@ -67,7 +67,7 @@ ns.localization.automationquestRewardHighlightTooltip = "Highlights the quest re
 ns.localization.automationautoSetRole = "Skip unnecessary role poll popups"
 ns.localization.automationautoSetRoleTooltip = "Skip the role poll popup if your role is already set or you are playing a pure dps class."
 ns.localization.automationautoSetRole_useSpec = "Set role based on current specialization"
-ns.localization.automationautoSetRole_useSpecTooltip = "Always attempts to set your role automatically based on your spec, never showing the popup."
+ns.localization.automationautoSetRole_useSpecTooltip = "Always attempt to set your role automatically based on your spec, never showing the popup."
 ns.localization.automationautoSetRole_verbose = "Verbose mode"
 ns.localization.automationautoSetRole_verboseTooltip = "Enable to be informed of what happens when the popup is skipped."
 
