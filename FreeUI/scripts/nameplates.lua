@@ -10,6 +10,7 @@ caelNamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self,
 local select = select
 
 local freq = C.performance.nameplates
+local freqHealth = C.performance.nameplatesHealth
 
 local CreateBD = function(parent, offset)
 	local left = parent:CreateTexture(nil, "BACKGROUND")
@@ -59,26 +60,6 @@ local function Round(x)
 	return floor(x * (10 ^ 2) + .5) / 10 ^ 2
 end
 
-local ThreatUpdate = function(self, elapsed)
-	if self.oldglow:IsShown() then
-		local _, green = self.oldglow:GetVertexColor()
-		if(green > .7) then
-			self:SetStatusBarColor(1, 1, .3) -- medium threat
-		elseif(green > .1) then
-			self:SetStatusBarColor(1, .5, 0) -- losing aggro
-		else
-			self:SetStatusBarColor(.3, 1, .3) -- tanking
-		end
-	else
-		local r, g, b = self:GetStatusBarColor()
-		if Round(r) == 0.53 and Round(g) == 0.53 and Round(b) == 1.00 then
-			self:SetStatusBarColor(.6, .6, .6)
-		else
-			self:SetStatusBarColor(self.r, self.g, self.b)
-		end
-	end
-end
-
 local oldClassColours = RAID_CLASS_COLORS
 local newClassColours = C.classcolours
 
@@ -90,7 +71,50 @@ local function updateClassColour(r, g, b)
 			return newClassColours[class].r, newClassColours[class].g, newClassColours[class].b
 		end
 	end
+
 	return r, g, b
+end
+
+local function updateBarColour(self, r, g, b)
+	local newr, newg, newb
+
+	if g + b == 0 then
+		newr, newg, newb = 255/255, 30/255, 60/255
+	elseif r + b == 0 then
+		newr, newg, newb = 0.33, 0.59, 0.33
+	elseif r + g == 0 then
+		newr, newg, newb = 0.31, 0.45, 0.63
+	elseif 2 - (r + g) < 0.05 and b == 0 then
+		newr, newg, newb = 1, 1, .3
+	else
+		newr, newg, newb = updateClassColour(r, g, b)
+	end
+
+	return newr, newg, newb
+end
+
+local ThreatUpdate = function(self, elapsed)
+	self.lastUpdate = self.lastUpdate + elapsed
+
+	if self.lastUpdate > freqHealth then
+		if self.oldglow:IsShown() then
+			local _, green = self.oldglow:GetVertexColor()
+			if(green > .7) then
+				self:SetStatusBarColor(1, 1, .3) -- medium threat
+			elseif(green > .1) then
+				self:SetStatusBarColor(1, .5, 0) -- losing aggro
+			else
+				self:SetStatusBarColor(.3, 1, .3) -- tanking
+			end
+		else
+			local r, g, b = self:GetStatusBarColor()
+			if not (Round(r) == 0.53 and Round(g) == 0.53 and Round(b) == 0.53) then -- only set colour if unit is not tagged
+				self:SetStatusBarColor(self.r, self.g, self.b)
+			end
+		end
+
+		self.lastUpdate = 0
+	end
 end
 
 local UpdateFrame = function(self)
@@ -117,31 +141,9 @@ local UpdateFrame = function(self)
 	bottom:SetPoint("BOTTOMLEFT", -offset, -offset)
 	bottom:SetPoint("BOTTOMRIGHT", offset, -offset)
 
-	local r, g, b = self.healthBar:GetStatusBarColor()
-	local newr, newg, newb
-	if g + b == 0 then
-		newr, newg, newb = 255/255, 30/255, 60/255
-		self.healthBar:SetStatusBarColor(255/255, 30/255, 60/255)
-	elseif r + b == 0 then
-		newr, newg, newb = 0.33, 0.59, 0.33
-		self.healthBar:SetStatusBarColor(0.33, 0.59, 0.33)
-	elseif r + g == 0 then
-		newr, newg, newb = 0.31, 0.45, 0.63
-		self.healthBar:SetStatusBarColor(0.31, 0.45, 0.63)
-	elseif 2 - (r + g) < 0.05 and b == 0 then
-		newr, newg, newb = 1, 1, .3
-		self.healthBar:SetStatusBarColor(1, 1, .3)
-	else
-		local cR, cG, cB = updateClassColour(r, g, b)
-		if cR then
-			newr, newg, newb = cR, cG, cB
-			self.healthBar:SetStatusBarColor(newr, newg, newb)
-		else
-			newr, newg, newb = r, g, b
-		end
-	end
-
-	self.healthBar.r, self.healthBar.g, self.healthBar.b = newr, newg, newb
+	self.healthBar.r, self.healthBar.g, self.healthBar.b = updateBarColour(self.healthBar, self.healthBar:GetStatusBarColor())
+	self.healthBar:SetStatusBarColor(self.healthBar.r, self.healthBar.g, self.healthBar.b)
+	self.healthBar.lastUpdate = 0
 
 	self.healthBar:ClearAllPoints()
 	self.healthBar:SetPoint("CENTER", self.healthBar:GetParent())
@@ -250,6 +252,7 @@ local StyleFrame = function(frame)
 	castTextRegion:ClearAllPoints()
 	castTextRegion:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
+	FixCastbar(castBar)
 	castBar:HookScript("OnShow", OnShow)
 	castBar:HookScript("OnSizeChanged", OnSizeChanged)
 	castBar:HookScript("OnValueChanged", OnValueChanged)

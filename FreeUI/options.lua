@@ -133,6 +133,7 @@ C["classmod"] = {
 C["performance"] = {
 	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
 	["nameplates"] = .1, 	-- update interval for nameplates in seconds (always)
+	["nameplatesHealth"] = .2, 	-- update interval for nameplate health bar colour (only with name plates shown)
 	["tolbarad"] = 10, 	-- update interval for TB timer in seconds (always)
 }
 
