@@ -252,7 +252,6 @@ local StyleFrame = function(frame)
 	castTextRegion:ClearAllPoints()
 	castTextRegion:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
-	FixCastbar(castBar)
 	castBar:HookScript("OnShow", OnShow)
 	castBar:HookScript("OnSizeChanged", OnSizeChanged)
 	castBar:HookScript("OnValueChanged", OnValueChanged)
@@ -302,6 +301,8 @@ local StyleFrame = function(frame)
 	healthBar:SetScript("OnUpdate", ThreatUpdate)
 	healthBar:Hide()
 	healthBar:Show()
+
+	FixCastbar(castBar)
 end
 
 local numKids = 0
