@@ -265,19 +265,6 @@ C["selfbuffs"] = {
 			},
 		},
 	},
-	WARRIOR = {
-		{
-			{
-				6673, -- Battle Shout
-				19506, -- Trueshot Aura
-				57330, -- Horn of Winter
-			},
-			{
-				469, -- Commanding Shout
-				21562, -- Power Word: Fortitude
-			},
-		},
-	}
 }
 
 -- buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
