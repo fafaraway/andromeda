@@ -301,8 +301,6 @@ local StyleFrame = function(frame)
 	healthBar:SetScript("OnUpdate", HealthUpdate)
 	healthBar:Hide()
 	healthBar:Show()
-
-	FixCastbar(castBar)
 end
 
 local numKids = 0
