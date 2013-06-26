@@ -183,10 +183,6 @@ if C.automation.questRewardHighlight then
 	end
 
 	highlightFunc = function()
-		for i = 1, MAX_NUM_ITEMS do
-			_G["QuestInfoItem"..i]:SetBackdropColor(0, 0, 0, .25)
-		end
-
 		local numChoices = GetNumQuestChoices()
 		if numChoices < 2 then return end
 
@@ -210,8 +206,10 @@ if C.automation.questRewardHighlight then
 		if maxPriceIndex > 0 then
 			local infoItem = _G["QuestInfoItem"..maxPriceIndex]
 
+			QuestInfoItemHighlight:ClearAllPoints()
 			QuestInfoItemHighlight:SetPoint("TOP", infoItem)
 			QuestInfoItemHighlight:Show()
+
 			infoItem:SetBackdropColor(0.89, 0.88, 0.06, .2)
 		end
 
