@@ -494,24 +494,27 @@ local Shared = function(self, unit, isSingle)
 		ohpb:SetTexture(C.media.texture)
 		ohpb:SetVertexColor(.5, 0, 1)
 
-		local absorbBar = self:CreateTexture()
-		absorbBar:SetTexture(C.media.texture)
-		absorbBar:SetVertexColor(.8, .34, .8)
-
-		local overAbsorbGlow = self:CreateTexture(nil, "OVERLAY")
-		overAbsorbGlow:SetWidth(16)
-		overAbsorbGlow:SetBlendMode("ADD")
-		overAbsorbGlow:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -7, 0)
-		overAbsorbGlow:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -7, 0)
-
 		self.HealPrediction = {
 			-- status bar to show my incoming heals
 			myBar = mhpb,
 			otherBar = ohpb,
-			absorbBar = absorbBar,
-			overAbsorbGlow = overAbsorbGlow,
 			maxOverflow = 1,
 		}
+
+		if C.unitframes.absorb then
+			local absorbBar = self:CreateTexture()
+			absorbBar:SetTexture(C.media.texture)
+			absorbBar:SetVertexColor(.8, .34, .8)
+
+			local overAbsorbGlow = self:CreateTexture(nil, "OVERLAY")
+			overAbsorbGlow:SetWidth(16)
+			overAbsorbGlow:SetBlendMode("ADD")
+			overAbsorbGlow:SetPoint("TOPLEFT", self.Health, "TOPRIGHT", -7, 0)
+			overAbsorbGlow:SetPoint("BOTTOMLEFT", self.Health, "BOTTOMRIGHT", -7, 0)
+
+			self.HealPrediction["absorbBar"] = absorbBar
+			self.HealPrediction["overAbsorbGlow"] = overAbsorbGlow
+		end
 	end
 
 	-- [[ Raid target icons ]]

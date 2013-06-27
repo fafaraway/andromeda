@@ -28,7 +28,7 @@ local function Update(self, event, unit)
 
 	local myIncomingHeal = UnitGetIncomingHeals(unit, 'player') or 0
 	local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
-	local totalAbsorb = UnitGetTotalAbsorbs(unit) or 0
+	local totalAbsorb
 
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
 
@@ -43,24 +43,28 @@ local function Update(self, event, unit)
 		allIncomingHeal = allIncomingHeal - myIncomingHeal
 	end
 
-	local overAbsorb = false
-	if health + myIncomingHeal + allIncomingHeal + totalAbsorb >= maxHealth then
-		if totalAbsorb > 0 then
-			overAbsorb = true
+	if hp.absorbBar then
+		totalAbsorb = UnitGetTotalAbsorbs(unit) or 0
+
+		local overAbsorb = false
+		if health + myIncomingHeal + allIncomingHeal + totalAbsorb >= maxHealth then
+			if totalAbsorb > 0 then
+				overAbsorb = true
+			end
+			totalAbsorb = max(0, maxHealth - (health + myIncomingHeal + allIncomingHeal))
 		end
-		totalAbsorb = max(0, maxHealth - (health + myIncomingHeal + allIncomingHeal))
-	end
-	if overAbsorb then
-		hp.overAbsorbGlow:Show()
-	else
-		hp.overAbsorbGlow:Hide()
+		if overAbsorb then
+			hp.overAbsorbGlow:Show()
+		else
+			hp.overAbsorbGlow:Hide()
+		end
 	end
 
 	local previousTexture = self.Health:GetStatusBarTexture()
 
 	previousTexture = UpdateFillBar(self, previousTexture, hp.myBar, myIncomingHeal)
 	previousTexture = UpdateFillBar(self, previousTexture, hp.otherBar, allIncomingHeal)
-	previousTexture = UpdateFillBar(self, previousTexture, hp.absorbBar, totalAbsorb)
+	if hp.absorbBar then UpdateFillBar(self, previousTexture, hp.absorbBar, totalAbsorb) end
 
 	if(hp.PostUpdate) then
 		return hp:PostUpdate(unit)
@@ -82,7 +86,7 @@ local function Enable(self)
 		hp.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
-		self:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED", Path)
+		if hp.absorbBar then self:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED", Path) end
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_HEALTH', Path)
 

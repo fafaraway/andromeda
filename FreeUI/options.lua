@@ -75,6 +75,7 @@ C["unitframes"] = {
 		["partyNameAlways"] = false,				-- show name on party/raid frames in dps/tank layout
 	["enableArena"] = true,					-- enable arena/flag carrier frames
 
+	["absorb"] = true, 							-- absorb bar/over absorb glow
 	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
 	["castbarSeparate"] = true, 				-- true for a separate player cast bar
 		["castbarSeparateOnlyCasters"] = true, 		-- separate bar only for mages/warlocks/priests

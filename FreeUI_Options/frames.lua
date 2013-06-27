@@ -417,8 +417,11 @@ partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
 
 enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
 
+local absorb = ns.CreateCheckBox(unitframes, "absorb", true, true)
+absorb:SetPoint("LEFT", enableGroup, "RIGHT", 240, 0)
+
 local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true, true)
-targettarget:SetPoint("LEFT", enableGroup, "RIGHT", 240, 0)
+targettarget:SetPoint("TOPLEFT", absorb, "BOTTOMLEFT", 0, -8)
 
 local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
 pvp:SetPoint("TOPLEFT", targettarget, "BOTTOMLEFT", 0, -8)
@@ -430,6 +433,9 @@ local castbarSeparateOnlyCasters = ns.CreateCheckBox(unitframes, "castbarSeparat
 castbarSeparateOnlyCasters:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 16, -8)
 
 castbarSeparate.children = {castbarSeparateOnlyCasters}
+
+local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
+enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
 
 local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
 enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
