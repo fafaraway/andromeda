@@ -195,13 +195,8 @@ local ColorCastBar = function(self, shielded)
 end
 
 local OnSizeChanged = function(self)
-	self.needFix = true
-end
-
-local OnValueChanged = function(self, curValue)
-	if self.needFix then
+	if self:GetHeight() > 10 then
 		FixCastbar(self)
-		self.needFix = nil
 	end
 end
 
@@ -254,7 +249,6 @@ local StyleFrame = function(frame)
 
 	castBar:HookScript("OnShow", OnShow)
 	castBar:HookScript("OnSizeChanged", OnSizeChanged)
-	castBar:HookScript("OnValueChanged", OnValueChanged)
 	castBar:HookScript("OnEvent", OnEvent)
 	castBar:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
 	castBar:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
