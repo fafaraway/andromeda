@@ -48,14 +48,6 @@ local CreateBD = function(parent, offset)
 	parent.bottomTex = bottom
 end
 
-local CreateBG = function(parent, offset)
-	local bg = parent:CreateTexture(nil, "BACKGROUND")
-	bg:SetTexture(0, 0, 0)
-	bg:SetPoint("TOPLEFT", -offset, offset)
-	bg:SetPoint("BOTTOMRIGHT", offset, -offset)
-	return bg
-end
-
 local function Round(x)
 	return floor(x * (10 ^ 2) + .5) / 10 ^ 2
 end
@@ -171,8 +163,6 @@ local UpdateFrame = function(self)
 end
 
 local FixCastbar = function(self)
-	self.castbarOverlay:Hide()
-
 	self:ClearAllPoints()
 	self:SetPoint("TOP", self.healthBar, "BOTTOM", 0, -2)
 	self:SetSize(80, 5)
@@ -202,7 +192,7 @@ end
 
 local OnShow = function(self)
 	FixCastbar(self)
-	ColorCastBar(self, self.shieldedRegion:IsShown())
+	ColorCastBar(self, self.castShield:IsShown())
 end
 
 local OnEvent = function(self, event, unit)
@@ -221,14 +211,14 @@ local StyleFrame = function(frame)
 	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
 	local healthBar, castBar = frame.healthBar, frame.castBar
 	local glowRegion, overlayRegion, highlightRegion, levelTextRegion, bossIconRegion, raidIconRegion, stateIconRegion = frame.barFrame:GetRegions()
-	local _, castbarOverlay, shieldedRegion, spellIconRegion, castTextRegion, castShadowRegion = castBar:GetRegions()
+	local _, castOverlay, castShield, castIcon, castText, castShadow = castBar:GetRegions()
 	local nameTextRegion = frame.nameFrame:GetRegions()
 
 	frame.oldname = nameTextRegion
 	nameTextRegion:Hide()
 
 	local newNameRegion = F.CreateFS(frame, 8 * UIParent:GetScale(), "CENTER")
-	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 0, 2)
+	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 1, 2)
 	newNameRegion:SetWidth(80)
 	newNameRegion:SetHeight(7)
 	frame.name = newNameRegion
@@ -237,15 +227,15 @@ local StyleFrame = function(frame)
 
 	healthBar:SetStatusBarTexture(C.media.texture)
 
-	castBar.castbarOverlay = castbarOverlay
+	castBar.castOverlay = castOverlay
 	castBar.healthBar = healthBar
-	castBar.shieldedRegion = shieldedRegion
+	castBar.castShield = castShield
 	castBar:SetStatusBarTexture(C.media.texture)
 
-	castShadowRegion:SetTexture("")
-	castTextRegion:SetFont(C.media.font, 8 * UIParent:GetScale(), "OUTLINEMONOCHROME")
-	castTextRegion:ClearAllPoints()
-	castTextRegion:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
+	castShadow:SetTexture("")
+	castText:SetFont(C.media.font, 8 * UIParent:GetScale(), "OUTLINEMONOCHROME")
+	castText:ClearAllPoints()
+	castText:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
 	castBar:HookScript("OnShow", OnShow)
 	castBar:HookScript("OnSizeChanged", OnSizeChanged)
@@ -267,8 +257,8 @@ local StyleFrame = function(frame)
 
 	glowRegion:SetTexture(nil)
 	overlayRegion:SetTexture(nil)
-	shieldedRegion:SetTexture(nil)
-	castbarOverlay:SetTexture(nil)
+	castShield:SetTexture(nil)
+	castOverlay:SetTexture(nil)
 	stateIconRegion:SetTexture(nil)
 	bossIconRegion:SetTexture(nil)
 
@@ -276,17 +266,16 @@ local StyleFrame = function(frame)
 	CreateBD(healthBar, offset)
 	CreateBD(castBar, offset)
 
-	local iconFrame = CreateFrame("Frame", nil, castBar)
-	iconFrame:SetPoint("TOPLEFT", healthBar, "TOPRIGHT", 2, 2)
-	iconFrame:SetHeight(16)
-	iconFrame:SetWidth(16)
-	iconFrame:SetFrameLevel(0)
+	castIcon:ClearAllPoints()
+	castIcon:SetPoint("TOPLEFT", healthBar, "TOPRIGHT", 2, 2)
+	castIcon:SetSize(16, 16)
+	castIcon:SetTexCoord(.08, .92, .08, .92)
 
-	castBar.iconbg = CreateBG(iconFrame, offset)
-
-	spellIconRegion:ClearAllPoints()
-	spellIconRegion:SetAllPoints(iconFrame)
-	spellIconRegion:SetTexCoord(.08, .92, .08, .92)
+	local bg = castBar:CreateTexture(nil, "BACKGROUND")
+	bg:SetTexture(0, 0, 0)
+	bg:SetPoint("TOPLEFT", castIcon, -offset, offset)
+	bg:SetPoint("BOTTOMRIGHT", castIcon, offset, -offset)
+	castBar.iconbg = bg
 
 	UpdateFrame(frame)
 	frame:SetScript("OnShow", UpdateFrame)
