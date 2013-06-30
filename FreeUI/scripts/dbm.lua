@@ -72,6 +72,9 @@ local function InitStyle()
 			DBMRangeCheckRadar.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 			DBMRangeCheckRadar.text:SetTextColor(1, 1, 1)
 			DBMRangeCheckRadar.text:SetShadowOffset(0, 0)
+			DBMRangeCheckRadar.inRangeText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			DBMRangeCheckRadar.inRangeText:SetTextColor(1, 1, 1)
+			DBMRangeCheckRadar.inRangeText:SetShadowOffset(0, 0)
 
 			firstRange = false
 		end
