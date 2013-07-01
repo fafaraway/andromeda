@@ -106,7 +106,7 @@ local function GetColor(unit)
 	elseif (not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) or UnitIsDead(unit) then
 		r, g, b = .6, .6, .6
 	else
-		r, g, b = unpack(C.reactioncolours[UnitReaction("player", unit) or 5])
+		r, g, b = unpack(C.reactioncolours[UnitReaction(unit, "player") or 5])
 	end
 
 	return Hex(r, g, b)
