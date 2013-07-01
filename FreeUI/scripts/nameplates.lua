@@ -162,20 +162,6 @@ local UpdateFrame = function(self)
 	end
 end
 
-local FixCastbar = function(self)
-	self:ClearAllPoints()
-	self:SetPoint("TOP", self.healthBar, "BOTTOM", 0, -2)
-	self:SetSize(80, 5)
-
-	while self:GetEffectiveScale() < 1 do
-		self:SetScale(self:GetScale() + 0.01)
-	end
-
-	while self:GetEffectiveScale() > 1 do
-		self:SetScale(self:GetScale() - 0.01)
-	end
-end
-
 local ColorCastBar = function(self, shielded)
 	if shielded then
 		self.iconbg:SetTexture(1, 0, 0)
@@ -184,14 +170,7 @@ local ColorCastBar = function(self, shielded)
 	end
 end
 
-local OnSizeChanged = function(self)
-	if self:GetHeight() > 10 then
-		FixCastbar(self)
-	end
-end
-
 local OnShow = function(self)
-	FixCastbar(self)
 	ColorCastBar(self, self.castShield:IsShown())
 end
 
@@ -199,6 +178,22 @@ local OnEvent = function(self, event, unit)
 	if unit == "target" then
 		if self:IsShown() then
 			ColorCastBar(self, event == "UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
+		end
+	end
+end
+
+local CastUpdate = function(self)
+	if floor(self:GetHeight() + 0.5) ~= 5 then
+		self:ClearAllPoints()
+		self:SetPoint("TOP", self.healthBar, "BOTTOM", 0, -2)
+		self:SetSize(80, 5)
+
+		while self:GetEffectiveScale() < 1 do
+			self:SetScale(self:GetScale() + 0.01)
+		end
+
+		while self:GetEffectiveScale() > 1 do
+			self:SetScale(self:GetScale() - 0.01)
 		end
 	end
 end
@@ -238,8 +233,8 @@ local StyleFrame = function(frame)
 	castText:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
 	castBar:HookScript("OnShow", OnShow)
-	castBar:HookScript("OnSizeChanged", OnSizeChanged)
 	castBar:HookScript("OnEvent", OnEvent)
+	castBar:HookScript("OnUpdate", CastUpdate)
 	castBar:RegisterEvent("UNIT_SPELLCAST_INTERRUPTIBLE")
 	castBar:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
 
