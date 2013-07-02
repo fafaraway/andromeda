@@ -16,7 +16,7 @@ ns.localization.resetOptionsTooltip = "Check to remove all saved options, and re
 ns.localization.resetCharBox = "Remove data for this character:"
 ns.localization.layoutText = "Use the button below to switch to the other unitframe layout.\nYou can also use the '/freeui dps' or '/freeui heal' command."
 ns.localization.author = "FreeUI by Haleth on wowinterface.com"
-ns.localization.authorSubText = "Freethinker @ Steamwheedle Cartel - EU"
+ns.localization.authorSubText = "Lightsword @ Argent Dawn - EU"
 
 ns.localization.general = "General"
 ns.localization.generalSubText = "These options control most of the common settings in the UI."
