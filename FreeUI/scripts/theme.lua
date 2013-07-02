@@ -4917,7 +4917,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local tcoords = CLASS_ICON_TCOORDS[class]
 			local ic = bu:GetNormalTexture()
-			ic:SetTexCoord(tcoords[1] + 0.015, tcoords[2] - 0.02, tcoords[3] + 0.018, tcoords[4] - 0.02)
+			ic:SetTexCoord(tcoords[1] + 0.018, tcoords[2] - 0.025, tcoords[3] + 0.018, tcoords[4] - 0.025)
 		end
 
 		local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
@@ -5919,20 +5919,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBG(bu.icon)
 		end
 
-		local tcoords = {
-			["WARRIOR"]     = {0.02, 0.23, 0.02, 0.23},
-			["MAGE"]        = {0.27, 0.47609375, 0.02, 0.23},
-			["ROGUE"]       = {0.51609375, 0.7221875, 0.02, 0.23},
-			["DRUID"]       = {0.7621875, 0.96828125, 0.02, 0.23},
-			["HUNTER"]      = {0.02, 0.23, 0.27, 0.48},
-			["SHAMAN"]      = {0.27, 0.47609375, 0.27, 0.48},
-			["PRIEST"]      = {0.51609375, 0.7221875, 0.27, 0.48},
-			["WARLOCK"]     = {0.7621875, 0.96828125, 0.27, 0.48},
-			["PALADIN"]     = {0.02, 0.23, 0.52, 0.73},
-			["DEATHKNIGHT"] = {0.27, .48, 0.52, .73},
-			["MONK"]		= {0.52, 0.71828125, 0.52, .73},
-		}
-
 		local UpdateIcons = function()
 			local index
 			local offset = HybridScrollFrame_GetOffset(GuildRosterContainer)
@@ -5956,7 +5942,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				index = offset + i
 				local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
 				if name and index <= visibleMembers and bu.icon:IsShown() then
-					bu.icon:SetTexCoord(unpack(tcoords[classFileName]))
+					local tcoords = CLASS_ICON_TCOORDS[classFileName]
+					bu.icon:SetTexCoord(tcoords[1] + 0.018, tcoords[2] - 0.025, tcoords[3] + 0.018, tcoords[4] - 0.025)
 					bu.bg:Show()
 				else
 					bu.bg:Hide()
