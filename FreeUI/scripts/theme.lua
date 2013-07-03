@@ -4917,7 +4917,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			local tcoords = CLASS_ICON_TCOORDS[class]
 			local ic = bu:GetNormalTexture()
-			ic:SetTexCoord(tcoords[1] + 0.018, tcoords[2] - 0.025, tcoords[3] + 0.018, tcoords[4] - 0.025)
+			ic:SetTexCoord(tcoords[1] + 0.022, tcoords[2] - 0.025, tcoords[3] + 0.022, tcoords[4] - 0.025)
 		end
 
 		local bd = CreateFrame("Frame", nil, CalendarFilterFrame)
@@ -5943,7 +5943,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				local name, _, _, _, _, _, _, _, _, _, classFileName  = GetGuildRosterInfo(index)
 				if name and index <= visibleMembers and bu.icon:IsShown() then
 					local tcoords = CLASS_ICON_TCOORDS[classFileName]
-					bu.icon:SetTexCoord(tcoords[1] + 0.018, tcoords[2] - 0.025, tcoords[3] + 0.018, tcoords[4] - 0.025)
+					bu.icon:SetTexCoord(tcoords[1] + 0.022, tcoords[2] - 0.025, tcoords[3] + 0.022, tcoords[4] - 0.025)
 					bu.bg:Show()
 				else
 					bu.bg:Hide()
