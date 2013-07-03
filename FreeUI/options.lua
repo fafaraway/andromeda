@@ -120,7 +120,7 @@ C["unitframes"] = {
 C["tooltip"] = {
 	["anchorCursor"] = false,
 	["guildrank"] = true,
-	["title"] = true,
+	["title"] = false,
 }
 
 C["classmod"] = {
