@@ -199,7 +199,7 @@ ns.addCategory = function(name)
 
 	local panel = CreateFrame("Frame", "FreeUIOptionsPanel"..name, FreeUIOptionsPanel)
 	panel:SetSize(623, 568)
-	panel:SetPoint("RIGHT", -16, 0)
+	panel:SetPoint("RIGHT", -42, 0)
 	panel:Hide()
 
 	panel.Title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -217,8 +217,14 @@ ns.addCategory = function(name)
 	tab:SetPoint("TOPLEFT", 16, -offset)
 	tab:SetSize(160, 44)
 
+	local icon = tab:CreateTexture(nil, "OVERLAY")
+	icon:SetSize(32, 32)
+	icon:SetPoint("LEFT", tab, "LEFT", 8, 0)
+	icon:SetTexCoord(.08, .92, .08, .92)
+	tab.Icon = icon
+
 	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	tab.Text:SetPoint("CENTER")
+	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	tab.Text:SetText(ns.localization[tag])
 
 	tab:SetScript("OnMouseUp", onTabClick)
@@ -233,7 +239,7 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	offset = offset + 54
+	offset = offset + 52
 end
 
 -- [[ Init ]]
@@ -381,6 +387,8 @@ init:SetScript("OnEvent", function()
 	for _, panel in pairs(panels) do
 		F.CreateBD(panel.tab, 0)
 		F.CreateGradient(panel.tab)
+		local bg = F.CreateBG(panel.tab.Icon)
+		bg:SetDrawLayer("ARTWORK")
 	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)

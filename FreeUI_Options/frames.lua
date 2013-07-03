@@ -3,7 +3,7 @@ local _, ns = ...
 -- [[ Main window ]]
 
 local options = CreateFrame("Frame", "FreeUIOptionsPanel", UIParent)
-options:SetSize(858, 660)
+options:SetSize(884, 680)
 options:SetPoint("CENTER")
 options:SetFrameStrata("HIGH")
 options:EnableMouse(true)
@@ -140,7 +140,7 @@ tinsert(ns.buttons, resetFrame.Cancel)
 
 local install = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 install:SetSize(128, 25)
-install:SetPoint("TOPLEFT", 16, -510)
+install:SetPoint("TOPLEFT", 16, -538)
 install:SetText(ns.localization.install)
 install:SetScript("OnClick", function()
 	if IsAddOnLoaded("FreeUI_Install") then
@@ -157,7 +157,7 @@ options.Install = install
 
 local reload = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 reload:SetSize(128, 25)
-reload:SetPoint("TOP", install, "BOTTOM", 0, -8)
+reload:SetPoint("TOP", install, "BOTTOM", 0, -4)
 reload:SetText(ns.localization.reload)
 reload:SetScript("OnClick", ReloadUI)
 tinsert(ns.buttons, reload)
@@ -166,7 +166,7 @@ options.Reload = reload
 
 local reset = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 reset:SetSize(128, 25)
-reset:SetPoint("TOP", reload, "BOTTOM", 0, -8)
+reset:SetPoint("TOP", reload, "BOTTOM", 0, -4)
 reset:SetText(RESET)
 reset:SetScript("OnClick", function()
 	resetFrame:Show()
@@ -176,7 +176,7 @@ tinsert(ns.buttons, reset)
 options.Reset = reset
 
 local line = options:CreateTexture()
-line:SetSize(1, 544)
+line:SetSize(1, 564)
 line:SetPoint("LEFT", 205, 0)
 line:SetTexture(1, 1, 1, .2)
 
@@ -202,12 +202,14 @@ ns.addCategory("ActionBars")
 ns.addCategory("Bags")
 ns.addCategory("Notifications")
 ns.addCategory("UnitFrames")
+ns.addCategory("Tooltip")
 ns.addCategory("ClassMod")
 ns.addCategory("Credits")
 
 -- [[ General ]]
 
 local general = FreeUIOptionsPanel.general
+general.tab.Icon:SetTexture("Interface\\Icons\\inv_gizmo_02")
 
 local buffReminder = ns.CreateCheckBox(general, "buffreminder", true, true)
 buffReminder:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
@@ -258,18 +260,13 @@ line:SetSize(450, 1)
 line:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 16, -36)
 line:SetTexture(1, 1, 1, .2)
 
-local tooltipCursor = ns.CreateCheckBox(general, "tooltip_cursor")
-tooltipCursor:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -66)
-
-local tooltipGuildRanks = ns.CreateCheckBox(general, "tooltip_guildranks")
-tooltipGuildRanks:SetPoint("TOPLEFT", tooltipCursor, "BOTTOMLEFT", 0, -8)
-
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
-uiScaleAuto:SetPoint("TOPLEFT", tooltipGuildRanks, "BOTTOMLEFT", 0, -8)
+uiScaleAuto:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -66)
 
 -- [[ Automation ]]
 
 local automation = FreeUIOptionsPanel.automation
+automation.tab.Icon:SetTexture("Interface\\Icons\\inv_pet_lilsmoky")
 
 local autoAccept = ns.CreateCheckBox(automation, "autoAccept")
 autoAccept:SetPoint("TOPLEFT", automation.subText, "BOTTOMLEFT", 0, -8)
@@ -308,6 +305,24 @@ autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
 -- [[ Action bars ]]
 
 local actionbars = FreeUIOptionsPanel.actionbars
+for i = 1, 4 do
+	local tex = actionbars.tab:CreateTexture(nil, "OVERLAY")
+	tex:SetSize(15, 15)
+	tex:SetTexCoord(.08, .92, .08, .92)
+	if i == 1 then
+		tex:SetTexture("Interface\\Icons\\Ability_Warrior_SavageBlow")
+		tex:SetPoint("TOPLEFT", actionbars.tab.Icon, "TOPLEFT")
+	elseif i == 2 then
+		tex:SetTexture("Interface\\Icons\\Ability_Warrior_ColossusSmash")
+		tex:SetPoint("TOPRIGHT", actionbars.tab.Icon, "TOPRIGHT")
+	elseif i == 3 then
+		tex:SetTexture("Interface\\Icons\\Ability_Warrior_Charge")
+		tex:SetPoint("BOTTOMLEFT", actionbars.tab.Icon, "BOTTOMLEFT")
+	else
+		tex:SetTexture("Interface\\Icons\\Ability_Warrior_Safeguard")
+		tex:SetPoint("BOTTOMRIGHT", actionbars.tab.Icon, "BOTTOMRIGHT")
+	end
+end
 
 local enable = ns.CreateCheckBox(actionbars, "enable", true, true)
 enable:SetPoint("TOPLEFT", actionbars.subText, "BOTTOMLEFT", 0, -8)
@@ -338,6 +353,7 @@ actionbars:HookScript("OnShow", toggleActionBarsOptions)
 -- [[ Bags ]]
 
 local bags = FreeUIOptionsPanel.bags
+bags.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_bag_08")
 
 local enable = ns.CreateCheckBox(bags, "enable", true, true)
 enable:SetPoint("TOPLEFT", bags.subText, "BOTTOMLEFT", 0, -8)
@@ -360,6 +376,7 @@ bags:HookScript("OnShow", toggleBagsOptions)
 -- [[ Notifications ]]
 
 local notifications = FreeUIOptionsPanel.notifications
+notifications.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_enggizmos_27")
 
 local enable = ns.CreateCheckBox(notifications, "enable", true, true)
 enable:SetPoint("TOPLEFT", notifications.subText, "BOTTOMLEFT", 0, -8)
@@ -398,6 +415,7 @@ notifications:HookScript("OnShow", toggleNotificationsOptions)
 -- [[ Unit frames ]]
 
 local unitframes = FreeUIOptionsPanel.unitframes
+unitframes.tab.Icon:SetTexture("Interface\\Icons\\Spell_Holy_PrayerofSpirit")
 
 local enable = ns.CreateCheckBox(unitframes, "enable", true, true)
 enable:SetPoint("TOPLEFT", unitframes.subText, "BOTTOMLEFT", 0, -8)
@@ -467,9 +485,26 @@ end
 enable:HookScript("OnClick", toggleUFOptions)
 unitframes:HookScript("OnShow", toggleUFOptions)
 
+-- [[ Tooltip ]]
+
+local tooltip = FreeUIOptionsPanel.tooltip
+tooltip.tab.Icon:SetTexture("Interface\\Icons\\INV_Enchant_FormulaEpic_01")
+
+local anchorCursor = ns.CreateCheckBox(tooltip, "anchorCursor")
+anchorCursor:SetPoint("TOPLEFT", tooltip.subText, "BOTTOMLEFT", 0, -8)
+
+local guildrank = ns.CreateCheckBox(tooltip, "guildrank")
+guildrank:SetPoint("TOPLEFT", anchorCursor, "BOTTOMLEFT", 0, -8)
+
+local title = ns.CreateCheckBox(tooltip, "title", true)
+title:SetPoint("TOPLEFT", guildrank, "BOTTOMLEFT", 0, -8)
+
 -- [[ Class specific ]]
 
 local classmod = FreeUIOptionsPanel.classmod
+classmod.tab.Icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
+local tcoords = CLASS_ICON_TCOORDS[select(2, UnitClass("player"))]
+classmod.tab.Icon:SetTexCoord(tcoords[1] + 0.022, tcoords[2] - 0.025, tcoords[3] + 0.022, tcoords[4] - 0.025)
 
 ns.classOptions = {}
 
@@ -510,6 +545,7 @@ tinsert(ns.classOptions, warlock)
 -- [[ Credits ]]
 
 local credits = FreeUIOptionsPanel.credits
+credits.tab.Icon:SetTexture("Interface\\Icons\\inv_valentinescard02")
 
 credits.Title:SetText("")
 

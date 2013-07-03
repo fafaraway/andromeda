@@ -5,7 +5,7 @@ local F, C, L = unpack(select(2, ...))
 PVP_ENABLED = ""
 
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
-	if C.general.tooltip_cursor == true then
+	if C.tooltip.anchorCursor then
 		self:SetOwner(parent, "ANCHOR_CURSOR")
 	else
 		self:SetOwner(parent, "ANCHOR_NONE")
@@ -145,7 +145,7 @@ local function OnTooltipSetUnit(self)
 		local guildName, guildRankName = GetGuildInfo(unit)
 
 		if guildName then
-			if C.general.tooltip_guildranks then
+			if C.tooltip.guildrank then
 				_G["GameTooltipTextLeft2"]:SetFormattedText("%s ("..color.."%s|r)", guildName, guildRankName)
 			else
 				_G["GameTooltipTextLeft2"]:SetText(guildName)

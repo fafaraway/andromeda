@@ -22,8 +22,6 @@ C["general"] = {
 	["nameplates"] = true, 			-- enable nameplates
 	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
 	["tolbarad"] = false,			-- Tol barad timer on the minimap
-	["tooltip_cursor"] = false,		-- anchor the tooltip to the cursor
-	["tooltip_guildranks"] = true, 	-- show guild ranks in tooltips
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
 }
@@ -117,6 +115,12 @@ C["unitframes"] = {
 	["num_arena_buffs"] = 8,
 	["num_focus_debuffs"] = 4,
 
+}
+
+C["tooltip"] = {
+	["anchorCursor"] = false,
+	["guildrank"] = true,
+	["title"] = true,
 }
 
 C["classmod"] = {
