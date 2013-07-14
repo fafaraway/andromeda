@@ -219,11 +219,12 @@ ns.addCategory = function(name)
 
 	local icon = tab:CreateTexture(nil, "OVERLAY")
 	icon:SetSize(32, 32)
-	icon:SetPoint("LEFT", tab, "LEFT", 8, 1)
-	icon:SetTexture("Interface\\AddOns\\FreeUI_Options\\media\\"..tag)
+	icon:SetPoint("LEFT", tab, "LEFT", 8, 0)
+	icon:SetTexCoord(.08, .92, .08, .92)
+	tab.Icon = icon
 
 	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, -1)
+	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	tab.Text:SetText(ns.localization[tag])
 
 	tab:SetScript("OnMouseUp", onTabClick)
@@ -386,6 +387,8 @@ init:SetScript("OnEvent", function()
 	for _, panel in pairs(panels) do
 		F.CreateBD(panel.tab, 0)
 		F.CreateGradient(panel.tab)
+		local bg = F.CreateBG(panel.tab.Icon)
+		bg:SetDrawLayer("ARTWORK")
 	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)
