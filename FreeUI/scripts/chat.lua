@@ -87,7 +87,7 @@ local function AddMessage(frame, text, red, green, blue, lineID, addToTop, acces
 		text = text:gsub("%[(%d+)%..-%]", "%1")
 		text = text:gsub("(|Hplayer.*|h) whispers", "From %1")
 		text = text:gsub("To (|Hplayer.*|h)", "To %1")
-		text = text:gsub("(|Hplayer.*|h) says", "%1")
+		text = text:gsub("(|Hplayer.*|h) says:", "%1:")
 		text = text:gsub("(|Hplayer.*|h) yells", "%1")
 		text = text:gsub("(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
 		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
