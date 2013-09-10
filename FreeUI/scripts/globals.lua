@@ -118,7 +118,13 @@ EMPTY_SOCKET_NO_COLOR = "prismatic"
 --[[ Loot mods ]]
 
 LOOT_ITEM = "%s + %s"
+LOOT_ITEM_BONUS_ROLL = "%s + %s (bonus)"
+LOOT_ITEM_BONUS_ROLL_MULTIPLE = "%s + %sx%d (bonus)"
+LOOT_ITEM_BONUS_ROLL_SELF = "+ %s (bonus)"
+LOOT_ITEM_BONUS_ROLL_SELF_MULTIPLE = "+ %sx%d (bonus)"
 LOOT_ITEM_MULTIPLE = "%s + % sx%d"
+LOOT_ITEM_PUSHED = "%s + %s"
+LOOT_ITEM_PUSHED_MULTIPLE = "%s + %sx%d"
 LOOT_ITEM_SELF = "+ %s"
 LOOT_ITEM_SELF_MULTIPLE = "+ %s x%d"
 LOOT_ITEM_PUSHED_SELF = "+ %s"

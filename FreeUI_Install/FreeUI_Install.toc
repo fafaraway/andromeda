@@ -1,8 +1,8 @@
-## Interface: 50300
+## Interface: 50400
 ## Title: FreeUI Install
 ## Notes: FreeUI setup addon.
 ## Author: Haleth/Freethinker
-## Version: 6.6
+## Version: 6.7
 ## RequiredDeps: FreeUI
 
 install.lua

@@ -86,7 +86,10 @@ local function Enable(self)
 		hp.ForceUpdate = ForceUpdate
 
 		self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
-		if hp.absorbBar then self:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED", Path) end
+		if hp.absorbBar then
+			self:RegisterEvent("UNIT_ABSORB_AMOUNT_CHANGED", Path)
+			self:RegisterEvent('UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		end
 		self:RegisterEvent('UNIT_MAXHEALTH', Path)
 		self:RegisterEvent('UNIT_HEALTH', Path)
 
@@ -103,6 +106,7 @@ local function Disable(self)
 	if(hp) then
 		self:UnregisterEvent('UNIT_HEAL_PREDICTION', Path)
 		self:UnregisterEvent("UNIT_ABSORB_AMOUNT_CHANGED", Path)
+		self:UnregisterEvent('UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
 		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
 		self:UnregisterEvent('UNIT_HEALTH', Path)
 	end

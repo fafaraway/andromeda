@@ -200,35 +200,38 @@ rd:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 5, -5)
 rd:RegisterEvent("PLAYER_ENTERING_WORLD")
 rd:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
 rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
+rd:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED")
 
 local rdt = F.CreateFS(rd, 8, "LEFT")
 rdt:SetPoint("TOPLEFT")
 
 rd:SetScript("OnEvent", function()
-	local _, _, difficulty, _, maxPlayers = GetInstanceInfo()
+	local _, _, difficultyID, _, maxPlayers, _, _, _, instanceGroupSize = GetInstanceInfo()
 
-	if difficulty == 0 then
+	if difficultyID == 0 then
 		rdt:SetText("")
 	elseif maxPlayers == 3 then
 		rdt:SetText("3")
-	elseif difficulty == 1 then
+	elseif difficultyID == 1 then
 		rdt:SetText("5")
-	elseif difficulty == 2 then
+	elseif difficultyID == 2 then
 		rdt:SetText("5H")
-	elseif difficulty == 3 then
+	elseif difficultyID == 3 then
 		rdt:SetText("10")
-	elseif difficulty == 4 then
+	elseif difficultyID == 4 then
 		rdt:SetText("25")
-	elseif difficulty == 5 then
+	elseif difficultyID == 5 then
 		rdt:SetText("10H")
-	elseif difficulty == 6 then
+	elseif difficultyID == 6 then
 		rdt:SetText("25H")
-	elseif difficulty == 7 then
+	elseif difficultyID == 7 then
 		rdt:SetText("LFR")
-	elseif difficulty == 8 then
+	elseif difficultyID == 8 then
 		rdt:SetText("5CM")
-	elseif difficulty == 9 then
+	elseif difficultyID == 9 then
 		rdt:SetText("40")
+	elseif difficultyID == 14 then
+		rdt:SetText(instanceGroupSize.."F")
 	end
 
 	if GuildInstanceDifficulty:IsShown() then

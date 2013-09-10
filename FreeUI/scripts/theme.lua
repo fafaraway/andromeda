@@ -130,7 +130,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Radio buttons ]]
 
-		local radiobuttons = {"ReportPlayerNameDialogPlayerNameCheckButton", "ReportPlayerNameDialogGuildNameCheckButton", "ReportPlayerNameDialogArenaTeamNameCheckButton", "SendMailSendMoneyButton", "SendMailCODButton"}
+		local radiobuttons = {"ReportPlayerNameDialogPlayerNameCheckButton", "ReportPlayerNameDialogGuildNameCheckButton", "SendMailSendMoneyButton", "SendMailCODButton"}
 		for i = 1, #radiobuttons do
 			local radiobutton = _G[radiobuttons[i]]
 			if radiobutton then
@@ -603,10 +603,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
 
 		GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
-		GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
-		GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
+		GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
+		GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 
-		for i = 1, 3 do
+		for i = 1, 4 do
 			local bu = GroupFinderFrame["groupButton"..i]
 
 			bu.ring:Hide()
@@ -625,7 +625,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)
 			local self = GroupFinderFrame
-			for i = 1, 3 do
+			for i = 1, 4 do
 				local button = self["groupButton"..i]
 				if i == index then
 					button.bg:Show()
@@ -1091,6 +1091,20 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
+
+		-- Flexible raid
+
+		FlexRaidFrameBottomInset.Bg:Hide()
+		FlexRaidFrameBottomInset:DisableDrawLayer("BORDER")
+
+		FlexRaidFrameScrollFrameScrollBackground:Hide()
+		FlexRaidFrameScrollFrameBackground:Hide()
+		FlexRaidFrameScrollFrameBackgroundCover:Hide()
+		FlexRaidFrameScrollFrameScrollBackgroundTopLeft:Hide()
+		FlexRaidFrameScrollFrameScrollBackgroundBottomRight:Hide()
+
+		F.Reskin(FlexRaidFrame.StartButton)
+		F.ReskinDropDown(FlexRaidFrameSelectionDropDown)
 
 		-- Scenario finder
 
@@ -2284,7 +2298,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		-- Achievement popup
+		-- Achievement alert
 
 		local function fixBg(f)
 			if f:GetObjectType() == "AnimationGroup" then
@@ -2593,6 +2607,22 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		-- Digsite completion alert
+
+		do
+			local frame = DigsiteCompleteToastFrame
+			local icon = frame.DigsiteTypeTexture
+
+			F.CreateBD(DigsiteCompleteToastFrame)
+
+			frame:GetRegions():Hide()
+
+			frame.glow:Hide()
+			frame.glow.Show = F.dummy
+			frame.shine:Hide()
+			frame.shine.Show = F.dummy
+		end
+
 		-- Help frame
 
 		for i = 1, 15 do
@@ -2699,7 +2729,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			Graphics_Quality.SetBackdrop = F.dummy
 
-			local checkboxes = {"Advanced_UseUIScale", "Advanced_MaxFPSCheckBox", "Advanced_MaxFPSBKCheckBox", "Advanced_DesktopGamma", "NetworkOptionsPanelOptimizeSpeed", "NetworkOptionsPanelUseIPv6", "AudioOptionsSoundPanelEnableSound", "AudioOptionsSoundPanelSoundEffects", "AudioOptionsSoundPanelErrorSpeech", "AudioOptionsSoundPanelEmoteSounds", "AudioOptionsSoundPanelPetSounds", "AudioOptionsSoundPanelMusic", "AudioOptionsSoundPanelLoopMusic", "AudioOptionsSoundPanelPetBattleMusic", "AudioOptionsSoundPanelAmbientSounds", "AudioOptionsSoundPanelSoundInBG", "AudioOptionsSoundPanelReverb", "AudioOptionsSoundPanelHRTF", "AudioOptionsSoundPanelEnableDSPs", "AudioOptionsSoundPanelUseHardware", "AudioOptionsVoicePanelEnableVoice", "AudioOptionsVoicePanelEnableMicrophone", "AudioOptionsVoicePanelPushToTalkSound"}
+			local checkboxes = {"Advanced_UseUIScale", "Advanced_MaxFPSCheckBox", "Advanced_MaxFPSBKCheckBox", "Advanced_DesktopGamma", "NetworkOptionsPanelOptimizeSpeed", "NetworkOptionsPanelUseIPv6", "AudioOptionsSoundPanelEnableSound", "AudioOptionsSoundPanelSoundEffects", "AudioOptionsSoundPanelErrorSpeech", "AudioOptionsSoundPanelEmoteSounds", "AudioOptionsSoundPanelPetSounds", "AudioOptionsSoundPanelMusic", "AudioOptionsSoundPanelLoopMusic", "AudioOptionsSoundPanelPetBattleMusic", "AudioOptionsSoundPanelAmbientSounds", "AudioOptionsSoundPanelSoundInBG", "AudioOptionsSoundPanelReverb", "AudioOptionsSoundPanelHRTF", "AudioOptionsSoundPanelEnableDSPs", "AudioOptionsVoicePanelEnableVoice", "AudioOptionsVoicePanelEnableMicrophone", "AudioOptionsVoicePanelPushToTalkSound"}
 			for i = 1, #checkboxes do
 				F.ReskinCheck(_G[checkboxes[i]])
 			end
@@ -3428,32 +3458,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
 		F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
 
-		-- PVP Banner Frame
-
-		for i = 1, 3 do
-			for j = 1, 2 do
-				select(i, _G["PVPBannerFrameCustomization"..j]:GetRegions()):Hide()
-			end
-		end
-
-		for i = 18, 28 do
-			select(i, PVPBannerFrame:GetRegions()):SetTexture("")
-		end
-
-		PVPBannerFrameCustomizationBorder:Hide()
-
-		F.ReskinPortraitFrame(PVPBannerFrame, true)
-		F.Reskin(select(6, PVPBannerFrame:GetChildren()))
-		F.Reskin(PVPBannerFrameAcceptButton)
-		F.Reskin(PVPColorPickerButton1)
-		F.Reskin(PVPColorPickerButton2)
-		F.Reskin(PVPColorPickerButton3)
-		F.ReskinInput(PVPBannerFrameEditBox, 20)
-		F.ReskinArrow(PVPBannerFrameCustomization1LeftButton, "left")
-		F.ReskinArrow(PVPBannerFrameCustomization1RightButton, "right")
-		F.ReskinArrow(PVPBannerFrameCustomization2LeftButton, "left")
-		F.ReskinArrow(PVPBannerFrameCustomization2RightButton, "right")
-
 		-- PVP Ready Dialog
 
 		local PVPReadyDialog = PVPReadyDialog
@@ -4149,7 +4153,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				F.CreateBG(it)
 
 				_G["BrowseButton"..i.."Left"]:Hide()
-				select(6, _G["BrowseButton"..i]:GetRegions()):Hide()
+				select(5, _G["BrowseButton"..i]:GetRegions()):Hide()
 				_G["BrowseButton"..i.."Right"]:Hide()
 
 				local bd = CreateFrame("Frame", nil, bu)
@@ -4210,7 +4214,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.CreateBG(it)
 
 			_G["AuctionsButton"..i.."Left"]:Hide()
-			select(5, _G["AuctionsButton"..i]:GetRegions()):Hide()
+			select(4, _G["AuctionsButton"..i]:GetRegions()):Hide()
 			_G["AuctionsButton"..i.."Right"]:Hide()
 
 			local bd = CreateFrame("Frame", nil, bu)
@@ -4983,7 +4987,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		CalendarTexturePickerFrame:ClearAllPoints()
 		CalendarTexturePickerFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", 311, -24)
 
-		local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton", "CalendarMassInviteGuildAcceptButton", "CalendarMassInviteArenaButton2", "CalendarMassInviteArenaButton3", "CalendarMassInviteArenaButton5"}
+		local cbuttons = {"CalendarViewEventAcceptButton", "CalendarViewEventTentativeButton", "CalendarViewEventDeclineButton", "CalendarViewEventRemoveButton", "CalendarCreateEventMassInviteButton", "CalendarCreateEventCreateButton", "CalendarCreateEventInviteButton", "CalendarEventPickerCloseButton", "CalendarCreateEventRaidInviteButton", "CalendarTexturePickerAcceptButton", "CalendarTexturePickerCancelButton", "CalendarFilterButton", "CalendarMassInviteGuildAcceptButton"}
 		for i = 1, #cbuttons do
 			local cbutton = _G[cbuttons[i]]
 			F.Reskin(cbutton)
@@ -5984,9 +5988,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 	elseif addon == "Blizzard_InspectUI" then
 		InspectModelFrame:DisableDrawLayer("OVERLAY")
-		InspectPVPTeam1:DisableDrawLayer("BACKGROUND")
-		InspectPVPTeam2:DisableDrawLayer("BACKGROUND")
-		InspectPVPTeam3:DisableDrawLayer("BACKGROUND")
 
 		InspectTalentFrame:GetRegions():Hide()
 		select(2, InspectTalentFrame:GetRegions()):Hide()
@@ -5994,8 +5995,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		for i = 1, 5 do
 			select(i, InspectModelFrame:GetRegions()):Hide()
 		end
-		InspectPVPFrameBG:SetAlpha(0)
-		InspectPVPFrameBottom:SetAlpha(0)
 		select(9, InspectMainHandSlot:GetRegions()):Hide()
 
 		local slots = {
@@ -6751,8 +6750,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(24, PVPUIFrame:GetRegions()):Hide()
 		select(25, PVPUIFrame:GetRegions()):Hide()
 
-		PVPUIFrameTab2:SetPoint("LEFT", PVPUIFrameTab1, "RIGHT", -15, 0)
-
 		-- Category buttons
 
 		for i = 1, 3 do
@@ -6958,6 +6955,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ConquestFrame.RatedBGHeader:Hide()
 		ConquestFrame.ShadowOverlay:Hide()
 
+		F.CreateBD(ConquestTooltip)
+
+		ConquestTooltip:HookScript("OnShow", function(self)
+			self:SetScale(UIParent:GetScale())
+
+			local p1, anchor, p2 = self:GetPoint()
+			self:SetPoint(p1, anchor, p2, 1, 0)
+		end)
+
 		for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.Arena5v5, ConquestFrame.RatedBG}) do
 			F.Reskin(bu, true)
 
@@ -6968,9 +6974,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
 		ConquestFrame.Arena5v5:SetPoint("TOP", ConquestFrame.Arena3v3, "BOTTOM", 0, -1)
-
-		ConquestFrame.RatedBG.TeamNameText:SetText(UnitName("player"))
-		ConquestFrame.RatedBG.TeamNameText:SetTextColor(r, g, b)
 
 		ConquestFrame.ArenaReward.Amount:SetPoint("RIGHT", ConquestFrame.ArenaReward.Icon, "LEFT", -2, 0)
 		ConquestFrame.ArenaReward.Icon:SetTexCoord(.08, .92, .08, .92)
@@ -7083,170 +7086,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			hooksecurefunc(header, "SetNormalTexture", onSetNormalTexture)
 		end
 
-		-- Arena
-
-		local ArenaTeamFrame = ArenaTeamFrame
-		local TopInset = ArenaTeamFrame.TopInset
-		local WeeklyDisplay = ArenaTeamFrame.WeeklyDisplay
-		local BottomInset = ArenaTeamFrame.BottomInset
-
-		for i = 1, 9 do
-			select(i, TopInset:GetRegions()):Hide()
-			select(i, WeeklyDisplay:GetRegions()):Hide()
-			select(i, BottomInset:GetRegions()):Hide()
-		end
-
-		ArenaTeamFrame.TeamNameHeader:Hide()
-		ArenaTeamFrame.ArenaTexture:Hide()
-		ArenaTeamFrame.TopShadowOverlay:Hide()
-
-		for i = 1, 3 do
-			local bu = PVPArenaTeamsFrame["Team"..i]
-
-			bu.Flag.FlagGrabber:Hide()
-			bu.Flag:SetPoint("TOPLEFT", 10, -1)
-
-			bu.Background:SetTexture(r, g, b, .2)
-			bu.Background:SetAllPoints()
-			bu.Background:Hide()
-
-			F.Reskin(bu, true)
-		end
-
-		hooksecurefunc("PVPArenaTeamsFrame_SelectButton", function(button)
-			for i = 1, MAX_ARENA_TEAMS do
-				local teamButton = PVPArenaTeamsFrame["Team"..i]
-				if teamButton == button then
-					teamButton.Background:Show()
-				else
-					teamButton.Background:Hide()
-				end
-			end
-		end)
-
-		local function onEnter(self)
-			self.bg:SetBackdropColor(r, g, b, .2)
-		end
-
-		local function onLeave(self)
-			self.bg:SetBackdropColor(0, 0, 0, .25)
-		end
-
-		for i = 1, 4 do
-			local header = ArenaTeamFrame["Header"..i]
-
-			for j = 1, 3 do
-				select(j, header:GetRegions()):Hide()
-			end
-
-			header:SetHighlightTexture("")
-
-			local bg = CreateFrame("Frame", nil, header)
-			bg:SetPoint("TOPLEFT", 2, 0)
-			bg:SetPoint("BOTTOMRIGHT", -1, 0)
-			bg:SetFrameLevel(header:GetFrameLevel()-1)
-			F.CreateBD(bg, .25)
-
-			header.bg = bg
-
-			header:HookScript("OnEnter", onEnter)
-			header:HookScript("OnLeave", onLeave)
-		end
-
-		hooksecurefunc("PVPArenaTeamsFrame_ShowTeam", function(self)
-			local frame = ArenaTeamFrame
-			if not self.selectedButton then
-				return
-			end
-
-			for i = 1, MAX_ARENA_TEAM_MEMBERS do
-				local button = frame["TeamMember"..i]
-
-				if button:IsEnabled() then
-					local name, rank, level, class, online = GetArenaTeamRosterInfo(frame.teamIndex, i);
-					local color = ConvertRGBtoColorString(C.classcolours[class])
-					if online then
-						button.NameText:SetText(color..name..FONT_COLOR_CODE_CLOSE)
-					else
-						button.NameText:SetText(GRAY_FONT_COLOR_CODE..name..FONT_COLOR_CODE_CLOSE)
-					end
-				end
-			end
-		end)
-
-		local INVITE_DROPDOWN = 1;
-		function ArenaInviteMenu_Init(self, level, team)
-			local info = UIDropDownMenu_CreateInfo();
-			info.notCheckable = true;
-			info.value = nil;
-
-			if (level == 1 and (not team or not team[1])) then
-				info.text = INVITE_TEAM_MEMBERS;
-				info.disabled = true;
-				info.func =  nil;
-				info.hasArrow = true;
-				info.value = INVITE_DROPDOWN;
-				UIDropDownMenu_AddButton(info, level)
-
-				info.text = CANCEL
-				info.disabled = nil;
-				info.hasArrow = nil;
-				info.value = nil;
-				info.func = nil
-				UIDropDownMenu_AddButton(info, level)
-				return;
-			end
-
-			if (UIDROPDOWNMENU_MENU_VALUE == INVITE_DROPDOWN) then
-				if (not team) then
-					return
-				end
-				for i=1, #team do
-					if (team[i].online) then
-						local color = C.classcolours[team[i].class]
-						info.text = ConvertRGBtoColorString(color)..team[i].name..FONT_COLOR_CODE_CLOSE;
-						info.func = function (menu, name) InviteToGroup(name); end
-						info.arg1 = team[i].name;
-						info.disabled = nil;
-					else
-						info.disabled = true;
-						info.text = team[i].name;
-					end
-					UIDropDownMenu_AddButton(info, level)
-				end
-			end
-
-			if (level == 1) then
-				info.text = INVITE_TEAM_MEMBERS;
-				info.func =  nil;
-				info.hasArrow = true;
-				info.value = INVITE_DROPDOWN;
-				info.menuList = team;
-				UIDropDownMenu_AddButton(info, level)
-				info.text = CANCEL
-				info.value = nil;
-				info.hasArrow = nil;
-				info.menuList = nil;
-				UIDropDownMenu_AddButton(info, level)
-			end
-		end
-
-		ArenaTeamFrame.Flag:SetPoint("TOPLEFT", 25, -3)
-
-		F.CreateBD(TopInset, .25)
-		F.ReskinArrow(ArenaTeamFrame.weeklyToggleRight, "RIGHT")
-		F.ReskinArrow(ArenaTeamFrame.weeklyToggleLeft, "LEFT")
-
 		-- Main style
 
 		F.ReskinPortraitFrame(PVPUIFrame)
-		F.ReskinTab(PVPUIFrame.Tab1)
-		F.ReskinTab(PVPUIFrame.Tab2)
 		F.Reskin(HonorFrame.SoloQueueButton)
 		F.Reskin(HonorFrame.GroupQueueButton)
 		F.Reskin(ConquestFrame.JoinButton)
 		F.Reskin(WarGameStartButton)
-		F.Reskin(ArenaTeamFrame.AddMemberButton)
 		F.ReskinDropDown(HonorFrameTypeDropDown)
 		F.ReskinScroll(HonorFrameSpecificFrameScrollBar)
 		F.ReskinScroll(WarGamesFrameScrollFrameScrollBar)
