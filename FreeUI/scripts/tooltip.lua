@@ -133,7 +133,7 @@ local function OnTooltipSetUnit(self)
 
 	local color = GetColor(unit)
 
-	do
+	if unitName then
 		local name = C.tooltip.title and UnitPVPName(unit) or unitName
 		if unitRealm and unitRealm ~= "" then
 			_G["GameTooltipTextLeft1"]:SetFormattedText(color.."%s - %s", name, unitRealm)
