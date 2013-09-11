@@ -353,7 +353,7 @@ local CloseBags2 = function()
 end
 
 local OpenBags = function()
-	for i = 0, 11 do
+	for i = 0, 4 do
 		OpenBag(i)
 	end
 end
@@ -374,7 +374,10 @@ for i = 1, 5 do
 	bag.SetScale = F.dummy
 end
 hooksecurefunc(BankFrame, "Show", function()
-	OpenBags()
+	for i = 0, 11 do
+		OpenBag(i)
+	end
+
 	ReanchorBankButtons()
 end)
 hooksecurefunc(BankFrame, "Hide", CloseBags)
