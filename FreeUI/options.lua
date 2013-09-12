@@ -21,6 +21,7 @@ C["general"] = {
 	["mailButton"] = true, 			-- adds a button to the mail frame to collect all attachments
 	["nameplates"] = true, 			-- enable nameplates
 	["rareAlert"] = true, 			-- raid warning when a rare mob is spotted (5.4)
+		["rareAlert_playSound"] = true, 			-- play sound
 	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
 	["tolbarad"] = false,			-- Tol barad timer on the minimap
 	["uiScaleAuto"] = true,			-- force the correct UI scale

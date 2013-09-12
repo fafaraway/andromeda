@@ -249,8 +249,11 @@ mailButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
 local rareAlert = ns.CreateCheckBox(general, "rareAlert", true)
 rareAlert:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
 
+local rareAlertPlaySound = ns.CreateCheckBox(general, "rareAlert_playSound")
+rareAlertPlaySound:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 16, -8)
+
 local nameplates = ns.CreateCheckBox(general, "nameplates", true, true)
-nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -8)
+nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -42)
 
 local tolBarad = ns.CreateCheckBox(general, "tolbarad", true, true)
 tolBarad:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
