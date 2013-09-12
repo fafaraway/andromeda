@@ -59,6 +59,7 @@ scripts\nameplates.lua
 scripts\panel.lua
 scripts\petbattles.lua
 scripts\rangecolor.lua
+scripts\rarealert.lua
 scripts\role.lua
 scripts\stats.lua
 scripts\tekkrush.lua

@@ -246,8 +246,11 @@ helmCloak:SetPoint("TOPLEFT", threatMeter, "BOTTOMLEFT", 0, -8)
 local mailButton = ns.CreateCheckBox(general, "mailButton", true, true)
 mailButton:SetPoint("TOPLEFT", helmCloak, "BOTTOMLEFT", 0, -8)
 
+local rareAlert = ns.CreateCheckBox(general, "rareAlert", true)
+rareAlert:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
+
 local nameplates = ns.CreateCheckBox(general, "nameplates", true, true)
-nameplates:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
+nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -8)
 
 local tolBarad = ns.CreateCheckBox(general, "tolbarad", true, true)
 tolBarad:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
