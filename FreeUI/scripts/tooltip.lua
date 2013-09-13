@@ -198,7 +198,7 @@ local function OnTooltipSetUnit(self)
 		self:AddLine(color..text)
 	end
 
-	if msp then
+	if msp and unitName then
 		hasMSP = false
 
 		if msp.char[unitName].supported then
