@@ -24,6 +24,8 @@ local function onUpdate(self, elapsed)
 			print(format("Repair: %.1fg (Guild)", cost * 0.0001))
 		else
 			print("Your guild cannot afford your repairs.")
+			RepairAllItems()
+			print(format("Repair: %.1fg", cost * 0.0001))
 		end
 	end
 end
@@ -31,24 +33,27 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("MERCHANT_SHOW")
 f:SetScript("OnEvent", function(self, event)
-	if CanMerchantRepair() and C.automation.autoRepair == true then
+	if CanMerchantRepair() and C.automation.autoRepair then
 		cost = GetRepairAllCost()
-		if cost > 0 and CanGuildBankRepair() and C.automation.autoRepair_guild == true then
+		local money = GetMoney()
+
+		if cost > 0 and CanGuildBankRepair() and C.automation.autoRepair_guild then
 			if GetGuildBankWithdrawMoney() > cost then
 				self:SetScript("OnUpdate", onUpdate) -- to work around bug when there's not enough money in guild bank
 				RepairAllItems(1)
-			else
-				print("Your repair costs are higher than your guild permits.")
+			elseif money > cost then -- if we can't withdraw enough from guild, just repair with player funds
+				RepairAllItems()
+				print(format("Repair: %.1fg", cost * 0.0001))
 			end
-		elseif cost > 0 and GetMoney() > cost then
+		elseif cost > 0 and money > cost then
 			RepairAllItems()
 			print(format("Repair: %.1fg", cost * 0.0001))
-		elseif GetMoney() < cost then
+		elseif money < cost then
 			print("You are not repaired! (insufficient funds)")
 		end
 	end
 
-	if C.automation.autoSell == true then
+	if C.automation.autoSell then
 		for bag = 0, 4 do
 			for slot = 0, GetContainerNumSlots(bag) do
 				local link = GetContainerItemLink(bag, slot)
@@ -115,7 +120,7 @@ F.AddOptionsCallback("automation", "autoAccept", function()
 	end
 end)
 
-if C.general.helmcloakbuttons == true then
+if C.general.helmcloakbuttons then
 	local helm = CreateFrame("CheckButton", "FreeUI_HelmCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")
 	helm:SetSize(22, 22)
 	helm:SetPoint("LEFT", CharacterHeadSlot, "RIGHT", 5, 0)
@@ -138,7 +143,7 @@ if C.general.helmcloakbuttons == true then
 	cloak:SetFrameLevel(31)
 end
 
-if C.general.undressButton == true then
+if C.general.undressButton then
 	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
 	undress:SetSize(80, 22)
 	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
