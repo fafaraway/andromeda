@@ -29,7 +29,9 @@ f:SetScript("OnEvent", function(self, _, addon)
 	frame.BarTitle:SetShadowOffset(0, 0)
 	frame.BarTitle:SetPoint("CENTER", 0, 13)
 
-	bar:SetWidth(Minimap:GetWidth())
+	local width = Minimap:GetWidth()
+	bar:SetWidth(width)
+	frame.Flash:SetWidth(width + 22)
 
 	bar:SetStatusBarTexture(C.media.texture)
 	bar:SetStatusBarColor(r, g, b)
