@@ -49,7 +49,7 @@ f:SetScript("OnEvent", function(self, event)
 			RepairAllItems()
 			print(format("Repair: %.1fg", cost * 0.0001))
 		elseif money < cost then
-			print("You are not repaired! (insufficient funds)")
+			F.Notification("Repairs", "You have insufficient funds to repair your equipment.")
 		end
 	end
 
