@@ -2,7 +2,9 @@ local F, C, L = unpack(select(2, ...))
 
 local general = C.general
 
-local function OnEvent(event)
+local function OnEvent(event, vignetteInstanceID)
+	if vignetteInstanceID == 989921295 then return end -- Kukuru's Treasure Cache
+
 	if general.rareAlert_playSound then
 		PlaySoundFile("Sound\\Interface\\RaidWarning.wav")
 	end
