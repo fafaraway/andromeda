@@ -38,12 +38,18 @@ f:SetScript("OnEvent", function(self, event)
 		local money = GetMoney()
 
 		if cost > 0 and CanGuildBankRepair() and C.automation.autoRepair_guild then
-			if GetGuildBankWithdrawMoney() > cost then
+			local guildWithdrawMoney = GetGuildBankWithdrawMoney()
+
+			if guildWithdrawMoney > cost then
 				self:SetScript("OnUpdate", onUpdate) -- to work around bug when there's not enough money in guild bank
 				RepairAllItems(1)
-			elseif money > cost then -- if we can't withdraw enough from guild, just repair with player funds
-				RepairAllItems()
-				print(format("Repair: %.1fg", cost * 0.0001))
+			elseif money > cost then -- if we can't withdraw enough from guild...
+				if cost / 9 > guildWithdrawMoney then -- average repairs/item is greater than guild money
+					RepairAllItems()
+					print(format("Repair: %.1fg", cost * 0.0001))
+				else
+					F.Notification("Repairs", "Guild repair failed. Repair manually or click to continue.", RepairAllItems())
+				end
 			end
 		elseif cost > 0 and money > cost then
 			RepairAllItems()
