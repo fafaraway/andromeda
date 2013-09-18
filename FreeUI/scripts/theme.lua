@@ -6136,8 +6136,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		TransmogrifyConfirmationPopup:SetScale(UIParent:GetScale())
-
 		F.CreateBD(TransmogrifyConfirmationPopup)
 		F.CreateSD(TransmogrifyConfirmationPopup)
 		F.Reskin(TransmogrifyConfirmationPopup.Button1)
