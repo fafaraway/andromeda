@@ -1,9 +1,21 @@
-local F, C, L = unpack(select(2, ...))
+﻿local F, C, L = unpack(select(2, ...))
 
 local general = C.general
 
+local kukuru = "Kukuru's Treasure Cache"
+
+if GetLocale() == "ruRU" then
+	kukuru = "Клад Кукуру"
+end
+
 local function OnEvent(event, vignetteInstanceID)
-	if vignetteInstanceID == 989921295 then return end -- Kukuru's Treasure Cache
+	if vignetteInstanceID then
+		local _, _, name = C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID)
+
+		if name and name == kukuru then
+			return
+		end
+	end
 
 	if general.rareAlert_playSound then
 		PlaySoundFile("Sound\\Interface\\RaidWarning.wav")
