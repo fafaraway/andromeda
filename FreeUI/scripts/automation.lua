@@ -44,7 +44,7 @@ f:SetScript("OnEvent", function(self, event)
 				self:SetScript("OnUpdate", onUpdate) -- to work around bug when there's not enough money in guild bank
 				RepairAllItems(1)
 			elseif money > cost then -- if we can't withdraw enough from guild...
-				if cost / 9 > guildWithdrawMoney then -- average repairs/item is greater than guild money
+				if cost / 9 > guildWithdrawMoney then -- can't even repair 1 item with guild money (average)
 					RepairAllItems()
 					print(format("Repair: %.1fg", cost * 0.0001))
 				else
