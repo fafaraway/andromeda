@@ -354,7 +354,7 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 		f:ClearAllPoints()
 		f:SetPoint(a1, p, a2, x, y)
 	else
-		f:SetPoint("TOPRIGHT", -4, -4)
+		f:SetPoint("TOPRIGHT", -6, -6)
 	end
 
 	f:SetNormalTexture("")
@@ -554,7 +554,6 @@ F.SetBD = function(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(0)
 	F.CreateBD(bg)
-	F.CreateSD(bg)
 end
 
 F.ReskinPortraitFrame = function(f, isButtonFrame)
@@ -584,7 +583,6 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 	end
 
 	F.CreateBD(f)
-	F.CreateSD(f)
 	F.ReskinClose(_G[name.."CloseButton"])
 end
 

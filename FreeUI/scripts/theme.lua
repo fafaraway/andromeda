@@ -144,14 +144,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.SetBD(DressUpFrame, 10, -12, -34, 74)
 		F.SetBD(HelpFrame)
-		F.SetBD(SpellBookFrame)
 		F.SetBD(RaidParentFrame)
 
 		local FrameBDs = {"GameMenuFrame", "InterfaceOptionsFrame", "VideoOptionsFrame", "AudioOptionsFrame", "ChatConfigFrame", "StackSplitFrame", "AddFriendFrame", "FriendsFriendsFrame", "ColorPickerFrame", "ReadyCheckFrame", "GuildInviteFrame", "ChannelFrameDaughterFrame"}
 		for i = 1, #FrameBDs do
 			local FrameBD = _G[FrameBDs[i]]
 			F.CreateBD(FrameBD)
-			F.CreateSD(FrameBD)
 		end
 
 		-- Dropdown lists
@@ -402,10 +400,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		OpenMailHorizontalBarLeft:Hide()
 		select(18, MailFrame:GetRegions()):Hide()
 		select(26, OpenMailFrame:GetRegions()):Hide()
+		for i = 4, 7 do
+			select(i, SendMailFrame:GetRegions()):Hide()
+		end
 
 		OpenMailLetterButton:SetNormalTexture("")
 		OpenMailLetterButton:SetPushedTexture("")
 		OpenMailLetterButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+
+		for i = 1, 2 do
+			F.ReskinTab(_G["MailFrameTab"..i])
+		end
 
 		local bgmail = CreateFrame("Frame", nil, OpenMailLetterButton)
 		bgmail:SetPoint("TOPLEFT", -1, 1)
@@ -743,11 +748,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.CreateBD(LFGDungeonReadyDialog)
 		LFGDungeonReadyDialog.SetBackdrop = F.dummy
-		F.CreateSD(LFGDungeonReadyDialog)
 		F.CreateBD(LFGInvitePopup)
-		F.CreateSD(LFGInvitePopup)
 		F.CreateBD(LFGDungeonReadyStatus)
-		F.CreateSD(LFGDungeonReadyStatus)
 
 		F.Reskin(LFGDungeonReadyDialogEnterDungeonButton)
 		F.Reskin(LFGDungeonReadyDialogLeaveQueueButton)
@@ -962,7 +964,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Role poll
 
 		F.CreateBD(RolePollPopup)
-		F.CreateSD(RolePollPopup)
 		F.Reskin(RolePollPopupAcceptButton)
 		F.ReskinClose(RolePollPopupCloseButton)
 
@@ -1062,7 +1063,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBG(bonusValor.Icon)
 
 		F.CreateBD(LFDRoleCheckPopup)
-		F.CreateSD(LFDRoleCheckPopup)
 		F.Reskin(LFDRoleCheckPopupAcceptButton)
 		F.Reskin(LFDRoleCheckPopupDeclineButton)
 		F.Reskin(LFDQueueFrameRandomScrollFrameChildFrame.bonusRepFrame.ChooseButton)
@@ -1197,10 +1197,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			tab:SetCheckedTexture(C.media.checked)
 			if i == 1 then
 				local a1, p, a2, x, y = tab:GetPoint()
-				tab:SetPoint(a1, p, a2, x + 11, y)
+				tab:SetPoint(a1, p, a2, x + 2, y)
 			end
 			F.CreateBG(tab)
-			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 			select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 		end
 
@@ -1224,6 +1223,21 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		-- Spellbook frame
+
+		SpellBookFrame:DisableDrawLayer("BACKGROUND")
+		SpellBookFrame:DisableDrawLayer("BORDER")
+		SpellBookFrame:DisableDrawLayer("OVERLAY")
+		SpellBookFrameInset:DisableDrawLayer("BORDER")
+
+		F.SetBD(SpellBookFrame)
+		F.ReskinClose(SpellBookFrameCloseButton)
+
+		SpellBookFrameTabButton1:ClearAllPoints()
+		SpellBookFrameTabButton1:SetPoint("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", 0, 2)
+
+		for i = 1, 5 do
+			F.ReskinTab(_G["SpellBookFrameTabButton"..i])
+		end
 
 		for i = 1, SPELLS_PER_PAGE do
 			local bu = _G["SpellButton"..i]
@@ -1279,7 +1293,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
-		SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 11, -36)
+		SpellBookSkillLineTab1:SetPoint("TOPLEFT", SpellBookSideTabsFrame, "TOPRIGHT", 2, -36)
 
 		hooksecurefunc("SpellBookFrame_UpdateSkillLineTabs", function()
 			for i = 1, GetNumSpellTabs() do
@@ -1290,7 +1304,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					tab:SetCheckedTexture(C.media.checked)
 
 					F.CreateBG(tab)
-					F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 
 					tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 
@@ -1310,12 +1323,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				tab:SetCheckedTexture(C.media.checked)
 
 				F.CreateBG(tab)
-				F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
 
 				tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
 
 				if i == 1 then
-					tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 11, -53)
+					tab:SetPoint("TOPLEFT", SpellBookCoreAbilitiesFrame, "TOPRIGHT", 2, -53)
 				end
 			end
 		end)
@@ -1431,6 +1443,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.ReskinPortraitFrame(MerchantFrame, true)
 		F.ReskinDropDown(MerchantFrameLootFilter)
+
+		MerchantFrameTab1:ClearAllPoints()
+		MerchantFrameTab1:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 50, -14)
+		MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
+
+		for i = 1, 2 do
+			F.ReskinTab(_G["MerchantFrameTab"..i])
+		end
 
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
 			local button = _G["MerchantItem"..i]
@@ -1567,6 +1587,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Friends Frame
 
+		for i = 1, 4 do
+			F.ReskinTab(_G["FriendsFrameTab"..i])
+		end
+
 		FriendsFrameIcon:Hide()
 
 		for i = 1, FRIENDS_TO_DISPLAY do
@@ -1675,7 +1699,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.CreateBD(BattleTagInviteFrame)
-		F.CreateSD(BattleTagInviteFrame)
 		F.CreateBD(BattleTagInviteFrame.NoteFrame, .25)
 
 		local _, send, cancel = BattleTagInviteFrame:GetChildren()
@@ -1719,6 +1742,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		-- Character frame
+
+		do
+			local i = 1
+			while _G["CharacterFrameTab"..i] do
+				F.ReskinTab(_G["CharacterFrameTab"..i])
+				i = i + 1
+			end
+		end
 
 		F.ReskinPortraitFrame(CharacterFrame, true)
 
@@ -2233,7 +2264,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
 			F.CreateBD(frame)
-			F.CreateSD(frame)
 
 			for j = 1, 3 do
 				F.Reskin(frame["button"..j])
@@ -2881,7 +2911,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		-- Tutorial Frame
 
 		F.CreateBD(TutorialFrame)
-		F.CreateSD(TutorialFrame)
 
 		TutorialFrameBackground:Hide()
 		TutorialFrameBackground.Show = F.dummy
@@ -2921,7 +2950,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LootHistoryFrame.ResizeButton:SetSize(32, 12)
 
 		F.CreateBD(LootHistoryFrame)
-		F.CreateSD(LootHistoryFrame)
 
 		F.ReskinClose(LootHistoryFrame.CloseButton)
 		F.ReskinScroll(LootHistoryFrameScrollFrameScrollBar)
@@ -3198,7 +3226,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		if IsMacClient() then
 			F.CreateBD(MacOptionsFrame)
-			F.CreateSD(MacOptionsFrame)
 
 			MacOptionsFrameHeader:SetTexture("")
 			MacOptionsFrameHeader:ClearAllPoints()
@@ -3268,7 +3295,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			self:SetScale(UIParent:GetScale())
 		end)
 		F.CreateBD(CinematicFrameCloseDialog)
-		F.CreateSD(CinematicFrameCloseDialog)
 		F.Reskin(CinematicFrameCloseDialogConfirmButton)
 		F.Reskin(CinematicFrameCloseDialogResumeButton)
 
@@ -3457,14 +3483,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		F.CreateBD(MovieFrame.CloseDialog)
-		F.CreateSD(MovieFrame.CloseDialog)
 		F.Reskin(MovieFrame.CloseDialog.ConfirmButton)
 		F.Reskin(MovieFrame.CloseDialog.ResumeButton)
 
 		-- Pet battle queue popup
 
 		F.CreateBD(PetBattleQueueReadyFrame)
-		F.CreateSD(PetBattleQueueReadyFrame)
 		F.CreateBG(PetBattleQueueReadyFrame.Art)
 		F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
 		F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
@@ -3511,7 +3535,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.CreateBD(PVPReadyDialog)
 		PVPReadyDialog.SetBackdrop = F.dummy
-		F.CreateSD(PVPReadyDialog)
 
 		F.Reskin(PVPReadyDialog.enterButton)
 		F.Reskin(PVPReadyDialog.leaveButton)
@@ -3632,15 +3655,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Hide regions ]]
 
-		local bglayers = {"SpellBookFrame", "LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
+		local bglayers = {"LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
 		for i = 1, #bglayers do
 			_G[bglayers[i]]:DisableDrawLayer("BACKGROUND")
 		end
-		local borderlayers = {"WhoFrameListInset", "WhoFrameEditBoxInset", "ChannelFrameLeftInset", "ChannelFrameRightInset", "SpellBookFrame", "SpellBookFrameInset", "LFDParentFrame", "LFDParentFrameInset", "CharacterFrameInsetRight", "HelpFrame", "HelpFrameLeftInset", "HelpFrameMainInset", "CharacterModelFrame", "VideoOptionsFramePanelContainer", "InterfaceOptionsFramePanelContainer", "RaidParentFrame", "RaidParentFrameInset", "RaidFinderFrameRoleInset", "LFRQueueFrameRoleInset", "LFRQueueFrameListInset", "LFRQueueFrameCommentInset"}
+		local borderlayers = {"WhoFrameListInset", "WhoFrameEditBoxInset", "ChannelFrameLeftInset", "ChannelFrameRightInset", "LFDParentFrame", "LFDParentFrameInset", "CharacterFrameInsetRight", "HelpFrame", "HelpFrameLeftInset", "HelpFrameMainInset", "CharacterModelFrame", "VideoOptionsFramePanelContainer", "InterfaceOptionsFramePanelContainer", "RaidParentFrame", "RaidParentFrameInset", "RaidFinderFrameRoleInset", "LFRQueueFrameRoleInset", "LFRQueueFrameListInset", "LFRQueueFrameCommentInset"}
 		for i = 1, #borderlayers do
 			_G[borderlayers[i]]:DisableDrawLayer("BORDER")
 		end
-		local overlayers = {"SpellBookFrame", "LFDParentFrame", "CharacterModelFrame"}
+		local overlayers = {"LFDParentFrame", "CharacterModelFrame"}
 		for i = 1, #overlayers do
 			_G[overlayers[i]]:DisableDrawLayer("OVERLAY")
 		end
@@ -3653,9 +3676,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 		OpenStationeryBackgroundLeft:Hide()
 		OpenStationeryBackgroundRight:Hide()
-		for i = 4, 7 do
-			select(i, SendMailFrame:GetRegions()):Hide()
-		end
 		SendStationeryBackgroundLeft:Hide()
 		SendStationeryBackgroundRight:Hide()
 		DressUpFramePortrait:Hide()
@@ -3919,7 +3939,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TabardCharacterModelRotateRightButton:SetPoint("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 1, 0)
 		LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
 		LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
-		MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
 		SendMailMoneySilver:SetPoint("LEFT", SendMailMoneyGold, "RIGHT", 1, 0)
 		SendMailMoneyCopper:SetPoint("LEFT", SendMailMoneySilver, "RIGHT", 1, 0)
 
@@ -3928,24 +3947,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		FriendsFrameTitleText:SetPoint("TOP", FriendsFrame, "TOP", 0, -8)
 		VideoOptionsFrameOkay:SetPoint("BOTTOMRIGHT", VideoOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
 		InterfaceOptionsFrameOkay:SetPoint("BOTTOMRIGHT", InterfaceOptionsFrameCancel, "BOTTOMLEFT", -1, 0)
-
-		-- [[ Tabs ]]
-
-		for i = 1, 5 do
-			F.ReskinTab(_G["SpellBookFrameTabButton"..i])
-		end
-
-		for i = 1, 4 do
-			F.ReskinTab(_G["FriendsFrameTab"..i])
-			if _G["CharacterFrameTab"..i] then
-				F.ReskinTab(_G["CharacterFrameTab"..i])
-			end
-		end
-
-		for i = 1, 2 do
-			F.ReskinTab(_G["MerchantFrameTab"..i])
-			F.ReskinTab(_G["MailFrameTab"..i])
-		end
 
 		-- [[ Buttons ]]
 
@@ -3967,7 +3968,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
 		end)
 
-		local closebuttons = {"SpellBookFrameCloseButton", "HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
+		local closebuttons = {"HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
 		for i = 1, #closebuttons do
 			F.ReskinClose(_G[closebuttons[i]])
 		end
@@ -4315,7 +4316,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 	elseif addon == "Blizzard_AchievementUI" then
 		F.CreateBD(AchievementFrame)
-		F.CreateSD(AchievementFrame)
 		AchievementFrameCategories:SetBackdrop(nil)
 		AchievementFrameSummary:SetBackdrop(nil)
 		for i = 1, 17 do
@@ -5075,7 +5075,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ScriptErrorsFrameTitleBG:Hide()
 		ScriptErrorsFrameDialogBG:Hide()
 		F.CreateBD(ScriptErrorsFrame)
-		F.CreateSD(ScriptErrorsFrame)
 
 		FrameStackTooltip:SetScale(UIParent:GetScale())
 		FrameStackTooltip:SetBackdrop(nil)
@@ -5139,11 +5138,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBD(EncounterJournalSearchResults, .75)
 
 		EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 75, 20)
+		EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOPRIGHT", EncounterJournalEncounterFrame, "TOPRIGHT", 74, 20)
 		EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -4)
+		EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoBossTab, "BOTTOM", 0, -2)
 		EncounterJournalEncounterFrameInfoModelTab:ClearAllPoints()
-		EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -4)
+		EncounterJournalEncounterFrameInfoModelTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, -2)
 
 		local tabs = {EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoModelTab}
 		for _, tab in pairs(tabs) do
@@ -5532,10 +5531,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			bu:SetCheckedTexture(C.media.checked)
 			F.CreateBG(bu)
-			F.CreateSD(bu, 5, 0, 0, 0, 1, 1)
 
 			local a1, p, a2, x, y = bu:GetPoint()
-			bu:SetPoint(a1, p, a2, x + 11, y)
+			bu:SetPoint(a1, p, a2, x + 1, y)
 
 			ic:SetTexCoord(.08, .92, .08, .92)
 			tb:GetRegions():Hide()
@@ -5584,7 +5582,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 	elseif addon == "Blizzard_GuildControlUI" then
 		F.CreateBD(GuildControlUI)
-		F.CreateSD(GuildControlUI)
 
 		for i = 1, 9 do
 			select(i, GuildControlUI:GetRegions()):Hide()
@@ -6137,7 +6134,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.CreateBD(TransmogrifyConfirmationPopup)
-		F.CreateSD(TransmogrifyConfirmationPopup)
 		F.Reskin(TransmogrifyConfirmationPopup.Button1)
 		F.Reskin(TransmogrifyConfirmationPopup.Button2)
 
@@ -6290,7 +6286,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LookingForGuildFrameInset:DisableDrawLayer("BACKGROUND")
 		LookingForGuildFrameInset:DisableDrawLayer("BORDER")
 		F.CreateBD(GuildFinderRequestMembershipFrame)
-		F.CreateSD(GuildFinderRequestMembershipFrame)
 		for i = 1, 5 do
 			local bu = _G["LookingForGuildBrowseFrameContainerButton"..i]
 			F.CreateBD(bu, .25)
@@ -6480,7 +6475,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		PetJournalTutorialButton.Ring:Hide()
 
 		F.CreateBD(PetJournalParent)
-		F.CreateSD(PetJournalParent)
 		F.CreateBD(MountJournal.MountCount, .25)
 		F.CreateBD(PetJournal.PetCount, .25)
 		F.CreateBD(MountJournal.MountDisplay.ModelFrame, .25)
@@ -7135,7 +7129,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		F.CreateBD(QuestChoiceFrame)
-		F.CreateSD(QuestChoiceFrame)
 		F.Reskin(QuestChoiceFrame.Option1.OptionButton)
 		F.Reskin(QuestChoiceFrame.Option2.OptionButton)
 		F.ReskinClose(QuestChoiceFrame.CloseButton)
@@ -7234,9 +7227,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
+		hooksecurefunc("PlayerTalentFrame_UpdateTabs", function()
+			for i = 1, NUM_TALENT_FRAME_TABS do
+				local tab = _G["PlayerTalentFrameTab"..i]
+				local a1, p, a2, x = tab:GetPoint()
+
+				tab:ClearAllPoints()
+				tab:SetPoint(a1, p, a2, x, 2)
+			end
+		end)
+
 		for i = 1, NUM_TALENT_FRAME_TABS do
-			local tab = _G["PlayerTalentFrameTab"..i]
-			F.ReskinTab(tab)
+			F.ReskinTab(_G["PlayerTalentFrameTab"..i])
 		end
 
 		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.ring:Hide()
@@ -7394,13 +7396,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			bg:SetFrameLevel(tab:GetFrameLevel()-1)
 			F.CreateBD(bg)
 
-			F.CreateSD(tab, 5, 0, 0, 0, 1, 1)
-
 			select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
 		end
 
 		hooksecurefunc("PlayerTalentFrame_UpdateSpecs", function()
-			PlayerSpecTab1:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", 11, -36)
+			PlayerSpecTab1:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPRIGHT", 2, -36)
 			PlayerSpecTab2:SetPoint("TOP", PlayerSpecTab1, "BOTTOM")
 		end)
 
@@ -7435,7 +7435,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TimeManagerAlarmAMPMDropDown:SetWidth(90)
 
 		F.ReskinPortraitFrame(TimeManagerFrame, true)
-		select(9, TimeManagerFrame:GetChildren()):Hide()
 
 		F.CreateBD(StopwatchFrame)
 		F.ReskinDropDown(TimeManagerAlarmHourDropDown)
@@ -7448,7 +7447,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinClose(StopwatchCloseButton, "TOPRIGHT", StopwatchFrame, "TOPRIGHT", -2, -2)
 	elseif addon == "Blizzard_TradeSkillUI" then
 		F.CreateBD(TradeSkillGuildFrame)
-		F.CreateSD(TradeSkillGuildFrame)
 		F.CreateBD(TradeSkillGuildFrameContainer, .25)
 
 		TradeSkillFramePortrait:Hide()
@@ -7891,7 +7889,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		F.CreateBD(DBM_GUI_OptionsFrame)
-		F.CreateSD(DBM_GUI_OptionsFrame)
 		F.Reskin(DBM_GUI_OptionsFrameOkay)
 		F.Reskin(DBM_GUI_OptionsFrameWebsiteButton)
 		F.ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)

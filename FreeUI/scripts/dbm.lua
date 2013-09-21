@@ -136,7 +136,6 @@ local function InitStyle()
 			local editBox = frame:GetChildren()
 			if editBox and editBox:GetObjectType() == "EditBox" and editBox:GetText() == "http://www.deadlybossmods.com" and not frame.styled then
 				F.CreateBD(frame)
-				F.CreateSD(frame)
 
 				select(6, editBox:GetRegions()):Hide()
 				select(7, editBox:GetRegions()):Hide()

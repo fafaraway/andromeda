@@ -47,7 +47,6 @@ f:SetSize(400, 400)
 f:SetPoint("CENTER")
 f:SetFrameStrata("HIGH")
 F.CreateBD(f)
-F.CreateSD(f)
 
 local sb = CreateFrame("StatusBar", nil, f)
 sb:SetPoint("BOTTOM", f, "BOTTOM", 0, 60)
