@@ -318,6 +318,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		-- Tab text position
+
+		hooksecurefunc("PanelTemplates_DeselectTab", function(tab)
+			_G[tab:GetName().."Text"]:SetPoint("CENTER", tab, "CENTER")
+		end)
+
+		hooksecurefunc("PanelTemplates_SelectTab", function(tab)
+			_G[tab:GetName().."Text"]:SetPoint("CENTER", tab, "CENTER")
+		end)
+
 		-- [[ Custom skins ]]
 
 		-- Pet stuff
