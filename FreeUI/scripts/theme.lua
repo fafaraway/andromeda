@@ -7287,15 +7287,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				end
 				index = index + 1
 			end
-
-			for i = 1, GetNumSpecializations(nil, self.isPet) do
-				local bu = self["specButton"..i]
-				if bu.selected then
-					bu.glowTex:Show()
-				else
-					bu.glowTex:Hide()
-				end
-			end
 		end)
 
 		for i = 1, GetNumSpecializations(false, nil) do
@@ -7314,16 +7305,15 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				bu.bg:SetAlpha(0)
 				bu.ring:Hide()
-				bu.learnedTex:SetPoint("TOPLEFT", 1, -1)
-				bu.learnedTex:SetPoint("BOTTOMRIGHT", -1, 1)
 				_G[name..i.."Glow"]:SetTexture("")
 
 				F.Reskin(bu, true)
 
-				bu.selectedTex:SetTexture("")
-				bu.learnedTex:SetTexture(C.media.backdrop)
-				bu.learnedTex:SetVertexColor(r, g, b, .2)
-				bu.learnedTex:SetDrawLayer("BACKGROUND")
+				bu.learnedTex:SetTexture("")
+				bu.selectedTex:SetTexture(C.media.backdrop)
+				bu.selectedTex:SetVertexColor(r, g, b, .2)
+				bu.selectedTex:SetDrawLayer("BACKGROUND")
+				bu.selectedTex:SetAllPoints()
 
 				bu.specIcon:SetTexCoord(.08, .92, .08, .92)
 				bu.specIcon:SetSize(58, 58)
@@ -7331,17 +7321,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.specIcon:SetDrawLayer("OVERLAY")
 				local bg = F.CreateBG(bu.specIcon)
 				bg:SetDrawLayer("BORDER")
-
-				bu.glowTex = CreateFrame("Frame", nil, bu)
-				bu.glowTex:SetBackdrop({
-					edgeFile = C.media.glow,
-					edgeSize = 5,
-				})
-				bu.glowTex:SetPoint("TOPLEFT", -6, 5)
-				bu.glowTex:SetPoint("BOTTOMRIGHT", 5, -5)
-				bu.glowTex:SetBackdropBorderColor(r, g, b)
-				bu.glowTex:SetFrameLevel(bu:GetFrameLevel()-1)
-				bu.glowTex:Hide()
 			end
 		end
 
