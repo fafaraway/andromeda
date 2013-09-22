@@ -67,9 +67,9 @@ local slots = {
 local updatechar = function(self)
 	if PaperDollFrame:IsShown() then
 		for i, slotName in ipairs(slots) do
-			-- Ammo is located at 0.
 			if i == 18 then i = 19 end
-			local slotFrame = _G['Character'..slotName.."Slot"]
+
+			local slotFrame = _G["Character"..slotName.."Slot"]
 			local slotLink = GetInventoryItemLink("player", i)
 
 			UpdateGlow(slotFrame, slotLink)
@@ -80,7 +80,7 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("UNIT_INVENTORY_CHANGED")
 f:SetScript("OnEvent", updatechar)
-PaperDollFrame:HookScript('OnShow', updatechar)
+PaperDollFrame:HookScript("OnShow", updatechar)
 
 -- Inspect Frame
 
@@ -131,6 +131,7 @@ local updateInspect = function()
 			slotFrame:Hide()
 			pollFrame:Show()
 		end
+
 		UpdateGlow(slotFrame, slotLink)
 	end
 end
@@ -192,35 +193,32 @@ void:RegisterEvent("VOID_STORAGE_DEPOSIT_UPDATE")
 void:RegisterEvent("VOID_TRANSFER_DONE")
 void:RegisterEvent("VOID_STORAGE_OPEN")
 
-local updateContents = function(self)
+local updateContents = function()
 	if not IsAddOnLoaded("Blizzard_VoidStorageUI") then return end
 
 	for slot = 1, VOID_WITHDRAW_MAX or 80 do
-		local slotFrame =  _G["VoidStorageStorageButton"..slot]
-		UpdateGlow(slotFrame, GetVoidItemInfo(slot))
+		UpdateGlow(_G["VoidStorageStorageButton"..slot], GetVoidItemInfo(slot))
 	end
 
 	for slot = 1, VOID_WITHDRAW_MAX or 9 do
-		local slotFrame = _G["VoidStorageWithdrawButton"..slot]
-		UpdateGlow(slotFrame, GetVoidTransferWithdrawalInfo(slot))
+		UpdateGlow(_G["VoidStorageWithdrawButton"..slot], GetVoidTransferWithdrawalInfo(slot))
 	end
 end
 
-local updateDeposit = function(self, event, slot)
+local updateDeposit = function(slot)
 	if not IsAddOnLoaded("Blizzard_VoidStorageUI") then return end
 
-	local slotFrame = _G["VoidStorageDepositButton"..slot]
-	UpdateGlow(slotFrame, GetVoidTransferDepositInfo(slot))
+	UpdateGlow(_G["VoidStorageDepositButton"..slot], GetVoidTransferDepositInfo(slot))
 end
 
-local update = function(self)
+local update = function()
 	if not IsAddOnLoaded("Blizzard_VoidStorageUI") then return end
 
 	for slot = 1, VOID_DEPOSIT_MAX or 9 do
-		updateDeposit(self, nil, slot)
+		updateDeposit(slot)
 	end
 
-	return updateContents(self)
+	return updateContents()
 end
 
 void:SetScript("OnEvent", function(self, event, ...)
@@ -232,15 +230,15 @@ void:SetScript("OnEvent", function(self, event, ...)
 				last = last + elapsed
 				if last > 1 then
 					self:SetScript("OnUpdate", nil)
-					update(self)
+					update()
 				end
 			end)
 		end
 	elseif event == "VOID_STORAGE_CONTENTS_UPDATE" then
-		updateContents(self)
+		updateContents()
 	elseif event == "VOID_STORAGE_DEPOSIT_UPDATE" then
-		updateDeposit(self, event, ...)
+		updateDeposit(...)
 	elseif event == "VOID_TRANSFER_DONE" or event == "VOID_STORAGE_OPEN" then
-		update(self)
+		update()
 	end
 end)

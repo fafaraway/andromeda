@@ -1824,12 +1824,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		local updateChar = function(self)
 			if not PaperDollFrame:IsShown() then return end
 
-			for i = 1, #slots do
-				local slot = _G["Character"..slots[i].."Slot"]
-
+			for i, slotName in ipairs(slots) do
 				if i == 18 then i = 19 end
 
-				if GetInventoryItemLink("player", i) then
+				local slot = _G["Character"..slotName.."Slot"]
+				local slotLink = GetInventoryItemLink("player", i)
+
+				if slotLink then
 					slot.icon:SetAlpha(1)
 				else
 					slot.icon:SetAlpha(0)
@@ -6089,7 +6090,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			slot:SetNormalTexture("")
 			slot:SetPushedTexture("")
-			_G["Inspect"..slots[i].."SlotIconTexture"]:SetTexCoord(.08, .92, .08, .92)
+
+			slot.icon:SetTexCoord(.08, .92, .08, .92)
 		end
 
 		-- PvP
