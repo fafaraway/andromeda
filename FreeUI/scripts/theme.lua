@@ -1763,6 +1763,23 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		F.ReskinPortraitFrame(CharacterFrame, true)
 
+		local function colourPopout(self)
+			local aR, aG, aB
+			local glow = self:GetParent().glow
+
+			if glow:IsShown() then
+				aR, aG, aB = self:GetParent().glow:GetVertexColor()
+			else
+				aR, aG, aB = r, g, b
+			end
+
+			self.arrow:SetVertexColor(aR, aG, aB)
+		end
+
+		local function clearPopout(self)
+			self.arrow:SetVertexColor(1, 1, 1)
+		end
+
 		local slots = {
 			"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist",
 			"Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand",
@@ -1777,6 +1794,28 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			slot:SetNormalTexture("")
 			slot:SetPushedTexture("")
 			ic:SetTexCoord(.08, .92, .08, .92)
+
+			local popout = slot.popoutButton
+
+			popout:SetNormalTexture("")
+			popout:SetHighlightTexture("")
+
+			local arrow = popout:CreateTexture(nil, "OVERLAY")
+
+			if slot.verticalFlyout then
+				arrow:SetSize(13, 8)
+				arrow:SetTexture(C.media.arrowDown)
+				arrow:SetPoint("TOP", slot, "BOTTOM", 0, 1)
+			else
+				arrow:SetSize(8, 14)
+				arrow:SetTexture(C.media.arrowRight)
+				arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
+			end
+
+			popout.arrow = arrow
+
+			popout:SetScript("OnEnter", colourPopout)
+			popout:SetScript("OnLeave", clearPopout)
 		end
 
 		select(10, CharacterMainHandSlot:GetRegions()):Hide()
@@ -1872,6 +1911,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end)
 
 		-- Equipment flyout
+
+		EquipmentFlyoutFrameHighlight:Hide()
+
+		local border = F.CreateBDFrame(EquipmentFlyoutFrame, 0)
+		border:SetBackdropBorderColor(1, 1, 1)
+		border:SetPoint("TOPLEFT", 2, -2)
+		border:SetPoint("BOTTOMRIGHT", -2, 2)
 
 		local navFrame = EquipmentFlyoutFrame.NavigationFrame
 
