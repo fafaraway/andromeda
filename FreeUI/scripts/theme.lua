@@ -7303,12 +7303,45 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinTab(_G["PlayerTalentFrameTab"..i])
 		end
 
-		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.ring:Hide()
-		PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.specIcon)
-		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.ring:Hide()
-		PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(PlayerTalentFramePetSpecializationSpellScrollFrameScrollChild.specIcon)
+		for _, frame in pairs({PlayerTalentFrameSpecialization, PlayerTalentFramePetSpecialization}) do
+			local scrollChild = frame.spellsScroll.child
+
+			scrollChild.ring:Hide()
+			scrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(scrollChild.specIcon)
+
+			local roleIcon = scrollChild.roleIcon
+
+			roleIcon:SetTexture(C.media.roleIcons)
+
+			local left = scrollChild:CreateTexture(nil, "OVERLAY")
+			left:SetWidth(1)
+			left:SetTexture(C.media.backdrop)
+			left:SetVertexColor(0, 0, 0)
+			left:SetPoint("TOPLEFT", roleIcon, 3, -3)
+			left:SetPoint("BOTTOMLEFT", roleIcon, 3, 4)
+
+			local right = scrollChild:CreateTexture(nil, "OVERLAY")
+			right:SetWidth(1)
+			right:SetTexture(C.media.backdrop)
+			right:SetVertexColor(0, 0, 0)
+			right:SetPoint("TOPRIGHT", roleIcon, -3, -3)
+			right:SetPoint("BOTTOMRIGHT", roleIcon, -3, 4)
+
+			local top = scrollChild:CreateTexture(nil, "OVERLAY")
+			top:SetHeight(1)
+			top:SetTexture(C.media.backdrop)
+			top:SetVertexColor(0, 0, 0)
+			top:SetPoint("TOPLEFT", roleIcon, 3, -3)
+			top:SetPoint("TOPRIGHT", roleIcon, -3, -3)
+
+			local bottom = scrollChild:CreateTexture(nil, "OVERLAY")
+			bottom:SetHeight(1)
+			bottom:SetTexture(C.media.backdrop)
+			bottom:SetVertexColor(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", roleIcon, 3, 4)
+			bottom:SetPoint("BOTTOMRIGHT", roleIcon, -3, 4)
+		end
 
 		hooksecurefunc("PlayerTalentFrame_UpdateSpecFrame", function(self, spec)
 			local playerTalentSpec = GetSpecialization(nil, self.isPet, PlayerSpecTab2:GetChecked() and 2 or 1)
@@ -7388,6 +7421,38 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				bu.specIcon:SetDrawLayer("OVERLAY")
 				local bg = F.CreateBG(bu.specIcon)
 				bg:SetDrawLayer("BORDER")
+
+				local roleIcon = bu.roleIcon
+
+				roleIcon:SetTexture(C.media.roleIcons)
+
+				local left = bu:CreateTexture(nil, "OVERLAY")
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+				left:SetPoint("TOPLEFT", roleIcon, 2, -2)
+				left:SetPoint("BOTTOMLEFT", roleIcon, 2, 3)
+
+				local right = bu:CreateTexture(nil, "OVERLAY")
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+				right:SetPoint("TOPRIGHT", roleIcon, -2, -2)
+				right:SetPoint("BOTTOMRIGHT", roleIcon, -2, 3)
+
+				local top = bu:CreateTexture(nil, "OVERLAY")
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+				top:SetPoint("TOPLEFT", roleIcon, 2, -2)
+				top:SetPoint("TOPRIGHT", roleIcon, -2, -2)
+
+				local bottom = bu:CreateTexture(nil, "OVERLAY")
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+				bottom:SetPoint("BOTTOMLEFT", roleIcon, 2, 3)
+				bottom:SetPoint("BOTTOMRIGHT", roleIcon, -2, 3)
 			end
 		end
 
