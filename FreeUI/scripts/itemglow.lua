@@ -5,28 +5,31 @@ local F, C, L = unpack(select(2, ...))
 local function UpdateGlow(button, id)
 	local quality, texture, _
 	local quest = _G[button:GetName().."IconQuestTexture"]
-	if(id) then
+
+	if id then
 		quality, _, _, _, _, _, _, texture = select(3, GetItemInfo(id))
 	end
 
 	local glow = button.glow
-	if(not glow) then
-		button.glow = glow
+	if not glow then
 		glow = button:CreateTexture(nil, "BACKGROUND")
 		glow:SetPoint("TOPLEFT", -1, 1)
 		glow:SetPoint("BOTTOMRIGHT", 1, -1)
 		glow:SetTexture(C.media.backdrop)
+
 		button.glow = glow
 	end
 
 	if texture then
 		local r, g, b
+
 		if quest and quest:IsShown() then
 			r, g, b = 1, 0, 0
 		else
 			r, g, b = GetItemQualityColor(quality)
-			if (r == 1 and g == 1) then r, g, b = 0, 0, 0 end
+			if r == 1 and g == 1 then r, g, b = 0, 0, 0 end
 		end
+
 		glow:SetVertexColor(r, g, b)
 		glow:Show()
 	else
@@ -40,7 +43,7 @@ hooksecurefunc("ContainerFrame_Update", function(self)
 	local name = self:GetName()
 	local id = self:GetID()
 
-	for i=1, self.size do
+	for i = 1, self.size do
 		local button = _G[name.."Item"..i]
 		local itemID = GetContainerItemID(id, button:GetID())
 		UpdateGlow(button, itemID)
