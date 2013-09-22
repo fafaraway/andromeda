@@ -1814,8 +1814,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			popout.arrow = arrow
 
-			popout:SetScript("OnEnter", clearPopout)
-			popout:SetScript("OnLeave", colourPopout)
+			popout:HookScript("OnEnter", clearPopout)
+			popout:HookScript("OnLeave", colourPopout)
 		end
 
 		select(10, CharacterMainHandSlot:GetRegions()):Hide()
@@ -6239,6 +6239,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TransmogrifyFrameButtonFrameMoneyRight:Hide()
 		TransmogrifyFrameButtonFrameMoneyMiddle:Hide()
 
+		local function colourPopout(self)
+			self.arrow:SetVertexColor(r, g, b)
+		end
+
+		local function clearPopout(self)
+			self.arrow:SetVertexColor(1, 1, 1)
+		end
+
 		local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "MainHand", "SecondaryHand"}
 
 		for i = 1, #slots do
@@ -6250,6 +6258,30 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				ic:SetTexCoord(.08, .92, .08, .92)
 				F.CreateBD(slot, 0)
+
+				local popout = slot.popoutButton
+
+				popout:SetNormalTexture("")
+				popout:SetHighlightTexture("")
+
+				local arrow = popout:CreateTexture(nil, "OVERLAY")
+
+				if slot.verticalFlyout then
+					arrow:SetSize(13, 8)
+					arrow:SetTexture(C.media.arrowDown)
+					arrow:SetPoint("TOP", slot, "BOTTOM", 0, 1)
+				else
+					arrow:SetSize(8, 14)
+					arrow:SetTexture(C.media.arrowRight)
+					arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
+				end
+
+				popout.arrow = arrow
+
+				colourPopout(popout)
+
+				popout:HookScript("OnEnter", clearPopout)
+				popout:HookScript("OnLeave", colourPopout)
 			end
 		end
 
