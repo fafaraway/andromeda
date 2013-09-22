@@ -793,9 +793,13 @@ end
 local StartCombat = function()
 	wipe(current)
 	combatstarted = true
-	if display ~= "total" then
-		ResetDisplay(current)
-	end
+
+	local displayTotal = (display == total)
+
+	ResetDisplay(current)
+
+	if displayTotal then display = total end
+
 	MainFrame:SetScript('OnUpdate', OnUpdate)
 end
 
