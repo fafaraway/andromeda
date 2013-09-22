@@ -6046,7 +6046,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Talents
 
-		InspectTalentFrame.InspectSpec.ring:Hide()
+		local inspectSpec = InspectTalentFrame.InspectSpec
+
+		inspectSpec.ring:Hide()
 
 		for i = 1, 6 do
 			local row = InspectTalentFrame.InspectTalents["tier"..i]
@@ -6063,8 +6065,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		InspectTalentFrame.InspectSpec.specIcon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(InspectTalentFrame.InspectSpec.specIcon)
+		inspectSpec.specIcon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(inspectSpec.specIcon)
 
 		local function updateIcon(self)
 			local spec = nil
@@ -6080,13 +6082,47 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		InspectTalentFrame.InspectSpec:HookScript("OnShow", updateIcon)
+		inspectSpec:HookScript("OnShow", updateIcon)
 		InspectTalentFrame:HookScript("OnEvent", function(self, event, unit)
 			if not InspectFrame:IsShown() then return end
 			if event == "INSPECT_READY" and InspectFrame.unit and UnitGUID(InspectFrame.unit) == unit then
 				updateIcon(self.InspectSpec)
 			end
 		end)
+
+		local roleIcon = inspectSpec.roleIcon
+
+		roleIcon:SetTexture(C.media.roleIcons)
+
+		do
+			local left = inspectSpec:CreateTexture(nil, "OVERLAY")
+			left:SetWidth(1)
+			left:SetTexture(C.media.backdrop)
+			left:SetVertexColor(0, 0, 0)
+			left:SetPoint("TOPLEFT", roleIcon, 2, -2)
+			left:SetPoint("BOTTOMLEFT", roleIcon, 2, 2)
+
+			local right = inspectSpec:CreateTexture(nil, "OVERLAY")
+			right:SetWidth(1)
+			right:SetTexture(C.media.backdrop)
+			right:SetVertexColor(0, 0, 0)
+			right:SetPoint("TOPRIGHT", roleIcon, -2, -2)
+			right:SetPoint("BOTTOMRIGHT", roleIcon, -2, 2)
+
+			local top = inspectSpec:CreateTexture(nil, "OVERLAY")
+			top:SetHeight(1)
+			top:SetTexture(C.media.backdrop)
+			top:SetVertexColor(0, 0, 0)
+			top:SetPoint("TOPLEFT", roleIcon, 2, -2)
+			top:SetPoint("TOPRIGHT", roleIcon, -2, -2)
+
+			local bottom = inspectSpec:CreateTexture(nil, "OVERLAY")
+			bottom:SetHeight(1)
+			bottom:SetTexture(C.media.backdrop)
+			bottom:SetVertexColor(0, 0, 0)
+			bottom:SetPoint("BOTTOMLEFT", roleIcon, 2, 2)
+			bottom:SetPoint("BOTTOMRIGHT", roleIcon, -2, 2)
+		end
 
 		local function updateGlyph(self, clear)
 			local id = self:GetID()
