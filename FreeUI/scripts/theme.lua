@@ -7274,18 +7274,33 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			else
 				bonuses = SPEC_SPELLS_DISPLAY[id]
 			end
+
 			for i = 1, #bonuses, 2 do
 				local frame = scrollChild["abilityButton"..index]
 				local _, icon = GetSpellTexture(bonuses[i])
+
 				frame.icon:SetTexture(icon)
 				frame.subText:SetTextColor(.75, .75, .75)
-				if not frame.reskinned then
-					frame.reskinned = true
+
+				if not frame.styled then
 					frame.ring:Hide()
 					frame.icon:SetTexCoord(.08, .92, .08, .92)
 					F.CreateBG(frame.icon)
+
+					frame.styled = true
 				end
+
 				index = index + 1
+			end
+
+			for i = 1, GetNumSpecializations(nil, self.isPet) do
+				local bu = self["specButton"..i]
+
+				if bu.disabled then
+					bu.roleName:SetTextColor(.5, .5, .5)
+				else
+					bu.roleName:SetTextColor(1, 1, 1)
+				end
 			end
 		end)
 
