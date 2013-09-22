@@ -69,8 +69,8 @@ local updatechar = function(self)
 		for i, slotName in ipairs(slots) do
 			-- Ammo is located at 0.
 			if i == 18 then i = 19 end
-			local slotFrame = _G['Character' .. slotName .. 'Slot']
-			local slotLink = GetInventoryItemLink('player', i)
+			local slotFrame = _G['Character'..slotName.."Slot"]
+			local slotLink = GetInventoryItemLink("player", i)
 
 			UpdateGlow(slotFrame, slotLink)
 		end
