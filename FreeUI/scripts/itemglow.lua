@@ -62,7 +62,7 @@ local slots = {
 -- Character Frame
 
 local updatechar = function(self)
-	if CharacterFrame:IsShown() then
+	if PaperDollFrame:IsShown() then
 		for i, slotName in ipairs(slots) do
 			-- Ammo is located at 0.
 			if i == 18 then i = 19 end
@@ -77,7 +77,7 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("UNIT_INVENTORY_CHANGED")
 f:SetScript("OnEvent", updatechar)
-CharacterFrame:HookScript('OnShow', updatechar)
+PaperDollFrame:HookScript('OnShow', updatechar)
 
 -- Inspect Frame
 
