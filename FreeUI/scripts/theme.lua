@@ -1768,7 +1768,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			local glow = self:GetParent().glow
 
 			if glow:IsShown() then
-				aR, aG, aB = self:GetParent().glow:GetVertexColor()
+				aR, aG, aB = glow:GetVertexColor()
 			else
 				aR, aG, aB = r, g, b
 			end
@@ -1826,14 +1826,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			for i = 1, #slots do
 				local slot = _G["Character"..slots[i].."Slot"]
-				local ic = _G["Character"..slots[i].."SlotIconTexture"]
 
 				if i == 18 then i = 19 end
 
 				if GetInventoryItemLink("player", i) then
-					ic:SetAlpha(1)
+					slot.icon:SetAlpha(1)
 				else
-					ic:SetAlpha(0)
+					slot.icon:SetAlpha(0)
 				end
 
 				colourPopout(slot.popoutButton)
