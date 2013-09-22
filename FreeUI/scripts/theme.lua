@@ -1814,15 +1814,18 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 			popout.arrow = arrow
 
-			popout:SetScript("OnEnter", colourPopout)
-			popout:SetScript("OnLeave", clearPopout)
+			popout:SetScript("OnEnter", clearPopout)
+			popout:SetScript("OnLeave", colourPopout)
 		end
 
 		select(10, CharacterMainHandSlot:GetRegions()):Hide()
 		select(10, CharacterSecondaryHandSlot:GetRegions()):Hide()
 
-		hooksecurefunc("PaperDollItemSlotButton_Update", function()
+		local updateChar = function(self)
+			if not PaperDollFrame:IsShown() then return end
+
 			for i = 1, #slots do
+				local slot = _G["Character"..slots[i].."Slot"]
 				local ic = _G["Character"..slots[i].."SlotIconTexture"]
 
 				if i == 18 then i = 19 end
@@ -1832,8 +1835,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				else
 					ic:SetAlpha(0)
 				end
+
+				colourPopout(slot.popoutButton)
 			end
-		end)
+		end
+
+		do
+			local f = CreateFrame("Frame")
+			f:RegisterEvent("UNIT_INVENTORY_CHANGED")
+			f:SetScript("OnEvent", updateChar)
+			PaperDollFrame:HookScript("OnShow", updateChar)
+		end
 
 		for i = 1, #PAPERDOLL_SIDEBARS do
 			local tab = _G["PaperDollSidebarTab"..i]
