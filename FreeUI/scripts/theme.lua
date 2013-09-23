@@ -3194,9 +3194,10 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		TaxiFrame:DisableDrawLayer("OVERLAY")
 		TaxiFrame.Bg:Hide()
 		TaxiFrame.TitleBg:Hide()
+		TaxiFrame.TopTileStreaks:Hide()
 
 		F.SetBD(TaxiFrame, 3, -23, -5, 3)
-		F.ReskinClose(TaxiFrame.CloseButton, "TOPRIGHT", TaxiRouteMap, "TOPRIGHT", -4, -4)
+		F.ReskinClose(TaxiFrame.CloseButton, "TOPRIGHT", TaxiRouteMap, "TOPRIGHT", -6, -6)
 
 		-- Tabard Frame
 
