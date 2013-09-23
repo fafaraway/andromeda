@@ -62,22 +62,22 @@ sbd:SetFrameLevel(sb:GetFrameLevel()-1)
 F.CreateBD(sbd, .25)
 
 local header = f:CreateFontString(nil, "OVERLAY")
-header:SetFont(C.media.font2, 16, "THINOUTLINE")
+header:SetFontObject(GameFontHighlightLarge)
 header:SetPoint("TOP", f, "TOP", 0, -20)
 
 local body = f:CreateFontString(nil, "OVERLAY")
+body:SetFontObject(GameFontHighlight)
 body:SetJustifyH("LEFT")
-body:SetFont(C.media.font2, 13, "THINOUTLINE")
 body:SetWidth(f:GetWidth()-40)
 body:SetPoint("TOPLEFT", f, "TOPLEFT", 20, -60)
 
 local credits = f:CreateFontString(nil, "OVERLAY")
-credits:SetFont(C.media.font2, 9, "THINOUTLINE")
+credits:SetFontObject(GameFontHighlightSmall)
 credits:SetText("FreeUI by Lightsword @ Argent Dawn - EU / Haleth on wowinterface.com")
 credits:SetPoint("BOTTOM", f, "BOTTOM", 0, 4)
 
 local sbt = sb:CreateFontString(nil, "OVERLAY")
-sbt:SetFont(C.media.font2, 13, "THINOUTLINE")
+sbt:SetFontObject(GameFontHighlight)
 sbt:SetPoint("CENTER", sb)
 
 local option1 = CreateFrame("Button", "FreeUI_Install_Option1", f, "UIPanelButtonTemplate")
