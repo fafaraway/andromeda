@@ -309,6 +309,8 @@ C["buffTracker"] = {
 		{spellId = 12975, spellId2 = 871, spellId3 = 1719, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 		-- Shield Block
 		{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		-- Enrage
+		{spellId = 12880, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, spec = 1},
 	}
 }
 
