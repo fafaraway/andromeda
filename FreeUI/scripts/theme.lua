@@ -3006,12 +3006,19 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Loot history
 
+		local LootHistoryFrame = LootHistoryFrame
+
 		for i = 1, 9 do
 			select(i, LootHistoryFrame:GetRegions()):Hide()
 		end
+		LootHistoryFrame.LootIcon:Hide()
+		LootHistoryFrame.Divider:SetAlpha(0)
 		LootHistoryFrameScrollFrame:GetRegions():Hide()
 
-		LootHistoryFrame.ResizeButton:SetPoint("TOP", LootHistoryFrame, "BOTTOM", 0, -1)
+		LootHistoryFrame.Label:ClearAllPoints()
+		LootHistoryFrame.Label:SetPoint("TOP", LootHistoryFrame, "TOP", 0, -8)
+
+		LootHistoryFrame.ResizeButton:SetPoint("TOP", LootHistoryFrame, "BOTTOM", 0, 1)
 		LootHistoryFrame.ResizeButton:SetFrameStrata("LOW")
 
 		F.ReskinArrow(LootHistoryFrame.ResizeButton, "down")
