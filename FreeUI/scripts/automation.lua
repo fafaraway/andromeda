@@ -37,25 +37,34 @@ f:SetScript("OnEvent", function(self, event)
 		cost = GetRepairAllCost()
 		local money = GetMoney()
 
-		if cost > 0 and CanGuildBankRepair() and C.automation.autoRepair_guild then
-			local guildWithdrawMoney = GetGuildBankWithdrawMoney()
+		if cost > 0 then
+			if C.automation.autoRepair_guild and CanGuildBankRepair() then
+				local guildWithdrawMoney = GetGuildBankWithdrawMoney()
 
-			if guildWithdrawMoney > cost then
-				self:SetScript("OnUpdate", onUpdate) -- to work around bug when there's not enough money in guild bank
-				RepairAllItems(1)
-			elseif money > cost then -- if we can't withdraw enough from guild...
-				if cost / 9 > guildWithdrawMoney then -- can't even repair 1 item with guild money (average)
-					RepairAllItems()
-					print(format("Repair: %.1fg", cost * 0.0001))
+				if guildWithdrawMoney > cost then
+					-- GetGuildBankMoney() doesn't work properly, so we just try to repair and see if it worked
+					RepairAllItems(1)
+					self:SetScript("OnUpdate", onUpdate)
 				else
-					F.Notification("Repairs", "Guild repair failed. Repair manually or click to continue.", RepairAllItems())
+					if money >= cost then
+						if cost / 9 > guildWithdrawMoney then
+							-- it probably isn't worth using guild repair at all
+							RepairAllItems()
+							print(format("Repair: %.1fg", cost * 0.0001))
+						else
+							-- it might still be possible to repair a few items with guild repair
+							F.Notification("Repairs", "Guild repair failed. Repair manually, or click to use own money.", RepairAllItems, "Interface\\Icons\\INV_Hammer_20")
+						end
+					else
+						F.Notification("Repairs", "You have insufficient funds to repair your equipment.", nil, "Interface\\Icons\\INV_Hammer_20")
+					end
 				end
+			elseif money >= cost then
+				RepairAllItems()
+				print(format("Repair: %.1fg", cost * 0.0001))
+			else
+				F.Notification("Repairs", "You have insufficient funds to repair your equipment.", nil, "Interface\\Icons\\INV_Hammer_20")
 			end
-		elseif cost > 0 and money > cost then
-			RepairAllItems()
-			print(format("Repair: %.1fg", cost * 0.0001))
-		elseif money < cost then
-			F.Notification("Repairs", "You have insufficient funds to repair your equipment.")
 		end
 	end
 
