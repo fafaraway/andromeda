@@ -18,7 +18,7 @@ F.AddOptionsCallback("notifications", "timeShown", function()
 	timeShown = C.notifications.timeShown
 end)
 
-local bannerWidth = 400
+local bannerWidth = 440
 local interval = 0.1
 
 -- Create frame and stuff
