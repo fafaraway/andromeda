@@ -17,7 +17,7 @@ for i = 1, 5 do
 	arenaFrames[i].Health:SetAllPoints()
 	arenaFrames[i].Health:SetStatusBarTexture(C.media.texture)
 	arenaFrames[i].SpecClass = F.CreateFS(arenaFrames[i].Health, 8)
-	arenaFrames[i].SpecClass:SetPoint("CENTER", 0, 1 + C.unitframes.power_height)
+	arenaFrames[i].SpecClass:SetPoint("CENTER")
 	arenaFrames[i]:Hide()
 end
 
@@ -44,10 +44,11 @@ local updateArena = function(event)
 					if s and s > 0 then
 						_, spec, _, _, _, _, class = GetSpecializationInfoByID(s)
 					end
-
 					if class and spec then
 						f.SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class])
-						f.Health:SetStatusBarColor(unpack(C.classcolours[class]))
+
+						local c = C.classcolours[class]
+						f.Health:SetStatusBarColor(c.r, c.g, c.b)
 						f:Show()
 					end
 				else
