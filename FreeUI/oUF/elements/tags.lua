@@ -1,3 +1,7 @@
+local F, C = unpack(select(2, ...))
+
+if not C.unitframes.enable then return end
+
 --[[
 -- Credits: Vika, Cladhaire, Tekkub
 ]]

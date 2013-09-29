@@ -1,4 +1,6 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
+
+if not C.unitframes.enable then return end
 
 local r, g, b = C.classcolours["MAGE"].r, C.classcolours["MAGE"].g, C.classcolours["MAGE"].b
 

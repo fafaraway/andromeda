@@ -1,3 +1,7 @@
+local F, C = unpack(select(2, ...))
+
+if not C.unitframes.enable then return end
+
 --[[ Element: Druid Mana Bar
  Handles updating and visibility of a status bar displaying the druid's mana
  while outside of caster form.

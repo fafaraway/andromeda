@@ -1,3 +1,7 @@
+local F, C = unpack(select(2, ...))
+
+if not C.unitframes.enable then return end
+
 local Update = function(self, event)
 	local resurrect = self.ResurrectIcon
 	if(resurrect.PreUpdate) then

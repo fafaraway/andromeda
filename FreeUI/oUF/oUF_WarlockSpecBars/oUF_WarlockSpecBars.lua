@@ -1,3 +1,7 @@
+local F, C = unpack(select(2, ...))
+
+if not C.unitframes.enable then return end
+
 if select(2, UnitClass("player")) ~= "WARLOCK" then return end
 
 local _, ns = ...

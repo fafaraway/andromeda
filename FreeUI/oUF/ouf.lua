@@ -1,3 +1,7 @@
+local F, C = unpack(select(2, ...))
+
+if not C.unitframes.enable then return end
+
 local parent, ns = ...
 local global = parent == "oUF" and parent
 local _VERSION = GetAddOnMetadata(parent, 'version')
