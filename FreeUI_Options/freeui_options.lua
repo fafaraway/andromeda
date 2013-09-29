@@ -321,15 +321,17 @@ init:SetScript("OnEvent", function()
 
 	local FreeUIOptionsPanel = FreeUIOptionsPanel
 
-	FreeUIOptionsPanel:HookScript("OnShow", function()
-		oUF_FreePlayer:SetAlpha(0)
-		oUF_FreeTarget:SetAlpha(0)
-	end)
+	if C.unitframes.enable then
+		FreeUIOptionsPanel:HookScript("OnShow", function()
+			oUF_FreePlayer:SetAlpha(0)
+			oUF_FreeTarget:SetAlpha(0)
+		end)
 
-	FreeUIOptionsPanel:HookScript("OnHide", function()
-		oUF_FreePlayer:SetAlpha(1)
-		oUF_FreeTarget:SetAlpha(1)
-	end)
+		FreeUIOptionsPanel:HookScript("OnHide", function()
+			oUF_FreePlayer:SetAlpha(1)
+			oUF_FreeTarget:SetAlpha(1)
+		end)
+	end
 
 	local resetFrame = FreeUIOptionsPanel.resetFrame
 	local layout = FreeUIOptionsPanel.unitframes.Layout

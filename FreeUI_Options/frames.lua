@@ -252,6 +252,8 @@ rareAlert:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
 local rareAlertPlaySound = ns.CreateCheckBox(general, "rareAlert_playSound")
 rareAlertPlaySound:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 16, -8)
 
+rareAlert.children = {rareAlertPlaySound}
+
 local nameplates = ns.CreateCheckBox(general, "nameplates", true, true)
 nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -42)
 
@@ -461,9 +463,6 @@ castbarSeparate.children = {castbarSeparateOnlyCasters}
 local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
 enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
 
-local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
-enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
-
 local layoutText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 layoutText:SetPoint("TOP", 0, -340)
 layoutText:SetText(ns.localization.layoutText)
@@ -475,10 +474,12 @@ tinsert(ns.buttons, unitframes.Layout)
 
 local function toggleUFOptions()
 	local shown = enable:GetChecked() == 1
+
 	enableGroup:SetShown(shown)
 	limitRaidSize:SetShown(shown)
 	healerClasscolours:SetShown(shown)
 	partyNameAlways:SetShown(shown)
+	absorb:SetShown(shown)
 	targettarget:SetShown(shown)
 	pvp:SetShown(shown)
 	castbarSeparate:SetShown(shown)
