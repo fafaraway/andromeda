@@ -2,6 +2,8 @@
 
 local F, C = unpack(select(2, ...))
 
+if not C.unitframes.enableArena then return end
+
 local arenaFrames = {}
 
 for i = 1, 5 do

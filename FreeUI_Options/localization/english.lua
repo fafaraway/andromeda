@@ -128,7 +128,7 @@ ns.localization.unitframeshealerClasscoloursTooltip = "Enable to use class colou
 ns.localization.unitframespvp = "PVP Icon"
 ns.localization.unitframespvpTooltip = "Show a small red PVP icon above the player unit frame."
 ns.localization.unitframesenableArena = "Arena/Flag Carrier frames"
-ns.localization.unitframesenableArenaTooltip = "Enables unit frames for arena enemies, and flag carriers in battlegrounds."
+ns.localization.unitframesenableArenaTooltip = "Enables unit frames for arena enemies (including round preparation) and flag carriers in battlegrounds."
 
 ns.localization.tooltip = "Tooltip"
 ns.localization.tooltipSubText = "Adjust the appearance and functionality of the game tooltip below."
