@@ -2,21 +2,7 @@
 
 local general = C.general
 
-local kukuru = "Kukuru's Treasure Cache"
-
-if GetLocale() == "ruRU" then
-	kukuru = "Клад Кукуру"
-end
-
-local function OnEvent(event, vignetteInstanceID)
-	if vignetteInstanceID then
-		local _, _, name = C_Vignettes.GetVignetteInfoFromInstanceID(vignetteInstanceID)
-
-		if name and name == kukuru then
-			return
-		end
-	end
-
+local function OnEvent()
 	if general.rareAlert_playSound then
 		PlaySoundFile("Sound\\Interface\\RaidWarning.wav")
 	end
