@@ -149,7 +149,7 @@ local UpdateFrame = function(self)
 	local level, elite, mylevel = tonumber(self.level:GetText()), self.elite:IsShown(), UnitLevel("player")
 	self.level:ClearAllPoints()
 	self.level:SetPoint("RIGHT", self.healthBar, "LEFT", -2 / barScale, 0)
-	self.level:SetFont(C.media.font, 8 * UIParent:GetScale() / barScale, "OUTLINEMONOCHROME")
+	self.level:SetFont(C.media.font, 8 * offset, "OUTLINEMONOCHROME")
 	self.level:SetShadowColor(0, 0, 0, 0)
 	if self.boss:IsShown() then
 		self.level:SetText("B")
@@ -201,6 +201,8 @@ end
 local StyleFrame = function(frame)
 	frame.done = true
 
+	local offset = UIParent:GetScale()
+
 	frame.barFrame, frame.nameFrame = frame:GetChildren()
 
 	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
@@ -212,7 +214,7 @@ local StyleFrame = function(frame)
 	frame.oldname = nameTextRegion
 	nameTextRegion:Hide()
 
-	local newNameRegion = F.CreateFS(frame, 8 * UIParent:GetScale(), "CENTER")
+	local newNameRegion = F.CreateFS(frame, 8 * offset, "CENTER")
 	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 1, 2)
 	newNameRegion:SetWidth(80)
 	newNameRegion:SetHeight(7)
@@ -228,7 +230,7 @@ local StyleFrame = function(frame)
 	castBar:SetStatusBarTexture(C.media.texture)
 
 	castShadow:SetTexture("")
-	castText:SetFont(C.media.font, 8 * UIParent:GetScale(), "OUTLINEMONOCHROME")
+	castText:SetFont(C.media.font, 8 * offset, "OUTLINEMONOCHROME")
 	castText:ClearAllPoints()
 	castText:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
@@ -257,7 +259,6 @@ local StyleFrame = function(frame)
 	stateIconRegion:SetTexture(nil)
 	bossIconRegion:SetTexture(nil)
 
-	local offset = UIParent:GetScale()
 	CreateBD(healthBar, offset)
 	CreateBD(castBar, offset)
 
