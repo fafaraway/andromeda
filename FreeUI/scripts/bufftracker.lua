@@ -28,7 +28,10 @@ local function onEvent(self, event, ...)
 		self:SetAlpha(1)
 		for i = 1, 40 do
 			local name, rank, icon, count, _, duration, expirationTime, caster, _, _, spellID = UnitAura(data.unitId, i, data.filter)
-			if((data.isMine~=1 or units[caster]) and(not data.spec or GetSpecialization()==data.spec) and (spellID == data.spellId or (data.spellId2 and spellID == data.spellId2) or (data.spellId3 and spellID == data.spellId3) or (data.spellId4 and spellID == data.spellId4) or (data.spellId5 and spellID == data.spellId5))) then
+			if((data.isMine~=1 or units[caster])
+			and(not data.spec or GetSpecialization() == data.spec)
+			and(spellID == data.spellId or (data.spellId2 and spellID == data.spellId2) or (data.spellId3 and spellID == data.spellId3) or (data.spellId4 and spellID == data.spellId4) or (data.spellId5 and spellID == data.spellId5))
+			and(not data.minStack or count >= data.minStack)) then
 				self.found = true
 				self.icon:SetTexture(icon)
 				self.count:SetText(count>1 and count or "")
