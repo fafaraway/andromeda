@@ -65,7 +65,7 @@ options.Profile = Profile
 
 local title = options:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint("TOP", 0, -26)
-title:SetText("FreeUI v."..GetAddOnMetadata("FreeUI", "Version"))
+title:SetText("FreeUI "..GetAddOnMetadata("FreeUI", "Version"))
 
 local reloadText = options:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 reloadText:SetPoint("BOTTOM", 0, 14)
