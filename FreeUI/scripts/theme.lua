@@ -7188,7 +7188,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		ConquestFrame.RatedBGReward.Icon:SetSize(16, 16)
 		F.CreateBG(ConquestFrame.RatedBGReward.Icon)
 
-		ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
+		ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
 		ConquestFrame.RatedBGReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
 
 		for i = 1, 4 do
