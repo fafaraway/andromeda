@@ -4,6 +4,9 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
+-- workaround for 5.4.1 taint error
+setfenv(WorldMapFrame_OnShow, setmetatable({ UpdateMicroButtons = function() end }, { __index = _G }))
+
 WORLDMAP_WINDOWED_SIZE = 0.82
 
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
@@ -32,6 +35,7 @@ mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, offset, -offset)
 mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
 
 local frame = CreateFrame ("Frame", nil, WorldMapButton)
+frame:SetScale(offset)
 frame:SetFrameStrata("HIGH")
 
 local panelHolder = CreateFrame("ScrollFrame", nil, WorldMapButton)
@@ -86,8 +90,8 @@ local SmallerMapSkin = function()
 	WorldMapFrameMiniBorderRight:Hide()
 
 	WorldMapFrameTitle:ClearAllPoints()
-	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 9, 5);
-	WorldMapFrameTitle:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
+	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 8, 4);
+	WorldMapFrameTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	WorldMapFrameTitle:SetTextColor(1, 1, 1)
 	WorldMapFrameTitle:SetShadowColor(0, 0, 0, 0)
 	WorldMapFrameTitle:SetParent(frame)
@@ -96,8 +100,8 @@ local SmallerMapSkin = function()
 	WorldMapTrackQuest:ClearAllPoints()
 	WorldMapTrackQuest:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT")
 	WorldMapTrackQuestText:ClearAllPoints()
-	WorldMapTrackQuestText:SetPoint("RIGHT", WorldMapTrackQuest, "LEFT",-4,1)
-	WorldMapTrackQuestText:SetFont(C.media.font, fontsize, "OUTLINEMONOCHROME")
+	WorldMapTrackQuestText:SetPoint("RIGHT", WorldMapTrackQuest, "LEFT", -2, 0)
+	WorldMapTrackQuestText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 	WorldMapTrackQuestText:SetTextColor(1, 1, 1)
 	WorldMapTrackQuestText:SetShadowColor(0, 0, 0, 0)
 
@@ -130,9 +134,9 @@ local SmallerMapSkin = function()
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
-local coords = F.CreateFS(frame, fontsize)
+local coords = F.CreateFS(frame, 8)
 coords:SetPoint("LEFT", WorldMapFrameTitle, "RIGHT")
-local cursorcoords = F.CreateFS(frame, fontsize)
+local cursorcoords = F.CreateFS(frame, 8)
 cursorcoords:SetPoint("BOTTOMLEFT", WorldMapFrameTitle, "TOPLEFT", 0, 4)
 
 local freq = C.performance.mapcoords
