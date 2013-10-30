@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 if not IsAddOnLoaded("FreeUI_Options") then return end
 
-local realm = GetCVar("realmName")
+local realm = GetRealmName()
 local name = UnitName("player")
 
 -- create the profile boolean
