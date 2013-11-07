@@ -10,6 +10,7 @@ local F, C, L = unpack(select(2, ...))
 
 	To override an option in a table which uses indexes (=the table is simply a summary of values), use this:
 	C.buffTracker.PALADIN[1] = {spellId = 59578, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3}
+	(if you are adding a table for a new class, you have to use C.buffTracker.NEWCLASSHERE = {} first)
 
 	To append an option to an existing table, use this format:
 	tinsert(C.buffTracker.PALADIN, {spellId = 114250, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3})
