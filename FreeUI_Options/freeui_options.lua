@@ -293,21 +293,31 @@ local function removeCharData(self)
 	self:ClearFocus()
 
 	local realm = C.myRealm
-	local text = self:GetText()
+	local name = self:GetText()
 
 	self:SetText("")
 
-	if text ~= "" then
-		for name in pairs(FreeUIGlobalConfig[realm].class) do
-			if text == name then
-				FreeUIGlobalConfig[realm].class[name] = nil
-				FreeUIGlobalConfig[realm].gold[name] = nil
-				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..text.." removed.", unpack(C.class))
-				return
-			end
+	if name ~= "" then
+		local somethingDeleted = false
+
+		if FreeUIGlobalConfig[realm].class[name] ~= nil then
+			FreeUIGlobalConfig[realm].class[name] = nil
+			somethingDeleted = true
+		end
+		if FreeUIGlobalConfig[realm].gold[name] ~= nil then
+			FreeUIGlobalConfig[realm].gold[name] = nil
+			somethingDeleted = true
+		end
+		if FreeUIOptionsGlobal[realm][name] ~= nil then
+			FreeUIOptionsGlobal[realm][name] = nil
+			somethingDeleted = true
 		end
 
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..text.." not found. Check the spelling of the name.", unpack(C.class))
+		if somethingDeleted then
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..name.." removed.", unpack(C.class))
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..name.." not found. Check the spelling of the name.", unpack(C.class))
+		end
 	end
 end
 
