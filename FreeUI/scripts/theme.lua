@@ -1655,12 +1655,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		FriendsFrameStatusDropDown:ClearAllPoints()
 		FriendsFrameStatusDropDown:SetPoint("TOPLEFT", FriendsFrame, "TOPLEFT", 10, -28)
 
-		FriendsTabHeaderSoRButton:SetPushedTexture("")
-		FriendsTabHeaderSoRButtonIcon:SetTexCoord(.08, .92, .08, .92)
-		local SoRBg = CreateFrame("Frame", nil, FriendsTabHeaderSoRButton)
-		SoRBg:SetPoint("TOPLEFT", -1, 1)
-		SoRBg:SetPoint("BOTTOMRIGHT", 1, -1)
-		F.CreateBD(SoRBg, 0)
+		for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
+			button:SetPushedTexture("")
+			button:GetRegions():SetTexCoord(.08, .92, .08, .92)
+			F.CreateBDFrame(button)
+		end
 
 		F.CreateBD(FriendsFrameBattlenetFrame.UnavailableInfoFrame)
 		FriendsFrameBattlenetFrame.UnavailableInfoFrame:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", 1, -18)
