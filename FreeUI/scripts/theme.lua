@@ -3769,6 +3769,26 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinPortraitFrame(ProductChoiceFrame)
 		F.Reskin(ProductChoiceFrame.Inset.ClaimButton)
 
+		-- Model Preview frame
+
+		local ModelPreviewFrame = ModelPreviewFrame
+		local Display = ModelPreviewFrame.Display
+
+		Display.YesMountsTex:Hide()
+		Display.ShadowOverlay:Hide()
+
+		F.ReskinPortraitFrame(ModelPreviewFrame, true)
+		F.Reskin(ModelPreviewFrame.CloseButton)
+		F.ReskinArrow(Display.Model.RotateLeftButton, "left")
+		F.ReskinArrow(Display.Model.RotateRightButton, "right")
+
+		local bg = F.CreateBDFrame(Display.Model, .25)
+		bg:SetPoint("TOPLEFT", -1, 0)
+		bg:SetPoint("BOTTOMRIGHT", 2, -2)
+
+		Display.Model.RotateLeftButton:SetPoint("TOPRIGHT", Display.Model, "BOTTOM", -5, -10)
+		Display.Model.RotateRightButton:SetPoint("TOPLEFT", Display.Model, "BOTTOM", 5, -10)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
