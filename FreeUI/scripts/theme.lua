@@ -3741,6 +3741,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		-- Recruit A Friend frame
+
+		local RecruitAFriendFrame = RecruitAFriendFrame
+		local RecruitAFriendSentFrame = RecruitAFriendSentFrame
+
+		RecruitAFriendFrame.NoteFrame:DisableDrawLayer("BACKGROUND")
+
+		F.CreateBD(RecruitAFriendFrame)
+		F.ReskinClose(RecruitAFriendFrameCloseButton)
+		F.Reskin(RecruitAFriendFrame.SendButton)
+		F.ReskinInput(RecruitAFriendNameEditBox)
+
+		F.CreateBDFrame(RecruitAFriendFrame.NoteFrame, .25)
+
+		F.CreateBD(RecruitAFriendSentFrame)
+		F.Reskin(RecruitAFriendSentFrame.OKButton)
+		F.ReskinClose(RecruitAFriendSentFrameCloseButton)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
