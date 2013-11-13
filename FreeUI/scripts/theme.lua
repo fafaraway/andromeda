@@ -55,7 +55,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Scroll bars ]]
 
-		local scrollbars = {"FriendsFrameFriendsScrollFrameScrollBar", "CharacterStatsPaneScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ChannelRosterScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "BCMCopyScrollScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar"}
+		local scrollbars = {"CharacterStatsPaneScrollBar", "LFDQueueFrameSpecificListScrollFrameScrollBar", "HelpFrameKnowledgebaseScrollFrameScrollBar", "HelpFrameReportBugScrollFrameScrollBar", "HelpFrameSubmitSuggestionScrollFrameScrollBar", "HelpFrameTicketScrollFrameScrollBar", "PaperDollTitlesPaneScrollBar", "PaperDollEquipmentManagerPaneScrollBar", "SendMailScrollFrameScrollBar", "OpenMailScrollFrameScrollBar", "RaidInfoScrollFrameScrollBar", "ChannelRosterScrollFrameScrollBar", "FriendsFriendsScrollFrameScrollBar", "HelpFrameGM_ResponseScrollFrame1ScrollBar", "HelpFrameGM_ResponseScrollFrame2ScrollBar", "HelpFrameKnowledgebaseScrollFrame2ScrollBar", "WhoListScrollFrameScrollBar", "GearManagerDialogPopupScrollFrameScrollBar", "LFDQueueFrameRandomScrollFrameScrollBar", "BCMCopyScrollScrollBar", "ScrollOfResurrectionSelectionFrameListScrollFrameScrollBar"}
 		for i = 1, #scrollbars do
 			local scrollbar = _G[scrollbars[i]]
 			if scrollbar then
@@ -1608,6 +1608,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Friends Frame
 
+		FriendsFrameFriendsScrollFrameTop:Hide()
+		FriendsFrameFriendsScrollFrameMiddle:Hide()
+		FriendsFrameFriendsScrollFrameBottom:Hide()
+		IgnoreListFrameTop:Hide()
+		IgnoreListFrameMiddle:Hide()
+		IgnoreListFrameBottom:Hide()
+		PendingListFrameTop:Hide()
+		PendingListFrameMiddle:Hide()
+		PendingListFrameBottom:Hide()
+
 		for i = 1, 4 do
 			F.ReskinTab(_G["FriendsFrameTab"..i])
 		end
@@ -1704,6 +1714,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(FriendsFrameIgnorePlayerButton)
 		F.Reskin(FriendsFrameUnsquelchButton)
 		F.Reskin(FriendsFrameMutePlayerButton)
+		F.ReskinScroll(FriendsFrameFriendsScrollFrameScrollBar)
+		F.ReskinScroll(FriendsFrameIgnoreScrollFrameScrollBar)
 		F.ReskinDropDown(FriendsFrameStatusDropDown)
 
 		-- Battlenet toast frame
@@ -3925,9 +3937,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 		ChannelRosterScrollFrameTop:SetAlpha(0)
 		ChannelRosterScrollFrameBottom:SetAlpha(0)
-		FriendsFrameFriendsScrollFrameTop:Hide()
-		FriendsFrameFriendsScrollFrameMiddle:Hide()
-		FriendsFrameFriendsScrollFrameBottom:Hide()
 		WhoFrameListInsetBg:Hide()
 		WhoFrameEditBoxInsetBg:Hide()
 		ChannelFrameLeftInsetBg:Hide()
@@ -3944,12 +3953,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		LFRQueueFrameListInsetBg:Hide()
 		LFRQueueFrameCommentInsetBg:Hide()
 		select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
-		IgnoreListFrameTop:Hide()
-		IgnoreListFrameMiddle:Hide()
-		IgnoreListFrameBottom:Hide()
-		PendingListFrameTop:Hide()
-		PendingListFrameMiddle:Hide()
-		PendingListFrameBottom:Hide()
 		ScrollOfResurrectionSelectionFrameBackground:Hide()
 
 		ReadyCheckFrame:HookScript("OnShow", function(self) if UnitIsUnit("player", self.initiator) then self:Hide() end end)
