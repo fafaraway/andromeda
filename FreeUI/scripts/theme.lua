@@ -3759,6 +3759,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(RecruitAFriendSentFrame.OKButton)
 		F.ReskinClose(RecruitAFriendSentFrameCloseButton)
 
+		-- Product Choice frame
+
+		local ProductChoiceFrame = ProductChoiceFrame
+
+		ProductChoiceFrame.Inset.Bg:Hide()
+		ProductChoiceFrame.Inset:DisableDrawLayer("BORDER")
+
+		F.ReskinPortraitFrame(ProductChoiceFrame)
+		F.Reskin(ProductChoiceFrame.Inset.ClaimButton)
+
 		-- [[ Hide regions ]]
 
 		local bglayers = {"LFDParentFrame", "LFDParentFrameInset", "WhoFrameColumnHeader1", "WhoFrameColumnHeader2", "WhoFrameColumnHeader3", "WhoFrameColumnHeader4", "RaidInfoInstanceLabel", "RaidInfoIDLabel", "CharacterFrameInsetRight", "LFRQueueFrame", "LFRBrowseFrame", "HelpFrameMainInset", "CharacterModelFrame", "HelpFrame", "HelpFrameLeftInset", "VideoOptionsFrameCategoryFrame", "InterfaceOptionsFrameCategories", "InterfaceOptionsFrameAddOns", "RaidParentFrame"}
