@@ -2900,6 +2900,25 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 
 			F.Reskin(InterfaceOptionsHelpPanelResetTutorials)
+
+			if not C.unitframes.enable and IsAddOnLoaded("Blizzard_CompactRaidFrames") then
+				CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateBG:Hide()
+
+				local boxes = {CompactUnitFrameProfilesRaidStylePartyFrames, CompactUnitFrameProfilesGeneralOptionsFrameKeepGroupsTogether, CompactUnitFrameProfilesGeneralOptionsFrameHorizontalGroups, CompactUnitFrameProfilesGeneralOptionsFrameDisplayIncomingHeals, CompactUnitFrameProfilesGeneralOptionsFrameDisplayPowerBar, CompactUnitFrameProfilesGeneralOptionsFrameDisplayAggroHighlight, CompactUnitFrameProfilesGeneralOptionsFrameUseClassColors, CompactUnitFrameProfilesGeneralOptionsFrameDisplayPets, CompactUnitFrameProfilesGeneralOptionsFrameDisplayMainTankAndAssist, CompactUnitFrameProfilesGeneralOptionsFrameDisplayBorder, CompactUnitFrameProfilesGeneralOptionsFrameShowDebuffs, CompactUnitFrameProfilesGeneralOptionsFrameDisplayOnlyDispellableDebuffs, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate2Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate3Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate5Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate10Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate15Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate25Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivate40Players, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec1, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivateSpec2, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivatePvP, CompactUnitFrameProfilesGeneralOptionsFrameAutoActivatePvE}
+
+				for _, box in next, boxes do
+					F.ReskinCheck(box)
+				end
+
+				F.Reskin(CompactUnitFrameProfilesSaveButton)
+				F.Reskin(CompactUnitFrameProfilesDeleteButton)
+				F.Reskin(CompactUnitFrameProfilesGeneralOptionsFrameResetPositionButton)
+				F.ReskinDropDown(CompactUnitFrameProfilesProfileSelector)
+				F.ReskinDropDown(CompactUnitFrameProfilesGeneralOptionsFrameSortByDropdown)
+				F.ReskinDropDown(CompactUnitFrameProfilesGeneralOptionsFrameHealthTextDropdown)
+				F.ReskinSlider(CompactUnitFrameProfilesGeneralOptionsFrameHeightSlider)
+				F.ReskinSlider(CompactUnitFrameProfilesGeneralOptionsFrameWidthSlider)
+			end
 		end)
 
 		hooksecurefunc("InterfaceOptions_AddCategory", function()
