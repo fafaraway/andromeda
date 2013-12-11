@@ -220,7 +220,7 @@ local function updateGuild()
 	for i, button in ipairs(buttons) do
 		if(button:IsShown() and button.online and button.guildIndex) then
 			local fullName, rank, rankIndex, level, class, zone, note, officernote, online, isAway, classFileName, achievementPnts, achievementRank, isMobile = GetGuildRosterInfo(button.guildIndex)
-			local displayedName = classColor[classFileName] .. fullName
+			local displayedName = classColor[classFileName] .. Ambiguate(fullName, "guild")
 			if isMobile then
 				if isAway == 2 then
 					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..displayedName
