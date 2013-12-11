@@ -13,7 +13,6 @@ UIErrorsFrame:SetShadowOffset(0, 0)
 STANDARD_TEXT_FONT = font
 UNIT_NAME_FONT     = font
 DAMAGE_TEXT_FONT   = font
-NAMEPLATE_FONT     = font
 
 AchievementFont_Small:SetFont(font, 10)
 AchievementFont_Small:SetShadowColor(0, 0, 0)
