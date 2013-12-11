@@ -193,19 +193,19 @@ end
 local function updateTradeSkills()
 	for i, button in ipairs(GuildRosterContainer.buttons) do
 		if button:IsShown() and button.online and button.guildIndex then
-			local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerName, class, online, zone, skill, classFileName, isMobile, isAway = GetGuildTradeSkillInfo(button.guildIndex)
-			if playerName then
-				playerName = classColor[classFileName]..playerName
+			local skillID, isCollapsed, iconTexture, headerName, numOnline, numVisible, numPlayers, playerDisplayName, playerFullName, class, online, zone, skill, classFileName, isMobile, isAway = GetGuildTradeSkillInfo(button.guildIndex)
+			if playerDisplayName then
+				playerDisplayName = classColor[classFileName]..playerDisplayName
 				if isMobile then
 					if isAway == 2 then
-						playerName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..playerName
+						playerDisplayName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..playerDisplayName
 					elseif isAway == 1 then
-						playerName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"..playerName
+						playerDisplayName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"..playerDisplayName
 					else
-						playerName = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..playerName
+						playerDisplayName = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..playerDisplayName
 					end
 				end
-				button.string1:SetText(playerName)
+				button.string1:SetText(playerDisplayName)
 			end
 		end
 	end
@@ -219,8 +219,8 @@ local function updateGuild()
 
 	for i, button in ipairs(buttons) do
 		if(button:IsShown() and button.online and button.guildIndex) then
-			local name, rank, rankIndex, level, class, zone, note, officernote, online, isAway, classFileName, achievementPnts, achievementRank, isMobile = GetGuildRosterInfo(button.guildIndex)
-			local displayedName = classColor[classFileName] .. name
+			local fullName, rank, rankIndex, level, class, zone, note, officernote, online, isAway, classFileName, achievementPnts, achievementRank, isMobile = GetGuildRosterInfo(button.guildIndex)
+			local displayedName = classColor[classFileName] .. fullName
 			if isMobile then
 				if isAway == 2 then
 					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..displayedName
