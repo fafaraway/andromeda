@@ -54,6 +54,8 @@ local microMenu = {
 	end},
 	{text = ENCOUNTER_JOURNAL,
 	func = function() ToggleEncounterJournal() F.menuShown = false end},
+	{text = BLIZZARD_STORE,
+	func = function() StoreMicroButton:Click() end},
 }
 
 -- spellbook need at least 1 opening else it taint in combat
