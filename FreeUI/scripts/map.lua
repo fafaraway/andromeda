@@ -4,9 +4,6 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
--- workaround for 5.4.1 taint error
-setfenv(WorldMapFrame_OnShow, setmetatable({ UpdateMicroButtons = function() end }, { __index = _G }))
-
 WORLDMAP_WINDOWED_SIZE = 0.82
 
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
