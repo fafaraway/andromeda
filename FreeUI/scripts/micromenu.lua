@@ -71,5 +71,5 @@ end
 F.RegisterEvent("ADDON_LOADED", taint)
 
 F.MicroMenu = function()
-	EasyMenu(microMenu, menuFrame, Minimap, -185, 253, 1)
+	EasyMenu(microMenu, menuFrame, Minimap, -185, 269, 1)
 end
