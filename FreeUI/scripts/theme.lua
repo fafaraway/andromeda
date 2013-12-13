@@ -4856,6 +4856,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinArrow(BarberShopFrameSelector2Next, "right")
 		F.ReskinArrow(BarberShopFrameSelector3Prev, "left")
 		F.ReskinArrow(BarberShopFrameSelector3Next, "right")
+		F.ReskinArrow(BarberShopFrameSelector4Prev, "left")
+		F.ReskinArrow(BarberShopFrameSelector4Next, "right")
 	elseif addon == "Blizzard_BattlefieldMinimap" then
 		F.SetBD(BattlefieldMinimap, -1, 1, -5, 3)
 		BattlefieldMinimapCorner:Hide()
