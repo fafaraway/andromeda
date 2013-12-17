@@ -1163,6 +1163,53 @@ local UnitSpecific = {
 		end)
 
 		self.CounterBar = CounterBar
+
+		do
+			local f = CreateFrame("Frame")
+
+			local function incrementAlpha()
+				local alpha = self:GetAlpha()
+
+				if alpha >= 1 then
+					self:SetAlpha(1)
+					f:SetScript("OnUpdate", nil)
+					return
+				end
+
+				self:SetAlpha(alpha + 0.05)
+			end
+
+			local function decrementAlpha()
+				local alpha = self:GetAlpha()
+
+				if alpha <= 0 then
+					self:SetAlpha(0)
+					f:SetScript("OnUpdate", nil)
+					return
+				end
+
+				self:SetAlpha(alpha - 0.05)
+			end
+
+			f:RegisterEvent("PLAYER_REGEN_ENABLED")
+			f:RegisterEvent("PLAYER_REGEN_DISABLED")
+			f:RegisterEvent("PLAYER_TARGET_CHANGED")
+			f:SetScript("OnEvent", function(_, event)
+				if event == "PLAYER_REGEN_ENABLED" then
+					f:SetScript("OnUpdate", decrementAlpha)
+				elseif event == "PLAYER_REGEN_DISABLED" then
+					f:SetScript("OnUpdate", incrementAlpha)
+				else
+					if UnitName("target") ~= nil then
+						f:SetScript("OnUpdate", incrementAlpha)
+					else
+						f:SetScript("OnUpdate", decrementAlpha)
+					end
+				end
+			end)
+
+			self:SetAlpha(0)
+		end
 	end,
 
 	target = function(self, ...)
