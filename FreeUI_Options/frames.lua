@@ -186,7 +186,10 @@ menuButton:SetPoint("TOP", GameMenuButtonUIOptions, "BOTTOM", 0, -1)
 menuButton:SetText("FreeUI")
 tinsert(ns.buttons, menuButton)
 
-GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + 22)
+GameMenuFrame:HookScript("OnShow", function(self)
+	GameMenuButtonStore:Hide()
+	GameMenuButtonOptions:SetPoint("TOP", GameMenuButtonHelp, "BOTTOM", 0, -16)
+end)
 
 GameMenuButtonKeybindings:ClearAllPoints()
 GameMenuButtonKeybindings:SetPoint("TOP", menuButton, "BOTTOM", 0, -1)
