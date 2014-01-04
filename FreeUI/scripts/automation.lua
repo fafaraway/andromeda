@@ -89,7 +89,7 @@ local IsFriend = function(name)
 
 	if IsInGuild() then
 		for i = 1, GetNumGuildMembers() do
-			if GetGuildRosterInfo(i) == name then return true end
+			if Ambiguate(GetGuildRosterInfo(i), "guild") == name then return true end
 		end
 	end
 
