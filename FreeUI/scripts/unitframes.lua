@@ -950,51 +950,9 @@ local UnitSpecific = {
 			staggerBar:SetSize(playerWidth, 2)
 			staggerBar:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 			staggerBar:SetStatusBarTexture(C.media.texture)
-			staggerBar:Hide()
 			F.CreateBDFrame(staggerBar)
 
-			local BREWMASTER_POWER_BAR_NAME = BREWMASTER_POWER_BAR_NAME
-			local STAGGER_YELLOW_TRANSITION = STAGGER_YELLOW_TRANSITION
-			local STAGGER_RED_TRANSITION = STAGGER_RED_TRANSITION
-
-			local GREEN_INDEX = 1
-			local YELLOW_INDEX = 2
-			local RED_INDEX = 3
-
-			staggerBar:SetScript("OnUpdate", function()
-				local currstagger = UnitStagger(self.unit)
-				if not currstagger then return end
-
-				local unitHealthMax = UnitHealthMax(self.unit)
-
-				staggerBar:SetValue(currstagger)
-				staggerBar:SetMinMaxValues(0, unitHealthMax)
-
-				local percent = currstagger / unitHealthMax
-				local info = PowerBarColor[BREWMASTER_POWER_BAR_NAME]
-
-				if percent > STAGGER_YELLOW_TRANSITION and percent < STAGGER_RED_TRANSITION then
-					info = info[YELLOW_INDEX]
-				elseif percent > STAGGER_RED_TRANSITION then
-					info = info[RED_INDEX]
-				else
-					info = info[GREEN_INDEX]
-				end
-				staggerBar:SetStatusBarColor(info.r, info.g, info.b)
-			end)
-
-			staggerBar:RegisterEvent("PLAYER_TALENT_UPDATE")
-			staggerBar:RegisterEvent("PLAYER_ENTERING_WORLD")
-			staggerBar:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR")
-			staggerBar:SetScript("OnEvent", function()
-				if GetSpecialization() == SPEC_MONK_BREWMASTER and not UnitHasVehiclePlayerFrameUI("player") then
-					staggerBar:Show()
-				else
-					staggerBar:Hide()
-				end
-			end)
-
-
+			self.Stagger = staggerBar
 			self.SpecialPowerBar = staggerBar
 		elseif class == "PALADIN" and C.classmod.paladinHP then
 			local UpdateHoly = function(self, event, unit, powerType)
@@ -1163,6 +1121,53 @@ local UnitSpecific = {
 		end)
 
 		self.CounterBar = CounterBar
+
+		-- do
+			-- local f = CreateFrame("Frame")
+
+			-- local function incrementAlpha()
+				-- local alpha = self:GetAlpha()
+
+				-- if alpha >= 1 then
+					-- self:SetAlpha(1)
+					-- f:SetScript("OnUpdate", nil)
+					-- return
+				-- end
+
+				-- self:SetAlpha(alpha + 0.05)
+			-- end
+
+			-- local function decrementAlpha()
+				-- local alpha = self:GetAlpha()
+
+				-- if alpha <= 0 then
+					-- self:SetAlpha(0)
+					-- f:SetScript("OnUpdate", nil)
+					-- return
+				-- end
+
+				-- self:SetAlpha(alpha - 0.05)
+			-- end
+
+			-- f:RegisterEvent("PLAYER_REGEN_ENABLED")
+			-- f:RegisterEvent("PLAYER_REGEN_DISABLED")
+			-- f:RegisterEvent("PLAYER_TARGET_CHANGED")
+			-- f:SetScript("OnEvent", function(_, event)
+				-- if event == "PLAYER_REGEN_ENABLED" then
+					-- f:SetScript("OnUpdate", decrementAlpha)
+				-- elseif event == "PLAYER_REGEN_DISABLED" then
+					-- f:SetScript("OnUpdate", incrementAlpha)
+				-- else
+					-- if UnitName("target") ~= nil then
+						-- f:SetScript("OnUpdate", incrementAlpha)
+					-- else
+						-- f:SetScript("OnUpdate", decrementAlpha)
+					-- end
+				-- end
+			-- end)
+
+			-- self:SetAlpha(0)
+		-- end
 	end,
 
 	target = function(self, ...)

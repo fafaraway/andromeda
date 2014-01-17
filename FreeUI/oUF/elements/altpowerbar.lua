@@ -84,8 +84,8 @@ local Toggler = function(self, event, unit)
 	if(unit ~= self.unit) then return end
 	local altpowerbar = self.AltPowerBar
 
-	local barType, minPower, _, _, _, hideFromOthers = UnitAlternatePowerInfo(unit)
-	if(barType and (not hideFromOthers or unit == 'player' or self.realUnit == 'player')) then
+	local barType, _, _, _, _, hideFromOthers, showOnRaid = UnitAlternatePowerInfo(unit)
+	if(barType and (showOnRaid and (UnitInParty(unit) or UnitInRaid(unit)) or not hideFromOthers or unit == 'player' or self.realUnit == 'player')) then
 		self:RegisterEvent('UNIT_POWER', UpdatePower)
 		self:RegisterEvent('UNIT_MAXPOWER', UpdatePower)
 
