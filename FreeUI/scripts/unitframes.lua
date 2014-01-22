@@ -1719,19 +1719,34 @@ local spawnHelper = function(self, unit, ...)
 end
 
 oUF:Factory(function(self)
-	local playerPos, targetPos, partyPos, raidPos
-	local target
+	local partyPos, raidPos
+	local player, target
 
-	local player = spawnHelper(self, 'player', unpack(C.unitframes.player))
+	if C.unitframes.autoPosition then
+		player = spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", GetScreenWidth()/-6.98, GetScreenHeight()/-11.43)
+	else
+		player = spawnHelper(self, 'player', unpack(C.unitframes.player))
+	end
 
 	if FreeUIConfig.layout == 1 then
-		target = spawnHelper(self, 'target', unpack(C.unitframes.target))
+		if C.unitframes.autoPosition then
+			target = spawnHelper(self, 'target', "TOP", UIParent, "CENTER", 0, GetScreenHeight()/-5.33)
+		else
+			target = spawnHelper(self, 'target', unpack(C.unitframes.target))
+		end
+
 		partyPos = {"BOTTOM", player, "TOP", 0, 50}
 		raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 	else
-		target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
-		partyPos = C.unitframes.party
-		raidPos = C.unitframes.raid
+		if C.unitframes.autoPosition then
+			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", GetScreenWidth()/6.98, GetScreenHeight()/-11.43)
+			partyPos = {"TOP", UIParent, "CENTER", 0, GetScreenHeight()/-5.33}
+			raidPos = {"TOP", UIParent, "CENTER", 0, GetScreenHeight()/-5.33}
+		else
+			target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
+			partyPos = C.unitframes.party
+			raidPos = C.unitframes.raid
+		end
 	end
 
 	spawnHelper(self, 'focus', "BOTTOMRIGHT", player, "TOPRIGHT", 0, 12)

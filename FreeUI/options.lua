@@ -66,6 +66,9 @@ C["notifications"] = {
 
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
+
+	["autoPosition"] = true,				-- automatically postion unit frames based on resolution
+
 	["enableGroup"] = true,					-- enable party/raid frames
 		["healerClasscolours"] = false,				-- colour unitframes by class in healer layout
 		["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid

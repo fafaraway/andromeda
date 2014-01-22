@@ -431,8 +431,11 @@ unitframes.tab.Icon:SetTexture("Interface\\Icons\\Spell_Holy_PrayerofSpirit")
 local enable = ns.CreateCheckBox(unitframes, "enable", true, true)
 enable:SetPoint("TOPLEFT", unitframes.subText, "BOTTOMLEFT", 0, -8)
 
+local autoPosition = ns.CreateCheckBox(unitframes, "autoPosition", true, true)
+autoPosition:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+
 local enableGroup = ns.CreateCheckBox(unitframes, "enableGroup", true, true)
-enableGroup:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+enableGroup:SetPoint("TOPLEFT", autoPosition, "BOTTOMLEFT", 0, -8)
 
 local limitRaidSize = ns.CreateCheckBox(unitframes, "limitRaidSize", true)
 limitRaidSize:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
@@ -447,7 +450,7 @@ partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
 enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
 
 local absorb = ns.CreateCheckBox(unitframes, "absorb", true, true)
-absorb:SetPoint("LEFT", enableGroup, "RIGHT", 240, 0)
+absorb:SetPoint("LEFT", autoPosition, "RIGHT", 240, 0)
 
 local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true, true)
 targettarget:SetPoint("TOPLEFT", absorb, "BOTTOMLEFT", 0, -8)
@@ -467,11 +470,11 @@ local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
 enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
 
 local layoutText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-layoutText:SetPoint("TOP", 0, -340)
+layoutText:SetPoint("TOP", 0, -374)
 layoutText:SetText(ns.localization.layoutText)
 
 unitframes.Layout = CreateFrame("Button", nil, unitframes, "UIPanelButtonTemplate")
-unitframes.Layout:SetPoint("TOP", 0, -374)
+unitframes.Layout:SetPoint("TOP", 0, -408)
 unitframes.Layout:SetSize(128, 25)
 tinsert(ns.buttons, unitframes.Layout)
 
