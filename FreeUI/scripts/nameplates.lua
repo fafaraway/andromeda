@@ -231,6 +231,7 @@ local StyleFrame = function(frame)
 
 	castShadow:SetTexture("")
 	castText:SetFont(C.media.font, 8 * offset, "OUTLINEMONOCHROME")
+	castText:SetShadowOffset(0, 0)
 	castText:ClearAllPoints()
 	castText:SetPoint("TOP", castBar, "BOTTOM", 0, -2)
 
