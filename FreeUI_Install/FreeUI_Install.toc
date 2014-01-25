@@ -2,7 +2,7 @@
 ## Title: FreeUI Install
 ## Notes: FreeUI setup addon.
 ## Author: Haleth/Freethinker
-## Version: 7.0
+## Version: 7.1
 ## RequiredDeps: FreeUI
 
 install.lua
