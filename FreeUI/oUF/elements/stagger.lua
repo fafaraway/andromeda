@@ -101,6 +101,7 @@ local Enable = function(self, unit)
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
+		element:Hide()
 
 		color = self.colors.power[BREWMASTER_POWER_BAR_NAME]
 
