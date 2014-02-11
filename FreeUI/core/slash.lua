@@ -78,3 +78,11 @@ SlashCmdList.GPOINT = function(f)
 end
 
 SLASH_GPOINT1 = "/gpoint"
+
+SlashCmdList.FPS = function(value)
+	local numValue = tonumber(value)
+	if numValue and 0 <= numValue then
+		SetCVar("maxFPS", numValue)
+	end
+end
+SLASH_FPS1 = "/fps"
