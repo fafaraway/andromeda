@@ -3,26 +3,27 @@ local F, C, L = unpack(FreeUI)
 local function InitStyle()
 	hooksecurefunc(DBT, "CreateBar", function(self)
 		for bar in self:GetBarIterator() do
-			if not bar.styled then
-				local frame = bar.frame
-				local name = frame:GetName().."Bar"
+			local frame = bar.frame
+			local name = frame:GetName().."Bar"
+			local tbar = _G[name]
+			local text = _G[name.."Name"]
 
-				local tbar = _G[name]
+			tbar:SetHeight(4)
+
+			text:SetPoint("CENTER", 0, 10)
+			text:SetPoint("LEFT", 2, 10)
+
+			if not bar.styled then
 				local texture = _G[name.."Texture"]
-				local text = _G[name.."Name"]
 				local timer = _G[name.."Timer"]
 				local spark = _G[name.."Spark"]
 				local icon = _G[name.."Icon1"]
-
-				tbar:SetHeight(4)
 
 				F.CreateBDFrame(tbar, 0)
 
 				texture:SetTexture(C.media.texture)
 				texture.SetTexture = F.dummy
 
-				text:SetPoint("CENTER", 0, 10)
-				text:SetPoint("LEFT", 2, 10)
 				text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
 				text:SetShadowColor(0, 0, 0, 0)
 				text.SetFont = F.dummy
@@ -34,6 +35,7 @@ local function InitStyle()
 				timer.SetFont = F.dummy
 
 				spark:SetSize(8, 16)
+				spark.SetSize = F.dummy
 				spark:SetTexture("Interface\\AddOns\\FreeUI\\media\\DBMSpark")
 
 				icon:ClearAllPoints()
