@@ -484,35 +484,92 @@ local name = UnitName("player")
 local realm = GetRealmName()
 local r, g, b = unpack(C.class)
 local keys = {}
-local tableFilled = false
+local tablesSorted = false
 
 local function ShowMoney()
 	GameTooltip:SetOwner(ContainerFrame1MoneyFrameGoldButton, "ANCHOR_NONE")
 	GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", -1, 0)
 
-	local total = 0
-	local goldlist = FreeUIGlobalConfig[realm].gold
+	local total, totalAlliance, totalHorde, totalNeutral = 0, 0, 0, 0
+	local goldList = FreeUIGlobalConfig[realm].gold
+	local factionList = FreeUIGlobalConfig[realm].faction
+	local allianceList, hordeList, neutralList = {}, {}, {}
+	local headerAdded = false
 
-	for k, v in pairs(goldlist) do
+	for k, v in pairs(goldList) do
+		if factionList[k] == "Alliance" then
+			totalAlliance = totalAlliance + v
+			allianceList[k] = v
+		elseif factionList[k] == "Horde" then
+			totalHorde = totalHorde + v
+			hordeList[k]= v
+		else
+			totalNeutral = totalNeutral + v
+			neutralList[k] = v
+		end
+
 		total = total + v
 	end
 
-	-- create a sorted table of goldlist where keys are index numbers and values are goldlist keys
-	-- only way to properly sort key-value tables
-	if not tableFilled then
-		for n in pairs(goldlist) do
-			table.insert(keys, n)
-		end
-		table.sort(keys)
-		tableFilled = true
-	end
 
 	GameTooltip:AddDoubleLine(realm, Format(total), r, g, b, 1, 1, 1)
-	GameTooltip:AddLine(" ")
+
+	for n in pairs(allianceList) do
+		table.insert(keys, n)
+	end
+	table.sort(keys)
+
 	for _, k in pairs(keys) do
 		local class = FreeUIGlobalConfig[realm].class[k]
-		local v = goldlist[k]
+		local v = allianceList[k]
 		if v and v >= 10000 then
+			if not headerAdded then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine("ALLIANCE", Format(totalAlliance), 0, 0.68, 0.94, 1, 1, 1)
+				headerAdded = true
+			end
+			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
+		end
+	end
+
+	headerAdded = false
+	table.wipe(keys)
+
+	for n in pairs(hordeList) do
+		table.insert(keys, n)
+	end
+	table.sort(keys)
+
+	for _, k in pairs(keys) do
+		local class = FreeUIGlobalConfig[realm].class[k]
+		local v = hordeList[k]
+		if v and v >= 10000 then
+			if not headerAdded then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine("HORDE", Format(totalHorde), 1, 0, 0, 1, 1, 1)
+				headerAdded = true
+			end
+			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
+		end
+	end
+
+	headerAdded = false
+	table.wipe(keys)
+
+	for n in pairs(neutralList) do
+		table.insert(keys, n)
+	end
+	table.sort(keys)
+
+	for _, k in pairs(keys) do
+		local class = FreeUIGlobalConfig[realm].class[k]
+		local v = neutralList[k]
+		if v and v >= 10000 then
+			if not headerAdded then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine("NEUTRAL", Format(totalNeutral), .9, .9, .9, 1, 1, 1)
+				headerAdded = true
+			end
 			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
 		end
 	end
