@@ -300,14 +300,13 @@ local function removeCharData(self)
 	if name ~= "" then
 		local somethingDeleted = false
 
-		if FreeUIGlobalConfig[realm].class[name] ~= nil then
-			FreeUIGlobalConfig[realm].class[name] = nil
-			somethingDeleted = true
+		for varType, varTable in pairs(FreeUIGlobalConfig[realm]) do
+			if varTable[name] ~= nil then
+				varTable[name] = nil
+				somethingDeleted = true
+			end
 		end
-		if FreeUIGlobalConfig[realm].gold[name] ~= nil then
-			FreeUIGlobalConfig[realm].gold[name] = nil
-			somethingDeleted = true
-		end
+
 		if FreeUIOptionsGlobal[realm][name] ~= nil then
 			FreeUIOptionsGlobal[realm][name] = nil
 			somethingDeleted = true
