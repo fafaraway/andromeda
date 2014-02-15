@@ -484,7 +484,6 @@ local name = UnitName("player")
 local realm = GetRealmName()
 local r, g, b = unpack(C.class)
 local keys = {}
-local tablesSorted = false
 
 local function ShowMoney()
 	GameTooltip:SetOwner(ContainerFrame1MoneyFrameGoldButton, "ANCHOR_NONE")
