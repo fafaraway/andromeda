@@ -1727,7 +1727,7 @@ oUF:Factory(function(self)
 	local player, target
 
 	if C.unitframes.autoPosition then
-		player = spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", round(GetScreenWidth()/-6.98), round(GetScreenHeight()/-11.43))
+		player = spawnHelper(self, 'player', "BOTTOM", UIParent, "CENTER", -275, round(GetScreenHeight()/-11.43))
 	else
 		player = spawnHelper(self, 'player', unpack(C.unitframes.player))
 	end
@@ -1743,9 +1743,9 @@ oUF:Factory(function(self)
 		raidPos = {"BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -5, 0}
 	else
 		if C.unitframes.autoPosition then
-			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", round(GetScreenWidth()/6.98), round(GetScreenHeight()/-11.43))
+			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, round(GetScreenHeight()/-11.43))
 			partyPos = {"TOP", UIParent, "CENTER", 0, round(GetScreenHeight()/-5.33)}
-			raidPos = {"TOP", UIParent, "CENTER", 0, round(GetScreenHeight()/-5.33)}
+			raidPos = {"TOP", UIParent, "CENTER", 0, round(GetScreenHeight()/-6)}
 		else
 			target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
 			partyPos = C.unitframes.party
