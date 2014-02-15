@@ -524,7 +524,7 @@ local function ShowMoney()
 		if v and v >= 10000 then
 			if not headerAdded then
 				GameTooltip:AddLine(" ")
-				GameTooltip:AddDoubleLine("ALLIANCE", Format(totalAlliance), 0, 0.68, 0.94, 1, 1, 1)
+				GameTooltip:AddDoubleLine(strupper(FACTION_ALLIANCE), Format(totalAlliance), 0, 0.68, 0.94, 1, 1, 1)
 				headerAdded = true
 			end
 			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
@@ -545,7 +545,7 @@ local function ShowMoney()
 		if v and v >= 10000 then
 			if not headerAdded then
 				GameTooltip:AddLine(" ")
-				GameTooltip:AddDoubleLine("HORDE", Format(totalHorde), 1, 0, 0, 1, 1, 1)
+				GameTooltip:AddDoubleLine(strupper(FACTION_HORDE), Format(totalHorde), 1, 0, 0, 1, 1, 1)
 				headerAdded = true
 			end
 			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
@@ -566,7 +566,7 @@ local function ShowMoney()
 		if v and v >= 10000 then
 			if not headerAdded then
 				GameTooltip:AddLine(" ")
-				GameTooltip:AddDoubleLine("NEUTRAL", Format(totalNeutral), .9, .9, .9, 1, 1, 1)
+				GameTooltip:AddDoubleLine(strupper(FACTION_OTHER), Format(totalNeutral), .9, .9, .9, 1, 1, 1)
 				headerAdded = true
 			end
 			GameTooltip:AddDoubleLine(k, Format(v), C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b, 1, 1, 1)
