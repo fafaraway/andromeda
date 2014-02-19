@@ -2,7 +2,7 @@
 ## Title: FreeUI Options
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth/Freethinker
-## Version: 7.1.2
+## Version: 7.1.3
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
