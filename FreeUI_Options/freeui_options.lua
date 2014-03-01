@@ -377,8 +377,8 @@ init:SetScript("OnEvent", function()
 
 	resetFrame.charBox:SetScript("OnEnterPressed", removeCharData)
 
-	FreeUIOptionsPanel.Profile:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
-	FreeUIOptionsPanel.Profile:SetScript("OnClick", function(self)
+	FreeUIOptionsPanel.ProfileBox:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
+	FreeUIOptionsPanel.ProfileBox:SetScript("OnClick", function(self)
 		FreeUIOptionsGlobal[C.myRealm][C.myName] = self:GetChecked() == 1
 		changeProfile()
 		displaySettings()
@@ -394,7 +394,7 @@ init:SetScript("OnEvent", function()
 	F.CreateBD(FreeUIOptionsPanel.popup)
 	F.CreateBD(resetFrame)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
-	F.ReskinCheck(FreeUIOptionsPanel.Profile)
+	F.ReskinCheck(FreeUIOptionsPanel.ProfileBox)
 	F.ReskinCheck(resetFrame.Data)
 	F.ReskinCheck(resetFrame.Options)
 

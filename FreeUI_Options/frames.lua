@@ -42,11 +42,11 @@ do
 	tinsert(ns.buttons, no)
 end
 
-local Okay = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
-Okay:SetPoint("BOTTOMRIGHT", -6, 6)
-Okay:SetSize(128, 25)
-Okay:SetText(OKAY)
-Okay:SetScript("OnClick", function()
+local OkayButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
+OkayButton:SetPoint("BOTTOMRIGHT", -6, 6)
+OkayButton:SetSize(128, 25)
+OkayButton:SetText(OKAY)
+OkayButton:SetScript("OnClick", function()
 	options:Hide()
 	if ns.needReload then
 		PlaySound("igMainMenuOpen")
@@ -54,14 +54,13 @@ Okay:SetScript("OnClick", function()
 	end
 end)
 
-options.Okay = Okay
-tinsert(ns.buttons, options.Okay)
+tinsert(ns.buttons, OkayButton)
 
-local Profile = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
-Profile:SetPoint("BOTTOMLEFT", 6, 6)
-Profile.Text:SetText(ns.localization.profile)
-Profile.tooltipText = ns.localization.profileTooltip
-options.Profile = Profile
+local ProfileBox = CreateFrame("CheckButton", nil, options, "InterfaceOptionsCheckButtonTemplate")
+ProfileBox:SetPoint("BOTTOMLEFT", 6, 6)
+ProfileBox.Text:SetText(ns.localization.profile)
+ProfileBox.tooltipText = ns.localization.profileTooltip
+options.ProfileBox = ProfileBox
 
 local title = options:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 title:SetPoint("TOP", 0, -26)
@@ -138,11 +137,11 @@ resetFrame.Cancel:SetScript("OnClick", function()
 end)
 tinsert(ns.buttons, resetFrame.Cancel)
 
-local install = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
-install:SetSize(128, 25)
-install:SetPoint("TOPLEFT", 16, -538)
-install:SetText(ns.localization.install)
-install:SetScript("OnClick", function()
+local InstallButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
+InstallButton:SetSize(128, 25)
+InstallButton:SetPoint("TOPLEFT", 16, -538)
+InstallButton:SetText(ns.localization.install)
+InstallButton:SetScript("OnClick", function()
 	if IsAddOnLoaded("FreeUI_Install") then
 		FreeUI_InstallFrame:Show()
 	else
@@ -151,29 +150,23 @@ install:SetScript("OnClick", function()
 	end
 	options:Hide()
 end)
-tinsert(ns.buttons, install)
+tinsert(ns.buttons, InstallButton)
 
-options.Install = install
+local ReloadButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
+ReloadButton:SetSize(128, 25)
+ReloadButton:SetPoint("TOP", InstallButton, "BOTTOM", 0, -4)
+ReloadButton:SetText(ns.localization.reload)
+ReloadButton:SetScript("OnClick", ReloadUI)
+tinsert(ns.buttons, ReloadButton)
 
-local reload = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
-reload:SetSize(128, 25)
-reload:SetPoint("TOP", install, "BOTTOM", 0, -4)
-reload:SetText(ns.localization.reload)
-reload:SetScript("OnClick", ReloadUI)
-tinsert(ns.buttons, reload)
-
-options.Reload = reload
-
-local reset = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
-reset:SetSize(128, 25)
-reset:SetPoint("TOP", reload, "BOTTOM", 0, -4)
-reset:SetText(RESET)
-reset:SetScript("OnClick", function()
+local ResetButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
+ResetButton:SetSize(128, 25)
+ResetButton:SetPoint("TOP", ReloadButton, "BOTTOM", 0, -4)
+ResetButton:SetText(RESET)
+ResetButton:SetScript("OnClick", function()
 	resetFrame:Show()
 end)
-tinsert(ns.buttons, reset)
-
-options.Reset = reset
+tinsert(ns.buttons, ResetButton)
 
 local line = options:CreateTexture()
 line:SetSize(1, 564)
