@@ -72,7 +72,7 @@ button:SetScript("OnEnter", colourText)
 button:SetScript("OnLeave", clearText)
 
 local SmallerMapSkin = function()
-	local fontsize = C.FONT_SIZE_NORMAL / WORLDMAP_WINDOWED_SIZE
+	local fontsize = C.general.fontSizeNormal / WORLDMAP_WINDOWED_SIZE
 
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:SetFrameStrata("MEDIUM")
