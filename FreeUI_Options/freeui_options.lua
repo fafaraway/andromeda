@@ -176,7 +176,7 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 	return slider
 end
 
-local offset = 60
+local offset = 58
 local activeTab = nil
 
 local function setActiveTab(tab)
@@ -244,7 +244,7 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	offset = offset + 52
+	offset = offset + 51
 end
 
 -- [[ Init ]]
