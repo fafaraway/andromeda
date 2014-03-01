@@ -120,7 +120,7 @@ end
 local function reskinMinimize(f)
 	f:SetSize(16, 16)
 	F.Reskin(f)
-	local minus = F.CreateFS(f, 8)
+	local minus = F.CreateFS(f)
 	minus:SetPoint("CENTER", 1, 0)
 	minus:SetText("-")
 end
@@ -194,7 +194,7 @@ local function StyleWindow(f)
 		frame.conversationButton:SetSize(16, 16)
 		frame.conversationButton.SetPoint = F.dummy
 		F.Reskin(frame.conversationButton)
-		local plus = F.CreateFS(frame.conversationButton, 8)
+		local plus = F.CreateFS(frame.conversationButton)
 		plus:SetPoint("CENTER", 1, 0)
 		plus:SetText("+")
 	end

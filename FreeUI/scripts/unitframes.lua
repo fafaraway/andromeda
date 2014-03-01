@@ -421,7 +421,7 @@ local Shared = function(self, unit, isSingle)
 		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
 		F.CreateBD(abd)
 
-		AltPowerBar.Text = F.CreateFS(AltPowerBar, 8, "RIGHT")
+		AltPowerBar.Text = F.CreateFS(AltPowerBar, C.FONT_SIZE_NORMAL, "RIGHT")
 		AltPowerBar.Text:SetPoint("RIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 6)
 
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
@@ -590,8 +590,8 @@ local UnitSpecific = {
 
 		Health:SetHeight(playerHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, 8, "LEFT")
-		self.MaxHealthPoints = F.CreateFS(Health, 8, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "LEFT")
+		self.MaxHealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
 		self.MaxHealthPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
@@ -602,7 +602,7 @@ local UnitSpecific = {
 
 		local _, UnitPowerType = UnitPowerType("player")
 		if UnitPowerType == "MANA" or class == "DRUID" then
-			local PowerPoints = F.CreateFS(Power, 8)
+			local PowerPoints = F.CreateFS(Power)
 			PowerPoints:SetPoint("LEFT", HealthPoints, "RIGHT", 2, 0)
 			PowerPoints:SetTextColor(.4, .7, 1)
 
@@ -612,7 +612,7 @@ local UnitSpecific = {
 
 		Castbar.Width = self:GetWidth()
 		Spark:SetHeight(self.Health:GetHeight())
-		Castbar.Text = F.CreateFS(Castbar, 8)
+		Castbar.Text = F.CreateFS(Castbar)
 		Castbar.Text:SetDrawLayer("ARTWORK")
 
 		local IconFrame = CreateFrame("Frame", nil, Castbar)
@@ -654,7 +654,7 @@ local UnitSpecific = {
 		end
 
 		if C.unitframes.pvp then
-			local PvP = F.CreateFS(self, 8)
+			local PvP = F.CreateFS(self)
 			PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
 			PvP:SetText("P")
 
@@ -908,7 +908,7 @@ local UnitSpecific = {
 						F.CreatePulse(self.glow)
 						self.count:SetText(chi)
 						self.count:SetTextColor(r, g, b)
-						self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+						F.SetFS(self.count, 40)
 					end
 				elseif chi == 0 then
 					self.glow:SetScript("OnUpdate", nil)
@@ -920,7 +920,7 @@ local UnitSpecific = {
 					self.glow:SetAlpha(0)
 					self.count:SetText(chi)
 					self.count:SetTextColor(1, 1, 1)
-					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+					F.SetFS(self.count, 24)
 					pulsating = false
 				end
 			end
@@ -965,7 +965,7 @@ local UnitSpecific = {
 					F.CreatePulse(self.glow)
 					self.count:SetText(num)
 					self.count:SetTextColor(1, 1, 0)
-					self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+					F.SetFS(self.count, 40)
 				elseif num == 0 then
 					self.glow:SetScript("OnUpdate", nil)
 					self.glow:SetAlpha(0)
@@ -975,7 +975,7 @@ local UnitSpecific = {
 					self.glow:SetAlpha(0)
 					self.count:SetText(num)
 					self.count:SetTextColor(1, 1, 1)
-					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+					F.SetFS(self.count, 24)
 				end
 			end
 
@@ -1008,7 +1008,7 @@ local UnitSpecific = {
 					F.CreatePulse(self.glow)
 					self.count:SetText(numOrbs)
 					self.count:SetTextColor(.6, 0, 1)
-					self.count:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+					F.SetFS(self.count, 40)
 				elseif numOrbs == 0 then
 					self.glow:SetScript("OnUpdate", nil)
 					self.glow:SetAlpha(0)
@@ -1018,7 +1018,7 @@ local UnitSpecific = {
 					self.glow:SetAlpha(0)
 					self.count:SetText(numOrbs)
 					self.count:SetTextColor(1, 1, 1)
-					self.count:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+					F.SetFS(self.count, 24)
 				end
 			end
 
@@ -1106,7 +1106,7 @@ local UnitSpecific = {
 		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
 		F.CreateBD(cbd)
 
-		CounterBar.Text = F.CreateFS(CounterBar, 8)
+		CounterBar.Text = F.CreateFS(CounterBar)
 		CounterBar.Text:SetPoint("CENTER")
 
 		local r, g, b
@@ -1180,14 +1180,14 @@ local UnitSpecific = {
 
 		Health:SetHeight(targetHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, 8, "LEFT")
+		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "LEFT")
 
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
 
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
 
-		local PowerPoints = F.CreateFS(Power, 8)
+		local PowerPoints = F.CreateFS(Power)
 		PowerPoints:SetPoint("BOTTOMLEFT", Health.value, "BOTTOMRIGHT")
 
 		self:Tag(PowerPoints, '[free:power]')
@@ -1201,7 +1201,7 @@ local UnitSpecific = {
 		tt:SetWidth(110)
 		tt:SetHeight(12)
 
-		ttt = F.CreateFS(tt, 8, "RIGHT")
+		ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "RIGHT")
 		ttt:SetAllPoints(tt)
 
 		tt:RegisterEvent("UNIT_TARGET")
@@ -1221,7 +1221,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		Castbar.Text = F.CreateFS(Castbar, 8)
+		Castbar.Text = F.CreateFS(Castbar)
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1240,7 +1240,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		local Name = F.CreateFS(self, 8)
+		local Name = F.CreateFS(self)
 		Name:SetPoint("BOTTOMLEFT", Power.value, "BOTTOMRIGHT")
 		Name:SetPoint("RIGHT", self)
 		Name:SetJustifyH"RIGHT"
@@ -1344,13 +1344,13 @@ local UnitSpecific = {
 
 		Health:SetHeight(bossHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, 8, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][free:bosshealth]')
 
 		Health.value = HealthPoints
 
-		local Name = F.CreateFS(self, 8, "LEFT")
+		local Name = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 		Name:SetWidth((bossWidth / 2) + 10)
 		Name:SetHeight(8)
@@ -1370,7 +1370,7 @@ local UnitSpecific = {
 		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
 		F.CreateBD(abd)
 
-		AltPowerBar.Text = F.CreateFS(AltPowerBar, 8, "CENTER")
+		AltPowerBar.Text = F.CreateFS(AltPowerBar, C.FONT_SIZE_NORMAL, "CENTER")
 		AltPowerBar.Text:SetPoint("CENTER", self, "TOP", 0, 6)
 
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
@@ -1392,7 +1392,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		Castbar.Text = F.CreateFS(self, 8)
+		Castbar.Text = F.CreateFS(self)
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1452,13 +1452,13 @@ local UnitSpecific = {
 
 		Health:SetHeight(arenaHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, 8, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][free:health]')
 
 		Health.value = HealthPoints
 
-		local Name = F.CreateFS(self, 8, "LEFT")
+		local Name = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 		Name:SetWidth(110)
 		Name:SetHeight(8)
@@ -1471,7 +1471,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		Castbar.Text = F.CreateFS(self, 8)
+		Castbar.Text = F.CreateFS(self)
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1525,7 +1525,7 @@ do
 
 		local Health, Power = self.Health, self.Power
 
-		local Text = F.CreateFS(Health, 8, "CENTER")
+		local Text = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "CENTER")
 		Text:SetPoint("CENTER", 1, 0)
 		self.Text = Text
 
@@ -1549,13 +1549,13 @@ do
 		self.RaidIcon:ClearAllPoints()
 		self.RaidIcon:SetPoint("CENTER", self, "CENTER")
 
-		local Leader = F.CreateFS(self, 8, "LEFT")
+		local Leader = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
 		Leader:SetText("l")
 		Leader:SetPoint("TOPLEFT", Health, 2, -1)
 
 		self.Leader = Leader
 
-		local MasterLooter = F.CreateFS(self, 8, "RIGHT")
+		local MasterLooter = F.CreateFS(self, C.FONT_SIZE_NORMAL, "RIGHT")
 		MasterLooter:SetText("m")
 		MasterLooter:SetPoint("TOPRIGHT", Health, 1, 0)
 
@@ -1585,7 +1585,7 @@ do
 			end
 		end
 
-		local lfd = F.CreateFS(Health, 8, "CENTER")
+		local lfd = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "CENTER")
 		lfd:SetPoint("BOTTOM", Health, 1, 1)
 		lfd.Override = UpdateLFD
 

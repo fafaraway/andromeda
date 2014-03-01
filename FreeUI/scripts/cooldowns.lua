@@ -41,7 +41,7 @@ hooksecurefunc(methods, "SetCooldown", function(self, start, duration, charges)
 
 		local text = self.text
 		if not text then
-			text = F.CreateFS(self, 8, "CENTER")
+			text = F.CreateFS(self, C.FONT_SIZE_NORMAL, "CENTER")
 			text:SetPoint("BOTTOM", 1, -1)
 			self.text = text
 			self:SetScript("OnUpdate", Timer_OnUpdate)

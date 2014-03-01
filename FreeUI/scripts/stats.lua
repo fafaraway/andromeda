@@ -11,7 +11,7 @@ local f = CreateFrame("Button", nil, UIParent)
 f:SetPoint("BOTTOM", UIParent, "BOTTOM")
 f:SetSize(200, 10)
 
-local text = F.CreateFS(f, 8)
+local text = F.CreateFS(f)
 text:SetPoint("CENTER")
 text:SetTextColor(r, g, b)
 

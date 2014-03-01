@@ -66,7 +66,7 @@ local function createIcon(data)
 	frame.icon:SetAllPoints(frame)
 	frame.icon:SetTexCoord(.08, .92, .08, .92)
 
-	frame.count = F.CreateFS(frame, 8)
+	frame.count = F.CreateFS(frame)
 	frame.count:SetPoint("TOP", 1, -2)
 
 	frame.cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")

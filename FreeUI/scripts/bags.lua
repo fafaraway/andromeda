@@ -47,7 +47,7 @@ local RestyleButton = function(buName, gridFrame)
 	bu:SetHighlightTexture("")
 	bu:SetFrameStrata("HIGH")
 
-	co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(co)
 	co:ClearAllPoints()
 	co:SetPoint("TOP", bu, 1, -2)
 
@@ -175,7 +175,7 @@ for _, gridFrame in pairs({grid, bankGrid}) do
 	end)
 end
 
-local purchase = F.CreateFS(bankholder, 8)
+local purchase = F.CreateFS(bankholder)
 purchase:SetPoint("BOTTOMLEFT", bankholder, "BOTTOMLEFT", 4, 4)
 purchase:SetText("Buy new slots: Click here.")
 
@@ -333,7 +333,7 @@ end
 local moneytext = {"ContainerFrame1MoneyFrameGoldButtonText", "ContainerFrame1MoneyFrameSilverButtonText", "ContainerFrame1MoneyFrameCopperButtonText", "BankFrameMoneyFrameGoldButtonText", "BankFrameMoneyFrameSilverButtonText", "BankFrameMoneyFrameCopperButtonText", "BackpackTokenFrameToken1Count", "BackpackTokenFrameToken2Count", "BackpackTokenFrameToken3Count"}
 
 for i = 1, 9 do
-	_G[moneytext[i]]:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(_G[moneytext[i]])
 end
 
 --[[ Show & Hide functions etc ]]
@@ -420,7 +420,7 @@ BagItemSearchBox:SetPoint("TOPLEFT", holder, "BOTTOMLEFT", 0, 1)
 BagItemSearchBox:SetPoint("TOPRIGHT", holder, "BOTTOMRIGHT", 0, 1)
 BagItemSearchBox.SetPoint = F.dummy
 BagItemSearchBox:SetWidth(holder:GetWidth())
-BagItemSearchBox:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(BagItemSearchBox)
 BagItemSearchBox:SetShadowColor(0, 0, 0, 0)
 BagItemSearchBox:SetJustifyH("CENTER")
 BagItemSearchBox:SetAlpha(0)

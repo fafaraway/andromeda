@@ -8,7 +8,7 @@ local frames = {}
 
 for i = 1, 2 do
 	local f = CreateFrame("ScrollingMessageFrame", "LightCT"..i, UIParent)
-	f:SetFont(C.media.font, 16, "OUTLINEMONOCHROME")
+	F.SetFS(f, C.FONT_SIZE_LARGE)
 	f:SetShadowColor(0, 0, 0, 0)
 	f:SetFadeDuration(0.2)
 	f:SetTimeVisible(3)

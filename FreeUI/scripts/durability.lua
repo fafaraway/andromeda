@@ -20,7 +20,7 @@ local fontstrings = setmetatable({}, {
 		local gslot = _G["Character"..i.."Slot"]
 		assert(gslot, "Character"..i.."Slot does not exist")
 
-		local fstr = F.CreateFS(gslot, 8)
+		local fstr = F.CreateFS(gslot)
 		fstr:SetPoint("CENTER", gslot, "BOTTOM", 1, 8)
 		t[i] = fstr
 		return fstr

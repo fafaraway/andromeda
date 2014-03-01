@@ -25,8 +25,7 @@ f:SetScript("OnEvent", function(self, _, addon)
 	frame.BarBackground:Hide()
 	frame.BarBorderAndOverlay:Hide()
 
-	frame.BarTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	frame.BarTitle:SetShadowOffset(0, 0)
+	F.SetFS(frame.BarTitle)
 	frame.BarTitle:SetPoint("CENTER", 0, 13)
 
 	local width = Minimap:GetWidth()

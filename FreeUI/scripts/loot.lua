@@ -116,12 +116,12 @@ local createSlot = function(id)
 	F.CreateBG(icon)
 	frame.icon = icon
 
-	local count = F.CreateFS(iconFrame, 8, "CENTER")
+	local count = F.CreateFS(iconFrame, C.FONT_SIZE_NORMAL, "CENTER")
 	count:SetPoint("TOP", iconFrame, 1, -2)
 	count:SetText(1)
 	frame.count = count
 
-	local name = F.CreateFS(frame, 8, "LEFT")
+	local name = F.CreateFS(frame, C.FONT_SIZE_NORMAL, "LEFT")
 	name:SetPoint("RIGHT", frame)
 	name:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	name:SetNonSpaceWrap(true)

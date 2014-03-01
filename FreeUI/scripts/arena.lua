@@ -18,7 +18,7 @@ for i = 1, 5 do
 	arenaFrames[i].Health = CreateFrame("StatusBar", nil, arenaFrames[i])
 	arenaFrames[i].Health:SetAllPoints()
 	arenaFrames[i].Health:SetStatusBarTexture(C.media.texture)
-	arenaFrames[i].SpecClass = F.CreateFS(arenaFrames[i].Health, 8)
+	arenaFrames[i].SpecClass = F.CreateFS(arenaFrames[i].Health)
 	arenaFrames[i].SpecClass:SetPoint("CENTER")
 	arenaFrames[i]:Hide()
 end

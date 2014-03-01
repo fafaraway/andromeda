@@ -20,7 +20,7 @@ for i = 1, 3 do
 
 	_G[barname.."Border"]:Hide()
 
-	_G[barname.."Text"] = F.CreateFS(bar, 8)
+	_G[barname.."Text"] = F.CreateFS(bar)
 	_G[barname.."Text"]:ClearAllPoints()
 	_G[barname.."Text"]:SetPoint("CENTER", _G[barname.."StatusBar"])
 
@@ -37,8 +37,7 @@ local function SkinIt(bar)
 		if region:GetObjectType() == "Texture" then
 			region:SetTexture(nil)
 		elseif region:GetObjectType() == "FontString" then
-			region:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-			region:SetShadowColor(0, 0, 0, 0)
+			F.SetFS(region)
 		end
 	end
 

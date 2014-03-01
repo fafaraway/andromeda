@@ -3099,13 +3099,13 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				frame.NameBorderMid:Hide()
 				frame.IconBorder:Hide()
 
-				frame.ItemName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(frame.ItemName)
 				frame.ItemName:SetShadowOffset(0, 0)
-				frame.WinnerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(frame.WinnerName)
 				frame.WinnerName:SetShadowOffset(0, 0)
-				frame.WinnerRoll:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(frame.WinnerRoll)
 				frame.WinnerRoll:SetShadowOffset(0, 0)
-				frame.WinnerRoll:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(frame.WinnerRoll)
 				frame.WinnerRoll:SetShadowOffset(0, 0)
 				frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
@@ -3136,9 +3136,9 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(_, playerFrame)
 			if not playerFrame.styled then
-				playerFrame.PlayerName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(playerFrame.PlayerName)
 				playerFrame.PlayerName:SetShadowOffset(0, 0)
-				playerFrame.RollText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(playerFrame.RollText)
 				playerFrame.RollText:SetShadowOffset(0, 0)
 				playerFrame.RollText:SetTextColor(.9, .9, .9)
 				playerFrame.WinMark:SetDesaturated(true)
@@ -3171,7 +3171,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		MasterLooterFrame.Item.NameBorderMid:Hide()
 		MasterLooterFrame.Item.IconBorder:Hide()
 
-		MasterLooterFrame.Item.ItemName:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		F.SetFS(MasterLooterFrame.Item.ItemName)
 		MasterLooterFrame.Item.ItemName:SetShadowOffset(0, 0)
 
 		MasterLooterFrame.Item.Icon:SetTexCoord(.08, .92, .08, .92)
@@ -3195,7 +3195,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 				local playerFrame = MasterLooterFrame["player"..i]
 				if playerFrame then
 					if not playerFrame.styled then
-						playerFrame.Name:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+						F.SetFS(playerFrame.Name)
 						playerFrame.Name:SetShadowOffset(0, 0)
 
 						playerFrame.Bg:SetPoint("TOPLEFT", 1, -1)
@@ -5694,7 +5694,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				bu.icon:SetTexCoord(.08, .92, .08, .92)
 
-				co:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+				F.SetFS(co)
 				co:ClearAllPoints()
 				co:SetPoint("TOP", bu, 1, -2)
 			end
@@ -8276,7 +8276,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			KC_LangButton.Right:SetAlpha(0)
 
 			KC_LangButtonText:Hide()
-			KC_LangButton.Text = F.CreateFS(KC_LangButton, 8)
+			KC_LangButton.Text = F.CreateFS(KC_LangButton)
 			KC_LangButton.Text:SetPoint("BOTTOM", 0, 2)
 
 			updateText(KC_LangButton)

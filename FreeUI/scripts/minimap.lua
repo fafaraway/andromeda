@@ -41,7 +41,7 @@ MiniMapMailFrame:HookScript("OnMouseUp", function(self)
 	mail:Hide()
 end)
 
-local mt = F.CreateFS(mail, 8)
+local mt = F.CreateFS(mail)
 mt:SetText("Mail")
 mt:SetPoint("BOTTOM", Minimap, 0, 6)
 
@@ -56,12 +56,12 @@ SubZoneTextFrame:SetFrameStrata("MEDIUM")
 ZoneTextString:ClearAllPoints()
 ZoneTextString:SetPoint("CENTER", Minimap)
 ZoneTextString:SetWidth(138)
-ZoneTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-SubZoneTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(ZoneTextString)
+F.SetFS(SubZoneTextString)
 SubZoneTextString:SetWidth(138)
-PVPInfoTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(PVPInfoTextString)
 PVPInfoTextString:SetWidth(138)
-PVPArenaTextString:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(PVPArenaTextString)
 PVPArenaTextString:SetWidth(138)
 
 MinimapZoneTextButton:ClearAllPoints()
@@ -70,7 +70,7 @@ MinimapZoneTextButton:SetFrameStrata("HIGH")
 MinimapZoneTextButton:EnableMouse(false)
 MinimapZoneTextButton:SetAlpha(0)
 MinimapZoneText:SetPoint("CENTER", MinimapZoneTextButton)
-MinimapZoneText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(MinimapZoneText)
 MinimapZoneText:SetShadowColor(0, 0, 0, 0)
 MinimapZoneText:SetJustifyH("CENTER")
 
@@ -115,7 +115,7 @@ GameTimeFrame:SetPushedTexture("")
 GameTimeFrame:SetHighlightTexture("")
 
 local _, _, _, _, dateText = GameTimeFrame:GetRegions()
-dateText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(dateText)
 dateText:SetTextColor(1, 1, 1)
 dateText:SetShadowOffset(0, 0)
 dateText:SetPoint("CENTER")
@@ -131,7 +131,7 @@ QueueStatusFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4, -1)
 
 local dots = {}
 for i = 1, 8 do
-	dots[i] = F.CreateFS(QueueStatusMinimapButton, 16)
+	dots[i] = F.CreateFS(QueueStatusMinimapButton, C.FONT_SIZE_LARGE)
 	dots[i]:SetText(".")
 end
 dots[1]:SetPoint("TOP", 2, 2)
@@ -202,7 +202,7 @@ rd:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
 rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
 rd:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED")
 
-local rdt = F.CreateFS(rd, 8, "LEFT")
+local rdt = F.CreateFS(rd, C.FONT_SIZE_NORMAL, "LEFT")
 rdt:SetPoint("TOPLEFT")
 
 rd:SetScript("OnEvent", function()
@@ -271,7 +271,7 @@ for _, ticketButton in pairs({HelpOpenTicketButton, HelpOpenWebTicketButton}) do
 	ticketButton:SetHighlightTexture("")
 	ticketButton:SetPushedTexture("")
 
-	local gmtext = F.CreateFS(ticketButton, 8)
+	local gmtext = F.CreateFS(ticketButton)
 	gmtext:SetPoint("CENTER", 2, 0)
 	gmtext:SetText(gsub(CHAT_FLAG_GM, "[<>]", "")) -- magic!
 

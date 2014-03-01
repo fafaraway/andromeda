@@ -24,14 +24,12 @@ local function InitStyle()
 				texture:SetTexture(C.media.texture)
 				texture.SetTexture = F.dummy
 
-				text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				text:SetShadowColor(0, 0, 0, 0)
+				F.SetFS(text)
 				text.SetFont = F.dummy
 
 				timer:SetPoint("CENTER", 0, 10)
 				timer:SetPoint("RIGHT", -2, 10)
-				timer:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				timer:SetShadowColor(0, 0, 0, 0)
+				F.SetFS(timer)
 				timer.SetFont = F.dummy
 
 				spark:SetSize(8, 16)
@@ -71,12 +69,10 @@ local function InitStyle()
 			DBMRangeCheckRadar.background:SetTexture("")
 			F.CreateBDFrame(DBMRangeCheckRadar)
 
-			DBMRangeCheckRadar.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			F.SetFS(DBMRangeCheckRadar.text)
 			DBMRangeCheckRadar.text:SetTextColor(1, 1, 1)
-			DBMRangeCheckRadar.text:SetShadowOffset(0, 0)
-			DBMRangeCheckRadar.inRangeText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			F.SetFS(DBMRangeCheckRadar.inRangeText)
 			DBMRangeCheckRadar.inRangeText:SetTextColor(1, 1, 1)
-			DBMRangeCheckRadar.inRangeText:SetShadowOffset(0, 0)
 
 			firstRange = false
 		end
@@ -86,9 +82,8 @@ local function InitStyle()
 		local anchor = DBMBossHealthDropdown:GetParent()
 		if not anchor.styled then
 			local header = anchor:GetRegions()
-			header:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			F.SetFS(header)
 			header:SetTextColor(1, 1, 1)
-			header:SetShadowOffset(0, 0)
 
 			anchor.styled = true
 		end
@@ -111,10 +106,8 @@ local function InitStyle()
 
 				sb:SetStatusBarTexture(C.media.texture)
 
-				text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				text:SetShadowOffset(0, 0)
-				timer:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-				timer:SetShadowOffset(0, 0)
+				F.SetFS(text)
+				F.SetFS(timer)
 
 				F.CreateBDFrame(sb)
 

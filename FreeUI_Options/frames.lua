@@ -271,8 +271,25 @@ line:SetSize(450, 1)
 line:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 16, -36)
 line:SetTexture(1, 1, 1, .2)
 
+local fontSizeNormal = ns.CreateNumberSlider(general, "fontSizeNormal", 4, 64, 4, 64, 1)
+fontSizeNormal:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 0, -76)
+
+local fontSizeLarge = ns.CreateNumberSlider(general, "fontSizeLarge", 4, 64, 4, 64, 1)
+fontSizeLarge:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -24)
+
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
-uiScaleAuto:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -66)
+uiScaleAuto:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", -16, -50)
+
+local fontOutline = ns.CreateCheckBox(general, "fontOutline", false, true)
+fontOutline:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -76)
+
+local fontOutlineMonochrome = ns.CreateCheckBox(general, "fontOutlineMonochrome", false, true)
+fontOutlineMonochrome:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 16, -8)
+
+fontOutline.children = {fontOutlineMonochrome}
+
+local fontShadow = ns.CreateCheckBox(general, "fontShadow", false, true)
+fontShadow:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 0, -42)
 
 -- [[ Automation ]]
 
@@ -373,7 +390,7 @@ local slotsShowAlways = ns.CreateCheckBox(bags, "slotsShowAlways", true)
 slotsShowAlways:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
 local size = ns.CreateNumberSlider(bags, "size", SMALL, LARGE, 8, 100, 1)
-size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 18, -42)
+size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 8, -42)
 
 local function toggleBagsOptions()
 	local shown = enable:GetChecked() == 1
@@ -408,7 +425,7 @@ local animations = ns.CreateCheckBox(notifications, "animations", true)
 animations:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 
 local timeShown = ns.CreateNumberSlider(notifications, "timeShown", "1 sec", "10 sec", 1, 10, 1)
-timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 18, -30)
+timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 8, -30)
 
 local function toggleNotificationsOptions()
 	local shown = enable:GetChecked() == 1

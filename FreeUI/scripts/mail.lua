@@ -9,8 +9,8 @@ button:SetPoint("BOTTOM", InboxFrame, "BOTTOM", -10, 92)
 button:SetWidth(128)
 button:SetHeight(25)
 
-local text = F.CreateFS(button, 8)
-text:SetPoint"CENTER"
+local text = F.CreateFS(button)
+text:SetPoint("CENTER")
 
 local processing = false
 

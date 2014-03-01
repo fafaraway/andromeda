@@ -93,7 +93,7 @@ ns.CreateCheckBox = function(parent, option, tooltipText, needsReload)
 end
 
 local function onValueChanged(self, value)
-	value = floor(value*1000)/1000
+	value = floor(value+0.5)
 
 	if self.textInput then
 		self.textInput:SetText(value)

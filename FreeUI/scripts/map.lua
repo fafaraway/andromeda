@@ -7,7 +7,6 @@ local r, g, b = unpack(C.class)
 WORLDMAP_WINDOWED_SIZE = 0.82
 
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
-local fontsize = 8 / WORLDMAP_WINDOWED_SIZE
 local panelHeight = 26
 
 select(2, WorldMapPing.Ping:GetAnimations()):SetScale(1.62, 1.62)
@@ -57,7 +56,7 @@ button:SetSize(16, 16)
 button:SetScale(offset)
 button:SetPoint("BOTTOM", WorldMapDetailFrame)
 
-local text = F.CreateFS(button, 8)
+local text = F.CreateFS(button)
 text:SetPoint("CENTER")
 text:SetText("+")
 
@@ -73,6 +72,8 @@ button:SetScript("OnEnter", colourText)
 button:SetScript("OnLeave", clearText)
 
 local SmallerMapSkin = function()
+	local fontsize = C.FONT_SIZE_NORMAL / WORLDMAP_WINDOWED_SIZE
+
 	WorldMapFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:SetFrameStrata("MEDIUM")
 	WorldMapDetailFrame:ClearAllPoints()
@@ -88,7 +89,7 @@ local SmallerMapSkin = function()
 
 	WorldMapFrameTitle:ClearAllPoints()
 	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, 8, 4);
-	WorldMapFrameTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(WorldMapFrameTitle)
 	WorldMapFrameTitle:SetTextColor(1, 1, 1)
 	WorldMapFrameTitle:SetShadowColor(0, 0, 0, 0)
 	WorldMapFrameTitle:SetParent(frame)
@@ -98,7 +99,7 @@ local SmallerMapSkin = function()
 	WorldMapTrackQuest:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, "BOTTOMRIGHT")
 	WorldMapTrackQuestText:ClearAllPoints()
 	WorldMapTrackQuestText:SetPoint("RIGHT", WorldMapTrackQuest, "LEFT", -2, 0)
-	WorldMapTrackQuestText:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(WorldMapTrackQuestText)
 	WorldMapTrackQuestText:SetTextColor(1, 1, 1)
 	WorldMapTrackQuestText:SetShadowColor(0, 0, 0, 0)
 
@@ -131,9 +132,9 @@ local SmallerMapSkin = function()
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
-local coords = F.CreateFS(frame, 8)
+local coords = F.CreateFS(frame)
 coords:SetPoint("LEFT", WorldMapFrameTitle, "RIGHT")
-local cursorcoords = F.CreateFS(frame, 8)
+local cursorcoords = F.CreateFS(frame)
 cursorcoords:SetPoint("BOTTOMLEFT", WorldMapFrameTitle, "TOPLEFT", 0, 4)
 
 local freq = C.performance.mapcoords
@@ -175,7 +176,7 @@ local editbox = CreateFrame("EditBox", "MapSearchBox", WorldMapFrame, "SearchBox
 editbox:SetAutoFocus(false)
 editbox:SetSize(150, 20)
 editbox:SetPoint("CENTER", panel)
-editbox:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(editbox)
 editbox:SetShadowOffset(0, 0)
 editbox:SetParent(panel)
 

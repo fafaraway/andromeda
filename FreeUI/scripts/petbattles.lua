@@ -294,7 +294,7 @@ hooksecurefunc("PetBattleAuraHolder_Update", function(self)
 				frame.bg = F.CreateBG(frame.Icon)
 			end
 
-			frame.Duration:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+			F.SetFS(frame.Duration)
 			frame.Duration:SetShadowOffset(0, 0)
 			frame.Duration:ClearAllPoints()
 			frame.Duration:SetPoint("BOTTOM", frame.Icon, 1, -1)
@@ -482,12 +482,12 @@ local function stylePetBattleButton(bu)
 	se:SetTexture(r, g, b, .2)
 	se:SetAllPoints()
 
-	ho:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(ho)
 	ho:SetJustifyH("CENTER")
 	ho:ClearAllPoints()
 	ho:SetPoint("TOP", 1, -2)
 
-	cd:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(cd)
 	cd:SetJustifyH("CENTER")
 	cd:SetDrawLayer("OVERLAY", 5)
 	cd:SetTextColor(1, 1, 1)

@@ -201,11 +201,13 @@ local function OnTooltipSetUnit(self)
 	if msp and unitName then
 		hasMSP = false
 
-		if msp.char[unitName].supported then
+		local fullName = unitName.."-"..(unitRealm or GetRealmName():gsub("%s+", ""))
+
+		if msp.char[fullName].supported then
 			hasMSP = true
 			GameTooltipTextRight1:SetText(GetColor(unit).."MSP")
 			GameTooltipTextRight1:Show()
-			local cu = msp.char[unitName].field["CU"]
+			local cu = msp.char[fullName].field["CU"]
 			if cu ~= "" then
 				local len = cu:len()
 				if len > 50 then
@@ -225,7 +227,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 
 if msp then
 	tinsert(msp.callback.received, function(unitName)
-		if not hasMSP and UnitExists("mouseover") and UnitName("mouseover") == unitName then
+		if not hasMSP and UnitExists("mouseover") and UnitName("mouseover") == Ambiguate(unitName, "none") then
 			hasMSP = true
 			GameTooltipTextRight1:SetText(GetColor("mouseover").."MSP")
 			GameTooltipTextRight1:Show()

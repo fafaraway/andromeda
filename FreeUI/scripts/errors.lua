@@ -26,9 +26,9 @@ secondErrorFrame:Hide()
 secondErrorFrame:SetFrameStrata("TOOLTIP")
 secondErrorFrame:SetFrameLevel(30)
 
-firstErrorFrame.text = F.CreateFS(firstErrorFrame, 8)
+firstErrorFrame.text = F.CreateFS(firstErrorFrame)
 firstErrorFrame.text:SetPoint("TOP", UIParent, 0, -76)
-secondErrorFrame.text = F.CreateFS(secondErrorFrame, 8)
+secondErrorFrame.text = F.CreateFS(secondErrorFrame)
 secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -85)
 
 local state = 0

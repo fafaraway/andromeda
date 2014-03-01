@@ -17,7 +17,7 @@ bg:SetPoint("BOTTOMRIGHT", f, 1, -1)
 bg:SetFrameLevel(f:GetFrameLevel()-1)
 F.CreateBD(bg)
 
-local nametext = F.CreateFS(f, 8, "LEFT")
+local nametext = F.CreateFS(f, C.FONT_SIZE_NORMAL, "LEFT")
 nametext:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 2)
 
 local addonLoaded

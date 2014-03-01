@@ -40,12 +40,12 @@ glow:SetScript("OnEvent", function(self, event, unit)
 	if count == 5 then
 		glow:SetAlpha(1)
 		F.CreatePulse(glow)
-		glow.text:SetFont(C.media.font, 40, "OUTLINEMONOCHROME")
+		F.SetFS(glow.text, 40)
 		glow.text:SetTextColor(.2, .6, .9)
 	else
 		glow:SetScript("OnUpdate", nil)
 		glow:SetAlpha(0)
-		glow.text:SetFont(C.media.font, 24, "OUTLINEMONOCHROME")
+		F.SetFS(glow.text, 24)
 		glow.text:SetTextColor(1, 1, 1)
 	end
 end)

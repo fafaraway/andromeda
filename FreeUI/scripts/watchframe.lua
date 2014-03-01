@@ -31,8 +31,7 @@ hooksecurefunc("WatchFrame_Expand", function()
 	WatchFrameCollapseExpandButton.plus:Hide()
 end)
 
-WatchFrameTitle:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-WatchFrameTitle:SetShadowColor(0, 0, 0, 0)
+F.SetFS(WatchFrameTitle)
 
 local index = 1
 local itemIndex = 1
@@ -40,10 +39,8 @@ local itemIndex = 1
 hooksecurefunc("WatchFrame_Update", function()
 	local line = _G["WatchFrameLine"..index]
 	while line do
-		line.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-		line.dash:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-		line.text:SetShadowColor(0, 0, 0, 0)
-		line.dash:SetShadowColor(0, 0, 0, 0)
+		F.SetFS(line.text)
+		F.SetFS(line.dash)
 		line.text:SetSpacing(2)
 
 		line.text:ClearAllPoints()
@@ -65,7 +62,7 @@ hooksecurefunc("WatchFrame_Update", function()
 
 		hotkey:ClearAllPoints()
 		hotkey:SetPoint("TOP", bu, -1, 0)
-		hotkey:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		F.SetFS(hotkey)
 		hotkey:SetJustifyH("CENTER")
 
 		itemIndex = itemIndex + 1
@@ -76,10 +73,8 @@ end)
 hooksecurefunc("WatchFrameScenario_GetCriteriaLine", function(index, parent)
 	local line = _G["WatchFrameScenarioLine"..index]
 	if not line.styled then
-		line.text:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-		line.dash:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-		line.text:SetShadowColor(0, 0, 0, 0)
-		line.dash:SetShadowColor(0, 0, 0, 0)
+		F.SetFS(line.text)
+		F.SetFS(line.dash)
 		line.text:SetSpacing(2)
 
 		line.styled = true

@@ -7,8 +7,7 @@ RaidWarningFrame.slot2:SetFont(font, 20, "OUTLINE")
 RaidBossEmoteFrame.slot1:SetFont(font, 20, "OUTLINE")
 RaidBossEmoteFrame.slot2:SetFont(font, 20, "OUTLINE")
 
-UIErrorsFrame:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-UIErrorsFrame:SetShadowOffset(0, 0)
+F.SetFS(UIErrorsFrame)
 
 STANDARD_TEXT_FONT = font
 UNIT_NAME_FONT     = font

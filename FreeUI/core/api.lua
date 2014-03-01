@@ -53,6 +53,9 @@ C.myClass = class
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
 
+C.FONT_SIZE_NORMAL = 1
+C.FONT_SIZE_LARGE = 2
+
 -- [[ Functions ]]
 
 F.dummy = function() end
@@ -96,11 +99,39 @@ F.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	sd:SetAlpha(alpha or 1)
 end
 
-F.CreateFS = function(parent, size, justify)
+F.CreateFS = function(parent, fontSize, justify)
     local f = parent:CreateFontString(nil, "OVERLAY")
-    f:SetFont(C.media.font, size, "OUTLINEMONOCHROME")
-    if(justify) then f:SetJustifyH(justify) end
+    F.SetFS(f, fontSize)
+
+    if justify then f:SetJustifyH(justify) end
+
     return f
+end
+
+F.SetFS = function(fontObject, fontSize)
+	local size
+
+	if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
+		size = C.general.fontSizeNormal
+	elseif fontSize == C.FONT_SIZE_LARGE then
+		size = C.general.fontSizeLarge
+	elseif fontSize > 4 then -- actual size
+		size = fontSize
+	end
+
+	local outline = nil
+	if C.general.fontOutline then
+		outline = C.general.fontOutlineMonochrome and "OUTLINEMONOCHROME" or "OUTLINE"
+	end
+
+	fontObject:SetFont(C.media.font, size, outline)
+
+	if C.general.fontShadow then
+		fontObject:SetShadowColor(0, 0, 0)
+		fontObject:SetShadowOffset(1, -1)
+	else
+		fontObject:SetShadowOffset(0, 0)
+	end
 end
 
 F.CreatePulse = function(frame) -- pulse function originally by nightcracker

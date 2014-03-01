@@ -23,14 +23,13 @@ local function applySkin(b)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	icon:SetDrawLayer("BACKGROUND", 1)
 
-	b.duration:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	b.duration:SetShadowOffset(0, 0)
+	F.SetFS(b.duration)
 	b.duration:ClearAllPoints()
 	b.duration:SetPoint("BOTTOM", 1, -2)
 
 	hooksecurefunc(b.duration, "SetFormattedText", durationSetText)
 
-	b.count:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+	F.SetFS(b.count)
 	b.count:ClearAllPoints()
 	b.count:SetPoint("TOP", b, "TOP", 2, -2)
 
@@ -96,7 +95,7 @@ ConsolidatedBuffs:SetParent(f)
 ConsolidatedBuffs:ClearAllPoints()
 ConsolidatedBuffs:SetPoint("TOPRIGHT")
 
-ConsolidatedBuffs.count:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+F.SetFS(ConsolidatedBuffs.count)
 ConsolidatedBuffs.count:ClearAllPoints()
 ConsolidatedBuffs.count:SetPoint("TOP", ConsolidatedBuffs, "TOP", 2, -2)
 ConsolidatedBuffsIcon:SetSize(30, 30)
@@ -110,8 +109,7 @@ F.CreateBD(ConsolidatedBuffsTooltip)
 for i = 1, NUM_LE_RAID_BUFF_TYPES do
 	local buff = ConsolidatedBuffsTooltip["Buff"..i]
 
-	buff.label:SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
-	buff.label:SetShadowColor(0, 0, 0, 0)
+	F.SetFS(buff.label)
 	buff.icon:SetTexCoord(.08, .92, .08, .92)
 
 	F.CreateBDFrame(buff.icon, .25)

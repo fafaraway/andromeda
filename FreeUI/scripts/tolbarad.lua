@@ -6,7 +6,7 @@ local frame = CreateFrame("Frame", nil, UIParent)
 frame:SetSize(100, 10)
 frame:SetPoint("TOP", Minimap, "BOTTOM", 0, -39)
 
-local text = F.CreateFS(frame, 8)
+local text = F.CreateFS(frame)
 text:SetPoint("CENTER")
 text:SetTextColor(unpack(C.class))
 

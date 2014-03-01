@@ -78,7 +78,7 @@ local faneifyTab = function(frame, sel)
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
 
-		frame:GetFontString():SetFont(C.media.font, 8, "OUTLINEMONOCHROME")
+		F.SetFS(frame:GetFontString())
 
 		frame.Fane = true
 	end
