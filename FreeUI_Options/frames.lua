@@ -281,7 +281,7 @@ local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
 uiScaleAuto:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", -16, -50)
 
 local fontOutline = ns.CreateCheckBox(general, "fontOutline", false, true)
-fontOutline:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -76)
+fontOutline:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -71)
 
 local fontOutlineMonochrome = ns.CreateCheckBox(general, "fontOutlineMonochrome", false, true)
 fontOutlineMonochrome:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 16, -8)
