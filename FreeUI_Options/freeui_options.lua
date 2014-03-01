@@ -15,8 +15,14 @@ local panels = {}
 local old = {} -- to keep track of whether or not reload is needed
 local needsReload = false
 local userChangedSlider = true -- to use SetValue without running OnValueChanged code
+local baseName = "FreeUIOptionsPanel"
 
 local r, g, b
+
+local function setReloadNeeded(isNeeded)
+	FreeUIOptionsPanel.reloadText:SetShown(isNeeded)
+	ns.needReload = isNeeded -- for the popup when clicking okay
+end
 
 local function SaveValue(f, value)
 	if not C.options[f.group] then C.options[f.group] = {} end
@@ -58,12 +64,10 @@ local function toggle(self)
 		end
 		for checkbox, value in pairs(old) do
 			if C[checkbox.group][checkbox.option] ~= value then
-				FreeUIOptionsPanel.reloadText:Show()
-				ns.needReload = true -- for the popup when clicking okay
+				setReloadNeeded(true)
 				break
 			else
-				FreeUIOptionsPanel.reloadText:Hide()
-				ns.needReload = false
+				setReloadNeeded(false)
 			end
 		end
 	end
@@ -101,11 +105,12 @@ local function onValueChanged(self, value)
 
 	if userChangedSlider then
 		SaveValue(self, value)
+
+		setReloadNeeded(true)
 	end
 end
 
-local function createSlider(parent, option, lowText, highText, low, high, step)
-	local baseName = "FreeUIOptionsPanel"
+local function createSlider(parent, option, lowText, highText, low, high, step, needsReload)
 	local f = CreateFrame("Slider", baseName..option, parent, "OptionsSliderTemplate")
 
 	BlizzardOptionsPanel_Slider_Enable(f)
@@ -118,6 +123,12 @@ local function createSlider(parent, option, lowText, highText, low, high, step)
 	_G[baseName..option.."High"]:SetText(highText)
 	f:SetMinMaxValues(low, high)
 	f:SetValueStep(step)
+
+	if needsReload then
+		f.tooltipText = ns.localization.requiresReload
+	end
+
+	f.needsReload = needsReload
 
 	f:SetScript("OnValueChanged", onValueChanged)
 	parent[option] = f
@@ -145,10 +156,8 @@ local function onEnterPressed(self)
 	self:ClearFocus()
 end
 
-ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, alignRight)
-	local slider = createSlider(parent, option, lowText, highText, low, high, step)
-
-	local baseName = "FreeUIOptionsPanel"
+ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, alignRight, needsReload)
+	local slider = createSlider(parent, option, lowText, highText, low, high, step, needsReload)
 
 	local f = CreateFrame("EditBox", baseName..option.."TextInput", slider)
 	f:SetAutoFocus(false)
@@ -157,11 +166,7 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 	f:SetMaxLetters(8)
 	f:SetFontObject(GameFontHighlight)
 
-	if alignRight then
-		slider:SetPoint("RIGHT", f, "LEFT", -20, 0)
-	else
-		f:SetPoint("LEFT", slider, "RIGHT", 20, 0)
-	end
+	f:SetPoint("LEFT", slider, "RIGHT", 20, 0)
 
 	f:SetScript("OnEscapePressed", onEscapePressed)
 	f:SetScript("OnEnterPressed", onEnterPressed)
@@ -197,7 +202,7 @@ end
 ns.addCategory = function(name)
 	local tag = strlower(name)
 
-	local panel = CreateFrame("Frame", "FreeUIOptionsPanel"..name, FreeUIOptionsPanel)
+	local panel = CreateFrame("Frame", baseName..name, FreeUIOptionsPanel)
 	panel:SetSize(623, 568)
 	panel:SetPoint("RIGHT", -42, 0)
 	panel:Hide()
