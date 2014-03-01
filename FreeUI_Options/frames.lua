@@ -137,9 +137,21 @@ resetFrame.Cancel:SetScript("OnClick", function()
 end)
 tinsert(ns.buttons, resetFrame.Cancel)
 
+local credits = CreateFrame("Frame", "FreeUIOptionsPanelCredits", UIParent) -- implemented at bottom
+
+local CreditsButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
+CreditsButton:SetSize(128, 25)
+CreditsButton:SetPoint("TOPLEFT", 16, -509)
+CreditsButton:SetText(ns.localization.credits)
+CreditsButton:SetScript("OnClick", function()
+	credits:Show()
+	options:SetAlpha(.3)
+end)
+tinsert(ns.buttons, CreditsButton)
+
 local InstallButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 InstallButton:SetSize(128, 25)
-InstallButton:SetPoint("TOPLEFT", 16, -538)
+InstallButton:SetPoint("TOP", CreditsButton, "BOTTOM", 0, -4)
 InstallButton:SetText(ns.localization.install)
 InstallButton:SetScript("OnClick", function()
 	if IsAddOnLoaded("FreeUI_Install") then
@@ -193,6 +205,7 @@ menuButton:SetScript("OnClick", function()
 end)
 
 ns.addCategory("General")
+ns.addCategory("Appearance")
 ns.addCategory("Automation")
 ns.addCategory("ActionBars")
 ns.addCategory("Bags")
@@ -200,7 +213,6 @@ ns.addCategory("Notifications")
 ns.addCategory("UnitFrames")
 ns.addCategory("Tooltip")
 ns.addCategory("ClassMod")
-ns.addCategory("Credits")
 
 -- [[ General ]]
 
@@ -264,22 +276,27 @@ line:SetSize(450, 1)
 line:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 16, -36)
 line:SetTexture(1, 1, 1, .2)
 
-local fontUseAlternativeFont = ns.CreateCheckBox(general, "fontUseAlternativeFont", true, true)
-fontUseAlternativeFont:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -56)
+local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
+uiScaleAuto:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -56)
 
-local fontSizeNormal = ns.CreateNumberSlider(general, "fontSizeNormal", 4, 64, 4, 64, 1)
+-- [[ Appearance ]]
+
+local appearance = FreeUIOptionsPanel.appearance
+appearance.tab.Icon:SetTexture("Interface\\Icons\\inv_ore_arcanite_01")
+
+local fontUseAlternativeFont = ns.CreateCheckBox(appearance, "fontUseAlternativeFont", true, true)
+fontUseAlternativeFont:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
+
+local fontSizeNormal = ns.CreateNumberSlider(appearance, "fontSizeNormal", 4, 64, 4, 64, 1)
 fontSizeNormal:SetPoint("TOPLEFT", fontUseAlternativeFont, "BOTTOMLEFT", 16, -26)
 
-local fontSizeLarge = ns.CreateNumberSlider(general, "fontSizeLarge", 4, 64, 4, 64, 1)
+local fontSizeLarge = ns.CreateNumberSlider(appearance, "fontSizeLarge", 4, 64, 4, 64, 1)
 fontSizeLarge:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -24)
 
-local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
-uiScaleAuto:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", -16, -36)
+local fontOutline = ns.CreateCheckBox(appearance, "fontOutline", false, true)
+fontOutline:SetPoint("LEFT", fontUseAlternativeFont, "RIGHT", 240, 0)
 
-local fontOutline = ns.CreateCheckBox(general, "fontOutline", false, true)
-fontOutline:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -71)
-
-local fontOutlineMonochrome = ns.CreateCheckBox(general, "fontOutlineMonochrome", false, true)
+local fontOutlineMonochrome = ns.CreateCheckBox(appearance, "fontOutlineMonochrome", false, true)
 fontOutlineMonochrome:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 16, -8)
 
 fontOutline.children = {fontOutlineMonochrome}
@@ -570,10 +587,29 @@ tinsert(ns.classOptions, warlock)
 
 -- [[ Credits ]]
 
-local credits = FreeUIOptionsPanel.credits
-credits.tab.Icon:SetTexture("Interface\\Icons\\inv_valentinescard02")
+credits:SetSize(525, 600)
+credits:SetPoint("CENTER")
+credits:SetFrameStrata("DIALOG")
+credits:EnableMouse(true)
+credits:Hide()
+options.credits = credits
 
-credits.Title:SetText("")
+tinsert(UISpecialFrames, credits:GetName())
+
+credits.CloseButton = CreateFrame("Button", nil, credits, "UIPanelCloseButton")
+
+local closeButton = CreateFrame("Button", nil, credits, "UIPanelButtonTemplate")
+closeButton:SetSize(128, 25)
+closeButton:SetPoint("BOTTOM", 0, 25)
+closeButton:SetText(CLOSE)
+closeButton:SetScript("OnClick", function()
+	credits:Hide()
+end)
+tinsert(ns.buttons, closeButton)
+
+credits:SetScript("OnHide", function()
+	options:SetAlpha(1)
+end)
 
 local author = credits:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
 author:SetPoint("TOP", 0, -64)

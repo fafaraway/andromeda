@@ -114,7 +114,7 @@ local UpdateFrame = function(self)
 	local uiScale = UIParent:GetScale()
 
 	local offset = uiScale / barScale
-	local fontSize = C.general.fontSizeNormal * offset
+	local fontSize = C.appearance.fontSizeNormal * offset
 
 	local left = self.healthBar.leftTex
 	local right = self.healthBar.rightTex
@@ -203,7 +203,7 @@ local StyleFrame = function(frame)
 	frame.done = true
 
 	local offset = UIParent:GetScale()
-	local fontSize = C.general.fontSizeNormal * offset
+	local fontSize = C.appearance.fontSizeNormal * offset
 
 	frame.barFrame, frame.nameFrame = frame:GetChildren()
 

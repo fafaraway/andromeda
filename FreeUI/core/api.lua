@@ -17,7 +17,7 @@ C.media = {
 	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
 }
 
-if C.general.fontUseAlternativeFont then
+if C.appearance.fontUseAlternativeFont then
 	C.media.font = C.media.font2
 elseif GetLocale() == "ruRU" then
 	C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
@@ -114,21 +114,21 @@ F.SetFS = function(fontObject, fontSize)
 	local size
 
 	if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
-		size = C.general.fontSizeNormal
+		size = C.appearance.fontSizeNormal
 	elseif fontSize == C.FONT_SIZE_LARGE then
-		size = C.general.fontSizeLarge
+		size = C.appearance.fontSizeLarge
 	elseif fontSize > 4 then -- actual size
 		size = fontSize
 	end
 
 	local outline = nil
-	if C.general.fontOutline then
-		outline = C.general.fontOutlineMonochrome and "OUTLINEMONOCHROME" or "OUTLINE"
+	if C.appearance.fontOutline then
+		outline = C.appearance.fontOutlineMonochrome and "OUTLINEMONOCHROME" or "OUTLINE"
 	end
 
 	fontObject:SetFont(C.media.font, size, outline)
 
-	if C.general.fontShadow then
+	if C.appearance.fontShadow then
 		fontObject:SetShadowColor(0, 0, 0)
 		fontObject:SetShadowOffset(1, -1)
 	else

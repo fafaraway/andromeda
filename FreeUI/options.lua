@@ -23,7 +23,9 @@ C["general"] = {
 	["tolbarad"] = false,			-- Tol barad timer on the minimap
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
+}
 
+C["appearance"] = {
 	["fontUseAlternativeFont"] = false,
 	["fontSizeNormal"] = 8,
 	["fontSizeLarge"] = 16,
