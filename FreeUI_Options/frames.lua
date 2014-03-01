@@ -271,14 +271,17 @@ line:SetSize(450, 1)
 line:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 16, -36)
 line:SetTexture(1, 1, 1, .2)
 
+local fontUseAlternativeFont = ns.CreateCheckBox(general, "fontUseAlternativeFont", true, true)
+fontUseAlternativeFont:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -56)
+
 local fontSizeNormal = ns.CreateNumberSlider(general, "fontSizeNormal", 4, 64, 4, 64, 1)
-fontSizeNormal:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 0, -76)
+fontSizeNormal:SetPoint("TOPLEFT", fontUseAlternativeFont, "BOTTOMLEFT", 16, -26)
 
 local fontSizeLarge = ns.CreateNumberSlider(general, "fontSizeLarge", 4, 64, 4, 64, 1)
 fontSizeLarge:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -24)
 
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
-uiScaleAuto:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", -16, -50)
+uiScaleAuto:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", -16, -36)
 
 local fontOutline = ns.CreateCheckBox(general, "fontOutline", false, true)
 fontOutline:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -71)

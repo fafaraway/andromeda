@@ -24,6 +24,7 @@ C["general"] = {
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
 
+	["fontUseAlternativeFont"] = false,
 	["fontSizeNormal"] = 8,
 	["fontSizeLarge"] = 16,
 	["fontOutline"] = true,

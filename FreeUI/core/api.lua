@@ -17,7 +17,9 @@ C.media = {
 	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
 }
 
-if GetLocale() == "ruRU" then
+if C.general.fontUseAlternativeFont then
+	C.media.font = C.media.font2
+elseif GetLocale() == "ruRU" then
 	C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
 end
 
