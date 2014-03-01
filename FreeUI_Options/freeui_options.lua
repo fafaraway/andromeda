@@ -138,11 +138,11 @@ local function createSlider(parent, option, lowText, highText, low, high, step, 
 	return f
 end
 
-local function onEscapePressed(self)
+local function onSliderEscapePressed(self)
 	self:ClearFocus()
 end
 
-local function onEnterPressed(self)
+local function onSliderEnterPressed(self)
 	local slider = self:GetParent()
 	local min, max = slider:GetMinMaxValues()
 
@@ -168,8 +168,9 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 
 	f:SetPoint("LEFT", slider, "RIGHT", 20, 0)
 
-	f:SetScript("OnEscapePressed", onEscapePressed)
-	f:SetScript("OnEnterPressed", onEnterPressed)
+	f:SetScript("OnEscapePressed", onSliderEscapePressed)
+	f:SetScript("OnEnterPressed", onSliderEnterPressed)
+	f:SetScript("OnEditFocusLost", onSliderEnterPressed)
 
 	slider.textInput = f
 
