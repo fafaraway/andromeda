@@ -64,6 +64,7 @@ ns.localization.appearancefontSizeLarge = "Large font size"
 ns.localization.appearancefontOutline = "Outline font"
 ns.localization.appearancefontOutlineMonochrome = "Monochrome outline"
 ns.localization.appearancefontShadow = "Font shadow"
+ns.localization.appearancesampleText = "sample SAMPLE"
 
 ns.localization.automation = "Automation"
 ns.localization.automationSubText = "With these features, the UI can perform common tasks automatically."
