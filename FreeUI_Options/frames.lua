@@ -294,7 +294,7 @@ fontOutlineMonochrome:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 16, -8)
 
 fontOutline.children = {fontOutlineMonochrome}
 
-local fontShadow = ns.CreateCheckBox(general, "fontShadow", false, true)
+local fontShadow = ns.CreateCheckBox(appearance, "fontShadow", false, true)
 fontShadow:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 0, -42)
 
 -- [[ Automation ]]
