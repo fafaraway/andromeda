@@ -906,11 +906,19 @@ local OnEvent = function(self, event, ...)
 			MainFrame:SetSize(dmconf.width, dmconf.maxbars*(dmconf.barheight+dmconf.spacing)-dmconf.spacing)
 			MainFrame:SetPoint(anchor, x, y)
 			MainFrame.bg = CreateBG(MainFrame)
+			MainFrame:SetMovable(true)
 			MainFrame:EnableMouse(true)
 			MainFrame:EnableMouseWheel(true)
+			MainFrame:SetScript("OnMouseDown", function(self, button)
+				if button == "LeftButton" and IsModifiedClick("SHIFT") then
+					self:StartMoving()
+				end
+			end)
 			MainFrame:SetScript("OnMouseUp", function(self, button)
 				if button == "RightButton" then
 					ToggleDropDownMenu(1, nil, menuFrame, 'cursor', 0, 0)
+				elseif button == "LeftButton" then
+					self:StopMovingOrSizing()
 				end
 			end)
 			MainFrame:SetScript("OnMouseWheel", OnMouseWheel)
