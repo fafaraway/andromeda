@@ -13,7 +13,7 @@ local dropdowns = {}
 local panels = {}
 
 local old = {} -- to keep track of whether or not reload is needed
-local needsReload = false
+local overrideReload = false
 local userChangedSlider = true -- to use SetValue without running OnValueChanged code
 local baseName = "FreeUIOptionsPanel"
 
@@ -62,12 +62,14 @@ local function toggle(self)
 		if old[self] == nil then
 			old[self] = not checked
 		end
-		for checkbox, value in pairs(old) do
-			if C[checkbox.group][checkbox.option] ~= value then
-				setReloadNeeded(true)
-				break
-			else
-				setReloadNeeded(false)
+		if not overrideReload then -- can't check sliders for old value
+			for checkbox, value in pairs(old) do
+				if C[checkbox.group][checkbox.option] ~= value then
+					setReloadNeeded(true)
+					break
+				else
+					setReloadNeeded(false)
+				end
 			end
 		end
 	end
@@ -107,6 +109,7 @@ local function onValueChanged(self, value)
 		SaveValue(self, value)
 
 		setReloadNeeded(true)
+		overrideReload = true
 	end
 end
 
@@ -446,8 +449,8 @@ init:SetScript("OnEvent", function()
 	F.SetFS(FreeUIOptionsPanel.appearance.normalSample, C.FONT_SIZE_NORMAL)
 	F.SetFS(FreeUIOptionsPanel.appearance.largeSample, C.FONT_SIZE_LARGE)
 
-	FreeUIOptionsPanel.appearance.normalSample:SetText("sample SAMPLE")
-	FreeUIOptionsPanel.appearance.largeSample:SetText("sample SAMPLE")
+	FreeUIOptionsPanel.appearance.normalSample:SetText(ns.localization.appearancesampleText)
+	FreeUIOptionsPanel.appearance.largeSample:SetText(ns.localization.appearancesampleText)
 
 	F.AddOptionsCallback("appearance", "fontUseAlternativeFont", updateFontSamples)
 	F.AddOptionsCallback("appearance", "fontSizeNormal", updateFontSamples)
