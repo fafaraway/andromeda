@@ -287,7 +287,7 @@ appearance.normalSample = appearance:CreateFontString()
 appearance.normalSample:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -16)
 
 local fontSizeLarge = ns.CreateNumberSlider(appearance, "fontSizeLarge", 5, 32, 5, 32, 1)
-fontSizeLarge:SetPoint("TOPLEFT", appearance.normalSample, "BOTTOMLEFT", 0, -16)
+fontSizeLarge:SetPoint("TOPLEFT", appearance.normalSample, "BOTTOMLEFT", 0, -26)
 
 appearance.largeSample = appearance:CreateFontString()
 appearance.largeSample:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", 0, -16)
