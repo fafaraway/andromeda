@@ -434,6 +434,28 @@ init:SetScript("OnEvent", function()
 	FreeUIOptionsPanel.classmod.paladinHP.Text:SetTextColor(colour.r, colour.g, colour.b)
 	FreeUIOptionsPanel.classmod.paladinRF.Text:SetTextColor(colour.r, colour.g, colour.b)
 
+	local function updateFontSamples()
+		if userChangedSlider then
+			if C.appearance.fontSizeNormal ~= nil and C.appearance.fontSizeLarge ~= nil then
+				F.SetFS(FreeUIOptionsPanel.appearance.normalSample, C.FONT_SIZE_NORMAL)
+				F.SetFS(FreeUIOptionsPanel.appearance.largeSample, C.FONT_SIZE_LARGE)
+			end
+		end
+	end
+
+	F.SetFS(FreeUIOptionsPanel.appearance.normalSample, C.FONT_SIZE_NORMAL)
+	F.SetFS(FreeUIOptionsPanel.appearance.largeSample, C.FONT_SIZE_LARGE)
+
+	FreeUIOptionsPanel.appearance.normalSample:SetText("sample SAMPLE")
+	FreeUIOptionsPanel.appearance.largeSample:SetText("sample SAMPLE")
+
+	F.AddOptionsCallback("appearance", "fontUseAlternativeFont", updateFontSamples)
+	F.AddOptionsCallback("appearance", "fontSizeNormal", updateFontSamples)
+	F.AddOptionsCallback("appearance", "fontSizeLarge", updateFontSamples)
+	F.AddOptionsCallback("appearance", "fontOutline", updateFontSamples)
+	F.AddOptionsCallback("appearance", "fontOutlineMonochrome", updateFontSamples)
+	F.AddOptionsCallback("appearance", "fontShadow", updateFontSamples)
+
 	displaySettings()
 end)
 

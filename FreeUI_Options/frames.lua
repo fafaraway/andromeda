@@ -280,11 +280,17 @@ appearance.tab.Icon:SetTexture("Interface\\Icons\\inv_ore_arcanite_01")
 local fontUseAlternativeFont = ns.CreateCheckBox(appearance, "fontUseAlternativeFont", true, true)
 fontUseAlternativeFont:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
 
-local fontSizeNormal = ns.CreateNumberSlider(appearance, "fontSizeNormal", 4, 64, 4, 64, 1)
+local fontSizeNormal = ns.CreateNumberSlider(appearance, "fontSizeNormal", 5, 32, 5, 32, 1)
 fontSizeNormal:SetPoint("TOPLEFT", fontUseAlternativeFont, "BOTTOMLEFT", 16, -26)
 
-local fontSizeLarge = ns.CreateNumberSlider(appearance, "fontSizeLarge", 4, 64, 4, 64, 1)
-fontSizeLarge:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -24)
+appearance.normalSample = appearance:CreateFontString()
+appearance.normalSample:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -16)
+
+local fontSizeLarge = ns.CreateNumberSlider(appearance, "fontSizeLarge", 5, 32, 5, 32, 1)
+fontSizeLarge:SetPoint("TOPLEFT", appearance.normalSample, "BOTTOMLEFT", 0, -16)
+
+appearance.largeSample = appearance:CreateFontString()
+appearance.largeSample:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", 0, -16)
 
 local fontOutline = ns.CreateCheckBox(appearance, "fontOutline", false, true)
 fontOutline:SetPoint("LEFT", fontUseAlternativeFont, "RIGHT", 240, 0)
