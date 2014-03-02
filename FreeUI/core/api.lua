@@ -17,11 +17,25 @@ C.media = {
 	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
 }
 
+local mainFont
+
 if C.appearance.fontUseAlternativeFont then
-	C.media.font = C.media.font2
+	mainFont = C.media.font2
 elseif GetLocale() == "ruRU" then
 	C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+else
+	mainFont = C.media.font
 end
+
+F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
+	if C.appearance.fontUseAlternativeFont then
+		mainFont = C.media.font2
+	elseif GetLocale() == "ruRU" then
+		C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+	else
+		mainFont = C.media.font
+	end
+end)
 
 C.classcolours = {
 	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
@@ -126,7 +140,7 @@ F.SetFS = function(fontObject, fontSize)
 		outline = C.appearance.fontOutlineMonochrome and "OUTLINEMONOCHROME" or "OUTLINE"
 	end
 
-	fontObject:SetFont(C.media.font, size, outline)
+	fontObject:SetFont(mainFont, size, outline)
 
 	if C.appearance.fontShadow then
 		fontObject:SetShadowColor(0, 0, 0)
