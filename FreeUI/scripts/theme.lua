@@ -7134,7 +7134,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBG(BonusFrame.BattlegroundReward2.Icon)
 
 		hooksecurefunc("HonorFrameBonusFrame_Update", function()
-			local canQueue, bgName, battleGroundID, hasWon, winHonorAmount, winConquestAmount = GetHolidayBGInfo()
+			local hasData, canQueue, bgName, battleGroundID, hasWon, winHonorAmount, winConquestAmount = GetHolidayBGInfo()
 			local rewardIndex = 0
 			if winConquestAmount and winConquestAmount > 0 then
 				rewardIndex = rewardIndex + 1
