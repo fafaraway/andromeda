@@ -1195,14 +1195,12 @@ local UnitSpecific = {
 		Power.value = PowerPoints
 
 		local tt = CreateFrame("Frame", nil, self)
-		local a1, p, a2, x, y = Health:GetPoint()
-		if C.unitframes.targettarget then y = y + 10 end
-		tt:SetPoint(a1, p, a2, x+60, y+26)
+		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7 + C.appearance.fontSizeNormal + (C.unitframes.targettarget and 10 or 0))
 		tt:SetWidth(110)
 		tt:SetHeight(12)
 
 		ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "RIGHT")
-		ttt:SetAllPoints(tt)
+		ttt:SetPoint("BOTTOMRIGHT", tt)
 
 		tt:RegisterEvent("UNIT_TARGET")
 		tt:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -1753,11 +1751,11 @@ oUF:Factory(function(self)
 		end
 	end
 
-	spawnHelper(self, 'focus', "BOTTOMRIGHT", player, "TOPRIGHT", 0, 12)
-	spawnHelper(self, 'pet', "BOTTOMLEFT", player, "TOPLEFT", 0, 12)
+	spawnHelper(self, 'focus', "BOTTOMRIGHT", player, "TOPRIGHT", 0, C.appearance.fontSizeNormal + 7)
+	spawnHelper(self, 'pet', "BOTTOMLEFT", player, "TOPLEFT", 0, C.appearance.fontSizeNormal + 7)
 
 	if C.unitframes.targettarget then
-		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, 15)
+		spawnHelper(self, 'targettarget', "BOTTOM", target, "TOP", 0, C.appearance.fontSizeNormal + 7)
 	end
 
 	for n = 1, MAX_BOSS_FRAMES do
