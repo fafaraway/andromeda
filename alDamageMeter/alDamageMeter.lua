@@ -2,7 +2,6 @@ local F, C = unpack(FreeUI)
 
 local anchor = "TOPLEFT"
 local x, y = 50, -50
-local font = C.media.font
 local texture = C.media.texture
 
 local defaults = {
@@ -15,8 +14,6 @@ local defaults = {
 	backdrop_color = {0, 0, 0, 0},
 	border_color = {0, 0, 0, 0},
 	border_size = 1,
-	font_style = "OUTLINEMONOCHROME",
-	font_size = 8,
 	hidetitle = true,
 	barcolor = {0.4, 0.4, 0.4, 1},
 	classcolorbar = true,
@@ -139,8 +136,7 @@ local IsUnitInCombat = function(uGUID)
 end
 
 local CreateFS = CreateFS or function(frame)
-	local fstring = frame:CreateFontString(nil, 'OVERLAY')
-	fstring:SetFont(font, dmconf.font_size, dmconf.font_style)
+	local fstring = F.CreateFS(frame)
 	return fstring
 end
 
@@ -394,10 +390,8 @@ local UpdateWindow = function()
 		v:SetWidth(MainFrame:GetWidth())
 		v:SetHeight(dmconf.barheight)
 		v:SetPoint("TOP", 0, -(dmconf.barheight + dmconf.spacing) * (i-1))
-		if not IsAddOnLoaded("alInterface") then
-			v.left:SetFont(font, dmconf.font_size, dmconf.font_style)
-			v.right:SetFont(font, dmconf.font_size, dmconf.font_style)
-		end
+		F.SetFS(v.left)
+		F.SetFS(v.right)
 	end
 	UpdateBars()
 end
@@ -567,20 +561,6 @@ local CreateMenu = function(self, level)
 				end
 				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
 					_G[self:GetName().."EditBox"]:SetText(dmconf.spacing)
-				end
-				StaticPopup_Show(addon_name.."ReportDialog")
-			end
-			info.notCheckable = 1
-			UIDropDownMenu_AddButton(info, level)
-			wipe(info)
-			info.text = "Font size"
-			info.func = function()
-				StaticPopupDialogs[addon_name.."ReportDialog"].OnAccept = function(self)
-					dmconf.font_size = tonumber(_G[self:GetName().."EditBox"]:GetText())
-					UpdateWindow()
-				end
-				StaticPopupDialogs[addon_name.."ReportDialog"].OnShow = function(self)
-					_G[self:GetName().."EditBox"]:SetText(dmconf.font_size)
 				end
 				StaticPopup_Show(addon_name.."ReportDialog")
 			end
