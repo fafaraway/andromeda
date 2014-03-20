@@ -296,6 +296,8 @@ C["buffTracker"] = {
 	["MONK"] = {
 		-- Tiger Power
 		{spellId = 125359, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		-- Tigereye Brew
+		{spellId = 125195, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 10},
 	},
 	["PALADIN"] = {
 		-- Sacred Shield
