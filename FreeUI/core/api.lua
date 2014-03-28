@@ -22,7 +22,7 @@ local mainFont
 if C.appearance.fontUseAlternativeFont then
 	mainFont = C.media.font2
 elseif GetLocale() == "ruRU" then
-	C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+	mainFont = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
 else
 	mainFont = C.media.font
 end
@@ -31,7 +31,7 @@ F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
 	if C.appearance.fontUseAlternativeFont then
 		mainFont = C.media.font2
 	elseif GetLocale() == "ruRU" then
-		C.media.font = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+		mainFont = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
 	else
 		mainFont = C.media.font
 	end
