@@ -199,9 +199,7 @@ local function OnTooltipSetUnit(self)
 	end
 
 	if msp and unitName then
-		hasMSP = false
-
-		local fullName = unitName.."-"..(unitRealm or GetRealmName():gsub("%s+", ""))
+		local fullName = UnitName("player") == unitName and unitName or (unitName.."-"..(unitRealm or GetRealmName():gsub("%s+", "")))
 
 		if msp.char[fullName].supported then
 			hasMSP = true
@@ -219,6 +217,8 @@ local function OnTooltipSetUnit(self)
 
 				GameTooltip:AddLine("|cffdddddd"..cu)
 			end
+		else
+			hasMSP = false
 		end
 	end
 end
