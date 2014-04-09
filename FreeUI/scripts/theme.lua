@@ -2299,6 +2299,14 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end)
 
+		hooksecurefunc(QuestInfoRequiredMoneyText, "SetTextColor", function(self, r, g, b)
+			if r == 0 then
+				self:SetTextColor(.8, .8, .8)
+			elseif r == .2 then
+				self:SetTextColor(1, 1, 1)
+			end
+		end)
+
 		local questButtons = {"QuestLogFrameAbandonButton", "QuestLogFramePushQuestButton", "QuestLogFrameTrackButton", "QuestLogFrameCancelButton", "QuestFrameAcceptButton", "QuestFrameDeclineButton", "QuestFrameCompleteQuestButton", "QuestFrameCompleteButton", "QuestFrameGoodbyeButton", "QuestFrameGreetingGoodbyeButton", "QuestLogFrameCompleteButton"}
 		for i = 1, #questButtons do
 			F.Reskin(_G[questButtons[i]])
