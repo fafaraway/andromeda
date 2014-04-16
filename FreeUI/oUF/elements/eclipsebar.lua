@@ -31,7 +31,7 @@ local UNIT_POWER = function(self, event, unit, powerType)
 	end
 
 	if(eb.PostUpdatePower) then
-		return eb:PostUpdatePower(unit)
+		return eb:PostUpdatePower(unit, power, maxPower, powerType)
 	end
 end
 
