@@ -4295,16 +4295,16 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			_G["AuctionFilterButton"..i]:SetNormalTexture("")
 		end
 
-		do
-			local i = 1
-			local tab = _G["AuctionFrameTab"..i]
+		local lastSkinnedTab = 1
+		AuctionFrame:HookScript("OnShow", function()
+			local tab = _G["AuctionFrameTab"..lastSkinnedTab]
 
 			while tab do
 				F.ReskinTab(tab)
-				i = i + 1
-				tab = _G["AuctionFrameTab"..i]
+				lastSkinnedTab = lastSkinnedTab + 1
+				tab = _G["AuctionFrameTab"..lastSkinnedTab]
 			end
-		end
+		end)
 
 		local abuttons = {"BrowseBidButton", "BrowseBuyoutButton", "BrowseCloseButton", "BrowseSearchButton", "BrowseResetButton", "BidBidButton", "BidBuyoutButton", "BidCloseButton", "AuctionsCloseButton", "AuctionsCancelAuctionButton", "AuctionsCreateAuctionButton", "AuctionsNumStacksMaxButton", "AuctionsStackSizeMaxButton"}
 		for i = 1, #abuttons do
