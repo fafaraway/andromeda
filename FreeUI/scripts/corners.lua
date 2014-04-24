@@ -2,17 +2,9 @@ local F, C, L = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
 
-local last = 0
 F.menuShown = false
 
 local function onMouseUp(self)
-	self:SetScript("OnUpdate", nil)
-	if F.menuShown then
-		ToggleFrame(DropDownList1)
-		F.menuShown = false
-		return
-	end
-
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
@@ -42,29 +34,19 @@ right:SetPoint("BOTTOMRIGHT")
 right:EnableMouse(true)
 right:SetScript("OnMouseDown", function(self, button)
 	if button == "LeftButton" then
-		self:HookScript("OnUpdate", function(self, elapsed)
-			last = last + elapsed
-			if last > .5 then
-				self:SetScript("OnUpdate", nil)
-				self:SetScript("OnMouseUp", nil)
-				last = 0
-				if F.menuShown then
-					ToggleFrame(DropDownList1)
-					F.menuShown = false
-				else
-					F.MicroMenu()
-					F.menuShown = true
-				end
+		if IsAddOnLoaded("alDamageMeter") then
+			DisableAddOn("alDamageMeter")
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
+		else
+			EnableAddOn("alDamageMeter")
+			LoadAddOn("alDamageMeter")
+			if IsAddOnLoaded("alDamageMeter") then
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter loaded.|r", r, g, b)
+			else
+				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter not found!|r", r, g, b)
 			end
-		end)
-		self:SetScript("OnMouseUp", onMouseUp)
-	elseif button == "RightButton" then
-		self:SetScript("OnMouseUp", nil)
-		if F.menuShown then
-			ToggleFrame(DropDownList1)
-			F.menuShown = false
-			return
 		end
+	elseif button == "RightButton" then
 		if IsAddOnLoaded("DBM-Core") then
 			DisableAddOn("DBM-Core")
 			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
@@ -90,7 +72,6 @@ right:SetScript("OnEnter", function(self)
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine("Left-click:", "Toggle alDamageMeter", r, g, b, 1, 1, 1)
 		GameTooltip:AddDoubleLine("Right-click:", "Toggle DBM", r, g, b, 1, 1, 1)
-		GameTooltip:AddDoubleLine("Click and hold:", "Toggle micro menu", r, g, b, 1, 1, 1)
 		GameTooltip:Show()
 	end
 end)
@@ -114,8 +95,16 @@ left:SetAlpha(0)
 left:SetSize(8, 8)
 left:SetPoint("BOTTOMLEFT")
 left:EnableMouse(true)
-left:SetScript("OnMouseDown", function()
+left:SetScript("OnMouseDown", function(self, button)
+	if button == "LeftButton" then
 		ToggleFrame(ChatMenu)
+	elseif button == "RightButton" then
+		if DropDownList1:IsShown() then
+			ToggleFrame(DropDownList1)
+		else
+			F.MicroMenu()
+		end
+	end
 end)
 
 left:SetScript("OnEnter", function(self)
@@ -126,7 +115,8 @@ left:SetScript("OnEnter", function(self)
 		GameTooltip:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 14, 14)
 		GameTooltip:AddLine("FreeUI", r, g, b)
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("Click to toggle chat menu", 1, 1, 1)
+		GameTooltip:AddDoubleLine("Left-click:", "Toggle chat menu", r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Right-click:", "Toggle micro menu", r, g, b, 1, 1, 1)
 		GameTooltip:Show()
 	end
 end)
