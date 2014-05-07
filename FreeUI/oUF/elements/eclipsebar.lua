@@ -7,8 +7,8 @@ if(select(2, UnitClass('player')) ~= 'DRUID') then return end
 local parent, ns = ...
 local oUF = ns.oUF
 
-local ECLIPSE_BAR_SOLAR_BUFF_ID = ECLIPSE_BAR_SOLAR_BUFF_ID
-local ECLIPSE_BAR_LUNAR_BUFF_ID = ECLIPSE_BAR_LUNAR_BUFF_ID
+local ECLIPSE_BAR_SOLAR_BUFF = GetSpellInfo(ECLIPSE_BAR_SOLAR_BUFF_ID)
+local ECLIPSE_BAR_LUNAR_BUFF = GetSpellInfo(ECLIPSE_BAR_LUNAR_BUFF_ID)
 local SPELL_POWER_ECLIPSE = SPELL_POWER_ECLIPSE
 local MOONKIN_FORM = MOONKIN_FORM
 
@@ -31,7 +31,7 @@ local UNIT_POWER = function(self, event, unit, powerType)
 	end
 
 	if(eb.PostUpdatePower) then
-		return eb:PostUpdatePower(unit, power, maxPower, powerType)
+		return eb:PostUpdatePower(unit, power, maxPower)
 	end
 end
 
@@ -63,27 +63,26 @@ end
 
 local UNIT_AURA = function(self, event, unit)
 	if(self.unit ~= unit) then return end
-
-	local i = 1
-	local hasSolarEclipse, hasLunarEclipse
-	repeat
-		local _, _, _, _, _, _, _, _, _, _, spellID = UnitAura(unit, i, 'HELPFUL')
-
-		if(spellID == ECLIPSE_BAR_SOLAR_BUFF_ID) then
-			hasSolarEclipse = true
-		elseif(spellID == ECLIPSE_BAR_LUNAR_BUFF_ID) then
-			hasLunarEclipse = true
-		end
-
-		i = i + 1
-	until not spellID
-
 	local eb = self.EclipseBar
+
+	local hasSolarEclipse = not not UnitBuff(unit, ECLIPSE_BAR_SOLAR_BUFF)
+	local hasLunarEclipse = not not UnitBuff(unit, ECLIPSE_BAR_LUNAR_BUFF)
+
 	if(eb.hasSolarEclipse == hasSolarEclipse and eb.hasLunarEclipse == hasLunarEclipse) then return end
+
 	eb.hasSolarEclipse = hasSolarEclipse
 	eb.hasLunarEclipse = hasLunarEclipse
 
 	if(eb.PostUnitAura) then
+		--[[ :PostUnitAura(unit)
+
+		 Callback which is called after the eclipse state was checked.
+
+		 Arguments
+
+		 self - The widget that holds the eclipse frame.
+		 unit - The unit that has the widget.
+		]]
 		return eb:PostUnitAura(unit)
 	end
 end
@@ -98,10 +97,11 @@ local ECLIPSE_DIRECTION_CHANGE = function(self, event, isLunar)
 	end
 end
 
-local Update = function(self, ...)
-	UNIT_POWER(self, ...)
-	UNIT_AURA(self, ...)
-	return UPDATE_VISIBILITY(self, ...)
+local Update = function(self, event, ...)
+	UNIT_POWER(self, event, ...)
+	UNIT_AURA(self, event, ...)
+	ECLIPSE_DIRECTION_CHANGE(self, event)
+	return UPDATE_VISIBILITY(self, event)
 end
 
 local ForceUpdate = function(element)
