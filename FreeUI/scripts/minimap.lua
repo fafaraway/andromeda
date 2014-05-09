@@ -105,6 +105,7 @@ Minimap:SetArchBlobRingScalar(0)
 Minimap:SetQuestBlobRingScalar(0)
 
 GuildInstanceDifficulty:SetAlpha(0)
+MiniMapChallengeMode:GetRegions():SetTexture("")
 
 GameTimeFrame:ClearAllPoints()
 GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -1, -1)
