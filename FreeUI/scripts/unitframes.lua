@@ -1743,7 +1743,7 @@ oUF:Factory(function(self)
 		if C.unitframes.autoPosition then
 			target = spawnHelper(self, 'target', "BOTTOM", UIParent, "CENTER", 275, round(GetScreenHeight()/-11.43))
 			partyPos = {"TOP", UIParent, "CENTER", 0, round(GetScreenHeight()/-5.33)}
-			raidPos = {"TOP", UIParent, "CENTER", 0, round(GetScreenHeight()/-6)}
+			raidPos = {"TOP", UIParent, "CENTER", 0, round(GetScreenHeight()/-6.49)}
 		else
 			target = spawnHelper(self, 'target', unpack(C.unitframes.target_heal))
 			partyPos = C.unitframes.party
