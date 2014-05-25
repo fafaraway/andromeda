@@ -258,11 +258,8 @@ rareAlert.children = {rareAlertPlaySound}
 local nameplates = ns.CreateCheckBox(general, "nameplates", true, true)
 nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -42)
 
-local tolBarad = ns.CreateCheckBox(general, "tolbarad", true, true)
-tolBarad:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
-
 local undressButton = ns.CreateCheckBox(general, "undressButton", true, true)
-undressButton:SetPoint("TOPLEFT", tolBarad, "BOTTOMLEFT", 0, -8)
+undressButton:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
 
 local line = general:CreateTexture(nil, "ARTWORK")
 line:SetSize(450, 1)

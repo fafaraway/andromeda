@@ -20,7 +20,6 @@ C["general"] = {
 	["rareAlert"] = true, 			-- raid warning when a rare mob is spotted (5.4)
 		["rareAlert_playSound"] = true, 			-- play sound
 	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
-	["tolbarad"] = false,			-- Tol barad timer on the minimap
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
 }
@@ -151,7 +150,6 @@ C["performance"] = {
 	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
 	["nameplates"] = .1, 	-- update interval for nameplates in seconds (always)
 	["nameplatesHealth"] = .2, 	-- update interval for nameplate health bar colour (only with name plates shown)
-	["tolbarad"] = 10, 	-- update interval for TB timer in seconds (always)
 }
 
 -- Selfbuff reminder

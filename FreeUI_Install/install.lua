@@ -315,7 +315,7 @@ end
 local tut4 = function()
 	sb:SetValue(400)
 	header:SetText("4. Features (2)")
-	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail. Below it is a Tol Barad timer which is enabled by default for level 85 characters.\n\nTo show the time manager and stopwatch, click the info text at the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
+	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail.\n\nTo show the time manager and stopwatch, click the info text at the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
 
 	sbt:SetText("4/6")
 
