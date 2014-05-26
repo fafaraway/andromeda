@@ -30,7 +30,7 @@ local function onEvent(self, event, ...)
 			local name, rank, icon, count, _, duration, expirationTime, caster, _, _, spellID = UnitAura(data.unitId, i, data.filter)
 			if((data.isMine~=1 or units[caster])
 			and(not data.spec or GetSpecialization() == data.spec)
-			and(spellID == data.spellId or (data.spellId2 and spellID == data.spellId2) or (data.spellId3 and spellID == data.spellId3) or (data.spellId4 and spellID == data.spellId4) or (data.spellId5 and spellID == data.spellId5))
+			and(data.spellIds[spellID])
 			and(not data.minStack or count >= data.minStack)) then
 				self.found = true
 				self.icon:SetTexture(icon)
@@ -54,7 +54,7 @@ local function onEvent(self, event, ...)
 end
 
 local function createIcon(data)
-	local frame = CreateFrame("Frame", "FreeUIBuffTracker" .. data.unitId .. "_" .. data.spellId, UIParent)
+	local frame = CreateFrame("Frame", nil, UIParent)
 	frame.data = data
 	frame:SetSize(data.size or 39, data.size or 39)
 	frame:RegisterEvent("UNIT_AURA")

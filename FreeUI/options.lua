@@ -282,46 +282,46 @@ C["selfbuffs"] = {
 }
 
 -- buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
--- spellID 1-5, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
+-- spellIDs, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
 -- if you use multiple spellIDs, first available gets displayed
 C["buffTracker"] = {
 	["MAGE"] = {
 		-- Alter Time
-		{spellId = 110909, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		{spellIds = {[110909]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Arcane Power
-		{spellId = 12042, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		{spellIds = {[12042]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 	},
 	["MONK"] = {
 		-- Tiger Power
-		{spellId = 125359, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		{spellIds = {[125359]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 		-- Tigereye Brew
-		{spellId = 125195, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 10},
+		{spellIds = {[125195]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 10},
 	},
 	["PALADIN"] = {
 		-- Sacred Shield
-		{spellId = 20925, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		{spellIds = {[20925]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Selfless Healer
-		{spellId = 114250, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 3},
+		{spellIds = {[114250]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 3},
 		-- Divine Shield, Hand of Protection, Avenging Wrath, Holy Avenger
-		{spellId = 642, spellId2 = 1022, spellId3 = 31884, spellId4 = 105809, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
+		{spellIds = {[642]=true, [1022]=true, [31884]=true, [105809]=true}, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
 		-- Inquisition, Bastion of Glory, Divine Plea
-		{spellId = 84963, spellId2 = 114637, spellId3 = 54428, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		{spellIds = {[84963]=true, [114637]=true, [54428]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["ROGUE"] = {
 		-- Bandit's Guile, Recuperate
-		{spellId = 84745, spellId2 = 84746, spellId3 = 84747, spellId4 = 73651, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		{spellIds = {[84745]=true, [84746]=true, [84747]=true, [73651]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Adrenaline Rush
-		{spellId = 13750, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		{spellIds = {[13750]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 		-- Slice and dice
-		{spellId = 5171, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		{spellIds = {[5171]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["WARRIOR"] = {
 		-- Last Stand, Shield Wall, Recklessness
-		{spellId = 12975, spellId2 = 871, spellId3 = 1719, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		{spellIds = {[12975]=true, [871]=true, [1719]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 		-- Shield Block
-		{spellId = 2565, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		{spellIds = {[2565]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Enrage
-		{spellId = 12880, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, spec = 1},
+		{spellIds = {[12880]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, spec = 1},
 	}
 }
 
