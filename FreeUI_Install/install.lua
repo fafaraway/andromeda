@@ -175,6 +175,7 @@ end
 
 local function SetupDBM()
 	if(DBM_SavedOptions) then table.wipe(DBM_SavedOptions) end
+	if(DBT_PersistentOptions["DBM"]) then print("wat"); table.wipe(DBT_PersistentOptions["DBM"]) end
 
 	DBM_SavedOptions = {
 		["WarningIconLeft"] = false,
@@ -182,36 +183,34 @@ local function SetupDBM()
 		["ShowMinimapButton"] = false,
 	}
 
-	DBT_PersistentOptions = {
-		["DBM"] = {
-			["EndColorG"] = 1,
-			["HugeTimerY"] = -120,
-			["HugeBarXOffset"] = 0,
-			["Scale"] = 1,
-			["HugeBarsEnabled"] = false,
-			["EnlargeBarsPercent"] = 0.125,
-			["StartColorR"] = 1,
-			["HugeWidth"] = 206,
-			["BarYOffset"] = 3,
-			["IconRight"] = false,
-			["IconLeft"] = true,
-			["HugeTimerX"] = 0,
-			["HugeBarYOffset"] = 0,
-			["TimerPoint"] = "CENTER",
-			["StartColorG"] = 0,
-			["TimerY"] = -157,
-			["TimerX"] = -264,
-			["EndColorR"] = 0,
-			["Width"] = 206,
-			["HugeTimerPoint"] = "CENTER",
-			["HugeScale"] = 1,
-			["FontSize"] = 10,
-			["EnlargeBarsTime"] = 8,
-			["Height"] = 20,
-			["StartColorB"] = 0,
-			["BarXOffset"] = 0,
-			["EndColorB"] = 0,
-		},
+	DBT_PersistentOptions["DBM"] = {
+		["EndColorG"] = 1,
+		["HugeTimerY"] = -120,
+		["HugeBarXOffset"] = 0,
+		["Scale"] = 1,
+		["HugeBarsEnabled"] = false,
+		["EnlargeBarsPercent"] = 0.125,
+		["StartColorR"] = 1,
+		["HugeWidth"] = 206,
+		["BarYOffset"] = 3,
+		["IconRight"] = false,
+		["IconLeft"] = true,
+		["HugeTimerX"] = 0,
+		["HugeBarYOffset"] = 0,
+		["TimerPoint"] = "CENTER",
+		["StartColorG"] = 0,
+		["TimerY"] = -157,
+		["TimerX"] = -264,
+		["EndColorR"] = 0,
+		["Width"] = 206,
+		["HugeTimerPoint"] = "CENTER",
+		["HugeScale"] = 1,
+		["FontSize"] = 10,
+		["EnlargeBarsTime"] = 8,
+		["Height"] = 20,
+		["StartColorB"] = 0,
+		["BarXOffset"] = 0,
+		["EndColorB"] = 0,
 	}
 end
 

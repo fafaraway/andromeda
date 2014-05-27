@@ -81,15 +81,12 @@ right:SetScript("OnMouseDown", function(self, button)
 	elseif button == "RightButton" then
 		if IsAddOnLoaded("DBM-Core") then
 			DisableAddOn("DBM-Core")
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM disabled. Type|r /rl |cfffffffffor the changes to apply.|r", unpack(C.class))
+			DisableAddOn("DBM-StatusBarTimers")
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
 		else
 			EnableAddOn("DBM-Core")
-			LoadAddOn("DBM-Core")
-			if IsAddOnLoaded("DBM-Core") then
-				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM loaded.|r", r, g, b)
-			else
-				DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM not found!|r", r, g, b)
-			end
+			EnableAddOn("DBM-StatusBarTimers")
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
 		end
 	end
 end)
