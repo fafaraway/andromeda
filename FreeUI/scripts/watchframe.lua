@@ -3,19 +3,33 @@ local F, C, L = unpack(select(2, ...))
 local wf = WatchFrame
 
 local function moveTracker()
+	local xCoord, yAnchor
+
 	if MultiBarLeft:IsShown() then
-		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -105, -160)
+		xCoord = -105
 	elseif MultiBarRight:IsShown() then
-		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -75, -160)
+		xCoord = -75
 	else
-		wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -37, -160)
+		xCoord = -37
 	end
-	wf:SetPoint("BOTTOM", Minimap, "TOP", 0, 10)
+
+	yAnchor = VehicleSeatIndicator:IsShown() and VehicleSeatIndicator or Minimap
+
+	wf:ClearAllPoints()
+	wf:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", xCoord, -160)
+	wf:SetPoint("BOTTOM", yAnchor, "TOP", 0, 10)
 end
 
 hooksecurefunc(wf, "SetPoint", function(_, _, _, point)
 	if point == "BOTTOMRIGHT" then
 		moveTracker()
+	end
+end)
+
+hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, anchor)
+	if anchor ~= Minimap then
+		VehicleSeatIndicator:ClearAllPoints()
+		VehicleSeatIndicator:SetPoint("BOTTOM", Minimap, "TOP", 0, 20)
 	end
 end)
 

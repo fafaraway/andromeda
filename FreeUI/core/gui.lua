@@ -24,6 +24,7 @@ else
 	profile = FreeUIOptions
 end
 
+-- apply or remove saved settings as needed
 for group, options in pairs(profile) do
 	if C[group] then
 		for option, value in pairs(options) do
@@ -38,4 +39,5 @@ for group, options in pairs(profile) do
 	end
 end
 
+-- add global options variable
 C.options = profile
