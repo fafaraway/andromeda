@@ -514,6 +514,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					bu.highlight:SetTexture(r, g, b, .2)
 					bu.highlight.SetTexture = F.dummy
 
+					bu.expandIcon:SetTexture("")
+
+					local minus = bu:CreateTexture(nil, "OVERLAY")
+					minus:SetSize(7, 1)
+					minus:SetPoint("LEFT", 8, 0)
+					minus:SetTexture(C.media.backdrop)
+					minus:SetVertexColor(1, 1, 1)
+					minus:Hide()
+					bu.minus = minus
+
+					local plus = bu:CreateTexture(nil, "OVERLAY")
+					plus:SetSize(1, 7)
+					plus:SetPoint("LEFT", 11, 0)
+					plus:SetTexture(C.media.backdrop)
+					plus:SetVertexColor(1, 1, 1)
+					plus:Hide()
+					bu.plus = plus
+
 					bu.categoryMiddle:SetAlpha(0)
 					bu.categoryLeft:SetAlpha(0)
 					bu.categoryRight:SetAlpha(0)
@@ -526,8 +544,12 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 				if bu.isHeader then
 					bu.bg:Hide()
+					bu.minus:Show()
+					bu.plus:SetShown(not bu.isExpanded)
 				else
 					bu.bg:Show()
+					bu.plus:Hide()
+					bu.minus:Hide()
 				end
 			end
 		end
