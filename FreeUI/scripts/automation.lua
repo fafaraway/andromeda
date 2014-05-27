@@ -156,6 +156,9 @@ if C.general.helmcloakbuttons then
 	cloak:SetChecked(ShowingCloak())
 	helm:SetFrameLevel(31)
 	cloak:SetFrameLevel(31)
+
+	F.ReskinCheck(helm)
+	F.ReskinCheck(cloak)
 end
 
 if C.general.undressButton then

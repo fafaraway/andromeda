@@ -32,7 +32,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- [[ Simple backdrops ]]
 
-		local bds = {"AutoCompleteBox", "TicketStatusFrameButton", "FriendsTooltip", "GearManagerDialogPopup", "TokenFramePopup", "RaidInfoFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog"}
+		local bds = {"AutoCompleteBox", "TicketStatusFrameButton", "FriendsTooltip", "GearManagerDialogPopup", "RaidInfoFrame", "ScrollOfResurrectionSelectionFrame", "ScrollOfResurrectionFrame", "VoiceChatTalkers", "ReportPlayerNameDialog", "ReportCheatingDialog"}
 
 		for i = 1, #bds do
 			local bd = _G[bds[i]]
@@ -110,23 +110,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		hooksecurefunc("CharacterFrame_Collapse", function()
 			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-right-active")
 		end)
-
-		-- [[ Check boxes ]]
-
-		local checkboxes = {"WorldMapTrackQuest", "TokenFramePopupInactiveCheckBox", "TokenFramePopupBackpackCheckBox"}
-		for i = 1, #checkboxes do
-			local checkbox = _G[checkboxes[i]]
-			if checkbox then
-				F.ReskinCheck(checkbox)
-			else
-				print("FreeUI: "..checkboxes[i].." was not found.")
-			end
-		end
-
-		if C.general.helmcloakbuttons == true then
-			F.ReskinCheck(FreeUI_HelmCheckBox)
-			F.ReskinCheck(FreeUI_CloakCheckBox)
-		end
 
 		-- [[ Radio buttons ]]
 
@@ -509,8 +492,17 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		-- Currency frame
 
+		TokenFramePopupCorner:Hide()
+		TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
+		F.CreateBD(TokenFramePopup)
+		F.ReskinClose(TokenFramePopupCloseButton)
+		F.ReskinCheck(TokenFramePopupInactiveCheckBox)
+		F.ReskinCheck(TokenFramePopupBackpackCheckBox)
+
 		local function updateButtons()
 			local buttons = TokenFrameContainer.buttons
+
+			if not buttons then return end
 
 			for i = 1, #buttons do
 				local bu = buttons[i]
@@ -541,6 +533,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		TokenFrame:HookScript("OnShow", updateButtons)
+		hooksecurefunc("TokenFrame_Update", updateButtons)
 		hooksecurefunc(TokenFrameContainer, "update", updateButtons)
 
 		F.ReskinScroll(TokenFrameContainerScrollBar)
@@ -3920,7 +3913,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		select(5, HelpFrameGM_Response:GetChildren()):Hide()
 		select(6, HelpFrameGM_Response:GetChildren()):Hide()
 		HelpFrameKnowledgebaseNavBarHomeButtonLeft:Hide()
-		TokenFramePopupCorner:Hide()
 		GearManagerDialogPopupScrollFrame:GetRegions():Hide()
 		select(2, GearManagerDialogPopupScrollFrame:GetRegions()):Hide()
 		for i = 1, 10 do
@@ -4119,7 +4111,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		HelpFrameGM_ResponseScrollFrame1ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame1, "TOPRIGHT", 1, -16)
 		HelpFrameGM_ResponseScrollFrame2ScrollBar:SetPoint("TOPLEFT", HelpFrameGM_ResponseScrollFrame2, "TOPRIGHT", 1, -16)
 		RaidInfoFrame:SetPoint("TOPLEFT", RaidFrame, "TOPRIGHT", 1, -28)
-		TokenFramePopup:SetPoint("TOPLEFT", TokenFrame, "TOPRIGHT", 1, -28)
 		CharacterFrameExpandButton:SetPoint("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
 		TabardCharacterModelRotateRightButton:SetPoint("TOPLEFT", TabardCharacterModelRotateLeftButton, "TOPRIGHT", 1, 0)
 		LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
@@ -4153,7 +4144,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			F.ReskinArrow(_G[f:GetName().."ButtonFrameBottomButton"], "down")
 		end)
 
-		local closebuttons = {"HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "TokenFramePopupCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
+		local closebuttons = {"HelpFrameCloseButton", "RaidInfoCloseButton", "ItemRefCloseButton", "ChannelFrameDaughterFrameDetailCloseButton", "RaidParentFrameCloseButton", "SideDressUpModelCloseButton"}
 		for i = 1, #closebuttons do
 			F.ReskinClose(_G[closebuttons[i]])
 		end

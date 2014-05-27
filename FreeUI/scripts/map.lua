@@ -9,6 +9,8 @@ WORLDMAP_WINDOWED_SIZE = 0.82
 local offset = 1 / WORLDMAP_WINDOWED_SIZE
 local panelHeight = 26
 
+-- fix ping
+
 select(2, WorldMapPing.Ping:GetAnimations()):SetScale(1.62, 1.62)
 
 WorldMapPing.Ping:SetScript("OnLoop", function(self, loopState)
@@ -20,6 +22,8 @@ end)
 
 WorldMapPlayerUpper:EnableMouse(false)
 WorldMapPlayerLower:EnableMouse(false)
+
+-- frames
 
 local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
 mapbg:SetBackdrop({
@@ -33,6 +37,8 @@ mapbg:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel()-1)
 local frame = CreateFrame ("Frame", nil, WorldMapButton)
 frame:SetScale(offset)
 frame:SetFrameStrata("HIGH")
+
+-- bottom panel
 
 local panelHolder = CreateFrame("ScrollFrame", nil, WorldMapButton)
 panelHolder:SetFrameStrata("LOW")
@@ -70,6 +76,8 @@ end
 
 button:SetScript("OnEnter", colourText)
 button:SetScript("OnLeave", clearText)
+
+-- map style function
 
 local SmallerMapSkin = function()
 	local fontsize = C.appearance.fontSizeNormal / WORLDMAP_WINDOWED_SIZE
@@ -132,6 +140,12 @@ local SmallerMapSkin = function()
 end
 hooksecurefunc("WorldMap_ToggleSizeDown", function() SmallerMapSkin() end)
 
+-- track quest button style
+
+F.ReskinCheck(WorldMapTrackQuest)
+
+-- coordinates
+
 local coords = F.CreateFS(frame)
 coords:SetPoint("LEFT", WorldMapFrameTitle, "RIGHT")
 local cursorcoords = F.CreateFS(frame)
@@ -172,6 +186,8 @@ WorldMapDetailFrame:HookScript("OnUpdate", function(self, elapsed)
 	end
 end)
 
+-- map search
+
 local editbox = CreateFrame("EditBox", "MapSearchBox", WorldMapFrame, "SearchBoxTemplate")
 editbox:SetAutoFocus(false)
 editbox:SetSize(150, 20)
@@ -207,6 +223,8 @@ editbox:SetScript("OnTextChanged", function(self)
 		end
 	end
 end)
+
+-- bottom panel
 
 local y = panelHeight
 local opened = false
