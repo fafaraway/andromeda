@@ -56,8 +56,8 @@ scripts\micromenu.lua
 scripts\minimap.lua
 scripts\mirrorbars.lua
 scripts\nameplates.lua
-scripts\panel.lua
 scripts\petbattles.lua
+scripts\queuetimer.lua
 scripts\rangecolor.lua
 scripts\rarealert.lua
 scripts\role.lua
