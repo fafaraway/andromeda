@@ -681,6 +681,12 @@ local UnitSpecific = {
 			PvP.Override = UpdatePvP
 		end
 
+		local Combat = F.CreateFS(self)
+		Combat:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 50, 3)
+		Combat:SetText("C")
+		Combat:SetTextColor(1, 0, 0)
+		self.Combat = Combat
+
 		-- We position these later on
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
