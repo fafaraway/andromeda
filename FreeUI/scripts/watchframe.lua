@@ -6,11 +6,11 @@ local function moveTracker()
 	local xCoord, yAnchor
 
 	if MultiBarLeft:IsShown() then
-		xCoord = -105
+		xCoord = -70
 	elseif MultiBarRight:IsShown() then
-		xCoord = -75
+		xCoord = -40
 	else
-		xCoord = -37
+		xCoord = -2
 	end
 
 	yAnchor = VehicleSeatIndicator:IsShown() and VehicleSeatIndicator or Minimap

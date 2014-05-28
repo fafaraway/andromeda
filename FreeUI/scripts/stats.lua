@@ -8,7 +8,7 @@ local addons = {}
 local n, total = 0, 0
 
 local f = CreateFrame("Button", nil, UIParent)
-f:SetPoint("BOTTOM", UIParent, "BOTTOM")
+f:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 2)
 f:SetSize(200, 10)
 
 local text = F.CreateFS(f)

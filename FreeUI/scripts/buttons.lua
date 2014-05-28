@@ -174,19 +174,30 @@ local function stylePetButton(bu)
 end
 
 local function styleStanceButton(bu)
+	local ic  = bu.icon
+
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
-	bu:SetCheckedTexture(C.media.checked)
+	bu:SetCheckedTexture(C.media.backdrop)
 
-	F.CreateBG(bu)
+	local ch = bu:GetCheckedTexture()
+	ch:SetVertexColor(r/2, g/2, b/2)
+	-- ch:SetDrawLayer("ARTWORK")
+	ch:SetAllPoints(bu)
+	ch:SetPoint("TOPLEFT", bu, 1, -1)
+	ch:SetPoint("BOTTOMRIGHT", bu, -1, 1)
 
-	bu.icon:SetDrawLayer("ARTWORK")
-	bu.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+	ic:SetTexCoord(.08, .92, .08, .92)
+	-- ic:SetDrawLayer("OVERLAY")
+	ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 1, -1)
+	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
+
+	applyBackground(bu)
 end
 
-local buttons = 0
+local numFlyoutButtons = 0
 local function flyoutbutton()
-	for i = 1, buttons do
+	for i = 1, numFlyoutButtons do
 		local bu = _G["SpellFlyoutButton"..i]
 		if bu and not bu.styled then
 			styleActionButton(bu)
@@ -218,7 +229,7 @@ local function styleflyout(self)
 		local x = GetFlyoutID(i)
 		local _, _, numSlots, isKnown = GetFlyoutInfo(x)
 		if isKnown then
-			buttons = numSlots
+			numFlyoutButtons = numSlots
 			break
 		end
 	end

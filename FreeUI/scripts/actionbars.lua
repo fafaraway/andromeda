@@ -75,16 +75,38 @@ end
 
 RegisterStateDriver(bar3, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
 
-bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 50)
-bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
-bar3:SetPoint("BOTTOM", bar1, "TOP", 0, 1)
+-- [[ Main bar positions ]]
+
+-- bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+-- bar2:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
+-- bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
+
+local function positionBars()
+	local leftShown, rightShown = MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown()
+
+	if leftShown and rightShown then
+		bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar2:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
+		bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
+	elseif leftShown then
+		bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
+	elseif rightShown then
+		bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar1:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
+	else
+		bar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+	end
+end
+
+hooksecurefunc("MultiActionBar_Update", positionBars)
 
 --[[ Right bar 1 ]]
 
 local bar4 = CreateFrame("Frame", "FreeUI_MultiBarRight", UIParent, "SecureHandlerStateTemplate")
 bar4:SetHeight(323)
 bar4:SetWidth(26)
-bar4:SetPoint("RIGHT", -50, 0)
+bar4:SetPoint("RIGHT", -15, 0)
 
 MultiBarRight:SetParent(bar4)
 MultiBarRight:EnableMouse(false)
@@ -108,7 +130,7 @@ RegisterStateDriver(bar4, "visibility", "[petbattle][vehicleui][overridebar][pos
 local bar5 = CreateFrame("Frame", "FreeUI_MultiBarLeft", UIParent, "SecureHandlerStateTemplate")
 bar5:SetHeight(323)
 bar5:SetWidth(26)
-bar5:SetPoint("RIGHT", -77, 0)
+bar5:SetPoint("RIGHT", -42, 0)
 
 MultiBarLeft:SetParent(bar5)
 MultiBarLeft:EnableMouse(false)
@@ -224,9 +246,8 @@ RegisterStateDriver(petbar, "visibility", "[petbattle][overridebar][vehicleui][p
 --[[ Stance/possess bar]]
 
 local stancebar = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
-stancebar:SetWidth(NUM_STANCE_SLOTS * 27 - 1)
 stancebar:SetHeight(26)
-stancebar:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 4)
+stancebar:SetPoint("BOTTOM", bar1, "TOP", 0, 2)
 
 StanceBarFrame:SetParent(stancebar)
 StanceBarFrame:EnableMouse(false)
@@ -239,7 +260,7 @@ for i = 1, NUM_STANCE_SLOTS do
 		button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
 	else
 		local previous = _G["StanceButton"..i-1]
-		button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
+		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
 
@@ -254,11 +275,37 @@ for i = 1, NUM_POSSESS_SLOTS do
 		button:SetPoint("BOTTOMLEFT", stancebar, 0, 0)
 	else
 		local previous = _G["PossessButton"..i-1]
-		button:SetPoint("LEFT", previous, "RIGHT", 3, 0)
+		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
 end
 
 RegisterStateDriver(stancebar, "visibility", "[petbattle][vehicleui][overridebar][possessbar,@vehicle,exists] hide; show")
+
+local cachedNumForms = 0
+
+local function setStancebarWidth()
+	stancebar:SetWidth(cachedNumForms * 27 - 1)
+end
+
+local delayedPositioner = CreateFrame("Frame")
+delayedPositioner:SetScript("OnEvent", function(self)
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	setStancebarWidth()
+end)
+
+hooksecurefunc("StanceBar_Update", function()
+	local numForms = GetNumShapeshiftForms()
+
+	if cachedNumForms ~= numForms then
+		cachedNumForms = numForms
+
+		if not InCombatLockdown() then
+			setStancebarWidth()
+		else
+			delayedPositioner:RegisterEvent("PLAYER_REGEN_ENABLED")
+		end
+	end
+end)
 
 --[[ Right bars on mouseover ]]
 
@@ -329,7 +376,7 @@ end
 
 local barextra = CreateFrame("Frame", "FreeUI_ExtraActionBar", UIParent, "SecureHandlerStateTemplate")
 barextra:SetSize(39, 39)
-barextra:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
+barextra:SetPoint("BOTTOM", bar1, "TOP", 0, 30)
 
 ExtraActionBarFrame:SetParent(barextra)
 ExtraActionBarFrame:EnableMouse(false)
