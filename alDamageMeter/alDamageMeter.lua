@@ -1,7 +1,7 @@
 local F, C = unpack(FreeUI)
 
 local anchor = "TOPLEFT"
-local x, y = 50, -50
+local x, y = 15, -15
 local texture = C.media.texture
 
 local defaults = {

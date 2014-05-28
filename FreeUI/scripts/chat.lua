@@ -125,15 +125,28 @@ local function reskinMinimize(f)
 	minus:SetText("-")
 end
 
+hooksecurefunc("FCF_SetButtonSide", function(chatFrame, buttonSide, forceUpdate)
+	local topY = 0
+	if IsCombatLog(chatFrame) then
+		topY = topY + CombatLogQuickButtonFrame_Custom:GetHeight()
+	end
+
+	if buttonSide == "left" then
+		chatFrame.buttonFrame:ClearAllPoints()
+		chatFrame.buttonFrame:SetPoint("TOPRIGHT", chatFrame, "TOPLEFT", 4, topY)
+		chatFrame.buttonFrame:SetPoint("BOTTOMRIGHT", chatFrame, "BOTTOMLEFT", 4, 0)
+	end
+end)
+
 local function StyleWindow(f)
 	local frame = _G[f]
 	if frame.reskinned then return end
 	frame.reskinned = true
 
 	local down = _G[f.."ButtonFrameBottomButton"]
-
 	down:SetPoint("BOTTOM")
 	down:Hide()
+
 	HideForever(_G[f.."ButtonFrameUpButton"])
 	HideForever(_G[f.."ButtonFrameDownButton"])
 
