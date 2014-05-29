@@ -36,7 +36,6 @@ scripts\colours.lua
 scripts\combattext.lua
 scripts\combo.lua
 scripts\cooldowns.lua
-scripts\corners.lua
 scripts\dbm.lua
 scripts\disable.lua
 scripts\durability.lua
@@ -52,6 +51,7 @@ scripts\lootroll.lua
 scripts\mail.lua
 scripts\map.lua
 scripts\marking.lua
+scripts\menubar.lua
 scripts\micromenu.lua
 scripts\minimap.lua
 scripts\mirrorbars.lua

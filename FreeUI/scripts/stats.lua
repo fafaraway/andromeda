@@ -7,8 +7,8 @@ local _, _, home, world = GetNetStats()
 local addons = {}
 local n, total = 0, 0
 
-local f = CreateFrame("Button", nil, UIParent)
-f:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 2)
+local f = CreateFrame("Button", nil, FreeUIMenubar)
+f:SetPoint("CENTER")
 f:SetSize(200, 10)
 
 local text = F.CreateFS(f)
@@ -39,6 +39,8 @@ end
 
 f:SetScript("OnEnter", function()
 	if InCombatLockdown() then return end
+
+	FreeUIMenubar.showBar()
 
 	collectgarbage()
 	UpdateAddOnMemoryUsage()
@@ -78,6 +80,7 @@ f:SetScript("OnLeave", function()
 	GameTooltip:Hide()
 	n, total = 0, 0
 	wipe(addons)
+	FreeUIMenubar.hideBar()
 end)
 
 f:SetScript("OnClick", function()
