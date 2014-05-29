@@ -114,7 +114,7 @@ end
 --[[ Bags ]]
 
 local holder = CreateFrame("Button", "BagsHolder", UIParent)
-holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -49, 49)
+holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -14, 14)
 holder:SetFrameStrata("HIGH")
 holder:Hide()
 F.CreateBD(holder, .6)
