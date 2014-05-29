@@ -682,8 +682,8 @@ local UnitSpecific = {
 		end
 
 		local Combat = F.CreateFS(self)
-		Combat:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 50, 3)
-		Combat:SetText("C")
+		Combat:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 80, 3)
+		Combat:SetText("!")
 		Combat:SetTextColor(1, 0, 0)
 		self.Combat = Combat
 
