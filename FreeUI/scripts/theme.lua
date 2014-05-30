@@ -8280,44 +8280,24 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(DBM_GUI_OptionsFrameWebsiteButton)
 		F.ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)
 	elseif addon == "KayrChat" then
-		local function moveButton(self)
-			self:ClearAllPoints()
-			self:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 1)
-		end
-
-		local function colourText(self)
-			self.Text:SetTextColor(r, g, b)
-		end
-
-		local function clearText(self)
-			self.Text:SetTextColor(1, 1, 1)
-		end
+		local menuButton
 
 		local function updateText(self)
-			self.Text:SetText(self:GetText())
+			menuButton.Text:SetText(self:GetText())
 		end
 
 		hooksecurefunc(KayrChat, "CreateLangButton", function()
-			local KC_LangButton = KC_LangButton
+			local button = KC_LangButton
 
-			KC_LangButton:SetNormalTexture("")
-			KC_LangButton:SetHighlightTexture("")
-			KC_LangButton.Left:SetAlpha(0)
-			KC_LangButton.Middle:SetAlpha(0)
-			KC_LangButton.Right:SetAlpha(0)
+			button:Hide()
+			button.Show = function() end
 
-			KC_LangButtonText:Hide()
-			KC_LangButton.Text = F.CreateFS(KC_LangButton)
-			KC_LangButton.Text:SetPoint("BOTTOM", 0, 2)
+			menuButton = FreeUIMenubar.addButton("KayrChat", false, function()
+				button:Click()
+			end)
 
-			updateText(KC_LangButton)
-			KC_LangButton:HookScript("OnClick", updateText)
-
-			KC_LangButton:HookScript("OnEnter", colourText)
-			KC_LangButton:HookScript("OnLeave", clearText)
-
-			moveButton(KC_LangButton)
-			hooksecurefunc(KC_LangButton, "Update", moveButton)
+			hooksecurefunc(button, "Update", updateText)
+			updateText(button)
 		end)
 	end
 end)

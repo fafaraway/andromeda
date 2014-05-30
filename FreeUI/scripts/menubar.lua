@@ -33,16 +33,27 @@ local function buttonOnLeave(self)
 	self:SetBackdropColor(0, 0, 0, .1)
 end
 
-local function createButton(text, clickFunc)
+local leftOffset, rightOffset = 0, 0
+
+local function addButton(text, onRightSide, clickFunc)
 	local bu = CreateFrame("Button", nil, bar)
 	bu:SetPoint("TOP", bar, "TOP")
 	bu:SetPoint("BOTTOM", bar, "BOTTOM")
 	bu:SetWidth(130)
 	F.CreateBD(bu, .1)
 
+	if onRightSide then
+		bu:SetPoint("RIGHT", bar, "RIGHT", rightOffset, 0)
+		rightOffset = rightOffset - 129
+	else
+		bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
+		leftOffset = leftOffset + 129
+	end
+
 	local buText = F.CreateFS(bu)
 	buText:SetPoint("CENTER")
 	buText:SetText(text)
+	bu.Text = buText
 
 	bu:SetScript("OnEnter", buttonOnEnter)
 	bu:SetScript("OnLeave", buttonOnLeave)
@@ -51,21 +62,21 @@ local function createButton(text, clickFunc)
 	return bu
 end
 
-local buttonMicroMenu = createButton("Micro menu", function()
+bar.addButton = addButton
+
+local buttonMicroMenu = addButton("Micro menu", false, function()
 	if DropDownList1:IsShown() then
 		ToggleFrame(DropDownList1)
 	else
 		F.MicroMenu()
 	end
 end)
-buttonMicroMenu:SetPoint("LEFT", bar, "LEFT")
 
-local buttonChatMenu = createButton("Chat menu", function()
+local buttonChatMenu = addButton("Chat menu", false, function()
 	ToggleFrame(ChatMenu)
 end)
-buttonChatMenu:SetPoint("LEFT", buttonMicroMenu, "RIGHT", -1, 0)
 
-local buttonDbm = createButton("Toggle DBM", function()
+local buttonDbm = addButton("Toggle DBM", true, function()
 	if IsAddOnLoaded("DBM-Core") then
 		DisableAddOn("DBM-Core")
 		DisableAddOn("DBM-StatusBarTimers")
@@ -76,9 +87,8 @@ local buttonDbm = createButton("Toggle DBM", function()
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
 	end
 end)
-buttonDbm:SetPoint("RIGHT", bar, "RIGHT")
 
-local buttonDamageMeter = createButton("Toggle damage meter", function()
+local buttonDamageMeter = addButton("Toggle damage meter", true, function()
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
@@ -92,4 +102,3 @@ local buttonDamageMeter = createButton("Toggle damage meter", function()
 		end
 	end
 end)
-buttonDamageMeter:SetPoint("RIGHT", buttonDbm, "LEFT", 1, 0)
