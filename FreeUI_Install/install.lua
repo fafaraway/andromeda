@@ -173,7 +173,8 @@ end
 
 local function SetupDBM()
 	if(DBM_SavedOptions) then table.wipe(DBM_SavedOptions) end
-	if(DBT_PersistentOptions["DBM"]) then print("wat"); table.wipe(DBT_PersistentOptions["DBM"]) end
+	if not DBT_PersistentOptions then DBT_PersistentOptions = {} end
+	if(DBT_PersistentOptions["DBM"]) then table.wipe(DBT_PersistentOptions["DBM"]) end
 
 	DBM_SavedOptions = {
 		["WarningIconLeft"] = false,
@@ -312,7 +313,7 @@ end
 local tut4 = function()
 	sb:SetValue(400)
 	header:SetText("4. Features (2)")
-	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail.\n\nTo show the time manager and stopwatch, click the info text which appears when you move the cursor to the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
+	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail.\n\nTo show the time manager and stopwatch, click the info text at the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
 
 	sbt:SetText("4/6")
 
@@ -322,7 +323,7 @@ end
 local tut3 = function()
 	sb:SetValue(300)
 	header:SetText("3. Features")
-	body:SetText("There's a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a selfbuff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options. Examples are included. Selfbuffs are already set up, so no worries.\n\nYou can mark mobs by alt+shift-clicking mobs in the game world and selecting an icon from the dropdown menu.\n\nMoving the cursor to the bottom of the screen reveals a panel with buttons for toggling the micro menu, chat menu, DBM and the damage meter, as well as info showing frame rate, latency, and a clock.")
+	body:SetText("There are a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a selfbuff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options. Examples are included. Selfbuffs are already set up, so no worries.\n\nYou can mark mobs by alt+shift-clicking mobs in the game world and selecting an icon from the dropdown menu.\n\nMoving the cursor to the bottom of the screen reveals a panel with buttons for toggling the micro menu, chat menu, DBM and the damage meter.")
 
 	sbt:SetText("3/6")
 

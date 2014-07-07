@@ -9,7 +9,11 @@ local n, total = 0, 0
 
 local f = CreateFrame("Button", nil, FreeUIMenubar)
 f:SetPoint("CENTER")
-f:SetSize(200, 10)
+f:SetPoint("TOP")
+f:SetPoint("BOTTOM")
+f:SetWidth(200)
+F.CreateBD(f, 0)
+f:SetBackdropBorderColor(0, 0, 0, 0)
 
 local text = F.CreateFS(f)
 text:SetPoint("CENTER")
@@ -37,10 +41,22 @@ local function order(a, b)
 	return a.memory > b.memory
 end
 
+local function showBackdrop()
+	f:SetBackdropColor(0, 0, 0, .1)
+	f:SetBackdropBorderColor(0, 0, 0)
+end
+
+local function hideBackdrop()
+	f:SetBackdropColor(0, 0, 0, 0)
+	f:SetBackdropBorderColor(0, 0, 0, 0)
+end
+
 f:SetScript("OnEnter", function()
 	if InCombatLockdown() then return end
 
 	FreeUIMenubar.showBar()
+	showBackdrop()
+	f:SetBackdropColor(r, g, b, .4)
 
 	collectgarbage()
 	UpdateAddOnMemoryUsage()
@@ -80,8 +96,13 @@ f:SetScript("OnLeave", function()
 	GameTooltip:Hide()
 	n, total = 0, 0
 	wipe(addons)
+
 	FreeUIMenubar.hideBar()
+	hideBackdrop()
 end)
+
+FreeUIMenubar:HookScript("OnEnter", showBackdrop)
+FreeUIMenubar:HookScript("OnLeave", hideBackdrop)
 
 f:SetScript("OnClick", function()
 	TimeManagerClockButton_OnClick(TimeManagerClockButton)

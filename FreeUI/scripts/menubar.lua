@@ -7,16 +7,36 @@ bar:SetFrameStrata("BACKGROUND")
 bar:SetPoint("BOTTOMLEFT", -1, -1)
 bar:SetPoint("BOTTOMRIGHT", 1, -1)
 bar:SetHeight(13)
-bar:SetAlpha(0)
-F.CreateBD(bar)
+F.CreateBD(bar, .25)
+
+bar.buttons = {}
+
+local function onEvent(event)
+	if event == "PLAYER_REGEN_DISABLED" then
+		bar:SetBackdropBorderColor(1, 0, 0)
+	else
+		bar:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
+F.RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
+F.RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
 
 local function showBar()
-	bar:SetAlpha(1)
+	bar:SetBackdropColor(0, 0, 0, .5)
+
+	for _, button in pairs(bar.buttons) do
+		button:Show()
+	end
 end
 bar.showBar = showBar
 
 local function hideBar()
-	bar:SetAlpha(0)
+	bar:SetBackdropColor(0, 0, 0, .25)
+
+	for _, button in pairs(bar.buttons) do
+		button:Hide()
+	end
 end
 bar.hideBar = hideBar
 
@@ -40,6 +60,7 @@ local function addButton(text, onRightSide, clickFunc)
 	bu:SetPoint("TOP", bar, "TOP")
 	bu:SetPoint("BOTTOM", bar, "BOTTOM")
 	bu:SetWidth(130)
+	bu:Hide()
 	F.CreateBD(bu, .1)
 
 	if onRightSide then
@@ -59,12 +80,14 @@ local function addButton(text, onRightSide, clickFunc)
 	bu:SetScript("OnLeave", buttonOnLeave)
 	bu:SetScript("OnClick", clickFunc)
 
+	tinsert(bar.buttons, bu)
+
 	return bu
 end
 
 bar.addButton = addButton
 
-local buttonMicroMenu = addButton("Micro menu", false, function()
+addButton("Micro menu", false, function()
 	if DropDownList1:IsShown() then
 		ToggleFrame(DropDownList1)
 	else
@@ -72,11 +95,11 @@ local buttonMicroMenu = addButton("Micro menu", false, function()
 	end
 end)
 
-local buttonChatMenu = addButton("Chat menu", false, function()
+addButton("Chat menu", false, function()
 	ToggleFrame(ChatMenu)
 end)
 
-local buttonDbm = addButton("Toggle DBM", true, function()
+addButton("Toggle DBM", true, function()
 	if IsAddOnLoaded("DBM-Core") then
 		DisableAddOn("DBM-Core")
 		DisableAddOn("DBM-StatusBarTimers")
@@ -88,7 +111,7 @@ local buttonDbm = addButton("Toggle DBM", true, function()
 	end
 end)
 
-local buttonDamageMeter = addButton("Toggle damage meter", true, function()
+addButton("Toggle damage meter", true, function()
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
