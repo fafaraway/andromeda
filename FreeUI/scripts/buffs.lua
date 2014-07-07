@@ -85,7 +85,7 @@ end
 
 local f = CreateFrame("Frame", "FreeUI_BuffFrameHolder", UIParent)
 f:SetSize(50, 50)
-f:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -15, -15)
+f:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
 
 BuffFrame:SetParent(f)
 BuffFrame:ClearAllPoints()

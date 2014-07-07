@@ -85,17 +85,17 @@ local function positionBars()
 	local leftShown, rightShown = MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown()
 
 	if leftShown and rightShown then
-		bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 30)
 		bar2:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
 		bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
 	elseif leftShown then
-		bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar2:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 30)
 		bar1:SetPoint("BOTTOM", bar2, "TOP", 0, 1)
 	elseif rightShown then
-		bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar3:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 30)
 		bar1:SetPoint("BOTTOM", bar3, "TOP", 0, 1)
 	else
-		bar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 15)
+		bar1:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 30)
 	end
 end
 
@@ -106,7 +106,7 @@ hooksecurefunc("MultiActionBar_Update", positionBars)
 local bar4 = CreateFrame("Frame", "FreeUI_MultiBarRight", UIParent, "SecureHandlerStateTemplate")
 bar4:SetHeight(323)
 bar4:SetWidth(26)
-bar4:SetPoint("RIGHT", -15, 0)
+bar4:SetPoint("RIGHT", -30, 0)
 
 MultiBarRight:SetParent(bar4)
 MultiBarRight:EnableMouse(false)
@@ -130,7 +130,7 @@ RegisterStateDriver(bar4, "visibility", "[petbattle][vehicleui][overridebar][pos
 local bar5 = CreateFrame("Frame", "FreeUI_MultiBarLeft", UIParent, "SecureHandlerStateTemplate")
 bar5:SetHeight(323)
 bar5:SetWidth(26)
-bar5:SetPoint("RIGHT", -42, 0)
+bar5:SetPoint("RIGHT", -57, 0)
 
 MultiBarLeft:SetParent(bar5)
 MultiBarLeft:EnableMouse(false)
@@ -221,9 +221,9 @@ end
 local numpet = NUM_PET_ACTION_SLOTS
 
 local petbar = CreateFrame("Frame", "FreeUI_PetBar", UIParent, "SecureHandlerStateTemplate")
-petbar:SetWidth(400)
+petbar:SetWidth((27 * numpet) - 1)
 petbar:SetHeight(54)
-petbar:SetPoint("BOTTOMRIGHT", 42, 15)
+petbar:SetPoint("BOTTOMRIGHT", -29, 2)
 
 PetActionBarFrame:SetParent(petbar)
 PetActionBarFrame:SetHeight(0.001)
@@ -231,13 +231,17 @@ PetActionBarFrame:SetHeight(0.001)
 for i = 1, numpet do
 	local button = _G["PetActionButton"..i]
 	local cd = _G["PetActionButton"..i.."Cooldown"]
+
 	button:ClearAllPoints()
+	button:SetSize(26, 26)
+
 	if i == 1 then
 		button:SetPoint("BOTTOMLEFT", petbar, 0,0)
 	else
 		local previous = _G["PetActionButton"..i-1]
 		button:SetPoint("LEFT", previous, "RIGHT", 1, 0)
 	end
+
 	cd:SetAllPoints(button)
 end
 

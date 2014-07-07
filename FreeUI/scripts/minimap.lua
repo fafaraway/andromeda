@@ -3,7 +3,7 @@ local F, C, L = unpack(select(2, ...))
 local r, g, b = unpack(C.class)
 
 Minimap:ClearAllPoints()
-Minimap:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -15, 15)
+Minimap:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -30, 30)
 Minimap:SetMaskTexture("Interface\\Buttons\\WHITE8X8")
 F.CreateBG(Minimap)
 

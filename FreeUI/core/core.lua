@@ -99,7 +99,7 @@ updateScale = function(event)
 			-- we don't bother with the cvar because of high resolution shenanigans
 			UIParent:SetScale(768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
 			ChatFrame1:ClearAllPoints()
-			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 15)
+			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 30, 30)
 		else
 			F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
 		end

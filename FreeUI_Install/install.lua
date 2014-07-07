@@ -125,7 +125,7 @@ local function SetupChat()
 	FCF_DockFrame(ChatFrame2)
 
 	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 15)
+	ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 30, 30)
 	if C.resolution > 1 then
 		ChatFrame1:SetSize(445, 180)
 	else

@@ -4159,10 +4159,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		for i = 1, NUM_CHAT_WINDOWS do
-			local bu = _G["ChatFrame"..i.."ButtonFrameBottomButton"]
-			F.ReskinArrow(bu, "down")
-			bu:SetSize(12, 12)
-			bu:SetPoint("BOTTOM", _G["ChatFrame"..i.."ButtonFrame"], "BOTTOM", 3, 0)
+			F.ReskinArrow(_G["ChatFrame"..i.."ButtonFrameBottomButton"], "down")
 		end
 
 		hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
