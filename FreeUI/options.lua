@@ -88,6 +88,7 @@ C["unitframes"] = {
 	["castbarSeparate"] = true, 				-- true for a separate player cast bar
 		["castbarSeparateOnlyCasters"] = true, 		-- separate bar only for mages/warlocks/priests
 	["pvp"] = true, 							-- show pvp icon on player frame
+	["questIcon"] = true,						-- show quest icon on target frame
 	["targettarget"] = false, 					-- show target of target frame
 
 	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105},

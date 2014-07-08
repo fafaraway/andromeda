@@ -484,8 +484,11 @@ targettarget:SetPoint("TOPLEFT", absorb, "BOTTOMLEFT", 0, -8)
 local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
 pvp:SetPoint("TOPLEFT", targettarget, "BOTTOMLEFT", 0, -8)
 
+local questIcon = ns.CreateCheckBox(unitframes, "questIcon", true, true)
+questIcon:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
+
 local castbarSeparate = ns.CreateCheckBox(unitframes, "castbarSeparate", true, true)
-castbarSeparate:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
+castbarSeparate:SetPoint("TOPLEFT", questIcon, "BOTTOMLEFT", 0, -8)
 
 local castbarSeparateOnlyCasters = ns.CreateCheckBox(unitframes, "castbarSeparateOnlyCasters", true, true)
 castbarSeparateOnlyCasters:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 16, -8)

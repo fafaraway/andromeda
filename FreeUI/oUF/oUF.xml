@@ -25,6 +25,7 @@
 	<Script file='elements\healprediction.lua' />
 	<Script file='elements\holypower.lua' />
 	<Script file='elements\readycheck.lua' />
+	<Script file='elements\qicon.lua' />
 	<Script file='elements\eclipsebar.lua' />
 	<Script file='elements\altpowerbar.lua' />
 	<Script file='elements\resurrect.lua' />
