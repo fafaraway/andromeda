@@ -155,3 +155,19 @@ addButton("Toggle damage meter", true, function()
 		end
 	end
 end)
+
+local specButton = addButton("No specialization", true, function()
+	SetActiveSpecGroup(3 - GetActiveSpecGroup())
+end)
+
+specButton:RegisterEvent("PLAYER_LOGIN")
+specButton:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+specButton:SetScript("OnEvent", function(self)
+	if GetNumSpecGroups() >= 2 then
+		local _, name = GetSpecializationInfo(GetSpecialization())
+		self.Text:SetText(format("%d - %s", GetActiveSpecGroup(), name))
+		self:Show()
+	else
+		self:Hide()
+	end
+end)
