@@ -114,7 +114,7 @@ end
 --[[ Bags ]]
 
 local holder = CreateFrame("Button", "BagsHolder", UIParent)
-holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -14, 14)
+holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -29, 29)
 holder:SetFrameStrata("HIGH")
 holder:Hide()
 F.CreateBD(holder, .6)
@@ -487,7 +487,7 @@ local keys = {}
 
 local function ShowMoney()
 	GameTooltip:SetOwner(ContainerFrame1MoneyFrameGoldButton, "ANCHOR_NONE")
-	GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", -1, 0)
+	GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", -1, -1)
 
 	local total, totalAlliance, totalHorde, totalNeutral = 0, 0, 0, 0
 	local goldList = FreeUIGlobalConfig[realm].gold
