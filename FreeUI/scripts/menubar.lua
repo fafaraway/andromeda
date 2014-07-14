@@ -167,7 +167,7 @@ specButton:SetScript("OnEvent", function(self)
 		local _, name = GetSpecializationInfo(GetSpecialization())
 		if name then
 			self.Text:SetText(format("%d - %s", GetActiveSpecGroup(), name))
-			sself:Show()
+			self:Show()
 		end
 	else
 		self:Hide()
