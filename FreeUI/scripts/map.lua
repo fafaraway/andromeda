@@ -229,20 +229,26 @@ end)
 local y = panelHeight
 local opened = false
 
-local open = function()
-	y = y - 1
-	panelHolder:SetVerticalScroll(y)
-	if y == 0 then
+local open = function(self, elapsed)
+	y = y - (elapsed * 100)
+
+	if y <= 0 then
+		y = 0
 		panel:SetScript("OnUpdate", nil)
 	end
+
+	panelHolder:SetVerticalScroll(y)
 end
 
-local close = function()
-	y = y + 1
-	panelHolder:SetVerticalScroll(y)
-	if y == panelHeight then
+local close = function(self, elapsed)
+	y = y + (elapsed * 100)
+
+	if y >= panelHeight then
+		y = panelHeight
 		panel:SetScript("OnUpdate", nil)
 	end
+
+	panelHolder:SetVerticalScroll(y)
 end
 
 panel.toggle = function()
