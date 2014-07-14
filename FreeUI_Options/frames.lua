@@ -141,7 +141,6 @@ local credits = CreateFrame("Frame", "FreeUIOptionsPanelCredits", UIParent) -- i
 
 local CreditsButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 CreditsButton:SetSize(128, 25)
-CreditsButton:SetPoint("TOPLEFT", 16, -539)
 CreditsButton:SetText(ns.localization.credits)
 CreditsButton:SetScript("OnClick", function()
 	credits:Show()
@@ -174,8 +173,8 @@ end)
 tinsert(ns.buttons, ResetButton)
 
 local line = options:CreateTexture()
-line:SetSize(1, 564)
-line:SetPoint("LEFT", 205, 0)
+line:SetSize(1, 568)
+line:SetPoint("TOPLEFT", 190, -58)
 line:SetTexture(1, 1, 1, .2)
 
 local menuButton = CreateFrame("Button", "GameMenuButtonFreeUI", GameMenuFrame, "GameMenuButtonTemplate")
@@ -203,17 +202,22 @@ ns.addCategory("Automation")
 ns.addCategory("ActionBars")
 ns.addCategory("Bags")
 ns.addCategory("Notifications")
-ns.addCategory("UnitFrames")
 ns.addCategory("Tooltip")
+ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
+
+CreditsButton:SetPoint("TOP", options.lastCategoryTab, "BOTTOM", 0, -172)
 
 -- [[ General ]]
 
 local general = FreeUIOptionsPanel.general
 general.tab.Icon:SetTexture("Interface\\Icons\\inv_gizmo_02")
 
+local features = ns.addSubCategory(general, "Features")
+features:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
+
 local buffReminder = ns.CreateCheckBox(general, "buffreminder", true, true)
-buffReminder:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
+buffReminder:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
 
 local buffTracker = ns.CreateCheckBox(general, "buffTracker", true, true)
 buffTracker:SetPoint("TOPLEFT", buffReminder, "BOTTOMLEFT", 0, -8)
@@ -261,13 +265,11 @@ nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -42)
 local undressButton = ns.CreateCheckBox(general, "undressButton", true, true)
 undressButton:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
 
-local line = general:CreateTexture(nil, "ARTWORK")
-line:SetSize(450, 1)
-line:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", 16, -36)
-line:SetTexture(1, 1, 1, .2)
+local misc = ns.addSubCategory(general, "Miscellaneous")
+misc:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -30)
 
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
-uiScaleAuto:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -56)
+uiScaleAuto:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 0, -20)
 
 -- [[ Appearance ]]
 
@@ -344,7 +346,7 @@ autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
 local actionbars = FreeUIOptionsPanel.actionbars
 for i = 1, 4 do
 	local tex = actionbars.tab:CreateTexture(nil, "OVERLAY")
-	tex:SetSize(15, 15)
+	tex:SetSize(11, 11)
 	tex:SetTexCoord(.08, .92, .08, .92)
 	if i == 1 then
 		tex:SetTexture("Interface\\Icons\\Ability_Warrior_SavageBlow")

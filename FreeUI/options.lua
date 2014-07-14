@@ -72,6 +72,12 @@ C["notifications"] = {
 	["checkGuildEvents"] = true,
 }
 
+C["tooltip"] = {
+	["anchorCursor"] = false,
+	["guildrank"] = true,
+	["title"] = false,
+}
+
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 
@@ -126,12 +132,6 @@ C["unitframes"] = {
 	["num_arena_buffs"] = 8,
 	["num_focus_debuffs"] = 4,
 
-}
-
-C["tooltip"] = {
-	["anchorCursor"] = false,
-	["guildrank"] = true,
-	["title"] = false,
 }
 
 C["classmod"] = {

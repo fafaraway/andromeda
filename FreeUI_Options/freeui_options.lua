@@ -185,13 +185,21 @@ local activeTab = nil
 
 local function setActiveTab(tab)
 	activeTab = tab
-	activeTab:SetBackdropColor(r, g, b, .2)
+
+	activeTab:SetBackdropColor(r, g, b, .15)
+	activeTab.topLine:Show()
+	activeTab.bottomLine:Show()
+
 	activeTab.panel:Show()
 end
 
 local onTabClick = function(tab)
-	activeTab:SetBackdropColor(0, 0, 0, 0)
 	activeTab.panel:Hide()
+
+	activeTab:SetBackdropColor(0, 0, 0, 0)
+	activeTab.topLine:Hide()
+	activeTab.bottomLine:Hide()
+
 	setActiveTab(tab)
 end
 
@@ -200,14 +208,14 @@ local function colourTab(f)
 end
 
 local function clearTab(f)
-	f.Text:SetTextColor(1, .82, 0)
+	f.Text:SetTextColor(.9, .9, .9)
 end
 
 ns.addCategory = function(name)
 	local tag = strlower(name)
 
 	local panel = CreateFrame("Frame", baseName..name, FreeUIOptionsPanel)
-	panel:SetSize(623, 568)
+	panel:SetSize(638, 568)
 	panel:SetPoint("RIGHT", -42, 0)
 	panel:Hide()
 
@@ -223,18 +231,33 @@ ns.addCategory = function(name)
 	panel.subText:SetText(ns.localization[tag.."SubText"])
 
 	local tab = CreateFrame("Frame", nil, FreeUIOptionsPanel)
-	tab:SetPoint("TOPLEFT", 16, -offset)
-	tab:SetSize(160, 44)
+	tab:SetPoint("TOPLEFT", 1, -offset)
+	tab:SetSize(189, 34)
 
 	local icon = tab:CreateTexture(nil, "OVERLAY")
-	icon:SetSize(32, 32)
-	icon:SetPoint("LEFT", tab, "LEFT", 8, 0)
+	icon:SetSize(24, 24)
+	icon:SetPoint("LEFT", tab, 6, 0)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	tab.Icon = icon
 
-	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, 0)
+	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontHighlightMedium")
+	tab.Text:SetPoint("BOTTOMLEFT", icon, "BOTTOMRIGHT", 8, 0)
+	tab.Text:SetTextColor(.9, .9, .9)
 	tab.Text:SetText(ns.localization[tag])
+
+	local topLine = tab:CreateTexture(nil, "OVERLAY")
+	topLine:SetHeight(1)
+	topLine:SetPoint("TOPLEFT")
+	topLine:SetPoint("TOPRIGHT")
+	topLine:Hide()
+	tab.topLine = topLine
+
+	local bottomLine = tab:CreateTexture(nil, "OVERLAY")
+	bottomLine:SetHeight(1)
+	bottomLine:SetPoint("BOTTOMLEFT", 0, -1)
+	bottomLine:SetPoint("BOTTOMRIGHT", 0, -1)
+	bottomLine:Hide()
+	tab.bottomLine = bottomLine
 
 	tab:SetScript("OnMouseUp", onTabClick)
 	tab:SetScript("OnEnter", colourTab)
@@ -248,7 +271,21 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	offset = offset + 51
+	FreeUIOptionsPanel.lastCategoryTab = panel.tab
+
+	offset = offset + 35
+end
+
+ns.addSubCategory = function(category, name)
+	local header = category:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	header:SetText(name)
+
+	local line = category:CreateTexture(nil, "ARTWORK")
+	line:SetSize(450, 1)
+	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
+	line:SetTexture(1, 1, 1, .2)
+
+	return header
 end
 
 -- [[ Init ]]
@@ -405,8 +442,14 @@ init:SetScript("OnEvent", function()
 	F.ReskinCheck(resetFrame.Options)
 
 	for _, panel in pairs(panels) do
-		F.CreateBD(panel.tab, 0)
-		F.CreateGradient(panel.tab)
+		panel.tab:SetBackdrop({
+			bgFile = C.media.backdrop,
+			insets = {top = 1},
+		})
+		panel.tab:SetBackdropColor(0, 0, 0, 0)
+		panel.tab.topLine:SetTexture(r, g, b, .2)
+		panel.tab.bottomLine:SetTexture(r, g, b, .2)
+
 		local bg = F.CreateBG(panel.tab.Icon)
 		bg:SetDrawLayer("ARTWORK")
 	end
