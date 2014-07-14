@@ -53,5 +53,5 @@ end
 F.RegisterEvent("ADDON_LOADED", taint)
 
 F.MicroMenu = function()
-	EasyMenu(microMenu, menuFrame, "UIParent", 10, 200, "MENU")
+	EasyMenu(microMenu, menuFrame, "UIParent", 30, 220, "MENU")
 end
