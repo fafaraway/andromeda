@@ -1,6 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 local r, g, b = unpack(C.class)
+local barAlpha = 0.25
+local buttonAlpha = 0
 
 local bar = CreateFrame("Frame", "FreeUIMenubar", UIParent)
 bar:SetFrameStrata("BACKGROUND")
@@ -22,21 +24,47 @@ end
 F.RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
 F.RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
 
-local function showBar()
-	bar:SetBackdropColor(0, 0, 0, .5)
+local function fadeIn(self, elapsed)
+	if barAlpha < .5 then
+		barAlpha = barAlpha + elapsed
+		buttonAlpha = buttonAlpha + (elapsed * 4)
+	else
+		barAlpha = .5
+		buttonAlpha = 1
+		self:SetScript("OnUpdate", nil)
+	end
+
+	self:SetBackdropColor(0, 0, 0, barAlpha)
 
 	for _, button in pairs(bar.buttons) do
-		button:Show()
+		button:SetAlpha(buttonAlpha)
 	end
+end
+
+local function fadeOut(self, elapsed)
+	if barAlpha > .25 then
+		barAlpha = barAlpha - elapsed
+		buttonAlpha = buttonAlpha - (elapsed * 4)
+	else
+		barAlpha = .25
+		buttonAlpha = 0
+		self:SetScript("OnUpdate", nil)
+	end
+
+	self:SetBackdropColor(0, 0, 0, barAlpha)
+
+	for _, button in pairs(bar.buttons) do
+		button:SetAlpha(buttonAlpha)
+	end
+end
+
+local function showBar()
+	bar:SetScript("OnUpdate", fadeIn)
 end
 bar.showBar = showBar
 
 local function hideBar()
-	bar:SetBackdropColor(0, 0, 0, .25)
-
-	for _, button in pairs(bar.buttons) do
-		button:Hide()
-	end
+	bar:SetScript("OnUpdate", fadeOut)
 end
 bar.hideBar = hideBar
 
@@ -60,7 +88,7 @@ local function addButton(text, onRightSide, clickFunc)
 	bu:SetPoint("TOP", bar, "TOP")
 	bu:SetPoint("BOTTOM", bar, "BOTTOM")
 	bu:SetWidth(130)
-	bu:Hide()
+	bu:SetAlpha(0)
 	F.CreateBD(bu, .1)
 
 	if onRightSide then
@@ -96,6 +124,8 @@ addButton("Micro menu", false, function()
 end)
 
 addButton("Chat menu", false, function()
+	ChatMenu:ClearAllPoints()
+	ChatMenu:SetPoint("BOTTOMLEFT", UIParent, 30, 30)
 	ToggleFrame(ChatMenu)
 end)
 
