@@ -1,7 +1,7 @@
 local F, C
 local _, ns = ...
 
--- [[ Functions ]]
+-- [[ Variables ]]
 
 ns.categories = {}
 ns.buttons = {}
@@ -9,21 +9,49 @@ ns.protectOptions = {}
 
 local checkboxes = {}
 local sliders = {}
-local dropdowns = {}
+local colourpickers = {}
 local panels = {}
 
 local old = {} -- to keep track of whether or not reload is needed
+local oldColours = {} -- same
 local overrideReload = false
 local userChangedSlider = true -- to use SetValue without running OnValueChanged code
 local baseName = "FreeUIOptionsPanel"
 
 local r, g, b
 
+-- [[ Functions ]]
+
+-- when an option needs a reload
 local function setReloadNeeded(isNeeded)
 	FreeUIOptionsPanel.reloadText:SetShown(isNeeded)
 	ns.needReload = isNeeded -- for the popup when clicking okay
 end
 
+-- check if a reload is needed
+local function checkIsReloadNeeded()
+	if not overrideReload then -- can't check sliders for old value, always flag for reload when they change
+		for checkbox, value in pairs(old) do
+			if C[checkbox.group][checkbox.option] ~= value then
+				setReloadNeeded(true)
+				return
+			end
+		end
+
+		for colourOption, oldTable in pairs(oldColours) do
+			local savedTable = C[colourOption.group][colourOption.option]
+			if savedTable.r ~= oldTable.r or savedTable.g ~= oldTable.g or savedTable.b ~= oldTable.b then
+				setReloadNeeded(true)
+				return
+			end
+		end
+
+		-- if the tables were empty, or all of the old values match their current ones
+		setReloadNeeded(false)
+	end
+end
+
+-- Called by every widget to save a value
 local function SaveValue(f, value)
 	if not C.options[f.group] then C.options[f.group] = {} end
 	if not C.options[f.group][f.option] then C.options[f.group][f.option] = {} end
@@ -31,6 +59,10 @@ local function SaveValue(f, value)
 	C.options[f.group][f.option] = value -- these are the saved variables
 	C[f.group][f.option] = value -- and this is from the lua options
 end
+
+-- [[ Widgets ]]
+
+-- Check boxes
 
 local function toggleChildren(self, checked)
 	local tR, tG, tB
@@ -62,16 +94,8 @@ local function toggle(self)
 		if old[self] == nil then
 			old[self] = not checked
 		end
-		if not overrideReload then -- can't check sliders for old value
-			for checkbox, value in pairs(old) do
-				if C[checkbox.group][checkbox.option] ~= value then
-					setReloadNeeded(true)
-					break
-				else
-					setReloadNeeded(false)
-				end
-			end
-		end
+
+		checkIsReloadNeeded()
 	end
 end
 
@@ -97,6 +121,8 @@ ns.CreateCheckBox = function(parent, option, tooltipText, needsReload)
 
 	return f
 end
+
+-- Sliders
 
 local function onValueChanged(self, value)
 	value = floor(value+0.5)
@@ -180,6 +206,76 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 	return slider
 end
 
+-- Colour pickers
+
+-- we update this in onColourSwatchClicked, need it for setColour / resetColour
+-- because it can't be passed as parameter
+local currentColourOption
+
+local function round(x)
+	return floor((x * 100) + .5) / 100
+end
+
+local function setColour()
+	local newR, newG, newB = ColorPickerFrame:GetColorRGB()
+	newR, newG, newB = round(newR), round(newG), round(newB)
+
+	currentColourOption.tex:SetVertexColor(newR, newG, newB)
+	SaveValue(currentColourOption, {r = newR, g = newG, b = newB})
+
+	checkIsReloadNeeded()
+end
+
+local function resetColour(restore)
+	local oldR, oldG, oldB = restore.r, restore.g, restore.b
+
+	currentColourOption.tex:SetVertexColor(oldR, oldG, oldB)
+	SaveValue(currentColourOption, {r = oldR, g = oldG, b = oldB})
+
+	checkIsReloadNeeded()
+end
+
+local function onColourSwatchClicked(self)
+	local colourTable = C[self.group][self.option]
+	local currentR, currentG, currentB = colourTable.r, colourTable.g, colourTable.b
+
+	currentColourOption = self
+
+	if self.needsReload and oldColours[self] == nil then
+		oldColours[self] = {r = currentR, g = currentG, b = currentB}
+	end
+
+	ColorPickerFrame:SetColorRGB(currentR, currentG, currentB)
+	ColorPickerFrame.previousValues = {r = currentR, g = currentG, b = currentB}
+	ColorPickerFrame.func = setColour
+	ColorPickerFrame.cancelFunc = resetColour
+	ColorPickerFrame:Hide()
+	ColorPickerFrame:Show()
+end
+
+ns.CreateColourPicker = function(parent, option, needsReload)
+	local f = CreateFrame("Button", nil, parent)
+	f:SetSize(16, 16)
+
+	local tex = f:CreateTexture(nil, "OVERLAY")
+	tex:SetAllPoints()
+	f.tex = tex
+
+	f.group = parent.tag
+	f.option = option
+
+	f.needsReload = needsReload
+
+	f:SetScript("OnClick", onColourSwatchClicked)
+	parent[option] = f
+
+	tinsert(colourpickers, f)
+
+	return f
+end
+
+-- [[ Categories and tabs ]]
+
 local offset = 58
 local activeTab = nil
 
@@ -241,7 +337,7 @@ ns.addCategory = function(name)
 	tab.Icon = icon
 
 	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontHighlightMedium")
-	tab.Text:SetPoint("BOTTOMLEFT", icon, "BOTTOMRIGHT", 8, 0)
+	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	tab.Text:SetTextColor(.9, .9, .9)
 	tab.Text:SetText(ns.localization[tag])
 
@@ -333,6 +429,11 @@ local function displaySettings()
 	end
 
 	userChangedSlider = true
+
+	for _, picker in pairs(colourpickers) do
+		local colourTable = C[picker.group][picker.option]
+		picker.tex:SetVertexColor(colourTable.r, colourTable.g, colourTable.b)
+	end
 end
 
 local function removeCharData(self)
@@ -467,6 +568,11 @@ init:SetScript("OnEvent", function()
 	for _, slider in pairs(sliders) do
 		F.ReskinSlider(slider)
 		F.ReskinInput(slider.textInput)
+	end
+
+	for _, picker in pairs(colourpickers) do
+		picker.tex:SetTexture(C.media.backdrop)
+		F.CreateBG(picker)
 	end
 
 	for _, setting in pairs(ns.classOptions) do

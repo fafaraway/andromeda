@@ -25,6 +25,8 @@ C["general"] = {
 }
 
 C["appearance"] = {
+	["useCustomColour"] = false,
+		["customColour"] = {r = .3, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
 	["fontSizeNormal"] = 8,
 	["fontSizeLarge"] = 16,

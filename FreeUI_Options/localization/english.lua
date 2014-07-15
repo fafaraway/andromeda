@@ -55,6 +55,9 @@ ns.localization.generalundressButtonTooltip = "Adds an undress button to the dre
 
 ns.localization.appearance = "Appearance"
 ns.localization.appearanceSubText = "You can change the appearance of various elements of the UI here."
+ns.localization.appearanceuseCustomColour = "Custom colour scheme"
+ns.localization.appearanceuseCustomColourTooltip = "Use a colour of your choice throughout the UI, instead of your class's colour.\n\nClick the square to the right to set the colour."
+ns.localization.appearancechooseColour = "Choose..."
 ns.localization.appearancefontUseAlternativeFont = "Use alternative font"
 ns.localization.appearancefontUseAlternativeFontTooltip = "Replaces the default pixel font with the one used in the chat frame."
 ns.localization.appearancefontSizeNormal = "Normal font size"

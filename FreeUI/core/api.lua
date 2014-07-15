@@ -52,7 +52,11 @@ C.classcolours = {
 }
 
 local _, class = UnitClass("player")
-C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
+if C.appearance.useCustomColour then
+	C.class = {C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b}
+else
+	C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
+end
 
 C.reactioncolours = {
 	[1] = {1, .12, .24},
@@ -171,7 +175,7 @@ F.CreatePulse = function(frame) -- pulse function originally by nightcracker
 	end)
 end
 
-local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+local r, g, b = unpack(C.class)
 local buttonR, buttonG, buttonB, buttonA = .3, .3, .3, .3
 
 local CreateGradient = function(f)

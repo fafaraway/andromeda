@@ -276,8 +276,20 @@ uiScaleAuto:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 0, -20)
 local appearance = FreeUIOptionsPanel.appearance
 appearance.tab.Icon:SetTexture("Interface\\Icons\\inv_ore_arcanite_01")
 
+local colours = ns.addSubCategory(appearance, "Colours")
+colours:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
+
+local useCustomColour = ns.CreateCheckBox(appearance, "useCustomColour", true, true)
+useCustomColour:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -20)
+
+local customColour = ns.CreateColourPicker(appearance, "customColour", true)
+customColour:SetPoint("LEFT", useCustomColour.Text, "RIGHT", 6, 0)
+
+local fonts = ns.addSubCategory(appearance, "Fonts")
+fonts:SetPoint("TOPLEFT", useCustomColour, "BOTTOMLEFT", 0, -30)
+
 local fontUseAlternativeFont = ns.CreateCheckBox(appearance, "fontUseAlternativeFont", true, true)
-fontUseAlternativeFont:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
+fontUseAlternativeFont:SetPoint("TOPLEFT", fonts, "BOTTOMLEFT", 0, -20)
 
 local fontSizeNormal = ns.CreateNumberSlider(appearance, "fontSizeNormal", 5, 32, 5, 32, 1)
 fontSizeNormal:SetPoint("TOPLEFT", fontUseAlternativeFont, "BOTTOMLEFT", 16, -26)
