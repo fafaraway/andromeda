@@ -1,5 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
+if not C.menubar.enable then return end
+
 local r, g, b = unpack(C.class)
 
 local memory
@@ -7,22 +9,22 @@ local _, _, home, world = GetNetStats()
 local addons = {}
 local n, total = 0, 0
 
-local f = CreateFrame("Button", nil, FreeUIMenubar)
-f:SetPoint("CENTER")
-f:SetPoint("TOP")
-f:SetPoint("BOTTOM")
-f:SetWidth(200)
-F.CreateBD(f, 0)
-f:SetBackdropBorderColor(0, 0, 0, 0)
+local holder = CreateFrame("Frame", nil, FreeUIMenubar)
+holder:SetFrameLevel(3)
+holder:SetPoint("TOP")
+holder:SetPoint("BOTTOM")
+holder:SetWidth(200)
+holder:SetPoint("CENTER")
 
-local text = F.CreateFS(f)
+local text = F.CreateFS(holder)
+text:SetDrawLayer("OVERLAY")
 text:SetPoint("CENTER")
 text:SetTextColor(r, g, b)
 
 local last = 0
 local lastLag = 0
 
-f:SetScript("OnUpdate", function(self, elapsed)
+FreeUIStatsButton:SetScript("OnUpdate", function(self, elapsed)
 	last = last + elapsed
 	lastLag = lastLag + elapsed
 
@@ -41,22 +43,8 @@ local function order(a, b)
 	return a.memory > b.memory
 end
 
-local function showBackdrop()
-	f:SetBackdropColor(0, 0, 0, .1)
-	f:SetBackdropBorderColor(0, 0, 0)
-end
-
-local function hideBackdrop()
-	f:SetBackdropColor(0, 0, 0, 0)
-	f:SetBackdropBorderColor(0, 0, 0, 0)
-end
-
-f:SetScript("OnEnter", function()
+FreeUIStatsButton:HookScript("OnEnter", function()
 	if InCombatLockdown() then return end
-
-	FreeUIMenubar.showBar()
-	showBackdrop()
-	f:SetBackdropColor(r, g, b, .4)
 
 	collectgarbage()
 	UpdateAddOnMemoryUsage()
@@ -92,18 +80,8 @@ f:SetScript("OnEnter", function()
 	GameTooltip:Show()
 end)
 
-f:SetScript("OnLeave", function()
+FreeUIStatsButton:HookScript("OnLeave", function()
 	GameTooltip:Hide()
 	n, total = 0, 0
 	wipe(addons)
-
-	FreeUIMenubar.hideBar()
-	hideBackdrop()
-end)
-
-FreeUIMenubar:HookScript("OnEnter", showBackdrop)
-FreeUIMenubar:HookScript("OnLeave", hideBackdrop)
-
-f:SetScript("OnClick", function()
-	TimeManagerClockButton_OnClick(TimeManagerClockButton)
 end)

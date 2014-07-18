@@ -26,7 +26,7 @@ C["general"] = {
 
 C["appearance"] = {
 	["useCustomColour"] = false,
-		["customColour"] = {r = .3, g = 1, b = 1},
+		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
 	["fontSizeNormal"] = 8,
 	["fontSizeLarge"] = 16,
@@ -58,8 +58,16 @@ C["actionbars"] = {
 
 C["bags"] = {
 	["enable"] = true,					-- enable the bag addon
+
 	["size"] = 37,						-- change the size of the bags/bank, default = 37
 	["slotsShowAlways"] = false, 		-- always show the bag item slots
+}
+
+C["menubar"] = {
+	["enable"] = true,
+
+	["enableButtons"] = true,			-- show buttons for quick access on the menu bar
+		["buttons_mouseover"] = true,			-- only on mouseover
 }
 
 C["notifications"] = {

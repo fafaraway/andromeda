@@ -201,12 +201,13 @@ ns.addCategory("Appearance")
 ns.addCategory("Automation")
 ns.addCategory("ActionBars")
 ns.addCategory("Bags")
+ns.addCategory("MenuBar")
 ns.addCategory("Notifications")
 ns.addCategory("Tooltip")
 ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
 
-CreditsButton:SetPoint("TOP", options.lastCategoryTab, "BOTTOM", 0, -172)
+CreditsButton:SetPoint("TOP", options.lastCategoryTab, "BOTTOM", 0, -136)
 
 -- [[ General ]]
 
@@ -423,6 +424,20 @@ end
 
 enable:HookScript("OnClick", toggleBagsOptions)
 bags:HookScript("OnShow", toggleBagsOptions)
+
+-- [[ Menu bar ]]
+
+local menubar = FreeUIOptionsPanel.menubar
+menubar.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_enggizmos_swissarmy")
+
+local enable = ns.CreateCheckBox(menubar, "enable", false, true)
+enable:SetPoint("TOPLEFT", menubar.subText, "BOTTOMLEFT", 0, -8)
+
+local enableButtons = ns.CreateCheckBox(menubar, "enableButtons", true, true)
+enableButtons:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+
+local buttonsMouseover = ns.CreateCheckBox(menubar, "buttons_mouseover", true)
+buttonsMouseover:SetPoint("TOPLEFT", enableButtons, "BOTTOMLEFT", 16, -8)
 
 -- [[ Notifications ]]
 

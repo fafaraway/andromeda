@@ -1,15 +1,27 @@
 local F, C = unpack(select(2, ...))
 
+if not C.menubar.enable then return end
+
 local r, g, b = unpack(C.class)
-local barAlpha = 0.25
-local buttonAlpha = 0
+
+local barAlpha, buttonAlpha
+
+if C.menubar.buttons_mouseover then
+	barAlpha = 0.25
+	buttonAlpha = 0
+else
+	barAlpha = 0.5
+	buttonAlpha = 1
+end
+
+-- [[ Bar ]]
 
 local bar = CreateFrame("Frame", "FreeUIMenubar", UIParent)
 bar:SetFrameStrata("BACKGROUND")
 bar:SetPoint("BOTTOMLEFT", -1, -1)
 bar:SetPoint("BOTTOMRIGHT", 1, -1)
 bar:SetHeight(13)
-F.CreateBD(bar, .25)
+F.CreateBD(bar, barAlpha)
 
 bar.buttons = {}
 
@@ -23,6 +35,12 @@ end
 
 F.RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
 F.RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
+
+-- [[ Buttons ]]
+
+if not C.menubar.enableButtons then return end
+
+local POSITION_LEFT, POSITION_MIDDLE, POSITION_RIGHT = 1, 2, 3
 
 local function fadeIn(self, elapsed)
 	if barAlpha < .5 then
@@ -68,35 +86,56 @@ local function hideBar()
 end
 bar.hideBar = hideBar
 
-bar:SetScript("OnEnter", showBar)
-bar:SetScript("OnLeave", hideBar)
+if C.menubar.buttons_mouseover then
+	bar:SetScript("OnEnter", showBar)
+	bar:SetScript("OnLeave", hideBar)
+end
+
+local function buttonOnEnterNoFade(self)
+	self:SetBackdropColor(r, g, b, .4)
+end
+
+local function buttonOnLeaveNoFade(self)
+	self:SetBackdropColor(0, 0, 0, .1)
+end
 
 local function buttonOnEnter(self)
-	showBar()
+	if C.menubar.buttons_mouseover then
+		showBar()
+	end
+
 	self:SetBackdropColor(r, g, b, .4)
 end
 
 local function buttonOnLeave(self)
-	hideBar()
+	if C.menubar.buttons_mouseover then
+		hideBar()
+	end
+
 	self:SetBackdropColor(0, 0, 0, .1)
 end
 
 local leftOffset, rightOffset = 0, 0
 
-local function addButton(text, onRightSide, clickFunc)
+local function addButton(text, position, clickFunc)
 	local bu = CreateFrame("Button", nil, bar)
 	bu:SetPoint("TOP", bar, "TOP")
 	bu:SetPoint("BOTTOM", bar, "BOTTOM")
 	bu:SetWidth(130)
-	bu:SetAlpha(0)
 	F.CreateBD(bu, .1)
 
-	if onRightSide then
+	if C.menubar.buttons_mouseover then
+		bu:SetAlpha(0)
+	end
+
+	if position == POSITION_LEFT then
+		bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
+		leftOffset = leftOffset + 129
+	elseif position == POSITION_RIGHT then
 		bu:SetPoint("RIGHT", bar, "RIGHT", rightOffset, 0)
 		rightOffset = rightOffset - 129
 	else
-		bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
-		leftOffset = leftOffset + 129
+		bu:SetPoint("CENTER", bar)
 	end
 
 	local buText = F.CreateFS(bu)
@@ -104,9 +143,9 @@ local function addButton(text, onRightSide, clickFunc)
 	buText:SetText(text)
 	bu.Text = buText
 
+	bu:SetScript("OnClick", clickFunc)
 	bu:SetScript("OnEnter", buttonOnEnter)
 	bu:SetScript("OnLeave", buttonOnLeave)
-	bu:SetScript("OnClick", clickFunc)
 
 	tinsert(bar.buttons, bu)
 
@@ -115,7 +154,19 @@ end
 
 bar.addButton = addButton
 
-addButton("Micro menu", false, function()
+F.AddOptionsCallback("menubar", "buttons_mouseover", function()
+	if C.menubar.buttons_mouseover then
+		bar:SetScript("OnEnter", showBar)
+		bar:SetScript("OnLeave", hideBar)
+		hideBar()
+	else
+		bar:SetScript("OnEnter", nil)
+		bar:SetScript("OnLeave", nil)
+		showBar()
+	end
+end)
+
+addButton("Micro menu", POSITION_LEFT, function()
 	if DropDownList1:IsShown() then
 		ToggleFrame(DropDownList1)
 	else
@@ -123,13 +174,19 @@ addButton("Micro menu", false, function()
 	end
 end)
 
-addButton("Chat menu", false, function()
+addButton("Chat menu", POSITION_LEFT, function()
 	ChatMenu:ClearAllPoints()
 	ChatMenu:SetPoint("BOTTOMLEFT", UIParent, 30, 30)
 	ToggleFrame(ChatMenu)
 end)
 
-addButton("Toggle DBM", true, function()
+FreeUIStatsButton = addButton("", POSITION_MIDDLE, function()
+	TimeManagerClockButton_OnClick(TimeManagerClockButton)
+end)
+
+FreeUIStatsButton:SetWidth(200)
+
+addButton("Toggle DBM", POSITION_RIGHT, function()
 	if IsAddOnLoaded("DBM-Core") then
 		DisableAddOn("DBM-Core")
 		DisableAddOn("DBM-StatusBarTimers")
@@ -141,7 +198,7 @@ addButton("Toggle DBM", true, function()
 	end
 end)
 
-addButton("Toggle damage meter", true, function()
+addButton("Toggle damage meter", POSITION_RIGHT, function()
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
@@ -156,7 +213,7 @@ addButton("Toggle damage meter", true, function()
 	end
 end)
 
-local specButton = addButton("No specialization", true, function()
+local specButton = addButton("No specialization", POSITION_RIGHT, function()
 	SetActiveSpecGroup(3 - GetActiveSpecGroup())
 end)
 

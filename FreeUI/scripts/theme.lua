@@ -8277,6 +8277,8 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.Reskin(DBM_GUI_OptionsFrameWebsiteButton)
 		F.ReskinScroll(DBM_GUI_OptionsFramePanelContainerFOVScrollBar)
 	elseif addon == "KayrChat" then
+		if not C.menubar.enable or not C.menubar.enableButtons then return end
+
 		local menuButton
 
 		local function updateText(self)
