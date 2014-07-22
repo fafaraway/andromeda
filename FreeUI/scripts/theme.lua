@@ -8291,7 +8291,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			button:Hide()
 			button.Show = function() end
 
-			menuButton = FreeUIMenubar.addButton("KayrChat", false, function()
+			menuButton = FreeUIMenubar.addButton("KayrChat", 1, function()
 				button:Click()
 			end)
 
