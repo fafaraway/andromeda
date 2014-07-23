@@ -104,11 +104,11 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.ReskinArrow(TabardCharacterModelRotateRightButton, "right")
 
 		hooksecurefunc("CharacterFrame_Expand", function()
-			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-left-active")
+			CharacterFrameExpandButton.tex:SetTexture(C.media.arrowLeft)
 		end)
 
 		hooksecurefunc("CharacterFrame_Collapse", function()
-			select(15, CharacterFrameExpandButton:GetRegions()):SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-right-active")
+			CharacterFrameExpandButton.tex:SetTexture(C.media.arrowRight)
 		end)
 
 		-- [[ Radio buttons ]]
@@ -4494,7 +4494,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		BrowseDropDownButton:HookScript("OnLeave", clearArrow)
 
 		local downtex = BrowseDropDownButton:CreateTexture(nil, "OVERLAY")
-		downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+		downtex:SetTexture(C.media.arrowDown)
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
@@ -5144,7 +5144,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateGradient(bd)
 
 		local downtex = CalendarFilterButton:CreateTexture(nil, "ARTWORK")
-		downtex:SetTexture("Interface\\AddOns\\FreeUI\\media\\arrow-down-active")
+		downtex:SetTexture(C.media.arrowDown)
 		downtex:SetSize(8, 8)
 		downtex:SetPoint("CENTER")
 		downtex:SetVertexColor(1, 1, 1)
