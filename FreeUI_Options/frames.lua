@@ -504,35 +504,43 @@ partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
 
 enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
 
+local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
+enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
+
+local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true, true)
+targettarget:SetPoint("TOPLEFT", enableArena, "BOTTOMLEFT", 0, -8)
+
 local absorb = ns.CreateCheckBox(unitframes, "absorb", true, true)
 absorb:SetPoint("LEFT", autoPosition, "RIGHT", 240, 0)
 
-local targettarget = ns.CreateCheckBox(unitframes, "targettarget", true, true)
-targettarget:SetPoint("TOPLEFT", absorb, "BOTTOMLEFT", 0, -8)
-
-local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
-pvp:SetPoint("TOPLEFT", targettarget, "BOTTOMLEFT", 0, -8)
-
-local questIcon = ns.CreateCheckBox(unitframes, "questIcon", true, true)
-questIcon:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
-
 local castbarSeparate = ns.CreateCheckBox(unitframes, "castbarSeparate", true, true)
-castbarSeparate:SetPoint("TOPLEFT", questIcon, "BOTTOMLEFT", 0, -8)
+castbarSeparate:SetPoint("TOPLEFT", absorb, "BOTTOMLEFT", 0, -8)
 
 local castbarSeparateOnlyCasters = ns.CreateCheckBox(unitframes, "castbarSeparateOnlyCasters", true, true)
 castbarSeparateOnlyCasters:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 16, -8)
 
 castbarSeparate.children = {castbarSeparateOnlyCasters}
 
-local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
-enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
+local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
+pvp:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 0, -42)
+
+local questIcon = ns.CreateCheckBox(unitframes, "questIcon", true, true)
+questIcon:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
+
+local statusIndicator = ns.CreateCheckBox(unitframes, "statusIndicator", true)
+statusIndicator:SetPoint("TOPLEFT", questIcon, "BOTTOMLEFT", 0, -8)
+
+local statusIndicatorCombat = ns.CreateCheckBox(unitframes, "statusIndicatorCombat", true)
+statusIndicatorCombat:SetPoint("TOPLEFT", statusIndicator, "BOTTOMLEFT", 16, -8)
+
+statusIndicator.children = {statusIndicatorCombat}
 
 local layoutText = unitframes:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-layoutText:SetPoint("TOP", 0, -374)
+layoutText:SetPoint("TOP", 0, -408)
 layoutText:SetText(ns.localization.layoutText)
 
 unitframes.Layout = CreateFrame("Button", nil, unitframes, "UIPanelButtonTemplate")
-unitframes.Layout:SetPoint("TOP", 0, -408)
+unitframes.Layout:SetPoint("TOP", 0, -442)
 unitframes.Layout:SetSize(128, 25)
 tinsert(ns.buttons, unitframes.Layout)
 

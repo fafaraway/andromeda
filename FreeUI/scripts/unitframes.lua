@@ -1122,52 +1122,50 @@ local UnitSpecific = {
 
 		self.CounterBar = CounterBar
 
-		-- do
-			-- local f = CreateFrame("Frame")
+		local statusIndicator = CreateFrame("Frame")
+		local statusText = F.CreateFS(Health)
+		statusText:SetPoint("BOTTOM", Health, "TOP", 0, 3)
 
-			-- local function incrementAlpha()
-				-- local alpha = self:GetAlpha()
+		local function updateStatus()
+			if UnitAffectingCombat("player") and C.unitframes.statusIndicatorCombat then
+				statusText:SetText("!")
+			elseif IsResting() then
+				statusText:SetText("Zzz")
+			else
+				statusText:SetText("")
+			end
+		end
 
-				-- if alpha >= 1 then
-					-- self:SetAlpha(1)
-					-- f:SetScript("OnUpdate", nil)
-					-- return
-				-- end
+		local function checkEvents()
+			if C.unitframes.statusIndicator then
+				statusText:Show()
+				statusIndicator:RegisterEvent("PLAYER_ENTERING_WORLD")
+				statusIndicator:RegisterEvent("PLAYER_UPDATE_RESTING")
 
-				-- self:SetAlpha(alpha + 0.05)
-			-- end
+				if C.unitframes.statusIndicatorCombat then
+					statusIndicator:RegisterEvent("PLAYER_REGEN_ENABLED")
+					statusIndicator:RegisterEvent("PLAYER_REGEN_DISABLED")
+				else
+					statusIndicator:UnregisterEvent("PLAYER_REGEN_ENABLED")
+					statusIndicator:UnregisterEvent("PLAYER_REGEN_DISABLED")
+				end
 
-			-- local function decrementAlpha()
-				-- local alpha = self:GetAlpha()
+				updateStatus()
+			else
+				statusIndicator:UnregisterEvent("PLAYER_ENTERING_WORLD")
+				statusIndicator:UnregisterEvent("PLAYER_UPDATE_RESTING")
+				statusIndicator:UnregisterEvent("PLAYER_REGEN_ENABLED")
+				statusIndicator:UnregisterEvent("PLAYER_REGEN_DISABLED")
+				statusText:Hide()
+			end
+		end
 
-				-- if alpha <= 0 then
-					-- self:SetAlpha(0)
-					-- f:SetScript("OnUpdate", nil)
-					-- return
-				-- end
+		checkEvents()
 
-				-- self:SetAlpha(alpha - 0.05)
-			-- end
+		F.AddOptionsCallback("unitframes", "statusIndicator", checkEvents)
+		F.AddOptionsCallback("unitframes", "statusIndicatorCombat", checkEvents)
 
-			-- f:RegisterEvent("PLAYER_REGEN_ENABLED")
-			-- f:RegisterEvent("PLAYER_REGEN_DISABLED")
-			-- f:RegisterEvent("PLAYER_TARGET_CHANGED")
-			-- f:SetScript("OnEvent", function(_, event)
-				-- if event == "PLAYER_REGEN_ENABLED" then
-					-- f:SetScript("OnUpdate", decrementAlpha)
-				-- elseif event == "PLAYER_REGEN_DISABLED" then
-					-- f:SetScript("OnUpdate", incrementAlpha)
-				-- else
-					-- if UnitName("target") ~= nil then
-						-- f:SetScript("OnUpdate", incrementAlpha)
-					-- else
-						-- f:SetScript("OnUpdate", decrementAlpha)
-					-- end
-				-- end
-			-- end)
-
-			-- self:SetAlpha(0)
-		-- end
+		statusIndicator:SetScript("OnEvent", updateStatus)
 	end,
 
 	target = function(self, ...)

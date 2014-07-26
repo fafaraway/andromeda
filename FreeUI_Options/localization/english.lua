@@ -152,6 +152,12 @@ ns.localization.unitframespvp = "PVP icon"
 ns.localization.unitframespvpTooltip = "Show a small red PVP icon above the player unit frame."
 ns.localization.unitframesquestIcon = "Quest icon"
 ns.localization.unitframesquestIconTooltip = "Show an indicator on the target frame if the target is important for a quest."
+
+ns.localization.unitframesstatusIndicator = "Status indicator"
+ns.localization.unitframesstatusIndicatorTooltip = "Show resting and combat (if enabled) status on the player frame."
+ns.localization.unitframesstatusIndicatorCombat = "Combat status"
+ns.localization.unitframesstatusIndicatorCombatTooltip = "Show combat status on the indicator. If disabled, only resting status is shown."
+
 ns.localization.unitframesenableArena = "Arena/Flag Carrier frames"
 ns.localization.unitframesenableArenaTooltip = "Enables unit frames for arena enemies (including round preparation) and flag carriers in battlegrounds."
 
