@@ -1472,12 +1472,32 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 
 		for i = 1, 2 do
 			local bu = _G["PrimaryProfession"..i]
+
+			_G["PrimaryProfession"..i.."IconBorder"]:Hide()
+
+			bu.professionName:ClearAllPoints()
+			bu.professionName:SetPoint("TOPLEFT", 100, -4)
+
+			bu.icon:SetAlpha(1)
+			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(bu.icon)
+
 			local bg = CreateFrame("Frame", nil, bu)
 			bg:SetPoint("TOPLEFT")
 			bg:SetPoint("BOTTOMRIGHT", 0, -4)
 			bg:SetFrameLevel(0)
 			F.CreateBD(bg, .25)
 		end
+
+		hooksecurefunc("FormatProfession", function(frame, index)
+			if index then
+				local _, texture = GetProfessionInfo(index)
+
+				if frame.icon and texture then
+					frame.icon:SetTexture(texture)
+				end
+			end
+		end)
 
 		-- Merchant Frame
 
