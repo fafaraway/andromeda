@@ -183,11 +183,6 @@ menuButton:SetPoint("TOP", GameMenuButtonUIOptions, "BOTTOM", 0, -1)
 menuButton:SetText("FreeUI")
 tinsert(ns.buttons, menuButton)
 
-GameMenuFrame:HookScript("OnShow", function(self)
-	GameMenuButtonStore:Hide()
-	GameMenuButtonOptions:SetPoint("TOP", GameMenuButtonHelp, "BOTTOM", 0, -16)
-end)
-
 GameMenuButtonKeybindings:ClearAllPoints()
 GameMenuButtonKeybindings:SetPoint("TOP", menuButton, "BOTTOM", 0, -1)
 
@@ -214,7 +209,7 @@ CreditsButton:SetPoint("TOP", options.lastCategoryTab, "BOTTOM", 0, -136)
 local general = FreeUIOptionsPanel.general
 general.tab.Icon:SetTexture("Interface\\Icons\\inv_gizmo_02")
 
-local features = ns.addSubCategory(general, "Features")
+local features = ns.addSubCategory(general, ns.localization.generalFeatures)
 features:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
 
 local buffReminder = ns.CreateCheckBox(general, "buffreminder", true, true)
@@ -266,7 +261,7 @@ nameplates:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -42)
 local undressButton = ns.CreateCheckBox(general, "undressButton", true, true)
 undressButton:SetPoint("TOPLEFT", nameplates, "BOTTOMLEFT", 0, -8)
 
-local misc = ns.addSubCategory(general, "Miscellaneous")
+local misc = ns.addSubCategory(general, ns.localization.generalMisc)
 misc:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -30)
 
 local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
@@ -277,7 +272,7 @@ uiScaleAuto:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 0, -20)
 local appearance = FreeUIOptionsPanel.appearance
 appearance.tab.Icon:SetTexture("Interface\\Icons\\inv_ore_arcanite_01")
 
-local colours = ns.addSubCategory(appearance, "Colours")
+local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
 colours:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
 
 local useCustomColour = ns.CreateCheckBox(appearance, "useCustomColour", true, true)
@@ -286,19 +281,19 @@ useCustomColour:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -20)
 local customColour = ns.CreateColourPicker(appearance, "customColour", true)
 customColour:SetPoint("LEFT", useCustomColour.Text, "RIGHT", 6, 0)
 
-local fonts = ns.addSubCategory(appearance, "Fonts")
+local fonts = ns.addSubCategory(appearance, ns.localization.appearanceFonts)
 fonts:SetPoint("TOPLEFT", useCustomColour, "BOTTOMLEFT", 0, -30)
 
 local fontUseAlternativeFont = ns.CreateCheckBox(appearance, "fontUseAlternativeFont", true, true)
 fontUseAlternativeFont:SetPoint("TOPLEFT", fonts, "BOTTOMLEFT", 0, -20)
 
-local fontSizeNormal = ns.CreateNumberSlider(appearance, "fontSizeNormal", 5, 32, 5, 32, 1)
+local fontSizeNormal = ns.CreateNumberSlider(appearance, "fontSizeNormal", 5, 32, 5, 32, 1, true)
 fontSizeNormal:SetPoint("TOPLEFT", fontUseAlternativeFont, "BOTTOMLEFT", 16, -26)
 
 appearance.normalSample = appearance:CreateFontString()
 appearance.normalSample:SetPoint("TOPLEFT", fontSizeNormal, "BOTTOMLEFT", 0, -16)
 
-local fontSizeLarge = ns.CreateNumberSlider(appearance, "fontSizeLarge", 5, 32, 5, 32, 1)
+local fontSizeLarge = ns.CreateNumberSlider(appearance, "fontSizeLarge", 5, 32, 5, 32, 1, true)
 fontSizeLarge:SetPoint("TOPLEFT", appearance.normalSample, "BOTTOMLEFT", 0, -26)
 
 appearance.largeSample = appearance:CreateFontString()
@@ -393,7 +388,7 @@ hotKey:SetPoint("TOPLEFT", rightBarsMouseover, "BOTTOMLEFT", 0, -8)
 enableStyle.children = {hotKey}
 
 local function toggleActionBarsOptions()
-	local shown = enable:GetChecked() == 1
+	local shown = enable:GetChecked()
 	enableStyle:SetShown(shown)
 	rightBarsMouseover:SetShown(shown)
 	hotKey:SetShown(shown)
@@ -417,7 +412,7 @@ local size = ns.CreateNumberSlider(bags, "size", SMALL, LARGE, 8, 100, 1)
 size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 8, -42)
 
 local function toggleBagsOptions()
-	local shown = enable:GetChecked() == 1
+	local shown = enable:GetChecked()
 	slotsShowAlways:SetShown(shown)
 	size:SetShown(shown)
 end
@@ -447,17 +442,26 @@ notifications.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_enggizmos_27")
 local enable = ns.CreateCheckBox(notifications, "enable", true, true)
 enable:SetPoint("TOPLEFT", notifications.subText, "BOTTOMLEFT", 0, -8)
 
-local checkMail = ns.CreateCheckBox(notifications, "checkMail", true)
-checkMail:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
+local when, whenLine = ns.addSubCategory(notifications, ns.localization.notificationsWhen)
+when:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -30)
+
+local checkBagsFull = ns.CreateCheckBox(notifications, "checkBagsFull", true)
+checkBagsFull:SetPoint("TOPLEFT", when, "BOTTOMLEFT", 0, -20)
 
 local checkEvents = ns.CreateCheckBox(notifications, "checkEvents", true)
-checkEvents:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", 0, -8)
+checkEvents:SetPoint("TOPLEFT", checkBagsFull, "BOTTOMLEFT", 0, -8)
 
 local checkGuildEvents = ns.CreateCheckBox(notifications, "checkGuildEvents", true)
 checkGuildEvents:SetPoint("TOPLEFT", checkEvents, "BOTTOMLEFT", 0, -8)
 
+local checkMail = ns.CreateCheckBox(notifications, "checkMail", true)
+checkMail:SetPoint("TOPLEFT", checkGuildEvents, "BOTTOMLEFT", 0, -8)
+
+local how, howLine = ns.addSubCategory(notifications, ns.localization.notificationsHow)
+how:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", 0, -30)
+
 local playSounds = ns.CreateCheckBox(notifications, "playSounds", true)
-playSounds:SetPoint("LEFT", enable, "RIGHT", 240, 0)
+playSounds:SetPoint("TOPLEFT", how, "BOTTOMLEFT", 0, -20)
 
 local animations = ns.CreateCheckBox(notifications, "animations", true)
 animations:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
@@ -465,14 +469,27 @@ animations:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 local timeShown = ns.CreateNumberSlider(notifications, "timeShown", "1 sec", "10 sec", 1, 10, 1)
 timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 8, -30)
 
+local previewButton = CreateFrame("Button", nil, notifications, "UIPanelButtonTemplate")
+previewButton:SetPoint("TOPLEFT", timeShown, "BOTTOMLEFT", -8, -40)
+previewButton:SetSize(128, 25)
+previewButton:SetText(ns.localization.notificationsPreview)
+tinsert(ns.buttons, previewButton)
+notifications.previewButton = previewButton
+
 local function toggleNotificationsOptions()
-	local shown = enable:GetChecked() == 1
+	local shown = enable:GetChecked()
+	when:SetShown(shown)
+	whenLine:SetShown(shown)
+	how:SetShown(shown)
+	howLine:SetShown(shown)
+	checkBagsFull:SetShown(shown)
 	checkMail:SetShown(shown)
 	checkEvents:SetShown(shown)
 	checkGuildEvents:SetShown(shown)
 	playSounds:SetShown(shown)
 	animations:SetShown(shown)
 	timeShown:SetShown(shown)
+	previewButton:SetShown(shown)
 end
 
 enable:HookScript("OnClick", toggleNotificationsOptions)
@@ -545,7 +562,7 @@ unitframes.Layout:SetSize(128, 25)
 tinsert(ns.buttons, unitframes.Layout)
 
 local function toggleUFOptions()
-	local shown = enable:GetChecked() == 1
+	local shown = enable:GetChecked()
 
 	autoPosition:SetShown(shown)
 	enableGroup:SetShown(shown)
@@ -556,6 +573,8 @@ local function toggleUFOptions()
 	targettarget:SetShown(shown)
 	pvp:SetShown(shown)
 	questIcon:SetShown(shown)
+	statusIndicator:SetShown(shown)
+	statusIndicatorCombat:SetShown(shown)
 	castbarSeparate:SetShown(shown)
 	castbarSeparateOnlyCasters:SetShown(shown)
 	enableArena:SetShown(shown)
@@ -615,12 +634,8 @@ local priest = ns.CreateCheckBox(classmod, "priest", false, true)
 priest:SetPoint("TOPLEFT", paladinRF, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, priest)
 
-local shaman = ns.CreateCheckBox(classmod, "shaman", false, true)
-shaman:SetPoint("TOPLEFT", priest, "BOTTOMLEFT", 0, -8)
-tinsert(ns.classOptions, shaman)
-
 local warlock = ns.CreateCheckBox(classmod, "warlock", false, true)
-warlock:SetPoint("TOPLEFT", shaman, "BOTTOMLEFT", 0, -8)
+warlock:SetPoint("TOPLEFT", priest, "BOTTOMLEFT", 0, -8)
 tinsert(ns.classOptions, warlock)
 
 -- [[ Credits ]]

@@ -31,7 +31,8 @@ local OnUpdate = function(self, elapsed)
 end
 
 local UpdateType = function(self, event, rid, alt)
-	local rune = self.Runes[runemap[rid]]
+	local runes = self.Runes
+	local rune = runes[runemap[rid]]
 	local colors = self.colors.runes[GetRuneType(rid) or alt]
 	local r, g, b = colors[1], colors[2], colors[3]
 
@@ -41,12 +42,22 @@ local UpdateType = function(self, event, rid, alt)
 		local mu = rune.bg.multiplier or 1
 		rune.bg:SetVertexColor(r * mu, g * mu, b * mu)
 	end
+
+	if(runes.PostUpdateType) then
+		return runes:PostUpdateType(rune, rid, alt)
+	end
 end
 
 local UpdateRune = function(self, event, rid)
 	local runes = self.Runes
 	local rune = runes[runemap[rid]]
 	if(not rune) then return end
+
+	if(UnitHasVehicleUI'player') then
+		return rune:Hide()
+	else
+		rune:Show()
+	end
 
 	local start, duration, runeReady = GetRuneCooldown(rid)
 	if(runeReady) then
@@ -58,6 +69,10 @@ local UpdateRune = function(self, event, rid)
 		rune.max = duration
 		rune:SetMinMaxValues(1, duration)
 		rune:SetScript("OnUpdate", OnUpdate)
+	end
+
+	if(runes.PostUpdateRune) then
+		return runes:PostUpdateRune(rune, rid, start, duration, runeReady)
 	end
 end
 

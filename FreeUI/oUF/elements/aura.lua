@@ -31,7 +31,7 @@ local createAuraIcon = function(icons, index)
 	local button = CreateFrame("Button", nil, icons)
 	button:RegisterForClicks'RightButtonUp'
 
-	local cd = CreateFrame("Cooldown", nil, button)
+	local cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 	cd:SetAllPoints(button)
 	cd:SetReverse()
 

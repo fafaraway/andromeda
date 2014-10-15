@@ -58,6 +58,8 @@ else
 	C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
 end
 
+C.r, C.g, C.b = unpack(C.class)
+
 C.reactioncolours = {
 	[1] = {1, .12, .24},
 	[2] = {1, .12, .24},
@@ -79,6 +81,11 @@ C.FONT_SIZE_LARGE = 2
 -- [[ Functions ]]
 
 F.dummy = function() end
+
+-- compatibility with Aurora plugins that are compatible with Aurora's custom style system
+F.AddPlugin = function(func)
+	func()
+end
 
 local CreateBD = function(f, a)
 	f:SetBackdrop({
@@ -321,6 +328,9 @@ local function clearArrow(f)
 	f.tex:SetVertexColor(1, 1, 1)
 end
 
+F.colourArrow = colourArrow
+F.clearArrow = clearArrow
+
 F.ReskinDropDown = function(f)
 	local frame = f:GetName()
 
@@ -430,10 +440,14 @@ end
 
 F.ReskinInput = function(f, height, width)
 	local frame = f:GetName()
-	if _G[frame.."Left"] then _G[frame.."Left"]:Hide() end
-	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-	if _G[frame.."Mid"] then _G[frame.."Mid"]:Hide() end
-	if _G[frame.."Right"] then _G[frame.."Right"]:Hide() end
+
+	local left = f.Left or _G[frame.."Left"]
+	local middle = f.Middle or _G[frame.."Middle"] or _G[frame.."Mid"]
+	local right = f.Right or _G[frame.."Right"]
+
+	left:Hide()
+	middle:Hide()
+	right:Hide()
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", -2, 0)
@@ -555,6 +569,9 @@ local function clearExpandOrCollapse(f)
 	f.minus:SetVertexColor(1, 1, 1)
 end
 
+F.colourExpandOrCollapse = colourExpandOrCollapse
+F.clearExpandOrCollapse = clearExpandOrCollapse
+
 F.ReskinExpandOrCollapse = function(f)
 	f:SetSize(13, 13)
 
@@ -654,4 +671,44 @@ F.ReskinColourSwatch = function(f)
 	bg:SetTexture(0, 0, 0)
 	bg:SetPoint("TOPLEFT", 2, -2)
 	bg:SetPoint("BOTTOMRIGHT", -2, 2)
+end
+
+F.ReskinFilterButton = function(f)
+	f.TopLeft:Hide()
+	f.TopRight:Hide()
+	f.BottomLeft:Hide()
+	f.BottomRight:Hide()
+	f.TopMiddle:Hide()
+	f.MiddleLeft:Hide()
+	f.MiddleRight:Hide()
+	f.BottomMiddle:Hide()
+	f.MiddleMiddle:Hide()
+
+	F.Reskin(f)
+	f.Icon:SetTexture(C.media.arrowRight)
+
+	f.Text:SetPoint("CENTER")
+	f.Icon:SetPoint("RIGHT", f, "RIGHT", -5, 0)
+	f.Icon:SetSize(8, 8)
+end
+
+F.ReskinNavBar = function(f)
+	local overflowButton = f.overflowButton
+
+	f:GetRegions():Hide()
+	f:DisableDrawLayer("BORDER")
+	f.overlay:Hide()
+	f.homeButton:GetRegions():Hide()
+
+	F.Reskin(f.homeButton)
+	F.Reskin(overflowButton, true)
+
+	local tex = overflowButton:CreateTexture(nil, "ARTWORK")
+	tex:SetTexture(C.media.arrowLeft)
+	tex:SetSize(8, 8)
+	tex:SetPoint("CENTER")
+	overflowButton.tex = tex
+
+	overflowButton:HookScript("OnEnter", colourArrow)
+	overflowButton:HookScript("OnLeave", clearArrow)
 end

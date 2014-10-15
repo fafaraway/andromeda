@@ -23,10 +23,10 @@ oUF.colors.power[7] = oUF.colors.power["SOUL_SHARDS"]
 oUF.colors.power[8] = oUF.colors.power["ECLIPSE"]
 oUF.colors.power[9] = oUF.colors.power["HOLY_POWER"]
 
-local GetDisplayPower = function(power, unit)
-	local _, _, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
+local GetDisplayPower = function(unit)
+	local _, min, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
 	if(showOnRaid) then
-		return ALTERNATE_POWER_INDEX
+		return ALTERNATE_POWER_INDEX, min
 	end
 end
 
@@ -36,15 +36,18 @@ local Update = function(self, event, unit)
 
 	if(power.PreUpdate) then power:PreUpdate(unit) end
 
-	local displayType = power.displayAltPower and GetDisplayPower(power, unit)
-	local min, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
+	local displayType, min
+	if power.displayAltPower then
+		displayType, min = GetDisplayPower(unit)
+	end
+	local cur, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
 	local disconnected = not UnitIsConnected(unit)
-	power:SetMinMaxValues(0, max)
+	power:SetMinMaxValues(min or 0, max)
 
 	if(disconnected) then
 		power:SetValue(max)
 	else
-		power:SetValue(min)
+		power:SetValue(cur)
 	end
 
 	power.disconnected = disconnected
@@ -54,8 +57,10 @@ local Update = function(self, event, unit)
 		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not
 		UnitIsTappedByAllThreatList(unit)) then
 		t = self.colors.tapped
-	elseif(power.colorDisconnected and not UnitIsConnected(unit)) then
+	elseif(power.colorDisconnected and disconnected) then
 		t = self.colors.disconnected
+	elseif(displayType == ALTERNATE_POWER_INDEX and power.altPowerColor) then
+		t = power.altPowerColor
 	elseif(power.colorPower) then
 		local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
 
@@ -77,7 +82,8 @@ local Update = function(self, event, unit)
 	elseif(power.colorReaction and UnitReaction(unit, 'player')) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(power.colorSmooth) then
-		r, g, b = self.ColorGradient(min, max, unpack(power.smoothGradient or self.colors.smooth))
+        local adjust = 0 - (min or 0)
+		r, g, b = self.ColorGradient(cur + adjust, max + adjust, unpack(power.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
@@ -95,7 +101,7 @@ local Update = function(self, event, unit)
 	end
 
 	if(power.PostUpdate) then
-		return power:PostUpdate(unit, min, max)
+		return power:PostUpdate(unit, cur, max, min)
 	end
 end
 

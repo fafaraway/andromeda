@@ -77,9 +77,10 @@ C["notifications"] = {
 	["animations"] = true,
 	["timeShown"] = 5,
 
-	["checkMail"] = true,
+	["checkBagsFull"] = true,
 	["checkEvents"] = true,
 	["checkGuildEvents"] = true,
+	["checkMail"] = true,
 }
 
 C["tooltip"] = {
@@ -154,7 +155,6 @@ C["classmod"] = {
 	["paladinHP"] = true, 	-- holy power
 	["paladinRF"] = true, 	-- righteous fury
 	["priest"] = true,		-- shadow orbs
-	["shaman"] = true, 		-- maelstrom weapon tracker
 	["warlock"] = true, 	-- spec bar
 }
 
@@ -173,8 +173,8 @@ C["selfbuffs"] = {
 	DEATHKNIGHT = {
 		{
 			{
-				57330, -- Horn of Winter
 				6673, -- Battle Shout
+				57330, -- Horn of Winter
 				19506, -- Trueshot Aura
 			},
 		},
@@ -182,20 +182,10 @@ C["selfbuffs"] = {
 	DRUID = {
 		{
 			{
-				1126, -- Mark of the Wild
 				20217, -- Blessing of Kings
 				115921, -- Legacy of the Emperor
-			},
-		},
-	},
-	HUNTER = {
-		{
-			{
-				13165, -- Aspect of the Hawk
-				109260, -- Aspect of the Iron Hawk
-				5118, -- Aspect of the Cheetah
-				13159, -- Aspect of the Pack
-				125042, -- Aspect of the Beast
+				116781, -- Legacy of the White Tiger
+				1126, -- Mark of the Wild
 			},
 		},
 	},
@@ -204,38 +194,29 @@ C["selfbuffs"] = {
 			{
 				1459, -- Arcane Brilliance
 				61316, -- Dalaran Brilliance
-				77747, -- Burning Wrath
 				109773, -- Dark Intent
 			},
-		},
-		{
 			{
 				1459, -- Arcane Brilliance
 				61316, -- Dalaran Brilliance
-				116781, -- Legacy of the White Tiger
 				17007, -- Leader of the Pack
-			},
-		},
-		{
-			{
-				7302, -- Frost Armor
-				6117, -- Mage Armor
-				30482, -- Molten Armor
+				116781, -- Legacy of the White Tiger
 			},
 		},
 	},
 	MONK = {
 		{
 			{
-				115921, -- Legacy of the Emperor
-				1126, -- Mark of the Wild
 				20217, -- Blessing of Kings
+				115921, -- Legacy of the Emperor
+				116781, -- Legacy of the White Tiger
+				1126, -- Mark of the Wild
 			},
 			{
-				116781, -- Legacy of the White Tiger
 				1459, -- Arcane Brilliance
 				61316, -- Dalaran Brilliance
 				17007, -- Leader of the Pack
+				116781, -- Legacy of the White Tiger
 			},
 		},
 	},
@@ -243,26 +224,24 @@ C["selfbuffs"] = {
 		{
 			{
 				20217, -- Blessing of Kings
-				1126, -- Mark of the Wild
 				115921, -- Legacy of the Emperor
+				116781, -- Legacy of the White Tiger
+				1126, -- Mark of the Wild
 			},
 			{
 				19740, -- Blessing of Might
 				116956, -- Grace of Air
+				24907, -- Moonkin Aura
+				155522, -- Power of the Grave
 			},
 		},
 	},
 	PRIEST = {
 		{
 			{
-				588, -- Inner Fire
-				73413, -- Inner Will
-			},
-		},
-		{
-			{
-				21562, -- Power Word: Fortitude
+				166928, -- Blood Pact
 				469, -- Commanding Shout
+				21562, -- Power Word: Fortitude
 			},
 		},
 	},
@@ -277,18 +256,38 @@ C["selfbuffs"] = {
 	SHAMAN = {
 		{
 			{
-				52127, -- Water shield
-				324, -- Lightning shield
 				974, -- Earth shield
+				324, -- Lightning shield
+				52127, -- Water shield
 			},
 		},
 	},
 	WARLOCK = {
 		{
 			{
-				109773, -- Dark Intent
 				1459, -- Arcane Brilliance
-				77747, -- Burning Wrath
+				61316, -- Dalaran Brilliance
+				109773, -- Dark Intent
+			},
+			{
+				109773, -- Dark Intent
+				49868, -- Mind Quickening
+				113742, -- Swiftblade's Cunning
+				166916, -- Windflurry
+			},
+		},
+	},
+	WARRIOR = {
+		{
+			{
+				166928, -- Blood Pact
+				469, -- Commanding Shout
+				21562, -- Power Word: Fortitude
+			},
+			{
+				6673, -- Battle Shout
+				57330, -- Horn of Winter
+				19506, -- Trueshot Aura
 			},
 		},
 	},
@@ -317,12 +316,12 @@ C["buffTracker"] = {
 		{spellIds = {[114250]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 3},
 		-- Divine Shield, Hand of Protection, Avenging Wrath, Holy Avenger
 		{spellIds = {[642]=true, [1022]=true, [31884]=true, [105809]=true}, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
-		-- Inquisition, Bastion of Glory, Divine Plea
-		{spellIds = {[84963]=true, [114637]=true, [54428]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		-- Bastion of Glory
+		{spellIds = {[114637]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["ROGUE"] = {
-		-- Bandit's Guile, Recuperate
-		{spellIds = {[84745]=true, [84746]=true, [84747]=true, [73651]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		-- Bandit's Guile
+		{spellIds = {[84745]=true, [84746]=true, [84747]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Adrenaline Rush
 		{spellIds = {[13750]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
 		-- Slice and dice
@@ -343,25 +342,6 @@ C["buffTracker"] = {
 -- Debuffs by other players or NPCs you want to show on enemy target
 
 C["debuffFilter"] = {
-	-- Weakened Armor
-	[113746] = true,
-
-	-- Physical Vulnerability
-	[81326] = true,
-
-	-- Weakened Blows
-	[115798] = true,
-	[109466] = true, -- Curse of Enfeeblement
-
-	-- Magic Vulnerability
-	[93068] = true, -- Master Poisoner
-	[1490] = true, -- Curse of the Elements
-
-	-- Slow Casting
-	[73975] = true, -- Necrotic Strike
-	[5760] = true, -- Mind-numbing Poison
-	[109466] = true, -- Curse of Enfeeblement
-
 	-- Stuns
 	[408] = true, -- Kidney Shot
 	[1833] = true, -- Cheap Shot
@@ -376,7 +356,6 @@ C["debuffFilter"] = {
 
 	-- Taunt
 	[355] = true, -- Taunt
-	[1161] = true, -- Challenging Shout
 	[21008] = true, -- Mocking Blow
 	[62124] = true, -- Reckoning
 	[49576] = true, -- Death Grip
@@ -384,12 +363,6 @@ C["debuffFilter"] = {
 	[6795] = true, -- Growl
 	[2649] = true, -- Growl (pet)
 	[116189] = true, -- Provoke
-
-	-- Disarm
-	[676] = true, -- Disarm
-	[124539] = true, -- Disarm (Voidwalker)
-	[51722] = true, -- Dismantle
-	[117368] = true, -- Grapple Weapon
 
 	-- Crowd control
 	[118] = true, -- Polymorph (sheep)
@@ -403,11 +376,9 @@ C["debuffFilter"] = {
 	[20066] = true, -- Repentance
 	[9484] = true, -- Shackle Undead
 	[339] = true, -- Entangling Roots
-	[2637] = true, -- Hibernate
 	[710] = true, -- Banish
 	[19386] = true, -- Wyvern Sting
 	[51514] = true, -- Hex
-	[76780] = true, -- Bind Elemental
 	[5782] = true, -- Fear
 	[1499] = true, -- Freezing Trap (1?)
 	[3355] = true, -- Freezing Trap (2?)
@@ -432,15 +403,14 @@ C["dangerousBuffs"] = {
 	[51753] = true, -- Camouflage
 	[31224] = true, -- Cloak of Shadows
 	[74001] = true, -- Combat Readiness
-	[49028] = true, -- Dancing Rune Weapon (?)
 	[19263] = true, -- Deterrence
+	[122783] = true, -- Diffuse Magic
 	[47585] = true, -- Dispersion
 	[498] = true, -- Divine Protection
 	[642] = true, -- Divine Shield
 	[5277] = true, -- Evasion
-	[86669] = true, -- Guardian of Ancient Kings (holy)
-	[86659] = true, -- Guardian of Ancient Kings (protection)
-	[86698] = true, -- Guardian of Ancient Kings (retribution)
+	[110959] = true, -- Greater Invisibility
+	[86659] = true, -- Guardian of Ancient Kings
 	[47788] = true, -- Guardian Spirit
 	[1022] = true, -- Hand of Protection
 	[32182] = true, -- Heroism
@@ -449,7 +419,6 @@ C["dangerousBuffs"] = {
 	[11426] = true, -- Ice Barrier
 	[45438] = true, -- Ice Block
 	[48792] = true, -- Icebound Fortitude
-	[29166] = true, -- Innervate
 	[66] = true, -- Invisibility
 	[12975] = true, -- Last Stand
 	[1463] = true, -- Mana Shield
@@ -462,7 +431,8 @@ C["dangerousBuffs"] = {
 	[23920] = true, -- Spell Reflection
 	[2983] = true, -- Sprint
 	[80353] = true, -- Time Warp
-	[49016] = true, -- Unholy Frenzy
+	[122470] = true, -- Touch of Karma
+	[115176] = true, -- Zen Meditation
 }
 
 -- Debuffs healers don't want to see on raid frames
@@ -530,13 +500,19 @@ C["myBuffs"] = {
 
 C["allBuffs"] = {
 	[86657] = true, -- Ancient Guardian
-	[642] = true, -- Divine Shield
-	[47788] = true, -- Guardian Spirit
-	[33206] = true, -- Pain Suppression
 	[31850] = true, -- Ardent Defender
-	[61336] = true, -- Survival Instincts
+	[642] = true, -- Divine Shield
+	[110959] = true, -- Greater Invisibility
+	[86659] = true, -- Guardian of Ancient Kings
+	[47788] = true, -- Guardian Spirit
+	[45438] = true, -- Ice Block
 	[48792] = true, -- Icebound Fortitude
+	[66] = true, -- Invisibility
+	[12975] = true, -- Last Stand
+	[33206] = true, -- Pain Suppression
 	[871] = true, -- Shield Wall
+	[61336] = true, -- Survival Instincts
+	[122470] = true, -- Touch of Karma
 
 	[1022] = true, -- Hand of Protection
 	[1038] = true, -- Hand of Salvation

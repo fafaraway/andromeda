@@ -259,7 +259,7 @@ local StyleFrame = function(frame)
 	overlayRegion:SetTexture(nil)
 	castShield:SetTexture(nil)
 	castOverlay:SetTexture(nil)
-	stateIconRegion:SetTexture(nil)
+	stateIconRegion:SetAlpha(0)
 	bossIconRegion:SetTexture(nil)
 
 	CreateBD(healthBar, offset)

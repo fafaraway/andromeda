@@ -1,6 +1,6 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
-if not C.general.buffTracker then return end
+if not C.general.buffTracker or not C.unitframes.enable then return end
 
 local units = {
 	player = true,
@@ -78,13 +78,9 @@ local function createIcon(data)
 end
 
 local _, class = UnitClass("player")
-if (C.buffTracker and C.buffTracker[class]) then
-	for index in pairs(C.buffTracker) do
-		if index ~= class then
-			C.buffTracker[index] = nil
-		end
-	end
-	for i = 1, #C.buffTracker[class], 1 do
-		createIcon(C.buffTracker[class][i])
+if C.buffTracker and C.buffTracker[class] then
+	local buffTable = C.buffTracker[class]
+	for i = 1, #buffTable do
+		createIcon(buffTable[i])
 	end
 end

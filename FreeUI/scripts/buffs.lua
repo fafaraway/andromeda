@@ -51,9 +51,7 @@ local updateBuffAnchors = function()
 		buff = _G["BuffButton"..i]
 		if not buff.consolidated then
 			if not buff.styled then applySkin(buff) end
-			--[[buff:SetParent(BuffFrame)
-			buff.consolidated = nil
-			buff.parent = BuffFrame]]
+
 			buff:ClearAllPoints()
 			numBuffs = numBuffs + 1
 			index = numBuffs + slack
@@ -66,7 +64,6 @@ local updateBuffAnchors = function()
 				aboveBuff = buff
 			elseif index == 1 then
 				buff:SetPoint("TOPRIGHT", BuffFrame, "TOPRIGHT", 0, 0)
-				--aboveBuff = buff
 			else
 				if numBuffs == 1 then
 					buff:SetPoint("TOPRIGHT", ConsolidatedBuffs, "TOPLEFT", -3, 0)
@@ -126,8 +123,11 @@ end)
 
 for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 	local bu = _G["TempEnchant"..i]
+
+	bu:SetSize(26, 26)
 	bu:ClearAllPoints()
-	bu:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -10, 15+35*i)
+	bu:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -2, 31*i)
+
 	applySkin(bu)
 end
 

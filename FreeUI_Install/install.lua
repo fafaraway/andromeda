@@ -2,6 +2,8 @@ local F, C, L = unpack(FreeUI)
 
 local addon = ...
 
+local playerName = UnitName("player")
+
 -- Smooth bars
 
 local smoothing = {}
@@ -97,7 +99,7 @@ close:SetScript("OnClick", function()
 		finishedFunc = function(f) f:SetAlpha(1); f:Hide() end,
 		finishedArg1 = f,
 	})
-	DisableAddOn(addon)
+	DisableAddOn(addon, playerName)
 end)
 
 F.Reskin(option1)
@@ -223,7 +225,7 @@ local step4 = function()
 	option2:SetText("Finish")
 
 	option2:SetScript("OnClick", function()
-		DisableAddOn(addon)
+		DisableAddOn(addon, playerName)
 		ReloadUI()
 	end)
 end
@@ -295,7 +297,7 @@ local tut6 = function()
 			finishedFunc = function(f) f:Hide() end,
 			finishedArg1 = f,
 		})
-		DisableAddOn(addon)
+		DisableAddOn(addon, playerName)
 	end)
 	option2:SetScript("OnClick", step1)
 end
@@ -303,7 +305,7 @@ end
 local tut5 = function()
 	sb:SetValue(500)
 	header:SetText("5. /Commands")
-	body:SetText("Lastly, FreeUI includes useful slash commands. Below is a list.\n\n|cff00c1ff/freeui|r brings up a list of UI-specific commands (you might want to try this now). |cff00c1ff/en|r and |cff00c1ff/dis|r are used to quickly enable and disable addons. |cff00c1ff/rl|r reloads the UI.\n\n|cff00c1ff/tt|r lets you whisper your target. |cff00c1ff/rc|r initiates a ready check. |cff00c1ff/rolepoll|r or |cff00c1ff/rolecheck|r initiates a role check.\n\n|cff00c1ff/gm|r toggles the Help frame. |cff00c1ff/vol|r lets you set the master volume (0-1).")
+	body:SetText("Lastly, FreeUI includes useful slash commands. Below is a list.\n\n|cff00c1ff/freeui|r brings up a list of UI-specific commands (you might want to try this now). |cff00c1ff/en|r and |cff00c1ff/dis|r are used to quickly enable and disable addons. |cff00c1ff/rl|r reloads the UI.\n\n|cff00c1ff/rc|r initiates a ready check. |cff00c1ff/rolepoll|r or |cff00c1ff/rolecheck|r initiates a role check.\n\n|cff00c1ff/gm|r toggles the Help frame. |cff00c1ff/vol|r lets you set the master volume (0-1).")
 
 	sbt:SetText("5/6")
 
@@ -313,7 +315,7 @@ end
 local tut4 = function()
 	sb:SetValue(400)
 	header:SetText("4. Features (2)")
-	body:SetText("To copy text from the chat frame, shift-click the first chat tab, which will show on mouseover.\n\nThe minimap will display a text saying 'Mail' if you have unread mail.\n\nTo show the time manager and stopwatch, click the info text at the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
+	body:SetText("You can see how much money your other characters have by moving your mouse over the money display on the bag frame.\n\nTo copy text from the chat frame, shift-click the first chat tab, which will show when moving the cursor over the chat frame.\n\nTo change minimap tracking options, right-click the minimap.\n\nThe minimap will display a text saying 'Mail' if you have unread mail.\n\nTo show the time manager and stopwatch, click the info text in the middle of the panel at the bottom of the screen.\n\nTo collect mail money and items easily, click the button at the bottom of your inbox.\n\nThe rest should explain itself. If you have any questions, you can always ask.")
 
 	sbt:SetText("4/6")
 
@@ -323,7 +325,7 @@ end
 local tut3 = function()
 	sb:SetValue(300)
 	header:SetText("3. Features")
-	body:SetText("There are a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a selfbuff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options. Examples are included. Selfbuffs are already set up, so no worries.\n\nYou can mark mobs by alt+shift-clicking mobs in the game world and selecting an icon from the dropdown menu.\n\nMoving the cursor to the bottom of the screen reveals a panel with buttons for toggling the micro menu, chat menu, DBM and the damage meter.")
+	body:SetText("There are a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a self-buff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options file in the FreeUI folder, which can be edited with any text editor. Examples are included. Self-buffs are already set up, so no worries.\n\nYou can mark players and NPCs by alt+shift-clicking them in the game world and selecting an icon from the dropdown menu.\n\nMoving the cursor to the bottom of the screen reveals a panel with buttons for toggling the micro menu, chat menu, DBM and the damage meter.")
 
 	sbt:SetText("3/6")
 
@@ -332,8 +334,8 @@ end
 
 local tut2 = function()
 	sb:SetValue(200)
-	header:SetText("2. Unitframes")
-	body:SetText("FreeUI includes an embedded version of oUF. This handles all of the unitframes on the screen, the buffs and debuffs, and the class-specific elements like Holy Power.\n\nIf you play as a healer, you may want to enable healer unitframes. Type |cff00c1ff/freeui dps/heal(er)|r to switch between layouts.\n\nThe source code for the unitframes is located in FreeUI/scripts/unitframes.lua. If you're any good with lua, you can edit them there.\n\nMost of the basics can be changed in the options file, to make it easier.")
+	header:SetText("2. Unit frames")
+	body:SetText("FreeUI includes an embedded version of oUF. This handles all of the unit frames on the screen, the buffs and debuffs, and the class-specific elements like Holy Power.\n\nIf you play as a healer, you may want to enable healer unit frames. Type |cff00c1ff/freeui dps/heal(er)|r to switch between layouts.\n\nThe source code for the unit frames is located in FreeUI/scripts/unitframes.lua. If you're any good with lua, you can edit them there.\n\nMost of the basics can be changed from the in-game options, to make it easier.")
 
 	sbt:SetText("2/6")
 
@@ -346,7 +348,7 @@ local tut1 = function()
 	sb:SetValue(100)
 	sb:GetStatusBarTexture():SetGradient("VERTICAL", 0, 0.65, .9, .1, .9, 1)
 	header:SetText("1. Essentials")
-	body:SetText("Good! First, here's a few things that's important to know about this UI.\n\nFor starters, the options for this UI can be found in FreeUI/options.lua, and can be opened with any simple text editor.\n\nYou might want to know about the bags as well. It's pretty simple.\n\nYour bags consist of an all-in-one window. To show which bags are equipped, mouseover just above the top of the bag or bank window.\n\nTo search, mouseover just below the bag and click the search box. You can search for item names, or slots; e.g. 'trinket' will highlight both items with 'trinket' in their name as well as all of your trinkets.")
+	body:SetText("Good! First, here are a few things that are important to know about this UI.\n\nFor starters, you can access the options for this UI by clicking the FreeUI button from the game menu, or by typing |cff00c1ff/freeui|r.\n\nYou might want to know about the bags as well. It's pretty simple.\n\nYour bags are merged into an all-in-one window. To show which bags are equipped, move the cursor just above the top of the bag or bank window. You can also configure sorting options for each bag by clicking its gear icon.\n\nTo search, click the search box near the bottom. You can search for item names, or slots; e.g. 'trinket' will highlight both items with 'trinket' in their name as well as all of your trinkets.\n\nTo sort your items, click the button in the bottom right corner.")
 
 	sbt:SetText("1/6")
 

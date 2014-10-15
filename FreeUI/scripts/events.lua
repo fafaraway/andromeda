@@ -2,11 +2,49 @@ local F, C = unpack(FreeUI)
 
 if not C.notifications.enable then return end
 
-local checkEvents = C.notifications.checkEvents
-local checkGuildEvents = C.notifications.checkGuildEvents
-
 local numInvites = 0 -- store amount of invites to compare later, and only show banner when invites differ; events fire multiple times
 local hasMail = false -- same with mail
+
+-- [[ Functions ]]
+
+-- Bags
+
+local alertBagsFull
+local shouldAlertBags = false
+
+local last = 0
+local function delayBagCheck(self, elapsed)
+	last = last + elapsed
+	if last > 1 then
+		self:SetScript("OnUpdate", nil)
+		last = 0
+		shouldAlertBags = true
+		alertBagsFull(self)
+	end
+end
+
+alertBagsFull = function(self)
+	local totalFree, freeSlots, bagFamily = 0
+	for i = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
+		freeSlots, bagFamily = GetContainerNumFreeSlots(i)
+		if bagFamily == 0 then
+			totalFree = totalFree + freeSlots
+		end
+	end
+
+	if totalFree == 0 then
+		if shouldAlertBags then
+			F.Notification("Bags", "Your bags are full.", ToggleBackpack, "Interface\\Icons\\inv_misc_bag_08")
+			shouldAlertBags = false
+		else
+			self:SetScript("OnUpdate", delayBagCheck)
+		end
+	else
+		shouldAlertBags = false
+	end
+end
+
+-- Mail
 
 local function alertMail()
 	local newMail = HasNewMail()
@@ -17,6 +55,8 @@ local function alertMail()
 		end
 	end
 end
+
+-- Calendar
 
 local function GetGuildInvites()
 	local numGuildInvites = 0
@@ -66,14 +106,54 @@ local function alertGuildEvents()
 	end
 end
 
+-- [[ Handle events ]]
+
 local f = CreateFrame("Frame", nil, frame)
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+if C.notifications.checkBagsFull then
+	f:RegisterEvent("BAG_UPDATE")
+end
+
+if C.notifications.checkGuildEvents then
+	f:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
+end
 if C.notifications.checkMail then
 	f:RegisterEvent("UPDATE_PENDING_MAIL")
 end
-if checkGuildEvents then
-	f:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
-end
+
+F.AddOptionsCallback("notifications", "checkBagsFull", function()
+	if C.notifications.checkBagsFull then
+		f:RegisterEvent("BAG_UPDATE")
+		alertBagsFull(f)
+	else
+		f:UnregisterEvent("BAG_UPDATE")
+	end
+end)
+
+F.AddOptionsCallback("notifications", "checkEvents", function()
+	if C.notifications.checkEvents or C.notifications.checkGuildEvents then
+		f:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
+		alertEvents()
+	else
+		f:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
+	end
+
+	if not C.notifications.checkEvents then
+		numInvites = 0
+	end
+end)
+
+F.AddOptionsCallback("notifications", "checkGuildEvents", function()
+	checkGuildEvents = C.notifications.checkGuildEvents
+
+	if C.notifications.checkGuildEvents then
+		f:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
+		alertGuildEvents()
+	else
+		f:UnregisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
+	end
+end)
 
 F.AddOptionsCallback("notifications", "checkMail", function()
 	if C.notifications.checkMail then
@@ -86,57 +166,34 @@ F.AddOptionsCallback("notifications", "checkMail", function()
 	end
 end)
 
-F.AddOptionsCallback("notifications", "checkEvents", function()
-	checkEvents = C.notifications.checkEvents
-
-	if checkEvents or checkGuildEvents then
-		f:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
-		alertEvents()
-	else
-		f:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
-	end
-
-	if not checkEvents then
-		numInvites = 0
-	end
-end)
-
-F.AddOptionsCallback("notifications", "checkGuildEvents", function()
-	checkGuildEvents = C.notifications.checkGuildEvents
-
-	if checkGuildEvents then
-		f:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
+f:SetScript("OnEvent", function(self, event)
+	if event == "BAG_UPDATE" then
+		alertBagsFull(self)
+	elseif event == "UPDATE_PENDING_MAIL" then
+		alertMail()
+	elseif event == "CALENDAR_UPDATE_PENDING_INVITES" then
+		if C.notifications.checkEvents then
+			alertEvents()
+		end
+		if C.notifications.checkGuildEvents then
+			alertGuildEvents()
+		end
+	elseif event == "CALENDAR_UPDATE_GUILD_EVENTS" then
 		alertGuildEvents()
-	else
-		f:UnregisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
-	end
-end)
-
-f:SetScript("OnEvent", function(_, event)
-	if event == "PLAYER_ENTERING_WORLD" then
-		if checkEvents or checkGuildEvents then
+	else -- PLAYER_ENTERING_WORLD
+		if C.notifications.checkEvents or C.notifications.checkGuildEvents then
 			OpenCalendar()
 			f:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
 		end
 
-		if checkEvents then
+		if C.notifications.checkEvents then
 			alertEvents()
 		end
-		if checkGuildEvents then
+
+		if C.notifications.checkGuildEvents then
 			alertGuildEvents()
 		end
 
 		f:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	elseif event == "UPDATE_PENDING_MAIL" then
-		alertMail()
-	elseif event == "CALENDAR_UPDATE_PENDING_INVITES" then
-		if checkEvents then
-			alertEvents()
-		end
-		if checkGuildEvents then
-			alertGuildEvents()
-		end
-	else
-		alertGuildEvents()
 	end
 end)

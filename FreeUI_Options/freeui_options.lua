@@ -79,7 +79,7 @@ local function toggleChildren(self, checked)
 end
 
 local function toggle(self)
-	local checked = self:GetChecked() == 1
+	local checked = self:GetChecked()
 
 	if checked then
 		PlaySound("igMainMenuOptionCheckBoxOn")
@@ -134,7 +134,11 @@ local function onValueChanged(self, value)
 	if userChangedSlider then
 		SaveValue(self, value)
 
-		setReloadNeeded(true)
+		if self.needsReload then
+			-- if not true, don't set to false - something else might have changed it
+			setReloadNeeded(true)
+		end
+
 		overrideReload = true
 	end
 end
@@ -185,10 +189,10 @@ local function onSliderEnterPressed(self)
 	self:ClearFocus()
 end
 
-ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, alignRight, needsReload)
+ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, needsReload)
 	local slider = createSlider(parent, option, lowText, highText, low, high, step, needsReload)
 
-	local f = CreateFrame("EditBox", baseName..option.."TextInput", slider)
+	local f = CreateFrame("EditBox", baseName..option.."TextInput", slider, "InputBoxTemplate")
 	f:SetAutoFocus(false)
 	f:SetWidth(60)
 	f:SetHeight(20)
@@ -199,6 +203,7 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 
 	f:SetScript("OnEscapePressed", onSliderEscapePressed)
 	f:SetScript("OnEnterPressed", onSliderEnterPressed)
+	f:SetScript("OnEditFocusGained", nil)
 	f:SetScript("OnEditFocusLost", onSliderEnterPressed)
 
 	slider.textInput = f
@@ -381,7 +386,7 @@ ns.addSubCategory = function(category, name)
 	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
 	line:SetTexture(1, 1, 1, .2)
 
-	return header
+	return header, line
 end
 
 -- [[ Init ]]
@@ -521,7 +526,7 @@ init:SetScript("OnEvent", function()
 
 	FreeUIOptionsPanel.ProfileBox:SetChecked(FreeUIOptionsGlobal[C.myRealm][C.myName])
 	FreeUIOptionsPanel.ProfileBox:SetScript("OnClick", function(self)
-		FreeUIOptionsGlobal[C.myRealm][C.myName] = self:GetChecked() == 1
+		FreeUIOptionsGlobal[C.myRealm][C.myName] = self:GetChecked()
 		changeProfile()
 		displaySettings()
 	end)
@@ -607,6 +612,10 @@ init:SetScript("OnEvent", function()
 	F.AddOptionsCallback("appearance", "fontOutline", updateFontSamples)
 	F.AddOptionsCallback("appearance", "fontOutlineMonochrome", updateFontSamples)
 	F.AddOptionsCallback("appearance", "fontShadow", updateFontSamples)
+
+	FreeUIOptionsPanel.notifications.previewButton:SetScript("OnClick", function()
+		F.Notification("FreeUI", ns.localization.notificationPreviewText)
+	end)
 
 	displaySettings()
 end)

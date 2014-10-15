@@ -1,4 +1,4 @@
-Copyright © 2010-2013 Haleth/Freethinker ( http://www.wowinterface.com/forums/member.php?u=110142 )
+﻿Copyright © 2010-2014 Haleth/Lightsword ( http://www.wowinterface.com/forums/member.php?u=110142 )
 
 The contents of this addon, excluding third-party resources, are
 copyrighted to its authors with all rights reserved.

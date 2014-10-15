@@ -1,6 +1,6 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
-if C.general.buffreminder == false then return end
+if not C.general.buffreminder then return end
 
 local class = select(2, UnitClass("Player"))
 local buffs = C.selfbuffs[class]
@@ -80,10 +80,10 @@ frame:RegisterEvent("PLAYER_REGEN_DISABLED")
 
 frame:SetScript("OnEvent", OnEvent)
 
--- avoid an extra comparison every time UNIT_AURA fires
-local mover = CreateFrame("Frame")
-mover:RegisterEvent("PlAYER_LOGIN")
-mover:SetScript("OnEvent", function()
-	frame:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
-	mover = nil
+F.RegisterEvent("PLAYER_LOGIN", function()
+	if C.unitframes.enable then
+		frame:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 42)
+	else
+		frame:SetPoint("CENTER", UIParent, 0, -100)
+	end
 end)

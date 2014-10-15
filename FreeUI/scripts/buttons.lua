@@ -13,8 +13,13 @@ local showHotKey = C.actionbars.hotkey
 
 F.AddOptionsCallback("actionbars", "hotkey", function()
 	showHotKey = C.actionbars.hotkey
+
 	for k, frame in pairs(ActionBarButtonEventsFrame.frames) do
 		ActionButton_UpdateHotkeys(frame, frame.buttonType)
+	end
+
+	for i = 1, NUM_PET_ACTION_SLOTS do
+		PetActionButton_SetHotkeys(_G["PetActionButton"..i])
 	end
 end)
 
@@ -28,7 +33,7 @@ local function updateHotkey(self)
 			ho:SetPoint("CENTER", 1, 0)
 			F.SetFS(ho)
 			ho:SetJustifyH("RIGHT")
-			ho:SetDrawLayer("OVERLAY")
+			ho:SetDrawLayer("OVERLAY", 1)
 			self.styledHotkey = true
 		end
 
@@ -53,6 +58,8 @@ local function updateHotkey(self)
 
 			ho:SetText("|cffffffff"..text)
 		end
+
+		ho:Show()
 	else
 		ho:Hide()
 	end
@@ -113,6 +120,7 @@ local function styleActionButton(bu)
 
 	_G[name.."Name"]:Hide()
 	_G[name.."Border"]:SetTexture("")
+	bu.NewActionTexture:SetTexture("")
 
 	F.SetFS(co)
 	co:ClearAllPoints()
@@ -168,6 +176,7 @@ local function stylePetButton(bu)
 	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -1, 1)
 	ic:SetDrawLayer("OVERLAY")
 
+	updateHotkey(bu)
 	if not bu.bg then applyBackground(bu) end
 
 	bu.styled = true
@@ -271,6 +280,7 @@ local function init()
 	styleExtraActionButton(ExtraActionButton1)
 
 	hooksecurefunc("ActionButton_UpdateHotkeys", updateHotkey)
+	hooksecurefunc("PetActionButton_SetHotkeys", updateHotkey)
 	hooksecurefunc("ActionButton_UpdateFlyout", styleflyout)
 end
 

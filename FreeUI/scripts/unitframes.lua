@@ -122,16 +122,19 @@ end
 
 --[[ Tags ]]
 
+oUF.Tags.Methods['free:playerHealth'] = function(unit)
+	if UnitIsDead(unit) or UnitIsGhost(unit) then return end
+
+	return siValue(UnitHealth(unit))
+end
+oUF.Tags.Events['free:playerHealth'] = oUF.Tags.Events.missinghp
+
 oUF.Tags.Methods['free:health'] = function(unit)
-	if(not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
+	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
 
-	if unit == "player" then
-		return siValue(min)
-	else
-		return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100)
-	end
+	return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100)
 end
 oUF.Tags.Events['free:health'] = oUF.Tags.Events.missinghp
 
@@ -141,14 +144,6 @@ oUF.Tags.Methods['free:bosshealth'] = function(unit)
 	return val or ""
 end
 oUF.Tags.Events['free:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
-
-oUF.Tags.Methods['free:maxhealth'] = function(unit)
-	if(not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
-
-	local max = UnitHealthMax(unit)
-	return max
-end
-oUF.Tags.Events['free:maxhealth'] = oUF.Tags.Events.missinghp
 
 local function shortName(unit)
 	name = UnitName(unit)
@@ -189,7 +184,6 @@ oUF.Tags.Events['free:missinghealth'] = oUF.Tags.Events.missinghp
 
 oUF.Tags.Methods['free:power'] = function(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)
-	local _, class = UnitClass(unit)
 	if(min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
 	return siValue(min)
@@ -422,7 +416,7 @@ local Shared = function(self, unit, isSingle)
 		F.CreateBD(abd)
 
 		AltPowerBar.Text = F.CreateFS(AltPowerBar, C.FONT_SIZE_NORMAL, "RIGHT")
-		AltPowerBar.Text:SetPoint("RIGHT", oUF_FreePlayer, "TOPRIGHT", 0, 6)
+		AltPowerBar.Text:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 3)
 
 		AltPowerBar:SetScript("OnValueChanged", function(_, value)
 			local min, max = AltPowerBar:GetMinMaxValues()
@@ -436,13 +430,6 @@ local Shared = function(self, unit, isSingle)
 		end
 
 		SmoothBar(AltPowerBar)
-
-		AltPowerBar:HookScript("OnShow", function()
-			oUF_FreePlayer.MaxHealthPoints:Hide()
-		end)
-		AltPowerBar:HookScript("OnHide", function()
-			oUF_FreePlayer.MaxHealthPoints:Show()
-		end)
 
 		AltPowerBar:EnableMouse(true)
 
@@ -588,27 +575,21 @@ local UnitSpecific = {
 		local Castbar = self.Castbar
 		local Spark = Castbar.Spark
 
+		-- Health and power
+
 		Health:SetHeight(playerHeight - powerHeight - 1)
 
 		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "LEFT")
-		self.MaxHealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
-
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
-		self.MaxHealthPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
-
-		self:Tag(HealthPoints, '[dead][offline][free:health]')
-		self:Tag(self.MaxHealthPoints, '[free:maxhealth]')
+		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
 		Health.value = HealthPoints
 
-		local _, UnitPowerType = UnitPowerType("player")
-		if UnitPowerType == "MANA" or class == "DRUID" then
-			local PowerPoints = F.CreateFS(Power)
-			PowerPoints:SetPoint("LEFT", HealthPoints, "RIGHT", 2, 0)
-			PowerPoints:SetTextColor(.4, .7, 1)
+		local PowerPoints = F.CreateFS(Power, C.FONT_SIZE_NORMAL, "RIGHT")
+		PowerPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
+		PowerPoints:SetTextColor(.4, .7, 1)
+		self:Tag(PowerPoints, '[free:power]')
 
-			self:Tag(PowerPoints, '[free:power]')
-			Power.value = PowerPoints
-		end
+		-- Cast bar
 
 		Castbar.Width = self:GetWidth()
 		Spark:SetHeight(self.Health:GetHeight())
@@ -653,6 +634,8 @@ local UnitSpecific = {
 			IconFrame:SetSize(44, 44)
 		end
 
+		-- PVP
+
 		if C.unitframes.pvp then
 			local PvP = F.CreateFS(self)
 			PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
@@ -681,6 +664,8 @@ local UnitSpecific = {
 			PvP.Override = UpdatePvP
 		end
 
+		-- Debuffs
+
 		-- We position these later on
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "TOPRIGHT"
@@ -696,6 +681,8 @@ local UnitSpecific = {
 
 		self.Debuffs = Debuffs
 		Debuffs.PostUpdateIcon = PostUpdateIcon
+
+		-- Class specific
 
 		if class == "DEATHKNIGHT" and C.classmod.deathknight then
 			local runes = CreateFrame("Frame", nil, self)
@@ -1094,6 +1081,8 @@ local UnitSpecific = {
 		end
 		moveDebuffAnchors()
 
+		-- Counter bar
+
 		local CounterBar = CreateFrame("StatusBar", nil, self)
 		CounterBar:SetWidth(playerWidth)
 		CounterBar:SetHeight(16)
@@ -1122,15 +1111,19 @@ local UnitSpecific = {
 
 		self.CounterBar = CounterBar
 
+		-- Status indicator
+
 		local statusIndicator = CreateFrame("Frame")
 		local statusText = F.CreateFS(Health)
-		statusText:SetPoint("BOTTOM", Health, "TOP", 0, 3)
+		statusText:SetPoint("LEFT", HealthPoints, "RIGHT", 10, 0)
 
 		local function updateStatus()
 			if UnitAffectingCombat("player") and C.unitframes.statusIndicatorCombat then
 				statusText:SetText("!")
+				statusText:SetTextColor(1, 0, 0)
 			elseif IsResting() then
 				statusText:SetText("Zzz")
+				statusText:SetTextColor(.8, .8, .8)
 			else
 				statusText:SetText("")
 			end
@@ -1166,6 +1159,12 @@ local UnitSpecific = {
 		F.AddOptionsCallback("unitframes", "statusIndicatorCombat", checkEvents)
 
 		statusIndicator:SetScript("OnEvent", updateStatus)
+
+		-- Exit vehicle button
+
+		if C.actionbars.enable then
+			FreeUI_LeaveVehicle:SetPoint("RIGHT", self, "LEFT", -9, 0)
+		end
 	end,
 
 	target = function(self, ...)
@@ -1179,18 +1178,14 @@ local UnitSpecific = {
 		Health:SetHeight(targetHeight - powerHeight - 1)
 
 		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "LEFT")
-
-		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 2)
-
+		HealthPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
 
 		local PowerPoints = F.CreateFS(Power)
-		PowerPoints:SetPoint("BOTTOMLEFT", Health.value, "BOTTOMRIGHT")
-
+		PowerPoints:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
+		PowerPoints:SetTextColor(.4, .7, 1)
 		self:Tag(PowerPoints, '[free:power]')
-
-		Power.value = PowerPoints
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7 + C.appearance.fontSizeNormal + (C.unitframes.targettarget and 10 or 0))
@@ -1237,7 +1232,7 @@ local UnitSpecific = {
 		self.Iconbg:SetTexture(C.media.backdrop)
 
 		local Name = F.CreateFS(self)
-		Name:SetPoint("BOTTOMLEFT", Power.value, "BOTTOMRIGHT")
+		Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
 		Name:SetPoint("RIGHT", self)
 		Name:SetJustifyH("RIGHT")
 		Name:SetTextColor(1, 1, 1)
@@ -1292,11 +1287,11 @@ local UnitSpecific = {
 			QuestIcon.PostUpdate = function(self, isQuestBoss)
 				if isQuestBoss then
 					Name:ClearAllPoints()
-					Name:SetPoint("BOTTOMLEFT", Power.value, "BOTTOMRIGHT")
+					Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
 					Name:SetPoint("RIGHT", QuestIcon, "LEFT", 0, 0)
 				else
 					Name:ClearAllPoints()
-					Name:SetPoint("BOTTOMLEFT", Power.value, "BOTTOMRIGHT")
+					Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
 					Name:SetPoint("RIGHT", self)
 				end
 			end
@@ -1471,7 +1466,7 @@ local UnitSpecific = {
 
 		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
-		self:Tag(HealthPoints, '[dead][free:health]')
+		self:Tag(HealthPoints, '[dead][offline][free:health]')
 
 		Health.value = HealthPoints
 

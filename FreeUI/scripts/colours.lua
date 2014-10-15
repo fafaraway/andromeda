@@ -214,43 +214,25 @@ end
 local function updateGuild()
 	if currentView == "tradeskill" then return end
 
-	local playerArea = GetRealZoneText()
-	local buttons = GuildRosterContainer.buttons
+	local myZone = GetRealZoneText()
 
-	for i, button in ipairs(buttons) do
-		if(button:IsShown() and button.online and button.guildIndex) then
+	for i, button in ipairs(GuildRosterContainer.buttons) do
+		if button:IsShown() and button.online and button.guildIndex then
 			local fullName, rank, rankIndex, level, class, zone, note, officernote, online, isAway, classFileName, achievementPnts, achievementRank, isMobile = GetGuildRosterInfo(button.guildIndex)
-			local displayedName = classColor[classFileName] .. Ambiguate(fullName, "guild")
-			if isMobile then
-				if isAway == 2 then
-					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-BusyMobile:14:14:0:0:16:16:0:16:0:16|t"..displayedName
-				elseif isAway == 1 then
-					displayedName = "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat-AwayMobile:14:14:0:0:16:16:0:16:0:16|t"..displayedName
-				else
-					displayedName = ChatFrame_GetMobileEmbeddedTexture(73/255, 177/255, 73/255)..displayedName
-				end
-			end
 
 			if currentView == "playerStatus" then
 				button.string1:SetText(diffColor[level]..level)
-				button.string2:SetText(displayedName)
-				if not isMobile and zone == playerArea then
+
+				if not (isMobile and not online) and zone == myZone then
 					button.string3:SetText("|cff00ff00"..zone)
+					button.string3:SetTextColor(0, 1, 0)
 				end
 			elseif currentView == "guildStatus" then
-				button.string1:SetText(displayedName)
 				if rankIndex and rank then
 					button.string2:SetText(guildRankColor[rankIndex]..rank)
 				end
-			elseif currentView == "achievement" then
+			else
 				button.string1:SetText(diffColor[level]..level)
-				button.string2:SetText(displayedName)
-			elseif currentView == "weeklyxp" or currentView == "totalxp" then
-				button.string1:SetText(diffColor[level]..level)
-				button.string2:SetText(displayedName)
-			elseif currentView == "reputation" then
-				button.string1:SetText(diffColor[level]..level)
-				button.string2:SetText(displayedName)
 			end
 		end
 	end
@@ -268,6 +250,15 @@ hooksecurefunc("GuildFrame_LoadUI", function()
 	hooksecurefunc("GuildRoster_Update", updateGuild)
 	hooksecurefunc(GuildRosterContainer, "update", updateGuild)
 	hooksecurefunc("GuildRoster_UpdateTradeSkills", updateTradeSkills)
+
+	hooksecurefunc("GuildRosterButton_SetStringText", function(buttonString, text, isOnline, class)
+		if isOnline then
+			if class then
+				local c = C.classcolours[class]
+				buttonString:SetTextColor(c.r, c.g, c.b)
+			end
+		end
+	end)
 end)
 
 hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, index)
