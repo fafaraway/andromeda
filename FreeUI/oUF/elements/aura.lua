@@ -33,7 +33,8 @@ local createAuraIcon = function(icons, index)
 
 	local cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 	cd:SetAllPoints(button)
-	cd:SetReverse()
+	cd:SetDrawEdge(false)
+	cd:SetReverse(true)
 
 	local icon = button:CreateTexture(nil, "BORDER")
 	icon:SetAllPoints(button)
