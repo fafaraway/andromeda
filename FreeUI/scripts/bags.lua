@@ -179,11 +179,11 @@ F.CreateBD(holder, .6)
 
 local ReanchorButtons = function()
 	table.wipe(buttons)
-	for f = CheckSlots(), 1, -1 do
+	for f = 1, CheckSlots() do
 		con = "ContainerFrame"..f
 		HideBag(con)
 
-		for i = 1, GetContainerNumSlots(_G[con]:GetID()) do
+		for i = GetContainerNumSlots(_G[con]:GetID()), 1, -1 do
 			bu = _G[con.."Item"..i]
 			RestyleButton(bu)
 			tinsert(buttons, bu)
