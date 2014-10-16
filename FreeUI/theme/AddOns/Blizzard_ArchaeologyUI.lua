@@ -21,6 +21,7 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	ArchaeologyFrameCompletedPageTitleTop:SetTextColor(1, 1, 1)
 	ArchaeologyFrameCompletedPageTitleMid:SetTextColor(1, 1, 1)
 	ArchaeologyFrameCompletedPagePageText:SetTextColor(1, 1, 1)
+	ArchaeologyFrameSummaryPagePageText:SetTextColor(1, 1, 1)
 
 	for i = 1, ARCHAEOLOGY_MAX_RACES do
 		_G["ArchaeologyFrameSummaryPageRace"..i]:GetRegions():SetTextColor(1, 1, 1)
@@ -58,6 +59,10 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	F.ReskinArrow(ArchaeologyFrameCompletedPageNextPageButton, "right")
 	ArchaeologyFrameCompletedPagePrevPageButtonIcon:Hide()
 	ArchaeologyFrameCompletedPageNextPageButtonIcon:Hide()
+	F.ReskinArrow(ArchaeologyFrameSummaryPagePrevPageButton, "left")
+	F.ReskinArrow(ArchaeologyFrameSummaryPageNextPageButton, "right")
+	ArchaeologyFrameSummaryPagePrevPageButtonIcon:Hide()
+	ArchaeologyFrameSummaryPageNextPageButtonIcon:Hide()
 
 	ArchaeologyFrameRankBarBorder:Hide()
 	ArchaeologyFrameRankBarBackground:Hide()
