@@ -366,7 +366,6 @@ ReagentBankFrameUnlockInfo:ClearAllPoints()
 ReagentBankFrameUnlockInfo:SetPoint("TOPLEFT", bankholder)
 ReagentBankFrameUnlockInfo:SetPoint("BOTTOMRIGHT", bankholder, 0, 19)
 ReagentBankFrameUnlockInfo:SetFrameStrata("HIGH")
-ReagentBankFrameUnlockInfo:SetFrameLevel(8)
 ReagentBankFrameUnlockInfo:EnableMouse(true)
 
 ReagentBankFrameUnlockInfoText:SetWidth(420)
@@ -423,6 +422,11 @@ local ReanchorReagentBankButtons = function()
 
 	if not reagentButtonsMoved then
 		MoveButtons(bankbuttons, bankholder)
+
+		local itemFrameLevel = ReagentBankFrameItem1:GetFrameLevel()
+		if ReagentBankFrameUnlockInfo:GetFrameLevel() <= itemFrameLevel then
+			ReagentBankFrameUnlockInfo:SetFrameLevel(itemFrameLevel + 1)
+		end
 
 		cachedReagentBankWidth = bankholder:GetWidth()
 		cachedReagentBankHeight = bankholder:GetHeight()
