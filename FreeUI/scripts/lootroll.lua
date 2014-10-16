@@ -50,7 +50,6 @@ local function onUpdate(self)
 		else
 			ShoppingTooltip1:Hide()
 			ShoppingTooltip2:Hide()
-			ShoppingTooltip3:Hide()
 		end
 
 		if IsModifiedClick("DRESSUP") then
