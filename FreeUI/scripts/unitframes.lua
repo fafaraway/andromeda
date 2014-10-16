@@ -777,16 +777,6 @@ local UnitSpecific = {
 			glow:SetPoint("TOPLEFT", -6, 6)
 			glow:SetPoint("BOTTOMRIGHT", 6, -6)
 
-			local hasEclipse = function(self, unit)
-				if self.hasSolarEclipse then
-					glow:SetBackdropBorderColor(.80, .82, .60, 1)
-				elseif self.hasLunarEclipse then
-					glow:SetBackdropBorderColor(.30, .52, .90, 1)
-				else
-					glow:SetBackdropBorderColor(0, 0, 0, 0)
-				end
-			end
-
 			local LunarBar = CreateFrame("StatusBar", nil, eclipseBar)
 			LunarBar:SetPoint("LEFT", eclipseBar, "LEFT")
 			LunarBar:SetSize(eclipseBar:GetWidth(), eclipseBar:GetHeight())
@@ -817,8 +807,6 @@ local UnitSpecific = {
 
 			self.EclipseBar = eclipseBar
 
-			self.EclipseBar.PostUnitAura = hasEclipse
-
 			eclipseBar:RegisterEvent("PLAYER_REGEN_ENABLED")
 			eclipseBar:RegisterEvent("PLAYER_REGEN_DISABLED")
 			eclipseBar:HookScript("OnEvent", function(self, event)
@@ -829,16 +817,17 @@ local UnitSpecific = {
 				end
 			end)
 
-			self.EclipseBar.PostUpdatePower = function(self)
-				if GetEclipseDirection() == "sun" then
-					eclipseBarText:SetTextColor(.30, .52, .90)
-				elseif GetEclipseDirection() == "moon" then
-					eclipseBarText:SetTextColor(.80, .82, .60)
+			eclipseBar.PostUnitAura = function(self, unit)
+				if self.hasSolarEclipse then
+					glow:SetBackdropBorderColor(.80, .82, .60, 1)
+				elseif self.hasLunarEclipse then
+					glow:SetBackdropBorderColor(.30, .52, .90, 1)
 				else
-					eclipseBarText:SetTextColor(1, 1, 1)
+					glow:SetBackdropBorderColor(0, 0, 0, 0)
 				end
+			end
 
-				local power = UnitPower("player", SPELL_POWER_ECLIPSE)
+			eclipseBar.PostUpdatePower = function(self, unit, power)
 				if power == 0 then
 					eclipseBarText:SetText("")
 				else
@@ -846,7 +835,17 @@ local UnitSpecific = {
 				end
 			end
 
-			self.EclipseBar.PostUpdateVisibility = moveDebuffAnchors
+			eclipseBar.PostDirectionChange = function(self)
+				if self.directionIsLunar then
+					eclipseBarText:SetTextColor(.80, .82, .60)
+				elseif self.direction == "sun" then
+					eclipseBarText:SetTextColor(.30, .52, .90)
+				else
+					eclipseBarText:SetTextColor(1, 1, 1)
+				end
+			end
+
+			eclipseBar.PostUpdateVisibility = moveDebuffAnchors
 
 			self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
 			self.AltPowerBar:HookScript("OnHide", moveDebuffAnchors)
