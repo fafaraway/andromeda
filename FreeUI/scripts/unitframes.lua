@@ -835,16 +835,12 @@ local UnitSpecific = {
 						eclipseBarText:SetText("")
 					else
 						eclipseBarText:SetText(math.abs(power))
-					end
-				end
 
-				eclipseBar.PostDirectionChange = function(self)
-					if self.directionIsLunar then
-						eclipseBarText:SetTextColor(.80, .82, .60)
-					elseif self.direction == "sun" then
-						eclipseBarText:SetTextColor(.30, .52, .90)
-					else
-						eclipseBarText:SetTextColor(1, 1, 1)
+						if power < 0 then
+							eclipseBarText:SetTextColor(.30, .52, .90)
+						else
+							eclipseBarText:SetTextColor(.80, .82, .60)
+						end
 					end
 				end
 
