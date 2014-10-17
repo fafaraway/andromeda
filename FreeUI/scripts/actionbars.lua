@@ -38,7 +38,7 @@ bar2:SetHeight(26)
 MultiBarBottomLeft:SetParent(bar2)
 MultiBarBottomLeft:EnableMouse(false)
 
-for i=1, 12 do
+for i = 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["MultiBarBottomLeftButton"..i]
 	button:ClearAllPoints()
 	button:SetSize(26, 26)
@@ -61,7 +61,7 @@ bar3:SetHeight(26)
 MultiBarBottomRight:SetParent(bar3)
 MultiBarBottomRight:EnableMouse(false)
 
-for i=1, 12 do
+for i= 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["MultiBarBottomRightButton"..i]
 	button:ClearAllPoints()
 	button:SetSize(26, 26)
@@ -109,7 +109,7 @@ bar4:SetPoint("RIGHT", -30, 0)
 MultiBarRight:SetParent(bar4)
 MultiBarRight:EnableMouse(false)
 
-for i=1, 12 do
+for i = 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["MultiBarRightButton"..i]
 	button:ClearAllPoints()
 	button:SetSize(26, 26)
@@ -133,7 +133,7 @@ bar5:SetPoint("RIGHT", -57, 0)
 MultiBarLeft:SetParent(bar5)
 MultiBarLeft:EnableMouse(false)
 
-for i=1, 12 do
+for i = 1, NUM_ACTIONBAR_BUTTONS do
 	local button = _G["MultiBarLeftButton"..i]
 	button:ClearAllPoints()
 	button:SetSize(26, 26)
@@ -311,21 +311,34 @@ end)
 
 --[[ Right bars on mouseover ]]
 
-if C.actionbars.rightbars_mouseover == true then
+if C.actionbars.rightbars_mouseover then
 	bar4:EnableMouse(true)
 	bar5:EnableMouse(true)
 
+	local function setButtonAlpha(alpha)
+		bar4:SetAlpha(alpha)
+		bar5:SetAlpha(alpha)
+
+		for i = 1, NUM_ACTIONBAR_BUTTONS do
+			local ab1 = _G["MultiBarLeftButton"..i]
+			local ab2 = _G["MultiBarRightButton"..i]
+
+			ab1.cooldown:SetSwipeColor(0, 0, 0, 0.8 * alpha)
+			ab1.cooldown:SetDrawBling(alpha == 1)
+			ab2.cooldown:SetSwipeColor(0, 0, 0, 0.8 * alpha)
+			ab2.cooldown:SetDrawBling(alpha == 1)
+		end
+	end
+
 	local function showButtons()
-		bar4:SetAlpha(1)
-		bar5:SetAlpha(1)
+		setButtonAlpha(1)
 	end
 
 	local function hideButtons()
-		bar4:SetAlpha(0)
-		bar5:SetAlpha(0)
+		setButtonAlpha(0)
 	end
 
-	for i = 1, 12 do
+	for i = 1, NUM_ACTIONBAR_BUTTONS do
 		local ab1 = _G["MultiBarLeftButton"..i]
 		local ab2 = _G["MultiBarRightButton"..i]
 
@@ -335,12 +348,11 @@ if C.actionbars.rightbars_mouseover == true then
 		ab2:HookScript("OnLeave", hideButtons)
 	end
 
-	bar4:SetAlpha(0)
 	bar4:HookScript("OnEnter", showButtons)
 	bar4:HookScript("OnLeave", hideButtons)
-	bar5:SetAlpha(0)
 	bar5:HookScript("OnEnter", showButtons)
 	bar5:HookScript("OnLeave", hideButtons)
+	hideButtons()
 
 	local function showButtonsFlyout()
 		local frame = SpellFlyout:GetParent():GetParent():GetParent()
