@@ -72,7 +72,7 @@ local function createIcon(data)
 	frame.cooldown = CreateFrame("Cooldown", nil, frame, "CooldownFrameTemplate")
 	frame.cooldown:SetPoint("TOPLEFT")
 	frame.cooldown:SetPoint("BOTTOMRIGHT")
-	frame.cooldown:SetReverse()
+	frame.cooldown:SetReverse(true)
 
 	F.CreateBG(frame)
 end
