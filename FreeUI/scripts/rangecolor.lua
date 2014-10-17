@@ -1,222 +1,220 @@
--- Range by Tuller, modified.
+-- modified tullaRange by Tuller
 
 --locals and speed
+local Addon = {}
 local _G = _G
+local next = next
+local pairs = pairs
+
 local UPDATE_DELAY = 0.15
-local ATTACK_BUTTON_FLASH_TIME = ATTACK_BUTTON_FLASH_TIME
-local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER
-local ActionButton_GetPagedID = ActionButton_GetPagedID
-local ActionButton_IsFlashing = ActionButton_IsFlashing
-local ActionHasRange = ActionHasRange
-local IsActionInRange = IsActionInRange
-local IsUsableAction = IsUsableAction
-local HasAction = HasAction
-local buttonsToUpdate = {}
+local ATTACK_BUTTON_FLASH_TIME = _G['ATTACK_BUTTON_FLASH_TIME']
 
-local colors = {
-	normal = {1, 1, 1},
-	oor = {1, 0.3, 0.1},
-	oom = {0.1, 0.3, 1},
-	ooh = {0.45, 0.45, 1}
-}
+local ActionHasRange = _G['ActionHasRange']
+local IsActionInRange = _G['IsActionInRange']
+local IsUsableAction = _G['IsUsableAction']
+local HasAction = _G['HasAction']
+local GetTime = _G['GetTime']
+local Timer_After = _G['C_Timer'].After
 
-local function timer_Create(parent, interval)
-	local updater = parent:CreateAnimationGroup()
-	updater:SetLooping('NONE')
-	updater:SetScript('OnFinished', function(self)
-		if parent:Update() then
-			parent:Start(interval)
-		end
+--[[
+	The main thing
+--]]
+
+function Addon:Load()
+	self.buttonColors = {}
+	self.buttonsToUpdate = {}
+
+	local f = CreateFrame("Frame")
+
+	f:SetScript('OnEvent', function(frame, ...)
+		self:OnEvent(...)
 	end)
 
-	local a = updater:CreateAnimation('Animation'); a:SetOrder(1)
-
-	parent.Start = function(self)
-		self:Stop()
-		a:SetDuration(interval)
-		updater:Play()
-		return self
-	end
-
-	parent.Stop = function(self)
-		if updater:IsPlaying() then
-			updater:Stop()
-		end
-		return self
-	end
-
-	parent.Active = function(self)
-		return updater:IsPlaying()
-	end
-
-	return parent
+	f:RegisterEvent('PLAYER_LOGIN')
 end
 
---stuff for holy power detection
-local PLAYER_IS_PALADIN = select(2, UnitClass('player')) == 'PALADIN'
-local HAND_OF_LIGHT = GetSpellInfo(90174)
-local isHolyPowerAbility
-do
-	local HOLY_POWER_SPELLS = {
-		[85256] = GetSpellInfo(85256), --Templar's Verdict
---		[53385] = GetSpellInfo(53385), --Divine Storm
-		[53600] = GetSpellInfo(53600), --Shield of the Righteous
---		[84963] = GetSpellInfo(84963), --Inquisition
---		[85673] = GetSpellInfo(85673), --Word of Glory (Not included: linear increase per holy power)
---		[85222] = GetSpellInfo(85222), --Light of Dawn (Not included: linear increase per holy power)
+
+--[[
+	Frame Events
+--]]
+
+function Addon:OnEvent(event, ...)
+	local action = self[event]
+
+	if action then
+		action(self, event, ...)
+	end
+end
+
+function Addon:PLAYER_LOGIN()
+	self.sets = {
+		normal = {1, 1, 1},
+		oor = {1, 0.3, 0.1},
+		oom = {0.1, 0.3, 1},
+		unusable = {0.4, 0.4, 0.4}
 	}
 
-	isHolyPowerAbility = function(actionId)
-		local actionType, id = GetActionInfo(actionId)
-		if actionType == 'macro' then
-			local macroSpell = GetMacroSpell(id)
-			if macroSpell then
-				for spellId, spellName in pairs(HOLY_POWER_SPELLS) do
-					if macroSpell == spellName then
-						return true
-					end
-				end
+	self:HookActionEvents()
+end
+
+--[[
+	Button Hooking
+--]]
+
+do
+	local function button_UpdateStatus(button)
+		Addon:UpdateButtonStatus(button)
+	end
+
+	local function button_UpdateUsable(button)
+		Addon:UpdateButtonUsable(button, true)
+	end
+
+	local function button_Register(button)
+		Addon:Register(button)
+	end
+
+	function Addon:HookActionEvents()
+		hooksecurefunc('ActionButton_OnUpdate', button_Register)
+		hooksecurefunc('ActionButton_UpdateUsable', button_UpdateUsable)
+		hooksecurefunc('ActionButton_Update', button_UpdateStatus)
+	end
+
+	function Addon:Register(button)
+		button:HookScript('OnShow', button_UpdateStatus)
+		button:HookScript('OnHide', button_UpdateStatus)
+		button:SetScript('OnUpdate', nil)
+
+		self:UpdateButtonStatus(button)
+	end
+end
+
+
+--[[
+	Actions
+--]]
+
+function Addon:RequestUpdate()
+	if not next(self.buttonsToUpdate) then return end
+
+	if not self.timerDone then
+		self.timerDone = function()
+			local elapsed = GetTime() - self.started
+			self.started = nil
+
+			if self:UpdateButtons(elapsed) then
+				self:RequestUpdate()
 			end
-		else
-			return HOLY_POWER_SPELLS[id]
 		end
+	end
+
+	if not self.started then
+		self.started = GetTime()
+
+		Timer_After(UPDATE_DELAY, self.timerDone)
+	end
+end
+
+function Addon:UpdateButtons(elapsed)
+	if not next(self.buttonsToUpdate) then
 		return false
 	end
-end
 
---[[ The main thing ]]--
-
-local Range = timer_Create(CreateFrame('Frame', 'Range'), UPDATE_DELAY)
-
---[[ Actions ]]--
-
-function Range:Update()
-	return self:UpdateButtons(UPDATE_DELAY)
-end
-
-function Range:UpdateActive()
-	if next(buttonsToUpdate) then
-		if not self:Active() then
-			self:Start()
-		end
-	else
-		self:Stop()
+	for button in pairs(self.buttonsToUpdate) do
+		self:UpdateButton(button, elapsed)
 	end
+
+	return true
 end
 
-function Range:UpdateButtons(elapsed)
-	if next(buttonsToUpdate) then
-		for button in pairs(buttonsToUpdate) do
-			self:UpdateButton(button, elapsed)
-		end
-		return true
+function Addon:UpdateButton(button, elapsed)
+	self:UpdateButtonUsable(button)
+	self:UpdateButtonFlash(button, elapsed)
+end
+
+function Addon:UpdateButtonUsable(button, force)
+	if force then
+		self.buttonColors[button] = nil
 	end
-	return false
-end
 
-function Range:UpdateButton(button, elapsed)
-	Range.UpdateButtonUsable(button)
-	Range.UpdateFlash(button, elapsed)
-end
-
-function Range:UpdateButtonStatus(button)
-	local action = ActionButton_GetPagedID(button)
-	if button:IsVisible() and action and HasAction(action) and ActionHasRange(action) then
-		buttonsToUpdate[button] = true
-	else
-		buttonsToUpdate[button] = nil
-	end
-	self:UpdateActive()
-end
-
---[[ Button Hooking ]]--
-
-function Range.RegisterButton(button)
-	button:HookScript('OnShow', Range.OnButtonShow)
-	button:HookScript('OnHide', Range.OnButtonHide)
-	button:SetScript('OnUpdate', nil)
-
-	Range:UpdateButtonStatus(button)
-end
-
-function Range.OnButtonShow(button)
-	Range:UpdateButtonStatus(button)
-end
-
-function Range.OnButtonHide(button)
-	Range:UpdateButtonStatus(button)
-end
-
-function Range.OnUpdateButtonUsable(button)
-	button.RangeColor = nil
-	Range.UpdateButtonUsable(button)
-end
-
-function Range.OnButtonUpdate(button)
-	 Range:UpdateButtonStatus(button)
-end
-
-hooksecurefunc('ActionButton_OnUpdate', Range.RegisterButton)
-hooksecurefunc('ActionButton_UpdateUsable', Range.OnUpdateButtonUsable)
-hooksecurefunc('ActionButton_Update', Range.OnButtonUpdate)
-
---[[ Range Coloring ]]--
-
-function Range.UpdateButtonUsable(button)
-	local action = ActionButton_GetPagedID(button)
+	local action = button.action
 	local isUsable, notEnoughMana = IsUsableAction(action)
 
-	--usable
+	--usable (ignoring target information)
 	if isUsable then
+		local inRange = IsActionInRange(action)
+
 		--but out of range
-		if IsActionInRange(action) == 0 then
-			Range.SetButtonColor(button, 'oor')
-		--a holy power abilty, and we're less than 3 Holy Power
-		elseif PLAYER_IS_PALADIN and isHolyPowerAbility(action) and not(UnitPower('player', SPELL_POWER_HOLY_POWER) >= 3 or UnitBuff('player', HAND_OF_LIGHT)) then
-			Range.SetButtonColor(button, 'ooh')
-		--in range
+		if inRange == false then
+			self:SetButtonColor(button, 'oor')
 		else
-			Range.SetButtonColor(button, 'normal')
+			self:SetButtonColor(button, 'normal')
 		end
 	--out of mana
 	elseif notEnoughMana then
-		Range.SetButtonColor(button, 'oom')
+		self:SetButtonColor(button, 'oom')
 	--unusable
 	else
-		button.RangeColor = 'unusuable'
+		self:SetButtonColor(button, 'unusable')
 	end
 end
 
-function Range.SetButtonColor(button, colorType)
-	if button.RangeColor ~= colorType then
-		button.RangeColor = colorType
+function Addon:UpdateButtonFlash(button, elapsed)
+	if button.flashing ~= 1 then return end
 
-		local r, g, b = colors[colorType][1], colors[colorType][2], colors[colorType][3]
+	local flashtime = button.flashtime - elapsed
 
-		local icon =  _G[button:GetName() .. 'Icon']
-		icon:SetVertexColor(r, g, b)
-	end
-end
+	if flashtime <= 0 then
+		local overtime = -flashtime
 
-function Range.UpdateFlash(button, elapsed)
-	if ActionButton_IsFlashing(button) then
-		local flashtime = button.flashtime - elapsed
-
-		if flashtime <= 0 then
-			local overtime = -flashtime
-			if overtime >= ATTACK_BUTTON_FLASH_TIME then
-				overtime = 0
-			end
-			flashtime = ATTACK_BUTTON_FLASH_TIME - overtime
-
-			local flashTexture = _G[button:GetName() .. 'Flash']
-			if flashTexture:IsShown() then
-				flashTexture:Hide()
-			else
-				flashTexture:Show()
-			end
+		if overtime >= ATTACK_BUTTON_FLASH_TIME then
+			overtime = 0
 		end
 
-		button.flashtime = flashtime
+		flashtime = ATTACK_BUTTON_FLASH_TIME - overtime
+
+		local flashTexture = button.Flash
+		if flashTexture:IsShown() then
+			flashTexture:Hide()
+		else
+			flashTexture:Show()
+		end
 	end
+
+	button.flashtime = flashtime
 end
+
+function Addon:UpdateButtonStatus(button)
+	local action = button.action
+
+	if action and button:IsVisible() and HasAction(action) then
+		self.buttonsToUpdate[button] = true
+	else
+		self.buttonsToUpdate[button] = nil
+	end
+
+	self:RequestUpdate()
+end
+
+function Addon:SetButtonColor(button, colorIndex)
+	if self.buttonColors[button] == colorIndex then return end
+
+	self.buttonColors[button] = colorIndex
+
+	local r, g, b = self:GetColor(colorIndex)
+	button.icon:SetVertexColor(r, g, b)
+end
+
+
+--[[
+	Configuration
+--]]
+
+function Addon:GetColor(index)
+	local color = self.sets[index]
+
+	return color[1], color[2], color[3]
+end
+
+--[[ Load The Thing ]]--
+Addon:Load()
