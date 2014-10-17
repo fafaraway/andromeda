@@ -581,15 +581,11 @@ init:SetScript("OnEvent", function()
 	end
 
 	for _, setting in pairs(ns.classOptions) do
-		local colour = C.classcolours[strupper(setting.option)]
+		local colour = C.classcolours[setting.className]
 		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
 	end
 
 	F.ReskinInput(resetFrame.charBox)
-
-	local colour = C.classcolours["PALADIN"]
-	FreeUIOptionsPanel.classmod.paladinHP.Text:SetTextColor(colour.r, colour.g, colour.b)
-	FreeUIOptionsPanel.classmod.paladinRF.Text:SetTextColor(colour.r, colour.g, colour.b)
 
 	local function updateFontSamples()
 		if userChangedSlider then

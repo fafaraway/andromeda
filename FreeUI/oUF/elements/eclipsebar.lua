@@ -1,8 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if not C.unitframes.enable then return end
-
-if(select(2, UnitClass('player')) ~= 'DRUID') then return end
+if not C.unitframes.enable or select(2, UnitClass('player')) ~= "DRUID" or not C.classmod.druidEclipse then return end
 
 local parent, ns = ...
 local oUF = ns.oUF

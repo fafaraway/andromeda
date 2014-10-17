@@ -148,14 +148,15 @@ C["unitframes"] = {
 }
 
 C["classmod"] = {
-	["deathknight"] = true, -- runes
-	["druid"] = true, 		-- eclipse bar, shapeshift mana bar
-	["mage"] = true, 		-- rune of power
-	["monk"] = true, 		-- chi, stagger bar
-	["paladinHP"] = true, 	-- holy power
-	["paladinRF"] = true, 	-- righteous fury
-	["priest"] = true,		-- shadow orbs
-	["warlock"] = true, 	-- spec bar
+	["deathknight"] = true, 	-- runes
+	["druidEclipse"] = true, 	-- eclipse bar
+	["druidMana"] = true, 		-- shapeshift mana bar
+	["mage"] = true, 			-- rune of power
+	["monk"] = true, 			-- chi, stagger bar
+	["paladinHP"] = true, 		-- holy power
+	["paladinRF"] = true, 		-- righteous fury
+	["priest"] = true,			-- shadow orbs
+	["warlock"] = true, 		-- spec bar
 }
 
 -- lower = smoother = more CPU usage

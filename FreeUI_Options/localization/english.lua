@@ -187,7 +187,8 @@ for class, localized in pairs(classes) do
 end
 
 ns.localization.classmoddeathknight = ns.localization.classmoddeathknight..":|cffffffff Rune bars"
-ns.localization.classmoddruid = ns.localization.classmoddruid..":|cffffffff Eclipse bar and shapeshift mana bar"
+ns.localization.classmoddruidMana = ns.localization.classmoddruid..":|cffffffff Shapeshift mana bar"
+ns.localization.classmoddruidEclipse = ns.localization.classmoddruid..":|cffffffff Eclipse bar"
 ns.localization.classmodmage = ns.localization.classmodmage..":|cffffffff Rune of Power tracker"
 ns.localization.classmodmonk = ns.localization.classmodmonk..":|cffffffff Chi and Stagger tracker"
 ns.localization.classmodpaladinHP = ns.localization.classmodpaladin..":|cffffffff Holy Power tracker"

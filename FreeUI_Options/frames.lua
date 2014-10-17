@@ -610,32 +610,47 @@ ns.classOptions = {}
 
 local deathknight = ns.CreateCheckBox(classmod, "deathknight", false, true)
 deathknight:SetPoint("TOPLEFT", classmod.subText, "BOTTOMLEFT", -2, -8)
+deathknight.className = "DEATHKNIGHT"
 tinsert(ns.classOptions, deathknight)
 
-local druid = ns.CreateCheckBox(classmod, "druid", false, true)
-druid:SetPoint("TOPLEFT", deathknight, "BOTTOMLEFT", 0, -8)
-tinsert(ns.classOptions, druid)
+local druidMana = ns.CreateCheckBox(classmod, "druidMana", false, true)
+druidMana:SetPoint("TOPLEFT", deathknight, "BOTTOMLEFT", 0, -8)
+druidMana.className = "DRUID"
+tinsert(ns.classOptions, druidMana)
+
+local druidEclipse = ns.CreateCheckBox(classmod, "druidEclipse", false, true)
+druidEclipse:SetPoint("TOPLEFT", druidMana, "BOTTOMLEFT", 0, -8)
+druidEclipse.className = "DRUID"
+tinsert(ns.classOptions, druidEclipse)
 
 local mage = ns.CreateCheckBox(classmod, "mage", false, true)
-mage:SetPoint("TOPLEFT", druid, "BOTTOMLEFT", 0, -8)
+mage:SetPoint("TOPLEFT", druidEclipse, "BOTTOMLEFT", 0, -8)
+mage.className = "MAGE"
 tinsert(ns.classOptions, mage)
 
 local monk = ns.CreateCheckBox(classmod, "monk", false, true)
 monk:SetPoint("TOPLEFT", mage, "BOTTOMLEFT", 0, -8)
+monk.className = "MONK"
 tinsert(ns.classOptions, monk)
 
 local paladinHP = ns.CreateCheckBox(classmod, "paladinHP", false, true)
 paladinHP:SetPoint("TOPLEFT", monk, "BOTTOMLEFT", 0, -8)
+paladinHP.className = "PALADIN"
+tinsert(ns.classOptions, paladinHP)
 
 local paladinRF = ns.CreateCheckBox(classmod, "paladinRF", false, true)
 paladinRF:SetPoint("TOPLEFT", paladinHP, "BOTTOMLEFT", 0, -8)
+paladinRF.className = "PALADIN"
+tinsert(ns.classOptions, paladinRF)
 
 local priest = ns.CreateCheckBox(classmod, "priest", false, true)
 priest:SetPoint("TOPLEFT", paladinRF, "BOTTOMLEFT", 0, -8)
+priest.className = "PRIEST"
 tinsert(ns.classOptions, priest)
 
 local warlock = ns.CreateCheckBox(classmod, "warlock", false, true)
 warlock:SetPoint("TOPLEFT", priest, "BOTTOMLEFT", 0, -8)
+warlock.className = "WARLOCK"
 tinsert(ns.classOptions, warlock)
 
 -- [[ Credits ]]
