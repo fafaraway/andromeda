@@ -211,8 +211,6 @@ rd:SetScript("OnEvent", function()
 
 	if difficultyID == 0 then
 		rdt:SetText("")
-	elseif maxPlayers == 3 then
-		rdt:SetText("3")
 	elseif difficultyID == 1 then
 		rdt:SetText("5")
 	elseif difficultyID == 2 then
@@ -226,13 +224,21 @@ rd:SetScript("OnEvent", function()
 	elseif difficultyID == 6 then
 		rdt:SetText("25H")
 	elseif difficultyID == 7 then
-		rdt:SetText("LFR")
+		rdt:SetText("RF")
 	elseif difficultyID == 8 then
-		rdt:SetText("5CM")
+		rdt:SetText("CM")
 	elseif difficultyID == 9 then
 		rdt:SetText("40")
+	elseif difficultyID == 11 then
+		rdt:SetText("3H")
+	elseif difficultyID == 12 then
+		rdt:SetText("3")
 	elseif difficultyID == 14 then
-		rdt:SetText(instanceGroupSize.."F")
+		rdt:SetText(instanceGroupSize.."N")
+	elseif difficultyID == 15 then
+		rdt:SetText(instanceGroupSize.."H")
+	elseif difficultyID == 16 then
+		rdt:SetText("M")
 	end
 
 	if GuildInstanceDifficulty:IsShown() then
