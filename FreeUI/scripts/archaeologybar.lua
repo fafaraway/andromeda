@@ -3,6 +3,7 @@ local F, C = unpack(FreeUI)
 local r, g, b = unpack(C.class)
 
 local frame, xpBar
+local customPosition = false
 
 local function setPosition()
 	if xpBar:IsShown() then
@@ -42,4 +43,12 @@ f:SetScript("OnEvent", function(self, _, addon)
 	frame:HookScript("OnShow", setPosition)
 	xpBar:HookScript("OnShow", setPosition)
 	xpBar:HookScript("OnHide", setPosition)
+
+	hooksecurefunc(frame, "SetPoint", function()
+		if not customPosition then
+			customPosition = true
+			setPosition()
+			customPosition = false
+		end
+	end)
 end)
