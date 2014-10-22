@@ -60,15 +60,26 @@ end
 
 -- Options GUI callbacks
 
-F.AddOptionsCallback = function(category, option, func)
+F.AddOptionsCallback = function(category, option, func, widgetType)
 	if not IsAddOnLoaded("FreeUI_Options") then return end
 
-	local frame = FreeUIOptionsPanel[category][option]
+	if widgetType and widgetType == "radio" then
+		local index = 1
+		local frame = FreeUIOptionsPanel[category][option..index]
+		while frame do
+			frame:HookScript("OnClick", func)
 
-	if frame:GetObjectType() == "Slider" then
-		frame:HookScript("OnValueChanged", func)
+			index = index + 1
+			frame = FreeUIOptionsPanel[category][option..index]
+		end
 	else
-		frame:HookScript("OnClick", func)
+		local frame = FreeUIOptionsPanel[category][option]
+
+		if frame:GetObjectType() == "Slider" then
+			frame:HookScript("OnValueChanged", func)
+		else
+			frame:HookScript("OnClick", func)
+		end
 	end
 end
 

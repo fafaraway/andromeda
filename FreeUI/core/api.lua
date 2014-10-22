@@ -148,7 +148,7 @@ F.SetFS = function(fontObject, fontSize)
 
 	local outline = nil
 	if C.appearance.fontOutline then
-		outline = C.appearance.fontOutlineMonochrome and "OUTLINEMONOCHROME" or "OUTLINE"
+		outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
 	end
 
 	fontObject:SetFont(mainFont, size, outline)

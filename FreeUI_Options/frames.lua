@@ -302,13 +302,12 @@ appearance.largeSample:SetPoint("TOPLEFT", fontSizeLarge, "BOTTOMLEFT", 0, -16)
 local fontOutline = ns.CreateCheckBox(appearance, "fontOutline", false, true)
 fontOutline:SetPoint("LEFT", fontUseAlternativeFont, "RIGHT", 240, 0)
 
-local fontOutlineMonochrome = ns.CreateCheckBox(appearance, "fontOutlineMonochrome", false, true)
-fontOutlineMonochrome:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 16, -8)
-
-fontOutline.children = {fontOutlineMonochrome}
+local fontOutlineStyle = ns.CreateRadioButtonGroup(appearance, "fontOutlineStyle", 2, true, true)
+fontOutlineStyle.buttons[1]:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 17, -29)
+fontOutline.children = {fontOutlineStyle}
 
 local fontShadow = ns.CreateCheckBox(appearance, "fontShadow", false, true)
-fontShadow:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 0, -42)
+fontShadow:SetPoint("TOPLEFT", fontOutline, "BOTTOMLEFT", 0, -76)
 
 -- [[ Automation ]]
 

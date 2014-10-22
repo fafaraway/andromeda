@@ -68,7 +68,11 @@ ns.localization.appearancefontUseAlternativeFontTooltip = "Replaces the default 
 ns.localization.appearancefontSizeNormal = "Normal font size"
 ns.localization.appearancefontSizeLarge = "Large font size"
 ns.localization.appearancefontOutline = "Font outline"
-ns.localization.appearancefontOutlineMonochrome = "Monochrome outline"
+ns.localization.appearancefontOutlineStyle = "Outline style"
+ns.localization.appearancefontOutlineStyle1 = "Normal"
+ns.localization.appearancefontOutlineStyle2 = "Monochrome"
+ns.localization.appearancefontOutlineStyle1Tooltip = "Best used with regular fonts (not pixel fonts)."
+ns.localization.appearancefontOutlineStyle2Tooltip = "Best used with pixel fonts."
 ns.localization.appearancefontShadow = "Font shadow"
 ns.localization.appearancesampleText = "sample SAMPLE"
 

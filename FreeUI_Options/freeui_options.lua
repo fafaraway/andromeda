@@ -8,11 +8,13 @@ ns.buttons = {}
 ns.protectOptions = {}
 
 local checkboxes = {}
+local radiobuttons = {}
 local sliders = {}
 local colourpickers = {}
 local panels = {}
 
 local old = {} -- to keep track of whether or not reload is needed
+local oldRadioValues = {} -- same
 local oldColours = {} -- same
 local overrideReload = false
 local userChangedSlider = true -- to use SetValue without running OnValueChanged code
@@ -35,6 +37,15 @@ local function checkIsReloadNeeded()
 			if C[checkbox.group][checkbox.option] ~= value then
 				setReloadNeeded(true)
 				return
+			end
+		end
+
+		for radioOptionGroup, radioOptionValues in pairs(oldRadioValues) do
+			for option, value in pairs(radioOptionValues) do
+				if C[radioOptionGroup][option] ~= value then
+					setReloadNeeded(true)
+					return
+				end
 			end
 		end
 
@@ -73,8 +84,17 @@ local function toggleChildren(self, checked)
 	end
 
 	for _, child in next, self.children do
-		child:SetEnabled(checked)
-		child.Text:SetTextColor(tR, tG, tB)
+		if child.radioHeader then -- radio button group
+			child.radioHeader:SetTextColor(tR, tG, tB)
+
+			for _, radioButton in pairs(child.buttons) do
+				radioButton:SetEnabled(checked)
+				radioButton.text:SetTextColor(tR, tG, tB)
+			end
+		else
+			child:SetEnabled(checked)
+			child.Text:SetTextColor(tR, tG, tB)
+		end
 	end
 end
 
@@ -120,6 +140,105 @@ ns.CreateCheckBox = function(parent, option, tooltipText, needsReload)
 	tinsert(checkboxes, f)
 
 	return f
+end
+
+local function toggleRadio(self)
+	local previousValue
+
+	local index = 1
+	local otherButton = self.parent[self.option..index]
+	while otherButton do
+		if otherButton ~= self then
+			if otherButton.isChecked then
+				previousValue = index
+				otherButton.isChecked = false
+			end
+
+			otherButton:SetChecked(false)
+		end
+
+		index = index + 1
+		otherButton = self.parent[self.option..index]
+	end
+
+	self:SetChecked(true) -- don't allow deselecting
+	self.isChecked = true
+
+	PlaySound("igMainMenuOptionCheckBoxOn")
+
+	SaveValue(self, self.index)
+
+	if self.needsReload then
+		if oldRadioValues[self.group] == nil then
+			oldRadioValues[self.group] = {}
+
+			if oldRadioValues[self.group][self.option] == nil then
+				oldRadioValues[self.group][self.option] = previousValue
+			end
+		end
+
+		checkIsReloadNeeded()
+	end
+end
+
+local function radioOnEnter(self)
+	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
+end
+
+local function radioOnLeave(self)
+	GameTooltip:Hide()
+end
+
+ns.CreateRadioButtonGroup = function(parent, option, numValues, tooltipText, needsReload)
+	local group = {}
+	group.buttons = {}
+
+	for i = 1, numValues do
+		local f = CreateFrame("CheckButton", nil, parent, "UIRadioButtonTemplate")
+
+		f.parent = parent
+		f.group = parent.tag
+		f.option = option
+		f.index = i
+
+		f.text:SetFontObject(GameFontHighlight)
+		f.text:SetText(ns.localization[parent.tag..option..i])
+		if tooltipText then
+			f.tooltipText = ns.localization[parent.tag..option..i.."Tooltip"]
+			f:HookScript("OnEnter", radioOnEnter)
+			f:HookScript("OnLeave", radioOnLeave)
+		end
+
+		if needsReload then
+			f.tooltipText = f.tooltipText and format("%s\n\n%s", f.tooltipText, ns.localization.requiresReload) or ns.localization.requiresReload
+		end
+
+		f.needsReload = needsReload
+
+		f:SetScript("OnClick", toggleRadio)
+		parent[option..i] = f
+
+		-- return value
+		tinsert(group.buttons, f)
+
+		-- handling input, style, ...
+		tinsert(radiobuttons, f)
+
+		if i > 1 then
+			f:SetPoint("TOP", parent[option..i-1], "BOTTOM", 0, -8)
+		end
+	end
+
+	local firstOption = parent[option..1]
+
+	-- add header
+	local header = firstOption:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	header:SetPoint("BOTTOMLEFT", firstOption, "TOPLEFT", 2, 5)
+	header:SetText(ns.localization[parent.tag..option])
+	group.radioHeader = header
+
+	return group
 end
 
 -- Sliders
@@ -425,6 +544,11 @@ local function displaySettings()
 		if box.children then toggleChildren(box, box:GetChecked()) end
 	end
 
+	for _, radio in pairs(radiobuttons) do
+		radio:SetChecked(C[radio.group][radio.option] == radio.index)
+		radio.isChecked = true -- need this for storing the previous value when user changes setting
+	end
+
 	userChangedSlider = false
 
 	for _, slider in pairs(sliders) do
@@ -570,6 +694,10 @@ init:SetScript("OnEvent", function()
 		F.ReskinCheck(box)
 	end
 
+	for _, radio in pairs(radiobuttons) do
+		F.ReskinRadio(radio)
+	end
+
 	for _, slider in pairs(sliders) do
 		F.ReskinSlider(slider)
 		F.ReskinInput(slider.textInput)
@@ -606,7 +734,7 @@ init:SetScript("OnEvent", function()
 	F.AddOptionsCallback("appearance", "fontSizeNormal", updateFontSamples)
 	F.AddOptionsCallback("appearance", "fontSizeLarge", updateFontSamples)
 	F.AddOptionsCallback("appearance", "fontOutline", updateFontSamples)
-	F.AddOptionsCallback("appearance", "fontOutlineMonochrome", updateFontSamples)
+	F.AddOptionsCallback("appearance", "fontOutlineStyle", updateFontSamples, "radio")
 	F.AddOptionsCallback("appearance", "fontShadow", updateFontSamples)
 
 	FreeUIOptionsPanel.notifications.previewButton:SetScript("OnClick", function()

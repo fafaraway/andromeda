@@ -31,7 +31,7 @@ C["appearance"] = {
 	["fontSizeNormal"] = 8,
 	["fontSizeLarge"] = 16,
 	["fontOutline"] = true,
-	["fontOutlineMonochrome"] = true,
+	["fontOutlineStyle"] = 2,		-- 1 = normal, 2 = monochrome
 	["fontShadow"] = false,
 }
 
@@ -144,7 +144,6 @@ C["unitframes"] = {
 	["num_boss_buffs"] = 5,
 	["num_arena_buffs"] = 8,
 	["num_focus_debuffs"] = 4,
-
 }
 
 C["classmod"] = {
