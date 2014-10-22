@@ -28,7 +28,8 @@ end
 for group, options in pairs(profile) do
 	if C[group] then
 		for option, value in pairs(options) do
-			if C[group][option] == nil or (group == "unitframes" and (tonumber(profile[group][option]) or type(profile[group][option]) == "table")) then
+			if C[group][option] == nil or C[group][option] == value then
+				-- remove saved vars if they do not exist in lua config anymore, or are the same as the lua config
 				profile[group][option] = nil
 			else
 				C[group][option] = value
