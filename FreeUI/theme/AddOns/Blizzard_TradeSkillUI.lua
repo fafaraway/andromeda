@@ -124,7 +124,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	hooksecurefunc("TradeSkillFrame_Update", function()
 		local numTradeSkills = GetNumTradeSkills()
 		local skillOffset = FauxScrollFrame_GetOffset(TradeSkillListScrollFrame)
-		local skillIndex
+		local _, skillIndex, skillType, isExpanded
 		local diplayedSkills = TRADE_SKILLS_DISPLAYED
 		local hasFilterBar = TradeSkillFilterBar:IsShown()
 		if hasFilterBar then
