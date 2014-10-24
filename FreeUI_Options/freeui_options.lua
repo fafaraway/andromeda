@@ -146,19 +146,19 @@ local function toggleRadio(self)
 	local previousValue
 
 	local index = 1
-	local otherButton = self.parent[self.option..index]
-	while otherButton do
-		if otherButton ~= self then
-			if otherButton.isChecked then
-				previousValue = index
-				otherButton.isChecked = false
-			end
+	local radioButton = self.parent[self.option..index]
+	while radioButton do
+		if radioButton.isChecked then
+			previousValue = index
 
-			otherButton:SetChecked(false)
+			if radioButton ~= self then
+				radioButton.isChecked = false
+				radioButton:SetChecked(false)
+			end
 		end
 
 		index = index + 1
-		otherButton = self.parent[self.option..index]
+		radioButton = self.parent[self.option..index]
 	end
 
 	self:SetChecked(true) -- don't allow deselecting
@@ -545,8 +545,10 @@ local function displaySettings()
 	end
 
 	for _, radio in pairs(radiobuttons) do
-		radio:SetChecked(C[radio.group][radio.option] == radio.index)
-		radio.isChecked = true -- need this for storing the previous value when user changes setting
+		local isChecked = C[radio.group][radio.option] == radio.index
+
+		radio:SetChecked(isChecked)
+		radio.isChecked = isChecked -- need this for storing the previous value when user changes setting
 	end
 
 	userChangedSlider = false
