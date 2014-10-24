@@ -46,6 +46,8 @@ local partyHeightHealer = C.unitframes.party_height_healer
 
 -- [[ Initialize / load layout option ]]
 
+-- this can't use the normal options system
+-- because we want users to be able to switch layout using /commands even when options gui is disabled
 local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
