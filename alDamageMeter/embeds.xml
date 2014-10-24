@@ -1,6 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
-        <Script file="lib\LibStub\LibStub.lua"/>
-        <Script file="lib\CallBackHandler-1.0\CallbackHandler-1.0.lua"/>
-        <Script file="lib\LibDataBroker\LibDataBroker-1.1.lua"/>
-	<Include file="lib\LibBossIDs-1.0\lib.xml"/>
-</Ui>
