@@ -90,25 +90,25 @@ C["tooltip"] = {
 }
 
 C["unitframes"] = {
-	["enable"] = true, 						-- enable the unit frames and their included modules
+	["enable"] = true, 									-- enable the unit frames and their included modules
 
-	["autoPosition"] = true,				-- automatically postion unit frames based on resolution
+	["autoPosition"] = true,							-- automatically postion unit frames based on resolution
 
-	["enableGroup"] = true,					-- enable party/raid frames
-		["healerClasscolours"] = false,				-- colour unitframes by class in healer layout
-		["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid
-		["partyNameAlways"] = false,				-- show name on party/raid frames in dps/tank layout
-	["enableArena"] = true,					-- enable arena/flag carrier frames
-	["targettarget"] = false, 					-- show target of target frame
+	["enableGroup"] = true,								-- enable party/raid frames
+		["healerClasscolours"] = false,						-- colour unitframes by class in healer layout
+		["limitRaidSize"] = false, 							-- show a maximum of 25 players in a raid
+		["partyNameAlways"] = false,						-- show name on party/raid frames in dps/tank layout
+	["enableArena"] = true,								-- enable arena/flag carrier frames
+	["targettarget"] = false, 							-- show target of target frame
 
-	["absorb"] = true, 							-- absorb bar/over absorb glow
-	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105}, 	-- only applies with 'castbar' set to 2
-	["castbarSeparate"] = true, 				-- true for a separate player cast bar
-		["castbarSeparateOnlyCasters"] = true, 		-- separate bar only for mages/warlocks/priests
-	["pvp"] = true, 							-- show pvp icon on player frame
-	["questIcon"] = true,						-- show quest icon on target frame
-	["statusIndicator"] = false,					-- show combat/resting status on player frame
-		["statusIndicatorCombat"] = true,				-- show combat status (else: only resting)
+	["absorb"] = true, 									-- absorb bar/over absorb glow
+	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105},	-- only applies with 'castbar' set to 2
+	["castbarSeparate"] = true, 						-- true for a separate player cast bar
+		["castbarSeparateOnlyCasters"] = true, 				-- separate bar only for mages/warlocks/priests
+	["pvp"] = true, 									-- show pvp icon on player frame
+	["questIcon"] = true,								-- show quest icon on target frame
+	["statusIndicator"] = false,						-- show combat/resting status on player frame
+		["statusIndicatorCombat"] = true,					-- show combat status (else: only resting)
 
 	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105},
 	["target"] = {"TOP", UIParent, "CENTER", 0, -225},
