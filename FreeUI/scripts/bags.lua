@@ -2,7 +2,7 @@
 
 local F, C, L = unpack(select(2, ...))
 
-if not C.bags.enable then return end
+if C.bags.style ~= 1 then return end
 
 local _G = _G
 

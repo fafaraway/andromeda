@@ -108,7 +108,9 @@ theme\AddOns\DBM-GUI.lua
 theme\AddOns\KayrChat.lua
 
 theme\FrameXML\AlertFrames.lua
+theme\FrameXML\BankFrame.lua
 theme\FrameXML\CharacterFrame.lua
+theme\FrameXML\ContainerFrame.lua
 theme\FrameXML\EquipmentFlyout.lua
 theme\FrameXML\LFDFrame.lua
 theme\FrameXML\LFGFrame.lua

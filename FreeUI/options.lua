@@ -57,7 +57,7 @@ C["actionbars"] = {
 }
 
 C["bags"] = {
-	["enable"] = true,					-- enable the bag addon
+	["style"] = 1,						-- 1 = all-in-one, 2 = restyle default bags, 3 = do nothing
 
 	["size"] = 37,						-- change the size of the bags/bank, default = 37
 	["slotsShowAlways"] = false, 		-- always show the bag item slots
