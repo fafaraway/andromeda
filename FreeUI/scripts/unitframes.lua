@@ -1295,26 +1295,24 @@ local UnitSpecific = {
 			return true
 		end
 
-		if C.unitframes.questIcon then
-			local QuestIcon = F.CreateFS(self)
-			QuestIcon:SetText("!")
-			QuestIcon:SetTextColor(228/255, 225/255, 16/255)
-			QuestIcon:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 2)
+		local QuestIcon = F.CreateFS(self)
+		QuestIcon:SetText("!")
+		QuestIcon:SetTextColor(228/255, 225/255, 16/255)
+		QuestIcon:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 2)
 
-			QuestIcon.PostUpdate = function(self, isQuestBoss)
-				if isQuestBoss then
-					Name:ClearAllPoints()
-					Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
-					Name:SetPoint("RIGHT", QuestIcon, "LEFT", 0, 0)
-				else
-					Name:ClearAllPoints()
-					Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
-					Name:SetPoint("RIGHT", self)
-				end
+		QuestIcon.PostUpdate = function(self, isQuestBoss)
+			if isQuestBoss then
+				Name:ClearAllPoints()
+				Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
+				Name:SetPoint("RIGHT", QuestIcon, "LEFT", 0, 0)
+			else
+				Name:ClearAllPoints()
+				Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
+				Name:SetPoint("RIGHT", self)
 			end
-
-			self.QuestIcon = QuestIcon
 		end
+
+		self.QuestIcon = QuestIcon
 	end,
 
 	focus = function(self, ...)

@@ -168,8 +168,6 @@ ns.localization.unitframeshealerClasscolours = "Always use class colours"
 ns.localization.unitframeshealerClasscoloursTooltip = "Enable to use class colours rather than gradient in the healer layout."
 ns.localization.unitframespvp = "PVP icon"
 ns.localization.unitframespvpTooltip = "Show a small red PVP icon above the player unit frame."
-ns.localization.unitframesquestIcon = "Quest icon"
-ns.localization.unitframesquestIconTooltip = "Show an indicator on the target frame if the target is important for a quest."
 
 ns.localization.unitframesstatusIndicator = "Status indicator"
 ns.localization.unitframesstatusIndicatorTooltip = "Show resting and combat (if enabled) status on the player frame."

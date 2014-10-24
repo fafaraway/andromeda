@@ -540,11 +540,8 @@ castbarSeparate.children = {castbarSeparateOnlyCasters}
 local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
 pvp:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", 0, -42)
 
-local questIcon = ns.CreateCheckBox(unitframes, "questIcon", true, true)
-questIcon:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
-
 local statusIndicator = ns.CreateCheckBox(unitframes, "statusIndicator", true)
-statusIndicator:SetPoint("TOPLEFT", questIcon, "BOTTOMLEFT", 0, -8)
+statusIndicator:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
 
 local statusIndicatorCombat = ns.CreateCheckBox(unitframes, "statusIndicatorCombat", true)
 statusIndicatorCombat:SetPoint("TOPLEFT", statusIndicator, "BOTTOMLEFT", 16, -8)
@@ -571,7 +568,6 @@ local function toggleUFOptions()
 	absorb:SetShown(shown)
 	targettarget:SetShown(shown)
 	pvp:SetShown(shown)
-	questIcon:SetShown(shown)
 	statusIndicator:SetShown(shown)
 	statusIndicatorCombat:SetShown(shown)
 	castbarSeparate:SetShown(shown)
