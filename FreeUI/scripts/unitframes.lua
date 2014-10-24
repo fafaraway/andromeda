@@ -5,6 +5,8 @@ if not C.unitframes.enable then return end
 local parent, ns = ...
 local oUF = ns.oUF
 
+local name = UnitName("player")
+local realm = GetRealmName()
 local class = select(2, UnitClass("player"))
 
 local colors = setmetatable({
@@ -41,6 +43,20 @@ local partyWidth = C.unitframes.party_width
 local partyHeight = C.unitframes.party_height
 local partyWidthHealer = C.unitframes.party_width_healer
 local partyHeightHealer = C.unitframes.party_height_healer
+
+-- [[ Initialize / load layout option ]]
+
+local addonLoaded
+addonLoaded = function(_, addon)
+	if addon ~= "FreeUI" then return end
+
+	if FreeUIConfig.layout == nil then FreeUIConfig.layout = 1 end
+
+	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
+	addonLoaded = nil
+end
+
+F.RegisterEvent("ADDON_LOADED", addonLoaded)
 
 --[[ Short values ]]
 
