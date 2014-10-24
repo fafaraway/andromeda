@@ -23,7 +23,7 @@ nametext:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 2)
 local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
-	if FreeUIConfig.layout == 2 then
+	if C.unitframes.enable and FreeUIConfig.layout == 2 then
 		f:UnregisterAllEvents()
 		f:Hide()
 	end
@@ -87,7 +87,11 @@ end
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 function f:PLAYER_ENTERING_WORLD()
 	f:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	f:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 13)
+	if C.unitframes.enable then
+		f:SetPoint("BOTTOM", oUF_FreeTarget, "TOP", 0, 13)
+	else
+		f:SetPoint("TOP", UIParent, "CENTER", 0, -212)
+	end
 end
 
 f:RegisterEvent("PLAYER_REGEN_ENABLED")
