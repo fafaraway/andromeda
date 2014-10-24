@@ -354,6 +354,10 @@ if C.actionbars.rightbars_mouseover then
 	bar5:HookScript("OnLeave", hideButtons)
 	hideButtons()
 
+	-- dumb fix for cooldown spirals not playing nice with alpha settingss
+	F.RegisterEvent("PLAYER_LOGIN", hideButtons)
+	F.RegisterEvent("PLAYER_ENTERING_WORLD", hideButtons)
+
 	local function showButtonsFlyout()
 		local frame = SpellFlyout:GetParent():GetParent():GetParent()
 		if frame and (frame == FreeUI_MultiBarLeft or frame == FreeUI_MultiBarRight) then
