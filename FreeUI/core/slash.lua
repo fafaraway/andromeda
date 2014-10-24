@@ -35,13 +35,17 @@ SLASH_VOLUME1 = "/vol"
 
 SlashCmdList.FREEUI = function(cmd)
 	local cmd, args = strsplit(" ", cmd:lower(), 2)
-	if cmd == "dps" then
-		FreeUIConfig.layout = 1
-		ReloadUI()
-	elseif(cmd == "heal" or cmd == "healer") then
-		FreeUIConfig.layout = 2
-		ReloadUI()
-	elseif cmd == "install" then
+	if C.unitframes.enable then
+		if cmd == "dps" then
+			FreeUIConfig.layout = 1
+			ReloadUI()
+		elseif(cmd == "heal" or cmd == "healer") then
+			FreeUIConfig.layout = 2
+			ReloadUI()
+		end
+	end
+
+	if cmd == "install" then
 		if IsAddOnLoaded("FreeUI_Install") then
 			FreeUI_InstallFrame:Show()
 		else
@@ -57,7 +61,9 @@ SlashCmdList.FREEUI = function(cmd)
 			FreeUIOptionsPanel:Show()
 		end
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r [dps/healer]|cffffffff: Select a unitframe layout|r", unpack(C.class))
+		if C.unitframes.enable then
+			DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r [dps/healer]|cffffffff: Select a unitframe layout|r", unpack(C.class))
+		end
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r install|cffffffff: Load the intaller|r", unpack(C.class))
 		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r reset|cffffffff: Clear saved settings|r", unpack(C.class))
 	end
