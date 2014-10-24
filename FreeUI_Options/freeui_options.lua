@@ -737,8 +737,12 @@ init:SetScript("OnEvent", function()
 	F.AddOptionsCallback("appearance", "fontOutlineStyle", updateFontSamples, "radio")
 	F.AddOptionsCallback("appearance", "fontShadow", updateFontSamples)
 
+	local function testNotificationCallback()
+		print(ns.localization.notificationPreviewCallbackText)
+	end
+
 	FreeUIOptionsPanel.notifications.previewButton:SetScript("OnClick", function()
-		F.Notification("FreeUI", ns.localization.notificationPreviewText)
+		F.Notification("FreeUI", ns.localization.notificationPreviewText, testNotificationCallback)
 	end)
 
 	displaySettings()

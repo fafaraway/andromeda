@@ -240,14 +240,3 @@ f:SetScript("OnMouseUp", function(self, button)
 		processing = false
 	end
 end)
-
--- Test function
-
-local function testCallback()
-	print("Banner clicked!")
-end
-
-SlashCmdList.TESTALERT = function(b)
-	F.Notification("FreeUI", "This is an example of a notification.", testCallback, b == "true" and "INTERFACE\\ICONS\\SPELL_FROST_ARCTICWINDS" or nil, .08, .92, .08, .92)
-end
-SLASH_TESTALERT1 = "/testalert"

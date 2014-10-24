@@ -142,6 +142,7 @@ local function friendsFrame()
 	local scrollFrame = FriendsFrameFriendsScrollFrame
 	local offset = HybridScrollFrame_GetOffset(scrollFrame)
 	local buttons = scrollFrame.buttons
+	local button, index
 
 	local playerArea = GetRealZoneText()
 

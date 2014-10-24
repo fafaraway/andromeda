@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
-SlashCmdList.FRAME = function() print(GetMouseFocus():GetName()) end
-SLASH_FRAME1 = "/gn"
+SlashCmdList.FRAMENAME = function() print(GetMouseFocus():GetName()) end
+SLASH_FRAMENAME1 = "/gn"
 
 SlashCmdList.GETPARENT = function() print(GetMouseFocus():GetParent():GetName()) end
 SLASH_GETPARENT1 = "/gp"

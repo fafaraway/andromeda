@@ -15,27 +15,6 @@ local FactionInfo = {
 	[8] = {155/255, 255/255, 155/255, "Exalted","FF9bff9b"},
 }
 
-local function ShortValue(value)
-	if value >= 1e6 then
-		return ("%.0fm"):format(value / 1e6):gsub("%.?0+([km])$", "%1")
-	elseif value >= 1e3 or value <= -1e3 then
-		return ("%.0fk"):format(value / 1e3):gsub("%.?+([km])$", "%1")
-	else
-		return value
-	end
-end
-
-local function CommaValue(amount)
-	local formatted = amount
-	while true do
-		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-		if (k==0) then
-			break
-		end
-	end
-	return formatted
-end
-
 -- Create frames
 
 local backdrop = CreateFrame("Frame", nil, Minimap)
@@ -152,10 +131,10 @@ mouseFrame:SetScript("OnEnter", function()
 	GameTooltip:ClearLines()
 	if UnitLevel("player") ~= MAX_PLAYER_LEVEL then
 		GameTooltip:AddLine("Experience:", r, g, b)
-		GameTooltip:AddDoubleLine("Current: ", string.format('%s/%s (%d%%)', CommaValue(XP), CommaValue(maxXP), (XP/maxXP)*100), r, g, b, 1, 1, 1)
-		GameTooltip:AddDoubleLine("Remaining: ", string.format('%s', CommaValue(maxXP-XP)), r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Current: ", string.format('%s/%s (%d%%)', BreakUpLargeNumbers(XP), BreakUpLargeNumbers(maxXP), (XP/maxXP)*100), r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Remaining: ", string.format('%s', BreakUpLargeNumbers(maxXP-XP)), r, g, b, 1, 1, 1)
 		if restXP then
-			GameTooltip:AddDoubleLine("Rested: ", string.format('|cffb3e1ff%s (%d%%)', CommaValue(restXP), restXP/maxXP*100), r, g, b)
+			GameTooltip:AddDoubleLine("Rested: ", string.format('|cffb3e1ff%s (%d%%)', BreakUpLargeNumbers(restXP), restXP/maxXP*100), r, g, b)
 		end
 	end
 	if GetWatchedFactionInfo() then
@@ -163,8 +142,8 @@ mouseFrame:SetScript("OnEnter", function()
 		if UnitLevel("player") ~= MAX_PLAYER_LEVEL then GameTooltip:AddLine(" ") end
 		GameTooltip:AddDoubleLine("Reputation:", name, r, g, b, 1, 1, 1)
 		GameTooltip:AddDoubleLine("Standing:", string.format('|c'..FactionInfo[rank][5]..'%s|r', FactionInfo[rank][4]), r, g, b)
-		GameTooltip:AddDoubleLine("Rep:", string.format('%s/%s (%d%%)', CommaValue(value-start), CommaValue(cap-start), (value-start)/(cap-start)*100), r, g, b, 1, 1, 1)
-		GameTooltip:AddDoubleLine("Remaining:", string.format('%s', CommaValue(cap-value)), r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Rep:", string.format('%s/%s (%d%%)', BreakUpLargeNumbers(value-start), BreakUpLargeNumbers(cap-start), (value-start)/(cap-start)*100), r, g, b, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Remaining:", string.format('%s', BreakUpLargeNumbers(cap-value)), r, g, b, 1, 1, 1)
 	end
 	GameTooltip:Show()
 end)

@@ -145,8 +145,6 @@ F.AddOptionsCallback("notifications", "checkEvents", function()
 end)
 
 F.AddOptionsCallback("notifications", "checkGuildEvents", function()
-	checkGuildEvents = C.notifications.checkGuildEvents
-
 	if C.notifications.checkGuildEvents then
 		f:RegisterEvent("CALENDAR_UPDATE_GUILD_EVENTS")
 		alertGuildEvents()

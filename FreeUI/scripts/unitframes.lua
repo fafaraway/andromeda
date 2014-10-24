@@ -146,7 +146,7 @@ end
 oUF.Tags.Events['free:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
 
 local function shortName(unit)
-	name = UnitName(unit)
+	local name = UnitName(unit)
 	if name and name:len() > 4 then name = name:sub(1, 4) end
 
 	return name
@@ -1191,7 +1191,7 @@ local UnitSpecific = {
 		tt:SetWidth(110)
 		tt:SetHeight(12)
 
-		ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "RIGHT")
+		local ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "RIGHT")
 		ttt:SetPoint("BOTTOMRIGHT", tt)
 
 		tt:RegisterEvent("UNIT_TARGET")
