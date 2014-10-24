@@ -275,14 +275,14 @@ appearance.tab.Icon:SetTexture("Interface\\Icons\\inv_ore_arcanite_01")
 local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
 colours:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
 
-local useCustomColour = ns.CreateCheckBox(appearance, "useCustomColour", true, true)
-useCustomColour:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -20)
+local colourScheme = ns.CreateRadioButtonGroup(appearance, "colourScheme", 2, true, true)
+colourScheme.buttons[1]:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -41)
 
 local customColour = ns.CreateColourPicker(appearance, "customColour", true)
-customColour:SetPoint("LEFT", useCustomColour.Text, "RIGHT", 6, 0)
+customColour:SetPoint("LEFT", colourScheme.buttons[2].text, "RIGHT", 6, 0)
 
 local fonts = ns.addSubCategory(appearance, ns.localization.appearanceFonts)
-fonts:SetPoint("TOPLEFT", useCustomColour, "BOTTOMLEFT", 0, -30)
+fonts:SetPoint("TOPLEFT", colourScheme.buttons[2], "BOTTOMLEFT", 0, -30)
 
 local fontUseAlternativeFont = ns.CreateCheckBox(appearance, "fontUseAlternativeFont", true, true)
 fontUseAlternativeFont:SetPoint("TOPLEFT", fonts, "BOTTOMLEFT", 0, -20)

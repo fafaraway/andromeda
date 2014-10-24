@@ -25,7 +25,7 @@ C["general"] = {
 }
 
 C["appearance"] = {
-	["useCustomColour"] = false,
+	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
 		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
 	["fontSizeNormal"] = 8,

@@ -52,7 +52,7 @@ C.classcolours = {
 }
 
 local _, class = UnitClass("player")
-if C.appearance.useCustomColour then
+if C.appearance.colourScheme == 2 then
 	C.class = {C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b}
 else
 	C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
