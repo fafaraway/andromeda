@@ -206,12 +206,15 @@ ns.CreateRadioButtonGroup = function(parent, option, numValues, tooltipText, nee
 		f.text:SetText(ns.localization[parent.tag..option..i])
 		if tooltipText then
 			f.tooltipText = ns.localization[parent.tag..option..i.."Tooltip"]
-			f:HookScript("OnEnter", radioOnEnter)
-			f:HookScript("OnLeave", radioOnLeave)
 		end
 
 		if needsReload then
 			f.tooltipText = f.tooltipText and format("%s\n\n%s", f.tooltipText, ns.localization.requiresReload) or ns.localization.requiresReload
+		end
+
+		if f.tooltipText then
+			f:HookScript("OnEnter", radioOnEnter)
+			f:HookScript("OnLeave", radioOnLeave)
 		end
 
 		f.needsReload = needsReload
