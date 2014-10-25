@@ -61,6 +61,8 @@ C["bags"] = {
 
 	["size"] = 37,						-- change the size of the bags/bank, default = 37
 	["slotsShowAlways"] = false, 		-- always show the bag item slots
+
+	["hideSlots"] = true,				-- hide bag slots if style is 2 or 3
 }
 
 C["menubar"] = {

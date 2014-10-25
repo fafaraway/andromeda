@@ -425,13 +425,15 @@ do
 	local size = ns.CreateNumberSlider(bags, "size", SMALL, LARGE, 8, 100, 1)
 	size:SetPoint("TOPLEFT", slotsShowAlways, "BOTTOMLEFT", 8, -42)
 
-	local function toggleBagsOptions()
-		local shown = style.buttons[1]:GetChecked()
+	local hideSlots = ns.CreateCheckBox(bags, "hideSlots", true)
+	hideSlots:SetPoint("TOPLEFT", styleSpecific, "BOTTOMLEFT", 0, -20)
 
-		styleSpecific:SetShown(shown)
-		styleSpecificLine:SetShown(shown)
-		slotsShowAlways:SetShown(shown)
-		size:SetShown(shown)
+	local function toggleBagsOptions()
+		local isAllInOne = style.buttons[1]:GetChecked()
+
+		slotsShowAlways:SetShown(isAllInOne)
+		size:SetShown(isAllInOne)
+		hideSlots:SetShown(not isAllInOne)
 	end
 
 	for _, button in pairs(style.buttons) do

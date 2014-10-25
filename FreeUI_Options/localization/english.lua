@@ -118,6 +118,8 @@ ns.localization.bagsstyle2 = "Restyle default"
 ns.localization.bagsstyle3 = "Disable"
 ns.localization.bagsslotsShowAlways = "Always show item slots"
 ns.localization.bagsslotsShowAlwaysTooltip = "Enable to show the border of empty bag slots even when not moving any items."
+ns.localization.bagshideSlots = "Hide bag slots"
+ns.localization.bagshideSlotsTooltip = "Disable this option when you want to add or a replace a bag."
 
 ns.localization.menubar = "Menu bar"
 ns.localization.menubarSubText = "The menu bar is the panel at the bottom of the screen. Moving your mouse over it reveals additional functionality and information."

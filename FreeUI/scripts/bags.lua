@@ -2,7 +2,21 @@
 
 local F, C, L = unpack(select(2, ...))
 
-if C.bags.style ~= 1 then return end
+if C.bags.style ~= 1 then
+	local function toggleBagSlots()
+		local parent = C.bags.hideSlots and FreeUIHider or MainMenuBarArtFrame
+
+		for i = 0, 3 do
+			_G["CharacterBag"..i.."Slot"]:SetParent(parent)
+		end
+	end
+
+	toggleBagSlots()
+
+	F.AddOptionsCallback("bags", "hideSlots", toggleBagSlots)
+
+	return
+end
 
 local _G = _G
 
