@@ -409,12 +409,14 @@ end
 do
 	local bags = FreeUIOptionsPanel.bags
 	bags.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_bag_08")
+	tinsert(ns.newCategories, bags)
 
 	local general = ns.addSubCategory(bags, ns.localization.bagsGeneral)
 	general:SetPoint("TOPLEFT", bags.subText, "BOTTOMLEFT", 0, -8)
 
 	local style = ns.CreateRadioButtonGroup(bags, "style", 3, false, true)
 	style.buttons[1]:SetPoint("TOPLEFT", general, "BOTTOMLEFT", 0, -41)
+	tinsert(ns.newOptions, style.buttons[2])
 
 	local styleSpecific, styleSpecificLine = ns.addSubCategory(bags, ns.localization.bagsStyleSpecific)
 	styleSpecific:SetPoint("TOPLEFT", style.buttons[3], "BOTTOMLEFT", 0, -30)
@@ -427,6 +429,7 @@ do
 
 	local hideSlots = ns.CreateCheckBox(bags, "hideSlots", true)
 	hideSlots:SetPoint("TOPLEFT", styleSpecific, "BOTTOMLEFT", 0, -20)
+	tinsert(ns.newOptions, hideSlots)
 
 	local function toggleBagsOptions()
 		local isAllInOne = style.buttons[1]:GetChecked()

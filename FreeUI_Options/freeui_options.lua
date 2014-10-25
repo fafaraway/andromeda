@@ -6,6 +6,9 @@ local _, ns = ...
 ns.categories = {}
 ns.buttons = {}
 ns.protectOptions = {}
+-- highlight new options
+ns.newCategories = {}
+ns.newOptions = {}
 
 local checkboxes = {}
 local radiobuttons = {}
@@ -13,11 +16,13 @@ local sliders = {}
 local colourpickers = {}
 local panels = {}
 
-local old = {} -- to keep track of whether or not reload is needed
-local oldRadioValues = {} -- same
-local oldColours = {} -- same
+-- cache old values to check whether UI needs to be reloaded
+local old = {}
+local oldRadioValues = {}
+local oldColours = {}
+
 local overrideReload = false
-local userChangedSlider = true -- to use SetValue without running OnValueChanged code
+local userChangedSlider = true -- to use SetValue without triggering OnValueChanged
 local baseName = "FreeUIOptionsPanel"
 
 local r, g, b
@@ -719,6 +724,22 @@ init:SetScript("OnEvent", function()
 	end
 
 	F.ReskinInput(resetFrame.charBox)
+
+	for _, newCategory in pairs(ns.newCategories) do
+		local new = F.CreateFS(newCategory.tab)
+		new:SetTextColor(r, g, b)
+		new:SetPoint("RIGHT", -5, 0)
+		new:SetText(ns.localization.NEW)
+	end
+
+	for _, newOption in pairs(ns.newOptions) do
+		local text = newOption.text or newOption.Text
+
+		local new = F.CreateFS(newOption)
+		new:SetTextColor(r, g, b)
+		new:SetPoint("LEFT", text, "RIGHT", 3, 6)
+		new:SetText(ns.localization.NEW)
+	end
 
 	local function updateFontSamples()
 		if userChangedSlider then

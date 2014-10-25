@@ -20,6 +20,7 @@ ns.localization.notificationPreviewText = "This is an example of a notification.
 ns.localization.notificationPreviewCallbackText = "Banner clicked! Most notifications have a relevant on-click action."
 ns.localization.author = "FreeUI by Haleth on wowinterface.com"
 ns.localization.authorSubText = "Lightsword @ Argent Dawn - EU"
+ns.localization.NEW = "NEW!"
 
 ns.localization.general = "General"
 ns.localization.generalSubText = "These options control most of the common settings in the UI."
