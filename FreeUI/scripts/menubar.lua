@@ -200,7 +200,7 @@ addButton("Toggle DBM", POSITION_RIGHT, function()
 	end
 end)
 
-addButton("Toggle damage meter", POSITION_RIGHT, function()
+--[[addButton("Toggle damage meter", POSITION_RIGHT, function()
 	if IsAddOnLoaded("alDamageMeter") then
 		DisableAddOn("alDamageMeter")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
@@ -213,7 +213,7 @@ addButton("Toggle damage meter", POSITION_RIGHT, function()
 			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffalDamageMeter not found!|r", r, g, b)
 		end
 	end
-end)
+end)]]
 
 local specButton = addButton("No specialization", POSITION_RIGHT, function()
 	SetActiveSpecGroup(3 - GetActiveSpecGroup())

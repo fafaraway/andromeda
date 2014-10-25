@@ -325,7 +325,7 @@ end
 local tut3 = function()
 	sb:SetValue(300)
 	header:SetText("3. Features")
-	body:SetText("There are a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a self-buff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options file in the FreeUI folder, which can be edited with any text editor. Examples are included. Self-buffs are already set up, so no worries.\n\nYou can mark players and NPCs by alt+shift-clicking them in the game world and selecting an icon from the dropdown menu.\n\nMoving the cursor to the bottom of the screen reveals a panel with buttons for toggling the micro menu, chat menu, DBM and the damage meter.")
+	body:SetText("There are a couple of small tools in this UI you might be interested in as well. For example, there are two ways to track buffs; an embedded buff tracker, to monitor buffs; and a self-buff reminder, which will display an icon if the buff is missing while in combat.\n\nYou can set up these buff trackers in the options file in the FreeUI folder, which can be edited with any text editor. Examples are included. Self-buffs are already set up, so no worries.\n\nYou can mark players and NPCs by alt+shift-clicking them in the game world and selecting an icon from the dropdown menu.\n\nMoving the cursor to the bottom of the screen reveals a panel with buttons for toggling the micro menu, chat menu, and DBM.")
 
 	sbt:SetText("3/6")
 
