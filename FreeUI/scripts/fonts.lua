@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
+local locale = GetLocale()
 local font = C.media.font2
 
 RaidWarningFrame.slot1:SetFont(font, 20, "OUTLINE")
@@ -56,8 +57,10 @@ QuestFont_Huge:SetFont(font, 18)
 QuestFont_Super_Huge:SetFont(font, 24)
 QuestFont_Super_Huge:SetShadowColor(0, 0, 0)
 QuestFont_Super_Huge:SetShadowOffset(1, -1)
-QuestFont_Enormous:SetFont(font, 30)
-QuestFont_Enormous:SetShadowOffset(1, -1)
+if locale ~= "zhCN" and local ~= "zhTW" then -- I don't even know
+	QuestFont_Enormous:SetFont(font, 30)
+	QuestFont_Enormous:SetShadowOffset(1, -1)
+end
 ReputationDetailFont:SetFont(font, 10)
 SpellFont_Small:SetFont(font, 10)
 SpellFont_Small:SetShadowColor(0, 0, 0)
