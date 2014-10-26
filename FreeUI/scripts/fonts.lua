@@ -57,7 +57,7 @@ QuestFont_Huge:SetFont(font, 18)
 QuestFont_Super_Huge:SetFont(font, 24)
 QuestFont_Super_Huge:SetShadowColor(0, 0, 0)
 QuestFont_Super_Huge:SetShadowOffset(1, -1)
-if locale ~= "zhCN" and local ~= "zhTW" then -- I don't even know
+if locale ~= "zhCN" and locale ~= "zhTW" then -- I don't even know
 	QuestFont_Enormous:SetFont(font, 30)
 	QuestFont_Enormous:SetShadowOffset(1, -1)
 end
