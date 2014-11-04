@@ -532,6 +532,38 @@ local Shared = function(self, unit, isSingle)
 
 	self.RaidIcon = RaidIcon
 
+	-- [[ Counter bar ]]
+
+	if unit == "player" or unit == "pet" then
+		local CounterBar = CreateFrame("StatusBar", nil, self)
+		CounterBar:SetWidth(playerWidth)
+		CounterBar:SetHeight(16)
+		CounterBar:SetStatusBarTexture(C.media.texture)
+		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
+
+		local cbd = CreateFrame("Frame", nil, CounterBar)
+		cbd:SetPoint("TOPLEFT", -1, 1)
+		cbd:SetPoint("BOTTOMRIGHT", 1, -1)
+		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
+		F.CreateBD(cbd)
+
+		CounterBar.Text = F.CreateFS(CounterBar)
+		CounterBar.Text:SetPoint("CENTER")
+
+		local r, g, b
+		local max
+
+		CounterBar:SetScript("OnValueChanged", function(_, value)
+			_, max = CounterBar:GetMinMaxValues()
+			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+			CounterBar:SetStatusBarColor(r, g, b)
+
+			CounterBar.Text:SetText(floor(value))
+		end)
+
+		self.CounterBar = CounterBar
+	end
+
 	--[[ Set up the layout ]]
 
 	self.colors = colors
@@ -1097,36 +1129,6 @@ local UnitSpecific = {
 			self.SpecialPowerBar:HookScript("OnHide", moveDebuffAnchors)
 		end
 		moveDebuffAnchors()
-
-		-- Counter bar
-
-		local CounterBar = CreateFrame("StatusBar", nil, self)
-		CounterBar:SetWidth(playerWidth)
-		CounterBar:SetHeight(16)
-		CounterBar:SetStatusBarTexture(C.media.texture)
-		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
-
-		local cbd = CreateFrame("Frame", nil, CounterBar)
-		cbd:SetPoint("TOPLEFT", -1, 1)
-		cbd:SetPoint("BOTTOMRIGHT", 1, -1)
-		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
-		F.CreateBD(cbd)
-
-		CounterBar.Text = F.CreateFS(CounterBar)
-		CounterBar.Text:SetPoint("CENTER")
-
-		local r, g, b
-		local max
-
-		CounterBar:SetScript("OnValueChanged", function(_, value)
-			_, max = CounterBar:GetMinMaxValues()
-			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-			CounterBar:SetStatusBarColor(r, g, b)
-
-			CounterBar.Text:SetText(floor(value))
-		end)
-
-		self.CounterBar = CounterBar
 
 		-- Status indicator
 
