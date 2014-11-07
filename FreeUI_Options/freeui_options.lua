@@ -3,6 +3,9 @@ local _, ns = ...
 
 -- [[ Variables ]]
 
+ns.locale = GetLocale()
+ns.localization = {}
+
 ns.categories = {}
 ns.buttons = {}
 ns.protectOptions = {}
@@ -463,12 +466,12 @@ ns.addCategory = function(name)
 	tab:SetSize(189, 34)
 
 	local icon = tab:CreateTexture(nil, "OVERLAY")
-	icon:SetSize(24, 24)
-	icon:SetPoint("LEFT", tab, 6, 0)
+	icon:SetSize(25, 25)
+	icon:SetPoint("LEFT", tab, 6, -1)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	tab.Icon = icon
 
-	tab.Text = tab:CreateFontString(nil, "ARTWORK", "GameFontHighlightMedium")
+	tab.Text = tab:CreateFontString(nil, "ARTWORK", "SystemFont_Shadow_Med3")
 	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	tab.Text:SetTextColor(.9, .9, .9)
 	tab.Text:SetText(ns.localization[tag])

@@ -1,6 +1,6 @@
 local _, ns = ...
 
-ns.localization = {}
+if ns.locale ~= "zhCN" and ns.locale ~= "zhTW" then return end
 
 ns.localization.profile = "角色单独配置"
 ns.localization.profileTooltip = "在角色单独配置和公共配置之间切换。"

@@ -1,7 +1,5 @@
 local _, ns = ...
 
-ns.localization = {}
-
 ns.localization.profile = "Character-specific settings"
 ns.localization.profileTooltip = "Switch between a profile that applies to all characters and one that is unique to this character."
 ns.localization.credits = "Credits"
