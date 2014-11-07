@@ -16,7 +16,7 @@ local microMenu = {
 		PlayerTalentFrame_Toggle()
 	end},
 	{text = ACHIEVEMENT_BUTTON, notCheckable = true, func = ToggleAchievementFrame},
-	{text = QUESTLOG_BUTTON, notCheckable = true, func = function() ToggleFrame(QuestLogFrame) end},
+	{text = WORLD_MAP.." / "..QUESTLOG_BUTTON, notCheckable = true, func = function() ShowUIPanel(WorldMapFrame) end},
 	{text = MOUNTS_AND_PETS, notCheckable = true, func = function() TogglePetJournal(1) end},
 	{text = SOCIAL_BUTTON, notCheckable = true, func = function() ToggleFriendsFrame(1) end},
 	{text = COMPACT_UNIT_FRAME_PROFILE_AUTOACTIVATEPVE, notCheckable = true, func = function() PVEFrame_ToggleFrame() end},
