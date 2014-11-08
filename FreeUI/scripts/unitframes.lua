@@ -300,7 +300,7 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 		Power:SetValue(0)
 	end
 
-	if unit == "player" then
+	if Power.Text then
 		Power.Text:SetTextColor(Power:GetStatusBarColor())
 	end
 end
@@ -1208,7 +1208,6 @@ local UnitSpecific = {
 		local PowerText = F.CreateFS(Power)
 		PowerText:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
 		self:Tag(PowerText, '[free:power]')
-		Power.Text = PowerText
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7 + C.appearance.fontSizeNormal + (C.unitframes.targettarget and 10 or 0))
