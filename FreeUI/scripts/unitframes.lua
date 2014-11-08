@@ -294,9 +294,9 @@ end
 
 --[[ Update power value ]]
 
-local PostUpdatePower = function(Power, unit, min, max)
+local PostUpdatePower = function(Power, unit, cur, max, min)
 	local Health = Power:GetParent().Health
-	if min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
+	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		Power:SetValue(0)
 	end
 end
@@ -634,10 +634,9 @@ local UnitSpecific = {
 		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
 		Health.value = HealthPoints
 
-		local PowerPoints = F.CreateFS(Power, C.FONT_SIZE_NORMAL, "RIGHT")
-		PowerPoints:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
-		PowerPoints:SetTextColor(.4, .7, 1)
-		self:Tag(PowerPoints, '[free:power]')
+		local PowerText = F.CreateFS(Power, C.FONT_SIZE_NORMAL, "RIGHT")
+		PowerText:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
+		self:Tag(PowerText, '[free:power]')
 
 		-- Cast bar
 
@@ -1201,10 +1200,9 @@ local UnitSpecific = {
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
 
-		local PowerPoints = F.CreateFS(Power)
-		PowerPoints:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
-		PowerPoints:SetTextColor(.4, .7, 1)
-		self:Tag(PowerPoints, '[free:power]')
+		local PowerText = F.CreateFS(Power)
+		PowerText:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
+		self:Tag(PowerText, '[free:power]')
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7 + C.appearance.fontSizeNormal + (C.unitframes.targettarget and 10 or 0))
@@ -1251,7 +1249,7 @@ local UnitSpecific = {
 		self.Iconbg:SetTexture(C.media.backdrop)
 
 		local Name = F.CreateFS(self)
-		Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
+		Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
 		Name:SetPoint("RIGHT", self)
 		Name:SetJustifyH("RIGHT")
 		Name:SetTextColor(1, 1, 1)
@@ -1305,11 +1303,11 @@ local UnitSpecific = {
 		QuestIcon.PostUpdate = function(self, isQuestBoss)
 			if isQuestBoss then
 				Name:ClearAllPoints()
-				Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
+				Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
 				Name:SetPoint("RIGHT", QuestIcon, "LEFT", 0, 0)
 			else
 				Name:ClearAllPoints()
-				Name:SetPoint("BOTTOMLEFT", PowerPoints, "BOTTOMRIGHT")
+				Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
 				Name:SetPoint("RIGHT", self)
 			end
 		end
