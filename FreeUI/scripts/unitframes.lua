@@ -299,6 +299,10 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		Power:SetValue(0)
 	end
+
+	if unit == "player" then
+		Power.Text:SetTextColor(Power:GetStatusBarColor())
+	end
 end
 
 -- [[ Threat update (party) ]]
@@ -637,6 +641,7 @@ local UnitSpecific = {
 		local PowerText = F.CreateFS(Power, C.FONT_SIZE_NORMAL, "RIGHT")
 		PowerText:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
 		self:Tag(PowerText, '[free:power]')
+		Power.Text = PowerText
 
 		-- Cast bar
 
@@ -1203,6 +1208,7 @@ local UnitSpecific = {
 		local PowerText = F.CreateFS(Power)
 		PowerText:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
 		self:Tag(PowerText, '[free:power]')
+		Power.Text = PowerText
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 7 + C.appearance.fontSizeNormal + (C.unitframes.targettarget and 10 or 0))
