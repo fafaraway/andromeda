@@ -201,6 +201,73 @@ tinsert(C.themes["FreeUI"], function()
 	F.ReskinInput(ActivityFinder.Dialog.EntryBox)
 	F.ReskinScroll(LFGListEntryCreationSearchScrollFrameScrollBar)
 
+	-- [[ Role count ]]
+
+	hooksecurefunc("LFGListGroupDataDisplayRoleCount_Update", function(self)
+		if not self.styled then
+			for _, roleButton in pairs({self.TankIcon, self.HealerIcon, self.DamagerIcon}) do
+				roleButton:SetTexture(C.media.roleIcons)
+
+				local left = self:CreateTexture(nil, "OVERLAY")
+				left:SetWidth(1)
+				left:SetTexture(C.media.backdrop)
+				left:SetVertexColor(0, 0, 0)
+
+				local right = self:CreateTexture(nil, "OVERLAY")
+				right:SetWidth(1)
+				right:SetTexture(C.media.backdrop)
+				right:SetVertexColor(0, 0, 0)
+
+				local top = self:CreateTexture(nil, "OVERLAY")
+				top:SetHeight(1)
+				top:SetTexture(C.media.backdrop)
+				top:SetVertexColor(0, 0, 0)
+
+				local bottom = self:CreateTexture(nil, "OVERLAY")
+				bottom:SetHeight(1)
+				bottom:SetTexture(C.media.backdrop)
+				bottom:SetVertexColor(0, 0, 0)
+
+				if roleButton == self.TankIcon then
+					roleButton:SetTexCoord(0, .24, .25, .5)
+
+					left:SetPoint("TOPLEFT", roleButton, 2, -3)
+					left:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
+					right:SetPoint("TOPRIGHT", roleButton, -1, -3)
+					right:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+					top:SetPoint("TOPLEFT", roleButton, 2, -2)
+					top:SetPoint("TOPRIGHT", roleButton, -1, -2)
+					bottom:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
+					bottom:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+				elseif roleButton == self.HealerIcon then
+					roleButton:SetTexCoord(.249, .5, 0.003, .243)
+
+					left:SetPoint("TOPLEFT", roleButton, 2, -1)
+					left:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
+					right:SetPoint("TOPRIGHT", roleButton, -1, -1)
+					right:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+					top:SetPoint("TOPLEFT", roleButton, 2, -1)
+					top:SetPoint("TOPRIGHT", roleButton, -1, -1)
+					bottom:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
+					bottom:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+				else
+					roleButton:SetTexCoord(.25, .5, .25, .5)
+
+					left:SetPoint("TOPLEFT", roleButton, 2, -3)
+					left:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
+					right:SetPoint("TOPRIGHT", roleButton, -1, -3)
+					right:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+					top:SetPoint("TOPLEFT", roleButton, 2, -2)
+					top:SetPoint("TOPRIGHT", roleButton, -1, -2)
+					bottom:SetPoint("BOTTOMLEFT", roleButton, 2, 1)
+					bottom:SetPoint("BOTTOMRIGHT", roleButton, -1, 1)
+				end
+			end
+
+			self.styled = true
+		end
+	end)
+
 	-- [[ Application dialog ]]
 
 	local LFGListApplicationDialog = LFGListApplicationDialog
