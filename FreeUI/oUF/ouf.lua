@@ -23,7 +23,7 @@ local print = Private.print
 local error = Private.error
 
 local styles, style = {}
-local callback, objects = {}, {}
+local callback, objects, headers = {}, {}, {}
 
 local elements = {}
 local activeElements = {}
@@ -455,10 +455,8 @@ do
 			-- There's no need to do anything on frames with onlyProcessChildren
 			if(not frame:GetAttribute'oUF-onlyProcessChildren') then
 				RegisterUnitWatch(frame)
-
 				-- Attempt to guess what the header is set to spawn.
 				local groupFilter = header:GetAttribute'groupFilter'
-
 				if(type(groupFilter) == 'string' and groupFilter:match('MAIN[AT]')) then
 					local role = groupFilter:match('MAIN([AT])')
 					if(role == 'T') then
@@ -471,7 +469,6 @@ do
 				elseif(header:GetAttribute'showParty') then
 					unit = 'party'
 				end
-
 				local headerType = header:GetAttribute'oUF-headerType'
 				local suffix = frame:GetAttribute'unitsuffix'
 				if(unit and suffix) then
@@ -483,21 +480,17 @@ do
 				elseif(unit and headerType == 'pet') then
 					unit = unit .. headerType
 				end
-
 				frame:SetAttribute('*type1', 'target')
 				frame:SetAttribute('*type2', 'togglemenu')
 				frame:SetAttribute('toggleForVehicle', true)
 				frame:SetAttribute('oUF-guessUnit', unit)
 			end
-
 			local body = header:GetAttribute'oUF-initialConfigFunction'
 			if(body) then
 				frame:Run(body, unit)
 			end
 		end
-
 		header:CallMethod('styleFunction', self:GetName())
-
 		local clique = header:GetFrameRef("clickcast_header")
 		if(clique) then
 			clique:SetAttribute("clickcast_button", self)
@@ -523,6 +516,9 @@ do
 
 		header.style = style
 		header.styleFunction = styleProxy
+
+		-- Expose the header through oUF.headers.
+		table.insert(headers, header)
 
 		-- We set it here so layouts can't directly override it.
 		header:SetAttribute('initialConfigFunction', initialConfigFunction)
@@ -585,6 +581,7 @@ end
 
 oUF.version = _VERSION
 oUF.objects = objects
+oUF.headers = headers
 
 if(global) then
 	if(parent ~= 'oUF' and global == 'oUF') then
