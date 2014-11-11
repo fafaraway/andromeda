@@ -112,11 +112,14 @@ theme\FrameXML\BankFrame.lua
 theme\FrameXML\CharacterFrame.lua
 theme\FrameXML\ContainerFrame.lua
 theme\FrameXML\EquipmentFlyout.lua
+theme\FrameXML\InterfaceOptionsFrame.lua
 theme\FrameXML\LFDFrame.lua
 theme\FrameXML\LFGFrame.lua
 theme\FrameXML\LFGList.lua
 theme\FrameXML\LFRFrame.lua
 theme\FrameXML\LootHistory.lua
+theme\FrameXML\MailFrame.lua
+theme\FrameXML\MerchantFrame.lua
 theme\FrameXML\ModelPreviewFrame.lua
 theme\FrameXML\NavigationBar.lua
 theme\FrameXML\PaperDollFrame.lua
