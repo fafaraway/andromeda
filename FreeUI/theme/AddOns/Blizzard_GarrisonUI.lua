@@ -191,25 +191,47 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		for i = 1, #buttons do
 			local button = buttons[i]
+			local portrait = button.PortraitFrame
 
 			if not button.restyled then
 				button.BG:Hide()
-
-				button.Selection:SetTexture(r, g, b, .2)
-				button.Selection:ClearAllPoints()
-				button.Selection:SetPoint("TOPLEFT", 2, -1)
-				button.Selection:SetPoint("BOTTOMRIGHT", -1, 1)
+				button.Selection:SetTexture("")
 
 				F.CreateBD(button, .25)
 
-				local portrait = button.PortraitFrame
-
 				if portrait then
 					portrait.PortraitRing:Hide()
+					portrait.PortraitRingQuality:SetTexture("")
 					portrait.LevelBorder:SetAlpha(0)
+
+					portrait:ClearAllPoints()
+					portrait:SetPoint("LEFT", 4, -3)
+					portrait.Level:ClearAllPoints()
+					portrait.Level:SetPoint("BOTTOM", 0, 6)
+
+					local squareBG = CreateFrame("Frame", nil, portrait)
+					squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
+					squareBG:SetPoint("TOPLEFT", 3, -3)
+					squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
+					F.CreateBD(squareBG, 1)
+					portrait.squareBG = squareBG
 				end
 
 				button.restyled = true
+			end
+
+			if button.Selection:IsShown() then
+				button:SetBackdropColor(r, g, b, .2)
+			else
+				button:SetBackdropColor(0, 0, 0, .25)
+			end
+
+			if portrait then
+				if portrait.PortraitRingQuality:IsShown() then
+					portrait.squareBG:SetBackdropBorderColor(portrait.PortraitRingQuality:GetVertexColor())
+				else
+					portrait.squareBG:SetBackdropBorderColor(0, 0, 0)
+				end
 			end
 		end
 	end)
