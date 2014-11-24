@@ -3,6 +3,24 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_GarrisonUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
+	-- [[ Shared functions ]]
+
+	local function restyleFollowerPortrait(portrait)
+		portrait.PortraitRing:Hide()
+		portrait.PortraitRingQuality:SetTexture("")
+		portrait.LevelBorder:SetAlpha(0)
+
+		portrait.Level:ClearAllPoints()
+		portrait.Level:SetPoint("BOTTOM", portrait, 0, 7)
+
+		local squareBG = CreateFrame("Frame", nil, portrait)
+		squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
+		squareBG:SetPoint("TOPLEFT", 3, -3)
+		squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
+		F.CreateBD(squareBG, 1)
+		portrait.squareBG = squareBG
+	end
+
 	-- [[ Capacitive display frame ]]
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
@@ -150,16 +168,30 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local FollowerTab = GarrisonLandingPage.FollowerTab
 
-	local xpBar = FollowerTab.XPBar
+	do
+		local xpBar = FollowerTab.XPBar
 
-	select(1, xpBar:GetRegions()):Hide()
-	xpBar.XPLeft:Hide()
-	xpBar.XPRight:Hide()
-	select(4, xpBar:GetRegions()):Hide()
+		select(1, xpBar:GetRegions()):Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
 
-	xpBar:SetStatusBarTexture(C.media.backdrop)
+		xpBar:SetStatusBarTexture(C.media.backdrop)
 
-	F.CreateBDFrame(xpBar)
+		F.CreateBDFrame(xpBar)
+	end
+
+	-- [[ Mission UI ]]
+
+	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
+		if not portraitFrame.styled then
+			restyleFollowerPortrait(portraitFrame)
+		end
+
+		local color = ITEM_QUALITY_COLORS[followerInfo.quality]
+
+		portraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
+	end)
 
 	-- [[ Recruiter frame ]]
 
@@ -200,21 +232,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				F.CreateBD(button, .25)
 
 				if portrait then
-					portrait.PortraitRing:Hide()
-					portrait.PortraitRingQuality:SetTexture("")
-					portrait.LevelBorder:SetAlpha(0)
-
+					restyleFollowerPortrait(portrait)
 					portrait:ClearAllPoints()
 					portrait:SetPoint("LEFT", 4, -3)
-					portrait.Level:ClearAllPoints()
-					portrait.Level:SetPoint("BOTTOM", 0, 6)
-
-					local squareBG = CreateFrame("Frame", nil, portrait)
-					squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
-					squareBG:SetPoint("TOPLEFT", 3, -3)
-					squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
-					F.CreateBD(squareBG, 1)
-					portrait.squareBG = squareBG
 				end
 
 				button.restyled = true
