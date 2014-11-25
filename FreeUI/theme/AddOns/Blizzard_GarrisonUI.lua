@@ -6,12 +6,19 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- [[ Shared functions ]]
 
 	local function restyleFollowerPortrait(portrait)
+		local level = portrait.Level
+		local cover = portrait.PortraitRingCover
+
 		portrait.PortraitRing:Hide()
 		portrait.PortraitRingQuality:SetTexture("")
-		portrait.LevelBorder:SetAlpha(0)
 
-		portrait.Level:ClearAllPoints()
-		portrait.Level:SetPoint("BOTTOM", portrait, 0, 7)
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+		portrait.LevelBorder:ClearAllPoints()
+		portrait.LevelBorder:SetPoint("BOTTOM", 0, 12)
+
+		level:ClearAllPoints()
+		level:SetPoint("BOTTOM", portrait, 0, 12)
 
 		local squareBG = CreateFrame("Frame", nil, portrait)
 		squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
@@ -19,6 +26,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
 		F.CreateBD(squareBG, 1)
 		portrait.squareBG = squareBG
+
+		cover:SetTexture(0, 0, 0)
+		cover:SetAllPoints(squareBG)
 	end
 
 	-- [[ Capacitive display frame ]]
@@ -260,6 +270,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		bg:SetPoint("BOTTOMRIGHT", -5, 6)
 	end
 
+	F.Reskin(MissionList.CompleteDialog.BorderFrame.ViewButton)
+
 	local buttons = MissionList.listScroll.buttons
 	for i = 1, #buttons do
 		local button = buttons[i]
@@ -345,6 +357,19 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	FollowerTab:DisableDrawLayer("BORDER")
 
+	do
+		local xpBar = FollowerTab.XPBar
+
+		select(1, xpBar:GetRegions()):Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
+
+		xpBar:SetStatusBarTexture(C.media.backdrop)
+
+		F.CreateBDFrame(xpBar)
+	end
+
 	for _, item in pairs({FollowerTab.ItemWeapon, FollowerTab.ItemArmor}) do
 		local icon = item.Icon
 
@@ -363,6 +388,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
 		if not portraitFrame.styled then
 			restyleFollowerPortrait(portraitFrame)
+			portraitFrame.styled = true
 		end
 
 		local color = ITEM_QUALITY_COLORS[followerInfo.quality]
@@ -405,13 +431,16 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			if not button.restyled then
 				button.BG:Hide()
 				button.Selection:SetTexture("")
+				button.AbilitiesBG:SetTexture("")
 
 				F.CreateBD(button, .25)
+
+				button.BusyFrame:SetAllPoints()
 
 				if portrait then
 					restyleFollowerPortrait(portrait)
 					portrait:ClearAllPoints()
-					portrait:SetPoint("LEFT", 4, -3)
+					portrait:SetPoint("TOPLEFT", 4, -1)
 				end
 
 				button.restyled = true
@@ -430,6 +459,20 @@ C.themes["Blizzard_GarrisonUI"] = function()
 					portrait.squareBG:SetBackdropBorderColor(0, 0, 0)
 				end
 			end
+		end
+	end)
+
+	hooksecurefunc("GarrisonFollowerButton_AddAbility", function(self, index)
+		local ability = self.Abilities[index]
+
+		if not ability.styled then
+			local icon = ability.Icon
+
+			icon:SetSize(19, 19)
+			icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(icon)
+
+			ability.styled = true
 		end
 	end)
 
