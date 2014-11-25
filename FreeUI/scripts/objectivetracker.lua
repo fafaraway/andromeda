@@ -66,6 +66,13 @@ for _, headerName in pairs({"QuestHeader", "AchievementHeader", "ScenarioHeader"
 	F.SetFS(header.Text)
 end
 
+do
+	local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
+
+	header.Background:Hide()
+	F.SetFS(header.Text)
+end
+
 hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 	if not block.headerStyled then
 		F.SetFS(block.HeaderText)
@@ -146,5 +153,33 @@ hooksecurefunc("ObjectiveTracker_AddBlock", function(block)
 		block.shouldFix = true
 		hooksecurefunc(block, "SetHeight", fixBlockHeight)
 		block.styled = true
+	end
+end)
+
+-- [[ Bonus objective progress bar ]]
+
+hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
+	local progressBar = line.ProgressBar
+
+	if not progressBar.styled then
+		local bar = progressBar.Bar
+		local label = bar.Label
+
+		bar.BorderLeft:Hide()
+		bar.BorderRight:Hide()
+		bar.BorderMid:Hide()
+		select(5, bar:GetRegions()):Hide()
+
+		bar:SetStatusBarTexture(C.media.backdrop)
+
+		label:ClearAllPoints()
+		label:SetPoint("CENTER", 0, -1)
+		F.SetFS(label)
+
+		local bg = F.CreateBDFrame(bar)
+		bg:SetPoint("TOPLEFT", -1, 0)
+		bg:SetPoint("BOTTOMRIGHT", 0, -3)
+
+		progressBar.styled = true
 	end
 end)
