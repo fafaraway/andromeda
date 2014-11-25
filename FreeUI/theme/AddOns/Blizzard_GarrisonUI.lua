@@ -212,7 +212,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- Follower list
 
-	F.ReskinInput(GarrisonMissionFrame.FollowerList.SearchBox)
+	local FollowerList = GarrisonMissionFrame.FollowerList
+
+	FollowerList:DisableDrawLayer("BORDER")
+	FollowerList.MaterialFrame:GetRegions():Hide()
+
+	F.ReskinInput(FollowerList.SearchBox)
+	F.ReskinScroll(FollowerList.listScroll.scrollBar)
 
 	local MissionTab = GarrisonMissionFrame.MissionTab
 
@@ -223,6 +229,36 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	MissionList:DisableDrawLayer("BORDER")
 
 	F.ReskinScroll(MissionList.listScroll.scrollBar)
+
+	for i = 1, 2 do
+		local tab = _G["GarrisonMissionFrameMissionsTab"..i]
+
+		tab.Left:Hide()
+		tab.Middle:Hide()
+		tab.Right:Hide()
+		tab.SelectedLeft:SetTexture("")
+		tab.SelectedMid:SetTexture("")
+		tab.SelectedRight:SetTexture("")
+
+		F.CreateBD(tab, .25)
+	end
+
+	GarrisonMissionFrameMissionsTab1:SetBackdropColor(r, g, b, .2)
+
+	hooksecurefunc("GarrisonMissonListTab_SetSelected", function(tab, isSelected)
+		if isSelected then
+			tab:SetBackdropColor(r, g, b, .2)
+		else
+			tab:SetBackdropColor(0, 0, 0, .25)
+		end
+	end)
+
+	do
+		MissionList.MaterialFrame:GetRegions():Hide()
+		local bg = F.CreateBDFrame(MissionList.MaterialFrame, .25)
+		bg:SetPoint("TOPLEFT", 5, -5)
+		bg:SetPoint("BOTTOMRIGHT", -5, 6)
+	end
 
 	local buttons = MissionList.listScroll.buttons
 	for i = 1, #buttons do
@@ -301,6 +337,25 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local iconbg = MissionPage.Stage.IconBG
 		iconbg:ClearAllPoints()
 		iconbg:SetPoint("TOPLEFT", 3, -1)
+	end
+
+	-- Follower tab
+
+	local FollowerTab = GarrisonMissionFrame.FollowerTab
+
+	FollowerTab:DisableDrawLayer("BORDER")
+
+	for _, item in pairs({FollowerTab.ItemWeapon, FollowerTab.ItemArmor}) do
+		local icon = item.Icon
+
+		item.Border:Hide()
+
+		icon:SetTexCoord(.08, .92, .08, .92)
+		F.CreateBG(icon)
+
+		local bg = F.CreateBDFrame(item, .25)
+		bg:SetPoint("TOPLEFT", 41, -1)
+		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 	end
 
 	-- Portraits
