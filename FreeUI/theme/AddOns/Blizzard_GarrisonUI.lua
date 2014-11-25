@@ -183,6 +183,128 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- [[ Mission UI ]]
 
+	local GarrisonMissionFrame = GarrisonMissionFrame
+
+	for i = 1, 18 do
+		select(i, GarrisonMissionFrame:GetRegions()):Hide()
+	end
+
+	GarrisonMissionFrame.TitleText:Show()
+
+	F.CreateBD(GarrisonMissionFrame)
+	F.ReskinClose(GarrisonMissionFrame.CloseButton)
+	F.ReskinTab(GarrisonMissionFrameTab1)
+	F.ReskinTab(GarrisonMissionFrameTab2)
+
+	GarrisonMissionFrameTab1:ClearAllPoints()
+	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
+
+	do
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("ADDON_LOADED")
+		f:SetScript("OnEvent", function(self, event, addon)
+			if addon == "MasterPlan" then
+				F.ReskinTab(GarrisonMissionFrameTab3)
+				self:UnregisterEvent("ADDON_LOADED")
+			end
+		end)
+	end
+
+	-- Follower list
+
+	F.ReskinInput(GarrisonMissionFrame.FollowerList.SearchBox)
+
+	local MissionTab = GarrisonMissionFrame.MissionTab
+
+	-- Mission list
+
+	local MissionList = MissionTab.MissionList
+
+	MissionList:DisableDrawLayer("BORDER")
+
+	F.ReskinScroll(MissionList.listScroll.scrollBar)
+
+	local buttons = MissionList.listScroll.buttons
+	for i = 1, #buttons do
+		local button = buttons[i]
+
+		for i = 1, 12 do
+			local rareOverlay = button.RareOverlay
+			local rareText = button.RareText
+
+			select(i, button:GetRegions()):Hide()
+
+			F.CreateBD(button, .25)
+
+			rareText:ClearAllPoints()
+			rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
+
+			rareOverlay:SetDrawLayer("BACKGROUND")
+			rareOverlay:SetTexture(C.media.backdrop)
+			rareOverlay:ClearAllPoints()
+			rareOverlay:SetAllPoints()
+			rareOverlay:SetVertexColor(0.098, 0.537, 0.969, 0.2)
+		end
+	end
+
+	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRewards)
+		if self.numRewardsStyled == nil then
+			self.numRewardsStyled = 0
+		end
+
+		while self.numRewardsStyled < numRewards do
+			self.numRewardsStyled = self.numRewardsStyled + 1
+
+			local reward = self.Rewards[self.numRewardsStyled]
+			local icon = reward.Icon
+
+			reward:GetRegions():Hide()
+
+			reward.Icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBG(reward.Icon)
+		end
+	end)
+
+	-- Mission page
+
+	local MissionPage = MissionTab.MissionPage
+
+	for i = 1, 11 do
+		select(i, MissionPage:GetRegions()):Hide()
+	end
+
+	F.Reskin(MissionPage.StartMissionButton)
+	F.ReskinClose(MissionPage.CloseButton)
+
+	MissionPage.CloseButton:ClearAllPoints()
+	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+
+	for i = 4, 8 do
+		select(i, MissionPage.Stage:GetRegions()):Hide()
+	end
+	for i = 19, 21 do
+		select(i, MissionPage.Stage:GetRegions()):Hide()
+	end
+
+	do
+		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
+		bg:SetPoint("TOPLEFT", 4, 1)
+		bg:SetPoint("BOTTOMRIGHT", -4, -1)
+		bg:SetFrameLevel(MissionPage.Stage:GetFrameLevel() - 1)
+		F.CreateBD(bg)
+
+		local overlay = MissionPage.Stage:CreateTexture()
+		overlay:SetDrawLayer("ARTWORK", 3)
+		overlay:SetAllPoints(bg)
+		overlay:SetTexture(0, 0, 0, .5)
+
+		local iconbg = MissionPage.Stage.IconBG
+		iconbg:ClearAllPoints()
+		iconbg:SetPoint("TOPLEFT", 3, -1)
+	end
+
+	-- Portraits
+
 	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
 		if not portraitFrame.styled then
 			restyleFollowerPortrait(portraitFrame)
