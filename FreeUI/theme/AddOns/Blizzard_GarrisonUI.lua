@@ -359,10 +359,20 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		F.CreateBD(follower, .25)
 	end
 
-	hooksecurefunc("GarrisonMissionPage_ClearFollower", function(frame)
-		local bg = frame.PortraitFrame.squareBG
+	hooksecurefunc("GarrisonMissionPage_SetFollower", function(frame)
+		local portrait = frame.PortraitFrame
 
-		if bg then bg:SetBackdropBorderColor(0, 0, 0) end
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+	end)
+
+	hooksecurefunc("GarrisonMissionPage_ClearFollower", function(frame)
+		local portrait = frame.PortraitFrame
+
+		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+		portrait.LevelBorder:SetSize(44, 11)
+
+		if portrait.squareBG then portrait.squareBG:SetBackdropBorderColor(0, 0, 0) end
 	end)
 
 	for i = 1, 10 do
