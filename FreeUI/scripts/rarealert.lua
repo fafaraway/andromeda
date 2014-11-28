@@ -2,7 +2,14 @@ local F, C, L = unpack(select(2, ...))
 
 local general = C.general
 
+local blacklist = {
+	[971] = true, -- Alliance garrison
+	[976] = true, -- Horde garrison
+}
+
 local function OnEvent()
+	if blacklist[GetCurrentMapAreaID()] then return end
+
 	if general.rareAlert_playSound then
 		PlaySoundFile("Sound\\Interface\\RaidWarning.wav")
 	end
