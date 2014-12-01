@@ -26,8 +26,6 @@ local OnLeave = function()
 end
 
 local createAuraIcon = function(icons, index)
-	icons.createdIcons = icons.createdIcons + 1
-
 	local button = CreateFrame("Button", nil, icons)
 	button:RegisterForClicks'RightButtonUp'
 
@@ -67,12 +65,16 @@ local createAuraIcon = function(icons, index)
 	button:SetScript("OnEnter", OnEnter)
 	button:SetScript("OnLeave", OnLeave)
 
-	table.insert(icons, button)
 
 	button.icon = icon
 	button.count = count
 	button.cd = cd
 
+	--[[ :PostCreateIcon(button)
+	 Callback which is called after a new aura icon button has been created.
+	 Arguments
+	 button - The newly created aura icon button.
+	 ]]
 	if(icons.PostCreateIcon) then icons:PostCreateIcon(button) end
 
 	return button
@@ -90,7 +92,21 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 		local n = visible + offset + 1
 		local icon = icons[n]
 		if(not icon) then
+			--[[ :CreateIcon(index)
+			 A function which creates the aura icon for a given index.
+			 Arguments
+			 index - The offset the icon should be created at.
+			 Returns
+			 A button used to represent aura icons.
+			]]
+			local prev = icons.createdIcons
 			icon = (icons.CreateIcon or createAuraIcon) (icons, n)
+
+			-- XXX: Update the counters if the layout doesn't.
+			if(prev == icons.createdIcons) then
+				table.insert(icons, icon)
+				icons.createdIcons = icons.createdIcons + 1
+			end
 		end
 
 		local isPlayer
@@ -103,6 +119,20 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 		icon.isDebuff = isDebuff
 		icon.isPlayer = isPlayer
 
+
+		--[[ :CustomFilter(unit, icon, ...)
+		 Defines a custom filter which controls if the aura icon should be shown
+		 or not.
+		 Arguments
+		 self - The widget that holds the aura icon.
+		 unit - The unit that has the aura.
+		 icon - The button displaying the aura.
+		 ...  - The return values from
+		 [UnitAura](http://wowprogramming.com/docs/api/UnitAura).
+		 Returns
+		 A boolean value telling the aura element if it should be show the icon
+		 or not.
+		]]
 		local show = (icons.CustomFilter or customFilter) (icons, unit, icon, name, rank, texture, count, dtype, duration, timeLeft, caster, isStealable, shouldConsolidate, spellID, canApplyAura, isBossDebuff)
 		if(show) then
 			-- We might want to consider delaying the creation of an actual cooldown
@@ -145,6 +175,15 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			icon.bg:Show()
 			icon:Show()
 
+			--[[ :PostUpdateIcon(unit, icon, index, offest)
+			 Callback which is called after the aura icon was updated.
+			 Arguments
+			 self   - The widget that holds the aura icon.
+			 unit   - The unit that has the aura.
+			 icon   - The button that was updated.
+			 index  - The index of the aura.
+			 offset - The offset the button was created at.
+			 ]]
 			if(icons.PostUpdateIcon) then
 				icons:PostUpdateIcon(unit, icon, index, n)
 			end
@@ -156,6 +195,14 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 	end
 end
 
+--[[ :SetPosition(from, to)
+ Function used to (re-)anchor aura icons. This function is only called when
+ new aura icons have been created or if :PreSetPosition is defined.
+ Arguments
+ self - The widget that holds the aura icons.
+ from - The aura icon before the new aura icon.
+ to   - The current number of created icons.
+]]
 local SetPosition = function(icons, from, to)
 	local sizex = (icons.size or 16) + (icons['spacing-x'] or icons.spacing or 0)
 	local sizey = (icons.size or 16) + (icons['spacing-y'] or icons.spacing or 0)
@@ -222,7 +269,16 @@ local UpdateAuras = function(self, event, unit)
 			hasGap = true
 			visibleBuffs = visibleBuffs + 1
 
-			local icon = auras[visibleBuffs] or (auras.CreateIcon or createAuraIcon) (auras, visibleBuffs)
+			local icon = auras[visibleBuffs]
+			if(not icon) then
+				local prev = auras.createdIcons
+				icon = (auras.CreateIcon or createAuraIcon) (auras, visibleBuffs)
+				-- XXX: Update the counters if the layout doesn't.
+				if(prev == auras.createdIcons) then
+					table.insert(auras, icon)
+					auras.createdIcons = auras.createdIcons + 1
+				end
+			end
 
 			-- Prevent the icon from displaying anything.
 			if(icon.cd) then icon.cd:Hide() end
@@ -234,6 +290,15 @@ local UpdateAuras = function(self, event, unit)
 			icon.bg:Hide()
 			icon:Show()
 
+			--[[ :PostUpdateGapIcon(unit, icon, visibleBuffs)
+			 Callback which is called after an invisible aura icon has been
+			 created. This is only used by Auras when the `gap` option is enabled.
+			 Arguments
+			 self         - The widget that holds the aura icon.
+			 unit         - The unit that has the aura icon.
+			 icon         - The invisible aura icon / gap.
+			 visibleBuffs - The number of currently visible buffs.
+			]]
 			if(auras.PostUpdateGapIcon) then
 				auras:PostUpdateGapIcon(unit, icon, visibleBuffs)
 			end
