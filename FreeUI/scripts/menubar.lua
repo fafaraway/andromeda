@@ -117,7 +117,35 @@ local function buttonOnLeave(self)
 	self:SetBackdropColor(0, 0, 0, .1)
 end
 
-local leftOffset, rightOffset = 0, 0
+local function reanchorButtons()
+	local leftOffset, rightOffset = 0, 0
+
+	for i = 1, #bar.buttons do
+		local bu = bar.buttons[i]
+
+		if bu:IsShown() then
+			if bu.position == POSITION_LEFT then
+				bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
+				leftOffset = leftOffset + 129
+			elseif bu.position == POSITION_RIGHT then
+				bu:SetPoint("RIGHT", bar, "RIGHT", rightOffset, 0)
+				rightOffset = rightOffset - 129
+			else
+				bu:SetPoint("CENTER", bar)
+			end
+		end
+	end
+end
+
+local function showButton(button)
+	button:Show()
+	reanchorButtons()
+end
+
+local function hideButton(button)
+	button:Hide()
+	reanchorButtons()
+end
 
 local function addButton(text, position, clickFunc)
 	local bu = CreateFrame("Button", nil, bar)
@@ -130,16 +158,6 @@ local function addButton(text, position, clickFunc)
 		bu:SetAlpha(0)
 	end
 
-	if position == POSITION_LEFT then
-		bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
-		leftOffset = leftOffset + 129
-	elseif position == POSITION_RIGHT then
-		bu:SetPoint("RIGHT", bar, "RIGHT", rightOffset, 0)
-		rightOffset = rightOffset - 129
-	else
-		bu:SetPoint("CENTER", bar)
-	end
-
 	local buText = F.CreateFS(bu)
 	buText:SetPoint("CENTER")
 	buText:SetText(text)
@@ -149,7 +167,11 @@ local function addButton(text, position, clickFunc)
 	bu:SetScript("OnEnter", buttonOnEnter)
 	bu:SetScript("OnLeave", buttonOnLeave)
 
+	bu.position = position
+
 	tinsert(bar.buttons, bu)
+
+	reanchorButtons()
 
 	return bu
 end
@@ -187,6 +209,19 @@ FreeUIStatsButton = addButton("", POSITION_MIDDLE, function()
 end)
 
 FreeUIStatsButton:SetWidth(200)
+
+local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
+garrisonButton:Hide()
+
+GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
+	if event == "GARRISON_SHOW_LANDING_PAGE" and not garrisonButton:IsShown() then
+		showButton(garrisonButton)
+	elseif event == "GARRISON_HIDE_LANDING_PAGE" then
+		hideButton(garrisonButton)
+	end
+
+	self:Hide()
+end)
 
 addButton("Toggle DBM", POSITION_RIGHT, function()
 	if IsAddOnLoaded("DBM-Core") then
@@ -229,10 +264,10 @@ specButton:SetScript("OnEvent", function(self)
 			local _, name = GetSpecializationInfo(currentSpec)
 			if name then
 				self.Text:SetText(format("%d - %s", GetActiveSpecGroup(), name))
-				self:Show()
+				showButton(self)
 			end
 		end
 	else
-		self:Hide()
+		hideButton(self)
 	end
 end)
