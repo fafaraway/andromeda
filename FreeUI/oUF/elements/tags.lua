@@ -23,11 +23,46 @@ local _ENV = {
 local _PROXY = setmetatable(_ENV, {__index = _G})
 
 local tagStrings = {
+	["creature"] = [[function(u)
+		return UnitCreatureFamily(u) or UnitCreatureType(u)
+	end]],
+
 	["dead"] = [[function(u)
 		if(UnitIsDead(u)) then
 			return 'Dead'
 		elseif(UnitIsGhost(u)) then
 			return 'Ghost'
+		end
+	end]],
+
+	["difficulty"] = [[function(u)
+		if UnitCanAttack("player", u) then
+			local l = UnitLevel(u)
+			return Hex(GetQuestDifficultyColor((l > 0) and l or 99))
+		end
+	end]],
+
+	["leader"] = [[function(u)
+		if(UnitIsGroupLeader(u)) then
+			return 'L'
+		end
+	end]],
+
+	["leaderlong"]  = [[function(u)
+		if(UnitIsGroupLeader(u)) then
+			return 'Leader'
+		end
+	end]],
+
+	["level"] = [[function(u)
+		local l = UnitLevel(u)
+		if(UnitIsWildBattlePet(u) or UnitIsBattlePetCompanion(u)) then
+			l = UnitBattlePetLevel(u)
+		end
+		if(l > 0) then
+			return l
+		else
+			return '??'
 		end
 	end]],
 
@@ -52,6 +87,237 @@ local tagStrings = {
 	["offline"] = [[function(u)
 		if(not UnitIsConnected(u)) then
 			return 'Offline'
+		end
+	end]],
+
+	["perhp"] = [[function(u)
+		local m = UnitHealthMax(u)
+		if(m == 0) then
+			return 0
+		else
+			return math.floor(UnitHealth(u)/m*100+.5)
+		end
+	end]],
+
+	["perpp"] = [[function(u)
+		local m = UnitPowerMax(u)
+		if(m == 0) then
+			return 0
+		else
+			return math.floor(UnitPower(u)/m*100+.5)
+		end
+	end]],
+
+	["plus"] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'elite' or c == 'rareelite') then
+			return '+'
+		end
+	end]],
+
+	["pvp"] = [[function(u)
+		if(UnitIsPVP(u)) then
+			return 'PvP'
+		end
+	end]],
+
+	["raidcolor"] = [[function(u)
+		local _, x = UnitClass(u)
+		if(x) then
+			return Hex(_COLORS.class[x])
+		end
+	end]],
+
+	["rare"] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'rare' or c == 'rareelite') then
+			return 'Rare'
+		end
+	end]],
+
+	["resting"] = [[function(u)
+		if(u == 'player' and IsResting()) then
+			return 'zzz'
+		end
+	end]],
+
+	["sex"] = [[function(u)
+		local s = UnitSex(u)
+		if(s == 2) then
+			return 'Male'
+		elseif(s == 3) then
+			return 'Female'
+		end
+	end]],
+
+	["smartclass"] = [[function(u)
+		if(UnitIsPlayer(u)) then
+			return _TAGS['class'](u)
+		end
+		return _TAGS['creature'](u)
+	end]],
+
+	["status"] = [[function(u)
+		if(UnitIsDead(u)) then
+			return 'Dead'
+		elseif(UnitIsGhost(u)) then
+			return 'Ghost'
+		elseif(not UnitIsConnected(u)) then
+			return 'Offline'
+		else
+			return _TAGS['resting'](u)
+		end
+	end]],
+
+	["threat"] = [[function(u)
+		local s = UnitThreatSituation(u)
+		if(s == 1) then
+			return '++'
+		elseif(s == 2) then
+			return '--'
+		elseif(s == 3) then
+			return 'Aggro'
+		end
+	end]],
+
+	["threatcolor"] = [[function(u)
+		return Hex(GetThreatStatusColor(UnitThreatSituation(u)))
+	end]],
+
+	["cpoints"] = [[function(u)
+		local cp
+		if(UnitHasVehicleUI'player') then
+			cp = GetComboPoints('vehicle', 'target')
+		else
+			cp = GetComboPoints('player', 'target')
+		end
+		if(cp > 0) then
+			return cp
+		end
+	end]],
+
+	['smartlevel'] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'worldboss') then
+			return 'Boss'
+		else
+			local plus = _TAGS['plus'](u)
+			local level = _TAGS['level'](u)
+			if(plus) then
+				return level .. plus
+			else
+				return level
+			end
+		end
+	end]],
+
+	["classification"] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'rare') then
+			return 'Rare'
+		elseif(c == 'rareelite') then
+			return 'Rare Elite'
+		elseif(c == 'elite') then
+			return 'Elite'
+		elseif(c == 'worldboss') then
+			return 'Boss'
+		elseif(c == 'minus') then
+			return 'Affix'
+		end
+	end]],
+
+	["shortclassification"] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'rare') then
+			return 'R'
+		elseif(c == 'rareelite') then
+			return 'R+'
+		elseif(c == 'elite') then
+			return '+'
+		elseif(c == 'worldboss') then
+			return 'B'
+		elseif(c == 'minus') then
+			return '-'
+		end
+	end]],
+
+	["group"] = [[function(unit)
+		local name, server = UnitName(unit)
+		if(server and server ~= "") then
+			name = string.format("%s-%s", name, server)
+		end
+		for i=1, GetNumGroupMembers() do
+			local raidName, _, group = GetRaidRosterInfo(i)
+			if( raidName == name ) then
+				return group
+			end
+		end
+	end]],
+
+	["deficit:name"] = [[function(u)
+		local missinghp = _TAGS['missinghp'](u)
+		if(missinghp) then
+			return '-' .. missinghp
+		else
+			return _TAGS['name'](u)
+		end
+	end]],
+
+	['pereclipse'] = [[function(u)
+		local m = UnitPowerMax('player', SPELL_POWER_ECLIPSE)
+		if(m == 0) then
+			return 0
+		else
+			return math.abs(UnitPower('player', SPELL_POWER_ECLIPSE)/m*100)
+		end
+	end]],
+
+	['curmana'] = [[function(unit)
+		return UnitPower(unit, SPELL_POWER_MANA)
+	end]],
+
+	['maxmana'] = [[function(unit)
+		return UnitPowerMax(unit, SPELL_POWER_MANA)
+	end]],
+
+	['soulshards'] = [[function()
+		if(IsPlayerSpell(WARLOCK_SOULBURN)) then
+			local num = UnitPower('player', SPELL_POWER_SOUL_SHARDS)
+			if(num > 0) then
+				return num
+			end
+		end
+	end]],
+
+	['holypower'] = [[function()
+		if(IsPlayerSpell(85673)) then
+			local num = UnitPower('player', SPELL_POWER_HOLY_POWER)
+			if(num > 0) then
+				return num
+			end
+		end
+	end]],
+
+	['chi'] = [[function()
+		local num = UnitPower('player', SPELL_POWER_CHI)
+		if(num > 0) then
+			return num
+		end
+	end]],
+
+	['shadoworbs'] = [[function()
+		if(IsPlayerSpell(95740)) then
+			local num = UnitPower('player', SPELL_POWER_SHADOW_ORBS)
+			if(num > 0) then
+				return num
+			end
+		end
+	end]],
+
+	['affix'] = [[function(u)
+		local c = UnitClassification(u)
+		if(c == 'minus') then
+			return 'Affix'
 		end
 	end]],
 }
@@ -103,11 +369,40 @@ local tags = setmetatable(
 _ENV._TAGS = tags
 
 local tagEvents = {
+	["curhp"]               = "UNIT_HEALTH",
 	["dead"]                = "UNIT_HEALTH",
+	["leader"]              = "PARTY_LEADER_CHANGED",
+	["leaderlong"]          = "PARTY_LEADER_CHANGED",
+	["level"]               = "UNIT_LEVEL PLAYER_LEVEL_UP",
+	["maxhp"]               = "UNIT_MAXHEALTH",
 	["missinghp"]           = "UNIT_HEALTH UNIT_MAXHEALTH",
 	["name"]                = "UNIT_NAME_UPDATE",
+	["perhp"]               = "UNIT_HEALTH UNIT_MAXHEALTH",
+	["pvp"]                 = "UNIT_FACTION",
+	["resting"]             = "PLAYER_UPDATE_RESTING",
+	["smartlevel"]          = "UNIT_LEVEL PLAYER_LEVEL_UP UNIT_CLASSIFICATION_CHANGED",
+	["threat"]              = "UNIT_THREAT_SITUATION_UPDATE",
+	["threatcolor"]         = "UNIT_THREAT_SITUATION_UPDATE",
+	['cpoints']             = 'UNIT_COMBO_POINTS PLAYER_TARGET_CHANGED',
+	['affix']				= 'UNIT_CLASSIFICATION_CHANGED',
+	['plus']				= 'UNIT_CLASSIFICATION_CHANGED',
+	['rare']                = 'UNIT_CLASSIFICATION_CHANGED',
+	['classification']      = 'UNIT_CLASSIFICATION_CHANGED',
+	['shortclassification'] = 'UNIT_CLASSIFICATION_CHANGED',
+	["group"]               = "GROUP_ROSTER_UPDATE",
+	["curpp"]               = 'UNIT_POWER',
+	["maxpp"]               = 'UNIT_MAXPOWER',
 	["missingpp"]           = 'UNIT_MAXPOWER UNIT_POWER',
+	["perpp"]               = 'UNIT_MAXPOWER UNIT_POWER',
 	["offline"]             = "UNIT_HEALTH UNIT_CONNECTION",
+	["status"]              = "UNIT_HEALTH PLAYER_UPDATE_RESTING UNIT_CONNECTION",
+	["pereclipse"]          = 'UNIT_POWER',
+	['curmana']             = 'UNIT_POWER UNIT_MAXPOWER',
+	['maxmana']             = 'UNIT_POWER UNIT_MAXPOWER',
+	['soulshards']          = 'UNIT_POWER SPELLS_CHANGED',
+	['holypower']           = 'UNIT_POWER SPELLS_CHANGED',
+	['chi']                 = 'UNIT_POWER',
+	['shadoworbs']          = 'UNIT_POWER SPELLS_CHANGED',
 }
 
 local unitlessEvents = {
@@ -117,7 +412,7 @@ local unitlessEvents = {
 
 	PARTY_LEADER_CHANGED = true,
 
-	RAID_ROSTER_UPDATE = true,
+	GROUP_ROSTER_UPDATE = true,
 
 	UNIT_COMBO_POINTS = true
 }
@@ -362,7 +657,7 @@ local Tag = function(self, fs, tagstr)
 	fs.UpdateTag = func
 
 	local unit = self.unit
-	if((unit and unit:match'%w+target') or fs.frequentUpdates) then
+	if(self.__eventless or fs.frequentUpdates) then
 		local timer
 		if(type(fs.frequentUpdates) == 'number') then
 			timer = fs.frequentUpdates
