@@ -603,7 +603,7 @@ F.SetBD = function(f, x, y, x2, y2)
 		bg:SetPoint("TOPLEFT", x, y)
 		bg:SetPoint("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(0)
+	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bg)
 end
 
