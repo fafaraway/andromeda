@@ -506,6 +506,28 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
+	-- [[ Monuments ]]
+
+	local GarrisonMonumentFrame = GarrisonMonumentFrame
+
+	GarrisonMonumentFrame.Background:Hide()
+	F.SetBD(GarrisonMonumentFrame, 6, -10, -6, 4)
+
+	do
+		local left = GarrisonMonumentFrame.LeftBtn
+		local right = GarrisonMonumentFrame.RightBtn
+
+		left.Texture:Hide()
+		right.Texture:Hide()
+
+		F.ReskinArrow(left, "left")
+		F.ReskinArrow(right, "right")
+		left:SetSize(35, 35)
+		left.tex:SetSize(16, 16)
+		right:SetSize(35, 35)
+		right.tex:SetSize(16, 16)
+	end
+
 	-- [[ Shared templates ]]
 
 	hooksecurefunc("GarrisonFollowerList_Update", function(self)
