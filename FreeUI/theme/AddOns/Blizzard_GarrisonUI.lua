@@ -69,6 +69,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local Report = GarrisonLandingPage.Report
 
+	select(2, Report:GetRegions()):Hide()
 	Report.List:GetRegions():Hide()
 
 	local scrollFrame = Report.List.listScroll
