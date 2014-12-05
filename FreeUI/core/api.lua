@@ -712,3 +712,31 @@ F.ReskinNavBar = function(f)
 	overflowButton:HookScript("OnEnter", colourArrow)
 	overflowButton:HookScript("OnLeave", clearArrow)
 end
+
+F.ReskinGarrisonPortrait = function(portrait)
+	local level = portrait.Level
+	local cover = portrait.PortraitRingCover
+
+	portrait.PortraitRing:Hide()
+	portrait.PortraitRingQuality:SetTexture("")
+
+	portrait.LevelBorder:SetTexture(0, 0, 0, .5)
+	portrait.LevelBorder:SetSize(44, 11)
+	portrait.LevelBorder:ClearAllPoints()
+	portrait.LevelBorder:SetPoint("BOTTOM", 0, 12)
+
+	level:ClearAllPoints()
+	level:SetPoint("BOTTOM", portrait, 0, 12)
+
+	local squareBG = CreateFrame("Frame", nil, portrait)
+	squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
+	squareBG:SetPoint("TOPLEFT", 3, -3)
+	squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
+	F.CreateBD(squareBG, 1)
+	portrait.squareBG = squareBG
+
+	if cover then
+		cover:SetTexture(0, 0, 0)
+		cover:SetAllPoints(squareBG)
+	end
+end
