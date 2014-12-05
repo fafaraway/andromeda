@@ -404,7 +404,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
 		if not portraitFrame.styled then
-			restyleFollowerPortrait(portraitFrame)
+			F.ReskinGarrisonPortrait(portraitFrame)
 			portraitFrame.styled = true
 		end
 
@@ -468,7 +468,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	for i = 1, 3 do
 		local recruit = FollowerSelection["Recruit"..i]
 
-		restyleFollowerPortrait(recruit.PortraitFrame)
+		F.ReskinGarrisonPortrait(recruit.PortraitFrame)
 
 		F.Reskin(recruit.HireRecruits)
 	end
@@ -531,7 +531,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				button.BusyFrame:SetAllPoints()
 
 				if portrait then
-					restyleFollowerPortrait(portrait)
+					F.ReskinGarrisonPortrait(portrait)
 					portrait:ClearAllPoints()
 					portrait:SetPoint("TOPLEFT", 4, -1)
 				end
