@@ -3,6 +3,137 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_GarrisonUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
+	-- [[ Building frame ]]
+
+	local GarrisonBuildingFrame = GarrisonBuildingFrame
+
+	for i = 1, 18 do
+		select(i, GarrisonBuildingFrame:GetRegions()):Hide()
+	end
+
+	GarrisonBuildingFrame.TitleText:Show()
+
+	F.CreateBD(GarrisonBuildingFrame)
+	F.ReskinClose(GarrisonBuildingFrame.CloseButton)
+
+	-- Building list
+
+	local BuildingList = GarrisonBuildingFrame.BuildingList
+
+	BuildingList:DisableDrawLayer("BORDER")
+	BuildingList.MaterialFrame:GetRegions():Hide()
+
+	for i = 1, GARRISON_NUM_BUILDING_SIZES do
+		local tab = BuildingList["Tab"..i]
+
+		tab:GetNormalTexture():SetAlpha(0)
+
+		local bg = CreateFrame("Frame", nil, tab)
+		bg:SetPoint("TOPLEFT", 6, -7)
+		bg:SetPoint("BOTTOMRIGHT", -6, 7)
+		bg:SetFrameLevel(tab:GetFrameLevel()-1)
+		F.CreateBD(bg, .25)
+		tab.bg = bg
+
+		local hl = tab:GetHighlightTexture()
+		hl:SetTexture(r, g, b, .1)
+		hl:ClearAllPoints()
+		hl:SetPoint("TOPLEFT", bg, 1, -1)
+		hl:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+	end
+
+	hooksecurefunc("GarrisonBuildingList_SelectTab", function(tab)
+		local list = GarrisonBuildingFrame.BuildingList
+
+		for i = 1, GARRISON_NUM_BUILDING_SIZES do
+			local otherTab = list["Tab"..i]
+			if i ~= tab:GetID() then
+				otherTab.bg:SetBackdropColor(0, 0, 0, .25)
+			end
+		end
+		tab.bg:SetBackdropColor(r, g, b, .2)
+
+		for _, button in pairs(list.Buttons) do
+			if not button.styled then
+				button.BG:Hide()
+
+				F.ReskinIcon(button.Icon)
+
+				local bg = CreateFrame("Frame", nil, button)
+				bg:SetPoint("TOPLEFT", 44, -5)
+				bg:SetPoint("BOTTOMRIGHT", 0, 6)
+				bg:SetFrameLevel(button:GetFrameLevel()-1)
+				F.CreateBD(bg, .25)
+
+				button.SelectedBG:SetTexture(r, g, b, .2)
+				button.SelectedBG:ClearAllPoints()
+				button.SelectedBG:SetPoint("TOPLEFT", bg, 1, -1)
+				button.SelectedBG:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+
+				local hl = button:GetHighlightTexture()
+				hl:SetTexture(r, g, b, .1)
+				hl:ClearAllPoints()
+				hl:SetPoint("TOPLEFT", bg, 1, -1)
+				hl:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+
+				button.styled = true
+			end
+		end
+	end)
+
+	-- Building level tooltip
+
+	local BuildingLevelTooltip = GarrisonBuildingFrame.BuildingLevelTooltip
+
+	for i = 1, 9 do
+		select(i, BuildingLevelTooltip:GetRegions()):Hide()
+		F.CreateBD(BuildingLevelTooltip)
+	end
+
+	-- Follower list
+
+	local FollowerList = GarrisonBuildingFrame.FollowerList
+
+	FollowerList:DisableDrawLayer("BACKGROUND")
+	FollowerList:DisableDrawLayer("BORDER")
+	F.ReskinScroll(FollowerList.listScroll.scrollBar)
+
+	FollowerList:ClearAllPoints()
+	FollowerList:SetPoint("BOTTOMLEFT", 24, 34)
+
+	-- Info box
+
+	local InfoBox = GarrisonBuildingFrame.InfoBox
+	local TownHallBox = GarrisonBuildingFrame.TownHallBox
+
+	for i = 1, 25 do
+		select(i, InfoBox:GetRegions()):Hide()
+		select(i, TownHallBox:GetRegions()):Hide()
+	end
+
+	F.CreateBD(InfoBox, .25)
+	F.CreateBD(TownHallBox, .25)
+	F.Reskin(InfoBox.UpgradeButton)
+	F.Reskin(TownHallBox.UpgradeButton)
+
+	do
+		local FollowerPortrait = InfoBox.FollowerPortrait
+
+		F.ReskinGarrisonPortrait(FollowerPortrait)
+
+		FollowerPortrait:SetPoint("BOTTOMLEFT", 230, 10)
+		FollowerPortrait.RemoveFollowerButton:ClearAllPoints()
+		FollowerPortrait.RemoveFollowerButton:SetPoint("TOPRIGHT", 4, 4)
+	end
+
+	hooksecurefunc("GarrisonBuildingInfoBox_ShowFollowerPortrait", function(_, _, infoBox)
+		local portrait = infoBox.FollowerPortrait
+
+		if portrait:IsShown() then
+			portrait.squareBG:SetBackdropBorderColor(portrait.PortraitRing:GetVertexColor())
+		end
+	end)
+
 	-- [[ Capacitive display frame ]]
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
