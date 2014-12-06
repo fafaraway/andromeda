@@ -134,6 +134,21 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
+	-- Confirmation popup
+
+	local Confirmation = GarrisonBuildingFrame.Confirmation
+
+	Confirmation:GetRegions():Hide()
+
+	F.CreateBD(Confirmation)
+
+	F.Reskin(Confirmation.CancelButton)
+	F.Reskin(Confirmation.BuildButton)
+	F.Reskin(Confirmation.UpgradeButton)
+	F.Reskin(Confirmation.UpgradeGarrisonButton)
+	F.Reskin(Confirmation.ReplaceButton)
+	F.Reskin(Confirmation.SwitchButton)
+
 	-- [[ Capacitive display frame ]]
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
