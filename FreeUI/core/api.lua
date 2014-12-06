@@ -740,3 +740,8 @@ F.ReskinGarrisonPortrait = function(portrait)
 		cover:SetAllPoints(squareBG)
 	end
 end
+
+F.ReskinIcon = function(icon)
+	icon:SetTexCoord(.08, .92, .08, .92)
+	F.CreateBG(icon)
+end
