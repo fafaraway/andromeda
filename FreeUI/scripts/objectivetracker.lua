@@ -177,8 +177,8 @@ hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, 
 		F.SetFS(label)
 
 		local bg = F.CreateBDFrame(bar)
-		bg:SetPoint("TOPLEFT", -1, 0)
-		bg:SetPoint("BOTTOMRIGHT", 0, -3)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 0, -2)
 
 		progressBar.styled = true
 	end
