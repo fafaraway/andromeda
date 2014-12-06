@@ -16,6 +16,13 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.CreateBD(GarrisonBuildingFrame)
 	F.ReskinClose(GarrisonBuildingFrame.CloseButton)
 
+	-- Tutorial button
+
+	local MainHelpButton = GarrisonBuildingFrame.MainHelpButton
+
+	MainHelpButton.Ring:Hide()
+	MainHelpButton:SetPoint("TOPLEFT", GarrisonBuildingFrame, "TOPLEFT", -12, 12)
+
 	-- Building list
 
 	local BuildingList = GarrisonBuildingFrame.BuildingList
