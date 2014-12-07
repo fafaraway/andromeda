@@ -446,12 +446,17 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	for i = 1, 11 do
 		select(i, MissionPage:GetRegions()):Hide()
 	end
+	MissionPage.StartMissionButton.Flash:SetTexture("")
 
 	F.Reskin(MissionPage.StartMissionButton)
 	F.ReskinClose(MissionPage.CloseButton)
 
 	MissionPage.CloseButton:ClearAllPoints()
 	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+
+	hooksecurefunc("GarrisonMissionPage_UpdateStartButton", function(missionPage)
+		missionPage.StartMissionButton.FlashAnim:Stop()
+	end)
 
 	for i = 4, 8 do
 		select(i, MissionPage.Stage:GetRegions()):Hide()
