@@ -78,4 +78,9 @@ tinsert(C.themes["FreeUI"], function()
 
 		tooltipFrame.numTraitsStyled = numTraitsStyled
 	end)
+
+	-- Mission tooltip
+
+	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonMissionTooltip)
+	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 end)
