@@ -89,6 +89,7 @@ C["tooltip"] = {
 	["anchorCursor"] = false,
 	["guildrank"] = true,
 	["title"] = false,
+	["pvp"] = false,
 }
 
 C["unitframes"] = {
