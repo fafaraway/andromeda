@@ -9,8 +9,8 @@ local enableOutdoors = C.general.interrupt_outdoors
 local playerName = UnitName("player")
 local LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME
 
-local function OnEvent(_, _, subEvent, _, _, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
-	if subEvent == "SPELL_INTERRUPT" and sourceName == playerName then
+local function OnEvent(_, _, subEvent, _, sourceGUID, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
+	if subEvent == "SPELL_INTERRUPT" and (sourceName == playerName or sourceGUID == UnitGUID("pet")) then
 		local channel
 
 		if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
