@@ -744,14 +744,7 @@ local UnitSpecific = {
 			runes:SetHeight(2)
 			runes:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
-			local rbd = CreateFrame("Frame", nil, runes)
-			rbd:SetBackdrop({
-				edgeFile = C.media.backdrop,
-				edgeSize = 1,
-			})
-			rbd:SetBackdropBorderColor(0, 0, 0)
-			rbd:SetPoint("TOPLEFT", -1, 1)
-			rbd:SetPoint("BOTTOMRIGHT", 1, -1)
+			F.CreateBDFrame(runes)
 
 			for i = 1, 6 do
 				runes[i] = CreateFrame("StatusBar", nil, self)
