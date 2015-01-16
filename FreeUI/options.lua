@@ -313,7 +313,7 @@ C["buffTracker"] = {
 	},
 	["PALADIN"] = {
 		-- Sacred Shield
-		{spellIds = {[20925]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
+		{spellIds = {[20925]=true, [148039]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Selfless Healer
 		{spellIds = {[114250]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 3},
 		-- Divine Shield, Hand of Protection, Avenging Wrath, Holy Avenger
