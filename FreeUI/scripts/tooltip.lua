@@ -157,7 +157,7 @@ local function OnTooltipSetUnit(self)
 		local n = guildName and 3 or 2
 		_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s", level, race)
 
-		if UnitIsPVP(unit) and C.tooltip.pvp then
+		if C.tooltip.pvp and UnitIsPVP(unit) then
 			_G["GameTooltipTextLeft"..n + 1]:SetFormattedText("%s (%s)", UnitFactionGroup(unit), PVP)
 		end
 	elseif UnitIsBattlePet(unit) then
