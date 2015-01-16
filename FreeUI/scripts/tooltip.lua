@@ -1,6 +1,8 @@
 -- aTooltip by Alza, modified.
 
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
+
+if not C.tooltip.enable then return end
 
 PVP_ENABLED = ""
 
@@ -161,6 +163,7 @@ local function OnTooltipSetUnit(self)
 			_G["GameTooltipTextLeft"..n + 1]:SetFormattedText("%s (%s)", UnitFactionGroup(unit), PVP)
 		end
 
+		-- fix duplicate faction text
 		if GetCVarBool("colorblindMode") then
 			_G["GameTooltipTextLeft"..n + 2]:SetText("")
 		end
