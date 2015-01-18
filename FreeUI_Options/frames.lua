@@ -267,6 +267,7 @@ do
 
 	local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
 	uiScaleAuto:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 0, -20)
+	tinsert(ns.protectOptions, uiScaleAuto)
 end
 
 -- [[ Appearance ]]
