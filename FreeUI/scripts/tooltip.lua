@@ -157,7 +157,12 @@ local function OnTooltipSetUnit(self)
 		end
 
 		local n = guildName and 3 or 2
-		_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s", level, race)
+		if C.tooltip.class then
+			local class = UnitClass(unit)
+			_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s "..color.."%s", level, race, class)
+		else
+			_G["GameTooltipTextLeft"..n]:SetFormattedText("%s %s", level, race)
+		end
 
 		if C.tooltip.pvp and UnitIsPVP(unit) then
 			_G["GameTooltipTextLeft"..n + 1]:SetFormattedText("%s (%s)", UnitFactionGroup(unit), PVP)

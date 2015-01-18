@@ -187,6 +187,7 @@ ns.localization.tooltipSubText = "Adjust the appearance and functionality of the
 ns.localization.tooltipenable = "Enable"
 ns.localization.tooltipenableTooltip = "Disable to resolve compatibility issues or if you want to use another tooltip addon."
 ns.localization.tooltipanchorCursor = "Anchor to cursor"
+ns.localization.tooltipclass = "Class"
 ns.localization.tooltipguildrank = "Guild rank"
 ns.localization.tooltiptitle = "Player titles"
 ns.localization.tooltippvp = "PvP status"

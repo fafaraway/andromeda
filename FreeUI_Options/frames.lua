@@ -626,8 +626,11 @@ do
 	local anchorCursor = ns.CreateCheckBox(tooltip, "anchorCursor")
 	anchorCursor:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
+	local class = ns.CreateCheckBox(tooltip, "class")
+	class:SetPoint("TOPLEFT", anchorCursor, "BOTTOMLEFT", 0, -8)
+
 	local guildrank = ns.CreateCheckBox(tooltip, "guildrank")
-	guildrank:SetPoint("TOPLEFT", anchorCursor, "BOTTOMLEFT", 0, -8)
+	guildrank:SetPoint("TOPLEFT", class, "BOTTOMLEFT", 0, -8)
 
 	local title = ns.CreateCheckBox(tooltip, "title")
 	title:SetPoint("TOPLEFT", guildrank, "BOTTOMLEFT", 0, -8)
