@@ -642,6 +642,7 @@ do
 		local shown = enable:GetChecked()
 
 		anchorCursor:SetShown(shown)
+		class:SetShown(shown)
 		guildrank:SetShown(shown)
 		title:SetShown(shown)
 		pvp:SetShown(shown)
