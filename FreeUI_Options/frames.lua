@@ -410,14 +410,12 @@ end
 do
 	local bags = FreeUIOptionsPanel.bags
 	bags.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_bag_08")
-	tinsert(ns.newCategories, bags)
 
 	local general = ns.addSubCategory(bags, ns.localization.bagsGeneral)
 	general:SetPoint("TOPLEFT", bags.subText, "BOTTOMLEFT", 0, -8)
 
 	local style = ns.CreateRadioButtonGroup(bags, "style", 3, false, true)
 	style.buttons[1]:SetPoint("TOPLEFT", general, "BOTTOMLEFT", 0, -41)
-	tinsert(ns.newOptions, style.buttons[2])
 
 	local styleSpecific, styleSpecificLine = ns.addSubCategory(bags, ns.localization.bagsStyleSpecific)
 	styleSpecific:SetPoint("TOPLEFT", style.buttons[3], "BOTTOMLEFT", 0, -30)
@@ -430,7 +428,6 @@ do
 
 	local hideSlots = ns.CreateCheckBox(bags, "hideSlots", true)
 	hideSlots:SetPoint("TOPLEFT", styleSpecific, "BOTTOMLEFT", 0, -20)
-	tinsert(ns.newOptions, hideSlots)
 
 	local function toggleBagsOptions()
 		local isAllInOne = style.buttons[1]:GetChecked()
@@ -531,6 +528,7 @@ end
 do
 	local unitframes = FreeUIOptionsPanel.unitframes
 	unitframes.tab.Icon:SetTexture("Interface\\Icons\\Spell_Holy_PrayerofSpirit")
+	tinsert(ns.newCategories, unitframes)
 
 	local enable = ns.CreateCheckBox(unitframes, "enable", true, true)
 	enable:SetPoint("TOPLEFT", unitframes.subText, "BOTTOMLEFT", 0, -8)
@@ -544,6 +542,7 @@ do
 	local showRaidFrames = ns.CreateCheckBox(unitframes, "showRaidFrames", true)
 	showRaidFrames:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
 	tinsert(ns.protectOptions, showRaidFrames)
+	tinsert(ns.newOptions,showRaidFrames)
 
 	local healerClasscolours = ns.CreateCheckBox(unitframes, "healerClasscolours", true, true)
 	healerClasscolours:SetPoint("TOPLEFT", showRaidFrames, "BOTTOMLEFT", 0, -8)
@@ -619,15 +618,18 @@ end
 do
 	local tooltip = FreeUIOptionsPanel.tooltip
 	tooltip.tab.Icon:SetTexture("Interface\\Icons\\INV_Enchant_FormulaEpic_01")
+	tinsert(ns.newCategories, tooltip)
 
 	local enable = ns.CreateCheckBox(tooltip, "enable", true, true)
 	enable:SetPoint("TOPLEFT", tooltip.subText, "BOTTOMLEFT", 0, -8)
+	tinsert(ns.newOptions, enable)
 
 	local anchorCursor = ns.CreateCheckBox(tooltip, "anchorCursor")
 	anchorCursor:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -16)
 
 	local class = ns.CreateCheckBox(tooltip, "class")
 	class:SetPoint("TOPLEFT", anchorCursor, "BOTTOMLEFT", 0, -8)
+	tinsert(ns.newOptions, class)
 
 	local guildrank = ns.CreateCheckBox(tooltip, "guildrank")
 	guildrank:SetPoint("TOPLEFT", class, "BOTTOMLEFT", 0, -8)
