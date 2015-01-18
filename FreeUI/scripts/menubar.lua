@@ -213,14 +213,16 @@ FreeUIStatsButton:SetWidth(200)
 local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
 garrisonButton:Hide()
 
+GarrisonLandingPageMinimapButton:SetSize(1, 1)
+GarrisonLandingPageMinimapButton:SetAlpha(0)
+GarrisonLandingPageMinimapButton:EnableMouse(false)
+
 GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
 	if event == "GARRISON_SHOW_LANDING_PAGE" and not garrisonButton:IsShown() then
 		showButton(garrisonButton)
 	elseif event == "GARRISON_HIDE_LANDING_PAGE" then
 		hideButton(garrisonButton)
 	end
-
-	self:Hide()
 end)
 
 addButton("Toggle DBM", POSITION_RIGHT, function()
