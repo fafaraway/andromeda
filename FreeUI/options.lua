@@ -101,7 +101,7 @@ C["unitframes"] = {
 
 	["enableGroup"] = true,								-- enable party/raid frames
 		["healerClasscolours"] = false,						-- colour unitframes by class in healer layout
-		["limitRaidSize"] = false, 							-- show a maximum of 25 players in a raid
+		["showRaidFrames"] = true, 							-- show the raid frames
 		["partyNameAlways"] = false,						-- show name on party/raid frames in dps/tank layout
 	["enableArena"] = true,								-- enable arena/flag carrier frames
 	["targettarget"] = false, 							-- show target of target frame

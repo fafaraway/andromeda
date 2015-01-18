@@ -541,17 +541,17 @@ do
 	local enableGroup = ns.CreateCheckBox(unitframes, "enableGroup", true, true)
 	enableGroup:SetPoint("TOPLEFT", autoPosition, "BOTTOMLEFT", 0, -8)
 
-	local limitRaidSize = ns.CreateCheckBox(unitframes, "limitRaidSize", true)
-	limitRaidSize:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
-	tinsert(ns.protectOptions, limitRaidSize)
+	local showRaidFrames = ns.CreateCheckBox(unitframes, "showRaidFrames", true)
+	showRaidFrames:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
+	tinsert(ns.protectOptions, showRaidFrames)
 
 	local healerClasscolours = ns.CreateCheckBox(unitframes, "healerClasscolours", true, true)
-	healerClasscolours:SetPoint("TOPLEFT", limitRaidSize, "BOTTOMLEFT", 0, -8)
+	healerClasscolours:SetPoint("TOPLEFT", showRaidFrames, "BOTTOMLEFT", 0, -8)
 
 	local partyNameAlways = ns.CreateCheckBox(unitframes, "partyNameAlways", true, true)
 	partyNameAlways:SetPoint("TOPLEFT", healerClasscolours, "BOTTOMLEFT", 0, -8)
 
-	enableGroup.children = {limitRaidSize, healerClasscolours, partyNameAlways}
+	enableGroup.children = {showRaidFrames, healerClasscolours, partyNameAlways}
 
 	local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
 	enableArena:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 0, -110)
@@ -595,7 +595,7 @@ do
 
 		autoPosition:SetShown(shown)
 		enableGroup:SetShown(shown)
-		limitRaidSize:SetShown(shown)
+		showRaidFrames:SetShown(shown)
 		healerClasscolours:SetShown(shown)
 		partyNameAlways:SetShown(shown)
 		absorb:SetShown(shown)

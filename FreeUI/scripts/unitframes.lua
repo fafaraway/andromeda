@@ -1846,27 +1846,14 @@ oUF:Factory(function(self)
 
 	raid:SetPoint(unpack(raidPos))
 
-	if C.unitframes.limitRaidSize then
-		raid:SetAttribute("groupFilter", "1,2,3,4,5")
-	end
-
-	F.AddOptionsCallback("unitframes", "limitRaidSize", function()
-		if C.unitframes.limitRaidSize then
-			raid:SetAttribute("groupFilter", "1,2,3,4,5")
-		else
-			raid:SetAttribute("groupFilter", "1,2,3,4,5,6,7,8")
-		end
-	end)
-
 	local raidToParty = CreateFrame("Frame")
-	raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
-	raidToParty:RegisterEvent("GROUP_ROSTER_UPDATE")
-	raidToParty:SetScript("OnEvent", function(self, event)
+
+	local function togglePartyAndRaid(event)
 		if InCombatLockdown() then
-			self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			raidToParty:RegisterEvent("PLAYER_REGEN_ENABLED")
 			return
-		elseif event == "PLAYER_REGEN_ENABLED" then
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		elseif (event and event == "PLAYER_REGEN_ENABLED") then
+			raidToParty:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		end
 
 		local numGroup = GetNumGroupMembers()
@@ -1887,5 +1874,26 @@ oUF:Factory(function(self)
 				party:SetAttribute("showRaid", false)
 			end
 		end
-	end)
+	end
+
+	raidToParty:SetScript("OnEvent", togglePartyAndRaid)
+
+	local function checkShowRaidFrames()
+		if showRaidFrames then
+			raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
+			raidToParty:RegisterEvent("GROUP_ROSTER_UPDATE")
+
+			togglePartyAndRaid()
+		else
+			raidToParty:UnregisterEvent("PLAYER_ENTERING_WORLD")
+			raidToParty:UnregisterEvent("GROUP_ROSTER_UPDATE")
+
+			party:SetAttribute("showParty", true)
+			party:SetAttribute("showRaid", true)
+			raid:SetAttribute("showRaid", false)
+		end
+	end
+
+	checkShowRaidFrames()
+	F.AddOptionsCallback("unitframes", "showRaidFrames", checkShowRaidFrames)
 end)
