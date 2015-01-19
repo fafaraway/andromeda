@@ -1879,7 +1879,7 @@ oUF:Factory(function(self)
 	raidToParty:SetScript("OnEvent", togglePartyAndRaid)
 
 	local function checkShowRaidFrames()
-		if showRaidFrames then
+		if C.unitframes.showRaidFrames then
 			raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
 			raidToParty:RegisterEvent("GROUP_ROSTER_UPDATE")
 
