@@ -167,11 +167,6 @@ local function OnTooltipSetUnit(self)
 		if C.tooltip.pvp and UnitIsPVP(unit) then
 			_G["GameTooltipTextLeft"..n + 1]:SetFormattedText("%s (%s)", UnitFactionGroup(unit), PVP)
 		end
-
-		-- fix duplicate faction text
-		if GetCVarBool("colorblindMode") then
-			_G["GameTooltipTextLeft"..n + 2]:SetText("")
-		end
 	elseif UnitIsBattlePet(unit) then
 		for i = 2, lines do
 			local line = _G["GameTooltipTextLeft"..i]
