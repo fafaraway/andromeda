@@ -8,7 +8,7 @@ if C.unitframes.enable then
 end
 
 -- disable sorting and loot order
-if C.bags.enable then
+if C.bags.style ~= 3 then
 	InterfaceOptionsControlsPanelReverseCleanUpBags:Disable()
 	InterfaceOptionsControlsPanelReverseCleanUpBagsText:SetTextColor(.5, .5, .5)
 	InterfaceOptionsControlsPanelReverseNewLoot:Disable()
