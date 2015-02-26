@@ -470,6 +470,13 @@ C["hideDebuffs"] = {
 	[71041] = true, -- Dungeon Deserter
 	[26218] = true, -- Mistletoe
 	[117870] = true, -- Touch of the Titans
+	[173658] = true, -- Delvar Ironfist defeated
+	[173659] = true, -- Talonpriest Ishaal defeated
+	[173661] = true, -- Vivianne defeated
+	[173679] = true, -- Leorajh defeated
+	[173649] = true, -- Tormmok defeated
+	[173660] = true, -- Aeda Brightdawn defeated
+	[173657] = true, -- Defender Illona defeated
 }
 
 if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end
