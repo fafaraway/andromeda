@@ -160,8 +160,18 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonCapacitiveDisplayFrame = GarrisonCapacitiveDisplayFrame
 
+	GarrisonCapacitiveDisplayFrameLeft:Hide()
+	GarrisonCapacitiveDisplayFrameMiddle:Hide()
+	GarrisonCapacitiveDisplayFrameRight:Hide()
+	F.CreateBD(GarrisonCapacitiveDisplayFrame.Count, .25)
+	GarrisonCapacitiveDisplayFrame.Count:SetWidth(38)
+	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
+
 	F.ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame, true)
 	F.Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
+	F.Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
+	F.ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, "left")
+	F.ReskinArrow(GarrisonCapacitiveDisplayFrame.IncrementButton, "right")
 
 	-- Capacitive display
 
