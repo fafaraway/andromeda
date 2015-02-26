@@ -427,4 +427,67 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar:SetStatusBarTexture(C.media.backdrop)
 
 	F.CreateBDFrame(progressBar, .25)
+
+	-- Buttons
+
+	hooksecurefunc("HeirloomsJournal_UpdateButton", function(button)
+		if not button.styled then
+			local ic = button.iconTexture
+
+			button.slotFrameCollected:SetTexture("")
+			button.slotFrameUncollected:SetTexture("")
+			button.levelBackground:SetAlpha(0)
+
+			button.iconTextureUncollected:SetTexCoord(.08, .92, .08, .92)
+			button.bg = F.ReskinIcon(ic)
+
+			button.level:ClearAllPoints()
+			button.level:SetPoint("BOTTOM", 0, 1)
+
+			local newLevelBg = button:CreateTexture(nil, "OVERLAY")
+			newLevelBg:SetTexture(0, 0, 0, .5)
+			newLevelBg:SetPoint("BOTTOMLEFT", button, "BOTTOMLEFT", 4, 5)
+			newLevelBg:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -4, 5)
+			newLevelBg:SetHeight(11)
+			button.newLevelBg = newLevelBg
+
+			button.styled = true
+		end
+
+		if button.iconTexture:IsShown() then
+			button.name:SetTextColor(1, 1, 1)
+			button.bg:SetVertexColor(.9, .8, .5)
+			button.newLevelBg:Show()
+		else
+			button.name:SetTextColor(.5, .5, .5)
+			button.bg:SetVertexColor(0, 0, 0)
+			button.newLevelBg:Hide()
+		end
+	end)
+
+	hooksecurefunc(HeirloomsJournal, "LayoutCurrentPage", function()
+		for i = 1, #HeirloomsJournal.heirloomHeaderFrames do
+			local header = HeirloomsJournal.heirloomHeaderFrames[i]
+			if not header.styled then
+				header.text:SetTextColor(1, 1, 1)
+				header.text:SetFont(C.media.font2, 16)
+
+				header.styled = true
+			end
+		end
+
+		for i = 1, #HeirloomsJournal.heirloomEntryFrames do
+			local button = HeirloomsJournal.heirloomEntryFrames[i]
+
+			if button.iconTexture:IsShown() then
+				button.name:SetTextColor(1, 1, 1)
+				button.bg:SetVertexColor(.9, .8, .5)
+				button.newLevelBg:Show()
+			else
+				button.name:SetTextColor(.5, .5, .5)
+				button.bg:SetVertexColor(0, 0, 0)
+				button.newLevelBg:Hide()
+			end
+		end
+	end)
 end
