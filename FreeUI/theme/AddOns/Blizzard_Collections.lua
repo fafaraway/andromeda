@@ -365,6 +365,29 @@ C.themes["Blizzard_Collections"] = function()
 
 	-- Toys!
 
+	local shouldChangeTextColor = true
+
+	local changeTextColor = function(toyString)
+		if shouldChangeTextColor then
+			shouldChangeTextColor = false
+
+			local self = toyString:GetParent()
+
+			if PlayerHasToy(self.itemID) then
+				local _, _, quality = GetItemInfo(self.itemID)
+				if quality then
+					toyString:SetTextColor(GetItemQualityColor(quality))
+				else
+					toyString:SetTextColor(1, 1, 1)
+				end
+			else
+				toyString:SetTextColor(.5, .5, .5)
+			end
+
+			shouldChangeTextColor = true
+		end
+	end
+
 	local buttons = ToyBox.iconsFrame
 	for i = 1, 18 do
 		local bu = buttons["spellButton"..i]
@@ -380,27 +403,9 @@ C.themes["Blizzard_Collections"] = function()
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(ic)
+
+		hooksecurefunc(bu.name, "SetTextColor", changeTextColor)
 	end
-
-	hooksecurefunc("ToySpellButton_UpdateButton", function(self)
-		local toyString = self.name
-
-		if PlayerHasToy(self.itemID) then
-			local _, _, quality = GetItemInfo(self.itemID)
-			if quality then
-				toyString:SetTextColor(GetItemQualityColor(quality))
-			else
-				toyString:SetTextColor(1, 1, 1)
-			end
-		else
-			toyString:SetTextColor(.5, .5, .5)
-		end
-
-		if not self.updateFixed then
-			hooksecurefunc(self, "updateFunction", ToySpellButton_UpdateButton)
-			self.updateFixed = true
-		end
-	end)
 
 	-- [[ Heirlooms ]]
 
