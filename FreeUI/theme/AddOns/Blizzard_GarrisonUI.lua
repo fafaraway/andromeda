@@ -345,17 +345,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	GarrisonMissionFrameTab1:ClearAllPoints()
 	GarrisonMissionFrameTab1:SetPoint("BOTTOMLEFT", 11, -40)
 
-	do
-		local f = CreateFrame("Frame")
-		f:RegisterEvent("ADDON_LOADED")
-		f:SetScript("OnEvent", function(self, event, addon)
-			if addon == "MasterPlan" then
-				F.ReskinTab(GarrisonMissionFrameTab3)
-				self:UnregisterEvent("ADDON_LOADED")
-			end
-		end)
-	end
-
 	-- Follower list
 
 	local FollowerList = GarrisonMissionFrame.FollowerList
@@ -795,4 +784,31 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		self.numAbilitiesStyled = numAbilitiesStyled
 	end)
+
+	-- [[ Master plan support ]]
+
+	do
+		local f = CreateFrame("Frame")
+		f:RegisterEvent("ADDON_LOADED")
+		f:SetScript("OnEvent", function(self, event, addon)
+			if addon == "MasterPlan" then
+				local minimize = MissionPage.MinimizeButton
+
+				F.ReskinTab(GarrisonMissionFrameTab3)
+				F.ReskinTab(GarrisonMissionFrameTab4)
+
+				MissionPage.CloseButton:SetSize(17, 17)
+				MissionPage.CloseButton:ClearAllPoints()
+				MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+
+				F.ReskinExpandOrCollapse(minimize)
+				minimize:SetSize(17, 17)
+				minimize:ClearAllPoints()
+				minimize:SetPoint("RIGHT", MissionPage.CloseButton, "LEFT", -1, 0)
+				minimize.plus:Hide()
+
+				self:UnregisterEvent("ADDON_LOADED")
+			end
+		end)
+	end
 end
