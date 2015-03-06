@@ -104,7 +104,7 @@ tinsert(C.themes["FreeUI"], function()
 				for _, pixel in pairs(closeButton.pixels) do
 					pixel:Show()
 				end
-				closeButton.minimize.Hide()
+				closeButton.minimize:Hide()
 			end
 		end
 	end)
