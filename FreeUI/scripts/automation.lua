@@ -198,7 +198,7 @@ if C.automation.questRewardHighlight then
 			self:SetScript("OnUpdate", nil)
 			last = 0
 
-			if QuestInfoItem1:IsVisible() then -- protection in case frame is closed early
+			if QuestInfoRewardsFrameQuestInfoItem1:IsVisible() then -- protection in case frame is closed early
 				highlightFunc()
 			end
 		end
