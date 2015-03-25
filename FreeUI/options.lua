@@ -255,6 +255,8 @@ C["selfbuffs"] = {
 			{
 				2823, -- Deadly Poison
 				8679, -- Wound Poison
+				3408, -- Crippling Poison
+				157584, -- Instant Poison
 			},
 		},
 	},
