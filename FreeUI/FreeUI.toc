@@ -84,6 +84,7 @@ theme\AddOns\Blizzard_BlackMarketUI.lua
 theme\AddOns\Blizzard_Calendar.lua
 theme\AddOns\Blizzard_ChallengesUI.lua
 theme\AddOns\Blizzard_Collections.lua
+theme\AddOns\Blizzard_DeathRecap.lua
 theme\AddOns\Blizzard_DebugTools.lua
 theme\AddOns\Blizzard_EncounterJournal.lua
 theme\AddOns\Blizzard_GarrisonUI.lua
