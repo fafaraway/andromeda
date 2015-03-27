@@ -113,8 +113,6 @@ local function GetColor(unit)
 	return Hex(r, g, b)
 end
 
-local hasMSP
-
 local function OnTooltipSetUnit(self)
 	local lines = self:NumLines()
 	local _, unit = self:GetUnit()
@@ -207,12 +205,9 @@ local function OnTooltipSetUnit(self)
 	if msp and unitName then
 		local fullName = UnitName("player") == unitName and unitName or (unitName.."-"..(unitRealm or GetRealmName():gsub("%s+", "")))
 
-		if msp.char[fullName].supported then
-			hasMSP = true
-			GameTooltipTextRight1:SetText(GetColor(unit).."MSP")
-			GameTooltipTextRight1:Show()
+		if msp.char[fullName] then
 			local cu = msp.char[fullName].field["CU"]
-			if cu ~= "" then
+			if cu ~= nil and cu ~= "" then
 				local len = cu:len()
 				if len > 50 then
 					cu = format("%s-\n%s", cu:sub(1, 50), cu:sub(51, min(len, 100)))
@@ -223,36 +218,11 @@ local function OnTooltipSetUnit(self)
 
 				GameTooltip:AddLine("|cffdddddd"..cu)
 			end
-		else
-			hasMSP = false
 		end
 	end
 end
 
 GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
-
-if msp then
-	tinsert(msp.callback.received, function(unitName)
-		if not hasMSP and UnitExists("mouseover") and UnitName("mouseover") == Ambiguate(unitName, "none") then
-			hasMSP = true
-			GameTooltipTextRight1:SetText(GetColor("mouseover").."MSP")
-			GameTooltipTextRight1:Show()
-			local cu = msp.char[unitName].field["CU"]
-			if cu ~= "" then
-				local len = cu:len()
-				if len > 50 then
-					cu = format("%s-\n%s", cu:sub(1, 50), cu:sub(51, min(len, 100)))
-					if len > 100 then
-						cu = cu.."..."
-					end
-				end
-
-				GameTooltip:AddLine("|cffdddddd"..cu)
-			end
-			GameTooltip:Show()
-		end
-	end)
-end
 
 --[[ Item Icons ]]
 local frame = CreateFrame("Frame", "ItemRefTooltipIconFrame", _G["ItemRefTooltip"])
