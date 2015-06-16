@@ -442,9 +442,12 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local MissionPage = MissionTab.MissionPage
 
-	for i = 1, 11 do
+	for i = 1, 15 do
 		select(i, MissionPage:GetRegions()):Hide()
 	end
+	select(18, MissionPage:GetRegions()):Hide()
+	select(19, MissionPage:GetRegions()):Hide()
+	select(20, MissionPage:GetRegions()):Hide()
 	MissionPage.StartMissionButton.Flash:SetTexture("")
 
 	F.Reskin(MissionPage.StartMissionButton)
@@ -453,16 +456,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	MissionPage.CloseButton:ClearAllPoints()
 	MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
 
-	hooksecurefunc("GarrisonMissionPage_UpdateStartButton", function(missionPage)
-		missionPage.StartMissionButton.FlashAnim:Stop()
-	end)
-
-	for i = 4, 8 do
-		select(i, MissionPage.Stage:GetRegions()):Hide()
-	end
-	for i = 19, 21 do
-		select(i, MissionPage.Stage:GetRegions()):Hide()
-	end
+	select(4, MissionPage.Stage:GetRegions()):Hide()
+	select(5, MissionPage.Stage:GetRegions()):Hide()
 
 	do
 		local bg = CreateFrame("Frame", nil, MissionPage.Stage)
@@ -476,7 +471,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		overlay:SetAllPoints(bg)
 		overlay:SetTexture(0, 0, 0, .5)
 
-		local iconbg = MissionPage.Stage.IconBG
+		local iconbg = select(16, MissionPage:GetRegions())
 		iconbg:ClearAllPoints()
 		iconbg:SetPoint("TOPLEFT", 3, -1)
 	end
@@ -489,21 +484,24 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		F.CreateBD(follower, .25)
 	end
 
-	hooksecurefunc("GarrisonMissionPage_SetFollower", function(frame)
+	local function onAssignFollowerToMission(self, frame)
 		local portrait = frame.PortraitFrame
 
 		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
-	end)
+	end
 
-	hooksecurefunc("GarrisonMissionPage_ClearFollower", function(frame)
+	local function onRemoveFollowerFromMission(self, frame)
 		local portrait = frame.PortraitFrame
 
 		portrait.LevelBorder:SetTexture(0, 0, 0, .5)
 		portrait.LevelBorder:SetSize(44, 11)
 
 		if portrait.squareBG then portrait.squareBG:SetBackdropBorderColor(0, 0, 0) end
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrame, "AssignFollowerToMission", onAssignFollowerToMission)
+	hooksecurefunc(GarrisonMissionFrame, "RemoveFollowerFromMission", onRemoveFollowerFromMission)
 
 	for i = 1, 10 do
 		select(i, MissionPage.RewardsFrame:GetRegions()):Hide()
@@ -646,27 +644,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			local portrait = recruit.PortraitFrame
 
 			portrait.squareBG:SetBackdropBorderColor(portrait.LevelBorder:GetVertexColor())
-
-			-- local abilities = recruit.Abilities
-
-			-- if recruit.numAbilitiesStyled == nil then
-				-- recruit.numAbilitiesStyled = 1
-			-- end
-
-			-- local numAbilitiesStyled = recruit.numAbilitiesStyled
-
-			-- local ability = abilities[numAbilitiesStyled]
-			-- while ability do
-				-- local icon = ability.Icon
-
-				-- icon:SetTexCoord(.08, .92, .08, .92)
-				-- F.CreateBG(icon)
-
-				-- numAbilitiesStyled = numAbilitiesStyled + 1
-				-- ability = abilities[numAbilitiesStyled]
-			-- end
-
-			-- recruit.numAbilitiesStyled = numAbilitiesStyled
 		end
 	end)
 
@@ -694,8 +671,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	-- [[ Shared templates ]]
 
-	hooksecurefunc("GarrisonFollowerList_Update", function(self)
-		local followerFrame = self
+	local function onUpdateData(self)
+		local followerFrame = self:GetParent()
 		local followers = followerFrame.FollowerList.followers
 		local followersList = followerFrame.FollowerList.followersList
 		local numFollowers = #followersList
@@ -746,7 +723,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				end
 			end
 		end
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrameFollowers, "UpdateData", onUpdateData)
+	hooksecurefunc(GarrisonLandingPageFollowerList, "UpdateData", onUpdateData)
 
 	hooksecurefunc("GarrisonFollowerButton_AddAbility", function(self, index)
 		local ability = self.Abilities[index]
@@ -762,7 +742,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonFollowerPage_ShowFollower", function(self, followerID)
+	local function onShowFollower(self, followerId)
+		local followerList = self
+		local self = self.followerTab
+
 		local abilities = self.AbilitiesFrame.Abilities
 
 		if self.numAbilitiesStyled == nil then
@@ -776,6 +759,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			local icon = ability.IconButton.Icon
 
 			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetDrawLayer("BACKGROUND", 1)
 			F.CreateBG(icon)
 
 			numAbilitiesStyled = numAbilitiesStyled + 1
@@ -783,7 +767,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 
 		self.numAbilitiesStyled = numAbilitiesStyled
-	end)
+	end
+
+	hooksecurefunc(GarrisonMissionFrame.FollowerList, "ShowFollower", onShowFollower)
+	hooksecurefunc(GarrisonLandingPageFollowerList, "ShowFollower", onShowFollower)
 
 	-- [[ Master plan support ]]
 
