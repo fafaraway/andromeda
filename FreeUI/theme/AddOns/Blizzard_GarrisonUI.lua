@@ -224,6 +224,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinClose(GarrisonLandingPage.CloseButton)
 	F.ReskinTab(GarrisonLandingPageTab1)
 	F.ReskinTab(GarrisonLandingPageTab2)
+	F.ReskinTab(GarrisonLandingPageTab3)
 
 	GarrisonLandingPageTab1:ClearAllPoints()
 	GarrisonLandingPageTab1:SetPoint("TOPLEFT", GarrisonLandingPage, "BOTTOMLEFT", 70, 2)
@@ -301,8 +302,21 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local FollowerList = GarrisonLandingPage.FollowerList
 
+	FollowerList:GetRegions():Hide()
 	select(2, FollowerList:GetRegions()):Hide()
-	FollowerList.FollowerHeaderBar:Hide()
+
+	F.ReskinInput(FollowerList.SearchBox)
+
+	local scrollFrame = FollowerList.listScroll
+
+	F.ReskinScroll(scrollFrame.scrollBar)
+
+	-- Ship follower list
+
+	local FollowerList = GarrisonLandingPage.ShipFollowerList
+
+	FollowerList:GetRegions():Hide()
+	select(2, FollowerList:GetRegions()):Hide()
 
 	F.ReskinInput(FollowerList.SearchBox)
 
@@ -325,6 +339,37 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		xpBar:SetStatusBarTexture(C.media.backdrop)
 
 		F.CreateBDFrame(xpBar)
+	end
+
+	-- Ship follower tab
+
+	local FollowerTab = GarrisonLandingPage.ShipFollowerTab
+
+	do
+		local xpBar = FollowerTab.XPBar
+
+		select(1, xpBar:GetRegions()):Hide()
+		xpBar.XPLeft:Hide()
+		xpBar.XPRight:Hide()
+		select(4, xpBar:GetRegions()):Hide()
+
+		xpBar:SetStatusBarTexture(C.media.backdrop)
+
+		F.CreateBDFrame(xpBar)
+	end
+
+	for i = 1, 2 do
+		local trait = FollowerTab.Traits[i]
+
+		trait.Border:Hide()
+		F.ReskinIcon(trait.Portrait)
+
+		local equipment = FollowerTab.EquipmentFrame.Equipment[i]
+
+		equipment.BG:Hide()
+		equipment.Border:Hide()
+
+		F.ReskinIcon(equipment.Icon)
 	end
 
 	-- [[ Mission UI ]]
@@ -771,6 +816,28 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc(GarrisonMissionFrame.FollowerList, "ShowFollower", onShowFollower)
 	hooksecurefunc(GarrisonLandingPageFollowerList, "ShowFollower", onShowFollower)
+
+	-- [[ Shipyard ]]
+
+	F.CreateBD(GarrisonShipyardMapMissionTooltip)
+
+	-- Follower tab
+
+	local FollowerTab = GarrisonShipyardFrame.FollowerTab
+
+	for i = 1, 2 do
+		local trait = FollowerTab.Traits[i]
+
+		trait.Border:Hide()
+		F.ReskinIcon(trait.Portrait)
+
+		local equipment = FollowerTab.EquipmentFrame.Equipment[i]
+
+		equipment.BG:Hide()
+		equipment.Border:Hide()
+
+		F.ReskinIcon(equipment.Icon)
+	end
 
 	-- [[ Master plan support ]]
 
