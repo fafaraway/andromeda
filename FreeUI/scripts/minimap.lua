@@ -225,6 +225,7 @@ local instanceTexts = {
 }
 
 rd:SetScript("OnEvent", function()
+	local inInstance, instanceType = IsInInstance()
 	local _, _, difficultyID, _, maxPlayers, _, _, _, instanceGroupSize = GetInstanceInfo()
 
 	if instanceTexts[difficultyID] ~= nil then
@@ -240,7 +241,13 @@ rd:SetScript("OnEvent", function()
 			rdt:SetText("")
 		end
 	end
-
+	
+	if not (inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")) then
+		rd:Hide()
+	else
+		rd:Show()
+	end
+	
 	if GuildInstanceDifficulty:IsShown() then
 		rdt:SetTextColor(0, .9, 0)
 	else
