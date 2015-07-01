@@ -362,7 +362,7 @@ tinsert(C.themes["FreeUI"], function()
 	do
 		local frame = GarrisonMissionAlertFrame
 
-		frame:GetRegions():Hide()
+		frame.Background:Hide()
 		frame.IconBG:Hide()
 		frame.glow:SetTexture("")
 		frame.shine:SetTexture("")
