@@ -374,6 +374,22 @@ tinsert(C.themes["FreeUI"], function()
 		F.CreateBD(bg)
 	end
 
+	-- Garrison shipyard mission alert
+
+	do
+		local frame = GarrisonShipMissionAlertFrame
+
+		frame.Background:Hide()
+		frame.glow:SetTexture("")
+		frame.shine:SetTexture("")
+
+		local bg = CreateFrame("Frame", nil, frame)
+		bg:SetPoint("TOPLEFT", 8, -8)
+		bg:SetPoint("BOTTOMRIGHT", -8, 10)
+		bg:SetFrameLevel(frame:GetFrameLevel()-1)
+		F.CreateBD(bg)
+	end
+
 	-- Garrison follower alert
 
 	do
