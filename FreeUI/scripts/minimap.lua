@@ -220,9 +220,12 @@ local instanceTexts = {
 	[11] = "3H",
 	[12] = "3",
 	[16] = "M",
+	[23] = "5M",	--Mythic 5-player
+	[24] = "5T",	--Timewalker 5-player
 }
 
 rd:SetScript("OnEvent", function()
+	local inInstance, instanceType = IsInInstance()
 	local _, _, difficultyID, _, maxPlayers, _, _, _, instanceGroupSize = GetInstanceInfo()
 
 	if instanceTexts[difficultyID] ~= nil then
@@ -232,11 +235,19 @@ rd:SetScript("OnEvent", function()
 			rdt:SetText(instanceGroupSize.."N")
 		elseif difficultyID == 15 then
 			rdt:SetText(instanceGroupSize.."H")
+		elseif difficultyID == 17 then
+			rdt:SetText(instanceGroupSize.."RF")
 		else
 			rdt:SetText("")
 		end
 	end
-
+	
+	if not (inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")) then
+		rd:Hide()
+	else
+		rd:Show()
+	end
+	
 	if GuildInstanceDifficulty:IsShown() then
 		rdt:SetTextColor(0, .9, 0)
 	else
