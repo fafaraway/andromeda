@@ -8,8 +8,7 @@ local oUF = ns.oUF
 local ALTERNATE_POWER_INDEX = ALTERNATE_POWER_INDEX
 
 local UpdateTooltip = function(self)
-	GameTooltip:SetText(self.powerName, 1, 1, 1)
-	GameTooltip:AddLine(self.powerTooltip, nil, nil, nil, 1)
+	GameTooltip:SetText(self.powerTooltip)
 	GameTooltip:Show()
 end
 
