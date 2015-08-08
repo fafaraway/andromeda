@@ -11,7 +11,7 @@ local function OnEvent()
 	if blacklist[GetCurrentMapAreaID()] then return end
 
 	if general.rareAlert_playSound then
-		PlaySoundFile("Sound\\Interface\\RaidWarning.wav")
+		PlaySoundFile("Sound\\Interface\\RaidWarning.ogg")
 	end
 
 	RaidNotice_AddMessage(RaidWarningFrame, "Rare spotted!", ChatTypeInfo["RAID_WARNING"])
