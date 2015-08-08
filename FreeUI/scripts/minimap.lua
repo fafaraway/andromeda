@@ -220,8 +220,8 @@ local instanceTexts = {
 	[11] = "3H",
 	[12] = "3",
 	[16] = "M",
-	[23] = "5M",	--Mythic 5-player
-	[24] = "5T",	--Timewalker 5-player
+	[23] = "5M",	-- Mythic 5-player
+	[24] = "5T",	-- Timewalker 5-player
 }
 
 rd:SetScript("OnEvent", function()
@@ -241,13 +241,9 @@ rd:SetScript("OnEvent", function()
 			rdt:SetText("")
 		end
 	end
-	
-	if not (inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario")) then
-		rd:Hide()
-	else
-		rd:Show()
-	end
-	
+
+	rd:SetShown(inInstance and (instanceType == "party" or instanceType == "raid" or instanceType == "scenario"))
+
 	if GuildInstanceDifficulty:IsShown() then
 		rdt:SetTextColor(0, .9, 0)
 	else
