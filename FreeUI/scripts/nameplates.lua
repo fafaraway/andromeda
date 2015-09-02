@@ -207,7 +207,7 @@ local StyleFrame = function(frame)
 
 	frame.barFrame, frame.nameFrame = frame:GetChildren()
 
-	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
+	frame.healthBar, frame.absorbBar, frame.castBar = frame.barFrame:GetChildren()
 	local healthBar, castBar = frame.healthBar, frame.castBar
 	local glowRegion, overlayRegion, highlightRegion, levelTextRegion, bossIconRegion, raidIconRegion, stateIconRegion = frame.barFrame:GetRegions()
 	local _, castOverlay, castShield, castIcon, castText, castShadow = castBar:GetRegions()
