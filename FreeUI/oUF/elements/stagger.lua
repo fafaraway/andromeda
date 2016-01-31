@@ -4,6 +4,39 @@ if not C.unitframes.enable then return end
 
 if(select(2, UnitClass('player')) ~= "MONK") then return end
 
+--[[ Element: Monk Stagger Bar
+ Handles updating and visibility of the monk's stagger bar.
+ Widget
+ Stagger - A StatusBar
+ Sub-Widgets
+ .bg - A Texture that functions as a background. It will inherit the color
+       of the main StatusBar.
+ Notes
+ The default StatusBar texture will be applied if the UI widget doesn't have a
+ status bar texture or color defined.
+ In order to override the internal update define the 'OnUpdate' script on the
+ widget in the layout
+ Sub-Widgets Options
+ .multiplier - Defines a multiplier, which is used to tint the background based
+               on the main widgets R, G and B values. Defaults to 1 if not
+               present.
+ Examples
+   local Stagger = CreateFrame('StatusBar', nil, self)
+   Stagger:SetSize(120, 20)
+   Stagger:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, 0)
+   -- Register with oUF
+   self.Stagger = Stagger
+ Hooks
+ OverrideVisibility(self) - Used to completely override the internal visibility
+                            function. Removing the table key entry will make
+                            the element fall-back to its internal function
+                            again.
+ Override(self)           - Used to completely override the internal
+                            update function. Removing the table key entry will
+                            make the element fall-back to its internal function
+                            again.
+]]
+
 local parent, ns = ...
 local oUF = ns.oUF
 
@@ -79,9 +112,12 @@ local Visibility = function(self, event, unit)
 			self.Stagger:Hide()
 			self:UnregisterEvent('UNIT_AURA', Path)
 		end
-	elseif not self.Stagger:IsShown() then
-		self.Stagger:Show()
-		self:RegisterEvent('UNIT_AURA', Path)
+	else
+		if(not self.Stagger:IsShown()) then
+			self.Stagger:Show()
+			self:RegisterEvent('UNIT_AURA', Path)
+		end
+
 		return Path(self, event, unit)
 	end
 end
