@@ -93,9 +93,14 @@ hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		itemButton:SetPushedTexture("")
 
 		itemButton.HotKey:ClearAllPoints()
-		itemButton.HotKey:SetPoint("TOP", itemButton, -1, 0)
+		itemButton.HotKey:SetPoint("CENTER", itemButton, 1, 0)
 		itemButton.HotKey:SetJustifyH("CENTER")
 		F.SetFS(itemButton.HotKey)
+        
+        itemButton.Count:ClearAllPoints()
+        itemButton.Count:SetPoint("TOP", itemButton, 2, -1)
+        itemButton.Count:SetJustifyH("CENTER")
+        F.SetFS(itemButton.Count)
 
 		itemButton.icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(itemButton)
