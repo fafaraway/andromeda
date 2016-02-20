@@ -846,7 +846,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		f:RegisterEvent("ADDON_LOADED")
 		f:SetScript("OnEvent", function(self, event, addon)
 			if addon == "MasterPlan" then
-				local minimize = MissionPage.MinimizeButton
+				F.ReskinTab(GarrisonLandingPageTab4)
 
 				F.ReskinTab(GarrisonMissionFrameTab3)
 				F.ReskinTab(GarrisonMissionFrameTab4)
@@ -855,6 +855,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				MissionPage.CloseButton:ClearAllPoints()
 				MissionPage.CloseButton:SetPoint("TOPRIGHT", -10, -5)
 
+				local minimize = MissionPage.MinimizeButton
 				F.ReskinExpandOrCollapse(minimize)
 				minimize:SetSize(17, 17)
 				minimize:ClearAllPoints()
