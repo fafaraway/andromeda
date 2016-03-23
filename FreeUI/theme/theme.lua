@@ -59,7 +59,7 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 			end
 		end
 
-		local lightbds = {"SecondaryProfession1", "SecondaryProfession2", "SecondaryProfession3", "SecondaryProfession4", "ChatConfigChatSettingsClassColorLegend", "ChatConfigChannelSettingsClassColorLegend", "FriendsFriendsList", "HelpFrameGM_ResponseScrollFrame1", "HelpFrameGM_ResponseScrollFrame2", "FriendsFriendsNoteFrame", "AddFriendNoteFrame", "ScrollOfResurrectionSelectionFrameList", "HelpFrameReportBugScrollFrame", "HelpFrameSubmitSuggestionScrollFrame", "ReportPlayerNameDialogCommentFrame", "ReportCheatingDialogCommentFrame"}
+		local lightbds = {"SecondaryProfession1", "SecondaryProfession2", "SecondaryProfession3", "SecondaryProfession4", "ChatConfigChatSettingsClassColorLegend", "ChatConfigChannelSettingsClassColorLegend", "FriendsFriendsList", "HelpFrameGM_ResponseScrollFrame1", "HelpFrameGM_ResponseScrollFrame2", "AddFriendNoteFrame", "ScrollOfResurrectionSelectionFrameList", "HelpFrameReportBugScrollFrame", "HelpFrameSubmitSuggestionScrollFrame", "ReportPlayerNameDialogCommentFrame", "ReportCheatingDialogCommentFrame"}
 		for i = 1, #lightbds do
 			local bd = _G[lightbds[i]]
 			if bd then
@@ -1006,20 +1006,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		F.CreateBD(MissingLootFrame)
 		F.ReskinClose(MissingLootFramePassButton)
 
-		-- BN conversation
-
-		BNConversationInviteDialogHeader:SetTexture("")
-
-		F.CreateBD(BNConversationInviteDialog)
-		F.CreateBD(BNConversationInviteDialogList, .25)
-
-		F.Reskin(BNConversationInviteDialogInviteButton)
-		F.Reskin(BNConversationInviteDialogCancelButton)
-		F.ReskinScroll(BNConversationInviteDialogListScrollFrameScrollBar)
-		for i = 1, BN_CONVERSATION_INVITE_NUM_DISPLAYED do
-			F.ReskinCheck(_G["BNConversationInviteDialogListFriend"..i].checkButton)
-		end
-
 		-- Tabard Frame
 
 		TabardFrameMoneyInset:DisableDrawLayer("BORDER")
@@ -1406,7 +1392,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 		RaidInfoDetailCorner:Hide()
 		RaidInfoFrameHeader:Hide()
 		for i = 1, 9 do
-			select(i, FriendsFriendsNoteFrame:GetRegions()):Hide()
 			select(i, AddFriendNoteFrame:GetRegions()):Hide()
 			select(i, ReportPlayerNameDialogCommentFrame:GetRegions()):Hide()
 			select(i, ReportCheatingDialogCommentFrame:GetRegions()):Hide()

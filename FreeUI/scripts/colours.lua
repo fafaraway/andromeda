@@ -162,10 +162,10 @@ local function friendsFrame()
 			elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
 				local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(button.id)
 				if isOnline and client == BNET_CLIENT_WOW then
-					local _, _, _, realmName, realmID, faction, race, class, guild, zoneName, level = BNGetToonInfo(toonID)
+					local _, _, _, realmName, realmID, faction, race, class, guild, zoneName, level = BNGetGameAccountInfo(toonID)
 					if presenceName and toonName and class then
-							nameText = presenceName ..' '.. FRIENDS_WOW_NAME_COLOR_CODE .. '(' .. classColor[class] .. classColor[class] .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
-						if zoneName == playerArea and CanCooperateWithToon(toonID) then
+						nameText = presenceName ..' '.. FRIENDS_WOW_NAME_COLOR_CODE .. '(' .. classColor[class] .. classColor[class] .. toonName .. FRIENDS_WOW_NAME_COLOR_CODE .. ')'
+						if zoneName == playerArea then
 							infoText = format('|cff00ff00%s|r', zoneName)
 						end
 					end

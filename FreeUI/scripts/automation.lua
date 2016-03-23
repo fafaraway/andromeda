@@ -97,7 +97,7 @@ local IsFriend = function(name)
 	for i = 1, select(2, BNGetNumFriends()) do
 		local presenceID, _, _, _, toonName, _, client = BNGetFriendInfo(i)
 		if client == "WoW" then
-			local _, _, _, realmName = BNGetToonInfo(presenceID)
+			local _, _, _, realmName = BNGetGameAccountInfo(presenceID)
 
 			if realmName == playerRealm and toonName == name then
 				return true

@@ -57,9 +57,12 @@ local function GetColor(className, isLocal)
 end
 
 local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
-	local _, charName, _, _, _, _, _, englishClass = BNGetToonInfo(id)
-	if englishClass and englishClass ~= "" then
-		fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
+	local gameAccount = select(6, BNGetFriendInfoByID(id))
+	if gameAccount then
+		local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
+		if englishClass and englishClass ~= "" then
+			fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
+		end
 	end
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
