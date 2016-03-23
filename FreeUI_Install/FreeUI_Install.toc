@@ -2,7 +2,7 @@
 ## Title: FreeUI Install
 ## Notes: FreeUI setup addon.
 ## Author: Haleth/Lightsword
-## Version: 8.3.3
+## Version: 8.4.0
 ## RequiredDeps: FreeUI
 
 install.lua
