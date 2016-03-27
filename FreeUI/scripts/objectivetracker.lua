@@ -52,9 +52,12 @@ minimizeButton.plus:Hide()
 
 hooksecurefunc("ObjectiveTracker_Collapse", function()
 	minimizeButton.plus:Show()
+	FreeUIConfig.objectiveTracker.collapsed = true
 end)
+
 hooksecurefunc("ObjectiveTracker_Expand", function()
 	minimizeButton.plus:Hide()
+	FreeUIConfig.objectiveTracker.collapsed = false
 end)
 
 -- [[ Blocks and lines ]]
@@ -96,7 +99,7 @@ hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		itemButton.HotKey:SetPoint("CENTER", itemButton, 1, 0)
 		itemButton.HotKey:SetJustifyH("CENTER")
 		F.SetFS(itemButton.HotKey)
-        
+
 		itemButton.Count:ClearAllPoints()
 		itemButton.Count:SetPoint("TOP", itemButton, 2, -1)
 		itemButton.Count:SetJustifyH("CENTER")
@@ -196,4 +199,14 @@ hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", function(self, 
 
 	bar.IconBG:Hide()
 	bar.newIconBg:SetShown(icon:IsShown())
+end)
+
+-- [[ Init ]]
+
+F.RegisterEvent("VARIABLES_LOADED", function()
+	if not FreeUIConfig.objectiveTracker then FreeUIConfig.objectiveTracker = {} end
+
+	if C.quests.rememberObjectiveTrackerState and (FreeUIConfig.objectiveTracker.collapsed or C.quests.alwaysCollapseObjectiveTracker) then
+		ObjectiveTracker_Collapse()
+	end
 end)

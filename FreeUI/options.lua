@@ -96,6 +96,8 @@ C["tooltip"] = {
 
 C["quests"] = {
 	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
+	["rememberObjectiveTrackerState"] = true,		-- saves objective tracker expanded/collapsed state per character
+		["alwaysCollapseObjectiveTracker"] = false,	-- always collapses objective tracker on login
 }
 
 C["unitframes"] = {

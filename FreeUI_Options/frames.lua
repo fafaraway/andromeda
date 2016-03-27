@@ -618,6 +618,16 @@ do
 
 	local questRewardHighlight = ns.CreateCheckBox(quests, "questRewardHighlight", true)
 	questRewardHighlight:SetPoint("TOPLEFT", quests.subText, "BOTTOMLEFT", 0, -8)
+
+	local rememberObjectiveTrackerState = ns.CreateCheckBox(quests, "rememberObjectiveTrackerState", true)
+	rememberObjectiveTrackerState:SetPoint("TOPLEFT", questRewardHighlight, "BOTTOMLEFT", 0, -8)
+	tinsert(ns.newOptions, rememberObjectiveTrackerState)
+
+	local alwaysCollapseObjectiveTracker = ns.CreateCheckBox(quests, "alwaysCollapseObjectiveTracker")
+	alwaysCollapseObjectiveTracker:SetPoint("TOPLEFT", rememberObjectiveTrackerState, "BOTTOMLEFT", 16, -8)
+	tinsert(ns.newOptions, alwaysCollapseObjectiveTracker)
+
+	rememberObjectiveTrackerState.children = {alwaysCollapseObjectiveTracker}
 end
 
 -- [[ Tooltip ]]
