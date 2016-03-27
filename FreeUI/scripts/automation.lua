@@ -182,7 +182,7 @@ if C.general.undressButton then
 	F.Reskin(sideUndress)
 end
 
-if C.automation.questRewardHighlight then
+do
 	local f = CreateFrame("Frame")
 	local highlightFunc
 
@@ -239,6 +239,17 @@ if C.automation.questRewardHighlight then
 		maxPriceIndex = 0
 	end
 
-	f:RegisterEvent("QUEST_COMPLETE")
 	f:SetScript("OnEvent", highlightFunc)
+
+	if C.quests.questRewardHighlight then
+		f:RegisterEvent("QUEST_COMPLETE")
+	end
+
+	F.AddOptionsCallback("quests", "questRewardHighlight", function()
+		if C.quests.questRewardHighlight then
+			f:RegisterEvent("QUEST_COMPLETE")
+		else
+			f:UnregisterEvent("QUEST_COMPLETE")
+		end
+	end)
 end

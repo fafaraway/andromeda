@@ -88,8 +88,6 @@ ns.localization.automationautoRoll = "Roll disenchant or greed on BoE uncommon i
 ns.localization.automationautoRoll_maxLevel = "Only at max level"
 ns.localization.automationautoSell = "Sell junk"
 ns.localization.automationautoSellTooltip = "Automatically sell grey quality items to vendors, unless they are used in an equipment set."
-ns.localization.automationquestRewardHighlight = "Quest reward highlighting"
-ns.localization.automationquestRewardHighlightTooltip = "When turning in a quest, highlight the quest reward with the highest vendor sell price."
 ns.localization.automationautoSetRole = "Skip unnecessary role poll popups"
 ns.localization.automationautoSetRoleTooltip = "Skip the role poll popup if your role is already set or you are playing a pure dps class."
 ns.localization.automationautoSetRole_useSpec = "Set role based on current specialization"
@@ -184,6 +182,8 @@ ns.localization.unitframesenableArenaTooltip = "Enables unit frames for arena en
 
 ns.localization.quests = "Quests"
 ns.localization.questsSubText = "All options related to quests and the objective tracker."
+ns.localization.questsquestRewardHighlight = "Quest reward highlighting"
+ns.localization.questsquestRewardHighlightTooltip = "When turning in a quest, highlight the quest reward with the highest vendor sell price."
 ns.localization.tooltip = "Tooltip"
 ns.localization.tooltipSubText = "Adjust the appearance and functionality of the game tooltip below."
 ns.localization.tooltipenable = "Enable"

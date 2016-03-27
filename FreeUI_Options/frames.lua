@@ -341,11 +341,8 @@ do
 	local autoSell = ns.CreateCheckBox(automation, "autoSell", true)
 	autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
 
-	local questRewardHighlight = ns.CreateCheckBox(automation, "questRewardHighlight", true)
-	questRewardHighlight:SetPoint("TOPLEFT", autoSell, "BOTTOMLEFT", 0, -8)
-
 	local autoSetRole = ns.CreateCheckBox(automation, "autoSetRole", true)
-	autoSetRole:SetPoint("TOPLEFT", questRewardHighlight, "BOTTOMLEFT", 0, -8)
+	autoSetRole:SetPoint("TOPLEFT", autoSell, "BOTTOMLEFT", 0, -8)
 
 	local autoSetRoleUseSpec = ns.CreateCheckBox(automation, "autoSetRole_useSpec", true)
 	autoSetRoleUseSpec:SetPoint("TOPLEFT", autoSetRole, "BOTTOMLEFT", 16, -8)
@@ -618,6 +615,9 @@ do
 	local quests = FreeUIOptionsPanel.quests
 	quests.tab.Icon:SetTexture("Interface\\Icons\\achievement_quests_completed_06")
 	tinsert(ns.newCategories, quests)
+
+	local questRewardHighlight = ns.CreateCheckBox(quests, "questRewardHighlight", true)
+	questRewardHighlight:SetPoint("TOPLEFT", quests.subText, "BOTTOMLEFT", 0, -8)
 end
 
 -- [[ Tooltip ]]
