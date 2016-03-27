@@ -150,7 +150,6 @@ tinsert(ns.buttons, CreditsButton)
 
 local InstallButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 InstallButton:SetSize(128, 25)
-InstallButton:SetPoint("TOP", CreditsButton, "BOTTOM", 0, -4)
 InstallButton:SetText(ns.localization.install)
 InstallButton:SetScript("OnClick", function()
 	if IsAddOnLoaded("FreeUI_Install") then
@@ -165,7 +164,6 @@ tinsert(ns.buttons, InstallButton)
 
 local ResetButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 ResetButton:SetSize(128, 25)
-ResetButton:SetPoint("TOP", InstallButton, "BOTTOM", 0, -4)
 ResetButton:SetText(RESET)
 ResetButton:SetScript("OnClick", function()
 	resetFrame:Show()
@@ -198,11 +196,14 @@ ns.addCategory("ActionBars")
 ns.addCategory("Bags")
 ns.addCategory("MenuBar")
 ns.addCategory("Notifications")
+ns.addCategory("Quests")
 ns.addCategory("Tooltip")
 ns.addCategory("UnitFrames")
 ns.addCategory("ClassMod")
 
-CreditsButton:SetPoint("TOP", options.lastCategoryTab, "BOTTOM", 0, -136)
+CreditsButton:SetPoint("BOTTOM", InstallButton, "TOP", 0, 4)
+InstallButton:SetPoint("BOTTOM", ResetButton, "TOP", 0, 4)
+ResetButton:SetPoint("TOP", FreeUIOptionsPanel.general.tab, "BOTTOM", 0, -509)
 
 -- [[ General ]]
 
@@ -609,6 +610,14 @@ do
 
 	enable:HookScript("OnClick", toggleUFOptions)
 	unitframes:HookScript("OnShow", toggleUFOptions)
+end
+
+-- [[ Quests ]]
+
+do
+	local quests = FreeUIOptionsPanel.quests
+	quests.tab.Icon:SetTexture("Interface\\Icons\\achievement_quests_completed_06")
+	tinsert(ns.newCategories, quests)
 end
 
 -- [[ Tooltip ]]

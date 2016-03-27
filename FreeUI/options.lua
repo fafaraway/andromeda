@@ -95,6 +95,9 @@ C["tooltip"] = {
 	["pvp"] = true,
 }
 
+C["quests"] = {
+}
+
 C["unitframes"] = {
 	["enable"] = true, 									-- enable the unit frames and their included modules
 

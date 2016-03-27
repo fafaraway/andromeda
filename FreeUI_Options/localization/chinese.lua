@@ -20,7 +20,7 @@ ns.localization.notificationPreviewText = "这是一个通知示例。"
 ns.localization.notificationPreviewCallbackText = "大多数通知都有相关的点击动作。"
 ns.localization.author = "FreeUI by Haleth on wowinterface.com"
 ns.localization.authorSubText = "Lightsword @ Argent Dawn - EU"
-ns.localization.NEW = "NEW!"
+ns.localization.NEW = "NEW"
 
 ns.localization.general = "综合"
 ns.localization.generalSubText = "这些选项控制这个界面的大部分通用设置。"

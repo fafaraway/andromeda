@@ -502,8 +502,6 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	FreeUIOptionsPanel.lastCategoryTab = panel.tab
-
 	offset = offset + 35
 end
 

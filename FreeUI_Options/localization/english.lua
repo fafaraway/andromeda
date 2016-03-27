@@ -18,7 +18,7 @@ ns.localization.notificationPreviewText = "This is an example of a notification.
 ns.localization.notificationPreviewCallbackText = "Banner clicked! Most notifications have a relevant on-click action."
 ns.localization.author = "FreeUI by Haleth on wowinterface.com"
 ns.localization.authorSubText = "Lightsword @ Argent Dawn - EU"
-ns.localization.NEW = "NEW!"
+ns.localization.NEW = "NEW"
 
 ns.localization.general = "General"
 ns.localization.generalSubText = "These options control most of the common settings in the UI."
@@ -182,6 +182,8 @@ ns.localization.unitframesstatusIndicatorCombatTooltip = "Show combat status on 
 ns.localization.unitframesenableArena = "Arena/Flag Carrier frames"
 ns.localization.unitframesenableArenaTooltip = "Enables unit frames for arena enemies (including round preparation) and flag carriers in battlegrounds."
 
+ns.localization.quests = "Quests"
+ns.localization.questsSubText = "All options related to quests and the objective tracker."
 ns.localization.tooltip = "Tooltip"
 ns.localization.tooltipSubText = "Adjust the appearance and functionality of the game tooltip below."
 ns.localization.tooltipenable = "Enable"
