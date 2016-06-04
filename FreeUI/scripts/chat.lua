@@ -161,10 +161,9 @@ local function StyleWindow(f)
 
 	frame.editBox:SetAltArrowKeyMode(nil)
 
-	local x=({_G[f.."EditBox"]:GetRegions()})
-	x[9]:SetAlpha(0)
-	x[10]:SetAlpha(0)
-	x[11]:SetAlpha(0)
+	_G[f.."EditBoxFocusLeft"]:SetAlpha(0)
+	_G[f.."EditBoxFocusRight"]:SetAlpha(0)
+	_G[f.."EditBoxFocusMid"]:SetAlpha(0)
 
 	local ebg = CreateFrame("Frame", nil, frame.editBox)
 	ebg:SetBackdrop({

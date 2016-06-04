@@ -9,6 +9,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	local ConquestFrame = ConquestFrame
 	local WarGamesFrame = WarGamesFrame
 	local PVPArenaTeamsFrame = PVPArenaTeamsFrame
+	local englishFaction = UnitFactionGroup("player")
 
 	-- Category buttons
 
@@ -48,10 +49,6 @@ C.themes["Blizzard_PVPUI"] = function()
 	PVPQueueFrame.CategoryButton2.Icon:SetTexture("Interface\\Icons\\achievement_bg_killxenemies_generalsroom")
 	PVPQueueFrame.CategoryButton3.Icon:SetTexture("Interface\\Icons\\ability_warrior_offensivestance")
 
-	local englishFaction = UnitFactionGroup("player")
-	PVPQueueFrame.CategoryButton1.CurrencyDisplay.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Honor-"..englishFaction)
-	PVPQueueFrame.CategoryButton2.CurrencyDisplay.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
-
 	hooksecurefunc("PVPQueueFrame_SelectButton", function(index)
 		local self = PVPQueueFrame
 		for i = 1, 4 do
@@ -74,32 +71,26 @@ C.themes["Blizzard_PVPUI"] = function()
 	for i = 1, 9 do
 		select(i, Inset:GetRegions()):Hide()
 	end
-	BonusFrame.BattlegroundTexture:Hide()
 	BonusFrame.WorldBattlesTexture:Hide()
-	BonusFrame.BattlegroundHeader:Hide()
-	BonusFrame.WorldPVPHeader:Hide()
 	BonusFrame.ShadowOverlay:Hide()
 
 	F.Reskin(BonusFrame.DiceButton)
 
-	for _, bonusButton in pairs({"RandomBGButton", "Arena1Button", "Arena2Button"}) do
+	for _, bonusButton in pairs({"RandomBGButton", "Arena1Button", "AshranButton"}) do
 		local bu = BonusFrame[bonusButton]
+		local reward = bu.Reward
 
 		F.Reskin(bu, true)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetTexture(r, g, b, .2)
 		bu.SelectedTexture:SetAllPoints()
-	end
 
-	BonusFrame.BattlegroundReward1.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward1.Icon, "LEFT", -2, 0)
-	BonusFrame.BattlegroundReward1.Icon:SetTexCoord(.08, .92, .08, .92)
-	BonusFrame.BattlegroundReward1.Icon:SetSize(16, 16)
-	F.CreateBG(BonusFrame.BattlegroundReward1.Icon)
-	BonusFrame.BattlegroundReward2.Amount:SetPoint("RIGHT", BonusFrame.BattlegroundReward2.Icon, "LEFT", -2, 0)
-	BonusFrame.BattlegroundReward2.Icon:SetTexCoord(.08, .92, .08, .92)
-	BonusFrame.BattlegroundReward2.Icon:SetSize(16, 16)
-	F.CreateBG(BonusFrame.BattlegroundReward2.Icon)
+		if reward then
+			reward.Border:Hide()
+			F.ReskinIcon(reward.Icon)
+		end
+	end
 
 	hooksecurefunc("HonorFrameBonusFrame_Update", function()
 		local hasData, canQueue, bgName, battleGroundID, hasWon, winHonorAmount, winConquestAmount = GetHolidayBGInfo()
@@ -229,7 +220,6 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	ConquestFrame.Arena2v2:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 	ConquestFrame.Arena3v3:HookScript("OnEnter", ConquestFrameButton_OnEnter)
-	ConquestFrame.Arena5v5:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 	ConquestFrame.RatedBG:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 
 	for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.Arena5v5, ConquestFrame.RatedBG}) do
@@ -241,33 +231,6 @@ C.themes["Blizzard_PVPUI"] = function()
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
-	ConquestFrame.Arena5v5:SetPoint("TOP", ConquestFrame.Arena3v3, "BOTTOM", 0, -1)
-
-	ConquestFrame.ArenaReward.Amount:SetPoint("RIGHT", ConquestFrame.ArenaReward.Icon, "LEFT", -2, 0)
-	ConquestFrame.ArenaReward.Icon:SetTexCoord(.08, .92, .08, .92)
-	ConquestFrame.ArenaReward.Icon:SetSize(16, 16)
-	F.CreateBG(ConquestFrame.ArenaReward.Icon)
-	ConquestFrame.RatedBGReward.Amount:SetPoint("RIGHT", ConquestFrame.RatedBGReward.Icon, "LEFT", -2, 0)
-	ConquestFrame.RatedBGReward.Icon:SetTexCoord(.08, .92, .08, .92)
-	ConquestFrame.RatedBGReward.Icon:SetSize(16, 16)
-	F.CreateBG(ConquestFrame.RatedBGReward.Icon)
-
-	ConquestFrame.ArenaReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
-	ConquestFrame.RatedBGReward.Icon:SetTexture("Interface\\Icons\\PVPCurrency-Conquest-"..englishFaction)
-
-	for i = 1, 4 do
-		select(i, ConquestBar:GetRegions()):Hide()
-		_G["ConquestPointsBarDivider"..i]:Hide()
-	end
-
-	ConquestBar.shadow:Hide()
-
-	ConquestBar.progress:SetTexture(C.media.backdrop)
-	ConquestBar.progress:SetGradient("VERTICAL", .8, 0, 0, 1, 0, 0)
-
-	local bg = F.CreateBDFrame(ConquestBar, .25)
-	bg:SetPoint("TOPLEFT", -1, -2)
-	bg:SetPoint("BOTTOMRIGHT", 1, 2)
 
 	-- War games
 
@@ -358,8 +321,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Main style
 
-	F.Reskin(HonorFrame.SoloQueueButton)
-	F.Reskin(HonorFrame.GroupQueueButton)
+	F.Reskin(HonorFrameQueueButton)
 	F.Reskin(ConquestFrame.JoinButton)
 	F.Reskin(WarGameStartButton)
 	F.ReskinDropDown(HonorFrameTypeDropDown)

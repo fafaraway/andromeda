@@ -104,7 +104,7 @@ local function GetColor(unit)
 	if UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
 		r, g, b = C.classcolours[class or "WARRIOR"].r, C.classcolours[class or "WARRIOR"].g, C.classcolours[class or "WARRIOR"].b
-	elseif (not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)) or UnitIsDead(unit) then
+	elseif UnitIsDead(unit) then
 		r, g, b = .6, .6, .6
 	else
 		r, g, b = unpack(C.reactioncolours[UnitReaction(unit, "player") or 5])

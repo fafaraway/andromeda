@@ -21,9 +21,6 @@ C.themes["Blizzard_TalentUI"] = function()
 		select(i, PlayerTalentFrameSpecializationSpellScrollFrameScrollChild:GetRegions()):Hide()
 	end
 
-	F.CreateBG(PlayerTalentFrameTalentsClearInfoFrame)
-	PlayerTalentFrameTalentsClearInfoFrameIcon:SetTexCoord(.08, .92, .08, .92)
-
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetTexture(1, 1, 1)
 	PlayerTalentFrameSpecializationSpellScrollFrameScrollChild.Seperator:SetAlpha(.2)
 
@@ -151,7 +148,6 @@ C.themes["Blizzard_TalentUI"] = function()
 	end
 
 	PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
-	PlayerTalentFrameTalentsLearnButton.Flash:SetTexture("")
 
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 
@@ -229,7 +225,6 @@ C.themes["Blizzard_TalentUI"] = function()
 			bu:SetHighlightTexture("")
 			bu.Slot:SetAlpha(0)
 			bu.knownSelection:SetAlpha(0)
-			bu.learnSelection:SetAlpha(0)
 
 			ic:SetDrawLayer("ARTWORK")
 			ic:SetTexCoord(.08, .92, .08, .92)
@@ -288,7 +283,6 @@ C.themes["Blizzard_TalentUI"] = function()
 
 	F.ReskinPortraitFrame(PlayerTalentFrame, true)
 	F.Reskin(PlayerTalentFrameSpecializationLearnButton)
-	F.Reskin(PlayerTalentFrameTalentsLearnButton)
 	F.Reskin(PlayerTalentFrameActivateButton)
 	F.Reskin(PlayerTalentFramePetSpecializationLearnButton)
 end

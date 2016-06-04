@@ -11,21 +11,4 @@ tinsert(C.themes["FreeUI"], function()
 		F.ReskinTab(_G["CharacterFrameTab"..i])
 		i = i + 1
 	end
-
-	-- [[ Expand button ]]
-
-	CharacterFrameExpandButton:GetNormalTexture():SetAlpha(0)
-	CharacterFrameExpandButton:GetPushedTexture():SetAlpha(0)
-
-	F.ReskinArrow(CharacterFrameExpandButton, "left")
-
-	CharacterFrameExpandButton:SetPoint("BOTTOMRIGHT", CharacterFrameInset, "BOTTOMRIGHT", -14, 6)
-
-	hooksecurefunc("CharacterFrame_Expand", function()
-		CharacterFrameExpandButton.tex:SetTexture(C.media.arrowLeft)
-	end)
-
-	hooksecurefunc("CharacterFrame_Collapse", function()
-		CharacterFrameExpandButton.tex:SetTexture(C.media.arrowRight)
-	end)
 end)

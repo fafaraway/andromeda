@@ -135,31 +135,31 @@ F.AddOptionsCallback("automation", "autoAccept", function()
 	end
 end)
 
-if C.general.helmcloakbuttons then
-	local helm = CreateFrame("CheckButton", "FreeUI_HelmCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")
-	helm:SetSize(22, 22)
-	helm:SetPoint("LEFT", CharacterHeadSlot, "RIGHT", 5, 0)
-	helm:SetScript("OnClick", function() ShowHelm(not ShowingHelm()) end)
-	helm:SetScript("OnEvent", function() helm:SetChecked(ShowingHelm()) end)
-	helm:RegisterEvent("UNIT_MODEL_CHANGED")
-	helm:SetToplevel(true)
+-- if C.general.helmcloakbuttons then
+-- 	local helm = CreateFrame("CheckButton", "FreeUI_HelmCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")
+-- 	helm:SetSize(22, 22)
+-- 	helm:SetPoint("LEFT", CharacterHeadSlot, "RIGHT", 5, 0)
+-- 	helm:SetScript("OnClick", function() ShowHelm(not ShowingHelm()) end)
+-- 	helm:SetScript("OnEvent", function() helm:SetChecked(ShowingHelm()) end)
+-- 	helm:RegisterEvent("UNIT_MODEL_CHANGED")
+-- 	helm:SetToplevel(true)
 
-	local cloak = CreateFrame("CheckButton", "FreeUI_CloakCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")
-	cloak:SetSize(22, 22)
-	cloak:SetPoint("LEFT", CharacterBackSlot, "RIGHT", 5, 0)
-	cloak:SetScript("OnClick", function() ShowCloak(not ShowingCloak()) end)
-	cloak:SetScript("OnEvent", function() cloak:SetChecked(ShowingCloak()) end)
-	cloak:RegisterEvent("UNIT_MODEL_CHANGED")
-	cloak:SetToplevel(true)
+-- 	local cloak = CreateFrame("CheckButton", "FreeUI_CloakCheckBox", PaperDollFrame, "OptionsCheckButtonTemplate")
+-- 	cloak:SetSize(22, 22)
+-- 	cloak:SetPoint("LEFT", CharacterBackSlot, "RIGHT", 5, 0)
+-- 	cloak:SetScript("OnClick", function() ShowCloak(not ShowingCloak()) end)
+-- 	cloak:SetScript("OnEvent", function() cloak:SetChecked(ShowingCloak()) end)
+-- 	cloak:RegisterEvent("UNIT_MODEL_CHANGED")
+-- 	cloak:SetToplevel(true)
 
-	helm:SetChecked(ShowingHelm())
-	cloak:SetChecked(ShowingCloak())
-	helm:SetFrameLevel(31)
-	cloak:SetFrameLevel(31)
+-- 	helm:SetChecked(ShowingHelm())
+-- 	cloak:SetChecked(ShowingCloak())
+-- 	helm:SetFrameLevel(31)
+-- 	cloak:SetFrameLevel(31)
 
-	F.ReskinCheck(helm)
-	F.ReskinCheck(cloak)
-end
+-- 	F.ReskinCheck(helm)
+-- 	F.ReskinCheck(cloak)
+-- end
 
 if C.general.undressButton then
 	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")

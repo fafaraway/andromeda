@@ -1,6 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
+	if true then return end
+
 	-- Achievement alert
 	local function fixBg(f)
 		if f:GetObjectType() == "AnimationGroup" then
