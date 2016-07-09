@@ -247,11 +247,6 @@ C.themes["Blizzard_TalentUI"] = function()
 				else
 					bu.bg:SetBackdropColor(0, 0, 0, .25)
 				end
-				if bu.learnSelection:IsShown() then
-					bu.bg:SetBackdropBorderColor(r, g, b)
-				else
-					bu.bg:SetBackdropBorderColor(0, 0, 0)
-				end
 			end
 		end
 	end)
