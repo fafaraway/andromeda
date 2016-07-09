@@ -216,7 +216,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 	local reaction = C.reactioncolours[UnitReaction(unit, "player") or 5]
 
 	local offline = not UnitIsConnected(unit)
-	local tapped = not UnitPlayerControlled(unit) and UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not UnitIsTappedByAllThreatList(unit)
+	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 
 	if tapped or offline then
 		r, g, b = .6, .6, .6
