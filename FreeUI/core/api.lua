@@ -39,6 +39,7 @@ end)
 
 C.classcolours = {
 	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
+	["DEMONHUNTER"] = {r = 0.64, g = 0.19, b = 0.79},
 	["DRUID"] = {r = 1, g = 0.49, b = 0.04},
 	["HUNTER"] = {r = 0.58, g = 0.86, b = 0.49},
 	["MAGE"] = {r = 0, g = 0.76, b = 1},
