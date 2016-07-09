@@ -113,8 +113,6 @@ if scale > 1 then scale = 1 end
 
 local function Setup()
 	SetCVar("screenshotQuality", 10)
-	SetCVar("cameraDistanceMax", 50)
-	SetCVar("cameraDistanceMaxFactor", 3.4)
 	SetCVar("nameplateShowFriends", 0)
 	SetCVar("nameplateShowEnemies", 1)
 	SetCVar("ShowClassColorInNameplate", 1)
