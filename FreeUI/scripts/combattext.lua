@@ -73,7 +73,7 @@ CombatText:SetScript("OnUpdate", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:UnregisterAllEvents()
 
-InterfaceOptionsDisplayPanelEnableFloatingCombatText:Disable()
-InterfaceOptionsDisplayPanelEnableFloatingCombatTextText:SetTextColor(.5, .5, .5)
+InterfaceOptionsCombatPanelEnableFloatingCombatText:Disable()
+InterfaceOptionsCombatPanelEnableFloatingCombatTextText:SetTextColor(.5, .5, .5)
 
 SetCVar("enableFloatingCombatText", 0)
