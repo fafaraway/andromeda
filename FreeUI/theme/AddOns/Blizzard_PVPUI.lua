@@ -23,7 +23,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		F.Reskin(bu, true)
 
 		bu.Background:SetAllPoints()
-		bu.Background:SetTexture(r, g, b, .2)
+		bu.Background:SetColorTexture(r, g, b, .2)
 		bu.Background:Hide()
 
 		icon:SetTexCoord(.08, .92, .08, .92)
@@ -83,7 +83,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		F.Reskin(bu, true)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-		bu.SelectedTexture:SetTexture(r, g, b, .2)
+		bu.SelectedTexture:SetColorTexture(r, g, b, .2)
 		bu.SelectedTexture:SetAllPoints()
 
 		if reward then
@@ -189,7 +189,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		bu.tex:SetPoint("BOTTOMRIGHT", bg, -1, 1)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-		bu.SelectedTexture:SetTexture(r, g, b, .2)
+		bu.SelectedTexture:SetColorTexture(r, g, b, .2)
 		bu.SelectedTexture:SetAllPoints(bu.tex)
 
 		bu.Icon:SetTexCoord(.08, .92, .08, .92)
@@ -226,7 +226,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		F.Reskin(bu, true)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
-		bu.SelectedTexture:SetTexture(r, g, b, .2)
+		bu.SelectedTexture:SetColorTexture(r, g, b, .2)
 		bu.SelectedTexture:SetAllPoints()
 	end
 
@@ -277,7 +277,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		tex:SetPoint("BOTTOMRIGHT", -2, 3)
 
 		SelectedTexture:SetDrawLayer("BACKGROUND")
-		SelectedTexture:SetTexture(r, g, b, .2)
+		SelectedTexture:SetColorTexture(r, g, b, .2)
 		SelectedTexture:SetPoint("TOPLEFT", 2, 0)
 		SelectedTexture:SetPoint("BOTTOMRIGHT", -1, 2)
 

@@ -64,19 +64,19 @@ tinsert(C.themes["FreeUI"], function()
 
 		for i = 1, 8 do
 			local tex = button:CreateTexture()
-			tex:SetTexture(1, 1, 1)
+			tex:SetColorTexture(1, 1, 1)
 			tex:SetSize(1, 1)
 			tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
 			tinsert(button.pixels, tex)
 		end
 
 		local hline = button:CreateTexture()
-		hline:SetTexture(1, 1, 1)
+		hline:SetColorTexture(1, 1, 1)
 		hline:SetSize(7, 1)
 		tinsert(button.pixels, hline)
 
 		local vline = button:CreateTexture()
-		vline:SetTexture(1, 1, 1)
+		vline:SetColorTexture(1, 1, 1)
 		vline:SetSize(1, 7)
 		tinsert(button.pixels, vline)
 
@@ -99,13 +99,13 @@ tinsert(C.themes["FreeUI"], function()
 
 	do
 		local topLine = WorldMapFrame.UIElementsFrame:CreateTexture()
-		topLine:SetTexture(0, 0, 0)
+		topLine:SetColorTexture(0, 0, 0)
 		topLine:SetHeight(1)
 		topLine:SetPoint("TOPLEFT", 0, 1)
 		topLine:SetPoint("TOPRIGHT", 1, 1)
 
 		local rightLine = WorldMapFrame.UIElementsFrame:CreateTexture()
-		rightLine:SetTexture(0, 0, 0)
+		rightLine:SetColorTexture(0, 0, 0)
 		rightLine:SetWidth(1)
 		rightLine:SetPoint("BOTTOMRIGHT", 1, 0)
 		rightLine:SetPoint("TOPRIGHT", 1, 1)

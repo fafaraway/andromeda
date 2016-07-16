@@ -51,7 +51,7 @@ local createAuraIcon = function(icons, index)
 	stealable:SetDrawLayer("BACKGROUND", 2)
 	stealable:SetPoint("TOPLEFT", -1, 1)
 	stealable:SetPoint("BOTTOMRIGHT", 1, -1)
-	stealable:SetTexture(r, g, b)
+	stealable:SetColorTexture(r, g, b)
 	button.stealable = stealable
 
 	local bg = button:CreateTexture(nil, "BACKGROUND")

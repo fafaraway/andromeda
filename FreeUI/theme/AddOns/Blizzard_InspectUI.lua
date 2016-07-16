@@ -48,7 +48,7 @@ C.themes["Blizzard_InspectUI"] = function()
 	for i = 1, 3 do
 		local div = InspectPVPFrame["Div"..i]
 
-		div:SetTexture(1, 1, 1, .2)
+		div:SetColorTexture(1, 1, 1, .2)
 		div:SetHeight(1)
 	end
 

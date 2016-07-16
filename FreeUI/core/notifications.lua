@@ -40,7 +40,7 @@ F.CreateBG(icon)
 local sep = f:CreateTexture(nil, "BACKGROUND")
 sep:SetSize(1, 50)
 sep:SetPoint("LEFT", icon, "RIGHT", 9, 0)
-sep:SetTexture(0, 0, 0)
+sep:SetColorTexture(0, 0, 0)
 
 local title = f:CreateFontString(nil, "OVERLAY")
 title:SetFont(C.media.font2, 14)

@@ -159,7 +159,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 				bossButton.text.SetTextColor = F.dummy
 
 				local hl = bossButton:GetHighlightTexture()
-				hl:SetTexture(r, g, b, .2)
+				hl:SetColorTexture(r, g, b, .2)
 				hl:SetPoint("TOPLEFT", 2, -1)
 				hl:SetPoint("BOTTOMRIGHT", 0, 1)
 

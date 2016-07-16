@@ -32,7 +32,7 @@ C.themes["Blizzard_BindingUI"] = function()
 		selected:SetTexture(C.media.backdrop)
 		selected:SetPoint("TOPLEFT", 1, -1)
 		selected:SetPoint("BOTTOMRIGHT", -1, 1)
-		selected:SetTexture(r, g, b, .2)
+		selected:SetColorTexture(r, g, b, .2)
 
 		F.Reskin(bu)
 	end
@@ -60,5 +60,5 @@ C.themes["Blizzard_BindingUI"] = function()
 	local line = KeyBindingFrame:CreateTexture(nil, "ARTWORK")
 	line:SetSize(1, 546)
 	line:SetPoint("LEFT", 205, 10)
-	line:SetTexture(1, 1, 1, .2)
+	line:SetColorTexture(1, 1, 1, .2)
 end

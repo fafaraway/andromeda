@@ -47,7 +47,7 @@ if not C.unitframes.enable then return end
    -- Add a background
    local Background = DruidMana:CreateTexture(nil, 'BACKGROUND')
    Background:SetAllPoints(DruidMana)
-   Background:SetTexture(1, 1, 1, .5)
+   Background:SetColorTexture(1, 1, 1, .5)
 
    -- Register it with oUF
    self.DruidMana = DruidMana

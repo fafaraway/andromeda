@@ -133,25 +133,25 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 		local left = ch:CreateTexture(nil, "BACKGROUND")
 		left:SetWidth(1)
-		left:SetTexture(0, 0, 0)
+		left:SetColorTexture(0, 0, 0)
 		left:SetPoint("TOPLEFT", tex, -1, 1)
 		left:SetPoint("BOTTOMLEFT", tex, -1, -1)
 
 		local right = ch:CreateTexture(nil, "BACKGROUND")
 		right:SetWidth(1)
-		right:SetTexture(0, 0, 0)
+		right:SetColorTexture(0, 0, 0)
 		right:SetPoint("TOPRIGHT", tex, 1, 1)
 		right:SetPoint("BOTTOMRIGHT", tex, 1, -1)
 
 		local top = ch:CreateTexture(nil, "BACKGROUND")
 		top:SetHeight(1)
-		top:SetTexture(0, 0, 0)
+		top:SetColorTexture(0, 0, 0)
 		top:SetPoint("TOPLEFT", tex, -1, 1)
 		top:SetPoint("TOPRIGHT", tex, 1, -1)
 
 		local bottom = ch:CreateTexture(nil, "BACKGROUND")
 		bottom:SetHeight(1)
-		bottom:SetTexture(0, 0, 0)
+		bottom:SetColorTexture(0, 0, 0)
 		bottom:SetPoint("BOTTOMLEFT", tex, -1, -1)
 		bottom:SetPoint("BOTTOMRIGHT", tex, 1, -1)
 	end
@@ -194,7 +194,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		if not bar.reskinned then
 			bar:SetStatusBarTexture(C.media.backdrop)
 
-			_G["AchievementFrameProgressBar"..index.."BG"]:SetTexture(0, 0, 0, .25)
+			_G["AchievementFrameProgressBar"..index.."BG"]:SetColorTexture(0, 0, 0, .25)
 			_G["AchievementFrameProgressBar"..index.."BorderLeft"]:Hide()
 			_G["AchievementFrameProgressBar"..index.."BorderCenter"]:Hide()
 			_G["AchievementFrameProgressBar"..index.."BorderRight"]:Hide()

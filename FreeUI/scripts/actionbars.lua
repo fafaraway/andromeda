@@ -427,7 +427,7 @@ leaveBu.pixels = {}
 
 for i = 1, 10 do
 	local tex = leaveBu:CreateTexture()
-	tex:SetTexture(1, 1, 1)
+	tex:SetColorTexture(1, 1, 1)
 	tex:SetSize(1, 1)
 	tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
 	tinsert(leaveBu.pixels, tex)
@@ -435,7 +435,7 @@ end
 
 for i = 1, 10 do
 	local tex = leaveBu:CreateTexture()
-	tex:SetTexture(1, 1, 1)
+	tex:SetColorTexture(1, 1, 1)
 	tex:SetSize(1, 1)
 	tex:SetPoint("TOPLEFT", 3+i, -3-i)
 	tinsert(leaveBu.pixels, tex)

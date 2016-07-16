@@ -94,10 +94,10 @@ tinsert(C.themes["FreeUI"], function()
 			end
 		end
 
-		tab.Highlight:SetTexture(r, g, b, .2)
+		tab.Highlight:SetColorTexture(r, g, b, .2)
 		tab.Highlight:SetPoint("TOPLEFT", 3, -4)
 		tab.Highlight:SetPoint("BOTTOMRIGHT", -1, 0)
-		tab.Hider:SetTexture(.3, .3, .3, .4)
+		tab.Hider:SetColorTexture(.3, .3, .3, .4)
 		tab.TabBg:SetAlpha(0)
 
 		select(2, tab:GetRegions()):ClearAllPoints()
@@ -145,9 +145,9 @@ tinsert(C.themes["FreeUI"], function()
 				_G["PaperDollEquipmentManagerPaneButton"..i.."BgMiddle"]:Hide()
 				_G["PaperDollEquipmentManagerPaneButton"..i.."BgBottom"]:SetAlpha(0)
 
-				bu.HighlightBar:SetTexture(r, g, b, .1)
+				bu.HighlightBar:SetColorTexture(r, g, b, .1)
 				bu.HighlightBar:SetDrawLayer("BACKGROUND")
-				bu.SelectedBar:SetTexture(r, g, b, .2)
+				bu.SelectedBar:SetColorTexture(r, g, b, .2)
 				bu.SelectedBar:SetDrawLayer("BACKGROUND")
 
 				bd:Hide()

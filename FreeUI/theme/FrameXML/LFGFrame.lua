@@ -13,7 +13,7 @@ tinsert(C.themes["FreeUI"], function()
 		icon:SetTexCoord(.08, .92, .08, .92)
 		icon:SetDrawLayer("OVERLAY")
 		count:SetDrawLayer("OVERLAY")
-		na:SetTexture(0, 0, 0, .25)
+		na:SetColorTexture(0, 0, 0, .25)
 		na:SetSize(118, 39)
 
 		if cta then
@@ -114,7 +114,7 @@ tinsert(C.themes["FreeUI"], function()
 
 			button.texture:SetTexCoord(.08, .92, .08, .92)
 
-			border:SetTexture(0, 0, 0)
+			border:SetColorTexture(0, 0, 0)
 			border:SetDrawLayer("BACKGROUND")
 			border:SetPoint("TOPLEFT", button.texture, -1, 1)
 			border:SetPoint("BOTTOMRIGHT", button.texture, 1, -1)
@@ -131,7 +131,7 @@ tinsert(C.themes["FreeUI"], function()
 
 			button.texture:SetTexCoord(.08, .92, .08, .92)
 
-			border:SetTexture(0, 0, 0)
+			border:SetColorTexture(0, 0, 0)
 			border:SetDrawLayer("BACKGROUND")
 			border:SetPoint("TOPLEFT", button.texture, -1, 1)
 			border:SetPoint("BOTTOMRIGHT", button.texture, 1, -1)
@@ -221,7 +221,7 @@ tinsert(C.themes["FreeUI"], function()
 
 			shortageBorder:SetTexture("")
 
-			icon.border:SetTexture(0, 0, 0)
+			icon.border:SetColorTexture(0, 0, 0)
 			icon.border:SetDrawLayer("BACKGROUND")
 			icon.border:SetPoint("TOPLEFT", icon.texture, -1, 1)
 			icon.border:SetPoint("BOTTOMRIGHT", icon.texture, 1, -1)

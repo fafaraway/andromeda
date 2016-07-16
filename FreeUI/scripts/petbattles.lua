@@ -23,17 +23,17 @@ for _, f in pairs(tooltips) do
 	f.bg = bg
 end
 
-PetBattlePrimaryUnitTooltip.Delimiter:SetTexture(0, 0, 0)
+PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
 PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
 PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-PetBattlePrimaryAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+PetBattlePrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
 PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-PetBattlePrimaryAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
+PetBattlePrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
 FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
-FloatingPetBattleAbilityTooltip.Delimiter1:SetTexture(0, 0, 0)
+FloatingPetBattleAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
 FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
-FloatingPetBattleAbilityTooltip.Delimiter2:SetTexture(0, 0, 0)
-FloatingBattlePetTooltip.Delimiter:SetTexture(0, 0, 0)
+FloatingPetBattleAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+FloatingBattlePetTooltip.Delimiter:SetColorTexture(0, 0, 0)
 FloatingBattlePetTooltip.Delimiter:SetHeight(1)
 F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
@@ -177,7 +177,7 @@ for index, unit in pairs(extraUnits) do
 	unit.BorderDead:SetVertexColor(1, 0, 0)
 
 	unit.HealthBorder = unit:CreateTexture()
-	unit.HealthBorder:SetTexture(0, 0, 0)
+	unit.HealthBorder:SetColorTexture(0, 0, 0)
 	unit.HealthBorder:SetSize(36, 1)
 	unit.HealthBorder:SetPoint("TOP", unit.ActualHealthBar, 0, 1)
 
@@ -222,7 +222,7 @@ for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 
 	unit.bd = unit:CreateTexture()
 	unit.bd:SetDrawLayer("BACKGROUND", 1)
-	unit.bd:SetTexture(0, 0, 0, .5)
+	unit.bd:SetColorTexture(0, 0, 0, .5)
 	unit.bd:SetAllPoints(unit.bg)
 
 	unit.bg.SelectedTexture = unit:CreateTexture()
@@ -245,7 +245,7 @@ for i = 1, NUM_BATTLE_PETS_IN_BATTLE  do
 
 	unit.ActualHealthBar.bd = unit:CreateTexture()
 	unit.ActualHealthBar.bd:SetDrawLayer("BACKGROUND", 3)
-	unit.ActualHealthBar.bd:SetTexture(0, 0, 0, .25)
+	unit.ActualHealthBar.bd:SetColorTexture(0, 0, 0, .25)
 	unit.ActualHealthBar.bd:SetAllPoints(unit.ActualHealthBar.bg)
 
 	unit:HookScript("OnEnter", petSelectOnEnter)
@@ -475,11 +475,11 @@ local function stylePetBattleButton(bu)
 	bu.CooldownShadow:SetAllPoints()
 	bu.CooldownFlash:SetAllPoints()
 
-	pushed:SetTexture(r, g, b)
+	pushed:SetColorTexture(r, g, b)
 	pushed:SetDrawLayer("BACKGROUND")
 	pushed:SetAllPoints()
 
-	se:SetTexture(r, g, b, .2)
+	se:SetColorTexture(r, g, b, .2)
 	se:SetAllPoints()
 
 	F.SetFS(ho)

@@ -383,7 +383,7 @@ local Enable = function(object, unit)
 			CastingBarFrame:UnregisterAllEvents()
 			CastingBarFrame.Show = CastingBarFrame.Hide
 			CastingBarFrame:Hide()
-            
+
 			PetCastingBarFrame:UnregisterAllEvents()
 			PetCastingBarFrame.Show = PetCastingBarFrame.Hide
 			PetCastingBarFrame:Hide()
@@ -405,7 +405,7 @@ local Enable = function(object, unit)
 
 		local sz = castbar.SafeZone
 		if(sz and sz:IsObjectType'Texture' and not sz:GetTexture()) then
-			sz:SetTexture(1, 0, 0)
+			sz:SetColorTexture(1, 0, 0)
 		end
 
 		castbar:Hide()

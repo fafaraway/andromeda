@@ -15,30 +15,30 @@ local freqHealth = C.performance.nameplatesHealth
 local CreateBD = function(parent, offset)
 	local left = parent:CreateTexture(nil, "BACKGROUND")
 	left:SetWidth(offset)
-	left:SetTexture(0, 0, 0)
+	left:SetColorTexture(0, 0, 0)
 	left:SetPoint("TOPLEFT", -offset, offset)
 	left:SetPoint("BOTTOMLEFT", -offset, -offset)
 
 	local right = parent:CreateTexture(nil, "BACKGROUND")
 	right:SetWidth(offset)
-	right:SetTexture(0, 0, 0)
+	right:SetColorTexture(0, 0, 0)
 	right:SetPoint("TOPRIGHT", offset, offset)
 	right:SetPoint("BOTTOMRIGHT", offset, -offset)
 
 	local top = parent:CreateTexture(nil, "BACKGROUND")
 	top:SetHeight(offset)
-	top:SetTexture(0, 0, 0)
+	top:SetColorTexture(0, 0, 0)
 	top:SetPoint("TOPLEFT", -offset, offset)
 	top:SetPoint("TOPRIGHT", offset, offset)
 
 	local bottom = parent:CreateTexture(nil, "BACKGROUND")
 	bottom:SetHeight(offset)
-	bottom:SetTexture(0, 0, 0)
+	bottom:SetColorTexture(0, 0, 0)
 	bottom:SetPoint("BOTTOMLEFT", -offset, -offset)
 	bottom:SetPoint("BOTTOMRIGHT", offset, -offset)
 
 	local bg = parent:CreateTexture(nil, "BACKGROUND")
-	bg:SetTexture(0, 0, 0, .5)
+	bg:SetColorTexture(0, 0, 0, .5)
 	bg:SetPoint("TOPLEFT")
 	bg:SetPoint("BOTTOMRIGHT")
 
@@ -165,9 +165,9 @@ end
 
 local ColorCastBar = function(self, shielded)
 	if shielded then
-		self.iconbg:SetTexture(1, 0, 0)
+		self.iconbg:SetColorTexture(1, 0, 0)
 	else
-		self.iconbg:SetTexture(0, 0, 0)
+		self.iconbg:SetColorTexture(0, 0, 0)
 	end
 end
 
@@ -271,7 +271,7 @@ local StyleFrame = function(frame)
 	castIcon:SetTexCoord(.08, .92, .08, .92)
 
 	local bg = castBar:CreateTexture(nil, "BACKGROUND")
-	bg:SetTexture(0, 0, 0)
+	bg:SetColorTexture(0, 0, 0)
 	bg:SetPoint("TOPLEFT", castIcon, -offset, offset)
 	bg:SetPoint("BOTTOMRIGHT", castIcon, offset, -offset)
 	castBar.iconbg = bg

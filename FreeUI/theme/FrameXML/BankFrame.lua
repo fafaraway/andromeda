@@ -111,7 +111,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.Reskin(ReagentBankFrameUnlockInfoPurchaseButton)
 
 	-- make button more visible
-	ReagentBankFrameUnlockInfoBlackBG:SetTexture(.1, .1, .1)
+	ReagentBankFrameUnlockInfoBlackBG:SetColorTexture(.1, .1, .1)
 
 	local reagentButtonsStyled = false
 	ReagentBankFrame:HookScript("OnShow", function()
