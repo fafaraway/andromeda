@@ -16,11 +16,13 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinTab(CollectionsJournalTab2)
 	F.ReskinTab(CollectionsJournalTab3)
 	F.ReskinTab(CollectionsJournalTab4)
+	F.ReskinTab(CollectionsJournalTab5)
 	F.ReskinClose(CollectionsJournalCloseButton)
 
 	CollectionsJournalTab2:SetPoint("LEFT", CollectionsJournalTab1, "RIGHT", -15, 0)
 	CollectionsJournalTab3:SetPoint("LEFT", CollectionsJournalTab2, "RIGHT", -15, 0)
 	CollectionsJournalTab4:SetPoint("LEFT", CollectionsJournalTab3, "RIGHT", -15, 0)
+	CollectionsJournalTab5:SetPoint("LEFT", CollectionsJournalTab4, "RIGHT", -15, 0)
 
 	-- [[ Mounts and pets ]]
 
@@ -500,4 +502,37 @@ C.themes["Blizzard_Collections"] = function()
 			end
 		end
 	end)
+
+	-- [[ WardrobeCollection ]]
+
+	local WardrobeCollectionFrame = WardrobeCollectionFrame
+	local ModelsFrame = WardrobeCollectionFrame.ModelsFrame
+
+	WardrobeCollectionFrameBg:Hide()
+	ModelsFrame:DisableDrawLayer("BACKGROUND")
+	ModelsFrame:DisableDrawLayer("BORDER")
+	ModelsFrame:DisableDrawLayer("ARTWORK")
+	ModelsFrame:DisableDrawLayer("OVERLAY")
+
+	F.ReskinInput(WardrobeCollectionFrameSearchBox)
+	F.ReskinFilterButton(WardrobeCollectionFrame.FilterButton)
+	F.ReskinDropDown(WardrobeCollectionFrameWeaponDropDown)
+	F.ReskinArrow(WardrobeCollectionFrame.NavigationFrame.PrevPageButton, "left")
+	F.ReskinArrow(WardrobeCollectionFrame.NavigationFrame.NextPageButton, "right")
+
+	WardrobeCollectionFrame.NavigationFrame.PrevPageButton:SetPoint("BOTTOM", 23, 51)
+	WardrobeCollectionFrame.NavigationFrame.NextPageButton:SetPoint("BOTTOM", 58, 51)
+
+	-- Progress bar
+
+	local progressBar = WardrobeCollectionFrame.progressBar
+	progressBar.borderLeft:Hide()
+	progressBar.borderMid:Hide()
+	progressBar.borderRight:Hide()
+	progressBar:DisableDrawLayer("BACKGROUND")
+
+	progressBar.text:SetPoint("CENTER", 0, 1)
+	progressBar:SetStatusBarTexture(C.media.backdrop)
+
+	F.CreateBDFrame(progressBar, .25)
 end
