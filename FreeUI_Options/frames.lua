@@ -173,7 +173,7 @@ tinsert(ns.buttons, ResetButton)
 local line = options:CreateTexture()
 line:SetSize(1, 568)
 line:SetPoint("TOPLEFT", 190, -58)
-line:SetTexture(1, 1, 1, .2)
+line:SetColorTexture(1, 1, 1, .2)
 
 local menuButton = CreateFrame("Button", "GameMenuButtonFreeUI", GameMenuFrame, "GameMenuButtonTemplate")
 menuButton:SetSize(144, 21)

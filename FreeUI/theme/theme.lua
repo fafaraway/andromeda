@@ -357,19 +357,6 @@ Skin:SetScript("OnEvent", function(self, event, addon)
 					_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
 				end
 			end
-
-			hooksecurefunc("PetPaperDollFrame_UpdateIsAvailable", function()
-				if not HasPetUI() then
-					CharacterFrameTab3:SetPoint("LEFT", CharacterFrameTab2, "LEFT", 0, 0)
-				else
-					CharacterFrameTab3:SetPoint("LEFT", CharacterFrameTab2, "RIGHT", -15, 0)
-				end
-			end)
-
-			PetModelFrameRotateLeftButton:Hide()
-			PetModelFrameRotateRightButton:Hide()
-			PetModelFrameShadowOverlay:Hide()
-			PetPaperDollPetModelBg:SetAlpha(0)
 		end
 
 		-- Ghost frame

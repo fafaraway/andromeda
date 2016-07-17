@@ -7,7 +7,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonBuildingFrame = GarrisonBuildingFrame
 
-	for i = 1, 18 do
+	for i = 1, 14 do
 		select(i, GarrisonBuildingFrame:GetRegions()):Hide()
 	end
 
@@ -376,7 +376,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonMissionFrame = GarrisonMissionFrame
 
-	for i = 1, 18 do
+	for i = 1, 14 do
 		select(i, GarrisonMissionFrame:GetRegions()):Hide()
 	end
 
@@ -601,19 +601,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 	end
 
-	-- Portraits
-
-	hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", function(portraitFrame, followerInfo)
-		if not portraitFrame.styled then
-			F.ReskinGarrisonPortrait(portraitFrame)
-			portraitFrame.styled = true
-		end
-
-		local color = ITEM_QUALITY_COLORS[followerInfo.quality]
-
-		portraitFrame.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
-	end)
-
 	-- Mechanic tooltip
 
 	GarrisonMissionMechanicTooltip:SetBackdrop(nil)
@@ -650,7 +637,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local GarrisonRecruitSelectFrame = GarrisonRecruitSelectFrame
 
-	for i = 1, 18 do
+	for i = 1, 14 do
 		select(i, GarrisonRecruitSelectFrame:GetRegions()):Hide()
 	end
 	GarrisonRecruitSelectFrame.TitleText:Show()
@@ -731,19 +718,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			local portrait = button.PortraitFrame
 
 			if not button.restyled then
-				button.BG:Hide()
-				button.Selection:SetTexture("")
-				button.AbilitiesBG:SetTexture("")
-
 				F.CreateBD(button, .25)
-
-				button.BusyFrame:SetAllPoints()
-
-				local hl = button:GetHighlightTexture()
-				hl:SetColorTexture(r, g, b, .1)
-				hl:ClearAllPoints()
-				hl:SetPoint("TOPLEFT", 1, -1)
-				hl:SetPoint("BOTTOMRIGHT", -1, 1)
 
 				if portrait then
 					F.ReskinGarrisonPortrait(portrait)
@@ -752,12 +727,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				end
 
 				button.restyled = true
-			end
-
-			if button.Selection:IsShown() then
-				button:SetBackdropColor(r, g, b, .2)
-			else
-				button:SetBackdropColor(0, 0, 0, .25)
 			end
 
 			if portrait then

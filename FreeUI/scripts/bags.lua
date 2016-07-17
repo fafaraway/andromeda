@@ -69,12 +69,14 @@ local RestyleButton = function(bu)
 	local newItemTexture = bu.NewItemTexture
 
 	bu:SetSize(C.bags.size, C.bags.size)
+	border:SetTexture(C.media.backdrop)
 
 	if bu.restyled then return end
 
 	local co = _G[buName.."Count"]
 
 	bu:SetFrameStrata("HIGH")
+	bu:SetToplevel(false)
 	bu:SetNormalTexture("")
 	bu:SetPushedTexture("")
 	bu:SetHighlightTexture("")
@@ -85,7 +87,6 @@ local RestyleButton = function(bu)
 
 	bu.icon:SetTexCoord(.08, .92, .08, .92)
 
-	border:SetTexture(C.media.backdrop)
 	border:SetPoint("TOPLEFT", -1, 1)
 	border:SetPoint("BOTTOMRIGHT", 1, -1)
 	border:SetDrawLayer("BACKGROUND")

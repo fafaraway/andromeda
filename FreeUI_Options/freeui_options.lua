@@ -512,7 +512,7 @@ ns.addSubCategory = function(category, name)
 	local line = category:CreateTexture(nil, "ARTWORK")
 	line:SetSize(450, 1)
 	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
-	line:SetTexture(1, 1, 1, .2)
+	line:SetColorTexture(1, 1, 1, .2)
 
 	return header, line
 end
@@ -688,8 +688,8 @@ init:SetScript("OnEvent", function()
 			insets = {top = 1},
 		})
 		panel.tab:SetBackdropColor(0, 0, 0, 0)
-		panel.tab.topLine:SetTexture(r, g, b, .2)
-		panel.tab.bottomLine:SetTexture(r, g, b, .2)
+		panel.tab.topLine:SetColorTexture(r, g, b, .2)
+		panel.tab.bottomLine:SetColorTexture(r, g, b, .2)
 
 		local bg = F.CreateBG(panel.tab.Icon)
 		bg:SetDrawLayer("ARTWORK")
