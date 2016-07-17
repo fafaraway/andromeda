@@ -535,4 +535,42 @@ C.themes["Blizzard_Collections"] = function()
 	progressBar:SetStatusBarTexture(C.media.backdrop)
 
 	F.CreateBDFrame(progressBar, .25)
+
+	-- [[ Wardrobe ]]
+
+	local WardrobeFrame = WardrobeFrame
+	local WardrobeTransmogFrame = WardrobeTransmogFrame
+
+	WardrobeTransmogFrameBg:Hide()
+	WardrobeTransmogFrame.Inset.BG:Hide()
+	WardrobeTransmogFrame.Inset:DisableDrawLayer("BORDER")
+	WardrobeTransmogFrame.MoneyLeft:Hide()
+	WardrobeTransmogFrame.MoneyMiddle:Hide()
+	WardrobeTransmogFrame.MoneyRight:Hide()
+	WardrobeTransmogFrame.SpecButton.Icon:Hide()
+
+	for i = 1, 9 do
+		select(i, WardrobeTransmogFrame.SpecButton:GetRegions()):Hide()
+	end
+
+	F.ReskinPortraitFrame(WardrobeFrame)
+	F.Reskin(WardrobeTransmogFrame.ApplyButton)
+	F.Reskin(WardrobeOutfitDropDown.SaveButton)
+	F.ReskinArrow(WardrobeTransmogFrame.SpecButton, "down")
+	F.ReskinDropDown(WardrobeOutfitDropDown)
+
+	WardrobeOutfitDropDown:SetHeight(32)
+	WardrobeOutfitDropDown.SaveButton:SetPoint("LEFT", WardrobeOutfitDropDown, "RIGHT", -13, 2)
+	WardrobeTransmogFrame.SpecButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
+
+	local slots = {"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Back", "Shirt", "Tabard", "MainHand", "SecondaryHand"}
+
+	for i = 1, #slots do
+		local slot = WardrobeTransmogFrame.Model[slots[i].."Button"]
+		if slot then
+			slot.Border:Hide()
+			slot.Icon:SetDrawLayer("BACKGROUND", 1)
+			F.ReskinIcon(slot.Icon)
+		end
+	end
 end
