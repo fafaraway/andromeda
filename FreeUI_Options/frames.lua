@@ -688,13 +688,8 @@ do
 	druidMana.className = "DRUID"
 	tinsert(ns.classOptions, druidMana)
 
-	local druidEclipse = ns.CreateCheckBox(classmod, "druidEclipse", false, true)
-	druidEclipse:SetPoint("TOPLEFT", druidMana, "BOTTOMLEFT", 0, -8)
-	druidEclipse.className = "DRUID"
-	tinsert(ns.classOptions, druidEclipse)
-
 	local mage = ns.CreateCheckBox(classmod, "mage", false, true)
-	mage:SetPoint("TOPLEFT", druidEclipse, "BOTTOMLEFT", 0, -8)
+	mage:SetPoint("TOPLEFT", druidMana, "BOTTOMLEFT", 0, -8)
 	mage.className = "MAGE"
 	tinsert(ns.classOptions, mage)
 

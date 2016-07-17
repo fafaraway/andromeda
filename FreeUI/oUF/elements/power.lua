@@ -20,7 +20,7 @@ oUF.colors.power[4] = oUF.colors.power["CHI"]
 oUF.colors.power[5] = oUF.colors.power["RUNES"]
 oUF.colors.power[6] = oUF.colors.power["RUNIC_POWER"]
 oUF.colors.power[7] = oUF.colors.power["SOUL_SHARDS"]
-oUF.colors.power[8] = oUF.colors.power["ECLIPSE"]
+oUF.colors.power[8] = oUF.colors.power["LUNAR_POWER"]
 oUF.colors.power[9] = oUF.colors.power["HOLY_POWER"]
 
 local GetDisplayPower = function(unit)

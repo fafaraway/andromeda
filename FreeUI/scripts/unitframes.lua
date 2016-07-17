@@ -18,6 +18,7 @@ local colors = setmetatable({
 		["ENERGY"] = {.9, .9, .1},
 		["AMMOSLOT"] = {0.8, 0.6, 0},
 		["RUNIC_POWER"] = {.1, .9, .9},
+		["LUNAR_POWER"] = {.5, .52, .9},
 		["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
 		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
 	}, {__index = oUF.colors.power}),
@@ -772,11 +773,11 @@ local UnitSpecific = {
 
 			self.Runes = runes
 			self.SpecialPowerBar = runes
-		elseif class == "DRUID" and (C.classmod.druidEclipse or C.classmod.druidMana) then
-			local druidMana, eclipseBar
+		elseif class == "DRUID" and C.classmod.druidMana then
+			local druidMana
 
 			local function moveDebuffAnchors()
-				if (druidMana and druidMana:IsShown()) or (eclipseBar and eclipseBar:IsShown()) then
+				if druidMana and druidMana:IsShown() then
 					local offset
 					if (druidMana and druidMana:IsShown()) then
 						offset = 1
@@ -809,89 +810,6 @@ local UnitSpecific = {
 				self.DruidMana = druidMana
 
 				druidMana.PostUpdate = moveDebuffAnchors
-			end
-
-			if C.classmod.druidEclipse then
-				eclipseBar = CreateFrame("Frame", nil, self)
-				eclipseBar:SetWidth(playerWidth)
-				eclipseBar:SetHeight(2)
-				eclipseBar:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
-
-				F.CreateBDFrame(eclipseBar, .25)
-
-				local glow = CreateFrame("Frame", nil, eclipseBar)
-				glow:SetBackdrop({
-					edgeFile = C.media.glow,
-					edgeSize = 5,
-				})
-				glow:SetPoint("TOPLEFT", -6, 6)
-				glow:SetPoint("BOTTOMRIGHT", 6, -6)
-
-				local LunarBar = CreateFrame("StatusBar", nil, eclipseBar)
-				LunarBar:SetPoint("LEFT", eclipseBar, "LEFT")
-				LunarBar:SetSize(eclipseBar:GetWidth(), eclipseBar:GetHeight())
-				LunarBar:SetStatusBarTexture(C.media.texture)
-				LunarBar:SetStatusBarColor(.80, .82, .60)
-				eclipseBar.LunarBar = LunarBar
-
-				SmoothBar(LunarBar)
-
-				local SolarBar = CreateFrame("StatusBar", nil, eclipseBar)
-				SolarBar:SetPoint("LEFT", LunarBar:GetStatusBarTexture(), "RIGHT")
-				SolarBar:SetSize(eclipseBar:GetWidth(), eclipseBar:GetHeight())
-				SolarBar:SetStatusBarTexture(C.media.texture)
-				SolarBar:SetStatusBarColor(.30, .52, .90)
-				eclipseBar.SolarBar = SolarBar
-
-				SmoothBar(SolarBar)
-
-				local spark = SolarBar:CreateTexture(nil, "OVERLAY")
-				spark:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-				spark:SetBlendMode("ADD")
-				spark:SetHeight(4)
-				spark:SetPoint("CENTER", SolarBar:GetStatusBarTexture(), "LEFT")
-
-				local eclipseBarText = F.CreateFS(eclipseBar, 24)
-				eclipseBarText:SetPoint("LEFT", self, "RIGHT", 10, 0)
-				eclipseBarText:Hide()
-
-				self.EclipseBar = eclipseBar
-
-				eclipseBar:RegisterEvent("PLAYER_REGEN_ENABLED")
-				eclipseBar:RegisterEvent("PLAYER_REGEN_DISABLED")
-				eclipseBar:HookScript("OnEvent", function(self, event)
-					if event == "PLAYER_REGEN_DISABLED" then
-						eclipseBarText:Show()
-					elseif event == "PLAYER_REGEN_ENABLED" then
-						eclipseBarText:Hide()
-					end
-				end)
-
-				eclipseBar.PostUnitAura = function(self, unit)
-					if self.hasSolarEclipse then
-						glow:SetBackdropBorderColor(.80, .82, .60, 1)
-					elseif self.hasLunarEclipse then
-						glow:SetBackdropBorderColor(.30, .52, .90, 1)
-					else
-						glow:SetBackdropBorderColor(0, 0, 0, 0)
-					end
-				end
-
-				eclipseBar.PostUpdatePower = function(self, unit, power)
-					if power == 0 then
-						eclipseBarText:SetText("")
-					else
-						eclipseBarText:SetText(math.abs(power))
-
-						if power < 0 then
-							eclipseBarText:SetTextColor(.30, .52, .90)
-						else
-							eclipseBarText:SetTextColor(.80, .82, .60)
-						end
-					end
-				end
-
-				eclipseBar.PostUpdateVisibility = moveDebuffAnchors
 			end
 
 			self.AltPowerBar:HookScript("OnShow", moveDebuffAnchors)
