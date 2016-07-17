@@ -113,6 +113,7 @@ theme\FrameXML\AlertFrames.lua
 theme\FrameXML\BankFrame.lua
 theme\FrameXML\CharacterFrame.lua
 theme\FrameXML\ContainerFrame.lua
+theme\FrameXML\DressUpFrames.lua
 theme\FrameXML\EquipmentFlyout.lua
 theme\FrameXML\GarrisonFollowerTooltip.lua
 theme\FrameXML\InterfaceOptionsFrame.lua
