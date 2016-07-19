@@ -997,7 +997,7 @@ local UnitSpecific = {
 			bars:SetHeight(2)
 			bars:SetPoint("BOTTOMRIGHT", Debuffs, "TOPRIGHT", 0, 3)
 
-			for i = 1, 4 do
+			for i = 1, UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS) do
 				bars[i] = CreateFrame("StatusBar", nil, bars)
 				bars[i]:SetHeight(2)
 				bars[i]:SetStatusBarTexture(C.media.texture)

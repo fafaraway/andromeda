@@ -8,14 +8,7 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, "oUF_WarlockSpecBars was unable to locate oUF install")
 
-local MAX_POWER_PER_EMBER = MAX_POWER_PER_EMBER
-local SPELL_POWER_DEMONIC_FURY = SPELL_POWER_DEMONIC_FURY
-local SPELL_POWER_BURNING_EMBERS = SPELL_POWER_BURNING_EMBERS
 local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS
-local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION
-local SPEC_WARLOCK_AFFLICTION = SPEC_WARLOCK_AFFLICTION
-local SPEC_WARLOCK_DEMONOLOGY = SPEC_WARLOCK_DEMONOLOGY
-local LATEST_SPEC = 0
 
 local Colors = {
 	[1] = {148/255, 130/255, 201/255, 1},
@@ -24,41 +17,19 @@ local Colors = {
 }
 
 local Update = function(self, event, unit, powerType)
-	if(self.unit ~= unit or (powerType and powerType ~= "BURNING_EMBERS" and powerType ~= "SOUL_SHARDS" and powerType ~= "DEMONIC_FURY")) then return end
+	if(self.unit ~= unit or (powerType and powerType ~= "SOUL_SHARDS")) then return end
 
 	local wsb = self.WarlockSpecBars
 	if(wsb.PreUpdate) then wsb:PreUpdate(unit) end
 
-	local spec = GetSpecialization()
+	local numShards = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
+	local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
 
-	if spec then
-		if (spec == SPEC_WARLOCK_DESTRUCTION) then
-			local maxPower = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true)
-			local power = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
-			local numEmbers = power / MAX_POWER_PER_EMBER
-			local numBars = floor(maxPower / MAX_POWER_PER_EMBER)
-
-			for i = 1, numBars do
-				wsb[i]:SetMinMaxValues((MAX_POWER_PER_EMBER * i) - MAX_POWER_PER_EMBER, MAX_POWER_PER_EMBER * i)
-				wsb[i]:SetValue(power)
-			end
-		elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
-			local numShards = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
-			local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
-
-			for i = 1, maxShards do
-				if i <= numShards then
-					wsb[i]:GetStatusBarTexture():SetAlpha(1)
-				else
-					wsb[i]:GetStatusBarTexture():SetAlpha(.2)
-				end
-			end
-		elseif spec == SPEC_WARLOCK_DEMONOLOGY then
-			local power = UnitPower("player", SPELL_POWER_DEMONIC_FURY)
-			local maxPower = UnitPowerMax("player", SPELL_POWER_DEMONIC_FURY)
-
-			wsb[1]:SetMinMaxValues(0, maxPower)
-			wsb[1]:SetValue(power)
+	for i = 1, maxShards do
+		if i <= numShards then
+			wsb[i]:GetStatusBarTexture():SetAlpha(1)
+		else
+			wsb[i]:GetStatusBarTexture():SetAlpha(.2)
 		end
 	end
 
@@ -67,72 +38,42 @@ local Update = function(self, event, unit, powerType)
 	end
 end
 
+local init = true
+
 local function Visibility(self, event, unit)
 	local wsb = self.WarlockSpecBars
 	local spacing = select(4, wsb[4]:GetPoint())
 	local w = wsb:GetWidth()
 	local s = 0
 
-	local spec = GetSpecialization()
-	if spec then
-		if not wsb:IsShown() then
-			wsb:Show()
-		end
-
-		if LATEST_SPEC ~= spec then
-			for i = 1, 4 do
-				local max = select(2, wsb[i]:GetMinMaxValues())
-				if spec == SPEC_WARLOCK_AFFLICTION then
-					wsb[i]:SetValue(max)
-				else
-					wsb[i]:SetValue(0)
-				end
-				wsb[i]:GetStatusBarTexture():SetAlpha(1)
-				wsb[i]:Show()
-			end
-		end
-
-		if spec == SPEC_WARLOCK_DESTRUCTION then
-			local maxEmbers = floor(UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true) / MAX_POWER_PER_EMBER)
-
-			for i = 1, maxEmbers do
-				if i ~= maxEmbers then
-					wsb[i]:SetWidth(w / maxEmbers - spacing)
-					s = s + (w / maxEmbers)
-				else
-					wsb[i]:SetWidth(w - s)
-				end
-				wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_DESTRUCTION]))
-			end
-		elseif spec == SPEC_WARLOCK_AFFLICTION then
-			local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
-
-			for i = 1, maxShards do
-				if i ~= maxShards then
-					wsb[i]:SetWidth(w / maxShards - spacing)
-					s = s + (w / maxShards)
-				else
-					wsb[i]:SetWidth(w - s)
-				end
-				wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_AFFLICTION]))
-			end
-		elseif spec == SPEC_WARLOCK_DEMONOLOGY then
-			wsb[2]:Hide()
-			wsb[3]:Hide()
-			wsb[4]:Hide()
-			wsb[1]:SetWidth(wsb:GetWidth())
-			wsb[1]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_DEMONOLOGY]))
-		end
-
-		-- force an update each time we respec
-		Update(self, nil, "player")
-	else
-		if wsb:IsShown() then
-			wsb:Hide()
-		end
+	if not wsb:IsShown() then
+		wsb:Show()
 	end
 
-	LATEST_SPEC = spec
+	if init then
+		for i = 1, UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS) do
+			local max = select(2, wsb[i]:GetMinMaxValues())
+			wsb[i]:SetValue(max)
+			wsb[i]:GetStatusBarTexture():SetAlpha(1)
+			wsb[i]:Show()
+		end
+		init = false
+	end
+
+	local maxShards = UnitPowerMax("player", SPELL_POWER_SOUL_SHARDS)
+
+	for i = 1, maxShards do
+		if i ~= maxShards then
+			wsb[i]:SetWidth(w / maxShards - spacing)
+			s = s + (w / maxShards)
+		else
+			wsb[i]:SetWidth(w - s)
+		end
+		wsb[i]:SetStatusBarColor(unpack(Colors[SPEC_WARLOCK_AFFLICTION]))
+	end
+
+	-- force an update each time we respec
+	Update(self, nil, "player")
 end
 
 local Path = function(self, ...)
