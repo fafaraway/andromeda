@@ -13,11 +13,11 @@ C.themes["Blizzard_AuctionUI"] = function()
 	ABBD:SetFrameLevel(AuctionProgressBar:GetFrameLevel()-1)
 	F.CreateBD(ABBD, .25)
 
-	AuctionProgressBarIcon:SetTexCoord(.08, .92, .08, .92)
-	F.CreateBG(AuctionProgressBarIcon)
+	AuctionProgressBar.Icon:SetTexCoord(.08, .92, .08, .92)
+	F.CreateBG(AuctionProgressBar.Icon)
 
-	AuctionProgressBarText:ClearAllPoints()
-	AuctionProgressBarText:SetPoint("CENTER", 0, 1)
+	AuctionProgressBar.Text:ClearAllPoints()
+	AuctionProgressBar.Text:SetPoint("CENTER", 0, 1)
 
 	F.ReskinClose(AuctionProgressFrameCancelButton, "LEFT", AuctionProgressBar, "RIGHT", 4, 0)
 	select(14, AuctionProgressFrameCancelButton:GetRegions()):SetPoint("CENTER", 0, 2)
@@ -27,7 +27,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 	for i = 1, 4 do
 		select(i, AuctionProgressFrame:GetRegions()):Hide()
 	end
-	AuctionProgressBarBorder:Hide()
+	AuctionProgressBar.Border:Hide()
 	BrowseFilterScrollFrame:GetRegions():Hide()
 	select(2, BrowseFilterScrollFrame:GetRegions()):Hide()
 	BrowseScrollFrame:GetRegions():Hide()
@@ -62,7 +62,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 		_G["AuctionFilterButton"..i]:GetNormalTexture():SetAlpha(0)
 	end
 
-	hooksecurefunc("FilterButton_SetType", function(button)
+	hooksecurefunc("FilterButton_SetUp", function(button)
 		button:SetNormalTexture("")
 	end)
 
