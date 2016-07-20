@@ -82,7 +82,10 @@ tinsert(C.themes["FreeUI"], function()
 
 				F.CreateBG(tab)
 
-				tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+				local nt = tab:GetNormalTexture()
+				if nt then
+					nt:SetTexCoord(.08, .92, .08, .92)
+				end
 
 				tab.styled = true
 			end
