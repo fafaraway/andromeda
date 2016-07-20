@@ -163,7 +163,6 @@ C["classmod"] = {
 	["monk"] = true, 			-- chi, stagger bar
 	["paladinHP"] = true, 		-- holy power
 	["paladinRF"] = true, 		-- righteous fury
-	["priest"] = true,			-- shadow orbs
 	["warlock"] = true, 		-- spec bar
 }
 

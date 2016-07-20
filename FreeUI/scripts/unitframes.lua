@@ -16,11 +16,8 @@ local colors = setmetatable({
 		["FUEL"] = {0, 0.55, 0.5},
 		["FOCUS"] = {.9, .5, .1},
 		["ENERGY"] = {.9, .9, .1},
-		["AMMOSLOT"] = {0.8, 0.6, 0},
 		["RUNIC_POWER"] = {.1, .9, .9},
 		["LUNAR_POWER"] = {.5, .52, .9},
-		["POWER_TYPE_STEAM"] = {0.55, 0.57, 0.61},
-		["POWER_TYPE_PYRITE"] = {0.60, 0.09, 0.17},
 	}, {__index = oUF.colors.power}),
 }, {__index = oUF.colors})
 
@@ -948,49 +945,6 @@ local UnitSpecific = {
 
 			self.HolyPower = glow
 			glow.Override = UpdateHoly
-		elseif class == "PRIEST" and C.classmod.priest then
-			local UpdateOrbs = function(self, event, unit, powerType)
-				if(self.unit ~= unit or (powerType and powerType ~= 'SHADOW_ORBS')) then return end
-
-				local numOrbs = UnitPower("player", SPELL_POWER_SHADOW_ORBS)
-
-				if(numOrbs == PRIEST_BAR_NUM_ORBS) then
-					self.glow:SetAlpha(1)
-					F.CreatePulse(self.glow)
-					self.count:SetText(numOrbs)
-					self.count:SetTextColor(.6, 0, 1)
-					F.SetFS(self.count, 40)
-				elseif numOrbs == 0 then
-					self.glow:SetScript("OnUpdate", nil)
-					self.glow:SetAlpha(0)
-					self.count:SetText("")
-				else
-					self.glow:SetScript("OnUpdate", nil)
-					self.glow:SetAlpha(0)
-					self.count:SetText(numOrbs)
-					self.count:SetTextColor(1, 1, 1)
-					F.SetFS(self.count, 24)
-				end
-			end
-
-			local glow = CreateFrame("Frame", nil, self)
-			glow:SetBackdrop({
-				edgeFile = C.media.glow,
-				edgeSize = 5,
-			})
-			glow:SetPoint("TOPLEFT", self, -6, 6)
-			glow:SetPoint("BOTTOMRIGHT", self, 6, -6)
-			glow:SetBackdropBorderColor(.6, 0, 1)
-
-			self.glow = glow
-
-			local count = F.CreateFS(self, 24)
-			count:SetPoint("LEFT", self, "RIGHT", 10, 0)
-
-			self.count = count
-
-			self.ShadowOrbs = glow
-			glow.Override = UpdateOrbs
 		elseif class == "WARLOCK" and C.classmod.warlock then
 			local bars = CreateFrame("Frame", nil, self)
 			bars:SetWidth(playerWidth)

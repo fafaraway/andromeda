@@ -708,13 +708,8 @@ do
 	paladinRF.className = "PALADIN"
 	tinsert(ns.classOptions, paladinRF)
 
-	local priest = ns.CreateCheckBox(classmod, "priest", false, true)
-	priest:SetPoint("TOPLEFT", paladinRF, "BOTTOMLEFT", 0, -8)
-	priest.className = "PRIEST"
-	tinsert(ns.classOptions, priest)
-
 	local warlock = ns.CreateCheckBox(classmod, "warlock", false, true)
-	warlock:SetPoint("TOPLEFT", priest, "BOTTOMLEFT", 0, -8)
+	warlock:SetPoint("TOPLEFT", paladinRF, "BOTTOMLEFT", 0, -8)
 	warlock.className = "WARLOCK"
 	tinsert(ns.classOptions, warlock)
 end
