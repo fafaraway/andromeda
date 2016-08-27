@@ -35,13 +35,13 @@ local state = 0
 firstErrorFrame:SetScript("OnHide", function() state = 0 end)
 local Error = CreateFrame("Frame")
 Error:RegisterEvent("UI_ERROR_MESSAGE")
-Error:SetScript("OnEvent", function(_, _, error)
+Error:SetScript("OnEvent", function(_, _, code, msg)
 	if state == 0 then
-		firstErrorFrame.text:SetText(error)
+		firstErrorFrame.text:SetText(msg)
 		FadingFrame_Show(firstErrorFrame)
 		state = 1
 	 else
-		secondErrorFrame.text:SetText(error)
+		secondErrorFrame.text:SetText(msg)
 		FadingFrame_Show(secondErrorFrame)
 		state = 0
 	 end
