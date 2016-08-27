@@ -37,7 +37,7 @@ local function onEvent(self, event, ...)
 				self.count:SetText(count>1 and count or "")
 				if duration > 0 then
 					self.cooldown:Show()
-					CooldownFrame_SetTimer(self.cooldown, expirationTime-duration, duration, 1)
+					CooldownFrame_Set(self.cooldown, expirationTime-duration, duration, 1)
 				else
 					self.cooldown:Hide()
 				end
