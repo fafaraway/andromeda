@@ -52,7 +52,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	DetailsFrame:GetRegions():Hide()
 	select(2, DetailsFrame:GetRegions()):Hide()
-	select(3, DetailsFrame:GetRegions()):Hide()
+	select(4, DetailsFrame:GetRegions()):Hide()
 	select(6, DetailsFrame.ShareButton:GetRegions()):Hide()
 	select(7, DetailsFrame.ShareButton:GetRegions()):Hide()
 
@@ -81,6 +81,23 @@ tinsert(C.themes["FreeUI"], function()
 	-- Scroll frame
 
 	F.ReskinScroll(DetailsFrame.ScrollFrame.ScrollBar)
+	hooksecurefunc("QuestLogQuests_Update", function()
+		for i, questLogHeader in next, QuestMapFrame.QuestsFrame.Contents.Headers do
+			if not questLogHeader.isSkinned then
+				F.ReskinExpandOrCollapse(questLogHeader)
+				questLogHeader.isSkinned = true
+			end
+			questLogHeader:SetHighlightTexture("")
+			if questLogHeader.questLogIndex then
+				local _, _, _, _, isCollapsed = _G.GetQuestLogTitle(questLogHeader.questLogIndex)
+				if isCollapsed then
+					questLogHeader.plus:Show()
+				else
+					questLogHeader.plus:Hide()
+				end
+			end
+		end
+	end)
 
 	-- Complete quest frame
 	CompleteQuestFrame:GetRegions():Hide()

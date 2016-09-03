@@ -258,16 +258,19 @@ local function clearScroll(f)
 	f.tex:SetVertexColor(1, 1, 1)
 end
 
-F.ReskinScroll = function(f)
+F.ReskinScroll = function(f, parent)
 	local frame = f:GetName()
 
-	if _G[frame.."Track"] then _G[frame.."Track"]:Hide() end
-	if _G[frame.."BG"] then _G[frame.."BG"]:Hide() end
-	if _G[frame.."Top"] then _G[frame.."Top"]:Hide() end
-	if _G[frame.."Middle"] then _G[frame.."Middle"]:Hide() end
-	if _G[frame.."Bottom"] then _G[frame.."Bottom"]:Hide() end
+	local track = (f.trackBG or f.Background) or (_G[frame.."Track"] or _G[frame.."BG"])
+	if track then track:Hide() end
+	local top = (f.ScrollBarTop or f.Top) or _G[frame.."Top"]
+	if top then top:Hide() end
+	local middle = (f.ScrollBarMiddle or f.Middle) or _G[frame.."Middle"]
+	if middle then middle:Hide() end
+	local bottom = (f.ScrollBarBottom or f.Bottom) or _G[frame.."Bottom"]
+	if bottom then bottom:Hide() end
 
-	local bu = _G[frame.."ThumbTexture"]
+	local bu = f.ThumbTexture or f.thumbTexture or _G[frame.."ThumbTexture"]
 	bu:SetAlpha(0)
 	bu:SetWidth(17)
 
@@ -280,8 +283,8 @@ F.ReskinScroll = function(f)
 	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
 
-	local up = _G[frame.."ScrollUpButton"]
-	local down = _G[frame.."ScrollDownButton"]
+	local up = f.ScrollUpButton or f.UpButton or _G[(frame or parent).."ScrollUpButton"]
+	local down = f.ScrollDownButton or f.DownButton or _G[(frame or parent).."ScrollDownButton"]
 
 	up:SetWidth(17)
 	down:SetWidth(17)
@@ -343,12 +346,20 @@ F.ReskinDropDown = function(f)
 	if middle then middle:SetAlpha(0) end
 	if right then right:SetAlpha(0) end
 
-	local down = _G[frame.."Button"]
+	local bg = CreateFrame("Frame", nil, f)
+	bg:SetPoint("TOPLEFT", 10, -4)
+	bg:SetPoint("BOTTOMRIGHT", -12, 8)
+	bg:SetFrameLevel(f:GetFrameLevel()-1)
+	F.CreateBD(bg, 0)
 
+	local gradient = CreateGradient(f)
+	gradient:SetPoint("TOPLEFT", bg, 1, -1)
+	gradient:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+
+	local down = _G[frame.."Button"]
 	down:SetSize(20, 20)
 	down:ClearAllPoints()
-	down:SetPoint("RIGHT", -18, 2)
-
+	down:SetPoint("TOPRIGHT", bg)
 	F.Reskin(down, true)
 
 	down:SetDisabledTexture(C.media.backdrop)
@@ -366,16 +377,6 @@ F.ReskinDropDown = function(f)
 
 	down:HookScript("OnEnter", colourArrow)
 	down:HookScript("OnLeave", clearArrow)
-
-	local bg = CreateFrame("Frame", nil, f)
-	bg:SetPoint("TOPLEFT", 16, -4)
-	bg:SetPoint("BOTTOMRIGHT", -18, 8)
-	bg:SetFrameLevel(f:GetFrameLevel()-1)
-	F.CreateBD(bg, 0)
-
-	local gradient = CreateGradient(f)
-	gradient:SetPoint("TOPLEFT", bg, 1, -1)
-	gradient:SetPoint("BOTTOMRIGHT", bg, -1, 1)
 end
 
 local function colourClose(f)
@@ -419,20 +420,19 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 
 	f.pixels = {}
 
-	for i = 1, 9 do
-		local tex = f:CreateTexture()
-		tex:SetColorTexture(1, 1, 1)
-		tex:SetSize(1, 1)
-		tex:SetPoint("BOTTOMLEFT", 3+i, 3+i)
-		tinsert(f.pixels, tex)
-	end
-
-	for i = 1, 9 do
-		local tex = f:CreateTexture()
-		tex:SetColorTexture(1, 1, 1)
-		tex:SetSize(1, 1)
-		tex:SetPoint("TOPLEFT", 3+i, -3-i)
-		tinsert(f.pixels, tex)
+	local lineOfs = 2.5
+	for i = 1, 2 do
+		local line = f:CreateLine()
+		line:SetColorTexture(1, 1, 1)
+		line:SetThickness(0.5)
+		if i == 1 then
+			line:SetStartPoint("TOPLEFT", lineOfs, -lineOfs)
+			line:SetEndPoint("BOTTOMRIGHT", -lineOfs, lineOfs)
+		else
+			line:SetStartPoint("TOPRIGHT", -lineOfs, -lineOfs)
+			line:SetEndPoint("BOTTOMLEFT", lineOfs, lineOfs)
+		end
+		tinsert(f.pixels, line)
 	end
 
 	f:HookScript("OnEnter", colourClose)
@@ -483,7 +483,7 @@ F.ReskinArrow = function(f, direction)
 	f:HookScript("OnLeave", clearArrow)
 end
 
-F.ReskinCheck = function(f)
+F.ReskinCheck = function(f, isTriState)
 	f:SetNormalTexture("")
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(C.media.texture)
@@ -505,6 +505,25 @@ F.ReskinCheck = function(f)
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(r, g, b)
+
+	if isTriState then
+		function f:SetTriState(state)
+			if ( not state or state == 0 ) then
+				-- nil or 0 means not checked
+				self:SetChecked(false)
+			else
+				ch:SetDesaturated(true)
+				self:SetChecked(true)
+				if ( state == 2 ) then
+					-- 2 is a normal check
+					ch:SetVertexColor(r, g, b)
+				else
+					-- 1 is a dark check
+					ch:SetVertexColor(r * 0.5, g * 0.5, b * 0.5)
+				end
+			end
+		end
+	end
 end
 
 local function colourRadio(f)
@@ -611,19 +630,22 @@ end
 F.ReskinPortraitFrame = function(f, isButtonFrame)
 	local name = f:GetName()
 
-	_G[name.."Bg"]:Hide()
+	f.Bg:Hide()
 	_G[name.."TitleBg"]:Hide()
-	_G[name.."Portrait"]:Hide()
-	_G[name.."PortraitFrame"]:Hide()
+	f.portrait:Hide()
+	f.portraitFrame:Hide()
 	_G[name.."TopRightCorner"]:Hide()
-	_G[name.."TopLeftCorner"]:Hide()
-	_G[name.."TopBorder"]:Hide()
-	_G[name.."TopTileStreaks"]:SetTexture("")
+	f.topLeftCorner:Hide()
+	f.topBorderBar:Hide()
+	f.TopTileStreaks:SetTexture("")
 	_G[name.."BotLeftCorner"]:Hide()
 	_G[name.."BotRightCorner"]:Hide()
 	_G[name.."BottomBorder"]:Hide()
-	_G[name.."LeftBorder"]:Hide()
+	f.leftBorderBar:Hide()
 	_G[name.."RightBorder"]:Hide()
+
+	F.ReskinClose(f.CloseButton)
+	f.portrait.Show = F.dummy
 
 	if isButtonFrame then
 		_G[name.."BtnCornerLeft"]:SetTexture("")
@@ -635,7 +657,6 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 	end
 
 	F.CreateBD(f)
-	F.ReskinClose(_G[name.."CloseButton"])
 end
 
 F.CreateBDFrame = function(f, a)
@@ -714,31 +735,27 @@ F.ReskinNavBar = function(f)
 	overflowButton:HookScript("OnLeave", clearArrow)
 end
 
-F.ReskinGarrisonPortrait = function(portrait)
-	local level = portrait.Level
-	local cover = portrait.PortraitRingCover
+F.ReskinGarrisonPortrait = function(portrait, isTroop)
+	portrait:SetSize(portrait.Portrait:GetSize())
+	F.CreateBD(portrait, 1)
+
+	portrait.Portrait:ClearAllPoints()
+	portrait.Portrait:SetPoint("TOPLEFT")
 
 	portrait.PortraitRing:Hide()
 	portrait.PortraitRingQuality:SetTexture("")
+	portrait.PortraitRingCover:SetTexture("")
+	portrait.LevelBorder:SetAlpha(0)
 
-	portrait.LevelBorder:SetColorTexture(0, 0, 0, .5)
-	portrait.LevelBorder:SetSize(44, 11)
-	portrait.LevelBorder:ClearAllPoints()
-	portrait.LevelBorder:SetPoint("BOTTOM", 0, 12)
+	if not isTroop then
+		local lvlBG = portrait:CreateTexture(nil, "BORDER")
+		lvlBG:SetColorTexture(0, 0, 0, 0.5)
+		lvlBG:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", 1, 12)
+		lvlBG:SetPoint("BOTTOMRIGHT", portrait, -1, 1)
 
-	level:ClearAllPoints()
-	level:SetPoint("BOTTOM", portrait, 0, 12)
-
-	local squareBG = CreateFrame("Frame", nil, portrait)
-	squareBG:SetFrameLevel(portrait:GetFrameLevel()-1)
-	squareBG:SetPoint("TOPLEFT", 3, -3)
-	squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
-	F.CreateBD(squareBG, 1)
-	portrait.squareBG = squareBG
-
-	if cover then
-		cover:SetColorTexture(0, 0, 0)
-		cover:SetAllPoints(squareBG)
+		local level = portrait.Level
+		level:ClearAllPoints()
+		level:SetPoint("CENTER", lvlBG)
 	end
 end
 

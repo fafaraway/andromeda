@@ -152,7 +152,8 @@ FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
 --[[ Text colours ]]
 
 NORMAL_QUEST_DISPLAY = "|cffffffff%s|r"
-TRIVIAL_QUEST_DISPLAY = "|cffffffff%s (low level)|r"
+TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, "000000", "ffffff")
+IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, "000000", "ffffff")
 
 -- [[ Misc ]]
 

@@ -224,10 +224,16 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.Arena5v5, ConquestFrame.RatedBG}) do
 		F.Reskin(bu, true)
+		local reward = bu.Reward
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .2)
 		bu.SelectedTexture:SetAllPoints()
+
+		if reward then
+			reward.Border:Hide()
+			F.ReskinIcon(reward.Icon)
+		end
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
@@ -321,7 +327,7 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Main style
 
-	F.Reskin(HonorFrameQueueButton)
+	F.Reskin(HonorFrame.QueueButton)
 	F.Reskin(ConquestFrame.JoinButton)
 	F.Reskin(WarGameStartButton)
 	F.ReskinDropDown(HonorFrameTypeDropDown)

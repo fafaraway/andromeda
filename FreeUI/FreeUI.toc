@@ -87,6 +87,7 @@ theme\AddOns\Blizzard_Collections.lua
 theme\AddOns\Blizzard_DeathRecap.lua
 theme\AddOns\Blizzard_DebugTools.lua
 theme\AddOns\Blizzard_EncounterJournal.lua
+theme\AddOns\Blizzard_GarrisonTemplates.lua.lua
 theme\AddOns\Blizzard_GarrisonUI.lua
 theme\AddOns\Blizzard_GlyphUI.lua
 theme\AddOns\Blizzard_GMSurveyUI.lua
@@ -94,7 +95,6 @@ theme\AddOns\Blizzard_GuildBankUI.lua
 theme\AddOns\Blizzard_GuildControlUI.lua
 theme\AddOns\Blizzard_GuildUI.lua
 theme\AddOns\Blizzard_InspectUI.lua
-theme\AddOns\Blizzard_ItemAlterationUI.lua
 theme\AddOns\Blizzard_ItemSocketingUI.lua
 theme\AddOns\Blizzard_ItemUpgradeUI.lua
 theme\AddOns\Blizzard_LookingForGuildUI.lua
@@ -112,6 +112,7 @@ theme\AddOns\KayrChat.lua
 theme\FrameXML\AlertFrames.lua
 theme\FrameXML\BankFrame.lua
 theme\FrameXML\CharacterFrame.lua
+theme\FrameXML\ChatConfigFrame.lua
 theme\FrameXML\ContainerFrame.lua
 theme\FrameXML\DressUpFrames.lua
 theme\FrameXML\EquipmentFlyout.lua

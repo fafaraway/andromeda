@@ -147,8 +147,6 @@ C.themes["Blizzard_TalentUI"] = function()
 		PlayerTalentFrameSpecialization["specButton"..i].specIcon:SetTexture(icon)
 	end
 
-	PlayerTalentFrameSpecializationLearnButton.Flash:SetTexture("")
-
 	local buttons = {"PlayerTalentFrameSpecializationSpecButton", "PlayerTalentFramePetSpecializationSpecButton"}
 
 	for _, name in pairs(buttons) do

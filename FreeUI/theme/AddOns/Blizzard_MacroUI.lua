@@ -23,6 +23,7 @@ C.themes["Blizzard_MacroUI"] = function()
 	select(2, MacroFrameSelectedMacroButton:GetRegions()):Hide()
 	MacroFrameSelectedMacroBackground:SetAlpha(0)
 	MacroButtonScrollFrameTop:Hide()
+	MacroButtonScrollFrameMiddle:Hide()
 	MacroButtonScrollFrameBottom:Hide()
 
 	MacroFrameSelectedMacroButton:SetPoint("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)

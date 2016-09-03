@@ -70,6 +70,7 @@ local RestyleButton = function(bu)
 
 	bu:SetSize(C.bags.size, C.bags.size)
 	border:SetTexture(C.media.backdrop)
+	border.SetTexture = F.dummy
 
 	if bu.restyled then return end
 

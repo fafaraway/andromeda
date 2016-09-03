@@ -1,6 +1,19 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
+	local function GetItemQualityColor(link)
+		if link then
+			local _, _, quality = _G.GetItemInfo(link)
+			if quality then
+				return _G.GetItemQualityColor(quality)
+			else
+				return 1, 1, 1
+			end
+		else
+			return 1, 1, 1
+		end
+	end
+
 	MerchantMoneyInset:DisableDrawLayer("BORDER")
 	MerchantExtraCurrencyInset:DisableDrawLayer("BORDER")
 	BuybackBG:SetAlpha(0)
@@ -82,42 +95,17 @@ tinsert(C.themes["FreeUI"], function()
 
 				local bu = _G["MerchantItem"..i.."ItemButton"]
 				local name = _G["MerchantItem"..i.."Name"]
-				if bu.link then
-					local _, _, quality = GetItemInfo(bu.link)
-					if quality then
-						local r, g, b = GetItemQualityColor(quality)
-						name:SetTextColor(r, g, b)
-					else
-						name:SetTextColor(1, 1, 1)
-					end
-				else
-					name:SetTextColor(1, 1, 1)
-				end
+				name:SetTextColor(GetItemQualityColor(bu.link))
 			end
 		end
 
-		local name = GetBuybackItemLink(GetNumBuybackItems())
-		if name then
-			local _, _, quality = GetItemInfo(name)
-			local r, g, b = GetItemQualityColor(quality)
-
-			MerchantBuyBackItemName:SetTextColor(r, g, b)
-		end
+		MerchantBuyBackItemName:SetTextColor(GetItemQualityColor(GetBuybackItemLink(GetNumBuybackItems())))
 	end)
 
 	hooksecurefunc("MerchantFrame_UpdateBuybackInfo", function()
 		for i = 1, BUYBACK_ITEMS_PER_PAGE do
-			local itemLink = GetBuybackItemLink(i)
 			local name = _G["MerchantItem"..i.."Name"]
-
-			if itemLink then
-				local _, _, quality = GetItemInfo(itemLink)
-				local r, g, b = GetItemQualityColor(quality)
-
-				name:SetTextColor(r, g, b)
-			else
-				name:SetTextColor(1, 1, 1)
-			end
+			name:SetTextColor(GetItemQualityColor(GetBuybackItemLink(i)))
 		end
 	end)
 
