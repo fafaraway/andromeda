@@ -338,12 +338,12 @@ C["buffTracker"] = {
 		{spellIds = {[5171]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
 	},
 	["WARRIOR"] = {
-		-- Last Stand, Shield Wall, Recklessness
-		{spellIds = {[12975]=true, [871]=true, [1719]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
-		-- Shield Block
-		{spellIds = {[2565]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 		-- Enrage
-		{spellIds = {[12880]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, spec = 1},
+		{spellIds = {[184362]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
+		-- Last Stand, Shield Wall, Battle Cry
+		{spellIds = {[12975]=true, [871]=true, [1719]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
+		-- Shield Block, Wrecking Ball
+		{spellIds = {[2565]=true, [215569]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
 	}
 }
 
