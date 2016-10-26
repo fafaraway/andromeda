@@ -1,8 +1,8 @@
-## Interface: 70000
+## Interface: 70100
 ## Title: FreeUI Options
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth/Lightsword
-## Version: 9.0.2
+## Version: 9.0.3
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
