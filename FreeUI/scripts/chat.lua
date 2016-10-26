@@ -21,7 +21,7 @@ local function HideForever(f)
 end
 
 HideForever(ChatFrameMenuButton)
-HideForever(FriendsMicroButton)
+HideForever(QuickJoinToastButton)
 HideForever(GeneralDockManagerOverflowButton)
 
 ChatTypeInfo.SAY.sticky = 1
@@ -140,7 +140,7 @@ local function StyleWindow(f)
 	HideForever(_G[f.."ButtonFrameUpButton"])
 	HideForever(_G[f.."ButtonFrameDownButton"])
 
-	frame:HookScript("OnMessageScrollChanged", toggleDown)
+	-- frame:HookScript("OnMessageScrollChanged", toggleDown)
 	frame:HookScript("OnShow", toggleDown)
 
 	frame:SetFading(false)

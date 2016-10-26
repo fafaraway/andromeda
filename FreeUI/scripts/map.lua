@@ -1,17 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
--- twice is enough
-WorldMapPing.Ping:SetScript("OnLoop", function(self, loopState)
-	self.loopCount = self.loopCount + 1
-	if self.loopCount >= 2 then
-		self:Stop()
-	end
-end)
-
--- don't need this
-WorldMapPlayerUpper:EnableMouse(false)
-WorldMapPlayerLower:EnableMouse(false)
-
 -- map bar
 
 local fontsize = C.appearance.fontSizeNormal / WORLDMAP_WINDOWED_SIZE
