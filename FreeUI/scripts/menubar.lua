@@ -225,17 +225,17 @@ GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
 	end
 end)
 
-addButton("Toggle DBM", POSITION_RIGHT, function()
-	if IsAddOnLoaded("DBM-Core") then
-		DisableAddOn("DBM-Core")
-		DisableAddOn("DBM-StatusBarTimers")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
-	else
-		EnableAddOn("DBM-Core")
-		EnableAddOn("DBM-StatusBarTimers")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
-	end
-end)
+-- addButton("Toggle DBM", POSITION_RIGHT, function()
+-- 	if IsAddOnLoaded("DBM-Core") then
+-- 		DisableAddOn("DBM-Core")
+-- 		DisableAddOn("DBM-StatusBarTimers")
+-- 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM disabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
+-- 	else
+-- 		EnableAddOn("DBM-Core")
+-- 		EnableAddOn("DBM-StatusBarTimers")
+-- 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
+-- 	end
+-- end)
 
 --[[addButton("Toggle damage meter", POSITION_RIGHT, function()
 	if IsAddOnLoaded("alDamageMeter") then
