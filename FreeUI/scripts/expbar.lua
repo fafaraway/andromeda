@@ -64,23 +64,50 @@ repBar:SetFrameLevel(2)
 xpBar:SetFrameLevel(2)
 mouseFrame:SetFrameLevel(3)
 
--- Update function
+local function toggleSplitRepBar(enable)
+	if enable then
+		xpBar:SetHeight(2)
+		restedxpBar:SetHeight(2)
+		repBar:SetHeight(1)
+		repBar:Show()
+		sep:Show()
+	else
+		xpBar:SetHeight(4)
+		restedxpBar:SetHeight(4)
+		repBar:Hide()
+		sep:Hide()
+	end
+end
 
 local function updateStatus()
-	local XP, maxXP = UnitXP("player"), UnitXPMax("player")
-	local restXP = GetXPExhaustion()
-
 	if UnitLevel("player") == MAX_PLAYER_LEVEL then
-		xpBar:Hide()
-		restedxpBar:Hide()
-		sep:Hide()
-		repBar:SetHeight(4)
-		if not GetWatchedFactionInfo() then
-			backdrop:Hide()
-		else
+		if HasArtifactEquipped() then
+			local _, _, name, _, totalPower, traitsLearned = C_ArtifactUI.GetEquippedArtifactInfo()
+			local numTraitsLearnable, power, powerForNextTrait = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(traitsLearned, totalPower);
+
 			backdrop:Show()
+			xpBar:Show()
+			xpBar:SetStatusBarColor(.9, .8, .5)
+			xpBar:SetMinMaxValues(0, powerForNextTrait)
+			xpBar:SetValue(power)
+			restedxpBar:Hide()
+
+			toggleSplitRepBar(GetWatchedFactionInfo())
+		else
+			xpBar:Hide()
+			restedxpBar:Hide()
+			sep:Hide()
+			repBar:SetHeight(4)
+			if not GetWatchedFactionInfo() then
+				backdrop:Hide()
+			else
+				backdrop:Show()
+			end
 		end
 	else
+		local XP, maxXP = UnitXP("player"), UnitXPMax("player")
+		local restXP = GetXPExhaustion()
+
 		xpBar:SetMinMaxValues(min(0, XP), maxXP)
 		xpBar:SetValue(XP)
 
@@ -92,18 +119,7 @@ local function updateStatus()
 			restedxpBar:Hide()
 		end
 
-		if GetWatchedFactionInfo() then
-			xpBar:SetHeight(2)
-			restedxpBar:SetHeight(2)
-			repBar:SetHeight(1)
-			repBar:Show()
-			sep:Show()
-		else
-			xpBar:SetHeight(4)
-			restedxpBar:SetHeight(4)
-			repBar:Hide()
-			sep:Hide()
-		end
+		toggleSplitRepBar(GetWatchedFactionInfo())
 	end
 
 	if GetWatchedFactionInfo() then
@@ -114,6 +130,8 @@ local function updateStatus()
 	end
 end
 
+F.RegisterEvent("ARTIFACT_XP_UPDATE", updateStatus)
+F.RegisterEvent("UNIT_INVENTORY_CHANGED", updateStatus)
 F.RegisterEvent("PLAYER_LEVEL_UP", updateStatus)
 F.RegisterEvent("PLAYER_XP_UPDATE", updateStatus)
 F.RegisterEvent("UPDATE_EXHAUSTION", updateStatus)
