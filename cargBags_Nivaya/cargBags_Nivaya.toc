@@ -1,0 +1,18 @@
+## Interface: 70300
+## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r |cffFF6666Bags|r
+## Notes: Minimalistic inventory addon featuring item filters and alot more.
+## Author: Luzzifus, Nibelheim, humfras (Modified/updated by Solor)
+## Version: 70300.04
+## RequiredDeps: FreeUI
+## OptionalDeps: ItemRack, Outfitter
+## SavedVariables: cBnivCfg, cB_CustomBags, cBniv_CatInfo
+## SavedVariablesPerCharacter: cB_KnownItems, cBniv
+
+config.lua
+
+libs\LibItemUpgradeInfo-1.0\LibItemUpgradeInfo-1.0.xml
+cargBags\embed.xml
+localization.lua
+filters.lua
+cargBags_Nivaya.lua
+style.lua

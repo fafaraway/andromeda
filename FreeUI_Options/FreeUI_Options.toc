@@ -1,14 +1,14 @@
-## Interface: 70100
-## Title: FreeUI Options
+## Interface: 70300
+## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r |cffFFFF99Options|r
 ## Notes: Options GUI for FreeUI.
-## Author: Haleth/Lightsword
-## Version: 9.0.3
+## Author: Haleth/Lightsword (Modified/updated by Solor)
+## Version: 70300.04
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
 freeui_options.lua
 
 localization\english.lua
-localization\chinese.lua
+#localization\chinese.lua
 
 frames.lua

@@ -1,16 +1,23 @@
 local F, C = unpack(select(2, ...))
 
 -- always enabled in raid and arena
+local playsound = C.general.interrupt_sound
 local enableInParty = C.general.interrupt_party
 local enableInBGs = C.general.interrupt_bgs
 local enableInLFG = C.general.interrupt_lfg
 local enableOutdoors = C.general.interrupt_outdoors
+local interruptSound = "Interface\\AddOns\\FreeUI\\media\\sound\\Shutupfool.ogg"
 
 local playerName = UnitName("player")
 local LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME
 
 local function OnEvent(_, _, subEvent, _, sourceGUID, sourceName, _, _, _, destName, _, _, _, _, _, spellID)
 	if subEvent == "SPELL_INTERRUPT" and (sourceName == playerName or sourceGUID == UnitGUID("pet")) then
+
+		if playsound then
+			PlaySoundFile(interruptSound, "Master")
+		end
+
 		local channel
 
 		if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
@@ -49,7 +56,11 @@ local function OnEvent(_, _, subEvent, _, sourceGUID, sourceName, _, _, _, destN
 		end
 
 		if channel then
-			SendChatMessage("Interrupted: "..destName.."'s "..GetSpellLink(spellID)..".", channel)
+			if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
+				SendChatMessage("已打断: "..destName.."'s "..GetSpellLink(spellID)..".", channel)
+			else
+				SendChatMessage("Interrupted: "..destName.."'s "..GetSpellLink(spellID)..".", channel)
+			end
 		end
 	end
 end

@@ -189,10 +189,10 @@ end
 --[[ Bags ]]
 
 local holder = CreateFrame("Button", "BagsHolder", UIParent)
-holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -30, 30)
+holder:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -20, 20)
 holder:SetFrameStrata("HIGH")
 holder:Hide()
-F.CreateBD(holder, .6)
+F.SetBD(holder)
 
 local ReanchorButtons = function()
 	table.wipe(buttons)
@@ -223,7 +223,7 @@ local bankholder = CreateFrame("Button", "BagsBankHolder", UIParent)
 bankholder:SetPoint("BOTTOMRIGHT", "BagsHolder", "BOTTOMLEFT", -10 , 0)
 bankholder:SetFrameStrata("HIGH")
 bankholder:Hide()
-F.CreateBD(bankholder, .6)
+F.SetBD(bankholder)
 
 local purchase = F.CreateFS(bankholder)
 purchase:SetPoint("BOTTOMLEFT", bankholder, "BOTTOMLEFT", 3, 22)
@@ -991,3 +991,4 @@ BagItemSearchBox:HookScript("OnEditFocusLost", function(self)
 	sortButton:SetAlpha(1)
 	searchButton.icon:Show()
 end)
+

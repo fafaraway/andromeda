@@ -37,6 +37,13 @@ local iconsize = 32
 local width = 200
 local sq, ss, sn, st
 
+local locale = GetLocale()
+local lootFont = {
+		C.font.normal,
+		12,
+		"OUTLINE"
+	}
+
 local addon = CreateFrame("Button", "Butsu", UIParent)
 addon:SetFrameStrata("HIGH")
 addon:SetClampedToScreen(true)
@@ -95,6 +102,7 @@ local createSlot = function(id)
 	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetFrameLevel(frame:GetFrameLevel()-1)
 	F.CreateBD(bg)
+	F.CreateSD(bg)
 	frame.bg = bg
 
 	frame:SetScript("OnClick", OnClick)
@@ -125,6 +133,11 @@ local createSlot = function(id)
 	name:SetPoint("RIGHT", frame)
 	name:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	name:SetNonSpaceWrap(true)
+
+	if locale == "zhCN" or locale == "zhTW" then
+		name:SetFont(unpack(lootFont))
+	end
+
 	frame.name = name
 
 	return frame

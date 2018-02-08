@@ -1,4 +1,4 @@
-local F, C = unpack(FreeUI)
+local F, C, L = unpack(select(2, ...))
 
 if not IsAddOnLoaded("Blizzard_CompactRaidFrames") then return end
 
@@ -6,7 +6,7 @@ local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 
 wm:SetParent("UIParent")
 wm:ClearAllPoints()
-wm:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 5, 5)
+wm:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 5, 33)
 wm:SetSize(16, 16)
 wm:Hide()
 

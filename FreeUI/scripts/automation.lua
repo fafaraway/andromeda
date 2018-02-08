@@ -231,7 +231,7 @@ do
 			QuestInfoItemHighlight:SetPoint("TOP", infoItem)
 			QuestInfoItemHighlight:Show()
 
-			infoItem.bg:SetBackdropColor(0.89, 0.88, 0.06, .2)
+			-- infoItem.bg:SetBackdropColor(0.89, 0.88, 0.06, .2)
 		end
 
 		startIndex = 1

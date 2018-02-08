@@ -3,28 +3,95 @@ local F, C, L = unpack(select(2, ...))
 -- All exceptions and special rules for these options are in profiles.lua!
 -- Consider using the in-game options instead, accessed through the game menu or by typing /freeui.
 
---[[ Global config ]]
+-- [[ Constants ]]
+C.media = {
+	["arrowUp"]    = "Interface\\AddOns\\FreeUI\\Media\\arrow-up-active",
+	["arrowDown"]  = "Interface\\AddOns\\FreeUI\\Media\\arrow-down-active",
+	["arrowLeft"]  = "Interface\\AddOns\\FreeUI\\Media\\arrow-left-active",
+	["arrowRight"] = "Interface\\AddOns\\FreeUI\\Media\\arrow-right-active",
+	["backdrop"]   = "Interface\\AddOns\\FreeUI\\Media\\blank",
+	["checked"]    = "Interface\\AddOns\\FreeUI\\Media\\CheckButtonHilight",
+	["glow"]       = "Interface\\AddOns\\FreeUI\\Media\\glowTex",
+	["gradient"]   = "Interface\\AddOns\\FreeUI\\Media\\gradient",
+	["roleIcons"]  = "Interface\\Addons\\FreeUI\\Media\\UI-LFG-ICON-ROLES",
+	["texture"]    = "Interface\\AddOns\\FreeUI\\Media\\statusbar",
+}
 
+if GetLocale() == "zhCN" then
+	C.font = {
+		["normal"] 		= "Fonts\\ARKai_T.ttf",	-- main font
+		["unitname"] 	= "Fonts\\ARKai_T.ttf",	-- big font for names over player/monster/NPC head
+		["damage"] 		= "Fonts\\ARKai_C.ttf",	-- damage font
+		["header"]		= "Fonts\\ARKai_T.ttf",	-- big font for some panel
+		["chat"]		= "Fonts\\ARKai_T.ttf",	-- chat font
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",	-- pixel font
+	}
+elseif GetLocale() == "zhTW" then
+	C.font = {
+		["normal"] 		= "Fonts\\blei00d.ttf",
+		["unitname"] 	= "Fonts\\blei00d.ttf",
+		["damage"] 		= "Fonts\\bKAI00M.ttf",
+		["header"]		= "Fonts\\blei00d.ttf",
+		["chat"]		= "Fonts\\blei00d.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+	}
+elseif GetLocale() == "koKR" then
+	C.font = {
+		["normal"] 		= "Fonts\\2002.ttf",
+		["unitname"] 	= "Fonts\\2002B.ttf",
+		["damage"] 		= "Fonts\\K_Damage.ttf",
+		["header"]		= "Fonts\\2002.ttf",
+		["chat"]		= "Fonts\\2002.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+	}
+elseif GetLocale() == "ruRU" then
+	C.font = {
+		["normal"] 		= "Fonts\\FRIZQT___CYR.ttf",
+		["unitname"] 	= "Fonts\\FRIZQT___CYR.ttf",
+		["damage"] 		= "Fonts\\FRIZQT___CYR.ttf",
+		["header"]		= "Fonts\\FRIZQT___CYR.ttf",
+		["chat"]		= "Fonts\\FRIZQT___CYR.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+	}
+else
+	C.font = {
+		["normal"] 		= "Interface\\AddOns\\FreeUI\\Media\\font\\ExpresswayRg.ttf",
+		["unitname"] 	= "Interface\\AddOns\\FreeUI\\Media\\font\\ExocetBlizzardMedium.ttf",
+		["damage"] 		= "Interface\\AddOns\\FreeUI\\Media\\font\\PEPSI_pl.ttf",
+		["header"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\ExocetBlizzardMedium.ttf",
+		["chat"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\ExpresswayRg.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+	}
+end
+
+
+--[[ Global config ]]
 C["general"] = {
-	["buffreminder"] = true, 		-- reminder for selfbuffs
-	["buffTracker"] = true, 		-- track important buffs for some classes (scroll down to buffTracker table to configure)
-	["combatText"] = true, 			-- show incoming damage and healing near player frame
-	["helmcloakbuttons"] = true, 		-- show buttons to toggle helm/cloak on character frame
+	["cooldownpulse"] = true,
+	["itemLinkLevel"] = true,
+	["rareAlert"] = true, 			-- raid warning when a rare mob/event is spotted
 	["interrupt"] = true,			-- announce your interrupts
-		["interrupt_party"] = true,		-- enable in 5 mans / scenarios
+		["interrupt_sound"] = true,		-- play sound
+		["interrupt_party"] = false,	-- enable in 5 mans / scenarios
 		["interrupt_bgs"] = false,		-- enable in battlegrounds
-		["interrupt_lfg"] = true, 		-- enable in dungeon/raid finder/scenario groups
-		["interrupt_outdoors"] = true,	-- enable when not in an instance
+		["interrupt_lfg"] = false, 		-- enable in dungeon/raid finder/scenario groups
+		["interrupt_outdoors"] = false,	-- enable when not in an instance
+	["flashCursor"] = true,
 	["mailButton"] = true, 			-- adds a button to the mail frame to collect all attachments
-	["nameplates"] = true, 			-- enable nameplates
-	["rareAlert"] = true, 			-- raid warning when a rare mob is spotted (5.4)
-		["rareAlert_playSound"] = true, 			-- play sound
-	["threatMeter"] = true,			-- threat bar above the target frame in dps/healer layout
-	["uiScaleAuto"] = true,			-- force the correct UI scale
 	["undressButton"] = true, 		-- undress button on dressup frame
+	["alreadyKnown"] = true,
+	["bossBanner"] = true,
+	["talkingHead"] = true,
+	["hideRaidNames"] = true,
+	["autoScreenShot"] = true,
+	["uiScaleAuto"] = true,			-- force the correct UI scale
+
+	["SaySapped"] = true,
 }
 
 C["appearance"] = {
+	["uiFader"] = false,
+	["ncShadow"] = true,
 	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
 		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
@@ -32,15 +99,29 @@ C["appearance"] = {
 	["fontSizeLarge"] = 16,
 	["fontOutline"] = true,
 	["fontOutlineStyle"] = 2,		-- 1 = normal, 2 = monochrome
-	["fontShadow"] = false,
+	["fontShadow"] = true,
+	["fontUseColorFont"] = true,
+	["fontColorFontRGB"] = {r = 247/255, g = 225/255, b =171/255},
+}
+
+C["auras"] = {
+	["buffSize"] = 42,
+	["buffScale"] = 1,
+	["debuffSize"] = 50,
+	["debuffScale"] = 1,
+	["paddingX"] = 1,
+	["paddingY"] = 3,
+	["buffPerRow"] = 8,
+	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
+	["aurasSource"] = true,
 }
 
 C["automation"] = {
-	["autoAccept"] = true,			-- auto accept invites from friends and guildies
+	["autoAccept"] = false,			-- auto accept invites from friends and guildies
 	["autoRepair"] = true,			-- automatically repair items
-		["autoRepair_guild"] = false,		-- use guild funds for auto repairs
-	["autoRoll"] = true, 			-- automatically DE or greed on BoE greens (DE priority)
-		["autoRoll_maxLevel"] = true, 		-- only automatically roll on items at max level
+		["autoRepair_guild"] = true,		-- use guild funds for auto repairs
+	["autoRoll"] = false, 			-- automatically DE or greed on BoE greens (DE priority)
+		["autoRoll_maxLevel"] = false, 		-- only automatically roll on items at max level
 	["autoSell"] = true,			-- automatically sell greys
 	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
@@ -49,23 +130,29 @@ C["automation"] = {
 
 C["actionbars"] = {
 	["enable"] = true,					-- enable the action bars
-	["enableStyle"] = true,				-- style the action bars (might have to be turned off for other addons)
+	["enableStyle"] = true,				-- enable action bars style
+	["hotKey"] = true, 					-- show hot keys on buttons
+	["macroName"] = true,				-- show macro name on buttons
+	["leaveVehicleButton"] = { "BOTTOM", UIParent, "BOTTOM", 113, 195 },
+	["sideBar_mouseOver"] = false,
+	["petBar_mouseOver"] = false,
+	["stanceBar_show"] = true,
 
-	["hotkey"] = false, 				-- show hot keys on buttons
-	["rightbars_mouseover"] = false,	-- show right bars on mouseover (show/hide: use blizz option)
+	["layout"] = 1,
 }
 
 C["bags"] = {
-	["style"] = 1,						-- 1 = all-in-one, 2 = restyle default bags, 3 = do nothing
+	["style"] = 3,						-- 1 = all-in-one, 2 = restyle default bags, 3 = do nothing
 
-	["size"] = 37,						-- change the size of the bags/bank, default = 37
-	["slotsShowAlways"] = false, 		-- always show the bag item slots
+	["size"] = 34,						-- change the size of the bags/bank, default = 37
+	["slotsShowAlways"] = true, 		-- always show the bag item slots
 
 	["hideSlots"] = true,				-- hide bag slots if style is 2 or 3
 }
 
 C["menubar"] = {
 	["enable"] = true,
+	["topPosition"] = true,
 
 	["enableButtons"] = true,			-- show buttons for quick access on the menu bar
 		["buttons_mouseover"] = true,			-- only on mouseover
@@ -85,85 +172,118 @@ C["notifications"] = {
 }
 
 C["tooltip"] = {
-	["enable"] = true,
-
-	["anchorCursor"] = false,
-	["class"] = false,
-	["guildrank"] = true,
+	["enable"] = true,		-- enable tooltip and modules
+	["anchorCursor"] = false,		-- tooltip at mouse
+	["position"] = {"BOTTOMRIGHT", -25, 30},	-- tooltip position
+	["sbHeight"] = 2,
+	["guildRank"] = false,
+	["realm"] = true,
 	["title"] = false,
-	["pvp"] = true,
+	["fadeOnUnit"] = false,
+	["combathide"] = false,
+	["combathideALL"] = false,
+	["ilvlspec"] = true,		-- show gear info and specialization on tooltip
+	["idtip"] = true,
 }
 
 C["quests"] = {
+	["questObjectiveTrackerStyle"] = true,
 	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
 	["rememberObjectiveTrackerState"] = true,		-- saves objective tracker expanded/collapsed state per character
-		["alwaysCollapseObjectiveTracker"] = false,	-- always collapses objective tracker on login
+ 		["alwaysCollapseObjectiveTracker"] = false,	-- always collapses objective tracker on login
+ 	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -20, -260},
 }
 
 C["unitframes"] = {
-	["enable"] = true, 									-- enable the unit frames and their included modules
+	["enable"] = true, 						-- enable the unit frames and their included modules
 
-	["autoPosition"] = true,							-- automatically postion unit frames based on resolution
+	["transMode"] = true,
+		["transModeAlpha"] = .3,
+		["healthClassColor"] = true,
+		["powerTypeColor"] = true,
 
-	["enableGroup"] = true,								-- enable party/raid frames
-		["healerClasscolours"] = false,						-- colour unitframes by class in healer layout
-		["showRaidFrames"] = true, 							-- show the raid frames
-		["partyNameAlways"] = false,						-- show name on party/raid frames in dps/tank layout
-	["enableArena"] = true,								-- enable arena/flag carrier frames
-	["targettarget"] = false, 							-- show target of target frame
+	["gradient"] = true,					-- gradient mode
+	["portrait"] = true,
+	["darkBorder"] = true,
 
-	["absorb"] = true, 									-- absorb bar/over absorb glow
-	["cast"] = {"BOTTOM", UIParent, "CENTER", 0, -105},	-- only applies with 'castbar' set to 2
-	["castbarSeparate"] = true, 						-- true for a separate player cast bar
-		["castbarSeparateOnlyCasters"] = true, 				-- separate bar only for mages/warlocks/priests
-	["pvp"] = true, 									-- show pvp icon on player frame
-	["statusIndicator"] = false,						-- show combat/resting status on player frame
-		["statusIndicatorCombat"] = true,					-- show combat status (else: only resting)
+	["absorb"] = true, 							-- absorb bar/over absorb glow
+	["castbar"] = true,
+	["castbarSeparate"] = false,
+	["pvp"] = true, 							-- show pvp icon on player frame
+	["statusIndicator"] = true,					-- show combat/resting status on player frame
+		["statusIndicatorCombat"] = true,				-- show combat status (else: only resting)
 
-	["player"] = {"BOTTOM", UIParent, "CENTER", -275, -105},
-	["target"] = {"TOP", UIParent, "CENTER", 0, -225},
-	["target_heal"] = {"BOTTOM", UIParent, "CENTER", 275, -105},
-	["party"] = {"TOP", UIParent, "CENTER", 0, -225}, 	-- only applies with healer layout enabled
-	["raid"] = {"TOP", UIParent, "CENTER", 0, -185}, 	-- only applies with healer layout enabled
+	["enableGroup"] = true,					-- enable party/raid frames
+		["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid
+		["showRaidFrames"] = true, 					-- show the raid frames
+		["partyNameAlways"] = false,				-- show name on party/raid frames
+		["partyMissingHealth"] = true,				-- show missing health
+	["enableArena"] = false,					-- enable arena/flag carrier frames
 
-	["altpower_height"] = 1,
-	["power_height"] = 1,
+	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 200},						-- player unitframe position
+	["player_width"] = 200,
+	["player_height"] = 12,
+	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
+	["player_castbar_width"] = 200,
 
-	["player_width"] = 229,
-	["player_height"] = 14,
-	["target_width"] = 229,
-	["target_height"] = 14,
-	["targettarget_width"] = 229,
-	["targettarget_height"] = 8,
-	["focus_width"] = 113,
-	["focus_height"] = 8,
-	["pet_width"] = 113,
-	["pet_height"] = 8,
-	["boss_width"] = 170,
-	["boss_height"] = 14,
+	["pet"] = {"RIGHT", "oUF_FreePlayer", "LEFT", -5, 0},									-- pet unitframe position
+	["pet_width"] = 89,
+	["pet_height"] = 12,
+
+	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 80, 120},					-- target unitframe position
+	["target_width"] = 262,
+	["target_height"] = 12,
+	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -6},			-- target castbar position
+	["target_castbar_width"] = 262,
+
+	["targettarget"] = {"LEFT", "oUF_FreeTarget", "RIGHT", 5, 0},							-- target target unitframe position
+	["targettarget_width"] = 80,
+	["targettarget_height"] = 12,
+
+	["focus"] = {"RIGHT", 'oUF_FreePlayer', "LEFT", -5, 40},					-- focus unitframe position
+	["focus_width"] = 89,
+	["focus_height"] = 12,
+	["focus_castbar"] = {"RIGHT", 'oUF_FreeFocus', "RIGHT", 0, 40},				-- focus castbar position
+	["focus_castbar_width"] = 165,
+
+	["focustarget"] = {"RIGHT", "oUF_FreeFocus", "LEFT", -5, 0},							-- focus target unitframe position
+	["focustarget_width"] = 89,
+	["focustarget_height"] = 12,
+
+	["party"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -30},			-- party unitframe position
+	["party_width"] = 50,
+	["party_height"] = 34,
+
+	["raid"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -30},			-- raid unitframe position
+	["raid_width"] = 50,
+	["raid_height"] = 30,
+
+	["boss"] = {a='LEFT', b='oUF_FreeTarget', c="RIGHT", x=100, y=180},			-- boss unitframe position
+	["boss_width"] = 160,
+	["boss_height"] = 16,
+
+	["arena"] = {a='LEFT', b='UIParent', c="LEFT", x=20, y=100},				-- arena unitframe position
 	["arena_width"] = 229,
-	["arena_height"] = 14,
-	["party_width"] = 38,
-	["party_height"] = 24,
-	["party_width_healer"] = 56,
-	["party_height_healer"] = 42,
+	["arena_height"] = 12,
+	
+	["castbarColorInterrupt"] = {241/255, 23/255, 45/255},
+	["castbarColorNormal"] = {113/255, 178/255, 237/255},
+	["castbarHeight"] = 6,
+
+	["power_height"] = 2,
+	["altpower_height"] = 2,
+	["classPower_height"] = 4,
 
 	["num_player_debuffs"] = 8,
 	["num_target_debuffs"] = 16,
 	["num_target_buffs"] = 16,
-	["num_boss_buffs"] = 5,
 	["num_arena_buffs"] = 8,
 	["num_focus_debuffs"] = 4,
 }
 
+
 C["classmod"] = {
-	["deathknight"] = true, 	-- runes
-	["druidMana"] = true, 		-- shapeshift mana bar
-	["mage"] = true, 			-- rune of power
-	["monk"] = true, 			-- chi, stagger bar
-	["paladinHP"] = true, 		-- holy power
-	["paladinRF"] = true, 		-- righteous fury
-	["warlock"] = true, 		-- spec bar
+	["classResource"] = true, 		-- class resource
 }
 
 -- lower = smoother = more CPU usage
@@ -173,279 +293,284 @@ C["performance"] = {
 	["nameplatesHealth"] = .2, 	-- update interval for nameplate health bar colour (only with name plates shown)
 }
 
--- Selfbuff reminder
--- put all possible buffs with the same effect in the same list, even when you can't cast them yourself
--- outer tables are for buffs that you want together (e.g. an outer table with inner fire and an outer table with PW:F)
--- tables within those tables are for buffs that are exclusive to each other (e.g. blessing of might and blessing of kings)
-C["selfbuffs"] = {
-	DEATHKNIGHT = {
-		{
-			{
-				6673, -- Battle Shout
-				57330, -- Horn of Winter
-				19506, -- Trueshot Aura
-			},
-		},
-	},
-	DRUID = {
-		{
-			{
-				20217, -- Blessing of Kings
-				115921, -- Legacy of the Emperor
-				116781, -- Legacy of the White Tiger
-				1126, -- Mark of the Wild
-			},
-		},
-	},
-	MAGE = {
-		{
-			{
-				1459, -- Arcane Brilliance
-				61316, -- Dalaran Brilliance
-				109773, -- Dark Intent
-			},
-			{
-				1459, -- Arcane Brilliance
-				61316, -- Dalaran Brilliance
-				17007, -- Leader of the Pack
-				116781, -- Legacy of the White Tiger
-			},
-		},
-	},
-	MONK = {
-		{
-			{
-				20217, -- Blessing of Kings
-				115921, -- Legacy of the Emperor
-				116781, -- Legacy of the White Tiger
-				1126, -- Mark of the Wild
-			},
-			{
-				1459, -- Arcane Brilliance
-				61316, -- Dalaran Brilliance
-				17007, -- Leader of the Pack
-				116781, -- Legacy of the White Tiger
-			},
-		},
-	},
-	PALADIN = {
-		{
-			{
-				20217, -- Blessing of Kings
-				115921, -- Legacy of the Emperor
-				116781, -- Legacy of the White Tiger
-				1126, -- Mark of the Wild
-			},
-			{
-				19740, -- Blessing of Might
-				116956, -- Grace of Air
-				24907, -- Moonkin Aura
-				155522, -- Power of the Grave
-			},
-		},
-	},
-	PRIEST = {
-		{
-			{
-				166928, -- Blood Pact
-				469, -- Commanding Shout
-				21562, -- Power Word: Fortitude
-			},
-		},
-	},
-	ROGUE = {
-		{
-			{
-				2823, -- Deadly Poison
-				8679, -- Wound Poison
-				3408, -- Crippling Poison
-				157584, -- Instant Poison
-			},
-		},
-	},
-	SHAMAN = {
-		{
-			{
-				974, -- Earth shield
-				324, -- Lightning shield
-				52127, -- Water shield
-			},
-		},
-	},
-	WARLOCK = {
-		{
-			{
-				1459, -- Arcane Brilliance
-				61316, -- Dalaran Brilliance
-				109773, -- Dark Intent
-			},
-			{
-				109773, -- Dark Intent
-				49868, -- Mind Quickening
-				113742, -- Swiftblade's Cunning
-				166916, -- Windflurry
-			},
-		},
-	},
-	WARRIOR = {
-		{
-			{
-				166928, -- Blood Pact
-				469, -- Commanding Shout
-				21562, -- Power Word: Fortitude
-			},
-			{
-				6673, -- Battle Shout
-				57330, -- Horn of Winter
-				19506, -- Trueshot Aura
-			},
-		},
-	},
+-- camera stuff
+C["camera"] = {
+	["speed"] = 50,
+	["increment"] = 3,
+	["distance"] = 50,
 }
 
--- buff tracker: slot 1 is left, slot 2 is middle, slot 3 is right
--- spellIDs, size, unitId, isMine, filter, slot (1-3: left, middle, right), customPoint (table, overrides slot), spec (1-3)
--- if you use multiple spellIDs, first available gets displayed
-C["buffTracker"] = {
-	["MAGE"] = {
-		-- Alter Time
-		{spellIds = {[110909]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-		-- Arcane Power
-		{spellIds = {[12042]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
-	},
-	["MONK"] = {
-		-- Tiger Power
-		{spellIds = {[125359]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-		-- Tigereye Brew
-		{spellIds = {[125195]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 10},
-	},
-	["PALADIN"] = {
-		-- Sacred Shield
-		{spellIds = {[20925]=true, [148039]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-		-- Selfless Healer
-		{spellIds = {[114250]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3, minStack = 3},
-		-- Divine Shield, Hand of Protection, Avenging Wrath, Holy Avenger
-		{spellIds = {[642]=true, [1022]=true, [31884]=true, [105809]=true}, unitId = "player", isMine = "all", filter = "HELPFUL", slot = 2},
-		-- Bastion of Glory
-		{spellIds = {[114637]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-	},
-	["ROGUE"] = {
-		-- Bandit's Guile
-		{spellIds = {[84745]=true, [84746]=true, [84747]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-		-- Adrenaline Rush
-		{spellIds = {[13750]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
-		-- Slice and dice
-		{spellIds = {[5171]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-	},
-	["WARRIOR"] = {
-		-- Enrage
-		{spellIds = {[184362]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 1},
-		-- Last Stand, Shield Wall, Battle Cry
-		{spellIds = {[12975]=true, [871]=true, [1719]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 2},
-		-- Shield Block, Wrecking Ball
-		{spellIds = {[2565]=true, [215569]=true}, unitId = "player", isMine = 1, filter = "HELPFUL", slot = 3},
-	}
-}
+
 
 -- [[ Filters ]]
+-- buff/debuff过滤规则
+-- 需要更新
+-- WA更方便
 
 -- Debuffs by other players or NPCs you want to show on enemy target
+-- 目标框体的debuff过滤表
+-- 由其他玩家或NPC施放的控制性技能
+-- 以下debuff将显示
 
 C["debuffFilter"] = {
-	-- Stuns
-	[408] = true, -- Kidney Shot
-	[1833] = true, -- Cheap Shot
-	[5211] = true, -- Mighty Bash
-	[853] = true, -- Hammer of Justice
+	-- CC
+	[33786]  = true, -- Cyclone
+	[605]    = true, -- Dominate Mind (Mind Control)
+	[20549]  = true, -- War Stomp
+	[107079] = true, -- Quaking Palm
+	[129597] = true, -- Arcane Torrent
+		[28730]  = true, -- Arcane Torrent
+		[25046]  = true, -- Arcane Torrent
+		[50613]  = true, -- Arcane Torrent
+		[69179]  = true, -- Arcane Torrent
+		[155145] = true, -- Arcane Torrent
+		[80483]  = true, -- Arcane Torrent
+	[155335] = true, -- Touched by Ice
+	[5246]   = true, -- Intimidating Shout
+	[24394]  = true, -- Intimidation
+	[132168] = true, -- Shockwave
+	[132169] = true, -- Storm Bolt
+	[853]    = true, -- Hammer of Justice
+	[10326]  = true, -- Turn Evil
+	[20066]  = true, -- Repentance
+	[31935]  = true, -- Avengers Shield
+	[105421] = true, -- Blinding Light
 	[105593] = true, -- Fist of Justice
-	[119381] = true, -- Leg Sweep
-
-	-- Silence
+	[119072] = true, -- Holy Wrath
+	[3355]   = true, -- Freezing Trap
+	[19386]  = true, -- Wyvern Sting
+	[117526] = true, -- Binding Shot
+	[408]    = true, -- Kidney Shot
+	[1330]   = true, -- Garrote - Silence
+	[1776]   = true, -- Gouge
+	[1833]   = true, -- Cheap Shot
+	[2094]   = true, -- Blind
+	[6770]   = true, -- Sap
+	[88611]  = true, -- Smoke Bomb
+	[8122]   = true, -- Psychic Scream
+	[9484]   = true, -- Shackle Undead
+	[15487]  = true, -- Silence
+	[64044]  = true, -- Psychic Horror
+	[87204]  = true, -- Sin and Punishment
+	[88625]  = true, -- Holy Word: Chastise
 	[47476] = true, -- Strangulate
-	[15487] = true, -- Silence
-
-	-- Taunt
-	[355] = true, -- Taunt
-	[21008] = true, -- Mocking Blow
-	[62124] = true, -- Reckoning
-	[49576] = true, -- Death Grip
-	[56222] = true, -- Dark Command
-	[6795] = true, -- Growl
-	[2649] = true, -- Growl (pet)
-	[116189] = true, -- Provoke
-
-	-- Crowd control
-	[118] = true, -- Polymorph (sheep)
-	[61305] = true, -- Polymorph (black cat)
-	[28272] = true, -- Polymorph (pig)
-	[61721] = true, -- Polymorph (rabbit)
-	[28271] = true, -- Polymorph (turtle)
-	[61780] = true, -- Polymorph (turkey)
-	[2094] = true, -- Blind
-	[6770] = true, -- Sap
-	[20066] = true, -- Repentance
-	[9484] = true, -- Shackle Undead
-	[339] = true, -- Entangling Roots
-	[710] = true, -- Banish
-	[19386] = true, -- Wyvern Sting
-	[51514] = true, -- Hex
-	[5782] = true, -- Fear
-	[1499] = true, -- Freezing Trap (1?)
-	[3355] = true, -- Freezing Trap (2?)
-	[6358] = true, -- Seduction
-	[10326] = true, -- Turn Evil
-	[33786] = true, -- Cyclone
+		[115502] = true, -- Strangulate (Asphyxiate)
+	[91797]  = true, -- Monstrous Blow
+	[91800]  = true, -- Gnaw
+	[108194] = true, -- Asphyxiate
+	[115001] = true, -- Remorseless Winter
+	[51514]  = true, -- Hex
+	[77505]  = true, -- Earthquake
+	[118345] = true, -- Pulverize
+	[118905] = true, -- Static Charge (Capacitor Totem)
+	[118]    = true, -- Polymorph
+		[61305]  = true, -- Polymorph Black Cat
+		[28272]  = true, -- Polymorph Pig
+		[61721]  = true, -- Polymorph Rabbit
+		[61780]  = true, -- Polymorph Turkey
+		[28271]  = true, -- Polymorph Turtle
+	[31661]  = true, -- Dragon's Breath
+	[44572]  = true, -- Deep Freeze
+	[82691]  = true, -- Ring of Frost
+	[102051] = true, -- Frostjaw
+	[710]    = true, -- Banish
+	[5484]   = true, -- Howl of Terror
+	[6358]   = true, -- Seduction
+	[6789]   = true, -- Mortal Coil
+	[22703]  = true, -- Infernal Awakening
+	[30283]  = true, -- Shadowfury
+	[31117]  = true, -- Unstable Affliction (Silence)
+	[89766]  = true, -- Axe Toss
+	[115268] = true, -- Mesmerize
+	[118699] = true, -- Fear
+		[130616] = true, -- Fear (Glyph of Fear)
+	[137143] = true, -- Blood Horror
 	[115078] = true, -- Paralysis
+	[119381] = true, -- Leg Sweep
+	[119392] = true, -- Charging Ox Wave
+	[120086] = true, -- Fists of Fury
+	[123393] = true, -- Breath of Fire
+	[137460] = true, -- Incapacitated
+	[99]     = true, -- Incapacitating Roar
+	[5211]   = true, -- Mighty Bash
+	[22570]  = true, -- Maim
+	[81261]  = true, -- Solar Beam
+	[114238] = true, -- Fae Silence
+	[163505] = true, -- Rake
+
+	-- Roots
+	[122]    = true, -- Frost Nova
+		[33395] = true, -- Freeze
+	[339]    = true, -- Entangling Roots
+		[113770] = true, -- Entangling Roots
+		[170855] = true, -- Entangling Roots (Nature's Grasp)
+	[53148]  = true, -- Charge (Hunter)
+	[105771] = true, -- Charge (Warrior)
+	[63685]  = true, -- Frozen Power
+	[64695]  = true, -- Earthgrab Totem
+	[87194]  = true, -- Glyph of Mind Blast
+	[96294]  = true, -- Chains of Ice
+	[102359] = true, -- Mass Entanglement
+	[111340] = true, -- Ice Ward
+	[114404] = true, -- Void Tendrils
+	[116706] = true, -- Disable
+	[135373] = true, -- Entrapment
+	[136634] = true, -- Narrow Escape
+	[55536]  = true, -- Frostweave Net
+	[157997] = true, -- Ice Nova
+	[45334]  = true, -- Wild Charge
+
 }
 
 -- Buffs to show on enemy players
+-- 目标框体的buff过滤表
+-- 防守/爆发性技能
+-- 以下buff将显示
 
 C["dangerousBuffs"] = {
-	[13750] = true, -- Adrenaline Rush
-	[23335] = true, -- Alliance Flag
-	[90355] = true, -- Ancient Hysteria
-	[48707] = true, -- Anti-Magic Shell
-	[31850] = true, -- Ardent Defender
-	[31821] = true, -- Aura Mastery
-	[31884] = true, -- Avenging Wrath
-	[46924] = true, -- Bladestorm
-	[2825] = true, -- Bloodlust
-	[51753] = true, -- Camouflage
-	[31224] = true, -- Cloak of Shadows
-	[74001] = true, -- Combat Readiness
-	[19263] = true, -- Deterrence
+	-- Immunities
+	[46924]  = true, -- Bladestorm
+	[642]    = true, -- Divine Shield
+	[19263]  = true, -- Deterrence
+		[148467] = true, -- Deterrence (Glyph of Mirrored Blades)
+	[51690]  = true, -- Killing Spree
+	[115018] = true, -- Desecrated Ground
+	[45438]  = true, -- Ice Block
+	[115760] = true, -- Glyph of Ice Block
+	[157913] = true, -- Evanesce
+
+	-- Spell Immunities
+	[23920]  = true, -- Spell Reflection
+		[114028] = true, -- Mass Spell Reflection
+	[31821]  = true, -- Devotion Aura
+	[31224]  = true, -- Cloak of Shadows
+	[159630] = true, -- Shadow Magic
+	[8178]   = true, -- Grounding Totem
+		[89523]  = true, -- Grounding Totem (Glyph of Grounding Totem)
+	[159652] = true, -- Glyph of Spiritwalker's Aegis
+	[48707]  = true, -- Anti-Magic Shell
+	[104773] = true, -- Unending Resolve
+	[159546] = true, -- Glyph of Zen Focus
+	[159438] = true, -- Glyph of Enchanted Bark
+
+	-- Defensive Buffs
+	[871]    = true, -- Shield Wall
+	[108271] = true, -- Astral Shift
+	[157128] = true, -- Saved by the Light
+	[33206]  = true, -- Pain Suppression
+	[116849] = true, -- Life Cocoon
+	[47788]  = true, -- Guardian Spirit
+	[47585]  = true, -- Dispersion
 	[122783] = true, -- Diffuse Magic
-	[47585] = true, -- Dispersion
-	[498] = true, -- Divine Protection
-	[642] = true, -- Divine Shield
-	[5277] = true, -- Evasion
-	[110959] = true, -- Greater Invisibility
-	[86659] = true, -- Guardian of Ancient Kings
-	[47788] = true, -- Guardian Spirit
-	[1022] = true, -- Hand of Protection
-	[32182] = true, -- Heroism
-	[105809] = true, -- Holy Avenger
-	[23333] = true, -- Horde Flag
-	[11426] = true, -- Ice Barrier
-	[45438] = true, -- Ice Block
-	[48792] = true, -- Icebound Fortitude
-	[66] = true, -- Invisibility
-	[12975] = true, -- Last Stand
-	[1463] = true, -- Mana Shield
-	[103958] = true, -- Metamorphosis
-	[33206] = true, -- Pain Suppression
-	[10060] = true, -- Power Infusion
-	[17] = true, -- Power Word: Shield
-	[15473] = true, -- Shadowform
-	[871] = true, -- Shield Wall
-	[23920] = true, -- Spell Reflection
-	[2983] = true, -- Sprint
-	[80353] = true, -- Time Warp
-	[122470] = true, -- Touch of Karma
+	[178858] = true, -- Contender
+	[61336]  = true, -- Survival Instincts
+	[98007]  = true, -- Spirit Link
+	[118038] = true, -- Die by the Sword
+	[74001]  = true, -- Combat Readiness
+	[30823]  = true, -- Shamanistic Rage
+	[114917] = true, -- Stay of Execution
+	[114029] = true, -- Safeguard
+	[5277]   = true, -- Evasion
+	[49039]  = true, -- Lichborne
+	[117679] = true, -- Incarnation: Tree of Life
+	[137562] = true, -- Nimble Brew
+	[102342] = true, -- Ironbark
+	[22812]  = true, -- Barkskin
+	[110913] = true, -- Dark Bargain
+	[122278] = true, -- Dampen Harm
+	[53480]  = true, -- Roar of Sacrifice
+	[55694]  = true, -- Enraged Regeneration
+	[12975]  = true, -- Last Stand
+	[1966]   = true, -- Feint
+	[6940]   = true, -- Hand of Sacrifice
+	[97463]  = true, -- Rallying Cry
 	[115176] = true, -- Zen Meditation
+	[120954] = true, -- Fortifying Brew
+	[118347] = true, -- Reinforce
+	[81782]  = true, -- Power Word: Barrier
+	[30884]  = true, -- Nature's Guardian
+	[155835] = true, -- Bristling Fur
+	[62606]  = true, -- Savage Defense
+	[1022]   = true, -- Hand of Protection
+	[48743]  = true, -- Death Pact
+	[31850]  = true, -- Ardent Defender
+	[114030] = true, -- Vigilance
+	[498]    = true, -- Divine Protection
+	[122470] = true, -- Touch of Karma
+	[48792]  = true, -- Icebound Fortitude
+	[55233]  = true, -- Vampiric Blood
+	[114039] = true, -- Hand of Purity
+	[86659]  = true, -- Guardian of Ancient Kings
+	[108416] = true, -- Sacrificial Pact
+
+	-- Offensive Buffs
+	[19574]  = true, -- Bestial Wrath
+	[84747]  = true, -- Deep Insight
+	[131894] = true, -- A Murder of Crows
+	[152151] = true, -- Shadow Reflection
+	[31842]  = true, -- Avenging Wrath
+	[114916] = true, -- Execution Sentence
+	[83853]  = true, -- Combustion
+	[51690]  = true, -- Killing Spree
+	[79140]  = true, -- Vendetta
+	[102560] = true, -- Incarnation: Chosen of Elune
+	[102543] = true, -- Incarnation: King of the Jungle
+	[123737] = true, -- Heart of the Wild
+		[108291] = true, -- Heart of the Wild (Balance)
+		[108292] = true, -- Heart of the Wild (Feral)
+		[108293] = true, -- Heart of the Wild (Guardian)
+		[108294] = true, -- Heart of the Wild (Restoration)
+	[124974] = true, -- Nature's Vigil
+	[12472]  = true, -- Icy Veins
+	[77801]  = true, -- Dark Soul
+		[113860] = true, -- Dark Soul (Misery)
+		[113861] = true, -- Dark Soul (Knowledge)
+		[113858] = true, -- Dark Soul (Instability)
+	[16166]  = true, -- Elemental Mastery
+	[114049] = true, -- Ascendance
+		[114052] = true, -- Ascendance (Restoration)
+		[114050] = true, -- Ascendance (Elemental)
+		[114051] = true, -- Ascendance (Enhancement)
+	[107574] = true, -- Avatar
+	[51713]  = true, -- Shadow Dance
+	[13750]  = true, -- Adrenaline Rush
+	[1719]   = true, -- Recklessness
+	[84746]  = true, -- Moderate Insight
+	[112071] = true, -- Celestial Alignment
+	[106951] = true, -- Berserk
+	[12042]  = true, -- Arcane Power
+	[51271]  = true, -- Pillar of Frost
+	[152279] = true, -- Breath of Sindragosa
+
+	[41425]  = true, -- Hypothermia
+	[130736] = true, -- Soul Reaper (Blood)
+		[114866] = true, -- Soul Reaper (Unholy)
+		[130735] = true, -- Soul Reaper (Frost)
+	[12043]  = true, -- Presence of Mind
+	[16188]  = true, -- Ancestral Swiftness
+	[132158] = true, -- Nature's Swiftness
+	[6346]   = true, -- Fear Ward
+	[77606]  = true, -- Dark Simulacrum
+	[172786] = true, -- Drink
+		[167152] = true, -- Refreshment
+	[114239] = true, -- Phantasm
+	[119032] = true, -- Spectral Guise
+	[1044]   = true, -- Hand of Freedom
+	[10060]  = true, -- Power Infusion
+	[5384]   = true, -- Feign Death
+	[108978] = true, -- Alter Time
+	[170856] = true, -- Nature's Grasp
+	[110959] = true, -- Greater Invisibility
+	[18499]  = true, -- Berserker Rage
+	[111397] = true, -- Blood Horror (Buff)
+	[114896] = true, -- Windwalk Totem
 }
 
 -- Debuffs healers don't want to see on raid frames
+-- 小队/团队框体的debuff过滤表
+-- 无意义的垃圾技能
+-- 比如密境的挑战者负担之类
+-- 以下技能将隐藏
 
 C["hideDebuffs"] = {
 	[57724] = true, -- Sated
@@ -481,12 +606,17 @@ C["hideDebuffs"] = {
 	[173679] = true, -- Leorajh defeated
 	[173649] = true, -- Tormmok defeated
 	[173660] = true, -- Aeda Brightdawn defeated
-	[173657] = true, -- Defender Illona defeated
+ 	[173657] = true, -- Defender Illona defeated
+ 	[206151] = true, -- 挑战者的负担
 }
 
 if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end
 
 -- Buffs cast by the player that healers want to see on raid frames
+-- 小队/团队框体的buff过滤表
+-- 玩家自己施放的技能
+-- 比如奶德的恢复牧师的盾之类
+-- 以下技能将显示
 
 C["myBuffs"] = {
 	[774] = true, -- Rejuvenation
@@ -504,16 +634,24 @@ C["myBuffs"] = {
 	[974] = true, -- Earth Shield
 
 	[53563] = true, -- Beacon of Light
-	[156322] = true, -- Eternal Flame
+	[114163] = true, -- Eternal Flame
 	[20925] = true, -- Sacred Shield
 
 	[119611] = true, -- Renewing Mist
 	[116849] = true, -- Life Cocoon
 	[124682] = true, -- Enveloping Mist
 	[124081] = true, -- Zen Sphere
+
+	[203528] = true, -- 力量祝福
+	[203539] = true, -- 智慧
+	[203538] = true, -- 王者
 }
 
 -- Buffs cast by anyone that healers want to see on raid frames
+-- 小队/团队框体的buff过滤表
+-- 治疗专精希望看到的由其他队友施放的技能
+-- 比如坦克的减伤技能
+-- 以下技能将显示
 
 C["allBuffs"] = {
 	[86657] = true, -- Ancient Guardian

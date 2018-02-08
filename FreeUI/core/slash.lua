@@ -60,12 +60,7 @@ SlashCmdList.FREEUI = function(cmd)
 		if not BankFrame:IsShown() and FreeUIOptionsPanel then
 			FreeUIOptionsPanel:Show()
 		end
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
-		if C.unitframes.enable then
-			DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r [dps/healer]|cffffffff: Select a unitframe layout|r", unpack(C.class))
-		end
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r install|cffffffff: Load the intaller|r", unpack(C.class))
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffffff/freeui|r reset|cffffffff: Clear saved settings|r", unpack(C.class))
+		
 	end
 end
 SLASH_FREEUI1 = "/freeui"

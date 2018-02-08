@@ -2,9 +2,20 @@ local F, C, L = unpack(select(2, ...))
 
 local _G = _G
 
+local chatFont = {
+	C.font.chat,
+	14,
+	"OUTLINE"
+}
+
+
 DEFAULT_CHATFRAME_ALPHA = 0
 CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME -- speed up fading out
 CHAT_TAB_HIDE_DELAY = CHAT_TAB_SHOW_DELAY -- ditto
+
+for i = 1, 23 do
+	CHAT_FONT_HEIGHTS[i] = i+7
+end
 
 local hooks = {}
 local chatEvents = {
@@ -39,6 +50,85 @@ ChatTypeInfo.WHISPER.sticky = 1
 ChatTypeInfo.BN_WHISPER.sticky = 1
 ChatTypeInfo.CHANNEL.sticky = 1
 
+
+local eFrame = CreateFrame("frame","ChatEvent_Frame",UIParent)
+eFrame:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
+
+local function scrollChat(frame, delta)
+	--Faster Scroll
+	if IsControlKeyDown()  then
+		--Faster scrolling by triggering a few scroll up in a loop
+		if ( delta > 0 ) then
+			for i = 1,5 do frame:ScrollUp(); end;
+		elseif ( delta < 0 ) then
+			for i = 1,5 do frame:ScrollDown(); end;
+		end
+	elseif IsAltKeyDown() then
+		--Scroll to the top or bottom
+		if ( delta > 0 ) then
+			frame:ScrollToTop();
+		elseif ( delta < 0 ) then
+			frame:ScrollToBottom();
+		end
+	else
+		--Normal Scroll
+		if delta > 0 then
+			frame:ScrollUp()
+		elseif delta < 0 then
+			frame:ScrollDown()
+		end
+	end
+end
+
+function eFrame:PLAYER_LOGIN()
+	--turn off profanity filter
+	SetCVar("profanityFilter", 0)
+
+	--sticky channels
+	-- for k, v in pairs(StickyTypeChannels) do
+	--   ChatTypeInfo[k].sticky = v;
+	-- end
+
+	--toggle class colors
+	for i,v in pairs(CHAT_CONFIG_CHAT_LEFT) do
+		ToggleChatColorNamesByClassGroup(true, v.type)
+	end
+
+	--this is to toggle class colors for all the global channels that is not listed under CHAT_CONFIG_CHAT_LEFT
+	for iCh = 1, 15 do
+		ToggleChatColorNamesByClassGroup(true, "CHANNEL"..iCh)
+	end
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local n = ("ChatFrame%d"):format(i)
+		local f = _G[n]
+
+		if f then
+
+			--add font shadows
+			local font, size = f:GetFont()
+			f:SetFont(chatFont[1], size, chatFont[3])
+			-- f:SetShadowColor(0, 0, 0, 0)
+
+			--few changes
+			f:EnableMouseWheel(true)
+			f:SetScript('OnMouseWheel', scrollChat)
+			f:SetClampRectInsets(0,0,0,0)
+
+		end
+	end
+end
+
+local function EnableFading(i)
+	local chatFrameNumber = ("ChatFrame%d"):format(i);
+	local ChatFrameNumberFrame = _G[chatFrameNumber];
+	
+	ChatFrameNumberFrame:SetFading(true);
+	ChatFrameNumberFrame:SetTimeVisible(10);
+	ChatFrameNumberFrame:SetFadeDuration(10);
+end
+
+
 local function GetColor(className, isLocal)
 	if isLocal then
 		local found
@@ -57,12 +147,12 @@ local function GetColor(className, isLocal)
 end
 
 local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
-	local gameAccount = select(6, BNGetFriendInfoByID(id))
-	if gameAccount then
-		local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
-		if englishClass and englishClass ~= "" then
-			fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
-		end
+		local gameAccount = select(6, BNGetFriendInfoByID(id))
+		if gameAccount then
+			local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
+			if englishClass and englishClass ~= "" then
+				fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
+			end
 	end
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
@@ -113,11 +203,11 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, messa
 end)
 
 local function toggleDown(f)
-	if f:GetCurrentScroll() > 0 then
-		_G[f:GetName().."ButtonFrameBottomButton"]:Show()
-	else
-		_G[f:GetName().."ButtonFrameBottomButton"]:Hide()
-	end
+	-- if f:GetCurrentScroll()> 0 then
+	-- 	_G[f:GetName().."ButtonFrameBottomButton"]:Show()
+	-- else
+	_G[f:GetName().."ButtonFrameBottomButton"]:Hide()
+	-- end
 end
 
 local function reskinMinimize(f)
@@ -140,13 +230,13 @@ local function StyleWindow(f)
 	HideForever(_G[f.."ButtonFrameUpButton"])
 	HideForever(_G[f.."ButtonFrameDownButton"])
 
-	-- frame:HookScript("OnMessageScrollChanged", toggleDown)
+	--frame:HookScript("OnMessageScrollChanged", toggleDown)
 	frame:HookScript("OnShow", toggleDown)
 
 	frame:SetFading(false)
 
-	frame:SetFont(C.media.font2, 13, "THINOUTLINE")
-	frame:SetShadowOffset(0, 0, 0, 0)
+	-- frame:SetFont(chatFont, 14, "OUTLINE")
+	-- frame:SetShadowOffset(0, 0, 0, 0)
 
 	frame:SetMinResize(0,0)
 	frame:SetMaxResize(0,0)
@@ -154,16 +244,16 @@ local function StyleWindow(f)
 	frame.editBox:ClearAllPoints()
 	frame.editBox:SetPoint("BOTTOMLEFT",  _G.ChatFrame1, "TOPLEFT", -5, 18)
 	frame.editBox:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, "TOPRIGHT", 5, 18)
-	frame.editBox:SetFont(C.media.font2, 13, "THINOUTLINE")
-	frame.editBox.header:SetFont(C.media.font2, 13, "THINOUTLINE")
+	frame.editBox:SetFont(unpack(chatFont))
+	frame.editBox.header:SetFont(unpack(chatFont))
 	frame.editBox.header:SetShadowColor(0, 0, 0, 0)
 	frame.editBox:SetShadowColor(0, 0, 0, 0)
 
-	frame.editBox:SetAltArrowKeyMode(nil)
+	frame.editBox:SetAltArrowKeyMode(false)
 
 	_G[f.."EditBoxFocusLeft"]:SetAlpha(0)
-	_G[f.."EditBoxFocusRight"]:SetAlpha(0)
-	_G[f.."EditBoxFocusMid"]:SetAlpha(0)
+ 	_G[f.."EditBoxFocusRight"]:SetAlpha(0)
+ 	_G[f.."EditBoxFocusMid"]:SetAlpha(0)
 
 	local ebg = CreateFrame("Frame", nil, frame.editBox)
 	ebg:SetBackdrop({
@@ -281,59 +371,6 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	return arg2;
 end
 
---Copy when you shift click tab
-local lines = {}
-
-local frame = CreateFrame("Frame", "BCMCopyFrame", UIParent)
-frame:SetWidth(ChatFrame1:GetWidth() + 35)
-frame:SetHeight(350)
-frame:SetPoint("LEFT", UIParent, "LEFT", 50, 0)
-frame:SetFrameStrata("DIALOG")
-frame:Hide()
-
-F.CreateBD(frame)
-
-local editBox = CreateFrame("EditBox", "BCMCopyBox", frame)
-editBox:SetMultiLine(true)
-editBox:SetMaxLetters(20000)
-editBox:EnableMouse(true)
-editBox:SetAutoFocus(true)
-editBox:SetFont(C.media.font2, 13, "THINOUTLINE")
-editBox:SetWidth(ChatFrame1:GetWidth())
-editBox:SetScript("OnEscapePressed", function() frame:Hide() wipe(lines) end)
-
-local scrollArea = CreateFrame("ScrollFrame", "BCMCopyScroll", frame, "UIPanelScrollFrameTemplate")
-scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -8)
-scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
-scrollArea:SetScrollChild(editBox)
-
-local function GetLines(...)
-	local ct = 1
-	for i = select("#", ...), 1, -1 do
-		local region = select(i, ...)
-		if(region:GetObjectType()=="FontString") then
-			lines[ct] = gsub(tostring(region:GetText()), "\124T.-\124t", "")
-			ct = ct + 1
-		end
-	end
-	return ct - 1
-end
-
-local function Copy(cf)
-	local _, size = cf:GetFont()
-	FCF_SetChatWindowFontSize(cf, cf, 0.01)
-	local lineCt = GetLines(cf:GetRegions())
-	local text = table.concat(lines, "\n", 1, lineCt)
-	FCF_SetChatWindowFontSize(cf, cf, size)
-	frame:Show()
-	editBox:SetText(text)
-end
-
-ChatFrame1Tab:HookScript("OnClick", function()
-	if(IsShiftKeyDown()) then
-		Copy(ChatFrame1)
-	end
-end)
 
 -- Colour real ID links
 
@@ -385,3 +422,63 @@ end
 
 ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', AddLinkColors)
 ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER_INFORM', AddLinkColors)
+
+
+-- CHAT DROPDOWN MENU
+-- special thanks to Tekkub for tekPlayerMenu
+
+StaticPopupDialogs["COPYNAME"] = {
+	text = "COPY NAME",
+	button2 = CANCEL,
+	hasEditBox = true,
+    hasWideEditBox = true,
+	timeout = 0,
+	exclusive = 1,
+	hideOnEscape = 1,
+	EditBoxOnEscapePressed = function(self) self:GetParent():Hide() end,
+	whileDead = 1,
+	maxLetters = 255,
+}
+
+local function insertbefore(t, before, val)
+	for k,v in ipairs(t) do if v == before then return table.insert(t, k, val) end end
+	table.insert(t, val)
+end
+
+local clickers = {["COPYNAME"] = function(a1) Chat_DoCopyName(a1) end, ["WHO"] = SendWho, ["GUILD_INVITE"] = GuildInvite}
+
+UnitPopupButtons["COPYNAME"] = {text = "Copy Name", dist = 0}
+UnitPopupButtons["GUILD_INVITE"] = {text = "Guild Invite", dist = 0}
+UnitPopupButtons["WHO"] = {text = "Who", dist = 0}
+
+insertbefore(UnitPopupMenus["FRIEND"], "GUILD_PROMOTE", "GUILD_INVITE")
+insertbefore(UnitPopupMenus["FRIEND"], "IGNORE", "COPYNAME")
+insertbefore(UnitPopupMenus["FRIEND"], "IGNORE", "WHO")
+
+hooksecurefunc("UnitPopup_HideButtons", function()
+	local dropdownMenu = UIDROPDOWNMENU_INIT_MENU
+	for i,v in pairs(UnitPopupMenus[dropdownMenu.which]) do
+		if v == "GUILD_INVITE" then UnitPopupShown[i] = (not CanGuildInvite() or dropdownMenu.name == UnitName("player")) and 0 or 1
+		elseif clickers[v] then UnitPopupShown[i] = (dropdownMenu.name == UnitName("player") and 0) or 1 end
+	end
+end)
+
+hooksecurefunc("UnitPopup_OnClick", function(self)
+	local dropdownFrame = UIDROPDOWNMENU_INIT_MENU
+	local button = self.value
+	if clickers[button] then clickers[button](dropdownFrame.name) end
+	PlaySound("1115")
+end)
+
+function Chat_DoCopyName(name)
+	local dialog = StaticPopup_Show("COPYNAME")
+	local editbox = _G[dialog:GetName().."EditBox"]
+	editbox:SetText(name or "")
+	editbox:SetFocus()
+	editbox:HighlightText()
+	local button = _G[dialog:GetName().."Button2"]
+	button:ClearAllPoints()
+	button:SetPoint("CENTER", editbox, "CENTER", 0, -30)
+end
+
+if IsLoggedIn() then eFrame:PLAYER_LOGIN() else eFrame:RegisterEvent("PLAYER_LOGIN") end

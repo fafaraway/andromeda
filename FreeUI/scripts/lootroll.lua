@@ -5,6 +5,13 @@ local F, C, L = unpack(select(2, ...))
 UIParent:UnregisterEvent("START_LOOT_ROLL")
 UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
 
+local locale = GetLocale()
+local lootrollFont = {
+		C.font.normal,
+		12,
+		"OUTLINE"
+	}
+
 local width = 200
 local iconsize = 32
 local grouplootlist, grouplootframes = {}, {}
@@ -85,7 +92,7 @@ end
 local addon = CreateFrame("Frame", "sGroupLoot", UIParent)
 addon:RegisterEvent("START_LOOT_ROLL")
 addon:SetScript("OnEvent", OnEvent)
-addon:SetPoint("RIGHT", -50, 0)
+addon:SetPoint("CENTER", -400, 200)
 addon:SetWidth(width)
 addon:SetHeight(24)
 
@@ -93,13 +100,13 @@ function addon:UpdateGroupLoot()
 	sort(grouplootlist, SortFunc)
 	for index, value in next, grouplootframes do value:Hide() end
 
-	if MultiBarLeft:IsShown() then
-		addon:SetPoint("RIGHT", -150, 0)
-	elseif MultiBarRight:IsShown() then
-		addon:SetPoint("RIGHT", -100, 0)
-	else
-		addon:SetPoint("RIGHT", -50, 0)
-	end
+	-- if MultiBarLeft:IsShown() then
+	-- 	addon:SetPoint("RIGHT", -150, 0)
+	-- elseif MultiBarRight:IsShown() then
+	-- 	addon:SetPoint("RIGHT", -100, 0)
+	-- else
+	-- 	addon:SetPoint("RIGHT", -50, 0)
+	-- end
 
 	local frame
 	for index, value in next, grouplootlist do
@@ -117,6 +124,7 @@ function addon:UpdateGroupLoot()
 			frame:SetScript("OnEnter", FrameOnEnter)
 
 			F.CreateBD(frame)
+			F.CreateSD(frame)
 
 			frame.pass = CreateFrame("Button", nil, frame)
 			frame.pass.type = 0
@@ -164,6 +172,13 @@ function addon:UpdateGroupLoot()
 			frame.text = F.CreateFS(frame, C.FONT_SIZE_NORMAL, "LEFT")
 			frame.text:SetPoint("LEFT")
 			frame.text:SetPoint("RIGHT", frame.need, "LEFT")
+
+
+			if locale == "zhCN" or locale == "zhTW" then
+				frame.text:SetFont(unpack(lootrollFont))
+			end
+
+			frame.text:SetWordWrap(false)
 
 			local iconFrame = CreateFrame("Frame", nil, frame)
 			iconFrame:SetHeight(iconsize)

@@ -6,6 +6,13 @@ local holdtime = 0.52 -- hold time (seconds)
 local fadeintime = 0.08 -- fadein time (seconds)
 local fadeouttime = 0.16 -- fade out time (seconds)
 
+local locale = GetLocale()
+local errorsFont = {
+		C.font.normal,
+		12,
+		"OUTLINE"
+	}
+
 UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
 
 local firstErrorFrame = CreateFrame("Frame", "FreeUIErrors1", UIParent)
@@ -40,9 +47,18 @@ Error:SetScript("OnEvent", function(_, _, code, msg)
 		firstErrorFrame.text:SetText(msg)
 		FadingFrame_Show(firstErrorFrame)
 		state = 1
-	 else
+	else
 		secondErrorFrame.text:SetText(msg)
 		FadingFrame_Show(secondErrorFrame)
 		state = 0
-	 end
+	end
+
+	if locale == "zhCN" or locale == "zhTW" then
+		firstErrorFrame.text:SetFont(unpack(errorsFont))
+		secondErrorFrame.text:SetFont(unpack(errorsFont))
+		secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -95)
+
+		UIErrorsFrame:SetFont(unpack(errorsFont))
+	end
 end)
+

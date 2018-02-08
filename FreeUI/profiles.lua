@@ -22,3 +22,23 @@ local F, C, L = unpack(select(2, ...))
 local name = C.myName
 local class = C.myClass
 local realm = C.myRealm
+
+-- C.font.normal = "Fonts\\ExpresswayRg-Bold.otf"
+-- C.font.header = "Fonts\\FF\\header.ttf"
+-- C.font.damage = "Fonts\\FF\\damage.ttf"
+-- C.font.chat = "Fonts\\FF\\chat.ttf"
+
+C.unitframes.power_height = 1
+C.unitframes.altpower_height = 1
+C.unitframes.classPower_height = 2
+if UnitName("player") == "單方只一味" or UnitName("player") == "Maginary" then
+	C.actionbars.mouseOver = true
+end
+if UnitName("player") == "盡在不言中" then
+	C.unitframes.castbarSeparate = true
+end
+
+
+
+
+

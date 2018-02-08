@@ -85,39 +85,40 @@ end
 
 -- [[ Resolution support ]]
 
-C.RESOLUTION_SMALL = 1
-C.RESOLUTION_MEDIUM = 2
-C.RESOLUTION_LARGE = 3
-
-C.resolution = 0
-
 local updateScale
 updateScale = function(event)
-	if event == "VARIABLES_LOADED" then
-		local height = GetScreenHeight()
 
-		if height <= 900 then
-			C.resolution = C.RESOLUTION_SMALL
-		elseif height < 1200 then
-			C.resolution = C.RESOLUTION_MEDIUM
-		else
-			C.resolution = C.RESOLUTION_LARGE
-		end
-	end
 
 	if C.general.uiScaleAuto then
-		if not InCombatLockdown() then
-			-- we don't bother with the cvar because of high resolution shenanigans
-			UIParent:SetScale(768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
-			ChatFrame1:ClearAllPoints()
-			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 30, 30)
-		else
-			F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
+
+		local pixelScale
+		local floor = _G.math.floor
+		local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
+
+		pixelScale = 768 / pysHeight
+		local cvarScale, parentScale = _G.tonumber(_G.GetCVar("uiscale")), floor(_G.UIParent:GetScale() * 100 + 0.5) / 100
+
+		-- if cvarScale ~= pixelScale then
+		-- 	--[[ Setting the `uiScale` cvar will taint the ObjectiveTracker, and by extention the
+		-- 		WorldMap and map action button. As such, we only use that if we absolutly have to.]]
+		-- 	_G.SetCVar("uiScale", _G.max(pixelScale, 0.64))
+		-- end
+		if parentScale ~= pixelScale then
+			_G.UIParent:SetScale(pixelScale)
 		end
 
-		if event == "PLAYER_REGEN_ENABLED" then
-			F.UnregisterEvent("PLAYER_REGEN_ENABLED", updateScale)
-		end
+		-- if not InCombatLockdown() then		
+		-- 	-- we don't bother with the cvar because of high resolution shenanigans
+		-- 	-- UIParent:SetScale(768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
+		-- 	UIParent:SetScale(768/pysHeight)
+			
+		-- else
+		-- 	F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
+		-- end
+
+		-- if event == "PLAYER_REGEN_ENABLED" then
+		-- 	F.UnregisterEvent("PLAYER_REGEN_ENABLED", updateScale)
+		-- end
 	end
 end
 

@@ -60,11 +60,9 @@ FreeUIStatsButton:HookScript("OnEnter", function()
 	sort(addons, order)
 
 	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
-	if C.bags.enable and BagsHolder:IsShown() then
-		GameTooltip:SetPoint("BOTTOMRIGHT", BagsHolder, "BOTTOMLEFT", 0, -1)
-	else
-		GameTooltip:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -1, -2)
-	end
+
+	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -31)
+
 	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), r, g, b, 1, 1, 1)
 
 	GameTooltip:AddLine(" ")

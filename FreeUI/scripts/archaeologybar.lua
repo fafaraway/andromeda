@@ -6,11 +6,7 @@ local frame, xpBar
 local customPosition = false
 
 local function setPosition()
-	if xpBar:IsShown() then
-		frame:SetPoint("BOTTOM", xpBar, "TOP", 0, -8)
-	else
-		frame:SetPoint("BOTTOM", Minimap, "TOP", 0, -8)
-	end
+	frame:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 50)
 end
 
 local f = CreateFrame("Frame")
@@ -29,7 +25,7 @@ f:SetScript("OnEvent", function(self, _, addon)
 	F.SetFS(frame.BarTitle)
 	frame.BarTitle:SetPoint("CENTER", 0, 13)
 
-	local width = Minimap:GetWidth()
+	local width = C.unitframes.player_width
 	bar:SetWidth(width)
 	frame.Flash:SetWidth(width + 22)
 
@@ -38,11 +34,11 @@ f:SetScript("OnEvent", function(self, _, addon)
 
 	F.CreateBDFrame(bar)
 
-	xpBar = FreeUIExpBar:GetParent()
+--	xpBar = FreeUIExpBar:GetParent()
 
 	frame:HookScript("OnShow", setPosition)
-	xpBar:HookScript("OnShow", setPosition)
-	xpBar:HookScript("OnHide", setPosition)
+--	xpBar:HookScript("OnShow", setPosition)
+--	xpBar:HookScript("OnHide", setPosition)
 
 	hooksecurefunc(frame, "SetPoint", function()
 		if not customPosition then

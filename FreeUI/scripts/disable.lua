@@ -10,3 +10,16 @@ GameMenuFrame:HookScript("OnShow", function(self)
 	GameMenuButtonStore:Hide()
 	GameMenuButtonWhatsNew:SetPoint("TOP", GameMenuButtonHelp, "BOTTOM", 0, -1)
 end)
+
+
+-- disable new talent alert
+local f = CreateFrame("Frame")
+function f:OnEvent(event)
+	hooksecurefunc("MainMenuMicroButton_ShowAlert", function(alert)
+		alert:Hide()
+	end)
+end
+
+f:RegisterEvent("ADDON_LOADED")
+f:RegisterEvent("PLAYER_LEVEL_UP")
+f:SetScript("OnEvent", f.OnEvent)

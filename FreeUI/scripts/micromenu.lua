@@ -1,6 +1,8 @@
 local F, C = unpack(FreeUI)
 
-local menuFrame = CreateFrame("Frame", "FreeUI_MicroMenu", UIParent, "UIDropDownMenuTemplate")
+local top = C.menubar.topPosition
+
+local menuFrame = CreateFrame("Frame", "FreeUI_MicroMenu", UIParent, "DropDownMenuTemplate")
 
 local microMenu = {
 	{text = CHARACTER_BUTTON, notCheckable = true, func = function() ToggleCharacter("PaperDollFrame") end},
@@ -51,5 +53,10 @@ end
 F.RegisterEvent("ADDON_LOADED", taint)
 
 F.MicroMenu = function()
-	EasyMenu(microMenu, menuFrame, "UIParent", 30, 220, "MENU")
+	if top then
+		menuFrame:SetPoint("TOPLEFT", UIParent)
+	else
+		menuFrame:SetPoint("BOTTOMLEFT", UIParent)
+	end
+   EasyMenu(microMenu, menuFrame, menuFrame, 0, 0, "MENU")
 end

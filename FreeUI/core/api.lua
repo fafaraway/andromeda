@@ -1,56 +1,25 @@
 local F, C = unpack(select(2, ...))
 
--- [[ Constants ]]
-
-C.media = {
-	["arrowUp"] = "Interface\\AddOns\\FreeUI\\media\\arrow-up-active",
-	["arrowDown"] = "Interface\\AddOns\\FreeUI\\media\\arrow-down-active",
-	["arrowLeft"] = "Interface\\AddOns\\FreeUI\\media\\arrow-left-active",
-	["arrowRight"] = "Interface\\AddOns\\FreeUI\\media\\arrow-right-active",
-	["backdrop"] = "Interface\\ChatFrame\\ChatFrameBackground", -- default backdrop
-	["checked"] = "Interface\\AddOns\\FreeUI\\media\\CheckButtonHilight", -- replace default checked texture
-	["font"] = "Interface\\AddOns\\FreeUI\\media\\PFRondaSeven.ttf", -- default pixel font
-	["font2"] = "Interface\\AddOns\\FreeUI\\media\\font.ttf", -- default font
-	["glow"] = "Interface\\AddOns\\FreeUI\\media\\glowTex", -- glow/shadow texture
-	["gradient"] = "Interface\\AddOns\\FreeUI\\media\\gradient",
-	["roleIcons"] = "Interface\\Addons\\FreeUI\\media\\UI-LFG-ICON-ROLES",
-	["texture"] = "Interface\\AddOns\\FreeUI\\media\\statusbar", -- statusbar texture
-}
+local locale = GetLocale()
 
 local mainFont
 
 if C.appearance.fontUseAlternativeFont then
-	mainFont = C.media.font2
-elseif GetLocale() == "ruRU" then
-	mainFont = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+	mainFont = C.font.normal
 else
-	mainFont = C.media.font
+	mainFont = C.font.pixel
 end
 
 F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
 	if C.appearance.fontUseAlternativeFont then
-		mainFont = C.media.font2
-	elseif GetLocale() == "ruRU" then
-		mainFont = "Interface\\AddOns\\FreeUI\\media\\iFlash705.ttf"
+		mainFont = C.font.normal
 	else
-		mainFont = C.media.font
+		mainFont = C.font.pixel
 	end
 end)
 
-C.classcolours = {
-	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
-	["DEMONHUNTER"] = {r = 0.64, g = 0.19, b = 0.79},
-	["DRUID"] = {r = 1, g = 0.49, b = 0.04},
-	["HUNTER"] = {r = 0.58, g = 0.86, b = 0.49},
-	["MAGE"] = {r = 0, g = 0.76, b = 1},
-	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
-	["PALADIN"] = {r = 1, g = 0.22, b = 0.52},
-	["PRIEST"] = {r = 0.8, g = 0.87, b = .9},
-	["ROGUE"] = {r = 1, g = 0.91, b = 0.2},
-	["SHAMAN"] = {r = 0, g = 0.6, b = 0.6},
-	["WARLOCK"] = {r = 0.6, g = 0.47, b = 0.85},
-	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
-}
+C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+
 
 local _, class = UnitClass("player")
 if C.appearance.colourScheme == 2 then
@@ -94,8 +63,20 @@ local CreateBD = function(f, a)
 		edgeFile = C.media.backdrop,
 		edgeSize = 1,
 	})
-	f:SetBackdropColor(0, 0, 0, a or .5)
+	f:SetBackdropColor(.06, .06, .06, a or .8)
 	f:SetBackdropBorderColor(0, 0, 0)
+
+	if not a then
+		f.tex = f.tex or f:CreateTexture(nil, "BACKGROUND", nil, 1)
+		f.tex:SetTexture([[Interface\AddOns\FreeUI\media\StripesThin]], true, true)
+		f.tex:SetAlpha(.45)
+		f.tex:SetAllPoints()
+		f.tex:SetHorizTile(true)
+		f.tex:SetVertTile(true)
+		f.tex:SetBlendMode("ADD")
+	else
+		f:SetBackdropColor(0, 0, 0, a)
+	end
 end
 
 F.CreateBD = CreateBD
@@ -115,25 +96,25 @@ end
 
 F.CreateSD = function(parent, size, r, g, b, alpha, offset)
 	local sd = CreateFrame("Frame", nil, parent)
-	sd.size = size or 5
-	sd.offset = offset or 0
+	sd.size = size or 4
+	sd.offset = offset or -1
 	sd:SetBackdrop({
 		edgeFile = C.media.glow,
 		edgeSize = sd.size,
 	})
-	sd:SetPoint("TOPLEFT", parent, -sd.size - 1 - sd.offset, sd.size + 1 + sd.offset)
-	sd:SetPoint("BOTTOMRIGHT", parent, sd.size + 1 + sd.offset, -sd.size - 1 - sd.offset)
-	sd:SetBackdropBorderColor(r or 0, g or 0, b or 0)
-	sd:SetAlpha(alpha or 1)
+	sd:SetPoint("TOPLEFT", parent, -sd.size - 0 - sd.offset, sd.size + 0 + sd.offset)
+	sd:SetPoint("BOTTOMRIGHT", parent, sd.size + 0 + sd.offset, -sd.size - 0 - sd.offset)
+	sd:SetBackdropBorderColor(r or .03, g or .03, b or .03)
+	sd:SetAlpha(alpha or .6)
 end
 
 F.CreateFS = function(parent, fontSize, justify)
-    local f = parent:CreateFontString(nil, "OVERLAY")
-    F.SetFS(f, fontSize)
+	local f = parent:CreateFontString(nil, "OVERLAY")
+	F.SetFS(f, fontSize)
 
-    if justify then f:SetJustifyH(justify) end
+	if justify then f:SetJustifyH(justify) end
 
-    return f
+	return f
 end
 
 F.SetFS = function(fontObject, fontSize)
@@ -184,13 +165,14 @@ F.CreatePulse = function(frame) -- pulse function originally by nightcracker
 end
 
 local r, g, b = unpack(C.class)
-local buttonR, buttonG, buttonB, buttonA = .3, .3, .3, .3
+local buttonR, buttonG, buttonB, buttonA = .1, .1, .1, .8
 
 local CreateGradient = function(f)
 	local tex = f:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(C.media.gradient)
+	tex:SetTexture(C.media.backdrop)
+--	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
@@ -198,19 +180,22 @@ end
 
 F.CreateGradient = CreateGradient
 
-local function colourButton(f)
+local function StartGlow(f)
 	if not f:IsEnabled() then return end
-
-	f:SetBackdropColor(r, g, b, buttonA)
+	f:SetBackdropColor(r, g, b, .1)
 	f:SetBackdropBorderColor(r, g, b)
+	f.glow:SetAlpha(1)
+	F.CreatePulse(f.glow)
 end
 
-local function clearButton(f)
+local function StopGlow(f)
 	f:SetBackdropColor(0, 0, 0, 0)
 	f:SetBackdropBorderColor(0, 0, 0)
+	f.glow:SetScript("OnUpdate", nil)
+	f.glow:SetAlpha(0)
 end
 
-F.Reskin = function(f, noHighlight)
+F.Reskin = function(f, noGlow)
 	f:SetNormalTexture("")
 	f:SetHighlightTexture("")
 	f:SetPushedTexture("")
@@ -224,11 +209,21 @@ F.Reskin = function(f, noHighlight)
 
 	F.CreateBD(f, 0)
 
-	f.tex = CreateGradient(f)
+	CreateGradient(f)
 
-	if not noHighlight then
-		f:HookScript("OnEnter", colourButton)
- 		f:HookScript("OnLeave", clearButton)
+	if not noGlow then
+		f.glow = CreateFrame("Frame", nil, f)
+		f.glow:SetBackdrop({
+			edgeFile = C.media.glow,
+			edgeSize = 5,
+		})
+		f.glow:SetPoint("TOPLEFT", -6, 6)
+		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
+		f.glow:SetBackdropBorderColor(r, g, b)
+		f.glow:SetAlpha(0)
+
+		f:HookScript("OnEnter", StartGlow)
+		f:HookScript("OnLeave", StopGlow)
 	end
 end
 
@@ -352,14 +347,16 @@ F.ReskinDropDown = function(f)
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bg, 0)
 
-	local gradient = CreateGradient(f)
+	local gradient = F.CreateGradient(f)
 	gradient:SetPoint("TOPLEFT", bg, 1, -1)
 	gradient:SetPoint("BOTTOMRIGHT", bg, -1, 1)
 
 	local down = _G[frame.."Button"]
+
 	down:SetSize(20, 20)
 	down:ClearAllPoints()
 	down:SetPoint("TOPRIGHT", bg)
+
 	F.Reskin(down, true)
 
 	down:SetDisabledTexture(C.media.backdrop)
@@ -377,19 +374,20 @@ F.ReskinDropDown = function(f)
 
 	down:HookScript("OnEnter", colourArrow)
 	down:HookScript("OnLeave", clearArrow)
+
 end
 
 local function colourClose(f)
 	if f:IsEnabled() then
 		for _, pixel in pairs(f.pixels) do
-			pixel:SetVertexColor(r, g, b)
+			pixel:SetColorTexture(r, g, b)
 		end
 	end
 end
 
 local function clearClose(f)
 	for _, pixel in pairs(f.pixels) do
-		pixel:SetVertexColor(1, 1, 1)
+		pixel:SetColorTexture(1, 1, 1)
 	end
 end
 
@@ -400,7 +398,7 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 		f:ClearAllPoints()
 		f:SetPoint(a1, p, a2, x, y)
 	else
-		f:SetPoint("TOPRIGHT", -6, -6)
+		f:SetPoint("TOPRIGHT", -4, -4)
 	end
 
 	f:SetNormalTexture("")
@@ -436,7 +434,7 @@ F.ReskinClose = function(f, a1, p, a2, x, y)
 	end
 
 	f:HookScript("OnEnter", colourClose)
- 	f:HookScript("OnLeave", clearClose)
+	f:HookScript("OnLeave", clearClose)
 end
 
 F.ReskinInput = function(f, height, width)
@@ -483,7 +481,7 @@ F.ReskinArrow = function(f, direction)
 	f:HookScript("OnLeave", clearArrow)
 end
 
-F.ReskinCheck = function(f, isTriState)
+F.ReskinCheck = function(f)
 	f:SetNormalTexture("")
 	f:SetPushedTexture("")
 	f:SetHighlightTexture(C.media.texture)
@@ -505,25 +503,6 @@ F.ReskinCheck = function(f, isTriState)
 	local ch = f:GetCheckedTexture()
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(r, g, b)
-
-	if isTriState then
-		function f:SetTriState(state)
-			if ( not state or state == 0 ) then
-				-- nil or 0 means not checked
-				self:SetChecked(false)
-			else
-				ch:SetDesaturated(true)
-				self:SetChecked(true)
-				if ( state == 2 ) then
-					-- 2 is a normal check
-					ch:SetVertexColor(r, g, b)
-				else
-					-- 1 is a dark check
-					ch:SetVertexColor(r * 0.5, g * 0.5, b * 0.5)
-				end
-			end
-		end
-	end
 end
 
 local function colourRadio(f)
@@ -539,10 +518,17 @@ F.ReskinRadio = function(f)
 	f:SetHighlightTexture("")
 	f:SetCheckedTexture(C.media.texture)
 
+	f:SetDisabledCheckedTexture(C.media.backdrop)
+
 	local ch = f:GetCheckedTexture()
 	ch:SetPoint("TOPLEFT", 4, -4)
 	ch:SetPoint("BOTTOMRIGHT", -4, 4)
 	ch:SetVertexColor(r, g, b, .6)
+
+	local dch = f:GetDisabledCheckedTexture()
+	dch:SetPoint("TOPLEFT", 4, -4)
+	dch:SetPoint("BOTTOMRIGHT", -4, 4)
+	dch:SetVertexColor(.7, .7, .7, .6)
 
 	local bd = CreateFrame("Frame", nil, f)
 	bd:SetPoint("TOPLEFT", 3, -3)
@@ -560,6 +546,7 @@ F.ReskinRadio = function(f)
 end
 
 F.ReskinSlider = function(f)
+	if f == nil then return end
 	f:SetBackdrop(nil)
 	f.SetBackdrop = F.dummy
 
@@ -625,6 +612,7 @@ F.SetBD = function(f, x, y, x2, y2)
 	end
 	bg:SetFrameLevel(f:GetFrameLevel()-1)
 	F.CreateBD(bg)
+	F.CreateSD(bg)
 end
 
 F.ReskinPortraitFrame = function(f, isButtonFrame)
@@ -657,6 +645,7 @@ F.ReskinPortraitFrame = function(f, isButtonFrame)
 	end
 
 	F.CreateBD(f)
+	F.CreateSD(f)
 end
 
 F.CreateBDFrame = function(f, a)
@@ -735,7 +724,7 @@ F.ReskinNavBar = function(f)
 	overflowButton:HookScript("OnLeave", clearArrow)
 end
 
-F.ReskinGarrisonPortrait = function(portrait, isTroop)
+F.ReskinGarrisonPortrait = function(portrait)
 	portrait:SetSize(portrait.Portrait:GetSize())
 	F.CreateBD(portrait, 1)
 
@@ -745,21 +734,70 @@ F.ReskinGarrisonPortrait = function(portrait, isTroop)
 	portrait.PortraitRing:Hide()
 	portrait.PortraitRingQuality:SetTexture("")
 	portrait.PortraitRingCover:SetTexture("")
-	portrait.LevelBorder:SetAlpha(0)
+ 	portrait.LevelBorder:SetAlpha(0)
 
-	if not isTroop then
-		local lvlBG = portrait:CreateTexture(nil, "BORDER")
-		lvlBG:SetColorTexture(0, 0, 0, 0.5)
-		lvlBG:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", 1, 12)
-		lvlBG:SetPoint("BOTTOMRIGHT", portrait, -1, 1)
+	local lvlBG = portrait:CreateTexture(nil, "BORDER")
+ 	lvlBG:SetColorTexture(0, 0, 0, 0.5)
+ 	lvlBG:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", 1, 12)
+ 	lvlBG:SetPoint("BOTTOMRIGHT", portrait, -1, 1)
 
-		local level = portrait.Level
-		level:ClearAllPoints()
-		level:SetPoint("CENTER", lvlBG)
-	end
+ 	local level = portrait.Level
+	level:ClearAllPoints()
+	level:SetPoint("CENTER", lvlBG)
 end
 
 F.ReskinIcon = function(icon)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	return F.CreateBG(icon)
 end
+
+F.CreateMF = function(f)
+	f:EnableMouse(true)
+	f:SetMovable(true)
+	f:SetUserPlaced(true)
+	f:SetClampedToScreen(true)
+	f:SetScript("OnMouseDown", function(self) self:StartMoving() end)
+	f:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
+end
+
+F.CreateGT = function(f, text, cc)
+	f:SetScript("OnEnter", function(self)
+		GameTooltip:Hide()
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
+		GameTooltip:ClearLines()
+		if cc then
+			GameTooltip:AddLine(text, cr, cg, cb)
+		else
+			GameTooltip:AddLine(text)
+		end
+		GameTooltip:Show()
+	end)
+	f:SetScript("OnLeave", GameTooltip_Hide)
+end
+
+F.CreateAT = function(f, name)
+	f:SetScript("OnEnter", function(self)
+		GameTooltip:Hide()
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
+		GameTooltip:ClearLines()
+		GameTooltip:SetUnitAura("player", name)
+		GameTooltip:Show()
+	end)
+	f:SetScript("OnLeave", GameTooltip_Hide)
+end
+
+-- Numberize
+F.Numb = function(n)
+	if n >= 1e9 then
+		return ("%.2fb"):format(n / 1e9)
+	elseif n >= 1e6 then
+		return ("%.1fm"):format(n / 1e6)
+	elseif n >= 1e3 then
+		return ("%.1fk"):format(n / 1e3)
+	else
+		return ("%.0f"):format(n)
+	end
+end
+
+DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
+DEFAULT_CHAT_FRAME:AddMessage("Type |cffffffff/FreeUI|r for more information.", unpack(C.class))

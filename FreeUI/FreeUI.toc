@@ -1,9 +1,8 @@
-## Interface: 70100
-## Title: FreeUI
+## Interface: 70300
+## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r
 ## Notes: Minimalistic user interface.
-## Author: Haleth/Lightsword
-## Version: 9.0.3
-## RequiredDeps: Blizzard_CombatText
+## Author: Haleth/Lightsword (Modified/updated by Solor)
+## Version: 70300.04
 ## OptionalDeps: Clique, FreeUI_Options, MyRolePlay, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
@@ -18,132 +17,9 @@ core\api.lua
 core\slash.lua
 core\notifications.lua
 
-oUF\oUF.xml
+libraries\oUF\oUF.xml
+libraries\load_libs.xml
 
-scripts\actionbars.lua
-scripts\archaeologybar.lua
-scripts\arena.lua
-scripts\automation.lua
-scripts\bags.lua
-scripts\bubbles.lua
-scripts\buffreminder.lua
-scripts\buffs.lua
-scripts\bufftracker.lua
-scripts\buttons.lua
-scripts\chat.lua
-scripts\chattabs.lua
-scripts\colours.lua
-scripts\combattext.lua
-scripts\combo.lua
-scripts\cooldowns.lua
-scripts\dbm.lua
-scripts\disable.lua
-scripts\durability.lua
-scripts\errors.lua
-scripts\events.lua
-scripts\expbar.lua
-scripts\fonts.lua
-scripts\globals.lua
-scripts\interrupt.lua
-scripts\loot.lua
-scripts\lootroll.lua
-scripts\mail.lua
-scripts\map.lua
-scripts\marking.lua
-scripts\menubar.lua
-scripts\micromenu.lua
-scripts\minimap.lua
-scripts\mirrorbars.lua
-scripts\moneytext.lua
-scripts\nameplates.lua
-scripts\objectivetracker.lua
-scripts\petbattles.lua
-scripts\queuetimer.lua
-scripts\rangecolor.lua
-scripts\rarealert.lua
-scripts\role.lua
-scripts\stats.lua
-scripts\tekkrush.lua
-scripts\threatmeter.lua
-scripts\tooltip.lua
-scripts\unitframes.lua
-scripts\worldmarker.lua
-scripts\worldstateframe.lua
+scripts\load_scripts.xml
 
-class\paladin.lua
-
-theme\theme.lua
-
-theme\AddOns\Blizzard_AchievementUI.lua
-theme\AddOns\Blizzard_ArchaeologyUI.lua
-theme\AddOns\Blizzard_AuctionUI.lua
-theme\AddOns\Blizzard_BarbershopUI.lua
-theme\AddOns\Blizzard_BattlefieldMinimap.lua
-theme\AddOns\Blizzard_BindingUI.lua
-theme\AddOns\Blizzard_BlackMarketUI.lua
-theme\AddOns\Blizzard_Calendar.lua
-theme\AddOns\Blizzard_ChallengesUI.lua
-theme\AddOns\Blizzard_Collections.lua
-theme\AddOns\Blizzard_DeathRecap.lua
-theme\AddOns\Blizzard_DebugTools.lua
-theme\AddOns\Blizzard_EncounterJournal.lua
-theme\AddOns\Blizzard_GarrisonTemplates.lua.lua
-theme\AddOns\Blizzard_GarrisonUI.lua
-theme\AddOns\Blizzard_GlyphUI.lua
-theme\AddOns\Blizzard_GMSurveyUI.lua
-theme\AddOns\Blizzard_GuildBankUI.lua
-theme\AddOns\Blizzard_GuildControlUI.lua
-theme\AddOns\Blizzard_GuildUI.lua
-theme\AddOns\Blizzard_InspectUI.lua
-theme\AddOns\Blizzard_ItemSocketingUI.lua
-theme\AddOns\Blizzard_ItemUpgradeUI.lua
-theme\AddOns\Blizzard_LookingForGuildUI.lua
-theme\AddOns\Blizzard_MacroUI.lua
-theme\AddOns\Blizzard_PVPUI.lua
-theme\AddOns\Blizzard_QuestChoice.lua
-theme\AddOns\Blizzard_TalentUI.lua
-theme\AddOns\Blizzard_TimeManager.lua
-theme\AddOns\Blizzard_TradeSkillUI.lua
-theme\AddOns\Blizzard_TrainerUI.lua
-theme\AddOns\Blizzard_VoidStorageUI.lua
-theme\AddOns\DBM-GUI.lua
-theme\AddOns\KayrChat.lua
-
-theme\FrameXML\AlertFrames.lua
-theme\FrameXML\BankFrame.lua
-theme\FrameXML\CharacterFrame.lua
-theme\FrameXML\ChatConfigFrame.lua
-theme\FrameXML\ContainerFrame.lua
-theme\FrameXML\DressUpFrames.lua
-theme\FrameXML\EquipmentFlyout.lua
-theme\FrameXML\GarrisonFollowerTooltip.lua
-theme\FrameXML\InterfaceOptionsFrame.lua
-theme\FrameXML\LFDFrame.lua
-theme\FrameXML\LFGFrame.lua
-theme\FrameXML\LFGList.lua
-theme\FrameXML\LFRFrame.lua
-theme\FrameXML\LootHistory.lua
-theme\FrameXML\MailFrame.lua
-theme\FrameXML\MerchantFrame.lua
-theme\FrameXML\ModelPreviewFrame.lua
-theme\FrameXML\NavigationBar.lua
-theme\FrameXML\PaperDollFrame.lua
-theme\FrameXML\ProductChoiceFrame.lua
-theme\FrameXML\PVEFrame.lua
-theme\FrameXML\QuestFrame.lua
-theme\FrameXML\QuestInfo.lua
-theme\FrameXML\QuestMapFrame.lua
-theme\FrameXML\QueueStatusFrame.lua
-theme\FrameXML\RaidFinder.lua
-theme\FrameXML\RecruitAFriendFrame.lua
-theme\FrameXML\RolePoll.lua
-theme\FrameXML\ScenarioFinder.lua
-theme\FrameXML\SpellBookFrame.lua
-theme\FrameXML\SplashFrame.lua
-theme\FrameXML\StaticPopup.lua
-theme\FrameXML\TaxiFrame.lua
-theme\FrameXML\VideoOptionsFrame.lua
-theme\FrameXML\WorldMapFrame.lua
-theme\FrameXML\WorldStateFrame.lua
-
-theme\SharedXML\AddonList.lua
+_dev\test.lua

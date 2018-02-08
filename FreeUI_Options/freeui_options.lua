@@ -110,9 +110,9 @@ local function toggle(self)
 	local checked = self:GetChecked()
 
 	if checked then
-		PlaySound("igMainMenuOptionCheckBoxOn")
+		PlaySound("856")
 	else
-		PlaySound("igMainMenuOptionCheckBoxOff")
+		PlaySound("857")
 	end
 
 	SaveValue(self, checked)
@@ -172,7 +172,7 @@ local function toggleRadio(self)
 	self:SetChecked(true) -- don't allow deselecting
 	self.isChecked = true
 
-	PlaySound("igMainMenuOptionCheckBoxOn")
+	PlaySound("856")
 
 	SaveValue(self, self.index)
 
@@ -617,17 +617,25 @@ init:SetScript("OnEvent", function()
 
 	local FreeUIOptionsPanel = FreeUIOptionsPanel
 
-	if C.unitframes.enable then
+	--[[if C.unitframes.enable then -- cause portrait issue, disable it for now
 		FreeUIOptionsPanel:HookScript("OnShow", function()
 			oUF_FreePlayer:SetAlpha(0)
 			oUF_FreeTarget:SetAlpha(0)
+			oUF_FreePet:SetAlpha(0)
+			oUF_FreeTargetTarget:SetAlpha(0)
+			oUF_FreeFocus:SetAlpha(0)
+			oUF_FreeFocusTarget:SetAlpha(0)
 		end)
 
 		FreeUIOptionsPanel:HookScript("OnHide", function()
 			oUF_FreePlayer:SetAlpha(1)
 			oUF_FreeTarget:SetAlpha(1)
+			oUF_FreePet:SetAlpha(1)
+			oUF_FreeTargetTarget:SetAlpha(1)
+			oUF_FreeFocus:SetAlpha(1)
+			oUF_FreeFocusTarget:SetAlpha(1)
 		end)
-	end
+	end]]
 
 	local resetFrame = FreeUIOptionsPanel.resetFrame
 	local layout = FreeUIOptionsPanel.unitframes.Layout
@@ -666,16 +674,14 @@ init:SetScript("OnEvent", function()
 		displaySettings()
 	end)
 
-	layout:SetText((FreeUIConfig.layout == 2) and "Dps/Tank Layout" or "Healer Layout")
-	layout:SetScript("OnClick", function()
-		FreeUIConfig.layout = (FreeUIConfig.layout == 2) and 1 or 2
-		ReloadUI()
-	end)
-
 	F.CreateBD(FreeUIOptionsPanel)
 	F.CreateBD(FreeUIOptionsPanel.popup)
 	F.CreateBD(FreeUIOptionsPanel.credits)
 	F.CreateBD(resetFrame)
+	F.CreateSD(FreeUIOptionsPanel)
+	F.CreateSD(FreeUIOptionsPanel.popup)
+	F.CreateSD(FreeUIOptionsPanel.credits)
+	F.CreateSD(resetFrame)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinClose(FreeUIOptionsPanel.credits.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.ProfileBox)
