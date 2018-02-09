@@ -195,28 +195,6 @@ frame.blackBg:SetTexture(nil)
 F.ReskinIcon(frame.Icon)
 F.CreateBG(frame.Icon)
 
--- Say sapped
-if C.general.SaySapped then
-	local SaySapped = CreateFrame("Frame")
-	SaySapped.playername = UnitName("player")
-
-	SaySapped:SetScript("OnEvent", function(_,_,_,event, _,_,sourceName, _,_,_,destName, _,_,spellId)
-		if ((spellId == 6770)
-		and (destName == SaySapped.playername)
-		and (event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH"))
-		then
-			if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
-				SendChatMessage("我被闷棍: "..(sourceName or "(unknown)"),"SAY")
-			else
-				SendChatMessage("Sapped by: "..(sourceName or "(unknown)"),"SAY")
-			end
-			DEFAULT_CHAT_FRAME:AddMessage("Sapped by: "..(sourceName or "(unknown)"))
-		end
-	end)
-
-	SaySapped:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-end
-
 -- ncShadow
 if C.appearance.ncShadow then
 	local f = CreateFrame("Frame", "ShadowBackground")
