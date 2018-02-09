@@ -15,7 +15,7 @@ C.defaults = {
     acknowledgedSplashScreen = false,
 
     bags = false,
-    loot = false,
+    loot = true,
     mainmenubar = false,
 
     chatBubbles = false,
