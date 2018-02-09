@@ -91,7 +91,8 @@ C["general"] = {
 
 C["appearance"] = {
 	["uiFader"] = false,
-	["ncShadow"] = true,
+	["vignette"] = true,
+		["vignetteAlpha"] = .7,
 	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
 		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,

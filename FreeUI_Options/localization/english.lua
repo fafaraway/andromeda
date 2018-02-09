@@ -74,9 +74,10 @@ ns.localization.generaluiScaleAutoTooltip = "Automatically apply the best UI sca
 
 ns.localization.appearance = "Appearance"
 ns.localization.appearanceSubText = "You can change the appearance of various aspects of the UI here."
+ns.localization.appearanceInterface = "Global"
 ns.localization.appearanceuiFader = "UI Fade"
 ns.localization.appearanceuiFaderTooltip = "Fades out entire UI when not in use."
-ns.localization.appearancencShadow = "Shadow edge"
+ns.localization.appearancencShadow = "Vignette"
 ns.localization.appearancencShadowTooltip = "Adding a shadowed border to the UI window."
 ns.localization.appearanceColours = "Colours"
 ns.localization.appearanceFonts = "Fonts"
