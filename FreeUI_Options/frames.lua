@@ -287,8 +287,8 @@ do
 	local uiFader = ns.CreateCheckBox(appearance, "uiFader", true, true)
 	uiFader:SetPoint("TOPLEFT", interface, "BOTTOMLEFT", 0, -20)
 
-	local ncShadow = ns.CreateCheckBox(appearance, "ncShadow", true, true)
-	ncShadow:SetPoint("LEFT", uiFader, "RIGHT", 240, 0)
+	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
+	vignette:SetPoint("LEFT", uiFader, "RIGHT", 240, 0)
 
 	local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
 	colours:SetPoint("TOPLEFT", uiFader, "BOTTOMLEFT", 0, -30)
