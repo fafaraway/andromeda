@@ -88,6 +88,7 @@ C["general"] = {
 
 	["saySapped"] = true,
 	["GroupFinderButton"] = false,
+	["screenSaver"] = true,
 }
 
 C["appearance"] = {

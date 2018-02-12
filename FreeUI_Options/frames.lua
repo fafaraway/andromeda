@@ -287,11 +287,14 @@ do
 	local uiFader = ns.CreateCheckBox(appearance, "uiFader", true, true)
 	uiFader:SetPoint("TOPLEFT", interface, "BOTTOMLEFT", 0, -20)
 
+	local screenSaver = ns.CreateCheckBox(appearance, "screenSaver", true, true)
+	screenSaver:SetPoint("TOPLEFT", uiFader, "BOTTOMLEFT", 0, -8)
+
 	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
 	vignette:SetPoint("LEFT", uiFader, "RIGHT", 240, 0)
 
 	local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
-	colours:SetPoint("TOPLEFT", uiFader, "BOTTOMLEFT", 0, -30)
+	colours:SetPoint("TOPLEFT", screenSaver, "BOTTOMLEFT", 0, -30)
 
 	local colourScheme = ns.CreateRadioButtonGroup(appearance, "colourScheme", 2, true, true)
 	colourScheme.buttons[1]:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -41)

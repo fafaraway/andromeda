@@ -51,6 +51,7 @@
 	<Script file="role.lua"/>
 	<Script file="safequeue.lua"/>
 	<Script file="saysapped.lua"/>
+	<Script file="screensaver.lua"/>
 	<Script file="sharedmedia.lua"/>
 	<Script file="skin_ace.lua"/>
 	<Script file="skin_dbmbars.lua"/>
