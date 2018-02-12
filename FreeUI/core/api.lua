@@ -18,10 +18,8 @@ F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
 	end
 end)
 
-C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-
-
 local _, class = UnitClass("player")
+
 if C.appearance.colourScheme == 2 then
 	C.class = {C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b}
 else

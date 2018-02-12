@@ -64,8 +64,24 @@ else
 	}
 end
 
+-- modify class color
+C.classcolours = {
+	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
+	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
+	["PALADIN"] = { r = 1, g = 0.22, b = 0.52 },
+	["PRIEST"] = { r = 0.8, g = 0.87, b = .9 },
+	["MAGE"] = { r = 0, g = 0.76, b = 1 },
+	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
+	["ROGUE"] = { r = 1, g = 0.91, b = 0.2 },
+	["DRUID"] = { r = 1, g = 0.49, b = 0.04 },
+	["SHAMAN"] = { r = 0, g = 0.6, b = 0.6 };
+	["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
+	["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
+	["DEMONHUNTER"] = { r = 0.64, g = 0.19, b = 0.79 },
+}
 
---[[ Global config ]]
+
+-- [[ Global config ]]
 C["general"] = {
 	["cooldownpulse"] = true,
 	["itemLinkLevel"] = true,
@@ -193,8 +209,8 @@ C["quests"] = {
 	["questObjectiveTrackerStyle"] = true,
 	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
 	["rememberObjectiveTrackerState"] = true,		-- saves objective tracker expanded/collapsed state per character
- 		["alwaysCollapseObjectiveTracker"] = false,	-- always collapses objective tracker on login
- 	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -20, -260},
+		["alwaysCollapseObjectiveTracker"] = false,	-- always collapses objective tracker on login
+	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -20, -260},
 }
 
 C["unitframes"] = {
@@ -609,8 +625,8 @@ C["hideDebuffs"] = {
 	[173679] = true, -- Leorajh defeated
 	[173649] = true, -- Tormmok defeated
 	[173660] = true, -- Aeda Brightdawn defeated
- 	[173657] = true, -- Defender Illona defeated
- 	[206151] = true, -- 挑战者的负担
+	[173657] = true, -- Defender Illona defeated
+	[206151] = true, -- 挑战者的负担
 }
 
 if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end
