@@ -103,7 +103,7 @@ local function unitColor(unit)
 		local _, class = UnitClass(unit)
 		if(class and UnitIsPlayer(unit)) then
 			-- Players have color
-			colors = RAID_CLASS_COLORS[class]
+			colors = C.classcolours[class]
 		elseif(UnitCanAttack(unit, "player")) then
 			-- Hostiles are red
 			colors = FACTION_BAR_COLORS[2]
