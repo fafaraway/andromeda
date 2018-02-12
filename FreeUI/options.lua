@@ -86,7 +86,7 @@ C["general"] = {
 	["autoScreenShot"] = true,
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 
-	["SaySapped"] = true,
+	["saySapped"] = true,
 }
 
 C["appearance"] = {
