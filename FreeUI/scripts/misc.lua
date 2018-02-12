@@ -211,5 +211,23 @@ if C.appearance.vignette then
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
+-- rGroupFinder by zorker
+-- Adds the group finder button to every quest
+if C.general.GroupFinderButton then
+	local function AddGroupFinderButton(block, questID)
+		if IsQuestComplete(questID) then return end
+		if wordQuestsOnly and not QuestUtils_IsQuestWorldQuest(questID) then return end
+		if block.groupFinderButton and block.hasGroupFinderButton then return end
+		if not block.hasGroupFinderButton then
+			block.hasGroupFinderButton = true
+		end
+		if not block.groupFinderButton then
+			block.groupFinderButton = QuestObjectiveFindGroup_AcquireButton(block, questID);
+			QuestObjectiveSetupBlockButton_AddRightButton(block, block.groupFinderButton, block.module.buttonOffsets.groupFinder);
+		end
+	end
+	hooksecurefunc("QuestObjectiveSetupBlockButton_FindGroup", AddGroupFinderButton)
+end
+
 -- temporary fix
 _G.GarrisonLandingPageTutorialBox:Hide()

@@ -87,6 +87,7 @@ C["general"] = {
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 
 	["saySapped"] = true,
+	["GroupFinderButton"] = false,
 }
 
 C["appearance"] = {
