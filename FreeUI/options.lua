@@ -194,23 +194,26 @@ C["tooltip"] = {
 	["enable"] = true,		-- enable tooltip and modules
 	["anchorCursor"] = false,		-- tooltip at mouse
 	["tipPosition"] = {"BOTTOMRIGHT", -30, 30},	-- tooltip position
+	["tipFont"] = 14,
 	["fadeOnUnit"] = false,
 	["combatHide"] = false,
 	["combatHideALL"] = false,
-	["guildRank"] = false,
+	["hideRank"] = false,
 	["guildText"] = "|cffE41F9B<%s>|r |cffA0A0A0%s|r",
-	["playerRealm"] = true,
+	["guildColor"] = { r=1, g=1, b=.7},
+	["hideRealm"] = false,
 	["realmText"] = " (*)",
-	["playerTitle"] = false,
+	["hideTitle"] = false,
 	["YOU"] = "<YOU>",
 	["ilvlspec"] = true,		-- show gear info and specialization on tooltip
+	["hidePVP"] = false,
+	["hideFaction"] = false,
+	["aurasSource"] = true,
 }
 
 C["quests"] = {
 	["questObjectiveTrackerStyle"] = true,
 	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
-	["rememberObjectiveTrackerState"] = true,		-- saves objective tracker expanded/collapsed state per character
-		["alwaysCollapseObjectiveTracker"] = false,	-- always collapses objective tracker on login
 	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -20, -260},
 }
 
