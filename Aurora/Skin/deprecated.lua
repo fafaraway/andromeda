@@ -7,28 +7,6 @@ local F, C = {}, {}
 Aurora[1] = F
 Aurora[2] = C
 
-C.classcolours = {
-    ["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
-    ["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
-    ["PALADIN"] = { r = 1, g = 0.22, b = 0.52 },
-    ["PRIEST"] = { r = 0.8, g = 0.87, b = .9 },
-    ["MAGE"] = { r = 0, g = 0.76, b = 1 },
-    ["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
-    ["ROGUE"] = { r = 1, g = 0.91, b = 0.2 },
-    ["DRUID"] = { r = 1, g = 0.49, b = 0.04 },
-    ["SHAMAN"] = { r = 0, g = 0.6, b = 0.6 };
-    ["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
-    ["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
-    ["DEMONHUNTER"] = { r = 0.64, g = 0.19, b = 0.79 },
-}
-
-if _G.CUSTOM_CLASS_COLORS then
-    C.classcolours = _G.CUSTOM_CLASS_COLORS
-end
-
-local _, class = _G.UnitClass("player")
-local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
-
 C.backdrop = private.backdrop
 C.media = {
     ["arrowUp"] = [[Interface\AddOns\Aurora\media\arrow-up-active]],
@@ -158,7 +136,7 @@ local function StartGlow(f)
     if not f:IsEnabled() then return end
     -- f:SetBackdropColor(r, g, b, .1)
     Base.SetBackdrop(f, Aurora.buttonColor:GetRGBA())
-    f:SetBackdropBorderColor(r, g, b)
+    f:SetBackdropBorderColor(Aurora.highlightColor:GetRGB())
     f.glow:SetAlpha(1)
     F.CreatePulse(f.glow)
 end
@@ -195,7 +173,7 @@ F.Reskin = function(f, noGlow)
         })
         f.glow:SetPoint("TOPLEFT", -6, 6)
         f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
-        f.glow:SetBackdropBorderColor(r, g, b)
+        f.glow:SetBackdropBorderColor(Aurora.highlightColor:GetRGB())
         f.glow:SetAlpha(0)
 
         f:HookScript("OnEnter", StartGlow)

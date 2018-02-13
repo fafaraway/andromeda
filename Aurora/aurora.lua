@@ -64,12 +64,26 @@ function private.OnLoad()
 
     -- Setup colors
     function private.updateHighlightColor()
+        local _, class = UnitClass("player")
         local r, g, b
-        if AuroraConfig.useCustomColour then
-            r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
-        else
-            r, g, b = _G.CUSTOM_CLASS_COLORS[private.charClass.token]:GetRGB()
-        end
+        -- if AuroraConfig.useCustomColour then
+            -- r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
+            if FreeUI then
+                local C = FreeUI[2]
+                -- print("succeed")
+                if C.appearance.colourScheme == 2 then
+                    r, g, b = C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b
+                else
+                    r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+                end
+            else
+                -- print("faild")
+                -- r, g, b = AuroraConfig.customColour.r, AuroraConfig.customColour.g, AuroraConfig.customColour.b
+                r, g, b = _G.CUSTOM_CLASS_COLORS[private.charClass.token]:GetRGB()
+            end
+        -- else
+        --     r, g, b = _G.CUSTOM_CLASS_COLORS[private.charClass.token]:GetRGB()
+        -- end
 
         C.r, C.g, C.b = r, g, b -- deprecated
         Aurora.highlightColor:SetRGBA(r, g, b, Aurora.frameColor.a)
