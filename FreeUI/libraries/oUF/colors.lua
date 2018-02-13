@@ -25,7 +25,7 @@ local colors = {
 local customClassColors = function()
 	if(CUSTOM_CLASS_COLORS) then
 		local updateColors = function()
-			for eclass, color in next, CUSTOM_CLASS_COLORS do
+			for eclass, color in next, C.classcolours do
 				colors.class[eclass] = {color.r, color.g, color.b}
 			end
 
