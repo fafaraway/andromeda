@@ -1,8 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if C.tooltip.enable == false then return end
-
-local ADDON_NAME, ns = ...
+if C.tooltip.enable ~= true then return end
 
 local tips = { [1] = _G["ItemRefTooltip"] }
 
@@ -40,7 +38,7 @@ local function CreateTip(link)
 	tip:SetPoint("BOTTOM", 0, 80)
 	tip:SetFrameStrata("TOOLTIP")
 	tip:SetSize(128, 64)
-	tip:SetPadding(16, 0)
+	tip:SetPadding(16, 16)
 	tip:EnableMouse(true)
 	tip:SetMovable(true)
 	tip:SetToplevel(true)

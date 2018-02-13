@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-if C.tooltip.enable ~= true or C.tooltip.idtip ~= true then return end
+if C.tooltip.enable ~= true then return end
 
 --	Spell/Item IDs(idTip by Silverwind)
 

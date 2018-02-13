@@ -688,28 +688,36 @@ do
 	local anchorCursor = ns.CreateCheckBox(tooltip, "anchorCursor", true, true)
 	anchorCursor:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
+	local fadeOnUnit = ns.CreateCheckBox(tooltip, "fadeOnUnit", true, true)
+	fadeOnUnit:SetPoint("TOPLEFT", anchorCursor, "BOTTOMLEFT", 0, -8)
+
+	local combatHide = ns.CreateCheckBox(tooltip, "combatHide", true, true)
+	combatHide:SetPoint("TOPLEFT", fadeOnUnit, "BOTTOMLEFT", 0, -8)
+
+	local combatHideALL = ns.CreateCheckBox(tooltip, "combatHideALL", true, true)
+	combatHideALL:SetPoint("TOPLEFT", combatHide, "BOTTOMLEFT", 0, -8)
+
 	local guildRank = ns.CreateCheckBox(tooltip, "guildRank", true, true)
-	guildRank:SetPoint("TOPLEFT", anchorCursor, "BOTTOMLEFT", 0, -8)
+	guildRank:SetPoint("TOPLEFT", combatHideALL, "BOTTOMLEFT", 0, -8)
 
-	local realm = ns.CreateCheckBox(tooltip, "realm", true, true)
-	realm:SetPoint("TOPLEFT", guildRank, "BOTTOMLEFT", 0, -8)
+	local playerRealm = ns.CreateCheckBox(tooltip, "playerRealm", true, true)
+	playerRealm:SetPoint("TOPLEFT", guildRank, "BOTTOMLEFT", 0, -8)
 
-	local title = ns.CreateCheckBox(tooltip, "title", true, true)
-	title:SetPoint("TOPLEFT", realm, "BOTTOMLEFT", 0, -8)
-
-	local combathideALL = ns.CreateCheckBox(tooltip, "combathideALL", true, true)
-	combathideALL:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
+	local playerTitle = ns.CreateCheckBox(tooltip, "playerTitle", true, true)
+	playerTitle:SetPoint("TOPLEFT", playerRealm, "BOTTOMLEFT", 0, -8)
 
 	local ilvlspec = ns.CreateCheckBox(tooltip, "ilvlspec", true, true)
-	ilvlspec:SetPoint("TOPLEFT", combathideALL, "BOTTOMLEFT", 0, -8)
+	ilvlspec:SetPoint("TOPLEFT", playerTitle, "BOTTOMLEFT", 0, -8)
 
 	local function toggleTooltipOptions()
 		local shown = enable:GetChecked()
 		anchorCursor:SetShown(shown)
+		fadeOnUnit:SetShown(shown)
+		combatHide:SetShown(shown)
+		combatHideALL:SetShown(shown)
 		guildRank:SetShown(shown)
-		realm:SetShown(shown)
-		title:SetShown(shown)
-		combathideALL:SetShown(shown)
+		playerRealm:SetShown(shown)
+		playerTitle:SetShown(shown)
 		ilvlspec:SetShown(shown)
 	end
 

@@ -13,38 +13,9 @@ hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
 		self:SetOwner(parent, "ANCHOR_CURSOR")
 	else
 		self:SetOwner(parent, "ANCHOR_NONE")
-		self:SetPoint(unpack(C.tooltip.position))
+		self:SetPoint(unpack(C.tooltip.tipPosition))
 	end
 end)
-
-
-local cfg = {
-	font = C.font.normal,
-	fontflag = "OUTLINE",
-
-	cursor = C.tooltip.cursor,
-	point = C.tooltip.position,
-	backdrop = {
-		bgFile = C.media.backdrop,
-		edgeFile = C.media.backdrop,
-		edgeSize = 1,
-	},
-	bgcolor = { r=0, g=0, b=0, t=.65 }, -- background
-	bdrcolor = { r=0, g=0, b=0 }, -- border
-	statusbar = C.media.texture,
-	sbHeight = C.tooltip.sbHeight,
-	fadeOnUnit = C.tooltip.fadeOnUnit, -- fade from units instead of hiding instantly
-	combathide = C.tooltip.combathide, -- hide just interface toolitps in combat
-	combathideALL = C.tooltip.combathideALL,
-	showGRank = C.tooltip.showGRank,
-	guildText = "|cffE41F9B<%s>|r |cffA0A0A0%s|r",
-	showRealm = C.tooltip.realm,
-	realmText = " (*)",
-	YOU = "<YOU>",
-	playerTitle = C.tooltip.playerTitle,
-}
-
-ns.cfg = cfg
 
 local locale = GetLocale()
 local BOSS, ELITE = BOSS, ELITE
@@ -74,17 +45,7 @@ local classification = {
 	worldboss = ("|cffFF0000?? %s|r"):format(BOSS)
 }
 
-local TooltipHeaderText = {}
-TooltipHeaderText[1], TooltipHeaderText[2], TooltipHeaderText[3] = GameTooltipHeaderText:GetFont()
-GameTooltipHeaderText:SetFont(cfg.font or TooltipHeaderText[1], TooltipHeaderText[2], cfg.fontflag or TooltipHeaderText[3])
 
-local TooltipText = {}
-TooltipText[1], TooltipText[2], TooltipText[3] = GameTooltipText:GetFont()
-GameTooltipText:SetFont(cfg.font or TooltipText[1], TooltipText[2], cfg.fontflag or TooltipText[3])
-
-local TooltipTextSmall = {}
-TooltipTextSmall[1], TooltipTextSmall[2], TooltipTextSmall[3] = GameTooltipTextSmall:GetFont()
-GameTooltipTextSmall:SetFont(cfg.font or TooltipTextSmall[1], TooltipTextSmall[2], cfg.fontflag or TooltipTextSmall[3])
 
 
 local hex = function(r, g, b)
@@ -148,15 +109,15 @@ local function getPlayer(unit, origName)
 		local class, _, race, _, _, name, realm = GetPlayerInfoByGUID(guid)
 		if not name then return end
 
-		if(cfg.playerTitle) then
+		if(C.tooltip.playerTitle) then
 			name = origName:gsub("-(.*)", "")
 		end
 
 		if (realm and strlen(realm) > 0) then
-			if(cfg.showRealm) then
+			if(C.tooltip.playerRealm) then
 				realm = ("-"..realm)
 			else
-				realm = cfg.realmText
+				realm = C.tooltip.realmText
 			end
 		end
 
@@ -172,7 +133,7 @@ end
 
 local function getTarget(unit)
 	if(UnitIsUnit(unit, "player")) then
-		return ("|cffff0000%s|r"):format(cfg.YOU)
+		return ("|cffff0000%s|r"):format(C.tooltip.YOU)
 	else
 		return UnitName(unit)
 	end
@@ -231,7 +192,7 @@ end
 -- GameTooltip HookScripts
 
 local function OnSetUnit(self)
-	if(cfg.combathide and InCombatLockdown()) then
+	if(C.tooltip.combathide and InCombatLockdown()) then
 		return self:Hide()
 	end
 
@@ -255,8 +216,8 @@ local function OnSetUnit(self)
 			if(guild) then
 				isInGuild = true
 
-				if(not cfg.showGRank) then gRank = nil end
-				GameTooltipTextLeft2:SetFormattedText(cfg.guildText, guild, gRank or "")
+				if(not C.tooltip.guildRank) then gRank = nil end
+				GameTooltipTextLeft2:SetFormattedText(C.tooltip.guildText, guild, gRank or "")
 			end
 		end
 
@@ -353,32 +314,32 @@ local function GTUpdate(self, elapsed)
 	self.ftipUpdate = (self.ftipUpdate or 0) + elapsed
 	if(self.ftipUpdate < .1) then return end
 
-	if(not cfg.fadeOnUnit) then
+	if(not C.tooltip.fadeOnUnit) then
 		if(self.ftipUnit and not UnitExists(self.ftipUnit)) then self:Hide() return end
 	end
 
-	self:SetBackdropColor(cfg.bgcolor.r, cfg.bgcolor.g, cfg.bgcolor.b, cfg.bgcolor.t)
+	self:SetBackdropColor(0, 0, 0, .65)
 
 	self.ftipUpdate = 0
 end
 GameTooltip:HookScript("OnUpdate", GTUpdate)
 
 GameTooltip.FadeOut = function(self)
-	if(not cfg.fadeOnUnit) then
+	if(not C.tooltip.fadeOnUnit) then
 		self:Hide()
 	end
 end
 
 -- StatusBar
-GameTooltipStatusBar:SetStatusBarTexture(cfg.statusbar)
-GameTooltipStatusBar:SetHeight(cfg.sbHeight)
+GameTooltipStatusBar:SetStatusBarTexture(C.media.texture)
+GameTooltipStatusBar:SetHeight(2)
 GameTooltipStatusBar:ClearAllPoints()
 GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
 GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, -3)
 
 local gtSBbg = GameTooltipStatusBar:CreateTexture(nil, "BACKGROUND")
 gtSBbg:SetAllPoints(GameTooltipStatusBar)
-gtSBbg:SetTexture(cfg.statusbar)
+gtSBbg:SetTexture(C.media.texture)
 gtSBbg:SetVertexColor(0.3, 0.3, 0.3, 0.5)
 
 local ssbc = CreateFrame("StatusBar").SetStatusBarColor
@@ -439,15 +400,14 @@ local function style(frame)
 
 	local bdFrame = frame.BackdropFrame or frame
 	if(not frame.ftipBD) then
-		bdFrame:SetBackdrop(cfg.backdrop)
 		bdFrame.ftipBD = true
 		
 		F.CreateBD(bdFrame)
 		F.CreateSD(bdFrame)
 	end
 
-	bdFrame:SetBackdropColor(cfg.bgcolor.r, cfg.bgcolor.g, cfg.bgcolor.b, cfg.bgcolor.t)
-	bdFrame:SetBackdropBorderColor(cfg.bdrcolor.r, cfg.bdrcolor.g, cfg.bdrcolor.b)
+	bdFrame:SetBackdropColor(0, 0, 0, .65)
+	bdFrame:SetBackdropBorderColor(0, 0, 0)
 
 	-- if(frame.GetItem) then
 	-- 	local _, item = frame:GetItem()
@@ -526,20 +486,20 @@ end
 ns.style = style
 
 -- local function OverrideGetBackdropColor()
--- 	return cfg.bgcolor.r, cfg.bgcolor.g, cfg.bgcolor.b, cfg.bgcolor.t
+-- 	return C.tooltip.bgcolor.r, C.tooltip.bgcolor.g, C.tooltip.bgcolor.b, C.tooltip.bgcolor.t
 -- end
 -- GameTooltip.GetBackdropColor = OverrideGetBackdropColor
 -- GameTooltip:SetBackdropColor(OverrideGetBackdropColor)
 
 -- local function OverrideGetBackdropBorderColor()
--- 	return cfg.bdrcolor.r, cfg.bdrcolor.g, cfg.bdrcolor.b
+-- 	return C.tooltip.bdrcolor.r, C.tooltip.bdrcolor.g, C.tooltip.bdrcolor.b
 -- end
 -- GameTooltip.GetBackdropBorderColor = OverrideGetBackdropBorderColor
 -- GameTooltip:SetBackdropBorderColor(OverrideGetBackdropBorderColor)
 
 local function framehook(frame)
 	frame:HookScript("OnShow", function(self)
-		if (cfg.combathideALL and cfg.combathideALL ~= 0 and InCombatLockdown()) then
+		if (C.tooltip.combathideALL and C.tooltip.combathideALL ~= 0 and InCombatLockdown()) then
 			return self:Hide()
 		end
 		style(self)
@@ -580,6 +540,10 @@ itemEvent:SetScript("OnEvent", function(self, event, arg1)
 		end
 	end
 end)
+
+GameTooltipHeaderText:SetFont(C.font.normal, 14, "OUTLINE")
+GameTooltipText:SetFont(C.font.normal, 12, "OUTLINE")
+GameTooltipTextSmall:SetFont(C.font.normal, 12, "OUTLINE")
 
 -- Aura Source
 

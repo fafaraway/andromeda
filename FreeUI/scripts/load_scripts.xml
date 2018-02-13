@@ -31,7 +31,6 @@
 	<Script file="foglight.lua"/>
 	<Script file="fonts.lua"/>
 	<Script file="globals.lua"/>
-	<Script file="ilvlSpec.lua"/>
 	<Script file="interrupt.lua"/>
 	<Script file="loot.lua"/>
 	<Script file="lootRoll.lua"/>
@@ -68,6 +67,7 @@
 	<Script file="tip_hover.lua"/>
 	<Script file="tip_icon.lua"/>
 	<Script file="tip_id.lua"/>
+	<Script file="tip_ilvlSpec.lua"/>
 	<Script file="tip_multi.lua"/>
 	<Script file="tradeskill.lua"/>
 	<Script file="uifader.lua"/>

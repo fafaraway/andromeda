@@ -18,16 +18,16 @@ do --[[ SharedXML\GameTooltipTemplate.xml ]]
         Base.SetBackdrop(gametooltip)
 
         -- BlizzWTF: the global name for this frame conflicts with ReputationParagonTooltipStatusBar
-        local status = gametooltip:GetChildren()
-        status:SetHeight(4)
-        status:SetPoint("TOPLEFT", gametooltip, "BOTTOMLEFT", 1, 0)
-        status:SetPoint("TOPRIGHT", gametooltip, "BOTTOMRIGHT", -1, 0)
-        Base.SetTexture(status:GetStatusBarTexture(), "gradientUp")
+        -- local status = gametooltip:GetChildren()
+        -- status:SetHeight(4)
+        -- status:SetPoint("TOPLEFT", gametooltip, "BOTTOMLEFT", 1, 0)
+        -- status:SetPoint("TOPRIGHT", gametooltip, "BOTTOMRIGHT", -1, 0)
+        -- Base.SetTexture(status:GetStatusBarTexture(), "gradientUp")
 
-        local statusBG = status:CreateTexture(nil, "BACKGROUND")
-        statusBG:SetColorTexture(0, 0, 0)
-        statusBG:SetPoint("TOPLEFT", -1, 1)
-        statusBG:SetPoint("BOTTOMRIGHT", 1, -1)
+        -- local statusBG = status:CreateTexture(nil, "BACKGROUND")
+        -- statusBG:SetColorTexture(0, 0, 0)
+        -- statusBG:SetPoint("TOPLEFT", -1, 1)
+        -- statusBG:SetPoint("BOTTOMRIGHT", 1, -1)
     end
     function Skin.ShoppingTooltipTemplate(gametooltip)
         Base.SetBackdrop(gametooltip)

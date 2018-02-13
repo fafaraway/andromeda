@@ -104,7 +104,7 @@ C["general"] = {
 
 	["saySapped"] = true,
 	["GroupFinderButton"] = false,
-	["screenSaver"] = true,
+	["screenSaver"] = false,
 }
 
 C["appearance"] = {
@@ -193,16 +193,17 @@ C["notifications"] = {
 C["tooltip"] = {
 	["enable"] = true,		-- enable tooltip and modules
 	["anchorCursor"] = false,		-- tooltip at mouse
-	["position"] = {"BOTTOMRIGHT", -25, 30},	-- tooltip position
-	["sbHeight"] = 2,
-	["guildRank"] = false,
-	["realm"] = true,
-	["title"] = false,
+	["tipPosition"] = {"BOTTOMRIGHT", -30, 30},	-- tooltip position
 	["fadeOnUnit"] = false,
-	["combathide"] = false,
-	["combathideALL"] = false,
+	["combatHide"] = false,
+	["combatHideALL"] = false,
+	["guildRank"] = false,
+	["guildText"] = "|cffE41F9B<%s>|r |cffA0A0A0%s|r",
+	["playerRealm"] = true,
+	["realmText"] = " (*)",
+	["playerTitle"] = false,
+	["YOU"] = "<YOU>",
 	["ilvlspec"] = true,		-- show gear info and specialization on tooltip
-	["idtip"] = true,
 }
 
 C["quests"] = {
