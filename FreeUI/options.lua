@@ -121,6 +121,7 @@ C["appearance"] = {
 	["fontShadow"] = true,
 	["fontUseColorFont"] = true,
 	["fontColorFontRGB"] = {r = 247/255, g = 225/255, b =171/255},
+	["uisetuphelper"] = false,
 }
 
 C["auras"] = {
@@ -194,20 +195,17 @@ C["tooltip"] = {
 	["enable"] = true,		-- enable tooltip and modules
 	["anchorCursor"] = false,		-- tooltip at mouse
 	["tipPosition"] = {"BOTTOMRIGHT", -30, 30},	-- tooltip position
-	["tipFont"] = 14,
 	["fadeOnUnit"] = false,
 	["combatHide"] = false,
 	["combatHideALL"] = false,
-	["hideRank"] = false,
+	["guildRank"] = false,
 	["guildText"] = "|cffE41F9B<%s>|r |cffA0A0A0%s|r",
 	["guildColor"] = { r=1, g=1, b=.7},
-	["hideRealm"] = false,
+	["playerRealm"] = false,
 	["realmText"] = " (*)",
-	["hideTitle"] = false,
+	["playerTitle"] = false,
 	["YOU"] = "<YOU>",
 	["ilvlspec"] = true,		-- show gear info and specialization on tooltip
-	["hidePVP"] = false,
-	["hideFaction"] = false,
 	["aurasSource"] = true,
 }
 

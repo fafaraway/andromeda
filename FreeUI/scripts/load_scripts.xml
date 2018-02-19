@@ -11,10 +11,8 @@
 	<Script file="auras.lua"/>
 	<Script file="automation.lua"/>
 	<Script file="bags.lua"/>
-	<Script file="bg_spamfix.lua"/>
-	<Script file="bg_specicon.lua"/>
+	<Script file="battleground.lua"/>
 	<Script file="camera.lua"/>
-	<Script file="cdpulse.lua"/>
 	<Script file="chat.lua"/>
 	<Script file="chat_bubble.lua"/>
 	<Script file="chat_itemlinklevel.lua"/>
@@ -23,6 +21,7 @@
 	<Script file="chat_whispersound.lua"/>
 	<Script file="colorpicker.lua"/>
 	<Script file="colours.lua"/>
+	<Script file="cooldown.lua"/>
 	<Script file="cursor.lua"/>
 	<Script file="disable.lua"/>
 	<Script file="dragemall.lua"/>
@@ -31,6 +30,7 @@
 	<Script file="foglight.lua"/>
 	<Script file="fonts.lua"/>
 	<Script file="globals.lua"/>
+	<Script file="hidenames.lua"/>
 	<Script file="interrupt.lua"/>
 	<Script file="loot.lua"/>
 	<Script file="lootRoll.lua"/>
@@ -39,6 +39,7 @@
 	<Script file="menubar.lua"/>
 	<Script file="micromenu.lua"/>
 	<Script file="minimap.lua"/>
+	<Script file="mirrorbar.lua"/>
 	<Script file="misc.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="orderhallcommandbar.lua"/>
@@ -71,6 +72,7 @@
 	<Script file="tip_multi.lua"/>
 	<Script file="tradeskill.lua"/>
 	<Script file="uifader.lua"/>
+	<Script file="uisetuphelper.lua"/>
 	<Script file="unitframes.lua"/>
 	<Script file="unitframes_arena.lua"/>
 	<Script file="unitframes_focuser.lua"/>

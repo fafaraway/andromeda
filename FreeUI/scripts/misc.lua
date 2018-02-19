@@ -159,20 +159,39 @@ function ChatFrame_OnHyperlinkShow (chatframe,link,text,button)
 	return _ChatFrame_OnHyperlinkShow (chatframe,link,text,button);
 end
 
--- Hide group member name while inside raid instance
+-- Hide friendly player names while in raid and/or party group.
 if C.general.hideRaidNames then
-	local HRN = CreateFrame("Frame")
-	HRN:RegisterEvent("PLAYER_ENTERING_WORLD")
-	HRN:SetScript("OnEvent", function(self, event)
-		if event=="PLAYER_ENTERING_WORLD" then
-			local _,instanceType = IsInInstance()
-			if instanceType=="raid" then
-				SetCVar("UnitNameFriendlyPlayerName",0);
-			else
-				SetCVar("UnitNameFriendlyPlayerName",1);
-			end
+	-- local HRN = CreateFrame("Frame")
+	-- HRN:RegisterEvent("PLAYER_ENTERING_WORLD")
+	-- HRN:SetScript("OnEvent", function(self, event)
+	-- 	if event=="PLAYER_ENTERING_WORLD" then
+	-- 		local _,instanceType = IsInInstance()
+	-- 		if instanceType=="raid" then
+	-- 			SetCVar("UnitNameFriendlyPlayerName",0);
+	-- 		else
+	-- 			SetCVar("UnitNameFriendlyPlayerName",1);
+	-- 		end
+	-- 	end
+	-- end)
+
+	local HFPN = function()
+		local name, type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
+		-- print(name.. " ".. type .." ".. difficulty)	
+		if type == "raid" or type == "party" and GetNumGroupMembers() > 3 then
+			SetCVar("UnitNameFriendlyPlayerName", 0)
+			-- print("|cffff6060Hiding.")
+			-- print(GetNumGroupMembers())	
+		else
+			SetCVar("UnitNameFriendlyPlayerName", 1)
+			-- print("|cff00ccffShowing.")
 		end
-	end)
+	end
+
+	local f = CreateFrame("Frame")
+	f:SetScript("OnEvent", HFPN)
+	f:RegisterEvent("PLAYER_ENTERING_WORLD")
+	f:RegisterEvent("RAID_ROSTER_UPDATE")
+	f:RegisterEvent("PARTY_MEMBERS_CHANGED")
 end
 
 -- Take screenshots of defined events
@@ -228,6 +247,19 @@ if C.general.GroupFinderButton then
 	end
 	hooksecurefunc("QuestObjectiveSetupBlockButton_FindGroup", AddGroupFinderButton)
 end
+
+-- EasyConfirm by SirMarklan
+--[[function EasyConfirm()
+	StaticPopup1Button1:Click();
+	StaticPopup2Button1:Click();
+end
+
+local btn = CreateFrame("BUTTON", "MyBindingHandlingButton")
+SetBindingClick("SHIFT-F", btn:GetName())
+btn:SetScript("OnClick", function(self, button, down)
+	EasyConfirm();
+end)
+btn:RegisterForClicks("AnyDown");]]
 
 -- temporary fix
 _G.GarrisonLandingPageTutorialBox:Hide()
