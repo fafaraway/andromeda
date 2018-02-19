@@ -1,3 +1,5 @@
+local F, C = unpack(select(2, ...))
+
 -- Focuser by slizen
 
 local function FocuserLoad()
@@ -40,9 +42,11 @@ local function FocuserLoad()
 		SetFocusHotkey(frame)
 	end
 	
-	local oUF = FreeUI.oUF or oUF
-	for _, object in pairs(oUF.objects) do
-		SetFocusHotkey(object)
+	if C.unitframes.enable then
+		local oUF = FreeUI.oUF or oUF
+		for _, object in pairs(oUF.objects) do
+			SetFocusHotkey(object)
+		end
 	end
 end
 
