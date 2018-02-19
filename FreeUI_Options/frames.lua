@@ -697,14 +697,14 @@ do
 	local combatHideALL = ns.CreateCheckBox(tooltip, "combatHideALL", true, true)
 	combatHideALL:SetPoint("TOPLEFT", combatHide, "BOTTOMLEFT", 0, -8)
 
-	local hideRank = ns.CreateCheckBox(tooltip, "hideRank", true, true)
-	hideRank:SetPoint("TOPLEFT", combatHideALL, "BOTTOMLEFT", 0, -8)
+	local guildRank = ns.CreateCheckBox(tooltip, "guildRank", true, true)
+	guildRank:SetPoint("TOPLEFT", combatHideALL, "BOTTOMLEFT", 0, -8)
 
-	local hideRealm = ns.CreateCheckBox(tooltip, "hideRealm", true, true)
-	hideRealm:SetPoint("TOPLEFT", hideRank, "BOTTOMLEFT", 0, -8)
+	local playerRealm = ns.CreateCheckBox(tooltip, "playerRealm", true, true)
+	playerRealm:SetPoint("TOPLEFT", guildRank, "BOTTOMLEFT", 0, -8)
 
-	local hideTitle = ns.CreateCheckBox(tooltip, "hideTitle", true, true)
-	hideTitle:SetPoint("TOPLEFT", hideRealm, "BOTTOMLEFT", 0, -8)
+	local playerTitle = ns.CreateCheckBox(tooltip, "playerTitle", true, true)
+	playerTitle:SetPoint("TOPLEFT", playerRealm, "BOTTOMLEFT", 0, -8)
 
 	local aurasSource = ns.CreateCheckBox(tooltip, "aurasSource", true, true)
 	aurasSource:SetPoint("TOPLEFT", hideTitle, "BOTTOMLEFT", 0, -8)
@@ -718,9 +718,9 @@ do
 		fadeOnUnit:SetShown(shown)
 		combatHide:SetShown(shown)
 		combatHideALL:SetShown(shown)
-		hideRank:SetShown(shown)
-		hideRealm:SetShown(shown)
-		hideTitle:SetShown(shown)
+		guildRank:SetShown(shown)
+		playerRealm:SetShown(shown)
+		playerTitle:SetShown(shown)
 		aurasSource:SetShown(shown)
 		ilvlspec:SetShown(shown)
 	end
