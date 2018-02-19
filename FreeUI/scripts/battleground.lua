@@ -1,12 +1,45 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 
-local _G = _G
 
-BgSpecIcon = CreateFrame ("Frame", nil, UIParent)
-local BGS = BgSpecIcon
-BGS:Hide ()
+-- Remove Boss Emote spam during BG
+local BATTLEGROUNDS = {
+	["Wintergrasp"] = true,
+	["Tol Barad"] = true,
+	["Isle of Conquest"] = true,
+	["Strand of the Ancients"] = true,
+	["Alterac Valley"] = true,
+	["Warsong Gulch"] = true,
+	["Twin Peaks"] = true,
+	["Arathi Basin"] = true,
+	["Eye of the Storm"] = true,
+	["Battle for Gilneas"] = true,
+	["Deepwind Gorge"] = true,
+	["Silvershard Mines"] = true,
+	["The Battle for Gilneas"] = true,
+	["Temple of Kotmogu"] = true,
+}
 
----------------------------------------------------------------------------
+local Fixer = _G.CreateFrame("Frame")
+local RaidBossEmoteFrame, spamDisabled = _G.RaidBossEmoteFrame
+local function ToggleBossEmotes()
+	if BATTLEGROUNDS[GetZoneText()] then 
+		RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")
+		spamDisabled = true
+	elseif spamDisabled then
+		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
+		spamDisabled = false
+	end
+end
+
+Fixer:RegisterEvent("PLAYER_ENTERING_WORLD")
+Fixer:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+Fixer:SetScript("OnEvent", ToggleBossEmotes)
+
+
+
+-- BgSpecIcon by Iroared
+local BGSpecIcon = CreateFrame ("Frame", nil, UIParent)
+BGSpecIcon:Hide ()
 
 local L = {}
 local gameLocale = GetLocale()
@@ -14,7 +47,6 @@ if gameLocale == "enGB" then
 	gameLocale = "enUS"
 end
 
--- Following borrowed from LibBabble-TalentTree
 if gameLocale == "zhCN" then
 	L["Affliction"] = "痛苦"
 	L["Arcane"] = "奥术"
@@ -162,9 +194,8 @@ function GetSpecIcon (class, spec)
 	return nil
 end
 
----------------------------------------------------------------------------
 
-function BGS.OnUpdate ()
+function BGSpecIcon.OnUpdate ()
 	local scrollOffset = FauxScrollFrame_GetOffset (WorldStateScoreScrollFrame)
 	local numScores = GetNumBattlefieldScores ()
 	for i = 1, MAX_WORLDSTATE_SCORE_BUTTONS do
@@ -189,22 +220,20 @@ function BGS.OnUpdate ()
 		end
 	end
 end
-function BGS:SetUpHooks ()
+function BGSpecIcon:SetUpHooks ()
 	hooksecurefunc ("WorldStateScoreFrame_Update", self.OnUpdate)
 end
 
---------------------------------------------------------------------------
-
-function BGS:OnEvent (event, ...)
+function BGSpecIcon:OnEvent (event, ...)
 	if self[event] then
 		self[event] (self, ...)
 	end
 end
-function BGS:ADDON_LOADED (addon)
+function BGSpecIcon:ADDON_LOADED (addon)
 	if addon == "FreeUI" then
 		self:SetUpHooks ()
 	end
 end
 
-BGS:SetScript ("OnEvent", BGS.OnEvent)
-BGS:RegisterEvent ("ADDON_LOADED")
+BGSpecIcon:SetScript ("OnEvent", BGSpecIcon.OnEvent)
+BGSpecIcon:RegisterEvent ("ADDON_LOADED")
