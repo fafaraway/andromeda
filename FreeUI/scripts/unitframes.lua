@@ -447,32 +447,6 @@ local function UpdateClassIconTexture(element)
 	end
 end
 
-function MirrorBars()
-	if(MirrorBars) then
-		for _, bar in pairs({"MirrorTimer1", "MirrorTimer2", "MirrorTimer3"}) do   
-			_G[bar]:GetRegions():Hide()
-			_G[bar.."Border"]:Hide()
-			_G[bar]:SetParent(UIParent)
-			_G[bar]:SetScale(1)
-			_G[bar]:SetHeight(16)
-			_G[bar]:SetWidth(200)
-			_G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar])
-			_G[bar.."Background"]:SetTexture(C.media.backdrop)
-			_G[bar.."Background"]:SetAllPoints(bar)
-			_G[bar.."Background"]:SetVertexColor(0, 0, 0, .5)
-			if locale == "zhCN" or locale == "zhTW" then
-				_G[bar.."Text"]:SetFont(unpack(unitframeFont))
-			else
-				F.SetFS(_G[bar.."Text"])
-			end
-			_G[bar.."Text"]:ClearAllPoints()
-			_G[bar.."Text"]:SetPoint("CENTER")
-			_G[bar.."StatusBar"]:SetAllPoints(_G[bar])
-			_G[bar.."StatusBar"]:SetStatusBarTexture(C.media.texture)
-			F.CreateSD(_G[bar])
-		end
-	end
-end
 
 --[[ Global ]]
 
@@ -860,8 +834,6 @@ local UnitSpecific = {
 
 	player = function(self, ...)
 		Shared(self, ...)
-
-		MirrorBars()
 
 		local Health = self.Health
 		local Power = self.Power
