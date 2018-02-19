@@ -17,7 +17,7 @@ local function SkinBar(bar)
 	bar:SetStatusBarTexture(C.media.texture)
 	bar:SetStatusBarColor(1, 0, 0)
 
-	F.CreateBD(bar)
+	F.CreateBD(bar, .65)
 	F.CreateSD(bar)
 end
 
