@@ -294,4 +294,56 @@ function private.AddOns.Blizzard_TalentUI()
 
     F.CreateBD(_G.PlayerTalentFrame)
     F.CreateSD(_G.PlayerTalentFrame)
+
+
+    -- PVP Talents
+    PlayerTalentFramePVPTalents.XPBar.Frame:Hide()
+    PlayerTalentFramePVPTalents.XPBar.Bar.Background:Hide()
+    F.CreateBDFrame(PlayerTalentFramePVPTalents.XPBar.Bar.Background)
+    F.Reskin(PlayerTalentFramePVPTalents.XPBar.PrestigeReward.Accept)
+    PlayerTalentFramePVPTalents.PortraitBackground:SetAlpha(0)
+    PlayerTalentFramePVPTalents.SmallWreath:SetAlpha(0)
+    for i = 1, 8 do
+        select(i, PlayerTalentFramePVPTalents.Talents:GetRegions()):Hide()
+    end
+    for i = 1, MAX_PVP_TALENT_TIERS do
+        local row = PlayerTalentFramePVPTalents.Talents["Tier"..i]
+        row.Bg:Hide()
+        row.TopLine:SetDesaturated(true)
+        row.TopLine:SetVertexColor(r, g, b)
+        row.BottomLine:SetDesaturated(true)
+        row.BottomLine:SetVertexColor(r, g, b)
+
+        for j = 1, 3 do
+            local bu = row["Talent"..j]
+            bu.learnSelection:SetAlpha(0)
+            bu.knownSelection:SetAlpha(0)
+            bu.LeftCap:Hide()
+            bu.RightCap:Hide()
+            bu.Cover:SetAlpha(0)
+            bu:SetHighlightTexture("")
+            bu.Slot:SetAlpha(0)
+            bu.Icon:SetDrawLayer("ARTWORK")
+            bu.Icon:SetTexCoord(.08, .92, .08, .92)
+            F.CreateBG(bu.Icon)
+
+            bu.bg = CreateFrame("Frame", nil, bu)
+            bu.bg:SetPoint("TOPLEFT", 10, 0)
+            bu.bg:SetPoint("BOTTOMRIGHT")
+            bu.bg:SetFrameLevel(bu:GetFrameLevel()-1)
+            F.CreateBD(bu.bg, .25)
+        end
+    end
+    hooksecurefunc("PVPTalentFrame_Update", function()
+        for i = 1, MAX_PVP_TALENT_TIERS do
+            for j = 1, 3 do
+                local bu = PlayerTalentFramePVPTalents.Talents["Tier"..i]["Talent"..j]
+                if bu.knownSelection:IsShown() then
+                    bu.bg:SetBackdropColor(r, g, b, .25)
+                else
+                    bu.bg:SetBackdropColor(0, 0, 0, .25)
+                end
+            end
+        end
+    end)
 end
