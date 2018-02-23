@@ -324,12 +324,20 @@ C.themes["Blizzard_OrderHallUI"] = function()
 
 				if bu and bu.talent then
 					local class = select(2, UnitClass("player"))
-					local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+					local r, g, b
+					if FreeUI then
+                		local C = FreeUI[2]
+						r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+					else
+						r, g, b = _G.CUSTOM_CLASS_COLORS[private.charClass.token]:GetRGB()
+					end
+					
 					if bu.talent.selected then
 						bu.bg:SetBackdropBorderColor(r, g, b)
 					else
 						bu.bg:SetBackdropBorderColor(0, 0, 0)
 					end
+
 				end
 			end
 		end
