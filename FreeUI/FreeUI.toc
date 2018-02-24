@@ -2,7 +2,7 @@
 ## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Lightsword (Modified/updated by Solor)
-## Version: 70300.04
+## Version: 70300.05
 ## OptionalDeps: Clique, FreeUI_Options, MyRolePlay, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig

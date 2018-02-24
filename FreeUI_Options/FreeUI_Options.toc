@@ -2,7 +2,7 @@
 ## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r |cffFFFF99Options|r
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth/Lightsword (Modified/updated by Solor)
-## Version: 70300.04
+## Version: 70300.05
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 

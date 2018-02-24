@@ -2,7 +2,7 @@
 ## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r |cffFF6666Bags|r
 ## Notes: Minimalistic inventory addon featuring item filters and alot more.
 ## Author: Luzzifus, Nibelheim, humfras (Modified/updated by Solor)
-## Version: 70300.04
+## Version: 70300.05
 ## RequiredDeps: FreeUI
 ## OptionalDeps: ItemRack, Outfitter
 ## SavedVariables: cBnivCfg, cB_CustomBags, cBniv_CatInfo
