@@ -24,7 +24,6 @@
 	<Script file="cooldown.lua"/>
 	<Script file="cursor.lua"/>
 	<Script file="disable.lua"/>
-	<Script file="dragemall.lua"/>
 	<Script file="errors.lua"/>
 	<Script file="events.lua"/>
 	<Script file="foglight.lua"/>
@@ -41,6 +40,7 @@
 	<Script file="minimap.lua"/>
 	<Script file="mirrorbar.lua"/>
 	<Script file="misc.lua"/>
+	<Script file="mover.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="orderhallcommandbar.lua"/>
 	<Script file="paperdollframe.lua"/>

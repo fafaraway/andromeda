@@ -1,7 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
+-- DragEmAll, by emelio
 
-local addon = CreateFrame("Frame")
+local mover = CreateFrame("Frame")
 
 -- Based on the frame list from NDragIt by Nemes.
 -- These frames are hooked on login.
@@ -47,6 +48,8 @@ local frames = {
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
 	["WorldStateScoreFrame"] = false,
+
+	["BaudErrorFrame"] = false,
 }
 
 -- Frame Existing Check
@@ -62,6 +65,7 @@ local lodFrames = {
 	-- AddonName = { list of frames, same syntax as above }
 	Blizzard_AchievementUI		= { ["AchievementFrame"] = false, ["AchievementFrameHeader"] = true, ["AchievementFrameCategoriesContainer"] = "AchievementFrame", ["AchievementFrame.searchResults"] = false },
 	Blizzard_AdventureMap		= { ["AdventureMapQuestChoiceDialog"] = false },
+	Blizzard_AlliedRacesUI		= { ["AlliedRacesFrame"] = false },
 	Blizzard_ArchaeologyUI		= { ["ArchaeologyFrame"] = false },
 	Blizzard_ArtifactUI			= { ["ArtifactFrame"] = false, ["ArtifactRelicForgeFrame"] = false },
 	Blizzard_AuctionUI			= { ["AuctionFrame"] = false },
@@ -90,17 +94,18 @@ local lodFrames = {
 	Blizzard_TradeSkillUI		= { ["TradeSkillFrame"] = false },
 	Blizzard_TrainerUI			= { ["ClassTrainerFrame"] = false },
 	Blizzard_VoidStorageUI		= { ["VoidStorageFrame"] = false, ["VoidStorageBorderFrameMouseBlockFrame"] = "VoidStorageFrame" },
+	Blizzard_WarboardUI			= { ["WarboardQuestChoiceFrame"] = false },
 }
 
 local parentFrame = {}
 local hooked = {}
 
-function addon:PLAYER_LOGIN()
+function mover:PLAYER_LOGIN()
 	self:HookFrames(frames)
 	IsFrameExists()
 end
 
-function addon:ADDON_LOADED(name)
+function mover:ADDON_LOADED(name)
 	local frameList = lodFrames[name]
 	if frameList then
 		self:HookFrames(frameList, name)
@@ -122,13 +127,13 @@ local function MouseUpHandler(frame, button)
 	end
 end
 
-function addon:HookFrames(list, arg)
+function mover:HookFrames(list, arg)
 	for name, child in pairs(list) do
 		self:HookFrame(name, child)
 	end
 end
 
-function addon:HookFrame(name, moveParent)
+function mover:HookFrame(name, moveParent)
 	-- find frame
 	-- name may contain dots for children, e.g. ReforgingFrame.InvisibleButton
 	local frame = _G
@@ -170,7 +175,7 @@ function addon:HookFrame(name, moveParent)
 	end
 end
 
-function addon:HookScript(frame, script, handler)
+function mover:HookScript(frame, script, handler)
 	if not frame.GetScript then return end
 	local oldHandler = frame:GetScript(script)
 	if oldHandler then
@@ -183,6 +188,6 @@ function addon:HookScript(frame, script, handler)
 	end
 end
 
-addon:SetScript("OnEvent", function(f, e, ...) f[e](f, ...) end)
-addon:RegisterEvent("PLAYER_LOGIN")
-addon:RegisterEvent("ADDON_LOADED")
+mover:SetScript("OnEvent", function(f, e, ...) f[e](f, ...) end)
+mover:RegisterEvent("PLAYER_LOGIN")
+mover:RegisterEvent("ADDON_LOADED")
