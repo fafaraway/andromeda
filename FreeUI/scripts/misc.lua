@@ -261,5 +261,3 @@ btn:SetScript("OnClick", function(self, button, down)
 end)
 btn:RegisterForClicks("AnyDown");]]
 
--- temporary fix
-_G.GarrisonLandingPageTutorialBox:Hide()
