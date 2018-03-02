@@ -555,7 +555,7 @@ local Shared = function(self, unit, isSingle)
 	Power.bg:SetPoint("LEFT")
 	Power.bg:SetPoint("RIGHT")
 	Power.bg:SetTexture(C.media.backdrop)
-	Power.bg:SetVertexColor(0, 0, 0, .25)
+	Power.bg:SetVertexColor(0, 0, 0, .1)
 
 	Power.colorReaction = true
 
