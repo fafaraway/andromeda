@@ -59,13 +59,13 @@ local function InitStyleWAO()
 		sizer[3]:SetPoint("BOTTOMLEFT", sizer[1], "BOTTOMRIGHT", 4, 0)
 
 		-- Minimize button
-		children[5]:Hide()
-		local minimize = children[5]:GetChildren()
-		F.ReskinArrow(minimize, "up")
-		minimize:SetParent(frame)
-		minimize:SetSize(17, 17)
-		minimize:ClearAllPoints()
-		minimize:SetPoint("TOPRIGHT", close, "TOPLEFT", -5, 0)
+		-- children[5]:Hide()
+		-- local minimize = children[5]:GetChildren()
+		-- F.ReskinArrow(minimize, "up")
+		-- minimize:SetParent(frame)
+		-- minimize:SetSize(17, 17)
+		-- minimize:ClearAllPoints()
+		-- minimize:SetPoint("TOPRIGHT", close, "TOPLEFT", -5, 0)
 
 		-- Tutorial
 		--children[6]

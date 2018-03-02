@@ -66,18 +66,18 @@ end
 
 -- modify class color
 C.classcolours = {
-	["HUNTER"] = { r = 0.58, g = 0.86, b = 0.49 },
-	["WARLOCK"] = { r = 0.6, g = 0.47, b = 0.85 },
-	["PALADIN"] = { r = 1, g = 0.22, b = 0.52 },
-	["PRIEST"] = { r = 0.8, g = 0.87, b = .9 },
-	["MAGE"] = { r = 0, g = 0.76, b = 1 },
+	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
+	["DEMONHUNTER"] = {r = 0.64, g = 0.19, b = 0.79},
+	["DRUID"] = {r = 1, g = 0.49, b = 0.04},
+	["HUNTER"] = {r = 0.58, g = 0.86, b = 0.49},
+	["MAGE"] = {r = 0, g = 0.76, b = 1},
 	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
-	["ROGUE"] = { r = 1, g = 0.91, b = 0.2 },
-	["DRUID"] = { r = 1, g = 0.49, b = 0.04 },
-	["SHAMAN"] = { r = 0, g = 0.6, b = 0.6 };
-	["WARRIOR"] = { r = 0.9, g = 0.65, b = 0.45 },
-	["DEATHKNIGHT"] = { r = 0.77, g = 0.12 , b = 0.23 },
-	["DEMONHUNTER"] = { r = 0.64, g = 0.19, b = 0.79 },
+	["PALADIN"] = {r = 1, g = 0.22, b = 0.52},
+	["PRIEST"] = {r = 0.8, g = 0.87, b = .9},
+	["ROGUE"] = {r = 1, g = 0.91, b = 0.2},
+	["SHAMAN"] = {r = 0, g = 0.6, b = 0.6},
+	["WARLOCK"] = {r = 0.6, g = 0.47, b = 0.85},
+	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
 }
 
 
@@ -105,6 +105,7 @@ C["general"] = {
 	["saySapped"] = true,
 	["GroupFinderButton"] = false,
 	["screenSaver"] = false,
+	["autoActionCam"] = false,
 }
 
 C["appearance"] = {
@@ -241,7 +242,7 @@ C["unitframes"] = {
 		["partyMissingHealth"] = true,				-- show missing health
 	["enableArena"] = false,					-- enable arena/flag carrier frames
 
-	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 200},						-- player unitframe position
+	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 280},						-- player unitframe position
 	["player_width"] = 200,
 	["player_height"] = 12,
 	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
@@ -251,7 +252,7 @@ C["unitframes"] = {
 	["pet_width"] = 89,
 	["pet_height"] = 12,
 
-	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 80, 120},					-- target unitframe position
+	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 100, 160},					-- target unitframe position
 	["target_width"] = 262,
 	["target_height"] = 12,
 	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -6},			-- target castbar position
@@ -291,7 +292,7 @@ C["unitframes"] = {
 	["castbarColorNormal"] = {113/255, 178/255, 237/255},
 	["castbarHeight"] = 6,
 
-	["power_height"] = 2,
+	["power_height"] = 3,
 	["altpower_height"] = 2,
 	["classPower_height"] = 4,
 

@@ -62,6 +62,9 @@ ns.localization.generalhideRaidNamesTooltip = "Hide group member name while insi
 ns.localization.generalautoScreenShot = "Auto screenshot"
 ns.localization.generalautoScreenShotTooltip = "Auto take screenshots while player earned achievement."
 
+ns.localization.generalautoActionCam = "Auto action camera"
+ns.localization.generalautoActionCamTooltip = "Auto enables the action camera mode on login."
+
 ns.localization.generaluiScaleAuto = "Force optimal UI scale"
 ns.localization.generaluiScaleAutoTooltip = "Automatically apply the best UI scale for your resolution."
 

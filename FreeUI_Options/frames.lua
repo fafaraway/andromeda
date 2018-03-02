@@ -217,7 +217,7 @@ do
 	local cooldownpulse = ns.CreateCheckBox(general, "cooldownpulse", true, true)
 	cooldownpulse:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -20)
 
-	local itemLinkLevel = ns.CreateCheckBox(general, "itemLinkLevel", true)
+	local itemLinkLevel = ns.CreateCheckBox(general, "itemLinkLevel", true, true)
 	itemLinkLevel:SetPoint("TOPLEFT", cooldownpulse, "BOTTOMLEFT", 0, -8)
 
 	local rareAlert = ns.CreateCheckBox(general, "rareAlert", true)
@@ -266,6 +266,9 @@ do
 
 	local autoScreenShot = ns.CreateCheckBox(general, "autoScreenShot", true, true)
 	autoScreenShot:SetPoint("TOPLEFT", hideRaidNames, "BOTTOMLEFT", 0, -8)
+
+	local autoActionCam = ns.CreateCheckBox(general, "autoActionCam", true, true)
+	autoActionCam:SetPoint("TOPLEFT", autoScreenShot, "BOTTOMLEFT", 0, -8)
 
 	local misc = ns.addSubCategory(general, ns.localization.generalMisc)
 	misc:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -20)

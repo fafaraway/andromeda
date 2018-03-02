@@ -101,6 +101,14 @@ do
 			end)
 		end
 	end
+
+	hooksecurefunc("LFGListEntryCreation_Show", function(self)
+		local searchBox = LFGListFrame.SearchPanel.SearchBox
+		if searchBox:GetText() ~= "" then
+			C_LFGList.CreateListing(16, searchBox:GetText(), 0, 0, "", searchBox:GetText(), true)
+			searchBox:SetText("")
+		end
+	end)
 end
 
 -- Select target when click on raid units
@@ -177,12 +185,15 @@ if C.general.hideRaidNames then
 	local HFPN = function()
 		local name, type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
 		-- print(name.. " ".. type .." ".. difficulty)	
-		if type == "raid" or type == "party" and GetNumGroupMembers() > 3 then
+		-- if type == "raid" or type == "party" and GetNumGroupMembers() > 3 then
+		if type == "raid" then
 			SetCVar("UnitNameFriendlyPlayerName", 0)
+			SetCVar("UnitNameFriendlyPetName", 0)
 			-- print("|cffff6060Hiding.")
 			-- print(GetNumGroupMembers())	
 		else
 			SetCVar("UnitNameFriendlyPlayerName", 1)
+			SetCVar("UnitNameFriendlyPetName", 1)
 			-- print("|cff00ccffShowing.")
 		end
 	end
@@ -248,16 +259,22 @@ if C.general.GroupFinderButton then
 	hooksecurefunc("QuestObjectiveSetupBlockButton_FindGroup", AddGroupFinderButton)
 end
 
--- EasyConfirm by SirMarklan
---[[function EasyConfirm()
-	StaticPopup1Button1:Click();
-	StaticPopup2Button1:Click();
-end
+-- Auto enables the ActionCam on login
+if C.general.autoActionCam then
+	local aac = CreateFrame("Frame", "AutoActionCam")
 
-local btn = CreateFrame("BUTTON", "MyBindingHandlingButton")
-SetBindingClick("SHIFT-F", btn:GetName())
-btn:SetScript("OnClick", function(self, button, down)
-	EasyConfirm();
-end)
-btn:RegisterForClicks("AnyDown");]]
+	aac:RegisterEvent("PLAYER_LOGIN")
+	UIParent:UnregisterEvent("EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED")
+
+	function SetCam(cmd)
+		ConsoleExec("ActionCam " .. cmd)
+	end
+
+	function aac:OnEvent(event, ...)
+		if event == "PLAYER_LOGIN" then
+			SetCam("basic")
+		end
+	end
+	aac:SetScript("OnEvent", aac.OnEvent)
+end
 
