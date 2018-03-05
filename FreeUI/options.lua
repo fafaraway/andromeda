@@ -84,7 +84,7 @@ C.classcolours = {
 -- [[ Global config ]]
 C["general"] = {
 	["cooldownpulse"] = true,
-	["itemLinkLevel"] = false,
+	["itemLinkLevel"] = true,
 	["rareAlert"] = true, 			-- raid warning when a rare mob/event is spotted
 	["interrupt"] = true,			-- announce your interrupts
 		["interrupt_sound"] = true,		-- play sound
@@ -104,7 +104,7 @@ C["general"] = {
 
 	["saySapped"] = true,
 	["GroupFinderButton"] = false,
-	["screenSaver"] = false,
+	["screenSaver"] = true,
 	["autoActionCam"] = false,
 }
 
