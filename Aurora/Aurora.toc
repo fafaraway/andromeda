@@ -2,7 +2,7 @@
 ## Title: |cffF5FFFAFreeUI|r |cff99CCFF<Continued>|r |cff9966FFAurora|r
 ## Notes: Minimalistic window theme.
 ## Author: Haleth/Lightsword, Gethe (Modified/updated by Solor)
-## Version: 70300.05
+## Version: 70300.06
 ## RequiredDeps: FreeUI
 ## OptionalDeps: Ace3, LibTextDump-1.0
 
