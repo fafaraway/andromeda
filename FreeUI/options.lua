@@ -213,7 +213,6 @@ C["tooltip"] = {
 C["quests"] = {
 	["questObjectiveTrackerStyle"] = true,
 	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
-	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -20, -260},
 }
 
 C["unitframes"] = {

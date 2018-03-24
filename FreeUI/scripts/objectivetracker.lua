@@ -20,47 +20,30 @@ local otFont = {
 	"OUTLINE"
 }
 
+
+
 do
-	local parent = CreateFrame("Frame", nil, UIParent)
-	parent:SetFrameStrata("HIGH")
-	RegisterStateDriver(parent, "visibility", "[petbattle] hide; show")
-	local Mover = CreateFrame("Button", "ObjectiveTrackerAnchor", parent)
-	Mover:SetPoint(unpack(C.quests.position))
-	Mover:SetSize(22, 22)
-	Mover.Icon = Mover:CreateTexture(nil, "ARTWORK")
-	Mover.Icon:SetAllPoints()
-	Mover.Icon:SetTexture("Interface\\WorldMap\\Gear_64")
-	Mover.Icon:SetTexCoord(0, .5, 0, .5)
-	Mover.Icon:SetAlpha(.2)
-	Mover:SetHighlightTexture("Interface\\WorldMap\\Gear_64")
-	Mover:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-	F.CreateGT(Mover, "Drag to move", "system")
-	F.CreateMF(Mover)
-
-
-	hooksecurefunc(ot, "SetPoint", function(_, _, parent)
-		if parent ~= Mover then
-			ot:ClearAllPoints()
-			ot:SetPoint("TOPRIGHT", Mover, "TOPLEFT", -5, 0)
-			ot:SetHeight(GetScreenHeight() - 400)
-		end
-	end)
-	hooksecurefunc("ObjectiveTracker_CheckAndHideHeader", function() Mover:SetShown(ot.HeaderMenu:IsShown()) end)
+	RegisterStateDriver(ot, "visibility", "[petbattle] hide; show")
+	--ot:SetWidth()
+	--ot:SetHeight()
+	--ot:ClearAllPoints()
+	--ot:SetPoint()
 end
+
 
 -- Questblock click enhant
 local function QuestHook(id)
 	local questLogIndex = GetQuestLogIndexByID(id)
-	if IsControlKeyDown() and CanAbandonQuest(id) then
+	if IsControlKeyDown() and CanAbandonQuest(id) then -- ctrl+click to abandon quest
 		QuestMapQuestOptions_AbandonQuest(id)
-	elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then
+	elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then -- alt+click to share quest
 		QuestMapQuestOptions_ShareQuest(id)
 	end
 end
 hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(self, block) QuestHook(block.id) end)
 hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
 
--- Show quest color and level
+--[[-- Show quest color and level
 local function Showlevel()
 	if ENABLE_COLORBLIND_MODE == "1" then return end
 	local numEntries = GetNumQuestLogEntries()
@@ -83,7 +66,7 @@ local function Showlevel()
 		end
 	end
 end
-hooksecurefunc("QuestLogQuests_Update", Showlevel)
+hooksecurefunc("QuestLogQuests_Update", Showlevel)]]
 
 
 -- Headers
