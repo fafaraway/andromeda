@@ -64,7 +64,7 @@ function BagButton:Create(bagID)
         button.UpdateTooltip = BagSlotButton_OnEnter
     elseif button.bagID >= 5 then
         -- Bank
-        button:SetID(invID - 67) -- bank IDs don't use the actual invID
+        button:SetID(buttonNum) -- bank IDs don't use the actual invID
         button.GetInventorySlot = ButtonInventorySlot
         button.UpdateTooltip = BankFrameItemButton_OnEnter
     end
