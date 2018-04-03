@@ -51,28 +51,6 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 	old_MerchantItemButton_OnModifiedClick(self, ...)
 end
 
--- Fix Drag Collections taint
-local EventFrame = CreateFrame( 'Frame' )
-EventFrame:RegisterEvent( 'ADDON_LOADED' )
-EventFrame:SetScript("OnEvent", function(self, event, addon)
-	if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-		CollectionsJournal:HookScript("OnShow", function()
-			if not self.init then
-				if InCombatLockdown() then
-					self:RegisterEvent("PLAYER_REGEN_ENABLED")
-				else
-					F.CreateMF(CollectionsJournal)
-					self:UnregisterAllEvents()
-				end
-				self.init = true
-			end
-		end)
-	elseif event == "PLAYER_REGEN_ENABLED" then
-		F.CreateMF(CollectionsJournal)
-		self:UnregisterAllEvents()
-	end
-end)
-
 -- Temporary PVP queue taint fix
 InterfaceOptionsFrameCancel:SetScript("OnClick", function()
 	InterfaceOptionsFrameOkay:Click()

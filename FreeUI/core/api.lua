@@ -749,41 +749,6 @@ F.ReskinIcon = function(icon)
 	return F.CreateBG(icon)
 end
 
-F.CreateMF = function(f)
-	f:EnableMouse(true)
-	f:SetMovable(true)
-	f:SetUserPlaced(true)
-	f:SetClampedToScreen(true)
-	f:SetScript("OnMouseDown", function(self) self:StartMoving() end)
-	f:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
-end
-
-F.CreateGT = function(f, text, cc)
-	f:SetScript("OnEnter", function(self)
-		GameTooltip:Hide()
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
-		GameTooltip:ClearLines()
-		if cc then
-			GameTooltip:AddLine(text, cr, cg, cb)
-		else
-			GameTooltip:AddLine(text)
-		end
-		GameTooltip:Show()
-	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
-end
-
-F.CreateAT = function(f, name)
-	f:SetScript("OnEnter", function(self)
-		GameTooltip:Hide()
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -5)
-		GameTooltip:ClearLines()
-		GameTooltip:SetUnitAura("player", name)
-		GameTooltip:Show()
-	end)
-	f:SetScript("OnLeave", GameTooltip_Hide)
-end
-
 -- Numberize
 F.Numb = function(n)
 	if n >= 1e9 then
@@ -795,6 +760,17 @@ F.Numb = function(n)
 	else
 		return ("%.0f"):format(n)
 	end
+end
+
+-- Guild Check
+F.UnitInGuild = function(unit)
+	for i = 1, GetNumGuildMembers() do
+		local name = GetGuildRosterInfo(i)
+		if name and name == unit then
+			return true
+		end
+	end
+	return false
 end
 
 DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
