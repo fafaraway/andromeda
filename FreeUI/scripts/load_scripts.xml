@@ -16,6 +16,7 @@
 	<Script file="chat.lua"/>
 	<Script file="chat_bubble.lua"/>
 	<Script file="chat_itemlinklevel.lua"/>
+	<Script file="chat_filter.lua"/>
 	<Script file="chat_spamagemeter.lua"/>
 	<Script file="chat_tab.lua"/>
 	<Script file="chat_whispersound.lua"/>
