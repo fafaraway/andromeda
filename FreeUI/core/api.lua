@@ -773,5 +773,17 @@ F.UnitInGuild = function(unit)
 	return false
 end
 
+-- Movable Frame
+F.CreateMF = function(f, parent)
+	local frame = parent or f
+	frame:SetMovable(true)
+	frame:SetUserPlaced(true)
+	frame:SetClampedToScreen(true)
+	f:EnableMouse(true)
+	f:RegisterForDrag("LeftButton")
+	f:SetScript("OnDragStart", function() frame:StartMoving() end)
+	f:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
+end
+
 DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
 DEFAULT_CHAT_FRAME:AddMessage("Type |cffffffff/FreeUI|r for more information.", unpack(C.class))
