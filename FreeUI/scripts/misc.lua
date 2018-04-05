@@ -52,15 +52,6 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 end
 
 -- Fix Drag Collections taint
-CreateMF = function(f)
-	f:EnableMouse(true)
-	f:SetMovable(true)
-	f:SetUserPlaced(true)
-	f:SetClampedToScreen(true)
-	f:SetScript("OnMouseDown", function(self) self:StartMoving() end)
-	f:SetScript("OnMouseUp", function(self) self:StopMovingOrSizing() end)
-end
-
 local EventFrame = CreateFrame( 'Frame' )
 EventFrame:RegisterEvent( 'ADDON_LOADED' )
 EventFrame:SetScript("OnEvent", function(self, event, addon)
@@ -70,14 +61,14 @@ EventFrame:SetScript("OnEvent", function(self, event, addon)
 				if InCombatLockdown() then
 					self:RegisterEvent("PLAYER_REGEN_ENABLED")
 				else
-					CreateMF(CollectionsJournal)
+					F.CreateMF(CollectionsJournal)
 					self:UnregisterAllEvents()
 				end
 				self.init = true
 			end
 		end)
 	elseif event == "PLAYER_REGEN_ENABLED" then
-		CreateMF(CollectionsJournal)
+		F.CreateMF(CollectionsJournal)
 		self:UnregisterAllEvents()
 	end
 end)
