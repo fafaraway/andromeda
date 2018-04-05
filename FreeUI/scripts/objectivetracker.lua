@@ -8,6 +8,7 @@ local r, g, b =  165/255, 0, 48/255
 
 local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
+local minimize = ot.HeaderMenu.MinimizeButton
 
 local otFontHeader = {
 	C.font.header,
@@ -21,13 +22,31 @@ local otFont = {
 }
 
 
-
 do
+	-- Move Tracker Frame
+	local mover = CreateFrame("Frame", "ObjectiveTrackerFrameMover", ot)
+	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -25)
+	mover:SetSize(50, 50)
+	F.CreateMF(minimize, mover)
+	minimize:SetFrameStrata("HIGH")
+	minimize:HookScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine("Drag to move", 1, .8, 0)
+		GameTooltip:Show()
+	end)
+	minimize:HookScript("OnLeave", GameTooltip_Hide)
+
+	hooksecurefunc(ot, "SetPoint", function(_, _, parent)
+		if parent ~= mover then
+			ot:ClearAllPoints()
+			ot:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
+			ot:SetHeight(GetScreenHeight() - 400)
+			-- ot:SetWidth()
+		end
+	end)
+
 	RegisterStateDriver(ot, "visibility", "[petbattle] hide; show")
-	--ot:SetWidth()
-	--ot:SetHeight()
-	--ot:ClearAllPoints()
-	--ot:SetPoint()
 end
 
 
