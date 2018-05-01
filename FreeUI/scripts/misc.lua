@@ -111,6 +111,23 @@ do
 	end)
 end
 
+-- Fix blizz LFGList error in zhCN
+if GetLocale() == "zhCN" then
+	StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
+		text = " 针对此项活动，你的队伍人数已满，将被移出列表。",
+		button1 = OKAY,
+		timeout = 0,
+		whileDead = 1,
+	}
+end
+hooksecurefunc("StaticPopup_Show", function(which)
+		if which == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
+			C_Timer.After(1, function()
+				StaticPopup_Hide(which)
+			end)
+		end
+end)
+
 -- Select target when click on raid units
 do
 	local function fixRaidGroupButton()
@@ -142,16 +159,6 @@ do
 			end
 		end
 	end)
-end
-
--- Fix blizz LFGList error in zhCN
-if GetLocale() == "zhCN" then
-	StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
-		text = " 针对此项活动，你的队伍人数已满，将被移出列表。",
-		button1 = OKAY,
-		timeout = 0,
-		whileDead = 1,
-	}
 end
 
 -- Ctrl + left click to report spamer
@@ -277,4 +284,6 @@ if C.general.autoActionCam then
 	end
 	aac:SetScript("OnEvent", aac.OnEvent)
 end
+
+
 
