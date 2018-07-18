@@ -30,17 +30,24 @@ local ItemKeys = cargBags.itemKeys
 
 local setItems
 
+local GetNumEquipmentSets = C_EquipmentSet.GetNumEquipmentSets
+local GetEquipmentSetInfo = C_EquipmentSet.GetEquipmentSetInfo
+local GetEquipmentSetItemIDs = C_EquipmentSet.GetItemIDs
+
 local function initUpdater()
-	local function updateSets()
+
+	local updateSets
+	function updateSets()
 		setItems = setItems or {}
 		for k in pairs(setItems) do setItems[k] = nil end
 
-		for setID = 1, GetNumEquipmentSets() do
-			local name = GetEquipmentSetInfo(setID)
-			local items = GetEquipmentSetItemIDs(name)
+		for setID = 0, GetNumEquipmentSets()-1 do
+			local items = GetEquipmentSetItemIDs(setID)
 
-			for slot, id in pairs(items) do
-				setItems[id] = setID
+			if items then
+				for slot, id in pairs(items) do
+					setItems[id] = setID
+				end
 			end
 		end
 	end
