@@ -2,20 +2,11 @@ local F, C, L = unpack(select(2, ...))
 
 if not C.tooltip.enable then return end
 
-local ADDON_NAME, ns = ...
 
-local _, _G = _, _G
-local GameTooltip = _G["GameTooltip"]
+local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
+local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 
--- Position
-hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
-	if C.tooltip.anchorCursor then
-		self:SetOwner(parent, "ANCHOR_CURSOR")
-	else
-		self:SetOwner(parent, "ANCHOR_NONE")
-		self:SetPoint(unpack(C.tooltip.tipPosition))
-	end
-end)
+
 
 
 local locale = GetLocale()
@@ -38,6 +29,7 @@ local classification = {
 	rareelite = ("|cffCC00FF %s|r"):format(RAREELITE),
 	worldboss = ("|cffFF0000?? %s|r"):format(BOSS)
 }
+
 
 local qqColor = { r=1, g=0, b=0 }
 local nilColor = { r=1, g=1, b=1 }
@@ -343,91 +335,294 @@ function GameTooltipStatusBar:SetStatusBarColor(...)
 	end
 end
 
-
-
-local tooltips = {
-    "GameTooltip",
-    "ItemRefTooltip",
-    "ShoppingTooltip1",
-    "ShoppingTooltip2",
-    "ShoppingTooltip3",
-    "AutoCompleteBox",
-    "FriendsTooltip",
-    "WorldMapTooltip",
-    "WorldMapCompareTooltip1",
-    "WorldMapCompareTooltip2",
-    "WorldMapCompareTooltip3",
-    "ItemRefShoppingTooltip1",
-    "ItemRefShoppingTooltip2",
-    "ItemRefShoppingTooltip3",
-    "FloatingBattlePetTooltip",
-    "BattlePetTooltip",
-    "IMECandidatesFrame",
-}
-
-local itemTips = {}
-
-local function style(frame)
-	if not frame or frame:IsForbidden() then return end
-
-	local frameName = frame and frame:GetName()
-	if not (frameName) then return end
-
-	local bdFrame = frame.BackdropFrame or frame
-	if(not frame.ftipBD) then
-		-- bdFrame:SetBackdrop(C.media.backdrop)
-		bdFrame.ftipBD = true
-		
-		F.CreateBD(bdFrame)
-		F.CreateSD(bdFrame)
-	end
-
-	bdFrame:SetBackdropColor(0, 0, 0, .65)
-	bdFrame:SetBackdropBorderColor(0, 0, 0)
-
-	frame:SetScale(1)
-end
-ns.style = style
-
-local frameload = CreateFrame("Frame")
-frameload:RegisterEvent("PLAYER_ENTERING_WORLD")
-frameload:SetScript("OnEvent", function(self)
-    self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-
-    for i, tip in ipairs(tooltips) do
-        frame = _G[tip]
-
-        if(frame) then
-            frame:HookScript("OnShow", function(self)
-                if(C.tooltip.combatHideALL and InCombatLockdown()) then
-                    return self:Hide()
-                end
-
-                style(self)
-            end)
-        end
-    end
-
-    style(GameTooltip)
-end)
-
-local itemEvent = CreateFrame"Frame"
-itemEvent:RegisterEvent("GET_ITEM_INFO_RECEIVED")
-itemEvent:SetScript("OnEvent", function(self, event, arg1)
-    for k in next, itemTips do
-        local tip = _G[k]
-        if(tip and tip:IsShown()) then
-            style(tip)
-        end
-    end
-end)
-
 GameTooltipHeaderText:SetFont(C.font.normal, 14, "OUTLINE")
 GameTooltipText:SetFont(C.font.normal, 12, "OUTLINE")
 GameTooltipTextSmall:SetFont(C.font.normal, 12, "OUTLINE")
 
 
+-- Tooltip skin
+local function style(self)
+	self:SetScale(1)
 
+	if not self.bg then
+		self:SetBackdrop(nil)
+		local bg = F.CreateBDFrame(self, .65)
+		--bg:SetFrameLevel(self:GetFrameLevel())
+		--F.CreateBD(bg)
+		--F.CreateTex(bg)
+		F.CreateSD(bg)
+		self.bg = bg
+
+		-- other gametooltip-like support
+		self.GetBackdrop = function() return bg:GetBackdrop() end
+		self.GetBackdropColor = function() return 0, 0, 0, .65 end
+		self.GetBackdropBorderColor = function() return 0, 0, 0 end
+	end
+
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+	--[[if self.GetItem then
+		local _, item = self:GetItem()
+		if item then
+			local quality = select(3, GetItemInfo(item))
+			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+			if color then
+				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+			end
+		end
+	end]]
+
+	--[[if self.NumLines and self:NumLines() > 0 then
+		for index = 1, self:NumLines() do
+			if index == 1 then
+				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12, "OUTLINE")
+			else
+				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12, "OUTLINE")
+			end
+			_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12, "OUTLINE")
+		end
+	end]]
+end
+
+local function extrastyle(self)
+	if not self.styled then
+		self:DisableDrawLayer("BACKGROUND")
+		style(self)
+
+		self.styled = true
+	end
+end
+
+hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+	self:SetBackdrop(nil)
+end)
+
+
+F.RegisterEvent("ADDON_LOADED", function(_, addon)
+	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("AuroraClassic") then
+		FrameStackTooltip:HookScript("OnShow", style)
+		EventTraceTooltip:HookScript("OnShow", style)
+
+	elseif addon == "FreeUI" then
+		
+
+		local tooltips = {
+			ChatMenu,
+			EmoteMenu,
+			LanguageMenu,
+			VoiceMacroMenu,
+			GameTooltip,
+			EmbeddedItemTooltip,
+			ItemRefTooltip,
+			ItemRefShoppingTooltip1,
+			ItemRefShoppingTooltip2,
+			ShoppingTooltip1,
+			ShoppingTooltip2,
+			AutoCompleteBox,
+			FriendsTooltip,
+			WorldMapTooltip,
+			WorldMapCompareTooltip1,
+			WorldMapCompareTooltip2,
+			QuestScrollFrame.StoryTooltip,
+			GeneralDockManagerOverflowButtonList,
+			ReputationParagonTooltip,
+			QuestScrollFrame.WarCampaignTooltip,
+			NamePlateTooltip,
+		}
+		for _, f in pairs(tooltips) do
+			if f then
+				f:HookScript("OnShow", style)
+			end
+		end
+
+		local extra = {
+			QueueStatusFrame,
+			FloatingGarrisonFollowerTooltip,
+			FloatingGarrisonFollowerAbilityTooltip,
+			FloatingGarrisonMissionTooltip,
+			GarrisonFollowerAbilityTooltip,
+			GarrisonFollowerTooltip,
+			FloatingGarrisonShipyardFollowerTooltip,
+			GarrisonShipyardFollowerTooltip,
+			BattlePetTooltip,
+			PetBattlePrimaryAbilityTooltip,
+			PetBattlePrimaryUnitTooltip,
+			FloatingBattlePetTooltip,
+			FloatingPetBattleAbilityTooltip,
+			IMECandidatesFrame
+		}
+		for _, f in pairs(extra) do
+			if f then
+				f:HookScript("OnShow", extrastyle)
+			end
+		end
+
+		-- DropdownMenu
+		hooksecurefunc("UIDropDownMenu_CreateFrames", function()
+			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+				local menu = _G["DropDownList"..i.."MenuBackdrop"]
+				if menu and not menu.styled then
+					menu:HookScript("OnShow", style)
+					menu.styled = true
+				end
+
+				local menu2 = _G["Lib_DropDownList"..i.."MenuBackdrop"]
+				if menu2 and not menu2.styled then
+					menu2:HookScript("OnShow", style)
+					menu2.styled = true
+				end
+			end
+		end)
+
+		-- IME
+		local r, g, b = unpack(C.class)
+		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
+
+		-- Pet Tooltip
+		PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
+		PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
+		PetBattlePrimaryUnitTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+		PetBattlePrimaryUnitTooltip.Delimiter2:SetHeight(1)
+		PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+		PetBattlePrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
+		PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+		PetBattlePrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+		FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
+		FloatingPetBattleAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
+		FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
+		FloatingPetBattleAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+		FloatingBattlePetTooltip.Delimiter:SetColorTexture(0, 0, 0)
+		FloatingBattlePetTooltip.Delimiter:SetHeight(1)
+
+		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
+			if not self.tipStyled then
+				if self.glow then self.glow:Hide() end
+				self.Border:Hide()
+				self.Icon:SetTexCoord(unpack(C.texCoord))
+				self.tipStyled = true
+			end
+		end)
+
+		hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self)
+			local nextBuff, nextDebuff = 1, 1
+			for i = 1, C_PetBattles.GetNumAuras(self.petOwner, self.petIndex) do
+				local _, _, _, isBuff = C_PetBattles.GetAuraInfo(self.petOwner, self.petIndex, i)
+				if isBuff and self.Buffs then
+					local frame = self.Buffs.frames[nextBuff]
+					if frame and frame.Icon then
+						frame.Icon:SetTexCoord(unpack(C.texCoord))
+					end
+					nextBuff = nextBuff + 1
+				elseif (not isBuff) and self.Debuffs then
+					local frame = self.Debuffs.frames[nextDebuff]
+					if frame and frame.Icon then
+						frame.DebuffBorder:Hide()
+						frame.Icon:SetTexCoord(unpack(C.texCoord))
+					end
+					nextDebuff = nextDebuff + 1
+				end
+			end
+		end)
+
+	elseif addon == "Blizzard_Collections" then
+		local pet = {
+			PetJournalPrimaryAbilityTooltip,
+			PetJournalSecondaryAbilityTooltip,
+		}
+		for _, f in pairs(pet) do
+			if f then
+				f:HookScript("OnShow", extrastyle)
+			end
+		end
+
+		PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+		PetJournalPrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
+		PetJournalPrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+		PetJournalPrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+
+	elseif addon == "Blizzard_GarrisonUI" then
+		local gt = {
+			GarrisonMissionMechanicTooltip,
+			GarrisonMissionMechanicFollowerCounterTooltip,
+			GarrisonShipyardMapMissionTooltip,
+			GarrisonBonusAreaTooltip,
+			GarrisonBuildingFrame.BuildingLevelTooltip,
+			GarrisonFollowerAbilityWithoutCountersTooltip,
+			GarrisonFollowerMissionAbilityWithoutCountersTooltip
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", extrastyle)
+			end
+		end
+
+	elseif addon == "Blizzard_PVPUI" then
+		local gt = {
+			ConquestTooltip,
+			PVPRewardTooltip,
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", style)
+			end
+		end
+
+	elseif addon == "Blizzard_Contribution" then
+		local gt = {
+			ContributionTooltip,
+			ContributionBuffTooltip,
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", extrastyle)
+			end
+		end
+		ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.texCoord))
+		ContributionBuffTooltip.Border:SetAlpha(0)
+
+	elseif addon == "Blizzard_EncounterJournal" then
+		local f = EncounterJournalTooltip
+		if f then
+			f:HookScript("OnShow", style)
+		end
+		f.Item1.icon:SetTexCoord(unpack(C.texCoord))
+		f.Item2.icon:SetTexCoord(unpack(C.texCoord))
+
+	elseif addon == "Blizzard_Calendar" then
+		local gt = {
+			CalendarContextMenu,
+			CalendarInviteStatusContextMenu,
+		}
+		for _, f in pairs(gt) do
+			if f then
+				f:HookScript("OnShow", style)
+			end
+		end
+
+	elseif addon == "Blizzard_IslandsQueueUI" then
+		local f = IslandsQueueFrameTooltip
+		f:GetParent():GetParent():HookScript("OnShow", style)
+		f:GetParent().IconBorder:SetAlpha(0)
+		f:GetParent().Icon:SetTexCoord(unpack(C.texCoord))
+	end
+end)
+
+
+
+
+-- Position
+hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
+	if C.tooltip.anchorCursor then
+		tooltip:SetOwner(parent, "ANCHOR_CURSOR_RIGHT")
+	else
+		tooltip:SetOwner(parent, "ANCHOR_NONE")
+		tooltip:ClearAllPoints()
+		tooltip:SetPoint(unpack(C.tooltip.tipPosition))
+	end
+end)
+
+
+
+-- aura source
 if C.auras.aurasSource then
 	local function addAuraInfo(self, caster, spellID)
 		if(caster) then
