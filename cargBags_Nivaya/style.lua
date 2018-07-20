@@ -471,8 +471,8 @@ function MyContainer:OnCreate(name, settings)
 	background:SetPoint("BOTTOMRIGHT", 4, -4)
 
 	-- Background, border
-	if FreeUI then
-		local F = FreeUI[1]
+	if AuroraClassic then
+		local F = AuroraClassic[1]
 		F.CreateBD(background)
 		F.CreateSD(background)
 	end
@@ -506,8 +506,8 @@ function MyContainer:OnCreate(name, settings)
 		
 		if (tBag or tBank) then
 			local close = CreateFrame("Button", nil, self, "UIPanelCloseButton")
-			if FreeUI then
-				local F = FreeUI[1]
+			if AuroraClassic then
+				local F = AuroraClassic[1]
 				F.ReskinClose(close, "TOPRIGHT", self, "TOPRIGHT", 1, 1)
 			else
 				close:SetPoint("TOPRIGHT", 8, 8)
