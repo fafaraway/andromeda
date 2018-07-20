@@ -27,6 +27,7 @@ else
 end
 
 C.r, C.g, C.b = unpack(C.class)
+C.texCoord = {.08, .92, .08, .92}
 
 C.reactioncolours = {
 	[1] = {1, .12, .24},
@@ -79,7 +80,7 @@ end
 
 F.CreateBD = CreateBD
 
-F.CreateBG = function(frame)
+F.CreateBG = function(frame, a)
 	local f = frame
 	if frame:GetObjectType() == "Texture" then f = frame:GetParent() end
 
@@ -87,7 +88,7 @@ F.CreateBG = function(frame)
 	bg:SetPoint("TOPLEFT", frame, -1, 1)
 	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
 	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0)
+	bg:SetVertexColor(0, 0, 0, a or .7)
 
 	return bg
 end

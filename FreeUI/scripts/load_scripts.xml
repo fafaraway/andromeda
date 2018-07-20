@@ -21,7 +21,7 @@
 	<Script file="chat_tab.lua"/>
 	<Script file="chat_whispersound.lua"/>
 	<Script file="colorpicker.lua"/>
-	<Script file="colours.lua"/>
+	<!-- <Script file="colours.lua"/> -->
 	<!-- <Script file="cooldown.lua"/> -->
 	<Script file="cursor.lua"/>
 	<Script file="disable.lua"/>
@@ -52,7 +52,7 @@
 	<Script file="role.lua"/>
 	<Script file="safequeue.lua"/>
 	<Script file="saysapped.lua"/>
-	<Script file="screensaver.lua"/>
+	<!-- <Script file="screensaver.lua"/> -->
 	<Script file="sharedmedia.lua"/>
 	<Script file="skin_ace.lua"/>
 	<Script file="skin_dbmbars.lua"/>
@@ -70,7 +70,7 @@
 	<Script file="tip_icon.lua"/>
 	<Script file="tip_id.lua"/>
 	<Script file="tip_ilvlSpec.lua"/>
-	<Script file="tip_multi.lua"/>
+	<!-- <Script file="tip_multi.lua"/> -->
 	<!-- <Script file="tradeskill.lua"/> -->
 	<Script file="uifader.lua"/>
 	<Script file="uisetuphelper.lua"/>
