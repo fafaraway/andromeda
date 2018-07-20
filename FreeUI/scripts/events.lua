@@ -58,7 +58,7 @@ end
 
 -- Calendar
 
-local function GetGuildInvites()
+--[[local function GetGuildInvites()
 	local numGuildInvites = 0
 	local _, currentMonth = CalendarGetDate()
 
@@ -81,9 +81,9 @@ end
 local function toggleCalendar()
 	if not CalendarFrame then LoadAddOn("Blizzard_Calendar") end
 	Calendar_Toggle()
-end
+end]]
 
-local function alertEvents()
+--[[local function alertEvents()
 	if CalendarFrame and CalendarFrame:IsShown() then return end
 	local num = CalendarGetNumPendingInvites()
 	if num ~= numInvites then
@@ -94,9 +94,9 @@ local function alertEvents()
 		end
 		numInvites = num
 	end
-end
+end]]
 
-local function alertGuildEvents()
+--[[local function alertGuildEvents()
 	if CalendarFrame and CalendarFrame:IsShown() then return end
 	local num = GetGuildInvites()
 	if num > 1 then
@@ -104,7 +104,7 @@ local function alertGuildEvents()
 	elseif num > 0 then
 		F.Notification("Calendar", "You have 1 pending guild event.", toggleCalendar)
 	end
-end
+end]]
 
 -- [[ Handle events ]]
 
@@ -181,17 +181,17 @@ f:SetScript("OnEvent", function(self, event)
 		alertGuildEvents()
 	else -- PLAYER_ENTERING_WORLD
 		if C.notifications.checkEvents or C.notifications.checkGuildEvents then
-			OpenCalendar()
+			-- OpenCalendar()
 			f:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
 		end
 
-		if C.notifications.checkEvents then
+		--[[if C.notifications.checkEvents then
 			alertEvents()
-		end
+		end]]
 
-		if C.notifications.checkGuildEvents then
+		--[[if C.notifications.checkGuildEvents then
 			alertGuildEvents()
-		end
+		end]]
 
 		f:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end

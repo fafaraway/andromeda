@@ -58,17 +58,17 @@ setBar(Reputation)
 Reputation:SetFrameLevel(4)
 setBackdrop(Reputation)
 
-local Artifact = CreateFrame("StatusBar", nil, f, 'AnimatedStatusBarTemplate')
-setBar(Artifact)
-Artifact:SetFrameLevel(4)
-Artifact:SetStatusBarColor(229/255, 205/255, 157/255)
-setBackdrop(Artifact)
+--local Artifact = CreateFrame("StatusBar", nil, f, 'AnimatedStatusBarTemplate')
+--setBar(Artifact)
+--Artifact:SetFrameLevel(4)
+--Artifact:SetStatusBarColor(229/255, 205/255, 157/255)
+--setBackdrop(Artifact)
 
-local Honor = CreateFrame("StatusBar", nil, f, 'AnimatedStatusBarTemplate')
-setBar(Honor)
-Honor:SetFrameLevel(4)
-Honor:SetStatusBarColor(205/255, 6/255, 0/255)
-setBackdrop(Honor)
+--local Honor = CreateFrame("StatusBar", nil, f, 'AnimatedStatusBarTemplate')
+--setBar(Honor)
+--Honor:SetFrameLevel(4)
+--Honor:SetStatusBarColor(205/255, 6/255, 0/255)
+--setBackdrop(Honor)
 
 local numberize = function(v)
 	if v <= 9999 then return v end
@@ -189,7 +189,7 @@ local showReputationTooltip = function(self)
 	end
 end
 
-local artifact_update = function(self, event)
+--[[local artifact_update = function(self, event)
 
 	if HasArtifactEquipped() then
 		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
@@ -310,7 +310,7 @@ local showHonorTooltip = function(self)
 
 		GameTooltip:Show()
 	end
-end
+end]]
 
 -- events
 Experience:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -330,7 +330,7 @@ Reputation:SetScript("OnEvent", reputation_update)
 Reputation:SetScript("OnEnter", function() showReputationTooltip(Reputation) end)
 Reputation:SetScript("OnLeave", function() GameTooltip:Hide() end)
 
-Artifact:RegisterEvent("PLAYER_ENTERING_WORLD")
+--[[Artifact:RegisterEvent("PLAYER_ENTERING_WORLD")
 Artifact:RegisterEvent("PLAYER_LEVEL_UP")
 Artifact:RegisterEvent("UPDATE_EXHAUSTION")
 Artifact:RegisterEvent("UPDATE_FACTION")
@@ -352,4 +352,4 @@ Honor:RegisterEvent("ARTIFACT_UPDATE")
 Honor:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 Honor:SetScript("OnEvent", honor_update)
 Honor:SetScript("OnEnter", function() showHonorTooltip(Honor) end)
-Honor:SetScript("OnLeave", function() GameTooltip:Hide() end)
+Honor:SetScript("OnLeave", function() GameTooltip:Hide() end)]]

@@ -35,6 +35,21 @@ HideForever(ChatFrameMenuButton)
 HideForever(QuickJoinToastButton)
 HideForever(GeneralDockManagerOverflowButton)
 
+local function skinChat(self)
+	if not self or (self and self.styled) then return end
+
+
+
+
+
+
+	HideForever(self.buttonFrame)
+	HideForever(self.ScrollBar)
+	HideForever(self.ScrollToBottomButton)
+
+	self.styled = true
+end
+
 ChatTypeInfo.SAY.sticky = 1
 ChatTypeInfo.EMOTE.sticky = 1
 ChatTypeInfo.YELL.sticky = 1
@@ -117,6 +132,19 @@ function eFrame:PLAYER_LOGIN()
 
 		end
 	end
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		skinChat(_G["ChatFrame"..i])
+	end
+
+	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+		for _, chatFrameName in next, CHAT_FRAMES do
+			local frame = _G[chatFrameName]
+			if frame.isTemporary then
+				skinChat(frame)
+			end
+		end
+	end)
 end
 
 local function EnableFading(i)
@@ -202,13 +230,13 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, messa
 	return false, ("+ |cffffffff|Hcurrency:%d|h%s|h|r%s"):format(currencyID, currencyName, currencyAmount or ""), ...
 end)
 
-local function toggleDown(f)
+--[[local function toggleDown(f)
 	-- if f:GetCurrentScroll()> 0 then
 	-- 	_G[f:GetName().."ButtonFrameBottomButton"]:Show()
 	-- else
 	_G[f:GetName().."ButtonFrameBottomButton"]:Hide()
 	-- end
-end
+end]]
 
 local function reskinMinimize(f)
 	f:SetSize(16, 16)
@@ -223,15 +251,15 @@ local function StyleWindow(f)
 	if frame.reskinned then return end
 	frame.reskinned = true
 
-	local down = _G[f.."ButtonFrameBottomButton"]
-	down:SetPoint("BOTTOM")
-	down:Hide()
+	--local down = _G[f.."ButtonFrameBottomButton"]
+	--down:SetPoint("BOTTOM")
+	--down:Hide()
 
-	HideForever(_G[f.."ButtonFrameUpButton"])
-	HideForever(_G[f.."ButtonFrameDownButton"])
+	--HideForever(_G[f.."ButtonFrameUpButton"])
+	--HideForever(_G[f.."ButtonFrameDownButton"])
 
 	--frame:HookScript("OnMessageScrollChanged", toggleDown)
-	frame:HookScript("OnShow", toggleDown)
+	--frame:HookScript("OnShow", toggleDown)
 
 	frame:SetFading(false)
 

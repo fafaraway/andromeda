@@ -62,7 +62,6 @@ end)
 do
 	local frames = {
 		"MiniMapInstanceDifficulty",
-		"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
 		"MiniMapMailBorder",
 		"MinimapBorderTop",
@@ -73,9 +72,9 @@ do
 		"MinimapBorder",
 	}
 
-	for i = 1, #frames do
-		_G[frames[i]]:Hide()
-		_G[frames[i]].Show = F.dummy
+	for _, v in pairs(frames) do
+		_G[v]:Hide()
+		_G[v].Show = F.Dummy
 	end
 end
 

@@ -557,9 +557,18 @@ F.ReskinSlider = function(f)
 
 	CreateGradient(bd)
 
-	local slider = select(4, f:GetRegions())
-	slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
-	slider:SetBlendMode("ADD")
+	--local slider = select(4, f:GetRegions())
+	--slider:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+	--slider:SetBlendMode("ADD")
+
+	for i = 1, f:GetNumRegions() do
+		local region = select(i, f:GetRegions())
+		if region:GetObjectType() == "Texture" then
+			region:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
+			region:SetBlendMode("ADD")
+			return
+		end
+	end
 end
 
 local function colourExpandOrCollapse(f)

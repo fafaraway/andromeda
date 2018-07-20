@@ -287,17 +287,27 @@ local function styleStanceButton(bu)
 end
 
 local numFlyoutButtons = 0
-local function flyoutbutton()
-	for i = 1, numFlyoutButtons do
-		local bu = _G["SpellFlyoutButton"..i]
-		if bu and not bu.styled then
-			styleActionButton(bu)
+--local function flyoutbutton()
+--	for i = 1, numFlyoutButtons do
+--		local bu = _G["SpellFlyoutButton"..i]
+--		if bu and not bu.styled then
+--			styleActionButton(bu)
 
-			if bu:GetChecked() then
-				bu:SetChecked(nil)
-			end
-			bu.styled = true
-		end
+--			if bu:GetChecked() then
+--				bu:SetChecked(nil)
+--			end
+--			bu.styled = true
+--		end
+--	end
+--end
+
+local function flyoutbutton()
+	local i = 1
+	local bu = _G["SpellFlyoutButton"..i]
+	while bu and bu:IsShown() do
+		styleActionButton(bu)
+		i = i + 1
+		bu = _G["SpellFlyoutButton"..i]
 	end
 end
 

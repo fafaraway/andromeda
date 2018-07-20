@@ -327,7 +327,7 @@ end
 
 --[[ Debuff highlight ]]
 
-local PostUpdateIcon = function(_, unit, icon, index, _, filter)
+--[[local PostUpdateIcon = function(_, unit, icon, index, _, filter)
 	local _, _, _, _, dtype = UnitAura(unit, index, icon.filter)
 	local texture = icon.icon
 	
@@ -349,7 +349,7 @@ local PostUpdateIcon = function(_, unit, icon, index, _, filter)
 	else
 		texture:SetDesaturated(false)
 	end
-end
+end]]
 
 
 --[[ Update power ]]
@@ -604,6 +604,8 @@ local Shared = function(self, unit, isSingle)
 		AltPowerBar:EnableMouse(true)
 
 		self.AltPowerBar = AltPowerBar
+		self.AlternativePower = AltPowerBar		
+		self.AlternativePower.PostUpdate = postUpdateAltPower
 	end
 
 	--[[ Portrait ]]
@@ -726,7 +728,7 @@ local Shared = function(self, unit, isSingle)
 
 	-- [[ Counter bar ]]
 
-	if unit == "player" or unit == "pet" then
+	--[[if unit == "player" or unit == "pet" then
 		local CounterBar = CreateFrame("StatusBar", nil, self)
 		CounterBar:SetWidth(playerWidth)
 		CounterBar:SetHeight(16)
@@ -754,7 +756,7 @@ local Shared = function(self, unit, isSingle)
 		end)
 
 		self.CounterBar = CounterBar
-	end
+	end]]
 
 	--[[ Set up the layout ]]
 

@@ -175,7 +175,7 @@ function ChatFrame_OnHyperlinkShow (chatframe,link,text,button)
 end
 
 -- Hide friendly player names while in raid and/or party group.
-if C.general.hideRaidNames then
+--[[if C.general.hideRaidNames then
 	-- local HRN = CreateFrame("Frame")
 	-- HRN:RegisterEvent("PLAYER_ENTERING_WORLD")
 	-- HRN:SetScript("OnEvent", function(self, event)
@@ -210,7 +210,7 @@ if C.general.hideRaidNames then
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 	f:RegisterEvent("RAID_ROSTER_UPDATE")
 	f:RegisterEvent("PARTY_MEMBERS_CHANGED")
-end
+end]]
 
 -- Take screenshots of defined events
 if C.general.autoScreenShot then
