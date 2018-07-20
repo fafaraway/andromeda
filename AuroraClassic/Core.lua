@@ -5,7 +5,7 @@ ns[1] = {} -- F, functions
 ns[2] = {} -- C, constants/config
 _G[addonName] = ns
 
-AuroraConfig = {}
+AuroraConfig = {
 
 	["useButtonGradientColour"] = true,
 	["shadow"] = true,
@@ -810,25 +810,25 @@ Skin:SetScript("OnEvent", function(_, _, addon)
 		-- [[ Load Variables ]]
 
 		-- remove deprecated or corrupt variables
-		for key in pairs(AuroraConfig) do
-			if C.defaults[key] == nil then
-				AuroraConfig[key] = nil
-			end
-		end
+		--for key in pairs(AuroraConfig) do
+		--	if C.defaults[key] == nil then
+		--		AuroraConfig[key] = nil
+		--	end
+		--end
 
 		-- load or init variables
-		for key, value in pairs(C.defaults) do
-			if AuroraConfig[key] == nil then
-				if type(value) == "table" then
-					AuroraConfig[key] = {}
-					for k in pairs(value) do
-						AuroraConfig[key][k] = value[k]
-					end
-				else
-					AuroraConfig[key] = value
-				end
-			end
-		end
+		--for key, value in pairs(C.defaults) do
+		--	if AuroraConfig[key] == nil then
+		--		if type(value) == "table" then
+		--			AuroraConfig[key] = {}
+		--			for k in pairs(value) do
+		--				AuroraConfig[key][k] = value[k]
+		--			end
+		--		else
+		--			AuroraConfig[key] = value
+		--		end
+		--	end
+		--end
 
 		useButtonGradientColour = AuroraConfig.useButtonGradientColour
 
