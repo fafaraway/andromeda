@@ -1,7 +1,3 @@
-local F, C = unpack(select(2, ...))
-
-if not C.unitframes.enable then return end
-
 local parent, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
@@ -18,10 +14,12 @@ function oUF:HandleUnit(object, unit)
 		object:RegisterEvent('UPDATE_MOUSEOVER_UNIT', object.UpdateAllElements)
 	elseif(unit == 'focus') then
 		object:RegisterEvent('PLAYER_FOCUS_CHANGED', object.UpdateAllElements)
-	elseif(unit:match'%w+target') then
-		enableTargetUpdate(object)
-	elseif(unit:match'(boss)%d?$' == 'boss') then
+	elseif(unit:match('boss%d?$')) then
 		object:RegisterEvent('INSTANCE_ENCOUNTER_ENGAGE_UNIT', object.UpdateAllElements, true)
 		object:RegisterEvent('UNIT_TARGETABLE_CHANGED', object.UpdateAllElements)
+	elseif(unit:match('arena%d?$')) then
+		object:RegisterEvent('ARENA_OPPONENT_UPDATE', object.UpdateAllElements)
+	elseif(unit:match('%w+target')) then
+		enableTargetUpdate(object)
 	end
 end
