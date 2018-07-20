@@ -286,4 +286,5 @@ if C.general.autoActionCam then
 end
 
 
-
+-- Hide talent alert
+MainMenuMicroButton_SetAlertsEnabled(false)
