@@ -15,6 +15,7 @@ C.media = {
 	["gradient"]   = "Interface\\AddOns\\FreeUI\\Media\\gradient",
 	["roleIcons"]  = "Interface\\Addons\\FreeUI\\Media\\UI-LFG-ICON-ROLES",
 	["texture"]    = "Interface\\AddOns\\FreeUI\\Media\\statusbar",
+	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\Media\\bgTex",
 }
 
 if GetLocale() == "zhCN" then
@@ -241,6 +242,8 @@ C["unitframes"] = {
 		["partyMissingHealth"] = true,				-- show missing health
 	["enableArena"] = false,					-- enable arena/flag carrier frames
 
+	["castbyPlayer"] = false,
+
 	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 280},						-- player unitframe position
 	["player_width"] = 200,
 	["player_height"] = 12,
@@ -252,10 +255,10 @@ C["unitframes"] = {
 	["pet_height"] = 12,
 
 	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 100, 160},					-- target unitframe position
-	["target_width"] = 262,
+	["target_width"] = 276,
 	["target_height"] = 12,
 	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -6},			-- target castbar position
-	["target_castbar_width"] = 262,
+	["target_castbar_width"] = 276,
 
 	["targettarget"] = {"LEFT", "oUF_FreeTarget", "RIGHT", 5, 0},							-- target target unitframe position
 	["targettarget_width"] = 80,

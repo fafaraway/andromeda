@@ -170,7 +170,7 @@ oUF.Tags.Methods['free:bosshealth'] = function(unit)
 end
 oUF.Tags.Events['free:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
 
--- [[ utf8 short string ]]
+-- utf8 short string
 
 local function usub(str, len)
 	local i = 1
@@ -311,18 +311,21 @@ local PostUpdateHealth = function(Health, unit, min, max)
 	end
 end
 
---[[ Hide Blizz frames ]]
+--[[ Update power ]]
 
-if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
-	CompactRaidFrameManager:SetParent(FreeUIHider)
-	CompactUnitFrameProfiles:UnregisterAllEvents()
+local PostUpdatePower = function(Power, unit, cur, max, min)
+	local Health = Power:GetParent().Health
+	local self = Power:GetParent()
+	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
+		Power:SetValue(0)
+	end
+
+	if Power.Text then
+		Power.Text:SetTextColor(Power:GetStatusBarColor())
+	end
 end
 
-for i = 1, MAX_PARTY_MEMBERS do
-	local pet = "PartyMemberFrame"..i.."PetFrame"
-	_G[pet]:SetParent(FreeUIHider)
-	_G[pet.."HealthBar"]:UnregisterAllEvents()
-end
+
 
 
 --[[ Debuff highlight ]]
@@ -351,20 +354,90 @@ end
 	end
 end]]
 
+local function PostCreateIcon(element, button)
 
---[[ Update power ]]
+	local bg = button:CreateTexture(nil, "BACKGROUND")
+	bg:SetPoint("TOPLEFT", -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", 1, -1)
+	bg:SetTexture(C.media.backdrop)
+	bg:SetVertexColor(0, 0, 0)
 
-local PostUpdatePower = function(Power, unit, cur, max, min)
-	local Health = Power:GetParent().Health
-	local self = Power:GetParent()
-	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
-		Power:SetValue(0)
+	local sd = CreateFrame("Frame", nil, button)
+	sd.size = 4
+	sd.offset = -1
+	sd:SetBackdrop({
+		edgeFile = C.media.glow,
+		edgeSize = 4,
+	})
+	sd:SetPoint("TOPLEFT", button, -sd.size - 0 - sd.offset, sd.size + 0 + sd.offset)
+	sd:SetPoint("BOTTOMRIGHT", button, sd.size + 0 + sd.offset, -sd.size - 0 - sd.offset)
+	sd:SetBackdropBorderColor(.03, .03, .03)
+	sd:SetAlpha(.5)
+
+	button.sd = sd
+	button.bg = bg
+	
+	button.overlay:SetTexture(nil)
+
+	button.cd:SetReverse(true)
+	button.cd:SetHideCountdownNumbers(true)
+
+	--button.icon:SetTexCoord(.08, .92, .25+.125, .85-.125)
+	button.icon:SetDrawLayer('ARTWORK')
+
+	button:SetScript('OnEnter', OnAuraEnter)
+
+	-- We create a parent for aura strings so that they appear over the cooldown widget
+	local StringParent = CreateFrame('Frame', nil, button)
+	StringParent:SetFrameLevel(20)
+
+	button.count:SetParent(StringParent)
+	button.count:ClearAllPoints()
+	button.count:SetPoint('TOP', button, 2, -2)
+
+	F.SetFS(button.count)
+
+	local Duration = StringParent:CreateFontString(nil, 'OVERLAY')
+	Duration:SetPoint('TOPLEFT', button, 0, -1)
+	F.SetFS(Duration)
+	button.Duration = Duration
+
+
+
+	--button:HookScript('OnUpdate', UpdateAura)
+end
+
+local function PostUpdateIcon(element, _, button, _, _, duration, _, debuffType)
+
+
+
+	button:SetSize(element.size, element.size*.75)
+	button.icon:SetTexCoord(.08, .92, .25+.125, .85-.125)
+
+
+	if button.isDebuff and element.showDebuffType then
+		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
+		button.bg:SetVertexColor(color[1], color[2], color[3])
+	else
+		button.bg:SetVertexColor(.1, .1, .1)
 	end
 
-	if Power.Text then
-		Power.Text:SetTextColor(Power:GetStatusBarColor())
+	if duration then 
+		button.sd:Show()
+		button.bg:Show()
+	end
+
+end
+
+local function PostUpdateGapIcon(_, _, icon)
+	if icon.sd and icon.sd:IsShown() then
+		icon.sd:Hide()
+	end
+	if icon.bg and icon.bg:IsShown() then
+		icon.bg:Hide()
 	end
 end
+
 
 -- [[  Update Portrait ]]
 
@@ -425,6 +498,7 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 end
 
 local function UpdateClassPowerColor(element)
+	local _, playerClass = UnitClass('player')
 	local r, g, b = 1, 1, 2/5
 	if(not UnitHasVehicleUI('player')) then
 		if(playerClass == 'MONK') then
@@ -447,6 +521,20 @@ local function UpdateClassPowerColor(element)
 		Bar:SetStatusBarColor(r, g, b)
 		Bar.bg:SetColorTexture(r * 1/3, g * 1/3, b * 1/3)
 	end
+end
+
+
+--[[ Hide Blizz frames ]]
+
+if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
+	CompactRaidFrameManager:SetParent(FreeUIHider)
+	CompactUnitFrameProfiles:UnregisterAllEvents()
+end
+
+for i = 1, MAX_PARTY_MEMBERS do
+	local pet = "PartyMemberFrame"..i.."PetFrame"
+	_G[pet]:SetParent(FreeUIHider)
+	_G[pet.."HealthBar"]:UnregisterAllEvents()
 end
 
 
@@ -801,6 +889,7 @@ end
 local UnitSpecific = {
 	pet = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "pet"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -838,6 +927,7 @@ local UnitSpecific = {
 
 	player = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "player"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1066,6 +1156,7 @@ local UnitSpecific = {
 
 	target = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "target"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1142,27 +1233,30 @@ local UnitSpecific = {
 		self.Name = Name
 
 		local Auras = CreateFrame("Frame", nil, self)
-		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 20)
+		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
 		Auras.initialAnchor = "BOTTOMLEFT"
 		Auras["growth-x"] = "RIGHT"
 		Auras["growth-y"] = "UP"
-		Auras['spacing-x'] = 3
-		Auras['spacing-y'] = -1
+		Auras['spacing-x'] = 4
+		Auras['spacing-y'] = 0
 
 		Auras.numDebuffs = C.unitframes.num_target_debuffs
 		Auras.numBuffs = C.unitframes.num_target_buffs
 		Auras:SetHeight(500)
 		Auras:SetWidth(targetWidth)
-		Auras.size = 30
+		Auras.size = 36
 
-		-- Auras.showDebuffType = true
+
 		Auras.gap = true
 
 		self.Auras = Auras
 
+		Auras.showDebuffType = true
 		Auras.showStealableBuffs = true
+		
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon
+		Auras.PostUpdateGapIcon = PostUpdateGapIcon
 
 
 		-- complicated filter is complicated
@@ -1170,18 +1264,22 @@ local UnitSpecific = {
 		-- it's a debuff on an enemy target which isn't yours, isn't cast by the target and isn't in the useful buffs filter
 		-- it's a buff on an enemy player target which is not important
 
-		local playerUnits = {
-			player = true,
-			pet = true,
-			vehicle = true,
-		}
+		if C.unitframes.castbyPlayer then
 
-		Auras.CustomFilter = function(_, unit, icon, _, _, _, _, _, _, _, caster, _, _, spellID)
-			if(icon.isDebuff and not UnitIsFriend("player", unit) and not playerUnits[icon.owner] and icon.owner ~= self.unit and not C.debuffFilter[spellID])
-			or(not icon.isDebuff and UnitIsPlayer(unit) and not UnitIsFriend("player", unit) and not C.dangerousBuffs[spellID]) then
-				return false
+			local playerUnits = {
+				player = true,
+				pet = true,
+				vehicle = true,
+			}
+
+			Auras.CustomFilter = function(_, unit, icon, _, _, _, _, _, _, _, caster, _, _, spellID)
+				if(icon.isDebuff and not UnitIsFriend("player", unit) and not playerUnits[icon.owner] and icon.owner ~= self.unit)
+				or(not icon.isDebuff and UnitIsPlayer(unit) and not UnitIsFriend("player", unit)) then
+					return false
+				end
+				return true
 			end
-			return true
+
 		end
 
 
@@ -1316,22 +1414,6 @@ local UnitSpecific = {
 
 		self:Tag(Name, '[name]')
 		self.Name = Name
-
-		local Debuffs = CreateFrame("Frame", nil, self)
-		Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		Debuffs.initialAnchor = "TOPLEFT"
-		Debuffs["growth-x"] = "RIGHT"
-		Debuffs["growth-y"] = "DOWN"
-		Debuffs["spacing-x"] = 3
-		Debuffs:SetHeight(20)
-		Debuffs:SetWidth(focusWidth)
-		Debuffs.size = 20
-		Debuffs.num = 3
-		self.Debuffs = Debuffs
-		self.Debuffs.onlyShowPlayer = true
-
-		Debuffs.PostCreateIcon = PostCreateIcon
-		Debuffs.PostUpdateIcon = PostUpdateIcon
 	end,
 
 	focustarget = function(self, ...)
@@ -1377,6 +1459,7 @@ local UnitSpecific = {
 
 	boss = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "boss"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1431,6 +1514,8 @@ local UnitSpecific = {
 		end
 
 		self.AltPowerBar = AltPowerBar
+		self.AlternativePower = AltPowerBar		
+		self.AlternativePower.PostUpdate = postUpdateAltPower
 
 		Castbar:SetAllPoints(Health)
 		Castbar.Width = self:GetWidth()
@@ -1460,7 +1545,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		local Buffs = CreateFrame("Frame", nil, self)
+		--[[local Buffs = CreateFrame("Frame", nil, self)
 		Buffs.initialAnchor = "TOPLEFT"
 		Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
 		Buffs["growth-x"] = "RIGHT"
@@ -1490,16 +1575,48 @@ local UnitSpecific = {
 		self.Debuffs = Debuffs
 		self.Debuffs.onlyShowPlayer = true
 
-		Debuffs.PostUpdateIcon = PostUpdateIcon
+		Debuffs.PostUpdateIcon = PostUpdateIcon]]
+
+		
+
+
+
+		local Auras = CreateFrame("Frame", nil, self)
+		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+		Auras.initialAnchor = "TOPLEFT"
+		Auras["growth-x"] = "RIGHT"
+		Auras["growth-y"] = "DOWN"
+		Auras['spacing-x'] = 4
+		Auras['spacing-y'] = 0
+
+		Auras.numDebuffs = C.unitframes.num_target_debuffs
+		Auras.numBuffs = C.unitframes.num_target_buffs
+		Auras:SetHeight(500)
+		Auras:SetWidth(targetWidth)
+		Auras.size = 36
+
+
+		Auras.gap = true
+
+		self.Auras = Auras
+
+		Auras.showDebuffType = true
+		Auras.showStealableBuffs = true
+
+		
+		Auras.PostCreateIcon = PostCreateIcon
+		Auras.PostUpdateIcon = PostUpdateIcon
+		Auras.PostUpdateGapIcon = postUpdateGapIcon
+
+	
+
 
 		AltPowerBar:HookScript("OnShow", function()
-			Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + altPowerHeight))
-			Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(5 + altPowerHeight))
+			Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(4 + altPowerHeight))
 		end)
 
 		AltPowerBar:HookScript("OnHide", function()
-			Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(3 + altPowerHeight))
-			Debuffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(3 + altPowerHeight))
+			Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
 		end)
 	end,
 
@@ -1507,6 +1624,7 @@ local UnitSpecific = {
 		if not C.unitframes.enableArena then return end
 
 		Shared(self, ...)
+		self.mystyle = "arena"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1590,6 +1708,7 @@ do
 
 	UnitSpecific.party = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "party"
 
 		self.disallowVehicleSwap = false
 
@@ -1619,17 +1738,17 @@ do
 		self.RaidIcon:ClearAllPoints()
 		self.RaidIcon:SetPoint("CENTER", self, "CENTER")
 
-		local Leader = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
-		Leader:SetText("l")
-		Leader:SetPoint("TOPLEFT", Health, 2, -1)
+		local LeaderIndicator = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
+		LeaderIndicator:SetText("l")
+		LeaderIndicator:SetPoint("TOPLEFT", Health, 2, -1)
 
-		self.Leader = Leader
+		self.LeaderIndicator = LeaderIndicator
 
-		local MasterLooter = F.CreateFS(self, C.FONT_SIZE_NORMAL, "RIGHT")
+		--[[local MasterLooter = F.CreateFS(self, C.FONT_SIZE_NORMAL, "RIGHT")
 		MasterLooter:SetText("m")
 		MasterLooter:SetPoint("TOPRIGHT", Health, 1, 0)
 
-		self.MasterLooter = MasterLooter
+		self.MasterLooter = MasterLooter]]
 
 		local rc = self:CreateTexture(nil, "OVERLAY")
 		rc:SetPoint("TOPLEFT", Health)
@@ -1698,7 +1817,7 @@ do
 			end
 		end
 
-		Debuffs.PostUpdateIcon = function(icons, unit, icon, index, _, filter)
+		--[[Debuffs.PostUpdateIcon = function(icons, unit, icon, index, _, filter)
 			local _, _, _, _, dtype = UnitAura(unit, index, icon.filter)
 			if dtype and UnitIsFriend("player", unit) then
 				local color = DebuffTypeColor[dtype]
@@ -1707,7 +1826,7 @@ do
 				icon.bg:SetVertexColor(0, 0, 0)
 			end
 			icon:EnableMouse(false)
-		end
+		end]]
 
 		local Buffs = CreateFrame("Frame", nil, self)
 		Buffs.initialAnchor = "CENTER"
