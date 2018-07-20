@@ -1,5 +1,6 @@
-# FreeUI Continued  `7.3.5` ❤
+# FreeUI Continued  `BfA` ❤
 This is a personal edition of [FreeUI](https://github.com/Haleth/FreeUI), updated and heavily modified.
+
 All credits should go to @Haleth and @Gethe for their amazing work.
 
 ### Features:
@@ -7,11 +8,3 @@ All credits should go to @Haleth and @Gethe for their amazing work.
 * a lot of **useful** features
 * more **immersive** gameplay experience
 
-### Recommended Addons:
-- WeakAuras
-- OmniCC
-- Kui_Nameplates
-- DBM
-- MikScrollingBattleText
-- ls_Toasts
-- AngryKeystones
