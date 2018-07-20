@@ -393,57 +393,59 @@ end
 
 -- [[ update class power ]]
 
-local function PostUpdateClassIcon(element, cur, max, diff, powerType, event)
-	if(diff or event == 'ClassPowerEnable') then
-		element:UpdateTexture()
-
+local function PostUpdateClassPower(element, cur, max, diff, powerType)
+	if(diff) then
 		for index = 1, max do
-			local ClassIcon = element[index]
+			local Bar = element[index]
 			local maxWidth, gap = playerWidth, 3
-
-			if(max == 5 or max == 10) then
-				ClassIcon:SetWidth(((maxWidth / 5) - ((4 * gap) / 5)))
-			else
-				ClassIcon:SetWidth(((maxWidth / max) - (((max-1) * gap) / max)))
+			if(max == 3) then
+				Bar:SetWidth(((maxWidth / 3) - ((2 * gap) / 3)))
+			elseif(max == 4) then
+				Bar:SetWidth(((maxWidth /4) - ((3 * gap) / 4)))
+			elseif(max == 5 or max == 10) then
+				Bar:SetWidth(((maxWidth / 5) - ((4 * gap) / 5)))
+			elseif(max == 6) then
+				Bar:SetWidth(((maxWidth / 6) - ((5 * gap) / 6)))
 			end
 
 			if(max == 10) then
-				-- Rogue anticipation
+				-- Rogue anticipation talent, align >5 on top of the first 5
 				if(index == 6) then
-					ClassIcon:ClearAllPoints()
-					ClassIcon:SetPoint('LEFT', element[index - 5])
-				end
-
-				if(index > 5) then
-					ClassIcon.Texture:SetColorTexture(1, 0, 0)
+					Bar:ClearAllPoints()
+					Bar:SetPoint('LEFT', element[index - 5])
 				end
 			else
 				if(index > 1) then
-					ClassIcon:ClearAllPoints()
-					ClassIcon:SetPoint('LEFT', element[index - 1], 'RIGHT', 3, 0)
+					Bar:ClearAllPoints()
+					Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
 				end
 			end
 		end
 	end
 end
 
-local function UpdateClassIconTexture(element)
+local function UpdateClassPowerColor(element)
 	local r, g, b = 1, 1, 2/5
 	if(not UnitHasVehicleUI('player')) then
-		if(class == 'MONK') then
+		if(playerClass == 'MONK') then
 			r, g, b = 0, 4/5, 3/5
-		elseif(class == 'WARLOCK') then
-			r, g, b = 97/255, 61/255, 181/255
-		elseif(class == 'PALADIN') then
-			r, g, b = 211/255, 196/255, 75/255
-		elseif(class == 'MAGE') then
+		elseif(playerClass == 'WARLOCK') then
+			r, g, b = 2/3, 1/3, 2/3
+		elseif(playerClass == 'PALADIN') then
+			r, g, b = 1, 1, 2/5
+		elseif(playerClass == 'MAGE') then
 			r, g, b = 5/6, 1/2, 5/6
 		end
 	end
 
-	for index = 1, 8 do
-		local ClassIcon = element[index]
-		ClassIcon.Texture:SetColorTexture(r, g, b)
+	for index = 1, #element do
+		local Bar = element[index]
+		if(playerClass == 'ROGUE' and UnitPowerMax('player', SPELL_POWER_COMBO_POINTS) == 10 and index > 5) then
+			r, g, b = 1, 0, 0
+		end
+
+		Bar:SetStatusBarColor(r, g, b)
+		Bar.bg:SetColorTexture(r * 1/3, g * 1/3, b * 1/3)
 	end
 end
 
@@ -910,7 +912,7 @@ local UnitSpecific = {
 
 		-- PVP
 
-		if C.unitframes.pvp then
+		--[[if C.unitframes.pvp then
 			local PvP = F.CreateFS(self)
 			PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
 			PvP:SetText("P")
@@ -936,7 +938,7 @@ local UnitSpecific = {
 
 			self.PvP = PvP
 			PvP.Override = UpdatePvP
-		end
+		end]]
 
 
 		-- DK runes
@@ -979,47 +981,36 @@ local UnitSpecific = {
 
 		-- class resource
 		if C.classmod.classResource then
-			local ClassIcons = {}
-			ClassIcons.UpdateTexture = UpdateClassIconTexture
-			ClassIcons.PostUpdate = PostUpdateClassIcon
+			local ClassPower = {}
+			ClassPower.UpdateColor = UpdateClassPowerColor
+			ClassPower.PostUpdate = PostUpdateClassPower
 
-			for index = 1, 10 do
-				local ClassIcon = CreateFrame('Frame', nil, self)
-				ClassIcon:SetHeight(C.unitframes.classPower_height)
+			for index = 1, 11 do -- have to create an extra to force __max to be different from UnitPowerMax
+				local Bar = CreateFrame('StatusBar', nil, self)
+				Bar:SetHeight(C.unitframes.classPower_height)
+				Bar:SetStatusBarTexture(C.media.texture)
+				--Bar:SetBackdrop(C.media.backdrop)
+				Bar:SetBackdropColor(0, 0, 0)
 
-				F.CreateBDFrame(ClassIcon)
-
-				-- local bd = CreateFrame("Frame", nil, ClassIcon)
-				-- bd:SetBackdrop({
-				-- 	edgeFile = C.media.backdrop,
-				-- 	edgeSize = 1,
-				-- })
-				-- bd:SetBackdropBorderColor(0, 0, 0)
-				-- bd:SetPoint("TOPLEFT", ClassIcon, -1, 1)
-				-- bd:SetPoint("BOTTOMRIGHT", ClassIcon, 1, -1)
+				F.CreateBDFrame(Bar)
 
 				if(index > 1) then
-					ClassIcon:SetPoint('LEFT', ClassIcons[index - 1], 'RIGHT', 3, 0)
+					Bar:SetPoint('LEFT', ClassPower[index - 1], 'RIGHT', 4, 0)
 				else
-					local function moveAnchor()
-						if self.AltPowerBar:IsShown() then
-							ClassIcon:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -7)
-						else
-							ClassIcon:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-						end
-					end
-					self.AltPowerBar:HookScript("OnShow", moveAnchor)
-					self.AltPowerBar:HookScript("OnHide", moveAnchor)
-					moveAnchor()
+					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -4)
 				end
 
-				local Texture = ClassIcon:CreateTexture(nil, 'BORDER', nil, index > 5 and 1 or 0)
-				Texture:SetAllPoints()
-				ClassIcon.Texture = Texture
+				if(index > 5) then
+					Bar:SetFrameLevel(Bar:GetFrameLevel() + 1)
+				end
 
-				ClassIcons[index] = ClassIcon
+				local Background = Bar:CreateTexture(nil, 'BORDER')
+				Background:SetAllPoints()
+				Bar.bg = Background
+
+				ClassPower[index] = Bar
 			end
-			self.ClassIcons = ClassIcons
+			self.ClassPower = ClassPower
 			
 		end
 
@@ -1212,7 +1203,7 @@ local UnitSpecific = {
 			end
 		end
 
-		self.QuestIcon = QuestIcon
+		self.QuestIndicator = QuestIcon
 	end,
 
 	targettarget = function(self, ...)
