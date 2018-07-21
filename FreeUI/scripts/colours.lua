@@ -136,7 +136,7 @@ end
 
 
 -- battlefield
-hooksecurefunc("WorldStateScoreFrame_Update", function()
+--[[hooksecurefunc("WorldStateScoreFrame_Update", function()
 	local inArena = IsActiveBattlefieldArena()
 	local offset = FauxScrollFrame_GetOffset(WorldStateScoreScrollFrame)
 
@@ -173,7 +173,7 @@ hooksecurefunc("WorldStateScoreFrame_Update", function()
 		end
 	end
 end)
-
+]]
 
 -- friends
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub("%%d", "%%s")
