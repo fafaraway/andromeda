@@ -73,10 +73,6 @@ EventFrame:SetScript("OnEvent", function(self, event, addon)
 	end
 end)
 
--- Temporary PVP queue taint fix
-InterfaceOptionsFrameCancel:SetScript("OnClick", function()
-	InterfaceOptionsFrameOkay:Click()
-end)
 
 -- Quickjoin for worldquests
 do

@@ -1,6 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 local function InitStyleDBM()
+	if not IsAddOnLoaded("DBM-Core") then return end
 
 	local buttonsize = 22
 	local function SkinBars(self)
@@ -153,16 +154,21 @@ local function InitStyleDBM()
 	-- hooksecurefunc(DBM.BossHealth, "AddBoss", SkinBoss)
 	-- hooksecurefunc(DBM.BossHealth, "UpdateSettings", SkinBoss)
 
-	local function SkinRange(self)
-		if not self.styled and DBMRangeCheckRadar then
-			DBMRangeCheck:SetBackdrop(nil)
+	local function SkinRange()
+		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
+			local bg = F.CreateBDFrame(DBMRangeCheckRadar, .3)
+
+
+			DBMRangeCheckRadar.styled = true
+		end
+
+		if DBMRangeCheck and not DBMRangeCheck.styled then
 			F.CreateBDFrame(DBMRangeCheck)
-			DBMRangeCheckRadar.background:SetTexture("")
-			F.CreateBDFrame(DBMRangeCheckRadar)
-			DBMRangeCheckRadar.text:SetTextColor(1, 1, 1)
-			DBMRangeCheckRadar.inRangeText:SetTextColor(1, 1, 1)
-			-- F.SetFS(DBMRangeCheckRadar.text)
-			self.styled = true
+
+			DBMRangeCheck.SetBackdropColor = F.Dummy
+			DBMRangeCheck.SetBackdropBorderColor = F.Dummy
+
+			DBMRangeCheck.styled = true
 		end
 	end
 	hooksecurefunc(DBM.RangeCheck, "Show", SkinRange)
@@ -173,7 +179,8 @@ local function InitStyleDBM()
 		bd:SetPoint("TOPLEFT")
 		bd:SetPoint("BOTTOMRIGHT")
 		bd:SetFrameLevel(DBMInfoFrame:GetFrameLevel()-1)
-		F.CreateBD(bd)
+		F.CreateBDFrame(bd, .45)
+
 	end)
 
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
