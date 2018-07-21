@@ -22,7 +22,7 @@
 	<Script file="chat_whispersound.lua"/>
 	<Script file="colorpicker.lua"/>
 	<Script file="colours.lua"/>
-	<!-- <Script file="cooldown.lua"/> -->
+	<Script file="cooldown.lua"/>
 	<Script file="cursor.lua"/>
 	<Script file="disable.lua"/>
 	<Script file="errors.lua"/>

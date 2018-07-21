@@ -3,6 +3,9 @@ local F, C, L = unpack(select(2, ...))
 if not C.general.cooldownpulse then return end
 
 -- Based on Doom Cooldown Pulse
+-- Flash an ability's icon in the middle of the screen when it comes off cooldown.
+-- Woffle of Dark Iron[US]
+
 local GetTime = GetTime
 local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
 local animScale, iconSize, holdTime, threshold = 1.5, 50, 0, 8
@@ -63,7 +66,7 @@ local function OnUpdate(_,update)
 					texture = v[3]
 					start, duration, enabled = GetItemCooldown(i)
 				elseif (v[2] == "pet") then
-					name, _, texture = GetPetActionInfo(v[3])
+					name, texture = GetPetActionInfo(v[3])
 					start, duration, enabled = GetPetActionCooldown(v[3])
 					isPet = true
 				end
@@ -130,7 +133,7 @@ function frame:ADDON_LOADED(addon)
 end
 frame:RegisterEvent("ADDON_LOADED")
 
-function frame:UNIT_SPELLCAST_SUCCEEDED(unit,spell,rank,lineID,spellID)
+function frame:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
 	if (unit == "player") then
 		watching[spellID] = {GetTime(),"spell",spellID}
 		self:SetScript("OnUpdate", OnUpdate)
@@ -138,8 +141,8 @@ function frame:UNIT_SPELLCAST_SUCCEEDED(unit,spell,rank,lineID,spellID)
 end
 frame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 
-function frame:COMBAT_LOG_EVENT_UNFILTERED(...)
-	local _,event,_,_,_,sourceFlags,_,_,_,_,_,spellID = ...
+function frame:COMBAT_LOG_EVENT_UNFILTERED()
+	local _,event,_,_,_,sourceFlags,_,_,_,_,_,spellID = CombatLogGetCurrentEventInfo()
 	if (event == "SPELL_CAST_SUCCESS") then
 		if (bit.band(sourceFlags,COMBATLOG_OBJECT_TYPE_PET) == COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags,COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
 			local name = GetSpellInfo(spellID)
