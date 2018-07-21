@@ -307,6 +307,15 @@ local function StyleWindow(f)
 
 	frame:SetClampRectInsets(0, 0, 0, 0)
 
+	local name = frame:GetName()
+
+	local lang = _G[name.."EditBoxLanguage"]
+	lang:GetRegions():SetAlpha(0)
+	lang:SetPoint("TOPLEFT", frame.editBox, "TOPRIGHT", -2, 0)
+	lang:SetPoint("BOTTOMRIGHT", frame.editBox, "BOTTOMRIGHT", 28, 0)
+	F.CreateBD(lang)
+	
+
 	-- real ID conversation
 	if frame.conversationButton then
 		frame.conversationButton:ClearAllPoints()
