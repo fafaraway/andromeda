@@ -52,12 +52,12 @@ tinsert(C.themes["AuroraClassic"], function()
 			newItemTexture:SetDrawLayer("BACKGROUND")
 			newItemTexture:SetSize(1, 1)
 
-			border:SetPoint("TOPLEFT", -1.2, 1.2)
-			border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+			border:SetPoint("TOPLEFT", -1, 1)
+			border:SetPoint("BOTTOMRIGHT", 1, -1)
 			border:SetDrawLayer("BACKGROUND", 1)
 
-			searchOverlay:SetPoint("TOPLEFT", -1.2, 1.2)
-			searchOverlay:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+			searchOverlay:SetPoint("TOPLEFT", -1, 1)
+			searchOverlay:SetPoint("BOTTOMRIGHT", 1, -1)
 
 			button:HookScript("OnEnter", onEnter)
 			button:HookScript("OnLeave", onLeave)

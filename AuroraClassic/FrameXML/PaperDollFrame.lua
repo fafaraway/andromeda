@@ -64,8 +64,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		slot.SetHighlightTexture = F.dummy
 		slot.icon:SetTexCoord(.08, .92, .08, .92)
 
-		border:SetPoint("TOPLEFT", -1.2, 1.2)
-		border:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+		border:SetPoint("TOPLEFT", -1, 1)
+		border:SetPoint("BOTTOMRIGHT", 1, -1)
 		border:SetDrawLayer("BACKGROUND")
 		F.CreateBDFrame(slot, .25)
 
@@ -149,8 +149,8 @@ tinsert(C.themes["AuroraClassic"], function()
 		tab.bg:SetFrameLevel(0)
 		F.CreateBD(tab.bg)
 
-		tab.Hider:SetPoint("TOPLEFT", tab.bg, 1.2, -1.2)
-		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -1.2, 1.2)
+		tab.Hider:SetPoint("TOPLEFT", tab.bg, 1, -1)
+		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -1, 1)
 	end
 
 	-- [[ Equipment manager ]]

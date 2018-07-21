@@ -41,8 +41,8 @@ C.themes["Blizzard_OrderHallUI"] = function()
 					bu.Border:SetAlpha(0)
 					bu.Highlight:SetColorTexture(1, 1, 1, .25)
 					bu.bg = F.CreateBDFrame(bu.Border)
-					bu.bg:SetPoint("TOPLEFT", -1.2, 1.2)
-					bu.bg:SetPoint("BOTTOMRIGHT", 1.2, -1.2)
+					bu.bg:SetPoint("TOPLEFT", -1, 1)
+					bu.bg:SetPoint("BOTTOMRIGHT", 1, -1)
 					bu.styled = true
 				end
 
