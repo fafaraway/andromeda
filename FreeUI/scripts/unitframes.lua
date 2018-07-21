@@ -1000,8 +1000,7 @@ local UnitSpecific = {
 			end
 		end
 
-		-- PVP
-
+		-- PVP indicator
 		if C.unitframes.pvp then
 			local PvPIndicator = F.CreateFS(self)
 			PvPIndicator:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
@@ -1052,7 +1051,6 @@ local UnitSpecific = {
 				local Rune = CreateFrame('StatusBar', nil, self)
 				Rune:SetHeight(classPowerHeight)
 				Rune:SetStatusBarTexture(C.media.texture)
-				-- Rune:SetStatusBarColor(255/255,101/255,101/255)
 
 				F.CreateBDFrame(Rune)
 
@@ -1067,6 +1065,7 @@ local UnitSpecific = {
 				Runes[index] = Rune
 			end
 			self.Runes = Runes
+
 		end
 
 		-- class resource

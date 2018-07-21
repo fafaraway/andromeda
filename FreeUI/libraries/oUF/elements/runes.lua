@@ -88,6 +88,14 @@ local function UpdateColor(element, runeID)
 	else
 		color = element.__owner.colors.power.RUNES
 	end
+	
+	if spec == 1 then
+		color = {151/255, 25/255, 0}
+	elseif spec == 2 then
+		color = {65/255, 133/255, 215/255}
+	elseif spec == 3 then
+		color = {98/255, 153/255, 51/255}
+	end
 
 	local r, g, b = color[1], color[2], color[3]
 
