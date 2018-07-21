@@ -1002,33 +1002,33 @@ local UnitSpecific = {
 
 		-- PVP
 
-		--[[if C.unitframes.pvp then
-			local PvP = F.CreateFS(self)
-			PvP:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
-			PvP:SetText("P")
+		if C.unitframes.pvp then
+			local PvPIndicator = F.CreateFS(self)
+			PvPIndicator:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
+			PvPIndicator:SetText("P")
 
-			local UpdatePvP = function(self, event, unit)
+			local UpdatePvPIndicator = function(self, event, unit)
 				if(unit ~= self.unit) then return end
 
-				local pvp = self.PvP
+				local PvPIndicator = self.PvPIndicator
 
 				local factionGroup = UnitFactionGroup(unit)
 				if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
 					if factionGroup == "Alliance" then
-						PvP:SetTextColor(0, 0.68, 0.94)
+						PvPIndicator:SetTextColor(0, 0.68, 0.94)
 					else
-						PvP:SetTextColor(1, 0, 0)
+						PvPIndicator:SetTextColor(1, 0, 0)
 					end
 
-					pvp:Show()
+					PvPIndicator:Show()
 				else
-					pvp:Hide()
+					PvPIndicator:Hide()
 				end
 			end
 
-			self.PvP = PvP
-			PvP.Override = UpdatePvP
-		end]]
+			self.PvPIndicator = PvPIndicator
+			PvPIndicator.Override = UpdatePvPIndicator
+		end
 
 
 		-- DK runes
