@@ -179,7 +179,7 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		CloseLoot(not autoLoot)
 	end
 
-	local items = GetNumLootItems()
+	--local items = GetNumLootItems()
 
 	local x, y = GetCursorPosition()
 	x = x / self:GetEffectiveScale()
@@ -189,26 +189,41 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	self:SetPoint("TOPLEFT", nil, "BOTTOMLEFT", x-40, y+20)
 	self:Raise()
 
+	local maxQuality = 0
+	local items = GetNumLootItems()
+
 	if(items > 0) then
 		for i = 1, items do
 			local slot = addon.slots[i] or createSlot(i)
-			local texture, item, quantity, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
-			if texture then
+			--local texture, item, quantity, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
+			local lootIcon, lootName, lootQuantity, currencyID, lootQuality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(i)
+			if lootIcon then
+				local color = ITEM_QUALITY_COLORS[lootQuality]
+				local r, g, b = color.r, color.g, color.b
 
 				if GetLootSlotType(i) == LOOT_SLOT_MONEY then
-					item = item:gsub("\n", ", ")
+					lootName = lootName:gsub("\n", ", ")
 				end
 
-				if(quantity > 1) then
-					slot.count:SetText(quantity)
+				if lootQuantity and lootQuantity > 1 then
+					slot.count:SetText(lootQuantity)
 					slot.count:Show()
 				else
 					slot.count:Hide()
 				end
 
-				slot.quality = quality
 
-				local color = ITEM_QUALITY_COLORS[quality]
+
+				--if(quantity > 1) then
+				--	slot.count:SetText(quantity)
+				--	slot.count:Show()
+				--else
+				--	slot.count:Hide()
+				--end
+
+				--slot.quality = quality
+
+				--local color = ITEM_QUALITY_COLORS[quality]
 
 				if questId and not isActive then
 					slot.bg:SetBackdropColor(.5, .5, 0, .5)
@@ -221,8 +236,16 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 					slot.name:SetTextColor(color.r, color.g, color.b)
 				end
 
-				slot.name:SetText(item)
-				slot.icon:SetTexture(texture)
+				--slot.name:SetText(item)
+				--slot.icon:SetTexture(texture)
+
+				slot.lootQuality = lootQuality
+				slot.isQuestItem = isQuestItem
+
+				slot.name:SetText(lootName)
+				slot.icon:SetTexture(lootIcon)
+
+				maxQuality = math.max(maxQuality, lootQuality)
 
 				slot:Enable()
 				slot:Show()
