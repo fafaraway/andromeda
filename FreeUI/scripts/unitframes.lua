@@ -1678,7 +1678,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		local Buffs = CreateFrame("Frame", nil, self)
+		--[[local Buffs = CreateFrame("Frame", nil, self)
 		Buffs.initialAnchor = "TOPLEFT"
 		Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
 		Buffs["growth-x"] = "RIGHT"
@@ -1693,7 +1693,7 @@ local UnitSpecific = {
 
 		self.Buffs = Buffs
 
-		Buffs.PostUpdateIcon = PostUpdateIcon
+		Buffs.PostUpdateIcon = PostUpdateIcon]]
 
 		self.RaidIcon:SetPoint("LEFT", self, "RIGHT", 3, 0)
 	end,
