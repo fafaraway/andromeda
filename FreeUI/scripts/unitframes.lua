@@ -693,9 +693,9 @@ local Shared = function(self, unit, isSingle)
 
 		AltPowerBar:EnableMouse(true)
 
-		self.AltPowerBar = AltPowerBar
+
 		self.AlternativePower = AltPowerBar		
-		self.AlternativePower.PostUpdate = postUpdateAltPower
+
 	end
 
 	--[[ Portrait ]]
@@ -1037,14 +1037,14 @@ local UnitSpecific = {
 			Runes:SetHeight(classPowerHeight)
 
 			local function moveAnchor()
-				if self.AltPowerBar:IsShown() then
-					Runes:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -7)
+				if self.AlternativePower:IsShown() then
+					Runes:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -10)
 				else
 					Runes:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
 				end
 			end
-			self.AltPowerBar:HookScript("OnShow", moveAnchor)
-			self.AltPowerBar:HookScript("OnHide", moveAnchor)
+			self.AlternativePower:HookScript("OnShow", moveAnchor)
+			self.AlternativePower:HookScript("OnHide", moveAnchor)
 			moveAnchor()
 
 			for index = 1, 6 do
@@ -1086,8 +1086,19 @@ local UnitSpecific = {
 				if(index > 1) then
 					Bar:SetPoint('LEFT', ClassPower[index - 1], 'RIGHT', 4, 0)
 				else
-					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -4)
+					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
 				end
+
+				local function moveAnchor()
+					if self.AlternativePower:IsShown() then
+						Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -10)
+					else
+						Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+					end
+				end
+				self.AlternativePower:HookScript("OnShow", moveAnchor)
+				self.AlternativePower:HookScript("OnHide", moveAnchor)
+				moveAnchor()
 
 				if(index > 5) then
 					Bar:SetFrameLevel(Bar:GetFrameLevel() + 1)
@@ -1512,9 +1523,9 @@ local UnitSpecific = {
 			AltPowerBar.Text:SetText(cur)
 		end
 
-		self.AltPowerBar = AltPowerBar
+
 		self.AlternativePower = AltPowerBar		
-		self.AlternativePower.PostUpdate = postUpdateAltPower
+
 
 		Castbar:SetAllPoints(Health)
 		Castbar.Width = self:GetWidth()
