@@ -92,6 +92,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	SpellBookFrameTutorialButton.Ring:Hide()
 	SpellBookFrameTutorialButton:SetPoint("TOPLEFT", SpellBookFrame, "TOPLEFT", -12, 12)
+	F.HideObject(SpellBookFrameTutorialButton)
 
 	-- Professions
 

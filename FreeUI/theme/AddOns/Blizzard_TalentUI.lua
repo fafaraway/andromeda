@@ -226,6 +226,10 @@ C.themes["Blizzard_TalentUI"] = function()
 	PlayerTalentFramePetSpecializationTutorialButton.Ring:Hide()
 	PlayerTalentFramePetSpecializationTutorialButton:SetPoint("TOPLEFT", PlayerTalentFrame, "TOPLEFT", -12, 12)
 
+	F.HideObject(PlayerTalentFrameSpecializationTutorialButton)
+	F.HideObject(PlayerTalentFrameTalentsTutorialButton)
+	F.HideObject(PlayerTalentFramePetSpecializationTutorialButton)
+
 	F.ReskinPortraitFrame(PlayerTalentFrame, true)
 	F.Reskin(PlayerTalentFrameSpecializationLearnButton)
 	F.Reskin(PlayerTalentFrameActivateButton)

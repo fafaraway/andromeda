@@ -67,6 +67,8 @@ C.themes["Blizzard_Collections"] = function()
 
 	PetJournalTutorialButton:SetPoint("TOPLEFT", PetJournal, "TOPLEFT", -14, 14)
 
+	F.HideObject(PetJournalTutorialButton)
+
 	local scrollFrames = {MountJournal.ListScrollFrame.buttons, PetJournal.listScroll.buttons}
 	for _, scrollFrame in pairs(scrollFrames) do
 		for i = 1, #scrollFrame do
