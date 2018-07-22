@@ -234,6 +234,10 @@ C["quests"] = {
 	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
 }
 
+C["chat"] = {
+	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
+}
+
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 
