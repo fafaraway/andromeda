@@ -79,43 +79,7 @@ local function hex(r, g, b)
 	return ('|cff%02x%02x%02x'):format(r * 255, g * 255, b * 255)
 end
 
--- [[ Smooth ]]
 
-local smoothing = {}
-local function Smooth(self, value)
-	local _, max = self:GetMinMaxValues()
-	if value == self:GetValue() or (self._max and self._max ~= max) then
-		smoothing[self] = nil
-		self:SetValue_(value)
-	else
-		smoothing[self] = value
-	end
-	self._max = max
-end
-
-local function SmoothBar(bar)
-	bar.SetValue_ = bar.SetValue
-	bar.SetValue = Smooth
-end
-
-local smoother, min, max = CreateFrame('Frame'), math.min, math.max
-smoother:SetScript('OnUpdate', function()
-	local rate = GetFramerate()
-	local limit = 30/rate
-	for bar, value in pairs(smoothing) do
-		local cur = bar:GetValue()
-		local new = cur + min((value-cur)/3, max(value-cur, limit))
-		if new ~= new then
-			-- Mad hax to prevent QNAN.
-			new = value
-		end
-		bar:SetValue_(new)
-		if cur == value or abs(new - value) < 2 then
-			bar:SetValue_(value)
-			smoothing[bar] = nil
-		end
-	end
-end)
 
 -- [[ Update resurrection/selection name colour ]]
 
@@ -380,7 +344,7 @@ local function PostCreateIcon(element, button)
 	button.overlay:SetTexture(nil)
 
 	button.cd:SetReverse(true)
-	button.cd:SetHideCountdownNumbers(true)
+	--button.cd:SetHideCountdownNumbers(true)
 
 	--button.icon:SetTexCoord(.08, .92, .25+.125, .85-.125)
 	button.icon:SetDrawLayer('ARTWORK')
@@ -550,6 +514,8 @@ local Shared = function(self, unit, isSingle)
 	self.colors.power.FURY = { 54/255, 199/255, 63/255 }
 	self.colors.power.PAIN = { 255/255, 156/255, 0 }
 	self.colors.power.INSANITY = { .4, 0, .8 }
+
+	SmoothBar = F.SmoothBar
 
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", -1, 1)
@@ -1263,6 +1229,8 @@ local UnitSpecific = {
 
 		Auras.showDebuffType = true
 		Auras.showStealableBuffs = true
+
+	
 		
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon

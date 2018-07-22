@@ -264,14 +264,14 @@ hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", function(block)
 end)
 
 -- Minimize button
-local minimizeButton = ot.HeaderMenu.MinimizeButton
+--[[local minimizeButton = ot.HeaderMenu.MinimizeButton
 
 F.ReskinExpandOrCollapse(minimizeButton)
 minimizeButton:SetSize(15, 15)
 minimizeButton.plus:Hide()
 
 hooksecurefunc("ObjectiveTracker_Collapse", function() minimizeButton.plus:Show() end)
-hooksecurefunc("ObjectiveTracker_Expand", function() minimizeButton.plus:Hide() end)
+hooksecurefunc("ObjectiveTracker_Expand", function() minimizeButton.plus:Hide() end)]]
 
 
 -- font

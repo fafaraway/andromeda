@@ -4,6 +4,7 @@ local F, C, L = unpack(select(2, ...))
 -- Consider using the in-game options instead, accessed through the game menu or by typing /freeui.
 
 -- [[ Constants ]]
+
 C.media = {
 	["arrowUp"]    = "Interface\\AddOns\\FreeUI\\Media\\arrow-up-active",
 	["arrowDown"]  = "Interface\\AddOns\\FreeUI\\Media\\arrow-down-active",
@@ -11,11 +12,11 @@ C.media = {
 	["arrowRight"] = "Interface\\AddOns\\FreeUI\\Media\\arrow-right-active",
 	["backdrop"]   = "Interface\\AddOns\\FreeUI\\Media\\blank",
 	["checked"]    = "Interface\\AddOns\\FreeUI\\Media\\CheckButtonHilight",
-	["glow"]       = "Interface\\AddOns\\FreeUI\\Media\\glowTex",
+	["glowtex"]    = "Interface\\AddOns\\FreeUI\\Media\\glowTex",
 	["gradient"]   = "Interface\\AddOns\\FreeUI\\Media\\gradient",
 	["roleIcons"]  = "Interface\\Addons\\FreeUI\\Media\\UI-LFG-ICON-ROLES",
 	["texture"]    = "Interface\\AddOns\\FreeUI\\Media\\statusbar",
-	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\Media\\bgTex",
+	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\Media\\StripesThin",
 }
 
 if GetLocale() == "zhCN" then
@@ -81,6 +82,23 @@ C.classcolours = {
 	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
 }
 
+-- theme config
+C.themeconfig = {
+	["alpha"] = 0.65,
+	["bags"] = false,
+	["buttonGradientColour"] = {.3, .3, .3, .3},
+	["buttonSolidColour"] = {.2, .2, .2, 1},
+	["useButtonGradientColour"] = true,
+	["chatBubbles"] = true,
+	["enableFont"] = false,
+	["loot"] = false,
+	["useCustomColour"] = true,
+	["customColour"] = {r = 1, g = 1, b = 1},
+	["tooltips"] = false,
+	["shadow"] = true,
+}
+
+C.themeframes = {}
 
 -- [[ Global config ]]
 C["general"] = {
@@ -242,7 +260,7 @@ C["unitframes"] = {
 		["partyMissingHealth"] = true,				-- show missing health
 	["enableArena"] = false,					-- enable arena/flag carrier frames
 
-	["castbyPlayer"] = false,
+	["castbyPlayer"] = true,
 
 	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 280},						-- player unitframe position
 	["player_width"] = 200,

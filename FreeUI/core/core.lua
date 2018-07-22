@@ -1,12 +1,12 @@
 -- [[ Core ]]
 
-local addon, core = ...
+local addonName, ns = ...
 
-core[1] = {} -- F, Functions
-core[2] = {} -- C, Constants/Config
-core[3] = {} -- L, Localisation
+ns[1] = {} -- F, Functions
+ns[2] = {} -- C, Constants/Config
+ns[3] = {} -- L, Localisation
 
-FreeUI = core
+_G[addonName] = ns
 
 local F, C, L = unpack(select(2, ...))
 
@@ -90,6 +90,10 @@ updateScale = function(event)
 
 
 	if C.general.uiScaleAuto then
+
+		F.HideOption(Advanced_UseUIScale)
+		F.HideOption(Advanced_UIScaleSlider)
+
 
 		local pixelScale
 		local floor = _G.math.floor

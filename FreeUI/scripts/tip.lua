@@ -567,15 +567,7 @@ F.RegisterEvent("ADDON_LOADED", function(_, addon)
 		end
 
 	elseif addon == "Blizzard_Contribution" then
-		local gt = {
-			ContributionTooltip,
-			ContributionBuffTooltip,
-		}
-		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
-		end
+		ContributionBuffTooltip:HookScript("OnShow", extrastyle)
 		ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.texCoord))
 		ContributionBuffTooltip.Border:SetAlpha(0)
 

@@ -21,5 +21,6 @@ libraries\oUF\oUF.xml
 libraries\load_libs.xml
 
 scripts\load_scripts.xml
+theme\_embeds.xml
 
 _dev\test.lua

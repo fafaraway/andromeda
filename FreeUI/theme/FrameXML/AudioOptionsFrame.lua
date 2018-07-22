@@ -1,0 +1,12 @@
+local F, C, L = unpack(select(2, ...))
+
+tinsert(C.themes["FreeUI"], function()
+	AudioOptionsFrameHeader:SetAlpha(0)
+	AudioOptionsFrameHeader:ClearAllPoints()
+	AudioOptionsFrameHeader:SetPoint("TOP", AudioOptionsFrame, 0, 0)
+	F.CreateBD(AudioOptionsFrame)
+	F.CreateSD(AudioOptionsFrame)
+	F.Reskin(AudioOptionsFrameOkay)
+	F.Reskin(AudioOptionsFrameCancel)
+	F.Reskin(AudioOptionsFrameDefaults)
+end)
