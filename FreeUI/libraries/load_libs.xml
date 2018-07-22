@@ -4,7 +4,7 @@
 	<Script file="CallbackHandler-1.0\CallbackHandler-1.0.lua"/>
 	<Script file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua"/>
 	<Script file="LibItemUpgradeInfo-1.0\LibItemUpgradeInfo-1.0.lua"/>
-	<Script file="LibItemLevel.lua"/>
+
 	<Script file="LibInspect\LibInspect.lua"/>
 	<Script file="rLib\core.lua"/>
 	<Script file="rLib\framefader.lua"/>
