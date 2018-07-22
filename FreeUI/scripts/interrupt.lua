@@ -66,7 +66,7 @@ local function OnEvent(_, _, subEvent, _, sourceGUID, sourceName, _, _, _, destN
 end
 
 if C.general.interrupt then
-	F.RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", OnEvent)
+	F:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", OnEvent)
 end
 
 F.AddOptionsCallback("general", "interrupt", function()

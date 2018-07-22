@@ -57,7 +57,7 @@ addonLoaded = function(_, addon)
 	addonLoaded = nil
 end
 
-F.RegisterEvent("ADDON_LOADED", addonLoaded)
+F:RegisterEvent("ADDON_LOADED", addonLoaded)
 
 --[[ Short values ]]
 

@@ -51,8 +51,8 @@ local function onEvent(event)
 	end
 end
 
-F.RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
-F.RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
+F:RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
+F:RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
 
 
 -- [[ Report ]]

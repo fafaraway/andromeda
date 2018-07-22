@@ -50,7 +50,7 @@ taint = function(event, addon)
 
 	F.UnregisterEvent("ADDON_LOADED", taint)
 end
-F.RegisterEvent("ADDON_LOADED", taint)
+F:RegisterEvent("ADDON_LOADED", taint)
 
 F.MicroMenu = function()
 	if top then
