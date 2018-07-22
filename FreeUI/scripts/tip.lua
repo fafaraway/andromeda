@@ -397,7 +397,7 @@ hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 end)
 
 
-F.RegisterEvent("ADDON_LOADED", function(_, addon)
+F:RegisterEvent("ADDON_LOADED", function(_, addon)
 	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("AuroraClassic") then
 		FrameStackTooltip:HookScript("OnShow", style)
 		EventTraceTooltip:HookScript("OnShow", style)

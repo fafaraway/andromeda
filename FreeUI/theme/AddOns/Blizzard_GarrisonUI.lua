@@ -446,8 +446,8 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	GarrisonCapacitiveDisplayFrame.Count:SetTextInsets(3, 0, 0, 0)
 
 	F.ReskinPortraitFrame(GarrisonCapacitiveDisplayFrame, true)
-	F.Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton, true)
-	F.Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton, true)
+	F.Reskin(GarrisonCapacitiveDisplayFrame.StartWorkOrderButton)
+	F.Reskin(GarrisonCapacitiveDisplayFrame.CreateAllWorkOrdersButton)
 	F.ReskinArrow(GarrisonCapacitiveDisplayFrame.DecrementButton, "left")
 	F.ReskinArrow(GarrisonCapacitiveDisplayFrame.IncrementButton, "right")
 
