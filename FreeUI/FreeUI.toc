@@ -3,7 +3,10 @@
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Lightsword (Modified/updated by Solor)
 ## Version: 80000.01
-## OptionalDeps: Clique, FreeUI_Options, MyRolePlay, oUF
+## X-Support: BfA
+## X-Website: https://github.com/Solor/FreeUI
+## X-Credits: Haleth, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, siweia, Paojy
+## OptionalDeps: FreeUI_Options, oUF
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 
@@ -14,6 +17,7 @@ profiles.lua
 
 core\gui.lua
 core\api.lua
+core\uiscale.lua
 core\slash.lua
 core\notifications.lua
 
