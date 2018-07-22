@@ -33,6 +33,7 @@ C.texCoord = {.08, .92, .08, .92}
 
 r, g, b = C.r, C.g, C.b
 
+C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
 
 
 C.reactioncolours = {
