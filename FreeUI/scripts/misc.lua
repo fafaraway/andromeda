@@ -1,9 +1,19 @@
 local F, C, L = unpack(select(2, ...))
+local module = F:RegisterModule("misc")
 
--- Remove Boss Banner
-if C.general.bossBanner == true then
-	BossBanner.PlayBanner = function() end
+function module:OnLogin()
+
+	self:ShowItemLevel()
+	self:Expbar()
+
+
+	-- Remove Boss Banner
+	if C.general.bossBanner == true then
+		BossBanner:UnregisterAllEvents()
+	end
 end
+
+
 
 -- Remove Talking Head Frame
 if C.general.talkingHead == true then
@@ -50,8 +60,6 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 	end
 	old_MerchantItemButton_OnModifiedClick(self, ...)
 end
-
-
 
 -- Quickjoin for worldquests
 do
@@ -187,15 +195,44 @@ end
 	f:RegisterEvent("PARTY_MEMBERS_CHANGED")
 end]]
 
--- Take screenshots of defined events
-if C.general.autoScreenShot then
-	local function OnEvent( self, event, ... )
-		C_Timer.After( 1, function() Screenshot() end )
+
+
+-- Auto screenshot when achieved
+do
+	local waitTable = {}
+	local function TakeScreen(delay, func, ...)
+		wipe(waitTable)
+		local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
+		waitFrame:SetScript("OnUpdate", function(_, elapse)
+			local count = #waitTable
+			local i = 1
+			while (i <= count) do
+				local waitRecord = tremove(waitTable, i)
+				local d = tremove(waitRecord, 1)
+				local f = tremove(waitRecord, 1)
+				local p = tremove(waitRecord, 1)
+				if (d > elapse) then
+					tinsert(waitTable, i, {d-elapse, f, p})
+					i = i + 1
+				else
+					count = count - 1
+					f(unpack(p))
+				end
+			end
+		end)
+
+		tinsert(waitTable, {delay, func, {...}})
 	end
 
-	local EventFrame = CreateFrame( 'Frame' )
-	EventFrame:RegisterEvent( 'ACHIEVEMENT_EARNED' )
-	EventFrame:SetScript( 'OnEvent', OnEvent )
+	local function setupMisc(event)
+		if not C.general.autoScreenShot then
+			F:UnregisterEvent(event, setupMisc)
+		else
+			TakeScreen(1, Screenshot)
+		end
+	end
+
+	F:RegisterEvent("ACHIEVEMENT_EARNED", setupMisc)
 end
 
 -- Clean up Loss Of Control
@@ -223,23 +260,6 @@ if C.appearance.vignette then
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
 
--- rGroupFinder by zorker
--- Adds the group finder button to every quest
-if C.general.GroupFinderButton then
-	local function AddGroupFinderButton(block, questID)
-		if IsQuestComplete(questID) then return end
-		if wordQuestsOnly and not QuestUtils_IsQuestWorldQuest(questID) then return end
-		if block.groupFinderButton and block.hasGroupFinderButton then return end
-		if not block.hasGroupFinderButton then
-			block.hasGroupFinderButton = true
-		end
-		if not block.groupFinderButton then
-			block.groupFinderButton = QuestObjectiveFindGroup_AcquireButton(block, questID);
-			QuestObjectiveSetupBlockButton_AddRightButton(block, block.groupFinderButton, block.module.buttonOffsets.groupFinder);
-		end
-	end
-	hooksecurefunc("QuestObjectiveSetupBlockButton_FindGroup", AddGroupFinderButton)
-end
 
 -- Auto enables the ActionCam on login
 if C.general.autoActionCam then
@@ -308,4 +328,29 @@ if C.general.undressButton then
 
 	F.Reskin(undress)
 	F.Reskin(sideUndress)
+end
+
+-- Fix Drag Collections taint
+do
+	local done
+	local function setupMisc(event, addon)
+		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
+			CollectionsJournal:HookScript("OnShow", function()
+				if not done then
+					if InCombatLockdown() then
+						F:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
+					else
+						F.CreateMF(CollectionsJournal)
+					end
+					done = true
+				end
+			end)
+			F:UnregisterEvent(event, setupMisc)
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			F.CreateMF(CollectionsJournal)
+			F:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	F:RegisterEvent("ADDON_LOADED", setupMisc)
 end

@@ -48,8 +48,10 @@
 	<Script file="mover.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="orderhallcommandbar.lua"/>
-	<Script file="paperdollframe.lua"/>
-	<Script file="progressbar.lua"/>
+
+	<Script file="itemlevel.lua"/>
+	<Script file="expbar.lua"/>
+
 	<Script file="queuetimer.lua"/>
 	<!-- <Script file="rarealert.lua"/> -->
 
