@@ -17,6 +17,15 @@ C.media = {
 	["roleIcons"]  = "Interface\\Addons\\FreeUI\\Media\\UI-LFG-ICON-ROLES",
 	["texture"]    = "Interface\\AddOns\\FreeUI\\Media\\statusbar",
 	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\Media\\StripesThin",
+	["newItemFlash"] = "Interface\\Cooldown\\star4",
+	["geartex"]    = "",
+	["abtex"] = {
+		normal		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\gloss",
+		flash		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\flash",
+		pushed		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\pushed",
+		checked		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\checked",
+		equipped	= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\gloss",
+	},
 }
 
 if GetLocale() == "zhCN" then
@@ -119,6 +128,7 @@ C["general"] = {
 	["talkingHead"] = true,
 	["hideRaidNames"] = true,
 	["autoScreenShot"] = true,
+	["uiScale"] = 1,
 	["uiScaleAuto"] = true,			-- force the correct UI scale
 
 	["saySapped"] = true,
@@ -182,12 +192,16 @@ C["actionbars"] = {
 }
 
 C["bags"] = {
-	["style"] = 3,						-- 1 = all-in-one, 2 = restyle default bags, 3 = do nothing
+	["itemSlotSize"] = 34,
+	["bagColumns"] = 12,
+	["bankColumns"] = 12,
+	["scale"] = 1,
+	["reverseSort"] = true,
+	["itemFilter"] = true,
+	["setFilter"] = true,
+	["artifact"] = true,
+	["iLvl"] = true,
 
-	["size"] = 34,						-- change the size of the bags/bank, default = 37
-	["slotsShowAlways"] = true, 		-- always show the bag item slots
-
-	["hideSlots"] = true,				-- hide bag slots if style is 2 or 3
 }
 
 C["menubar"] = {

@@ -23,6 +23,8 @@
 	<Script file="chat_tab.lua"/>
 	<Script file="chat_whispersound.lua"/>
 
+	<Script file="bags.lua"/>
+
 	<Script file="colorpicker.lua"/>
 	<Script file="colours.lua"/>
 	<Script file="cooldown.lua"/>
@@ -85,4 +87,5 @@
 	<!-- <Script file="worldmap.lua"/> -->
 	<Script file="worldmarker.lua"/>
 	<Script file="worldstateframe.lua"/>
+
 </Ui>
