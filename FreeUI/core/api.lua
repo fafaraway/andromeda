@@ -101,7 +101,21 @@ F.SetFS = function(fontObject, fontSize)
 end
 
 
+function F:CreatePFS(text, classcolor, anchor, x, y)
+	local fs = self:CreateFontString(nil, "OVERLAY")
+	fs:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+	fs:SetText(text)
+	fs:SetWordWrap(false)
+	--if classcolor then fs:SetTextColor(cr, cg, cb) end
+	fs:SetTextColor(1, 1, 1)
+	if anchor and x and y then
+		fs:SetPoint(anchor, x, y)
+	else
+		fs:SetPoint("CENTER", 1, 0)
+	end
 
+	return fs
+end
 
 
 
@@ -127,15 +141,17 @@ function F:CreateSD(a)
 	return self.Shadow
 end
 
-function F:CreateBD(a)
+
+
+function F:CreateBD(a, s)
 	self:SetBackdrop({
 		bgFile = C.media.backdrop,
 		edgeFile = C.media.backdrop,
-		edgeSize = 1,
+		edgeSize = s or 1,
 	})
 	self:SetBackdropColor(0, 0, 0, a or C.themeconfig.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
-	if not a then tinsert(C.themeframes, self) end
+	--if not a then tinsert(C.themeframes, self) end
 end
 
 function F:CreateBG()
@@ -831,7 +847,36 @@ function F:ReskinMinMax()
 end
 
 
+
+
 -------------------
+
+-- Button Color
+function F:CreateBC(a)
+	self:SetNormalTexture("")
+	self:SetHighlightTexture("")
+	self:SetPushedTexture("")
+	self:SetDisabledTexture("")
+
+	if self.Left then self.Left:SetAlpha(0) end
+	if self.Middle then self.Middle:SetAlpha(0) end
+	if self.Right then self.Right:SetAlpha(0) end
+	if self.LeftSeparator then self.LeftSeparator:Hide() end
+	if self.RightSeparator then self.RightSeparator:Hide() end
+
+	self:SetScript("OnEnter", function()
+		self:SetBackdropBorderColor(cr, cg, cb, 1)
+	end)
+	self:SetScript("OnLeave", function()
+		self:SetBackdropBorderColor(0, 0, 0, 1)
+	end)
+	self:SetScript("OnMouseDown", function()
+		self:SetBackdropColor(cr, cg, cb, a or .3)
+	end)
+	self:SetScript("OnMouseUp", function()
+		self:SetBackdropColor(0, 0, 0, a or .3)
+	end)
+end
 
 
 -- GameTooltip
@@ -907,7 +952,7 @@ function F.UnitColor(unit)
 	if UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
 		if class then
-			r, g, b = B.ClassColor(class)
+			r, g, b = F.ClassColor(class)
 		end
 	elseif UnitIsTapDenied(unit) then
 		r, g, b = .6, .6, .6
@@ -928,7 +973,7 @@ F.HiddenFrame:Hide()
 function F:HideObject()
 	if self.UnregisterAllEvents then
 		self:UnregisterAllEvents()
-		self:SetParent(B.HiddenFrame)
+		self:SetParent(F.HiddenFrame)
 	else
 		self.Show = self.Hide
 	end
@@ -992,6 +1037,120 @@ function F.UnitInGuild(unitName)
 		end
 	end
 	return false
+end
+
+
+
+---------------------------
+
+
+-------------------
+
+-- GUI APIs
+function F:CreateButton(width, height, text, fontSize)
+	local bu = CreateFrame("Button", nil, self)
+	bu:SetSize(width, height)
+	F.CreateBD(bu, .3)
+	F.CreateBC(bu)
+	bu.text = F.CreatePFS(bu, text, true)
+
+	return bu
+end
+
+function F:CreateCheckBox()
+	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
+	F.CreateCB(cb)
+
+	cb.Type = "CheckBox"
+	return cb
+end
+
+function F:CreateEditBox(width, height)
+	local eb = CreateFrame("EditBox", nil, self)
+	eb:SetSize(width, height)
+	eb:SetAutoFocus(false)
+	eb:SetTextInsets(10, 10, 0, 0)
+	eb:SetFontObject(GameFontHighlight)
+	F.CreateBD(eb, .3)
+	eb:SetScript("OnEscapePressed", function()
+		eb:ClearFocus()
+	end)
+	eb:SetScript("OnEnterPressed", function()
+		eb:ClearFocus()
+	end)
+
+	eb.Type = "EditBox"
+	return eb
+end
+
+function F:CreateDropDown(width, height, data)
+	local dd = CreateFrame("Frame", nil, self)
+	dd:SetSize(width, height)
+	F.CreateBD(dd, .3)
+	dd.Text = F.CreateFS(dd, 14, "")
+	dd.options = {}
+
+	local bu = CreateFrame("Button", nil, dd)
+	bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
+	bu:SetSize(22, 22)
+	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
+	bu.Icon:SetAllPoints()
+	bu.Icon:SetTexture(C.media.geartex)
+	bu.Icon:SetTexCoord(0, .5, 0, .5)
+	bu:SetHighlightTexture(C.media.geartex)
+	bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
+	local list = CreateFrame("Frame", nil, dd)
+	list:SetPoint("TOP", dd, "BOTTOM")
+	F.CreateBD(list, .7)
+	bu:SetScript("OnShow", function() list:Hide() end)
+	bu:SetScript("OnClick", function()
+		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+		ToggleFrame(list)
+	end)
+	dd.button = bu
+
+	local opt, index = {}, 0
+	local function optOnClick(self)
+		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+		for i = 1, #opt do
+			if self == opt[i] then
+				opt[i]:SetBackdropColor(1, .8, 0, .3)
+				opt[i].selected = true
+			else
+				opt[i]:SetBackdropColor(0, 0, 0, .3)
+				opt[i].selected = false
+			end
+		end
+		dd.Text:SetText(self.text)
+		list:Hide()
+	end
+	local function optOnEnter(self)
+		if self.selected then return end
+		self:SetBackdropColor(1, 1, 1, .3)
+	end
+	local function optOnLeave(self)
+		if self.selected then return end
+		self:SetBackdropColor(0, 0, 0, .3)
+	end
+
+	for i, j in pairs(data) do
+		opt[i] = CreateFrame("Button", nil, list)
+		opt[i]:SetPoint("TOPLEFT", 5, -5 - (i-1)*height)
+		opt[i]:SetSize(width - 10, height)
+		F.CreateBD(opt[i], .3)
+		F.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
+		opt[i].text = j
+		opt[i]:SetScript("OnClick", optOnClick)
+		opt[i]:SetScript("OnEnter", optOnEnter)
+		opt[i]:SetScript("OnLeave", optOnLeave)
+
+		dd.options[i] = opt[i]
+		index = index + 1
+	end
+	list:SetSize(width, index*height + 10)
+
+	dd.Type = "DropDown"
+	return dd
 end
 
 
