@@ -19,6 +19,7 @@ C.media = {
 	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\Media\\StripesThin",
 	["newItemFlash"] = "Interface\\Cooldown\\star4",
 	["geartex"]    = "",
+	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
 	["abtex"] = {
 		normal		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\gloss",
 		flash		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\flash",
