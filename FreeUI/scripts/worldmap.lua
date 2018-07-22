@@ -1,131 +1,109 @@
 local F, C, L = unpack(select(2, ...))
+local module = F:RegisterModule("worldmap")
 
-local _G = _G
 
-local function skin()
-	--print("Map:Skin")
 
-	if not _G.WorldMapFrame.skinned then
-		_G.WorldMapFrame:SetUserPlaced(true)
-		local trackingBtn = _G.WorldMapFrame.UIElementsFrame.TrackingOptionsButton
 
-		--Buttons
-		trackingBtn:ClearAllPoints()
-		trackingBtn:SetPoint("TOPRIGHT", _G.WorldMapFrame.UIElementsFrame, 3, 3)
 
-		_G.WorldMapFrame.skinned = true
+local mapRects = {}
+local tempVec2D = CreateVector2D(0, 0)
+
+function module:GetPlayerMapPos(mapID)
+	tempVec2D.x, tempVec2D.y = UnitPosition("player")
+	if not tempVec2D.x then return end
+
+	local mapRect = mapRects[mapID]
+	if not mapRect then
+		mapRect = {}
+		mapRect[1] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(0, 0)))
+		mapRect[2] = select(2, C_Map.GetWorldPosFromMapPos(mapID, CreateVector2D(1, 1)))
+		mapRect[2]:Subtract(mapRect[1])
+
+		mapRects[mapID] = mapRect
 	end
+	tempVec2D:Subtract(mapRect[1])
+
+	return tempVec2D.y/mapRect[2].y, tempVec2D.x/mapRect[2].x
 end
 
--- Size Adjust --
-local function SetLargeWorldMap()
-	--print("SetLargeWorldMap")
-	if _G.InCombatLockdown() then return end
-
-	-- reparent
-	_G.WorldMapFrame:SetParent(_G.UIParent)
-	_G.WorldMapFrame:SetScale(1)
-	_G.WorldMapFrame:EnableMouse(true)
-	_G.WorldMapFrame:SetFrameStrata("HIGH")
-	_G.WorldMapTooltip:SetFrameStrata("TOOLTIP");
-	_G.WorldMapCompareTooltip1:SetFrameStrata("TOOLTIP");
-	_G.WorldMapCompareTooltip2:SetFrameStrata("TOOLTIP");
-
-	--reposition
-	if WorldMapFrame:GetAttribute('UIPanelLayout-area') ~= 'center' then
-		SetUIPanelAttribute(WorldMapFrame, "area", "center");
+function module:OnLogin()
+	-- Scaling
+	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(C.map.worldMapScale) end
+	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
+		if InCombatLockdown() then return end
+		self:SetScale(C.map.worldMapScale)
+	end)
+	hooksecurefunc(WorldMapFrame, "Maximize", function(self)
+		if InCombatLockdown() then return end
+		self:SetScale(1)
+	end)
+	-- cursor fix, need reviewed
+	if C.map.worldMapScale > 1 then
+		RunScript("WorldMapFrame.ScrollContainer.GetCursorPosition=function(f) local x,y=MapCanvasScrollControllerMixin.GetCursorPosition(f);local s=WorldMapFrame:GetScale();return x/s,y/s;end")
 	end
 
-	if WorldMapFrame:GetAttribute('UIPanelLayout-allowOtherPanels') ~= true then
-		SetUIPanelAttribute(WorldMapFrame, "allowOtherPanels", true)
-	end
+	-- Generate Coords
 
-	-- WorldMapFrameSizeUpButton:Hide()
-	-- WorldMapFrameSizeDownButton:Show()
+	local player = F.CreatePFS(WorldMapFrame.BorderFrame, "", false, "TOPLEFT", 10, -10)
+	local cursor = F.CreatePFS(WorldMapFrame.BorderFrame, "", false, "TOPLEFT", 130, -10)
 
-	WorldMapFrame:ClearAllPoints()
-	WorldMapFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-	WorldMapFrame:SetSize(1002, 668)
-end
+	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
+	F.HideObject(WorldMapFrame.BorderFrame.Tutorial)
 
-local function SetQuestWorldMap()
-	if _G.InCombatLockdown() or not _G.IsAddOnLoaded("Aurora") then return end
-	
-	-- WorldMapFrameSizeUpButton:Show()
-	-- WorldMapFrameSizeDownButton:Hide()
+	local mapBody = WorldMapFrame:GetCanvasContainer()
+	local scale, width, height = mapBody:GetEffectiveScale(), mapBody:GetWidth(), mapBody:GetHeight()
+	hooksecurefunc(WorldMapFrame, "OnFrameSizeChanged", function()
+		width, height = mapBody:GetWidth(), mapBody:GetHeight()
+	end)
 
-	_G.WorldMapFrameNavBar:SetPoint("TOPLEFT", _G.WorldMapFrame.BorderFrame, 3, -33)
-	_G.WorldMapFrameNavBar:SetWidth(700)
-end
-
-if _G.InCombatLockdown() then return end
-
-_G.BlackoutWorld:SetTexture(nil)
-
-_G.QuestMapFrame_Hide()
-if _G.GetCVar("questLogOpen") == 1 then
-	_G.QuestMapFrame_Show()
-end
-
-_G.hooksecurefunc("WorldMap_ToggleSizeUp", SetLargeWorldMap)
-_G.hooksecurefunc("WorldMap_ToggleSizeDown", SetQuestWorldMap)
-
-if _G.WORLDMAP_SETTINGS.size == _G.WORLDMAP_FULLMAP_SIZE then
-	_G.WorldMap_ToggleSizeUp()
-elseif _G.WORLDMAP_SETTINGS.size == _G.WORLDMAP_WINDOWED_SIZE then
-	_G.WorldMap_ToggleSizeDown()
-end
-
-_G.DropDownList1:HookScript("OnShow", function(self)
-	if _G.DropDownList1:GetScale() ~= _G.UIParent:GetScale() then
-		_G.DropDownList1:SetScale(_G.UIParent:GetScale())
-	end
-end)
-
--- coordinates
-local UIFrame = WorldMapFrame.UIElementsFrame
-
-local coords = F.CreateFS(UIFrame, C.FONT_SIZE_NORMAL, "LEFT")
-coords:SetPoint("BOTTOMLEFT", UIFrame, 5, 5)
-local cursorcoords = F.CreateFS(UIFrame, C.FONT_SIZE_NORMAL, "LEFT")
-cursorcoords:SetPoint("BOTTOMLEFT", coords, "BOTTOMRIGHT", 5, 0)
-
-local freq = C.performance.mapcoords
-local last = 0
-
-WorldMapDetailFrame:HookScript("OnUpdate", function(self, elapsed)
-	last = last + elapsed
-	if last >= freq then
-		local x, y = GetPlayerMapPosition("player")
-		if (x and x > 0) and (y and y > 0) then
-			x = math.floor(100 * x)
-			y = math.floor(100 * y)
-
-			coords:SetText("PLAYER"..": "..x..", "..y)
-			cursorcoords:SetPoint("BOTTOMLEFT", coords, "BOTTOMRIGHT", 5, 0)
+	local mapID
+	hooksecurefunc(WorldMapFrame, "OnMapChanged", function(self)
+		if self:GetMapID() == C_Map.GetBestMapForUnit("player") then
+			mapID = self:GetMapID()
 		else
-			coords:SetText("")
-			cursorcoords:SetPoint("BOTTOMLEFT", UIFrame, 5, 5)
+			mapID = nil
 		end
+	end)
 
-		local scale = WorldMapDetailFrame:GetEffectiveScale()
-		local width = WorldMapDetailFrame:GetWidth()
-		local height = WorldMapDetailFrame:GetHeight()
-		local centerX, centerY = WorldMapDetailFrame:GetCenter()
+	local function CursorCoords()
+		local left, top = mapBody:GetLeft() or 0, mapBody:GetTop() or 0
 		local x, y = GetCursorPosition()
-		local adjustedX = (x / scale - (centerX - (width/2))) / width
-		local adjustedY = (centerY + (height/2) - y / scale) / height
-
-		if (adjustedX >= 0  and adjustedY >= 0 and adjustedX <= 1 and adjustedY <= 1) then
-			adjustedX = math.floor(100 * adjustedX)
-			adjustedY = math.floor(100 * adjustedY)
-			cursorcoords:SetText("CURSOR"..": "..adjustedX..", "..adjustedY)
-		else
-			cursorcoords:SetText(" ")
-		end
-
-		last = 0
+		local cx = (x/scale - left) / width
+		local cy = (top - y/scale) / height
+		if cx < 0 or cx > 1 or cy < 0 or cy > 1 then return end
+		return cx, cy
 	end
-end)
 
+	local function CoordsFormat(owner, none)
+		local text = none and ": --, --" or ": %.1f, %.1f"
+		return owner..C.myColor..text
+	end
 
+	local function UpdateCoords(self, elapsed)
+		self.elapsed = (self.elapsed or 0) + elapsed
+		if self.elapsed > .1 then
+			local cx, cy = CursorCoords()
+			if cx and cy then
+				cursor:SetFormattedText(CoordsFormat("Mouse"), 100 * cx, 100 * cy)
+			else
+				cursor:SetText(CoordsFormat("Mouse", true))
+			end
+
+			if not mapID then
+				player:SetText(CoordsFormat(PLAYER, true))
+			else
+				local x, y = module:GetPlayerMapPos(mapID)
+				if not x or (x == 0 and y == 0) then
+					player:SetText(CoordsFormat("Player", true))
+				else
+					player:SetFormattedText(CoordsFormat("Player"), 100 * x, 100 * y)
+				end
+			end
+
+			self.elapsed = 0
+		end
+	end
+
+	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
+	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
+end

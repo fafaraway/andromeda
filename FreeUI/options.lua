@@ -342,6 +342,11 @@ C["unitframes"] = {
 }
 
 
+C["map"] = {
+	["worldMapScale"] = 1,
+}
+
+
 C["classmod"] = {
 	["classResource"] = true, 		-- class resource
 }

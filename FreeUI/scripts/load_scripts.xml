@@ -84,7 +84,7 @@
 	<Script file="unitframes_arena.lua"/>
 	<Script file="unitframes_focuser.lua"/>
 	<Script file="unitframes_sound.lua"/>
-	<!-- <Script file="worldmap.lua"/> -->
+	<Script file="worldmap.lua"/>
 	<Script file="worldmarker.lua"/>
 	<Script file="worldstateframe.lua"/>
 
