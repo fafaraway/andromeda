@@ -118,6 +118,19 @@ function F:CreatePFS(text, classcolor, anchor, x, y)
 	return fs
 end
 
+function F:CreateTex()
+	if self.Tex then return end
+
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
+
+	self.Tex = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
+	self.Tex:SetAllPoints(self)
+	self.Tex:SetTexture(C.media.bgtex, true, true)
+	self.Tex:SetHorizTile(true)
+	self.Tex:SetVertTile(true)
+	self.Tex:SetBlendMode("ADD")
+end
 
 
 local function CreateTex(f)
@@ -912,6 +925,31 @@ function F:CreateMF(parent)
 	self:RegisterForDrag("LeftButton")
 	self:SetScript("OnDragStart", function() frame:StartMoving() end)
 	self:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
+end
+
+
+-- Statusbar
+function F:CreateSB(spark, r, g, b)
+	self:SetStatusBarTexture(C.media.texture)
+	if r and g and b then
+		self:SetStatusBarColor(r, g, b)
+	else
+		self:SetStatusBarColor(cr, cg, cb)
+	end
+	F.CreateSD(self, 3, 3)
+	self.BG = self:CreateTexture(nil, "BACKGROUND")
+	self.BG:SetAllPoints()
+	self.BG:SetTexture(C.media.backdrop)
+	self.BG:SetVertexColor(0, 0, 0, .5)
+	F.CreateTex(self.BG)
+	if spark then
+		self.Spark = self:CreateTexture(nil, "OVERLAY")
+		self.Spark:SetTexture(C.media.sparktex)
+		self.Spark:SetBlendMode("ADD")
+		self.Spark:SetAlpha(.8)
+		self.Spark:SetPoint("TOPLEFT", self:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
+		self.Spark:SetPoint("BOTTOMRIGHT", self:GetStatusBarTexture(), "BOTTOMRIGHT", 10, -10)
+	end
 end
 
 
