@@ -51,27 +51,6 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 	old_MerchantItemButton_OnModifiedClick(self, ...)
 end
 
--- Fix Drag Collections taint
-local EventFrame = CreateFrame( 'Frame' )
-EventFrame:RegisterEvent( 'ADDON_LOADED' )
-EventFrame:SetScript("OnEvent", function(self, event, addon)
-	if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-		CollectionsJournal:HookScript("OnShow", function()
-			if not self.init then
-				if InCombatLockdown() then
-					self:RegisterEvent("PLAYER_REGEN_ENABLED")
-				else
-					F.CreateMF(CollectionsJournal)
-					self:UnregisterAllEvents()
-				end
-				self.init = true
-			end
-		end)
-	elseif event == "PLAYER_REGEN_ENABLED" then
-		F.CreateMF(CollectionsJournal)
-		self:UnregisterAllEvents()
-	end
-end)
 
 
 -- Quickjoin for worldquests
@@ -284,3 +263,49 @@ end
 
 -- Hide talent alert
 MainMenuMicroButton_SetAlertsEnabled(false)
+
+
+-- Temporary taint fix
+do
+	InterfaceOptionsFrameCancel:SetScript("OnClick", function()
+		InterfaceOptionsFrameOkay:Click()
+	end)
+
+	-- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeCommunitiesTaint
+	if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
+		UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
+		hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
+			if UIDROPDOWNMENU_OPEN_PATCH_VERSION ~= 1 then return end
+
+			if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, "displayMode") then
+				UIDROPDOWNMENU_OPEN_MENU = nil
+				local t, f, prefix, i = _G, issecurevariable, " \0", 1
+				repeat
+					i, t[prefix .. i] = i+1
+				until f("UIDROPDOWNMENU_OPEN_MENU")
+			end
+		end)
+	end
+end
+
+-- undress button
+if C.general.undressButton then
+	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
+	undress:SetSize(80, 22)
+	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
+	undress:SetText("Undress")
+	undress:SetScript("OnClick", function()
+		DressUpModel:Undress()
+	end)
+
+	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
+	sideUndress:SetSize(80, 22)
+	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
+	sideUndress:SetText("Undress")
+	sideUndress:SetScript("OnClick", function()
+		SideDressUpModel:Undress()
+	end)
+
+	F.Reskin(undress)
+	F.Reskin(sideUndress)
+end

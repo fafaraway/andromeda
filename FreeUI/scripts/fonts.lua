@@ -167,7 +167,7 @@ SetFont("RaidWarningFrame.slot2", 	HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
 SetFont("RaidBossEmoteFrame.slot1",	HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
 SetFont("RaidBossEmoteFrame.slot2",	HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
 
-SetFont("GameFontNormalSmall",		NORMAL, 11)
+SetFont("GameFontNormalSmall",		NORMAL, 12)
 
 
 if C.appearance.fontUseColorFont then
