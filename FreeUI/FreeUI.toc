@@ -25,6 +25,6 @@ core\notifications.lua
 libs\_libs.xml
 
 scripts\_scripts.xml
-theme\_theme.xml
+skins\_skins.xml
 
 core\dev.lua
