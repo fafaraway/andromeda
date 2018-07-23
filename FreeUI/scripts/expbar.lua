@@ -185,7 +185,7 @@ function module:Expbar()
 
 	local bar = CreateFrame("StatusBar", nil, Minimap)
 	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)
-	bar:SetSize(Minimap:GetWidth(), 4)
+	bar:SetSize(256, 4)
 	bar:SetHitRectInsets(0, 0, 0, -10)
 	F.CreateSB(bar, true)
 
