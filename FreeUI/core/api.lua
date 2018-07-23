@@ -34,6 +34,7 @@ C.texCoord = {.08, .92, .08, .92}
 r, g, b = C.r, C.g, C.b
 
 C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
+C.infoColor = "|cff70c0f5"
 
 
 C.reactioncolours = {
@@ -180,6 +181,8 @@ function F:CreateBG()
 
 	return bg
 end
+
+
 
 -- we assign these after loading variables for caching
 -- otherwise we call an extra unpack() every time
@@ -1080,7 +1083,20 @@ end
 
 
 
----------------------------
+-- Table Backup
+function F.CopyTable(source, target)
+	for key, value in pairs(source) do
+		if type(value) == "table" then
+			if not target[key] then target[key] = {} end
+			for k in pairs(value) do
+				target[key][k] = value[k]
+			end
+		else
+			target[key] = value
+		end
+	end
+end
+
 
 
 -------------------
