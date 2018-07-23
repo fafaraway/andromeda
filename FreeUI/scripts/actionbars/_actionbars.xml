@@ -1,1 +1,1 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	<Script file="fader.lua"/>	<Script file="core.lua"/>	<Script file="blizzard.lua"/>	<Script file="bars.lua"/>	<Script file="layout.lua"/>	<Script file="style.lua"/>	<Script file="range.lua"/>	<Script file="bind.lua"/></Ui>
+<Ui xmlns="http://www.blizzard.com/wow/ui/">	<Script file="fader.lua"/>	<Script file="blizzard.lua"/>	<Script file="bars.lua"/>	<Script file="layout.lua"/>	<Script file="style.lua"/>	<Script file="range.lua"/>	<Script file="bind.lua"/></Ui>

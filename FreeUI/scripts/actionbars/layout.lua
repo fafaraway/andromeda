@@ -1,19 +1,14 @@
-
--- Layout for rActionBar
-
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 --if not C.actionbars.enable then return end
 
------------------------------
--- Variables
------------------------------
 
-local A, L = ...
 
------------------------------
+local A = ...
+
+
+
 -- Fader
------------------------------
 
 local fader = {
 	fadeInAlpha = 1,
@@ -241,7 +236,7 @@ else
 		buttonMargin    = 4,
 		numCols         = 1,
 		startPoint      = "TOPRIGHT",
-		frameVisibility = "hide"
+		--frameVisibility = "hide"
 	}
 	--create
 	rActionBar:CreateActionBar4(A, bar4)
@@ -256,7 +251,7 @@ else
 		buttonMargin    = 4,
 		numCols         = 1,
 		startPoint      = "BOTTOMLEFT",
-		frameVisibility = "hide"
+		--frameVisibility = "hide"
 	}
 	--create
 	rActionBar:CreateActionBar5(A, bar5)

@@ -1,22 +1,14 @@
-
--- rActionBar: bars
--- zork, 2016
-
 local F, C, L = unpack(select(2, ...))
 
 local module = F:RegisterModule("actionbars")
 
 --if not C.actionbars.enable then return end
 
------------------------------
--- Variables
------------------------------
 
-local A, L = ...
 
------------------------------
--- Init
------------------------------
+local A = ...
+
+
 
 --BagBar
 function rActionBar:CreateBagBar(addonName,cfg)
@@ -26,7 +18,7 @@ function rActionBar:CreateBagBar(addonName,cfg)
 	cfg.frameTemplate = "SecureHandlerStateTemplate"
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle] hide; show"
 	local buttonList = { MainMenuBarBackpackButton, CharacterBag0Slot, CharacterBag1Slot, CharacterBag2Slot, CharacterBag3Slot }
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 end
 
 --MicroMenuBar
@@ -48,7 +40,7 @@ function rActionBar:CreateMicroMenuBar(addonName,cfg)
 		end
 	end
 	--achievement micro button has wrong alpha on first login when buttons are reparented to early, delay bar setup
-	local frame = L:CreateButtonFrame(cfg,buttonList,true)
+	local frame = F:CreateButtonFrame(cfg,buttonList,true)
 	--special
 	PetBattleFrame.BottomFrame.MicroButtonFrame:SetScript("OnShow", nil)
 	OverrideActionBar:SetScript("OnShow", nil)
@@ -57,7 +49,7 @@ end
 
 --Bar1
 function rActionBar:CreateActionBar1(addonName,cfg)
-	L:HideMainMenuBar()
+	F:HideMainMenuBar()
 	cfg.blizzardBar = nil
 	cfg.frameName = addonName.."Bar1"
 	cfg.frameParent = cfg.frameParent or UIParent
@@ -66,8 +58,8 @@ function rActionBar:CreateActionBar1(addonName,cfg)
 	cfg.actionPage = cfg.actionPage or "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
 	local buttonName = "ActionButton"
 	local numButtons = NUM_ACTIONBAR_BUTTONS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 	--fix the button grid for actionbar1
 	local function ToggleButtonGrid()
 		if InCombatLockdown() then
@@ -109,8 +101,8 @@ function rActionBar:CreateActionBar2(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; show"
 	local buttonName = "MultiBarBottomLeftButton"
 	local numButtons = NUM_ACTIONBAR_BUTTONS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 end
 
 --Bar3
@@ -122,8 +114,8 @@ function rActionBar:CreateActionBar3(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; show"
 	local buttonName = "MultiBarBottomRightButton"
 	local numButtons = NUM_ACTIONBAR_BUTTONS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 end
 
 --Bar4
@@ -135,8 +127,8 @@ function rActionBar:CreateActionBar4(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; show"
 	local buttonName = "MultiBarRightButton"
 	local numButtons = NUM_ACTIONBAR_BUTTONS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 end
 
 --Bar5
@@ -148,8 +140,8 @@ function rActionBar:CreateActionBar5(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; show"
 	local buttonName = "MultiBarLeftButton"
 	local numButtons = NUM_ACTIONBAR_BUTTONS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 end
 
 --StanceBar
@@ -161,8 +153,8 @@ function rActionBar:CreateStanceBar(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; show"
 	local buttonName = "StanceButton"
 	local numButtons = NUM_STANCE_SLOTS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 	--special
 	StanceBarLeft:SetTexture(nil)
 	StanceBarMiddle:SetTexture(nil)
@@ -178,8 +170,8 @@ function rActionBar:CreatePetBar(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[petbattle][overridebar][vehicleui][possessbar][shapeshift] hide; [pet] show; hide"
 	local buttonName = "PetActionButton"
 	local numButtons = NUM_PET_ACTION_SLOTS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 	--special
 	SlidingActionBarTexture0:SetTexture(nil)
 	SlidingActionBarTexture1:SetTexture(nil)
@@ -194,8 +186,8 @@ function rActionBar:CreateExtraBar(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[extrabar] show; hide"
 	local buttonName = "ExtraActionButton"
 	local numButtons = NUM_ACTIONBAR_BUTTONS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 	--special
 	ExtraActionBarFrame.ignoreFramePositionManager = true
 end
@@ -218,7 +210,7 @@ function rActionBar:CreateVehicleExitBar(addonName,cfg)
 	button:SetScript("OnClick", OnClick)
 	F.ReskinClose(button)
 	local buttonList = { button }
-	local frame = L:CreateButtonFrame(cfg, buttonList)
+	local frame = F:CreateButtonFrame(cfg, buttonList)
 	--[canexitvehicle] is not triggered on taxi, exit workaround
 	frame:SetAttribute("_onstate-exit", [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])
 	if not CanExitVehicle() then frame:Hide() end
@@ -233,8 +225,8 @@ function rActionBar:CreatePossessExitBar(addonName,cfg)
 	cfg.frameVisibility = cfg.frameVisibility or "[possessbar] show; hide"
 	local buttonName = "PossessButton"
 	local numButtons = NUM_POSSESS_SLOTS
-	local buttonList = L:GetButtonList(buttonName, numButtons)
-	local frame = L:CreateButtonFrame(cfg,buttonList)
+	local buttonList = F:GetButtonList(buttonName, numButtons)
+	local frame = F:CreateButtonFrame(cfg,buttonList)
 	--special
 	PossessBackground1:SetTexture(nil)
 	PossessBackground2:SetTexture(nil)

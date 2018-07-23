@@ -165,7 +165,7 @@ C["actionbars"] = {
 	["leaveVehicleButton"] = { "BOTTOM", UIParent, "BOTTOM", 113, 195 },
 	["sideBar_mouseOver"] = false,
 	["petBar_mouseOver"] = false,
-	["stanceBar_show"] = true,
+	["stanceBar_show"] = false,
 	["classColor"] = false,
 	["count"] = true,
 

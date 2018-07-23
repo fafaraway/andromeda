@@ -1,22 +1,10 @@
 
--- rActionBar: blizzard
--- zork, 2016
 
 local F, C, L = unpack(select(2, ...))
 
 --if not C.actionbars.enable then return end
 
------------------------------
--- Config
------------------------------
 
-local cfg = {}
-
------------------------------
--- Variables
------------------------------
-
-local A, L = ...
 
 local hiddenFrame = CreateFrame("Frame")
 hiddenFrame:Hide()
@@ -51,7 +39,7 @@ local function DisableAllScripts(frame)
 end
 
 --hide main menu bar
-function L:HideMainMenuBar()
+function F:HideMainMenuBar()
 	for i, frame in next, framesToHide do
 		frame:SetParent(hiddenFrame)
 	end
