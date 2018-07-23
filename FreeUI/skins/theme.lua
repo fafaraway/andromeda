@@ -9,6 +9,8 @@ end
 C.themes = {}
 C.themes["FreeUI"] = {}
 
+C.themeframes = {}
+
 -- [[ Initialize addon ]]
 
 local Skin = CreateFrame("Frame")
