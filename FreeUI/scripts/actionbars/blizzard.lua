@@ -1,12 +1,33 @@
-local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
+
+-- rActionBar: blizzard
+-- zork, 2016
+
+local F, C, L = unpack(select(2, ...))
+
+--if not C.actionbars.enable then return end
+
+-----------------------------
+-- Config
+-----------------------------
+
+local cfg = {}
+
+-----------------------------
+-- Variables
+-----------------------------
+
+local A, L = ...
+
+local hiddenFrame = CreateFrame("Frame")
+hiddenFrame:Hide()
 
 local scripts = {
 	"OnShow", "OnHide", "OnEvent", "OnEnter", "OnLeave", "OnUpdate", "OnValueChanged", "OnClick", "OnMouseDown", "OnMouseUp",
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	MainMenuBar,
+	OverrideActionBar,
 }
 
 local framesToDisable = {
@@ -17,21 +38,35 @@ local framesToDisable = {
 	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
 }
 
+-----------------------------
+-- Init
+-----------------------------
+
 local function DisableAllScripts(frame)
-	for _, script in next, scripts do
+	for i, script in next, scripts do
 		if frame:HasScript(script) then
-			frame:SetScript(script, nil)
+			frame:SetScript(script,nil)
 		end
 	end
 end
 
-function Bar:HideBlizz()
-	for _, frame in next, framesToHide do
-		frame:SetParent(F.HiddenFrame)
+--hide main menu bar
+function L:HideMainMenuBar()
+	for i, frame in next, framesToHide do
+		frame:SetParent(hiddenFrame)
 	end
-
-	for _, frame in next, framesToDisable do
+	for i, frame in next, framesToDisable do
 		frame:UnregisterAllEvents()
 		DisableAllScripts(frame)
 	end
 end
+
+--fix blizzard cooldown flash
+hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, 'SetCooldown', function(self)
+  if not self then return end
+	if self:GetEffectiveAlpha() > 0 then
+		self:Show()
+	else
+		self:Hide()
+	end
+end)

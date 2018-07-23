@@ -6,26 +6,26 @@ local F, C, L = unpack(select(2, ...))
 -- [[ Constants ]]
 
 C.media = {
-	["arrowUp"]    = "Interface\\AddOns\\FreeUI\\Media\\arrow-up-active",
-	["arrowDown"]  = "Interface\\AddOns\\FreeUI\\Media\\arrow-down-active",
-	["arrowLeft"]  = "Interface\\AddOns\\FreeUI\\Media\\arrow-left-active",
-	["arrowRight"] = "Interface\\AddOns\\FreeUI\\Media\\arrow-right-active",
-	["backdrop"]   = "Interface\\AddOns\\FreeUI\\Media\\blank",
-	["checked"]    = "Interface\\AddOns\\FreeUI\\Media\\CheckButtonHilight",
-	["glowtex"]    = "Interface\\AddOns\\FreeUI\\Media\\glowTex",
-	["gradient"]   = "Interface\\AddOns\\FreeUI\\Media\\gradient",
-	["roleIcons"]  = "Interface\\Addons\\FreeUI\\Media\\UI-LFG-ICON-ROLES",
-	["texture"]    = "Interface\\AddOns\\FreeUI\\Media\\statusbar",
-	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\Media\\StripesThin",
+	["arrowUp"]    = "Interface\\AddOns\\FreeUI\\assets\\arrow-up-active",
+	["arrowDown"]  = "Interface\\AddOns\\FreeUI\\assets\\arrow-down-active",
+	["arrowLeft"]  = "Interface\\AddOns\\FreeUI\\assets\\arrow-left-active",
+	["arrowRight"] = "Interface\\AddOns\\FreeUI\\assets\\arrow-right-active",
+	["backdrop"]   = "Interface\\AddOns\\FreeUI\\assets\\blank",
+	["checked"]    = "Interface\\AddOns\\FreeUI\\assets\\CheckButtonHilight",
+	["glowtex"]    = "Interface\\AddOns\\FreeUI\\assets\\glowTex",
+	["gradient"]   = "Interface\\AddOns\\FreeUI\\assets\\gradient",
+	["roleIcons"]  = "Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES",
+	["texture"]    = "Interface\\AddOns\\FreeUI\\assets\\statusbar",
+	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\StripesThin",
 	["newItemFlash"] = "Interface\\Cooldown\\star4",
 	["geartex"]    = "",
 	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
 	["abtex"] = {
-		normal		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\gloss",
-		flash		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\flash",
-		pushed		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\pushed",
-		checked		= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\checked",
-		equipped	= "Interface\\AddOns\\FreeUI\\Media\\actionbar\\gloss",
+		normal		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\gloss",
+		flash		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\flash",
+		pushed		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\pushed",
+		checked		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\checked",
+		equipped	= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\gloss",
 	},
 }
 
@@ -36,7 +36,7 @@ if GetLocale() == "zhCN" then
 		["damage"] 		= "Fonts\\ARKai_C.ttf",	-- damage font
 		["header"]		= "Fonts\\ARKai_T.ttf",	-- big font for some panel
 		["chat"]		= "Fonts\\ARKai_T.ttf",	-- chat font
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",	-- pixel font
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",	-- pixel font
 	}
 elseif GetLocale() == "zhTW" then
 	C.font = {
@@ -45,7 +45,7 @@ elseif GetLocale() == "zhTW" then
 		["damage"] 		= "Fonts\\bKAI00M.ttf",
 		["header"]		= "Fonts\\blei00d.ttf",
 		["chat"]		= "Fonts\\blei00d.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 	}
 elseif GetLocale() == "koKR" then
 	C.font = {
@@ -54,7 +54,7 @@ elseif GetLocale() == "koKR" then
 		["damage"] 		= "Fonts\\K_Damage.ttf",
 		["header"]		= "Fonts\\2002.ttf",
 		["chat"]		= "Fonts\\2002.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 	}
 elseif GetLocale() == "ruRU" then
 	C.font = {
@@ -63,16 +63,16 @@ elseif GetLocale() == "ruRU" then
 		["damage"] 		= "Fonts\\FRIZQT___CYR.ttf",
 		["header"]		= "Fonts\\FRIZQT___CYR.ttf",
 		["chat"]		= "Fonts\\FRIZQT___CYR.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 	}
 else
 	C.font = {
-		["normal"] 		= "Interface\\AddOns\\FreeUI\\Media\\font\\ExpresswayRg.ttf",
-		["unitname"] 	= "Interface\\AddOns\\FreeUI\\Media\\font\\ExocetBlizzardMedium.ttf",
-		["damage"] 		= "Interface\\AddOns\\FreeUI\\Media\\font\\PEPSI_pl.ttf",
-		["header"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\ExocetBlizzardMedium.ttf",
-		["chat"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\ExpresswayRg.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\Media\\font\\pixel.ttf",
+		["normal"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
+		["unitname"] 	= "Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf",
+		["damage"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\PEPSI_pl.ttf",
+		["header"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf",
+		["chat"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
+		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 	}
 end
 
@@ -108,7 +108,7 @@ C.themeconfig = {
 	["shadow"] = true,
 }
 
-C.themeframes = {}
+
 
 -- [[ Global config ]]
 C["general"] = {
@@ -166,8 +166,11 @@ C["actionbars"] = {
 	["sideBar_mouseOver"] = false,
 	["petBar_mouseOver"] = false,
 	["stanceBar_show"] = true,
+	["classColor"] = false,
+	["count"] = true,
 
 	["layout"] = 1,
+
 }
 
 C["auras"] = {

@@ -1,5 +1,6 @@
 local F, C = unpack(select(2, ...))
-
+local A, L = ...
+rLib = {}
 -- rLib: framefader, zork
 
 local SpellFlyout = SpellFlyout
@@ -98,7 +99,7 @@ local function SpellFlyoutOnShow(self)
 end
 SpellFlyout:HookScript("OnShow", SpellFlyoutOnShow)
 
-local function CreateFrameFader(frame, faderConfig)
+function rLib:CreateFrameFader(frame, faderConfig)
 	if frame.faderConfig then return end
 	frame.faderConfig = faderConfig
 	frame:EnableMouse(true)
@@ -108,11 +109,11 @@ local function CreateFrameFader(frame, faderConfig)
 	FrameHandler(frame)
 end
 
-function F:CreateButtonFrameFader(buttonList, faderConfig)
-	CreateFrameFader(self, faderConfig)
-	for _, button in next, buttonList do
+function rLib:CreateButtonFrameFader(frame, buttonList, faderConfig)
+	rLib:CreateFrameFader(frame, faderConfig)
+	for i, button in next, buttonList do
 		if not button.__faderParent then
-			button.__faderParent = self
+			button.__faderParent = frame
 			button:HookScript("OnEnter", OffFrameHandler)
 			button:HookScript("OnLeave", OffFrameHandler)
 		end

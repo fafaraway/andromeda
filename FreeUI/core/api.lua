@@ -2,21 +2,21 @@ local F, C = unpack(select(2, ...))
 
 local locale = GetLocale()
 
-local mainFont
+--local mainFont
 
-if C.appearance.fontUseAlternativeFont then
-	mainFont = C.font.normal
-else
-	mainFont = C.font.pixel
-end
+--if C.appearance.fontUseAlternativeFont then
+--	mainFont = C.font.normal
+--else
+--	mainFont = C.font.pixel
+--end
 
-F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
-	if C.appearance.fontUseAlternativeFont then
-		mainFont = C.font.normal
-	else
-		mainFont = C.font.pixel
-	end
-end)
+--F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
+--	if C.appearance.fontUseAlternativeFont then
+--		mainFont = C.font.normal
+--	else
+--		mainFont = C.font.pixel
+--	end
+--end)
 
 local _, class = UnitClass("player")
 
@@ -77,29 +77,34 @@ F.CreateFS = function(parent, fontSize, justify)
 end
 
 F.SetFS = function(fontObject, fontSize)
-	local size
+	--local size
 
-	if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
-		size = C.appearance.fontSizeNormal
-	elseif fontSize == C.FONT_SIZE_LARGE then
-		size = C.appearance.fontSizeLarge
-	elseif fontSize > 4 then -- actual size
-		size = fontSize
-	end
+	--if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
+	--	size = C.appearance.fontSizeNormal
+	--elseif fontSize == C.FONT_SIZE_LARGE then
+	--	size = C.appearance.fontSizeLarge
+	--elseif fontSize > 4 then -- actual size
+	--	size = fontSize
+	--end
 
-	local outline = nil
-	if C.appearance.fontOutline then
-		outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
-	end
+	--local outline = nil
+	--if C.appearance.fontOutline then
+	--	outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
+	--end
 
-	fontObject:SetFont(mainFont, size, outline)
 
-	if C.appearance.fontShadow then
-		fontObject:SetShadowColor(0, 0, 0)
-		fontObject:SetShadowOffset(1, -1)
-	else
-		fontObject:SetShadowOffset(0, 0)
-	end
+
+	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+
+	--if C.appearance.fontShadow then
+	--	fontObject:SetShadowColor(0, 0, 0)
+	--	fontObject:SetShadowOffset(1, -1)
+	--else
+	--	fontObject:SetShadowOffset(0, 0)
+	--end
+
+	fontObject:SetShadowColor(0, 0, 0)
+	fontObject:SetShadowOffset(1, -1)
 end
 
 
@@ -525,7 +530,7 @@ function F:ReskinArrow(direction)
 	dis:SetDrawLayer("OVERLAY")
 
 	local tex = self:CreateTexture(nil, "ARTWORK")
-	local themeMediaPath = "Interface\\AddOns\\FreeUI\\media\\"
+	local themeMediaPath = "Interface\\AddOns\\FreeUI\\assets\\"
 	tex:SetTexture(themeMediaPath.."arrow-"..direction.."-active")
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")

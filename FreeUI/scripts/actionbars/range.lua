@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local Bar = F:GetModule("actionbars")
 
 local IsUsableAction = _G.IsUsableAction
@@ -14,10 +14,10 @@ function Bar:RangeOnUpdate()
 end
 
 function Bar:RangeUpdate()
-
-	local bar = self:GetParent():GetParent()
-	if bar and bar:GetAlpha() == 0 then return end
-
+	if C.actionbars.enable then
+		local bar = self:GetParent():GetParent()
+		if bar and bar:GetAlpha() == 0 then return end
+	end
 
 	local icon = self.icon
 	local normalTexture = self.NormalTexture
