@@ -5,6 +5,7 @@ function module:OnLogin()
 
 	self:ShowItemLevel()
 	self:Expbar()
+	self:flashCursor()
 
 
 	-- Remove Boss Banner
@@ -157,22 +158,11 @@ function ChatFrame_OnHyperlinkShow (chatframe,link,text,button)
 	return _ChatFrame_OnHyperlinkShow (chatframe,link,text,button);
 end
 
--- Hide friendly player names while in raid and/or party group.
---[[if C.general.hideRaidNames then
-	-- local HRN = CreateFrame("Frame")
-	-- HRN:RegisterEvent("PLAYER_ENTERING_WORLD")
-	-- HRN:SetScript("OnEvent", function(self, event)
-	-- 	if event=="PLAYER_ENTERING_WORLD" then
-	-- 		local _,instanceType = IsInInstance()
-	-- 		if instanceType=="raid" then
-	-- 			SetCVar("UnitNameFriendlyPlayerName",0);
-	-- 		else
-	-- 			SetCVar("UnitNameFriendlyPlayerName",1);
-	-- 		end
-	-- 	end
-	-- end)
+-- Hide friendly player/pet names while in raid and/or party group.
+if C.general.hideRaidNames then
 
-	local HFPN = function()
+
+	local HRN = function()
 		local name, type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
 		-- print(name.. " ".. type .." ".. difficulty)	
 		-- if type == "raid" or type == "party" and GetNumGroupMembers() > 3 then
@@ -189,11 +179,11 @@ end
 	end
 
 	local f = CreateFrame("Frame")
-	f:SetScript("OnEvent", HFPN)
+	f:SetScript("OnEvent", HRN)
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 	f:RegisterEvent("RAID_ROSTER_UPDATE")
-	f:RegisterEvent("PARTY_MEMBERS_CHANGED")
-end]]
+	f:RegisterEvent("GROUP_ROSTER_UPDATE")
+end
 
 
 
