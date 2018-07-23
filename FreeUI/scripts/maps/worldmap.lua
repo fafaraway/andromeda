@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule("worldmap")
+local module = F:RegisterModule("maps")
 
 
 
@@ -28,17 +28,17 @@ end
 
 function module:OnLogin()
 	-- Scaling
-	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(C.map.worldMapScale) end
+	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(C.maps.worldMapScale) end
 	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
 		if InCombatLockdown() then return end
-		self:SetScale(C.map.worldMapScale)
+		self:SetScale(C.maps.worldMapScale)
 	end)
 	hooksecurefunc(WorldMapFrame, "Maximize", function(self)
 		if InCombatLockdown() then return end
 		self:SetScale(1)
 	end)
 	-- cursor fix, need reviewed
-	if C.map.worldMapScale > 1 then
+	if C.maps.worldMapScale > 1 then
 		RunScript("WorldMapFrame.ScrollContainer.GetCursorPosition=function(f) local x,y=MapCanvasScrollControllerMixin.GetCursorPosition(f);local s=WorldMapFrame:GetScale();return x/s,y/s;end")
 	end
 
@@ -106,4 +106,8 @@ function module:OnLogin()
 
 	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
 	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
+
+
+	self:SetupMinimap()
+
 end

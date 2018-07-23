@@ -1,11 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="ab_core.lua"/>
+	<!-- <Script file="ab_core.lua"/>
 	<Script file="ab_blizzard.lua"/>
 	<Script file="ab_bars.lua"/>
 	<Script file="ab_layout.lua"/>
 	<Script file="ab_style.lua"/>
 	<Script file="ab_range.lua"/>
-	<Script file="ab_bind.lua"/>
+	<Script file="ab_bind.lua"/> -->
 
 	<Script file="alreadyknown.lua"/>
 
@@ -33,7 +33,7 @@
 	<Script file="errors.lua"/>
 
 	<Script file="fonts.lua"/>
-	<Script file="globals.lua"/>
+	<!-- <Script file="globals.lua"/> -->
 	<Script file="hidenames.lua"/>
 	<Script file="interrupt.lua"/>
 	<Script file="loot.lua"/>
@@ -42,7 +42,7 @@
 	<Script file="marking.lua"/>
 	<Script file="menubar.lua"/>
 	<Script file="micromenu.lua"/>
-	<Script file="minimap.lua"/>
+
 	<Script file="mirrorbar.lua"/>
 	<Script file="misc.lua"/>
 	<Script file="mover.lua"/>
@@ -86,8 +86,12 @@
 	<Script file="unitframes_arena.lua"/>
 	<Script file="unitframes_focuser.lua"/>
 	<Script file="unitframes_sound.lua"/>
-	<Script file="worldmap.lua"/>
+
 	<Script file="worldmarker.lua"/>
 	<Script file="worldstateframe.lua"/>
+
+	<!-- <Include file="actionbars\_embed.xml"/> -->
+
+	<Include file="maps\_embed.xml"/>
 
 </Ui>

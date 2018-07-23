@@ -155,6 +155,21 @@ C["appearance"] = {
 	["uisetuphelper"] = false,
 }
 
+
+
+C["actionbars"] = {
+	["enable"] = true,					-- enable the action bars
+	["enableStyle"] = true,				-- enable action bars style
+	["hotKey"] = true, 					-- show hot keys on buttons
+	["macroName"] = true,				-- show macro name on buttons
+	["leaveVehicleButton"] = { "BOTTOM", UIParent, "BOTTOM", 113, 195 },
+	["sideBar_mouseOver"] = false,
+	["petBar_mouseOver"] = false,
+	["stanceBar_show"] = true,
+
+	["layout"] = 1,
+}
+
 C["auras"] = {
 	["buffSize"] = 42,
 	["buffScale"] = 1,
@@ -179,18 +194,7 @@ C["automation"] = {
 		["autoSetRole_verbose"] = false,	-- tells you what happens when setting role
 }
 
-C["actionbars"] = {
-	["enable"] = true,					-- enable the action bars
-	["enableStyle"] = true,				-- enable action bars style
-	["hotKey"] = true, 					-- show hot keys on buttons
-	["macroName"] = true,				-- show macro name on buttons
-	["leaveVehicleButton"] = { "BOTTOM", UIParent, "BOTTOM", 113, 195 },
-	["sideBar_mouseOver"] = false,
-	["petBar_mouseOver"] = false,
-	["stanceBar_show"] = true,
 
-	["layout"] = 1,
-}
 
 C["bags"] = {
 	["itemSlotSize"] = 34,
@@ -343,8 +347,12 @@ C["unitframes"] = {
 }
 
 
-C["map"] = {
+C["maps"] = {
 	["worldMapScale"] = 1,
+	["miniMapScale"] = 1,
+	["miniMapPosition"] = { "TOPRIGHT", UIParent, "TOPRIGHT", -22, 0 },
+	["miniMapSize"] = 256,
+	["whoPings"] = true,
 }
 
 
