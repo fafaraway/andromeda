@@ -27,4 +27,4 @@ libs\_libs.xml
 scripts\_scripts.xml
 theme\_theme.xml
 
-_dev\test.lua
+core\dev.lua
