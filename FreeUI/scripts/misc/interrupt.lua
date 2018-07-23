@@ -6,7 +6,7 @@ local enableInParty = C.general.interrupt_party
 local enableInBGs = C.general.interrupt_bgs
 local enableInLFG = C.general.interrupt_lfg
 local enableOutdoors = C.general.interrupt_outdoors
-local interruptSound = "Interface\\AddOns\\FreeUI\\media\\sound\\Shutupfool.ogg"
+local interruptSound = "Interface\\AddOns\\FreeUI\\assets\\sound\\Shutupfool.ogg"
 
 local playerName = UnitName("player")
 local LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME

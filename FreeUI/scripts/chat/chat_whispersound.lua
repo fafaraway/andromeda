@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 local WhisperSounds = CreateFrame("Frame")
-local WhisperSoundsFile = "Interface\\AddOns\\FreeUI\\media\\sound\\whisper.ogg"
+local WhisperSoundsFile = "Interface\\AddOns\\FreeUI\\assets\\sound\\whisper.ogg"
 local WhisperSoundseventHandlers = {}
 local chatSoundTimer = 0
 
