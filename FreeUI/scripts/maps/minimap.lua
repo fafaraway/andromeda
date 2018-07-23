@@ -207,6 +207,68 @@ function module:ReskinRegions()
 		TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", -400, -20)
 		TicketStatusFrame.SetPoint = F.Dummy
 	end
+
+	-- durability
+	hooksecurefunc(DurabilityFrame, 'SetPoint', function(self, _, parent)
+		if parent=='MinimapCluster' or parent==_G['MinimapCluster'] then
+			self:ClearAllPoints()
+			self:SetPoint('RIGHT', Minimap, 'LEFT', -50, -250)
+			self:SetScale(.7)
+		end
+	end)
+
+
+	-- VEHICLE SEAT INDICATOR
+	hooksecurefunc(VehicleSeatIndicator,'SetPoint', function(self, _, parent)
+		if parent=='MinimapCluster' or parent==_G['MinimapCluster'] then
+			self:ClearAllPoints()
+			self:SetPoint('RIGHT', Minimap, 'LEFT', -50, -250)
+			self:SetScale(.7)
+		end
+	end)
+
+
+	-- move zonetextframe
+	ZoneTextFrame:SetFrameStrata("MEDIUM")
+	SubZoneTextFrame:SetFrameStrata("MEDIUM")
+
+	ZoneTextString:ClearAllPoints()
+	ZoneTextString:SetPoint("CENTER", Minimap)
+	ZoneTextString:SetWidth(230)
+	SubZoneTextString:SetWidth(230)
+	PVPInfoTextString:SetWidth(230)
+	PVPArenaTextString:SetWidth(230)
+
+	MinimapZoneTextButton:ClearAllPoints()
+	MinimapZoneTextButton:SetPoint("CENTER", Minimap)
+	MinimapZoneTextButton:SetFrameStrata("HIGH")
+	MinimapZoneTextButton:EnableMouse(false)
+	MinimapZoneTextButton:SetAlpha(0)
+	MinimapZoneText:SetPoint("CENTER", MinimapZoneTextButton)
+
+	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
+	MinimapZoneText:SetJustifyH("CENTER")
+
+	if GetLocale() == "zhCN" or GetLocale() == "zhTW" then
+		ZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
+		SubZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
+		PVPInfoTextString:SetFont(C.font.normal, 14, "OUTLINE")
+		PVPArenaTextString:SetFont(C.font.normal, 14, "OUTLINE")
+		MinimapZoneText:SetFont(C.font.normal, 14, "OUTLINE")
+	else
+		F.SetFS(ZoneTextString)
+		F.SetFS(SubZoneTextString)
+		F.SetFS(PVPInfoTextString)
+		F.SetFS(PVPArenaTextString)
+		F.SetFS(MinimapZoneText)
+	end
+
+	Minimap:HookScript("OnEnter", function()
+		MinimapZoneTextButton:SetAlpha(1)
+	end)
+	Minimap:HookScript("OnLeave", function()
+		MinimapZoneTextButton:SetAlpha(0)
+	end)
 end
 
 
@@ -256,7 +318,7 @@ function module:SetupMinimap()
 
 	Minimap:SetClampedToScreen(false)
 	Minimap:SetSize(size*scale, size*scale)
-	Minimap:SetMaskTexture[[Interface\AddOns\FreeUI\media\rectangle]]
+	Minimap:SetMaskTexture[[Interface\AddOns\FreeUI\assets\rectangle]]
 	Minimap:SetHitRectInsets(0, 0, 34*scale, 34*scale)
 	Minimap:SetFrameLevel(10)
 	Minimap:ClearAllPoints()
