@@ -45,14 +45,7 @@ SlashCmdList.FREEUI = function(cmd)
 		end
 	end
 
-	if cmd == "install" then
-		if IsAddOnLoaded("FreeUI_Install") then
-			FreeUI_InstallFrame:Show()
-		else
-			EnableAddOn("FreeUI_Install")
-			LoadAddOn("FreeUI_Install")
-		end
-	elseif cmd == "reset" then
+	if cmd == "reset" then
 		FreeUIGlobalConfig = {}
 		FreeUIConfig = {}
 		ReloadUI()

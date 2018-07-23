@@ -19,7 +19,7 @@ core\gui.lua
 core\api.lua
 core\uiscale.lua
 core\slash.lua
-core\notifications.lua
+
 
 
 libs\_libs.xml
