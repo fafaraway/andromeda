@@ -59,14 +59,6 @@ local function applySkin(b)
 
 	b.Border = border
 
-	--shadow
-	-- local back = CreateFrame("Frame", nil, b)
-	-- back:SetPoint("TOPLEFT", b, "TOPLEFT", -2, 2)
-	-- back:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", 2, -2)
-	-- back:SetFrameLevel(b:GetFrameLevel()-1)
-	-- back:SetBackdrop({bgFile = "", edgeFile = "Interface\\AddOns\\FreeUI\\Media\\glowTex",
-	-- edgeSize = 3,insets = {left = 3,right = 3,top = 3,bottom = 3,},})
-	-- back:SetBackdropBorderColor(0, 0, 0, 0.5)
 
 	local icon = _G[name.."Icon"]
 	icon:SetTexCoord(0.1,0.9,0.1,0.9)
