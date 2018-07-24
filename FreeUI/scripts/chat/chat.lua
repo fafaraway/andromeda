@@ -34,6 +34,7 @@ local function skinChat(self)
 	self:SetMinResize(100, 50)
 	self:SetFont(C.font.chat, fontSize, "OUTLINE")
 	self:SetShadowColor(0, 0, 0, 0)
+	self:SetShadowOffset(1, -1)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < maxLines then
@@ -107,6 +108,20 @@ local function EnableFading(i)
 	ChatFrameNumberFrame:SetFading(true);
 	ChatFrameNumberFrame:SetTimeVisible(10);
 	ChatFrameNumberFrame:SetFadeDuration(10);
+end
+
+local function ForceChatSettings()
+	FCF_SetLocked(ChatFrame1, nil)
+	ChatFrame1:ClearAllPoints()
+	ChatFrame1:SetPoint(unpack(C.chat.position))
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local cf = _G["ChatFrame"..i]
+		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
+	end
+	FCF_SavePositionAndDimensions(ChatFrame1)
+	FCF_SetLocked(ChatFrame1, true)
+
 end
 
 
@@ -506,5 +521,8 @@ function module:OnLogin()
 	HideForever(ChatFrameMenuButton)
 	HideForever(QuickJoinToastButton)
 	HideForever(GeneralDockManagerOverflowButton)
+
+	ForceChatSettings()
+
 	
 end
