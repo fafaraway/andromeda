@@ -21,5 +21,5 @@ local function OnVignetteAdded(self,event,id)
 end
 
 local eventHandler = CreateFrame("Frame")
-eventHandler:RegisterEvent("VIGNETTE_ADDED")
+eventHandler:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
 eventHandler:SetScript("OnEvent", OnVignetteAdded)
