@@ -802,8 +802,7 @@ function F:ReskinGarrisonPortrait()
 	self.PortraitRingQuality:SetTexture("")
 	if self.Highlight then self.Highlight:Hide() end
 
-	self.LevelBorder:Hide()
-	self.LevelBorder.Show = F.dummy
+	self.LevelBorder:SetScale(.0001)
 	self.Level:ClearAllPoints()
 	self.Level:SetPoint("BOTTOM", self, 0, 12)
 
@@ -899,6 +898,43 @@ function F:CreateBC(a)
 	self:SetScript("OnMouseUp", function()
 		self:SetBackdropColor(0, 0, 0, a or .3)
 	end)
+end
+
+-- Checkbox
+function F:CreateCB(a)
+	self:SetNormalTexture("")
+	self:SetPushedTexture("")
+	self:SetHighlightTexture(C.media.backdrop)
+	local hl = self:GetHighlightTexture()
+	hl:SetPoint("TOPLEFT", 6, -6)
+	hl:SetPoint("BOTTOMRIGHT", -6, 6)
+	hl:SetVertexColor(cr, cg, cb, .25)
+
+	local bd = F.CreateBG(self, -4)
+	F.CreateBDFrame(bd)
+
+	local ch = self:GetCheckedTexture()
+	ch:SetDesaturated(true)
+	ch:SetVertexColor(r, g, b)
+end
+
+-- Icon Style
+function F:CreateIF(mouse, cd)
+	F.CreateSD(self, 3, 3)
+	self.Icon = self:CreateTexture(nil, "ARTWORK")
+	self.Icon:SetAllPoints()
+	self.Icon:SetTexCoord(unpack(C.texCoord))
+	if mouse then
+		self:EnableMouse(true)
+		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
+		self.HL:SetColorTexture(1, 1, 1, .3)
+		self.HL:SetAllPoints(self.Icon)
+	end
+	if cd then
+		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
+		self.CD:SetAllPoints()
+		self.CD:SetReverse(true)
+	end
 end
 
 
