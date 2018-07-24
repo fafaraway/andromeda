@@ -185,17 +185,7 @@ C["auras"] = {
 	["aurasSource"] = true,
 }
 
-C["automation"] = {
-	["autoAccept"] = false,			-- auto accept invites from friends and guildies
-	["autoRepair"] = true,			-- automatically repair items
-		["autoRepair_guild"] = true,		-- use guild funds for auto repairs
-	["autoRoll"] = false, 			-- automatically DE or greed on BoE greens (DE priority)
-		["autoRoll_maxLevel"] = false, 		-- only automatically roll on items at max level
-	["autoSell"] = true,			-- automatically sell greys
-	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
-		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
-		["autoSetRole_verbose"] = false,	-- tells you what happens when setting role
-}
+
 
 
 
@@ -346,6 +336,15 @@ C["maps"] = {
 	["miniMapPosition"] = { "TOPRIGHT", UIParent, "TOPRIGHT", -22, 0 },
 	["miniMapSize"] = 256,
 	["whoPings"] = true,
+	["mapReveal"] = true,
+}
+
+C["misc"] = {
+	["rareAlert"] = true,
+	["rareAlertinChat"] = true,
+	["interrupt"] = true,
+
+	["interruptinChat"] = true,
 }
 
 
