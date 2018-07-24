@@ -1,8 +1,7 @@
 ﻿local F, C = unpack(select(2, ...))
 
-if not C.menubar.enable then return end
+if not C.infoBar.enable then return end
 
-local top = C.menubar.topPosition
 
 local locale = GetLocale()
 local menubarFont = {
@@ -15,7 +14,7 @@ local r, g, b = unpack(C.class)
 
 local barAlpha, buttonAlpha
 
-if C.menubar.buttons_mouseover then
+if C.infoBar.buttons_mouseover then
 	barAlpha = 0.25
 	buttonAlpha = 0
 else
@@ -30,13 +29,10 @@ bar:SetFrameStrata("BACKGROUND")
 
 RegisterStateDriver(bar, "visibility", "[petbattle] hide; show")
 
-if top then
-	bar:SetPoint("TOPLEFT", -1, 1)
-	bar:SetPoint("TOPRIGHT", 1, 1)
-else
-	bar:SetPoint("BOTTOMLEFT", -1, -1)
-	bar:SetPoint("BOTTOMRIGHT", 1, -1)
-end
+
+bar:SetPoint("TOPLEFT", -1, 1)
+bar:SetPoint("TOPRIGHT", 1, 1)
+
 
 bar:SetHeight(14)
 F.CreateBD(bar, barAlpha)
@@ -160,7 +156,7 @@ end
 
 -- [[ Buttons ]]
 
-if not C.menubar.enableButtons then return end
+if not C.infoBar.enableButtons then return end
 
 local POSITION_LEFT, POSITION_MIDDLE, POSITION_RIGHT = 1, 2, 3
 
@@ -210,7 +206,7 @@ local function hideBar()
 end
 bar.hideBar = hideBar
 
-if C.menubar.buttons_mouseover then
+if C.infoBar.buttons_mouseover then
 	bar:SetScript("OnEnter", showBar)
 	bar:SetScript("OnLeave", hideBar)
 end
@@ -224,7 +220,7 @@ local function buttonOnLeaveNoFade(self)
 end
 
 local function buttonOnEnter(self)
-	if C.menubar.buttons_mouseover then
+	if C.infoBar.buttons_mouseover then
 		showBar()
 	end
 
@@ -232,7 +228,7 @@ local function buttonOnEnter(self)
 end
 
 local function buttonOnLeave(self)
-	if C.menubar.buttons_mouseover then
+	if C.infoBar.buttons_mouseover then
 		hideBar()
 	end
 
@@ -276,7 +272,7 @@ local function addButton(text, position, clickFunc)
 	bu:SetWidth(130)
 	F.CreateBD(bu, .1)
 
-	if C.menubar.buttons_mouseover then
+	if C.infoBar.buttons_mouseover then
 		bu:SetAlpha(0)
 	end
 
@@ -301,7 +297,7 @@ end
 bar.addButton = addButton
 
 F.AddOptionsCallback("menubar", "buttons_mouseover", function()
-	if C.menubar.buttons_mouseover then
+	if C.infoBar.buttons_mouseover then
 		bar:SetScript("OnEnter", showBar)
 		bar:SetScript("OnLeave", hideBar)
 		hideBar()
@@ -348,11 +344,9 @@ addButton("Chat menu", POSITION_LEFT, function(self, button)
 		ChatFrame_OpenChat(StatReport(), chatFrame)
 	 else
 		ChatMenu:ClearAllPoints()
-		if top then
-			ChatMenu:SetPoint("TOPLEFT", UIParent, 30, -30)
-		else
-			ChatMenu:SetPoint("BOTTOMLEFT", UIParent, 30, 30)
-		end
+
+		ChatMenu:SetPoint("TOPLEFT", UIParent, 30, -30)
+
 		ToggleFrame(ChatMenu)
 	end
 end)

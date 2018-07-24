@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-if not C.menubar.enable then return end
+if not C.infoBar.enable then return end
 
 local r, g, b = unpack(C.class)
 
@@ -34,7 +34,7 @@ FreeUIStatsButton:SetScript("OnUpdate", function(self, elapsed)
 	end
 
 	if last >= 1 then
-		text:SetText("|cffffffff"..floor(GetFramerate() + .5 + 100).."|r fps   |cffffffff"..(home + 123).."|r/|cffffffff"..(world + 148).."|r ms   |cffffffff"..GameTime_GetTime(false))
+		text:SetText("|cffffffff"..floor(GetFramerate() + .5).."|r fps   |cffffffff"..(home).."|r/|cffffffff"..(world).."|r ms   |cffffffff"..GameTime_GetTime(false))
 		last = 0
 	end
 end)
