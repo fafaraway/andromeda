@@ -1,0 +1,15 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="fonts.lua"/>
+	<Script file="errors.lua"/>
+	<Script file="colours.lua"/>
+	<Script file="colorpicker.lua"/>
+	<Script file="mirrorbar.lua"/>
+	<Script file="mover.lua"/>
+	<Script file="marking.lua"/>
+	<Script file="role.lua"/>
+	<Script file="worldmarker.lua"/>
+	<Script file="objectivetracker.lua"/>
+	<Script file="timer.lua"/>
+	<Script file="worldstateframe.lua"/>
+	<Script file="orderhallcommandbar.lua"/>
+</Ui>

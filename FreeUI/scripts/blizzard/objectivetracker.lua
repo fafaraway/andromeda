@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-if not C.quests.questObjectiveTrackerStyle then return end
+--if not C.quests.questObjectiveTrackerStyle then return end
 
 -- local class = select(2, UnitClass("player"))
 -- local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
