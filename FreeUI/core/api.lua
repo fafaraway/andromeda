@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-local locale = GetLocale()
+
 
 --local mainFont
 
@@ -52,8 +52,9 @@ C.myClass = class
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
 
-C.FONT_SIZE_NORMAL = 1
-C.FONT_SIZE_LARGE = 2
+C.client = GetLocale()
+
+
 
 -- [[ Functions ]]
 

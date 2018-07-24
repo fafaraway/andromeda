@@ -212,9 +212,9 @@ C["bags"] = {
 
 }
 
-C["menubar"] = {
+C["infoBar"] = {
 	["enable"] = true,
-	["topPosition"] = true,
+
 
 	["enableButtons"] = true,			-- show buttons for quick access on the menu bar
 		["buttons_mouseover"] = true,			-- only on mouseover
@@ -258,6 +258,10 @@ C["quests"] = {
 
 C["chat"] = {
 	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
+	["sticky"] = true,
+	["oldName"] = false,
+	["match"] = 1,
+
 }
 
 C["unitframes"] = {
