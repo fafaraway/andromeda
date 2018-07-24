@@ -461,14 +461,14 @@ if locale == "zhCN" or locale == "zhTW" then
 end
 garrisonButton:Hide()
 
---GarrisonLandingPageMinimapButton:SetSize(1, 1)
---GarrisonLandingPageMinimapButton:SetAlpha(0)
---GarrisonLandingPageMinimapButton:EnableMouse(false)
+GarrisonLandingPageMinimapButton:SetSize(1, 1)
+GarrisonLandingPageMinimapButton:SetAlpha(0)
+GarrisonLandingPageMinimapButton:EnableMouse(false)
 
---GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
---	if event == "GARRISON_SHOW_LANDING_PAGE" and not garrisonButton:IsShown() then
---		showButton(garrisonButton)
---	elseif event == "GARRISON_HIDE_LANDING_PAGE" then
---		hideButton(garrisonButton)
---	end
---end)
+GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
+	if event == "GARRISON_SHOW_LANDING_PAGE" and not garrisonButton:IsShown() then
+		showButton(garrisonButton)
+	elseif event == "GARRISON_HIDE_LANDING_PAGE" then
+		hideButton(garrisonButton)
+	end
+end)
