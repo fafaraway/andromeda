@@ -242,7 +242,7 @@ if C.appearance.vignette then
 	f:SetFrameLevel(0)
 	f:SetFrameStrata("BACKGROUND")
 	f.tex = f:CreateTexture()
-	f.tex:SetTexture([[Interface\Addons\FreeUI\media\shadow.tga]])
+	f.tex:SetTexture([[Interface\Addons\FreeUI\assets\shadow.tga]])
 	f.tex:SetAllPoints(f)
 
 	f:SetAlpha(C.appearance.vignetteAlpha)
@@ -344,3 +344,38 @@ do
 
 	F:RegisterEvent("ADDON_LOADED", setupMisc)
 end
+
+
+-- Remove Boss Emote spam during BG
+local BATTLEGROUNDS = {
+	["Wintergrasp"] = true,
+	["Tol Barad"] = true,
+	["Isle of Conquest"] = true,
+	["Strand of the Ancients"] = true,
+	["Alterac Valley"] = true,
+	["Warsong Gulch"] = true,
+	["Twin Peaks"] = true,
+	["Arathi Basin"] = true,
+	["Eye of the Storm"] = true,
+	["Battle for Gilneas"] = true,
+	["Deepwind Gorge"] = true,
+	["Silvershard Mines"] = true,
+	["The Battle for Gilneas"] = true,
+	["Temple of Kotmogu"] = true,
+}
+
+local BGSpam = _G.CreateFrame("Frame")
+local RaidBossEmoteFrame, spamDisabled = _G.RaidBossEmoteFrame
+local function ToggleBossEmotes()
+	if BATTLEGROUNDS[GetZoneText()] then 
+		RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")
+		spamDisabled = true
+	elseif spamDisabled then
+		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
+		spamDisabled = false
+	end
+end
+
+BGSpam:RegisterEvent("PLAYER_ENTERING_WORLD")
+BGSpam:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+BGSpam:SetScript("OnEvent", ToggleBossEmotes)
