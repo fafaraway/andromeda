@@ -195,6 +195,9 @@ load:SetScript("OnEvent", function(self, event)
 	OpacitySliderFrame:SetPoint("BOTTOM", "ColorPPCopyColorSwatch", "BOTTOM", 0, 23)
 	OpacitySliderFrame:SetPoint("RIGHT", "ColorPickerFrame", "RIGHT", -35, 18)
 
+	
+	F.ReskinSlider(OpacitySliderFrame)
+
 	-- Set up edit box frames and interior label and text areas
 	local boxes = {"R", "G", "B", "H", "A"}
 	for i = 1, table.getn(boxes) do
@@ -249,7 +252,7 @@ load:SetScript("OnEvent", function(self, event)
 	end
 
 	-- Finish up with placement
-	ColorPPBoxR:SetPoint("BOTTOMLEFT", "ColorPickerOkayButton", "TOPLEFT", -100, 24)
+	ColorPPBoxR:SetPoint("BOTTOMLEFT", "ColorPickerOkayButton", "TOPLEFT", 0, 24)
 	ColorPPBoxG:SetPoint("LEFT", "ColorPPBoxR", "RIGHT", 18, 0)
 	ColorPPBoxB:SetPoint("LEFT", "ColorPPBoxG", "RIGHT", 18, 0)
 	ColorPPBoxH:SetPoint("LEFT", "ColorPPBoxB", "RIGHT", 18, 0)
@@ -266,6 +269,8 @@ load:SetScript("OnEvent", function(self, event)
 	ColorPPBoxG:SetScript("OnTabPressed", function(self) ColorPPBoxB:SetFocus() end)
 	ColorPPBoxB:SetScript("OnTabPressed", function(self) ColorPPBoxH:SetFocus() end)
 	ColorPPBoxA:SetScript("OnTabPressed", function(self) ColorPPBoxR:SetFocus() end)
+
+
 
 	-- Make the color picker movable
 	local mover = CreateFrame("Frame", nil, ColorPickerFrame)
