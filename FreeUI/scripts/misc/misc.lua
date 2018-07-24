@@ -3,6 +3,8 @@ local module = F:RegisterModule("misc")
 
 function module:OnLogin()
 
+	self:AddAlerts()
+
 	self:ShowItemLevel()
 	self:Expbar()
 	self:flashCursor()
@@ -272,7 +274,9 @@ end
 
 
 -- Hide talent alert
-MainMenuMicroButton_SetAlertsEnabled(false)
+function MainMenuMicroButton_AreAlertsEffectivelyEnabled()
+	return false
+end
 
 
 -- Temporary taint fix
