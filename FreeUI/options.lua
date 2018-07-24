@@ -220,18 +220,7 @@ C["infoBar"] = {
 		["buttons_mouseover"] = true,			-- only on mouseover
 }
 
-C["notifications"] = {
-	["enable"] = true,
 
-	["playSounds"] = true,
-	["animations"] = true,
-	["timeShown"] = 5,
-
-	["checkBagsFull"] = true,
-	["checkEvents"] = true,
-	["checkGuildEvents"] = true,
-	["checkMail"] = true,
-}
 
 C["tooltip"] = {
 	["enable"] = true,		-- enable tooltip and modules
@@ -251,10 +240,7 @@ C["tooltip"] = {
 	["aurasSource"] = true,
 }
 
-C["quests"] = {
-	["questObjectiveTrackerStyle"] = true,
-	["questRewardHighlight"] = true,				-- highlights the quest reward with highest vendor price
-}
+
 
 C["chat"] = {
 	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},

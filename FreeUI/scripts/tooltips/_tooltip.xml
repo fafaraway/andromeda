@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="tip.lua"/>
+	<Script file="hover.lua"/>
+	<Script file="icon.lua"/>
+	<Script file="id.lua"/>
+	<Script file="ilvlSpec.lua"/>
+</Ui>
