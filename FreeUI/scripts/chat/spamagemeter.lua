@@ -1,29 +1,33 @@
-----------------------------------------------------------------------------------------
---	Merge damage meter spam(SpamageMeters by Wrug and Cybey)
-----------------------------------------------------------------------------------------
+-- SpamageMeters by Wrug and Cybey
+-- Merge damage meter spam
+
 local firstLines = {
-	"^Recount - (.*)$", --Recount
-	"^Skada: (.*) for (.*):$", -- Skada enUS
-	"^Skada: (.*) por (.*):$", -- Skada esES/ptBR
-	"^Skada: (.*) für (.*):$", -- Skada deDE
-	"^Skada: (.*) pour (.*):$", -- Skada frFR
-	"^Skada: (.*) per (.*):$", -- Skada itIT
-	"^(.*) 의 Skada 보고 (.*):$", -- Skada koKR
-	"^Отчёт Skada: (.*), с (.*):$", -- Skada ruRU
-	"^Skada战斗报告：(.*)的(.*), (.*)到(.*):$", -- Skada zhCN
-	"^Skada：(.*)的(.*), (.*)到(.*):$", -- Skada zhCN
-	"^Skada:(.*)來自(.*):$", -- Skada zhTW
-	"^(.*) Done for (.*)$", -- TinyDPS
-	"^Numeration: (.*)$", -- Numeration
-	"^Details! Report for (.*)$" -- Details!
+	"^Recount - (.*)$", 									-- Recount
+	"^Skada: (.*) for (.*):$",								-- Skada enUS
+	"^Skada: (.*) für (.*):$",								-- Skada deDE
+	"^Skada: (.*) pour (.*):$",								-- Skada frFR
+	"^Отчёт Skada: (.*), с (.*):$",							-- Skada ruRU
+	"^Skada: (.*) por (.*):$",								-- Skada esES/ptBR
+	"^Skada: (.*) per (.*):$",								-- Skada itIT
+	"^(.*) 의 Skada 보고 (.*):$",							-- Skada koKR
+	"^Skada报告(.*)的(.*):$",								-- Skada zhCN
+	"^Skada:(.*)來自(.*):$",								-- Skada zhTW
+	"^(.*) Done for (.*)$",									-- TinyDPS enUS
+	"^(.*) für (.*)$",										-- TinyDPS deDE
+	"데미지량 -(.*)$",										-- TinyDPS koKR
+	"힐량 -(.*)$",											-- TinyDPS koKR
+	"Урон:(.*)$",											-- TinyDPS ruRU
+	"Исцеление:(.*)$",										-- TinyDPS ruRU
+	"^Numeration: (.*) - (.*)$",							-- Numeration
+	"alDamageMeter : (.*)$",								-- alDamageMeter
+	"^Details! Report for (.*)$"							-- Details!
 }
 
 local nextLines = {
-	"^(%d+)\. (.*)$", --Recount, Details! and Skada
-	"^(.*)   (.*)$", --Additional Skada
-	"^Numeration: (.*)$", -- Numeration
-	"^[+-]%d+.%d", -- Numeration Deathlog Details
-	"^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$" -- TinyDPS
+	"^(%d+)\. (.*)$",										-- Recount, Details! and Skada
+	"^(.*)   (.*)$",										-- Additional Skada
+	"^[+-]%d+.%d",											-- Numeration deathlog details
+	"^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$"		-- TinyDPS
 }
 
 local meters = {}
@@ -34,16 +38,14 @@ local events = {
 	"CHAT_MSG_OFFICER",
 	"CHAT_MSG_PARTY",
 	"CHAT_MSG_PARTY_LEADER",
-	"CHAT_MSG_INSTANCE_CHAT",
-	"CHAT_MSG_INSTANCE_CHAT_LEADER",
 	"CHAT_MSG_RAID",
 	"CHAT_MSG_RAID_LEADER",
+	"CHAT_MSG_INSTANCE_CHAT",
+	"CHAT_MSG_INSTANCE_CHAT_LEADER",
 	"CHAT_MSG_SAY",
 	"CHAT_MSG_WHISPER",
 	"CHAT_MSG_WHISPER_INFORM",
-	"CHAT_MSG_BN_WHISPER",
-	"CHAT_MSG_BN_WHISPER_INFORM",
-	"CHAT_MSG_YELL",
+	"CHAT_MSG_YELL"
 }
 
 local function FilterLine(event, source, message, ...)

@@ -1,21 +1,13 @@
 local F, C, L = unpack(select(2, ...))
 
-local _G = _G
-
-local chatFont = {
-	C.font.chat,
-	14,
-	"OUTLINE"
-}
+local module = F:RegisterModule("chat")
 
 
-DEFAULT_CHATFRAME_ALPHA = 0
-CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME -- speed up fading out
-CHAT_TAB_HIDE_DELAY = CHAT_TAB_SHOW_DELAY -- ditto
 
-for i = 1, 23 do
-	CHAT_FONT_HEIGHTS[i] = i+7
-end
+
+
+
+
 
 local hooks = {}
 local chatEvents = {
@@ -26,48 +18,59 @@ local chatEvents = {
 	"CHAT_MSG_CHANNEL_LIST"
 }
 
-local function HideForever(f)
-	f:SetScript("OnShow", f.Hide)
-	f:Hide()
-end
 
-HideForever(ChatFrameMenuButton)
-HideForever(QuickJoinToastButton)
-HideForever(GeneralDockManagerOverflowButton)
+
+
+local maxLines = 1024
+local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 
 local function skinChat(self)
 	if not self or (self and self.styled) then return end
 
+	local name = self:GetName()
+	local fontSize = select(2, self:GetFont())
+	self:SetClampRectInsets(0, 0, 0, 0)
+	self:SetMaxResize(maxWidth, maxHeight)
+	self:SetMinResize(100, 50)
+	self:SetFont(C.font.chat, fontSize, "OUTLINE")
+	self:SetShadowColor(0, 0, 0, 0)
+	self:SetClampRectInsets(0, 0, 0, 0)
+	self:SetClampedToScreen(false)
+	if self:GetMaxLines() < maxLines then
+		self:SetMaxLines(maxLines)
+	end
+
+	local eb = _G[name.."EditBox"]
+	eb:SetAltArrowKeyMode(false)
+	eb:ClearAllPoints()
+	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
+	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -15, 54)
+	F.CreateBD(eb)
+	F.CreateSD(eb)
+	F.CreateTex(eb)
+	for i = 3, 8 do
+		select(i, eb:GetRegions()):SetAlpha(0)
+	end
+
+	local lang = _G[name.."EditBoxLanguage"]
+	lang:GetRegions():SetAlpha(0)
+	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", 2, 0)
+	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 28, 0)
+	F.CreateBD(lang)
+	F.CreateSD(lang)
+	F.CreateTex(lang)
 
 
 
 
-
-	HideForever(self.buttonFrame)
-	HideForever(self.ScrollBar)
-	HideForever(self.ScrollToBottomButton)
+	F.HideObject(self.buttonFrame)
+	F.HideObject(self.ScrollBar)
+	F.HideObject(self.ScrollToBottomButton)
 
 	self.styled = true
 end
 
-ChatTypeInfo.SAY.sticky = 1
-ChatTypeInfo.EMOTE.sticky = 1
-ChatTypeInfo.YELL.sticky = 1
-ChatTypeInfo.PARTY.sticky = 1
-ChatTypeInfo.PARTY_LEADER.sticky = 1
-ChatTypeInfo.GUILD.sticky = 1
-ChatTypeInfo.OFFICER.sticky = 1
-ChatTypeInfo.RAID.sticky = 1
-ChatTypeInfo.RAID_WARNING.sticky = 1
-ChatTypeInfo.INSTANCE_CHAT.sticky = 1
-ChatTypeInfo.INSTANCE_CHAT_LEADER.sticky = 1
-ChatTypeInfo.WHISPER.sticky = 1
-ChatTypeInfo.BN_WHISPER.sticky = 1
-ChatTypeInfo.CHANNEL.sticky = 1
 
-
-local eFrame = CreateFrame("frame","ChatEvent_Frame",UIParent)
-eFrame:SetScript("OnEvent", function(self, event, ...) if self[event] then return self[event](self, event, ...) end end)
 
 local function scrollChat(frame, delta)
 	--Faster Scroll
@@ -95,57 +98,7 @@ local function scrollChat(frame, delta)
 	end
 end
 
-function eFrame:PLAYER_LOGIN()
-	--turn off profanity filter
-	SetCVar("profanityFilter", 0)
 
-	--sticky channels
-	-- for k, v in pairs(StickyTypeChannels) do
-	--   ChatTypeInfo[k].sticky = v;
-	-- end
-
-	--toggle class colors
-	for i,v in pairs(CHAT_CONFIG_CHAT_LEFT) do
-		ToggleChatColorNamesByClassGroup(true, v.type)
-	end
-
-	--this is to toggle class colors for all the global channels that is not listed under CHAT_CONFIG_CHAT_LEFT
-	for iCh = 1, 15 do
-		ToggleChatColorNamesByClassGroup(true, "CHANNEL"..iCh)
-	end
-
-	for i = 1, NUM_CHAT_WINDOWS do
-		local n = ("ChatFrame%d"):format(i)
-		local f = _G[n]
-
-		if f then
-
-			--add font shadows
-			local font, size = f:GetFont()
-			f:SetFont(chatFont[1], size, chatFont[3])
-			-- f:SetShadowColor(0, 0, 0, 0)
-
-			--few changes
-			f:EnableMouseWheel(true)
-			f:SetScript('OnMouseWheel', scrollChat)
-			f:SetClampRectInsets(0,0,0,0)
-
-		end
-	end
-
-	for i = 1, NUM_CHAT_WINDOWS do
-		skinChat(_G["ChatFrame"..i])
-	end
-
-	hooksecurefunc("FCF_OpenTemporaryWindow", function()
-		for _, chatFrameName in next, CHAT_FRAMES do
-			local frame = _G[chatFrameName]
-			if frame.isTemporary then
-				skinChat(frame)
-			end
-		end
-	end)
-end
 
 local function EnableFading(i)
 	local chatFrameNumber = ("ChatFrame%d"):format(i);
@@ -230,90 +183,16 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, messa
 	return false, ("+ |cffffffff|Hcurrency:%d|h%s|h|r%s"):format(currencyID, currencyName, currencyAmount or ""), ...
 end)
 
---[[local function toggleDown(f)
-	-- if f:GetCurrentScroll()> 0 then
-	-- 	_G[f:GetName().."ButtonFrameBottomButton"]:Show()
-	-- else
-	_G[f:GetName().."ButtonFrameBottomButton"]:Hide()
-	-- end
-end]]
 
-local function reskinMinimize(f)
-	f:SetSize(16, 16)
-	F.Reskin(f)
-	local minus = F.CreateFS(f)
-	minus:SetPoint("CENTER", 1, 0)
-	minus:SetText("-")
-end
+
+
 
 local function StyleWindow(f)
 	local frame = _G[f]
 	if frame.reskinned then return end
 	frame.reskinned = true
 
-	--local down = _G[f.."ButtonFrameBottomButton"]
-	--down:SetPoint("BOTTOM")
-	--down:Hide()
-
-	--HideForever(_G[f.."ButtonFrameUpButton"])
-	--HideForever(_G[f.."ButtonFrameDownButton"])
-
-	--frame:HookScript("OnMessageScrollChanged", toggleDown)
-	--frame:HookScript("OnShow", toggleDown)
-
-	frame:SetFading(false)
-
-	-- frame:SetFont(chatFont, 14, "OUTLINE")
-	-- frame:SetShadowOffset(0, 0, 0, 0)
-
-	frame:SetMinResize(0,0)
-	frame:SetMaxResize(0,0)
-
-	frame.editBox:ClearAllPoints()
-	frame.editBox:SetPoint("BOTTOMLEFT",  _G.ChatFrame1, "TOPLEFT", -5, 18)
-	frame.editBox:SetPoint("BOTTOMRIGHT", _G.ChatFrame1, "TOPRIGHT", 5, 18)
-	frame.editBox:SetFont(unpack(chatFont))
-	frame.editBox.header:SetFont(unpack(chatFont))
-	frame.editBox.header:SetShadowColor(0, 0, 0, 0)
-	frame.editBox:SetShadowColor(0, 0, 0, 0)
-
-	frame.editBox:SetAltArrowKeyMode(false)
-
-	_G[f.."EditBoxFocusLeft"]:SetAlpha(0)
- 	_G[f.."EditBoxFocusRight"]:SetAlpha(0)
- 	_G[f.."EditBoxFocusMid"]:SetAlpha(0)
-
-	local ebg = CreateFrame("Frame", nil, frame.editBox)
-	ebg:SetBackdrop({
-		bgFile = C.media.backdrop,
-		edgeFile = C.media.backdrop,
-		edgeSize = 1,
-	})
-	ebg:SetBackdropColor(0, 0, 0, .4)
-	ebg:SetPoint("TOPLEFT", frame.editBox, 4, -4)
-	ebg:SetPoint("BOTTOMRIGHT", frame.editBox, -4, 4)
-	ebg:SetFrameStrata("BACKGROUND")
-	ebg:SetFrameLevel(0)
-	frame.editBox.ebg = ebg
-
-	for j = 1, #CHAT_FRAME_TEXTURES do
-		_G[f..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
-	end
-
-	--Hide the new editbox "ghost"
-	_G[f.."EditBoxLeft"]:SetAlpha(0)
-	_G[f.."EditBoxRight"]:SetAlpha(0)
-	_G[f.."EditBoxMid"]:SetAlpha(0)
-
-	frame:SetClampRectInsets(0, 0, 0, 0)
-
-	local name = frame:GetName()
-
-	local lang = _G[name.."EditBoxLanguage"]
-	lang:GetRegions():SetAlpha(0)
-	lang:SetPoint("TOPLEFT", frame.editBox, "TOPRIGHT", -2, 0)
-	lang:SetPoint("BOTTOMRIGHT", frame.editBox, "BOTTOMRIGHT", 28, 0)
-	F.CreateBD(lang)
+	
 	
 
 	-- real ID conversation
@@ -328,14 +207,14 @@ local function StyleWindow(f)
 		plus:SetText("+")
 	end
 
-	-- minimize button
-	reskinMinimize(frame.buttonFrame.minimizeButton)
+
 
 	hooks[frame] = frame.AddMessage
 	frame.AddMessage = AddMessage
 
 	hooks[frame.editBox] = frame.editBox.Insert
 	frame.editBox.Insert = Insert
+
 end
 
 for i = 1, NUM_CHAT_WINDOWS do
@@ -346,28 +225,7 @@ hooksecurefunc("FCF_SetTemporaryWindowType", function(f)
 	StyleWindow(f:GetName())
 end)
 
--- From Tukui
-hooksecurefunc("ChatEdit_UpdateHeader", function()
-	local editBox = ChatEdit_ChooseBoxForSend()
-	local mType = editBox:GetAttribute("chatType")
-	if mType == "CHANNEL" then
-		local id = GetChannelName(editBox:GetAttribute("channelTarget"))
-		if id == 0 then
-			editBox.ebg:SetBackdropBorderColor(0, 0, 0)
-		else
-			editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
-		end
-	elseif mType == "SAY" then
-		editBox.ebg:SetBackdropBorderColor(0, 0, 0)
-	else
-		editBox.ebg:SetBackdropBorderColor(ChatTypeInfo[mType].r,ChatTypeInfo[mType].g,ChatTypeInfo[mType].b)
-	end
-end)
 
-BNToastFrame:HookScript("OnShow", function(self)
-	self:ClearAllPoints()
-	self:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", -1, 56)
-end)
 
 SlashCmdList["TELLTARGET"] = function(s)
 	if(UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player")==GetDefaultLanguage("target"))then
@@ -375,6 +233,8 @@ SlashCmdList["TELLTARGET"] = function(s)
 	end
 end
 SLASH_TELLTARGET1 = "/tt"
+
+
 
 function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 	local chatType = strsub(event, 10);
@@ -461,6 +321,8 @@ ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', AddLinkColors)
 ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER_INFORM', AddLinkColors)
 
 
+
+
 -- CHAT DROPDOWN MENU
 -- special thanks to Tekkub for tekPlayerMenu
 
@@ -518,4 +380,131 @@ function Chat_DoCopyName(name)
 	button:SetPoint("CENTER", editbox, "CENTER", 0, -30)
 end
 
-if IsLoggedIn() then eFrame:PLAYER_LOGIN() else eFrame:RegisterEvent("PLAYER_LOGIN") end
+
+
+
+
+function module:OnLogin()
+	for i = 1, NUM_CHAT_WINDOWS do
+		skinChat(_G["ChatFrame"..i])
+	end
+
+	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+		for _, chatFrameName in next, CHAT_FRAMES do
+			local frame = _G[chatFrameName]
+			if frame.isTemporary then
+				skinChat(frame)
+			end
+		end
+	end)
+
+	hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
+		if selected then
+			self:GetFontString():SetTextColor(1, .8, 0)
+		else
+			self:GetFontString():SetTextColor(.5, .5, .5)
+		end
+	end)
+
+	-- Font size
+	for i = 1, 15 do
+		CHAT_FONT_HEIGHTS[i] = i + 9
+	end
+
+	-- Default
+	SetCVar("chatStyle", "classic")
+	F.HideOption(InterfaceOptionsSocialPanelChatStyle)
+	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
+
+	-- Sticky
+	if C.chat.sticky then
+		--ChatTypeInfo["WHISPER"].sticky = 1
+		--ChatTypeInfo["BN_WHISPER"].sticky = 1
+
+		ChatTypeInfo.SAY.sticky = 1
+		ChatTypeInfo.EMOTE.sticky = 1
+		ChatTypeInfo.YELL.sticky = 1
+		ChatTypeInfo.PARTY.sticky = 1
+		ChatTypeInfo.PARTY_LEADER.sticky = 1
+		ChatTypeInfo.GUILD.sticky = 1
+		ChatTypeInfo.OFFICER.sticky = 1
+		ChatTypeInfo.RAID.sticky = 1
+		ChatTypeInfo.RAID_WARNING.sticky = 1
+		ChatTypeInfo.INSTANCE_CHAT.sticky = 1
+		ChatTypeInfo.INSTANCE_CHAT_LEADER.sticky = 1
+		ChatTypeInfo.WHISPER.sticky = 1
+		ChatTypeInfo.BN_WHISPER.sticky = 1
+		ChatTypeInfo.CHANNEL.sticky = 1
+	end
+
+	-- Easy Resizing
+	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
+		if btn == "LeftButton" then
+			if select(8, GetChatWindowInfo(1)) then
+				ChatFrame1:StartSizing("TOP")
+			end
+		end
+	end)
+	ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
+		if btn == "LeftButton" then
+			ChatFrame1:StopMovingOrSizing()
+			FCF_SavePositionAndDimensions(ChatFrame1)
+		end
+	end)
+
+	-- Add Elements
+	self:ChatFilter()
+
+
+
+	-- ProfanityFilter
+	if not BNFeaturesEnabledAndConnected() then return end
+
+	SetCVar("profanityFilter", 0)
+
+
+	ACHIEVEMENT_BROADCAST = "%s achieved %s!"
+
+	BN_INLINE_TOAST_FRIEND_OFFLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has gone |cffff0000offline|r."
+	BN_INLINE_TOAST_FRIEND_ONLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has come |cff00ff00online|r."
+
+	CHAT_BN_WHISPER_GET = "From %s:\32"
+	CHAT_BN_WHISPER_INFORM_GET = "To %s:\32"
+
+	CHAT_FLAG_AFK = "[AFK] "
+	CHAT_FLAG_DND = "[DND] "
+
+	CHAT_YOU_CHANGED_NOTICE = "|Hchannel:%d|h[%s]|h"
+
+	ERR_FRIEND_OFFLINE_S = "%s has gone |cffff0000offline|r."
+	ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h has come |cff00ff00online|r."
+
+	ERR_SKILL_UP_SI = "|cffffffff%s|r |cff00adf0%d|r"
+
+	FACTION_STANDING_DECREASED = "%s -%d"
+	FACTION_STANDING_INCREASED = "%s +%d"
+	FACTION_STANDING_INCREASED_ACH_BONUS = "%s +%d (+%.1f)"
+	FACTION_STANDING_INCREASED_ACH_PART = "(+%.1f)"
+	FACTION_STANDING_INCREASED_BONUS = "%s + %d (+%.1f RAF)"
+	FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
+	FACTION_STANDING_INCREASED_REFER_PART = "(+%.1f RAF)"
+	FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
+
+	ERR_AUCTION_SOLD_S = "|cff1eff00%s|r |cffffffffsold.|r"
+
+
+
+	DEFAULT_CHATFRAME_ALPHA = 0
+	CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME
+	CHAT_TAB_HIDE_DELAY = CHAT_TAB_SHOW_DELAY
+
+	local function HideForever(f)
+		f:SetScript("OnShow", f.Hide)
+		f:Hide()
+	end
+
+	HideForever(ChatFrameMenuButton)
+	HideForever(QuickJoinToastButton)
+	HideForever(GeneralDockManagerOverflowButton)
+	
+end
