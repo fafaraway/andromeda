@@ -1,6 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="misc.lua"/>
+
 	<Script file="notifications.lua"/>
+	<Script file="automation.lua"/>
+	
 	<Script file="alreadyknown.lua"/>
 	<Script file="camera.lua"/>
 	<Script file="cooldownflash.lua"/>
@@ -15,4 +18,6 @@
 	<Script file="safequeue.lua"/>
 	<Script file="saysapped.lua"/>
 	<Script file="sharedmedia.lua"/>
+
+	<Script file="tabbinder.lua"/>
 </Ui>
