@@ -349,7 +349,7 @@ C["misc"] = {
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
 		["autoSetRole_verbose"] = true, -- tells you what happens when setting role
 
-	["autoScreenShot"] = true,
+	["autoScreenShot"] = true,		-- auto screenshot when achieved
 
 	["autoSell"] = true, -- automatically sell greys
 	["autoRepair"] = true,			-- automatically repair items
