@@ -78,6 +78,32 @@ F.CreateFS = function(parent, fontSize, justify)
 end
 
 F.SetFS = function(fontObject, fontSize)
+	local size
+
+	if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
+		size = C.appearance.fontSizeNormal
+	elseif fontSize == C.FONT_SIZE_LARGE then
+		size = C.appearance.fontSizeLarge
+	elseif fontSize > 4 then -- actual size
+		size = fontSize
+	end
+
+	local outline = nil
+	if C.appearance.fontOutline then
+		outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
+	end
+
+	fontObject:SetFont(C.font.pixel, size, outline)
+
+	if C.appearance.fontShadow then
+		fontObject:SetShadowColor(0, 0, 0)
+		fontObject:SetShadowOffset(1, -1)
+	else
+		fontObject:SetShadowOffset(0, 0)
+	end
+end
+
+--[[F.SetFS = function(fontObject, fontSize)
 	--local size
 
 	--if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
@@ -106,7 +132,7 @@ F.SetFS = function(fontObject, fontSize)
 
 	fontObject:SetShadowColor(0, 0, 0)
 	fontObject:SetShadowOffset(1, -1)
-end
+end]]
 
 
 function F:CreatePFS(text, classcolor, anchor, x, y)

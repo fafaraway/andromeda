@@ -26,7 +26,7 @@ function module:ReskinRegions()
 
 	local dots = {}
 	for i = 1, 8 do
-		dots[i] = F.CreateFS(QueueStatusMinimapButton, 18)
+		dots[i] = F.CreateFS(QueueStatusMinimapButton, 16)
 		dots[i]:SetText(".")
 	end
 	dots[1]:SetPoint("TOP", 2, 2)

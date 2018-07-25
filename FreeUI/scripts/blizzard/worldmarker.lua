@@ -6,7 +6,7 @@ local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 
 wm:SetParent("UIParent")
 wm:ClearAllPoints()
-wm:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 5, 33)
+wm:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 5, 35)
 wm:SetSize(16, 16)
 wm:Hide()
 
@@ -34,7 +34,9 @@ wm:HookScript("OnLeave", function()
 	plus:SetTextColor(1, 1, 1)
 end)
 
+wm:RegisterEvent("PARTY_LEADER_CHANGED")
 wm:RegisterEvent("GROUP_ROSTER_UPDATE")
+wm:RegisterEvent("PLAYER_ENTERING_WORLD")
 wm:HookScript("OnEvent", function(self)
 	local inRaid = IsInRaid()
 	if (inRaid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (not inRaid and IsInGroup()) then
