@@ -8,6 +8,7 @@ function module:OnLogin()
 	self:ShowItemLevel()
 	self:Expbar()
 	self:flashCursor()
+	self:questRewardHighlight()
 
 
 	-- Remove Boss Banner
@@ -189,44 +190,6 @@ end
 
 
 
--- Auto screenshot when achieved
-do
-	local waitTable = {}
-	local function TakeScreen(delay, func, ...)
-		wipe(waitTable)
-		local waitFrame = _G["TakeScreenWaitFrame"] or CreateFrame("Frame", "TakeScreenWaitFrame", UIParent)
-		waitFrame:SetScript("OnUpdate", function(_, elapse)
-			local count = #waitTable
-			local i = 1
-			while (i <= count) do
-				local waitRecord = tremove(waitTable, i)
-				local d = tremove(waitRecord, 1)
-				local f = tremove(waitRecord, 1)
-				local p = tremove(waitRecord, 1)
-				if (d > elapse) then
-					tinsert(waitTable, i, {d-elapse, f, p})
-					i = i + 1
-				else
-					count = count - 1
-					f(unpack(p))
-				end
-			end
-		end)
-
-		tinsert(waitTable, {delay, func, {...}})
-	end
-
-	local function setupMisc(event)
-		if not C.general.autoScreenShot then
-			F:UnregisterEvent(event, setupMisc)
-		else
-			TakeScreen(1, Screenshot)
-		end
-	end
-
-	F:RegisterEvent("ACHIEVEMENT_EARNED", setupMisc)
-end
-
 -- Clean up Loss Of Control
 local frame = _G.LossOfControlFrame
 frame.RedLineTop:SetTexture(nil)
@@ -302,27 +265,7 @@ do
 	end
 end
 
--- undress button
-if C.general.undressButton then
-	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
-	undress:SetSize(80, 22)
-	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
-	undress:SetText("Undress")
-	undress:SetScript("OnClick", function()
-		DressUpModel:Undress()
-	end)
 
-	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
-	sideUndress:SetSize(80, 22)
-	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
-	sideUndress:SetText("Undress")
-	sideUndress:SetScript("OnClick", function()
-		SideDressUpModel:Undress()
-	end)
-
-	F.Reskin(undress)
-	F.Reskin(sideUndress)
-end
 
 -- Fix Drag Collections taint
 do
@@ -383,3 +326,95 @@ end
 BGSpam:RegisterEvent("PLAYER_ENTERING_WORLD")
 BGSpam:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 BGSpam:SetScript("OnEvent", ToggleBossEmotes)
+
+
+
+-- undress button on dress up frame
+local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
+undress:SetSize(80, 22)
+undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
+undress:SetText("Undress")
+undress:SetScript("OnClick", function()
+	DressUpModel:Undress()
+end)
+
+local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
+sideUndress:SetSize(80, 22)
+sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
+sideUndress:SetText("Undress")
+sideUndress:SetScript("OnClick", function()
+	SideDressUpModel:Undress()
+end)
+
+F.Reskin(undress)
+F.Reskin(sideUndress)
+
+
+
+
+--
+
+function module:questRewardHighlight()
+
+	local f = CreateFrame("Frame")
+	local highlightFunc
+
+	local last = 0
+	local startIndex = 1
+
+	local maxPrice = 0
+	local maxPriceIndex = 0
+
+	local function onUpdate(self, elapsed)
+		last = last + elapsed
+		if last >= .05 then
+			self:SetScript("OnUpdate", nil)
+			last = 0
+
+			if QuestInfoRewardsFrameQuestInfoItem1:IsVisible() then -- protection in case frame is closed early
+				highlightFunc()
+			end
+		end
+	end
+
+	highlightFunc = function()
+		local numChoices = GetNumQuestChoices()
+		if numChoices < 2 then return end
+
+		for i = startIndex, numChoices do
+			local link = GetQuestItemLink("choice", i)
+			if link then
+				local _, _, _, _, _, _, _, _, _, _, vendorPrice = GetItemInfo(link)
+
+				if vendorPrice > maxPrice then
+					maxPrice = vendorPrice
+					maxPriceIndex = i
+				end
+			else
+				startIndex = i
+				f:SetScript("OnUpdate", onUpdate)
+				return
+			end
+		end
+
+		if maxPriceIndex > 0 then
+			local infoItem = _G["QuestInfoRewardsFrameQuestInfoItem"..maxPriceIndex]
+
+			QuestInfoItemHighlight:ClearAllPoints()
+			QuestInfoItemHighlight:SetPoint("TOP", infoItem)
+			QuestInfoItemHighlight:Show()
+
+			-- infoItem.bg:SetBackdropColor(0.89, 0.88, 0.06, .2)
+		end
+
+		startIndex = 1
+		maxPrice = 0
+		maxPriceIndex = 0
+	end
+
+	f:SetScript("OnEvent", highlightFunc)
+
+	f:RegisterEvent("QUEST_COMPLETE")
+	
+
+end

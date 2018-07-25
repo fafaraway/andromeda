@@ -343,8 +343,19 @@ C["misc"] = {
 	["rareAlert"] = true,
 	["rareAlertinChat"] = true,
 	["interrupt"] = true,
-
 	["interruptinChat"] = true,
+
+	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
+		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
+		["autoSetRole_verbose"] = true, -- tells you what happens when setting role
+
+	["autoScreenShot"] = true,
+
+	["autoSell"] = true, -- automatically sell greys
+	["autoRepair"] = true,			-- automatically repair items
+		["autoRepair_guild"] = true, -- use guild funds for auto repairs
+
+	["autoAccept"] = false, -- auto accept invites from friends and guildies
 }
 
 
@@ -352,12 +363,7 @@ C["classmod"] = {
 	["classResource"] = true, 		-- class resource
 }
 
--- lower = smoother = more CPU usage
-C["performance"] = {
-	["mapcoords"] = .1, 	-- update interval for map coords in seconds (only with map open)
-	["nameplates"] = .1, 	-- update interval for nameplates in seconds (always)
-	["nameplatesHealth"] = .2, 	-- update interval for nameplate health bar colour (only with name plates shown)
-}
+
 
 -- camera stuff
 C["camera"] = {
