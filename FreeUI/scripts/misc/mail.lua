@@ -9,7 +9,7 @@ OpenAllMail:Hide()
 OpenAllMail:UnregisterAllEvents()
 
 local button = CreateFrame("Button", "aMailButton", InboxFrame, "UIPanelButtonTemplate")
-button:SetPoint("BOTTOM", InboxFrame, "BOTTOM", 0, 6)
+button:SetPoint("BOTTOM", InboxFrame, "BOTTOM", -20, 102)
 button:SetWidth(128)
 button:SetHeight(25)
 F.Reskin(button)

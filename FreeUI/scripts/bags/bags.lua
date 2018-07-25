@@ -372,7 +372,7 @@ function module:OnLogin()
 		infoFrame:SetWidth(220)
 		infoFrame:SetHeight(32)
 
-		--[[local search = self:SpawnPlugin("SearchBar", infoFrame)
+		local search = self:SpawnPlugin("SearchBar", infoFrame)
 		search.highlightFunction = highlightFunction
 		search.isGlobal = true
 		search:SetPoint("LEFT", infoFrame, "LEFT", 0, 5)
@@ -388,7 +388,7 @@ function module:OnLogin()
 		local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 		tagDisplay:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
 		tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT",0,0)
-		F.CreatePFS(infoFrame, "SEARCH", true, "LEFT", 0, 1)]]
+		F.CreatePFS(infoFrame, "SEARCH", true, "LEFT", 0, 1)
 
 		local SortButton = F.CreateButton(self, 60, 20, "Sort")
 		SortButton:SetPoint("BOTTOMLEFT", 5, 7)

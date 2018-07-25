@@ -6,7 +6,7 @@
 	<Script file="mirrorbar.lua"/>
 	<Script file="mover.lua"/>
 	<Script file="marking.lua"/>
-	<Script file="role.lua"/>
+
 	<Script file="worldmarker.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="timer.lua"/>

@@ -321,7 +321,7 @@ function F:StyleAllActionButtons(cfg)
 		local i = 1
 		local button = _G["SpellFlyoutButton"..i]
 		while button and button:IsShown() do
-			B:StyleActionButton(button, cfg)
+			F:StyleActionButton(button, cfg)
 			i = i + 1
 			button = _G["SpellFlyoutButton"..i]
 		end
