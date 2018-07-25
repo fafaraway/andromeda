@@ -758,11 +758,11 @@ local Shared = function(self, unit, isSingle)
 
 	-- [[ Raid target icons ]]
 
-	local RaidIcon = self:CreateTexture()
-	RaidIcon:SetSize(16, 16)
-	RaidIcon:SetPoint("CENTER", self, "CENTER", 0, 20)
+	local RaidTargetIndicator = self:CreateTexture()
+	RaidTargetIndicator:SetSize(16, 16)
+	RaidTargetIndicator:SetPoint("CENTER", self, "CENTER", 0, 20)
 
-	self.RaidIcon = RaidIcon
+	self.RaidTargetIndicator = RaidTargetIndicator
 
 	-- [[ Spell Range ]]
 
@@ -1297,8 +1297,8 @@ local UnitSpecific = {
 
 		Spark:SetHeight(Health:GetHeight())
 
-		self.RaidIcon:ClearAllPoints()
-		self.RaidIcon:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		self.RaidTargetIndicator:ClearAllPoints()
+		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
@@ -1342,8 +1342,8 @@ local UnitSpecific = {
 			Castbar.Text = F.CreateFS(Castbar)
 			Castbar.Text:SetDrawLayer("ARTWORK")
 
-			self.RaidIcon:ClearAllPoints()
-			self.RaidIcon:SetPoint("RIGHT", self, "LEFT", -3, 0)
+			self.RaidTargetIndicator:ClearAllPoints()
+			self.RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
 
 			local IconFrame = CreateFrame("Frame", nil, Castbar)
 
@@ -1409,8 +1409,8 @@ local UnitSpecific = {
 
 		Spark:SetHeight(Health:GetHeight())
 
-		self.RaidIcon:ClearAllPoints()
-		self.RaidIcon:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		self.RaidTargetIndicator:ClearAllPoints()
+		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
@@ -1674,7 +1674,7 @@ local UnitSpecific = {
 
 		Buffs.PostUpdateIcon = PostUpdateIcon]]
 
-		self.RaidIcon:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 	end,
 }
 
@@ -1713,8 +1713,8 @@ do
 		self.ResurrectIcon:SetSize(16, 16)
 		self.ResurrectIcon:SetPoint("CENTER")
 
-		self.RaidIcon:ClearAllPoints()
-		self.RaidIcon:SetPoint("CENTER", self, "CENTER")
+		self.RaidTargetIndicator:ClearAllPoints()
+		self.RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
 
 		local LeaderIndicator = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
 		LeaderIndicator:SetText("l")
