@@ -88,4 +88,30 @@ function module:ShowItemLevel()
 			SetupItemLevel(InspectFrame.unit, tarString)
 		end
 	end)
+
+
+
+	--- Character Info Sheet ---
+	_G.hooksecurefunc("PaperDollFrame_SetArmor", function(_, unit)
+		if (unit ~= "player") then return end
+
+		if ( _G.UnitLevel("player") >= _G.MIN_PLAYER_LEVEL_FOR_ITEM_LEVEL_DISPLAY ) then
+
+			local total, equip = GetAverageItemLevel()
+			if (total > 0) then total = format("%.1f", total) end
+			if (equip > 0) then equip = format("%.1f", equip) end
+
+			local itemLevel = equip
+			if (equip ~= total) then
+				itemLevel = equip.." / "..total
+			end
+
+			PaperDollFrame_SetItemLevel(CharacterStatsPane.ItemLevelFrame, unit)
+			-- CharacterStatsPane.ItemLevelCategory:Show()
+			-- CharacterStatsPane.ItemLevelFrame:Show()
+			CharacterStatsPane.ItemLevelFrame.Value:SetText(itemLevel)
+			-- CharacterStatsPane.AttributesCategory:SetPoint("TOP", CharacterStatsPane.ItemLevelFrame, "BOTTOM", 0, -10)
+		
+		end
+	end)
 end
