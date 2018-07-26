@@ -121,8 +121,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local missionComplete = self.MissionComplete
 		local bonusRewards = missionComplete.BonusRewards
 		select(11, bonusRewards:GetRegions()):SetTextColor(1, .8, 0)
-		bonusRewards.Saturated:Hide()
-		bonusRewards.Saturated.Show = F.dummy
+		F.StripTextures(bonusRewards.Saturated)
 		for i = 1, 9 do
 			select(i, bonusRewards:GetRegions()):SetAlpha(0)
 		end

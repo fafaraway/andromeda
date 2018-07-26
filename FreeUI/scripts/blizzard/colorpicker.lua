@@ -195,8 +195,6 @@ load:SetScript("OnEvent", function(self, event)
 	OpacitySliderFrame:SetPoint("BOTTOM", "ColorPPCopyColorSwatch", "BOTTOM", 0, 23)
 	OpacitySliderFrame:SetPoint("RIGHT", "ColorPickerFrame", "RIGHT", -35, 18)
 
-	
-	F.ReskinSlider(OpacitySliderFrame)
 
 	-- Set up edit box frames and interior label and text areas
 	local boxes = {"R", "G", "B", "H", "A"}

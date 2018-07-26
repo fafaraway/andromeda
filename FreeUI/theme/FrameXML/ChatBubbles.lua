@@ -42,6 +42,13 @@ tinsert(C.themes["FreeUI"], function()
 		CHAT_MSG_MONSTER_PARTY = "chatBubblesParty",
 	}
 
+	local colors = {
+		CHAT_MSG_SAY = {1, 1, 1},
+		CHAT_MSG_YELL = {1, .25, .25},
+		CHAT_MSG_PARTY = {.65, .65, 1},
+		CHAT_MSG_PARTY_LEADER = {.65, .65, 1},
+	}
+
 	local bubbleHook = CreateFrame("Frame")
 	for event in next, events do
 		bubbleHook:RegisterEvent(event)
@@ -50,6 +57,7 @@ tinsert(C.themes["FreeUI"], function()
 		if GetCVarBool(events[event]) then
 			self.elapsed = 0
 			self.msg = msg
+			self.color = colors[event]
 			self:Show()
 		end
 	end)
@@ -62,6 +70,10 @@ tinsert(C.themes["FreeUI"], function()
 			if chatbubble and not chatbubble.styled then
 				styleBubble(chatbubble)
 				chatbubble.styled = true
+			end
+
+			if self.color and chatbubble.Shadow then
+				chatbubble.Shadow:SetBackdropBorderColor(unpack(self.color))
 			end
 		end
 	end)
