@@ -624,7 +624,7 @@ function F:ReskinRadio()
 	self:HookScript("OnLeave", clearRadio)
 end
 
-function F:ReskinSlider()
+function F:ReskinSlider(verticle)
 	self:SetBackdrop(nil)
 	self.SetBackdrop = F.dummy
 
@@ -642,6 +642,8 @@ function F:ReskinSlider()
 		if region:GetObjectType() == "Texture" then
 			region:SetTexture("Interface\\CastingBar\\UI-CastingBar-Spark")
 			region:SetBlendMode("ADD")
+
+			if verticle then region:SetRotation(math.rad(90)) end
 			return
 		end
 	end
@@ -1275,6 +1277,13 @@ function F:CreateDropDown(width, height, data)
 	dd.Type = "DropDown"
 	return dd
 end
+
+
+
+
+
+
+
 
 
 
