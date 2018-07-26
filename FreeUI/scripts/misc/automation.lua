@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("misc")
 
 
-local r, g, b = unpack(C.class)
+
 
 
 -- auto repair / sell
@@ -86,6 +86,7 @@ f:SetScript("OnEvent", function(self, event)
 		end
 	end
 end)
+
 
 
 
@@ -181,7 +182,7 @@ end
 
 
 -- auto set role
-
+local r, g, b = unpack(C.class)
 local useSpec = C.misc.autoSetRole_useSpec
 local verbose = C.misc.autoSetRole_verbose
 
