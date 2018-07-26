@@ -309,7 +309,7 @@ local function RefMap(self)
 					texture:SetPoint("TOPLEFT", offsetX + (TILE_SIZE_WIDTH * (k-1)), -(offsetY + (TILE_SIZE_HEIGHT * (j - 1))))
 					texture:SetTexture(tonumber(fileDataIDs[((j - 1) * numTexturesWide) + k]), nil, nil, "TRILINEAR")
 					texture:SetDrawLayer("ARTWORK", -1)
-					texture:SetShown(NDuiDB["Map"]["MapReveal"])
+					--texture:SetShown(C.maps.mapReveal)
 					tinsert(overlayTextures, texture)
 				end
 			end
