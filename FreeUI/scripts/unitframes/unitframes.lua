@@ -42,7 +42,7 @@ local partyHeightHealer = C.unitframes.party_height_healer
 local raidWidth = C.unitframes.raid_width
 local raidHeight = C.unitframes.raid_height
 
-local CBinterrupt = C.unitframes.castbarColorInterrupt
+local CBshield = C.unitframes.castbarColorShield
 local CBnormal = C.unitframes.castbarColorNormal
 
 -- [[ Initialize / load layout option ]]
@@ -690,10 +690,10 @@ local Shared = function(self, unit, isSingle)
 
 	local PostCastStart = function(Castbar, unit, spell, spellrank)
 		if self.Iconbg then
-			if Castbar.interrupt and (unit=="target" or unit=="focus" or unit:find("boss%d")) then
+			if Castbar.notInterruptible and (unit=="target" or unit=="focus" or unit:find("boss%d")) then
 				self.Iconbg:SetVertexColor(1, 0, 0)
 				if unit=="target" or unit=="focus" then
-					Castbar:SetStatusBarColor(unpack(CBinterrupt))
+					Castbar:SetStatusBarColor(unpack(CBshield))
 				end
 			elseif unit=="player" then
 				self.Iconbg:SetVertexColor(0, 0, 0)

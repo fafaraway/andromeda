@@ -254,7 +254,7 @@ C["unitframes"] = {
 
 	["absorb"] = true, 							-- absorb bar/over absorb glow
 	["castbar"] = true,
-	["castbarSeparate"] = false,
+	["castbarSeparate"] = true,
 	["pvp"] = true, 							-- show pvp icon on player frame
 	["statusIndicator"] = true,					-- show combat/resting status on player frame
 		["statusIndicatorCombat"] = true,				-- show combat status (else: only resting)
@@ -314,7 +314,7 @@ C["unitframes"] = {
 	["arena_width"] = 229,
 	["arena_height"] = 12,
 	
-	["castbarColorInterrupt"] = {241/255, 23/255, 45/255},
+	["castbarColorShield"] = {241/255, 23/255, 45/255},
 	["castbarColorNormal"] = {113/255, 178/255, 237/255},
 	["castbarHeight"] = 6,
 
