@@ -109,5 +109,6 @@ function module:OnLogin()
 
 
 	self:SetupMinimap()
+	self:MapReveal()
 
 end
