@@ -29,13 +29,17 @@ function module:RareAlert()
 			local atlasHeight = height/(txBottom-txTop)
 
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-			UIErrorsFrame:AddMessage(C.infoColor.."Rare Found"..tex..(info.name or ""))
+			--UIErrorsFrame:AddMessage(C.infoColor.."Rare Found"..tex..(info.name or ""))
 
-			--RaidNotice_AddMessage(RaidWarningFrame, str..name.." spotted!", ChatTypeInfo["RAID_WARNING"])
+
+
+			RaidNotice_AddMessage(RaidWarningFrame, tex.." "..(info.name or "Unknown").." ".."spotted!", ChatTypeInfo["RAID_WARNING"])
+			
 
 			if C.misc.rareAlertinChat then
 
-				print("  -> "..C.infoColor.."Rare Found"..tex..(info.name or ""))
+				--print("  -> "..C.infoColor.."Rare Found"..tex..(info.name or ""))
+				print(info.name, "spotted!")
 
 			end
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
