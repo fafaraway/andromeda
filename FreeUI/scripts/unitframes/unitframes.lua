@@ -318,6 +318,29 @@ end
 	end
 end]]
 
+local function UpdateAura(self, elapsed)
+	if(self.expiration) then
+		self.expiration = math.max(self.expiration - elapsed, 0)
+
+		if(self.expiration > 0 and self.expiration < 60) then
+			self.Duration:SetFormattedText('%d', self.expiration)
+		else
+			self.Duration:SetText()
+		end
+
+
+	end
+end
+
+local function OnAuraEnter(self)
+	if(not self:IsVisible()) then
+		return
+	end
+
+	GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
+	self:UpdateTooltip()
+end
+
 local function PostCreateIcon(element, button)
 
 	local bg = button:CreateTexture(nil, "BACKGROUND")
@@ -363,12 +386,12 @@ local function PostCreateIcon(element, button)
 
 	local Duration = StringParent:CreateFontString(nil, 'OVERLAY')
 	Duration:SetPoint('TOPLEFT', button, 0, -1)
-	F.SetFS(Duration)
+	
 	button.Duration = Duration
 
+	F.SetFS(Duration)
 
-
-	--button:HookScript('OnUpdate', UpdateAura)
+	button:HookScript('OnUpdate', UpdateAura)
 end
 
 local function PostUpdateIcon(element, _, button, _, _, duration, _, debuffType)
@@ -386,12 +409,27 @@ local function PostUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 		button.bg:SetVertexColor(.1, .1, .1)
 	end
 
+
 	if duration then 
 		button.sd:Show()
 		button.bg:Show()
 	end
 
 end
+
+
+local function FilterTargetDebuffs(_, unit, button, _, _, _, _, _, _, _, caster, _, _, spellID)
+	local playerUnits = {
+		player = true,
+		pet = true,
+		vehicle = true,
+	}
+	if(button.isDebuff and not button.isPlayer) then
+		return false
+	end
+	return true
+end
+
 
 local function PostUpdateGapIcon(_, _, icon)
 	if icon.sd and icon.sd:IsShown() then
@@ -782,37 +820,6 @@ local Shared = function(self, unit, isSingle)
 		self:SetAttribute(key, "focus")
 	end
 
-	-- [[ Counter bar ]]
-
-	--[[if unit == "player" or unit == "pet" then
-		local CounterBar = CreateFrame("StatusBar", nil, self)
-		CounterBar:SetWidth(playerWidth)
-		CounterBar:SetHeight(16)
-		CounterBar:SetStatusBarTexture(C.media.texture)
-		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
-
-		local cbd = CreateFrame("Frame", nil, CounterBar)
-		cbd:SetPoint("TOPLEFT", -1, 1)
-		cbd:SetPoint("BOTTOMRIGHT", 1, -1)
-		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
-		F.CreateBD(cbd)
-
-		CounterBar.Text = F.CreateFS(CounterBar)
-		CounterBar.Text:SetPoint("CENTER")
-
-		local r, g, b
-		local max
-
-		CounterBar:SetScript("OnValueChanged", function(_, value)
-			_, max = CounterBar:GetMinMaxValues()
-			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-			CounterBar:SetStatusBarColor(r, g, b)
-
-			CounterBar.Text:SetText(floor(value))
-		end)
-
-		self.CounterBar = CounterBar
-	end]]
 
 	--[[ Set up the layout ]]
 
@@ -1230,34 +1237,12 @@ local UnitSpecific = {
 		Auras.showDebuffType = true
 		Auras.showStealableBuffs = true
 
-	
-		
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon
 		Auras.PostUpdateGapIcon = PostUpdateGapIcon
 
-
-		-- complicated filter is complicated
-		-- icon hides if:
-		-- it's a debuff on an enemy target which isn't yours, isn't cast by the target and isn't in the useful buffs filter
-		-- it's a buff on an enemy player target which is not important
-
 		if C.unitframes.castbyPlayer then
-
-			local playerUnits = {
-				player = true,
-				pet = true,
-				vehicle = true,
-			}
-
-			Auras.CustomFilter = function(_, unit, icon, _, _, _, _, _, _, _, caster, _, _, spellID)
-				if(icon.isDebuff and not UnitIsFriend("player", unit) and not playerUnits[icon.owner] and icon.owner ~= self.unit)
-				or(not icon.isDebuff and UnitIsPlayer(unit) and not UnitIsFriend("player", unit)) then
-					return false
-				end
-				return true
-			end
-
+			Auras.CustomFilter = FilterTargetDebuffs
 		end
 
 
@@ -1567,11 +1552,11 @@ local UnitSpecific = {
 		Auras['spacing-x'] = 4
 		Auras['spacing-y'] = 0
 
-		Auras.numDebuffs = C.unitframes.num_target_debuffs
-		Auras.numBuffs = C.unitframes.num_target_buffs
-		Auras:SetHeight(500)
-		Auras:SetWidth(targetWidth)
-		Auras.size = 36
+		Auras.numDebuffs = 8
+		Auras.numBuffs = 8
+		Auras:SetHeight(100)
+		Auras:SetWidth(bossWidth)
+		Auras.size = 26
 
 
 		Auras.gap = true
@@ -1585,6 +1570,7 @@ local UnitSpecific = {
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon
 		Auras.PostUpdateGapIcon = postUpdateGapIcon
+		Auras.CustomFilter = FilterTargetDebuffs
 
 	
 
