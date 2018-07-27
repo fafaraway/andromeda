@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="blizzard.lua"/>
 	<Script file="fonts.lua"/>
 	<Script file="errors.lua"/>
 	<Script file="colours.lua"/>

@@ -1,5 +1,104 @@
 local F, C, L = unpack(select(2, ...))
-local _G = _G
+
+local module = F:GetModule("blizzard")
+
+
+
+
+
+
+
+
+
+
+
+function module:FontStyle()
+
+
+	local function ReskinFont(font, size, white)
+		font:SetFont(C.font.normal, size, white and "" or "OUTLINE")
+		font:SetShadowColor(0, 0, 0, 0)
+	end
+
+
+
+	-- Refont Titles Panel
+	hooksecurefunc("PaperDollTitlesPane_UpdateScrollFrame", function()
+		local bu = PaperDollTitlesPane.buttons
+		for i = 1, #bu do
+			if not bu[i].fontStyled then
+				ReskinFont(bu[i].text, 12)
+				bu[i].fontStyled = true
+			end
+		end
+	end)
+
+	-- Achievement ShieldPoints, GuildRoster LevelText
+	local styledIndex = 0
+	local function updateAchievement(event, addon)
+		if addon == "Blizzard_AchievementUI" then
+			hooksecurefunc("AchievementObjectives_DisplayProgressiveAchievement", function()
+				local index = 1
+				local mini = _G["AchievementFrameMiniAchievement"..index]
+				while mini do
+					if not mini.fontStyled then
+						mini.points:SetWidth(22)
+						mini.points:ClearAllPoints()
+						mini.points:SetPoint("BOTTOMRIGHT", 2, 2)
+						mini.fontStyled = true
+					end
+
+					index = index + 1
+					mini = _G["AchievementFrameMiniAchievement"..index]
+				end
+			end)
+
+			styledIndex = styledIndex + 1
+		elseif addon == "Blizzard_GuildUI" then
+			hooksecurefunc("GuildRoster_SetView", function(view)
+				if view == "playerStatus" or view == "reputation" or view == "achievement" then
+					local buttons = GuildRosterContainer.buttons
+					for i = 1, #buttons do
+						local str = _G["GuildRosterContainerButton"..i.."String1"]
+						str:SetWidth(32)
+						str:SetJustifyH("LEFT")
+					end
+
+					if view == "achievement" then
+						for i = 1, #buttons do
+							local str = _G["GuildRosterContainerButton"..i.."BarLabel"]
+							str:SetWidth(60)
+							str:SetJustifyH("LEFT")
+						end
+					end
+				end
+			end)
+			GuildRoster_SetView(GetCVar("guildRosterView"))
+
+			styledIndex = styledIndex + 1
+		end
+
+		if styledIndex == 2 then B:UnregisterEvent(event, updateAchievement) end
+	end
+	F:RegisterEvent("ADDON_LOADED", updateAchievement)
+
+	-- WhoFrame LevelText
+	hooksecurefunc("WhoList_Update", function()
+		for i = 1, WHOS_TO_DISPLAY, 1 do
+			local level = _G["WhoFrameButton"..i.."Level"]
+			if level and not level.fontStyled then
+				level:SetWidth(32)
+				level:SetJustifyH("LEFT")
+				level.fontStyled = true
+			end
+		end
+	end)
+end
+
+
+-------------------------------------
+-------------------------------------
+
 local next, type = _G.next, _G.type
 local playername, _ = UnitName('player')
 local r, g, b = C.appearance.fontColorFontRGB.r, C.appearance.fontColorFontRGB.g, C.appearance.fontColorFontRGB.b
