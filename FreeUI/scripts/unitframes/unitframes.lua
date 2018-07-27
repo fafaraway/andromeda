@@ -1236,6 +1236,7 @@ local UnitSpecific = {
 
 		Auras.showDebuffType = true
 		Auras.showStealableBuffs = true
+		Auras.disableCooldown = true
 
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon
@@ -1755,6 +1756,8 @@ do
 		Debuffs.num = 2
 		Debuffs.size = 16
 
+		Debuffs.disableCooldown = true
+
 		self.Debuffs = Debuffs
 
 		Debuffs.PostCreateIcon = function(icons, index)
@@ -1802,6 +1805,8 @@ do
 		Buffs.num = 3
 		Buffs.size = 12
 
+		Buffs.disableCooldown = true
+
 		self.Buffs = Buffs
 
 		Buffs.PostCreateIcon = function(icons, index)
@@ -1809,8 +1814,9 @@ do
 			index.cd.noshowcd = true
 		end
 
-		Buffs.PostUpdateIcon = function(_, _, icon)
-			icon:EnableMouse(false)
+		Buffs.PostUpdateIcon = function(_, _, button)
+			button:EnableMouse(false)
+			
 		end
 
 		local myBuffs = C.myBuffs
