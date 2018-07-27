@@ -65,7 +65,7 @@ local updateArena = function(event)
 	end
 end
 
-F.RegisterEvent("PLAYER_LOGIN", updateArena)
-F.RegisterEvent("PLAYER_ENTERING_WORLD", updateArena)
-F.RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", updateArena)
-F.RegisterEvent("ARENA_OPPONENT_UPDATE", updateArena)
+F:RegisterEvent("PLAYER_LOGIN", updateArena)
+F:RegisterEvent("PLAYER_ENTERING_WORLD", updateArena)
+F:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS", updateArena)
+F:RegisterEvent("ARENA_OPPONENT_UPDATE", updateArena)

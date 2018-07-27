@@ -263,8 +263,8 @@ C["unitframes"] = {
 		["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid
 		["showRaidFrames"] = true, 					-- show the raid frames
 		["partyNameAlways"] = false,				-- show name on party/raid frames
-		["partyMissingHealth"] = true,				-- show missing health
-	["enableArena"] = false,					-- enable arena/flag carrier frames
+		["partyMissingHealth"] = false,				-- show missing health
+	["enableArena"] = true,					-- enable arena/flag carrier frames
 
 	["castbyPlayer"] = true,
 
@@ -691,32 +691,48 @@ if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false e
 -- 以下技能将显示
 
 C["myBuffs"] = {
-	[774] = true, -- Rejuvenation
-	[8936] = true, -- Regrowth
-	[33763] = true, -- Lifebloom
 
-	[33110] = true, -- Prayer of Mending
-	[33076] = true, -- Prayer of Mending
-	[41635] = true, -- Prayer of Mending
-	[41637] = true, -- Prayer of Mending
-	[139] = true, -- Renew
-	[17] = true, -- Power Word: Shield
+	[774] = true,		-- 回春
+	[8936] = true,		-- 愈合
+	[33763] = true,		-- 生命绽放
+	[48438] = true,		-- 野性成长
+	[155777] = true,	-- 萌芽
+	[102352] = true,	-- 塞纳里奥结界
+	[200389] = true, -- 栽培
 
-	[61295] = true, -- Riptide
-	[974] = true, -- Earth Shield
+	[34477] = true, -- 误导
 
-	[53563] = true, -- Beacon of Light
-	[114163] = true, -- Eternal Flame
-	[20925] = true, -- Sacred Shield
+	[57934] = true, -- 嫁祸
 
-	[119611] = true, -- Renewing Mist
-	[116849] = true, -- Life Cocoon
-	[124682] = true, -- Enveloping Mist
-	[124081] = true, -- Zen Sphere
+	[12975] = true,		-- 援护
+	[114030] = true, -- 警戒
 
-	[203528] = true, -- 力量祝福
-	[203539] = true, -- 智慧
-	[203538] = true, -- 王者
+	[61295] = true, -- 激流
+
+	[1044] = true,		-- 自由祝福
+	[6940] = true,		-- 牺牲祝福
+	[25771] = true,		-- 自律
+	[53563] = true,		-- 圣光道标
+	[156910] = true,	-- 信仰道标
+	[223306] = true,	-- 赋予信仰
+	[200025] = true,	-- 美德道标
+	[200654] = true,	-- 提尔的拯救
+	[243174] = true, -- 神圣黎明
+
+	[17] = true,		-- 真言术盾
+	[139] = true,		-- 恢复
+	[41635] = true,		-- 愈合祷言
+	[47788] = true,		-- 守护之魂
+	[194384] = true,	-- 救赎
+	[152118] = true,	-- 意志洞悉
+	[208065] = true, -- 图雷之光
+
+	[119611] = true,	-- 复苏之雾
+	[116849] = true,	-- 作茧缚命
+	[124682] = true,	-- 氤氲之雾
+	[124081] = true,	-- 禅意波
+	[191840] = true,	-- 精华之泉
+	[115175] = true, -- 抚慰之雾
 }
 
 -- Buffs cast by anyone that healers want to see on raid frames
@@ -726,22 +742,18 @@ C["myBuffs"] = {
 -- 以下技能将显示
 
 C["allBuffs"] = {
-	[86657] = true, -- Ancient Guardian
-	[31850] = true, -- Ardent Defender
-	[642] = true, -- Divine Shield
-	[110959] = true, -- Greater Invisibility
-	[86659] = true, -- Guardian of Ancient Kings
-	[47788] = true, -- Guardian Spirit
-	[45438] = true, -- Ice Block
-	[48792] = true, -- Icebound Fortitude
-	[66] = true, -- Invisibility
-	[12975] = true, -- Last Stand
-	[33206] = true, -- Pain Suppression
-	[871] = true, -- Shield Wall
-	[61336] = true, -- Survival Instincts
-	[122470] = true, -- Touch of Karma
-
-	[1022] = true, -- Hand of Protection
-	[1038] = true, -- Hand of Salvation
-	[6940] = true, -- Hand of Sacrifice
+	[642] = true,		-- 圣盾术
+	[1022] = true,		-- 保护祝福
+	[27827] = true,		-- 救赎之魂
+	[98008] = true,		-- 灵魂链接
+	[31821] = true,		-- 光环掌握
+	[97463] = true,		-- 命令怒吼
+	[81782] = true,		-- 真言术障
+	[33206] = true,		-- 痛苦压制
+	[45438] = true,		-- 冰箱
+	[204018] = true,	-- 破咒祝福
+	[204150] = true,	-- 圣光护盾
+	[102342] = true,	-- 铁木树皮
+	[209426] = true,	-- 黑暗
+	[186265] = true, -- 灵龟守护
 }

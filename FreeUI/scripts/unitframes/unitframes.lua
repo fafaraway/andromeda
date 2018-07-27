@@ -367,14 +367,12 @@ local function PostCreateIcon(element, button)
 	button.overlay:SetTexture(nil)
 
 	button.cd:SetReverse(true)
-	--button.cd:SetHideCountdownNumbers(true)
 
-	--button.icon:SetTexCoord(.08, .92, .25+.125, .85-.125)
 	button.icon:SetDrawLayer('ARTWORK')
 
 	button:SetScript('OnEnter', OnAuraEnter)
 
-	-- We create a parent for aura strings so that they appear over the cooldown widget
+
 	local StringParent = CreateFrame('Frame', nil, button)
 	StringParent:SetFrameLevel(20)
 
@@ -399,7 +397,7 @@ local function PostUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 
 
 	button:SetSize(element.size, element.size*.75)
-	button.icon:SetTexCoord(.08, .92, .25+.125, .85-.125)
+	button.icon:SetTexCoord(.08, .92, .25, .85)
 
 
 	if button.isDebuff and element.showDebuffType then
@@ -419,16 +417,33 @@ end
 
 
 local function FilterTargetDebuffs(_, unit, button, _, _, _, _, _, _, _, caster, _, _, spellID)
-	local playerUnits = {
-		player = true,
-		pet = true,
-		vehicle = true,
-	}
+
+
 	if(button.isDebuff and not button.isPlayer) then
 		return false
 	end
 	return true
 end
+
+
+
+local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID)
+	if C.hideDebuffs[spellID] then
+		return false
+	end
+	return true
+end
+
+
+
+local function groupBuffFilter(_, unit, button, _, _, _, _, _, _, caster, _, _, spellID)
+	if (button.isPlayer and C.myBuffs[spellID]) or C.allBuffs[spellID] then
+		return true
+	end
+	return false
+end
+
+
 
 
 local function PostUpdateGapIcon(_, _, icon)
@@ -862,7 +877,7 @@ end
 local UnitSpecific = {
 	pet = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "pet"
+		self.unitStyle = "pet"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -900,7 +915,7 @@ local UnitSpecific = {
 
 	player = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "player"
+		self.unitStyle = "player"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1139,7 +1154,7 @@ local UnitSpecific = {
 
 	target = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "target"
+		self.unitStyle = "target"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1270,6 +1285,7 @@ local UnitSpecific = {
 
 	targettarget = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "targettarget"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1312,6 +1328,7 @@ local UnitSpecific = {
 
 	focus = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "focus"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1382,6 +1399,7 @@ local UnitSpecific = {
 
 	focustarget = function(self, ...)
 		Shared(self, ...)
+		self.mystyle = "focustarget"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1673,7 +1691,7 @@ do
 
 	UnitSpecific.party = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "party"
+		self.mystyle = "group"
 
 		self.disallowVehicleSwap = false
 
@@ -1745,6 +1763,9 @@ do
 
 		self.LFDRole = lfd
 
+
+
+
 		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "CENTER"
 		Debuffs:SetPoint("BOTTOM", 0, powerHeight - 1)
@@ -1756,23 +1777,14 @@ do
 		Debuffs.num = 2
 		Debuffs.size = 16
 
+		Debuffs.showDebuffType = true
+		Debuffs.showStealableBuffs = true
 		Debuffs.disableCooldown = true
+		Debuffs.disableMouse = true
 
 		self.Debuffs = Debuffs
 
-		Debuffs.PostCreateIcon = function(icons, index)
-			index:EnableMouse(false)
-		end
-
-		-- Import the global table for faster usage
-		local hideDebuffs = C.hideDebuffs
-
-		Debuffs.CustomFilter = function(_, _, _, _, _, _, _, _, _, _, caster, _, _, spellID)
-			if hideDebuffs[spellID] then
-				return false
-			end
-			return true
-		end
+		
 
 		Debuffs.PostUpdate = function(icons)
 			local vb = icons.visibleDebuffs
@@ -1784,16 +1796,10 @@ do
 			end
 		end
 
-		--[[Debuffs.PostUpdateIcon = function(icons, unit, icon, index, _, filter)
-			local _, _, _, _, dtype = UnitAura(unit, index, icon.filter)
-			if dtype and UnitIsFriend("player", unit) then
-				local color = DebuffTypeColor[dtype]
-				icon.bg:SetVertexColor(color.r, color.g, color.b)
-			else
-				icon.bg:SetVertexColor(0, 0, 0)
-			end
-			icon:EnableMouse(false)
-		end]]
+		Debuffs.PostCreateIcon = PostCreateIcon
+		Debuffs.PostUpdateIcon = PostUpdateIcon
+		Debuffs.CustomFilter = groupDebuffFilter
+
 
 		local Buffs = CreateFrame("Frame", nil, self)
 		Buffs.initialAnchor = "CENTER"
@@ -1805,28 +1811,14 @@ do
 		Buffs.num = 3
 		Buffs.size = 12
 
+		Buffs.showDebuffType = true
+		Buffs.showStealableBuffs = true
 		Buffs.disableCooldown = true
+		Buffs.disableMouse = true
 
 		self.Buffs = Buffs
 
-		Buffs.PostCreateIcon = function(icons, index)
-			index:EnableMouse(false)
-			index.cd.noshowcd = true
-		end
 
-		Buffs.PostUpdateIcon = function(_, _, button)
-			button:EnableMouse(false)
-			
-		end
-
-		local myBuffs = C.myBuffs
-		local allBuffs = C.allBuffs
-
-		Buffs.CustomFilter = function(_, _, _, _, _, _, _, _, _, _, caster, _, _, spellID)
-			if (caster == "player" and myBuffs[spellID]) or allBuffs[spellID] then
-				return true
-			end
-		end
 
 		Buffs.PostUpdate = function(icons)
 			local vb = icons.visibleBuffs
@@ -1839,6 +1831,13 @@ do
 				Buffs:SetPoint("TOP", 0, -2)
 			end
 		end
+
+		Buffs.PostCreateIcon = PostCreateIcon
+		Buffs.PostUpdateIcon = PostUpdateIcon
+		Buffs.CustomFilter = groupBuffFilter
+
+
+
 
 		local Threat = CreateFrame("Frame", nil, self)
 		self.Threat = Threat
