@@ -1,7 +1,7 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	if not C.themeconfig.chatBubbles then return end
+	--if not AuroraConfig.chatBubbles then return end
 
 	local function styleBubble(frame)
 		for i = 1, frame:GetNumRegions() do
@@ -42,12 +42,13 @@ tinsert(C.themes["FreeUI"], function()
 		CHAT_MSG_MONSTER_PARTY = "chatBubblesParty",
 	}
 
-	local colors = {
-		CHAT_MSG_SAY = {1, 1, 1},
-		CHAT_MSG_YELL = {1, .25, .25},
-		CHAT_MSG_PARTY = {.65, .65, 1},
-		CHAT_MSG_PARTY_LEADER = {.65, .65, 1},
+	local channels = {
+		CHAT_MSG_SAY = "SAY",
+		CHAT_MSG_YELL = "YELL",
+		CHAT_MSG_PARTY = "PARTY",
+		CHAT_MSG_PARTY_LEADER = "PARTY_LEADER",
 	}
+	--if not AuroraConfig.bubbleColor then channels = {} end
 
 	local bubbleHook = CreateFrame("Frame")
 	for event in next, events do
@@ -57,7 +58,13 @@ tinsert(C.themes["FreeUI"], function()
 		if GetCVarBool(events[event]) then
 			self.elapsed = 0
 			self.msg = msg
-			self.color = colors[event]
+			local channel = channels[event]
+			if channel then
+				local info = ChatTypeInfo[channel]
+				self.color = {info.r, info.g, info.b}
+			else
+				self.color = nil
+			end
 			self:Show()
 		end
 	end)
@@ -67,13 +74,25 @@ tinsert(C.themes["FreeUI"], function()
 		local chatbubble = findChatBubble(self.msg)
 		if chatbubble or self.elapsed > .3 then
 			self:Hide()
-			if chatbubble and not chatbubble.styled then
-				styleBubble(chatbubble)
-				chatbubble.styled = true
-			end
+			if chatbubble then
+				if not chatbubble.styled then
+					styleBubble(chatbubble)
+					chatbubble.styled = true
+				end
 
-			if self.color and chatbubble.Shadow then
-				chatbubble.Shadow:SetBackdropBorderColor(unpack(self.color))
+				if self.color then
+					if chatbubble.Shadow then
+						chatbubble.Shadow:SetBackdropBorderColor(unpack(self.color))
+					else
+						chatbubble:SetBackdropBorderColor(unpack(self.color))
+					end
+				else
+					if chatbubble.Shadow then
+						chatbubble.Shadow:SetBackdropBorderColor(0, 0, 0)
+					else
+						chatbubble:SetBackdropBorderColor(0, 0, 0)
+					end
+				end
 			end
 		end
 	end)
