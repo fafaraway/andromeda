@@ -182,6 +182,7 @@ C.themes["Blizzard_Collections"] = function()
 			bg:SetAllPoints()
 			bg:SetFrameLevel(0)
 			F.CreateBD(bg)
+			F.CreateSD(bg)
 		end
 	end
 

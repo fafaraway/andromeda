@@ -6,6 +6,7 @@ tinsert(C.themes["FreeUI"], function()
 			select(i, QueueStatusFrame:GetRegions()):Hide()
 		end
 		F.CreateBD(QueueStatusFrame)
+		F.CreateSD(QueueStatusFrame)
 	end
 
 	local function SkinEntry(entry)

@@ -10,6 +10,7 @@ tinsert(C.themes["FreeUI"], function()
 			if not backdrop.reskinned then
 				if C.themeconfig.tooltips then
 					F.CreateBD(menu)
+					F.CreateSD(menu)
 				end
 				F.CreateBD(backdrop)
 				F.CreateSD(backdrop)
@@ -99,7 +100,11 @@ tinsert(C.themes["FreeUI"], function()
 					arrow:SetNormalTexture(C.media.arrowRight)
 					arrow:SetSize(8, 8)
 				end
-				_G["DropDownList"..level.."Button"..j.."UnCheck"]:SetTexture("")
+
+				local uncheck = _G["DropDownList"..level.."Button"..j.."UnCheck"]
+				if uncheck:GetTexture() == "Interface\\Common\\UI-DropDownRadioChecks" then
+					uncheck:SetTexture("")
+				end
 
 				if not bu.notCheckable then
 					toggleBackdrop(bu, true)
