@@ -14,7 +14,7 @@ core\core.lua
 options.lua
 profiles.lua
 
-core\gui.lua
+#core\gui.lua
 core\api.lua
 core\uiscale.lua
 core\slash.lua
