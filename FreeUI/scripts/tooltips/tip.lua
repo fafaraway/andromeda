@@ -523,6 +523,19 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 			end
 		end)
 
+		-- MeetingShit
+		if IsAddOnLoaded("MeetingStone") then
+			local tips = {
+				NetEaseGUI20_Tooltip51,
+				NetEaseGUI20_Tooltip52,
+			}
+			for _, f in pairs(tips) do
+				if f then
+					f:HookScript("OnShow", style)
+				end
+			end
+		end
+
 	elseif addon == "Blizzard_Collections" then
 		local pet = {
 			PetJournalPrimaryAbilityTooltip,
@@ -556,28 +569,20 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 		end
 
 	elseif addon == "Blizzard_PVPUI" then
-		local gt = {
-			ConquestTooltip,
-			PVPRewardTooltip,
-		}
-		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", style)
-			end
-		end
+
+		ConquestTooltip:HookScript("OnShow", style)
 
 	elseif addon == "Blizzard_Contribution" then
+
 		ContributionBuffTooltip:HookScript("OnShow", extrastyle)
 		ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.texCoord))
 		ContributionBuffTooltip.Border:SetAlpha(0)
 
 	elseif addon == "Blizzard_EncounterJournal" then
-		local f = EncounterJournalTooltip
-		if f then
-			f:HookScript("OnShow", style)
-		end
-		f.Item1.icon:SetTexCoord(unpack(C.texCoord))
-		f.Item2.icon:SetTexCoord(unpack(C.texCoord))
+
+		EncounterJournalTooltip:HookScript("OnShow", style)
+		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.texCoord))
+		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.texCoord))
 
 	elseif addon == "Blizzard_Calendar" then
 		local gt = {
@@ -591,10 +596,11 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 		end
 
 	elseif addon == "Blizzard_IslandsQueueUI" then
-		local f = IslandsQueueFrameTooltip
-		f:GetParent():GetParent():HookScript("OnShow", style)
-		f:GetParent().IconBorder:SetAlpha(0)
-		f:GetParent().Icon:SetTexCoord(unpack(C.texCoord))
+
+		local tip = IslandsQueueFrameTooltip
+		tip:GetParent():GetParent():HookScript("OnShow", style)
+		tip:GetParent().IconBorder:SetAlpha(0)
+		tip:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
 	end
 end)
 
