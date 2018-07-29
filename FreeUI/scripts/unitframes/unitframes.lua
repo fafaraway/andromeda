@@ -1740,7 +1740,7 @@ do
 		self.ReadyCheck = rc
 
 		local UpdateLFD = function(self, event)
-			local lfdrole = self.LFDRole
+			local lfdrole = self.GroupRoleIndicator
 			local role = UnitGroupRolesAssigned(self.unit)
 
 			if role == "DAMAGER" then
@@ -1761,7 +1761,7 @@ do
 		lfd:SetPoint("BOTTOM", Health, 1, 1)
 		lfd.Override = UpdateLFD
 
-		self.LFDRole = lfd
+		self.GroupRoleIndicator = lfd
 
 
 
