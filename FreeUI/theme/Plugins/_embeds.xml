@@ -1,0 +1,5 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="DBM_GUI.lua"/>
+	<Script file="DBM_Bars.lua"/>
+\
+</Ui>

@@ -3,4 +3,5 @@
 	<Include file="AddOns\_embeds.xml"/>
 	<Include file="FrameXML\_embeds.xml"/>
 	<Include file="SharedXML\_embeds.xml"/>
+	<Include file="Plugins\_embeds.xml"/>
 </Ui>
