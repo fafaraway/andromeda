@@ -66,37 +66,37 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 end
 
 -- Quickjoin for worldquests
-do
-	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
-		if self.module.ShowWorldQuests then
-			if button == "MiddleButton" then
-				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
-			end
-		end
-	end)
+--do
+--	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
+--		if self.module.ShowWorldQuests then
+--			if button == "MiddleButton" then
+--				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
+--			end
+--		end
+--	end)
 
-	for i = 1, 10 do
-		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
-		if bu then
-			bu:HookScript("OnDoubleClick", function()
-				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
-					LFGListFrame.SearchPanel.SignUpButton:Click()
-				end
-				if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
-					LFGListApplicationDialog.SignUpButton:Click()
-				end
-			end)
-		end
-	end
+--	for i = 1, 10 do
+--		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
+--		if bu then
+--			bu:HookScript("OnDoubleClick", function()
+--				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
+--					LFGListFrame.SearchPanel.SignUpButton:Click()
+--				end
+--				if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
+--					LFGListApplicationDialog.SignUpButton:Click()
+--				end
+--			end)
+--		end
+--	end
 
-	hooksecurefunc("LFGListEntryCreation_Show", function(self)
-		local searchBox = LFGListFrame.SearchPanel.SearchBox
-		if searchBox:GetText() ~= "" then
-			C_LFGList.CreateListing(16, searchBox:GetText(), 0, 0, "", searchBox:GetText(), true)
-			searchBox:SetText("")
-		end
-	end)
-end
+--	hooksecurefunc("LFGListEntryCreation_Show", function(self)
+--		local searchBox = LFGListFrame.SearchPanel.SearchBox
+--		if searchBox:GetText() ~= "" then
+--			C_LFGList.CreateListing(16, searchBox:GetText(), 0, 0, "", searchBox:GetText(), true)
+--			searchBox:SetText("")
+--		end
+--	end)
+--end
 
 -- Fix blizz LFGList error in zhCN
 if GetLocale() == "zhCN" then
