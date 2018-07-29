@@ -162,16 +162,16 @@ C["actionbars"] = {
 	["enableStyle"] = true,				-- enable action bars style
 	["hotKey"] = true, 					-- show hot keys on buttons
 	["macroName"] = true,				-- show macro name on buttons
-	["leaveVehicleButton"] = { "BOTTOM", UIParent, "BOTTOM", 113, 195 },
+	["bar1_mouseOver"] = false,
+	["bar2_mouseOver"] = false,
+	["bar3_mouseOver"] = false,
 	["sideBar_mouseOver"] = false,
 	["petBar_mouseOver"] = false,
 	["stanceBar_show"] = false,
 	["classColor"] = false,
 	["count"] = true,
-
-	["layout"] = 1,
-
 }
+
 
 C["auras"] = {
 	["buffSize"] = 42,

@@ -54,7 +54,7 @@ local micromenubar = {
 rActionBar:CreateMicroMenuBar(A, micromenubar)
 
 
-if C.actionbars.layout == 1 then
+if C.actionbars.bar1_mouseOver then
 	-- Bar1
 	local bar1 = {
 		framePoint      = { "BOTTOM", UIParent, "BOTTOM", 0, 6 },
@@ -65,10 +65,30 @@ if C.actionbars.layout == 1 then
 		buttonMargin    = 4,
 		numCols         = 12,
 		startPoint      = "BOTTOMLEFT",
+		fader 			= fader,
+		--frameVisibility = "[combat][modifier][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide"
 	}
 	--create
 	rActionBar:CreateActionBar1(A, bar1)
+else
+	-- Bar1
+	local bar1 = {
+		framePoint      = { "BOTTOM", UIParent, "BOTTOM", 0, 6 },
+		frameScale      = 1,
+		framePadding    = 0,
+		buttonWidth     = 24,
+		buttonHeight    = 24,
+		buttonMargin    = 4,
+		numCols         = 12,
+		startPoint      = "BOTTOMLEFT",
+		--frameVisibility = "[combat][modifier][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide"
+	}
+	--create
+	rActionBar:CreateActionBar1(A, bar1)
+end
 
+
+if C.actionbars.bar2_mouseOver then
 	-- Bar2
 	local bar2 = {
 		framePoint      = { "BOTTOM", A.."Bar1", "TOP", 0, 4 },
@@ -79,9 +99,30 @@ if C.actionbars.layout == 1 then
 		buttonMargin    = 4,
 		numCols         = 12,
 		startPoint      = "BOTTOMLEFT",
+		fader 			= fader,
+		--frameVisibility = "[combat][modifier][@target,exists,nodead] show; hide"
 	}
 	--create
 	rActionBar:CreateActionBar2(A, bar2)
+else
+	-- Bar2
+	local bar2 = {
+		framePoint      = { "BOTTOM", A.."Bar1", "TOP", 0, 4 },
+		frameScale      = 1,
+		framePadding    = 0,
+		buttonWidth     = 24,
+		buttonHeight    = 24,
+		buttonMargin    = 4,
+		numCols         = 12,
+		startPoint      = "BOTTOMLEFT",
+		--frameVisibility = "[combat][modifier][@target,exists,nodead] show; hide"
+	}
+	--create
+	rActionBar:CreateActionBar2(A, bar2)
+end
+
+
+if C.actionbars.bar3_mouseOver then
 
 	-- Bar3
 	local bar3 = {
@@ -97,39 +138,7 @@ if C.actionbars.layout == 1 then
 	}
 	--create
 	rActionBar:CreateActionBar3(A, bar3)
-
-elseif C.actionbars.layout == 2 then
-
-	-- Bar1
-	local bar1 = {
-		framePoint      = { "BOTTOM", UIParent, "BOTTOM", 0, 6 },
-		frameScale      = 1,
-		framePadding    = 0,
-		buttonWidth     = 24,
-		buttonHeight    = 24,
-		buttonMargin    = 4,
-		numCols         = 12,
-		startPoint      = "BOTTOMLEFT",
-		frameVisibility = "[combat][modifier][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide"
-	}
-	--create
-	rActionBar:CreateActionBar1(A, bar1)
-
-	-- Bar2
-	local bar2 = {
-		framePoint      = { "BOTTOM", A.."Bar1", "TOP", 0, 4 },
-		frameScale      = 1,
-		framePadding    = 0,
-		buttonWidth     = 24,
-		buttonHeight    = 24,
-		buttonMargin    = 4,
-		numCols         = 12,
-		startPoint      = "BOTTOMLEFT",
-		frameVisibility = "[combat][modifier][@target,exists,nodead] show; hide"
-	}
-	--create
-	rActionBar:CreateActionBar2(A, bar2)
-
+else
 	-- Bar3
 	local bar3 = {
 		framePoint      = { "BOTTOM", A.."Bar2", "TOP", 0, 4 },
@@ -140,59 +149,14 @@ elseif C.actionbars.layout == 2 then
 		buttonMargin    = 4,
 		numCols         = 12,
 		startPoint      = "BOTTOMLEFT",
-		frameVisibility = "[combat][modifier][@target,exists,nodead] show; hide"
+		--frameVisibility = "[combat][modifier][@target,exists,nodead] show; hide"
 	}
 	--create
 	rActionBar:CreateActionBar3(A, bar3)
+end
 
 	
-elseif C.actionbars.layout == 3 then
-	-- Bar1
-	local bar1 = {
-		framePoint      = { "BOTTOM", UIParent, "BOTTOM", 0, 6 },
-		frameScale      = 1,
-		framePadding    = 0,
-		buttonWidth     = 24,
-		buttonHeight    = 24,
-		buttonMargin    = 4,
-		numCols         = 12,
-		startPoint      = "BOTTOMLEFT",
-		fader 			= fader,
-	}
-	--create
-	rActionBar:CreateActionBar1(A, bar1)
 
-	-- Bar2
-	local bar2 = {
-		framePoint      = { "BOTTOM", A.."Bar1", "TOP", 0, 4 },
-		frameScale      = 1,
-		framePadding    = 0,
-		buttonWidth     = 24,
-		buttonHeight    = 24,
-		buttonMargin    = 4,
-		numCols         = 12,
-		startPoint      = "BOTTOMLEFT",
-		fader 			= fader,
-	}
-	--create
-	rActionBar:CreateActionBar2(A, bar2)
-
-	-- Bar3
-	local bar3 = {
-		framePoint      = { "BOTTOM", A.."Bar2", "TOP", 0, 4 },
-		frameScale      = 1,
-		framePadding    = 0,
-		buttonWidth     = 24,
-		buttonHeight    = 24,
-		buttonMargin    = 4,
-		numCols         = 12,
-		startPoint      = "BOTTOMLEFT",
-		fader 			= fader,
-	}
-	--create
-	rActionBar:CreateActionBar3(A, bar3)
-
-end
 
 
 if C.actionbars.sideBar_mouseOver then
@@ -337,7 +301,7 @@ rActionBar:CreateExtraBar(A, extrabar)
 
 
 -- VehicleExitBar
-local vehicleexitbar = {
+--[[local vehicleexitbar = {
 	framePoint      = C.actionbars.leaveVehicleButton,
 	frameScale      = 1,
 	framePadding    = 0,
@@ -349,11 +313,10 @@ local vehicleexitbar = {
 	frameVisibility = "hide"
 }
 --create
-rActionBar:CreateVehicleExitBar(A, vehicleexitbar)
+rActionBar:CreateVehicleExitBar(A, vehicleexitbar)]]
 
 
 -- PossessExitBar
-local possessexitbar = vehicleexitbar
-possessexitbar.frameVisibility = nil --need to reset the value that is given to vehicleexitbar
+--[[possessexitbar.frameVisibility = nil --need to reset the value that is given to vehicleexitbar
 --create
-rActionBar:CreatePossessExitBar(A, possessexitbar)
+rActionBar:CreatePossessExitBar(A, possessexitbar)]]
