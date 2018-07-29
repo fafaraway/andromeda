@@ -1289,4 +1289,4 @@ end
 
 
 DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
-DEFAULT_CHAT_FRAME:AddMessage("Type |cffffffff/FreeUI|r for more information.", unpack(C.class))
+--DEFAULT_CHAT_FRAME:AddMessage("Type |cffffffff/FreeUI|r for more information.", unpack(C.class))
