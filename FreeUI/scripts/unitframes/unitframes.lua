@@ -1251,7 +1251,7 @@ local UnitSpecific = {
 
 		Auras.showDebuffType = true
 		Auras.showStealableBuffs = true
-		Auras.disableCooldown = true
+		--Auras.disableCooldown = true
 
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon
