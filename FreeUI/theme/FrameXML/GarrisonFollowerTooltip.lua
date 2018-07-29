@@ -6,7 +6,7 @@ tinsert(C.themes["FreeUI"], function()
 			select(i, frame:GetRegions()):Hide()
 		end
 
-		if AuroraConfig.tooltips then
+		if C.themeconfig.tooltips then
 			F.CreateBD(frame)
 			F.CreateSD(frame)
 		end
@@ -22,7 +22,7 @@ tinsert(C.themes["FreeUI"], function()
 		icon:SetTexCoord(.08, .92, .08, .92)
 		F.CreateBG(icon)
 
-		if AuroraConfig.tooltips then
+		if C.themeconfig.tooltips then
 			F.CreateBD(frame)
 			F.CreateSD(frame)
 		end
