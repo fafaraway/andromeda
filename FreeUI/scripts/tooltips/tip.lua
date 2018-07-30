@@ -621,27 +621,27 @@ end)
 
 
 -- aura source
-if C.auras.aurasSource then
-	local function addAuraInfo(self, caster, spellID)
-		if(caster) then
-			local color = hex(unitColor(caster))
+--if C.auras.aurasSource then
+--	local function addAuraInfo(self, caster, spellID)
+--		if(caster) then
+--			local color = hex(unitColor(caster))
 
-			GameTooltip:AddDoubleLine("CastBy: "..color..UnitName(caster))
-			GameTooltip:Show()
-		end
-	end
+--			GameTooltip:AddDoubleLine("CastBy: "..color..UnitName(caster))
+--			GameTooltip:Show()
+--		end
+--	end
 
-	local UnitAura, UnitBuff, UnitDebuff = UnitAura, UnitBuff, UnitDebuff
-	hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
-		local _,_,_,_,_,_,_, caster,_,_, spellID = UnitAura(...)
-		addAuraInfo(self, caster, spellID)
-	end)
-	hooksecurefunc(GameTooltip, "SetUnitBuff", function(self,...)
-		local _,_,_,_,_,_,_, caster,_,_, spellID = UnitBuff(...)
-		addAuraInfo(self, caster, spellID)
-	end)
-	hooksecurefunc(GameTooltip, "SetUnitDebuff", function(self,...)
-		local _,_,_,_,_,_,_, caster,_,_, spellID = UnitDebuff(...)
-		addAuraInfo(self, caster, spellID)
-	end)
-end
+--	local UnitAura, UnitBuff, UnitDebuff = UnitAura, UnitBuff, UnitDebuff
+--	hooksecurefunc(GameTooltip, "SetUnitAura", function(self,...)
+--		local _,_,_,_,_,_,_, caster,_,_, spellID = UnitAura(...)
+--		addAuraInfo(self, caster, spellID)
+--	end)
+--	hooksecurefunc(GameTooltip, "SetUnitBuff", function(self,...)
+--		local _,_,_,_,_,_,_, caster,_,_, spellID = UnitBuff(...)
+--		addAuraInfo(self, caster, spellID)
+--	end)
+--	hooksecurefunc(GameTooltip, "SetUnitDebuff", function(self,...)
+--		local _,_,_,_,_,_,_, caster,_,_, spellID = UnitDebuff(...)
+--		addAuraInfo(self, caster, spellID)
+--	end)
+--end
