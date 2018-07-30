@@ -1054,7 +1054,7 @@ function F.HexRGB(r, g, b)
 end
 
 function F.ClassColor(class)
-	local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+	local color = C.classcolours[class]
 	if not color then return 1, 1, 1 end
 	return color.r, color.g, color.b
 end
