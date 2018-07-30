@@ -1892,17 +1892,14 @@ oUF:Factory(function(self)
 	local player, target, focus, targettarget, focustarget, pet
 
 	player = spawnHelper(self, 'player', unpack(C.unitframes.player))
-	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet))
 
 	if C.unitframes.useFrameVisibility then
 		player:Disable()
 		player.frameVisibility = C.unitframes.frameVisibility
 		RegisterStateDriver(player, "visibility", C.unitframes.frameVisibility)
-
-		pet:Disable()
-		pet.frameVisibility = C.unitframes.frameVisibility
-		RegisterStateDriver(pet, "visibility", C.unitframes.frameVisibility)
 	end
+
+	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet))
 
 	target = spawnHelper(self, 'target', unpack(C.unitframes.target))
 	targettarget = spawnHelper(self, 'targettarget', unpack(C.unitframes.targettarget))
