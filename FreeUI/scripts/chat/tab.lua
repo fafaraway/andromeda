@@ -2,7 +2,7 @@
 
 local F, C, L = unpack(select(2, ...))
 
-local locale = GetLocale()
+
 local tabFont = {
 		C.font.normal,
 		12,
@@ -85,7 +85,7 @@ local faneifyTab = function(frame, sel)
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
 
-		if locale == "zhCN" or locale == "zhTW" then
+		if C.client == "zhCN" or C.client == "zhTW" then
 			frame:GetFontString():SetFont(unpack(tabFont))
 		else
 			F.SetFS(frame:GetFontString())

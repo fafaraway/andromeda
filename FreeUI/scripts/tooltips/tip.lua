@@ -7,15 +7,9 @@ local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_RE
 local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 
 
-
-
-local locale = GetLocale()
 local BOSS, ELITE = BOSS, ELITE
 local RARE, RAREELITE
-if (locale == "zhCN") then
-	RARE = "稀有"
-	RAREELITE = "稀有精英"
-elseif (locale == "zhTW") then
+if (C.client == "zhCN" or C.client == "zhTW") then
 	RARE = "稀有"
 	RAREELITE = "稀有精英"
 else

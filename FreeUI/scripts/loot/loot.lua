@@ -37,7 +37,6 @@ local iconsize = 32
 local width = 200
 local sq, ss, sn, st
 
-local locale = GetLocale()
 local lootFont = {
 		C.font.normal,
 		12,
@@ -134,7 +133,7 @@ local createSlot = function(id)
 	name:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	name:SetNonSpaceWrap(true)
 
-	if locale == "zhCN" or locale == "zhTW" then
+	if C.client == "zhCN" or C.client == "zhTW" then
 		name:SetFont(unpack(lootFont))
 	end
 

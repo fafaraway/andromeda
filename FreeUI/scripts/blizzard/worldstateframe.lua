@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-local locale = GetLocale()
+
 local stateFont = {
 		C.font.normal,
 		12,
@@ -58,7 +58,7 @@ local function restyleStateFrames()
 		if f and not f.styled then
 			local _, g = f:GetRegions()
 
-			if locale == "zhCN" or locale == "zhTW" then
+			if C.client == "zhCN" or C.client == "zhTW" then
 				g:SetFont(unpack(stateFont))
 			else
 				F.SetFS(g)

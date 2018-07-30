@@ -6,7 +6,7 @@ local holdtime = 0.52 -- hold time (seconds)
 local fadeintime = 0.08 -- fadein time (seconds)
 local fadeouttime = 0.16 -- fade out time (seconds)
 
-local locale = GetLocale()
+
 local errorsFont = {
 		C.font.normal,
 		12,
@@ -53,7 +53,7 @@ Error:SetScript("OnEvent", function(_, _, code, msg)
 		state = 0
 	end
 
-	if locale == "zhCN" or locale == "zhTW" then
+	if C.client == "zhCN" or C.client == "zhTW" then
 		firstErrorFrame.text:SetFont(unpack(errorsFont))
 		secondErrorFrame.text:SetFont(unpack(errorsFont))
 		secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -95)

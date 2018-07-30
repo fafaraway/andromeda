@@ -2,8 +2,6 @@
 
 if not C.infoBar.enable then return end
 
-
-local locale = GetLocale()
 local menubarFont = {
 		C.font.normal,
 		12,
@@ -445,7 +443,7 @@ specButton:SetScript("OnEvent", function(self)
 			else
 				self.Text:SetText(format("S: %s  L: %s", name, lootname))
 			end
-			if locale == "zhCN" or locale == "zhTW" then
+			if C.client == "zhCN" or C.client == "zhTW" then
 				self.Text:SetFont(unpack(menubarFont))
 			end
 			showButton(self)
@@ -456,7 +454,7 @@ specButton:SetScript("OnEvent", function(self)
 end)
 
 local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
-if locale == "zhCN" or locale == "zhTW" then
+if C.client == "zhCN" or C.client == "zhTW" then
 	garrisonButton.Text:SetFont(unpack(menubarFont))
 end
 garrisonButton:Hide()

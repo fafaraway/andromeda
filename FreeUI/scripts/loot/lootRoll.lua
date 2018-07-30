@@ -5,7 +5,7 @@ local F, C, L = unpack(select(2, ...))
 UIParent:UnregisterEvent("START_LOOT_ROLL")
 UIParent:UnregisterEvent("CANCEL_LOOT_ROLL")
 
-local locale = GetLocale()
+
 local lootrollFont = {
 		C.font.normal,
 		12,
@@ -174,7 +174,7 @@ function addon:UpdateGroupLoot()
 			frame.text:SetPoint("RIGHT", frame.need, "LEFT")
 
 
-			if locale == "zhCN" or locale == "zhTW" then
+			if C.client == "zhCN" or C.client == "zhTW" then
 				frame.text:SetFont(unpack(lootrollFont))
 			end
 

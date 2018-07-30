@@ -113,7 +113,7 @@ end
 local next, type = _G.next, _G.type
 local playername, _ = UnitName('player')
 local r, g, b = C.appearance.fontColorFontRGB.r, C.appearance.fontColorFontRGB.g, C.appearance.fontColorFontRGB.b
-local locale = GetLocale()
+
 local font
 
 local function SetFont(fontObj, fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
