@@ -274,6 +274,10 @@ C["unitframes"] = {
 	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
 	["player_castbar_width"] = 200,
 
+	["useFrameVisibility"] = false,
+	["frameVisibility"] = "[combat][mod][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide",
+
+
 	["pet"] = {"RIGHT", "oUF_FreePlayer", "LEFT", -5, 0},									-- pet unitframe position
 	["pet_width"] = 89,
 	["pet_height"] = 12,

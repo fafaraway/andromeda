@@ -8,7 +8,6 @@ local oUF = ns.oUF
 local name = UnitName("player")
 local realm = GetRealmName()
 local class = select(2, UnitClass("player"))
-local locale = GetLocale()
 
 local unitframeFont = {
 		C.font.normal,
@@ -365,12 +364,15 @@ local function PostCreateIcon(element, button)
 	button.bg = bg
 	
 	button.overlay:SetTexture(nil)
+	button.stealable:SetTexture(nil)
 
 	button.cd:SetReverse(true)
 
 	button.icon:SetDrawLayer('ARTWORK')
 
 	button:SetScript('OnEnter', OnAuraEnter)
+
+
 
 
 	local StringParent = CreateFrame('Frame', nil, button)
@@ -392,7 +394,8 @@ local function PostCreateIcon(element, button)
 	button:HookScript('OnUpdate', UpdateAura)
 end
 
-local function PostUpdateIcon(element, _, button, _, _, duration, _, debuffType)
+local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
+	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
 
 
@@ -400,9 +403,17 @@ local function PostUpdateIcon(element, _, button, _, _, duration, _, debuffType)
 	button.icon:SetTexCoord(.08, .92, .25, .85)
 
 
-	if button.isDebuff and element.showDebuffType then
+	
+
+	if canStealOrPurge then
+
+		button.bg:SetVertexColor(1, 1, 1)
+
+	elseif button.isDebuff and element.showDebuffType then
+
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.bg:SetVertexColor(color[1], color[2], color[3])
+
 	else
 		button.bg:SetVertexColor(.1, .1, .1)
 	end
@@ -1882,6 +1893,17 @@ oUF:Factory(function(self)
 
 	player = spawnHelper(self, 'player', unpack(C.unitframes.player))
 	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet))
+
+	if C.unitframes.useFrameVisibility then
+		player:Disable()
+		player.frameVisibility = C.unitframes.frameVisibility
+		RegisterStateDriver(player, "visibility", C.unitframes.frameVisibility)
+
+		pet:Disable()
+		pet.frameVisibility = C.unitframes.frameVisibility
+		RegisterStateDriver(pet, "visibility", C.unitframes.frameVisibility)
+	end
+
 	target = spawnHelper(self, 'target', unpack(C.unitframes.target))
 	targettarget = spawnHelper(self, 'targettarget', unpack(C.unitframes.targettarget))
 	focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus))
