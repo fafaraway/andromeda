@@ -9,6 +9,7 @@ function module:OnLogin()
 	self:Expbar()
 	self:flashCursor()
 	self:questRewardHighlight()
+	self:QuickJoin()
 
 
 	-- Remove Boss Banner
@@ -65,55 +66,7 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 	old_MerchantItemButton_OnModifiedClick(self, ...)
 end
 
--- Quickjoin for worldquests
---do
---	hooksecurefunc("BonusObjectiveTracker_OnBlockClick", function(self, button)
---		if self.module.ShowWorldQuests then
---			if button == "MiddleButton" then
---				LFGListUtil_FindQuestGroup(self.TrackedQuest.questID)
---			end
---		end
---	end)
 
---	for i = 1, 10 do
---		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
---		if bu then
---			bu:HookScript("OnDoubleClick", function()
---				if LFGListFrame.SearchPanel.SignUpButton:IsEnabled() then
---					LFGListFrame.SearchPanel.SignUpButton:Click()
---				end
---				if LFGListApplicationDialog:IsShown() and LFGListApplicationDialog.SignUpButton:IsEnabled() then
---					LFGListApplicationDialog.SignUpButton:Click()
---				end
---			end)
---		end
---	end
-
---	hooksecurefunc("LFGListEntryCreation_Show", function(self)
---		local searchBox = LFGListFrame.SearchPanel.SearchBox
---		if searchBox:GetText() ~= "" then
---			C_LFGList.CreateListing(16, searchBox:GetText(), 0, 0, "", searchBox:GetText(), true)
---			searchBox:SetText("")
---		end
---	end)
---end
-
--- Fix blizz LFGList error in zhCN
-if GetLocale() == "zhCN" then
-	StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
-		text = " 针对此项活动，你的队伍人数已满，将被移出列表。",
-		button1 = OKAY,
-		timeout = 0,
-		whileDead = 1,
-	}
-end
-hooksecurefunc("StaticPopup_Show", function(which)
-		if which == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
-			C_Timer.After(1, function()
-				StaticPopup_Hide(which)
-			end)
-		end
-end)
 
 -- Select target when click on raid units
 do

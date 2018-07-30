@@ -20,4 +20,5 @@
 	<Script file="sharedmedia.lua"/>
 
 	<Script file="tabbinder.lua"/>
+	<Script file="quickjoin.lua"/>
 </Ui>
