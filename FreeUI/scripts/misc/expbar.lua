@@ -39,6 +39,14 @@ local function UpdateBar(bar)
 		bar:SetMinMaxValues(min, max)
 		bar:SetValue(value)
 		bar:Show()
+
+	elseif IsWatchingHonorAsXP() then
+		local current, max = UnitHonor("player"), UnitHonorMax("player")
+		bar:SetStatusBarColor(1, .24, 0)
+		bar:SetMinMaxValues(0, max)
+		bar:SetValue(current)
+		bar:Show()
+
 	elseif C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
@@ -47,26 +55,23 @@ local function UpdateBar(bar)
 		bar:SetValue(xp)
 		bar:Show()
 	elseif HasArtifactEquipped() then
-		local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-		xp = xpForNextPoint == 0 and 0 or xp
-		bar:SetStatusBarColor(.9, .8, .6)
-		bar:SetMinMaxValues(0, xpForNextPoint)
-		bar:SetValue(xp)
+		if C_ArtifactUI.IsEquippedArtifactDisabled() then
+			bar:SetStatusBarColor(.6, .6, .6)
+			bar:SetMinMaxValues(0, 1)
+			bar:SetValue(1)
+		else
+			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+			local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
+			xp = xpForNextPoint == 0 and 0 or xp
+			bar:SetStatusBarColor(.9, .8, .6)
+			bar:SetMinMaxValues(0, xpForNextPoint)
+			bar:SetValue(xp)
+		end
 		bar:Show()
 	else
 		bar:Hide()
 	end
 
-	-- Available ArtifactPoint
-	--[[if bar.newPoint then
-		bar.newPoint:SetAlpha(0)
-		if HasArtifactEquipped() then
-			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-			local num = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-			if num > 0 then bar.newPoint:SetAlpha(1) end
-		end
-	end]]
 end
 
 local function UpdateTooltip(bar)
@@ -137,16 +142,19 @@ local function UpdateTooltip(bar)
 		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		GameTooltip:AddLine(" ")
-		if pointsSpent > 51 then
-			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent).." ".."Paragon"..(pointsSpent - 51)..")", 243/250, 222627/250, 57/250)
+		if C_ArtifactUI.IsEquippedArtifactDisabled() then
+			GameTooltip:AddLine(name, 0,.6,1)
+			GameTooltip:AddLine(ARTIFACT_RETIRED, .6,.8,1, 1)
 		else
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 243/250, 222627/250, 57/250)
-		end
-		local numText = num > 0 and " ("..num..")" or ""
-		GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(totalXP)..numText, 131/250, 239/250, 131/250, 1,1,1)
-		if xpForNextPoint ~= 0 then
-			local perc = " ("..floor(xp/xpForNextPoint*100).."%)"
-			GameTooltip:AddDoubleLine("Next Trait", F.Numb(xp).."/"..F.Numb(xpForNextPoint)..perc, 131/250, 239/250, 131/250, 1,1,1)
+		
+			local numText = num > 0 and " ("..num..")" or ""
+			GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(totalXP)..numText, .6,.8,1, 1,1,1)
+			if xpForNextPoint ~= 0 then
+				local perc = " ("..floor(xp/xpForNextPoint*100).."%)"
+				GameTooltip:AddDoubleLine("Next Trait", F.Numb(xp).."/"..F.Numb(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
+			end
+		
 		end
 	end
 	GameTooltip:Show()
@@ -164,6 +172,7 @@ function module:SetupScript(bar)
 		"ENABLE_XP_GAIN",
 		"DISABLE_XP_GAIN",
 		"AZERITE_ITEM_EXPERIENCE_CHANGED",
+		"HONOR_XP_UPDATE",
 	}
 	for _, event in pairs(bar.eventList) do
 		bar:RegisterEvent(event)
@@ -179,6 +188,10 @@ function module:SetupScript(bar)
 			ToggleFrame(ArtifactFrame)
 		end
 	end)
+
+	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()
+		UpdateBar(bar)
+	end)
 end
 
 function module:Expbar()
@@ -187,7 +200,7 @@ function module:Expbar()
 	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)
 	bar:SetSize(256, 4)
 	bar:SetHitRectInsets(0, 0, 0, -10)
-	F.CreateSB(bar, true)
+	F.CreateSB(bar)
 
 	local rest = CreateFrame("StatusBar", nil, bar)
 	rest:SetAllPoints()
@@ -195,13 +208,6 @@ function module:Expbar()
 	rest:SetStatusBarColor(105/250, 194/250, 221/250, .9)
 	rest:SetFrameLevel(bar:GetFrameLevel() - 1)
 	bar.restBar = rest
-
-	--[[local newPoint = bar:CreateTexture(nil, "OVERLAY")
-	newPoint:SetTexture("Interface\\COMMON\\ReputationStar")
-	newPoint:SetTexCoord(.5, 1, .5, 1)
-	newPoint:SetSize(18, 18)
-	newPoint:SetPoint("CENTER", 0, -2)
-	bar.newPoint = newPoint]]
 
 	self:SetupScript(bar)
 end
