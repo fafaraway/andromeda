@@ -139,9 +139,9 @@ C["general"] = {
 }
 
 C["appearance"] = {
-	["uiFader"] = false,
+
 	["vignette"] = true,
-		["vignetteAlpha"] = .7,
+		["vignetteAlpha"] = .5,
 	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
 		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
@@ -152,7 +152,7 @@ C["appearance"] = {
 	["fontShadow"] = true,
 	["fontUseColorFont"] = true,
 	["fontColorFontRGB"] = {r = 247/255, g = 225/255, b =171/255},
-	["uisetuphelper"] = false,
+
 }
 
 
@@ -196,7 +196,7 @@ C["bags"] = {
 	["scale"] = 1,
 	["reverseSort"] = true,
 	["itemFilter"] = true,
-	["setFilter"] = true,
+	["setFilter"] = false,
 	["artifact"] = true,
 	["iLvl"] = true,
 
