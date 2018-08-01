@@ -166,7 +166,7 @@ function module:ReskinRegions()
 
 	local mt = F.CreateFS(mail)
 	mt:SetText("Mail")
-	mt:SetTextColor(r, g, b)
+	mt:SetTextColor(1, 1, 1)
 	mt:SetPoint("BOTTOM", Minimap, 0, 36)
 
 	MiniMapMailFrame:SetAlpha(0)
@@ -389,6 +389,9 @@ function module:SetupMinimap()
 		_G[v]:Hide()
 		_G[v].Show = F.Dummy
 	end
+
+	GuildInstanceDifficulty:SetAlpha(0)
+	MiniMapChallengeMode:GetRegions():SetTexture("")
 
 
 
