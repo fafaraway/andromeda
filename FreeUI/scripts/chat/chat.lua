@@ -223,13 +223,13 @@ function module:OnLogin()
 		end
 	end)
 
-	hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
+	--[[hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
 		if selected then
 			self:GetFontString():SetTextColor(1, .8, 0)
 		else
 			self:GetFontString():SetTextColor(.5, .5, .5)
 		end
-	end)
+	end)]]
 
 	-- Font size
 	for i = 1, 15 do
@@ -281,13 +281,6 @@ function module:OnLogin()
 	self:ChatFilter()
 
 
-
-	-- ProfanityFilter
-	if not BNFeaturesEnabledAndConnected() then return end
-
-	SetCVar("profanityFilter", 0)
-
-
 	ACHIEVEMENT_BROADCAST = "%s achieved %s!"
 
 	BN_INLINE_TOAST_FRIEND_OFFLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has gone |cffff0000offline|r."
@@ -333,6 +326,11 @@ function module:OnLogin()
 	HideForever(GeneralDockManagerOverflowButton)
 
 	ForceChatSettings()
+
+	-- ProfanityFilter
+	if not BNFeaturesEnabledAndConnected() then return end
+
+	SetCVar("profanityFilter", 0)
 
 	
 end
