@@ -1,3 +1,7 @@
+local F, C = unpack(select(2, ...))
+if not C.chat.spamageMeters then return end
+
+
 -- SpamageMeters by Wrug and Cybey
 -- Merge damage meter spam
 

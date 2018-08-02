@@ -1,4 +1,5 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
+if not C.chat.whisperAlert then return end
 
 local WhisperSounds = CreateFrame("Frame")
 local WhisperSoundsFile = "Interface\\AddOns\\FreeUI\\assets\\sound\\whisper.ogg"

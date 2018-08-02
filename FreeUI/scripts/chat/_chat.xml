@@ -4,5 +4,5 @@
 	<Script file="itemlinklevel.lua"/>
 	<Script file="filter.lua"/>
 	<Script file="spamagemeter.lua"/>
-	<Script file="whispersound.lua"/>
+	<Script file="whisperalert.lua"/>
 </Ui>

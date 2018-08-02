@@ -235,9 +235,10 @@ C["tooltip"] = {
 C["chat"] = {
 	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
 	["sticky"] = true,
-	["oldName"] = false,
 	["match"] = 1,
 	["itemLinkLevel"] = true,
+	["spamageMeters"] = true,
+	["whisperAlert"] = true,
 
 }
 
