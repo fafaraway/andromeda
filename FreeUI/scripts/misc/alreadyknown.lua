@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if C.general.alreadyKnown ~= true then return end
+if not C.misc.alreadyKnown then return end
 
 -- Colorizes recipes/mounts/pets/toys that is already known
 -- AlreadyKnown by Villiv

@@ -13,7 +13,7 @@ function module:OnLogin()
 
 
 	-- Remove Boss Banner
-	if C.general.bossBanner == true then
+	if C.misc.bossBanner == true then
 		BossBanner:UnregisterAllEvents()
 	end
 end
@@ -21,7 +21,7 @@ end
 
 
 -- Remove Talking Head Frame
-if C.general.talkingHead == true then
+if C.misc.talkingHead == true then
 	local frame = CreateFrame("Frame")
 	frame:RegisterEvent("ADDON_LOADED")
 	frame:SetScript("OnEvent", function(self, event, addon)
@@ -102,22 +102,21 @@ do
 end
 
 -- Ctrl + left click to report spamer
-local _ChatFrame_OnHyperlinkShow = ChatFrame_OnHyperlinkShow;
+--[[local _ChatFrame_OnHyperlinkShow = ChatFrame_OnHyperlinkShow;
 function ChatFrame_OnHyperlinkShow (chatframe,link,text,button)
 	if IsControlKeyDown() then
 		local line = string.match(link,"player:[^:]+:(%d+):");
 			if line then
-				ReportPlayer("spam",line);
+				C_ChatInfo.ReportPlayer("spam",line);
 			return;
 		end
 	end
 	return _ChatFrame_OnHyperlinkShow (chatframe,link,text,button);
-end
+end]]
+
 
 -- Hide friendly player/pet names while in raid and/or party group.
-if C.general.hideRaidNames then
-
-
+if C.misc.hideRaidNames then
 	local HRN = function()
 		local name, type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
 		-- print(name.. " ".. type .." ".. difficulty)	
@@ -170,7 +169,7 @@ end
 
 
 -- Auto enables the ActionCam on login
-if C.general.autoActionCam then
+if C.misc.autoActionCam then
 	local aac = CreateFrame("Frame", "AutoActionCam")
 
 	aac:RegisterEvent("PLAYER_LOGIN")
@@ -302,24 +301,26 @@ BGSpam:SetScript("OnEvent", ToggleBossEmotes)
 
 
 -- undress button on dress up frame
-local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
-undress:SetSize(80, 22)
-undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
-undress:SetText("Undress")
-undress:SetScript("OnClick", function()
-	DressUpModel:Undress()
-end)
+if C.misc.undressButton then
+	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
+	undress:SetSize(80, 22)
+	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
+	undress:SetText("Undress")
+	undress:SetScript("OnClick", function()
+		DressUpModel:Undress()
+	end)
 
-local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
-sideUndress:SetSize(80, 22)
-sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
-sideUndress:SetText("Undress")
-sideUndress:SetScript("OnClick", function()
-	SideDressUpModel:Undress()
-end)
+	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
+	sideUndress:SetSize(80, 22)
+	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
+	sideUndress:SetText("Undress")
+	sideUndress:SetScript("OnClick", function()
+		SideDressUpModel:Undress()
+	end)
 
-F.Reskin(undress)
-F.Reskin(sideUndress)
+	F.Reskin(undress)
+	F.Reskin(sideUndress)
+end
 
 
 

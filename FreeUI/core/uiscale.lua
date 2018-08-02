@@ -6,7 +6,7 @@ local function ForceUIScale()
 	F.HideOption(Advanced_UseUIScale)
 	F.HideOption(Advanced_UIScaleSlider)
 
-	local scale = C.general.uiScale
+	local scale = C.misc.uiScale
 	local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 	if C.general.uiScaleAuto then
 		scale = 768 / pysHeight
@@ -42,7 +42,7 @@ local function ForceUIScale()
 end
 
 F.AddOptionsCallback("general", "uiScaleAuto", function()
-	if C.general.uiScaleAuto then
+	if C.misc.uiScaleAuto then
 		F:RegisterEvent("UI_SCALE_CHANGED", ForceUIScale)
 		ForceUIScale()
 	else

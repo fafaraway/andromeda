@@ -111,32 +111,7 @@ C.themeconfig = {
 
 
 -- [[ Global config ]]
-C["general"] = {
-	["cooldownpulse"] = true,
-	["itemLinkLevel"] = true,
-	["rareAlert"] = true, 			-- raid warning when a rare mob/event is spotted
-	["interrupt"] = true,			-- announce your interrupts
-		["interrupt_sound"] = true,		-- play sound
-		["interrupt_party"] = false,	-- enable in 5 mans / scenarios
-		["interrupt_bgs"] = false,		-- enable in battlegrounds
-		["interrupt_lfg"] = false, 		-- enable in dungeon/raid finder/scenario groups
-		["interrupt_outdoors"] = false,	-- enable when not in an instance
-	["flashCursor"] = true,
-	["mailButton"] = true, 			-- adds a button to the mail frame to collect all attachments
-	["undressButton"] = true, 		-- undress button on dressup frame
-	["alreadyKnown"] = true,
-	["bossBanner"] = true,
-	["talkingHead"] = true,
-	["hideRaidNames"] = true,
-	["autoScreenShot"] = true,
-	["uiScale"] = 1,
-	["uiScaleAuto"] = true,			-- force the correct UI scale
 
-	["saySapped"] = true,
-	["GroupFinderButton"] = false,
-	["screenSaver"] = true,
-	["autoActionCam"] = false,
-}
 
 C["appearance"] = {
 
@@ -346,7 +321,28 @@ C["maps"] = {
 	["mapReveal"] = true,
 }
 
+
+
 C["misc"] = {
+	["uiScale"] = 1,
+	["uiScaleAuto"] = true,	
+
+	["cooldownpulse"] = true,
+	["flashCursor"] = true,
+
+	["mailButton"] = true, 
+	["undressButton"] = true, 
+
+	["alreadyKnown"] = true,
+
+	["bossBanner"] = true,
+	["talkingHead"] = true,
+
+	["hideRaidNames"] = true,
+	["saySapped"] = true,
+
+	["autoActionCam"] = false,
+
 	["rareAlert"] = true,
 	["rareAlertinChat"] = true,
 	["interrupt"] = true,

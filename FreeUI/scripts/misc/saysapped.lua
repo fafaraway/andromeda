@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-if not C.general.saySapped then return end
+if not C.misc.saySapped then return end
 
 local DefsSapped=CreateFrame("Frame")
 local _,playerName

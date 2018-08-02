@@ -1,6 +1,6 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
-if not C.general.cooldownpulse then return end
+if not C.misc.cooldownpulse then return end
 
 -- Based on Doom Cooldown Pulse
 -- Flash an ability's icon in the middle of the screen when it comes off cooldown.

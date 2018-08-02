@@ -4,7 +4,7 @@ local module = F:GetModule("misc")
 
 
 function module:flashCursor()
-	if not C.general.flashCursor then return end
+	if not C.misc.flashCursor then return end
 
 	local frame = CreateFrame("Frame", nil, UIParent);
 	frame:SetFrameStrata("TOOLTIP");
