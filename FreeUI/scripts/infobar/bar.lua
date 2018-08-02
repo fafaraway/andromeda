@@ -453,10 +453,11 @@ specButton:SetScript("OnEvent", function(self)
 	end
 end)
 
-local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
-if C.client == "zhCN" or C.client == "zhTW" then
-	garrisonButton.Text:SetFont(unpack(menubarFont))
-end
+--local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
+--if C.client == "zhCN" or C.client == "zhTW" then
+--	garrisonButton.Text:SetFont(unpack(menubarFont))
+--end
+local garrisonButton = addButton("Garrison Report", POSITION_RIGHT, GarrisonLandingPage_Toggle)
 garrisonButton:Hide()
 
 GarrisonLandingPageMinimapButton:SetSize(1, 1)
