@@ -1,3 +1,5 @@
+local F, C = unpack(select(2, ...))
+
 -- yClassColors by yleaf
 -- colorize player names by their class in friend list, who list, guild list, etc..
 
@@ -22,7 +24,7 @@ for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
 	BC[v] = k
 end
 
-local RAID_CLASS_COLORS = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+local RAID_CLASS_COLORS = C.classcolours or RAID_CLASS_COLORS
 local WHITE_HEX = "|cffffffff"
 
 local function Hex(r, g, b)
