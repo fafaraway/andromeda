@@ -8,12 +8,12 @@ local function ForceUIScale()
 
 	local scale = C.misc.uiScale
 	local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
-	if C.general.uiScaleAuto then
+	if C.misc.uiScaleAuto then
 		scale = 768 / pysHeight
 		local minScale = .64
 		if pysHeight > 1080 then minScale = .5 end
 		if scale < minScale then scale = minScale end
-		C.general.uiScale = scale
+		C.misc.uiScale = scale
 	end
 
 	SetCVar("useUiScale", 1)
