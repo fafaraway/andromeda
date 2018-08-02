@@ -237,6 +237,7 @@ C["chat"] = {
 	["sticky"] = true,
 	["oldName"] = false,
 	["match"] = 1,
+	["itemLinkLevel"] = true,
 
 }
 
