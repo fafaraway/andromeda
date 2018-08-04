@@ -250,11 +250,11 @@ load:SetScript("OnEvent", function(self, event)
 	end
 
 	-- Finish up with placement
-	ColorPPBoxR:SetPoint("BOTTOMLEFT", "ColorPickerOkayButton", "TOPLEFT", 0, 24)
-	ColorPPBoxG:SetPoint("LEFT", "ColorPPBoxR", "RIGHT", 18, 0)
-	ColorPPBoxB:SetPoint("LEFT", "ColorPPBoxG", "RIGHT", 18, 0)
-	ColorPPBoxH:SetPoint("LEFT", "ColorPPBoxB", "RIGHT", 18, 0)
-	ColorPPBoxA:SetPoint("LEFT", "ColorPPBoxH", "RIGHT", 18, 0)
+	ColorPPBoxR:SetPoint("TOPLEFT", "ColorPickerWheel", "BOTTOMLEFT", 20, -26)
+	ColorPPBoxG:SetPoint("BOTTOMLEFT", "ColorPPBoxR", "BOTTOMRIGHT", 18, 0)
+	ColorPPBoxB:SetPoint("BOTTOMLEFT", "ColorPPBoxG", "BOTTOMRIGHT", 18, 0)
+	ColorPPBoxH:SetPoint("BOTTOMLEFT", "ColorPPBoxB", "BOTTOMRIGHT", 18, 0)
+	ColorPPBoxA:SetPoint("BOTTOMLEFT", "ColorPPBoxH", "BOTTOMRIGHT", 18, 0)
 	F.SetFS(ColorPPBoxR)
 	F.SetFS(ColorPPBoxG)
 	F.SetFS(ColorPPBoxB)

@@ -10,7 +10,7 @@
 
 	<Script file="worldmarker.lua"/>
 	<Script file="objectivetracker.lua"/>
-	<Script file="timer.lua"/>
-	<Script file="worldstateframe.lua"/>
+	<Script file="timertracker.lua"/>
+	<Script file="capturebar.lua"/>
 	<Script file="orderhallcommandbar.lua"/>
 </Ui>
