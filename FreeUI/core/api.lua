@@ -2,21 +2,24 @@ local F, C = unpack(select(2, ...))
 
 
 
---local mainFont
+local mainFont
 
---if C.appearance.fontUseAlternativeFont then
---	mainFont = C.font.normal
---else
---	mainFont = C.font.pixel
---end
+if C.appearance.fontUseAlternativeFont then
+	mainFont = C.font.normal
+else
+	mainFont = C.font.pixel
+end
 
---F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
---	if C.appearance.fontUseAlternativeFont then
---		mainFont = C.font.normal
---	else
---		mainFont = C.font.pixel
---	end
---end)
+F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
+	if C.appearance.fontUseAlternativeFont then
+		mainFont = C.font.normal
+	else
+		mainFont = C.font.pixel
+	end
+end)
+
+C.FONT_SIZE_NORMAL = 1
+C.FONT_SIZE_LARGE = 2
 
 local _, class = UnitClass("player")
 
@@ -27,31 +30,15 @@ else
 end
 
 C.r, C.g, C.b = unpack(C.class)
-C.texCoord = {.08, .92, .08, .92}
-
-
-
 r, g, b = C.r, C.g, C.b
 
+
+C.texCoord = {.08, .92, .08, .92}
 C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
 C.infoColor = "|cff70c0f5"
-
-
-C.reactioncolours = {
-	[1] = {1, .12, .24},
-	[2] = {1, .12, .24},
-	[3] = {1, .12, .24},
-	[4] = {1, 1, 0.3},
-	[5] = {0.26, 1, 0.22},
-	[6] = {0.26, 1, 0.22},
-	[7] = {0.26, 1, 0.22},
-	[8] = {0.26, 1, 0.22},
-}
-
 C.myClass = class
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
-
 C.client = GetLocale()
 
 
@@ -93,7 +80,7 @@ F.SetFS = function(fontObject, fontSize)
 		outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
 	end
 
-	fontObject:SetFont(C.font.pixel, size, outline)
+	fontObject:SetFont(mainFont, size, outline)
 
 	if C.appearance.fontShadow then
 		fontObject:SetShadowColor(0, 0, 0)
@@ -103,45 +90,19 @@ F.SetFS = function(fontObject, fontSize)
 	end
 end
 
---[[F.SetFS = function(fontObject, fontSize)
-	--local size
-
-	--if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
-	--	size = C.appearance.fontSizeNormal
-	--elseif fontSize == C.FONT_SIZE_LARGE then
-	--	size = C.appearance.fontSizeLarge
-	--elseif fontSize > 4 then -- actual size
-	--	size = fontSize
-	--end
-
-	--local outline = nil
-	--if C.appearance.fontOutline then
-	--	outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
-	--end
 
 
-
-	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
-
-	--if C.appearance.fontShadow then
-	--	fontObject:SetShadowColor(0, 0, 0)
-	--	fontObject:SetShadowOffset(1, -1)
-	--else
-	--	fontObject:SetShadowOffset(0, 0)
-	--end
-
-	fontObject:SetShadowColor(0, 0, 0)
-	fontObject:SetShadowOffset(1, -1)
-end]]
-
-
-function F:CreatePFS(text, classcolor, anchor, x, y)
+function F:CreateFSA(size, text, classcolor, anchor, x, y)
 	local fs = self:CreateFontString(nil, "OVERLAY")
-	fs:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+	--fs:SetFont(C.font.normal, size, "OUTLINE")
+	F.SetFS(fs, size)
 	fs:SetText(text)
 	fs:SetWordWrap(false)
-	--if classcolor then fs:SetTextColor(cr, cg, cb) end
-	fs:SetTextColor(1, 1, 1)
+	if classcolor then
+		fs:SetTextColor(cr, cg, cb)
+	else
+		fs:SetTextColor(1, 1, 1)
+	end
 	if anchor and x and y then
 		fs:SetPoint(anchor, x, y)
 	else
@@ -150,6 +111,8 @@ function F:CreatePFS(text, classcolor, anchor, x, y)
 
 	return fs
 end
+
+
 
 function F:CreateTex()
 	if self.Tex then return end
@@ -177,7 +140,6 @@ local function CreateTex(f)
 end
 
 function F:CreateSD(a)
-	if not C.themeconfig.shadow then return end
 	if self.Shadow then return end
 	self.Shadow = CreateFrame("Frame", nil, self)
 	self.Shadow:SetPoint("TOPLEFT", -3, 3)
@@ -196,9 +158,20 @@ function F:CreateBD(a, s)
 		edgeFile = C.media.backdrop,
 		edgeSize = s or 1,
 	})
-	self:SetBackdropColor(0, 0, 0, a or C.themeconfig.alpha)
+	self:SetBackdropColor(0, 0, 0, a or .65)
 	self:SetBackdropBorderColor(0, 0, 0)
-	--if not a then tinsert(C.themeframes, self) end
+
+	--[[if not a then
+		self.tex = self.tex or self:CreateTexture(nil, "BACKGROUND", nil, 1)
+		self.tex:SetTexture("Interface\AddOns\FreeUI\media\StripesThin", true, true)
+		self.tex:SetAlpha(.45)
+		self.tex:SetAllPoints()
+		self.tex:SetHorizTile(true)
+		self.tex:SetVertTile(true)
+		self.tex:SetBlendMode("ADD")
+	else
+		self:SetBackdropColor(0, 0, 0, a)
+	end]]
 end
 
 function F:CreateBG()
@@ -215,54 +188,18 @@ function F:CreateBG()
 end
 
 
-
--- we assign these after loading variables for caching
--- otherwise we call an extra unpack() every time
-local buttonR, buttonG, buttonB, buttonA
-
-useButtonGradientColour = C.themeconfig.useButtonGradientColour
-
-if useButtonGradientColour then
-	buttonR, buttonG, buttonB, buttonA = unpack(C.themeconfig.buttonGradientColour)
-else
-	buttonR, buttonG, buttonB, buttonA = unpack(C.themeconfig.buttonSolidColour)
-end
-
-
-
-
-
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	tex:SetTexture(useButtonGradientColour and C.media.gradient or C.media.backdrop)
-	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+	--tex:SetTexture(C.media.gradient)
+	tex:SetTexture(C.media.backdrop)
+	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
+	tex:SetVertexColor(.1, .1, .1, .8)
 
 	return tex
 end
 
-local function colourButton(self)
-	if not self:IsEnabled() then return end
-
-	if useButtonGradientColour then
-		self:SetBackdropColor(r, g, b, .3)
-	else
-		self.bgTex:SetVertexColor(r / 4, g / 4, b / 4)
-	end
-
-	self:SetBackdropBorderColor(r, g, b)
-end
-
-local function clearButton(self)
-	if useButtonGradientColour then
-		self:SetBackdropColor(0, 0, 0, 0)
-	else
-		self.bgTex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
-	end
-
-	self:SetBackdropBorderColor(0, 0, 0)
-end
 
 F.CreatePulse = function(frame) -- pulse function originally by nightcracker
 	local speed = .05
@@ -303,16 +240,25 @@ local function StopGlow(f)
 end
 
 F.Reskin = function(f, noGlow)
-	f:SetNormalTexture("")
-	f:SetHighlightTexture("")
-	f:SetPushedTexture("")
-	f:SetDisabledTexture("")
+	if f.SetNormalTexture then f:SetNormalTexture("") end
+	if f.SetHighlightTexture then f:SetHighlightTexture("") end
+	if f.SetPushedTexture then f:SetPushedTexture("") end
+	if f.SetDisabledTexture then f:SetDisabledTexture("") end
 
 	if f.Left then f.Left:SetAlpha(0) end
 	if f.Middle then f.Middle:SetAlpha(0) end
 	if f.Right then f.Right:SetAlpha(0) end
-	if f.LeftSeparator then f.LeftSeparator:Hide() end
-	if f.RightSeparator then f.RightSeparator:Hide() end
+	if f.LeftSeparator then f.LeftSeparator:SetAlpha(0) end
+	if f.RightSeparator then f.RightSeparator:SetAlpha(0) end
+	if f.TopLeft then f.TopLeft:SetAlpha(0) end
+	if f.TopMiddle then f.TopMiddle:SetAlpha(0) end
+	if f.TopRight then f.TopRight:SetAlpha(0) end
+	if f.MiddleLeft then f.MiddleLeft:SetAlpha(0) end
+	if f.MiddleMiddle then f.MiddleMiddle:SetAlpha(0) end
+	if f.MiddleRight then f.MiddleRight:SetAlpha(0) end
+	if f.BottomLeft then f.BottomLeft:SetAlpha(0) end
+	if f.BottomMiddle then f.BottomMiddle:SetAlpha(0) end
+	if f.BottomRight then f.BottomRight:SetAlpha(0) end
 
 	--f:SetBackdropColor(.2, .2, .2, .7)
 
@@ -346,7 +292,7 @@ function F:ReskinTab()
 	bg:SetFrameLevel(self:GetFrameLevel()-1)
 	F.CreateBD(bg)
 
-	self:SetHighlightTexture(C.media.backdrop)
+	self:SetHighlightTexture(C.media.texture)
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 9, -4)
 	hl:SetPoint("BOTTOMRIGHT", -9, 1)
@@ -519,7 +465,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 	end
 
 	self:HookScript("OnEnter", textureOnEnter)
- 	self:HookScript("OnLeave", textureOnLeave)
+	self:HookScript("OnLeave", textureOnLeave)
 end
 
 function F:ReskinInput(height, width)
@@ -712,14 +658,7 @@ function F:SetBD(x, y, x2, y2)
 	F.CreateSD(bg)
 end
 
-function F:StripTextures()
-	for i = 1, self:GetNumRegions() do
-		local region = select(i, self:GetRegions())
-		if region and region:GetObjectType() == "Texture" then
-			region:SetTexture("")
-		end
-	end
-end
+
 
 function F:ReskinPortraitFrame(isButtonFrame)
 	local name = self:GetName()
@@ -823,32 +762,7 @@ function F:ReskinNavBar()
 	self.navBarStyled = true
 end
 
-function F:ReskinGarrisonPortrait()
-	self.Portrait:ClearAllPoints()
-	self.Portrait:SetPoint("TOPLEFT", 4, -4)
-	self.PortraitRing:Hide()
-	self.PortraitRingQuality:SetTexture("")
-	if self.Highlight then self.Highlight:Hide() end
 
-	self.LevelBorder:SetScale(.0001)
-	self.Level:ClearAllPoints()
-	self.Level:SetPoint("BOTTOM", self, 0, 12)
-
-	self.squareBG = F.CreateBDFrame(self, 1)
-	self.squareBG:SetFrameLevel(self:GetFrameLevel())
-	self.squareBG:SetPoint("TOPLEFT", 3, -3)
-	self.squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
-	
-	if self.PortraitRingCover then
-		self.PortraitRingCover:SetColorTexture(0, 0, 0)
-		self.PortraitRingCover:SetAllPoints(self.squareBG)
-	end
-
-	if self.Empty then
-		self.Empty:SetColorTexture(0, 0, 0)
-		self.Empty:SetAllPoints(self.Portrait)
-	end
-end
 
 function F:ReskinIcon()
 	self:SetTexCoord(.08, .92, .08, .92)
@@ -897,11 +811,6 @@ function F:ReskinMinMax()
 end
 
 
-
-
--------------------
-
--- Button Color
 function F:CreateBC(a)
 	self:SetNormalTexture("")
 	self:SetHighlightTexture("")
@@ -928,43 +837,15 @@ function F:CreateBC(a)
 	end)
 end
 
--- Checkbox
-function F:CreateCB(a)
-	self:SetNormalTexture("")
-	self:SetPushedTexture("")
-	self:SetHighlightTexture(C.media.backdrop)
-	local hl = self:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 6, -6)
-	hl:SetPoint("BOTTOMRIGHT", -6, 6)
-	hl:SetVertexColor(cr, cg, cb, .25)
+function F:CreateButton(width, height, text, fontSize)
+	local bu = CreateFrame("Button", nil, self)
+	bu:SetSize(width, height)
+	F.CreateBD(bu, .3)
+	F.CreateBC(bu)
+	bu.text = F.CreateFSA(bu, fontSize or 8, text, false)
 
-	local bd = F.CreateBG(self, -4)
-	F.CreateBDFrame(bd)
-
-	local ch = self:GetCheckedTexture()
-	ch:SetDesaturated(true)
-	ch:SetVertexColor(r, g, b)
+	return bu
 end
-
--- Icon Style
-function F:CreateIF(mouse, cd)
-	F.CreateSD(self, 3, 3)
-	self.Icon = self:CreateTexture(nil, "ARTWORK")
-	self.Icon:SetAllPoints()
-	self.Icon:SetTexCoord(unpack(C.texCoord))
-	if mouse then
-		self:EnableMouse(true)
-		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
-		self.HL:SetColorTexture(1, 1, 1, .3)
-		self.HL:SetAllPoints(self.Icon)
-	end
-	if cd then
-		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
-		self.CD:SetAllPoints()
-		self.CD:SetReverse(true)
-	end
-end
-
 
 -- GameTooltip
 function F:AddTooltip(anchor, text, color)
@@ -1150,138 +1031,6 @@ function F.UnitInGuild(unitName)
 	end
 	return false
 end
-
-
-
--- Table Backup
-function F.CopyTable(source, target)
-	for key, value in pairs(source) do
-		if type(value) == "table" then
-			if not target[key] then target[key] = {} end
-			for k in pairs(value) do
-				target[key][k] = value[k]
-			end
-		else
-			target[key] = value
-		end
-	end
-end
-
-
-
--------------------
-
--- GUI APIs
-function F:CreateButton(width, height, text, fontSize)
-	local bu = CreateFrame("Button", nil, self)
-	bu:SetSize(width, height)
-	F.CreateBD(bu, .3)
-	F.CreateBC(bu)
-	bu.text = F.CreatePFS(bu, text, true)
-
-	return bu
-end
-
-function F:CreateCheckBox()
-	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
-	F.CreateCB(cb)
-
-	cb.Type = "CheckBox"
-	return cb
-end
-
-function F:CreateEditBox(width, height)
-	local eb = CreateFrame("EditBox", nil, self)
-	eb:SetSize(width, height)
-	eb:SetAutoFocus(false)
-	eb:SetTextInsets(10, 10, 0, 0)
-	eb:SetFontObject(GameFontHighlight)
-	F.CreateBD(eb, .3)
-	eb:SetScript("OnEscapePressed", function()
-		eb:ClearFocus()
-	end)
-	eb:SetScript("OnEnterPressed", function()
-		eb:ClearFocus()
-	end)
-
-	eb.Type = "EditBox"
-	return eb
-end
-
-function F:CreateDropDown(width, height, data)
-	local dd = CreateFrame("Frame", nil, self)
-	dd:SetSize(width, height)
-	F.CreateBD(dd, .3)
-	dd.Text = F.CreateFS(dd, 14, "")
-	dd.options = {}
-
-	local bu = CreateFrame("Button", nil, dd)
-	bu:SetPoint("LEFT", dd, "RIGHT", -2, 0)
-	bu:SetSize(22, 22)
-	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
-	bu.Icon:SetAllPoints()
-	bu.Icon:SetTexture(C.media.geartex)
-	bu.Icon:SetTexCoord(0, .5, 0, .5)
-	bu:SetHighlightTexture(C.media.geartex)
-	bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-	local list = CreateFrame("Frame", nil, dd)
-	list:SetPoint("TOP", dd, "BOTTOM")
-	F.CreateBD(list, .7)
-	bu:SetScript("OnShow", function() list:Hide() end)
-	bu:SetScript("OnClick", function()
-		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-		ToggleFrame(list)
-	end)
-	dd.button = bu
-
-	local opt, index = {}, 0
-	local function optOnClick(self)
-		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-		for i = 1, #opt do
-			if self == opt[i] then
-				opt[i]:SetBackdropColor(1, .8, 0, .3)
-				opt[i].selected = true
-			else
-				opt[i]:SetBackdropColor(0, 0, 0, .3)
-				opt[i].selected = false
-			end
-		end
-		dd.Text:SetText(self.text)
-		list:Hide()
-	end
-	local function optOnEnter(self)
-		if self.selected then return end
-		self:SetBackdropColor(1, 1, 1, .3)
-	end
-	local function optOnLeave(self)
-		if self.selected then return end
-		self:SetBackdropColor(0, 0, 0, .3)
-	end
-
-	for i, j in pairs(data) do
-		opt[i] = CreateFrame("Button", nil, list)
-		opt[i]:SetPoint("TOPLEFT", 5, -5 - (i-1)*height)
-		opt[i]:SetSize(width - 10, height)
-		F.CreateBD(opt[i], .3)
-		F.CreateFS(opt[i], 14, j, false, "LEFT", 5, 0)
-		opt[i].text = j
-		opt[i]:SetScript("OnClick", optOnClick)
-		opt[i]:SetScript("OnEnter", optOnEnter)
-		opt[i]:SetScript("OnLeave", optOnLeave)
-
-		dd.options[i] = opt[i]
-		index = index + 1
-	end
-	list:SetSize(width, index*height + 10)
-
-	dd.Type = "DropDown"
-	return dd
-end
-
-
-
-
-
 
 
 
