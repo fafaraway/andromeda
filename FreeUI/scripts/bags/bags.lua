@@ -99,7 +99,7 @@ function module:OnLogin()
 		self.Junk:SetSize(20, 20)
 		self.Junk:SetPoint("TOPRIGHT", 1, 0)
 
-		self.Quest = F.CreatePFS(self, "!", false, "LEFT", 3, 0)
+		self.Quest = F.CreateFSA(self, 8, "!", false, "LEFT", 3, 0)
 		self.Quest:SetTextColor(1, .8, 0)
 
 		self.Azerite = self:CreateTexture(nil, "ARTWORK")
@@ -114,7 +114,7 @@ function module:OnLogin()
 		end
 
 		if C.bags.iLvl then
-			self.iLvl = F.CreatePFS(self, "", false, "BOTTOMLEFT", 1, 1)
+			self.iLvl = F.CreateFSA(self, 8, "", false, "BOTTOMLEFT", 1, 1)
 		end
 
 		local flash = self:CreateTexture(nil, "ARTWORK")
@@ -321,7 +321,10 @@ function module:OnLogin()
 			--label = BAG_FILTER_CONSUMABLES
 			label = "consumable"
 		end
-		if label then F.CreatePFS(self, label, true, "TOPLEFT", 8, -8) return end
+		if label then
+			F.CreateFSA(self, 8, label, false, "TOPLEFT", 8, -8)
+			return
+		end
 
 		local infoFrame = CreateFrame("Button", nil, self)
 		infoFrame:SetPoint("BOTTOMRIGHT", -50, 0)
@@ -344,7 +347,7 @@ function module:OnLogin()
 		local tagDisplay = self:SpawnPlugin("TagDisplay", "[money]", infoFrame)
 		tagDisplay:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
 		tagDisplay:SetPoint("RIGHT", infoFrame, "RIGHT",0,0)
-		F.CreatePFS(infoFrame, "SEARCH", true, "LEFT", 0, 1)
+		F.CreateFSA(infoFrame, 8, "SEARCH", false, "LEFT", 0, 1)
 
 		local SortButton = F.CreateButton(self, 60, 20, "Sort")
 		SortButton:SetPoint("BOTTOMLEFT", 5, 7)

@@ -183,7 +183,7 @@ function module:ReskinRegions()
 	Invt:SetSize(300, 80)
 	F.CreateBD(Invt)
 	F.CreateTex(Invt)
-	F.CreatePFS(Invt, C.infoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
+	F.CreateFSA(Invt, 8, C.infoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
 	local function updateInviteVisibility()
 		if C_Calendar.GetNumPendingInvites() > 0 then
@@ -277,7 +277,7 @@ function module:WhoPingsMyMap()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreatePFS(f, "", false, "BOTTOM", 0, 0)
+	f.text = F.CreateFSA(f, 8, "", false, "BOTTOM", 0, 0)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)

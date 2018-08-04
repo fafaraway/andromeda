@@ -44,8 +44,10 @@ function module:OnLogin()
 
 	-- Generate Coords
 
-	local player = F.CreatePFS(WorldMapFrame.BorderFrame, "", false, "TOPLEFT", 10, -10)
-	local cursor = F.CreatePFS(WorldMapFrame.BorderFrame, "", false, "TOPLEFT", 130, -10)
+	local player = F.CreateFS(WorldMapFrame.BorderFrame)
+	local cursor = F.CreateFS(WorldMapFrame.BorderFrame)
+	player:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 10, 10)
+	cursor:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 130, 10)
 
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 	F.HideObject(WorldMapFrame.BorderFrame.Tutorial)
