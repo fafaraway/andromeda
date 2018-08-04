@@ -1,13 +1,19 @@
-local addonName, ns = ...
+-- [[ Core ]]
 
-ns[1] = {} -- F, Functions
-ns[2] = {} -- C, Constants/Config
-ns[3] = {} -- L, Localisation
+local addon, core = ...
 
-FreeUIGlobalConfig = FreeUIGlobalConfig or {}
-FreeUIConfig = FreeUIConfig or {}
+core[1] = {} -- F, Functions
+core[2] = {} -- C, Constants/Config
+core[3] = {} -- L, Localisation
 
-local F, C, L = unpack(ns)
+FreeUI = core
+
+local F, C, L = unpack(select(2, ...))
+
+-- [[ Saved variables ]]
+
+FreeUIGlobalConfig = {}
+FreeUIConfig = {}
 
 
 
@@ -129,5 +135,3 @@ end
 local hider = CreateFrame("Frame", "FreeUIHider", UIParent)
 hider:Hide()
 
-
-_G[addonName] = ns

@@ -41,17 +41,8 @@ local function ForceUIScale()
 	end)
 end
 
-F.AddOptionsCallback("general", "uiScaleAuto", function()
-	if C.misc.uiScaleAuto then
-		F:RegisterEvent("UI_SCALE_CHANGED", ForceUIScale)
-		ForceUIScale()
-	else
-		F:UnregisterEvent("UI_SCALE_CHANGED", ForceUIScale)
-	end
-end)
+
 
 function module:OnLogin()
-
 	ForceUIScale()
-
 end

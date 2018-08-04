@@ -16,9 +16,9 @@ C.media = {
 	["gradient"]   = "Interface\\AddOns\\FreeUI\\assets\\gradient",
 	["roleIcons"]  = "Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES",
 	["texture"]    = "Interface\\AddOns\\FreeUI\\assets\\statusbar",
-	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\StripesThin",
+	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\bgTex",
 	["newItemFlash"] = "Interface\\Cooldown\\star4",
-	["geartex"]    = "",
+
 	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
 	["abtex"] = {
 		normal		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\gloss",
@@ -92,21 +92,18 @@ C.classcolours = {
 	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
 }
 
--- theme config
-C.themeconfig = {
-	["alpha"] = 0.65,
-	["bags"] = false,
-	["buttonGradientColour"] = {.3, .3, .3, .3},
-	["buttonSolidColour"] = {.2, .2, .2, 1},
-	["useButtonGradientColour"] = true,
-	["chatBubbles"] = true,
-	["enableFont"] = false,
-	["loot"] = false,
-	["useCustomColour"] = true,
-	["customColour"] = {r = 1, g = 1, b = 1},
-	["tooltips"] = false,
-	["shadow"] = true,
+C.reactioncolours = {
+	[1] = {1, .12, .24},
+	[2] = {1, .12, .24},
+	[3] = {1, .12, .24},
+	[4] = {1, 1, 0.3},
+	[5] = {0.26, 1, 0.22},
+	[6] = {0.26, 1, 0.22},
+	[7] = {0.26, 1, 0.22},
+	[8] = {0.26, 1, 0.22},
 }
+
+
 
 
 
@@ -214,6 +211,7 @@ C["chat"] = {
 	["itemLinkLevel"] = true,
 	["spamageMeters"] = true,
 	["whisperAlert"] = true,
+	["minimize"] = true,
 
 }
 
