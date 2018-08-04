@@ -79,7 +79,7 @@ function module:InterruptAlert()
 
 				PlaySoundFile(interruptSound, "Master")
 
-				if IsInGroup() and C.misc.interruptinChat then
+				if IsInGroup() and C.misc.interruptNotify then
 					if C.client == "zhCN" or C.client == "zhTW" then
 						SendChatMessage("已打断: "..destName.."'s "..GetSpellLink(spellID)..".")
 					else

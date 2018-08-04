@@ -344,7 +344,7 @@ C["misc"] = {
 	["rareAlert"] = true,
 	["rareAlertinChat"] = true,
 	["interrupt"] = true,
-	["interruptinChat"] = true,
+	["interruptNotify"] = false,
 
 	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
