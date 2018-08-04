@@ -22,7 +22,9 @@ wm.MiddleMiddle:Hide()
 wm:SetNormalTexture("")
 wm:SetHighlightTexture("")
 
-local plus = F.CreateFS(wm, C.FONT_SIZE_LARGE)
+F.StripTextures(wm)
+
+local plus = F.CreateFS(wm, 16)
 plus:SetPoint("CENTER", 1, 0)
 plus:SetText("+")
 
