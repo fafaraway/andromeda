@@ -23,6 +23,7 @@ local icon = frame:CreateTexture(nil, "BORDER")
 icon:SetTexCoord(.08, .92, .08, .92)
 icon:SetAllPoints(frame)
 F.CreateBDFrame(frame)
+F.CreateSD(frame)
 
 
 local ignored_spells = {
