@@ -44,6 +44,13 @@ local raidHeight = C.unitframes.raid_height
 local CBshield = C.unitframes.castbarColorShield
 local CBnormal = C.unitframes.castbarColorNormal
 
+oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
+oUF.colors.power.MANA = {100/255, 149/255, 237/255}
+oUF.colors.power.ENERGY = {1, 222/255, 80/255}
+oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
+oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
+
+
 -- [[ Initialize / load layout option ]]
 
 -- this can't use the normal options system
@@ -537,6 +544,8 @@ local function UpdateClassPowerColor(element)
 			r, g, b = 1, 1, 2/5
 		elseif(playerClass == 'MAGE') then
 			r, g, b = 5/6, 1/2, 5/6
+		elseif(playerClass == 'ROGUE') then
+			r, g, b = 221/255, 0, 55/255
 		end
 	end
 
@@ -573,11 +582,6 @@ local Shared = function(self, unit, isSingle)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
 
 	self:RegisterForClicks("AnyUp")
-
-	self.colors.power.MANA = {100/255, 149/255, 237/255}
-	self.colors.power.FURY = { 54/255, 199/255, 63/255 }
-	self.colors.power.PAIN = { 255/255, 156/255, 0 }
-	self.colors.power.INSANITY = { .4, 0, .8 }
 
 	SmoothBar = F.SmoothBar
 
