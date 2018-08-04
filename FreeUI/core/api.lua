@@ -10,7 +10,7 @@ else
 	mainFont = C.font.pixel
 end
 
-F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
+--[[F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
 	if C.appearance.fontUseAlternativeFont then
 		mainFont = C.font.normal
 	else
@@ -19,15 +19,15 @@ F.AddOptionsCallback("appearance", "fontUseAlternativeFont", function()
 end)
 
 C.FONT_SIZE_NORMAL = 1
-C.FONT_SIZE_LARGE = 2
+C.FONT_SIZE_LARGE = 2]]
 
 local _, class = UnitClass("player")
 
-if C.appearance.colourScheme == 2 then
-	C.class = {C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b}
-else
+--if C.appearance.colourScheme == 2 then
+--	C.class = {C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b}
+--else
 	C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
-end
+--end
 
 C.r, C.g, C.b = unpack(C.class)
 r, g, b = C.r, C.g, C.b
