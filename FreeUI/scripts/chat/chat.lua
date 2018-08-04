@@ -36,7 +36,7 @@ local function skinChat(self)
 	eb:ClearAllPoints()
 	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
 	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -15, 54)
-	F.CreateBD(eb)
+	F.CreateBD(eb, .5)
 	F.CreateSD(eb)
 	F.CreateTex(eb)
 	for i = 3, 8 do
@@ -118,7 +118,7 @@ end
 SLASH_TELLTARGET1 = "/tt"
 
 
-local function GetColor(className, isLocal)
+--[[local function GetColor(className, isLocal)
 	if isLocal then
 		local found
 		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
@@ -144,24 +144,24 @@ local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
 			end
 	end
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
-end
+end]]
 
 local AddMessage = function(frame, text, ...)
 	if type(text) == "string" then
 
-		local chatNum = string.match(text,"%d+") or ""
-		if not tonumber(chatNum) then chatNum = "" else chatNum = chatNum..":" end
-		text = gsub(text, "%[%d+%. General.-%]", "["..chatNum.."GN]")
-		text = gsub(text, "%[%d+%. Trade.-%]", "["..chatNum.."TR]")
-		text = gsub(text, "%[%d+%. WorldDefense%]", "["..chatNum.."WD]")
-		text = gsub(text, "%[%d+%. LocalDefense.-%]", "["..chatNum.."LD]")
-		text = gsub(text, "%[%d+%. LookingForGroup%]", "["..chatNum.."LFG]")
-		text = gsub(text, "%[%d+%. GuildRecruitment.-%]", "["..chatNum.."GR]")
+		--local chatNum = string.match(text,"%d+") or ""
+		--if not tonumber(chatNum) then chatNum = "" else chatNum = chatNum..":" end
+		text = gsub(text, "%[%d+%. General.-%]", "GN")
+		text = gsub(text, "%[%d+%. Trade.-%]", "TR")
+		text = gsub(text, "%[%d+%. WorldDefense%]", "WD")
+		text = gsub(text, "%[%d+%. LocalDefense.-%]", "LD")
+		text = gsub(text, "%[%d+%. LookingForGroup%]", "LFG")
+		text = gsub(text, "%[%d+%. GuildRecruitment.-%]", "GR")
 
-		text = gsub(text, "%[(%d+)%. 大脚世界频道%]", "["..chatNum.."世界]")
-		text = gsub(text, "%[(%d+)%. 大腳世界頻道%]", "["..chatNum.."世界]")
+		text = gsub(text, "%[(%d+)%. 大脚世界频道%]", "世界")
+		text = gsub(text, "%[(%d+)%. 大腳世界頻道%]", "世界")
 
-		text = text:gsub("%[Guild%]", "g")
+		--[[text = text:gsub("%[Guild%]", "g")
 		text = text:gsub("%[Party%]", "p")
 		text = text:gsub("%[Party Leader%]", "P")
 		text = text:gsub("%[Dungeon Guide%]", "P")
@@ -174,9 +174,10 @@ local AddMessage = function(frame, text, ...)
 		text = text:gsub("%[(%d+)%..-%]", "%1")
 		text = text:gsub("(|Hplayer.*|h) whispers", "From %1")
 		text = text:gsub("To (|Hplayer.*|h)", "To %1")
+
 		text = text:gsub("(|Hplayer.*|h) says:", "%1:")
 		text = text:gsub("(|Hplayer.*|h) yells", "%1")
-		--text = text:gsub("(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
+		--text = text:gsub("(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)]]
 		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
 
 	end
@@ -291,6 +292,7 @@ function module:OnLogin()
 
 	CHAT_FLAG_AFK = "[AFK] "
 	CHAT_FLAG_DND = "[DND] "
+	CHAT_FLAG_GM = "[GM] "
 
 	CHAT_YOU_CHANGED_NOTICE = "|Hchannel:%d|h[%s]|h"
 
@@ -309,6 +311,30 @@ function module:OnLogin()
 	FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
 
 	ERR_AUCTION_SOLD_S = "|cff1eff00%s|r |cffffffffsold.|r"
+
+	CHAT_WHISPER_GET = "from %s: "
+	CHAT_WHISPER_INFORM_GET = "to %s: "
+	CHAT_BN_WHISPER_INFORM_GET = "to %s: "
+	CHAT_BN_WHISPER_GET = "from %s: "
+
+	CHAT_YELL_GET = "|Hchannel:Yell|h%s: "
+	CHAT_SAY_GET = "|Hchannel:Say|h%s: "
+
+	CHAT_BATTLEGROUND_GET			= "|Hchannel:Battleground|h[BG]|h %s: "
+	CHAT_BATTLEGROUND_LEADER_GET 	= [[|Hchannel:Battleground|h[BG|TInterface\GroupFrame\UI-Group-LeaderIcon:0|t]|h %s: ]]
+	CHAT_GUILD_GET   				= "|Hchannel:Guild|h[G]|h %s: "
+	CHAT_OFFICER_GET 				= "|Hchannel:Officer|h[O]|h %s: "
+	CHAT_PARTY_GET        			= "|Hchannel:Party|h[P]|h %s: "
+	CHAT_PARTY_LEADER_GET 			= [[|Hchannel:Party|h[P|TInterface\GroupFrame\UI-Group-LeaderIcon:0|t]|h %s: ]]
+	CHAT_PARTY_GUIDE_GET  			= CHAT_PARTY_LEADER_GET
+	CHAT_RAID_GET         			= "|Hchannel:Raid|h[R]|h %s: "
+	CHAT_RAID_LEADER_GET  			= [[|Hchannel:Raid|h[R|TInterface\GroupFrame\UI-Group-LeaderIcon:0|t]|h %s: ]]
+	CHAT_RAID_WARNING_GET 			= [[|Hchannel:RaidWarning|h[RW|TInterface\GroupFrame\UI-GROUP-MAINASSISTICON:0|t]|h %s: ]]
+	
+	CHAT_MONSTER_PARTY_GET   		= CHAT_PARTY_GET
+	CHAT_MONSTER_SAY_GET     		= CHAT_SAY_GET
+	CHAT_MONSTER_WHISPER_GET 		= CHAT_WHISPER_GET
+	CHAT_MONSTER_YELL_GET = CHAT_YELL_GET
 
 
 
