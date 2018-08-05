@@ -118,67 +118,19 @@ end
 SLASH_TELLTARGET1 = "/tt"
 
 
---[[local function GetColor(className, isLocal)
-	if isLocal then
-		local found
-		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
-			if v == className then className = k found = true break end
-		end
-		if not found then
-			for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-				if v == className then className = k break end
-			end
-		end
-	end
-	local tbl = C.classcolours[className]
-	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
-	return color
-end
-
-local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
-		local gameAccount = select(6, BNGetFriendInfoByID(id))
-		if gameAccount then
-			local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
-			if englishClass and englishClass ~= "" then
-				fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
-			end
-	end
-	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
-end]]
-
 local AddMessage = function(frame, text, ...)
 	if type(text) == "string" then
 
-		--local chatNum = string.match(text,"%d+") or ""
-		--if not tonumber(chatNum) then chatNum = "" else chatNum = chatNum..":" end
-		text = gsub(text, "%[%d+%. General.-%]", "GN")
-		text = gsub(text, "%[%d+%. Trade.-%]", "TR")
-		text = gsub(text, "%[%d+%. WorldDefense%]", "WD")
-		text = gsub(text, "%[%d+%. LocalDefense.-%]", "LD")
-		text = gsub(text, "%[%d+%. LookingForGroup%]", "LFG")
-		text = gsub(text, "%[%d+%. GuildRecruitment.-%]", "GR")
+		local chatNum = string.match(text,"%d+") or ""
+		if not tonumber(chatNum) then chatNum = "" else chatNum = chatNum..":" end
 
 		text = gsub(text, "%[(%d+)%. 大脚世界频道%]", "世界")
 		text = gsub(text, "%[(%d+)%. 大腳世界頻道%]", "世界")
 
-		--[[text = text:gsub("%[Guild%]", "g")
-		text = text:gsub("%[Party%]", "p")
-		text = text:gsub("%[Party Leader%]", "P")
-		text = text:gsub("%[Dungeon Guide%]", "P")
-		text = text:gsub("%[Raid%]", "r")
-		text = text:gsub("%[Raid Leader%]", "RL")
-		text = text:gsub("%[Raid Warning%]", "RW")
-		text = text:gsub("%[Officer%]", "o")
-		text = text:gsub("%[Instance%]", "i")
-		text = text:gsub("%[Instance Leader%]", "IL")
-		text = text:gsub("%[(%d+)%..-%]", "%1")
-		text = text:gsub("(|Hplayer.*|h) whispers", "From %1")
-		text = text:gsub("To (|Hplayer.*|h)", "To %1")
+		text = gsub(text, "%[%d+%. .-%]", "["..chatNum.."]")
 
-		text = text:gsub("(|Hplayer.*|h) says:", "%1:")
-		text = text:gsub("(|Hplayer.*|h) yells", "%1")
-		--text = text:gsub("(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)]]
 		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
+
 
 	end
 	msgHooks[frame:GetName()].AddMessage(frame, text, ...)
@@ -196,7 +148,6 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, messa
 	local currencyID, currencyName, currencyAmount = message:match'currency:(%d+)', message:match'|h(.+)|h', message:match' x%d+'
 	return false, ("+ |cffffffff|Hcurrency:%d|h%s|h|r%s"):format(currencyID, currencyName, currencyAmount or ""), ...
 end)
-
 
 
 
@@ -224,13 +175,6 @@ function module:OnLogin()
 		end
 	end)
 
-	--[[hooksecurefunc("FCFTab_UpdateColors", function(self, selected)
-		if selected then
-			self:GetFontString():SetTextColor(1, .8, 0)
-		else
-			self:GetFontString():SetTextColor(.5, .5, .5)
-		end
-	end)]]
 
 	-- Font size
 	for i = 1, 15 do
@@ -282,35 +226,7 @@ function module:OnLogin()
 	self:ChatFilter()
 
 
-	ACHIEVEMENT_BROADCAST = "%s achieved %s!"
 
-	BN_INLINE_TOAST_FRIEND_OFFLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has gone |cffff0000offline|r."
-	BN_INLINE_TOAST_FRIEND_ONLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has come |cff00ff00online|r."
-
-	CHAT_BN_WHISPER_GET = "From %s:\32"
-	CHAT_BN_WHISPER_INFORM_GET = "To %s:\32"
-
-	CHAT_FLAG_AFK = "[AFK] "
-	CHAT_FLAG_DND = "[DND] "
-	CHAT_FLAG_GM = "[GM] "
-
-	CHAT_YOU_CHANGED_NOTICE = "|Hchannel:%d|h[%s]|h"
-
-	ERR_FRIEND_OFFLINE_S = "%s has gone |cffff0000offline|r."
-	ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h has come |cff00ff00online|r."
-
-	ERR_SKILL_UP_SI = "|cffffffff%s|r |cff00adf0%d|r"
-
-	FACTION_STANDING_DECREASED = "%s -%d"
-	FACTION_STANDING_INCREASED = "%s +%d"
-	FACTION_STANDING_INCREASED_ACH_BONUS = "%s +%d (+%.1f)"
-	FACTION_STANDING_INCREASED_ACH_PART = "(+%.1f)"
-	FACTION_STANDING_INCREASED_BONUS = "%s + %d (+%.1f RAF)"
-	FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
-	FACTION_STANDING_INCREASED_REFER_PART = "(+%.1f RAF)"
-	FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
-
-	ERR_AUCTION_SOLD_S = "|cff1eff00%s|r |cffffffffsold.|r"
 
 	CHAT_WHISPER_GET = "from %s: "
 	CHAT_WHISPER_INFORM_GET = "to %s: "
@@ -321,22 +237,23 @@ function module:OnLogin()
 	CHAT_SAY_GET = "|Hchannel:Say|h%s: "
 
 	CHAT_BATTLEGROUND_GET			= "|Hchannel:Battleground|h[BG]|h %s: "
-	CHAT_BATTLEGROUND_LEADER_GET 	= [[|Hchannel:Battleground|h[BG|TInterface\GroupFrame\UI-Group-LeaderIcon:0|t]|h %s: ]]
+	CHAT_BATTLEGROUND_LEADER_GET 	= [[|Hchannel:Battleground|h[BGL]|h %s: ]]
+
 	CHAT_GUILD_GET   				= "|Hchannel:Guild|h[G]|h %s: "
 	CHAT_OFFICER_GET 				= "|Hchannel:Officer|h[O]|h %s: "
+
 	CHAT_PARTY_GET        			= "|Hchannel:Party|h[P]|h %s: "
-	CHAT_PARTY_LEADER_GET 			= [[|Hchannel:Party|h[P|TInterface\GroupFrame\UI-Group-LeaderIcon:0|t]|h %s: ]]
+	CHAT_PARTY_LEADER_GET 			= [[|Hchannel:Party|h[PL]|h %s: ]]
 	CHAT_PARTY_GUIDE_GET  			= CHAT_PARTY_LEADER_GET
+
 	CHAT_RAID_GET         			= "|Hchannel:Raid|h[R]|h %s: "
-	CHAT_RAID_LEADER_GET  			= [[|Hchannel:Raid|h[R|TInterface\GroupFrame\UI-Group-LeaderIcon:0|t]|h %s: ]]
-	CHAT_RAID_WARNING_GET 			= [[|Hchannel:RaidWarning|h[RW|TInterface\GroupFrame\UI-GROUP-MAINASSISTICON:0|t]|h %s: ]]
+	CHAT_RAID_LEADER_GET  			= [[|Hchannel:Raid|h[RL]|h %s: ]]
+	CHAT_RAID_WARNING_GET 			= [[|Hchannel:RaidWarning|h[RW]|h %s: ]]
+
+	CHAT_INSTANCE_CHAT_GET 			= "|Hchannel:Instance|h[I]|h %s: "
+	CHAT_INSTANCE_CHAT_LEADER_GET	= "|Hchannel:Instance|h[IL]|h %s: "
+	CHAT_INSTANCE_CHAT_GUIDE_GET  	= CHAT_INSTANCE_CHAT_LEADER_GET
 	
-	CHAT_MONSTER_PARTY_GET   		= CHAT_PARTY_GET
-	CHAT_MONSTER_SAY_GET     		= CHAT_SAY_GET
-	CHAT_MONSTER_WHISPER_GET 		= CHAT_WHISPER_GET
-	CHAT_MONSTER_YELL_GET = CHAT_YELL_GET
-
-
 
 	DEFAULT_CHATFRAME_ALPHA = 0
 	CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME
