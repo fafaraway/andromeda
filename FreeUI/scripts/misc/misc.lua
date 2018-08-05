@@ -116,7 +116,7 @@ end]]
 
 
 -- Hide friendly player/pet names while in raid and/or party group.
-if C.misc.hideRaidNames then
+--[[if C.misc.hideRaidNames then
 	local HRN = function()
 		local name, type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
 		-- print(name.. " ".. type .." ".. difficulty)	
@@ -138,7 +138,7 @@ if C.misc.hideRaidNames then
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 	f:RegisterEvent("RAID_ROSTER_UPDATE")
 	f:RegisterEvent("GROUP_ROSTER_UPDATE")
-end
+end]]
 
 
 
