@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 if not C.unitframes.enable then return end
 
+
 local parent, ns = ...
 local oUF = ns.oUF
 
@@ -55,7 +56,7 @@ oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 -- this can't use the normal options system
 -- because we want users to be able to switch layout using /commands even when options gui is disabled
-local addonLoaded
+--[[local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
 
@@ -63,7 +64,7 @@ addonLoaded = function(_, addon)
 	addonLoaded = nil
 end
 
-F:RegisterEvent("ADDON_LOADED", addonLoaded)
+F:RegisterEvent("ADDON_LOADED", addonLoaded)]]
 
 --[[ Short values ]]
 
@@ -207,6 +208,16 @@ oUF.Tags.Methods['free:power'] = function(unit)
 end
 oUF.Tags.Events['free:power'] = oUF.Tags.Events.missingpp
 
+-- Alt Power value tag
+oUF.Tags.Methods["altpower"] = function(unit)
+	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
+	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
+	if max > 0 and not UnitIsDeadOrGhost(unit) then
+		return ("%s%%"):format(math.floor(cur/max*100 + .5))
+	end
+end
+oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
+
 
 --[[ Update health ]]
 
@@ -296,33 +307,46 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 end
 
 
-
-
---[[ Debuff highlight ]]
-
---[[local PostUpdateIcon = function(_, unit, icon, index, _, filter)
-	local _, _, _, _, dtype = UnitAura(unit, index, icon.filter)
-	local texture = icon.icon
-	
-	-- if icon.isDebuff and dtype and UnitIsFriend("player", unit) then
-	if icon.isDebuff then
-		icon.bg:SetVertexColor(.8, .1, .2)
-
-		if dtype then
-			local color = DebuffTypeColor[dtype]
-			icon.bg:SetVertexColor(color.r, color.g, color.b)
+--[[ Update alt power ]]
+local function postUpdateAltPower(element, _, cur, _, max)
+	if cur and max then
+		local perc = math.floor((cur/max)*100)
+		if perc < 35 then
+			element:SetStatusBarColor(0, 1, 0)
+		elseif perc < 70 then
+			element:SetStatusBarColor(1, 1, 0)
+		else
+			element:SetStatusBarColor(1, 0, 0)
 		end
-		
-	else
-		icon.bg:SetVertexColor(.9, .9, .8)
 	end
-	-- if icon.isDebuff and not icon.isPlayer and unit ~= "player" then
-	if icon.isDebuff and not icon.isPlayer then
-		texture:SetDesaturated(true)
-	else
-		texture:SetDesaturated(false)
-	end
-end]]
+end
+
+local function CreateAltPower(self)
+	local style = self.unitStyle
+	local bar = CreateFrame("StatusBar", nil, self)
+	bar:SetStatusBarTexture(C.media.texture)
+	bar:SetPoint("BOTTOM", oUF_FreePlayer, 0, -C.unitframes.power_height-3)
+	bar:SetSize(self:GetWidth(), altPowerHeight)
+
+	local abd = CreateFrame("Frame", nil, bar)
+	abd:SetPoint("TOPLEFT", -1, 1)
+	abd:SetPoint("BOTTOMRIGHT", 1, -1)
+	abd:SetFrameLevel(bar:GetFrameLevel()-1)
+	F.CreateBD(abd, .5)
+
+	local text = F.CreateFS(bar, 8, "CENTER")
+	text:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 3)
+
+	self:Tag(text, "[altpower]")
+
+	SmoothBar(bar)
+
+	bar:EnableMouse(true)
+
+	self.AlternativePower = bar		
+	self.AlternativePower.PostUpdate = postUpdateAltPower
+end
+
 
 local function UpdateAura(self, elapsed)
 	if(self.expiration) then
@@ -444,7 +468,6 @@ local function FilterTargetDebuffs(_, unit, button, _, _, _, _, _, _, _, caster,
 end
 
 
-
 local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID)
 	if C.hideDebuffs[spellID] then
 		return false
@@ -453,15 +476,12 @@ local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellI
 end
 
 
-
 local function groupBuffFilter(_, unit, button, _, _, _, _, _, _, caster, _, _, spellID)
 	if (button.isPlayer and C.myBuffs[spellID]) or C.allBuffs[spellID] then
 		return true
 	end
 	return false
 end
-
-
 
 
 local function PostUpdateGapIcon(_, _, icon)
@@ -516,18 +536,11 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 				Bar:SetWidth(((maxWidth / 6) - ((5 * gap) / 6)))
 			end
 
-			if(max == 10) then
-				-- Rogue anticipation talent, align >5 on top of the first 5
-				if(index == 6) then
-					Bar:ClearAllPoints()
-					Bar:SetPoint('LEFT', element[index - 5])
-				end
-			else
-				if(index > 1) then
-					Bar:ClearAllPoints()
-					Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
-				end
+			if(index > 1) then
+				Bar:ClearAllPoints()
+				Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
 			end
+
 		end
 	end
 end
@@ -551,13 +564,49 @@ local function UpdateClassPowerColor(element)
 
 	for index = 1, #element do
 		local Bar = element[index]
-		if(playerClass == 'ROGUE' and UnitPowerMax('player', SPELL_POWER_COMBO_POINTS) == 10 and index > 5) then
-			r, g, b = 1, 0, 0
-		end
-
 		Bar:SetStatusBarColor(r, g, b)
 		Bar.bg:SetColorTexture(r * 1/3, g * 1/3, b * 1/3)
 	end
+end
+
+local function CreateClassPower(self)
+
+	local ClassPower = {}
+	ClassPower.UpdateColor = UpdateClassPowerColor
+	ClassPower.PostUpdate = PostUpdateClassPower
+
+	for index = 1, 11 do -- have to create an extra to force __max to be different from UnitPowerMax
+		local Bar = CreateFrame('StatusBar', nil, self)
+		Bar:SetHeight(C.unitframes.classPower_height)
+		Bar:SetStatusBarTexture(C.media.texture)
+		Bar:SetBackdropColor(0, 0, 0)
+
+		F.CreateBDFrame(Bar)
+
+		local function moveCPBar()
+			if(index == 1) then
+				if self.AlternativePower:IsShown() then
+					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.power_height-4-altPowerHeight-C.unitframes.classPower_height)
+				else
+					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.power_height-2-altPowerHeight)
+				end
+			end
+		end
+		self.AlternativePower:HookScript("OnShow", moveCPBar)
+		self.AlternativePower:HookScript("OnHide", moveCPBar)
+		moveCPBar()
+
+
+		local Background = Bar:CreateTexture(nil, 'BORDER')
+		Background:SetAllPoints()
+		Bar.bg = Background
+
+		ClassPower[index] = Bar
+
+		
+	end
+
+	self.ClassPower = ClassPower
 end
 
 
@@ -590,10 +639,9 @@ local Shared = function(self, unit, isSingle)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameStrata("BACKGROUND")
 
-	-- dark border
-	if C.unitframes.darkBorder then
-		F.CreateSD(bd)
-	end
+
+	F.CreateSD(bd)
+
 
 	self.bd = bd
 
@@ -694,43 +742,6 @@ local Shared = function(self, unit, isSingle)
 	end
 
 
-	--[[ Alt Power ]]
-
-	if unit == "player" or unit == "pet" then
-		local AltPowerBar = CreateFrame("StatusBar", nil, self)
-		AltPowerBar:SetWidth(playerWidth)
-		AltPowerBar:SetHeight(altPowerHeight)
-		AltPowerBar:SetStatusBarTexture(C.media.texture)
-		AltPowerBar:SetPoint("BOTTOM", oUF_FreePlayer, 0, -C.unitframes.power_height-3)
-
-		local abd = CreateFrame("Frame", nil, AltPowerBar)
-		abd:SetPoint("TOPLEFT", -1, 1)
-		abd:SetPoint("BOTTOMRIGHT", 1, -1)
-		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
-		F.CreateBD(abd, .5)
-
-		AltPowerBar.Text = F.CreateFS(AltPowerBar, C.FONT_SIZE_NORMAL, "RIGHT")
-		AltPowerBar.Text:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 3)
-
-		AltPowerBar:SetScript("OnValueChanged", function(_, value)
-			local min, max = AltPowerBar:GetMinMaxValues()
-			local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-			AltPowerBar:SetStatusBarColor(r, g, b)
-			AltPowerBar.Text:SetTextColor(r, g, b)
-		end)
-
-		AltPowerBar.PostUpdate = function(_, _, cur)
-			AltPowerBar.Text:SetText(cur)
-		end
-
-		SmoothBar(AltPowerBar)
-
-		AltPowerBar:EnableMouse(true)
-
-
-		self.AlternativePower = AltPowerBar		
-
-	end
 
 	--[[ Portrait ]]
 
@@ -1071,51 +1082,10 @@ local UnitSpecific = {
 
 		end
 
-		-- class resource
-		if C.classmod.classResource then
-			local ClassPower = {}
-			ClassPower.UpdateColor = UpdateClassPowerColor
-			ClassPower.PostUpdate = PostUpdateClassPower
+		CreateAltPower(self)
+		CreateClassPower(self)
 
-			for index = 1, 11 do -- have to create an extra to force __max to be different from UnitPowerMax
-				local Bar = CreateFrame('StatusBar', nil, self)
-				Bar:SetHeight(C.unitframes.classPower_height)
-				Bar:SetStatusBarTexture(C.media.texture)
-				--Bar:SetBackdrop(C.media.backdrop)
-				Bar:SetBackdropColor(0, 0, 0)
 
-				F.CreateBDFrame(Bar)
-
-				if(index > 1) then
-					Bar:SetPoint('LEFT', ClassPower[index - 1], 'RIGHT', 4, 0)
-				else
-					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-				end
-
-				local function moveAnchor()
-					if self.AlternativePower:IsShown() then
-						Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -10)
-					else
-						Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-					end
-				end
-				self.AlternativePower:HookScript("OnShow", moveAnchor)
-				self.AlternativePower:HookScript("OnHide", moveAnchor)
-				moveAnchor()
-
-				if(index > 5) then
-					Bar:SetFrameLevel(Bar:GetFrameLevel() + 1)
-				end
-
-				local Background = Bar:CreateTexture(nil, 'BORDER')
-				Background:SetAllPoints()
-				Bar.bg = Background
-
-				ClassPower[index] = Bar
-			end
-			self.ClassPower = ClassPower
-			
-		end
 
 		-- Status indicator
 
@@ -1124,7 +1094,7 @@ local UnitSpecific = {
 		statusText:SetPoint("LEFT", HealthPoints, "RIGHT", 10, 0)
 
 		local function updateStatus()
-			if UnitAffectingCombat("player") and C.unitframes.statusIndicatorCombat then
+			if UnitAffectingCombat("player") then
 				statusText:SetText("!")
 				statusText:SetTextColor(1, 0, 0)
 			elseif IsResting() then
@@ -1134,35 +1104,6 @@ local UnitSpecific = {
 				statusText:SetText("")
 			end
 		end
-
-		local function checkEvents()
-			if C.unitframes.statusIndicator then
-				statusText:Show()
-				statusIndicator:RegisterEvent("PLAYER_ENTERING_WORLD")
-				statusIndicator:RegisterEvent("PLAYER_UPDATE_RESTING")
-
-				if C.unitframes.statusIndicatorCombat then
-					statusIndicator:RegisterEvent("PLAYER_REGEN_ENABLED")
-					statusIndicator:RegisterEvent("PLAYER_REGEN_DISABLED")
-				else
-					statusIndicator:UnregisterEvent("PLAYER_REGEN_ENABLED")
-					statusIndicator:UnregisterEvent("PLAYER_REGEN_DISABLED")
-				end
-
-				updateStatus()
-			else
-				statusIndicator:UnregisterEvent("PLAYER_ENTERING_WORLD")
-				statusIndicator:UnregisterEvent("PLAYER_UPDATE_RESTING")
-				statusIndicator:UnregisterEvent("PLAYER_REGEN_ENABLED")
-				statusIndicator:UnregisterEvent("PLAYER_REGEN_DISABLED")
-				statusText:Hide()
-			end
-		end
-
-		checkEvents()
-
-		F.AddOptionsCallback("unitframes", "statusIndicator", checkEvents)
-		F.AddOptionsCallback("unitframes", "statusIndicatorCombat", checkEvents)
 
 		statusIndicator:SetScript("OnEvent", updateStatus)
 	end,
@@ -1300,7 +1241,7 @@ local UnitSpecific = {
 
 	targettarget = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "targettarget"
+		self.unitStyle = "targettarget"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1343,7 +1284,7 @@ local UnitSpecific = {
 
 	focus = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "focus"
+		self.unitStyle = "focus"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1414,7 +1355,7 @@ local UnitSpecific = {
 
 	focustarget = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "focustarget"
+		self.unitStyle = "focustarget"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1456,7 +1397,7 @@ local UnitSpecific = {
 
 	boss = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "boss"
+		self.unitStyle = "boss"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1483,35 +1424,9 @@ local UnitSpecific = {
 		self:Tag(Name, '[name]')
 		self.Name = Name
 
-		local AltPowerBar = CreateFrame("StatusBar", nil, self)
-		AltPowerBar:SetWidth(bossWidth)
-		AltPowerBar:SetHeight(altPowerHeight)
-		AltPowerBar:SetStatusBarTexture(C.media.texture)
-		AltPowerBar:SetPoint("BOTTOM", 0, -2)
-
-		local abd = CreateFrame("Frame", nil, AltPowerBar)
-		abd:SetPoint("TOPLEFT", -1, 1)
-		abd:SetPoint("BOTTOMRIGHT", 1, -1)
-		abd:SetFrameLevel(AltPowerBar:GetFrameLevel()-1)
-		F.CreateBD(abd)
-
-		AltPowerBar.Text = F.CreateFS(AltPowerBar, C.FONT_SIZE_NORMAL, "CENTER")
-		AltPowerBar.Text:SetPoint("BOTTOM", Health, "TOP", 0, 3)
-
-		AltPowerBar:SetScript("OnValueChanged", function(_, value)
-			local min, max = AltPowerBar:GetMinMaxValues()
-			local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-
-			AltPowerBar:SetStatusBarColor(r, g, b)
-			AltPowerBar.Text:SetTextColor(r, g, b)
-		end)
-
-		AltPowerBar.PostUpdate = function(_, _, cur)
-			AltPowerBar.Text:SetText(cur)
-		end
+		CreateAltPower(self)
 
 
-		self.AlternativePower = AltPowerBar		
 
 
 		Castbar:SetAllPoints(Health)
@@ -1542,41 +1457,6 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		--[[local Buffs = CreateFrame("Frame", nil, self)
-		Buffs.initialAnchor = "TOPLEFT"
-		Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		Buffs["growth-x"] = "RIGHT"
-		Buffs["growth-y"] = "DOWN"
-		Buffs['spacing-x'] = 3
-		Buffs['spacing-y'] = 3
-
-		Buffs:SetHeight(22)
-		Buffs:SetWidth(bossWidth - 24)
-		Buffs.num = 8
-		Buffs.size = 26
-
-		self.Buffs = Buffs
-		Buffs.PostUpdateIcon = PostUpdateIcon
-
-		local Debuffs = CreateFrame("Frame", nil, self)
-		Debuffs:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -4)
-		Debuffs.initialAnchor = "TOPRIGHT"
-		Debuffs["growth-x"] = "LEFT"
-		Debuffs["growth-y"] = "DOWN"
-		Debuffs["spacing-x"] = 3
-		Debuffs['spacing-y'] = 3
-		Debuffs:SetHeight(22)
-		Debuffs:SetWidth(bossWidth - 24)
-		Debuffs.size = 26
-		Debuffs.num = 8
-		self.Debuffs = Debuffs
-		self.Debuffs.onlyShowPlayer = true
-
-		Debuffs.PostUpdateIcon = PostUpdateIcon]]
-
-		
-
-
 
 		local Auras = CreateFrame("Frame", nil, self)
 		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
@@ -1603,26 +1483,26 @@ local UnitSpecific = {
 		
 		Auras.PostCreateIcon = PostCreateIcon
 		Auras.PostUpdateIcon = PostUpdateIcon
-		Auras.PostUpdateGapIcon = postUpdateGapIcon
+		Auras.PostUpdateGapIcon = PostUpdateGapIcon
 		Auras.CustomFilter = FilterTargetDebuffs
 
 	
 
 
-		AltPowerBar:HookScript("OnShow", function()
-			Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(4 + altPowerHeight))
-		end)
+		--AltPowerBar:HookScript("OnShow", function()
+		--	Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(4 + altPowerHeight))
+		--end)
 
-		AltPowerBar:HookScript("OnHide", function()
-			Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		end)
+		--AltPowerBar:HookScript("OnHide", function()
+		--	Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+		--end)
 	end,
 
 	arena = function(self, ...)
 		if not C.unitframes.enableArena then return end
 
 		Shared(self, ...)
-		self.mystyle = "arena"
+		self.unitStyle = "arena"
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1706,7 +1586,7 @@ do
 
 	UnitSpecific.party = function(self, ...)
 		Shared(self, ...)
-		self.mystyle = "group"
+		self.unitStyle = "group"
 
 		self.disallowVehicleSwap = false
 
@@ -1951,7 +1831,7 @@ oUF:Factory(function(self)
 		'point', "LEFT",
 		'columnAnchorPoint', "LEFT",
 		'groupBy', 'ASSIGNEDROLE',
-		'groupingOrder', 'DAMAGER,HEALER,TANK',
+		'groupingOrder', 'TANK,HEALER,DAMAGER',
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)
