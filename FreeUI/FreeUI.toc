@@ -1,5 +1,5 @@
 ## Interface: 80000
-## Title: |cffF5FFFAFreeUI|r |cff50fa83Core|r
+## Title: |cffF5FFFAFreeUI|r |cff00a563Core|r
 ## Notes: Minimalistic user interface.
 ## Author: Haleth/Lightsword (Modified/updated by Solor)
 ## Version: 80000.01

@@ -4,6 +4,8 @@ local cargBags = ns.cargBags
 local _
 local L = cBnivL
 
+local F, C = unpack(FreeUI)
+
 local mediaPath = [[Interface\AddOns\cargBags_Nivaya\media\]]
 local Textures = {
 	Background =	mediaPath .. "texture",
@@ -241,12 +243,12 @@ local UpdateDimensions = function(self)
 	end
 	if self.bagToggle then
 		local tBag = (self.name == "cBniv_Bag")
-		local fheight = (ns.options.fonts.standard[2] + 4)
+		local fheight = (12 + 4)
 		local extraHeight = (tBag and self.hintShown) and (fheight + 4) or 0
 		height = height + 24 + extraHeight
 	end
 	if self.Caption then		-- Space for captions
-		local fheight = (ns.options.fonts.standard[2] + 12)
+		local fheight = (12 + 12)
 		height = height + fheight
 	end
 	self:SetHeight(self.ContainerHeight + height)
@@ -342,12 +344,9 @@ local createIconButton = function (name, parent, texture, point, hint, isBag)
 	
 	button.tooltip = button:CreateFontString()
 	-- button.tooltip:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", isBag and -76 or -59, 4.5)
-	if FreeUI then
-		local F, C, L = unpack(FreeUI)
-		F.SetFS(button.tooltip)
-	else
-		button.tooltip:SetFont(unpack(ns.options.fonts.standard))
-	end
+
+	F.SetFS(button.tooltip)
+
 	button.tooltip:SetJustifyH("RIGHT")
 	button.tooltip:SetText(hint)
 	button.tooltip:SetTextColor(0.8, 0.8, 0.8)
@@ -471,31 +470,28 @@ function MyContainer:OnCreate(name, settings)
 	background:SetPoint("BOTTOMRIGHT", 4, -4)
 
 	-- Background, border
-	if AuroraClassic then
-		local F = AuroraClassic[1]
-		F.CreateBD(background)
-		F.CreateSD(background)
-	end
+
+	local F = FreeUI[1]
+	F.CreateBD(background)
+	F.CreateSD(background)
+
 
 	-- Caption, close button
 	local caption = background:CreateFontString(background, "OVERLAY", nil)
-	if FreeUI then
-		local F, C, L = unpack(FreeUI)
-		local locale = GetLocale()
-		local captionFont = {
-				C.font.normal,
-				12,
-				"OUTLINE"
-			}
 
-		if locale == "zhCN" or locale == "zhTW" then
-			caption:SetFont(unpack(captionFont))
-		else
-			F.SetFS(caption)
-		end
+
+	local captionFont = {
+			C.font.normal,
+			12,
+			"OUTLINE"
+		}
+
+	if C.client == "zhCN" or C.client == "zhTW" then
+		caption:SetFont(unpack(captionFont))
 	else
-		caption:SetFont(unpack(ns.options.fonts.standard))
+		F.SetFS(caption)
 	end
+
 	if(caption) then
 		local t = L.bagCaptions[self.name] or (tBankBags and strsub(self.name, 5))
 		if not t then t = self.name end
@@ -731,12 +727,9 @@ function MyContainer:OnCreate(name, settings)
 		self.DropTarget:SetScript("OnReceiveDrag", DropTargetProcessItem)
 		
 		local fs = self:CreateFontString(nil, "OVERLAY")
-		if FreeUI then
-			local F = FreeUI[1]
-			F.SetFS(fs)
-		else
-			fs:SetFont(unpack(ns.options.fonts.standard))
-		end
+
+		F.SetFS(fs)
+
 		fs:SetJustifyH("LEFT")
 		fs:SetPoint("BOTTOMRIGHT", self.DropTarget, "BOTTOMRIGHT", 1.5, 1.5)
 		self.EmptySlotCounter = fs
@@ -784,12 +777,9 @@ function MyContainer:OnCreate(name, settings)
 		-- The money display
 		local money = self:SpawnPlugin("TagDisplay", "[money]", self)
 		money:SetPoint("TOPRIGHT", self, -25.5, -2.5)
-		if FreeUI then
-			local F = FreeUI[1]
-			F.SetFS(money)
-		else
-			money:SetFont(unpack(ns.options.fonts.standard))
-		end
+
+		F.SetFS(money)
+
 		money:SetJustifyH("RIGHT")
 		money:SetShadowColor(0, 0, 0, 0)
 	end

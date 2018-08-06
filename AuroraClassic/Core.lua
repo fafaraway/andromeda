@@ -48,10 +48,20 @@ C.frames = {}
 
 -- [[ Functions ]]
 
+
+
 local useButtonGradientColour
 local _, class = UnitClass("player")
 C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+
+local r, g, b
+
+local FC = FreeUI[2]
+r, g, b = FC.classcolours[class].r, FC.classcolours[class].g, FC.classcolours[class].b
+
+
+
+
 
 function F:dummy()
 end

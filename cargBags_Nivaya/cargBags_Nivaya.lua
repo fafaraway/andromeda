@@ -40,17 +40,15 @@ do	--Replacement for UIDropDownMenu
 		local fstr = button:CreateFontString()
 		fstr:SetJustifyH("LEFT")
 		fstr:SetJustifyV("MIDDLE")
-		if FreeUI then
-			local F, C, L = unpack(FreeUI)
-			local menuFont = {
-				C.font.normal,
-				12,
-				"OUTLINE"
-			}
-			fstr:SetFont(unpack(menuFont))
-		else
-			fstr:SetFont(unpack(ns.options.fonts.dropdown))
-		end
+
+		local F, C = unpack(FreeUI)
+		local menuFont = {
+			C.font.normal,
+			12,
+			"OUTLINE"
+		}
+		fstr:SetFont(unpack(menuFont))
+
 		fstr:SetPoint("LEFT", button, "LEFT", 0, 0)
 		button.Text = fstr
 		
@@ -782,10 +780,10 @@ Event:SetScript('OnEvent', function(self, event, ...)
 				NivayacBniv_Bank.reagentBtn:Show()
 				buyReagent:Hide()
 			end)
-			if Aurora then
-				local F = Aurora[1]
-				F.Reskin(buyReagent)
-			end
+
+			local F = FreeUI[1]
+			F.Reskin(buyReagent)
+
 			buyReagent:RegisterEvent("REAGENTBANK_PURCHASED")
 		end
 

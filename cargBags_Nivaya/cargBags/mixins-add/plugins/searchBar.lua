@@ -85,23 +85,21 @@ end
 cargBags:RegisterPlugin("SearchBar", function(self, target)
 	local search = CreateFrame("EditBox", nil, self)
 	
-	if FreeUI then
-		local F, C, L = unpack(FreeUI)
-		local locale = GetLocale()
-		local searchFont = {
-				C.font.normal,
-				12,
-				"OUTLINE"
-			}
 
-		if locale == "zhCN" or locale == "zhTW" then
-			search:SetFont(unpack(searchFont))
-		else
-			F.SetFS(search)
-		end
+	local F, C = unpack(FreeUI)
+
+	local searchFont = {
+			C.font.normal,
+			12,
+			"OUTLINE"
+		}
+
+	if C.client == "zhCN" or C.client == "zhTW" then
+		search:SetFont(unpack(searchFont))
 	else
-		search:SetFont(unpack(ns.options.fonts.standard))
+		F.SetFS(search)
 	end
+
 
 	self.Search = search
 

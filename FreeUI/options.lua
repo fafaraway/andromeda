@@ -86,7 +86,7 @@ C.classcolours = {
 	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
 	["PALADIN"] = {r = 1, g = 0.22, b = 0.52},
 	["PRIEST"] = {r = 0.8, g = 0.87, b = .9},
-	["ROGUE"] = {r = 1, g = 0.91, b = 0.2},
+	["ROGUE"] = {r = 233/255, g = 191/255, b = 42/255},
 	["SHAMAN"] = {r = 0, g = 0.6, b = 0.6},
 	["WARLOCK"] = {r = 0.6, g = 0.47, b = 0.85},
 	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
@@ -171,6 +171,24 @@ C["bags"] = {
 	["setFilter"] = false,
 	["artifact"] = true,
 	["iLvl"] = true,
+
+	["itemSlotSize"] = 38,
+
+	["sizes"] = {
+		bags = {
+			columnsSmall = 8,
+			columnsLarge = 10,
+			largeItemCount = 64,
+		},
+		bank = {
+			columnsSmall = 10,
+			columnsLarge = 12,
+			largeItemCount = 96,
+		},	
+	},
+	["colors"] = {
+		background = {.05, .05, .05, .8},
+	},
 
 }
 
