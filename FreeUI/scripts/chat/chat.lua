@@ -129,7 +129,7 @@ local AddMessage = function(frame, text, ...)
 
 		text = gsub(text, "%[%d+%. .-%]", "["..chatNum.."]")
 
-		text = text:gsub("|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
+		text = gsub(text, "|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
 
 
 	end
