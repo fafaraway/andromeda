@@ -62,30 +62,6 @@ end
 hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(self, block) QuestHook(block.id) end)
 hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
 
---[[-- Show quest color and level
-local function Showlevel()
-	if ENABLE_COLORBLIND_MODE == "1" then return end
-	local numEntries = GetNumQuestLogEntries()
-	local titleIndex = 1
-	for i = 1, numEntries do
-		local title, level, _, isHeader, _, isComplete, frequency, questID = GetQuestLogTitle(i)
-		local titleButton = QuestLogQuests_GetTitleButton(titleIndex)
-		if title and (not isHeader) and titleButton.questID == questID then
-			titleButton.Check:SetPoint("LEFT", titleButton.Text, titleButton.Text:GetWrappedWidth() + 2, 0)
-			titleIndex = titleIndex + 1
-			local text = "["..level.."] "..title
-			if isComplete then
-				text = "|cffff78ff"..text
-			elseif frequency == LE_QUEST_FREQUENCY_DAILY then
-				text = "|cff3399ff"..text
-			end
-			titleButton.Text:SetText(text)
-			titleButton.Text:SetPoint("TOPLEFT", 24, -5)
-			titleButton.Text:SetWidth(216)
-		end
-	end
-end
-hooksecurefunc("QuestLogQuests_Update", Showlevel)]]
 
 
 -- Headers
