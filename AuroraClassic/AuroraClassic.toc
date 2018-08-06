@@ -1,5 +1,5 @@
 ## Interface: 80000
-## Title: |cffF5FFFAFreeUI|r |cffd0b2e4Aurora|r
+## Title: |cffF5FFFAFreeUI|r |cffec005fAurora|r
 ## Notes: Classical Aurora Style for WoW UIs.
 ## Author: Haleth, Lightsword, Siweia
 ## Version: 80000.01
