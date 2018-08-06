@@ -152,7 +152,7 @@ F.ReskinIcon(frame.Icon)
 F.CreateBG(frame.Icon)
 
 -- ncShadow
-if C.appearance.vignette then
+if C.misc.vignette then
 	local f = CreateFrame("Frame", "ShadowBackground")
 	f:SetPoint("TOPLEFT")
 	f:SetPoint("BOTTOMRIGHT")
@@ -162,7 +162,7 @@ if C.appearance.vignette then
 	f.tex:SetTexture([[Interface\Addons\FreeUI\assets\shadow.tga]])
 	f.tex:SetAllPoints(f)
 
-	f:SetAlpha(C.appearance.vignetteAlpha)
+	f:SetAlpha(C.misc.vignetteAlpha)
 	
 	f:RegisterEvent("PLAYER_ENTERING_WORLD")
 end

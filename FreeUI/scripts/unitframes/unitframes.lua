@@ -348,6 +348,8 @@ local function CreateAltPower(self)
 end
 
 
+
+-- Aura stuff
 local function UpdateAura(self, elapsed)
 	if(self.expiration) then
 		self.expiration = math.max(self.expiration - elapsed, 0)
@@ -380,30 +382,20 @@ local function PostCreateIcon(element, button)
 	bg:SetVertexColor(0, 0, 0)
 
 	local sd = CreateFrame("Frame", nil, button)
-	sd.size = 4
-	sd.offset = -1
-	sd:SetBackdrop({
-		edgeFile = C.media.glow,
-		edgeSize = 4,
-	})
-	sd:SetPoint("TOPLEFT", button, -sd.size - 0 - sd.offset, sd.size + 0 + sd.offset)
-	sd:SetPoint("BOTTOMRIGHT", button, sd.size + 0 + sd.offset, -sd.size - 0 - sd.offset)
-	sd:SetBackdropBorderColor(.03, .03, .03)
-	sd:SetAlpha(.5)
+	sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+	sd:SetPoint("TOPLEFT", -4, 4)
+	sd:SetPoint("BOTTOMRIGHT", 4, -4)
+	sd:SetBackdropBorderColor(0, 0, 0, .65)
 
 	button.sd = sd
 	button.bg = bg
 	
 	button.overlay:SetTexture(nil)
 	button.stealable:SetTexture(nil)
-
 	button.cd:SetReverse(true)
-
 	button.icon:SetDrawLayer('ARTWORK')
 
 	button:SetScript('OnEnter', OnAuraEnter)
-
-
 
 
 	local StringParent = CreateFrame('Frame', nil, button)
@@ -423,36 +415,35 @@ local function PostCreateIcon(element, button)
 	F.SetFS(Duration)
 
 	button:HookScript('OnUpdate', UpdateAura)
+
 end
 
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
 	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-
-
 	button:SetSize(element.size, element.size*.75)
 	button.icon:SetTexCoord(.08, .92, .25, .85)
-
-
-	
 
 	if canStealOrPurge then
 
 		button.bg:SetVertexColor(1, 1, 1)
+		button.sd:SetBackdropBorderColor(1, 1, 1, .65)
 
 	elseif button.isDebuff and element.showDebuffType then
 
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.bg:SetVertexColor(color[1], color[2], color[3])
+		button.sd:SetBackdropBorderColor(color[1], color[2], color[3], .65)
 
 	else
-		button.bg:SetVertexColor(.1, .1, .1)
+		button.bg:SetVertexColor(0, 0, 0)
+		button.sd:SetBackdropBorderColor(0, 0, 0, .65)
 	end
-
 
 	if duration then 
 		button.sd:Show()
 		button.bg:Show()
+
 	end
 
 end
@@ -640,7 +631,7 @@ local Shared = function(self, unit, isSingle)
 	bd:SetFrameStrata("BACKGROUND")
 
 
-	F.CreateSD(bd)
+	F.CreateSD(bd, .5)
 
 
 	self.bd = bd
@@ -930,6 +921,7 @@ local UnitSpecific = {
 		Auras:SetHeight(100)
 		Auras:SetWidth(petWidth)
 		Auras.size = 20
+		Auras.disableCooldown = true
 
 		Auras.gap = true
 
@@ -942,6 +934,8 @@ local UnitSpecific = {
 	player = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "player"
+
+		--self.bd.Shadow:SetBackdropBorderColor(1, 1, 1, .65)
 
 		local Health = self.Health
 		local Power = self.Power

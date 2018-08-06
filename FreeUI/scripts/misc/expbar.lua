@@ -143,8 +143,8 @@ local function UpdateTooltip(bar)
 		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		GameTooltip:AddLine(" ")
 		if C_ArtifactUI.IsEquippedArtifactDisabled() then
-			GameTooltip:AddLine(name, 0,.6,1)
-			GameTooltip:AddLine(ARTIFACT_RETIRED, .6,.8,1, 1)
+			GameTooltip:AddLine(name, 201/255,189/255,152/255)
+			GameTooltip:AddLine(ARTIFACT_RETIRED, 192/255,201/255,201/255,1)
 		else
 			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 243/250, 222627/250, 57/250)
 		

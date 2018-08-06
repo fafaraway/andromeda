@@ -86,7 +86,7 @@ C.classcolours = {
 	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
 	["PALADIN"] = {r = 1, g = 0.22, b = 0.52},
 	["PRIEST"] = {r = 0.8, g = 0.87, b = .9},
-	["ROGUE"] = {r = 233/255, g = 191/255, b = 42/255},
+	["ROGUE"] = {r = 211/255, g = 193/255, b = 111/255},
 	["SHAMAN"] = {r = 0, g = 0.6, b = 0.6},
 	["WARLOCK"] = {r = 0.6, g = 0.47, b = 0.85},
 	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
@@ -112,8 +112,7 @@ C.reactioncolours = {
 
 C["appearance"] = {
 
-	["vignette"] = true,
-		["vignetteAlpha"] = .5,
+
 	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
 		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
@@ -232,9 +231,8 @@ C["unitframes"] = {
 		["healthClassColor"] = true,
 		["powerTypeColor"] = true,
 
-	["gradient"] = true,					-- gradient mode
+	["gradient"] = false,					-- gradient mode
 	["portrait"] = true,
-	["darkBorder"] = true,
 
 	["absorb"] = true, 							-- absorb bar/over absorb glow
 	["castbar"] = true,
@@ -287,12 +285,12 @@ C["unitframes"] = {
 	["focustarget_width"] = 89,
 	["focustarget_height"] = 12,
 
-	["party"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -30},			-- party unitframe position
-	["party_width"] = 50,
+	["party"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 2, -30},			-- party unitframe position
+	["party_width"] = 52,
 	["party_height"] = 34,
 
 	["raid"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -30},			-- raid unitframe position
-	["raid_width"] = 50,
+	["raid_width"] = 52,
 	["raid_height"] = 30,
 
 	["boss"] = {a='LEFT', b='oUF_FreeTarget', c="RIGHT", x=100, y=180},			-- boss unitframe position
@@ -339,6 +337,8 @@ C["misc"] = {
 
 	["mailButton"] = true, 
 	["undressButton"] = true, 
+	["vignette"] = true,
+	["vignetteAlpha"] = .5,
 
 	["alreadyKnown"] = true,
 
@@ -348,12 +348,13 @@ C["misc"] = {
 	["hideRaidNames"] = true,
 	["saySapped"] = true,
 
-	["autoActionCam"] = false,
+	["autoActionCam"] = true,
 
 	["rareAlert"] = true,
-	["rareAlertinChat"] = true,
-	["interrupt"] = true,
+	["rareAlertNotify"] = true,
+	["interruptAlert"] = true,
 	["interruptNotify"] = false,
+	["dispelAlert"] = true,
 
 	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec

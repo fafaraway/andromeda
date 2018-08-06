@@ -36,7 +36,7 @@ function module:RareAlert()
 			RaidNotice_AddMessage(RaidWarningFrame, tex.." "..(info.name or "Unknown").." ".."spotted!", ChatTypeInfo["RAID_WARNING"])
 			
 
-			if C.misc.rareAlertinChat then
+			if C.misc.rareAlertNotify then
 
 				--print("  -> "..C.infoColor.."Rare Found"..tex..(info.name or ""))
 				print(info.name, "spotted!")
@@ -60,7 +60,7 @@ end
 
 function module:InterruptAlert()
 
-	if not C.misc.interrupt then return end
+	if not C.misc.interruptAlert then return end
 
 	local interruptSound = "Interface\\AddOns\\FreeUI\\assets\\sound\\Shutupfool.ogg"
 	local dispelSound = "Interface\\AddOns\\FreeUI\\assets\\sound\\buzz.ogg"
