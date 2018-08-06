@@ -17,8 +17,8 @@ local function SkinBar(bar)
 	bar:SetStatusBarTexture(C.media.texture)
 	bar:SetStatusBarColor(1, 0, 0)
 
-	F.CreateBD(bar, .65)
-	F.CreateSD(bar)
+	F.CreateBD(bar, .5)
+	F.CreateSD(bar, .5)
 end
 
 local f = _G.CreateFrame("Frame")

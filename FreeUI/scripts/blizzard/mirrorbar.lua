@@ -12,7 +12,7 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 			statusbar:ClearAllPoints()
 			statusbar:SetPoint("TOPLEFT", frame, 2, -2)
 			statusbar:SetPoint("BOTTOMRIGHT", frame, -2, 8)
-			statusbar:SetStatusBarTexture(C.media.backdrop)
+			statusbar:SetStatusBarTexture(C.media.texture)
 			statusbar:SetHeight(16)
 			statusbar:SetWidth(200)
 			
@@ -21,12 +21,12 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 				region:SetAlpha(0)
 			end
 		
-			statusbar.backdrop = F.CreateBDFrame(statusbar, .65)
+			statusbar.backdrop = F.CreateBDFrame(statusbar, .5)
 			statusbar.backdrop:SetPoint("BOTTOMRIGHT", statusbar, 1, -2)
-			F.CreateSD(statusbar.backdrop)
+			F.CreateSD(statusbar.backdrop, .5)
 			
 			text:ClearAllPoints()
-			text:SetFont(C.font.normal, 12, "OUTLINE")
+			text:SetFont(C.font.normal, 11, "OUTLINE")
 			text:SetPoint("CENTER", statusbar)
 			
 			border:SetTexture(nil)
