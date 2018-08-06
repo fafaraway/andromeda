@@ -8,13 +8,22 @@ function module:ReskinRegions()
 	GarrisonLandingPageMinimapButton:SetAlpha(0)
 	GarrisonLandingPageMinimapButton:EnableMouse(false)
 
-	-- Queue Status
+	-- date
+	GameTimeFrame:ClearAllPoints()
+	GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -1, -36)
+	GameTimeFrame:SetSize(16, 16)
+	GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
+	GameTimeFrame:SetNormalTexture("")
+	GameTimeFrame:SetPushedTexture("")
+	GameTimeFrame:SetHighlightTexture("")
+
 	local _, _, _, _, dateText = GameTimeFrame:GetRegions()
 	F.SetFS(dateText)
-	dateText:SetTextColor(r, g, b)
+	dateText:SetTextColor(1, 1, 1)
 	dateText:SetShadowOffset(0, 0)
 	dateText:SetPoint("CENTER")
 
+	-- Queue Status
 	QueueStatusMinimapButtonBorder:SetAlpha(0)
 	QueueStatusMinimapButton:ClearAllPoints()
 	QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", Minimap, 0, 36)
@@ -372,7 +381,6 @@ function module:SetupMinimap()
 
 	-- Hide Blizz
 	local frames = {
-		"GameTimeFrame",
 		"MinimapBorderTop",
 		"MinimapNorthTag",
 		"MinimapBorder",
@@ -383,17 +391,14 @@ function module:SetupMinimap()
 		"MiniMapMailBorder",
 		"MiniMapTracking",
 		"MiniMapInstanceDifficulty",
+		"GuildInstanceDifficulty",
+		"MiniMapChallengeMode",
+
 	}
 
 	for _, v in pairs(frames) do
-		_G[v]:Hide()
-		_G[v].Show = F.Dummy
+		F.HideObject(_G[v])
 	end
-
-	GuildInstanceDifficulty:SetAlpha(0)
-	MiniMapChallengeMode:GetRegions():SetTexture("")
-
-
 
 	self:ReskinRegions()
 	self:WhoPingsMyMap()
