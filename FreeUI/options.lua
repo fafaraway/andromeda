@@ -162,15 +162,6 @@ C["auras"] = {
 
 
 C["bags"] = {
-	["itemSlotSize"] = 34,
-	["bagColumns"] = 12,
-	["bankColumns"] = 16,
-	["scale"] = 1,
-	["reverseSort"] = true,
-	["itemFilter"] = true,
-	["setFilter"] = false,
-	["artifact"] = true,
-	["iLvl"] = true,
 
 	["itemSlotSize"] = 38,
 
