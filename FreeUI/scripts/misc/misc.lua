@@ -11,6 +11,7 @@ function module:OnLogin()
 	self:questRewardHighlight()
 	self:QuickJoin()
 	self:Focuser()
+	self:MissingStats()
 
 
 	-- Remove Boss Banner

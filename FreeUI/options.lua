@@ -196,6 +196,7 @@ C["misc"] = {
 	["autoAccept"] = false, -- auto accept invites from friends and guildies
 
 	["focuser"] = true,
+	["missingStats"] = true,
 }
 
 
