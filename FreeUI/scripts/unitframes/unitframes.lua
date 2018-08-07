@@ -2,13 +2,10 @@ local F, C, L = unpack(select(2, ...))
 
 if not C.unitframes.enable then return end
 
-
 local parent, ns = ...
 local oUF = ns.oUF
 
-local name = UnitName("player")
-local realm = GetRealmName()
-local class = select(2, UnitClass("player"))
+
 
 local unitframeFont = {
 		C.font.normal,
@@ -52,19 +49,9 @@ oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
--- [[ Initialize / load layout option ]]
 
--- this can't use the normal options system
--- because we want users to be able to switch layout using /commands even when options gui is disabled
---[[local addonLoaded
-addonLoaded = function(_, addon)
-	if addon ~= "FreeUI" then return end
 
-	F.UnregisterEvent("ADDON_LOADED", addonLoaded)
-	addonLoaded = nil
-end
 
-F:RegisterEvent("ADDON_LOADED", addonLoaded)]]
 
 --[[ Short values ]]
 
@@ -208,6 +195,7 @@ oUF.Tags.Methods['free:power'] = function(unit)
 end
 oUF.Tags.Events['free:power'] = oUF.Tags.Events.missingpp
 
+
 -- Alt Power value tag
 oUF.Tags.Methods["altpower"] = function(unit)
 	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
@@ -217,6 +205,8 @@ oUF.Tags.Methods["altpower"] = function(unit)
 	end
 end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
+
+
 
 
 --[[ Update health ]]
@@ -292,6 +282,8 @@ local PostUpdateHealth = function(Health, unit, min, max)
 	end
 end
 
+
+
 --[[ Update power ]]
 
 local PostUpdatePower = function(Power, unit, cur, max, min)
@@ -305,7 +297,6 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 		Power.Text:SetTextColor(Power:GetStatusBarColor())
 	end
 end
-
 
 --[[ Update alt power ]]
 local function postUpdateAltPower(element, _, cur, _, max)
@@ -346,7 +337,6 @@ local function CreateAltPower(self)
 	self.AlternativePower = bar		
 	self.AlternativePower.PostUpdate = postUpdateAltPower
 end
-
 
 
 -- Aura stuff
@@ -392,10 +382,14 @@ local function PostCreateIcon(element, button)
 	
 	button.overlay:SetTexture(nil)
 	button.stealable:SetTexture(nil)
+
 	button.cd:SetReverse(true)
+
 	button.icon:SetDrawLayer('ARTWORK')
 
 	button:SetScript('OnEnter', OnAuraEnter)
+
+
 
 
 	local StringParent = CreateFrame('Frame', nil, button)
@@ -415,14 +409,18 @@ local function PostCreateIcon(element, button)
 	F.SetFS(Duration)
 
 	button:HookScript('OnUpdate', UpdateAura)
-
 end
 
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
 	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
+
+
 	button:SetSize(element.size, element.size*.75)
 	button.icon:SetTexCoord(.08, .92, .25, .85)
+
+
+	
 
 	if canStealOrPurge then
 
@@ -440,10 +438,10 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		button.sd:SetBackdropBorderColor(0, 0, 0, .65)
 	end
 
+
 	if duration then 
 		button.sd:Show()
 		button.bg:Show()
-
 	end
 
 end
@@ -459,6 +457,7 @@ local function FilterTargetDebuffs(_, unit, button, _, _, _, _, _, _, _, caster,
 end
 
 
+
 local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID)
 	if C.hideDebuffs[spellID] then
 		return false
@@ -467,12 +466,15 @@ local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellI
 end
 
 
+
 local function groupBuffFilter(_, unit, button, _, _, _, _, _, _, caster, _, _, spellID)
 	if (button.isPlayer and C.myBuffs[spellID]) or C.allBuffs[spellID] then
 		return true
 	end
 	return false
 end
+
+
 
 
 local function PostUpdateGapIcon(_, _, icon)
@@ -598,9 +600,8 @@ local function CreateClassPower(self)
 	self.ClassPower = ClassPower
 end
 
-
+-- DK runes bars
 local function CreateRunesBar(self)
-	if not class == "DEATHKNIGHT" or not C.unitframes.classPower then return end
 
 	local Runes = CreateFrame("Frame", nil, self)
 	Runes:SetWidth(playerWidth)
@@ -637,6 +638,64 @@ local function CreateRunesBar(self)
 	self.Runes = Runes
 end
 
+-- status indicator
+local function CreateStatusIndicator(self)
+	local PvPIndicator = F.CreateFS(self)
+	PvPIndicator:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -50, 3)
+	PvPIndicator:SetText("P")
+
+	local UpdatePvPIndicator = function(self, event, unit)
+		if(unit ~= self.unit) then return end
+
+		local PvPIndicator = self.PvPIndicator
+
+		local factionGroup = UnitFactionGroup(unit)
+		if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
+			if factionGroup == "Alliance" then
+				PvPIndicator:SetTextColor(0, 0.68, 0.94)
+			else
+				PvPIndicator:SetTextColor(1, 0, 0)
+			end
+
+			PvPIndicator:Show()
+		else
+			PvPIndicator:Hide()
+		end
+	end
+
+	self.PvPIndicator = PvPIndicator
+	PvPIndicator.Override = UpdatePvPIndicator
+
+
+	local statusIndicator = CreateFrame("Frame")
+	local statusText = F.CreateFS(self.Health)
+	statusText:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
+
+	local function updateStatus()
+		if UnitAffectingCombat("player") then
+			statusText:SetText("!")
+			statusText:SetTextColor(1, 0, 0)
+		elseif IsResting() then
+			statusText:SetText("Zzz")
+			statusText:SetTextColor(.8, .8, .8)
+		else
+			statusText:SetText("")
+		end
+	end
+
+	local function checkEvents()
+		statusText:Show()
+		statusIndicator:RegisterEvent("PLAYER_ENTERING_WORLD")
+		statusIndicator:RegisterEvent("PLAYER_UPDATE_RESTING")
+		statusIndicator:RegisterEvent("PLAYER_REGEN_ENABLED")
+		statusIndicator:RegisterEvent("PLAYER_REGEN_DISABLED")
+
+		updateStatus()
+	end
+	checkEvents()
+	statusIndicator:SetScript("OnEvent", updateStatus)
+end
+
 
 --[[ Hide Blizz frames ]]
 
@@ -667,9 +726,7 @@ local Shared = function(self, unit, isSingle)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameStrata("BACKGROUND")
 
-
 	F.CreateSD(bd, .5)
-
 
 	self.bd = bd
 
@@ -768,6 +825,9 @@ local Shared = function(self, unit, isSingle)
 	else
 		Power.colorPower = true
 	end
+
+
+
 
 
 
@@ -972,7 +1032,7 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "player"
 
-		--self.bd.Shadow:SetBackdropBorderColor(1, 1, 1, .65)
+		--self.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .65)
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1045,59 +1105,17 @@ local UnitSpecific = {
 			end
 		end
 
-		-- PVP indicator
-		if C.unitframes.pvp then
-			local PvPIndicator = F.CreateFS(self)
-			PvPIndicator:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", -50, 3)
-			PvPIndicator:SetText("P")
-
-			local UpdatePvPIndicator = function(self, event, unit)
-				if(unit ~= self.unit) then return end
-
-				local PvPIndicator = self.PvPIndicator
-
-				local factionGroup = UnitFactionGroup(unit)
-				if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
-					if factionGroup == "Alliance" then
-						PvPIndicator:SetTextColor(0, 0.68, 0.94)
-					else
-						PvPIndicator:SetTextColor(1, 0, 0)
-					end
-
-					PvPIndicator:Show()
-				else
-					PvPIndicator:Hide()
-				end
-			end
-
-			self.PvPIndicator = PvPIndicator
-			PvPIndicator.Override = UpdatePvPIndicator
-		end
-
 		CreateAltPower(self)
-		CreateClassPower(self)
-		CreateRunesBar(self)
-
-
-		-- Status indicator
-
-		local statusIndicator = CreateFrame("Frame")
-		local statusText = F.CreateFS(Health)
-		statusText:SetPoint("LEFT", HealthPoints, "RIGHT", 10, 0)
-
-		local function updateStatus()
-			if UnitAffectingCombat("player") then
-				statusText:SetText("!")
-				statusText:SetTextColor(1, 0, 0)
-			elseif IsResting() then
-				statusText:SetText("Zzz")
-				statusText:SetTextColor(.8, .8, .8)
-			else
-				statusText:SetText("")
-			end
+		
+		if C.myClass == "DEATHKNIGHT" then
+			CreateRunesBar(self)
+		else
+			CreateClassPower(self)
 		end
 
-		statusIndicator:SetScript("OnEvent", updateStatus)
+		CreateStatusIndicator(self)
+
+
 	end,
 
 	target = function(self, ...)
@@ -1419,8 +1437,6 @@ local UnitSpecific = {
 		CreateAltPower(self)
 
 
-
-
 		Castbar:SetAllPoints(Health)
 		Castbar.Width = self:GetWidth()
 
@@ -1448,6 +1464,11 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("TOPLEFT", -1 , 1)
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
+
+
+
+		
+
 
 
 		local Auras = CreateFrame("Frame", nil, self)
@@ -1481,13 +1502,7 @@ local UnitSpecific = {
 	
 
 
-		--AltPowerBar:HookScript("OnShow", function()
-		--	Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -(4 + altPowerHeight))
-		--end)
 
-		--AltPowerBar:HookScript("OnHide", function()
-		--	Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		--end)
 	end,
 
 	arena = function(self, ...)
