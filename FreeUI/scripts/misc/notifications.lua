@@ -72,7 +72,7 @@ function module:InterruptAlert()
 				if C.misc.interruptNotify then
 					SendChatMessage("Interrupted: "..destName.."'s "..GetSpellLink(spellID)..".", channel)
 				end
-			elseif ((event == "SPELL_STOLEN") or (event == "SPELL_DISPEL") or (event == "SPELL_MISSED")) then
+			elseif ((event == "SPELL_STOLEN") or (event == "SPELL_DISPEL")) then
 				if C.misc.dispelSound then
 					PlaySoundFile(dispelSound, "Master")
 				end
