@@ -561,6 +561,7 @@ local function UpdateClassPowerColor(element)
 end
 
 local function CreateClassPower(self)
+	if not C.unitframes.classPower then return end
 
 	local ClassPower = {}
 	ClassPower.UpdateColor = UpdateClassPowerColor
@@ -568,7 +569,7 @@ local function CreateClassPower(self)
 
 	for index = 1, 11 do -- have to create an extra to force __max to be different from UnitPowerMax
 		local Bar = CreateFrame('StatusBar', nil, self)
-		Bar:SetHeight(C.unitframes.classPower_height)
+		Bar:SetHeight(classPowerHeight)
 		Bar:SetStatusBarTexture(C.media.texture)
 		Bar:SetBackdropColor(0, 0, 0)
 
@@ -577,9 +578,9 @@ local function CreateClassPower(self)
 		local function moveCPBar()
 			if(index == 1) then
 				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.power_height-4-altPowerHeight-C.unitframes.classPower_height)
+					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-4-altPowerHeight-classPowerHeight)
 				else
-					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.power_height-2-altPowerHeight)
+					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-2-altPowerHeight)
 				end
 			end
 		end
@@ -587,17 +588,53 @@ local function CreateClassPower(self)
 		self.AlternativePower:HookScript("OnHide", moveCPBar)
 		moveCPBar()
 
-
 		local Background = Bar:CreateTexture(nil, 'BORDER')
 		Background:SetAllPoints()
 		Bar.bg = Background
 
-		ClassPower[index] = Bar
-
-		
+		ClassPower[index] = Bar	
 	end
 
 	self.ClassPower = ClassPower
+end
+
+
+local function CreateRunesBar(self)
+	if not class == "DEATHKNIGHT" or not C.unitframes.classPower then return end
+
+	local Runes = CreateFrame("Frame", nil, self)
+	Runes:SetWidth(playerWidth)
+	Runes:SetHeight(classPowerHeight)
+
+	local function moveCPBar()
+		if self.AlternativePower:IsShown() then
+			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-4-altPowerHeight-classPowerHeight)
+		else
+			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-2-altPowerHeight)
+		end
+	end
+	self.AlternativePower:HookScript("OnShow", moveCPBar)
+	self.AlternativePower:HookScript("OnHide", moveCPBar)
+	moveCPBar()
+
+	for index = 1, 6 do
+		local Rune = CreateFrame('StatusBar', nil, self)
+		Rune:SetHeight(classPowerHeight)
+		Rune:SetStatusBarTexture(C.media.texture)
+
+		F.CreateBDFrame(Rune)
+
+		if(index == 1) then
+			Rune:SetPoint("LEFT", Runes)
+			Rune:SetWidth(playerWidth/6)
+		else
+			Rune:SetPoint('LEFT', Runes[index - 1], 'RIGHT', 3, 0)
+			Rune:SetWidth((playerWidth/6)-3)
+		end
+
+		Runes[index] = Rune
+	end
+	self.Runes = Runes
 end
 
 
@@ -1037,48 +1074,9 @@ local UnitSpecific = {
 			PvPIndicator.Override = UpdatePvPIndicator
 		end
 
-
-		-- DK runes
-		if class == "DEATHKNIGHT" and C.classmod.classResource then
-			local Runes = CreateFrame("Frame", nil, self)
-			Runes:SetWidth(playerWidth)
-			Runes:SetHeight(classPowerHeight)
-
-			local function moveAnchor()
-				if self.AlternativePower:IsShown() then
-					Runes:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -10)
-				else
-					Runes:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-				end
-			end
-			self.AlternativePower:HookScript("OnShow", moveAnchor)
-			self.AlternativePower:HookScript("OnHide", moveAnchor)
-			moveAnchor()
-
-			for index = 1, 6 do
-				local Rune = CreateFrame('StatusBar', nil, self)
-				Rune:SetHeight(classPowerHeight)
-				Rune:SetStatusBarTexture(C.media.texture)
-
-				F.CreateBDFrame(Rune)
-
-				if(index == 1) then
-					Rune:SetPoint("LEFT", Runes)
-					Rune:SetWidth(playerWidth/6)
-				else
-					Rune:SetPoint('LEFT', Runes[index - 1], 'RIGHT', 3, 0)
-					Rune:SetWidth((playerWidth/6)-3)
-				end
-
-				Runes[index] = Rune
-			end
-			self.Runes = Runes
-
-		end
-
 		CreateAltPower(self)
 		CreateClassPower(self)
-
+		CreateRunesBar(self)
 
 
 		-- Status indicator

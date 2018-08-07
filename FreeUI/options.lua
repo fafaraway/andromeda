@@ -234,6 +234,8 @@ C["unitframes"] = {
 	["gradient"] = false,					-- gradient mode
 	["portrait"] = true,
 
+	["classPower"] = true,
+
 	["absorb"] = true, 							-- absorb bar/over absorb glow
 	["castbar"] = true,
 	["castbarSeparate"] = true,
@@ -369,10 +371,6 @@ C["misc"] = {
 	["autoAccept"] = false, -- auto accept invites from friends and guildies
 }
 
-
-C["classmod"] = {
-	["classResource"] = true, 		-- class resource
-}
 
 
 
