@@ -677,62 +677,131 @@ local function CreateRunesBar(self)
 end
 
 
--- status indicator
-local function CreateStatusIndicator(self)
-	local PvPIndicator = F.CreateFS(self)
-	PvPIndicator:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -50, 3)
-	PvPIndicator:SetText("P")
+-- indicator
+local function CreateIndicator(self)
+	if self.unitStyle == "player" then
+		local PvPIndicator = F.CreateFS(self)
+		PvPIndicator:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -50, 3)
+		PvPIndicator:SetText("P")
 
-	local UpdatePvPIndicator = function(self, event, unit)
-		if(unit ~= self.unit) then return end
+		local UpdatePvPIndicator = function(self, event, unit)
+			if(unit ~= self.unit) then return end
 
-		local PvPIndicator = self.PvPIndicator
+			local PvPIndicator = self.PvPIndicator
 
-		local factionGroup = UnitFactionGroup(unit)
-		if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
-			if factionGroup == "Alliance" then
-				PvPIndicator:SetTextColor(0, 0.68, 0.94)
+			local factionGroup = UnitFactionGroup(unit)
+			if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
+				if factionGroup == "Alliance" then
+					PvPIndicator:SetTextColor(0, 0.68, 0.94)
+				else
+					PvPIndicator:SetTextColor(1, 0, 0)
+				end
+
+				PvPIndicator:Show()
 			else
-				PvPIndicator:SetTextColor(1, 0, 0)
+				PvPIndicator:Hide()
 			end
-
-			PvPIndicator:Show()
-		else
-			PvPIndicator:Hide()
 		end
-	end
 
-	self.PvPIndicator = PvPIndicator
-	PvPIndicator.Override = UpdatePvPIndicator
+		self.PvPIndicator = PvPIndicator
+		PvPIndicator.Override = UpdatePvPIndicator
 
 
-	local statusIndicator = CreateFrame("Frame")
-	local statusText = F.CreateFS(self.Health)
-	statusText:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
+		local statusIndicator = CreateFrame("Frame")
+		local statusText = F.CreateFS(self.Health)
+		statusText:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
 
-	local function updateStatus()
-		if UnitAffectingCombat("player") then
-			statusText:SetText("!")
-			statusText:SetTextColor(1, 0, 0)
-		elseif IsResting() then
-			statusText:SetText("Zzz")
-			statusText:SetTextColor(.8, .8, .8)
-		else
-			statusText:SetText("")
+		local function updateStatus()
+			if UnitAffectingCombat("player") then
+				statusText:SetText("!")
+				statusText:SetTextColor(1, 0, 0)
+			elseif IsResting() then
+				statusText:SetText("Zzz")
+				statusText:SetTextColor(.8, .8, .8)
+			else
+				statusText:SetText("")
+			end
 		end
+
+		local function checkEvents()
+			statusText:Show()
+			statusIndicator:RegisterEvent("PLAYER_ENTERING_WORLD")
+			statusIndicator:RegisterEvent("PLAYER_UPDATE_RESTING")
+			statusIndicator:RegisterEvent("PLAYER_REGEN_ENABLED")
+			statusIndicator:RegisterEvent("PLAYER_REGEN_DISABLED")
+
+			updateStatus()
+		end
+		checkEvents()
+		statusIndicator:SetScript("OnEvent", updateStatus)
 	end
 
-	local function checkEvents()
-		statusText:Show()
-		statusIndicator:RegisterEvent("PLAYER_ENTERING_WORLD")
-		statusIndicator:RegisterEvent("PLAYER_UPDATE_RESTING")
-		statusIndicator:RegisterEvent("PLAYER_REGEN_ENABLED")
-		statusIndicator:RegisterEvent("PLAYER_REGEN_DISABLED")
+	if self.unitStyle == "target" then
+		local QuestIndicator = F.CreateFS(self)
+		QuestIndicator:SetText("X")
+		QuestIndicator:SetTextColor(228/255, 225/255, 16/255)
+		QuestIndicator:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
 
-		updateStatus()
+		self.QuestIndicator = QuestIndicator
 	end
-	checkEvents()
-	statusIndicator:SetScript("OnEvent", updateStatus)
+
+	local RaidTargetIndicator = self:CreateTexture()
+	
+	if self.unitStyle == "group" then
+		RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
+	elseif self.unitStyle == "targettarget" then
+		RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+	elseif self.unitStyle == "focus" then
+		RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
+	elseif self.unitStyle == "focustarget" then
+		RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+	else
+		RaidTargetIndicator:SetPoint("CENTER", self, "CENTER", 0, 20)
+	end
+
+	RaidTargetIndicator:SetSize(16, 16)
+	self.RaidTargetIndicator = RaidTargetIndicator
+
+	if self.unitStyle == "group" then
+		local ResurrectIndicator = self:CreateTexture(nil, 'OVERLAY')
+		ResurrectIndicator:SetSize(16, 16)
+		ResurrectIndicator:SetPoint('CENTER')
+		self.ResurrectIndicator = ResurrectIndicator
+
+		local LeaderIndicator = F.CreateFS(self, 8, "LEFT")
+		LeaderIndicator:SetText("l")
+		LeaderIndicator:SetPoint("TOPLEFT", self.Health, 2, -1)
+		self.LeaderIndicator = LeaderIndicator
+
+		local ReadyCheckIndicator = self:CreateTexture(nil, "OVERLAY")
+		ReadyCheckIndicator:SetPoint("TOPLEFT", self.Health)
+		ReadyCheckIndicator:SetSize(16, 16)
+		self.ReadyCheckIndicator = ReadyCheckIndicator
+
+		local UpdateLFD = function(self, event)
+			local lfdrole = self.GroupRoleIndicator
+			local role = UnitGroupRolesAssigned(self.unit)
+
+			if role == "DAMAGER" then
+				lfdrole:SetTextColor(1, .1, .1, 1)
+				lfdrole:SetText(".")
+			elseif role == "TANK" then
+				lfdrole:SetTextColor(.3, .4, 1, 1)
+				lfdrole:SetText("x")
+			elseif role == "HEALER" then
+				lfdrole:SetTextColor(0, 1, 0, 1)
+				lfdrole:SetText("+")
+			else
+				lfdrole:SetTextColor(0, 0, 0, 0)
+			end
+		end
+
+		local GroupRoleIndicator = F.CreateFS(self, 8, "CENTER")
+		GroupRoleIndicator:SetPoint("BOTTOM", self.Health, 1, 1)
+		GroupRoleIndicator.Override = UpdateLFD
+
+		self.GroupRoleIndicator = GroupRoleIndicator
+	end
 end
 
 
@@ -962,11 +1031,11 @@ local Shared = function(self, unit, isSingle)
 
 	-- [[ Raid target icons ]]
 
-	local RaidTargetIndicator = self:CreateTexture()
-	RaidTargetIndicator:SetSize(16, 16)
-	RaidTargetIndicator:SetPoint("CENTER", self, "CENTER", 0, 20)
+	--local RaidTargetIndicator = self:CreateTexture()
+	--RaidTargetIndicator:SetSize(16, 16)
+	--RaidTargetIndicator:SetPoint("CENTER", self, "CENTER", 0, 20)
 
-	self.RaidTargetIndicator = RaidTargetIndicator
+	--self.RaidTargetIndicator = RaidTargetIndicator
 
 	-- [[ Spell Range ]]
 
@@ -1140,7 +1209,7 @@ local UnitSpecific = {
 			CreateClassPower(self)
 		end
 
-		CreateStatusIndicator(self)
+		CreateIndicator(self)
 
 
 	end,
@@ -1223,6 +1292,7 @@ local UnitSpecific = {
 		self:Tag(Name, '[name]')
 		self.Name = Name
 
+		CreateIndicator(self)
 		CreateAuras(self)
 
 
@@ -1259,7 +1329,7 @@ local UnitSpecific = {
 
 
 
-		local QuestIcon = F.CreateFS(self)
+		--[[local QuestIcon = F.CreateFS(self)
 		QuestIcon:SetText("!")
 		QuestIcon:SetTextColor(228/255, 225/255, 16/255)
 		QuestIcon:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 2)
@@ -1276,7 +1346,7 @@ local UnitSpecific = {
 			end
 		end
 
-		self.QuestIndicator = QuestIcon
+		self.QuestIndicator = QuestIcon]]
 	end,
 
 	targettarget = function(self, ...)
@@ -1295,8 +1365,10 @@ local UnitSpecific = {
 
 		Spark:SetHeight(Health:GetHeight())
 
-		self.RaidTargetIndicator:ClearAllPoints()
-		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		--self.RaidTargetIndicator:ClearAllPoints()
+		--self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+
+		CreateIndicator(self)
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
@@ -1341,8 +1413,10 @@ local UnitSpecific = {
 			Castbar.Text = F.CreateFS(Castbar)
 			Castbar.Text:SetDrawLayer("ARTWORK")
 
-			self.RaidTargetIndicator:ClearAllPoints()
-			self.RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
+			--self.RaidTargetIndicator:ClearAllPoints()
+			--self.RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
+
+			CreateIndicator(self)
 
 			local IconFrame = CreateFrame("Frame", nil, Castbar)
 
@@ -1409,8 +1483,9 @@ local UnitSpecific = {
 
 		Spark:SetHeight(Health:GetHeight())
 
-		self.RaidTargetIndicator:ClearAllPoints()
-		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		--self.RaidTargetIndicator:ClearAllPoints()
+		--self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		CreateIndicator(self)
 
 		local tt = CreateFrame("Frame", nil, self)
 		tt:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
@@ -1564,7 +1639,8 @@ local UnitSpecific = {
 		CreateDebuffs(self)
 
 
-		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		--self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		CreateIndicator(self)
 	end,
 }
 
@@ -1599,18 +1675,19 @@ do
 			self:Tag(Text, '[dead][offline]')
 		end
 
-		self.ResurrectIcon = self:CreateTexture(nil, "OVERLAY")
-		self.ResurrectIcon:SetSize(16, 16)
-		self.ResurrectIcon:SetPoint("CENTER")
+		--self.ResurrectIcon = self:CreateTexture(nil, "OVERLAY")
+		--self.ResurrectIcon:SetSize(16, 16)
+		--self.ResurrectIcon:SetPoint("CENTER")
 
-		self.RaidTargetIndicator:ClearAllPoints()
-		self.RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
+		--self.RaidTargetIndicator:ClearAllPoints()
+		--self.RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
+		CreateIndicator(self)
 
-		local LeaderIndicator = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
-		LeaderIndicator:SetText("l")
-		LeaderIndicator:SetPoint("TOPLEFT", Health, 2, -1)
+		--local LeaderIndicator = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
+		--LeaderIndicator:SetText("l")
+		--LeaderIndicator:SetPoint("TOPLEFT", Health, 2, -1)
 
-		self.LeaderIndicator = LeaderIndicator
+		--self.LeaderIndicator = LeaderIndicator
 
 		--[[local MasterLooter = F.CreateFS(self, C.FONT_SIZE_NORMAL, "RIGHT")
 		MasterLooter:SetText("m")
@@ -1618,35 +1695,35 @@ do
 
 		self.MasterLooter = MasterLooter]]
 
-		local rc = self:CreateTexture(nil, "OVERLAY")
-		rc:SetPoint("TOPLEFT", Health)
-		rc:SetSize(16, 16)
+		--local ReadyCheckIndicator = self:CreateTexture(nil, "OVERLAY")
+		--ReadyCheckIndicator:SetPoint("TOPLEFT", Health)
+		--ReadyCheckIndicator:SetSize(16, 16)
 
-		self.ReadyCheck = rc
+		--self.ReadyCheckIndicator = ReadyCheckIndicator
 
-		local UpdateLFD = function(self, event)
-			local lfdrole = self.GroupRoleIndicator
-			local role = UnitGroupRolesAssigned(self.unit)
+		--local UpdateLFD = function(self, event)
+		--	local lfdrole = self.GroupRoleIndicator
+		--	local role = UnitGroupRolesAssigned(self.unit)
 
-			if role == "DAMAGER" then
-				lfdrole:SetTextColor(1, .1, .1, 1)
-				lfdrole:SetText(".")
-			elseif role == "TANK" then
-				lfdrole:SetTextColor(.3, .4, 1, 1)
-				lfdrole:SetText("x")
-			elseif role == "HEALER" then
-				lfdrole:SetTextColor(0, 1, 0, 1)
-				lfdrole:SetText("+")
-			else
-				lfdrole:SetTextColor(0, 0, 0, 0)
-			end
-		end
+		--	if role == "DAMAGER" then
+		--		lfdrole:SetTextColor(1, .1, .1, 1)
+		--		lfdrole:SetText(".")
+		--	elseif role == "TANK" then
+		--		lfdrole:SetTextColor(.3, .4, 1, 1)
+		--		lfdrole:SetText("x")
+		--	elseif role == "HEALER" then
+		--		lfdrole:SetTextColor(0, 1, 0, 1)
+		--		lfdrole:SetText("+")
+		--	else
+		--		lfdrole:SetTextColor(0, 0, 0, 0)
+		--	end
+		--end
 
-		local lfd = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "CENTER")
-		lfd:SetPoint("BOTTOM", Health, 1, 1)
-		lfd.Override = UpdateLFD
+		--local lfd = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "CENTER")
+		--lfd:SetPoint("BOTTOM", Health, 1, 1)
+		--lfd.Override = UpdateLFD
 
-		self.GroupRoleIndicator = lfd
+		--self.GroupRoleIndicator = lfd
 
 
 
