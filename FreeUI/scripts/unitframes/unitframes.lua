@@ -598,7 +598,7 @@ local function CreateClassPower(self)
 	self.ClassPower = ClassPower
 end
 
-
+-- DK runes bars
 local function CreateRunesBar(self)
 	if not class == "DEATHKNIGHT" or not C.unitframes.classPower then return end
 
@@ -635,6 +635,27 @@ local function CreateRunesBar(self)
 		Runes[index] = Rune
 	end
 	self.Runes = Runes
+end
+
+-- Status indicator
+local function CreateStatusIndicator(self)
+	local statusIndicator = CreateFrame("Frame")
+	local statusText = F.CreateFS(self.Health)
+	statusText:SetPoint("LEFT", HealthPoints, "RIGHT", 10, 0)
+
+	local function updateStatus()
+		if UnitAffectingCombat("player") then
+			statusText:SetText("!")
+			statusText:SetTextColor(1, 0, 0)
+		elseif IsResting() then
+			statusText:SetText("Zzz")
+			statusText:SetTextColor(.8, .8, .8)
+		else
+			statusText:SetText("")
+		end
+	end
+
+	statusIndicator:SetScript("OnEvent", updateStatus)
 end
 
 
@@ -1077,27 +1098,8 @@ local UnitSpecific = {
 		CreateAltPower(self)
 		CreateClassPower(self)
 		CreateRunesBar(self)
+		CreateStatusIndicator(self)
 
-
-		-- Status indicator
-
-		local statusIndicator = CreateFrame("Frame")
-		local statusText = F.CreateFS(Health)
-		statusText:SetPoint("LEFT", HealthPoints, "RIGHT", 10, 0)
-
-		local function updateStatus()
-			if UnitAffectingCombat("player") then
-				statusText:SetText("!")
-				statusText:SetTextColor(1, 0, 0)
-			elseif IsResting() then
-				statusText:SetText("Zzz")
-				statusText:SetTextColor(.8, .8, .8)
-			else
-				statusText:SetText("")
-			end
-		end
-
-		statusIndicator:SetScript("OnEvent", updateStatus)
 	end,
 
 	target = function(self, ...)
