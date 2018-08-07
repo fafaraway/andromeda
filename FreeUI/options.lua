@@ -17,16 +17,7 @@ C.media = {
 	["roleIcons"]  = "Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES",
 	["texture"]    = "Interface\\AddOns\\FreeUI\\assets\\statusbar",
 	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\bgTex",
-	["newItemFlash"] = "Interface\\Cooldown\\star4",
-
 	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
-	["abtex"] = {
-		normal		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\gloss",
-		flash		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\flash",
-		pushed		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\pushed",
-		checked		= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\checked",
-		equipped	= "Interface\\AddOns\\FreeUI\\assets\\actionbar\\gloss",
-	},
 }
 
 if GetLocale() == "zhCN" then
@@ -75,6 +66,7 @@ else
 		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 	}
 end
+C.font.standard = { C.font.normal, 12, "OUTLINE"}
 
 -- modify class color
 C.classcolours = {

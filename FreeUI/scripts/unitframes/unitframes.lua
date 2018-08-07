@@ -1,17 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
-if not C.unitframes.enable then return end
-
 local parent, ns = ...
 local oUF = ns.oUF
-
-
-
-local unitframeFont = {
-		C.font.normal,
-		12,
-		"OUTLINE"
-	}
 
 local powerHeight = C.unitframes.power_height
 local altPowerHeight = C.unitframes.altpower_height
@@ -49,12 +39,7 @@ oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
-
-
-
-
---[[ Short values ]]
-
+-- Short values
 local siValue = function(val)
 	if(val >= 1e6) then
 		return format("%.2fm", val * 0.000001)
@@ -74,9 +59,7 @@ local function hex(r, g, b)
 end
 
 
-
--- [[ Update resurrection/selection name colour ]]
-
+-- Update resurrection/selection name colour
 local updateNameColour = function(self, unit)
 	if UnitIsUnit(unit, "target") then
 		self.Text:SetTextColor(.1, .7, 1)
@@ -103,8 +86,7 @@ local updateNameColourAlt = function(self)
 	end
 end
 
---[[ Tags ]]
-
+-- Tags
 oUF.Tags.Methods['free:playerHealth'] = function(unit)
 	if UnitIsDead(unit) or UnitIsGhost(unit) then return end
 
@@ -129,7 +111,6 @@ end
 oUF.Tags.Events['free:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
 
 -- utf8 short string
-
 local function usub(str, len)
 	local i = 1
 	local n = 0
@@ -207,10 +188,7 @@ end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
 
 
-
-
---[[ Update health ]]
-
+-- health
 local PostUpdateHealth = function(Health, unit, min, max)
 	local self = Health:GetParent()
 	local r, g, b
@@ -283,9 +261,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 end
 
 
-
---[[ Update power ]]
-
+-- Power
 local PostUpdatePower = function(Power, unit, cur, max, min)
 	local Health = Power:GetParent().Health
 	local self = Power:GetParent()
@@ -298,7 +274,8 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 	end
 end
 
---[[ Update alt power ]]
+
+-- Alternative power
 local function postUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local perc = math.floor((cur/max)*100)
@@ -339,7 +316,7 @@ local function CreateAltPower(self)
 end
 
 
--- Aura stuff
+-- Auras
 local function UpdateAura(self, elapsed)
 	if(self.expiration) then
 		self.expiration = math.max(self.expiration - elapsed, 0)
@@ -349,8 +326,6 @@ local function UpdateAura(self, elapsed)
 		else
 			self.Duration:SetText()
 		end
-
-
 	end
 end
 
@@ -364,7 +339,6 @@ local function OnAuraEnter(self)
 end
 
 local function PostCreateIcon(element, button)
-
 	local bg = button:CreateTexture(nil, "BACKGROUND")
 	bg:SetPoint("TOPLEFT", -1, 1)
 	bg:SetPoint("BOTTOMRIGHT", 1, -1)
@@ -382,15 +356,10 @@ local function PostCreateIcon(element, button)
 	
 	button.overlay:SetTexture(nil)
 	button.stealable:SetTexture(nil)
-
 	button.cd:SetReverse(true)
-
 	button.icon:SetDrawLayer('ARTWORK')
 
 	button:SetScript('OnEnter', OnAuraEnter)
-
-
-
 
 	local StringParent = CreateFrame('Frame', nil, button)
 	StringParent:SetFrameLevel(20)
@@ -406,57 +375,39 @@ local function PostCreateIcon(element, button)
 	
 	button.Duration = Duration
 
-	F.SetFS(Duration)
-
 	button:HookScript('OnUpdate', UpdateAura)
 end
 
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
 	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-
-
 	button:SetSize(element.size, element.size*.75)
 	button.icon:SetTexCoord(.08, .92, .25, .85)
 
-
-	
-
 	if canStealOrPurge then
-
 		button.bg:SetVertexColor(1, 1, 1)
 		button.sd:SetBackdropBorderColor(1, 1, 1, .65)
-
 	elseif button.isDebuff and element.showDebuffType then
-
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.bg:SetVertexColor(color[1], color[2], color[3])
 		button.sd:SetBackdropBorderColor(color[1], color[2], color[3], .65)
-
 	else
 		button.bg:SetVertexColor(0, 0, 0)
 		button.sd:SetBackdropBorderColor(0, 0, 0, .65)
 	end
 
-
 	if duration then 
 		button.sd:Show()
 		button.bg:Show()
 	end
-
 end
 
-
 local function FilterTargetDebuffs(_, unit, button, _, _, _, _, _, _, _, caster, _, _, spellID)
-
-
 	if(button.isDebuff and not button.isPlayer) then
 		return false
 	end
 	return true
 end
-
-
 
 local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID)
 	if C.hideDebuffs[spellID] then
@@ -465,17 +416,12 @@ local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellI
 	return true
 end
 
-
-
 local function groupBuffFilter(_, unit, button, _, _, _, _, _, _, caster, _, _, spellID)
 	if (button.isPlayer and C.myBuffs[spellID]) or C.allBuffs[spellID] then
 		return true
 	end
 	return false
 end
-
-
-
 
 local function PostUpdateGapIcon(_, _, icon)
 	if icon.sd and icon.sd:IsShown() then
@@ -487,14 +433,13 @@ local function PostUpdateGapIcon(_, _, icon)
 end
 
 
--- [[  Update Portrait ]]
-
+-- Portrait
 local function PostUpdatePortrait(element, unit)
 	-- element:SetModelAlpha(0.1)
 	element:SetDesaturation(1)
 end
 
--- [[ Threat update (party) ]]
+-- Threat update (party)
 
 local UpdateThreat = function(self, event, unit)
 	if(unit ~= self.unit) then return end
@@ -512,8 +457,8 @@ local UpdateThreat = function(self, event, unit)
 	end
 end
 
--- [[ update class power ]]
 
+-- Class power
 local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	if(diff) then
 		for index = 1, max do
@@ -600,9 +545,9 @@ local function CreateClassPower(self)
 	self.ClassPower = ClassPower
 end
 
--- DK runes bars
-local function CreateRunesBar(self)
 
+-- Runes bars
+local function CreateRunesBar(self)
 	local Runes = CreateFrame("Frame", nil, self)
 	Runes:SetWidth(playerWidth)
 	Runes:SetHeight(classPowerHeight)
@@ -637,6 +582,7 @@ local function CreateRunesBar(self)
 	end
 	self.Runes = Runes
 end
+
 
 -- status indicator
 local function CreateStatusIndicator(self)
@@ -697,8 +643,7 @@ local function CreateStatusIndicator(self)
 end
 
 
---[[ Hide Blizz frames ]]
-
+-- Hide Blizz frames
 if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
 	CompactRaidFrameManager:SetParent(FreeUIHider)
 	CompactUnitFrameProfiles:UnregisterAllEvents()
@@ -711,8 +656,7 @@ for i = 1, MAX_PARTY_MEMBERS do
 end
 
 
---[[ Global ]]
-
+-- Global
 local Shared = function(self, unit, isSingle)
 	self:SetScript("OnEnter", UnitFrame_OnEnter)
 	self:SetScript("OnLeave", UnitFrame_OnLeave)
@@ -986,8 +930,8 @@ local Shared = function(self, unit, isSingle)
 	Power.PostUpdate = PostUpdatePower
 end
 
--- [[ Unit specific functions ]]
 
+-- Unit specific functions
 local UnitSpecific = {
 	pet = function(self, ...)
 		Shared(self, ...)
@@ -1083,7 +1027,7 @@ local UnitSpecific = {
 				Castbar:SetHeight(self:GetHeight())
 				Castbar:SetPoint(unpack(C.unitframes.player_castbar))
 				Castbar.Text:SetAllPoints(Castbar)
-				Castbar.Text:SetFont(unpack(unitframeFont))
+				Castbar.Text:SetFont(unpack(C.font.standard))
 
 				local sf = Castbar:CreateTexture(nil, "OVERLAY")
 				sf:SetVertexColor(.5, .5, .5, .5)
@@ -1170,7 +1114,7 @@ local UnitSpecific = {
 			Castbar:SetHeight(C.unitframes.castbarHeight)
 			Castbar:SetPoint(unpack(C.unitframes.target_castbar))
 			Castbar.Text:SetPoint("TOP", Castbar, "BOTTOM", 0, -4)
-			Castbar.Text:SetFont(unpack(unitframeFont))
+			Castbar.Text:SetFont(unpack(C.font.standard))
 
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
 			sf:SetVertexColor(.5, .5, .5, .5)
@@ -1187,7 +1131,7 @@ local UnitSpecific = {
 		local Name = F.CreateFS(self)
 		Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
 		Name:SetPoint("RIGHT", self)
-		Name:SetFont(unpack(unitframeFont))
+		Name:SetFont(unpack(C.font.standard))
 		Name:SetWidth(C.unitframes.targettarget_width)
 		Name:SetJustifyH("RIGHT")
 		Name:SetTextColor(1, 1, 1)
@@ -1274,7 +1218,7 @@ local UnitSpecific = {
 
 		local ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "RIGHT")
 		ttt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-		ttt:SetFont(unpack(unitframeFont))
+		ttt:SetFont(unpack(C.font.standard))
 		ttt:SetWordWrap(false)
 		ttt:SetWidth(C.unitframes.targettarget_width)
 
@@ -1335,7 +1279,7 @@ local UnitSpecific = {
 			Castbar:SetHeight(C.unitframes.castbarHeight)
 			Castbar:SetPoint(unpack(C.unitframes.focus_castbar))
 			Castbar.Text:SetPoint("BOTTOM", Castbar, "TOP", 0, 4)
-			Castbar.Text:SetFont(unpack(unitframeFont))
+			Castbar.Text:SetFont(unpack(C.font.standard))
 
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
 			sf:SetVertexColor(.5, .5, .5, .5)
@@ -1353,7 +1297,7 @@ local UnitSpecific = {
 
 		local Name = F.CreateFS(self)
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-		Name:SetFont(unpack(unitframeFont))
+		Name:SetFont(unpack(C.font.standard))
 		Name:SetWidth(C.unitframes.focus_width)
 		Name:SetJustifyH"RIGHT"
 		Name:SetWordWrap(false)
@@ -1387,7 +1331,7 @@ local UnitSpecific = {
 
 		local ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "LEFT")
 		ttt:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-		ttt:SetFont(unpack(unitframeFont))
+		ttt:SetFont(unpack(C.font.standard))
 		ttt:SetWordWrap(false)
 		ttt:SetWidth(C.unitframes.focustarget_width)
 
@@ -1426,7 +1370,7 @@ local UnitSpecific = {
 		Health.value = HealthPoints
 
 		local Name = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
-		Name:SetFont(unpack(unitframeFont))
+		Name:SetFont(unpack(C.font.standard))
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetWidth((bossWidth / 2) + 10)
 		Name:SetWordWrap(false)
@@ -1443,7 +1387,7 @@ local UnitSpecific = {
 		Spark:SetHeight(self.Health:GetHeight())
 
 		Castbar.Text = F.CreateFS(self)
-		Castbar.Text:SetFont(unpack(unitframeFont))
+		Castbar.Text:SetFont(unpack(C.font.standard))
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1531,7 +1475,7 @@ local UnitSpecific = {
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
 		Name:SetWidth(110)
 		Name:SetHeight(12)
-		Name:SetFont(unpack(unitframeFont))
+		Name:SetFont(unpack(C.font.standard))
 
 		self:Tag(Name, '[name]')
 		self.Name = Name
@@ -1542,7 +1486,7 @@ local UnitSpecific = {
 		Spark:SetHeight(self.Health:GetHeight())
 
 		Castbar.Text = F.CreateFS(self)
-		Castbar.Text:SetFont(unpack(unitframeFont))
+		Castbar.Text:SetFont(unpack(C.font.standard))
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1608,7 +1552,7 @@ do
 
 		Health:SetHeight(partyHeight - powerHeight - 1)
 		if C.unitframes.partyNameAlways then
-			Text:SetFont(unpack(unitframeFont))
+			Text:SetFont(unpack(C.font.standard))
 			self:Tag(Text, '[free:name]')
 		elseif C.unitframes.partyMissingHealth then
 			self:Tag(Text, '[free:missinghealth]')
@@ -1753,8 +1697,8 @@ do
 	end
 end
 
---[[ Register and activate style ]]
 
+-- Register and activate style
 oUF:RegisterStyle("Free", Shared)
 for unit,layout in next, UnitSpecific do
 	oUF:RegisterStyle('Free - ' .. unit:gsub("^%l", string.upper), layout)
@@ -1803,10 +1747,6 @@ oUF:Factory(function(self)
 
 	partyPos = C.unitframes.party
 	raidPos = C.unitframes.raid
-
-	-- spawnHelper(self, 'pet', "RIGHT", player, "LEFT", -5, 0)
-	-- spawnHelper(self, 'targettarget', "LEFT", target, "RIGHT", 5, 0)
-	-- spawnHelper(self, 'focustarget', "LEFT", focus, "RIGHT", 5, 0)
 
 	for n = 1, MAX_BOSS_FRAMES do
 		spawnHelper(self, 'boss' .. n, C.unitframes.boss.a, C.unitframes.boss.b, C.unitframes.boss.c, C.unitframes.boss.x, C.unitframes.boss.y + (66 * n))
