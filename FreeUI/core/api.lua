@@ -141,12 +141,18 @@ end
 
 function F:CreateSD(a)
 	if self.Shadow then return end
-	self.Shadow = CreateFrame("Frame", nil, self)
-	self.Shadow:SetPoint("TOPLEFT", -3, 3)
-	self.Shadow:SetPoint("BOTTOMRIGHT", 3, -3)
+
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
+	local lvl = frame:GetFrameLevel()
+
+	self.Shadow = CreateFrame("Frame", nil, frame)
+	self.Shadow:SetPoint("TOPLEFT", self, -3, 3)
+	self.Shadow:SetPoint("BOTTOMRIGHT", self, 3, -3)
 	self.Shadow:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .6)
-	CreateTex(self)
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .5)
+	self.Shadow:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+
 	return self.Shadow
 end
 

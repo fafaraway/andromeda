@@ -159,6 +159,8 @@ local function reskinProgressbar(self, block, line)
 		icon:ClearAllPoints()
 		icon:SetPoint("RIGHT", 30, 0)
 
+		F.CreateBDFrame(icon)
+
 		bar.Label:ClearAllPoints()
 		bar.Label:SetPoint("CENTER")
 		F.SetFS(bar.Label)
