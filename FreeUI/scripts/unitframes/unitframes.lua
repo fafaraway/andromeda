@@ -1,4 +1,5 @@
 local F, C, L = unpack(select(2, ...))
+local UF = F:RegisterModule("unitframes")
 
 local parent, ns = ...
 local oUF = ns.oUF
@@ -430,6 +431,98 @@ local function PostUpdateGapIcon(_, _, icon)
 	if icon.bg and icon.bg:IsShown() then
 		icon.bg:Hide()
 	end
+end
+
+
+local function CreateAuras(self)
+	local Auras = CreateFrame("Frame", nil, self)
+	Auras["growth-x"] = "RIGHT"
+	Auras['spacing-x'] = 4
+	Auras['spacing-y'] = 0
+
+	Auras.gap = true
+	Auras.showDebuffType = true
+	Auras.showStealableBuffs = true
+
+	if self.unitStyle == "pet" then
+		Auras.initialAnchor = "TOPLEFT"
+		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+
+		Auras["growth-y"] = "DOWN"
+		Auras.size = 20
+
+		Auras.disableCooldown = true
+
+	elseif self.unitStyle == "target" then
+		Auras.initialAnchor = "BOTTOMLEFT"
+		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
+
+		Auras["growth-y"] = "UP"
+		Auras.size = 36
+
+		if C.unitframes.castbyPlayer then
+			Auras.CustomFilter = FilterTargetDebuffs
+		end
+	elseif self.unitStyle == "boss" then
+		Auras.initialAnchor = "TOPLEFT"
+		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+		Auras["growth-y"] = "DOWN"
+
+		Auras.size = 26
+
+		Auras.CustomFilter = FilterTargetDebuffs
+
+	end
+
+
+	Auras:SetSize(self:GetWidth(), 100)
+
+
+	self.Auras = Auras
+
+	Auras.PostCreateIcon = PostCreateIcon
+	Auras.PostUpdateIcon = PostUpdateIcon
+	Auras.PostUpdateGapIcon = PostUpdateGapIcon
+
+end
+
+local function CreateBuffs(self)
+	local Buffs = CreateFrame("Frame", nil, self)
+	Buffs.initialAnchor = "TOPLEFT"
+	Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+	Buffs["growth-x"] = "RIGHT"
+	Buffs["growth-y"] = "DOWN"
+	Buffs["spacing-x"] = 4
+	Buffs["spacing-y"] = 0
+
+	Buffs:SetSize(self:GetWidth(), 100)
+	Buffs.size = 22
+
+	Buffs.showStealableBuffs = true
+
+	self.Buffs = Buffs
+	Buffs.PostCreateIcon = PostCreateIcon
+	Buffs.PostUpdateIcon = PostUpdateIcon
+end
+
+local function CreateDebuffs(self)
+	local Debuffs = CreateFrame("Frame", nil, self)
+	Debuffs.initialAnchor = "TOPLEFT"
+	Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 4, 0)
+	Debuffs["growth-x"] = "RIGHT"
+	Debuffs["growth-y"] = "DOWN"
+	Debuffs["spacing-x"] = 4
+	Debuffs["spacing-y"] = 0
+
+	Debuffs:SetSize(self:GetWidth(), 100)
+	Debuffs.size = 28
+
+	Debuffs.showStealableBuffs = true
+	Debuffs.showDebuffType = true
+
+	self.Debuffs = Debuffs
+	Debuffs.PostCreateIcon = PostCreateIcon
+	Debuffs.PostUpdateIcon = PostUpdateIcon
 end
 
 
@@ -937,7 +1030,9 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
-		local Auras = CreateFrame("Frame", nil, self)
+		CreateAuras(self)
+
+		--[[local Auras = CreateFrame("Frame", nil, self)
 		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
 		Auras.initialAnchor = "TOPLEFT"
 		Auras["growth-x"] = "RIGHT"
@@ -957,7 +1052,7 @@ local UnitSpecific = {
 		self.Auras = Auras
 
 		Auras.PostCreateIcon = PostCreateIcon
-		Auras.PostUpdateIcon = PostUpdateIcon
+		Auras.PostUpdateIcon = PostUpdateIcon]]
 	end,
 
 	player = function(self, ...)
@@ -1128,7 +1223,10 @@ local UnitSpecific = {
 		self:Tag(Name, '[name]')
 		self.Name = Name
 
-		local Auras = CreateFrame("Frame", nil, self)
+		CreateAuras(self)
+
+
+		--[[local Auras = CreateFrame("Frame", nil, self)
 		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
 		Auras.initialAnchor = "BOTTOMLEFT"
 		Auras["growth-x"] = "RIGHT"
@@ -1157,7 +1255,7 @@ local UnitSpecific = {
 
 		if C.unitframes.castbyPlayer then
 			Auras.CustomFilter = FilterTargetDebuffs
-		end
+		end]]
 
 
 
@@ -1397,43 +1495,8 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-
-
-		
-
-
-
-		local Auras = CreateFrame("Frame", nil, self)
-		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		Auras.initialAnchor = "TOPLEFT"
-		Auras["growth-x"] = "RIGHT"
-		Auras["growth-y"] = "DOWN"
-		Auras['spacing-x'] = 4
-		Auras['spacing-y'] = 0
-
-		Auras.numDebuffs = 8
-		Auras.numBuffs = 8
-		Auras:SetHeight(100)
-		Auras:SetWidth(bossWidth)
-		Auras.size = 26
-
-
-		Auras.gap = true
-
-		self.Auras = Auras
-
-		Auras.showDebuffType = true
-		Auras.showStealableBuffs = true
-
-		
-		Auras.PostCreateIcon = PostCreateIcon
-		Auras.PostUpdateIcon = PostUpdateIcon
-		Auras.PostUpdateGapIcon = PostUpdateGapIcon
-		Auras.CustomFilter = FilterTargetDebuffs
-
-	
-
-
+		CreateBuffs(self)
+		CreateDebuffs(self)
 
 	end,
 
@@ -1496,22 +1559,10 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		--[[local Buffs = CreateFrame("Frame", nil, self)
-		Buffs.initialAnchor = "TOPLEFT"
-		Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		Buffs["growth-x"] = "RIGHT"
-		Buffs["growth-y"] = "DOWN"
-		Buffs['spacing-x'] = 3
-		Buffs['spacing-y'] = 3
 
-		Buffs:SetHeight(22)
-		Buffs:SetWidth(arenaWidth)
-		Buffs.num = C.unitframes.num_arena_buffs
-		Buffs.size = 22
+		CreateBuffs(self)
+		CreateDebuffs(self)
 
-		self.Buffs = Buffs
-
-		Buffs.PostUpdateIcon = PostUpdateIcon]]
 
 		self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 	end,
@@ -1645,7 +1696,6 @@ do
 		Buffs.num = 3
 		Buffs.size = 12
 
-		Buffs.showDebuffType = true
 		Buffs.showStealableBuffs = true
 		Buffs.disableCooldown = true
 		Buffs.disableMouse = true
@@ -1742,7 +1792,7 @@ oUF:Factory(function(self)
 
 	if C.unitframes.enableArena then
 		for n = 1, 5 do
-			spawnHelper(self, 'arena' .. n, C.unitframes.arena.a, C.unitframes.arena.b, C.unitframes.arena.c, C.unitframes.arena.x, C.unitframes.arena.y - (66 * n))
+			spawnHelper(self, 'arena' .. n, C.unitframes.arena.a, C.unitframes.arena.b, C.unitframes.arena.c, C.unitframes.arena.x, C.unitframes.arena.y + (100 * n))
 		end
 	end
 
