@@ -746,11 +746,11 @@ local function CreateIndicator(self)
 	end
 
 	local RaidTargetIndicator = self:CreateTexture()
-	
+
 	if self.unitStyle == "group" then
 		RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
 	elseif self.unitStyle == "targettarget" then
-		RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
 	elseif self.unitStyle == "focus" then
 		RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
 	elseif self.unitStyle == "focustarget" then
@@ -971,6 +971,7 @@ local Shared = function(self, unit, isSingle)
 			elseif unit=="player" then
 				self.Iconbg:SetVertexColor(0, 0, 0)
 				if C.unitframes.castbarSeparate then
+					local _, class = UnitClass("player")
 					Castbar:SetStatusBarColor(C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b)
 				else
 					Castbar:SetStatusBarColor(0, 0, 0, .3)
@@ -1099,6 +1100,7 @@ local UnitSpecific = {
 
 		Spark:SetHeight(self.Health:GetHeight())
 
+		CreateIndicator(self)
 		CreateAuras(self)
 
 		--[[local Auras = CreateFrame("Frame", nil, self)
@@ -1244,7 +1246,7 @@ local UnitSpecific = {
 			Castbar.Text:SetDrawLayer("ARTWORK")
 
 			local IconFrame = CreateFrame("Frame", nil, Castbar)
-			IconFrame:SetPoint("TOPRIGHT", self, "TOPLEFT", -4, 0)
+			IconFrame:SetPoint("TOPLEFT", self, "TOPRIGHT", -4, 0)
 			IconFrame:SetHeight(24)
 			IconFrame:SetWidth(24)
 
@@ -1419,12 +1421,15 @@ local UnitSpecific = {
 			CreateIndicator(self)
 
 			local IconFrame = CreateFrame("Frame", nil, Castbar)
+			F.CreateSD(IconFrame)
+			IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -4, 0)
+			IconFrame:SetSize(14, 14)
 
 			local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
 			Icon:SetAllPoints(IconFrame)
 			Icon:SetTexCoord(.08, .92, .08, .92)
 
-			F.CreateSD(IconFrame)
+			
 
 			Castbar.Icon = Icon
 
@@ -1444,8 +1449,7 @@ local UnitSpecific = {
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
 			sf:SetVertexColor(.5, .5, .5, .5)
 			Castbar.SafeZone = sf
-			IconFrame:SetPoint("LEFT", Castbar, "RIGHT", 4, 0)
-			IconFrame:SetSize(14, 14)
+			
 
 			local bg = CreateFrame("Frame", nil, Castbar)
 			bg:SetPoint("TOPLEFT", -1, 1)
