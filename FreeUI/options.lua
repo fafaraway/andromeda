@@ -103,8 +103,6 @@ C.reactioncolours = {
 
 
 C["appearance"] = {
-
-
 	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
 		["customColour"] = {r = 1, g = 1, b = 1},
 	["fontUseAlternativeFont"] = false,
@@ -115,9 +113,7 @@ C["appearance"] = {
 	["fontShadow"] = true,
 	["fontUseColorFont"] = true,
 	["fontColorFontRGB"] = {r = 247/255, g = 225/255, b =171/255},
-
 }
-
 
 
 C["actionbars"] = {
@@ -149,7 +145,65 @@ C["auras"] = {
 }
 
 
+C["maps"] = {
+	["worldMapScale"] = 1,
+	["miniMapScale"] = 1,
+	["miniMapPosition"] = { "TOPRIGHT", UIParent, "TOPRIGHT", -22, 0 },
+	["miniMapSize"] = 256,
+	["whoPings"] = true,
+	["mapReveal"] = true,
+}
 
+
+C["misc"] = {
+	["uiScale"] = 1,
+	["uiScaleAuto"] = true,	
+
+	["cooldownpulse"] = true,
+	["flashCursor"] = true,
+
+	["mailButton"] = true, 
+	["undressButton"] = true, 
+	["vignette"] = true,
+	["vignetteAlpha"] = .5,
+
+	["alreadyKnown"] = true,
+
+	["bossBanner"] = true,
+	["talkingHead"] = true,
+
+	["hideRaidNames"] = true,
+	["saySapped"] = true,
+
+	["autoActionCam"] = true,
+
+	["rareAlert"] = true,
+	["rareAlertNotify"] = true,
+	["interruptAlert"] = true,
+	["interruptNotify"] = false,
+	["dispelAlert"] = true,
+
+	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
+		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
+		["autoSetRole_verbose"] = true, -- tells you what happens when setting role
+
+	["autoScreenShot"] = true,		-- auto screenshot when achieved
+
+	["autoSell"] = true, -- automatically sell greys
+	["autoRepair"] = true,			-- automatically repair items
+		["autoRepair_guild"] = true, -- use guild funds for auto repairs
+
+	["autoAccept"] = false, -- auto accept invites from friends and guildies
+
+	["focuser"] = true,
+}
+
+
+C["camera"] = {
+	["speed"] = 50,
+	["increment"] = 3,
+	["distance"] = 50,
+}
 
 
 C["bags"] = {
@@ -183,7 +237,6 @@ C["infoBar"] = {
 }
 
 
-
 C["tooltip"] = {
 	["enable"] = true,		-- enable tooltip and modules
 	["anchorCursor"] = false,		-- tooltip at mouse
@@ -203,7 +256,6 @@ C["tooltip"] = {
 }
 
 
-
 C["chat"] = {
 	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
 	["sticky"] = true,
@@ -214,6 +266,7 @@ C["chat"] = {
 	["minimize"] = true,
 
 }
+
 
 C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
@@ -308,69 +361,6 @@ C["unitframes"] = {
 	["num_target_buffs"] = 16,
 	["num_arena_buffs"] = 8,
 	["num_focus_debuffs"] = 4,
-}
-
-
-C["maps"] = {
-	["worldMapScale"] = 1,
-	["miniMapScale"] = 1,
-	["miniMapPosition"] = { "TOPRIGHT", UIParent, "TOPRIGHT", -22, 0 },
-	["miniMapSize"] = 256,
-	["whoPings"] = true,
-	["mapReveal"] = true,
-}
-
-
-
-C["misc"] = {
-	["uiScale"] = 1,
-	["uiScaleAuto"] = true,	
-
-	["cooldownpulse"] = true,
-	["flashCursor"] = true,
-
-	["mailButton"] = true, 
-	["undressButton"] = true, 
-	["vignette"] = true,
-	["vignetteAlpha"] = .5,
-
-	["alreadyKnown"] = true,
-
-	["bossBanner"] = true,
-	["talkingHead"] = true,
-
-	["hideRaidNames"] = true,
-	["saySapped"] = true,
-
-	["autoActionCam"] = true,
-
-	["rareAlert"] = true,
-	["rareAlertNotify"] = true,
-	["interruptAlert"] = true,
-	["interruptNotify"] = false,
-	["dispelAlert"] = true,
-
-	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
-		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
-		["autoSetRole_verbose"] = true, -- tells you what happens when setting role
-
-	["autoScreenShot"] = true,		-- auto screenshot when achieved
-
-	["autoSell"] = true, -- automatically sell greys
-	["autoRepair"] = true,			-- automatically repair items
-		["autoRepair_guild"] = true, -- use guild funds for auto repairs
-
-	["autoAccept"] = false, -- auto accept invites from friends and guildies
-}
-
-
-
-
--- camera stuff
-C["camera"] = {
-	["speed"] = 50,
-	["increment"] = 3,
-	["distance"] = 50,
 }
 
 

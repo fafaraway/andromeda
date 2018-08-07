@@ -10,6 +10,7 @@ function module:OnLogin()
 	self:flashCursor()
 	self:questRewardHighlight()
 	self:QuickJoin()
+	self:Focuser()
 
 
 	-- Remove Boss Banner

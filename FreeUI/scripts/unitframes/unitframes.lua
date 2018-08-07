@@ -881,18 +881,6 @@ local Shared = function(self, unit, isSingle)
 		insideAlpha = 1,
 		outsideAlpha = .3}
 
-	-- [[ shift + left click to set focus ]]
-
-	local ModKey = "shift"
-	local MouseButton = 1
-	local key = ModKey .. "-type" .. (MouseButton or "")
-	if(self.unit == "focus") then
-		self:SetAttribute(key, "macro")
-		self:SetAttribute("macrotext", "/clearfocus")
-	else
-		self:SetAttribute(key, "focus")
-	end
-
 
 	--[[ Set up the layout ]]
 
