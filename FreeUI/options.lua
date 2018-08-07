@@ -180,8 +180,10 @@ C["misc"] = {
 	["rareAlert"] = true,
 	["rareAlertNotify"] = true,
 	["interruptAlert"] = true,
-	["interruptNotify"] = false,
-	["dispelAlert"] = true,
+		["interruptSound"] = true,
+		["interruptNotify"] = false,
+		["dispelSound"] = true,
+		["dispelNotify"] = false,
 
 	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
