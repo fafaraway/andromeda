@@ -232,8 +232,3 @@ function rActionBar:CreatePossessExitBar(addonName,cfg)
 	PossessBackground2:SetTexture(nil)
 end
 
-
-function module:OnLogin()
-
-	self:ReskinBars()
-end
