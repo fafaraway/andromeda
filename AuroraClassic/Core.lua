@@ -148,38 +148,6 @@ local function clearButton(self)
 	self:SetBackdropBorderColor(0, 0, 0)
 end
 
---[[function F:Reskin(noHighlight)
-	if self.SetNormalTexture then self:SetNormalTexture("") end
-	if self.SetHighlightTexture then self:SetHighlightTexture("") end
-	if self.SetPushedTexture then self:SetPushedTexture("") end
-	if self.SetDisabledTexture then self:SetDisabledTexture("") end
-
-	if self.Left then self.Left:SetAlpha(0) end
-	if self.Middle then self.Middle:SetAlpha(0) end
-	if self.Right then self.Right:SetAlpha(0) end
-	if self.LeftSeparator then self.LeftSeparator:SetAlpha(0) end
-	if self.RightSeparator then self.RightSeparator:SetAlpha(0) end
-	if self.TopLeft then self.TopLeft:SetAlpha(0) end
-	if self.TopMiddle then self.TopMiddle:SetAlpha(0) end
-	if self.TopRight then self.TopRight:SetAlpha(0) end
-	if self.MiddleLeft then self.MiddleLeft:SetAlpha(0) end
-	if self.MiddleMiddle then self.MiddleMiddle:SetAlpha(0) end
-	if self.MiddleRight then self.MiddleRight:SetAlpha(0) end
-	if self.BottomLeft then self.BottomLeft:SetAlpha(0) end
-	if self.BottomMiddle then self.BottomMiddle:SetAlpha(0) end
-	if self.BottomRight then self.BottomRight:SetAlpha(0) end
-
-	F.CreateBD(self, .0)
-
-	self.bgTex = F.CreateGradient(self)
-
-	if not noHighlight then
-		self:HookScript("OnEnter", colourButton)
- 		self:HookScript("OnLeave", clearButton)
-	end
-end]]
-
-
 F.CreatePulse = function(frame)
 	local speed = .05
 	local mult = 1
@@ -303,6 +271,19 @@ local function textureOnLeave(self)
 end
 F.clearArrow = textureOnLeave
 
+local function scrollOnEnter(self)
+	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
+	if not bu then return end
+	bu.bg:SetBackdropColor(r, g, b, .3)
+	bu.bg:SetBackdropBorderColor(r, g, b)
+end
+local function scrollOnLeave(self)
+	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
+	if not bu then return end
+	bu.bg:SetBackdropColor(0, 0, 0, 0)
+	bu.bg:SetBackdropBorderColor(0, 0, 0)
+end
+
 function F:ReskinScroll()
 	local frame = self:GetName()
 
@@ -363,6 +344,9 @@ function F:ReskinScroll()
 	up:HookScript("OnLeave", textureOnLeave)
 	down:HookScript("OnEnter", textureOnEnter)
 	down:HookScript("OnLeave", textureOnLeave)
+	
+	self:HookScript("OnEnter", scrollOnEnter)
+	self:HookScript("OnLeave", scrollOnLeave)
 end
 
 function F:ReskinDropDown()

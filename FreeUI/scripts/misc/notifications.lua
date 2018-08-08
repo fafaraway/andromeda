@@ -14,8 +14,17 @@ end
 function module:RareAlert()
 	if not C.misc.rareAlert then return end
 
+	local isIgnored = {
+		[1153] = true,		-- 部落要塞
+		[1159] = true,		-- 联盟要塞
+		[1803] = true,		-- 涌泉海滩
+	}
+
 	local cache = {}
 	local function updateAlert(_, id)
+		local instID = select(8, GetInstanceInfo())
+		if isIgnored[instID] then return end
+
 		if id and not cache[id] then
 			local info = C_VignetteInfo.GetVignetteInfo(id)
 			if not info then return end
