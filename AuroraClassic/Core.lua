@@ -274,8 +274,8 @@ F.clearArrow = textureOnLeave
 local function scrollOnEnter(self)
 	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
 	if not bu then return end
-	bu.bg:SetBackdropColor(r, g, b, .3)
-	bu.bg:SetBackdropBorderColor(r, g, b)
+	bu.bg:SetBackdropColor(.3, .3, .3, .6)
+	bu.bg:SetBackdropBorderColor(.3, .3, .3)
 end
 local function scrollOnLeave(self)
 	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
