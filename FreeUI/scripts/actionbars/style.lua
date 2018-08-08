@@ -70,7 +70,12 @@ local function applyBackground(bu)
 	bu.bg = F.CreateBDFrame(bu)
 	bu.sd = F.CreateSD(bu.bg, .5)
 
+	if C.actionbars.classColor then
+		bu.bg:SetBackdropBorderColor(r, g, b)
+	end
+
 	bu.bg = true
+	bu.sd = true
 end
 
 local function styleExtraActionButton(bu)
