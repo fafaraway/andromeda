@@ -66,7 +66,7 @@ else
 		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 	}
 end
-C.font.standard = { C.font.normal, 12, "OUTLINE"}
+
 
 -- modify class color
 C.classcolours = {
@@ -302,54 +302,54 @@ C["unitframes"] = {
 
 	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 280},						-- player unitframe position
 	["player_width"] = 200,
-	["player_height"] = 12,
+	["player_height"] = 14,
 	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
 	["player_castbar_width"] = 200,
 
 	["pet"] = {"RIGHT", "oUF_FreePlayer", "LEFT", -5, 0},									-- pet unitframe position
-	["pet_width"] = 89,
-	["pet_height"] = 12,
+	["pet_width"] = 68,
+	["pet_height"] = 14,
 
 	["frameVisibility"] = false,
 	["frameVisibility_player"] = "[combat][mod][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide",
 	["frameVisibility_pet"] = "[nocombat,nomod,@target,noexists][@pet,noexists] hide; show",
 
 
-	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 100, 160},					-- target unitframe position
-	["target_width"] = 276,
-	["target_height"] = 12,
-	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -6},			-- target castbar position
-	["target_castbar_width"] = 276,
+	["target"] = {"RIGHT", 'oUF_FreePlayer', "LEFT", -100, 200},					-- target unitframe position
+	["target_width"] = 262,
+	["target_height"] = 14,
+	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -8},			-- target castbar position
+	["target_castbar_width"] = 262,
 
-	["targettarget"] = {"LEFT", "oUF_FreeTarget", "RIGHT", 5, 0},							-- target target unitframe position
+	["targettarget"] = {"RIGHT", 'oUF_FreeTarget', "LEFT", -5, 0},							-- target target unitframe position
 	["targettarget_width"] = 80,
-	["targettarget_height"] = 12,
+	["targettarget_height"] = 14,
 
-	["focus"] = {"RIGHT", 'oUF_FreePlayer', "LEFT", -5, 40},					-- focus unitframe position
-	["focus_width"] = 89,
-	["focus_height"] = 12,
-	["focus_castbar"] = {"RIGHT", 'oUF_FreeFocus', "RIGHT", 0, 40},				-- focus castbar position
-	["focus_castbar_width"] = 165,
+	["focus"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 30, 60},					-- focus unitframe position
+	["focus_width"] = 92,
+	["focus_height"] = 14,
+	["focus_castbar"] = {"LEFT", 'oUF_FreeFocus', "LEFT", 0, 40},				-- focus castbar position
+	["focus_castbar_width"] = 189,
 
-	["focustarget"] = {"RIGHT", "oUF_FreeFocus", "LEFT", -5, 0},							-- focus target unitframe position
-	["focustarget_width"] = 89,
-	["focustarget_height"] = 12,
+	["focustarget"] = {"LEFT", 'oUF_FreeFocus', "RIGHT", 5, 0},							-- focus target unitframe position
+	["focustarget_width"] = 92,
+	["focustarget_height"] = 14,
 
-	["party"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 2, -30},			-- party unitframe position
-	["party_width"] = 52,
+	["party"] = {"BOTTOMRIGHT", 'oUF_FreeTarget', "TOPLEFT", -100, 100},			-- party unitframe position
+	["party_width"] = 100,
 	["party_height"] = 34,
 
-	["raid"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -30},			-- raid unitframe position
-	["raid_width"] = 52,
+	["raid"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -40},			-- raid unitframe position
+	["raid_width"] = 50,
 	["raid_height"] = 30,
 
-	["boss"] = {a='LEFT', b='oUF_FreeTarget', c="RIGHT", x=100, y=180},			-- boss unitframe position
-	["boss_width"] = 160,
+	["boss"] = {a='LEFT', b='oUF_FreePlayer', c="RIGHT", x=400, y=400},			-- boss unitframe position
+	["boss_width"] = 156,
 	["boss_height"] = 16,
 
-	["arena"] = {a='LEFT', b='UIParent', c="LEFT", x=20, y=100},				-- arena unitframe position
-	["arena_width"] = 229,
-	["arena_height"] = 12,
+	["arena"] = {a='RIGHT', b='oUF_FreeTarget', c="LEFT", x=-100, y=180},				-- arena unitframe position
+	["arena_width"] = 156,
+	["arena_height"] = 16,
 	
 	["castbarColorShield"] = {241/255, 23/255, 45/255},
 	["castbarColorNormal"] = {113/255, 178/255, 237/255},
@@ -358,12 +358,6 @@ C["unitframes"] = {
 	["power_height"] = 3,
 	["altpower_height"] = 2,
 	["classPower_height"] = 4,
-
-	["num_player_debuffs"] = 8,
-	["num_target_debuffs"] = 16,
-	["num_target_buffs"] = 16,
-	["num_arena_buffs"] = 8,
-	["num_focus_debuffs"] = 4,
 }
 
 

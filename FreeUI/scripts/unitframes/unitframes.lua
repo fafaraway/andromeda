@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local UF = F:RegisterModule("unitframes")
+--local UF = F:RegisterModule("unitframes")
 
 local parent, ns = ...
 local oUF = ns.oUF
@@ -38,6 +38,8 @@ oUF.colors.power.MANA = {100/255, 149/255, 237/255}
 oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
+
+ufFont = { C.font.normal, 12, "OUTLINE"}
 
 
 -- Short values
@@ -317,6 +319,7 @@ local function CreateAltPower(self)
 end
 
 
+
 -- Auras
 local function UpdateAura(self, elapsed)
 	if(self.expiration) then
@@ -367,7 +370,7 @@ local function PostCreateIcon(element, button)
 
 	button.count:SetParent(StringParent)
 	button.count:ClearAllPoints()
-	button.count:SetPoint('TOP', button, 2, -2)
+	button.count:SetPoint('TOPRIGHT', button, 2, -2)
 
 	F.SetFS(button.count)
 
@@ -440,63 +443,54 @@ local function CreateAuras(self)
 	Auras['spacing-x'] = 4
 	Auras['spacing-y'] = 0
 
+	Auras:SetSize(self:GetWidth(), 100)
+
 	Auras.gap = true
 	Auras.showDebuffType = true
 	Auras.showStealableBuffs = true
 
 	if self.unitStyle == "pet" then
 		Auras.initialAnchor = "TOPLEFT"
-		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-
+		Auras:SetPoint("TOP", self, "BOTTOM", 0, -4)
 		Auras["growth-y"] = "DOWN"
 		Auras.size = 20
-
-		Auras.disableCooldown = true
-
+		--Auras.disableCooldown = true
 	elseif self.unitStyle == "target" then
 		Auras.initialAnchor = "BOTTOMLEFT"
-		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
-
+		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
 		Auras["growth-y"] = "UP"
-		Auras.size = 36
+		Auras.size = 30
+		Auras:SetSize(self:GetWidth()-24, 100)
 
 		if C.unitframes.castbyPlayer then
 			Auras.CustomFilter = FilterTargetDebuffs
 		end
 	elseif self.unitStyle == "boss" then
 		Auras.initialAnchor = "TOPLEFT"
-		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+		Auras:SetPoint("TOP", self, "BOTTOM", 0, -4)
 		Auras["growth-y"] = "DOWN"
-
-		Auras.size = 26
+		Auras.size = 28
 
 		Auras.CustomFilter = FilterTargetDebuffs
-
 	end
-
-
-	Auras:SetSize(self:GetWidth(), 100)
-
-
 	self.Auras = Auras
 
 	Auras.PostCreateIcon = PostCreateIcon
 	Auras.PostUpdateIcon = PostUpdateIcon
 	Auras.PostUpdateGapIcon = PostUpdateGapIcon
-
 end
 
 local function CreateBuffs(self)
 	local Buffs = CreateFrame("Frame", nil, self)
 	Buffs.initialAnchor = "TOPLEFT"
-	Buffs:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
+	Buffs:SetPoint("TOP", self, "BOTTOM", 0, -4)
 	Buffs["growth-x"] = "RIGHT"
 	Buffs["growth-y"] = "DOWN"
 	Buffs["spacing-x"] = 4
 	Buffs["spacing-y"] = 0
 
 	Buffs:SetSize(self:GetWidth(), 100)
-	Buffs.size = 22
+	Buffs.size = 28
 
 	Buffs.showStealableBuffs = true
 
@@ -514,7 +508,7 @@ local function CreateDebuffs(self)
 	Debuffs["spacing-x"] = 4
 	Debuffs["spacing-y"] = 0
 
-	Debuffs:SetSize(self:GetWidth(), 100)
+	Debuffs:SetSize(124, 100)
 	Debuffs.size = 28
 
 	Debuffs.showStealableBuffs = true
@@ -533,7 +527,6 @@ local function PostUpdatePortrait(element, unit)
 end
 
 -- Threat update (party)
-
 local UpdateThreat = function(self, event, unit)
 	if(unit ~= self.unit) then return end
 
@@ -804,6 +797,79 @@ local function CreateIndicator(self)
 	end
 end
 
+	-- name
+local function CreateName(self)
+	local Name = F.CreateFS(self)
+	Name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
+	Name:SetWordWrap(false)
+	Name:SetFont(unpack(ufFont))
+	Name:SetWidth(100)
+	Name:SetTextColor(1, 1, 1)
+
+	self:Tag(Name, '[name]')
+	self.Name = Name
+
+	--[[if C.client == 'zhCN' then
+		Name:SetFont(unpack(ufFont))
+	else
+		F.SetFS(Name)
+	end]]
+
+	if self.unitStyle == "target" then
+		Name:SetJustifyH("RIGHT")
+
+	elseif self.unitStyle == "focus" then
+		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
+		Name:SetJustifyH("CENTER")
+		Name:SetWidth(focusWidth)
+	elseif self.unitStyle == "boss" then
+		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+		Name:SetJustifyH("LEFT")
+		
+	elseif self.unitStyle == "arena" then
+		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+		Name:SetJustifyH("LEFT")
+	end
+	
+end
+
+local function UpdateName(self)
+	local f = CreateFrame("Frame", nil, self)
+
+	local tt = F.CreateFS(f)
+	tt:SetPoint("BOTTOM", self, "TOP", 0, 3)
+	tt:SetJustifyH"CENTER"
+	tt:SetFont(unpack(ufFont))
+	tt:SetWordWrap(false)
+	tt:SetWidth(targettargetWidth)
+
+	local ft = F.CreateFS(f)
+	ft:SetPoint("BOTTOM", self, "TOP", 0, 3)
+	ft:SetFont(unpack(ufFont))
+	ft:SetJustifyH"CENTER"
+	ft:SetWordWrap(false)
+	ft:SetWidth(focustargetWidth)
+
+	f:RegisterEvent("UNIT_TARGET")
+	f:RegisterEvent("PLAYER_TARGET_CHANGED")
+	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
+
+	f:SetScript("OnEvent", function()
+		if(UnitName("targettarget")==UnitName("player")) then
+			tt:SetText("> YOU <")
+			tt:SetTextColor(1, 0, 0)
+		elseif(UnitName("focustarget")==UnitName("player")) then
+			ft:SetText("> YOU <")
+			ft:SetTextColor(1, 0, 0)
+		else
+			tt:SetText(UnitName"targettarget")
+			tt:SetTextColor(1, 1, 1)
+			ft:SetText(UnitName"focustarget")
+			ft:SetTextColor(1, 1, 1)
+		end
+	end)
+end
+
 
 -- Hide Blizz frames
 if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
@@ -932,11 +998,6 @@ local Shared = function(self, unit, isSingle)
 		Power.colorPower = true
 	end
 
-
-
-
-
-
 	--[[ Portrait ]]
 
 	if C.unitframes.portrait then
@@ -947,6 +1008,14 @@ local Shared = function(self, unit, isSingle)
 		Portrait.PostUpdate = PostUpdatePortrait
 		self.Portrait = Portrait
 	end
+
+
+
+
+
+
+
+
 
 	--[[ Castbar ]]
 
@@ -997,6 +1066,12 @@ local Shared = function(self, unit, isSingle)
 	self:RegisterEvent("UNIT_NAME_UPDATE", PostCastStopUpdate)
 	table.insert(self.__elements, PostCastStopUpdate)
 
+	Castbar.PostChannelStart = PostCastStart
+	Castbar.PostCastStart = PostCastStart
+
+	Castbar.PostCastStop = PostCastStop
+	Castbar.PostChannelStop = PostCastStop
+
 	-- [[ Heal prediction ]]
 
 	local mhpb = self:CreateTexture()
@@ -1030,13 +1105,6 @@ local Shared = function(self, unit, isSingle)
 		self.HealPrediction["overAbsorbGlow"] = overAbsorbGlow
 	end
 
-	-- [[ Raid target icons ]]
-
-	--local RaidTargetIndicator = self:CreateTexture()
-	--RaidTargetIndicator:SetSize(16, 16)
-	--RaidTargetIndicator:SetPoint("CENTER", self, "CENTER", 0, 20)
-
-	--self.RaidTargetIndicator = RaidTargetIndicator
 
 	-- [[ Spell Range ]]
 
@@ -1071,11 +1139,7 @@ local Shared = function(self, unit, isSingle)
 		end
 	end
 
-	Castbar.PostChannelStart = PostCastStart
-	Castbar.PostCastStart = PostCastStart
-
-	Castbar.PostCastStop = PostCastStop
-	Castbar.PostChannelStop = PostCastStop
+	
 
 	Health.PostUpdate = PostUpdateHealth
 	Power.PostUpdate = PostUpdatePower
@@ -1181,7 +1245,13 @@ local UnitSpecific = {
 				Castbar:SetHeight(self:GetHeight())
 				Castbar:SetPoint(unpack(C.unitframes.player_castbar))
 				Castbar.Text:SetAllPoints(Castbar)
-				Castbar.Text:SetFont(unpack(C.font.standard))
+
+
+				if C.client == 'zhCN' then
+					Castbar.Text:SetFont(unpack(ufFont))
+				else
+					F.SetFS(Castbar.Text)
+				end
 
 				local sf = Castbar:CreateTexture(nil, "OVERLAY")
 				sf:SetVertexColor(.5, .5, .5, .5)
@@ -1246,7 +1316,7 @@ local UnitSpecific = {
 			Castbar.Text:SetDrawLayer("ARTWORK")
 
 			local IconFrame = CreateFrame("Frame", nil, Castbar)
-			IconFrame:SetPoint("TOPLEFT", self, "TOPRIGHT", -4, 0)
+			IconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
 			IconFrame:SetHeight(24)
 			IconFrame:SetWidth(24)
 
@@ -1268,7 +1338,12 @@ local UnitSpecific = {
 			Castbar:SetHeight(C.unitframes.castbarHeight)
 			Castbar:SetPoint(unpack(C.unitframes.target_castbar))
 			Castbar.Text:SetPoint("TOP", Castbar, "BOTTOM", 0, -4)
-			Castbar.Text:SetFont(unpack(C.font.standard))
+
+			if C.client == 'zhCN' then
+				Castbar.Text:SetFont(unpack(ufFont))
+			else
+				F.SetFS(Castbar.Text)
+			end
 
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
 			sf:SetVertexColor(.5, .5, .5, .5)
@@ -1282,73 +1357,10 @@ local UnitSpecific = {
 			F.CreateSD(bg, 5, 0, 0, 0, .8, -2)
 		end
 
-		local Name = F.CreateFS(self)
-		Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
-		Name:SetPoint("RIGHT", self)
-		Name:SetFont(unpack(C.font.standard))
-		Name:SetWidth(C.unitframes.targettarget_width)
-		Name:SetJustifyH("RIGHT")
-		Name:SetTextColor(1, 1, 1)
-		Name:SetWordWrap(false)
-
-		self:Tag(Name, '[name]')
-		self.Name = Name
+		CreateName(self)
 
 		CreateIndicator(self)
 		CreateAuras(self)
-
-
-		--[[local Auras = CreateFrame("Frame", nil, self)
-		Auras:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 24)
-		Auras.initialAnchor = "BOTTOMLEFT"
-		Auras["growth-x"] = "RIGHT"
-		Auras["growth-y"] = "UP"
-		Auras['spacing-x'] = 4
-		Auras['spacing-y'] = 0
-
-		Auras.numDebuffs = C.unitframes.num_target_debuffs
-		Auras.numBuffs = C.unitframes.num_target_buffs
-		Auras:SetHeight(500)
-		Auras:SetWidth(targetWidth)
-		Auras.size = 36
-
-
-		Auras.gap = true
-
-		self.Auras = Auras
-
-		Auras.showDebuffType = true
-		Auras.showStealableBuffs = true
-		--Auras.disableCooldown = true
-
-		Auras.PostCreateIcon = PostCreateIcon
-		Auras.PostUpdateIcon = PostUpdateIcon
-		Auras.PostUpdateGapIcon = PostUpdateGapIcon
-
-		if C.unitframes.castbyPlayer then
-			Auras.CustomFilter = FilterTargetDebuffs
-		end]]
-
-
-
-		--[[local QuestIcon = F.CreateFS(self)
-		QuestIcon:SetText("!")
-		QuestIcon:SetTextColor(228/255, 225/255, 16/255)
-		QuestIcon:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 2)
-
-		QuestIcon.PostUpdate = function(self, isQuestBoss)
-			if isQuestBoss then
-				Name:ClearAllPoints()
-				Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
-				Name:SetPoint("RIGHT", QuestIcon, "LEFT", 0, 0)
-			else
-				Name:ClearAllPoints()
-				Name:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT")
-				Name:SetPoint("RIGHT", self)
-			end
-		end
-
-		self.QuestIndicator = QuestIcon]]
 	end,
 
 	targettarget = function(self, ...)
@@ -1367,32 +1379,10 @@ local UnitSpecific = {
 
 		Spark:SetHeight(Health:GetHeight())
 
-		--self.RaidTargetIndicator:ClearAllPoints()
-		--self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 
 		CreateIndicator(self)
 
-		local tt = CreateFrame("Frame", nil, self)
-		tt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-		tt:SetWidth(C.unitframes.targettarget_width)
-
-		local ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "RIGHT")
-		ttt:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-		ttt:SetFont(unpack(C.font.standard))
-		ttt:SetWordWrap(false)
-		ttt:SetWidth(C.unitframes.targettarget_width)
-
-		tt:RegisterEvent("UNIT_TARGET")
-		tt:RegisterEvent("PLAYER_TARGET_CHANGED")
-		tt:SetScript("OnEvent", function()
-			if(UnitName("targettarget")==UnitName("player")) then
-				ttt:SetText("> YOU <")
-				ttt:SetTextColor(1, 0, 0)
-			else
-				ttt:SetText(UnitName"targettarget")
-				ttt:SetTextColor(1, 1, 1)
-			end
-		end)
+		UpdateName(self)
 
 	end,
 
@@ -1444,7 +1434,12 @@ local UnitSpecific = {
 			Castbar:SetHeight(C.unitframes.castbarHeight)
 			Castbar:SetPoint(unpack(C.unitframes.focus_castbar))
 			Castbar.Text:SetPoint("BOTTOM", Castbar, "TOP", 0, 4)
-			Castbar.Text:SetFont(unpack(C.font.standard))
+			
+			if C.client == 'zhCN' then
+				Castbar.Text:SetFont(unpack(ufFont))
+			else
+				F.SetFS(Castbar.Text)
+			end
 
 			local sf = Castbar:CreateTexture(nil, "OVERLAY")
 			sf:SetVertexColor(.5, .5, .5, .5)
@@ -1459,16 +1454,8 @@ local UnitSpecific = {
 			F.CreateSD(bg, 5, 0, 0, 0, .8, -2)
 		end
 
-		local Name = F.CreateFS(self)
-		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-		Name:SetFont(unpack(C.font.standard))
-		Name:SetWidth(C.unitframes.focus_width)
-		Name:SetJustifyH"RIGHT"
-		Name:SetWordWrap(false)
-		Name:SetTextColor(1, 1, 1)
+		CreateName(self)
 
-		self:Tag(Name, '[name]')
-		self.Name = Name
 	end,
 
 	focustarget = function(self, ...)
@@ -1487,30 +1474,10 @@ local UnitSpecific = {
 
 		Spark:SetHeight(Health:GetHeight())
 
-		--self.RaidTargetIndicator:ClearAllPoints()
-		--self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
+
+		UpdateName(self)
 		CreateIndicator(self)
 
-		local tt = CreateFrame("Frame", nil, self)
-		tt:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-
-		local ttt = F.CreateFS(tt, C.FONT_SIZE_NORMAL, "LEFT")
-		ttt:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-		ttt:SetFont(unpack(C.font.standard))
-		ttt:SetWordWrap(false)
-		ttt:SetWidth(C.unitframes.focustarget_width)
-
-		tt:RegisterEvent("UNIT_TARGET")
-		tt:RegisterEvent("PLAYER_FOCUS_CHANGED")
-		tt:SetScript("OnEvent", function()
-			if(UnitName("focustarget")==UnitName("player")) then
-				ttt:SetText("> YOU <")
-				ttt:SetTextColor(1, 0, 0)
-			else
-				ttt:SetText(UnitName"focustarget")
-				ttt:SetTextColor(1, 1, 1)
-			end
-		end)
 	end,
 
 
@@ -1534,14 +1501,7 @@ local UnitSpecific = {
 
 		Health.value = HealthPoints
 
-		local Name = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
-		Name:SetFont(unpack(C.font.standard))
-		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-		Name:SetWidth((bossWidth / 2) + 10)
-		Name:SetWordWrap(false)
-
-		self:Tag(Name, '[name]')
-		self.Name = Name
+		CreateName(self)
 
 		CreateAltPower(self)
 
@@ -1552,9 +1512,14 @@ local UnitSpecific = {
 		Spark:SetHeight(self.Health:GetHeight())
 
 		Castbar.Text = F.CreateFS(self)
-		Castbar.Text:SetFont(unpack(C.font.standard))
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
+
+		if C.client == 'zhCN' then
+			Castbar.Text:SetFont(unpack(ufFont))
+		else
+			F.SetFS(Castbar.Text)
+		end
 
 		local IconFrame = CreateFrame("Frame", nil, Castbar)
 		IconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
@@ -1574,9 +1539,7 @@ local UnitSpecific = {
 		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
 		self.Iconbg:SetTexture(C.media.backdrop)
 
-		CreateBuffs(self)
-		CreateDebuffs(self)
-
+		CreateAuras(self)
 	end,
 
 	arena = function(self, ...)
@@ -1601,14 +1564,7 @@ local UnitSpecific = {
 
 		Health.value = HealthPoints
 
-		local Name = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
-		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 2)
-		Name:SetWidth(110)
-		Name:SetHeight(12)
-		Name:SetFont(unpack(C.font.standard))
-
-		self:Tag(Name, '[name]')
-		self.Name = Name
+		CreateName(self)
 
 		Castbar:SetAllPoints(Health)
 		Castbar.Width = self:GetWidth()
@@ -1616,7 +1572,7 @@ local UnitSpecific = {
 		Spark:SetHeight(self.Health:GetHeight())
 
 		Castbar.Text = F.CreateFS(self)
-		Castbar.Text:SetFont(unpack(C.font.standard))
+		Castbar.Text:SetFont(unpack(ufFont))
 		Castbar.Text:SetDrawLayer("ARTWORK")
 		Castbar.Text:SetAllPoints(Health)
 
@@ -1642,8 +1598,6 @@ local UnitSpecific = {
 		CreateBuffs(self)
 		CreateDebuffs(self)
 
-
-		--self.RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 		CreateIndicator(self)
 	end,
 }
@@ -1671,7 +1625,7 @@ do
 
 		Health:SetHeight(partyHeight - powerHeight - 1)
 		if C.unitframes.partyNameAlways then
-			Text:SetFont(unpack(C.font.standard))
+			Text:SetFont(unpack(ufFont))
 			self:Tag(Text, '[free:name]')
 		elseif C.unitframes.partyMissingHealth then
 			self:Tag(Text, '[free:missinghealth]')
@@ -1679,57 +1633,7 @@ do
 			self:Tag(Text, '[dead][offline]')
 		end
 
-		--self.ResurrectIcon = self:CreateTexture(nil, "OVERLAY")
-		--self.ResurrectIcon:SetSize(16, 16)
-		--self.ResurrectIcon:SetPoint("CENTER")
-
-		--self.RaidTargetIndicator:ClearAllPoints()
-		--self.RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
 		CreateIndicator(self)
-
-		--local LeaderIndicator = F.CreateFS(self, C.FONT_SIZE_NORMAL, "LEFT")
-		--LeaderIndicator:SetText("l")
-		--LeaderIndicator:SetPoint("TOPLEFT", Health, 2, -1)
-
-		--self.LeaderIndicator = LeaderIndicator
-
-		--[[local MasterLooter = F.CreateFS(self, C.FONT_SIZE_NORMAL, "RIGHT")
-		MasterLooter:SetText("m")
-		MasterLooter:SetPoint("TOPRIGHT", Health, 1, 0)
-
-		self.MasterLooter = MasterLooter]]
-
-		--local ReadyCheckIndicator = self:CreateTexture(nil, "OVERLAY")
-		--ReadyCheckIndicator:SetPoint("TOPLEFT", Health)
-		--ReadyCheckIndicator:SetSize(16, 16)
-
-		--self.ReadyCheckIndicator = ReadyCheckIndicator
-
-		--local UpdateLFD = function(self, event)
-		--	local lfdrole = self.GroupRoleIndicator
-		--	local role = UnitGroupRolesAssigned(self.unit)
-
-		--	if role == "DAMAGER" then
-		--		lfdrole:SetTextColor(1, .1, .1, 1)
-		--		lfdrole:SetText(".")
-		--	elseif role == "TANK" then
-		--		lfdrole:SetTextColor(.3, .4, 1, 1)
-		--		lfdrole:SetText("x")
-		--	elseif role == "HEALER" then
-		--		lfdrole:SetTextColor(0, 1, 0, 1)
-		--		lfdrole:SetText("+")
-		--	else
-		--		lfdrole:SetTextColor(0, 0, 0, 0)
-		--	end
-		--end
-
-		--local lfd = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "CENTER")
-		--lfd:SetPoint("BOTTOM", Health, 1, 1)
-		--lfd.Override = UpdateLFD
-
-		--self.GroupRoleIndicator = lfd
-
-
 
 
 		local Debuffs = CreateFrame("Frame", nil, self)
@@ -1885,16 +1789,16 @@ oUF:Factory(function(self)
 	party_width = partyWidth
 	party_height = partyHeight
 
-	local party = self:SpawnHeader(nil, nil, "party,raid",
+	local party = self:SpawnHeader(nil, nil, "party",
 		'showParty', true,
 		'showPlayer', true,
 		'showSolo', false,
 		'xoffset', 3,
-		'yoffset', 3,
-		'maxColumns', 5,
-		'unitsperColumn', 1,
+		'yoffset', 5,
+		'maxColumns', 1,
+		'unitsperColumn', 5,
 		'columnSpacing', 3,
-		'point', "LEFT",
+		'point', "BOTTOM", -- party initial position
 		'columnAnchorPoint', "LEFT",
 		'groupBy', 'ASSIGNEDROLE',
 		'groupingOrder', 'TANK,HEALER,DAMAGER',
@@ -1909,12 +1813,12 @@ oUF:Factory(function(self)
 	local raid = self:SpawnHeader(nil, nil, "raid",
 		'showParty', false,
 		'showRaid', true,
-		'xoffset', 3,
+		'xoffset', -3,
 		'yOffset', -3,
-		'point', "LEFT",
+		'point', "RIGHT",
 		'groupFilter', '1,2,3,4,5,6,7,8',
 		'groupingOrder', '1,2,3,4,5,6,7,8',
-		'groupBy', 'ASSIGNEDROLE',
+		'groupBy', 'GROUP',
 		'maxColumns', 8,
 		'unitsPerColumn', 5,
 		'columnSpacing', 3,
@@ -1940,7 +1844,19 @@ oUF:Factory(function(self)
 		end
 	end)
 
-	local raidToParty = CreateFrame("Frame")
+
+
+	local mapList = {
+		[30] = true,
+
+	}
+	local instID = select(8, GetInstanceInfo())
+	if mapList[instID] then
+		--raid:SetAttribute("groupFilter", "1,2,3,4")
+		raid:SetAttribute("showRaid", false)
+	end
+
+	--[[local raidToParty = CreateFrame("Frame")
 
 	local function togglePartyAndRaid(event)
 		if InCombatLockdown() then
@@ -1989,5 +1905,5 @@ oUF:Factory(function(self)
 	end
 
 	checkShowRaidFrames()
-	F.AddOptionsCallback("unitframes", "showRaidFrames", checkShowRaidFrames)
+	F.AddOptionsCallback("unitframes", "showRaidFrames", checkShowRaidFrames)]]
 end)
