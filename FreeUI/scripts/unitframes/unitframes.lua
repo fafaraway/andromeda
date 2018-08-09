@@ -293,10 +293,9 @@ local function postUpdateAltPower(element, _, cur, _, max)
 end
 
 local function CreateAltPower(self)
-	local style = self.unitStyle
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetStatusBarTexture(C.media.texture)
-	bar:SetPoint("BOTTOM", oUF_FreePlayer, 0, -C.unitframes.power_height-3)
+	bar:SetPoint("BOTTOM", self, 0, -altPowerHeight-3)
 	bar:SetSize(self:GetWidth(), altPowerHeight)
 
 	local abd = CreateFrame("Frame", nil, bar)
@@ -306,7 +305,7 @@ local function CreateAltPower(self)
 	F.CreateBD(abd, .5)
 
 	local text = F.CreateFS(bar, 8, "CENTER")
-	text:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 3)
+	text:SetPoint("BOTTOM", self, "TOP", 0, 3)
 
 	self:Tag(text, "[altpower]")
 
@@ -797,7 +796,7 @@ local function CreateIndicator(self)
 	end
 end
 
-	-- name
+-- name
 local function CreateName(self)
 	local Name = F.CreateFS(self)
 	Name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
@@ -858,12 +857,15 @@ local function UpdateName(self)
 		if(UnitName("targettarget")==UnitName("player")) then
 			tt:SetText("> YOU <")
 			tt:SetTextColor(1, 0, 0)
-		elseif(UnitName("focustarget")==UnitName("player")) then
-			ft:SetText("> YOU <")
-			ft:SetTextColor(1, 0, 0)
 		else
 			tt:SetText(UnitName"targettarget")
 			tt:SetTextColor(1, 1, 1)
+		end
+
+		if(UnitName("focustarget")==UnitName("player")) then
+			ft:SetText("> YOU <")
+			ft:SetTextColor(1, 0, 0)
+		else
 			ft:SetText(UnitName"focustarget")
 			ft:SetTextColor(1, 1, 1)
 		end
@@ -946,7 +948,7 @@ local Shared = function(self, unit, isSingle)
 		local Healthdef = CreateFrame("StatusBar", nil, self)
 		Healthdef:SetFrameStrata("LOW")
 		Healthdef:SetAllPoints(Health)
-		Healthdef:SetStatusBarTexture(C.media.texture)
+		Healthdef:SetStatusBarTexture(C.media.backdrop)
 		Healthdef:SetStatusBarColor(1, 1, 1)
 
 		Healthdef:SetReverseFill(true)
