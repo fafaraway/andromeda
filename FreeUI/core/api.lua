@@ -180,16 +180,17 @@ function F:CreateBD(a, s)
 	end]]
 end
 
-function F:CreateBG()
-	local f = self
-	if self:GetObjectType() == "Texture" then f = self:GetParent() end
 
-	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", self, -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", self, 1, -1)
-	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0)
+function F:CreateBG(offset)
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
+	offset = offset or 1
+	local lvl = frame:GetFrameLevel()
 
+	local bg = CreateFrame("Frame", nil, frame)
+	bg:SetPoint("TOPLEFT", self, -offset, offset)
+	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
+	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	return bg
 end
 
@@ -979,11 +980,19 @@ function F:HideObject()
 	self:Hide()
 end
 
-function F:StripTextures()
+function F:StripTextures(kill)
 	for i = 1, self:GetNumRegions() do
 		local region = select(i, self:GetRegions())
 		if region and region:GetObjectType() == "Texture" then
-			region:SetTexture("")
+			if kill and type(kill) == "boolean" then
+				F.HideObject(region)
+			elseif region:GetDrawLayer() == kill then
+				region:SetTexture(nil)
+			elseif kill and type(kill) == "string" and region:GetTexture() ~= kill then
+				region:SetTexture("")
+			else
+				region:SetTexture("")
+			end
 		end
 	end
 end
