@@ -150,24 +150,16 @@ local function InitStyleDBM()
 	end
 
 	hooksecurefunc(DBT, "CreateBar", SkinBars)
-	-- hooksecurefunc(DBM.BossHealth, "Show", SkinBossTitle)
-	-- hooksecurefunc(DBM.BossHealth, "AddBoss", SkinBoss)
-	-- hooksecurefunc(DBM.BossHealth, "UpdateSettings", SkinBoss)
 
 	local function SkinRange()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
-			local bg = F.CreateBDFrame(DBMRangeCheckRadar, .3)
-
-
+			local bg = F.CreateBDFrame(DBMRangeCheckRadar)
 			DBMRangeCheckRadar.styled = true
 		end
 
 		if DBMRangeCheck and not DBMRangeCheck.styled then
-			F.CreateBDFrame(DBMRangeCheck)
-
-			DBMRangeCheck.SetBackdropColor = F.Dummy
-			DBMRangeCheck.SetBackdropBorderColor = F.Dummy
-
+			DBMRangeCheck:SetBackdrop(nil)
+			local bg = F.CreateBDFrame(DBMRangeCheck)
 			DBMRangeCheck.styled = true
 		end
 	end
@@ -179,7 +171,7 @@ local function InitStyleDBM()
 		bd:SetPoint("TOPLEFT")
 		bd:SetPoint("BOTTOMRIGHT")
 		bd:SetFrameLevel(DBMInfoFrame:GetFrameLevel()-1)
-		F.CreateBDFrame(bd, .45)
+		F.CreateBDFrame(bd)
 
 	end)
 
@@ -198,8 +190,6 @@ local function InitStyleDBM()
 		end
 		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
 	end
-
-
 
 	-- Force Settings
 	if not DBM_AllSavedOptions["Default"] then DBM_AllSavedOptions["Default"] = {} end
