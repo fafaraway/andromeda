@@ -31,7 +31,7 @@ function module:ReskinRegions()
 	QueueStatusMinimapButton.Eye.texture:SetTexture("")
 
 	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMLEFT", -4, 33)
+	QueueStatusFrame:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -4, -36)
 
 	local dots = {}
 	for i = 1, 8 do
