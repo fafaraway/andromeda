@@ -23,8 +23,8 @@ local function skinChat(self)
 	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
 	self:SetFont(C.font.chat, fontSize, "OUTLINE")
-	self:SetShadowColor(0, 0, 0, 0)
-	self:SetShadowOffset(1, -1)
+	--self:SetShadowColor(0, 0, 0, 0)
+	--self:SetShadowOffset(1, -1)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < maxLines then
@@ -126,6 +126,7 @@ local AddMessage = function(frame, text, ...)
 
 		text = gsub(text, "%[(%d+)%. 大脚世界频道%]", "世界")
 		text = gsub(text, "%[(%d+)%. 大腳世界頻道%]", "世界")
+		text = gsub(text, "%[(%d+)%. BigfootWorldChannel%]", "w")
 
 		text = gsub(text, "%[%d+%. .-%]", "["..chatNum.."]")
 
@@ -236,22 +237,22 @@ function module:OnLogin()
 	CHAT_YELL_GET = "|Hchannel:Yell|h%s: "
 	CHAT_SAY_GET = "|Hchannel:Say|h%s: "
 
-	CHAT_BATTLEGROUND_GET			= "|Hchannel:Battleground|h[BG]|h %s: "
-	CHAT_BATTLEGROUND_LEADER_GET 	= [[|Hchannel:Battleground|h[BGL]|h %s: ]]
+	CHAT_BATTLEGROUND_GET			= "|Hchannel:Battleground|h[bg]|h %s: "
+	CHAT_BATTLEGROUND_LEADER_GET 	= [[|Hchannel:Battleground|h[bgl]|h %s: ]]
 
-	CHAT_GUILD_GET   				= "|Hchannel:Guild|h[G]|h %s: "
-	CHAT_OFFICER_GET 				= "|Hchannel:Officer|h[O]|h %s: "
+	CHAT_GUILD_GET   				= "|Hchannel:Guild|h[g]|h %s: "
+	CHAT_OFFICER_GET 				= "|Hchannel:Officer|h[go]|h %s: "
 
-	CHAT_PARTY_GET        			= "|Hchannel:Party|h[P]|h %s: "
-	CHAT_PARTY_LEADER_GET 			= [[|Hchannel:Party|h[PL]|h %s: ]]
+	CHAT_PARTY_GET        			= "|Hchannel:Party|h[p]|h %s: "
+	CHAT_PARTY_LEADER_GET 			= [[|Hchannel:Party|h[pl]|h %s: ]]
 	CHAT_PARTY_GUIDE_GET  			= CHAT_PARTY_LEADER_GET
 
-	CHAT_RAID_GET         			= "|Hchannel:Raid|h[R]|h %s: "
-	CHAT_RAID_LEADER_GET  			= [[|Hchannel:Raid|h[RL]|h %s: ]]
-	CHAT_RAID_WARNING_GET 			= [[|Hchannel:RaidWarning|h[RW]|h %s: ]]
+	CHAT_RAID_GET         			= "|Hchannel:Raid|h[r]|h %s: "
+	CHAT_RAID_LEADER_GET  			= [[|Hchannel:Raid|h[rl]|h %s: ]]
+	CHAT_RAID_WARNING_GET 			= [[|Hchannel:RaidWarning|h[rw]|h %s: ]]
 
-	CHAT_INSTANCE_CHAT_GET 			= "|Hchannel:Instance|h[I]|h %s: "
-	CHAT_INSTANCE_CHAT_LEADER_GET	= "|Hchannel:Instance|h[IL]|h %s: "
+	CHAT_INSTANCE_CHAT_GET 			= "|Hchannel:Instance|h[i]|h %s: "
+	CHAT_INSTANCE_CHAT_LEADER_GET	= "|Hchannel:Instance|h[il]|h %s: "
 	CHAT_INSTANCE_CHAT_GUIDE_GET  	= CHAT_INSTANCE_CHAT_LEADER_GET
 	
 
