@@ -908,7 +908,7 @@ local Shared = function(self, unit, isSingle)
 
 	local Health = CreateFrame("StatusBar", nil, self)
 	Health:SetFrameStrata("LOW")
-	Health:SetStatusBarTexture(C.media.texture)
+	Health:SetStatusBarTexture(C.media.backdrop)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
