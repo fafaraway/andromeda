@@ -344,11 +344,11 @@ C["unitframes"] = {
 	["raid_height"] = 30,
 
 	["boss"] = {a='LEFT', b='oUF_FreePlayer', c="RIGHT", x=400, y=400},			-- boss unitframe position
-	["boss_width"] = 156,
+	["boss_width"] = 166,
 	["boss_height"] = 16,
 
 	["arena"] = {a='RIGHT', b='oUF_FreeTarget', c="LEFT", x=-100, y=180},				-- arena unitframe position
-	["arena_width"] = 156,
+	["arena_width"] = 166,
 	["arena_height"] = 16,
 	
 	["castbarColorShield"] = {241/255, 23/255, 45/255},

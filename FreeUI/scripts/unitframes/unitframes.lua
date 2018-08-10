@@ -488,7 +488,7 @@ local function CreateBuffs(self)
 	Buffs["spacing-x"] = 4
 	Buffs["spacing-y"] = 0
 
-	Buffs:SetSize(self:GetWidth(), 100)
+	Buffs:SetSize(self:GetWidth()-10, 100)
 	Buffs.size = 28
 
 	Buffs.showStealableBuffs = true

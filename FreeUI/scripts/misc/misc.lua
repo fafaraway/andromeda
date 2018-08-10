@@ -151,7 +151,8 @@ frame.RedLineBottom:SetTexture(nil)
 frame.blackBg:SetTexture(nil)
 
 F.ReskinIcon(frame.Icon)
-F.CreateBG(frame.Icon)
+F.CreateBDFrame(frame.Icon)
+F.CreateSD(frame.Icon)
 
 -- ncShadow
 if C.misc.vignette then
