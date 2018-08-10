@@ -58,7 +58,10 @@ Error:SetScript("OnEvent", function(_, _, code, msg)
 		secondErrorFrame.text:SetFont(unpack(errorsFont))
 		secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -95)
 
-		UIErrorsFrame:SetFont(unpack(errorsFont))
 	end
+
+	UIErrorsFrame:SetFont(errorsFont[1], errorsFont[2]+2)
+	UIErrorsFrame:SetShadowColor(0, 0, 0)
+	UIErrorsFrame:SetShadowOffset(1, -1)
 end)
 
