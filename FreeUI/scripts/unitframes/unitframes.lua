@@ -1579,7 +1579,7 @@ local UnitSpecific = {
 		Castbar.Text:SetAllPoints(Health)
 
 		local IconFrame = CreateFrame("Frame", nil, Castbar)
-		IconFrame:SetPoint("LEFT", self, "RIGHT", 3, 0)
+		IconFrame:SetPoint("RIGHT", self, "LEFT", -3, 0)
 		IconFrame:SetHeight(22)
 		IconFrame:SetWidth(22)
 
