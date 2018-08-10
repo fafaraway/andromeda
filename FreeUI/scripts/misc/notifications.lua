@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("misc")
 
 
@@ -37,11 +37,12 @@ function module:RareAlert()
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 			--UIErrorsFrame:AddMessage(C.infoColor.."Rare Found"..tex..(info.name or ""))
 
-			RaidNotice_AddMessage(RaidWarningFrame, tex.." "..(info.name or "Unknown").." ".."spotted!", ChatTypeInfo["RAID_WARNING"])
+	
+			RaidNotice_AddMessage(RaidWarningFrame, C.infoColor..L.misc.rareFound..tex..(info.name or ""), ChatTypeInfo["RAID_WARNING"])
+
 			
 			if C.misc.rareAlertNotify then
-				--print("  -> "..C.infoColor.."Rare Found"..tex..(info.name or ""))
-				print(info.name, "spotted!")
+				print(C.infoColor..L.misc.rareFound..tex..(info.name or ""))
 			end
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
 			cache[id] = true

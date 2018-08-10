@@ -35,7 +35,7 @@ r, g, b = C.r, C.g, C.b
 
 C.texCoord = {.08, .92, .08, .92}
 C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
-C.infoColor = "|cff70c0f5"
+C.infoColor = "|cfffef888"
 C.myClass = select(2, UnitClass("player"))
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
