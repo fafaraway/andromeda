@@ -14,6 +14,8 @@ core\core.lua
 options.lua
 profiles.lua
 
+locales\_locales.xml
+
 #core\gui.lua
 core\api.lua
 core\uiscale.lua
