@@ -22,4 +22,5 @@
 	<Script file="tabbinder.lua"/>
 	<Script file="quickjoin.lua"/>
 	<Script file="missingstats.lua"/>
+	<Script file="pvpsound.lua"/>
 </Ui>
