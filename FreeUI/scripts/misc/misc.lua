@@ -13,11 +13,13 @@ function module:OnLogin()
 	self:Focuser()
 	self:MissingStats()
 
-
 	-- Remove Boss Banner
 	if C.misc.bossBanner == true then
 		BossBanner:UnregisterAllEvents()
 	end
+
+	-- Fix patch 27326
+	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame", nil, F.HiddenFrame)
 end
 
 
