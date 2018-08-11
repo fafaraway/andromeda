@@ -525,6 +525,7 @@ local function PostUpdatePortrait(element, unit)
 	element:SetDesaturation(1)
 end
 
+
 -- Threat update (party)
 local UpdateThreat = function(self, event, unit)
 	if(unit ~= self.unit) then return end
@@ -632,6 +633,28 @@ end
 
 
 -- Runes bars
+local function postUpdateRunes(element, runemap)
+	for index, runeID in next, runemap do
+		local spec = GetSpecialization() or 0
+		local rune = element[index]
+		local runeReady = select(3, GetRuneCooldown(runeID))
+		if rune:IsShown() and not runeReady then
+			rune:SetAlpha(.6)
+		else
+			rune:SetAlpha(1)
+		end
+		local color
+		if spec == 1 then
+			color = {151/255, 25/255, 0}
+		elseif spec == 2 then
+			color = {65/255, 133/255, 215/255}
+		elseif spec == 3 then
+			color = {98/255, 153/255, 51/255}
+		end
+		rune:SetStatusBarColor(color[1], color[2], color[3])
+	end
+end
+
 local function CreateRunesBar(self)
 	local Runes = CreateFrame("Frame", nil, self)
 	Runes:SetWidth(playerWidth)
@@ -665,7 +688,11 @@ local function CreateRunesBar(self)
 
 		Runes[index] = Rune
 	end
+	--Runes.colorSpec = true -- use my own color palette
+	Runes.sortOrder = "asc"
+
 	self.Runes = Runes
+	Runes.PostUpdate = postUpdateRunes
 end
 
 
