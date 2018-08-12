@@ -37,13 +37,19 @@ function module:OnLogin()
 		if InCombatLockdown() then return end
 		self:SetScale(1)
 	end)
+
+	-- keep minimized world map centered
+	hooksecurefunc("ToggleWorldMap", function()
+		WorldMapFrame:ClearAllPoints()
+		WorldMapFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+	end)
+
 	-- cursor fix, need reviewed
 	if C.maps.worldMapScale > 1 then
 		RunScript("WorldMapFrame.ScrollContainer.GetCursorPosition=function(f) local x,y=MapCanvasScrollControllerMixin.GetCursorPosition(f);local s=WorldMapFrame:GetScale();return x/s,y/s;end")
 	end
 
 	-- Generate Coords
-
 	local player = F.CreateFS(WorldMapFrame.BorderFrame)
 	local cursor = F.CreateFS(WorldMapFrame.BorderFrame)
 	player:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 10, 10)
