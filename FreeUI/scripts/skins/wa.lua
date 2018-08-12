@@ -1,21 +1,21 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("skins")
 
-local function ReskinWA()
+function module:ReskinWA()
 	local function Skin_WeakAuras(f, fType)
 		if fType == "icon" then
 			if not f.styled then
-				f.icon:SetTexCoord(unpack(C.texCoord))
-				f.icon.SetTexCoord = F.Dummy
+				f.icon:SetTexCoord(.08, .92, .08, .92)
+				f.icon.SetTexCoord = F.dummy
 				F.CreateBD(f, 0)
 				F.CreateSD(f)
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
 			if not f.styled then
+				f.icon:SetTexCoord(.08, .92, .08, .92)
+				f.icon.SetTexCoord = F.dummy
 				F.CreateSD(f.bar)
-				f.icon:SetTexCoord(unpack(C.texCoord))
-				f.icon.SetTexCoord = F.Dummy
 				f.iconFrame:SetAllPoints(f.icon)
 				F.CreateSD(f.iconFrame)
 				f.styled = true
@@ -51,10 +51,8 @@ local function ReskinWA()
 
 	for weakAura, _ in pairs(WeakAuras.regions) do
 		local regions = WeakAuras.regions[weakAura]
-		if regions.regionType == "icon" or regions.regionType == "aurabar" then
+		if regions.regionType == "icon" then
 			Skin_WeakAuras(regions.region, regions.regionType)
 		end
 	end
 end
-
-module:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)

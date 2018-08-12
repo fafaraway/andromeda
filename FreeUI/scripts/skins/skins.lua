@@ -2,8 +2,9 @@ local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("skins")
 
 function module:OnLogin()
-	self:DBMBarSkin()
+	self:ReskinDBM()
 	self:ReskinWA()
+	self:ReskinSkada()
 end
 
 function module:LoadWithAddOn(addonName, value, func)

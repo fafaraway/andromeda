@@ -1,25 +1,12 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("skins")
 
-local function InitStyleSKADA()
-	--print("Skada", F, C)
-	-- Short Numbers
-	local SkadaFormatValueText = _G.Skada.FormatValueText
-
-	local function FormatValues(value, enabled, ...)
-		if value == nil then
-			return
-		elseif ( _G.type(value) == "number" or ( _G.type(value) == "string" and value:match("^[-+]?[%d.,]+$") )) and _G.tonumber(value) > 1000 then
-			value = _G.Skada:FormatNumber(_G.tonumber(value))
-		end
-		return value, enabled, FormatValues(...)
-	end
-
-	function _G.Skada.FormatValueText(Skada, ...)
-		return SkadaFormatValueText(Skada, FormatValues(...))
-	end
+function module:ReskinSkada()
+	--if not C.skins.skada then return end
+	if not IsAddOnLoaded("Skada") then return end
 
 	-- Background + Textures
-	local skadaBar = _G.Skada.displays["bar"]
+	--[[local skadaBar = _G.Skada.displays["bar"]
 	skadaBar._ApplySettings = skadaBar.ApplySettings
 	skadaBar.ApplySettings = function(bar, win)
 		skadaBar._ApplySettings(bar, win)
@@ -43,20 +30,22 @@ local function InitStyleSKADA()
 
 	for _, window in _G.ipairs(_G.Skada:GetWindows()) do
 		window:UpdateDisplay()
+	end]]
+
+	-- Change Skada Default Settings
+	Skada.windowdefaults.bartexture = "C.media.texture"
+	--Skada.windowdefaults.classicons = false
+	--Skada.windowdefaults.title.fontflags = "OUTLINE"
+	--Skada.windowdefaults.title.fontsize = 14
+	--Skada.windowdefaults.title.color = {r=0,g=0,b=0,a=.3}
+	--Skada.windowdefaults.barfontflags = "OUTLINE"
+	--Skada.windowdefaults.barfontsize = 15
+	--Skada.windowdefaults.barbgcolor = {r=0,g=0,b=0,a=0}
+
+	-- Change Skada NumberFormat
+	Skada.options.args.generaloptions.args.numberformat = nil
+
+	function Skada:FormatNumber(number)
+		if number then return F.Numb(number) end
 	end
-end
-
-if IsAddOnLoaded("Skada") then
-	InitStyleWA()
-else
-	local load = CreateFrame("Frame")
-	load:RegisterEvent("ADDON_LOADED")
-	load:SetScript("OnEvent", function(self, _, addon)
-		if addon ~= "Skada" then return end
-		self:UnregisterEvent("ADDON_LOADED")
-
-		InitStyleSKADA()
-
-		load = nil
-	end)
 end

@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("skins")
 
-function module:DBMBarSkin()
+function module:ReskinDBM()
 	if not IsAddOnLoaded("DBM-Core") then return end
 	--if not C.skins.DBMBars then return end
 
@@ -58,9 +58,9 @@ function module:DBMBarSkin()
 
 				if not frame.styled then
 					frame:SetScale(1)
-					frame.SetScale = F.Dummy
+					frame.SetScale = F.dummy
 					frame:SetHeight(buttonsize/2)
-					frame.SetHeight = F.Dummy
+					frame.SetHeight = F.dummy
 					if not frame.bg then
 						frame.bg = CreateFrame("Frame", nil, frame)
 						frame.bg:SetAllPoints()
@@ -81,7 +81,7 @@ function module:DBMBarSkin()
 					icon1:ClearAllPoints()
 					icon1:SetPoint("TOPLEFT", icon1.overlay, 1, -1)
 					icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -1, 1)
-					icon1.SetSize = F.Dummy
+					icon1.SetSize = F.dummy
 					F.CreateBDFrame(icon1)
 					--F.CreateSD(icon1, .8)
 					icon1.styled = true
@@ -92,7 +92,7 @@ function module:DBMBarSkin()
 					icon2:ClearAllPoints()
 					icon2:SetPoint("TOPLEFT", icon2.overlay, 1, -1)
 					icon2:SetPoint("BOTTOMRIGHT", icon2.overlay, -1, 1)
-					icon2.SetSize = F.Dummy
+					icon2.SetSize = F.dummy
 					icon2.styled = true
 				end
 
@@ -105,7 +105,7 @@ function module:DBMBarSkin()
 				if not tbar.styled then
 					tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
 					tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)
-					tbar.SetPoint = F.Dummy
+					tbar.SetPoint = F.dummy
 					tbar.styled = true
 
 					tbar.Spark = tbar:CreateTexture(nil, "OVERLAY")
@@ -120,9 +120,9 @@ function module:DBMBarSkin()
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", frame, "LEFT", 2, 8)
 					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
-					name.SetPoint = F.Dummy
+					name.SetPoint = F.dummy
 					name:SetFont(C.font.normal, 12, "OUTLINE")
-					name.SetFont = F.Dummy
+					name.SetFont = F.dummy
 					name:SetJustifyH("LEFT")
 					name:SetWordWrap(false)
 					name:SetShadowColor(0, 0, 0, 0)
@@ -132,10 +132,10 @@ function module:DBMBarSkin()
 				if not timer.styled then	
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", frame, "RIGHT", -2, 8)
-					timer.SetPoint = F.Dummy
+					timer.SetPoint = F.dummy
 					--timer:SetFont(C.font.normal, 12, "OUTLINE")
 					F.SetFS(timer)
-					timer.SetFont = F.Dummy
+					timer.SetFont = F.dummy
 					timer:SetJustifyH("RIGHT")
 					timer:SetShadowColor(0, 0, 0, 0)
 					timer.styled = true
@@ -214,3 +214,4 @@ function module:DBMBarSkin()
 		DBM_AllSavedOptions["Default"]["ChosenVoicePack"] = "Yike"
 	end
 end
+
