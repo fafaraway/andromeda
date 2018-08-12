@@ -24,4 +24,5 @@
 	<Script file="missingstats.lua"/>
 	<Script file="pvpsound.lua"/>
 	<Script file="tradetabs.lua"/>
+	<Script file="reputation.lua"/>
 </Ui>
