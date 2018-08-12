@@ -3,6 +3,7 @@ local module = F:RegisterModule("skins")
 
 function module:OnLogin()
 	self:DBMBarSkin()
+	self:ReskinWA()
 end
 
 function module:LoadWithAddOn(addonName, value, func)

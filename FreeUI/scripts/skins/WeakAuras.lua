@@ -1,20 +1,21 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("skins")
 
-local function InitStyleWA()
+local function ReskinWA()
 	local function Skin_WeakAuras(f, fType)
 		if fType == "icon" then
 			if not f.styled then
-				f.icon:SetTexCoord(.08, .92, .08, .92)
-				f.icon.SetTexCoord = F.dummy
+				f.icon:SetTexCoord(unpack(C.texCoord))
+				f.icon.SetTexCoord = F.Dummy
 				F.CreateBD(f, 0)
 				F.CreateSD(f)
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
 			if not f.styled then
-				f.icon:SetTexCoord(.08, .92, .08, .92)
-				f.icon.SetTexCoord = F.dummy
 				F.CreateSD(f.bar)
+				f.icon:SetTexCoord(unpack(C.texCoord))
+				f.icon.SetTexCoord = F.Dummy
 				f.iconFrame:SetAllPoints(f.icon)
 				F.CreateSD(f.iconFrame)
 				f.styled = true
@@ -50,23 +51,10 @@ local function InitStyleWA()
 
 	for weakAura, _ in pairs(WeakAuras.regions) do
 		local regions = WeakAuras.regions[weakAura]
-		if regions.regionType == "icon" then
+		if regions.regionType == "icon" or regions.regionType == "aurabar" then
 			Skin_WeakAuras(regions.region, regions.regionType)
 		end
 	end
 end
 
-if IsAddOnLoaded("WeakAuras") then
-	InitStyleWA()
-else
-	local load = CreateFrame("Frame")
-	load:RegisterEvent("ADDON_LOADED")
-	load:SetScript("OnEvent", function(self, _, addon)
-		if addon ~= "WeakAuras" then return end
-		self:UnregisterEvent("ADDON_LOADED")
-
-		InitStyleWA()
-
-		load = nil
-	end)
-end
+module:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)
