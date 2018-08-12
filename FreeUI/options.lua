@@ -356,7 +356,7 @@ C["unitframes"] = {
 	["castbarColorNormal"] = {113/255, 178/255, 237/255},
 	["castbarHeight"] = 6,
 
-	["power_height"] = 1,
+	["power_height"] = 2,
 	["altpower_height"] = 2,
 	["classPower_height"] = 2,
 }

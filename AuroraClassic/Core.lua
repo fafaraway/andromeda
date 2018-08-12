@@ -83,7 +83,7 @@ function F:CreateSD(a)
 	self.Shadow:SetPoint("TOPLEFT", -3, 3)
 	self.Shadow:SetPoint("BOTTOMRIGHT", 3, -3)
 	self.Shadow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .6)
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .5)
 	CreateTex(self)
 	return self.Shadow
 end
