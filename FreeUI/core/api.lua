@@ -898,6 +898,35 @@ function F:CreateSB(spark, r, g, b)
 	end
 end
 
+-- Icon Style
+function F:CreateIF(mouse, cd)
+	F.CreateSD(self)
+	self.Icon = self:CreateTexture(nil, "ARTWORK")
+	self.Icon:SetAllPoints()
+	self.Icon:SetTexCoord(unpack(C.texCoord))
+	if mouse then
+		self:EnableMouse(true)
+		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
+		self.HL:SetColorTexture(1, 1, 1, .25)
+		self.HL:SetAllPoints(self.Icon)
+	end
+	if cd then
+		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
+		self.CD:SetAllPoints()
+		self.CD:SetReverse(true)
+	end
+end
+
+-- Gradient Frame
+function F:CreateGF(w, h, o, r, g, b, a1, a2)
+	self:SetSize(w, h)
+	self:SetFrameStrata("BACKGROUND")
+	local gf = self:CreateTexture(nil, "BACKGROUND")
+	gf:SetAllPoints()
+	gf:SetTexture(C.media.texture)
+	gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
+end
+
 
 
 -- Numberize
