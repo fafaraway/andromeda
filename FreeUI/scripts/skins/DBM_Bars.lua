@@ -1,7 +1,9 @@
 local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("skins")
 
-local function InitStyleDBM()
+function module:DBMBarSkin()
 	if not IsAddOnLoaded("DBM-Core") then return end
+	--if not C.skins.DBMBars then return end
 
 	local buttonsize = 22
 	local function SkinBars(self)
@@ -21,26 +23,28 @@ local function InitStyleDBM()
 					icon1.overlay:SetSize(buttonsize+2, buttonsize+2)
 					icon1.overlay:SetFrameStrata("BACKGROUND")
 					icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -buttonsize/6, -3)
-
+			
 					local backdroptex = icon1.overlay:CreateTexture(nil, "BORDER")
 					backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
 					backdroptex:SetPoint("TOPLEFT", icon1.overlay, "TOPLEFT", 1, -1)
 					backdroptex:SetPoint("BOTTOMRIGHT", icon1.overlay, "BOTTOMRIGHT", -1, 1)
-					backdroptex:SetTexCoord(.08, .92, .08, .92)
+					backdroptex:SetTexCoord(unpack(C.texCoord))
+
 					F.CreateSD(icon1.overlay)
+
 				end
 
 				if not (icon2.overlay) then
 					icon2.overlay = CreateFrame("Frame", "$parentIcon2Overlay", tbar)
 					icon2.overlay:SetSize(buttonsize+2, buttonsize+2)
 					icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", buttonsize/6, -3)
-
+			
 					local backdroptex = icon2.overlay:CreateTexture(nil, "BORDER")
 					backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
 					backdroptex:SetPoint("TOPLEFT", icon2.overlay, "TOPLEFT", 1, -1)
 					backdroptex:SetPoint("BOTTOMRIGHT", icon2.overlay, "BOTTOMRIGHT", -1, 1)
-					backdroptex:SetTexCoord(.08, .92, .08, .92)
-					F.CreateSD(icon2.overlay)
+					backdroptex:SetTexCoord(unpack(C.texCoord))		
+
 				end
 
 				if bar.color then
@@ -54,9 +58,9 @@ local function InitStyleDBM()
 
 				if not frame.styled then
 					frame:SetScale(1)
-					frame.SetScale = F.dummy
+					frame.SetScale = F.Dummy
 					frame:SetHeight(buttonsize/2)
-					frame.SetHeight = F.dummy
+					frame.SetHeight = F.Dummy
 					if not frame.bg then
 						frame.bg = CreateFrame("Frame", nil, frame)
 						frame.bg:SetAllPoints()
@@ -73,24 +77,23 @@ local function InitStyleDBM()
 				end
 
 				if not icon1.styled then
-					icon1:SetTexCoord(.08, .92, .08, .92)
+					icon1:SetTexCoord(unpack(C.texCoord))
 					icon1:ClearAllPoints()
 					icon1:SetPoint("TOPLEFT", icon1.overlay, 1, -1)
 					icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -1, 1)
-					icon1.SetSize = F.dummy
-					icon1.styled = true
+					icon1.SetSize = F.Dummy
 					F.CreateBDFrame(icon1)
-					F.CreateSD(icon1)
+					--F.CreateSD(icon1, .8)
+					icon1.styled = true
 				end
-
+		
 				if not icon2.styled then
-					icon2:SetTexCoord(.08, .92, .08, .92)
+					icon2:SetTexCoord(unpack(C.texCoord))
 					icon2:ClearAllPoints()
 					icon2:SetPoint("TOPLEFT", icon2.overlay, 1, -1)
 					icon2:SetPoint("BOTTOMRIGHT", icon2.overlay, -1, 1)
-					icon2.SetSize = F.dummy
+					icon2.SetSize = F.Dummy
 					icon2.styled = true
-					-- F.CreateBG(icon2)
 				end
 
 				if not texture.styled then
@@ -100,13 +103,13 @@ local function InitStyleDBM()
 
 				tbar:SetStatusBarTexture(C.media.texture)
 				if not tbar.styled then
-					tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 2, -2)
-					tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 2)
-					tbar.SetPoint = F.dummy
+					tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
+					tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)
+					tbar.SetPoint = F.Dummy
 					tbar.styled = true
 
 					tbar.Spark = tbar:CreateTexture(nil, "OVERLAY")
-					tbar.Spark:SetTexture[[Interface\CastingBar\UI-CastingBar-Spark]]
+					tbar.Spark:SetTexture(C.media.sparktex)
 					tbar.Spark:SetBlendMode("ADD")
 					tbar.Spark:SetAlpha(.8)
 					tbar.Spark:SetPoint("TOPLEFT", tbar:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
@@ -115,24 +118,24 @@ local function InitStyleDBM()
 
 				if not name.styled then
 					name:ClearAllPoints()
-					name:SetPoint("LEFT", frame, "LEFT", 2, 14)
+					name:SetPoint("LEFT", frame, "LEFT", 2, 8)
 					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
-					name.SetPoint = F.dummy
-					-- F.SetFS(name)
+					name.SetPoint = F.Dummy
 					name:SetFont(C.font.normal, 12, "OUTLINE")
-					name.SetFont = F.dummy
+					name.SetFont = F.Dummy
 					name:SetJustifyH("LEFT")
 					name:SetWordWrap(false)
 					name:SetShadowColor(0, 0, 0, 0)
 					name.styled = true
 				end
-
-				if not timer.styled then
+		
+				if not timer.styled then	
 					timer:ClearAllPoints()
-					timer:SetPoint("RIGHT", frame, "RIGHT", -2, 12)
-					timer.SetPoint = F.dummy
+					timer:SetPoint("RIGHT", frame, "RIGHT", -2, 8)
+					timer.SetPoint = F.Dummy
+					--timer:SetFont(C.font.normal, 12, "OUTLINE")
 					F.SetFS(timer)
-					timer.SetFont = F.dummy
+					timer.SetFont = F.Dummy
 					timer:SetJustifyH("RIGHT")
 					timer:SetShadowColor(0, 0, 0, 0)
 					timer.styled = true
@@ -149,32 +152,40 @@ local function InitStyleDBM()
 			end
 		end
 	end
-
 	hooksecurefunc(DBT, "CreateBar", SkinBars)
 
 	local function SkinRange()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
-			local bg = F.CreateBDFrame(DBMRangeCheckRadar)
+			local bg = F.CreateBG(DBMRangeCheckRadar)
+			F.CreateBD(bg, .4)
+			F.CreateTex(bg)
+
 			DBMRangeCheckRadar.styled = true
 		end
 
 		if DBMRangeCheck and not DBMRangeCheck.styled then
 			DBMRangeCheck:SetBackdrop(nil)
-			local bg = F.CreateBDFrame(DBMRangeCheck)
+			local bg = F.CreateBG(DBMRangeCheck)
+			F.CreateBD(bg, .4)
+			F.CreateTex(bg)
+
 			DBMRangeCheck.styled = true
 		end
 	end
 	hooksecurefunc(DBM.RangeCheck, "Show", SkinRange)
 
-	hooksecurefunc(DBM.InfoFrame, "Show", function()
-		DBMInfoFrame:SetBackdrop(nil)
-		local bd = CreateFrame("Frame", nil, DBMInfoFrame)
-		bd:SetPoint("TOPLEFT")
-		bd:SetPoint("BOTTOMRIGHT")
-		bd:SetFrameLevel(DBMInfoFrame:GetFrameLevel()-1)
-		F.CreateBDFrame(bd)
-
-	end)
+	if DBM.InfoFrame then
+		DBM.InfoFrame:Show(5, "test")
+		DBM.InfoFrame:Hide()
+		DBMInfoFrame:HookScript("OnShow", function(self)
+			if not self.bg then
+				self:SetBackdrop(nil)
+				self.bg = F.CreateBG(self)
+				F.CreateBD(self.bg)
+				F.CreateTex(self.bg)
+			end
+		end)
+	end
 
 	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
 	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
@@ -194,29 +205,12 @@ local function InitStyleDBM()
 
 	-- Force Settings
 	if not DBM_AllSavedOptions["Default"] then DBM_AllSavedOptions["Default"] = {} end
-	
 	DBM_AllSavedOptions["Default"]["BlockVersionUpdateNotice"] = true
-	DBM_AllSavedOptions["Default"]["HugeBarsEnabled"] = false
-
+	DBM_AllSavedOptions["Default"]["EventSoundVictory"] = "None"
+	DBT_AllPersistentOptions["Default"]["DBM"].BarYOffset = 20
+	DBT_AllPersistentOptions["Default"]["DBM"].HugeBarYOffset = 20
 	if IsAddOnLoaded("DBM-VPYike") then
 		DBM_AllSavedOptions["Default"]["CountdownVoice"] = "VP:Yike"
 		DBM_AllSavedOptions["Default"]["ChosenVoicePack"] = "Yike"
 	end
-
-
-end
-
-if IsAddOnLoaded("DBM-Core") then
-	InitStyleDBM()
-else
-	local load = CreateFrame("Frame")
-	load:RegisterEvent("ADDON_LOADED")
-	load:SetScript("OnEvent", function(self, _, addon)
-		if addon ~= "DBM-Core" then return end
-		self:UnregisterEvent("ADDON_LOADED")
-
-		InitStyleDBM()
-
-		load = nil
-	end)
 end
