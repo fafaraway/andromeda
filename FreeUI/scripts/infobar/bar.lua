@@ -294,17 +294,6 @@ end
 
 bar.addButton = addButton
 
-F.AddOptionsCallback("menubar", "buttons_mouseover", function()
-	if C.infoBar.buttons_mouseover then
-		bar:SetScript("OnEnter", showBar)
-		bar:SetScript("OnLeave", hideBar)
-		hideBar()
-	else
-		bar:SetScript("OnEnter", nil)
-		bar:SetScript("OnLeave", nil)
-		showBar()
-	end
-end)
 
 FreeUIStatsButton = addButton("", POSITION_MIDDLE, function()
 	TimeManagerClockButton_OnClick(TimeManagerClockButton)

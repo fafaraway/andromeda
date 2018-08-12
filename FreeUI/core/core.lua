@@ -59,17 +59,6 @@ function F:UnregisterEvent(event, func)
 	end
 end
 
-F.UnregisterAllEvents = function(func)
-	for event in next, events do
-		F.UnregisterEvent(event, func)
-	end
-end
-
-F.debugEvents = function()
-	for event in next, events do
-		print(event..": "..#events[event])
-	end
-end
 
 -- Modules
 local modules, initQueue = {}, {}
@@ -103,31 +92,6 @@ F:RegisterEvent("PLAYER_LOGIN", function()
 	end
 end)
 
-
--- Options GUI callbacks
-
-F.AddOptionsCallback = function(category, option, func, widgetType)
-	if not IsAddOnLoaded("FreeUI_Options") then return end
-
-	if widgetType and widgetType == "radio" then
-		local index = 1
-		local frame = FreeUIOptionsPanel[category][option..index]
-		while frame do
-			frame:HookScript("OnClick", func)
-
-			index = index + 1
-			frame = FreeUIOptionsPanel[category][option..index]
-		end
-	else
-		local frame = FreeUIOptionsPanel[category][option]
-
-		if frame:GetObjectType() == "Slider" then
-			frame:HookScript("OnValueChanged", func)
-		else
-			frame:HookScript("OnClick", func)
-		end
-	end
-end
 
 
 -- [[ For secure frame hiding ]]

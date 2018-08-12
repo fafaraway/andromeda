@@ -9,17 +9,6 @@ local r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours
 local showHotKey = C.actionbars.hotKey
 local showMacroName = C.actionbars.macroName
 
-F.AddOptionsCallback("actionbars", "hotKey", function()
-	showHotKey = C.actionbars.hotKey
-
-	for k, frame in pairs(ActionBarButtonEventsFrame.frames) do
-		ActionButton_UpdateHotkeys(frame, frame.buttonType)
-	end
-
-	for i = 1, NUM_PET_ACTION_SLOTS do
-		PetActionButton_SetHotkeys(_G["PetActionButton"..i])
-	end
-end)
 
 local function updateHotkey(self, actionButtonType)
 	local ho = _G[self:GetName().."HotKey"]

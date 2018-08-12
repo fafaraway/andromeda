@@ -453,7 +453,7 @@ local function CreateAuras(self)
 		Auras:SetPoint("TOP", self, "BOTTOM", 0, -4)
 		Auras["growth-y"] = "DOWN"
 		Auras.size = 20
-		--Auras.disableCooldown = true
+		Auras.disableCooldown = true
 	elseif self.unitStyle == "target" then
 		Auras.initialAnchor = "BOTTOMLEFT"
 		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
@@ -611,9 +611,9 @@ local function CreateClassPower(self)
 		local function moveCPBar()
 			if(index == 1) then
 				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-4-altPowerHeight-classPowerHeight)
+					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -powerHeight-4-altPowerHeight)
 				else
-					Bar:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-2-altPowerHeight)
+					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -powerHeight-2)
 				end
 			end
 		end
@@ -944,7 +944,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
 	Health:SetPoint("RIGHT")
-	Health:SetPoint("BOTTOM", 0, 1 + powerHeight)
+	Health:SetPoint("BOTTOM", 0, 2 + powerHeight)
 
 	self.Health = Health
 
@@ -997,7 +997,7 @@ local Shared = function(self, unit, isSingle)
 
 	Power:SetPoint("LEFT")
 	Power:SetPoint("RIGHT")
-	Power:SetPoint("TOP", Health, "BOTTOM", 0, -1)
+	Power:SetPoint("TOP", Health, "BOTTOM", 0, -2)
 
 	self.Power = Power
 
@@ -1865,7 +1865,7 @@ oUF:Factory(function(self)
 	if C.unitframes.limitRaidSize then
 		raid:SetAttribute("groupFilter", "1,2,3,4")
 	end
-	F.AddOptionsCallback("unitframes", "limitRaidSize", function()
+	--[[F.AddOptionsCallback("unitframes", "limitRaidSize", function()
 		if C.unitframes.limitRaidSize then
 			raid:SetAttribute("groupFilter", "1,2,3,4")
 		else
@@ -1883,7 +1883,7 @@ oUF:Factory(function(self)
 	if mapList[instID] then
 		--raid:SetAttribute("groupFilter", "1,2,3,4")
 		raid:SetAttribute("showRaid", false)
-	end
+	end]]
 
 	--[[local raidToParty = CreateFrame("Frame")
 
