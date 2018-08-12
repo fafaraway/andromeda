@@ -23,4 +23,5 @@
 	<Script file="quickjoin.lua"/>
 	<Script file="missingstats.lua"/>
 	<Script file="pvpsound.lua"/>
+	<Script file="tradetabs.lua"/>
 </Ui>
