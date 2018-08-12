@@ -11,7 +11,7 @@ mb.t = F.CreateFS(mb)
 mb.t:SetText("-")
 mb.t:SetTextColor(228/255, 225/255, 16/255)
 
-mb:SetPoint("BOTTOM","ChatFrame1ButtonFrame","BOTTOM",0,-35)
+mb:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 10, 10)
 F.Reskin(mb)
 mb:Show()
 

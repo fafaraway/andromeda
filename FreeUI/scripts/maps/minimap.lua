@@ -213,7 +213,7 @@ function module:ReskinRegions()
 
 	if TicketStatusFrame then
 		TicketStatusFrame:ClearAllPoints()
-		TicketStatusFrame:SetPoint("TOP", UIParent, "TOP", -400, -20)
+		TicketStatusFrame:SetPoint("TOPLEFT", UIParent, 100, -100)
 		TicketStatusFrame.SetPoint = F.Dummy
 	end
 

@@ -94,7 +94,7 @@ local function reskinQuestIcon(self, block)
 		itemButton:SetPushedTexture("")
 		itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 		itemButton.icon:SetTexCoord(.08, .92, .08, .92)
-		F.CreateBG(itemButton)
+		F.CreateBDFrame(itemButton)
 		F.CreateSD(itemButton)
 
 		itemButton.HotKey:ClearAllPoints()

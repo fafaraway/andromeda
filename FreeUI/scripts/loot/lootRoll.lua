@@ -190,9 +190,11 @@ function addon:UpdateGroupLoot()
 			icon:SetPoint("TOPLEFT")
 			icon:SetPoint("BOTTOMRIGHT")
 			icon:SetTexCoord(.08, .92, .08, .92)
-			frame.icon = icon
 
-			F.CreateBG(icon)
+			F.CreateBDFrame(icon)
+			F.CreateSD(icon)
+
+			frame.icon = icon
 
 			tinsert(grouplootframes, frame)
 		end

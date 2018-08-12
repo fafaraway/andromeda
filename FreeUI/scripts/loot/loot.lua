@@ -96,6 +96,12 @@ local createSlot = function(id)
 	frame:SetID(id)
 	addon.slots[id] = frame
 
+	frame:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+	frame:SetScript("OnEnter", OnEnter)
+	frame:SetScript("OnLeave", OnLeave)
+	frame:SetScript("OnClick", OnClick)
+	frame:SetScript("OnUpdate", OnUpdate)
+
 	local bg = CreateFrame("Frame", nil, frame)
 	bg:SetPoint("TOPLEFT", frame, -1, 1)
 	bg:SetPoint("BOTTOMRIGHT", frame, 1, -1)
@@ -103,10 +109,6 @@ local createSlot = function(id)
 	F.CreateBD(bg)
 	F.CreateSD(bg)
 	frame.bg = bg
-
-	frame:SetScript("OnClick", OnClick)
-	frame:SetScript("OnEnter", OnEnter)
-	frame:SetScript("OnLeave", OnLeave)
 
 	local iconFrame = CreateFrame("Frame", nil, frame)
 	iconFrame:SetHeight(iconsize)
@@ -120,7 +122,8 @@ local createSlot = function(id)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	icon:SetPoint("TOPLEFT", 1, -1)
 	icon:SetPoint("BOTTOMRIGHT", -1, 1)
-	F.CreateBG(icon)
+	F.CreateBDFrame(icon)
+	F.CreateSD(icon)
 	frame.icon = icon
 
 	local count = F.CreateFS(iconFrame, C.FONT_SIZE_NORMAL, "CENTER")
@@ -149,7 +152,6 @@ local anchorSlots = function(self)
 		if(frame:IsShown()) then
 			shownSlots = shownSlots + 1
 
-			-- We don't have to worry about the previous slots as they're already hidden.
 			frame:SetPoint("TOP", addon, 4, (-8 + iconsize) - (shownSlots * (iconsize+1)))
 		end
 	end
@@ -178,8 +180,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 		CloseLoot(not autoLoot)
 	end
 
-	--local items = GetNumLootItems()
-
 	local x, y = GetCursorPosition()
 	x = x / self:GetEffectiveScale()
 	y = y / self:GetEffectiveScale()
@@ -194,7 +194,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 	if(items > 0) then
 		for i = 1, items do
 			local slot = addon.slots[i] or createSlot(i)
-			--local texture, item, quantity, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(i)
 			local lootIcon, lootName, lootQuantity, currencyID, lootQuality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(i)
 			if lootIcon then
 				local color = ITEM_QUALITY_COLORS[lootQuality]
@@ -211,19 +210,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 					slot.count:Hide()
 				end
 
-
-
-				--if(quantity > 1) then
-				--	slot.count:SetText(quantity)
-				--	slot.count:Show()
-				--else
-				--	slot.count:Hide()
-				--end
-
-				--slot.quality = quality
-
-				--local color = ITEM_QUALITY_COLORS[quality]
-
 				if questId and not isActive then
 					slot.bg:SetBackdropColor(.5, .5, 0, .5)
 					slot.name:SetTextColor(1, 1, 0)
@@ -234,9 +220,6 @@ addon.LOOT_OPENED = function(self, event, autoloot)
 					slot.bg:SetBackdropColor(0, 0, 0, .5)
 					slot.name:SetTextColor(color.r, color.g, color.b)
 				end
-
-				--slot.name:SetText(item)
-				--slot.icon:SetTexture(texture)
 
 				slot.lootQuality = lootQuality
 				slot.isQuestItem = isQuestItem

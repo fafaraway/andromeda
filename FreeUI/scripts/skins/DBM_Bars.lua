@@ -79,7 +79,8 @@ local function InitStyleDBM()
 					icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -1, 1)
 					icon1.SetSize = F.dummy
 					icon1.styled = true
-					F.CreateBG(icon1)
+					F.CreateBDFrame(icon1)
+					F.CreateSD(icon1)
 				end
 
 				if not icon2.styled then
