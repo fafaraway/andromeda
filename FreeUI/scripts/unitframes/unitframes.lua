@@ -39,6 +39,7 @@ oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
+
 ufFont = { C.font.normal, 12, "OUTLINE"}
 
 
@@ -320,12 +321,35 @@ end
 
 
 -- Auras
+local function formatTime(s)
+	local day, hour, minute = 86400, 3600, 60
+
+	if s >= day then
+		--return format('%dd', floor(s/day + 0.5))
+		return format('%d', floor(s/day + 0.5))
+	elseif s >= hour then
+		--return format('%dh', floor(s/hour + 0.5))
+		return format('%d', floor(s/hour + 0.5))
+	elseif s >= minute then
+		--return format('%dm', floor(s/minute + 0.5))
+		return format('%d', floor(s/minute + 0.5))
+	end
+	return format('%d', mod(s, minute))
+end
+
 local function UpdateAura(self, elapsed)
 	if(self.expiration) then
 		self.expiration = math.max(self.expiration - elapsed, 0)
 
-		if(self.expiration > 0 and self.expiration < 60) then
-			self.Duration:SetFormattedText('%d', self.expiration)
+		if(self.expiration > 0 and self.expiration < 30) then
+			self.Duration:SetText(formatTime(self.expiration))
+			self.Duration:SetTextColor(1, 0, 0)
+		elseif(self.expiration > 30 and self.expiration < 60) then
+			self.Duration:SetText(formatTime(self.expiration))
+			self.Duration:SetTextColor(1, 1, 0)
+		elseif(self.expiration > 60 and self.expiration < 300) then
+			self.Duration:SetText(formatTime(self.expiration))
+			self.Duration:SetTextColor(1, 1, 1)
 		else
 			self.Duration:SetText()
 		end
@@ -362,6 +386,9 @@ local function PostCreateIcon(element, button)
 	button.cd:SetReverse(true)
 	button.icon:SetDrawLayer('ARTWORK')
 
+	element.disableCooldown = true
+
+
 	button:SetScript('OnEnter', OnAuraEnter)
 
 	local StringParent = CreateFrame('Frame', nil, button)
@@ -374,9 +401,14 @@ local function PostCreateIcon(element, button)
 	F.SetFS(button.count)
 
 	local Duration = StringParent:CreateFontString(nil, 'OVERLAY')
-	Duration:SetPoint('TOPLEFT', button, 0, -1)
+	--local Duration = F.CreateFS(StringParent)
+	Duration:SetParent(StringParent)
+	Duration:ClearAllPoints()
+	Duration:SetPoint('BOTTOM', button, 2, -4)
+	Duration:SetFont("Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf", 16, "OUTLINEMONOCHROME")
 	
 	button.Duration = Duration
+
 
 	button:HookScript('OnUpdate', UpdateAura)
 end
@@ -386,6 +418,14 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 
 	button:SetSize(element.size, element.size*.75)
 	button.icon:SetTexCoord(.08, .92, .25, .85)
+
+	if(duration and duration > 0) then
+		button.expiration = expiration - GetTime()
+	else
+		button.expiration = math.huge
+	end
+
+
 
 	if canStealOrPurge then
 		button.bg:SetVertexColor(1, 1, 1)
@@ -453,7 +493,7 @@ local function CreateAuras(self)
 		Auras:SetPoint("TOP", self, "BOTTOM", 0, -4)
 		Auras["growth-y"] = "DOWN"
 		Auras.size = 20
-		Auras.disableCooldown = true
+		--Auras.disableCooldown = true
 	elseif self.unitStyle == "target" then
 		Auras.initialAnchor = "BOTTOMLEFT"
 		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
@@ -901,17 +941,11 @@ end
 
 
 -- Hide Blizz frames
-if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
-	CompactRaidFrameManager:SetParent(FreeUIHider)
-	CompactUnitFrameProfiles:UnregisterAllEvents()
-end
-
-for i = 1, MAX_PARTY_MEMBERS do
-	local pet = "PartyMemberFrame"..i.."PetFrame"
-	_G[pet]:SetParent(FreeUIHider)
-	_G[pet.."HealthBar"]:UnregisterAllEvents()
-end
-
+CompactRaidFrameManager:UnregisterAllEvents()
+CompactRaidFrameManager:SetParent(FreeUIHider)
+CompactRaidFrameContainer:UnregisterAllEvents()
+CompactRaidFrameContainer:Hide()
+CompactRaidFrameContainer:Hide()
 
 -- Global
 local Shared = function(self, unit, isSingle)
