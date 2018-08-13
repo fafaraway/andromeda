@@ -3,7 +3,6 @@ local module = F:RegisterModule("skins")
 
 function module:OnLogin()
 	self:ReskinDBM()
-	self:ReskinWA()
 	self:ReskinSkada()
 end
 

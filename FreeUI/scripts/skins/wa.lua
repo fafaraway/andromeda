@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("skins")
 
-function module:ReskinWA()
+local function ReskinWA()
 	local function Skin_WeakAuras(f, fType)
 		if fType == "icon" then
 			if not f.styled then
@@ -56,3 +56,4 @@ function module:ReskinWA()
 		end
 	end
 end
+module:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)
