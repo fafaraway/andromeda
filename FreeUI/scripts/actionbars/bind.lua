@@ -1,8 +1,10 @@
+local F, C, L = unpack(select(2, ...))
+
 -- Author: Nightcracker
 -- Maintainer: Coote
 -- Notes: Allows you to bind keys on buttons by hovering over them.
 
-local bind, localmacros = CreateFrame("Frame", "ncHoverBind", UIParent), 0
+local bind, localmacros, frame = CreateFrame("Frame", "ncHoverBind", UIParent), 0
 -- SLASH COMMAND
 SlashCmdList.MOUSEOVERBIND = function()
 	if InCombatLockdown() then print("You can't bind keys in combat.") return end
@@ -217,35 +219,61 @@ SlashCmdList.MOUSEOVERBIND = function()
 			self.enabled = true
 			self:RegisterEvent("PLAYER_REGEN_DISABLED")
 		end
+		local bindType = 1
 		function bind:Deactivate(save)
 			if save then
-				SaveBindings(2)
+				SaveBindings(bindType)
 				print("All keybindings have been saved.")
 			else
-				LoadBindings(2)
+				LoadBindings(bindType)
 				print("All newly set keybindings have been discarded.")
 			end
 			self.enabled = false
 			self:HideFrame()
 			self:UnregisterEvent("PLAYER_REGEN_DISABLED")
-			StaticPopup_Hide("KEYBIND_MODE")
+			frame:Hide()
 		end
 
-		StaticPopupDialogs["KEYBIND_MODE"] = {
-			text = "Hover your mouse over any actionbutton to bind it. Press the escape key or right click to clear the current actionbutton's keybinding.",
-			button1 = "Save bindings",
-			button2 = "Discard bindings",
-			OnAccept = function() bind:Deactivate(true) end,
-			OnCancel = function() bind:Deactivate(false) end,
-			timeout = 0,
-			whileDead = 1,
-			hideOnEscape = false
-		}
+		function bind:CallBindFrame()
+			if frame then frame:Show() return end
+			frame = CreateFrame("Frame", nil, UIParent)
+			frame:SetSize(320, 100)
+			frame:SetPoint("TOP", 0, -135)
+			F.CreateBD(frame)
+			F.CreateSD(frame)
+			F.CreateFSA(frame, 14, KEY_BINDING, false, "TOP", 0, -15)
+			--local text = F.CreateFSA(frame, 14, CHARACTER_SPECIFIC_KEYBINDINGS, false, "TOP", 0, -40)
+			local text = F.CreateFS(frame)
+			text:SetFont(C.font.normal, 12, "OUTLINE")
+			text:SetTextColor(1, .8, 0)
+			text:SetText(CHARACTER_SPECIFIC_KEYBINDINGS)
+			text:SetPoint("TOP", 0, -40)
+			local button1 = F.CreateButton(frame, 120, 25, APPLY, 12)
+			button1:SetPoint("BOTTOMLEFT", 25, 10)
+			button1:SetScript("OnClick", function()
+				bind:Deactivate(true)
+			end)
+			local button2 = F.CreateButton(frame, 120, 25, CANCEL, 12)
+			button2:SetPoint("BOTTOMRIGHT", -25, 10)
+			button2:SetScript("OnClick", function()
+				bind:Deactivate(false)
+			end)
+			F.Reskin(button1)
+			F.Reskin(button2)
+			local box = F.CreateCheckBox(frame)
+			box:SetPoint("RIGHT", text, "LEFT", -5, -0)
+			box:SetScript("OnClick", function(self)
+				if self:GetChecked() == true then
+					bindType = 2
+				else
+					bindType = 1
+				end
+			end)
+		end
 
 		-- REGISTERING
 		local stance = StanceButton1:GetScript("OnClick")
 		local pet = PetActionButton1:GetScript("OnClick")
---		local button = SecureActionButton_OnClick
 		local button = ActionButton1:GetScript("OnClick")
 
 		local function register(val)
@@ -294,7 +322,7 @@ SlashCmdList.MOUSEOVERBIND = function()
 	end
 	if not bind.enabled then
 		bind:Activate()
-		StaticPopup_Show("KEYBIND_MODE")
+		bind:CallBindFrame()
 	end
 end
 
