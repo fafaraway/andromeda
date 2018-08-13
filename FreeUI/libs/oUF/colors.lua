@@ -1,7 +1,7 @@
 local parent, ns = ...
 local oUF = ns.oUF
 local Private = oUF.Private
-
+local F, C = unpack(select(2, ...))
 local frame_metatable = Private.frame_metatable
 
 local colors = {
@@ -46,7 +46,7 @@ local function customClassColors()
 end
 
 if(not customClassColors()) then
-	for classToken, color in next, RAID_CLASS_COLORS do
+	for classToken, color in next, C.classcolours do
 		colors.class[classToken] = {color.r, color.g, color.b}
 	end
 

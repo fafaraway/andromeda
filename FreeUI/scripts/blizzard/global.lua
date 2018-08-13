@@ -1,10 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-
---ITEM_LEVEL = "|cff00ffffilvl: %d|r"
---ITEM_LEVEL_ALT = "|cff00ffffilvl: %d (%d)|r"
-
-if C.Client == "enUS" or C.Client == "enGB" then
+if C.client == "enUS" or C.Client == "enGB" then
 	ITEM_BIND_ON_EQUIP = "BoE"
 	ITEM_BIND_ON_PICKUP = "BoP"
 	ITEM_BIND_ON_USE = "Bind on use"
@@ -80,6 +76,8 @@ if C.Client == "enUS" or C.Client == "enGB" then
 	SELL_PRICE = "Price"
 end
 
+
+
 ARMOR_TEMPLATE = "Armor: %s"
 DAMAGE_TEMPLATE = "Damage: %s - %s"
 DPS_TEMPLATE = "%s DPS"
@@ -135,9 +133,9 @@ BN_INLINE_TOAST_FRIEND_OFFLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIc
 BN_INLINE_TOAST_FRIEND_ONLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has come |cff00ff00online|r."
 CHAT_BN_WHISPER_GET = "From %s:\32"
 CHAT_BN_WHISPER_INFORM_GET = "To %s:\32"
-CHAT_FLAG_AFK = "AFK "
-CHAT_FLAG_DND = "DND "
-CHAT_FLAG_GM = "GM "
+CHAT_FLAG_AFK = "<AFK> "
+CHAT_FLAG_DND = "<DND> "
+CHAT_FLAG_GM = "<GM> "
 CHAT_YOU_CHANGED_NOTICE = "|Hchannel:%d|h[%s]|h"
 ERR_FRIEND_OFFLINE_S = "%s has gone |cffff0000offline|r."
 ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h has come |cff00ff00online|r."
@@ -150,6 +148,9 @@ FACTION_STANDING_INCREASED_BONUS = "%s + %d (+%.1f RAF)"
 FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
 FACTION_STANDING_INCREASED_REFER_PART = "(+%.1f RAF)"
 FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
+
+
+
 
 --[[ Text colours ]]
 
