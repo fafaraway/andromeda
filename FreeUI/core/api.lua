@@ -79,8 +79,8 @@ end
 
 function F:CreateFSA(size, text, classcolor, anchor, x, y)
 	local fs = self:CreateFontString(nil, "OVERLAY")
-	--fs:SetFont(C.font.normal, size, "OUTLINE")
-	F.SetFS(fs, size)
+	fs:SetFont(C.font.normal, size, "OUTLINE")
+	--F.SetFS(fs, size)
 	fs:SetText(text)
 	fs:SetWordWrap(false)
 	if classcolor then
@@ -802,6 +802,23 @@ function F:ReskinMinMax()
 	end
 end
 
+-- Checkbox
+function F:CreateCB(a)
+	self:SetNormalTexture("")
+	self:SetPushedTexture("")
+	self:SetHighlightTexture(C.media.backdrop)
+	local hl = self:GetHighlightTexture()
+	hl:SetPoint("TOPLEFT", 6, -6)
+	hl:SetPoint("BOTTOMRIGHT", -6, 6)
+	hl:SetVertexColor(C.r, C.g, C.b, .25)
+
+	local bd = F.CreateBG(self, -4)
+	F.CreateBD(bd, a, 2)
+
+	local ch = self:GetCheckedTexture()
+	ch:SetDesaturated(true)
+	ch:SetVertexColor(C.r, C.g, C.b)
+end
 
 function F:CreateBC(a)
 	self:SetNormalTexture("")
@@ -837,6 +854,14 @@ function F:CreateButton(width, height, text, fontSize)
 	bu.text = F.CreateFSA(bu, fontSize or 8, text, false)
 
 	return bu
+end
+
+function F:CreateCheckBox()
+	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
+	F.CreateCB(cb)
+
+	cb.Type = "CheckBox"
+	return cb
 end
 
 -- GameTooltip
@@ -1059,6 +1084,29 @@ function F.UnitInGuild(unitName)
 		end
 	end
 	return false
+end
+
+-- Timer Format
+function F.FormatTime(s)
+	local day, hour, minute = 86400, 3600, 60
+
+	if s >= day then
+		return format("%d"..C.myColor.."d", s/day), s % day
+	elseif s >= hour then
+		return format("%d"..C.myColor.."h", s/hour), s % hour
+	elseif s >= minute then
+		return format("%d"..C.myColor.."m", s/minute), s % minute
+	elseif s < 3 then
+		if C.actionbars.decimalCD then
+			return format("|cffff0000%.1f|r", s), s - format("%.1f", s)
+		else
+			return format("|cffff0000%d|r", s + .5), s - floor(s)
+		end
+	elseif s < 10 then
+		return format("|cffffff00%d|r", s), s - floor(s)
+	else
+		return format("|cffcccc33%d|r", s), s - floor(s)
+	end
 end
 
 
