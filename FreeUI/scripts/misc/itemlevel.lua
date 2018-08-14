@@ -34,7 +34,8 @@ function module:ShowItemLevel()
 		__index = function(t, i)
 			local gslot = _G["Character"..i.."Slot"]
 			if not gslot then return end
-			local fstr = F.CreateFSA(gslot, 8, "", false, "BOTTOMRIGHT", 0, 2)
+			local fstr = F.CreateFS(gslot)
+			fstr:SetPoint("BOTTOMRIGHT", 0, 2)
 			t[i] = fstr
 			return fstr
 		end
@@ -44,7 +45,8 @@ function module:ShowItemLevel()
 		__index = function(t, i)
 			local gslot = _G["Inspect"..i.."Slot"]
 			if not gslot then return end
-			local fstr = F.CreateFSA(gslot, 8, "", false, "BOTTOMRIGHT", 0, 2)
+			local fstr = F.CreateFS(gslot)
+			fstr:SetPoint("BOTTOMRIGHT", 0, 2)
 			t[i] = fstr
 			return fstr
 		end
