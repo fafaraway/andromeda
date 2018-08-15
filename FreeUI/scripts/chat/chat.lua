@@ -107,15 +107,41 @@ local function ForceChatSettings()
 end
 
 
-
-
-
 SlashCmdList["TELLTARGET"] = function(s)
 	if(UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player")==GetDefaultLanguage("target"))then
 		SendChatMessage(s, "WHISPER", nil, UnitName("target"))
 	end
 end
 SLASH_TELLTARGET1 = "/tt"
+
+
+local function GetColor(className, isLocal)
+	if isLocal then
+		local found
+		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+			if v == className then className = k found = true break end
+		end
+		if not found then
+			for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+				if v == className then className = k break end
+			end
+		end
+	end
+	local tbl = C.classcolours[className]
+	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
+	return color
+end
+
+local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
+		local gameAccount = select(6, BNGetFriendInfoByID(id))
+		if gameAccount then
+			local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
+			if englishClass and englishClass ~= "" then
+				fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
+			end
+	end
+	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
+end
 
 
 local AddMessage = function(frame, text, ...)
@@ -129,6 +155,8 @@ local AddMessage = function(frame, text, ...)
 		text = gsub(text, "%[(%d+)%. BigfootWorldChannel%]", "w")
 
 		text = gsub(text, "%[%d+%. .-%]", "["..chatNum.."]")
+
+		text = gsub(text, "(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
 
 		text = gsub(text, "|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
 

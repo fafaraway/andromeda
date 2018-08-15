@@ -96,8 +96,8 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 end
 
 local addonBlockList = {
-	"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【网%.易%.有%.爱】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
-	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "=>", "->"
+	"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
+	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "EUI属性通报", "=>", "->"
 }
 
 local function genAddonBlock(_, _, msg, author)
@@ -133,5 +133,6 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", genAddonBlock)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", genAddonBlock)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genAddonBlock)
 
 end
