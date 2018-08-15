@@ -93,6 +93,14 @@ function module:OnLogin()
 			timer.enabled = true
 			timer.nextUpdate = 0
 
+			-- wait for blizz to fix itself
+			local parent = self:GetParent()
+			local charge = parent and parent.chargeCooldown
+			local chargeTimer = charge and charge.timer
+			if chargeTimer and chargeTimer ~= timer then
+				Timer_Stop(chargeTimer)
+			end
+
 			if timer.fontScale >= MIN_SCALE then 
 				timer:Show()
 			end
@@ -112,7 +120,7 @@ function module:OnLogin()
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", Timer_Start)
-	hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", hideCooldownNumbers)
+	--hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", hideCooldownNumbers)
 	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", function(self)
 		hideCooldownNumbers(self, true)
 	end)

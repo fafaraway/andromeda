@@ -8,7 +8,7 @@ local function UpdateBar(bar)
 
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-		bar:SetStatusBarColor(82/250, 227/250, 148/250)
+		bar:SetStatusBarColor(79/250, 167/250, 74/250)
 		bar:SetMinMaxValues(0, mxp)
 		bar:SetValue(xp)
 		bar:Show()
@@ -201,6 +201,7 @@ function module:Expbar()
 	bar:SetSize(256, 4)
 	bar:SetHitRectInsets(0, 0, 0, -10)
 	F.CreateSB(bar)
+	F.CreateBDFrame(bar)
 
 	local rest = CreateFrame("StatusBar", nil, bar)
 	rest:SetAllPoints()

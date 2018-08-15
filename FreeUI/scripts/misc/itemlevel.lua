@@ -91,6 +91,11 @@ function module:ShowItemLevel()
 		end
 	end)
 
+	-- 
+	F.SetFS(_G.CharacterNeckSlot.RankFrame.Label)
+	_G.CharacterNeckSlot.RankFrame.Label:ClearAllPoints()
+	_G.CharacterNeckSlot.RankFrame.Label:SetPoint("TOPLEFT", 0, -4)
+
 
 
 	--- Character Info Sheet ---
