@@ -466,15 +466,9 @@ local function groupBuffFilter(_, unit, button, _, _, _, _, _, _, caster, _, _, 
 	return false
 end
 
-local function PostUpdateGapIcon(_, _, icon)
-	if icon.sd and icon.sd:IsShown() then
-		icon.sd:Hide()
-	end
-	if icon.bg and icon.bg:IsShown() then
-		icon.bg:Hide()
-	end
+local function PostUpdateGapIcon(self, unit, icon, visibleBuffs)
+	icon:Hide()
 end
-
 
 local function CreateAuras(self)
 	local Auras = CreateFrame("Frame", nil, self)
@@ -749,6 +743,7 @@ local function CreateIndicator(self)
 			local PvPIndicator = self.PvPIndicator
 
 			local factionGroup = UnitFactionGroup(unit)
+			--C_PvP.IsWarModeActive()
 			if(UnitIsPVPFreeForAll(unit) or (factionGroup and factionGroup ~= "Neutral" and UnitIsPVP(unit))) then
 				if factionGroup == "Alliance" then
 					PvPIndicator:SetTextColor(0, 0.68, 0.94)
