@@ -3,6 +3,6 @@ if not C.Client == "zhCN" then return end
 
 
 L["misc"] = {
-	["rareFound"] = "发现稀有！",
+	["rareFound"] = "发现稀有！ ",
 
 }
