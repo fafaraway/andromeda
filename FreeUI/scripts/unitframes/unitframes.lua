@@ -409,7 +409,7 @@ local function PostCreateIcon(element, button)
 	
 	button.Duration = Duration
 
-	if element.__owner.unitStyle == "group" then
+	if element.__owner.unitStyle == "group" or element.__owner.unitStyle == "pet" then
 		Duration:Hide()
 	end
 
