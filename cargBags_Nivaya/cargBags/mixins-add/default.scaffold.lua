@@ -29,6 +29,27 @@ local cargBags = ns.cargBags
 
 local function noop() end
 
+local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+local ItemDB = {}
+local function GetBagItemLevel(link, bag, slot)
+	if ItemDB[link] then return ItemDB[link] end
+
+	local tip = _G["FreeUIBagItemTooltip"] or CreateFrame("GameTooltip", "FreeUIBagItemTooltip", nil, "GameTooltipTemplate")
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	tip:SetBagItem(bag, slot)
+
+	for i = 2, 5 do
+		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+		local hasLevel = string.find(text, itemLevelString)
+		if hasLevel then
+			local level = string.match(text, "(%d+)%)?$")
+			ItemDB[link] = tonumber(level)
+			break
+		end
+	end
+	return ItemDB[link]
+end
+
 --[[
 local S_UPGRADE_LEVEL = "^" .. gsub(ITEM_UPGRADE_TOOLTIP_FORMAT, "%%d", "(%%d+)")	-- Search pattern
 local scantip = CreateFrame("GameTooltip", "ItemUpgradeScanTooltip", nil, "GameTooltipTemplate")
@@ -171,9 +192,11 @@ local function ItemButton_Update(self, item)
 
 	-- Item Level
 	if item.link then
+		local level = GetBagItemLevel(item.link, item.bagID, item.slotID) or item.level
+		local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 		if (item.type and (ilvlTypes[item.type] or item.subType and ilvlSubTypes[item.subType])) and item.level > 0 then
-			self.BottomString:SetText(item.level)
-			self.BottomString:SetTextColor(GetItemQualityColor(item.rarity))
+			self.BottomString:SetText(level)
+			self.BottomString:SetTextColor(color.r, color.g, color.b)
 		else
 			self.BottomString:SetText("")
 		end
