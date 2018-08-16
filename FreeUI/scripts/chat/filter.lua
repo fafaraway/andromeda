@@ -1,34 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("chat")
 
--- Account-wide settings
---[[local function accountSettings(event)
-	if not NDuiADB["ChatFilter"] then NDuiADB["ChatFilter"] = "" end
-	if not NDuiADB["ChatAt"] then NDuiADB["ChatAt"] = "" end
-	if not NDuiADB["Timestamp"] then NDuiADB["Timestamp"] = false end
 
-	if event == "PLAYER_LOGIN" then
-		NDuiDB["Chat"]["FilterList"] = NDuiADB["ChatFilter"]
-		NDuiDB["Chat"]["AtList"] = NDuiADB["ChatAt"]
-		NDuiDB["Chat"]["Timestamp"] = NDuiADB["Timestamp"]
-	elseif event == "PLAYER_LOGOUT" then
-		NDuiADB["ChatFilter"] = NDuiDB["Chat"]["FilterList"]
-		NDuiADB["ChatAt"] = NDuiDB["Chat"]["AtList"]
-		NDuiADB["Timestamp"] = NDuiDB["Chat"]["Timestamp"]
-	end
-
-	-- Timestamp
-	local greyStamp = DB.GreyColor.."[%H:%M:%S]|r "
-	if NDuiDB["Chat"]["Timestamp"] then
-		SetCVar("showTimestamps", greyStamp)
-	else
-		if GetCVar("showTimestamps") == greyStamp then
-			SetCVar("showTimestamps", "none")
-		end
-	end
-end
-B:RegisterEvent("PLAYER_LOGIN", accountSettings)
-B:RegisterEvent("PLAYER_LOGOUT", accountSettings)]]
 
 --[[
 	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
