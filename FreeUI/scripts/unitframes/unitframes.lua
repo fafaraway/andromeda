@@ -321,7 +321,7 @@ end
 
 
 -- Auras
-local function formatTime(s)
+local function formatAuraTime(s)
 	local day, hour, minute = 86400, 3600, 60
 
 	if s >= day then
@@ -342,13 +342,13 @@ local function UpdateAura(self, elapsed)
 		self.expiration = math.max(self.expiration - elapsed, 0)
 
 		if(self.expiration > 0 and self.expiration < 30) then
-			self.Duration:SetText(formatTime(self.expiration))
+			self.Duration:SetText(formatAuraTime(self.expiration))
 			self.Duration:SetTextColor(1, 0, 0)
 		elseif(self.expiration > 30 and self.expiration < 60) then
-			self.Duration:SetText(formatTime(self.expiration))
+			self.Duration:SetText(formatAuraTime(self.expiration))
 			self.Duration:SetTextColor(1, 1, 0)
 		elseif(self.expiration > 60 and self.expiration < 300) then
-			self.Duration:SetText(formatTime(self.expiration))
+			self.Duration:SetText(formatAuraTime(self.expiration))
 			self.Duration:SetTextColor(1, 1, 1)
 		else
 			self.Duration:SetText()
@@ -408,6 +408,10 @@ local function PostCreateIcon(element, button)
 	Duration:SetFont("Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf", 16, "OUTLINEMONOCHROME")
 	
 	button.Duration = Duration
+
+	if element.__owner.unitStyle == "group" then
+		Duration:Hide()
+	end
 
 
 	button:HookScript('OnUpdate', UpdateAura)
