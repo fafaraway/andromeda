@@ -404,7 +404,7 @@ local function PostCreateIcon(element, button)
 	--local Duration = F.CreateFS(StringParent)
 	Duration:SetParent(StringParent)
 	Duration:ClearAllPoints()
-	Duration:SetPoint('BOTTOM', button, 2, -4)
+	Duration:SetPoint('BOTTOM', button, 2, -6)
 	Duration:SetFont("Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf", 16, "OUTLINEMONOCHROME")
 	
 	button.Duration = Duration
@@ -496,8 +496,8 @@ local function CreateAuras(self)
 		Auras.initialAnchor = "BOTTOMLEFT"
 		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
 		Auras["growth-y"] = "UP"
-		Auras.size = 30
-		Auras:SetSize(self:GetWidth()-24, 100)
+		Auras.size = 32
+		Auras:SetSize(self:GetWidth()-14, 100)
 
 		if C.unitframes.castbyPlayer then
 			Auras.CustomFilter = FilterTargetDebuffs

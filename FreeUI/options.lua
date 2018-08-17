@@ -129,6 +129,7 @@ C["actionbars"] = {
 	["stanceBar_show"] = false,
 	["classColor"] = false,
 	["count"] = true,
+	["decimalCD"] = false,
 }
 
 
@@ -269,7 +270,7 @@ C["chat"] = {
 	["whisperAlert"] = true,
 	["minimize"] = true,
 
-	["filterList"] = "艾尔文森林美食协会 猎户星座 星空之下 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人",
+	["filterList"] = "艾尔文森林美食协会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收",
 }
 
 
