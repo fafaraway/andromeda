@@ -4,7 +4,7 @@ local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("cooldown")
 
 function module:OnLogin()
-	--if not C.actionbars.cooldown then return end
+	if not C.actionbars.cooldown then return end
 
 	local FONT_SIZE = 18
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for

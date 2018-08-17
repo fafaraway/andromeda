@@ -129,6 +129,7 @@ C["actionbars"] = {
 	["stanceBar_show"] = false,
 	["classColor"] = false,
 	["count"] = true,
+	["cooldown"] = true,
 	["decimalCD"] = false,
 }
 
