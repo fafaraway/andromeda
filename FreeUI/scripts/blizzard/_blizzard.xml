@@ -15,4 +15,5 @@
 	<Script file="capturebar.lua"/>
 	<Script file="orderhallcommandbar.lua"/>
 	<Script file="petbattle.lua"/>
+	<Script file="archaeologybar"/>
 </Ui>
