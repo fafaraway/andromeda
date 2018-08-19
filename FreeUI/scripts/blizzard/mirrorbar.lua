@@ -23,7 +23,7 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 			text:SetPoint("CENTER", statusbar)
 			
 			if C.client == 'zhCN' then
-				text:SetFont(C.font.normal, 11, "OUTLINE")
+				text:SetFont(C.font.normal, 12)
 			else
 				F.SetFS(text)
 			end

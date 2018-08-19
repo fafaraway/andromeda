@@ -14,7 +14,7 @@ function module:OnLogin()
 	self:MissingStats()
 
 	-- Remove Boss Banner
-	if C.misc.bossBanner == true then
+	if not C.misc.bossBanner then
 		BossBanner:UnregisterAllEvents()
 	end
 
@@ -25,17 +25,34 @@ end
 
 
 -- Remove Talking Head Frame
-if C.misc.talkingHead == true then
-	local frame = CreateFrame("Frame")
-	frame:RegisterEvent("ADDON_LOADED")
-	frame:SetScript("OnEvent", function(self, event, addon)
-		if addon == "Blizzard_TalkingHeadUI" then
-			hooksecurefunc("TalkingHeadFrame_PlayCurrent", function()
-				TalkingHeadFrame:Hide()
-			end)
-			self:UnregisterEvent(event)
+do
+	local function NoTalkingHeads()
+		hooksecurefunc(TalkingHeadFrame, "Show", function(self)
+			self:Hide()
+		end)
+		TalkingHeadFrame.ignoreFramePositionManager = true
+	end
+
+	local function setupMisc(event, addon)
+		if C.misc.talkingHead then
+			F:UnregisterEvent(event, setupMisc)
+			return
 		end
-	end)
+
+		if event == "PLAYER_ENTERING_WORLD" then
+			F:UnregisterEvent(event, setupMisc)
+			if IsAddOnLoaded("Blizzard_TalkingHeadUI") then
+				NoTalkingHeads()
+				F:UnregisterEvent("ADDON_LOADED", setupMisc)
+			end
+		elseif event == "ADDON_LOADED" and addon == "Blizzard_TalkingHeadUI" then
+			NoTalkingHeads()
+			F:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	F:RegisterEvent("PLAYER_ENTERING_WORLD", setupMisc)
+	F:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
 -- ALT + Right Click to buy a stack

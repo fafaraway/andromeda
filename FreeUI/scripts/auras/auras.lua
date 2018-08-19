@@ -1,234 +1,207 @@
 local F, C, L = unpack(select(2, ...))
 
-local _G = _G
+local module = F:RegisterModule("auras")
 
-local cfg = C.auras
 
-local unpack = unpack
+local BuffFrame = BuffFrame
+local buffsPerRow, buffSize, margin, offset = C.auras.buffPerRow, C.auras.buffSize, C.auras.paddingX, C.auras.paddingY
+local debuffsPerRow, debuffSize = C.auras.buffPerRow, C.auras.debuffSize
+local buffAnchor, debuffAnchor
 
--- _G.DAY_ONELETTER_ABBR = '|cffffffff%dd|r'
--- _G.HOUR_ONELETTER_ABBR = '|cff51afed%dh|r'
--- _G.MINUTE_ONELETTER_ABBR = '|cfff1c31a%dm|r'
--- _G.SECOND_ONELETTER_ABBR = '|cffff000c%d|r'
+function module:OnLogin()
+	buffAnchor = CreateFrame("Frame", nil, UIParent)
+	buffAnchor:SetPoint(unpack(C.auras.position))
+	buffAnchor:SetSize((buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
 
--- _G.DEBUFF_MAX_DISPLAY = 32 -- show more debuffs
--- _G.BUFF_MIN_ALPHA = 1
+	debuffAnchor = CreateFrame("Frame", nil, UIParent)
+	debuffAnchor:SetPoint("TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset)
+	debuffAnchor:SetSize((debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
 
-local function durationSetText(duration, arg1, arg2)
-	duration:SetText(format("|cffffffff"..string.gsub(arg1, " ", "").."|r", arg2))
+	for i = 1, 3 do
+		local enchant = _G["TempEnchant"..i]
+		enchant:ClearAllPoints()
+		if i == 1 then
+			enchant:SetPoint("TOPRIGHT", buffAnchor)
+		else
+			enchant:SetPoint("TOPRIGHT", _G["TempEnchant"..(i-1)], "TOPLEFT", -margin, 0)
+		end
+	end
+	TempEnchant3:Hide()
+	BuffFrame.ignoreFramePositionManager = true
 end
 
+local function styleButton(bu, isDebuff)
+	if not bu or bu.styled then return end
+	local name = bu:GetName()
 
-local function applySkin(b)
-	if not b or (b and b.styled) then return end
-
-	local name = b:GetName()
-
-	--check the button type
-	local tempenchant, Debuff, Buff = false, false, false
-	if (name:match("TempEnchant")) then
-		tempenchant = true
-	elseif (name:match("Debuff")) then
-		Debuff = true
-	else
-		Buff = true
-	end
-
-	--button
-	if Debuff then
-		b:SetSize(cfg.debuffSize, cfg.debuffSize)
-	else
-		b:SetSize(cfg.buffSize, cfg.buffSize)
-	end
+	local iconSize = buffSize
+	if isDebuff then iconSize = debuffSize end
 
 	local border = _G[name.."Border"]
+	if border then border:Hide() end
 
-	local new = CreateFrame("Frame", nil, b)
-	new:SetFrameLevel(b:GetFrameLevel()-1)
-	new:SetPoint("TOPLEFT", b, "TOPLEFT", 2, -2)
-	new:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -2, 2)
-	new:SetBackdrop({
+	local bg = CreateFrame("Frame", nil, bu)
+	bg:SetFrameLevel(bu:GetFrameLevel()-1)
+	bg:SetPoint("TOPLEFT", bu, "TOPLEFT", 2, -2)
+	bg:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -2, 2)
+	bg:SetBackdrop({
 		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
 		insets = {top = -1, left = -1, bottom = -1, right = -1}})
-	if border then
-		border:SetTexture(nil)
-		new:SetBackdropColor(1, 0, 0, 1)
-	else
-		new:SetBackdropColor(0, 0, 0, 1)
-	end
 
-	b.Border = border
+	bg:SetBackdropColor(0, 0, 0, 1)
 
 
 	local icon = _G[name.."Icon"]
-	icon:SetTexCoord(0.1,0.9,0.1,0.9)
-	icon:SetPoint("TOPLEFT", b, "TOPLEFT", 2, -2)
-	icon:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", -2, 2)
-	icon:SetDrawLayer("BACKGROUND",-8)
-	b.icon = icon
+	icon:SetAllPoints()
+	icon:SetTexCoord(unpack(C.texCoord))
+	icon:SetPoint("TOPLEFT", bu, "TOPLEFT", 2, -2)
+	icon:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -2, 2)
+	icon:SetDrawLayer("BACKGROUND", 1)
 
-	--duration
-	F.SetFS(b.duration)
-	b.duration:ClearAllPoints()
-	b.duration:SetPoint("BOTTOM", 2, 2)
+	local duration = _G[name.."Duration"]
+	duration:ClearAllPoints()
+	duration:SetPoint("TOP", bu, "BOTTOM", 2, 2)
+	duration:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
 
-	hooksecurefunc(b.duration, "SetFormattedText", durationSetText)
+	local count = _G[name.."Count"]
+	count:ClearAllPoints()
+	count:SetParent(bu)
+	count:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -1, -3)
+	count:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
 
-	--count
-	F.SetFS(b.count)
-	b.count:ClearAllPoints()
-	b.count:SetPoint("TOP", b, "TOP", 2, -2)
+	bu:SetSize(iconSize, iconSize)
+	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
+	bu.HL:SetColorTexture(1, 1, 1, .25)
+	bu.HL:SetAllPoints(icon)
+	--F.CreateBDFrame(bu)
+	F.CreateSD(bu)
 
-	F.CreateSD(b)
-
-	b.styled = true
+	bu.styled = true
 end
 
+local function reskinBuffs()
+	local buff, previousBuff, aboveBuff, index
+	local numBuffs = 0
+	local slack = BuffFrame.numEnchants
 
-local origSecondsToTimeAbbrev = _G.SecondsToTimeAbbrev
-local function SecondsToTimeAbbrevHook(seconds)
-		origSecondsToTimeAbbrev(seconds)
-
-		local tempTime
-		if (seconds >= 86400) then
-				tempTime = ceil(seconds / 86400)
-				return '|cffffffff%dd|r', tempTime
-		end
-
-		if (seconds >= 3600) then
-				tempTime = ceil(seconds / 3600)
-				return '|cff51afed%dh|r', tempTime
-		end
-
-		if (seconds >= 60) then
-				tempTime = ceil(seconds / 60)
-				return '|cfff1c31a%dm|r', tempTime
-		end
-
-		return '|cffff000c%d|r', seconds
-end
-SecondsToTimeAbbrev = SecondsToTimeAbbrevHook
-
-BuffFrame:SetScript('OnUpdate', nil)
-hooksecurefunc(BuffFrame, 'Show', function(self)
-		self:SetScript('OnUpdate', nil)
-end)
-
--- TemporaryEnchantFrame ...
-TempEnchant1:ClearAllPoints()
-TempEnchant1:SetPoint(unpack(C.auras.position))
--- TempEnchant1.SetPoint = function() end
-
-TempEnchant2:ClearAllPoints()
-TempEnchant2:SetPoint('TOPRIGHT', TempEnchant1, 'TOPLEFT', -cfg.paddingX, 0)
-
-local function UpdateFirstButton(self)
-		if (self and self:IsShown()) then
-				self:ClearAllPoints()
-				if (UnitHasVehicleUI('player')) then
-						self:SetPoint('TOPRIGHT', TempEnchant1)
-						return
-				else
-						if (BuffFrame.numEnchants > 0) then
-								self:SetPoint('TOPRIGHT', _G['TempEnchant'..BuffFrame.numEnchants], 'TOPLEFT', -cfg.paddingX, 0)
-								return
-						else
-								self:SetPoint('TOPRIGHT', TempEnchant1)
-								return
-						end
-				end
-		end
-end
-
-local function CheckFirstButton()
-		if (BuffButton1) then
-		UpdateFirstButton(BuffButton1)
-		end
-end
-
-hooksecurefunc('BuffFrame_UpdateAllBuffAnchors', function()
-		local previousBuff, aboveBuff
-		local numBuffs = 0
-		local numTotal = BuffFrame.numEnchants
-
-		for i = 1, BUFF_ACTUAL_DISPLAY do
-				local buff = _G['BuffButton'..i]
+	for i = 1, BUFF_ACTUAL_DISPLAY do
+		buff = _G["BuffButton"..i]
+		styleButton(buff)
 
 		numBuffs = numBuffs + 1
-		numTotal = numTotal + 1
-
+		index = numBuffs + slack
 		buff:ClearAllPoints()
-		if (numBuffs == 1) then
-			UpdateFirstButton(buff)
-		elseif (numBuffs > 1 and mod(numTotal, cfg.buffPerRow) == 1) then
-			if (numTotal == cfg.buffPerRow + 1) then
-				buff:SetPoint('TOP', TempEnchant1, 'BOTTOM', 0, -cfg.paddingY)
+		if index > 1 and mod(index, buffsPerRow) == 1 then
+			if index == buffsPerRow + 1 then
+				buff:SetPoint("TOP", TempEnchant1, "BOTTOM", 0, -offset)
 			else
-				buff:SetPoint('TOP', aboveBuff, 'BOTTOM', 0, -cfg.paddingY)
+				buff:SetPoint("TOP", aboveBuff, "BOTTOM", 0, -offset)
 			end
-
 			aboveBuff = buff
+		elseif numBuffs == 1 and slack == 0 then
+			buff:SetPoint("TOPRIGHT", buffAnchor)
+		elseif numBuffs == 1 and slack > 0 then
+			buff:SetPoint("TOPRIGHT", _G["TempEnchant"..slack], "TOPLEFT", -margin, 0)
 		else
-			buff:SetPoint('TOPRIGHT', previousBuff, 'TOPLEFT', -cfg.paddingX, 0)
+			buff:SetPoint("RIGHT", previousBuff, "LEFT", -margin, 0)
 		end
-
 		previousBuff = buff
-		end
-end)
+	end
+end
+hooksecurefunc("BuffFrame_UpdateAllBuffAnchors", reskinBuffs)
 
-hooksecurefunc('DebuffButton_UpdateAnchors', function(self, index)
-		local numBuffs = BUFF_ACTUAL_DISPLAY + BuffFrame.numEnchants
-		local rowSpacing
-		local debuffSpace = cfg.buffSize + cfg.paddingY
-		local numRows = ceil(numBuffs/cfg.buffPerRow)
+local function reskinTempEnchant()
+	for i = 1, NUM_TEMP_ENCHANT_FRAMES do
+		local bu = _G["TempEnchant"..i]
+		styleButton(bu)
+	end
+end
+hooksecurefunc("TemporaryEnchantFrame_Update", reskinTempEnchant)
 
-		if (numRows and numRows > 1) then
-				rowSpacing = -numRows * debuffSpace
+local function reskinDebuffs(buttonName, i)
+	local debuff = _G[buttonName..i]
+	styleButton(debuff, true)
+
+	debuff:ClearAllPoints()
+	if i > 1 and mod(i, debuffsPerRow) == 1 then
+		debuff:SetPoint("TOP", _G[buttonName..(i-debuffsPerRow)], "BOTTOM", 0, -offset)
+	elseif i == 1 then
+		debuff:SetPoint("TOPRIGHT", debuffAnchor)
+	else
+		debuff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -margin, 0)
+	end
+end
+hooksecurefunc("DebuffButton_UpdateAnchors", reskinDebuffs)
+
+local function updateDebuffBorder(buttonName, index, filter)
+	local unit = PlayerFrame.unit
+	local name, _, _, debuffType = UnitAura(unit, index, filter)
+	if not name then return end
+	local bu = _G[buttonName..index]
+	if not (bu and bu.bg and bu.Shadow) then return end
+
+	if filter == "HARMFUL" then
+		local color = DebuffTypeColor[debuffType or "none"]
+		bu.bg:SetBackdropColor(color.r, color.g, color.b)
+		bu.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
+end
+hooksecurefunc("AuraButton_Update", updateDebuffBorder)
+
+local function flashOnEnd(self)
+	if self.timeLeft < 10 then
+		self:SetAlpha(BuffFrame.BuffAlphaValue)
+	else
+		self:SetAlpha(1)
+	end
+end
+hooksecurefunc("AuraButton_OnUpdate", flashOnEnd)
+
+local function formatAuraTime(seconds)
+	local d, h, m, str = 0, 0, 0
+	if seconds >= 86400 then
+		d = seconds/86400
+		seconds = seconds%86400
+	end
+	if seconds >= 3600 then
+		h = seconds/3600
+		seconds = seconds%3600
+	end
+	if seconds >= 60 then
+		m = seconds/60
+		seconds = seconds%60
+	end
+	if d > 0 then
+		str = format("%d"..C.infoColor.."d", d)
+	elseif h > 0 then
+		str = format("%d"..C.infoColor.."h", h)
+	elseif m >= 10 then
+		str = format("%d"..C.infoColor.."m", m)
+	elseif m > 0 and m < 10 then
+		str = format("%d:%.2d", m, seconds)
+	else
+		if seconds <= 5 then
+			str = format("|cffff0000%.1f|r", seconds) -- red
+		elseif seconds <= 10 then
+			str = format("|cffffff00%.1f|r", seconds) -- yellow
 		else
-				rowSpacing = -debuffSpace
+			str = format("%d"..C.infoColor.."s", seconds)
 		end
+	end
 
-		local buff = _G[self..index]
-		buff:ClearAllPoints()
-
-		if (index == 1) then
-				buff:SetPoint('TOP', TempEnchant1, 'BOTTOM', 0, rowSpacing)
-		elseif (index >= 2 and mod(index, cfg.buffPerRow) == 1) then
-				buff:SetPoint('TOP', _G[self..(index-cfg.buffPerRow)], 'BOTTOM', 0, -cfg.paddingY)
-		else
-				buff:SetPoint('TOPRIGHT', _G[self..(index-1)], 'TOPLEFT', -cfg.paddingX, 0)
-		end
-end)
-
-for i = 1, NUM_TEMP_ENCHANT_FRAMES do
-		local button = _G['TempEnchant'..i]
-		button:SetScale(cfg.buffScale)
-		button:SetSize(cfg.buffSize, cfg.buffSize)
-
-		applySkin(button)
-
-		button:SetScript('OnShow', function()
-				CheckFirstButton()
-		end)
-
-		button:SetScript('OnHide', function()
-				CheckFirstButton()
-		end)
-
+	return str
 end
 
-hooksecurefunc('AuraButton_Update', function(self, index)
-		local button = _G[self..index]
-
-		if (button and not button.styled) then applySkin(button)
-				-- if (button) then
-				-- 		if (self:match('Debuff')) then
-				-- 				button:SetSize(cfg.debuffSize, cfg.debuffSize)
-				-- 				button:SetScale(cfg.debuffScale)
-				-- 		else
-				-- 				button:SetSize(cfg.buffSize, cfg.buffSize)
-				-- 				button:SetScale(cfg.buffScale)
-				-- 		end
-				-- end
-		end
+hooksecurefunc("AuraButton_UpdateDuration", function(button, timeLeft)
+	local duration = button.duration
+	if SHOW_BUFF_DURATIONS == "1" and timeLeft then
+		duration:SetText(formatAuraTime(timeLeft))
+		duration:SetVertexColor(1, 1, 1)
+		duration:Show()
+	else
+		duration:Hide()
+	end
 end)
+
+
+

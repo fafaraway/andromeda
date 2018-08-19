@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 
-local stateFont = {
+--[[local stateFont = {
 		C.font.normal,
 		12,
 		"OUTLINE"
@@ -48,11 +48,16 @@ local function CaptureUpdate()
 		end
 	end
 end
-hooksecurefunc("UIParent_ManageFramePositions", CaptureUpdate)
+hooksecurefunc("UIParent_ManageFramePositions", CaptureUpdate)]]
+
+
+_G.UIWidgetTopCenterContainerFrame:ClearAllPoints()
+_G.UIWidgetTopCenterContainerFrame:SetPoint("TOP", UIParent, "TOP", 0, -30)
+_G.UIWidgetTopCenterContainerFrame.ignoreFramePositionManager = true
 
 
 
-local function restyleStateFrames()
+--[[local function restyleStateFrames()
 	for i = 1, 20 do
 		local f = _G["AlwaysUpFrame"..i]
 		if f and not f.styled then
@@ -71,5 +76,5 @@ local function restyleStateFrames()
 	end
 end
 
-restyleStateFrames()
+restyleStateFrames()]]
 --hooksecurefunc("WorldStateAlwaysUpFrame_Update", restyleStateFrames)

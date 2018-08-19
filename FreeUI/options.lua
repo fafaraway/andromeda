@@ -102,18 +102,7 @@ C.reactioncolours = {
 -- [[ Global config ]]
 
 
-C["appearance"] = {
-	["colourScheme"] = 1,			-- 1 = class coloured, 2 = custom
-		["customColour"] = {r = 1, g = 1, b = 1},
-	["fontUseAlternativeFont"] = false,
-	["fontSizeNormal"] = 8,
-	["fontSizeLarge"] = 16,
-	["fontOutline"] = true,
-	["fontOutlineStyle"] = 2,		-- 1 = normal, 2 = monochrome
-	["fontShadow"] = true,
-	["fontUseColorFont"] = true,
-	["fontColorFontRGB"] = {r = 247/255, g = 225/255, b =171/255},
-}
+
 
 
 C["actionbars"] = {
@@ -136,11 +125,9 @@ C["actionbars"] = {
 
 C["auras"] = {
 	["buffSize"] = 42,
-	["buffScale"] = 1,
 	["debuffSize"] = 50,
-	["debuffScale"] = 1,
-	["paddingX"] = 1,
-	["paddingY"] = 3,
+	["paddingX"] = 3,
+	["paddingY"] = 8,
 	["buffPerRow"] = 8,
 	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
 	["aurasSource"] = true,
@@ -171,8 +158,8 @@ C["misc"] = {
 
 	["alreadyKnown"] = true,
 
-	["bossBanner"] = true,
-	["talkingHead"] = true,
+	["bossBanner"] = false,
+	["talkingHead"] = false,
 
 	["hideRaidNames"] = true,
 	["saySapped"] = true,

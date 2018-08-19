@@ -38,16 +38,19 @@ function module:OnLogin()
 		self:SetScale(1)
 	end)
 
+	if C.maps.worldMapScale > 1 then
+		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+			local s = WorldMapFrame:GetScale()
+			return x/s, y/s
+		end
+	end
+
 	-- keep minimized world map centered
 	hooksecurefunc("ToggleWorldMap", function()
 		WorldMapFrame:ClearAllPoints()
 		WorldMapFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 	end)
-
-	-- cursor fix, need reviewed
-	if C.maps.worldMapScale > 1 then
-		RunScript("WorldMapFrame.ScrollContainer.GetCursorPosition=function(f) local x,y=MapCanvasScrollControllerMixin.GetCursorPosition(f);local s=WorldMapFrame:GetScale();return x/s,y/s;end")
-	end
 
 	-- Generate Coords
 	local player = F.CreateFS(WorldMapFrame.BorderFrame)
@@ -84,7 +87,7 @@ function module:OnLogin()
 
 	local function CoordsFormat(owner, none)
 		local text = none and ": --, --" or ": %.1f, %.1f"
-		return owner..C.myColor..text
+		return owner..C.infoColor..text
 	end
 
 	local function UpdateCoords(self, elapsed)

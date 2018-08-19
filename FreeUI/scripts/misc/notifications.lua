@@ -38,7 +38,7 @@ function module:RareAlert()
 			--UIErrorsFrame:AddMessage(C.infoColor.."Rare Found"..tex..(info.name or ""))
 
 	
-			RaidNotice_AddMessage(RaidWarningFrame, C.infoColor..L.misc.rareFound..tex..(info.name or ""), ChatTypeInfo["RAID_WARNING"])
+			RaidNotice_AddMessage(RaidWarningFrame, C.infoColor..L.misc.rareFound..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
 
 			
 			if C.misc.rareAlertNotify then

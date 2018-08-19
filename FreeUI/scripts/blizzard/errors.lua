@@ -10,7 +10,7 @@ local fadeouttime = 0.16 -- fade out time (seconds)
 local errorsFont = {
 		C.font.normal,
 		12,
-		"OUTLINE"
+		nil,
 	}
 
 UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE")
