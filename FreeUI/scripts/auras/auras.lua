@@ -14,7 +14,7 @@ function module:OnLogin()
 	buffAnchor:SetSize((buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
 
 	debuffAnchor = CreateFrame("Frame", nil, UIParent)
-	debuffAnchor:SetPoint("TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset)
+	debuffAnchor:SetPoint("TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset+30)
 	debuffAnchor:SetSize((debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
 
 	for i = 1, 3 do
@@ -40,22 +40,18 @@ local function styleButton(bu, isDebuff)
 	local border = _G[name.."Border"]
 	if border then border:Hide() end
 
-	local bg = CreateFrame("Frame", nil, bu)
-	bg:SetFrameLevel(bu:GetFrameLevel()-1)
-	bg:SetPoint("TOPLEFT", bu, "TOPLEFT", 2, -2)
-	bg:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -2, 2)
-	bg:SetBackdrop({
-		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
-		insets = {top = -1, left = -1, bottom = -1, right = -1}})
+	local bg = bu:CreateTexture(nil, "BACKGROUND")
+	bg:SetPoint("TOPLEFT", -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", 1, -1)
+	bg:SetTexture(C.media.backdrop)
+	bg:SetVertexColor(0, 0, 0)
 
-	bg:SetBackdropColor(0, 0, 0, 1)
-
-
+	bu.bg = bg
+	
 	local icon = _G[name.."Icon"]
 	icon:SetAllPoints()
 	icon:SetTexCoord(unpack(C.texCoord))
-	icon:SetPoint("TOPLEFT", bu, "TOPLEFT", 2, -2)
-	icon:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", -2, 2)
+
 	icon:SetDrawLayer("BACKGROUND", 1)
 
 	local duration = _G[name.."Duration"]
@@ -142,7 +138,7 @@ local function updateDebuffBorder(buttonName, index, filter)
 
 	if filter == "HARMFUL" then
 		local color = DebuffTypeColor[debuffType or "none"]
-		bu.bg:SetBackdropColor(color.r, color.g, color.b)
+		bu.bg:SetVertexColor(color.r, color.g, color.b)
 		bu.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 end

@@ -71,17 +71,17 @@ end
 -- modify class color
 C.classcolours = {
 	["DEATHKNIGHT"] = {r = 0.77, g = 0.12, b = 0.23},
-	["DEMONHUNTER"] = {r = 0.64, g = 0.19, b = 0.79},
-	["DRUID"] = {r = 1, g = 0.49, b = 0.04},
-	["HUNTER"] = {r = 0.58, g = 0.86, b = 0.49},
+	["DEMONHUNTER"] = {r = 144/255, g = 0, b = 229/255},
+	["DRUID"] = {r = 191/255, g = 104/255, b = 30/255},
+	["HUNTER"] = {r = 91/255, g = 177/255, b = 87/255},
 	["MAGE"] = {r = 0, g = 0.76, b = 1},
-	["MONK"] = {r = 0.0, g = 1.00 , b = 0.59},
-	["PALADIN"] = {r = 1, g = 0.22, b = 0.52},
+	["MONK"] = {r = 65/255, g = 177/255, b = 139/255},
+	["PALADIN"] = {r = 229/255, g = 0, b = 134/255},
 	["PRIEST"] = {r = 0.8, g = 0.87, b = .9},
 	["ROGUE"] = {r = 211/255, g = 193/255, b = 111/255},
-	["SHAMAN"] = {r = 0, g = 0.6, b = 0.6},
-	["WARLOCK"] = {r = 0.6, g = 0.47, b = 0.85},
-	["WARRIOR"] = {r = 0.9, g = 0.65, b = 0.45},
+	["SHAMAN"] = {r = 55/255, g = 145/255, b = 165/255},
+	["WARLOCK"] = {r = 156/255, g = 110/255, b = 229/255},
+	["WARRIOR"] = {r = 165/255, g = 143/255, b = 106/255},
 }
 
 C.reactioncolours = {
@@ -126,9 +126,9 @@ C["actionbars"] = {
 C["auras"] = {
 	["buffSize"] = 42,
 	["debuffSize"] = 50,
-	["paddingX"] = 3,
+	["paddingX"] = 5,
 	["paddingY"] = 8,
-	["buffPerRow"] = 8,
+	["buffPerRow"] = 10,
 	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
 	["aurasSource"] = true,
 }
@@ -291,7 +291,7 @@ C["unitframes"] = {
 
 	["castbyPlayer"] = true,
 
-	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 280},						-- player unitframe position
+	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 320},						-- player unitframe position
 	["player_width"] = 200,
 	["player_height"] = 14,
 	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
@@ -302,7 +302,7 @@ C["unitframes"] = {
 	["pet_height"] = 14,
 
 	["frameVisibility"] = false,
-	["frameVisibility_player"] = "[combat][mod][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide",
+	["frameVisibility_player"] = "[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide",
 	["frameVisibility_pet"] = "[nocombat,nomod,@target,noexists][@pet,noexists] hide; show",
 
 
@@ -316,7 +316,7 @@ C["unitframes"] = {
 	["targettarget_width"] = 80,
 	["targettarget_height"] = 14,
 
-	["focus"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 30, 60},					-- focus unitframe position
+	["focus"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 80, 60},					-- focus unitframe position
 	["focus_width"] = 92,
 	["focus_height"] = 14,
 	["focus_castbar"] = {"LEFT", 'oUF_FreeFocus', "LEFT", 0, 40},				-- focus castbar position
@@ -659,6 +659,7 @@ C["hideDebuffs"] = {
 	[173660] = true, -- Aeda Brightdawn defeated
 	[173657] = true, -- Defender Illona defeated
 	[206151] = true, -- 挑战者的负担
+	[260738] = true, -- 艾泽里特残渣
 }
 
 if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end

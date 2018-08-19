@@ -1,10 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local r, g, b = unpack(C.class)
-
--- if _G.IsAddOnLoaded("DBM-Core") or _G.IsAddOnLoaded("BigWigs") then return end
-
-
 -- Queue timer on LFGDungeonReadyDialog
 
 local frame = _G.CreateFrame("Frame", nil, _G.LFGDungeonReadyDialog)
@@ -28,7 +23,7 @@ local function UpdateBar()
 		frame.bar:SetPoint("TOPLEFT", 1, -1)
 		frame.bar:SetPoint("BOTTOMLEFT", -1, 1)
 		frame.bar:SetFrameLevel(_G.LFGDungeonReadyDialog:GetFrameLevel() + 1)
-		frame.bar:SetStatusBarColor(r, g, b)
+		frame.bar:SetStatusBarColor(229/255, 209/255, 159/255)
 	end
 
 	local obj = _G.LFGDungeonReadyDialog
