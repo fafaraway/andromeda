@@ -1,16 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 
-
-local mainFont
-
-if C.appearance.fontUseAlternativeFont then
-	mainFont = C.font.normal
-else
-	mainFont = C.font.pixel
-end
-
-
 local _, class = UnitClass("player")
 
 C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
@@ -20,7 +10,7 @@ r, g, b = C.r, C.g, C.b
 
 C.texCoord = {.08, .92, .08, .92}
 C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
-C.infoColor = "|cfffef888"
+C.infoColor = "|cffe5d19f"
 C.myClass = select(2, UnitClass("player"))
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
@@ -50,32 +40,11 @@ F.CreateFS = function(parent, fontSize, justify)
 end
 
 F.SetFS = function(fontObject, fontSize)
-	local size
+	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
 
-	if(not fontSize or fontSize == C.FONT_SIZE_NORMAL) then
-		size = C.appearance.fontSizeNormal
-	elseif fontSize == C.FONT_SIZE_LARGE then
-		size = C.appearance.fontSizeLarge
-	elseif fontSize > 4 then -- actual size
-		size = fontSize
-	end
-
-	local outline = nil
-	if C.appearance.fontOutline then
-		outline = C.appearance.fontOutlineStyle == 2 and "OUTLINEMONOCHROME" or "OUTLINE"
-	end
-
-	fontObject:SetFont(mainFont, size, outline)
-
-	if C.appearance.fontShadow then
-		fontObject:SetShadowColor(0, 0, 0)
-		fontObject:SetShadowOffset(1, -1)
-	else
-		fontObject:SetShadowOffset(0, 0)
-	end
+	fontObject:SetShadowColor(0, 0, 0)
+	fontObject:SetShadowOffset(1, -1)
 end
-
-
 
 function F:CreateFSA(size, text, classcolor, anchor, x, y)
 	local fs = self:CreateFontString(nil, "OVERLAY")
@@ -97,8 +66,6 @@ function F:CreateFSA(size, text, classcolor, anchor, x, y)
 	return fs
 end
 
-
-
 function F:CreateTex()
 	if self.Tex then return end
 
@@ -112,7 +79,6 @@ function F:CreateTex()
 	self.Tex:SetVertTile(true)
 	self.Tex:SetBlendMode("ADD")
 end
-
 
 local function CreateTex(f)
 	if f.Tex then return end
@@ -141,8 +107,6 @@ function F:CreateSD(a)
 	return self.Shadow
 end
 
-
-
 function F:CreateBD(a, s)
 	self:SetBackdrop({
 		bgFile = C.media.backdrop,
@@ -151,20 +115,7 @@ function F:CreateBD(a, s)
 	})
 	self:SetBackdropColor(0, 0, 0, a or .65)
 	self:SetBackdropBorderColor(0, 0, 0)
-
-	--[[if not a then
-		self.tex = self.tex or self:CreateTexture(nil, "BACKGROUND", nil, 1)
-		self.tex:SetTexture("Interface\AddOns\FreeUI\media\StripesThin", true, true)
-		self.tex:SetAlpha(.45)
-		self.tex:SetAllPoints()
-		self.tex:SetHorizTile(true)
-		self.tex:SetVertTile(true)
-		self.tex:SetBlendMode("ADD")
-	else
-		self:SetBackdropColor(0, 0, 0, a)
-	end]]
 end
-
 
 function F:CreateBG(offset)
 	local frame = self
@@ -179,7 +130,6 @@ function F:CreateBG(offset)
 	return bg
 end
 
-
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
@@ -191,7 +141,6 @@ function F:CreateGradient()
 
 	return tex
 end
-
 
 F.CreatePulse = function(frame) -- pulse function originally by nightcracker
 	local speed = .05
