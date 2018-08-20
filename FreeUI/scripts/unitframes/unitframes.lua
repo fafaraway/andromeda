@@ -388,20 +388,21 @@ local function PostCreateIcon(element, button)
 
 	element.disableCooldown = true
 
+	button.HL = button:CreateTexture(nil, "HIGHLIGHT")
+	button.HL:SetColorTexture(1, 1, 1, .25)
+	button.HL:SetAllPoints()
 
 	button:SetScript('OnEnter', OnAuraEnter)
 
 	local StringParent = CreateFrame('Frame', nil, button)
-	StringParent:SetFrameLevel(20)
+	StringParent:SetFrameLevel(button:GetFrameLevel() + 3)
 
 	button.count:SetParent(StringParent)
 	button.count:ClearAllPoints()
 	button.count:SetPoint('TOPRIGHT', button, 2, -2)
-
 	F.SetFS(button.count)
 
 	local Duration = StringParent:CreateFontString(nil, 'OVERLAY')
-	--local Duration = F.CreateFS(StringParent)
 	Duration:SetParent(StringParent)
 	Duration:ClearAllPoints()
 	Duration:SetPoint('BOTTOM', button, 2, -6)
@@ -413,23 +414,20 @@ local function PostCreateIcon(element, button)
 		Duration:Hide()
 	end
 
-
 	button:HookScript('OnUpdate', UpdateAura)
 end
 
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
 	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-	button:SetSize(element.size, element.size*.75)
-	button.icon:SetTexCoord(.08, .92, .25, .85)
+	--button:SetSize(element.size, element.size*.75)
+	--button.icon:SetTexCoord(.08, .92, .25, .85)
 
 	if(duration and duration > 0) then
 		button.expiration = expiration - GetTime()
 	else
 		button.expiration = math.huge
 	end
-
-
 
 	if canStealOrPurge then
 		button.bg:SetVertexColor(1, 1, 1)
@@ -1008,7 +1006,7 @@ local Shared = function(self, unit, isSingle)
 		local Healthdef = CreateFrame("StatusBar", nil, self)
 		Healthdef:SetFrameStrata("LOW")
 		Healthdef:SetAllPoints(Health)
-		Healthdef:SetStatusBarTexture(C.media.backdrop)
+		Healthdef:SetStatusBarTexture(C.media.texture)
 		Healthdef:SetStatusBarColor(1, 1, 1)
 
 		Healthdef:SetReverseFill(true)
