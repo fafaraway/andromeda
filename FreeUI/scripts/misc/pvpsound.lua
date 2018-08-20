@@ -91,7 +91,6 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 				if(dstName == pname and srcName ~= pname) then
 					enemyname = srcName;
 				elseif(dstName == pname and srcName == pname) then
-					DEFAULT_CHAT_FRAME:AddMessage(pname.." "..killyourself,1,1,0);
 					DOTA_timer_reset_control = true;
 
 					enemyname = nil;
@@ -104,7 +103,6 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 				if(dstName == pname and srcName ~= pname) then
 					enemyname = srcName;
 				elseif(dstName == pname and srcName == pname) then
-					DEFAULT_CHAT_FRAME:AddMessage(pname.." "..killyourself,1,1,0);
 					DOTA_timer_reset_control = true;
 					enemyname = nil;
 				end
@@ -116,7 +114,6 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 					enemyname = srcName;
 
 				elseif(dstName == pname and srcName == pname) then
-					DEFAULT_CHAT_FRAME:AddMessage(pname.." "..killyourself,1,1,0);
 					DOTA_timer_reset_control = true;
 
 					enemyname = nil;
