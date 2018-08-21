@@ -329,9 +329,15 @@ function GameTooltipStatusBar:SetStatusBarColor(...)
 	end
 end
 
-GameTooltipHeaderText:SetFont(C.font.normal, 14, "OUTLINE")
-GameTooltipText:SetFont(C.font.normal, 12, "OUTLINE")
-GameTooltipTextSmall:SetFont(C.font.normal, 12, "OUTLINE")
+GameTooltipHeaderText:SetFont(C.font.normal, 14, nil)
+GameTooltipHeaderText:SetShadowColor(0, 0, 0, 1)
+GameTooltipHeaderText:SetShadowOffset(2, -2)
+GameTooltipText:SetFont(C.font.normal, 12, nil)
+GameTooltipText:SetShadowColor(0, 0, 0, 1)
+GameTooltipText:SetShadowOffset(2, -2)
+GameTooltipTextSmall:SetFont(C.font.normal, 12, nil)
+GameTooltipTextSmall:SetShadowColor(0, 0, 0, 1)
+GameTooltipTextSmall:SetShadowOffset(2, -2)
 
 
 -- Tooltip skin

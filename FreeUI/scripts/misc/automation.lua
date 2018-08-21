@@ -60,7 +60,7 @@ f:SetScript("OnEvent", function(self, event)
 							print(format("Repair: %.1fg", cost * 0.0001))
 						else
 							-- it might still be possible to repair a few items with guild repair
-							print("Guild repair failed. Repair manually to use own money.")
+							print("Guild repair failed. Repair manually to use your own money.")
 						end
 					else
 						print("You have insufficient funds to repair your equipment.")

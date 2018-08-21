@@ -13,12 +13,12 @@ local minimize = ot.HeaderMenu.MinimizeButton
 local otFontHeader = {
 	C.font.header,
 	16,
-	"OUTLINE"
+	nil
 }
 local otFont = {
 	C.font.normal,
 	12,
-	"OUTLINE"
+	nil
 }
 
 
@@ -261,24 +261,34 @@ ot.HeaderMenu.Title:SetFont(unpack(otFontHeader))
 for _, headerName in pairs({"QuestHeader", "AchievementHeader", "ScenarioHeader"}) do
 	local header = BlocksFrame[headerName]
 	header.Text:SetFont(unpack(otFontHeader))
+	header.Text:SetShadowColor(0, 0, 0, 1)
+	header.Text:SetShadowOffset(2, -2)
 end
 
 do
 	local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
 	header.Text:SetFont(unpack(otFontHeader))
+	header.Text:SetShadowColor(0, 0, 0, 1)
+	header.Text:SetShadowOffset(2, -2)
 end
 
 do
 	local header = WORLD_QUEST_TRACKER_MODULE.Header
 	header.Text:SetFont(unpack(otFontHeader))
+	header.Text:SetShadowColor(0, 0, 0, 1)
+	header.Text:SetShadowOffset(2, -2)
 
 	local header_bonus = BONUS_OBJECTIVE_TRACKER_MODULE.Header
 	header_bonus.Text:SetFont(unpack(otFontHeader))
+	header_bonus.Text:SetShadowColor(0, 0, 0, 1)
+	header_bonus.Text:SetShadowOffset(2, -2)
 end
 
 hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 	if not block.headerStyled then
 		block.HeaderText:SetFont(otFont[1],otFont[2]+2,otFont[3])
+		block.HeaderText:SetShadowColor(0, 0, 0, 1)
+		block.HeaderText:SetShadowOffset(2, -2)
 		block.headerStyled = true
 	end
 end)
@@ -286,6 +296,8 @@ end)
 hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 	if not block.headerStyled then
 		block.HeaderText:SetFont(otFont[1],otFont[2]+2,otFont[3])
+		block.HeaderText:SetShadowColor(0, 0, 0, 1)
+		block.HeaderText:SetShadowOffset(2, -2)
 		block.headerStyled = true
 	end
 end)
@@ -329,6 +341,8 @@ hooksecurefunc("ObjectiveTracker_AddBlock", function(block)
 		for _, line in pairs(block.lines) do
 			if not line.styled then
 				line.Text:SetFont(otFont[1],otFont[2]+2,otFont[3])
+				line.Text:SetShadowColor(0, 0, 0, 1)
+				line.Text:SetShadowOffset(2, -2)
 				line.Text:SetSpacing(2)
 
 				if line.Dash then

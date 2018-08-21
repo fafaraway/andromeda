@@ -42,6 +42,8 @@ function module:ReskinSkada()
 	--Skada.windowdefaults.barfontsize = 15
 	--Skada.windowdefaults.barbgcolor = {r=0,g=0,b=0,a=0}
 
+	Skada.classcolors = C.classcolours
+
 	-- Change Skada NumberFormat
 	Skada.options.args.generaloptions.args.numberformat = nil
 
