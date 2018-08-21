@@ -6,4 +6,5 @@
 	<Script file="spamagemeter.lua"/>
 	<Script file="whisperalert.lua"/>
 	<Script file="minimize.lua"/>
+	<Script file="string.lua"/>
 </Ui>

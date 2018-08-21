@@ -2,15 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 local module = F:RegisterModule("chat")
 
-
-
-
-
-
-
 local msgHooks = {}
-
-
 local maxLines = 1024
 local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 
@@ -22,9 +14,16 @@ local function skinChat(self)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
-	self:SetFont(C.font.chat, fontSize, "OUTLINE")
-	--self:SetShadowColor(0, 0, 0, 0)
-	--self:SetShadowOffset(1, -1)
+	
+	if C.chat.outline then
+		self:SetFont(C.font.chat, fontSize, "OUTLINE")
+		self:SetShadowColor(0, 0, 0, 0)
+	else
+		self:SetFont(C.font.chat, fontSize, nil)
+		self:SetShadowColor(0, 0, 0, 1)
+		self:SetShadowOffset(2, -2)
+	end
+	
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < maxLines then
@@ -51,9 +50,7 @@ local function skinChat(self)
 	F.CreateSD(lang)
 	F.CreateTex(lang)
 
-
-
-
+	F.StripTextures(self)
 	F.HideObject(self.buttonFrame)
 	F.HideObject(self.ScrollBar)
 	F.HideObject(self.ScrollToBottomButton)
@@ -107,13 +104,6 @@ local function ForceChatSettings()
 end
 
 
-SlashCmdList["TELLTARGET"] = function(s)
-	if(UnitExists("target") and UnitName("target") and UnitIsPlayer("target") and GetDefaultLanguage("player")==GetDefaultLanguage("target"))then
-		SendChatMessage(s, "WHISPER", nil, UnitName("target"))
-	end
-end
-SLASH_TELLTARGET1 = "/tt"
-
 
 local function GetColor(className, isLocal)
 	if isLocal then
@@ -143,7 +133,6 @@ local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
 
-
 local AddMessage = function(frame, text, ...)
 	if type(text) == "string" then
 
@@ -159,26 +148,37 @@ local AddMessage = function(frame, text, ...)
 		text = gsub(text, "(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
 
 		text = gsub(text, "|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
+		--text = gsub(text, "|Hplayer:([^%|]+)|h%[([^%]]+)%]|h", "|Hplayer:%1|h%2|h")
+
+		--url search
+		text = gsub(text, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
 
 
 	end
 	msgHooks[frame:GetName()].AddMessage(frame, text, ...)
 end
 
-local Insert = function(self, str, ...)
-	if type(str) == "string" then
-		str = str:gsub("|H(.-)|h[%[]?(.-)[%]]?|h", "|H%1|h[%2]|h")
+--local Insert = function(self, str, ...)
+--	if type(str) == "string" then
+--		str = str:gsub("|H(.-)|h[%[]?(.-)[%]]?|h", "|H%1|h[%2]|h")
+--	end
+
+--	return msgHooks[self](self, str, ...)
+--end
+
+--ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, message, ...)
+--	local currencyID, currencyName, currencyAmount = message:match'currency:(%d+)', message:match'|h(.+)|h', message:match' x%d+'
+--	return false, ("+ |cffffffff|Hcurrency:%d|h%s|h|r%s"):format(currencyID, currencyName, currencyAmount or ""), ...
+--end)
+
+
+-- whisper to target
+SLASH_TELLTARGET1 = "/tt"
+SlashCmdList.TELLTARGET = function(message)
+	if UnitIsPlayer("target") and (UnitIsUnit("player", "target") or UnitCanCooperate("player", "target")) then
+		SendChatMessage(message, "WHISPER", nil, GetUnitName("target", true))
 	end
-
-	return msgHooks[self](self, str, ...)
 end
-
-ChatFrame_AddMessageEventFilter("CHAT_MSG_CURRENCY", function(self, event, message, ...)
-	local currencyID, currencyName, currencyAmount = message:match'currency:(%d+)', message:match'|h(.+)|h', message:match' x%d+'
-	return false, ("+ |cffffffff|Hcurrency:%d|h%s|h|r%s"):format(currencyID, currencyName, currencyAmount or ""), ...
-end)
-
-
 
 
 function module:OnLogin()
@@ -204,7 +204,6 @@ function module:OnLogin()
 		end
 	end)
 
-
 	-- Font size
 	for i = 1, 15 do
 		CHAT_FONT_HEIGHTS[i] = i + 9
@@ -217,9 +216,6 @@ function module:OnLogin()
 
 	-- Sticky
 	if C.chat.sticky then
-		--ChatTypeInfo["WHISPER"].sticky = 1
-		--ChatTypeInfo["BN_WHISPER"].sticky = 1
-
 		ChatTypeInfo.SAY.sticky = 1
 		ChatTypeInfo.EMOTE.sticky = 1
 		ChatTypeInfo.YELL.sticky = 1
@@ -236,6 +232,10 @@ function module:OnLogin()
 		ChatTypeInfo.CHANNEL.sticky = 1
 	end
 
+	--don't cut the toastframe
+	BNToastFrame:SetClampedToScreen(true)
+	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
+
 	-- Easy Resizing
 	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
@@ -251,43 +251,6 @@ function module:OnLogin()
 		end
 	end)
 
-	-- Add Elements
-	self:ChatFilter()
-
-
-
-
-	CHAT_WHISPER_GET = "from %s: "
-	CHAT_WHISPER_INFORM_GET = "to %s: "
-	CHAT_BN_WHISPER_INFORM_GET = "to %s: "
-	CHAT_BN_WHISPER_GET = "from %s: "
-
-	CHAT_YELL_GET = "|Hchannel:Yell|h%s: "
-	CHAT_SAY_GET = "|Hchannel:Say|h%s: "
-
-	CHAT_BATTLEGROUND_GET			= "|Hchannel:Battleground|h[bg]|h %s: "
-	CHAT_BATTLEGROUND_LEADER_GET 	= [[|Hchannel:Battleground|h[bgl]|h %s: ]]
-
-	CHAT_GUILD_GET   				= "|Hchannel:Guild|h[g]|h %s: "
-	CHAT_OFFICER_GET 				= "|Hchannel:Officer|h[go]|h %s: "
-
-	CHAT_PARTY_GET        			= "|Hchannel:Party|h[p]|h %s: "
-	CHAT_PARTY_LEADER_GET 			= [[|Hchannel:Party|h[pl]|h %s: ]]
-	CHAT_PARTY_GUIDE_GET  			= CHAT_PARTY_LEADER_GET
-
-	CHAT_RAID_GET         			= "|Hchannel:Raid|h[r]|h %s: "
-	CHAT_RAID_LEADER_GET  			= [[|Hchannel:Raid|h[rl]|h %s: ]]
-	CHAT_RAID_WARNING_GET 			= [[|Hchannel:RaidWarning|h[rw]|h %s: ]]
-
-	CHAT_INSTANCE_CHAT_GET 			= "|Hchannel:Instance|h[i]|h %s: "
-	CHAT_INSTANCE_CHAT_LEADER_GET	= "|Hchannel:Instance|h[il]|h %s: "
-	CHAT_INSTANCE_CHAT_GUIDE_GET  	= CHAT_INSTANCE_CHAT_LEADER_GET
-	
-
-	DEFAULT_CHATFRAME_ALPHA = 0
-	CHAT_FRAME_FADE_OUT_TIME = CHAT_FRAME_FADE_TIME
-	CHAT_TAB_HIDE_DELAY = CHAT_TAB_SHOW_DELAY
-
 	local function HideForever(f)
 		f:SetScript("OnShow", f.Hide)
 		f:Hide()
@@ -299,10 +262,6 @@ function module:OnLogin()
 
 	ForceChatSettings()
 
-	-- ProfanityFilter
-	if not BNFeaturesEnabledAndConnected() then return end
+	self:ChatFilter()
 
-	SetCVar("profanityFilter", 0)
-
-	
 end
