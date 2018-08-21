@@ -4,4 +4,5 @@
 	<Script file="icon.lua"/>
 	<Script file="id.lua"/>
 	<Script file="ilvlSpec.lua"/>
+	<Script file="azeritetrait.lua"/>
 </Ui>
