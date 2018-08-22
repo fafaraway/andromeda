@@ -9,8 +9,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			if region:GetObjectType() == "Texture" then
 				region:SetTexture(nil)
 			elseif region:GetObjectType() == "FontString" then
-				region:SetFont(C.media.font, 22, "OUTLINE")
-				region:SetShadowColor(0, 0, 0, 0)
+				region:SetFont(C.media.font, 22)
+				region:SetShadowColor(0, 0, 0, 1)
+				region:SetShadowOffset(2, -2)
 			end
 		end
 
