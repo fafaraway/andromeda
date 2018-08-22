@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
---local UF = F:RegisterModule("unitframes")
 
 local parent, ns = ...
 local oUF = ns.oUF
@@ -40,7 +39,7 @@ oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
-ufFont = { C.font.normal, 12, "OUTLINE"}
+ufFont = { C.font.normal, 12, nil}
 
 
 -- Short values
@@ -796,7 +795,7 @@ local function CreateIndicator(self)
 		local QuestIndicator = F.CreateFS(self)
 		QuestIndicator:SetText("X")
 		QuestIndicator:SetTextColor(228/255, 225/255, 16/255)
-		QuestIndicator:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
+		QuestIndicator:SetPoint("RIGHT", self.Name, "LEFT", -10, 0)
 
 		self.QuestIndicator = QuestIndicator
 	end
@@ -866,6 +865,8 @@ local function CreateName(self)
 	Name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
 	Name:SetWordWrap(false)
 	Name:SetFont(unpack(ufFont))
+	Name:SetShadowColor(0, 0, 0, 1)
+	Name:SetShadowOffset(2, -2)
 	Name:SetWidth(100)
 	Name:SetTextColor(1, 1, 1)
 
@@ -896,7 +897,7 @@ local function CreateName(self)
 	
 end
 
-local function UpdateName(self)
+local function UpdateTOTName(self)
 	local f = CreateFrame("Frame", nil, self)
 
 	local tt = F.CreateFS(f)
@@ -906,16 +907,8 @@ local function UpdateName(self)
 	tt:SetWordWrap(false)
 	tt:SetWidth(targettargetWidth)
 
-	local ft = F.CreateFS(f)
-	ft:SetPoint("BOTTOM", self, "TOP", 0, 3)
-	ft:SetFont(unpack(ufFont))
-	ft:SetJustifyH"CENTER"
-	ft:SetWordWrap(false)
-	ft:SetWidth(focustargetWidth)
-
 	f:RegisterEvent("UNIT_TARGET")
 	f:RegisterEvent("PLAYER_TARGET_CHANGED")
-	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
 
 	f:SetScript("OnEvent", function()
 		if(UnitName("targettarget")==UnitName("player")) then
@@ -925,7 +918,23 @@ local function UpdateName(self)
 			tt:SetText(UnitName"targettarget")
 			tt:SetTextColor(1, 1, 1)
 		end
+	end)
+end
 
+local function UpdateTOFName(self)
+	local f = CreateFrame("Frame", nil, self)
+
+	local ft = F.CreateFS(f)
+	ft:SetPoint("BOTTOM", self, "TOP", 0, 3)
+	ft:SetFont(unpack(ufFont))
+	ft:SetJustifyH"CENTER"
+	ft:SetWordWrap(false)
+	ft:SetWidth(focustargetWidth)
+
+	f:RegisterEvent("UNIT_TARGET")
+	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
+
+	f:SetScript("OnEvent", function()
 		if(UnitName("focustarget")==UnitName("player")) then
 			ft:SetText("> YOU <")
 			ft:SetTextColor(1, 0, 0)
@@ -1070,13 +1079,6 @@ local Shared = function(self, unit, isSingle)
 	end
 
 
-
-
-
-
-
-
-
 	--[[ Castbar ]]
 
 	local Castbar = CreateFrame("StatusBar", nil, self)
@@ -1114,6 +1116,8 @@ local Shared = function(self, unit, isSingle)
 		end
 	end
 
+
+
 	local PostCastStop = function(Castbar, unit)
 		if Castbar.Text then Castbar.Text:SetText("") end
 	end
@@ -1131,6 +1135,8 @@ local Shared = function(self, unit, isSingle)
 
 	Castbar.PostCastStop = PostCastStop
 	Castbar.PostChannelStop = PostCastStop
+
+	
 
 	-- [[ Heal prediction ]]
 
@@ -1219,35 +1225,13 @@ local UnitSpecific = {
 
 		Health:SetHeight(petHeight - powerHeight - 1)
 
-		Castbar:SetAllPoints(Health)
-		Castbar.Width = self:GetWidth()
+		self.Castbar:SetAllPoints(Health)
+		self.Castbar.Width = self:GetWidth()
 
-		Spark:SetHeight(self.Health:GetHeight())
+		Castbar.Spark:SetHeight(self.Health:GetHeight())
 
 		CreateIndicator(self)
 		CreateAuras(self)
-
-		--[[local Auras = CreateFrame("Frame", nil, self)
-		Auras:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -4)
-		Auras.initialAnchor = "TOPLEFT"
-		Auras["growth-x"] = "RIGHT"
-		Auras["growth-y"] = "DOWN"
-		Auras['spacing-x'] = 3
-		Auras['spacing-y'] = -3
-
-		Auras.numDebuffs = 4
-		Auras.numBuffs = 4
-		Auras:SetHeight(100)
-		Auras:SetWidth(petWidth)
-		Auras.size = 20
-		Auras.disableCooldown = true
-
-		Auras.gap = true
-
-		self.Auras = Auras
-
-		Auras.PostCreateIcon = PostCreateIcon
-		Auras.PostUpdateIcon = PostUpdateIcon]]
 	end,
 
 	player = function(self, ...)
@@ -1332,6 +1316,7 @@ local UnitSpecific = {
 				IconFrame:SetSize(22, 22)
 			end
 		end
+
 
 		CreateAltPower(self)
 		
@@ -1442,7 +1427,7 @@ local UnitSpecific = {
 
 		CreateIndicator(self)
 
-		UpdateName(self)
+		UpdateTOTName(self)
 
 	end,
 
@@ -1535,7 +1520,7 @@ local UnitSpecific = {
 		Spark:SetHeight(Health:GetHeight())
 
 
-		UpdateName(self)
+		UpdateTOFName(self)
 		CreateIndicator(self)
 
 	end,

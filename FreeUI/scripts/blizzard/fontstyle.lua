@@ -35,7 +35,8 @@ function module:FontStyle()
 		elseif fontColor then fontObj:SetAlpha(fontColor) end
 	end
 
-	
+
+	SetFont("System_IME", NORMAL, 16)
 
 	SetFont("ZoneTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("SubZoneTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
@@ -53,9 +54,12 @@ function module:FontStyle()
 	SetFont("FriendsFont_Normal", NORMAL, 13)
 	SetFont("FriendsFont_Small", NORMAL, 12)
 
+	SetFont("AchievementFont_Small", NORMAL, 12)
+
 	local function ReskinFont(font, size, white)
 		font:SetFont(NORMAL, size, white and "" or "OUTLINE")
 		font:SetShadowColor(0, 0, 0, 0)
+		font:SetShadowOffset(2, -2)
 	end
 
 	-- Refont Titles Panel
@@ -97,7 +101,7 @@ function module:FontStyle()
 		"AchievementPointsFont",
 		"AchievementPointsFontSmall",
 		"AchievementDateFont",
-		"FocusFontSmall"
+		"FocusFontSmall",
 	}
 	for k, yellowFont in next, coloredFonts do
 		_G[yellowFont]:SetTextColor(247/255, 225/255, 171/255)
