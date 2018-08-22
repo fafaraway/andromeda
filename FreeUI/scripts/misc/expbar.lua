@@ -18,7 +18,7 @@ local function UpdateBar(bar)
 			rest:Show()
 		end
 		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end
-	elseif GetWatchedFactionInfo() then
+	--[[elseif GetWatchedFactionInfo() then
 		local _, standing, min, max, value, factionID = GetWatchedFactionInfo()
 		local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
 		if friendID then
@@ -45,7 +45,7 @@ local function UpdateBar(bar)
 		bar:SetStatusBarColor(1, .24, 0)
 		bar:SetMinMaxValues(0, max)
 		bar:SetValue(current)
-		bar:Show()
+		bar:Show()]]
 
 	elseif C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
@@ -54,7 +54,7 @@ local function UpdateBar(bar)
 		bar:SetMinMaxValues(0, totalLevelXP)
 		bar:SetValue(xp)
 		bar:Show()
-	elseif HasArtifactEquipped() then
+	--[[elseif HasArtifactEquipped() then
 		if C_ArtifactUI.IsEquippedArtifactDisabled() then
 			bar:SetStatusBarColor(.6, .6, .6)
 			bar:SetMinMaxValues(0, 1)
@@ -67,7 +67,7 @@ local function UpdateBar(bar)
 			bar:SetMinMaxValues(0, xpForNextPoint)
 			bar:SetValue(xp)
 		end
-		bar:Show()
+		bar:Show()]]
 	else
 		bar:Hide()
 	end
@@ -76,16 +76,20 @@ end
 
 local function UpdateTooltip(bar)
 	GameTooltip:SetOwner(bar, "ANCHOR_LEFT")
-	GameTooltip:ClearLines()
-	GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), 243/250, 222627/250, 57/250)
+	
+	
 
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), C.r, C.g, C.b)
+
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-		GameTooltip:AddDoubleLine(XP..":", xp.."/"..mxp.." ("..floor(xp/mxp*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
+		GameTooltip:AddDoubleLine(XP..":", xp.."/"..mxp.." ("..floor(xp/mxp*100).."%)", 1, 1, 1, 1,1,1)
 		if rxp then
-			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26..":", "+"..rxp.." ("..floor(rxp/mxp*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
+			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26..":", "+"..rxp.." ("..floor(rxp/mxp*100).."%)", 1, 1, 1, 1,1,1)
 		end
 		if IsXPUserDisabled() then GameTooltip:AddLine("|cffff0000"..XP..LOCKED) end
+		GameTooltip:AddLine(" ")
 	end
 
 	if GetWatchedFactionInfo() then
@@ -108,9 +112,10 @@ local function UpdateTooltip(bar)
 			end
 			standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
 		end
+		--GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(name, 62/250, 175/250, 227/250)
+		GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", 1, 1, 1, 1,1,1)
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(name, 243/250, 222627/250, 57/250)
-		GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
 
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
@@ -122,9 +127,10 @@ local function UpdateTooltip(bar)
 
 	if IsWatchingHonorAsXP() then
 		local current, max, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
+		--GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(HONOR, 177/250, 19/250, 0)
+		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..max, 1, 1, 1, 1,1,1)
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(HONOR, .243/250, 222627/250, 57/250)
-		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..max, 131/250, 239/250, 131/250, 1,1,1)
 	end
 
 	if C_AzeriteItem.HasActiveAzeriteItem() then
@@ -133,12 +139,12 @@ local function UpdateTooltip(bar)
 		local azeriteItemName = azeriteItem:GetItemName()
 		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
 		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 243/250, 222627/250, 57/250)
-		GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(xp).."/"..F.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
+		--GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 247/255, 225/255, 171/255)
+		GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(xp).."/"..F.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", 1, 1, 1, 1,1,1)
 	end
 
-	if HasArtifactEquipped() then
+	--[[if HasArtifactEquipped() then
 		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 		GameTooltip:AddLine(" ")
@@ -155,6 +161,22 @@ local function UpdateTooltip(bar)
 				GameTooltip:AddDoubleLine("Next Trait", F.Numb(xp).."/"..F.Numb(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
 			end
 		
+		end
+	end]]
+
+	--island weekly
+	if UnitLevel("player") == MAX_PLAYER_LEVEL then
+		local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
+		if iwqID and IsQuestFlaggedCompleted(iwqID) then
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Island Weekly", 0, 1, 0.5, 1, 1, 1)
+			GameTooltip:AddDoubleLine("Status", "Finished", 1, 1, 1, 1, 1, 1)
+		elseif iwqID then
+			local _, _, _, cur, max = GetQuestObjectiveInfo(iwqID, 1, false)
+			GameTooltip:AddLine(" ")
+			GameTooltip:AddLine("Island Weekly", 0, 1, 0.5, 1, 1, 1)
+			GameTooltip:AddDoubleLine("Cur / Max", cur.." / "..max, 1, 1, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine("Needed", (max-cur), 1, 1, 1, 1, 1, 1)
 		end
 	end
 	GameTooltip:Show()
@@ -180,7 +202,7 @@ function module:SetupScript(bar)
 	bar:SetScript("OnEvent", UpdateBar)
 	bar:SetScript("OnEnter", UpdateTooltip)
 	bar:SetScript("OnLeave", GameTooltip_Hide)
-	bar:SetScript("OnMouseUp", function(_, btn)
+	--[[bar:SetScript("OnMouseUp", function(_, btn)
 		if not HasArtifactEquipped() or btn ~= "LeftButton" then return end
 		if not ArtifactFrame or not ArtifactFrame:IsShown() then
 			SocketInventoryItem(16)
@@ -191,14 +213,14 @@ function module:SetupScript(bar)
 
 	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()
 		UpdateBar(bar)
-	end)
+	end)]]
 end
 
 function module:Expbar()
 
 	local bar = CreateFrame("StatusBar", nil, Minimap)
 	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)
-	bar:SetSize(256, 4)
+	bar:SetSize(256, 2)
 	bar:SetHitRectInsets(0, 0, 0, -10)
 	F.CreateSB(bar)
 	F.CreateBDFrame(bar)
