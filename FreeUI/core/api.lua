@@ -1040,21 +1040,21 @@ function F.FormatTime(s)
 	local day, hour, minute = 86400, 3600, 60
 
 	if s >= day then
-		return format("|cffdadbcc%d|r", s/day), s % day -- grey
+		return format("|cffbebfb3%d|r", s/day), s % day -- grey
 	elseif s >= hour then
 		return format("|cffffffff%d|r", s/hour), s % hour -- white
 	elseif s >= minute then
 		return format("|cff67acdb%d|r", s/minute), s % minute -- blue
-	elseif s < 3 then
+	elseif s < 10 then
 		if C.actionbars.decimalCD then
 			return format("|cffc50046%.1f|r", s), s - format("%.1f", s)
 		else
 			return format("|cffc50046%d|r", s + .5), s - floor(s)
 		end
-	elseif s < 10 then
-		return format("|cffc50046%d|r", s), s - floor(s) -- red
-	elseif s > 10 and s < 60 then
+	elseif s < 60 then
 		return format("|cffc5b879%d|r", s), s - floor(s) -- yellow
+	else
+		return format("|cff996ec3%d|r", s), s - floor(s)
 	end
 end
 
