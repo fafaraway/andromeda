@@ -112,3 +112,41 @@ WorldMapTooltip.ItemTooltip.Tooltip:HookScript('OnTooltipSetItem', function(self
     	AzeriteTooltip_BuildTooltip(link, self)
     end
 end)
+
+
+
+function Get_Azerite_Progress_String()
+	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
+	if(C_AzeriteItem.HasActiveAzeriteItem() and azeriteItemLocation) then
+		local currentXP, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
+		return currentXP .. " / " .. totalLevelXP
+	end
+	return nil
+end
+
+function RoundToNumberOfDecimalPlaces(number, numberOfDecimalPlaces)
+	local multiplier = 10^(numberOfDecimalPlaces or 0)
+	return math.floor(number * multiplier + 0.5) / multiplier
+end
+
+function Get_Azerite_Progress_Percent()
+	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
+	if(C_AzeriteItem.HasActiveAzeriteItem() and azeriteItemLocation) then
+		local currentXP, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
+		return RoundToNumberOfDecimalPlaces(((currentXP / totalLevelXP) * 100), 2)
+	end
+	return nil
+end
+
+local function OnTooltipSetItem(tooltip)
+	if (tooltip:GetItem() == "Heart of Azeroth") or (tooltip:GetItem() == "艾泽拉斯之心") then
+		local AzeritePowerProgressString = Get_Azerite_Progress_String()
+		if (AzeritePowerProgressString == nil) then
+			return
+		end
+
+		GameTooltip:AddDoubleLine("Azerite Power:", Get_Azerite_Progress_Percent() .. "% (" .. AzeritePowerProgressString .. ")", 0.4, 0.7, 1, 0.4, 0.7, 1);
+	end
+end
+
+GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
