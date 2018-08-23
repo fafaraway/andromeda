@@ -99,17 +99,17 @@ local updateBorderColourAlt = function(self, unit)
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
 			frame.Name:SetTextColor(.1, .7, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0)
+			frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .5)
 		elseif UnitIsDead(frame.unit) then
 			frame.Name:SetTextColor(.7, .2, .1)
-			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0)
+			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
 		else
 			frame.Name:SetTextColor(1, 1, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0)
+			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
 		end
 	else
 		frame.Name:SetTextColor(1, 1, 1)
-		frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0)
+		frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
 	end
 end
 
@@ -911,7 +911,7 @@ local function CreateName(self)
 		Name:SetJustifyH("LEFT")
 		Name:SetWidth(60)
 	elseif self.unitStyle == "focus" then
-		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
+		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 		Name:SetWidth(60)
 	elseif self.unitStyle == "focustarget" then
