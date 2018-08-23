@@ -79,13 +79,37 @@ local updateNameColourAlt = function(self)
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
 			frame.Text:SetTextColor(.1, .7, 1)
+			frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .5)
 		elseif UnitIsDead(frame.unit) then
 			frame.Text:SetTextColor(.7, .2, .1)
+			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
 		else
 			frame.Text:SetTextColor(1, 1, 1)
+			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
 		end
 	else
 		frame.Text:SetTextColor(1, 1, 1)
+		frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+	end
+end
+
+-- update selected border
+local updateBorderColourAlt = function(self, unit)
+	local frame = self:GetParent()
+	if frame.unit then
+		if UnitIsUnit(frame.unit, "target") then
+			frame.Name:SetTextColor(.1, .7, 1)
+			frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0)
+		elseif UnitIsDead(frame.unit) then
+			frame.Name:SetTextColor(.7, .2, .1)
+			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0)
+		else
+			frame.Name:SetTextColor(1, 1, 1)
+			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0)
+		end
+	else
+		frame.Name:SetTextColor(1, 1, 1)
+		frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -191,6 +215,10 @@ end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
 
 
+
+
+
+
 -- health
 local PostUpdateHealth = function(Health, unit, min, max)
 	local self = Health:GetParent()
@@ -208,8 +236,6 @@ local PostUpdateHealth = function(Health, unit, min, max)
 	elseif UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
 		if class then r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b else r, g, b = 1, 1, 1 end
-	-- elseif unit:find("boss%d") then
-	-- 	r, g, b = self.ColorGradient(min, max, unpack(self.colors.smooth))
 	else
 		r, g, b = unpack(reaction)
 	end
@@ -229,7 +255,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 				if C.unitframes.healthClassColor then
 					self.Healthdef:GetStatusBarTexture():SetVertexColor(r, g, b)
 				else
-					self.Healthdef:GetStatusBarTexture():SetVertexColor(.63, 0, 0)
+					self.Healthdef:GetStatusBarTexture():SetVertexColor(149/255, 0, 39/255)
 				end
 			else
 				self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
@@ -501,7 +527,7 @@ local function CreateAuras(self)
 		end
 	elseif self.unitStyle == "boss" then
 		Auras.initialAnchor = "TOPLEFT"
-		Auras:SetPoint("TOP", self, "BOTTOM", 0, -4)
+		Auras:SetPoint("TOP", self, "BOTTOM", 0, -6)
 		Auras["growth-y"] = "DOWN"
 		Auras.size = 28
 
@@ -562,7 +588,7 @@ end
 
 
 -- Threat update (party)
-local UpdateThreat = function(self, event, unit)
+--[[local UpdateThreat = function(self, event, unit)
 	if(unit ~= self.unit) then return end
 
 	local threat = self.Threat
@@ -576,7 +602,7 @@ local UpdateThreat = function(self, event, unit)
 	else
 		self.bd:SetBackdropBorderColor(0, 0, 0)
 	end
-end
+end]]
 
 
 -- Class power
@@ -867,7 +893,6 @@ local function CreateName(self)
 	Name:SetFont(unpack(ufFont))
 	Name:SetShadowColor(0, 0, 0, 1)
 	Name:SetShadowOffset(2, -2)
-	Name:SetWidth(100)
 	Name:SetTextColor(1, 1, 1)
 
 	self:Tag(Name, '[name]')
@@ -881,15 +906,21 @@ local function CreateName(self)
 
 	if self.unitStyle == "target" then
 		Name:SetJustifyH("RIGHT")
-
+		Name:SetWidth(100)
+	elseif self.unitStyle == "targettarget" then
+		Name:SetJustifyH("LEFT")
+		Name:SetWidth(60)
 	elseif self.unitStyle == "focus" then
 		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
-		Name:SetJustifyH("CENTER")
-		Name:SetWidth(focusWidth)
+		Name:SetJustifyH("LEFT")
+		Name:SetWidth(60)
+	elseif self.unitStyle == "focustarget" then
+		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
+		Name:SetJustifyH("RIGHT")
+		Name:SetWidth(60)
 	elseif self.unitStyle == "boss" then
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
-		
 	elseif self.unitStyle == "arena" then
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
@@ -962,6 +993,7 @@ local Shared = function(self, unit, isSingle)
 
 	SmoothBar = F.SmoothBar
 
+
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
@@ -970,6 +1002,9 @@ local Shared = function(self, unit, isSingle)
 	F.CreateSD(bd, .5)
 
 	self.bd = bd
+
+
+
 
 	--[[ Health ]]
 
@@ -1585,6 +1620,11 @@ local UnitSpecific = {
 		self.Iconbg:SetTexture(C.media.backdrop)
 
 		CreateAuras(self)
+
+		local select = CreateFrame("Frame", nil, self)
+		select:RegisterEvent("PLAYER_TARGET_CHANGED")
+		select:SetScript("OnEvent", updateBorderColourAlt)
+		
 	end,
 
 	arena = function(self, ...)
@@ -1753,9 +1793,9 @@ do
 
 
 
-		local Threat = CreateFrame("Frame", nil, self)
+		--[[local Threat = CreateFrame("Frame", nil, self)
 		self.Threat = Threat
-		Threat.Override = UpdateThreat
+		Threat.Override = UpdateThreat]]
 
 		local select = CreateFrame("Frame", nil, self)
 		select:RegisterEvent("PLAYER_TARGET_CHANGED")
