@@ -85,25 +85,18 @@ C.classcolours = {
 }
 
 C.reactioncolours = {
-	[1] = {1, .12, .24},
-	[2] = {1, .12, .24},
-	[3] = {1, .12, .24},
-	[4] = {1, 1, 0.3},
-	[5] = {0.26, 1, 0.22},
-	[6] = {0.26, 1, 0.22},
-	[7] = {0.26, 1, 0.22},
-	[8] = {0.26, 1, 0.22},
+	[1] = {149/255, 0, 39/255}, -- Exceptionally hostile
+	[2] = {149/255, 0, 39/255}, -- Very Hostile
+	[3] = {149/255, 0, 39/255}, -- Hostile
+	[4] = {215/255, 195/255, 108/255}, -- Neutral
+	[5] = {81/255, 207/255, 115/255}, -- Friendly
+	[6] = {81/255, 207/255, 115/255}, -- Very Friendly
+	[7] = {81/255, 207/255, 115/255}, -- Exceptionally friendly
+	[8] = {81/255, 207/255, 115/255}, -- Exalted
 }
 
 
-
-
-
 -- [[ Global config ]]
-
-
-
-
 
 C["actionbars"] = {
 	["enable"] = true,					-- enable the action bars
@@ -252,6 +245,7 @@ C["tooltip"] = {
 
 C["chat"] = {
 	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
+	["lockPosition"] = true,
 	["sticky"] = true,
 	["match"] = 1,
 	["itemLinkLevel"] = true,
@@ -344,7 +338,7 @@ C["unitframes"] = {
 	["arena_width"] = 166,
 	["arena_height"] = 16,
 	
-	["castbarColorShield"] = {241/255, 23/255, 45/255},
+	["castbarColorShield"] = {149/255, 146/255, 144/255},
 	["castbarColorNormal"] = {113/255, 178/255, 237/255},
 	["castbarHeight"] = 6,
 

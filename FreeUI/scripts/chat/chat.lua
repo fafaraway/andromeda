@@ -259,6 +259,9 @@ function module:OnLogin()
 	HideForever(ChatFrameMenuButton)
 	HideForever(QuickJoinToastButton)
 	HideForever(GeneralDockManagerOverflowButton)
+	HideForever(ChatFrameChannelButton)
+	HideForever(ChatFrameToggleVoiceDeafenButton)
+	HideForever(ChatFrameToggleVoiceMuteButton)
 
 	ForceChatSettings()
 

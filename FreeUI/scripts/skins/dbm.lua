@@ -125,7 +125,8 @@ function module:ReskinDBM()
 					name.SetFont = F.dummy
 					name:SetJustifyH("LEFT")
 					name:SetWordWrap(false)
-					name:SetShadowColor(0, 0, 0, 0)
+					name:SetShadowColor(0, 0, 0, 1)
+					name:SetShadowOffset(2, -2)
 					name.styled = true
 				end
 		
