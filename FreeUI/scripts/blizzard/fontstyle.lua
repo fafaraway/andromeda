@@ -55,6 +55,7 @@ function module:FontStyle()
 	SetFont("FriendsFont_Small", NORMAL, 12)
 
 	SetFont("AchievementFont_Small", NORMAL, 12)
+	SetFont("AchievementPointsFont", NORMAL, 12)
 
 	local function ReskinFont(font, size, white)
 		font:SetFont(NORMAL, size, white and "" or "OUTLINE")
