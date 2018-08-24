@@ -71,23 +71,23 @@ end
 -- modify class color
 C.classcolours = {
 	["WARRIOR"] = {r = .72, g = .58, b = .47},
-	["DEATHKNIGHT"] = {r = .67, g = 0, b = .21},
-	["PALADIN"] = {r = .9, g = 0, b = .55},
-	["MONK"] = {r = .18, g = .71, b = .59},
-	["PRIEST"] = {r = .77, g = .77, b = .77},
-	["SHAMAN"] = {r = .33, g = .47, b = .74},
-	["DRUID"] = {r = .78, g = .44, b = .09},
-	["ROGUE"] = {r = .77, g = .69, b = .45},
-	["MAGE"] = {r = 0, g = 0.76, b = 1},
-	["WARLOCK"] = {r = .51, g = .44, b = .75},
-	["HUNTER"] = {r = .5, g = .76, b = .45},
-	["DEMONHUNTER"] = {r = .74, g = .15, b = .79},
+	["DEATHKNIGHT"] = {r = .87, g = 0, b = .32},
+	["PALADIN"] = {r = .91, g = .21, b = .63},
+	["MONK"] = {r = .22, g = .78, b = .69},
+	["PRIEST"] = {r = .86, g = .87, b = .91},
+	["SHAMAN"] = {r = .35, g = .45, b = .91},
+	["DRUID"] = {r = .84, g = .47, b = .09},
+	["ROGUE"] = {r = .81, g = .72, b = .46},
+	["MAGE"] = {r = 0, g = .71, b = .91},
+	["WARLOCK"] = {r = .59, g = .52, b = .75},
+	["HUNTER"] = {r = .62, g = .81, b = .49},
+	["DEMONHUNTER"] = {r = .72, g = .28, b = .83},
 }
 
 C.reactioncolours = {
 	[1] = {149/255, 0, 39/255}, -- Exceptionally hostile
-	[2] = {149/255, 0, 39/255}, -- Very Hostile
-	[3] = {149/255, 0, 39/255}, -- Hostile
+	[2] = {179/255, 50/255, 58/255}, -- Very Hostile
+	[3] = {243/255, 68/255, 79/255}, -- Hostile
 	[4] = {215/255, 195/255, 108/255}, -- Neutral
 	[5] = {81/255, 207/255, 115/255}, -- Friendly
 	[6] = {81/255, 207/255, 115/255}, -- Very Friendly
@@ -231,7 +231,7 @@ C["tooltip"] = {
 	["combatHide"] = false,
 	["combatHideALL"] = false,
 	["guildRank"] = false,
-	["guildText"] = "|cffE41F9B<%s>|r |cffA0A0A0%s|r",
+	["guildText"] = "|cffffffff<%s>|r |cffA0A0A0%s|r",
 	["guildColor"] = { r=1, g=1, b=.7},
 	["playerRealm"] = false,
 	["realmText"] = " (*)",
