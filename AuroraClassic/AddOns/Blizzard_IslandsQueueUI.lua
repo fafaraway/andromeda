@@ -14,4 +14,6 @@ C.themes["Blizzard_IslandsQueueUI"] = function()
 	local closeButton = tutorial:GetChildren()
 	F.Reskin(closeButton)
 	tutorial.TutorialText:SetTextColor(1, 1, 1)
+
+	IslandsQueueFrame.HelpButton:Hide()
 end
