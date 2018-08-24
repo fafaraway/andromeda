@@ -204,7 +204,7 @@ function module:PetBattleUI()
 	end
 
 	-- Reskin Petbar
-	local bar = CreateFrame("Frame", "NDuiPetBattleBar", UIParent, "SecureHandlerStateTemplate")
+	local bar = CreateFrame("Frame", "FreeUIPetBattleBar", UIParent, "SecureHandlerStateTemplate")
 	bar:SetPoint("BOTTOM", UIParent, 0, 28)
 	bar:SetSize(310, 40)
 	local visibleState = "[petbattle] show; hide"

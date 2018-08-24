@@ -36,10 +36,11 @@ local function updateHotkey(self, actionButtonType)
 	for _, value in pairs(replaces) do
 		text = gsub(text, value[1], value[2])
 	end
-	if ho:GetText() == RANGE_INDICATOR then
-        ho:SetText("")
-    else
-        ho:SetText(text)
+
+	if text == RANGE_INDICATOR then
+		ho:SetText("")
+	else
+		ho:SetText(text)
 	end
 	
 	if not self.styledHotkey then
@@ -72,6 +73,7 @@ local function styleExtraActionButton(bu)
 
 	local name = bu:GetName()
 	local ho = _G[name.."HotKey"]
+	local co= _G[name.."Count"]
 
 	-- remove the style background theme
 	bu.style:SetTexture(nil)
@@ -88,6 +90,12 @@ local function styleExtraActionButton(bu)
 
 	-- cooldown
 	bu.cooldown:SetAllPoints(bu.icon)
+
+	-- count
+	F.SetFS(co)
+	co:ClearAllPoints()
+	co:SetPoint("TOPRIGHT", -1, -1)
+	co:SetDrawLayer("OVERLAY")
 
 	-- hotkey
 	updateHotkey(bu)
@@ -316,17 +324,6 @@ local function styleflyout(self)
 	end
 end
 
---zone ability
---ZoneAbilityFrame:ClearAllPoints()
-ZoneAbilityFrame.ignoreFramePositionManager = true
-ZoneAbilityFrameNormalTexture:SetAlpha(0)
-
-local spellButton = ZoneAbilityFrame.SpellButton
-spellButton.Style:SetAlpha(0)
-spellButton.Icon:SetTexCoord(.08, .92, .08, .92)
-spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
-F.CreateBDFrame(spellButton.Icon)
-F.CreateSD(spellButton.Icon, .5)
 
 local function init()
 	for i = 1, NUM_ACTIONBAR_BUTTONS do

@@ -1363,6 +1363,8 @@ local UnitSpecific = {
 
 		CreateIndicator(self)
 
+		FreeUI_LeaveVehicleButton:SetPoint("LEFT", self, "RIGHT", 5, 0)
+
 
 	end,
 

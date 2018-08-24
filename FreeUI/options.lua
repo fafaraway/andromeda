@@ -71,15 +71,15 @@ end
 -- modify class color
 C.classcolours = {
 	["WARRIOR"] = {r = .72, g = .58, b = .47},
-	["DEATHKNIGHT"] = {r = .87, g = 0, b = .32},
+	["DEATHKNIGHT"] = {r = .73, g = .17, b = 0},
 	["PALADIN"] = {r = .91, g = .21, b = .63},
-	["MONK"] = {r = .22, g = .78, b = .69},
+	["MONK"] = {r = .02, g = .78, b = .66},
 	["PRIEST"] = {r = .86, g = .87, b = .91},
 	["SHAMAN"] = {r = .35, g = .45, b = .91},
 	["DRUID"] = {r = .84, g = .47, b = .09},
 	["ROGUE"] = {r = .81, g = .72, b = .46},
 	["MAGE"] = {r = 0, g = .71, b = .91},
-	["WARLOCK"] = {r = .59, g = .52, b = .75},
+	["WARLOCK"] = {r = .52, g = .54, b = .75},
 	["HUNTER"] = {r = .62, g = .81, b = .49},
 	["DEMONHUNTER"] = {r = .72, g = .28, b = .83},
 }
@@ -99,21 +99,51 @@ C.reactioncolours = {
 -- [[ Global config ]]
 
 C["actionbars"] = {
-	["enable"] = true,					-- enable the action bars
-	["enableStyle"] = true,				-- enable action bars style
 	["hotKey"] = true, 					-- show hot keys on buttons
 	["macroName"] = true,				-- show macro name on buttons
-	["bar1_mouseOver"] = false,
-	["bar2_mouseOver"] = false,
+	["count"] = true,
+
 	["bar3_mouseOver"] = false,
 	["sideBar_mouseOver"] = false,
 	["petBar_mouseOver"] = false,
-	["stanceBar_show"] = false,
+	["stanceBar_show"] = true,			-- hide stance bar
+
 	["classColor"] = false,
-	["count"] = true,
+	
 	["cooldown"] = true,
 	["decimalCD"] = false,
+
+	["layoutSimple"] = false,
+
+	["buttonSizeNormal"] = 30,
+	["buttonSizeSmall"] = 24,
+	["buttonSizeBig"] = 34,
+	["buttonSizeHuge"] = 40,
+	["padding"] = 2,
+	["margin"] = 4,
+
+	["fader"] = {
+		fadeInAlpha = 1,
+		fadeInDuration = 0.3,
+		fadeInSmooth = "OUT",
+		fadeOutAlpha = 0,
+		fadeOutDuration = 0.9,
+		fadeOutSmooth = "OUT",
+		fadeOutDelay = 0,
+	},
+	["faderOnShow"] = {
+		fadeInAlpha = 1,
+		fadeInDuration = 0.3,
+		fadeInSmooth = "OUT",
+		fadeOutAlpha = 0,
+		fadeOutDuration = 0.9,
+		fadeOutSmooth = "OUT",
+		fadeOutDelay = 0,
+		trigger = "OnShow",
+	},
 }
+
+
 
 
 C["auras"] = {
@@ -254,7 +284,7 @@ C["chat"] = {
 	["minimize"] = true,
 	["outline"] = false,
 
-	["filterList"] = "艾尔文森林美食协会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收",
+	["filterList"] = "艾尔文森林美食协会 黄金梅利 新公会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收",
 }
 
 
