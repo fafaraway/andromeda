@@ -1046,7 +1046,7 @@ function F.FormatTime(s)
 	elseif s >= minute then
 		return format("|cff67acdb%d|r", s/minute), s % minute -- blue
 	elseif s < 10 then
-		if C.actionbars.decimalCD then
+		if C.misc.decimalCD then
 			return format("|cffc50046%.1f|r", s), s - format("%.1f", s)
 		else
 			return format("|cffc50046%d|r", s + .5), s - floor(s)

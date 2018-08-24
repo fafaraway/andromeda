@@ -110,8 +110,7 @@ C["actionbars"] = {
 
 	["classColor"] = false,
 	
-	["cooldown"] = true,
-	["decimalCD"] = false,
+	
 
 	["layoutSimple"] = false,
 
@@ -188,6 +187,9 @@ C["misc"] = {
 	["saySapped"] = true,
 
 	["autoActionCam"] = true,
+
+	["cooldown"] = true,
+	["decimalCD"] = false,
 
 	["rareAlert"] = true,
 	["rareAlertNotify"] = true,

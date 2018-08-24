@@ -5,6 +5,7 @@
 	<Script file="errors.lua"/>
 	<Script file="colours.lua"/>
 	<Script file="colorpicker.lua"/>
+	<Script file="cooldown.lua"/>
 	<Script file="mirrorbar.lua"/>
 	<Script file="mover.lua"/>
 	<Script file="marking.lua"/>
