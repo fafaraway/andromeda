@@ -5,6 +5,7 @@
 	<Script file="alreadyknown.lua"/>
 	<Script file="camera.lua"/>
 	<Script file="cdpulse.lua"/>
+	<Script file="clickcast.lua"/>
 	<Script file="cursor.lua"/>
 	<Script file="expbar.lua"/>
 	<Script file="itemlevel.lua"/>

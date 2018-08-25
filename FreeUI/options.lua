@@ -214,6 +214,8 @@ C["misc"] = {
 	["focuser"] = true,
 	["missingStats"] = true,
 	["DOTA"] = true,
+
+	["clickCast"] = true,
 }
 
 
