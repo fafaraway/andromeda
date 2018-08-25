@@ -35,17 +35,14 @@ function module:FontStyle()
 		elseif fontColor then fontObj:SetAlpha(fontColor) end
 	end
 
+	SetFont("SystemFont_Shadow_Small",         NORMAL, 11, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("SystemFont_Small",                NORMAL, 11)
 
 	SetFont("System_IME", NORMAL, 16)
 
 	SetFont("ZoneTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("SubZoneTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("WorldMapTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
-
-	SetFont("RaidWarningFrame.slot1", HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("RaidWarningFrame.slot2", HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("RaidBossEmoteFrame.slot1",	HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("RaidBossEmoteFrame.slot2",	HEADER, 28, nil, nil, {0, 0, 0}, 1, -1)
 
 	SetFont("GameFontNormal", NORMAL, 12)
 	SetFont("GameFontNormalSmall", NORMAL, 12)
