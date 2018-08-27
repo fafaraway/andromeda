@@ -55,6 +55,11 @@ local function skinChat(self)
 	F.HideObject(self.ScrollBar)
 	F.HideObject(self.ScrollToBottomButton)
 
+	if C.chat.lockPosition then
+		ChatFrame1:ClearAllPoints()
+		ChatFrame1:SetPoint(unpack(C.chat.position))
+	end
+
 	self.styled = true
 end
 
@@ -266,5 +271,10 @@ function module:OnLogin()
 	ForceChatSettings()
 
 	self:ChatFilter()
+
+	-- ProfanityFilter
+	if not BNFeaturesEnabledAndConnected() then return end
+
+	SetCVar("profanityFilter", 0)
 
 end
