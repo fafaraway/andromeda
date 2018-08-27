@@ -10,7 +10,8 @@
 	<Script file="expbar.lua"/>
 	<Script file="itemlevel.lua"/>
 	<Script file="mail.lua"/>
-	<Script file="queuetimer.lua"/>
+	<Script file="lfgqueuetimer.lua"/>
+	<Script file="pvpqueuetimer.lua"/>
 	<Script file="safequeue.lua"/>
 	<Script file="saysapped.lua"/>
 	<Script file="sharedmedia.lua"/>
