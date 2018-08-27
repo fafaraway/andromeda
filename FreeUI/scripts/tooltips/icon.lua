@@ -104,22 +104,20 @@ end
 
 IDCard:RegisterTooltip(ItemRefTooltip)
 
+
 local newString = "0:0:64:64:5:59:5:59"
 
--- WorldQuest Tooltip
-hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", function(self)
-	if self.Icon then
-		F.ReskinIcon(self.Icon)
-		self.IconBorder:Hide()
-	end
-end)
-_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$d|r %3$s"
+-- Tooltip rewards icon
+_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = "|T%1$s:16:16:"..newString.."|t |cffffffff%2$s|r %3$s"
 _G.BONUS_OBJECTIVE_REWARD_FORMAT = "|T%1$s:16:16:"..newString.."|t %2$s"
 
--- PVPReward Tooltip
-hooksecurefunc("EmbeddedItemTooltip_SetItemByID", function(self)
-	if self.Icon then
-		F.ReskinIcon(self.Icon)
+local function ReskinRewardIcon(self)
+	if self and self.Icon then
+		self.Icon:SetTexCoord(unpack(C.texCoord))
 		self.IconBorder:Hide()
 	end
-end)
+end
+hooksecurefunc("EmbeddedItemTooltip_SetItemByQuestReward", ReskinRewardIcon)
+hooksecurefunc("EmbeddedItemTooltip_SetItemByID", ReskinRewardIcon)
+hooksecurefunc("EmbeddedItemTooltip_SetCurrencyByID", ReskinRewardIcon)
+hooksecurefunc("QuestUtils_AddQuestCurrencyRewardsToTooltip", function(_, _, self) ReskinRewardIcon(self) end)
