@@ -83,6 +83,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			if not tab.styled then
 				tab:GetRegions():Hide()
 				tab:SetCheckedTexture(C.media.checked)
+				tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				F.CreateBG(tab)
 
 				tab.styled = true
