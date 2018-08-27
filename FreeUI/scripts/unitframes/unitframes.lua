@@ -639,7 +639,7 @@ local function UpdateClassPowerColor(element)
 		elseif(playerClass == 'WARLOCK') then
 			r, g, b = 2/3, 1/3, 2/3
 		elseif(playerClass == 'PALADIN') then
-			r, g, b = 1, 1, 2/5
+			r, g, b = 238/255, 220/255, 127/255
 		elseif(playerClass == 'MAGE') then
 			r, g, b = 5/6, 1/2, 5/6
 		elseif(playerClass == 'ROGUE') then
@@ -978,11 +978,9 @@ end
 
 
 -- Hide Blizz frames
-CompactRaidFrameManager:UnregisterAllEvents()
-CompactRaidFrameManager:SetParent(FreeUIHider)
-CompactRaidFrameContainer:UnregisterAllEvents()
-CompactRaidFrameContainer:Hide()
-CompactRaidFrameContainer:Hide()
+F.HideObject(CompactRaidFrameContainer)
+F.HideObject(CompactRaidFrameManager)
+RaidOptionsFrame_UpdatePartyFrames = F.dummy	
 
 -- Global
 local Shared = function(self, unit, isSingle)
@@ -1859,7 +1857,7 @@ oUF:Factory(function(self)
 	raidPos = C.unitframes.raid
 
 	for n = 1, MAX_BOSS_FRAMES do
-		spawnHelper(self, 'boss' .. n, C.unitframes.boss.a, C.unitframes.boss.b, C.unitframes.boss.c, C.unitframes.boss.x, C.unitframes.boss.y + (66 * n))
+		spawnHelper(self, 'boss' .. n, C.unitframes.boss.a, C.unitframes.boss.b, C.unitframes.boss.c, C.unitframes.boss.x, C.unitframes.boss.y + (80 * n))
 	end
 
 	if C.unitframes.enableArena then

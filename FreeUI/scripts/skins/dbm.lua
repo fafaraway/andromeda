@@ -121,7 +121,7 @@ function module:ReskinDBM()
 					name:SetPoint("LEFT", frame, "LEFT", 2, 8)
 					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
 					name.SetPoint = F.dummy
-					name:SetFont(C.font.normal, 12, "OUTLINE")
+					name:SetFont(C.font.normal, 12)
 					name.SetFont = F.dummy
 					name:SetJustifyH("LEFT")
 					name:SetWordWrap(false)
