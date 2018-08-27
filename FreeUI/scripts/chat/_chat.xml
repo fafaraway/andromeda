@@ -7,4 +7,5 @@
 	<Script file="whisperalert.lua"/>
 	<Script file="minimize.lua"/>
 	<Script file="string.lua"/>
+	<Script file="reallinks.lua"/>
 </Ui>
