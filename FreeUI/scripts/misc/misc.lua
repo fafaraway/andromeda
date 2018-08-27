@@ -438,3 +438,22 @@ function module:questRewardHighlight()
 	
 
 end
+
+
+
+
+
+
+
+
+
+
+local function alertFrameMover(self, ...)
+	_G.AlertFrame:ClearAllPoints()
+	_G.AlertFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
+end
+
+hooksecurefunc(_G.AlertFrame, "UpdateAnchors", alertFrameMover)
+
+
+
