@@ -69,7 +69,7 @@ end
 
 
 -- modify class color
-C.classcolours = {
+--[[C.classcolours = {
 	["WARRIOR"] = {r = .72, g = .58, b = .47},
 	["DEATHKNIGHT"] = {r = .73, g = .17, b = 0},
 	["PALADIN"] = {r = .91, g = .21, b = .63},
@@ -82,12 +82,14 @@ C.classcolours = {
 	["WARLOCK"] = {r = .52, g = .54, b = .75},
 	["HUNTER"] = {r = .62, g = .81, b = .49},
 	["DEMONHUNTER"] = {r = .72, g = .28, b = .83},
-}
+}]]
+C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+
 
 C.reactioncolours = {
 	[1] = {149/255, 0, 39/255}, -- Exceptionally hostile
 	[2] = {179/255, 50/255, 58/255}, -- Very Hostile
-	[3] = {243/255, 68/255, 79/255}, -- Hostile
+	[3] = {243/255, 91/255, 98/255}, -- Hostile
 	[4] = {215/255, 195/255, 108/255}, -- Neutral
 	[5] = {81/255, 207/255, 115/255}, -- Friendly
 	[6] = {81/255, 207/255, 115/255}, -- Very Friendly
@@ -101,18 +103,16 @@ C.reactioncolours = {
 C["actionbars"] = {
 	["hotKey"] = true, 					-- show hot keys on buttons
 	["macroName"] = true,				-- show macro name on buttons
-	["count"] = true,
+	["count"] = true,					
+	["classColor"] = false,				-- button border colored by class color
 
-	["bar3_mouseOver"] = false,
-	["sideBar_mouseOver"] = false,
-	["petBar_mouseOver"] = false,
-	["stanceBar_show"] = true,			-- hide stance bar
+	["bar3Fade"] = false,
+	["sideBarEnable"] = true,
+	["sideBarFade"] = false,
+	["petBarFade"] = false,
+	["stanceBarEnable"] = true,
 
-	["classColor"] = false,
-	
-	
-
-	["layoutSimple"] = false,
+	["layoutSimple"] = false,			-- hide bar1 bar2 for default
 
 	["buttonSizeNormal"] = 30,
 	["buttonSizeSmall"] = 24,
@@ -141,8 +141,6 @@ C["actionbars"] = {
 		trigger = "OnShow",
 	},
 }
-
-
 
 
 C["auras"] = {
@@ -250,7 +248,6 @@ C["bags"] = {
 
 C["infoBar"] = {
 	["enable"] = true,
-
 
 	["enableButtons"] = true,			-- show buttons for quick access on the menu bar
 		["buttons_mouseover"] = true,			-- only on mouseover
@@ -372,8 +369,8 @@ C["unitframes"] = {
 	["arena_width"] = 166,
 	["arena_height"] = 16,
 	
-	["castbarColorShield"] = {149/255, 146/255, 144/255},
-	["castbarColorNormal"] = {113/255, 178/255, 237/255},
+	["castbarColorShield"] = {221/255, 84/255, 87/255},
+	["castbarColorNormal"] = {52/255, 214/255, 221/255},
 	["castbarHeight"] = 6,
 
 	["power_height"] = 2,

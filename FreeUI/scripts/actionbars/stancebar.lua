@@ -73,7 +73,7 @@ function Bar:CreateStancebar()
 	end
 
 	--show/hide the frame on a given state driver
-	if cfg.stanceBar_show then
+	if cfg.stanceBarEnable then
 		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	else
 		frame.frameVisibility = "hide"

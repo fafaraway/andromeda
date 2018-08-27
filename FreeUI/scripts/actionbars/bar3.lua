@@ -47,7 +47,7 @@ function Bar:CreateBar3()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	--create the mouseover functionality
-	if cfg.bar3_mouseOver then
+	if cfg.bar3Fade then
 		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 

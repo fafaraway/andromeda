@@ -37,11 +37,15 @@ function Bar:CreateBar4()
 	end
 
 	--show/hide the frame on a given state driver
-	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
+	if not cfg.sideBarEnable then
+		frame.frameVisibility = "hide"
+	else
+		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
+	end
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	--create the mouseover functionality
-	if cfg.sideBar_mouseOver then
+	if cfg.sideBarEnable and cfg.sideBar_mouseOver then
 		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 

@@ -55,7 +55,7 @@ function Bar:CreatePetbar()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	--create the mouseover functionality
-	if cfg.petBar_mouseOver then
+	if cfg.petBarFade then
 		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end
