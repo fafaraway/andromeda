@@ -63,6 +63,28 @@ hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(self, block)
 hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
 
 
+-- Show quest color and level
+	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
+		if ENABLE_COLORBLIND_MODE == "1" then return end
+
+		for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
+			if title and not isHeader and button.questID == questID then
+				local title = "["..level.."] "..title
+				if isComplete then
+					title = "|cffff78ff"..title
+				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
+					title = "|cff3399ff"..title
+				end
+				button.Text:SetText(title)
+				button.Text:SetPoint("TOPLEFT", 24, -5)
+				button.Text:SetWidth(205)
+				button.Text:SetWordWrap(false)
+				button.Check:SetPoint("LEFT", button.Text, button.Text:GetWrappedWidth(), 0)
+			end
+		end
+	end
+hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
+
 
 -- Headers
 local function reskinHeader(header)
@@ -93,14 +115,14 @@ local function reskinQuestIcon(self, block)
 		itemButton:SetNormalTexture("")
 		itemButton:SetPushedTexture("")
 		itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
-		itemButton.icon:SetTexCoord(.08, .92, .08, .92)
+		itemButton.icon:SetTexCoord(unpack(C.texCoord))
 		F.CreateBDFrame(itemButton, 0)
 		F.CreateSD(itemButton)
 
-		itemButton.HotKey:ClearAllPoints()
-		itemButton.HotKey:SetPoint("CENTER", itemButton, 1, 0)
-		itemButton.HotKey:SetJustifyH("CENTER")
-		F.SetFS(itemButton.HotKey)
+		--[[local text = itemButton.HotKey:GetText()
+		if text == RANGE_INDICATOR then
+			itemButton.HotKey:SetText("")
+		end]]
 
 		itemButton.Count:ClearAllPoints()
 		itemButton.Count:SetPoint("TOP", itemButton, 2, -1)
@@ -131,16 +153,23 @@ hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
 
 -- Progressbars
 local function reskinProgressbar(self, block, line)
-	local progressBar = line.ProgressBar
-	local bar = progressBar.Bar
+	local progressBar = line and line.ProgressBar
+	local bar = progressBar and progressBar.Bar
+	if not bar then return end
 	local icon = bar.Icon
+	local label = bar.Label
 
-	if not bar.styled then
-		bar.BarFrame:Hide()
-		bar.BarFrame2:Hide()
-		bar.BarFrame3:Hide()
-		bar.BarBG:Hide()
-		bar.IconBG:SetTexture("")
+	if not progressBar.styled then
+		if bar.BarFrame then bar.BarFrame:Hide() end
+		if bar.BarFrame2 then bar.BarFrame2:Hide() end
+		if bar.BarFrame3 then bar.BarFrame3:Hide() end
+		if bar.BarBG then bar.BarBG:Hide() end
+		if bar.BarGlow then bar.BarGlow:Hide() end
+		if bar.Sheen then bar.Sheen:Hide() end
+		if bar.IconBG then bar.IconBG:SetAlpha(0) end
+		if bar.BorderLeft then bar.BorderLeft:SetAlpha(0) end
+		if bar.BorderRight then bar.BorderRight:SetAlpha(0) end
+		if bar.BorderMid then bar.BorderMid:SetAlpha(0) end
 
 		bar:SetPoint("LEFT", 22, 0)
 		bar:SetStatusBarTexture(C.media.texture)
@@ -149,32 +178,35 @@ local function reskinProgressbar(self, block, line)
 
 		local bg = F.CreateBDFrame(bar)
 		F.CreateSD(bg)
-		if bar.AnimIn then	-- Fix bg opacity
-			bar.AnimIn:HookScript("OnFinished", function() bg:SetBackdropColor(0, 0, 0, .5) end)
+
+		if label then
+			label:ClearAllPoints()
+			label:SetPoint("CENTER")
+			F.SetFS(label)
 		end
 
-		icon:SetMask(nil)
-		icon:SetTexCoord(.08, .92, .08, .92)
-		icon:SetSize(24, 24)
-		icon:ClearAllPoints()
-		icon:SetPoint("RIGHT", 30, 0)
+		if icon then
+			icon:ClearAllPoints()
+			icon:SetPoint("RIGHT", 30, 0)
+			icon:SetMask("")
+			icon:SetTexCoord(unpack(C.texCoord))
+			icon:SetSize(24, 24)
 
-		local ibg = F.CreateBDFrame(icon)
+			local ibg = F.CreateBDFrame(icon)
+			F.CreateSD(ibg)
+		end
 
-		F.CreateSD(ibg)
+		BonusObjectiveTrackerProgressBar_PlayFlareAnim = function() end
 
-		bar.Label:ClearAllPoints()
-		bar.Label:SetPoint("CENTER")
-		F.SetFS(bar.Label)
-
-		bar.styled = true
+		progressBar.styled = true
 	end
 end
 hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
+hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgressbar)
 
-hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
+--[[hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
 	local progressBar = line.ProgressBar
 	local bar = progressBar.Bar
 
@@ -194,7 +226,7 @@ hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, lin
 
 		bar.styled = true
 	end
-end)
+end)]]
 
 
 -- Blocks
@@ -261,6 +293,7 @@ ot.HeaderMenu.Title:SetFont(unpack(otFontHeader))
 for _, headerName in pairs({"QuestHeader", "AchievementHeader", "ScenarioHeader"}) do
 	local header = BlocksFrame[headerName]
 	header.Text:SetFont(unpack(otFontHeader))
+	header.Text:SetTextColor(229/255, 209/255, 159/255, 1)
 	header.Text:SetShadowColor(0, 0, 0, 1)
 	header.Text:SetShadowOffset(2, -2)
 end
@@ -275,13 +308,9 @@ end
 do
 	local header = WORLD_QUEST_TRACKER_MODULE.Header
 	header.Text:SetFont(unpack(otFontHeader))
+	header.Text:SetTextColor(229/255, 209/255, 159/255, 1)
 	header.Text:SetShadowColor(0, 0, 0, 1)
 	header.Text:SetShadowOffset(2, -2)
-
-	local header_bonus = BONUS_OBJECTIVE_TRACKER_MODULE.Header
-	header_bonus.Text:SetFont(unpack(otFontHeader))
-	header_bonus.Text:SetShadowColor(0, 0, 0, 1)
-	header_bonus.Text:SetShadowOffset(2, -2)
 end
 
 hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
@@ -301,6 +330,7 @@ hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", function(_, block)
 		block.headerStyled = true
 	end
 end)
+
 
 hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", function(_, block)
 	local line = block.currentLine
