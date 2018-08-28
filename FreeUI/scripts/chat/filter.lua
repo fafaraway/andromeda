@@ -16,14 +16,14 @@ local function genFilterList()
 end
 F.genFilterList = genFilterList
 
-local friendsList = {}
+F.FriendsList = {}
 local function updateFriends()
-	wipe(friendsList)
+	wipe(F.FriendsList)
 
 	for i = 1, GetNumFriends() do
 		local name = GetFriendInfo(i)
 		if name then
-			friendsList[Ambiguate(name, "none")] = true
+			F.FriendsList[Ambiguate(name, "none")] = true
 		end
 	end
 
@@ -31,7 +31,7 @@ local function updateFriends()
 		for j = 1, BNGetNumFriendGameAccounts(i) do
 			local _, characterName, client, realmName = BNGetFriendGameAccountInfo(i, j)
 			if client == BNET_CLIENT_WOW then
-				friendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
+				F.FriendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
 			end
 		end
 	end
@@ -45,7 +45,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
-	elseif F.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or friendsList[name] then
+	elseif F.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or F.FriendsList[name] then
 		return
 	end
 
@@ -70,7 +70,7 @@ end
 
 local addonBlockList = {
 	"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
-	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "%[World Quest Tracker%]"
+	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "%[World Quest Tracker%]", "wowcn%.vip"
 }
 
 local function genAddonBlock(_, _, msg, author)
