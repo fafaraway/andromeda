@@ -894,6 +894,7 @@ local function CreateName(self)
 	Name:SetShadowColor(0, 0, 0, 1)
 	Name:SetShadowOffset(2, -2)
 	Name:SetTextColor(1, 1, 1)
+	Name:SetWidth(60)
 
 	self:Tag(Name, '[name]')
 	self.Name = Name
@@ -909,21 +910,19 @@ local function CreateName(self)
 		Name:SetWidth(100)
 	elseif self.unitStyle == "targettarget" then
 		Name:SetJustifyH("LEFT")
-		Name:SetWidth(60)
 	elseif self.unitStyle == "focus" then
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
-		Name:SetWidth(60)
 	elseif self.unitStyle == "focustarget" then
 		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
 		Name:SetJustifyH("RIGHT")
-		Name:SetWidth(60)
 	elseif self.unitStyle == "boss" then
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 	elseif self.unitStyle == "arena" then
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
+		Name:SetWidth(100)
 	end
 	
 end
@@ -1017,7 +1016,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
 	Health:SetPoint("RIGHT")
-	Health:SetPoint("BOTTOM", 0, 2 + powerHeight)
+	Health:SetPoint("BOTTOM", 0, 1 + powerHeight)
 
 	self.Health = Health
 
@@ -1070,7 +1069,7 @@ local Shared = function(self, unit, isSingle)
 
 	Power:SetPoint("LEFT")
 	Power:SetPoint("RIGHT")
-	Power:SetPoint("TOP", Health, "BOTTOM", 0, -2)
+	Power:SetPoint("TOP", Health, "BOTTOM", 0, -1)
 
 	self.Power = Power
 

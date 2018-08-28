@@ -8,7 +8,6 @@ function module:OnLogin()
 	self:ShowItemLevel()
 	self:Expbar()
 	self:flashCursor()
-	self:questRewardHighlight()
 	self:QuickJoin()
 	self:Focuser()
 	self:MissingStats()
@@ -344,10 +343,14 @@ if C.misc.undressButton then
 	F.Reskin(sideUndress)
 end
 
+
 -- Instant delete
-hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
-	self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-end)
+do
+	hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
+		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+	end)
+end
+
 
 -- Faster Looting
 do
@@ -372,72 +375,6 @@ do
 end
 
 
---
-
-function module:questRewardHighlight()
-
-	local f = CreateFrame("Frame")
-	local highlightFunc
-
-	local last = 0
-	local startIndex = 1
-
-	local maxPrice = 0
-	local maxPriceIndex = 0
-
-	local function onUpdate(self, elapsed)
-		last = last + elapsed
-		if last >= .05 then
-			self:SetScript("OnUpdate", nil)
-			last = 0
-
-			if QuestInfoRewardsFrameQuestInfoItem1:IsVisible() then -- protection in case frame is closed early
-				highlightFunc()
-			end
-		end
-	end
-
-	highlightFunc = function()
-		local numChoices = GetNumQuestChoices()
-		if numChoices < 2 then return end
-
-		for i = startIndex, numChoices do
-			local link = GetQuestItemLink("choice", i)
-			if link then
-				local _, _, _, _, _, _, _, _, _, _, vendorPrice = GetItemInfo(link)
-
-				if vendorPrice > maxPrice then
-					maxPrice = vendorPrice
-					maxPriceIndex = i
-				end
-			else
-				startIndex = i
-				f:SetScript("OnUpdate", onUpdate)
-				return
-			end
-		end
-
-		if maxPriceIndex > 0 then
-			local infoItem = _G["QuestInfoRewardsFrameQuestInfoItem"..maxPriceIndex]
-
-			QuestInfoItemHighlight:ClearAllPoints()
-			QuestInfoItemHighlight:SetPoint("TOP", infoItem)
-			QuestInfoItemHighlight:Show()
-
-			-- infoItem.bg:SetBackdropColor(0.89, 0.88, 0.06, .2)
-		end
-
-		startIndex = 1
-		maxPrice = 0
-		maxPriceIndex = 0
-	end
-
-	f:SetScript("OnEvent", highlightFunc)
-
-	f:RegisterEvent("QUEST_COMPLETE")
-	
-
-end
 
 
 
@@ -446,8 +383,7 @@ end
 
 
 
-
-
+-- reposition alert popup
 local function alertFrameMover(self, ...)
 	_G.AlertFrame:ClearAllPoints()
 	_G.AlertFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
