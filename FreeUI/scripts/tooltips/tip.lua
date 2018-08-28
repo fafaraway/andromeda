@@ -398,9 +398,16 @@ end)
 
 
 F:RegisterEvent("ADDON_LOADED", function(_, addon)
-	if addon == "Blizzard_DebugTools" and not IsAddOnLoaded("AuroraClassic") then
-		FrameStackTooltip:HookScript("OnShow", style)
-		EventTraceTooltip:HookScript("OnShow", style)
+	if addon == "Blizzard_DebugTools" then
+		local tooltips = {
+			FrameStackTooltip,
+			EventTraceTooltip
+		}
+		for _, tip in pairs(tooltips) do
+			tip:SetParent(UIParent)
+			tip:SetFrameStrata("TOOLTIP")
+			tip:HookScript("OnShow", style)
+		end
 
 	elseif addon == "FreeUI" then
 		
