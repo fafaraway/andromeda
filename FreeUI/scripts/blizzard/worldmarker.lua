@@ -24,7 +24,8 @@ wm:SetHighlightTexture("")
 
 F.StripTextures(wm)
 
-local plus = F.CreateFS(wm, 16)
+local plus = F.CreateFS(wm)
+plus:SetFont(C.font.pixel, 16, "OUTLINEMONOCHROME")
 plus:SetPoint("CENTER", 1, 0)
 plus:SetText("+")
 

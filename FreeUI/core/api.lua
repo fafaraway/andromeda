@@ -30,9 +30,9 @@ F.AddPlugin = function(func)
 	func()
 end
 
-F.CreateFS = function(parent, fontSize, justify)
+F.CreateFS = function(parent, justify)
 	local f = parent:CreateFontString(nil, "OVERLAY")
-	F.SetFS(f, fontSize)
+	F.SetFS(f)
 
 	if justify then f:SetJustifyH(justify) end
 

@@ -126,12 +126,12 @@ local createSlot = function(id)
 	F.CreateSD(icon)
 	frame.icon = icon
 
-	local count = F.CreateFS(iconFrame, C.FONT_SIZE_NORMAL, "CENTER")
+	local count = F.CreateFS(iconFrame, "CENTER")
 	count:SetPoint("TOP", iconFrame, 1, -2)
 	count:SetText(1)
 	frame.count = count
 
-	local name = F.CreateFS(frame, C.FONT_SIZE_NORMAL, "LEFT")
+	local name = F.CreateFS(frame, "LEFT")
 	name:SetPoint("RIGHT", frame)
 	name:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	name:SetNonSpaceWrap(true)

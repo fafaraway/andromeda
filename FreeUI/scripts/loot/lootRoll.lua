@@ -169,7 +169,7 @@ function addon:UpdateGroupLoot()
 			frame.need:SetPoint("RIGHT", frame.disenchant, "LEFT", -1, 0)
 			frame.need:SetScript("OnClick", ButtonOnClick)
 
-			frame.text = F.CreateFS(frame, C.FONT_SIZE_NORMAL, "LEFT")
+			frame.text = F.CreateFS(frame, "LEFT")
 			frame.text:SetPoint("LEFT")
 			frame.text:SetPoint("RIGHT", frame.need, "LEFT")
 

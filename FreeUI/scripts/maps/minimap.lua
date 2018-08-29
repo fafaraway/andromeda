@@ -109,7 +109,7 @@ function module:ReskinRegions()
 	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
 	rd:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-	local rdt = F.CreateFS(rd, C.FONT_SIZE_NORMAL, "LEFT")
+	local rdt = F.CreateFS(rd, "LEFT")
 	rdt:SetPoint("TOPLEFT")
 	rdt:SetTextColor(1, 1, 1)
 
