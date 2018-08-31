@@ -96,22 +96,21 @@ function F:CreateSD(a)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
+	if not m then m, s = 2, 3 end
 
 	self.Shadow = CreateFrame("Frame", nil, frame)
 	self.Shadow:SetPoint("TOPLEFT", self, -3, 3)
 	self.Shadow:SetPoint("BOTTOMRIGHT", self, 3, -3)
 	self.Shadow:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
 	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .5)
-	self.Shadow:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
 	return self.Shadow
 end
 
-function F:CreateBD(a, s)
+function F:CreateBD(a)
 	self:SetBackdrop({
-		bgFile = C.media.backdrop,
-		edgeFile = C.media.backdrop,
-		edgeSize = s or 1,
+		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = 1,
 	})
 	self:SetBackdropColor(0, 0, 0, a or .65)
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -126,7 +125,7 @@ function F:CreateBG(offset)
 	local bg = CreateFrame("Frame", nil, frame)
 	bg:SetPoint("TOPLEFT", self, -offset, offset)
 	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
-	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+	bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 	return bg
 end
 
@@ -757,12 +756,12 @@ function F:CreateCB(a)
 	self:SetPushedTexture("")
 	self:SetHighlightTexture(C.media.backdrop)
 	local hl = self:GetHighlightTexture()
-	hl:SetPoint("TOPLEFT", 6, -6)
-	hl:SetPoint("BOTTOMRIGHT", -6, 6)
+	hl:SetPoint("TOPLEFT", 5, -5)
+	hl:SetPoint("BOTTOMRIGHT", -5, 5)
 	hl:SetVertexColor(C.r, C.g, C.b, .25)
 
 	local bd = F.CreateBG(self, -4)
-	F.CreateBD(bd, a, 2)
+	F.CreateBD(bd, a)
 
 	local ch = self:GetCheckedTexture()
 	ch:SetDesaturated(true)
