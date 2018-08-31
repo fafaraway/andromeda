@@ -162,7 +162,7 @@ cast.PostCastStart = function(self, unit)
 	end
 
 	if unit == "pet" or unit == "targettarget" or unit == "focustarget" or unit == "boss" or unit == "arena" or (unit == "player" and not C.unitframes.castbarSeparate) then
-		self:SetStatusBarColor(.3, .3, .3, .3)
+		self:SetStatusBarColor(.4, .4, .4, .45)
 	end
 
 end

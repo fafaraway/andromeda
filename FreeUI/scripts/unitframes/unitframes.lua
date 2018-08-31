@@ -354,7 +354,7 @@ local function CreateAltPower(self)
 
 	self:Tag(text, "[altpower]")
 
-	SmoothBar(bar)
+	F.SmoothBar(bar)
 
 	bar:EnableMouse(true)
 
@@ -371,15 +371,12 @@ local function CreateCastBar(self)
 	cb:SetStatusBarTexture(C.media.texture)
 	cb:SetStatusBarColor(0, 0, 0, 0)
 	cb:SetFrameLevel(1)
-	cb:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -30)
+	cb:SetAllPoints(self)
 
 	local bg = CreateFrame("Frame", nil, cb)
 	bg:SetPoint("TOPLEFT", -1, 1)
 	bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	bg:SetFrameLevel(cb:GetFrameLevel()-1)
-	F.CreateBD(bg)
-	F.CreateSD(bg)
-	F.CreateTex(bg)
 
 	cb.CastingColor = C.unitframes.cbCastingColor
 	cb.ChannelingColor = C.unitframes.cbChannelingColor
@@ -400,15 +397,17 @@ local function CreateCastBar(self)
 		F.SetFS(name)
 	end
 
-	name:SetPoint("BOTTOM", cb, "TOP", 0, 6)
+	name:SetPoint("CENTER", self.Health)
 	cb.Text = name
+	name:SetAlpha(.5)
 
 	local timer = F.CreateFS(cb)
 	timer:SetPoint("BOTTOMRIGHT", cb, "TOPRIGHT", 0, 6)
 	cb.Time = timer
+	timer:Hide()
 
 	local iconFrame = CreateFrame("Frame", nil, cb)
-	iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
+	iconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
 	iconFrame:SetSize(22, 22)
 
 	F.CreateSD(iconFrame)
@@ -439,29 +438,40 @@ local function CreateCastBar(self)
 		cb.SafeZone = safe
 	end
 
-	if self.unitStyle == "pet" or self.unitStyle == "targettarget" or self.unitStyle == "focustarget" or (not C.unitframes.castbarSeparate and self.unitStyle == "player") then
+	if self.unitStyle == "target" or self.unitStyle == "focus" or (C.unitframes.castbarSeparate and self.unitStyle == "player") then
 		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
+		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
 		cb:ClearAllPoints()
-		cb:SetAllPoints(self)
+		cb:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -30)
+
 		name:ClearAllPoints()
-		name:SetPoint("CENTER", self.Health)
-		name:SetAlpha(.5)
-		timer:Hide()
+		name:SetPoint("BOTTOM", cb, "TOP", 0, 4)
+		name:SetAlpha(1)
+
+		timer:Show()
+
+		F.CreateBD(bg)
+		F.CreateSD(bg)
+		F.CreateTex(bg)
 	end
 
-	if self.unitStyle == "target" then
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint("LEFT", cb, "RIGHT", 4, 0)
-	elseif self.unitStyle == "focus" then
+	if self.unitStyle == "focus" then
 		cb:SetWidth(self:GetWidth() * 2 + 5)
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
 		cb:ClearAllPoints()
 		cb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 30)
-	elseif self.unitStyle == "focustarget" then
+	end
+
+	if self.unitStyle == "focustarget" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
 	end
 
+	if self.unitStyle == "focus" or self.unitStyle == "focustarget" or self.unitStyle == "targettarget" or self.unitStyle == "player" then
+		name:Hide()
+		timer:Hide()
+	end
 
 	cb.OnUpdate = cast.OnCastbarUpdate
 	cb.PostCastStart = cast.PostCastStart
@@ -1101,9 +1111,6 @@ local Shared = function(self, unit, isSingle)
 
 	self:RegisterForClicks("AnyUp")
 
-	SmoothBar = F.SmoothBar
-
-
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
@@ -1114,8 +1121,6 @@ local Shared = function(self, unit, isSingle)
 	self.bd = bd
 
 
-
-
 	--[[ Health ]]
 
 	local Health = CreateFrame("StatusBar", nil, self)
@@ -1124,7 +1129,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
-	SmoothBar(Health)
+	F.SmoothBar(Health)
 
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
@@ -1165,7 +1170,7 @@ local Shared = function(self, unit, isSingle)
 		Healthdef:SetStatusBarColor(1, 1, 1)
 
 		Healthdef:SetReverseFill(true)
-		SmoothBar(Healthdef)
+		F.SmoothBar(Healthdef)
 
 		self.Healthdef = Healthdef
 	end
@@ -1177,7 +1182,7 @@ local Shared = function(self, unit, isSingle)
 	Power:SetStatusBarTexture(C.media.texture)
 
 	Power.frequentUpdates = true
-	SmoothBar(Power)
+	F.SmoothBar(Power)
 
 	Power:SetHeight(powerHeight)
 
@@ -1225,77 +1230,7 @@ local Shared = function(self, unit, isSingle)
 		Portrait.PostUpdate = PostUpdatePortrait
 		self.Portrait = Portrait
 	end
-
-
-	--[[ Castbar ]]
-
-	--[[local Castbar = CreateFrame("StatusBar", nil, self)
-	Castbar:SetStatusBarTexture(C.media.backdrop)
-	Castbar:SetStatusBarColor(0, 0, 0, 0)
-
-	local Spark = Castbar:CreateTexture(nil, "OVERLAY")
-	Spark:SetBlendMode("ADD")
-	Spark:SetWidth(16)
-	Castbar.Spark = Spark
-
-	self.Castbar = Castbar
-
-	local PostCastStart = function(Castbar, unit, spell, spellrank)
-		if self.Iconbg then
-			if Castbar.notInterruptible and (unit=="target" or unit=="focus" or unit:find("boss%d")) then
-				self.Iconbg:SetVertexColor(1, 0, 0)
-				if unit=="target" or unit=="focus" then
-					Castbar:SetStatusBarColor(unpack(CBshield))
-				end
-			elseif unit=="player" then
-				self.Iconbg:SetVertexColor(0, 0, 0)
-				if C.unitframes.castbarSeparate then
-					local _, class = UnitClass("player")
-					Castbar:SetStatusBarColor(C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b)
-				else
-					Castbar:SetStatusBarColor(0, 0, 0, .3)
-				end
-			else
-				self.Iconbg:SetVertexColor(0, 0, 0)
-				if unit=="target" or unit=="focus" then
-					Castbar:SetStatusBarColor(unpack(CBnormal))
-				end
-			end
-		end
-	end
-
-
-	local PostCastStop = function(Castbar, unit)
-		if Castbar.Text then Castbar.Text:SetText("") end
-	end
-
-	local PostCastStopUpdate = function(self, event, unit)
-		if(unit ~= self.unit) then return end
-		return PostCastStop(self.Castbar, unit)
-	end
-
-	self:RegisterEvent("UNIT_NAME_UPDATE", PostCastStopUpdate)
-	table.insert(self.__elements, PostCastStopUpdate)
-
-	Castbar.PostChannelStart = PostCastStart
-	Castbar.PostCastStart = PostCastStart
-
-	Castbar.PostCastStop = PostCastStop
-	Castbar.PostChannelStop = PostCastStop]]
-
-
-
-
 	
-
-	
-
-
-
-
-
-	
-
 	-- [[ Heal prediction ]]
 
 	local mhpb = self:CreateTexture()

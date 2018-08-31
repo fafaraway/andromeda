@@ -293,7 +293,7 @@ C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 
 	["transMode"] = true,
-		["transModeAlpha"] = .3,
+		["transModeAlpha"] = .1,
 		["healthClassColor"] = true,
 		["powerTypeColor"] = true,
 
