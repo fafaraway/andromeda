@@ -39,6 +39,7 @@
 	<Script file="elements\raidroleindicator.lua"/>
 
 	<Script file='plugins\oUF_SpellRange.lua' />
+	<Script file='plugins\castbar.lua' />
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate">

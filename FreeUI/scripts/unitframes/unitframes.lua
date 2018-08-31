@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 local parent, ns = ...
 local oUF = ns.oUF
+local cast = ns.cast
 
 local powerHeight = C.unitframes.power_height
 local altPowerHeight = C.unitframes.altpower_height
@@ -39,7 +40,12 @@ oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
-ufFont = { C.font.normal, 12, nil}
+local ufFont
+if C.unitframes.pixelFontName then -- Miss Lin really likes pixel font ;)
+	ufFont = {"Fonts\\CN\\pixfontCN.ttf", 10, "OUTLINEMONOCHROME"}
+else
+	ufFont = {C.font.normal, 12}
+end
 
 
 -- Short values
@@ -116,19 +122,32 @@ end
 -- Tags
 oUF.Tags.Methods['free:playerHealth'] = function(unit)
 	if UnitIsDead(unit) or UnitIsGhost(unit) then return end
-
 	return siValue(UnitHealth(unit))
 end
 oUF.Tags.Events['free:playerHealth'] = oUF.Tags.Events.missinghp
 
 oUF.Tags.Methods['free:health'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
-
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-
 	return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100)
 end
 oUF.Tags.Events['free:health'] = oUF.Tags.Events.missinghp
+
+-- classification
+oUF.Tags.Methods["free:classification"] = function(unit)
+  local c = UnitClassification(unit)
+  local l = UnitLevel(unit)
+  if(c == 'worldboss' or l == -1) then
+    return '|cffff0000{B}|r '
+  elseif(c == 'rare') then
+    return '|cffff9900{R}|r '
+  elseif(c == 'rareelite') then
+    return '|cffff0000{R+}|r '
+  elseif(c == 'elite') then
+    return '|cffff6666{E}|r '
+  end
+end
+oUF.Tags.Events["free:classification"] = "UNIT_CLASSIFICATION_CHANGED"
 
 -- boss health requires frequent updates to work
 oUF.Tags.Methods['free:bosshealth'] = function(unit)
@@ -330,7 +349,7 @@ local function CreateAltPower(self)
 	abd:SetFrameLevel(bar:GetFrameLevel()-1)
 	F.CreateBD(abd, .5)
 
-	local text = F.CreateFS(bar, 8, "CENTER")
+	local text = F.CreateFS(bar, "CENTER")
 	text:SetPoint("BOTTOM", self, "TOP", 0, 3)
 
 	self:Tag(text, "[altpower]")
@@ -341,6 +360,119 @@ local function CreateAltPower(self)
 
 	self.AlternativePower = bar		
 	self.AlternativePower.PostUpdate = postUpdateAltPower
+end
+
+
+-- Cast bar
+local function CreateCastBar(self)
+	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.unitStyle, self)
+	cb:SetHeight(C.unitframes.cbHeight)
+	cb:SetWidth(self:GetWidth())
+	cb:SetStatusBarTexture(C.media.texture)
+	cb:SetStatusBarColor(0, 0, 0, 0)
+	cb:SetFrameLevel(1)
+	cb:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -30)
+
+	local bg = CreateFrame("Frame", nil, cb)
+	bg:SetPoint("TOPLEFT", -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", 1, -1)
+	bg:SetFrameLevel(cb:GetFrameLevel()-1)
+	F.CreateBD(bg)
+	F.CreateSD(bg)
+	F.CreateTex(bg)
+
+	cb.CastingColor = C.unitframes.cbCastingColor
+	cb.ChannelingColor = C.unitframes.cbChannelingColor
+	cb.notInterruptibleColor = C.unitframes.cbnotInterruptibleColor
+	cb.CompleteColor = C.unitframes.cbCompleteColor
+	cb.FailColor = C.unitframes.cbFailColor
+
+	local spark = cb:CreateTexture(nil, "OVERLAY")
+	spark:SetBlendMode("ADD")
+	spark:SetAlpha(.7)
+	spark:SetHeight(cb:GetHeight()*2.5)
+	cb.Spark = spark
+
+	local name = F.CreateFS(cb)
+	if C.client == 'zhCN' then
+		name:SetFont(unpack(ufFont))
+	else
+		F.SetFS(name)
+	end
+
+	name:SetPoint("BOTTOM", cb, "TOP", 0, 6)
+	cb.Text = name
+
+	local timer = F.CreateFS(cb)
+	timer:SetPoint("BOTTOMRIGHT", cb, "TOPRIGHT", 0, 6)
+	cb.Time = timer
+
+	local iconFrame = CreateFrame("Frame", nil, cb)
+	iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
+	iconFrame:SetSize(22, 22)
+
+	F.CreateSD(iconFrame)
+
+	local icon = iconFrame:CreateTexture(nil, "OVERLAY")
+	icon:SetAllPoints(iconFrame)
+	icon:SetTexCoord(unpack(C.texCoord))
+
+	cb.Icon = icon
+
+	local iconBG = iconFrame:CreateTexture(nil, "BACKGROUND")
+	iconBG:SetPoint("TOPLEFT", -1 , 1)
+	iconBG:SetPoint("BOTTOMRIGHT", 1, -1)
+	iconBG:SetTexture(C.media.backdrop)
+	iconBG:SetVertexColor(0, 0, 0)
+
+	cb.iconBG = iconBG
+
+	self.Castbar = cb
+
+	if self.unitStyle == "player" then
+		local safe = cb:CreateTexture(nil,"OVERLAY")
+		safe:SetTexture(C.media.backdrop)
+		safe:SetVertexColor(223/255, 63/255, 107/255, .6)
+		safe:SetPoint("TOPRIGHT")
+		safe:SetPoint("BOTTOMRIGHT")
+		cb:SetFrameLevel(10)
+		cb.SafeZone = safe
+	end
+
+	if self.unitStyle == "pet" or self.unitStyle == "targettarget" or self.unitStyle == "focustarget" or (not C.unitframes.castbarSeparate and self.unitStyle == "player") then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
+		cb:ClearAllPoints()
+		cb:SetAllPoints(self)
+		name:ClearAllPoints()
+		name:SetPoint("CENTER", self.Health)
+		name:SetAlpha(.5)
+		timer:Hide()
+	end
+
+	if self.unitStyle == "target" then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint("LEFT", cb, "RIGHT", 4, 0)
+	elseif self.unitStyle == "focus" then
+		cb:SetWidth(self:GetWidth() * 2 + 5)
+		cb:ClearAllPoints()
+		cb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 30)
+	elseif self.unitStyle == "focustarget" then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
+	end
+
+
+	cb.OnUpdate = cast.OnCastbarUpdate
+	cb.PostCastStart = cast.PostCastStart
+	cb.PostChannelStart = cast.PostCastStart
+	cb.PostCastStop = cast.PostCastStop
+	cb.PostChannelStop = cast.PostChannelStop
+	cb.PostCastFailed = cast.PostCastFailed
+	cb.PostCastInterrupted = cast.PostCastFailed
+	cb.PostCastInterruptible = cast.PostUpdateInterruptible
+	cb.PostCastNotInterruptible = cast.PostUpdateInterruptible
+
 end
 
 
@@ -587,24 +719,6 @@ local function PostUpdatePortrait(element, unit)
 end
 
 
--- Threat update (party)
---[[local UpdateThreat = function(self, event, unit)
-	if(unit ~= self.unit) then return end
-
-	local threat = self.Threat
-
-	unit = unit or self.unit
-	local status = UnitThreatSituation(unit)
-
-	if(status and status > 0) then
-		local r, g, b = GetThreatStatusColor(status)
-		self.bd:SetBackdropBorderColor(r, g, b)
-	else
-		self.bd:SetBackdropBorderColor(0, 0, 0)
-	end
-end]]
-
-
 -- Class power
 local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	if(diff) then
@@ -819,9 +933,9 @@ local function CreateIndicator(self)
 
 	if self.unitStyle == "target" then
 		local QuestIndicator = F.CreateFS(self)
-		QuestIndicator:SetText("X")
+		QuestIndicator:SetText("!")
 		QuestIndicator:SetTextColor(228/255, 225/255, 16/255)
-		QuestIndicator:SetPoint("RIGHT", self.Name, "LEFT", -10, 0)
+		QuestIndicator:SetPoint("RIGHT", self.Name, "LEFT", -3, 0)
 
 		self.QuestIndicator = QuestIndicator
 	end
@@ -849,7 +963,7 @@ local function CreateIndicator(self)
 		ResurrectIndicator:SetPoint('CENTER')
 		self.ResurrectIndicator = ResurrectIndicator
 
-		local LeaderIndicator = F.CreateFS(self, 8, "LEFT")
+		local LeaderIndicator = F.CreateFS(self, "LEFT")
 		LeaderIndicator:SetText("l")
 		LeaderIndicator:SetPoint("TOPLEFT", self.Health, 2, -1)
 		self.LeaderIndicator = LeaderIndicator
@@ -877,7 +991,7 @@ local function CreateIndicator(self)
 			end
 		end
 
-		local GroupRoleIndicator = F.CreateFS(self, 8, "CENTER")
+		local GroupRoleIndicator = F.CreateFS(self, "CENTER")
 		GroupRoleIndicator:SetPoint("BOTTOM", self.Health, 1, 1)
 		GroupRoleIndicator.Override = UpdateLFD
 
@@ -895,7 +1009,6 @@ local function CreateName(self)
 	Name:SetShadowOffset(2, -2)
 	Name:SetTextColor(1, 1, 1)
 	Name:SetWidth(60)
-
 	self:Tag(Name, '[name]')
 	self.Name = Name
 
@@ -1019,6 +1132,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetPoint("BOTTOM", 0, 1 + powerHeight)
 
 	self.Health = Health
+	Health.PostUpdate = PostUpdateHealth
 
 	--[[ Gradient ]]
 
@@ -1099,6 +1213,8 @@ local Shared = function(self, unit, isSingle)
 		Power.colorPower = true
 	end
 
+	Power.PostUpdate = PostUpdatePower
+
 	--[[ Portrait ]]
 
 	if C.unitframes.portrait then
@@ -1113,7 +1229,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Castbar ]]
 
-	local Castbar = CreateFrame("StatusBar", nil, self)
+	--[[local Castbar = CreateFrame("StatusBar", nil, self)
 	Castbar:SetStatusBarTexture(C.media.backdrop)
 	Castbar:SetStatusBarColor(0, 0, 0, 0)
 
@@ -1149,7 +1265,6 @@ local Shared = function(self, unit, isSingle)
 	end
 
 
-
 	local PostCastStop = function(Castbar, unit)
 		if Castbar.Text then Castbar.Text:SetText("") end
 	end
@@ -1166,7 +1281,18 @@ local Shared = function(self, unit, isSingle)
 	Castbar.PostCastStart = PostCastStart
 
 	Castbar.PostCastStop = PostCastStop
-	Castbar.PostChannelStop = PostCastStop
+	Castbar.PostChannelStop = PostCastStop]]
+
+
+
+
+	
+
+	
+
+
+
+
 
 	
 
@@ -1208,7 +1334,7 @@ local Shared = function(self, unit, isSingle)
 
 	self.SpellRange = {
 		insideAlpha = 1,
-		outsideAlpha = .3}
+		outsideAlpha = .4}
 
 
 	--[[ Set up the layout ]]
@@ -1237,10 +1363,6 @@ local Shared = function(self, unit, isSingle)
 		end
 	end
 
-	
-
-	Health.PostUpdate = PostUpdateHealth
-	Power.PostUpdate = PostUpdatePower
 end
 
 
@@ -1252,17 +1374,11 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		Health:SetHeight(petHeight - powerHeight - 1)
 
-		self.Castbar:SetAllPoints(Health)
-		self.Castbar.Width = self:GetWidth()
-
-		Castbar.Spark:SetHeight(self.Health:GetHeight())
-
 		CreateIndicator(self)
+		CreateCastBar(self)
 		CreateAuras(self)
 	end,
 
@@ -1274,83 +1390,21 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
-
-		-- Health and power
 
 		Health:SetHeight(playerHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "LEFT")
+		local HealthPoints = F.CreateFS(Health, "LEFT")
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
 		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
 		Health.value = HealthPoints
 
-		local PowerText = F.CreateFS(Power, C.FONT_SIZE_NORMAL, "RIGHT")
+		local PowerText = F.CreateFS(Power, "RIGHT")
 		PowerText:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
 		self:Tag(PowerText, '[free:power]')
 		Power.Text = PowerText
 
-		-- Cast bar
-
-		if C.unitframes.castbar then
-			Castbar.Width = self:GetWidth()
-			Spark:SetHeight(self.Health:GetHeight())
-			Castbar.Text = F.CreateFS(Castbar)
-			Castbar.Text:SetDrawLayer("ARTWORK")
-
-			local IconFrame = CreateFrame("Frame", nil, Castbar)
-
-			local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
-			Icon:SetAllPoints(IconFrame)
-			Icon:SetTexCoord(.08, .92, .08, .92)
-
-			F.CreateSD(IconFrame)
-
-			Castbar.Icon = Icon
-
-			self.Iconbg = IconFrame:CreateTexture(nil, "BACKGROUND")
-			self.Iconbg:SetPoint("TOPLEFT", -1 , 1)
-			self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
-			self.Iconbg:SetTexture(C.media.backdrop)
-
-			if C.unitframes.castbarSeparate then
-				Castbar:SetStatusBarTexture(C.media.texture)
-				--Castbar:SetStatusBarColor(unpack(C.class))
-				Castbar:SetWidth(C.unitframes.player_castbar_width)
-				Castbar:SetHeight(self:GetHeight())
-				Castbar:SetPoint(unpack(C.unitframes.player_castbar))
-				Castbar.Text:SetAllPoints(Castbar)
-
-
-				if C.client == 'zhCN' then
-					Castbar.Text:SetFont(unpack(ufFont))
-				else
-					F.SetFS(Castbar.Text)
-				end
-
-				local sf = Castbar:CreateTexture(nil, "OVERLAY")
-				sf:SetVertexColor(.5, .5, .5, .5)
-				Castbar.SafeZone = sf
-				IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -6, 0)
-				IconFrame:SetSize(22, 22)
-
-				local bg = CreateFrame("Frame", nil, Castbar)
-				bg:SetPoint("TOPLEFT", -1, 1)
-				bg:SetPoint("BOTTOMRIGHT", 1, -1)
-				bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
-				F.CreateBD(bg)
-				F.CreateSD(bg, 5, 0, 0, 0, .8, -2)
-			else
-				Castbar:SetAllPoints(Health)
-				Castbar.Text:Hide()
-				IconFrame:SetPoint("RIGHT", self, "LEFT", -6, 0)
-				IconFrame:SetSize(22, 22)
-			end
-		end
-
-
 		CreateAltPower(self)
+		CreateIndicator(self)
 		
 		if C.myClass == "DEATHKNIGHT" then
 			CreateRunesBar(self)
@@ -1358,11 +1412,9 @@ local UnitSpecific = {
 			CreateClassPower(self)
 		end
 
-		CreateIndicator(self)
+		CreateCastBar(self)
 
 		FreeUI_LeaveVehicleButton:SetPoint("LEFT", self, "RIGHT", 5, 0)
-
-
 	end,
 
 	target = function(self, ...)
@@ -1371,12 +1423,10 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		Health:SetHeight(targetHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "LEFT")
+		local HealthPoints = F.CreateFS(Health, "LEFT")
 		HealthPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
@@ -1386,59 +1436,13 @@ local UnitSpecific = {
 		if powerType ~= 0 then PowerText.frequentUpdates = .1 end
 		self:Tag(PowerText, '[free:power]')
 
-		-- Cast bar
-
-		if C.unitframes.castbar then
-			Castbar.Width = self:GetWidth()
-			Spark:SetHeight(self.Health:GetHeight())
-			Castbar.Text = F.CreateFS(Castbar)
-			Castbar.Text:SetDrawLayer("ARTWORK")
-
-			local IconFrame = CreateFrame("Frame", nil, Castbar)
-			IconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
-			IconFrame:SetHeight(24)
-			IconFrame:SetWidth(24)
-
-			F.CreateSD(IconFrame)
-
-			local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
-			Icon:SetAllPoints(IconFrame)
-			Icon:SetTexCoord(.08, .92, .08, .92)
-
-			Castbar.Icon = Icon
-
-			self.Iconbg = IconFrame:CreateTexture(nil, "BACKGROUND")
-			self.Iconbg:SetPoint("TOPLEFT", -1 , 1)
-			self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
-			self.Iconbg:SetTexture(C.media.backdrop)
-
-			Castbar:SetStatusBarTexture(C.media.texture)
-			Castbar:SetWidth(C.unitframes.target_castbar_width)
-			Castbar:SetHeight(C.unitframes.castbarHeight)
-			Castbar:SetPoint(unpack(C.unitframes.target_castbar))
-			Castbar.Text:SetPoint("TOP", Castbar, "BOTTOM", 0, -4)
-
-			if C.client == 'zhCN' then
-				Castbar.Text:SetFont(unpack(ufFont))
-			else
-				F.SetFS(Castbar.Text)
-			end
-
-			local sf = Castbar:CreateTexture(nil, "OVERLAY")
-			sf:SetVertexColor(.5, .5, .5, .5)
-			Castbar.SafeZone = sf
-
-			local bg = CreateFrame("Frame", nil, Castbar)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
-			bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
-			F.CreateBD(bg)
-			F.CreateSD(bg, 5, 0, 0, 0, .8, -2)
-		end
+		local Classification = F.CreateFS(self)
+		Classification:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT", 3, 0)
+		self:Tag(Classification, '[free:classification]')
 
 		CreateName(self)
-
 		CreateIndicator(self)
+		CreateCastBar(self)
 		CreateAuras(self)
 	end,
 
@@ -1448,21 +1452,12 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		Health:SetHeight(targettargetHeight - powerHeight - 1)
 
-		Castbar:SetAllPoints(Health)
-		Castbar.Width = self:GetWidth()
-
-		Spark:SetHeight(Health:GetHeight())
-
-
-		CreateIndicator(self)
-
 		UpdateTOTName(self)
-
+		CreateIndicator(self)
+		CreateCastBar(self)
 	end,
 
 	focus = function(self, ...)
@@ -1471,70 +1466,12 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		Health:SetHeight(focusHeight - powerHeight - 1)
 
-		-- Cast bar
-
-		if C.unitframes.castbar then
-			Castbar.Width = self:GetWidth()
-			Spark:SetHeight(self.Health:GetHeight())
-			Castbar.Text = F.CreateFS(Castbar)
-			Castbar.Text:SetDrawLayer("ARTWORK")
-
-			--self.RaidTargetIndicator:ClearAllPoints()
-			--self.RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
-
-			CreateIndicator(self)
-
-			local IconFrame = CreateFrame("Frame", nil, Castbar)
-			F.CreateSD(IconFrame)
-			IconFrame:SetPoint("RIGHT", Castbar, "LEFT", -4, 0)
-			IconFrame:SetSize(14, 14)
-
-			local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
-			Icon:SetAllPoints(IconFrame)
-			Icon:SetTexCoord(.08, .92, .08, .92)
-
-			
-
-			Castbar.Icon = Icon
-
-			self.Iconbg = IconFrame:CreateTexture(nil, "BACKGROUND")
-			self.Iconbg:SetPoint("TOPLEFT", -1 , 1)
-			self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
-			self.Iconbg:SetTexture(C.media.backdrop)
-
-			Castbar:SetStatusBarTexture(C.media.texture)
-			--Castbar:SetStatusBarColor(219/255, 0, 11/255)
-			Castbar:SetWidth(C.unitframes.focus_castbar_width)
-			Castbar:SetHeight(C.unitframes.castbarHeight)
-			Castbar:SetPoint(unpack(C.unitframes.focus_castbar))
-			Castbar.Text:SetPoint("BOTTOM", Castbar, "TOP", 0, 4)
-			
-			if C.client == 'zhCN' then
-				Castbar.Text:SetFont(unpack(ufFont))
-			else
-				F.SetFS(Castbar.Text)
-			end
-
-			local sf = Castbar:CreateTexture(nil, "OVERLAY")
-			sf:SetVertexColor(.5, .5, .5, .5)
-			Castbar.SafeZone = sf
-			
-
-			local bg = CreateFrame("Frame", nil, Castbar)
-			bg:SetPoint("TOPLEFT", -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", 1, -1)
-			bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
-			F.CreateBD(bg)
-			F.CreateSD(bg, 5, 0, 0, 0, .8, -2)
-		end
-
 		CreateName(self)
-
+		CreateIndicator(self)
+		CreateCastBar(self)
 	end,
 
 	focustarget = function(self, ...)
@@ -1543,20 +1480,12 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		Health:SetHeight(focustargetHeight - powerHeight - 1)
 
-		Castbar:SetAllPoints(Health)
-		Castbar.Width = self:GetWidth()
-
-		Spark:SetHeight(Health:GetHeight())
-
-
 		UpdateTOFName(self)
 		CreateIndicator(self)
-
+		CreateCastBar(self)
 	end,
 
 
@@ -1566,64 +1495,27 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		self:SetAttribute('initial-height', bossHeight)
 		self:SetAttribute('initial-width', bossWidth)
 
 		Health:SetHeight(bossHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, "RIGHT")
 		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 4)
 		self:Tag(HealthPoints, '[dead][free:bosshealth]')
 
 		Health.value = HealthPoints
 
 		CreateName(self)
-
 		CreateAltPower(self)
-
-
-		Castbar:SetAllPoints(Health)
-		Castbar.Width = self:GetWidth()
-
-		Spark:SetHeight(self.Health:GetHeight())
-
-		Castbar.Text = F.CreateFS(self)
-		Castbar.Text:SetDrawLayer("ARTWORK")
-		Castbar.Text:SetAllPoints(Health)
-
-		if C.client == 'zhCN' then
-			Castbar.Text:SetFont(unpack(ufFont))
-		else
-			F.SetFS(Castbar.Text)
-		end
-
-		local IconFrame = CreateFrame("Frame", nil, Castbar)
-		IconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
-		IconFrame:SetHeight(22)
-		IconFrame:SetWidth(22)
-
-		F.CreateSD(IconFrame)
-
-		local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
-		Icon:SetAllPoints(IconFrame)
-		Icon:SetTexCoord(.08, .92, .08, .92)
-
-		Castbar.Icon = Icon
-
-		self.Iconbg = IconFrame:CreateTexture(nil, "BACKGROUND")
-		self.Iconbg:SetPoint("TOPLEFT", -1 , 1)
-		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
-		self.Iconbg:SetTexture(C.media.backdrop)
-
+		CreateIndicator(self)
+		CreateCastBar(self)
 		CreateAuras(self)
 
 		local select = CreateFrame("Frame", nil, self)
 		select:RegisterEvent("PLAYER_TARGET_CHANGED")
 		select:SetScript("OnEvent", updateBorderColourAlt)
-		
 	end,
 
 	arena = function(self, ...)
@@ -1634,62 +1526,30 @@ local UnitSpecific = {
 
 		local Health = self.Health
 		local Power = self.Power
-		local Castbar = self.Castbar
-		local Spark = Castbar.Spark
 
 		self:SetAttribute('initial-height', arenaHeight)
 		self:SetAttribute('initial-width', arenaWidth)
 
 		Health:SetHeight(arenaHeight - powerHeight - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 
 		Health.value = HealthPoints
 
 		CreateName(self)
-
-		Castbar:SetAllPoints(Health)
-		Castbar.Width = self:GetWidth()
-
-		Spark:SetHeight(self.Health:GetHeight())
-
-		Castbar.Text = F.CreateFS(self)
-		Castbar.Text:SetFont(unpack(ufFont))
-		Castbar.Text:SetDrawLayer("ARTWORK")
-		Castbar.Text:SetAllPoints(Health)
-
-		local IconFrame = CreateFrame("Frame", nil, Castbar)
-		IconFrame:SetPoint("RIGHT", self, "LEFT", -3, 0)
-		IconFrame:SetHeight(22)
-		IconFrame:SetWidth(22)
-
-		F.CreateSD(IconFrame)
-
-		local Icon = IconFrame:CreateTexture(nil, "OVERLAY")
-		Icon:SetAllPoints(IconFrame)
-		Icon:SetTexCoord(.08, .92, .08, .92)
-
-		Castbar.Icon = Icon
-
-		self.Iconbg = IconFrame:CreateTexture(nil, "BACKGROUND")
-		self.Iconbg:SetPoint("TOPLEFT", -1 , 1)
-		self.Iconbg:SetPoint("BOTTOMRIGHT", 1, -1)
-		self.Iconbg:SetTexture(C.media.backdrop)
-
-
+		CreateIndicator(self)
+		CreateCastBar(self)
 		CreateBuffs(self)
 		CreateDebuffs(self)
-
-		CreateIndicator(self)
 	end,
 }
 
 do
 	local range = {
 		insideAlpha = 1,
-		outsideAlpha = .3,
+		outsideAlpha = .4,
 	}
 
 	UnitSpecific.party = function(self, ...)
@@ -1700,7 +1560,7 @@ do
 
 		local Health, Power = self.Health, self.Power
 
-		local Text = F.CreateFS(Health, C.FONT_SIZE_NORMAL, "CENTER")
+		local Text = F.CreateFS(Health, "CENTER")
 		Text:SetPoint("CENTER", 1, 0)
 
 		self.Text = Text
@@ -1789,12 +1649,6 @@ do
 		Buffs.PostUpdateIcon = PostUpdateIcon
 		Buffs.CustomFilter = groupBuffFilter
 
-
-
-
-		--[[local Threat = CreateFrame("Frame", nil, self)
-		self.Threat = Threat
-		Threat.Override = UpdateThreat]]
 
 		local select = CreateFrame("Frame", nil, self)
 		select:RegisterEvent("PLAYER_TARGET_CHANGED")

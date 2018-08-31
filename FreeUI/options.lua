@@ -357,7 +357,7 @@ C["unitframes"] = {
 	["party_width"] = 100,
 	["party_height"] = 34,
 
-	["raid"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -40},			-- raid unitframe position
+	["raid"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -60},			-- raid unitframe position
 	["raid_width"] = 50,
 	["raid_height"] = 30,
 
@@ -369,13 +369,18 @@ C["unitframes"] = {
 	["arena_width"] = 166,
 	["arena_height"] = 16,
 	
-	["castbarColorShield"] = {221/255, 84/255, 87/255},
-	["castbarColorNormal"] = {52/255, 214/255, 221/255},
-	["castbarHeight"] = 6,
+	["cbCastingColor"] = {77/255, 183/255, 219/255},
+	["cbChannelingColor"] = {77/255, 183/255, 219/255},
+	["cbnotInterruptibleColor"] = {160/255, 159/255, 161/255},
+	["cbCompleteColor"] = {63/255, 161/255, 124/255},
+	["cbFailColor"] = {187/255, 99/255, 110/255},
+	["cbHeight"] = 12,
 
 	["power_height"] = 2,
 	["altpower_height"] = 2,
 	["classPower_height"] = 2,
+
+	["pixelFontName"] = false,
 }
 
 
