@@ -169,7 +169,7 @@ function module:ReskinDBM()
 			local bg = F.CreateBG(DBMRangeCheck)
 			F.CreateBD(bg, .4)
 			F.CreateTex(bg)
-
+			DBMRangeCheck.tipStyled = true
 			DBMRangeCheck.styled = true
 		end
 	end
@@ -184,6 +184,7 @@ function module:ReskinDBM()
 				self.bg = F.CreateBG(self)
 				F.CreateBD(self.bg)
 				F.CreateTex(self.bg)
+				DBMInfoFrame.tipStyled = true
 			end
 		end)
 	end
