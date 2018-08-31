@@ -176,8 +176,12 @@ local function reskinProgressbar(self, block, line)
 		bar:SetStatusBarColor(r, g, b)
 		bar:SetHeight(14)
 
-		local bg = F.CreateBDFrame(bar)
+		local bg = F.CreateBG(bar)
+		bg:SetPoint("TOPLEFT", bar, -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", bar, 1, -1)
+		F.CreateBD(bg)
 		F.CreateSD(bg)
+		F.CreateTex(bg)
 
 		if label then
 			label:ClearAllPoints()
@@ -204,9 +208,9 @@ end
 hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgressbar)
+--hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgressbar)
 
---[[hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
+hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
 	local progressBar = line.ProgressBar
 	local bar = progressBar.Bar
 
@@ -220,20 +224,25 @@ hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgress
 		bar.Label:Show()
 		F.SetFS(bar.Label)
 		local oldBg = select(5, bar:GetRegions())
-		local bg = F.CreateBDFrame(oldBg)
+		local bg = F.CreateBG(oldBg)
 		F.CreateBD(bg)
 		F.CreateSD(bg)
 
 		bar.styled = true
 	end
-end)]]
+end)
 
 
 -- Blocks
 hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
-	block.NormalBG:SetTexture(C.media.dropback)
+	block.NormalBG:SetTexture("")
 	if not block.bg then
 		block.bg = F.CreateBDFrame(block.GlowTexture)
+		block.bg:SetPoint("TOPLEFT", block.GlowTexture, 2, 0)
+		block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -2, 0)
+		F.CreateBD(block.bg)
+		F.CreateSD(block.bg)
+		F.CreateTex(block.bg)
 	end
 end)
 
@@ -243,9 +252,10 @@ hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
 		block.TimerBG:Hide()
 		block.TimerBGBack:Hide()
 		block.timerbg = F.CreateBDFrame(block.TimerBGBack)
-		block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 5, -1)
-		block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -5, -6)
+		block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 4, -2)
+		block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -4, -5)
 		F.CreateBD(block.timerbg)
+		F.CreateSD(block.timerbg)
 
 		block.StatusBar:SetStatusBarTexture(C.media.texture)
 		block.StatusBar:SetStatusBarColor(r, g, b)

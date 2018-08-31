@@ -20,11 +20,15 @@ frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end
 frame:SetPoint("CENTER", anchor, "CENTER")
 
 local icon = frame:CreateTexture(nil, "BORDER")
-icon:SetTexCoord(.08, .92, .08, .92)
+icon:SetTexCoord(unpack(C.texCoord))
 icon:SetAllPoints(frame)
 
-frame.bg = F.CreateBDFrame(frame)
-
+local iconBG = frame:CreateTexture(nil, "BACKGROUND")
+iconBG:SetPoint("TOPLEFT", -1 , 1)
+iconBG:SetPoint("BOTTOMRIGHT", 1, -1)
+iconBG:SetTexture(C.media.backdrop)
+iconBG:SetVertexColor(0, 0, 0)
+F.CreateSD(iconBG)
 
 
 local ignored_spells = {

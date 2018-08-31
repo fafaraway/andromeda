@@ -9,7 +9,8 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 			F.StripTextures(frame, true)
 			frame:SetSize(200, 16)
 
-			local bg = F.CreateBDFrame(frame)
+			local bg = F.CreateBG(frame, 1)
+			F.CreateBD(bg)
 			F.CreateTex(bg)
 			F.CreateSD(bg)
 
