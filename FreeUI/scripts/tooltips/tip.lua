@@ -340,6 +340,21 @@ GameTooltipTextSmall:SetShadowColor(0, 0, 0, 1)
 GameTooltipTextSmall:SetShadowOffset(2, -2)
 
 
+hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
+	if self.progressBarPool then
+		local bar = self.progressBarPool:Acquire()
+		if bar and not bar.styled then
+			F.StripTextures(bar.Bar, true)
+			bar.Bar:SetStatusBarTexture(C.media.texture)
+			F.CreateBD(bar, .25)
+			bar:SetSize(216, 18)
+
+			bar.styled = true
+		end
+	end
+end)
+
+
 -- Tooltip skin
 local function style(self)
 	self:SetScale(1)
