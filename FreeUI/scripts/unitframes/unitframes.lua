@@ -33,7 +33,7 @@ local raidHeight = C.unitframes.raid_height
 local CBshield = C.unitframes.castbarColorShield
 local CBnormal = C.unitframes.castbarColorNormal
 
-oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
+--oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
 oUF.colors.power.MANA = {100/255, 149/255, 237/255}
 oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
@@ -234,6 +234,45 @@ end
 oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
 
 
+-- [[ Smooth ]]
+
+local smoothing = {}
+local function Smooth(self, value)
+	local _, max = self:GetMinMaxValues()
+	if value == self:GetValue() or (self._max and self._max ~= max) then
+		smoothing[self] = nil
+		self:SetValue_(value)
+	else
+		smoothing[self] = value
+	end
+	self._max = max
+end
+
+local function SmoothBar(bar)
+	bar.SetValue_ = bar.SetValue
+	bar.SetValue = Smooth
+end
+
+local smoother, min, max = CreateFrame('Frame'), math.min, math.max
+smoother:SetScript('OnUpdate', function()
+	local rate = GetFramerate()
+	local limit = 30/rate
+	for bar, value in pairs(smoothing) do
+		local cur = bar:GetValue()
+		local new = cur + min((value-cur)/3, max(value-cur, limit))
+		if new ~= new then
+			-- Mad hax to prevent QNAN.
+			new = value
+		end
+		bar:SetValue_(new)
+		if cur == value or abs(new - value) < 2 then
+			bar:SetValue_(value)
+			smoothing[bar] = nil
+		end
+	end
+end)
+
+
 
 
 
@@ -354,7 +393,7 @@ local function CreateAltPower(self)
 
 	self:Tag(text, "[altpower]")
 
-	F.SmoothBar(bar)
+	SmoothBar(bar)
 
 	bar:EnableMouse(true)
 
@@ -1129,7 +1168,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
-	F.SmoothBar(Health)
+	SmoothBar(Health)
 
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
@@ -1170,7 +1209,7 @@ local Shared = function(self, unit, isSingle)
 		Healthdef:SetStatusBarColor(1, 1, 1)
 
 		Healthdef:SetReverseFill(true)
-		F.SmoothBar(Healthdef)
+		SmoothBar(Healthdef)
 
 		self.Healthdef = Healthdef
 	end
@@ -1182,7 +1221,7 @@ local Shared = function(self, unit, isSingle)
 	Power:SetStatusBarTexture(C.media.texture)
 
 	Power.frequentUpdates = true
-	F.SmoothBar(Power)
+	SmoothBar(Power)
 
 	Power:SetHeight(powerHeight)
 
@@ -1263,6 +1302,41 @@ local Shared = function(self, unit, isSingle)
 		self.HealPrediction["absorbBar"] = absorbBar
 		self.HealPrediction["overAbsorbGlow"] = overAbsorbGlow
 	end
+
+	-- [[ Counter bar ]]
+
+	if unit == "player" or unit == "pet" then
+		local CounterBar = CreateFrame("StatusBar", nil, self)
+		CounterBar:SetWidth(playerWidth)
+		CounterBar:SetHeight(16)
+		CounterBar:SetStatusBarTexture(C.media.texture)
+		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
+
+		local cbd = CreateFrame("Frame", nil, CounterBar)
+		cbd:SetPoint("TOPLEFT", -1, 1)
+		cbd:SetPoint("BOTTOMRIGHT", 1, -1)
+		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
+		F.CreateBD(cbd, .4)
+		F.CreateSD(cbd)
+
+		CounterBar.Text = F.CreateFS(CounterBar)
+		CounterBar.Text:SetPoint("CENTER")
+
+		local r, g, b
+		local max
+
+		CounterBar:SetScript("OnValueChanged", function(_, value)
+			_, max = CounterBar:GetMinMaxValues()
+			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+			CounterBar:SetStatusBarColor(r, g, b)
+
+			CounterBar.Text:SetText(floor(value))
+		end)
+
+		self.CounterBar = CounterBar
+	end
+
+
 
 
 	-- [[ Spell Range ]]
