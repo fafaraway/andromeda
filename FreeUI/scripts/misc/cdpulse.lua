@@ -23,12 +23,8 @@ local icon = frame:CreateTexture(nil, "BORDER")
 icon:SetTexCoord(unpack(C.texCoord))
 icon:SetAllPoints(frame)
 
-local iconBG = frame:CreateTexture(nil, "BACKGROUND")
-iconBG:SetPoint("TOPLEFT", -1 , 1)
-iconBG:SetPoint("BOTTOMRIGHT", 1, -1)
-iconBG:SetTexture(C.media.backdrop)
-iconBG:SetVertexColor(0, 0, 0)
-F.CreateSD(iconBG)
+F.CreateBDFrame(icon)
+F.CreateSD(icon)
 
 
 local ignored_spells = {

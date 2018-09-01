@@ -32,7 +32,7 @@ AuroraConfig = {
 	["alpha"] = 0.65,
 	["bags"] = false,
 	["buttonGradientColour"] = {.3, .3, .3, .3},
-	["buttonSolidColour"] = {.2, .2, .2, 1},
+	["buttonSolidColour"] = {.2, .2, .2, .6},
 	["useButtonGradientColour"] = true,
 	["chatBubbles"] = true,
 	["bubbleColor"] = true,
@@ -55,9 +55,9 @@ local _, class = UnitClass("player")
 C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 
 local r, g, b
-
-local FC = FreeUI[2]
-r, g, b = FC.classcolours[class].r, FC.classcolours[class].g, FC.classcolours[class].b
+r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+--local FC = FreeUI[2]
+--r, g, b = FC.classcolours[class].r, FC.classcolours[class].g, FC.classcolours[class].b
 
 
 
