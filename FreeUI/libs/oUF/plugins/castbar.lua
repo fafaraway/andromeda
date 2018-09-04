@@ -161,7 +161,10 @@ cast.PostCastStart = function(self, unit)
 		end
 	end
 
-	if unit == "pet" or unit == "targettarget" or unit == "focustarget" or unit == (unit:find("boss%d")) or unit == (unit:find("arena%d")) or (unit == "player" and not C.unitframes.castbarSeparate) then
+	if unit == "pet" or unit == "targettarget" or unit == "focustarget" 
+		or unit:find("boss%d") or unit:find("arena%d") 
+		or (unit == "player" and not C.unitframes.castbarSeparate) 
+		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframes.castbarSeparate) then
 		self:SetStatusBarColor(.4, .4, .4, .45)
 	end
 
