@@ -9,15 +9,12 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 			F.StripTextures(frame, true)
 			frame:SetSize(200, 16)
 
-			local bg = F.CreateBG(frame, 1)
-			F.CreateBD(bg)
-			F.CreateTex(bg)
+			local bg = F.CreateBDFrame(frame)
 			F.CreateSD(bg)
 
 			local statusbar = _G["MirrorTimer"..i.."StatusBar"]
 			statusbar:SetAllPoints()
 			statusbar:SetStatusBarTexture(C.media.texture)
-			statusbar:SetAlpha(.75)
 
 			local text = _G["MirrorTimer"..i.."Text"]
 			text:ClearAllPoints()

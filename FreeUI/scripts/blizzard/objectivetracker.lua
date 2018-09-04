@@ -116,7 +116,7 @@ local function reskinQuestIcon(self, block)
 		itemButton:SetPushedTexture("")
 		itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 		itemButton.icon:SetTexCoord(unpack(C.texCoord))
-		F.CreateBDFrame(itemButton, 0)
+		F.CreateBG(itemButton)
 		F.CreateSD(itemButton)
 
 		--[[local text = itemButton.HotKey:GetText()
