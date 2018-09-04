@@ -138,13 +138,13 @@ oUF.Tags.Methods["free:classification"] = function(unit)
   local c = UnitClassification(unit)
   local l = UnitLevel(unit)
   if(c == 'worldboss' or l == -1) then
-    return '|cffff0000{B}|r '
+	return '|cffff0000{B}|r '
   elseif(c == 'rare') then
-    return '|cffff9900{R}|r '
+	return '|cffff9900{R}|r '
   elseif(c == 'rareelite') then
-    return '|cffff0000{R+}|r '
+	return '|cffff0000{R+}|r '
   elseif(c == 'elite') then
-    return '|cffff6666{E}|r '
+	return '|cffff6666{E}|r '
   end
 end
 oUF.Tags.Events["free:classification"] = "UNIT_CLASSIFICATION_CHANGED"
@@ -601,7 +601,7 @@ local function PostCreateIcon(element, button)
 	button:SetScript('OnEnter', OnAuraEnter)
 
 	local StringParent = CreateFrame('Frame', nil, button)
-	StringParent:SetFrameLevel(button:GetFrameLevel() + 3)
+	StringParent:SetFrameLevel(button.cd:GetFrameLevel() + 1)
 
 	button.count:SetParent(StringParent)
 	button.count:ClearAllPoints()
@@ -1045,7 +1045,16 @@ local function CreateIndicator(self)
 		GroupRoleIndicator.Override = UpdateLFD
 
 		self.GroupRoleIndicator = GroupRoleIndicator
+
+		-- phase indicator
+		local PhaseIndicator = F.CreateFS(self)
+		PhaseIndicator:SetText("x")
+		PhaseIndicator:SetTextColor(1, 1, 1, 1)
+		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, -2, -1)
+
+		self.PhaseIndicator = PhaseIndicator
 	end
+
 end
 
 -- name
@@ -1335,8 +1344,6 @@ local Shared = function(self, unit, isSingle)
 
 		self.CounterBar = CounterBar
 	end
-
-
 
 
 	-- [[ Spell Range ]]
