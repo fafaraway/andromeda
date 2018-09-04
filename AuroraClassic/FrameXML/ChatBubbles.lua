@@ -4,16 +4,20 @@ tinsert(C.themes["AuroraClassic"], function()
 	if not AuroraConfig.chatBubbles then return end
 
 	local function styleBubble(frame)
+		if frame:IsForbidden() then return end
 		for i = 1, frame:GetNumRegions() do
 			local region = select(i, frame:GetRegions())
 			if region:GetObjectType() == "Texture" then
 				region:SetTexture(nil)
 			elseif region:GetObjectType() == "FontString" then
+				frame.text = region
+
 				region:SetFont(C.media.font, 22)
 				region:SetShadowColor(0, 0, 0, 1)
-				region:SetShadowOffset(2, -2)
 			end
 		end
+
+		local r, g, b = frame.text:GetTextColor()
 
 		F.CreateBD(frame)
 		F.CreateSD(frame)
@@ -48,9 +52,9 @@ tinsert(C.themes["AuroraClassic"], function()
 		CHAT_MSG_YELL = "YELL",
 		CHAT_MSG_PARTY = "PARTY",
 		CHAT_MSG_PARTY_LEADER = "PARTY_LEADER",
-
 		CHAT_MSG_MONSTER_SAY = "MONSTER_SAY",
 		CHAT_MSG_MONSTER_YELL = "MONSTER_YELL",
+		CHAT_MSG_MONSTER_PARTY = "MONSTER_PARTY",
 	}
 	if not AuroraConfig.bubbleColor then channels = {} end
 
@@ -58,6 +62,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	for event in next, events do
 		bubbleHook:RegisterEvent(event)
 	end
+
 	bubbleHook:SetScript("OnEvent", function(self, event, msg)
 		if GetCVarBool(events[event]) then
 			self.elapsed = 0
@@ -73,7 +78,11 @@ tinsert(C.themes["AuroraClassic"], function()
 		end
 	end)
 
+
 	bubbleHook:SetScript("OnUpdate", function(self, elapsed)
+		local _, instanceType = IsInInstance()
+		if not instanceType == "none" then return end
+
 		self.elapsed = self.elapsed + elapsed
 		local chatbubble = findChatBubble(self.msg)
 		if chatbubble or self.elapsed > .3 then
@@ -100,5 +109,9 @@ tinsert(C.themes["AuroraClassic"], function()
 			end
 		end
 	end)
+
+
+
 	bubbleHook:Hide()
+
 end)

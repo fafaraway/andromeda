@@ -29,7 +29,7 @@ C.media = {
 }
 
 AuroraConfig = {
-	["alpha"] = 0.65,
+	["alpha"] = .6,
 	["bags"] = false,
 	["buttonGradientColour"] = {.3, .3, .3, .3},
 	["buttonSolidColour"] = {.2, .2, .2, .6},
