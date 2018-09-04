@@ -38,11 +38,11 @@ function module:RareAlert()
 			--UIErrorsFrame:AddMessage(C.infoColor.."Rare Found"..tex..(info.name or ""))
 
 	
-			RaidNotice_AddMessage(RaidWarningFrame, C.infoColor..L.misc.rareFound..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
+			RaidNotice_AddMessage(RaidWarningFrame, C.infoColor..L["rareFound"]..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
 
 			
 			if C.misc.rareAlertNotify then
-				print(C.infoColor..L.misc.rareFound..tex..(info.name or ""))
+				print(C.infoColor..L["rareFound"]..tex..(info.name or ""))
 			end
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
 			cache[id] = true
@@ -72,14 +72,21 @@ function module:InterruptAlert()
 					PlaySoundFile(interruptSound, "Master")
 				end
 				if inInstance and C.misc.interruptNotify then
-					SendChatMessage(L["misc"]["interrupted"]..destName.." "..GetSpellLink(spellID), say)
+					SendChatMessage(L["interrupted"]..destName.." "..GetSpellLink(spellID), say)
 				end
-			elseif ((event == "SPELL_STOLEN") or (event == "SPELL_DISPEL")) then
+			elseif (event == "SPELL_DISPEL") then
 				if C.misc.dispelSound then
 					PlaySoundFile(dispelSound, "Master")
 				end
 				if inInstance and C.misc.dispelNotify then
-					SendChatMessage(L["misc"]["dispeled"]..destName.." "..GetSpellLink(spellID), say)
+					SendChatMessage(L["dispeled"]..destName.." "..GetSpellLink(spellID), say)
+				end
+			elseif (event == "SPELL_STOLEN") then
+				if C.misc.dispelSound then
+					PlaySoundFile(dispelSound, "Master")
+				end
+				if inInstance and C.misc.dispelNotify then
+					SendChatMessage(L["stolen"]..destName.." "..GetSpellLink(spellID), say)
 				end
 			end
 		end

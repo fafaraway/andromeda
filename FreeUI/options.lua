@@ -193,9 +193,9 @@ C["misc"] = {
 	["rareAlertNotify"] = true,
 	["interruptAlert"] = true,
 		["interruptSound"] = true,
-		["interruptNotify"] = false,
+		["interruptNotify"] = true,
 		["dispelSound"] = true,
-		["dispelNotify"] = false,
+		["dispelNotify"] = true,
 
 	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
@@ -293,7 +293,7 @@ C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 
 	["transMode"] = true,
-		["transModeAlpha"] = .1,
+		["transModeAlpha"] = .2,
 		["healthClassColor"] = true,
 		["powerTypeColor"] = true,
 

@@ -5,87 +5,60 @@ local module = F:GetModule("misc")
 
 
 
--- auto repair / sell
+-- Auto repair
+local isShown, isBankEmpty
 
-local IDs = {}
-for _, slot in pairs({"Head", "Shoulder", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "MainHand", "SecondaryHand"}) do
-	IDs[slot] = GetInventorySlotInfo(slot.."Slot")
-end
+local function autoRepair(override)
+	if isShown and not override then return end
+	isShown = true
+	isBankEmpty = false
 
-local cost
-local last = 0
-local function onUpdate(self, elapsed)
-	last = last + elapsed
-	if last >= 1 then
-		self:SetScript("OnUpdate", nil)
-		last = 0
-		local gearRepaired = true
-		for slot, id in pairs(IDs) do
-			local dur, maxdur = GetInventoryItemDurability(id)
-			if dur and maxdur and dur < maxdur then
-				gearRepaired = false
-				break
-			end
-		end
-		if gearRepaired then
-			print(format("Repair: %.1fg (Guild)", cost * 0.0001))
+	local repairAllCost, canRepair = GetRepairAllCost()
+	local myMoney = GetMoney()
+
+	if canRepair and repairAllCost > 0 then
+		if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
+			RepairAllItems(true)
 		else
-			print("Your guild cannot afford your repairs.")
-			RepairAllItems()
-			print(format("Repair: %.1fg", cost * 0.0001))
+			if myMoney > repairAllCost then
+				RepairAllItems()
+				print(format(C.infoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
+				return
+			else
+				print(C.infoColor..L["repairError"])
+				return
+			end
 		end
+
+		C_Timer.After(.5, function()
+			if isBankEmpty then
+				autoRepair(true)
+			else
+				print(format(C.infoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
+			end
+		end)
 	end
 end
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("MERCHANT_SHOW")
-f:SetScript("OnEvent", function(self, event)
-	if CanMerchantRepair() and C.misc.autoRepair then
-		cost = GetRepairAllCost()
-		local money = GetMoney()
-
-		if cost > 0 then
-			if C.misc.autoRepair_guild and CanGuildBankRepair() then
-				local guildWithdrawMoney = GetGuildBankWithdrawMoney()
-
-				if guildWithdrawMoney > cost then
-					-- GetGuildBankMoney() doesn't work properly, so we just try to repair and see if it worked
-					RepairAllItems(1)
-					self:SetScript("OnUpdate", onUpdate)
-				else
-					if money >= cost then
-						if cost / 9 > guildWithdrawMoney then
-							-- it probably isn't worth using guild repair at all
-							RepairAllItems()
-							print(format("Repair: %.1fg", cost * 0.0001))
-						else
-							-- it might still be possible to repair a few items with guild repair
-							print("Guild repair failed. Repair manually to use your own money.")
-						end
-					else
-						print("You have insufficient funds to repair your equipment.")
-					end
-				end
-			elseif money >= cost then
-				RepairAllItems()
-				print(format("Repair: %.1fg", cost * 0.0001))
-			else
-				print("You have insufficient funds to repair your equipment.")
-			end
-		end
+local function checkBankFund(_, msgType)
+	if msgType == LE_GAME_ERR_GUILD_NOT_ENOUGH_MONEY then
+		isBankEmpty = true
 	end
+end
 
-	if C.misc.autoSell then
-		for bag = 0, 4 do
-			for slot = 0, GetContainerNumSlots(bag) do
-				local link = GetContainerItemLink(bag, slot)
-				if link and select(3, GetItemInfo(link)) == 0 and not GetContainerItemEquipmentSetInfo(bag, slot) then
-					UseContainerItem(bag, slot)
-				end
-			end
-		end
-	end
-end)
+local function merchantClose()
+	isShown = false
+	F:UnregisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+	F:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
+end
+
+local function merchantShow()
+	if IsShiftKeyDown() or not CanMerchantRepair() then return end
+	autoRepair()
+	F:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+	F:RegisterEvent("MERCHANT_CLOSED", merchantClose)
+end
+F:RegisterEvent("MERCHANT_SHOW", merchantShow)
 
 
 
