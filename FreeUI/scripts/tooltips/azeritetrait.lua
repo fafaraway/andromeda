@@ -2,17 +2,8 @@ local F, C, L = unpack(select(2, ...))
 if not C.tooltip.azeriteTrait then return end
 local addon, AzeriteTooltip = ...
 
-function AzeriteTooltip:CreateCheckBox(name, parent, label, tooltip, relativeTo, x, y, disableInCombat)
-    local checkBox = CreateFrame("CheckButton", name, parent, "InterfaceOptionsCheckButtonTemplate")
-    checkBox:SetPoint("TOPLEFT", relativeTo, "BOTTOMLEFT", x, y)
-    checkBox.Text:SetText(label)
-
-    if ( tooltip ) then
-        checkBox.tooltipText = tooltip
-    end
-
-    return checkBox
-end
+local addText = ""
+local currentLevel = 0
 
 function AzeriteTooltip_GetSpellID(powerID)
 	local powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(powerID)
@@ -22,131 +13,149 @@ function AzeriteTooltip_GetSpellID(powerID)
   	end
 end
 
-function AzeriteTooltip_ScanSelectedTraits(powerName)
-	for i = 10, GameTooltip:NumLines() do
-		local left = _G[GameTooltip:GetName().."TextLeft"..i]
+function AzeriteTooltip_ScanSelectedTraits(tooltip, powerName)
+	for i = 10, tooltip:NumLines() do
+		local left = _G[tooltip:GetName().."TextLeft"..i]
 		local text = left:GetText()
-        if text:find(powerName) then
+        if text and text:find(powerName) then
         	return true
         end
     end
 end
 
-local currentLevel = 0
-
-function AzeriteTooltip_BuildTooltip(itemLink, tooltip)	
-	-- Current Azerite Level
-	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
-	if azeriteItemLocation then
-		currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
+function AzeriteTooltip_ClearBlizzardText(tooltip, powerName)
+	local textLeft = tooltip.textLeft
+	if not textLeft then
+		local tooltipName = tooltip:GetName()
+		textLeft = setmetatable({}, { __index = function(t, i)
+			local line = _G[tooltipName .. "TextLeft" .. i]
+			t[i] = line
+			return line
+		end })
+		tooltip.textLeft = textLeft
 	end
+	for i = 8, tooltip:NumLines() do
+		if textLeft then
+			local line = textLeft[i]		
+			local text = line:GetText()
+			local r, g, b = line:GetTextColor()
+			if text then
+				local ActiveAzeritePowers = strsplit("(%d/%d)", CURRENTLY_SELECTED_AZERITE_POWERS) -- Active Azerite Powers (%d/%d)
+				local AzeritePowers = strsplit("(0/%d)", TOOLTIP_AZERITE_UNLOCK_LEVELS) -- Azerite Powers (0/%d)
+				local AzeriteUnlock = strsplit("%d", AZERITE_POWER_UNLOCKED_AT_LEVEL) -- Unlocked at Heart of Azeroth Level %d
+				local Durability = strsplit("%d / %d", DURABILITY_TEMPLATE)
 
-	local specID = GetSpecializationInfo(GetSpecialization())
-	local allTierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(itemLink)
+				if text:match(CURRENTLY_SELECTED_AZERITE_POWERS_INSPECT) then return end
 
-	if not allTierInfo[1]["azeritePowerIDs"][1] then return end
-
-	tooltip:AddLine(" ")
-
-	for j=1, 3 do
-		local tierLevel = allTierInfo[j]["unlockLevel"]
-		local azeritePowerID = allTierInfo[j]["azeritePowerIDs"][1]
-
-		if azeritePowerID == 13 then break end -- Ignore +5 item level tier
-
-		if tierLevel <= currentLevel then
-			tooltip:AddLine(" Level "..tierLevel, 1, 0.8, 0)
-			tooltip:AddLine(" ")
-		else
-			tooltip:AddLine(" Level "..tierLevel, 0.5, 0.5, 0.5)
-			tooltip:AddLine(" ")
-		end
-
-		for i, _ in pairs(allTierInfo[j]["azeritePowerIDs"]) do
-			local azeritePowerID = allTierInfo[j]["azeritePowerIDs"][i]
-			local azeriteSpellID = AzeriteTooltip_GetSpellID(azeritePowerID)
-				
-			local azeritePowerName, _, icon = GetSpellInfo(azeriteSpellID)
-			local azeriteIcon = '|T'..icon..':18:18:0:0:64:64:4:60:4:60|t'
-			local azeriteTooltipText = "  "..azeriteIcon.."  "..azeritePowerName
-
-			if tierLevel <= currentLevel then
-				if AzeriteTooltip_ScanSelectedTraits(azeritePowerName) then
-					tooltip:AddLine(azeriteTooltipText, 0, 1, 0)
-				elseif C_AzeriteEmpoweredItem.IsPowerAvailableForSpec(azeritePowerID, specID) then
-					tooltip:AddLine(azeriteTooltipText, 1, 1, 1)
-				else
-					tooltip:AddLine(azeriteTooltipText,  0.5, 0.5, 0.5)
+				if text:find(ActiveAzeritePowers) or text:find(AzeritePowers) then
+					textLeft[i-1]:SetText("")
+					line:SetText("")
+					textLeft[i+1]:SetText(addText)
 				end
-			else
-				tooltip:AddLine(azeriteTooltipText, 0.5, 0.5, 0.5)
+
+				if text:find(AzeriteUnlock) or text:find(NEW_AZERITE_POWER_AVAILABLE) then
+					line:SetText("")
+					textLeft[i+1]:SetText("")
+				end
+
+				if powerName then
+					if text:find("- "..powerName) then
+						line:SetText("")
+						textLeft[i+1]:SetText("")
+					end
+					if r < 0.1 and g > 0.9 and b < 0.1 and not text:match(ITEM_AZERITE_EMPOWERED_VIEWABLE) then
+						line:SetText("")
+						textLeft[i+1]:SetText("")
+					end
+				end
+
+				if text:find(Durability) then
+					textLeft[i-1]:SetText("")
+				end
+
 			end
 		end
-		tooltip:AddLine(" ")
 	end
 end
 
-GameTooltip:HookScript("OnTooltipSetItem", function(self)
+
+function AzeriteTooltip_BuildTooltip(self)	
+	addText = ""
 	local name, link = self:GetItem()
   	if not name then return end
 
   	if C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
-    	AzeriteTooltip_BuildTooltip(link, self)
-    end
-end)
 
-ItemRefTooltip:HookScript("OnTooltipSetItem", function(self)
-	local name, link = self:GetItem()
-  	if not name then return end
-
-  	if C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
-    	AzeriteTooltip_BuildTooltip(link, self)
-    end
-end)
-
-WorldMapTooltip.ItemTooltip.Tooltip:HookScript('OnTooltipSetItem', function(self)
-	local name, link = self:GetItem()
-  	if not name then return end
-
-  	if C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
-    	AzeriteTooltip_BuildTooltip(link, self)
-    end
-end)
-
-
-
-function Get_Azerite_Progress_String()
-	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
-	if(C_AzeriteItem.HasActiveAzeriteItem() and azeriteItemLocation) then
-		local currentXP, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
-		return currentXP .. " / " .. totalLevelXP
-	end
-	return nil
-end
-
-function RoundToNumberOfDecimalPlaces(number, numberOfDecimalPlaces)
-	local multiplier = 10^(numberOfDecimalPlaces or 0)
-	return math.floor(number * multiplier + 0.5) / multiplier
-end
-
-function Get_Azerite_Progress_Percent()
-	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem();
-	if(C_AzeriteItem.HasActiveAzeriteItem() and azeriteItemLocation) then
-		local currentXP, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation);
-		return RoundToNumberOfDecimalPlaces(((currentXP / totalLevelXP) * 100), 2)
-	end
-	return nil
-end
-
-local function OnTooltipSetItem(tooltip)
-	if (tooltip:GetItem() == "Heart of Azeroth") or (tooltip:GetItem() == "艾泽拉斯之心") then
-		local AzeritePowerProgressString = Get_Azerite_Progress_String()
-		if (AzeritePowerProgressString == nil) then
-			return
+		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+		if azeriteItemLocation then
+			currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
 		end
 
-		GameTooltip:AddDoubleLine("Azerite Power:", Get_Azerite_Progress_Percent() .. "% (" .. AzeritePowerProgressString .. ")", 0.4, 0.7, 1, 0.4, 0.7, 1);
+		local specID = GetSpecializationInfo(GetSpecialization())
+		local allTierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(link)
+
+		if not allTierInfo then return end
+
+		local activePowers = {}
+		local activeAzeriteTrait = false
+
+		for j=1, 3 do
+			local tierLevel = allTierInfo[j]["unlockLevel"]
+			local azeritePowerID = allTierInfo[j]["azeritePowerIDs"][1]
+
+			if azeritePowerID == 13 then break end -- Ignore +5 item level tier
+
+			local azeriteTooltipText = " "
+			for i, _ in pairs(allTierInfo[j]["azeritePowerIDs"]) do
+				local azeritePowerID = allTierInfo[j]["azeritePowerIDs"][i]
+				local azeriteSpellID = AzeriteTooltip_GetSpellID(azeritePowerID)				
+				local azeritePowerName, _, icon = GetSpellInfo(azeriteSpellID)	
+
+				if tierLevel <= currentLevel then
+					if AzeriteTooltip_ScanSelectedTraits(self, azeritePowerName) then
+						local azeriteIcon = '|T'..icon..':24:24:0:0:64:64:4:60:4:60:255:255:255|t'
+						azeriteTooltipText = azeriteTooltipText.."  "..azeriteIcon
+
+						tinsert(activePowers, {name = azeritePowerName})
+						activeAzeriteTrait = true
+					elseif C_AzeriteEmpoweredItem.IsPowerAvailableForSpec(azeritePowerID, specID) then
+						local azeriteIcon = '|T'..icon..':24:24:0:0:64:64:4:60:4:60:150:150:150|t'
+						azeriteTooltipText = azeriteTooltipText.."  "..azeriteIcon
+					end
+				else
+					local azeriteIcon = '|T'..icon..':24:24:0:0:64:64:4:60:4:60:150:150:150|t'
+					azeriteTooltipText = azeriteTooltipText.."  "..azeriteIcon
+				end				
+			end
+
+			if tierLevel <= currentLevel then
+				if j > 1 then 
+					addText = addText.."\n \n|cFFffcc00Level "..tierLevel..azeriteTooltipText.."|r"
+				else
+					addText = addText.."\n|cFFffcc00Level "..tierLevel..azeriteTooltipText.."|r"
+				end
+			else
+				if j > 1 then 
+					addText = addText.."\n \n|cFF7a7a7aLevel "..tierLevel..azeriteTooltipText.."|r"
+				else
+					addText = addText.."\n|cFF7a7a7aLevel "..tierLevel..azeriteTooltipText.."|r"
+				end
+			end
+		end
+
+		if activeAzeriteTrait then
+			for k, v in pairs(activePowers) do
+				AzeriteTooltip_ClearBlizzardText(self, v.name)
+			end
+		else
+			AzeriteTooltip_ClearBlizzardText(self, nil)
+		end
+
+		wipe(activePowers)	
 	end
 end
 
-GameTooltip:HookScript("OnTooltipSetItem", OnTooltipSetItem)
+GameTooltip:HookScript("OnTooltipSetItem", AzeriteTooltip_BuildTooltip)
+ItemRefTooltip:HookScript("OnTooltipSetItem", AzeriteTooltip_BuildTooltip)
+ShoppingTooltip1:HookScript("OnTooltipSetItem", AzeriteTooltip_BuildTooltip)
+WorldMapTooltip.ItemTooltip.Tooltip:HookScript('OnTooltipSetItem', AzeriteTooltip_BuildTooltip)
