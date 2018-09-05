@@ -68,24 +68,6 @@ else
 end
 
 
--- modify class color
---[[C.classcolours = {
-	["WARRIOR"] = {r = .72, g = .58, b = .47},
-	["DEATHKNIGHT"] = {r = .73, g = .17, b = 0},
-	["PALADIN"] = {r = .91, g = .21, b = .63},
-	["MONK"] = {r = .02, g = .78, b = .66},
-	["PRIEST"] = {r = .86, g = .87, b = .91},
-	["SHAMAN"] = {r = .35, g = .45, b = .91},
-	["DRUID"] = {r = .84, g = .47, b = .09},
-	["ROGUE"] = {r = .81, g = .72, b = .46},
-	["MAGE"] = {r = 0, g = .71, b = .91},
-	["WARLOCK"] = {r = .52, g = .54, b = .75},
-	["HUNTER"] = {r = .62, g = .81, b = .49},
-	["DEMONHUNTER"] = {r = .72, g = .28, b = .83},
-}]]
-C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-
-
 C.reactioncolours = {
 	[1] = {149/255, 0, 39/255}, -- Exceptionally hostile
 	[2] = {179/255, 50/255, 58/255}, -- Very Hostile
@@ -99,6 +81,22 @@ C.reactioncolours = {
 
 
 -- [[ Global config ]]
+
+C["appearance"] = {
+	["alpha"] = .6,
+	["buttonGradientColour"] = {.3, .3, .3, .3},
+	["buttonSolidColour"] = {.2, .2, .2, .6},
+	["useButtonGradientColour"] = true,
+
+	--["enableFont"] = false,
+
+	["useCustomColour"] = false,
+	["customColour"] = {r = 1, g = 1, b = 1},
+	["tooltips"] = true,
+	["shadow"] = true,
+	["vignette"] = true,
+	["vignetteAlpha"] = .5,
+}
 
 C["actionbars"] = {
 	["hotKey"] = true, 					-- show hot keys on buttons
@@ -173,8 +171,7 @@ C["misc"] = {
 
 	["mailButton"] = true, 
 	["undressButton"] = true, 
-	["vignette"] = true,
-	["vignetteAlpha"] = .5,
+
 
 	["alreadyKnown"] = true,
 

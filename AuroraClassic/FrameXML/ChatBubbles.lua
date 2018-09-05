@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["AuroraClassic"], function()
-	if not AuroraConfig.chatBubbles then return end
 
 	local function styleBubble(frame)
 		if frame:IsForbidden() then return end
@@ -56,7 +55,6 @@ tinsert(C.themes["AuroraClassic"], function()
 		CHAT_MSG_MONSTER_YELL = "MONSTER_YELL",
 		CHAT_MSG_MONSTER_PARTY = "MONSTER_PARTY",
 	}
-	if not AuroraConfig.bubbleColor then channels = {} end
 
 	local bubbleHook = CreateFrame("Frame")
 	for event in next, events do

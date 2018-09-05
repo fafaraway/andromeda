@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="AlertFrames.lua"/>
 	<Script file="AudioOptionsFrame.lua"/>
-	<Script file="BankFrame.lua"/>
+	<!-- <Script file="BankFrame.lua"/> -->
 	<Script file="BNet.lua"/>
 	<Script file="CharacterFrame.lua"/>
 	<Script file="ChatBubbles.lua"/>
@@ -9,8 +9,8 @@
 	<Script file="ChatFrame.lua"/>
 	<Script file="CinematicFrame.lua"/>
 	<Script file="ColorPickerFrame.lua"/>
-	<!-- <Script file="Constants.lua"/> -->
-	<Script file="ContainerFrame.lua"/>
+	<Script file="Constants.lua"/>
+	<!-- <Script file="ContainerFrame.lua"/> -->
 	<Script file="DressUpFrames.lua"/>
 	<Script file="EquipmentFlyout.lua"/>
 	<!-- <Script file="Fonts.lua"/> -->
@@ -30,7 +30,7 @@
 	<Script file="LFGFrame.lua"/>
 	<Script file="LFGList.lua"/>
 	<Script file="LFRFrame.lua"/>
-	<Script file="LootFrame.lua"/>
+	<!-- <Script file="LootFrame.lua"/> -->
 	<Script file="LootHistory.lua"/>
 	<Script file="MailFrame.lua"/>
 	<Script file="MainMenuBarMicroButtons.lua"/>
