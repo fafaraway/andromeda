@@ -5,7 +5,7 @@ local function ReskinWA()
 	local function applyBackground(f)
 		--if f:GetFrameLevel() < 7 then f:SetFrameLevel(7) end
 
-		f.bg = F.CreateBDFrame(f)
+		f.bg = F.CreateBDFrame(f, 0)
 		f.sd = F.CreateSD(f.bg)
 
 		f.bg = true

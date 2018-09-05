@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-
+C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 local _, class = UnitClass("player")
 
 C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}

@@ -5,7 +5,8 @@ ns[1] = {} -- F, functions
 ns[2] = {} -- C, constants/config
 _G[addonName] = ns
 
-AuroraConfig = {}
+local CONFIG = FreeUI[2]
+AuroraConfig = CONFIG.appearance
 
 local F, C = unpack(ns)
 
@@ -28,21 +29,7 @@ C.media = {
 	["texture"] = mediaPath.."statusbar",
 }
 
-AuroraConfig = {
-	["alpha"] = .6,
-	["bags"] = false,
-	["buttonGradientColour"] = {.3, .3, .3, .3},
-	["buttonSolidColour"] = {.2, .2, .2, .6},
-	["useButtonGradientColour"] = true,
-	["chatBubbles"] = true,
-	["bubbleColor"] = true,
-	["enableFont"] = false,
-	["loot"] = true,
-	["useCustomColour"] = false,
-	["customColour"] = {r = 1, g = 1, b = 1},
-	["tooltips"] = false,
-	["shadow"] = true,
-}
+
 
 C.frames = {}
 
@@ -94,7 +81,7 @@ function F:CreateBD(a)
 		edgeFile = C.media.backdrop,
 		edgeSize = 1,
 	})
-	self:SetBackdropColor(0, 0, 0, a or AuroraConfig.alpha)
+	self:SetBackdropColor(.05, .05, .05, a or AuroraConfig.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
 	if not a then tinsert(C.frames, self) end
 end
