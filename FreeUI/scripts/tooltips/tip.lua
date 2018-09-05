@@ -356,7 +356,7 @@ end)
 
 
 -- Tooltip skin
-local function style(self)
+--[[local function style(self)
 	self:SetScale(1)
 
 	if not self.bg then
@@ -375,27 +375,7 @@ local function style(self)
 	end
 
 	self.bg:SetBackdropBorderColor(0, 0, 0)
-	--[[if self.GetItem then
-		local _, item = self:GetItem()
-		if item then
-			local quality = select(3, GetItemInfo(item))
-			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
-			if color then
-				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-			end
-		end
-	end]]
 
-	--[[if self.NumLines and self:NumLines() > 0 then
-		for index = 1, self:NumLines() do
-			if index == 1 then
-				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12, "OUTLINE")
-			else
-				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12, "OUTLINE")
-			end
-			_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12, "OUTLINE")
-		end
-	end]]
 end
 
 local function extrastyle(self)
@@ -624,7 +604,7 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 		tip:GetParent().IconBorder:SetAlpha(0)
 		tip:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
 	end
-end)
+end)]]
 
 
 
