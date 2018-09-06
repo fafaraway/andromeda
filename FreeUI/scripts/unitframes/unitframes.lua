@@ -85,17 +85,21 @@ local updateNameColourAlt = function(self)
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
 			frame.Text:SetTextColor(.1, .7, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .5)
+			--frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .85)
+			frame.bd:SetBackdropBorderColor(1, 0, 0)
 		elseif UnitIsDead(frame.unit) then
 			frame.Text:SetTextColor(.7, .2, .1)
-			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+			--frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		else
 			frame.Text:SetTextColor(1, 1, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+			--frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
 		frame.Text:SetTextColor(1, 1, 1)
-		frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+		--frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+		frame.bd:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -273,10 +277,6 @@ smoother:SetScript('OnUpdate', function()
 end)
 
 
-
-
-
-
 -- health
 local PostUpdateHealth = function(Health, unit, min, max)
 	local self = Health:GetParent()
@@ -409,7 +409,7 @@ local function CreateCastBar(self)
 	cb:SetWidth(self:GetWidth())
 	cb:SetStatusBarTexture(C.media.texture)
 	cb:SetStatusBarColor(0, 0, 0, 0)
-	cb:SetFrameLevel(1)
+	cb:SetFrameLevel(self.Health:GetFrameLevel() + 1)
 	cb:SetAllPoints(self)
 
 	local bg = CreateFrame("Frame", nil, cb)
@@ -473,7 +473,7 @@ local function CreateCastBar(self)
 		safe:SetVertexColor(223/255, 63/255, 107/255, .6)
 		safe:SetPoint("TOPRIGHT")
 		safe:SetPoint("BOTTOMRIGHT")
-		cb:SetFrameLevel(10)
+		--cb:SetFrameLevel(10)
 		cb.SafeZone = safe
 	end
 
@@ -710,7 +710,7 @@ local function CreateAuras(self)
 		Auras.initialAnchor = "TOPLEFT"
 		Auras:SetPoint("TOP", self, "BOTTOM", 0, -6)
 		Auras["growth-y"] = "DOWN"
-		Auras.size = 28
+		Auras.size = 24
 
 		Auras.CustomFilter = FilterTargetDebuffs
 	end
@@ -1070,32 +1070,29 @@ local function CreateName(self)
 	self:Tag(Name, '[name]')
 	self.Name = Name
 
-	--[[if C.client == 'zhCN' then
-		Name:SetFont(unpack(ufFont))
-	else
-		F.SetFS(Name)
-	end]]
-
 	if self.unitStyle == "target" then
 		Name:SetJustifyH("RIGHT")
 		Name:SetWidth(100)
 	elseif self.unitStyle == "targettarget" then
 		Name:SetJustifyH("LEFT")
 	elseif self.unitStyle == "focus" then
+		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 	elseif self.unitStyle == "focustarget" then
+		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
 		Name:SetJustifyH("RIGHT")
 	elseif self.unitStyle == "boss" then
-		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
+		Name:ClearAllPoints()
+		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		Name:SetJustifyH("LEFT")
 	elseif self.unitStyle == "arena" then
+		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 		Name:SetWidth(100)
 	end
-	
 end
 
 local function UpdateTOTName(self)
@@ -1164,7 +1161,7 @@ local Shared = function(self, unit, isSingle)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameStrata("BACKGROUND")
 
-	F.CreateSD(bd, .5)
+	F.CreateSD(bd)
 
 	self.bd = bd
 
