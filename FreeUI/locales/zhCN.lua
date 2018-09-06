@@ -4,6 +4,8 @@ if not C.Client == "zhCN" then return end
 
 L["rareFound"] = "发现稀有！ "
 
+L["rare"] = "稀有"
+
 L["interrupted"] = "打断："
 L["dispeled"] = "驱散："
 L["stolen"] = "偷取："

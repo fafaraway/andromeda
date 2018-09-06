@@ -93,7 +93,7 @@ C["appearance"] = {
 
 	["useCustomColour"] = false,
 	["customColour"] = {r = 1, g = 1, b = 1},
-	["tooltips"] = true,
+	["tooltips"] = false,
 	["shadow"] = true,
 	["vignette"] = true,
 	["vignetteAlpha"] = .5,
@@ -236,7 +236,7 @@ C["bags"] = {
 			columnsSmall = 10,
 			columnsLarge = 12,
 			largeItemCount = 96,
-		},	
+		},
 	},
 	["colors"] = {
 		background = {.05, .05, .05, .8},
@@ -256,19 +256,20 @@ C["tooltip"] = {
 	["enable"] = true,		-- enable tooltip and modules
 	["anchorCursor"] = false,		-- tooltip at mouse
 	["tipPosition"] = {"BOTTOMRIGHT", -30, 30},	-- tooltip position
+	
+	["hidePVP"] = false,
+	["hideFaction"] = true,
+	["hideTitle"] = true,
+	["hideRealm"] = true,
+	["hideGuildRank"] = true,
+
 	["fadeOnUnit"] = false,
 	["combatHide"] = false,
-	["combatHideALL"] = false,
-	["guildRank"] = false,
-	["guildText"] = "|cffffffff<%s>|r |cffA0A0A0%s|r",
-	["guildColor"] = { r=1, g=1, b=.7},
-	["playerRealm"] = false,
-	["realmText"] = " (*)",
-	["playerTitle"] = false,
-	["YOU"] = "<YOU>",
-	["ilvlspec"] = true,		-- show gear info and specialization on tooltip
-	["aurasSource"] = true,
+
+	["ilvlspec"] = true,
+	["spellID"] = true,
 	["azeriteTrait"] = true,
+	["borderColor"] = true,
 }
 
 

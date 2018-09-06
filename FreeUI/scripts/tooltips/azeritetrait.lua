@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-if not C.tooltip.azeriteTrait then return end
+if C.tooltip.enable ~= true or C.tooltip.azeriteTrait ~= true then return end
+
 local addon, AzeriteTooltip = ...
 
 local addText = ""

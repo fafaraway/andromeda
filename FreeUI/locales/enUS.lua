@@ -3,6 +3,8 @@ local F, C, L = unpack(select(2, ...))
 
 L["rareFound"] = "Rare nearby! "
 
+L["rare"] = "Rare"
+
 L["interrupted"] = "Interrupted: "
 L["dispeled"] = "Dispeled: "
 L["stolen"] = "Stolen: "
