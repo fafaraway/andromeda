@@ -269,7 +269,7 @@ C["tooltip"] = {
 	["ilvlspec"] = true,
 	["spellID"] = true,
 	["azeriteTrait"] = true,
-	["borderColor"] = true,
+	["borderColor"] = true,		-- item tooltip border colored by item quality
 }
 
 
