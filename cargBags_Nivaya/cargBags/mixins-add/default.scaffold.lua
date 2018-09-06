@@ -219,6 +219,8 @@ end
 local function ItemButton_UpdateCooldown(self, item)
 	if(item.cdEnable == 1 and item.cdStart and item.cdStart > 0) then
 		self.Cooldown:SetCooldown(item.cdStart, item.cdFinish)
+		self.Cooldown:SetPoint("TOPLEFT", 1, -1)
+		self.Cooldown:SetPoint("BOTTOMRIGHT", -1, 1)
 		self.Cooldown:Show()
 	else
 		self.Cooldown:Hide()
