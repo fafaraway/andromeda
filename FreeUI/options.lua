@@ -83,6 +83,7 @@ C.reactioncolours = {
 -- [[ Global config ]]
 
 C["appearance"] = {
+	["backdropcolor"] = {.05, .05, .05},
 	["alpha"] = .6,
 	["buttonGradientColour"] = {.3, .3, .3, .3},
 	["buttonSolidColour"] = {.2, .2, .2, .6},

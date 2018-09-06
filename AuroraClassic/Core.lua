@@ -76,12 +76,13 @@ function F:CreateSD(a)
 end
 
 function F:CreateBD(a)
+	local r, g, b = AuroraConfig.backdropcolor
 	self:SetBackdrop({
 		bgFile = C.media.backdrop,
 		edgeFile = C.media.backdrop,
 		edgeSize = 1,
 	})
-	self:SetBackdropColor(.05, .05, .05, a or AuroraConfig.alpha)
+	self:SetBackdropColor(r, g, b, a or AuroraConfig.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
 	if not a then tinsert(C.frames, self) end
 end
