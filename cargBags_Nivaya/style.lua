@@ -448,31 +448,27 @@ function MyContainer:OnCreate(name, settings)
 
 	-- The frame background
 	local tBankCustom = (tBankBags and not cBnivCfg.BankBlack)
-	local color_rb = ns.options.colors.background[1]
-	local color_gb = tBankCustom and .2 or ns.options.colors.background[2]
-	local color_bb = tBankCustom and .3 or ns.options.colors.background[3]
-	local alpha_fb = ns.options.colors.background[4]
 
 	-- The frame background
+	local F, C = unpack(FreeUI)
 	local background = CreateFrame("Frame", nil, self)
 	background:SetBackdrop{
-		bgFile = Textures.Background,
-		edgeFile = Textures.Background,
+		bgFile = C.media.backdrop,
+		edgeFile = C.media.backdrop,
 		tile = true, tileSize = 16, edgeSize = 1,
 		insets = {left = 1, right = 1, top = 1, bottom = 1},
 	}
 	background:SetFrameStrata("HIGH")
 	background:SetFrameLevel(1)
-	background:SetBackdropColor(color_rb,color_gb,color_bb,alpha_fb)
+	background:SetBackdropColor(0, 0, 0, 0)
 	background:SetBackdropBorderColor(0, 0, 0, 1)
 
 	background:SetPoint("TOPLEFT", -4, 4)
 	background:SetPoint("BOTTOMRIGHT", 4, -4)
 
 	-- Background, border
-
-	local F = FreeUI[1]
 	F.CreateBD(background)
+	F.CreateTex(background)
 	F.CreateSD(background)
 
 
