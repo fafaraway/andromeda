@@ -25,11 +25,6 @@ function F:dummy()
 	return
 end
 
--- compatibility with Aurora plugins that are compatible with Aurora's custom style system
-F.AddPlugin = function(func)
-	func()
-end
-
 F.CreateFS = function(parent, justify)
 	local f = parent:CreateFontString(nil, "OVERLAY")
 	F.SetFS(f)
@@ -91,6 +86,7 @@ local function CreateTex(f)
 end
 
 function F:CreateSD(a)
+	if not C.appearance.shadow then return end
 	if self.Shadow then return end
 
 	local frame = self
@@ -109,10 +105,11 @@ function F:CreateSD(a)
 end
 
 function F:CreateBD(a)
+	local r, g, b = C.appearance.backdropcolor
 	self:SetBackdrop({
 		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = 1,
 	})
-	self:SetBackdropColor(0, 0, 0, a or .65)
+	self:SetBackdropColor(0, 0, 0, a or C.appearance.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
 end
 
@@ -129,16 +126,48 @@ function F:CreateBG(offset)
 	return bg
 end
 
+local buttonR, buttonG, buttonB, buttonA
+
+if C.appearance.useButtonGradientColour then
+	buttonR, buttonG, buttonB, buttonA = unpack(C.appearance.buttonGradientColour)
+else
+	buttonR, buttonG, buttonB, buttonA = unpack(C.appearance.buttonSolidColour)
+end
+
+if C.appearance.useCustomColour then
+	r, g, b = C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b
+end
+
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", 1, -1)
 	tex:SetPoint("BOTTOMRIGHT", -1, 1)
-	--tex:SetTexture(C.media.gradient)
-	tex:SetTexture(C.media.backdrop)
-	tex:SetGradientAlpha("VERTICAL", 0, 0, 0, .3, .35, .35, .35, .35)
-	tex:SetVertexColor(.1, .1, .1, .8)
+	tex:SetTexture(C.appearance.useButtonGradientColour and C.media.gradient or C.media.backdrop)
+	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
 	return tex
+end
+
+local function colourButton(self)
+	if not self:IsEnabled() then return end
+
+	if C.appearance.useButtonGradientColour then
+		self:SetBackdropColor(r, g, b, .3)
+	else
+		self.bgtex:SetVertexColor(r / 4, g / 4, b / 4)
+	end
+
+	self:SetBackdropBorderColor(r, g, b)
+end
+
+local function clearButton(self)
+	if C.appearance.useButtonGradientColour then
+		self:SetBackdropColor(0, 0, 0, 0)
+	else
+		self.bgtex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
+	end
+
+	self:SetBackdropBorderColor(0, 0, 0)
 end
 
 F.CreatePulse = function(frame) -- pulse function originally by nightcracker
@@ -232,7 +261,7 @@ function F:ReskinTab()
 	bg:SetFrameLevel(self:GetFrameLevel()-1)
 	F.CreateBD(bg)
 
-	self:SetHighlightTexture(C.media.texture)
+	self:SetHighlightTexture(C.media.backdrop)
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 9, -4)
 	hl:SetPoint("BOTTOMRIGHT", -9, 1)
@@ -262,6 +291,19 @@ local function textureOnLeave(self)
 	end
 end
 F.clearArrow = textureOnLeave
+
+local function scrollOnEnter(self)
+	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
+	if not bu then return end
+	bu.bg:SetBackdropColor(.3, .3, .3, .6)
+	bu.bg:SetBackdropBorderColor(.3, .3, .3)
+end
+local function scrollOnLeave(self)
+	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
+	if not bu then return end
+	bu.bg:SetBackdropColor(0, 0, 0, 0)
+	bu.bg:SetBackdropBorderColor(0, 0, 0)
+end
 
 function F:ReskinScroll()
 	local frame = self:GetName()
@@ -355,7 +397,7 @@ function F:ReskinDropDown()
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
 	tex:SetVertexColor(1, 1, 1)
-	down.bgTex = tex
+	down.bgtex = tex
 
 	down:HookScript("OnEnter", textureOnEnter)
 	down:HookScript("OnLeave", textureOnLeave)
@@ -447,7 +489,7 @@ function F:ReskinArrow(direction)
 	tex:SetTexture(themeMediaPath.."arrow-"..direction.."-active")
 	tex:SetSize(8, 8)
 	tex:SetPoint("CENTER")
-	self.bgTex = tex
+	self.bgtex = tex
 
 	self:HookScript("OnEnter", textureOnEnter)
 	self:HookScript("OnLeave", textureOnLeave)
@@ -597,8 +639,6 @@ function F:SetBD(x, y, x2, y2)
 	F.CreateBD(bg)
 	F.CreateSD(bg)
 end
-
-
 
 function F:ReskinPortraitFrame(isButtonFrame)
 	local name = self:GetName()
@@ -1064,4 +1104,3 @@ end
 
 
 DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
---DEFAULT_CHAT_FRAME:AddMessage("Type |cffffffff/FreeUI|r for more information.", unpack(C.class))
