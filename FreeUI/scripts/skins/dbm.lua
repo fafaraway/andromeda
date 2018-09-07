@@ -20,16 +20,11 @@ function module:ReskinDBM()
 
 				if not (icon1.overlay) then
 					icon1.overlay = CreateFrame("Frame", "$parentIcon1Overlay", tbar)
-					icon1.overlay:SetSize(buttonsize+2, buttonsize+2)
+					icon1.overlay:SetSize(buttonsize, buttonsize)
 					icon1.overlay:SetFrameStrata("BACKGROUND")
 					icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -buttonsize/6, -3)
-			
-					local backdroptex = icon1.overlay:CreateTexture(nil, "BORDER")
-					backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
-					backdroptex:SetPoint("TOPLEFT", icon1.overlay, "TOPLEFT", 1, -1)
-					backdroptex:SetPoint("BOTTOMRIGHT", icon1.overlay, "BOTTOMRIGHT", -1, 1)
-					backdroptex:SetTexCoord(unpack(C.texCoord))
 
+					F.CreateBD(icon1.overlay)
 					F.CreateSD(icon1.overlay)
 
 				end
@@ -38,13 +33,9 @@ function module:ReskinDBM()
 					icon2.overlay = CreateFrame("Frame", "$parentIcon2Overlay", tbar)
 					icon2.overlay:SetSize(buttonsize+2, buttonsize+2)
 					icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", buttonsize/6, -3)
-			
-					local backdroptex = icon2.overlay:CreateTexture(nil, "BORDER")
-					backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
-					backdroptex:SetPoint("TOPLEFT", icon2.overlay, "TOPLEFT", 1, -1)
-					backdroptex:SetPoint("BOTTOMRIGHT", icon2.overlay, "BOTTOMRIGHT", -1, 1)
-					backdroptex:SetTexCoord(unpack(C.texCoord))		
 
+					F.CreateBD(icon2.overlay)
+					F.CreateSD(icon2.overlay)
 				end
 
 				if bar.color then
@@ -82,8 +73,6 @@ function module:ReskinDBM()
 					icon1:SetPoint("TOPLEFT", icon1.overlay, 1, -1)
 					icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -1, 1)
 					icon1.SetSize = F.dummy
-					F.CreateBDFrame(icon1)
-					--F.CreateSD(icon1, .8)
 					icon1.styled = true
 				end
 		
@@ -121,12 +110,21 @@ function module:ReskinDBM()
 					name:SetPoint("LEFT", frame, "LEFT", 2, 8)
 					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
 					name.SetPoint = F.dummy
-					name:SetFont(C.font.normal, 12)
+					
+					if C.appearance.usePixelFont then
+						name:SetFont(unpack(C.fontPixel))
+						name:SetShadowColor(0, 0, 0, 1)
+						name:SetShadowOffset(1, -1)
+					else
+						name:SetFont(unpack(C.fontNormal))
+						name:SetShadowColor(0, 0, 0, 1)
+						name:SetShadowOffset(2, -2)
+					end
+
 					name.SetFont = F.dummy
 					name:SetJustifyH("LEFT")
 					name:SetWordWrap(false)
-					name:SetShadowColor(0, 0, 0, 1)
-					name:SetShadowOffset(2, -2)
+					
 					name.styled = true
 				end
 		
@@ -134,7 +132,6 @@ function module:ReskinDBM()
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", frame, "RIGHT", -2, 8)
 					timer.SetPoint = F.dummy
-					--timer:SetFont(C.font.normal, 12, "OUTLINE")
 					F.SetFS(timer)
 					timer.SetFont = F.dummy
 					timer:SetJustifyH("RIGHT")
