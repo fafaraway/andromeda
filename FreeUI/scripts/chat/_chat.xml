@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="chat.lua"/>
 	<Script file="tab.lua"/>
+	<Script file="bubble.lua"/>
 	<Script file="itemlinklevel.lua"/>
 	<Script file="filter.lua"/>
 	<Script file="spamagemeter.lua"/>
