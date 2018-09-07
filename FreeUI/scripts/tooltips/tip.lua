@@ -292,7 +292,7 @@ local function style(self)
 		end
 	end
 
-	if self.NumLines and self:NumLines() > 0 then
+	--[[if self.NumLines and self:NumLines() > 0 then
 		for index = 1, self:NumLines() do
 			if index == 1 then
 				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 14)
@@ -301,7 +301,7 @@ local function style(self)
 			end
 			_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12)
 		end
-	end
+	end]]
 end
 
 local function extrastyle(self)

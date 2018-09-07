@@ -54,6 +54,10 @@ function module:FontStyle()
 	SetFont("AchievementFont_Small", NORMAL, 12)
 	SetFont("AchievementPointsFont", NORMAL, 12)
 
+	SetFont("GameTooltipHeaderText", NORMAL, 14, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("GameTooltipText", NORMAL, 12, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("GameTooltipTextSmall", NORMAL, 12, nil, nil, {0, 0, 0}, 1, -1)
+
 	local function ReskinFont(font, size, white)
 		font:SetFont(NORMAL, size, white and "" or "OUTLINE")
 		font:SetShadowColor(0, 0, 0, 0)
