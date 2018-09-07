@@ -42,9 +42,9 @@ local _, class = UnitClass("player")
 C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 
 local r, g, b
-r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
---local FC = FreeUI[2]
---r, g, b = FC.classcolours[class].r, FC.classcolours[class].g, FC.classcolours[class].b
+--r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+
+r, g, b = CONFIG.classcolours[class].r, CONFIG.classcolours[class].g, CONFIG.classcolours[class].b
 
 
 
