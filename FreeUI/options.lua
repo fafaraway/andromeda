@@ -20,52 +20,16 @@ C.media = {
 	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
 }
 
-if GetLocale() == "zhCN" then
-	C.font = {
-		["normal"] 		= "Fonts\\ARKai_T.ttf",	-- main font
-		["unitname"] 	= "Fonts\\ARKai_T.ttf",	-- big font for names over player/monster/NPC head
-		["damage"] 		= "Fonts\\ARKai_C.ttf",	-- damage font
-		["header"]		= "Fonts\\ARKai_T.ttf",	-- big font for some panel
-		["chat"]		= "Fonts\\ARKai_T.ttf",	-- chat font
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",	-- pixel font
-	}
-elseif GetLocale() == "zhTW" then
-	C.font = {
-		["normal"] 		= "Fonts\\blei00d.ttf",
-		["unitname"] 	= "Fonts\\blei00d.ttf",
-		["damage"] 		= "Fonts\\bKAI00M.ttf",
-		["header"]		= "Fonts\\blei00d.ttf",
-		["chat"]		= "Fonts\\blei00d.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
-	}
-elseif GetLocale() == "koKR" then
-	C.font = {
-		["normal"] 		= "Fonts\\2002.ttf",
-		["unitname"] 	= "Fonts\\2002B.ttf",
-		["damage"] 		= "Fonts\\K_Damage.ttf",
-		["header"]		= "Fonts\\2002.ttf",
-		["chat"]		= "Fonts\\2002.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
-	}
-elseif GetLocale() == "ruRU" then
-	C.font = {
-		["normal"] 		= "Fonts\\FRIZQT___CYR.ttf",
-		["unitname"] 	= "Fonts\\FRIZQT___CYR.ttf",
-		["damage"] 		= "Fonts\\FRIZQT___CYR.ttf",
-		["header"]		= "Fonts\\FRIZQT___CYR.ttf",
-		["chat"]		= "Fonts\\FRIZQT___CYR.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
-	}
-else
-	C.font = {
-		["normal"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
-		["unitname"] 	= "Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf",
-		["damage"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\PEPSI_pl.ttf",
-		["header"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf",
-		["chat"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
-		["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
-	}
-end
+C.font = {
+	["normal"] 		= _G.STANDARD_TEXT_FONT,
+	["damage"] 		= _G.DAMAGE_TEXT_FONT,
+	["header"] 		= _G.UNIT_NAME_FONT,
+	["chat"] 		= _G.STANDARD_TEXT_FONT,
+	["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
+}
+
+C.fontNormal = {C.font.normal, 12}
+C.fontPixel = {'Fonts\\CN\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'} -- Chinese pixel font for personal use
 
 
 C.reactioncolours = {
@@ -88,15 +52,13 @@ C["appearance"] = {
 	["buttonGradientColour"] = {.3, .3, .3, .3},
 	["buttonSolidColour"] = {.2, .2, .2, .6},
 	["useButtonGradientColour"] = true,
-
-	--["enableFont"] = false,
-
 	["useCustomColour"] = false,
 	["customColour"] = {r = 1, g = 1, b = 1},
-	["tooltips"] = false,
 	["shadow"] = true,
 	["vignette"] = true,
 	["vignetteAlpha"] = .5,
+	["fontStyle"] = true,
+	["usePixelFont"] = false, -- Chinese pixel font for personal use
 }
 
 C["actionbars"] = {
@@ -246,7 +208,6 @@ C["bags"] = {
 
 C["infoBar"] = {
 	["enable"] = true,
-
 	["enableButtons"] = true,			-- show buttons for quick access on the menu bar
 		["buttons_mouseover"] = true,			-- only on mouseover
 }
@@ -333,7 +294,7 @@ C["unitframes"] = {
 
 
 	["target"] = {"RIGHT", 'oUF_FreePlayer', "LEFT", -100, 200},					-- target unitframe position
-	["target_width"] = 262,
+	["target_width"] = 302,
 	["target_height"] = 14,
 	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -8},			-- target castbar position
 	["target_castbar_width"] = 262,
@@ -352,13 +313,13 @@ C["unitframes"] = {
 	["focustarget_width"] = 92,
 	["focustarget_height"] = 14,
 
-	["party"] = {"BOTTOMRIGHT", 'oUF_FreeTarget', "TOPLEFT", -100, 100},			-- party unitframe position
-	["party_width"] = 100,
-	["party_height"] = 34,
+	["party"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -60},			-- party unitframe position
+	["party_width"] = 58,
+	["party_height"] = 32,
 
 	["raid"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -60},			-- raid unitframe position
-	["raid_width"] = 50,
-	["raid_height"] = 30,
+	["raid_width"] = 58,
+	["raid_height"] = 32,
 
 	["boss"] = {a='LEFT', b='oUF_FreePlayer', c="RIGHT", x=400, y=400},			-- boss unitframe position
 	["boss_width"] = 166,
@@ -378,8 +339,6 @@ C["unitframes"] = {
 	["power_height"] = 2,
 	["altpower_height"] = 2,
 	["classPower_height"] = 2,
-
-	["pixelFontName"] = false,
 }
 
 

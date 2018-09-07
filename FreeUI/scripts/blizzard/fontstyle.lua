@@ -1,4 +1,5 @@
 local F, C, L = unpack(select(2, ...))
+if not C.appearance.fontStyle then return end
 
 local module = F:GetModule("blizzard")
 
@@ -16,10 +17,7 @@ local UNITNAME   = C.font.unitname
 -- Header Font: replaces MORPHEUS.ttf
 local HEADER = C.font.header
 
-_G.STANDARD_TEXT_FONT = NORMAL
-_G.UNIT_NAME_FONT = UNITNAME
-_G.NAMEPLATE_FONT = NORMAL
-_G.DAMAGE_TEXT_FONT = CRIT
+
 
 function module:FontStyle()
 	local next, type = _G.next, _G.type

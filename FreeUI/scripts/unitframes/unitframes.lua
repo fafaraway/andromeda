@@ -41,10 +41,10 @@ oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
 local ufFont
-if C.unitframes.pixelFontName then -- Miss Lin really likes pixel font ;)
-	ufFont = {"Fonts\\CN\\pixfontCN.ttf", 10, "OUTLINEMONOCHROME"}
+if C.appearance.usePixelFont then -- Miss Lin really likes pixel font ;)
+	ufFont = C.fontPixel
 else
-	ufFont = {C.font.normal, 12}
+	ufFont = C.fontNormal
 end
 
 
@@ -430,7 +430,7 @@ local function CreateCastBar(self)
 	cb.Spark = spark
 
 	local name = F.CreateFS(cb)
-	if C.client == 'zhCN' then
+	if C.client == 'zhCN' or C.client == 'zhTW' then
 		name:SetFont(unpack(ufFont))
 	else
 		F.SetFS(name)
@@ -505,6 +505,9 @@ local function CreateCastBar(self)
 	if self.unitStyle == "focustarget" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
+	elseif self.unitStyle == "target" or (self.unitStyle == "player" and not C.unitframes.castbarSeparate) then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint("LEFT", cb, "RIGHT", 4, 0)
 	end
 
 	if self.unitStyle == "focus" or self.unitStyle == "focustarget" or self.unitStyle == "targettarget" or self.unitStyle == "player" then
@@ -1048,7 +1051,7 @@ local function CreateIndicator(self)
 
 		-- phase indicator
 		local PhaseIndicator = F.CreateFS(self)
-		PhaseIndicator:SetText("x")
+		PhaseIndicator:SetText("p")
 		PhaseIndicator:SetTextColor(1, 1, 1, 1)
 		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, -2, -1)
 
@@ -1744,12 +1747,12 @@ oUF:Factory(function(self)
 		'showParty', true,
 		'showPlayer', true,
 		'showSolo', false,
-		'xoffset', 3,
+		'xoffset', -3,
 		'yoffset', 5,
 		'maxColumns', 1,
 		'unitsperColumn', 5,
 		'columnSpacing', 3,
-		'point', "BOTTOM", -- party initial position
+		'point', "RIGHT", -- party initial position
 		'columnAnchorPoint', "LEFT",
 		'groupBy', 'ASSIGNEDROLE',
 		'groupingOrder', 'TANK,HEALER,DAMAGER',

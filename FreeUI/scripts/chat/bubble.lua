@@ -17,7 +17,7 @@ local function styleBubble(frame)
 		elseif region:GetObjectType() == "FontString" then
 			frame.text = region
 
-			region:SetFont(C.font.normal, 22)
+			region:SetFont(C.font.chat, 22)
 			region:SetShadowColor(0, 0, 0, 1)
 		end
 	end
