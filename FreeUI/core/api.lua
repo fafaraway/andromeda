@@ -109,7 +109,7 @@ function F:CreateBD(a)
 	self:SetBackdrop({
 		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = 1,
 	})
-	self:SetBackdropColor(0, 0, 0, a or C.appearance.alpha)
+	self:SetBackdropColor(r, g, b, a or C.appearance.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
 end
 
