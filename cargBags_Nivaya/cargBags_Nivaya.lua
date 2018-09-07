@@ -1,6 +1,8 @@
 local addon, ns = ...
 local cargBags = ns.cargBags
 
+local F, C = unpack(FreeUI)
+
 cargBags_Nivaya = CreateFrame('Frame', 'cargBags_Nivaya', UIParent)
 cargBags_Nivaya:SetScript('OnEvent', function(self, event, ...) self[event](self, event, ...) end)
 cargBags_Nivaya:RegisterEvent("ADDON_LOADED")
@@ -27,7 +29,7 @@ do	--Replacement for UIDropDownMenu
 		edgeFile = "Interface\\Buttons\\WHITE8x8", 
 		tile = true, tileSize = 16, edgeSize = 1, 
 		insets = { left = inset, right = inset, top = inset, bottom = inset }})
-	local colors = ns.options.colors.background
+	local colors = C.appearance.backdropcolor
 	f:SetBackdropColor(unpack(colors))
 	f:SetBackdropBorderColor(0, 0, 0)
 
@@ -41,13 +43,13 @@ do	--Replacement for UIDropDownMenu
 		fstr:SetJustifyH("LEFT")
 		fstr:SetJustifyV("MIDDLE")
 
-		local F, C = unpack(FreeUI)
-		local menuFont = {
-			C.font.normal,
-			12,
-			"OUTLINE"
-		}
-		fstr:SetFont(unpack(menuFont))
+		if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
+			fstr:SetFont(unpack(C.fontPixel))
+		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+			fstr:SetFont(unpack(C.fontNormal))
+		else
+			F.SetFS(fstr)
+		end
 
 		fstr:SetPoint("LEFT", button, "LEFT", 0, 0)
 		button.Text = fstr
@@ -781,7 +783,6 @@ Event:SetScript('OnEvent', function(self, event, ...)
 				buyReagent:Hide()
 			end)
 
-			local F = FreeUI[1]
 			F.Reskin(buyReagent)
 
 			buyReagent:RegisterEvent("REAGENTBANK_PURCHASED")

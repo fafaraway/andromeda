@@ -475,15 +475,10 @@ function MyContainer:OnCreate(name, settings)
 	-- Caption, close button
 	local caption = background:CreateFontString(background, "OVERLAY", nil)
 
-
-	local captionFont = {
-			C.font.normal,
-			12,
-			"OUTLINE"
-		}
-
-	if C.client == "zhCN" or C.client == "zhTW" then
-		caption:SetFont(unpack(captionFont))
+	if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
+		caption:SetFont(unpack(C.fontPixel))
+	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		caption:SetFont(unpack(C.fontNormal))
 	else
 		F.SetFS(caption)
 	end
@@ -498,16 +493,7 @@ function MyContainer:OnCreate(name, settings)
 		
 		if (tBag or tBank) then
 			local close = CreateFrame("Button", nil, self, "UIPanelCloseButton")
-			if FreeUI then
-				local F = FreeUI[1]
-				F.ReskinClose(close, "TOPRIGHT", self, "TOPRIGHT", 1, 1)
-			else
-				close:SetPoint("TOPRIGHT", 8, 8)
-				close:SetDisabledTexture("Interface\\AddOns\\cargBags_Nivaya\\media\\CloseButton\\UI-Panel-MinimizeButton-Disabled")
-				close:SetNormalTexture("Interface\\AddOns\\cargBags_Nivaya\\media\\CloseButton\\UI-Panel-MinimizeButton-Up")
-				close:SetPushedTexture("Interface\\AddOns\\cargBags_Nivaya\\media\\CloseButton\\UI-Panel-MinimizeButton-Down")
-				close:SetHighlightTexture("Interface\\AddOns\\cargBags_Nivaya\\media\\CloseButton\\UI-Panel-MinimizeButton-Highlight", "ADD")
-			end
+			F.ReskinClose(close, "TOPRIGHT", self, "TOPRIGHT", 1, 1)
 			close:SetScript("OnClick", function(self) if cbNivaya:AtBank() then CloseBankFrame() else CloseAllBags() end end)
 		end
 	end

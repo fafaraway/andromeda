@@ -200,10 +200,6 @@ C["bags"] = {
 			largeItemCount = 96,
 		},
 	},
-	["colors"] = {
-		background = {.05, .05, .05, .8},
-	},
-
 }
 
 C["infoBar"] = {

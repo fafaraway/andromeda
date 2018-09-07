@@ -310,6 +310,26 @@ local ilvlSubTypes = {
 	[GetItemSubClassInfo(3,11)] = true	--Artifact Relic
 }
 
+local cB_TT_Name = "cargBagsContainerItemTooltip"
+local cB_TT= CreateFrame("GameTooltip", cB_TT_Name, nil, "GameTooltipTemplate")
+local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+local itemDB = {}
+local function GetContainerItemLevel(link, bagID, slotID)
+	if itemDB[link] then return itemDB[link] end
+	cB_TT:SetOwner(UIParent, "ANCHOR_NONE")
+	cB_TT:SetBagItem(bagID, slotID)
+ 	for i = 2, 5 do
+		local text = _G[cB_TT_Name.."TextLeft"..i]:GetText() or ""
+		local hasLevel = string.find(text, itemLevelString)
+		if hasLevel then
+			local level = string.match(text, "(%d+)%)?$")
+			itemDB[link] = tonumber(level)
+			break
+		end
+	end
+	return itemDB[link]
+end
+
 function Implementation:GetItemInfo(bagID, slotID, i)
 	i = i or defaultItem
 	for k in pairs(i) do i[k] = nil end
@@ -337,7 +357,7 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 			if i.rarity == LE_ITEM_QUALITY_ARTIFACT then
 				-- for artifact weapons, GetItemInfo returns the actual ilvl
 			else
-				i.level = ItemUpgradeInfo:GetUpgradedItemLevel(i.link)
+				i.level = GetContainerItemLevel(clink, bagID, slotID) or i.level	--ItemUpgradeInfo:GetUpgradedItemLevel(i.link)
 			end
 		end
 		-- get the item spell to determine if the item is an Artifact Power boosting item
