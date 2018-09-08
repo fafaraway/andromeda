@@ -97,6 +97,11 @@ end
 
 local function ItemButton_Scaffold(self)
 	self:SetSize(37, 37)
+
+	self:SetNormalTexture(nil)
+	self:SetPushedTexture(nil)
+	self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+
 --[[
 	local monitorIndex = (tonumber(GetCVar('gxMonitor')) or 0) + 1
 	local resolution = select(GetCurrentResolution(monitorIndex), GetScreenResolutions(monitorIndex))
