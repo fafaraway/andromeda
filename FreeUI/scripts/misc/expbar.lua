@@ -18,35 +18,6 @@ local function UpdateBar(bar)
 			rest:Show()
 		end
 		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end
-	--[[elseif GetWatchedFactionInfo() then
-		local _, standing, min, max, value, factionID = GetWatchedFactionInfo()
-		local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-		if friendID then
-			if nextFriendThreshold then
-				min, max, value = friendThreshold, nextFriendThreshold, friendRep
-			else
-				min, max, value = 0, 1, 1
-			end
-			standing = 5
-		elseif C_Reputation.IsFactionParagon(factionID) then
-			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-			currentValue = mod(currentValue, threshold)
-			min, max, value = 0, threshold, currentValue
-		else
-			if standing == MAX_REPUTATION_REACTION then min, max, value = 0, 1, 1 end
-		end
-		bar:SetStatusBarColor(FACTION_BAR_COLORS[standing].r, FACTION_BAR_COLORS[standing].g, FACTION_BAR_COLORS[standing].b, .85)
-		bar:SetMinMaxValues(min, max)
-		bar:SetValue(value)
-		bar:Show()
-
-	elseif IsWatchingHonorAsXP() then
-		local current, max = UnitHonor("player"), UnitHonorMax("player")
-		bar:SetStatusBarColor(1, .24, 0)
-		bar:SetMinMaxValues(0, max)
-		bar:SetValue(current)
-		bar:Show()]]
-
 	elseif C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
@@ -54,20 +25,6 @@ local function UpdateBar(bar)
 		bar:SetMinMaxValues(0, totalLevelXP)
 		bar:SetValue(xp)
 		bar:Show()
-	--[[elseif HasArtifactEquipped() then
-		if C_ArtifactUI.IsEquippedArtifactDisabled() then
-			bar:SetStatusBarColor(.6, .6, .6)
-			bar:SetMinMaxValues(0, 1)
-			bar:SetValue(1)
-		else
-			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-			local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-			xp = xpForNextPoint == 0 and 0 or xp
-			bar:SetStatusBarColor(.9, .8, .6)
-			bar:SetMinMaxValues(0, xpForNextPoint)
-			bar:SetValue(xp)
-		end
-		bar:Show()]]
 	else
 		bar:Hide()
 	end
@@ -77,10 +34,7 @@ end
 local function UpdateTooltip(bar)
 	GameTooltip:SetOwner(bar, "ANCHOR_LEFT")
 	
-	
-
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
-		GameTooltip:ClearLines()
 		GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), C.r, C.g, C.b)
 
 		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
@@ -89,6 +43,17 @@ local function UpdateTooltip(bar)
 			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26..":", "+"..rxp.." ("..floor(rxp/mxp*100).."%)", 1, 1, 1, 1,1,1)
 		end
 		if IsXPUserDisabled() then GameTooltip:AddLine("|cffff0000"..XP..LOCKED) end
+		GameTooltip:AddLine(" ")
+	end
+
+	if C_AzeriteItem.HasActiveAzeriteItem() then
+		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
+		local azeriteItemName = azeriteItem:GetItemName()
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
+		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
+		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 247/255, 225/255, 171/255)
+		GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(xp).."/"..F.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", 1, 1, 1, 1,1,1)
 		GameTooltip:AddLine(" ")
 	end
 
@@ -112,7 +77,6 @@ local function UpdateTooltip(bar)
 			end
 			standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
 		end
-		--GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(name, 62/250, 175/250, 227/250)
 		GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", 1, 1, 1, 1,1,1)
 		GameTooltip:AddLine(" ")
@@ -125,55 +89,22 @@ local function UpdateTooltip(bar)
 		end
 	end
 
-	if IsWatchingHonorAsXP() then
+	--if IsWatchingHonorAsXP() then
+	if UnitLevel("player") == MAX_PLAYER_LEVEL then
 		local current, max, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
-		--GameTooltip:AddLine(" ")
 		GameTooltip:AddLine(HONOR, 177/250, 19/250, 0)
 		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..max, 1, 1, 1, 1,1,1)
 		GameTooltip:AddLine(" ")
 	end
 
-	if C_AzeriteItem.HasActiveAzeriteItem() then
-		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
-		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
-		local azeriteItemName = azeriteItem:GetItemName()
-		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
-		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
-		--GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 247/255, 225/255, 171/255)
-		GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(xp).."/"..F.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", 1, 1, 1, 1,1,1)
-	end
-
-	--[[if HasArtifactEquipped() then
-		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
-		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-		GameTooltip:AddLine(" ")
-		if C_ArtifactUI.IsEquippedArtifactDisabled() then
-			GameTooltip:AddLine(name, 201/255,189/255,152/255)
-			GameTooltip:AddLine(ARTIFACT_RETIRED, 192/255,201/255,201/255,1)
-		else
-			GameTooltip:AddLine(name.." ("..format(SPELLBOOK_AVAILABLE_AT, pointsSpent)..")", 243/250, 222627/250, 57/250)
-		
-			local numText = num > 0 and " ("..num..")" or ""
-			GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(totalXP)..numText, .6,.8,1, 1,1,1)
-			if xpForNextPoint ~= 0 then
-				local perc = " ("..floor(xp/xpForNextPoint*100).."%)"
-				GameTooltip:AddDoubleLine("Next Trait", F.Numb(xp).."/"..F.Numb(xpForNextPoint)..perc, .6,.8,1, 1,1,1)
-			end
-		
-		end
-	end]]
-
 	--island weekly
 	if UnitLevel("player") == MAX_PLAYER_LEVEL then
 		local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
 		if iwqID and IsQuestFlaggedCompleted(iwqID) then
-			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(ISLANDS_HEADER, 0, 1, 0.5, 1, 1, 1)
 			GameTooltip:AddDoubleLine("Status", "Finished", 1, 1, 1, 1, 1, 1)
 		elseif iwqID then
 			local _, _, _, cur, max = GetQuestObjectiveInfo(iwqID, 1, false)
-			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(ISLANDS_HEADER, 0, 1, 0.5, 1, 1, 1)
 			GameTooltip:AddDoubleLine("Cur / Max", cur.." / "..max, 1, 1, 1, 1, 1, 1)
 			GameTooltip:AddDoubleLine("Needed", (max-cur), 1, 1, 1, 1, 1, 1)
@@ -202,18 +133,6 @@ function module:SetupScript(bar)
 	bar:SetScript("OnEvent", UpdateBar)
 	bar:SetScript("OnEnter", UpdateTooltip)
 	bar:SetScript("OnLeave", GameTooltip_Hide)
-	--[[bar:SetScript("OnMouseUp", function(_, btn)
-		if not HasArtifactEquipped() or btn ~= "LeftButton" then return end
-		if not ArtifactFrame or not ArtifactFrame:IsShown() then
-			SocketInventoryItem(16)
-		else
-			ToggleFrame(ArtifactFrame)
-		end
-	end)
-
-	hooksecurefunc(StatusTrackingBarManager, "UpdateBarsShown", function()
-		UpdateBar(bar)
-	end)]]
 end
 
 function module:Expbar()
