@@ -109,7 +109,7 @@ local updateBorderColourAlt = function(self, unit)
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
 			frame.Name:SetTextColor(.1, .7, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .5)
+			frame.bd.Shadow:SetBackdropBorderColor(1, 1, 1, .5)
 		elseif UnitIsDead(frame.unit) then
 			frame.Name:SetTextColor(.7, .2, .1)
 			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
