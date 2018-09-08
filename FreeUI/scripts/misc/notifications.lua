@@ -71,21 +71,21 @@ function module:InterruptAlert()
 				if C.misc.interruptSound then
 					PlaySoundFile(interruptSound, "Master")
 				end
-				if inInstance and C.misc.interruptNotify then
+				if inInstance and C.misc.interruptNotify and (instanceType ~= 'pvp' and instanceType ~= 'arena') then
 					SendChatMessage(L["interrupted"]..destName.." "..GetSpellLink(spellID), say)
 				end
 			elseif (event == "SPELL_DISPEL") then
 				if C.misc.dispelSound then
 					PlaySoundFile(dispelSound, "Master")
 				end
-				if inInstance and C.misc.dispelNotify then
+				if inInstance and C.misc.interruptNotify and (instanceType ~= 'pvp' and instanceType ~= 'arena') then
 					SendChatMessage(L["dispeled"]..destName.." "..GetSpellLink(spellID), say)
 				end
 			elseif (event == "SPELL_STOLEN") then
 				if C.misc.dispelSound then
 					PlaySoundFile(dispelSound, "Master")
 				end
-				if inInstance and C.misc.dispelNotify then
+				if inInstance and C.misc.interruptNotify and (instanceType ~= 'pvp' and instanceType ~= 'arena') then
 					SendChatMessage(L["stolen"]..destName.." "..GetSpellLink(spellID), say)
 				end
 			end
