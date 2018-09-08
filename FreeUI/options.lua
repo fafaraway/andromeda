@@ -227,6 +227,8 @@ C["tooltip"] = {
 	["spellID"] = true,
 	["azeriteTrait"] = true,
 	["borderColor"] = true,		-- item tooltip border colored by item quality
+
+	["clearTip"] = false,		-- get rid of a few lines, experimental!
 }
 
 

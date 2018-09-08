@@ -119,9 +119,9 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 
 				local myGuild, _, _, myGuildRealm = GetGuildInfo("player")
 				if IsInGuild() and guildName == myGuild and guildRealm == myGuildRealm then
-					GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
+					GameTooltipTextLeft2:SetTextColor(182/255, 243/255, 136/255)
 				else
-					GameTooltipTextLeft2:SetTextColor(.9, .9, .9)
+					GameTooltipTextLeft2:SetTextColor(166/255, 217/255, 243/255)
 				end
 			end
 		end
@@ -250,6 +250,7 @@ hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 end)
 
 
+
 -- Tooltip skin
 local function style(self)
 	self:SetScale(1)
@@ -317,6 +318,9 @@ hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end)
+
+
+GAME_TOOLTIP_BACKDROP_STYLE_AZERITE_ITEM = {}
 
 F:RegisterEvent("ADDON_LOADED", function(_, addon)
 	if addon == "Blizzard_DebugTools" then

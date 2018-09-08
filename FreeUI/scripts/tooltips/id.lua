@@ -60,7 +60,7 @@ local function addLine(tooltip, id, kind)
 		right = HIGHLIGHT_FONT_COLOR_CODE .. id .. FONT_COLOR_CODE_CLOSE
 	end
 
-	if debuginfo == true and IsModifierKeyDown() then 
+	if debuginfo == true and IsShiftKeyDown() then 
 		tooltip:AddDoubleLine(left, right)
 		tooltip:Show()
 	end
@@ -162,10 +162,10 @@ end)
 
 -- Talents
 hooksecurefunc(GameTooltip, "SetTalent", function(self, id)
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.talent) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.talent) end
 end)
 hooksecurefunc(GameTooltip, "SetPvpTalent", function(self, id)
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.talent) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.talent) end
 end)
 
 -- NPCs
@@ -176,18 +176,18 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		local guid = UnitGUID(unit) or ""
 		local id = tonumber(guid:match("-(%d+)-%x+$"), 10)
 		if id and guid:match("%a+") ~= "Player" then
-			if debuginfo == true and IsModifierKeyDown() then addLine(GameTooltip, id, kinds.unit) end
+			if debuginfo == true and IsShiftKeyDown() then addLine(GameTooltip, id, kinds.unit) end
 		end
 	end
 end)
 
 -- Items
 hooksecurefunc(GameTooltip, "SetToyByItemID", function(self, id)
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.item) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.item) end
 end)
 
 hooksecurefunc(GameTooltip, "SetRecipeReagentItem", function(self, id)
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.item) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.item) end
 end)
 
 local function attachItemTooltip(self)
@@ -241,13 +241,13 @@ local function attachItemTooltip(self)
 		addLine(self, id, kinds.item)
 		if itemSplit[2] ~= 0 then
 			enchantid = itemSplit[2]
-			if debuginfo == true and IsModifierKeyDown() then addLine(self, enchantid, kinds.enchant) end
+			if debuginfo == true and IsShiftKeyDown() then addLine(self, enchantid, kinds.enchant) end
 		end
 		if #bonuses ~= 0 then
-			if debuginfo == true and IsModifierKeyDown() then addLine(self, bonuses, kinds.bonus) end
+			if debuginfo == true and IsShiftKeyDown() then addLine(self, bonuses, kinds.bonus) end
 		end
 		if #gems ~= 0 then
-			if debuginfo == true and IsModifierKeyDown() then addLine(self, gems, kinds.gem) end
+			if debuginfo == true and IsShiftKeyDown() then addLine(self, gems, kinds.gem) end
 		end
 	end
 end
@@ -268,7 +268,7 @@ f:SetScript("OnEvent", function(_, _, what)
 			button:HookScript("OnEnter", function()
 				GameTooltip:SetOwner(button, "ANCHOR_NONE")
 				GameTooltip:SetPoint("TOPLEFT", button, "TOPRIGHT", 0, 0)
-				if debuginfo == true and IsModifierKeyDown() then addLine(GameTooltip, button.id, kinds.achievement) end
+				if debuginfo == true and IsShiftKeyDown() then addLine(GameTooltip, button.id, kinds.achievement) end
 				GameTooltip:Show()
 			end)
 			button:HookScript("OnLeave", function()
@@ -286,7 +286,7 @@ f:SetScript("OnEvent", function(_, _, what)
 						if criteriaid then
 							GameTooltip:SetOwner(button:GetParent(), "ANCHOR_NONE")
 							GameTooltip:SetPoint("TOPLEFT", button, "TOPRIGHT", 0, 0)
-							if debuginfo == true and IsModifierKeyDown() then 
+							if debuginfo == true and IsShiftKeyDown() then 
 								addLine(GameTooltip, button.id, kinds.achievement)
 								addLine(GameTooltip, criteriaid, kinds.criteria)
 							end
@@ -314,13 +314,13 @@ f:SetScript("OnEvent", function(_, _, what)
 			end
 
 			if #visualIDs ~= 0 then
-				if debuginfo == true and IsModifierKeyDown() then addLine(GameTooltip, visualIDs, kinds.visual) end	 
+				if debuginfo == true and IsShiftKeyDown() then addLine(GameTooltip, visualIDs, kinds.visual) end	 
 			end
 			if #sourceIDs ~= 0 then
-				if debuginfo == true and IsModifierKeyDown() then addLine(GameTooltip, sourceIDs, kinds.source) end
+				if debuginfo == true and IsShiftKeyDown() then addLine(GameTooltip, sourceIDs, kinds.source) end
 			end
 			if #itemIDs ~= 0 then
-				if debuginfo == true and IsModifierKeyDown() then addLine(GameTooltip, itemIDs, kinds.item) end
+				if debuginfo == true and IsShiftKeyDown() then addLine(GameTooltip, itemIDs, kinds.item) end
 			end
 		end)
 	end
@@ -339,26 +339,26 @@ end)
 -- Currencies
 hooksecurefunc(GameTooltip, "SetCurrencyToken", function(self, index)
 	local id = tonumber(string.match(GetCurrencyListLink(index),"currency:(%d+)"))
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.currency) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.currency) end
 end)
 
 hooksecurefunc(GameTooltip, "SetCurrencyByID", function(self, id)
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.currency) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.currency) end
 end)
 
 hooksecurefunc(GameTooltip, "SetCurrencyTokenByID", function(self, id)
-	if debuginfo == true and IsModifierKeyDown() then addLine(self, id, kinds.currency) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(self, id, kinds.currency) end
 end)
 
 -- Quests
 hooksecurefunc("QuestMapLogTitleButton_OnEnter", function(self)
 	local id = select(8, GetQuestLogTitle(self.questLogIndex))
-	if debuginfo == true and IsModifierKeyDown() then addLine(GameTooltip, id, kinds.quest) end
+	if debuginfo == true and IsShiftKeyDown() then addLine(GameTooltip, id, kinds.quest) end
 end)
 
 hooksecurefunc("TaskPOI_OnEnter", function(self)
 	if self and self.questID then 
-		if debuginfo == true and IsModifierKeyDown() then addLine(WorldMapTooltip, self.questID, kinds.quest) end	
+		if debuginfo == true and IsShiftKeyDown() then addLine(WorldMapTooltip, self.questID, kinds.quest) end	
 	end
 end)
 

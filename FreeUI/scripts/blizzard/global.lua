@@ -87,22 +87,19 @@ if C.client == "enUS" or C.Client == "enGB" then
 	ITEM_WRONG_CLASS = "Wrong class!"
 	ITEM_UNSELLABLE = "Can't be sold"
 	SELL_PRICE = "Price"
+
+	ARMOR_TEMPLATE = "Armor: %s"
+	DAMAGE_TEMPLATE = "Damage: %s - %s"
+	DPS_TEMPLATE = "%s DPS"
+	DURABILITY_TEMPLATE = "Durability: %d/%d"
+	SHIELD_BLOCK_TEMPLATE = "Block: %d"
+
+	EMPTY_SOCKET_RED = "red"
+	EMPTY_SOCKET_YELLOW = "yellow"
+	EMPTY_SOCKET_BLUE = "blue"
+	EMPTY_SOCKET_META = "meta"
+	EMPTY_SOCKET_NO_COLOR = "prismatic"
 end
-
-
-
-ARMOR_TEMPLATE = "Armor: %s"
-DAMAGE_TEMPLATE = "Damage: %s - %s"
-DPS_TEMPLATE = "%s DPS"
-DURABILITY_TEMPLATE = "Durability: %d/%d"
-SHIELD_BLOCK_TEMPLATE = "Block: %d"
-
-EMPTY_SOCKET_RED = "red"
-EMPTY_SOCKET_YELLOW = "yellow"
-EMPTY_SOCKET_BLUE = "blue"
-EMPTY_SOCKET_META = "meta"
-EMPTY_SOCKET_NO_COLOR = "prismatic"
-
 
 --[[ Text colours ]]
 
