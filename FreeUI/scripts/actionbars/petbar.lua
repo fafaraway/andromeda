@@ -9,7 +9,7 @@ function Bar:CreatePetbar()
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_PetActionBar", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeSmall + (num-1)*cfg.margin + 2*cfg.padding)
+	frame:SetWidth(num*cfg.buttonSizeSmall + (num-1)*(cfg.margin+2) + 2*cfg.padding)
 	frame:SetHeight(cfg.buttonSizeSmall + 2*cfg.padding)
 	frame:SetScale(1)
 
@@ -43,7 +43,7 @@ function Bar:CreatePetbar()
 			button:SetPoint("LEFT", frame, cfg.padding, 0)
 		else
 			local previous = _G["PetActionButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin+2, 0)
 		end
 		--cooldown fix
 		local cd = _G["PetActionButton"..i.."Cooldown"]

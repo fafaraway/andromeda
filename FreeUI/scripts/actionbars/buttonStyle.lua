@@ -172,7 +172,7 @@ local function styleActionButton(bu)
 	fl:SetTexture("")
 
 	bu:SetPushedTexture(C.media.backdrop)
-	bu:SetCheckedTexture(C.media.backdrop)
+	bu:SetCheckedTexture(C.media.checked)
 	bu:SetNormalTexture("")
 	bu:SetHighlightTexture("")
 
@@ -218,12 +218,13 @@ local function stylePetButton(bu)
 
 	local name = bu:GetName()
 	local ic  = _G[name.."Icon"]
+	local fl= _G[name.."Flash"]
 
 	_G[name.."NormalTexture2"]:SetAllPoints(bu)
 	_G[name.."AutoCastable"]:SetAlpha(0)
 
 	bu:SetPushedTexture(C.media.backdrop)
-	bu:SetCheckedTexture(C.media.backdrop)
+	bu:SetCheckedTexture(C.media.checked)
 	bu:SetNormalTexture("")
 	bu:SetHighlightTexture("")
 
@@ -234,15 +235,23 @@ local function stylePetButton(bu)
 	end)
 
 	local ch = bu:GetCheckedTexture()
-	ch:SetVertexColor(r, g, b)
+	ch:SetVertexColor(r, g, b, .25)
 	ch:SetDrawLayer("ARTWORK")
 	ch:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	ch:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
+
+	local pu = bu:GetPushedTexture()
+	pu:SetVertexColor(r, g, b, .25)
+	pu:SetDrawLayer("ARTWORK")
+	pu:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
+	pu:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 
 	ic:SetTexCoord(.08, .92, .08, .92)
 	ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 	-- ic:SetDrawLayer("OVERLAY")
+
+	fl:SetTexture("")
 
 	updateHotkey(bu)
 
