@@ -87,8 +87,8 @@ C.themes["Blizzard_PVPUI"] = function()
 		end
 	end
 
-	F.StripTextures(HonorFrame.ConquestBar)
-	F.CreateBDFrame(HonorFrame.ConquestBar, .25)
+	--F.StripTextures(HonorFrame.ConquestBar)
+	--F.CreateBDFrame(HonorFrame.ConquestBar, .25)
 
 	-- Role buttons
 
@@ -175,8 +175,8 @@ C.themes["Blizzard_PVPUI"] = function()
 	end
 
 	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
-	F.StripTextures(ConquestFrame.ConquestBar)
-	F.CreateBDFrame(ConquestFrame.ConquestBar, .25)
+	--F.StripTextures(ConquestFrame.ConquestBar)
+	--F.CreateBDFrame(ConquestFrame.ConquestBar, .25)
 
 	-- Main style
 

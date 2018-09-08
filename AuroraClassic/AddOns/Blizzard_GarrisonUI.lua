@@ -963,6 +963,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			hooksecurefunc(OrderHallMissionFrame.MissionTab.MissionList, "Update", buttonOnUpdate)
 			OrderHallMissionFrame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
 
+			hooksecurefunc(BFAMissionFrame.MissionTab.MissionList, "Update", buttonOnUpdate)
+			BFAMissionFrame.MissionTab.MissionPage:HookScript("OnShow", buttonOnShow)
+
 			f:UnregisterEvent(event)
 		end
 	end)
