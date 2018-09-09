@@ -2,21 +2,21 @@ local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_WarboardUI"] = function()
 	local WarboardQuestChoiceFrame = _G.WarboardQuestChoiceFrame
- 	F.ReskinClose(WarboardQuestChoiceFrame.CloseButton)
+	F.ReskinClose(WarboardQuestChoiceFrame.CloseButton)
 
- 	WarboardQuestChoiceFrame.Background:Hide()
+	WarboardQuestChoiceFrame.Background:Hide()
 	WarboardQuestChoiceFrame.Title.Left:Hide()
 	WarboardQuestChoiceFrame.Title.Right:Hide()
 	WarboardQuestChoiceFrame.Title.Middle:Hide()
 	WarboardQuestChoiceFrame.BorderFrame:Hide()
 
 	_G.WarboardQuestChoiceFrameTopRightCorner:Hide()
-    WarboardQuestChoiceFrame.topLeftCorner:Hide()
-    WarboardQuestChoiceFrame.topBorderBar:Hide()
-    _G.WarboardQuestChoiceFrameBotRightCorner:Hide()
-    _G.WarboardQuestChoiceFrameBotLeftCorner:Hide()
-    _G.WarboardQuestChoiceFrameBottomBorder:Hide()
-    WarboardQuestChoiceFrame.leftBorderBar:Hide()
+	WarboardQuestChoiceFrame.topLeftCorner:Hide()
+	WarboardQuestChoiceFrame.topBorderBar:Hide()
+	_G.WarboardQuestChoiceFrameBotRightCorner:Hide()
+	_G.WarboardQuestChoiceFrameBotLeftCorner:Hide()
+	_G.WarboardQuestChoiceFrameBottomBorder:Hide()
+	WarboardQuestChoiceFrame.leftBorderBar:Hide()
 	_G.WarboardQuestChoiceFrameRightBorder:Hide()
 
 	F.CreateBD(WarboardQuestChoiceFrame)
@@ -37,16 +37,16 @@ C.themes["Blizzard_WarboardUI"] = function()
 					end
 					option.Header.Text:SetTextColor(0, 0, 0)
 					option.Header.SetTextColor = F.dummy
-					option.OptionText:SetTextColor(1, .8, 0)
+					option.OptionText:SetTextColor(0, 0, 0)
 					option.OptionText.SetTextColor = F.dummy
 				end
 				F.Reskin(option.OptionButtonsContainer.OptionButton1)
 				option.styled = true
 			end
- 		end
- 	end)
+		end
+	end)
 
- 	
+	
 
 
 end
