@@ -279,7 +279,7 @@ local function style(self)
 	end
 
 	self.bg:SetBackdropBorderColor(0, 0, 0)
-	self.sd:SetBackdropBorderColor(0, 0, 0, .5)
+	self.sd:SetBackdropBorderColor(0, 0, 0, .3)
 
 	if C.tooltip.borderColor and self.GetItem then
 		local _, item = self:GetItem()
@@ -288,7 +288,7 @@ local function style(self)
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
 				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-				self.sd:SetBackdropBorderColor(color.r, color.g, color.b, .5)
+				self.sd:SetBackdropBorderColor(color.r, color.g, color.b, .3)
 			end
 		end
 	end
