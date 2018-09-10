@@ -1,39 +1,11 @@
 local F, C, L = unpack(select(2, ...))
 
+if not C.unitframes.enable then return end
+
 local parent, ns = ...
 local oUF = ns.oUF
 local cast = ns.cast
 
-local powerHeight = C.unitframes.power_height
-local altPowerHeight = C.unitframes.altpower_height
-local classPowerHeight = C.unitframes.classPower_height
-local playerWidth = C.unitframes.player_width
-local playerHeight = C.unitframes.player_height
-local targetWidth = C.unitframes.target_width
-local targetHeight = C.unitframes.target_height
-local targettargetWidth = C.unitframes.targettarget_width
-local targettargetHeight = C.unitframes.targettarget_height
-local focusWidth = C.unitframes.focus_width
-local focusHeight = C.unitframes.focus_height
-local focustargetWidth = C.unitframes.focustarget_width
-local focustargetHeight = C.unitframes.focustarget_height
-local petWidth = C.unitframes.pet_width
-local petHeight = C.unitframes.pet_height
-local bossWidth = C.unitframes.boss_width
-local bossHeight = C.unitframes.boss_height
-local arenaWidth = C.unitframes.arena_width
-local arenaHeight = C.unitframes.arena_height
-local partyWidth = C.unitframes.party_width
-local partyHeight = C.unitframes.party_height
-local partyWidthHealer = C.unitframes.party_width_healer
-local partyHeightHealer = C.unitframes.party_height_healer
-local raidWidth = C.unitframes.raid_width
-local raidHeight = C.unitframes.raid_height
-
-local CBshield = C.unitframes.castbarColorShield
-local CBnormal = C.unitframes.castbarColorNormal
-
---oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
 oUF.colors.power.MANA = {100/255, 149/255, 237/255}
 oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
@@ -103,7 +75,7 @@ local updateNameColourAlt = function(self)
 	end
 end
 
--- update selected border
+-- update selected boss frame border
 local updateBorderColourAlt = function(self, unit)
 	local frame = self:GetParent()
 	if frame.unit then
@@ -139,17 +111,17 @@ oUF.Tags.Events['free:health'] = oUF.Tags.Events.missinghp
 
 -- classification
 oUF.Tags.Methods["free:classification"] = function(unit)
-  local c = UnitClassification(unit)
-  local l = UnitLevel(unit)
-  if(c == 'worldboss' or l == -1) then
-	return '|cffff0000{B}|r '
-  elseif(c == 'rare') then
-	return '|cffff9900{R}|r '
-  elseif(c == 'rareelite') then
-	return '|cffff0000{R+}|r '
-  elseif(c == 'elite') then
-	return '|cffff6666{E}|r '
-  end
+	local c = UnitClassification(unit)
+	local l = UnitLevel(unit)
+	if(c == 'worldboss' or l == -1) then
+		return '|cffff0000{B}|r '
+	elseif(c == 'rare') then
+		return '|cffff9900{R}|r '
+	elseif(c == 'rareelite') then
+		return '|cffff0000{R+}|r '
+	elseif(c == 'elite') then
+		return '|cffff6666{E}|r '
+	end
 end
 oUF.Tags.Events["free:classification"] = "UNIT_CLASSIFICATION_CHANGED"
 
@@ -379,8 +351,8 @@ end
 local function CreateAltPower(self)
 	local bar = CreateFrame("StatusBar", nil, self)
 	bar:SetStatusBarTexture(C.media.texture)
-	bar:SetPoint("BOTTOM", self, 0, -altPowerHeight-3)
-	bar:SetSize(self:GetWidth(), altPowerHeight)
+	bar:SetPoint("BOTTOM", self, 0, -C.unitframes.altpower_height - 3)
+	bar:SetSize(self:GetWidth(), C.unitframes.altpower_height)
 
 	local abd = CreateFrame("Frame", nil, bar)
 	abd:SetPoint("TOPLEFT", -1, 1)
@@ -524,9 +496,7 @@ local function CreateCastBar(self)
 	cb.PostCastInterrupted = cast.PostCastFailed
 	cb.PostCastInterruptible = cast.PostUpdateInterruptible
 	cb.PostCastNotInterruptible = cast.PostUpdateInterruptible
-
 end
-
 
 
 -- Auras
@@ -534,13 +504,10 @@ local function formatAuraTime(s)
 	local day, hour, minute = 86400, 3600, 60
 
 	if s >= day then
-		--return format('%dd', floor(s/day + 0.5))
 		return format('%d', floor(s/day + 0.5))
 	elseif s >= hour then
-		--return format('%dh', floor(s/hour + 0.5))
 		return format('%d', floor(s/hour + 0.5))
 	elseif s >= minute then
-		--return format('%dm', floor(s/minute + 0.5))
 		return format('%d', floor(s/minute + 0.5))
 	end
 	return format('%d', mod(s, minute))
@@ -766,7 +733,6 @@ end
 
 -- Portrait
 local function PostUpdatePortrait(element, unit)
-	-- element:SetModelAlpha(0.1)
 	element:SetDesaturation(1)
 end
 
@@ -776,7 +742,7 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	if(diff) then
 		for index = 1, max do
 			local Bar = element[index]
-			local maxWidth, gap = playerWidth, 3
+			local maxWidth, gap = C.unitframes.player_width, 3
 			if(max == 3) then
 				Bar:SetWidth(((maxWidth / 3) - ((2 * gap) / 3)))
 			elseif(max == 4) then
@@ -829,7 +795,7 @@ local function CreateClassPower(self)
 
 	for index = 1, 11 do -- have to create an extra to force __max to be different from UnitPowerMax
 		local Bar = CreateFrame('StatusBar', nil, self)
-		Bar:SetHeight(classPowerHeight)
+		Bar:SetHeight(C.unitframes.classPower_height)
 		Bar:SetStatusBarTexture(C.media.texture)
 		Bar:SetBackdropColor(0, 0, 0)
 
@@ -838,9 +804,9 @@ local function CreateClassPower(self)
 		local function moveCPBar()
 			if(index == 1) then
 				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -powerHeight-4-altPowerHeight)
+					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -C.unitframes.power_height - 4 -C.unitframes.altpower_height)
 				else
-					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -powerHeight-2)
+					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -C.unitframes.power_height - 2)
 				end
 			end
 		end
@@ -884,14 +850,14 @@ end
 
 local function CreateRunesBar(self)
 	local Runes = CreateFrame("Frame", nil, self)
-	Runes:SetWidth(playerWidth)
-	Runes:SetHeight(classPowerHeight)
+	Runes:SetWidth(C.unitframes.player_width)
+	Runes:SetHeight(C.unitframes.classPower_height)
 
 	local function moveCPBar()
 		if self.AlternativePower:IsShown() then
-			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-4-altPowerHeight-classPowerHeight)
+			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.classPower_height - 4 -C.unitframes.altpower_height - C.unitframes.classPower_height)
 		else
-			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -classPowerHeight-2-altPowerHeight)
+			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.classPower_height - 2 - C.unitframes.altpower_height)
 		end
 	end
 	self.AlternativePower:HookScript("OnShow", moveCPBar)
@@ -900,17 +866,17 @@ local function CreateRunesBar(self)
 
 	for index = 1, 6 do
 		local Rune = CreateFrame('StatusBar', nil, self)
-		Rune:SetHeight(classPowerHeight)
+		Rune:SetHeight(C.unitframes.classPower_height)
 		Rune:SetStatusBarTexture(C.media.texture)
 
 		F.CreateBDFrame(Rune)
 
 		if(index == 1) then
 			Rune:SetPoint("LEFT", Runes)
-			Rune:SetWidth(playerWidth/6)
+			Rune:SetWidth(C.unitframes.player_width/6)
 		else
 			Rune:SetPoint('LEFT', Runes[index - 1], 'RIGHT', 3, 0)
-			Rune:SetWidth((playerWidth/6)-3)
+			Rune:SetWidth((C.unitframes.player_width/6)-3)
 		end
 
 		Runes[index] = Rune
@@ -1057,7 +1023,6 @@ local function CreateIndicator(self)
 
 		self.PhaseIndicator = PhaseIndicator
 	end
-
 end
 
 -- name
@@ -1106,7 +1071,7 @@ local function UpdateTOTName(self)
 	tt:SetJustifyH"CENTER"
 	tt:SetFont(unpack(ufFont))
 	tt:SetWordWrap(false)
-	tt:SetWidth(targettargetWidth)
+	tt:SetWidth(C.unitframes.targettarget_width)
 
 	f:RegisterEvent("UNIT_TARGET")
 	f:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -1130,7 +1095,7 @@ local function UpdateTOFName(self)
 	ft:SetFont(unpack(ufFont))
 	ft:SetJustifyH"CENTER"
 	ft:SetWordWrap(false)
-	ft:SetWidth(focustargetWidth)
+	ft:SetWidth(C.unitframes.focustarget_width)
 
 	f:RegisterEvent("UNIT_TARGET")
 	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
@@ -1150,7 +1115,7 @@ end
 -- Hide Blizz frames
 F.HideObject(CompactRaidFrameContainer)
 F.HideObject(CompactRaidFrameManager)
-RaidOptionsFrame_UpdatePartyFrames = F.dummy	
+RaidOptionsFrame_UpdatePartyFrames = F.dummy
 
 -- Global
 local Shared = function(self, unit, isSingle)
@@ -1182,7 +1147,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
 	Health:SetPoint("RIGHT")
-	Health:SetPoint("BOTTOM", 0, 1 + powerHeight)
+	Health:SetPoint("BOTTOM", 0, 1 + C.unitframes.power_height)
 
 	self.Health = Health
 	Health.PostUpdate = PostUpdateHealth
@@ -1232,7 +1197,7 @@ local Shared = function(self, unit, isSingle)
 	Power.frequentUpdates = true
 	SmoothBar(Power)
 
-	Power:SetHeight(powerHeight)
+	Power:SetHeight(C.unitframes.power_height)
 
 	Power:SetPoint("LEFT")
 	Power:SetPoint("RIGHT")
@@ -1248,7 +1213,7 @@ local Shared = function(self, unit, isSingle)
 	Powertex:SetVertexColor(0, 0, 0)
 
 	Power.bg = Power:CreateTexture(nil, "BACKGROUND")
-	Power.bg:SetHeight(powerHeight)
+	Power.bg:SetHeight(C.unitframes.power_height)
 	Power.bg:SetPoint("LEFT")
 	Power.bg:SetPoint("RIGHT")
 	Power.bg:SetTexture(C.media.backdrop)
@@ -1274,7 +1239,7 @@ local Shared = function(self, unit, isSingle)
 		local Portrait = CreateFrame('PlayerModel', nil, self)
 		Portrait:SetAllPoints(Health)
 		Portrait:SetFrameLevel(Health:GetFrameLevel() - 1)
-		Portrait:SetAlpha(.1)
+		Portrait:SetAlpha(C.unitframes.portraitAlpha)
 		Portrait.PostUpdate = PostUpdatePortrait
 		self.Portrait = Portrait
 	end
@@ -1316,7 +1281,7 @@ local Shared = function(self, unit, isSingle)
 
 	if unit == "player" or unit == "pet" then
 		local CounterBar = CreateFrame("StatusBar", nil, self)
-		CounterBar:SetWidth(playerWidth)
+		CounterBar:SetWidth(200)
 		CounterBar:SetHeight(16)
 		CounterBar:SetStatusBarTexture(C.media.texture)
 		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
@@ -1348,9 +1313,14 @@ local Shared = function(self, unit, isSingle)
 
 	-- [[ Spell Range ]]
 
-	self.SpellRange = {
-		insideAlpha = 1,
-		outsideAlpha = .4}
+	if unit == "target" or unit == "targettarget"
+		or unit == "foucs" or unit == "foucstarget"
+		or unit:find("boss%d") or unit:find("arena%d") then
+		self.SpellRange = {
+			insideAlpha = 1,
+			outsideAlpha = C.unitframes.outRangeAlpha
+		}
+	end
 
 
 	--[[ Set up the layout ]]
@@ -1361,21 +1331,21 @@ local Shared = function(self, unit, isSingle)
 
 	if(isSingle) then
 		if unit == "player" then
-			self:SetSize(playerWidth, playerHeight)
+			self:SetSize(C.unitframes.player_width, C.unitframes.player_height)
 		elseif unit == "target" then
-			self:SetSize(targetWidth, targetHeight)
+			self:SetSize(C.unitframes.target_width, C.unitframes.target_height)
 		elseif unit == "targettarget" then
-			self:SetSize(targettargetWidth, targettargetHeight)
+			self:SetSize(C.unitframes.targettarget_width, C.unitframes.targettarget_height)
 		elseif unit:find("arena%d") then
-			self:SetSize(arenaWidth, arenaHeight)
+			self:SetSize(C.unitframes.arena_width, C.unitframes.arena_height)
 		elseif unit == "focus" then
-			self:SetSize(focusWidth, focusHeight)
+			self:SetSize(C.unitframes.focus_width, C.unitframes.focus_height)
 		elseif unit == "focustarget" then
-			self:SetSize(focustargetWidth, focustargetHeight)
+			self:SetSize(C.unitframes.focus_width, C.unitframes.focus_height)
 		elseif unit == "pet" then
-			self:SetSize(petWidth, petHeight)
+			self:SetSize(C.unitframes.pet_width, C.unitframes.pet_height)
 		elseif unit and unit:find("boss%d") then
-			self:SetSize(bossWidth, bossHeight)
+			self:SetSize(C.unitframes.boss_width, C.unitframes.boss_height)
 		end
 	end
 
@@ -1391,7 +1361,7 @@ local UnitSpecific = {
 		local Health = self.Health
 		local Power = self.Power
 
-		Health:SetHeight(petHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.pet_height - C.unitframes.power_height - 1)
 
 		CreateIndicator(self)
 		CreateCastBar(self)
@@ -1407,7 +1377,7 @@ local UnitSpecific = {
 		local Health = self.Health
 		local Power = self.Power
 
-		Health:SetHeight(playerHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.player_height - C.unitframes.power_height - 1)
 
 		local HealthPoints = F.CreateFS(Health, "LEFT")
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
@@ -1440,7 +1410,7 @@ local UnitSpecific = {
 		local Health = self.Health
 		local Power = self.Power
 
-		Health:SetHeight(targetHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.target_height - C.unitframes.power_height - 1)
 
 		local HealthPoints = F.CreateFS(Health, "LEFT")
 		HealthPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
@@ -1469,7 +1439,7 @@ local UnitSpecific = {
 		local Health = self.Health
 		local Power = self.Power
 
-		Health:SetHeight(targettargetHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.targettarget_height - C.unitframes.power_height - 1)
 
 		UpdateTOTName(self)
 		CreateIndicator(self)
@@ -1483,7 +1453,7 @@ local UnitSpecific = {
 		local Health = self.Health
 		local Power = self.Power
 
-		Health:SetHeight(focusHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.focus_height - C.unitframes.power_height - 1)
 
 		CreateName(self)
 		CreateIndicator(self)
@@ -1497,7 +1467,7 @@ local UnitSpecific = {
 		local Health = self.Health
 		local Power = self.Power
 
-		Health:SetHeight(focustargetHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.focustarget_height - C.unitframes.power_height - 1)
 
 		UpdateTOFName(self)
 		CreateIndicator(self)
@@ -1515,7 +1485,7 @@ local UnitSpecific = {
 		self:SetAttribute('initial-height', bossHeight)
 		self:SetAttribute('initial-width', bossWidth)
 
-		Health:SetHeight(bossHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.boss_height - C.unitframes.power_height - 1)
 
 		local HealthPoints = F.CreateFS(Health, "RIGHT")
 		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 4)
@@ -1546,7 +1516,7 @@ local UnitSpecific = {
 		self:SetAttribute('initial-height', arenaHeight)
 		self:SetAttribute('initial-width', arenaWidth)
 
-		Health:SetHeight(arenaHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.arena_height - C.unitframes.power_height - 1)
 
 		local HealthPoints = F.CreateFS(Health, "RIGHT")
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
@@ -1563,11 +1533,6 @@ local UnitSpecific = {
 }
 
 do
-	local range = {
-		insideAlpha = 1,
-		outsideAlpha = .4,
-	}
-
 	UnitSpecific.party = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "group"
@@ -1583,7 +1548,7 @@ do
 
 		self:Tag(Text, '[dead][offline]')
 
-		Health:SetHeight(partyHeight - powerHeight - 1)
+		Health:SetHeight(C.unitframes.party_height - C.unitframes.power_height - 1)
 		if C.unitframes.partyNameAlways then
 			Text:SetFont(unpack(ufFont))
 			self:Tag(Text, '[free:name]')
@@ -1596,9 +1561,9 @@ do
 		CreateIndicator(self)
 
 
-		local Debuffs = CreateFrame("Frame", nil, self)
+		--[[local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "CENTER"
-		Debuffs:SetPoint("BOTTOM", 0, powerHeight - 1)
+		Debuffs:SetPoint("BOTTOM", 0, C.unitframes.power_height - 1)
 		Debuffs["growth-x"] = "RIGHT"
 		Debuffs["spacing-x"] = 4
 
@@ -1663,14 +1628,16 @@ do
 
 		Buffs.PostCreateIcon = PostCreateIcon
 		Buffs.PostUpdateIcon = PostUpdateIcon
-		Buffs.CustomFilter = groupBuffFilter
+		Buffs.CustomFilter = groupBuffFilter]]
 
 
 		local select = CreateFrame("Frame", nil, self)
 		select:RegisterEvent("PLAYER_TARGET_CHANGED")
 		select:SetScript("OnEvent", updateNameColourAlt)
 
-		self.Range = range
+		self.Range = {
+			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
+		}
 	end
 end
 
@@ -1722,9 +1689,6 @@ oUF:Factory(function(self)
 	focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus))
 	focustarget = spawnHelper(self, 'focustarget', unpack(C.unitframes.focustarget))
 
-	partyPos = C.unitframes.party
-	raidPos = C.unitframes.raid
-
 	for n = 1, MAX_BOSS_FRAMES do
 		spawnHelper(self, 'boss' .. n, C.unitframes.boss.a, C.unitframes.boss.b, C.unitframes.boss.c, C.unitframes.boss.x, C.unitframes.boss.y + (80 * n))
 	end
@@ -1738,10 +1702,6 @@ oUF:Factory(function(self)
 	if not C.unitframes.enableGroup then return end
 
 	self:SetActiveStyle'Free - Party'
-
-	local party_width, party_height
-	party_width = partyWidth
-	party_height = partyHeight
 
 	local party = self:SpawnHeader(nil, nil, "party",
 		'showParty', true,
@@ -1759,10 +1719,10 @@ oUF:Factory(function(self)
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)
-		]]):format(party_height, party_width)
+		]]):format(C.unitframes.party_height, C.unitframes.party_width)
 	)
 
-	party:SetPoint(unpack(partyPos))
+	party:SetPoint(unpack(C.unitframes.party))
 
 	local raid = self:SpawnHeader(nil, nil, "raid",
 		'showParty', false,
@@ -1781,10 +1741,10 @@ oUF:Factory(function(self)
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)
-		]]):format(raidHeight, raidWidth)
+		]]):format(C.unitframes.raid_height, C.unitframes.raid_width)
 	)
 
-	raid:SetPoint(unpack(raidPos))
+	raid:SetPoint(unpack(C.unitframes.raid))
 
 	-- 限制团队框体只显示4个队伍20名成员
 	if C.unitframes.limitRaidSize then
