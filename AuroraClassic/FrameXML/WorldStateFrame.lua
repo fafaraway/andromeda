@@ -10,7 +10,7 @@ tinsert(C.themes["AuroraClassic"], function()
 	WorldStateScoreFrameTab1:SetPoint("TOPLEFT", WorldStateScoreFrame, "BOTTOMLEFT", 5, 2)
 	WorldStateScoreFrameTab2:SetPoint("LEFT", WorldStateScoreFrameTab1, "RIGHT", -15, 0)
 	WorldStateScoreFrameTab3:SetPoint("LEFT", WorldStateScoreFrameTab2, "RIGHT", -15, 0)
-	WorldStateScoreFrame.XPBar.Frame:Hide()
+	--WorldStateScoreFrame.XPBar.Frame:Hide()
 
 	for i = 1, 3 do
 		F.ReskinTab(_G["WorldStateScoreFrameTab"..i])

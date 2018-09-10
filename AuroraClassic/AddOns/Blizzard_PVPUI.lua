@@ -91,7 +91,7 @@ C.themes["Blizzard_PVPUI"] = function()
 		F.StripTextures(bar.ConquestBar)
 		F.CreateBDFrame(bar.ConquestBar, .25)
 		bar.ConquestBar:SetStatusBarTexture(C.media.texture)
-		bar.ConquestBar:SetStatusBarColor(230/255, 213/255, 120/255)
+		bar.ConquestBar:SetStatusBarColor(219/255, 34/255, 70/255)
 		--bar.ConquestBar:GetStatusBarTexture():SetGradient("VERTICAL", 1, .8, 0, 6, .4, 0)
 	end
 	reskinConquestBar(HonorFrame)

@@ -27,10 +27,12 @@ C.themes["Blizzard_WarboardUI"] = function()
 			local option = self.Options[i]
 			option.OptionText:SetTextColor(0, 0, 0)
 			option.Header.Text:SetTextColor(0, 0, 0)
+			--option.Background:SetAlpha(0)
 			if not option.styled then
 				F.Reskin(option.OptionButtonsContainer.OptionButton1)
 				for i = 1, option.WidgetContainer:GetNumChildren() do
 					local child = select(i, option.WidgetContainer:GetChildren())
+
 					if child.Text then
 						child.Text:SetTextColor(0, 0, 0)
 						child.Text.SetTextColor = F.dummy
