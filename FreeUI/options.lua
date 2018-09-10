@@ -256,8 +256,8 @@ C["unitframes"] = {
 		["powerTypeColor"] = true,
 
 	["gradient"] = false,					-- gradient mode
-	["portrait"] = false,
-	["portraitAlpha"] = .2,
+	["portrait"] = true,
+	["portraitAlpha"] = .08,
 
 	["outRangeAlpha"] = .4,
 

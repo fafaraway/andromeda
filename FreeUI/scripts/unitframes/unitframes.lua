@@ -114,13 +114,13 @@ oUF.Tags.Methods["free:classification"] = function(unit)
 	local c = UnitClassification(unit)
 	local l = UnitLevel(unit)
 	if(c == 'worldboss' or l == -1) then
-		return '|cffff0000{B}|r '
+		return '|cff9D2933{B}|r '
 	elseif(c == 'rare') then
-		return '|cffff9900{R}|r '
+		return '|cffFF99FF{R}|r '
 	elseif(c == 'rareelite') then
-		return '|cffff0000{R+}|r '
+		return '|cffFF0099{R+}|r '
 	elseif(c == 'elite') then
-		return '|cffff6666{E}|r '
+		return '|cffCC3300{E}|r '
 	end
 end
 oUF.Tags.Events["free:classification"] = "UNIT_CLASSIFICATION_CHANGED"
@@ -379,15 +379,10 @@ local function CreateCastBar(self)
 	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.unitStyle, self)
 	cb:SetHeight(C.unitframes.cbHeight)
 	cb:SetWidth(self:GetWidth())
+	cb:SetAllPoints(self)
 	cb:SetStatusBarTexture(C.media.texture)
 	cb:SetStatusBarColor(0, 0, 0, 0)
-	cb:SetFrameLevel(self.Health:GetFrameLevel() + 1)
-	cb:SetAllPoints(self)
-
-	local bg = CreateFrame("Frame", nil, cb)
-	bg:SetPoint("TOPLEFT", -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	bg:SetFrameLevel(cb:GetFrameLevel()-1)
+	cb:SetFrameLevel(self.Health:GetFrameLevel() + 3)
 
 	cb.CastingColor = C.unitframes.cbCastingColor
 	cb.ChannelingColor = C.unitframes.cbChannelingColor
@@ -419,7 +414,7 @@ local function CreateCastBar(self)
 
 	local iconFrame = CreateFrame("Frame", nil, cb)
 	iconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
-	iconFrame:SetSize(22, 22)
+	iconFrame:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
 
 	F.CreateSD(iconFrame)
 
@@ -445,11 +440,11 @@ local function CreateCastBar(self)
 		safe:SetVertexColor(223/255, 63/255, 107/255, .6)
 		safe:SetPoint("TOPRIGHT")
 		safe:SetPoint("BOTTOMRIGHT")
-		--cb:SetFrameLevel(10)
 		cb.SafeZone = safe
 	end
 
-	if self.unitStyle == "target" or self.unitStyle == "focus" or (C.unitframes.castbarSeparate and self.unitStyle == "player") then
+	if self.unitStyle == "target" or self.unitStyle == "focus"
+		or (C.unitframes.castbarSeparate and self.unitStyle == "player") then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
 		cb:ClearAllPoints()
@@ -460,6 +455,11 @@ local function CreateCastBar(self)
 		name:SetAlpha(1)
 
 		timer:Show()
+
+		local bg = CreateFrame("Frame", nil, cb)
+		bg:SetPoint("TOPLEFT", -1, 1)
+		bg:SetPoint("BOTTOMRIGHT", 1, -1)
+		bg:SetFrameLevel(cb:GetFrameLevel()-1)
 
 		F.CreateBD(bg)
 		F.CreateSD(bg)
@@ -561,6 +561,7 @@ local function PostCreateIcon(element, button)
 	button.stealable:SetTexture(nil)
 	button.cd:SetReverse(true)
 	button.icon:SetDrawLayer('ARTWORK')
+	button:SetFrameLevel(element:GetFrameLevel() + 4)
 
 	element.disableCooldown = true
 
@@ -1177,10 +1178,12 @@ local Shared = function(self, unit, isSingle)
 
 	if C.unitframes.transMode then
 		local Healthdef = CreateFrame("StatusBar", nil, self)
-		Healthdef:SetFrameStrata("LOW")
+		--Healthdef:SetFrameStrata("LOW")
+		Healthdef:SetFrameLevel(Health:GetFrameLevel() + 1)
 		Healthdef:SetAllPoints(Health)
 		Healthdef:SetStatusBarTexture(C.media.texture)
 		Healthdef:SetStatusBarColor(1, 1, 1)
+		--Healthdef:SetAlpha(.6)
 
 		Healthdef:SetReverseFill(true)
 		SmoothBar(Healthdef)
@@ -1235,10 +1238,10 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Portrait ]]
 
-	if C.unitframes.portrait then
+	if C.unitframes.portrait and (unit == 'player' or unit == 'pet' or unit == 'target' or unit == 'vehicle' or unit:find("boss%d")) then
 		local Portrait = CreateFrame('PlayerModel', nil, self)
 		Portrait:SetAllPoints(Health)
-		Portrait:SetFrameLevel(Health:GetFrameLevel() - 1)
+		Portrait:SetFrameLevel(Health:GetFrameLevel() + 2)
 		Portrait:SetAlpha(C.unitframes.portraitAlpha)
 		Portrait.PostUpdate = PostUpdatePortrait
 		self.Portrait = Portrait
@@ -1561,7 +1564,7 @@ do
 		CreateIndicator(self)
 
 
-		--[[local Debuffs = CreateFrame("Frame", nil, self)
+		local Debuffs = CreateFrame("Frame", nil, self)
 		Debuffs.initialAnchor = "CENTER"
 		Debuffs:SetPoint("BOTTOM", 0, C.unitframes.power_height - 1)
 		Debuffs["growth-x"] = "RIGHT"
@@ -1628,7 +1631,7 @@ do
 
 		Buffs.PostCreateIcon = PostCreateIcon
 		Buffs.PostUpdateIcon = PostUpdateIcon
-		Buffs.CustomFilter = groupBuffFilter]]
+		Buffs.CustomFilter = groupBuffFilter
 
 
 		local select = CreateFrame("Frame", nil, self)
