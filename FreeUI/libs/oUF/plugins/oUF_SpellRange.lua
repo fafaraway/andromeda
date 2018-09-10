@@ -65,7 +65,7 @@ local HarmIDs = ({
 		589,                    -- Shadow Word: Pain (40yd) - Lvl 4
 		585                     -- Smite (40yd) - Starter
 	},
-	-- ROGUE = {},
+	ROGUE = { 185565 },
 	SHAMAN = {                  -- Lightning Bolt (40yd)
 	403,
 	187837,
