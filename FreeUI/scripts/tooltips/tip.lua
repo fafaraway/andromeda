@@ -287,7 +287,7 @@ local function style(self)
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+				--self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 				self.sd:SetBackdropBorderColor(color.r, color.g, color.b, .3)
 			end
 		end

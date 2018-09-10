@@ -23,8 +23,18 @@ local icon = frame:CreateTexture(nil, "BORDER")
 icon:SetTexCoord(unpack(C.texCoord))
 icon:SetAllPoints(frame)
 
-F.CreateBDFrame(icon)
-F.CreateSD(icon)
+local bg = frame:CreateTexture(nil, "BACKGROUND")
+bg:SetPoint("TOPLEFT", -1, 1)
+bg:SetPoint("BOTTOMRIGHT", 1, -1)
+bg:SetTexture(C.media.backdrop)
+bg:SetVertexColor(0, 0, 0)
+
+local sd = CreateFrame("Frame", nil, frame)
+sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+sd:SetPoint("TOPLEFT", -4, 4)
+sd:SetPoint("BOTTOMRIGHT", 4, -4)
+sd:SetBackdropBorderColor(0, 0, 0, .5)
+
 
 
 local ignored_spells = {
@@ -108,6 +118,8 @@ local function OnUpdate(_,update)
 			tremove(animating,1)
 			runtimer = 0
 			icon:SetTexture(nil)
+			bg:Hide()
+			sd:Hide()
 		else
 			if not icon:GetTexture() then
 				icon:SetTexture(animating[1][1])
@@ -122,6 +134,8 @@ local function OnUpdate(_,update)
 			local scale = iconSize+(iconSize*((animScale-1)*(runtimer/(fadeInTime+holdTime+fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
+			bg:Show()
+			sd:Show()
 		end
 	end
 end
