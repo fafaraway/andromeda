@@ -1,5 +1,6 @@
+if not C.tooltip.clearTip then return end
+
 local _, ns = ...
-local L = ns.L
 
 
 local db = {
