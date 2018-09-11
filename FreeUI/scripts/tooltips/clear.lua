@@ -1,3 +1,4 @@
+local F, C = unpack(select(2, ...))
 if not C.tooltip.clearTip then return end
 
 local _, ns = ...
