@@ -23,48 +23,46 @@ tinsert(C.themes["AuroraClassic"], function()
 
 	-- Capture bar
 
-	hooksecurefunc("UIParent_ManageFramePositions", function()
-		if not NUM_EXTENDED_UI_FRAMES then return end
-		for i = 1, NUM_EXTENDED_UI_FRAMES do
-			local bar = _G["WorldStateCaptureBar"..i]
-			if bar and bar:IsVisible() then
-				bar:ClearAllPoints()
-				bar:SetPoint("TOP", UIParent, "TOP", 0, -120)
+	--hooksecurefunc("UIParent_ManageFramePositions", function()
+	--	if not NUM_EXTENDED_UI_FRAMES then return end
+	--	for i = 1, NUM_EXTENDED_UI_FRAMES do
+	--		local bar = _G["WorldStateCaptureBar"..i]
+	--		if bar and bar:IsVisible() then
+	--			bar:ClearAllPoints()
+				
+	--			if i == 1 then
+	--				bar:SetPoint("TOP", UIParent, "TOP", 0, -100)
+	--			else
+	--				bar:SetPoint("TOPLEFT", _G["WorldStateCaptureBar" .. i - 1], "TOPLEFT", 0, -45)
+	--			end
 
-				if not bar.skinned then
-					bar.BarBackground:Hide()
+	--			if not bar.skinned then
+	--				local left = bar.LeftBar
+	--				local right = bar.RightBar
+	--				local middle = bar.MiddleBar
+	--				select(4, bar:GetRegions()):Hide()
+	--				bar.LeftLine:SetAlpha(0)
+	--				bar.RightLine:SetAlpha(0)
+	--				bar.LeftIconHighlight:SetAlpha(0)
+	--				bar.RightIconHighlight:SetAlpha(0)
 
-					local bg = F.CreateBDFrame(bar)
-					bg:SetPoint("TOPLEFT", 25, -7)
-					bg:SetPoint("BOTTOMRIGHT", -25, 7)
+	--				left:SetTexture(C.media.texture)
+	--				right:SetTexture(C.media.texture)
+	--				middle:SetTexture(C.media.texture)
 
-					local left = bar:CreateTexture()
-					left:SetTexture("Interface\\WorldStateFrame\\AllianceFlag")
-					left:SetPoint("LEFT", -5, 0)
-					left:SetSize(32, 32)
-					bar.newLeftFaction = left
+	--				left:SetVertexColor(0.2, 0.6, 1)
+	--				right:SetVertexColor(0.9, 0.2, 0.2)
+	--				middle:SetVertexColor(0.8, 0.8, 0.8)
 
-					local right = bar:CreateTexture()
-					right:SetTexture("Interface\\WorldStateFrame\\HordeFlag")
-					right:SetPoint("RIGHT", 5, 0)
-					right:SetSize(32, 32)
-					bar.newRightFaction = right
+	--				bar:CreateBackdrop("Default")
+	--				bar.backdrop:SetPoint("TOPLEFT", left, -2, 2)
+	--				bar.backdrop:SetPoint("BOTTOMRIGHT", right, 2, -2)
 
-					bar.RightLine:SetColorTexture(0, 0, 0)
-					bar.RightLine:SetSize(2, 9)
-					bar.LeftLine:SetColorTexture(0, 0, 0)
-					bar.LeftLine:SetSize(2, 9)
-
-					bar.LeftIconHighlight:SetTexture("Interface\\WorldStateFrame\\HordeFlagFlash")
-					bar.LeftIconHighlight:SetAllPoints(left)
-					bar.RightIconHighlight:SetTexture("Interface\\WorldStateFrame\\HordeFlagFlash")
-					bar.RightIconHighlight:SetAllPoints(right)
-
-					bar.skinned = true
-				end
-			end
-		end
-	end)
+	--				bar.skinned = true
+	--			end
+	--		end
+	--	end
+	--end)
 --[[
 	hooksecurefunc(ExtendedUI["CAPTUREPOINT"], "update", function(id)
 		local bar = _G["WorldStateCaptureBar"..id]
