@@ -11,6 +11,7 @@ function module:OnLogin()
 	self:QuickJoin()
 	self:Focuser()
 	self:MissingStats()
+	self:fasterLooting()
 
 	-- Remove Boss Banner
 	if not C.misc.bossBanner then
@@ -353,25 +354,21 @@ end
 
 
 -- Faster Looting
-do
-	local delay = 0
-	local function setupMisc(event)
-		if C.misc.fasterLoot then
-			if GetTime() - delay >= .3 then
-				delay = GetTime()
-				if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
-					for i = GetNumLootItems(), 1, -1 do
-						LootSlot(i)
-					end
-					delay = GetTime()
+function module:fasterLooting()
+	local faster = CreateFrame("Frame")
+	faster:RegisterEvent("LOOT_READY")
+	faster:SetScript("OnEvent",function()
+		local tDelay = 0
+		if GetTime() - tDelay >= 0.3 then
+			tDelay = GetTime()
+			if GetCVarBool("autoLootDefault") ~= IsModifiedClick("AUTOLOOTTOGGLE") then
+				for i = GetNumLootItems(), 1, -1 do
+					LootSlot(i)
 				end
+				tDelay = GetTime()
 			end
-		else
-			F:UnregisterEvent(event, setupMisc)
 		end
-	end
-
-	F:RegisterEvent("LOOT_READY", setupMisc)
+	end)
 end
 
 
