@@ -12,6 +12,7 @@ function module:OnLogin()
 	self:Focuser()
 	self:MissingStats()
 	self:fasterLooting()
+	self:vignette()
 
 	-- Remove Boss Banner
 	if not C.misc.bossBanner then
@@ -173,20 +174,22 @@ F.ReskinIcon(frame.Icon)
 F.CreateBDFrame(frame.Icon)
 F.CreateSD(frame.Icon)
 
--- ncShadow
-if C.appearance.vignette then
-	local f = CreateFrame("Frame", "ShadowBackground")
-	f:SetPoint("TOPLEFT")
-	f:SetPoint("BOTTOMRIGHT")
-	f:SetFrameLevel(0)
-	f:SetFrameStrata("BACKGROUND")
-	f.tex = f:CreateTexture()
-	f.tex:SetTexture([[Interface\Addons\FreeUI\assets\shadow.tga]])
-	f.tex:SetAllPoints(f)
 
-	f:SetAlpha(C.appearance.vignetteAlpha)
-	
-	f:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+-- adding a shadowed border to the UI window
+function module:vignette()
+	if not C.appearance.vignette then return end
+
+	self.f = CreateFrame("Frame", "ShadowBackground")
+	self.f:SetPoint("TOPLEFT")
+	self.f:SetPoint("BOTTOMRIGHT")
+	self.f:SetFrameLevel(0)
+	self.f:SetFrameStrata("BACKGROUND")
+	self.f.tex = self.f:CreateTexture()
+	self.f.tex:SetTexture([[Interface\Addons\FreeUI\assets\shadow.tga]])
+	self.f.tex:SetAllPoints(f)
+
+	self.f:SetAlpha(C.appearance.vignetteAlpha)
 end
 
 
