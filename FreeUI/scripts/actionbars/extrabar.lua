@@ -38,8 +38,10 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:SetPoint("CENTER", UIParent, "CENTER", 0, -300)
 
 	local spellButton = ZoneAbilityFrame.SpellButton
+	spellButton:SetSize(cfg.buttonSizeHuge, cfg.buttonSizeHuge)
 	spellButton.Style:SetAlpha(0)
-	spellButton.Icon:SetTexCoord(.08, .92, .08, .92)
+	spellButton.Icon:SetTexCoord(unpack(C.texCoord))
 	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	F.CreateBDFrame(spellButton.Icon)
 	F.CreateSD(spellButton.Icon)
 end
