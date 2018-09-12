@@ -33,14 +33,14 @@ C.fontPixel = {'Fonts\\CN\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'} -- Chinese p
 
 
 C.reactioncolours = {
-	[1] = {149/255, 0, 39/255}, -- Exceptionally hostile
-	[2] = {179/255, 50/255, 58/255}, -- Very Hostile
-	[3] = {243/255, 91/255, 98/255}, -- Hostile
-	[4] = {215/255, 195/255, 108/255}, -- Neutral
-	[5] = {81/255, 207/255, 115/255}, -- Friendly
-	[6] = {81/255, 207/255, 115/255}, -- Very Friendly
-	[7] = {81/255, 207/255, 115/255}, -- Exceptionally friendly
-	[8] = {81/255, 207/255, 115/255}, -- Exalted
+	[1] = {139/255, 39/255, 60/255}, -- Exceptionally hostile
+	[2] = {217/255, 51/255, 22/255}, -- Very Hostile
+	[3] = {231/255, 87/255, 83/255}, -- Hostile
+	[4] = {213/255, 201/255, 128/255}, -- Neutral
+	[5] = {184/255, 243/255, 147/255}, -- Friendly
+	[6] = {115/255, 231/255, 62/255}, -- Very Friendly
+	[7] = {107/255, 231/255, 157/255}, -- Exceptionally friendly
+	[8] = {44/255, 153/255, 111/255}, -- Exalted
 }
 
 
@@ -251,7 +251,7 @@ C["unitframes"] = {
 	["enable"] = true, 						-- enable the unit frames and their included modules
 
 	["transMode"] = true,
-		["transModeAlpha"] = .2,
+		["transModeAlpha"] = .1,
 		["healthClassColor"] = true,
 		["powerTypeColor"] = true,
 
