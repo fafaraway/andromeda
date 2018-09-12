@@ -119,11 +119,6 @@ local function reskinQuestIcon(self, block)
 		F.CreateBG(itemButton)
 		F.CreateSD(itemButton)
 
-		--[[local text = itemButton.HotKey:GetText()
-		if text == RANGE_INDICATOR then
-			itemButton.HotKey:SetText("")
-		end]]
-
 		itemButton.Count:ClearAllPoints()
 		itemButton.Count:SetPoint("TOP", itemButton, 2, -1)
 		itemButton.Count:SetJustifyH("CENTER")
@@ -138,7 +133,6 @@ local function reskinQuestIcon(self, block)
 		rightButton:SetPushedTexture("")
 		rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 		local bg = F.CreateBDFrame(rightButton)
-		-- F.CreateBD(bg)
 		F.CreateSD(rightButton)
 		rightButton:SetSize(22, 22)
 		rightButton.Icon:SetParent(bg)
@@ -153,62 +147,53 @@ hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
 
 -- Progressbars
 local function reskinProgressbar(self, block, line)
-	local progressBar = line and line.ProgressBar
-	local bar = progressBar and progressBar.Bar
-	if not bar then return end
+	local progressBar = line.ProgressBar
+	local bar = progressBar.Bar
 	local icon = bar.Icon
 	local label = bar.Label
 
-	if not progressBar.styled then
-		if bar.BarFrame then bar.BarFrame:Hide() end
-		if bar.BarFrame2 then bar.BarFrame2:Hide() end
-		if bar.BarFrame3 then bar.BarFrame3:Hide() end
-		if bar.BarBG then bar.BarBG:Hide() end
-		if bar.BarGlow then bar.BarGlow:Hide() end
-		if bar.Sheen then bar.Sheen:Hide() end
-		if bar.IconBG then bar.IconBG:SetAlpha(0) end
-		if bar.BorderLeft then bar.BorderLeft:SetAlpha(0) end
-		if bar.BorderRight then bar.BorderRight:SetAlpha(0) end
-		if bar.BorderMid then bar.BorderMid:SetAlpha(0) end
+	if not bar.styled then
+		bar.BarFrame:Hide()
+		bar.BarFrame2:Hide()
+		bar.BarFrame3:Hide()
+		bar.BarBG:Hide()
+		bar.BarGlow:Hide()
+		bar.IconBG:SetTexture("")
+		BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.dummy
 
 		bar:SetPoint("LEFT", 22, 0)
 		bar:SetStatusBarTexture(C.media.texture)
 		bar:SetStatusBarColor(r, g, b)
 		bar:SetHeight(14)
+		F.SmoothBar(bar)
 
-		local bg = F.CreateBG(bar)
+		local bg = F.CreateBG(progressBar)
 		bg:SetPoint("TOPLEFT", bar, -1, 1)
 		bg:SetPoint("BOTTOMRIGHT", bar, 1, -1)
 		F.CreateBD(bg)
 		F.CreateSD(bg)
 		F.CreateTex(bg)
 
-		if label then
-			label:ClearAllPoints()
-			label:SetPoint("CENTER")
-			F.SetFS(label)
-		end
+		label:ClearAllPoints()
+		label:SetPoint("CENTER")
+		F.SetFS(label)
 
-		if icon then
-			icon:ClearAllPoints()
-			icon:SetPoint("RIGHT", 30, 0)
-			icon:SetMask("")
-			icon:SetTexCoord(unpack(C.texCoord))
-			icon:SetSize(24, 24)
+		icon:SetMask(nil)
+		icon:SetTexCoord(unpack(C.texCoord))
+		icon:ClearAllPoints()
+		icon:SetPoint("TOPLEFT", bar, "TOPRIGHT", 5, 1)
+		icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 25, -1)
+		F.CreateSD(icon)
 
-			local ibg = F.CreateBDFrame(icon)
-			F.CreateSD(ibg)
-		end
-
-		BonusObjectiveTrackerProgressBar_PlayFlareAnim = function() end
-
-		progressBar.styled = true
+		bar.styled = true
 	end
+
+	icon.Shadow:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 end
 hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
 hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
---hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgressbar)
+hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgressbar)
 
 hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, line)
 	local progressBar = line.ProgressBar
@@ -227,6 +212,7 @@ hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(self, block, lin
 		local bg = F.CreateBG(oldBg)
 		F.CreateBD(bg)
 		F.CreateSD(bg)
+		F.CreateTex(bg)
 
 		bar.styled = true
 	end
@@ -252,10 +238,9 @@ hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
 		block.TimerBG:Hide()
 		block.TimerBGBack:Hide()
 		block.timerbg = F.CreateBDFrame(block.TimerBGBack)
-		block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 4, -2)
-		block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -4, -5)
+		block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 6, -2)
+		block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
 		F.CreateBD(block.timerbg)
-		F.CreateSD(block.timerbg)
 
 		block.StatusBar:SetStatusBarTexture(C.media.texture)
 		block.StatusBar:SetStatusBarColor(r, g, b)
@@ -263,8 +248,8 @@ hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
 
 		select(3, block:GetRegions()):Hide()
 		block.bg = F.CreateBDFrame(block)
-		block.bg:SetPoint("TOPLEFT", 2, 0)
-		block.bg:SetPoint("BOTTOMRIGHT", -2, 0)
+		block.bg:SetPoint("TOPLEFT", 4, -2)
+		block.bg:SetPoint("BOTTOMRIGHT", -4, 0)
 		F.CreateBD(block.bg)
  		F.CreateTex(block.bg)
 		F.CreateSD(block.bg)
