@@ -6,6 +6,7 @@ function module:OnLogin()
 	self:FontStyle()
 	self:PetBattleUI()
 	self:EnhanceColorPicker()
+	self:PositionUIWidgets()
 end
 
 
