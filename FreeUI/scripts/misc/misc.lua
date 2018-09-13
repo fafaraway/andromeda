@@ -13,6 +13,7 @@ function module:OnLogin()
 	self:MissingStats()
 	self:fasterLooting()
 	self:vignette()
+	self:PVPMessageEnhancement()
 
 	-- Remove Boss Banner
 	if not C.misc.bossBanner then
@@ -289,39 +290,14 @@ do
 end
 
 
--- Remove Boss Emote spam during BG
-local BATTLEGROUNDS = {
-	["Wintergrasp"] = true,
-	["Tol Barad"] = true,
-	["Isle of Conquest"] = true,
-	["Strand of the Ancients"] = true,
-	["Alterac Valley"] = true,
-	["Warsong Gulch"] = true,
-	["Twin Peaks"] = true,
-	["Arathi Basin"] = true,
-	["Eye of the Storm"] = true,
-	["Battle for Gilneas"] = true,
-	["Deepwind Gorge"] = true,
-	["Silvershard Mines"] = true,
-	["The Battle for Gilneas"] = true,
-	["Temple of Kotmogu"] = true,
-}
-
-local BGSpam = _G.CreateFrame("Frame")
-local RaidBossEmoteFrame, spamDisabled = _G.RaidBossEmoteFrame
-local function ToggleBossEmotes()
-	if BATTLEGROUNDS[GetZoneText()] then 
-		RaidBossEmoteFrame:UnregisterEvent("RAID_BOSS_EMOTE")
-		spamDisabled = true
-	elseif spamDisabled then
-		RaidBossEmoteFrame:RegisterEvent("RAID_BOSS_EMOTE")
-		spamDisabled = false
+-- enhance PVP message
+function module:PVPMessageEnhancement(_, msg)
+	local _, instanceType = IsInInstance()
+	if instanceType == 'pvp' or instanceType == 'arena' then
+		RaidNotice_AddMessage(RaidBossEmoteFrame, msg, ChatTypeInfo["RAID_BOSS_EMOTE"]);
 	end
 end
 
-BGSpam:RegisterEvent("PLAYER_ENTERING_WORLD")
-BGSpam:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-BGSpam:SetScript("OnEvent", ToggleBossEmotes)
 
 
 
