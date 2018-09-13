@@ -334,6 +334,7 @@ end
 
 -- Faster Looting
 function module:fasterLooting()
+	if not C.misc.fasterLooting then return end
 	local faster = CreateFrame("Frame")
 	faster:RegisterEvent("LOOT_READY")
 	faster:SetScript("OnEvent",function()

@@ -174,6 +174,7 @@ C["misc"] = {
 	["DOTA"] = true,
 
 	["clickCast"] = true,
+	["fasterLooting"] = true,
 }
 
 
