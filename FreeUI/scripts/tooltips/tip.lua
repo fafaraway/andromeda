@@ -1,5 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 
+local module = F:RegisterModule("tooltip")
+
+
+
 if not C.tooltip.enable then return end
 
 
@@ -16,7 +20,7 @@ local classification = {
 
 local function getUnit(self)
 	local _, unit = self and self:GetUnit()
-	if(not unit) then
+	if not unit then
 		local mFocus = GetMouseFocus()
 		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit"))) or "mouseover"
 	end
@@ -98,7 +102,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 			if unitName then GameTooltipTextLeft1:SetText(unitName) end
 
 			local relationship = UnitRealmRelationship(unit)
-			if(relationship == LE_REALM_RELATION_VIRTUAL) then
+			if relationship == LE_REALM_RELATION_VIRTUAL then
 				self:AppendText(("|cffcccccc%s|r"):format(INTERACTIVE_SERVER_LABEL))
 			end
 
@@ -175,13 +179,6 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	else
 		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
 	end
-
-	if GameTooltipStatusBar:IsShown() then
-		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 1, -3)
-		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -1, -3)
-	end
-
 end)
 
 
@@ -190,7 +187,6 @@ GameTooltip:HookScript("OnTooltipCleared", function(self)
 	self.ttNumLines = 0
 	self.ttUnit = nil
 end)
-
 
 GameTooltip:HookScript("OnUpdate", function(self, elapsed)
 	self.ttUpdate = (self.ttUpdate or 0) + elapsed
@@ -212,29 +208,26 @@ GameTooltip.FadeOut = function(self)
 end
 
 
+-- StatusBar
+GameTooltipStatusBar:SetStatusBarTexture(C.media.texture)
+GameTooltipStatusBar:SetHeight(2)
+GameTooltipStatusBar:ClearAllPoints()
+GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
+GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, -3)
 
-do
-	GameTooltipStatusBar:SetStatusBarTexture(C.media.texture)
-	GameTooltipStatusBar:SetHeight(2)
-	local bg = F.CreateBG(GameTooltipStatusBar, 1)
-	F.CreateBD(bg, .7)
+local bg = F.CreateBG(GameTooltipStatusBar, 1)
+F.CreateBD(bg, .7)
+
+local ssbc = CreateFrame("StatusBar").SetStatusBarColor
+GameTooltipStatusBar._SetStatusBarColor = ssbc
+function GameTooltipStatusBar:SetStatusBarColor(...)
+	local unit = getUnit(GameTooltip)
+	if(UnitExists(unit)) then
+		return self:_SetStatusBarColor(F.UnitColor(unit))
+	end
 end
 
-hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
-	if self.statusBarPool then
-		local bar = self.statusBarPool:Acquire()
-		if bar and not bar.styled then
-			local _, bd, tex = bar:GetRegions()
-			tex:SetTexture(C.media.texture)
-			bd:Hide()
-			local bg = F.CreateBG(bd, 0)
-			F.CreateBD(bg, .25)
-
-			bar.styled = true
-		end
-	end
-end)
-
+-- world quest progress bar
 hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 	if self.progressBarPool then
 		local bar = self.progressBarPool:Acquire()
@@ -319,10 +312,10 @@ hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 	self:SetBackdrop(nil)
 end)
 
-
 GAME_TOOLTIP_BACKDROP_STYLE_AZERITE_ITEM = {}
 
-F:RegisterEvent("ADDON_LOADED", function(_, addon)
+
+local function addonStyled(_, addon)
 	if addon == "Blizzard_DebugTools" then
 		local tooltips = {
 			FrameStackTooltip,
@@ -409,20 +402,19 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
 
 		-- Pet Tooltip
-		PetBattlePrimaryUnitTooltip.Delimiter:SetColorTexture(0, 0, 0)
-		PetBattlePrimaryUnitTooltip.Delimiter:SetHeight(1)
-		PetBattlePrimaryUnitTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-		PetBattlePrimaryUnitTooltip.Delimiter2:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetHeight(1)
-		PetBattlePrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetHeight(1)
-		FloatingPetBattleAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetColorTexture(0, 0, 0)
-		FloatingBattlePetTooltip.Delimiter:SetHeight(1)
+		local petTips = {
+			PetBattlePrimaryUnitTooltip.Delimiter,
+			PetBattlePrimaryUnitTooltip.Delimiter2,
+			PetBattlePrimaryAbilityTooltip.Delimiter1,
+			PetBattlePrimaryAbilityTooltip.Delimiter2,
+			FloatingPetBattleAbilityTooltip.Delimiter1,
+			FloatingPetBattleAbilityTooltip.Delimiter2,
+			FloatingBattlePetTooltip.Delimiter,
+		}
+		for _, element in pairs(petTips) do
+			element:SetColorTexture(0, 0, 0)
+			element:SetHeight(1.2)
+		end
 
 		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
 			if not self.tipStyled then
@@ -453,19 +445,6 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 				end
 			end
 		end)
-
-		-- MeetingShit
-		if IsAddOnLoaded("MeetingStone") then
-			local tips = {
-				NetEaseGUI20_Tooltip51,
-				NetEaseGUI20_Tooltip52,
-			}
-			for _, f in pairs(tips) do
-				if f then
-					f:HookScript("OnShow", style)
-				end
-			end
-		end
 
 	elseif addon == "Blizzard_Collections" then
 		local pet = {
@@ -533,12 +512,13 @@ F:RegisterEvent("ADDON_LOADED", function(_, addon)
 		tip:GetParent().IconBorder:SetAlpha(0)
 		tip:GetParent().Icon:SetTexCoord(.08, .92, .08, .92)
 	end
-end)
+end
 
 F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 
+F:RegisterEvent("ADDON_LOADED", addonStyled)
 
 -- Position
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)
