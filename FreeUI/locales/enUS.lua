@@ -12,3 +12,6 @@ L["stolen"] = "Stolen: "
 L["guildRepair"] = "Repair cost covered by Guild Bank"
 L["repairCost"] = "Repair cost"
 L["repairError"] = "You have insufficient funds to repair your equipment!"
+
+L["Stack Cap"] = "Stack Caps"
+L["Castby"] = "Castby"

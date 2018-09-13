@@ -111,7 +111,6 @@ C["auras"] = {
 	["paddingY"] = 8,
 	["buffPerRow"] = 10,
 	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
-	["aurasSource"] = true,
 }
 
 
@@ -225,7 +224,7 @@ C["tooltip"] = {
 	["combatHide"] = false,
 
 	["ilvlspec"] = true,
-	["spellID"] = true,
+	["extraInfo"] = true,
 	["azeriteTrait"] = true,
 	["borderColor"] = true,		-- item tooltip border colored by item quality
 

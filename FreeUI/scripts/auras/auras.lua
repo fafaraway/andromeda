@@ -198,18 +198,3 @@ hooksecurefunc("AuraButton_UpdateDuration", function(button, timeLeft)
 		duration:Hide()
 	end
 end)
-
-
--- aura source
-if C.auras.aurasSource then
-	local function SetCaster(self, unit, index, filter)
-		local unitCaster = select(7, UnitAura(unit, index, filter))
-		if unitCaster then
-			local name = GetUnitName(unitCaster, true)
-			local hexColor = F.HexRGB(F.UnitColor(unitCaster))
-			self:AddDoubleLine("Castby:", hexColor..name)
-			self:Show()
-		end
-	end
-	hooksecurefunc(GameTooltip, "SetUnitAura", SetCaster)
-end
