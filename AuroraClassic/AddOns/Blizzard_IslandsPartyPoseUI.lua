@@ -7,6 +7,9 @@ C.themes["Blizzard_IslandsPartyPoseUI"] = function()
 	F.StripTextures(IslandsPartyPoseFrame.ModelScene)
 	F.CreateBDFrame(IslandsPartyPoseFrame.ModelScene, .25)
 
+	IslandsPartyPoseFrame.Topper:Hide()
+	IslandsPartyPoseFrame.Background:Hide()
+
 	local rewardFrame = IslandsPartyPoseFrame.RewardAnimations.RewardFrame
 	local bg = F.CreateBDFrame(rewardFrame)
 	bg:SetPoint("TOPLEFT", -5, 5)

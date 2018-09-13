@@ -43,6 +43,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 					option.OptionText.SetTextColor = F.dummy
 				end
 				F.Reskin(option.OptionButtonsContainer.OptionButton1)
+				F.Reskin(option.OptionButtonsContainer.OptionButton2)
 				option.styled = true
 			end
 		end
