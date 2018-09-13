@@ -2,7 +2,10 @@ local F, C, L = unpack(select(2, ...))
 
 local module = F:RegisterModule("tooltip")
 
-
+function module:OnLogin()
+	self:extraInfo()
+	self:azeriteTrait()
+end
 
 if not C.tooltip.enable then return end
 
