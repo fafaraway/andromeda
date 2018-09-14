@@ -45,7 +45,7 @@ function Bar:CreateBar4()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	--create the mouseover functionality
-	if cfg.sideBarEnable and cfg.sideBar_mouseOver then
+	if cfg.sideBarEnable and cfg.sideBarFade then
 		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 
