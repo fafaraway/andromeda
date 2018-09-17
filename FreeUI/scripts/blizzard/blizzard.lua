@@ -7,6 +7,7 @@ function module:OnLogin()
 	self:PetBattleUI()
 	self:EnhanceColorPicker()
 	self:PositionUIWidgets()
+	self:QuestTracker()
 end
 
 
