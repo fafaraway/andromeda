@@ -287,7 +287,7 @@ function module:WhoPingsMyMap()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFSA(f, 8, "", false, "BOTTOM", 0, 0)
+	f.text = F.CreateFSA(f, 12, "", false, "CENTER", 0, 0)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)
@@ -315,35 +315,31 @@ function module:SetupMinimap()
 	-- Shape and Position
 	local scale = C.maps.miniMapScale
 	local size = C.maps.miniMapSize
-	local texture = "Interface\\Buttons\\WHITE8x8"
+	local mask = 'Interface\\AddOns\\FreeUI\\assets\\rectangle'
 	local backdrop = {edgeFile = C.media.backdrop, edgeSize = 1}
+
 	function GetMinimapShape() return "SQUARE" end
-
-	MinimapCluster:SetScale(scale)
-	MinimapCluster:ClearAllPoints()
-	MinimapCluster:SetPoint(unpack(C.maps.miniMapPosition))
+	
 	MinimapCluster:EnableMouse(false)
-	MinimapCluster:SetClampedToScreen(false)
-	MinimapCluster:SetSize(size*scale, size*scale)
-
-	Minimap:SetClampedToScreen(false)
 	Minimap:SetSize(size*scale, size*scale)
-	Minimap:SetMaskTexture[[Interface\AddOns\FreeUI\assets\rectangle]]
-	Minimap:SetHitRectInsets(0, 0, 34*scale, 34*scale)
-	Minimap:SetFrameLevel(10)
-	Minimap:ClearAllPoints()
-	Minimap:SetAllPoints(MinimapCluster)
 	Minimap:SetScale(scale)
+	Minimap:SetMaskTexture(mask)
+	Minimap:SetHitRectInsets(0, 0, size/8, size/8)
+	Minimap:SetClampRectInsets(0, 0, -size/4, -size/4)
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
+	Minimap:EnableMouse(true)
+	Minimap:SetClampedToScreen(false)
+	Minimap:ClearAllPoints()
+	Minimap:SetPoint(unpack(C.maps.miniMapPosition))
 
 	BorderFrame = CreateFrame("Frame", nil, Minimap)
-	BorderFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -1, -(32*scale))
-	BorderFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 1, (32*scale))
+	BorderFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -1, -(size/8*scale))
+	BorderFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 1, (size/8*scale))
 	BorderFrame:SetBackdrop(backdrop)
 	BorderFrame:SetBackdropBorderColor(0, 0, 0)
 	BorderFrame:SetBackdropColor(0, 0, 0)
-	BorderFrame:SetFrameLevel(6)
+	BorderFrame:SetFrameLevel(Minimap:GetFrameLevel() - 1)
 
 	F.CreateSD(BorderFrame)
 

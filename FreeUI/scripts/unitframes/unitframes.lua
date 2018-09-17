@@ -81,17 +81,17 @@ local updateBorderColourAlt = function(self, unit)
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
 			frame.Name:SetTextColor(.1, .7, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(1, 1, 1, .5)
+			frame.sd:SetBackdropBorderColor(1, 1, 1, .5)
 		elseif UnitIsDead(frame.unit) then
 			frame.Name:SetTextColor(.7, .2, .1)
-			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 		else
 			frame.Name:SetTextColor(1, 1, 1)
-			frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 		end
 	else
 		frame.Name:SetTextColor(1, 1, 1)
-		frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+		frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 	end
 end
 
@@ -1129,10 +1129,14 @@ local Shared = function(self, unit, isSingle)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameStrata("BACKGROUND")
-
-	F.CreateSD(bd)
-
 	self.bd = bd
+
+	local sd = CreateFrame("Frame", nil, bd)
+	sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+	sd:SetPoint("TOPLEFT", -4, 4)
+	sd:SetPoint("BOTTOMRIGHT", 4, -4)
+	sd:SetBackdropBorderColor(0, 0, 0, .35)
+	self.sd = sd
 
 
 	--[[ Health ]]

@@ -57,7 +57,7 @@ function module:FontStyle()
 	SetFont("GameTooltipTextSmall", NORMAL, 13, nil, nil, {0, 0, 0}, 1, -1)
 
 	local function ReskinFont(font, size, white)
-		font:SetFont(NORMAL, size, white and "" or "OUTLINE")
+		font:SetFont(NORMAL, size, white and "" or nil)
 		font:SetShadowColor(0, 0, 0, 0)
 		font:SetShadowOffset(2, -2)
 	end

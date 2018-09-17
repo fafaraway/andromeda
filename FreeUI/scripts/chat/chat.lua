@@ -240,6 +240,8 @@ function module:OnLogin()
 	--don't cut the toastframe
 	BNToastFrame:SetClampedToScreen(true)
 	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
+	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-15,15,15,-15)
 
 	-- Easy Resizing
 	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)

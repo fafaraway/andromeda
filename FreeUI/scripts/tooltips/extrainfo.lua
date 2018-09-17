@@ -22,15 +22,19 @@ function module:extraInfo()
 		if not noadd then self:AddLine(" ") end
 
 		if type == types.item then
-			if GetItemCount(id, true) and GetItemCount(id, true) - GetItemCount(id) > 0 and IsShiftKeyDown() then
-				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", format(C.infoColor.."%s|r", GetItemCount(id).."/"..GetItemCount(id, true) - GetItemCount(id)))
-			elseif GetItemCount(id) > 0 and IsShiftKeyDown() then
-				self:AddDoubleLine(BAGSLOT..":", format(C.infoColor.."%s|r", GetItemCount(id)))
+			local bagCount = GetItemCount(id)
+			local bankCount = GetItemCount(id, true) - GetItemCount(id)
+			local itemStackCount = select(8, GetItemInfo(id))
+			if bankCount > 0 and IsShiftKeyDown() then
+				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", C.infoColor..bagCount.."/"..bankCount)
+			elseif bagCount > 0 and IsShiftKeyDown() then
+				self:AddDoubleLine(BAGSLOT..":", C.infoColor..bagCount)
 			end
-			if select(8, GetItemInfo(id)) and select(8, GetItemInfo(id)) > 1 and IsShiftKeyDown() then
-				self:AddDoubleLine(L["Stack Cap"]..":", format(C.infoColor.."%s|r", select(8, GetItemInfo(id))))
+			if itemStackCount and itemStackCount > 1 and IsShiftKeyDown() then
+				self:AddDoubleLine(L["Stack Cap"]..":", C.infoColor..itemStackCount)
 			end
 		end
+		
 		self:AddDoubleLine(type, format(C.infoColor.."%s|r", id))
 		self:Show()
 	end

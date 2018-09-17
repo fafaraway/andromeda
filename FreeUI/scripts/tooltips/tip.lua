@@ -25,9 +25,11 @@ local function getUnit(self)
 	local _, unit = self and self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()
-		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit"))) or "mouseover"
+		if mFocus then
+			unit = mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit"))
+		end
 	end
-	return unit
+	return (unit or "mouseover")
 end
 
 local function hideLines(self)

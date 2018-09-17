@@ -11,20 +11,20 @@ function module:azeriteTrait()
 
 	function AzeriteTooltip_GetSpellID(powerID)
 		local powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(powerID)
-	  	if (powerInfo) then
-	    	local azeriteSpellID = powerInfo["spellID"]
-	    	return azeriteSpellID
-	  	end
+		if (powerInfo) then
+			local azeriteSpellID = powerInfo["spellID"]
+			return azeriteSpellID
+		end
 	end
 
 	function AzeriteTooltip_ScanSelectedTraits(tooltip, powerName)
 		for i = 8, tooltip:NumLines() do
 			local left = _G[tooltip:GetName().."TextLeft"..i]
 			local text = left:GetText()
-	        if text and text:find(powerName) then
-	        	return true
-	        end
-	    end
+			if text and text:find(powerName) then
+				return true
+			end
+		end
 	end
 
 	function AzeriteTooltip_GetAzeriteLevel()
@@ -113,11 +113,11 @@ function module:azeriteTrait()
 
 	function AzeriteTooltip_BuildTooltip(self)
 		local name, link = self:GetItem()
-	  	if not name then return end
+		if not name then return end
 
-	  	if C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
+		if C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
 
-	  		addText = ""
+			addText = ""
 			
 			local currentLevel = AzeriteTooltip_GetAzeriteLevel()
 
@@ -178,13 +178,18 @@ function module:azeriteTrait()
 				end	
 			end
 
-			if activeAzeriteTrait then
-				for k, v in pairs(activePowers) do
-					AzeriteTooltip_RemovePowerText(self, v.name)
+			if IsShiftKeyDown() then
+				self:AddLine(addText)
+				self:AddLine(" ")
+			else
+				if activeAzeriteTrait then
+					for k, v in pairs(activePowers) do
+						AzeriteTooltip_RemovePowerText(self, v.name)
+					end
 				end
+				AzeriteTooltip_ClearBlizzardText(self)
 			end
-			AzeriteTooltip_ClearBlizzardText(self)
-
+			
 			wipe(activePowers)
 		end
 	end

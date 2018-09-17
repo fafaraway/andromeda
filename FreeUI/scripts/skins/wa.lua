@@ -2,15 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("skins")
 
 local function ReskinWA()
-	local function applyBackground(f)
-		--if f:GetFrameLevel() < 7 then f:SetFrameLevel(7) end
-
-		f.bg = F.CreateBDFrame(f, 0)
-		f.sd = F.CreateSD(f.bg)
-
-		f.bg = true
-		f.sd = true
-	end
 
 	local function Skin_WeakAuras(f, fType)
 		if not f or (f and f.styled) then return end
@@ -18,7 +9,11 @@ local function ReskinWA()
 			if not f.styled then
 				f.icon:SetTexCoord(unpack(C.texCoord))
 				f.icon.SetTexCoord = F.dummy
-				if not f.bg then applyBackground(f) end
+
+				local bg = F.CreateBG(f.icon)
+				F.CreateBD(bg)
+				F.CreateSD(bg)
+
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
