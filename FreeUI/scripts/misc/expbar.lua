@@ -102,12 +102,11 @@ local function UpdateTooltip(bar)
 		local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
 		if iwqID and IsQuestFlaggedCompleted(iwqID) then
 			GameTooltip:AddLine(ISLANDS_HEADER, 0, 1, 0.5, 1, 1, 1)
-			GameTooltip:AddDoubleLine("Status", "Finished", 1, 1, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L["Status"], L["Finished"], 1, 1, 1, 1, 1, 1)
 		elseif iwqID then
 			local _, _, _, cur, max = GetQuestObjectiveInfo(iwqID, 1, false)
 			GameTooltip:AddLine(ISLANDS_HEADER, 0, 1, 0.5, 1, 1, 1)
-			GameTooltip:AddDoubleLine("Cur / Max", cur.." / "..max, 1, 1, 1, 1, 1, 1)
-			GameTooltip:AddDoubleLine("Needed", (max-cur), 1, 1, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L["Status"], cur.." / "..max, 1, 1, 1, 1, 1, 1)
 		end
 	end
 	GameTooltip:Show()

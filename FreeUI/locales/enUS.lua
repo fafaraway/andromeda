@@ -17,3 +17,6 @@ L["Vendor trash sold"] = "Vendor trash sold"
 
 L["Stack Cap"] = "Stack Caps"
 L["Castby"] = "Castby"
+
+L["Status"] = "Status"
+L["Finished"] = "Finished"

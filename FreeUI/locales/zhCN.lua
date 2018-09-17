@@ -18,3 +18,6 @@ L["Vendor trash sold"] = "出售垃圾"
 
 L["Stack Cap"] = "堆叠上限"
 L["Castby"] = "来自"
+
+L["Status"] = "状态"
+L["Finished"] = "已完成"
