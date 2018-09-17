@@ -68,8 +68,10 @@ C["actionbars"] = {
 	["classColor"] = false,				-- button border colored by class color
 
 	["bar3Fade"] = false,
+
 	["sideBarEnable"] = true,
-	["sideBarFade"] = false,
+		["sideBarFade"] = false,
+
 	["petBarFade"] = false,
 	["stanceBarEnable"] = true,
 
