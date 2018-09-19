@@ -288,7 +288,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 					self.Healthdef:GetStatusBarTexture():SetVertexColor(149/255, 0, 39/255)
 				end
 			else
-				self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
+				self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 			end
 
 			self.Healthdef:Show()
