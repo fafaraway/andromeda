@@ -237,11 +237,17 @@ function module:OnLogin()
 		ChatTypeInfo.CHANNEL.sticky = 1
 	end
 
-	--don't cut the toastframe
+	-- don't cut the toastframe
 	BNToastFrame:SetClampedToScreen(true)
 	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
+
+	-- voice chat stuff
 	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-15,15,15,-15)
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-50,50,50,-50)
+	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-50,50,50,-50)
+	ChatAlertFrame:SetClampedToScreen(true)
+	ChatAlertFrame:SetClampRectInsets(-50,50,50,-50)
 
 	-- Easy Resizing
 	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
