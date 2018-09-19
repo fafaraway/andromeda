@@ -1176,7 +1176,7 @@ local Shared = function(self, unit, isSingle)
 	if C.unitframes.transMode then
 		local Healthdef = CreateFrame("StatusBar", nil, self)
 		--Healthdef:SetFrameStrata("LOW")
-		Healthdef:SetFrameLevel(Health:GetFrameLevel() + 1)
+		Healthdef:SetFrameLevel(Health:GetFrameLevel())
 		Healthdef:SetAllPoints(Health)
 		Healthdef:SetStatusBarTexture(C.media.texture)
 		Healthdef:SetStatusBarColor(1, 1, 1)
