@@ -1029,29 +1029,22 @@ end
 -- name
 local function CreateName(self)
 	local Name = F.CreateFS(self)
-	Name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
+	Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	Name:SetWordWrap(false)
+	Name:SetJustifyH("CENTER")
 	Name:SetFont(unpack(ufFont))
 	Name:SetShadowColor(0, 0, 0, 1)
 	Name:SetShadowOffset(2, -2)
 	Name:SetTextColor(1, 1, 1)
-	Name:SetWidth(60)
+	Name:SetWidth(self:GetWidth())
 	self:Tag(Name, '[name]')
 	self.Name = Name
 
 	if self.unitStyle == "target" then
+		Name:ClearAllPoints()
+		Name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
 		Name:SetJustifyH("RIGHT")
 		Name:SetWidth(100)
-	elseif self.unitStyle == "targettarget" then
-		Name:SetJustifyH("LEFT")
-	elseif self.unitStyle == "focus" then
-		Name:ClearAllPoints()
-		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
-		Name:SetJustifyH("LEFT")
-	elseif self.unitStyle == "focustarget" then
-		Name:ClearAllPoints()
-		Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
-		Name:SetJustifyH("RIGHT")
 	elseif self.unitStyle == "boss" then
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
@@ -1069,7 +1062,7 @@ local function UpdateTOTName(self)
 
 	local tt = F.CreateFS(f)
 	tt:SetPoint("BOTTOM", self, "TOP", 0, 3)
-	tt:SetJustifyH"CENTER"
+	tt:SetJustifyH("CENTER")
 	tt:SetFont(unpack(ufFont))
 	tt:SetWordWrap(false)
 	tt:SetWidth(C.unitframes.targettarget_width)
