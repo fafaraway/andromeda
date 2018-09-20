@@ -281,18 +281,14 @@ local PostUpdateHealth = function(Health, unit, min, max)
 			self.Healthdef:SetMinMaxValues(0, max)
 			self.Healthdef:SetValue(max-min)
 
-			if UnitIsPlayer(unit) then
-				if C.unitframes.healthClassColor then
+			if C.unitframes.healthClassColor then
+				if UnitIsPlayer(unit) then
 					self.Healthdef:GetStatusBarTexture():SetVertexColor(r, g, b)
-				else
-					self.Healthdef:GetStatusBarTexture():SetVertexColor(149/255, 0, 39/255)
-				end
-			else
-				if not C.unitframes.healthClassColor then
-					self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 				else
 					self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
 				end
+			else
+				self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 			end
 
 			self.Healthdef:Show()
