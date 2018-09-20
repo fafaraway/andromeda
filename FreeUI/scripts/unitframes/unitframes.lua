@@ -414,7 +414,7 @@ local function CreateCastBar(self)
 
 	local iconFrame = CreateFrame("Frame", nil, cb)
 	iconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
-	iconFrame:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
+	iconFrame:SetSize(self:GetHeight() + 8, self:GetHeight() + 8)
 
 	F.CreateSD(iconFrame)
 
