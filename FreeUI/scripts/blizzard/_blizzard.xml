@@ -6,10 +6,10 @@
 	<Script file="colours.lua"/>
 	<Script file="colorpicker.lua"/>
 	<Script file="cooldown.lua"/>
+	<Script file="loot.lua"/>
 	<Script file="mirrorbar.lua"/>
 	<Script file="mover.lua"/>
 	<Script file="marking.lua"/>
-
 	<Script file="worldmarker.lua"/>
 	<Script file="objectivetracker.lua"/>
 	<Script file="timertracker.lua"/>
