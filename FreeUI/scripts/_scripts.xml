@@ -4,10 +4,9 @@
 	<Include file="blizzard\_blizzard.xml"/>
 	<Include file="chat\_chat.xml"/>
 	<Include file="infobar\_infobar.xml"/>
-	<Include file="loot\_loot.xml"/>
 	<Include file="maps\_maps.xml"/>
-	<Include file="misc\_misc.xml"/>
 	<Include file="tooltips\_tooltips.xml"/>
+	<Include file="misc\_misc.xml"/>
 	<Include file="unitframes\_unitframes.xml"/>
 	<Include file="skins\_skins.xml"/>
 </Ui>

@@ -1,4 +1,5 @@
 local F, C = unpack(select(2, ...))
+local module = F:GetModule("tooltip")
 if C.tooltip.enable ~= true or C.tooltip.ilvlspec ~= true then return end
 
 --[[
@@ -57,6 +58,25 @@ local function SetUnitInfo(gear, spec)
 		GameTooltip:AddLine(infoString)
 	end
 	GameTooltip:Show()
+end
+
+local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "(%%d+)")
+function module:GetItemLevel(link, quality)
+	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
+
+	local tip = _G["FreeUIScanTooltip"] or CreateFrame("GameTooltip", "FreeUIScanTooltip", nil, "GameTooltipTemplate")
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+ 	tip:SetHyperlink(link)
+
+	for i = 2, 5 do
+		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+		local level = string.match(text, itemLevelString)
+		if level then
+			ItemDB[link] = tonumber(level)
+			break
+		end
+	end
+	return ItemDB[link]
 end
 
 

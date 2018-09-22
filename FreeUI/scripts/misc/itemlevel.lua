@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("misc")
+local tipModule = F:GetModule("tooltip")
 
 
 local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
@@ -95,6 +96,36 @@ function module:ShowItemLevel()
 	F.SetFS(_G.CharacterNeckSlot.RankFrame.Label)
 	_G.CharacterNeckSlot.RankFrame.Label:ClearAllPoints()
 	_G.CharacterNeckSlot.RankFrame.Label:SetPoint("TOPLEFT", 0, -4)
+
+
+	-- ilvl on scrapping machine
+	local function updateMachineLevel(self)
+		if not self.iLvl then
+			self.iLvl = F.CreateFS(self)
+			self.iLvl:SetPoint("BOTTOMRIGHT", 0, 2)
+		end
+		if not self.itemLink then self.iLvl:SetText("") return end
+
+		local quality = 1
+		if self.itemLocation and not self.item:IsItemEmpty() and self.item:GetItemName() then
+			quality = self.item:GetItemQuality()
+		end
+		local level = tipModule:GetItemLevel(self.itemLink, quality)
+		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		self.iLvl:SetText(level)
+		self.iLvl:SetTextColor(color.r, color.g, color.b)
+	end
+
+	local function itemLevelOnScrapping(event, addon)
+		if addon == "Blizzard_ScrappingMachineUI" then
+			for button in pairs(ScrappingMachineFrame.ItemSlots.scrapButtons.activeObjects) do
+				hooksecurefunc(button, "RefreshIcon", updateMachineLevel)
+			end
+
+			F:UnregisterEvent(event, itemLevelOnScrapping)
+		end
+	end
+	F:RegisterEvent("ADDON_LOADED", itemLevelOnScrapping)
 
 
 
