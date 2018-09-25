@@ -177,6 +177,25 @@ end
 --end)
 
 
+local DefaultSetItemRef = SetItemRef
+function SetItemRef(link, ...)
+	local type, value = link:match("(%a+):(.+)")
+	--print(type)
+	if IsAltKeyDown() and type == "player" then
+		InviteUnit(value:match("([^:]+)"))
+	elseif (type == "url") then
+		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or ChatFrame1EditBox
+		if not eb then return end
+		eb:Show()
+		eb:SetText(value)
+		eb:SetFocus()
+		eb:HighlightText()
+	else
+		return DefaultSetItemRef(link, ...)
+	end
+end
+
+
 -- whisper to target
 SLASH_TELLTARGET1 = "/tt"
 SlashCmdList.TELLTARGET = function(message)
