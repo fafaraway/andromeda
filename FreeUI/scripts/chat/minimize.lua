@@ -44,11 +44,33 @@ mb.t:SetTextColor(228/255, 225/255, 16/255)
 	end
 end)
 
+mb:SetScript("OnMouseDown", function(self, button)
+	if C.client == 'zhCN' and button == 'RightButton' then
+		local inchannel = false
+		local channels = {GetChannelList()}
+		for i = 1, #channels do
+			if channels[i] == '大脚世界频道' then
+				inchannel = true
+				break
+			end
+		end
+		if inchannel then
+			LeaveChannelByName('大脚世界频道')
+			print('|cffFF0000离开|r 大脚世界频道')  
+		else
+			JoinPermanentChannel('大脚世界频道' ,nil ,1)
+			ChatFrame_AddChannel(ChatFrame1, '大脚世界频道')
+			ChatFrame_RemoveMessageGroup(ChatFrame1, 'CHANNEL')
+			print('|cff7FFF00加入|r 大脚世界频道')
+		end
+	end
+end)
+
 mb:SetScript("onclick", function(self, button)
 	if ChatHide == false then
 
 		mb.t:SetText("+")
-mb.t:SetTextColor(228/255, 225/255, 16/255)
+		mb.t:SetTextColor(228/255, 225/255, 16/255)
 		--QuickJoinToastButton:Hide()
 		--GeneralDockManager:Hide()
 		--ChatFrameMenuButton:Hide()
@@ -69,7 +91,7 @@ mb.t:SetTextColor(228/255, 225/255, 16/255)
 	elseif ChatHide == true then
 
 		mb.t:SetText("-")
-mb.t:SetTextColor(228/255, 225/255, 16/255)
+		mb.t:SetTextColor(228/255, 225/255, 16/255)
 		--QuickJoinToastButton:Show()
 		--GeneralDockManager:Show()
 		--ChatFrameMenuButton:Show()
