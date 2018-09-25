@@ -2,200 +2,98 @@ local F, C, L = unpack(select(2, ...))
 
 local module = F:GetModule("tooltip")
 
--- AzeriteTooltip by jokair9
 
 function module:azeriteTrait()
 	if not C.tooltip.azeriteTrait then return end
 
-	local addText = ""
+	local tipList = {}
+	local function scanTooltip(tooltip)
+		for i = 9, tooltip:NumLines() do
+			local line = _G[tooltip:GetName().."TextLeft"..i]
+			local text = line:GetText()
+			if text and text:find("%-") then
+				tinsert(tipList, i)
+			end
+		end
+		return #tipList
+	end
 
-	function AzeriteTooltip_GetSpellID(powerID)
-		local powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(powerID)
-		if (powerInfo) then
-			local azeriteSpellID = powerInfo["spellID"]
-			return azeriteSpellID
+	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59"
+	local function getIconString(icon, known)
+		if known then
+			return format(iconString..":255:255:255|t", icon)
+		else
+			return format(iconString..":130:130:130|t", icon)
 		end
 	end
 
-	function AzeriteTooltip_ScanSelectedTraits(tooltip, powerName)
+	local powerData = {}
+	local function convertPowerID(id)
+		local spellID = powerData[id]
+		if not spellID then
+			local powerInfo = C_AzeriteEmpoweredItem.GetPowerInfo(id)
+			if powerInfo and powerInfo.spellID then
+				spellID = powerInfo.spellID
+				powerData[id] = spellID
+			end
+		end
+		return spellID
+	end
+
+	local function lookingForAzerite(tooltip, powerName)
 		for i = 8, tooltip:NumLines() do
-			local left = _G[tooltip:GetName().."TextLeft"..i]
-			local text = left:GetText()
-			if text and text:find(powerName) then
+			local line = _G[tooltip:GetName().."TextLeft"..i]
+			local text = line:GetText()
+			if text and text:find("%- "..powerName) then
 				return true
 			end
 		end
 	end
 
-	function AzeriteTooltip_GetAzeriteLevel()
-		local level
-		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
-		if azeriteItemLocation then
-			level = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
-		else
-			level = 0
+	local cache = {}
+	local function updateAzeriteArmor(self)
+		local link = select(2, self:GetItem())
+		if not link then return end
+		if not C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then return end
+		local allTierInfo = cache[link]
+		if not allTierInfo then
+			allTierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(link)
+			cache[link] = allTierInfo
 		end
-		return level
-	end
+		if not allTierInfo then return end
 
-	-- Thanks muxxon@Curse for help
-	function AzeriteTooltip_ClearBlizzardText(tooltip)
-		local textLeft = tooltip.textLeft
-		if not textLeft then
-			local tooltipName = tooltip:GetName()
-			textLeft = setmetatable({}, { __index = function(t, i)
-				local line = _G[tooltipName .. "TextLeft" .. i]
-				t[i] = line
-				return line
-			end })
-			tooltip.textLeft = textLeft
-		end
-		for i = 7, tooltip:NumLines() do
-			if textLeft then
-				local line = textLeft[i]		
-				local text = line:GetText()
-				local r, g, b = line:GetTextColor()
-				if text then
-					local ActiveAzeritePowers = strsplit("(%d/%d)", CURRENTLY_SELECTED_AZERITE_POWERS) -- Active Azerite Powers (%d/%d)
-					local AzeritePowers = strsplit("(0/%d)", TOOLTIP_AZERITE_UNLOCK_LEVELS) -- Azerite Powers (0/%d)
-					local AzeriteUnlock = strsplit("%d", AZERITE_POWER_UNLOCKED_AT_LEVEL) -- Unlocked at Heart of Azeroth Level %d
-					local Durability = strsplit("%d / %d", DURABILITY_TEMPLATE)
+		local count = scanTooltip(self)
+		local index = 1
+		for i = 1, #allTierInfo do
+			local powerIDs = allTierInfo[i].azeritePowerIDs
+			if powerIDs[1] == 13 then break end
 
-					if text:match(CURRENTLY_SELECTED_AZERITE_POWERS_INSPECT) then return end
-
-					if text:find(ActiveAzeritePowers) or text:find(AzeritePowers) then
-						textLeft[i-1]:SetText("")
-						line:SetText("")
-						textLeft[i+1]:SetText(addText)
-					end
-
-					if text:find(AzeriteUnlock) or text:find(NEW_AZERITE_POWER_AVAILABLE) then
-						line:SetText("")
-					end
-
-					if text:find(Durability) then
-						textLeft[i-1]:SetText("")
-					end
-				end
-			end
-		end
-	end
-
-	function AzeriteTooltip_RemovePowerText(tooltip, powerName)
-		local textLeft = tooltip.textLeft
-		if not textLeft then
-			local tooltipName = tooltip:GetName()
-			textLeft = setmetatable({}, { __index = function(t, i)
-				local line = _G[tooltipName .. "TextLeft" .. i]
-				t[i] = line
-				return line
-			end })
-			tooltip.textLeft = textLeft
-		end
-		for i = 7, tooltip:NumLines() do
-			if textLeft then
-				local line = textLeft[i]		
-				local text = line:GetText()
-				local r, g, b = line:GetTextColor()
-				if text then				
-					if text:match(CURRENTLY_SELECTED_AZERITE_POWERS_INSPECT) then return end
-
-					if text:find("- "..powerName) then
-						line:SetText("")
-					end
-					if r < 0.1 and g > 0.9 and b < 0.1 and not text:match(ITEM_AZERITE_EMPOWERED_VIEWABLE) then
-						line:SetText("")
-					end
-				end
-			end
-		end
-	end
-
-	function AzeriteTooltip_BuildTooltip(self)
-		local name, link = self:GetItem()
-		if not name then return end
-
-		if C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(link) then
-
-			addText = ""
-			
-			local currentLevel = AzeriteTooltip_GetAzeriteLevel()
-
-			local specID = GetSpecializationInfo(GetSpecialization())
-			local allTierInfo = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID(link)
-
-			if not allTierInfo then return end
-
-			local activePowers = {}
-			local activeAzeriteTrait = false
-
-			for j=1, 3 do
-				local tierLevel = allTierInfo[j]["unlockLevel"]
-				local azeritePowerID = allTierInfo[j]["azeritePowerIDs"][1]
-
-				if azeritePowerID == 13 then break end -- Ignore +5 item level tier	
-
-				if not allTierInfo[1]["azeritePowerIDs"][1] then return end
-
-				if tierLevel <= currentLevel then
-					if j > 1 then 
-						addText = addText.."\n \n|cFFffcc00 Level "..tierLevel.."|r\n"
-					else
-						addText = addText.."\n|cFFffcc00 Level "..tierLevel.."|r\n"
-					end
+			local tooltipText = ""
+			for _, id in ipairs(powerIDs) do
+				local spellID = convertPowerID(id)
+				if not spellID then break end
+				local name, _, icon = GetSpellInfo(spellID)
+				local found = lookingForAzerite(self, name)
+				if found then
+					tooltipText = tooltipText.." "..getIconString(icon, true)
 				else
-					if j > 1 then 
-						addText = addText.."\n \n|cFF7a7a7a Level "..tierLevel.."|r\n"
-					else
-						addText = addText.."\n|cFF7a7a7a Level "..tierLevel.."|r\n"
-					end
+					tooltipText = tooltipText.." "..getIconString(icon)
 				end
-
-				for i, v in pairs(allTierInfo[j]["azeritePowerIDs"]) do
-					local azeritePowerID = allTierInfo[j]["azeritePowerIDs"][i]
-					local azeriteSpellID = AzeriteTooltip_GetSpellID(azeritePowerID)
-						
-					local azeritePowerName, _, icon = GetSpellInfo(azeriteSpellID)
-					local azeriteIcon = '|T'..icon..':20:20:0:0:64:64:4:60:4:60|t'
-					local azeriteTooltipText = "  "..azeriteIcon.."  "..azeritePowerName
-
-					if tierLevel <= currentLevel then
-						if AzeriteTooltip_ScanSelectedTraits(self, azeritePowerName) then
-							tinsert(activePowers, {name = azeritePowerName})
-							activeAzeriteTrait = true	
-
-							addText = addText.."\n|cFF00FF00"..azeriteTooltipText.."|r"			
-						elseif C_AzeriteEmpoweredItem.IsPowerAvailableForSpec(azeritePowerID, specID) then
-							addText = addText.."\n|cFFFFFFFF"..azeriteTooltipText.."|r"
-						else
-							addText = addText.."\n|cFF7a7a7a"..azeriteTooltipText.."|r"
-						end
-					elseif C_AzeriteEmpoweredItem.IsPowerAvailableForSpec(azeritePowerID, specID) then
-						addText = addText.."\n|cFF7a7a7a"..azeriteTooltipText.."|r"
-					else
-						addText = addText.."\n|cFF7a7a7a"..azeriteTooltipText.."|r"
-					end		
-				end	
 			end
 
-			if IsShiftKeyDown() then
-				self:AddLine(addText)
-				self:AddLine(" ")
-			else
-				if activeAzeriteTrait then
-					for k, v in pairs(activePowers) do
-						AzeriteTooltip_RemovePowerText(self, v.name)
-					end
-				end
-				AzeriteTooltip_ClearBlizzardText(self)
+			if tooltipText ~= "" and count > 0 then
+				local line = _G[self:GetName().."TextLeft"..tipList[index]]
+				line:SetText(line:GetText().."\n "..tooltipText)
+				count = count - 1
+				index = index + 1
 			end
-			
-			wipe(activePowers)
 		end
+
+		wipe(tipList)
 	end
 
-	GameTooltip:HookScript("OnTooltipSetItem", AzeriteTooltip_BuildTooltip)
-	ItemRefTooltip:HookScript("OnTooltipSetItem", AzeriteTooltip_BuildTooltip)
-	ShoppingTooltip1:HookScript("OnTooltipSetItem", AzeriteTooltip_BuildTooltip)
-	WorldMapTooltip.ItemTooltip.Tooltip:HookScript('OnTooltipSetItem', AzeriteTooltip_BuildTooltip)
+	GameTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
+	ItemRefTooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
+	ShoppingTooltip1:HookScript("OnTooltipSetItem", updateAzeriteArmor)
+	WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 end
