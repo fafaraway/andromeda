@@ -117,7 +117,7 @@ function module:QuestTracker()
 			itemButton:SetPushedTexture("")
 			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 			itemButton.icon:SetTexCoord(unpack(C.texCoord))
-			local bg = F.CreateBDFrame(itemButton)
+			local bg = F.CreateBDFrame(itemButton, 0)
 			F.CreateSD(itemButton)
 
 			itemButton.Count:ClearAllPoints()
