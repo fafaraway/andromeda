@@ -13,6 +13,7 @@ if not C.tooltip.enable then return end
 local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
 local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 
+PVP_ENABLED = "|cffff0000PVP|r"
 
 local classification = {
 	elite = " |cffcc8800"..ELITE.."|r",
@@ -246,7 +247,6 @@ hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 		end
 	end
 end)
-
 
 
 -- Tooltip skin
