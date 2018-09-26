@@ -49,15 +49,19 @@ C.reactioncolours = {
 C["appearance"] = {
 	["backdropcolor"] = {.05, .05, .05},
 	["alpha"] = .6,
+	["shadow"] = true,
 	["buttonGradientColour"] = {.3, .3, .3, .3},
 	["buttonSolidColour"] = {.2, .2, .2, .6},
 	["useButtonGradientColour"] = true,
+
 	["useCustomColour"] = false,
-	["customColour"] = {r = 1, g = 1, b = 1},
-	["shadow"] = true,
+		["customColour"] = {r = 1, g = 1, b = 1},
+
 	["vignette"] = true,
-	["vignetteAlpha"] = .5,
+		["vignetteAlpha"] = .5,
+
 	["fontStyle"] = true,
+
 	["usePixelFont"] = false, -- Chinese pixel font for personal use
 }
 
@@ -107,12 +111,12 @@ C["actionbars"] = {
 
 
 C["auras"] = {
+	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
 	["buffSize"] = 42,
 	["debuffSize"] = 50,
 	["paddingX"] = 5,
 	["paddingY"] = 8,
 	["buffPerRow"] = 10,
-	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
 }
 
 
@@ -148,7 +152,7 @@ C["misc"] = {
 	["autoActionCam"] = true,
 
 	["cooldown"] = true,
-	["decimalCD"] = false,
+		["decimalCD"] = false,
 
 	["rareAlert"] = true,
 	["rareAlertNotify"] = true,
@@ -187,9 +191,7 @@ C["camera"] = {
 
 
 C["bags"] = {
-
 	["itemSlotSize"] = 38,
-
 	["sizes"] = {
 		bags = {
 			columnsSmall = 8,
@@ -265,28 +267,26 @@ C["unitframes"] = {
 		["powerTypeColor"] = true,
 
 	["gradient"] = false,					-- gradient mode
-	["portrait"] = true,
-	["portraitAlpha"] = .08,
+
+	["portrait"] = true,					-- enable portrait on player/target frame
+		["portraitAlpha"] = .1,
 
 	["outRangeAlpha"] = .4,
 
 	["classPower"] = true,
 
-	["absorb"] = true, 							-- absorb bar/over absorb glow
+	["absorb"] = true, 						-- absorb bar/over absorb glow
 	["castbar"] = true,
-	["castbarSeparate"] = false,
-	["pvp"] = true, 							-- show pvp icon on player frame
-	["statusIndicator"] = true,					-- show combat/resting status on player frame
-		["statusIndicatorCombat"] = true,				-- show combat status (else: only resting)
+		["castbarSeparate"] = false,
 
 	["enableGroup"] = true,					-- enable party/raid frames
-		["limitRaidSize"] = false, 					-- show a maximum of 25 players in a raid
-		["showRaidFrames"] = true, 					-- show the raid frames
-		["partyNameAlways"] = false,				-- show name on party/raid frames
-		["partyMissingHealth"] = false,				-- show missing health
+		["limitRaidSize"] = false, 				-- show a maximum of 25 players in a raid
+		["showRaidFrames"] = true, 				-- show the raid frames
+		["partyNameAlways"] = false,			-- show name on party/raid frames
+		["partyMissingHealth"] = false,			-- show missing health
 	["enableArena"] = true,					-- enable arena/flag carrier frames
 
-	["castbyPlayer"] = true,
+	["castbyPlayer"] = true,				-- only show target debuffs casted by player
 
 	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 320},						-- player unitframe position
 	["player_width"] = 200,
