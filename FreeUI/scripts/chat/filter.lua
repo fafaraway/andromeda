@@ -2,19 +2,14 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("chat")
 
 
-
---[[
-	修改自NoGoldSeller，强迫症患者只能接受这个低占用的。
-]]
-
--- Filter Chat symbols
-local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "-"}
-
 local FilterList = {}
+local recent_msg = {}
+local index = 1
+
 local function genFilterList()
 	FilterList = {string.split(" ", C.chat.filterList or "")}
 end
-F.genFilterList = genFilterList
+
 
 F.FriendsList = {}
 local function updateFriends()
@@ -39,20 +34,25 @@ end
 F:RegisterEvent("FRIENDLIST_UPDATE", updateFriends)
 F:RegisterEvent("BN_FRIEND_INFO_CHANGED", updateFriends)
 
-local function genChatFilter(_, event, msg, author, _, _, _, flag)
-	--if not C.chat.enableFilter then return end
 
+local function genChatFilter(_, event, msg, author, _, _, _, flag)
+	if not C.chat.enableFilter then return end
+
+	local sender = string.split("-", author)
 	local name = Ambiguate(author, "none")
+
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
 	elseif F.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or F.FriendsList[name] then
 		return
 	end
 
-	for _, symbol in ipairs(msgSymbols) do
+	-- filter symbols
+	for _, symbol in ipairs(C.chat.symbols) do
 		msg = gsub(msg, symbol, "")
 	end
 
+	-- filter keywords
 	local match = 0
 	for _, keyword in pairs(FilterList) do
 		if keyword ~= "" then
@@ -63,23 +63,40 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 		end
 	end
 
-	if match >= C.chat.match then
+	if match >= C.chat.keyWordMatch then
 		return true
 	end
+
+	-- filter repeat messages
+	for i = 1, 4 do
+		if recent_msg[i] and recent_msg[i]["sender"] == sender and recent_msg[i]["msg"] == msg then
+			return true
+		end
+	end
+	
+	if index == 5 then
+		index = 1
+	end
+	
+	if not recent_msg[index] then
+		recent_msg[index] = {}
+	end
+	
+	recent_msg[index]["sender"] = sender
+	recent_msg[index]["msg"] = msg
+	
+	index = index + 1
 end
 
-local addonBlockList = {
-	"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
-	"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "wowcn%.vip"
-}
 
+-- filter spam from addons
 local function genAddonBlock(_, _, msg, author)
-	--if not C.chat.blockAddonAlert then return end
+	if not C.chat.blockAddonAlert then return end
 
 	local name = Ambiguate(author, "none")
 	if UnitIsUnit(name, "player") then return end
 
-	for _, word in ipairs(addonBlockList) do
+	for _, word in ipairs(C.chat.addonBlockList) do
 		if msg:find(word) then
 			return true
 		end
@@ -87,10 +104,9 @@ local function genAddonBlock(_, _, msg, author)
 end
 
 
---[[
-	过滤WQT的邀请
-	Credit: WorldQuestTrackerBlocker, Jordy141
-]]
+
+-- filter auto invite from WQT
+-- Credit: WorldQuestTrackerBlocker, Jordy141
 local WQTUsers = {}
 local inviteString = _G.ERR_INVITED_TO_GROUP_SS:gsub(".+|h", "")
 local function blockInviteString(_, _, msg)
@@ -116,7 +132,7 @@ local function hideInvitePopup(_, name)
 	end
 end
 
--- 过滤海岛探险中艾泽里特的获取信息
+-- filter azerite info while islands-ing
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub("%%d/%%d ", "")
 local function filterAzeriteGain(_, _, msg)
 	if msg:find(azerite) then

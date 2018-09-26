@@ -238,14 +238,21 @@ C["chat"] = {
 	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
 	["lockPosition"] = true,
 	["sticky"] = true,
-	["match"] = 1,
 	["itemLinkLevel"] = true,
 	["spamageMeters"] = true,
 	["whisperAlert"] = true,
 	["minimize"] = true,
 	["outline"] = false,
 
-	["filterList"] = "艾尔文森林美食协会 黄金梅利 新公会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收",
+	['enableFilter'] = true,
+	["keyWordMatch"] = 1,
+	['blockAddonAlert'] = true,
+	['symbols'] = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "-"},
+	["filterList"] = "艾尔文森林美食协会 墨雪 夙愿 柳岩客栈 黄金梅利 新公会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收",
+	['addonBlockList'] = {
+		"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
+		"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "wowcn%.vip"
+		},
 }
 
 
