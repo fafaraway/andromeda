@@ -274,7 +274,7 @@ C["unitframes"] = {
 
 	["absorb"] = true, 							-- absorb bar/over absorb glow
 	["castbar"] = true,
-	["castbarSeparate"] = true,
+	["castbarSeparate"] = false,
 	["pvp"] = true, 							-- show pvp icon on player frame
 	["statusIndicator"] = true,					-- show combat/resting status on player frame
 		["statusIndicatorCombat"] = true,				-- show combat status (else: only resting)
