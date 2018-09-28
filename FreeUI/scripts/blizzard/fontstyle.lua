@@ -1,25 +1,10 @@
 local F, C, L = unpack(select(2, ...))
-if not C.appearance.fontStyle then return end
-
 local module = F:GetModule("blizzard")
-
--- Regular text: replaces FRIZQT__.TTF
-local NORMAL = C.font.normal
-
--- Chat Font: replaces ARIALN.TTF
-local CHAT   = C.font.chat
-
--- Crit Font: replaces skurri.ttf
-local CRIT   = C.font.damage
-
-local UNITNAME   = C.font.unitname
-
--- Header Font: replaces MORPHEUS.ttf
-local HEADER = C.font.header
-
 
 
 function module:FontStyle()
+	if not C.appearance.fontStyle then return end
+
 	local next, type = _G.next, _G.type
 	local font
 
@@ -33,31 +18,31 @@ function module:FontStyle()
 		elseif fontColor then fontObj:SetAlpha(fontColor) end
 	end
 
-	SetFont("SystemFont_Shadow_Small",         NORMAL, 11, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("SystemFont_Small",                NORMAL, 11)
+	SetFont("SystemFont_Shadow_Small", C.font.normal, 11, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("SystemFont_Small", C.font.normal, 11)
 
-	SetFont("System_IME", NORMAL, 16)
+	SetFont("System_IME", C.font.normal, 16)
 
-	SetFont("ZoneTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("SubZoneTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("WorldMapTextFont", HEADER, 40, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("ZoneTextFont", C.font.header, 40, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("SubZoneTextFont", C.font.header, 40, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("WorldMapTextFont", C.font.header, 40, nil, nil, {0, 0, 0}, 1, -1)
 
-	SetFont("GameFontNormal", NORMAL, 12)
-	SetFont("GameFontNormalSmall", NORMAL, 12)
-	SetFont("GameFontNormalLarge", NORMAL, 16)
+	SetFont("GameFontNormal", C.font.normal, 12)
+	SetFont("GameFontNormalSmall", C.font.normal, 12)
+	SetFont("GameFontNormalLarge", C.font.normal, 16)
 
-	SetFont("FriendsFont_Normal", NORMAL, 13)
-	SetFont("FriendsFont_Small", NORMAL, 12)
+	SetFont("FriendsFont_Normal", C.font.normal, 13)
+	SetFont("FriendsFont_Small", C.font.normal, 12)
 
-	SetFont("AchievementFont_Small", NORMAL, 12)
-	SetFont("AchievementPointsFont", NORMAL, 12)
+	SetFont("AchievementFont_Small", C.font.normal, 12)
+	SetFont("AchievementPointsFont", C.font.normal, 12)
 
-	SetFont("GameTooltipHeaderText", NORMAL, 14, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("GameTooltipText", NORMAL, 13, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("GameTooltipTextSmall", NORMAL, 13, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("GameTooltipHeaderText", C.font.normal, 14, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("GameTooltipText", C.font.normal, 13, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("GameTooltipTextSmall", C.font.normal, 13, nil, nil, {0, 0, 0}, 1, -1)
 
 	local function ReskinFont(font, size, white)
-		font:SetFont(NORMAL, size, white and "" or nil)
+		font:SetFont(C.font.normal, size, white and "" or nil)
 		font:SetShadowColor(0, 0, 0, 0)
 		font:SetShadowOffset(2, -2)
 	end

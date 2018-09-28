@@ -7,7 +7,7 @@ mb:SetSize(16,16)
 --mb.t=mb:CreateTexture(nil,"BORDER")
 --mb.t:SetTexture("Interface\\CHATFRAME\\UI-ChatIcon-Minimize-Up.blp")
 --mb.t:SetAllPoints(mb)
-mb.t = F.CreateFS(mb)
+mb.t = F.CreateFS(mb, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 mb.t:SetText("-")
 mb.t:SetTextColor(228/255, 225/255, 16/255)
 

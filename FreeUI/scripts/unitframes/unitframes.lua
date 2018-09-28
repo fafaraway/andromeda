@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+local module = F:RegisterModule("unitframe")
 if not C.unitframes.enable then return end
 
 local parent, ns = ...
@@ -14,9 +14,9 @@ oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 local ufFont
 if C.appearance.usePixelFont then -- Miss Lin really likes pixel font ;)
-	ufFont = C.fontPixel
+	ufFont = C.pixelFontCN
 else
-	ufFont = C.fontNormal
+	ufFont = C.standardFont
 end
 
 
@@ -360,7 +360,8 @@ local function CreateAltPower(self)
 	abd:SetFrameLevel(bar:GetFrameLevel()-1)
 	F.CreateBD(abd, .5)
 
-	local text = F.CreateFS(bar, "CENTER")
+	local text = F.CreateFS(bar, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+	text:SetJustifyH('CENTER')
 	text:SetPoint("BOTTOM", self, "TOP", 0, 3)
 
 	self:Tag(text, "[altpower]")
@@ -396,18 +397,17 @@ local function CreateCastBar(self)
 	spark:SetHeight(cb:GetHeight()*2.5)
 	cb.Spark = spark
 
-	local name = F.CreateFS(cb)
+	local name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+
 	if C.client == 'zhCN' or C.client == 'zhTW' then
 		name:SetFont(unpack(ufFont))
-	else
-		F.SetFS(name)
 	end
 
 	name:SetPoint("CENTER", self.Health)
 	cb.Text = name
 	name:SetAlpha(.5)
 
-	local timer = F.CreateFS(cb)
+	local timer = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 	timer:SetPoint("BOTTOMRIGHT", cb, "TOPRIGHT", 0, 6)
 	cb.Time = timer
 	timer:Hide()
@@ -893,7 +893,7 @@ end
 -- indicator
 local function CreateIndicator(self)
 	if self.unitStyle == "player" then
-		local PvPIndicator = F.CreateFS(self)
+		local PvPIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		PvPIndicator:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -50, 3)
 		PvPIndicator:SetText("P")
 
@@ -922,7 +922,7 @@ local function CreateIndicator(self)
 
 
 		local statusIndicator = CreateFrame("Frame")
-		local statusText = F.CreateFS(self.Health)
+		local statusText = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		statusText:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
 
 		local function updateStatus()
@@ -951,7 +951,7 @@ local function CreateIndicator(self)
 	end
 
 	if self.unitStyle == "target" then
-		local QuestIndicator = F.CreateFS(self)
+		local QuestIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		QuestIndicator:SetText("!")
 		QuestIndicator:SetTextColor(228/255, 225/255, 16/255)
 		QuestIndicator:SetPoint("RIGHT", self.Name, "LEFT", -3, 0)
@@ -982,8 +982,9 @@ local function CreateIndicator(self)
 		ResurrectIndicator:SetPoint('CENTER')
 		self.ResurrectIndicator = ResurrectIndicator
 
-		local LeaderIndicator = F.CreateFS(self, "LEFT")
+		local LeaderIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		LeaderIndicator:SetText("l")
+		LeaderIndicator:SetJustifyH('LEFT')
 		LeaderIndicator:SetPoint("TOPLEFT", self.Health, 2, -1)
 		self.LeaderIndicator = LeaderIndicator
 
@@ -1010,14 +1011,15 @@ local function CreateIndicator(self)
 			end
 		end
 
-		local GroupRoleIndicator = F.CreateFS(self, "CENTER")
+		local GroupRoleIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		GroupRoleIndicator:SetJustifyH('CENTER')
 		GroupRoleIndicator:SetPoint("BOTTOM", self.Health, 1, 1)
 		GroupRoleIndicator.Override = UpdateLFD
 
 		self.GroupRoleIndicator = GroupRoleIndicator
 
 		-- phase indicator
-		local PhaseIndicator = F.CreateFS(self)
+		local PhaseIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		PhaseIndicator:SetText("p")
 		PhaseIndicator:SetTextColor(1, 1, 1, 1)
 		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, -2, -1)
@@ -1028,14 +1030,10 @@ end
 
 -- name
 local function CreateName(self)
-	local Name = F.CreateFS(self)
+	local Name = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	Name:SetWordWrap(false)
 	Name:SetJustifyH("CENTER")
-	Name:SetFont(unpack(ufFont))
-	Name:SetShadowColor(0, 0, 0, 1)
-	Name:SetShadowOffset(2, -2)
-	Name:SetTextColor(1, 1, 1)
 	Name:SetWidth(self:GetWidth())
 	self:Tag(Name, '[name]')
 	self.Name = Name
@@ -1060,10 +1058,9 @@ end
 local function UpdateTOTName(self)
 	local f = CreateFrame("Frame", nil, self)
 
-	local tt = F.CreateFS(f)
+	local tt = F.CreateFS(f, C.font.normal, 12, nil, nil, {0, 0, 0}, 2, -2)
 	tt:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	tt:SetJustifyH("CENTER")
-	tt:SetFont(unpack(ufFont))
 	tt:SetWordWrap(false)
 	tt:SetWidth(C.unitframes.targettarget_width)
 
@@ -1084,7 +1081,7 @@ end
 local function UpdateTOFName(self)
 	local f = CreateFrame("Frame", nil, self)
 
-	local ft = F.CreateFS(f)
+	local ft = F.CreateFS(f, C.font.normal, 12, nil, nil, {0, 0, 0}, 2, -2)
 	ft:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	ft:SetFont(unpack(ufFont))
 	ft:SetJustifyH"CENTER"
@@ -1293,7 +1290,7 @@ local Shared = function(self, unit, isSingle)
 		F.CreateBD(cbd, .4)
 		F.CreateSD(cbd)
 
-		CounterBar.Text = F.CreateFS(CounterBar)
+		CounterBar.Text = F.CreateFS(CounterBar, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		CounterBar.Text:SetPoint("CENTER")
 
 		local r, g, b
@@ -1379,12 +1376,14 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.player_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, "LEFT")
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		HealthPoints:SetJustifyH('LEFT')
 		HealthPoints:SetPoint("BOTTOMLEFT", Health, "TOPLEFT", 0, 3)
 		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
 		Health.value = HealthPoints
 
-		local PowerText = F.CreateFS(Power, "RIGHT")
+		local PowerText = F.CreateFS(Power, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		PowerText:SetJustifyH('RIGHT')
 		PowerText:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
 		self:Tag(PowerText, '[free:power]')
 		Power.Text = PowerText
@@ -1412,17 +1411,17 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.target_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, "LEFT")
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		HealthPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
 
-		local PowerText = F.CreateFS(Power)
+		local PowerText = F.CreateFS(Power, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		PowerText:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
 		if powerType ~= 0 then PowerText.frequentUpdates = .1 end
 		self:Tag(PowerText, '[free:power]')
 
-		local Classification = F.CreateFS(self)
+		local Classification = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 		Classification:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT", 3, 0)
 		self:Tag(Classification, '[free:classification]')
 
@@ -1487,7 +1486,8 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.boss_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		HealthPoints:SetJustifyH('RIGHT')
 		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 4)
 		self:Tag(HealthPoints, '[dead][free:bosshealth]')
 
@@ -1518,7 +1518,8 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.arena_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, "RIGHT")
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		HealthPoints:SetJustifyH('RIGHT')
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 
@@ -1541,7 +1542,8 @@ do
 
 		local Health, Power = self.Health, self.Power
 
-		local Text = F.CreateFS(Health, "CENTER")
+		local Text = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		Text:SetJustifyH('CENTER')
 		Text:SetPoint("CENTER", 1, 0)
 
 		self.Text = Text
@@ -1821,3 +1823,7 @@ oUF:Factory(function(self)
 	checkShowRaidFrames()
 	F.AddOptionsCallback("unitframes", "showRaidFrames", checkShowRaidFrames)]]
 end)
+
+function module:OnLogin()
+	self:Focuser()
+end

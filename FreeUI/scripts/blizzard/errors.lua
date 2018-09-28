@@ -27,9 +27,9 @@ secondErrorFrame:Hide()
 secondErrorFrame:SetFrameStrata("TOOLTIP")
 secondErrorFrame:SetFrameLevel(30)
 
-firstErrorFrame.text = F.CreateFS(firstErrorFrame)
+firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 firstErrorFrame.text:SetPoint("TOP", UIParent, 0, -160)
-secondErrorFrame.text = F.CreateFS(secondErrorFrame)
+secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -174)
 
 local state = 0
@@ -48,11 +48,11 @@ Error:SetScript("OnEvent", function(_, _, code, msg)
 	end
 
 	if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
-		firstErrorFrame.text:SetFont(unpack(C.fontPixel))
-		secondErrorFrame.text:SetFont(unpack(C.fontPixel))
+		firstErrorFrame.text:SetFont(unpack(C.pixelFontCN))
+		secondErrorFrame.text:SetFont(unpack(C.pixelFontCN))
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		firstErrorFrame.text:SetFont(unpack(C.fontNormal))
-		secondErrorFrame.text:SetFont(unpack(C.fontNormal))
+		firstErrorFrame.text:SetFont(unpack(C.standardFont))
+		secondErrorFrame.text:SetFont(unpack(C.standardFont))
 		secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -180)
 	end
 

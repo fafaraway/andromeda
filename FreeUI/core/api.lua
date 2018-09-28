@@ -25,41 +25,26 @@ function F:dummy()
 	return
 end
 
-F.CreateFS = function(parent, justify)
-	local f = parent:CreateFontString(nil, "OVERLAY")
-	F.SetFS(f)
-
-	if justify then f:SetJustifyH(justify) end
-
-	return f
-end
-
 F.SetFS = function(fontObject, fontSize)
-	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+	fontObject:SetFont(C.media.pixel, 8, "OUTLINEMONOCHROME")
 
 	fontObject:SetShadowColor(0, 0, 0)
 	fontObject:SetShadowOffset(1, -1)
 end
 
-function F:CreateFSA(size, text, classcolor, anchor, x, y)
+function F:CreateFS(fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
 	local fs = self:CreateFontString(nil, "OVERLAY")
-	fs:SetFont(C.font.normal, size, "OUTLINE")
-	--F.SetFS(fs, size)
-	fs:SetText(text)
-	fs:SetWordWrap(false)
-	if classcolor then
-		fs:SetTextColor(cr, cg, cb)
-	else
-		fs:SetTextColor(1, 1, 1)
-	end
-	if anchor and x and y then
-		fs:SetPoint(anchor, x, y)
-	else
-		fs:SetPoint("CENTER", 1, 0)
-	end
+	fs:SetFont(fontPath, fontSize, fontStyle)
+
+	if shadowColor then fs:SetShadowColor(shadowColor[1], shadowColor[2], shadowColor[3], shadowColor[4]) end
+	if shadowX and shadowY then fs:SetShadowOffset(shadowX, shadowY) end
+	if type(fontColor) == "table" then fs:SetTextColor(fontColor[1], fontColor[2], fontColor[3], fontColor[4])
+	elseif fontColor then fs:SetAlpha(fontColor) end
 
 	return fs
 end
+
+
 
 function F:CreateTex()
 	if self.Tex then return end
@@ -839,7 +824,6 @@ function F:CreateButton(width, height, text, fontSize)
 	bu:SetSize(width, height)
 	F.CreateBD(bu, .3)
 	F.CreateBC(bu)
-	bu.text = F.CreateFSA(bu, fontSize or 8, text, false)
 
 	return bu
 end

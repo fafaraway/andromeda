@@ -15,7 +15,7 @@ button:SetHeight(25)
 F.Reskin(button)
 
 
-local text = F.CreateFS(button)
+local text = F.CreateFS(button, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 text:SetPoint("CENTER")
 
 local processing = false

@@ -477,9 +477,9 @@ function MyContainer:OnCreate(name, settings)
 	local caption = background:CreateFontString(background, "OVERLAY", nil)
 
 	if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
-		caption:SetFont(unpack(C.fontPixel))
+		caption:SetFont(unpack(C.pixelFontCN))
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		caption:SetFont(unpack(C.fontNormal))
+		caption:SetFont(unpack(C.standardFont))
 	else
 		F.SetFS(caption)
 	end

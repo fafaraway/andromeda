@@ -112,11 +112,11 @@ function module:ReskinDBM()
 					name.SetPoint = F.dummy
 					
 					if C.appearance.usePixelFont then
-						name:SetFont(unpack(C.fontPixel))
+						name:SetFont(unpack(C.pixelFontCN))
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(1, -1)
 					else
-						name:SetFont(unpack(C.fontNormal))
+						name:SetFont(unpack(C.standardFont))
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(2, -2)
 					end

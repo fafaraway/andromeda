@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
 -- All exceptions and special rules for these options are in profiles.lua!
--- Consider using the in-game options instead, accessed through the game menu or by typing /freeui.
 
 -- [[ Constants ]]
 
@@ -18,19 +17,18 @@ C.media = {
 	["texture"]    = "Interface\\AddOns\\FreeUI\\assets\\statusbar",
 	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\bgTex",
 	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
+	["pixel"]      = "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 }
 
 C.font = {
-	["normal"] 		= _G.STANDARD_TEXT_FONT,
-	["damage"] 		= _G.DAMAGE_TEXT_FONT,
-	["header"] 		= _G.UNIT_NAME_FONT,
-	["chat"] 		= _G.STANDARD_TEXT_FONT,
-	["pixel"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
+	["normal"] 		= _G.STANDARD_TEXT_FONT,	-- default font for most of UI
+	["damage"] 		= _G.DAMAGE_TEXT_FONT,		-- damage/healing font
+	["header"] 		= _G.UNIT_NAME_FONT,		-- name over player head
+	["chat"] 		= _G.STANDARD_TEXT_FONT,	-- chat frame font
 }
 
-C.fontNormal = {C.font.normal, 12}
-C.fontPixel = {'Fonts\\CN\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'} -- Chinese pixel font for personal use
-
+C.standardFont = {C.font.normal, 12}
+C.pixelFontCN = {'Fonts\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'} -- pixel font for Chinese client, personal use
 
 C.reactioncolours = {
 	[1] = {139/255, 39/255, 60/255}, -- Exceptionally hostile
@@ -174,7 +172,6 @@ C["misc"] = {
 
 	["autoAccept"] = false, -- auto accept invites from friends and guildies
 
-	["focuser"] = true,
 	["missingStats"] = true,
 	["DOTA"] = true,
 
@@ -287,6 +284,8 @@ C["unitframes"] = {
 	["enableArena"] = true,					-- enable arena/flag carrier frames
 
 	["castbyPlayer"] = true,				-- only show target debuffs casted by player
+
+	["focuser"] = true,						-- shift + left click to set focus
 
 	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 320},						-- player unitframe position
 	["player_width"] = 200,

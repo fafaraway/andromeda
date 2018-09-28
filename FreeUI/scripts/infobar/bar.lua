@@ -274,7 +274,7 @@ local function addButton(text, position, clickFunc)
 		bu:SetAlpha(0)
 	end
 
-	local buText = F.CreateFS(bu)
+	local buText = F.CreateFS(bu, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 	buText:SetPoint("CENTER")
 	buText:SetText(text)
 	bu.Text = buText

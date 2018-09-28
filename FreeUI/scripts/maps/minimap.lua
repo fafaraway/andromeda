@@ -35,8 +35,7 @@ function module:ReskinRegions()
 
 	local dots = {}
 	for i = 1, 8 do
-		dots[i] = F.CreateFS(QueueStatusMinimapButton)
-		dots[i]:SetFont(C.font.pixel, 16, "OUTLINEMONOCHROME")
+		dots[i] = F.CreateFS(QueueStatusMinimapButton, C.media.pixel, 16, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 		dots[i]:SetText(".")
 	end
 	dots[1]:SetPoint("TOP", 2, 2)
@@ -109,7 +108,7 @@ function module:ReskinRegions()
 	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
 	rd:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-	local rdt = F.CreateFS(rd, "LEFT")
+	local rdt = F.CreateFS(rd, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 	rdt:SetPoint("TOPLEFT")
 	rdt:SetTextColor(1, 1, 1)
 
@@ -174,7 +173,7 @@ function module:ReskinRegions()
 		mail:Hide()
 	end)
 
-	local mt = F.CreateFS(mail)
+	local mt = F.CreateFS(mail, C.media.pixel, 8, 'OUTLINEMONOCHROME')
 	mt:SetText("Mail")
 	mt:SetTextColor(1, 1, 1)
 	mt:SetPoint("BOTTOM", Minimap, 0, 36)
@@ -193,7 +192,9 @@ function module:ReskinRegions()
 	Invt:SetSize(300, 80)
 	F.CreateBD(Invt)
 	F.CreateTex(Invt)
-	F.CreateFSA(Invt, 8, C.infoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
+
+	Invt.text = F.CreateFS(Invt, C.font.normal, 14)
+	Invt.text:SetText(C.infoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
 	local function updateInviteVisibility()
 		if C_Calendar.GetNumPendingInvites() > 0 then
@@ -287,7 +288,8 @@ function module:WhoPingsMyMap()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFSA(f, 12, "", false, "CENTER", 0, 0)
+	f.text = F.CreateFS(f, C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
+	f.text:SetPoint("CENTER", 0, 0)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)

@@ -35,7 +35,7 @@ function module:ShowItemLevel()
 		__index = function(t, i)
 			local gslot = _G["Character"..i.."Slot"]
 			if not gslot then return end
-			local fstr = F.CreateFS(gslot)
+			local fstr = F.CreateFS(gslot, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 			fstr:SetPoint("BOTTOMRIGHT", 0, 2)
 			t[i] = fstr
 			return fstr
@@ -46,7 +46,7 @@ function module:ShowItemLevel()
 		__index = function(t, i)
 			local gslot = _G["Inspect"..i.."Slot"]
 			if not gslot then return end
-			local fstr = F.CreateFS(gslot)
+			local fstr = F.CreateFS(gslot, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 			fstr:SetPoint("BOTTOMRIGHT", 0, 2)
 			t[i] = fstr
 			return fstr
@@ -101,7 +101,7 @@ function module:ShowItemLevel()
 	-- ilvl on scrapping machine
 	local function updateMachineLevel(self)
 		if not self.iLvl then
-			self.iLvl = F.CreateFS(self)
+			self.iLvl = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 			self.iLvl:SetPoint("BOTTOMRIGHT", 0, 2)
 		end
 		if not self.itemLink then self.iLvl:SetText("") return end

@@ -53,8 +53,8 @@ function module:OnLogin()
 	end)
 
 	-- Generate Coords
-	local player = F.CreateFS(WorldMapFrame.BorderFrame)
-	local cursor = F.CreateFS(WorldMapFrame.BorderFrame)
+	local player = F.CreateFS(WorldMapFrame.BorderFrame, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
+	local cursor = F.CreateFS(WorldMapFrame.BorderFrame, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 	player:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 10, 10)
 	cursor:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 130, 10)
 

@@ -57,13 +57,13 @@ local function styleButton(bu, isDebuff)
 	local duration = _G[name.."Duration"]
 	duration:ClearAllPoints()
 	duration:SetPoint("TOP", bu, "BOTTOM", 2, 2)
-	duration:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+	F.SetFS(duration)
 
 	local count = _G[name.."Count"]
 	count:ClearAllPoints()
 	count:SetParent(bu)
 	count:SetPoint("TOPRIGHT", bu, "TOPRIGHT", -1, -3)
-	count:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+	F.SetFS(count)
 
 	bu:SetSize(iconSize, iconSize)
 	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
