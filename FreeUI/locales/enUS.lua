@@ -15,6 +15,7 @@ L["repairError"] = "You have insufficient funds to repair your equipment!"
 
 L["Vendor trash sold"] = "Vendor trash sold"
 
+L["Sell Price"] = "Sell Price"
 L["Stack Cap"] = "Stack Caps"
 L["Castby"] = "Castby"
 

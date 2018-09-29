@@ -24,6 +24,17 @@ function module:extraInfo()
 			local bagCount = GetItemCount(id)
 			local bankCount = GetItemCount(id, true) - GetItemCount(id)
 			local itemStackCount = select(8, GetItemInfo(id))
+			local itemSellPrice = select(11, GetItemInfo(id))
+			if itemSellPrice and itemSellPrice ~= 0 and IsShiftKeyDown() then
+				local g, s, c = math.floor(itemSellPrice / 10000) or 0, math.floor((itemSellPrice % 10000) / 100) or 0, itemSellPrice % 100
+				if itemSellPrice >= 10000 then
+					self:AddDoubleLine(L["Sell Price"]..":", "|cffffffff"..g.."\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t "..s.."\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t "..c.."\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t".."|r")
+				elseif itemSellPrice < 10000 and itemSellPrice >= 100 then
+					self:AddDoubleLine(L["Sell Price"]..":", "|cffffffff"..s.."\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t "..c.."\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t".."|r")
+				elseif itemSellPrice < 100 then
+					self:AddDoubleLine(L["Sell Price"]..":", "|cffffffff"..c.."\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t".."|r")
+				end
+			end
 			if bankCount > 0 and IsShiftKeyDown() then
 				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", C.infoColor..bagCount.."/"..bankCount)
 			elseif bagCount > 0 and IsShiftKeyDown() then

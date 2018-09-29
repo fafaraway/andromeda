@@ -16,6 +16,7 @@ L["repairError"] = "没有足够的钱进行修理！"
 
 L["Vendor trash sold"] = "出售垃圾"
 
+L["Sell Price"] = "售价"
 L["Stack Cap"] = "堆叠上限"
 L["Castby"] = "来自"
 
