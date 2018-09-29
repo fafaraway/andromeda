@@ -1,4 +1,78 @@
+local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("chat")
 
+
+
+local gsub = string.gsub
+local match = string.match
+local format = string.format
+
+local shorthands = {
+	INSTANCE_CHAT = 'i',
+	OFFICER = 'o',
+	GUILD = 'g',
+	PARTY = 'p',
+	RAID = 'r'
+}
+
+local classes = {}
+for token, localized in next, LOCALIZED_CLASS_NAMES_MALE do
+	classes[localized] = token
+end
+
+for token, localized in next, LOCALIZED_CLASS_NAMES_FEMALE do
+	classes[localized] = token
+end
+
+local function AbbreviateChannel(channel, name)
+	local flag = ''
+	if(match(name, LEADER)) then
+		flag = '|cffffff00!|r'
+	end
+
+	return format('|Hchannel:%s|h%s|h %s', channel, shorthands[channel] or gsub(channel, 'channel:', ''), flag)
+end
+
+local function FormatPlayer(info, name)
+	return format('|Hplayer:%s|h%s|h', info, gsub(name, '%-[^|]+', ''))
+end
+
+local function FormatBNPlayer(info)
+	local _, _, battleTag, _, _, _, client = BNGetFriendInfoByID(match(info, '(%d+):'))
+	local color = C.ClientColors[client] or '22aaff'
+	return format('|HBNplayer:%s|h|cff%s%s|r|h', info, color, match(battleTag, '(%w+)#%d+'))
+end
+
+local hooks = {}
+local function AddMessage(self, message, ...)
+	message = gsub(message, "%[(%d+)%. 大脚世界频道%]", "世界")
+	message = gsub(message, "%[(%d+)%. 大腳世界頻道%]", "世界")
+	message = gsub(message, "%[(%d+)%. BigfootWorldChannel%]", "world")
+
+	message = gsub(message, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayer)
+	message = gsub(message, '|HBNplayer:(.-)|h%[(.-)%]|h', FormatBNPlayer)
+	message = gsub(message, '|Hchannel:(.-)|h%[(.-)%]|h ', AbbreviateChannel)
+
+	--message = gsub(message, '^%w- (|H)', '|cffa1a1a1@|r%1')
+	--message = gsub(message, '^(.-|h) %w-:', '%1:')
+	message = gsub(message, '^%[' .. RAID_WARNING .. '%]', 'rw')
+
+	message = gsub(message, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
+
+	return hooks[self](self, message, ...)
+end
+
+for index = 1, 5 do
+	if(index ~= 2) then
+		local ChatFrame = _G['ChatFrame' .. index]
+		hooks[ChatFrame] = ChatFrame.AddMessage
+		ChatFrame.AddMessage = AddMessage
+	end
+end
+
+
+
+-- string format
 CHAT_FLAG_AFK = "AFK. "
 CHAT_FLAG_DND = "DND. "
 CHAT_FLAG_GM = "GM. "
@@ -8,30 +82,12 @@ CHAT_SAY_GET = "|Hchannel:Say|h%s: "
 
 CHAT_WHISPER_GET = "from %s: "
 CHAT_WHISPER_INFORM_GET = "to %s: "
-CHAT_BN_WHISPER_INFORM_GET = "to %s: "
 CHAT_BN_WHISPER_GET = "from %s: "
+CHAT_BN_WHISPER_INFORM_GET = "to %s: "
 
-CHAT_BATTLEGROUND_GET         = "|Hchannel:Battleground|hBG.|h %s: "
-CHAT_BATTLEGROUND_LEADER_GET  = "|Hchannel:Battleground|hBGL.|h %s: "
-
-CHAT_GUILD_GET                = "|Hchannel:Guild|hG.|h %s: "
-CHAT_OFFICER_GET              = "|Hchannel:Officer|hO.|h %s: "
-
-CHAT_PARTY_GET                = "|Hchannel:Party|hP.|h %s: "
-CHAT_PARTY_LEADER_GET         = "|Hchannel:Party|hPL.|h %s: "
-CHAT_PARTY_GUIDE_GET          = "|Hchannel:Party|hPG.|h %s: "
-
-CHAT_RAID_GET                 = "|Hchannel:Raid|hR.|h %s: "
-CHAT_RAID_LEADER_GET          = "|Hchannel:Raid|hRL.|h %s: "
-CHAT_RAID_WARNING_GET         = "|Hchannel:RaidWarning|hRW.|h %s: "
-
-CHAT_INSTANCE_CHAT_GET        = "|Hchannel:Battleground|hI.|h %s: "
-CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:Battleground|hIL.|h %s: "
-CHAT_INSTANCE_CHAT_GUIDE_GET  = "|Hchannel:Battleground|hIG.|h %s: "
 
 YOU_LOOT_MONEY_GUILD = YOU_LOOT_MONEY
 LOOT_MONEY_SPLIT_GUILD = LOOT_MONEY_SPLIT
-
 
 
 ACHIEVEMENT_BROADCAST = "%s achieved %s!"
@@ -53,7 +109,6 @@ FACTION_STANDING_INCREASED_BONUS = "%s + %d (+%.1f RAF)"
 FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
 FACTION_STANDING_INCREASED_REFER_PART = "(+%.1f RAF)"
 FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
-
 
 
 LOOT_ITEM = "%s + %s"
