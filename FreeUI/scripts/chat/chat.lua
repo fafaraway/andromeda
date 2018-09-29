@@ -110,58 +110,58 @@ end
 
 
 
-local function GetColor(className, isLocal)
-	if isLocal then
-		local found
-		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
-			if v == className then className = k found = true break end
-		end
-		if not found then
-			for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-				if v == className then className = k break end
-			end
-		end
-	end
-	local tbl = C.classcolours[className]
-	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
-	return color
-end
+--local function GetColor(className, isLocal)
+--	if isLocal then
+--		local found
+--		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+--			if v == className then className = k found = true break end
+--		end
+--		if not found then
+--			for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+--				if v == className then className = k break end
+--			end
+--		end
+--	end
+--	local tbl = C.classcolours[className]
+--	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
+--	return color
+--end
 
-local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
-		local gameAccount = select(6, BNGetFriendInfoByID(id))
-		if gameAccount then
-			local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
-			if englishClass and englishClass ~= "" then
-				fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
-			end
-	end
-	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
-end
+--local changeBNetName = function(misc, id, moreMisc, fakeName, tag, colon)
+--		local gameAccount = select(6, BNGetFriendInfoByID(id))
+--		if gameAccount then
+--			local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
+--			if englishClass and englishClass ~= "" then
+--				fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
+--			end
+--	end
+--	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
+--end
 
-local AddMessage = function(frame, text, ...)
-	if type(text) == "string" then
+--local AddMessage = function(frame, text, ...)
+--	if type(text) == "string" then
 
-		local chatNum = string.match(text,"%d+") or ""
-		if not tonumber(chatNum) then chatNum = "" else chatNum = chatNum..":" end
+--		local chatNum = string.match(text,"%d+") or ""
+--		if not tonumber(chatNum) then chatNum = "" else chatNum = chatNum..":" end
 
-		text = gsub(text, "%[(%d+)%. 大脚世界频道%]", "世界")
-		text = gsub(text, "%[(%d+)%. 大腳世界頻道%]", "世界")
-		text = gsub(text, "%[(%d+)%. BigfootWorldChannel%]", "w")
+--		text = gsub(text, "%[(%d+)%. 大脚世界频道%]", "世界")
+--		text = gsub(text, "%[(%d+)%. 大腳世界頻道%]", "世界")
+--		text = gsub(text, "%[(%d+)%. BigfootWorldChannel%]", "w")
 
-		text = gsub(text, "%[%d+%. .-%]", "["..chatNum.."]")
+--		text = gsub(text, "%[%d+%. .-%]", "["..chatNum.."]")
 
-		text = gsub(text, "(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
+--		text = gsub(text, "(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)", changeBNetName)
 
-		text = gsub(text, "|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
-		--text = gsub(text, "|Hplayer:([^%|]+)|h%[([^%]]+)%]|h", "|Hplayer:%1|h%2|h")
+--		text = gsub(text, "|H(.-)|h%[(.-)%]|h", "|H%1|h%2|h")
+--		--text = gsub(text, "|Hplayer:([^%|]+)|h%[([^%]]+)%]|h", "|Hplayer:%1|h%2|h")
 
-		--url search
-		text = gsub(text, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
+--		--url search
+--		text = gsub(text, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
 
 
-	end
-	msgHooks[frame:GetName()].AddMessage(frame, text, ...)
-end
+--	end
+--	msgHooks[frame:GetName()].AddMessage(frame, text, ...)
+--end
 
 --local Insert = function(self, str, ...)
 --	if type(str) == "string" then
@@ -197,10 +197,19 @@ end
 
 
 -- whisper to target
-SLASH_TELLTARGET1 = "/tt"
-SlashCmdList.TELLTARGET = function(message)
-	if UnitIsPlayer("target") and (UnitIsUnit("player", "target") or UnitCanCooperate("player", "target")) then
-		SendChatMessage(message, "WHISPER", nil, GetUnitName("target", true))
+
+
+hooksecurefunc('ChatEdit_OnSpacePressed', function(self)
+	if(string.sub(self:GetText(), 1, 3) == '/tt' and (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target'))) then
+		self:SetText(SLASH_SMART_WHISPER1 .. ' ' .. GetUnitName('target', true):gsub(' ', '') .. ' ')
+		ChatEdit_ParseText(self, 0)
+	end
+end)
+
+SLASH_TELLTARGET1 = '/tt'
+SlashCmdList.TELLTARGET = function(str)
+	if(UnitCanCooperate('player', 'target')) then
+		SendChatMessage(str, 'WHISPER', GetDefaultLanguage('player'), GetUnitName('target', true):gsub(' ', ''))
 	end
 end
 
@@ -209,14 +218,14 @@ function module:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
 		skinChat(_G["ChatFrame"..i])
 
-		local n = ("ChatFrame%d"):format(i)
+		--[[local n = ("ChatFrame%d"):format(i)
 		local f = _G[n]
 
 		if f ~= COMBATLOG and not msgHooks[n] then
 			msgHooks[n] = {}
 			msgHooks[n].AddMessage = f.AddMessage
 			f.AddMessage = AddMessage
-		end
+		end]]
 	end
 
 	hooksecurefunc("FCF_OpenTemporaryWindow", function()
