@@ -12,35 +12,8 @@ oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
-local ufFont
-if C.appearance.usePixelFont then -- Miss Lin really likes pixel font ;)
-	ufFont = C.pixelFontCN
-else
-	ufFont = C.standardFont
-end
 
-
--- Short values
-local siValue = function(val)
-	if(val >= 1e6) then
-		return format("%.2fm", val * 0.000001)
-	elseif(val >= 1e4) then
-		return format("%.1fk", val * 0.001)
-	else
-		return val
-	end
-end
-
-local function hex(r, g, b)
-	if not r then return '|cffFFFFFF' end
-	if(type(r) == 'table') then
-		if(r.r) then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
-	end
-	return ('|cff%02x%02x%02x'):format(r * 255, g * 255, b * 255)
-end
-
-
--- Update resurrection/selection name colour
+-- Update selected name colour
 local updateNameColour = function(self, unit)
 	if UnitIsUnit(unit, "target") then
 		self.Text:SetTextColor(.1, .7, 1)
@@ -52,166 +25,42 @@ local updateNameColour = function(self, unit)
 end
 
 -- to use on child frame
-local updateNameColourAlt = function(self)
-	local frame = self:GetParent()
-	if frame.unit then
-		if UnitIsUnit(frame.unit, "target") then
-			frame.Text:SetTextColor(.1, .7, 1)
-			--frame.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .85)
-			frame.bd:SetBackdropBorderColor(1, 0, 0)
-		elseif UnitIsDead(frame.unit) then
-			frame.Text:SetTextColor(.7, .2, .1)
-			--frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
-			frame.bd:SetBackdropBorderColor(0, 0, 0)
-		else
-			frame.Text:SetTextColor(1, 1, 1)
-			--frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
-			frame.bd:SetBackdropBorderColor(0, 0, 0)
-		end
-	else
-		frame.Text:SetTextColor(1, 1, 1)
-		--frame.bd.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
-		frame.bd:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
--- update selected boss frame border
-local updateBorderColourAlt = function(self, unit)
+local updateSelectedBorder = function(self)
 	local frame = self:GetParent()
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
 			frame.Name:SetTextColor(.1, .7, 1)
-			frame.sd:SetBackdropBorderColor(1, 1, 1, .5)
+
+			if frame.unitStyle == "boss" then
+				frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
+				frame.bd:SetBackdropBorderColor(1, 1, 1)
+			else
+				frame.sd:SetBackdropBorderColor(1, 0, 0, .45)
+				frame.bd:SetBackdropBorderColor(1, 0, 0)
+			end
 		elseif UnitIsDead(frame.unit) then
 			frame.Name:SetTextColor(.7, .2, .1)
 			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		else
 			frame.Name:SetTextColor(1, 1, 1)
 			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		end
 	else
 		frame.Name:SetTextColor(1, 1, 1)
 		frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+		frame.bd:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
--- Tags
-oUF.Tags.Methods['free:playerHealth'] = function(unit)
-	if UnitIsDead(unit) or UnitIsGhost(unit) then return end
-	return siValue(UnitHealth(unit))
-end
-oUF.Tags.Events['free:playerHealth'] = oUF.Tags.Events.missinghp
-
-oUF.Tags.Methods['free:health'] = function(unit)
-	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
-	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-	return format("|cffffffff%s|r %.0f", siValue(min), (min/max)*100)
-end
-oUF.Tags.Events['free:health'] = oUF.Tags.Events.missinghp
-
--- classification
-oUF.Tags.Methods["free:classification"] = function(unit)
-	local c = UnitClassification(unit)
-	local l = UnitLevel(unit)
-	if(c == 'worldboss' or l == -1) then
-		return '|cff9D2933{B}|r '
-	elseif(c == 'rare') then
-		return '|cffFF99FF{R}|r '
-	elseif(c == 'rareelite') then
-		return '|cffFF0099{R+}|r '
-	elseif(c == 'elite') then
-		return '|cffCC3300{E}|r '
-	end
-end
-oUF.Tags.Events["free:classification"] = "UNIT_CLASSIFICATION_CHANGED"
-
--- boss health requires frequent updates to work
-oUF.Tags.Methods['free:bosshealth'] = function(unit)
-	local val = oUF.Tags.Methods['free:health'](unit)
-	return val or ""
-end
-oUF.Tags.Events['free:bosshealth'] = "UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_TARGETABLE_CHANGED"
-
--- utf8 short string
-local function usub(str, len)
-	local i = 1
-	local n = 0
-	while true do
-		local b,e = string.find(str, "([%z\1-\127\194-\244][\128-\191]*)", i)
-		if(b == nil) then
-			return str
-		end
-		i = e + 1
-		n = n + 1
-		if(n > len) then
-			local r = string.sub(str, 1, b-1)
-			return r
-		end
-	end
+local function CreateSelectedBorder(self)
+	local select = CreateFrame("Frame", nil, self)
+	select:RegisterEvent("PLAYER_TARGET_CHANGED")
+	select:SetScript("OnEvent", updateSelectedBorder)
 end
 
-local function getSummary(str)
-	local t = string.gsub(str, "<.->", "")
-	return usub(t, 100, "...")
-end
-
-local function shortName(unit)
-	local name = UnitName(unit)
-	if name and name:len() > 4 then name = usub(name, 4) end
-
-	return name
-end
-
-oUF.Tags.Methods['free:name'] = function(unit)
-	if not UnitIsConnected(unit) then
-		return "Off"
-	elseif UnitIsDead(unit) then
-		return "Dead"
-	elseif UnitIsGhost(unit) then
-		return "Ghost"
-	else
-		return shortName(unit)
-	end
-end
-oUF.Tags.Events['free:name'] = oUF.Tags.Events.missinghp
-
-oUF.Tags.Methods['free:missinghealth'] = function(unit)
-	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-
-	if not UnitIsConnected(unit) then
-		return "Off"
-	elseif UnitIsDead(unit) then
-		return "Dead"
-	elseif UnitIsGhost(unit) then
-		return "Ghost"
-	elseif min ~= max then
-		return siValue(max-min)
-	end
-end
-oUF.Tags.Events['free:missinghealth'] = oUF.Tags.Events.missinghp
-
-oUF.Tags.Methods['free:power'] = function(unit)
-	local min, max = UnitPower(unit), UnitPowerMax(unit)
-	if(min == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
-
-	return siValue(min)
-end
-oUF.Tags.Events['free:power'] = oUF.Tags.Events.missingpp
-
-
--- Alt Power value tag
-oUF.Tags.Methods["altpower"] = function(unit)
-	local cur = UnitPower(unit, ALTERNATE_POWER_INDEX)
-	local max = UnitPowerMax(unit, ALTERNATE_POWER_INDEX)
-	if max > 0 and not UnitIsDeadOrGhost(unit) then
-		return ("%s%%"):format(math.floor(cur/max*100 + .5))
-	end
-end
-oUF.Tags.Events["altpower"] = "UNIT_POWER_UPDATE"
-
-
--- [[ Smooth ]]
-
+-- Smooth
 local smoothing = {}
 local function Smooth(self, value)
 	local _, max = self:GetMinMaxValues()
@@ -249,7 +98,7 @@ smoother:SetScript('OnUpdate', function()
 end)
 
 
--- health
+-- Update health
 local PostUpdateHealth = function(Health, unit, min, max)
 	local self = Health:GetParent()
 	local r, g, b
@@ -320,7 +169,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 end
 
 
--- Power
+-- Update power
 local PostUpdatePower = function(Power, unit, cur, max, min)
 	local Health = Power:GetParent().Health
 	local self = Power:GetParent()
@@ -334,7 +183,7 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 end
 
 
--- Alternative power
+-- Update alternative power
 local function postUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local perc = math.floor((cur/max)*100)
@@ -360,7 +209,7 @@ local function CreateAltPower(self)
 	abd:SetFrameLevel(bar:GetFrameLevel()-1)
 	F.CreateBD(abd, .5)
 
-	local text = F.CreateFS(bar, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+	local text = F.CreateFS(bar, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 	text:SetJustifyH('CENTER')
 	text:SetPoint("BOTTOM", self, "TOP", 0, 3)
 
@@ -375,7 +224,7 @@ local function CreateAltPower(self)
 end
 
 
--- Cast bar
+-- Create cast bar
 local function CreateCastBar(self)
 	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.unitStyle, self)
 	cb:SetHeight(C.unitframes.cbHeight)
@@ -397,17 +246,21 @@ local function CreateCastBar(self)
 	spark:SetHeight(cb:GetHeight()*2.5)
 	cb.Spark = spark
 
-	local name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+	local name
 
-	if C.client == 'zhCN' or C.client == 'zhTW' then
-		name:SetFont(unpack(ufFont))
+	if C.appearance.usePixelFont then
+		name = F.CreateFS(cb, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+	else
+		name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
 	end
 
 	name:SetPoint("CENTER", self.Health)
 	cb.Text = name
-	name:SetAlpha(.5)
+	name:Hide()
 
-	local timer = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+	local timer = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 	timer:SetPoint("BOTTOMRIGHT", cb, "TOPRIGHT", 0, 6)
 	cb.Time = timer
 	timer:Hide()
@@ -452,7 +305,7 @@ local function CreateCastBar(self)
 
 		name:ClearAllPoints()
 		name:SetPoint("BOTTOM", cb, "TOP", 0, 4)
-		name:SetAlpha(1)
+		name:Show()
 
 		timer:Show()
 
@@ -482,10 +335,6 @@ local function CreateCastBar(self)
 		iconFrame:SetPoint("LEFT", cb, "RIGHT", 4, 0)
 	end
 
-	if self.unitStyle == "focus" or self.unitStyle == "focustarget" or self.unitStyle == "targettarget" or self.unitStyle == "player" then
-		name:Hide()
-		timer:Hide()
-	end
 
 	cb.OnUpdate = cast.OnCastbarUpdate
 	cb.PostCastStart = cast.PostCastStart
@@ -893,7 +742,7 @@ end
 -- indicator
 local function CreateIndicator(self)
 	if self.unitStyle == "player" then
-		local PvPIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local PvPIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0,0,0}, 1, -1)
 		PvPIndicator:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", -50, 3)
 		PvPIndicator:SetText("P")
 
@@ -922,7 +771,7 @@ local function CreateIndicator(self)
 
 
 		local statusIndicator = CreateFrame("Frame")
-		local statusText = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local statusText = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		statusText:SetPoint("LEFT", self.Health.value, "RIGHT", 10, 0)
 
 		local function updateStatus()
@@ -951,7 +800,7 @@ local function CreateIndicator(self)
 	end
 
 	if self.unitStyle == "target" then
-		local QuestIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local QuestIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		QuestIndicator:SetText("!")
 		QuestIndicator:SetTextColor(228/255, 225/255, 16/255)
 		QuestIndicator:SetPoint("RIGHT", self.Name, "LEFT", -3, 0)
@@ -982,8 +831,8 @@ local function CreateIndicator(self)
 		ResurrectIndicator:SetPoint('CENTER')
 		self.ResurrectIndicator = ResurrectIndicator
 
-		local LeaderIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
-		LeaderIndicator:SetText("l")
+		local LeaderIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		LeaderIndicator:SetText("L")
 		LeaderIndicator:SetJustifyH('LEFT')
 		LeaderIndicator:SetPoint("TOPLEFT", self.Health, 2, -1)
 		self.LeaderIndicator = LeaderIndicator
@@ -1011,7 +860,7 @@ local function CreateIndicator(self)
 			end
 		end
 
-		local GroupRoleIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local GroupRoleIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		GroupRoleIndicator:SetJustifyH('CENTER')
 		GroupRoleIndicator:SetPoint("BOTTOM", self.Health, 1, 1)
 		GroupRoleIndicator.Override = UpdateLFD
@@ -1019,10 +868,10 @@ local function CreateIndicator(self)
 		self.GroupRoleIndicator = GroupRoleIndicator
 
 		-- phase indicator
-		local PhaseIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
-		PhaseIndicator:SetText("p")
-		PhaseIndicator:SetTextColor(1, 1, 1, 1)
-		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, -2, -1)
+		local PhaseIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		PhaseIndicator:SetText("?")
+		PhaseIndicator:SetJustifyH('RIGHT')
+		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -1)
 
 		self.PhaseIndicator = PhaseIndicator
 	end
@@ -1030,7 +879,16 @@ end
 
 -- name
 local function CreateName(self)
-	local Name = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+	local Name
+
+	if C.appearance.usePixelFont then
+		Name = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		Name = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+	else
+		Name = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+	end
+
 	Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	Name:SetWordWrap(false)
 	Name:SetJustifyH("CENTER")
@@ -1058,7 +916,16 @@ end
 local function UpdateTOTName(self)
 	local f = CreateFrame("Frame", nil, self)
 
-	local tt = F.CreateFS(f, C.font.normal, 12, nil, nil, {0, 0, 0}, 2, -2)
+	local tt
+
+	if C.appearance.usePixelFont then
+		tt = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		tt = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+	else
+		tt = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+	end
+
 	tt:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	tt:SetJustifyH("CENTER")
 	tt:SetWordWrap(false)
@@ -1068,7 +935,7 @@ local function UpdateTOTName(self)
 	f:RegisterEvent("PLAYER_TARGET_CHANGED")
 
 	f:SetScript("OnEvent", function()
-		if(UnitName("targettarget")==UnitName("player")) then
+		if(UnitName("targettarget") == UnitName("player")) then
 			tt:SetText("> YOU <")
 			tt:SetTextColor(1, 0, 0)
 		else
@@ -1081,10 +948,18 @@ end
 local function UpdateTOFName(self)
 	local f = CreateFrame("Frame", nil, self)
 
-	local ft = F.CreateFS(f, C.font.normal, 12, nil, nil, {0, 0, 0}, 2, -2)
+	local ft
+
+	if C.appearance.usePixelFont then
+		ft = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		ft = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+	else
+		ft = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+	end
+
 	ft:SetPoint("BOTTOM", self, "TOP", 0, 3)
-	ft:SetFont(unpack(ufFont))
-	ft:SetJustifyH"CENTER"
+	ft:SetJustifyH('CENTER')
 	ft:SetWordWrap(false)
 	ft:SetWidth(C.unitframes.focustarget_width)
 
@@ -1172,12 +1047,11 @@ local Shared = function(self, unit, isSingle)
 
 	if C.unitframes.transMode then
 		local Healthdef = CreateFrame("StatusBar", nil, self)
-		--Healthdef:SetFrameStrata("LOW")
-		Healthdef:SetFrameLevel(Health:GetFrameLevel())
+		Healthdef:SetFrameStrata("LOW")
 		Healthdef:SetAllPoints(Health)
 		Healthdef:SetStatusBarTexture(C.media.texture)
+		-- Healthdef:GetStatusBarTexture():SetBlendMode("BLEND")
 		Healthdef:SetStatusBarColor(1, 1, 1)
-		--Healthdef:SetAlpha(.6)
 
 		Healthdef:SetReverseFill(true)
 		SmoothBar(Healthdef)
@@ -1232,7 +1106,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Portrait ]]
 
-	if C.unitframes.portrait and (unit == 'player' or unit == 'pet' or unit == 'target' or unit == 'vehicle' or unit:find("boss%d")) then
+	if C.unitframes.portrait and (unit == 'player' or unit == 'pet' or unit == 'target' or unit == 'party' or unit == 'vehicle' or unit:find("boss%d")) then
 		local Portrait = CreateFrame('PlayerModel', nil, self)
 		Portrait:SetAllPoints(Health)
 		Portrait:SetFrameLevel(Health:GetFrameLevel() + 2)
@@ -1290,7 +1164,7 @@ local Shared = function(self, unit, isSingle)
 		F.CreateBD(cbd, .4)
 		F.CreateSD(cbd)
 
-		CounterBar.Text = F.CreateFS(CounterBar, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		CounterBar.Text = F.CreateFS(CounterBar, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		CounterBar.Text:SetPoint("CENTER")
 
 		local r, g, b
@@ -1382,7 +1256,7 @@ local UnitSpecific = {
 		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
 		Health.value = HealthPoints
 
-		local PowerText = F.CreateFS(Power, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local PowerText = F.CreateFS(Power, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		PowerText:SetJustifyH('RIGHT')
 		PowerText:SetPoint("BOTTOMRIGHT", Health, "TOPRIGHT", 0, 3)
 		self:Tag(PowerText, '[free:power]')
@@ -1411,17 +1285,17 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.target_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		HealthPoints:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 		Health.value = HealthPoints
 
-		local PowerText = F.CreateFS(Power, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local PowerText = F.CreateFS(Power, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		PowerText:SetPoint("BOTTOMLEFT", HealthPoints, "BOTTOMRIGHT", 3, 0)
 		if powerType ~= 0 then PowerText.frequentUpdates = .1 end
 		self:Tag(PowerText, '[free:power]')
 
-		local Classification = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local Classification = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		Classification:SetPoint("BOTTOMLEFT", PowerText, "BOTTOMRIGHT", 3, 0)
 		self:Tag(Classification, '[free:classification]')
 
@@ -1486,7 +1360,7 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.boss_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		HealthPoints:SetJustifyH('RIGHT')
 		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 4)
 		self:Tag(HealthPoints, '[dead][free:bosshealth]')
@@ -1498,10 +1372,8 @@ local UnitSpecific = {
 		CreateIndicator(self)
 		CreateCastBar(self)
 		CreateAuras(self)
-
-		local select = CreateFrame("Frame", nil, self)
-		select:RegisterEvent("PLAYER_TARGET_CHANGED")
-		select:SetScript("OnEvent", updateBorderColourAlt)
+		CreateSelectedBorder(self)
+		
 	end,
 
 	arena = function(self, ...)
@@ -1518,7 +1390,7 @@ local UnitSpecific = {
 
 		Health:SetHeight(C.unitframes.arena_height - C.unitframes.power_height - 1)
 
-		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		local HealthPoints = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		HealthPoints:SetJustifyH('RIGHT')
 		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 6)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
@@ -1542,22 +1414,28 @@ do
 
 		local Health, Power = self.Health, self.Power
 
-		local Text = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME')
-		Text:SetJustifyH('CENTER')
-		Text:SetPoint("CENTER", 1, 0)
+		local Name = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		Name:SetJustifyH('CENTER')
+		Name:SetPoint("CENTER", 1, 0)
 
-		self.Text = Text
+		self.Name = Name
 
-		self:Tag(Text, '[dead][offline]')
+		self:Tag(Name, '[dead][offline]')
 
-		Health:SetHeight(C.unitframes.party_height - C.unitframes.power_height - 1)
 		if C.unitframes.partyNameAlways then
-			Text:SetFont(unpack(ufFont))
-			self:Tag(Text, '[free:name]')
+			if C.appearance.usePixelFont then
+				Name = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+			elseif C.client == 'zhCN' or C.client == 'zhTW' then
+				Name = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+			else
+				Name = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+			end
+
+			self:Tag(Name, '[free:name]')
 		elseif C.unitframes.partyMissingHealth then
-			self:Tag(Text, '[free:missinghealth]')
+			self:Tag(Name, '[free:missinghealth]')
 		else
-			self:Tag(Text, '[dead][offline]')
+			self:Tag(Name, '[dead][offline]')
 		end
 
 		CreateIndicator(self)
@@ -1633,9 +1511,7 @@ do
 		Buffs.CustomFilter = groupBuffFilter
 
 
-		local select = CreateFrame("Frame", nil, self)
-		select:RegisterEvent("PLAYER_TARGET_CHANGED")
-		select:SetScript("OnEvent", updateNameColourAlt)
+		CreateSelectedBorder(self)
 
 		self.Range = {
 			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
@@ -1709,11 +1585,11 @@ oUF:Factory(function(self)
 		'showParty', true,
 		'showPlayer', true,
 		'showSolo', false,
-		'xoffset', -3,
-		'yoffset', 5,
+		'xoffset', -4,
+		'yoffset', 0,
 		'maxColumns', 1,
 		'unitsperColumn', 5,
-		'columnSpacing', 3,
+		'columnSpacing', 4,
 		'point', "RIGHT", -- party initial position
 		'columnAnchorPoint', "LEFT",
 		'groupBy', 'ASSIGNEDROLE',
@@ -1729,15 +1605,15 @@ oUF:Factory(function(self)
 	local raid = self:SpawnHeader(nil, nil, "raid",
 		'showParty', false,
 		'showRaid', true,
-		'xoffset', -3,
-		'yOffset', -3,
+		'xoffset', -4,
+		'yOffset', -4,
 		'point', "RIGHT",
 		'groupFilter', '1,2,3,4,5,6,7,8',
 		'groupingOrder', '1,2,3,4,5,6,7,8',
 		'groupBy', 'GROUP',
 		'maxColumns', 8,
 		'unitsPerColumn', 5,
-		'columnSpacing', 3,
+		'columnSpacing', 4,
 		'columnAnchorPoint', "TOP",
 		"sortMethod", "INDEX",
 		'oUF-initialConfigFunction', ([[
@@ -1746,7 +1622,9 @@ oUF:Factory(function(self)
 		]]):format(C.unitframes.raid_height, C.unitframes.raid_width)
 	)
 
-	raid:SetPoint(unpack(C.unitframes.raid))
+	--raid:SetPoint(unpack(C.unitframes.raid))
+
+	oUF_FreePartyRaid:SetPoint('TOP', target, 'BOTTOM', 0, -20)
 
 	-- 限制团队框体只显示4个队伍20名成员
 	if C.unitframes.limitRaidSize then
