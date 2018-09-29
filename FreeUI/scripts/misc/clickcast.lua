@@ -9,12 +9,6 @@ SpellBinder:SetPoint("TOPLEFT", SpellBookFrame, "TOPRIGHT", 100, 0)
 SpellBinder:SetSize(300, 400)
 SpellBinder:Hide()
 
-_G["SpellBinderPortrait"]:SetTexture(nil)
-
-SpellBinder.title = _G["SpellBinderTitle"] or SpellBinder:CreateFontString("SpellBinderTitle", "OVERLAY", "GameFontNormal")
-SpellBinder.title:SetPoint("TOP", _G["SpellBinder"], "TOP", 0, -5)
-SpellBinder.title:SetText(L_MISC_BINDER_OPEN)
-
 SpellBinder.sbOpen = false
 SpellBinder.spellbuttons = {}
 
