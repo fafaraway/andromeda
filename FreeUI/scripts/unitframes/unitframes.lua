@@ -32,25 +32,40 @@ local updateSelectedBorder = function(self)
 			frame.Name:SetTextColor(.1, .7, 1)
 
 			if frame.unitStyle == "boss" then
-				frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
 				frame.bd:SetBackdropBorderColor(1, 1, 1)
+
+				if frame.sd then
+					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
+				end
 			else
-				frame.sd:SetBackdropBorderColor(1, 0, 0, .45)
 				frame.bd:SetBackdropBorderColor(1, 0, 0)
+
+				if frame.sd then
+					frame.sd:SetBackdropBorderColor(1, 0, 0, .45)
+				end
 			end
 		elseif UnitIsDead(frame.unit) then
 			frame.Name:SetTextColor(.7, .2, .1)
-			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 			frame.bd:SetBackdropBorderColor(0, 0, 0)
+
+			if frame.sd then
+				frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+			end
 		else
 			frame.Name:SetTextColor(1, 1, 1)
-			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 			frame.bd:SetBackdropBorderColor(0, 0, 0)
+
+			if frame.sd then
+				frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+			end
 		end
 	else
 		frame.Name:SetTextColor(1, 1, 1)
-		frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 		frame.bd:SetBackdropBorderColor(0, 0, 0)
+
+		if frame.sd then
+			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+		end
 	end
 end
 
@@ -396,15 +411,16 @@ local function PostCreateIcon(element, button)
 	bg:SetPoint("BOTTOMRIGHT", 1, -1)
 	bg:SetTexture(C.media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
-
-	local sd = CreateFrame("Frame", nil, button)
-	sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
-	sd:SetPoint("TOPLEFT", -4, 4)
-	sd:SetPoint("BOTTOMRIGHT", 4, -4)
-	sd:SetBackdropBorderColor(0, 0, 0, .65)
-
-	button.sd = sd
 	button.bg = bg
+
+	if C.appearance.shadow then
+		local sd = CreateFrame("Frame", nil, button)
+		sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+		sd:SetPoint("TOPLEFT", -4, 4)
+		sd:SetPoint("BOTTOMRIGHT", 4, -4)
+		sd:SetBackdropBorderColor(0, 0, 0, .65)
+		button.sd = sd
+	end
 	
 	button.overlay:SetTexture(nil)
 	button.stealable:SetTexture(nil)
@@ -457,19 +473,31 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 
 	if canStealOrPurge then
 		button.bg:SetVertexColor(1, 1, 1)
-		button.sd:SetBackdropBorderColor(1, 1, 1, .65)
+
+		if button.sd then
+			button.sd:SetBackdropBorderColor(1, 1, 1, .65)
+		end
 	elseif button.isDebuff and element.showDebuffType then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.bg:SetVertexColor(color[1], color[2], color[3])
-		button.sd:SetBackdropBorderColor(color[1], color[2], color[3], .65)
+
+		if button.sd then
+			button.sd:SetBackdropBorderColor(color[1], color[2], color[3], .65)
+		end
 	else
 		button.bg:SetVertexColor(0, 0, 0)
-		button.sd:SetBackdropBorderColor(0, 0, 0, .65)
+
+		if button.sd then
+			button.sd:SetBackdropBorderColor(0, 0, 0, .65)
+		end
 	end
 
-	if duration then 
-		button.sd:Show()
+	if duration then
 		button.bg:Show()
+
+		if button.sd then
+			button.sd:Show()
+		end
 	end
 end
 
@@ -996,12 +1024,14 @@ local Shared = function(self, unit, isSingle)
 	bd:SetFrameStrata("BACKGROUND")
 	self.bd = bd
 
-	local sd = CreateFrame("Frame", nil, bd)
-	sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
-	sd:SetPoint("TOPLEFT", -4, 4)
-	sd:SetPoint("BOTTOMRIGHT", 4, -4)
-	sd:SetBackdropBorderColor(0, 0, 0, .35)
-	self.sd = sd
+	if C.appearance.shadow then
+		local sd = CreateFrame("Frame", nil, bd)
+		sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+		sd:SetPoint("TOPLEFT", -4, 4)
+		sd:SetPoint("BOTTOMRIGHT", 4, -4)
+		sd:SetBackdropBorderColor(0, 0, 0, .35)
+		self.sd = sd
+	end
 
 
 	--[[ Health ]]
@@ -1622,9 +1652,9 @@ oUF:Factory(function(self)
 		]]):format(C.unitframes.raid_height, C.unitframes.raid_width)
 	)
 
-	--raid:SetPoint(unpack(C.unitframes.raid))
+	raid:SetPoint(unpack(C.unitframes.raid))
 
-	oUF_FreePartyRaid:SetPoint('TOP', target, 'BOTTOM', 0, -20)
+	--oUF_FreePartyRaid:SetPoint('TOP', target, 'BOTTOM', 0, -20)
 
 	-- 限制团队框体只显示4个队伍20名成员
 	if C.unitframes.limitRaidSize then

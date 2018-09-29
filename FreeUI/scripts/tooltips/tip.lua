@@ -339,16 +339,18 @@ local function style(self)
 		self:SetBackdrop(nil)
 		local bg = F.CreateBG(self, 0)
 		bg:SetFrameLevel(self:GetFrameLevel())
-		F.CreateBD(bg, .7)
+		F.CreateBD(bg)
 		F.CreateTex(bg)
 		self.bg = bg
 
-		local sd = CreateFrame("Frame", nil, self)
-		sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
-		sd:SetPoint("TOPLEFT", -4, 4)
-		sd:SetPoint("BOTTOMRIGHT", 4, -4)
-		sd:SetBackdropBorderColor(0, 0, 0, .5)
-		self.sd = sd
+		if C.appearance.shadow then
+			local sd = CreateFrame("Frame", nil, self)
+			sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+			sd:SetPoint("TOPLEFT", -4, 4)
+			sd:SetPoint("BOTTOMRIGHT", 4, -4)
+			sd:SetBackdropBorderColor(0, 0, 0, .5)
+			self.sd = sd
+		end
 
 		-- other gametooltip-like support
 		self.GetBackdrop = function() return bg:GetBackdrop() end
@@ -359,7 +361,9 @@ local function style(self)
 	end
 
 	self.bg:SetBackdropBorderColor(0, 0, 0)
-	self.sd:SetBackdropBorderColor(0, 0, 0, .3)
+	if self.sd then
+		self.sd:SetBackdropBorderColor(0, 0, 0, .3)
+	end
 
 	if C.tooltip.borderColor and self.GetItem then
 		local _, item = self:GetItem()
@@ -368,7 +372,9 @@ local function style(self)
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
 				--self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-				self.sd:SetBackdropBorderColor(color.r, color.g, color.b, .3)
+				if self.sd then
+					self.sd:SetBackdropBorderColor(color.r, color.g, color.b, .3)
+				end
 			end
 		end
 	end
