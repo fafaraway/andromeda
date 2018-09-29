@@ -1242,7 +1242,7 @@ local Shared = function(self, unit, isSingle)
 		elseif unit == "focus" then
 			self:SetSize(C.unitframes.focus_width, C.unitframes.focus_height)
 		elseif unit == "focustarget" then
-			self:SetSize(C.unitframes.focus_width, C.unitframes.focus_height)
+			self:SetSize(C.unitframes.focustarget_width, C.unitframes.focustarget_height)
 		elseif unit == "pet" then
 			self:SetSize(C.unitframes.pet_width, C.unitframes.pet_height)
 		elseif unit and unit:find("boss%d") then
