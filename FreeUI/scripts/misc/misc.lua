@@ -123,45 +123,6 @@ do
 	end)
 end
 
--- Ctrl + left click to report spamer
---[[local _ChatFrame_OnHyperlinkShow = ChatFrame_OnHyperlinkShow;
-function ChatFrame_OnHyperlinkShow (chatframe,link,text,button)
-	if IsControlKeyDown() then
-		local line = string.match(link,"player:[^:]+:(%d+):");
-			if line then
-				C_ChatInfo.ReportPlayer("spam",line);
-			return;
-		end
-	end
-	return _ChatFrame_OnHyperlinkShow (chatframe,link,text,button);
-end]]
-
-
--- Hide friendly player/pet names while in raid and/or party group.
---[[if C.misc.hideRaidNames then
-	local HRN = function()
-		local name, type, difficulty, difficultyName, maxPlayers, playerDifficulty, isDynamicInstance = GetInstanceInfo()
-		-- print(name.. " ".. type .." ".. difficulty)	
-		-- if type == "raid" or type == "party" and GetNumGroupMembers() > 3 then
-		if type == "raid" then
-			SetCVar("UnitNameFriendlyPlayerName", 0)
-			SetCVar("UnitNameFriendlyPetName", 0)
-			-- print("|cffff6060Hiding.")
-			-- print(GetNumGroupMembers())	
-		else
-			SetCVar("UnitNameFriendlyPlayerName", 1)
-			SetCVar("UnitNameFriendlyPetName", 1)
-			-- print("|cff00ccffShowing.")
-		end
-	end
-
-	local f = CreateFrame("Frame")
-	f:SetScript("OnEvent", HRN)
-	f:RegisterEvent("PLAYER_ENTERING_WORLD")
-	f:RegisterEvent("RAID_ROSTER_UPDATE")
-	f:RegisterEvent("GROUP_ROSTER_UPDATE")
-end]]
-
 
 
 -- Clean up Loss Of Control
