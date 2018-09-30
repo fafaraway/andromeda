@@ -7,15 +7,20 @@ if not C.chat.spamageMeters then return end
 
 local firstLines = {
 	"^Recount - (.*)$", 									-- Recount
+
 	"^Skada: (.*) for (.*):$",								-- Skada enUS
+
 	"^Skada: (.*) für (.*):$",								-- Skada deDE
 	"^Skada: (.*) pour (.*):$",								-- Skada frFR
 	"^Отчёт Skada: (.*), с (.*):$",							-- Skada ruRU
 	"^Skada: (.*) por (.*):$",								-- Skada esES/ptBR
 	"^Skada: (.*) per (.*):$",								-- Skada itIT
 	"^(.*) 의 Skada 보고 (.*):$",							-- Skada koKR
-	"^Skada报告(.*)的(.*):$",								-- Skada zhCN
+
+	"^Skada：(.*)：$",								-- Skada zhCN
+
 	"^Skada:(.*)來自(.*):$",								-- Skada zhTW
+
 	"^(.*) Done for (.*)$",									-- TinyDPS enUS
 	"^(.*) für (.*)$",										-- TinyDPS deDE
 	"데미지량 -(.*)$",										-- TinyDPS koKR
