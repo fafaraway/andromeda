@@ -4,9 +4,8 @@ local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("cooldown")
 
 function module:OnLogin()
-	if not C.misc.cooldown then return end
+	if not C.misc.cooldownCount then return end
 
-	local FONT = { "Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf", 16, "OUTLINEMONOCHROME" }
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
 	local ICON_SIZE = 36
@@ -33,7 +32,7 @@ function module:OnLogin()
 		if fontScale < MIN_SCALE then
 			self:Hide()
 		else
-			self.text:SetFont(unpack(FONT))
+			self.text:SetFont(unpack(C.misc.CDFont))
 			self.text:SetShadowColor(0, 0, 0, 0)
 			--F.SetFS(self.text)
 			self.text:SetPoint("BOTTOM", 2, 2)

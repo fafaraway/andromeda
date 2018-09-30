@@ -130,27 +130,24 @@ C["maps"] = {
 
 C["misc"] = {
 	["uiScale"] = 1,
-	["uiScaleAuto"] = true,	
+	["uiScaleAuto"] = true,
 
-	["cooldownpulse"] = true,
 	["flashCursor"] = true,
-
-	["mailButton"] = true, 
-	["undressButton"] = true, 
-
-
-	["alreadyKnown"] = true,
 
 	["bossBanner"] = false,
 	["talkingHead"] = false,
-
-	["hideRaidNames"] = true,
+	["mailButton"] = true, 
+	["undressButton"] = true, 
+	["alreadyKnown"] = true,
 	["saySapped"] = true,
 
+	["autoScreenShot"] = true,		-- auto screenshot when achieved
 	["autoActionCam"] = true,
 
-	["cooldown"] = true,
+	["cooldownpulse"] = true,
+	["cooldownCount"] = true,
 		["decimalCD"] = false,
+		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
 
 	["rareAlert"] = true,
 	["rareAlertNotify"] = true,
@@ -164,9 +161,6 @@ C["misc"] = {
 		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
 		["autoSetRole_verbose"] = true, -- tells you what happens when setting role
 
-	["autoScreenShot"] = true,		-- auto screenshot when achieved
-
-	["autoSell"] = true, -- automatically sell greys
 	["autoRepair"] = true,			-- automatically repair items
 		["autoRepair_guild"] = true, -- use guild funds for auto repairs
 
@@ -302,15 +296,15 @@ C["unitframes"] = {
 	["frameVisibility_pet"] = "[nocombat,nomod,@target,noexists][@pet,noexists] hide; show",
 
 
-	["target"] = {"RIGHT", 'oUF_FreePlayer', "LEFT", -100, 200},					-- target unitframe position
-	["target_width"] = 302,
-	["target_height"] = 14,
+	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 100, 200},					-- target unitframe position
+	["target_width"] = 240,
+	["target_height"] = 16,
 	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -8},			-- target castbar position
-	["target_castbar_width"] = 262,
+	["target_castbar_width"] = 240,
 
 	["targettarget"] = {"RIGHT", 'oUF_FreeTarget', "LEFT", -5, 0},							-- target target unitframe position
 	["targettarget_width"] = 80,
-	["targettarget_height"] = 14,
+	["targettarget_height"] = 16,
 
 	["focus"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 80, 60},					-- focus unitframe position
 	["focus_width"] = 92,
@@ -322,9 +316,9 @@ C["unitframes"] = {
 	["focustarget_width"] = 92,
 	["focustarget_height"] = 14,
 
-	["party"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -60},			-- party unitframe position
-	["party_width"] = 58,
-	["party_height"] = 32,
+	["party"] = {"BOTTOMRIGHT", 'oUF_FreePlayer', "BOTTOMLEFT", -100, 60},			-- party unitframe position
+	["party_width"] = 80,
+	["party_height"] = 38,
 
 	["raid"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -60},			-- raid unitframe position
 	["raid_width"] = 58,
@@ -332,7 +326,7 @@ C["unitframes"] = {
 
 	["boss"] = {a='LEFT', b='oUF_FreePlayer', c="RIGHT", x=400, y=400},			-- boss unitframe position
 	["boss_width"] = 166,
-	["boss_height"] = 16,
+	["boss_height"] = 20,
 
 	["arena"] = {a='RIGHT', b='oUF_FreeTarget', c="LEFT", x=-100, y=180},				-- arena unitframe position
 	["arena_width"] = 166,
