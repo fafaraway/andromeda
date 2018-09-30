@@ -85,14 +85,14 @@ SpellBinder.makeSpellsList = function(self, scroll, delete)
 				bf:SetPoint("TOPLEFT", scroll, "TOPLEFT", 10, -10)
 				bf:SetPoint("BOTTOMRIGHT", scroll, "TOPRIGHT", -10, -34)
 			else
-				bf:SetPoint("TOPLEFT", oldb, "BOTTOMLEFT", 0, -2)
-				bf:SetPoint("BOTTOMRIGHT", oldb, "BOTTOMRIGHT", 0, -26)
+				bf:SetPoint("TOPLEFT", oldb, "BOTTOMLEFT", 0, -20)
+				bf:SetPoint("BOTTOMRIGHT", oldb, "BOTTOMRIGHT", 0, -44)
 			end
 
 			bf:EnableMouse(true)
 
 			bf.tex = bf.tex or bf:CreateTexture(i.."_texture", "OVERLAY")
-			bf.tex:SetSize(22, 22)
+			bf.tex:SetSize(34, 34)
 			bf.tex:SetPoint("LEFT")
 			bf.tex:SetTexture(spell.texture)
 
