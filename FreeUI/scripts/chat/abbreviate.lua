@@ -1,7 +1,14 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("chat")
 
-
+C.ClientColors = {
+	[BNET_CLIENT_WOW] = '5cc400',
+	[BNET_CLIENT_D3] = 'b71709',
+	[BNET_CLIENT_SC2] = '00b6ff',
+	[BNET_CLIENT_WTCG] = 'd37000',
+	[BNET_CLIENT_HEROES] = '6800c4',
+	[BNET_CLIENT_OVERWATCH] = 'dcdcef',
+}
 
 local gsub = string.gsub
 local match = string.match
