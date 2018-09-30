@@ -22,3 +22,10 @@ local F, C, L = unpack(select(2, ...))
 local name = C.myName
 local class = C.myClass
 local realm = C.myRealm
+
+
+
+
+
+
+

@@ -15,125 +15,87 @@ local F, C, L = unpack(select(2, ...))
 FreeUIGlobalConfig = {}
 FreeUIConfig = {}
 
+
+
+
+
 -- [[ Event handler ]]
 
-local eventFrame = CreateFrame("Frame")
 local events = {}
+local host = CreateFrame("Frame")
 
-eventFrame:SetScript("OnEvent", function(_, event, ...)
-	for i = #events[event], 1, -1 do
-		events[event][i](event, ...)
+host:SetScript("OnEvent", function(_, event, ...)
+	for func in pairs(events[event]) do
+		if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+			func(event, CombatLogGetCurrentEventInfo())
+		else
+			func(event, ...)
+		end
 	end
 end)
 
-F.RegisterEvent = function(event, func)
+function F:RegisterEvent(event, func, unit1, unit2)
 	if not events[event] then
 		events[event] = {}
-		eventFrame:RegisterEvent(event)
-	end
-	table.insert(events[event], func)
-end
-
-F.UnregisterEvent = function(event, func)
-	for index, tFunc in ipairs(events[event]) do
-		if tFunc == func then
-			table.remove(events[event], index)
-		end
-	end
-	if #events[event] == 0 then
-		events[event] = nil
-		eventFrame:UnregisterEvent(event)
-	end
-end
-
-F.UnregisterAllEvents = function(func)
-	for event in next, events do
-		F.UnregisterEvent(event, func)
-	end
-end
-
-F.debugEvents = function()
-	for event in next, events do
-		print(event..": "..#events[event])
-	end
-end
-
--- Options GUI callbacks
-
-F.AddOptionsCallback = function(category, option, func, widgetType)
-	if not IsAddOnLoaded("FreeUI_Options") then return end
-
-	if widgetType and widgetType == "radio" then
-		local index = 1
-		local frame = FreeUIOptionsPanel[category][option..index]
-		while frame do
-			frame:HookScript("OnClick", func)
-
-			index = index + 1
-			frame = FreeUIOptionsPanel[category][option..index]
-		end
-	else
-		local frame = FreeUIOptionsPanel[category][option]
-
-		if frame:GetObjectType() == "Slider" then
-			frame:HookScript("OnValueChanged", func)
+		if unit1 then
+			host:RegisterUnitEvent(event, unit1, unit2)
 		else
-			frame:HookScript("OnClick", func)
+			host:RegisterEvent(event)
+		end
+	end
+
+	events[event][func] = true
+end
+
+function F:UnregisterEvent(event, func)
+	local funcs = events[event]
+	if funcs and funcs[func] then
+		funcs[func] = nil
+
+		if not next(funcs) then
+			events[event] = nil
+			host:UnregisterEvent(event)
 		end
 	end
 end
 
--- [[ Resolution support ]]
 
-C.RESOLUTION_SMALL = 1
-C.RESOLUTION_MEDIUM = 2
-C.RESOLUTION_LARGE = 3
+-- Modules
+local modules, initQueue = {}, {}
 
-C.resolution = 0
+function F:RegisterModule(name)
+	if modules[name] then print("Module <"..name.."> has been registered.") return end
+	local module = {}
+	module.name = name
+	modules[name] = module
 
-local updateScale
-updateScale = function(event)
-	if event == "VARIABLES_LOADED" then
-		local height = GetScreenHeight()
-
-		if height <= 900 then
-			C.resolution = C.RESOLUTION_SMALL
-		elseif height < 1200 then
-			C.resolution = C.RESOLUTION_MEDIUM
-		else
-			C.resolution = C.RESOLUTION_LARGE
-		end
-	end
-
-	if C.general.uiScaleAuto then
-		if not InCombatLockdown() then
-			-- we don't bother with the cvar because of high resolution shenanigans
-			UIParent:SetScale(768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
-			ChatFrame1:ClearAllPoints()
-			ChatFrame1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 30, 30)
-		else
-			F.RegisterEvent("PLAYER_REGEN_ENABLED", updateScale)
-		end
-
-		if event == "PLAYER_REGEN_ENABLED" then
-			F.UnregisterEvent("PLAYER_REGEN_ENABLED", updateScale)
-		end
-	end
+	tinsert(initQueue, module)
+	return module
 end
 
-F.RegisterEvent("VARIABLES_LOADED", updateScale)
-F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
+function F:GetModule(name)
+	if not modules[name] then print("Module <"..name.."> does not exist.") return end
 
-F.AddOptionsCallback("general", "uiScaleAuto", function()
-	if C.general.uiScaleAuto then
-		F.RegisterEvent("UI_SCALE_CHANGED", updateScale)
-		updateScale()
-	else
-		F.UnregisterEvent("UI_SCALE_CHANGED", updateScale)
+	return modules[name]
+end
+
+
+-- Init
+
+F:RegisterEvent("PLAYER_LOGIN", function()
+	for _, module in pairs(initQueue) do
+		if module.OnLogin then
+			module:OnLogin()
+		else
+			print("Module <"..module.name.."> does not loaded.")
+		end
 	end
 end)
+
+
 
 -- [[ For secure frame hiding ]]
 
 local hider = CreateFrame("Frame", "FreeUIHider", UIParent)
 hider:Hide()
+

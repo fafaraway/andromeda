@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="LibStub.lua"/>
+	<Script file="CallbackHandler-1.0.lua"/>
+	<Script file="LibSharedMedia-3.0.lua"/>
+	<Script file="LibItemGem.lua"/>
+	<Include file="oUF\oUF.xml"/>
+</Ui>

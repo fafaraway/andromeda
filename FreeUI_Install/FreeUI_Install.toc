@@ -1,8 +1,0 @@
-## Interface: 70100
-## Title: FreeUI Install
-## Notes: FreeUI setup addon.
-## Author: Haleth/Lightsword
-## Version: 9.0.3
-## RequiredDeps: FreeUI
-
-install.lua

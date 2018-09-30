@@ -5,6 +5,9 @@ if not IsAddOnLoaded("FreeUI_Options") then return end
 local realm = GetRealmName()
 local name = UnitName("player")
 
+
+--[[
+
 -- create the profile boolean
 if not FreeUIOptionsGlobal then FreeUIOptionsGlobal = {} end
 if FreeUIOptionsGlobal[realm] == nil then FreeUIOptionsGlobal[realm] = {} end
@@ -42,3 +45,5 @@ end
 
 -- add global options variable
 C.options = profile
+
+]]
