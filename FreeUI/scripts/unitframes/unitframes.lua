@@ -316,13 +316,16 @@ local function CreateCastBar(self)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
 		cb:ClearAllPoints()
-		cb:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -30)
+		cb:SetPoint(unpack(C.unitframes.target_castbar))
 
 		name:ClearAllPoints()
 		name:SetPoint("BOTTOM", cb, "TOP", 0, 4)
-		name:Show()
-
-		timer:Show()
+		if C.unitframes.cbName then
+			name:Show()
+		end
+		if C.unitframes.cbTimer then
+			timer:Show()
+		end
 
 		local bg = CreateFrame("Frame", nil, cb)
 		bg:SetPoint("TOPLEFT", -1, 1)
@@ -339,10 +342,10 @@ local function CreateCastBar(self)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
 		cb:ClearAllPoints()
-		cb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 30)
+		cb:SetPoint(unpack(C.unitframes.focus_castbar))
 	end
 
-	if self.unitStyle == "focustarget" then
+	if self.unitStyle == "targettarget" or self.unitStyle == "focustarget" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
 	elseif self.unitStyle == "target" or (self.unitStyle == "player" and not C.unitframes.castbarSeparate) then
@@ -447,8 +450,8 @@ local function PostCreateIcon(element, button)
 	local Duration = StringParent:CreateFontString(nil, 'OVERLAY')
 	Duration:SetParent(StringParent)
 	Duration:ClearAllPoints()
-	Duration:SetPoint('BOTTOM', button, 2, -6)
-	Duration:SetFont("Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf", 16, "OUTLINEMONOCHROME")
+	Duration:SetPoint('BOTTOMLEFT', button, 2, -2)
+	Duration:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
 	
 	button.Duration = Duration
 
@@ -548,8 +551,8 @@ local function CreateAuras(self)
 		Auras.initialAnchor = "BOTTOMLEFT"
 		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
 		Auras["growth-y"] = "UP"
-		Auras.size = 32
-		Auras:SetSize(self:GetWidth()-14, 100)
+		Auras.size = 28
+		Auras:SetSize(self:GetWidth(), 100)
 
 		if C.unitframes.castbyPlayer then
 			Auras.CustomFilter = FilterTargetDebuffs
@@ -1616,11 +1619,11 @@ oUF:Factory(function(self)
 		'showPlayer', true,
 		'showSolo', false,
 		'xoffset', -4,
-		'yoffset', 0,
+		'yoffset', 4,
 		'maxColumns', 1,
 		'unitsperColumn', 5,
 		'columnSpacing', 4,
-		'point', "RIGHT", -- party initial position
+		'point', "BOTTOM", -- party initial position
 		'columnAnchorPoint', "LEFT",
 		'groupBy', 'ASSIGNEDROLE',
 		'groupingOrder', 'TANK,HEALER,DAMAGER',

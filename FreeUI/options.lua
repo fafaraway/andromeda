@@ -296,31 +296,31 @@ C["unitframes"] = {
 	["frameVisibility_pet"] = "[nocombat,nomod,@target,noexists][@pet,noexists] hide; show",
 
 
-	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 100, 200},					-- target unitframe position
-	["target_width"] = 240,
+	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 60, 100},					-- target unitframe position
+	["target_width"] = 220,
 	["target_height"] = 16,
-	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -8},			-- target castbar position
-	["target_castbar_width"] = 240,
+	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -30},			-- target castbar position
+	["target_castbar_width"] = 220,
 
-	["targettarget"] = {"RIGHT", 'oUF_FreeTarget', "LEFT", -5, 0},							-- target target unitframe position
+	["targettarget"] = {"LEFT", 'oUF_FreeTarget', "RIGHT", 6, 0},							-- target target unitframe position
 	["targettarget_width"] = 80,
 	["targettarget_height"] = 16,
 
-	["focus"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 80, 60},					-- focus unitframe position
-	["focus_width"] = 92,
-	["focus_height"] = 14,
-	["focus_castbar"] = {"LEFT", 'oUF_FreeFocus', "LEFT", 0, 40},				-- focus castbar position
-	["focus_castbar_width"] = 189,
+	["focus"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -100},					-- focus unitframe position
+	["focus_width"] = 106,
+	["focus_height"] = 16,
+	["focus_castbar"] = {"LEFT", 'oUF_FreeFocus', "LEFT", 0, -60},				-- focus castbar position
+	["focus_castbar_width"] = 220,
 
-	["focustarget"] = {"LEFT", 'oUF_FreeFocus', "RIGHT", 5, 0},							-- focus target unitframe position
-	["focustarget_width"] = 92,
-	["focustarget_height"] = 14,
+	["focustarget"] = {"LEFT", 'oUF_FreeFocus', "RIGHT", 6, 0},							-- focus target unitframe position
+	["focustarget_width"] = 106,
+	["focustarget_height"] = 16,
 
 	["party"] = {"BOTTOMRIGHT", 'oUF_FreePlayer', "BOTTOMLEFT", -100, 60},			-- party unitframe position
-	["party_width"] = 80,
+	["party_width"] = 86,
 	["party_height"] = 38,
 
-	["raid"] = {"TOPRIGHT", 'oUF_FreeTarget', "BOTTOMRIGHT", 0, -60},			-- raid unitframe position
+	["raid"] = {"TOPRIGHT", 'oUF_FreePlayer', "TOPLEFT", -100, 140},			-- raid unitframe position
 	["raid_width"] = 58,
 	["raid_height"] = 32,
 
@@ -337,7 +337,9 @@ C["unitframes"] = {
 	["cbnotInterruptibleColor"] = {160/255, 159/255, 161/255},
 	["cbCompleteColor"] = {63/255, 161/255, 124/255},
 	["cbFailColor"] = {187/255, 99/255, 110/255},
-	["cbHeight"] = 12,
+	["cbHeight"] = 14,
+	['cbName'] = false,
+	['cbTimer'] = false,
 
 	["power_height"] = 2,
 	["altpower_height"] = 2,
