@@ -20,15 +20,47 @@ C.media = {
 	["pixel"]      = "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 }
 
-C.font = {
-	["normal"] 		= _G.STANDARD_TEXT_FONT,	-- default font for most of UI
-	["damage"] 		= _G.DAMAGE_TEXT_FONT,		-- damage/healing font
-	["header"] 		= _G.UNIT_NAME_FONT,		-- name over player head
-	["chat"] 		= _G.STANDARD_TEXT_FONT,	-- chat frame font
-}
+if GetLocale() == "zhCN" then
+	C.font = {
+		["normal"] 		= "Fonts\\ARKai_T.ttf",
+		["damage"] 		= "Fonts\\ARKai_C.ttf",
+		["header"]		= "Fonts\\ARKai_T.ttf",
+		["chat"]		= "Fonts\\ARKai_T.ttf",
+	}
+elseif GetLocale() == "zhTW" then
+	C.font = {
+		["normal"] 		= "Fonts\\blei00d.ttf",
+		["damage"] 		= "Fonts\\bKAI00M.ttf",
+		["header"]		= "Fonts\\blei00d.ttf",
+		["chat"]		= "Fonts\\blei00d.ttf",
+	}
+elseif GetLocale() == "koKR" then
+	C.font = {
+		["normal"] 		= "Fonts\\2002.ttf",
+		["damage"] 		= "Fonts\\K_Damage.ttf",
+		["header"]		= "Fonts\\2002.ttf",
+		["chat"]		= "Fonts\\2002.ttf",
+	}
+elseif GetLocale() == "ruRU" then
+	C.font = {
+		["normal"] 		= "Fonts\\FRIZQT___CYR.ttf",
+		["damage"] 		= "Fonts\\FRIZQT___CYR.ttf",
+		["header"]		= "Fonts\\FRIZQT___CYR.ttf",
+		["chat"]		= "Fonts\\FRIZQT___CYR.ttf",
+	}
+else
+	C.font = {
+		["normal"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
+		["damage"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\PEPSI_pl.ttf",
+		["header"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf",
+		["chat"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
+	}
+end
 
 C.standardFont = {C.font.normal, 12}
 C.pixelFontCN = {'Fonts\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'} -- pixel font for Chinese client, personal use
+
+
 
 C.reactioncolours = {
 	[1] = {139/255, 39/255, 60/255}, -- Exceptionally hostile
