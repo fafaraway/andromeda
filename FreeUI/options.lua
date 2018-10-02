@@ -26,6 +26,7 @@ if GetLocale() == "zhCN" then
 		["damage"] 		= "Fonts\\ARKai_C.ttf",
 		["header"]		= "Fonts\\ARKai_T.ttf",
 		["chat"]		= "Fonts\\ARKai_T.ttf",
+		['pixel']		= {'Fonts\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'}, -- pixel font for Chinese client, personal use
 	}
 elseif GetLocale() == "zhTW" then
 	C.font = {
@@ -56,10 +57,6 @@ else
 		["chat"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
 	}
 end
-
-C.standardFont = {C.font.normal, 12}
-C.pixelFontCN = {'Fonts\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'} -- pixel font for Chinese client, personal use
-
 
 
 C.reactioncolours = {
@@ -199,7 +196,7 @@ C["misc"] = {
 	["autoAccept"] = false, -- auto accept invites from friends and guildies
 
 	["missingStats"] = true,
-	["DOTA"] = true,
+	["PVPSound"] = true,
 
 	["clickCast"] = true,
 	["fasterLooting"] = true,
@@ -313,7 +310,7 @@ C["unitframes"] = {
 
 	["focuser"] = true,						-- shift + left click to set focus
 
-	["player"] = {"BOTTOM", UIParent, "BOTTOM", 0, 320},						-- player unitframe position
+	["player"] = {"CENTER", UIParent, "CENTER", 0, -380},						-- player unitframe position
 	["player_width"] = 200,
 	["player_height"] = 14,
 	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
@@ -328,7 +325,7 @@ C["unitframes"] = {
 	["frameVisibility_pet"] = "[nocombat,nomod,@target,noexists][@pet,noexists] hide; show",
 
 
-	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 60, 100},					-- target unitframe position
+	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 60, 60},					-- target unitframe position
 	["target_width"] = 220,
 	["target_height"] = 16,
 	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -30},			-- target castbar position
