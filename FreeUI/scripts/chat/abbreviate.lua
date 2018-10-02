@@ -1,14 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("chat")
 
-C.ClientColors = {
-	[BNET_CLIENT_WOW] = '5cc400',
-	[BNET_CLIENT_D3] = 'b71709',
-	[BNET_CLIENT_SC2] = '00b6ff',
-	[BNET_CLIENT_WTCG] = 'd37000',
-	[BNET_CLIENT_HEROES] = '6800c4',
-	[BNET_CLIENT_OVERWATCH] = 'dcdcef',
-}
 
 local gsub = string.gsub
 local match = string.match
@@ -22,19 +14,38 @@ local shorthands = {
 	RAID = 'r'
 }
 
-local classes = {}
-for token, localized in next, LOCALIZED_CLASS_NAMES_MALE do
-	classes[localized] = token
+local function GetColor(className, isLocal)
+	if isLocal then
+		local found
+		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+			if v == className then className = k found = true break end
+		end
+		if not found then
+			for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+				if v == className then className = k break end
+			end
+		end
+	end
+	local tbl = C.classcolours[className]
+	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
+	return color
 end
 
-for token, localized in next, LOCALIZED_CLASS_NAMES_FEMALE do
-	classes[localized] = token
+local function FormatBNPlayer(misc, id, moreMisc, fakeName, tag, colon)
+		local gameAccount = select(6, BNGetFriendInfoByID(id))
+		if gameAccount then
+			local _, charName, _, _, _, _, _, englishClass = BNGetGameAccountInfo(gameAccount)
+			if englishClass and englishClass ~= "" then
+				fakeName = "|cFF"..GetColor(englishClass, true)..fakeName.."|r"
+			end
+	end
+	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
 
 local function AbbreviateChannel(channel, name)
 	local flag = ''
 	if(match(name, LEADER)) then
-		flag = '|cffffff00!|r'
+		flag = '|cffffff00!|r '
 	end
 
 	return format('|Hchannel:%s|h%s|h %s', channel, shorthands[channel] or gsub(channel, 'channel:', ''), flag)
@@ -44,11 +55,6 @@ local function FormatPlayer(info, name)
 	return format('|Hplayer:%s|h%s|h', info, gsub(name, '%-[^|]+', ''))
 end
 
-local function FormatBNPlayer(info)
-	local _, _, battleTag, _, _, _, client = BNGetFriendInfoByID(match(info, '(%d+):'))
-	local color = C.ClientColors[client] or '22aaff'
-	return format('|HBNplayer:%s|h|cff%s%s|r|h', info, color, match(battleTag, '(%w+)#%d+'))
-end
 
 local hooks = {}
 local function AddMessage(self, message, ...)
@@ -57,7 +63,8 @@ local function AddMessage(self, message, ...)
 	message = gsub(message, "%[(%d+)%. BigfootWorldChannel%]", "world")
 
 	message = gsub(message, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayer)
-	message = gsub(message, '|HBNplayer:(.-)|h%[(.-)%]|h', FormatBNPlayer)
+	--message = gsub(message, '|HBNplayer:(.-)|h%[(.-)%]|h', FormatBNPlayer)
+	message = gsub(message, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayer)
 	message = gsub(message, '|Hchannel:(.-)|h%[(.-)%]|h ', AbbreviateChannel)
 
 	--message = gsub(message, '^%w- (|H)', '|cffa1a1a1@|r%1')
