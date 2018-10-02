@@ -4,6 +4,7 @@ local module = F:RegisterModule("skins")
 function module:OnLogin()
 	self:ReskinDBM()
 	self:ReskinSkada()
+	self:BigWigsSkin()
 end
 
 function module:LoadWithAddOn(addonName, value, func)
