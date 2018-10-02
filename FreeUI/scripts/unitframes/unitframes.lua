@@ -915,7 +915,7 @@ local function CreateName(self)
 	if C.appearance.usePixelFont then
 		Name = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		Name = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+		Name = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		Name = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
 	end
@@ -952,7 +952,7 @@ local function UpdateTOTName(self)
 	if C.appearance.usePixelFont then
 		tt = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		tt = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+		tt = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		tt = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
 	end
@@ -984,7 +984,7 @@ local function UpdateTOFName(self)
 	if C.appearance.usePixelFont then
 		ft = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		ft = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+		ft = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		ft = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
 	end
@@ -1451,19 +1451,19 @@ do
 		Name:SetJustifyH('CENTER')
 		Name:SetPoint("CENTER", 1, 0)
 
+		if C.appearance.usePixelFont then
+			Name:SetFont(unpack(C.pixelFontCN))
+		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+			Name:SetFont(unpack(C.standardFont))
+		else
+			Name:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		end
+
 		self.Name = Name
 
 		self:Tag(Name, '[dead][offline]')
 
 		if C.unitframes.partyNameAlways then
-			if C.appearance.usePixelFont then
-				Name = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-			elseif C.client == 'zhCN' or C.client == 'zhTW' then
-				Name = F.CreateFS(self, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
-			else
-				Name = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
-			end
-
 			self:Tag(Name, '[free:name]')
 		elseif C.unitframes.partyMissingHealth then
 			self:Tag(Name, '[free:missinghealth]')
@@ -1619,7 +1619,7 @@ oUF:Factory(function(self)
 		'showPlayer', true,
 		'showSolo', false,
 		'xoffset', -4,
-		'yoffset', 4,
+		'yoffset', 6,
 		'maxColumns', 1,
 		'unitsperColumn', 5,
 		'columnSpacing', 4,
