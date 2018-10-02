@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-if C.Client ~= "zhCN" then return end
+if GetLocale() ~= "zhCN" then return end
 
 
 L["rareFound"] = "发现稀有！ "

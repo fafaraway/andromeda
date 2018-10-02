@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
-
 L["rareFound"] = "Rare nearby! "
 
 L["rare"] = "Rare"

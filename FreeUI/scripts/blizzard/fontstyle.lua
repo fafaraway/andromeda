@@ -1,13 +1,12 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("blizzard")
 
+_G.STANDARD_TEXT_FONT = C.font.normal
+_G.UNIT_NAME_FONT = C.font.header
+_G.DAMAGE_TEXT_FONT = C.font.damage
 
 function module:FontStyle()
 	if not C.appearance.fontStyle then return end
-
-	_G.STANDARD_TEXT_FONT = C.font.normal
-	_G.UNIT_NAME_FONT = 'Fonts\\FF\\header.ttf'
-	_G.DAMAGE_TEXT_FONT = C.font.damage
 
 	local function SetFont(fontObj, fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
 		if type(fontObj) == "string" then fontObj = _G[fontObj] end
