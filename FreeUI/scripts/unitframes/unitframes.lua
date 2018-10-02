@@ -1451,19 +1451,19 @@ do
 		Name:SetJustifyH('CENTER')
 		Name:SetPoint("CENTER", 1, 0)
 
-		if C.appearance.usePixelFont then
-			Name:SetFont(unpack(C.pixelFontCN))
-		elseif C.client == 'zhCN' or C.client == 'zhTW' then
-			Name:SetFont(unpack(C.standardFont))
-		else
-			Name:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
-		end
-
 		self.Name = Name
 
 		self:Tag(Name, '[dead][offline]')
 
 		if C.unitframes.partyNameAlways then
+			if C.appearance.usePixelFont then
+				Name:SetFont(unpack(C.pixelFontCN))
+			elseif C.client == 'zhCN' or C.client == 'zhTW' then
+				Name:SetFont(unpack(C.standardFont))
+			else
+				Name:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
+			end
+
 			self:Tag(Name, '[free:name]')
 		elseif C.unitframes.partyMissingHealth then
 			self:Tag(Name, '[free:missinghealth]')
