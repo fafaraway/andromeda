@@ -38,10 +38,10 @@ local updateSelectedBorder = function(self)
 					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
 				end
 			else
-				frame.bd:SetBackdropBorderColor(1, 0, 0)
+				frame.bd:SetBackdropBorderColor(1, 1, 1)
 
 				if frame.sd then
-					frame.sd:SetBackdropBorderColor(1, 0, 0, .45)
+					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
 				end
 			end
 		elseif UnitIsDead(frame.unit) then
@@ -264,7 +264,7 @@ local function CreateCastBar(self)
 	local name
 
 	if C.appearance.usePixelFont then
-		name = F.CreateFS(cb, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+		name = F.CreateFS(cb, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
 		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
@@ -913,7 +913,7 @@ local function CreateName(self)
 	local Name
 
 	if C.appearance.usePixelFont then
-		Name = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+		Name = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
 		Name = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
@@ -950,7 +950,7 @@ local function UpdateTOTName(self)
 	local tt
 
 	if C.appearance.usePixelFont then
-		tt = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+		tt = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
 		tt = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
@@ -982,7 +982,7 @@ local function UpdateTOFName(self)
 	local ft
 
 	if C.appearance.usePixelFont then
-		ft = F.CreateFS(self, C.pixelFontCN[1], C.pixelFontCN[2], C.pixelFontCN[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+		ft = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
 		ft = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
@@ -1457,11 +1457,14 @@ do
 
 		if C.unitframes.partyNameAlways then
 			if C.appearance.usePixelFont then
-				Name:SetFont(unpack(C.pixelFontCN))
+				Name:SetFont(unpack(C.font.pixel))
+				Name:SetShadowOffset(1, -1)
 			elseif C.client == 'zhCN' or C.client == 'zhTW' then
-				Name:SetFont(unpack(C.standardFont))
+				Name:SetFont(C.font.normal, 11)
+				Name:SetShadowOffset(2, -2)
 			else
-				Name:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
+				F.SetFS(Name)
+				Name:SetShadowOffset(1, -1)
 			end
 
 			self:Tag(Name, '[free:name]')

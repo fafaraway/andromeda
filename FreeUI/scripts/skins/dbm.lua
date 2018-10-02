@@ -112,13 +112,17 @@ function module:ReskinDBM()
 					name.SetPoint = F.dummy
 					
 					if C.appearance.usePixelFont then
-						name:SetFont(unpack(C.pixelFontCN))
+						name:SetFont(unpack(C.font.pixel))
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(1, -1)
-					else
-						name:SetFont(unpack(C.standardFont))
+					elseif C.client == 'zhCN' or C.client == 'zhTW' then
+						name:SetFont(C.font.normal, 12)
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(2, -2)
+					else
+						F.SetFS(name)
+						name:SetShadowColor(0, 0, 0, 1)
+						name:SetShadowOffset(1, -1)
 					end
 
 					name.SetFont = F.dummy

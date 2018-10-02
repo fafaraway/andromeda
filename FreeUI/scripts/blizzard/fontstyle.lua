@@ -154,6 +154,8 @@ function module:FontStyle()
 	SetFont("SubZoneTextFont", C.font.header, 40, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("WorldMapTextFont", C.font.header, 40, nil, nil, {0, 0, 0}, 1, -1)
 
+	SetFont("ChatFontNormal", C.font.chat, 14, nil, nil, {0, 0, 0}, 1, -1)
+
 	-- Text color
 	GameFontBlackMedium:SetTextColor(1, 1, 1)
 	CoreAbilityFont:SetTextColor(1, 1, 1)

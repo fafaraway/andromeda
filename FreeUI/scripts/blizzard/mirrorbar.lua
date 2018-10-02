@@ -21,11 +21,17 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 			text:SetPoint("CENTER", statusbar)
 			
 			if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
-				text:SetFont(unpack(C.pixelFontCN))
+				text:SetFont(unpack(C.font.pixel))
+				text:SetShadowColor(0,0,0,1)
+				text:SetShadowOffset(1, -1)
 			elseif C.client == 'zhCN' or C.client == 'zhTW' then
-				text:SetFont(unpack(C.standardFont))
+				text:SetFont(C.font.normal, 12)
+				text:SetShadowColor(0,0,0,1)
+				text:SetShadowOffset(2, -2)
 			else
 				F.SetFS(text)
+				text:SetShadowColor(0,0,0,1)
+				text:SetShadowOffset(1, -1)
 			end
 
 			if previous then

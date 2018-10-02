@@ -11,7 +11,7 @@ function Bar:CreateExtrabar()
 	local frame = CreateFrame("Frame", "FreeUI_ExtraActionBar", UIParent, "SecureHandlerStateTemplate")
 	frame:SetWidth(num*cfg.buttonSizeHuge + (num-1)*cfg.margin + 2*cfg.padding)
 	frame:SetHeight(cfg.buttonSizeHuge + 2*cfg.padding)
-	frame:SetPoint("CENTER", UIParent, "CENTER", 0, -300)
+	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 300)
 	frame:SetScale(1)
 
 	--move the buttons into position and reparent them

@@ -147,7 +147,7 @@ function module:vignette()
 	self.f:SetFrameLevel(0)
 	self.f:SetFrameStrata("BACKGROUND")
 	self.f.tex = self.f:CreateTexture()
-	self.f.tex:SetTexture([[Interface\Addons\FreeUI\assets\shadow.tga]])
+	self.f.tex:SetTexture([[Interface\Addons\FreeUI\assets\vignette.tga]])
 	self.f.tex:SetAllPoints(f)
 
 	self.f:SetAlpha(C.appearance.vignetteAlpha)

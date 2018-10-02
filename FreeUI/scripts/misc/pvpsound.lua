@@ -1,34 +1,10 @@
 ﻿local F, C, L = unpack(select(2, ...))
-if not C.misc.DOTA then return end
+if not C.misc.PVPSound then return end
 
 
 -- dota-like killing sound
 
-local mapList = {
-	[30] = true, 	--Alterac Valley
-	[529] = true, 	--Arathi Basin
-	[1105] = true, 	--Deepwind Gorge
-	[566] = true, 	--Eye of the Storm
-	[968] = true, 	--Eye of the Storm (Rated)
-	[628] = true, 	--Isle of Conquest
-	[727] = true, 	--Silvershard Mines
-	[607] = true, 	--Strand of the Ancients
-	[998] = true, 	--Temple of Kotmogu
-	[761] = true, 	--The Battle for Gilneas
-	[726] = true, 	--Twin Peaks
-	[489] = true, 	--Warsong Gulch
-	[1803] = true,
-
-	[562] = true, 	--Blade's Edge Arena
-	[617] = true, 	--Dalaran Arena
-	[559] = true, 	--Nagrand Arena
-	[572] = true, 	--Ruins of Lordaeron
-	[618] = true, 	--The Ring of Valor
-	[1134] = true, 	--The Tiger's Peak
-	[980] = true, 	--Tol'Viron Arena
-}
-
-local soundpath = "interface\\addons\\FreeUI\\assets\\dota\\"
+local soundpath = "interface\\addons\\FreeUI\\assets\\pvpsound\\"
 local forthealliance = "Interface\\Addons\\FreeUI\\assets\\sound\\forthealliance.mp3"
 local forthehorde = "Interface\\Addons\\FreeUI\\assets\\sound\\forthehorde.mp3"
 
@@ -133,10 +109,10 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 	end
 	
 	if event == "ZONE_CHANGED_NEW_AREA" then 
-		local instID = select(8, GetInstanceInfo())
 		local faction = UnitFactionGroup("player")
+		local inInstance, instanceType = IsInInstance()
 
-		if mapList[instID] then
+		if instanceType == 'pvp' or instanceType == 'arena' then
 			-- just for fun :)
 			if faction == "Alliance" then
 				PlaySoundFile(forthealliance, "Master");

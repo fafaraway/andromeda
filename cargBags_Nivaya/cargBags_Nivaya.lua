@@ -46,7 +46,7 @@ do	--Replacement for UIDropDownMenu
 		if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
 			fstr:SetFont(unpack(C.pixelFontCN))
 		elseif C.client == 'zhCN' or C.client == 'zhTW' then
-			fstr:SetFont(unpack(C.standardFont))
+			fstr:SetFont(C.font.normal, 11)
 		else
 			F.SetFS(fstr)
 		end
