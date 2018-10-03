@@ -238,6 +238,23 @@ function module:QuestTracker()
 		end
 	end)
 
+	hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, "Update", function()
+		local widgetContainer = ScenarioStageBlock.WidgetContainer
+		if not widgetContainer then return end
+		local widgetFrame = widgetContainer:GetChildren()
+		if widgetFrame and widgetFrame.Frame then
+			widgetFrame.Frame:SetAlpha(0)
+			for _, bu in next, {widgetFrame.CurrencyContainer:GetChildren()} do
+				if bu and not bu.styled then
+					bu.Icon:SetTexCoord(unpack(C.texCoord))
+					local bg = F.CreateBG(bu.Icon)
+					F.CreateBD(bg)
+					bu.styled = true
+				end
+			end
+		end
+	end)
+
 	hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
 		local block = ScenarioChallengeModeBlock
 		if not block.bg then
