@@ -95,7 +95,7 @@ C["appearance"] = {
 C["actionbars"] = {
 	["hotKey"] = true, 					-- show hot keys on buttons
 	["macroName"] = true,				-- show macro name on buttons
-	["count"] = true,					
+	["count"] = false,					
 	["classColor"] = false,				-- button border colored by class color
 
 	["bar3Fade"] = false,
