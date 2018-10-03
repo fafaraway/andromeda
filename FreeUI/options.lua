@@ -93,10 +93,12 @@ C["appearance"] = {
 }
 
 C["actionbars"] = {
-	["hotKey"] = true, 					-- show hot keys on buttons
-	["macroName"] = true,				-- show macro name on buttons
-	["count"] = false,					
-	["classColor"] = false,				-- button border colored by class color
+	["buttonSizeNormal"] = 30,
+	["buttonSizeSmall"] = 24,
+	["buttonSizeBig"] = 34,
+	["buttonSizeHuge"] = 40,
+	["padding"] = 2,
+	["margin"] = 4,
 
 	["bar3Fade"] = false,
 
@@ -105,15 +107,6 @@ C["actionbars"] = {
 
 	["petBarFade"] = false,
 	["stanceBarEnable"] = true,
-
-	["layoutSimple"] = false,			-- hide bar1 bar2 for default
-
-	["buttonSizeNormal"] = 30,
-	["buttonSizeSmall"] = 24,
-	["buttonSizeBig"] = 34,
-	["buttonSizeHuge"] = 40,
-	["padding"] = 2,
-	["margin"] = 4,
 
 	['extraButtonPos'] = {"CENTER", UIParent, "CENTER", 0, 200},
 	['zoneAbilityPos'] = {"CENTER", UIParent, "CENTER", 0, 300},
@@ -137,6 +130,13 @@ C["actionbars"] = {
 		fadeOutDelay = 0,
 		trigger = "OnShow",
 	},
+
+	["hotKey"] = true, 					-- show hot keys on buttons
+	["macroName"] = true,				-- show macro name on buttons
+	["count"] = false,					-- show itme count on buttons		
+	["classColor"] = false,				-- button border colored by class color
+
+	["layoutSimple"] = false,			-- only show bar1/bar2 when shift key is down
 }
 
 
