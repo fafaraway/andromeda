@@ -29,7 +29,6 @@
 	<Script file="LFDFrame.lua"/>
 	<Script file="LFGFrame.lua"/>
 	<Script file="LFGList.lua"/>
-	<Script file="LFRFrame.lua"/>
 	<Script file="LootFrame.lua"/>
 	<Script file="LootHistory.lua"/>
 	<Script file="MailFrame.lua"/>
