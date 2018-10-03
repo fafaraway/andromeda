@@ -11,7 +11,7 @@ function Bar:CreateExtrabar()
 	local frame = CreateFrame("Frame", "FreeUI_ExtraActionBar", UIParent, "SecureHandlerStateTemplate")
 	frame:SetWidth(num*cfg.buttonSizeHuge + (num-1)*cfg.margin + 2*cfg.padding)
 	frame:SetHeight(cfg.buttonSizeHuge + 2*cfg.padding)
-	frame:SetPoint("CENTER", UIParent, "CENTER", 0, 300)
+	frame:SetPoint(unpack(C.actionbars.extraButtonPos))
 	frame:SetScale(1)
 
 	--move the buttons into position and reparent them
@@ -35,7 +35,7 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:ClearAllPoints()
 	ZoneAbilityFrame.ignoreFramePositionManager = true
 	ZoneAbilityFrameNormalTexture:SetAlpha(0)
-	ZoneAbilityFrame:SetPoint("CENTER", UIParent, "CENTER", 0, -300)
+	ZoneAbilityFrame:SetPoint(unpack(C.actionbars.zoneAbilityPos))
 
 	local spellButton = ZoneAbilityFrame.SpellButton
 	spellButton:SetSize(cfg.buttonSizeHuge, cfg.buttonSizeHuge)

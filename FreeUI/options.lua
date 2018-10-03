@@ -115,6 +115,9 @@ C["actionbars"] = {
 	["padding"] = 2,
 	["margin"] = 4,
 
+	['extraButtonPos'] = {"CENTER", UIParent, "CENTER", 0, 200},
+	['zoneAbilityPos'] = {"CENTER", UIParent, "CENTER", 0, 300},
+
 	["fader"] = {
 		fadeInAlpha = 1,
 		fadeInDuration = 0.3,
