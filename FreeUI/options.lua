@@ -5,217 +5,217 @@ local F, C, L = unpack(select(2, ...))
 -- [[ Constants ]]
 
 C.media = {
-	["arrowUp"]    = "Interface\\AddOns\\FreeUI\\assets\\arrow-up-active",
-	["arrowDown"]  = "Interface\\AddOns\\FreeUI\\assets\\arrow-down-active",
-	["arrowLeft"]  = "Interface\\AddOns\\FreeUI\\assets\\arrow-left-active",
-	["arrowRight"] = "Interface\\AddOns\\FreeUI\\assets\\arrow-right-active",
-	["backdrop"]   = "Interface\\AddOns\\FreeUI\\assets\\blank",
-	["checked"]    = "Interface\\AddOns\\FreeUI\\assets\\CheckButtonHilight",
-	["glowtex"]    = "Interface\\AddOns\\FreeUI\\assets\\glowTex",
-	["gradient"]   = "Interface\\AddOns\\FreeUI\\assets\\gradient",
-	["roleIcons"]  = "Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES",
-	["texture"]    = "Interface\\AddOns\\FreeUI\\assets\\statusbar",
-	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\bgTex",
-	["sparktex"]   = "Interface\\AddOns\\FreeUI\\assets\\spark",
-	["pixel"]      = "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
+	['arrowUp']    = 'Interface\\AddOns\\FreeUI\\assets\\arrow-up-active',
+	['arrowDown']  = 'Interface\\AddOns\\FreeUI\\assets\\arrow-down-active',
+	['arrowLeft']  = 'Interface\\AddOns\\FreeUI\\assets\\arrow-left-active',
+	['arrowRight'] = 'Interface\\AddOns\\FreeUI\\assets\\arrow-right-active',
+	['backdrop']   = 'Interface\\AddOns\\FreeUI\\assets\\blank',
+	['checked']    = 'Interface\\AddOns\\FreeUI\\assets\\CheckButtonHilight',
+	['glowtex']    = 'Interface\\AddOns\\FreeUI\\assets\\glowTex',
+	['gradient']   = 'Interface\\AddOns\\FreeUI\\assets\\gradient',
+	['roleIcons']  = 'Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES',
+	['texture']    = 'Interface\\AddOns\\FreeUI\\assets\\statusbar',
+	['bgtex']	   = 'Interface\\AddOns\\FreeUI\\assets\\bgTex',
+	['sparktex']   = 'Interface\\AddOns\\FreeUI\\assets\\spark',
+	['pixel']      = 'Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf',
 }
 
-if GetLocale() == "zhCN" then
+if GetLocale() == 'zhCN' then
 	C.font = {
-		["normal"] 		= "Fonts\\ARKai_T.ttf",
-		["damage"] 		= "Fonts\\ARKai_C.ttf",
-		["header"]		= "Fonts\\ARKai_T.ttf",
-		["chat"]		= "Fonts\\ARKai_T.ttf",
+		['normal'] 		= 'Fonts\\ARKai_T.ttf',
+		['damage'] 		= 'Fonts\\ARKai_C.ttf',
+		['header']		= 'Fonts\\ARKai_T.ttf',
+		['chat']		= 'Fonts\\ARKai_T.ttf',
 		['pixel']		= {'Fonts\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'}, -- pixel font for Chinese client, personal use
 	}
-elseif GetLocale() == "zhTW" then
+elseif GetLocale() == 'zhTW' then
 	C.font = {
-		["normal"] 		= "Fonts\\blei00d.ttf",
-		["damage"] 		= "Fonts\\bKAI00M.ttf",
-		["header"]		= "Fonts\\blei00d.ttf",
-		["chat"]		= "Fonts\\blei00d.ttf",
+		['normal'] 		= 'Fonts\\blei00d.ttf',
+		['damage'] 		= 'Fonts\\bKAI00M.ttf',
+		['header']		= 'Fonts\\blei00d.ttf',
+		['chat']		= 'Fonts\\blei00d.ttf',
 	}
-elseif GetLocale() == "koKR" then
+elseif GetLocale() == 'koKR' then
 	C.font = {
-		["normal"] 		= "Fonts\\2002.ttf",
-		["damage"] 		= "Fonts\\K_Damage.ttf",
-		["header"]		= "Fonts\\2002.ttf",
-		["chat"]		= "Fonts\\2002.ttf",
+		['normal'] 		= 'Fonts\\2002.ttf',
+		['damage'] 		= 'Fonts\\K_Damage.ttf',
+		['header']		= 'Fonts\\2002.ttf',
+		['chat']		= 'Fonts\\2002.ttf',
 	}
-elseif GetLocale() == "ruRU" then
+elseif GetLocale() == 'ruRU' then
 	C.font = {
-		["normal"] 		= "Fonts\\FRIZQT___CYR.ttf",
-		["damage"] 		= "Fonts\\FRIZQT___CYR.ttf",
-		["header"]		= "Fonts\\FRIZQT___CYR.ttf",
-		["chat"]		= "Fonts\\FRIZQT___CYR.ttf",
+		['normal'] 		= 'Fonts\\FRIZQT___CYR.ttf',
+		['damage'] 		= 'Fonts\\FRIZQT___CYR.ttf',
+		['header']		= 'Fonts\\FRIZQT___CYR.ttf',
+		['chat']		= 'Fonts\\FRIZQT___CYR.ttf',
 	}
 else
 	C.font = {
-		["normal"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
-		["damage"] 		= "Interface\\AddOns\\FreeUI\\assets\\font\\PEPSI_pl.ttf",
-		["header"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf",
-		["chat"]		= "Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf",
+		['normal'] 		= 'Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf',
+		['damage'] 		= 'Interface\\AddOns\\FreeUI\\assets\\font\\PEPSI_pl.ttf',
+		['header']		= 'Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf',
+		['chat']		= 'Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf',
 	}
 end
 
 
 C.reactioncolours = {
-	[1] = {139/255, 39/255, 60/255}, -- Exceptionally hostile
-	[2] = {217/255, 51/255, 22/255}, -- Very Hostile
-	[3] = {231/255, 87/255, 83/255}, -- Hostile
-	[4] = {213/255, 201/255, 128/255}, -- Neutral
-	[5] = {184/255, 243/255, 147/255}, -- Friendly
-	[6] = {115/255, 231/255, 62/255}, -- Very Friendly
-	[7] = {107/255, 231/255, 157/255}, -- Exceptionally friendly
-	[8] = {44/255, 153/255, 111/255}, -- Exalted
+	[1] = {139/255, 39/255, 60/255}, 	-- Exceptionally hostile
+	[2] = {217/255, 51/255, 22/255}, 	-- Very Hostile
+	[3] = {231/255, 87/255, 83/255}, 	-- Hostile
+	[4] = {213/255, 201/255, 128/255}, 	-- Neutral
+	[5] = {184/255, 243/255, 147/255}, 	-- Friendly
+	[6] = {115/255, 231/255, 62/255}, 	-- Very Friendly
+	[7] = {107/255, 231/255, 157/255}, 	-- Exceptionally friendly
+	[8] = {44/255, 153/255, 111/255}, 	-- Exalted
 }
 
 
 -- [[ Global config ]]
 
-C["appearance"] = {
-	["backdropcolor"] = {.05, .05, .05},
-	["alpha"] = .6,
-	["shadow"] = true,
-	["buttonGradientColour"] = {.3, .3, .3, .3},
-	["buttonSolidColour"] = {.2, .2, .2, .6},
-	["useButtonGradientColour"] = true,
+C['appearance'] = {
+	['backdropcolor'] = {.05, .05, .05},
+	['alpha'] = .6,
+	['shadow'] = true,
+	['buttonGradientColour'] = {.3, .3, .3, .3},
+	['buttonSolidColour'] = {.2, .2, .2, .6},
+	['useButtonGradientColour'] = true,
 
-	["useCustomColour"] = false,
-		["customColour"] = {r = 1, g = 1, b = 1},
+	['useCustomColour'] = false,
+		['customColour'] = {r = 1, g = 1, b = 1},
 
-	["vignette"] = true,
-		["vignetteAlpha"] = .5,
+	['vignette'] = true,
+		['vignetteAlpha'] = .5,
 
-	["fontStyle"] = true,
+	['fontStyle'] = true,
 
-	["usePixelFont"] = false, -- Chinese pixel font for personal use
+	['usePixelFont'] = false, -- Chinese pixel font for personal use
 }
 
-C["actionbars"] = {
-	["buttonSizeNormal"] = 30,
-	["buttonSizeSmall"] = 24,
-	["buttonSizeBig"] = 34,
-	["buttonSizeHuge"] = 40,
-	["padding"] = 2,
-	["margin"] = 4,
+C['actionbars'] = {
+	['buttonSizeNormal'] = 30,
+	['buttonSizeSmall'] = 24,
+	['buttonSizeBig'] = 34,
+	['buttonSizeHuge'] = 40,
+	['padding'] = 2,
+	['margin'] = 4,
 
-	["bar3Fade"] = false,
+	['bar3Fade'] = false,
 
-	["sideBarEnable"] = true,
-		["sideBarFade"] = false,
+	['sideBarEnable'] = true,
+		['sideBarFade'] = false,
 
-	["petBarFade"] = false,
-	["stanceBarEnable"] = true,
+	['petBarFade'] = false,
+	['stanceBarEnable'] = true,
 
-	['extraButtonPos'] = {"CENTER", UIParent, "CENTER", 0, 200},
-	['zoneAbilityPos'] = {"CENTER", UIParent, "CENTER", 0, 300},
+	['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
+	['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 
-	["fader"] = {
+	['fader'] = {
 		fadeInAlpha = 1,
 		fadeInDuration = 0.3,
-		fadeInSmooth = "OUT",
+		fadeInSmooth = 'OUT',
 		fadeOutAlpha = 0,
 		fadeOutDuration = 0.9,
-		fadeOutSmooth = "OUT",
+		fadeOutSmooth = 'OUT',
 		fadeOutDelay = 0,
 	},
-	["faderOnShow"] = {
+	['faderOnShow'] = {
 		fadeInAlpha = 1,
 		fadeInDuration = 0.3,
-		fadeInSmooth = "OUT",
+		fadeInSmooth = 'OUT',
 		fadeOutAlpha = 0,
 		fadeOutDuration = 0.9,
-		fadeOutSmooth = "OUT",
+		fadeOutSmooth = 'OUT',
 		fadeOutDelay = 0,
-		trigger = "OnShow",
+		trigger = 'OnShow',
 	},
 
-	["hotKey"] = true, 					-- show hot keys on buttons
-	["macroName"] = true,				-- show macro name on buttons
-	["count"] = false,					-- show itme count on buttons		
-	["classColor"] = false,				-- button border colored by class color
+	['hotKey'] = true, 					-- show hot keys on buttons
+	['macroName'] = true,				-- show macro name on buttons
+	['count'] = false,					-- show itme count on buttons		
+	['classColor'] = false,				-- button border colored by class color
 
-	["layoutSimple"] = false,			-- only show bar1/bar2 when shift key is down
+	['layoutSimple'] = false,			-- only show bar1/bar2 when shift key is down
 }
 
 
-C["auras"] = {
-	["position"] = {"TOPRIGHT", UIParent, "TOPRIGHT", -290, -36},
-	["buffSize"] = 42,
-	["debuffSize"] = 50,
-	["paddingX"] = 5,
-	["paddingY"] = 8,
-	["buffPerRow"] = 10,
+C['auras'] = {
+	['position'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -290, -36},
+	['buffSize'] = 42,
+	['debuffSize'] = 50,
+	['paddingX'] = 5,
+	['paddingY'] = 8,
+	['buffPerRow'] = 10,
 }
 
 
-C["maps"] = {
-	["worldMapScale"] = 1,
-	["miniMapScale"] = 1,
-	["miniMapPosition"] = { "TOPRIGHT", UIParent, "TOPRIGHT", -22, 0 },
-	["miniMapSize"] = 256,
-	["whoPings"] = true,
-	["mapReveal"] = true,
+C['maps'] = {
+	['worldMapScale'] = 1,
+	['miniMapScale'] = 1,
+	['miniMapPosition'] = { 'TOPRIGHT', UIParent, 'TOPRIGHT', -22, 0 },
+	['miniMapSize'] = 256,
+	['whoPings'] = true,
+	['mapReveal'] = true,
 }
 
 
-C["misc"] = {
-	["uiScale"] = 1,
-	["uiScaleAuto"] = true,
+C['misc'] = {
+	['uiScale'] = 1,
+	['uiScaleAuto'] = true,
 
-	["flashCursor"] = true,
+	['flashCursor'] = true,
 
-	["bossBanner"] = false,
-	["talkingHead"] = false,
-	["mailButton"] = true, 
-	["undressButton"] = true, 
-	["alreadyKnown"] = true,
-	["saySapped"] = true,
+	['bossBanner'] = false,
+	['talkingHead'] = false,
+	['mailButton'] = true, 
+	['undressButton'] = true, 
+	['alreadyKnown'] = true,
+	['saySapped'] = true,
 
-	["autoScreenShot"] = true,		-- auto screenshot when achieved
-	["autoActionCam"] = true,
+	['autoScreenShot'] = true,		-- auto screenshot when achieved
+	['autoActionCam'] = true,
 
-	["cooldownpulse"] = true,
-	["cooldownCount"] = true,
-		["decimalCD"] = false,
+	['cooldownpulse'] = true,
+	['cooldownCount'] = true,
+		['decimalCD'] = false,
 		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
 
-	["rareAlert"] = true,
-	["rareAlertNotify"] = true,
-	["interruptAlert"] = true,
-		["interruptSound"] = true,
-		["interruptNotify"] = true,
-		["dispelSound"] = true,
-		["dispelNotify"] = true,
+	['rareAlert'] = true,
+	['rareAlertNotify'] = true,
+	['interruptAlert'] = true,
+		['interruptSound'] = true,
+		['interruptNotify'] = true,
+		['dispelSound'] = true,
+		['dispelNotify'] = true,
 
-	["autoSetRole"] = true,			-- automatically set role and hide dialog where possible
-		["autoSetRole_useSpec"] = true,		-- attempt to set role based on your current spec
-		["autoSetRole_verbose"] = true, -- tells you what happens when setting role
+	['autoSetRole'] = true,			-- automatically set role and hide dialog where possible
+		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
+		['autoSetRole_verbose'] = true, -- tells you what happens when setting role
 
-	["autoRepair"] = true,			-- automatically repair items
-		["autoRepair_guild"] = true, -- use guild funds for auto repairs
+	['autoRepair'] = true,			-- automatically repair items
+		['autoRepair_guild'] = true, -- use guild funds for auto repairs
 
-	["autoAccept"] = false, -- auto accept invites from friends and guildies
+	['autoAccept'] = false, -- auto accept invites from friends and guildies
 
-	["missingStats"] = true,
-	["PVPSound"] = true,
+	['missingStats'] = true,
+	['PVPSound'] = true,
 
-	["clickCast"] = true,
-	["fasterLooting"] = true,
+	['clickCast'] = true,
+	['fasterLooting'] = true,
 }
 
 
-C["camera"] = {
-	["speed"] = 50,
-	["increment"] = 3,
-	["distance"] = 50,
+C['camera'] = {
+	['speed'] = 50,
+	['increment'] = 3,
+	['distance'] = 50,
 }
 
 
-C["bags"] = {
-	["itemSlotSize"] = 38,
-	["sizes"] = {
+C['bags'] = {
+	['itemSlotSize'] = 38,
+	['sizes'] = {
 		bags = {
 			columnsSmall = 8,
 			columnsLarge = 10,
@@ -229,153 +229,153 @@ C["bags"] = {
 	},
 }
 
-C["infoBar"] = {
-	["enable"] = true,
-	["enableButtons"] = true,			-- show buttons for quick access on the menu bar
-		["buttons_mouseover"] = true,			-- only on mouseover
+C['infoBar'] = {
+	['enable'] = true,
+	['enableButtons'] = true,			-- show buttons for quick access on the menu bar
+		['buttons_mouseover'] = true,			-- only on mouseover
 }
 
 
-C["tooltip"] = {
-	["enable"] = true,		-- enable tooltip and modules
-	["anchorCursor"] = false,		-- tooltip at mouse
-	["tipPosition"] = {"BOTTOMRIGHT", -30, 30},	-- tooltip position
+C['tooltip'] = {
+	['enable'] = true,		-- enable tooltip and modules
+	['anchorCursor'] = false,		-- tooltip at mouse
+	['tipPosition'] = {'BOTTOMRIGHT', -30, 30},	-- tooltip position
 	
-	["hidePVP"] = false,
-	["hideFaction"] = true,
-	["hideTitle"] = true,
-	["hideRealm"] = true,
-	["hideGuildRank"] = true,
+	['hidePVP'] = false,
+	['hideFaction'] = true,
+	['hideTitle'] = true,
+	['hideRealm'] = true,
+	['hideGuildRank'] = true,
 
-	["fadeOnUnit"] = false,
-	["combatHide"] = false,
+	['fadeOnUnit'] = false,
+	['combatHide'] = false,
 
-	["ilvlspec"] = true,
-	["extraInfo"] = true,
-	["azeriteTrait"] = true,
-	["borderColor"] = true,		-- item tooltip border colored by item quality
+	['ilvlspec'] = true,
+	['extraInfo'] = true,
+	['azeriteTrait'] = true,
+	['borderColor'] = true,		-- item tooltip border colored by item quality
 
-	["clearTip"] = false,		-- get rid of a few lines, experimental!
+	['clearTip'] = false,		-- get rid of a few lines, experimental!
 }
 
 
-C["chat"] = {
-	["position"] = {"BOTTOMLEFT", UIParent, "BOTTOMLEFT", 50, 50},
-	["lockPosition"] = true,
-	["sticky"] = true,
-	["itemLinkLevel"] = true,
-	["spamageMeters"] = true,
-	["whisperAlert"] = true,
-	["minimize"] = true,
-	["outline"] = false,
+C['chat'] = {
+	['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},
+	['lockPosition'] = true,
+	['sticky'] = true,
+	['itemLinkLevel'] = true,
+	['spamageMeters'] = true,
+	['whisperAlert'] = true,
+	['minimize'] = true,
+	['outline'] = false,
 
 	['enableFilter'] = true,
-	["keyWordMatch"] = 1,
+	['keyWordMatch'] = 1,
 	['blockAddonAlert'] = true,
-	['symbols'] = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~", "-"},
-	["filterList"] = "艾尔文森林美食协会 墨雪 夙愿 柳岩客栈 黄金梅利 新公会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收",
+	['symbols'] = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '-'},
+	['filterList'] = '艾尔文森林美食协会 墨雪 夙愿 柳岩客栈 黄金梅利 新公会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收',
 	['addonBlockList'] = {
-		"任务进度提示%s?[:：]", "%[接受任务%]", "%(任务完成%)", "<大脚组队提示>", "<大脚团队提示>", "【爱不易】", "EUI:", "EUI_RaidCD", "打断:.+|Hspell", "PS 死亡: .+>", "%*%*.+%*%*",
-		"<iLvl>", ("%-"):rep(30), "<小队物品等级:.+>", "<LFG>", "wowcdk", "进度:", "属性通报", "wowcn%.vip"
+		'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
+		'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', 'wowcdk', '进度:', '属性通报', 'wowcn%.vip'
 		},
 }
 
 
-C["unitframes"] = {
-	["enable"] = true, 						-- enable the unit frames and their included modules
+C['unitframes'] = {
+	['enable'] = true, 						-- enable the unit frames and their included modules
 
-	["transMode"] = true,
-		["transModeAlpha"] = .1,
-		["healthClassColor"] = true,
-		["powerTypeColor"] = true,
+	['transMode'] = true,
+		['transModeAlpha'] = .1,
+		['healthClassColor'] = true,
+		['powerTypeColor'] = true,
 
-	["gradient"] = false,					-- gradient mode
+	['gradient'] = false,					-- gradient mode
 
-	["portrait"] = true,					-- enable portrait on player/target frame
-		["portraitAlpha"] = .1,
+	['portrait'] = true,					-- enable portrait on player/target frame
+		['portraitAlpha'] = .1,
 
-	["outRangeAlpha"] = .4,
+	['outRangeAlpha'] = .4,
 
-	["classPower"] = true,
+	['classPower'] = true,
 
-	["absorb"] = true, 						-- absorb bar/over absorb glow
-	["castbar"] = true,
-		["castbarSeparate"] = false,
+	['absorb'] = true, 						-- absorb bar/over absorb glow
+	['castbar'] = true,
+		['castbarSeparate'] = false,
 
-	["enableGroup"] = true,					-- enable party/raid frames
-		["limitRaidSize"] = false, 				-- show a maximum of 25 players in a raid
-		["showRaidFrames"] = true, 				-- show the raid frames
-		["partyNameAlways"] = false,			-- show name on party/raid frames
-		["partyMissingHealth"] = false,			-- show missing health
-	["enableArena"] = true,					-- enable arena/flag carrier frames
+	['enableGroup'] = true,					-- enable party/raid frames
+		['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
+		['showRaidFrames'] = true, 				-- show the raid frames
+		['partyNameAlways'] = false,			-- show name on party/raid frames
+		['partyMissingHealth'] = false,			-- show missing health
+	['enableArena'] = true,					-- enable arena/flag carrier frames
 
-	["castbyPlayer"] = true,				-- only show target debuffs casted by player
+	['castbyPlayer'] = true,				-- only show target debuffs casted by player
 
-	["focuser"] = true,						-- shift + left click to set focus
+	['focuser'] = true,						-- shift + left click to set focus
 
-	["player"] = {"CENTER", UIParent, "CENTER", 0, -380},						-- player unitframe position
-	["player_width"] = 200,
-	["player_height"] = 14,
-	["player_castbar"] = {"CENTER", 'oUF_FreePlayer', "CENTER", 0, -50},		-- player castbar position
-	["player_castbar_width"] = 200,
+	['player'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
+	['player_width'] = 200,
+	['player_height'] = 14,
+	['player_castbar'] = {'CENTER', 'oUF_FreePlayer', 'CENTER', 0, -50},		-- player castbar position
+	['player_castbar_width'] = 200,
 
-	["pet"] = {"RIGHT", "oUF_FreePlayer", "LEFT", -5, 0},									-- pet unitframe position
-	["pet_width"] = 68,
-	["pet_height"] = 14,
+	['pet'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},									-- pet unitframe position
+	['pet_width'] = 68,
+	['pet_height'] = 14,
 
-	["frameVisibility"] = false,
-	["frameVisibility_player"] = "[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide",
-	["frameVisibility_pet"] = "[nocombat,nomod,@target,noexists][@pet,noexists] hide; show",
+	['frameVisibility'] = false,
+	['frameVisibility_player'] = '[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
+	['frameVisibility_pet'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
 
 
-	["target"] = {"LEFT", 'oUF_FreePlayer', "RIGHT", 60, 60},					-- target unitframe position
-	["target_width"] = 220,
-	["target_height"] = 16,
-	["target_castbar"] = {"TOP", 'oUF_FreeTarget', "BOTTOM", 0, -30},			-- target castbar position
-	["target_castbar_width"] = 220,
+	['target'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 60, 60},					-- target unitframe position
+	['target_width'] = 220,
+	['target_height'] = 16,
+	['target_castbar'] = {'TOP', 'oUF_FreeTarget', 'BOTTOM', 0, -30},			-- target castbar position
+	['target_castbar_width'] = 220,
 
-	["targettarget"] = {"LEFT", 'oUF_FreeTarget', "RIGHT", 6, 0},							-- target target unitframe position
-	["targettarget_width"] = 80,
-	["targettarget_height"] = 16,
+	['targettarget'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},							-- target target unitframe position
+	['targettarget_width'] = 80,
+	['targettarget_height'] = 16,
 
-	["focus"] = {"TOPLEFT", 'oUF_FreeTarget', "BOTTOMLEFT", 0, -100},					-- focus unitframe position
-	["focus_width"] = 106,
-	["focus_height"] = 16,
-	["focus_castbar"] = {"LEFT", 'oUF_FreeFocus', "LEFT", 0, -60},				-- focus castbar position
-	["focus_castbar_width"] = 220,
+	['focus'] = {'TOPLEFT', 'oUF_FreeTarget', 'BOTTOMLEFT', 0, -100},					-- focus unitframe position
+	['focus_width'] = 106,
+	['focus_height'] = 16,
+	['focus_castbar'] = {'LEFT', 'oUF_FreeFocus', 'LEFT', 0, -60},				-- focus castbar position
+	['focus_castbar_width'] = 220,
 
-	["focustarget"] = {"LEFT", 'oUF_FreeFocus', "RIGHT", 6, 0},							-- focus target unitframe position
-	["focustarget_width"] = 106,
-	["focustarget_height"] = 16,
+	['focustarget'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},							-- focus target unitframe position
+	['focustarget_width'] = 106,
+	['focustarget_height'] = 16,
 
-	["party"] = {"BOTTOMRIGHT", 'oUF_FreePlayer', "BOTTOMLEFT", -100, 60},			-- party unitframe position
-	["party_width"] = 86,
-	["party_height"] = 38,
+	['party'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},			-- party unitframe position
+	['party_width'] = 86,
+	['party_height'] = 38,
 
-	["raid"] = {"TOPRIGHT", 'oUF_FreePlayer', "TOPLEFT", -100, 140},			-- raid unitframe position
-	["raid_width"] = 58,
-	["raid_height"] = 32,
+	['raid'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
+	['raid_width'] = 58,
+	['raid_height'] = 32,
 
-	["boss"] = {a='LEFT', b='oUF_FreePlayer', c="RIGHT", x=400, y=400},			-- boss unitframe position
-	["boss_width"] = 166,
-	["boss_height"] = 20,
+	['boss'] = {a='LEFT', b='oUF_FreePlayer', c='RIGHT', x=400, y=400},			-- boss unitframe position
+	['boss_width'] = 166,
+	['boss_height'] = 20,
 
-	["arena"] = {a='RIGHT', b='oUF_FreeTarget', c="LEFT", x=-100, y=180},				-- arena unitframe position
-	["arena_width"] = 166,
-	["arena_height"] = 16,
+	['arena'] = {a='RIGHT', b='oUF_FreeTarget', c='LEFT', x=-100, y=180},				-- arena unitframe position
+	['arena_width'] = 166,
+	['arena_height'] = 16,
 	
-	["cbCastingColor"] = {77/255, 183/255, 219/255},
-	["cbChannelingColor"] = {77/255, 183/255, 219/255},
-	["cbnotInterruptibleColor"] = {160/255, 159/255, 161/255},
-	["cbCompleteColor"] = {63/255, 161/255, 124/255},
-	["cbFailColor"] = {187/255, 99/255, 110/255},
-	["cbHeight"] = 14,
+	['cbCastingColor'] = {77/255, 183/255, 219/255},
+	['cbChannelingColor'] = {77/255, 183/255, 219/255},
+	['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
+	['cbCompleteColor'] = {63/255, 161/255, 124/255},
+	['cbFailColor'] = {187/255, 99/255, 110/255},
+	['cbHeight'] = 14,
 	['cbName'] = false,
 	['cbTimer'] = false,
 
-	["power_height"] = 2,
-	["altpower_height"] = 2,
-	["classPower_height"] = 2,
+	['power_height'] = 2,
+	['altpower_height'] = 2,
+	['classPower_height'] = 2,
 }
 
 
@@ -390,7 +390,7 @@ C["unitframes"] = {
 -- 由其他玩家或NPC施放的控制性技能
 -- 以下debuff将显示
 
-C["debuffFilter"] = {
+C['debuffFilter'] = {
 	-- CC
 	[33786]  = true, -- Cyclone
 	[605]    = true, -- Dominate Mind (Mind Control)
@@ -505,7 +505,7 @@ C["debuffFilter"] = {
 -- 防守/爆发性技能
 -- 以下buff将显示
 
-C["dangerousBuffs"] = {
+C['dangerousBuffs'] = {
 	-- Immunities
 	[46924]  = true, -- Bladestorm
 	[642]    = true, -- Divine Shield
@@ -650,7 +650,7 @@ C["dangerousBuffs"] = {
 -- 比如密境的挑战者负担之类
 -- 以下技能将隐藏
 
-C["hideDebuffs"] = {
+C['hideDebuffs'] = {
 	[57724] = true, -- Sated
 	[57723] = true, -- Exhaustion
 	[80354] = true, -- Temporal Displacement
@@ -689,7 +689,7 @@ C["hideDebuffs"] = {
 	[260738] = true, -- 艾泽里特残渣
 }
 
-if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false end
+if select(2, UnitClass('player')) == 'PRIEST' then C.hideDebuffs[6788] = false end
 
 -- Buffs cast by the player that healers want to see on raid frames
 -- 小队/团队框体的buff过滤表
@@ -697,7 +697,7 @@ if select(2, UnitClass("player")) == "PRIEST" then C.hideDebuffs[6788] = false e
 -- 比如奶德的恢复牧师的盾之类
 -- 以下技能将显示
 
-C["myBuffs"] = {
+C['myBuffs'] = {
 
 	[774] = true,		-- 回春
 	[8936] = true,		-- 愈合
@@ -748,7 +748,7 @@ C["myBuffs"] = {
 -- 比如坦克的减伤技能
 -- 以下技能将显示
 
-C["allBuffs"] = {
+C['allBuffs'] = {
 	[642] = true,		-- 圣盾术
 	[1022] = true,		-- 保护祝福
 	[27827] = true,		-- 救赎之魂

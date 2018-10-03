@@ -21,7 +21,7 @@ function module:PetBattleUI()
 	weather.Icon:SetPoint("TOP", UIParent, 0, -10)
 	weather.Icon:SetTexCoord(unpack(C.texCoord))
 	F.CreateSD(weather.Icon)
-	if C.appearance.shadow then
+	if weather.Icon.Shadow then
 		weather.Icon.Shadow:SetFrameLevel(weather:GetFrameLevel())
 	end
 	weather.Duration:ClearAllPoints()

@@ -73,7 +73,7 @@ function module:FontStyle()
 	SetFont("NumberFont_Small",                   C.font.chat, 12, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("NumberFont_Normal_Med",              C.font.chat, 12, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("NumberFont_Outline_Med",             C.font.chat, 12, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("NumberFont_Outline_Large",           C.font.chat, 16, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("NumberFont_Outline_Large",           C.font.normal, 14, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("NumberFont_Outline_Huge",            C.font.header, 30, nil, nil, {0, 0, 0}, 1, -1)
 
 	SetFont("Fancy22Font",                  C.font.header, 22, nil, nil, {0, 0, 0}, 1, -1)
@@ -166,6 +166,7 @@ function module:FontStyle()
 
 	local function ReskinFont(font, size, white)
 		font:SetFont(C.font.normal, size, white and "" or nil)
+		font:SetTextColor(247/255, 225/255, 171/255)
 		font:SetShadowColor(0, 0, 0, 0)
 		font:SetShadowOffset(2, -2)
 	end
