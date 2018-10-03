@@ -206,23 +206,6 @@ function module:EnhanceColorPicker()
 		end
 	end)
 
-	--class color button
-	b = CreateFrame('Button', 'ColorPPClass', ColorPickerFrame, 'UIPanelButtonTemplate')
-	b:SetText(CLASS)
-	F.Reskin(b)
-	b:SetWidth(80)
-	b:SetHeight(22)
-	b:SetPoint("TOP", "ColorPPCopy", "BOTTOMRIGHT", 0, -7)
-
-	b:SetScript('OnClick', function()
-		local color = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]);
-		ColorPickerFrame:SetColorRGB(color.r, color.g, color.b)
-		ColorSwatch:SetColorTexture(color.r, color.g, color.b)
-		if ColorPickerFrame.hasOpacity then
-			OpacitySliderFrame:SetValue(0)
-		end
-	end)
-
 	-- add paste button to the ColorPickerFrame
 	b = CreateFrame("Button", "ColorPPPaste", ColorPickerFrame, "UIPanelButtonTemplate")
 	b:SetText(CALENDAR_PASTE_EVENT)
@@ -249,7 +232,7 @@ function module:EnhanceColorPicker()
 	F.Reskin(b)
 	b:SetWidth(80)
 	b:SetHeight(22)
-	b:SetPoint("TOPLEFT", "ColorPPClass", "BOTTOMLEFT", 0, -7)
+	b:SetPoint("TOP", "ColorPPCopy", "BOTTOMRIGHT", 0, -7)
 	b:Disable()  -- enable when something has been copied
 	b:SetScript("OnHide", function(self)
 		self.colors = nil
