@@ -931,7 +931,7 @@ local function CreateName(self)
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
 		Name:SetJustifyH("RIGHT")
-		Name:SetWidth(100)
+		Name:SetWidth(80)
 	elseif self.unitStyle == "boss" then
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
@@ -940,7 +940,7 @@ local function CreateName(self)
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
-		Name:SetWidth(100)
+		Name:SetWidth(80)
 	end
 end
 
