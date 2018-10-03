@@ -16,7 +16,7 @@ C.media = {
 	["roleIcons"]  = "Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES",
 	["texture"]    = "Interface\\AddOns\\FreeUI\\assets\\statusbar",
 	["bgtex"]	   = "Interface\\AddOns\\FreeUI\\assets\\bgTex",
-	["sparktex"]   = "Interface\\CastingBar\\UI-CastingBar-Spark",
+	["sparktex"]   = "Interface\\AddOns\\FreeUI\\assets\\spark",
 	["pixel"]      = "Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf",
 }
 

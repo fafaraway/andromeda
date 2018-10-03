@@ -98,7 +98,7 @@ function module:ReskinDBM()
 					tbar.styled = true
 
 					tbar.Spark = tbar:CreateTexture(nil, "OVERLAY")
-					tbar.Spark:SetTexture(C.media.sparktex)
+					tbar.Spark:SetTexture('Interface\\CastingBar\\UI-CastingBar-Spark')
 					tbar.Spark:SetBlendMode("ADD")
 					tbar.Spark:SetAlpha(.8)
 					tbar.Spark:SetPoint("TOPLEFT", tbar:GetStatusBarTexture(), "TOPRIGHT", -10, 10)

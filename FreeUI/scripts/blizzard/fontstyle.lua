@@ -77,7 +77,7 @@ function module:FontStyle()
 	SetFont("NumberFont_Outline_Huge",            C.font.header, 30, nil, nil, {0, 0, 0}, 1, -1)
 
 	SetFont("Fancy22Font",                  C.font.header, 22, nil, nil, {0, 0, 0}, 1, -1)
-	SetFont("QuestFont_Shadow_Huge",        C.font.normal, 18, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("QuestFont_Shadow_Huge",        C.font.header, 18, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("QuestFont_Outline_Huge",       C.font.header, 20, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("QuestFont_Super_Huge",         C.font.header, 24, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("QuestFont_Super_Huge_Outline", C.font.header, 24, nil, nil, {0, 0, 0}, 1, -1)
@@ -155,6 +155,9 @@ function module:FontStyle()
 	SetFont("WorldMapTextFont", C.font.header, 40, nil, nil, {0, 0, 0}, 1, -1)
 
 	SetFont("ChatFontNormal", C.font.chat, 14, nil, nil, {0, 0, 0}, 1, -1)
+
+	SetFont("QuestInfoDescriptionText", C.font.normal, 14, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("GossipGreetingText", C.font.normal, 14, nil, nil, {0, 0, 0}, 1, -1)
 
 	-- Text color
 	GameFontBlackMedium:SetTextColor(1, 1, 1)
