@@ -179,7 +179,12 @@ local PostUpdateHealth = function(Health, unit, min, max)
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
 			Health:SetValue(0)
 		end
-		Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+
+		if C.unitframes.gradient then
+			Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r/2, g/2, b/2)
+		else
+			Health:GetStatusBarTexture():SetGradient("VERTICAL", r, g, b, r, g, b)
+		end
 	end
 end
 
@@ -282,7 +287,7 @@ local function CreateCastBar(self)
 
 	local iconFrame = CreateFrame("Frame", nil, cb)
 	iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
-	iconFrame:SetSize(self:GetHeight() + 8, self:GetHeight() + 8)
+	iconFrame:SetSize(self:GetHeight() + 4, self:GetHeight() + 4)
 
 	F.CreateSD(iconFrame)
 

@@ -165,7 +165,11 @@ cast.PostCastStart = function(self, unit)
 		or unit:find("boss%d") or unit:find("arena%d") 
 		or (unit == "player" and not C.unitframes.castbarSeparate) 
 		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframes.castbarSeparate) then
-		self:SetStatusBarColor(.4, .4, .4, .45)
+		if C.unitframes.transMode then
+			self:SetStatusBarColor(.4, .4, .4, .45)
+		else
+			self:SetStatusBarColor(.4, .4, .4, .8)
+		end
 	end
 
 end
