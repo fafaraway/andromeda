@@ -179,6 +179,9 @@ function MainMenuMicroButton_AreAlertsEffectivelyEnabled()
 	return false
 end
 
+function TalentMicroButtonAlert:Show()
+	TalentMicroButtonAlert:Hide();
+end
 
 -- HonorFrame.type can be tainted through UIDropDownMenu
 -- https://www.townlong-yak.com/bugs/afKy4k-HonorFrameLoadTaint
@@ -312,8 +315,19 @@ function module:fasterLooting()
 end
 
 
+-- plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
+local flightMastersWhistle_SpellID1 = 227334;
+local flightMastersWhistle_SpellID2 = 253937;
 
+local f = CreateFrame("frame")
+f:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end);
 
+function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
+	if (unit == "player" and (spellID == flightMastersWhistle_SpellID1 or spellID == flightMastersWhistle_SpellID2)) then
+		PlaySoundFile([[Interface\Addons\FreeUI\assets\sound\blowmywhistle.ogg]])
+	end
+end
+f:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 
 
 
