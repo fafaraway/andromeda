@@ -99,12 +99,8 @@ CHAT_WHISPER_INFORM_GET = "to %s: "
 CHAT_BN_WHISPER_GET = "from %s: "
 CHAT_BN_WHISPER_INFORM_GET = "to %s: "
 
-
-YOU_LOOT_MONEY_GUILD = YOU_LOOT_MONEY
-LOOT_MONEY_SPLIT_GUILD = LOOT_MONEY_SPLIT
-
-
 ACHIEVEMENT_BROADCAST = "%s achieved %s!"
+
 BN_INLINE_TOAST_FRIEND_OFFLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has gone |cffff0000offline|r."
 BN_INLINE_TOAST_FRIEND_ONLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has come |cff00ff00online|r."
 
@@ -124,27 +120,48 @@ FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
 FACTION_STANDING_INCREASED_REFER_PART = "(+%.1f RAF)"
 FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
 
+CURRENCY_GAINED = "+ %s";
+CURRENCY_GAINED_MULTIPLE = "+ %sx%d";
+CURRENCY_GAINED_MULTIPLE_BONUS = "+ %sx%d (Bonus)";
+CURRENCY_LOST_FROM_DEATH = "- %sx%d";
 
-LOOT_ITEM = "%s + %s"
-LOOT_ITEM_BONUS_ROLL = "%s + %s (bonus)"
-LOOT_ITEM_BONUS_ROLL_MULTIPLE = "%s + %sx%d (bonus)"
-LOOT_ITEM_BONUS_ROLL_SELF = "+ %s (bonus)"
-LOOT_ITEM_BONUS_ROLL_SELF_MULTIPLE = "+ %sx%d (bonus)"
-LOOT_ITEM_MULTIPLE = "%s + % sx%d"
-LOOT_ITEM_PUSHED = "%s + %s"
-LOOT_ITEM_PUSHED_MULTIPLE = "%s + %sx%d"
-LOOT_ITEM_SELF = "+ %s"
-LOOT_ITEM_SELF_MULTIPLE = "+ %s x%d"
-LOOT_ITEM_PUSHED_SELF = "+ %s"
-LOOT_ITEM_PUSHED_SELF_MULTIPLE = "+ %s x%d"
-LOOT_MONEY = "|cff00a956+|r |cffffffff%s"
-YOU_LOOT_MONEY = "|cff00a956+|r |cffffffff%s"
-LOOT_MONEY_SPLIT = "|cff00a956+|r |cffffffff%s"
-LOOT_ROLL_ALL_PASSED = "|HlootHistory:%d|h[Loot]|h: All passed on %s"
-LOOT_ROLL_PASSED_AUTO = "%s passed %s (auto)"
-LOOT_ROLL_PASSED_AUTO_FEMALE = "%s passed %s (auto)"
-LOOT_ROLL_PASSED_SELF = "|HlootHistory:%d|h[Loot]|h: passed %s"
-LOOT_ROLL_PASSED_SELF_AUTO = "|HlootHistory:%d|h[Loot]|h: passed %s (auto)"
+LOOT_CURRENCY_REFUND = "+ %sx%d";
+LOOT_DISENCHANT_CREDIT = "- %s : %s (Disenchant)";
+
+LOOT_ITEM = "+ %s : %s";
+
+LOOT_ITEM_BONUS_ROLL = "+ %s : %s (Bonus)";
+LOOT_ITEM_BONUS_ROLL_MULTIPLE = "+ %s : %sx%d (Bonus)";
+LOOT_ITEM_BONUS_ROLL_SELF = "+ %s (Bonus)";
+LOOT_ITEM_BONUS_ROLL_SELF_MULTIPLE = "+ %sx%d (Bonus)";
+
+LOOT_ITEM_CREATED_SELF = "+ %s (Craft)";
+LOOT_ITEM_CREATED_SELF_MULTIPLE = "+ %sx%d (Craft)";
+LOOT_ITEM_CREATED = "+ %s : %s (Craft)";
+LOOT_ITEM_CREATED_MULTIPLE = "+ %s : %sx%d (Craft)";
+
+LOOT_ITEM_MULTIPLE = "+ %s : %sx%d";
+LOOT_ITEM_PUSHED = "+ %s : %s";
+LOOT_ITEM_PUSHED_MULTIPLE = "+ %s : %sx%d";
+LOOT_ITEM_PUSHED_SELF = "+ %s";
+LOOT_ITEM_PUSHED_SELF_MULTIPLE = "+ %sx%d";
+LOOT_ITEM_REFUND = "+ %s";
+LOOT_ITEM_REFUND_MULTIPLE = "+ %sx%d";
+LOOT_ITEM_SELF = "+ %s";
+LOOT_ITEM_SELF_MULTIPLE = "+ %sx%d";
+LOOT_ITEM_WHILE_PLAYER_INELIGIBLE = "+ %s : %s";
+
+GUILD_NEWS_FORMAT4 = "+ %s : %s (Craft)";
+GUILD_NEWS_FORMAT8 = "+ %s : %s";
+
+CREATED_ITEM = "+ %s : %s (Craft)";
+CREATED_ITEM_MULTIPLE = "+ %s : %sx%d (Craft)";
+
+YOU_LOOT_MONEY = "+ %s";
+YOU_LOOT_MONEY_GUILD = "+ %s (%s Guild)";
+
+TRADESKILL_LOG_FIRSTPERSON = "+ %s : %s (Craft)";
+TRADESKILL_LOG_THIRDPERSON = "+ %s : %s (Craft)";
 
 COPPER_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t"
 SILVER_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t"
