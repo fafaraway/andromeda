@@ -316,8 +316,6 @@ C['unitframes'] = {
 	['player'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
 	['player_width'] = 200,
 	['player_height'] = 14,
-	['player_castbar'] = {'CENTER', 'oUF_FreePlayer', 'CENTER', 0, -50},		-- player castbar position
-	['player_castbar_width'] = 200,
 
 	['pet'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},									-- pet unitframe position
 	['pet_width'] = 68,
@@ -327,29 +325,24 @@ C['unitframes'] = {
 	['frameVisibility_player'] = '[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
 	['frameVisibility_pet'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
 
-
-	['target'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 60, 60},					-- target unitframe position
+	['target'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
 	['target_width'] = 220,
 	['target_height'] = 16,
-	['target_castbar'] = {'TOP', 'oUF_FreeTarget', 'BOTTOM', 0, -30},			-- target castbar position
-	['target_castbar_width'] = 220,
 
 	['targettarget'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},							-- target target unitframe position
 	['targettarget_width'] = 80,
 	['targettarget_height'] = 16,
 
-	['focus'] = {'TOPLEFT', 'oUF_FreeTarget', 'BOTTOMLEFT', 0, -100},					-- focus unitframe position
+	['focus'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},					-- focus unitframe position
 	['focus_width'] = 106,
 	['focus_height'] = 16,
-	['focus_castbar'] = {'LEFT', 'oUF_FreeFocus', 'LEFT', 0, -60},				-- focus castbar position
-	['focus_castbar_width'] = 220,
 
 	['focustarget'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},							-- focus target unitframe position
 	['focustarget_width'] = 106,
 	['focustarget_height'] = 16,
 
 	['party'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},			-- party unitframe position
-	['party_width'] = 86,
+	['party_width'] = 90,
 	['party_height'] = 38,
 
 	['raid'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position

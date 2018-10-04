@@ -281,7 +281,7 @@ local function CreateCastBar(self)
 	timer:Hide()
 
 	local iconFrame = CreateFrame("Frame", nil, cb)
-	iconFrame:SetPoint("RIGHT", self, "LEFT", -4, 0)
+	iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
 	iconFrame:SetSize(self:GetHeight() + 8, self:GetHeight() + 8)
 
 	F.CreateSD(iconFrame)
@@ -315,11 +315,10 @@ local function CreateCastBar(self)
 		or (C.unitframes.castbarSeparate and self.unitStyle == "player") then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
-		cb:ClearAllPoints()
-		cb:SetPoint(unpack(C.unitframes.target_castbar))
 
 		name:ClearAllPoints()
 		name:SetPoint("BOTTOM", cb, "TOP", 0, 4)
+
 		if C.unitframes.cbName then
 			name:Show()
 		end
@@ -337,20 +336,24 @@ local function CreateCastBar(self)
 		F.CreateTex(bg)
 	end
 
-	if self.unitStyle == "focus" then
-		cb:SetWidth(self:GetWidth() * 2 + 5)
+	if (self.unitStyle == "player" and C.unitframes.castbarSeparate) then
+		cb:ClearAllPoints()
+		cb:SetPoint('TOP', self, 'BOTTOM', 0, -40)
+	elseif self.unitStyle == "player" then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
+	elseif self.unitStyle == "target" then
+		cb:ClearAllPoints()
+		cb:SetPoint('TOP', self, 'BOTTOM', 0, -40)
+	elseif self.unitStyle == "focus" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
+		cb:SetWidth(self:GetWidth() * 2 + 5)
 		cb:ClearAllPoints()
-		cb:SetPoint(unpack(C.unitframes.focus_castbar))
-	end
-
-	if self.unitStyle == "targettarget" or self.unitStyle == "focustarget" then
+		cb:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -80)
+	elseif self.unitStyle == "targettarget" or self.unitStyle == "focustarget" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
-	elseif self.unitStyle == "target" or (self.unitStyle == "player" and not C.unitframes.castbarSeparate) then
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint("LEFT", cb, "RIGHT", 4, 0)
 	end
 
 
@@ -444,13 +447,13 @@ local function PostCreateIcon(element, button)
 
 	button.count:SetParent(StringParent)
 	button.count:ClearAllPoints()
-	button.count:SetPoint('TOPRIGHT', button, 2, -2)
+	button.count:SetPoint('TOPRIGHT', button, 2, 4)
 	F.SetFS(button.count)
 
 	local Duration = StringParent:CreateFontString(nil, 'OVERLAY')
 	Duration:SetParent(StringParent)
 	Duration:ClearAllPoints()
-	Duration:SetPoint('BOTTOMLEFT', button, 2, -2)
+	Duration:SetPoint('BOTTOMLEFT', button, 2, -4)
 	Duration:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
 	
 	button.Duration = Duration
@@ -575,13 +578,13 @@ end
 local function CreateBuffs(self)
 	local Buffs = CreateFrame("Frame", nil, self)
 	Buffs.initialAnchor = "TOPLEFT"
-	Buffs:SetPoint("TOP", self, "BOTTOM", 0, -4)
+	Buffs:SetPoint("TOP", self, "BOTTOM", 0, -6)
 	Buffs["growth-x"] = "RIGHT"
 	Buffs["growth-y"] = "DOWN"
 	Buffs["spacing-x"] = 4
 	Buffs["spacing-y"] = 0
 
-	Buffs:SetSize(self:GetWidth()-10, 100)
+	Buffs:SetSize(self:GetWidth(), 100)
 	Buffs.size = 28
 
 	Buffs.showStealableBuffs = true
@@ -600,11 +603,18 @@ local function CreateDebuffs(self)
 	Debuffs["spacing-x"] = 4
 	Debuffs["spacing-y"] = 0
 
-	Debuffs:SetSize(124, 100)
+	Debuffs:SetSize(self:GetWidth(), 100)
 	Debuffs.size = 28
 
 	Debuffs.showStealableBuffs = true
 	Debuffs.showDebuffType = true
+
+	if self.unitStyle == "targettarget" or self.unitStyle == "focus" or self.unitStyle == "focustarget" then
+		Debuffs:ClearAllPoints()
+		Debuffs:SetPoint("TOP", self, "BOTTOM", 0, -6)
+		Debuffs.size = 22
+		Debuffs.num = 4
+	end
 
 	self.Debuffs = Debuffs
 	Debuffs.PostCreateIcon = PostCreateIcon
@@ -1025,6 +1035,7 @@ local Shared = function(self, unit, isSingle)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameStrata("BACKGROUND")
+	F.CreateTex(bd)
 	self.bd = bd
 
 	if C.appearance.shadow then
@@ -1342,42 +1353,30 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "targettarget"
 
-		local Health = self.Health
-		local Power = self.Power
-
-		Health:SetHeight(C.unitframes.targettarget_height - C.unitframes.power_height - 1)
-
 		UpdateTOTName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
+		CreateDebuffs(self)
 	end,
 
 	focus = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "focus"
 
-		local Health = self.Health
-		local Power = self.Power
-
-		Health:SetHeight(C.unitframes.focus_height - C.unitframes.power_height - 1)
-
 		CreateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
+		CreateDebuffs(self)
 	end,
 
 	focustarget = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "focustarget"
 
-		local Health = self.Health
-		local Power = self.Power
-
-		Health:SetHeight(C.unitframes.focustarget_height - C.unitframes.power_height - 1)
-
 		UpdateTOFName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
+		CreateDebuffs(self)
 	end,
 
 
