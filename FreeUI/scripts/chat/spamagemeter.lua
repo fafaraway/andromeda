@@ -29,7 +29,7 @@ local firstLines = {
 	"Исцеление:(.*)$",										-- TinyDPS ruRU
 	"^Numeration: (.*) - (.*)$",							-- Numeration
 	"alDamageMeter : (.*)$",								-- alDamageMeter
-	"^Details! Report for (.*)$"							-- Details!
+	"^Details!:(.*)$"							-- Details!
 }
 
 local nextLines = {
