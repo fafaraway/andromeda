@@ -287,11 +287,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		tab:GetNormalTexture():SetAlpha(0)
 
-		local bg = CreateFrame("Frame", nil, tab)
+		local bg = F.CreateBDFrame(tab, .25)
 		bg:SetPoint("TOPLEFT", 6, -7)
 		bg:SetPoint("BOTTOMRIGHT", -6, 7)
-		bg:SetFrameLevel(tab:GetFrameLevel()-1)
-		F.CreateBD(bg, .25)
 		tab.bg = bg
 
 		local hl = tab:GetHighlightTexture()
@@ -318,11 +316,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 				F.ReskinIcon(button.Icon)
 
-				local bg = CreateFrame("Frame", nil, button)
+				local bg = F.CreateBDFrame(button, .25)
 				bg:SetPoint("TOPLEFT", 44, -5)
 				bg:SetPoint("BOTTOMRIGHT", 0, 6)
-				bg:SetFrameLevel(button:GetFrameLevel()-1)
-				F.CreateBD(bg, .25)
 
 				button.SelectedBG:SetColorTexture(r, g, b, .2)
 				button.SelectedBG:ClearAllPoints()
@@ -498,10 +494,9 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	for i = 1, #buttons do
 		local button = buttons[i]
 		button.BG:Hide()
-		local bg = CreateFrame("Frame", nil, button)
+		local bg = F.CreateBDFrame(button, .25)
 		bg:SetPoint("TOPLEFT")
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
-		bg:SetFrameLevel(button:GetFrameLevel() - 1)
 
 		for _, reward in pairs(button.Rewards) do
 			reward:GetRegions():Hide()
@@ -511,8 +506,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			reward:ClearAllPoints()
 			reward:SetPoint("TOPRIGHT", -4, -4)
 		end
-
-		F.CreateBD(bg, .25)
 	end
 
 	for _, tab in pairs({Report.InProgress, Report.Available}) do
@@ -520,9 +513,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		tab.Text:ClearAllPoints()
 		tab.Text:SetPoint("CENTER")
 
-		local bg = CreateFrame("Frame", nil, tab)
-		bg:SetFrameLevel(tab:GetFrameLevel() - 1)
-		F.CreateBD(bg, .25)
+		local bg = F.CreateBDFrame(tab, .25)
 		F.CreateGradient(bg)
 
 		local selectedTex = bg:CreateTexture(nil, "BACKGROUND")
