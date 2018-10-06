@@ -93,9 +93,10 @@ function module:ShowItemLevel()
 	end)
 
 	-- 
-	F.SetFS(_G.CharacterNeckSlot.RankFrame.Label)
-	_G.CharacterNeckSlot.RankFrame.Label:ClearAllPoints()
-	_G.CharacterNeckSlot.RankFrame.Label:SetPoint("TOPLEFT", 0, -4)
+	local RankFrame = CharacterNeckSlot and CharacterNeckSlot.RankFrame
+	if RankFrame then
+		F.SetFS(RankFrame.Label)
+	end
 
 
 	-- ilvl on scrapping machine
@@ -148,6 +149,9 @@ function module:ShowItemLevel()
 			-- CharacterStatsPane.ItemLevelCategory:Show()
 			-- CharacterStatsPane.ItemLevelFrame:Show()
 			CharacterStatsPane.ItemLevelFrame.Value:SetText(itemLevel)
+			CharacterStatsPane.ItemLevelFrame.Value:SetFont('Interface\\AddOns\\FreeUI\\assets\\font\\expresswaysb.ttf', 18)
+			CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0,0,0,1)
+			CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(1, -1)
 			-- CharacterStatsPane.AttributesCategory:SetPoint("TOP", CharacterStatsPane.ItemLevelFrame, "BOTTOM", 0, -10)
 		
 		end
