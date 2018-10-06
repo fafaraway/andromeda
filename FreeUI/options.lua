@@ -51,10 +51,10 @@ elseif GetLocale() == 'ruRU' then
 	}
 else
 	C.font = {
-		['normal'] 		= 'Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf',
+		['normal'] 		= 'Interface\\AddOns\\FreeUI\\assets\\font\\expresswaysb.ttf',
 		['damage'] 		= 'Interface\\AddOns\\FreeUI\\assets\\font\\PEPSI_pl.ttf',
 		['header']		= 'Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf',
-		['chat']		= 'Interface\\AddOns\\FreeUI\\assets\\font\\ExpresswayRg.ttf',
+		['chat']		= 'Interface\\AddOns\\FreeUI\\assets\\font\\expresswaysb.ttf',
 	}
 end
 
