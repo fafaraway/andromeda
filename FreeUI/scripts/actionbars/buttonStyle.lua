@@ -48,7 +48,7 @@ local function updateHotkey(self, actionButtonType)
 		ho:SetWidth(0)
 		ho:SetPoint("TOPLEFT", 1, 0)
 		F.SetFS(ho)
-		ho:SetJustifyH("RIGHT")
+		ho:SetJustifyH("LEFT")
 		ho:SetDrawLayer("OVERLAY", 1)
 		self.styledHotkey = true
 	end

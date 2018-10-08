@@ -156,7 +156,7 @@ cast.PostCastStart = function(self, unit)
 		if self.notInterruptible then
 			self.iconBG:SetVertexColor(1, 0, 0)
 		else
-			self.iconBG:SetVertexColor(1, 1, 1)
+			self.iconBG:SetVertexColor(0, 0, 0)
 
 		end
 	end
