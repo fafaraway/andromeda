@@ -13,6 +13,27 @@ oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
 
 
+local function CreateHeader(self)
+	local hl = self:CreateTexture(nil, "OVERLAY")
+	hl:SetAllPoints()
+	hl:SetTexture("Interface\\PETBATTLES\\PetBattle-SelectedPetGlow")
+	hl:SetTexCoord(0, 1, .5, 1)
+	hl:SetVertexColor(.6, .6, .6)
+	hl:SetBlendMode("ADD")
+	hl:Hide()
+	self.Highlight = hl
+
+	self:RegisterForClicks("AnyUp")
+	self:HookScript("OnEnter", function()
+		UnitFrame_OnEnter(self)
+		self.Highlight:Show()
+	end)
+	self:HookScript("OnLeave", function()
+		UnitFrame_OnLeave(self)
+		self.Highlight:Hide()
+	end)
+end
+
 -- Update selected name colour
 local updateNameColour = function(self, unit)
 	if UnitIsUnit(unit, "target") then
@@ -60,7 +81,7 @@ local updateSelectedBorder = function(self)
 			end
 		end
 	else
-		frame.Name:SetTextColor(1, 1, 1)
+		--frame.Name:SetTextColor(1, 1, 1)
 		frame.bd:SetBackdropBorderColor(0, 0, 0)
 
 		if frame.sd then
@@ -621,15 +642,27 @@ local function CreateDebuffs(self)
 		Debuffs.num = 4
 	end
 
-	self.Debuffs = Debuffs
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
+
+	self.Debuffs = Debuffs
 end
 
 
 -- Portrait
 local function PostUpdatePortrait(element, unit)
 	element:SetDesaturation(1)
+end
+
+local function CreatePortrait(self)
+	if not C.unitframes.portrait then return end
+
+	local Portrait = CreateFrame('PlayerModel', nil, self)
+	Portrait:SetAllPoints(self.Health)
+	Portrait:SetFrameLevel(self.Health:GetFrameLevel() + 2)
+	Portrait:SetAlpha(C.unitframes.portraitAlpha)
+	Portrait.PostUpdate = PostUpdatePortrait
+	self.Portrait = Portrait
 end
 
 
@@ -859,7 +892,7 @@ local function CreateIndicator(self)
 	if self.unitStyle == "group" then
 		RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
 	elseif self.unitStyle == "targettarget" then
-		RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
+		RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
 	elseif self.unitStyle == "focus" then
 		RaidTargetIndicator:SetPoint("RIGHT", self, "LEFT", -3, 0)
 	elseif self.unitStyle == "focustarget" then
@@ -928,17 +961,18 @@ local function CreateName(self)
 	local Name
 
 	if C.appearance.usePixelFont then
-		Name = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+		Name = F.CreateFS(self.Health, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		Name = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
-		Name = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
 	end
 
 	Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
 	Name:SetWordWrap(false)
 	Name:SetJustifyH("CENTER")
 	Name:SetWidth(self:GetWidth())
+	
 	self:Tag(Name, '[name]')
 	self.Name = Name
 
@@ -956,6 +990,33 @@ local function CreateName(self)
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 		Name:SetWidth(80)
+	elseif self.unitStyle == "group" then
+		Name:ClearAllPoints()
+		Name:SetPoint("CENTER", 1, 0)
+		Name:SetJustifyH('CENTER')
+
+		self:Tag(Name, '[dead][offline]')
+
+		if C.unitframes.partyNameAlways then
+			if C.appearance.usePixelFont then
+				Name:SetFont(unpack(C.font.pixel))
+				Name:SetShadowOffset(1, -1)
+			elseif C.client == 'zhCN' or C.client == 'zhTW' then
+				Name:SetFont(C.font.normal, 11)
+				Name:SetShadowOffset(2, -2)
+			else
+				F.SetFS(Name)
+				Name:SetShadowOffset(1, -1)
+			end
+
+			self:Tag(Name, '[free:name]')
+		elseif C.unitframes.partyMissingHealth then
+			self:Tag(Name, '[free:missinghealth]')
+			F.SetFS(Name)
+		else
+			self:Tag(Name, '[dead][offline]')
+			F.SetFS(Name)
+		end
 	end
 end
 
@@ -1031,10 +1092,10 @@ RaidOptionsFrame_UpdatePartyFrames = F.dummy
 
 -- Global
 local Shared = function(self, unit, isSingle)
-	self:SetScript("OnEnter", UnitFrame_OnEnter)
-	self:SetScript("OnLeave", UnitFrame_OnLeave)
+	--self:SetScript("OnEnter", UnitFrame_OnEnter)
+	--self:SetScript("OnLeave", UnitFrame_OnLeave)
 
-	self:RegisterForClicks("AnyUp")
+	--self:RegisterForClicks("AnyUp")
 
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", -1, 1)
@@ -1096,8 +1157,9 @@ local Shared = function(self, unit, isSingle)
 
 	if C.unitframes.transMode then
 		local Healthdef = CreateFrame("StatusBar", nil, self)
-		Healthdef:SetFrameStrata("LOW")
-		Healthdef:SetAllPoints(Health)
+		--Healthdef:SetFrameStrata("LOW")
+		Healthdef:SetFrameLevel(self.Health:GetFrameLevel())
+		Healthdef:SetAllPoints(self.Health)
 		Healthdef:SetStatusBarTexture(C.media.texture)
 		-- Healthdef:GetStatusBarTexture():SetBlendMode("BLEND")
 		Healthdef:SetStatusBarColor(1, 1, 1)
@@ -1155,14 +1217,7 @@ local Shared = function(self, unit, isSingle)
 
 	--[[ Portrait ]]
 
-	if C.unitframes.portrait and (unit == 'player' or unit == 'pet' or unit == 'target' or unit == 'party' or unit == 'vehicle' or unit:find("boss%d")) then
-		local Portrait = CreateFrame('PlayerModel', nil, self)
-		Portrait:SetAllPoints(Health)
-		Portrait:SetFrameLevel(Health:GetFrameLevel() + 2)
-		Portrait:SetAlpha(C.unitframes.portraitAlpha)
-		Portrait.PostUpdate = PostUpdatePortrait
-		self.Portrait = Portrait
-	end
+	
 	
 	-- [[ Heal prediction ]]
 
@@ -1278,6 +1333,9 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "pet"
 
+		CreateHeader(self)
+		CreatePortrait(self)
+
 		local Health = self.Health
 		local Power = self.Power
 
@@ -1292,7 +1350,7 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "player"
 
-		--self.bd.Shadow:SetBackdropBorderColor(1, 0, 0, .65)
+		CreateHeader(self)
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1322,12 +1380,17 @@ local UnitSpecific = {
 
 		CreateCastBar(self)
 
+		CreatePortrait(self)
+
 		FreeUI_LeaveVehicleButton:SetPoint("LEFT", self, "RIGHT", 5, 0)
 	end,
 
 	target = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "target"
+
+		CreateHeader(self)
+		CreatePortrait(self)
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1358,6 +1421,8 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "targettarget"
 
+		CreateHeader(self)
+
 		UpdateTOTName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
@@ -1367,6 +1432,8 @@ local UnitSpecific = {
 	focus = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "focus"
+
+		CreateHeader(self)
 
 		CreateName(self)
 		CreateIndicator(self)
@@ -1378,6 +1445,8 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "focustarget"
 
+		CreateHeader(self)
+
 		UpdateTOFName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
@@ -1388,6 +1457,9 @@ local UnitSpecific = {
 	boss = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "boss"
+
+		CreateHeader(self)
+		CreatePortrait(self)
 
 		local Health = self.Health
 		local Power = self.Power
@@ -1419,6 +1491,8 @@ local UnitSpecific = {
 		Shared(self, ...)
 		self.unitStyle = "arena"
 
+		CreateHeader(self)
+
 		local Health = self.Health
 		local Power = self.Power
 
@@ -1440,43 +1514,19 @@ local UnitSpecific = {
 		CreateBuffs(self)
 		CreateDebuffs(self)
 	end,
-}
 
-do
-	UnitSpecific.party = function(self, ...)
+	party = function(self, ...)
 		Shared(self, ...)
 		self.unitStyle = "group"
+
+		CreateHeader(self)
+		CreatePortrait(self)
 
 		self.disallowVehicleSwap = false
 
 		local Health, Power = self.Health, self.Power
 
-		local Name = F.CreateFS(Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-		Name:SetJustifyH('CENTER')
-		Name:SetPoint("CENTER", 1, 0)
-
-		self.Name = Name
-
-		self:Tag(Name, '[dead][offline]')
-
-		if C.unitframes.partyNameAlways then
-			if C.appearance.usePixelFont then
-				Name:SetFont(unpack(C.font.pixel))
-				Name:SetShadowOffset(1, -1)
-			elseif C.client == 'zhCN' or C.client == 'zhTW' then
-				Name:SetFont(C.font.normal, 11)
-				Name:SetShadowOffset(2, -2)
-			else
-				F.SetFS(Name)
-				Name:SetShadowOffset(1, -1)
-			end
-
-			self:Tag(Name, '[free:name]')
-		elseif C.unitframes.partyMissingHealth then
-			self:Tag(Name, '[free:missinghealth]')
-		else
-			self:Tag(Name, '[dead][offline]')
-		end
+		CreateName(self)
 
 		CreateIndicator(self)
 
@@ -1553,15 +1603,112 @@ do
 
 		CreateSelectedBorder(self)
 
+
+
 		self.Range = {
 			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
 		}
-	end
-end
+	end,
+
+	raid = function(self, ...)
+		Shared(self, ...)
+		self.unitStyle = "group"
+
+		CreateHeader(self)
+
+		self.disallowVehicleSwap = false
+
+		local Health, Power = self.Health, self.Power
+
+		CreateName(self)
+
+		CreateIndicator(self)
+
+
+		local Debuffs = CreateFrame("Frame", nil, self)
+		Debuffs.initialAnchor = "CENTER"
+		Debuffs:SetPoint("BOTTOM", 0, C.unitframes.power_height - 1)
+		Debuffs["growth-x"] = "RIGHT"
+		Debuffs["spacing-x"] = 4
+
+		Debuffs:SetHeight(16)
+		Debuffs:SetWidth(37)
+		Debuffs.num = 2
+		Debuffs.size = 16
+
+		Debuffs.showDebuffType = true
+		Debuffs.showStealableBuffs = true
+		Debuffs.disableCooldown = true
+		Debuffs.disableMouse = true
+
+		self.Debuffs = Debuffs
+
+		
+
+		Debuffs.PostUpdate = function(icons)
+			local vb = icons.visibleDebuffs
+
+			if vb == 2 then
+				Debuffs:SetPoint("BOTTOM", -9, 0)
+			else
+				Debuffs:SetPoint("BOTTOM")
+			end
+		end
+
+		Debuffs.PostCreateIcon = PostCreateIcon
+		Debuffs.PostUpdateIcon = PostUpdateIcon
+		Debuffs.CustomFilter = groupDebuffFilter
+
+
+		local Buffs = CreateFrame("Frame", nil, self)
+		Buffs.initialAnchor = "CENTER"
+		Buffs:SetPoint("TOP", 0, -2)
+		Buffs["growth-x"] = "RIGHT"
+		Buffs["spacing-x"] = 3
+
+		Buffs:SetSize(43, 12)
+		Buffs.num = 3
+		Buffs.size = 12
+
+		Buffs.showStealableBuffs = true
+		Buffs.disableCooldown = true
+		Buffs.disableMouse = true
+
+		self.Buffs = Buffs
+
+
+
+		Buffs.PostUpdate = function(icons)
+			local vb = icons.visibleBuffs
+
+			if vb == 3 then
+				Buffs:SetPoint("TOP", -15, -2)
+			elseif vb == 2 then
+				Buffs:SetPoint("TOP", -7, -2)
+			else
+				Buffs:SetPoint("TOP", 0, -2)
+			end
+		end
+
+		Buffs.PostCreateIcon = PostCreateIcon
+		Buffs.PostUpdateIcon = PostUpdateIcon
+		Buffs.CustomFilter = groupBuffFilter
+
+
+		CreateSelectedBorder(self)
+
+
+
+		self.Range = {
+			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
+		}
+	end,
+}
 
 
 -- Register and activate style
 oUF:RegisterStyle("Free", Shared)
+
 for unit,layout in next, UnitSpecific do
 	oUF:RegisterStyle('Free - ' .. unit:gsub("^%l", string.upper), layout)
 end
@@ -1585,11 +1732,7 @@ local function round(x)
 end
 
 oUF:Factory(function(self)
-	local partyPos, raidPos
-	local player, target, focus, targettarget, focustarget, pet
-
 	player = spawnHelper(self, 'player', unpack(C.unitframes.player))
-
 	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet))
 
 	if C.unitframes.frameVisibility then
@@ -1613,9 +1756,12 @@ oUF:Factory(function(self)
 
 	if C.unitframes.enableArena then
 		for n = 1, 5 do
+
+
 			spawnHelper(self, 'arena' .. n, C.unitframes.arena.a, C.unitframes.arena.b, C.unitframes.arena.c, C.unitframes.arena.x, C.unitframes.arena.y + (100 * n))
 		end
 	end
+
 
 	if not C.unitframes.enableGroup then return end
 
@@ -1638,9 +1784,9 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			self:SetWidth(%d)
 		]]):format(C.unitframes.party_height, C.unitframes.party_width)
-	)
+	):SetPoint(unpack(C.unitframes.party))
 
-	party:SetPoint(unpack(C.unitframes.party))
+	self:SetActiveStyle'Free - Raid'
 
 	local raid = self:SpawnHeader(nil, nil, "raid",
 		'showParty', false,
@@ -1660,86 +1806,15 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			self:SetWidth(%d)
 		]]):format(C.unitframes.raid_height, C.unitframes.raid_width)
-	)
+	):SetPoint(unpack(C.unitframes.raid))
 
-	raid:SetPoint(unpack(C.unitframes.raid))
 
-	--oUF_FreePartyRaid:SetPoint('TOP', target, 'BOTTOM', 0, -20)
 
 	-- 限制团队框体只显示4个队伍20名成员
 	if C.unitframes.limitRaidSize then
 		raid:SetAttribute("groupFilter", "1,2,3,4")
 	end
-	--[[F.AddOptionsCallback("unitframes", "limitRaidSize", function()
-		if C.unitframes.limitRaidSize then
-			raid:SetAttribute("groupFilter", "1,2,3,4")
-		else
-			raid:SetAttribute("groupFilter", "1,2,3,4,5,6,7,8")
-		end
-	end)
 
-
-
-	local mapList = {
-		[30] = true,
-
-	}
-	local instID = select(8, GetInstanceInfo())
-	if mapList[instID] then
-		--raid:SetAttribute("groupFilter", "1,2,3,4")
-		raid:SetAttribute("showRaid", false)
-	end]]
-
-	--[[local raidToParty = CreateFrame("Frame")
-
-	local function togglePartyAndRaid(event)
-		if InCombatLockdown() then
-			raidToParty:RegisterEvent("PLAYER_REGEN_ENABLED")
-			return
-		elseif (event and event == "PLAYER_REGEN_ENABLED") then
-			raidToParty:UnregisterEvent("PLAYER_REGEN_ENABLED")
-		end
-
-		local numGroup = GetNumGroupMembers()
-
-		if numGroup > 5 then
-			party:SetAttribute("showParty", false)
-			party:SetAttribute("showRaid", false)
-			raid:SetAttribute("showRaid", true)
-		else
-			raid:SetAttribute("showRaid", false)
-			-- if in a party, or in a raid where everyone is in one party (subgroup), show party
-			-- if in a raid where people are spread across subgroups, show raid
-			if GetNumSubgroupMembers() + 1 < numGroup then
-				party:SetAttribute("showParty", false)
-				party:SetAttribute("showRaid", true)
-			else
-				party:SetAttribute("showParty", true)
-				party:SetAttribute("showRaid", false)
-			end
-		end
-	end
-
-	raidToParty:SetScript("OnEvent", togglePartyAndRaid)
-
-	local function checkShowRaidFrames()
-		if C.unitframes.showRaidFrames then
-			raidToParty:RegisterEvent("PLAYER_ENTERING_WORLD")
-			raidToParty:RegisterEvent("GROUP_ROSTER_UPDATE")
-
-			togglePartyAndRaid()
-		else
-			raidToParty:UnregisterEvent("PLAYER_ENTERING_WORLD")
-			raidToParty:UnregisterEvent("GROUP_ROSTER_UPDATE")
-
-			party:SetAttribute("showParty", false)
-			party:SetAttribute("showRaid", false)
-			raid:SetAttribute("showRaid", false)
-		end
-	end
-
-	checkShowRaidFrames()
-	F.AddOptionsCallback("unitframes", "showRaidFrames", checkShowRaidFrames)]]
 end)
 
 function module:OnLogin()
