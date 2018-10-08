@@ -203,6 +203,9 @@ C['misc'] = {
 
 	['clickCast'] = true,
 	['fasterLooting'] = true,
+
+	['objectiveTracker_height'] = 1000,
+	['objectiveTracker_width'] = 250,
 }
 
 

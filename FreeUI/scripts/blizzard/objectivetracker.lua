@@ -39,8 +39,8 @@ do
 		if parent ~= mover then
 			ot:ClearAllPoints()
 			ot:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
-			ot:SetHeight(GetScreenHeight() - 400)
-			-- ot:SetWidth()
+			ot:SetHeight(C.misc.objectiveTracker_height)
+			ot:SetWidth(C.misc.objectiveTracker_width)
 		end
 	end)
 
