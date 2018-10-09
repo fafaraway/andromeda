@@ -221,6 +221,16 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 	if Power.Text then
 		Power.Text:SetTextColor(Power:GetStatusBarColor())
 	end
+
+	if C.myClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc then
+		local spec = GetSpecialization() or 0
+		local cp = UnitPower(unit)
+		if spec == 1 then
+			if cp < 40 then
+				Power:SetStatusBarColor(1, 0, 0)
+			end
+		end
+	end
 end
 
 

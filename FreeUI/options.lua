@@ -316,6 +316,8 @@ C['unitframes'] = {
 
 	['focuser'] = true,						-- shift + left click to set focus
 
+	['classMod_havoc'] = true,	 			-- set power bar to red if power below 40(chaos strike)
+
 	['player'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
 	['player_width'] = 200,
 	['player_height'] = 14,
