@@ -150,6 +150,11 @@ C.themes["Blizzard_AuctionUI"] = function()
 	local _, AuctionsItemButtonNameFrame = AuctionsItemButton:GetRegions()
 	AuctionsItemButtonNameFrame:Hide()
 
+	local hl = AuctionsItemButton:GetHighlightTexture()
+	hl:SetColorTexture(1, 1, 1, .25)
+	hl:SetPoint("TOPLEFT", 1, -1)
+	hl:SetPoint("BOTTOMRIGHT", -1, 1)
+
 	F.ReskinClose(AuctionFrameCloseButton, "TOPRIGHT", AuctionFrame, "TOPRIGHT", -4, -14)
 	F.ReskinScroll(BrowseScrollFrameScrollBar)
 	F.ReskinScroll(AuctionsScrollFrameScrollBar)
