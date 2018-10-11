@@ -204,7 +204,7 @@ C['misc'] = {
 	['clickCast'] = true,
 	['fasterLooting'] = true,
 
-	['objectiveTracker_height'] = 1000,
+	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
 }
 
@@ -358,7 +358,7 @@ C['unitframes'] = {
 	['boss_width'] = 166,
 	['boss_height'] = 20,
 
-	['arena'] = {a='RIGHT', b='oUF_FreeTarget', c='LEFT', x=-100, y=180},				-- arena unitframe position
+	['arena'] = {a='LEFT', b='UIParent', c='LEFT', x=100, y=180},				-- arena unitframe position
 	['arena_width'] = 166,
 	['arena_height'] = 16,
 	
