@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("unitframe")
 if not C.unitframes.enable then return end
 
-local parent, ns = ...
+local _, ns = ...
 local oUF = ns.oUF
 local cast = ns.cast
 
@@ -11,7 +11,13 @@ oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
-
+oUF.colors.debuffType = {
+	Curse = {.8, 0, 1},
+	Disease = {.8, .6, 0},
+	Magic = {0, .8, 1},
+	Poison = {0, .8, 0},
+	none = {0, 0, 0}
+}
 
 local function CreateHeader(self)
 	local hl = self:CreateTexture(nil, "OVERLAY")
@@ -37,16 +43,16 @@ end
 -- Update selected name colour
 local updateNameColour = function(self, unit)
 	if UnitIsUnit(unit, "target") then
-		self.Text:SetTextColor(.1, .7, 1)
+		self.Name:SetTextColor(.1, .7, 1)
 	elseif UnitIsDead(unit) then
-		self.Text:SetTextColor(.7, .2, .1)
+		self.Name:SetTextColor(.7, .2, .1)
 	else
-		self.Text:SetTextColor(1, 1, 1)
+		self.Name:SetTextColor(1, 1, 1)
 	end
 end
 
 -- to use on child frame
-local updateSelectedBorder = function(self)
+local updateSelectedBorder = function(self, unit)
 	local frame = self:GetParent()
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
@@ -61,9 +67,9 @@ local updateSelectedBorder = function(self)
 			else
 				frame.bd:SetBackdropBorderColor(1, 1, 1)
 
-				if frame.sd then
-					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
-				end
+				--if frame.sd then
+				--	frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
+				--end
 			end
 		elseif UnitIsDead(frame.unit) then
 			frame.Name:SetTextColor(.7, .2, .1)
@@ -76,12 +82,11 @@ local updateSelectedBorder = function(self)
 			frame.Name:SetTextColor(1, 1, 1)
 			frame.bd:SetBackdropBorderColor(0, 0, 0)
 
-			if frame.sd then
-				frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
-			end
+			--if frame.sd then
+			--	frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
+			--end
 		end
 	else
-		--frame.Name:SetTextColor(1, 1, 1)
 		frame.bd:SetBackdropBorderColor(0, 0, 0)
 
 		if frame.sd then
@@ -95,43 +100,6 @@ local function CreateSelectedBorder(self)
 	select:RegisterEvent("PLAYER_TARGET_CHANGED")
 	select:SetScript("OnEvent", updateSelectedBorder)
 end
-
--- Smooth
-local smoothing = {}
-local function Smooth(self, value)
-	local _, max = self:GetMinMaxValues()
-	if value == self:GetValue() or (self._max and self._max ~= max) then
-		smoothing[self] = nil
-		self:SetValue_(value)
-	else
-		smoothing[self] = value
-	end
-	self._max = max
-end
-
-local function SmoothBar(bar)
-	bar.SetValue_ = bar.SetValue
-	bar.SetValue = Smooth
-end
-
-local smoother, min, max = CreateFrame('Frame'), math.min, math.max
-smoother:SetScript('OnUpdate', function()
-	local rate = GetFramerate()
-	local limit = 30/rate
-	for bar, value in pairs(smoothing) do
-		local cur = bar:GetValue()
-		local new = cur + min((value-cur)/3, max(value-cur, limit))
-		if new ~= new then
-			-- Mad hax to prevent QNAN.
-			new = value
-		end
-		bar:SetValue_(new)
-		if cur == value or abs(new - value) < 2 then
-			bar:SetValue_(value)
-			smoothing[bar] = nil
-		end
-	end
-end)
 
 
 -- Update health
@@ -193,9 +161,9 @@ local PostUpdateHealth = function(Health, unit, min, max)
 			end
 		end
 
-		if self.Text then
-			updateNameColour(self, unit)
-		end
+		--if self.Name then
+		--	updateNameColour(self, unit)
+		--end
 	else
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
 			Health:SetValue(0)
@@ -222,7 +190,7 @@ local PostUpdatePower = function(Power, unit, cur, max, min)
 		Power.Text:SetTextColor(Power:GetStatusBarColor())
 	end
 
-	if C.myClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc then
+	if C.myClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc and self.unitStyle == 'player' then
 		local spec = GetSpecialization() or 0
 		local cp = UnitPower(unit)
 		if spec == 1 then
@@ -266,7 +234,7 @@ local function CreateAltPower(self)
 
 	self:Tag(text, "[altpower]")
 
-	SmoothBar(bar)
+	F.SmoothBar(bar)
 
 	bar:EnableMouse(true)
 
@@ -1132,7 +1100,7 @@ local Shared = function(self, unit, isSingle)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
-	SmoothBar(Health)
+	F.SmoothBar(Health)
 
 	Health:SetPoint("TOP")
 	Health:SetPoint("LEFT")
@@ -1175,7 +1143,7 @@ local Shared = function(self, unit, isSingle)
 		Healthdef:SetStatusBarColor(1, 1, 1)
 
 		Healthdef:SetReverseFill(true)
-		SmoothBar(Healthdef)
+		F.SmoothBar(Healthdef)
 
 		self.Healthdef = Healthdef
 	end
@@ -1187,7 +1155,7 @@ local Shared = function(self, unit, isSingle)
 	Power:SetStatusBarTexture(C.media.texture)
 
 	Power.frequentUpdates = true
-	SmoothBar(Power)
+	F.SmoothBar(Power)
 
 	Power:SetHeight(C.unitframes.power_height)
 
@@ -1612,7 +1580,6 @@ local UnitSpecific = {
 
 
 		CreateSelectedBorder(self)
-
 
 
 		self.Range = {
