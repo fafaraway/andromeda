@@ -43,20 +43,40 @@ end
 -- Update selected name colour
 local updateNameColour = function(self, unit)
 	if UnitIsUnit(unit, "target") then
-		self.Name:SetTextColor(.1, .7, 1)
+		self.Text:SetTextColor(.1, .7, 1)
 	elseif UnitIsDead(unit) then
-		self.Name:SetTextColor(.7, .2, .1)
+		self.Text:SetTextColor(.7, .2, .1)
 	else
-		self.Name:SetTextColor(1, 1, 1)
+		self.Text:SetTextColor(1, 1, 1)
 	end
 end
 
--- to use on child frame
-local updateSelectedBorder = function(self, unit)
+local updateNameColourAlt = function(self)
 	local frame = self:GetParent()
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
-			frame.Name:SetTextColor(.1, .7, 1)
+			frame.Text:SetTextColor(.1, .7, 1)
+		elseif UnitIsDead(frame.unit) then
+			frame.Text:SetTextColor(.7, .2, .1)
+		else
+			frame.Text:SetTextColor(1, 1, 1)
+		end
+	else
+		frame.Text:SetTextColor(1, 1, 1)
+	end
+end
+
+local function NameColour(self)
+	local nc = CreateFrame("Frame", nil, self)
+	nc:RegisterEvent("PLAYER_TARGET_CHANGED")
+	nc:SetScript("OnEvent", updateNameColourAlt)
+end
+
+
+local updateBorderColour = function(self)
+	local frame = self:GetParent()
+	if frame.unit then
+		if UnitIsUnit(frame.unit, "target") then
 
 			if frame.unitStyle == "boss" then
 				frame.bd:SetBackdropBorderColor(1, 1, 1)
@@ -67,24 +87,16 @@ local updateSelectedBorder = function(self, unit)
 			else
 				frame.bd:SetBackdropBorderColor(1, 1, 1)
 
-				--if frame.sd then
-				--	frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
-				--end
+				if frame.sd then
+					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
+				end
 			end
-		elseif UnitIsDead(frame.unit) then
-			frame.Name:SetTextColor(.7, .2, .1)
+		else
 			frame.bd:SetBackdropBorderColor(0, 0, 0)
 
 			if frame.sd then
 				frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
 			end
-		else
-			frame.Name:SetTextColor(1, 1, 1)
-			frame.bd:SetBackdropBorderColor(0, 0, 0)
-
-			--if frame.sd then
-			--	frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
-			--end
 		end
 	else
 		frame.bd:SetBackdropBorderColor(0, 0, 0)
@@ -95,10 +107,10 @@ local updateSelectedBorder = function(self, unit)
 	end
 end
 
-local function CreateSelectedBorder(self)
-	local select = CreateFrame("Frame", nil, self)
-	select:RegisterEvent("PLAYER_TARGET_CHANGED")
-	select:SetScript("OnEvent", updateSelectedBorder)
+local function BorderColour(self)
+	local bc = CreateFrame("Frame", nil, self)
+	bc:RegisterEvent("PLAYER_TARGET_CHANGED")
+	bc:SetScript("OnEvent", updateBorderColour)
 end
 
 
@@ -161,9 +173,9 @@ local PostUpdateHealth = function(Health, unit, min, max)
 			end
 		end
 
-		--if self.Name then
-		--	updateNameColour(self, unit)
-		--end
+		if self.Text then
+			updateNameColour(self, unit)
+		end
 	else
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
 			Health:SetValue(0)
@@ -939,11 +951,11 @@ local function CreateName(self)
 	local Name
 
 	if C.appearance.usePixelFont then
-		Name = F.CreateFS(self.Health, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
+		Name = F.CreateFS(self.Health, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], nil, {0, 0, 0}, 1, -1)
 	elseif C.client == 'zhCN' or C.client == 'zhTW' then
-		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 	else
-		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 	end
 
 	Name:SetPoint("BOTTOM", self, "TOP", 0, 3)
@@ -963,38 +975,67 @@ local function CreateName(self)
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
 		Name:SetJustifyH("LEFT")
+		Name:SetWidth(100)
 	elseif self.unitStyle == "arena" then
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 		Name:SetWidth(80)
-	elseif self.unitStyle == "group" then
-		Name:ClearAllPoints()
-		Name:SetPoint("CENTER", 1, 0)
-		Name:SetJustifyH('CENTER')
+	--elseif self.unitStyle == "group" then
+	--	Name:ClearAllPoints()
+	--	Name:SetPoint("CENTER", 1, 0)
+	--	Name:SetJustifyH('CENTER')
 
-		self:Tag(Name, '[dead][offline]')
+	--	self:Tag(Name, '[dead][offline]')
 
-		if C.unitframes.partyNameAlways then
-			if C.appearance.usePixelFont then
-				Name:SetFont(unpack(C.font.pixel))
-				Name:SetShadowOffset(1, -1)
-			elseif C.client == 'zhCN' or C.client == 'zhTW' then
-				Name:SetFont(C.font.normal, 11)
-				Name:SetShadowOffset(2, -2)
-			else
-				F.SetFS(Name)
-				Name:SetShadowOffset(1, -1)
-			end
+	--	if C.unitframes.partyNameAlways then
+	--		if C.appearance.usePixelFont then
+	--			Name:SetFont(unpack(C.font.pixel))
+	--			Name:SetShadowOffset(1, -1)
+	--		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	--			Name:SetFont(C.font.normal, 11)
+	--			Name:SetShadowOffset(2, -2)
+	--		else
+	--			F.SetFS(Name)
+	--			Name:SetShadowOffset(1, -1)
+	--		end
 
-			self:Tag(Name, '[free:name]')
-		elseif C.unitframes.partyMissingHealth then
-			self:Tag(Name, '[free:missinghealth]')
-			F.SetFS(Name)
+	--		self:Tag(Name, '[free:name]')
+	--	elseif C.unitframes.partyMissingHealth then
+	--		self:Tag(Name, '[free:missinghealth]')
+	--		F.SetFS(Name)
+	--	else
+	--		self:Tag(Name, '[dead][offline]')
+	--		F.SetFS(Name)
+	--	end
+	end
+end
+
+local function CreatePartyName(self)
+	local Text = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
+	Text:SetPoint("CENTER", 1, 0)
+	Text:SetJustifyH("CENTER")
+	self.Text = Text
+
+	if C.unitframes.partyNameAlways then
+		if C.appearance.usePixelFont then
+			Text:SetFont(unpack(C.font.pixel))
+			Text:SetShadowOffset(1, -1)
+		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+			Text:SetFont(C.font.normal, 11)
+			Text:SetShadowOffset(2, -2)
 		else
-			self:Tag(Name, '[dead][offline]')
 			F.SetFS(Name)
+			Text:SetShadowOffset(1, -1)
 		end
+
+		self:Tag(Text, '[free:name]')
+	elseif C.unitframes.partyMissingHealth then
+		self:Tag(Text, '[free:missinghealth]')
+		F.SetFS(Text)
+	else
+		self:Tag(Text, '[dead][offline]')
+		F.SetFS(Text)
 	end
 end
 
@@ -1060,6 +1101,38 @@ local function UpdateTOFName(self)
 			ft:SetTextColor(1, 1, 1)
 		end
 	end)
+end
+
+
+local function CreateCounterBar(self)
+	local CounterBar = CreateFrame("StatusBar", nil, self)
+	CounterBar:SetWidth(200)
+	CounterBar:SetHeight(16)
+	CounterBar:SetStatusBarTexture(C.media.texture)
+	CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
+
+	local cbd = CreateFrame("Frame", nil, CounterBar)
+	cbd:SetPoint("TOPLEFT", -1, 1)
+	cbd:SetPoint("BOTTOMRIGHT", 1, -1)
+	cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
+	F.CreateBD(cbd, .4)
+	F.CreateSD(cbd)
+
+	CounterBar.Text = F.CreateFS(CounterBar, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	CounterBar.Text:SetPoint("CENTER")
+
+	local r, g, b
+	local max
+
+	CounterBar:SetScript("OnValueChanged", function(_, value)
+		_, max = CounterBar:GetMinMaxValues()
+		r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+		CounterBar:SetStatusBarColor(r, g, b)
+
+		CounterBar.Text:SetText(floor(value))
+	end)
+
+	self.CounterBar = CounterBar
 end
 
 
@@ -1193,8 +1266,6 @@ local Shared = function(self, unit, isSingle)
 
 	Power.PostUpdate = PostUpdatePower
 
-	--[[ Portrait ]]
-
 	
 	
 	-- [[ Heal prediction ]]
@@ -1228,39 +1299,6 @@ local Shared = function(self, unit, isSingle)
 
 		self.HealPrediction["absorbBar"] = absorbBar
 		self.HealPrediction["overAbsorbGlow"] = overAbsorbGlow
-	end
-
-	-- [[ Counter bar ]]
-
-	if unit == "player" or unit == "pet" then
-		local CounterBar = CreateFrame("StatusBar", nil, self)
-		CounterBar:SetWidth(200)
-		CounterBar:SetHeight(16)
-		CounterBar:SetStatusBarTexture(C.media.texture)
-		CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
-
-		local cbd = CreateFrame("Frame", nil, CounterBar)
-		cbd:SetPoint("TOPLEFT", -1, 1)
-		cbd:SetPoint("BOTTOMRIGHT", 1, -1)
-		cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
-		F.CreateBD(cbd, .4)
-		F.CreateSD(cbd)
-
-		CounterBar.Text = F.CreateFS(CounterBar, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-		CounterBar.Text:SetPoint("CENTER")
-
-		local r, g, b
-		local max
-
-		CounterBar:SetScript("OnValueChanged", function(_, value)
-			_, max = CounterBar:GetMinMaxValues()
-			r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-			CounterBar:SetStatusBarColor(r, g, b)
-
-			CounterBar.Text:SetText(floor(value))
-		end)
-
-		self.CounterBar = CounterBar
 	end
 
 
@@ -1322,6 +1360,7 @@ local UnitSpecific = {
 		CreateIndicator(self)
 		CreateCastBar(self)
 		CreateAuras(self)
+		CreateCounterBar(self)
 	end,
 
 	player = function(self, ...)
@@ -1359,6 +1398,7 @@ local UnitSpecific = {
 		CreateCastBar(self)
 
 		CreatePortrait(self)
+		CreateCounterBar(self)
 
 		FreeUI_LeaveVehicleButton:SetPoint("LEFT", self, "RIGHT", 5, 0)
 	end,
@@ -1459,7 +1499,9 @@ local UnitSpecific = {
 		CreateIndicator(self)
 		CreateCastBar(self)
 		CreateAuras(self)
-		CreateSelectedBorder(self)
+		--CreateSelectedBorder(self)
+
+		BorderColour(self)
 		
 	end,
 
@@ -1504,7 +1546,7 @@ local UnitSpecific = {
 
 		local Health, Power = self.Health, self.Power
 
-		CreateName(self)
+		CreatePartyName(self)
 
 		CreateIndicator(self)
 
@@ -1579,8 +1621,8 @@ local UnitSpecific = {
 		Buffs.CustomFilter = groupBuffFilter
 
 
-		CreateSelectedBorder(self)
-
+		NameColour(self)
+		BorderColour(self)
 
 		self.Range = {
 			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
@@ -1597,7 +1639,7 @@ local UnitSpecific = {
 
 		local Health, Power = self.Health, self.Power
 
-		CreateName(self)
+		CreatePartyName(self)
 
 		CreateIndicator(self)
 
@@ -1672,7 +1714,8 @@ local UnitSpecific = {
 		Buffs.CustomFilter = groupBuffFilter
 
 
-		CreateSelectedBorder(self)
+		NameColour(self)
+		BorderColour(self)
 
 
 
