@@ -77,33 +77,14 @@ local updateBorderColour = function(self)
 	local frame = self:GetParent()
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
-
-			if frame.unitStyle == "boss" then
-				frame.bd:SetBackdropBorderColor(1, 1, 1)
-
-				if frame.sd then
-					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
-				end
-			else
-				frame.bd:SetBackdropBorderColor(1, 1, 1)
-
-				if frame.sd then
-					frame.sd:SetBackdropBorderColor(1, 1, 1, .45)
-				end
-			end
+			frame.bd:SetBackdropBorderColor(1, 1, 1)
+		elseif UnitIsDead(frame.unit) then
+			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		else
 			frame.bd:SetBackdropBorderColor(0, 0, 0)
-
-			if frame.sd then
-				frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
-			end
 		end
 	else
 		frame.bd:SetBackdropBorderColor(0, 0, 0)
-
-		if frame.sd then
-			frame.sd:SetBackdropBorderColor(0, 0, 0, .35)
-		end
 	end
 end
 
