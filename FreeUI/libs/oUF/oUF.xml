@@ -42,6 +42,7 @@
 	<Script file='plugins\spellrange.lua' />
 	<Script file='plugins\castbar.lua' />
 	<Script file='plugins\counterbar.lua' />
+	<Script file='plugins\dispellable.lua' />
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate">
