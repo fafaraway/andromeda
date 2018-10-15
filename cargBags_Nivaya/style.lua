@@ -757,14 +757,12 @@ function MyContainer:OnCreate(name, settings)
 		-- self.hint:SetText("Ctrl + Alt + Right Click an item to assign category")
 		-- self.hintShown = true
 		
-		-- The money display
-		local money = self:SpawnPlugin("TagDisplay", "[money]", self)
-		money:SetPoint("TOPRIGHT", self, -25.5, -2.5)
-
-		F.SetFS(money)
-
-		money:SetJustifyH("RIGHT")
-		money:SetShadowColor(0, 0, 0, 0)
+		-- The money/currencies display
+		local tagDisplay = self:SpawnPlugin("TagDisplay", "[currencies]  [money]", self)
+		tagDisplay:SetPoint("TOPRIGHT", self, -25, -3)
+		F.SetFS(tagDisplay)
+		tagDisplay:SetJustifyH("RIGHT")
+		tagDisplay:SetShadowColor(0, 0, 0, 0)
 	end
 	
 	self:SetScale(cBnivCfg.scale)
