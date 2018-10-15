@@ -301,7 +301,8 @@ C['unitframes'] = {
 
 	['classPower'] = true,
 
-	['absorb'] = true, 						-- absorb bar/over absorb glow
+	['healthPrediction'] = false, 			-- incoming heals and heal/damage absorbs
+	['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
 	['castbar'] = true,
 		['castbarSeparate'] = false,
 
@@ -354,7 +355,7 @@ C['unitframes'] = {
 	['raid_width'] = 58,
 	['raid_height'] = 32,
 
-	['boss'] = {a='LEFT', b='oUF_FreePlayer', c='RIGHT', x=400, y=400},			-- boss unitframe position
+	['boss'] = {a='LEFT', b='oUF_FreePlayer', c='RIGHT', x=400, y=240},			-- boss unitframe position
 	['boss_width'] = 166,
 	['boss_height'] = 20,
 
