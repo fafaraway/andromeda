@@ -3,5 +3,6 @@
 	<Script file="CallbackHandler-1.0.lua"/>
 	<Script file="LibSharedMedia-3.0.lua"/>
 	<Script file="LibItemGem.lua"/>
+	<Include file="LibPlayerSpells\lib.xml"/>
 	<Include file="oUF\oUF.xml"/>
 </Ui>
