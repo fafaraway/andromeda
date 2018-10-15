@@ -292,7 +292,7 @@ C['unitframes'] = {
 		['healthClassColor'] = true,
 		['powerTypeColor'] = true,
 
-	['gradient'] = false,					-- gradient mode
+	['gradient'] = true,					-- gradient mode
 
 	['portrait'] = true,					-- enable portrait on player/target frame
 		['portraitAlpha'] = .1,
