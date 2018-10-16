@@ -4,7 +4,7 @@ local F, C = unpack(select(2, ...))
 local oUF = ns.oUF or oUF
 local module = F:GetModule("unitframe")
 
-function module:Focuser()
+function module:focuser()
 	if not C.unitframes.focuser then return end
 
 	local modifier = "shift" -- shift, alt or ctrl

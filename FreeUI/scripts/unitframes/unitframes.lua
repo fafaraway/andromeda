@@ -457,6 +457,8 @@ end
 
 -- Create cast bar
 local function CreateCastBar(self)
+	if (not C.unitframes.castbar) then return end
+	
 	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.unitStyle, self)
 	cb:SetHeight(C.unitframes.cbHeight)
 	cb:SetWidth(self:GetWidth())
@@ -528,7 +530,7 @@ local function CreateCastBar(self)
 	end
 
 	if self.unitStyle == "target" or self.unitStyle == "focus"
-		or (C.unitframes.castbarSeparate and self.unitStyle == "player") then
+		or (C.unitframes.cbSeparate and self.unitStyle == "player") then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("RIGHT", cb, "LEFT", -4, 0)
 
@@ -552,7 +554,7 @@ local function CreateCastBar(self)
 		F.CreateTex(bg)
 	end
 
-	if (self.unitStyle == "player" and C.unitframes.castbarSeparate) then
+	if (self.unitStyle == "player" and C.unitframes.cbSeparate) then
 		cb:ClearAllPoints()
 		cb:SetPoint('TOP', self, 'BOTTOM', 0, -40)
 	elseif self.unitStyle == "player" then
@@ -773,7 +775,7 @@ local function CreateAuras(self)
 		Auras.size = 28
 		Auras:SetSize(self:GetWidth(), 100)
 
-		if C.unitframes.castbyPlayer then
+		if C.unitframes.debuffbyPlayer then
 			Auras.CustomFilter = FilterTargetDebuffs
 		end
 	elseif self.unitStyle == "boss" then
@@ -1293,6 +1295,8 @@ local function UpdateThreat(self, event, unit)
 end
 
 function CreateThreatIndicator(self)
+	if (not C.unitframes.threat) then return end
+
 	local threat = {}
 	threat.IsObjectType = function() end
 	threat.Override = UpdateThreat
@@ -1352,9 +1356,11 @@ end
 
 -- spell range
 local function spellRange(self)
+	if (not C.unitframes.spellRange) then return end
+
 	self.SpellRange = {
 		insideAlpha = 1,
-		outsideAlpha = C.unitframes.outRangeAlpha
+		outsideAlpha = C.unitframes.spellRangeAlpha
 	}
 end
 
@@ -1602,7 +1608,7 @@ local UnitSpecific = {
 		CreateDispellable(self, unit)
 
 		self.Range = {
-			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
+			insideAlpha = 1, outsideAlpha = C.unitframes.spellRangeAlpha,
 		}
 	end,
 
@@ -1694,7 +1700,7 @@ local UnitSpecific = {
 
 
 		self.Range = {
-			insideAlpha = 1, outsideAlpha = C.unitframes.outRangeAlpha,
+			insideAlpha = 1, outsideAlpha = C.unitframes.spellRangeAlpha,
 		}
 	end,
 }
@@ -1724,33 +1730,29 @@ local function round(x)
 end
 
 oUF:Factory(function(self)
-	player = spawnHelper(self, 'player', unpack(C.unitframes.player))
-	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet))
+	player = spawnHelper(self, 'player', unpack(C.unitframes.player_pos))
+	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet_pos))
 
-	if C.unitframes.frameVisibility then
+	if C.unitframes.useFrameVisibility then
 		player:Disable()
-		player.frameVisibility = C.unitframes.frameVisibility_player
-		RegisterStateDriver(player, "visibility", C.unitframes.frameVisibility_player)
+		RegisterStateDriver(player, 'visibility', '[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide')
 
 		pet:Disable()
-		pet.frameVisibility = C.unitframes.frameVisibility_pet
-		RegisterStateDriver(pet, "visibility", C.unitframes.frameVisibility_pet)
+		RegisterStateDriver(pet, 'visibility', '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show')
 	end
 
-	target = spawnHelper(self, 'target', unpack(C.unitframes.target))
-	targettarget = spawnHelper(self, 'targettarget', unpack(C.unitframes.targettarget))
-	focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus))
-	focustarget = spawnHelper(self, 'focustarget', unpack(C.unitframes.focustarget))
+	target = spawnHelper(self, 'target', unpack(C.unitframes.target_pos))
+	targettarget = spawnHelper(self, 'targettarget', unpack(C.unitframes.targettarget_pos))
+	focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus_pos))
+	focustarget = spawnHelper(self, 'focustarget', unpack(C.unitframes.focustarget_pos))
 
 	for n = 1, MAX_BOSS_FRAMES do
-		spawnHelper(self, 'boss' .. n, C.unitframes.boss.a, C.unitframes.boss.b, C.unitframes.boss.c, C.unitframes.boss.x, C.unitframes.boss.y + (80 * n))
+		spawnHelper(self, 'boss' .. n, C.unitframes.boss_pos[1], C.unitframes.boss_pos[2], C.unitframes.boss_pos[3], C.unitframes.boss_pos[4], C.unitframes.boss_pos[5] + (80 * n))
 	end
 
 	if C.unitframes.enableArena then
 		for n = 1, 5 do
-
-
-			spawnHelper(self, 'arena' .. n, C.unitframes.arena.a, C.unitframes.arena.b, C.unitframes.arena.c, C.unitframes.arena.x, C.unitframes.arena.y + (100 * n))
+			spawnHelper(self, 'arena' .. n, C.unitframes.arena_pos[1], C.unitframes.arena_pos[2], C.unitframes.arena_pos[3], C.unitframes.arena_pos[4], C.unitframes.arena_pos[5] + (100 * n))
 		end
 	end
 
@@ -1776,7 +1778,7 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			self:SetWidth(%d)
 		]]):format(C.unitframes.party_height, C.unitframes.party_width)
-	):SetPoint(unpack(C.unitframes.party))
+	):SetPoint(unpack(C.unitframes.party_pos))
 
 	self:SetActiveStyle'Free - Raid'
 
@@ -1798,7 +1800,7 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			self:SetWidth(%d)
 		]]):format(C.unitframes.raid_height, C.unitframes.raid_width)
-	):SetPoint(unpack(C.unitframes.raid))
+	):SetPoint(unpack(C.unitframes.raid_pos))
 
 
 
@@ -1810,5 +1812,6 @@ oUF:Factory(function(self)
 end)
 
 function module:OnLogin()
-	self:Focuser()
+	self:focuser()
+	self:ufsounds()
 end

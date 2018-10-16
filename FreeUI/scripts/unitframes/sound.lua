@@ -1,11 +1,10 @@
---[[
-	Shadow, Mal'Ganis (US)
-]]
+local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("unitframe")
 
-local Sounds = select(2, ...)
+local ufsounds = select(2, ...)
 
 -- Focus sounds
-function Sounds:PLAYER_FOCUS_CHANGED()
+function ufsounds:PLAYER_FOCUS_CHANGED()
 	if( UnitExists("focus") ) then
 		if( UnitIsEnemy("focus", "player") ) then
 			PlaySound("873")
@@ -20,7 +19,7 @@ function Sounds:PLAYER_FOCUS_CHANGED()
 end
 
 -- Target sounds
-function Sounds:PLAYER_TARGET_CHANGED()
+function ufsounds:PLAYER_TARGET_CHANGED()
 	if( UnitExists("target") ) then
 		if( UnitIsEnemy("target", "player") ) then
 			PlaySound("873")
@@ -36,7 +35,7 @@ end
 
 -- PVP flag sounds
 local announcedPVP
-function Sounds:UNIT_FACTION(unit, ...)
+function ufsounds:UNIT_FACTION(unit, ...)
 	if( unit ~= "player" ) then return end
 
 	if( UnitIsPVPFreeForAll("player") or UnitIsPVP("player") ) then
@@ -49,11 +48,12 @@ function Sounds:UNIT_FACTION(unit, ...)
 	end
 end
 
-
-local frame = CreateFrame("Frame")
-frame:RegisterEvent("PLAYER_FOCUS_CHANGED")
-frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-frame:RegisterEvent("UNIT_FACTION")
-frame:SetScript("OnEvent", function(self, event, ...)
-	Sounds[event](Sounds, ...)
-end)
+function module:ufsounds()
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("PLAYER_FOCUS_CHANGED")
+	f:RegisterEvent("PLAYER_TARGET_CHANGED")
+	f:RegisterEvent("UNIT_FACTION")
+	f:SetScript("OnEvent", function(self, event, ...)
+		ufsounds[event](ufsounds, ...)
+	end)
+end

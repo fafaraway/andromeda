@@ -276,7 +276,7 @@ C['chat'] = {
 	['keyWordMatch'] = 1,
 	['blockAddonAlert'] = true,
 	['symbols'] = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '-'},
-	['filterList'] = '艾尔文森林美食协会 墨雪 夙愿 柳岩客栈 黄金梅利 新公会 豪门夜宴 猎户星座 星空之下 小号的天堂 守護之魂 爱与家庭 曙乂光 迪奥布斯 星辉 孤城 荣丶耀 众神之颠 招人 招收 收人 主收',
+	['filterList'] = '',	-- blacklist keywords
 	['addonBlockList'] = {
 		'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
 		'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', 'wowcdk', '进度:', '属性通报', 'wowcn%.vip'
@@ -297,84 +297,85 @@ C['unitframes'] = {
 	['portrait'] = true,					-- enable portrait on player/target frame
 		['portraitAlpha'] = .1,
 
-	['outRangeAlpha'] = .4,
+	['spellRange'] = true,					-- spell range support for target/focus/boss
+		['spellRangeAlpha'] = .4,
 
-	['classPower'] = true,
-
-	['healthPrediction'] = false, 			-- incoming heals and heal/damage absorbs
-	['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
-	['castbar'] = true,
-		['castbarSeparate'] = false,
-
-	['enableGroup'] = true,					-- enable party/raid frames
-		['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
-		['showRaidFrames'] = true, 				-- show the raid frames
-		['partyNameAlways'] = false,			-- show name on party/raid frames
-		['partyMissingHealth'] = false,			-- show missing health
-	['enableArena'] = true,					-- enable arena/flag carrier frames
-
-	['castbyPlayer'] = true,				-- only show target debuffs casted by player
-
-	['focuser'] = true,						-- shift + left click to set focus
+	['classPower'] = true,					-- player's class resources (like Chi Orbs or Holy Power) and combo points
+		['classPower_height'] = 2,
 
 	['classMod_havoc'] = true,	 			-- set power bar to red if power below 40(chaos strike)
 
-	['player'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
+	['threat'] = true,						-- threat indicator for party/raid frames
+	['healthPrediction'] = false, 			-- incoming heals and heal/damage absorbs
+	['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
+	
+	['castbar'] = true,						-- enable cast bar
+		['cbSeparate'] = false,				-- true for a separate player cast bar
+		['cbCastingColor'] = {77/255, 183/255, 219/255},
+		['cbChannelingColor'] = {77/255, 183/255, 219/255},
+		['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
+		['cbCompleteColor'] = {63/255, 161/255, 124/255},
+		['cbFailColor'] = {187/255, 99/255, 110/255},
+		['cbHeight'] = 14,
+		['cbName'] = false,
+		['cbTimer'] = false,
+
+	['enableGroup'] = true,					-- enable party/raid frames
+		['showRaidFrames'] = true, 				-- show the raid frames
+		['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
+		['partyNameAlways'] = false,			-- show name on party/raid frames
+		['partyMissingHealth'] = false,			-- show missing health on party/raid frames
+	['enableArena'] = true,					-- enable arena/flag carrier frames
+
+	['debuffbyPlayer'] = true,				-- only show target debuffs casted by player
+
+	['focuser'] = true,						-- shift + left click on unitframes/models/nameplates to set focus
+
+	['player_pos'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
+	['player_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -380},				-- player unitframe position for healer layout(WIP)
 	['player_width'] = 200,
 	['player_height'] = 14,
 
-	['pet'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},									-- pet unitframe position
+	['pet_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},						-- pet unitframe position
 	['pet_width'] = 68,
 	['pet_height'] = 14,
 
-	['frameVisibility'] = false,
-	['frameVisibility_player'] = '[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
-	['frameVisibility_pet'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
+	['useFrameVisibility'] = false,													-- hide palyer/pet unitframes for defualt
 
-	['target'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
+	['target_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
 	['target_width'] = 220,
 	['target_height'] = 16,
 
-	['targettarget'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},							-- target target unitframe position
+	['targettarget_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},					-- target target unitframe position
 	['targettarget_width'] = 80,
 	['targettarget_height'] = 16,
 
-	['focus'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},					-- focus unitframe position
+	['focus_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},					-- focus unitframe position
 	['focus_width'] = 106,
 	['focus_height'] = 16,
 
-	['focustarget'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},							-- focus target unitframe position
+	['focustarget_pos'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},					-- focus target unitframe position
 	['focustarget_width'] = 106,
 	['focustarget_height'] = 16,
 
-	['party'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},			-- party unitframe position
+	['party_pos'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},		-- party unitframe position
 	['party_width'] = 90,
 	['party_height'] = 38,
 
-	['raid'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
+	['raid_pos'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
 	['raid_width'] = 58,
 	['raid_height'] = 32,
 
-	['boss'] = {a='LEFT', b='oUF_FreePlayer', c='RIGHT', x=400, y=240},			-- boss unitframe position
+	['boss_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 120, 160},					-- boss unitframe position
 	['boss_width'] = 166,
 	['boss_height'] = 20,
 
-	['arena'] = {a='LEFT', b='UIParent', c='LEFT', x=100, y=180},				-- arena unitframe position
+	['arena_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -400, 249},					-- arena unitframe position
 	['arena_width'] = 166,
 	['arena_height'] = 16,
 	
-	['cbCastingColor'] = {77/255, 183/255, 219/255},
-	['cbChannelingColor'] = {77/255, 183/255, 219/255},
-	['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
-	['cbCompleteColor'] = {63/255, 161/255, 124/255},
-	['cbFailColor'] = {187/255, 99/255, 110/255},
-	['cbHeight'] = 14,
-	['cbName'] = false,
-	['cbTimer'] = false,
-
 	['power_height'] = 2,
 	['altpower_height'] = 2,
-	['classPower_height'] = 2,
 }
 
 
