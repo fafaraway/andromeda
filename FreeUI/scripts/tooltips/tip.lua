@@ -444,6 +444,7 @@ local function addonStyled(_, addon)
 			ReputationParagonTooltip,
 			QuestScrollFrame.WarCampaignTooltip,
 			NamePlateTooltip,
+			LibDBIconTooltip,
 		}
 		for _, f in pairs(tooltips) do
 			if f then
