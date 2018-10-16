@@ -135,6 +135,8 @@ local PostUpdateHealth = function(Health, unit, min, max)
 
 	if tapped or offline then
 		r, g, b = .6, .6, .6
+	elseif UnitIsDead(unit) then
+		r, g, b = 1, 0, 0
 	elseif unit == "pet" then
 		local _, class = UnitClass("player")
 		r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
@@ -176,6 +178,10 @@ local PostUpdateHealth = function(Health, unit, min, max)
 				self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
 			else
 				self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .6, .6, .6, .6)
+			end
+		elseif UnitIsDead(unit) or UnitIsGhost(unit) then
+			if C.unitframes.gradient then
+				self.gradient:SetGradientAlpha("VERTICAL", .1, .1, .1, 1, .1, .1, .1, 1)
 			end
 		else
 			if C.unitframes.gradient then
@@ -311,12 +317,12 @@ local function CreateHealthText(self)
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 	elseif self.unitStyle == "boss" then
 		HealthPoints:ClearAllPoints()
-		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 4)
+		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
 		HealthPoints:SetJustifyH('RIGHT')
 		self:Tag(HealthPoints, '[dead][free:bosshealth]')
 	elseif self.unitStyle == "arena" then
 		HealthPoints:ClearAllPoints()
-		HealthPoints:SetPoint("RIGHT", self, "TOPRIGHT", 0, 4)
+		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
 		HealthPoints:SetJustifyH('RIGHT')
 		self:Tag(HealthPoints, '[dead][offline][free:health]')
 	end
@@ -458,7 +464,7 @@ end
 -- Create cast bar
 local function CreateCastBar(self)
 	if (not C.unitframes.castbar) then return end
-	
+
 	local cb = CreateFrame("StatusBar", "oUF_Castbar"..self.unitStyle, self)
 	cb:SetHeight(C.unitframes.cbHeight)
 	cb:SetWidth(self:GetWidth())
@@ -651,6 +657,7 @@ local function PostCreateIcon(element, button)
 	button.cd:SetReverse(true)
 	button.icon:SetDrawLayer('ARTWORK')
 	button:SetFrameLevel(element:GetFrameLevel() + 4)
+	button.icon:SetTexCoord(.08, .92, .25, .85)
 
 	element.disableCooldown = true
 
@@ -686,8 +693,7 @@ end
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
 	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-	--button:SetSize(element.size, element.size*.75)
-	--button.icon:SetTexCoord(.08, .92, .25, .85)
+	button:SetSize(element.size, element.size*.75)
 
 	if(duration and duration > 0) then
 		button.expiration = expiration - GetTime()
@@ -947,21 +953,22 @@ end
 
 
 -- Runes bars
-local function postUpdateRunes(element, runemap)
+local function PostUpdateRune(element, runemap)
 	for index, runeID in next, runemap do
-		local spec = GetSpecialization() or 0
 		local rune = element[index]
 		local runeReady = select(3, GetRuneCooldown(runeID))
 		if rune:IsShown() and not runeReady then
-			rune:SetAlpha(.6)
+			rune:SetAlpha(.45)
 		else
 			rune:SetAlpha(1)
 		end
+
+		local spec = GetSpecialization() or 0
 		local color
 		if spec == 1 then
 			color = {151/255, 25/255, 0}
 		elseif spec == 2 then
-			color = {65/255, 133/255, 215/255}
+			color = {193/255, 219/255, 233/255}
 		elseif spec == 3 then
 			color = {98/255, 153/255, 51/255}
 		end
@@ -969,44 +976,42 @@ local function postUpdateRunes(element, runemap)
 	end
 end
 
-local function CreateRunesBar(self)
-	local Runes = CreateFrame("Frame", nil, self)
-	Runes:SetWidth(C.unitframes.player_width)
-	Runes:SetHeight(C.unitframes.classPower_height)
+local function CreateRunesBar(self, width, height, spacing)
+	local runes = {}
+	local maxRunes = 6
+
+	local runesframe = CreateFrame('Frame', nil, self)
+	runesframe:SetPoint('TOP', self.Power, 'BOTTOM', 0, 4)
+	runesframe:SetSize(self:GetWidth(), C.unitframes.classPower_height + 4)
 
 	local function moveCPBar()
 		if self.AlternativePower:IsShown() then
-			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.classPower_height - 4 -C.unitframes.altpower_height - C.unitframes.classPower_height)
+			runesframe:SetPoint('TOP', self.AlternativePower, 'BOTTOM', 0, -3)
 		else
-			Runes:SetPoint('TOPLEFT', self.Health, 'BOTTOMLEFT', 0, -C.unitframes.classPower_height - 2 - C.unitframes.altpower_height)
+			runesframe:SetPoint('TOP', self.Power, 'BOTTOM', 0, -3)
 		end
 	end
 	self.AlternativePower:HookScript("OnShow", moveCPBar)
 	self.AlternativePower:HookScript("OnHide", moveCPBar)
 	moveCPBar()
 
-	for index = 1, 6 do
-		local Rune = CreateFrame('StatusBar', nil, self)
-		Rune:SetHeight(C.unitframes.classPower_height)
-		Rune:SetStatusBarTexture(C.media.texture)
+	width = (width - (maxRunes + 1) * spacing) / maxRunes
+	spacing = width + spacing
 
-		F.CreateBDFrame(Rune)
+	for i = 1, maxRunes do
+		local rune = CreateFrame('StatusBar', nil, runesframe)
+		rune:SetSize(width - 2, height)
+		rune:SetPoint('TOPLEFT', (i - 1) * spacing + 2, 0)
+		rune:SetStatusBarTexture(C.media.texture)
 
-		if(index == 1) then
-			Rune:SetPoint("LEFT", Runes)
-			Rune:SetWidth(C.unitframes.player_width/6)
-		else
-			Rune:SetPoint('LEFT', Runes[index - 1], 'RIGHT', 3, 0)
-			Rune:SetWidth((C.unitframes.player_width/6)-3)
-		end
+		local bg = F.CreateBDFrame(rune)
 
-		Runes[index] = Rune
+		runes[i] = rune
 	end
-	--Runes.colorSpec = true -- use my own color palette
-	Runes.sortOrder = "asc"
 
-	self.Runes = Runes
-	Runes.PostUpdate = postUpdateRunes
+	runes.sortOrder = 'asc'
+	runes.PostUpdate = PostUpdateRune
+	self.Runes = runes
 end
 
 
@@ -1164,9 +1169,6 @@ local function CreateName(self)
 	Name:SetWordWrap(false)
 	Name:SetJustifyH("CENTER")
 	Name:SetWidth(self:GetWidth())
-	
-	self:Tag(Name, '[name]')
-	self.Name = Name
 
 	if self.unitStyle == "target" then
 		Name:ClearAllPoints()
@@ -1175,15 +1177,23 @@ local function CreateName(self)
 		Name:SetWidth(80)
 	elseif self.unitStyle == "boss" then
 		Name:ClearAllPoints()
-		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 5)
+		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
 		Name:SetWidth(100)
 	elseif self.unitStyle == "arena" then
 		Name:ClearAllPoints()
 		Name:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0, 3)
 		Name:SetJustifyH("LEFT")
-		Name:SetWidth(80)
+		Name:SetWidth(80)	
 	end
+
+	if self.unitStyle == "arena" then
+		self:Tag(Name, "[arenaspec] [name]")
+	else
+		self:Tag(Name, '[name]')
+	end
+
+	--self.Name = Name
 end
 
 local function CreatePartyName(self)
@@ -1204,7 +1214,7 @@ local function CreatePartyName(self)
 			Text:SetShadowOffset(1, -1)
 		end
 
-		self:Tag(Text, '[free:name]')
+		self:Tag(Text, '[free:partyname]')
 	elseif C.unitframes.partyMissingHealth then
 		self:Tag(Text, '[free:missinghealth]')
 		F.SetFS(Text)
@@ -1410,8 +1420,8 @@ local UnitSpecific = {
 		spellRange(self)
 		CreateCounterBar(self)
 		
-		if C.myClass == "DEATHKNIGHT" then
-			CreateRunesBar(self)
+		if (C.myClass == 'DEATHKNIGHT') then
+			CreateRunesBar(self, C.unitframes.player_width, C.unitframes.classPower_height, 1)
 		else
 			CreateClassPower(self)
 		end
@@ -1746,11 +1756,15 @@ oUF:Factory(function(self)
 	focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus_pos))
 	focustarget = spawnHelper(self, 'focustarget', unpack(C.unitframes.focustarget_pos))
 
-	for n = 1, MAX_BOSS_FRAMES do
-		spawnHelper(self, 'boss' .. n, C.unitframes.boss_pos[1], C.unitframes.boss_pos[2], C.unitframes.boss_pos[3], C.unitframes.boss_pos[4], C.unitframes.boss_pos[5] + (80 * n))
+	if C.unitframes.enableBoss then
+		local boss = {}
+		for n = 1, MAX_BOSS_FRAMES do
+			spawnHelper(self, 'boss' .. n, C.unitframes.boss_pos[1], C.unitframes.boss_pos[2], C.unitframes.boss_pos[3], C.unitframes.boss_pos[4], C.unitframes.boss_pos[5] + (80 * n))
+		end
 	end
 
 	if C.unitframes.enableArena then
+		local arena = {}
 		for n = 1, 5 do
 			spawnHelper(self, 'arena' .. n, C.unitframes.arena_pos[1], C.unitframes.arena_pos[2], C.unitframes.arena_pos[3], C.unitframes.arena_pos[4], C.unitframes.arena_pos[5] + (100 * n))
 		end

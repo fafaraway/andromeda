@@ -325,6 +325,7 @@ C['unitframes'] = {
 		['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
 		['partyNameAlways'] = false,			-- show name on party/raid frames
 		['partyMissingHealth'] = false,			-- show missing health on party/raid frames
+	['enableBoss'] = true,					-- enable boss frames
 	['enableArena'] = true,					-- enable arena/flag carrier frames
 
 	['debuffbyPlayer'] = true,				-- only show target debuffs casted by player

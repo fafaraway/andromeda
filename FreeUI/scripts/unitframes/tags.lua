@@ -84,14 +84,14 @@ local function getSummary(str)
 	return usub(t, 100, "...")
 end
 
-local function shortName(unit)
+local function shortName(unit, len)
 	local name = UnitName(unit)
-	if name and name:len() > 4 then name = usub(name, 4) end
+	if name and name:len() > len then name = usub(name, len) end
 
 	return name
 end
 
-tags.Methods['free:name'] = function(unit)
+tags.Methods['free:partyname'] = function(unit)
 	if not UnitIsConnected(unit) then
 		return "Off"
 	elseif UnitIsDead(unit) then
@@ -99,10 +99,10 @@ tags.Methods['free:name'] = function(unit)
 	elseif UnitIsGhost(unit) then
 		return "Ghost"
 	else
-		return shortName(unit)
+		return shortName(unit, 4)
 	end
 end
-tags.Events['free:name'] = tags.Events.missinghp
+tags.Events['free:partyname'] = tags.Events.missinghp
 
 tags.Methods['free:missinghealth'] = function(unit)
 	local min, max = UnitHealth(unit), UnitHealthMax(unit)
