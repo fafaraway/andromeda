@@ -21,11 +21,9 @@
 	<Script file="elements\castbar.lua"/>
 	<Script file="elements\threatindicator.lua"/>
 	<Script file="elements\tags.lua"/>
-	<Script file="elements\assistantindicator.lua"/>
 	<Script file="elements\runes.lua"/>
 	<Script file="elements\grouproleindicator.lua"/>
 	<Script file="elements\healthprediction.lua"/>
-	<Script file="elements\powerprediction.lua"/>
 	<Script file="elements\phaseindicator.lua"/>
 	<Script file="elements\readycheckindicator.lua"/>
 	<Script file="elements\questindicator.lua"/>
@@ -39,10 +37,10 @@
 
 	<Script file="finalize.lua"/>
 
-	<Script file='plugins\spellrange.lua' />
-	<Script file='plugins\castbar.lua' />
-	<Script file='plugins\counterbar.lua' />
-	<Script file='plugins\dispellable.lua' />
+	<Script file='plugins\spellrange.lua'/>
+	<Script file='plugins\castbar.lua'/>
+	<Script file='plugins\counterbar.lua'/>
+	<Script file='plugins\dispellable.lua'/>
 
 	<!-- Clique support -->
 	<Button name="oUF_ClickCastUnitTemplate" virtual="true" inherits="SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate">

@@ -1,27 +1,42 @@
 --[[
 # Element: Runes
+
 Handles the visibility and updating of Death Knight's runes.
+
 ## Widget
+
 Runes - An `table` holding `StatusBar`s.
+
 ## Sub-Widgets
+
 .bg - A `Texture` used as a background. It will inherit the color of the main StatusBar.
+
 ## Notes
+
 A default texture will be applied if the sub-widgets are StatusBars and don't have a texture set.
+
 ## Options
+
 .colorSpec - Use `self.colors.runes[specID]` to color the bar based on player's spec. `specID` is defined by the return
              value of [GetSpecialization](http://wowprogramming.com/docs/api/GetSpecialization.html) (boolean)
 .sortOrder - Sorting order (string?)['asc', 'desc']
+
 ## Sub-Widgets Options
+
 .multiplier - Used to tint the background based on the main widgets R, G and B values. Defaults to 1 (number)[0-1]
+
 ## Examples
+
     local Runes = {}
     for index = 1, 6 do
         -- Position and size of the rune bar indicators
         local Rune = CreateFrame('StatusBar', nil, self)
         Rune:SetSize(120 / 6, 20)
         Rune:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', index * 120 / 6, 0)
+
         Runes[index] = Rune
     end
+
     -- Register with oUF
     self.Runes = Runes
 --]]
@@ -125,6 +140,7 @@ local function Update(self, event)
 
 	--[[ Callback: Runes:PostUpdate(runemap)
 	Called after the element has been updated.
+
 	* self    - the Runes element
 	* runemap - the ordered list of runes' indices (table)
 	--]]
@@ -138,6 +154,7 @@ local function Path(self, event, ...)
 	if(event ~= 'RUNE_POWER_UPDATE') then
 		--[[ Override: Runes:UpdateColor(runeID)
 		Used to completely override the internal function for updating the widgets' colors.
+
 		* self   - the Runes element
 		* runeID - the index of the updated rune (number)
 		--]]
@@ -149,6 +166,7 @@ local function Path(self, event, ...)
 
 	--[[ Override: Runes.Override(self, event, ...)
 	Used to completely override the internal update function.
+
 	* self  - the parent object
 	* event - the event triggering the update (string)
 	* ...   - the arguments accompanying the event
@@ -162,7 +180,7 @@ end
 
 local function Enable(self, unit)
 	local element = self.Runes
-	if(element and unit == 'player') then
+	if(element and UnitIsUnit(unit, 'player')) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
