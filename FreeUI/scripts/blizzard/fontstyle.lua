@@ -196,21 +196,56 @@ function module:FontStyle()
 
 	local coloredFonts = {
 		"GameFontNormal",
-		"GameFontNormalSmall",
-		"GameFontNormalMed3",
-		"GameFontNormalLarge",
+		"GameFontNormalOutline",
+		"GameFontNormal_NoShadow",
 		"GameFontNormalHuge",
-		"BossEmoteNormalHuge",
+		"GameFontNormalHugeOutline",
+		"GameFontNormalHugeOutline2",
+		"GameFontNormalHuge2",
+		"GameFontNormalHuge3",
+		"GameFontNormalHuge3Outline",
+		"GameFontNormalShadowHuge2",
+
+		"GameFontNormalSmall",
+		"GameFontNormalSmall2",
+		"GameFontNormalTiny",
+		"GameFontNormalTiny2",
+
+		"GameFontNormalMed1",
+		"GameFontNormalMed2",
+		"GameFontNormalMed3",
+
+		"GameFontNormalLarge",
+		"GameFontNormalLarge2",
+		"GameFontNormalLargeOutline",
+		
+		"GameFontNormalWTF2",
+		"GameFontNormalWTF2Outline",
+
+		"IMEHighlight",
+
+		"GameFont_Gigantic",
+
+		"GameNormalNumberFont",
 		"NumberFontNormalRightYellow",
 		"NumberFontNormalYellow",
 		"NumberFontNormalLargeRightYellow",
 		"NumberFontNormalLargeYellow",
-		"QuestTitleFontBlackShadow",
+
+		"CombatTextFont",
+		"CombatTextFontOutline",
+		
+		"BossEmoteNormalHuge",
+		
 		"DialogButtonNormalText",
+
 		"AchievementPointsFont",
 		"AchievementPointsFontSmall",
 		"AchievementDateFont",
+
 		"FocusFontSmall",
+
+		"ArtifactAppearanceSetNormalFont",
 	}
 	for k, v in next, coloredFonts do
 		_G[v]:SetTextColor(247/255, 225/255, 171/255)
