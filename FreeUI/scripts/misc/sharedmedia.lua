@@ -18,7 +18,7 @@ LSM:Register("font", "FreeUI_supereffective", 			[[Interface\Addons\FreeUI\asset
 LSM:Register("font", "FreeUI_pixel", 					[[Interface\Addons\FreeUI\assets\font\pixel.ttf]], zhCN + zhTW + western)
 LSM:Register("font", "FreeUI_pixel_bold", 				[[Interface\Addons\FreeUI\assets\font\pixel_bold.ttf]], zhCN + zhTW + western)
 
-LSM:Register("font", "FreeUI_PixfontCN", 				C.font.pixel[1], zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_PixfontCN", 				[[Fonts\pixfontCN.ttf]], zhCN + zhTW + western)
 LSM:Register("font", "FreeUI_Normal", 					C.font.normal, zhCN + zhTW + western)
 LSM:Register("font", "FreeUI_Header", 					C.font.header, zhCN + zhTW + western)
 
