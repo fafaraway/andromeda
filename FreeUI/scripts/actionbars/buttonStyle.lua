@@ -74,6 +74,7 @@ local function styleExtraActionButton(bu)
 	local name = bu:GetName()
 	local ho = _G[name.."HotKey"]
 	local co= _G[name.."Count"]
+	local ic= _G[name.."Icon"]
 
 	-- remove the style background theme
 	bu.style:SetTexture(nil)
@@ -102,13 +103,13 @@ local function styleExtraActionButton(bu)
 
 	-- add button normal texture
 	bu:SetPushedTexture(C.media.backdrop)
-	bu:SetCheckedTexture(C.media.backdrop)
+	bu:SetCheckedTexture(C.media.checked)
 	bu:SetNormalTexture("")
 	bu:SetHighlightTexture("")
 
-	-- bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
-	-- bu.HL:SetColorTexture(1, 1, 1, .3)
-	-- bu.HL:SetAllPoints(bu.icon)
+	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
+	bu.HL:SetColorTexture(1, 1, 1, .3)
+	bu.HL:SetAllPoints(ic)
 
 	local ch = bu:GetCheckedTexture()
 	ch:SetVertexColor(r, g, b, .4)
@@ -176,9 +177,9 @@ local function styleActionButton(bu)
 	bu:SetNormalTexture("")
 	bu:SetHighlightTexture("")
 
-	-- bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
-	-- bu.HL:SetColorTexture(1, 1, 1, .3)
-	-- bu.HL:SetAllPoints(ic)
+	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
+	bu.HL:SetColorTexture(1, 1, 1, .3)
+	bu.HL:SetAllPoints(ic)
 
 	if not nt then
 		-- fix the non existent texture problem (no clue what is causing this)
@@ -268,7 +269,7 @@ local function styleStanceButton(bu)
 	local fl= _G[name.."Flash"]
 
 	bu:SetPushedTexture(C.media.backdrop)
-	bu:SetCheckedTexture(C.media.backdrop)
+	bu:SetCheckedTexture(C.media.checked)
 	bu:SetNormalTexture("")
 	bu:SetHighlightTexture("")
 
