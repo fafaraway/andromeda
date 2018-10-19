@@ -21,4 +21,5 @@
 	<Script file="pvpsound.lua"/>
 	<Script file="tradetabs.lua"/>
 	<Script file="reputation.lua"/>
+	<Script file="ush.lua"/>
 </Ui>
