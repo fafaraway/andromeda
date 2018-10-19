@@ -288,11 +288,12 @@ local function CreateHealthBar(self)
 		healAbsorbBar:SetReverseFill(true)
 		healAbsorbBar:SetStatusBarTexture(C.media.texture)
 
-		local overAbsorb = self.Health:CreateTexture(nil, "OVERLAY")
+		local overAbsorb = self:CreateTexture(nil, "OVERLAY")
 		overAbsorb:SetPoint('TOP')
 		overAbsorb:SetPoint('BOTTOM')
-		overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -6, 0)
-		overAbsorb:SetWidth(12)
+		overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -2, 0)
+		overAbsorb:SetWidth(10)
+		overAbsorb:SetAlpha(.5)
 
 		self.HealthPrediction = {
 			myBar = mhpb,
@@ -566,6 +567,9 @@ local function CreateCastBar(self)
 	elseif self.unitStyle == "player" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
+	elseif self.unitStyle == "pet" then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint('RIGHT', self, 'LEFT', -4, 0)
 	elseif self.unitStyle == "target" then
 		cb:ClearAllPoints()
 		cb:SetPoint('TOP', self, 'BOTTOM', 0, -40)
