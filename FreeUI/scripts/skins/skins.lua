@@ -5,6 +5,7 @@ function module:OnLogin()
 	self:ReskinDBM()
 	self:ReskinSkada()
 	self:BigWigsSkin()
+	self:ReskinPGF()
 end
 
 function module:LoadWithAddOn(addonName, value, func)
