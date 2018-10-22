@@ -134,7 +134,7 @@ function module:SetupScript(bar)
 	bar:SetScript("OnLeave", GameTooltip_Hide)
 end
 
-function module:Expbar()
+function module:progressBar()
 
 	local bar = CreateFrame("StatusBar", nil, Minimap)
 	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)

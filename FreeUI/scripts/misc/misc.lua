@@ -4,9 +4,10 @@ local module = F:RegisterModule("misc")
 function module:OnLogin()
 
 	self:AddAlerts()
+	self:rareAlert()
 
 	self:ShowItemLevel()
-	self:Expbar()
+	self:progressBar()
 	self:flashCursor()
 	self:QuickJoin()
 	self:MissingStats()
@@ -124,7 +125,6 @@ do
 end
 
 
-
 -- Clean up Loss Of Control
 local frame = _G.LossOfControlFrame
 frame.RedLineTop:SetTexture(nil)
@@ -134,7 +134,6 @@ frame.blackBg:SetTexture(nil)
 F.ReskinIcon(frame.Icon)
 F.CreateBDFrame(frame.Icon)
 F.CreateSD(frame.Icon)
-
 
 
 -- adding a shadowed border to the UI window
@@ -226,7 +225,6 @@ if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
 end
 
 
-
 -- Fix Drag Collections taint
 do
 	local done
@@ -260,8 +258,6 @@ function module:PVPMessageEnhancement(_, msg)
 		RaidNotice_AddMessage(RaidBossEmoteFrame, msg, ChatTypeInfo["RAID_BOSS_EMOTE"]);
 	end
 end
-
-
 
 
 -- undress button on dress up frame
@@ -316,18 +312,27 @@ end
 
 
 -- plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
-local flightMastersWhistle_SpellID1 = 227334;
-local flightMastersWhistle_SpellID2 = 253937;
+local flightMastersWhistle_SpellID1 = 227334
+local flightMastersWhistle_SpellID2 = 253937
+local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\blowmywhistle.ogg'
 
 local f = CreateFrame("frame")
 f:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end);
 
 function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
 	if (unit == "player" and (spellID == flightMastersWhistle_SpellID1 or spellID == flightMastersWhistle_SpellID2)) then
-		PlaySoundFile([[Interface\Addons\FreeUI\assets\sound\blowmywhistle.ogg]])
+		PlaySoundFile(whistleSound)
 	end
 end
 f:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+
+
+-- ready check in master sound
+do
+	F:RegisterEvent("READY_CHECK", function()
+		PlaySound(SOUNDKIT.READY_CHECK, "master")
+	end)
+end
 
 
 
