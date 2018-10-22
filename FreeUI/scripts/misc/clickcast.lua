@@ -318,9 +318,9 @@ SpellBinder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 SpellBinder:RegisterEvent("ZONE_CHANGED")
 SpellBinder:SetScript("OnEvent", function(self, event, ...)
 	if event == "PLAYER_LOGIN" then
-		SavedBindings = _G.SavedBindings or {}
-		SavedBindings[UnitName("player")] = _G.SavedBindings[UnitName("player")] or {}
-		DB = SavedBindings[UnitName("player")]
+		FreeUISavedBindings = _G.FreeUISavedBindings or {}
+		FreeUISavedBindings[UnitName("player")] = _G.FreeUISavedBindings[UnitName("player")] or {}
+		DB = FreeUISavedBindings[UnitName("player")]
 		DB.spells = DB.spells or {}
 		DB.frames = DB.frames or {}
 		DB.keys = DB.keys or {}

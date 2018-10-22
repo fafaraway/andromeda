@@ -10,13 +10,12 @@ FreeUI = core
 
 local F, C, L = unpack(select(2, ...))
 
+
 -- [[ Saved variables ]]
 
 FreeUIGlobalConfig = {}
 FreeUIConfig = {}
-
-
-
+FreeUISavedBindings = {}
 
 
 -- [[ Event handler ]]
@@ -60,7 +59,8 @@ function F:UnregisterEvent(event, func)
 end
 
 
--- Modules
+-- [[ Modules ]]
+
 local modules, initQueue = {}, {}
 
 function F:RegisterModule(name)
@@ -80,7 +80,7 @@ function F:GetModule(name)
 end
 
 
--- Init
+-- [[ Init ]]
 
 F:RegisterEvent("PLAYER_LOGIN", function()
 	for _, module in pairs(initQueue) do
