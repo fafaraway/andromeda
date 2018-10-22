@@ -1423,6 +1423,7 @@ local UnitSpecific = {
 		CreateCastBar(self)
 		spellRange(self)
 		CreateCounterBar(self)
+		CreateDispellable(self, unit)
 		
 		if (C.myClass == 'DEATHKNIGHT') then
 			CreateRunesBar(self, C.unitframes.player_width, C.unitframes.classPower_height, 1)
