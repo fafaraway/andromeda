@@ -171,9 +171,8 @@ C['misc'] = {
 	['mailButton'] = true, 
 	['undressButton'] = true, 
 	['alreadyKnown'] = true,
-	['saySapped'] = true,
 
-	['autoScreenShot'] = true,		-- auto screenshot when achieved
+	['autoScreenShot'] = true,			-- auto screenshot when achieved
 	['autoActionCam'] = true,
 
 	['cooldownpulse'] = true,
@@ -188,15 +187,18 @@ C['misc'] = {
 		['interruptNotify'] = true,
 		['dispelSound'] = true,
 		['dispelNotify'] = true,
+	['usefulSpellAlert'] = true,		-- feast/bot/portal/summon/refreshmenttable/soulwell/toy
+	['resAlert'] = true,				-- combat res
+	['sappedAlert'] = true,
 
-	['autoSetRole'] = true,			-- automatically set role and hide dialog where possible
+	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
 		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
-		['autoSetRole_verbose'] = true, -- tells you what happens when setting role
+		['autoSetRole_verbose'] = true, 	-- tells you what happens when setting role
 
-	['autoRepair'] = true,			-- automatically repair items
-		['autoRepair_guild'] = true, -- use guild funds for auto repairs
+	['autoRepair'] = true,				-- automatically repair items
+		['autoRepair_guild'] = true, 		-- use guild funds for auto repairs
 
-	['autoAccept'] = false, -- auto accept invites from friends and guildies
+	['autoAccept'] = false, 			-- auto accept invites from friends and guildies
 
 	['missingStats'] = false,
 	['PVPSound'] = true,

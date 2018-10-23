@@ -13,7 +13,6 @@
 	<Script file="progressbar.lua"/>
 	<Script file="pvpqueuetimer.lua"/>
 	<Script file="safequeue.lua"/>
-	<Script file="saysapped.lua"/>
 	<Script file="sharedmedia.lua"/>
 	<Script file="tabbinder.lua"/>
 	<Script file="quickjoin.lua"/>
