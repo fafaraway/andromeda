@@ -18,12 +18,12 @@ function module:azeriteTrait()
 		return #tipList
 	end
 
-	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59"
+	local iconString = "|T%s:24:24:0:0:64:64:4:60:4:60"
 	local function getIconString(icon, known)
 		if known then
 			return format(iconString..":255:255:255|t", icon)
 		else
-			return format(iconString..":130:130:130|t", icon)
+			return format(iconString..":90:90:90|t", icon)
 		end
 	end
 
@@ -97,3 +97,4 @@ function module:azeriteTrait()
 	ShoppingTooltip1:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 	WorldMapTooltip.ItemTooltip.Tooltip:HookScript("OnTooltipSetItem", updateAzeriteArmor)
 end
+
