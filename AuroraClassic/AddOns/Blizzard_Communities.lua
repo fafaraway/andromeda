@@ -23,7 +23,7 @@ C.themes["Blizzard_Communities"] = function()
 
 		if frame.CircleMask then
 			frame.CircleMask:Hide()
-			F.CreateBG(frame.Icon)
+			F.ReskinIcon(frame.Icon)
 		end
 		
 		if frame.FindAGuildButton then F.Reskin(frame.FindAGuildButton) end
