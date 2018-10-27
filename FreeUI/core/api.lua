@@ -1,21 +1,20 @@
-local F, C = unpack(select(2, ...))
-
-C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-local _, class = UnitClass("player")
-
-C.class = {C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b}
-
-C.r, C.g, C.b = unpack(C.class)
-r, g, b = C.r, C.g, C.b
+local F, C, L = unpack(select(2, ...))
 
 C.texCoord = {.08, .92, .08, .92}
-C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
 C.infoColor = "|cffe5d19f"
 C.greyColor = "|cff808080"
 C.myClass = select(2, UnitClass("player"))
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
 C.client = GetLocale()
+
+C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+
+C.classColor = {C.classcolours[C.myClass].r, C.classcolours[C.myClass].g, C.classcolours[C.myClass].b}
+C.r, C.g, C.b = unpack(C.classColor)
+
+r, g, b = C.r, C.g, C.b
+C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
 
 
 
@@ -1101,5 +1100,13 @@ function F:AffixesSetup()
 end
 
 
+function F.SplitList(list, variable, cleanup)
+	if cleanup then wipe(list) end
+	for word in variable:gmatch("%S+") do
+		list[word] = true
+	end
+end
 
-DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.class))
+
+
+DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.classColor))
