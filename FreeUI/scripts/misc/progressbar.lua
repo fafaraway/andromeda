@@ -32,7 +32,7 @@ local function UpdateBar(bar)
 end
 
 local function UpdateTooltip(bar)
-	GameTooltip:SetOwner(bar, "ANCHOR_LEFT")
+	GameTooltip:SetOwner(bar, "ANCHOR_LEFT", -6, 0)
 	
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
 		GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), C.r, C.g, C.b)

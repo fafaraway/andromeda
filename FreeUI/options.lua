@@ -181,7 +181,7 @@ C['misc'] = {
 		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
 
 	['rareAlert'] = true,
-	['rareAlertNotify'] = true,
+		['rareAlertNotify'] = true,
 	['interruptAlert'] = true,
 		['interruptSound'] = true,
 		['interruptNotify'] = true,

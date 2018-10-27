@@ -21,6 +21,7 @@ LSM:Register("font", "FreeUI_pixel_bold", 				[[Interface\Addons\FreeUI\assets\f
 LSM:Register("font", "FreeUI_PixfontCN", 				[[Fonts\pixfontCN.ttf]], zhCN + zhTW + western)
 LSM:Register("font", "FreeUI_Normal", 					C.font.normal, zhCN + zhTW + western)
 LSM:Register("font", "FreeUI_Header", 					C.font.header, zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_Chat", 					C.font.chat, zhCN + zhTW + western)
 
 
 -- SOUND
