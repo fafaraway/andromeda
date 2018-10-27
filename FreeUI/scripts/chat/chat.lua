@@ -34,17 +34,23 @@ local function skinChat(self)
 	eb:SetAltArrowKeyMode(false)
 	eb:ClearAllPoints()
 	eb:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 24)
-	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -13, 52)
-	F.CreateBD(eb, .5)
-	F.CreateSD(eb)
-	F.CreateTex(eb)
+	eb:SetPoint("TOPRIGHT", self, "TOPRIGHT", -13, 48)
+
+	local bd = CreateFrame("Frame", nil, eb)
+	bd:SetPoint("TOPLEFT", -1, 1)
+	bd:SetPoint("BOTTOMRIGHT", 1, -1)
+	bd:SetFrameStrata("BACKGROUND")
+	F.CreateTex(bd)
+	F.CreateBD(bd)
+	F.CreateSD(bd)
+	eb.bd = bd
 	for i = 3, 8 do
 		select(i, eb:GetRegions()):SetAlpha(0)
 	end
 
 	local lang = _G[name.."EditBoxLanguage"]
 	lang:GetRegions():SetAlpha(0)
-	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", 2, 0)
+	lang:SetPoint("TOPLEFT", eb, "TOPRIGHT", 4, 0)
 	lang:SetPoint("BOTTOMRIGHT", eb, "BOTTOMRIGHT", 30, 0)
 	F.CreateBD(lang)
 	F.CreateSD(lang)
@@ -62,6 +68,9 @@ local function skinChat(self)
 
 	self.styled = true
 end
+
+
+
 
 
 -- Quick Scroll
@@ -234,6 +243,24 @@ function module:OnLogin()
 			if frame.isTemporary then
 				skinChat(frame)
 			end
+		end
+	end)
+
+	-- update chat edit box border color
+	hooksecurefunc("ChatEdit_UpdateHeader", function()
+		local editBox = ChatEdit_ChooseBoxForSend()
+		local mType = editBox:GetAttribute("chatType")
+		if mType == "CHANNEL" then
+			local id = GetChannelName(editBox:GetAttribute("channelTarget"))
+			if id == 0 then
+				editBox.bd:SetBackdropBorderColor(0, 0, 0)
+			else
+				editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType..id].r,ChatTypeInfo[mType..id].g,ChatTypeInfo[mType..id].b)
+			end
+		elseif mType == "SAY" then
+			editBox.bd:SetBackdropBorderColor(0, 0, 0)
+		else
+			editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r,ChatTypeInfo[mType].g,ChatTypeInfo[mType].b)
 		end
 	end)
 
