@@ -1,13 +1,13 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("chat")
 
-
 local FilterList = {}
 local recent_msg = {}
 local index = 1
 
-local function genFilterList()
-	FilterList = {string.split(" ", C.chat.filterList or "")}
+
+function F:GenFilterList()
+	F.SplitList(FilterList, C.chat.filterList, true)
 end
 
 
@@ -54,7 +54,7 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 
 	-- filter keywords
 	local match = 0
-	for _, keyword in pairs(FilterList) do
+	for keyword in pairs(FilterList) do
 		if keyword ~= "" then
 			local _, count = gsub(msg, keyword, "")
 			if count > 0 then
@@ -153,7 +153,7 @@ end
 
 
 function module:ChatFilter()
-	genFilterList()
+	F:GenFilterList()
 
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", genChatFilter)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", genChatFilter)
