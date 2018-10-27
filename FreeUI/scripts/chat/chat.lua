@@ -39,7 +39,7 @@ local function skinChat(self)
 	local bd = CreateFrame("Frame", nil, eb)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
-	bd:SetFrameStrata("BACKGROUND")
+	bd:SetFrameLevel(eb:GetFrameLevel() - 1)
 	F.CreateTex(bd)
 	F.CreateBD(bd)
 	F.CreateSD(bd)
@@ -68,9 +68,6 @@ local function skinChat(self)
 
 	self.styled = true
 end
-
-
-
 
 
 -- Quick Scroll
