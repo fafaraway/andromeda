@@ -2,13 +2,6 @@
 
 if not C.infoBar.enable then return end
 
-local menubarFont = {
-		C.font.normal,
-		12,
-		"OUTLINE"
-	}
-
-local r, g, b = unpack(C.class)
 
 local barAlpha, buttonAlpha
 
@@ -210,7 +203,7 @@ if C.infoBar.buttons_mouseover then
 end
 
 local function buttonOnEnterNoFade(self)
-	self:SetBackdropColor(r, g, b, .4)
+	self:SetBackdropColor(C.r, C.g, C.b, .4)
 end
 
 local function buttonOnLeaveNoFade(self)
@@ -222,7 +215,7 @@ local function buttonOnEnter(self)
 		showBar()
 	end
 
-	self:SetBackdropColor(r, g, b, .4)
+	self:SetBackdropColor(C.r, C.g, C.b, .4)
 end
 
 local function buttonOnLeave(self)
@@ -350,7 +343,7 @@ addButton("Toggle DBM", POSITION_LEFT, function(self, button)
 	else
 		EnableAddOn("DBM-Core")
 		EnableAddOn("DBM-StatusBarTimers")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", C.r, C.g, C.b)
 	end
 end)
 
@@ -365,7 +358,7 @@ addButton("Toggle Skada", POSITION_LEFT, function(self, button)
 		end
 	else
 		EnableAddOn("Skada")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffSkada enabled. Type|r /rl |cfffffffffor the changes to apply.|r", r, g, b)
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffSkada enabled. Type|r /rl |cfffffffffor the changes to apply.|r", C.r, C.g, C.b)
 	end
 end)
 
@@ -432,9 +425,13 @@ specButton:SetScript("OnEvent", function(self)
 			else
 				self.Text:SetText(format("S: %s  L: %s", name, lootname))
 			end
-			if C.client == "zhCN" or C.client == "zhTW" then
-				self.Text:SetFont(unpack(menubarFont))
+
+			if C.appearance.usePixelFont then
+				self.Text:SetFont(unpack(C.font.pixel))
+			elseif C.client == "zhCN" or C.client == "zhTW" then
+				self.Text:SetFont(C.font.normal, 11)
 			end
+
 			showButton(self)
 		end
 	else

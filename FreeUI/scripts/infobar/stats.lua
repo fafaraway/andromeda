@@ -2,8 +2,6 @@ local F, C, L = unpack(select(2, ...))
 
 if not C.infoBar.enable then return end
 
-local r, g, b = unpack(C.class)
-
 local memory
 local _, _, home, world = GetNetStats()
 local addons = {}
@@ -19,7 +17,7 @@ holder:SetPoint("CENTER")
 local text = F.CreateFS(holder, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 text:SetDrawLayer("OVERLAY")
 text:SetPoint("CENTER")
-text:SetTextColor(r, g, b)
+text:SetTextColor(C.r, C.g, C.b)
 
 local last = 0
 local lastLag = 0
@@ -63,7 +61,7 @@ FreeUIStatsButton:HookScript("OnEnter", function()
 
 	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -31)
 
-	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), r, g, b, 1, 1, 1)
+	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), C.r, C.g, C.b, 1, 1, 1)
 
 	GameTooltip:AddLine(" ")
 
@@ -73,7 +71,7 @@ FreeUIStatsButton:HookScript("OnEnter", function()
 
 	GameTooltip:AddLine(" ")
 
-	GameTooltip:AddLine("Click |cffffffffto show time manager.", r, g, b)
+	GameTooltip:AddLine("Click |cffffffffto show time manager.", C.r, C.g, C.b)
 
 	GameTooltip:Show()
 end)

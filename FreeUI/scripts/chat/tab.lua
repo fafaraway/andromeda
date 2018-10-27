@@ -2,13 +2,6 @@
 
 local F, C, L = unpack(select(2, ...))
 
-
-local tabFont = {
-		C.font.normal,
-		12,
-		"OUTLINE"
-	}
-
 CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
 CHAT_FRAME_TAB_ALERTING_NOMOUSE_ALPHA = 1
@@ -40,7 +33,7 @@ local OnLeave = function(self)
 	local emphasis = _G["ChatFrame"..id..'TabFlash']:IsShown()
 
 	if (_G["ChatFrame"..id] == SELECTED_CHAT_FRAME) then
-		r, g, b = unpack(C.class)
+		r, g, b = C.r, C.g, C.b
 	elseif emphasis then
 		r, g, b = 1, 0, 0
 	else
@@ -85,8 +78,10 @@ local faneifyTab = function(frame, sel)
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
 
-		if C.client == "zhCN" or C.client == "zhTW" then
-			frame:GetFontString():SetFont(unpack(tabFont))
+		if C.appearance.usePixelFont then
+			frame:GetFontString():SetFont(unpack(C.font.pixel))
+		elseif C.client == "zhCN" or C.client == "zhTW" then
+			frame:GetFontString():SetFont(C.font.chat, 11)
 		else
 			F.SetFS(frame:GetFontString())
 		end
@@ -96,7 +91,7 @@ local faneifyTab = function(frame, sel)
 
 	-- We can't trust sel. :(
 	if(i == SELECTED_CHAT_FRAME:GetID()) then
-		updateFS(frame, nil, nil, unpack(C.class))
+		updateFS(frame, nil, nil, C.r, C.g, C.b)
 	else
 		updateFS(frame, nil, nil, 1, 1, 1)
 	end

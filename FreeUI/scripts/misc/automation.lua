@@ -155,7 +155,6 @@ end
 
 
 -- auto set role
-local r, g, b = unpack(C.class)
 local useSpec = C.misc.autoSetRole_useSpec
 local verbose = C.misc.autoSetRole_verbose
 
@@ -169,7 +168,7 @@ local lastMsgTime = 0
 local function Print(msg)
 	if time() - lastMsgTime > 10 then
 		lastMsgTime = time()
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffff"..msg, r, g, b)
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffff"..msg, C.r, C.g, C.b)
 	end
 end
 

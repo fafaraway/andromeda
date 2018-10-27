@@ -492,8 +492,7 @@ local function addonStyled(_, addon)
 		end)
 
 		-- IME
-		local r, g, b = unpack(C.class)
-		IMECandidatesFrame.selection:SetVertexColor(r, g, b)
+		IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b)
 
 		-- Pet Tooltip
 		local petTips = {
