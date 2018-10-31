@@ -13,8 +13,7 @@ C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 C.classColor = {C.classcolours[C.myClass].r, C.classcolours[C.myClass].g, C.classcolours[C.myClass].b}
 C.r, C.g, C.b = unpack(C.classColor)
 
-r, g, b = C.r, C.g, C.b
-C.myColor = format("|cff%02x%02x%02x", r*255, g*255, b*255)
+C.myColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
 
 
 
@@ -142,7 +141,7 @@ local function colourButton(self)
 		self.bgtex:SetVertexColor(r / 4, g / 4, b / 4)
 	end
 
-	self:SetBackdropBorderColor(r, g, b)
+	self:SetBackdropBorderColor(C.r, C.g, C.b)
 end
 
 local function clearButton(self)
@@ -180,7 +179,7 @@ local function StartGlow(f)
 	if not f:IsEnabled() then return end
 	--f:SetBackdropColor(.2, .2, .2, .7)
 
-	f:SetBackdropBorderColor(r, g, b)
+	f:SetBackdropBorderColor(C.r, C.g, C.b)
 	f.glow:SetAlpha(1)
 	F.CreatePulse(f.glow)
 end
@@ -229,7 +228,7 @@ F.Reskin = function(f, noGlow)
 		})
 		f.glow:SetPoint("TOPLEFT", -6, 6)
 		f.glow:SetPoint("BOTTOMRIGHT", 6, -6)
-		f.glow:SetBackdropBorderColor(r, g, b)
+		f.glow:SetBackdropBorderColor(C.r, C.g, C.b)
 		f.glow:SetAlpha(0)
 
 		f:HookScript("OnEnter", StartGlow)
@@ -250,17 +249,17 @@ function F:ReskinTab()
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 9, -4)
 	hl:SetPoint("BOTTOMRIGHT", -9, 1)
-	hl:SetVertexColor(r, g, b, .25)
+	hl:SetVertexColor(C.r, C.g, C.b, .25)
 end
 
 local function textureOnEnter(self)
 	if self:IsEnabled() then
 		if self.pixels then
 			for _, pixel in pairs(self.pixels) do
-				pixel:SetVertexColor(r, g, b)
+				pixel:SetVertexColor(C.r, C.g, C.b)
 			end
 		else
-			self.bgTex:SetVertexColor(r, g, b)
+			self.bgTex:SetVertexColor(C.r, C.g, C.b)
 		end
 	end
 end
@@ -487,7 +486,7 @@ function F:ReskinCheck()
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint("TOPLEFT", 5, -5)
 	hl:SetPoint("BOTTOMRIGHT", -5, 5)
-	hl:SetVertexColor(r, g, b, .2)
+	hl:SetVertexColor(C.r, C.g, C.b, .2)
 
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", 4, -4)
@@ -501,11 +500,11 @@ function F:ReskinCheck()
 
 	local ch = self:GetCheckedTexture()
 	ch:SetDesaturated(true)
-	ch:SetVertexColor(r, g, b)
+	ch:SetVertexColor(C.r, C.g, C.b)
 end
 
 local function colourRadio(self)
-	self.bd:SetBackdropBorderColor(r, g, b)
+	self.bd:SetBackdropBorderColor(C.r, C.g, C.b)
 end
 
 local function clearRadio(self)
@@ -520,7 +519,7 @@ function F:ReskinRadio()
 	local ch = self:GetCheckedTexture()
 	ch:SetPoint("TOPLEFT", 4, -4)
 	ch:SetPoint("BOTTOMRIGHT", -4, 4)
-	ch:SetVertexColor(r, g, b, .6)
+	ch:SetVertexColor(C.r, C.g, C.b, .6)
 
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", 3, -3)
@@ -564,7 +563,7 @@ end
 
 local function expandOnEnter(self)
 	if self:IsEnabled() then
-		self.bg:SetBackdropColor(r, g, b, .3)
+		self.bg:SetBackdropColor(C.r, C.g, C.b, .3)
 	end
 end
 
