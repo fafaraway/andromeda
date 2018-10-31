@@ -201,7 +201,7 @@ C['misc'] = {
 
 	['autoAccept'] = false, 			-- auto accept invites from friends and guildies
 
-	['missingStats'] = false,
+	['missingStats'] = true,
 	['PVPSound'] = true,
 
 	['clickCast'] = true,
