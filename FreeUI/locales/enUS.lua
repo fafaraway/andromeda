@@ -30,3 +30,5 @@ L['SoulWell'] = '<Attention>: %s casted %s!'
 
 L['ResNoTarget'] = '<Attention>: %s casted %s!'
 L['ResTarget'] = '<Attention>: %s casted %s on %s!'
+
+L['ExplosiveCount'] = 'Explosives Count - '

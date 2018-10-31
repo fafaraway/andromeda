@@ -1108,5 +1108,11 @@ function F.SplitList(list, variable, cleanup)
 end
 
 
+function F.GetNPCID(guid)
+	local id = tonumber((guid or ""):match("%-(%d-)%-%x-$"))
+	return id
+end
+
+
 
 DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.classColor))

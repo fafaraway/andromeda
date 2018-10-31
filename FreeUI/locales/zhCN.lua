@@ -33,3 +33,5 @@ L['SoulWell'] 			= '<注意>：%s 施放了 %s！'
 
 L['ResNoTarget'] 		= '<注意>：%s 使用了 %s！'
 L['ResTarget'] 			= '<注意>：%s 使用了 %s 在 %s！'
+
+L['ExplosiveCount'] = '打球统计 - '
