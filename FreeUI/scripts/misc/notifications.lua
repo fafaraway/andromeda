@@ -288,12 +288,13 @@ function module:ExplosiveAlert()
 	if not C.misc.explosiveCount then return end
 
 	local affixes = C_MythicPlus.GetCurrentAffixes()
-	if affixes[3] ~= 13 then return end
+	if not affixes or affixes[3] ~= 13 then return end
 	local eventList = {
 		['SWING_DAMAGE'] = 13,
 		['RANGE_DAMAGE'] = 16,
 		['SPELL_DAMAGE'] = 16,
 		['SPELL_PERIODIC_DAMAGE'] = 16,
+		["SPELL_BUILDING_DAMAGE"] = 16,
 	}
 	local cache = {}
 	local function updateCount(_, ...)
