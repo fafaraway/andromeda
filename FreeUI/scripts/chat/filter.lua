@@ -2,48 +2,19 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("chat")
 
 local FilterList = {}
-local recent_msg = {}
-local index = 1
-
 
 function F:GenFilterList()
 	F.SplitList(FilterList, C.chat.filterList, true)
 end
 
-
-F.FriendsList = {}
-local function updateFriends()
-	wipe(F.FriendsList)
-
-	for i = 1, GetNumFriends() do
-		local name = GetFriendInfo(i)
-		if name then
-			F.FriendsList[Ambiguate(name, "none")] = true
-		end
-	end
-
-	for i = 1, select(2, BNGetNumFriends()) do
-		for j = 1, BNGetNumFriendGameAccounts(i) do
-			local _, characterName, client, realmName = BNGetFriendGameAccountInfo(i, j)
-			if client == BNET_CLIENT_WOW then
-				F.FriendsList[Ambiguate(characterName.."-"..realmName, "none")] = true
-			end
-		end
-	end
-end
-F:RegisterEvent("FRIENDLIST_UPDATE", updateFriends)
-F:RegisterEvent("BN_FRIEND_INFO_CHANGED", updateFriends)
-
-
-local function genChatFilter(_, event, msg, author, _, _, _, flag)
+local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _, guid)
 	if not C.chat.enableFilter then return end
 
-	local sender = string.split("-", author)
 	local name = Ambiguate(author, "none")
 
 	if UnitIsUnit(name, "player") or (event == "CHAT_MSG_WHISPER" and flag == "GM") or flag == "DEV" then
 		return
-	elseif F.UnitInGuild(author) or UnitInRaid(name) or UnitInParty(name) or F.FriendsList[name] then
+	elseif IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) or IsGUIDInGroup(guid) then
 		return
 	end
 
@@ -66,31 +37,23 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag)
 	if match >= C.chat.keyWordMatch then
 		return true
 	end
-
-	-- filter repeat messages
-	for i = 1, 4 do
-		if recent_msg[i] and recent_msg[i]["sender"] == sender and recent_msg[i]["msg"] == msg then
-			return true
-		end
-	end
-	
-	if index == 5 then
-		index = 1
-	end
-	
-	if not recent_msg[index] then
-		recent_msg[index] = {}
-	end
-	
-	recent_msg[index]["sender"] = sender
-	recent_msg[index]["msg"] = msg
-	
-	index = index + 1
 end
 
+local function restoreCVar(cvar)
+	C_Timer.After(.01, function()
+		SetCVar(cvar, 1)
+	end)
+end
+
+local function toggleBubble(party)
+	local cvar = "chatBubbles"..(party and "Party" or "")
+	if not GetCVarBool(cvar) then return end
+	SetCVar(cvar, 0)
+	restoreCVar(cvar)
+end
 
 -- filter spam from addons
-local function genAddonBlock(_, _, msg, author)
+local function genAddonBlock(_, event, msg, author)
 	if not C.chat.blockAddonAlert then return end
 
 	local name = Ambiguate(author, "none")
@@ -98,6 +61,12 @@ local function genAddonBlock(_, _, msg, author)
 
 	for _, word in ipairs(C.chat.addonBlockList) do
 		if msg:find(word) then
+			if event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" then
+				toggleBubble()
+			elseif event == "CHAT_MSG_PARTY" or event == "CHAT_MSG_PARTY_LEADER" then
+				toggleBubble(true)
+			end
+
 			return true
 		end
 	end
