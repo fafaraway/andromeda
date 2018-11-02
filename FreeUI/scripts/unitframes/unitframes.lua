@@ -1,4 +1,5 @@
 local F, C, L = unpack(select(2, ...))
+
 local module = F:RegisterModule("unitframe")
 if not C.unitframes.enable then return end
 
@@ -64,7 +65,7 @@ local function CreateHeader(self)
 	end)
 end
 
--- Update selected name colour
+-- Update selected frame's name/border colour
 local updateNameColour = function(self, unit)
 	if UnitIsUnit(unit, "target") then
 		self.Text:SetTextColor(.1, .7, 1)
@@ -91,7 +92,6 @@ local updateNameColourAlt = function(self)
 		end
 	else
 		frame.Text:SetTextColor(1, 1, 1)
-
 	end
 end
 
@@ -100,7 +100,6 @@ local function NameColour(self)
 	nc:RegisterEvent("PLAYER_TARGET_CHANGED")
 	nc:SetScript("OnEvent", updateNameColourAlt)
 end
-
 
 local updateBorderColour = function(self)
 	local frame = self:GetParent()
@@ -155,7 +154,8 @@ local PostUpdateHealth = function(Health, unit, min, max)
 
 	if C.unitframes.transMode then
 		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
-			self.Healthdef:Hide()
+			--self.Healthdef:Hide()
+			self.Healthdef:SetAlpha(0)
 		else
 			self.Healthdef:SetMinMaxValues(0, max)
 			self.Healthdef:SetValue(max-min)
@@ -170,7 +170,8 @@ local PostUpdateHealth = function(Health, unit, min, max)
 				self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 			end
 
-			self.Healthdef:Show()
+			--self.Healthdef:Show()
+			self.Healthdef:SetAlpha(1)
 		end
 
 		if tapped or offline then
@@ -307,54 +308,6 @@ local function CreateHealthBar(self)
 	end
 end
 
-local function CreateHealthText(self)
-	local HealthPoints = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-	HealthPoints:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 3)
-	HealthPoints:SetJustifyH('LEFT')
-	
-	if self.unitStyle == "player" then
-		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
-	elseif self.unitStyle == "target" then
-		self:Tag(HealthPoints, '[dead][offline][free:health]')
-	elseif self.unitStyle == "boss" then
-		HealthPoints:ClearAllPoints()
-		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-		HealthPoints:SetJustifyH('RIGHT')
-		self:Tag(HealthPoints, '[dead][free:bosshealth]')
-	elseif self.unitStyle == "arena" then
-		HealthPoints:ClearAllPoints()
-		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
-		HealthPoints:SetJustifyH('RIGHT')
-		self:Tag(HealthPoints, '[dead][offline][free:health]')
-	end
-
-	self.Health.value = HealthPoints
-end
-
-local function CreatePowerText(self)
-	local PowerText = F.CreateFS(self.Power, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-	PowerText:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 0, 3)
-	PowerText:SetJustifyH('RIGHT')
-
-	if self.unitStyle == "target" then
-		PowerText:ClearAllPoints()
-		PowerText:SetPoint("BOTTOMLEFT", self.Health.value, "BOTTOMRIGHT", 3, 0)
-	end
-
-	if powerType ~= 0 then
-		PowerText.frequentUpdates = .1
-	end
-
-	self:Tag(PowerText, '[free:power]')
-
-	self.Power.Text = PowerText
-end
-
-local function ClassificationText(self)
-	local Classification = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-	Classification:SetPoint("BOTTOMLEFT", self.Power.Text, "BOTTOMRIGHT", 3, 0)
-	self:Tag(Classification, '[free:classification]')
-end
 
 -- Update power
 local PostUpdatePower = function(Power, unit, cur, max, min)
@@ -459,6 +412,57 @@ local function CreateAltPower(self)
 
 	self.AlternativePower = bar		
 	self.AlternativePower.PostUpdate = postUpdateAltPower
+end
+
+
+-- Create health/power/classification text
+local function CreateHealthText(self)
+	local HealthPoints = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	HealthPoints:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 3)
+	HealthPoints:SetJustifyH('LEFT')
+	
+	if self.unitStyle == "player" then
+		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
+	elseif self.unitStyle == "target" then
+		self:Tag(HealthPoints, '[dead][offline][free:health]')
+	elseif self.unitStyle == "boss" then
+		HealthPoints:ClearAllPoints()
+		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
+		HealthPoints:SetJustifyH('RIGHT')
+		self:Tag(HealthPoints, '[dead][free:bosshealth]')
+	elseif self.unitStyle == "arena" then
+		HealthPoints:ClearAllPoints()
+		HealthPoints:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", 0, 3)
+		HealthPoints:SetJustifyH('RIGHT')
+		self:Tag(HealthPoints, '[dead][offline][free:health]')
+	end
+
+	self.Health.value = HealthPoints
+end
+
+local function CreatePowerText(self)
+	local PowerText = F.CreateFS(self.Power, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	PowerText:SetPoint("BOTTOMRIGHT", self.Health, "TOPRIGHT", 0, 3)
+	PowerText:SetJustifyH('RIGHT')
+
+	if self.unitStyle == "target" then
+		PowerText:ClearAllPoints()
+		PowerText:SetPoint("BOTTOMLEFT", self.Health.value, "BOTTOMRIGHT", 3, 0)
+	end
+
+	if powerType ~= 0 then
+		PowerText.frequentUpdates = .1
+	end
+
+	self:Tag(PowerText, '[free:power]')
+
+	self.Power.Text = PowerText
+end
+
+local function ClassificationText(self)
+	local Classification = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	Classification:SetPoint("BOTTOMLEFT", self.Power.Text, "BOTTOMRIGHT", 3, 0)
+	self:Tag(Classification, '[free:classification]')
 end
 
 
@@ -583,7 +587,6 @@ local function CreateCastBar(self)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint("LEFT", self, "RIGHT", 4, 0)
 	end
-
 
 	cb.OnUpdate = cast.OnCastbarUpdate
 	cb.PostCastStart = cast.PostCastStart
@@ -735,25 +738,50 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 	end
 end
 
-local function FilterTargetDebuffs(_, unit, button, _, _, _, _, _, _, _, caster, _, _, spellID)
-	if(button.isDebuff and not button.isPlayer) then
-		return false
-	end
-	return true
+local function BolsterPreUpdate(element)
+	element.bolster = 0
+	element.bolsterIndex = nil
 end
 
-local function groupDebuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spellID)
-	if C.hideDebuffs[spellID] then
-		return false
+local function BolsterPostUpdate(element)
+	if not element.bolsterIndex then return end
+	for _, button in pairs(element) do
+		if button == element.bolsterIndex then
+			button.count:SetText(element.bolster)
+			return
+		end
 	end
-	return true
 end
 
-local function groupBuffFilter(_, unit, button, _, _, _, _, _, _, caster, _, _, spellID)
-	if (button.isPlayer and C.myBuffs[spellID]) or C.allBuffs[spellID] then
-		return true
+local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID)
+	local style = element.__owner.unitStyle
+	if name and spellID == 209859 then
+		element.bolster = element.bolster + 1
+		if not element.bolsterIndex then
+			element.bolsterIndex = button
+			return true
+		end
+	elseif style == "target" then
+		if (C.unitframes.debuffbyPlayer and button.isDebuff and not button.isPlayer) then
+			return false
+		else
+			return true
+		end
+	elseif style == "boss" then
+		if (button.isDebuff and not button.isPlayer) then
+			return false
+		else
+			return true
+		end
+	elseif style == "group" then
+		if (button.isDebuff and not C.ignoredDebuffs[spellID]) then
+			return true
+		elseif (button.isBuff and button.isPlayer and C.myBuffs[spellID]) or (button.isDebuff and C.allBuffs[spellID]) then
+			return true
+		else
+			return false
+		end
 	end
-	return false
 end
 
 local function PostUpdateGapIcon(self, unit, icon, visibleBuffs)
@@ -784,20 +812,15 @@ local function CreateAuras(self)
 		Auras["growth-y"] = "UP"
 		Auras.size = 28
 		Auras:SetSize(self:GetWidth(), 100)
-
-		if C.unitframes.debuffbyPlayer then
-			Auras.CustomFilter = FilterTargetDebuffs
-		end
 	elseif self.unitStyle == "boss" then
 		Auras.initialAnchor = "TOPLEFT"
 		Auras:SetPoint("TOP", self, "BOTTOM", 0, -6)
 		Auras["growth-y"] = "DOWN"
 		Auras.size = 24
-
-		Auras.CustomFilter = FilterTargetDebuffs
 	end
 	self.Auras = Auras
 
+	Auras.CustomFilter = CustomFilter
 	Auras.PostCreateIcon = PostCreateIcon
 	Auras.PostUpdateIcon = PostUpdateIcon
 	Auras.PostUpdateGapIcon = PostUpdateGapIcon
@@ -860,7 +883,7 @@ local function CreatePortrait(self)
 	if not C.unitframes.portrait then return end
 
 	local Portrait = CreateFrame('PlayerModel', nil, self)
-	Portrait:SetAllPoints(self.Health)
+	Portrait:SetAllPoints(self)
 	Portrait:SetFrameLevel(self.Health:GetFrameLevel() + 2)
 	Portrait:SetAlpha(C.unitframes.portraitAlpha)
 	Portrait.PostUpdate = PostUpdatePortrait
@@ -1368,6 +1391,7 @@ local function CreateCounterBar(self)
 	self.CounterBar = CounterBar
 end
 
+
 -- spell range
 local function spellRange(self)
 	if (not C.unitframes.spellRange) then return end
@@ -1384,8 +1408,6 @@ if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
 	CompactRaidFrameManager:SetParent(FreeUIHider)
 	CompactUnitFrameProfiles:UnregisterAllEvents()
 end
-
-
 
 
 
@@ -1580,7 +1602,7 @@ local UnitSpecific = {
 
 		Debuffs.PostCreateIcon = PostCreateIcon
 		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.CustomFilter = groupDebuffFilter
+		Debuffs.CustomFilter = CustomFilter
 
 
 		local Buffs = CreateFrame("Frame", nil, self)
@@ -1615,7 +1637,7 @@ local UnitSpecific = {
 
 		Buffs.PostCreateIcon = PostCreateIcon
 		Buffs.PostUpdateIcon = PostUpdateIcon
-		Buffs.CustomFilter = groupBuffFilter
+		Buffs.CustomFilter = CustomFilter
 
 
 		NameColour(self)
@@ -1671,7 +1693,7 @@ local UnitSpecific = {
 
 		Debuffs.PostCreateIcon = PostCreateIcon
 		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.CustomFilter = groupDebuffFilter
+		Debuffs.CustomFilter = CustomFilter
 
 
 		local Buffs = CreateFrame("Frame", nil, self)
@@ -1706,7 +1728,7 @@ local UnitSpecific = {
 
 		Buffs.PostCreateIcon = PostCreateIcon
 		Buffs.PostUpdateIcon = PostUpdateIcon
-		Buffs.CustomFilter = groupBuffFilter
+		Buffs.CustomFilter = CustomFilter
 
 
 		NameColour(self)
