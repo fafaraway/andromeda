@@ -87,9 +87,9 @@ end
 
 
 -- string format
-CHAT_FLAG_AFK = "AFK. "
-CHAT_FLAG_DND = "DND. "
-CHAT_FLAG_GM = "GM. "
+CHAT_FLAG_AFK = "[AFK] "
+CHAT_FLAG_DND = "[DND] "
+CHAT_FLAG_GM = "[GM] "
 
 CHAT_YELL_GET = "|Hchannel:Yell|h%s: "
 CHAT_SAY_GET = "|Hchannel:Say|h%s: "
@@ -98,27 +98,6 @@ CHAT_WHISPER_GET = "from %s: "
 CHAT_WHISPER_INFORM_GET = "to %s: "
 CHAT_BN_WHISPER_GET = "from %s: "
 CHAT_BN_WHISPER_INFORM_GET = "to %s: "
-
-ACHIEVEMENT_BROADCAST = "%s achieved %s!"
-
-BN_INLINE_TOAST_FRIEND_OFFLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has gone |cffff0000offline|r."
-BN_INLINE_TOAST_FRIEND_ONLINE = "\124TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61\124t%s has come |cff00ff00online|r."
-
-CHAT_YOU_CHANGED_NOTICE = "|Hchannel:%d|h[%s]|h"
-ERR_FRIEND_OFFLINE_S = "%s has gone |cffff0000offline|r."
-ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h has come |cff00ff00online|r."
-
-ERR_SKILL_UP_SI = "|cffffffff%s|r |cff00adf0%d|r"
-ERR_AUCTION_SOLD_S = "|cff1eff00%s|r |cffffffffsold.|r"
-
-FACTION_STANDING_DECREASED = "%s -%d"
-FACTION_STANDING_INCREASED = "%s +%d"
-FACTION_STANDING_INCREASED_ACH_BONUS = "%s +%d (+%.1f)"
-FACTION_STANDING_INCREASED_ACH_PART = "(+%.1f)"
-FACTION_STANDING_INCREASED_BONUS = "%s + %d (+%.1f RAF)"
-FACTION_STANDING_INCREASED_DOUBLE_BONUS = "%s +%d (+%.1f RAF) (+%.1f)"
-FACTION_STANDING_INCREASED_REFER_PART = "(+%.1f RAF)"
-FACTION_STANDING_INCREASED_REST_PART = "(+%.1f Rested)"
 
 CURRENCY_GAINED = "+ %s";
 CURRENCY_GAINED_MULTIPLE = "+ %sx%d";
