@@ -190,7 +190,6 @@ C['misc'] = {
 	['usefulSpellAlert'] = true,		-- feast/bot/portal/summon/refreshmenttable/soulwell/toy
 	['resAlert'] = true,				-- combat res
 	['sappedAlert'] = true,
-	['explosiveCount'] = true,
 
 	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
 		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
@@ -282,7 +281,7 @@ C['chat'] = {
 	['filterList'] = '',	-- blacklist keywords
 	['addonBlockList'] = {
 		'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
-		'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard%.cn.+%.vip'
+		'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard%.cn%.%w+%.vip'
 		},
 }
 

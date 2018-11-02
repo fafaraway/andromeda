@@ -9,7 +9,6 @@ function module:AddAlerts()
 	self:UsefulSpellAlert()
 	self:ResAlert()
 	self:SappedAlert()
-	self:ExplosiveAlert()
 end
 
 
@@ -281,46 +280,4 @@ function module:SappedAlert()
 			end)
 		end
 	end)
-end
-
-
-function module:ExplosiveAlert()
-	if not C.misc.explosiveCount then return end
-
-	local affixes = C_MythicPlus.GetCurrentAffixes()
-	if not affixes or affixes[3] ~= 13 then return end
-	local eventList = {
-		['SWING_DAMAGE'] = 13,
-		['RANGE_DAMAGE'] = 16,
-		['SPELL_DAMAGE'] = 16,
-		['SPELL_PERIODIC_DAMAGE'] = 16,
-		["SPELL_BUILDING_DAMAGE"] = 16,
-	}
-	local cache = {}
-	local function updateCount(_, ...)
-		local _, eventType, _, _, sourceName, _, _, destGUID = ...
-		local index = eventList[eventType]
-		if index and F.GetNPCID(destGUID) == 120651 then
-			local overkill = select(index, ...)
-			if overkill and overkill > 0 then
-				local name = string.split('-', sourceName)
-				if not cache[name] then cache[name] = 0 end
-				cache[name] = cache[name] + 1
-			end
-		end
-	end
-	local function startCount()
-		wipe(cache)
-		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', updateCount)
-	end
-	local function endCount()
-		local text
-		for name, count in pairs(cache) do
-			text = (text or L['ExplosiveCount'])..name..'('..count..') '
-		end
-		if text then SendChatMessage(text, 'PARTY') end
-		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', updateCount)
-	end
-	F:RegisterEvent('CHALLENGE_MODE_START', startCount)
-	F:RegisterEvent('CHALLENGE_MODE_COMPLETED', endCount)
 end
