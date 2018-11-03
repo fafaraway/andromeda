@@ -1580,7 +1580,7 @@ local UnitSpecific = {
 
 		Debuffs:SetHeight(16)
 		Debuffs:SetWidth(37)
-		Debuffs.num = 2
+		Debuffs.num = 3
 		Debuffs.size = 16
 
 		Debuffs.showDebuffType = true
@@ -1593,7 +1593,9 @@ local UnitSpecific = {
 		Debuffs.PostUpdate = function(icons)
 			local vb = icons.visibleDebuffs
 
-			if vb == 2 then
+			if vb == 3 then
+				Debuffs:SetPoint("BOTTOM", -19, 0)
+			elseif vb == 2 then
 				Debuffs:SetPoint("BOTTOM", -9, 0)
 			else
 				Debuffs:SetPoint("BOTTOM")
