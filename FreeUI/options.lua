@@ -58,7 +58,6 @@ else
 	}
 end
 
-
 C.reactioncolours = {
 	[1] = {139/255, 39/255, 60/255}, 	-- Exceptionally hostile
 	[2] = {217/255, 51/255, 22/255}, 	-- Very Hostile
@@ -273,6 +272,7 @@ C['chat'] = {
 	['whisperAlert'] = true,
 	['minimize'] = true,
 	['outline'] = false,
+	['timeStamp'] = false,
 
 	['enableFilter'] = true,
 	['keyWordMatch'] = 1,

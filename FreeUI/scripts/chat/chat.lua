@@ -149,6 +149,17 @@ SlashCmdList.TELLTARGET = function(str)
 	end
 end
 
+-- time stamp
+local function updateTimestamp()
+	local greyStamp = C.greyColor.."%H:%M|r "
+	if C.chat.timeStamp then
+		SetCVar("showTimestamps", greyStamp)
+	else
+		SetCVar("showTimestamps", "none")
+	end
+end
+F.UpdateTimestamp = updateTimestamp
+
 
 function module:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
@@ -252,6 +263,7 @@ function module:OnLogin()
 	ForceChatSettings()
 
 	self:ChatFilter()
+	updateTimestamp()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
