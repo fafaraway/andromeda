@@ -2,10 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("misc")
 
 function module:OnLogin()
-
 	self:AddAlerts()
 	self:rareAlert()
-
 	self:ShowItemLevel()
 	self:progressBar()
 	self:flashCursor()
@@ -14,48 +12,8 @@ function module:OnLogin()
 	self:fasterLooting()
 	self:vignette()
 	self:PVPMessageEnhancement()
-
-	-- Remove Boss Banner
-	if not C.misc.bossBanner then
-		BossBanner:UnregisterAllEvents()
-	end
-
-	-- Fix patch 27326
-	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame", nil, F.HiddenFrame)
 end
 
-
-
--- Remove Talking Head Frame
-do
-	local function NoTalkingHeads()
-		hooksecurefunc(TalkingHeadFrame, "Show", function(self)
-			self:Hide()
-		end)
-		TalkingHeadFrame.ignoreFramePositionManager = true
-	end
-
-	local function setupMisc(event, addon)
-		if C.misc.talkingHead then
-			F:UnregisterEvent(event, setupMisc)
-			return
-		end
-
-		if event == "PLAYER_ENTERING_WORLD" then
-			F:UnregisterEvent(event, setupMisc)
-			if IsAddOnLoaded("Blizzard_TalkingHeadUI") then
-				NoTalkingHeads()
-				F:UnregisterEvent("ADDON_LOADED", setupMisc)
-			end
-		elseif event == "ADDON_LOADED" and addon == "Blizzard_TalkingHeadUI" then
-			NoTalkingHeads()
-			F:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	F:RegisterEvent("PLAYER_ENTERING_WORLD", setupMisc)
-	F:RegisterEvent("ADDON_LOADED", setupMisc)
-end
 
 -- ALT + Right Click to buy a stack
 local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
@@ -88,52 +46,6 @@ function MerchantItemButton_OnModifiedClick(self, ...)
 	end
 	old_MerchantItemButton_OnModifiedClick(self, ...)
 end
-
-
-
--- Select target when click on raid units
-do
-	local function fixRaidGroupButton()
-		for i = 1, 40 do
-			local bu = _G["RaidGroupButton"..i]
-			if bu and bu.unit and not bu.clickFixed then
-				bu:SetAttribute("type", "target")
-				bu:SetAttribute("unit", bu.unit)
-
-				bu.clickFixed = true
-			end
-		end
-	end
-
-	local EventFrame = CreateFrame( 'Frame' )
-	EventFrame:RegisterEvent("ADDON_LOADED")
-	EventFrame:SetScript("OnEvent", function(self, event, addon)
-		if event == "ADDON_LOADED" and addon == "Blizzard_RaidUI" then
-			if not InCombatLockdown() then
-				fixRaidGroupButton()
-				self:UnregisterAllEvents()
-			else
-				self:RegisterEvent("PLAYER_REGEN_ENABLED")
-			end
-		elseif event == "PLAYER_REGEN_ENABLED" then
-			if RaidGroupButton1 and RaidGroupButton1:GetAttribute("type") ~= "target" then
-				fixRaidGroupButton()
-				self:UnregisterAllEvents()
-			end
-		end
-	end)
-end
-
-
--- Clean up Loss Of Control
-local frame = _G.LossOfControlFrame
-frame.RedLineTop:SetTexture(nil)
-frame.RedLineBottom:SetTexture(nil)
-frame.blackBg:SetTexture(nil)
-
-F.ReskinIcon(frame.Icon)
-F.CreateBDFrame(frame.Icon)
-F.CreateSD(frame.Icon)
 
 
 -- adding a shadowed border to the UI window
@@ -170,84 +82,6 @@ if C.misc.autoActionCam then
 		end
 	end
 	aac:SetScript("OnEvent", aac.OnEvent)
-end
-
-
--- Hide talent alert
-function MainMenuMicroButton_AreAlertsEffectivelyEnabled()
-	return false
-end
-
-function TalentMicroButtonAlert:Show()
-	TalentMicroButtonAlert:Hide();
-end
-
--- HonorFrame.type can be tainted through UIDropDownMenu
--- https://www.townlong-yak.com/bugs/afKy4k-HonorFrameLoadTaint
-if (UIDROPDOWNMENU_VALUE_PATCH_VERSION or 0) < 2 then
-    UIDROPDOWNMENU_VALUE_PATCH_VERSION = 2
-    hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
-        if UIDROPDOWNMENU_VALUE_PATCH_VERSION ~= 2 then
-            return
-        end
-        for i=1, UIDROPDOWNMENU_MAXLEVELS do
-            for j=1, UIDROPDOWNMENU_MAXBUTTONS do
-                local b = _G["DropDownList" .. i .. "Button" .. j]
-                if not (issecurevariable(b, "value") or b:IsShown()) then
-                    b.value = nil
-                    repeat
-                        j, b["fx" .. j] = j+1
-                    until issecurevariable(b, "value")
-                end
-            end
-        end
-    end)
-end
-
-
--- UIDropDown displayMode taints Communities UI
--- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeCommunitiesTaint
-if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
-    UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
-    hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
-        if UIDROPDOWNMENU_OPEN_PATCH_VERSION ~= 1 then
-            return
-        end
-        if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame
-           and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, "displayMode") then
-            UIDROPDOWNMENU_OPEN_MENU = nil
-            local t, f, prefix, i = _G, issecurevariable, " \0", 1
-            repeat
-                i, t[prefix .. i] = i + 1
-            until f("UIDROPDOWNMENU_OPEN_MENU")
-        end
-    end)
-end
-
-
--- Fix Drag Collections taint
-do
-	local done
-	local function setupMisc(event, addon)
-		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-			CollectionsJournal:HookScript("OnShow", function()
-				if not done then
-					if InCombatLockdown() then
-						F:RegisterEvent("PLAYER_REGEN_ENABLED", setupMisc)
-					else
-						F.CreateMF(CollectionsJournal)
-					end
-					done = true
-				end
-			end)
-			F:UnregisterEvent(event, setupMisc)
-		elseif event == "PLAYER_REGEN_ENABLED" then
-			F.CreateMF(CollectionsJournal)
-			F:UnregisterEvent(event, setupMisc)
-		end
-	end
-
-	F:RegisterEvent("ADDON_LOADED", setupMisc)
 end
 
 
@@ -312,19 +146,21 @@ end
 
 
 -- plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
-local flightMastersWhistle_SpellID1 = 227334
-local flightMastersWhistle_SpellID2 = 253937
-local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\blowmywhistle.ogg'
+do
+	local flightMastersWhistle_SpellID1 = 227334
+	local flightMastersWhistle_SpellID2 = 253937
+	local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\blowmywhistle.ogg'
 
-local f = CreateFrame("frame")
-f:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end);
+	local f = CreateFrame("frame")
+	f:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end);
 
-function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
-	if (unit == "player" and (spellID == flightMastersWhistle_SpellID1 or spellID == flightMastersWhistle_SpellID2)) then
-		PlaySoundFile(whistleSound)
+	function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
+		if (unit == "player" and (spellID == flightMastersWhistle_SpellID1 or spellID == flightMastersWhistle_SpellID2)) then
+			PlaySoundFile(whistleSound)
+		end
 	end
+	f:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 end
-f:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 
 
 -- ready check in master sound
@@ -339,13 +175,7 @@ end
 
 
 
--- reposition alert popup
-local function alertFrameMover(self, ...)
-	_G.AlertFrame:ClearAllPoints()
-	_G.AlertFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
-end
 
-hooksecurefunc(_G.AlertFrame, "UpdateAnchors", alertFrameMover)
 
 
 

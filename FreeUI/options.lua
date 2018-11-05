@@ -149,14 +149,19 @@ C['maps'] = {
 }
 
 
+C['blizzard'] = {
+	['hideBossBanner'] = true,
+	['hideTalkingHead'] = true,
+}
+
+
 C['misc'] = {
 	['uiScale'] = 1,
 	['uiScaleAuto'] = true,
 
 	['flashCursor'] = true,
 
-	['bossBanner'] = false,
-	['talkingHead'] = false,
+	
 	['mailButton'] = true, 
 	['undressButton'] = true, 
 	['alreadyKnown'] = true,

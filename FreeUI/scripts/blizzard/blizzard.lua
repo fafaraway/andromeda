@@ -8,66 +8,179 @@ function module:OnLogin()
 	self:EnhanceColorPicker()
 	self:PositionUIWidgets()
 	self:QuestTracker()
+
+	-- Remove Boss Banner
+	if C.blizzard.hideBossBanner then
+		BossBanner:UnregisterAllEvents()
+	end
+
+	-- Fix patch 27326
+	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame", nil, F.HiddenFrame)
 end
 
 
--- Prevents spells from being automatically added to your action bar
--- This prevents icons from being animated onto the main action bar
-IconIntroTracker.RegisterEvent = function() end
-IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
+do
+	-- Prevents spells from being automatically added to your action bar
+	IconIntroTracker.RegisterEvent = function() end
+	IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
 
--- In the unlikely event that you're looking at a different action page while switching talents
--- the spell is automatically added to your main bar. This takes it back off.
-local f = CreateFrame('frame')
-f:SetScript('OnEvent', function(self, event, spellID, slotIndex, slotPos)
-	-- This event should never fire in combat, but check anyway
-	if not InCombatLockdown() then
-		ClearCursor()
-		PickupAction(slotIndex)
-		ClearCursor()
-	end
-end)
-f:RegisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
+	local iit = CreateFrame('frame')
+	iit:SetScript('OnEvent', function(self, event, spellID, slotIndex, slotPos)
+		if not InCombatLockdown() then
+			ClearCursor()
+			PickupAction(slotIndex)
+			ClearCursor()
+		end
+	end)
+	iit:RegisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
+end
 
 
-C.reactioncolours = {
-	[1] = {139/255, 39/255, 60/255}, 	-- Exceptionally hostile
-	[2] = {217/255, 51/255, 22/255}, 	-- Very Hostile
-	[3] = {231/255, 87/255, 83/255}, 	-- Hostile
-	[4] = {213/255, 201/255, 128/255}, 	-- Neutral
-	[5] = {184/255, 243/255, 147/255}, 	-- Friendly
-	[6] = {115/255, 231/255, 62/255}, 	-- Very Friendly
-	[7] = {107/255, 231/255, 157/255}, 	-- Exceptionally friendly
-	[8] = {44/255, 153/255, 111/255}, 	-- Exalted
-}
+-- reposition alert popup
+local function alertFrameMover(self, ...)
+	_G.AlertFrame:ClearAllPoints()
+	_G.AlertFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
+end
 
--- custom reputation color
-hooksecurefunc('ReputationFrame_Update', function(showLFGPulse)
-	local numFactions = GetNumFactions()
-	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+hooksecurefunc(_G.AlertFrame, "UpdateAnchors", alertFrameMover)
 
-	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
-		local factionIndex = factionOffset + i
-		local factionBar = _G['ReputationBar'..i..'ReputationBar']
 
-		if factionIndex <= numFactions then
-			local name, description, standingID = GetFactionInfo(factionIndex)
-			local colorIndex = standingID
+-- remove talent alert
+function MainMenuMicroButton_AreAlertsEffectivelyEnabled()
+	return false
+end
+function TalentMicroButtonAlert:Show()
+	TalentMicroButtonAlert:Hide();
+end
 
-			local color = C.reactioncolours[colorIndex]
-			factionBar:SetStatusBarColor(color[1], color[2], color[3])
+
+-- remove talking head
+do
+	local hth = CreateFrame("Frame")
+	function hth:OnEvent(event, addon)
+		if C.blizzard.hideTalkingHead then
+			if addon == "Blizzard_TalkingHeadUI" then
+				hooksecurefunc("TalkingHeadFrame_PlayCurrent", function()
+					TalkingHeadFrame:Hide()
+				end)
+				self:UnregisterEvent(event)
+			end
 		end
 	end
-end)
-
-hooksecurefunc(ReputationBarMixin, 'Update', function(self)
-	local name, reaction, minBar, maxBar, value, factionID = GetWatchedFactionInfo();
-	local colorIndex = reaction;
-
-	local color = C.reactioncolours[colorIndex];
-	self:SetBarColor(color[1], color[2], color[3], 1);
-end)
+	hth:RegisterEvent("ADDON_LOADED")
+	hth:SetScript("OnEvent", hth.OnEvent)
+end
 
 
+-- Select target when click on raid units
+do
+	local function fixRaidGroupButton()
+		for i = 1, 40 do
+			local bu = _G["RaidGroupButton"..i]
+			if bu and bu.unit and not bu.clickFixed then
+				bu:SetAttribute("type", "target")
+				bu:SetAttribute("unit", bu.unit)
+
+				bu.clickFixed = true
+			end
+		end
+	end
+
+	local EventFrame = CreateFrame( 'Frame' )
+	EventFrame:RegisterEvent("ADDON_LOADED")
+	EventFrame:SetScript("OnEvent", function(self, event, addon)
+		if event == "ADDON_LOADED" and addon == "Blizzard_RaidUI" then
+			if not InCombatLockdown() then
+				fixRaidGroupButton()
+				self:UnregisterAllEvents()
+			else
+				self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			end
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			if RaidGroupButton1 and RaidGroupButton1:GetAttribute("type") ~= "target" then
+				fixRaidGroupButton()
+				self:UnregisterAllEvents()
+			end
+		end
+	end)
+end
 
 
+-- Clean up Loss Of Control
+do
+	local frame = _G.LossOfControlFrame
+	frame.RedLineTop:SetTexture(nil)
+	frame.RedLineBottom:SetTexture(nil)
+	frame.blackBg:SetTexture(nil)
+
+	F.ReskinIcon(frame.Icon)
+	F.CreateBDFrame(frame.Icon)
+	F.CreateSD(frame.Icon)
+end
+
+
+-- HonorFrame.type can be tainted through UIDropDownMenu
+-- https://www.townlong-yak.com/bugs/afKy4k-HonorFrameLoadTaint
+if (UIDROPDOWNMENU_VALUE_PATCH_VERSION or 0) < 2 then
+    UIDROPDOWNMENU_VALUE_PATCH_VERSION = 2
+    hooksecurefunc("UIDropDownMenu_InitializeHelper", function()
+        if UIDROPDOWNMENU_VALUE_PATCH_VERSION ~= 2 then
+            return
+        end
+        for i=1, UIDROPDOWNMENU_MAXLEVELS do
+            for j=1, UIDROPDOWNMENU_MAXBUTTONS do
+                local b = _G["DropDownList" .. i .. "Button" .. j]
+                if not (issecurevariable(b, "value") or b:IsShown()) then
+                    b.value = nil
+                    repeat
+                        j, b["fx" .. j] = j+1
+                    until issecurevariable(b, "value")
+                end
+            end
+        end
+    end)
+end
+-- UIDropDown displayMode taints Communities UI
+-- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeCommunitiesTaint
+if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
+    UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
+    hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
+        if UIDROPDOWNMENU_OPEN_PATCH_VERSION ~= 1 then
+            return
+        end
+        if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame
+           and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, "displayMode") then
+            UIDROPDOWNMENU_OPEN_MENU = nil
+            local t, f, prefix, i = _G, issecurevariable, " \0", 1
+            repeat
+                i, t[prefix .. i] = i + 1
+            until f("UIDROPDOWNMENU_OPEN_MENU")
+        end
+    end)
+end
+
+
+-- Fix Drag Collections taint
+do
+	local done
+	local function fixBlizz(event, addon)
+		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
+			CollectionsJournal:HookScript("OnShow", function()
+				if not done then
+					if InCombatLockdown() then
+						F:RegisterEvent("PLAYER_REGEN_ENABLED", fixBlizz)
+					else
+						F.CreateMF(CollectionsJournal)
+					end
+					done = true
+				end
+			end)
+			F:UnregisterEvent(event, fixBlizz)
+		elseif event == "PLAYER_REGEN_ENABLED" then
+			F.CreateMF(CollectionsJournal)
+			F:UnregisterEvent(event, fixBlizz)
+		end
+	end
+
+	F:RegisterEvent("ADDON_LOADED", fixBlizz)
+end
