@@ -6,14 +6,6 @@ local gsub = string.gsub
 local match = string.match
 local format = string.format
 
---[[local shorthands = {
-	INSTANCE_CHAT = 'i',
-	OFFICER = 'o',
-	GUILD = 'g',
-	PARTY = 'p',
-	RAID = 'r'
-}]]
-
 local function GetColor(className, isLocal)
 	if isLocal then
 		local found
@@ -42,15 +34,6 @@ local function FormatBNPlayer(misc, id, moreMisc, fakeName, tag, colon)
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
 
-local function AbbreviateChannel(channel, name)
-	local flag = ''
-	if(match(name, LEADER)) then
-		flag = '|cffffffff!|r '
-	end
-
-	--return format('|Hchannel:%s|h%s|h %s', channel, shorthands[channel] or gsub(channel, 'channel:', ''), flag)
-end
-
 local function FormatPlayer(info, name)
 	return format('|Hplayer:%s|h%s|h', info, gsub(name, '%-[^|]+', ''))
 end
@@ -65,26 +48,7 @@ local function AddMessage(self, message, ...)
 	message = gsub(message, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayer)
 	message = gsub(message, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayer)
 
-	message = gsub(message, '|Hchannel:(.-)|h%[(.-)%]|h ', AbbreviateChannel)
-
-	--message = gsub(message, '^%[' .. RAID_WARNING .. '%]', 'rw')
-
-	--[[message = gsub(message, "%[Guild%]", "g")
-	message = gsub(message, "%[Party%]", "p")
-	message = gsub(message, "%[Party Leader%]", "P")
-	message = gsub(message, "%[Dungeon Guide%]", "P")
-	message = gsub(message, "%[Raid%]", "r")
-	message = gsub(message, "%[Raid Leader%]", "RL")
-	message = gsub(message, "%[Raid Warning%]", "RW")
-	message = gsub(message, "%[Officer%]", "o")
-	message = gsub(message, "%[Instance%]", "i")
-	message = gsub(message, "%[Instance Leader%]", "I")
-	message = gsub(message, "%[(%d+)%..-%]", "%1")
-	message = gsub(message, "(|Hplayer.*|h) whispers", "From %1")
-	message = gsub(message, "To (|Hplayer.*|h)", "To %1")
-	message = gsub(message, "(|Hplayer.*|h) says:", "%1:")
-	message = gsub(message, "(|Hplayer.*|h) yells", "%1")]]
-
+	-- url
 	message = gsub(message, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
 
 	return hooks[self](self, message, ...)
