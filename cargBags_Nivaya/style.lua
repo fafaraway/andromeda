@@ -189,11 +189,10 @@ local function SellJunk()
 			end
 		end
 	end
-	
+
 	if Profit > 0 then
 		local loc = FreeUI[3]
-		local g, s, c = math.floor(Profit / 10000) or 0, math.floor((Profit % 10000) / 100) or 0, Profit % 100
-		print(C.infoColor..loc["Vendor trash sold"]..": ".."|cffffffff"..g.."\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t "..s.."\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t "..c.."\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t".."|r")
+		print(C.infoColor..loc["SellJunk"]..": ".."|cffd366ae("..SoldCount..")|r".." |cff00ff00+|r ".."|cffffffff"..GetMoneyString(Profit).."|r")
 	end
 end
 JS:SetScript("OnEvent", function() SellJunk() end)
