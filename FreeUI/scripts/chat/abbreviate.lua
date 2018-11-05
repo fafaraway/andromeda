@@ -6,13 +6,13 @@ local gsub = string.gsub
 local match = string.match
 local format = string.format
 
-local shorthands = {
+--[[local shorthands = {
 	INSTANCE_CHAT = 'i',
 	OFFICER = 'o',
 	GUILD = 'g',
 	PARTY = 'p',
 	RAID = 'r'
-}
+}]]
 
 local function GetColor(className, isLocal)
 	if isLocal then
@@ -26,7 +26,7 @@ local function GetColor(className, isLocal)
 			end
 		end
 	end
-	local tbl = C.classcolours[className]
+	local tbl = C.classColors[className]
 	local color = ("%02x%02x%02x"):format(tbl.r*255, tbl.g*255, tbl.b*255)
 	return color
 end
@@ -42,14 +42,14 @@ local function FormatBNPlayer(misc, id, moreMisc, fakeName, tag, colon)
 	return misc..id..moreMisc..fakeName..tag..(colon == ":" and ":" or colon)
 end
 
-local function AbbreviateChannel(channel, name)
+--[[local function AbbreviateChannel(channel, name)
 	local flag = ''
 	if(match(name, LEADER)) then
 		flag = '|cffffff00!|r '
 	end
 
 	return format('|Hchannel:%s|h%s|h %s', channel, shorthands[channel] or gsub(channel, 'channel:', ''), flag)
-end
+end]]
 
 local function FormatPlayer(info, name)
 	return format('|Hplayer:%s|h%s|h', info, gsub(name, '%-[^|]+', ''))
@@ -63,13 +63,27 @@ local function AddMessage(self, message, ...)
 	message = gsub(message, "%[(%d+)%. BigfootWorldChannel%]", "world")
 
 	message = gsub(message, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayer)
-	--message = gsub(message, '|HBNplayer:(.-)|h%[(.-)%]|h', FormatBNPlayer)
 	message = gsub(message, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayer)
-	message = gsub(message, '|Hchannel:(.-)|h%[(.-)%]|h ', AbbreviateChannel)
 
-	--message = gsub(message, '^%w- (|H)', '|cffa1a1a1@|r%1')
-	--message = gsub(message, '^(.-|h) %w-:', '%1:')
-	message = gsub(message, '^%[' .. RAID_WARNING .. '%]', 'rw')
+	--message = gsub(message, '|Hchannel:(.-)|h%[(.-)%]|h ', AbbreviateChannel)
+
+	--message = gsub(message, '^%[' .. RAID_WARNING .. '%]', 'rw')
+
+	message = gsub(message, "%[Guild%]", "g")
+	message = gsub(message, "%[Party%]", "p")
+	message = gsub(message, "%[Party Leader%]", "P")
+	message = gsub(message, "%[Dungeon Guide%]", "P")
+	message = gsub(message, "%[Raid%]", "r")
+	message = gsub(message, "%[Raid Leader%]", "RL")
+	message = gsub(message, "%[Raid Warning%]", "RW")
+	message = gsub(message, "%[Officer%]", "o")
+	message = gsub(message, "%[Instance%]", "i")
+	message = gsub(message, "%[Instance Leader%]", "I")
+	message = gsub(message, "%[(%d+)%..-%]", "%1")
+	message = gsub(message, "(|Hplayer.*|h) whispers", "From %1")
+	message = gsub(message, "To (|Hplayer.*|h)", "To %1")
+	message = gsub(message, "(|Hplayer.*|h) says:", "%1:")
+	message = gsub(message, "(|Hplayer.*|h) yells", "%1")
 
 	message = gsub(message, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
 
@@ -91,13 +105,13 @@ CHAT_FLAG_AFK = "[AFK] "
 CHAT_FLAG_DND = "[DND] "
 CHAT_FLAG_GM = "[GM] "
 
-CHAT_YELL_GET = "|Hchannel:Yell|h%s: "
-CHAT_SAY_GET = "|Hchannel:Say|h%s: "
+--CHAT_YELL_GET = "|Hchannel:Yell|h%s: "
+--CHAT_SAY_GET = "|Hchannel:Say|h%s: "
 
-CHAT_WHISPER_GET = "from %s: "
-CHAT_WHISPER_INFORM_GET = "to %s: "
-CHAT_BN_WHISPER_GET = "from %s: "
-CHAT_BN_WHISPER_INFORM_GET = "to %s: "
+--CHAT_WHISPER_GET = "from %s: "
+--CHAT_WHISPER_INFORM_GET = "to %s: "
+--CHAT_BN_WHISPER_GET = "from %s: "
+--CHAT_BN_WHISPER_INFORM_GET = "to %s: "
 
 CURRENCY_GAINED = "+ %s";
 CURRENCY_GAINED_MULTIPLE = "+ %sx%d";
@@ -145,3 +159,16 @@ TRADESKILL_LOG_THIRDPERSON = "+ %s : %s (Craft)";
 COPPER_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t"
 SILVER_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t"
 GOLD_AMOUNT = "%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t"
+
+if C.client == "zhCN" then
+	BN_INLINE_TOAST_FRIEND_OFFLINE = "|TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61|t%s |cffff0000离线|r"
+	BN_INLINE_TOAST_FRIEND_ONLINE = "|TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61|t%s |cff00ff00上线|r"
+
+	ERR_FRIEND_OFFLINE_S = "%s |cffff0000下线|r"
+	ERR_FRIEND_ONLINE_SS = "|Hplayer:%s|h[%s]|h |cff00ff00上线|r"
+
+	ERR_SKILL_UP_SI = "|cffffffff%s|r |cff00adf0%d|r"
+
+	ERR_AUCTION_SOLD_S = "|cff1eff00%s|r |cffffffff售出|r"
+end
+
