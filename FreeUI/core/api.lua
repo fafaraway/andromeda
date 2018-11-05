@@ -8,17 +8,32 @@ C.myName = UnitName("player")
 C.myRealm = GetRealmName()
 C.client = GetLocale()
 
-C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+C.classColors = {}
+C.classList = {}
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+	C.classList[v] = k
+end
 
-C.classColor = {C.classcolours[C.myClass].r, C.classcolours[C.myClass].g, C.classcolours[C.myClass].b}
-C.r, C.g, C.b = unpack(C.classColor)
+local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+for class in pairs(colors) do
+	C.classColors[class] = {}
+	C.classColors[class].r = colors[class].r
+	C.classColors[class].g = colors[class].g
+	C.classColors[class].b = colors[class].b
+	C.classColors[class].colorStr = colors[class].colorStr
+end
 
-C.myColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
+local r, g, b
+if C.appearance.useCustomColour then
+	r, g, b = C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b
+else
+	r, g, b = C.classColors[C.myClass].r, C.classColors[C.myClass].g, C.classColors[C.myClass].b
+end
+C.r, C.g, C.b = r, g, b
 
 
 
 -- [[ Functions ]]
-
 
 function F:dummy()
 	return
@@ -42,8 +57,6 @@ function F:CreateFS(fontPath, fontSize, fontStyle, fontColor, shadowColor, shado
 
 	return fs
 end
-
-
 
 function F:CreateTex()
 	if self.Tex then return end
@@ -952,7 +965,7 @@ function F.HexRGB(r, g, b)
 end
 
 function F.ClassColor(class)
-	local color = C.classcolours[class]
+	local color = C.classColors[class]
 	if not color then return 1, 1, 1 end
 	return color.r, color.g, color.b
 end
@@ -1096,4 +1109,4 @@ end
 
 
 
-DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), unpack(C.classColor))
+DEFAULT_CHAT_FRAME:AddMessage("FreeUI <Continued> |cffffffff"..GetAddOnMetadata("FreeUI", "Version"), C.r, C.g, C.b)

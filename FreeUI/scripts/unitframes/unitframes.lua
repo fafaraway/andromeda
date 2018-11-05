@@ -138,10 +138,10 @@ local PostUpdateHealth = function(Health, unit, min, max)
 		r, g, b = 1, 0, 0
 	elseif unit == "pet" then
 		local _, class = UnitClass("player")
-		r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
+		r, g, b = C.classColors[class].r, C.classColors[class].g, C.classColors[class].b
 	elseif UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
-		if class then r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b else r, g, b = 1, 1, 1 end
+		if class then r, g, b = C.classColors[class].r, C.classColors[class].g, C.classColors[class].b else r, g, b = 1, 1, 1 end
 	else
 		r, g, b = unpack(reaction)
 	end

@@ -39,12 +39,12 @@ C.frames = {}
 
 local useButtonGradientColour
 local _, class = UnitClass("player")
-C.classcolours = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+C.classcolours = CONFIG.classColors
 
 local r, g, b
 --r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 
-r, g, b = CONFIG.classcolours[class].r, CONFIG.classcolours[class].g, CONFIG.classcolours[class].b
+r, g, b = CONFIG.classColors[class].r, CONFIG.classColors[class].g, CONFIG.classColors[class].b
 
 
 
