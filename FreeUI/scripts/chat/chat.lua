@@ -61,10 +61,10 @@ local function skinChat(self)
 	F.HideObject(self.ScrollBar)
 	F.HideObject(self.ScrollToBottomButton)
 
-	if C.chat.lockPosition then
-		ChatFrame1:ClearAllPoints()
-		ChatFrame1:SetPoint(unpack(C.chat.position))
-	end
+	--if C.chat.lockPosition then
+	--	ChatFrame1:ClearAllPoints()
+	--	ChatFrame1:SetPoint(unpack(C.chat.position))
+	--end
 
 	self.styled = true
 end
@@ -89,8 +89,7 @@ hooksecurefunc("FloatingChatFrame_OnMouseScroll", function(self, dir)
 	end
 end)
 
-
-
+-- chat frame fading
 local function EnableFading(i)
 	local chatFrameNumber = ("ChatFrame%d"):format(i);
 	local ChatFrameNumberFrame = _G[chatFrameNumber];
@@ -100,21 +99,7 @@ local function EnableFading(i)
 	ChatFrameNumberFrame:SetFadeDuration(10);
 end
 
-local function ForceChatSettings()
-	FCF_SetLocked(ChatFrame1, nil)
-	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint(unpack(C.chat.position))
-
-	for i = 1, NUM_CHAT_WINDOWS do
-		local cf = _G["ChatFrame"..i]
-		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
-	end
-	FCF_SavePositionAndDimensions(ChatFrame1)
-	FCF_SetLocked(ChatFrame1, true)
-
-end
-
-
+-- alt click invite
 local DefaultSetItemRef = SetItemRef
 function SetItemRef(link, ...)
 	local type, value = link:match("(%a+):(.+)")
@@ -132,7 +117,6 @@ function SetItemRef(link, ...)
 		return DefaultSetItemRef(link, ...)
 	end
 end
-
 
 -- whisper to target
 hooksecurefunc('ChatEdit_OnSpacePressed', function(self)
@@ -159,6 +143,20 @@ local function updateTimestamp()
 	end
 end
 F.UpdateTimestamp = updateTimestamp
+
+-- lock position
+local function ForceChatSettings()
+	FCF_SetLocked(ChatFrame1, nil)
+	ChatFrame1:ClearAllPoints()
+	ChatFrame1:SetPoint(unpack(C.chat.position))
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local cf = _G["ChatFrame"..i]
+		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
+	end
+	FCF_SavePositionAndDimensions(ChatFrame1)
+	FCF_SetLocked(ChatFrame1, true)
+end
 
 
 function module:OnLogin()
@@ -260,7 +258,9 @@ function module:OnLogin()
 	HideForever(ChatFrameToggleVoiceDeafenButton)
 	HideForever(ChatFrameToggleVoiceMuteButton)
 
-	ForceChatSettings()
+	if C.chat.lockPosition then
+		ForceChatSettings()
+	end
 
 	self:ChatFilter()
 	updateTimestamp()
