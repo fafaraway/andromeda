@@ -13,6 +13,7 @@ local frames = {
 	["BonusRollLootWonFrame"] = true,
 	["BonusRollMoneyWonFrame"] = true,
 	["CharacterFrame"] = false,
+	["ChannelFrame"] = false,
 	["ChatConfigFrame"] = false,
 	["ClassicQuestLogFrame"] = false,
 	["DressUpFrame"] = false,
