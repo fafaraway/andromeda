@@ -29,7 +29,7 @@ plus:SetPoint("CENTER", 1, 0)
 plus:SetText("+")
 
 wm:HookScript("OnEnter", function()
-	plus:SetTextColor(unpack(C.class))
+	plus:SetTextColor(C.r, C.g, C.b)
 end)
 
 wm:HookScript("OnLeave", function()
