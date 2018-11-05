@@ -30,6 +30,17 @@ end)
 f:RegisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
 
 
+C.reactioncolours = {
+	[1] = {139/255, 39/255, 60/255}, 	-- Exceptionally hostile
+	[2] = {217/255, 51/255, 22/255}, 	-- Very Hostile
+	[3] = {231/255, 87/255, 83/255}, 	-- Hostile
+	[4] = {213/255, 201/255, 128/255}, 	-- Neutral
+	[5] = {184/255, 243/255, 147/255}, 	-- Friendly
+	[6] = {115/255, 231/255, 62/255}, 	-- Very Friendly
+	[7] = {107/255, 231/255, 157/255}, 	-- Exceptionally friendly
+	[8] = {44/255, 153/255, 111/255}, 	-- Exalted
+}
+
 -- custom reputation color
 hooksecurefunc('ReputationFrame_Update', function(showLFGPulse)
 	local numFactions = GetNumFactions()
