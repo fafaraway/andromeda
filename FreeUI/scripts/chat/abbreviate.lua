@@ -65,31 +65,31 @@ end
 
 
 -- string format
-CHAT_FLAG_AFK = "[AFK] "
-CHAT_FLAG_DND = "[DND] "
-CHAT_FLAG_GM = "[GM] "
+CHAT_FLAG_AFK = "|cffffffff[AFK]|r\32"
+CHAT_FLAG_DND = "|cffffffff[DND]|r\32"
+CHAT_FLAG_GM = "|cffff0000[GM]|r\32"
 
-CHAT_WHISPER_GET = "[from] %s:\32"
-CHAT_WHISPER_INFORM_GET = "[to] %s:\32"
-CHAT_BN_WHISPER_GET = "[from] %s:\32"
-CHAT_BN_WHISPER_INFORM_GET = "[to] %s:\32"
+CHAT_WHISPER_GET = "From. %s:\32"
+CHAT_WHISPER_INFORM_GET = "To. %s:\32"
+CHAT_BN_WHISPER_GET = "From. %s:\32"
+CHAT_BN_WHISPER_INFORM_GET = "To. %s:\32"
 
-CHAT_GUILD_GET = "[|Hchannel:Guild|hG|h] %s:\32"
-CHAT_OFFICER_GET = "[|Hchannel:o|hO|h] %s:\32"
+CHAT_GUILD_GET = "|Hchannel:Guild|hG.|h %s:\32"
+CHAT_OFFICER_GET = "|Hchannel:o|hO.|h %s:\32"
 
-CHAT_PARTY_GET = "[|Hchannel:party|hP|h] %s:\32"
-CHAT_PARTY_LEADER_GET = "[|Hchannel:party|hPL|h] %s:\32"
-CHAT_PARTY_GUIDE_GET = "[|Hchannel:party|hPG|h] %s:\32"
+CHAT_PARTY_GET = "|Hchannel:party|hP.|h %s:\32"
+CHAT_PARTY_LEADER_GET = "|Hchannel:party|h|cffffff00!|r P.|h %s:\32"
+CHAT_PARTY_GUIDE_GET = "|Hchannel:party|hP.|h %s:\32"
 
-CHAT_RAID_GET = "[|Hchannel:raid|hR|h] %s:\32"
-CHAT_RAID_WARNING_GET = "[RW!] %s:\32"
-CHAT_RAID_LEADER_GET = "[|Hchannel:raid|hRL|h] %s:\32"
+CHAT_RAID_GET = "|Hchannel:raid|hR.|h %s:\32"
+CHAT_RAID_WARNING_GET = "[RW] %s:\32"
+CHAT_RAID_LEADER_GET = "|Hchannel:raid|h|cffffff00!|r R.|h %s:\32"
 
-CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE_CHAT|h[I]|h %s:\32"
-CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE_CHAT|h[IL]|h %s:\32"
+CHAT_INSTANCE_CHAT_GET = "|Hchannel:INSTANCE_CHAT|hI.|h %s:\32"
+CHAT_INSTANCE_CHAT_LEADER_GET = "|Hchannel:INSTANCE_CHAT|h|cffffff00!|r I.|h %s:\32"
 
-CHAT_BATTLEGROUND_GET = "[|Hchannel:Battleground|hBG|h] %s:\32"
-CHAT_BATTLEGROUND_LEADER_GET = "[|Hchannel:Battleground|hBL|h] %s:\32"
+CHAT_BATTLEGROUND_GET = "|Hchannel:Battleground|hB.|h %s:\32"
+CHAT_BATTLEGROUND_LEADER_GET = "|Hchannel:Battleground|h|cffffff00!|r B.|h %s:\32"
 
 CHAT_YELL_GET = "|Hchannel:Yell|h%s:\32"
 CHAT_SAY_GET = "|Hchannel:Say|h%s:\32"

@@ -267,7 +267,7 @@ C['chat'] = {
 	['whisperAlert'] = true,
 	['minimize'] = true,
 	['outline'] = false,
-	['timeStamp'] = false,
+	['timeStamp'] = true,
 
 	['enableFilter'] = true,
 	['keyWordMatch'] = 1,
