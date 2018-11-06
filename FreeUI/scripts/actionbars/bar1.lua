@@ -72,7 +72,17 @@ function module:OnLogin()
 	]])
 	RegisterStateDriver(frame, "page", actionPage)
 
-	--add elements
+	local function vehicleFix()
+		if InCombatLockdown() then return end
+		if HasVehicleActionBar() or HasOverrideActionBar() then
+			for _, button in next, buttonList do
+				ActionButton_Update(button)
+			end
+		end
+	end
+	F:RegisterEvent("UPDATE_VEHICLE_ACTIONBAR", vehicleFix)
+	F:RegisterEvent("UPDATE_OVERRIDE_ACTIONBAR", vehicleFix)
+
 	self:CreateBar2()
 	self:CreateBar3()
 	self:CreateBar4()
@@ -82,5 +92,4 @@ function module:OnLogin()
 	self:CreateExtrabar()
 	self:CreateLeaveVehicle()
 	self:HideBlizz()
-	--self:ReskinBars()
 end
