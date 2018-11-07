@@ -96,6 +96,11 @@ CHAT_SAY_GET = "|Hchannel:Say|h%s:\32"
 
 CHAT_CHANNEL_GET = "%s:\32"
 
+CHAT_MONSTER_PARTY_GET = "|Hchannel:PARTY|hP.|h %s:\32"
+CHAT_MONSTER_SAY_GET = "%s:\32";
+CHAT_MONSTER_WHISPER_GET = "%s:\32"
+CHAT_MONSTER_YELL_GET = "%s:\32"
+
 
 CHAT_YOU_CHANGED_NOTICE = ">|Hchannel:%d|h[%s]|h"
 CHAT_YOU_CHANGED_NOTICE_BN = ">|Hchannel:CHANNEL:%d|h[%s]|h"
