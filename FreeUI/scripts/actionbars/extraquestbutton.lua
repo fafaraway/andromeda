@@ -179,7 +179,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	iconBG:SetPoint("TOPLEFT", -1 , 1)
 	iconBG:SetPoint("BOTTOMRIGHT", 1, -1)
 	iconBG:SetTexture(C.media.backdrop)
-	iconBG:SetVertexColor(0, 0, 0)
+	iconBG:SetVertexColor(0, 1, 0)
 
 	F.CreateSD(iconBG)
 

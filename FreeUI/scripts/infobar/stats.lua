@@ -59,7 +59,7 @@ FreeUIStatsButton:HookScript("OnEnter", function()
 
 	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
 
-	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -31)
+	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
 
 	GameTooltip:AddDoubleLine("Addons", format("%.1f kb", total), C.r, C.g, C.b, 1, 1, 1)
 

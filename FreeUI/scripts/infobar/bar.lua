@@ -1,7 +1,6 @@
 ﻿local F, C = unpack(select(2, ...))
-
+local module = F:RegisterModule("infobar")
 if not C.infoBar.enable then return end
-
 
 local barAlpha, buttonAlpha
 
@@ -25,7 +24,7 @@ bar:SetPoint("TOPLEFT", -1, 1)
 bar:SetPoint("TOPRIGHT", 1, 1)
 
 
-bar:SetHeight(14)
+bar:SetHeight(C.infoBar.height)
 F.CreateBD(bar, barAlpha)
 
 bar.buttons = {}
@@ -41,109 +40,6 @@ end
 F:RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
 F:RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
 
-
--- [[ Report ]]
-
-local function Talent()
-	local Spec = GetSpecialization()
-	local SpecName = Spec and select(2, GetSpecializationInfo(Spec)) or "无"
-	return SpecName
-end
-
-local function HealText()
-	local HP = UnitHealthMax("player")
-	if HP > 1e4 then
-		return format('%.2f万',HP/1e4)
-	else
-		return HP
-	end
-end
-
-local function BaseInfo()
-	local BaseStat = ""
-	BaseStat = BaseStat..("%s"):format(Talent())
-	BaseStat = BaseStat..("%s "):format(UnitClass("player"))
-	BaseStat = BaseStat..("最高装等:%.1f 当前:%.1f "):format(GetAverageItemLevel())
-	BaseStat = BaseStat..("血量:%s "):format(HealText())
-	return BaseStat
-end
-
-local function DpsInfo()
-	local DpsStat={"", "", ""}
-	local specAttr={
-		WARRIOR={1,1,1},
-		DEATHKNIGHT={1,1,1},
-		DEMONHUNTER={2,2},
-		ROGUE={2,2,2},
-		HUNTER={2,2,2},
-		MAGE={3,3,3},
-		WARLOCK={3,3,3},
-		PRIEST={3,3,3},
-		SHAMAN={3,2,3},
-		MONK={2,3,2},
-		DRUID={3,2,2,3},
-		PALADIN={3,1,1}
-	}
-	local specId = GetSpecialization()
-	local classCN,classEnName = UnitClass("player")
-	local classSpecArr = specAttr[classEnName]
-	DpsStat[1] = ("力量:%s "):format(UnitStat("player", 1))
-	DpsStat[2] = ("敏捷:%s "):format(UnitStat("player", 2))
-	DpsStat[3] = ("智力:%s "):format(UnitStat("player", 4))
-	return DpsStat[classSpecArr[specId]]
-end
-
-local function TankInfo()
-	local TankStat = ""
-	TankStat = TankStat..("耐力:%s "):format(UnitStat("player", 3))
-	TankStat = TankStat..("护甲:%s "):format(UnitArmor("player"))
-	TankStat = TankStat..("闪避:%.2f%% "):format(GetDodgeChance())
-	TankStat = TankStat..("招架:%.2f%% "):format(GetParryChance())
-	TankStat = TankStat..("格挡:%.2f%% "):format(GetBlockChance())
-	return TankStat
-end
-
-local function HealInfo()
-	local HealStat = ""
-	HealStat = HealStat..("法力回复:%d "):format(GetManaRegen()*5)
-	return HealStat
-end
-
-local function MoreInfo()
-	local MoreStat = ""
-	MoreStat = MoreStat..("爆击:%.2f%% "):format(GetCritChance())
-	MoreStat = MoreStat..("急速:%.2f%% "):format(GetMeleeHaste())
-	MoreStat = MoreStat..("精通:%.2f%% "):format(GetMasteryEffect())
-	return MoreStat
-end
-
-local function Versatility_DONE()
-	local Versatility_DONE = ""
-	Versatility_DONE = Versatility_DONE..("全能:%.2f%% "):format(GetCombatRatingBonus(29))
-	return Versatility_DONE
-end
-
-local function Versatility_TAKEN()
-	local Versatility_TAKEN = ""
-	Versatility_TAKEN = Versatility_TAKEN..("全能:%.2f%% "):format(GetCombatRatingBonus(29))
-	return Versatility_TAKEN
-end
-
-local function StatReport()
-	if UnitLevel("player") < 10 then
-		return BaseInfo()
-	 end
-	 local StatInfo = ""
-	 local Role = GetSpecializationRole(GetSpecialization())
-	 if Role == "HEALER" then
-			StatInfo = StatInfo..BaseInfo()..DpsInfo()..HealInfo()..MoreInfo()..Versatility_DONE()
-	 elseif Role == "TANK" then
-			StatInfo = StatInfo..BaseInfo()..DpsInfo()..TankInfo()..MoreInfo()..Versatility_TAKEN()
-	 else
-			StatInfo = StatInfo..BaseInfo()..DpsInfo()..MoreInfo()..Versatility_DONE()
-	 end
-	 return StatInfo
-end
 
 -- [[ Buttons ]]
 
@@ -300,7 +196,7 @@ addButton("Micro menu", POSITION_LEFT, function(self, button)
 		for i = 1, NUM_CONTAINER_FRAMES do
 				local containerFrame = _G["ContainerFrame"..i]
 				if containerFrame:IsShown() then
-						openbags = true
+					openbags = true
 				end
 		end
 		if not openbags then
@@ -331,7 +227,7 @@ addButton("Chat menu", POSITION_LEFT, function(self, button)
 	end
 end)
 
-addButton("Toggle DBM", POSITION_LEFT, function(self, button)
+--[[addButton("Toggle DBM", POSITION_LEFT, function(self, button)
 	if IsAddOnLoaded("DBM-Core") then
 		if button == "RightButton" then
 			DBM:Disable()
@@ -345,7 +241,7 @@ addButton("Toggle DBM", POSITION_LEFT, function(self, button)
 		EnableAddOn("DBM-StatusBarTimers")
 		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffDBM enabled. Type|r /rl |cfffffffffor the changes to apply.|r", C.r, C.g, C.b)
 	end
-end)
+end)]]
 
 addButton("Toggle Skada", POSITION_LEFT, function(self, button)
 	if IsAddOnLoaded("Skada") then
@@ -439,17 +335,13 @@ specButton:SetScript("OnEvent", function(self)
 	end
 end)
 
---local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
---if C.client == "zhCN" or C.client == "zhTW" then
---	garrisonButton.Text:SetFont(unpack(menubarFont))
---end
-local garrisonButton = addButton("Garrison Report", POSITION_RIGHT, GarrisonLandingPage_Toggle)
+
+local garrisonButton = addButton(GARRISON_LANDING_PAGE_TITLE, POSITION_RIGHT, GarrisonLandingPage_Toggle)
 garrisonButton:Hide()
 
 GarrisonLandingPageMinimapButton:SetSize(1, 1)
 GarrisonLandingPageMinimapButton:SetAlpha(0)
 GarrisonLandingPageMinimapButton:EnableMouse(false)
-
 GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
 	if event == "GARRISON_SHOW_LANDING_PAGE" and not garrisonButton:IsShown() then
 		showButton(garrisonButton)
@@ -457,3 +349,195 @@ GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
 		hideButton(garrisonButton)
 	end
 end)
+if C.appearance.usePixelFont then
+	garrisonButton.Text:SetFont(unpack(C.font.pixel))
+elseif C.client == "zhCN" or C.client == "zhTW" then
+	garrisonButton.Text:SetFont(C.font.normal, 11)
+end
+
+
+-- money
+local keys = {}
+
+local addonLoaded
+addonLoaded = function(_, addon)
+	if addon ~= "FreeUI" then return end
+
+	if FreeUIGlobalConfig[C.myRealm] == nil then FreeUIGlobalConfig[C.myRealm] = {} end
+
+	if FreeUIGlobalConfig[C.myRealm].gold == nil then FreeUIGlobalConfig[C.myRealm].gold = {} end
+
+	if FreeUIGlobalConfig[C.myRealm].class == nil then FreeUIGlobalConfig[C.myRealm].class = {} end
+	FreeUIGlobalConfig[C.myRealm].class[C.myName] = select(2, UnitClass("player"))
+
+	if FreeUIGlobalConfig[C.myRealm].faction == nil then FreeUIGlobalConfig[C.myRealm].faction = {} end
+	FreeUIGlobalConfig[C.myRealm].faction[C.myName] = UnitFactionGroup("player")
+
+	F:UnregisterEvent("ADDON_LOADED", addonLoaded)
+	addonLoaded = nil
+end
+F:RegisterEvent("ADDON_LOADED", addonLoaded)
+
+local function updateMoney()
+	FreeUIGlobalConfig[C.myRealm].gold[C.myName] = GetMoney()
+end
+
+F:RegisterEvent("PLAYER_MONEY", updateMoney)
+F:RegisterEvent("PLAYER_ENTERING_WORLD", updateMoney)
+
+local FreeUIMoneyButton = addButton("", POSITION_RIGHT, function(self, button) end)
+
+FreeUIMoneyButton:HookScript("OnEnter", function()
+	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
+	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+
+	local total, totalAlliance, totalHorde, totalNeutral = 0, 0, 0, 0
+	local goldList = FreeUIGlobalConfig[C.myRealm].gold
+	local factionList = FreeUIGlobalConfig[C.myRealm].faction
+	local allianceList, hordeList, neutralList = {}, {}, {}
+	local headerAdded = false
+
+	for k, v in pairs(goldList) do
+		if factionList[k] == "Alliance" then
+			totalAlliance = totalAlliance + v
+			allianceList[k] = v
+		elseif factionList[k] == "Horde" then
+			totalHorde = totalHorde + v
+			hordeList[k]= v
+		else
+			totalNeutral = totalNeutral + v
+			neutralList[k] = v
+		end
+
+		total = total + v
+	end
+
+	GameTooltip:AddDoubleLine(C.myRealm, GetMoneyString(total), C.r, C.g, C.b, 1, 1, 1)
+
+	for n in pairs(allianceList) do
+		table.insert(keys, n)
+	end
+	table.sort(keys)
+
+	for _, k in pairs(keys) do
+		local class = FreeUIGlobalConfig[C.myRealm].class[k]
+		local v = allianceList[k]
+		if v and v >= 10000 then
+			if not headerAdded then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine(strupper(FACTION_ALLIANCE), GetMoneyString(totalAlliance), 0, 0.68, 0.94, 1, 1, 1)
+				headerAdded = true
+			end
+			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.classColors[class].r, C.classColors[class].g, C.classColors[class].b, 1, 1, 1)
+		end
+	end
+
+	headerAdded = false
+	table.wipe(keys)
+
+	for n in pairs(hordeList) do
+		table.insert(keys, n)
+	end
+	table.sort(keys)
+
+	for _, k in pairs(keys) do
+		local class = FreeUIGlobalConfig[C.myRealm].class[k]
+		local v = hordeList[k]
+		if v and v >= 10000 then
+			if not headerAdded then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine(strupper(FACTION_HORDE), GetMoneyString(totalHorde), 1, 0, 0, 1, 1, 1)
+				headerAdded = true
+			end
+			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.classColors[class].r, C.classColors[class].g, C.classColors[class].b, 1, 1, 1)
+		end
+	end
+
+	headerAdded = false
+	table.wipe(keys)
+
+	for n in pairs(neutralList) do
+		table.insert(keys, n)
+	end
+	table.sort(keys)
+
+	for _, k in pairs(keys) do
+		local class = FreeUIGlobalConfig[C.myRealm].class[k]
+		local v = neutralList[k]
+		if v and v >= 10000 then
+			if not headerAdded then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddDoubleLine(strupper(FACTION_OTHER), GetMoneyString(totalNeutral), .9, .9, .9, 1, 1, 1)
+				headerAdded = true
+			end
+			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.classColors[class].r, C.classColors[class].g, C.classColors[class].b, 1, 1, 1)
+		end
+	end
+
+	GameTooltip:Show()
+end)
+
+FreeUIMoneyButton:HookScript("OnLeave", function()
+	GameTooltip:Hide()
+end)
+
+local function moneyFormat(money)
+	--return format("|cffc1b37c"..BreakUpLargeNumbers(math.floor((money / 10000))).."|r")
+	local goldString, silverString, copperString
+	local gold = floor(money / (COPPER_PER_SILVER * SILVER_PER_GOLD))
+	local silver = floor((money - (gold * COPPER_PER_SILVER * SILVER_PER_GOLD)) / COPPER_PER_SILVER)
+	local copper = mod(money, COPPER_PER_SILVER)
+	goldString = format("|cffdbd368"..gold.."|r", 0, 0)
+	silverString = format("|cffd9d6d3"..silver.."|r", 0, 0)
+	copperString = format("|cffc19377"..copper.."|r", 0, 0)
+
+	local moneyString = ""
+	local separator = ""
+	if ( gold > 0 ) then
+		moneyString = goldString
+		separator = " "
+	end
+	if ( silver > 0 ) then
+		moneyString = moneyString..separator..silverString
+		separator = " "
+	end
+	if ( copper > 0 or moneyString == "" ) then
+		moneyString = moneyString..separator..copperString
+	end
+ 
+	return moneyString
+end
+
+
+local moneyHolder = CreateFrame("Frame", nil, FreeUIMoneyButton)
+moneyHolder:SetFrameLevel(3)
+moneyHolder:SetAllPoints(FreeUIMoneyButton)
+
+local moneyText = moneyHolder:CreateFontString()
+F.SetFS(moneyText)
+moneyText:SetPoint("CENTER")
+
+moneyHolder:RegisterEvent("PLAYER_ENTERING_WORLD")
+moneyHolder:RegisterEvent("PLAYER_MONEY")
+moneyHolder:RegisterEvent("SEND_MAIL_MONEY_CHANGED")
+moneyHolder:RegisterEvent("SEND_MAIL_COD_CHANGED")
+moneyHolder:RegisterEvent("PLAYER_TRADE_MONEY")
+moneyHolder:RegisterEvent("TRADE_MONEY_CHANGED")
+moneyHolder:SetScript("OnEvent", function(self, event, ...)
+	local tmpMoney = GetMoney()
+	self.CurrentMoney = tmpMoney
+	moneyText:SetText(moneyFormat(self.CurrentMoney))
+end)
+
+
+
+
+
+function module:OnLogin()
+	
+
+end
+
+
+
+
