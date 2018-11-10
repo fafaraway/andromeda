@@ -41,7 +41,7 @@ local function skinChat(self)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameLevel(eb:GetFrameLevel() - 1)
 	F.CreateTex(bd)
-	F.CreateBD(bd)
+	F.CreateBD(bd, .3)
 	F.CreateSD(bd)
 	eb.bd = bd
 	for i = 3, 8 do
