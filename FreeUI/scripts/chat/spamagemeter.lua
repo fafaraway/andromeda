@@ -6,55 +6,55 @@ if not C.chat.spamageMeters then return end
 -- Merge damage meter spam
 
 local firstLines = {
-	"^Recount - (.*)$", 									-- Recount
+	'^Recount - (.*)$', 									-- Recount
 
-	"^Skada: (.*) for (.*):$",								-- Skada enUS
+	'^Skada: (.*) for (.*):$',								-- Skada enUS
 
-	"^Skada: (.*) für (.*):$",								-- Skada deDE
-	"^Skada: (.*) pour (.*):$",								-- Skada frFR
-	"^Отчёт Skada: (.*), с (.*):$",							-- Skada ruRU
-	"^Skada: (.*) por (.*):$",								-- Skada esES/ptBR
-	"^Skada: (.*) per (.*):$",								-- Skada itIT
-	"^(.*) 의 Skada 보고 (.*):$",							-- Skada koKR
+	'^Skada: (.*) für (.*):$',								-- Skada deDE
+	'^Skada: (.*) pour (.*):$',								-- Skada frFR
+	'^Отчёт Skada: (.*), с (.*):$',							-- Skada ruRU
+	'^Skada: (.*) por (.*):$',								-- Skada esES/ptBR
+	'^Skada: (.*) per (.*):$',								-- Skada itIT
+	'^(.*) 의 Skada 보고 (.*):$',							-- Skada koKR
 
-	"^Skada：(.*)：$",								-- Skada zhCN
+	'^Skada：(.*)：$',								-- Skada zhCN
 
-	"^Skada:(.*)來自(.*):$",								-- Skada zhTW
+	'^Skada:(.*)來自(.*):$',								-- Skada zhTW
 
-	"^(.*) Done for (.*)$",									-- TinyDPS enUS
-	"^(.*) für (.*)$",										-- TinyDPS deDE
-	"데미지량 -(.*)$",										-- TinyDPS koKR
-	"힐량 -(.*)$",											-- TinyDPS koKR
-	"Урон:(.*)$",											-- TinyDPS ruRU
-	"Исцеление:(.*)$",										-- TinyDPS ruRU
-	"^Numeration: (.*) - (.*)$",							-- Numeration
-	"alDamageMeter : (.*)$",								-- alDamageMeter
-	"^Details!:(.*)$"							-- Details!
+	'^(.*) Done for (.*)$',									-- TinyDPS enUS
+	'^(.*) für (.*)$',										-- TinyDPS deDE
+	'데미지량 -(.*)$',										-- TinyDPS koKR
+	'힐량 -(.*)$',											-- TinyDPS koKR
+	'Урон:(.*)$',											-- TinyDPS ruRU
+	'Исцеление:(.*)$',										-- TinyDPS ruRU
+	'^Numeration: (.*) - (.*)$',							-- Numeration
+	'alDamageMeter : (.*)$',								-- alDamageMeter
+	'^Details!:(.*)$'							-- Details!
 }
 
 local nextLines = {
-	"^(%d+)\. (.*)$",										-- Recount, Details! and Skada
-	"^(.*)   (.*)$",										-- Additional Skada
-	"^[+-]%d+.%d",											-- Numeration deathlog details
-	"^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$"		-- TinyDPS
+	'^(%d+)\. (.*)$',										-- Recount, Details! and Skada
+	'^(.*)   (.*)$',										-- Additional Skada
+	'^[+-]%d+.%d',											-- Numeration deathlog details
+	'^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$'		-- TinyDPS
 }
 
 local meters = {}
 
 local events = {
-	"CHAT_MSG_CHANNEL",
-	"CHAT_MSG_GUILD",
-	"CHAT_MSG_OFFICER",
-	"CHAT_MSG_PARTY",
-	"CHAT_MSG_PARTY_LEADER",
-	"CHAT_MSG_RAID",
-	"CHAT_MSG_RAID_LEADER",
-	"CHAT_MSG_INSTANCE_CHAT",
-	"CHAT_MSG_INSTANCE_CHAT_LEADER",
-	"CHAT_MSG_SAY",
-	"CHAT_MSG_WHISPER",
-	"CHAT_MSG_WHISPER_INFORM",
-	"CHAT_MSG_YELL"
+	'CHAT_MSG_CHANNEL',
+	'CHAT_MSG_GUILD',
+	'CHAT_MSG_OFFICER',
+	'CHAT_MSG_PARTY',
+	'CHAT_MSG_PARTY_LEADER',
+	'CHAT_MSG_RAID',
+	'CHAT_MSG_RAID_LEADER',
+	'CHAT_MSG_INSTANCE_CHAT',
+	'CHAT_MSG_INSTANCE_CHAT_LEADER',
+	'CHAT_MSG_SAY',
+	'CHAT_MSG_WHISPER',
+	'CHAT_MSG_WHISPER_INFORM',
+	'CHAT_MSG_YELL'
 }
 
 local function FilterLine(event, source, message, ...)
@@ -90,7 +90,7 @@ local function FilterLine(event, source, message, ...)
 				local elapsed = curTime - j.time
 				if j.source == source and j.event == event and elapsed < 1 then
 					newID = i
-					return true, true, string.format("|HMergeSpamMeter:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
+					return true, true, string.format('|HMergeSpamMeter:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
 				end
 			end
 
@@ -102,7 +102,7 @@ local function FilterLine(event, source, message, ...)
 				end
 			end
 
-			return true, true, string.format("|HMergeSpamMeter:%1$d|h|cFFFFFF00[%2$s]|r|h", newID or 0, message or "nil")
+			return true, true, string.format('|HMergeSpamMeter:%1$d|h|cFFFFFF00[%2$s]|r|h', newID or 0, message or 'nil')
 		end
 	end
 	return false, false, nil
@@ -110,18 +110,18 @@ end
 
 local orig2 = SetItemRef
 function SetItemRef(link, text, button, frame)
-	local linkType, id = strsplit(":", link)
-	if linkType == "MergeSpamMeter" then
+	local linkType, id = strsplit(':', link)
+	if linkType == 'MergeSpamMeter' then
 		local meterID = tonumber(id)
 		ShowUIPanel(ItemRefTooltip)
 		if not ItemRefTooltip:IsShown() then
-			ItemRefTooltip:SetOwner(UIParent, "ANCHOR_PRESERVE")
+			ItemRefTooltip:SetOwner(UIParent, 'ANCHOR_PRESERVE')
 		end
 		ItemRefTooltip:ClearLines()
 		ItemRefTooltip:AddLine(meters[meterID].title)
-		ItemRefTooltip:AddLine(string.format(BY_SOURCE..": %s", meters[meterID].source))
+		ItemRefTooltip:AddLine(string.format(BY_SOURCE..': %s', meters[meterID].source))
 		for k, v in ipairs(meters[meterID].data) do
-			local left, right = v:match("^(.*)  (.*)$")
+			local left, right = v:match('^(.*)  (.*)$')
 			if left and right then
 				ItemRefTooltip:AddDoubleLine(left, right, 1, 1, 1, 1, 1, 1)
 			else

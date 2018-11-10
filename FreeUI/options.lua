@@ -262,25 +262,29 @@ C['tooltip'] = {
 
 
 C['chat'] = {
-	['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},
-	['lockPosition'] = true,
-	['sticky'] = true,
-	['itemLinkLevel'] = true,
-	['spamageMeters'] = true,
-	['whisperAlert'] = true,
-	['minimize'] = true,
-	['outline'] = false,
-	['timeStamp'] = true,
+	['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},  -- default position for chat frame
+	['lockPosition'] = true,	-- lock chat frame on default position
+	['itemLinkLevel'] = true,	-- expand item links in chat frame
+	['spamageMeters'] = true,	-- suppresses messages from damage meters like Skada
+	['whisperSound'] = true,	-- play a sound when you received a whisper or BN whisper message
+	['minimizeButton'] = true,	-- a clickable button for hide entire chat frame
+	['fontOutline'] = false,	-- add outline for chat frame texts
+	['timeStamp'] = true,		-- add customized time stamp for chat frame messages
+	['voiceButtons'] = false,	-- show voice buttons
+	['channelSticky'] = true,	-- chat sticky
+	['lineFading'] = true,		-- fading texts from chat frame
+		['timeVisible'] = 20,
+		['fadeDuration'] = 6,
 
-	['enableFilter'] = true,
-	['keyWordMatch'] = 1,
-	['blockAddonAlert'] = true,
-	['symbols'] = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '-'},
-	['filterList'] = '',	-- blacklist keywords
-	['addonBlockList'] = {
-		'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
-		'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard%.cn.+%.vip'
-		},
+	['enableFilter'] = true,	-- simple chat filter for keywords, repeat lines, addon alerts
+		['keyWordMatch'] = 1,
+		['symbols'] = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '-'},
+		['filterList'] = '',	-- blacklist keywords, use profiles.lua to create your own list
+		['blockAddonAlert'] = true,
+			['addonBlockList'] = {	-- filter annoying alerts from idiot addons
+				'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
+				'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard%.cn.+%.vip'
+				},
 }
 
 

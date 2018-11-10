@@ -10,7 +10,7 @@ CHAT_FRAME_TAB_SELECTED_MOUSEOVER_ALPHA = 1
 CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = 1
 CHAT_FRAME_TAB_ALERTING_MOUSEOVER_ALPHA = 1
 
-local Fane = CreateFrame("Frame")
+local Fane = CreateFrame('Frame')
 
 local updateFS = function(self, _, _, ...)
 	local fstring = self:GetFontString()
@@ -23,16 +23,16 @@ local updateFS = function(self, _, _, ...)
 end
 
 local OnEnter = function(self)
-	local emphasis = _G["ChatFrame"..self:GetID()..'TabFlash']:IsShown()
+	local emphasis = _G['ChatFrame'..self:GetID()..'TabFlash']:IsShown()
 	updateFS(self, emphasis, 'OUTLINEMONOCHROME', 0, .8, 1)
 end
 
 local OnLeave = function(self)
 	local r, g, b
 	local id = self:GetID()
-	local emphasis = _G["ChatFrame"..id..'TabFlash']:IsShown()
+	local emphasis = _G['ChatFrame'..id..'TabFlash']:IsShown()
 
-	if (_G["ChatFrame"..id] == SELECTED_CHAT_FRAME) then
+	if (_G['ChatFrame'..id] == SELECTED_CHAT_FRAME) then
 		r, g, b = C.r, C.g, C.b
 	elseif emphasis then
 		r, g, b = 1, 0, 0
@@ -80,7 +80,7 @@ local faneifyTab = function(frame, sel)
 
 		if C.appearance.usePixelFont then
 			frame:GetFontString():SetFont(unpack(C.font.pixel))
-		elseif C.client == "zhCN" or C.client == "zhTW" then
+		elseif C.client == 'zhCN' or C.client == 'zhTW' then
 			frame:GetFontString():SetFont(C.font.chat, 11, 'OUTLINE')
 		else
 			F.SetFS(frame:GetFontString())
@@ -105,7 +105,7 @@ end)
 hooksecurefunc('FCFTab_UpdateColors', faneifyTab)
 
 for i = 1, NUM_CHAT_WINDOWS do
-	faneifyTab(_G['ChatFrame'.. i.."Tab"])
+	faneifyTab(_G['ChatFrame'.. i..'Tab'])
 end
 
 function Fane:ADDON_LOADED(event, addon)

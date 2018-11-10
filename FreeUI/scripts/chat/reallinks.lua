@@ -1,4 +1,5 @@
 local F, C = unpack(select(2, ...))
+local module = F:GetModule('chat')
 
 -- Colors links in Battle.net whispers
 -- RealLinks by p3lim
@@ -86,5 +87,7 @@ Handler:SetScript('OnEvent', function()
 	end
 end)
 
-ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', MessageFilter)
-ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER_INFORM', MessageFilter)
+function module:RealLinks()
+	ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', MessageFilter)
+	ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER_INFORM', MessageFilter)
+end
