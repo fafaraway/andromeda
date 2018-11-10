@@ -1,8 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-C.texCoord = {.08, .92, .08, .92}
-C.infoColor = "|cffe5d19f"
-C.greyColor = "|cff808080"
+
 C.myClass = select(2, UnitClass("player"))
 C.myName = UnitName("player")
 C.myRealm = GetRealmName()
@@ -31,6 +29,16 @@ else
 end
 C.r, C.g, C.b = r, g, b
 
+C.myColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
+C.infoColor = "|cffe5d19f"
+C.greyColor = "|cff808080"
+
+C.lineString = C.greyColor.."---------------"
+C.leftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
+C.rightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
+C.scrollButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
+
+C.texCoord = {.08, .92, .08, .92}
 
 
 -- [[ Functions ]]
@@ -963,6 +971,16 @@ function F.HexRGB(r, g, b)
 		return ("|cff%02x%02x%02x"):format(r*255, g*255, b*255)
 	end
 end
+
+--[[local function TwoDecimal(decimal)
+	decimal = math.floor((decimal * 100)+0.5)*0.01       
+	return decimal 
+end
+
+function F.Hex2RGB(hex)
+    hex = hex:gsub("|cff","")
+    return TwoDecimal(("0x"..hex:sub(1,2))/255), TwoDecimal(("0x"..hex:sub(3,4))/255), TwoDecimal(("0x"..hex:sub(5,6))/255)
+end]]
 
 function F.ClassColor(class)
 	local color = C.classColors[class]
