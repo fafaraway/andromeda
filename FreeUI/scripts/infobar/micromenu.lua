@@ -1,8 +1,11 @@
 local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("infobar")
+if not C.infoBar.enable then return end
+
+local FreeUIMicroMenuButton = module.FreeUIMicroMenuButton
 
 
-
-local menuFrame = CreateFrame("Frame", "FreeUI_MicroMenu", UIParent, "DropDownMenuTemplate")
+local menuFrame = CreateFrame("Frame", "FreeUI_MicroMenu", FreeUIMicroMenuButton, "DropDownMenuTemplate")
 
 local microMenu = {
 	{text = CHARACTER_BUTTON, notCheckable = true, func = function() ToggleCharacter("PaperDollFrame") end},
@@ -45,16 +48,23 @@ local microMenu = {
 local taint
 taint = function(event, addon)
 	if addon ~= "FreeUI" then return end
-
 	ToggleFrame(SpellBookFrame)
-
 	F.UnregisterEvent("ADDON_LOADED", taint)
 end
 F:RegisterEvent("ADDON_LOADED", taint)
 
-F.MicroMenu = function()
-
-	menuFrame:SetPoint("TOPLEFT", UIParent)
-
+module.MicroMenu = function()
+	menuFrame:SetPoint("TOPLEFT", FreeUIMicroMenuButton, "TOPLEFT")
 	EasyMenu(microMenu, menuFrame, menuFrame, 0, 0, "MENU")
 end
+
+
+FreeUIMicroMenuButton = module:addButton("Micro menu", module.POSITION_LEFT, function(self, button)
+	if button == "LeftButton" then
+		if DropDownList1:IsShown() then
+			ToggleFrame(DropDownList1)
+		else
+			module.MicroMenu()
+		end
+	end
+end)

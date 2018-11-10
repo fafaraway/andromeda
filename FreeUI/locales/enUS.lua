@@ -32,3 +32,19 @@ L['ResNoTarget'] = '<Attention>: %s casted %s!'
 L['ResTarget'] = '<Attention>: %s casted %s on %s!'
 
 L['Undress'] = 'Undress'
+
+L["WoW"] = "<World of Warcraft>"
+L["BN"] = "<Battle.NET>"
+L["NoOnline"] = "No friends online at the moment."
+L["HoldShift"] = "Hold <Shift>"
+L["ShowFriends"] = "Open friend panel"
+L["OpenBag"] = "Open bag"
+L["SpecPanel"] = "Open talent panel"
+L["ChangeSpec"] = "Change specialization"
+L["ChangeLootSpec"] = "Change loot specialization"
+L["CollectMemory"] = "Collect Memory"
+L["Hidden"] = "Hidden"
+L["DefaultUIMemoryUsage:"] = "Default UI Memory Usage:"
+L["TotalMemoryUsage:"] = "Total Memory Usage:"
+L["OpenAddonList"] = "Open addon list panel"
+L["OpenTimerTracker"] = "Open timer panel"

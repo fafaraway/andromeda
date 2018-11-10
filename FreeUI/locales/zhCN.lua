@@ -35,3 +35,19 @@ L['ResNoTarget'] 		= '<注意>：%s 使用了 %s！'
 L['ResTarget'] 			= '<注意>：%s 使用了 %s 在 %s！'
 
 L['Undress'] = '脱衣'
+
+L['WoW'] = '<魔兽世界>'
+L['BN'] = '<战网好友>'
+L["NoOnline"] = "当前没有好友在线"
+L["HoldShift"] = "按住 <Shift> 展开详细信息"
+L["ShowFriends"] = "打开好友面板"
+L["OpenBag"] = "打开背包"
+L["SpecPanel"] = "打开天赋面板"
+L["ChangeSpec"] = "切换专精"
+L["ChangeLootSpec"] = "切换拾取专精"
+L["CollectMemory"] = "整理内存"
+L["Hidden"] = "隐藏"
+L["DefaultUIMemoryUsage:"] = "系统插件内存:"
+L["TotalMemoryUsage:"] = "总内存使用:"
+L["OpenAddonList"] = "打开插件列表"
+L["OpenTimerTracker"] = "打开时钟"

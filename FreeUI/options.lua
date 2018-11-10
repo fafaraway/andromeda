@@ -230,9 +230,11 @@ C['bags'] = {
 
 C['infoBar'] = {
 	['enable'] = true,
-	['height'] = 16,
+	['height'] = 20,
 	['enableButtons'] = true,			-- show buttons for quick access on the menu bar
 		['buttons_mouseover'] = true,			-- only on mouseover
+
+	['maxAddOns'] = 10,
 }
 
 
