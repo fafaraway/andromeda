@@ -152,6 +152,7 @@ C['maps'] = {
 C['blizzard'] = {
 	['hideBossBanner'] = true,
 	['hideTalkingHead'] = true,
+	['alertPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 }
 
 

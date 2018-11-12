@@ -39,7 +39,7 @@ end
 -- reposition alert popup
 local function alertFrameMover(self, ...)
 	_G.AlertFrame:ClearAllPoints()
-	_G.AlertFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
+	_G.AlertFrame:SetPoint(unpack(C.blizzard.alertPos))
 end
 
 hooksecurefunc(_G.AlertFrame, "UpdateAnchors", alertFrameMover)
