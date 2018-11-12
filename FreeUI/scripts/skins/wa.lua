@@ -8,7 +8,7 @@ local function ReskinWA()
 		if fType == "icon" then
 			if not f.styled then
 				f.icon:SetTexCoord(unpack(C.texCoord))
-				f.icon.SetTexCoord = F.dummy
+				f.icon.SetTexCoord = F.Dummy
 
 				local bg = F.CreateBG(f.icon)
 				F.CreateBD(bg)
@@ -19,7 +19,7 @@ local function ReskinWA()
 		elseif fType == "aurabar" then
 			if not f.styled then
 				f.icon:SetTexCoord(unpack(C.texCoord))
-				f.icon.SetTexCoord = F.dummy
+				f.icon.SetTexCoord = F.Dummy
 				F.CreateSD(f.bar)
 				f.iconFrame:SetAllPoints(f.icon)
 				F.CreateSD(f.iconFrame)

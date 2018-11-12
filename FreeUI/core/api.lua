@@ -43,7 +43,7 @@ C.texCoord = {.08, .92, .08, .92}
 
 -- [[ Functions ]]
 
-function F:dummy()
+function F:Dummy()
 	return
 end
 
@@ -559,7 +559,7 @@ end
 
 function F:ReskinSlider(verticle)
 	self:SetBackdrop(nil)
-	self.SetBackdrop = F.dummy
+	self.SetBackdrop = F.Dummy
 
 	local bd = CreateFrame("Frame", nil, self)
 	bd:SetPoint("TOPLEFT", 14, -2)
@@ -747,8 +747,6 @@ function F:ReskinNavBar()
 	self.navBarStyled = true
 end
 
-
-
 function F:ReskinIcon()
 	self:SetTexCoord(.08, .92, .08, .92)
 	return F.CreateBG(self)
@@ -856,26 +854,6 @@ function F:CreateCheckBox()
 	return cb
 end
 
--- GameTooltip
-function F:AddTooltip(anchor, text, color)
-	self:SetScript("OnEnter", function()
-		GameTooltip:SetOwner(self, anchor)
-		GameTooltip:ClearLines()
-		if tonumber(text) then
-			GameTooltip:SetSpellByID(text)
-		else
-			local r, g, b = 1, 1, 1
-			if color == "class" then
-				r, g, b = cr, cg, cb
-			elseif color == "system" then
-				r, g, b = 1, .8, 0
-			end
-			GameTooltip:AddLine(text, r, g, b)
-		end
-		GameTooltip:Show()
-	end)
-	self:SetScript("OnLeave", GameTooltip_Hide)
-end
 
 -- Movable Frame
 function F:CreateMF(parent)
@@ -959,6 +937,10 @@ function F.Numb(n)
 	else
 		return ("%.0f"):format(n)
 	end
+end
+
+function F.Round(x)
+	return floor(x + .5)
 end
 
 
@@ -1124,6 +1106,41 @@ function F.SplitList(list, variable, cleanup)
 		list[word] = true
 	end
 end
+
+
+local iLvlDB = {}
+local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
+local tip = CreateFrame("GameTooltip", "FreeUI_iLvlTooltip", nil, "GameTooltipTemplate")
+
+function F.GetItemLevel(link, arg1, arg2)
+	if iLvlDB[link] then return iLvlDB[link] end
+
+	tip:SetOwner(UIParent, "ANCHOR_NONE")
+	if arg1 and type(arg1) == "string" then
+		tip:SetInventoryItem(arg1, arg2)
+	elseif arg1 and type(arg1) == "number" then
+		tip:SetBagItem(arg1, arg2)
+	else
+		tip:SetHyperlink(link)
+	end
+
+	for i = 2, 5 do
+		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
+		local found = text:find(itemLevelString)
+		if found then
+			local level = text:match("(%d+)%)?$")
+			iLvlDB[link] = tonumber(level)
+			break
+		end
+	end
+	return iLvlDB[link]
+end
+
+function F.GetNPCID(guid)
+	local id = tonumber((guid or ""):match("%-(%d-)%-%x-$"))
+	return id
+end
+
 
 
 

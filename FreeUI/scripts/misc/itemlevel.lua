@@ -1,31 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("misc")
-local tipModule = F:GetModule("tooltip")
 
 
-local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
-local ItemDB = {}
-function module:GetUnitItemLevel(link, unit, index, quality)
-	if ItemDB[link] and quality ~= 6 then return ItemDB[link] end
-
-	local tip = _G["FreeUIItemLevelTooltip"] or CreateFrame("GameTooltip", "FreeUIItemLevelTooltip", nil, "GameTooltipTemplate")
-	tip:SetOwner(UIParent, "ANCHOR_NONE")
- 	tip:SetInventoryItem(unit, index)
-
-	for i = 2, 5 do
-		local text = _G[tip:GetName().."TextLeft"..i]:GetText() or ""
-		local hasLevel = string.find(text, itemLevelString)
-		if hasLevel then
-			local level = string.match(text, "(%d+)%)?$")
-			ItemDB[link] = tonumber(level)
-			break
-		end
-	end
-	return ItemDB[link]
-end
 
 function module:ShowItemLevel()
-
 	local SLOTIDS = {}
 	for _, slot in pairs({"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand", "SecondaryHand"}) do
 		SLOTIDS[slot] = GetInventorySlotInfo(slot.."Slot")
@@ -64,7 +42,7 @@ function module:ShowItemLevel()
 			local link = GetInventoryItemLink(unit, index)
 			if link and index ~= 4 then
 				local _, _, quality, level = GetItemInfo(link)
-				level = self:GetUnitItemLevel(link, unit, index, quality) or level
+				level = F.GetItemLevel(link, unit, index) or level
 
 				if level and level > 1 and quality then
 					local color = BAG_ITEM_QUALITY_COLORS[quality]
@@ -92,12 +70,6 @@ function module:ShowItemLevel()
 		end
 	end)
 
-	-- 
-	local RankFrame = CharacterNeckSlot and CharacterNeckSlot.RankFrame
-	if RankFrame then
-		F.SetFS(RankFrame.Label)
-	end
-
 
 	-- ilvl on scrapping machine
 	local function updateMachineLevel(self)
@@ -111,7 +83,7 @@ function module:ShowItemLevel()
 		if self.itemLocation and not self.item:IsItemEmpty() and self.item:GetItemName() then
 			quality = self.item:GetItemQuality()
 		end
-		local level = tipModule:GetItemLevel(self.itemLink, quality)
+		local level = F.GetItemLevel(self.itemLink)
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
 		self.iLvl:SetText(level)
 		self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -129,8 +101,45 @@ function module:ShowItemLevel()
 	F:RegisterEvent("ADDON_LOADED", itemLevelOnScrapping)
 
 
+	-- ilvl on flyout buttons
+	local function SetupFlyoutLevel(button, bag, slot, quality)
+		if not button.iLvl then
+			button.iLvl = F.CreateFS(button, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
+			button.iLvl:SetPoint("BOTTOMRIGHT", 0, 2)
+		end
+		local link, level
+		if bag then
+			link = GetContainerItemLink(bag, slot)
+			level = F.GetItemLevel(link, bag, slot)
+		else
+			link = GetInventoryItemLink("player", slot)
+			level = F.GetItemLevel(link, "player", slot)
+		end
+		local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+		button.iLvl:SetText(level)
+		button.iLvl:SetTextColor(color.r, color.g, color.b)
+	end
 
-	--- Character Info Sheet ---
+	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)
+		local location = button.location
+		if not location or location < 0 then return end
+		if location == EQUIPMENTFLYOUT_PLACEINBAGS_LOCATION then
+			if button.iLvl then button.iLvl:SetText("") end
+			return
+		end
+
+		local _, _, bags, voidStorage, slot, bag = EquipmentManager_UnpackLocation(location)
+		if voidStorage then return end
+		local quality = select(13, EquipmentManager_GetItemInfoByLocation(location))
+		if bags then
+			SetupFlyoutLevel(button, bag, slot, quality)
+		else
+			SetupFlyoutLevel(button, nil, slot, quality)
+		end
+	end)
+
+
+	-- Character Info Sheet
 	_G.hooksecurefunc("PaperDollFrame_SetArmor", function(_, unit)
 		if (unit ~= "player") then return end
 
@@ -146,14 +155,8 @@ function module:ShowItemLevel()
 			end
 
 			PaperDollFrame_SetItemLevel(CharacterStatsPane.ItemLevelFrame, unit)
-			-- CharacterStatsPane.ItemLevelCategory:Show()
-			-- CharacterStatsPane.ItemLevelFrame:Show()
+
 			CharacterStatsPane.ItemLevelFrame.Value:SetText(itemLevel)
-			CharacterStatsPane.ItemLevelFrame.Value:SetFont('Interface\\AddOns\\FreeUI\\assets\\font\\expresswaysb.ttf', 18)
-			CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0,0,0,1)
-			CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(1, -1)
-			-- CharacterStatsPane.AttributesCategory:SetPoint("TOP", CharacterStatsPane.ItemLevelFrame, "BOTTOM", 0, -10)
-		
 		end
 	end)
 end

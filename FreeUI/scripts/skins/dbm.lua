@@ -49,9 +49,9 @@ function module:ReskinDBM()
 
 				if not frame.styled then
 					frame:SetScale(1)
-					frame.SetScale = F.dummy
+					frame.SetScale = F.Dummy
 					frame:SetHeight(buttonsize/2)
-					frame.SetHeight = F.dummy
+					frame.SetHeight = F.Dummy
 					if not frame.bg then
 						frame.bg = CreateFrame("Frame", nil, frame)
 						frame.bg:SetAllPoints()
@@ -72,7 +72,7 @@ function module:ReskinDBM()
 					icon1:ClearAllPoints()
 					icon1:SetPoint("TOPLEFT", icon1.overlay, 1, -1)
 					icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -1, 1)
-					icon1.SetSize = F.dummy
+					icon1.SetSize = F.Dummy
 					icon1.styled = true
 				end
 		
@@ -81,7 +81,7 @@ function module:ReskinDBM()
 					icon2:ClearAllPoints()
 					icon2:SetPoint("TOPLEFT", icon2.overlay, 1, -1)
 					icon2:SetPoint("BOTTOMRIGHT", icon2.overlay, -1, 1)
-					icon2.SetSize = F.dummy
+					icon2.SetSize = F.Dummy
 					icon2.styled = true
 				end
 
@@ -94,7 +94,7 @@ function module:ReskinDBM()
 				if not tbar.styled then
 					tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
 					tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)
-					tbar.SetPoint = F.dummy
+					tbar.SetPoint = F.Dummy
 					tbar.styled = true
 
 					tbar.Spark = tbar:CreateTexture(nil, "OVERLAY")
@@ -109,7 +109,7 @@ function module:ReskinDBM()
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", frame, "LEFT", 2, 8)
 					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
-					name.SetPoint = F.dummy
+					name.SetPoint = F.Dummy
 					
 					if C.appearance.usePixelFont then
 						name:SetFont(unpack(C.font.pixel))
@@ -125,7 +125,7 @@ function module:ReskinDBM()
 						name:SetShadowOffset(1, -1)
 					end
 
-					name.SetFont = F.dummy
+					name.SetFont = F.Dummy
 					name:SetJustifyH("LEFT")
 					name:SetWordWrap(false)
 					
@@ -135,9 +135,9 @@ function module:ReskinDBM()
 				if not timer.styled then	
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", frame, "RIGHT", -2, 8)
-					timer.SetPoint = F.dummy
+					timer.SetPoint = F.Dummy
 					F.SetFS(timer)
-					timer.SetFont = F.dummy
+					timer.SetFont = F.Dummy
 					timer:SetJustifyH("RIGHT")
 					timer:SetShadowColor(0, 0, 0, 0)
 					timer.styled = true

@@ -162,7 +162,7 @@ function module:QuestTracker()
 			bar.BarBG:Hide()
 			bar.BarGlow:Hide()
 			bar.IconBG:SetTexture("")
-			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.dummy
+			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.Dummy
 
 			bar:SetPoint("LEFT", 22, 0)
 			bar:SetStatusBarTexture(C.media.texture)

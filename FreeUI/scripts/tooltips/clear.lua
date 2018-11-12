@@ -174,7 +174,7 @@ Loader:SetScript("OnEvent", function(self, event, arg)
 end)
 
 
-GameTooltip_OnTooltipAddMoney = F.dummy
+GameTooltip_OnTooltipAddMoney = F.Dummy
 
 --[[local showPriceFrames = {
 	"AuctionFrame",
