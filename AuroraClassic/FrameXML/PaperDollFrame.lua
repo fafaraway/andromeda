@@ -33,6 +33,7 @@ tinsert(C.themes["AuroraClassic"], function()
 			self.RankFrame.Label:ClearAllPoints()
 			self.RankFrame.Label:SetPoint("TOPLEFT", self, 2, -1)
 			self.RankFrame.Label:SetTextColor(1, .5, 0)
+			FreeUI[1].SetFS(self.RankFrame.Label)
 
 			self.styled = true
 		end
