@@ -1,24 +1,10 @@
 local F, C, L = unpack(select(2, ...))
-
-local module = F:RegisterModule("unitframe")
 if not C.unitframes.enable then return end
 
-local _, ns = ...
-local oUF = ns.oUF
-local cast = ns.cast
+local module = F:RegisterModule("unitframe")
+local oUF, cast = FreeUI.oUF, FreeUI.cast
 
-oUF.colors.power.MANA = {100/255, 149/255, 237/255}
-oUF.colors.power.ENERGY = {1, 222/255, 80/255}
-oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
-oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
 
-oUF.colors.debuffType = {
-	Curse = {.8, 0, 1},
-	Disease = {.8, .6, 0},
-	Magic = {0, .8, 1},
-	Poison = {0, .8, 0},
-	none = {0, 0, 0}
-}
 
 local function CreateBackDrop(self)
 	local bd = CreateFrame("Frame", nil, self)
@@ -65,8 +51,9 @@ local function CreateHeader(self)
 	end)
 end
 
--- Update selected frame's name/border colour
-local updateNameColour = function(self, unit)
+
+-- Selected frames name/border colour
+local function UpdateNameColour(self, unit)
 	if UnitIsUnit(unit, "target") then
 		self.Text:SetTextColor(.1, .7, 1)
 	elseif UnitIsDead(unit) then
@@ -78,7 +65,7 @@ local updateNameColour = function(self, unit)
 	end
 end
 
-local updateNameColourAlt = function(self)
+local function UpdateNameColourAlt(self)
 	local frame = self:GetParent()
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
@@ -98,10 +85,10 @@ end
 local function NameColour(self)
 	local nc = CreateFrame("Frame", nil, self)
 	nc:RegisterEvent("PLAYER_TARGET_CHANGED")
-	nc:SetScript("OnEvent", updateNameColourAlt)
+	nc:SetScript("OnEvent", UpdateNameColourAlt)
 end
 
-local updateBorderColour = function(self)
+local function UpdateBorderColour(self)
 	local frame = self:GetParent()
 	if frame.unit then
 		if UnitIsUnit(frame.unit, "target") then
@@ -119,12 +106,12 @@ end
 local function BorderColour(self)
 	local bc = CreateFrame("Frame", nil, self)
 	bc:RegisterEvent("PLAYER_TARGET_CHANGED")
-	bc:SetScript("OnEvent", updateBorderColour)
+	bc:SetScript("OnEvent", UpdateBorderColour)
 end
 
 
--- Update health
-local PostUpdateHealth = function(Health, unit, min, max)
+-- Health
+local function PostUpdateHealth(Health, unit, min, max)
 	local self = Health:GetParent()
 	local r, g, b
 	local reaction = C.reactioncolours[UnitReaction(unit, "player") or 5]
@@ -193,7 +180,7 @@ local PostUpdateHealth = function(Health, unit, min, max)
 		end
 
 		if self.Text then
-			updateNameColour(self, unit)
+			UpdateNameColour(self, unit)
 		end
 	else
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -309,8 +296,8 @@ local function CreateHealthBar(self)
 end
 
 
--- Update power
-local PostUpdatePower = function(Power, unit, cur, max, min)
+-- Power
+local function PostUpdatePower(Power, unit, cur, max, min)
 	local Health = Power:GetParent().Health
 	local self = Power:GetParent()
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -374,8 +361,8 @@ local function CreatePowerBar(self)
 end
 
 
--- Update alternative power
-local function postUpdateAltPower(element, _, cur, _, max)
+-- Alternative power
+local function PostUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local perc = math.floor((cur/max)*100)
 		if perc < 35 then
@@ -411,11 +398,11 @@ local function CreateAltPower(self)
 	bar:EnableMouse(true)
 
 	self.AlternativePower = bar		
-	self.AlternativePower.PostUpdate = postUpdateAltPower
+	self.AlternativePower.PostUpdate = PostUpdateAltPower
 end
 
 
--- Create health/power/classification text
+-- Health/Power/Classification text
 local function CreateHealthText(self)
 	local HealthPoints = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 	HealthPoints:SetPoint("BOTTOMLEFT", self.Health, "TOPLEFT", 0, 3)
@@ -466,7 +453,7 @@ local function ClassificationText(self)
 end
 
 
--- Create cast bar
+-- Cast bar
 local function CreateCastBar(self)
 	if (not C.unitframes.castbar) then return end
 
@@ -571,7 +558,7 @@ local function CreateCastBar(self)
 	elseif self.unitStyle == "player" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
-	elseif self.unitStyle == "pet" then
+	elseif self.unitStyle == "pet" or self.unitStyle == "arena" then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('RIGHT', self, 'LEFT', -4, 0)
 	elseif self.unitStyle == "target" then
@@ -601,15 +588,15 @@ end
 
 
 -- Auras
-local function formatAuraTime(s)
+local function FormatAuraTime(s)
 	local day, hour, minute = 86400, 3600, 60
 
 	if s >= day then
-		return format('%d', floor(s/day + 0.5))
+		return format('%d', F.Round(s/day))
 	elseif s >= hour then
-		return format('%d', floor(s/hour + 0.5))
+		return format('%d', F.Round(s/hour))
 	elseif s >= minute then
-		return format('%d', floor(s/minute + 0.5))
+		return format('%d', F.Round(s/minute))
 	end
 	return format('%d', mod(s, minute))
 end
@@ -619,13 +606,13 @@ local function UpdateAura(self, elapsed)
 		self.expiration = math.max(self.expiration - elapsed, 0)
 
 		if(self.expiration > 0 and self.expiration < 30) then
-			self.Duration:SetText(formatAuraTime(self.expiration))
+			self.Duration:SetText(FormatAuraTime(self.expiration))
 			self.Duration:SetTextColor(1, 0, 0)
 		elseif(self.expiration > 30 and self.expiration < 60) then
-			self.Duration:SetText(formatAuraTime(self.expiration))
+			self.Duration:SetText(FormatAuraTime(self.expiration))
 			self.Duration:SetTextColor(1, 1, 0)
 		elseif(self.expiration > 60 and self.expiration < 300) then
-			self.Duration:SetText(formatAuraTime(self.expiration))
+			self.Duration:SetText(FormatAuraTime(self.expiration))
 			self.Duration:SetTextColor(1, 1, 1)
 		else
 			self.Duration:SetText()
@@ -690,7 +677,7 @@ local function PostCreateIcon(element, button)
 	
 	button.Duration = Duration
 
-	if element.__owner.unitStyle == "group" or element.__owner.unitStyle == "pet" then
+	if element.__owner.unitStyle == "party" or element.__owner.unitStyle == "raid" or element.__owner.unitStyle == "pet" then
 		Duration:Hide()
 	end
 
@@ -720,6 +707,10 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 
 		if button.sd then
 			button.sd:SetBackdropBorderColor(color[1], color[2], color[3], .65)
+		end
+	elseif (element.__owner.unitStyle == 'party' or element.__owner.unitStyle == 'raid') and not button.isDebuff then
+		if button.sd then
+			button.sd:SetBackdropBorderColor(0, 0, 0, 0)
 		end
 	else
 		button.bg:SetVertexColor(0, 0, 0)
@@ -755,6 +746,7 @@ end
 
 local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID)
 	local style = element.__owner.unitStyle
+
 	if name and spellID == 209859 then
 		element.bolster = element.bolster + 1
 		if not element.bolsterIndex then
@@ -773,14 +765,22 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		else
 			return true
 		end
-	elseif style == "group" then
-		if (button.isDebuff and not C.ignoredDebuffs[spellID]) then
+	elseif style == "party" or style == "raid" then
+		if (button.isDebuff and not module.ignoredDebuffs[spellID]) then
 			return true
-		elseif (button.isBuff and button.isPlayer and C.myBuffs[spellID]) or (button.isDebuff and C.allBuffs[spellID]) then
+		elseif (button.isPlayer and module.myBuffs[spellID]) or (module.allBuffs[spellID]) then
 			return true
 		else
 			return false
 		end
+	elseif style == "focus" then
+		if (button.isDebuff and button.isPlayer) then
+			return true
+		else
+			return false
+		end
+	elseif style == "arena" then
+		return true
 	end
 end
 
@@ -788,87 +788,105 @@ local function PostUpdateGapIcon(self, unit, icon, visibleBuffs)
 	icon:Hide()
 end
 
-local function CreateAuras(self)
+local function AuraIconSize(w, n, s)
+	return (w-(n-1)*s)/n
+end
+
+local function CreateAuras(self, num, perrow)
 	local Auras = CreateFrame("Frame", nil, self)
-	Auras["growth-x"] = "RIGHT"
-	Auras['spacing-x'] = 4
-	Auras['spacing-y'] = 0
 
-	Auras:SetSize(self:GetWidth(), 100)
+	if self.unitStyle == "target" then
+		Auras.initialAnchor = "BOTTOMLEFT"
+		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
+		Auras["growth-y"] = "UP"
+		Auras['spacing-x'] = 5
+	elseif self.unitStyle == "pet" or self.unitStyle == "focus" or self.unitStyle == "boss" or self.unitStyle == "arena" then
+		Auras.initialAnchor = "TOPLEFT"
+		Auras:SetPoint("TOP", self, "BOTTOM", 0, -6)
+		Auras["growth-y"] = "DOWN"
+		Auras['spacing-x'] = 5
+	end
 
+	Auras.numTotal  = num
+	Auras.iconsPerRow = perrow
 	Auras.gap = true
 	Auras.showDebuffType = true
 	Auras.showStealableBuffs = true
 
-	if self.unitStyle == "pet" then
-		Auras.initialAnchor = "TOPLEFT"
-		Auras:SetPoint("TOP", self, "BOTTOM", 0, -4)
-		Auras["growth-y"] = "DOWN"
-		Auras.size = 20
-		--Auras.disableCooldown = true
-	elseif self.unitStyle == "target" then
-		Auras.initialAnchor = "BOTTOMLEFT"
-		Auras:SetPoint("BOTTOM", self, "TOP", 0, 24)
-		Auras["growth-y"] = "UP"
-		Auras.size = 28
-		Auras:SetSize(self:GetWidth(), 100)
-	elseif self.unitStyle == "boss" then
-		Auras.initialAnchor = "TOPLEFT"
-		Auras:SetPoint("TOP", self, "BOTTOM", 0, -6)
-		Auras["growth-y"] = "DOWN"
-		Auras.size = 24
-	end
-	self.Auras = Auras
+	Auras.size = AuraIconSize(self:GetWidth(), Auras.iconsPerRow, 5)
+	Auras:SetWidth(self:GetWidth())
+	Auras:SetHeight((Auras.size) * F.Round(Auras.numTotal/Auras.iconsPerRow))
 
 	Auras.CustomFilter = CustomFilter
 	Auras.PostCreateIcon = PostCreateIcon
 	Auras.PostUpdateIcon = PostUpdateIcon
 	Auras.PostUpdateGapIcon = PostUpdateGapIcon
+	Auras.PreUpdate = BolsterPreUpdate
+	Auras.PostUpdate = BolsterPostUpdate
+
+	self.Auras = Auras
 end
 
 local function CreateBuffs(self)
 	local Buffs = CreateFrame("Frame", nil, self)
-	Buffs.initialAnchor = "TOPLEFT"
-	Buffs:SetPoint("TOP", self, "BOTTOM", 0, -6)
+	Buffs.initialAnchor = "CENTER"
+	Buffs:SetPoint("TOP", 0, -2)
 	Buffs["growth-x"] = "RIGHT"
-	Buffs["growth-y"] = "DOWN"
-	Buffs["spacing-x"] = 4
-	Buffs["spacing-y"] = 0
+	Buffs.spacing = 3
+	Buffs.num = 3
+	Buffs.size = 12
+	Buffs:SetSize((Buffs.size*Buffs.num)+(Buffs.num-1)*Buffs.spacing, Buffs.size)
 
-	Buffs:SetSize(self:GetWidth(), 100)
-	Buffs.size = 28
+	Buffs.PostUpdate = function(icons)
+		local vb = icons.visibleBuffs
 
-	Buffs.showStealableBuffs = true
+		if vb == 3 then
+			Buffs:SetPoint("TOP", -15, -2)
+		elseif vb == 2 then
+			Buffs:SetPoint("TOP", -7, -2)
+		else
+			Buffs:SetPoint("TOP", 0, -2)
+		end
+	end
 
-	self.Buffs = Buffs
+	Buffs.disableCooldown = true
+	Buffs.disableMouse = true
+
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
+	Buffs.CustomFilter = CustomFilter
+
+	self.Buffs = Buffs
 end
 
 local function CreateDebuffs(self)
 	local Debuffs = CreateFrame("Frame", nil, self)
-	Debuffs.initialAnchor = "TOPLEFT"
-	Debuffs:SetPoint("TOPLEFT", self, "TOPRIGHT", 4, 0)
+	Debuffs.initialAnchor = "CENTER"
+	Debuffs:SetPoint("BOTTOM", 0, C.unitframes.power_height - 1)
 	Debuffs["growth-x"] = "RIGHT"
-	Debuffs["growth-y"] = "DOWN"
-	Debuffs["spacing-x"] = 4
-	Debuffs["spacing-y"] = 0
+	Debuffs.spacing = 3
+	Debuffs.num = 2
+	Debuffs.size = 16
 
-	Debuffs:SetSize(self:GetWidth(), 100)
-	Debuffs.size = 28
+	Debuffs:SetSize((Debuffs.size*Debuffs.num)+(Debuffs.num-1)*Debuffs.spacing, Debuffs.size)
 
-	Debuffs.showStealableBuffs = true
-	Debuffs.showDebuffType = true
+	Debuffs.PostUpdate = function(icons)
+		local vb = icons.visibleDebuffs
 
-	if self.unitStyle == "targettarget" or self.unitStyle == "focus" or self.unitStyle == "focustarget" then
-		Debuffs:ClearAllPoints()
-		Debuffs:SetPoint("TOP", self, "BOTTOM", 0, -6)
-		Debuffs.size = 22
-		Debuffs.num = 4
+		if vb == 2 then
+			Debuffs:SetPoint("BOTTOM", -9, 0)
+		else
+			Debuffs:SetPoint("BOTTOM")
+		end
 	end
+
+	Debuffs.disableCooldown = true
+	Debuffs.disableMouse = true
+	Debuffs.showDebuffType = true
 
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
+	Debuffs.CustomFilter = CustomFilter
 
 	self.Debuffs = Debuffs
 end
@@ -897,21 +915,13 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 		for index = 1, max do
 			local Bar = element[index]
 			local maxWidth, gap = C.unitframes.player_width, 3
-			if(max == 3) then
-				Bar:SetWidth(((maxWidth / 3) - ((2 * gap) / 3)))
-			elseif(max == 4) then
-				Bar:SetWidth(((maxWidth /4) - ((3 * gap) / 4)))
-			elseif(max == 5 or max == 10) then
-				Bar:SetWidth(((maxWidth / 5) - ((4 * gap) / 5)))
-			elseif(max == 6) then
-				Bar:SetWidth(((maxWidth / 6) - ((5 * gap) / 6)))
-			end
+
+			Bar:SetWidth((maxWidth - (max - 1) * gap) / max)
 
 			if(index > 1) then
 				Bar:ClearAllPoints()
 				Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
 			end
-
 		end
 	end
 end
@@ -947,7 +957,7 @@ local function CreateClassPower(self)
 	ClassPower.UpdateColor = UpdateClassPowerColor
 	ClassPower.PostUpdate = PostUpdateClassPower
 
-	for index = 1, 11 do -- have to create an extra to force __max to be different from UnitPowerMax
+	for index = 1, 6 do 
 		local Bar = CreateFrame('StatusBar', nil, self)
 		Bar:SetHeight(C.unitframes.classPower_height)
 		Bar:SetStatusBarTexture(C.media.texture)
@@ -955,18 +965,22 @@ local function CreateClassPower(self)
 
 		F.CreateBDFrame(Bar)
 
-		local function moveCPBar()
+		if(index == 1) then
+			Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
+		end
+
+		local function MoveClassPowerBar()
 			if(index == 1) then
 				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -C.unitframes.power_height - 4 -C.unitframes.altpower_height)
+					Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0,-3)
 				else
-					Bar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -C.unitframes.power_height - 2)
+					Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
 				end
 			end
 		end
-		self.AlternativePower:HookScript("OnShow", moveCPBar)
-		self.AlternativePower:HookScript("OnHide", moveCPBar)
-		moveCPBar()
+		self.AlternativePower:HookScript("OnShow", MoveClassPowerBar)
+		self.AlternativePower:HookScript("OnHide", MoveClassPowerBar)
+		MoveClassPowerBar()
 
 		local Background = Bar:CreateTexture(nil, 'BORDER')
 		Background:SetAllPoints()
@@ -979,15 +993,24 @@ local function CreateClassPower(self)
 end
 
 
--- Runes bars
+-- Runes bar
 local function PostUpdateRune(element, runemap)
+	local MaxRunes = 6
 	for index, runeID in next, runemap do
-		local rune = element[index]
+		local Bar = element[index]
 		local runeReady = select(3, GetRuneCooldown(runeID))
-		if rune:IsShown() and not runeReady then
-			rune:SetAlpha(.45)
+		local maxWidth, gap = C.unitframes.player_width, 3
+		if Bar:IsShown() and not runeReady then
+			Bar:SetAlpha(.45)
 		else
-			rune:SetAlpha(1)
+			Bar:SetAlpha(1)
+		end
+
+		Bar:SetWidth((maxWidth - (MaxRunes - 1) * gap) / MaxRunes)
+
+		if(index > 1) then
+			Bar:ClearAllPoints()
+			Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
 		end
 
 		local spec = GetSpecialization() or 0
@@ -999,46 +1022,48 @@ local function PostUpdateRune(element, runemap)
 		elseif spec == 3 then
 			color = {98/255, 153/255, 51/255}
 		end
-		rune:SetStatusBarColor(color[1], color[2], color[3])
+		Bar:SetStatusBarColor(color[1], color[2], color[3])
 	end
 end
 
-local function CreateRunesBar(self, width, height, spacing)
-	local runes = {}
-	local maxRunes = 6
+local function CreateRunesBar(self)
+	local Runes = {}
+	local MaxRunes = 6
 
-	local runesframe = CreateFrame('Frame', nil, self)
-	runesframe:SetPoint('TOP', self.Power, 'BOTTOM', 0, 4)
-	runesframe:SetSize(self:GetWidth(), C.unitframes.classPower_height + 4)
+	for index = 1, MaxRunes do
+		local Bar = CreateFrame('StatusBar', nil, self)
+		Bar:SetHeight(C.unitframes.classPower_height)
+		Bar:SetStatusBarTexture(C.media.texture)
 
-	local function moveCPBar()
-		if self.AlternativePower:IsShown() then
-			runesframe:SetPoint('TOP', self.AlternativePower, 'BOTTOM', 0, -3)
-		else
-			runesframe:SetPoint('TOP', self.Power, 'BOTTOM', 0, -3)
+		F.CreateBDFrame(Bar)
+
+		if(index == 1) then
+			Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
 		end
+
+		local function MoveRunesBar()
+			if(index == 1) then
+				if self.AlternativePower:IsShown() then
+					Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0,-3)
+				else
+					Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
+				end
+			end
+		end
+		self.AlternativePower:HookScript("OnShow", MoveRunesBar)
+		self.AlternativePower:HookScript("OnHide", MoveRunesBar)
+		MoveRunesBar()
+
+		local Background = Bar:CreateTexture(nil, 'BORDER')
+		Background:SetAllPoints()
+		Bar.bg = Background
+
+		Runes[index] = Bar
 	end
-	self.AlternativePower:HookScript("OnShow", moveCPBar)
-	self.AlternativePower:HookScript("OnHide", moveCPBar)
-	moveCPBar()
 
-	width = (width - (maxRunes + 1) * spacing) / maxRunes
-	spacing = width + spacing
-
-	for i = 1, maxRunes do
-		local rune = CreateFrame('StatusBar', nil, runesframe)
-		rune:SetSize(width - 2, height)
-		rune:SetPoint('TOPLEFT', (i - 1) * spacing + 2, 0)
-		rune:SetStatusBarTexture(C.media.texture)
-
-		local bg = F.CreateBDFrame(rune)
-
-		runes[i] = rune
-	end
-
-	runes.sortOrder = 'asc'
-	runes.PostUpdate = PostUpdateRune
-	self.Runes = runes
+	Runes.sortOrder = 'asc'
+	Runes.PostUpdate = PostUpdateRune
+	self.Runes = Runes
 end
 
 
@@ -1113,7 +1138,7 @@ local function CreateIndicator(self)
 
 	local RaidTargetIndicator = self:CreateTexture()
 
-	if self.unitStyle == "group" then
+	if self.unitStyle == "party" or self.unitStyle == "raid" then
 		RaidTargetIndicator:SetPoint("CENTER", self, "CENTER")
 	elseif self.unitStyle == "targettarget" then
 		RaidTargetIndicator:SetPoint("LEFT", self, "RIGHT", 3, 0)
@@ -1128,7 +1153,7 @@ local function CreateIndicator(self)
 	RaidTargetIndicator:SetSize(16, 16)
 	self.RaidTargetIndicator = RaidTargetIndicator
 
-	if self.unitStyle == "group" then
+	if self.unitStyle == "party" or self.unitStyle == "raid" then
 		local ResurrectIndicator = self:CreateTexture(nil, 'OVERLAY')
 		ResurrectIndicator:SetSize(16, 16)
 		ResurrectIndicator:SetPoint('CENTER')
@@ -1180,7 +1205,8 @@ local function CreateIndicator(self)
 	end
 end
 
--- name
+
+-- Names
 local function CreateName(self)
 	local Name
 
@@ -1315,7 +1341,8 @@ local function UpdateTOFName(self)
 	end)
 end
 
--- threat indicator
+
+-- Threat
 local function UpdateThreat(self, event, unit)
 	if(self.unit ~= unit) then return end
 	local status = UnitThreatSituation(unit)
@@ -1341,7 +1368,7 @@ function CreateThreatIndicator(self)
 end
 
 
--- dispellable highlight
+-- Dispellable highlight
 local function CreateDispellable(self, unit)
 	if (not C.unitframes.dispellable) then return end
 
@@ -1359,7 +1386,7 @@ local function CreateDispellable(self, unit)
 end
 
 
--- counter bar
+-- Counter bar
 local function CreateCounterBar(self)
 	local CounterBar = CreateFrame("StatusBar", nil, self)
 	CounterBar:SetWidth(200)
@@ -1392,9 +1419,9 @@ local function CreateCounterBar(self)
 end
 
 
--- spell range
+-- Spell range
 local function spellRange(self)
-	if (not C.unitframes.spellRange) then return end
+	if not C.unitframes.spellRange then return end
 
 	self.SpellRange = {
 		insideAlpha = 1,
@@ -1410,7 +1437,6 @@ if IsAddOnLoaded("Blizzard_CompactRaidFrames") then
 end
 
 
-
 -- Unit specific functions
 local UnitSpecific = {
 	pet = function(self, ...)
@@ -1424,7 +1450,7 @@ local UnitSpecific = {
 		CreatePortrait(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateAuras(self)
+		CreateAuras(self, 6, 3)
 		spellRange(self)
 		CreateCounterBar(self)
 	end,
@@ -1446,9 +1472,8 @@ local UnitSpecific = {
 		spellRange(self)
 		CreateCounterBar(self)
 		CreateDispellable(self, unit)
-		
 		if (C.myClass == 'DEATHKNIGHT') then
-			CreateRunesBar(self, C.unitframes.player_width, C.unitframes.classPower_height, 1)
+			CreateRunesBar(self)
 		else
 			CreateClassPower(self)
 		end
@@ -1471,7 +1496,7 @@ local UnitSpecific = {
 		CreateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateAuras(self)
+		CreateAuras(self, 28, 7)
 		spellRange(self)
 	end,
 
@@ -1486,7 +1511,6 @@ local UnitSpecific = {
 		UpdateTOTName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateDebuffs(self)
 		spellRange(self)
 	end,
 
@@ -1501,7 +1525,7 @@ local UnitSpecific = {
 		CreateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateDebuffs(self)
+		CreateAuras(self, 8, 4)
 		spellRange(self)
 	end,
 
@@ -1516,7 +1540,6 @@ local UnitSpecific = {
 		UpdateTOFName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateDebuffs(self)
 		spellRange(self)
 	end,
 
@@ -1535,11 +1558,8 @@ local UnitSpecific = {
 		CreateAltPower(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateAuras(self)
-
+		CreateAuras(self, 15, 5)
 		BorderColour(self)
-		spellRange(self)
-		
 	end,
 
 	arena = function(self, ...)
@@ -1555,13 +1575,12 @@ local UnitSpecific = {
 		CreateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
-		CreateBuffs(self)
-		CreateDebuffs(self)
+		CreateAuras(self, 18, 6)
 		spellRange(self)
 	end,
 
 	party = function(self, ...)
-		self.unitStyle = "group"
+		self.unitStyle = "party"
 
 		CreateBackDrop(self)
 		CreateHeader(self)
@@ -1571,88 +1590,16 @@ local UnitSpecific = {
 		CreatePartyName(self)
 		CreateIndicator(self)
 		CreateThreatIndicator(self)
-
-		local Debuffs = CreateFrame("Frame", nil, self)
-		Debuffs.initialAnchor = "CENTER"
-		Debuffs:SetPoint("BOTTOM", 0, C.unitframes.power_height - 1)
-		Debuffs["growth-x"] = "RIGHT"
-		Debuffs["spacing-x"] = 4
-
-		Debuffs:SetHeight(16)
-		Debuffs:SetWidth(37)
-		Debuffs.num = 3
-		Debuffs.size = 16
-
-		Debuffs.showDebuffType = true
-		Debuffs.showStealableBuffs = true
-		Debuffs.disableCooldown = true
-		Debuffs.disableMouse = true
-
-		self.Debuffs = Debuffs
-
-		Debuffs.PostUpdate = function(icons)
-			local vb = icons.visibleDebuffs
-
-			if vb == 3 then
-				Debuffs:SetPoint("BOTTOM", -19, 0)
-			elseif vb == 2 then
-				Debuffs:SetPoint("BOTTOM", -9, 0)
-			else
-				Debuffs:SetPoint("BOTTOM")
-			end
-		end
-
-		Debuffs.PostCreateIcon = PostCreateIcon
-		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.CustomFilter = CustomFilter
-
-
-		local Buffs = CreateFrame("Frame", nil, self)
-		Buffs.initialAnchor = "CENTER"
-		Buffs:SetPoint("TOP", 0, -2)
-		Buffs["growth-x"] = "RIGHT"
-		Buffs["spacing-x"] = 3
-
-		Buffs:SetSize(43, 12)
-		Buffs.num = 3
-		Buffs.size = 12
-
-		Buffs.showStealableBuffs = true
-		Buffs.disableCooldown = true
-		Buffs.disableMouse = true
-
-		self.Buffs = Buffs
-
-
-
-		Buffs.PostUpdate = function(icons)
-			local vb = icons.visibleBuffs
-
-			if vb == 3 then
-				Buffs:SetPoint("TOP", -15, -2)
-			elseif vb == 2 then
-				Buffs:SetPoint("TOP", -7, -2)
-			else
-				Buffs:SetPoint("TOP", 0, -2)
-			end
-		end
-
-		Buffs.PostCreateIcon = PostCreateIcon
-		Buffs.PostUpdateIcon = PostUpdateIcon
-		Buffs.CustomFilter = CustomFilter
-
-
+		CreateBuffs(self)
+		CreateDebuffs(self)
 		NameColour(self)
 		BorderColour(self)
 		CreateDispellable(self, unit)
-
-		self.Range = {
-			insideAlpha = 1, outsideAlpha = C.unitframes.spellRangeAlpha,
-		}
+		spellRange(self)
 	end,
 
 	raid = function(self, ...)
-		self.unitStyle = "group"
+		self.unitStyle = "raid"
 
 		CreateBackDrop(self)
 		CreateHeader(self)
@@ -1661,86 +1608,11 @@ local UnitSpecific = {
 		CreatePartyName(self)
 		CreateIndicator(self)
 		CreateThreatIndicator(self)
-
-
-		local Debuffs = CreateFrame("Frame", nil, self)
-		Debuffs.initialAnchor = "CENTER"
-		Debuffs:SetPoint("BOTTOM", 0, C.unitframes.power_height - 1)
-		Debuffs["growth-x"] = "RIGHT"
-		Debuffs["spacing-x"] = 4
-
-		Debuffs:SetHeight(16)
-		Debuffs:SetWidth(37)
-		Debuffs.num = 2
-		Debuffs.size = 16
-
-		Debuffs.showDebuffType = true
-		Debuffs.showStealableBuffs = true
-		Debuffs.disableCooldown = true
-		Debuffs.disableMouse = true
-
-		self.Debuffs = Debuffs
-
-		
-
-		Debuffs.PostUpdate = function(icons)
-			local vb = icons.visibleDebuffs
-
-			if vb == 2 then
-				Debuffs:SetPoint("BOTTOM", -9, 0)
-			else
-				Debuffs:SetPoint("BOTTOM")
-			end
-		end
-
-		Debuffs.PostCreateIcon = PostCreateIcon
-		Debuffs.PostUpdateIcon = PostUpdateIcon
-		Debuffs.CustomFilter = CustomFilter
-
-
-		local Buffs = CreateFrame("Frame", nil, self)
-		Buffs.initialAnchor = "CENTER"
-		Buffs:SetPoint("TOP", 0, -2)
-		Buffs["growth-x"] = "RIGHT"
-		Buffs["spacing-x"] = 3
-
-		Buffs:SetSize(43, 12)
-		Buffs.num = 3
-		Buffs.size = 12
-
-		Buffs.showStealableBuffs = true
-		Buffs.disableCooldown = true
-		Buffs.disableMouse = true
-
-		self.Buffs = Buffs
-
-
-
-		Buffs.PostUpdate = function(icons)
-			local vb = icons.visibleBuffs
-
-			if vb == 3 then
-				Buffs:SetPoint("TOP", -15, -2)
-			elseif vb == 2 then
-				Buffs:SetPoint("TOP", -7, -2)
-			else
-				Buffs:SetPoint("TOP", 0, -2)
-			end
-		end
-
-		Buffs.PostCreateIcon = PostCreateIcon
-		Buffs.PostUpdateIcon = PostUpdateIcon
-		Buffs.CustomFilter = CustomFilter
-
-
+		CreateBuffs(self)
+		CreateDebuffs(self)
 		NameColour(self)
 		BorderColour(self)
-
-
-
-		self.Range = {
-			insideAlpha = 1, outsideAlpha = C.unitframes.spellRangeAlpha,
-		}
+		spellRange(self)
 	end,
 }
 
@@ -1764,9 +1636,6 @@ local spawnHelper = function(self, unit, ...)
 	return object
 end
 
-local function round(x)
-	return floor(x + .5)
-end
 
 oUF:Factory(function(self)
 	player = spawnHelper(self, 'player', unpack(C.unitframes.player_pos))
@@ -1855,6 +1724,6 @@ oUF:Factory(function(self)
 end)
 
 function module:OnLogin()
-	self:focuser()
-	self:ufsounds()
+	self:Focuser()
+	self:TargetSound()
 end

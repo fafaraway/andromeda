@@ -1,9 +1,6 @@
 local F, C = unpack(select(2, ...))
-
-local parent, ns = ...
-local oUF = ns.oUF
-
-local tags = oUF.Tags
+local module = F:GetModule("unitframe")
+local tags = FreeUI.oUF.Tags
 
 -- Short values
 local siValue = function(val)

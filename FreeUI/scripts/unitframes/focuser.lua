@@ -1,10 +1,9 @@
-local _, ns = ...
 local F, C = unpack(select(2, ...))
-
-local oUF = ns.oUF or oUF
 local module = F:GetModule("unitframe")
+local oUF = FreeUI.oUF
 
-function module:focuser()
+
+function module:Focuser()
 	if not C.unitframes.focuser then return end
 
 	local modifier = "shift" -- shift, alt or ctrl

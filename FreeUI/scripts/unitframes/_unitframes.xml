@@ -1,6 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="tags.lua"/>
 	<Script file="unitframes.lua"/>
+	<Script file="tags.lua"/>
+	<Script file="colors.lua"/>
+	<Script file="filterlist.lua"/>
 	<Script file="arena.lua"/>
 	<Script file="focuser.lua"/>
 	<Script file="sound.lua"/>
