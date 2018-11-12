@@ -49,7 +49,7 @@ local updateArena = function(event)
 					if class and spec then
 						f.SpecClass:SetText(spec.."  -  "..LOCALIZED_CLASS_NAMES_MALE[class])
 
-						local c = C.classColors[class]
+						local c = C.ClassColors[class]
 						f.Health:SetStatusBarColor(c.r, c.g, c.b)
 						f:Show()
 					end

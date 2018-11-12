@@ -356,7 +356,7 @@ F.ReskinTab(SpellBinder.OpenButton)
 F.CreateBDFrame(SpellBinder.OpenButton)
 
 SpellBinder.OpenButton:SetNormalTexture("Interface\\ICONS\\Spell_holy_chastise")
-SpellBinder.OpenButton:GetNormalTexture():SetTexCoord(unpack(C.texCoord))
+SpellBinder.OpenButton:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 
 SpellBinder.OpenButton:SetCheckedTexture(C.media.checked)
 SpellBinder.OpenButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)

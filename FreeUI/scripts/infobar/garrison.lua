@@ -19,6 +19,6 @@ GarrisonLandingPageMinimapButton:HookScript("OnEvent", function(self, event)
 end)
 if C.appearance.usePixelFont then
 	FreeUIGarrisonButton.Text:SetFont(unpack(C.font.pixel))
-elseif C.client == "zhCN" or C.client == "zhTW" then
+elseif C.Client == "zhCN" or C.Client == "zhTW" then
 	FreeUIGarrisonButton.Text:SetFont(C.font.normal, 11)
 end

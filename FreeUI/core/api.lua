@@ -1,44 +1,44 @@
 local F, C, L = unpack(select(2, ...))
 
 
-C.myClass = select(2, UnitClass("player"))
-C.myName = UnitName("player")
-C.myRealm = GetRealmName()
-C.client = GetLocale()
+C.PlayerClass = select(2, UnitClass("player"))
+C.PlayerName = UnitName("player")
+C.PlayerRealm = GetRealmName()
+C.Client = GetLocale()
 
-C.classColors = {}
-C.classList = {}
+C.ClassColors = {}
+C.ClassList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-	C.classList[v] = k
+	C.ClassList[v] = k
 end
 
 local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
 for class in pairs(colors) do
-	C.classColors[class] = {}
-	C.classColors[class].r = colors[class].r
-	C.classColors[class].g = colors[class].g
-	C.classColors[class].b = colors[class].b
-	C.classColors[class].colorStr = colors[class].colorStr
+	C.ClassColors[class] = {}
+	C.ClassColors[class].r = colors[class].r
+	C.ClassColors[class].g = colors[class].g
+	C.ClassColors[class].b = colors[class].b
+	C.ClassColors[class].colorStr = colors[class].colorStr
 end
 
 local r, g, b
 if C.appearance.useCustomColour then
 	r, g, b = C.appearance.customColour.r, C.appearance.customColour.g, C.appearance.customColour.b
 else
-	r, g, b = C.classColors[C.myClass].r, C.classColors[C.myClass].g, C.classColors[C.myClass].b
+	r, g, b = C.ClassColors[C.PlayerClass].r, C.ClassColors[C.PlayerClass].g, C.ClassColors[C.PlayerClass].b
 end
 C.r, C.g, C.b = r, g, b
 
-C.myColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
-C.infoColor = "|cffe5d19f"
-C.greyColor = "|cff808080"
+C.MyColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
+C.InfoColor = "|cffe5d19f"
+C.GreyColor = "|cff808080"
 
-C.lineString = C.greyColor.."---------------"
-C.leftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
-C.rightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
-C.scrollButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
+C.LineString = C.GreyColor.."---------------"
+C.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
+C.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
+C.MiddleButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
 
-C.texCoord = {.08, .92, .08, .92}
+C.TexCoord = {.08, .92, .08, .92}
 
 
 -- [[ Functions ]]
@@ -47,9 +47,8 @@ function F:Dummy()
 	return
 end
 
-F.SetFS = function(fontObject, fontSize)
+function F.SetFS(fontObject, fontSize)
 	fontObject:SetFont(C.media.pixel, 8, "OUTLINEMONOCHROME")
-
 	fontObject:SetShadowColor(0, 0, 0)
 	fontObject:SetShadowOffset(1, -1)
 end
@@ -175,7 +174,7 @@ local function clearButton(self)
 	self:SetBackdropBorderColor(0, 0, 0)
 end
 
-F.CreatePulse = function(frame) -- pulse function originally by nightcracker
+local function CreatePulse(frame)
 	local speed = .05
 	local mult = 1
 	local alpha = 1
@@ -202,7 +201,7 @@ local function StartGlow(f)
 
 	f:SetBackdropBorderColor(C.r, C.g, C.b)
 	f.glow:SetAlpha(1)
-	F.CreatePulse(f.glow)
+	CreatePulse(f.glow)
 end
 
 local function StopGlow(f)
@@ -213,7 +212,7 @@ local function StopGlow(f)
 	f.glow:SetAlpha(0)
 end
 
-F.Reskin = function(f, noGlow)
+function F.Reskin(f, noGlow)
 	if f.SetNormalTexture then f:SetNormalTexture("") end
 	if f.SetHighlightTexture then f:SetHighlightTexture("") end
 	if f.SetPushedTexture then f:SetPushedTexture("") end
@@ -240,7 +239,6 @@ F.Reskin = function(f, noGlow)
 
 	f.bgTex = F.CreateGradient(f)
 	
-
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
 		f.glow:SetBackdrop({
@@ -898,7 +896,7 @@ function F:CreateIF(mouse, cd)
 	F.CreateSD(self)
 	self.Icon = self:CreateTexture(nil, "ARTWORK")
 	self.Icon:SetAllPoints()
-	self.Icon:SetTexCoord(unpack(C.texCoord))
+	self.Icon:SetTexCoord(unpack(C.TexCoord))
 	if mouse then
 		self:EnableMouse(true)
 		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
@@ -965,7 +963,7 @@ function F.Hex2RGB(hex)
 end]]
 
 function F.ClassColor(class)
-	local color = C.classColors[class]
+	local color = C.ClassColors[class]
 	if not color then return 1, 1, 1 end
 	return color.r, color.g, color.b
 end
@@ -1140,6 +1138,26 @@ function F.GetNPCID(guid)
 	local id = tonumber((guid or ""):match("%-(%d-)%-%x-$"))
 	return id
 end
+
+-- Role Updater
+local function CheckRole()
+	local tree = GetSpecialization()
+	if not tree then return end
+	local _, _, _, _, role, stat = GetSpecializationInfo(tree)
+	if role == "TANK" then
+		C.PlayerRole = "Tank"
+	elseif role == "HEALER" then
+		C.PlayerRole = "Healer"
+	elseif role == "DAMAGER" then
+		if stat == 4 then	--1力量，2敏捷，4智力
+			C.PlayerRole = "Caster"
+		else
+			C.PlayerRole = "Melee"
+		end
+	end
+end
+F:RegisterEvent("PLAYER_LOGIN", CheckRole)
+F:RegisterEvent("PLAYER_TALENT_UPDATE", CheckRole)
 
 
 

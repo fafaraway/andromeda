@@ -43,9 +43,9 @@ do	--Replacement for UIDropDownMenu
 		fstr:SetJustifyH("LEFT")
 		fstr:SetJustifyV("MIDDLE")
 
-		if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
+		if C.appearance.usePixelFont and (C.Client == 'zhCN' or C.Client == 'zhTW') then
 			fstr:SetFont(unpack(C.pixelFontCN))
-		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 			fstr:SetFont(C.font.normal, 11)
 		else
 			F.SetFS(fstr)

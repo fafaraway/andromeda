@@ -29,16 +29,16 @@ function module:extraInfo()
 				self:AddDoubleLine(L["SellPrice"]..":", "|cffffffff"..GetMoneyString(itemSellPrice).."|r")
 			end
 			if bankCount > 0 and IsShiftKeyDown() then
-				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", C.infoColor..bagCount.."/"..bankCount)
+				self:AddDoubleLine(BAGSLOT.."/"..BANK..":", C.InfoColor..bagCount.."/"..bankCount)
 			elseif bagCount > 1 and IsShiftKeyDown() then
-				self:AddDoubleLine(BAGSLOT..":", C.infoColor..bagCount)
+				self:AddDoubleLine(BAGSLOT..":", C.InfoColor..bagCount)
 			end
 			if itemStackCount and itemStackCount > 1 and IsShiftKeyDown() then
-				self:AddDoubleLine(L["StackCap"]..":", C.infoColor..itemStackCount)
+				self:AddDoubleLine(L["StackCap"]..":", C.InfoColor..itemStackCount)
 			end
 		end
 		
-		self:AddDoubleLine(type, format(C.infoColor.."%s|r", id))
+		self:AddDoubleLine(type, format(C.InfoColor.."%s|r", id))
 		self:Show()
 	end
 

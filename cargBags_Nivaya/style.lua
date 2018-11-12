@@ -30,12 +30,6 @@ local itemSlotSize = ns.options.itemSlotSize
 local cbNivaya = cargBags:GetImplementation("Nivaya")
 local MyContainer = cbNivaya:GetContainerClass()
 
-local function GetClassColor(class)
-	if not RAID_CLASS_COLORS[class] then return {1, 1, 1} end
-	local classColors = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
-	return {classColors.r, classColors.g, classColors.b}
-end
-
 local GetNumFreeSlots = function(bagType)
 	local free, max = 0, 0
 	if bagType == "bag" then
@@ -270,14 +264,10 @@ local SetFrameMovable = function(f, v)
 	end
 end
 
-local classColor
 local function IconButton_OnEnter(self)
 	self.mouseover = true
 	
-	if not classColor then
-		classColor = GetClassColor(select(2, UnitClass("player")))
-	end
-	self.icon:SetVertexColor(classColor[1], classColor[2], classColor[3])
+	self.icon:SetVertexColor(C.r, C.g, C.b)
 	
 	if self.tooltip then
 		self.tooltip:Show()
@@ -475,9 +465,9 @@ function MyContainer:OnCreate(name, settings)
 	-- Caption, close button
 	local caption = background:CreateFontString(background, "OVERLAY", nil)
 
-	if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
+	if C.appearance.usePixelFont and (C.Client == 'zhCN' or C.Client == 'zhTW') then
 		caption:SetFont(unpack(C.font.pixel))
-	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		caption:SetFont(C.font.normal, 11)
 	else
 		F.SetFS(caption)

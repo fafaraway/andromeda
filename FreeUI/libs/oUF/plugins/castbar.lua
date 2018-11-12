@@ -20,7 +20,7 @@ local channelingTicks = {
 	[GetSpellInfo(205021)] = 5,
 }
 
-if C.myClass == "PRIEST" then
+if C.PlayerClass == "PRIEST" then
 	local penance = GetSpellInfo(47540)
 	local function updateTicks()
 		local numTicks = 3

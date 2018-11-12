@@ -8,15 +8,15 @@ local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
 
-	if FreeUIGlobalConfig[C.myRealm] == nil then FreeUIGlobalConfig[C.myRealm] = {} end
+	if FreeUIGlobalConfig[C.PlayerRealm] == nil then FreeUIGlobalConfig[C.PlayerRealm] = {} end
 
-	if FreeUIGlobalConfig[C.myRealm].gold == nil then FreeUIGlobalConfig[C.myRealm].gold = {} end
+	if FreeUIGlobalConfig[C.PlayerRealm].gold == nil then FreeUIGlobalConfig[C.PlayerRealm].gold = {} end
 
-	if FreeUIGlobalConfig[C.myRealm].class == nil then FreeUIGlobalConfig[C.myRealm].class = {} end
-	FreeUIGlobalConfig[C.myRealm].class[C.myName] = select(2, UnitClass("player"))
+	if FreeUIGlobalConfig[C.PlayerRealm].class == nil then FreeUIGlobalConfig[C.PlayerRealm].class = {} end
+	FreeUIGlobalConfig[C.PlayerRealm].class[C.PlayerName] = select(2, UnitClass("player"))
 
-	if FreeUIGlobalConfig[C.myRealm].faction == nil then FreeUIGlobalConfig[C.myRealm].faction = {} end
-	FreeUIGlobalConfig[C.myRealm].faction[C.myName] = UnitFactionGroup("player")
+	if FreeUIGlobalConfig[C.PlayerRealm].faction == nil then FreeUIGlobalConfig[C.PlayerRealm].faction = {} end
+	FreeUIGlobalConfig[C.PlayerRealm].faction[C.PlayerName] = UnitFactionGroup("player")
 
 	F:UnregisterEvent("ADDON_LOADED", addonLoaded)
 	addonLoaded = nil
@@ -24,7 +24,7 @@ end
 F:RegisterEvent("ADDON_LOADED", addonLoaded)
 
 local function updateMoney()
-	FreeUIGlobalConfig[C.myRealm].gold[C.myName] = GetMoney()
+	FreeUIGlobalConfig[C.PlayerRealm].gold[C.PlayerName] = GetMoney()
 end
 
 F:RegisterEvent("PLAYER_MONEY", updateMoney)
@@ -81,8 +81,8 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
 
 	local total, totalAlliance, totalHorde, totalNeutral = 0, 0, 0, 0
-	local goldList = FreeUIGlobalConfig[C.myRealm].gold
-	local factionList = FreeUIGlobalConfig[C.myRealm].faction
+	local goldList = FreeUIGlobalConfig[C.PlayerRealm].gold
+	local factionList = FreeUIGlobalConfig[C.PlayerRealm].faction
 	local allianceList, hordeList, neutralList = {}, {}, {}
 	local headerAdded = false
 
@@ -101,7 +101,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 		total = total + v
 	end
 
-	GameTooltip:AddDoubleLine(C.myRealm, GetMoneyString(total), .9, .82, .62, 1, 1, 1)
+	GameTooltip:AddDoubleLine(C.PlayerRealm, GetMoneyString(total), .9, .82, .62, 1, 1, 1)
 
 	for n in pairs(allianceList) do
 		table.insert(keys, n)
@@ -109,7 +109,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	table.sort(keys)
 
 	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.myRealm].class[k]
+		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
 		local v = allianceList[k]
 		if v and v >= 10000 then
 			if not headerAdded then
@@ -117,7 +117,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 				GameTooltip:AddDoubleLine(strupper(FACTION_ALLIANCE), GetMoneyString(totalAlliance), 0, 0.68, 0.94, 1, 1, 1)
 				headerAdded = true
 			end
-			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.classColors[class].r, C.classColors[class].g, C.classColors[class].b, 1, 1, 1)
+			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b, 1, 1, 1)
 		end
 	end
 
@@ -130,7 +130,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	table.sort(keys)
 
 	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.myRealm].class[k]
+		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
 		local v = hordeList[k]
 		if v and v >= 10000 then
 			if not headerAdded then
@@ -138,7 +138,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 				GameTooltip:AddDoubleLine(strupper(FACTION_HORDE), GetMoneyString(totalHorde), 1, 0, 0, 1, 1, 1)
 				headerAdded = true
 			end
-			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.classColors[class].r, C.classColors[class].g, C.classColors[class].b, 1, 1, 1)
+			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b, 1, 1, 1)
 		end
 	end
 
@@ -151,7 +151,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	table.sort(keys)
 
 	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.myRealm].class[k]
+		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
 		local v = neutralList[k]
 		if v and v >= 10000 then
 			if not headerAdded then
@@ -159,11 +159,11 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 				GameTooltip:AddDoubleLine(strupper(FACTION_OTHER), GetMoneyString(totalNeutral), .9, .9, .9, 1, 1, 1)
 				headerAdded = true
 			end
-			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.classColors[class].r, C.classColors[class].g, C.classColors[class].b, 1, 1, 1)
+			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b, 1, 1, 1)
 		end
 	end
-	GameTooltip:AddDoubleLine(" ", C.lineString)
-	GameTooltip:AddDoubleLine(" ", C.leftButton..L["OpenBag"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.LineString)
+	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["OpenBag"], 1,1,1, .9, .82, .62)
 	GameTooltip:Show()
 end)
 

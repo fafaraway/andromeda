@@ -6,7 +6,7 @@ local module = F:GetModule("tooltip")
 
 if not C.tooltip.clearTip then return end
 
-if C.client == "zhCN" then
+if C.Client == "zhCN" then
 	ITEM_CREATED_BY = ""
 
 	ITEM_LEVEL = "物品等级 %d"

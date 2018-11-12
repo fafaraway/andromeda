@@ -194,7 +194,7 @@ function module:ReskinRegions()
 	F.CreateTex(Invt)
 
 	Invt.text = F.CreateFS(Invt, C.font.normal, 14)
-	Invt.text:SetText(C.infoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
+	Invt.text:SetText(C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
 
 	local function updateInviteVisibility()
 		if C_Calendar.GetNumPendingInvites() > 0 then
@@ -260,7 +260,7 @@ function module:ReskinRegions()
 	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
 	MinimapZoneText:SetJustifyH("CENTER")
 
-	if C.client == "zhCN" or C.client == "zhTW" then
+	if C.Client == "zhCN" or C.Client == "zhTW" then
 		ZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
 		SubZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
 		PVPInfoTextString:SetFont(C.font.normal, 14, "OUTLINE")

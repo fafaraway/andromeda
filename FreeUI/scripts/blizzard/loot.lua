@@ -138,7 +138,7 @@ local createSlot = function(id)
 	name:SetPoint("LEFT", icon, "RIGHT", 8, 0)
 	name:SetNonSpaceWrap(true)
 
-	if C.client == "zhCN" or C.client == "zhTW" then
+	if C.Client == "zhCN" or C.Client == "zhTW" then
 		name:SetFont(unpack(lootFont))
 	end
 

@@ -513,7 +513,7 @@ local function addonStyled(_, addon)
 			if not self.tipStyled then
 				if self.glow then self.glow:Hide() end
 				self.Border:Hide()
-				self.Icon:SetTexCoord(unpack(C.texCoord))
+				self.Icon:SetTexCoord(unpack(C.TexCoord))
 				self.tipStyled = true
 			end
 		end)
@@ -525,14 +525,14 @@ local function addonStyled(_, addon)
 				if isBuff and self.Buffs then
 					local frame = self.Buffs.frames[nextBuff]
 					if frame and frame.Icon then
-						frame.Icon:SetTexCoord(unpack(C.texCoord))
+						frame.Icon:SetTexCoord(unpack(C.TexCoord))
 					end
 					nextBuff = nextBuff + 1
 				elseif (not isBuff) and self.Debuffs then
 					local frame = self.Debuffs.frames[nextDebuff]
 					if frame and frame.Icon then
 						frame.DebuffBorder:Hide()
-						frame.Icon:SetTexCoord(unpack(C.texCoord))
+						frame.Icon:SetTexCoord(unpack(C.TexCoord))
 					end
 					nextDebuff = nextDebuff + 1
 				end
@@ -578,14 +578,14 @@ local function addonStyled(_, addon)
 	elseif addon == "Blizzard_Contribution" then
 
 		ContributionBuffTooltip:HookScript("OnShow", extrastyle)
-		ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.texCoord))
+		ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.TexCoord))
 		ContributionBuffTooltip.Border:SetAlpha(0)
 
 	elseif addon == "Blizzard_EncounterJournal" then
 
 		EncounterJournalTooltip:HookScript("OnShow", style)
-		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.texCoord))
-		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.texCoord))
+		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.TexCoord))
+		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.TexCoord))
 
 	elseif addon == "Blizzard_Calendar" then
 		local gt = {

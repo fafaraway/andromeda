@@ -50,7 +50,7 @@ local function styleButton(bu, isDebuff)
 	
 	local icon = _G[name.."Icon"]
 	icon:SetAllPoints()
-	icon:SetTexCoord(unpack(C.texCoord))
+	icon:SetTexCoord(unpack(C.TexCoord))
 
 	icon:SetDrawLayer("BACKGROUND", 1)
 
@@ -168,11 +168,11 @@ local function formatAuraTime(seconds)
 		seconds = seconds%60
 	end
 	if d > 0 then
-		str = format("%d"..C.infoColor.."d", d)
+		str = format("%d"..C.InfoColor.."d", d)
 	elseif h > 0 then
-		str = format("%d"..C.infoColor.."h", h)
+		str = format("%d"..C.InfoColor.."h", h)
 	elseif m >= 10 then
-		str = format("%d"..C.infoColor.."m", m)
+		str = format("%d"..C.InfoColor.."m", m)
 	elseif m > 0 and m < 10 then
 		str = format("%d:%.2d", m, seconds)
 	else
@@ -181,7 +181,7 @@ local function formatAuraTime(seconds)
 		elseif seconds <= 10 then
 			str = format("|cffffff00%.1f|r", seconds) -- yellow
 		else
-			str = format("%d"..C.infoColor.."s", seconds)
+			str = format("%d"..C.InfoColor.."s", seconds)
 		end
 	end
 

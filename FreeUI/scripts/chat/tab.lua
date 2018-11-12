@@ -80,7 +80,7 @@ local faneifyTab = function(frame, sel)
 
 		if C.appearance.usePixelFont then
 			frame:GetFontString():SetFont(unpack(C.font.pixel))
-		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 			frame:GetFontString():SetFont(C.font.chat, 11, 'OUTLINE')
 		else
 			F.SetFS(frame:GetFontString())

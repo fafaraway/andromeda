@@ -20,7 +20,7 @@ frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end
 frame:SetPoint("CENTER", anchor, "CENTER")
 
 local icon = frame:CreateTexture(nil, "BORDER")
-icon:SetTexCoord(unpack(C.texCoord))
+icon:SetTexCoord(unpack(C.TexCoord))
 icon:SetAllPoints(frame)
 
 local bg = frame:CreateTexture(nil, "BACKGROUND")

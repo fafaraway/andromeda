@@ -163,7 +163,7 @@ function TradeTabs:CreateTab(i, parent, spellID)
 	button:SetCheckedTexture(C.media.checked)
 	button:GetRegions():Hide()
 	F.CreateBDFrame(button)
-	button:GetNormalTexture():SetTexCoord(unpack(C.texCoord))
+	button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 
 	button:SetScript("OnEvent", updateSelection)
 	button:RegisterEvent("TRADE_SKILL_SHOW")

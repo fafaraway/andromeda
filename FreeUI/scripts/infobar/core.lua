@@ -188,34 +188,6 @@ bar.addButton = addButton
 
 
 
-
-
---[[module:addButton("Toggle Skada", module.POSITION_LEFT, function(self, button)
-	if IsAddOnLoaded("Skada") then
-		if button == "MiddleButton" then
-			Skada:Reset()
-		elseif button == "RightButton" then
-			Skada:SetActive(false)
-		else
-			Skada:SetActive(true)
-		end
-	else
-		EnableAddOn("Skada")
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffSkada enabled. Type|r /rl |cfffffffffor the changes to apply.|r", C.r, C.g, C.b)
-	end
-end)]]
-
-
-
-
-
-
-
-
-
-
-
-
 function module:OnLogin()
 	
 

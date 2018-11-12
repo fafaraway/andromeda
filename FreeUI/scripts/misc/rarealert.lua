@@ -26,14 +26,14 @@ function module:rareAlert()
 			local atlasHeight = height/(txBottom-txTop)
 
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-			--UIErrorsFrame:AddMessage(C.infoColor.."Rare Found"..tex..(info.name or ""))
+			--UIErrorsFrame:AddMessage(C.InfoColor.."Rare Found"..tex..(info.name or ""))
 
 	
-			RaidNotice_AddMessage(RaidWarningFrame, C.infoColor..L["rareFound"]..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
+			RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["rareFound"]..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
 
 			
 			if C.misc.rareAlertNotify then
-				print(C.infoColor..L["rareFound"]..tex..(info.name or ""))
+				print(C.InfoColor..L["rareFound"]..tex..(info.name or ""))
 			end
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
 			cache[id] = true

@@ -45,7 +45,7 @@ mb.t:SetTextColor(228/255, 225/255, 16/255)
 end)
 
 mb:SetScript('OnMouseDown', function(self, button)
-	if C.client == 'zhCN' and button == 'RightButton' then
+	if C.Client == 'zhCN' and button == 'RightButton' then
 		local inchannel = false
 		local channels = {GetChannelList()}
 		for i = 1, #channels do

@@ -47,10 +47,10 @@ Error:SetScript("OnEvent", function(_, _, code, msg)
 		state = 0
 	end
 
-	if C.appearance.usePixelFont and (C.client == 'zhCN' or C.client == 'zhTW') then
+	if C.appearance.usePixelFont and (C.Client == 'zhCN' or C.Client == 'zhTW') then
 		firstErrorFrame.text:SetFont(unpack(C.font.pixel))
 		secondErrorFrame.text:SetFont(unpack(C.font.pixel))
-	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		firstErrorFrame.text:SetFont(C.font.normal, 12)
 		secondErrorFrame.text:SetFont(C.font.normal, 12)
 		secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -180)

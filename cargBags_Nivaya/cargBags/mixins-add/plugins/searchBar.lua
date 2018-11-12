@@ -94,7 +94,7 @@ cargBags:RegisterPlugin("SearchBar", function(self, target)
 			"OUTLINE"
 		}
 
-	if C.client == "zhCN" or C.client == "zhTW" then
+	if C.Client == "zhCN" or C.Client == "zhTW" then
 		search:SetFont(unpack(searchFont))
 	else
 		F.SetFS(search)

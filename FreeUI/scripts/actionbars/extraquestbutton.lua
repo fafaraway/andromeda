@@ -173,7 +173,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
 	local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
 	Icon:SetAllPoints()
-	Icon:SetTexCoord(unpack(C.texCoord))
+	Icon:SetTexCoord(unpack(C.TexCoord))
 	
 	local iconBG = self:CreateTexture("$parentIcon", "BACKGROUND")
 	iconBG:SetPoint("TOPLEFT", -1 , 1)

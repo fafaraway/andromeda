@@ -40,7 +40,7 @@ function Bar:CreateExtrabar()
 	local spellButton = ZoneAbilityFrame.SpellButton
 	spellButton:SetSize(cfg.buttonSizeHuge, cfg.buttonSizeHuge)
 	spellButton.Style:SetAlpha(0)
-	spellButton.Icon:SetTexCoord(unpack(C.texCoord))
+	spellButton.Icon:SetTexCoord(unpack(C.TexCoord))
 	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBDFrame(spellButton.Icon)
 	F.CreateSD(spellButton.Icon)

@@ -227,7 +227,7 @@ end
 
 -- time stamp
 local function UpdateTimeStamp()
-	local greyStamp = C.greyColor..'%H:%M|r '
+	local greyStamp = C.GreyColor..'%H:%M|r '
 	if C.chat.timeStamp then
 		SetCVar('showTimestamps', greyStamp)
 	else

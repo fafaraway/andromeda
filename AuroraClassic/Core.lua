@@ -39,12 +39,12 @@ C.frames = {}
 
 local useButtonGradientColour
 local _, class = UnitClass("player")
-C.classcolours = CONFIG.classColors
+C.classcolours = CONFIG.ClassColors
 
 local r, g, b
 --r, g, b = C.classcolours[class].r, C.classcolours[class].g, C.classcolours[class].b
 
-r, g, b = CONFIG.classColors[class].r, CONFIG.classColors[class].g, CONFIG.classColors[class].b
+r, g, b = CONFIG.ClassColors[class].r, CONFIG.ClassColors[class].g, CONFIG.ClassColors[class].b
 
 
 

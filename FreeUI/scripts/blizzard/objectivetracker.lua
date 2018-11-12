@@ -116,7 +116,7 @@ function module:QuestTracker()
 			itemButton:SetNormalTexture("")
 			itemButton:SetPushedTexture("")
 			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
-			itemButton.icon:SetTexCoord(unpack(C.texCoord))
+			itemButton.icon:SetTexCoord(unpack(C.TexCoord))
 			local bg = F.CreateBDFrame(itemButton, 0)
 			F.CreateSD(itemButton)
 
@@ -179,7 +179,7 @@ function module:QuestTracker()
 			F.SetFS(label)
 
 			icon:SetMask(nil)
-			icon:SetTexCoord(unpack(C.texCoord))
+			icon:SetTexCoord(unpack(C.TexCoord))
 			icon:ClearAllPoints()
 			icon:SetPoint("RIGHT", 30, 0)
 			icon:SetSize(24, 24)
@@ -246,7 +246,7 @@ function module:QuestTracker()
 			widgetFrame.Frame:SetAlpha(0)
 			for _, bu in next, {widgetFrame.CurrencyContainer:GetChildren()} do
 				if bu and not bu.styled then
-					bu.Icon:SetTexCoord(unpack(C.texCoord))
+					bu.Icon:SetTexCoord(unpack(C.TexCoord))
 					local bg = F.CreateBG(bu.Icon)
 					F.CreateBD(bg)
 					bu.styled = true

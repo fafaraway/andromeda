@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 
 
 local class = select(2, UnitClass("player"))
-local r, g, b = C.classColors[class].r, C.classColors[class].g, C.classColors[class].b
+local r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
 
 
 

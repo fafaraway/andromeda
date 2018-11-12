@@ -78,7 +78,7 @@ FreeUISpecButton:SetScript("OnEvent", function(self)
 
 		if C.appearance.usePixelFont then
 			self.Text:SetFont(unpack(C.font.pixel))
-		elseif C.client == "zhCN" or C.client == "zhTW" then
+		elseif C.Client == "zhCN" or C.Client == "zhTW" then
 			self.Text:SetFont(C.font.normal, 11)
 		end
 
@@ -128,10 +128,10 @@ FreeUISpecButton:HookScript("OnEnter", function(self)
 		wipe(pvpTalents)
 	end
 
-	GameTooltip:AddDoubleLine(" ", C.lineString)
-	GameTooltip:AddDoubleLine(" ", C.leftButton..L["ChangeSpec"].." ", 1,1,1, .9, .82, .62)
-	GameTooltip:AddDoubleLine(" ", C.rightButton..L["ChangeLootSpec"].." ", 1,1,1, .9, .82, .62)
-	GameTooltip:AddDoubleLine(" ", C.scrollButton..L["SpecPanel"].." ", 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.LineString)
+	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["ChangeSpec"].." ", 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.RightButton..L["ChangeLootSpec"].." ", 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.MiddleButton..L["SpecPanel"].." ", 1,1,1, .9, .82, .62)
 	GameTooltip:Show()
 end)
 

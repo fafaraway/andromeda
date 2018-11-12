@@ -17,7 +17,7 @@ local function GetColor(className, isLocal)
 			end
 		end
 	end
-	local tbl = C.classColors[className]
+	local tbl = C.ClassColors[className]
 	local color = ('%02x%02x%02x'):format(tbl.r*255, tbl.g*255, tbl.b*255)
 	return color
 end

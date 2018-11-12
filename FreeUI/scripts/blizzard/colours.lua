@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 -- based on yClassColors by yleaf
 
 local function classColor(class, showRGB)
-	local color = C.classColors[C.classList[class] or class]
+	local color = C.ClassColors[C.ClassList[class] or class]
 	if showRGB then
 		return color.r, color.g, color.b
 	else
@@ -166,7 +166,7 @@ local strfind, format, gsub, strmatch, strsub = string.find, string.format, stri
 local pairs, type = pairs, type
 
 local blizzHexColors = {}
-for class, color in pairs(C.classColors) do
+for class, color in pairs(C.ClassColors) do
 	blizzHexColors[color.colorStr] = class
 end
 
@@ -191,7 +191,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	local info = ChatTypeInfo[chatType]
 	if info and info.colorNameByClass and arg12 and arg12 ~= "" and arg12 ~= 0 then
 		local _, class = GetPlayerInfoByGUID(arg12)
-		local color = class and C.classColors[class]
+		local color = class and C.ClassColors[class]
 		if color then
 			return format("|c%s%s|r", color.colorStr, arg2)
 		end
@@ -206,7 +206,7 @@ do
 	local function FixClassColors(frame, message, ...) -- 3174
 		if type(message) == "string" and strfind(message, "|cff") then -- type check required for shitty addons that pass nil or non-string values
 			for hex, class in pairs(blizzHexColors) do
-				local color = C.classColors[class]
+				local color = C.ClassColors[class]
 				message = color and gsub(message, hex, color.colorStr) or message -- color check required for Warmup, maybe others
 			end
 		end

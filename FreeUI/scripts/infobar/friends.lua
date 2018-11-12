@@ -26,7 +26,7 @@ local function buildFriendTable(num)
 			else
 				status = ""
 			end
-			class = C.classList[class]
+			class = C.ClassList[class]
 
 			friendTable[i] = {name, level, class, area, connected, status}
 		end
@@ -49,7 +49,7 @@ local function buildBNetTable(num)
 			local _, _, _, realmName, _, _, _, class, _, zoneName, _, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
 
 			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
-			class = C.classList[class]
+			class = C.ClassList[class]
 			accountName = isBattleTagPresence and battleTag or accountName
 
 			local status, infoText = ""
@@ -102,7 +102,7 @@ FreeUIFriendsButton:SetScript("OnEvent", function(self, event, arg1)
 
 	local _, onlineFriends = GetNumFriends()
 	local _, onlineBNet = BNGetNumFriends()
-	self.Text:SetText(format("%s: "..C.infoColor.."%d", 'FRIENDS', onlineFriends + onlineBNet))
+	self.Text:SetText(format("%s: "..C.InfoColor.."%d", 'FRIENDS', onlineFriends + onlineBNet))
 	updateRequest = false
 end)
 
@@ -135,7 +135,7 @@ FreeUIFriendsButton:HookScript("OnEnter", function(self)
 				if connected then
 					local zoneColor = GetRealZoneText() == area and activeZone or inactiveZone
 					local levelColor = F.HexRGB(GetQuestDifficultyColor(level))
-					local classColor = C.classColors[class] or levelColor
+					local classColor = C.ClassColors[class] or levelColor
 					GameTooltip:AddDoubleLine(levelColor..level.."|r "..name..status, area, classColor.r, classColor.g, classColor.b, zoneColor.r, zoneColor.g, zoneColor.b)
 				end
 			end
@@ -153,7 +153,7 @@ FreeUIFriendsButton:HookScript("OnEnter", function(self)
 
 					if client == BNET_CLIENT_WOW then
 						if CanCooperateWithGameAccount(gameID) then
-							local color = C.classColors[class] or GetQuestDifficultyColor(1)
+							local color = C.ClassColors[class] or GetQuestDifficultyColor(1)
 							name = F.HexRGB(color).." "..charName
 						end
 						zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
@@ -169,9 +169,9 @@ FreeUIFriendsButton:HookScript("OnEnter", function(self)
 			end
 		end
 	end
-	GameTooltip:AddDoubleLine(" ", C.lineString)
+	GameTooltip:AddDoubleLine(" ", C.LineString)
 	GameTooltip:AddDoubleLine(" ", L["HoldShift"], 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", C.leftButton..L["ShowFriends"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["ShowFriends"], 1,1,1, .9, .82, .62)
 	GameTooltip:Show()
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")

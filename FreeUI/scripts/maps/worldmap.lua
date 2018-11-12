@@ -87,7 +87,7 @@ function module:OnLogin()
 
 	local function CoordsFormat(owner, none)
 		local text = none and ": --, --" or ": %.1f, %.1f"
-		return owner..C.infoColor..text
+		return owner..C.InfoColor..text
 	end
 
 	local function UpdateCoords(self, elapsed)

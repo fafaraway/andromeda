@@ -125,10 +125,10 @@ local function PostUpdateHealth(Health, unit, min, max)
 		r, g, b = 1, 0, 0
 	elseif unit == "pet" then
 		local _, class = UnitClass("player")
-		r, g, b = C.classColors[class].r, C.classColors[class].g, C.classColors[class].b
+		r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
 	elseif UnitIsPlayer(unit) then
 		local _, class = UnitClass(unit)
-		if class then r, g, b = C.classColors[class].r, C.classColors[class].g, C.classColors[class].b else r, g, b = 1, 1, 1 end
+		if class then r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b else r, g, b = 1, 1, 1 end
 	else
 		r, g, b = unpack(reaction)
 	end
@@ -308,7 +308,7 @@ local function PostUpdatePower(Power, unit, cur, max, min)
 		Power.Text:SetTextColor(Power:GetStatusBarColor())
 	end
 
-	if C.myClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc and self.unitStyle == 'player' then
+	if C.PlayerClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc and self.unitStyle == 'player' then
 		local spec, cp = GetSpecialization() or 0, UnitPower(unit)
 		if spec == 1 and cp < 40 then
 			Power:SetStatusBarColor(1, 0, 0)
@@ -481,7 +481,7 @@ local function CreateCastBar(self)
 
 	if C.appearance.usePixelFont then
 		name = F.CreateFS(cb, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -504,7 +504,7 @@ local function CreateCastBar(self)
 
 	local icon = iconFrame:CreateTexture(nil, "OVERLAY")
 	icon:SetAllPoints(iconFrame)
-	icon:SetTexCoord(unpack(C.texCoord))
+	icon:SetTexCoord(unpack(C.TexCoord))
 
 	cb.Icon = icon
 
@@ -1212,7 +1212,7 @@ local function CreateName(self)
 
 	if C.appearance.usePixelFont then
 		Name = F.CreateFS(self.Health, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], nil, {0, 0, 0}, 1, -1)
-	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 	else
 		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
@@ -1259,7 +1259,7 @@ local function CreatePartyName(self)
 		if C.appearance.usePixelFont then
 			Text:SetFont(unpack(C.font.pixel))
 			Text:SetShadowOffset(1, -1)
-		elseif C.client == 'zhCN' or C.client == 'zhTW' then
+		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 			Text:SetFont(C.font.normal, 11)
 			Text:SetShadowOffset(2, -2)
 		else
@@ -1284,7 +1284,7 @@ local function UpdateTOTName(self)
 
 	if C.appearance.usePixelFont then
 		tt = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		tt = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		tt = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -1316,7 +1316,7 @@ local function UpdateTOFName(self)
 
 	if C.appearance.usePixelFont then
 		ft = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-	elseif C.client == 'zhCN' or C.client == 'zhTW' then
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		ft = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		ft = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -1472,7 +1472,7 @@ local UnitSpecific = {
 		spellRange(self)
 		CreateCounterBar(self)
 		CreateDispellable(self, unit)
-		if (C.myClass == 'DEATHKNIGHT') then
+		if (C.PlayerClass == 'DEATHKNIGHT') then
 			CreateRunesBar(self)
 		else
 			CreateClassPower(self)

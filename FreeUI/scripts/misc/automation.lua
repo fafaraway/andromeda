@@ -22,10 +22,10 @@ local function autoRepair(override)
 		else
 			if myMoney > repairAllCost then
 				RepairAllItems()
-				print(format(C.infoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
+				print(format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
 				return
 			else
-				print(C.infoColor..L["repairError"])
+				print(C.InfoColor..L["repairError"])
 				return
 			end
 		end
@@ -34,7 +34,7 @@ local function autoRepair(override)
 			if isBankEmpty then
 				autoRepair(true)
 			else
-				print(format(C.infoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
+				print(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
 			end
 		end)
 	end
@@ -64,9 +64,6 @@ F:RegisterEvent("MERCHANT_SHOW", merchantShow)
 
 
 -- auto accept invites from friends and guildies
-
-local playerRealm = C.myRealm
-
 local IsFriend = function(name)
 	for i = 1, GetNumFriends() do
 		if GetFriendInfo(i) == name then return true end
@@ -84,7 +81,7 @@ local IsFriend = function(name)
 		if client == "WoW" then
 			local _, _, _, realmName = BNGetGameAccountInfo(presenceID)
 
-			if realmName == playerRealm and toonName == name then
+			if realmName == C.PlayerRealm and toonName == name then
 				return true
 			elseif name:find("-") then
 				local invName, invRealm = strsplit("-", name)

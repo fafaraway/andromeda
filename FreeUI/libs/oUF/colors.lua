@@ -46,7 +46,7 @@ local function customClassColors()
 end
 
 if(not customClassColors()) then
-	for classToken, color in next, C.classColors do
+	for classToken, color in next, C.ClassColors do
 		colors.class[classToken] = {color.r, color.g, color.b}
 	end
 

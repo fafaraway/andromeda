@@ -68,7 +68,7 @@ function module:ReskinDBM()
 				end
 
 				if not icon1.styled then
-					icon1:SetTexCoord(unpack(C.texCoord))
+					icon1:SetTexCoord(unpack(C.TexCoord))
 					icon1:ClearAllPoints()
 					icon1:SetPoint("TOPLEFT", icon1.overlay, 1, -1)
 					icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -1, 1)
@@ -77,7 +77,7 @@ function module:ReskinDBM()
 				end
 		
 				if not icon2.styled then
-					icon2:SetTexCoord(unpack(C.texCoord))
+					icon2:SetTexCoord(unpack(C.TexCoord))
 					icon2:ClearAllPoints()
 					icon2:SetPoint("TOPLEFT", icon2.overlay, 1, -1)
 					icon2:SetPoint("BOTTOMRIGHT", icon2.overlay, -1, 1)
@@ -115,7 +115,7 @@ function module:ReskinDBM()
 						name:SetFont(unpack(C.font.pixel))
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(1, -1)
-					elseif C.client == 'zhCN' or C.client == 'zhTW' then
+					elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 						name:SetFont(C.font.normal, 12)
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(2, -2)

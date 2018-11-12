@@ -67,7 +67,7 @@ SlashCmdList["NPCID"] = function()
 	local guid = UnitGUID("target")
 		if name and guid then
 		local npcID = F.GetNPCID(guid)
-		print(name, C.infoColor..(npcID or "nil"))
+		print(name, C.InfoColor..(npcID or "nil"))
 	end
 end
 SLASH_NPCID1 = "/getnpc"
