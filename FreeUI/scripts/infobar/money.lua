@@ -8,15 +8,15 @@ local addonLoaded
 addonLoaded = function(_, addon)
 	if addon ~= "FreeUI" then return end
 
-	if FreeUIGlobalConfig[C.PlayerRealm] == nil then FreeUIGlobalConfig[C.PlayerRealm] = {} end
+	if FreeUIGlobalConfig[C.Realm] == nil then FreeUIGlobalConfig[C.Realm] = {} end
 
-	if FreeUIGlobalConfig[C.PlayerRealm].gold == nil then FreeUIGlobalConfig[C.PlayerRealm].gold = {} end
+	if FreeUIGlobalConfig[C.Realm].gold == nil then FreeUIGlobalConfig[C.Realm].gold = {} end
 
-	if FreeUIGlobalConfig[C.PlayerRealm].class == nil then FreeUIGlobalConfig[C.PlayerRealm].class = {} end
-	FreeUIGlobalConfig[C.PlayerRealm].class[C.PlayerName] = select(2, UnitClass("player"))
+	if FreeUIGlobalConfig[C.Realm].class == nil then FreeUIGlobalConfig[C.Realm].class = {} end
+	FreeUIGlobalConfig[C.Realm].class[C.PlayerName] = select(2, UnitClass("player"))
 
-	if FreeUIGlobalConfig[C.PlayerRealm].faction == nil then FreeUIGlobalConfig[C.PlayerRealm].faction = {} end
-	FreeUIGlobalConfig[C.PlayerRealm].faction[C.PlayerName] = UnitFactionGroup("player")
+	if FreeUIGlobalConfig[C.Realm].faction == nil then FreeUIGlobalConfig[C.Realm].faction = {} end
+	FreeUIGlobalConfig[C.Realm].faction[C.PlayerName] = UnitFactionGroup("player")
 
 	F:UnregisterEvent("ADDON_LOADED", addonLoaded)
 	addonLoaded = nil
@@ -24,7 +24,7 @@ end
 F:RegisterEvent("ADDON_LOADED", addonLoaded)
 
 local function updateMoney()
-	FreeUIGlobalConfig[C.PlayerRealm].gold[C.PlayerName] = GetMoney()
+	FreeUIGlobalConfig[C.Realm].gold[C.PlayerName] = GetMoney()
 end
 
 F:RegisterEvent("PLAYER_MONEY", updateMoney)
@@ -81,8 +81,8 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
 
 	local total, totalAlliance, totalHorde, totalNeutral = 0, 0, 0, 0
-	local goldList = FreeUIGlobalConfig[C.PlayerRealm].gold
-	local factionList = FreeUIGlobalConfig[C.PlayerRealm].faction
+	local goldList = FreeUIGlobalConfig[C.Realm].gold
+	local factionList = FreeUIGlobalConfig[C.Realm].faction
 	local allianceList, hordeList, neutralList = {}, {}, {}
 	local headerAdded = false
 
@@ -101,7 +101,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 		total = total + v
 	end
 
-	GameTooltip:AddDoubleLine(C.PlayerRealm, GetMoneyString(total), .9, .82, .62, 1, 1, 1)
+	GameTooltip:AddDoubleLine(C.Realm, GetMoneyString(total), .9, .82, .62, 1, 1, 1)
 
 	for n in pairs(allianceList) do
 		table.insert(keys, n)
@@ -109,7 +109,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	table.sort(keys)
 
 	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
+		local class = FreeUIGlobalConfig[C.Realm].class[k]
 		local v = allianceList[k]
 		if v and v >= 10000 then
 			if not headerAdded then
@@ -130,7 +130,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	table.sort(keys)
 
 	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
+		local class = FreeUIGlobalConfig[C.Realm].class[k]
 		local v = hordeList[k]
 		if v and v >= 10000 then
 			if not headerAdded then
@@ -151,7 +151,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	table.sort(keys)
 
 	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
+		local class = FreeUIGlobalConfig[C.Realm].class[k]
 		local v = neutralList[k]
 		if v and v >= 10000 then
 			if not headerAdded then

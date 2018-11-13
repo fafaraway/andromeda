@@ -81,7 +81,7 @@ local IsFriend = function(name)
 		if client == "WoW" then
 			local _, _, _, realmName = BNGetGameAccountInfo(presenceID)
 
-			if realmName == C.PlayerRealm and toonName == name then
+			if realmName == C.Realm and toonName == name then
 				return true
 			elseif name:find("-") then
 				local invName, invRealm = strsplit("-", name)

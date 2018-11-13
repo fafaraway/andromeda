@@ -3,7 +3,7 @@ local F, C, L = unpack(select(2, ...))
 
 C.PlayerClass = select(2, UnitClass("player"))
 C.PlayerName = UnitName("player")
-C.PlayerRealm = GetRealmName()
+C.Realm = GetRealmName()
 C.Client = GetLocale()
 
 C.ClassColors = {}
@@ -37,6 +37,8 @@ C.LineString = C.GreyColor.."---------------"
 C.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
 C.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
 C.MiddleButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
+
+C.NewItemFlash = "Interface\\Cooldown\\star4"
 
 C.TexCoord = {.08, .92, .08, .92}
 
