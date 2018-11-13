@@ -214,19 +214,14 @@ C['camera'] = {
 
 
 C['bags'] = {
+	['enable'] = true,
 	['itemSlotSize'] = 38,
-	['sizes'] = {
-		bags = {
-			columnsSmall = 8,
-			columnsLarge = 10,
-			largeItemCount = 64,
-		},
-		bank = {
-			columnsSmall = 10,
-			columnsLarge = 12,
-			largeItemCount = 96,
-		},
-	},
+	['bagColumnsSmall'] = 8,
+	['bagColumnsLarge'] = 8,
+	['bagLargeItemCount'] = 64,
+	['bankColumnsSmall'] = 10,
+	['bankColumnsLarge'] = 12,
+	['bankLargeItemCount'] = 96,
 }
 
 C['infoBar'] = {

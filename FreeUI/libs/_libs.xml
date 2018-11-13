@@ -5,4 +5,5 @@
 	<Script file="LibItemGem.lua"/>
 	<Include file="LibPlayerSpells\lib.xml"/>
 	<Include file="oUF\oUF.xml"/>
+	<Include file="cargBags\embed.xml"/>
 </Ui>
