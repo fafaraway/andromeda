@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
-
 C.PlayerClass = select(2, UnitClass("player"))
 C.PlayerName = UnitName("player")
 C.Realm = GetRealmName()
@@ -75,7 +74,7 @@ function F:CreateTex()
 
 	self.Tex = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
 	self.Tex:SetAllPoints(self)
-	self.Tex:SetTexture(C.media.bgtex, true, true)
+	self.Tex:SetTexture(C.media.bgTex, true, true)
 	self.Tex:SetHorizTile(true)
 	self.Tex:SetVertTile(true)
 	self.Tex:SetBlendMode("ADD")
@@ -85,7 +84,7 @@ local function CreateTex(f)
 	if f.Tex then return end
 	f.Tex = f:CreateTexture(nil, "BACKGROUND", nil, 1)
 	f.Tex:SetAllPoints()
-	f.Tex:SetTexture(C.media.bgtex, true, true)
+	f.Tex:SetTexture(C.media.bgTex, true, true)
 	f.Tex:SetHorizTile(true)
 	f.Tex:SetVertTile(true)
 	f.Tex:SetBlendMode("ADD")
@@ -103,7 +102,7 @@ function F:CreateSD(a)
 	self.Shadow = CreateFrame("Frame", nil, frame)
 	self.Shadow:SetPoint("TOPLEFT", self, -3, 3)
 	self.Shadow:SetPoint("BOTTOMRIGHT", self, 3, -3)
-	self.Shadow:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+	self.Shadow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .5)
 	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
@@ -244,7 +243,7 @@ function F.Reskin(f, noGlow)
 	if not noGlow then
 		f.glow = CreateFrame("Frame", nil, f)
 		f.glow:SetBackdrop({
-			edgeFile = C.media.glowtex,
+			edgeFile = C.media.glowTex,
 			edgeSize = 5,
 		})
 		f.glow:SetPoint("TOPLEFT", -6, 6)
@@ -871,7 +870,7 @@ end
 
 -- Statusbar
 function F:CreateSB(spark, r, g, b)
-	self:SetStatusBarTexture(C.media.texture)
+	self:SetStatusBarTexture(C.media.sbTex)
 	if r and g and b then
 		self:SetStatusBarColor(r, g, b)
 	else
@@ -885,7 +884,7 @@ function F:CreateSB(spark, r, g, b)
 	F.CreateTex(self.BG)
 	if spark then
 		self.Spark = self:CreateTexture(nil, "OVERLAY")
-		self.Spark:SetTexture(C.media.sparktex)
+		self.Spark:SetTexture(C.media.sparkTex)
 		self.Spark:SetBlendMode("ADD")
 		self.Spark:SetAlpha(.8)
 		self.Spark:SetPoint("TOPLEFT", self:GetStatusBarTexture(), "TOPRIGHT", -10, 10)
@@ -918,7 +917,7 @@ function F:CreateGF(w, h, o, r, g, b, a1, a2)
 	self:SetFrameStrata("BACKGROUND")
 	local gf = self:CreateTexture(nil, "BACKGROUND")
 	gf:SetAllPoints()
-	gf:SetTexture(C.media.texture)
+	gf:SetTexture(C.media.sbTex)
 	gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 end
 

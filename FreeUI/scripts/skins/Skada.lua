@@ -18,7 +18,7 @@ function module:ReskinSkada()
 			F.CreateBDFrame(skada.button)
 		end
 
-		skada:SetTexture(C.media.texture)
+		skada:SetTexture(C.media.sbTex)
 		skada:SetSpacing(0)
 		skada:SetFrameLevel(5)
 
@@ -33,7 +33,7 @@ function module:ReskinSkada()
 	end]]
 
 	-- Change Skada Default Settings
-	Skada.windowdefaults.bartexture = "C.media.texture"
+	Skada.windowdefaults.bartexture = "C.media.sbTex"
 	--Skada.windowdefaults.classicons = false
 	--Skada.windowdefaults.title.fontflags = "OUTLINE"
 	--Skada.windowdefaults.title.fontsize = 14

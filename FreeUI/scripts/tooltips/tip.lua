@@ -215,7 +215,7 @@ end
 
 
 -- StatusBar
-GameTooltipStatusBar:SetStatusBarTexture(C.media.texture)
+GameTooltipStatusBar:SetStatusBarTexture(C.media.sbTex)
 GameTooltipStatusBar:SetHeight(2)
 GameTooltipStatusBar:ClearAllPoints()
 GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
@@ -239,7 +239,7 @@ hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 		local bar = self.progressBarPool:Acquire()
 		if bar and not bar.styled then
 			F.StripTextures(bar.Bar, true)
-			bar.Bar:SetStatusBarTexture(C.media.texture)
+			bar.Bar:SetStatusBarTexture(C.media.sbTex)
 			F.CreateBD(bar, .25)
 			bar:SetSize(216, 18)
 
@@ -345,7 +345,7 @@ local function style(self)
 
 		if C.appearance.shadow then
 			local sd = CreateFrame("Frame", nil, self)
-			sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+			sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 			sd:SetPoint("TOPLEFT", -4, 4)
 			sd:SetPoint("BOTTOMRIGHT", 4, -4)
 			sd:SetBackdropBorderColor(0, 0, 0, .5)

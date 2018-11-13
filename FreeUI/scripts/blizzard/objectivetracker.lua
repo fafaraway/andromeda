@@ -165,7 +165,7 @@ function module:QuestTracker()
 			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.Dummy
 
 			bar:SetPoint("LEFT", 22, 0)
-			bar:SetStatusBarTexture(C.media.texture)
+			bar:SetStatusBarTexture(C.media.sbTex)
 			bar:SetStatusBarColor(r, g, b)
 			bar:SetHeight(14)
 
@@ -211,7 +211,7 @@ function module:QuestTracker()
 			for i = 1, 6 do
 				select(i, bar:GetRegions()):Hide()
 			end
-			bar:SetStatusBarTexture(C.media.texture)
+			bar:SetStatusBarTexture(C.media.sbTex)
 			bar.Label:Show()
 			F.SetFS(bar.Label)
 			local oldBg = select(5, bar:GetRegions())
@@ -265,7 +265,7 @@ function module:QuestTracker()
 			block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
 			F.CreateBD(block.timerbg)
 
-			block.StatusBar:SetStatusBarTexture(C.media.texture)
+			block.StatusBar:SetStatusBarTexture(C.media.sbTex)
 			block.StatusBar:SetStatusBarColor(r, g, b)
 			block.StatusBar:SetHeight(10)
 

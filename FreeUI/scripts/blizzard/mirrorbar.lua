@@ -14,7 +14,7 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 
 			local statusbar = _G["MirrorTimer"..i.."StatusBar"]
 			statusbar:SetAllPoints()
-			statusbar:SetStatusBarTexture(C.media.texture)
+			statusbar:SetStatusBarTexture(C.media.sbTex)
 
 			local text = _G["MirrorTimer"..i.."Text"]
 			text:ClearAllPoints()

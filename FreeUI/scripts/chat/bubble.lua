@@ -25,7 +25,7 @@ local function styleBubble(frame)
 
 	frame:SetBackdrop({
 		bgFile = C.media.backdrop,
-		edgeFile = C.media.glowtex,
+		edgeFile = C.media.glowTex,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 		tile = false, tileSize = 0, 
 		edgeSize = 4,

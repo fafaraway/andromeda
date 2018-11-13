@@ -9,7 +9,7 @@ local koKR, ruRU, zhCN, zhTW, western = LSM.LOCALE_BIT_koKR, LSM.LOCALE_BIT_ruRU
 LSM:Register("background", "FreeUI_BG", 				C.media.backdrop)
 
 -- STATUSBAR
-LSM:Register("statusbar", "FreeUI_SB",  				C.media.texture)
+LSM:Register("statusbar", "FreeUI_SB",  				C.media.sbTex)
 
 -- FONT
 LSM:Register("font", "FreeUI_ExocetBlizzardLight", 		[[Interface\Addons\FreeUI\assets\font\ExocetBlizzardLight.ttf]], zhCN + zhTW + western)

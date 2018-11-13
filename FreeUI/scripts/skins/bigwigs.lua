@@ -36,7 +36,7 @@ function module:BigWigsSkin()
 		local height = bar:GetHeight()
 		bar:Set("bigwigs:restoreheight", height)
 		bar:SetHeight(height/2)
-		bar:SetTexture(C.media.texture)
+		bar:SetTexture(C.media.sbTex)
 
 		local bd = bar.candyBarBackdrop
 		F.CreateBD(bd)

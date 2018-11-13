@@ -14,7 +14,7 @@ local function SkinBar(bar)
 		end
 	end
 
-	bar:SetStatusBarTexture(C.media.texture)
+	bar:SetStatusBarTexture(C.media.sbTex)
 	bar:SetStatusBarColor(1, 0, 0)
 
 	local bg = F.CreateBDFrame(bar)

@@ -19,7 +19,7 @@ local function UpdateBar()
 		frame:SetHeight(4)
 
 		frame.bar = _G.CreateFrame("StatusBar", nil, frame)
-		frame.bar:SetStatusBarTexture(C.media.texture)
+		frame.bar:SetStatusBarTexture(C.media.sbTex)
 		frame.bar:SetPoint("TOPLEFT", 1, -1)
 		frame.bar:SetPoint("BOTTOMLEFT", -1, 1)
 		frame.bar:SetFrameLevel(_G.LFGDungeonReadyDialog:GetFrameLevel() + 1)

@@ -32,7 +32,7 @@ f:SetScript("OnEvent", function(self, _, addon)
 	bar:SetWidth(width)
 	frame.Flash:SetWidth(width + 22)
 
-	bar:SetStatusBarTexture(C.media.texture)
+	bar:SetStatusBarTexture(C.media.sbTex)
 	bar:SetStatusBarColor(221/255, 197/255, 162/255)
 
 	F.CreateBDFrame(bar)

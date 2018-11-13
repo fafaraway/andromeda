@@ -86,11 +86,11 @@ function module:ReskinDBM()
 				end
 
 				if not texture.styled then
-					texture:SetTexture(C.media.texture)
+					texture:SetTexture(C.media.sbTex)
 					texture.styled = true
 				end
 
-				tbar:SetStatusBarTexture(C.media.texture)
+				tbar:SetStatusBarTexture(C.media.sbTex)
 				if not tbar.styled then
 					tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
 					tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)

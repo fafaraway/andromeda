@@ -30,7 +30,7 @@ bg:SetTexture(C.media.backdrop)
 bg:SetVertexColor(0, 0, 0)
 
 local sd = CreateFrame("Frame", nil, frame)
-sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 sd:SetPoint("TOPLEFT", -4, 4)
 sd:SetPoint("BOTTOMRIGHT", 4, -4)
 sd:SetBackdropBorderColor(0, 0, 0, .5)

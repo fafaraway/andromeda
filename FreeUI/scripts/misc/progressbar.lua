@@ -146,7 +146,7 @@ function module:progressBar()
 
 	local rest = CreateFrame("StatusBar", nil, bar)
 	rest:SetAllPoints()
-	rest:SetStatusBarTexture(C.media.texture)
+	rest:SetStatusBarTexture(C.media.sbTex)
 	rest:SetStatusBarColor(105/250, 194/250, 221/250, .9)
 	rest:SetFrameLevel(bar:GetFrameLevel() - 1)
 	bar.restBar = rest

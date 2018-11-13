@@ -22,7 +22,7 @@ local function CreateBackDrop(self)
 
 	if C.appearance.shadow then
 		local sd = CreateFrame("Frame", nil, bd)
-		sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 		sd:SetPoint("TOPLEFT", -4, 4)
 		sd:SetPoint("BOTTOMRIGHT", 4, -4)
 		sd:SetBackdropBorderColor(0, 0, 0, .35)
@@ -233,7 +233,7 @@ local function CreateHealthBar(self)
 		--Healthdef:SetFrameStrata("LOW")
 		Healthdef:SetFrameLevel(self.Health:GetFrameLevel())
 		Healthdef:SetAllPoints(self.Health)
-		Healthdef:SetStatusBarTexture(C.media.texture)
+		Healthdef:SetStatusBarTexture(C.media.sbTex)
 		Healthdef:GetStatusBarTexture():SetBlendMode("BLEND")
 		Healthdef:SetStatusBarColor(1, 1, 1)
 
@@ -249,7 +249,7 @@ local function CreateHealthBar(self)
 		mhpb:SetPoint('BOTTOM')
 		mhpb:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
 		mhpb:SetWidth(40)
-		mhpb:SetStatusBarTexture(C.media.texture)
+		mhpb:SetStatusBarTexture(C.media.sbTex)
 		mhpb:SetStatusBarColor(0, .5, 1)
 
 		local ohpb = CreateFrame('StatusBar', nil, self.Health)
@@ -257,7 +257,7 @@ local function CreateHealthBar(self)
 		ohpb:SetPoint('BOTTOM')
 		ohpb:SetPoint('LEFT', mhpb:GetStatusBarTexture(), 'RIGHT')
 		ohpb:SetWidth(40)
-		ohpb:SetStatusBarTexture(C.media.texture)
+		ohpb:SetStatusBarTexture(C.media.sbTex)
 		ohpb:SetStatusBarColor(.5, 0, 1)
 
 		local absorbBar = CreateFrame('StatusBar', nil, self.Health)
@@ -265,7 +265,7 @@ local function CreateHealthBar(self)
 		absorbBar:SetPoint('BOTTOM')
 		absorbBar:SetPoint('LEFT', ohpb:GetStatusBarTexture(), 'RIGHT')
 		absorbBar:SetWidth(200)
-		absorbBar:SetStatusBarTexture(C.media.texture)
+		absorbBar:SetStatusBarTexture(C.media.sbTex)
 		absorbBar:SetStatusBarColor(.8, .34, .8)
 
 		local healAbsorbBar = CreateFrame('StatusBar', nil, self.Health)
@@ -274,7 +274,7 @@ local function CreateHealthBar(self)
 		healAbsorbBar:SetPoint('RIGHT', self.Health:GetStatusBarTexture())
 		healAbsorbBar:SetWidth(200)
 		healAbsorbBar:SetReverseFill(true)
-		healAbsorbBar:SetStatusBarTexture(C.media.texture)
+		healAbsorbBar:SetStatusBarTexture(C.media.sbTex)
 
 		local overAbsorb = self:CreateTexture(nil, "OVERLAY")
 		overAbsorb:SetPoint('TOP')
@@ -318,7 +318,7 @@ end
 
 local function CreatePowerBar(self)
 	local Power = CreateFrame("StatusBar", nil, self)
-	Power:SetStatusBarTexture(C.media.texture)
+	Power:SetStatusBarTexture(C.media.sbTex)
 
 	Power.frequentUpdates = true
 	F.SmoothBar(Power)
@@ -377,7 +377,7 @@ end
 
 local function CreateAltPower(self)
 	local bar = CreateFrame("StatusBar", nil, self)
-	bar:SetStatusBarTexture(C.media.texture)
+	bar:SetStatusBarTexture(C.media.sbTex)
 	bar:SetPoint("BOTTOM", self, 0, -C.unitframes.altpower_height - 3)
 	bar:SetSize(self:GetWidth(), C.unitframes.altpower_height)
 
@@ -461,7 +461,7 @@ local function CreateCastBar(self)
 	cb:SetHeight(C.unitframes.cbHeight)
 	cb:SetWidth(self:GetWidth())
 	cb:SetAllPoints(self)
-	cb:SetStatusBarTexture(C.media.texture)
+	cb:SetStatusBarTexture(C.media.sbTex)
 	cb:SetStatusBarColor(0, 0, 0, 0)
 	cb:SetFrameLevel(self.Health:GetFrameLevel() + 3)
 
@@ -639,7 +639,7 @@ local function PostCreateIcon(element, button)
 
 	if C.appearance.shadow then
 		local sd = CreateFrame("Frame", nil, button)
-		sd:SetBackdrop({edgeFile = C.media.glowtex, edgeSize = 4})
+		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 		sd:SetPoint("TOPLEFT", -4, 4)
 		sd:SetPoint("BOTTOMRIGHT", 4, -4)
 		sd:SetBackdropBorderColor(0, 0, 0, .65)
@@ -960,7 +960,7 @@ local function CreateClassPower(self)
 	for index = 1, 6 do 
 		local Bar = CreateFrame('StatusBar', nil, self)
 		Bar:SetHeight(C.unitframes.classPower_height)
-		Bar:SetStatusBarTexture(C.media.texture)
+		Bar:SetStatusBarTexture(C.media.sbTex)
 		Bar:SetBackdropColor(0, 0, 0)
 
 		F.CreateBDFrame(Bar)
@@ -1033,7 +1033,7 @@ local function CreateRunesBar(self)
 	for index = 1, MaxRunes do
 		local Bar = CreateFrame('StatusBar', nil, self)
 		Bar:SetHeight(C.unitframes.classPower_height)
-		Bar:SetStatusBarTexture(C.media.texture)
+		Bar:SetStatusBarTexture(C.media.sbTex)
 
 		F.CreateBDFrame(Bar)
 
@@ -1391,7 +1391,7 @@ local function CreateCounterBar(self)
 	local CounterBar = CreateFrame("StatusBar", nil, self)
 	CounterBar:SetWidth(200)
 	CounterBar:SetHeight(16)
-	CounterBar:SetStatusBarTexture(C.media.texture)
+	CounterBar:SetStatusBarTexture(C.media.sbTex)
 	CounterBar:SetPoint("TOP", UIParent, "TOP", 0, -100)
 
 	local cbd = CreateFrame("Frame", nil, CounterBar)

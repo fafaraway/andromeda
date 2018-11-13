@@ -181,8 +181,7 @@ local function SellJunk()
 	end
 
 	if Profit > 0 then
-		local loc = FreeUI[3]
-		print(C.InfoColor..loc["SellJunk"]..": ".."|cffffffff"..GetMoneyString(Profit).."|r".."  |cffd366ae("..SoldCount..")|r")
+		print(C.InfoColor..L["SellJunk"]..": ".."|cffffffff"..GetMoneyString(Profit).."|r".."  |cffd366ae("..SoldCount..")|r")
 	end
 end
 JS:SetScript("OnEvent", function() SellJunk() end)

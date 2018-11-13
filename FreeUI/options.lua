@@ -11,12 +11,12 @@ C.media = {
 	['arrowRight'] = 'Interface\\AddOns\\FreeUI\\assets\\arrow-right-active',
 	['backdrop']   = 'Interface\\AddOns\\FreeUI\\assets\\blank',
 	['checked']    = 'Interface\\AddOns\\FreeUI\\assets\\CheckButtonHilight',
-	['glowtex']    = 'Interface\\AddOns\\FreeUI\\assets\\glowTex',
+	['glowTex']    = 'Interface\\AddOns\\FreeUI\\assets\\glowTex',
 	['gradient']   = 'Interface\\AddOns\\FreeUI\\assets\\gradient',
 	['roleIcons']  = 'Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES',
-	['texture']    = 'Interface\\AddOns\\FreeUI\\assets\\statusbar',
-	['bgtex']	   = 'Interface\\AddOns\\FreeUI\\assets\\bgTex',
-	['sparktex']   = 'Interface\\AddOns\\FreeUI\\assets\\spark',
+	['sbTex']      = 'Interface\\AddOns\\FreeUI\\assets\\statusbar',
+	['bgTex']	   = 'Interface\\AddOns\\FreeUI\\assets\\bgTex',
+	['sparkTex']   = 'Interface\\AddOns\\FreeUI\\assets\\spark',
 	['pixel']      = 'Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf',
 }
 
