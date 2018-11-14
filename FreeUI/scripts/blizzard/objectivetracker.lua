@@ -133,8 +133,7 @@ function module:QuestTracker()
 			rightButton:SetNormalTexture("")
 			rightButton:SetPushedTexture("")
 			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
-			local bg = F.CreateBG(rightButton)
-			F.CreateBD(bg)
+			local bg = F.CreateBDFrame(rightButton)
 			F.CreateSD(bg)
 			rightButton:SetSize(18, 18)
 			rightButton.Icon:SetParent(bg)
@@ -218,7 +217,6 @@ function module:QuestTracker()
 			local bg = F.CreateBG(oldBg)
 			F.CreateBD(bg)
 			F.CreateSD(bg)
-			F.CreateTex(bg)
 
 			bar.styled = true
 		end
@@ -234,7 +232,6 @@ function module:QuestTracker()
 			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -2, 0)
 			F.CreateBD(block.bg)
 			F.CreateSD(block.bg)
-			F.CreateTex(block.bg)
 		end
 	end)
 
@@ -274,7 +271,6 @@ function module:QuestTracker()
 			block.bg:SetPoint("TOPLEFT", 4, -2)
 			block.bg:SetPoint("BOTTOMRIGHT", -4, 0)
 			F.CreateBD(block.bg)
-	 		F.CreateTex(block.bg)
 			F.CreateSD(block.bg)
 		end
 	end)

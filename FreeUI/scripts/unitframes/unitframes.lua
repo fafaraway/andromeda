@@ -11,7 +11,6 @@ local function CreateBackDrop(self)
 	bd:SetPoint("TOPLEFT", -1, 1)
 	bd:SetPoint("BOTTOMRIGHT", 1, -1)
 	bd:SetFrameStrata("BACKGROUND")
-	F.CreateTex(bd)
 	self.bd = bd
 
 	if C.unitframes.transMode then
@@ -549,7 +548,6 @@ local function CreateCastBar(self)
 
 		F.CreateBD(bg)
 		F.CreateSD(bg)
-		F.CreateTex(bg)
 	end
 
 	if (self.unitStyle == "player" and C.unitframes.cbSeparate) then

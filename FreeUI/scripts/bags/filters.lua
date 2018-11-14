@@ -1,6 +1,7 @@
 ﻿local addon, ns = ...
 local cargBags = ns.cargBags
 local F, C, L = unpack(select(2, ...))
+if not C.bags.enable then return end
 
 local cbNivaya = cargBags:NewImplementation("Nivaya")
 cbNivaya:RegisterBlizzard()

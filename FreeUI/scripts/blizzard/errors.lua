@@ -27,10 +27,10 @@ secondErrorFrame:Hide()
 secondErrorFrame:SetFrameStrata("TOOLTIP")
 secondErrorFrame:SetFrameLevel(30)
 
-firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
+firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.font.normal, 13, nil, nil, {0, 0, 0}, 2, -2)
 firstErrorFrame.text:SetPoint("TOP", UIParent, 0, -160)
-secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
-secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -174)
+secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.font.normal, 13, nil, nil, {0, 0, 0}, 2, -2)
+secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -180)
 
 local state = 0
 firstErrorFrame:SetScript("OnHide", function() state = 0 end)
@@ -46,18 +46,5 @@ Error:SetScript("OnEvent", function(_, _, code, msg)
 		FadingFrame_Show(secondErrorFrame)
 		state = 0
 	end
-
-	if C.appearance.usePixelFont and (C.Client == 'zhCN' or C.Client == 'zhTW') then
-		firstErrorFrame.text:SetFont(unpack(C.font.pixel))
-		secondErrorFrame.text:SetFont(unpack(C.font.pixel))
-	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
-		firstErrorFrame.text:SetFont(C.font.normal, 12)
-		secondErrorFrame.text:SetFont(C.font.normal, 12)
-		secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -180)
-	end
-
-	UIErrorsFrame:SetFont(C.font.normal, 13)
-	UIErrorsFrame:SetShadowColor(0, 0, 0)
-	UIErrorsFrame:SetShadowOffset(1, -1)
 end)
 

@@ -159,6 +159,9 @@ function module:FontStyle()
 	SetFont("QuestInfoDescriptionText", C.font.normal, 14, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("GossipGreetingText", C.font.normal, 14, nil, nil, {0, 0, 0}, 1, -1)
 
+	SetFont("ErrorFont", C.font.normal, 13, nil, nil, {0, 0, 0}, 2, -2)
+	
+
 	-- Text color
 	GameFontBlackMedium:SetTextColor(1, 1, 1)
 	CoreAbilityFont:SetTextColor(1, 1, 1)

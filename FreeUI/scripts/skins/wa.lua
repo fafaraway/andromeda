@@ -10,8 +10,8 @@ local function ReskinWA()
 				f.icon:SetTexCoord(unpack(C.TexCoord))
 				f.icon.SetTexCoord = F.Dummy
 
-				local bg = F.CreateBG(f.icon)
-				F.CreateBD(bg)
+				local bg = F.CreateBDFrame(f.icon)
+				--F.CreateBD(bg)
 				F.CreateSD(bg)
 
 				f.styled = true

@@ -160,7 +160,6 @@ function module:ReskinDBM()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
 			local bg = F.CreateBG(DBMRangeCheckRadar)
 			F.CreateBD(bg, .4)
-			F.CreateTex(bg)
 
 			DBMRangeCheckRadar.styled = true
 		end
@@ -169,7 +168,6 @@ function module:ReskinDBM()
 			DBMRangeCheck:SetBackdrop(nil)
 			local bg = F.CreateBG(DBMRangeCheck)
 			F.CreateBD(bg, .4)
-			F.CreateTex(bg)
 			DBMRangeCheck.tipStyled = true
 			DBMRangeCheck.styled = true
 		end
@@ -184,7 +182,6 @@ function module:ReskinDBM()
 				self:SetBackdrop(nil)
 				self.bg = F.CreateBG(self)
 				F.CreateBD(self.bg)
-				F.CreateTex(self.bg)
 				DBMInfoFrame.tipStyled = true
 			end
 		end)

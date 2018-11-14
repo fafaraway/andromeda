@@ -364,6 +364,5 @@ SpellBinder.OpenButton:GetHighlightTexture():SetAllPoints(SpellBinder.OpenButton
 
 F.CreateBG(SpellBinder.OpenButton)
 F.CreateBD(SpellBinder)
-F.CreateTex(SpellBinder)
 F.ReskinClose(SpellBinderCloseButton)
 F.ReskinScroll(SpellBinderScrollFrameSpellListScrollBar)

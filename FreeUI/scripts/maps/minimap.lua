@@ -85,7 +85,7 @@ function module:ReskinRegions()
 
 	QueueStatusMinimapButton:HookScript("OnEnter", function()
 		for i = 1, 8 do
-			dots[i]:SetTextColor(r, g, b)
+			dots[i]:SetTextColor(C.r, C.g, C.b)
 		end
 	end)
 
@@ -191,7 +191,6 @@ function module:ReskinRegions()
 	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
 	Invt:SetSize(300, 80)
 	F.CreateBD(Invt)
-	F.CreateTex(Invt)
 
 	Invt.text = F.CreateFS(Invt, C.font.normal, 14)
 	Invt.text:SetText(C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)

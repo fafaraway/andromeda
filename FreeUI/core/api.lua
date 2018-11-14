@@ -80,16 +80,6 @@ function F:CreateTex()
 	self.Tex:SetBlendMode("ADD")
 end
 
-local function CreateTex(f)
-	if f.Tex then return end
-	f.Tex = f:CreateTexture(nil, "BACKGROUND", nil, 1)
-	f.Tex:SetAllPoints()
-	f.Tex:SetTexture(C.media.bgTex, true, true)
-	f.Tex:SetHorizTile(true)
-	f.Tex:SetVertTile(true)
-	f.Tex:SetBlendMode("ADD")
-end
-
 function F:CreateSD(a)
 	if not C.appearance.shadow then return end
 	if self.Shadow then return end
@@ -116,9 +106,11 @@ function F:CreateBD(a)
 	})
 	self:SetBackdropColor(r, g, b, a or C.appearance.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
+
+	F.CreateTex(self)
 end
 
-function F:CreateBG(offset)
+--[[function F:CreateBG(offset)
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	offset = offset or 1
@@ -128,6 +120,35 @@ function F:CreateBG(offset)
 	bg:SetPoint("TOPLEFT", self, -offset, offset)
 	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
 	bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
+
+	F.CreateTex(bg)
+	return bg
+end]]
+
+function F:CreateBG()
+	local f = self
+	if self:GetObjectType() == "Texture" then f = self:GetParent() end
+
+	local bg = f:CreateTexture(nil, "BACKGROUND")
+	bg:SetPoint("TOPLEFT", self, -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", self, 1, -1)
+	bg:SetTexture(C.media.backdrop)
+	bg:SetVertexColor(0, 0, 0)
+
+	return bg
+end
+
+function F:CreateBDFrame(a)
+	local frame = self
+	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
+	local lvl = frame:GetFrameLevel()
+
+	local bg = CreateFrame("Frame", nil, frame)
+	bg:SetPoint("TOPLEFT", self, -1, 1)
+	bg:SetPoint("BOTTOMRIGHT", self, 1, -1)
+	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
+	F.CreateBD(bg, a or C.appearance.alpha)
+
 	return bg
 end
 
@@ -675,20 +696,6 @@ function F:ReskinPortraitFrame(isButtonFrame)
 	F.ReskinClose(_G[name.."CloseButton"])
 end
 
-function F:CreateBDFrame(a)
-	local frame = self
-	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
-	local lvl = frame:GetFrameLevel()
-
-	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetPoint("TOPLEFT", self, -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", self, 1, -1)
-	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
-	F.CreateBD(bg, a or .5)
-
-	return bg
-end
-
 function F:ReskinColourSwatch()
 	local name = self:GetName()
 
@@ -744,6 +751,33 @@ function F:ReskinNavBar()
 	overflowButton:HookScript("OnLeave", textureOnLeave)
 
 	self.navBarStyled = true
+end
+
+function F:ReskinGarrisonPortrait()
+	self.Portrait:ClearAllPoints()
+	self.Portrait:SetPoint("TOPLEFT", 4, -4)
+	self.PortraitRing:Hide()
+	self.PortraitRingQuality:SetTexture("")
+	if self.Highlight then self.Highlight:Hide() end
+
+	self.LevelBorder:SetScale(.0001)
+	self.Level:ClearAllPoints()
+	self.Level:SetPoint("BOTTOM", self, 0, 12)
+
+	self.squareBG = F.CreateBDFrame(self, 1)
+	self.squareBG:SetFrameLevel(self:GetFrameLevel())
+	self.squareBG:SetPoint("TOPLEFT", 3, -3)
+	self.squareBG:SetPoint("BOTTOMRIGHT", -3, 11)
+	
+	if self.PortraitRingCover then
+		self.PortraitRingCover:SetColorTexture(0, 0, 0)
+		self.PortraitRingCover:SetAllPoints(self.squareBG)
+	end
+
+	if self.Empty then
+		self.Empty:SetColorTexture(0, 0, 0)
+		self.Empty:SetAllPoints(self.Portrait)
+	end
 end
 
 function F:ReskinIcon()

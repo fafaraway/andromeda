@@ -221,8 +221,7 @@ GameTooltipStatusBar:ClearAllPoints()
 GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
 GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, -3)
 
-local bg = F.CreateBG(GameTooltipStatusBar, 1)
-F.CreateBD(bg, .7)
+local bg = F.CreateBDFrame(GameTooltipStatusBar, 1)
 
 local ssbc = CreateFrame("StatusBar").SetStatusBarColor
 GameTooltipStatusBar._SetStatusBarColor = ssbc
@@ -336,11 +335,11 @@ local function style(self)
 	self:SetScale(1)
 
 	if not self.tipStyled then
+		F.ReskinClose(ItemRefCloseButton)
+		
 		self:SetBackdrop(nil)
-		local bg = F.CreateBG(self, 0)
+		local bg = F.CreateBDFrame(self)
 		bg:SetFrameLevel(self:GetFrameLevel())
-		F.CreateBD(bg)
-		F.CreateTex(bg)
 		self.bg = bg
 
 		if C.appearance.shadow then

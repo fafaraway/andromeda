@@ -227,7 +227,6 @@ SlashCmdList.MOUSEOVERBIND = function()
 			frame:SetPoint("TOP", 0, -135)
 			F.CreateBD(frame)
 			F.CreateSD(frame)
-			F.CreateTex(frame)
 
 			local title = F.CreateFS(frame, C.font.normal, 14)
 			title:SetText(KEY_BINDING)

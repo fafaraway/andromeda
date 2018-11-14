@@ -1,6 +1,7 @@
 local addon, ns = ...
 local cargBags = ns.cargBags
 local F, C, L = unpack(select(2, ...))
+if not C.bags.enable then return end
 
 local mediaPath = [[Interface\AddOns\FreeUI\assets\bag\]]
 local Textures = {
@@ -452,7 +453,6 @@ function MyContainer:OnCreate(name, settings)
 
 	-- Background, border
 	F.CreateBD(background)
-	F.CreateTex(background)
 	F.CreateSD(background)
 
 
