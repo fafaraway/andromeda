@@ -24,6 +24,6 @@ locales\_locales.xml
 libs\_libs.xml
 
 scripts\_scripts.xml
-
+theme\_theme.xml
 
 core\dev.lua
