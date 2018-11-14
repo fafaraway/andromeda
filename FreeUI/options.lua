@@ -201,6 +201,17 @@ C['misc'] = {
 	['clickCast'] = true,
 	['fasterLooting'] = true,
 
+	['sct'] = true,						-- combat text
+		["sctDmgIn"] = true,
+		["sctDmgInPos"] = {"CENTER", UIParent, -200, 0},
+		['sctDmgOut'] = false,
+		["sctDmgOutPos"] = {"CENTER", UIParent, 200, 0},
+		["sctInfo"] = true,
+		["sctDmgInfoPos"] = {"CENTER", UIParent, 0, 400},
+		["sctMerge"] = true,
+		["sctPet"] = true,
+		["sctPeriodic"] = true,
+
 	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
 }
