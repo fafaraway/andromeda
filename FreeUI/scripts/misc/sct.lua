@@ -105,7 +105,7 @@ end
 
 local function DamageHealingString(isIn,isHealing,spellID,amount,school,isCritical,Hits)
 	local frame = isIn and InFrame or OutFrame
-	local symbol = isHealing and "+" or (isIn and "-" or "")
+	local symbol = isHealing and "+ " or (isIn and "- " or "")
 	if Hits and Hits > 1 then
 		frame:AddMessage(format("|T%s:0:0:0:-5|t |cff%s%s%s x%d|r",GetSpellTexture(spellID) or "",dmgcolor[school] or "ffffff",symbol,NumUnitFormat(amount/Hits),Hits))
 	else

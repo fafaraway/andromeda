@@ -1106,7 +1106,7 @@ local function CreateIndicator(self)
 				statusText:SetTextColor(1, 0, 0)
 			elseif IsResting() then
 				statusText:SetText("Zzz")
-				statusText:SetTextColor(.8, .8, .8)
+				statusText:SetTextColor(44/255, 141/255, 81/255)
 			else
 				statusText:SetText("")
 			end

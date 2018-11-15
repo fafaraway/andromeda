@@ -24,8 +24,8 @@ local itemSlotSize = C.bags.itemSlotSize
 ------------------------------------------
 -- MyContainer specific
 ------------------------------------------
-local cbNivaya = cargBags:GetImplementation("Nivaya")
-local MyContainer = cbNivaya:GetContainerClass()
+local FUI = cargBags:GetImplementation("FreeUI_Inventory")
+local MyContainer = FUI:GetContainerClass()
 
 local GetNumFreeSlots = function(bagType)
 	local free, max = 0, 0
@@ -83,7 +83,7 @@ function MyContainer:OnContentsChanged()
 
 	local buttonIDs = {}
   	for i, button in pairs(self.buttons) do
-		local item = cbNivaya:GetItemInfo(button.bagID, button.slotID)
+		local item = FUI:GetItemInfo(button.bagID, button.slotID)
 		if item.link then
 			buttonIDs[i] = { item.id, item.rarity, button, item.count }
 		else
@@ -141,7 +141,7 @@ function MyContainer:OnContentsChanged()
 	end
 
 	cB_BagHidden[tName] = (not t) and isEmpty or false
-	cbNivaya:UpdateAnchors(self)
+	FUI:UpdateAnchors(self)
 end
 
 --[[function MyContainer:OnButtonAdd(button)
@@ -170,7 +170,7 @@ local function SellJunk()
 
 	for BagID = 0, 4 do
 		for BagSlot = 1, GetContainerNumSlots(BagID) do
-			item = cbNivaya:GetItemInfo(BagID, BagSlot)
+			item = FUI:GetItemInfo(BagID, BagSlot)
 			if item then
 				if item.rarity == 0 and item.sellPrice ~= 0 then
 					Profit = Profit + (item.sellPrice * item.count)
@@ -206,7 +206,7 @@ local resetNewItems = function(self)
 		local tNumSlots = GetContainerNumSlots(bag)
 		if tNumSlots > 0 then
 			for slot = 1, tNumSlots do
-				local item = cbNivaya:GetItemInfo(bag, slot)
+				local item = FUI:GetItemInfo(bag, slot)
 				--print("resetNewItems", item.id)
 				item.id = item.id or 0
 				if cB_KnownItems[item.id] then
@@ -217,7 +217,7 @@ local resetNewItems = function(self)
 			end 
 		end
 	end
-	cbNivaya:UpdateBags()
+	FUI:UpdateBags()
 end
 function cbNivResetNew()
 	resetNewItems()
@@ -478,7 +478,7 @@ function MyContainer:OnCreate(name, settings)
 		if (tBag or tBank) then
 			local close = CreateFrame("Button", nil, self, "UIPanelCloseButton")
 			F.ReskinClose(close, "TOPRIGHT", self, "TOPRIGHT", 1, 1)
-			close:SetScript("OnClick", function(self) if cbNivaya:AtBank() then CloseBankFrame() else CloseAllBags() end end)
+			close:SetScript("OnClick", function(self) if FUI:AtBank() then CloseBankFrame() else CloseAllBags() end end)
 		end
 	end
 	
@@ -491,7 +491,7 @@ function MyContainer:OnCreate(name, settings)
 
 			local tcol = (cB_CustomBags[idx].col + ((dir == "left") and 1 or -1)) % 2
 			cB_CustomBags[idx].col = tcol
-			cbNivaya:CreateAnchors()
+			FUI:CreateAnchors()
 		end
 
 		local moveUD = function(dir)
@@ -510,7 +510,7 @@ function MyContainer:OnCreate(name, settings)
 				local ele = cB_CustomBags[idx]
 				cB_CustomBags[idx] = cB_CustomBags[pos]
 				cB_CustomBags[pos] = ele
-				cbNivaya:CreateAnchors()
+				FUI:CreateAnchors()
 			end
 		end		
 		
@@ -750,7 +750,7 @@ end
 ------------------------------------------
 -- MyButton specific
 ------------------------------------------
-local MyButton = cbNivaya:GetItemButtonClass()
+local MyButton = FUI:GetItemButtonClass()
 MyButton:Scaffold("Default")
 
 function MyButton:OnAdd()
@@ -817,6 +817,6 @@ end
 ------------------------------------------
 -- BagButton specific
 ------------------------------------------
-local BagButton = cbNivaya:GetClass("BagButton", true, "BagButton")
+local BagButton = FUI:GetClass("BagButton", true, "BagButton")
 
 function BagButton:OnCreate() self:GetCheckedTexture():SetVertexColor(1, 0.8, 0, 0.8) end

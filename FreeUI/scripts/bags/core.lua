@@ -3,11 +3,17 @@ local cargBags = ns.cargBags
 local F, C, L = unpack(select(2, ...))
 if not C.bags.enable then return end
 
-cargBags_Nivaya = CreateFrame('Frame', 'cargBags_Nivaya', UIParent)
-cargBags_Nivaya:SetScript('OnEvent', function(self, event, ...) self[event](self, event, ...) end)
-cargBags_Nivaya:RegisterEvent("ADDON_LOADED")
+if IsAddOnLoaded("cargBags_Nivaya") then
+	print("FreeUI includes an efficient built-in module of inventory.")
+	print("It's highly recommended that you disable cargBags_Nivaya.")
+	return
+end
 
-local cbNivaya = cargBags:GetImplementation("Nivaya")
+FreeUI_Inventory = CreateFrame('Frame', 'FreeUI_Inventory', UIParent)
+FreeUI_Inventory:SetScript('OnEvent', function(self, event, ...) self[event](self, event, ...) end)
+FreeUI_Inventory:RegisterEvent("ADDON_LOADED")
+
+local FUI = cargBags:GetImplementation("FreeUI_Inventory")
 --cbNivCatDropDown = CreateFrame("Frame", "cbNivCatDropDown", UIParent, "UIDropDownMenuTemplate")
 
 do	--Replacement for UIDropDownMenu
@@ -137,7 +143,7 @@ do	--Replacement for UIDropDownMenu
 	end
 
 	function f:Toggle(frame, point, relativepoint, ofsX, ofsY)
-		cbNivaya:CatDropDownInit()
+		FUI:CatDropDownInit()
 		self:UpdatePosition(frame, point, relativepoint, ofsX, ofsY)
 		self:Show()
 	end
@@ -181,7 +187,7 @@ local defaults = {}
 local ItemSetCaption = (IsAddOnLoaded('ItemRack') and "ItemRack ") or (IsAddOnLoaded('Outfitter') and "Outfitter ") or "Item "
 local bankOpenState = false
 
-function cbNivaya:ShowBags(...)
+function FUI:ShowBags(...)
 	local bags = {...}
 	for i = 1, #bags do
 		local bag = bags[i]
@@ -190,7 +196,7 @@ function cbNivaya:ShowBags(...)
 		end
 	end
 end
-function cbNivaya:HideBags(...)
+function FUI:HideBags(...)
 	local bags = {...}
 	for i = 1, #bags do
 		local bag = bags[i]
@@ -209,13 +215,13 @@ local LoadDefaults = function()
 	end
 end
 
-function cargBags_Nivaya:ADDON_LOADED(event, addon)
+function FreeUI_Inventory:ADDON_LOADED(event, addon)
 
 	if (addon ~= 'FreeUI') then return end
 	self:UnregisterEvent(event)
 	
 	LoadDefaults()
-	--UIDropDownMenu_Initialize(cbNivCatDropDown, cbNivaya.CatDropDownInit, "MENU")
+	--UIDropDownMenu_Initialize(cbNivCatDropDown, FUI.CatDropDownInit, "MENU")
 	
 	cB_filterEnabled["Armor"] = cBnivCfg.Armor
 	cB_filterEnabled["Gem"] = cBnivCfg.Gem
@@ -230,7 +236,7 @@ function cargBags_Nivaya:ADDON_LOADED(event, addon)
 	-----------------
 	-- Frame Spawns
 	-----------------
-	local C = cbNivaya:GetContainerClass()
+	local C = FUI:GetContainerClass()
 
 	-- bank bags
 	cB_Bags.bankSets		= C:New("cBniv_BankSets")
@@ -316,12 +322,12 @@ function cargBags_Nivaya:ADDON_LOADED(event, addon)
 	cB_Bags.main:SetPoint("BOTTOMRIGHT", -99, 26)
 	cB_Bags.bank:SetPoint("TOPLEFT", 20, -20)
 	
-	cbNivaya:CreateAnchors()
-	cbNivaya:Init()
-	cbNivaya:ToggleBagPosButtons()
+	FUI:CreateAnchors()
+	FUI:Init()
+	FUI:ToggleBagPosButtons()
 end
 
-function cbNivaya:CreateAnchors()
+function FUI:CreateAnchors()
 	-----------------------------------------------
 	-- Store the anchoring order:
 	-- read: "tar" is anchored to "src" in the direction denoted by "dir".
@@ -400,10 +406,10 @@ function cbNivaya:CreateAnchors()
 	end
 	
 	-- Finally update all anchors:
-	for _,v in pairs(cB_Bags) do cbNivaya:UpdateAnchors(v) end
+	for _,v in pairs(cB_Bags) do FUI:UpdateAnchors(v) end
 end
 
-function cbNivaya:UpdateAnchors(self)
+function FUI:UpdateAnchors(self)
 	if not self.AnchorTargets then return end
 	for v,_ in pairs(self.AnchorTargets) do
 		local t, u = v.AnchorTo, v.AnchorDir
@@ -420,37 +426,37 @@ function cbNivaya:UpdateAnchors(self)
 	end
 end
 
-function cbNivaya:OnOpen()
+function FUI:OnOpen()
 	cB_Bags.main:Show()
 	PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
-	cbNivaya:ShowBags(cB_Bags.armor, cB_Bags.bagNew, cB_Bags.bagItemSets, cB_Bags.gem, cB_Bags.quest, cB_Bags.consumables, cB_Bags.artifactpower, cB_Bags.battlepet, 
+	FUI:ShowBags(cB_Bags.armor, cB_Bags.bagNew, cB_Bags.bagItemSets, cB_Bags.gem, cB_Bags.quest, cB_Bags.consumables, cB_Bags.artifactpower, cB_Bags.battlepet, 
 					  cB_Bags.tradegoods, --[[cB_Bags.bagStuff,]] cB_Bags.bagJunk)
-	for _,v in ipairs(cB_CustomBags) do if v.active then cbNivaya:ShowBags(cB_Bags[v.name]) end end
+	for _,v in ipairs(cB_CustomBags) do if v.active then FUI:ShowBags(cB_Bags[v.name]) end end
 end
 
-function cbNivaya:OnClose()
+function FUI:OnClose()
 	PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
-	cbNivaya:HideBags(cB_Bags.main, cB_Bags.armor, cB_Bags.bagNew, cB_Bags.bagItemSets, cB_Bags.gem, cB_Bags.quest, cB_Bags.consumables, cB_Bags.artifactpower, cB_Bags.battlepet, 
+	FUI:HideBags(cB_Bags.main, cB_Bags.armor, cB_Bags.bagNew, cB_Bags.bagItemSets, cB_Bags.gem, cB_Bags.quest, cB_Bags.consumables, cB_Bags.artifactpower, cB_Bags.battlepet, 
 					  cB_Bags.tradegoods, --[[cB_Bags.bagStuff,]] cB_Bags.bagJunk, cB_Bags.key)
-	for _,v in ipairs(cB_CustomBags) do if v.active then cbNivaya:HideBags(cB_Bags[v.name]) end end
+	for _,v in ipairs(cB_CustomBags) do if v.active then FUI:HideBags(cB_Bags[v.name]) end end
 end
 
-function cbNivaya:OnBankOpened() 
+function FUI:OnBankOpened() 
 	cB_Bags.bank:Show(); 
-	cbNivaya:ShowBags(cB_Bags.bankSets, cB_Bags.bankReagent, cB_Bags.bankArmor, cB_Bags.bankGem, cB_Bags.bankQuest, cB_Bags.bankTrade, cB_Bags.bankConsumables, cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet) 
+	FUI:ShowBags(cB_Bags.bankSets, cB_Bags.bankReagent, cB_Bags.bankArmor, cB_Bags.bankGem, cB_Bags.bankQuest, cB_Bags.bankTrade, cB_Bags.bankConsumables, cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet) 
 	if cBniv.BankCustomBags then
-		for _,v in ipairs(cB_CustomBags) do if v.active then cbNivaya:ShowBags(cB_Bags['Bank'..v.name]) end end
+		for _,v in ipairs(cB_CustomBags) do if v.active then FUI:ShowBags(cB_Bags['Bank'..v.name]) end end
 	end
 end
 
-function cbNivaya:OnBankClosed()
-	cbNivaya:HideBags(cB_Bags.bank, cB_Bags.bankSets, cB_Bags.bankReagent, cB_Bags.bankArmor, cB_Bags.bankGem, cB_Bags.bankQuest, cB_Bags.bankTrade, cB_Bags.bankConsumables, cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet)
+function FUI:OnBankClosed()
+	FUI:HideBags(cB_Bags.bank, cB_Bags.bankSets, cB_Bags.bankReagent, cB_Bags.bankArmor, cB_Bags.bankGem, cB_Bags.bankQuest, cB_Bags.bankTrade, cB_Bags.bankConsumables, cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet)
 	if cBniv.BankCustomBags then
-		for _,v in ipairs(cB_CustomBags) do if v.active then cbNivaya:HideBags(cB_Bags['Bank'..v.name]) end end
+		for _,v in ipairs(cB_CustomBags) do if v.active then FUI:HideBags(cB_Bags['Bank'..v.name]) end end
 	end
 end
 
-function cbNivaya:ToggleBagPosButtons()
+function FUI:ToggleBagPosButtons()
 	for _,v in ipairs(cB_CustomBags) do 
 		if v.active then 
 			local b = cB_Bags[v.name]
@@ -488,7 +494,7 @@ local SetFrameMovable = function(f, v)
 end
 
 local DropDownInitialized
-function cbNivaya:CatDropDownInit()
+function FUI:CatDropDownInit()
 	if DropDownInitialized then return end
 	DropDownInitialized = true
 	local info = {}--UIDropDownMenu_CreateInfo()
@@ -502,7 +508,7 @@ function cbNivaya:CatDropDownInit()
 		if (type == "-------------") or (type == CANCEL) then
 			info.func = nil
 		else
-			info.func = function(self) cbNivaya:CatDropDownOnClick(self, type) end
+			info.func = function(self) FUI:CatDropDownOnClick(self, type) end
 		end
 		
 		cbNivCatDropDown:AddButton(info.text, type, info.func)
@@ -527,10 +533,10 @@ function cbNivaya:CatDropDownInit()
 	AddInfoItem("-------------")
 	AddInfoItem(CANCEL)
 	
-	hooksecurefunc(NivayacBniv_Bag, "Hide", function() cbNivCatDropDown:Hide() end)
+	hooksecurefunc(FreeUI_InventorycBniv_Bag, "Hide", function() cbNivCatDropDown:Hide() end)
 end
 
-function cbNivaya:CatDropDownOnClick(self, type)
+function FUI:CatDropDownOnClick(self, type)
 	local value = self.value
 	local itemName = cbNivCatDropDown.itemName
 	local itemID = cbNivCatDropDown.itemID
@@ -539,25 +545,25 @@ function cbNivaya:CatDropDownOnClick(self, type)
 	--	table.remove(cB_KnownItems, itemID)
 		cB_KnownItems[itemID] = nil
 	elseif (type == "MarkAsKnown") then
-		cB_KnownItems[itemID] = GetItemCount(itemID)	--cbNivaya:getItemCount(itemName)
+		cB_KnownItems[itemID] = GetItemCount(itemID)	--FUI:getItemCount(itemName)
 	else
 		cBniv_CatInfo[itemID] = value
 		if (itemID ~= nil) then cB_ItemClass[itemID] = nil end
 	end
-	cbNivaya:UpdateBags()
+	FUI:UpdateBags()
 end
 
 local function StatusMsg(str1, str2, data, name, short)
 	local R,G,t = '|cFFFF0000', '|cFF00FF00', ''
 	if (data ~= nil) then t = data and G..(short and 'on|r' or 'enabled|r') or R..(short and 'off|r' or 'disabled|r') end
-	t = (name and '|cFFFFFF00cargBags_Nivaya:|r ' or '')..str1..t..str2
+	t = (name and '|cFFFFFF00FreeUI:|r ' or '')..str1..t..str2
 	ChatFrame1:AddMessage(t)
 end
 
 local function StatusMsgVal(str1, str2, data, name)
 	local G,t = '|cFF00FF00', ''
 	if (data ~= nil) then t = G..data..'|r' end
-	t = (name and '|cFFFFFF00cargBags_Nivaya:|r ' or '')..str1..t..str2
+	t = (name and '|cFFFFFF00FreeUI:|r ' or '')..str1..t..str2
 	ChatFrame1:AddMessage(t)
 end
 
@@ -692,7 +698,7 @@ local function HandleSlash(str)
 		end
 
 	elseif str == 'bagpos' then
-		cbNivaya:ToggleBagPosButtons()
+		FUI:ToggleBagPosButtons()
 		StatusMsg('Custom container movers are now ', '.', cBniv.BagPos, true, false)
 
 	elseif str == 'bagprio' then
@@ -705,7 +711,7 @@ local function HandleSlash(str)
 		StatusMsg('Display of custom containers in the bank is now ', '. Reload your UI for this change to take effect!', cBnivCfg.BankCustomBags, true, false)
 
 	else
-		ChatFrame1:AddMessage('|cFFFFFF00cargBags_Nivaya:|r')
+		ChatFrame1:AddMessage('|cFFFFFF00FreeUI:|r')
 		StatusMsg('(', ') |cFFFFFF00unlock|r - Toggle unlocked status.', cBnivCfg.Unlocked, false, true)
 		StatusMsg('(', ') |cFFFFFF00new|r - Toggle the "New Items" filter.', cBnivCfg.NewItems, false, true)
 		StatusMsg('(', ') |cFFFFFF00trade|r - Toggle the "Trade Goods" filter .', cBnivCfg.TradeGoods, false, true)
@@ -729,7 +735,7 @@ local function HandleSlash(str)
 		StatusMsg('(', ') |cFFFFFF00bankbags|r - Show custom containers in the bank too.', cBnivCfg.BankCustomBags, false, true)
 	end
 	if updateBags then
-		cbNivaya:UpdateBags()
+		FUI:UpdateBags()
 	end
 end
 
@@ -744,9 +750,9 @@ Event:SetScript('OnEvent', function(self, event, ...)
 		for bagID = -3, 11 do
 			local slots = GetContainerNumSlots(bagID)
 			for slotID=1,slots do
-				local button = cbNivaya.buttonClass:New(bagID, slotID)
+				local button = FUI.buttonClass:New(bagID, slotID)
 				buttonCollector[#buttonCollector+1] = button
-				cbNivaya:SetButton(bagID, slotID, nil)
+				FUI:SetButton(bagID, slotID, nil)
 			end
 		end
 		for i,button in pairs(buttonCollector) do
@@ -755,16 +761,16 @@ Event:SetScript('OnEvent', function(self, event, ...)
 			end
 			button:Free()
 		end
-		cbNivaya:UpdateBags()
+		FUI:UpdateBags()
 
 		if IsReagentBankUnlocked() then
-			NivayacBniv_Bank.reagentBtn:Show()
+			FreeUI_InventorycBniv_Bank.reagentBtn:Show()
 		else
-			NivayacBniv_Bank.reagentBtn:Hide()
-			local buyReagent = CreateFrame("Button", nil, NivayacBniv_BankReagent, "UIPanelButtonTemplate")
+			FreeUI_InventorycBniv_Bank.reagentBtn:Hide()
+			local buyReagent = CreateFrame("Button", nil, FreeUI_InventorycBniv_BankReagent, "UIPanelButtonTemplate")
 			buyReagent:SetText(BANKSLOTPURCHASE)
 			buyReagent:SetWidth(buyReagent:GetTextWidth() + 20)
-			buyReagent:SetPoint("CENTER", NivayacBniv_BankReagent, 0, 0)
+			buyReagent:SetPoint("CENTER", FreeUI_InventorycBniv_BankReagent, 0, 0)
 			buyReagent:SetScript("OnEnter", function(self)
 				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 				GameTooltip:AddLine(REAGENT_BANK_HELP, 1, 1, 1, true)
@@ -780,7 +786,7 @@ Event:SetScript('OnEvent', function(self, event, ...)
 			buyReagent:SetScript("OnEvent", function(...)
 				--print("OnReagentPurchase", ...)
 				buyReagent:UnregisterEvent("REAGENTBANK_PURCHASED")
-				NivayacBniv_Bank.reagentBtn:Show()
+				FreeUI_InventorycBniv_Bank.reagentBtn:Show()
 				buyReagent:Hide()
 			end)
 
@@ -793,11 +799,11 @@ Event:SetScript('OnEvent', function(self, event, ...)
 	end
 end)
 
-function cargBags_Nivaya:ResetItemClass()
+function FreeUI_Inventory:ResetItemClass()
 	for k,v in pairs(cB_ItemClass) do
 		if v == "NoClass" then
 			cB_ItemClass[k] = nil
 		end
 	end
-	cbNivaya:UpdateBags()
+	FUI:UpdateBags()
 end

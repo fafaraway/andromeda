@@ -3,9 +3,9 @@ local cargBags = ns.cargBags
 local F, C, L = unpack(select(2, ...))
 if not C.bags.enable then return end
 
-local cbNivaya = cargBags:NewImplementation("Nivaya")
-cbNivaya:RegisterBlizzard()
-function cbNivaya:UpdateBags() for i = -3, 11 do cbNivaya:UpdateBag(i) end end
+local FUI = cargBags:NewImplementation("FreeUI_Inventory")
+FUI:RegisterBlizzard()
+function FUI:UpdateBags() for i = -3, 11 do FUI:UpdateBag(i) end end
 
 cB_Filters = {}
 cB_KnownItems = cB_KnownItems or {}
@@ -29,7 +29,7 @@ cB_Filters.fHideEmpty = function(item) if cBnivCfg.CompressEmpty then return ite
 ------------------------------------
 cB_Filters.fItemClass = function(item, container)
 	if not item.id or not item.name then	return false	end	-- incomplete data (itemID or itemName missing), return (item that aren't loaded yet will get classified on the next successful call)
-	if not cB_ItemClass[item.id] then cbNivaya:ClassifyItem(item) end
+	if not cB_ItemClass[item.id] then FUI:ClassifyItem(item) end
 	
 	local t, bag = cB_ItemClass[item.id]
 
@@ -43,7 +43,7 @@ cB_Filters.fItemClass = function(item, container)
 	return bag == container
 end
 
-function cbNivaya:ClassifyItem(item)
+function FUI:ClassifyItem(item)
 	-- keyring
 	if item.bagID == -2 then cB_ItemClass[item.id] = "Keyring"; return true end
 
@@ -77,7 +77,7 @@ cB_Filters.fNewItems = function(item)
 	if not ((item.bagID >= 0) and (item.bagID <= 4)) then return false end
 	if not item.link then return false end
 	if not cB_KnownItems[item.id] then return true end
-	local t = GetItemCount(item.id)	--cbNivaya:getItemCount(item.id)
+	local t = GetItemCount(item.id)	--FUI:getItemCount(item.id)
 	return (t > cB_KnownItems[item.id]) and true or false
 end
 
@@ -116,7 +116,7 @@ local function cacheSetsIR()
 			end
 		end
 	end
-	cbNivaya:UpdateBags()
+	FUI:UpdateBags()
 end
 
 if IR then
@@ -145,7 +145,7 @@ local function cacheSetsOF()
 			end
 		end
 	end
-	cbNivaya:UpdateBags()
+	FUI:UpdateBags()
 end
 
 if OF then

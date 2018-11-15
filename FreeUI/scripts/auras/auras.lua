@@ -40,18 +40,9 @@ local function styleButton(bu, isDebuff)
 	local border = _G[name.."Border"]
 	if border then border:Hide() end
 
-	local bg = bu:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", 1, -1)
-	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0)
-
-	bu.bg = bg
-	
 	local icon = _G[name.."Icon"]
 	icon:SetAllPoints()
 	icon:SetTexCoord(unpack(C.TexCoord))
-
 	icon:SetDrawLayer("BACKGROUND", 1)
 
 	local duration = _G[name.."Duration"]
@@ -69,8 +60,11 @@ local function styleButton(bu, isDebuff)
 	bu.HL = bu:CreateTexture(nil, "HIGHLIGHT")
 	bu.HL:SetColorTexture(1, 1, 1, .25)
 	bu.HL:SetAllPoints(icon)
-	--F.CreateBDFrame(bu)
-	F.CreateSD(bu)
+
+	local bg = F.CreateBG(bu)
+	local sd = F.CreateSD(bu)
+	bu.bg = bg
+	bu.sd = sd
 
 	bu.styled = true
 end
@@ -139,7 +133,7 @@ local function updateDebuffBorder(buttonName, index, filter)
 	if filter == "HARMFUL" then
 		local color = DebuffTypeColor[debuffType or "none"]
 		bu.bg:SetVertexColor(color.r, color.g, color.b)
-		bu.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+		bu.sd:SetBackdropBorderColor(color.r, color.g, color.b)
 	end
 end
 hooksecurefunc("AuraButton_Update", updateDebuffBorder)
