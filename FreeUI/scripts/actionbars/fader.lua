@@ -1,5 +1,25 @@
 local F, C = unpack(select(2, ...))
 
+C['actionbars']['fader'] = {
+	fadeInAlpha = 1,
+	fadeInDuration = 0.3,
+	fadeInSmooth = 'OUT',
+	fadeOutAlpha = 0,
+	fadeOutDuration = 0.9,
+	fadeOutSmooth = 'OUT',
+	fadeOutDelay = 0,
+}
+C['actionbars']['faderOnShow'] = {
+	fadeInAlpha = 1,
+	fadeInDuration = 0.3,
+	fadeInSmooth = 'OUT',
+	fadeOutAlpha = 0,
+	fadeOutDuration = 0.9,
+	fadeOutSmooth = 'OUT',
+	fadeOutDelay = 0,
+	trigger = 'OnShow',
+}
+
 local SpellFlyout = SpellFlyout
 
 local function FaderOnFinished(self)

@@ -125,13 +125,14 @@ end
 	return bg
 end]]
 
-function F:CreateBG()
+function F:CreateBG(offset)
 	local f = self
 	if self:GetObjectType() == "Texture" then f = self:GetParent() end
+	offset = offset or 1
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
-	bg:SetPoint("TOPLEFT", self, -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", self, 1, -1)
+	bg:SetPoint("TOPLEFT", self, -offset, offset)
+	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
 	bg:SetTexture(C.media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
 
@@ -837,7 +838,7 @@ function F:CreateCB(a)
 	hl:SetVertexColor(C.r, C.g, C.b, .25)
 
 	local bd = F.CreateBG(self, -4)
-	F.CreateBD(bd, a)
+	--F.CreateBD(bd, a)
 
 	local ch = self:GetCheckedTexture()
 	ch:SetDesaturated(true)

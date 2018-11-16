@@ -100,26 +100,6 @@ C['actionbars'] = {
 	['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 	['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 
-	['fader'] = {
-		fadeInAlpha = 1,
-		fadeInDuration = 0.3,
-		fadeInSmooth = 'OUT',
-		fadeOutAlpha = 0,
-		fadeOutDuration = 0.9,
-		fadeOutSmooth = 'OUT',
-		fadeOutDelay = 0,
-	},
-	['faderOnShow'] = {
-		fadeInAlpha = 1,
-		fadeInDuration = 0.3,
-		fadeInSmooth = 'OUT',
-		fadeOutAlpha = 0,
-		fadeOutDuration = 0.9,
-		fadeOutSmooth = 'OUT',
-		fadeOutDelay = 0,
-		trigger = 'OnShow',
-	},
-
 	['hotKey'] = true, 					-- show hot keys on buttons
 	['macroName'] = true,				-- show macro name on buttons
 	['count'] = false,					-- show itme count on buttons		
@@ -201,17 +181,6 @@ C['misc'] = {
 	['clickCast'] = true,
 	['fasterLooting'] = true,
 
-	['sct'] = true,						-- combat text
-		["sctDmgIn"] = true,
-		["sctDmgInPos"] = {"CENTER", UIParent, -200, 0},
-		['sctDmgOut'] = false,
-		["sctDmgOutPos"] = {"CENTER", UIParent, 200, 0},
-		["sctInfo"] = true,
-		["sctDmgInfoPos"] = {"CENTER", UIParent, 0, 400},
-		["sctMerge"] = true,
-		["sctPet"] = true,
-		["sctPeriodic"] = true,
-
 	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
 }
@@ -226,45 +195,45 @@ C['camera'] = {
 
 C['bags'] = {
 	['enable'] = true,
-	['itemSlotSize'] = 38,
-	['bagColumnsSmall'] = 8,
-	['bagColumnsLarge'] = 8,
-	['bagLargeItemCount'] = 64,
-	['bankColumnsSmall'] = 10,
-	['bankColumnsLarge'] = 12,
-	['bankLargeItemCount'] = 96,
+		['itemSlotSize'] = 38,
+		['bagColumnsSmall'] = 8,
+		['bagColumnsLarge'] = 8,
+		['bagLargeItemCount'] = 64,
+		['bankColumnsSmall'] = 10,
+		['bankColumnsLarge'] = 12,
+		['bankLargeItemCount'] = 96,
 }
 
 C['infoBar'] = {
 	['enable'] = true,
-	['height'] = 20,
-	['enableButtons'] = true,			-- show buttons for quick access on the menu bar
-		['buttons_mouseover'] = true,			-- only on mouseover
+		['height'] = 20,
+		['enableButtons'] = true,			-- show buttons for quick access on the menu bar
+			['buttons_mouseover'] = true,			-- only on mouseover
 
-	['maxAddOns'] = 10,
+		['maxAddOns'] = 10,
 }
 
 
 C['tooltip'] = {
 	['enable'] = true,		-- enable tooltip and modules
-	['anchorCursor'] = false,		-- tooltip at mouse
-	['tipPosition'] = {'BOTTOMRIGHT', -30, 30},	-- tooltip position
-	
-	['hidePVP'] = false,
-	['hideFaction'] = true,
-	['hideTitle'] = true,
-	['hideRealm'] = true,
-	['hideGuildRank'] = true,
+		['anchorCursor'] = false,		-- tooltip at mouse
+		['tipPosition'] = {'BOTTOMRIGHT', -30, 30},	-- tooltip position
+		
+		['hidePVP'] = false,
+		['hideFaction'] = true,
+		['hideTitle'] = true,
+		['hideRealm'] = true,
+		['hideGuildRank'] = true,
 
-	['fadeOnUnit'] = false,
-	['combatHide'] = false,
+		['fadeOnUnit'] = false,
+		['combatHide'] = false,
 
-	['ilvlspec'] = true,
-	['extraInfo'] = true,
-	['azeriteTrait'] = true,
-	['borderColor'] = true,		-- item tooltip border colored by item quality
+		['ilvlspec'] = true,
+		['extraInfo'] = true,
+		['azeriteTrait'] = true,
+		['borderColor'] = true,		-- item tooltip border colored by item quality
 
-	['clearTip'] = true,
+		['clearTip'] = true,
 }
 
 
@@ -298,96 +267,96 @@ C['chat'] = {
 C['unitframes'] = {
 	['enable'] = true, 						-- enable the unit frames and their included modules
 
-	['transMode'] = true,
-		['transModeAlpha'] = .1,
-		['healthClassColor'] = true,
-		['powerTypeColor'] = true,
+		['transMode'] = true,
+			['transModeAlpha'] = .1,
+			['healthClassColor'] = true,
+			['powerTypeColor'] = true,
 
-	['gradient'] = true,					-- gradient mode
+		['gradient'] = true,					-- gradient mode
 
-	['portrait'] = true,					-- enable portrait on player/target frame
-		['portraitAlpha'] = .1,
+		['portrait'] = true,					-- enable portrait on player/target frame
+			['portraitAlpha'] = .1,
 
-	['spellRange'] = true,					-- spell range support for target/focus/boss
-		['spellRangeAlpha'] = .4,
+		['spellRange'] = true,					-- spell range support for target/focus/boss
+			['spellRangeAlpha'] = .4,
 
-	['classPower'] = true,					-- player's class resources (like Chi Orbs or Holy Power) and combo points
-		['classPower_height'] = 2,
+		['classPower'] = true,					-- player's class resources (like Chi Orbs or Holy Power) and combo points
+			['classPower_height'] = 2,
 
-	['classMod_havoc'] = true,	 			-- set power bar to red if power below 40(chaos strike)
+		['classMod_havoc'] = true,	 			-- set power bar to red if power below 40(chaos strike)
 
-	['threat'] = true,						-- threat indicator for party/raid frames
-	['healthPrediction'] = false, 			-- incoming heals and heal/damage absorbs
-	['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
-	
-	['castbar'] = true,						-- enable cast bar
-		['cbSeparate'] = false,				-- true for a separate player cast bar
-		['cbCastingColor'] = {77/255, 183/255, 219/255},
-		['cbChannelingColor'] = {77/255, 183/255, 219/255},
-		['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
-		['cbCompleteColor'] = {63/255, 161/255, 124/255},
-		['cbFailColor'] = {187/255, 99/255, 110/255},
-		['cbHeight'] = 14,
-		['cbName'] = false,
-		['cbTimer'] = false,
+		['threat'] = true,						-- threat indicator for party/raid frames
+		['healthPrediction'] = false, 			-- incoming heals and heal/damage absorbs
+		['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
+		
+		['castbar'] = true,						-- enable cast bar
+			['cbSeparate'] = false,				-- true for a separate player cast bar
+			['cbCastingColor'] = {77/255, 183/255, 219/255},
+			['cbChannelingColor'] = {77/255, 183/255, 219/255},
+			['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
+			['cbCompleteColor'] = {63/255, 161/255, 124/255},
+			['cbFailColor'] = {187/255, 99/255, 110/255},
+			['cbHeight'] = 14,
+			['cbName'] = false,
+			['cbTimer'] = false,
 
-	['enableGroup'] = true,					-- enable party/raid frames
-		['showRaidFrames'] = true, 				-- show the raid frames
-		['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
-		['partyNameAlways'] = false,			-- show name on party/raid frames
-		['partyMissingHealth'] = false,			-- show missing health on party/raid frames
-	['enableBoss'] = true,					-- enable boss frames
-	['enableArena'] = true,					-- enable arena/flag carrier frames
+		['enableGroup'] = true,					-- enable party/raid frames
+			['showRaidFrames'] = true, 				-- show the raid frames
+			['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
+			['partyNameAlways'] = false,			-- show name on party/raid frames
+			['partyMissingHealth'] = false,			-- show missing health on party/raid frames
+		['enableBoss'] = true,					-- enable boss frames
+		['enableArena'] = true,					-- enable arena/flag carrier frames
 
-	['debuffbyPlayer'] = true,				-- only show target debuffs casted by player
+		['debuffbyPlayer'] = true,				-- only show target debuffs casted by player
 
-	['focuser'] = true,						-- shift + left click on unitframes/models/nameplates to set focus
+		['focuser'] = true,						-- shift + left click on unitframes/models/nameplates to set focus
 
-	['player_pos'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
-	['player_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -380},				-- player unitframe position for healer layout(WIP)
-	['player_width'] = 200,
-	['player_height'] = 14,
+		['player_pos'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
+		['player_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -380},				-- player unitframe position for healer layout(WIP)
+		['player_width'] = 200,
+		['player_height'] = 14,
 
-	['pet_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},						-- pet unitframe position
-	['pet_width'] = 68,
-	['pet_height'] = 14,
+		['pet_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},						-- pet unitframe position
+		['pet_width'] = 68,
+		['pet_height'] = 14,
 
-	['useFrameVisibility'] = false,													-- hide palyer/pet unitframes for defualt
+		['useFrameVisibility'] = false,													-- hide palyer/pet unitframes for defualt
 
-	['target_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
-	['target_width'] = 220,
-	['target_height'] = 16,
+		['target_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
+		['target_width'] = 220,
+		['target_height'] = 16,
 
-	['targettarget_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},					-- target target unitframe position
-	['targettarget_width'] = 80,
-	['targettarget_height'] = 16,
+		['targettarget_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},					-- target target unitframe position
+		['targettarget_width'] = 80,
+		['targettarget_height'] = 16,
 
-	['focus_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},					-- focus unitframe position
-	['focus_width'] = 106,
-	['focus_height'] = 16,
+		['focus_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},					-- focus unitframe position
+		['focus_width'] = 106,
+		['focus_height'] = 16,
 
-	['focustarget_pos'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},					-- focus target unitframe position
-	['focustarget_width'] = 106,
-	['focustarget_height'] = 16,
+		['focustarget_pos'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},					-- focus target unitframe position
+		['focustarget_width'] = 106,
+		['focustarget_height'] = 16,
 
-	['party_pos'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},		-- party unitframe position
-	['party_width'] = 90,
-	['party_height'] = 38,
+		['party_pos'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},		-- party unitframe position
+		['party_width'] = 90,
+		['party_height'] = 38,
 
-	['raid_pos'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
-	['raid_width'] = 58,
-	['raid_height'] = 32,
+		['raid_pos'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
+		['raid_width'] = 58,
+		['raid_height'] = 32,
 
-	['boss_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 120, 160},					-- boss unitframe position
-	['boss_width'] = 166,
-	['boss_height'] = 20,
+		['boss_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 120, 160},					-- boss unitframe position
+		['boss_width'] = 166,
+		['boss_height'] = 20,
 
-	['arena_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -400, 249},					-- arena unitframe position
-	['arena_width'] = 166,
-	['arena_height'] = 16,
-	
-	['power_height'] = 2,
-	['altpower_height'] = 2,
+		['arena_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -400, 249},					-- arena unitframe position
+		['arena_width'] = 166,
+		['arena_height'] = 16,
+		
+		['power_height'] = 2,
+		['altpower_height'] = 2,
 }
 
 

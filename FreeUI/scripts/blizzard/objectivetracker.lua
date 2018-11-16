@@ -214,8 +214,7 @@ function module:QuestTracker()
 			bar.Label:Show()
 			F.SetFS(bar.Label)
 			local oldBg = select(5, bar:GetRegions())
-			local bg = F.CreateBG(oldBg)
-			F.CreateBD(bg)
+			local bg = F.CreateBDFrame(oldBg)
 			F.CreateSD(bg)
 
 			bar.styled = true
@@ -244,8 +243,7 @@ function module:QuestTracker()
 			for _, bu in next, {widgetFrame.CurrencyContainer:GetChildren()} do
 				if bu and not bu.styled then
 					bu.Icon:SetTexCoord(unpack(C.TexCoord))
-					local bg = F.CreateBG(bu.Icon)
-					F.CreateBD(bg)
+					local bg = F.CreateBDFrame(bu.Icon)
 					bu.styled = true
 				end
 			end
