@@ -742,6 +742,8 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		end
 	elseif style == "arena" then
 		return true
+	elseif style == "pet" then
+		return true
 	end
 end
 
