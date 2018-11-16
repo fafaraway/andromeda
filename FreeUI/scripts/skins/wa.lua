@@ -18,9 +18,11 @@ local function ReskinWA()
 				F.CreateSD(f.bar)
 				f.icon:SetTexCoord(unpack(C.TexCoord))
 				f.icon.SetTexCoord = F.Dummy
-				f.iconFrame:SetAllPoints(f.icon)
-				local bg = F.CreateBDFrame(f.icon)
-				F.CreateSD(bg)
+				if f.icon then
+					f.iconFrame:SetAllPoints(f.icon)
+					local bg = F.CreateBDFrame(f.icon)
+					F.CreateSD(bg)
+				end
 				f.styled = true
 			end
 		end
