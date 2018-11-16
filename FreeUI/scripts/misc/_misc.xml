@@ -22,5 +22,4 @@
 	<Script file="rarealert.lua"/>
 	<Script file="reputation.lua"/>
 	<Script file="ush.lua"/>
-	<Script file="sct.lua"/>
 </Ui>

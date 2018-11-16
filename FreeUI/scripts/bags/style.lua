@@ -767,7 +767,7 @@ function MyButton:OnAdd()
 	end)
 end
 
-function MyButton:OnCreate()
+--[[function MyButton:OnCreate()
 	local flash = self:CreateTexture(nil, "ARTWORK")
 	flash:SetTexture(C.NewItemFlash)
 	flash:SetPoint("TOPLEFT", -20, 20)
@@ -810,7 +810,7 @@ function MyButton:OnUpdate(item)
 			if self.anim:IsPlaying() then self.anim:Stop() end
 		end
 	end
-end
+end]]
 
 
 
