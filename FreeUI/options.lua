@@ -286,7 +286,7 @@ C['unitframes'] = {
 		['classMod_havoc'] = true,	 			-- set power bar to red if power below 40(chaos strike)
 
 		['threat'] = true,						-- threat indicator for party/raid frames
-		['healthPrediction'] = false, 			-- incoming heals and heal/damage absorbs
+		['healthPrediction'] = true, 			-- incoming heals and heal/damage absorbs
 		['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
 		
 		['castbar'] = true,						-- enable cast bar

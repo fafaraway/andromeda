@@ -243,52 +243,15 @@ local function CreateHealthBar(self)
 	end
 
 	if C.unitframes.healthPrediction then
-		local mhpb = CreateFrame('StatusBar', nil, self.Health)
-		mhpb:SetPoint('TOP')
-		mhpb:SetPoint('BOTTOM')
-		mhpb:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
-		mhpb:SetWidth(40)
-		mhpb:SetStatusBarTexture(C.media.sbTex)
-		mhpb:SetStatusBarColor(0, .5, 1)
-
-		local ohpb = CreateFrame('StatusBar', nil, self.Health)
-		ohpb:SetPoint('TOP')
-		ohpb:SetPoint('BOTTOM')
-		ohpb:SetPoint('LEFT', mhpb:GetStatusBarTexture(), 'RIGHT')
-		ohpb:SetWidth(40)
-		ohpb:SetStatusBarTexture(C.media.sbTex)
-		ohpb:SetStatusBarColor(.5, 0, 1)
-
-		local absorbBar = CreateFrame('StatusBar', nil, self.Health)
-		absorbBar:SetPoint('TOP')
-		absorbBar:SetPoint('BOTTOM')
-		absorbBar:SetPoint('LEFT', ohpb:GetStatusBarTexture(), 'RIGHT')
-		absorbBar:SetWidth(200)
-		absorbBar:SetStatusBarTexture(C.media.sbTex)
-		absorbBar:SetStatusBarColor(.8, .34, .8)
-
-		local healAbsorbBar = CreateFrame('StatusBar', nil, self.Health)
-		healAbsorbBar:SetPoint('TOP')
-		healAbsorbBar:SetPoint('BOTTOM')
-		healAbsorbBar:SetPoint('RIGHT', self.Health:GetStatusBarTexture())
-		healAbsorbBar:SetWidth(200)
-		healAbsorbBar:SetReverseFill(true)
-		healAbsorbBar:SetStatusBarTexture(C.media.sbTex)
-
-		local overAbsorb = self:CreateTexture(nil, "OVERLAY")
+		local overAbsorb = self.Health:CreateTexture(nil, "OVERLAY")
 		overAbsorb:SetPoint('TOP')
 		overAbsorb:SetPoint('BOTTOM')
-		overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -2, 0)
+		overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
 		overAbsorb:SetWidth(10)
-		overAbsorb:SetAlpha(.5)
+		overAbsorb:SetAlpha(1)
 
 		self.HealthPrediction = {
-			myBar = mhpb,
-			otherBar = ohpb,
-			absorbBar = absorbBar,
-			healAbsorbBar = healAbsorbBar,
 			overAbsorb = overAbsorb,
-			maxOverflow = 1,
 			frequentUpdates = true,
 		}
 	end
