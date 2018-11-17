@@ -276,6 +276,8 @@ local function PostUpdatePower(Power, unit, cur, max, min)
 			Power:SetStatusBarColor(1, 0, 0)
 		end
 	end
+
+	Power.bg:SetVertexColor(0, 0, 0, .65)
 end
 
 local function CreatePowerBar(self)
