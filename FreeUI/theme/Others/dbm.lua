@@ -1,9 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("skins")
+local module = F:GetModule("Theme")
 
-function module:ReskinDBM()
+function module:DBM()
 	if not IsAddOnLoaded("DBM-Core") then return end
-	--if not C.skins.DBMBars then return end
 
 	local buttonsize = 22
 	local function SkinBars(self)

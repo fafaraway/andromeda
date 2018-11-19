@@ -9,6 +9,5 @@
 	<Include file="tooltips\_tooltips.xml"/>
 	<Include file="misc\_misc.xml"/>
 	<Include file="remind\_remind.xml"/>
-	<Include file="skins\_skins.xml"/>
 	<Include file="bags\_bags.xml"/>
 </Ui>

@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("skins")
+local module = F:GetModule("Theme")
 
-local function ReskinWA()
+local function WA()
 
 	local function Skin_WeakAuras(f, fType)
 		if not f or (f and f.styled) then return end
@@ -61,4 +61,4 @@ local function ReskinWA()
 		end
 	end
 end
-module:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)
+module:LoadWithAddOn("WeakAuras", "WeakAuras", WA)

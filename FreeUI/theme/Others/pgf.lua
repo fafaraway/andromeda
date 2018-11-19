@@ -1,8 +1,8 @@
 local F, C = unpack(select(2, ...))
-local module = F:GetModule('skins')
+local module = F:GetModule('Theme')
 
 
-function module:ReskinPGF()
+function module:PGF()
 	if not IsAddOnLoaded('PremadeGroupsFilter') then return end
 
 	local dialog = PremadeGroupsFilterDialog

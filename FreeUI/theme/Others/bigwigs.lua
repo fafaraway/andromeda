@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("skins")
+local module = F:GetModule("Theme")
 
 
-function module:BigWigsSkin()
+function module:BigWigs()
 
 	if not IsAddOnLoaded("BigWigs") then return end
 
