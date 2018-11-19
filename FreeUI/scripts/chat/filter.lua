@@ -1,6 +1,10 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule('chat')
 
+local strmatch, strfind = string.match, string.find
+local format, gsub = string.format, string.gsub
+local pairs, ipairs = pairs, ipairs
+
 local FilterList = {}
 
 function F:GenFilterList()
@@ -85,7 +89,7 @@ local function genAddonBlock(_, event, msg, author)
 	if UnitIsUnit(name, 'player') then return end
 
 	for _, word in ipairs(C.chat.addonBlockList) do
-		if msg:find(word) then
+		if strfind(msg, word) then
 			if event == 'CHAT_MSG_SAY' or event == 'CHAT_MSG_YELL' then
 				toggleBubble()
 			elseif event == 'CHAT_MSG_PARTY' or event == 'CHAT_MSG_PARTY_LEADER' then
@@ -104,8 +108,8 @@ end
 local WQTUsers = {}
 local inviteString = _G.ERR_INVITED_TO_GROUP_SS:gsub('.+|h', '')
 local function blockInviteString(_, _, msg)
-	if msg:find(inviteString) then
-		local name = msg:match('%[(.+)%]')
+	if strfind(msg, inviteString) then
+		local name = strmatch(msg, "%[(.+)%]")
 		if WQTUsers[name] then
 			return true
 		end
@@ -113,7 +117,7 @@ local function blockInviteString(_, _, msg)
 end
 local function blockWhisperString(_, _, msg, author)
 	local name = Ambiguate(author, 'none')
-	if msg:find('%[World Quest Tracker%]') or msg:find('一起做世界任务吧：') or msg:find('一起来做世界任务<') then
+	if strfind(msg, "%[World Quest Tracker%]") or strfind(msg, "一起做世界任务吧：") or strfind(msg, "一起来做世界任务<") then
 		if not WQTUsers[name] then
 			WQTUsers[name] = true
 		end
@@ -129,7 +133,7 @@ end
 -- filter azerite info while islands-ing
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub('%%d/%%d ', '')
 local function filterAzeriteGain(_, _, msg)
-	if msg:find(azerite) then
+	if strfind(msg, azerite) then
 		return true
 	end
 end
