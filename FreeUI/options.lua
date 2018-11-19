@@ -139,50 +139,38 @@ C['blizzard'] = {
 C['misc'] = {
 	['uiScale'] = 1,
 	['uiScaleAuto'] = true,
-
 	['flashCursor'] = true,
-
-	
 	['mailButton'] = true, 
 	['undressButton'] = true, 
-	['alreadyKnown'] = true,
-
 	['autoScreenShot'] = true,			-- auto screenshot when achieved
 	['autoActionCam'] = true,
-
+	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
+		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
+		['autoSetRole_verbose'] = true, 	-- tells you what happens when setting role
+	['autoRepair'] = true,				-- automatically repair items
+		['autoRepair_guild'] = true, 		-- use guild funds for auto repairs
 	['cooldownpulse'] = true,
 	['cooldownCount'] = true,
 		['decimalCD'] = false,
 		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
-
-	['rareAlert'] = true,
-		['rareAlertNotify'] = true,
-	['interruptAlert'] = true,
-		['interruptSound'] = true,
-		['interruptNotify'] = true,
-		['dispelSound'] = true,
-		['dispelNotify'] = true,
-	['usefulSpellAlert'] = true,		-- feast/bot/portal/summon/refreshmenttable/soulwell/toy
-	['resAlert'] = true,				-- combat res
-	['sappedAlert'] = true,
-
-	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
-		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
-		['autoSetRole_verbose'] = true, 	-- tells you what happens when setting role
-
-	['autoRepair'] = true,				-- automatically repair items
-		['autoRepair_guild'] = true, 		-- use guild funds for auto repairs
-
-	['autoAccept'] = false, 			-- auto accept invites from friends and guildies
-
 	['missingStats'] = true,
 	['PVPSound'] = true,
-
 	['clickCast'] = true,
 	['fasterLooting'] = true,
-
+	['alreadyKnown'] = true,
 	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
+}
+
+
+C['remind'] = {
+	['enable'] = true,
+		['interrupt'] = true,
+		['dispel'] = true,
+		['rare'] = true,
+		['spell'] = true,
+		['resurrect'] = true,
+		['sapped'] = true,
 }
 
 
@@ -259,7 +247,7 @@ C['chat'] = {
 		['blockAddonAlert'] = true,
 			['addonBlockList'] = {	-- filter annoying alerts from idiot addons
 				'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
-				'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard%.cn.+%.vip'
+				'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '助我轻松提高DPS'
 				},
 }
 

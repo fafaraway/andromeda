@@ -1,16 +1,18 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("misc")
 
+local tostring, tonumber, pairs = tostring, tonumber, pairs
+local tremove, tinsert = table.remove, table.insert
+local strsplit, random = string.split, math.random
+
 function module:OnLogin()
-	self:AddAlerts()
-	self:rareAlert()
 	self:ShowItemLevel()
-	self:progressBar()
-	self:flashCursor()
+	self:ProgressBar()
+	self:FlashCursor()
 	self:QuickJoin()
 	self:MissingStats()
-	self:fasterLooting()
-	self:vignette()
+	self:FasterLooting()
+	self:Vignette()
 	self:PVPMessageEnhancement()
 end
 
@@ -49,7 +51,7 @@ end
 
 
 -- adding a shadowed border to the UI window
-function module:vignette()
+function module:Vignette()
 	if not C.appearance.vignette then return end
 
 	self.f = CreateFrame("Frame", "ShadowBackground")
@@ -126,7 +128,7 @@ end
 
 
 -- Faster Looting
-function module:fasterLooting()
+function module:FasterLooting()
 	if not C.misc.fasterLooting then return end
 	local faster = CreateFrame("Frame")
 	faster:RegisterEvent("LOOT_READY")
@@ -171,10 +173,187 @@ do
 end
 
 
+-- Auto screenshot when Achievement earned
+do
+	local f = CreateFrame("Frame")
+	f:Hide()
+	f:SetScript("OnUpdate", function(_, elapsed)
+		f.delay = f.delay - elapsed
+		if f.delay < 0 then
+			Screenshot()
+			f:Hide()
+		end
+	end)
+
+	local function setupMisc(event)
+		if not C.misc.autoScreenShot then
+			F:UnregisterEvent(event, setupMisc)
+		else
+			f.delay = 1
+			f:Show()
+		end
+	end
+end
 
 
+-- Auto repair
+local isShown, isBankEmpty
+
+local function autoRepair(override)
+	if isShown and not override then return end
+	isShown = true
+	isBankEmpty = false
+
+	local repairAllCost, canRepair = GetRepairAllCost()
+	local myMoney = GetMoney()
+
+	if canRepair and repairAllCost > 0 then
+		if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
+			RepairAllItems(true)
+		else
+			if myMoney > repairAllCost then
+				RepairAllItems()
+				print(format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
+				return
+			else
+				print(C.InfoColor..L["repairError"])
+				return
+			end
+		end
+
+		C_Timer.After(.5, function()
+			if isBankEmpty then
+				autoRepair(true)
+			else
+				print(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
+			end
+		end)
+	end
+end
+
+local function checkBankFund(_, msgType)
+	if msgType == LE_GAME_ERR_GUILD_NOT_ENOUGH_MONEY then
+		isBankEmpty = true
+	end
+end
+
+local function merchantClose()
+	isShown = false
+	F:UnregisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+	F:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
+end
+
+local function merchantShow()
+	if IsShiftKeyDown() or not CanMerchantRepair() then return end
+	autoRepair()
+	F:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+	F:RegisterEvent("MERCHANT_CLOSED", merchantClose)
+end
+F:RegisterEvent("MERCHANT_SHOW", merchantShow)
 
 
+-- auto set role
+local useSpec = C.misc.autoSetRole_useSpec
+local verbose = C.misc.autoSetRole_verbose
+
+local _, class = UnitClass("Player")
+local isPureClass
+if class == "HUNTER" or class == "MAGE" or class == "ROGUE" or class == "WARLOCK" then
+	isPureClass = true
+end
+
+local lastMsgTime = 0
+local function Print(msg)
+	if time() - lastMsgTime > 10 then
+		lastMsgTime = time()
+		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffff"..msg, C.r, C.g, C.b)
+	end
+end
+
+local function setRoleForSpec(self)
+	local spec = GetSpecialization()
+	if spec then
+		UnitSetRole("player", select(6, GetSpecializationInfo(spec)))
+		if verbose then
+			Print("Role check: Setting role based on current spec.")
+		end
+	else
+		RolePollPopup_Show(self)
+		if verbose then
+			Print("Role check: You have no spec, cannot set automatically.")
+		end
+	end
+end
+
+local function autoSetRole(self, event)
+	if event ~= "ROLE_POLL_BEGIN" or InCombatLockdown() then return end
+
+	if isPureClass then
+		UnitSetRole("player", "DAMAGER")
+		if verbose then
+			Print("Role check: Setting role to dps.")
+		end
+	else
+		if UnitGroupRolesAssigned("player") == "NONE" then
+			if useSpec then
+				setRoleForSpec(self)
+			else
+				if not self:IsShown() then
+					RolePollPopup_Show(self)
+				end
+			end
+		else
+			if useSpec then
+				setRoleForSpec(self)
+			else
+				if verbose then
+					Print("Role check: Role already set, doing nothing.")
+				end
+			end
+		end
+	end
+end
+
+if C.misc.autoSetRole then
+	RolePollPopup:SetScript("OnEvent", autoSetRole)
+end
+
+-- flash cursor
+function module:FlashCursor()
+	if not C.misc.flashCursor then return end
+
+	local frame = CreateFrame("Frame", nil, UIParent);
+	frame:SetFrameStrata("TOOLTIP");
+
+	local texture = frame:CreateTexture();
+	texture:SetTexture([[Interface\Cooldown\star4]]);
+	texture:SetBlendMode("ADD");
+	texture:SetAlpha(0.5);
+
+	local x = 0;
+	local y = 0;
+	local speed = 0;
+	local function OnUpdate(_, elapsed)
+		local dX = x;
+		local dY = y;
+		x, y = GetCursorPosition();
+		dX = x - dX;
+		dY = y - dY;
+		local weight = 2048 ^ -elapsed;
+		speed = math.min(weight * speed + (1 - weight) * math.sqrt(dX * dX + dY * dY) / elapsed, 1024);
+		local size = speed / 6 - 16;
+		if (size > 0) then
+			local scale = UIParent:GetEffectiveScale();
+			texture:SetHeight(size);
+			texture:SetWidth(size);
+			texture:SetPoint("CENTER", UIParent, "BOTTOMLEFT", (x + 0.5 * dX) / scale, (y + 0.5 * dY) / scale);
+			texture:Show();
+		else
+			texture:Hide();
+		end
+	end
+	frame:SetScript("OnUpdate", OnUpdate);
+end
 
 
 

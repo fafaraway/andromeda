@@ -1,9 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("misc")
+local module = F:GetModule('Remind')
 
--- rare mob/event alert
-function module:rareAlert()
-	if not C.misc.rareAlert then return end
+function module:Rare()
+	if not C.remind.rare then return end
 
 	local isIgnored = {
 		[1153] = true,		-- 部落要塞
@@ -26,16 +25,10 @@ function module:rareAlert()
 			local atlasHeight = height/(txBottom-txTop)
 
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-			--UIErrorsFrame:AddMessage(C.InfoColor.."Rare Found"..tex..(info.name or ""))
-
-	
 			RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["rareFound"]..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
-
-			
-			if C.misc.rareAlertNotify then
-				print(C.InfoColor..L["rareFound"]..tex..(info.name or ""))
-			end
+			print(C.InfoColor..L["rareFound"]..tex..(info.name or ""))
 			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+
 			cache[id] = true
 		end
 		if #cache > 666 then wipe(cache) end
