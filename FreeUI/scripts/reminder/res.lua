@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Remind')
+local module = F:GetModule('reminder')
 
 local CombatResSpells = {
 	[61999] = true,	-- 盟友復生
@@ -9,7 +9,7 @@ local CombatResSpells = {
 
 
 function module:Resurrect()
-	if not C.remind.resurrect then return end
+	if not C.reminder.resurrect then return end
 
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')

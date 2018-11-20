@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Remind')
+local module = F:GetModule('reminder')
 
 function module:Sapped()
-	if not C.remind.sapped then return end
+	if not C.reminder.sapped then return end
 
 	local frame = CreateFrame('Frame')
 	local _, playerName

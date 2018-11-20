@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Remind')
+local module = F:GetModule('reminder')
 
 function module:Interrupt()
-	if not C.remind.interrupt then return end
+	if not C.reminder.interrupt then return end
 
 	local interruptSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\Shutupfool.ogg'
 	local frame = CreateFrame('Frame')

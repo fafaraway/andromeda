@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Remind')
+local module = F:GetModule('reminder')
 
 function module:Rare()
-	if not C.remind.rare then return end
+	if not C.reminder.rare then return end
 
 	local isIgnored = {
 		[1153] = true,		-- 部落要塞

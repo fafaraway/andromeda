@@ -8,6 +8,6 @@
 	<Include file="maps\_maps.xml"/>
 	<Include file="tooltips\_tooltips.xml"/>
 	<Include file="misc\_misc.xml"/>
-	<Include file="remind\_remind.xml"/>
+	<Include file="reminder\_reminder.xml"/>
 	<Include file="bags\_bags.xml"/>
 </Ui>

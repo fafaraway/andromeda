@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Remind')
+local module = F:GetModule('reminder')
 
 function module:Dispel()
-	if not C.remind.dispel then return end
+	if not C.reminder.dispel then return end
 
 	local dispelSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\buzz.ogg'
 	local frame = CreateFrame('Frame')

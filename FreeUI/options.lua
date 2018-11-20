@@ -163,7 +163,7 @@ C['misc'] = {
 }
 
 
-C['remind'] = {
+C['reminder'] = {
 	['enable'] = true,
 		['interrupt'] = true,
 		['dispel'] = true,

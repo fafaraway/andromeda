@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Remind')
+local module = F:GetModule('reminder')
 
 local FeastSpells = {
 	[126492] = true,  -- 燒烤盛宴
@@ -72,7 +72,7 @@ local PortalSpells = {
 
 
 function module:Spell()
-	if not C.remind.spell then return end
+	if not C.reminder.spell then return end
 
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
