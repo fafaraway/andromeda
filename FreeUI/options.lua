@@ -158,6 +158,8 @@ C['misc'] = {
 	['clickCast'] = true,
 	['fasterLooting'] = true,
 	['alreadyKnown'] = true,
+	['cameraIncrement'] = 1,
+	['cameraDistance'] = 50,
 	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
 }
@@ -171,13 +173,6 @@ C['reminder'] = {
 		['spell'] = true,				-- special spell alert
 		['resurrect'] = true,			-- resurrect alert
 		['sapped'] = true,				-- sapped alert
-}
-
-
-C['camera'] = {
-	['speed'] = 50,
-	['increment'] = 3,
-	['distance'] = 50,
 }
 
 
