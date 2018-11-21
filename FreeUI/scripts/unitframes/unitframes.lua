@@ -242,7 +242,7 @@ local function CreateHealthBar(self)
 		self.Healthdef = Healthdef
 	end
 
-	if C.unitframes.healthPrediction then
+	if C.unitframes.absorb then
 		local overAbsorb = self.Health:CreateTexture(nil, "OVERLAY")
 		overAbsorb:SetPoint('TOP')
 		overAbsorb:SetPoint('BOTTOM')
