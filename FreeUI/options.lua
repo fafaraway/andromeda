@@ -164,13 +164,13 @@ C['misc'] = {
 
 
 C['reminder'] = {
-	['enable'] = true,
-		['interrupt'] = true,
-		['dispel'] = true,
-		['rare'] = true,
-		['spell'] = true,
-		['resurrect'] = true,
-		['sapped'] = true,
+	['enable'] = true,				-- enable reminder module
+		['interrupt'] = true,			-- interrupt alert
+		['dispel'] = true,				-- dispel alert
+		['rare'] = true,				-- rare mob/event alert
+		['spell'] = true,				-- special spell alert
+		['resurrect'] = true,			-- resurrect alert
+		['sapped'] = true,				-- sapped alert
 }
 
 
