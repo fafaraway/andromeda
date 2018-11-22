@@ -3,7 +3,7 @@ local module = F:GetModule("misc")
 
 
 
-function module:ShowItemLevel()
+function module:ItemLevel()
 	local SLOTIDS = {}
 	for _, slot in pairs({"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand", "SecondaryHand"}) do
 		SLOTIDS[slot] = GetInventorySlotInfo(slot.."Slot")

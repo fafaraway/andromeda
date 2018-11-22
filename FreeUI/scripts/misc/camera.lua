@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("misc")
 
 -- FasterCamera by Ketho
 -- Increases camera zoom speed
@@ -8,11 +7,11 @@ local oldZoomIn = CameraZoomIn
 local oldZoomOut = CameraZoomOut
 
 function CameraZoomIn(distance)
-	oldZoomIn(C.misc.increment)
+	oldZoomIn(C.misc.cameraIncrement)
 end
 
 function CameraZoomOut(distance)
-	oldZoomOut(C.misc.increment)
+	oldZoomOut(C.misc.cameraIncrement)
 end
 
 
@@ -20,11 +19,11 @@ local oldVehicleZoomIn = VehicleCameraZoomIn
 local oldVehicleZoomOut = VehicleCameraZoomOut
 
 function VehicleCameraZoomIn(distance)
-	oldVehicleZoomIn(C.misc.increment)
+	oldVehicleZoomIn(C.misc.cameraIncrement)
 end
 
 function VehicleCameraZoomOut(distance)
-	oldVehicleZoomOut(C.misc.increment)
+	oldVehicleZoomOut(C.misc.cameraIncrement)
 end
 
 
@@ -36,7 +35,7 @@ local cvar = {
 
 C_Timer.After(1, function()
 
-	SetCVar("cameraDistanceMaxZoomFactor", C.misc.distance)
+	SetCVar("cameraDistanceMaxZoomFactor", C.misc.cameraDistance)
 
 end)
 
@@ -50,10 +49,6 @@ end
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", f.OnEvent)
 
-
-function module:OnLogin()
-
-	if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
-		SetCVar("cameraDistanceMaxZoomFactor", 2.6)
-	end
+if tonumber(GetCVar("cameraDistanceMaxZoomFactor")) ~= 2.6 then
+	SetCVar("cameraDistanceMaxZoomFactor", 2.6)
 end

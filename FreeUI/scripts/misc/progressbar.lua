@@ -136,7 +136,6 @@ function module:SetupScript(bar)
 end
 
 function module:ProgressBar()
-
 	local bar = CreateFrame("StatusBar", nil, Minimap)
 	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)
 	bar:SetSize(256, 2)

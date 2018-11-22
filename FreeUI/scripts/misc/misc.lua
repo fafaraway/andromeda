@@ -1,20 +1,25 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule("misc")
 
-local tostring, tonumber, pairs = tostring, tonumber, pairs
-local tremove, tinsert = table.remove, table.insert
-local strsplit, random = string.split, math.random
-
 function module:OnLogin()
-	self:ShowItemLevel()
+	self:ItemLevel()
 	self:ProgressBar()
 	self:FlashCursor()
 	self:QuickJoin()
 	self:MissingStats()
-	self:FasterLooting()
+	self:FasterLoot()
 	self:Vignette()
 	self:PVPMessageEnhancement()
+	self:UndressButton()
+	self:ActionCam()
+	self:FasterDelete()
+	self:FlightMasterWhistle()
+	self:AutoScreenShot()
+	self:ReadyCheckEnhancement()
+	self:AutoRepair()
+	self:AutoSetRole()
 end
+
 
 
 -- ALT + Right Click to buy a stack
@@ -68,22 +73,24 @@ end
 
 
 -- Auto enables the ActionCam on login
-if C.misc.autoActionCam then
-	local aac = CreateFrame("Frame", "AutoActionCam")
+function module:ActionCam()
+	if C.misc.autoActionCam then
+		local aac = CreateFrame("Frame", "AutoActionCam")
 
-	aac:RegisterEvent("PLAYER_LOGIN")
-	UIParent:UnregisterEvent("EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED")
+		aac:RegisterEvent("PLAYER_LOGIN")
+		UIParent:UnregisterEvent("EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED")
 
-	function SetCam(cmd)
-		ConsoleExec("ActionCam " .. cmd)
-	end
-
-	function aac:OnEvent(event, ...)
-		if event == "PLAYER_LOGIN" then
-			SetCam("basic")
+		function SetCam(cmd)
+			ConsoleExec("ActionCam " .. cmd)
 		end
+
+		function aac:OnEvent(event, ...)
+			if event == "PLAYER_LOGIN" then
+				SetCam("basic")
+			end
+		end
+		aac:SetScript("OnEvent", aac.OnEvent)
 	end
-	aac:SetScript("OnEvent", aac.OnEvent)
 end
 
 
@@ -97,30 +104,32 @@ end
 
 
 -- undress button on dress up frame
-if C.misc.undressButton then
-	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
-	undress:SetSize(80, 22)
-	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
-	undress:SetText(L['Undress'])
-	undress:SetScript("OnClick", function()
-		DressUpModel:Undress()
-	end)
+function module:UndressButton()
+	if C.misc.undressButton then
+		local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
+		undress:SetSize(80, 22)
+		undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
+		undress:SetText(L['Undress'])
+		undress:SetScript("OnClick", function()
+			DressUpModel:Undress()
+		end)
 
-	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
-	sideUndress:SetSize(80, 22)
-	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
-	sideUndress:SetText(L['Undress'])
-	sideUndress:SetScript("OnClick", function()
-		SideDressUpModel:Undress()
-	end)
+		local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
+		sideUndress:SetSize(80, 22)
+		sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
+		sideUndress:SetText(L['Undress'])
+		sideUndress:SetScript("OnClick", function()
+			SideDressUpModel:Undress()
+		end)
 
-	F.Reskin(undress)
-	F.Reskin(sideUndress)
+		F.Reskin(undress)
+		F.Reskin(sideUndress)
+	end
 end
 
 
 -- Instant delete
-do
+function module:FasterDelete()
 	hooksecurefunc(StaticPopupDialogs["DELETE_GOOD_ITEM"], "OnShow", function(self)
 		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 	end)
@@ -128,8 +137,8 @@ end
 
 
 -- Faster Looting
-function module:FasterLooting()
-	if not C.misc.fasterLooting then return end
+function module:FasterLoot()
+	if not C.misc.fasterLoot then return end
 	local faster = CreateFrame("Frame")
 	faster:RegisterEvent("LOOT_READY")
 	faster:SetScript("OnEvent",function()
@@ -148,7 +157,7 @@ end
 
 
 -- plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
-do
+function module:FlightMasterWhistle()
 	local flightMastersWhistle_SpellID1 = 227334
 	local flightMastersWhistle_SpellID2 = 253937
 	local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\blowmywhistle.ogg'
@@ -166,7 +175,7 @@ end
 
 
 -- ready check in master sound
-do
+function module:ReadyCheckEnhancement()
 	F:RegisterEvent("READY_CHECK", function()
 		PlaySound(SOUNDKIT.READY_CHECK, "master")
 	end)
@@ -174,7 +183,7 @@ end
 
 
 -- Auto screenshot when Achievement earned
-do
+function module:AutoScreenShot()
 	local f = CreateFrame("Frame")
 	f:Hide()
 	f:SetScript("OnUpdate", function(_, elapsed)
@@ -197,124 +206,129 @@ end
 
 
 -- Auto repair
-local isShown, isBankEmpty
+function module:AutoRepair()
+	if not C.misc.autoRepair then return end
 
-local function autoRepair(override)
-	if isShown and not override then return end
-	isShown = true
-	isBankEmpty = false
+	local isShown, isBankEmpty
+	local function autoRepair(override)
+		if isShown and not override then return end
+		isShown = true
+		isBankEmpty = false
 
-	local repairAllCost, canRepair = GetRepairAllCost()
-	local myMoney = GetMoney()
+		local repairAllCost, canRepair = GetRepairAllCost()
+		local myMoney = GetMoney()
 
-	if canRepair and repairAllCost > 0 then
-		if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
-			RepairAllItems(true)
-		else
-			if myMoney > repairAllCost then
-				RepairAllItems()
-				print(format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
-				return
+		if canRepair and repairAllCost > 0 then
+			if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
+				RepairAllItems(true)
 			else
-				print(C.InfoColor..L["repairError"])
-				return
+				if myMoney > repairAllCost then
+					RepairAllItems()
+					print(format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
+					return
+				else
+					print(C.InfoColor..L["repairError"])
+					return
+				end
 			end
+
+			C_Timer.After(.5, function()
+				if isBankEmpty then
+					autoRepair(true)
+				else
+					print(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
+				end
+			end)
 		end
-
-		C_Timer.After(.5, function()
-			if isBankEmpty then
-				autoRepair(true)
-			else
-				print(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
-			end
-		end)
 	end
-end
 
-local function checkBankFund(_, msgType)
-	if msgType == LE_GAME_ERR_GUILD_NOT_ENOUGH_MONEY then
-		isBankEmpty = true
+	local function checkBankFund(_, msgType)
+		if msgType == LE_GAME_ERR_GUILD_NOT_ENOUGH_MONEY then
+			isBankEmpty = true
+		end
 	end
-end
 
-local function merchantClose()
-	isShown = false
-	F:UnregisterEvent("UI_ERROR_MESSAGE", checkBankFund)
-	F:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
-end
+	local function merchantClose()
+		isShown = false
+		F:UnregisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+		F:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
+	end
 
-local function merchantShow()
-	if IsShiftKeyDown() or not CanMerchantRepair() then return end
-	autoRepair()
-	F:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
-	F:RegisterEvent("MERCHANT_CLOSED", merchantClose)
+	local function merchantShow()
+		if IsShiftKeyDown() or not CanMerchantRepair() then return end
+		autoRepair()
+		F:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
+		F:RegisterEvent("MERCHANT_CLOSED", merchantClose)
+	end
+	F:RegisterEvent("MERCHANT_SHOW", merchantShow)
 end
-F:RegisterEvent("MERCHANT_SHOW", merchantShow)
 
 
 -- auto set role
-local useSpec = C.misc.autoSetRole_useSpec
-local verbose = C.misc.autoSetRole_verbose
+function module:AutoSetRole()
+	if not C.misc.autoSetRole then return end
 
-local _, class = UnitClass("Player")
-local isPureClass
-if class == "HUNTER" or class == "MAGE" or class == "ROGUE" or class == "WARLOCK" then
-	isPureClass = true
-end
+	local useSpec = C.misc.autoSetRole_useSpec
+	local verbose = C.misc.autoSetRole_verbose
 
-local lastMsgTime = 0
-local function Print(msg)
-	if time() - lastMsgTime > 10 then
-		lastMsgTime = time()
-		DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffff"..msg, C.r, C.g, C.b)
+	local _, class = UnitClass("Player")
+	local isPureClass
+	if class == "HUNTER" or class == "MAGE" or class == "ROGUE" or class == "WARLOCK" then
+		isPureClass = true
 	end
-end
 
-local function setRoleForSpec(self)
-	local spec = GetSpecialization()
-	if spec then
-		UnitSetRole("player", select(6, GetSpecializationInfo(spec)))
-		if verbose then
-			Print("Role check: Setting role based on current spec.")
-		end
-	else
-		RolePollPopup_Show(self)
-		if verbose then
-			Print("Role check: You have no spec, cannot set automatically.")
+	local lastMsgTime = 0
+	local function Print(msg)
+		if time() - lastMsgTime > 10 then
+			lastMsgTime = time()
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffff"..msg, C.r, C.g, C.b)
 		end
 	end
-end
 
-local function autoSetRole(self, event)
-	if event ~= "ROLE_POLL_BEGIN" or InCombatLockdown() then return end
-
-	if isPureClass then
-		UnitSetRole("player", "DAMAGER")
-		if verbose then
-			Print("Role check: Setting role to dps.")
-		end
-	else
-		if UnitGroupRolesAssigned("player") == "NONE" then
-			if useSpec then
-				setRoleForSpec(self)
-			else
-				if not self:IsShown() then
-					RolePollPopup_Show(self)
-				end
+	local function setRoleForSpec(self)
+		local spec = GetSpecialization()
+		if spec then
+			UnitSetRole("player", select(6, GetSpecializationInfo(spec)))
+			if verbose then
+				Print("Role check: Setting role based on current spec.")
 			end
 		else
-			if useSpec then
-				setRoleForSpec(self)
+			RolePollPopup_Show(self)
+			if verbose then
+				Print("Role check: You have no spec, cannot set automatically.")
+			end
+		end
+	end
+
+	local function autoSetRole(self, event)
+		if event ~= "ROLE_POLL_BEGIN" or InCombatLockdown() then return end
+
+		if isPureClass then
+			UnitSetRole("player", "DAMAGER")
+			if verbose then
+				Print("Role check: Setting role to dps.")
+			end
+		else
+			if UnitGroupRolesAssigned("player") == "NONE" then
+				if useSpec then
+					setRoleForSpec(self)
+				else
+					if not self:IsShown() then
+						RolePollPopup_Show(self)
+					end
+				end
 			else
-				if verbose then
-					Print("Role check: Role already set, doing nothing.")
+				if useSpec then
+					setRoleForSpec(self)
+				else
+					if verbose then
+						Print("Role check: Role already set, doing nothing.")
+					end
 				end
 			end
 		end
 	end
-end
 
-if C.misc.autoSetRole then
 	RolePollPopup:SetScript("OnEvent", autoSetRole)
 end
 
@@ -354,7 +368,3 @@ function module:FlashCursor()
 	end
 	frame:SetScript("OnUpdate", OnUpdate);
 end
-
-
-
-
