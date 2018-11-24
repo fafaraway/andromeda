@@ -17,9 +17,9 @@
 	along with cargBags; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ]]
-local addon, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
-local F, C, L = unpack(select(2, ...))
+
 local _G = _G
 
 --[[!
@@ -37,7 +37,7 @@ function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
 	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "ItemButtonTemplate",
       (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "ItemButtonTemplate";
-end 
+end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
 
@@ -56,9 +56,9 @@ function ItemButton:New(bagID, slotID)
 	button.bagID = bagID
 	button.slotID = slotID
 	button:SetID(slotID)
-	
 	button:Show()
-	
+	button:HookScript("OnEnter", button.OnEnter)
+
 	return button
 end
 
@@ -68,7 +68,6 @@ end
 	@return button <ItemButton>
 	@callback button:OnCreate(tpl)
 ]]
-local bFS
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
@@ -84,13 +83,6 @@ function ItemButton:Create(tpl, parent)
 	if btnNT then btnNT:SetTexture("") end
 	if btnNIT then btnNIT:SetTexture("") end
 	if btnBIT then btnBIT:SetTexture("") end
-	
-	button:SetSize(C.bags.itemSlotSize, C.bags.itemSlotSize)
-	bFS = _G[button:GetName().."Count"]
-	bFS:ClearAllPoints()
-	bFS:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1.5, 1.5);
-
-	F.SetFS(bFS)
 
 	return button
 end
@@ -111,4 +103,3 @@ end
 function ItemButton:GetItemInfo(item)
 	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
 end
-

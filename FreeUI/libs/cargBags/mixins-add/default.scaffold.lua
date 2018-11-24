@@ -24,105 +24,19 @@ DESCRIPTION
 DEPENDENCIES
 	mixins/api-common.lua
 ]]
-local addon, ns = ...
+
+local _, ns = ...
 local cargBags = ns.cargBags
-
-local function noop() end
-
---[[
-local S_UPGRADE_LEVEL = "^" .. gsub(ITEM_UPGRADE_TOOLTIP_FORMAT, "%%d", "(%%d+)")	-- Search pattern
-local scantip = CreateFrame("GameTooltip", "ItemUpgradeScanTooltip", nil, "GameTooltipTemplate")
-scantip:SetOwner(UIParent, "ANCHOR_NONE")
-
-local function GetItemUpgradeLevel(itemLink)
-	scantip:SetOwner(UIParent, "ANCHOR_NONE")
-	scantip:SetHyperlink(itemLink)
-	for i = 2, scantip:NumLines() do -- Line 1 = name so skip
-		local text = _G["ItemUpgradeScanTooltipTextLeft"..i]:GetText()
-		if text and text ~= "" then
-			local currentUpgradeLevel, maxUpgradeLevel = strmatch(text, S_UPGRADE_LEVEL)
-			if currentUpgradeLevel then
-				return currentUpgradeLevel, maxUpgradeLevel
-			end
-		end
-	end
-	scantip:Hide()
-end
-]]
-local function Round(num, idp)
-	local mult = 10^(idp or 0)
-	return math.floor(num * mult + 0.5) / mult
-end
-
-local function ItemColorGradient(perc, ...)
-	if perc >= 1 then
-		return select(select('#', ...) - 2, ...)
-	elseif perc <= 0 then
-		return ...
-	end
-
-	local num = select('#', ...) / 3
-	local segment, relperc = math.modf(perc*(num-1))
-	local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
-
-	return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
-end
-
-local function CreateInfoString(button, position)
-	local str = button:CreateFontString(nil, "OVERLAY")
-	if position == "TOP" then
-		str:SetJustifyH("LEFT")
-		str:SetPoint("TOPLEFT", button, "TOPLEFT", 1.5, -1.5)
-	else
-		str:SetJustifyH("RIGHT")
-		str:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 1.5, 1.5)
-	end
-
-	local F = FreeUI[1]
-	F.SetFS(str)
-
-
-	return str
-end
-
-local function GetScreenModes()
-	local curResIndex = GetCurrentResolution()
-	local curRes = curResIndex > 0 and select(curResIndex, GetScreenResolutions()) or nil
-	local windowedMode = Display_DisplayModeDropDown:windowedmode()
-	
-	local resolution = curRes or (windowedMode and GetCVar("gxWindowedResolution")) or GetCVar("gxFullscreenResolution")
-	
-	return resolution
-end
 
 local function ItemButton_Scaffold(self)
 	self:SetSize(37, 37)
 
-	self:SetNormalTexture(nil)
-	self:SetPushedTexture(nil)
-	self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
---[[
-	local monitorIndex = (tonumber(GetCVar('gxMonitor')) or 0) + 1
-	local resolution = select(GetCurrentResolution(monitorIndex), GetScreenResolutions(monitorIndex))
-	local bordersize = 768/string.match(resolution, "%d+x(%d+)")/(GetCVar("uiScale")*cBnivCfg.scale)
-]]
-	local bordersize = 768/string.match(GetScreenModes(), "%d+x(%d+)")/(GetCVar("uiScale")*cBnivCfg.scale)
 	local name = self:GetName()
 	self.Icon = _G[name.."IconTexture"]
 	self.Count = _G[name.."Count"]
 	self.Cooldown = _G[name.."Cooldown"]
 	self.Quest = _G[name.."IconQuestTexture"]
-	self.Border = CreateFrame("Frame", nil, self)
-	self.Border:SetPoint("TOPLEFT", self.Icon, 0, 0)
-	self.Border:SetPoint("BOTTOMRIGHT", self.Icon, 0, 0)
-	self.Border:SetBackdrop({
-		edgeFile = "Interface\\Buttons\\WHITE8x8", edgeSize = bordersize,
-	})
-	self.Border:SetBackdropBorderColor(0, 0, 0, 0)
-
-	self.TopString = CreateInfoString(self, "TOP")
-	self.BottomString = CreateInfoString(self, "BOTTOM")
+	self.Border = _G[name.."NormalTexture"]
 end
 
 --[[!
@@ -130,61 +44,16 @@ end
 	@param item <table> The itemTable holding information, see Implementation:GetItemInfo()
 	@callback OnUpdate(item)
 ]]
-local L = cargBags:GetLocalizedTypes()
-local ilvlTypes = {
-	[L.ItemClass["Armor"]] = true,
-	[L.ItemClass["Weapon"]] = true,
-}
-local ilvlSubTypes = {
-	[GetItemSubClassInfo(3,11)] = true	--Artifact Relic
-}
 local function ItemButton_Update(self, item)
-	if item.texture then
-		local tex = item.texture or (cBnivCfg.CompressEmpty and self.bgTex)
-		if tex then
-			self.Icon:SetTexture(tex)
-			self.Icon:SetTexCoord(.08, .92, .08, .92)
-		else
-			self.Icon:SetColorTexture(1,1,1,0.1)
-		end
-	else
-		if cBnivCfg.CompressEmpty then
-			self.Icon:SetTexture(self.bgTex)
-			self.Icon:SetTexCoord(.08, .92, .08, .92)
-		else
-			self.Icon:SetColorTexture(1,1,1,0.1)
-		end
-	end
+	self.Icon:SetTexture(item.texture or self.bgTex)
+
 	if(item.count and item.count > 1) then
-		self.Count:SetText(item.count >= 1e3 and "*" or item.count)
+		self.Count:SetText(item.count > 1e3 and "*" or item.count)
 		self.Count:Show()
 	else
 		self.Count:Hide()
 	end
 	self.count = item.count -- Thank you Blizz for not using local variables >.> (BankFrame.lua @ 234 )
-
-	-- Durability
-	local dCur, dMax = GetContainerItemDurability(item.bagID, item.slotID)
-	if dMax and (dMax > 0) and (dCur < dMax) then
-		local dPer = (dCur / dMax * 100)
-		local r, g, b = ItemColorGradient((dCur/dMax), 1, 0, 0, 1, 1, 0, 0, 1, 0)
-		self.TopString:SetText(Round(dPer).."%")
-		self.TopString:SetTextColor(r, g, b)
-	else
-		self.TopString:SetText("")
-	end
-
-	-- Item Level
-	if item.link then
-		if (item.type and (ilvlTypes[item.type] or item.subType and ilvlSubTypes[item.subType])) and item.level > 0 then
-			self.BottomString:SetText(item.level)
-			self.BottomString:SetTextColor(GetItemQualityColor(item.rarity))
-		else
-			self.BottomString:SetText("")
-		end
-	else
-		self.BottomString:SetText("")
-	end
 
 	self:UpdateCooldown(item)
 	self:UpdateLock(item)
@@ -201,8 +70,6 @@ end
 local function ItemButton_UpdateCooldown(self, item)
 	if(item.cdEnable == 1 and item.cdStart and item.cdStart > 0) then
 		self.Cooldown:SetCooldown(item.cdStart, item.cdFinish)
-		self.Cooldown:SetPoint("TOPLEFT", 1, -1)
-		self.Cooldown:SetPoint("BOTTOMRIGHT", -1, 1)
 		self.Cooldown:Show()
 	else
 		self.Cooldown:Hide()
@@ -228,15 +95,11 @@ end
 	@callback OnUpdateQuest(item)
 ]]
 local function ItemButton_UpdateQuest(self, item)
-	if item.questID or item.isQuestItem then
-		self.Border:SetBackdropBorderColor(1, 1, 0, 1)
-	elseif item.rarity and item.rarity > 1 then
-		local r, g, b = GetItemQualityColor(item.rarity)
-		self.Border:SetBackdropBorderColor(r, g, b, 1)
-	else
-		self.Border:SetBackdropBorderColor(0, 0, 0, 1)
-	end
 	if(self.OnUpdateQuest) then self:OnUpdateQuest(item) end
+end
+
+local function ItemButton_OnEnter(self)
+	if(self.OnEnter) then self:OnEnter() end
 end
 
 cargBags:RegisterScaffold("Default", function(self)

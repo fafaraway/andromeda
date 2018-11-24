@@ -26,10 +26,10 @@ DEPENDENCIES
 	mixins/textFilter.lua
 ]]
 
-local addon, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 
-local function apply(self, container, text, mode)
+local function apply(self, container, text)
 	if(text == "" or not text) then
 		container:ApplyToButtons(self.highlightFunction, true)
 	else
@@ -51,7 +51,7 @@ local function doSearch(self, text)
 	self.currFilters = self.parent.implementation:ParseTextFilter(text, self.currFilters, self.textFilters)
 
 	if(self.isGlobal) then
-		for name, container in pairs(self.parent.implementation.contByName) do
+		for _, container in pairs(self.parent.implementation.contByName) do
 			apply(self, container, text)
 		end
 	else
@@ -84,27 +84,35 @@ end
 
 cargBags:RegisterPlugin("SearchBar", function(self, target)
 	local search = CreateFrame("EditBox", nil, self)
-	
-
-	local F, C = unpack(FreeUI)
-
-	local searchFont = {
-			C.font.normal,
-			12,
-			"OUTLINE"
-		}
-
-	if C.Client == "zhCN" or C.Client == "zhTW" then
-		search:SetFont(unpack(searchFont))
-	else
-		F.SetFS(search)
-	end
-
-
+	search:SetFontObject(GameFontHighlight)
 	self.Search = search
 
 	search.Clear = onEscape
 	search.DoSearch = search.doSearch
+
+	local left = search:CreateTexture(nil, "BACKGROUND")
+	left:SetTexture("Interface\\Common\\Common-Input-Border")
+	left:SetTexCoord(0, 0.0625, 0, 0.625)
+	left:SetWidth(8)
+	left:SetHeight(20)
+	left:SetPoint("LEFT", -5, 0)
+	search.Left = left
+
+	local right = search:CreateTexture(nil, "BACKGROUND")
+	right:SetTexture("Interface\\Common\\Common-Input-Border")
+	right:SetTexCoord(0.9375, 1, 0, 0.625)
+	right:SetWidth(8)
+	right:SetHeight(20)
+	right:SetPoint("RIGHT", 0, 0)
+	search.Right = right
+
+	local center = search:CreateTexture(nil, "BACKGROUND")
+	center:SetTexture("Interface\\Common\\Common-Input-Border")
+	center:SetTexCoord(0.0625, 0.9375, 0, 0.625)
+	center:SetHeight(20)
+	center:SetPoint("RIGHT", right, "LEFT", 0, 0)
+	center:SetPoint("LEFT", left, "RIGHT", 0, 0)
+	search.Center = center
 
 	search:SetScript("OnTextChanged", doSearch)
 	search:SetScript("OnEscapePressed", onEscape)

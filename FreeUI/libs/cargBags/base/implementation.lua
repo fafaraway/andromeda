@@ -17,7 +17,7 @@
 	along with cargBags; if not, write to the Free Software
 	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 ]]
-local addon, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 
 --[[!
@@ -31,9 +31,6 @@ Implementation.itemKeys = {}
 
 local toBagSlot = cargBags.ToBagSlot
 local L
-
--- Upgrade Level retrieval
---local ItemUpgradeInfo = LibStub("LibItemUpgradeInfo-1.0")
 
 --[[!
 	Creates a new instance of the class
@@ -236,18 +233,12 @@ end
 ]]
 function Implementation:Init()
 	if(not self.notInited) then return end
-	
-	 -- initialization of bags in combat taints the itembuttons within - Lars Norberg
-	if (InCombatLockdown()) then
-		local L = LibStub("gLocale-1.0"):GetLocale(addon, true)
-		if (L) then
-			UIErrorsFrame:AddMessage(L["Can't initialize bags while engaged in combat."], 1.0, 0.82, 0.0, 1.0)
-			UIErrorsFrame:AddMessage(L["Please exit combat then re-open the bags!"], 1.0, 0.82, 0.0, 1.0)
-		end
 
+	-- initialization of bags in combat taints the itembuttons within - Lars Norberg
+	if (InCombatLockdown()) then
 		return
 	end
-	
+
 	self.notInited = nil
 
 	if(self.OnInit) then self:OnInit() end
@@ -257,6 +248,7 @@ function Implementation:Init()
 	end
 
 	self:RegisterEvent("BAG_UPDATE", self, self.BAG_UPDATE)
+	self:RegisterEvent("MERCHANT_SHOW", self, self.BAG_UPDATE)
 	self:RegisterEvent("BAG_UPDATE_COOLDOWN", self, self.BAG_UPDATE_COOLDOWN)
 	self:RegisterEvent("ITEM_LOCK_CHANGED", self, self.ITEM_LOCK_CHANGED)
 	self:RegisterEvent("PLAYERBANKSLOTS_CHANGED", self, self.PLAYERBANKSLOTS_CHANGED)
@@ -302,34 +294,6 @@ local defaultItem = cargBags:NewItemTable()
 	@param i <table> [optional]
 	@return i <table>
 ]]
-local ilvlTypes = {
-	[GetItemClassInfo(4)] = true,	--Armor
-	[GetItemClassInfo(2)] = true,	--Weapon
-}
-local ilvlSubTypes = {
-	[GetItemSubClassInfo(3,11)] = true	--Artifact Relic
-}
-
-local cB_TT_Name = "cargBagsContainerItemTooltip"
-local cB_TT= CreateFrame("GameTooltip", cB_TT_Name, nil, "GameTooltipTemplate")
-local itemLevelString = _G["ITEM_LEVEL"]:gsub("%%d", "")
-local itemDB = {}
-local function GetContainerItemLevel(link, bagID, slotID)
-	if itemDB[link] then return itemDB[link] end
-	cB_TT:SetOwner(UIParent, "ANCHOR_NONE")
-	cB_TT:SetBagItem(bagID, slotID)
- 	for i = 2, 5 do
-		local text = _G[cB_TT_Name.."TextLeft"..i]:GetText() or ""
-		local hasLevel = string.find(text, itemLevelString)
-		if hasLevel then
-			local level = string.match(text, "(%d+)%)?$")
-			itemDB[link] = tonumber(level)
-			break
-		end
-	end
-	return itemDB[link]
-end
-
 function Implementation:GetItemInfo(bagID, slotID, i)
 	i = i or defaultItem
 	for k in pairs(i) do i[k] = nil end
@@ -340,52 +304,36 @@ function Implementation:GetItemInfo(bagID, slotID, i)
 	local clink = GetContainerItemLink(bagID, slotID)
 
 	if(clink) then
-		local _
-		i.texture, i.count, i.locked, i.quality, i.readable, _, _, _, _, i.id = GetContainerItemInfo(bagID, slotID)
+		i.texture, i.count, i.locked, i.quality = GetContainerItemInfo(bagID, slotID)
 		i.cdStart, i.cdFinish, i.cdEnable = GetContainerItemCooldown(bagID, slotID)
 		i.isQuestItem, i.questID, i.questActive = GetContainerItemQuestInfo(bagID, slotID)
 		i.isInSet, i.setName = GetContainerItemEquipmentSetInfo(bagID, slotID)
+		i.id = GetContainerItemID(bagID, slotID)
 
-		-- *edits by Lars "Goldpaw" Norberg for WoW 5.0.4 (MoP)
-		-- last return value here, "texture", doesn't show for battle pets
 		local texture
-		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice  = GetItemInfo(clink)
-		-- get the first link return because otherwise ilvl for artifacts will bug
-		i.link = clink
-		-- get the actual item level for items we want it to be shown
-		if (i.type and (ilvlTypes[i.type] or i.subType and ilvlSubTypes[i.subType])) and i.level > 0 then
-			if i.rarity == LE_ITEM_QUALITY_ARTIFACT then
-				-- for artifact weapons, GetItemInfo returns the actual ilvl
-			else
-				i.level = GetContainerItemLevel(clink, bagID, slotID) or i.level	--ItemUpgradeInfo:GetUpgradedItemLevel(i.link)
-			end
-		end
-		-- get the item spell to determine if the item is an Artifact Power boosting item
-		if IsArtifactPowerItem(i.id) then
-			i.type = ARTIFACT_POWER
-		end
-		-- texture
+		i.name, i.link, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice, i.classID = GetItemInfo(clink)
 		i.texture = i.texture or texture
-		-- battle pet info must be extracted from the itemlink
-		if (clink:find("battlepet")) then
+		i.rarity = i.rarity or i.quality
+
+		if clink:find("battlepet") then
 			if not(L) then
 				L = cargBags:GetLocalizedTypes()
 			end
 			local data, name = strmatch(clink, "|H(.-)|h(.-)|h")
-			local  _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
-			i.type = L.ItemClass["Battle Pets"]
+			local _, _, level, rarity, _, _, _, id = strmatch(data, "(%w+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)")
+			i.type = L["Battle Pets"]
 			i.rarity = tonumber(rarity) or 0
 			i.id = tonumber(id) or 0
 			i.name = name
 			i.minLevel = level
-		elseif (clink:find("keystone")) then
-			local data, name = strsplit("[", clink)
-			i.name = strsplit("]", name)
-
-			if not i.id then i.id = 138019 end
-			_, _, i.rarity, i.level, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc, texture, i.sellPrice  = GetItemInfo(i.id)
+			i.link = clink
+		elseif clink:find("keystone") then
+			local data = strmatch(clink, "|H(.-)|h(.-)|h")
+			local level = strmatch(data, "%w+:%d+:%d+:(%d+)")
+			i.name, _, _, _, i.minLevel, i.type, i.subType, i.stackCount, i.equipLoc = GetItemInfo(i.id)
+			i.level = level
+			i.link = clink
 		end
-		--print("GetItemInfo:", i.isInSet, i.setName, i.name)
 	end
 	return i
 end
@@ -455,13 +403,13 @@ end
 	@param slotID <number> [optional]
 	@callback Container:OnBagUpdate(bagID, slotID)
 ]]
-function Implementation:BAG_UPDATE(event, bagID, slotID)
+function Implementation:BAG_UPDATE(_, bagID, slotID)
 	if(bagID and slotID) then
 		self:UpdateSlot(bagID, slotID)
 	elseif(bagID) then
 		self:UpdateBag(bagID)
 	else
-		for bagID = -2, 11 do
+		for bagID = -3, 11 do
 			self:UpdateBag(bagID)
 		end
 	end
@@ -480,7 +428,7 @@ end
 	Fired when the item cooldowns need to be updated
 	@param bagID <number> [optional]
 ]]
-function Implementation:BAG_UPDATE_COOLDOWN(event, bagID)
+function Implementation:BAG_UPDATE_COOLDOWN(_, bagID)
 	if(bagID) then
 		for slotID=1, GetContainerNumSlots(bagID) do
 			local button = self:GetButton(bagID, slotID)
@@ -490,8 +438,8 @@ function Implementation:BAG_UPDATE_COOLDOWN(event, bagID)
 			end
 		end
 	else
-		for id, container in pairs(self.contByID) do
-			for i, button in pairs(container.buttons) do
+		for _, container in pairs(self.contByID) do
+			for _, button in pairs(container.buttons) do
 				local item = self:GetItemInfo(button.bagID, button.slotID)
 				button:UpdateCooldown(item)
 			end
@@ -504,7 +452,7 @@ end
 	@param bagID <number>
 	@param slotID <number> [optional]
 ]]
-function Implementation:ITEM_LOCK_CHANGED(event, bagID, slotID)
+function Implementation:ITEM_LOCK_CHANGED(_, bagID, slotID)
 	if(not slotID) then return end
 
 	local button = self:GetButton(bagID, slotID)
@@ -544,9 +492,9 @@ end
 --[[
 	Fired when the quest log of a unit changes
 ]]
-function Implementation:UNIT_QUEST_LOG_CHANGED(event)
-	for id, container in pairs(self.contByID) do
-		for i, button in pairs(container.buttons) do
+function Implementation:UNIT_QUEST_LOG_CHANGED()
+	for _, container in pairs(self.contByID) do
+		for _, button in pairs(container.buttons) do
 			local item = self:GetItemInfo(button.bagID, button.slotID)
 			button:UpdateQuest(item)
 		end

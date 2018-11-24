@@ -22,7 +22,8 @@ DESCRIPTION
 	They are only used in the layout and more experienced user
 	may replace the functions with their own in their implementation.
 ]]
-local addon, ns = ...
+
+local _, ns = ...
 local cargBags = ns.cargBags
 local Implementation = cargBags.classes.Implementation
 local Container = cargBags.classes.Container

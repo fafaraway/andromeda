@@ -70,6 +70,7 @@ function FilterSet:SetExtended(filter, param, flag)
 	if(not flag and param) then
 		flag = true
 	end
+
 	self:Set(filter, flag)
 	self.params[filter] = param
 end
@@ -127,7 +128,7 @@ end
 	@return container <Container>
 ]]
 function Implementation:GetContainerForItem(item)
-	for i, container in ipairs(self.contByID) do
+	for _, container in ipairs(self.contByID) do
 		if(not container.filters or container.filters:Check(item)) then
 			return container
 		end
@@ -158,7 +159,7 @@ end
 function Container:FilterForFunction(func, filters)
 	filters = filters or self.filters
 
-	for i, button in pairs(self.buttons) do
+	for _, button in pairs(self.buttons) do
 		local result = filters:Check(button:GetItemInfo())
 		func(button, result)
 	end

@@ -56,4 +56,3 @@ cargBags.itemKeys["bindOn"] = function(i)
 	i.bindOn = bindOn
 	return bindOn
 end
-

@@ -23,31 +23,24 @@ DESCRIPTION
 DEPENDENCIES
 	mixins-add/itemkeys/basic.lua
 ]]
-local parent, ns = ...
+local _, ns = ...
 local cargBags = ns.cargBags
 
 local ItemKeys = cargBags.itemKeys
 
 local setItems
 
-local GetNumEquipmentSets = C_EquipmentSet.GetNumEquipmentSets
-local GetEquipmentSetInfo = C_EquipmentSet.GetEquipmentSetInfo
-local GetEquipmentSetItemIDs = C_EquipmentSet.GetItemIDs
-
 local function initUpdater()
-
-	local updateSets
-	function updateSets()
+	local function updateSets()
 		setItems = setItems or {}
 		for k in pairs(setItems) do setItems[k] = nil end
 
-		for setID = 0, GetNumEquipmentSets()-1 do
-			local items = GetEquipmentSetItemIDs(setID)
+		for setID = 1, GetNumEquipmentSets() do
+			local name = GetEquipmentSetInfo(setID)
+			local items = GetEquipmentSetItemIDs(name)
 
-			if items then
-				for slot, id in pairs(items) do
-					setItems[id] = setID
-				end
+			for _, id in pairs(items) do
+				setItems[id] = setID
 			end
 		end
 	end
@@ -72,4 +65,3 @@ ItemKeys["set"] = function(i)
 	local setID = i.setID
 	return setID and GetEquipmentSetInfo(setID)
 end
-
