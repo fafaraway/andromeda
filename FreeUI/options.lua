@@ -132,6 +132,9 @@ C['maps'] = {
 C['blizzard'] = {
 	['hideBossBanner'] = true,
 	['hideTalkingHead'] = true,
+	['cooldownCount'] = true,
+		['decimalCD'] = false,
+		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
 	['alertPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 }
 
@@ -150,9 +153,6 @@ C['misc'] = {
 	['autoRepair'] = true,				-- automatically repair items
 	['autoSetRole'] = true,
 	['cooldownpulse'] = true,
-	['cooldownCount'] = true,
-		['decimalCD'] = false,
-		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
 	['missingStats'] = true,
 	['PVPSound'] = true,
 	['clickCast'] = true,
@@ -242,7 +242,7 @@ C['chat'] = {
 		['blockAddonAlert'] = true,
 			['addonBlockList'] = {	-- filter annoying alerts from idiot addons
 				'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
-				'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '助我轻松提高DPS'
+				'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '助我轻松提高DPS', '=>'
 				},
 }
 
