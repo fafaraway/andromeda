@@ -35,6 +35,7 @@ local function WA()
 	regionTypes.icon.create = function(parent, data)
 		local region = Create_Icon(parent, data)
 		Skin_WeakAuras(region, "icon")
+
 		return region
 	end
 
@@ -47,6 +48,7 @@ local function WA()
 	regionTypes.icon.modify = function(parent, region, data)
 		Modify_Icon(parent, region, data)
 		Skin_WeakAuras(region, "icon")
+
 	end
 
 	regionTypes.aurabar.modify = function(parent, region, data)
@@ -58,6 +60,8 @@ local function WA()
 		local regions = WeakAuras.regions[weakAura]
 		if regions.regionType == "icon" then
 			Skin_WeakAuras(regions.region, regions.regionType)
+			regions.region.cooldown:SetDrawEdge(true)
+			regions.region.cooldown:SetSwipeColor(0, 0, 0, .6)
 		end
 	end
 end
