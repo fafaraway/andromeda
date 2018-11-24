@@ -8,6 +8,7 @@ function module:OnLogin()
 	self:EnhanceColorPicker()
 	self:PositionUIWidgets()
 	self:QuestTracker()
+	self:CooldownCount()
 
 	-- Remove Boss Banner
 	if C.blizzard.hideBossBanner then

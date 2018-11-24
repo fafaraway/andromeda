@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("blizzard")
 
-function module:OnLogin()
+function module:CooldownCount()
 	if not C.blizzard.cooldownCount then return end
 
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for

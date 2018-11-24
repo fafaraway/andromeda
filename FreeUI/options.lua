@@ -74,7 +74,7 @@ C['appearance'] = {
 		['customColour'] = {r = 1, g = 1, b = 1},
 
 	['vignette'] = true,
-		['vignetteAlpha'] = .5,
+		['vignetteAlpha'] = .35,
 
 	['fontStyle'] = true,
 

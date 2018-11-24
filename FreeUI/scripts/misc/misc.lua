@@ -60,7 +60,7 @@ end
 
 -- adding a shadowed border to the UI window
 function module:Vignette()
-	if not C.appearance.vignette then return end
+	if not (C.appearance.vignette and C.appearance.shadow) then return end
 
 	self.f = CreateFrame("Frame", "ShadowBackground")
 	self.f:SetPoint("TOPLEFT")
