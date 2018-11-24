@@ -62,7 +62,7 @@ local function styleButton(bu, isDebuff)
 	bu.HL:SetAllPoints(icon)
 
 	local bg = F.CreateBG(bu)
-	local sd = F.CreateSD(bu)
+	local sd = F.CreateSD(bg)
 	bu.bg = bg
 	bu.sd = sd
 
