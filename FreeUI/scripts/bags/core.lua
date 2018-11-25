@@ -61,7 +61,7 @@ function module:CreateInfoFrame()
 	bg:SetPoint("TOPLEFT", -5, -5)
 	bg:SetPoint("BOTTOMRIGHT", 5, 5)
 
-	local tag = self:SpawnPlugin("TagDisplay", "[currencies] [money]", infoFrame)
+	local tag = self:SpawnPlugin("TagDisplay", "[money]  [currencies]", infoFrame)
 	F.SetFS(tag)
 	tag:SetPoint("LEFT", infoFrame.text, "RIGHT", 6, -2)
 end
@@ -280,7 +280,7 @@ function module:OnLogin()
 		F.SetFS(self.Count)
 
 		self.BG = F.CreateBG(self)
-		self.BG:SetVertexColor(0, 0, 0, .25)
+		self.BG:SetVertexColor(0, 0, 0, .5)
 
 		--[[self.junkIcon = self:CreateTexture(nil, "ARTWORK")
 		self.junkIcon:SetAtlas("bags-junkcoin")
@@ -383,7 +383,7 @@ function module:OnLogin()
 			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 			self.BG:SetVertexColor(color.r, color.g, color.b, 1)
 		else
-			self.BG:SetVertexColor(0, 0, 0, .25)
+			self.BG:SetVertexColor(0, 0, 0, .5)
 		end
 	end
 
@@ -392,8 +392,8 @@ function module:OnLogin()
 		self:SortButtons("bagSlot")
 
 		local offset = 38
-		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 4, -offset + 4)
-		self:SetSize(width + 8, height + offset)
+		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 5, 5, -offset + 5)
+		self:SetSize(width + 10, height + offset)
 
 		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.tradegoods, f.questitem, f.junk})
 		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble})
