@@ -151,6 +151,7 @@ C['misc'] = {
 		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
 		['autoSetRole_verbose'] = true, 	-- tells you what happens when setting role
 	['autoRepair'] = true,				-- automatically repair items
+	['autoSellJunk'] = true,
 	['autoSetRole'] = true,
 	['cooldownpulse'] = true,
 	['missingStats'] = true,
