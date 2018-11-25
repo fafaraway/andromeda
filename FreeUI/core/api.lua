@@ -41,6 +41,8 @@ C.NewItemFlash = "Interface\\Cooldown\\star4"
 
 C.TexCoord = {.08, .92, .08, .92}
 
+C.TempAnchor = {}
+
 
 -- [[ Functions ]]
 
@@ -134,7 +136,7 @@ function F:CreateBG(offset)
 	bg:SetPoint("TOPLEFT", self, -offset, offset)
 	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
 	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0)
+	bg:SetVertexColor(0, 0, 0, C.appearance.alpha)
 
 	return bg
 end
@@ -827,6 +829,27 @@ function F:ReskinMinMax()
 	end
 end
 
+-- GameTooltip
+function F:AddTooltip(anchor, text, color)
+	self:SetScript("OnEnter", function()
+		GameTooltip:SetOwner(self, anchor)
+		GameTooltip:ClearLines()
+		if tonumber(text) then
+			GameTooltip:SetSpellByID(text)
+		else
+			local r, g, b = 1, 1, 1
+			if color == "class" then
+				r, g, b = cr, cg, cb
+			elseif color == "system" then
+				r, g, b = 1, .8, 0
+			end
+			GameTooltip:AddLine(text, r, g, b)
+		end
+		GameTooltip:Show()
+	end)
+	self:SetScript("OnLeave", GameTooltip_Hide)
+end
+
 -- Checkbox
 function F:CreateCB(a)
 	self:SetNormalTexture("")
@@ -871,26 +894,12 @@ function F:CreateBC(a)
 	end)
 end
 
-function F:CreateButton(width, height, text, fontSize)
-	local bu = CreateFrame("Button", nil, self)
-	bu:SetSize(width, height)
-	F.CreateBD(bu, .3)
-	F.CreateBC(bu)
 
-	return bu
-end
 
-function F:CreateCheckBox()
-	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
-	F.CreateCB(cb)
-
-	cb.Type = "CheckBox"
-	return cb
-end
 
 
 -- Movable Frame
-function F:CreateMF(parent)
+function F:CreateMF(parent, saved)
 	local frame = parent or self
 	frame:SetMovable(true)
 	frame:SetUserPlaced(true)
@@ -899,9 +908,21 @@ function F:CreateMF(parent)
 	self:EnableMouse(true)
 	self:RegisterForDrag("LeftButton")
 	self:SetScript("OnDragStart", function() frame:StartMoving() end)
-	self:SetScript("OnDragStop", function() frame:StopMovingOrSizing() end)
+	self:SetScript("OnDragStop", function()
+		frame:StopMovingOrSizing()
+		if not saved then return end
+		local orig, _, tar, x, y = frame:GetPoint()
+		C["TempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
+	end)
 end
 
+function F:RestoreMF()
+	local name = self:GetName()
+	if name and C["TempAnchor"][name] then
+		self:ClearAllPoints()
+		self:SetPoint(unpack(C["TempAnchor"][name]))
+	end
+end
 
 -- Statusbar
 function F:CreateSB(spark, r, g, b)
@@ -944,6 +965,30 @@ function F:CreateIF(mouse, cd)
 		self.CD:SetAllPoints()
 		self.CD:SetReverse(true)
 	end
+end
+
+function F:CreateButton(width, height, text, fontSize)
+	local bu = CreateFrame("Button", nil, self)
+	bu:SetSize(width, height)
+	F.CreateBD(bu, .3)
+	if type(text) == "boolean" then
+		F.CreateIF(bu, true)
+		bu.Icon:SetTexture(fontSize)
+	else
+		F.CreateBC(bu)
+		bu.text = F.CreateFS(bu, fontSize or 14)
+		bu.text:SetText(text)
+	end
+
+	return bu
+end
+
+function F:CreateCheckBox()
+	local cb = CreateFrame("CheckButton", nil, self, "InterfaceOptionsCheckButtonTemplate")
+	F.CreateCB(cb)
+
+	cb.Type = "CheckBox"
+	return cb
 end
 
 -- Gradient Frame

@@ -1,809 +1,502 @@
-local addon, ns = ...
-local cargBags = ns.cargBags
 local F, C, L = unpack(select(2, ...))
-if not C.bags.enable then return end
+local cargBags = FreeUI.cargBags
+local module = F:RegisterModule("bags")
 
-if IsAddOnLoaded("cargBags_Nivaya") then
-	print("FreeUI includes an efficient built-in module of inventory.")
-	print("It's highly recommended that you disable cargBags_Nivaya.")
-	return
+local ipairs, strmatch = ipairs, string.match
+
+function module:ReverseSort()
+	C_Timer.After(.5, function()
+		for bag = 0, 4 do
+			local numSlots = GetContainerNumSlots(bag)
+			for slot = 1, numSlots do
+				local texture, _, locked = GetContainerItemInfo(bag, slot)
+				if texture and not locked then
+					PickupContainerItem(bag, slot)
+					PickupContainerItem(bag, numSlots+1 - slot)
+				end
+			end
+		end
+	end)
 end
 
-FreeUI_Inventory = CreateFrame('Frame', 'FreeUI_Inventory', UIParent)
-FreeUI_Inventory:SetScript('OnEvent', function(self, event, ...) self[event](self, event, ...) end)
-FreeUI_Inventory:RegisterEvent("ADDON_LOADED")
-
-local FUI = cargBags:GetImplementation("FreeUI_Inventory")
---cbNivCatDropDown = CreateFrame("Frame", "cbNivCatDropDown", UIParent, "UIDropDownMenuTemplate")
-
-do	--Replacement for UIDropDownMenu
-
-	local frameHeight = 14
-	local defaultWidth = 120
-	local frameInset = 16
-
-	local f = cbNivCatDropDown or CreateFrame("Frame", "cbNivCatDropDown", UIParent)
-	f.ActiveButtons = 0
-	f.Buttons = {}
-	
-	f:SetFrameStrata("FULLSCREEN_DIALOG")
-	f:SetSize(defaultWidth+frameInset,32)
-	f:SetClampedToScreen(true)
-
-	local inset = 1
-	f:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8", 
-		edgeFile = "Interface\\Buttons\\WHITE8x8", 
-		tile = true, tileSize = 16, edgeSize = 1, 
-		insets = { left = inset, right = inset, top = inset, bottom = inset }})
-	local colors = C.appearance.backdropcolor
-	f:SetBackdropColor(unpack(colors))
-	f:SetBackdropBorderColor(0, 0, 0)
-
-	function f:CreateButton()
-		
-		local button = CreateFrame("Button", nil, self)
-		button:SetWidth(defaultWidth)
-		button:SetHeight(frameHeight)
-		
-		local fstr = button:CreateFontString()
-		fstr:SetJustifyH("LEFT")
-		fstr:SetJustifyV("MIDDLE")
-
-		if C.appearance.usePixelFont and (C.Client == 'zhCN' or C.Client == 'zhTW') then
-			fstr:SetFont(unpack(C.pixelFontCN))
-		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
-			fstr:SetFont(C.font.normal, 11)
-		else
-			F.SetFS(fstr)
-		end
-
-		fstr:SetPoint("LEFT", button, "LEFT", 0, 0)
-		button.Text = fstr
-		
-		function button:SetText(str)
-			button.Text:SetText(str)
-		end
-		
-		button:SetText("test")
-		
-		local ntex = button:CreateTexture()
-		ntex:SetColorTexture(1,1,1,0)
-		ntex:SetAllPoints()	
-		button:SetNormalTexture(ntex)
-		
-		local htex = button:CreateTexture()
-		htex:SetColorTexture(1,1,1,0.2)
-		htex:SetAllPoints()
-		button:SetHighlightTexture(htex)
-		
-		local ptex = button:CreateTexture()
-		ptex:SetColorTexture(1,1,1,0.4)
-		ptex:SetAllPoints()
-		button:SetPushedTexture(ptex)
-		
-		return button
-		
-	end
-
-	function f:AddButton(text, value, func)
-		
-		local bID = self.ActiveButtons+1
-		
-		local btn = self.Buttons[bID] or self:CreateButton()
-		
-		btn:SetText(text or "")
-		btn.value = value
-		btn.func = func or function() end
-		
-		btn:SetScript("OnClick", function(self, ...) self:func(...) self:GetParent():Hide() end)
-		
-		btn:ClearAllPoints()
-		if bID == 1 then
-			btn:SetPoint("TOP", self, "TOP", 0, -(frameInset/2))
-		else
-			btn:SetPoint("TOP", self.Buttons[bID-1], "BOTTOM", 0, 0)
-		end
-		
-		self.Buttons[bID] = btn
-		self.ActiveButtons = bID
-		
-		self:UpdateSize()
-
-	end
-
-	function f:UpdatePosition(frame, point, relativepoint, ofsX, ofsY)
-		
-		point, relativepoint, ofsX, ofsY = point or "TOPLEFT", relativepoint or "BOTTOMLEFT", ofsX or 0, ofsY or 0
-		
-		self:ClearAllPoints()
-		self:SetPoint(point, frame, relativepoint, ofsX, ofsY)
-		
-	end
-
-	function f:UpdateSize()
-
-		local maxButtons = self.ActiveButtons
-		local maxwidth = defaultWidth
-		
-		for i=1,maxButtons do
-		
-			local width = self.Buttons[i].Text:GetWidth()
-			if width > maxwidth then maxwidth = width end
-		
-		end
-		
-		for i=1,maxButtons do
-			self.Buttons[i]:SetWidth(maxwidth)
-		end
-		
-		local height = maxButtons * frameHeight
-		
-		self:SetSize(maxwidth+frameInset, height+frameInset)
-		
-	end
-
-	function f:Toggle(frame, point, relativepoint, ofsX, ofsY)
-		FUI:CatDropDownInit()
-		self:UpdatePosition(frame, point, relativepoint, ofsX, ofsY)
-		self:Show()
-	end
-	
-	tinsert(UISpecialFrames,f:GetName())
-
-end
-
----------------------------------------------
----------------------------------------------
-cB_Bags = {}
-cB_BagHidden = {}
-cB_CustomBags = {}
-
--- Those are default values only, change them ingame via "/cbniv":
-local optDefaults = {
-					NewItems = true,
-					Restack = true,
-					TradeGoods = true,
-					Armor = true,
-					Gem = true,
-					CoolStuff = false,
-					Junk = true,
-					ItemSets = true,
-					Consumables = true,
-					Quest = true,
-					BankBlack = true,
-					scale = 1,
-					FilterBank = true,
-					CompressEmpty = true,
-					Unlocked = true,
-					SortBags = true,
-					SortBank = true,
-					BankCustomBags = true,
-					SellJunk = true,
-					}
-
--- Those are internal settings, don't touch them at all:
-local defaults = {}
-
-local ItemSetCaption = (IsAddOnLoaded('ItemRack') and "ItemRack ") or (IsAddOnLoaded('Outfitter') and "Outfitter ") or "Item "
-local bankOpenState = false
-
-function FUI:ShowBags(...)
-	local bags = {...}
-	for i = 1, #bags do
-		local bag = bags[i]
-		if not cB_BagHidden[bag.name] then
+function module:UpdateAnchors(parent, bags)
+	local anchor = parent
+	for _, bag in ipairs(bags) do
+		if bag:GetHeight() > 45 then
 			bag:Show()
+		else
+			bag:Hide()
 		end
-	end
-end
-function FUI:HideBags(...)
-	local bags = {...}
-	for i = 1, #bags do
-		local bag = bags[i]
-		bag:Hide()
-	end
-end
-
-local LoadDefaults = function()
-	cBniv = cBniv or {}
-	for k,v in pairs(defaults) do
-		if(type(cBniv[k]) == 'nil') then cBniv[k] = v end
-	end
-	cBnivCfg = cBnivCfg or {}
-	for k,v in pairs(optDefaults) do
-		if(type(cBnivCfg[k]) == 'nil') then cBnivCfg[k] = v end
-	end
-end
-
-function FreeUI_Inventory:ADDON_LOADED(event, addon)
-
-	if (addon ~= 'FreeUI') then return end
-	self:UnregisterEvent(event)
-	
-	LoadDefaults()
-	--UIDropDownMenu_Initialize(cbNivCatDropDown, FUI.CatDropDownInit, "MENU")
-	
-	cB_filterEnabled["Armor"] = cBnivCfg.Armor
-	cB_filterEnabled["Gem"] = cBnivCfg.Gem
-	cB_filterEnabled["TradeGoods"] = cBnivCfg.TradeGoods
-	cB_filterEnabled["Junk"] = cBnivCfg.Junk
-	cB_filterEnabled["ItemSets"] = cBnivCfg.ItemSets
-	cB_filterEnabled["Consumables"] = cBnivCfg.Consumables
-	cB_filterEnabled["Quest"] = cBnivCfg.Quest
-	cBniv.BankCustomBags = cBnivCfg.BankCustomBags
-	cBniv.BagPos = true
-
-	-----------------
-	-- Frame Spawns
-	-----------------
-	local C = FUI:GetContainerClass()
-
-	-- bank bags
-	cB_Bags.bankSets		= C:New("cBniv_BankSets")
-	
-	if cBniv.BankCustomBags then
-		for _,v in ipairs(cB_CustomBags) do 
-			cB_Bags['Bank'..v.name] = C:New('Bank'..v.name) 
-			cB_existsBankBag[v.name] = true
-		end
-	end
-	
-	cB_Bags.bankArmor		= C:New("cBniv_BankArmor")
-	cB_Bags.bankGem			= C:New("cBniv_BankGem")
-	cB_Bags.bankConsumables	= C:New("cBniv_BankCons")
-	cB_Bags.bankArtifactPower	= C:New("cBniv_BankArtifactPower")
-	cB_Bags.bankBattlePet	= C:New("cBniv_BankPet")
-	cB_Bags.bankQuest		= C:New("cBniv_BankQuest")
-	cB_Bags.bankTrade		= C:New("cBniv_BankTrade")
-	cB_Bags.bankReagent		= C:New("cBniv_BankReagent")
-	cB_Bags.bank			= C:New("cBniv_Bank")
-
-	cB_Bags.bankSets		:SetMultipleFilters(true, cB_Filters.fBank, cB_Filters.fBankFilter, cB_Filters.fItemSets)
-	cB_Bags.bankArmor		:SetExtendedFilter(cB_Filters.fItemClass, "BankArmor")
-	cB_Bags.bankGem			:SetExtendedFilter(cB_Filters.fItemClass, "BankGem")
-	cB_Bags.bankConsumables :SetExtendedFilter(cB_Filters.fItemClass, "BankConsumables")
-	cB_Bags.bankArtifactPower	:SetExtendedFilter(cB_Filters.fItemClass, "BankArtifactPower")
-	cB_Bags.bankBattlePet	:SetExtendedFilter(cB_Filters.fItemClass, "BankBattlePet")
-	cB_Bags.bankQuest		:SetExtendedFilter(cB_Filters.fItemClass, "BankQuest")
-	cB_Bags.bankTrade		:SetExtendedFilter(cB_Filters.fItemClass, "BankTradeGoods")
-	cB_Bags.bankReagent		:SetMultipleFilters(true, cB_Filters.fBankReagent, cB_Filters.fHideEmpty)
-	cB_Bags.bank			:SetMultipleFilters(true, cB_Filters.fBank, cB_Filters.fHideEmpty)
-	if cBniv.BankCustomBags then
-		for _,v in ipairs(cB_CustomBags) do cB_Bags['Bank'..v.name]:SetExtendedFilter(cB_Filters.fItemClass, 'Bank'..v.name) end
-	end
-
-	-- inventory bags
-	cB_Bags.key			= C:New("cBniv_Keyring")
-	cB_Bags.bagItemSets	= C:New("cBniv_ItemSets")
-	--cB_Bags.bagStuff	= C:New("cBniv_Stuff")
-	
-	for _,v in ipairs(cB_CustomBags) do 
-		if (v.prio > 0) then 
-			cB_Bags[v.name] = C:New(v.name, { isCustomBag = true } )
-			v.active = true
-			cB_filterEnabled[v.name] = true
-		end 
-	end
-	
-	cB_Bags.bagJunk		= C:New("cBniv_Junk")
-	cB_Bags.bagNew		= C:New("cBniv_NewItems")
-
-	for _,v in ipairs(cB_CustomBags) do 
-		if (v.prio <= 0) then 
-			cB_Bags[v.name] = C:New(v.name, { isCustomBag = true } )
-			v.active = true
-			cB_filterEnabled[v.name] = true
-		end
-	end
-	cB_Bags.armor		= C:New("cBniv_Armor")
-	cB_Bags.gem			= C:New("cBniv_Gem")
-	cB_Bags.quest		= C:New("cBniv_Quest")
-	cB_Bags.consumables	= C:New("cBniv_Consumables")
-	cB_Bags.artifactpower	= C:New("cBniv_ArtifactPower")
-	cB_Bags.battlepet	= C:New("cBniv_BattlePet")
-	cB_Bags.tradegoods	= C:New("cBniv_TradeGoods")
-	cB_Bags.main		= C:New("cBniv_Bag")
-
-	cB_Bags.key			:SetExtendedFilter(cB_Filters.fItemClass, "Keyring")
-	cB_Bags.bagItemSets	:SetFilter(cB_Filters.fItemSets, true)
-	--cB_Bags.bagStuff	:SetExtendedFilter(cB_Filters.fItemClass, "Stuff")
-	cB_Bags.bagJunk		:SetExtendedFilter(cB_Filters.fItemClass, "Junk")
-	cB_Bags.bagNew		:SetFilter(cB_Filters.fNewItems, true)
-	cB_Bags.armor		:SetExtendedFilter(cB_Filters.fItemClass, "Armor")
-	cB_Bags.gem			:SetExtendedFilter(cB_Filters.fItemClass, "Gem")
-	cB_Bags.quest		:SetExtendedFilter(cB_Filters.fItemClass, "Quest")
-	cB_Bags.consumables	:SetExtendedFilter(cB_Filters.fItemClass, "Consumables")
-	cB_Bags.artifactpower	:SetExtendedFilter(cB_Filters.fItemClass, "ArtifactPower")
-	cB_Bags.battlepet	:SetExtendedFilter(cB_Filters.fItemClass, "BattlePet")
-	cB_Bags.tradegoods	:SetExtendedFilter(cB_Filters.fItemClass, "TradeGoods")
-	cB_Bags.main		:SetMultipleFilters(true, cB_Filters.fBags, cB_Filters.fHideEmpty)
-	for _,v in pairs(cB_CustomBags) do cB_Bags[v.name]:SetExtendedFilter(cB_Filters.fItemClass, v.name) end
-
-	cB_Bags.main:SetPoint("BOTTOMRIGHT", -99, 26)
-	cB_Bags.bank:SetPoint("TOPLEFT", 20, -20)
-	
-	FUI:CreateAnchors()
-	FUI:Init()
-	FUI:ToggleBagPosButtons()
-end
-
-function FUI:CreateAnchors()
-	-----------------------------------------------
-	-- Store the anchoring order:
-	-- read: "tar" is anchored to "src" in the direction denoted by "dir".
-	-----------------------------------------------
-	local function CreateAnchorInfo(src, tar, dir)
-		tar.AnchorTo = src
-		tar.AnchorDir = dir
-		if src then
-			if not src.AnchorTargets then src.AnchorTargets = {} end
-			src.AnchorTargets[tar] = true
-		end
-	end
-	
-	-- neccessary if this function is used to update the anchors:
-	for k,_ in pairs(cB_Bags) do
-		if not ((k == 'main') or (k == 'bank')) then cB_Bags[k]:ClearAllPoints() end
-		cB_Bags[k].AnchorTo = nil
-		cB_Bags[k].AnchorDir = nil
-		cB_Bags[k].AnchorTargets = nil
-	end
-
-	-- Main Anchors:
-	CreateAnchorInfo(nil, cB_Bags.main, "Bottom")
-	CreateAnchorInfo(nil, cB_Bags.bank, "Bottom")
-
-	-- Bank Anchors:
-	CreateAnchorInfo(cB_Bags.bank, cB_Bags.bankArmor, "Right")
-	CreateAnchorInfo(cB_Bags.bankArmor, cB_Bags.bankSets, "Bottom")
-	CreateAnchorInfo(cB_Bags.bankSets, cB_Bags.bankGem, "Bottom")
-	CreateAnchorInfo(cB_Bags.bankGem, cB_Bags.bankTrade, "Bottom")
-	
-	CreateAnchorInfo(cB_Bags.bank, cB_Bags.bankReagent, "Bottom")
-	CreateAnchorInfo(cB_Bags.bankReagent, cB_Bags.bankConsumables, "Bottom")
-	CreateAnchorInfo(cB_Bags.bankConsumables, cB_Bags.bankQuest, "Bottom")
-	CreateAnchorInfo(cB_Bags.bankQuest, cB_Bags.bankArtifactPower, "Bottom")
-	CreateAnchorInfo(cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet, "Bottom")
-	
-	-- Bank Custom Container Anchors:
-	if cBniv.BankCustomBags then
-		local ref = { [0] = 0, [1] = 0 }
-		for _,v in ipairs(cB_CustomBags) do
-			if v.active then
-				local c = v.col
-				if ref[c] == 0 then ref[c] = (c == 0) and cB_Bags.bankBattlePet or cB_Bags.bankTrade end
-				CreateAnchorInfo(ref[c], cB_Bags['Bank'..v.name], "Bottom")
-				ref[c] = cB_Bags['Bank'..v.name]
-			end
-		end
-	end
-	
-	-- Bag Anchors:
-	CreateAnchorInfo(cB_Bags.main, 			cB_Bags.key, 			"Bottom")
-
-	CreateAnchorInfo(cB_Bags.main, 			cB_Bags.bagItemSets, 	"Left")
-	CreateAnchorInfo(cB_Bags.bagItemSets, 	cB_Bags.armor, 			"Top")
-	CreateAnchorInfo(cB_Bags.armor, 		cB_Bags.gem, 			"Top")
-	CreateAnchorInfo(cB_Bags.gem, 			cB_Bags.artifactpower,	"Top")
-	CreateAnchorInfo(cB_Bags.artifactpower,	cB_Bags.battlepet, 		"Top")
-	--CreateAnchorInfo(cB_Bags.battlepet, 	cB_Bags.bagStuff, 		"Top")
-
-	CreateAnchorInfo(cB_Bags.main, 			cB_Bags.tradegoods, 	"Top")
-	CreateAnchorInfo(cB_Bags.tradegoods, 	cB_Bags.consumables, 	"Top")
-	CreateAnchorInfo(cB_Bags.consumables, 	cB_Bags.quest, 			"Top")
-	CreateAnchorInfo(cB_Bags.quest, 		cB_Bags.bagJunk, 		"Top")
-	CreateAnchorInfo(cB_Bags.bagJunk, 		cB_Bags.bagNew, 		"Top")
-	
-	-- Custom Container Anchors:
-	local ref = { [0] = 0, [1] = 0 }
-	for _,v in ipairs(cB_CustomBags) do
-		if v.active then
-			local c = v.col
-			if ref[c] == 0 then ref[c] = (c == 0) and --[[cB_Bags.bagStuff or]] cB_Bags.bagNew end
-			CreateAnchorInfo(ref[c], cB_Bags[v.name], "Top")
-			ref[c] = cB_Bags[v.name]
-		end
-	end
-	
-	-- Finally update all anchors:
-	for _,v in pairs(cB_Bags) do FUI:UpdateAnchors(v) end
-end
-
-function FUI:UpdateAnchors(self)
-	if not self.AnchorTargets then return end
-	for v,_ in pairs(self.AnchorTargets) do
-		local t, u = v.AnchorTo, v.AnchorDir
-		if t then
-			local h = cB_BagHidden[t.name]
-			v:ClearAllPoints()
-			if	not h		and u == "Top"		then v:SetPoint("BOTTOM", t, "TOP", 0, 9)
-			elseif	h		and u == "Top"		then v:SetPoint("BOTTOM", t, "BOTTOM")
-			elseif	not h	and u == "Bottom"	then v:SetPoint("TOP", t, "BOTTOM", 0, -9)
-			elseif	h		and u == "Bottom"	then v:SetPoint("TOP", t, "TOP")
-			elseif	u == "Left"					then v:SetPoint("BOTTOMRIGHT", t, "BOTTOMLEFT", -9, 0)
-			elseif	u == "Right"				then v:SetPoint("TOPLEFT", t, "TOPRIGHT", 9, 0) end
+		if bag:IsShown() then
+			bag:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 5)
+			anchor = bag
 		end
 	end
 end
 
-function FUI:OnOpen()
-	cB_Bags.main:Show()
-	PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
-	FUI:ShowBags(cB_Bags.armor, cB_Bags.bagNew, cB_Bags.bagItemSets, cB_Bags.gem, cB_Bags.quest, cB_Bags.consumables, cB_Bags.artifactpower, cB_Bags.battlepet, 
-					  cB_Bags.tradegoods, --[[cB_Bags.bagStuff,]] cB_Bags.bagJunk)
-	for _,v in ipairs(cB_CustomBags) do if v.active then FUI:ShowBags(cB_Bags[v.name]) end end
+function module:SetBackground()
+	F.CreateBD(self)
+	F.CreateSD(self)
 end
 
-function FUI:OnClose()
-	PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
-	FUI:HideBags(cB_Bags.main, cB_Bags.armor, cB_Bags.bagNew, cB_Bags.bagItemSets, cB_Bags.gem, cB_Bags.quest, cB_Bags.consumables, cB_Bags.artifactpower, cB_Bags.battlepet, 
-					  cB_Bags.tradegoods, --[[cB_Bags.bagStuff,]] cB_Bags.bagJunk, cB_Bags.key)
-	for _,v in ipairs(cB_CustomBags) do if v.active then FUI:HideBags(cB_Bags[v.name]) end end
+local function highlightFunction(button, match)
+	button:SetAlpha(match and 1 or .3)
 end
 
-function FUI:OnBankOpened() 
-	cB_Bags.bank:Show(); 
-	FUI:ShowBags(cB_Bags.bankSets, cB_Bags.bankReagent, cB_Bags.bankArmor, cB_Bags.bankGem, cB_Bags.bankQuest, cB_Bags.bankTrade, cB_Bags.bankConsumables, cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet) 
-	if cBniv.BankCustomBags then
-		for _,v in ipairs(cB_CustomBags) do if v.active then FUI:ShowBags(cB_Bags['Bank'..v.name]) end end
-	end
+function module:CreateInfoFrame()
+	local infoFrame = CreateFrame("Button", nil, self)
+	infoFrame:SetPoint("TOPLEFT", 10, 0)
+	infoFrame:SetSize(220, 32)
+	infoFrame.text = infoFrame:CreateFontString(nil, "OVERLAY")
+	infoFrame.text:SetFont(C.font.normal, 11)
+	infoFrame.text:SetText(SEARCH)
+	infoFrame.text:SetPoint("LEFT", -5, 2)
+
+	local search = self:SpawnPlugin("SearchBar", infoFrame)
+	search.highlightFunction = highlightFunction
+	search.isGlobal = true
+	search:SetPoint("LEFT", 0, 5)
+	F.StripTextures(search)
+	local bg = F.CreateBG(search)
+	bg:SetPoint("TOPLEFT", -5, -5)
+	bg:SetPoint("BOTTOMRIGHT", 5, 5)
+
+	local tag = self:SpawnPlugin("TagDisplay", "[currencies] [money]", infoFrame)
+	F.SetFS(tag)
+	tag:SetPoint("LEFT", infoFrame.text, "RIGHT", 6, -2)
 end
 
-function FUI:OnBankClosed()
-	FUI:HideBags(cB_Bags.bank, cB_Bags.bankSets, cB_Bags.bankReagent, cB_Bags.bankArmor, cB_Bags.bankGem, cB_Bags.bankQuest, cB_Bags.bankTrade, cB_Bags.bankConsumables, cB_Bags.bankArtifactPower, cB_Bags.bankBattlePet)
-	if cBniv.BankCustomBags then
-		for _,v in ipairs(cB_CustomBags) do if v.active then FUI:HideBags(cB_Bags['Bank'..v.name]) end end
-	end
+function module:CreateBagBar(settings, columns)
+	local bagBar = self:SpawnPlugin("BagBar", settings.Bags)
+	local width, height = bagBar:LayoutButtons("grid", columns, 5, 5, -5)
+	bagBar:SetSize(width + 10, height + 10)
+	bagBar:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", 0, -5)
+	module.SetBackground(bagBar)
+	bagBar.highlightFunction = highlightFunction
+	bagBar.isGlobal = true
+	bagBar:Hide()
+
+	self.BagBar = bagBar
 end
 
-function FUI:ToggleBagPosButtons()
-	for _,v in ipairs(cB_CustomBags) do 
-		if v.active then 
-			local b = cB_Bags[v.name]
-			
-			if cBniv.BagPos then
-				b.rightBtn:Hide()
-				b.leftBtn:Hide()
-				b.downBtn:Hide()
-				b.upBtn:Hide()
+function module:CreateCloseButton()
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Buttons\\UI-StopButton")
+	bu:SetPoint("TOPRIGHT", -5, -5)
+	bu:SetScript("OnClick", CloseAllBags)
+	F.AddTooltip(bu, "ANCHOR_TOP", CLOSE)
+
+	return bu
+end
+
+function module:CreateRestoreButton(f)
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Buttons\\UI-RefreshButton")
+	bu:SetScript("OnClick", function()
+		C["TempAnchor"][f.main:GetName()] = nil
+		C["TempAnchor"][f.bank:GetName()] = nil
+		C["TempAnchor"][f.reagent:GetName()] = nil
+		f.main:ClearAllPoints()
+		f.main:SetPoint("BOTTOMRIGHT", -100, 100)
+		f.bank:ClearAllPoints()
+		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
+		f.reagent:ClearAllPoints()
+		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
+		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
+	end)
+	F.AddTooltip(bu, "ANCHOR_TOP", RESET)
+
+	return bu
+end
+
+function module:CreateReagentButton(f)
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS")
+	bu:RegisterForClicks("AnyUp")
+	bu:SetScript("OnClick", function(_, btn)
+		if not IsReagentBankUnlocked() then
+			StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
+		else
+			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+			ReagentBankFrame:Show()
+			BankFrame.selectedTab = 2
+			f.reagent:Show()
+			f.bank:Hide()
+			if btn == "RightButton" then DepositReagentBank() end
+		end
+	end)
+	F.AddTooltip(bu, "ANCHOR_TOP", REAGENT_BANK)
+
+	return bu
+end
+
+function module:CreateBankButton(f)
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Icons\\INV_Misc_EngGizmos_17")
+	bu:SetScript("OnClick", function()
+		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+		ReagentBankFrame:Hide()
+		BankFrame.selectedTab = 1
+		f.reagent:Hide()
+		f.bank:Show()
+	end)
+	F.AddTooltip(bu, "ANCHOR_TOP", BANK)
+
+	return bu
+end
+
+function module:CreateDepositButton()
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Icons\\Spell_ChargePositive")
+	bu:SetScript("OnClick", DepositReagentBank)
+	F.AddTooltip(bu, "ANCHOR_TOP", REAGENTBANK_DEPOSIT)
+
+	return bu
+end
+
+function module:CreateBagToggle()
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Icons\\INV_Misc_Bag_08")
+	bu:SetScript("OnClick", function()
+		ToggleFrame(self.BagBar)
+		if self.BagBar:IsShown() then
+			bu.Shadow:SetBackdropBorderColor(1, 1, 1)
+			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
+		else
+			bu.Shadow:SetBackdropBorderColor(0, 0, 0)
+			PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
+		end
+	end)
+	F.AddTooltip(bu, "ANCHOR_TOP", BACKPACK_TOOLTIP)
+
+	return bu
+end
+
+function module:CreateSortButton(name)
+	local bu = F.CreateButton(self, 16, 16, true, "Interface\\Icons\\INV_Pet_Broom")
+	bu:SetScript("OnClick", function()
+		if name == "Bank" then
+			SortBankBags()
+		elseif name == "Reagent" then
+			SortReagentBankBags()
+		else
+			if C.bags.reverseSort then
+				if InCombatLockdown() then
+					UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
+				else
+					SortBags()
+					module:ReverseSort()
+				end
 			else
-				b.rightBtn:Show()
-				b.leftBtn:Show()
-				b.downBtn:Show()
-				b.upBtn:Show()
+				SortBags()
 			end
 		end
-	end
-	cBniv.BagPos = not cBniv.BagPos
+	end)
+	F.AddTooltip(bu, "ANCHOR_TOP", L["Sort"])
+
+	return bu
 end
 
-local SetFrameMovable = function(f, v)
-	f:SetMovable(true)
-	f:SetUserPlaced(true)
-	f:RegisterForClicks("LeftButton", "RightButton")
-	if v then 
-		f:SetScript("OnMouseDown", function() 
-			f:ClearAllPoints() 
-			f:StartMoving() 
-		end)
-		f:SetScript("OnMouseUp",  f.StopMovingOrSizing)
-	else
-		f:SetScript("OnMouseDown", nil)
-		f:SetScript("OnMouseUp", nil)
-	end
-end
+function module:OnLogin()
+	if not C.bags.enable then return end
 
-local DropDownInitialized
-function FUI:CatDropDownInit()
-	if DropDownInitialized then return end
-	DropDownInitialized = true
-	local info = {}--UIDropDownMenu_CreateInfo()
-  
-	local function AddInfoItem(type)
-		local caption = "cBniv_"..type
-		local t = L.bagCaptions[caption] or L[type]
-		info.text = t and t or type
-		info.value = type
-		
-		if (type == "-------------") or (type == CANCEL) then
-			info.func = nil
-		else
-			info.func = function(self) FUI:CatDropDownOnClick(self, type) end
-		end
-		
-		cbNivCatDropDown:AddButton(info.text, type, info.func)
-	end
+	local Backpack = cargBags:NewImplementation("FreeUI_Backpack")
+	Backpack:RegisterBlizzard()
+	Backpack:SetScale(C.bags.bagScale)
+	Backpack:HookScript("OnShow", function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
+	Backpack:HookScript("OnHide", function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
-	AddInfoItem("MarkAsNew")
-	AddInfoItem("MarkAsKnown")
-	AddInfoItem("-------------")
-	AddInfoItem("Armor")
-	AddInfoItem("BattlePet")
-	AddInfoItem("Consumables")
-	AddInfoItem("Quest")
-	AddInfoItem("TradeGoods")
-	AddInfoItem("Gem")
-	AddInfoItem("ArtifactPower")
-	--AddInfoItem("Stuff")
-	AddInfoItem("Junk")
-	AddInfoItem("Bag")
-	for _,v in ipairs(cB_CustomBags) do
-		if v.active then AddInfoItem(v.name) end
-	end
-	AddInfoItem("-------------")
-	AddInfoItem(CANCEL)
-	
-	hooksecurefunc(FreeUI_InventorycBniv_Bag, "Hide", function() cbNivCatDropDown:Hide() end)
-end
+	local f = {}
+	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagTradeGoods, bagQuestItem, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent = self:GetFilters()
 
-function FUI:CatDropDownOnClick(self, type)
-	local value = self.value
-	local itemName = cbNivCatDropDown.itemName
-	local itemID = cbNivCatDropDown.itemID
+	function Backpack:OnInit()
+		local MyContainer = self:GetContainerClass()
 
-	if (type == "MarkAsNew") then
-	--	table.remove(cB_KnownItems, itemID)
-		cB_KnownItems[itemID] = nil
-	elseif (type == "MarkAsKnown") then
-		cB_KnownItems[itemID] = GetItemCount(itemID)	--FUI:getItemCount(itemName)
-	else
-		cBniv_CatInfo[itemID] = value
-		if (itemID ~= nil) then cB_ItemClass[itemID] = nil end
-	end
-	FUI:UpdateBags()
-end
+		f.main = MyContainer:New("Main", {Columns = C.bags.bagColumns, Bags = "bags"})
+		f.main:SetFilter(onlyBags, true)
+		f.main:SetPoint("BOTTOMRIGHT", -100, 100)
 
-local function StatusMsg(str1, str2, data, name, short)
-	local R,G,t = '|cFFFF0000', '|cFF00FF00', ''
-	if (data ~= nil) then t = data and G..(short and 'on|r' or 'enabled|r') or R..(short and 'off|r' or 'disabled|r') end
-	t = (name and '|cFFFFFF00FreeUI:|r ' or '')..str1..t..str2
-	ChatFrame1:AddMessage(t)
-end
+		f.junk = MyContainer:New("Junk", {Columns = C.bags.bagColumns, Parent = f.main})
+		f.junk:SetFilter(bagsJunk, true)
 
-local function StatusMsgVal(str1, str2, data, name)
-	local G,t = '|cFF00FF00', ''
-	if (data ~= nil) then t = G..data..'|r' end
-	t = (name and '|cFFFFFF00FreeUI:|r ' or '')..str1..t..str2
-	ChatFrame1:AddMessage(t)
-end
+		f.azeriteItem = MyContainer:New("AzeriteItem", {Columns = C.bags.bagColumns, Parent = f.main})
+		f.azeriteItem:SetFilter(bagAzeriteItem, true)
 
-local function HandleSlash(str)
-	local str, str2 = strsplit(" ", str, 2)
-	local updateBags
-	
-	if ((str == 'addbag') or (str == 'delbag') or (str == 'movebag') or (str == 'bagprio') or (str == 'orderup') or (str == 'orderdn')) and (not str2) then
-		StatusMsg('You have to specify a name, e.g. /cbniv '..str..' TestBag.', '', nil, true, false)
-		return false
-	end
-	
-	local numBags, idx = 0, -1
-	for i,v in ipairs(cB_CustomBags) do
-		numBags = numBags + 1
-		if v.name == str2 then idx = i end
+		f.equipment = MyContainer:New("Equipment", {Columns = C.bags.bagColumns, Parent = f.main})
+		f.equipment:SetFilter(bagEquipment, true)
+
+		f.consumble = MyContainer:New("Consumble", {Columns = C.bags.bagColumns, Parent = f.main})
+		f.consumble:SetFilter(bagConsumble, true)
+
+		f.tradegoods = MyContainer:New("TradeGoods", {Columns = C.bags.bagColumns, Parent = f.main})
+		f.tradegoods:SetFilter(bagTradeGoods, true)
+
+		f.questitem = MyContainer:New("QuestItem", {Columns = C.bags.bagColumns, Parent = f.main})
+		f.questitem:SetFilter(bagQuestItem, true)
+
+		f.bank = MyContainer:New("Bank", {Columns = C.bags.bankColumns, Bags = "bank"})
+		f.bank:SetFilter(onlyBank, true)
+		f.bank:SetPoint("BOTTOMRIGHT", f.main, "BOTTOMLEFT", -10, 0)
+		f.bank:Hide()
+
+		f.bankAzeriteItem = MyContainer:New("BankAzeriteItem", {Columns = C.bags.bankColumns, Parent = f.bank})
+		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
+
+		f.bankLegendary = MyContainer:New("BankLegendary", {Columns = C.bags.bankColumns, Parent = f.bank})
+		f.bankLegendary:SetFilter(bankLegendary, true)
+
+		f.bankEquipment = MyContainer:New("BankEquipment", {Columns = C.bags.bankColumns, Parent = f.bank})
+		f.bankEquipment:SetFilter(bankEquipment, true)
+
+		f.bankConsumble = MyContainer:New("BankConsumble", {Columns = C.bags.bankColumns, Parent = f.bank})
+		f.bankConsumble:SetFilter(bankConsumble, true)
+
+		f.reagent = MyContainer:New("Reagent", {Columns = C.bags.bankColumns})
+		f.reagent:SetFilter(onlyReagent, true)
+		f.reagent:SetPoint("BOTTOMLEFT", f.bank)
+		f.reagent:Hide()
 	end
 
-	if ((str == 'delbag') or (str == 'movebag') or (str == 'bagprio') or (str == 'orderup') or (str == 'orderdn')) and (idx == -1) then
-		StatusMsg('There is no custom container named |cFF00FF00'..str2, '|r.', nil, true, false)
-		return false
+	function Backpack:OnBankOpened()
+		BankFrame:Show()
+		self:GetContainer("Bank"):Show()
 	end
-	
-	if str == 'new' then
-		cBnivCfg.NewItems = not cBnivCfg.NewItems
-		StatusMsg('The "New Items" filter is now ', '.', cBnivCfg.NewItems, true, false)
-		updateBags = true
-	elseif str == 'trade' then
-		cBnivCfg.TradeGoods = not cBnivCfg.TradeGoods
-		cB_filterEnabled["TradeGoods"] = cBnivCfg.TradeGoods
-		StatusMsg('The "Trade Goods" filter is now ', '.', cBnivCfg.TradeGoods, true, false)
-		updateBags = true
-	elseif str == 'armor' then
-		cBnivCfg.Armor = not cBnivCfg.Armor
-		cB_filterEnabled["Armor"] = cBnivCfg.Armor
-		StatusMsg('The "Armor and Weapons" filter is now ', '.', cBnivCfg.Armor, true, false)
-	elseif str == 'gem' then
-		cBnivCfg.Gem = not cBnivCfg.Gem
-		cB_filterEnabled["Gem"] = cBnivCfg.Gem
-		StatusMsg('The "Gem and Weapons" filter is now ', '.', cBnivCfg.Gem, true, false)
-		updateBags = true
-	elseif str == 'junk' then
-		cBnivCfg.Junk = not cBnivCfg.Junk
-		cB_filterEnabled["Junk"] = cBnivCfg.Junk
-		StatusMsg('The "Junk" filter is now ', '.', cBnivCfg.Junk, true, false)
-		updateBags = true
-	elseif str == 'sets' then
-		cBnivCfg.ItemSets = not cBnivCfg.ItemSets
-		cB_filterEnabled["ItemSets"] = cBnivCfg.ItemSets
-		StatusMsg('The "ItemSets" filters are now ', '.', cBnivCfg.ItemSets, true, false)
-		updateBags = true
-	elseif str == 'consumables' then
-		cBnivCfg.Consumables = not cBnivCfg.Consumables
-		cB_filterEnabled["Consumables"] = cBnivCfg.Consumables
-		StatusMsg('The "Consumables" filters are now ', '.', cBnivCfg.Consumables, true, false)
-		updateBags = true
-	elseif str == 'quest' then
-		cBnivCfg.Quest = not cBnivCfg.Quest
-		cB_filterEnabled["Quest"] = cBnivCfg.Quest
-		StatusMsg('The "Quest" filters are now ', '.', cBnivCfg.Quest, true, false)
-		updateBags = true
-	elseif str == 'bankbg' then
-		cBnivCfg.BankBlack = not cBnivCfg.BankBlack
-		StatusMsg('Black background color for the bank is now ', '. Reload your UI for this change to take effect!', cBnivCfg.BankBlack, true, false)
-	elseif str == 'bankfilter' then
-		cBnivCfg.FilterBank = not cBnivCfg.FilterBank
-		StatusMsg('Bank filtering is now ', '. Reload your UI for this change to take effect!', cBnivCfg.FilterBank, true, false)
-	elseif str == 'empty' then
-		cBnivCfg.CompressEmpty = not cBnivCfg.CompressEmpty
-		if cBnivCfg.CompressEmpty then 
-			cB_Bags.bank.DropTarget:Show()
-			cB_Bags.main.DropTarget:Show()
-			cB_Bags.main.EmptySlotCounter:Show()
-			cB_Bags.bank.EmptySlotCounter:Show()
-		else
-			cB_Bags.bank.DropTarget:Hide()
-			cB_Bags.main.DropTarget:Hide()
-			cB_Bags.main.EmptySlotCounter:Hide()
-			cB_Bags.bank.EmptySlotCounter:Hide()
-		end
-		StatusMsg('Empty bagspace compression is now ', '.', cBnivCfg.CompressEmpty, true, false)
-		updateBags = true
-	elseif str == 'unlock' then
-		cBnivCfg.Unlocked = not cBnivCfg.Unlocked
-		SetFrameMovable(cB_Bags.main, cBnivCfg.Unlocked)
-		SetFrameMovable(cB_Bags.bank, cBnivCfg.Unlocked)
-		StatusMsg('Movable bags are now ', '.', cBnivCfg.Unlocked, true, false)
-		updateBags = true
-	elseif str == 'sortbags' then
-		cBnivCfg.SortBags = not cBnivCfg.SortBags
-		StatusMsg('Auto sorting bags is now ', '. Reload your UI for this change to take effect!', cBnivCfg.SortBags, true, false)
-	elseif str == 'sortbank' then
-		cBnivCfg.SortBank = not cBnivCfg.SortBank
-		StatusMsg('Auto sorting bank is now ', '. Reload your UI for this change to take effect!', cBnivCfg.SortBank, true, false)
 
-	elseif str == 'scale' then
-		local t = tonumber(str2)
-		if t then
-			cBnivCfg.scale = t
-			for _,v in pairs(cB_Bags) do v:SetScale(cBnivCfg.scale) end
-			StatusMsgVal('Overall scale has been set to ', '.', cBnivCfg.scale, true)
-		else
-			StatusMsg('You have to specify a value, e.g. /cbniv scale 0.8.', '', nil, true, false)
+	function Backpack:OnBankClosed()
+		BankFrame.selectedTab = 1
+		BankFrame:Hide()
+		self:GetContainer("Bank"):Hide()
+		self:GetContainer("Reagent"):Hide()
+		ReagentBankFrame:Hide()
+	end
+
+	local MyButton = Backpack:GetItemButtonClass()
+	MyButton:Scaffold("Default")
+
+	local iconSize = C.bags.itemSlotSize
+	function MyButton:OnCreate()
+		self:SetNormalTexture(nil)
+		self:SetPushedTexture(nil)
+		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		self:SetSize(iconSize, iconSize)
+
+		self.Icon:SetAllPoints()
+		self.Icon:SetTexCoord(unpack(C.TexCoord))
+		self.Count:SetPoint("BOTTOMRIGHT", 2, 2)
+		F.SetFS(self.Count)
+
+		self.BG = F.CreateBG(self)
+		self.BG:SetVertexColor(0, 0, 0, .25)
+
+		--[[self.junkIcon = self:CreateTexture(nil, "ARTWORK")
+		self.junkIcon:SetAtlas("bags-junkcoin")
+		self.junkIcon:SetSize(20, 20)
+		self.junkIcon:SetPoint("TOPRIGHT", 1, 0)]]
+
+		self.Quest = self:CreateFontString(nil, "OVERLAY")
+		F.SetFS(self.Quest)
+		self.Quest:SetText("!")
+		self.Quest:SetPoint("TOPLEFT", 2, -2)
+
+		self.Azerite = self:CreateTexture(nil, "ARTWORK")
+		self.Azerite:SetAtlas("AzeriteIconFrame")
+		self.Azerite:SetAllPoints()
+
+		if C.bags.itemLevel then
+			self.iLvl = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, nil)
+			self.iLvl:SetPoint("BOTTOMRIGHT", 2, 2)
 		end
 
-	elseif str == 'addbag' then
-		if not bagExists then
-			local i = numBags + 1
-			cB_CustomBags[i] = { name = str2, col = 0, prio = 1, active = false }
-			StatusMsg('The new custom container has been created. Reload your UI for this change to take effect!', '', nil, true, false)
+		local flash = self:CreateTexture(nil, "ARTWORK")
+		flash:SetTexture(C.NewItemFlash)
+		flash:SetPoint("TOPLEFT", -20, 20)
+		flash:SetPoint("BOTTOMRIGHT", 20, -20)
+		flash:SetBlendMode("ADD")
+		flash:SetAlpha(0)
+		local anim = flash:CreateAnimationGroup()
+		anim:SetLooping("REPEAT")
+		anim.rota = anim:CreateAnimation("Rotation")
+		anim.rota:SetDuration(1)
+		anim.rota:SetDegrees(-90)
+		anim.fader = anim:CreateAnimation("Alpha")
+		anim.fader:SetFromAlpha(0)
+		anim.fader:SetToAlpha(.5)
+		anim.fader:SetDuration(.5)
+		anim.fader:SetSmoothing("OUT")
+		anim.fader2 = anim:CreateAnimation("Alpha")
+		anim.fader2:SetStartDelay(.5)
+		anim.fader2:SetFromAlpha(.5)
+		anim.fader2:SetToAlpha(0)
+		anim.fader2:SetDuration(1.2)
+		anim.fader2:SetSmoothing("OUT")
+		self:HookScript("OnHide", function() if anim:IsPlaying() then anim:Stop() end end)
+		self.anim = anim
+
+		self.ShowNewItems = true
+	end
+
+	function MyButton:OnEnter()
+		if self.ShowNewItems then
+			if self.anim:IsPlaying() then self.anim:Stop() end
+		end
+	end
+
+	function MyButton:OnUpdate(item)
+		--[[if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
+			self.junkIcon:SetAlpha(1)
 		else
-			StatusMsg('A custom container with this name already exists.', '', nil, true, false)
+			self.junkIcon:SetAlpha(0)
+		end]]
+
+		if item.link and C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) then
+			self.Azerite:SetAlpha(1)
+		else
+			self.Azerite:SetAlpha(0)
 		end
 
-	elseif str == 'delbag' then
-		table.remove(cB_CustomBags, idx)
-		for k,v in pairs(cBniv_CatInfo) do
-			if v==str2 then
-				cBniv_CatInfo[k] = nil
-			end
-		end
-		StatusMsg('The specified custom container has been removed. Reload your UI for this change to take effect!', '', nil, true, false)
-		
-	elseif str == 'listbags' then
-		if numBags == 0 then
-			StatusMsgVal('There are ', ' custom containers.', 0, true, false)
-		else
-			StatusMsgVal('There are ', ' custom containers:', numBags, true, false)
-			for i,v in ipairs(cB_CustomBags) do 
-				StatusMsg(i..'. '..v.name..' (|cFF00FF00'..((v.col == 0) and 'right' or 'left')..'|r column, |cFF00FF00'..((v.prio == 1) and 'high' or 'low')..'|r priority)', '', nil, true, false)
+		if C.bags.itemLevel then
+			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_TABARD" and item.equipLoc ~= "INVTYPE_BODY" and item.equipLoc ~= "INVTYPE_BAG")) then
+				local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
+				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
+				self.iLvl:SetText(level)
+				self.iLvl:SetTextColor(color.r, color.g, color.b)
+			else
+				self.iLvl:SetText("")
 			end
 		end
 
-	elseif str == 'bagpos' then
-		FUI:ToggleBagPosButtons()
-		StatusMsg('Custom container movers are now ', '.', cBniv.BagPos, true, false)
-
-	elseif str == 'bagprio' then
-		local tprio = (cB_CustomBags[idx].prio + 1) % 2
-		cB_CustomBags[idx].prio = tprio 
-		StatusMsg('The priority of the specified custom container has been set to |cFF00FF00'..((tprio == 1) and 'high' or 'low')..'|r. Reload your UI for this change to take effect!', '', nil, true, false)
-
-	elseif str == 'bankbags' then
-		cBnivCfg.BankCustomBags = not cBnivCfg.BankCustomBags
-		StatusMsg('Display of custom containers in the bank is now ', '. Reload your UI for this change to take effect!', cBnivCfg.BankCustomBags, true, false)
-
-	else
-		ChatFrame1:AddMessage('|cFFFFFF00FreeUI:|r')
-		StatusMsg('(', ') |cFFFFFF00unlock|r - Toggle unlocked status.', cBnivCfg.Unlocked, false, true)
-		StatusMsg('(', ') |cFFFFFF00new|r - Toggle the "New Items" filter.', cBnivCfg.NewItems, false, true)
-		StatusMsg('(', ') |cFFFFFF00trade|r - Toggle the "Trade Goods" filter .', cBnivCfg.TradeGoods, false, true)
-		StatusMsg('(', ') |cFFFFFF00armor|r - Toggle the "Armor and Weapons" filter .', cBnivCfg.Armor, false, true)
-		StatusMsg('(', ') |cFFFFFF00gem|r - Toggle the "Gem" filter .', cBnivCfg.Gem, false, true)
-		StatusMsg('(', ') |cFFFFFF00junk|r - Toggle the "Junk" filter.', cBnivCfg.Junk, false, true)
-		StatusMsg('(', ') |cFFFFFF00sets|r - Toggle the "ItemSets" filters.', cBnivCfg.ItemSets, false, true)
-		StatusMsg('(', ') |cFFFFFF00consumables|r - Toggle the "Consumables" filters.', cBnivCfg.Consumables, false, true)
-		StatusMsg('(', ') |cFFFFFF00quest|r - Toggle the "Quest" filters.', cBnivCfg.Quest, false, true)
-		StatusMsg('(', ') |cFFFFFF00bankbg|r - Toggle black bank background color.', cBnivCfg.BankBlack, false, true)
-		StatusMsg('(', ') |cFFFFFF00bankfilter|r - Toggle bank filtering.', cBnivCfg.FilterBank, false, true)
-		StatusMsg('(', ') |cFFFFFF00empty|r - Toggle empty bagspace compression.', cBnivCfg.CompressEmpty, false, true)
-		StatusMsg('(', ') |cFFFFFF00sortbags|r - Toggle auto sorting the bags.', cBnivCfg.SortBags, false, true)
-		StatusMsg('(', ') |cFFFFFF00sortbank|r - Toggle auto sorting the bank.', cBnivCfg.SortBank, false, true)
-		StatusMsgVal('(', ') |cFFFFFF00scale|r [number] - Set the overall scale.', cBnivCfg.scale, false)
-		StatusMsg('', ' |cFFFFFF00addbag|r [name] - Add a custom container.')
-		StatusMsg('', ' |cFFFFFF00delbag|r [name] - Remove a custom container.')
-		StatusMsg('', ' |cFFFFFF00listbags|r - List all custom containers.')
-		StatusMsg('', ' |cFFFFFF00bagpos|r - Toggle buttons to move custom containers (up, down, left, right).')
-		StatusMsg('', " |cFFFFFF00bagprio|r [name] - Changes the filter priority of a custom container. High priority prevents items from being classified as junk or new, low priority doesn't.")
-		StatusMsg('(', ') |cFFFFFF00bankbags|r - Show custom containers in the bank too.', cBnivCfg.BankCustomBags, false, true)
-	end
-	if updateBags then
-		FUI:UpdateBags()
-	end
-end
-
-SLASH_CBNIV1 = '/cbniv'
-SlashCmdList.CBNIV = HandleSlash
-
-local buttonCollector = {}
-local Event =  CreateFrame('Frame', nil)
-Event:RegisterEvent("PLAYER_ENTERING_WORLD")
-Event:SetScript('OnEvent', function(self, event, ...)
-	if event == "PLAYER_ENTERING_WORLD" then
-		for bagID = -3, 11 do
-			local slots = GetContainerNumSlots(bagID)
-			for slotID=1,slots do
-				local button = FUI.buttonClass:New(bagID, slotID)
-				buttonCollector[#buttonCollector+1] = button
-				FUI:SetButton(bagID, slotID, nil)
+		if self.ShowNewItems then
+			if C_NewItems.IsNewItem(item.bagID, item.slotID) then
+				self.anim:Play()
+			else
+				if self.anim:IsPlaying() then self.anim:Stop() end
 			end
 		end
-		for i,button in pairs(buttonCollector) do
-			if button.container then
-				button.container:RemoveButton(button)
-			end
-			button:Free()
-		end
-		FUI:UpdateBags()
+	end
 
-		if IsReagentBankUnlocked() then
-			FreeUI_InventorycBniv_Bank.reagentBtn:Show()
+	function MyButton:OnUpdateQuest(item)
+		--if item.questID and not item.questActive then
+		if item.questID then
+			self.Quest:SetAlpha(1)
+			self.Quest:SetTextColor(.8, .8, 0, 1)
 		else
-			FreeUI_InventorycBniv_Bank.reagentBtn:Hide()
-			local buyReagent = CreateFrame("Button", nil, FreeUI_InventorycBniv_BankReagent, "UIPanelButtonTemplate")
-			buyReagent:SetText(BANKSLOTPURCHASE)
-			buyReagent:SetWidth(buyReagent:GetTextWidth() + 20)
-			buyReagent:SetPoint("CENTER", FreeUI_InventorycBniv_BankReagent, 0, 0)
-			buyReagent:SetScript("OnEnter", function(self)
-				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-				GameTooltip:AddLine(REAGENT_BANK_HELP, 1, 1, 1, true)
-				GameTooltip:Show()
-			end)
-			buyReagent:SetScript("OnLeave", function()
-				GameTooltip:Hide()
-			end)
-			buyReagent:SetScript("OnClick", function()
-				--print("Reagent Bank!!!")
-				StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
-			end)
-			buyReagent:SetScript("OnEvent", function(...)
-				--print("OnReagentPurchase", ...)
-				buyReagent:UnregisterEvent("REAGENTBANK_PURCHASED")
-				FreeUI_InventorycBniv_Bank.reagentBtn:Show()
-				buyReagent:Hide()
-			end)
-
-			F.Reskin(buyReagent)
-
-			buyReagent:RegisterEvent("REAGENTBANK_PURCHASED")
+			self.Quest:SetAlpha(0)
 		end
 
-		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	end
-end)
-
-function FreeUI_Inventory:ResetItemClass()
-	for k,v in pairs(cB_ItemClass) do
-		if v == "NoClass" then
-			cB_ItemClass[k] = nil
+		if item.questID or item.isQuestItem then
+			self.BG:SetVertexColor(.8, .8, 0)
+		elseif item.rarity and item.rarity > -1 then
+			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
+			self.BG:SetVertexColor(color.r, color.g, color.b, 1)
+		else
+			self.BG:SetVertexColor(0, 0, 0, .25)
 		end
 	end
-	FUI:UpdateBags()
+
+	local MyContainer = Backpack:GetContainerClass()
+	function MyContainer:OnContentsChanged()
+		self:SortButtons("bagSlot")
+
+		local offset = 38
+		local width, height = self:LayoutButtons("grid", self.Settings.Columns, 4, 4, -offset + 4)
+		self:SetSize(width + 8, height + offset)
+
+		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.tradegoods, f.questitem, f.junk})
+		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble})
+	end
+
+	function MyContainer:OnCreate(name, settings)
+		self.Settings = settings
+		self:SetParent(settings.Parent or Backpack)
+		self:SetFrameStrata("HIGH")
+		self:SetClampedToScreen(true)
+		module.SetBackground(self)
+		F.CreateMF(self, settings.Parent, true)
+
+		local label
+		if strmatch(name, "AzeriteItem$") then
+			label = L["AzeriteArmor"]
+		elseif strmatch(name, "Equipment$") then
+			if C.bags.itemSetFilter then
+				label = L["EquipementSet"]
+			else
+				label = BAG_FILTER_EQUIPMENT
+			end
+		elseif name == "BankLegendary" then
+			label = LOOT_JOURNAL_LEGENDARIES
+		elseif strmatch(name, "Consumble$") then
+			label = BAG_FILTER_CONSUMABLES
+		elseif strmatch(name, "TradeGoods$") then
+			label = BAG_FILTER_TRADE_GOODS
+		elseif strmatch(name, "QuestItem$") then
+			label = AUCTION_CATEGORY_QUEST_ITEMS
+		elseif strmatch(name, "Junk") then
+			label = BAG_FILTER_JUNK
+		end
+		if label then
+			self.cat = self:CreateFontString(nil, "OVERLAY")
+			self.cat:SetFont(C.font.normal, 11)
+			self.cat:SetText(label)
+			self.cat:SetPoint("TOPLEFT", 5, -8)
+			return
+		end
+
+		module.CreateInfoFrame(self)
+
+		local buttons = {}
+		buttons[1] = module.CreateCloseButton(self)
+		if name == "Main" then
+			module.CreateBagBar(self, settings, 4)
+			buttons[2] = module.CreateRestoreButton(self, f)
+			buttons[3] = module.CreateBagToggle(self)
+		elseif name == "Bank" then
+			module.CreateBagBar(self, settings, 7)
+			buttons[2] = module.CreateReagentButton(self, f)
+			buttons[3] = module.CreateBagToggle(self)
+		elseif name == "Reagent" then
+			buttons[2] = module.CreateBankButton(self, f)
+			buttons[3] = module.CreateDepositButton(self)
+		end
+		buttons[4] = module.CreateSortButton(self, name)
+
+		for i = 1, 4 do
+			local bu = buttons[i]
+			if i == 1 then
+				bu:SetPoint("TOPRIGHT", -5, -5)
+			else
+				bu:SetPoint("RIGHT", buttons[i-1], "LEFT", -5, 0)
+			end
+		end
+
+		self:HookScript("OnShow", F.RestoreMF)
+	end
+
+	local BagButton = Backpack:GetClass("BagButton", true, "BagButton")
+	function BagButton:OnCreate()
+		self:SetNormalTexture(nil)
+		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		self:SetPushedTexture(nil)
+		self:SetCheckedTexture(nil)
+
+		self:SetSize(iconSize, iconSize)
+
+		self.BG = F.CreateBG(self)
+
+		self.Icon:SetAllPoints()
+		self.Icon:SetTexCoord(unpack(C.TexCoord))
+	end
+
+	function BagButton:OnUpdate()
+		local id = GetInventoryItemID("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
+		local quality = id and select(3, GetItemInfo(id)) or 0
+		if quality == 1 then quality = 0 end
+		local color = BAG_ITEM_QUALITY_COLORS[quality]
+		if self:GetChecked() then
+			self.BG:SetVertexColor(color.r, color.g, color.b)
+		else
+			self.BG:SetVertexColor(0, 0, 0)
+		end
+	end
+
+	-- Fixes
+	ToggleAllBags()
+	ToggleAllBags()
+	BankFrame.GetRight = function() return f.bank:GetRight() end
+
+	SetSortBagsRightToLeft(not C.bags.reverseSort)
+	SetInsertItemsLeftToRight(false)
 end

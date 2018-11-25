@@ -178,13 +178,16 @@ C['reminder'] = {
 
 C['bags'] = {
 	['enable'] = true,
-		['itemSlotSize'] = 38,
-		['bagColumnsSmall'] = 8,
-		['bagColumnsLarge'] = 8,
-		['bagLargeItemCount'] = 64,
-		['bankColumnsSmall'] = 10,
-		['bankColumnsLarge'] = 12,
-		['bankLargeItemCount'] = 96,
+		['bagScale'] = 1,
+		['itemSlotSize'] = 32,
+		['bagColumns'] = 12,
+		['bankColumns'] = 12,
+		['reverseSort'] = true,
+		['itemLevel'] = true,
+		['itemFilter'] = true,
+			['itemSetFilter'] = false,
+			['tradeGoodsFilter'] = true,
+			['questItemFilter'] = true,
 }
 
 C['infoBar'] = {
