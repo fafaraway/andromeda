@@ -247,31 +247,31 @@ local function CreateHealthPrediction(self)
 	if not C.unitframes.prediction then return end
 
 	local mhpb = CreateFrame('StatusBar', nil, self.Health)
-    mhpb:SetPoint('TOP')
-    mhpb:SetPoint('BOTTOM')
-    mhpb:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
-    mhpb:SetStatusBarTexture(C.media.sbTex)
-    mhpb:SetStatusBarColor(0, .8, .8, 1)
-    mhpb:SetWidth(200)
+	mhpb:SetPoint('TOP')
+	mhpb:SetPoint('BOTTOM')
+	mhpb:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
+	mhpb:SetStatusBarTexture(C.media.sbTex)
+	mhpb:SetStatusBarColor(0, .8, .8, .5)
+	mhpb:SetWidth(200)
 
-    local ohpb = CreateFrame('StatusBar', nil, self.Health)
-    ohpb:SetPoint('TOP')
-    ohpb:SetPoint('BOTTOM')
-    ohpb:SetPoint('LEFT', mhpb:GetStatusBarTexture(), 'RIGHT')
-    ohpb:SetStatusBarTexture(C.media.sbTex)
-    ohpb:SetStatusBarColor(0, .6, .6, 1)
-    ohpb:SetWidth(200)
+	local ohpb = CreateFrame('StatusBar', nil, self.Health)
+	ohpb:SetPoint('TOP')
+	ohpb:SetPoint('BOTTOM')
+	ohpb:SetPoint('LEFT', mhpb:GetStatusBarTexture(), 'RIGHT')
+	ohpb:SetStatusBarTexture(C.media.sbTex)
+	ohpb:SetStatusBarColor(0, .6, .6, .5)
+	ohpb:SetWidth(200)
 
-    local oa = self.Health:CreateTexture(nil, 'OVERLAY')
-    oag:SetPoint('TOP', 0, 2)
-    oag:SetPoint('BOTTOM', 0, -2)
-    oag:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
-    oag:SetWidth(10)
+	local oa = self.Health:CreateTexture(nil, 'OVERLAY')
+	oa:SetPoint('TOP', 0, 2)
+	oa:SetPoint('BOTTOM', 0, -2)
+	oa:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
+	oa:SetWidth(16)
 
 	self.HealthPrediction = {
 		myBar = mhpb,
 		otherBar = ohpb,
-		overAbsorb = oag,
+		overAbsorb = oa,
 		maxOverflow = 1,
 		frequentUpdates = true,
 	}
