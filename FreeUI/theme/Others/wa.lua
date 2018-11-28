@@ -61,7 +61,7 @@ local function WA()
 		if regions.regionType == "icon" then
 			Skin_WeakAuras(regions.region, regions.regionType)
 			regions.region.cooldown:SetDrawEdge(false)
-			regions.region.cooldown:SetSwipeColor(0, 0, 0, .45)
+			regions.region.cooldown:SetSwipeColor(0, 0, 0, .3)
 		end
 	end
 end

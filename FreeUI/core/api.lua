@@ -136,7 +136,7 @@ function F:CreateBG(offset)
 	bg:SetPoint("TOPLEFT", self, -offset, offset)
 	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
 	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0, C.appearance.alpha)
+	bg:SetVertexColor(0, 0, 0, 1)
 
 	return bg
 end

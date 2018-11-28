@@ -100,6 +100,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 		local bu = _G[button..i]
 		local it = _G[button..i.."Item"]
 		local ic = _G[button..i.."ItemIconTexture"]
+		local co = _G[button..i.."ItemCount"]
 
 		if bu and it then
 			it:SetNormalTexture("")
@@ -119,6 +120,10 @@ C.themes["Blizzard_AuctionUI"] = function()
 			hl:ClearAllPoints()
 			hl:SetPoint("TOPLEFT", 0, -1)
 			hl:SetPoint("BOTTOMRIGHT", -1, 6)
+
+			co:SetPoint("BOTTOMRIGHT", 2, 2)
+
+			F.SetFS(co)
 		end
 	end
 

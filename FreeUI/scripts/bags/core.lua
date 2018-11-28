@@ -61,13 +61,13 @@ end
 
 function module:CreateInfoFrame()
 	local infoFrame = CreateFrame('Button', nil, self)
-	infoFrame:SetPoint('TOPLEFT', 10, 0)
-	infoFrame:SetSize(220, 32)
+	infoFrame:SetPoint('TOPLEFT', 10, 2)
+	infoFrame:SetSize(220, 26)
 
 	local searchIcon = self:CreateTexture(nil, 'ARTWORK')
 	searchIcon:SetTexture('Interface\\AddOns\\FreeUI\\assets\\Search')
 	searchIcon:SetVertexColor(.8, .8, .8)
-	searchIcon:SetPoint('TOPLEFT', self, 'TOPLEFT', 6, -8)
+	searchIcon:SetPoint('TOPLEFT', self, 'TOPLEFT', 6, -2)
 	searchIcon:SetSize(16, 16)
 
 	local search = self:SpawnPlugin('SearchBar', infoFrame)
@@ -408,7 +408,7 @@ function module:OnLogin()
 	function MyContainer:OnContentsChanged()
 		self:SortButtons('bagSlot')
 
-		local offset = 38
+		local offset = 26
 		local width, height = self:LayoutButtons('grid', self.Settings.Columns, 5, 5, -offset + 5)
 		self:SetSize(width + 10, height + offset)
 
@@ -446,9 +446,9 @@ function module:OnLogin()
 		end
 		if label then
 			self.cat = self:CreateFontString(nil, 'OVERLAY')
-			self.cat:SetFont(C.font.normal, 11)
+			self.cat:SetFont(C.font.normal, 11, "OUTLINE")
 			self.cat:SetText(label)
-			self.cat:SetPoint('TOPLEFT', 5, -8)
+			self.cat:SetPoint('TOPLEFT', 5, -4)
 			return
 		end
 
@@ -473,7 +473,7 @@ function module:OnLogin()
 		for i = 1, 4 do
 			local bu = buttons[i]
 			if i == 1 then
-				bu:SetPoint('TOPRIGHT', -5, -5)
+				bu:SetPoint('TOPRIGHT', -5, -2)
 			else
 				bu:SetPoint('RIGHT', buttons[i-1], 'LEFT', -5, 0)
 			end

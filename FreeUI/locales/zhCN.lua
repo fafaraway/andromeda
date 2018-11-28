@@ -28,7 +28,7 @@ L['BotToy'] 			= '<注意>：%s 放置了 %s！'
 L['Feast'] 				= '<注意>：%s 摆出了 %s！'
 L['Portal'] 			= '<注意>：%s 开启了 %s！'
 L['RefreshmentTable'] 	= '<注意>：%s 施放了 %s！'
-L['RitualOfSummoning'] 	= '<注意>：%s 施放了 %s！'
+L['RitualOfSummoning'] 	= '<注意>：%s 正在施放 %s！'
 L['SoulWell'] 			= '<注意>：%s 施放了 %s！'
 
 L['ResNoTarget'] 		= '<注意>：%s 使用了 %s！'
