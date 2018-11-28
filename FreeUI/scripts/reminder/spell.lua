@@ -24,6 +24,10 @@ local FeastSpells = {
 	[156525] = true,  -- 海帆盛宴
 	[156526] = true,  -- 船长盛宴佳肴
 	[162519] = true,  -- 秘法药锅
+	[185709] = true,  -- 焦糖鱼宴
+	[259409] = true,  -- 海帆盛宴
+	[259410] = true,  -- 船长盛宴
+	[276972] = true,  -- 秘法药锅
 }
 
 local Bots = {
@@ -84,33 +88,28 @@ function module:Spell()
 
 		local srcName = srcName:gsub('%-[^|]+', '')
 		if subEvent == 'SPELL_CAST_SUCCESS' then
-
 			if FeastSpells[spellID] then 
 				SendChatMessage(format(L['Feast'], srcName, GetSpellLink(spellID)), say)
-			end
-
-			if spellID == 43987 then
+			elseif spellID == 43987 then -- Conjure Refreshment Table
 				SendChatMessage(format(L['RefreshmentTable'], srcName, GetSpellLink(spellID)), say)
-
-			elseif spellID == 698 then
+			elseif spellID == 698 then -- Ritual of Summoning
 				SendChatMessage(format(L['RitualOfSummoning'], srcName, GetSpellLink(spellID)), say)
+			elseif spellID == 226241 then -- 宁神圣典
+				SendChatMessage(format(L['Feast'], srcName, GetSpellLink(spellID)), say)
+			elseif spellID == 256230 then -- 静心圣典
+				SendChatMessage(format(L['Feast'], srcName, GetSpellLink(spellID)), say)
 			end
 		elseif subEvent == 'SPELL_SUMMON' then
-
 			if Bots[spellID] then
 				SendChatMessage(format(L['BotToy'], srcName, GetSpellLink(spellID)), say)
 			end
 		elseif subEvent == 'SPELL_CREATE' then
-
 			if spellID == 54710 then -- MOLL-E
 				SendChatMessage(format(L['BotToy'], srcName, GetSpellLink(spellID)), say)
-
-			elseif spellID == 29893 then
+			elseif spellID == 29893 then -- Create Soulwell
 				SendChatMessage(format(L['SoulWell'], srcName, GetSpellLink(spellID)), say)
-
 			elseif Toys[spellID] then
 				SendChatMessage(format(L['BotToy'], srcName, GetSpellLink(spellID)), say)
-
 			elseif PortalSpells[spellID] then
 				SendChatMessage(format(L['Portal'], srcName, GetSpellLink(spellID)), say)
 			end
