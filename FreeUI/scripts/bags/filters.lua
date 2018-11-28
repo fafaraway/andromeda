@@ -58,11 +58,13 @@ local function isItemLegendary(item)
 end
 
 local function isItemTrade(item)
+	if not C.bags.itemFilter then return end
 	if not C.bags.tradeGoodsFilter then return end
 	return item.classID == LE_ITEM_CLASS_TRADEGOODS
 end
 
 local function isItemQuest(item)
+	if not C.bags.itemFilter then return end
 	if not C.bags.questItemFilter then return end
 	return item.classID == LE_ITEM_CLASS_QUESTITEM
 end
