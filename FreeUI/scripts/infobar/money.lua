@@ -73,6 +73,14 @@ FreeUIMoneyButton = module:addButton("", module.POSITION_RIGHT, function(self, b
 		else
 			CloseAllBags()
 		end
+	elseif button == "RightButton" then
+		wipe(FreeUIGlobalConfig[C.Realm])
+		if FreeUIGlobalConfig[C.Realm] == nil then FreeUIGlobalConfig[C.Realm] = {} end
+		if FreeUIGlobalConfig[C.Realm].gold == nil then FreeUIGlobalConfig[C.Realm].gold = {} end
+		if FreeUIGlobalConfig[C.Realm].class == nil then FreeUIGlobalConfig[C.Realm].class = {} end
+		FreeUIGlobalConfig[C.Realm].class[C.PlayerName] = select(2, UnitClass("player"))
+		if FreeUIGlobalConfig[C.Realm].faction == nil then FreeUIGlobalConfig[C.Realm].faction = {} end
+		FreeUIGlobalConfig[C.Realm].faction[C.PlayerName] = UnitFactionGroup("player")
 	end
 end)
 
@@ -164,6 +172,7 @@ FreeUIMoneyButton:HookScript("OnEnter", function()
 	end
 	GameTooltip:AddDoubleLine(" ", C.LineString)
 	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["OpenBag"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.RightButton..L["ResetGold"], 1,1,1, .9, .82, .62)
 	GameTooltip:Show()
 end)
 
