@@ -56,7 +56,7 @@ local function WA()
 		Skin_WeakAuras(region, "aurabar")
 	end
 
-	for weakAura, _ in pairs(WeakAuras.regions) do
+	for weakAura in pairs(WeakAuras.regions) do
 		local regions = WeakAuras.regions[weakAura]
 		if regions.regionType == "icon" then
 			Skin_WeakAuras(regions.region, regions.regionType)

@@ -509,9 +509,9 @@ local function addonStyled(_, addon)
 		end
 
 		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
+			self.Border:SetAlpha(0)
 			if not self.tipStyled then
 				if self.glow then self.glow:Hide() end
-				self.Border:Hide()
 				self.Icon:SetTexCoord(unpack(C.TexCoord))
 				self.tipStyled = true
 			end
