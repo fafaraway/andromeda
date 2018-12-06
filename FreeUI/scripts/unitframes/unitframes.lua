@@ -246,20 +246,22 @@ end
 local function CreateHealthPrediction(self)
 	if not C.unitframes.prediction then return end
 
+	local sbTex = 'Interface\\AddOns\\FreeUI\\assets\\statusbar_striped'
+
 	local mhpb = CreateFrame('StatusBar', nil, self.Health)
 	mhpb:SetPoint('TOP')
 	mhpb:SetPoint('BOTTOM')
 	mhpb:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
-	mhpb:SetStatusBarTexture(C.media.sbTex)
-	mhpb:SetStatusBarColor(0, .8, .8, .5)
+	mhpb:SetStatusBarTexture(sbTex)
+	mhpb:SetStatusBarColor(0, .8, .8, .6)
 	mhpb:SetWidth(200)
 
 	local ohpb = CreateFrame('StatusBar', nil, self.Health)
 	ohpb:SetPoint('TOP')
 	ohpb:SetPoint('BOTTOM')
 	ohpb:SetPoint('LEFT', mhpb:GetStatusBarTexture(), 'RIGHT')
-	ohpb:SetStatusBarTexture(C.media.sbTex)
-	ohpb:SetStatusBarColor(0, .6, .6, .5)
+	ohpb:SetStatusBarTexture(sbTex)
+	ohpb:SetStatusBarColor(0, .6, .6, .6)
 	ohpb:SetWidth(200)
 
 	local oa = self.Health:CreateTexture(nil, 'OVERLAY')
