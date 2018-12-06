@@ -2,15 +2,14 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("Theme")
 
 local function WA()
-
 	local function Skin_WeakAuras(f, fType)
 		if not f or (f and f.styled) then return end
 		if fType == "icon" then
 			if not f.styled then
 				f.icon:SetTexCoord(unpack(C.TexCoord))
 				f.icon.SetTexCoord = F.Dummy
-				local bg = F.CreateBDFrame(f.icon)
-				F.CreateSD(bg)
+				F.CreateBDFrame(f.icon)
+				F.CreateSD(f.icon)
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
@@ -20,8 +19,8 @@ local function WA()
 				f.icon.SetTexCoord = F.Dummy
 				if f.icon then
 					f.iconFrame:SetAllPoints(f.icon)
-					local bg = F.CreateBDFrame(f.icon)
-					F.CreateSD(bg)
+					F.CreateBDFrame(f.icon)
+					F.CreateSD(f.icon)
 				end
 				f.styled = true
 			end
@@ -35,7 +34,6 @@ local function WA()
 	regionTypes.icon.create = function(parent, data)
 		local region = Create_Icon(parent, data)
 		Skin_WeakAuras(region, "icon")
-
 		return region
 	end
 
@@ -48,7 +46,6 @@ local function WA()
 	regionTypes.icon.modify = function(parent, region, data)
 		Modify_Icon(parent, region, data)
 		Skin_WeakAuras(region, "icon")
-
 	end
 
 	regionTypes.aurabar.modify = function(parent, region, data)
@@ -60,8 +57,6 @@ local function WA()
 		local regions = WeakAuras.regions[weakAura]
 		if regions.regionType == "icon" then
 			Skin_WeakAuras(regions.region, regions.regionType)
-			regions.region.cooldown:SetDrawEdge(false)
-			regions.region.cooldown:SetSwipeColor(0, 0, 0, .3)
 		end
 	end
 end

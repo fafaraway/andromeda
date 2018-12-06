@@ -191,6 +191,9 @@ function module:ItemLevel()
 			PaperDollFrame_SetItemLevel(CharacterStatsPane.ItemLevelFrame, unit)
 
 			CharacterStatsPane.ItemLevelFrame.Value:SetText(itemLevel)
+			CharacterStatsPane.ItemLevelFrame.Value:SetFont("Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf", 20)
+			CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
+			CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(2, -2)
 		end
 	end)
 end

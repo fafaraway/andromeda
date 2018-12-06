@@ -79,7 +79,7 @@ function F:CreateTex()
 	self.Tex:SetTexture(C.media.bgTex, true, true)
 	self.Tex:SetHorizTile(true)
 	self.Tex:SetVertTile(true)
-	self.Tex:SetBlendMode("ADD")
+	self.Tex:SetBlendMode("BLEND")
 end
 
 function F:CreateSD(a)

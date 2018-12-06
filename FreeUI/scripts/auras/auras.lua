@@ -133,6 +133,9 @@ local function updateDebuffBorder(buttonName, index, filter)
 	if filter == "HARMFUL" then
 		local color = DebuffTypeColor[debuffType or "none"]
 		bu.bg:SetVertexColor(color.r, color.g, color.b)
+		if bu.sd then
+			bu.sd:SetBackdropBorderColor(color.r, color.g, color.b)
+		end
 	end
 end
 hooksecurefunc("AuraButton_Update", updateDebuffBorder)
