@@ -64,7 +64,7 @@ end
 
 C['appearance'] = {
 	['backdropcolor'] = {.05, .05, .05},
-	['alpha'] = .6,
+	['alpha'] = .4,
 	['shadow'] = true,
 	['buttonGradientColour'] = {.3, .3, .3, .3},
 	['buttonSolidColour'] = {.2, .2, .2, .6},

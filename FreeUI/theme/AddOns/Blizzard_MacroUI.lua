@@ -38,6 +38,7 @@ C.themes["Blizzard_MacroUI"] = function()
 	for i = 1, MAX_ACCOUNT_MACROS do
 		local bu = _G["MacroButton"..i]
 		local ic = _G["MacroButton"..i.."Icon"]
+		local na = _G["MacroButton"..i.."Name"]
 
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
@@ -45,6 +46,8 @@ C.themes["Blizzard_MacroUI"] = function()
 		ic:SetPoint("TOPLEFT", 1, -1)
 		ic:SetPoint("BOTTOMRIGHT", -1, 1)
 		ic:SetTexCoord(.08, .92, .08, .92)
+
+		F.SetFS(na)
 
 		F.CreateBD(bu, .25)
 	end

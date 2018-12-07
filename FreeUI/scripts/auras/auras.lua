@@ -118,7 +118,7 @@ local function reskinDebuffs(buttonName, i)
 	elseif i == 1 then
 		debuff:SetPoint("TOPRIGHT", debuffAnchor)
 	else
-		debuff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -margin, 0)
+		debuff:SetPoint("RIGHT", _G[buttonName..(i-1)], "LEFT", -margin - 4, 0)
 	end
 end
 hooksecurefunc("DebuffButton_UpdateAnchors", reskinDebuffs)
