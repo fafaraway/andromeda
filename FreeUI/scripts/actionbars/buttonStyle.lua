@@ -168,6 +168,7 @@ local function styleActionButton(bu)
 	-- adjust the cooldown frame
 	cd:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	cd:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
+	cd:SetSwipeColor(0, 0, 0, .7)
 
 	-- applying the textures
 	fl:SetTexture("")
