@@ -153,6 +153,7 @@ C['misc'] = {
 	['autoRepair'] = true,				-- automatically repair items
 	['autoSellJunk'] = true,
 	['autoSetRole'] = true,
+	['autoQuest'] = true,
 	['cooldownpulse'] = true,
 	['missingStats'] = true,
 	['PVPSound'] = true,

@@ -13,6 +13,7 @@
 	<Script file="sharedmedia.lua"/>
 	<Script file="tabbinder.lua"/>
 	<Script file="quickjoin.lua"/>
+	<Script file="quickquest.lua"/>
 	<Script file="missingstats.lua"/>
 	<Script file="pvpsound.lua"/>
 	<Script file="tradetabs.lua"/>
