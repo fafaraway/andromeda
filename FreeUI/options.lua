@@ -135,6 +135,8 @@ C['blizzard'] = {
 	['cooldownCount'] = true,
 		['decimalCD'] = false,
 		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
+	['raidManager'] = true,
+		['raidManager_pos'] = {'LEFT'},
 	['alertPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 }
 

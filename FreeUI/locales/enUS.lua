@@ -54,3 +54,5 @@ L["OpenTimerTracker"] = "Open timer panel"
 L["Sort"] = "Sort"
 L["AzeriteArmor"] = "Azerite Armor"
 L["EquipementSet"] = "EquipmentSet Items"
+
+L["Pull"] = "Pull in 10s!"

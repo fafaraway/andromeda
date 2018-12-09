@@ -9,11 +9,12 @@
 	<Script file="mirrorbar.lua"/>
 	<Script file="mover.lua"/>
 	<Script file="marking.lua"/>
-	<Script file="worldmarker.lua"/>
+	<!-- <Script file="worldmarker.lua"/> -->
 	<Script file="objectivetracker.lua"/>
 	<Script file="timertracker.lua"/>
 	<Script file="capturebar.lua"/>
 	<Script file="orderhallcommandbar.lua"/>
 	<Script file="petbattle.lua"/>
 	<Script file="archaeologybar.lua"/>
+	<Script file="raidmanager.lua"/>
 </Ui>

@@ -58,3 +58,5 @@ L["Sort"] = "整理"
 L["AzeriteArmor"] = "艾泽里特护甲"
 L["EquipementSet"] = "装备配置方案"
 
+
+L["Pull"] = "10秒后开怪！"
