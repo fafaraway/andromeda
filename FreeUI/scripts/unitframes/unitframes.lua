@@ -1124,6 +1124,8 @@ local function CreateIndicator(self)
 	end
 
 	local RaidTargetIndicator = self:CreateTexture()
+	RaidTargetIndicator:SetTexture('Interface\\AddOns\\FreeUI\\assets\\UI-RaidTargetingIcons')
+	RaidTargetIndicator:SetSize(16, 16)
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
 		RaidTargetIndicator:SetPoint('CENTER', self, 'CENTER')
@@ -1137,7 +1139,6 @@ local function CreateIndicator(self)
 		RaidTargetIndicator:SetPoint('CENTER', self, 'CENTER', 0, 20)
 	end
 
-	RaidTargetIndicator:SetSize(16, 16)
 	self.RaidTargetIndicator = RaidTargetIndicator
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
