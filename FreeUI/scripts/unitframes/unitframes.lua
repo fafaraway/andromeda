@@ -246,37 +246,45 @@ end
 local function CreateHealthPrediction(self)
 	if not C.unitframes.prediction then return end
 
-	local sbTex = 'Interface\\AddOns\\FreeUI\\assets\\statusbar_striped'
+	local myBar = CreateFrame('StatusBar', nil, self.Health)
+	myBar:SetPoint('TOP')
+	myBar:SetPoint('BOTTOM')
+	myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
+	myBar:SetStatusBarTexture(C.media.sbTex)
+	myBar:SetStatusBarColor(0, .8, .8, .6)
+	myBar:SetWidth(self:GetWidth())
 
-	local mhpb = CreateFrame('StatusBar', nil, self.Health)
-	mhpb:SetPoint('TOP')
-	mhpb:SetPoint('BOTTOM')
-	mhpb:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
-	mhpb:SetStatusBarTexture(sbTex)
-	mhpb:SetStatusBarColor(0, .8, .8, .6)
-	mhpb:SetWidth(200)
+	local otherBar = CreateFrame('StatusBar', nil, self.Health)
+	otherBar:SetPoint('TOP')
+	otherBar:SetPoint('BOTTOM')
+	otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), 'RIGHT')
+	otherBar:SetStatusBarTexture(C.media.sbTex)
+	otherBar:SetStatusBarColor(0, .6, .6, .6)
+	otherBar:SetWidth(self:GetWidth())
 
-	local ohpb = CreateFrame('StatusBar', nil, self.Health)
-	ohpb:SetPoint('TOP')
-	ohpb:SetPoint('BOTTOM')
-	ohpb:SetPoint('LEFT', mhpb:GetStatusBarTexture(), 'RIGHT')
-	ohpb:SetStatusBarTexture(sbTex)
-	ohpb:SetStatusBarColor(0, .6, .6, .6)
-	ohpb:SetWidth(200)
+	local absorbBar = CreateFrame('StatusBar', nil, self.Health)
+    absorbBar:SetPoint('TOP')
+    absorbBar:SetPoint('BOTTOM')
+    absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'RIGHT')
+    absorbBar:SetStatusBarTexture('Interface\\AddOns\\FreeUI\\assets\\statusbar_striped')
+    absorbBar:SetStatusBarColor(.8, .8, .8, .6)
+    absorbBar:SetWidth(self:GetWidth())
 
-	local oa = self.Health:CreateTexture(nil, 'OVERLAY')
-	oa:SetPoint('TOP', 0, 2)
-	oa:SetPoint('BOTTOM', 0, -2)
-	oa:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
-	oa:SetWidth(16)
+	local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
+	overAbsorb:SetPoint('TOP', 0, 2)
+	overAbsorb:SetPoint('BOTTOM', 0, -2)
+	overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
+	overAbsorb:SetWidth(14)
 
 	self.HealthPrediction = {
-		myBar = mhpb,
-		otherBar = ohpb,
-		overAbsorb = oa,
+		myBar = myBar,
+		otherBar = otherBar,
+		absorbBar = absorbBar,
+		overAbsorb = overAbsorb,
 		maxOverflow = 1,
 		frequentUpdates = true,
 	}
+
 end
 
 
