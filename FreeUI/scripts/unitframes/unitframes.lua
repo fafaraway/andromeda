@@ -667,6 +667,11 @@ local function PostCreateIcon(element, button)
 	end
 
 	button:HookScript('OnUpdate', UpdateAura)
+	button:SetScript('OnClick', function(self, button)
+		if not InCombatLockdown() and button == 'RightButton' then
+			CancelUnitBuff('player', self:GetID(), self.filter)
+		end
+	end)
 end
 
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
