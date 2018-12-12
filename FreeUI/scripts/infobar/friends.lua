@@ -17,18 +17,16 @@ local function buildFriendTable(num)
 	wipe(friendTable)
 
 	for i = 1, num do
-		local name, level, class, area, connected, status = GetFriendInfo(i)
-		if connected then
-			if status == CHAT_FLAG_AFK then
+		local info = C_FriendList.GetFriendInfoByIndex(i)
+		if info and info.connected then
+			local status = ""
+			if info.afk then
 				status = AFKTex
-			elseif status == CHAT_FLAG_DND then
+			elseif info.dnd then
 				status = DNDTex
-			else
-				status = ""
 			end
-			class = C.ClassList[class]
-
-			friendTable[i] = {name, level, class, area, connected, status}
+			local class = C.ClassList[info.className]
+			friendTable[i] = {info.name, info.level, class, info.area, info.connected, status}
 		end
 	end
 
@@ -100,14 +98,14 @@ FreeUIFriendsButton:SetScript("OnEvent", function(self, event, arg1)
 		self:GetScript("OnEnter")(self)
 	end
 
-	local _, onlineFriends = GetNumFriends()
+	local onlineFriends = C_FriendList.GetNumOnlineFriends()
 	local _, onlineBNet = BNGetNumFriends()
 	self.Text:SetText(format("%s: "..C.InfoColor.."%d", 'FRIENDS', onlineFriends + onlineBNet))
 	updateRequest = false
 end)
 
 FreeUIFriendsButton:HookScript("OnEnter", function(self)
-	local numFriends, onlineFriends = GetNumFriends()
+	local numFriends, onlineFriends = C_FriendList.GetNumFriends(), C_FriendList.GetNumOnlineFriends()
 	local numBNet, onlineBNet = BNGetNumFriends()
 	local totalOnline = onlineFriends + onlineBNet
 	local totalFriends = numFriends + numBNet

@@ -134,7 +134,7 @@ local function updateDebuffBorder(buttonName, index, filter)
 		local color = DebuffTypeColor[debuffType or "none"]
 		bu.bg:SetVertexColor(color.r, color.g, color.b)
 		if bu.sd then
-			bu.sd:SetBackdropBorderColor(color.r, color.g, color.b)
+			bu.sd:SetBackdropBorderColor(color.r, color.g, color.b, 1)
 		end
 	end
 end

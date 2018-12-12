@@ -197,7 +197,7 @@ end
 local function CreateHealthBar(self)
 	local Health = CreateFrame('StatusBar', nil, self)
 	Health:SetFrameStrata('LOW')
-	Health:SetStatusBarTexture(C.media.backdrop)
+	Health:SetStatusBarTexture(C.media.sbTex)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
 	Health.frequentUpdates = true
@@ -251,6 +251,7 @@ local function CreateHealthPrediction(self)
 	myBar:SetPoint('BOTTOM')
 	myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
 	myBar:SetStatusBarTexture(C.media.sbTex)
+	myBar:GetStatusBarTexture():SetBlendMode('BLEND')
 	myBar:SetStatusBarColor(0, .8, .8, .6)
 	myBar:SetWidth(self:GetWidth())
 
@@ -259,6 +260,7 @@ local function CreateHealthPrediction(self)
 	otherBar:SetPoint('BOTTOM')
 	otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), 'RIGHT')
 	otherBar:SetStatusBarTexture(C.media.sbTex)
+	otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
 	otherBar:SetStatusBarColor(0, .6, .6, .6)
 	otherBar:SetWidth(self:GetWidth())
 
@@ -267,6 +269,7 @@ local function CreateHealthPrediction(self)
     absorbBar:SetPoint('BOTTOM')
     absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'RIGHT')
     absorbBar:SetStatusBarTexture('Interface\\AddOns\\FreeUI\\assets\\statusbar_striped')
+    absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
     absorbBar:SetStatusBarColor(.8, .8, .8, .6)
     absorbBar:SetWidth(self:GetWidth())
 
@@ -456,6 +459,7 @@ local function CreateCastBar(self)
 	cb:SetWidth(self:GetWidth())
 	cb:SetAllPoints(self)
 	cb:SetStatusBarTexture(C.media.sbTex)
+	cb:GetStatusBarTexture():SetBlendMode('BLEND')
 	cb:SetStatusBarColor(0, 0, 0, 0)
 	cb:SetFrameLevel(self.Health:GetFrameLevel() + 3)
 
@@ -685,7 +689,9 @@ end
 local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
 	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-	button:SetSize(element.size, element.size*.75)
+	if not (element.__owner.unitStyle == 'party' and button.isDebuff) then
+		button:SetSize(element.size, element.size*.75)
+	end
 
 	if(duration and duration > 0) then
 		button.expiration = expiration - GetTime()
@@ -834,24 +840,35 @@ local function CreateBuffs(self)
 	Buffs['growth-x'] = 'RIGHT'
 	Buffs.spacing = 3
 	Buffs.num = 3
-	Buffs.size = 12
-	Buffs:SetSize((Buffs.size*Buffs.num)+(Buffs.num-1)*Buffs.spacing, Buffs.size)
-
-	Buffs.PostUpdate = function(icons)
-		local vb = icons.visibleBuffs
-
-		if vb == 3 then
-			Buffs:SetPoint('TOP', -15, -2)
-		elseif vb == 2 then
-			Buffs:SetPoint('TOP', -7, -2)
-		else
-			Buffs:SetPoint('TOP', 0, -2)
+	
+	if self.unitStyle == 'party' then
+		Buffs.size = 18
+		Buffs.PostUpdate = function(icons)
+			if icons.visibleBuffs == 3 then
+				Buffs:SetPoint('TOP', -20, -2)
+			elseif icons.visibleBuffs == 2 then
+				Buffs:SetPoint('TOP', -10, -2)
+			else
+				Buffs:SetPoint('TOP', 0, -2)
+			end
+		end
+	elseif self.unitStyle == 'raid' then
+		Buffs.size = 12
+		Buffs.PostUpdate = function(icons)
+			if icons.visibleBuffs == 3 then
+				Buffs:SetPoint('TOP', -14, -2)
+			elseif icons.visibleBuffs == 2 then
+				Buffs:SetPoint('TOP', -7, -2)
+			else
+				Buffs:SetPoint('TOP', 0, -2)
+			end
 		end
 	end
 
+	Buffs:SetSize((Buffs.size*Buffs.num)+(Buffs.num-1)*Buffs.spacing, Buffs.size)
+
 	Buffs.disableCooldown = true
 	Buffs.disableMouse = true
-
 	Buffs.PostCreateIcon = PostCreateIcon
 	Buffs.PostUpdateIcon = PostUpdateIcon
 	Buffs.CustomFilter = CustomFilter
@@ -861,29 +878,36 @@ end
 
 local function CreateDebuffs(self)
 	local Debuffs = CreateFrame('Frame', nil, self)
-	Debuffs.initialAnchor = 'CENTER'
-	Debuffs:SetPoint('BOTTOM', 0, C.unitframes.power_height - 1)
-	Debuffs['growth-x'] = 'RIGHT'
-	Debuffs.spacing = 3
-	Debuffs.num = 2
-	Debuffs.size = 16
+	
+	if self.unitStyle == 'party' then
+		Debuffs.initialAnchor = 'LEFT'
+		Debuffs['growth-x'] = 'RIGHT'
+		Debuffs:SetPoint('LEFT', self, 'RIGHT', 6, 0)
+		Debuffs.size = 24
+		Debuffs.num = 3
+		Debuffs.disableCooldown = false
+		Debuffs.disableMouse = false
+	elseif self.unitStyle == 'raid' then
+		Debuffs.initialAnchor = 'CENTER'
+		Debuffs['growth-x'] = 'RIGHT'
+		Debuffs:SetPoint('BOTTOM', 0, C.unitframes.power_height - 1)
+		Debuffs.size = 16
+		Debuffs.num = 2
+		Debuffs.disableCooldown = true
+		Debuffs.disableMouse = true
 
-	Debuffs:SetSize((Debuffs.size*Debuffs.num)+(Debuffs.num-1)*Debuffs.spacing, Debuffs.size)
-
-	Debuffs.PostUpdate = function(icons)
-		local vb = icons.visibleDebuffs
-
-		if vb == 2 then
-			Debuffs:SetPoint('BOTTOM', -9, 0)
-		else
-			Debuffs:SetPoint('BOTTOM')
+		Debuffs.PostUpdate = function(icons)
+			if icons.visibleDebuffs == 2 then
+				Debuffs:SetPoint('BOTTOM', -9, 0)
+			else
+				Debuffs:SetPoint('BOTTOM')
+			end
 		end
 	end
 
-	Debuffs.disableCooldown = true
-	Debuffs.disableMouse = true
+	Debuffs.spacing = 5
+	Debuffs:SetSize((Debuffs.size*Debuffs.num)+(Debuffs.num-1)*Debuffs.spacing, Debuffs.size)
 	Debuffs.showDebuffType = true
-
 	Debuffs.PostCreateIcon = PostCreateIcon
 	Debuffs.PostUpdateIcon = PostUpdateIcon
 	Debuffs.CustomFilter = CustomFilter
@@ -1693,6 +1717,7 @@ oUF:Factory(function(self)
 		'columnAnchorPoint', 'LEFT',
 		'groupBy', 'ASSIGNEDROLE',
 		'groupingOrder', 'TANK,HEALER,DAMAGER',
+		'sortDir', 'DESC',
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)

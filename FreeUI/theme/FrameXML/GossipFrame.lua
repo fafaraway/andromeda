@@ -1,10 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	GossipGreetingScrollFrameTop:Hide()
-	GossipGreetingScrollFrameBottom:Hide()
-	GossipGreetingScrollFrameMiddle:Hide()
-	select(19, GossipFrame:GetRegions()):Hide()
+	local gsub = string.gsub
 
 	GossipGreetingText:SetTextColor(1, 1, 1)
 	NPCFriendshipStatusBar:GetRegions():Hide()
@@ -21,9 +18,11 @@ tinsert(C.themes["FreeUI"], function()
 	NPCFriendshipStatusBar.icon:SetPoint("TOPLEFT", -30, 7)
 	F.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
-	F.ReskinPortraitFrame(GossipFrame, true)
+	GossipFrameInset:Hide()
+	F.ReskinPortraitFrame(GossipFrame)
 	F.Reskin(GossipFrameGreetingGoodbyeButton)
 	F.ReskinScroll(GossipGreetingScrollFrameScrollBar)
+	F.SetBD(GossipFrame)
 
 	GossipFrame:HookScript("OnShow", function()
 		C_Timer.After(.01, function()

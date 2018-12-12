@@ -7,5 +7,6 @@ tinsert(C.themes["FreeUI"], function()
 	ProductChoiceFrame.Inset:DisableDrawLayer("BORDER")
 
 	F.ReskinPortraitFrame(ProductChoiceFrame)
+	F.SetBD(ProductChoiceFrame)
 	F.Reskin(ProductChoiceFrame.Inset.ClaimButton)
 end)

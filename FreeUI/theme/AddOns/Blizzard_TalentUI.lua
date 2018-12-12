@@ -172,6 +172,7 @@ C.themes["Blizzard_TalentUI"] = function()
 			local ic = _G["PlayerTalentFrameTalentsTalentRow"..i.."Talent"..j.."IconTexture"]
 
 			bu:SetHighlightTexture("")
+			bu.Cover:SetAlpha(0)
 			bu.Slot:SetAlpha(0)
 			bu.knownSelection:SetAlpha(0)
 
@@ -225,7 +226,9 @@ C.themes["Blizzard_TalentUI"] = function()
 	F.HideObject(PlayerTalentFrameTalentsTutorialButton)
 	F.HideObject(PlayerTalentFramePetSpecializationTutorialButton)
 
-	F.ReskinPortraitFrame(PlayerTalentFrame, true)
+	F.ReskinPortraitFrame(PlayerTalentFrame)
+	F.SetBD(PlayerTalentFrame)
+	PlayerTalentFrameInset:Hide()
 	F.Reskin(PlayerTalentFrameSpecializationLearnButton)
 	F.Reskin(PlayerTalentFrameActivateButton)
 	F.Reskin(PlayerTalentFramePetSpecializationLearnButton)
@@ -239,12 +242,12 @@ C.themes["Blizzard_TalentUI"] = function()
 	talentList:ClearAllPoints()
 	talentList:SetPoint("LEFT", PlayerTalentFrame, "RIGHT", 2, 0)
 	F.StripTextures(talentList)
+	F.RemoveSlice(talentList)
 	F.CreateBD(talentList)
 	F.CreateSD(talentList)
+	talentList.Inset:Hide()
 
-	PlayerTalentFrameTalentsPvpTalentFrameTalentListInset:SetAlpha(0)
 	F.StripTextures(PlayerTalentFrameTalentsPvpTalentFrame)
-	F.StripTextures(PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollChild)
 	F.ReskinScroll(PlayerTalentFrameTalentsPvpTalentFrameTalentListScrollFrameScrollBar)
 
 	local function updatePVPTalent(self)

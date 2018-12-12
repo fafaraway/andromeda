@@ -1,10 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_ChallengesUI"] = function()
-	local Free = FreeUI[1]
-
-	ChallengesFrameInset:DisableDrawLayer("BORDER")
-	ChallengesFrameInsetBg:Hide()
+	ChallengesFrameInset:Hide()
 	for i = 1, 2 do
 		select(i, ChallengesFrame:GetRegions()):Hide()
 	end
@@ -29,7 +26,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 			F.CreateBD(scheduel, .3)
 			if scheduel.Entries then
 				for i = 1, 3 do
-					Free.AffixesSetup(scheduel.Entries[i])
+					F.AffixesSetup(scheduel.Entries[i])
 				end
 			end
 
@@ -45,7 +42,7 @@ C.themes["Blizzard_ChallengesUI"] = function()
 	hooksecurefunc(ChallengesFrame.WeeklyInfo, "SetUp", function(self)
 		local affixes = C_MythicPlus.GetCurrentAffixes()
 		if affixes then
-			Free.AffixesSetup(self.Child)
+			F.AffixesSetup(self.Child)
 		end
 	end)
 
@@ -59,5 +56,5 @@ C.themes["Blizzard_ChallengesUI"] = function()
 		self.InstructionBackground:SetAlpha(0)
 	end)
 
-	hooksecurefunc(keystone, "OnKeystoneSlotted", Free.AffixesSetup)
+	hooksecurefunc(keystone, "OnKeystoneSlotted", F.AffixesSetup)
 end

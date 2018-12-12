@@ -1,10 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
+	if not AuroraConfig.loot then return end
 
-	--[[LootFramePortraitOverlay:Hide()
-
-	select(19, LootFrame:GetRegions()):SetPoint("TOP", LootFrame, "TOP", 0, -7)
+	LootFramePortraitOverlay:Hide()
 
 	hooksecurefunc("LootFrame_UpdateButton", function(index)
 		local ic = _G["LootButton"..index.."IconTexture"]
@@ -20,11 +19,9 @@ tinsert(C.themes["FreeUI"], function()
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			bu.IconBorder:SetAlpha(0)
 
-			local bd = CreateFrame("Frame", nil, bu)
+			local bd = F.CreateBDFrame(bu, .25)
 			bd:SetPoint("TOPLEFT")
 			bd:SetPoint("BOTTOMRIGHT", 114, 0)
-			bd:SetFrameLevel(bu:GetFrameLevel()-1)
-			F.CreateBD(bd, .25)
 
 			ic:SetTexCoord(.08, .92, .08, .92)
 			ic.bg = F.CreateBG(ic)
@@ -44,9 +41,11 @@ tinsert(C.themes["FreeUI"], function()
 	LootFrameNext:ClearAllPoints()
 	LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
 
-	F.ReskinPortraitFrame(LootFrame, true)
+	F.ReskinPortraitFrame(LootFrame)
+	F.SetBD(LootFrame)
+	LootFrameInset:Hide()
 	F.ReskinArrow(LootFrameUpButton, "up")
-	F.ReskinArrow(LootFrameDownButton, "down")]]
+	F.ReskinArrow(LootFrameDownButton, "down")
 
 	-- Bonus roll
 
@@ -79,7 +78,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	-- Loot Roll Frame
 
-	--[[hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
+	hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
 		for i = 1, NUM_GROUP_LOOT_FRAMES do
 			local frame = _G["GroupLootFrame"..i]
 			if not frame.styled then
@@ -109,5 +108,5 @@ tinsert(C.themes["FreeUI"], function()
 				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
-	end)]]
+	end)
 end)
