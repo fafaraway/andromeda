@@ -157,3 +157,14 @@ function F:CreateButtonFrameFader(buttonList, faderConfig)
 		end
 	end
 end
+
+-- fix blizzard cooldown flash
+local function FixCooldownFlash(self)
+	if not self then return end
+	if self:GetEffectiveAlpha() > 0 then
+		self:Show()
+	else
+		self:Hide()
+	end
+end
+hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, "SetCooldown", FixCooldownFlash)

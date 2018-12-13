@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-tinsert(C.themes["AuroraClassic"], function()
+tinsert(C.themes["FreeUI"], function()
 	local restyled = false
 
 	InterfaceOptionsFrame:HookScript("OnShow", function()
