@@ -113,46 +113,65 @@ function module:ReskinRegions()
 	rdt:SetTextColor(1, 1, 1)
 
 	rd:SetScript("OnEvent", function()
+		local _, instanceType = IsInInstance()
 		local difficulty = select(3, GetInstanceInfo())
 		local numplayers = select(9, GetInstanceInfo())
 		local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or "";
 
-		if (difficulty == 1) then
-			rdt:SetText("5")
-		elseif difficulty == 2 then
-			rdt:SetText("5H")
-		elseif difficulty == 3 then
-			rdt:SetText("10")
-		elseif difficulty == 4 then
-			rdt:SetText("25")
-		elseif difficulty == 5 then
-			rdt:SetText("10H")
-		elseif difficulty == 6 then
-			rdt:SetText("25H")
-		elseif difficulty == 7 then
-			rdt:SetText("LFR")
-		elseif difficulty == 8 then
-			rdt:SetText("M+"..mplusdiff)
-		elseif difficulty == 9 then
-			rdt:SetText("40")
-		elseif difficulty == 11 then
-			rdt:SetText("HScen")
-		elseif difficulty == 12 then
-			rdt:SetText("Scen")
-		elseif difficulty == 14 then
-			rdt:SetText("N:"..numplayers)
-		elseif difficulty == 15 then
-			rdt:SetText("H:"..numplayers)
-		elseif difficulty == 16 then
-			rdt:SetText("M")
-		elseif difficulty == 17 then
-			rdt:SetText("LFR:"..numplayers)
-		elseif difficulty == 23 then
-			rdt:SetText("M+")
-		elseif difficulty == 24 then
-			rdt:SetText("TW")
+		if instanceType == "party" or instanceType == "raid" or instanceType == "scenario" then
+			if (difficulty == 1) then
+				rdt:SetText("5N")
+			elseif difficulty == 2 then
+				rdt:SetText("5H")
+			elseif difficulty == 3 then
+				rdt:SetText("10N")
+			elseif difficulty == 4 then
+				rdt:SetText("25N")
+			elseif difficulty == 5 then
+				rdt:SetText("10H")
+			elseif difficulty == 6 then
+				rdt:SetText("25H")
+			elseif difficulty == 7 then
+				rdt:SetText("LFR")
+			elseif difficulty == 8 then
+				rdt:SetText("M+"..mplusdiff)
+			elseif difficulty == 9 then
+				rdt:SetText("40R")
+			elseif difficulty == 11 or difficulty == 39 then
+				rdt:SetText("HScen")
+			elseif difficulty == 12 or difficulty == 38 then
+				rdt:SetText("Scen")
+			elseif difficulty == 40 then 
+				rdt:SetText("MScen")
+			elseif difficulty == 14 then
+				rdt:SetText("N:"..numplayers)
+			elseif difficulty == 15 then
+				rdt:SetText("H:"..numplayers)
+			elseif difficulty == 16 then
+				rdt:SetText("M")
+			elseif difficulty == 17 then
+				rdt:SetText("LFR:"..numplayers)
+			elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
+				rdt:SetText("EScen")
+			elseif difficulty == 23 then
+				rdt:SetText("5M")
+			elseif difficulty == 24 or difficulty == 33 then
+				rdt:SetText("TW")
+			elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
+				rdt:SetText("PVP")
+			elseif difficulty == 29 then
+				rdt:SetText("PvEvP")
+			end
+		elseif instanceType == "pvp" or instanceType == "arena" then
+			rdt:SetText("PVP")
 		else
-			rdt:SetText("")
+			rdt:SetText("D")
+		end
+
+		if not IsInInstance() then
+			rdt:Hide()
+		else
+			rdt:Show()
 		end
 	end)
 
@@ -364,7 +383,7 @@ function module:SetupMinimap()
 	end)
 
 	-- Click Func
-	Minimap:SetScript("OnMouseUp", function(self, btn)
+	--[[Minimap:SetScript("OnMouseUp", function(self, btn)
 		if btn == "MiddleButton" then
 			if not IsAddOnLoaded("Blizzard_Calendar") then
 				LoadAddOn('Blizzard_Calendar')
@@ -375,7 +394,7 @@ function module:SetupMinimap()
 		else
 			Minimap_OnClick(self)
 		end
-	end)
+	end)]]
 
 	-- Hide Blizz
 	local frames = {

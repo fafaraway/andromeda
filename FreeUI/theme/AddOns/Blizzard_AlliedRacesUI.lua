@@ -1,12 +1,12 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_AlliedRacesUI"] = function()
-	for i = 1, 19 do
-		select(i, AlliedRacesFrame:GetRegions()):Hide()
-	end
-	select(8, AlliedRacesFrame:GetRegions()):Show()
+	F.ReskinPortraitFrame(AlliedRacesFrame)
 	F.SetBD(AlliedRacesFrame)
-	F.ReskinClose(AlliedRacesFrameCloseButton)
+	AlliedRacesFrame.NineSlice:Hide()
+	--AlliedRacesFrame.RaceInfoFrame.ScrollFrame.Child.ObjectivesFrame.HeaderBackground:Hide()
+	--AlliedRacesFrame.RaceInfoFrame.ScrollFrame.Child.ObjectivesFrame.Title:Hide()
+
 	F.ReskinScroll(AlliedRacesFrame.RaceInfoFrame.ScrollFrame.ScrollBar)
 	select(2, AlliedRacesFrame.ModelFrame:GetRegions()):Hide()
 

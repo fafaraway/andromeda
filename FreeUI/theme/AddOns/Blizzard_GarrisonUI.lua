@@ -901,6 +901,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	local BFAMissionFrame = BFAMissionFrame
 	F.ReskinMissionFrame(BFAMissionFrame)
+	BFAMissionFrame.OverlayElements.Topper:SetAlpha(0)
 
 	-- [[ Addon supports ]]
 

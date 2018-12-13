@@ -2,17 +2,11 @@ local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_WarboardUI"] = function()
 	local WarboardQuestChoiceFrame = _G.WarboardQuestChoiceFrame
-	F.RemoveSlice(WarboardQuestChoiceFrame)
+
 	F.ReskinClose(WarboardQuestChoiceFrame.CloseButton)
-
-	--WarboardQuestChoiceFrame.Background:Hide()
-	--WarboardQuestChoiceFrame.Title.Left:Hide()
-	--WarboardQuestChoiceFrame.Title.Right:Hide()
-	--WarboardQuestChoiceFrame.Title.Middle:Hide()
-	--WarboardQuestChoiceFrame.BorderFrame:Hide()
-
-	--WarboardQuestChoiceFrame.NineSlice:Hide()
-	--WarboardQuestChoiceFrame.CloseButton.Border:SetAlpha(0)
+	WarboardQuestChoiceFrame.BorderFrame.Header:SetAlpha(0)
+	WarboardQuestChoiceFrame.Background:Hide()
+	WarboardQuestChoiceFrame.NineSlice:Hide()
 
 	F.CreateBD(WarboardQuestChoiceFrame)
 	F.CreateSD(WarboardQuestChoiceFrame)
@@ -30,6 +24,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 
 					if child.Text then
 						child.Text:SetTextColor(0, 0, 0)
+						child.Text:SetShadowColor(0, 0, 0, 0)
 						child.Text.SetTextColor = F.Dummy
 					end
 					option.Header.Text:SetTextColor(0, 0, 0)

@@ -4,8 +4,9 @@ tinsert(C.themes["FreeUI"], function()
 	GameMenuFrameHeader:SetAlpha(0)
 	GameMenuFrameHeader:ClearAllPoints()
 	GameMenuFrameHeader:SetPoint("TOP", GameMenuFrame, 0, 7)
-	F.CreateBD(GameMenuFrame)
-	F.CreateSD(GameMenuFrame)
+	F.StripTextures(GameMenuFrame)
+	F.SetBD(GameMenuFrame, 0, 0, -1, 0)
+	--F.CreateSD(GameMenuFrame)
 
 	local buttons = {
 		GameMenuButtonHelp,
