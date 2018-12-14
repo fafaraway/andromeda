@@ -43,8 +43,7 @@ tinsert(C.themes["FreeUI"], function()
 		end
 	end)
 
-	F.ReskinPortraitFrame(PVEFrame)
-	F.SetBD(PVEFrame)
+	F.ReskinPortraitFrame(PVEFrame, true)
 	F.ReskinTab(PVEFrameTab1)
 	F.ReskinTab(PVEFrameTab2)
 	F.ReskinTab(PVEFrameTab3)

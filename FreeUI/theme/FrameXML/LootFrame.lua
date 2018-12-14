@@ -39,9 +39,7 @@ tinsert(C.themes["FreeUI"], function()
 	LootFrameNext:ClearAllPoints()
 	LootFrameNext:SetPoint("RIGHT", LootFrameDownButton, "LEFT", -4, 0)
 
-	F.ReskinPortraitFrame(LootFrame)
-	F.SetBD(LootFrame)
-	LootFrameInset:Hide()
+	F.ReskinPortraitFrame(LootFrame, true)
 	F.ReskinArrow(LootFrameUpButton, "up")
 	F.ReskinArrow(LootFrameDownButton, "down")
 

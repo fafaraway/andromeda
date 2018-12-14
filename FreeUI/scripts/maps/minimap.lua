@@ -161,11 +161,13 @@ function module:ReskinRegions()
 				rdt:SetText("PVP")
 			elseif difficulty == 29 then
 				rdt:SetText("PvEvP")
+				elseif difficulty == 147 then
+				rdt:SetText("WF")
 			end
 		elseif instanceType == "pvp" or instanceType == "arena" then
 			rdt:SetText("PVP")
 		else
-			rdt:SetText("D")
+			rdt:SetText("")
 		end
 
 		if not IsInInstance() then
