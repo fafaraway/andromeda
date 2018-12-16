@@ -17,37 +17,21 @@ local function updateTimerFormat(color, hour, minute)
 	end
 end
 
-local FreeUIGarrisonButton = module.FreeUIGarrisonButton
+local FreeUIReportButton = module.FreeUIReportButton
 
-FreeUIGarrisonButton = module:addButton('Report', module.POSITION_RIGHT, function(self, button)
-	--FreeUIGarrisonButton:Hide()
-	if button == "LeftButton" then
-		HideUIPanel(GarrisonLandingPage)
-		ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
-	elseif button == "RightButton" then
-		HideUIPanel(GarrisonLandingPage)
-		ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+FreeUIReportButton = module:addButton('REPORT', module.POSITION_RIGHT)
+
+FreeUIReportButton:HookScript("OnEvent", function(self, event)
+	if event == "GARRISON_SHOW_LANDING_PAGE" then
+		if button == "LeftButton" then
+			HideUIPanel(GarrisonLandingPage)
+			ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
+		elseif button == "RightButton" then
+			HideUIPanel(GarrisonLandingPage)
+			ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+		end
 	end
 end)
-
---[[FreeUIGarrisonButton:SetScript("OnUpdate", function(self, elapsed)
-	self.timer = (self.timer or 0) + elapsed
-	if self.timer > 1 then
-		local color = C_Calendar.GetNumPendingInvites() > 0 and "|cffFF0000" or ""
-
-		local hour, minute
-		if GetCVarBool("timeMgrUseLocalTime") then
-			hour, minute = tonumber(date("%H")), tonumber(date("%M"))
-		else
-			hour, minute = GetGameTime()
-		end
-		self.Text:SetText(updateTimerFormat(color, hour, minute))
-	
-		self.timer = 0
-	end
-end)]]
-
-
 
 
 local invIndex = {
@@ -111,7 +95,7 @@ local function addTitle(text)
 	end
 end
 
-FreeUIGarrisonButton:HookScript("OnEnter", function(self)
+FreeUIReportButton:HookScript("OnEnter", function(self)
 	RequestRaidInfo()
 
 	local r,g,b
@@ -186,7 +170,7 @@ FreeUIGarrisonButton:HookScript("OnEnter", function(self)
 	GameTooltip:Show()
 end)
 
-FreeUIGarrisonButton:HookScript("OnLeave", function(self)
+FreeUIReportButton:HookScript("OnLeave", function(self)
 	GameTooltip:Hide()
 end)
 

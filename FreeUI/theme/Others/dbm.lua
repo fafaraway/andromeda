@@ -23,7 +23,7 @@ function module:DBM()
 					icon1.overlay:SetFrameStrata("BACKGROUND")
 					icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -buttonsize/6, -3)
 
-					F.CreateBD(icon1.overlay)
+					F.CreateBDFrame(icon1.overlay)
 					F.CreateSD(icon1.overlay)
 
 				end
@@ -33,7 +33,7 @@ function module:DBM()
 					icon2.overlay:SetSize(buttonsize+2, buttonsize+2)
 					icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", buttonsize/6, -3)
 
-					F.CreateBD(icon2.overlay)
+					F.CreateBDFrame(icon2.overlay)
 					F.CreateSD(icon2.overlay)
 				end
 
@@ -56,7 +56,7 @@ function module:DBM()
 						frame.bg:SetAllPoints()
 					end
 					F.CreateSD(frame.bg)
-					F.CreateBD(frame.bg, .4)
+					F.CreateBDFrame(frame.bg)
 					frame.styled = true
 				end
 
@@ -157,16 +157,13 @@ function module:DBM()
 
 	local function SkinRange()
 		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
-			local bg = F.CreateBG(DBMRangeCheckRadar)
-			F.CreateBD(bg, .4)
-
+			local bg = F.CreateBDFrame(DBMRangeCheckRadar)
 			DBMRangeCheckRadar.styled = true
 		end
 
 		if DBMRangeCheck and not DBMRangeCheck.styled then
 			DBMRangeCheck:SetBackdrop(nil)
-			local bg = F.CreateBG(DBMRangeCheck)
-			F.CreateBD(bg, .4)
+			local bg = F.CreateBDFrame(DBMRangeCheck)
 			DBMRangeCheck.tipStyled = true
 			DBMRangeCheck.styled = true
 		end
@@ -179,8 +176,7 @@ function module:DBM()
 		DBMInfoFrame:HookScript("OnShow", function(self)
 			if not self.bg then
 				self:SetBackdrop(nil)
-				self.bg = F.CreateBG(self)
-				F.CreateBD(self.bg)
+				self.bg = F.CreateBDFrame(self)
 				DBMInfoFrame.tipStyled = true
 			end
 		end)
