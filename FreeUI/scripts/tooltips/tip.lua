@@ -360,6 +360,7 @@ local function style(self)
 	end
 
 	self.bg:SetBackdropBorderColor(0, 0, 0)
+	self.bg:SetBackdropColor(0, 0, 0, .6)
 	if self.sd then
 		self.sd:SetBackdropBorderColor(0, 0, 0, .3)
 	end
