@@ -315,7 +315,7 @@ local function textureOnLeave(self)
 			pixel:SetVertexColor(1, 1, 1)
 		end
 	else
-		self.bgTex:SetVertexColor(1, 1, 1)
+		self.bgTex:SetVertexColor(0, 0, 0)
 	end
 end
 F.clearArrow = textureOnLeave
@@ -684,7 +684,7 @@ end
 
 function F:ReskinPortraitFrame(setBG)
 	local name = self:GetName()
-	local insetFrame = name and _G[name.."Inset"] or self.Inset
+	local insetFrame = self.inset or self.Inset
 	if insetFrame then F.CleanInset(insetFrame) end
 	F.StripTextures(self)
 	F.RemoveSlice(self)
