@@ -8,7 +8,7 @@
 ## X-Credits: Haleth, Gethe, siweia, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy
 ## OptionalDeps: Kui_Nameplates_Core, Kui_Nameplates, ls_Toasts, WeakAuras, !ClassColors
 ## SavedVariables: FreeUIGlobalConfig
-## SavedVariablesPerCharacter: FreeUIConfig, FreeUISavedBindings
+## SavedVariablesPerCharacter: FreeUIConfig
 
 core\core.lua
 
