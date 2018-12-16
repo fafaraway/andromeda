@@ -1,0 +1,195 @@
+local F, C, L = unpack(select(2, ...))
+local module = F:GetModule("infobar")
+if not C.infoBar.enable then return end
+
+local time, date = time, date
+local strfind, format, floor = string.find, string.format, math.floor
+local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
+local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
+
+local function updateTimerFormat(color, hour, minute)
+	if GetCVarBool("timeMgrUseMilitaryTime") then
+		return format(color..TIMEMANAGER_TICKER_24HOUR, hour, minute)
+	else
+		local timerUnit = DB.MyColor..(hour < 12 and "AM" or "PM")
+		if hour > 12 then hour = hour - 12 end
+		return format(color..TIMEMANAGER_TICKER_12HOUR..timerUnit, hour, minute)
+	end
+end
+
+local FreeUIGarrisonButton = module.FreeUIGarrisonButton
+
+FreeUIGarrisonButton = module:addButton('Report', module.POSITION_RIGHT, function(self, button)
+	--FreeUIGarrisonButton:Hide()
+	if button == "LeftButton" then
+		HideUIPanel(GarrisonLandingPage)
+		ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
+	elseif button == "RightButton" then
+		HideUIPanel(GarrisonLandingPage)
+		ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+	end
+end)
+
+--[[FreeUIGarrisonButton:SetScript("OnUpdate", function(self, elapsed)
+	self.timer = (self.timer or 0) + elapsed
+	if self.timer > 1 then
+		local color = C_Calendar.GetNumPendingInvites() > 0 and "|cffFF0000" or ""
+
+		local hour, minute
+		if GetCVarBool("timeMgrUseLocalTime") then
+			hour, minute = tonumber(date("%H")), tonumber(date("%M"))
+		else
+			hour, minute = GetGameTime()
+		end
+		self.Text:SetText(updateTimerFormat(color, hour, minute))
+	
+		self.timer = 0
+	end
+end)]]
+
+
+
+
+local invIndex = {
+	[1] = {title = L["LegionInvasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = 1517274000}, -- 1/30 9:00 [1]
+	[2] = {title = L["BfAInvasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6}, baseTime = 1544691600}, -- 12/13 17:00 [1]
+}
+
+local function GetInvasionTimeLeft(areaPoiID, mapID)
+	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
+	if seconds then
+		local mapInfo = C_Map.GetMapInfo(mapID)
+		return seconds, mapInfo.name
+	end
+end
+
+local function GetInvasionInfo(mapID)
+	local banners = C_Map.GetMapBannersForMap(mapID)
+	for _, info in pairs(banners) do
+		if info then
+			if info.uiTextureKit == "LegionInvasion" then
+				return 1, GetInvasionTimeLeft(info.areaPoiID, mapID)
+			elseif info.atlasName and strfind(info.atlasName, "Emblem") then
+				return 2, GetInvasionTimeLeft(info.areaPoiID, mapID)
+			end
+		end
+	end
+end
+
+local function CheckInvasion(zones, index)
+	for _, mapID in pairs(zones) do
+		local invType, timeLeft, name = GetInvasionInfo(mapID)
+		if invType and invType == index then
+			return timeLeft, name
+		end
+	end
+end
+
+local function GetNextTime(baseTime, index)
+	local currentTime = time()
+	local duration = invIndex[index].duration
+	local elapsed = mod(currentTime - baseTime, duration)
+	return duration - elapsed + currentTime
+end
+
+local function GetNextLocation(nextTime, index)
+	if index == 2 then return UNKNOWN end	-- data collecting
+	local inv = invIndex[index]
+	local count = #inv.timeTable
+	local elapsed = nextTime - inv.baseTime
+	local round = mod(floor(elapsed / inv.duration) + 1, count)
+	if round == 0 then round = count end
+	return C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name
+end
+
+local title
+local function addTitle(text)
+	if not title then
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine(text..":", 0,.6,1)
+		title = true
+	end
+end
+
+FreeUIGarrisonButton:HookScript("OnEnter", function(self)
+	RequestRaidInfo()
+
+	local r,g,b
+	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
+	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+	GameTooltip:ClearLines()
+	GameTooltip:AddLine(C.InfoColor..'Report')
+
+	-- World bosses
+	title = false
+	for i = 1, GetNumSavedWorldBosses() do
+		local name, id, reset = GetSavedWorldBossInfo(i)
+		if not (id == 11 or id == 12 or id == 13) then
+			addTitle(RAID_INFO_WORLD_BOSS)
+			GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1,1,1, 1,1,1)
+		end
+	end
+
+	-- Mythic Dungeons
+	title = false
+	for i = 1, GetNumSavedInstances() do
+		local name, _, reset, diff, locked, extended = GetSavedInstanceInfo(i)
+		if diff == 23 and (locked or extended) then
+			addTitle(DUNGEON_DIFFICULTY3..DUNGEONS)
+			if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
+			GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
+		end
+	end
+
+	-- Raids
+	title = false
+	for i = 1, GetNumSavedInstances() do
+		local name, _, reset, _, locked, extended, _, isRaid, _, diffName = GetSavedInstanceInfo(i)
+		if isRaid and (locked or extended) then
+			addTitle(RAID_INFO)
+			if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
+			GameTooltip:AddDoubleLine(name.." - "..diffName, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
+		end
+	end
+
+	-- Invasions
+	for index, value in ipairs(invIndex) do
+		title = false
+		addTitle(value.title)
+		local timeLeft, zoneName = CheckInvasion(value.maps, index)
+		local nextTime = GetNextTime(value.baseTime, index)
+		if timeLeft then
+			timeLeft = timeLeft/60
+			if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+			GameTooltip:AddDoubleLine(L["CurrentInvasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+		end
+		GameTooltip:AddDoubleLine(L["NextInvasion"]..GetNextLocation(nextTime, index), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
+	end
+
+	local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
+	if iwqID and UnitLevel("player") == 120 then
+		GameTooltip:AddLine(" ")
+		if IsQuestFlaggedCompleted(iwqID) then
+			GameTooltip:AddDoubleLine(ISLANDS_HEADER, QUEST_COMPLETE, 1,1,1, 0,1,0)
+		else
+			local cur, max = select(4, GetQuestObjectiveInfo(iwqID, 1, false))
+			local stautsText = cur.."/"..max
+			if not cur or not max then stautsText = LFG_LIST_LOADING end
+			GameTooltip:AddDoubleLine(ISLANDS_HEADER, stautsText, 1,1,1, 1,0,0)
+		end
+	end
+
+	GameTooltip:AddLine(" ")
+	GameTooltip:AddDoubleLine(" ", C.LineString)
+	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["ShowGarrionReport_BfA"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.RightButton..L["ShowGarrionReport_LEG"], 1,1,1, .9, .82, .62)
+	GameTooltip:Show()
+end)
+
+FreeUIGarrisonButton:HookScript("OnLeave", function(self)
+	GameTooltip:Hide()
+end)
+
+GarrisonLandingPageMinimapButton:SetSize(1, 1)
+GarrisonLandingPageMinimapButton:SetAlpha(0)
+GarrisonLandingPageMinimapButton:EnableMouse(false)

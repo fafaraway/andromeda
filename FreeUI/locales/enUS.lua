@@ -18,9 +18,6 @@ L['SellPrice'] = 'Sell Price'
 L['StackCap'] = 'Stack Caps'
 L['Castby'] = 'Castby'
 
-L['Status'] = 'Status'
-L['Finished'] = 'Finished'
-
 L['BotToy'] = '<Attention>: %s puts %s!'
 L['Feast'] = '<Attention>: %s puts %s!'
 L['Portal'] = '<Attention>: %s opened %s!'
@@ -49,6 +46,12 @@ L["DefaultUIMemoryUsage:"] = "Default UI Memory Usage:"
 L["TotalMemoryUsage:"] = "Total Memory Usage:"
 L["OpenAddonList"] = "Open addon list panel"
 L["OpenTimerTracker"] = "Open timer panel"
+L["ShowGarrionReport_BfA"] = 'Garrion Report (BfA)'
+L["ShowGarrionReport_LEG"] = 'Garrion Report (WOD)'
+L["LegionInvasion"] = "Legion Invasion"
+L["BfAInvasion"] = "Faction Invasion"
+L["CurrentInvasion"] = "Current: "
+L["NextInvasion"] = "Next: "
 
 
 L["Sort"] = "Sort"

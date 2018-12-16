@@ -1,12 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="core.lua"/>
 	<Script file="stats.lua"/>
-	<Script file="micromenu.lua"/>
 	<Script file="dm.lua"/>
-	<Script file="garrison.lua"/>
 	<Script file="spec.lua"/>
 	<Script file="friends.lua"/>
 	<Script file="money.lua"/>
-	
-
+	<Script file="report.lua"/>
 </Ui>

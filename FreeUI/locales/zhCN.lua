@@ -20,10 +20,6 @@ L['SellPrice'] = '售价'
 L['StackCap'] = '堆叠上限'
 L['Castby'] = '来自'
 
-L['Status'] = '状态'
-L['Finished'] = '已完成'
-
-
 L['BotToy'] 			= '<注意>：%s 放置了 %s！'
 L['Feast'] 				= '<注意>：%s 摆出了 %s！'
 L['Portal'] 			= '<注意>：%s 开启了 %s！'
@@ -52,6 +48,12 @@ L["DefaultUIMemoryUsage:"] = "系统插件内存:"
 L["TotalMemoryUsage:"] = "总内存使用:"
 L["OpenAddonList"] = "打开插件列表"
 L["OpenTimerTracker"] = "打开时钟"
+L["ShowGarrionReport_BfA"] = '要塞报告(BfA)'
+L["ShowGarrionReport_LEG"] = '要塞报告(WOD)'
+L["LegionInvasion"] = "军团突袭"
+L["BfAInvasion"] = "阵营突袭"
+L["CurrentInvasion"] = "当前: "
+L["NextInvasion"] = "下次: "
 
 
 L["Sort"] = "整理"
