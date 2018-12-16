@@ -10,6 +10,8 @@ tinsert(C.themes["FreeUI"], function()
 	F.StripTextures(DressUpFrameOutfitDropDown)
 	F.ReskinDropDown(DressUpFrameOutfitDropDown)
 	F.ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -10, 0)
+	DressUpFrame.ModelBackground:Hide()
+	F.CreateBDFrame(DressUpFrame.ModelBackground)
 
 	DressUpFrameOutfitDropDown:SetHeight(32)
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
