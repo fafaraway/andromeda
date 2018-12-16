@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 local module = F:GetModule("blizzard")
 
 
-function module:PositionUIWidgets()
+--[[function module:PositionUIWidgets()
 	_G.UIWidgetTopCenterContainerFrame:ClearAllPoints()
 	_G.UIWidgetTopCenterContainerFrame:SetPoint("TOP", UIParent, "TOP", 0, -30)
 	_G.UIWidgetTopCenterContainerFrame.ignoreFramePositionManager = true
@@ -33,4 +33,4 @@ function module:PositionUIWidgets()
 	hooksecurefunc(belowMiniMapcontainer, "ClearAllPoints", function(self)
 		self:SetPoint("CENTER", belowMiniMapHolder, "CENTER")
 	end)
-end
+end]]

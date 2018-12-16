@@ -6,7 +6,7 @@ function module:OnLogin()
 	self:FontStyle()
 	self:PetBattleUI()
 	self:EnhanceColorPicker()
-	self:PositionUIWidgets()
+	--self:PositionUIWidgets()
 	self:QuestTracker()
 	self:CooldownCount()
 
@@ -185,3 +185,7 @@ do
 
 	F:RegisterEvent("ADDON_LOADED", fixBlizz)
 end
+
+-- UIWidget reanchor
+UIWidgetTopCenterContainerFrame:ClearAllPoints()
+UIWidgetTopCenterContainerFrame:SetPoint("TOP", 0, -36)
