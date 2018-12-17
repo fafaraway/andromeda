@@ -67,7 +67,7 @@ C['appearance'] = {
 	['alpha'] = .4,
 	['shadow'] = true,
 	['buttonGradientColour'] = {.3, .3, .3, .3},
-	['buttonSolidColour'] = {.2, .2, .2, .6},
+	['buttonSolidColour'] = {.01, .01, .01, .4},
 	['useButtonGradientColour'] = true,
 
 	['useCustomColour'] = false,
@@ -306,12 +306,13 @@ C['unitframes'] = {
 		['player_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -380},				-- player unitframe position for healer layout(WIP)
 		['player_width'] = 200,
 		['player_height'] = 14,
+		['player_frameVisibility'] = '[combat][mod:shift][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
+		['enableFrameVisibility'] = false,
 
 		['pet_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},						-- pet unitframe position
 		['pet_width'] = 68,
 		['pet_height'] = 14,
-
-		['useFrameVisibility'] = false,													-- hide palyer/pet unitframes for defualt
+		['pet_frameVisibility'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
 
 		['target_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
 		['target_width'] = 220,
@@ -332,6 +333,7 @@ C['unitframes'] = {
 		['party_pos'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},		-- party unitframe position
 		['party_width'] = 90,
 		['party_height'] = 38,
+		['party_showSolo'] = false,
 
 		['raid_pos'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
 		['raid_width'] = 58,

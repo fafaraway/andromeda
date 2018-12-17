@@ -229,7 +229,7 @@ function module:QuestTracker()
 			block.bg = F.CreateBDFrame(block.GlowTexture)
 			block.bg:SetPoint("TOPLEFT", block.GlowTexture, 2, 0)
 			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -2, 0)
-			F.CreateBD(block.bg)
+			--F.CreateBD(block.bg)
 			F.CreateSD(block.bg)
 		end
 	end)
@@ -359,7 +359,7 @@ function module:QuestTracker()
 			end
 
 			block.shouldFix = false
-			block:SetHeight(height + 5)
+			block:SetHeight(height + 4)
 			block.shouldFix = true
 		end
 	end

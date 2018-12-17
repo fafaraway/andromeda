@@ -6,12 +6,9 @@ local f = CreateFrame('Frame', 'RaidManagerFrame', UIParent)
 f:SetFrameStrata('MEDIUM')
 f:SetHeight(250)
 f:SetWidth(40)
-f:SetPoint(unpack(C.blizzard.raidManager_pos))
-f:Hide()
-f:RegisterEvent('PLAYER_LOGIN')
+f:SetPoint('LEFT', -200, 0)
+f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
-
-local t
 
 local marker = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 if not marker then
@@ -36,15 +33,13 @@ local function textbutton(button,parent,size,a1,a2,x,y,fsize,text,l)
 	b.text = F.CreateFS(b, 'Interface\\AddOns\\FreeUI\\assets\\font\\symbol.ttf', fsize, nil, {1,1,1,.3}, {0,0,0}, 1, -1) 
 	b.text:SetText(text)
 	b.text:SetPoint('CENTER')
-	b:SetScript('OnEnter',
-	function(self)
+	b:SetScript('OnEnter', function(self)
 		self.text:SetTextColor(C.r, C.g, C.b, 1) 
 		GameTooltip:SetOwner(self, 'ANCHOR_RIGHT', 0, 0)
 		if l then GameTooltip:AddLine(l) else GameTooltip:AddLine(t) end
 		GameTooltip:Show()
 	end)
-	b:SetScript('OnLeave',
-	function(self) 
+	b:SetScript('OnLeave', function(self) 
 		self.text:SetTextColor(1, 1, 1, .3)
 		GameTooltip:Hide()	
 	end)
@@ -116,10 +111,8 @@ local function buttons()
 		if UnitIsGroupLeader("player") or UnitIsGroupAssistant("player") then
 			if UnitInRaid('player') then
 				ConvertToParty()
-				t = CONVERT_TO_RAID
 			elseif UnitInParty('player') then
 				ConvertToRaid()
-				t = CONVERT_TO_PARTY
 			end
 		else
 			UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
@@ -150,15 +143,16 @@ local check = CreateFrame('Frame')
 check:RegisterEvent('GROUP_ROSTER_UPDATE')
 check:RegisterEvent('PLAYER_ENTERING_WORLD')
 check:SetScript('OnEvent', function(self, event)
-	t = UnitInRaid('player') and CONVERT_TO_PARTY or CONVERT_TO_RAID
 	if InCombatLockdown() then
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		return
 	end	
 	if CheckRaidStatus() then
-		f:Show()
+		--f:Show()
+		f:SetPoint(unpack(C.blizzard.raidManager_pos))
 	else
-		f:Hide()
+		--f:Hide()
+		f:SetPoint('LEFT', -200, 0)
 	end
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")

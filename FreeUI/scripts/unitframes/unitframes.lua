@@ -674,10 +674,6 @@ local function PostCreateIcon(element, button)
 	
 	button.Duration = Duration
 
-	if element.__owner.unitStyle == 'party' or element.__owner.unitStyle == 'raid' or element.__owner.unitStyle == 'pet' then
-		Duration:Hide()
-	end
-
 	button:HookScript('OnUpdate', UpdateAura)
 	button:SetScript('OnClick', function(self, button)
 		if not InCombatLockdown() and button == 'RightButton' then
@@ -697,6 +693,10 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		button.expiration = expiration - GetTime()
 	else
 		button.expiration = math.huge
+	end
+
+	if (element.__owner.unitStyle == 'party' and not button.isDebuff) or element.__owner.unitStyle == 'raid' or element.__owner.unitStyle == 'pet' then
+		button.Duration:Hide()
 	end
 
 	if canStealOrPurge then
@@ -1672,12 +1672,11 @@ oUF:Factory(function(self)
 	player = spawnHelper(self, 'player', unpack(C.unitframes.player_pos))
 	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet_pos))
 
-	if C.unitframes.useFrameVisibility then
+	if C.unitframes.enableFrameVisibility then
 		player:Disable()
-		RegisterStateDriver(player, 'visibility', '[combat][mod][@target,exists,nodead][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide')
-
+		RegisterStateDriver(player, 'visibility', C.unitframes.player_frameVisibility)
 		pet:Disable()
-		RegisterStateDriver(pet, 'visibility', '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show')
+		RegisterStateDriver(pet, 'visibility', C.unitframes.pet_frameVisibility)
 	end
 
 	target = spawnHelper(self, 'target', unpack(C.unitframes.target_pos))
@@ -1704,10 +1703,10 @@ oUF:Factory(function(self)
 
 	self:SetActiveStyle'Free - Party'
 
-	local party = self:SpawnHeader(nil, nil, 'party',
+	local party = self:SpawnHeader(nil, nil, 'solo,party',
 		'showParty', true,
 		'showPlayer', true,
-		'showSolo', false,
+		'showSolo', C.unitframes.party_showSolo,
 		'xoffset', -4,
 		'yoffset', 6,
 		'maxColumns', 1,
