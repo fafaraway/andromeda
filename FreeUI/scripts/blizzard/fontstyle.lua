@@ -9,16 +9,6 @@ _G.NAMEPLATE_FONT = C.font.normal
 function module:FontStyle()
 	if not C.appearance.fontStyle then return end
 
-	--local function SetFont(fontObj, fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
-	--	if type(fontObj) == "string" then fontObj = _G[fontObj] end
-	--	if not fontObj then return end
-	--	fontObj:SetFont(fontPath, fontSize, fontStyle)
-	--	if shadowColor then fontObj:SetShadowColor(shadowColor[1], shadowColor[2], shadowColor[3], shadowColor[4]) end
-	--	if shadowX and shadowY then fontObj:SetShadowOffset(shadowX, shadowY) end
-	--	if type(fontColor) == "table" then fontObj:SetTextColor(fontColor[1], fontColor[2], fontColor[3], fontColor[4])
-	--	elseif fontColor then fontObj:SetAlpha(fontColor) end
-	--end
-
 	local function SetFont(fontObj, fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
 		if _G.type(fontObj) == "string" then fontObj = _G[fontObj] end
 		if not fontObj then return end
@@ -77,7 +67,7 @@ function module:FontStyle()
 	SetFont("NumberFont_Shadow_Med",           C.font.chat, 14, nil, nil, {0, 0, 0}, 1, -1)
 
 	SetFont("Tooltip_Med",       C.font.normal, 12)
-	SetFont("Tooltip_Small",     C.font.normal, 11)
+	SetFont("Tooltip_Small",     C.font.normal, 12)
 
 
 	-- Fonts

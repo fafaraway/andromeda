@@ -64,3 +64,5 @@ L["EquipementSet"] = "装备配置方案"
 L["Pull"] = "10秒后开怪！"
 
 L["AutoQuest"] = '自动交接任务'
+
+L["MapReveal"] = "去除地图迷雾"

@@ -62,3 +62,5 @@ L["EquipementSet"] = "EquipmentSet Items"
 L["Pull"] = "Pull in 10s!"
 
 L["AutoQuest"] = 'Auto quest'
+
+L["Map Reveal"] = "Map Reveal"
