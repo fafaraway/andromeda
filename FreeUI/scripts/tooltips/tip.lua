@@ -185,6 +185,20 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	else
 		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
 	end
+
+	if GameTooltipStatusBar:IsShown() then
+		GameTooltipStatusBar:ClearAllPoints()
+		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
+		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, -3)
+		if not GameTooltipStatusBar.bg then
+			GameTooltipStatusBar:SetStatusBarTexture(C.media.sbTex)
+			GameTooltipStatusBar:SetHeight(2)
+			local bg = F.CreateBG(GameTooltipStatusBar, 1)
+			--F.CreateBD(bg, .7)
+			F.CreateTex(bg)
+			GameTooltipStatusBar.bg = bg
+		end
+	end
 end)
 
 
@@ -210,25 +224,6 @@ end)
 GameTooltip.FadeOut = function(self)
 	if(not C.tooltip.fadeOnUnit) then
 		self:Hide()
-	end
-end
-
-
--- StatusBar
-GameTooltipStatusBar:SetStatusBarTexture(C.media.sbTex)
-GameTooltipStatusBar:SetHeight(2)
-GameTooltipStatusBar:ClearAllPoints()
-GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
-GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, -3)
-
-local bg = F.CreateBDFrame(GameTooltipStatusBar, 1)
-
-local ssbc = CreateFrame("StatusBar").SetStatusBarColor
-GameTooltipStatusBar._SetStatusBarColor = ssbc
-function GameTooltipStatusBar:SetStatusBarColor(...)
-	local unit = getUnit(GameTooltip)
-	if(UnitExists(unit)) then
-		return self:_SetStatusBarColor(F.UnitColor(unit))
 	end
 end
 
@@ -378,17 +373,6 @@ local function style(self)
 			end
 		end
 	end
-
-	--[[if self.NumLines and self:NumLines() > 0 then
-		for index = 1, self:NumLines() do
-			if index == 1 then
-				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 14)
-			else
-				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12)
-			end
-			_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12)
-		end
-	end]]
 end
 
 local function extrastyle(self)
@@ -495,20 +479,6 @@ local function addonStyled(_, addon)
 		IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b)
 
 		-- Pet Tooltip
-		local petTips = {
-			PetBattlePrimaryUnitTooltip.Delimiter,
-			PetBattlePrimaryUnitTooltip.Delimiter2,
-			PetBattlePrimaryAbilityTooltip.Delimiter1,
-			PetBattlePrimaryAbilityTooltip.Delimiter2,
-			FloatingPetBattleAbilityTooltip.Delimiter1,
-			FloatingPetBattleAbilityTooltip.Delimiter2,
-			FloatingBattlePetTooltip.Delimiter,
-		}
-		for _, element in pairs(petTips) do
-			element:SetColorTexture(0, 0, 0)
-			element:SetHeight(1.2)
-		end
-
 		PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
 			self.Border:SetAlpha(0)
 			if not self.tipStyled then
