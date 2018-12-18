@@ -80,13 +80,15 @@ local function UpdateTooltip(bar)
 		end
 		GameTooltip:AddLine(name, 62/250, 175/250, 227/250)
 		GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", 1, 1, 1, 1,1,1)
-		GameTooltip:AddLine(" ")
-
+		
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 			local paraCount = floor(currentValue/threshold)
 			currentValue = mod(currentValue, threshold)
-			GameTooltip:AddDoubleLine("ParagonRep"..paraCount, currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
+			GameTooltip:AddDoubleLine(L["ParagonRep"]..paraCount, currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
+			GameTooltip:AddLine(" ")
+		else
+			GameTooltip:AddLine(" ")
 		end
 	end
 
@@ -95,7 +97,6 @@ local function UpdateTooltip(bar)
 		local current, max, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
 		GameTooltip:AddLine(HONOR, 177/250, 19/250, 0)
 		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..max, 1, 1, 1, 1,1,1)
-		GameTooltip:AddLine(" ")
 	end
 
 	GameTooltip:Show()
