@@ -5,8 +5,8 @@ tinsert(C.themes["FreeUI"], function()
 	GameMenuFrameHeader:ClearAllPoints()
 	GameMenuFrameHeader:SetPoint("TOP", GameMenuFrame, 0, 7)
 	F.StripTextures(GameMenuFrame)
-	F.SetBD(GameMenuFrame, 0, 0, -1, 0)
-	--F.CreateSD(GameMenuFrame)
+	F.CreateBD(GameMenuFrame)
+	F.CreateSD(GameMenuFrame)
 
 	local buttons = {
 		GameMenuButtonHelp,
@@ -24,6 +24,5 @@ tinsert(C.themes["FreeUI"], function()
 
 	for _, button in next, buttons do
 		F.Reskin(button)
-		button:SetSize(144, 22)
 	end
 end)

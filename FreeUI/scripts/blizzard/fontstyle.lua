@@ -77,7 +77,7 @@ function module:FontStyle()
 	SetFont("NumberFont_Shadow_Med",           C.font.chat, 14, nil, nil, {0, 0, 0}, 1, -1)
 
 	SetFont("Tooltip_Med",       C.font.normal, 12)
-	SetFont("Tooltip_Small",     C.font.normal, 10)
+	SetFont("Tooltip_Small",     C.font.normal, 11)
 
 
 	-- Fonts
@@ -93,9 +93,9 @@ function module:FontStyle()
 	SetFont("NumberFont_GameNormal",            C.font.normal, 10, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("NumberFont_OutlineThick_Mono_Small", C.font.chat, 12, "THICKOUTLINE, MONOCHROME")
 	SetFont("NumberFont_Small",                   C.font.chat, 12)
-	SetFont("NumberFont_Normal_Med",              C.font.chat, 14)
-	SetFont("NumberFont_Outline_Med",             C.font.chat, 14, "OUTLINE")
-	SetFont("NumberFont_Outline_Large",           C.font.chat, 16, "OUTLINE")
+	SetFont("NumberFont_Normal_Med",              C.font.chat, 12)
+	SetFont("NumberFont_Outline_Med",             C.font.chat, 12, "OUTLINE")
+	SetFont("NumberFont_Outline_Large",           C.font.chat, 14, "OUTLINE")
 	SetFont("NumberFont_Outline_Huge",            C.font.damage, 30, "OUTLINE")
 
 	SetFont("Fancy22Font",                  C.font.header, 22)

@@ -33,7 +33,7 @@ QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if C.misc.autoQuest and not IsAltKeyDown() then
+		if C.misc.autoQuest and not IsModifierKeyDown() then
 			func(...)
 		end
 	end
