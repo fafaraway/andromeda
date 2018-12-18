@@ -1,28 +1,24 @@
--- [[ Core ]]
+local addonName, ns = ...
 
-local addon, core = ...
+ns[1] = {} -- F, Functions
+ns[2] = {} -- C, Constants/Config
+ns[3] = {} -- L, Localisation
 
-core[1] = {} -- F, Functions
-core[2] = {} -- C, Constants/Config
-core[3] = {} -- L, Localisation
-
-FreeUI = core
-
-local F, C, L = unpack(select(2, ...))
+local F, C, L = unpack(ns)
+local pairs, next, tinsert = pairs, next, table.insert
 
 
 -- [[ Saved variables ]]
 
-FreeUIGlobalConfig = {}
-FreeUIConfig = {}
-FreeUISavedBindings = {}
+FreeUIGlobalConfig = FreeUIGlobalConfig or {}
+FreeUIConfig = FreeUIConfig or {}
 
 
 -- [[ Event handler ]]
 
 local events = {}
-local host = CreateFrame("Frame")
 
+local host = CreateFrame("Frame")
 host:SetScript("OnEvent", function(_, event, ...)
 	for func in pairs(events[event]) do
 		if event == "COMBAT_LOG_EVENT_UNFILTERED" then
@@ -90,12 +86,14 @@ F:RegisterEvent("PLAYER_LOGIN", function()
 			print("Module <"..module.name.."> does not loaded.")
 		end
 	end
+
+	C_Timer.After(3, collectgarbage)
 end)
 
+_G[addonName] = ns
 
 
 -- [[ For secure frame hiding ]]
 
 local hider = CreateFrame("Frame", "FreeUIHider", UIParent)
 hider:Hide()
-
