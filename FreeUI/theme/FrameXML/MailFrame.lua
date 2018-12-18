@@ -88,8 +88,8 @@ tinsert(C.themes["FreeUI"], function()
 		bu:GetRegions():Hide()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		border:SetPoint("TOPLEFT", -1, 1)
-		border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border:SetPoint("TOPLEFT", -C.mult, C.mult)
+		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 		border:SetDrawLayer("BACKGROUND")
 
 		F.CreateBDFrame(bu, .25)
@@ -119,8 +119,8 @@ tinsert(C.themes["FreeUI"], function()
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.Dummy
-		border:SetPoint("TOPLEFT", -1, 1)
-		border:SetPoint("BOTTOMRIGHT", 1, -1)
+		border:SetPoint("TOPLEFT", -C.mult, C.mult)
+		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 		border:SetDrawLayer("BACKGROUND")
 
 		F.CreateBDFrame(bu, .25)

@@ -24,5 +24,6 @@ tinsert(C.themes["FreeUI"], function()
 
 	for _, button in next, buttons do
 		F.Reskin(button)
+		button:SetSize(144, 22)
 	end
 end)

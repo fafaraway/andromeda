@@ -9,18 +9,10 @@ C.themes["Blizzard_IslandsPartyPoseUI"] = function()
 
 	IslandsPartyPoseFrame.ModelScene:SetAlpha(.8)
 
-	IslandsPartyPoseFrame.Topper:Hide()
+	IslandsPartyPoseFrame.OverlayElements.Topper:Hide()
 	IslandsPartyPoseFrame.Background:Hide()
 
-	IslandsPartyPoseFrame.RightBorder:Hide()
-	IslandsPartyPoseFrame.LeftBorder:Hide()
-	IslandsPartyPoseFrame.TopRightCorner:Hide()
-	IslandsPartyPoseFrame.TopLeftCorner:Hide()
-	IslandsPartyPoseFrame.BotRightCorner:Hide()
-	IslandsPartyPoseFrame.BotLeftCorner:Hide()
-	IslandsPartyPoseFrame.TitleBg:Hide()
-	IslandsPartyPoseFrame.TopBorder:Hide()
-	IslandsPartyPoseFrame.BottomBorder:Hide()
+	IslandsPartyPoseFrame.Border:Hide()
 
 
 	local rewardFrame = IslandsPartyPoseFrame.RewardAnimations.RewardFrame

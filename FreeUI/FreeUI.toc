@@ -16,13 +16,11 @@ options.lua
 profiles.lua
 
 core\api.lua
-core\uiscale.lua
+core\setting.lua
+
 core\slash.lua
-
 locales\_locales.xml
-
 libs\_libs.xml
-
 scripts\_scripts.xml
 theme\_theme.xml
 

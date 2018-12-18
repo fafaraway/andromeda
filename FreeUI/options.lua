@@ -63,6 +63,8 @@ end
 -- [[ Global config ]]
 
 C['appearance'] = {
+	['uiScale'] = 1,
+	['uiScaleAuto'] = true,
 	['backdropcolor'] = {.05, .05, .05},
 	['alpha'] = .4,
 	['shadow'] = true,
@@ -142,8 +144,6 @@ C['blizzard'] = {
 
 
 C['misc'] = {
-	['uiScale'] = 1,
-	['uiScaleAuto'] = true,
 	['flashCursor'] = true,
 	['mailButton'] = true, 
 	['undressButton'] = true, 
@@ -350,6 +350,3 @@ C['unitframes'] = {
 		['power_height'] = 2,
 		['altpower_height'] = 2,
 }
-
-
-

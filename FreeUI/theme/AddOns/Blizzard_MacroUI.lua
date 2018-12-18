@@ -24,8 +24,8 @@ C.themes["Blizzard_MacroUI"] = function()
 	MacroButtonScrollFrameMiddle:Hide()
 
 	MacroFrameSelectedMacroButton:SetPoint("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
-	MacroFrameSelectedMacroButtonIcon:SetPoint("TOPLEFT", 1, -1)
-	MacroFrameSelectedMacroButtonIcon:SetPoint("BOTTOMRIGHT", -1, 1)
+	MacroFrameSelectedMacroButtonIcon:SetPoint("TOPLEFT", C.mult, -C.mult)
+	MacroFrameSelectedMacroButtonIcon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 	MacroFrameSelectedMacroButtonIcon:SetTexCoord(.08, .92, .08, .92)
 
 	MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
@@ -41,8 +41,8 @@ C.themes["Blizzard_MacroUI"] = function()
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
 
-		ic:SetPoint("TOPLEFT", 1, -1)
-		ic:SetPoint("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
+		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		ic:SetTexCoord(.08, .92, .08, .92)
 
 		F.SetFS(na)
@@ -59,8 +59,8 @@ C.themes["Blizzard_MacroUI"] = function()
 				bu:SetCheckedTexture(C.media.checked)
 				select(2, bu:GetRegions()):Hide()
 
-				ic:SetPoint("TOPLEFT", 1, -1)
-				ic:SetPoint("BOTTOMRIGHT", -1, 1)
+				ic:SetPoint("TOPLEFT", C.mult, -C.mult)
+				ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 				ic:SetTexCoord(.08, .92, .08, .92)
 
 				F.CreateBD(bu, .25)

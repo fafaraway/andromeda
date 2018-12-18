@@ -43,6 +43,10 @@ C.TexCoord = {.08, .92, .08, .92}
 
 C.TempAnchor = {}
 
+C.mult = 1
+
+
+
 
 -- [[ Functions ]]
 
@@ -104,7 +108,7 @@ end
 function F:CreateBD(a)
 	local r, g, b = C.appearance.backdropcolor
 	self:SetBackdrop({
-		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = 1,
+		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.mult,
 	})
 	self:SetBackdropColor(r, g, b, a or C.appearance.alpha)
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -130,7 +134,7 @@ end]]
 function F:CreateBG(offset)
 	local f = self
 	if self:GetObjectType() == "Texture" then f = self:GetParent() end
-	offset = offset or 1
+	offset = offset or C.mult
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
 	bg:SetPoint("TOPLEFT", self, -offset, offset)
@@ -147,8 +151,8 @@ function F:CreateBDFrame(a)
 	local lvl = frame:GetFrameLevel()
 
 	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetPoint("TOPLEFT", self, -1, 1)
-	bg:SetPoint("BOTTOMRIGHT", self, 1, -1)
+	bg:SetPoint("TOPLEFT", self, -C.mult, C.mult)
+	bg:SetPoint("BOTTOMRIGHT", self, C.mult, -C.mult)
 	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
 	F.CreateBD(bg, a or C.appearance.alpha)
 
@@ -169,8 +173,8 @@ end
 
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT", 1, -1)
-	tex:SetPoint("BOTTOMRIGHT", -1, 1)
+	tex:SetPoint("TOPLEFT", C.mult, -C.mult)
+	tex:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 	tex:SetTexture(C.appearance.useButtonGradientColour and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
@@ -356,8 +360,8 @@ function F:ReskinScroll()
 	F.CreateBD(bu.bg, 0)
 
 	local tex = F.CreateGradient(self)
-	tex:SetPoint("TOPLEFT", bu.bg, 1, -1)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg, -1, 1)
+	tex:SetPoint("TOPLEFT", bu.bg, C.mult, -C.mult)
+	tex:SetPoint("BOTTOMRIGHT", bu.bg, -C.mult, C.mult)
 
 	local up, down = self:GetChildren()
 	up:SetWidth(17)
@@ -438,8 +442,8 @@ function F:ReskinDropDown()
 	F.CreateBD(bg, 0)
 
 	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bg, 1, -1)
-	gradient:SetPoint("BOTTOMRIGHT", bg, -1, 1)
+	gradient:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
+	gradient:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
 end
 
 function F:ReskinClose(a1, p, a2, x, y)
@@ -497,8 +501,8 @@ function F:ReskinInput(height, width)
 	F.CreateBD(bd, 0)
 
 	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bd, 1, -1)
-	gradient:SetPoint("BOTTOMRIGHT", bd, -1, 1)
+	gradient:SetPoint("TOPLEFT", bd, C.mult, -C.mult)
+	gradient:SetPoint("BOTTOMRIGHT", bd, -C.mult, C.mult)
 
 	if height then self:SetHeight(height) end
 	if width then self:SetWidth(width) end
@@ -683,7 +687,6 @@ function F:CleanInset()
 end
 
 function F:ReskinPortraitFrame(setBG)
-	local name = self:GetName()
 	local insetFrame = self.inset or self.Inset
 	if insetFrame then F.CleanInset(insetFrame) end
 	F.StripTextures(self)

@@ -54,8 +54,8 @@ tinsert(C.themes["FreeUI"], function()
 
 		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:ClearAllPoints()
-		ic:SetPoint("TOPLEFT", 1, -1)
-		ic:SetPoint("BOTTOMRIGHT", -1, 1)
+		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
+		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 
 		for j = 1, 3 do
 			F.CreateBG(_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"])
@@ -125,8 +125,8 @@ tinsert(C.themes["FreeUI"], function()
 
 	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
 	MerchantBuyBackItemItemButtonIconTexture:ClearAllPoints()
-	MerchantBuyBackItemItemButtonIconTexture:SetPoint("TOPLEFT", 1, -1)
-	MerchantBuyBackItemItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -1, 1)
+	MerchantBuyBackItemItemButtonIconTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
+	MerchantBuyBackItemItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 
 	MerchantBuyBackItemName:SetHeight(25)
 	MerchantBuyBackItemName:ClearAllPoints()

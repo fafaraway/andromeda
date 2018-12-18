@@ -25,7 +25,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	local line = QuestFrameGreetingPanel:CreateTexture()
 	line:SetColorTexture(1, 1, 1, .25)
-	line:SetSize(256, 1)
+	line:SetSize(256, C.mult)
 	line:SetPoint("CENTER", QuestGreetingFrameHorizontalBreak)
 	QuestGreetingFrameHorizontalBreak:SetTexture("")
 	QuestFrameGreetingPanel:HookScript("OnShow", function()
