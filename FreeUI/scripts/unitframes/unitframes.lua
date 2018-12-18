@@ -305,12 +305,14 @@ local function PostUpdatePower(Power, unit, cur, max, min)
 
 	if C.PlayerClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc and self.unitStyle == 'player' then
 		local spec, cp = GetSpecialization() or 0, UnitPower(unit)
-		if spec == 1 and cp < 40 then
+		if spec == 1 and cp < 15 then
+			Power:SetStatusBarColor(.7, .8, .4)
+		elseif spec == 1 and cp < 40 then
 			Power:SetStatusBarColor(1, 0, 0)
 		end
 	end
 
-	Power.bg:SetVertexColor(0, 0, 0, .65)
+	Power.bg:SetVertexColor(0, 0, 0, .5)
 end
 
 local function CreatePowerBar(self)
