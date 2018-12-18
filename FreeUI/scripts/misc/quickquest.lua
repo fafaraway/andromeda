@@ -1,34 +1,39 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("misc")
 
--- QuickQuest by p3lim
+-- based on QuickQuest by p3lim
 
---[[local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
-mono:SetPoint("TOPRIGHT", -140, 0)
-mono:SetSize(26, 26)
-F.CreateCB(mono, .25)
-mono.text = F.CreateFS(mono, 14, L["AutoQuest"], false, "LEFT", 25, 0)
-mono:RegisterEvent("PLAYER_LOGIN")
-mono:SetScript("OnEvent", function(self)
-	self:SetChecked(C.misc.autoQuest)
-end)
-mono:SetScript("OnClick", function(self)
-	C.misc.autoQuest = self:GetChecked()
-end)]]
+local created
+local function setupCheckButton()
+	if created then return end
+	local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
+	mono:SetPoint("TOPRIGHT", -140, -2)
+	mono:SetSize(26, 26)
+	F.CreateCB(mono, .25)
+	mono.text = F.CreateFS(mono, C.font.normal, 12, "OUTLINE")
+	mono.text:SetText(L["AutoQuest"])
+	mono.text:SetPoint("LEFT", 25, 0)
+	mono:SetChecked(C.misc.autoQuest)
+	mono:SetScript("OnClick", function(self)
+		C.misc.autoQuest = self:GetChecked()
+	end)
+
+	created = true
+end
+WorldMapFrame:HookScript("OnShow", setupCheckButton)
 
 -- Function
 local strmatch = string.match
 local tonumber, next = tonumber, next
 
+local quests, choiceQueue = {}
 local QuickQuest = CreateFrame("Frame")
 QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
-
-local quests, choiceQueue = {}
 
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if C.misc.autoQuest and not IsShiftKeyDown() then
+		if C.misc.autoQuest and not IsAltKeyDown() then
 			func(...)
 		end
 	end
@@ -66,6 +71,7 @@ local ignoreQuestNPC = {
 	[142063] = true,	-- 特兹兰
 	[143388] = true,	-- 德鲁扎
 	[98489] = true,		-- 海难俘虏
+	[135690] = true,	-- 亡灵舰长
 }
 
 local function GetQuestLogQuests(onlyComplete)

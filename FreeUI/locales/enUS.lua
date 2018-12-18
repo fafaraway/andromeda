@@ -46,16 +46,19 @@ L["DefaultUIMemoryUsage:"] = "Default UI Memory Usage:"
 L["TotalMemoryUsage:"] = "Total Memory Usage:"
 L["OpenAddonList"] = "Open addon list panel"
 L["OpenTimerTracker"] = "Open timer panel"
-L["ShowGarrionReport_BfA"] = 'Garrion Report (BfA)'
-L["ShowGarrionReport_LEG"] = 'Garrion Report (WOD)'
+L["ShowGarrionReport_BfA"] = 'Mission Report'
+L["ShowGarrionReport_LEG"] = 'Order Hall Report'
+L["ShowGarrionReport_WOD"] = 'Garrion Report'
 L["LegionInvasion"] = "Legion Invasion"
 L["BfAInvasion"] = "Faction Invasion"
 L["CurrentInvasion"] = "Current: "
 L["NextInvasion"] = "Next: "
-
+L["ParagonRep"] = "Paragon Rep"
 
 L["Sort"] = "Sort"
 L["AzeriteArmor"] = "Azerite Armor"
 L["EquipementSet"] = "EquipmentSet Items"
 
 L["Pull"] = "Pull in 10s!"
+
+L["AutoQuest"] = 'Auto quest'

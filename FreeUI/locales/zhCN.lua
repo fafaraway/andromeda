@@ -48,17 +48,19 @@ L["DefaultUIMemoryUsage:"] = "系统插件内存:"
 L["TotalMemoryUsage:"] = "总内存使用:"
 L["OpenAddonList"] = "打开插件列表"
 L["OpenTimerTracker"] = "打开时钟"
-L["ShowGarrionReport_BfA"] = '要塞报告(BfA)'
-L["ShowGarrionReport_LEG"] = '要塞报告(WOD)'
+L["ShowGarrionReport_BfA"] = '任务报告'
+L["ShowGarrionReport_LEG"] = '职业大厅报告'
+L["ShowGarrionReport_WOD"] = '要塞报告'
 L["LegionInvasion"] = "军团突袭"
 L["BfAInvasion"] = "阵营突袭"
 L["CurrentInvasion"] = "当前: "
 L["NextInvasion"] = "下次: "
-
+L["ParagonRep"] = "巅峰声望"
 
 L["Sort"] = "整理"
 L["AzeriteArmor"] = "艾泽里特护甲"
 L["EquipementSet"] = "装备配置方案"
 
-
 L["Pull"] = "10秒后开怪！"
+
+L["AutoQuest"] = '自动交接任务'

@@ -169,8 +169,8 @@ function module:QuestTracker()
 			bar:SetHeight(14)
 
 			local bg = F.CreateBDFrame(progressBar)
-			bg:SetPoint("TOPLEFT", bar, -1, 1)
-			bg:SetPoint("BOTTOMRIGHT", bar, 1, -1)
+			bg:SetPoint("TOPLEFT", bar, -C.mult, C.mult)
+			bg:SetPoint("BOTTOMRIGHT", bar, C.mult, -C.mult)
 			F.CreateSD(bg)
 
 			label:ClearAllPoints()
