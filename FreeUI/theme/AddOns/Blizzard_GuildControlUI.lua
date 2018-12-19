@@ -57,7 +57,7 @@ C.themes["Blizzard_GuildControlUI"] = function()
 
 				_G[tab.."Bg"]:Hide()
 
-				ownedTab.tabIcon:SetTexCoord(.08, .92, .08, .92)
+				ownedTab.tabIcon:SetTexCoord(unpack(C.TexCoord))
 				F.CreateBG(ownedTab.tabIcon)
 
 				F.CreateBD(bu, .25)

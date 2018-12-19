@@ -174,7 +174,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 				F.Reskin(header.button)
 
-				header.button.abilityIcon:SetTexCoord(.08, .92, .08, .92)
+				header.button.abilityIcon:SetTexCoord(unpack(C.TexCoord))
 				header.button.bg = F.CreateBG(header.button.abilityIcon)
 
 				header.styled = true
@@ -241,7 +241,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 		item.icon:SetPoint("TOPLEFT", 1, -1)
 
-		item.icon:SetTexCoord(.08, .92, .08, .92)
+		item.icon:SetTexCoord(unpack(C.TexCoord))
 		item.icon:SetDrawLayer("OVERLAY")
 		F.CreateBG(item.icon)
 
@@ -260,7 +260,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		select(1, result:GetRegions()):SetAlpha(0)
 		if result.icon then
 			select(2, result:GetRegions()):SetAlpha(0)
-			select(3, result:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+			select(3, result:GetRegions()):SetTexCoord(unpack(C.TexCoord))
 			F.ReskinIcon(select(3, result:GetRegions()))
 			select(5, result:GetRegions()):SetAlpha(0)
 			select(6, result:GetRegions()):SetAlpha(0)
@@ -407,7 +407,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 			if data.iconPath then
 				suggestion.icon:SetMask(nil)
-				suggestion.icon:SetTexCoord(.08, .92, .08, .92)
+				suggestion.icon:SetTexCoord(unpack(C.TexCoord))
 			end
 		end
 
@@ -422,7 +422,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 				if data.iconPath then
 					suggestion.icon:SetMask(nil)
-					suggestion.icon:SetTexCoord(.08, .92, .08, .92)
+					suggestion.icon:SetTexCoord(unpack(C.TexCoord))
 				end
 			end
 		end
@@ -432,7 +432,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local rewardData = suggestion.reward.data
 		if rewardData then
 			suggestion.reward.icon:SetMask("")
-			suggestion.reward.icon:SetTexCoord(.08, .92, .08, .92)
+			suggestion.reward.icon:SetTexCoord(unpack(C.TexCoord))
 		end
 	end)
 
@@ -477,7 +477,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	hooksecurefunc(EncounterJournal.LootJournal.ItemSetsFrame, "ConfigureItemButton", function(_, button)
 		if not button.bg then
 			button.Border:SetAlpha(0)
-			button.Icon:SetTexCoord(.08, .92, .08, .92)
+			button.Icon:SetTexCoord(unpack(C.TexCoord))
 			button.bg = F.CreateBDFrame(button.Icon)
 		end
 

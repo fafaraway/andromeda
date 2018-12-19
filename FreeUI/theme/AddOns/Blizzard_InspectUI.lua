@@ -34,7 +34,7 @@ C.themes["Blizzard_InspectUI"] = function()
 		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 		border:SetDrawLayer("BACKGROUND")
 		F.CreateBDFrame(slot, .25)
-		slot.icon:SetTexCoord(.08, .92, .08, .92)
+		slot.icon:SetTexCoord(unpack(C.TexCoord))
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
@@ -61,13 +61,13 @@ C.themes["Blizzard_InspectUI"] = function()
 			bu.border:SetTexture("")
 
 			bu.icon:SetDrawLayer("ARTWORK")
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			bu.icon:SetTexCoord(unpack(C.TexCoord))
 
 			F.CreateBG(bu.icon)
 		end
 	end
 
-	inspectSpec.specIcon:SetTexCoord(.08, .92, .08, .92)
+	inspectSpec.specIcon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateBG(inspectSpec.specIcon)
 
 	local function updateIcon(self)

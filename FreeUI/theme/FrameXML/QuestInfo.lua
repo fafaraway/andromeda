@@ -37,7 +37,7 @@ tinsert(C.themes["FreeUI"], function()
 
 		icon:SetPoint("TOPLEFT", 3, -2)
 		icon:SetDrawLayer("ARTWORK")
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(icon)
 
 		local bg = CreateFrame("Frame", nil, bu)
@@ -83,7 +83,7 @@ tinsert(C.themes["FreeUI"], function()
 	local function restyleRewardButton(bu, isMapQuestInfo)
 		bu.NameFrame:Hide()
 
-		bu.Icon:SetTexCoord(.08, .92, .08, .92)
+		bu.Icon:SetTexCoord(unpack(C.TexCoord))
 		bu.Icon:SetDrawLayer("BACKGROUND", 1)
 		F.CreateBG(bu.Icon, 1)
 		if bu.IconBorder then
@@ -130,7 +130,7 @@ tinsert(C.themes["FreeUI"], function()
 		local icon = spellRewardFrame.Icon
 		local nameFrame = spellRewardFrame.NameFrame
 
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBDFrame(icon)
 		nameFrame:Hide()
 		local bg = F.CreateBDFrame(nameFrame, .25)
@@ -143,7 +143,7 @@ tinsert(C.themes["FreeUI"], function()
 		local frame = QuestInfoPlayerTitleFrame
 		local icon = frame.Icon
 
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBDFrame(icon)
 		for i = 2, 4 do
 			select(i, frame:GetRegions()):Hide()

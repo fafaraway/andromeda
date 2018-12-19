@@ -22,6 +22,6 @@ C.themes["Blizzard_IslandsPartyPoseUI"] = function()
 	F.CreateSD(bg)
 	rewardFrame.NameFrame:SetAlpha(0)
 	rewardFrame.IconBorder:SetAlpha(0)
-	rewardFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+	rewardFrame.Icon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateBDFrame(rewardFrame.Icon)
 end

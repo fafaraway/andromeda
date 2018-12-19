@@ -38,7 +38,7 @@ tinsert(C.themes["FreeUI"], function()
 		local na = _G["QuestProgressItem"..i.."NameFrame"]
 		local co = _G["QuestProgressItem"..i.."Count"]
 		ic:SetSize(40, 40)
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		ic:SetDrawLayer("OVERLAY")
 		F.CreateBD(bu, .25)
 		na:Hide()

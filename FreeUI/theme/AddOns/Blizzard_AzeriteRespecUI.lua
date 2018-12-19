@@ -8,7 +8,7 @@ C.themes["Blizzard_AzeriteRespecUI"] = function()
 	F.RemoveSlice(AzeriteRespecFrame)
 	F.SetBD(AzeriteRespecFrame)
 	F.ReskinClose(AzeriteRespecFrameCloseButton)
-	AzeriteRespecFrame.ItemSlot.Icon:SetTexCoord(.08, .92, .08, .92)
+	AzeriteRespecFrame.ItemSlot.Icon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateBDFrame(AzeriteRespecFrame.ItemSlot.Icon)
 
 	F.StripTextures(AzeriteRespecFrame.ButtonFrame)

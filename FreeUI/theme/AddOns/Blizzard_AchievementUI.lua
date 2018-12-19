@@ -106,7 +106,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		bg:SetPoint("TOPLEFT", 1, -1)
 		bg:SetPoint("BOTTOMRIGHT", 0, 2)
 
-		bu.icon.texture:SetTexCoord(.08, .92, .08, .92)
+		bu.icon.texture:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(bu.icon.texture)
 
 		-- can't get a backdrop frame to appear behind the checked texture for some reason
@@ -217,7 +217,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 				F.CreateBD(bg, 0)
 
 				local ic = _G["AchievementFrameSummaryAchievement"..i.."IconTexture"]
-				ic:SetTexCoord(.08, .92, .08, .92)
+				ic:SetTexCoord(unpack(C.TexCoord))
 				F.CreateBG(ic)
 
 				bu.reskinned = true
@@ -318,11 +318,11 @@ C.themes["Blizzard_AchievementUI"] = function()
 		_G["AchievementFrameComparisonContainerButton"..i.."FriendIconOverlay"]:Hide()
 
 		local ic = _G["AchievementFrameComparisonContainerButton"..i.."PlayerIconTexture"]
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(ic)
 
 		local ic = _G["AchievementFrameComparisonContainerButton"..i.."FriendIconTexture"]
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(ic)
 	end
 
@@ -345,7 +345,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		select(1, result:GetRegions()):SetAlpha(0)
 		if result.icon then
 			select(2, result:GetRegions()):SetAlpha(0)
-			select(3, result:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+			select(3, result:GetRegions()):SetTexCoord(unpack(C.TexCoord))
 			F.ReskinIcon(select(3, result:GetRegions()))
 			select(5, result:GetRegions()):SetAlpha(0)
 			select(6, result:GetRegions()):SetAlpha(0)

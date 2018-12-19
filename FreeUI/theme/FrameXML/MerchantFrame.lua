@@ -52,14 +52,14 @@ tinsert(C.themes["FreeUI"], function()
 		button.bd:SetFrameLevel(0)
 		F.CreateBD(button.bd, .25)
 
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		ic:ClearAllPoints()
 		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
 		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 
 		for j = 1, 3 do
 			F.CreateBG(_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"])
-			_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"]:SetTexCoord(.08, .92, .08, .92)
+			_G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"]:SetTexCoord(unpack(C.TexCoord))
 		end
 	end
 
@@ -123,7 +123,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.CreateBD(MerchantBuyBackItemItemButton, 0)
 	F.CreateBD(MerchantBuyBackItem, .25)
 
-	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	MerchantBuyBackItemItemButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 	MerchantBuyBackItemItemButtonIconTexture:ClearAllPoints()
 	MerchantBuyBackItemItemButtonIconTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
 	MerchantBuyBackItemItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
@@ -144,7 +144,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.CreateBG(MerchantRepairItemButton)
 	local ic = MerchantRepairItemButton:GetRegions()
 	ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
-	ic:SetTexCoord(.08, .92, .08, .92)
+	ic:SetTexCoord(unpack(C.TexCoord))
 
 	hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
 		for i = 1, MAX_MERCHANT_CURRENCIES do
@@ -153,7 +153,7 @@ tinsert(C.themes["FreeUI"], function()
 				local ic = _G["MerchantToken"..i.."Icon"]
 				local co = _G["MerchantToken"..i.."Count"]
 
-				ic:SetTexCoord(.08, .92, .08, .92)
+				ic:SetTexCoord(unpack(C.TexCoord))
 				ic:SetDrawLayer("OVERLAY")
 				ic:SetPoint("LEFT", co, "RIGHT", 2, 0)
 				co:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)

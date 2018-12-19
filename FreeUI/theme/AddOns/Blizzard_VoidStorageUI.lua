@@ -37,7 +37,7 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			_G[voidButton..i.."Bg"]:Hide()
 
-			bu.icon:SetTexCoord(.08, .92, .08, .92)
+			bu.icon:SetTexCoord(unpack(C.TexCoord))
 
 			border:SetTexture(C.media.backdrop)
 			border.SetTexture = F.Dummy
@@ -68,7 +68,7 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 		searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 
 		_G["VoidStorageStorageButton"..i.."Bg"]:Hide()
-		_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(unpack(C.TexCoord))
 	end
 
 	for i = 1, 2 do
@@ -76,7 +76,7 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 		tab:GetRegions():Hide()
 		tab:SetCheckedTexture(C.media.checked)
 		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		tab:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+		tab:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(tab)
 	end
 

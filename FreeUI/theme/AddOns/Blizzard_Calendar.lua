@@ -50,7 +50,7 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarCreateEventFrameButtonBackground:Hide()
 	CalendarCreateEventMassInviteButtonBorder:Hide()
 	CalendarCreateEventCreateButtonBorder:Hide()
-	CalendarCreateEventIcon:SetTexCoord(.08, .92, .08, .92)
+	CalendarCreateEventIcon:SetTexCoord(unpack(C.TexCoord))
 	CalendarCreateEventIcon.SetTexCoord = F.Dummy
 	F.CreateBG(CalendarCreateEventIcon)
 	CalendarEventPickerTitleFrameBackgroundLeft:Hide()

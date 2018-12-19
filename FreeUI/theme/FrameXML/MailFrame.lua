@@ -45,7 +45,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	OpenMailLetterButton:SetNormalTexture("")
 	OpenMailLetterButton:SetPushedTexture("")
-	OpenMailLetterButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	OpenMailLetterButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 	F.CreateBDFrame(OpenMailLetterButton)
 
 	for i = 1, 2 do
@@ -54,7 +54,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	OpenMailMoneyButton:SetNormalTexture("")
 	OpenMailMoneyButton:SetPushedTexture("")
-	OpenMailMoneyButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	OpenMailMoneyButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 
 	F.CreateBDFrame(OpenMailMoneyButton)
 
@@ -76,7 +76,7 @@ tinsert(C.themes["FreeUI"], function()
 
 		st:Hide()
 		line:Hide()
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		bd:SetAlpha(0)
 		F.CreateBDFrame(bu)
 	end
@@ -115,7 +115,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu:SetNormalTexture("")
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.Dummy
@@ -131,7 +131,7 @@ tinsert(C.themes["FreeUI"], function()
 			local button = _G["SendMailAttachment"..i]
 			button.IconBorder:SetTexture(C.media.backdrop)
 			if button:GetNormalTexture() then
-				button:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+				button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 			end
 		end
 	end)

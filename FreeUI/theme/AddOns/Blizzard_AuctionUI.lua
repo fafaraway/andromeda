@@ -144,7 +144,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 	auctionhandler:SetScript("OnEvent", function()
 		local AuctionsItemButtonIconTexture = AuctionsItemButton:GetNormalTexture()
 		if AuctionsItemButtonIconTexture then
-			AuctionsItemButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+			AuctionsItemButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 			AuctionsItemButtonIconTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
 			AuctionsItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
 		end
@@ -235,6 +235,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 		iconBorder:SetDrawLayer("BACKGROUND")
 		iconBorder:SetPoint("TOPLEFT", icon, -C.mult, C.mult)
 		iconBorder:SetPoint("BOTTOMRIGHT", icon, C.mult, -C.mult)
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 	end
 end

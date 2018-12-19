@@ -65,7 +65,7 @@ tinsert(C.themes["FreeUI"], function()
 
 			frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
-			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			frame.Icon:SetTexCoord(unpack(C.TexCoord))
 			frame.Icon:SetDrawLayer("ARTWORK")
 			frame.bg = F.CreateBG(frame.Icon)
 			frame.bg:SetVertexColor(frame.IconBorder:GetVertexColor())

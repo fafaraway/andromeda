@@ -10,7 +10,7 @@ tinsert(C.themes["FreeUI"], function()
 		local na = _G[buttonName.."NameFrame"]
 
 		F.CreateBG(icon)
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 		icon:SetDrawLayer("OVERLAY")
 		count:SetDrawLayer("OVERLAY")
 		na:SetColorTexture(0, 0, 0, .25)
@@ -91,7 +91,7 @@ tinsert(C.themes["FreeUI"], function()
 		if not button.styled then
 			local border = _G[button:GetName().."Border"]
 
-			button.texture:SetTexCoord(.08, .92, .08, .92)
+			button.texture:SetTexCoord(unpack(C.TexCoord))
 
 			border:SetColorTexture(0, 0, 0)
 			border:SetDrawLayer("BACKGROUND")
@@ -108,7 +108,7 @@ tinsert(C.themes["FreeUI"], function()
 		if not button.styled then
 			local border = _G[button:GetName().."Border"]
 
-			button.texture:SetTexCoord(.08, .92, .08, .92)
+			button.texture:SetTexCoord(unpack(C.TexCoord))
 
 			border:SetColorTexture(0, 0, 0)
 			border:SetDrawLayer("BACKGROUND")

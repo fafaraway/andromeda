@@ -74,7 +74,7 @@ C.themes["Blizzard_Collections"] = function()
 			bg:SetPoint("BOTTOMRIGHT", 0, 1)
 			bu.bg = bg
 
-			ic:SetTexCoord(.08, .92, .08, .92)
+			ic:SetTexCoord(unpack(C.TexCoord))
 			ic.bg = F.CreateBG(ic)
 
 			bu.name:SetParent(bg)
@@ -158,14 +158,14 @@ C.themes["Blizzard_Collections"] = function()
 	hooksecurefunc(PetJournalListScrollFrame, "update", updatePetScroll)
 
 	PetJournalHealPetButtonBorder:Hide()
-	PetJournalHealPetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	PetJournalHealPetButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 	PetJournal.HealPetButton:SetPushedTexture("")
 	PetJournal.HealPetButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(PetJournal.HealPetButton)
 
 	do
 		local ic = MountJournal.MountDisplay.InfoButton.Icon
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(ic)
 	end
 
@@ -182,7 +182,7 @@ C.themes["Blizzard_Collections"] = function()
 	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)
 
 	PetJournalSummonRandomFavoritePetButtonBorder:Hide()
-	PetJournalSummonRandomFavoritePetButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	PetJournalSummonRandomFavoritePetButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 	PetJournalSummonRandomFavoritePetButton:SetPushedTexture("")
 	PetJournalSummonRandomFavoritePetButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(PetJournalSummonRandomFavoritePetButton)
@@ -190,7 +190,7 @@ C.themes["Blizzard_Collections"] = function()
 	-- Favourite mount button
 
 	MountJournalSummonRandomFavoriteButtonBorder:Hide()
-	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(.08, .92, .08, .92)
+	MountJournalSummonRandomFavoriteButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
 	MountJournalSummonRandomFavoriteButton:SetPushedTexture("")
 	MountJournalSummonRandomFavoriteButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	F.CreateBG(MountJournalSummonRandomFavoriteButton)
@@ -219,7 +219,7 @@ C.themes["Blizzard_Collections"] = function()
 	card.PetInfo.level:SetFontObject(GameFontNormal)
 	card.PetInfo.level:SetTextColor(1, 1, 1)
 
-	card.PetInfo.icon:SetTexCoord(.08, .92, .08, .92)
+	card.PetInfo.icon:SetTexCoord(unpack(C.TexCoord))
 	card.PetInfo.icon.bg = F.CreateBG(card.PetInfo.icon)
 
 	F.CreateBD(card, .25)
@@ -273,7 +273,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.level:SetFontObject(GameFontNormal)
 		bu.level:SetTextColor(1, 1, 1)
 
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		bu.icon.bg = F.CreateBDFrame(bu.icon, .25)
 
 		bu.setButton:GetRegions():SetPoint("TOPLEFT", bu.icon, -5, 5)
@@ -308,7 +308,7 @@ C.themes["Blizzard_Collections"] = function()
 			spell.FlyoutArrow:SetSize(8, 8)
 			spell.FlyoutArrow:SetTexCoord(0, 1, 0, 1)
 
-			spell.icon:SetTexCoord(.08, .92, .08, .92)
+			spell.icon:SetTexCoord(unpack(C.TexCoord))
 			F.CreateBG(spell.icon)
 		end
 	end
@@ -335,7 +335,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 		bu.icon:SetDrawLayer("ARTWORK")
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(bu.icon)
 	end
 
@@ -399,7 +399,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.slotFrameCollected:SetTexture("")
 		bu.slotFrameUncollected:SetTexture("")
 
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		local bg = F.CreateBG(bu)
 		bg:SetPoint("TOPLEFT", 2.8, -1.8)
 		bg:SetPoint("BOTTOMRIGHT", -2.8, 3.8)
@@ -449,7 +449,7 @@ C.themes["Blizzard_Collections"] = function()
 			button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			button:GetHighlightTexture():SetAllPoints(ic)
 
-			button.iconTextureUncollected:SetTexCoord(.08, .92, .08, .92)
+			button.iconTextureUncollected:SetTexCoord(unpack(C.TexCoord))
 			button.bg = F.ReskinIcon(ic)
 
 			button.level:ClearAllPoints()
@@ -580,7 +580,7 @@ C.themes["Blizzard_Collections"] = function()
 	hooksecurefunc(SetsCollectionFrame, "SetItemFrameQuality", function(_, itemFrame)
 		local ic = itemFrame.Icon
 		if not ic.bg then
-			ic:SetTexCoord(.08, .92, .08, .92)
+			ic:SetTexCoord(unpack(C.TexCoord))
 			itemFrame.IconBorder:Hide()
 			itemFrame.IconBorder.Show = F.dummy
 			ic.bg = F.CreateBDFrame(ic)
@@ -679,7 +679,7 @@ C.themes["Blizzard_Collections"] = function()
 				PetJournalBandageButton:SetPushedTexture("")
 				PetJournalBandageButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				PetJournalBandageButtonBorder:Hide()
-				PetJournalBandageButtonIcon:SetTexCoord(.08, .92, .08, .92)
+				PetJournalBandageButtonIcon:SetTexCoord(unpack(C.TexCoord))
 				PetJournalBandageButton:SetPoint("TOPRIGHT", PetJournalHealPetButton, "TOPLEFT", -3, 0)
 				PetJournalBandageButton:SetPoint("BOTTOMLEFT", PetJournalHealPetButton, "BOTTOMLEFT", -35, 0)
 				F.CreateBDFrame(PetJournalBandageButtonIcon)
@@ -722,7 +722,7 @@ do
 					local bu = HAbiFrameActiveEnemy.AbilityButtons[i]
 					bu.NormalTexture:SetTexture(nil)
 					bu.NormalTexture.SetTexture = F.Dummy
-					bu.Icon:SetTexCoord(.08, .92, .08, .92)
+					bu.Icon:SetTexCoord(unpack(C.TexCoord))
 					local bg = F.CreateBDFrame(bu.Icon)
 					F.CreateSD(bg)
 				end

@@ -15,7 +15,7 @@ C.themes["Blizzard_ItemSocketingUI"] = function()
 
 		bu:SetPushedTexture("")
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 
 		shine:ClearAllPoints()
 		shine:SetPoint("TOPLEFT", bu)

@@ -176,7 +176,7 @@ C.themes["Blizzard_GuildUI"] = function()
 		bg:SetPoint("TOPLEFT", 1, -3)
 		bg:SetPoint("BOTTOMRIGHT", 0, 4)
 
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(bu.icon)
 	end
 	GuildPerksContainerButton1:SetPoint("LEFT", -1, 0)

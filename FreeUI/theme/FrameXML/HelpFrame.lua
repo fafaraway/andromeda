@@ -96,7 +96,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	HelpFrameCharacterStuckHearthstone:SetSize(56, 56)
 	F.CreateBG(HelpFrameCharacterStuckHearthstone)
-	HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(.08, .92, .08, .92)
+	HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(unpack(C.TexCoord))
 
 	F.Reskin(HelpBrowserNavHome)
 	F.Reskin(HelpBrowserNavReload)

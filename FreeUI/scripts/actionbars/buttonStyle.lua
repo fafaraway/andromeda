@@ -85,7 +85,7 @@ local function styleExtraActionButton(bu)
 	end)
 
 	-- icon
-	bu.icon:SetTexCoord(.08, .92, .08, .92)
+	bu.icon:SetTexCoord(unpack(C.TexCoord))
 	bu.icon:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	bu.icon:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 
@@ -201,14 +201,14 @@ local function styleActionButton(bu)
 
 
 	-- cut the default border of the icons and make them shiny
-	ic:SetTexCoord(.08, .92, .08, .92)
+	ic:SetTexCoord(unpack(C.TexCoord))
 	-- ic:SetDrawLayer("OVERLAY")
 	ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 
 	-- make the normaltexture match the buttonsize
 	-- nt:SetAllPoints(bu)
-	-- nt:SetTexCoord(.08, .92, .08, .92)
+	-- nt:SetTexCoord(unpack(C.TexCoord))
 
 	if not bu.bg then applyBackground(bu) end
 
@@ -248,7 +248,7 @@ local function stylePetButton(bu)
 	pu:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	pu:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 
-	ic:SetTexCoord(.08, .92, .08, .92)
+	ic:SetTexCoord(unpack(C.TexCoord))
 	ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 	-- ic:SetDrawLayer("OVERLAY")
@@ -286,7 +286,7 @@ local function styleStanceButton(bu)
 	pu:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	pu:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 
-	ic:SetTexCoord(.08, .92, .08, .92)
+	ic:SetTexCoord(unpack(C.TexCoord))
 	ic:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)
 	ic:SetPoint("BOTTOMRIGHT", bu, "BOTTOMRIGHT", 0, 0)
 	-- ic:SetDrawLayer("OVERLAY")

@@ -21,7 +21,7 @@ tinsert(C.themes["FreeUI"], function()
 			bd:SetPoint("TOPLEFT")
 			bd:SetPoint("BOTTOMRIGHT", 114, 0)
 
-			ic:SetTexCoord(.08, .92, .08, .92)
+			ic:SetTexCoord(unpack(C.TexCoord))
 			ic.bg = F.CreateBG(ic)
 		end
 
@@ -52,7 +52,7 @@ tinsert(C.themes["FreeUI"], function()
 		frame.IconBorder:Hide()
 		frame.BlackBackgroundHoist.Background:Hide()
 		frame.SpecRing:SetAlpha(0)
-		frame.SpecIcon:SetTexCoord(.08, .92, .08, .92)
+		frame.SpecIcon:SetTexCoord(unpack(C.TexCoord))
 		local bg = F.CreateBDFrame(frame.SpecIcon)
 		hooksecurefunc("BonusRollFrame_StartBonusRoll", function()
 			bg:SetShown(frame.SpecIcon:IsShown())

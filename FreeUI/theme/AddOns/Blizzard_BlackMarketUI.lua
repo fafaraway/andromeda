@@ -17,7 +17,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 	BlackMarketFrameRight:Hide()
 
 	F.CreateBG(BlackMarketFrame.HotDeal.Item)
-	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
+	BlackMarketFrame.HotDeal.Item.IconTexture:SetTexCoord(unpack(C.TexCoord))
 
 	local headers = {"ColumnName", "ColumnLevel", "ColumnType", "ColumnDuration", "ColumnHighBidder", "ColumnCurrentBid"}
 	for _, header in pairs(headers) do
@@ -43,7 +43,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 		for i = 1, #buttons do
 			local bu = buttons[i]
 
-			bu.Item.IconTexture:SetTexCoord(.08, .92, .08, .92)
+			bu.Item.IconTexture:SetTexCoord(unpack(C.TexCoord))
 			if not bu.reskinned then
 				bu.Left:Hide()
 				bu.Right:Hide()

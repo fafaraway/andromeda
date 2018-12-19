@@ -17,7 +17,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.ReskinArrow(PetStablePrevPageButton, "left")
 	F.ReskinArrow(PetStableNextPageButton, "right")
 
-	PetStableSelectedPetIcon:SetTexCoord(.08, .92, .08, .92)
+	PetStableSelectedPetIcon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateBG(PetStableSelectedPetIcon)
 
 	for i = 1, NUM_PET_ACTIVE_SLOTS do
@@ -29,7 +29,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu.Checked:SetTexture(C.media.checked)
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
-		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G["PetStableActivePet"..i.."IconTexture"]:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBDFrame(bu, .25)
 	end
 
@@ -40,7 +40,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		bu:DisableDrawLayer("BACKGROUND")
 
-		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G["PetStableStabledPet"..i.."IconTexture"]:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBDFrame(bu, .25)
 	end
 end)

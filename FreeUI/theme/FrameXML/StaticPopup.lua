@@ -23,7 +23,7 @@ tinsert(C.themes["FreeUI"], function()
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
-		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(.08, .92, .08, .92)
+		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(unpack(C.TexCoord))
 
 		bu:SetNormalTexture("")
 		bu:SetHighlightTexture("")

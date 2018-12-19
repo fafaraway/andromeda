@@ -32,7 +32,7 @@ C.themes["Blizzard_OrderHallUI"] = function()
 			local bu = select(i, OrderHallTalentFrame:GetChildren())
 			if bu and bu.talent then
 				if not bu.bg then
-					bu.Icon:SetTexCoord(.08, .92, .08, .92)
+					bu.Icon:SetTexCoord(unpack(C.TexCoord))
 					bu.Border:SetAlpha(0)
 					bu.Highlight:SetColorTexture(1, 1, 1, .25)
 					bu.bg = F.CreateBDFrame(bu.Icon)

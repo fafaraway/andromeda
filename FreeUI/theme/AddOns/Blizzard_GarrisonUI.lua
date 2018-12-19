@@ -72,7 +72,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	end
 
 	function F:ReskinGarrMaterial()
-		self.MaterialFrame.Icon:SetTexCoord(.08, .92, .08, .92)
+		self.MaterialFrame.Icon:SetTexCoord(unpack(C.TexCoord))
 		self.MaterialFrame:GetRegions():Hide()
 		local bg = F.CreateBDFrame(self.MaterialFrame, .25)
 		bg:SetPoint("TOPLEFT", 5, -5)
@@ -180,7 +180,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local ability = abilities[numAbilitiesStyled]
 		while ability do
 			local icon = ability.IconButton.Icon
-			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetTexCoord(unpack(C.TexCoord))
 			icon:SetDrawLayer("BACKGROUND", 1)
 			F.CreateBG(icon)
 
@@ -195,7 +195,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				if equip and not equip.bg then
 					equip.Border:Hide()
 					equip.BG:Hide()
-					equip.Icon:SetTexCoord(.08, .92, .08, .92)
+					equip.Icon:SetTexCoord(unpack(C.TexCoord))
 					equip.bg = F.CreateBDFrame(equip.Icon, .25)
 				end
 			end
@@ -235,7 +235,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			if item then
 				local icon = item.Icon
 				item.Border:Hide()
-				icon:SetTexCoord(.08, .92, .08, .92)
+				icon:SetTexCoord(unpack(C.TexCoord))
 				F.CreateBG(icon)
 
 				local bg = F.CreateBDFrame(item, .25)
@@ -429,7 +429,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	do
 		local icon = CapacitiveDisplay.ShipmentIconFrame.Icon
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(icon)
 		F.ReskinGarrisonPortrait(CapacitiveDisplay.ShipmentIconFrame.Follower)
 	end
@@ -442,7 +442,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		while reagent do
 			reagent.NameFrame:SetAlpha(0)
 
-			reagent.Icon:SetTexCoord(.08, .92, .08, .92)
+			reagent.Icon:SetTexCoord(unpack(C.TexCoord))
 			reagent.Icon:SetDrawLayer("BORDER")
 			F.CreateBG(reagent.Icon)
 
@@ -492,7 +492,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 		for _, reward in pairs(button.Rewards) do
 			reward:GetRegions():Hide()
-			reward.Icon:SetTexCoord(.08, .92, .08, .92)
+			reward.Icon:SetTexCoord(unpack(C.TexCoord))
 			reward.IconBorder:SetAlpha(0)
 			F.CreateBG(reward.Icon)
 			reward:ClearAllPoints()
@@ -628,7 +628,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 
 	hooksecurefunc("GarrisonMissionPage_SetReward", function(frame)
 		if not frame.bg then
-			frame.Icon:SetTexCoord(.08, .92, .08, .92)
+			frame.Icon:SetTexCoord(unpack(C.TexCoord))
 			F.CreateBDFrame(frame.Icon)
 			frame.BG:SetAlpha(0)
 			frame.bg = F.CreateBDFrame(frame.BG, .25)

@@ -23,7 +23,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu:SetCheckedTexture("")
 		bu:SetPushedTexture("")
 
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 		ic.bg = F.CreateBG(bu)
 	end
 
@@ -70,7 +70,7 @@ tinsert(C.themes["FreeUI"], function()
 			local tab = _G["SpellBookSkillLineTab"..i]
 			local nt = tab:GetNormalTexture()
 			if nt then
-				nt:SetTexCoord(.08, .92, .08, .92)
+				nt:SetTexCoord(unpack(C.TexCoord))
 			end
 
 			if not tab.styled then
@@ -117,7 +117,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu:SetCheckedTexture(C.media.checked)
 
 		if icon then
-			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetTexCoord(unpack(C.TexCoord))
 			icon:ClearAllPoints()
 			icon:SetPoint("TOPLEFT", 2, -2)
 			icon:SetPoint("BOTTOMRIGHT", -2, 2)
@@ -135,7 +135,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu.professionName:SetPoint("TOPLEFT", 100, -4)
 
 		bu.icon:SetAlpha(1)
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		bu.icon:SetDesaturated(false)
 		F.CreateBG(bu.icon)
 

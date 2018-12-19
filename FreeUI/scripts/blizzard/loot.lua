@@ -119,7 +119,7 @@ local createSlot = function(id)
 	iconFrame:SetPoint("RIGHT", frame, "LEFT", -2, 0)
 
 	local icon = iconFrame:CreateTexture(nil, "ARTWORK")
-	icon:SetTexCoord(.08, .92, .08, .92)
+	icon:SetTexCoord(unpack(C.TexCoord))
 	icon:SetPoint("TOPLEFT", 1, -1)
 	icon:SetPoint("BOTTOMRIGHT", -1, 1)
 	F.CreateBDFrame(icon)

@@ -17,7 +17,7 @@ C.themes["Blizzard_AlliedRacesUI"] = function()
 			local bu = select(i, parent:GetChildren())
 
 			if bu.Icon and not bu.styled then
-				bu.Icon:SetTexCoord(.08, .92, .08, .92)
+				bu.Icon:SetTexCoord(unpack(C.TexCoord))
 				select(3, bu:GetRegions()):Hide()
 				F.CreateBG(bu.Icon)
 				bu.Text:SetTextColor(1, 1, 1)

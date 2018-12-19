@@ -31,7 +31,7 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 		local bu = _G["ArchaeologyFrameCompletedPageArtifact"..i]
 		bu:GetRegions():Hide()
 		select(2, bu:GetRegions()):Hide()
-		select(3, bu:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+		select(3, bu:GetRegions()):SetTexCoord(unpack(C.TexCoord))
 		select(4, bu:GetRegions()):SetTextColor(1, 1, 1)
 		select(5, bu:GetRegions()):SetTextColor(1, 1, 1)
 		F.CreateBDFrame(bu, .25)
@@ -75,6 +75,6 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 	local bg = F.CreateBDFrame(ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
 	bg:SetFrameLevel(0)
 
-	ArchaeologyFrameArtifactPageIcon:SetTexCoord(.08, .92, .08, .92)
+	ArchaeologyFrameArtifactPageIcon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateBG(ArchaeologyFrameArtifactPageIcon)
 end

@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_TimeManager"] = function()
 	TimeManagerGlobe:Hide()
 
-	TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(.08, .92, .08, .92)
+	TimeManagerStopwatchCheck:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 	TimeManagerStopwatchCheck:SetCheckedTexture(C.media.checked)
 	F.CreateBG(TimeManagerStopwatchCheck)
 

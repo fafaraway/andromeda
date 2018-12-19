@@ -77,7 +77,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	for _, button in pairs({FriendsTabHeaderSoRButton, FriendsTabHeaderRecruitAFriendButton}) do
 		button:SetPushedTexture("")
-		button:GetRegions():SetTexCoord(.08, .92, .08, .92)
+		button:GetRegions():SetTexCoord(unpack(C.TexCoord))
 		F.CreateBDFrame(button)
 	end
 

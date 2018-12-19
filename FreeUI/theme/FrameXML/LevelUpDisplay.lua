@@ -6,7 +6,7 @@ tinsert(C.themes["FreeUI"], function()
 			local f = _G["LevelUpDisplaySideUnlockFrame"..i]
 
 			if not f.restyled then
-				f.icon:SetTexCoord(.08, .92, .08, .92)
+				f.icon:SetTexCoord(unpack(C.TexCoord))
 				F.CreateBG(f.icon)
 			end
 		end

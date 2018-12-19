@@ -17,7 +17,7 @@ tinsert(C.themes["FreeUI"], function()
 
 		local icon = frame.Icon
 
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(icon)
 
 		F.CreateBD(frame)
@@ -51,7 +51,7 @@ tinsert(C.themes["FreeUI"], function()
 		while ability do
 			local icon = ability.Icon
 
-			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetTexCoord(unpack(C.TexCoord))
 			F.CreateBG(icon)
 
 			numAbilitiesStyled = numAbilitiesStyled + 1
@@ -74,7 +74,7 @@ tinsert(C.themes["FreeUI"], function()
 		while trait do
 			local icon = trait.Icon
 
-			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetTexCoord(unpack(C.TexCoord))
 			F.CreateBG(icon)
 
 			numTraitsStyled = numTraitsStyled + 1

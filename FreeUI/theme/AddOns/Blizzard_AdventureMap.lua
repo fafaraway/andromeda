@@ -19,7 +19,7 @@ C.themes["Blizzard_AdventureMap"] = function()
 		for i = 6, 7 do
 			local bu = select(i, dialog:GetChildren())
 			if bu then
-				bu.Icon:SetTexCoord(.08, .92, .08, .92)
+				bu.Icon:SetTexCoord(unpack(C.TexCoord))
 				F.CreateBDFrame(bu.Icon)
 				local bg = F.CreateBDFrame(bu.Icon, .25)
 				bg:SetPoint("BOTTOMRIGHT")

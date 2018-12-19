@@ -30,7 +30,7 @@ tinsert(C.themes["FreeUI"], function()
 				bu.categoryLeft:SetAlpha(0)
 				bu.categoryRight:SetAlpha(0)
 
-				bu.icon:SetTexCoord(.08, .92, .08, .92)
+				bu.icon:SetTexCoord(unpack(C.TexCoord))
 				bu.bg = F.CreateBG(bu.icon)
 
 				bu.styled = true

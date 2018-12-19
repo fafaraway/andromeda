@@ -24,7 +24,7 @@ tinsert(C.themes["FreeUI"], function()
 
 		F.Reskin(bu, true)
 
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
 		bu.icon:SetDrawLayer("OVERLAY")
 		bu.icon.bg = F.CreateBG(bu.icon)

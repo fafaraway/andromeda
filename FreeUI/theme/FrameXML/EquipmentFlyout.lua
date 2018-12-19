@@ -32,7 +32,7 @@ tinsert(C.themes["FreeUI"], function()
 		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
 		border:SetDrawLayer("BACKGROUND", 1)
 
-		bu.icon:SetTexCoord(.08, .92, .08, .92)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
 	end)
 
 	hooksecurefunc("EquipmentFlyout_DisplayButton", function(button)

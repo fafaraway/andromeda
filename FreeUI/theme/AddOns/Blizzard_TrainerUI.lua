@@ -24,7 +24,7 @@ C.themes["Blizzard_TrainerUI"] = function()
 
 	F.CreateBDFrame(ClassTrainerFrameSkillStepButton, 0)
 
-	ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(.08, .92, .08, .92)
+	ClassTrainerFrameSkillStepButtonIcon:SetTexCoord(unpack(C.TexCoord))
 
 	hooksecurefunc("ClassTrainerFrame_Update", function()
 		for _, bu in next, ClassTrainerFrame.scrollFrame.buttons do
@@ -48,7 +48,7 @@ C.themes["Blizzard_TrainerUI"] = function()
 				bu.selectedTex:SetTexture(C.media.backdrop)
 				bu.selectedTex:SetVertexColor(r, g, b, .2)
 
-				bu.icon:SetTexCoord(.08, .92, .08, .92)
+				bu.icon:SetTexCoord(unpack(C.TexCoord))
 				F.CreateBG(bu.icon)
 
 				bu.styled = true

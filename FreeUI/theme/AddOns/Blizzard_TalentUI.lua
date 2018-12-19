@@ -59,7 +59,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		local scrollChild = frame.spellsScroll.child
 
 		scrollChild.ring:Hide()
-		scrollChild.specIcon:SetTexCoord(.08, .92, .08, .92)
+		scrollChild.specIcon:SetTexCoord(unpack(C.TexCoord))
 		F.CreateBG(scrollChild.specIcon)
 
 		local roleIcon = scrollChild.roleIcon
@@ -99,7 +99,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 				if not frame.styled then
 					frame.ring:Hide()
-					frame.icon:SetTexCoord(.08, .92, .08, .92)
+					frame.icon:SetTexCoord(unpack(C.TexCoord))
 					F.CreateBG(frame.icon)
 
 					frame.styled = true
@@ -142,7 +142,7 @@ C.themes["Blizzard_TalentUI"] = function()
 			bu.selectedTex:SetDrawLayer("BACKGROUND")
 			bu.selectedTex:SetAllPoints()
 
-			bu.specIcon:SetTexCoord(.08, .92, .08, .92)
+			bu.specIcon:SetTexCoord(unpack(C.TexCoord))
 			bu.specIcon:SetSize(58, 58)
 			bu.specIcon:SetPoint("LEFT", bu, "LEFT")
 			bu.specIcon:SetDrawLayer("OVERLAY")
@@ -177,7 +177,7 @@ C.themes["Blizzard_TalentUI"] = function()
 			bu.knownSelection:SetAlpha(0)
 
 			ic:SetDrawLayer("ARTWORK")
-			ic:SetTexCoord(.08, .92, .08, .92)
+			ic:SetTexCoord(unpack(C.TexCoord))
 			F.CreateBG(ic)
 
 			bu.bg = F.CreateBDFrame(bu, .25)
@@ -207,7 +207,7 @@ C.themes["Blizzard_TalentUI"] = function()
 		_G["PlayerSpecTab"..i.."Background"]:Hide()
 		tab:SetCheckedTexture(C.media.checked)
 		F.CreateBDFrame(tab)
-		select(2, tab:GetRegions()):SetTexCoord(.08, .92, .08, .92)
+		select(2, tab:GetRegions()):SetTexCoord(unpack(C.TexCoord))
 	end
 
 	hooksecurefunc("PlayerTalentFrame_UpdateSpecs", function()
@@ -250,7 +250,7 @@ C.themes["Blizzard_TalentUI"] = function()
 
 	local function updatePVPTalent(self)
 		if not self.styled then
-			self.Icon:SetTexCoord(.08, .92, .08, .92)
+			self.Icon:SetTexCoord(unpack(C.TexCoord))
 			F.CreateBDFrame(self.Icon)
 			F.CreateBDFrame(self, .25)
 			self:GetRegions():SetAlpha(0)

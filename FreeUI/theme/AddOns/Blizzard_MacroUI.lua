@@ -26,7 +26,7 @@ C.themes["Blizzard_MacroUI"] = function()
 	MacroFrameSelectedMacroButton:SetPoint("TOPLEFT", MacroFrameSelectedMacroBackground, "TOPLEFT", 12, -16)
 	MacroFrameSelectedMacroButtonIcon:SetPoint("TOPLEFT", C.mult, -C.mult)
 	MacroFrameSelectedMacroButtonIcon:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
-	MacroFrameSelectedMacroButtonIcon:SetTexCoord(.08, .92, .08, .92)
+	MacroFrameSelectedMacroButtonIcon:SetTexCoord(unpack(C.TexCoord))
 
 	MacroPopupFrame:SetPoint("TOPLEFT", MacroFrame, "TOPRIGHT", 1, 0)
 	MacroPopupFrame:SetHeight(525)
@@ -43,7 +43,7 @@ C.themes["Blizzard_MacroUI"] = function()
 
 		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
 		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
-		ic:SetTexCoord(.08, .92, .08, .92)
+		ic:SetTexCoord(unpack(C.TexCoord))
 
 		F.SetFS(na)
 
@@ -61,7 +61,7 @@ C.themes["Blizzard_MacroUI"] = function()
 
 				ic:SetPoint("TOPLEFT", C.mult, -C.mult)
 				ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
-				ic:SetTexCoord(.08, .92, .08, .92)
+				ic:SetTexCoord(unpack(C.TexCoord))
 
 				F.CreateBD(bu, .25)
 				bu.styled = true
