@@ -66,10 +66,10 @@ C['appearance'] = {
 	['uiScale'] = 1,
 	['uiScaleAuto'] = true,
 	['backdropcolor'] = {.05, .05, .05},
-	['alpha'] = .4,
+	['alpha'] = .5,
 	['shadow'] = true,
-	['buttonGradientColour'] = {.3, .3, .3, .3},
-	['buttonSolidColour'] = {.01, .01, .01, .4},
+	['buttonGradientColour'] = {.1, .1, .1, .5},
+	['buttonSolidColour'] = {.05, .05, .05, .5},
 	['useButtonGradientColour'] = true,
 
 	['useCustomColour'] = false,
