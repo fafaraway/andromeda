@@ -8,11 +8,11 @@ tinsert(C.themes["FreeUI"], function()
 			local menu = _G["DropDownList"..i.."MenuBackdrop"]
 			local backdrop = _G["DropDownList"..i.."Backdrop"]
 			if not backdrop.reskinned then
-				F.CreateBD(menu)
-				F.CreateSD(menu)
+				--F.CreateBD(menu)
+				--F.CreateSD(menu)
 				
 				F.CreateBD(backdrop)
-				F.CreateSD(backdrop)
+				--F.CreateSD(backdrop)
 				backdrop.reskinned = true
 			end
 		end
