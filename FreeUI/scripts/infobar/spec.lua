@@ -76,9 +76,7 @@ FreeUISpecButton:SetScript("OnEvent", function(self)
 			self.Text:SetText(format("S: %s  L: %s", name, lootname))
 		end
 
-		if C.appearance.usePixelFont then
-			self.Text:SetFont(unpack(C.font.pixel))
-		elseif C.Client == "zhCN" or C.Client == "zhTW" then
+		if C.Client == "zhCN" or C.Client == "zhTW" then
 			self.Text:SetFont(C.font.normal, 11)
 		end
 

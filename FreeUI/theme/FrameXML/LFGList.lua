@@ -25,8 +25,8 @@ tinsert(C.themes["FreeUI"], function()
 			bu.Icon:SetTexCoord(.01, .99, .01, .99)
 
 			local bg = F.CreateBG(bu)
-			bg:SetPoint("TOPLEFT", bu.Icon, -C.mult, C.mult)
-			bg:SetPoint("BOTTOMRIGHT", bu.Icon, C.mult, -C.mult)
+			bg:SetPoint("TOPLEFT", bu.Icon, -C.Mult, C.Mult)
+			bg:SetPoint("BOTTOMRIGHT", bu.Icon, C.Mult, -C.Mult)
 
 			bu.styled = true
 		end

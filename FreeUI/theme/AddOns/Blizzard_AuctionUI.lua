@@ -145,8 +145,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 		local AuctionsItemButtonIconTexture = AuctionsItemButton:GetNormalTexture()
 		if AuctionsItemButtonIconTexture then
 			AuctionsItemButtonIconTexture:SetTexCoord(unpack(C.TexCoord))
-			AuctionsItemButtonIconTexture:SetPoint("TOPLEFT", C.mult, -C.mult)
-			AuctionsItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+			AuctionsItemButtonIconTexture:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+			AuctionsItemButtonIconTexture:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 		end
 		AuctionsItemButton.IconBorder:SetTexture("")
 	end)
@@ -157,8 +157,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 
 	local hl = AuctionsItemButton:GetHighlightTexture()
 	hl:SetColorTexture(1, 1, 1, .25)
-	hl:SetPoint("TOPLEFT", C.mult, -C.mult)
-	hl:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	hl:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+	hl:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 
 	F.ReskinClose(AuctionFrameCloseButton, "TOPRIGHT", AuctionFrame, "TOPRIGHT", -4, -14)
 	F.ReskinScroll(BrowseScrollFrameScrollBar)
@@ -233,8 +233,8 @@ C.themes["Blizzard_AuctionUI"] = function()
 		Token.ItemBorder:Hide()
 		iconBorder:SetTexture(C.media.backdrop)
 		iconBorder:SetDrawLayer("BACKGROUND")
-		iconBorder:SetPoint("TOPLEFT", icon, -C.mult, C.mult)
-		iconBorder:SetPoint("BOTTOMRIGHT", icon, C.mult, -C.mult)
+		iconBorder:SetPoint("TOPLEFT", icon, -C.Mult, C.Mult)
+		iconBorder:SetPoint("BOTTOMRIGHT", icon, C.Mult, -C.Mult)
 		icon:SetTexCoord(unpack(C.TexCoord))
 	end
 end

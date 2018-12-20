@@ -26,7 +26,6 @@ if GetLocale() == 'zhCN' then
 		['damage'] 		= 'Fonts\\ARKai_C.ttf',
 		['header']		= 'Fonts\\ARKai_T.ttf',
 		['chat']		= 'Fonts\\ARKai_T.ttf',
-		['pixel']		= {'Fonts\\pixfontCN.ttf', 10, 'OUTLINEMONOCHROME'}, -- pixel font for Chinese client, personal use
 	}
 elseif GetLocale() == 'zhTW' then
 	C.font = {
@@ -65,10 +64,9 @@ end
 C['appearance'] = {
 	['uiScale'] = 1,
 	['uiScaleAuto'] = true,
-	['backdropcolor'] = {.05, .05, .05},
-	['alpha'] = .5,
-	['shadow'] = true,
-	['buttonGradientColour'] = {.1, .1, .1, .5},
+	['backdropColour'] = {.05, .05, .05, .5},
+	['addShadowBorder'] = true,
+	['buttonGradientColour'] = {.15, .15, .15, .5},
 	['buttonSolidColour'] = {.05, .05, .05, .5},
 	['useButtonGradientColour'] = true,
 
@@ -79,13 +77,11 @@ C['appearance'] = {
 		['vignetteAlpha'] = .35,
 
 	['fontStyle'] = true,
-
-	['usePixelFont'] = false, -- Chinese pixel font for personal use
 }
 
 C['actionbars'] = {
-	['buttonSizeNormal'] = 30,
 	['buttonSizeSmall'] = 24,
+	['buttonSizeNormal'] = 30,
 	['buttonSizeBig'] = 34,
 	['buttonSizeHuge'] = 40,
 	['padding'] = 2,

@@ -31,8 +31,8 @@ function module:FontStyle()
 	end
 
 	-- SharedFonts     
-	SetFont("SystemFont_Tiny2",                C.font.normal, 8)
-	SetFont("SystemFont_Tiny",                 C.font.normal, 9)
+	SetFont("SystemFont_Tiny2",                C.font.normal, 11)
+	SetFont("SystemFont_Tiny",                 C.font.normal, 11)
 	SetFont("SystemFont_Shadow_Small",         C.font.normal, 11, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("SystemFont_Small",                C.font.normal, 11)
 	SetFont("SystemFont_Small2",               C.font.normal, 11)

@@ -3,10 +3,14 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["FreeUI"], function()
 	GameMenuFrameHeader:SetAlpha(0)
 	GameMenuFrameHeader:ClearAllPoints()
-	GameMenuFrameHeader:SetPoint("TOP", GameMenuFrame, 0, 7)
+	GameMenuFrameHeader:SetPoint("TOP", GameMenuFrame, 0, 4)
 	F.StripTextures(GameMenuFrame)
 	F.CreateBD(GameMenuFrame)
 	F.CreateSD(GameMenuFrame)
+
+	hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", function()
+		GameMenuFrame:SetHeight(360)
+	end)
 
 	local buttons = {
 		GameMenuButtonHelp,

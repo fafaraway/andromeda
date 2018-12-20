@@ -64,8 +64,8 @@ tinsert(C.themes["FreeUI"], function()
 		slot.SetHighlightTexture = F.Dummy
 		slot.icon:SetTexCoord(unpack(C.TexCoord))
 
-		border:SetPoint("TOPLEFT", -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+		border:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+		border:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 		border:SetDrawLayer("BACKGROUND")
 		F.CreateBDFrame(slot, .25)
 
@@ -146,8 +146,8 @@ tinsert(C.themes["FreeUI"], function()
 		tab.bg:SetFrameLevel(0)
 		F.CreateBD(tab.bg)
 
-		tab.Hider:SetPoint("TOPLEFT", tab.bg, C.mult, -C.mult)
-		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -C.mult, C.mult)
+		tab.Hider:SetPoint("TOPLEFT", tab.bg, C.Mult, -C.Mult)
+		tab.Hider:SetPoint("BOTTOMRIGHT", tab.bg, -C.Mult, C.Mult)
 	end
 
 	-- [[ Equipment manager ]]
@@ -180,8 +180,8 @@ tinsert(C.themes["FreeUI"], function()
 
 		bu:SetCheckedTexture(C.media.checked)
 		select(2, bu:GetRegions()):Hide()
-		ic:SetPoint("TOPLEFT", C.mult, -C.mult)
-		ic:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+		ic:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+		ic:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 		ic:SetTexCoord(unpack(C.TexCoord))
 
 		F.CreateBD(bu, .25)

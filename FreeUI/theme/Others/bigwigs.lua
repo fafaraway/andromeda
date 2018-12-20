@@ -69,12 +69,20 @@ function module:BigWigs()
 			iconBd:Show()
 		end
 
-		bar.candyBarLabel:ClearAllPoints()
-		bar.candyBarLabel:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
-		bar.candyBarLabel:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
-		bar.candyBarDuration:ClearAllPoints()
-		bar.candyBarDuration:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
-		bar.candyBarDuration:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
+		local label = bar.candyBarLabel
+		local timer = bar.candyBarDuration
+
+		label:SetFont(C.font.normal, 11)
+		label:SetShadowColor(0, 0, 0, 1)
+		label:SetShadowOffset(2, -2)
+		label:ClearAllPoints()
+		label:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
+		label:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
+
+		F.SetFS(timer)
+		timer:ClearAllPoints()
+		timer:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
+		timer:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
 	end
 
 	local function registerStyle()

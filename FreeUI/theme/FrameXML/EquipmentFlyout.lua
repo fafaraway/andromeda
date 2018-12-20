@@ -28,8 +28,8 @@ tinsert(C.themes["FreeUI"], function()
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.Dummy
-		border:SetPoint("TOPLEFT", -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+		border:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+		border:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 		border:SetDrawLayer("BACKGROUND", 1)
 
 		bu.icon:SetTexCoord(unpack(C.TexCoord))

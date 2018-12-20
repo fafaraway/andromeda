@@ -14,14 +14,15 @@ local function WA()
 			end
 		elseif fType == "aurabar" then
 			if not f.styled then
+				F.CreateBDFrame(f.bar)
 				F.CreateSD(f.bar)
 				f.icon:SetTexCoord(unpack(C.TexCoord))
 				f.icon.SetTexCoord = F.Dummy
-				if f.icon then
+				--[[if f.icon then
 					f.iconFrame:SetAllPoints(f.icon)
 					F.CreateBDFrame(f.icon)
 					F.CreateSD(f.icon)
-				end
+				end]]
 				f.styled = true
 			end
 		end

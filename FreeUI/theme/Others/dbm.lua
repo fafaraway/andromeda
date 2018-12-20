@@ -110,11 +110,7 @@ function module:DBM()
 					name:SetPoint("RIGHT", frame, "LEFT", tbar:GetWidth()*.85, 8)
 					name.SetPoint = F.Dummy
 					
-					if C.appearance.usePixelFont then
-						name:SetFont(unpack(C.font.pixel))
-						name:SetShadowColor(0, 0, 0, 1)
-						name:SetShadowOffset(1, -1)
-					elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
+					if C.Client == 'zhCN' or C.Client == 'zhTW' then
 						name:SetFont(C.font.normal, 12)
 						name:SetShadowColor(0, 0, 0, 1)
 						name:SetShadowOffset(2, -2)

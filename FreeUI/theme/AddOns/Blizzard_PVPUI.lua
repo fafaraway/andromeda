@@ -138,8 +138,8 @@ C.themes["Blizzard_PVPUI"] = function()
 
 		bu.tex = F.CreateGradient(bu)
 		bu.tex:SetDrawLayer("BACKGROUND")
-		bu.tex:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
-		bu.tex:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
+		bu.tex:SetPoint("TOPLEFT", bg, C.Mult, -C.Mult)
+		bu.tex:SetPoint("BOTTOMRIGHT", bg, -C.Mult, C.Mult)
 
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)

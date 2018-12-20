@@ -19,13 +19,15 @@ local function CreateBackDrop(self)
 		F.CreateBD(bd)
 	end
 
-	if C.appearance.shadow then
-		local sd = CreateFrame('Frame', nil, bd)
+	if C.appearance.addShadowBorder then
+		F.CreateSD(bd)
+		self.Shadow = sd
+		--[[local sd = CreateFrame('Frame', nil, bd)
 		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 		sd:SetPoint('TOPLEFT', -4, 4)
 		sd:SetPoint('BOTTOMRIGHT', 4, -4)
 		sd:SetBackdropBorderColor(0, 0, 0, .35)
-		self.sd = sd
+		self.sd = sd]]
 	end
 end
 
@@ -479,9 +481,7 @@ local function CreateCastBar(self)
 
 	local name
 
-	if C.appearance.usePixelFont then
-		name = F.CreateFS(cb, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -636,7 +636,7 @@ local function PostCreateIcon(element, button)
 	bg:SetVertexColor(0, 0, 0)
 	button.bg = bg
 
-	if C.appearance.shadow then
+	if C.appearance.addShadowBorder then
 		local sd = CreateFrame('Frame', nil, button)
 		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 		sd:SetPoint('TOPLEFT', -4, 4)
@@ -1237,9 +1237,7 @@ end
 local function CreateName(self)
 	local Name
 
-	if C.appearance.usePixelFont then
-		Name = F.CreateFS(self.Health, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], nil, {0, 0, 0}, 1, -1)
-	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 	else
 		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
@@ -1283,10 +1281,7 @@ local function CreatePartyName(self)
 	self.Text = Text
 
 	if C.unitframes.partyNameAlways then
-		if C.appearance.usePixelFont then
-			Text:SetFont(unpack(C.font.pixel))
-			Text:SetShadowOffset(1, -1)
-		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
+		if C.Client == 'zhCN' or C.Client == 'zhTW' then
 			Text:SetFont(C.font.normal, 11)
 			Text:SetShadowOffset(2, -2)
 		else
@@ -1309,9 +1304,7 @@ local function UpdateTOTName(self)
 
 	local tt
 
-	if C.appearance.usePixelFont then
-		tt = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		tt = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		tt = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -1341,9 +1334,7 @@ local function UpdateTOFName(self)
 
 	local ft
 
-	if C.appearance.usePixelFont then
-		ft = F.CreateFS(self, C.font.pixel[1], C.font.pixel[2], C.font.pixel[3], {1, 1, 1}, {0, 0, 0}, 1, -1)
-	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		ft = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		ft = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)

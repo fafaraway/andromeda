@@ -41,8 +41,8 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 
 			border:SetTexture(C.media.backdrop)
 			border.SetTexture = F.Dummy
-			border:SetPoint("TOPLEFT", -C.mult, C.mult)
-			border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+			border:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+			border:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 			border:SetDrawLayer("BACKGROUND")
 
 			F.CreateBDFrame(bu, .25)
@@ -60,12 +60,12 @@ C.themes["Blizzard_VoidStorageUI"] = function()
 
 		border:SetTexture(C.media.backdrop)
 		border.SetTexture = F.Dummy
-		border:SetPoint("TOPLEFT", -C.mult, C.mult)
-		border:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+		border:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+		border:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 		border:SetDrawLayer("BACKGROUND")
 
-		searchOverlay:SetPoint("TOPLEFT", -C.mult, C.mult)
-		searchOverlay:SetPoint("BOTTOMRIGHT", C.mult, -C.mult)
+		searchOverlay:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+		searchOverlay:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 
 		_G["VoidStorageStorageButton"..i.."Bg"]:Hide()
 		_G["VoidStorageStorageButton"..i.."IconTexture"]:SetTexCoord(unpack(C.TexCoord))

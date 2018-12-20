@@ -7,14 +7,14 @@ tinsert(C.themes["FreeUI"], function()
 			f = f:GetParent()
 		end
 		if f.bg then
-			f.bg:SetBackdropColor(0, 0, 0, C.appearance.alpha)
+			f.bg:SetBackdropColor(unpack(C.appearance.backdropColour))
 		end
 	end
 
 	local function fixParentbg(f)
 		f = f:GetParent():GetParent()
 		if f.bg then
-			f.bg:SetBackdropColor(0, 0, 0, C.appearance.alpha)
+			f.bg:SetBackdropColor(unpack(C.appearance.backdropColour))
 		end
 	end
 

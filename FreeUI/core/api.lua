@@ -43,7 +43,7 @@ C.TexCoord = {.08, .92, .08, .92}
 
 C.TempAnchor = {}
 
-C.mult = 1
+C.Mult = 1
 
 
 
@@ -87,7 +87,7 @@ function F:CreateTex()
 end
 
 function F:CreateSD(a)
-	if not C.appearance.shadow then return end
+	if not C.appearance.addShadowBorder then return end
 	if self.Shadow then return end
 
 	local frame = self
@@ -106,35 +106,19 @@ function F:CreateSD(a)
 end
 
 function F:CreateBD(a)
-	local r, g, b = C.appearance.backdropcolor
 	self:SetBackdrop({
-		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.mult,
+		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult,
 	})
-	self:SetBackdropColor(r, g, b, a or C.appearance.alpha)
+	self:SetBackdropColor(C.appearance.backdropColour[1], C.appearance.backdropColour[2], C.appearance.backdropColour[3], a or C.appearance.backdropColour[4])
 	self:SetBackdropBorderColor(0, 0, 0)
 
 	F.CreateTex(self)
 end
 
---[[function F:CreateBG(offset)
-	local frame = self
-	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
-	offset = offset or 1
-	local lvl = frame:GetFrameLevel()
-
-	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetPoint("TOPLEFT", self, -offset, offset)
-	bg:SetPoint("BOTTOMRIGHT", self, offset, -offset)
-	bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
-
-	F.CreateTex(bg)
-	return bg
-end]]
-
 function F:CreateBG(offset)
 	local f = self
 	if self:GetObjectType() == "Texture" then f = self:GetParent() end
-	offset = offset or C.mult
+	offset = offset or C.Mult
 
 	local bg = f:CreateTexture(nil, "BACKGROUND")
 	bg:SetPoint("TOPLEFT", self, -offset, offset)
@@ -151,10 +135,10 @@ function F:CreateBDFrame(a)
 	local lvl = frame:GetFrameLevel()
 
 	local bg = CreateFrame("Frame", nil, frame)
-	bg:SetPoint("TOPLEFT", self, -C.mult, C.mult)
-	bg:SetPoint("BOTTOMRIGHT", self, C.mult, -C.mult)
+	bg:SetPoint("TOPLEFT", self, -C.Mult, C.Mult)
+	bg:SetPoint("BOTTOMRIGHT", self, C.Mult, -C.Mult)
 	bg:SetFrameLevel(lvl == 0 and 1 or lvl - 1)
-	F.CreateBD(bg, a or C.appearance.alpha)
+	F.CreateBD(bg, a)
 
 	return bg
 end
@@ -173,8 +157,8 @@ end
 
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
-	tex:SetPoint("TOPLEFT", C.mult, -C.mult)
-	tex:SetPoint("BOTTOMRIGHT", -C.mult, C.mult)
+	tex:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+	tex:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 	tex:SetTexture(C.appearance.useButtonGradientColour and C.media.gradient or C.media.backdrop)
 	tex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
 
@@ -360,8 +344,8 @@ function F:ReskinScroll()
 	F.CreateBD(bu.bg, 0)
 
 	local tex = F.CreateGradient(self)
-	tex:SetPoint("TOPLEFT", bu.bg, C.mult, -C.mult)
-	tex:SetPoint("BOTTOMRIGHT", bu.bg, -C.mult, C.mult)
+	tex:SetPoint("TOPLEFT", bu.bg, C.Mult, -C.Mult)
+	tex:SetPoint("BOTTOMRIGHT", bu.bg, -C.Mult, C.Mult)
 
 	local up, down = self:GetChildren()
 	up:SetWidth(17)
@@ -442,8 +426,8 @@ function F:ReskinDropDown()
 	F.CreateBD(bg, 0)
 
 	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bg, C.mult, -C.mult)
-	gradient:SetPoint("BOTTOMRIGHT", bg, -C.mult, C.mult)
+	gradient:SetPoint("TOPLEFT", bg, C.Mult, -C.Mult)
+	gradient:SetPoint("BOTTOMRIGHT", bg, -C.Mult, C.Mult)
 end
 
 function F:ReskinClose(a1, p, a2, x, y)
@@ -501,8 +485,8 @@ function F:ReskinInput(height, width)
 	F.CreateBD(bd, 0)
 
 	local gradient = F.CreateGradient(self)
-	gradient:SetPoint("TOPLEFT", bd, C.mult, -C.mult)
-	gradient:SetPoint("BOTTOMRIGHT", bd, -C.mult, C.mult)
+	gradient:SetPoint("TOPLEFT", bd, C.Mult, -C.Mult)
+	gradient:SetPoint("BOTTOMRIGHT", bd, -C.Mult, C.Mult)
 
 	if height then self:SetHeight(height) end
 	if width then self:SetWidth(width) end

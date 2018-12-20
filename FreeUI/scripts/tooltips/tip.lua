@@ -337,7 +337,7 @@ local function style(self)
 		bg:SetFrameLevel(self:GetFrameLevel())
 		self.bg = bg
 
-		if C.appearance.shadow then
+		if C.appearance.addShadowBorder then
 			local sd = CreateFrame("Frame", nil, self)
 			sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
 			sd:SetPoint("TOPLEFT", -4, 4)
