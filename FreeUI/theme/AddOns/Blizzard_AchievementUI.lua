@@ -50,8 +50,8 @@ C.themes["Blizzard_AchievementUI"] = function()
 					bu:SetHighlightTexture(C.media.backdrop)
 					local hl = bu:GetHighlightTexture()
 					hl:SetVertexColor(r, g, b, .2)
-					hl:SetPoint("TOPLEFT", 1, -2)
-					hl:SetPoint("BOTTOMRIGHT", -1, 1)
+					hl:SetPoint("TOPLEFT", bg, C.Mult, -C.Mult)
+					hl:SetPoint("BOTTOMRIGHT", bg, -C.Mult, C.Mult)
 				end
 				first = false
 			end

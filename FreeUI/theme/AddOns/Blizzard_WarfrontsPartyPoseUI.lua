@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_WarfrontsPartyPoseUI"] = function()
-	F.StripTextures(WarfrontsPartyPoseFrame.Border)
+	WarfrontsPartyPoseFrame.Border:Hide()
 	F.SetBD(WarfrontsPartyPoseFrame)
 	F.Reskin(WarfrontsPartyPoseFrame.LeaveButton)
 	F.StripTextures(WarfrontsPartyPoseFrame.ModelScene)
