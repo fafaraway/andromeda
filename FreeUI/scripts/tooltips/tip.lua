@@ -190,10 +190,10 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 		GameTooltipStatusBar:ClearAllPoints()
 		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltipStatusBar:GetParent(), "TOPLEFT", 1, -3)
 		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltipStatusBar:GetParent(), "TOPRIGHT", -1, -3)
-		if not GameTooltipStatusBar.bg then
+		if C.Mult and not GameTooltipStatusBar.bg then
 			GameTooltipStatusBar:SetStatusBarTexture(C.media.sbTex)
 			GameTooltipStatusBar:SetHeight(2)
-			local bg = F.CreateBG(GameTooltipStatusBar, 1)
+			local bg = F.CreateBG(GameTooltipStatusBar)
 			--F.CreateBD(bg, .7)
 			F.CreateTex(bg)
 			GameTooltipStatusBar.bg = bg
@@ -236,6 +236,7 @@ hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 			bar.Bar:SetStatusBarTexture(C.media.sbTex)
 			F.CreateBD(bar, .25)
 			bar:SetSize(216, 18)
+			F.SetFS(bar.Bar.Label)
 
 			bar.styled = true
 		end
