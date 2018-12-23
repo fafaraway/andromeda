@@ -1,5 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 
+local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
+local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
+local min, max, abs, floor = math.min, math.max, math.abs, math.floor
+
 C.PlayerClass = select(2, UnitClass("player"))
 C.PlayerName = UnitName("player")
 C.Realm = GetRealmName()
@@ -291,7 +295,7 @@ local function textureOnEnter(self)
 				pixel:SetVertexColor(C.r, C.g, C.b)
 			end
 		else
-			self.bgTex:SetVertexColor(C.r, C.g, C.b)
+			--self.bgTex:SetVertexColor(C.r, C.g, C.b)
 		end
 	end
 end
@@ -303,7 +307,7 @@ local function textureOnLeave(self)
 			pixel:SetVertexColor(1, 1, 1)
 		end
 	else
-		self.bgTex:SetVertexColor(0, 0, 0)
+		--self.bgTex:SetVertexColor(0, 0, 0)
 	end
 end
 F.clearArrow = textureOnLeave
@@ -311,8 +315,8 @@ F.clearArrow = textureOnLeave
 local function scrollOnEnter(self)
 	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
 	if not bu then return end
-	bu.bg:SetBackdropColor(.3, .3, .3, .6)
-	bu.bg:SetBackdropBorderColor(.3, .3, .3)
+	bu.bg:SetBackdropColor(C.r, C.g, C.b, .25)
+	bu.bg:SetBackdropBorderColor(C.r, C.g, C.b)
 end
 local function scrollOnLeave(self)
 	local bu = (self.ThumbTexture or self.thumbTexture) or _G[self:GetName().."ThumbTexture"]
@@ -419,11 +423,9 @@ function F:ReskinDropDown()
 	down:HookScript("OnEnter", textureOnEnter)
 	down:HookScript("OnLeave", textureOnLeave)
 
-	local bg = CreateFrame("Frame", nil, self)
+	local bg = F.CreateBDFrame(self, 0)
 	bg:SetPoint("TOPLEFT", 16, -4)
 	bg:SetPoint("BOTTOMRIGHT", -18, 8)
-	bg:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bg, 0)
 
 	local gradient = F.CreateGradient(self)
 	gradient:SetPoint("TOPLEFT", bg, C.Mult, -C.Mult)
@@ -1139,6 +1141,40 @@ function F.FormatTime(s)
 		return format("|cffc5b879%d|r", s), s - floor(s) -- yellow
 	else
 		return format("|cff996ec3%d|r", s), s - floor(s)
+	end
+end
+
+function F.FormatTimeRaw(s)
+	if s >= day then
+		return format("%dd", s/day)
+	elseif s >= hour then
+		return format("%dh", s/hour)
+	elseif s >= minute then
+		return format("%dm", s/minute)
+	elseif s >= 3 then
+		return floor(s)
+	else
+		if C.blizzard.decimalCD then
+			return format("%.1f", s)
+		else
+			return format("%d", s + .5)
+		end
+	end
+end
+
+function F:CooldownOnUpdate(elapsed, raw)
+	local formatTime = raw and F.FormatTimeRaw or F.FormatTime
+	self.elapsed = (self.elapsed or 0) + elapsed
+	if self.elapsed >= .1 then
+		local timeLeft = self.expiration - GetTime()
+		if timeLeft > 0 then
+			local text = formatTime(timeLeft)
+			self.timer:SetText(text)
+		else
+			self:SetScript("OnUpdate", nil)
+			self.timer:SetText(nil)
+		end
+		self.elapsed = 0
 	end
 end
 
