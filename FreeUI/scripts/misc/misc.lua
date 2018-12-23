@@ -206,6 +206,7 @@ function module:AutoScreenShot()
 			f:Show()
 		end
 	end
+	F:RegisterEvent("ACHIEVEMENT_EARNED", setupMisc)
 end
 
 
