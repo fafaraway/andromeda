@@ -23,8 +23,8 @@ local function SetupUIScale()
 	local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 	if C.appearance.uiScaleAuto then
 		scale = 768 / pysHeight
+		scale = tonumber(floor(scale*100 + .5)/100)
 	end
-	scale = tonumber(format("%.2f", scale))
 
 	_G.SetCVar("useUiScale", 1)
 	_G.SetCVar("uiScale", scale)
