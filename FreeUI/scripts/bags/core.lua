@@ -400,7 +400,7 @@ function module:OnLogin()
 			local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 			self.BG:SetVertexColor(color.r, color.g, color.b, 1)
 		else
-			self.BG:SetVertexColor(0, 0, 0, .5)
+			self.BG:SetVertexColor(0, 0, 0, .2)
 		end
 	end
 

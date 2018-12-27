@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-local TradeTabs = CreateFrame("Frame", "TradeTabs")
+local TradeTabs = CreateFrame("Frame")
 
 local whitelist = {
 	[171] = true, -- Alchemy
@@ -28,6 +28,7 @@ local onlyPrimary = {
 }
 
 local RUNEFORGING = 53428 -- Runeforging spellid
+local CHEF_HAT = 134020
 
 function TradeTabs:OnEvent(event, addon)
 	--if not C.misc.tradeTabs then return end
@@ -79,7 +80,7 @@ function TradeTabs:Initialize()
 	local parent = TradeSkillFrame
 	local tradeSpells = buildSpellList()
 	local i = 1
-	local prev
+	local prev, foundCooking
 
 	-- if player is a DK, insert runeforging at the top
 	if select(2, UnitClass("player")) == "DEATHKNIGHT" then
@@ -91,15 +92,21 @@ function TradeTabs:Initialize()
 	for i, slot in ipairs(tradeSpells) do
 		local _, spellID = GetSpellBookItemInfo(slot, BOOKTYPE_PROFESSION)
 		local tab = self:CreateTab(i, parent, spellID)
+		if spellID == 818 then foundCooking = true end
 		i = i + 1
 
-		local point, relPoint, x, y = "TOPLEFT", "BOTTOMLEFT", 0, -17
+		local point, relPoint, x, y = "TOPLEFT", "BOTTOMLEFT", 0, -10
 		if not prev then
-			prev, relPoint, x, y = parent, "TOPRIGHT", 2, -44
+			prev, relPoint, x, y = parent, "TOPRIGHT", 2, -40
 		end
 		tab:SetPoint(point, prev, relPoint, x, y)
 
 		prev = tab
+	end
+
+	if foundCooking and PlayerHasToy(CHEF_HAT) and C_ToyBox.IsToyUsable(CHEF_HAT) then
+		local tab = self:CreateTab(i, parent, CHEF_HAT, true)
+		tab:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -10)
 	end
 
 	self.initialized = true
@@ -117,7 +124,7 @@ local function onLeave(self)
 end   
 
 local function updateSelection(self)
-	if IsCurrentSpell(self.spell) then
+	if IsCurrentSpell(self.spellID) then
 		self:SetChecked(true)
 		self.clickStopper:Show()
 	else
@@ -126,12 +133,13 @@ local function updateSelection(self)
 	end
 
 	-- CD monitoring
-	if not self.CD then
-		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
-		self.CD:SetAllPoints()
+	local start, duration
+	if self.type == "toy" then
+		start, duration = GetItemCooldown(self.spellID)
+	else
+		start, duration = GetSpellCooldown(self.spellID)
 	end
-	local start, duration = GetSpellCooldown(self.spell)
-	if duration and duration > 1.5 then	-- not for GCD
+	if start and duration and duration > 1.5 then
 		self.CD:SetCooldown(start, duration)
 	end
 end
@@ -147,15 +155,22 @@ local function createClickStopper(button)
 	f:Hide()
 end
 
-function TradeTabs:CreateTab(i, parent, spellID)
-	local spell, _, texture = GetSpellInfo(spellID)
-	local button = CreateFrame("CheckButton", "TradeTabsTab"..i, parent, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
-	button.tooltip = spell
+function TradeTabs:CreateTab(i, parent, spellID, isToy)
+	local name, texture, _
+	if isToy then
+		_, name, texture = C_ToyBox.GetToyInfo(spellID)
+	else
+		name, _, texture = GetSpellInfo(spellID)
+	end
+
+	local button = CreateFrame("CheckButton", nil, parent, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
+	button.tooltip = name
 	button.spellID = spellID
-	button.spell = spell
+	button.spell = name
 	button:Show()
-	button:SetAttribute("type", "spell")
-	button:SetAttribute("spell", spell)
+	button.type = isToy and "toy" or "spell"
+	button:SetAttribute("type", button.type)
+	button:SetAttribute(button.type, name)
 
 	button:SetNormalTexture(texture)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -164,6 +179,9 @@ function TradeTabs:CreateTab(i, parent, spellID)
 	button:GetRegions():Hide()
 	F.CreateBDFrame(button)
 	button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
+
+	button.CD = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+	button.CD:SetAllPoints()
 
 	button:SetScript("OnEvent", updateSelection)
 	button:RegisterEvent("TRADE_SKILL_SHOW")

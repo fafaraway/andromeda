@@ -18,7 +18,7 @@ function module:PetBattleUI()
 	weather.Label:Hide()
 	weather.Name:Hide()
 	weather.Icon:ClearAllPoints()
-	weather.Icon:SetPoint("TOP", UIParent, 0, -10)
+	weather.Icon:SetPoint("TOP", frame.TopVersusText, "BOTTOM", 0, -15)
 	weather.Icon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateSD(weather.Icon)
 	if weather.Icon.Shadow then
