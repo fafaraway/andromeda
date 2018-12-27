@@ -1,6 +1,14 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("misc")
 
+local format, pairs = string.format, pairs
+local min, mod, floor = math.min, mod, math.floor
+local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
+local MAX_REPUTATION_REACTION = MAX_REPUTATION_REACTION
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS
+local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
+local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
+
 
 local function UpdateBar(bar)
 	local rest = bar.restBar
@@ -14,7 +22,7 @@ local function UpdateBar(bar)
 		bar:Show()
 		if rxp then
 			rest:SetMinMaxValues(0, mxp)
-			rest:SetValue(math.min(xp + rxp, mxp))
+			rest:SetValue(min(xp + rxp, mxp))
 			rest:Show()
 		end
 		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end
@@ -59,7 +67,7 @@ local function UpdateTooltip(bar)
 	end
 
 	if GetWatchedFactionInfo() then
-		local name, standing, min, max, value, factionID = GetWatchedFactionInfo()
+		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local friendID, _, _, _, _, _, friendTextLevel, _, nextFriendThreshold = GetFriendshipReputation(factionID)
 		local currentRank, maxRank = GetFriendshipReputationRanks(friendID)
 		local standingtext
@@ -68,18 +76,18 @@ local function UpdateTooltip(bar)
 				name = name.." ("..currentRank.." / "..maxRank..")"
 			end
 			if not nextFriendThreshold then
-				value = max - 1
+				value = barMax - 1
 			end
 			standingtext = friendTextLevel
 		else
 			if standing == MAX_REPUTATION_REACTION then
-				max = min + 1e3
-				value = max - 1
+				barMax = barMin + 1e3
+				value = barMax - 1
 			end
 			standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
 		end
 		GameTooltip:AddLine(name, 62/250, 175/250, 227/250)
-		GameTooltip:AddDoubleLine(standingtext, value - min.."/"..max - min.." ("..floor((value - min)/(max - min)*100).."%)", 1, 1, 1, 1,1,1)
+		GameTooltip:AddDoubleLine(standingtext, value - barMin.."/"..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", 1,1,1, 1,1,1)
 		
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
@@ -94,9 +102,9 @@ local function UpdateTooltip(bar)
 
 	--if IsWatchingHonorAsXP() then
 	if UnitLevel("player") == MAX_PLAYER_LEVEL then
-		local current, max, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
+		local current, barMax, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
 		GameTooltip:AddLine(HONOR, 177/250, 19/250, 0)
-		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..max, 1, 1, 1, 1,1,1)
+		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..barMax, 1, 1, 1, 1,1,1)
 	end
 
 	GameTooltip:Show()
@@ -140,4 +148,32 @@ function module:ProgressBar()
 	bar.restBar = rest
 
 	self:SetupScript(bar)
+
+	hooksecurefunc("ReputationFrame_Update", module.HookParagonRep)
+end
+
+function module:HookParagonRep()
+	local numFactions = GetNumFactions()
+	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
+		local factionIndex = factionOffset + i
+		local factionRow = _G["ReputationBar"..i]
+		local factionBar = _G["ReputationBar"..i.."ReputationBar"]
+		local factionStanding = _G["ReputationBar"..i.."ReputationBarFactionStanding"]
+
+		if factionIndex <= numFactions then
+			local factionID = select(14, GetFactionInfo(factionIndex))
+			if factionID and C_Reputation.IsFactionParagon(factionID) then
+				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+				local barValue = mod(currentValue, threshold)
+				local factionStandingtext = C.InfoColor..L["Paragon"]..floor(currentValue/threshold)
+
+				factionBar:SetMinMaxValues(0, threshold)
+				factionBar:SetValue(barValue)
+				factionStanding:SetText(factionStandingtext)
+				factionRow.standingText = factionStandingtext
+				factionRow.rolloverText = C.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+			end
+		end
+	end
 end

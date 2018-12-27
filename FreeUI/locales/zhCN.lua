@@ -55,6 +55,7 @@ L["LegionInvasion"] = "军团突袭"
 L["BfAInvasion"] = "阵营突袭"
 L["CurrentInvasion"] = "当前: "
 L["NextInvasion"] = "下次: "
+L["Paragon"] = "巅峰"
 L["ParagonRep"] = "巅峰声望"
 
 L["Sort"] = "整理"

@@ -53,6 +53,7 @@ L["LegionInvasion"] = "Legion Invasion"
 L["BfAInvasion"] = "Faction Invasion"
 L["CurrentInvasion"] = "Current: "
 L["NextInvasion"] = "Next: "
+L["Paragon"] = "Paragon "
 L["ParagonRep"] = "Paragon Rep"
 
 L["Sort"] = "Sort"
