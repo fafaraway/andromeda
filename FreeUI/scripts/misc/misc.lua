@@ -20,6 +20,10 @@ function module:OnLogin()
 	self:AutoSetRole()
 	self:BuyStack()
 	self:AutoSellJunk()
+
+	if C.misc.paragonRep then
+		hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
+	end
 end
 
 

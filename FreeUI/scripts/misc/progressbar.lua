@@ -129,7 +129,7 @@ function module:SetupScript(bar)
 	end
 	bar:SetScript("OnEvent", UpdateBar)
 	bar:SetScript("OnEnter", UpdateTooltip)
-	bar:SetScript("OnLeave", GameTooltip_Hide)
+	bar:SetScript("OnLeave", F.HideTooltip)
 end
 
 function module:ProgressBar()
@@ -148,8 +148,6 @@ function module:ProgressBar()
 	bar.restBar = rest
 
 	self:SetupScript(bar)
-
-	hooksecurefunc("ReputationFrame_Update", module.HookParagonRep)
 end
 
 function module:HookParagonRep()

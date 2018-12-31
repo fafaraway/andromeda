@@ -162,6 +162,7 @@ C['misc'] = {
 	['cameraDistance'] = 50,
 	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
+	['paragonRep'] = true,
 }
 
 
