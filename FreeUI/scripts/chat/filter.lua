@@ -3,7 +3,7 @@ local module = F:GetModule('chat')
 
 local strmatch, strfind = string.match, string.find
 local format, gsub = string.format, string.gsub
-local pairs, ipairs = pairs, ipairs
+local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 
 local FilterList = {}
 
@@ -68,17 +68,17 @@ local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _
 	end
 end
 
-local function restoreCVar(cvar)
-	C_Timer.After(.01, function()
-		SetCVar(cvar, 1)
-	end)
+local cvar
+local function toggleCVar(value)
+	value = tonumber(value) or 1
+	SetCVar(cvar, value)
 end
 
 local function toggleBubble(party)
-	local cvar = 'chatBubbles'..(party and 'Party' or '')
+	cvar = "chatBubbles"..(party and "Party" or "")
 	if not GetCVarBool(cvar) then return end
-	SetCVar(cvar, 0)
-	restoreCVar(cvar)
+	toggleCVar(0)
+	C_Timer.After(.01, toggleCVar)
 end
 
 -- filter spam from addons
@@ -101,34 +101,6 @@ local function genAddonBlock(_, event, msg, author)
 	end
 end
 
-
-
--- filter auto invite from WQT
--- Credit: WorldQuestTrackerBlocker, Jordy141
-local WQTUsers = {}
-local inviteString = _G.ERR_INVITED_TO_GROUP_SS:gsub('.+|h', '')
-local function blockInviteString(_, _, msg)
-	if strfind(msg, inviteString) then
-		local name = strmatch(msg, "%[(.+)%]")
-		if WQTUsers[name] then
-			return true
-		end
-	end
-end
-local function blockWhisperString(_, _, msg, author)
-	local name = Ambiguate(author, 'none')
-	if strfind(msg, "%[World Quest Tracker%]") or strfind(msg, "一起做世界任务吧：") or strfind(msg, "一起来做世界任务<") then
-		if not WQTUsers[name] then
-			WQTUsers[name] = true
-		end
-		return true
-	end
-end
-local function hideInvitePopup(_, name)
-	if WQTUsers[name] then
-		StaticPopup_Hide('PARTY_INVITE')
-	end
-end
 
 -- filter azerite info while islands-ing
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub('%%d/%%d ', '')
@@ -168,10 +140,6 @@ function module:ChatFilter()
 	ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', genAddonBlock)
 	ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', genAddonBlock)
 	ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', genAddonBlock)
-
-	ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', blockInviteString)
-	ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', blockWhisperString)
-	F:RegisterEvent('PARTY_INVITE_REQUEST', hideInvitePopup)
 
 	F:RegisterEvent('PLAYER_ENTERING_WORLD', isPlayerOnIslands)
 end
