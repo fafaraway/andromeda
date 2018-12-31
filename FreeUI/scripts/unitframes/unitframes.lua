@@ -267,13 +267,13 @@ local function CreateHealthPrediction(self)
 	otherBar:SetWidth(self:GetWidth())
 
 	local absorbBar = CreateFrame('StatusBar', nil, self.Health)
-    absorbBar:SetPoint('TOP')
-    absorbBar:SetPoint('BOTTOM')
-    absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'RIGHT')
-    absorbBar:SetStatusBarTexture('Interface\\AddOns\\FreeUI\\assets\\statusbar_striped')
-    absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
-    absorbBar:SetStatusBarColor(.8, .8, .8, .6)
-    absorbBar:SetWidth(self:GetWidth())
+	absorbBar:SetPoint('TOP')
+	absorbBar:SetPoint('BOTTOM')
+	absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'RIGHT')
+	absorbBar:SetStatusBarTexture('Interface\\AddOns\\FreeUI\\assets\\statusbar_striped')
+	absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
+	absorbBar:SetStatusBarColor(.8, .8, .8, .6)
+	absorbBar:SetWidth(self:GetWidth())
 
 	local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
 	overAbsorb:SetPoint('TOP', 0, 2)
@@ -1219,7 +1219,6 @@ local function CreateIndicator(self)
 		GroupRoleIndicator:SetJustifyH('CENTER')
 		GroupRoleIndicator:SetPoint('BOTTOM', self.Health, 1, 1)
 		GroupRoleIndicator.Override = UpdateLFD
-
 		self.GroupRoleIndicator = GroupRoleIndicator
 
 		-- phase indicator
@@ -1227,8 +1226,13 @@ local function CreateIndicator(self)
 		PhaseIndicator:SetText('?')
 		PhaseIndicator:SetJustifyH('RIGHT')
 		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -1)
-
 		self.PhaseIndicator = PhaseIndicator
+
+		-- summon indicator
+		local summon = self:CreateTexture(nil, "OVERLAY")
+		summon:SetSize(16, 16)
+		summon:SetPoint("CENTER", 0, 0)
+		self.SummonIndicator = summon
 	end
 end
 
