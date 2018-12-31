@@ -33,7 +33,7 @@ do
 		GameTooltip:AddLine("Drag to move", 1, .8, 0)
 		GameTooltip:Show()
 	end)
-	minimize:HookScript("OnLeave", GameTooltip_Hide)
+	minimize:HookScript("OnLeave", F.HideTooltip)
 
 	hooksecurefunc(ot, "SetPoint", function(_, _, parent)
 		if parent ~= mover then
