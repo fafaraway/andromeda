@@ -340,14 +340,14 @@ function module:OnLogin()
 		end
 	end
 
-	hooksecurefunc('FCF_OpenTemporaryWindow', function()
+	--[[hooksecurefunc('FCF_OpenTemporaryWindow', function()
 		for _, chatFrameName in next, CHAT_FRAMES do
 			local frame = _G[chatFrameName]
 			if frame.isTemporary then
 				skinChat(frame)
 			end
 		end
-	end)
+	end)]]
 
 	self:ChatFilter()
 	self:ChatAbbreviate()
