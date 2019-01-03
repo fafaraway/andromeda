@@ -27,7 +27,8 @@ function module:Rare()
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 			RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["rareFound"]..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
 			print(C.InfoColor..L["rareFound"]..tex..(info.name or ""))
-			PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+			--PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+			PlaySound(23404, "master")
 
 			cache[id] = true
 		end
