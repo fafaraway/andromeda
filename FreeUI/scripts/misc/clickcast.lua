@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-if not C.misc.clickCast then return end
+if not C.general.clickCast then return end
 
 
 --	Simple click2cast spell binder(sBinder by Fernir)
@@ -162,7 +162,7 @@ SpellBinder.makeFramesList = function(self)
 	for frame, value in pairs(ClickCastFrames) do
 		local v
 		if frame and type(frame) == "table" then v = frame:GetName() end
-		if C.misc.click_cast_filter ~= true then
+		if C.general.click_cast_filter ~= true then
 			if v then DB.frames[frame] = DB.frames[frame] or true end
 		else
 			if v ~= "oUF_Target" and v ~= "oUF_Player" then DB.frames[frame] = DB.frames[frame] or true end
@@ -348,11 +348,9 @@ SpellBinder:SetScript("OnEvent", function(self, event, ...)
 	end
 end)
 
+F.ReskinPortraitFrame(SpellBinder, true)
 F.ReskinPortraitFrame(SpellBinder)
-SpellBinderInset:DisableDrawLayer("BORDER")
-SpellBinderInset:DisableDrawLayer("BACKGROUND")
-SpellBinder:DisableDrawLayer("BORDER")
-SpellBinder:DisableDrawLayer("OVERLAY")
+
 F.ReskinTab(SpellBinder.OpenButton)
 F.CreateBDFrame(SpellBinder.OpenButton)
 

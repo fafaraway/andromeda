@@ -21,9 +21,7 @@ function module:OnLogin()
 	self:BuyStack()
 	self:AutoSellJunk()
 
-	if C.misc.paragonRep then
-		hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
-	end
+	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
 end
 
 
@@ -82,7 +80,7 @@ end
 
 -- Auto enables the ActionCam on login
 function module:ActionCam()
-	if C.misc.autoActionCam then
+	if C.general.autoActionCam then
 		local aac = CreateFrame("Frame", "AutoActionCam")
 
 		aac:RegisterEvent("PLAYER_LOGIN")
@@ -113,26 +111,24 @@ end
 
 -- undress button on dress up frame
 function module:UndressButton()
-	if C.misc.undressButton then
-		local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
-		undress:SetSize(80, 22)
-		undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
-		undress:SetText(L['Undress'])
-		undress:SetScript("OnClick", function()
-			DressUpModel:Undress()
-		end)
+	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
+	undress:SetSize(80, 22)
+	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
+	undress:SetText(L['Undress'])
+	undress:SetScript("OnClick", function()
+		DressUpModel:Undress()
+	end)
 
-		local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
-		sideUndress:SetSize(80, 22)
-		sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
-		sideUndress:SetText(L['Undress'])
-		sideUndress:SetScript("OnClick", function()
-			SideDressUpModel:Undress()
-		end)
+	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
+	sideUndress:SetSize(80, 22)
+	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
+	sideUndress:SetText(L['Undress'])
+	sideUndress:SetScript("OnClick", function()
+		SideDressUpModel:Undress()
+	end)
 
-		F.Reskin(undress)
-		F.Reskin(sideUndress)
-	end
+	F.Reskin(undress)
+	F.Reskin(sideUndress)
 end
 
 
@@ -146,7 +142,7 @@ end
 
 -- Faster Looting
 function module:FasterLoot()
-	if not C.misc.fasterLoot then return end
+	if not C.general.fasterLoot then return end
 	local faster = CreateFrame("Frame")
 	faster:RegisterEvent("LOOT_READY")
 	faster:SetScript("OnEvent",function()
@@ -203,7 +199,7 @@ function module:AutoScreenShot()
 	end)
 
 	local function setupMisc(event)
-		if not C.misc.autoScreenShot then
+		if not C.general.autoScreenShot then
 			F:UnregisterEvent(event, setupMisc)
 		else
 			f.delay = 1
@@ -216,7 +212,7 @@ end
 
 -- Auto repair
 function module:AutoRepair()
-	if not C.misc.autoRepair then return end
+	if not C.general.autoRepair then return end
 
 	local isShown, isBankEmpty
 	local function autoRepair(override)
@@ -281,7 +277,7 @@ end
 
 -- auto sell junk
 function module:AutoSellJunk()
-	if not C.misc.autoSellJunk then return end
+	if not C.general.autoSellJunk then return end
 
 	local sellCount, stop, cache = 0, true, {}
 	local errorText = _G.ERR_VENDOR_DOESNT_BUY
@@ -338,10 +334,7 @@ end
 
 -- auto set role
 function module:AutoSetRole()
-	if not C.misc.autoSetRole then return end
-
-	local useSpec = C.misc.autoSetRole_useSpec
-	local verbose = C.misc.autoSetRole_verbose
+	if not C.general.autoSetRole then return end
 
 	local _, class = UnitClass("Player")
 	local isPureClass
@@ -361,14 +354,10 @@ function module:AutoSetRole()
 		local spec = GetSpecialization()
 		if spec then
 			UnitSetRole("player", select(6, GetSpecializationInfo(spec)))
-			if verbose then
-				Print("Role check: Setting role based on current spec.")
-			end
+			Print("Role check: Setting role based on current spec.")
 		else
 			RolePollPopup_Show(self)
-			if verbose then
-				Print("Role check: You have no spec, cannot set automatically.")
-			end
+			Print("Role check: You have no spec, cannot set automatically.")
 		end
 	end
 
@@ -377,26 +366,13 @@ function module:AutoSetRole()
 
 		if isPureClass then
 			UnitSetRole("player", "DAMAGER")
-			if verbose then
-				Print("Role check: Setting role to dps.")
-			end
+			Print("Role check: Setting role to dps.")
 		else
 			if UnitGroupRolesAssigned("player") == "NONE" then
-				if useSpec then
-					setRoleForSpec(self)
-				else
-					if not self:IsShown() then
-						RolePollPopup_Show(self)
-					end
-				end
+				setRoleForSpec(self)
 			else
-				if useSpec then
-					setRoleForSpec(self)
-				else
-					if verbose then
-						Print("Role check: Role already set, doing nothing.")
-					end
-				end
+				setRoleForSpec(self)
+				Print("Role check: Role already set, doing nothing.")
 			end
 		end
 	end
@@ -406,7 +382,7 @@ end
 
 -- flash cursor
 function module:FlashCursor()
-	if not C.misc.flashCursor then return end
+	if not C.general.flashCursor then return end
 
 	local frame = CreateFrame("Frame", nil, UIParent);
 	frame:SetFrameStrata("TOOLTIP");

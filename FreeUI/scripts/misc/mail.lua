@@ -2,7 +2,7 @@
 
 local F, C, L = unpack(select(2, ...))
 
-if not C.misc.mailButton then return end
+if not C.general.mailButton then return end
 
 -- Remove Open All Mail Button
 OpenAllMail:Hide()

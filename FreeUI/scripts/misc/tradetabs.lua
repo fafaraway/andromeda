@@ -31,7 +31,7 @@ local RUNEFORGING = 53428 -- Runeforging spellid
 local CHEF_HAT = 134020
 
 function TradeTabs:OnEvent(event, addon)
-	--if not C.misc.tradeTabs then return end
+	--if not C.general.tradeTabs then return end
 	if event == "ADDON_LOADED" and addon == "Blizzard_TradeSkillUI" then
 		self:UnregisterEvent(event)
 		if InCombatLockdown() then

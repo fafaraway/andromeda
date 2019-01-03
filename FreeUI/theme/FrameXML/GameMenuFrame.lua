@@ -9,6 +9,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.CreateSD(GameMenuFrame)
 
 	hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", function()
+		if not IsAddOnLoaded("FreeUI_Options") then return end
 		GameMenuFrame:SetHeight(360)
 	end)
 

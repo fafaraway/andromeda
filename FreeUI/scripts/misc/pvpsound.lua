@@ -1,5 +1,5 @@
 ﻿local F, C, L = unpack(select(2, ...))
-if not C.misc.PVPSound then return end
+if not C.general.PVPSound then return end
 
 
 -- dota-like killing sound

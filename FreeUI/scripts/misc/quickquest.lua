@@ -13,9 +13,9 @@ local function setupCheckButton()
 	mono.text = F.CreateFS(mono, C.font.normal, 12, "OUTLINE")
 	mono.text:SetText(L["AutoQuest"])
 	mono.text:SetPoint("LEFT", 25, 0)
-	mono:SetChecked(C.misc.autoQuest)
+	mono:SetChecked(C.general.autoQuest)
 	mono:SetScript("OnClick", function(self)
-		C.misc.autoQuest = self:GetChecked()
+		C.general.autoQuest = self:GetChecked()
 	end)
 
 	created = true
@@ -33,7 +33,7 @@ QuickQuest:SetScript("OnEvent", function(self, event, ...) self[event](...) end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if C.misc.autoQuest and not IsModifierKeyDown() then
+		if C.general.autoQuest and not IsModifierKeyDown() then
 			func(...)
 		end
 	end

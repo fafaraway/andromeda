@@ -3,7 +3,7 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule('misc')
 
 function module:MissingStats()
-	if not C.misc.missingStats then return end
+	if not C.general.missingStats then return end
 
 	local statPanel = CreateFrame('Frame', nil, CharacterFrameInsetRight)
 	statPanel:SetSize(200, 350)

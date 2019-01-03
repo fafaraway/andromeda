@@ -7,11 +7,11 @@ local oldZoomIn = CameraZoomIn
 local oldZoomOut = CameraZoomOut
 
 function CameraZoomIn(distance)
-	oldZoomIn(C.misc.cameraIncrement)
+	oldZoomIn(C.general.cameraIncrement)
 end
 
 function CameraZoomOut(distance)
-	oldZoomOut(C.misc.cameraIncrement)
+	oldZoomOut(C.general.cameraIncrement)
 end
 
 
@@ -19,11 +19,11 @@ local oldVehicleZoomIn = VehicleCameraZoomIn
 local oldVehicleZoomOut = VehicleCameraZoomOut
 
 function VehicleCameraZoomIn(distance)
-	oldVehicleZoomIn(C.misc.cameraIncrement)
+	oldVehicleZoomIn(C.general.cameraIncrement)
 end
 
 function VehicleCameraZoomOut(distance)
-	oldVehicleZoomOut(C.misc.cameraIncrement)
+	oldVehicleZoomOut(C.general.cameraIncrement)
 end
 
 
@@ -35,7 +35,7 @@ local cvar = {
 
 C_Timer.After(1, function()
 
-	SetCVar("cameraDistanceMaxZoomFactor", C.misc.cameraDistance)
+	SetCVar("cameraDistanceMaxZoomFactor", C.general.cameraDistance)
 
 end)
 

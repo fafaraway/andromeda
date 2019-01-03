@@ -139,20 +139,17 @@ C['blizzard'] = {
 }
 
 
-C['misc'] = {
+C['general'] = {
 	['flashCursor'] = true,
 	['mailButton'] = true, 
-	['undressButton'] = true, 
 	['autoScreenShot'] = true,			-- auto screenshot when achieved
 	['autoActionCam'] = true,
 	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
-		['autoSetRole_useSpec'] = true,		-- attempt to set role based on your current spec
-		['autoSetRole_verbose'] = true, 	-- tells you what happens when setting role
 	['autoRepair'] = true,				-- automatically repair items
 	['autoSellJunk'] = true,
 	['autoSetRole'] = true,
 	['autoQuest'] = true,
-	['cooldownpulse'] = true,
+	['CDPulse'] = true,
 	['missingStats'] = true,
 	['PVPSound'] = true,
 	['clickCast'] = true,
@@ -162,7 +159,6 @@ C['misc'] = {
 	['cameraDistance'] = 50,
 	['objectiveTracker_height'] = 800,
 	['objectiveTracker_width'] = 250,
-	['paragonRep'] = true,
 }
 
 
