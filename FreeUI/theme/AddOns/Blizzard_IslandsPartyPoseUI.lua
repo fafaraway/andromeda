@@ -5,15 +5,10 @@ C.themes["Blizzard_IslandsPartyPoseUI"] = function()
 	F.SetBD(IslandsPartyPoseFrame)
 	F.Reskin(IslandsPartyPoseFrame.LeaveButton)
 	F.StripTextures(IslandsPartyPoseFrame.ModelScene)
-	--F.CreateBDFrame(IslandsPartyPoseFrame.ModelScene, .25)
-
 	IslandsPartyPoseFrame.ModelScene:SetAlpha(.8)
-
 	IslandsPartyPoseFrame.OverlayElements.Topper:Hide()
 	IslandsPartyPoseFrame.Background:Hide()
-
 	IslandsPartyPoseFrame.Border:Hide()
-
 
 	local rewardFrame = IslandsPartyPoseFrame.RewardAnimations.RewardFrame
 	local bg = F.CreateBDFrame(rewardFrame)
