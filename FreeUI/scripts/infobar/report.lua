@@ -22,15 +22,10 @@ local FreeUIReportButton = module.FreeUIReportButton
 FreeUIReportButton = module:addButton('REPORT', module.POSITION_RIGHT, GarrisonLandingPage_Toggle)
 
 local invIndex = {
-	[1] = {title = L["LegionInvasion"], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = 1517274000}, -- 1/30 9:00 [1]
-	[2] = {title = L["BfAInvasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1544691600}, -- 12/13 17:00 [1]
+	[1] = {title = L["BfAInvasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1544691600}, -- 12/13 17:00 [1]
 }
 
 local mapAreaPoiIDs = {
-	[630] = 5175,
-	[641] = 5210,
-	[650] = 5177,
-	[634] = 5178,
 	[862] = 5973,
 	[863] = 5969,
 	[864] = 5970,
