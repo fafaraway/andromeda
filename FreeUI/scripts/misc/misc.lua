@@ -233,9 +233,13 @@ function module:AutoRepair()
 			else
 				if myMoney > repairAllCost then
 					RepairAllItems()
-					print(format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)))
+					--RaidNotice_AddMessage(RaidWarningFrame, format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)), ChatTypeInfo["RAID_WARNING"])
+					UIErrorsFrame:AddMessage(format(C.InfoColor.."%s:|r"..C.RedColor.." %s|r", L["repairCost"], GetMoneyString(repairAllCost)))
+					print(format(C.InfoColor.."%s:|r"..C.RedColor.." %s|r", L["repairCost"], GetMoneyString(repairAllCost)))
 					return
 				else
+					--RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["repairError"], ChatTypeInfo["RAID_WARNING"])
+					UIErrorsFrame:AddMessage(C.InfoColor..L["repairError"])
 					print(C.InfoColor..L["repairError"])
 					return
 				end
@@ -245,6 +249,8 @@ function module:AutoRepair()
 				if isBankEmpty then
 					autoRepair(true)
 				else
+					--RaidNotice_AddMessage(RaidWarningFrame, format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)), ChatTypeInfo["RAID_WARNING"])
+					UIErrorsFrame:AddMessage(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
 					print(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
 				end
 			end)
@@ -283,7 +289,9 @@ function module:AutoSellJunk()
 	local function stopSelling(tell)
 		stop = true
 		if sellCount > 0 and tell then
-			print(C.InfoColor..L["SellJunk"]..": ".."|cffffffff"..GetMoneyString(sellCount).."|r")
+			--RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["SellJunk"]..": "..C.GreenColor..GetMoneyString(sellCount), ChatTypeInfo["RAID_WARNING"])
+			UIErrorsFrame:AddMessage(C.InfoColor..L["SellJunk"]..": "..C.GreenColor..GetMoneyString(sellCount))
+			print(C.InfoColor..L["SellJunk"]..": "..C.GreenColor..GetMoneyString(sellCount))
 		end
 		sellCount = 0
 	end

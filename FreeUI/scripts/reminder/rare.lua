@@ -12,7 +12,7 @@ function module:Rare()
 
 	local cache = {}
 	local function updateAlert(_, id)
-		local instID = select(8, GetInstanceInfo())
+		local _, instType, _, _, _, _, _, instID = GetInstanceInfo()
 		if isIgnored[instID] then return end
 
 		if id and not cache[id] then
@@ -25,10 +25,15 @@ function module:Rare()
 			local atlasHeight = height/(txBottom-txTop)
 
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-			RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["rareFound"]..tex..("<"..info.name..">" or ""), ChatTypeInfo["RAID_WARNING"])
-			print(C.InfoColor..L["rareFound"]..tex..(info.name or ""))
-			--PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
-			PlaySound(23404, "master")
+			
+			if instType == "none" then
+				--RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["rareFound"]..tex..(C.RedColor..info.name or ""), ChatTypeInfo["RAID_WARNING"])
+				UIErrorsFrame:AddMessage(C.InfoColor..L["rareFound"]..tex..(C.RedColor..info.name or ""))
+				print(C.InfoColor..L["rareFound"]..tex..C.RedColor..(info.name or ""))
+
+				--PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+				PlaySound(23404, "master")
+			end
 
 			cache[id] = true
 		end
