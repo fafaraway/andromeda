@@ -8,10 +8,10 @@ tinsert(C.themes["FreeUI"], function()
 	F.CreateBD(GameMenuFrame)
 	F.CreateSD(GameMenuFrame)
 
-	hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", function()
+	--[[hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", function()
 		if not IsAddOnLoaded("FreeUI_Options") then return end
 		GameMenuFrame:SetHeight(360)
-	end)
+	end)]]
 
 	local buttons = {
 		GameMenuButtonHelp,

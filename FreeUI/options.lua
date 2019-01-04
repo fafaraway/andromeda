@@ -61,6 +61,29 @@ end
 
 -- [[ Global config ]]
 
+C['general'] = {
+	['flashCursor'] = true,
+	['mailButton'] = true, 
+	['autoScreenShot'] = true,			-- auto screenshot when achieved
+	['autoActionCam'] = true,
+	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
+	['autoRepair'] = true,				-- automatically repair items
+	['autoSellJunk'] = true,
+	['autoSetRole'] = true,
+	['autoQuest'] = true,
+	['CDPulse'] = true,
+	['missingStats'] = true,
+	['PVPSound'] = true,
+	['clickCast'] = true,
+	['fasterLoot'] = true,
+	['alreadyKnown'] = true,
+	['cameraIncrement'] = 5,
+	['cameraDistance'] = 50,
+	['objectiveTracker_height'] = 800,
+	['objectiveTracker_width'] = 250,
+}
+
+
 C['appearance'] = {
 	['uiScale'] = 1,
 	['uiScaleAuto'] = true,
@@ -78,6 +101,7 @@ C['appearance'] = {
 
 	['fontStyle'] = true,
 }
+
 
 C['actionbars'] = {
 	['buttonSizeSmall'] = 24,
@@ -139,29 +163,6 @@ C['blizzard'] = {
 }
 
 
-C['general'] = {
-	['flashCursor'] = true,
-	['mailButton'] = true, 
-	['autoScreenShot'] = true,			-- auto screenshot when achieved
-	['autoActionCam'] = true,
-	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
-	['autoRepair'] = true,				-- automatically repair items
-	['autoSellJunk'] = true,
-	['autoSetRole'] = true,
-	['autoQuest'] = true,
-	['CDPulse'] = true,
-	['missingStats'] = true,
-	['PVPSound'] = true,
-	['clickCast'] = true,
-	['fasterLoot'] = true,
-	['alreadyKnown'] = true,
-	['cameraIncrement'] = 5,
-	['cameraDistance'] = 50,
-	['objectiveTracker_height'] = 800,
-	['objectiveTracker_width'] = 250,
-}
-
-
 C['reminder'] = {
 	['enable'] = true,				-- enable reminder module
 		['interrupt'] = true,			-- interrupt alert
@@ -187,13 +188,12 @@ C['bags'] = {
 			['questItemFilter'] = true,
 }
 
+
 C['infoBar'] = {
 	['enable'] = true,
 		['height'] = 20,
 		['enableButtons'] = true,			-- show buttons for quick access on the menu bar
 			['buttons_mouseover'] = true,			-- only on mouseover
-
-		['maxAddOns'] = 10,
 }
 
 
