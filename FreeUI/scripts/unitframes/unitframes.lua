@@ -1408,39 +1408,6 @@ local function CreateDispellable(self, unit)
 end
 
 
--- Counter bar
-local function CreateCounterBar(self)
-	local CounterBar = CreateFrame('StatusBar', nil, self)
-	CounterBar:SetWidth(200)
-	CounterBar:SetHeight(16)
-	CounterBar:SetStatusBarTexture(C.media.sbTex)
-	CounterBar:SetPoint('TOP', UIParent, 'TOP', 0, -100)
-
-	local cbd = CreateFrame('Frame', nil, CounterBar)
-	cbd:SetPoint('TOPLEFT', -1, 1)
-	cbd:SetPoint('BOTTOMRIGHT', 1, -1)
-	cbd:SetFrameLevel(CounterBar:GetFrameLevel()-1)
-	F.CreateBD(cbd, .4)
-	F.CreateSD(cbd)
-
-	CounterBar.Text = F.CreateFS(CounterBar, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-	CounterBar.Text:SetPoint('CENTER')
-
-	local r, g, b
-	local max
-
-	CounterBar:SetScript('OnValueChanged', function(_, value)
-		_, max = CounterBar:GetMinMaxValues()
-		r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-		CounterBar:SetStatusBarColor(r, g, b)
-
-		CounterBar.Text:SetText(floor(value))
-	end)
-
-	self.CounterBar = CounterBar
-end
-
-
 -- Spell range
 local function spellRange(self)
 	if not C.unitframes.spellRange then return end
@@ -1475,7 +1442,6 @@ local UnitSpecific = {
 		CreateCastBar(self)
 		CreateAuras(self, 6, 3)
 		spellRange(self)
-		CreateCounterBar(self)
 	end,
 
 	player = function(self, ...)
@@ -1494,7 +1460,6 @@ local UnitSpecific = {
 		CreateIndicator(self)
 		CreateCastBar(self)
 		spellRange(self)
-		CreateCounterBar(self)
 		CreateDispellable(self, unit)
 		if (C.PlayerClass == 'DEATHKNIGHT') then
 			CreateRunesBar(self)
