@@ -97,3 +97,6 @@ _G[addonName] = ns
 
 local hider = CreateFrame("Frame", "FreeUIHider", UIParent)
 hider:Hide()
+
+
+

@@ -82,9 +82,8 @@ function module:Spell()
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 	frame:SetScript('OnEvent', function(self, event)
-		local inInstance, instanceType = IsInInstance()
 		local _, subEvent, _, _, srcName, _, _, _, destName, _, _, spellID = CombatLogGetCurrentEventInfo() 
-		if not IsInGroup() or instanceType ~= 'party' or InCombatLockdown() or not subEvent or not spellID or not srcName then return end
+		if not IsInGroup() or InCombatLockdown() or not subEvent or not spellID or not srcName then return end
 		if not UnitInRaid(srcName) and not UnitInParty(srcName) then return end
 
 		local srcName = srcName:gsub('%-[^|]+', '')

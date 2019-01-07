@@ -12,14 +12,18 @@ function module:Dispel()
 		local inInstance, instanceType = IsInInstance()
 		if ((sourceGUID == UnitGUID('player')) or (sourceGUID == UnitGUID('pet'))) then
 			if (event == 'SPELL_DISPEL') then
-				PlaySoundFile(dispelSound, 'Master')
-				if inInstance and (instanceType ~= 'pvp' and instanceType ~= 'arena') then
+				if inInstance and IsInGroup() then
 					SendChatMessage(L['dispeled']..destName..' '..GetSpellLink(spellID), say)
 				end
+				if C.reminder.dispelSoundAlert then
+					PlaySoundFile(dispelSound, 'Master')
+				end
 			elseif (event == 'SPELL_STOLEN') then
-				PlaySoundFile(dispelSound, 'Master')
-				if inInstance and (instanceType ~= 'pvp' and instanceType ~= 'arena') then
+				if inInstance and IsInGroup() then
 					SendChatMessage(L['stolen']..destName..' '..GetSpellLink(spellID), say)
+				end
+				if C.reminder.dispelSoundAlert then
+					PlaySoundFile(dispelSound, 'Master')
 				end
 			end
 		end

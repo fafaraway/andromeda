@@ -62,25 +62,17 @@ end
 -- [[ Global config ]]
 
 C['general'] = {
+	['alreadyKnown'] = true,
 	['flashCursor'] = true,
-	['mailButton'] = true, 
-	['autoScreenShot'] = true,			-- auto screenshot when achieved
-	['autoActionCam'] = true,
-	['autoSetRole'] = true,				-- automatically set role and hide dialog where possible
-	['autoRepair'] = true,				-- automatically repair items
-	['autoSellJunk'] = true,
-	['autoSetRole'] = true,
-	['autoQuest'] = true,
+	['mailButton'] = true, 				
 	['CDPulse'] = true,
 	['missingStats'] = true,
 	['PVPSound'] = true,
 	['clickCast'] = true,
+		['clickCast_filter'] = true,
 	['fasterLoot'] = true,
-	['alreadyKnown'] = true,
 	['cameraIncrement'] = 5,
 	['cameraDistance'] = 50,
-	['objectiveTracker_height'] = 800,
-	['objectiveTracker_width'] = 250,
 }
 
 
@@ -104,40 +96,43 @@ C['appearance'] = {
 
 
 C['actionbars'] = {
-	['buttonSizeSmall'] = 24,
-	['buttonSizeNormal'] = 30,
-	['buttonSizeBig'] = 34,
-	['buttonSizeHuge'] = 40,
-	['padding'] = 2,
-	['margin'] = 4,
+	['enable'] = true,
+		['buttonSizeSmall'] = 24,
+		['buttonSizeNormal'] = 30,
+		['buttonSizeBig'] = 34,
+		['buttonSizeHuge'] = 40,
+		['padding'] = 2,
+		['margin'] = 4,
 
-	['bar3Fade'] = false,
+		['hotKey'] = true,
+		['macroName'] = true,
+		['count'] = false,
+		['classColor'] = false,
 
-	['sideBarEnable'] = true,
-		['sideBarFade'] = false,
+		['bar3Fade'] = false,
 
-	['petBarFade'] = false,
-	['stanceBarEnable'] = true,
+		['sideBarEnable'] = true,
+			['sideBarFade'] = false,
 
-	['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
-	['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
+		['petBarFade'] = false,
+		['stanceBarEnable'] = true,
 
-	['hotKey'] = true, 					-- show hot keys on buttons
-	['macroName'] = true,				-- show macro name on buttons
-	['count'] = false,					-- show itme count on buttons		
-	['classColor'] = false,				-- button border colored by class color
+		['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
+		['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 
-	['layoutSimple'] = false,			-- only show bar1/bar2 when shift key is down
+		['layoutSimple'] = false,
 }
 
 
 C['auras'] = {
-	['position'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -290, -36},
-	['buffSize'] = 42,
-	['debuffSize'] = 50,
-	['paddingX'] = 5,
-	['paddingY'] = 8,
-	['buffPerRow'] = 10,
+	['enable'] = true,
+		['position'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -290, -36},
+		['buffSize'] = 42,
+		['debuffSize'] = 50,
+		['paddingX'] = 5,
+		['paddingY'] = 8,
+		['buffPerRow'] = 10,
+		['auraSource'] = true,
 }
 
 
@@ -164,13 +159,33 @@ C['blizzard'] = {
 
 
 C['reminder'] = {
-	['enable'] = true,				-- enable reminder module
-		['interrupt'] = true,			-- interrupt alert
-		['dispel'] = true,				-- dispel alert
-		['rare'] = true,				-- rare mob/event alert
-		['spell'] = true,				-- special spell alert
-		['resurrect'] = true,			-- resurrect alert
-		['sapped'] = true,				-- sapped alert
+	['enable'] = true,
+		['interrupt'] = true,
+			['interruptSoundAlert'] = true,
+		['dispel'] = true,
+			['dispelSoundAlert'] = true,
+		['rare'] = true,
+			['rareSoundAlert'] = true,
+		['spell'] = true,
+		['resurrect'] = true,
+		['sapped'] = true,
+}
+
+
+C['automation'] = {
+	['autoSetRole'] = true,
+		['autoSetRole_useSpec'] = true,
+		['autoSetRole_verbose'] = true,
+	['autoSellJunk'] = true,
+	['autoRepair'] = true,
+	['autoScreenShot'] = true,
+	['autoActionCam'] = true,
+	['autoQuest'] = true,
+	['autoBuyStack'] = true,
+	['autoTabBinder'] = true,
+	['autoAcceptInvite'] = true,
+	['autoInvite'] = true,
+		['autoInvite_keyword'] = 'invite',
 }
 
 
@@ -178,12 +193,12 @@ C['bags'] = {
 	['enable'] = true,
 		['bagScale'] = 1,
 		['itemSlotSize'] = 36,
-		['bagColumns'] = 12,
-		['bankColumns'] = 12,
+		['bagColumns'] = 10,
+		['bankColumns'] = 10,
 		['reverseSort'] = true,
 		['itemLevel'] = true,
-		['itemFilter'] = true,
-			['itemSetFilter'] = false,
+		['useCategory'] = true,
+			['gearSetFilter'] = false,
 			['tradeGoodsFilter'] = true,
 			['questItemFilter'] = true,
 }
@@ -192,15 +207,15 @@ C['bags'] = {
 C['infoBar'] = {
 	['enable'] = true,
 		['height'] = 20,
-		['enableButtons'] = true,			-- show buttons for quick access on the menu bar
-			['buttons_mouseover'] = true,			-- only on mouseover
+		['enableButtons'] = true,
+			['buttons_mouseover'] = true,
 }
 
 
 C['tooltip'] = {
-	['enable'] = true,		-- enable tooltip and modules
-		['anchorCursor'] = false,		-- tooltip at mouse
-		['tipPosition'] = {'BOTTOMRIGHT', -30, 30},	-- tooltip position
+	['enable'] = true,
+		['anchorCursor'] = false,
+		['tipPosition'] = {'BOTTOMRIGHT', -30, 30},
 		
 		['hidePVP'] = false,
 		['hideFaction'] = true,
@@ -214,66 +229,65 @@ C['tooltip'] = {
 		['ilvlspec'] = true,
 		['extraInfo'] = true,
 		['azeriteTrait'] = true,
-		['borderColor'] = true,		-- item tooltip border colored by item quality
+		['borderColor'] = true,
 
 		['clearTip'] = true,
 }
 
 
 C['chat'] = {
-	['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},  -- default position for chat frame
-	['lockPosition'] = true,	-- lock chat frame on default position
-	['itemLinkLevel'] = true,	-- expand item links in chat frame
-	['spamageMeters'] = true,	-- suppresses messages from damage meters like Skada
-	['whisperSound'] = true,	-- play a sound when you received a whisper or BN whisper message
-	['minimizeButton'] = true,	-- a clickable button for hide entire chat frame
-	['fontOutline'] = false,	-- add outline for chat frame texts
-	['timeStamp'] = true,		-- add customized time stamp for chat frame messages
-	['voiceButtons'] = false,	-- show voice buttons
-	['channelSticky'] = true,	-- chat sticky
-	['lineFading'] = true,		-- fading texts from chat frame
-		['timeVisible'] = 20,
-		['fadeDuration'] = 6,
+	['enable'] = true,
+		['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},
+		['lockPosition'] = true,
+		['itemLinkLevel'] = true,
+		['spamageMeters'] = true,
+		['whisperSound'] = true,
+		['minimizeButton'] = true,
+		['useOutline'] = false,
+		['timeStamp'] = true,
+		['voiceButtons'] = false,
+		['channelSticky'] = true,
+		['lineFading'] = true,
+			['timeVisible'] = 20,
+			['fadeDuration'] = 6,
 
-	['enableFilter'] = true,	-- simple chat filter for keywords, repeat lines, addon alerts
-		['keyWordMatch'] = 1,
-		['symbols'] = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '-'},
-		['filterList'] = '',	-- blacklist keywords, use profiles.lua to create your own list
-		['blockAddonAlert'] = true,
-			['addonBlockList'] = {	-- filter annoying alerts from idiot addons
-				'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
-				'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '助我轻松提高DPS', '=>'
-				},
+		['useFilter'] = true,
+			['keyWordMatch'] = 1,
+			['symbols'] = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '-'},
+			['filterList'] = '',
+			['blockAddonAlert'] = true,
+				['addonBlockList'] = {
+					'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
+					'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '=>'
+					},
 }
 
 
 C['unitframes'] = {
-	['enable'] = true, 						-- enable the unit frames and their included modules
+	['enable'] = true,
 
 		['transMode'] = true,
 			['transModeAlpha'] = .1,
 			['healthClassColor'] = true,
 			['powerTypeColor'] = true,
 
-		['gradient'] = true,					-- gradient mode
+		['gradient'] = true,
 
-		['portrait'] = true,					-- enable portrait on player/target frame
+		['portrait'] = true,
 			['portraitAlpha'] = .1,
 
-		['spellRange'] = true,					-- spell range support for target/focus/boss
+		['spellRange'] = true,
 			['spellRangeAlpha'] = .4,
 
-		['classPower'] = true,					-- player's class resources (like Chi Orbs or Holy Power) and combo points
+		['classPower'] = true,
 			['classPower_height'] = 2,
 
-		['classMod_havoc'] = true,	 			-- set power bar to red if power below 40(chaos strike)
-
-		['threat'] = true,						-- threat indicator for party/raid frames
-		['prediction'] = true, 					-- health prediction
-		['dispellable'] = true,					-- Highlights debuffs that are dispelable by the player
+		['threat'] = true,
+		['prediction'] = true, 
+		['dispellable'] = true,
 		
-		['castbar'] = true,						-- enable cast bar
-			['cbSeparate'] = false,				-- true for a separate player cast bar
+		['castbar'] = true,
+			['cbSeparate'] = false,
 			['cbCastingColor'] = {77/255, 183/255, 219/255},
 			['cbChannelingColor'] = {77/255, 183/255, 219/255},
 			['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
@@ -283,63 +297,84 @@ C['unitframes'] = {
 			['cbName'] = false,
 			['cbTimer'] = false,
 
-		['enableGroup'] = true,					-- enable party/raid frames
-			['showRaidFrames'] = true, 				-- show the raid frames
-			['limitRaidSize'] = false, 				-- show a maximum of 25 players in a raid
-			['partyNameAlways'] = false,			-- show name on party/raid frames
-			['partyMissingHealth'] = false,			-- show missing health on party/raid frames
-		['enableBoss'] = true,					-- enable boss frames
-		['enableArena'] = true,					-- enable arena/flag carrier frames
+		['enableGroup'] = true,
+			['limitRaidSize'] = {1, 2, 3, 4},
+			['partyNameAlways'] = false,
+			['partyMissingHealth'] = false,
+		['enableBoss'] = true,
+		['enableArena'] = true,
 
-		['debuffbyPlayer'] = true,				-- only show target debuffs casted by player
+		['debuffbyPlayer'] = true,
 
-		['focuser'] = true,						-- shift + left click on unitframes/models/nameplates to set focus
+		['focuser'] = true,
 
-		['player_pos'] = {'CENTER', UIParent, 'CENTER', 0, -380},						-- player unitframe position
-		['player_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -380},				-- player unitframe position for healer layout(WIP)
-		['player_width'] = 200,
-		['player_height'] = 14,
+		['player_pos'] = {'CENTER', UIParent, 'CENTER', 0, -380},
+		['player_pos_healer'] = {'RIGHT', UIParent, 'CENTER', -100, -200},
+		['player_width'] = 220,
+		['player_height'] = 16,
 		['player_frameVisibility'] = '[combat][mod:shift][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
 		['enableFrameVisibility'] = false,
 
-		['pet_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},						-- pet unitframe position
+		['pet_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -5, 0},
 		['pet_width'] = 68,
-		['pet_height'] = 14,
+		['pet_height'] = 16,
 		['pet_frameVisibility'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
 
-		['target_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},					-- target unitframe position
+		['target_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, 60},
+		['target_pos_healer'] = {'LEFT', UIParent, 'CENTER', 100, -200},
 		['target_width'] = 220,
 		['target_height'] = 16,
 
-		['targettarget_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},					-- target target unitframe position
+		['targettarget_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, 0},
 		['targettarget_width'] = 80,
 		['targettarget_height'] = 16,
 
-		['focus_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},					-- focus unitframe position
+		['focus_pos'] = {'LEFT', 'oUF_FreePlayer', 'RIGHT', 100, -60},
+		['focus_pos_healer'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 6, -100},
 		['focus_width'] = 106,
 		['focus_height'] = 16,
 
-		['focustarget_pos'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},					-- focus target unitframe position
+		['focustarget_pos'] = {'LEFT', 'oUF_FreeFocus', 'RIGHT', 6, 0},
 		['focustarget_width'] = 106,
 		['focustarget_height'] = 16,
 
-		['party_pos'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},		-- party unitframe position
+		['party_pos'] = {'BOTTOMRIGHT', 'oUF_FreePlayer', 'BOTTOMLEFT', -100, 60},
+		['party_pos_healer'] = {'TOP', UIParent, 'CENTER', 0, -300},
 		['party_width'] = 90,
 		['party_height'] = 38,
-		['party_showSolo'] = false,
+		['party_width_healer'] = 58,
+		['party_height_healer'] = 32,
+		['party_xoffset'] = 0,
+		['party_yoffset'] = 6,
+		['party_xoffset_healer'] = 4,
+		['party_yoffset_healer'] = 0,
+		['party_point'] = 'BOTTOM',
+		['party_point_healer'] = 'LEFT',
+		['party_columnAnchorPoint'] = 'LEFT',
+		['party_columnAnchorPoint_healer'] = 'RIGHT',
 
-		['raid_pos'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},			-- raid unitframe position
+		['raid_pos'] = {'TOPRIGHT', 'oUF_FreePlayer', 'TOPLEFT', -100, 140},
+		['raid_pos_healer'] = {'TOP', UIParent, 'CENTER', 0, -300},
 		['raid_width'] = 58,
 		['raid_height'] = 32,
+		['raid_xoffset'] = -4,
+		['raid_yoffset'] = 6,
+		['raid_xoffset_healer'] = 4,
+		['raid_yoffset_healer'] = 6,
+		['raid_point'] = 'RIGHT',
+		['raid_point_healer'] = 'LEFT',
+		['raid_groupFilter'] = '1,2,3,4,5,6,7,8',
 
-		['boss_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 120, 160},					-- boss unitframe position
+		['boss_pos'] = {'LEFT', 'oUF_FreeTarget', 'RIGHT', 120, 160},
 		['boss_width'] = 166,
 		['boss_height'] = 20,
 
-		['arena_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -400, 249},					-- arena unitframe position
+		['arena_pos'] = {'RIGHT', 'oUF_FreePlayer', 'LEFT', -400, 249},
 		['arena_width'] = 166,
 		['arena_height'] = 16,
 		
 		['power_height'] = 2,
 		['altpower_height'] = 2,
+
+		['classMod_havoc'] = true,
 }

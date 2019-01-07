@@ -11,7 +11,7 @@ L['dispeled'] = '驱散：'
 L['stolen'] = '偷取：'
 
 L['guildRepair'] = '使用公会修理'
-L['repairCost'] = '本次修理花费'
+L['repairCost'] = '自动修理花费'
 L['repairError'] = '没有足够的钱进行修理！'
 
 L['SellJunk'] = '自动出售垃圾'
@@ -34,36 +34,40 @@ L['Undress'] = '脱衣'
 
 L['WoW'] = '<魔兽世界>'
 L['BN'] = '<战网好友>'
-L["NoOnline"] = "当前没有好友在线"
-L["HoldShift"] = "按住 <Shift> 展开详细信息"
-L["ShowFriends"] = "打开好友面板"
-L["OpenBag"] = "打开背包"
-L["ResetGold"] = "重置数据"
-L["SpecPanel"] = "打开天赋面板"
-L["ChangeSpec"] = "切换专精"
-L["ChangeLootSpec"] = "切换拾取专精"
-L["CollectMemory"] = "整理内存"
-L["Hidden"] = "隐藏"
-L["DefaultUIMemoryUsage:"] = "系统插件内存:"
-L["TotalMemoryUsage:"] = "总内存使用:"
-L["OpenAddonList"] = "打开插件列表"
-L["OpenTimerTracker"] = "打开时钟"
-L["ShowGarrionReport_BfA"] = '任务报告'
-L["ShowGarrionReport_LEG"] = '职业大厅报告'
-L["ShowGarrionReport_WOD"] = '要塞报告'
-L["LegionInvasion"] = "军团突袭"
-L["BfAInvasion"] = "阵营突袭"
-L["CurrentInvasion"] = "当前: "
-L["NextInvasion"] = "下次: "
-L["Paragon"] = "巅峰"
-L["ParagonRep"] = "巅峰声望"
+L['NoOnline'] = '当前没有好友在线'
+L['HoldShift'] = '按住 <Shift> 展开详细信息'
+L['ShowFriends'] = '打开好友面板'
+L['OpenBag'] = '打开背包'
+L['ResetGold'] = '重置数据'
+L['SpecPanel'] = '打开天赋面板'
+L['ChangeSpec'] = '切换专精'
+L['ChangeLootSpec'] = '切换拾取专精'
+L['CollectMemory'] = '整理内存'
+L['Hidden'] = '隐藏'
+L['DefaultUIMemoryUsage:'] = '系统插件内存:'
+L['TotalMemoryUsage:'] = '总内存使用:'
+L['OpenAddonList'] = '打开插件列表'
+L['OpenTimerTracker'] = '打开时钟'
+L['ShowGarrionReport_BfA'] = '任务报告'
+L['ShowGarrionReport_LEG'] = '职业大厅报告'
+L['ShowGarrionReport_WOD'] = '要塞报告'
+L['LegionInvasion'] = '军团突袭'
+L['BfAInvasion'] = '阵营突袭'
+L['CurrentInvasion'] = '当前: '
+L['NextInvasion'] = '下次: '
+L['Paragon'] = '巅峰'
+L['ParagonRep'] = '巅峰声望'
 
-L["Sort"] = "整理"
-L["AzeriteArmor"] = "艾泽里特护甲"
-L["EquipementSet"] = "装备配置方案"
+L['Sort'] = '整理'
+L['AzeriteArmor'] = '艾泽里特护甲'
+L['EquipementSet'] = '装备配置方案'
 
-L["Pull"] = "10秒后开怪！"
+L['Pull'] = '10秒后开怪！'
 
-L["AutoQuest"] = '自动交接任务'
+L['AutoQuest'] = '自动交接任务'
 
-L["MapReveal"] = "去除地图迷雾"
+L['MapReveal'] = '去除地图迷雾'
+
+L['InviteInfo'] = '接受邀请'
+L['InviteEnable'] = '自动邀请功能启用'
+L['InviteDisable'] = '自动邀请功能关闭'

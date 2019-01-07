@@ -11,54 +11,18 @@ function module:OnLogin()
 	self:Vignette()
 	self:PVPMessageEnhancement()
 	self:UndressButton()
-	self:ActionCam()
 	self:FasterDelete()
 	self:FlightMasterWhistle()
-	self:AutoScreenShot()
 	self:ReadyCheckEnhancement()
-	self:AutoRepair()
-	self:AutoSetRole()
-	self:BuyStack()
-	self:AutoSellJunk()
+
 
 	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
 end
 
 
 
--- ALT + Right Click to buy a stack
-function module:BuyStack()
-	local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
-	local cache = {}
-	function MerchantItemButton_OnModifiedClick(self, ...)
-		if IsAltKeyDown() then
-			local id = self:GetID()
-			local itemLink = GetMerchantItemLink(id)
-			if not itemLink then return end
-			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
-			if ( maxStack and maxStack > 1 ) then
-				if not cache[itemLink] then
-					StaticPopupDialogs["BUY_STACK"] = {
-						text = "Stack Buying Check",
-						button1 = YES,
-						button2 = NO,
-						OnAccept = function()
-							BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-							cache[itemLink] = true
-						end,
-						hideOnEscape = 1,
-						hasItemFrame = 1,
-					}
-					local r, g, b = GetItemQualityColor(quality or 1)
-					StaticPopup_Show("BUY_STACK", " ", " ", {["texture"] = texture, ["name"] = name, ["color"] = {r, g, b, 1}, ["link"] = itemLink, ["index"] = id, ["count"] = maxStack})
-				else
-					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-				end
-			end
-		end
-		old_MerchantItemButton_OnModifiedClick(self, ...)
-	end
-end
+
+
 
 
 -- adding a shadowed border to the UI window
@@ -78,26 +42,7 @@ function module:Vignette()
 end
 
 
--- Auto enables the ActionCam on login
-function module:ActionCam()
-	if C.general.autoActionCam then
-		local aac = CreateFrame("Frame", "AutoActionCam")
 
-		aac:RegisterEvent("PLAYER_LOGIN")
-		UIParent:UnregisterEvent("EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED")
-
-		function SetCam(cmd)
-			ConsoleExec("ActionCam " .. cmd)
-		end
-
-		function aac:OnEvent(event, ...)
-			if event == "PLAYER_LOGIN" then
-				SetCam("basic")
-			end
-		end
-		aac:SetScript("OnEvent", aac.OnEvent)
-	end
-end
 
 
 -- enhance PVP message
@@ -186,199 +131,8 @@ function module:ReadyCheckEnhancement()
 end
 
 
--- Auto screenshot when Achievement earned
-function module:AutoScreenShot()
-	local f = CreateFrame("Frame")
-	f:Hide()
-	f:SetScript("OnUpdate", function(_, elapsed)
-		f.delay = f.delay - elapsed
-		if f.delay < 0 then
-			Screenshot()
-			f:Hide()
-		end
-	end)
-
-	local function setupMisc(event)
-		if not C.general.autoScreenShot then
-			F:UnregisterEvent(event, setupMisc)
-		else
-			f.delay = 1
-			f:Show()
-		end
-	end
-	F:RegisterEvent("ACHIEVEMENT_EARNED", setupMisc)
-end
 
 
--- Auto repair
-function module:AutoRepair()
-	if not C.general.autoRepair then return end
-
-	local isShown, isBankEmpty
-	local function autoRepair(override)
-		if isShown and not override then return end
-		isShown = true
-		isBankEmpty = false
-
-		local repairAllCost, canRepair = GetRepairAllCost()
-		local myMoney = GetMoney()
-
-		if canRepair and repairAllCost > 0 then
-			if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
-				RepairAllItems(true)
-			else
-				if myMoney > repairAllCost then
-					RepairAllItems()
-					--RaidNotice_AddMessage(RaidWarningFrame, format(C.InfoColor.."%s:|r %s", L["repairCost"], GetMoneyString(repairAllCost)), ChatTypeInfo["RAID_WARNING"])
-					UIErrorsFrame:AddMessage(format(C.InfoColor.."%s:|r"..C.RedColor.." %s|r", L["repairCost"], GetMoneyString(repairAllCost)))
-					print(format(C.InfoColor.."%s:|r"..C.RedColor.." %s|r", L["repairCost"], GetMoneyString(repairAllCost)))
-					return
-				else
-					--RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["repairError"], ChatTypeInfo["RAID_WARNING"])
-					UIErrorsFrame:AddMessage(C.InfoColor..L["repairError"])
-					print(C.InfoColor..L["repairError"])
-					return
-				end
-			end
-
-			C_Timer.After(.5, function()
-				if isBankEmpty then
-					autoRepair(true)
-				else
-					--RaidNotice_AddMessage(RaidWarningFrame, format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)), ChatTypeInfo["RAID_WARNING"])
-					UIErrorsFrame:AddMessage(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
-					print(format(C.InfoColor.."%s:|r %s", L["guildRepair"], GetMoneyString(repairAllCost)))
-				end
-			end)
-		end
-	end
-
-	local function checkBankFund(_, msgType)
-		if msgType == LE_GAME_ERR_GUILD_NOT_ENOUGH_MONEY then
-			isBankEmpty = true
-		end
-	end
-
-	local function merchantClose()
-		isShown = false
-		F:UnregisterEvent("UI_ERROR_MESSAGE", checkBankFund)
-		F:UnregisterEvent("MERCHANT_CLOSED", merchantClose)
-	end
-
-	local function merchantShow()
-		if IsShiftKeyDown() or not CanMerchantRepair() then return end
-		autoRepair()
-		F:RegisterEvent("UI_ERROR_MESSAGE", checkBankFund)
-		F:RegisterEvent("MERCHANT_CLOSED", merchantClose)
-	end
-	F:RegisterEvent("MERCHANT_SHOW", merchantShow)
-end
-
-
--- auto sell junk
-function module:AutoSellJunk()
-	if not C.general.autoSellJunk then return end
-
-	local sellCount, stop, cache = 0, true, {}
-	local errorText = _G.ERR_VENDOR_DOESNT_BUY
-
-	local function stopSelling(tell)
-		stop = true
-		if sellCount > 0 and tell then
-			--RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["SellJunk"]..": "..C.GreenColor..GetMoneyString(sellCount), ChatTypeInfo["RAID_WARNING"])
-			UIErrorsFrame:AddMessage(C.InfoColor..L["SellJunk"]..": "..C.GreenColor..GetMoneyString(sellCount))
-			print(C.InfoColor..L["SellJunk"]..": "..C.GreenColor..GetMoneyString(sellCount))
-		end
-		sellCount = 0
-	end
-
-	local function startSelling()
-		if stop then return end
-		for bag = 0, 4 do
-			for slot = 1, GetContainerNumSlots(bag) do
-				if stop then return end
-				local link = GetContainerItemLink(bag, slot)
-				if link then
-					local price = select(11, GetItemInfo(link))
-					local _, count, _, quality = GetContainerItemInfo(bag, slot)
-					if quality == 0 and price > 0 and not cache["b"..bag.."s"..slot] then
-						sellCount = sellCount + price*count
-						cache["b"..bag.."s"..slot] = true
-						UseContainerItem(bag, slot)
-						C_Timer.After(.2, startSelling)
-						return
-					end
-				end
-			end
-		end
-	end
-
-	local function updateSelling(event, ...)
-		local _, arg = ...
-		if event == "MERCHANT_SHOW" then
-			if IsShiftKeyDown() then return end
-			stop = false
-			wipe(cache)
-			startSelling()
-			F:RegisterEvent("UI_ERROR_MESSAGE", updateSelling)
-		elseif event == "UI_ERROR_MESSAGE" and arg == errorText then
-			stopSelling(false)
-		elseif event == "MERCHANT_CLOSED" then
-			stopSelling(true)
-		end
-	end
-	F:RegisterEvent("MERCHANT_SHOW", updateSelling)
-	F:RegisterEvent("MERCHANT_CLOSED", updateSelling)
-end
-
-
--- auto set role
-function module:AutoSetRole()
-	if not C.general.autoSetRole then return end
-
-	local _, class = UnitClass("Player")
-	local isPureClass
-	if class == "HUNTER" or class == "MAGE" or class == "ROGUE" or class == "WARLOCK" then
-		isPureClass = true
-	end
-
-	local lastMsgTime = 0
-	local function Print(msg)
-		if time() - lastMsgTime > 10 then
-			lastMsgTime = time()
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffff"..msg, C.r, C.g, C.b)
-		end
-	end
-
-	local function setRoleForSpec(self)
-		local spec = GetSpecialization()
-		if spec then
-			UnitSetRole("player", select(6, GetSpecializationInfo(spec)))
-			Print("Role check: Setting role based on current spec.")
-		else
-			RolePollPopup_Show(self)
-			Print("Role check: You have no spec, cannot set automatically.")
-		end
-	end
-
-	local function autoSetRole(self, event)
-		if event ~= "ROLE_POLL_BEGIN" or InCombatLockdown() then return end
-
-		if isPureClass then
-			UnitSetRole("player", "DAMAGER")
-			Print("Role check: Setting role to dps.")
-		else
-			if UnitGroupRolesAssigned("player") == "NONE" then
-				setRoleForSpec(self)
-			else
-				setRoleForSpec(self)
-				Print("Role check: Role already set, doing nothing.")
-			end
-		end
-	end
-
-	RolePollPopup:SetScript("OnEvent", autoSetRole)
-end
 
 -- flash cursor
 function module:FlashCursor()

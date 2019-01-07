@@ -333,7 +333,7 @@ function module:MapReveal()
 	bu:SetSize(26, 26)
 	F.CreateCB(bu)
 	bu:SetChecked(C.maps.mapReveal)
-	bu.text = F.CreateFS(bu, C.font.normal, 12, "OUTLINE")
+	bu.text = F.CreateFS(bu, C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
 	bu.text:SetText(L["MapReveal"])
 	bu.text:SetPoint("LEFT", 25, 0)
 

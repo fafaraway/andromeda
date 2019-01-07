@@ -3,6 +3,7 @@ local module = F:RegisterModule("actionbars")
 local cfg = C.actionbars
 
 function module:OnLogin()
+	if not C.actionbars.enable then return end
 
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}

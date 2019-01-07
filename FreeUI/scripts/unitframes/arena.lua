@@ -1,8 +1,7 @@
--- by Tukz
-
-local F, C = unpack(select(2, ...))
-
+local F, C, L = unpack(select(2, ...))
+if not C.unitframes.enable then return end
 if not C.unitframes.enableArena then return end
+local module = F:GetModule("unitframe")
 
 local arenaFrames = {}
 

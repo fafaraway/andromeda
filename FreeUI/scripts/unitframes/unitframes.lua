@@ -6,6 +6,7 @@ local oUF, cast = FreeUI.oUF, FreeUI.cast
 
 
 
+
 local function CreateBackDrop(self)
 	local bd = CreateFrame('Frame', nil, self)
 	bd:SetPoint('TOPLEFT', -1, 1)
@@ -22,12 +23,6 @@ local function CreateBackDrop(self)
 	if C.appearance.addShadowBorder then
 		F.CreateSD(bd)
 		self.Shadow = sd
-		--[[local sd = CreateFrame('Frame', nil, bd)
-		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
-		sd:SetPoint('TOPLEFT', -4, 4)
-		sd:SetPoint('BOTTOMRIGHT', 4, -4)
-		sd:SetBackdropBorderColor(0, 0, 0, .35)
-		self.sd = sd]]
 	end
 end
 
@@ -279,7 +274,11 @@ local function CreateHealthPrediction(self)
 	overAbsorb:SetPoint('TOP', 0, 2)
 	overAbsorb:SetPoint('BOTTOM', 0, -2)
 	overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
-	overAbsorb:SetWidth(14)
+	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
+		overAbsorb:SetWidth(8)
+	else
+		overAbsorb:SetWidth(14)
+	end
 
 	self.HealthPrediction = {
 		myBar = myBar,
@@ -289,7 +288,6 @@ local function CreateHealthPrediction(self)
 		maxOverflow = 1,
 		frequentUpdates = true,
 	}
-
 end
 
 
@@ -458,6 +456,10 @@ end
 local function CreateCastBar(self)
 	if (not C.unitframes.castbar) then return end
 
+	if FreeUIConfig.layout == 2 then
+		C.unitframes.cbSeparate = true
+	end
+
 	local cb = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
 	cb:SetHeight(C.unitframes.cbHeight)
 	cb:SetWidth(self:GetWidth())
@@ -573,6 +575,9 @@ local function CreateCastBar(self)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
 	end
+
+
+
 
 	cb.OnUpdate = cast.OnCastbarUpdate
 	cb.PostCastStart = cast.PostCastStart
@@ -843,7 +848,7 @@ local function CreateBuffs(self)
 	Buffs.spacing = 3
 	Buffs.num = 3
 	
-	if self.unitStyle == 'party' then
+	if (self.unitStyle == 'party' and FreeUIConfig.layout ~= 2) then
 		Buffs.size = 18
 		Buffs.PostUpdate = function(icons)
 			if icons.visibleBuffs == 3 then
@@ -854,7 +859,7 @@ local function CreateBuffs(self)
 				Buffs:SetPoint('TOP', 0, -2)
 			end
 		end
-	elseif self.unitStyle == 'raid' then
+	else
 		Buffs.size = 12
 		Buffs.PostUpdate = function(icons)
 			if icons.visibleBuffs == 3 then
@@ -881,7 +886,7 @@ end
 local function CreateDebuffs(self)
 	local Debuffs = CreateFrame('Frame', nil, self)
 	
-	if self.unitStyle == 'party' then
+	if self.unitStyle == 'party' and FreeUIConfig.layout ~= 2 then
 		Debuffs.initialAnchor = 'LEFT'
 		Debuffs['growth-x'] = 'RIGHT'
 		Debuffs:SetPoint('LEFT', self, 'RIGHT', 6, 0)
@@ -889,7 +894,7 @@ local function CreateDebuffs(self)
 		Debuffs.num = 3
 		Debuffs.disableCooldown = false
 		Debuffs.disableMouse = false
-	elseif self.unitStyle == 'raid' then
+	else
 		Debuffs.initialAnchor = 'CENTER'
 		Debuffs['growth-x'] = 'RIGHT'
 		Debuffs:SetPoint('BOTTOM', 0, C.unitframes.power_height - 1)
@@ -1631,8 +1636,19 @@ end
 
 
 oUF:Factory(function(self)
-	player = spawnHelper(self, 'player', unpack(C.unitframes.player_pos))
+	if FreeUIConfig.layout == 2 then
+		player = spawnHelper(self, 'player', unpack(C.unitframes.player_pos_healer))
+		target = spawnHelper(self, 'target', unpack(C.unitframes.target_pos_healer))
+		focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus_pos_healer))
+	else
+		player = spawnHelper(self, 'player', unpack(C.unitframes.player_pos))
+		target = spawnHelper(self, 'target', unpack(C.unitframes.target_pos))
+		focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus_pos))
+	end
+
 	pet = spawnHelper(self, 'pet', unpack(C.unitframes.pet_pos))
+	targettarget = spawnHelper(self, 'targettarget', unpack(C.unitframes.targettarget_pos))
+	focustarget = spawnHelper(self, 'focustarget', unpack(C.unitframes.focustarget_pos))
 
 	if C.unitframes.enableFrameVisibility then
 		player:Disable()
@@ -1640,11 +1656,6 @@ oUF:Factory(function(self)
 		pet:Disable()
 		RegisterStateDriver(pet, 'visibility', C.unitframes.pet_frameVisibility)
 	end
-
-	target = spawnHelper(self, 'target', unpack(C.unitframes.target_pos))
-	targettarget = spawnHelper(self, 'targettarget', unpack(C.unitframes.targettarget_pos))
-	focus = spawnHelper(self, 'focus', unpack(C.unitframes.focus_pos))
-	focustarget = spawnHelper(self, 'focustarget', unpack(C.unitframes.focustarget_pos))
 
 	if C.unitframes.enableBoss then
 		local boss = {}
@@ -1663,37 +1674,67 @@ oUF:Factory(function(self)
 
 	if not C.unitframes.enableGroup then return end
 
+	local party_xoffset, party_yoffset, party_point, party_columnAnchorPoint, party_height, party_width, party_pos, 
+	raid_xoffset, raid_yoffset, raid_point, raid_pos
+
+	if FreeUIConfig.layout == 2 then
+		party_xoffset = C.unitframes.party_xoffset_healer
+		party_yoffset = C.unitframes.party_yoffset_healer
+		party_point = C.unitframes.party_point_healer
+		party_columnAnchorPoint = C.unitframes.party_columnAnchorPoint_healer
+		party_height = C.unitframes.party_height_healer
+		party_width = C.unitframes.party_width_healer
+		party_pos = C.unitframes.party_pos_healer
+		raid_xoffset = C.unitframes.raid_xoffset_healer
+		raid_yoffset = C.unitframes.raid_yoffset_healer
+		raid_point = C.unitframes.raid_point_healer
+		raid_pos = C.unitframes.raid_pos_healer
+	else
+		party_xoffset = C.unitframes.party_xoffset
+		party_yoffset = C.unitframes.party_yoffset
+		party_point = C.unitframes.party_point
+		party_columnAnchorPoint = C.unitframes.party_columnAnchorPoint
+		party_height = C.unitframes.party_height
+		party_width = C.unitframes.party_width
+		party_pos = C.unitframes.party_pos
+		raid_xoffset = C.unitframes.raid_xoffset
+		raid_yoffset = C.unitframes.raid_yoffset
+		raid_point = C.unitframes.raid_point
+		raid_pos = C.unitframes.raid_pos
+	end
+
 	self:SetActiveStyle'Free - Party'
 
 	local party = self:SpawnHeader(nil, nil, 'solo,party',
 		'showParty', true,
 		'showPlayer', true,
-		'showSolo', C.unitframes.party_showSolo,
-		'xoffset', -4,
-		'yoffset', 6,
+		'showSolo', false,
+		'xoffset', party_xoffset,
+		'yoffset', party_yoffset,
 		'maxColumns', 1,
 		'unitsperColumn', 5,
-		'columnSpacing', 4,
-		'point', 'BOTTOM', -- party initial position
-		'columnAnchorPoint', 'LEFT',
-		'groupBy', 'ASSIGNEDROLE',
-		'groupingOrder', 'TANK,HEALER,DAMAGER',
-		'sortDir', 'DESC',
+		'columnSpacing', 0,
+		'point', party_point,
+		'columnAnchorPoint', party_columnAnchorPoint,
+		--'groupBy', 'ASSIGNEDROLE',
+		--'groupingOrder', 'TANK,HEALER,DAMAGER',
+		--'sortDir', 'DESC',
 		'oUF-initialConfigFunction', ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)
-		]]):format(C.unitframes.party_height, C.unitframes.party_width)
-	):SetPoint(unpack(C.unitframes.party_pos))
+		]]):format(party_height, party_width)
+	):SetPoint(unpack(party_pos))
+
 
 	self:SetActiveStyle'Free - Raid'
 
 	local raid = self:SpawnHeader(nil, nil, 'raid',
 		'showParty', false,
 		'showRaid', true,
-		'xoffset', -4,
-		'yOffset', -4,
-		'point', 'RIGHT',
-		'groupFilter', '1,2,3,4,5,6,7,8',
+		'xoffset', raid_xoffset,
+		'yOffset', raid_yoffset,
+		'point', raid_point,
+		'groupFilter', C.unitframes.raid_groupFilter,
 		'groupingOrder', '1,2,3,4,5,6,7,8',
 		'groupBy', 'GROUP',
 		'maxColumns', 8,
@@ -1705,18 +1746,19 @@ oUF:Factory(function(self)
 			self:SetHeight(%d)
 			self:SetWidth(%d)
 		]]):format(C.unitframes.raid_height, C.unitframes.raid_width)
-	):SetPoint(unpack(C.unitframes.raid_pos))
-
-
-
-	-- 限制团队框体只显示4个队伍20名成员
-	if C.unitframes.limitRaidSize then
-		raid:SetAttribute('groupFilter', '1,2,3,4')
-	end
-
+	):SetPoint(unpack(raid_pos))
 end)
 
 function module:OnLogin()
+	local addonLoaded
+	addonLoaded = function(_, addon)
+		if addon ~= "FreeUI" then return end
+		if FreeUIConfig.layout == nil then FreeUIConfig.layout = 1 end
+		F:UnregisterEvent("ADDON_LOADED", addonLoaded)
+		addonLoaded = nil
+	end
+	F:RegisterEvent("ADDON_LOADED", addonLoaded)
+
 	self:Focuser()
 	self:TargetSound()
 end

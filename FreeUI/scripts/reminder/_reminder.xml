@@ -1,9 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="remind.lua"/>
-	<Script file="dispel.lua"/>
-	<Script file="interrupt.lua"/>
-	<Script file="rare.lua"/>
-	<Script file="res.lua"/>
-	<Script file="sap.lua"/>
-	<Script file="spell.lua"/>
-</Ui>

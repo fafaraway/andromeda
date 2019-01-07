@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
+if not C.tooltip.enable then return end
+if not C.tooltip.clearTip then return end
+local module = F:GetModule("tooltip")
 
 -- based on ItemTooltipCleaner by phanx
 
-local module = F:GetModule("tooltip")
-
-if not C.tooltip.clearTip then return end
 
 if C.Client == "zhCN" then
 	ITEM_CREATED_BY = ""

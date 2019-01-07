@@ -26,12 +26,10 @@ function module:Rare()
 
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 			
-			if instType == "none" then
-				--RaidNotice_AddMessage(RaidWarningFrame, C.InfoColor..L["rareFound"]..tex..(C.RedColor..info.name or ""), ChatTypeInfo["RAID_WARNING"])
-				UIErrorsFrame:AddMessage(C.InfoColor..L["rareFound"]..tex..(C.RedColor..info.name or ""))
-				print(C.InfoColor..L["rareFound"]..tex..C.RedColor..(info.name or ""))
+			UIErrorsFrame:AddMessage(C.InfoColor..L["rareFound"]..tex..(C.RedColor..info.name or ""))
+			print(C.InfoColor..L["rareFound"]..tex..C.RedColor..(info.name or ""))
 
-				--PlaySoundFile("Sound\\Interface\\PVPFlagTakenMono.ogg", "master")
+			if C.reminder.rareSoundAlert then
 				PlaySound(23404, "master")
 			end
 

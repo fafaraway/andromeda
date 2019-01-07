@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-if C.tooltip.enable ~= true then return end
+if not C.tooltip.enable then return end
 
 local function setTooltipIcon(self, icon)
 	local title = icon and _G[self:GetName().."TextLeft1"]

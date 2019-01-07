@@ -15,14 +15,14 @@ function module:Resurrect()
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 	frame:SetScript('OnEvent', function(self, event)	
 		local _, event, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID = CombatLogGetCurrentEventInfo()
-		local _, _, difficultyID = GetInstanceInfo()
+		local inInstance, instanceType = IsInInstance()
 		
 		if event ~= 'SPELL_CAST_SUCCESS' then return end
 		
 		if destName then destName = destName:gsub('%-[^|]+', '') end
 		if sourceName then sourceName = sourceName:gsub('%-[^|]+', '') else return end
 		
-		if difficultyID ~= 0 then
+		if inInstance and IsInGroup() then
 			if CombatResSpells[spellID] then
 				if destName == nil then
 					SendChatMessage(format(L['ResNoTarget'], sourceName, GetSpellLink(spellID)), say)

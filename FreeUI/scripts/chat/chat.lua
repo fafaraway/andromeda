@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+if not C.chat.enable then return end
 local module = F:RegisterModule('chat')
 
 
@@ -13,7 +13,7 @@ local function SkinChat(self)
 	self:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
 	self:SetMinResize(100, 50)
 	
-	if C.chat.fontOutline then
+	if C.chat.useOutline then
 		self:SetFont(C.font.chat, fontSize, 'OUTLINE')
 		self:SetShadowColor(0, 0, 0, 0)
 	else

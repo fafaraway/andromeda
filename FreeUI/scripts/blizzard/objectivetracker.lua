@@ -3,7 +3,7 @@ local module = F:GetModule("blizzard")
 
 
 local r, g, b =  165/255, 0, 48/255
-
+local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
 local minimize = ot.HeaderMenu.MinimizeButton
@@ -39,8 +39,8 @@ do
 		if parent ~= mover then
 			ot:ClearAllPoints()
 			ot:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
-			ot:SetHeight(C.general.objectiveTracker_height)
-			ot:SetWidth(C.general.objectiveTracker_width)
+			ot:SetHeight(pysHeight/2)
+			ot:SetWidth(C.maps.miniMapSize)
 		end
 	end)
 

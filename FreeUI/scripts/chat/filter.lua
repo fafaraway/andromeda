@@ -15,7 +15,7 @@ local recent_msg = {}
 local index = 1
 
 local function genChatFilter(_, event, msg, author, _, _, _, flag, _, _, _, _, _, guid)
-	if not C.chat.enableFilter then return end
+	if not C.chat.useFilter then return end
 
 	local name = Ambiguate(author, 'none')
 

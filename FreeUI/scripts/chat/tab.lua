@@ -1,6 +1,6 @@
--- Fane by Tekkub, modified.
-
 local F, C, L = unpack(select(2, ...))
+if not C.chat.enable then return end
+
 
 CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0

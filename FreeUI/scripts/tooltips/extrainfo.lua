@@ -95,18 +95,6 @@ function module:extraInfo()
 		end
 	end)
 
-	-- Castby
-	local function SetCaster(self, unit, index, filter)
-		local unitCaster = select(7, UnitAura(unit, index, filter))
-		if unitCaster then
-			local name = GetUnitName(unitCaster, true)
-			local hexColor = F.HexRGB(F.UnitColor(unitCaster))
-			self:AddDoubleLine(L["Castby"]..":", hexColor..name)
-			self:Show()
-		end
-	end
-	hooksecurefunc(GameTooltip, "SetUnitAura", SetCaster)
-
 
 	-- took from idTip by silverwind
 	local hooksecurefunc, select, tonumber, strfind = hooksecurefunc, select, tonumber, strfind

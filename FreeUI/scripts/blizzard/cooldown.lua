@@ -33,7 +33,6 @@ function module:CooldownCount()
 		else
 			self.text:SetFont(unpack(C.blizzard.CDFont))
 			self.text:SetShadowColor(0, 0, 0, 0)
-			--F.SetFS(self.text)
 			self.text:SetPoint("BOTTOM", 2, 2)
 
 			if self.enabled then
@@ -107,16 +106,13 @@ function module:CooldownCount()
 			Timer_Stop(self.timer)
 		end
 
-		-- hide cooldown flash if not visible
-		local parent = self:GetParent()
-		if parent and parent.isAuraWatch then return end
-		local name = parent:GetName()
-		if name and (strfind(name, "Hekili") or strfind(name, "Zygor")) then return end
-
-		if self:GetEffectiveAlpha() > 0 then
-			self:Show()
-		else
-			self:Hide()
+		-- hide cooldown flash if barFader enabled
+		if self:GetParent().__faderParent then
+			if self:GetEffectiveAlpha() > 0 then
+				self:Show()
+			else
+				self:Hide()
+			end
 		end
 	end
 
@@ -131,7 +127,6 @@ function module:CooldownCount()
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, "SetCooldown", Timer_Start)
-	--hooksecurefunc(cooldownIndex, "SetHideCountdownNumbers", hideCooldownNumbers)
 	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", function(self)
 		hideCooldownNumbers(self, true)
 	end)

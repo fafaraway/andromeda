@@ -20,21 +20,7 @@ function module:OnLogin()
 end
 
 
-do
-	-- Prevents spells from being automatically added to your action bar
-	IconIntroTracker.RegisterEvent = function() end
-	IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
 
-	local iit = CreateFrame('frame')
-	iit:SetScript('OnEvent', function(self, event, spellID, slotIndex, slotPos)
-		if not InCombatLockdown() then
-			ClearCursor()
-			PickupAction(slotIndex)
-			ClearCursor()
-		end
-	end)
-	iit:RegisterEvent('SPELL_PUSHED_TO_ACTIONBAR')
-end
 
 
 -- reposition alert popup
@@ -46,13 +32,7 @@ end
 hooksecurefunc(_G.AlertFrame, "UpdateAnchors", alertFrameMover)
 
 
--- remove talent alert
-function MainMenuMicroButton_AreAlertsEffectivelyEnabled()
-	return false
-end
-function TalentMicroButtonAlert:Show()
-	TalentMicroButtonAlert:Hide();
-end
+
 
 
 -- remove talking head
@@ -104,19 +84,6 @@ do
 			end
 		end
 	end)
-end
-
-
--- Clean up Loss Of Control
-do
-	local frame = _G.LossOfControlFrame
-	frame.RedLineTop:SetTexture(nil)
-	frame.RedLineBottom:SetTexture(nil)
-	frame.blackBg:SetTexture(nil)
-
-	F.ReskinIcon(frame.Icon)
-	F.CreateBDFrame(frame.Icon)
-	F.CreateSD(frame.Icon)
 end
 
 

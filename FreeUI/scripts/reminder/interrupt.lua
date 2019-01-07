@@ -12,9 +12,11 @@ function module:Interrupt()
 		local inInstance, instanceType = IsInInstance()
 		if ((sourceGUID == UnitGUID('player')) or (sourceGUID == UnitGUID('pet'))) then
 			if (event == 'SPELL_INTERRUPT') then
-				PlaySoundFile(interruptSound, 'Master')
-				if inInstance and (instanceType ~= 'pvp' and instanceType ~= 'arena') then
+				if inInstance and IsInGroup() then
 					SendChatMessage(L['interrupted']..destName..' '..GetSpellLink(spellID), say)
+				end
+				if C.reminder.interruptSoundAlert then
+					PlaySoundFile(interruptSound, 'Master')
 				end
 			end
 		end

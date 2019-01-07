@@ -1,4 +1,5 @@
 ﻿local F, C, L = unpack(select(2, ...))
+if not C.bags.enable then return end
 local cargBags = FreeUI.cargBags
 
 local module = F:GetModule("bags")
@@ -13,7 +14,7 @@ local CustomFilterList = {
 }
 
 local function isCustomFilter(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	return CustomFilterList[item.id]
 end
 
@@ -27,19 +28,19 @@ local function isItemInBank(item)
 end
 
 local function isItemJunk(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	return item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0
 end
 
 local function isAzeriteArmor(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	if not item.link then return end
-	return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) and not (C.bags.itemSetFilter and item.isInSet)
+	return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) and not (C.bags.gearSetFilter and item.isInSet)
 end
 
 local function isItemEquipment(item)
-	if not C.bags.itemFilter then return end
-	if C.bags.itemSetFilter then
+	if not C.bags.useCategory then return end
+	if C.bags.gearSetFilter then
 		return item.isInSet
 	else
 		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= "" and item.equipLoc ~= "INVTYPE_BAG"))
@@ -47,24 +48,24 @@ local function isItemEquipment(item)
 end
 
 local function isItemConsumble(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	if isCustomFilter(item) == false then return end
 	return isCustomFilter(item) or (item.classID and (item.classID == LE_ITEM_CLASS_CONSUMABLE or item.classID == LE_ITEM_CLASS_ITEM_ENHANCEMENT))
 end
 
 local function isItemLegendary(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	return item.rarity == LE_ITEM_QUALITY_LEGENDARY
 end
 
 local function isItemTrade(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	if not C.bags.tradeGoodsFilter then return end
 	return item.classID == LE_ITEM_CLASS_TRADEGOODS
 end
 
 local function isItemQuest(item)
-	if not C.bags.itemFilter then return end
+	if not C.bags.useCategory then return end
 	if not C.bags.questItemFilter then return end
 	return item.classID == LE_ITEM_CLASS_QUESTITEM
 end

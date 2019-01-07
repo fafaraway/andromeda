@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-
+if not C.chat.enable then return end
 
 local UnitPopupButtonsExtra = {
 	['NAME_COPY'] = { text = COPY_NAME },

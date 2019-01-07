@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+if not C.tooltip.enable then return end
 local module = F:RegisterModule("tooltip")
 
 function module:OnLogin()
@@ -7,7 +7,7 @@ function module:OnLogin()
 	self:azeriteTrait()
 end
 
-if not C.tooltip.enable then return end
+
 
 
 local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)

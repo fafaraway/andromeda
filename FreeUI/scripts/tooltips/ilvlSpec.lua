@@ -1,6 +1,7 @@
 local F, C = unpack(select(2, ...))
+if not C.tooltip.enable then return end
+if not C.tooltip.ilvlspec then return end
 local module = F:GetModule("tooltip")
-if C.tooltip.enable ~= true or C.tooltip.ilvlspec ~= true then return end
 
 --[[
 	Cloudy Unit Info

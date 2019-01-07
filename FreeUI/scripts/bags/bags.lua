@@ -1,4 +1,5 @@
 local F, C, L = unpack(select(2, ...))
+if not C.bags.enable then return end
 local cargBags = FreeUI.cargBags
 local module = F:RegisterModule('bags')
 
@@ -209,8 +210,6 @@ function module:CreateSortButton(name)
 end
 
 function module:OnLogin()
-	if not C.bags.enable then return end
-
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
 	Backpack:SetScale(C.bags.bagScale)
@@ -428,7 +427,7 @@ function module:OnLogin()
 		if strmatch(name, 'AzeriteItem$') then
 			label = L['AzeriteArmor']
 		elseif strmatch(name, 'Equipment$') then
-			if C.bags.itemSetFilter then
+			if C.bags.gearSetFilter then
 				label = L['EquipementSet']
 			else
 				label = BAG_FILTER_EQUIPMENT
@@ -513,6 +512,7 @@ function module:OnLogin()
 	ToggleAllBags()
 	ToggleAllBags()
 	BankFrame.GetRight = function() return f.bank:GetRight() end
+	BankFrameItemButton_Update = F.Dummy
 
 	SetSortBagsRightToLeft(not C.bags.reverseSort)
 	SetInsertItemsLeftToRight(false)
