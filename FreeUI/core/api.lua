@@ -816,6 +816,49 @@ function F:ReskinMinMax()
 end
 
 -- GameTooltip
+local function getBackdrop(self) return self.bg:GetBackdrop() end
+local function getBackdropColor() return 0, 0, 0, .7 end
+local function getBackdropBorderColor() return 0, 0, 0 end
+
+function F:ReskinTooltip()
+	if not self then
+		if C.general.isDeveloper then print("Unknown tooltip spotted.") end
+		return
+	end
+	self:SetScale(1)
+
+	if not self.tipStyled then
+		self:SetBackdrop(nil)
+		self:DisableDrawLayer("BACKGROUND")
+		local bg = F.CreateBDFrame(self)
+		F.CreateSD(bg)
+		self.bg = bg
+
+		self.GetBackdrop = getBackdrop
+		self.GetBackdropColor = getBackdropColor
+		self.GetBackdropBorderColor = getBackdropBorderColor
+		
+		self.tipStyled = true
+	end
+
+	if self.bg.Shadow then
+		self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+	end
+
+	if C.tooltip.borderColor and self.GetItem then
+		local _, item = self:GetItem()
+		if item then
+			local quality = select(3, GetItemInfo(item))
+			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+			if color then
+				if self.bg.Shadow then
+					self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .5)
+				end
+			end
+		end
+	end
+end
+
 function F:HideTooltip()
 	GameTooltip:Hide()
 end

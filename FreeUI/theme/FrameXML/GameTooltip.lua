@@ -3,44 +3,6 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["FreeUI"], function()
 	F.ReskinClose(ItemRefCloseButton)
 
-	local function getBackdrop(self) return self.bg:GetBackdrop() end
-	local function getBackdropColor() return 0, 0, 0, .7 end
-	local function getBackdropBorderColor() return 0, 0, 0 end
-
-	function F:ReskinTooltip()
-		if not self then
-			if C.general.isDeveloper then print("Unknown tooltip spotted.") end
-			return
-		end
-		self:SetScale(1)
-
-		if not self.tipStyled then
-			self:SetBackdrop(nil)
-			self:DisableDrawLayer("BACKGROUND")
-			local bg = F.CreateBDFrame(self)
-			F.CreateSD(bg)
-			self.bg = bg
-
-			self.GetBackdrop = getBackdrop
-			self.GetBackdropColor = getBackdropColor
-			self.GetBackdropBorderColor = getBackdropBorderColor
-			
-			self.tipStyled = true
-		end
-
-		self.bg.Shadow:SetBackdropBorderColor(0, 0, 0)
-		if C.tooltip.borderColor and self.GetItem then
-			local _, item = self:GetItem()
-			if item then
-				local quality = select(3, GetItemInfo(item))
-				local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
-				if color then
-					self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
-				end
-			end
-		end
-	end
-
 	hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 		if not self.tipStyled then return end
 		self:SetBackdrop(nil)
@@ -74,8 +36,9 @@ tinsert(C.themes["FreeUI"], function()
 		FloatingPetBattleAbilityTooltip,
 		IMECandidatesFrame,
 	}
-	for _, tooltip in pairs(tooltips) do
-		F.ReskinTooltip(tooltip)
+
+	for _, f in pairs(tooltips) do
+		f:HookScript("OnShow", F.ReskinTooltip)
 	end
 
 	C_Timer.After(5, function()
