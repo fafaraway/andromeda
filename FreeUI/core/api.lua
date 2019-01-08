@@ -6,8 +6,8 @@ local min, max, abs, floor = math.min, math.max, math.abs, math.floor
 
 C.PlayerClass = select(2, UnitClass("player"))
 C.PlayerName = UnitName("player")
-C.Realm = GetRealmName()
-C.Client = GetLocale()
+C.PlayerRealm = GetRealmName()
+C.GameClient = GetLocale()
 
 C.ClassColors = {}
 C.ClassList = {}

@@ -6,7 +6,7 @@ local module = F:GetModule("tooltip")
 -- based on ItemTooltipCleaner by phanx
 
 
-if C.Client == "zhCN" then
+if C.GameClient == "zhCN" then
 	ITEM_CREATED_BY = ""
 
 	ITEM_LEVEL = "物品等级 %d"
