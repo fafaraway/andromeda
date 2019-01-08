@@ -73,6 +73,7 @@ C['general'] = {
 	['fasterLoot'] = true,
 	['cameraIncrement'] = 5,
 	['cameraDistance'] = 50,
+	['isDeveloper'] = false,
 }
 
 
@@ -260,6 +261,20 @@ C['chat'] = {
 					'任务进度提示%s?[:：]', '%[接受任务%]', '%(任务完成%)', '<大脚组队提示>', '<大脚团队提示>', '【爱不易】', 'EUI:', 'EUI_RaidCD', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*',
 					'<iLvl>', ('%-'):rep(30), '<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '=>'
 					},
+}
+
+
+C["notifications"] = {
+	["enable"] = true,
+
+		["playSounds"] = true,
+		["animations"] = true,
+		["timeShown"] = 5,
+
+		["checkBagsFull"] = true,
+		["checkEvents"] = true,
+		["checkGuildEvents"] = true,
+		["checkMail"] = true,
 }
 
 

@@ -19,6 +19,7 @@ core\gui.lua
 core\api.lua
 core\setting.lua
 core\slash.lua
+core\notifications.lua
 
 locales\enUS.lua
 locales\zhCN.lua
@@ -105,6 +106,7 @@ scripts\misc\alreadyknown.lua
 scripts\misc\camera.lua
 scripts\misc\cdpulse.lua
 scripts\misc\clickcast.lua
+scripts\misc\events.lua
 scripts\misc\itemlevel.lua
 scripts\misc\mail.lua
 scripts\misc\lfgqueuetimer.lua

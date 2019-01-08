@@ -17,6 +17,7 @@ local function autoRepair(override)
 		else
 			if myMoney > repairAllCost then
 				RepairAllItems()
+				F.Notification("Repairs", format(C.RedColor..'%s:|r'..' %s', L['repairCost'], GetMoneyString(repairAllCost)), "Interface\\Icons\\INV_Hammer_20")
 				UIErrorsFrame:AddMessage(format(C.RedColor..'%s:|r'..' %s', L['repairCost'], GetMoneyString(repairAllCost)))
 				print(format(C.RedColor..'%s:|r'..' %s', L['repairCost'], GetMoneyString(repairAllCost)))
 				return

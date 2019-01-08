@@ -9,6 +9,7 @@ local errorText = _G.ERR_VENDOR_DOESNT_BUY
 local function stopSelling(tell)
 	stop = true
 	if sellCount > 0 and tell then
+		F.Notification("SellJunk", C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount), "Interface\\Icons\\INV_Hammer_20")
 		UIErrorsFrame:AddMessage(C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount))
 		print(C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount))
 	end
