@@ -483,7 +483,7 @@ local function CreateCastBar(self)
 
 	local name
 
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
 		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -1246,7 +1246,7 @@ end
 local function CreateName(self)
 	local Name
 
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
 		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 	else
 		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
@@ -1290,7 +1290,7 @@ local function CreatePartyName(self)
 	self.Text = Text
 
 	if C.unitframes.partyNameAlways then
-		if C.Client == 'zhCN' or C.Client == 'zhTW' then
+		if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
 			Text:SetFont(C.font.normal, 11)
 			Text:SetShadowOffset(2, -2)
 		else
@@ -1313,7 +1313,7 @@ local function UpdateTOTName(self)
 
 	local tt
 
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
 		tt = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		tt = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -1343,7 +1343,7 @@ local function UpdateTOFName(self)
 
 	local ft
 
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
 		ft = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		ft = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
