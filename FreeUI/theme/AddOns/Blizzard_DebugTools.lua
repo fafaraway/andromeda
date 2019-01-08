@@ -17,15 +17,11 @@ C.themes["Blizzard_DebugTools"] = function()
 	F.CreateBD(bu.bg, 0)
 	F.CreateGradient(bu.bg) 
 
-	for _, tip in next, {FrameStackTooltip, EventTraceTooltip} do
-		tip:SetFrameStrata("TOOLTIP")
-		tip:SetBackdrop(nil)
-		tip.auroraTip = true
-		local bg = F.CreateBDFrame(tip, .6)
-		F.CreateSD(bg)
-	end
+	F.ReskinTooltip(FrameStackTooltip)
+	F.ReskinTooltip(EventTraceTooltip)
 	FrameStackTooltip:SetScale(UIParent:GetScale())
 	EventTraceTooltip:SetParent(UIParent)
+	EventTraceTooltip:SetFrameStrata("TOOLTIP")
 
 	local texs = {
 		"TopLeft",

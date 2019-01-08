@@ -1,13 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_OrderHallUI"] = function()
-	-- Orderhall tooltips
-	GarrisonFollowerAbilityWithoutCountersTooltip:DisableDrawLayer("BACKGROUND")
-	F.CreateBDFrame(GarrisonFollowerAbilityWithoutCountersTooltip)
-	F.CreateSD(GarrisonFollowerAbilityWithoutCountersTooltip)
-	GarrisonFollowerMissionAbilityWithoutCountersTooltip:DisableDrawLayer("BACKGROUND")
-	F.CreateBDFrame(GarrisonFollowerMissionAbilityWithoutCountersTooltip)
-	F.CreateSD(GarrisonFollowerMissionAbilityWithoutCountersTooltip)
 
 	-- Talent Frame
 	local OrderHallTalentFrame = OrderHallTalentFrame

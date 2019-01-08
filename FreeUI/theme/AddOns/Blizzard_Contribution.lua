@@ -30,9 +30,7 @@ C.themes["Blizzard_Contribution"] = function()
 
 	-- Tooltips
 
-	ContributionBuffTooltip:DisableDrawLayer("BACKGROUND")
-	F.CreateBDFrame(ContributionBuffTooltip)
-	F.CreateSD(ContributionBuffTooltip)
+	F.ReskinTooltip(ContributionBuffTooltip)
 	ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.TexCoord))
 	ContributionBuffTooltip.Border:SetAlpha(0)
 end

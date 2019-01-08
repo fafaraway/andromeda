@@ -3,6 +3,14 @@ local F, C = unpack(select(2, ...))
 C.themes["Blizzard_GarrisonUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
+	F.ReskinTooltip(GarrisonFollowerAbilityWithoutCountersTooltip)
+	F.ReskinTooltip(GarrisonFollowerMissionAbilityWithoutCountersTooltip)
+	F.ReskinTooltip(GarrisonMissionMechanicTooltip)
+	F.ReskinTooltip(GarrisonMissionMechanicFollowerCounterTooltip)
+	F.ReskinTooltip(GarrisonShipyardMapMissionTooltip)
+	F.ReskinTooltip(GarrisonBonusAreaTooltip)
+	F.ReskinTooltip(GarrisonBuildingFrame.BuildingLevelTooltip)
+
 	-- [[ Shared codes ]]
 
 	function F:ReskinMissionPage()
@@ -334,15 +342,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 			end
 		end
 	end)
-
-	-- Building level tooltip
-	local BuildingLevelTooltip = GarrisonBuildingFrame.BuildingLevelTooltip
-
-	for i = 1, 9 do
-		select(i, BuildingLevelTooltip:GetRegions()):Hide()
-	end
-	F.CreateBD(BuildingLevelTooltip)
-	F.CreateSD(BuildingLevelTooltip)
 
 	-- Follower list
 
@@ -712,15 +711,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	-- Mechanic tooltip
-
-	GarrisonMissionMechanicTooltip:SetBackdrop(nil)
-	F.CreateBDFrame(GarrisonMissionMechanicTooltip)
-	F.CreateSD(GarrisonMissionMechanicTooltip)
-	GarrisonMissionMechanicFollowerCounterTooltip:SetBackdrop(nil)
-	F.CreateBDFrame(GarrisonMissionMechanicFollowerCounterTooltip)
-	F.CreateSD(GarrisonMissionMechanicFollowerCounterTooltip)
-
 	-- [[ Recruiter frame ]]
 
 	local GarrisonRecruiterFrame = GarrisonRecruiterFrame
@@ -809,9 +799,6 @@ C.themes["Blizzard_GarrisonUI"] = function()
 	-- [[ Shipyard ]]
 
 	local GarrisonShipyardFrame = GarrisonShipyardFrame
-
-	F.CreateBD(GarrisonShipyardMapMissionTooltip)
-	F.CreateSD(GarrisonShipyardMapMissionTooltip)
 
 	for i = 1, 14 do
 		select(i, GarrisonShipyardFrame.BorderFrame:GetRegions()):Hide()

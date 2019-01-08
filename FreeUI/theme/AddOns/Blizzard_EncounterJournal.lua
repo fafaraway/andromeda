@@ -332,9 +332,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	local suggestFrame = EncounterJournal.suggestFrame
 
 	-- Tooltip
-	local EncounterJournalTooltip = EncounterJournalTooltip
-	F.CreateBD(EncounterJournalTooltip)
-	F.CreateSD(EncounterJournalTooltip)
+	F.ReskinTooltip(EncounterJournalTooltip)
 	EncounterJournalTooltip.Item1.newBg = F.ReskinIcon(EncounterJournalTooltip.Item1.icon)
 	EncounterJournalTooltip.Item2.newBg = F.ReskinIcon(EncounterJournalTooltip.Item2.icon)
 

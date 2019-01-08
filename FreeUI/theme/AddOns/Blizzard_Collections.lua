@@ -169,14 +169,8 @@ C.themes["Blizzard_Collections"] = function()
 		F.CreateBG(ic)
 	end
 
-	for _, f in pairs({PetJournalPrimaryAbilityTooltip, PetJournalSecondaryAbilityTooltip}) do
-		f:DisableDrawLayer("BACKGROUND")
-		local bg = CreateFrame("Frame", nil, f)
-		bg:SetAllPoints()
-		bg:SetFrameLevel(0)
-		F.CreateBD(bg)
-		F.CreateSD(bg)
-	end
+	F.ReskinTooltip(PetJournalPrimaryAbilityTooltip)
+	F.ReskinTooltip(PetJournalSecondaryAbilityTooltip)
 
 	PetJournalLoadoutBorderSlotHeaderText:SetParent(PetJournal)
 	PetJournalLoadoutBorderSlotHeaderText:SetPoint("CENTER", PetJournalLoadoutBorderTop, "TOP", 0, 4)

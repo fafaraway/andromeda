@@ -6,8 +6,7 @@ tinsert(C.themes["FreeUI"], function()
 			select(i, frame:GetRegions()):Hide()
 		end
 
-		F.CreateBD(frame)
-		F.CreateSD(frame)
+		F.ReskinTooltip(frame)
 	end
 
 	local function restyleGarrisonFollowerAbilityTooltipTemplate(frame)
@@ -15,14 +14,12 @@ tinsert(C.themes["FreeUI"], function()
 			select(i, frame:GetRegions()):Hide()
 		end
 
-		local icon = frame.Icon
-
-		icon:SetTexCoord(unpack(C.TexCoord))
-		F.CreateBG(icon)
-
-		F.CreateBD(frame)
-		F.CreateSD(frame)
+		F.ReskinIcon(frame.Icon)
+		F.ReskinTooltip(frame)
 	end
+
+	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonMissionTooltip)
+	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 
 	restyleGarrisonFollowerTooltipTemplate(GarrisonFollowerTooltip)
 	restyleGarrisonFollowerAbilityTooltipTemplate(GarrisonFollowerAbilityTooltip)
@@ -33,6 +30,7 @@ tinsert(C.themes["FreeUI"], function()
 	restyleGarrisonFollowerAbilityTooltipTemplate(FloatingGarrisonFollowerAbilityTooltip)
 	F.ReskinClose(FloatingGarrisonFollowerAbilityTooltip.CloseButton)
 
+	restyleGarrisonFollowerTooltipTemplate(GarrisonShipyardFollowerTooltip)
 	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonShipyardFollowerTooltip)
 	F.ReskinClose(FloatingGarrisonShipyardFollowerTooltip.CloseButton)
 
@@ -83,9 +81,4 @@ tinsert(C.themes["FreeUI"], function()
 
 		tooltipFrame.numTraitsStyled = numTraitsStyled
 	end)
-	
-	-- Mission tooltip
-	
-	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonMissionTooltip)
-	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
 end)

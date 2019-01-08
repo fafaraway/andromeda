@@ -3,20 +3,26 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["FreeUI"], function()
 	local r, g, b = C.r, C.g, C.b
 
-	hooksecurefunc("UIDropDownMenu_CreateFrames", function()
-		for i = 1, _G.UIDROPDOWNMENU_MAXLEVELS do
-			local menu = _G["DropDownList"..i.."MenuBackdrop"]
-			local backdrop = _G["DropDownList"..i.."Backdrop"]
-			if not backdrop.reskinned then
-				--F.CreateBD(menu)
-				--F.CreateSD(menu)
-				
-				F.CreateBD(backdrop)
-				--F.CreateSD(backdrop)
-				backdrop.reskinned = true
+	local function reskinDropdown()
+		for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do
+			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+				local menu = _G[name..i.."MenuBackdrop"]
+
+				if menu and not menu.styled then
+					F.ReskinTooltip(menu)
+					menu.styled = true
+				end
+
+				local backdrop = _G[name..i.."Backdrop"]
+				if backdrop and not backdrop.styled then
+					F.CreateBD(backdrop)
+					F.CreateSD(backdrop)
+					backdrop.styled = true
+				end
 			end
 		end
-	end)
+	end
+	hooksecurefunc("UIDropDownMenu_CreateFrames", reskinDropdown)
 
 	local function toggleBackdrop(bu, show)
 		if show then

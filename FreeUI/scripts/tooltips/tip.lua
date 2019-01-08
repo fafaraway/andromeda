@@ -227,6 +227,20 @@ GameTooltip.FadeOut = function(self)
 	end
 end
 
+hooksecurefunc("GameTooltip_ShowStatusBar", function(self)
+	if self.statusBarPool then
+		local bar = self.statusBarPool:Acquire()
+		if bar and not bar.styled then
+			local _, bd, tex = bar:GetRegions()
+			tex:SetTexture(C.media.sbTex)
+			bd:Hide()
+			local bg = F.CreateBDFrame(bd)
+
+			bar.styled = true
+		end
+	end
+end)
+
 -- world quest progress bar
 hooksecurefunc("GameTooltip_ShowProgressBar", function(self)
 	if self.progressBarPool then
@@ -327,13 +341,16 @@ end)
 
 
 -- Tooltip skin
-local function style(self)
+--[[local function getBackdrop(self) return self.bg:GetBackdrop() end
+local function getBackdropColor() return 0, 0, 0, .7 end
+local function getBackdropBorderColor() return 0, 0, 0 end
+
+function F:ReskinTooltip()
 	self:SetScale(1)
 
 	if not self.tipStyled then
-		F.ReskinClose(ItemRefCloseButton)
-		
 		self:SetBackdrop(nil)
+		self:DisableDrawLayer("BACKGROUND")
 		local bg = F.CreateBDFrame(self)
 		bg:SetFrameLevel(self:GetFrameLevel())
 		self.bg = bg
@@ -348,9 +365,9 @@ local function style(self)
 		end
 
 		-- other gametooltip-like support
-		self.GetBackdrop = function() return bg:GetBackdrop() end
-		self.GetBackdropColor = function() return 0, 0, 0, .7 end
-		self.GetBackdropBorderColor = function() return 0, 0, 0 end
+		self.GetBackdrop = getBackdrop
+		self.GetBackdropColor = getBackdropColor
+		self.GetBackdropBorderColor = getBackdropBorderColor
 
 		self.tipStyled = true
 	end
@@ -376,15 +393,6 @@ local function style(self)
 	end
 end
 
-local function extrastyle(self)
-	if not self.styled then
-		self:DisableDrawLayer("BACKGROUND")
-		style(self)
-
-		self.styled = true
-	end
-end
-
 hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
@@ -395,15 +403,11 @@ GAME_TOOLTIP_BACKDROP_STYLE_AZERITE_ITEM = {}
 
 local function addonStyled(_, addon)
 	if addon == "Blizzard_DebugTools" then
-		local tooltips = {
-			FrameStackTooltip,
-			EventTraceTooltip
-		}
-		for _, tip in pairs(tooltips) do
-			tip:SetParent(UIParent)
-			tip:SetFrameStrata("TOOLTIP")
-			tip:HookScript("OnShow", style)
-		end
+		F.ReskinTooltip(FrameStackTooltip)
+		F.ReskinTooltip(EventTraceTooltip)
+		FrameStackTooltip:SetScale(UIParent:GetScale())
+		EventTraceTooltip:SetParent(UIParent)
+		EventTraceTooltip:SetFrameStrata("TOOLTIP")
 
 	elseif addon == "FreeUI" then
 		
@@ -430,14 +434,6 @@ local function addonStyled(_, addon)
 			QuestScrollFrame.WarCampaignTooltip,
 			NamePlateTooltip,
 			LibDBIconTooltip,
-		}
-		for _, f in pairs(tooltips) do
-			if f then
-				f:HookScript("OnShow", style)
-			end
-		end
-
-		local extra = {
 			QueueStatusFrame,
 			FloatingGarrisonFollowerTooltip,
 			FloatingGarrisonFollowerAbilityTooltip,
@@ -453,28 +449,23 @@ local function addonStyled(_, addon)
 			FloatingPetBattleAbilityTooltip,
 			IMECandidatesFrame
 		}
-		for _, f in pairs(extra) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
+		for _, f in pairs(tooltips) do
+			f:HookScript("OnShow", F.ReskinTooltip)
 		end
 
 		-- DropdownMenu
-		hooksecurefunc("UIDropDownMenu_CreateFrames", function()
-			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
-				local menu = _G["DropDownList"..i.."MenuBackdrop"]
-				if menu and not menu.styled then
-					menu:HookScript("OnShow", style)
-					menu.styled = true
-				end
-
-				local menu2 = _G["Lib_DropDownList"..i.."MenuBackdrop"]
-				if menu2 and not menu2.styled then
-					menu2:HookScript("OnShow", style)
-					menu2.styled = true
+		local function reskinDropdown()
+			for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do
+				for i = 1, UIDROPDOWNMENU_MAXLEVELS do
+					local menu = _G[name..i.."MenuBackdrop"]
+					if menu and not menu.styled then
+						menu:HookScript("OnShow", F.ReskinTooltip)
+						menu.styled = true
+					end
 				end
 			end
-		end)
+		end
+		hooksecurefunc("UIDropDownMenu_CreateFrames", reskinDropdown)
 
 		-- IME
 		IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b)
@@ -510,17 +501,35 @@ local function addonStyled(_, addon)
 			end
 		end)
 
-	elseif addon == "Blizzard_Collections" then
-		local pet = {
-			PetJournalPrimaryAbilityTooltip,
-			PetJournalSecondaryAbilityTooltip,
-		}
-		for _, f in pairs(pet) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
+		if IsAddOnLoaded("MeetingStone") then
+			F.ReskinTooltip(NetEaseGUI20_Tooltip51)
+			F.ReskinTooltip(NetEaseGUI20_Tooltip52)
 		end
 
+		if IsAddOnLoaded("BattlePetBreedID") then
+			hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
+				if parent == FloatingBattlePetTooltip then
+					F.ReskinTooltip(BPBID_BreedTooltip2)
+				else
+					F.ReskinTooltip(BPBID_BreedTooltip)
+				end
+			end)
+		end
+
+		if IsAddOnLoaded("MethodDungeonTools") then
+			local styledMDT
+			hooksecurefunc(MethodDungeonTools, "ShowInterface", function()
+				if not styledMDT then
+					F.ReskinTooltip(MethodDungeonTools.tooltip)
+					F.ReskinTooltip(MethodDungeonTools.pullTooltip)
+					styledMDT = true
+				end
+			end)
+		end
+
+	elseif addon == "Blizzard_Collections" then
+		PetJournalPrimaryAbilityTooltip:HookScript("OnShow", F.ReskinTooltip)
+		PetJournalSecondaryAbilityTooltip:HookScript("OnShow", F.ReskinTooltip)
 		PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
 		PetJournalPrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
 		PetJournalPrimaryAbilityTooltip.Delimiter2:SetHeight(1)
@@ -537,52 +546,39 @@ local function addonStyled(_, addon)
 			GarrisonFollowerMissionAbilityWithoutCountersTooltip
 		}
 		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", extrastyle)
-			end
+			f:HookScript("OnShow", F.ReskinTooltip)
 		end
 
 	elseif addon == "Blizzard_PVPUI" then
 
-		ConquestTooltip:HookScript("OnShow", style)
+		ConquestTooltip:HookScript("OnShow", F.ReskinTooltip)
 
 	elseif addon == "Blizzard_Contribution" then
 
-		ContributionBuffTooltip:HookScript("OnShow", extrastyle)
+		ContributionBuffTooltip:HookScript("OnShow", F.ReskinTooltip)
 		ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.TexCoord))
 		ContributionBuffTooltip.Border:SetAlpha(0)
 
 	elseif addon == "Blizzard_EncounterJournal" then
 
-		EncounterJournalTooltip:HookScript("OnShow", style)
+		EncounterJournalTooltip:HookScript("OnShow", F.ReskinTooltip)
 		EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.TexCoord))
 		EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.TexCoord))
 
 	elseif addon == "Blizzard_Calendar" then
-		local gt = {
-			CalendarContextMenu,
-			CalendarInviteStatusContextMenu,
-		}
-		for _, f in pairs(gt) do
-			if f then
-				f:HookScript("OnShow", style)
-			end
-		end
+		CalendarContextMenu:HookScript("OnShow", F.ReskinTooltip)
+		CalendarInviteStatusContextMenu:HookScript("OnShow", F.ReskinTooltip)
 
 	elseif addon == "Blizzard_IslandsQueueUI" then
 
-		local tip = IslandsQueueFrameTooltip
-		tip:GetParent():GetParent():HookScript("OnShow", style)
-		tip:GetParent().IconBorder:SetAlpha(0)
-		tip:GetParent().Icon:SetTexCoord(unpack(C.TexCoord))
+		local tooltip = IslandsQueueFrameTooltip:GetParent()
+		tooltip.IconBorder:SetAlpha(0)
+		tooltip.Icon:SetTexCoord(unpack(C.TexCoord))
+		tooltip:GetParent():HookScript("OnShow", F.ReskinTooltip)
 	end
 end
 
-F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
-F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
-F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
-
-F:RegisterEvent("ADDON_LOADED", addonStyled)
+F:RegisterEvent("ADDON_LOADED", addonStyled)]]
 
 -- Position
 hooksecurefunc("GameTooltip_SetDefaultAnchor", function(tooltip, parent)

@@ -17,10 +17,8 @@ tinsert(C.themes["FreeUI"], function()
 	QuestScrollFrame.DetailFrame.BottomDetail:SetAlpha(0)
 	QuestScrollFrame.Contents.Separator:SetAlpha(0)
 
-	F.CreateBD(QuestScrollFrame.StoryTooltip)
-	F.CreateSD(QuestScrollFrame.StoryTooltip)
-	F.CreateBD(QuestScrollFrame.WarCampaignTooltip)
-	F.CreateSD(QuestScrollFrame.WarCampaignTooltip)
+	F.ReskinTooltip(QuestScrollFrame.StoryTooltip)
+	F.ReskinTooltip(QuestScrollFrame.WarCampaignTooltip)
 
 	F.ReskinScroll(QuestScrollFrame.ScrollBar)
 

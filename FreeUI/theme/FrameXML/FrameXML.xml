@@ -12,6 +12,7 @@
 	<Script file="EquipmentFlyout.lua"/>
 	<Script file="FriendsFrame.lua"/>
 	<Script file="GameMenuFrame.lua"/>
+	<Script file="GameTooltip.lua"/>
 	<Script file="GarrisonFollowerTooltip.lua"/>
 	<Script file="GhostFrame.lua"/>
 	<Script file="GossipFrame.lua"/>

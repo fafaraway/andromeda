@@ -157,10 +157,9 @@ C.themes["Blizzard_PVPUI"] = function()
 	ConquestFrame.RatedBGTexture:Hide()
 	ConquestFrame.ShadowOverlay:Hide()
 
-	F.CreateBD(ConquestTooltip)
-	F.CreateSD(ConquestTooltip)
+	F.ReskinTooltip(ConquestTooltip)
 
-	local ConquestFrameButton_OnEnter = function(self)
+	local function ConquestFrameButton_OnEnter(self)
 		ConquestTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT", 1, 0)
 	end
 
