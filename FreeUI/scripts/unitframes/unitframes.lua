@@ -1308,7 +1308,7 @@ local function CreatePartyName(self)
 	end
 end
 
-local function UpdateTOTName(self)
+local function UpdateName(self)
 	local f = CreateFrame('Frame', nil, self)
 
 	local tt
@@ -1322,48 +1322,29 @@ local function UpdateTOTName(self)
 	tt:SetPoint('BOTTOM', self, 'TOP', 0, 3)
 	tt:SetJustifyH('CENTER')
 	tt:SetWordWrap(false)
-	tt:SetWidth(C.unitframes.targettarget_width)
+	tt:SetWidth(80)
 
 	f:RegisterEvent('UNIT_TARGET')
 	f:RegisterEvent('PLAYER_TARGET_CHANGED')
-
-	f:SetScript('OnEvent', function()
-		if(UnitName('targettarget') == UnitName('player')) then
-			tt:SetText('> YOU <')
-			tt:SetTextColor(1, 0, 0)
-		else
-			tt:SetText(UnitName'targettarget')
-			tt:SetTextColor(1, 1, 1)
-		end
-	end)
-end
-
-local function UpdateTOFName(self)
-	local f = CreateFrame('Frame', nil, self)
-
-	local ft
-
-	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
-		ft = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
-	else
-		ft = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
-	end
-
-	ft:SetPoint('BOTTOM', self, 'TOP', 0, 3)
-	ft:SetJustifyH('CENTER')
-	ft:SetWordWrap(false)
-	ft:SetWidth(C.unitframes.focustarget_width)
-
-	f:RegisterEvent('UNIT_TARGET')
 	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
 
 	f:SetScript('OnEvent', function()
-		if(UnitName('focustarget')==UnitName('player')) then
-			ft:SetText('> YOU <')
-			ft:SetTextColor(1, 0, 0)
-		else
-			ft:SetText(UnitName'focustarget')
-			ft:SetTextColor(1, 1, 1)
+		if self.unitStyle == 'targettarget' then
+			if(UnitName('targettarget') == UnitName('player')) then
+				tt:SetText('> YOU <')
+				tt:SetTextColor(1, 0, 0)
+			else
+				tt:SetText(UnitName'targettarget')
+				tt:SetTextColor(1, 1, 1)
+			end
+		elseif self.unitStyle == 'focustarget' then
+			if(UnitName('focustarget')==UnitName('player')) then
+				tt:SetText('> YOU <')
+				tt:SetTextColor(1, 0, 0)
+			else
+				tt:SetText(UnitName'focustarget')
+				tt:SetTextColor(1, 1, 1)
+			end
 		end
 	end)
 end
@@ -1503,7 +1484,7 @@ local UnitSpecific = {
 		CreateHeader(self)
 		CreateHealthBar(self)
 		CreatePowerBar(self)
-		UpdateTOTName(self)
+		UpdateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
 		spellRange(self)
@@ -1533,7 +1514,7 @@ local UnitSpecific = {
 		CreateHeader(self)
 		CreateHealthBar(self)
 		CreatePowerBar(self)
-		UpdateTOFName(self)
+		UpdateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
 		spellRange(self)
