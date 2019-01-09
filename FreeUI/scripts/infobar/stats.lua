@@ -113,7 +113,7 @@ FreeUIStatsButton:HookScript("OnEnter", function(self)
 
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
 	GameTooltip:ClearLines()
-	GameTooltip:AddDoubleLine("Addons", formatMemory(total), C.r, C.g, C.b, memoryColor(total))
+	GameTooltip:AddDoubleLine(ADDONS, formatMemory(total), .9, .82, .62, memoryColor(total))
 	GameTooltip:AddLine(" ")
 
 	for _, entry in next, addons do

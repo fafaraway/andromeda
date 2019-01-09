@@ -97,7 +97,7 @@ FreeUISpecButton:HookScript("OnEnter", function(self)
 	GameTooltip:AddLine(" ")
 
 	local _, specName, _, specIcon = GetSpecializationInfo(GetSpecialization())
-	GameTooltip:AddLine(addIcon(specIcon).." "..specName, .9, .82, .62)
+	GameTooltip:AddLine(addIcon(specIcon).." "..specName, .6,.8,1)
 
 	for t = 1, MAX_TALENT_TIERS do
 		for c = 1, 3 do
@@ -114,7 +114,7 @@ FreeUISpecButton:HookScript("OnEnter", function(self)
 		if #pvpTalents > 0 then
 			local texture = select(3, GetCurrencyInfo(104))
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, .9, .82, .62)
+			GameTooltip:AddLine(addIcon(texture).." "..PVP_TALENTS, .6,.8,1)
 			for _, talentID in next, pvpTalents do
 				local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
 				if name and unlocked then

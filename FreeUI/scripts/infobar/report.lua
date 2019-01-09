@@ -17,9 +17,55 @@ local function updateTimerFormat(color, hour, minute)
 	end
 end
 
+-- Data
+local bonus = {
+	52834, 52838,	-- Gold
+	52835, 52839,	-- Honor
+	52837, 52840,	-- Resources
+}
+local bonusName = GetCurrencyInfo(1580)
+
+local isTimeWalker, walkerTexture
+local function checkTimeWalker(event)
+	local date = C_Calendar.GetDate()
+	C_Calendar.SetAbsMonth(date.month, date.year)
+	C_Calendar.OpenCalendar()
+
+	local today = date.monthDay
+	local numEvents = C_Calendar.GetNumDayEvents(0, today)
+	if numEvents <= 0 then return end
+
+	for i = 1, numEvents do
+		local info = C_Calendar.GetDayEvent(0, today, i)
+		if info and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
+			isTimeWalker = true
+			walkerTexture = info.iconTexture
+			break
+		end
+	end
+	F:UnregisterEvent(event, checkTimeWalker)
+end
+F:RegisterEvent("PLAYER_ENTERING_WORLD", checkTimeWalker)
+
+local function checkTexture(texture)
+	if not walkerTexture then return end
+	if walkerTexture == texture or walkerTexture == texture - 1 then
+		return true
+	end
+end
+
+local questlist = {
+	{name = "Blingtron", id = 34774},
+	{name = "Mean One", id = 6983},
+	{name = "Timewarped", id = 40168, texture = 1129674},	-- TBC
+	{name = "Timewarped", id = 40173, texture = 1129686},	-- WotLK
+	{name = "Timewarped", id = 40786, texture = 1304688},	-- Cata
+	{name = "Timewarped", id = 45799, texture = 1530590},	-- MoP
+}
+
 local FreeUIReportButton = module.FreeUIReportButton
 
-FreeUIReportButton = module:addButton('REPORT', module.POSITION_RIGHT, GarrisonLandingPage_Toggle)
+FreeUIReportButton = module:addButton('DAILY REPORT', module.POSITION_RIGHT, GarrisonLandingPage_Toggle)
 
 local invIndex = {
 	[1] = {title = L["BfAInvasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
@@ -70,7 +116,7 @@ local title
 local function addTitle(text)
 	if not title then
 		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(text..":", 0,.6,1)
+		GameTooltip:AddLine(text..":", .6,.8,1)
 		title = true
 	end
 end
@@ -82,7 +128,7 @@ FreeUIReportButton:HookScript("OnEnter", function(self)
 	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
 	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine(C.InfoColor..'Report')
+	GameTooltip:AddLine(C.InfoColor..DAILY)
 
 	-- World bosses
 	title = false
@@ -116,6 +162,20 @@ FreeUIReportButton:HookScript("OnEnter", function(self)
 		end
 	end
 
+	-- Quests
+	title = false
+	local count, maxCoins = 0, 2
+	for _, id in pairs(bonus) do
+		if IsQuestFlaggedCompleted(id) then
+			count = count + 1
+		end
+	end
+	if count > 0 then
+		addTitle(QUESTS_LABEL)
+		if count == maxCoins then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
+		GameTooltip:AddDoubleLine(bonusName, count.."/"..maxCoins, 1,1,1, r,g,b)
+	end
+
 	-- Invasions
 	for index, value in ipairs(invIndex) do
 		title = false
@@ -143,11 +203,21 @@ FreeUIReportButton:HookScript("OnEnter", function(self)
 		end
 	end
 
-	--[[if UnitLevel("player") == 120 then
+	for _, v in pairs(questlist) do
+		if v.name and IsQuestFlaggedCompleted(v.id) then
+			if v.name == "Timewarped" and isTimeWalker and checkTexture(v.texture) or v.name ~= "Timewarped" then
+				GameTooltip:AddLine(" ")
+				addTitle(QUESTS_LABEL)
+				GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 0,1,0)
+			end
+		end
+	end
+
+	if UnitLevel("player") == 120 then
 		GameTooltip:AddLine(" ")
 		GameTooltip:AddDoubleLine(" ", C.LineString)
 		GameTooltip:AddDoubleLine(" ", C.LeftButton..L["ShowGarrionReport_BfA"], 1,1,1, .9, .82, .62)
-	end]]
+	end
 	
 	GameTooltip:Show()
 end)

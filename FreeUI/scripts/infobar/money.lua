@@ -1,204 +1,137 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("infobar")
+local module = F:GetModule('infobar')
 if not C.infoBar.enable then return end
 
-local keys = {}
+local format = string.format
+local pairs, wipe = pairs, table.wipe
 
-local addonLoaded
-addonLoaded = function(_, addon)
-	if addon ~= "FreeUI" then return end
+local profit, spent, oldMoney = 0, 0, 0
 
-	if FreeUIGlobalConfig[C.PlayerRealm] == nil then FreeUIGlobalConfig[C.PlayerRealm] = {} end
-
-	if FreeUIGlobalConfig[C.PlayerRealm].gold == nil then FreeUIGlobalConfig[C.PlayerRealm].gold = {} end
-
-	if FreeUIGlobalConfig[C.PlayerRealm].class == nil then FreeUIGlobalConfig[C.PlayerRealm].class = {} end
-	FreeUIGlobalConfig[C.PlayerRealm].class[C.PlayerName] = select(2, UnitClass("player"))
-
-	if FreeUIGlobalConfig[C.PlayerRealm].faction == nil then FreeUIGlobalConfig[C.PlayerRealm].faction = {} end
-	FreeUIGlobalConfig[C.PlayerRealm].faction[C.PlayerName] = UnitFactionGroup("player")
-
-	F:UnregisterEvent("ADDON_LOADED", addonLoaded)
-	addonLoaded = nil
-end
-F:RegisterEvent("ADDON_LOADED", addonLoaded)
-
-local function updateMoney()
-	FreeUIGlobalConfig[C.PlayerRealm].gold[C.PlayerName] = GetMoney()
+local function formatTextMoney(money)
+	return format('%s: '..C.InfoColor..'%d', 'GOLD', money * .0001)
 end
 
-F:RegisterEvent("PLAYER_MONEY", updateMoney)
-F:RegisterEvent("PLAYER_ENTERING_WORLD", updateMoney)
-
-local function moneyFormat(money)
-	--return format("|cffc1b37c"..BreakUpLargeNumbers(math.floor((money / 10000))).."|r")
-	local goldString, silverString, copperString
-	local gold = floor(money / (COPPER_PER_SILVER * SILVER_PER_GOLD))
-	local silver = floor((money - (gold * COPPER_PER_SILVER * SILVER_PER_GOLD)) / COPPER_PER_SILVER)
-	local copper = mod(money, COPPER_PER_SILVER)
-	goldString = format("|cffdbd368"..gold.."|r", 0, 0)
-	silverString = format("|cffd9d6d3"..silver.."|r", 0, 0)
-	copperString = format("|cffc19377"..copper.."|r", 0, 0)
-
-	local moneyString = ""
-	local separator = ""
-	if ( gold > 0 ) then
-		moneyString = goldString
-		separator = " "
-	end
-	if ( silver > 0 ) then
-		moneyString = moneyString..separator..silverString
-		separator = " "
-	end
-	if ( copper > 0 or moneyString == "" ) then
-		moneyString = moneyString..separator..copperString
-	end
- 
-	return moneyString
+local function getClassIcon(class)
+	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
+	c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
+	local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:'..c1..':'..c2..':'..c3..':'..c4..'|t '
+	return classStr or ''
 end
+
+local function getGoldString(number)
+	local money = format('%.0f', number/1e4)
+	return GetMoneyString(money*1e4)
+end
+
+StaticPopupDialogs['RESETGOLD'] = {
+	text = 'Are you sure to reset the gold count?',
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		FreeUIGlobalConfig['totalGold'] = {}
+		FreeUIGlobalConfig['totalGold'][C.PlayerRealm] = {}
+		FreeUIGlobalConfig['totalGold'][C.PlayerRealm][C.PlayerName] = {GetMoney(), C.PlayerClass}
+	end,
+	whileDead = 1,
+}
 
 local FreeUIMoneyButton = module.FreeUIMoneyButton
 
-FreeUIMoneyButton = module:addButton("", module.POSITION_RIGHT, function(self, button)
-	if button == "LeftButton" then
-		local openbags
-		for i = 1, NUM_CONTAINER_FRAMES do
-				local containerFrame = _G["ContainerFrame"..i]
-				if containerFrame:IsShown() then
-					openbags = true
-				end
-		end
-		if not openbags then
-			OpenAllBags()
-		else
-			CloseAllBags()
-		end
-	elseif button == "RightButton" then
-		wipe(FreeUIGlobalConfig[C.PlayerRealm])
-		if FreeUIGlobalConfig[C.PlayerRealm] == nil then FreeUIGlobalConfig[C.PlayerRealm] = {} end
-		if FreeUIGlobalConfig[C.PlayerRealm].gold == nil then FreeUIGlobalConfig[C.PlayerRealm].gold = {} end
-		if FreeUIGlobalConfig[C.PlayerRealm].class == nil then FreeUIGlobalConfig[C.PlayerRealm].class = {} end
-		FreeUIGlobalConfig[C.PlayerRealm].class[C.PlayerName] = select(2, UnitClass("player"))
-		if FreeUIGlobalConfig[C.PlayerRealm].faction == nil then FreeUIGlobalConfig[C.PlayerRealm].faction = {} end
-		FreeUIGlobalConfig[C.PlayerRealm].faction[C.PlayerName] = UnitFactionGroup("player")
+FreeUIMoneyButton = module:addButton('', module.POSITION_RIGHT, function(self, button)
+	if button == 'RightButton' then
+		StaticPopup_Show('RESETGOLD')
+	else
+		ToggleCharacter('TokenFrame')
 	end
 end)
 
-FreeUIMoneyButton:HookScript("OnEnter", function()
-	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
-	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+FreeUIMoneyButton:RegisterEvent('PLAYER_ENTERING_WORLD')
+FreeUIMoneyButton:RegisterEvent('PLAYER_MONEY')
+FreeUIMoneyButton:RegisterEvent('SEND_MAIL_MONEY_CHANGED')
+FreeUIMoneyButton:RegisterEvent('SEND_MAIL_COD_CHANGED')
+FreeUIMoneyButton:RegisterEvent('PLAYER_TRADE_MONEY')
+FreeUIMoneyButton:RegisterEvent('TRADE_MONEY_CHANGED')
+FreeUIMoneyButton:SetScript('OnEvent', function(self, event)
+	if event == 'PLAYER_ENTERING_WORLD' then
+		oldMoney = GetMoney()
+		self:UnregisterEvent(event)
+	end
 
-	local total, totalAlliance, totalHorde, totalNeutral = 0, 0, 0, 0
-	local goldList = FreeUIGlobalConfig[C.PlayerRealm].gold
-	local factionList = FreeUIGlobalConfig[C.PlayerRealm].faction
-	local allianceList, hordeList, neutralList = {}, {}, {}
-	local headerAdded = false
+	local newMoney = GetMoney()
+	local change = newMoney - oldMoney
+	if oldMoney > newMoney then
+		spent = spent - change
+	else
+		profit = profit + change
+	end
+	self.Text:SetText(formatTextMoney(newMoney))
 
-	for k, v in pairs(goldList) do
-		if factionList[k] == "Alliance" then
-			totalAlliance = totalAlliance + v
-			allianceList[k] = v
-		elseif factionList[k] == "Horde" then
-			totalHorde = totalHorde + v
-			hordeList[k]= v
-		else
-			totalNeutral = totalNeutral + v
-			neutralList[k] = v
+	if not FreeUIGlobalConfig['totalGold'] then FreeUIGlobalConfig['totalGold'] = {} end
+	if not FreeUIGlobalConfig['totalGold'][C.PlayerRealm] then FreeUIGlobalConfig['totalGold'][C.PlayerRealm] = {} end
+	FreeUIGlobalConfig['totalGold'][C.PlayerRealm][C.PlayerName] = {GetMoney(), C.PlayerClass}
+
+	oldMoney = newMoney
+end)
+
+
+
+FreeUIMoneyButton:HookScript('OnEnter', function()
+	GameTooltip:SetOwner(Minimap, 'ANCHOR_NONE')
+	GameTooltip:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -5, -33)
+
+	GameTooltip:ClearLines()
+	GameTooltip:AddLine(CURRENCY, .9, .82, .62)
+	GameTooltip:AddLine(' ')
+
+	GameTooltip:AddLine(L['Session'], .6,.8,1)
+	GameTooltip:AddDoubleLine(L['Earned'], GetMoneyString(profit), 1,1,1, 1,1,1)
+	GameTooltip:AddDoubleLine(L['Spent'], GetMoneyString(spent), 1,1,1, 1,1,1)
+	if profit < spent then
+		GameTooltip:AddDoubleLine(L['Deficit'], GetMoneyString(spent-profit), 1,0,0, 1,1,1)
+	elseif profit > spent then
+		GameTooltip:AddDoubleLine(L['Profit'], GetMoneyString(profit-spent), 0,1,0, 1,1,1)
+	end
+	GameTooltip:AddLine(' ')
+
+	local totalGold = 0
+	GameTooltip:AddLine(L['Character'], .6,.8,1)
+	local thisRealmList = FreeUIGlobalConfig['totalGold'][C.PlayerRealm]
+	for k, v in pairs(thisRealmList) do
+		local gold, class = unpack(v)
+		local r, g, b = F.ClassColor(class)
+		GameTooltip:AddDoubleLine(getClassIcon(class)..k, getGoldString(gold), r,g,b, 1,1,1)
+		totalGold = totalGold + gold
+	end
+	GameTooltip:AddLine(' ')
+	GameTooltip:AddDoubleLine(TOTAL..':', getGoldString(totalGold), .6,.8,1, 1,1,1)
+
+	for i = 1, GetNumWatchedTokens() do
+		local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
+		if name and i == 1 then
+			GameTooltip:AddLine(' ')
+			GameTooltip:AddLine(CURRENCY..':', .6,.8,1)
 		end
-
-		total = total + v
-	end
-
-	GameTooltip:AddDoubleLine(C.PlayerRealm, GetMoneyString(total), .9, .82, .62, 1, 1, 1)
-
-	for n in pairs(allianceList) do
-		table.insert(keys, n)
-	end
-	table.sort(keys)
-
-	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
-		local v = allianceList[k]
-		if v and v >= 10000 then
-			if not headerAdded then
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddDoubleLine(strupper(FACTION_ALLIANCE), GetMoneyString(totalAlliance), 0, 0.68, 0.94, 1, 1, 1)
-				headerAdded = true
+		if name and count then
+			local _, _, _, _, _, total = GetCurrencyInfo(currencyID)
+			local iconTexture = ' |T'..icon..':13:15:0:0:50:50:4:46:4:46|t'
+			if total > 0 then
+				GameTooltip:AddDoubleLine(name, count..'/'..total..iconTexture, 1,1,1, 1,1,1)
+			else
+				GameTooltip:AddDoubleLine(name, count..iconTexture, 1,1,1, 1,1,1)
 			end
-			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b, 1, 1, 1)
 		end
 	end
 
-	headerAdded = false
-	table.wipe(keys)
 
-	for n in pairs(hordeList) do
-		table.insert(keys, n)
-	end
-	table.sort(keys)
-
-	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
-		local v = hordeList[k]
-		if v and v >= 10000 then
-			if not headerAdded then
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddDoubleLine(strupper(FACTION_HORDE), GetMoneyString(totalHorde), 1, 0, 0, 1, 1, 1)
-				headerAdded = true
-			end
-			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b, 1, 1, 1)
-		end
-	end
-
-	headerAdded = false
-	table.wipe(keys)
-
-	for n in pairs(neutralList) do
-		table.insert(keys, n)
-	end
-	table.sort(keys)
-
-	for _, k in pairs(keys) do
-		local class = FreeUIGlobalConfig[C.PlayerRealm].class[k]
-		local v = neutralList[k]
-		if v and v >= 10000 then
-			if not headerAdded then
-				GameTooltip:AddLine(" ")
-				GameTooltip:AddDoubleLine(strupper(FACTION_OTHER), GetMoneyString(totalNeutral), .9, .9, .9, 1, 1, 1)
-				headerAdded = true
-			end
-			GameTooltip:AddDoubleLine(k, GetMoneyString(v), C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b, 1, 1, 1)
-		end
-	end
-	GameTooltip:AddDoubleLine(" ", C.LineString)
-	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["OpenBag"], 1,1,1, .9, .82, .62)
-	GameTooltip:AddDoubleLine(" ", C.RightButton..L["ResetGold"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(' ', C.LineString)
+	GameTooltip:AddDoubleLine(' ', C.LeftButton..L['OpenCurrencyPanel'], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(' ', C.RightButton..L['ResetGoldData'], 1,1,1, .9, .82, .62)
 	GameTooltip:Show()
 end)
 
-FreeUIMoneyButton:HookScript("OnLeave", function()
+FreeUIMoneyButton:HookScript('OnLeave', function()
 	GameTooltip:Hide()
 end)
 
 
 
-
-local moneyHolder = CreateFrame("Frame", nil, FreeUIMoneyButton)
-moneyHolder:SetFrameLevel(3)
-moneyHolder:SetAllPoints(FreeUIMoneyButton)
-
-local moneyText = moneyHolder:CreateFontString()
-F.SetFS(moneyText)
-moneyText:SetPoint("CENTER")
-
-moneyHolder:RegisterEvent("PLAYER_ENTERING_WORLD")
-moneyHolder:RegisterEvent("PLAYER_MONEY")
-moneyHolder:RegisterEvent("SEND_MAIL_MONEY_CHANGED")
-moneyHolder:RegisterEvent("SEND_MAIL_COD_CHANGED")
-moneyHolder:RegisterEvent("PLAYER_TRADE_MONEY")
-moneyHolder:RegisterEvent("TRADE_MONEY_CHANGED")
-moneyHolder:SetScript("OnEvent", function(self, event, ...)
-	local tmpMoney = GetMoney()
-	self.CurrentMoney = tmpMoney
-	moneyText:SetText("MONEY: "..moneyFormat(self.CurrentMoney))
-end)

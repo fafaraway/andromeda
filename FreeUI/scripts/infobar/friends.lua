@@ -82,6 +82,9 @@ end
 FreeUIFriendsButton = module:addButton("", module.POSITION_RIGHT, function(self, button)
 	if button == "LeftButton" then
 		ToggleFriendsFrame()
+	elseif button == "RightButton" then
+		StaticPopupSpecial_Show(AddFriendFrame)
+		AddFriendFrame_ShowEntry()
 	end
 end)
 
@@ -169,7 +172,8 @@ FreeUIFriendsButton:HookScript("OnEnter", function(self)
 	end
 	GameTooltip:AddDoubleLine(" ", C.LineString)
 	GameTooltip:AddDoubleLine(" ", L["HoldShift"], 1,1,1, .6,.8,1)
-	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["ShowFriends"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["OpenFriendsPanel"], 1,1,1, .9, .82, .62)
+	GameTooltip:AddDoubleLine(" ", C.RightButton..L["AddFriend"], 1,1,1, .9, .82, .62)
 	GameTooltip:Show()
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
