@@ -1,0 +1,144 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='core\core.lua'/>
+
+	<Script file='options.lua'/>
+	<Script file='profiles.lua'/>
+
+	<Script file='core\gui.lua'/>
+	<Script file='core\api.lua'/>
+	<Script file='core\setting.lua'/>
+	<Script file='core\slash.lua'/>
+	<Script file='core\notifications.lua'/>
+
+	<Script file='locales\enUS.lua'/>
+	<Script file='locales\zhCN.lua'/>
+
+	<Include file='libs\libs.xml'/>
+
+	<Script file='scripts\actionbars\fader.lua'/>
+	<Script file='scripts\actionbars\bar1.lua'/>
+	<Script file='scripts\actionbars\bar2.lua'/>
+	<Script file='scripts\actionbars\bar3.lua'/>
+	<Script file='scripts\actionbars\bar4.lua'/>
+	<Script file='scripts\actionbars\bar5.lua'/>
+	<Script file='scripts\actionbars\stancebar.lua'/>
+	<Script file='scripts\actionbars\petbar.lua'/>
+	<Script file='scripts\actionbars\extrabar.lua'/>
+	<Script file='scripts\actionbars\leave_vehicle.lua'/>
+	<Script file='scripts\actionbars\hide_blizzart.lua'/>
+	<Script file='scripts\actionbars\buttonStyle.lua'/>
+	<Script file='scripts\actionbars\rangeColor.lua'/>
+	<Script file='scripts\actionbars\keybind.lua'/>
+	<Script file='scripts\actionbars\extraquestbutton.lua'/>
+
+	<Script file='scripts\auras\buffframe.lua'/>
+	<Script file='scripts\auras\aurasource.lua'/>
+
+	<Script file='scripts\automation\actioncam.lua'/>
+	<Script file='scripts\automation\buy.lua'/>
+	<Script file='scripts\automation\invite.lua'/>
+	<Script file='scripts\automation\quest.lua'/>
+	<Script file='scripts\automation\repair.lua'/>
+	<Script file='scripts\automation\role.lua'/>
+	<Script file='scripts\automation\screenshot.lua'/>
+	<Script file='scripts\automation\sell.lua'/>
+	<Script file='scripts\automation\tabbinder.lua'/>
+
+	<Script file='scripts\bags\bags.lua'/>
+	<Script file='scripts\bags\filters.lua'/>
+
+	<Script file='scripts\blizzard\blizzard.lua'/>
+	<Script file='scripts\blizzard\archaeologybar.lua'/>
+	<Script file='scripts\blizzard\colorpicker.lua'/>
+	<Script file='scripts\blizzard\colours.lua'/>
+	<Script file='scripts\blizzard\cooldown.lua'/>
+	<Script file='scripts\blizzard\errors.lua'/>
+	<Script file='scripts\blizzard\fontstyle.lua'/>
+	<Script file='scripts\blizzard\loot.lua'/>
+	<Script file='scripts\blizzard\marking.lua'/>
+	<Script file='scripts\blizzard\mirrorbar.lua'/>
+	<Script file='scripts\blizzard\mover.lua'/>
+	<Script file='scripts\blizzard\objectivetracker.lua'/>
+	<Script file='scripts\blizzard\orderhallcommandbar.lua'/>
+	<Script file='scripts\blizzard\petbattle.lua'/>
+	<Script file='scripts\blizzard\raidmanager.lua'/>
+	<Script file='scripts\blizzard\timertracker.lua'/>
+
+	<Script file='scripts\chat\chat.lua'/>
+	<Script file='scripts\chat\abbreviate.lua'/>
+	<Script file='scripts\chat\bubble.lua'/>
+	<Script file='scripts\chat\copyname.lua'/>
+	<Script file='scripts\chat\filter.lua'/>
+	<Script file='scripts\chat\itemlinklevel.lua'/>
+	<Script file='scripts\chat\minimizebutton.lua'/>
+	<Script file='scripts\chat\reallinks.lua'/>
+	<Script file='scripts\chat\spamagemeter.lua'/>
+	<Script file='scripts\chat\strings.lua'/>
+	<Script file='scripts\chat\tab.lua'/>
+	<Script file='scripts\chat\whispersound.lua'/>
+
+	<Script file='scripts\infobar\core.lua'/>
+	<Script file='scripts\infobar\stats.lua'/>
+	<Script file='scripts\infobar\dm.lua'/>
+	<Script file='scripts\infobar\spec.lua'/>
+	<Script file='scripts\infobar\friends.lua'/>
+	<Script file='scripts\infobar\money.lua'/>
+	<Script file='scripts\infobar\report.lua'/>
+
+	<Script file='scripts\maps\worldmap.lua'/>
+	<Script file='scripts\maps\mapreveal.lua'/>
+	<Script file='scripts\maps\minimap.lua'/>
+	<Script file='scripts\maps\menu.lua'/>
+
+	<Script file='scripts\misc\misc.lua'/>
+	<Script file='scripts\misc\alreadyknown.lua'/>
+	<Script file='scripts\misc\camera.lua'/>
+	<Script file='scripts\misc\cdpulse.lua'/>
+	<Script file='scripts\misc\clickcast.lua'/>
+	<Script file='scripts\misc\events.lua'/>
+	<Script file='scripts\misc\itemlevel.lua'/>
+	<Script file='scripts\misc\mail.lua'/>
+	<Script file='scripts\misc\lfgqueuetimer.lua'/>
+	<Script file='scripts\misc\progressbar.lua'/>
+	<Script file='scripts\misc\pvpqueuetimer.lua'/>
+	<Script file='scripts\misc\safequeue.lua'/>
+	<Script file='scripts\misc\sharedmedia.lua'/>
+	<Script file='scripts\misc\quickjoin.lua'/>
+	<Script file='scripts\misc\missingstats.lua'/>
+	<Script file='scripts\misc\pvpsound.lua'/>
+	<Script file='scripts\misc\tradetabs.lua'/>
+	<Script file='scripts\misc\reputation.lua'/>
+	<Script file='scripts\misc\ush.lua'/>
+
+	<Script file='scripts\reminder\reminder.lua'/>
+	<Script file='scripts\reminder\dispel.lua'/>
+	<Script file='scripts\reminder\interrupt.lua'/>
+	<Script file='scripts\reminder\rare.lua'/>
+	<Script file='scripts\reminder\res.lua'/>
+	<Script file='scripts\reminder\sap.lua'/>
+	<Script file='scripts\reminder\spell.lua'/>
+
+	<Script file='scripts\tooltips\tip.lua'/>
+	<Script file='scripts\tooltips\azeritetrait.lua'/>
+	<Script file='scripts\tooltips\clear.lua'/>
+	<Script file='scripts\tooltips\extrainfo.lua'/>
+	<Script file='scripts\tooltips\hover.lua'/>
+	<Script file='scripts\tooltips\icon.lua'/>
+	<Script file='scripts\tooltips\ilvlSpec.lua'/>
+
+	<Script file='scripts\unitframes\unitframes.lua'/>
+	<Script file='scripts\unitframes\tags.lua'/>
+	<Script file='scripts\unitframes\colors.lua'/>
+	<Script file='scripts\unitframes\filterlist.lua'/>
+	<Script file='scripts\unitframes\arena.lua'/>
+	<Script file='scripts\unitframes\focuser.lua'/>
+	<Script file='scripts\unitframes\sound.lua'/>
+
+	<Script file='theme\Core.lua'/>
+	<Include file='theme\AddOns\AddOns.xml'/>
+	<Include file='theme\FrameXML\FrameXML.xml'/>
+	<Include file='theme\SharedXML\SharedXML.xml'/>
+	<Include file='theme\Others\Others.xml'/>
+
+	<Script file='core\dev.lua'/>
+</Ui>
