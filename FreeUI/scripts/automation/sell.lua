@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
-
-if not C.automation.autoSellJunk then return end
+local format = string.format
+local pairs, wipe = pairs, table.wipe
 
 local sellCount, stop, cache = 0, true, {}
 local errorText = _G.ERR_VENDOR_DOESNT_BUY
@@ -10,7 +10,7 @@ local function stopSelling(tell)
 	stop = true
 	if sellCount > 0 and tell then
 		F.Notification("SellJunk", C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount), "Interface\\Icons\\INV_Hammer_20")
-		UIErrorsFrame:AddMessage(C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount))
+		--UIErrorsFrame:AddMessage(C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount))
 		print(C.GreenColor..L['SellJunk']..'|r: '..GetMoneyString(sellCount))
 	end
 	sellCount = 0
@@ -38,6 +38,8 @@ local function startSelling()
 end
 
 local function updateSelling(event, ...)
+	if not C.automation.autoSellJunk then return end
+
 	local _, arg = ...
 	if event == 'MERCHANT_SHOW' then
 		if IsShiftKeyDown() then return end

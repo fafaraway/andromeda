@@ -18,7 +18,7 @@ F.AddOptionsCallback("notifications", "timeShown", function()
 	timeShown = C.notifications.timeShown
 end)
 
-local bannerWidth = 440
+local bannerWidth = 300
 local interval = 0.1
 
 -- Create frame and stuff
@@ -137,11 +137,11 @@ local function display(name, message, clickFunc, texture, ...)
 		if ... then
 			icon:SetTexCoord(...)
 		else
-			icon:SetTexCoord(.08, .92, .08, .92)
+			icon:SetTexCoord(unpack(C.TexCoord))
 		end
 	else
 		icon:SetTexture("Interface\\Icons\\achievement_general")
-		icon:SetTexCoord(.08, .92, .08, .92)
+		icon:SetTexCoord(unpack(C.TexCoord))
 	end
 
 	title:SetText(name)
