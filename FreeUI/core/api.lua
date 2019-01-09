@@ -817,7 +817,7 @@ end
 
 -- GameTooltip
 local function getBackdrop(self) return self.bg:GetBackdrop() end
-local function getBackdropColor() return 0, 0, 0, .7 end
+local function getBackdropColor() return 0, 0, 0, .65 end
 local function getBackdropBorderColor() return 0, 0, 0 end
 
 function F:ReskinTooltip()
@@ -830,7 +830,7 @@ function F:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer("BACKGROUND")
-		local bg = F.CreateBDFrame(self)
+		local bg = F.CreateBDFrame(self, .65)
 		F.CreateSD(bg)
 		self.bg = bg
 
