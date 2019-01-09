@@ -10,7 +10,7 @@ end
 local FreeUISpecButton = module.FreeUISpecButton
 local pvpTalents
 
-FreeUISpecButton = module:addButton("", module.POSITION_RIGHT, 160, function(self, button)
+FreeUISpecButton = module:addButton("", module.POSITION_RIGHT, 220, function(self, button)
 	local currentSpec = GetSpecialization()
 	local numSpec = GetNumSpecializations()
 	if not (currentSpec and numSpec) then return end

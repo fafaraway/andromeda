@@ -121,6 +121,8 @@ C['actionbars'] = {
 		['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 		['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 
+		['hoverBind'] = true,
+
 		['layoutSimple'] = false,
 }
 

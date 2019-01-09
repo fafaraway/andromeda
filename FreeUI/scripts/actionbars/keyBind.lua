@@ -1,5 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
+if not C.actionbars.enable then return end
+if not C.actionbars.hoverBind then return end
+
 -- Author: Nightcracker
 -- Maintainer: Coote
 -- Notes: Allows you to bind keys on buttons by hovering over them.

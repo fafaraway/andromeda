@@ -1235,8 +1235,9 @@ local function CreateIndicator(self)
 
 		-- summon indicator
 		local summon = self:CreateTexture(nil, "OVERLAY")
-		summon:SetSize(16, 16)
-		summon:SetPoint("CENTER", 0, 0)
+		summon:SetSize(32, 32)
+		summon:SetPoint("CENTER", self)
+		summon:SetParent(UIParent)
 		self.SummonIndicator = summon
 	end
 end
@@ -1245,6 +1246,10 @@ end
 -- Names
 local function CreateName(self)
 	local Name
+	local f = CreateFrame('Frame', nil, self)
+	f:RegisterEvent('UNIT_TARGET')
+	f:RegisterEvent('PLAYER_TARGET_CHANGED')
+	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
 
 	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
 		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
@@ -1274,13 +1279,27 @@ local function CreateName(self)
 		Name:SetWidth(80)	
 	end
 
-	if self.unitStyle == 'arena' then
-		self:Tag(Name, '[arenaspec] [name]')
-	else
-		self:Tag(Name, '[name]')
-	end
+	f:SetScript('OnEvent', function()
+		if self.unitStyle == 'targettarget' then
+			if(UnitName('targettarget') == UnitName('player')) then
+				Name:SetText('|cffff0000> YOU <|r')
+			else
+				Name:SetText(UnitName'targettarget')
+			end
+		elseif self.unitStyle == 'focustarget' then
+			if(UnitName('focustarget') == UnitName('player')) then
+				Name:SetText('|cffff0000> YOU <|r')
+			else
+				Name:SetText(UnitName'focustarget')
+			end
+		elseif self.unitStyle == 'arena' then
+			self:Tag(Name, '[arenaspec] [name]')
+		else
+			self:Tag(Name, '[name]')
+		end
+	end)
 
-	--self.Name = Name
+	self.Name = Name
 end
 
 local function CreatePartyName(self)
@@ -1308,7 +1327,7 @@ local function CreatePartyName(self)
 	end
 end
 
-local function UpdateName(self)
+--[[local function UpdateName(self)
 	local f = CreateFrame('Frame', nil, self)
 
 	local tt
@@ -1347,7 +1366,7 @@ local function UpdateName(self)
 			end
 		end
 	end)
-end
+end]]
 
 
 -- Threat
@@ -1484,7 +1503,8 @@ local UnitSpecific = {
 		CreateHeader(self)
 		CreateHealthBar(self)
 		CreatePowerBar(self)
-		UpdateName(self)
+		--UpdateName(self)
+		CreateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
 		spellRange(self)
@@ -1514,7 +1534,8 @@ local UnitSpecific = {
 		CreateHeader(self)
 		CreateHealthBar(self)
 		CreatePowerBar(self)
-		UpdateName(self)
+		--UpdateName(self)
+		CreateName(self)
 		CreateIndicator(self)
 		CreateCastBar(self)
 		spellRange(self)

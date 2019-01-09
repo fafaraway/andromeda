@@ -28,9 +28,9 @@ StaticPopupDialogs['RESETGOLD'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		FreeUIGlobalConfig['totalGold'] = {}
-		FreeUIGlobalConfig['totalGold'][C.PlayerRealm] = {}
-		FreeUIGlobalConfig['totalGold'][C.PlayerRealm][C.PlayerName] = {GetMoney(), C.PlayerClass}
+		FreeUIGlobalConfig['goldCount'] = {}
+		FreeUIGlobalConfig['goldCount'][C.PlayerRealm] = {}
+		FreeUIGlobalConfig['goldCount'][C.PlayerRealm][C.PlayerName] = {GetMoney(), C.PlayerClass}
 	end,
 	whileDead = 1,
 }
@@ -66,9 +66,9 @@ FreeUIMoneyButton:SetScript('OnEvent', function(self, event)
 	end
 	self.Text:SetText(formatTextMoney(newMoney))
 
-	if not FreeUIGlobalConfig['totalGold'] then FreeUIGlobalConfig['totalGold'] = {} end
-	if not FreeUIGlobalConfig['totalGold'][C.PlayerRealm] then FreeUIGlobalConfig['totalGold'][C.PlayerRealm] = {} end
-	FreeUIGlobalConfig['totalGold'][C.PlayerRealm][C.PlayerName] = {GetMoney(), C.PlayerClass}
+	if not FreeUIGlobalConfig['goldCount'] then FreeUIGlobalConfig['goldCount'] = {} end
+	if not FreeUIGlobalConfig['goldCount'][C.PlayerRealm] then FreeUIGlobalConfig['goldCount'][C.PlayerRealm] = {} end
+	FreeUIGlobalConfig['goldCount'][C.PlayerRealm][C.PlayerName] = {GetMoney(), C.PlayerClass}
 
 	oldMoney = newMoney
 end)
@@ -95,7 +95,7 @@ FreeUIMoneyButton:HookScript('OnEnter', function()
 
 	local totalGold = 0
 	GameTooltip:AddLine(L['Character'], .6,.8,1)
-	local thisRealmList = FreeUIGlobalConfig['totalGold'][C.PlayerRealm]
+	local thisRealmList = FreeUIGlobalConfig['goldCount'][C.PlayerRealm]
 	for k, v in pairs(thisRealmList) do
 		local gold, class = unpack(v)
 		local r, g, b = F.ClassColor(class)
