@@ -79,7 +79,7 @@ local function buildBNetTable(num)
 	end)
 end
 
-FreeUIFriendsButton = module:addButton("", module.POSITION_RIGHT, function(self, button)
+FreeUIFriendsButton = module:addButton("", module.POSITION_RIGHT, 120, function(self, button)
 	if button == "LeftButton" then
 		ToggleFriendsFrame()
 	elseif button == "RightButton" then

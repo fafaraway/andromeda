@@ -59,7 +59,7 @@ local function memoryColor(value, times)
 end
 
 
-FreeUIStatsButton = module:addButton("", POSITION_MIDDLE, function(self, button)
+FreeUIStatsButton = module:addButton("", POSITION_MIDDLE, 200, function(self, button)
 	if button == "LeftButton" then
 		local openaddonlist
 

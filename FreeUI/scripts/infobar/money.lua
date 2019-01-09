@@ -37,7 +37,7 @@ StaticPopupDialogs['RESETGOLD'] = {
 
 local FreeUIMoneyButton = module.FreeUIMoneyButton
 
-FreeUIMoneyButton = module:addButton('', module.POSITION_RIGHT, function(self, button)
+FreeUIMoneyButton = module:addButton('', module.POSITION_RIGHT, 120, function(self, button)
 	if button == 'RightButton' then
 		StaticPopup_Show('RESETGOLD')
 	else

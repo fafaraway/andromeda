@@ -10,7 +10,7 @@ end
 local FreeUISpecButton = module.FreeUISpecButton
 local pvpTalents
 
-FreeUISpecButton = module:addButton("", module.POSITION_RIGHT, function(self, button)
+FreeUISpecButton = module:addButton("", module.POSITION_RIGHT, 160, function(self, button)
 	local currentSpec = GetSpecialization()
 	local numSpec = GetNumSpecializations()
 	if not (currentSpec and numSpec) then return end
@@ -44,14 +44,6 @@ FreeUISpecButton = module:addButton("", module.POSITION_RIGHT, function(self, bu
 			SetLootSpecialization(index[1])
 		end
 	else
-		--if not PlayerTalentFrame then
-		--	LoadAddOn("Blizzard_TalentUI")
-		--end
-		--if not PlayerTalentFrame:IsShown() then
-		--	ShowUIPanel(PlayerTalentFrame)
-		--else
-		--	HideUIPanel(PlayerTalentFrame)
-		--end
 		ToggleTalentFrame(2)
 	end
 end)
@@ -71,9 +63,9 @@ FreeUISpecButton:SetScript("OnEvent", function(self)
 		local lootrole = GetSpecializationRoleByID(lootSpecID)
 
 		if not lootname or name == lootname then
-			self.Text:SetText(format("S: %s  L: %s", name, name))
+			self.Text:SetText(format(SPECIALIZATION..": "..C.MyColor.."%s  |r"..ITEM_LOOT..":"..C.MyColor.." %s", name, name))
 		else
-			self.Text:SetText(format("S: %s  L: %s", name, lootname))
+			self.Text:SetText(format(SPECIALIZATION..": "..C.MyColor.."%s  |r"..ITEM_LOOT..":"..C.MyColor.." %s", name, lootname))
 		end
 
 		if C.GameClient == "zhCN" or C.GameClient == "zhTW" then

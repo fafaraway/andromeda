@@ -131,10 +131,10 @@ local function reanchorButtons()
 		if bu:IsShown() then
 			if bu.position == module.POSITION_LEFT then
 				bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
-				leftOffset = leftOffset + 129
+				leftOffset = leftOffset + (bu:GetWidth() - 1)
 			elseif bu.position == module.POSITION_RIGHT then
 				bu:SetPoint("RIGHT", bar, "RIGHT", rightOffset, 0)
-				rightOffset = rightOffset - 129
+				rightOffset = rightOffset - (bu:GetWidth() - 1)
 			else
 				bu:SetPoint("CENTER", bar)
 			end
@@ -152,11 +152,11 @@ function module:hideButton(button)
 	reanchorButtons()
 end
 
-function module:addButton(text, position, clickFunc)
+function module:addButton(text, position, width, clickFunc)
 	local bu = CreateFrame("Button", nil, bar)
 	bu:SetPoint("TOP", bar, "TOP")
 	bu:SetPoint("BOTTOM", bar, "BOTTOM")
-	bu:SetWidth(130)
+	bu:SetWidth(width)
 	F.CreateBD(bu, .1)
 
 	if C.infoBar.buttons_mouseover then

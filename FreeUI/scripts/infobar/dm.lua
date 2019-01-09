@@ -4,7 +4,7 @@ if not C.infoBar.enable then return end
 
 local FreeUIDMButton = module.FreeUIDMButton
 
-FreeUIDMButton = module:addButton("Toggle Skada", module.POSITION_LEFT, function(self, button)
+FreeUIDMButton = module:addButton("Toggle Skada", module.POSITION_LEFT, 120, function(self, button)
 	if button == "LeftButton" then
 		Skada:SetActive(true)
 	elseif button == "RightButton" then

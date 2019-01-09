@@ -65,7 +65,7 @@ local questlist = {
 
 local FreeUIReportButton = module.FreeUIReportButton
 
-FreeUIReportButton = module:addButton('DAILY REPORT', module.POSITION_RIGHT, GarrisonLandingPage_Toggle)
+FreeUIReportButton = module:addButton('DAILY REPORT', module.POSITION_RIGHT, 120, GarrisonLandingPage_Toggle)
 
 local invIndex = {
 	[1] = {title = L["BfAInvasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
