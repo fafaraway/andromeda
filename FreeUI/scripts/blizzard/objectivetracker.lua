@@ -1,23 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("blizzard")
 
-
+local pairs = pairs
 local r, g, b =  165/255, 0, 48/255
 local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
 local minimize = ot.HeaderMenu.MinimizeButton
 
-local otFontHeader = {
-	C.font.header,
-	16,
-	nil
-}
-local otFont = {
-	C.font.normal,
-	12,
-	nil
-}
+local otFontHeader = {C.font.header,16,nil}
+local otFont = {C.font.normal,12,nil}
 
 
 do
@@ -30,7 +22,7 @@ do
 	minimize:HookScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOP")
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine("Drag to move", 1, .8, 0)
+		GameTooltip:AddLine(L["Toggle"], 1, .8, 0)
 		GameTooltip:Show()
 	end)
 	minimize:HookScript("OnLeave", F.HideTooltip)
@@ -45,6 +37,23 @@ do
 	end)
 
 	RegisterStateDriver(ot, "visibility", "[petbattle] hide; show")
+end
+
+-- mythic affixes
+function F:AffixesSetup()
+	for _, frame in ipairs(self.Affixes) do
+		frame.Border:SetTexture(nil)
+		frame.Portrait:SetTexture(nil)
+		if not frame.bg then
+			frame.bg = F.ReskinIcon(frame.Portrait)
+		end
+		if frame.info then
+			frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
+		elseif frame.affixID then
+			local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
+			frame.Portrait:SetTexture(filedataid)
+		end
+	end
 end
 
 

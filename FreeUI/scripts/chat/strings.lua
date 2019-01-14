@@ -98,7 +98,7 @@ function module:ChatStrings()
 	ERR_SKILL_UP_SI = '|cffffffff%s|r |cff00adf0%d|r'
 
 
-	if C.GameClient == 'zhCN' then
+	if C.Client == 'zhCN' then
 		BN_INLINE_TOAST_FRIEND_OFFLINE = '|TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61|t%s |cffff0000离线|r'
 		BN_INLINE_TOAST_FRIEND_ONLINE = '|TInterface\\FriendsFrame\\UI-Toast-ToastIcons.tga:16:16:0:0:128:64:2:29:34:61|t%s |cff00ff00上线|r'
 

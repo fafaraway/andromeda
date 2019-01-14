@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-if not C.blizzard.raidManager then return end
+if not C.general.raidManager then return end
 
 local converttip
 
@@ -8,7 +8,7 @@ local f = CreateFrame('Frame', 'RaidManagerFrame', UIParent)
 f:SetFrameStrata('MEDIUM')
 f:SetHeight(250)
 f:SetWidth(40)
-f:SetPoint('LEFT')
+f:SetPoint(unpack(C.general.raidManager_Position))
 f:Hide()
 f:RegisterEvent('PLAYER_LOGIN')
 
@@ -158,10 +158,8 @@ check:SetScript('OnEvent', function(self, event)
 	end	
 	if CheckRaidStatus() then
 		f:Show()
-		--f:SetPoint(unpack(C.blizzard.raidManager_pos))
 	else
 		f:Hide()
-		--f:SetPoint('LEFT', -200, 0)
 	end
 	if event == "PLAYER_REGEN_ENABLED" then
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")

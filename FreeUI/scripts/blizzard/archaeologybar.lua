@@ -20,7 +20,7 @@ f:SetScript("OnEvent", function(self, _, addon)
 	frame.BarBackground:Hide()
 	frame.BarBorderAndOverlay:Hide()
 
-	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		frame.BarTitle:SetFont(C.font.normal, 12, "OUTLINE")
 	else
 		F.SetFS(frame.BarTitle)

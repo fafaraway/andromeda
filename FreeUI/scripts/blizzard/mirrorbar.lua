@@ -20,7 +20,7 @@ local function MBSkin(timer, value, maxvalue, scale, paused, label)
 			text:ClearAllPoints()
 			text:SetPoint("CENTER", statusbar)
 			
-			if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
+			if C.Client == 'zhCN' or C.Client == 'zhTW' then
 				text:SetFont(C.font.normal, 12)
 				text:SetShadowColor(0,0,0,1)
 				text:SetShadowOffset(2, -2)
