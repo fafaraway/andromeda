@@ -1,8 +1,20 @@
 local F, C, L = unpack(select(2, ...))
 
+
+
+
+
+-- tooltip
+L['RARE'] = 'Rare'
+
+
+
+
+
+
 L['rareFound'] = 'Rare nearby! '
 
-L['rare'] = 'Rare'
+
 
 L['interrupted'] = 'Interrupted: '
 L['dispeled'] = 'Dispeled: '
@@ -62,6 +74,9 @@ L['CurrentInvasion'] = 'Current: '
 L['NextInvasion'] = 'Next: '
 L['Paragon'] = 'Paragon '
 L['ParagonRep'] = 'Paragon Rep'
+L['LocalTime'] = 'Local Time: '
+L['RealmTime'] = 'Realm Time: '
+L['DAILY_WEEKLY_INFO'] = 'Daily/weekly information'
 
 L['Sort'] = 'Sort'
 L['AzeriteArmor'] = 'Azerite Armor'
