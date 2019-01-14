@@ -12,9 +12,11 @@ C.themes = {}
 C.themes["FreeUI"] = {}
 
 
-local Skin = CreateFrame("Frame")
+local Skin = CreateFrame("Frame", nil, UIParent)
 Skin:RegisterEvent("ADDON_LOADED")
-Skin:SetScript("OnEvent", function(_, _, addon)
+Skin:SetScript("OnEvent", function(self, event, addon)
+	if not C.appearance.enable then return end
+	
 	local addonModule = C.themes[addon]
 	if addonModule then
 		if type(addonModule) == "function" then
