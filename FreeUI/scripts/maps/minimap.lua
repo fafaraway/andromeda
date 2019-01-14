@@ -280,7 +280,7 @@ function module:ReskinRegions()
 	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
 	MinimapZoneText:SetJustifyH("CENTER")
 
-	if C.GameClient == "zhCN" or C.GameClient == "zhTW" then
+	if C.Client == "zhCN" or C.Client == "zhTW" then
 		ZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
 		SubZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
 		PVPInfoTextString:SetFont(C.font.normal, 14, "OUTLINE")

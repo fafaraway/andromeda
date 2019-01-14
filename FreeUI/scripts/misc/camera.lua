@@ -27,17 +27,7 @@ function VehicleCameraZoomOut(distance)
 end
 
 
-local cvar = {
-	"cameraDistanceMoveSpeed",
-	"cameraDistanceMaxZoomFactor",
-}
 
-
-C_Timer.After(1, function()
-
-	SetCVar("cameraDistanceMaxZoomFactor", C.general.cameraDistance)
-
-end)
 
 local f = CreateFrame("Frame")
 
