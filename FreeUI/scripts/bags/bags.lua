@@ -111,9 +111,9 @@ end
 function module:CreateRestoreButton(f)
 	local bu = createIconButton('Restore', self, 'Interface\\AddOns\\FreeUI\\assets\\ResetNew', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
-		C['TempAnchor'][f.main:GetName()] = nil
-		C['TempAnchor'][f.bank:GetName()] = nil
-		C['TempAnchor'][f.reagent:GetName()] = nil
+		FreeUIConfig['TempAnchor'][f.main:GetName()] = nil
+		FreeUIConfig['TempAnchor'][f.bank:GetName()] = nil
+		FreeUIConfig['TempAnchor'][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
 		f.main:SetPoint('BOTTOMRIGHT', -100, 100)
 		f.bank:ClearAllPoints()
@@ -318,7 +318,7 @@ function module:OnLogin()
 		end
 
 		local flash = self:CreateTexture(nil, 'ARTWORK')
-		flash:SetTexture(C.NewItemFlash)
+		flash:SetTexture(C.media.flashTex)
 		flash:SetPoint('TOPLEFT', -20, 20)
 		flash:SetPoint('BOTTOMRIGHT', 20, -20)
 		flash:SetBlendMode('ADD')
