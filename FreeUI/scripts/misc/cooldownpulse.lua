@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if not C.general.CDPulse then return end
+if not C.general.cooldownPulse then return end
 
 -- Based on Doom Cooldown Pulse
 -- Flash an ability's icon in the middle of the screen when it comes off cooldown.
@@ -35,12 +35,6 @@ sd:SetPoint("TOPLEFT", -4, 4)
 sd:SetPoint("BOTTOMRIGHT", 4, -4)
 sd:SetBackdropBorderColor(0, 0, 0, .5)
 
-
-
-local ignored_spells = {
-	--GetSpellInfo(6807),	-- Maul
-	--GetSpellInfo(35395),	-- Crusader Strike
-}
 
 
 -- Utility Functions
@@ -83,7 +77,7 @@ local function OnUpdate(_,update)
 					isPet = true
 				end
 
-				if ignored_spells[name] then
+				if C.general.cooldownPulse_ignoredSpells[name] then
 					watching[i] = nil
 				else
 					if (enabled ~= 0) then
@@ -142,8 +136,8 @@ end
 
 -- Event Handlers
 function frame:ADDON_LOADED(addon)
-	for _, v in pairs(ignored_spells) do
-		ignored_spells[v] = true
+	for _, v in pairs(C.general.cooldownPulse_ignoredSpells) do
+		C.general.cooldownPulse_ignoredSpells[v] = true
 	end
 	self:UnregisterEvent("ADDON_LOADED")
 end
