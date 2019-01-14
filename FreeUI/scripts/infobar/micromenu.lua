@@ -1,8 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("infobar")
-if not C.infoBar.enable then return end
-
-local FreeUIMicroMenuButton = module.FreeUIMicroMenuButton
+if not C.infobar.enable then return end
+if not C.infobar.microMenu then return end
+local module = F:GetModule("Infobar")
 
 
 local menuFrame = CreateFrame("Frame", "FreeUI_MicroMenu", FreeUIMicroMenuButton, "DropDownMenuTemplate")
@@ -53,18 +52,24 @@ taint = function(event, addon)
 end
 F:RegisterEvent("ADDON_LOADED", taint)
 
-module.MicroMenu = function()
-	menuFrame:SetPoint("TOPLEFT", FreeUIMicroMenuButton, "TOPLEFT")
-	EasyMenu(microMenu, menuFrame, menuFrame, 0, 0, "MENU")
-end
 
 
-FreeUIMicroMenuButton = module:addButton("Micro menu", module.POSITION_LEFT, function(self, button)
-	if button == "LeftButton" then
-		if DropDownList1:IsShown() then
-			ToggleFrame(DropDownList1)
-		else
-			module.MicroMenu()
-		end
+
+function module:MicroMenu()
+	local FreeUIMicroMenuButton = module.FreeUIMicroMenuButton
+
+	local MicroMenu = function()
+		menuFrame:SetPoint("TOPLEFT", FreeUIMicroMenuButton, "TOPLEFT", 20, 0)
+		EasyMenu(microMenu, menuFrame, menuFrame, 0, 0, "MENU")
 	end
-end)
+
+	FreeUIMicroMenuButton = module:addButton("Micro menu", module.POSITION_LEFT, 100, function(self, button)
+		if button == "LeftButton" then
+			if DropDownList1:IsShown() then
+				ToggleFrame(DropDownList1)
+			else
+				MicroMenu()
+			end
+		end
+	end)
+end

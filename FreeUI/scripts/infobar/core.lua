@@ -1,10 +1,12 @@
 ﻿local F, C = unpack(select(2, ...))
-local module = F:RegisterModule("infobar")
-if not C.infoBar.enable then return end
+if not C.infobar.enable then return end
+
+local module = F:RegisterModule("Infobar")
+
 
 local barAlpha, buttonAlpha
 
-if C.infoBar.buttons_mouseover then
+if C.infobar.mouseover then
 	barAlpha = 0.25
 	buttonAlpha = 0
 else
@@ -12,20 +14,14 @@ else
 	buttonAlpha = 1
 end
 
--- [[ Bar ]]
-
 local bar = CreateFrame("Frame", "FreeUIMenubar", UIParent)
 bar:SetFrameStrata("BACKGROUND")
-
-RegisterStateDriver(bar, "visibility", "[petbattle] hide; show")
-
-
 bar:SetPoint("TOPLEFT", -1, 1)
 bar:SetPoint("TOPRIGHT", 1, 1)
-
-
-bar:SetHeight(C.infoBar.height)
+bar:SetHeight(C.infobar.height)
 F.CreateBD(bar, barAlpha)
+
+RegisterStateDriver(bar, "visibility", "[petbattle] hide; show")
 
 bar.buttons = {}
 
@@ -40,10 +36,6 @@ end
 F:RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
 F:RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
 
-
--- [[ Buttons ]]
-
-if not C.infoBar.enableButtons then return end
 
 module.POSITION_LEFT, module.POSITION_MIDDLE, module.POSITION_RIGHT = 1, 2, 3
 
@@ -93,7 +85,8 @@ local function hideBar()
 end
 bar.hideBar = hideBar
 
-if C.infoBar.buttons_mouseover then
+
+if C.infobar.mouseover then
 	bar:SetScript("OnEnter", showBar)
 	bar:SetScript("OnLeave", hideBar)
 end
@@ -107,18 +100,16 @@ local function buttonOnLeaveNoFade(self)
 end
 
 local function buttonOnEnter(self)
-	if C.infoBar.buttons_mouseover then
+	if C.infobar.mouseover then
 		showBar()
 	end
-
 	self:SetBackdropColor(C.r, C.g, C.b, .4)
 end
 
 local function buttonOnLeave(self)
-	if C.infoBar.buttons_mouseover then
+	if C.infobar.mouseover then
 		hideBar()
 	end
-
 	self:SetBackdropColor(0, 0, 0, .1)
 end
 
@@ -159,7 +150,7 @@ function module:addButton(text, position, width, clickFunc)
 	bu:SetWidth(width)
 	F.CreateBD(bu, .1)
 
-	if C.infoBar.buttons_mouseover then
+	if C.infobar.mouseover then
 		bu:SetAlpha(0)
 	end
 
@@ -183,14 +174,14 @@ end
 
 bar.addButton = addButton
 
-
-
-
-
-
 function module:OnLogin()
-	
-
+	self:Stats()
+	self:MicroMenu()
+	self:DMTool()
+	self:SpecTalent()
+	self:Friends()
+	self:Currencies()
+	self:Report()
 end
 
 

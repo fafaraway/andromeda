@@ -1,43 +1,47 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("infobar")
-if not C.infoBar.enable then return end
+if not C.infobar.enable then return end
+if not C.infobar.skadaTool then return end
+local module = F:GetModule("Infobar")
 
-local FreeUIDMButton = module.FreeUIDMButton
 
-FreeUIDMButton = module:addButton("Toggle Skada", module.POSITION_LEFT, 120, function(self, button)
-	if button == "LeftButton" then
-		Skada:SetActive(true)
-	elseif button == "RightButton" then
-		Skada:SetActive(false)
-	elseif button == "MiddleButton" then
-		Skada:Reset()
-	end
-end)
+function module:DMTool()
+	local FreeUIDMButton = module.FreeUIDMButton
 
-FreeUIDMButton:RegisterEvent("PLAYER_ENTERING_WORLD")
-FreeUIDMButton:SetScript("OnEvent", function(self)
-	if IsAddOnLoaded("Skada") then
-		module:showButton(self)
-	else
-		module:hideButton(self)
-	end
-end)
+	FreeUIDMButton = module:addButton("Toggle Skada", module.POSITION_LEFT, 120, function(self, button)
+		if button == "LeftButton" then
+			Skada:SetActive(true)
+		elseif button == "RightButton" then
+			Skada:SetActive(false)
+		elseif button == "MiddleButton" then
+			Skada:Reset()
+		end
+	end)
 
-FreeUIDMButton:HookScript("OnEnter", function(self)
-	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
-	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+	FreeUIDMButton:RegisterEvent("PLAYER_ENTERING_WORLD")
+	FreeUIDMButton:SetScript("OnEvent", function(self)
+		if IsAddOnLoaded("Skada") then
+			module:showButton(self)
+		else
+			module:hideButton(self)
+		end
+	end)
 
-	GameTooltip:ClearLines()
-	GameTooltip:AddLine("Skada", .9, .82, .62)
-	GameTooltip:AddLine(" ")
+	FreeUIDMButton:HookScript("OnEnter", function(self)
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
+		GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
 
-	GameTooltip:AddDoubleLine(" ", C.LineString)
-	GameTooltip:AddDoubleLine(" ", C.LeftButton.."Skada:SetActive".." ", 1,1,1, .9, .82, .62)
-	GameTooltip:AddDoubleLine(" ", C.RightButton.."Skada:SetInactive".." ", 1,1,1, .9, .82, .62)
-	GameTooltip:AddDoubleLine(" ", C.MiddleButton.."Skada:Reset".." ", 1,1,1, .9, .82, .62)
-	GameTooltip:Show()
-end)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine("Skada", .9, .82, .62)
+		GameTooltip:AddLine(" ")
 
-FreeUIDMButton:HookScript("OnLeave", function(self)
-	GameTooltip:Hide()
-end)
+		GameTooltip:AddDoubleLine(" ", C.LineString)
+		GameTooltip:AddDoubleLine(" ", C.LeftButton.."Skada:SetActive".." ", 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(" ", C.RightButton.."Skada:SetInactive".." ", 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(" ", C.MiddleButton.."Skada:Reset".." ", 1,1,1, .9, .82, .62)
+		GameTooltip:Show()
+	end)
+
+	FreeUIDMButton:HookScript("OnLeave", function(self)
+		GameTooltip:Hide()
+	end)
+end

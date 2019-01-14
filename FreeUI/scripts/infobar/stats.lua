@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-if not C.infoBar.enable then return end
-
-local module = F:GetModule("infobar")
+if not C.infobar.enable then return end
+if not C.infobar.stats then return end
+local module = F:GetModule("Infobar")
 
 
 local format, min = string.format, math.min
@@ -26,7 +26,9 @@ text:SetDrawLayer("OVERLAY")
 text:SetPoint("CENTER")
 text:SetTextColor(C.r, C.g, C.b)
 
-local FreeUIStatsButton = module.FreeUIStatsButton
+print(C.r, C.g, C.b)
+
+
 
 local function formatMemory(value)
 	if value > 1024 then
@@ -59,77 +61,86 @@ local function memoryColor(value, times)
 end
 
 
-FreeUIStatsButton = module:addButton("", POSITION_MIDDLE, 200, function(self, button)
-	if button == "LeftButton" then
-		local openaddonlist
+function module:Stats()
+	local FreeUIStatsButton = module.FreeUIStatsButton
 
-		if AddonList:IsVisible() then
-			openaddonlist = true
+	FreeUIStatsButton = module:addButton("", POSITION_MIDDLE, 200, function(self, button)
+		if button == "LeftButton" then
+			local openaddonlist
+
+			if AddonList:IsVisible() then
+				openaddonlist = true
+			end
+
+			if not openaddonlist then
+				ShowUIPanel(AddonList)
+			else
+				HideUIPanel(AddonList)
+			end
+		elseif button == "RightButton" then
+			TimeManagerClockButton_OnClick(TimeManagerClockButton)
+		end
+	end)
+
+	FreeUIStatsButton:SetWidth(250)
+
+	FreeUIStatsButton:SetScript("OnUpdate", function(self, elapsed)
+		last = last + elapsed
+		lastLag = lastLag + elapsed
+
+		if lastLag >= 30 then
+			_, _, home, world = GetNetStats()
+			lastLag = 0
 		end
 
-		if not openaddonlist then
-			ShowUIPanel(AddonList)
-		else
-			HideUIPanel(AddonList)
+		if last >= 1 then
+			text:SetText("|cffffffff"..floor(GetFramerate() + .5).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..GameTime_GetTime(false))
+			last = 0
 		end
-	elseif button == "RightButton" then
-		TimeManagerClockButton_OnClick(TimeManagerClockButton)
-	end
-end)
+	end)
 
-FreeUIStatsButton:SetWidth(250)
+	FreeUIStatsButton:HookScript("OnEnter", function(self)
+		if InCombatLockdown() then return end
 
+		collectgarbage()
+		UpdateAddOnMemoryUsage()
 
-FreeUIStatsButton:SetScript("OnUpdate", function(self, elapsed)
-	last = last + elapsed
-	lastLag = lastLag + elapsed
-
-	if lastLag >= 30 then
-		_, _, home, world = GetNetStats()
-		lastLag = 0
-	end
-
-	if last >= 1 then
-		text:SetText("|cffffffff"..floor(GetFramerate() + .5).."|r fps   |cffffffff"..home.."|r/|cffffffff"..world.."|r ms   |cffffffff"..GameTime_GetTime(false))
-		last = 0
-	end
-end)
-
-FreeUIStatsButton:HookScript("OnEnter", function(self)
-	if InCombatLockdown() then return end
-
-	collectgarbage()
-	UpdateAddOnMemoryUsage()
-
-	for i = 1, GetNumAddOns() do
-		if IsAddOnLoaded(i) then
-			memory = GetAddOnMemoryUsage(i)
-			n = n + 1
-			addons[n] = {name = GetAddOnInfo(i), memory = memory}
-			total = total + memory
+		for i = 1, GetNumAddOns() do
+			if IsAddOnLoaded(i) then
+				memory = GetAddOnMemoryUsage(i)
+				n = n + 1
+				addons[n] = {name = GetAddOnInfo(i), memory = memory}
+				total = total + memory
+			end
 		end
-	end
-	sort(addons, order)
+		sort(addons, order)
 
-	GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
-	GameTooltip:ClearLines()
-	GameTooltip:AddDoubleLine(ADDONS, formatMemory(total), .9, .82, .62, memoryColor(total))
-	GameTooltip:AddLine(" ")
+		GameTooltip:SetOwner(self, "ANCHOR_BOTTOM", 0, -15)
+		GameTooltip:ClearLines()
+		local today = C_Calendar.GetDate()
+		local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
+		GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), .9, .82, .62)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine(L["LocalTime"], GameTime_GetLocalTime(true), .6,.8,1 ,1,1,1)
+		GameTooltip:AddDoubleLine(L["RealmTime"], GameTime_GetGameTime(true), .6,.8,1 ,1,1,1)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine(ADDONS, formatMemory(total), .9, .82, .62, memoryColor(total))
+		--GameTooltip:AddLine(" ")
 
-	for _, entry in next, addons do
-		GameTooltip:AddDoubleLine(entry.name, formatMemory(entry.memory), 1, 1, 1, memoryColor(entry.memory))
-	end
+		for _, entry in next, addons do
+			GameTooltip:AddDoubleLine(entry.name, formatMemory(entry.memory), 1, 1, 1, memoryColor(entry.memory))
+		end
 
-	GameTooltip:AddLine(" ")
-	GameTooltip:AddDoubleLine(" ", C.LineString)
-	GameTooltip:AddDoubleLine(" ", C.LeftButton..L["OpenAddonList"].." ", 1,1,1, .9, .82, .62)
-	GameTooltip:AddDoubleLine(" ", C.RightButton..L["OpenTimerTracker"].." ", 1,1,1, .9, .82, .62)
-	GameTooltip:Show()
-end)
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddDoubleLine(" ", C.LineString)
+		GameTooltip:AddDoubleLine(" ", C.LeftButton..L["OpenAddonList"].." ", 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(" ", C.RightButton..L["OpenTimerTracker"].." ", 1,1,1, .9, .82, .62)
+		GameTooltip:Show()
+	end)
 
-FreeUIStatsButton:HookScript("OnLeave", function(self)
-	GameTooltip:Hide()
-	n, total = 0, 0
-	wipe(addons)
-end)
-
+	FreeUIStatsButton:HookScript("OnLeave", function(self)
+		GameTooltip:Hide()
+		n, total = 0, 0
+		wipe(addons)
+	end)
+end
