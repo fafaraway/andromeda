@@ -1,10 +1,8 @@
-local addon, core = ...
+local AddonName, core = ...
 
 core[1] = {} -- F, Functions
 core[2] = {} -- C, Constants/Config
 core[3] = {} -- L, Localisation
-
-FreeUI = core
 
 local F, C, L = unpack(core)
 local pairs, next, tinsert = pairs, next, table.insert
@@ -57,32 +55,6 @@ function F:UnregisterEvent(event, func)
 end
 
 
--- Options GUI callbacks
-
-F.AddOptionsCallback = function(category, option, func, widgetType)
-	if not IsAddOnLoaded("FreeUI_Options") then return end
-
-	if widgetType and widgetType == "radio" then
-		local index = 1
-		local frame = FreeUIOptionsPanel[category][option..index]
-		while frame do
-			frame:HookScript("OnClick", func)
-
-			index = index + 1
-			frame = FreeUIOptionsPanel[category][option..index]
-		end
-	else
-		local frame = FreeUIOptionsPanel[category][option]
-
-		if frame:GetObjectType() == "Slider" then
-			frame:HookScript("OnValueChanged", func)
-		else
-			frame:HookScript("OnClick", func)
-		end
-	end
-end
-
-
 -- [[ Modules ]]
 
 local modules, initQueue = {}, {}
@@ -118,7 +90,7 @@ F:RegisterEvent("PLAYER_LOGIN", function()
 	C_Timer.After(3, collectgarbage)
 end)
 
-
+_G[AddonName] = core
 
 
 -- [[ For secure frame hiding ]]
