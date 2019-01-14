@@ -16,7 +16,10 @@ C.media = {
 	['roleIcons']  = 'Interface\\Addons\\FreeUI\\assets\\UI-LFG-ICON-ROLES',
 	['sbTex']      = 'Interface\\AddOns\\FreeUI\\assets\\statusbar',
 	['bgTex']	   = 'Interface\\AddOns\\FreeUI\\assets\\bgTex',
-	['sparkTex']   = 'Interface\\AddOns\\FreeUI\\assets\\spark',
+	['sparkTex']   = 'Interface\\CastingBar\\UI-CastingBar-Spark',
+	['flashTex']   = "Interface\\Cooldown\\star4",
+	['gearTex']    = "Interface\\WorldMap\\Gear_64",
+	['creditTex']  = "Interface\\HelpFrame\\HelpIcon-KnowledgeBase",
 	['pixel']      = 'Interface\\AddOns\\FreeUI\\assets\\font\\pixel.ttf',
 }
 
@@ -59,40 +62,65 @@ end
 
 
 
+
+
+
+
 -- [[ Global config ]]
 
 C['general'] = {
-	['alreadyKnown'] = true,
+	['uiScale'] = 1,
+	['uiScaleAuto'] = true,
+	['hideBossBanner'] = true,
+	['hideTalkingHead'] = true,
 	['flashCursor'] = true,
 	['mailButton'] = true, 				
-	['CDPulse'] = true,
+	['alreadyKnown'] = true,
 	['missingStats'] = true,
+	['fasterLoot'] = true,
 	['PVPSound'] = true,
+	
 	['clickCast'] = true,
 		['clickCast_filter'] = true,
-	['fasterLoot'] = true,
+	['cooldownCount'] = true,
+		['cooldownCount_decimal'] = true,
+		['cooldownCount_font'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
+	['cooldownPulse'] = true,
+		['cooldownPulse_ignoredSpells'] = {
+			--GetSpellInfo(6807),	-- Maul
+			--GetSpellInfo(35395),	-- Crusader Strike
+		},
+
+	['alert'] = true,
+		['alert_Position'] = {'CENTER', UIParent, 'CENTER', 0, 200},
+	['raidManager'] = true,
+		['raidManager_Position'] = {'LEFT'},
+
 	['cameraIncrement'] = 5,
-	['cameraDistance'] = 50,
+	
 	['isDeveloper'] = false,
 }
 
 
-C['appearance'] = {
-	['uiScale'] = 1,
-	['uiScaleAuto'] = true,
-	['backdropColour'] = {.05, .05, .05, .5},
-	['addShadowBorder'] = true,
-	['buttonGradientColour'] = {.15, .15, .15, .5},
-	['buttonSolidColour'] = {.05, .05, .05, .5},
-	['useButtonGradientColour'] = true,
 
-	['useCustomColour'] = false,
-		['customColour'] = {r = 1, g = 1, b = 1},
+
+C['appearance'] = {
+	['enable'] = true,
+		['backdropColour'] = {.05, .05, .05, .75},
+		['addShadowBorder'] = true,
+		['buttonGradientColour'] = {.15, .15, .15, .5},
+		['buttonSolidColour'] = {.05, .05, .05, .5},
+		['useButtonGradientColour'] = true,
+
+		["colourScheme"] = 1,
+			["customColour"] = {r = 1, g = 1, b = 1},
 
 	['vignette'] = true,
 		['vignetteAlpha'] = .35,
 
 	['fontStyle'] = true,
+
+
 }
 
 
@@ -124,6 +152,8 @@ C['actionbars'] = {
 		['hoverBind'] = true,
 
 		['layoutSimple'] = false,
+
+		
 }
 
 
@@ -149,16 +179,7 @@ C['maps'] = {
 }
 
 
-C['blizzard'] = {
-	['hideBossBanner'] = true,
-	['hideTalkingHead'] = true,
-	['cooldownCount'] = true,
-		['decimalCD'] = false,
-		['CDFont'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
-	['raidManager'] = true,
-		['raidManager_pos'] = {'LEFT'},
-	['alertPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
-}
+
 
 
 C['reminder'] = {
@@ -207,34 +228,37 @@ C['bags'] = {
 }
 
 
-C['infoBar'] = {
+C['infobar'] = {
 	['enable'] = true,
 		['height'] = 20,
-		['enableButtons'] = true,
-			['buttons_mouseover'] = true,
+		['mouseover'] = true,
+		['stats'] = true,
+		['microMenu'] = true,
+		['skadaTool'] = true,
+		['specTalent'] = true,
+		['friends'] = true,
+		['currencies'] = true,
+		['report'] = true,
 }
 
 
 C['tooltip'] = {
 	['enable'] = true,
-		['anchorCursor'] = false,
-		['tipPosition'] = {'BOTTOMRIGHT', -30, 30},
-		
-		['hidePVP'] = false,
+		['cursor'] = false,
+		['position'] = {'BOTTOMRIGHT', -50, 50},
+		['hidePVP'] = true,
 		['hideFaction'] = true,
 		['hideTitle'] = true,
 		['hideRealm'] = true,
-		['hideGuildRank'] = true,
-
-		['fadeOnUnit'] = false,
+		['hideRank'] = true,
 		['combatHide'] = false,
-
-		['ilvlspec'] = true,
+		['ilvlSpec'] = true,
 		['extraInfo'] = true,
 		['azeriteTrait'] = true,
+		['linkHover'] = true,
 		['borderColor'] = true,
-
-		['clearTip'] = true,
+		['tipIcon'] = true,
+		['tipClear'] = true,
 }
 
 
@@ -392,6 +416,9 @@ C['unitframes'] = {
 		
 		['power_height'] = 2,
 		['altpower_height'] = 2,
+}
 
-		['classMod_havoc'] = true,
+
+C['classmod'] = {
+	['havocFury'] = true,
 }
