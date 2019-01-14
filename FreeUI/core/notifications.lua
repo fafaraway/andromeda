@@ -6,6 +6,8 @@ local playSounds = C.notifications.playSounds
 local animations = C.notifications.animations
 local timeShown = C.notifications.timeShown
 
+F.AddOptionsCallback = function(category, option, func, widgetType) end
+
 F.AddOptionsCallback("notifications", "playSounds", function()
 	playSounds = C.notifications.playSounds
 end)
