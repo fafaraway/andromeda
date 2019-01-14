@@ -1,9 +1,9 @@
 local F, C, L = unpack(select(2, ...))
+if not C.tooltip.enable then return end
+local module = F:GetModule("Tooltip")
 
-local module = F:GetModule("tooltip")
 
-
-function module:azeriteTrait()
+function module:AzeriteTrait()
 	if not C.tooltip.azeriteTrait then return end
 
 	local tipList = {}

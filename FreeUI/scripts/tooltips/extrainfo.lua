@@ -1,9 +1,11 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("tooltip")
+if not C.tooltip.enable then return end
+
+local module = F:GetModule("Tooltip")
 
 --  Spell/Item IDs(idTip by Silverwind)
 
-function module:extraInfo()
+function module:ExtraInfo()
 	if not C.tooltip.extraInfo then return end
 
 	local types = {

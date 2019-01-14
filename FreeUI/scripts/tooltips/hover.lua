@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 if not C.tooltip.enable then return end
+if not C.tooltip.linkHover then return end
 
 local orig1, orig2, GameTooltip = {}, {}, GameTooltip
 local linktypes = {item = true, enchant = true, spell = true, quest = true, unit = true, talent = true, achievement = true, glyph = true, instancelock = true, currency = true, keystone = true}
