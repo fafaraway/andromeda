@@ -303,10 +303,10 @@ local function PostUpdatePower(Power, unit, cur, max, min)
 		Power.Text:SetTextColor(Power:GetStatusBarColor())
 	end
 
-	if C.PlayerClass == 'DEMONHUNTER' and C.unitframes.classMod_havoc and self.unitStyle == 'player' then
+	if C.Class == 'DEMONHUNTER' and C.classmod.havocFury and self.unitStyle == 'player' then
 		local spec, cp = GetSpecialization() or 0, UnitPower(unit)
 		if spec == 1 and cp < 15 then
-			Power:SetStatusBarColor(.7, .8, .4)
+			Power:SetStatusBarColor(.5, .5, .5)
 		elseif spec == 1 and cp < 40 then
 			Power:SetStatusBarColor(1, 0, 0)
 		end
@@ -483,7 +483,7 @@ local function CreateCastBar(self)
 
 	local name
 
-	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
 	else
 		name = F.CreateFS(cb, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
@@ -591,7 +591,7 @@ local function CreateCastBar(self)
 end
 
 
--- Auras
+-- Aura stuff
 local function FormatAuraTime(s)
 	local day, hour, minute = 86400, 3600, 60
 
@@ -1098,7 +1098,41 @@ local function CreateRunesBar(self)
 end
 
 
--- indicator
+-- Summon
+local function UpdateSummon(self, event)
+	local element = self.SummonIndicator
+	local icon = element.Icon
+
+	local status = C_IncomingSummon.IncomingSummonStatus(self.unit)
+	if(status == Enum.SummonStatus.None) then
+		element:Hide()
+	else
+		element:Show()
+
+		if(status == Enum.SummonStatus.Pending) then
+			icon:SetVertexColor(1, 1, 1)
+			icon:SetDesaturated(false)
+			element.tooltip = INCOMING_SUMMON_TOOLTIP_SUMMON_PENDING
+		elseif(status == Enum.SummonStatus.Accepted) then
+			icon:SetVertexColor(0, 1, 0)
+			icon:SetDesaturated(true)
+			element.tooltip = INCOMING_SUMMON_TOOLTIP_SUMMON_ACCEPTED
+		elseif(status == Enum.SummonStatus.Declined) then
+			icon:SetVertexColor(1, 0.3, 0.3)
+			icon:SetDesaturated(true)
+			element.tooltip = INCOMING_SUMMON_TOOLTIP_SUMMON_DECLINED
+		end
+	end
+end
+
+local function OnSummonEnter(self)
+	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMLEFT')
+	GameTooltip:SetText(self.tooltip)
+	GameTooltip:Show()
+end
+
+
+-- Indicator
 local function CreateIndicator(self)
 	if self.unitStyle == 'player' then
 		local PvPIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0,0,0}, 1, -1)
@@ -1226,24 +1260,29 @@ local function CreateIndicator(self)
 		GroupRoleIndicator.Override = UpdateLFD
 		self.GroupRoleIndicator = GroupRoleIndicator
 
-		-- phase indicator
 		local PhaseIndicator = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		PhaseIndicator:SetText('?')
 		PhaseIndicator:SetJustifyH('RIGHT')
 		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -1)
 		self.PhaseIndicator = PhaseIndicator
 
-		-- summon indicator
-		local summon = self:CreateTexture(nil, "OVERLAY")
-		summon:SetSize(32, 32)
-		summon:SetPoint("CENTER", self)
-		summon:SetParent(UIParent)
-		self.SummonIndicator = summon
+		local Summon = CreateFrame('Frame', nil, self)
+		Summon:SetPoint('RIGHT', self, 'LEFT')
+		Summon:SetSize(32, 32)
+		Summon:SetScript('OnLeave', GameTooltip_Hide)
+		Summon:SetScript('OnEnter', OnSummonEnter)
+		Summon.Override = UpdateSummon
+		self.SummonIndicator = Summon
+
+		local SummonIcon = Summon:CreateTexture(nil, 'OVERLAY')
+		SummonIcon:SetAllPoints()
+		SummonIcon:SetAtlas('Raid-Icon-SummonPending')
+		Summon.Icon = SummonIcon
 	end
 end
 
 
--- Names
+-- Name
 local function CreateName(self)
 	local Name
 	local f = CreateFrame('Frame', nil, self)
@@ -1251,7 +1290,7 @@ local function CreateName(self)
 	f:RegisterEvent('PLAYER_TARGET_CHANGED')
 	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
 
-	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
 		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
 	else
 		Name = F.CreateFS(self.Health, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
@@ -1309,7 +1348,7 @@ local function CreatePartyName(self)
 	self.Text = Text
 
 	if C.unitframes.partyNameAlways then
-		if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
+		if C.Client == 'zhCN' or C.Client == 'zhTW' then
 			Text:SetFont(C.font.normal, 11)
 			Text:SetShadowOffset(2, -2)
 		else
@@ -1326,47 +1365,6 @@ local function CreatePartyName(self)
 		F.SetFS(Text)
 	end
 end
-
---[[local function UpdateName(self)
-	local f = CreateFrame('Frame', nil, self)
-
-	local tt
-
-	if C.GameClient == 'zhCN' or C.GameClient == 'zhTW' then
-		tt = F.CreateFS(self, C.font.normal, 11, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
-	else
-		tt = F.CreateFS(self, C.media.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
-	end
-
-	tt:SetPoint('BOTTOM', self, 'TOP', 0, 3)
-	tt:SetJustifyH('CENTER')
-	tt:SetWordWrap(false)
-	tt:SetWidth(80)
-
-	f:RegisterEvent('UNIT_TARGET')
-	f:RegisterEvent('PLAYER_TARGET_CHANGED')
-	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
-
-	f:SetScript('OnEvent', function()
-		if self.unitStyle == 'targettarget' then
-			if(UnitName('targettarget') == UnitName('player')) then
-				tt:SetText('> YOU <')
-				tt:SetTextColor(1, 0, 0)
-			else
-				tt:SetText(UnitName'targettarget')
-				tt:SetTextColor(1, 1, 1)
-			end
-		elseif self.unitStyle == 'focustarget' then
-			if(UnitName('focustarget')==UnitName('player')) then
-				tt:SetText('> YOU <')
-				tt:SetTextColor(1, 0, 0)
-			else
-				tt:SetText(UnitName'focustarget')
-				tt:SetTextColor(1, 1, 1)
-			end
-		end
-	end)
-end]]
 
 
 -- Threat
@@ -1466,7 +1464,7 @@ local UnitSpecific = {
 		CreateCastBar(self)
 		spellRange(self)
 		CreateDispellable(self, unit)
-		if (C.PlayerClass == 'DEATHKNIGHT') then
+		if (C.Class == 'DEATHKNIGHT') then
 			CreateRunesBar(self)
 		else
 			CreateClassPower(self)
@@ -1660,14 +1658,12 @@ oUF:Factory(function(self)
 	end
 
 	if C.unitframes.enableBoss then
-		local boss = {}
 		for n = 1, MAX_BOSS_FRAMES do
 			spawnHelper(self, 'boss' .. n, C.unitframes.boss_pos[1], C.unitframes.boss_pos[2], C.unitframes.boss_pos[3], C.unitframes.boss_pos[4], C.unitframes.boss_pos[5] + (80 * n))
 		end
 	end
 
 	if C.unitframes.enableArena then
-		local arena = {}
 		for n = 1, 5 do
 			spawnHelper(self, 'arena' .. n, C.unitframes.arena_pos[1], C.unitframes.arena_pos[2], C.unitframes.arena_pos[3], C.unitframes.arena_pos[4], C.unitframes.arena_pos[5] + (100 * n))
 		end
