@@ -47,8 +47,8 @@
 	<Script file='scripts\automation\sell.lua'/>
 	<Script file='scripts\automation\tabbinder.lua'/>
 
-	<Script file='scripts\inventory\bags.lua'/>
-	<Script file='scripts\inventory\filters.lua'/>
+	<Script file='scripts\inventory\core.lua'/>
+	<Script file='scripts\inventory\filter.lua'/>
 
 	<Script file='scripts\blizzard\blizzard.lua'/>
 	<Script file='scripts\blizzard\archaeologybar.lua'/>
