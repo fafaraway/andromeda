@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	F.ReskinPortraitFrame(PetitionFrame, true)
+	F.ReskinPortraitFrame(PetitionFrame)
 	F.Reskin(PetitionFrameSignButton)
 	F.Reskin(PetitionFrameRequestButton)
 	F.Reskin(PetitionFrameRenameButton)

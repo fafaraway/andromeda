@@ -17,7 +17,6 @@ tinsert(C.themes["FreeUI"], function()
 	end
 
 	F.ReskinPortraitFrame(WorldStateScoreFrame)
-	F.SetBD(WorldStateScoreFrame)
 	F.Reskin(WorldStateScoreFrameQueueButton)
 	F.Reskin(WorldStateScoreFrameLeaveButton)
 	F.ReskinScroll(WorldStateScoreScrollFrameScrollBar)

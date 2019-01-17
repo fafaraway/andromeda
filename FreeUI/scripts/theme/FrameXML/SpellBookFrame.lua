@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	F.ReskinPortraitFrame(SpellBookFrame, true)
+	F.ReskinPortraitFrame(SpellBookFrame)
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")
 
 	SpellBookFrameTabButton1:ClearAllPoints()

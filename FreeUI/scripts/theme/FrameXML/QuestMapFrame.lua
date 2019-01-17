@@ -126,7 +126,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	local QuestLogPopupDetailFrame = QuestLogPopupDetailFrame
 
-	F.ReskinPortraitFrame(QuestLogPopupDetailFrame, true)
+	F.ReskinPortraitFrame(QuestLogPopupDetailFrame)
 	F.ReskinScroll(QuestLogPopupDetailFrameScrollFrameScrollBar)
 	F.Reskin(QuestLogPopupDetailFrame.AbandonButton)
 	F.Reskin(QuestLogPopupDetailFrame.TrackButton)

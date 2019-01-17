@@ -216,7 +216,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 
 	F.Reskin(BrowseWowTokenResults.Buyout)
 
-	F.ReskinPortraitFrame(WowTokenGameTimeTutorial, true)
+	F.ReskinPortraitFrame(WowTokenGameTimeTutorial)
 	F.Reskin(StoreButton)
 	WowTokenGameTimeTutorial.LeftDisplay.Label:SetTextColor(1, 1, 1)
 	WowTokenGameTimeTutorial.LeftDisplay.Tutorial1:SetTextColor(1, .8, 0)

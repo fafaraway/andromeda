@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	F.ReskinPortraitFrame(QuestFrame, true)
+	F.ReskinPortraitFrame(QuestFrame)
 
 	QuestFrameDetailPanel:DisableDrawLayer("BACKGROUND")
 	QuestFrameProgressPanel:DisableDrawLayer("BACKGROUND")

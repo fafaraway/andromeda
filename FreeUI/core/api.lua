@@ -725,28 +725,14 @@ function F:SetBD(x, y, x2, y2)
 	F.CreateSD(bg)
 end
 
-function F:RemoveSlice()
-	for _, tex in next, self.NineSlice do
-		if type(tex) == "table" then
-			tex:SetTexture(nil)
-			tex:Hide()
-		end
-	end
-end
-
-function F:CleanInset()
-	self.Bg:Hide()
-	F.RemoveSlice(self)
-end
-
-function F:ReskinPortraitFrame(setBG)
-	local insetFrame = self.inset or self.Inset
-	if insetFrame then F.CleanInset(insetFrame) end
+function F:ReskinPortraitFrame()
 	F.StripTextures(self)
-	F.RemoveSlice(self)
-	self.portrait:SetAlpha(0)
-	F.ReskinClose(self.CloseButton)
-	if setBG then F.SetBD(self) end
+	F.SetBD(self)
+	local frameName = self.GetName and self:GetName()
+	local portrait = self.portrait or _G[frameName.."Portrait"]
+	portrait:SetAlpha(0)
+	local closeButton = self.CloseButton or _G[frameName.."CloseButton"]
+	F.ReskinClose(closeButton)
 end
 
 function F:ReskinColourSwatch()
@@ -981,22 +967,29 @@ function F:RestoreMF()
 end
 
 -- Icon Style
-function F:CreateIF(mouse, cd)
-	F.CreateSD(self)
+function F:PixelIcon(texture, highlight)
+	F.CreateBD(self)
 	self.Icon = self:CreateTexture(nil, "ARTWORK")
-	self.Icon:SetAllPoints()
+	self.Icon:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+	self.Icon:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 	self.Icon:SetTexCoord(unpack(C.TexCoord))
-	if mouse then
+	if texture then
+		self.Icon:SetTexture(texture)
+	end
+	if highlight and type(highlight) == "boolean" then
 		self:EnableMouse(true)
 		self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 		self.HL:SetColorTexture(1, 1, 1, .25)
 		self.HL:SetAllPoints(self.Icon)
 	end
-	if cd then
-		self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
-		self.CD:SetAllPoints()
-		self.CD:SetReverse(true)
-	end
+end
+
+function F:AuraIcon(highlight)
+	self.CD = CreateFrame("Cooldown", nil, self, "CooldownFrameTemplate")
+	self.CD:SetAllPoints()
+	self.CD:SetReverse(true)
+	F.PixelIcon(self, nil, highlight)
+	F.CreateSD(self)
 end
 
 function F:CreateGear(name)
@@ -1114,18 +1107,41 @@ function F:HideObject()
 	self:Hide()
 end
 
+local BlizzTextures = {
+	"Inset",
+	"inset",
+	"InsetFrame",
+	"LeftInset",
+	"RightInset",
+	"NineSlice",
+	"BorderFrame",
+	"bottomInset",
+	"BottomInset",
+	"bgLeft",
+	"bgRight",
+	"FilligreeOverlay",
+}
+
 function F:StripTextures(kill)
-	for i = 1, self:GetNumRegions() do
-		local region = select(i, self:GetRegions())
-		if region and region:GetObjectType() == "Texture" then
-			if kill and type(kill) == "boolean" then
-				F.HideObject(region)
-			elseif region:GetDrawLayer() == kill then
-				region:SetTexture(nil)
-			elseif kill and type(kill) == "string" and region:GetTexture() ~= kill then
-				region:SetTexture("")
-			else
-				region:SetTexture("")
+	local frameName = self.GetName and self:GetName()
+	for _, texture in pairs(BlizzTextures) do
+		local blizzFrame = self[texture] or frameName and _G[frameName..texture]
+		if blizzFrame then
+			F.StripTextures(blizzFrame, kill)
+		end
+	end
+
+	if self.GetNumRegions then
+		for i = 1, self:GetNumRegions() do
+			local region = select(i, self:GetRegions())
+			if region and region.IsObjectType and region:IsObjectType("Texture") then
+				if kill and type(kill) == "boolean" then
+					F.HideObject(region)
+				elseif kill == 0 then
+					region:SetAlpha(0)
+				else
+					region:SetTexture("")
+				end
 			end
 		end
 	end
@@ -1288,8 +1304,7 @@ function F:CreateButton(width, height, text, textColor, fontSize)
 	bu:SetSize(width, height)
 	F.CreateBD(bu, .3)
 	if type(text) == "boolean" then
-		F.CreateIF(bu, true)
-		bu.Icon:SetTexture(fontSize)
+		F.PixelIcon(bu, fontSize, true)
 	else
 		F.CreateBC(bu)
 		bu.text = F.CreateFSAlt(bu, fontSize or 12, text, textColor, true)

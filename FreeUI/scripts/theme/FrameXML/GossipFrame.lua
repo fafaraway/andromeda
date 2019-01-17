@@ -19,7 +19,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.CreateBDFrame(NPCFriendshipStatusBar, .25)
 
 	GossipFrameInset:Hide()
-	F.ReskinPortraitFrame(GossipFrame, true)
+	F.ReskinPortraitFrame(GossipFrame)
 	F.Reskin(GossipFrameGreetingGoodbyeButton)
 	F.ReskinScroll(GossipGreetingScrollFrameScrollBar)
 
