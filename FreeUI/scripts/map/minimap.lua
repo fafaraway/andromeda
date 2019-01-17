@@ -239,22 +239,34 @@ function module:ReskinRegions()
 		TicketStatusFrame.SetPoint = F.Dummy
 	end
 
-	-- durability
-	hooksecurefunc(DurabilityFrame, 'SetPoint', function(self, _, parent)
-		if parent=='MinimapCluster' or parent==_G['MinimapCluster'] then
-			self:ClearAllPoints()
-			self:SetPoint('RIGHT', Minimap, 'LEFT', -50, -250)
-			self:SetScale(.7)
+
+	local durabilityMover = F.CreateGear(DurabilityFrame, "FreeUIDurabilityFrameMover")
+	durabilityMover:SetPoint('RIGHT', Minimap, 'LEFT', -50, -250)
+	durabilityMover:SetFrameStrata("HIGH")
+	F.AddTooltip(durabilityMover, "ANCHOR_TOP", L["TOGGLE"], "system")
+	F.CreateMF(durabilityMover)
+
+	hooksecurefunc(DurabilityFrame, "SetPoint", function(_, _, parent)
+		if parent ~= durabilityMover then
+			DurabilityFrame:SetScale(.7)
+			DurabilityFrame:ClearAllPoints()
+			DurabilityFrame:SetClampedToScreen(true)
+			DurabilityFrame:SetPoint("BOTTOMRIGHT", durabilityMover, "BOTTOMLEFT", -5, 0)
 		end
 	end)
 
+	local vehicleMover = F.CreateGear(VehicleSeatIndicator, "FreeUIVehicleSeatMover")
+	vehicleMover:SetPoint('RIGHT', Minimap, 'LEFT', -150, -250)
+	vehicleMover:SetFrameStrata("HIGH")
+	F.AddTooltip(vehicleMover, "ANCHOR_TOP", L["TOGGLE"], "system")
+	F.CreateMF(vehicleMover)
 
-	-- VEHICLE SEAT INDICATOR
-	hooksecurefunc(VehicleSeatIndicator,'SetPoint', function(self, _, parent)
-		if parent=='MinimapCluster' or parent==_G['MinimapCluster'] then
-			self:ClearAllPoints()
-			self:SetPoint('RIGHT', Minimap, 'LEFT', -50, -250)
-			self:SetScale(.7)
+	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, parent)
+		if parent ~= vehicleMover then
+			VehicleSeatIndicator:SetScale(.7)
+			VehicleSeatIndicator:ClearAllPoints()
+			VehicleSeatIndicator:SetClampedToScreen(true)
+			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT", vehicleMover, "BOTTOMLEFT", -5, 0)
 		end
 	end)
 

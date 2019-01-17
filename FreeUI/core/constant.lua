@@ -20,6 +20,7 @@ C.media = {
 	['bgTex']	   = assetsPath..'bgTex',
 	['sparkTex']   = 'Interface\\CastingBar\\UI-CastingBar-Spark',
 	['flashTex']   = 'Interface\\Cooldown\\star4',
+	['gearTex']    = 'Interface\\WorldMap\\Gear_64'
 }
 
 
