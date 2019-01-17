@@ -1,10 +1,12 @@
 local F, C, L = unpack(select(2, ...))
 
+
+
 local frame, xpBar
 local customPosition = false
 
 local function setPosition()
-	frame:SetPoint("BOTTOM", oUF_FreePlayer, "TOP", 0, 50)
+	frame:SetPoint("BOTTOM", oUF_Player, "TOP", 0, 50)
 end
 
 local f = CreateFrame("Frame")
@@ -28,7 +30,7 @@ f:SetScript("OnEvent", function(self, _, addon)
 
 	frame.BarTitle:SetPoint("CENTER", 0, 13)
 
-	local width = C.unitframes.player_width
+	local width = C.unitframe.player_width
 	bar:SetWidth(width)
 	frame.Flash:SetWidth(width + 22)
 

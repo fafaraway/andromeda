@@ -9,14 +9,21 @@ L['RARE'] = '稀有'
 
 
 
+-- notification
+L['NOTIFICATION_RARE'] = '发现稀有！ '
+L['NOTIFICATION_INTERRUPTED'] = '打断：'
+L['NOTIFICATION_DISPELED'] = '驱散：'
+L['NOTIFICATION_STOLEN'] = '偷取：'
+L['NOTIFICATION_RESNOTARGET'] = '<注意>：%s 使用了 %s！'
+L['NOTIFICATION_RESTARGET'] = '<注意>：%s 使用了 %s 在 %s！'
+L['NOTIFICATION_BOTTOY'] = '<注意>：%s 放置了 %s！'
+L['NOTIFICATION_FEAST'] = '<注意>：%s 摆出了 %s！'
+L['NOTIFICATION_PORTAL'] = '<注意>：%s 开启了 %s！'
+L['NOTIFICATION_REFRESHMENTTABLE'] = '<注意>：%s 施放了 %s！'
+L['NOTIFICATION_RITUALOFSUMMONING'] = '<注意>：%s 正在施放 %s！'
+L['NOTIFICATION_SOULWELL'] = '<注意>：%s 施放了 %s！'
 
-L['rareFound'] = '发现稀有！ '
 
-
-
-L['interrupted'] = '打断：'
-L['dispeled'] = '驱散：'
-L['stolen'] = '偷取：'
 
 L['guildRepair'] = '使用公会修理'
 L['repairCost'] = '自动修理花费'
@@ -28,15 +35,9 @@ L['SellPrice'] = '售价'
 L['StackCap'] = '堆叠上限'
 L['Castby'] = '来自'
 
-L['BotToy'] 			= '<注意>：%s 放置了 %s！'
-L['Feast'] 				= '<注意>：%s 摆出了 %s！'
-L['Portal'] 			= '<注意>：%s 开启了 %s！'
-L['RefreshmentTable'] 	= '<注意>：%s 施放了 %s！'
-L['RitualOfSummoning'] 	= '<注意>：%s 正在施放 %s！'
-L['SoulWell'] 			= '<注意>：%s 施放了 %s！'
 
-L['ResNoTarget'] 		= '<注意>：%s 使用了 %s！'
-L['ResTarget'] 			= '<注意>：%s 使用了 %s 在 %s！'
+
+
 
 L['Undress'] = '脱衣'
 
@@ -181,5 +182,32 @@ L["INFOBAR_MICROMENU"] = 'Micro menu'
 
 L["MAIL_TOOL"] = 'Mail tool'
 
--- Changelog
-L["CHANGELOG"] = "ChangeLog"
+
+
+
+
+
+
+
+-- Mover
+L["MOVER_PANEL"] = '移动控制'
+L["MOVER_GRID"] = '网格'
+L["MOVER_TOOLTIP"] = 'tooltip'
+L["MOVER_MINIMAP"] = 'minimap'
+L["MOVER_RAIDMANAGER"] = 'RM'
+L["MOVER_RESET_CONFIRM"] = "是否重置所有界面元素为默认位置？"
+L["MOVER_CANCEL_CONFIRM"] = "是否取消本次操作？"
+
+L['MOVER_UNITFRAME_PLAYER'] = 'player'
+L['MOVER_UNITFRAME_PET'] = 'pet'
+L['MOVER_UNITFRAME_TARGET'] = 'target'
+L['MOVER_UNITFRAME_TARGETTARGET'] = 'targettarget'
+L['MOVER_UNITFRAME_FOCUS'] = 'focus'
+L['MOVER_UNITFRAME_FOCUSTARGET'] = 'focustarget'
+L['MOVER_UNITFRAME_BOSS'] = 'boss'
+L['MOVER_UNITFRAME_ARENA'] = 'arena'
+L['MOVER_UNITFRAME_PARTY'] = 'party'
+L['MOVER_UNITFRAME_RAID'] = 'raid'
+L["MOVER_UNITFRAME_PLAYER_CASTBAR"] = 'palyer castbar'
+L["MOVER_UNITFRAME_TARGET_CASTBAR"] = 'target castbar'
+L["MOVER_UNITFRAME_FOCUS_CASTBAR"] = 'focus castbar'

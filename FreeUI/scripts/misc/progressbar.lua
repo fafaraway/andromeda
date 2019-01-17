@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("misc")
+local module = F:GetModule("Misc")
 
 local format, pairs = string.format, pairs
 local min, mod, floor = math.min, mod, math.floor
@@ -151,6 +151,8 @@ function module:ProgressBar()
 end
 
 function module:HookParagonRep()
+	if not C.general.progressBar then return end
+	
 	local numFactions = GetNumFactions()
 	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
 	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do

@@ -2,6 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("blizzard")
 
 function module:PetBattleUI()
+	if not C.appearance.petBattle then return end
+	
 	local r, g, b = C.r, C.g, C.b
 
 	-- Head Frame

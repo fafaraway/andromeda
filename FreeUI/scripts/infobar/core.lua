@@ -154,7 +154,7 @@ function module:addButton(text, position, width, clickFunc)
 		bu:SetAlpha(0)
 	end
 
-	local buText = F.CreateFS(bu, C.media.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
+	local buText = F.CreateFS(bu, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
 	buText:SetPoint("CENTER")
 	buText:SetText(text)
 	bu.Text = buText

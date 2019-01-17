@@ -32,32 +32,19 @@ do
 			ot:ClearAllPoints()
 			ot:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
 			ot:SetHeight(pysHeight/2)
-			ot:SetWidth(C.maps.miniMapSize)
+			ot:SetWidth(C.map.miniMapSize)
 		end
 	end)
 
 	RegisterStateDriver(ot, "visibility", "[petbattle] hide; show")
 end
 
--- mythic affixes
-function F:AffixesSetup()
-	for _, frame in ipairs(self.Affixes) do
-		frame.Border:SetTexture(nil)
-		frame.Portrait:SetTexture(nil)
-		if not frame.bg then
-			frame.bg = F.ReskinIcon(frame.Portrait)
-		end
-		if frame.info then
-			frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
-		elseif frame.affixID then
-			local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
-			frame.Portrait:SetTexture(filedataid)
-		end
-	end
-end
+
 
 
 function module:QuestTracker()
+	if not C.appearance.objectiveTracker then return end
+	
 	-- Questblock click enhant
 	local function QuestHook(id)
 		local questLogIndex = GetQuestLogIndexByID(id)

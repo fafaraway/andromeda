@@ -36,8 +36,6 @@ else
 end
 
 
-
-
 C.MyColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
 C.InfoColor = "|cffe5d19f"
 C.GreyColor = "|cff808080"
@@ -73,7 +71,7 @@ print('API - '..C.Mult)
 
 
 function F.SetFS(fontObject, fontSize)
-	fontObject:SetFont(C.media.pixel, 8, "OUTLINEMONOCHROME")
+	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
 	fontObject:SetShadowColor(0, 0, 0)
 	fontObject:SetShadowOffset(1, -1)
 end
@@ -94,7 +92,7 @@ function F:CreateFSAlt(size, text, colour, shadow, anchor, x, y)
 	local fs = self:CreateFontString(nil, "OVERLAY")
 	
 	if size and size == 'pixel' then
-		fs:SetFont(C.media.pixel, 8, 'OUTLINEMONOCHROME')
+		fs:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
 	else
 		fs:SetFont(C.font.normal, size, nil)
 	end
@@ -281,7 +279,7 @@ local function CreatePulse(frame)
 end
 
 local function StartGlow(f)
-	--if not f:IsEnabled() then return end
+	if not f:IsEnabled() then return end
 	--f:SetBackdropColor(.2, .2, .2, .7)
 
 	f:SetBackdropBorderColor(r, g, b)
@@ -970,15 +968,15 @@ function F:CreateMF(parent, saved)
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
-		FreeUIConfig["TempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
+		FreeUIConfig["tempAnchor"][frame:GetName()] = {orig, "UIParent", tar, x, y}
 	end)
 end
 
 function F:RestoreMF()
 	local name = self:GetName()
-	if name and FreeUIConfig["TempAnchor"][name] then
+	if name and FreeUIConfig["tempAnchor"][name] then
 		self:ClearAllPoints()
-		self:SetPoint(unpack(FreeUIConfig["TempAnchor"][name]))
+		self:SetPoint(unpack(FreeUIConfig["tempAnchor"][name]))
 	end
 end
 
@@ -1410,6 +1408,22 @@ end
 
 
 
+-- mythic affixes
+function F:AffixesSetup()
+	for _, frame in ipairs(self.Affixes) do
+		frame.Border:SetTexture(nil)
+		frame.Portrait:SetTexture(nil)
+		if not frame.bg then
+			frame.bg = F.ReskinIcon(frame.Portrait)
+		end
+		if frame.info then
+			frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
+		elseif frame.affixID then
+			local _, _, filedataid = C_ChallengeMode.GetAffixInfo(frame.affixID)
+			frame.Portrait:SetTexture(filedataid)
+		end
+	end
+end
 
 
 -- role updater

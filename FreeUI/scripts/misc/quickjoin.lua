@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("misc")
+local module = F:GetModule("Misc")
 
 
 --[[

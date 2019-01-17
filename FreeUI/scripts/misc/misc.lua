@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule("misc")
+local module = F:RegisterModule("Misc")
 
 function module:OnLogin()
 	self:ItemLevel()
@@ -14,6 +14,8 @@ function module:OnLogin()
 	self:FasterDelete()
 	self:FlightMasterWhistle()
 	self:ReadyCheckEnhancement()
+	self:Marker()
+	self:Focuser()
 
 
 	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)

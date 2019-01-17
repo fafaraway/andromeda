@@ -2,7 +2,11 @@ local F, C = unpack(select(2, ...))
 
 -- shared media stuff for FreeUI
 
-local LSM = _G.LibStub("LibSharedMedia-3.0")
+
+local LSM = _G.LibStub("LibSharedMedia-3.0", true)
+if not LSM then return end
+
+
 local koKR, ruRU, zhCN, zhTW, western = LSM.LOCALE_BIT_koKR, LSM.LOCALE_BIT_ruRU, LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_zhTW, LSM.LOCALE_BIT_western
 
 -- BACKGROUND

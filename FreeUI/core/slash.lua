@@ -36,23 +36,3 @@ SLASH_INSTANCEID1 = '/getinstid'
 
 
 
-
-
-
-SlashCmdList.FREEUI = function(cmd)
-	local cmd, args = strsplit(' ', cmd:lower(), 2)
-	if C.unitframes.enable then
-		if cmd == 'dps' then
-			FreeUIConfig.layout = 1
-			ReloadUI()
-		elseif cmd == 'healer' then
-			FreeUIConfig.layout = 2
-			ReloadUI()
-		elseif cmd == 'reset' then
-			FreeUIGlobalConfig = {}
-			FreeUIConfig = {}
-			ReloadUI()
-		end
-	end
-end
-SLASH_FREEUI1 = '/freeui'

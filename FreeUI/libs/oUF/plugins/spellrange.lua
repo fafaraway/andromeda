@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 
-if not C.unitframes.enable then return end
+if not C.unitframe.enable then return end
 
 --[[****************************************************************************
 * oUF_SpellRange by Saiket                                                   *

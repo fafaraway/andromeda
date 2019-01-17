@@ -318,9 +318,7 @@ SpellBinder:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 SpellBinder:RegisterEvent("ZONE_CHANGED")
 SpellBinder:SetScript("OnEvent", function(self, event, ...)
 	if event == "PLAYER_LOGIN" then
-		if not FreeUIConfig['SavedBindings'] then FreeUIConfig['SavedBindings'] = {} end
-
-		DB = FreeUIConfig['SavedBindings']
+		DB = FreeUIConfig['clickCast']
 		DB.spells = DB.spells or {}
 		DB.frames = DB.frames or {}
 		DB.keys = DB.keys or {}

@@ -71,7 +71,7 @@ function module:Currencies()
 		end
 		self.Text:SetText(formatTextMoney(newMoney))
 
-		if not FreeUIGlobalConfig['totalGold'] then FreeUIGlobalConfig['totalGold'] = {} end
+		--if not FreeUIGlobalConfig['totalGold'] then FreeUIGlobalConfig['totalGold'] = {} end
 		if not FreeUIGlobalConfig['totalGold'][C.Realm] then FreeUIGlobalConfig['totalGold'][C.Realm] = {} end
 		FreeUIGlobalConfig['totalGold'][C.Realm][C.Name] = {GetMoney(), C.Class}
 

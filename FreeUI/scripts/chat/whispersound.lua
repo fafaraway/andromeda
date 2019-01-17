@@ -6,8 +6,8 @@ function module:WhisperSound()
 	if not C.chat.whisperSound then return end
 
 	local f = CreateFrame('Frame')
-	local soundFile = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper.ogg'
-	local soundFileAlt = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper1.ogg'
+	local soundFile = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper1.ogg'
+	local soundFileAlt = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper2.ogg'
 	local lastSoundTimer = 0
 
 	f:RegisterEvent('CHAT_MSG_WHISPER')

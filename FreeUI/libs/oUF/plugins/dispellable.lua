@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-if (not C.unitframes.dispellable) then return end
+if (not C.unitframe.dispellable) then return end
 
 local _, ns = ...
 

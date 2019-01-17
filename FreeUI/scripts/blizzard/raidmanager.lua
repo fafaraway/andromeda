@@ -8,9 +8,11 @@ local f = CreateFrame('Frame', 'RaidManagerFrame', UIParent)
 f:SetFrameStrata('MEDIUM')
 f:SetHeight(250)
 f:SetWidth(40)
-f:SetPoint(unpack(C.general.raidManager_Position))
+--f:SetPoint(unpack(C.general.raidManager_Position))
 f:Hide()
 f:RegisterEvent('PLAYER_LOGIN')
+
+F.Mover(f, L['MOVER_RAIDMANAGER'], "RaidManagerFrame", C.general.raidManager_Position, 40, 280)
 
 
 local marker = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
@@ -156,7 +158,12 @@ check:SetScript('OnEvent', function(self, event)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 		return
 	end	
-	if CheckRaidStatus() then
+	--if CheckRaidStatus() then
+	--	f:Show()
+	--else
+	--	f:Hide()
+	--end
+	if IsInGroup() then
 		f:Show()
 	else
 		f:Hide()
