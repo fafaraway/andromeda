@@ -251,9 +251,10 @@ function module:PetBattleUI()
 	for i = 1, 5 do
 		select(i, skipButton:GetRegions()):Hide()
 	end
-	F.CreateIF(skipButton, true)
+	F.PixelIcon(skipButton, "Interface\\Icons\\Ability_Foundryraid_Dormant", true)
+	skipButton.Icon:SetAllPoints()
+	F.CreateSD(skipButton)
 	skipButton:SetPushedTexture(C.media.backdrop)
-	skipButton.Icon:SetTexture("Interface\\Icons\\Ability_Foundryraid_Dormant")
 
 	skipButton.text = F.CreateFS(skipButton, C.font.normal, 12)
 	skipButton.text:SetFont(C.font.normal, 14)

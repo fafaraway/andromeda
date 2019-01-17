@@ -16,6 +16,8 @@ function module:OnLogin()
 	self:ReadyCheckEnhancement()
 	self:Marker()
 	self:Focuser()
+	self:NakedIcon()
+	self:ExtendInstance()
 
 
 	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)
@@ -61,7 +63,7 @@ function module:UndressButton()
 	local undress = CreateFrame("Button", "DressUpFrameUndressButton", DressUpFrame, "UIPanelButtonTemplate")
 	undress:SetSize(80, 22)
 	undress:SetPoint("RIGHT", DressUpFrameResetButton, "LEFT", -1, 0)
-	undress:SetText(L['Undress'])
+	undress:SetText(L['GET_NAKED'])
 	undress:SetScript("OnClick", function()
 		DressUpModel:Undress()
 	end)
@@ -69,7 +71,7 @@ function module:UndressButton()
 	local sideUndress = CreateFrame("Button", "SideDressUpModelUndressButton", SideDressUpModel, "UIPanelButtonTemplate")
 	sideUndress:SetSize(80, 22)
 	sideUndress:SetPoint("TOP", SideDressUpModelResetButton, "BOTTOM", 0, -5)
-	sideUndress:SetText(L['Undress'])
+	sideUndress:SetText(L['GET_NAKED'])
 	sideUndress:SetScript("OnClick", function()
 		SideDressUpModel:Undress()
 	end)
@@ -171,4 +173,119 @@ function module:FlashCursor()
 		end
 	end
 	frame:SetScript("OnUpdate", OnUpdate);
+end
+
+
+-- Get Naked
+function module:NakedIcon()
+	local bu = CreateFrame("Button", nil, CharacterFrameInsetRight)
+	bu:SetSize(31, 33)
+	bu:SetPoint("RIGHT", PaperDollSidebarTab1, "LEFT", -4, -2)
+	F.PixelIcon(bu, "Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH", true)
+	F.AddTooltip(bu, "ANCHOR_RIGHT", L["GET_NAKED"])
+
+	local function UnequipItemInSlot(i)
+		local action = EquipmentManager_UnequipItemInSlot(i)
+		EquipmentManager_RunAction(action)
+	end
+
+	bu:SetScript("OnDoubleClick", function()
+		for i = 1, 17 do
+			local texture = GetInventoryItemTexture("player", i)
+			if texture then
+				UnequipItemInSlot(i) 
+			end
+		end
+	end)
+end
+
+
+-- Show BID and highlight price
+do
+	local function setupMisc(event, addon)
+		if addon == "Blizzard_AuctionUI" then
+			hooksecurefunc("AuctionFrameBrowse_Update", function()
+				local numBatchAuctions = GetNumAuctionItems("list")
+				local offset = FauxScrollFrame_GetOffset(BrowseScrollFrame)
+				for i = 1, NUM_BROWSE_TO_DISPLAY do
+					local index = offset + i + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page)
+					if index <= numBatchAuctions + (NUM_AUCTION_ITEMS_PER_PAGE * AuctionFrameBrowse.page) then
+						local name, _, _, _, _, _, _, _, _, buyoutPrice, bidAmount =  GetAuctionItemInfo("list", offset + i)
+						local alpha = .5
+						local color = "yellow"
+						if name then
+							local itemName = _G["BrowseButton"..i.."Name"]
+							local moneyFrame = _G["BrowseButton"..i.."MoneyFrame"]
+							local buyoutMoney = _G["BrowseButton"..i.."BuyoutFrameMoney"]
+							if buyoutPrice/10000 >= 5000 then color = "red" end
+							if bidAmount > 0 then
+								name = name .. " |cffffff00"..BID.."|r"
+								alpha = 1.0
+							end
+							itemName:SetText(name)
+							moneyFrame:SetAlpha(alpha)
+							SetMoneyFrameColor(buyoutMoney:GetName(), color)
+						end
+					end
+				end
+			end)
+
+			F:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	F:RegisterEvent("ADDON_LOADED", setupMisc)
+end
+
+
+-- Extend Instance
+function module:ExtendInstance()
+	local bu = CreateFrame("Button", nil, RaidInfoFrame)
+	bu:SetPoint("TOPRIGHT", -35, -5)
+	bu:SetSize(25, 25)
+	F.PixelIcon(bu, GetSpellTexture(80353), true)
+	F.AddTooltip(bu, "ANCHOR_RIGHT", L["EXTEND_INSTANCE"], "system")
+
+	bu:SetScript("OnMouseUp", function(_, btn)
+		for i = 1, GetNumSavedInstances() do
+			local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
+			if isRaid then
+				if btn == "LeftButton" then
+					if not extended then
+						SetSavedInstanceExtend(i, true)		-- extend
+					end
+				else
+					if extended then
+						SetSavedInstanceExtend(i, false)	-- cancel
+					end
+				end
+			end
+		end
+		RequestRaidInfo()
+		RaidInfoFrame_Update()
+	end)
+end
+
+
+-- TradeFrame hook
+do
+	local infoText = F.CreateFSAlt(TradeFrame, 14, "")
+	infoText:ClearAllPoints()
+	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
+
+	local function updateColor()
+		local r, g, b = F.UnitColor("NPC")
+		TradeFrameRecipientNameText:SetTextColor(r, g, b)
+
+		local guid = UnitGUID("NPC")
+		if not guid then return end
+		local text = "|cffff0000"..L["STRANGER"]
+		if BNGetGameAccountInfoByGUID(guid) or IsCharacterFriend(guid) then
+			text = "|cffffff00"..FRIEND
+		elseif IsGuildMember(guid) then
+			text = "|cff00ff00"..GUILD
+		end
+		infoText:SetText(text)
+	end
+	hooksecurefunc("TradeFrame_Update", updateColor)
 end

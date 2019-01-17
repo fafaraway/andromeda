@@ -7,18 +7,33 @@ local F, C, L = unpack(select(2, ...))
 -- tooltip
 L['RARE'] = 'Rare'
 
+-- automation
+L["STACK_BUYING_CHECK"] = "是否购买|cffff0000一组|r下列物品？"
+
+
+-- misc
+L["EXTEND_INSTANCE"] = "Extend All Raids Lock"
+L["STRANGER"] = "Stranger"
+L["TOGGLE"] = "Drag to move"
+L["GET_NAKED"] = 'Undress'
+
+-- notification
+L['NOTIFICATION_RARE'] = 'Rare nearby! '
+L['NOTIFICATION_INTERRUPTED'] = 'Interrupted: '
+L['NOTIFICATION_DISPELED'] = 'Dispeled: '
+L['NOTIFICATION_STOLEN'] = 'Stolen: '
+L['NOTIFICATION_RESNOTARGET'] = '<Attention>: %s casted %s!'
+L['NOTIFICATION_RESTARGET'] = '<Attention>: %s casted %s on %s!'
+L['NOTIFICATION_BOTTOY'] = '<Attention>: %s puts %s!'
+L['NOTIFICATION_FEAST'] = '<Attention>: %s puts %s!'
+L['NOTIFICATION_PORTAL'] = '<Attention>: %s opened %s!'
+L['NOTIFICATION_REFRESHMENTTABLE'] = '<Attention>: %s casted %s!'
+L['NOTIFICATION_RITUALOFSUMMONING'] = '<Attention>: %s is casting %s!'
+L['NOTIFICATION_SOULWELL'] = '<Attention>: %s casted %s!'
 
 
 
 
-
-L['rareFound'] = 'Rare nearby! '
-
-
-
-L['interrupted'] = 'Interrupted: '
-L['dispeled'] = 'Dispeled: '
-L['stolen'] = 'Stolen: '
 
 L['guildRepair'] = 'Repair cost covered by Guild Bank'
 L['repairCost'] = 'Repair cost'
@@ -30,17 +45,9 @@ L['SellPrice'] = 'Sell Price'
 L['StackCap'] = 'Stack Caps'
 L['Castby'] = 'Castby'
 
-L['BotToy'] = '<Attention>: %s puts %s!'
-L['Feast'] = '<Attention>: %s puts %s!'
-L['Portal'] = '<Attention>: %s opened %s!'
-L['RefreshmentTable'] = '<Attention>: %s casted %s!'
-L['RitualOfSummoning'] = '<Attention>: %s is casting %s!'
-L['SoulWell'] = '<Attention>: %s casted %s!'
 
-L['ResNoTarget'] = '<Attention>: %s casted %s!'
-L['ResTarget'] = '<Attention>: %s casted %s on %s!'
 
-L['Undress'] = 'Undress'
+
 
 L['WoW'] = '<World of Warcraft>'
 L['BN'] = '<Battle.NET>'
@@ -86,8 +93,33 @@ L['Pull'] = 'Pull in 10s!'
 
 L['AutoQuest'] = 'Auto quest'
 
-L['Map Reveal'] = 'Map Reveal'
+L['MapReveal'] = 'Map Reveal'
 
 L['InviteInfo'] = 'Accepted invite from'
 L['InviteEnable'] = 'Autoinvite ON'
 L['InviteDisable'] = 'Autoinvite OFF'
+
+
+
+-- Mover
+L["MOVER_PANEL"] = 'Mover console'
+L["MOVER_GRID"] = 'Grids'
+L["MOVER_TOOLTIP"] = 'tooltip'
+L["MOVER_MINIMAP"] = 'minimap'
+L["MOVER_RAIDMANAGER"] = 'RM'
+L["MOVER_RESET_CONFIRM"] = "Are you sure to reset frames position?"
+L["MOVER_CANCEL_CONFIRM"] = "Are you sure to reverse your positioning?"
+
+L['MOVER_UNITFRAME_PLAYER'] = 'player'
+L['MOVER_UNITFRAME_PET'] = 'pet'
+L['MOVER_UNITFRAME_TARGET'] = 'target'
+L['MOVER_UNITFRAME_TARGETTARGET'] = 'targettarget'
+L['MOVER_UNITFRAME_FOCUS'] = 'focus'
+L['MOVER_UNITFRAME_FOCUSTARGET'] = 'focustarget'
+L['MOVER_UNITFRAME_BOSS'] = 'boss'
+L['MOVER_UNITFRAME_ARENA'] = 'arena'
+L['MOVER_UNITFRAME_PARTY'] = 'party'
+L['MOVER_UNITFRAME_RAID'] = 'raid'
+L["MOVER_UNITFRAME_PLAYER_CASTBAR"] = 'palyer castbar'
+L["MOVER_UNITFRAME_TARGET_CASTBAR"] = 'target castbar'
+L["MOVER_UNITFRAME_FOCUS_CASTBAR"] = 'focus castbar'

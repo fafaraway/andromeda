@@ -12,7 +12,7 @@ if C.automation.autoBuyStack then
 			if ( maxStack and maxStack > 1 ) then
 				if not cache[itemLink] then
 					StaticPopupDialogs['BUY_STACK'] = {
-						text = 'Stack Buying Check',
+						text = L['STACK_BUYING_CHECK'],
 						button1 = YES,
 						button2 = NO,
 						OnAccept = function()

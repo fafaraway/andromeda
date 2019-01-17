@@ -22,7 +22,7 @@ do
 	minimize:HookScript("OnEnter", function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_TOP")
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["Toggle"], 1, .8, 0)
+		GameTooltip:AddLine(L["TOGGLE"], 1, .8, 0)
 		GameTooltip:Show()
 	end)
 	minimize:HookScript("OnLeave", F.HideTooltip)

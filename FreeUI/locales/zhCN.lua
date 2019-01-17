@@ -7,6 +7,16 @@ if GetLocale() ~= 'zhCN' then return end
 -- tootlip
 L['RARE'] = '稀有'
 
+-- automation
+L["STACK_BUYING_CHECK"] = "是否购买|cffff0000一组|r下列物品？"
+
+
+-- misc
+L["EXTEND_INSTANCE"] = "延长所有副本锁定"
+L["STRANGER"] = "陌生人"
+L["TOGGLE"] = "点击拖动"
+L["GET_NAKED"] = '脱衣'
+
 
 
 -- notification
@@ -39,7 +49,9 @@ L['Castby'] = '来自'
 
 
 
-L['Undress'] = '脱衣'
+
+
+
 
 L['WoW'] = '<魔兽世界>'
 L['BN'] = '<战网好友>'
@@ -90,97 +102,6 @@ L['MapReveal'] = '去除地图迷雾'
 L['InviteInfo'] = '接受邀请'
 L['InviteEnable'] = '自动邀请功能启用'
 L['InviteDisable'] = '自动邀请功能关闭'
-
-
-
-L["CancelMoverConfirm"] = 'Cancel Mover Confirm'
-L["ResetMoverConfirm"] = 'Reset Mover Confirm'
-L["MoverConsole"] = 'Mover Console'
-L["Grids"] = 'Grids'
-L["ToggleAuraWatch"] = 'Toggle AuraWatch'
-
-
-
-L["Toggle"] = "点击拖动"
-
-
-
-
--- Tutorial
-L["SKIP"] = "Skip"
-L["APPLY"] = "Apply"
-L["DEFAULT_SETTINGS"] = "Default Settings"
-L["CHATFRAME"] = "Chat"
-L["SKINS"] = "Skins"
-L["COMPLETED"] = 'Completed'
-L["TUTORIAL_PAGE_1"] = "Here is the tutorial to improve your experiencing.\n\nNow click the button to load some default settings that suit for |cffe5d19fFreeUI|r.\n\n|cffff0000These are strongly recommended.|r"
-L["TUTORIAL_PAGE_2"] = "|cffff0000CAUTIONS: The settings below are shared in account wide.|r\n\nThis is the section to set recommended scale."
-L["TUTORIAL_PAGE_3"] = "Here gonna load some relevant settings for ChatFrame and |cffffcc00lock|r its default position.\n\n|cffff0000CAUTIONS:|r\n\n|cff00ccffYou can scroll to head or end by holding key 'ALT' on the ChatFrame.|r"
-L["TUTORIAL_PAGE_4"] = "|cffff0000CAUTIONS: The settings below are shared in account wide.|r\n\nAt the end, the settings of Skada/DBM/BigWigs would be loaded by APPLY button."
-L["TUTORIAL_PAGE_5"] = "Done! You have complete the tutorial.\n\nMost of the settings can be changed in |cffe5d19fFreeUI Config Panel|r."
-L["DEFAULT_SETTINGS_CHECK"] = "Default settings loaded."
-L["UI_SCALE"] = 'UI Scale'
-L["UI_SCALE_CHECK"] = "UI Scale loaded"
-L["CHAT_SETTINGS_CHECK"] = "Chat frame settings loaded"
-L["TUTORIAL_COMPLETE"] = "Relevant addons settings loaded, You need to ReloadUI."
-L["HELP_TITLE"] = "Help Info"
-L["HELP_INFO_1"] = "Thanks for choosing |cffe5d19fFreeUI|r,"
-L["HELP_INFO_2"] = "there are some commands for you as follows: "
-
-L["HELP_INFO_3"] = "Open FreeUI config panel."
-
-L["HELP_INFO_4"] = "Open FreeUI install panel."
-L["HELP_INFO_5"] = "Reset all saved options."
-L["HELP_INFO_6"] = "Switch to DPS layout."
-L["HELP_INFO_7"] = "Switch to healer layout."
-
-L["HELP_INFO_8"] = "Easily bind buttons on mouseover."
-L["HELP_INFO_9"] = "Show FreeUI CHANGELOG."
-
-L["HELP_INFO_10"] = "If this is your first time using |cffe5d19fFreeUI|r,"
-L["HELP_INFO_11"] = "please go for a tutorial by clicking the button below."
-L["HELP_INFO_12"] = "add new AuraWatch;"
-L["TUTORIAL"] = "Tutorial"
-
-
-L["VERSION_INFO"] = "Type in |cffe5d19f/freeui|r to open config panel."
-
-
-
-
-
--- GUI
-L["GUI_TAB_GENERAL"] = "General"
-L["GUI_TAB_APPEARANCE"] = "Appearance"
-L["GUI_TAB_ACTIONBAR"] = "Actionbar"
-L["GUI_TAB_UNITFRAME"] = "Unitframe"
-L["GUI_TAB_AURA"] = "Aura"
-L["GUI_TAB_INVENTORY"] = "Inventory"
-L["GUI_TAB_CHAT"] = "Chat"
-L["GUI_TAB_MAP"] = "Map"
-L["GUI_TAB_TOOLTIP"] = "Tooltip"
-L["GUI_TAB_INFOBAR"] = "Infobar"
-L["GUI_TAB_REMINDER"] = "Reminder"
-L["GUI_TAB_NOTIFICATION"] = "Notification"
-
-L["RELOADUI_REQUIRED"] = "Settings would work after reload ui."
-L["RESET_CHECK"] = "Are you sure to reset all the settings?"
-L["SETTING_RESET"] = "Reset Settings"
-L["OPTION_TIP"] = "Options not marked with an asterisk (*) require an UI Reload."
-L['CREDITS'] = 'Credits:'
-
-L["INFOBAR_ENABLE"] = 'Enable'
-L["INFOBAR_MOUSEOVER"] = 'Mouseover'
-L["INFOBAR_STATS"] = 'Stats'
-L["INFOBAR_DMTOOL"] = 'DMTool'
-L["INFOBAR_SPECTALENT"] = 'Spec and talent'
-L["INFOBAR_FRIENDS"] = 'Friends'
-L["INFOBAR_CURRENCIES"] = 'Currencies'
-L["INFOBAR_REPORT"] = 'Report'
-L["INFOBAR_MICROMENU"] = 'Micro menu'
-
-
-L["MAIL_TOOL"] = 'Mail tool'
 
 
 
