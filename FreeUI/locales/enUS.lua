@@ -8,7 +8,7 @@ local F, C, L = unpack(select(2, ...))
 L['RARE'] = 'Rare'
 
 -- automation
-L["STACK_BUYING_CHECK"] = "是否购买|cffff0000一组|r下列物品？"
+L["STACK_BUYING_CHECK"] = "Are you sure to buy |cffff0000a stack|r of these?"
 
 
 -- misc

@@ -135,7 +135,6 @@ line:SetColorTexture(.5, .5, .5, .1)
 ns.addCategory("general")
 ns.addCategory("appearance")
 ns.addCategory("automation")
-ns.addCategory("announcement")
 ns.addCategory("notification")
 ns.addCategory("infobar")
 ns.addCategory("actionBar")
@@ -310,20 +309,20 @@ do
 	local theme = ns.addSubCategory(appearance, ns.localization.appearancetheme)
 	theme:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
 
-	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
-	vignette:SetPoint("TOPLEFT", theme, "BOTTOMLEFT", 0, -8)
-
-	local vignetteAlpha = ns.CreateNumberSlider(appearance, "vignetteAlpha", nil, nil, .1, 1, .1, true)
-	vignetteAlpha:SetPoint("TOPLEFT", vignette, "BOTTOMLEFT", 16, -20)
-
 	local enableTheme = ns.CreateCheckBox(appearance, "enableTheme", true, true)
-	enableTheme:SetPoint("LEFT", vignette, "RIGHT", 240, 0)
+	enableTheme:SetPoint("TOPLEFT", theme, "BOTTOMLEFT", 0, -8)
 
 	local fontStyle = ns.CreateCheckBox(appearance, "fontStyle", true, true)
 	fontStyle:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
 
+	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
+	vignette:SetPoint("LEFT", enableTheme, "RIGHT", 240, 0)
+
+	local vignetteAlpha = ns.CreateNumberSlider(appearance, "vignetteAlpha", nil, nil, .1, 1, .1, true)
+	vignetteAlpha:SetPoint("TOPLEFT", vignette, "BOTTOMLEFT", 16, -20)
+
 	local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
-	colours:SetPoint("TOPLEFT", vignetteAlpha, "BOTTOMLEFT", -16, -30)
+	colours:SetPoint("TOPLEFT", fontStyle, "BOTTOMLEFT", 0, -30)
 
 	local colourScheme = ns.CreateRadioButtonGroup(appearance, "colourScheme", 2, true, true)
 	colourScheme.buttons[1]:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 8, -30)
@@ -377,17 +376,13 @@ do
 	local autoSellJunk = ns.CreateCheckBox(automation, "autoSellJunk", true, true)
 	autoSellJunk:SetPoint("LEFT", autoRepair, "RIGHT", 240, 0)
 
-	local autoBuyStack = ns.CreateCheckBox(automation, "autoBuyStack", true, true)
-	autoBuyStack:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -8)
-
 	local autoTabBinder = ns.CreateCheckBox(automation, "autoTabBinder", true, true)
-	autoTabBinder:SetPoint("LEFT", autoBuyStack, "RIGHT", 240, 0)
+	autoTabBinder:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -8)
 
 	local autoAcceptInvite = ns.CreateCheckBox(automation, "autoAcceptInvite", true, true)
-	autoAcceptInvite:SetPoint("TOPLEFT", autoBuyStack, "BOTTOMLEFT", 0, -8)
+	autoAcceptInvite:SetPoint("LEFT", autoTabBinder, "RIGHT", 240, 0)
 
-	local autoInvite = ns.CreateCheckBox(automation, "autoInvite", true, true)
-	autoInvite:SetPoint("LEFT", autoAcceptInvite, "RIGHT", 240, 0)
+
 
 	--local autoRepairGuild = ns.CreateCheckBox(automation, "autoRepair_guild")
 	--autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
@@ -415,74 +410,63 @@ do
 	--autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
 end
 
--- [[ Announcement ]]
 
-do
-	local announcement = FreeUIOptionsPanel.announcement
-	announcement.tab.Icon:SetTexture("Interface\\Icons\\Ability_Warrior_RallyingCry")
-
-	--local autoAccept = ns.CreateCheckBox(automation, "autoAccept")
-	--autoAccept:SetPoint("TOPLEFT", automation.subText, "BOTTOMLEFT", 0, -8)
-
-end
 
 -- [[ Notifications ]]
 
 do
 	local notification = FreeUIOptionsPanel.notification
-	notification.tab.Icon:SetTexture("Interface\\Icons\\inv_misc_enggizmos_27")
+	notification.tab.Icon:SetTexture("Interface\\Icons\\Ability_Warrior_RallyingCry")
 
-	local enable = ns.CreateCheckBox(notification, "enable", true, true)
+	local enable = ns.CreateCheckBox(notification, "enableNotification", true, true)
 	enable:SetPoint("TOPLEFT", notification.subText, "BOTTOMLEFT", 0, -8)
 
-	local when, whenLine = ns.addSubCategory(notification, ns.localization.notificationWhen)
-	when:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -30)
+	local playSounds = ns.CreateCheckBox(notification, "playSounds", true)
+	playSounds:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
 	local checkBagsFull = ns.CreateCheckBox(notification, "checkBagsFull", true)
-	checkBagsFull:SetPoint("TOPLEFT", when, "BOTTOMLEFT", 0, -20)
-
-	local checkEvents = ns.CreateCheckBox(notification, "checkEvents", true)
-	checkEvents:SetPoint("TOPLEFT", checkBagsFull, "BOTTOMLEFT", 0, -8)
-
-	local checkGuildEvents = ns.CreateCheckBox(notification, "checkGuildEvents", true)
-	checkGuildEvents:SetPoint("TOPLEFT", checkEvents, "BOTTOMLEFT", 0, -8)
+	checkBagsFull:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 
 	local checkMail = ns.CreateCheckBox(notification, "checkMail", true)
-	checkMail:SetPoint("TOPLEFT", checkGuildEvents, "BOTTOMLEFT", 0, -8)
+	checkMail:SetPoint("TOPLEFT", checkBagsFull, "BOTTOMLEFT", 0, -8)
 
-	local how, howLine = ns.addSubCategory(notification, ns.localization.notificationHow)
-	how:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", 0, -30)
+	local alert = ns.addSubCategory(notification, ns.localization.notificationalert)
+	alert:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", -16, -20)
 
-	local playSounds = ns.CreateCheckBox(notification, "playSounds", true)
-	playSounds:SetPoint("TOPLEFT", how, "BOTTOMLEFT", 0, -20)
+	local interrupt = ns.CreateCheckBox(notification, "interrupt", true, true)
+	interrupt:SetPoint("TOPLEFT", alert, "BOTTOMLEFT", 0, -8)
 
-	local animations = ns.CreateCheckBox(notification, "animations", true)
-	animations:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
+	local interruptSound = ns.CreateCheckBox(notification, "interruptSound", true)
+	interruptSound:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 16, -8)
 
-	local timeShown = ns.CreateNumberSlider(notification, "timeShown", "1 sec", "10 sec", 1, 10, 1)
-	timeShown:SetPoint("TOPLEFT", animations, "BOTTOMLEFT", 8, -30)
+	local dispel = ns.CreateCheckBox(notification, "dispel", true, true)
+	dispel:SetPoint("LEFT", interrupt, "RIGHT", 240, 0)
 
-	local previewButton = CreateFrame("Button", nil, notification, "UIPanelButtonTemplate")
-	previewButton:SetPoint("TOPLEFT", timeShown, "BOTTOMLEFT", -8, -40)
-	previewButton:SetSize(128, 25)
-	previewButton:SetText(ns.localization.notificationPreview)
-	tinsert(ns.buttons, previewButton)
-	notification.previewButton = previewButton
+	local dispelSound = ns.CreateCheckBox(notification, "dispelSound", true)
+	dispelSound:SetPoint("TOPLEFT", dispel, "BOTTOMLEFT", 16, -8)
+
+	local spell = ns.CreateCheckBox(notification, "spell", true, true)
+	spell:SetPoint("TOPLEFT", interruptSound, "BOTTOMLEFT", -16, -8)
+
+	local resurrect = ns.CreateCheckBox(notification, "resurrect", true, true)
+	resurrect:SetPoint("LEFT", spell, "RIGHT", 240, 0)
+
+	local sapped = ns.CreateCheckBox(notification, "sapped", true, true)
+	sapped:SetPoint("TOPLEFT", spell, "BOTTOMLEFT", 0, -8)
+
+	local rare = ns.CreateCheckBox(notification, "rare", true, true)
+	rare:SetPoint("TOPLEFT", sapped, "BOTTOMLEFT", 0, -8)
+
+	local rareSound = ns.CreateCheckBox(notification, "rareSound", true)
+	rareSound:SetPoint("TOPLEFT", rare, "BOTTOMLEFT", 16, -8)
+	
 
 	local function toggleNotificationOptions()
 		local shown = enable:GetChecked()
-		when:SetShown(shown)
-		whenLine:SetShown(shown)
-		how:SetShown(shown)
-		howLine:SetShown(shown)
 		checkBagsFull:SetShown(shown)
 		checkMail:SetShown(shown)
-		checkEvents:SetShown(shown)
-		checkGuildEvents:SetShown(shown)
 		playSounds:SetShown(shown)
-		animations:SetShown(shown)
-		timeShown:SetShown(shown)
-		previewButton:SetShown(shown)
+
 	end
 
 	enable:HookScript("OnClick", toggleNotificationOptions)
@@ -505,7 +489,7 @@ do
 	stats:SetPoint("TOPLEFT", mouseover, "BOTTOMLEFT", 0, -8)
 
 	local microMenu = ns.CreateCheckBox(infobar, "microMenu", true, true)
-	microMenu:SetPoint("TOPLEFT", mouseover, "BOTTOMLEFT", 0, -8)
+	microMenu:SetPoint("TOPLEFT", stats, "BOTTOMLEFT", 0, -8)
 
 	local specTalent = ns.CreateCheckBox(infobar, "specTalent", true, true)
 	specTalent:SetPoint("TOPLEFT", microMenu, "BOTTOMLEFT", 0, -8)

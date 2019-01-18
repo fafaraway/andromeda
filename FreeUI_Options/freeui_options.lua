@@ -685,13 +685,6 @@ init:SetScript("OnEvent", function()
 	lr:SetFrameStrata("HIGH")
 
 
-	local function testNotificationCallback()
-		print(ns.localization.notificationPreviewCallbackText)
-	end
-
-	FreeUIOptionsPanel.notification.previewButton:SetScript("OnClick", function()
-		F.Notification("FreeUI", ns.localization.notificationPreviewText, testNotificationCallback)
-	end)
 
 	displaySettings()
 end)

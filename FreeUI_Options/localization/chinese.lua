@@ -72,8 +72,6 @@ ns.localization.appearanceSubText = "控制界面外观相关的设置"
 ns.localization.appearancetheme = "全局"
 ns.localization.appearanceskin = "细节"
 ns.localization.appearanceColours = "颜色"
-
-
 ns.localization.appearancefontStyle = "字体调整"
 ns.localization.appearancefontStyleTooltip = "调整界面字体的大小和颜色"
 ns.localization.appearanceenableTheme = "全局主题"
