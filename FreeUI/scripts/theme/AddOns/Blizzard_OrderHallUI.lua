@@ -5,6 +5,7 @@ C.themes["Blizzard_OrderHallUI"] = function()
 	-- Talent Frame
 	local OrderHallTalentFrame = OrderHallTalentFrame
 	F.ReskinPortraitFrame(OrderHallTalentFrame)
+	OrderHallTalentFrame.NineSlice:Hide()
 	OrderHallTalentFrame.Background:SetAlpha(0)
 	F.Reskin(OrderHallTalentFrame.BackButton)
 	F.ReskinIcon(OrderHallTalentFrame.Currency.Icon)
