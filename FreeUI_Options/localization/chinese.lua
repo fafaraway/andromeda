@@ -256,15 +256,7 @@ ns.localization.unitframesstatusIndicatorCombatTooltip = "在玩家框体显示�
 ns.localization.unitframesenableArena = "启用 PVP 框体"
 ns.localization.unitframesenableArenaTooltip = "PVP 环境下的特殊框体，竞技场框体，战场中携带旗帜和宝珠人员的框体。"
 
-ns.localization.quests = "任务追踪"
-ns.localization.questsSubText = "All options related to quests and the objective tracker."
-ns.localization.questsquestRewardHighlight = "Quest reward highlighting"
-ns.localization.questsquestRewardHighlightTooltip = "When turning in a quest, highlight the quest reward with the highest vendor sell price."
-ns.localization.questsrememberObjectiveTrackerState = "Save objective tracker expanded/collapsed state"
-ns.localization.questsrememberObjectiveTrackerStateTooltip = "Collapses the objective tracker when you log in if it was collapsed when you logged out. Works on a per-character basis."
-ns.localization.questsalwaysCollapseObjectiveTracker = "Always collapse objective tracker on login"
-ns.localization.questsquestObjectiveTrackerStyle = "任务追踪栏样式"
-ns.localization.questsquestObjectiveTrackerStyleTooltip = "启用任务追踪栏的样式。\n如果要使用其他任务追踪类插件请先禁用这个选项。"
+
 
 
 ns.localization.tooltip = "鼠标提示"
