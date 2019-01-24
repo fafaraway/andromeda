@@ -58,7 +58,7 @@ local scale = tonumber(floor(fixedHeight*100 + .5)/100)
 
 C.Mult = fixedHeight / scale
 
-print('API - '..C.Mult)
+
 
 
 
@@ -1175,17 +1175,18 @@ f:SetScript("OnUpdate", function()
 	end
 end)
 
+local function SetSmoothValue(self, value)
+	if value ~= self:GetValue() or value == 0 then
+		smoothing[self] = value
+	else
+		smoothing[self] = nil
+	end
+end
+
 function F:SmoothBar()
 	if not self.SetValue_ then
 		self.SetValue_ = self.SetValue
-		self.SetValue = function(_, value)
-			if value ~= self:GetValue() or value == 0 then
-				smoothing[self] = value
-			else
-				smoothing[self] = nil
-				self:SetValue_(value)
-			end
-		end
+		self.SetValue = SetSmoothValue
 	end
 end
 
