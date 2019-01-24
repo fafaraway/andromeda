@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 
 
-
+L["VERSION_INFO"] = 'Type in /freeui for more help.'
 
 
 -- tooltip
