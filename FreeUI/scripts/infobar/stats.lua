@@ -26,8 +26,6 @@ text:SetDrawLayer("OVERLAY")
 text:SetPoint("CENTER")
 text:SetTextColor(C.r, C.g, C.b)
 
-print(C.r, C.g, C.b)
-
 
 
 local function formatMemory(value)

@@ -55,8 +55,8 @@ end)
 
 
 -- Addon Info
-DEFAULT_CHAT_FRAME:AddMessage(C.Title..' - '..C.RedColor..C.Version)
-DEFAULT_CHAT_FRAME:AddMessage(L["VERSION_INFO"])
+DEFAULT_CHAT_FRAME:AddMessage(C.Title..' - '..C.MyColor..C.Version)
+DEFAULT_CHAT_FRAME:AddMessage(C.InfoColor..L["VERSION_INFO"])
 
 
 
@@ -310,12 +310,8 @@ local f = CreateFrame("Frame")
 
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", function(self, event, addon)
-
-
 	F:SetupUIScale()
 
-	--local cvarScale, parentScale = _G.GetCVar("uiscale"), _G.UIParent:GetScale()
-	print('cvarScale - '.._G.GetCVar("uiscale"))
-	print('parentScale - '.._G.UIParent:GetScale())
-
+	--print('cvarScale - '.._G.GetCVar("uiscale"))
+	--print('parentScale - '.._G.UIParent:GetScale())
 end)
