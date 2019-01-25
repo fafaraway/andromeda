@@ -120,6 +120,8 @@ ns.localization.automationautoTabBinder = "Tab bind"
 ns.localization.automationautoTabBinderTooltip = "Automatically change your TAB key binding to only target enemy playerswhen in PvP zones, and to target all enemies when not."
 ns.localization.automationautoAcceptInvite = "Invite"
 ns.localization.automationautoAcceptInviteTooltip = "Automatically accept invites from friends and guild members."
+ns.localization.automationautoActionCam = "ActionCam"
+ns.localization.automationautoActionCamTooltip = "Automatically enable action camera mode."
 
 
 

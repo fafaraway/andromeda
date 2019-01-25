@@ -384,6 +384,9 @@ do
 	local autoAcceptInvite = ns.CreateCheckBox(automation, "autoAcceptInvite", true, true)
 	autoAcceptInvite:SetPoint("LEFT", autoTabBinder, "RIGHT", 240, 0)
 
+	local autoActionCam = ns.CreateCheckBox(automation, "autoActionCam", true, true)
+	autoActionCam:SetPoint("TOPLEFT", autoTabBinder, "BOTTOMLEFT", 0, -8)
+
 
 
 	--local autoRepairGuild = ns.CreateCheckBox(automation, "autoRepair_guild")
