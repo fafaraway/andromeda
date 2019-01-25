@@ -57,7 +57,7 @@ C['font'] = {
 	['normal']     = normalFont,
 	['damage']     = damageFont,
 	['header']     = headerFont,
-	['chat']       = ChatFont,
+	['chat']       = chatFont,
 	['pixel']      = assetsPath..'font\\pixel.ttf',
 }
 
