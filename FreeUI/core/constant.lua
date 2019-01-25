@@ -1,9 +1,8 @@
-local addonName, _ = ...
 local F, C, L = unpack(select(2, ...))
 
 local format = string.format
 
-local assetsPath = "interface\\addons\\"..addonName.."\\assets\\"
+local assetsPath = "interface\\addons\\FreeUI\\assets\\"
 
 
 C.media = {
