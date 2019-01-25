@@ -1,6 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
 if C.automation.autoActionCam then
+	if IsAddOnLoaded("DynamicCam") then return end
+	
 	local f = CreateFrame('Frame')
 
 	f:RegisterEvent('PLAYER_LOGIN')

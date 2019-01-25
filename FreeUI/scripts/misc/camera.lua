@@ -1,7 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
--- FasterCamera by Ketho
--- Increases camera zoom speed
+if IsAddOnLoaded("DynamicCam") then return end
+
+-- based on FasterCamera by Ketho
 
 local oldZoomIn = CameraZoomIn
 local oldZoomOut = CameraZoomOut
