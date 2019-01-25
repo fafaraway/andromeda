@@ -186,11 +186,11 @@ ns.localization.infobarreportTooltip = "Show daily weekly informations."
 
 
 
-ns.localization.actionbars = "Action bars"
-ns.localization.actionbarsSubText = "These options are specific to the action bars and their buttons."
+ns.localization.actionbar = "Actionbar"
+ns.localization.actionbarSubText = "These options are specific to the action bars and their buttons."
 ns.localization.actionbarsGeneral = "Layout"
-ns.localization.actionbarsenable = "Enable"
-ns.localization.actionbarsenableTooltip = "Disable this option if you want to use another action bars addon."
+ns.localization.actionbarenable = "Enable"
+ns.localization.actionbarenableTooltip = "Disable this option if you want to use another action bars addon."
 ns.localization.actionbarsenableStyle = "Button style"
 ns.localization.actionbarsenableStyleTooltip = "You may need to disable this option to ensure compatibility with other action bars addons."
 ns.localization.actionbarshotKey = "Key binding"
@@ -246,15 +246,31 @@ ns.localization.tooltipazeriteTrait = "Show azerite armor info"
 
 
 
+ns.localization.chat = "Chat"
+ns.localization.chatSubText = "Adjust the appearance and functionality of the game chat."
+ns.localization.chatenable = "Enable"
+ns.localization.chatenableTooltip = "Use FreeUI chat instead of default chat.\nDisable to resolve compatibility issues or if you want to use another chat addon."
+
+
+
+
+ns.localization.map = "Map"
+ns.localization.mapSubText = "Adjust the appearance and functionality of the game map."
+ns.localization.mapenable = "Enable"
+ns.localization.mapenableTooltip = "Use FreeUI map instead of default map.\nDisable to resolve compatibility issues or if you want to use another map addon."
 
 
 
 
 
-ns.localization.unitframes = "Unit frames"
-ns.localization.unitframesSubText = "These options control most of the options for the unit frames."
-ns.localization.unitframesenable = "Enable Unit frames"
-ns.localization.unitframesenableTooltip = "Disable this option if you want to use another unit frames addon."
+
+
+
+
+ns.localization.unitframe = "Unitframe"
+ns.localization.unitframeSubText = "These options control most of the options for the unit frames."
+ns.localization.unitframeenable = "Enable Unit frames"
+ns.localization.unitframeenableTooltip = "Disable this option if you want to use another unit frames addon."
 ns.localization.unitframesgradient = "Gradient mode"
 ns.localization.unitframesgradientTooltip = "Disable this option if you prefer flat look."
 ns.localization.unitframesdarkBorder = "Dark border"

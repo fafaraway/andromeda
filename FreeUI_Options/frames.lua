@@ -137,10 +137,12 @@ ns.addCategory("appearance")
 ns.addCategory("automation")
 ns.addCategory("notification")
 ns.addCategory("infobar")
-ns.addCategory("actionBar")
+ns.addCategory("actionbar")
+ns.addCategory("unitFrame")
 ns.addCategory("inventory")
 ns.addCategory("tooltip")
-ns.addCategory("unitFrame")
+ns.addCategory("chat")
+ns.addCategory("map")
 ns.addCategory("classmod")
 
 CreditsButton:SetPoint("BOTTOM", InstallButton, "TOP", 0, 4)
@@ -588,155 +590,11 @@ do
 	--actionbars:HookScript("OnShow", toggleActionBarsOptions)
 end
 
--- [[ Inventory ]]
-
-do
-	local inventory = FreeUIOptionsPanel.inventory
-	inventory.tab.Icon:SetTexture("Interface\\Icons\\INV_MISC_BAG_09")
-
-	local general = ns.addSubCategory(inventory, ns.localization.inventoryGeneral)
-	general:SetPoint("TOPLEFT", inventory.subText, "BOTTOMLEFT", 0, -8)
-
-	local enable = ns.CreateCheckBox(inventory, "enable", true, true)
-	enable:SetPoint("TOPLEFT", general, "BOTTOMLEFT", 0, -8)
-
-	local useCategory = ns.CreateCheckBox(inventory, "useCategory", true, true)
-	useCategory:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
-
-	local gearSetFilter = ns.CreateCheckBox(inventory, "gearSetFilter", true, true)
-	gearSetFilter:SetPoint("TOPLEFT", useCategory, "BOTTOMLEFT", 0, -8)
-
-	useCategory.children = {gearSetFilter}
-
-	local reverseSort = ns.CreateCheckBox(inventory, "reverseSort", true, true)
-	reverseSort:SetPoint("LEFT", useCategory, "RIGHT", 240, 0)
-
-	local style = ns.addSubCategory(inventory, ns.localization.inventoryStyle)
-	style:SetPoint("TOPLEFT", gearSetFilter, "BOTTOMLEFT", -16, -30)
-
-	local itemLevel = ns.CreateCheckBox(inventory, "itemLevel", true, true)
-	itemLevel:SetPoint("TOPLEFT", style, "BOTTOMLEFT", 0, -8)
-
-	local newitemFlash = ns.CreateCheckBox(inventory, "newitemFlash", true, true)
-	newitemFlash:SetPoint("TOPLEFT", itemLevel, "BOTTOMLEFT", 0, -8)
-
-	local size = ns.CreateNumberSlider(inventory, "itemSlotSize", nil, nil, 20, 40, 1, true)
-	size:SetPoint("TOPLEFT", newitemFlash, "BOTTOMLEFT", 0, -30)
-
-
-	--local function toggleInventoryOptions()
-	--	local enable = enable:GetChecked()
-
-	--	useCategory:SetShown(shown)
-	--	gearSetFilter:SetShown(shown)
-	--	reverseSort:SetShown(shown)
-	--end
-
-	--for _, button in pairs(style.buttons) do
-	--	button:HookScript("OnClick", toggleInventoryOptions)
-	--end
-
-	--inventory:HookScript("OnShow", toggleInventoryOptions)
-
-
-
-	local function toggleInventoryOptions()
-		local shown = enable:GetChecked()
-		useCategory:SetShown(shown)
-		gearSetFilter:SetShown(shown)
-		reverseSort:SetShown(shown)
-		style:SetShown(shown)
-		itemLevel:SetShown(shown)
-		newitemFlash:SetShown(shown)
-		size:SetShown(shown)
-	end
-
-	enable:HookScript("OnClick", toggleInventoryOptions)
-	inventory:HookScript("OnShow", toggleInventoryOptions)
-end
-
--- [[ Tooltip ]]
-
-do
-	local tooltip = FreeUIOptionsPanel.tooltip
-	tooltip.tab.Icon:SetTexture("Interface\\Icons\\INV_Scroll_09")
-
-	local features = ns.addSubCategory(tooltip)
-	features:SetPoint("TOPLEFT", tooltip.subText, "BOTTOMLEFT", 0, 0)
-
-	local enable = ns.CreateCheckBox(tooltip, "enable", true, true)
-	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
-
-	local cursor = ns.CreateCheckBox(tooltip, "cursor", true, true)
-	cursor:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
-
-	local combatHide = ns.CreateCheckBox(tooltip, "combatHide", true, true)
-	combatHide:SetPoint("LEFT", cursor, "RIGHT", 240, 0)
-
-	local hidePVP = ns.CreateCheckBox(tooltip, "hidePVP", true, true)
-	hidePVP:SetPoint("TOPLEFT", cursor, "BOTTOMLEFT", 0, -8)
-
-	local hideFaction = ns.CreateCheckBox(tooltip, "hideFaction", true, true)
-	hideFaction:SetPoint("LEFT", hidePVP, "RIGHT", 240, 0)
-
-	local hideTitle = ns.CreateCheckBox(tooltip, "hideTitle", true, true)
-	hideTitle:SetPoint("TOPLEFT", hidePVP, "BOTTOMLEFT", 0, -8)
-
-	local hideRealm = ns.CreateCheckBox(tooltip, "hideRealm", true, true)
-	hideRealm:SetPoint("LEFT", hideTitle, "RIGHT", 240, 0)
-
-	local hideRank = ns.CreateCheckBox(tooltip, "hideRank", true, true)
-	hideRank:SetPoint("TOPLEFT", hideTitle, "BOTTOMLEFT", 0, -8)
-
-	local borderColor = ns.CreateCheckBox(tooltip, "borderColor", true, true)
-	borderColor:SetPoint("LEFT", hideRank, "RIGHT", 240, 0)
-
-	local tipIcon = ns.CreateCheckBox(tooltip, "tipIcon", true, true)
-	tipIcon:SetPoint("TOPLEFT", hideRank, "BOTTOMLEFT", 0, -8)
-
-	local tipClear = ns.CreateCheckBox(tooltip, "tipClear", true, true)
-	tipClear:SetPoint("LEFT", tipIcon, "RIGHT", 240, 0)
-
-	local extraInfo = ns.CreateCheckBox(tooltip, "extraInfo", true, true)
-	extraInfo:SetPoint("TOPLEFT", tipIcon, "BOTTOMLEFT", 0, -8)
-
-	local azeriteTrait = ns.CreateCheckBox(tooltip, "azeriteTrait", true, true)
-	azeriteTrait:SetPoint("LEFT", extraInfo, "RIGHT", 240, 0)
-
-	local linkHover = ns.CreateCheckBox(tooltip, "linkHover", true, true)
-	linkHover:SetPoint("TOPLEFT", extraInfo, "BOTTOMLEFT", 0, -8)
-
-	local ilvlSpec = ns.CreateCheckBox(tooltip, "ilvlSpec", true, true)
-	ilvlSpec:SetPoint("LEFT", linkHover, "RIGHT", 240, 0)
-
-	local function toggleTooltipOptions()
-		local shown = enable:GetChecked()
-		cursor:SetShown(shown)
-		hidePVP:SetShown(shown)
-		hideFaction:SetShown(shown)
-		hideTitle:SetShown(shown)
-		hideRealm:SetShown(shown)
-		hideRank:SetShown(shown)
-		combatHide:SetShown(shown)
-		ilvlSpec:SetShown(shown)
-		azeriteTrait:SetShown(shown)
-		linkHover:SetShown(shown)
-		borderColor:SetShown(shown)
-		tipIcon:SetShown(shown)
-		tipClear:SetShown(shown)
-		extraInfo:SetShown(shown)
-	end
-
-	enable:HookScript("OnClick", toggleTooltipOptions)
-	tooltip:HookScript("OnShow", toggleTooltipOptions)
-
-end
-
 -- [[ Unit frames ]]
 
 do
 	local unitframe = FreeUIOptionsPanel.unitframe
-	unitframe.tab.Icon:SetTexture("Interface\\Icons\\Achievement_Reputation_Ogre")
+	unitframe.tab.Icon:SetTexture("Interface\\Icons\\Achievement_Character_Human_Female")
 
 	local enable = ns.CreateCheckBox(unitframe, "enable", true, true)
 	enable:SetPoint("TOPLEFT", unitframe.subText, "BOTTOMLEFT", 0, -16)
@@ -839,6 +697,179 @@ do
 
 	--enable:HookScript("OnClick", toggleUFOptions)
 	--unitframes:HookScript("OnShow", toggleUFOptions)
+end
+
+-- [[ Inventory ]]
+
+do
+	local inventory = FreeUIOptionsPanel.inventory
+	inventory.tab.Icon:SetTexture("Interface\\Icons\\INV_Misc_Bag_31")
+
+	local general = ns.addSubCategory(inventory, ns.localization.inventoryGeneral)
+	general:SetPoint("TOPLEFT", inventory.subText, "BOTTOMLEFT", 0, -8)
+
+	local enable = ns.CreateCheckBox(inventory, "enable", true, true)
+	enable:SetPoint("TOPLEFT", general, "BOTTOMLEFT", 0, -8)
+
+	local useCategory = ns.CreateCheckBox(inventory, "useCategory", true, true)
+	useCategory:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+
+	local gearSetFilter = ns.CreateCheckBox(inventory, "gearSetFilter", true, true)
+	gearSetFilter:SetPoint("TOPLEFT", useCategory, "BOTTOMLEFT", 0, -8)
+
+	useCategory.children = {gearSetFilter}
+
+	local reverseSort = ns.CreateCheckBox(inventory, "reverseSort", true, true)
+	reverseSort:SetPoint("LEFT", useCategory, "RIGHT", 240, 0)
+
+	local style = ns.addSubCategory(inventory, ns.localization.inventoryStyle)
+	style:SetPoint("TOPLEFT", gearSetFilter, "BOTTOMLEFT", -16, -30)
+
+	local itemLevel = ns.CreateCheckBox(inventory, "itemLevel", true, true)
+	itemLevel:SetPoint("TOPLEFT", style, "BOTTOMLEFT", 0, -8)
+
+	local newitemFlash = ns.CreateCheckBox(inventory, "newitemFlash", true, true)
+	newitemFlash:SetPoint("TOPLEFT", itemLevel, "BOTTOMLEFT", 0, -8)
+
+	local size = ns.CreateNumberSlider(inventory, "itemSlotSize", nil, nil, 20, 40, 1, true)
+	size:SetPoint("TOPLEFT", newitemFlash, "BOTTOMLEFT", 0, -30)
+
+
+	--local function toggleInventoryOptions()
+	--	local enable = enable:GetChecked()
+
+	--	useCategory:SetShown(shown)
+	--	gearSetFilter:SetShown(shown)
+	--	reverseSort:SetShown(shown)
+	--end
+
+	--for _, button in pairs(style.buttons) do
+	--	button:HookScript("OnClick", toggleInventoryOptions)
+	--end
+
+	--inventory:HookScript("OnShow", toggleInventoryOptions)
+
+
+
+	local function toggleInventoryOptions()
+		local shown = enable:GetChecked()
+		useCategory:SetShown(shown)
+		gearSetFilter:SetShown(shown)
+		reverseSort:SetShown(shown)
+		style:SetShown(shown)
+		itemLevel:SetShown(shown)
+		newitemFlash:SetShown(shown)
+		size:SetShown(shown)
+	end
+
+	enable:HookScript("OnClick", toggleInventoryOptions)
+	inventory:HookScript("OnShow", toggleInventoryOptions)
+end
+
+-- [[ Tooltip ]]
+
+do
+	local tooltip = FreeUIOptionsPanel.tooltip
+	tooltip.tab.Icon:SetTexture("Interface\\Icons\\INV_Inscription_ScrollOfWisdom_01")
+
+	local features = ns.addSubCategory(tooltip)
+	features:SetPoint("TOPLEFT", tooltip.subText, "BOTTOMLEFT", 0, 0)
+
+	local enable = ns.CreateCheckBox(tooltip, "enable", true, true)
+	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
+
+	local cursor = ns.CreateCheckBox(tooltip, "cursor", true, true)
+	cursor:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+
+	local combatHide = ns.CreateCheckBox(tooltip, "combatHide", true, true)
+	combatHide:SetPoint("LEFT", cursor, "RIGHT", 240, 0)
+
+	local hidePVP = ns.CreateCheckBox(tooltip, "hidePVP", true, true)
+	hidePVP:SetPoint("TOPLEFT", cursor, "BOTTOMLEFT", 0, -8)
+
+	local hideFaction = ns.CreateCheckBox(tooltip, "hideFaction", true, true)
+	hideFaction:SetPoint("LEFT", hidePVP, "RIGHT", 240, 0)
+
+	local hideTitle = ns.CreateCheckBox(tooltip, "hideTitle", true, true)
+	hideTitle:SetPoint("TOPLEFT", hidePVP, "BOTTOMLEFT", 0, -8)
+
+	local hideRealm = ns.CreateCheckBox(tooltip, "hideRealm", true, true)
+	hideRealm:SetPoint("LEFT", hideTitle, "RIGHT", 240, 0)
+
+	local hideRank = ns.CreateCheckBox(tooltip, "hideRank", true, true)
+	hideRank:SetPoint("TOPLEFT", hideTitle, "BOTTOMLEFT", 0, -8)
+
+	local borderColor = ns.CreateCheckBox(tooltip, "borderColor", true, true)
+	borderColor:SetPoint("LEFT", hideRank, "RIGHT", 240, 0)
+
+	local tipIcon = ns.CreateCheckBox(tooltip, "tipIcon", true, true)
+	tipIcon:SetPoint("TOPLEFT", hideRank, "BOTTOMLEFT", 0, -8)
+
+	local tipClear = ns.CreateCheckBox(tooltip, "tipClear", true, true)
+	tipClear:SetPoint("LEFT", tipIcon, "RIGHT", 240, 0)
+
+	local extraInfo = ns.CreateCheckBox(tooltip, "extraInfo", true, true)
+	extraInfo:SetPoint("TOPLEFT", tipIcon, "BOTTOMLEFT", 0, -8)
+
+	local azeriteTrait = ns.CreateCheckBox(tooltip, "azeriteTrait", true, true)
+	azeriteTrait:SetPoint("LEFT", extraInfo, "RIGHT", 240, 0)
+
+	local linkHover = ns.CreateCheckBox(tooltip, "linkHover", true, true)
+	linkHover:SetPoint("TOPLEFT", extraInfo, "BOTTOMLEFT", 0, -8)
+
+	local ilvlSpec = ns.CreateCheckBox(tooltip, "ilvlSpec", true, true)
+	ilvlSpec:SetPoint("LEFT", linkHover, "RIGHT", 240, 0)
+
+	local function toggleTooltipOptions()
+		local shown = enable:GetChecked()
+		cursor:SetShown(shown)
+		hidePVP:SetShown(shown)
+		hideFaction:SetShown(shown)
+		hideTitle:SetShown(shown)
+		hideRealm:SetShown(shown)
+		hideRank:SetShown(shown)
+		combatHide:SetShown(shown)
+		ilvlSpec:SetShown(shown)
+		azeriteTrait:SetShown(shown)
+		linkHover:SetShown(shown)
+		borderColor:SetShown(shown)
+		tipIcon:SetShown(shown)
+		tipClear:SetShown(shown)
+		extraInfo:SetShown(shown)
+	end
+
+	enable:HookScript("OnClick", toggleTooltipOptions)
+	tooltip:HookScript("OnShow", toggleTooltipOptions)
+end
+
+
+-- [[ Chat ]]
+
+do
+	local chat = FreeUIOptionsPanel.chat
+	chat.tab.Icon:SetTexture("Interface\\Icons\\INV_Enchanting_70_Pet_Pen")
+
+	local features = ns.addSubCategory(chat)
+	features:SetPoint("TOPLEFT", chat.subText, "BOTTOMLEFT", 0, 0)
+
+	local enable = ns.CreateCheckBox(chat, "enable", true, true)
+	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
+
+end
+
+
+-- [[ Map ]]
+
+do
+	local map = FreeUIOptionsPanel.map
+	map.tab.Icon:SetTexture("Interface\\Icons\\Icon_TreasureMap")
+
+	local features = ns.addSubCategory(map)
+	features:SetPoint("TOPLEFT", map.subText, "BOTTOMLEFT", 0, 0)
+
+	local enable = ns.CreateCheckBox(map, "enable", true, true)
+	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
+
 end
 
 

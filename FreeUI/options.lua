@@ -152,6 +152,15 @@ C['actionbar'] = {
 		['count'] = false,
 		['classColor'] = false,
 
+		['lockPosition'] = false,
+
+		['stanceBar'] = true,
+			['stanceBarMouseover'] = false,
+		['petBar'] = true,
+			['petBarMouseover'] = false,
+		['sideBar'] = true,
+			['sideBarMouseover'] = false,
+
 		['bar3Fade'] = false,
 
 		['sideBarEnable'] = true,
@@ -184,12 +193,13 @@ C['aura'] = {
 
 
 C['map'] = {
-	['worldMapScale'] = 1,
-	['miniMapScale'] = 1,
-	['miniMapPosition'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -22, 0},
-	['miniMapSize'] = 256,
-	['whoPings'] = true,
-	['mapReveal'] = true,
+	['enable'] = true,
+		['worldMapScale'] = 1,
+		['miniMapScale'] = 1,
+		['miniMapPosition'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -22, 0},
+		['miniMapSize'] = 256,
+		['whoPings'] = true,
+		['mapReveal'] = true,
 }
 
 
