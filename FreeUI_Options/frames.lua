@@ -553,24 +553,6 @@ do
 	local enable = ns.CreateCheckBox(actionbar, "enable", true, true)
 	enable:SetPoint("TOPLEFT", actionbar.subText, "BOTTOMLEFT", 0, -8)
 
-	--local enableStyle = ns.CreateCheckBox(actionbars, "enableStyle", true, true)
-	--enableStyle:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
-
-	--local hotKey = ns.CreateCheckBox(actionbars, "hotKey", true, true)
-	--hotKey:SetPoint("TOPLEFT", enableStyle, "BOTTOMLEFT", 0, -8)
-
-	--local macroName = ns.CreateCheckBox(actionbars, "macroName", true, true)
-	--macroName:SetPoint("TOPLEFT", hotKey, "BOTTOMLEFT", 0, -8)
-
-	--local sideBar_mouseOver = ns.CreateCheckBox(actionbars, "sideBar_mouseOver", true, true)
-	--sideBar_mouseOver:SetPoint("TOPLEFT", macroName, "BOTTOMLEFT", 0, -8)
-
-	--local petBar_mouseOver = ns.CreateCheckBox(actionbars, "petBar_mouseOver", true, true)
-	--petBar_mouseOver:SetPoint("TOPLEFT", sideBar_mouseOver, "BOTTOMLEFT", 0, -8)
-
-	--local stanceBar_show = ns.CreateCheckBox(actionbars, "stanceBar_show", true, true)
-	--stanceBar_show:SetPoint("TOPLEFT", petBar_mouseOver, "BOTTOMLEFT", 0, -8)
-
 	local layoutStyle = ns.CreateRadioButtonGroup(actionbar, "layoutStyle", 3, false, true)
 	layoutStyle.buttons[1]:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -30)
 
@@ -627,24 +609,26 @@ do
 	hoverBind:SetPoint("TOPLEFT", sideBarMouseover, "BOTTOMLEFT", -16, -16)
 
 
+	local function toggleActionBarsOptions()
+		local shown = enable:GetChecked()
+		hotKey:SetShown(shown)
+		macroName:SetShown(shown)
+		count:SetShown(shown)
+		classColor:SetShown(shown)
+		hoverBind:SetShown(shown)
+		stanceBar:SetShown(shown)
+		stanceBarMouseover:SetShown(shown)
+		petBar:SetShown(shown)
+		petBarMouseover:SetShown(shown)
+		sideBar:SetShown(shown)
+		sideBarMouseover:SetShown(shown)
+		layoutStyle.buttons[1]:SetShown(shown)
+		layoutStyle.buttons[2]:SetShown(shown)
+		layoutStyle.buttons[3]:SetShown(shown)
+	end
 
-	---- enable.children = {enableStyle, hotKey, macroName, sideBar_mouseOver, petBar_mouseOver, stanceBar_mouseOver, layout}
-
-	--local function toggleActionBarsOptions()
-	--	local shown = enable:GetChecked()
-	--	enableStyle:SetShown(shown)
-	--	macroName:SetShown(shown)
-	--	hotKey:SetShown(shown)
-	--	stanceBar_show:SetShown(shown)
-	--	sideBar_mouseOver:SetShown(shown)
-	--	petBar_mouseOver:SetShown(shown)
-	--	layout.buttons[1]:SetShown(shown)
-	--	layout.buttons[2]:SetShown(shown)
-	--	layout.buttons[3]:SetShown(shown)
-	--end
-
-	--enable:HookScript("OnClick", toggleActionBarsOptions)
-	--actionbars:HookScript("OnShow", toggleActionBarsOptions)
+	enable:HookScript("OnClick", toggleActionBarsOptions)
+	actionbar:HookScript("OnShow", toggleActionBarsOptions)
 end
 
 -- [[ Unit frames ]]
@@ -791,21 +775,8 @@ do
 	local size = ns.CreateNumberSlider(inventory, "itemSlotSize", nil, nil, 20, 40, 1, true)
 	size:SetPoint("TOPLEFT", newitemFlash, "BOTTOMLEFT", 0, -30)
 
-
-	--local function toggleInventoryOptions()
-	--	local enable = enable:GetChecked()
-
-	--	useCategory:SetShown(shown)
-	--	gearSetFilter:SetShown(shown)
-	--	reverseSort:SetShown(shown)
-	--end
-
-	--for _, button in pairs(style.buttons) do
-	--	button:HookScript("OnClick", toggleInventoryOptions)
-	--end
-
-	--inventory:HookScript("OnShow", toggleInventoryOptions)
-
+	local bagColumns = ns.CreateNumberSlider(inventory, "bagColumns", nil, nil, 8, 16, 1, true)
+	bagColumns:SetPoint("LEFT", size, "RIGHT", 120, 0)
 
 
 	local function toggleInventoryOptions()
@@ -817,6 +788,7 @@ do
 		itemLevel:SetShown(shown)
 		newitemFlash:SetShown(shown)
 		size:SetShown(shown)
+		bagColumns:SetShown(shown)
 	end
 
 	enable:HookScript("OnClick", toggleInventoryOptions)

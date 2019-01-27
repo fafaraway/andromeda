@@ -193,14 +193,10 @@ ns.localization.actionbarSubText = "These options are specific to the action bar
 ns.localization.actionbarsGeneral = "Layout"
 ns.localization.actionbarenable = "Enable"
 ns.localization.actionbarenableTooltip = "Disable this option if you want to use another action bars addon."
-
-
 ns.localization.actionbarlayoutStyle = "Layout style"
 ns.localization.actionbarlayoutStyle1 = "Default (3*12)"
 ns.localization.actionbarlayoutStyle2 = "Divide bar3 on side (2*18)"
 ns.localization.actionbarlayoutStyle3 = "Only show bar1/bar2 when shift key down and bar3 on mouseover"
-
-
 ns.localization.actionbarbuttonSizeNormal = "Button size normal"
 ns.localization.actionbarbuttonSizeNormalTooltip = "Button size for main bar."
 ns.localization.actionbarbuttonSizeSmall = "Button size small"
@@ -209,18 +205,14 @@ ns.localization.actionbarbuttonSizeBig = "Button size big"
 ns.localization.actionbarbuttonSizeBigTooltip = "Button size for stance bar."
 ns.localization.actionbarbuttonSizeHuge = "Button size huge"
 ns.localization.actionbarbuttonSizeHugeTooltip = "Button size for extra bar."
-
 ns.localization.actionbarhotKey = "Show hotkey"
 ns.localization.actionbarmacroName = "Show macro name"
 ns.localization.actionbarcount = "Show item counts"
 ns.localization.actionbarclassColor = "Class colour button border"
-
-
 ns.localization.actionbarsenableStyle = "Button style"
 ns.localization.actionbarsenableStyleTooltip = "You may need to disable this option to ensure compatibility with other action bars addons."
 ns.localization.actionbarhoverBind = "Hover bind"
 ns.localization.actionbarhoverBindTooltip = "Type /hb then bind buttons on mouseover."
-
 ns.localization.actionbarsideBar = "Side bar"
 ns.localization.actionbarsideBarTooltip = "Show side bar."
 ns.localization.actionbarsideBarMouseover = "Side bar mouseover"
@@ -240,13 +232,14 @@ ns.localization.inventory = "Inventory"
 ns.localization.inventorySubText = "Choose and customize a bag style of your liking."
 ns.localization.inventoryGeneral = "General"
 ns.localization.inventoryStyle = "Style-specific"
-ns.localization.inventoryuseCategory = "Item filters"
+ns.localization.inventoryuseCategory = "Classify items by type"
 ns.localization.inventoryreverseSort = "Reverse sort bags"
-ns.localization.inventoryenable = "Enable bags"
+ns.localization.inventoryenable = "Enable"
 ns.localization.inventorygearSetFilter = "Equipment set"
 ns.localization.inventoryitemLevel = "Show item level"
 ns.localization.inventorynewitemFlash = "New item flash"
 ns.localization.inventoryitemSlotSize = 'Slot size'
+ns.localization.inventorybagColumns = 'Columns'
 
 
 ns.localization.tooltip = "Tooltip"
