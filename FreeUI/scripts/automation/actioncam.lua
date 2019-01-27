@@ -12,11 +12,28 @@ function SetCam(cmd)
 	ConsoleExec('ActionCam ' .. cmd)
 end
 
+--[[overNames - Return nameplates over the head
+underNames - Reposition nameplates under the feet
+heavyHeadMove - heavy head movement
+noHeadMove - disable head movement
+lowHeadMove - enable head movement
+headMove - enable head movement
+focusOff - Target focusing only
+focusOn - ACTION cam, without the target focusing
+basic - Basic ActionCam
+full - All action cam features on
+off - Disable action cam features
+default - Default ActionCam settings]]
+
 function f:OnEvent(event, ...)
-	if event == 'PLAYER_LOGIN' and C.automation.autoActionCam then
-		SetCam('basic')
-	else
-		SetCam('off')
+	if event == 'PLAYER_LOGIN' then
+		if C.automation.autoActionCam and C.automation.autoActionCam_full then
+			SetCam('full')
+		elseif C.automation.autoActionCam and not C.automation.autoActionCam_full then
+			SetCam('basic')
+		else
+			SetCam('off')
+		end
 	end
 end
 f:SetScript('OnEvent', f.OnEvent)
