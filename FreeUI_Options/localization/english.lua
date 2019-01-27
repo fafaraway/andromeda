@@ -193,23 +193,46 @@ ns.localization.actionbarSubText = "These options are specific to the action bar
 ns.localization.actionbarsGeneral = "Layout"
 ns.localization.actionbarenable = "Enable"
 ns.localization.actionbarenableTooltip = "Disable this option if you want to use another action bars addon."
+
+
+ns.localization.actionbarlayoutStyle = "Layout style"
+ns.localization.actionbarlayoutStyle1 = "Default (3*12)"
+ns.localization.actionbarlayoutStyle2 = "Divide bar3 on side (2*18)"
+ns.localization.actionbarlayoutStyle3 = "Only show bar1/bar2 when shift key down and bar3 on mouseover"
+
+
+ns.localization.actionbarbuttonSizeNormal = "Button size normal"
+ns.localization.actionbarbuttonSizeNormalTooltip = "Button size for main bar."
+ns.localization.actionbarbuttonSizeSmall = "Button size small"
+ns.localization.actionbarbuttonSizeSmallTooltip = "Button size for side bar."
+ns.localization.actionbarbuttonSizeBig = "Button size big"
+ns.localization.actionbarbuttonSizeBigTooltip = "Button size for stance bar."
+ns.localization.actionbarbuttonSizeHuge = "Button size huge"
+ns.localization.actionbarbuttonSizeHugeTooltip = "Button size for extra bar."
+
+ns.localization.actionbarhotKey = "Show hotkey"
+ns.localization.actionbarmacroName = "Show macro name"
+ns.localization.actionbarcount = "Show item counts"
+ns.localization.actionbarclassColor = "Class colour button border"
+
+
 ns.localization.actionbarsenableStyle = "Button style"
 ns.localization.actionbarsenableStyleTooltip = "You may need to disable this option to ensure compatibility with other action bars addons."
-ns.localization.actionbarshotKey = "Key binding"
-ns.localization.actionbarshotKeyTooltip = "Show key binding on buttons."
-ns.localization.actionbarsmacroName = "Macro name"
-ns.localization.actionbarsmacroNameTooltip = "Show macro name on buttons."
-ns.localization.actionbarslayout = "Action bar style"
-ns.localization.actionbarslayout1 = "Default"
-ns.localization.actionbarslayout2 = "Only show actionbars1/2/3 when you have target or in combat"
-ns.localization.actionbarslayout3 = "Only show actionbars1/2/3 when you mouse over them"
-ns.localization.actionbarssideBar_mouseOver = "Side bar"
-ns.localization.actionbarssideBar_mouseOverTooltip = "Only show side bars(bar4/5) when you mouse over them."
-ns.localization.actionbarspetBar_mouseOver = "Pet bar"
-ns.localization.actionbarspetBar_mouseOverTooltip = "Only show pet bar when you mouse over them."
-ns.localization.actionbarsstanceBar_show = "Stance bar"
-ns.localization.actionbarsstanceBar_showTooltip = "Show stance bar."
+ns.localization.actionbarhoverBind = "Hover bind"
+ns.localization.actionbarhoverBindTooltip = "Type /hb then bind buttons on mouseover."
 
+ns.localization.actionbarsideBar = "Side bar"
+ns.localization.actionbarsideBarTooltip = "Show side bar."
+ns.localization.actionbarsideBarMouseover = "Side bar mouseover"
+ns.localization.actionbarsideBarMouseoverTooltip = "Show side bar on mouseover."
+ns.localization.actionbarpetBar = "Pet bar"
+ns.localization.actionbarpetBarTooltip = "Show pet bar."
+ns.localization.actionbarpetBarMouseover = "Pet bar mouseover"
+ns.localization.actionbarpetBarMouseoverTooltip = "Show pet bar on mouseover."
+ns.localization.actionbarstanceBar = "Stance bar"
+ns.localization.actionbarstanceBarTooltip = "Show stance bar."
+ns.localization.actionbarstanceBarMouseover = "Stance bar mouseover"
+ns.localization.actionbarstanceBarMouseoverTooltip = "Show stance bar on mouseover."
 
 
 

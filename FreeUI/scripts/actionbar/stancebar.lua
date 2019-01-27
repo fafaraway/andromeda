@@ -1,9 +1,11 @@
 local F, C = unpack(select(2, ...))
 local Bar = F:GetModule("actionbars")
 local cfg = C.actionbar
+cfg.buttonSizeBig = cfg.buttonSizeBig*C.Mult
+cfg.padding = cfg.padding*C.Mult
+cfg.margin = cfg.margin*C.Mult
 
 function Bar:CreateStancebar()
-
 	local num = NUM_STANCE_SLOTS
 	local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS
 	local buttonList = {}
@@ -73,11 +75,15 @@ function Bar:CreateStancebar()
 	end
 
 	--show/hide the frame on a given state driver
-	if cfg.stanceBarEnable then
+	if cfg.stanceBar then
 		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	else
 		frame.frameVisibility = "hide"
 	end
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+
+	if cfg.stanceBar and cfg.stanceBarMouseover then
+		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+	end
 
 end

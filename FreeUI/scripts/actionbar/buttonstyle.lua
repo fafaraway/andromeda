@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-
+if not C.actionbar.enable then return end
 
 local class = select(2, UnitClass("player"))
 local r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
@@ -160,10 +160,14 @@ local function styleActionButton(bu)
 	if not showMacroName then na:Hide() end
 
 	-- count
-	F.SetFS(co)
-	co:ClearAllPoints()
-	co:SetPoint("TOPRIGHT", -1, -1)
-	co:SetDrawLayer("OVERLAY")
+	if C.actionbar.count then
+		F.SetFS(co)
+		co:ClearAllPoints()
+		co:SetPoint("TOPRIGHT", -1, -1)
+		co:SetDrawLayer("OVERLAY")
+	else
+		co:Hide()
+	end
 
 	-- adjust the cooldown frame
 	cd:SetPoint("TOPLEFT", bu, "TOPLEFT", 0, 0)

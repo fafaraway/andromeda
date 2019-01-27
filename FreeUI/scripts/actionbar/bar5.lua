@@ -1,9 +1,11 @@
 local F, C = unpack(select(2, ...))
 local Bar = F:GetModule("actionbars")
 local cfg = C.actionbar
+cfg.buttonSizeSmall = cfg.buttonSizeSmall*C.Mult
+cfg.padding = cfg.padding*C.Mult
+cfg.margin = cfg.margin*C.Mult
 
 function Bar:CreateBar5()
-
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 
@@ -35,7 +37,7 @@ function Bar:CreateBar5()
 	end
 
 	--show/hide the frame on a given state driver
-	if not cfg.sideBarEnable then
+	if not cfg.sideBar then
 		frame.frameVisibility = "hide"
 	else
 		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
@@ -43,7 +45,7 @@ function Bar:CreateBar5()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	--create the mouseover functionality
-	if cfg.sideBarEnable and cfg.sideBarFade then
+	if cfg.sideBar and cfg.sideBarMouseover then
 		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end

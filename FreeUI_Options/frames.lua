@@ -571,8 +571,62 @@ do
 	--local stanceBar_show = ns.CreateCheckBox(actionbars, "stanceBar_show", true, true)
 	--stanceBar_show:SetPoint("TOPLEFT", petBar_mouseOver, "BOTTOMLEFT", 0, -8)
 
-	--local layout = ns.CreateRadioButtonGroup(actionbars, "layout", 3, false, true)
-	--layout.buttons[1]:SetPoint("TOPLEFT", stanceBar_show, "BOTTOMLEFT", 0, -30)
+	local layoutStyle = ns.CreateRadioButtonGroup(actionbar, "layoutStyle", 3, false, true)
+	layoutStyle.buttons[1]:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -30)
+
+	--local buttonSizeNormal = ns.CreateNumberSlider(actionbar, "buttonSizeNormal", nil, nil, 20, 50, 1, true)
+	--buttonSizeNormal:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -130)
+
+	--local buttonSizeSmall = ns.CreateNumberSlider(actionbar, "buttonSizeSmall", nil, nil, 20, 50, 1, true)
+	--buttonSizeSmall:SetPoint("LEFT", buttonSizeNormal, "RIGHT", 120, 0)
+
+	--local buttonSizeBig = ns.CreateNumberSlider(actionbar, "buttonSizeBig", nil, nil, 20, 50, 1, true)
+	--buttonSizeBig:SetPoint("TOPLEFT", buttonSizeNormal, "BOTTOMLEFT", 0, -30)
+
+	--local buttonSizeHuge = ns.CreateNumberSlider(actionbar, "buttonSizeHuge", nil, nil, 20, 50, 1, true)
+	--buttonSizeHuge:SetPoint("LEFT", buttonSizeBig, "RIGHT", 120, 0)
+
+	local hotKey = ns.CreateCheckBox(actionbar, "hotKey", true, true)
+	hotKey:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -130)
+
+	local macroName = ns.CreateCheckBox(actionbar, "macroName", true, true)
+	macroName:SetPoint("LEFT", hotKey, "RIGHT", 240, 0)
+
+	local count = ns.CreateCheckBox(actionbar, "count", true, true)
+	count:SetPoint("TOPLEFT", hotKey, "BOTTOMLEFT", 0, -8)
+
+	local classColor = ns.CreateCheckBox(actionbar, "classColor", true, true)
+	classColor:SetPoint("LEFT", count, "RIGHT", 240, 0)
+
+
+	local stanceBar = ns.CreateCheckBox(actionbar, "stanceBar", true, true)
+	stanceBar:SetPoint("TOPLEFT", count, "BOTTOMLEFT", 0, -16)
+
+	local stanceBarMouseover = ns.CreateCheckBox(actionbar, "stanceBarMouseover", true, true)
+	stanceBarMouseover:SetPoint("TOPLEFT", stanceBar, "BOTTOMLEFT", 16, -8)
+
+	stanceBar.children = {stanceBarMouseover}
+
+	local petBar = ns.CreateCheckBox(actionbar, "petBar", true, true)
+	petBar:SetPoint("LEFT", stanceBar, "RIGHT", 240, 0)
+
+	local petBarMouseover = ns.CreateCheckBox(actionbar, "petBarMouseover", true, true)
+	petBarMouseover:SetPoint("TOPLEFT", petBar, "BOTTOMLEFT", 16, -8)
+
+	petBar.children = {petBarMouseover}
+
+	local sideBar = ns.CreateCheckBox(actionbar, "sideBar", true, true)
+	sideBar:SetPoint("TOPLEFT", stanceBarMouseover, "BOTTOMLEFT", -16, -8)
+
+	local sideBarMouseover = ns.CreateCheckBox(actionbar, "sideBarMouseover", true, true)
+	sideBarMouseover:SetPoint("TOPLEFT", sideBar, "BOTTOMLEFT", 16, -8)
+
+	sideBar.children = {sideBarMouseover}
+
+	local hoverBind = ns.CreateCheckBox(actionbar, "hoverBind", true, true)
+	hoverBind:SetPoint("TOPLEFT", sideBarMouseover, "BOTTOMLEFT", -16, -16)
+
+
 
 	---- enable.children = {enableStyle, hotKey, macroName, sideBar_mouseOver, petBar_mouseOver, stanceBar_mouseOver, layout}
 

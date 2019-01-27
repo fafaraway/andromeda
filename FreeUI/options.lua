@@ -84,11 +84,14 @@ C['actionbar'] = {
 
 		['hotKey'] = true,
 		['macroName'] = true,
-		['count'] = false,
+		['count'] = true,
 		['classColor'] = false,
 
 		['lockPosition'] = false,
 
+		['layoutStyle'] = 1,
+
+		['bar3Mouseover'] = false,
 		['stanceBar'] = true,
 			['stanceBarMouseover'] = false,
 		['petBar'] = true,
@@ -96,22 +99,10 @@ C['actionbar'] = {
 		['sideBar'] = true,
 			['sideBarMouseover'] = false,
 
-		['bar3Fade'] = false,
-
-		['sideBarEnable'] = true,
-			['sideBarFade'] = false,
-
-		['petBarFade'] = false,
-		['stanceBarEnable'] = true,
-
 		['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 		['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 
-		['hoverBind'] = true,
-
-		['layoutSimple'] = false,
-
-		
+		['hoverBind'] = true,		
 }
 
 
@@ -168,6 +159,7 @@ C['automation'] = {
 	['autoRepair'] = true,
 	['autoScreenShot'] = true,
 	['autoActionCam'] = true,
+		['autoActionCam_full'] = false,
 	['autoQuest'] = true,
 	['autoBuyStack'] = true,
 	['autoTabBinder'] = true,

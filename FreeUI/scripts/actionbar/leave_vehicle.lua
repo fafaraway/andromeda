@@ -40,11 +40,7 @@ function Bar:CreateLeaveVehicle()
 	button:SetScript("OnLeave", F.HideTooltip)
 
 	--frame visibility
-	if cfg.layoutSimple then
-		frame.frameVisibility = "hide"
-	else
-		frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"
-	end
+	frame.frameVisibility = "[canexitvehicle]c;[mounted]m;n"
 	RegisterStateDriver(frame, "exit", frame.frameVisibility)
 
 	frame:SetAttribute("_onstate-exit", [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])

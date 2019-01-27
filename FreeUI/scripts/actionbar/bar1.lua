@@ -1,9 +1,12 @@
 local F, C = unpack(select(2, ...))
 local module = F:RegisterModule("actionbars")
 local cfg = C.actionbar
+cfg.buttonSizeNormal = cfg.buttonSizeNormal*C.Mult
+cfg.padding = cfg.padding*C.Mult
+cfg.margin = cfg.margin*C.Mult
 
 function module:OnLogin()
-	if not C.actionbar.enable then return end
+	if not cfg.enable then return end
 
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
@@ -32,8 +35,8 @@ function module:OnLogin()
 	end
 
 	--show/hide the frame on a given state driver
-	if cfg.layoutSimple then
-		frame.frameVisibility = "[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide"
+	if cfg.layoutStyle == 3 then
+		frame.frameVisibility = "[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide"
 		F.CreateButtonFrameFader(frame, buttonList, cfg.faderOnShow)
 	else
 		frame.frameVisibility = "[petbattle] hide; show"
