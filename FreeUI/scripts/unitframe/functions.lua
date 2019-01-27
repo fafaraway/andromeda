@@ -266,7 +266,7 @@ function module:CreateHealthPrediction(self)
 	absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'RIGHT')
 	absorbBar:SetStatusBarTexture('Interface\\AddOns\\FreeUI\\assets\\statusbar_striped')
 	absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
-	absorbBar:SetStatusBarColor(.8, .8, .8, .6)
+	absorbBar:SetStatusBarColor(.8, .8, .8, .8)
 	absorbBar:SetWidth(self:GetWidth())
 
 	local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')

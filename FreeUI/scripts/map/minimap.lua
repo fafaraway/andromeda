@@ -320,8 +320,7 @@ function module:WhoPingsMyMap()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFS(f, C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
-	f.text:SetPoint("CENTER", 0, 0)
+	f.text = F.CreateFSAlt(f, 13, '', 'class', true, "CENTER", 0, 50)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)
