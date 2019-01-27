@@ -78,9 +78,11 @@ function F:ForceDefaultSettings()
 	SetCVar("alwaysShowActionBars", 0)
 	SetCVar("lockActionBars", 1)
 	SetCVar("ActionButtonUseKeyDown", 1)
-	SetActionBarToggles(1, 1, nil, nil)
-	SHOW_MULTI_ACTIONBAR_4 = nil
-	SHOW_MULTI_ACTIONBAR_3 = nil
+	SetActionBarToggles(1, 1, 1, 1)
+	SHOW_MULTI_ACTIONBAR_4 = 1
+	SHOW_MULTI_ACTIONBAR_3 = 1
+	SHOW_MULTI_ACTIONBAR_2 = 1
+	SHOW_MULTI_ACTIONBAR_1 = 1
 	MultiActionBar_Update()
 	
 	SetCVar("floatingCombatTextCombatDamage", 1)
