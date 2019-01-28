@@ -93,7 +93,9 @@ function F:CreateFSAlt(size, text, colour, shadow, anchor, x, y)
 	
 	if size and size == 'pixel' then
 		fs:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
-	else
+	elseif size and size == 'pixelbig' then
+		fs:SetFont(C.font.pixel, 16, 'OUTLINEMONOCHROME')
+	elseif size then
 		fs:SetFont(C.font.normal, size, nil)
 	end
 
