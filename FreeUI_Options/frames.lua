@@ -6,40 +6,13 @@ local name = UnitName("player")
 -- [[ Main window ]]
 
 local options = CreateFrame("Frame", "FreeUIOptionsPanel", UIParent)
-options:SetSize(784, 780)
+options:SetSize(780, 800)
 options:SetPoint("CENTER")
 options:SetFrameStrata("HIGH")
 options:EnableMouse(true)
-
 tinsert(UISpecialFrames, options:GetName())
-
 options.CloseButton = CreateFrame("Button", nil, options, "UIPanelCloseButton")
 
-StaticPopupDialogs["FREEUI_RELOAD_UI"] = {
-	text = "RELOADUI_REQUIRED",
-	button1 = APPLY,
-	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
-	OnAccept = function()
-		ReloadUI()
-	end,
-	whileDead = true,
-	hideOnEscape = true,
-}
-
-StaticPopupDialogs["FREEUI_RESET_DATA"] = {
-	text = "RESET_CHECK",
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		FreeUIOptions = {}
-		FreeUIOptionsPerChar = {}
-		FreeUIOptionsGlobal[realm][name] = false
-		C.options = FreeUIOptions
-		ReloadUI()
-	end,
-	whileDead = true,
-	hideOnEscape = true,
-}
 
 do
 	local popup = CreateFrame("Frame", nil, UIParent)
@@ -99,9 +72,72 @@ reloadText:SetText(ns.localization.needReload)
 reloadText:Hide()
 options.reloadText = reloadText
 
+local resetFrame = CreateFrame("Frame", nil, UIParent)
+resetFrame:SetSize(320, 200)
+resetFrame:SetPoint("CENTER")
+resetFrame:SetFrameStrata("HIGH")
+resetFrame:SetFrameLevel(5)
+resetFrame:EnableMouse(true)
+resetFrame:Hide()
 
+resetFrame:SetScript("OnShow", function()
+	options:SetAlpha(.2)
+end)
 
-local credits = CreateFrame("Frame", "FreeUIOptionsPanelCredits", UIParent) -- implemented at bottom
+resetFrame:SetScript("OnHide", function()
+	options:SetAlpha(1)
+end)
+
+options.resetFrame = resetFrame
+
+resetFrame.Data = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
+resetFrame.Data:SetPoint("TOPLEFT", 16, -16)
+resetFrame.Data.Text:SetText(ns.localization.resetData)
+resetFrame.Data.tooltipText = ns.localization.resetDataTooltip
+
+resetFrame.Options = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
+resetFrame.Options:SetPoint("TOPLEFT", resetFrame.Data, "BOTTOMLEFT", 0, -8)
+resetFrame.Options.Text:SetText(ns.localization.resetOptions)
+resetFrame.Options.tooltipText = ns.localization.resetOptionsTooltip
+
+local charBox = CreateFrame("EditBox", "FreeUIOptionsPanelResetFrameCharBox", resetFrame)
+charBox:SetAutoFocus(false)
+charBox:SetWidth(180)
+charBox:SetHeight(20)
+charBox:SetMaxLetters(12)
+charBox:SetFontObject(GameFontHighlight)
+charBox:SetPoint("TOPLEFT", resetFrame.Options, "BOTTOMLEFT", 6, -34)
+
+charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxLeft")
+charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxRight")
+charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxMiddle")
+
+charBox:SetScript("OnEscapePressed", function(self)
+	self:ClearFocus()
+end)
+
+resetFrame.charBox = charBox
+
+local charBoxLabel = charBox:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+charBoxLabel:SetPoint("BOTTOMLEFT", charBox, "TOPLEFT", 0, 6)
+charBoxLabel:SetText(ns.localization.resetCharBox)
+
+resetFrame.Okay = CreateFrame("Button", nil, resetFrame, "UIPanelButtonTemplate")
+resetFrame.Okay:SetSize(128, 25)
+resetFrame.Okay:SetPoint("BOTTOMLEFT", 16, 16)
+resetFrame.Okay:SetText(OKAY)
+tinsert(ns.buttons, resetFrame.Okay)
+
+resetFrame.Cancel = CreateFrame("Button", nil, resetFrame, "UIPanelButtonTemplate")
+resetFrame.Cancel:SetSize(128, 25)
+resetFrame.Cancel:SetPoint("BOTTOMRIGHT", -16, 16)
+resetFrame.Cancel:SetText(CANCEL)
+resetFrame.Cancel:SetScript("OnClick", function()
+	resetFrame:Hide()
+end)
+tinsert(ns.buttons, resetFrame.Cancel)
+
+local credits = CreateFrame("Frame", "FreeUIOptionsPanelCredits", UIParent)
 
 local CreditsButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 CreditsButton:SetSize(128, 25)
@@ -118,11 +154,28 @@ InstallButton:SetText(ns.localization.install)
 
 tinsert(ns.buttons, InstallButton)
 
+
+StaticPopupDialogs["FREEUI_RESET"] = {
+	text = ns.localization.resetCheck,
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		FreeUIOptions = {}
+		FreeUIOptionsPerChar = {}
+		FreeUIOptionsGlobal[realm][name] = false
+		C.options = FreeUIOptions
+		ReloadUI()
+	end,
+	whileDead = true,
+	hideOnEscape = true,
+}
+
 local ResetButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 ResetButton:SetSize(128, 25)
 ResetButton:SetText(ns.localization.reset)
 ResetButton:SetScript("OnClick", function()
-	StaticPopup_Show("FREEUI_RESET_DATA")
+	StaticPopup_Show("FREEUI_RESET")
+	--resetFrame:Show()
 end)
 tinsert(ns.buttons, ResetButton)
 
@@ -148,6 +201,8 @@ ns.addCategory("classmod")
 CreditsButton:SetPoint("BOTTOM", InstallButton, "TOP", 0, 4)
 InstallButton:SetPoint("BOTTOM", ResetButton, "TOP", 0, 4)
 ResetButton:SetPoint("TOP", FreeUIOptionsPanel.general.tab, "BOTTOM", 0, -600)
+
+
 
 -- [[ General ]]
 
@@ -242,64 +297,6 @@ do
 	uiScaleAuto:HookScript("OnClick", toggleUIScaleOptions)
 	uiScale:HookScript("OnShow", toggleUIScaleOptions)
 
-
-
-	--local rareAlert = ns.CreateCheckBox(general, "rareAlert", true)
-	--rareAlert:SetPoint("TOPLEFT", itemLinkLevel, "BOTTOMLEFT", 0, -8)
-
-	--local interrupt = ns.CreateCheckBox(general, "interrupt", true)
-	--interrupt:SetPoint("TOPLEFT", rareAlert, "BOTTOMLEFT", 0, -8)
-
-	--local interruptsound = ns.CreateCheckBox(general, "interrupt_sound", true, true)
-	--interruptsound:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 16, -8)
-
-	--local interruptParty = ns.CreateCheckBox(general, "interrupt_party", true)
-	--interruptParty:SetPoint("TOPLEFT", interruptsound, "BOTTOMLEFT", 0, -8)
-
-	--local interruptBGs = ns.CreateCheckBox(general, "interrupt_bgs", true)
-	--interruptBGs:SetPoint("TOPLEFT", interruptParty, "BOTTOMLEFT", 0, -8)
-
-	--local interruptLFG = ns.CreateCheckBox(general, "interrupt_lfg", true)
-	--interruptLFG:SetPoint("TOPLEFT", interruptBGs, "BOTTOMLEFT", 0, -8)
-
-	--local interruptOutdoors = ns.CreateCheckBox(general, "interrupt_outdoors", true)
-	--interruptOutdoors:SetPoint("TOPLEFT", interruptLFG, "BOTTOMLEFT", 0, -8)
-
-	--interrupt.children = {interruptsound, interruptParty, interruptBGs, interruptLFG, interruptOutdoors}
-
-	--local flashCursor = ns.CreateCheckBox(general, "flashCursor", true, true)
-	--flashCursor:SetPoint("LEFT", cooldownpulse, "RIGHT", 240, 0)
-
-	--local mailButton = ns.CreateCheckBox(general, "mailButton", true, true)
-	--mailButton:SetPoint("TOPLEFT", flashCursor, "BOTTOMLEFT", 0, -8)
-
-	--local undressButton = ns.CreateCheckBox(general, "undressButton", true, true)
-	--undressButton:SetPoint("TOPLEFT", mailButton, "BOTTOMLEFT", 0, -8)
-
-	--local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
-	--alreadyKnown:SetPoint("TOPLEFT", undressButton, "BOTTOMLEFT", 0, -8)
-
-	--local bossBanner = ns.CreateCheckBox(general, "bossBanner", true, true)
-	--bossBanner:SetPoint("TOPLEFT", alreadyKnown, "BOTTOMLEFT", 0, -8)
-
-	--local talkingHead = ns.CreateCheckBox(general, "talkingHead", true, true)
-	--talkingHead:SetPoint("TOPLEFT", bossBanner, "BOTTOMLEFT", 0, -8)
-
-	--local hideRaidNames = ns.CreateCheckBox(general, "hideRaidNames", true, true)
-	--hideRaidNames:SetPoint("TOPLEFT", talkingHead, "BOTTOMLEFT", 0, -8)
-
-	--local autoScreenShot = ns.CreateCheckBox(general, "autoScreenShot", true, true)
-	--autoScreenShot:SetPoint("TOPLEFT", hideRaidNames, "BOTTOMLEFT", 0, -8)
-
-	--local autoActionCam = ns.CreateCheckBox(general, "autoActionCam", true, true)
-	--autoActionCam:SetPoint("TOPLEFT", autoScreenShot, "BOTTOMLEFT", 0, -8)
-
-	--local misc = ns.addSubCategory(general, ns.localization.generalMisc)
-	--misc:SetPoint("TOPLEFT", interruptOutdoors, "BOTTOMLEFT", -16, -20)
-
-	--local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true)
-	--uiScaleAuto:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 0, -20)
-	--tinsert(ns.protectOptions, uiScaleAuto)
 end
 
 -- [[ Appearance ]]
@@ -415,8 +412,6 @@ do
 	--autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
 end
 
-
-
 -- [[ Notifications ]]
 
 do
@@ -426,13 +421,13 @@ do
 	local enable = ns.CreateCheckBox(notification, "enableNotification", true, true)
 	enable:SetPoint("TOPLEFT", notification.subText, "BOTTOMLEFT", 0, -8)
 
-	local playSounds = ns.CreateCheckBox(notification, "playSounds", true)
+	local playSounds = ns.CreateCheckBox(notification, "playSounds", true, true)
 	playSounds:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
-	local checkBagsFull = ns.CreateCheckBox(notification, "checkBagsFull", true)
+	local checkBagsFull = ns.CreateCheckBox(notification, "checkBagsFull", true, true)
 	checkBagsFull:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 
-	local checkMail = ns.CreateCheckBox(notification, "checkMail", true)
+	local checkMail = ns.CreateCheckBox(notification, "checkMail", true, true)
 	checkMail:SetPoint("TOPLEFT", checkBagsFull, "BOTTOMLEFT", 0, -8)
 
 	local alert = ns.addSubCategory(notification, ns.localization.notificationalert)
@@ -441,14 +436,18 @@ do
 	local interrupt = ns.CreateCheckBox(notification, "interrupt", true, true)
 	interrupt:SetPoint("TOPLEFT", alert, "BOTTOMLEFT", 0, -8)
 
-	local interruptSound = ns.CreateCheckBox(notification, "interruptSound", true)
+	local interruptSound = ns.CreateCheckBox(notification, "interruptSound", true, true)
 	interruptSound:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 16, -8)
+
+	interrupt.children = {interruptSound}
 
 	local dispel = ns.CreateCheckBox(notification, "dispel", true, true)
 	dispel:SetPoint("LEFT", interrupt, "RIGHT", 240, 0)
 
-	local dispelSound = ns.CreateCheckBox(notification, "dispelSound", true)
+	local dispelSound = ns.CreateCheckBox(notification, "dispelSound", true, true)
 	dispelSound:SetPoint("TOPLEFT", dispel, "BOTTOMLEFT", 16, -8)
+
+	dispel.children = {dispelSound}
 
 	local spell = ns.CreateCheckBox(notification, "spell", true, true)
 	spell:SetPoint("TOPLEFT", interruptSound, "BOTTOMLEFT", -16, -8)
@@ -462,8 +461,10 @@ do
 	local rare = ns.CreateCheckBox(notification, "rare", true, true)
 	rare:SetPoint("TOPLEFT", sapped, "BOTTOMLEFT", 0, -8)
 
-	local rareSound = ns.CreateCheckBox(notification, "rareSound", true)
+	local rareSound = ns.CreateCheckBox(notification, "rareSound", true, true)
 	rareSound:SetPoint("TOPLEFT", rare, "BOTTOMLEFT", 16, -8)
+
+	rare.children = {rareSound}
 	
 
 	local function toggleNotificationOptions()
@@ -638,7 +639,7 @@ do
 	unitframe.tab.Icon:SetTexture("Interface\\Icons\\Achievement_Character_Human_Female")
 
 	local enable = ns.CreateCheckBox(unitframe, "enable", true, true)
-	enable:SetPoint("TOPLEFT", unitframe.subText, "BOTTOMLEFT", 0, -16)
+	enable:SetPoint("TOPLEFT", unitframe.subText, "BOTTOMLEFT", 0, -8)
 
 	--local transMode = ns.CreateCheckBox(unitframes, "transMode", true, true)
 	--transMode:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
@@ -746,11 +747,8 @@ do
 	local inventory = FreeUIOptionsPanel.inventory
 	inventory.tab.Icon:SetTexture("Interface\\Icons\\INV_Misc_Bag_31")
 
-	local general = ns.addSubCategory(inventory, ns.localization.inventoryGeneral)
-	general:SetPoint("TOPLEFT", inventory.subText, "BOTTOMLEFT", 0, -8)
-
 	local enable = ns.CreateCheckBox(inventory, "enable", true, true)
-	enable:SetPoint("TOPLEFT", general, "BOTTOMLEFT", 0, -8)
+	enable:SetPoint("TOPLEFT", inventory.subText, "BOTTOMLEFT", 0, -8)
 
 	local useCategory = ns.CreateCheckBox(inventory, "useCategory", true, true)
 	useCategory:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
@@ -763,11 +761,8 @@ do
 	local reverseSort = ns.CreateCheckBox(inventory, "reverseSort", true, true)
 	reverseSort:SetPoint("LEFT", useCategory, "RIGHT", 240, 0)
 
-	local style = ns.addSubCategory(inventory, ns.localization.inventoryStyle)
-	style:SetPoint("TOPLEFT", gearSetFilter, "BOTTOMLEFT", -16, -30)
-
 	local itemLevel = ns.CreateCheckBox(inventory, "itemLevel", true, true)
-	itemLevel:SetPoint("TOPLEFT", style, "BOTTOMLEFT", 0, -8)
+	itemLevel:SetPoint("TOPLEFT", gearSetFilter, "BOTTOMLEFT", 0, -8)
 
 	local newitemFlash = ns.CreateCheckBox(inventory, "newitemFlash", true, true)
 	newitemFlash:SetPoint("TOPLEFT", itemLevel, "BOTTOMLEFT", 0, -8)
@@ -784,7 +779,6 @@ do
 		useCategory:SetShown(shown)
 		gearSetFilter:SetShown(shown)
 		reverseSort:SetShown(shown)
-		style:SetShown(shown)
 		itemLevel:SetShown(shown)
 		newitemFlash:SetShown(shown)
 		size:SetShown(shown)
@@ -801,11 +795,8 @@ do
 	local tooltip = FreeUIOptionsPanel.tooltip
 	tooltip.tab.Icon:SetTexture("Interface\\Icons\\INV_Inscription_ScrollOfWisdom_01")
 
-	local features = ns.addSubCategory(tooltip)
-	features:SetPoint("TOPLEFT", tooltip.subText, "BOTTOMLEFT", 0, 0)
-
 	local enable = ns.CreateCheckBox(tooltip, "enable", true, true)
-	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
+	enable:SetPoint("TOPLEFT", tooltip.subText, "BOTTOMLEFT", 0, -8)
 
 	local cursor = ns.CreateCheckBox(tooltip, "cursor", true, true)
 	cursor:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
@@ -871,18 +862,14 @@ do
 	tooltip:HookScript("OnShow", toggleTooltipOptions)
 end
 
-
 -- [[ Chat ]]
 
 do
 	local chat = FreeUIOptionsPanel.chat
 	chat.tab.Icon:SetTexture("Interface\\Icons\\INV_Enchanting_70_Pet_Pen")
 
-	local features = ns.addSubCategory(chat)
-	features:SetPoint("TOPLEFT", chat.subText, "BOTTOMLEFT", 0, 0)
-
 	local enable = ns.CreateCheckBox(chat, "enable", true, true)
-	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
+	enable:SetPoint("TOPLEFT", chat.subText, "BOTTOMLEFT", 0, -8)
 
 end
 
@@ -893,16 +880,29 @@ do
 	local map = FreeUIOptionsPanel.map
 	map.tab.Icon:SetTexture("Interface\\Icons\\Icon_TreasureMap")
 
-	local features = ns.addSubCategory(map)
-	features:SetPoint("TOPLEFT", map.subText, "BOTTOMLEFT", 0, 0)
+	local bigmap = ns.addSubCategory(map, ns.localization.mapbigmap)
+	bigmap:SetPoint("TOPLEFT", map.subText, "BOTTOMLEFT", 0, -8)
 
-	local enable = ns.CreateCheckBox(map, "enable", true, true)
-	enable:SetPoint("TOPLEFT", features, "BOTTOMLEFT", 0, -16)
+	local worldMap = ns.CreateCheckBox(map, "worldMap", true, true)
+	worldMap:SetPoint("TOPLEFT", bigmap, "BOTTOMLEFT", 0, -8)
+
+	local coords = ns.CreateCheckBox(map, "coords", true, true)
+	coords:SetPoint("TOPLEFT", worldMap, "BOTTOMLEFT", 16, -8)
+
+	worldMap.children = {coords}
+
+	local smallmap = ns.addSubCategory(map, ns.localization.mapsmallmap)
+	smallmap:SetPoint("TOPLEFT", coords, "BOTTOMLEFT", -16, -16)
+
+	local miniMap = ns.CreateCheckBox(map, "miniMap", true, true)
+	miniMap:SetPoint("TOPLEFT", smallmap, "BOTTOMLEFT", 0, -8)
+
+	local whoPings = ns.CreateCheckBox(map, "whoPings", true, true)
+	whoPings:SetPoint("TOPLEFT", miniMap, "BOTTOMLEFT", 16, -8)
+
+	miniMap.children = {whoPings}
 
 end
-
-
-
 
 -- [[ Class specific ]]
 
@@ -980,9 +980,6 @@ end
 
 
 
-
-
-
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", function()
@@ -1009,5 +1006,4 @@ f:SetScript("OnEvent", function()
 		F:HelloWorld()
 		options:Hide()
 	end)
-	
 end)

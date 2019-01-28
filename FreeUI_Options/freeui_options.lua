@@ -567,6 +567,42 @@ local function displaySettings()
 	end
 end
 
+--[[local function removeCharData(self)
+	self:ClearFocus()
+
+	--local realm = C.Realm
+	local charName = self:GetText()
+
+	self:SetText("")
+
+	if charName ~= "" then
+		local somethingDeleted = false
+
+		for varType, varTable in pairs(FreeUIGlobalConfig[realm]) do
+			print('1')
+			if varTable[charName] ~= nil then
+				varTable[charName] = nil
+				somethingDeleted = true
+				print('2')
+			end
+			print('3')
+		end
+
+		if FreeUIOptionsGlobal[realm][charName] ~= nil then
+			FreeUIOptionsGlobal[realm][charName] = nil
+			somethingDeleted = true
+		end
+
+		if somethingDeleted then
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..charName.." removed.", C.r, C.g, C.b)
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..charName.." not found. Check the spelling of the name.", C.r, C.g, C.b)
+		end
+	end
+end]]
+
+
+
 
 
 local init = CreateFrame("Frame")
@@ -599,9 +635,38 @@ init:SetScript("OnEvent", function()
 		end)
 	end
 
-	FreeUIOptionsPanel.ProfileBox:SetChecked(FreeUIOptionsGlobal[C.Realm][C.Name])
+	local resetFrame = FreeUIOptionsPanel.resetFrame
+
+	resetFrame.Okay:SetScript("OnClick", function()
+		local somethingChecked = false
+
+		if resetFrame.Data:GetChecked() then
+			FreeUIGlobalConfig = {}
+			FreeUIConfig = {}
+			somethingChecked = true
+		end
+		if resetFrame.Options:GetChecked() then
+			FreeUIOptions = {}
+			FreeUIOptionsPerChar = {}
+			FreeUIOptionsGlobal[realm][name] = false
+			C.options = FreeUIOptions
+			somethingChecked = true
+		end
+
+		--removeCharData(resetFrame.charBox)
+
+		if somethingChecked then
+			ReloadUI()
+		else
+			resetFrame:Hide()
+		end
+	end)
+
+	--resetFrame.charBox:SetScript("OnEnterPressed", removeCharData)
+
+	FreeUIOptionsPanel.ProfileBox:SetChecked(FreeUIOptionsGlobal[realm][name])
 	FreeUIOptionsPanel.ProfileBox:SetScript("OnClick", function(self)
-		FreeUIOptionsGlobal[C.Realm][C.Name] = self:GetChecked()
+		FreeUIOptionsGlobal[realm][name] = self:GetChecked()
 		changeProfile()
 		displaySettings()
 	end)
@@ -609,12 +674,16 @@ init:SetScript("OnEvent", function()
 	F.CreateBD(FreeUIOptionsPanel)
 	F.CreateBD(FreeUIOptionsPanel.popup)
 	F.CreateBD(FreeUIOptionsPanel.credits)
+	F.CreateBD(resetFrame)
 	F.CreateSD(FreeUIOptionsPanel)
 	F.CreateSD(FreeUIOptionsPanel.popup)
 	F.CreateSD(FreeUIOptionsPanel.credits)
+	F.CreateSD(resetFrame)
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinClose(FreeUIOptionsPanel.credits.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.ProfileBox)
+	F.ReskinCheck(resetFrame.Data)
+	F.ReskinCheck(resetFrame.Options)
 
 	for _, panel in pairs(panels) do
 		panel.tab:SetBackdrop({
@@ -656,6 +725,8 @@ init:SetScript("OnEvent", function()
 		local colour = C.ClassColors[setting.className]
 		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
 	end
+
+	F.ReskinInput(resetFrame.charBox)
 
 	for _, newCategory in pairs(ns.newCategories) do
 		local new = F.CreateFS(newCategory.tab)
