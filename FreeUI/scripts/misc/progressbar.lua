@@ -133,6 +133,8 @@ function module:SetupScript(bar)
 end
 
 function module:ProgressBar()
+	if not C.general.progressBar or not C.map.miniMap then return end 
+
 	local bar = CreateFrame("StatusBar", nil, Minimap)
 	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)
 	bar:SetSize(256, 2)
@@ -151,8 +153,8 @@ function module:ProgressBar()
 end
 
 function module:HookParagonRep()
-	if not C.general.progressBar then return end
-	
+	if not C.general.paragonRep then return end
+
 	local numFactions = GetNumFactions()
 	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
 	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
