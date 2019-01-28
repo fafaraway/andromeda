@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("maps")
+local module = F:GetModule("Map")
 
 
 -- basee on ClickMenu by 10leej

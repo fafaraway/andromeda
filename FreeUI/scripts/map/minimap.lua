@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("maps")
+local module = F:GetModule("Map")
 
 
 function module:ReskinRegions()
@@ -35,7 +35,7 @@ function module:ReskinRegions()
 
 	local dots = {}
 	for i = 1, 8 do
-		dots[i] = F.CreateFS(QueueStatusMinimapButton, C.font.pixel, 16, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
+		dots[i] = F.CreateFSAlt(QueueStatusMinimapButton, 'pixelbig', '.', true, true)
 		dots[i]:SetText(".")
 	end
 	dots[1]:SetPoint("TOP", 2, 2)
@@ -108,9 +108,7 @@ function module:ReskinRegions()
 	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
 	rd:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-	local rdt = F.CreateFS(rd, C.font.pixel, 8, 'OUTLINEMONOCHROME')
-	rdt:SetPoint("TOPLEFT")
-	rdt:SetTextColor(1, 1, 1)
+	local rdt = F.CreateFSAlt(rd, 'pixel', '', true, true, "TOPLEFT", 0, 0)
 
 	rd:SetScript("OnEvent", function()
 		local _, instanceType = IsInInstance()
@@ -194,9 +192,7 @@ function module:ReskinRegions()
 		mail:Hide()
 	end)
 
-	local mt = F.CreateFS(mail, C.font.pixel, 8, 'OUTLINEMONOCHROME')
-	mt:SetText("Mail")
-	mt:SetTextColor(1, 1, 1)
+	local mt = F.CreateFSAlt(mail, 'pixel', '<Mail>', true, true)
 	mt:SetPoint("BOTTOM", Minimap, 0, 36)
 
 	MiniMapMailFrame:SetAlpha(0)
@@ -213,8 +209,7 @@ function module:ReskinRegions()
 	Invt:SetSize(300, 80)
 	F.CreateBD(Invt)
 
-	Invt.text = F.CreateFS(Invt, C.font.normal, 14)
-	Invt.text:SetText(C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES)
+	Invt.text = F.CreateFSAlt(Invt, 13, C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES, true, true)
 
 	local function updateInviteVisibility()
 		if C_Calendar.GetNumPendingInvites() > 0 then
@@ -345,6 +340,8 @@ function module:WhoPingsMyMap()
 end
 
 function module:SetupMinimap()
+	if not C.map.miniMap then return end
+
 	-- Shape and Position
 	local scale = C.map.miniMapScale
 	local size = C.map.miniMapSize

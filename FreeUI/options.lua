@@ -16,6 +16,7 @@ C['general'] = {
 	['PVPSound'] = true,
 
 	['progressBar'] = true,
+	['paragonRep'] = true,
 	['quickMarking'] = true,
 	['quickFocusing'] = true,
 
@@ -119,13 +120,16 @@ C['aura'] = {
 
 
 C['map'] = {
-	['enable'] = true,
+	['worldMap'] = true,
 		['worldMapScale'] = 1,
+		['coords'] = true,
+		['mapReveal'] = true,
+	['miniMap'] = true,
 		['miniMapScale'] = 1,
 		['miniMapPosition'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -22, 0},
 		['miniMapSize'] = 256,
 		['whoPings'] = true,
-		['mapReveal'] = true,
+		
 }
 
 

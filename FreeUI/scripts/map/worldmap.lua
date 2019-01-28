@@ -1,9 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule("maps")
-
-
-
-
+local module = F:RegisterModule("Map")
 
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
@@ -27,16 +23,19 @@ function module:GetPlayerMapPos(mapID)
 end
 
 function module:OnLogin()
+	if not C.map.worldMap then return end
+
+	self:SetupMinimap()
+	self:MapReveal()
+
 	-- Scaling
-	if not WorldMapFrame.isMaximized then WorldMapFrame:SetScale(C.map.worldMapScale) end
-	hooksecurefunc(WorldMapFrame, "Minimize", function(self)
-		if InCombatLockdown() then return end
-		self:SetScale(C.map.worldMapScale)
-	end)
-	hooksecurefunc(WorldMapFrame, "Maximize", function(self)
-		if InCombatLockdown() then return end
-		self:SetScale(1)
-	end)
+	local function setupScale(self)
+		if self.isMaximized and self:GetScale() ~= 1 then
+			self:SetScale(1)
+		elseif not self.isMaximized and self:GetScale() ~= C.map.worldMapScale then
+			self:SetScale(C.map.worldMapScale)
+		end
+	end
 
 	if C.map.worldMapScale > 1 then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
@@ -46,17 +45,24 @@ function module:OnLogin()
 		end
 	end
 
+	local function updateMapAnchor(self)
+		setupScale(self)
+		if not self.isMaximized then F.RestoreMF(self) end
+	end
+	F.CreateMF(WorldMapFrame, nil, true)
+	hooksecurefunc(WorldMapFrame, "SynchronizeDisplayState", updateMapAnchor)
+
 	-- keep minimized world map centered
-	hooksecurefunc("ToggleWorldMap", function()
-		WorldMapFrame:ClearAllPoints()
-		WorldMapFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-	end)
+	--hooksecurefunc("ToggleWorldMap", function()
+	--	WorldMapFrame:ClearAllPoints()
+	--	WorldMapFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+	--end)
 
 	-- Generate Coords
-	local player = F.CreateFS(WorldMapFrame.BorderFrame, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-	local cursor = F.CreateFS(WorldMapFrame.BorderFrame, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-	player:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 10, 10)
-	cursor:SetPoint("BOTTOMLEFT", WorldMapFrame.BorderFrame, 130, 10)
+	if not C.map.coords then return end
+
+	local player = F.CreateFSAlt(WorldMapFrame.BorderFrame, 'pixel', '', true, true, "BOTTOMLEFT", 10, 10)
+	local cursor = F.CreateFSAlt(WorldMapFrame.BorderFrame, 'pixel', '', true, true, "BOTTOMLEFT", 130, 10)
 
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 	F.HideObject(WorldMapFrame.BorderFrame.Tutorial)
@@ -117,9 +123,4 @@ function module:OnLogin()
 
 	local CoordsUpdater = CreateFrame("Frame", nil, WorldMapFrame.BorderFrame)
 	CoordsUpdater:SetScript("OnUpdate", UpdateCoords)
-
-
-	self:SetupMinimap()
-	self:MapReveal()
-
 end

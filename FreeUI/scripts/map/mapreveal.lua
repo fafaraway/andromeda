@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("maps")
+local module = F:GetModule("Map")
 
 
 -- based on Map reveal by Leatix
@@ -333,9 +333,7 @@ function module:MapReveal()
 	bu:SetSize(26, 26)
 	F.CreateCB(bu)
 	bu:SetChecked(C.map.mapReveal)
-	bu.text = F.CreateFS(bu, C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
-	bu.text:SetText(L["MapReveal"])
-	bu.text:SetPoint("LEFT", 25, 0)
+	bu.text = F.CreateFSAlt(bu, 12, L["MapReveal"], true, false, "LEFT", 25, 0)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
 		hooksecurefunc(pin, "RefreshOverlays", MapExplorationPin_RefreshOverlays)
