@@ -135,7 +135,34 @@ function module:ReadyCheckEnhancement()
 end
 
 
+-- paragon reputation
+function module:HookParagonRep()
+	if not C.general.paragonRep then return end
 
+	local numFactions = GetNumFactions()
+	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
+		local factionIndex = factionOffset + i
+		local factionRow = _G["ReputationBar"..i]
+		local factionBar = _G["ReputationBar"..i.."ReputationBar"]
+		local factionStanding = _G["ReputationBar"..i.."ReputationBarFactionStanding"]
+
+		if factionIndex <= numFactions then
+			local factionID = select(14, GetFactionInfo(factionIndex))
+			if factionID and C_Reputation.IsFactionParagon(factionID) then
+				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+				local barValue = mod(currentValue, threshold)
+				local factionStandingtext = C.InfoColor..L["Paragon"]..floor(currentValue/threshold)
+
+				factionBar:SetMinMaxValues(0, threshold)
+				factionBar:SetValue(barValue)
+				factionStanding:SetText(factionStandingtext)
+				factionRow.standingText = factionStandingtext
+				factionRow.rolloverText = C.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+			end
+		end
+	end
+end
 
 
 -- flash cursor
