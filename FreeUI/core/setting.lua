@@ -5,7 +5,6 @@ local min, max, format = math.min, math.max, string.format
 
 
 
-
 local defaultSettings = {
 	BfA = false,
 	mover = {},
@@ -15,7 +14,6 @@ local defaultSettings = {
 }
 
 local accountSettings = {
-	versionCheck = true,
 	totalGold = {},
 }
 
@@ -42,6 +40,7 @@ local loader = CreateFrame("Frame")
 loader:RegisterEvent("ADDON_LOADED")
 loader:SetScript("OnEvent", function(self, _, addon)
 	if addon ~= "FreeUI" then return end
+
 	if not FreeUIConfig["BfA"] then
 		FreeUIConfig = {}
 		FreeUIConfig["BfA"] = true

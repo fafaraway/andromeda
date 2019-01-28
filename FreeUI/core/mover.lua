@@ -268,45 +268,43 @@ StaticPopupDialogs["RELOAD_FREEUI"] = {
 	end,
 }
 
-StaticPopupDialogs["RESET_FREEUI"] = {
+--[[StaticPopupDialogs["RESET_FREEUI"] = {
 	text = L["RESET_CHECK"],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		FreeUIConfig = {}
 		FreeUIGlobalConfig = {}
+		FreeUIConfig = {}
+		FreeUIOptions = {}
+		FreeUIOptionsPerChar = {}
+		FreeUIOptionsGlobal[C.Realm][C.Name] = false
+		C.options = FreeUIOptions
 		ReloadUI()
 	end,
-}
+	whileDead = true,
+	hideOnEscape = true,
+}]]
 
 
 SlashCmdList.FREEUI = function(cmd)
 	local cmd, args = strsplit(' ', cmd:lower(), 2)
-	--if C.unitframe.enable then
-		--[[if cmd == 'dps' then
-			FreeUIConfig.unitframeLayout = 1
-			ReloadUI()
-		elseif cmd == 'healer' then
-			FreeUIConfig.unitframeLayout = 2
-			ReloadUI()
-		else]]if cmd == 'reset' then
-			StaticPopup_Show("RESET_FREEUI")
-		elseif cmd == 'install' then
-			F:HelloWorld()
-		elseif cmd == 'unlock' then
-			if InCombatLockdown() then
-				UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
-				return
-			end
-			CreateConsole()
-			UnlockElements()
-		else
-			if FreeUIOptionsPanel then
-				FreeUIOptionsPanel:Show()
-				HideUIPanel(GameMenuFrame)
-				PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-			end
+	if cmd == 'reset' then
+		StaticPopup_Show("FREEUI_RESET")
+	elseif cmd == 'install' then
+		F:HelloWorld()
+	elseif cmd == 'unlock' then
+		if InCombatLockdown() then
+			UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
+			return
 		end
-	--end
+		CreateConsole()
+		UnlockElements()
+	else
+		if FreeUIOptionsPanel then
+			FreeUIOptionsPanel:Show()
+			HideUIPanel(GameMenuFrame)
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+		end
+	end
 end
 SLASH_FREEUI1 = '/freeui'

@@ -12,7 +12,9 @@ local otFontHeader = {C.font.header,16,nil}
 local otFont = {C.font.normal,12,nil}
 
 
-do
+function module:QuestTracker()
+	if not C.appearance.objectiveTracker then return end
+
 	-- Move Tracker Frame
 	local mover = CreateFrame("Frame", "ObjectiveTrackerFrameMover", ot)
 	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -25)
@@ -37,13 +39,6 @@ do
 	end)
 
 	RegisterStateDriver(ot, "visibility", "[petbattle] hide; show")
-end
-
-
-
-
-function module:QuestTracker()
-	if not C.appearance.objectiveTracker then return end
 	
 	-- Questblock click enhant
 	local function QuestHook(id)
