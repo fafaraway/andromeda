@@ -1365,7 +1365,7 @@ function module:CreatePartyName(self)
 			Text:SetFont(C.font.normal, 11)
 			Text:SetShadowOffset(2, -2)
 		else
-			F.SetFS(Name)
+			F.SetFS(Text)
 			Text:SetShadowOffset(1, -1)
 		end
 
