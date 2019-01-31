@@ -257,8 +257,6 @@ do
 
 	clickCast.children = {clickCast_filter}
 
-	
-
 	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
 	cooldown:SetPoint("TOPLEFT", clickCast_filter, "BOTTOMLEFT", -16, -12)
 
@@ -311,14 +309,25 @@ do
 	local enableTheme = ns.CreateCheckBox(appearance, "enableTheme", true, true)
 	enableTheme:SetPoint("TOPLEFT", theme, "BOTTOMLEFT", 0, -8)
 
+	local addShadowBorder = ns.CreateCheckBox(appearance, "addShadowBorder", true, true)
+	addShadowBorder:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
+
 	local fontStyle = ns.CreateCheckBox(appearance, "fontStyle", true, true)
-	fontStyle:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
+	fontStyle:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
 
 	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
-	vignette:SetPoint("LEFT", enableTheme, "RIGHT", 240, 0)
+	vignette:SetPoint("LEFT", addShadowBorder, "RIGHT", 240, 0)
 
 	local vignetteAlpha = ns.CreateNumberSlider(appearance, "vignetteAlpha", nil, nil, .1, 1, .1, true)
 	vignetteAlpha:SetPoint("TOPLEFT", vignette, "BOTTOMLEFT", 16, -20)
+
+	local function togglevignetteOptions()
+		local shown = vignette:GetChecked()
+		vignetteAlpha:SetShown(shown)
+	end
+
+	vignette:HookScript("OnClick", togglevignetteOptions)
+	vignetteAlpha:HookScript("OnShow", togglevignetteOptions)
 
 	local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
 	colours:SetPoint("TOPLEFT", fontStyle, "BOTTOMLEFT", 0, -30)
@@ -384,32 +393,16 @@ do
 	local autoActionCam = ns.CreateCheckBox(automation, "autoActionCam", true, true)
 	autoActionCam:SetPoint("TOPLEFT", autoTabBinder, "BOTTOMLEFT", 0, -8)
 
+	local autoSetRole = ns.CreateCheckBox(automation, "autoSetRole", true)
+	autoSetRole:SetPoint("TOPLEFT", autoActionCam, "BOTTOMLEFT", 0, -8)
 
+	local autoSetRoleUseSpec = ns.CreateCheckBox(automation, "autoSetRole_useSpec", true)
+	autoSetRoleUseSpec:SetPoint("TOPLEFT", autoSetRole, "BOTTOMLEFT", 16, -8)
 
-	--local autoRepairGuild = ns.CreateCheckBox(automation, "autoRepair_guild")
-	--autoRepairGuild:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 16, -8)
-	--autoRepair.children = {autoRepairGuild}
+	local autoSetRoleVerbose = ns.CreateCheckBox(automation, "autoSetRole_verbose", true)
+	autoSetRoleVerbose:SetPoint("TOPLEFT", autoSetRoleUseSpec, "BOTTOMLEFT", 0, -8)
 
-	--local autoRoll = ns.CreateCheckBox(automation, "autoRoll")
-	--autoRoll:SetPoint("TOPLEFT", autoRepair, "BOTTOMLEFT", 0, -42)
-
-	--local autoRollMaxLevel = ns.CreateCheckBox(automation, "autoRoll_maxLevel")
-	--autoRollMaxLevel:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 16, -8)
-	--autoRoll.children = {autoRollMaxLevel}
-
-	--local autoSell = ns.CreateCheckBox(automation, "autoSell", true)
-	--autoSell:SetPoint("TOPLEFT", autoRoll, "BOTTOMLEFT", 0, -42)
-
-	--local autoSetRole = ns.CreateCheckBox(automation, "autoSetRole", true)
-	--autoSetRole:SetPoint("TOPLEFT", autoSell, "BOTTOMLEFT", 0, -8)
-
-	--local autoSetRoleUseSpec = ns.CreateCheckBox(automation, "autoSetRole_useSpec", true)
-	--autoSetRoleUseSpec:SetPoint("TOPLEFT", autoSetRole, "BOTTOMLEFT", 16, -8)
-
-	--local autoSetRoleVerbose = ns.CreateCheckBox(automation, "autoSetRole_verbose", true)
-	--autoSetRoleVerbose:SetPoint("TOPLEFT", autoSetRoleUseSpec, "BOTTOMLEFT", 0, -8)
-
-	--autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
+	autoSetRole.children = {autoSetRoleUseSpec, autoSetRoleVerbose}
 end
 
 -- [[ Notifications ]]
@@ -641,25 +634,120 @@ do
 	local enable = ns.CreateCheckBox(unitframe, "enable", true, true)
 	enable:SetPoint("TOPLEFT", unitframe.subText, "BOTTOMLEFT", 0, -8)
 
-	--local transMode = ns.CreateCheckBox(unitframes, "transMode", true, true)
-	--transMode:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+	local transMode = ns.CreateCheckBox(unitframe, "transMode", true, true)
+	transMode:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
-	--local healthClassColor = ns.CreateCheckBox(unitframes, "healthClassColor", true, true)
-	--healthClassColor:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 16, -8)
+	local healthClassColor = ns.CreateCheckBox(unitframe, "healthClassColor", true, true)
+	healthClassColor:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 16, -8)
 
-	--local powerTypeColor = ns.CreateCheckBox(unitframes, "powerTypeColor", true, true)
-	--powerTypeColor:SetPoint("TOPLEFT", healthClassColor, "BOTTOMLEFT", 0, -8)
+	local powerTypeColor = ns.CreateCheckBox(unitframe, "powerTypeColor", true, true)
+	powerTypeColor:SetPoint("TOPLEFT", healthClassColor, "BOTTOMLEFT", 0, -8)
 
-	--transMode.children = {healthClassColor, powerTypeColor}
+	transMode.children = {healthClassColor, powerTypeColor}
 
-	--local darkBorder = ns.CreateCheckBox(unitframes, "darkBorder", true, true)
-	--darkBorder:SetPoint("TOPLEFT", powerTypeColor, "BOTTOMLEFT", -16, -8)
+	local gradient = ns.CreateCheckBox(unitframe, "gradient", true, true)
+	gradient:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
 
-	--local gradient = ns.CreateCheckBox(unitframes, "gradient", true, true)
-	--gradient:SetPoint("TOPLEFT", darkBorder, "BOTTOMLEFT", 0, -8)
+	local portrait = ns.CreateCheckBox(unitframe, "portrait", true, true)
+	portrait:SetPoint("TOPLEFT", gradient, "BOTTOMLEFT", 0, -8)
 
-	--local portrait = ns.CreateCheckBox(unitframes, "portrait", true, true)
-	--portrait:SetPoint("TOPLEFT", gradient, "BOTTOMLEFT", 0, -8)
+	local main = ns.addSubCategory(unitframe, ns.localization.unitframemain)
+	main:SetPoint("TOPLEFT", powerTypeColor, "BOTTOMLEFT", -32, -8)
+
+	local threat = ns.CreateCheckBox(unitframe, "threat", true, true)
+	threat:SetPoint("TOPLEFT", main, "BOTTOMLEFT", 16, -16)
+
+	local prediction = ns.CreateCheckBox(unitframe, "prediction", true, true)
+	prediction:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
+
+	local classPower = ns.CreateCheckBox(unitframe, "classPower", true, true)
+	classPower:SetPoint("TOPLEFT", prediction, "BOTTOMLEFT", 0, -8)
+
+	local dispellable = ns.CreateCheckBox(unitframe, "dispellable", true, true)
+	dispellable:SetPoint("LEFT", threat, "RIGHT", 240, 0)
+
+	local spellRange = ns.CreateCheckBox(unitframe, "spellRange", true, true)
+	spellRange:SetPoint("TOPLEFT", dispellable, "BOTTOMLEFT", 0, -8)
+
+	local spellRangeAlpha = ns.CreateNumberSlider(unitframe, "spellRangeAlpha", nil, nil, .1, 1, .1, true)
+	spellRangeAlpha:SetPoint("TOPLEFT", spellRange, "BOTTOMLEFT", 16, -20)
+
+	local function toggleSpellRangeOptions()
+		local shown = spellRange:GetChecked()
+		spellRangeAlpha:SetShown(shown)
+	end
+
+	spellRange:HookScript("OnClick", toggleSpellRangeOptions)
+	spellRangeAlpha:HookScript("OnShow", toggleSpellRangeOptions)
+
+	local castbarline = ns.addSubCategory(unitframe, ns.localization.unitframecastbarline)
+	castbarline:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -16)
+
+	local castbar = ns.CreateCheckBox(unitframe, "castbar", true, true)
+	castbar:SetPoint("TOPLEFT", castbarline, "BOTTOMLEFT", 16, -16)
+
+	local cbSeparate = ns.CreateCheckBox(unitframe, "cbSeparate", true, true)
+	cbSeparate:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
+
+	castbar.children = {cbSeparate}
+
+	local group = ns.addSubCategory(unitframe, ns.localization.unitframegroup)
+	group:SetPoint("TOPLEFT", cbSeparate, "BOTTOMLEFT", -32, -8)
+
+	local enableGroup = ns.CreateCheckBox(unitframe, "enableGroup", true, true)
+	enableGroup:SetPoint("TOPLEFT", group, "BOTTOMLEFT", 16, -16)
+
+	local partyMissingHealth = ns.CreateCheckBox(unitframe, "partyMissingHealth", true, true)
+	partyMissingHealth:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
+
+	local partyNameAlways = ns.CreateCheckBox(unitframe, "partyNameAlways", true, true)
+	partyNameAlways:SetPoint("LEFT", partyMissingHealth, "RIGHT", 240, 0)
+
+	enableGroup.children = {partyMissingHealth, partyNameAlways}
+
+	local misc = ns.addSubCategory(unitframe, ns.localization.unitframemisc)
+	misc:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", -32, -8)
+
+	local enableBoss = ns.CreateCheckBox(unitframe, "enableBoss", true, true)
+	enableBoss:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 16, -16)
+
+	local enableArena = ns.CreateCheckBox(unitframe, "enableArena", true, true)
+	enableArena:SetPoint("LEFT", enableBoss, "RIGHT", 240, 0)
+
+	local function toggleUFOptions()
+		local shown = enable:GetChecked()
+		transMode:SetShown(shown)
+		healthClassColor:SetShown(shown)
+		powerTypeColor:SetShown(shown)
+		gradient:SetShown(shown)
+		main:SetShown(shown)
+		portrait:SetShown(shown)
+
+		group:SetShown(shown)
+		enableGroup:SetShown(shown)
+		partyNameAlways:SetShown(shown)
+		partyMissingHealth:SetShown(shown)
+
+		threat:SetShown(shown)
+		prediction:SetShown(shown)
+		classPower:SetShown(shown)
+		dispellable:SetShown(shown)
+		spellRange:SetShown(shown)
+		spellRangeAlpha:SetShown(shown)
+
+		castbarline:SetShown(shown)
+		castbar:SetShown(shown)
+		cbSeparate:SetShown(shown)
+
+		
+		misc:SetShown(shown)
+		enableBoss:SetShown(shown)
+		enableArena:SetShown(shown)
+
+	end
+
+	enable:HookScript("OnClick", toggleUFOptions)
+	unitframe:HookScript("OnShow", toggleUFOptions)
 
 	--local castbar = ns.CreateCheckBox(unitframes, "castbar", true, true)
 	--castbar:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", 0, -8)
@@ -715,30 +803,7 @@ do
 	tinsert(ns.buttons, unitframe.Layout)]]
 
 
-	--local function toggleUFOptions()
-	--	local shown = enable:GetChecked()
-	--	transMode:SetShown(shown)
-	--	healthClassColor:SetShown(shown)
-	--	powerTypeColor:SetShown(shown)
-	--	gradient:SetShown(shown)
-	--	darkBorder:SetShown(shown)
-	--	portrait:SetShown(shown)
-	--	enableGroup:SetShown(shown)
-	--	showRaidFrames:SetShown(shown)
-	--	limitRaidSize:SetShown(shown)
-	--	partyNameAlways:SetShown(shown)
-	--	partyMissingHealth:SetShown(shown)
-	--	castbarSeparate:SetShown(shown)
-	--	absorb:SetShown(shown)
-	--	pvp:SetShown(shown)
-	--	statusIndicator:SetShown(shown)
-	--	statusIndicatorCombat:SetShown(shown)
-	--	castbar:SetShown(shown)
-	--	enableArena:SetShown(shown)
-	--end
-
-	--enable:HookScript("OnClick", toggleUFOptions)
-	--unitframes:HookScript("OnShow", toggleUFOptions)
+	
 end
 
 -- [[ Inventory ]]

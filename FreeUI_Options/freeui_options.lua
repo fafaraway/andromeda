@@ -259,7 +259,7 @@ end
 -- Sliders
 
 local function onValueChanged(self, value)
-	if self.option == 'uiScale' or self.option == 'vignetteAlpha' then
+	if self.option == 'uiScale' or self.option == 'vignetteAlpha' or self.option == 'spellRangeAlpha' then
 		value = string.format("%.2f", value)
 	else
 		value = floor(value+0.5)
