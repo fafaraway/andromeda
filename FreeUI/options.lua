@@ -262,9 +262,9 @@ C['unitframe'] = {
 			['healthClassColor'] = true,
 			['powerTypeColor'] = true,
 
-		['gradient'] = true,
+		['gradient'] = false,
 
-		['portrait'] = true,
+		['portrait'] = false,
 			['portraitAlpha'] = .1,
 
 		['spellRange'] = true,
