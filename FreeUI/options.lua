@@ -276,6 +276,8 @@ C['unitframe'] = {
 		['threat'] = true,
 		['prediction'] = true, 
 		['dispellable'] = true,
+
+		['debuffbyPlayer'] = true,
 		
 		['castbar'] = true,
 			['cbSeparate'] = false,
@@ -297,10 +299,6 @@ C['unitframe'] = {
 
 		['power_height'] = 2,
 		['altpower_height'] = 2,
-
-		['debuffbyPlayer'] = true,
-
-		['focuser'] = true,
 
 		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -360},
 		['player_cb_pos'] = {'TOPRIGHT', 'oUF_Player', 'BOTTOMRIGHT', 0, -60},
