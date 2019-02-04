@@ -91,7 +91,7 @@ function module:Spell()
 		if subEvent == 'SPELL_CAST_SUCCESS' then
 			if FeastSpells[spellID] then 
 				SendChatMessage(format(L['NOTIFICATION_FEAST'], srcName, GetSpellLink(spellID)), say)
-			elseif spellID == 43987 then -- Conjure Refreshment Table
+			elseif spellID == 43987 or spellID == 42955 then -- Conjure Refreshment Table
 				SendChatMessage(format(L['NOTIFICATION_REFRESHMENTTABLE'], srcName, GetSpellLink(spellID)), say)
 			elseif spellID == 698 then -- Ritual of Summoning
 				SendChatMessage(format(L['NOTIFICATION_RITUALOFSUMMONING'], srcName, GetSpellLink(spellID)), say)
