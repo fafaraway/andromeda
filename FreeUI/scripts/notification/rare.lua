@@ -26,8 +26,10 @@ function module:Rare()
 
 			local tex = string.format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 			
-			UIErrorsFrame:AddMessage(C.InfoColor..L["NOTIFICATION_RARE"]..tex..(C.RedColor..info.name or ""))
-			print(C.InfoColor..L["NOTIFICATION_RARE"]..tex..C.RedColor..(info.name or ""))
+			if instType == "none" then
+				UIErrorsFrame:AddMessage(C.InfoColor..L["NOTIFICATION_RARE"]..tex..(C.RedColor..info.name or ""))
+				print(C.InfoColor..L["NOTIFICATION_RARE"]..tex..C.RedColor..(info.name or ""))
+			end
 
 			if C.notification.rareSound and instType == "none" then
 				PlaySound(23404, "master")
