@@ -192,7 +192,7 @@ function module:ReskinRegions()
 		mail:Hide()
 	end)
 
-	local mt = F.CreateFSAlt(mail, 'pixel', '|cffd3009a<New Mail>|r', true, true)
+	local mt = F.CreateFSAlt(mail, 'pixel', '|cffcb58e2<New Mail>|r', true, true)
 	mt:SetPoint("BOTTOM", Minimap, 0, 36)
 
 	MiniMapMailFrame:SetAlpha(0)

@@ -136,7 +136,7 @@ function module:ProgressBar()
 	if not C.general.progressBar or not C.map.miniMap then return end 
 
 	local bar = CreateFrame("StatusBar", nil, Minimap)
-	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 31)
+	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 33)
 	bar:SetSize(256, 2)
 	bar:SetHitRectInsets(0, 0, 0, -10)
 	F.CreateSB(bar)
