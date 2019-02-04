@@ -4,29 +4,6 @@ local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
 local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
 local min, max, abs, floor = math.min, math.max, math.abs, math.floor
 
-C.Class = select(2, UnitClass("player"))
-C.Name = UnitName("player")
-C.Realm = GetRealmName()
-C.Client = GetLocale()
-C.Version = GetAddOnMetadata("FreeUI", "Version")
-C.Title = GetAddOnMetadata("FreeUI", "Title")
-C.Support = GetAddOnMetadata("FreeUI", "X-Support")
-
-C.ClassColors = {}
-C.ClassList = {}
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
-	C.ClassList[v] = k
-end
-
-local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-for class in pairs(colors) do
-	C.ClassColors[class] = {}
-	C.ClassColors[class].r = colors[class].r
-	C.ClassColors[class].g = colors[class].g
-	C.ClassColors[class].b = colors[class].b
-	C.ClassColors[class].colorStr = colors[class].colorStr
-end
-C.r, C.g, C.b = C.ClassColors[C.Class].r, C.ClassColors[C.Class].g, C.ClassColors[C.Class].b
 
 local r, g, b
 if C.appearance.colourScheme == 2 then
@@ -36,39 +13,9 @@ else
 end
 
 
-C.MyColor = format("|cff%02x%02x%02x", C.r*255, C.g*255, C.b*255)
-C.InfoColor = "|cffe5d19f"
-C.GreyColor = "|cff808080"
-C.RedColor = "|cffff2735"
-C.GreenColor = "|cff3a9d36"
-
-C.LineString = C.GreyColor.."---------------"
-C.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
-C.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
-C.MiddleButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
-
-
-
-C.TexCoord = {.08, .92, .08, .92}
-
-
-local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
-local fixedHeight = 768 / pysHeight
-local scale = tonumber(floor(fixedHeight*100 + .5)/100)
-
-C.Mult = fixedHeight / scale
-
-
-
-
-
-
-
 
 
 -- [[ Functions ]]
-
-
 
 function F.SetFS(fontObject, fontSize)
 	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
