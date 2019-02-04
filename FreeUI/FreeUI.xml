@@ -110,6 +110,7 @@
 	<Script file='scripts\misc\sharedmedia.lua'/>
 	<Script file='scripts\misc\quickjoin.lua'/>
 	<Script file='scripts\misc\missingstats.lua'/>
+	<Script file='scripts\misc\missingbuffs.lua'/>
 	<Script file='scripts\misc\pvpsound.lua'/>
 	<Script file='scripts\misc\tradetabs.lua'/>
 	<Script file='scripts\misc\reputation.lua'/>

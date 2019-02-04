@@ -12,6 +12,7 @@ C['general'] = {
 	['mailButton'] = true, 				
 	['alreadyKnown'] = true,
 	['missingStats'] = true,
+	['missingBuffs'] = true,
 	['fasterLoot'] = true,
 	['PVPSound'] = true,
 
@@ -348,6 +349,7 @@ C['unitframe'] = {
 		['boss_pos'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
 		['boss_width'] = 166,
 		['boss_height'] = 20,
+		['boss_padding'] = 60,
 
 		['arena_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
 		['arena_width'] = 166,
