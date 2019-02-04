@@ -18,6 +18,7 @@ function module:OnLogin()
 	self:Focuser()
 	self:NakedIcon()
 	self:ExtendInstance()
+	self:MissingBuffs()
 
 
 	hooksecurefunc("ReputationFrame_Update", self.HookParagonRep)

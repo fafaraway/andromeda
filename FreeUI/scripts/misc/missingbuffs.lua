@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("Misc")
+local module = F:GetModule('Misc')
 
-module.MissingBuffs = {
+module.BuffsList = {
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -32,7 +32,7 @@ module.MissingBuffs = {
 				[6673] = true,
 			},
 			depend = 6673,
-			instance = true,
+			instance = false,
 		},
 	},
 	SHAMAN = {
@@ -64,12 +64,12 @@ module.MissingBuffs = {
 	},
 }
 
-local groups = module.MissingBuffs[C.Class]
-local iconSize = 32
+local groups = module.BuffsList[C.Class]
+local iconSize = 48
 local frames, parentFrame = {}
 local pairs, tinsert = pairs, table.insert
 
-local function UpdateReminder(cfg)
+local function UpdateMissingBuffs(cfg)
 	local frame = cfg.frame
 	local depend = cfg.depend
 	local spec = cfg.spec
@@ -82,14 +82,14 @@ local function UpdateReminder(cfg)
 	if depend and not IsPlayerSpell(depend) then isPlayerSpell = false end
 	if spec and spec ~= GetSpecialization() then isRightSpec = false end
 	if combat and InCombatLockdown() then isInCombat = true end
-	if instance and inInst and (instType == "scenario" or instType == "party" or instType == "raid") then isInInst = true end
-	if pvp and (instType == "arena" or instType == "pvp" or GetZonePVPInfo() == "combat") then isInPVP = true end
+	if instance and inInst and (instType == 'scenario' or instType == 'party' or instType == 'raid') then isInInst = true end
+	if pvp and (instType == 'arena' or instType == 'pvp' or GetZonePVPInfo() == 'combat') then isInPVP = true end
 	if not combat and not instance and not pvp then isInCombat, isInInst, isInPVP = true, true, true end
 
 	frame:Hide()
-	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle("player") then
+	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') then
 		for i = 1, 32 do
-			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff("player", i)
+			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
 			if name and cfg.spells[spellID] then
 				frame:Hide()
 				return
@@ -99,8 +99,8 @@ local function UpdateReminder(cfg)
 	end
 end
 
-local function AddReminder(cfg)
-	local frame = CreateFrame("Frame", nil, parentFrame)
+local function AddMissingBuffs(cfg)
+	local frame = CreateFrame('Frame', nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
 	F.CreateSD(frame)
@@ -108,7 +108,7 @@ local function AddReminder(cfg)
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break
 	end
-	frame.text = F.CreateFSAlt(frame, 'pixel', 'Missing', true, true, "TOP", 1, 15)
+	frame.text = F.CreateFSAlt(frame, 'pixel', 'Missing', true, true, 'TOP', 1, 15)
 	frame:Hide()
 	cfg.frame = frame
 
@@ -120,7 +120,7 @@ local function UpdateAnchor()
 	local offset = iconSize + 5
 	for _, frame in next, frames do
 		if frame:IsShown() then
-			frame:SetPoint("LEFT", offset * index, 0)
+			frame:SetPoint('LEFT', offset * index, 0)
 			index = index + 1
 		end
 	end
@@ -129,25 +129,25 @@ end
 
 local function UpdateEvent()
 	for _, cfg in pairs(groups) do
-		if not cfg.frame then AddReminder(cfg) end
-		UpdateReminder(cfg)
+		if not cfg.frame then AddMissingBuffs(cfg) end
+		UpdateMissingBuffs(cfg)
 	end
 	UpdateAnchor()
 end
 
-function module:InitReminder()
+function module:MissingBuffs()
 	if not groups then return end
 	if not C.general.missingBuffs then return end
 
-	parentFrame = CreateFrame("Frame", nil, UIParent)
-	parentFrame:SetPoint("CENTER", -220, 130)
+	parentFrame = CreateFrame('Frame', nil, UIParent)
+	parentFrame:SetPoint('TOPLEFT', 50, -100)
 	parentFrame:SetSize(iconSize, iconSize)
 
-	F:RegisterEvent("UNIT_AURA", UpdateEvent, "player")
-	F:RegisterEvent("PLAYER_ENTERING_WORLD", UpdateEvent)
-	F:RegisterEvent("PLAYER_REGEN_ENABLED", UpdateEvent)
-	F:RegisterEvent("PLAYER_REGEN_DISABLED", UpdateEvent)
-	F:RegisterEvent("ZONE_CHANGED_NEW_AREA", UpdateEvent)
-	F:RegisterEvent("UNIT_ENTERED_VEHICLE", UpdateEvent)
-	F:RegisterEvent("UNIT_EXITED_VEHICLE", UpdateEvent)
+	F:RegisterEvent('UNIT_AURA', UpdateEvent, 'player')
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateEvent)
+	F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateEvent)
+	F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateEvent)
+	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateEvent)
+	F:RegisterEvent('UNIT_ENTERED_VEHICLE', UpdateEvent)
+	F:RegisterEvent('UNIT_EXITED_VEHICLE', UpdateEvent)
 end
