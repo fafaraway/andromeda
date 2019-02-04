@@ -19,7 +19,7 @@ function module:ReskinRegions()
 
 	local _, _, _, _, dateText = GameTimeFrame:GetRegions()
 	F.SetFS(dateText)
-	dateText:SetTextColor(1, 1, 1)
+	dateText:SetTextColor(147/255, 211/255, 231/255)
 	dateText:SetShadowOffset(0, 0)
 	dateText:SetPoint("CENTER")
 
@@ -192,7 +192,7 @@ function module:ReskinRegions()
 		mail:Hide()
 	end)
 
-	local mt = F.CreateFSAlt(mail, 'pixel', '<Mail>', true, true)
+	local mt = F.CreateFSAlt(mail, 'pixel', '|cffd3009a<New Mail>|r', true, true)
 	mt:SetPoint("BOTTOM", Minimap, 0, 36)
 
 	MiniMapMailFrame:SetAlpha(0)
