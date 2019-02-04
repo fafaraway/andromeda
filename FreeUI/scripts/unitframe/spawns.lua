@@ -22,7 +22,7 @@ local function CreatePlayerStyle(self)
 	module:CreateAltPower(self)
 	module:CreateIndicator(self)
 	module:CreateCastBar(self)
-	module:CreateSpellRange(self)
+	--module:CreateSpellRange(self)
 	module:CreateDispellable(self, unit)
 	if (C.Class == 'DEATHKNIGHT') then
 		module:CreateRunesBar(self)
@@ -30,7 +30,9 @@ local function CreatePlayerStyle(self)
 		module:CreateClassPower(self)
 	end
 
-	FreeUI_LeaveVehicleButton:SetPoint('LEFT', self, 'RIGHT', 5, 0)
+	if C.actionbar.enable then
+		FreeUI_LeaveVehicleButton:SetPoint('LEFT', self, 'RIGHT', 5, 0)
+	end
 end
 
 local function CreatePetStyle(self)
@@ -127,7 +129,7 @@ local function CreatePartyStyle(self)
 	module:CreateThreatIndicator(self)
 	module:CreateBuffs(self)
 	module:CreateDebuffs(self)
-	module:CreateNameColour(self)
+	--module:CreateNameColour(self)
 	module:CreateBorderColour(self)
 	module:CreateDispellable(self, unit)
 	module:CreateSpellRange(self)
@@ -146,7 +148,7 @@ local function CreateRaidStyle(self)
 	module:CreateThreatIndicator(self)
 	module:CreateBuffs(self)
 	module:CreateDebuffs(self)
-	module:CreateNameColour(self)
+	--module:CreateNameColour(self)
 	module:CreateBorderColour(self)
 	module:CreateSpellRange(self)
 end
@@ -564,11 +566,13 @@ function module:OnLogin()
 		local arena = {}
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
+			arena[i]:SetAttribute('oUF-enableArenaPrep', false)
 			local width, height = arena[i]:GetWidth(), arena[i]:GetHeight()
 			if i == 1 then
-				arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"]..i, "Arena1", {"RIGHT", UIParent, "CENTER", -520, -100}, width, height)
+				arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"]..i, "Arena1", cfg.arena_pos, width, height)
 			else
-				arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"]..i, "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 80}, width, height)
+				--arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"]..i, "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 80}, width, height)
+				arena[i]:SetPoint("BOTTOM", arena[i-1], "TOP", 0, cfg.arena_padding)
 			end
 		end
 	end
@@ -585,12 +589,12 @@ function module:OnLogin()
 			'showParty', true,
 			'showPlayer', true,
 			'showSolo', false,
-			'xoffset', 6,
-			'yoffset', 6,
+			'xoffset', cfg.party_reverse and -cfg.party_padding or cfg.party_padding,
+			'yoffset', cfg.party_reverse and cfg.party_padding or -cfg.party_padding,
 			'maxColumns', 1,
 			'unitsperColumn', 5,
 			'columnSpacing', 0,
-			"point", "BOTTOM",
+			"point", cfg.party_horizon and "RIGHT" or cfg.party_horizon and cfg.party_reverse and "LEFT" or not cfg.party_horizon and "BOTTOM" or not cfg.party_horizon and cfg.party_reverse and "TOP",
 			'columnAnchorPoint', 'LEFT',
 			'groupBy', 'ASSIGNEDROLE',
 			'groupingOrder', 'TANK,HEALER,DAMAGER',
@@ -600,9 +604,32 @@ function module:OnLogin()
 				self:SetWidth(%d)
 			]]):format(cfg.party_height, cfg.party_width)
 		)
-		partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, cfg.party_width, cfg.party_height*5+20)
-		party:ClearAllPoints()
-		party:SetPoint("BOTTOMLEFT", partyMover)
+
+		--for i = 1, 5 do
+		--	party[i] = "oUF_Party"..i
+
+
+		if cfg.party_horizon then
+			partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, cfg.party_width*5+cfg.party_padding*4, cfg.party_height)
+			if cfg.party_reverse then
+				party:ClearAllPoints()
+				party:SetPoint("RIGHT", partyMover)
+			else
+				party:ClearAllPoints()
+				party:SetPoint("LEFT", partyMover)
+			end
+		else
+			partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, cfg.party_width, cfg.party_height*5+cfg.party_padding*4)
+			if cfg.party_reverse then
+				party:ClearAllPoints()
+				party:SetPoint("BOTTOM", partyMover)
+			else
+				party:ClearAllPoints()
+				party:SetPoint("TOP", partyMover)
+			end
+		end
+
+		
 	
 
 		oUF:RegisterStyle("Raid", CreateRaidStyle)
@@ -614,15 +641,15 @@ function module:OnLogin()
 			local raid = oUF:SpawnHeader(name, nil, "raid",
 			"showParty", false,
 			"showRaid", true,
-			"xoffset", 4,
-			"yOffset", -4,
+			"xoffset", cfg.raid_padding,
+			"yOffset", cfg.raid_padding,
 			"groupFilter", tostring(i),
 			"groupingOrder", "1,2,3,4,5,6,7,8",
 			"groupBy", "GROUP",
 			"sortMethod", "INDEX",
 			"maxColumns", 1,
 			"unitsPerColumn", 5,
-			"columnSpacing", 4,
+			"columnSpacing", 0,
 			"point", cfg.raid_horizon and "LEFT" or "TOP",
 			"columnAnchorPoint", "RIGHT",
 			"oUF-initialConfigFunction", ([[
@@ -637,13 +664,13 @@ function module:OnLogin()
 			groups[i] = CreateRaid("oUF_Raid"..i, i)
 			if i == 1 then
 				if cfg.raid_horizon then
-					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, cfg.raid_width*5+16, cfg.raid_height*cfg.raid_numGroups+(4*(cfg.raid_numGroups-1)))
+					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, cfg.raid_width*5+cfg.raid_padding*4, cfg.raid_height*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1)))
 					if cfg.raid_reverse then
 						groups[i]:ClearAllPoints()
 						groups[i]:SetPoint("BOTTOMLEFT", raidMover)
 					end
 				else
-					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, cfg.raid_width*cfg.raid_numGroups+(4*(cfg.raid_numGroups-1)), cfg.raid_height*5+16)
+					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, cfg.raid_width*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1)), cfg.raid_height*5+cfg.raid_padding*4)
 					if cfg.raid_reverse then
 						groups[i]:ClearAllPoints()
 						groups[i]:SetPoint("TOPRIGHT", raidMover)
@@ -652,15 +679,15 @@ function module:OnLogin()
 			else
 				if cfg.raid_horizon then
 					if cfg.raid_reverse then
-						groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, 4)
+						groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, cfg.raid_padding)
 					else
-						groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, -4)
+						groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, -cfg.raid_padding)
 					end
 				else
 					if cfg.raid_reverse then
-						groups[i]:SetPoint("TOPRIGHT", groups[i-1], "TOPLEFT", -4, 0)
+						groups[i]:SetPoint("TOPRIGHT", groups[i-1], "TOPLEFT", -cfg.raid_padding, 0)
 					else
-						groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", 4, 0)
+						groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", cfg.raid_padding, 0)
 					end
 				end
 			end

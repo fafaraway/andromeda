@@ -8,20 +8,26 @@ local oUF, cast = FreeUI.oUF, FreeUI.cast
 
 function module:CreateBackDrop(self)
 	local bd = CreateFrame('Frame', nil, self)
+	bd:SetFrameStrata('BACKGROUND')
 	bd:SetPoint('TOPLEFT', -1, 1)
 	bd:SetPoint('BOTTOMRIGHT', 1, -1)
-	bd:SetFrameStrata('BACKGROUND')
+	bd:SetBackdrop({bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult})
+	bd:SetBackdropBorderColor(0, 0, 0)
+	if C.unitframe.transMode then
+		bd:SetBackdropColor(0, 0, 0, .25)
+	else
+		bd:SetBackdropColor(0, 0, 0, .45)
+	end
+	F.CreateTex(bd)
 	self.bd = bd
 
-	if C.unitframe.transMode then
-		F.CreateBD(bd, C.unitframe.transModeAlpha)
-	else
-		F.CreateBD(bd)
-	end
-
 	if C.appearance.addShadowBorder then
-		F.CreateSD(bd)
-		self.Shadow = sd
+		local sd = CreateFrame('Frame', nil, bd)
+		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+		sd:SetPoint('TOPLEFT', -4, 4)
+		sd:SetPoint('BOTTOMRIGHT', 4, -4)
+		sd:SetBackdropBorderColor(0, 0, 0, .35)
+		self.sd = sd
 	end
 end
 
@@ -49,7 +55,7 @@ end
 
 -- Selected frames name/border colour
 local function UpdateNameColour(self, unit)
-	if UnitIsUnit(unit, 'target') then
+	--[[if UnitIsUnit(unit, 'target') then
 		self.Text:SetTextColor(.1, .7, 1)
 	elseif UnitIsDead(unit) then
 		self.Text:SetTextColor(.7, .2, .1)
@@ -57,12 +63,25 @@ local function UpdateNameColour(self, unit)
 		self.Text:SetTextColor(.7, .6, .8)
 	else
 		self.Text:SetTextColor(1, 1, 1)
+	end]]
+
+	local r, g, b
+	local _, class = UnitClass(unit)
+
+	if (UnitIsDead(unit) or UnitIsGhost(unit)) then
+
+		r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
+
+		self.Text:SetTextColor(r, g, b)
+	else
+		self.Text:SetTextColor(1, 1, 1)
 	end
+
 end
 
 local function UpdateNameColourAlt(self)
 	local frame = self:GetParent()
-	if frame.unit then
+	--[[if frame.unit then
 		if UnitIsUnit(frame.unit, 'target') then
 			frame.Text:SetTextColor(.1, .7, 1)
 		elseif UnitIsDead(frame.unit) then
@@ -74,6 +93,17 @@ local function UpdateNameColourAlt(self)
 		end
 	else
 		frame.Text:SetTextColor(1, 1, 1)
+	end]]
+
+	local r, g, b
+	local _, class = UnitClass(unit)
+	if frame.unit then
+		if UnitIsDead(frame.unit) or UnitIsGhost(frame.unit) then
+			r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
+			frame.Text:SetTextColor(r, g, b)
+		else
+			frame.Text:SetTextColor(1, 1, 1)
+		end
 	end
 end
 
@@ -86,10 +116,8 @@ end
 local function UpdateBorderColour(self)
 	local frame = self:GetParent()
 	if frame.unit then
-		if UnitIsUnit(frame.unit, 'target') then
+		if UnitExists('target') and UnitIsUnit('target', frame.unit) then
 			frame.bd:SetBackdropBorderColor(1, 1, 1)
-		elseif UnitIsDead(frame.unit) then
-			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		else
 			frame.bd:SetBackdropBorderColor(0, 0, 0)
 		end
@@ -134,6 +162,14 @@ local function PostUpdateHealth(Health, unit, min, max)
 		end
 	end
 
+	if self.Text then
+		if UnitIsDead(unit) or UnitIsGhost(unit) then
+			self.Text:SetTextColor(r, g, b)
+		else
+			self.Text:SetTextColor(1, 1, 1)
+		end
+	end
+
 	if C.unitframe.transMode then
 		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
 			--self.Healthdef:Hide()
@@ -172,10 +208,6 @@ local function PostUpdateHealth(Health, unit, min, max)
 			else
 				self.gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, .6, .1, .1, .1, .6)
 			end
-		end
-
-		if self.Text then
-			UpdateNameColour(self, unit)
 		end
 	else
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -225,8 +257,8 @@ function module:CreateHealthBar(self)
 
 	if C.unitframe.transMode then
 		local Healthdef = CreateFrame('StatusBar', nil, self)
-		--Healthdef:SetFrameStrata('LOW')
-		Healthdef:SetFrameLevel(self.Health:GetFrameLevel())
+		Healthdef:SetFrameStrata('LOW')
+		--Healthdef:SetFrameLevel(self.Health:GetFrameLevel())
 		Healthdef:SetAllPoints(self.Health)
 		Healthdef:SetStatusBarTexture(C.media.sbTex)
 		Healthdef:GetStatusBarTexture():SetBlendMode('BLEND')
@@ -719,7 +751,7 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		button.Duration:Hide()
 	end
 
-	if canStealOrPurge then
+	if canStealOrPurge and (element.__owner.unitStyle ~= 'party' or element.__owner.unitStyle ~= 'raid') then
 		button.bg:SetVertexColor(1, 1, 1)
 
 		if button.sd then
@@ -1214,7 +1246,9 @@ function module:CreateIndicator(self)
 		self.QuestIndicator = QuestIndicator
 	end
 
-	local RaidTargetIndicator = self:CreateTexture()
+	local IndicatorParent = CreateFrame('Frame', nil, self)
+	IndicatorParent:SetFrameLevel(self.Health:GetFrameLevel() + 1)
+	local RaidTargetIndicator = IndicatorParent:CreateTexture()
 	RaidTargetIndicator:SetTexture('Interface\\AddOns\\FreeUI\\assets\\UI-RaidTargetingIcons')
 	RaidTargetIndicator:SetSize(16, 16)
 
@@ -1233,18 +1267,18 @@ function module:CreateIndicator(self)
 	self.RaidTargetIndicator = RaidTargetIndicator
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		local ResurrectIndicator = self:CreateTexture(nil, 'OVERLAY')
+		local ResurrectIndicator = IndicatorParent:CreateTexture(nil, 'OVERLAY')
 		ResurrectIndicator:SetSize(16, 16)
 		ResurrectIndicator:SetPoint('CENTER')
 		self.ResurrectIndicator = ResurrectIndicator
 
-		local LeaderIndicator = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		local LeaderIndicator = F.CreateFS(IndicatorParent, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		LeaderIndicator:SetText('L')
 		LeaderIndicator:SetJustifyH('LEFT')
 		LeaderIndicator:SetPoint('TOPLEFT', self.Health, 2, -1)
 		self.LeaderIndicator = LeaderIndicator
 
-		local ReadyCheckIndicator = self:CreateTexture(nil, 'OVERLAY')
+		local ReadyCheckIndicator = IndicatorParent:CreateTexture(nil, 'OVERLAY')
 		ReadyCheckIndicator:SetPoint('TOPLEFT', self.Health)
 		ReadyCheckIndicator:SetSize(16, 16)
 		self.ReadyCheckIndicator = ReadyCheckIndicator
@@ -1267,20 +1301,20 @@ function module:CreateIndicator(self)
 			end
 		end
 
-		local GroupRoleIndicator = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		local GroupRoleIndicator = F.CreateFS(IndicatorParent, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		GroupRoleIndicator:SetJustifyH('CENTER')
 		GroupRoleIndicator:SetPoint('BOTTOM', self.Health, 1, 1)
 		GroupRoleIndicator.Override = UpdateLFD
 		self.GroupRoleIndicator = GroupRoleIndicator
 
-		local PhaseIndicator = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		local PhaseIndicator = F.CreateFS(IndicatorParent, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
 		PhaseIndicator:SetText('?')
 		PhaseIndicator:SetJustifyH('RIGHT')
 		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -1)
 		self.PhaseIndicator = PhaseIndicator
 
-		local Summon = CreateFrame('Frame', nil, self)
-		Summon:SetPoint('RIGHT', self, 'LEFT')
+		local Summon = CreateFrame('Frame', nil, IndicatorParent)
+		Summon:SetPoint('CENTER', self.Health, 'CENTER')
 		Summon:SetSize(32, 32)
 		Summon:SetScript('OnLeave', GameTooltip_Hide)
 		Summon:SetScript('OnEnter', OnSummonEnter)
@@ -1355,28 +1389,24 @@ function module:CreateName(self)
 end
 
 function module:CreatePartyName(self)
-	local Text = F.CreateFS(self.Health, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-	Text:SetPoint('CENTER', 1, 0)
-	Text:SetJustifyH('CENTER')
-	self.Text = Text
+	local Text
 
 	if C.unitframe.partyNameAlways then
 		if C.Client == 'zhCN' or C.Client == 'zhTW' then
-			Text:SetFont(C.font.normal, 11)
-			Text:SetShadowOffset(2, -2)
+			Text = F.CreateFSAlt(self.Health, 11, '', true, true, 'CENTER', 1, 0)
 		else
-			F.SetFS(Text)
-			Text:SetShadowOffset(1, -1)
+			Text = F.CreateFSAlt(self.Health, 'pixel', '', true, true, 'CENTER', 1, 0)
 		end
-
 		self:Tag(Text, '[free:partyname]')
 	elseif C.unitframe.partyMissingHealth then
+		Text = F.CreateFSAlt(self.Health, 'pixel', '', true, true, 'CENTER', 1, 0)
 		self:Tag(Text, '[free:missinghealth]')
-		F.SetFS(Text)
 	else
+		Text = F.CreateFSAlt(self.Health, 'pixel', '', true, true, 'CENTER', 1, 0)
 		self:Tag(Text, '[dead][offline]')
-		F.SetFS(Text)
 	end
+	Text:SetJustifyH('CENTER')
+	self.Text = Text
 end
 
 

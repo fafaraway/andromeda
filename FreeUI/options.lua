@@ -333,10 +333,14 @@ C['unitframe'] = {
 		['party_pos'] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
 		['party_width'] = 90,
 		['party_height'] = 38,
+		['party_padding'] = 6,
+		['party_horizon'] = false,
+		['party_reverse'] = true,
 
 		['raid_pos'] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -40},
-		['raid_width'] = 50,
+		['raid_width'] = 48,
 		['raid_height'] = 32,
+		['raid_padding'] = 5,
 		['raid_numGroups'] = '8',
 		['raid_horizon'] = true,
 		['raid_reverse'] = false,
@@ -345,9 +349,10 @@ C['unitframe'] = {
 		['boss_width'] = 166,
 		['boss_height'] = 20,
 
-		['arena_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -400, 249},
+		['arena_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
 		['arena_width'] = 166,
 		['arena_height'] = 16,
+		['arena_padding'] = 80,
 		
 		
 }
