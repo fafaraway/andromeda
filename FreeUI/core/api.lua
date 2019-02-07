@@ -17,56 +17,44 @@ end
 
 -- [[ Functions ]]
 
-function F.SetFS(fontObject, fontSize)
-	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
-	fontObject:SetShadowColor(0, 0, 0)
-	fontObject:SetShadowOffset(1, -1)
-end
-
-function F:CreateFS(fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
+function F:CreateFS(size, flag, text, justify, colour, shadow, anchor, x, y)
 	local fs = self:CreateFontString(nil, "OVERLAY")
-	fs:SetFont(fontPath, fontSize, fontStyle)
-
-	if shadowColor then fs:SetShadowColor(shadowColor[1], shadowColor[2], shadowColor[3], shadowColor[4]) end
-	if shadowX and shadowY then fs:SetShadowOffset(shadowX, shadowY) end
-	if type(fontColor) == "table" then fs:SetTextColor(fontColor[1], fontColor[2], fontColor[3], fontColor[4])
-	elseif fontColor then fs:SetAlpha(fontColor) end
-
-	return fs
-end
-
-function F:CreateFSAlt(size, text, colour, shadow, anchor, x, y)
-	local fs = self:CreateFontString(nil, "OVERLAY")
-	
-	if size and size == 'pixel' then
-		fs:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
-	elseif size and size == 'pixelbig' then
-		fs:SetFont(C.font.pixel, 16, 'OUTLINEMONOCHROME')
-	elseif size then
-		fs:SetFont(C.font.normal, size, nil)
-	end
-
-	fs:SetText(text)
 	fs:SetWordWrap(false)
 
-	if colour and type(colour) == "boolean" then
-		fs:SetTextColor(1, 1, 1)
-	elseif colour == "class" then
+	if size == 'pixel' then
+		fs:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
+	elseif size == 'pixelbig' then
+		fs:SetFont(C.font.pixel, 16, 'OUTLINEMONOCHROME')
+	else
+		fs:SetFont(C.font.normal, size, flag)
+	end
+
+	if text then
+		fs:SetText(text)
+	end
+	
+	if justify then
+		fs:SetJustifyH(justify)
+	end
+
+	if colour and colour == "class" then
 		fs:SetTextColor(C.r, C.g, C.b)
-	elseif colour == "yellow" then
+	elseif colour and colour == "yellow" then
 		fs:SetTextColor(.9, .82, .62)
-	elseif colour == "red" then
+	elseif colour and colour == "red" then
 		fs:SetTextColor(1, .15, .21)
-	elseif colour == "green" then
+	elseif colour and colour == "green" then
 		fs:SetTextColor(.23, .62, .21)
-	elseif colour == "grey" then
+	elseif colour and colour == "grey" then
 		fs:SetTextColor(.5, .5, .5)
+	else
+		fs:SetTextColor(1, 1, 1)
 	end
 
 	if shadow and type(shadow) == "boolean" then
 		fs:SetShadowColor(0, 0, 0, 1)
 		fs:SetShadowOffset(1, -1)
-	elseif shadow == '2' then
+	elseif shadow and shadow == '2' then
 		fs:SetShadowColor(0, 0, 0, 1)
 		fs:SetShadowOffset(2, -2)
 	else
@@ -80,6 +68,12 @@ function F:CreateFSAlt(size, text, colour, shadow, anchor, x, y)
 	end
 
 	return fs
+end
+
+function F.SetFS(fontObject, fontSize)
+	fontObject:SetFont(C.font.pixel, 8, "OUTLINEMONOCHROME")
+	fontObject:SetShadowColor(0, 0, 0)
+	fontObject:SetShadowOffset(1, -1)
 end
 
 function F:CreateTex()
@@ -173,7 +167,6 @@ else
 	buttonR, buttonG, buttonB, buttonA = unpack(C.appearance.buttonSolidColour)
 end
 
-
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, "BORDER")
 	tex:SetPoint("TOPLEFT", C.Mult, -C.Mult)
@@ -183,28 +176,6 @@ function F:CreateGradient()
 
 	return tex
 end
-
---[[local function colourButton(self)
-	if not self:IsEnabled() then return end
-
-	if C.appearance.useButtonGradientColour then
-		self:SetBackdropColor(r, g, b, .3)
-	else
-		self.bgtex:SetVertexColor(r / 4, g / 4, b / 4)
-	end
-
-	self:SetBackdropBorderColor(C.r, C.g, C.b)
-end
-
-local function clearButton(self)
-	if C.appearance.useButtonGradientColour then
-		self:SetBackdropColor(0, 0, 0, 0)
-	else
-		self.bgtex:SetVertexColor(buttonR, buttonG, buttonB, buttonA)
-	end
-
-	self:SetBackdropBorderColor(0, 0, 0)
-end]]
 
 local function CreatePulse(frame)
 	local speed = .05
@@ -1257,7 +1228,7 @@ function F:CreateButton(width, height, text, textColor, fontSize)
 		F.PixelIcon(bu, fontSize, true)
 	else
 		F.CreateBC(bu)
-		bu.text = F.CreateFSAlt(bu, fontSize or 12, text, textColor, true)
+		bu.text = F.CreateFS(bu, fontSize or 12, nil, text, nil, textColor, true)
 	end
 
 	return bu
@@ -1294,7 +1265,7 @@ function F:CreateDropDown(width, height, data)
 	dd:SetSize(width, height)
 	F.CreateBD(dd)
 	dd:SetBackdropBorderColor(1, 1, 1, .2)
-	dd.Text = F.CreateFSAlt(dd, 12, "", true, true, "LEFT", 5, 0)
+	dd.Text = F.CreateFS(dd, 12, nil, "", nil, nil, true, "LEFT", 5, 0)
 	dd.Text:SetPoint("RIGHT", -5, 0)
 	dd.options = {}
 
@@ -1341,7 +1312,7 @@ function F:CreateDropDown(width, height, data)
 		opt[i]:SetSize(width - 8, height)
 		F.CreateBD(opt[i], .3)
 		opt[i]:SetBackdropBorderColor(1, 1, 1, .2)
-		local text = F.CreateFSAlt(opt[i], 12, j, true, true, "LEFT", 5, 0)
+		local text = F.CreateFS(opt[i], 12, nil, j, nil, nil, true, "LEFT", 5, 0)
 		text:SetPoint("RIGHT", -5, 0)
 		opt[i].text = j
 		opt[i]:SetScript("OnClick", optOnClick)
