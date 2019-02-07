@@ -116,7 +116,7 @@ function F:Mover(text, value, anchor, width, height)
 	mover:SetHeight(height or self:GetHeight())
 	F.CreateBD(mover)
 	F.CreateSD(mover)
-	F.CreateFSAlt(mover, 'pixel', text, 'yellow', true)
+	F.CreateFS(mover, 'pixel', nil, text, nil, 'yellow', true)
 
 	tinsert(MoverList, mover)
 
@@ -194,7 +194,7 @@ local function CreateConsole()
 	F.CreateBD(f)
 	F.CreateSD(f)
 	F.CreateMF(f)
-	F.CreateFSAlt(f, 15, L["MOVER_PANEL"], "yellow", true, "TOP", 0, -10)
+	F.CreateFS(f, 14, nil, L["MOVER_PANEL"], nil, "yellow", true, "TOP", 0, -10)
 	local bu, text = {}, {LOCK, CANCEL, L["MOVER_GRID"], RESET}
 	for i = 1, 4 do
 		bu[i] = F.CreateButton(f, 70, 28, text[i])

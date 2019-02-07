@@ -21,11 +21,9 @@ holder:SetPoint("BOTTOM")
 holder:SetWidth(200)
 holder:SetPoint("CENTER")
 
-local text = F.CreateFS(holder, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-text:SetDrawLayer("OVERLAY")
-text:SetPoint("CENTER")
+local text = F.CreateFS(holder, 'pixel', nil, '', nil, nil, true, 'CENTER', 0, 0)
 text:SetTextColor(C.r, C.g, C.b)
-
+text:SetDrawLayer("OVERLAY")
 
 
 local function formatMemory(value)

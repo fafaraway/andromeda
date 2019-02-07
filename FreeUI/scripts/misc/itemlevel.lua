@@ -13,8 +13,7 @@ function module:ItemLevel()
 		__index = function(t, i)
 			local gslot = _G["Character"..i.."Slot"]
 			if not gslot then return end
-			local fstr = F.CreateFS(gslot, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-			fstr:SetPoint("BOTTOMRIGHT", 0, 2)
+			local fstr = F.CreateFS(gslot, 'pixel', nil, '', nil, nil, true, "BOTTOMRIGHT", 0, 2)
 			t[i] = fstr
 			return fstr
 		end
@@ -24,8 +23,7 @@ function module:ItemLevel()
 		__index = function(t, i)
 			local gslot = _G["Inspect"..i.."Slot"]
 			if not gslot then return end
-			local fstr = F.CreateFS(gslot, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-			fstr:SetPoint("BOTTOMRIGHT", 0, 2)
+			local fstr = F.CreateFS(gslot, 'pixel', nil, '', nil, nil, true, "BOTTOMRIGHT", 0, 2)
 			t[i] = fstr
 			return fstr
 		end
@@ -74,8 +72,7 @@ function module:ItemLevel()
 	-- ilvl on scrapping machine
 	local function updateMachineLevel(self)
 		if not self.iLvl then
-			self.iLvl = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-			self.iLvl:SetPoint("BOTTOMRIGHT", 0, 2)
+			self.iLvl = F.CreateFS(self, 'pixel', nil, '', nil, nil, true, "BOTTOMRIGHT", 0, 2)
 		end
 		if not self.itemLink then self.iLvl:SetText("") return end
 
@@ -104,8 +101,7 @@ function module:ItemLevel()
 	-- ilvl on flyout buttons
 	local function SetupFlyoutLevel(button, bag, slot, quality)
 		if not button.iLvl then
-			button.iLvl = F.CreateFS(button, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
-			button.iLvl:SetPoint("BOTTOMRIGHT", 0, 2)
+			button.iLvl = F.CreateFS(button, 'pixel', nil, '', nil, nil, true, "BOTTOMRIGHT", 0, 2)
 		end
 		local link, level
 		if bag then

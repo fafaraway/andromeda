@@ -35,7 +35,7 @@ function module:ReskinRegions()
 
 	local dots = {}
 	for i = 1, 8 do
-		dots[i] = F.CreateFSAlt(QueueStatusMinimapButton, 'pixelbig', '.', true, true)
+		dots[i] = F.CreateFS(QueueStatusMinimapButton, 'pixelbig', nil, '.', nil, nil, true)
 		dots[i]:SetText(".")
 	end
 	dots[1]:SetPoint("TOP", 2, 2)
@@ -108,7 +108,7 @@ function module:ReskinRegions()
 	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
 	rd:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 
-	local rdt = F.CreateFSAlt(rd, 'pixel', '', true, true, "TOPLEFT", 0, 0)
+	local rdt = F.CreateFS(rd, 'pixel', nil, '', nil, nil, true, "TOPLEFT", 0, 0)
 
 	rd:SetScript("OnEvent", function()
 		local _, instanceType = IsInInstance()
@@ -192,7 +192,7 @@ function module:ReskinRegions()
 		mail:Hide()
 	end)
 
-	local mt = F.CreateFSAlt(mail, 'pixel', '|cffcb58e2<New Mail>|r', true, true)
+	local mt = F.CreateFS(mail, 'pixel', nil, '<New Mail>', nil, 'green', true)
 	mt:SetPoint("BOTTOM", Minimap, 0, 36)
 
 	MiniMapMailFrame:SetAlpha(0)
@@ -209,7 +209,7 @@ function module:ReskinRegions()
 	Invt:SetSize(300, 80)
 	F.CreateBD(Invt)
 
-	Invt.text = F.CreateFSAlt(Invt, 13, C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES, true, true)
+	Invt.text = F.CreateFS(Invt, 13, nil, C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES, nil, nil, true)
 
 	local function updateInviteVisibility()
 		if C_Calendar.GetNumPendingInvites() > 0 then
@@ -315,7 +315,7 @@ function module:WhoPingsMyMap()
 
 	local f = CreateFrame("Frame", nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFSAlt(f, 13, '', 'class', true, "CENTER", 0, 50)
+	f.text = F.CreateFS(f, 14, nil, '', nil, 'class', true, "CENTER", 0, 50)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)

@@ -61,8 +61,8 @@ function module:OnLogin()
 	-- Generate Coords
 	if not C.map.coords then return end
 
-	local player = F.CreateFSAlt(WorldMapFrame.BorderFrame, 'pixel', '', true, true, "BOTTOMLEFT", 10, 10)
-	local cursor = F.CreateFSAlt(WorldMapFrame.BorderFrame, 'pixel', '', true, true, "BOTTOMLEFT", 130, 10)
+	local player = F.CreateFS(WorldMapFrame.BorderFrame, 'pixel', nil, '', nil, nil, true, "BOTTOMLEFT", 10, 10)
+	local cursor = F.CreateFS(WorldMapFrame.BorderFrame, 'pixel', nil, '', nil, nil, true, "BOTTOMLEFT", 130, 10)
 
 	WorldMapFrame.BorderFrame.Tutorial:SetPoint("TOPLEFT", WorldMapFrame, "TOPLEFT", -12, -12)
 	F.HideObject(WorldMapFrame.BorderFrame.Tutorial)

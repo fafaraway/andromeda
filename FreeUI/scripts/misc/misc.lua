@@ -297,7 +297,7 @@ end
 
 -- TradeFrame hook
 do
-	local infoText = F.CreateFSAlt(TradeFrame, 14, "")
+	local infoText = F.CreateFS(TradeFrame, 14, nil, "", nil, nil, true)
 	infoText:ClearAllPoints()
 	infoText:SetPoint("TOP", TradeFrameRecipientNameText, "BOTTOM", 0, -5)
 

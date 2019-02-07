@@ -108,7 +108,7 @@ local function AddMissingBuffs(cfg)
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break
 	end
-	frame.text = F.CreateFSAlt(frame, 'pixel', 'Missing', true, true, 'TOP', 1, 15)
+	frame.text = F.CreateFS(frame, 'pixel', nil, 'Missing', nil, nil, true, 'TOP', 1, 15)
 	frame:Hide()
 	cfg.frame = frame
 

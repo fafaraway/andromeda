@@ -256,10 +256,7 @@ function module:PetBattleUI()
 	F.CreateSD(skipButton)
 	skipButton:SetPushedTexture(C.media.backdrop)
 
-	skipButton.text = F.CreateFS(skipButton, C.font.normal, 12)
-	skipButton.text:SetFont(C.font.normal, 14)
-	skipButton.text:SetText(PET_BATTLE_PASS)
-	skipButton.text:SetPoint("BOTTOM", 1, 2)
+	skipButton.text = F.CreateFS(skipButton, 14, nil, PET_BATTLE_PASS, nil, nil, true, "BOTTOM", 1, 2)
 
 	local xpbar = PetBattleFrameXPBar
 	for i = 2, 4 do
