@@ -12,9 +12,7 @@ ns.localization = {}
 ns.categories = {}
 ns.buttons = {}
 ns.protectOptions = {}
--- highlight new options
-ns.newCategories = {}
-ns.newOptions = {}
+
 
 local checkboxes = {}
 local radiobuttons = {}
@@ -728,24 +726,9 @@ init:SetScript("OnEvent", function()
 
 	F.ReskinInput(resetFrame.charBox)
 
-	for _, newCategory in pairs(ns.newCategories) do
-		local new = F.CreateFS(newCategory.tab)
-		new:SetTextColor(r, g, b)
-		new:SetPoint("RIGHT", -5, 0)
-		new:SetText(ns.localization.NEW)
-	end
 
-	for _, newOption in pairs(ns.newOptions) do
-		local text = newOption.text or newOption.Text
-
-		local new = F.CreateFS(newOption)
-		new:SetTextColor(r, g, b)
-		new:SetPoint("LEFT", text, "RIGHT", 3, 6)
-		new:SetText(ns.localization.NEW)
-	end
-
-	local title = F.CreateFSAlt(FreeUIOptionsPanel, 18, C.Title, true, true, "TOP", 0, -10)
-	local version = F.CreateFSAlt(FreeUIOptionsPanel, 'pixel', C.Version, 'grey', false, "TOP", 0, -34)
+	local title = F.CreateFS(FreeUIOptionsPanel, 18, nil, C.Title, nil, nil, true, "TOP", 0, -10)
+	local version = F.CreateFS(FreeUIOptionsPanel, 'pixel', nil, C.Version, nil, 'grey', false, "TOP", 0, -34)
 	local ll = CreateFrame("Frame", nil, FreeUIOptionsPanel)
 	ll:SetPoint("TOP", -50, -30)
 	F.CreateGF(ll, 100, 1, "Horizontal", .7, .7, .7, 0, .7)

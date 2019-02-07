@@ -231,14 +231,14 @@ do
 	local quickFocusing = ns.CreateCheckBox(general, "quickFocusing", true, true)
 	quickFocusing:SetPoint("LEFT", quickMarking, "RIGHT", 240, 0)
 
-	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
-	alreadyKnown:SetPoint("TOPLEFT", quickMarking, "BOTTOMLEFT", 0, -8)
+	local missingBuffs = ns.CreateCheckBox(general, "missingBuffs", true, true)
+	missingBuffs:SetPoint("TOPLEFT", quickMarking, "BOTTOMLEFT", 0, -8)
 
 	local missingStats = ns.CreateCheckBox(general, "missingStats", true, true)
-	missingStats:SetPoint("LEFT", alreadyKnown, "RIGHT", 240, 0)
+	missingStats:SetPoint("LEFT", missingBuffs, "RIGHT", 240, 0)
 
 	local fasterLoot = ns.CreateCheckBox(general, "fasterLoot", true, true)
-	fasterLoot:SetPoint("TOPLEFT", alreadyKnown, "BOTTOMLEFT", 0, -8)
+	fasterLoot:SetPoint("TOPLEFT", missingBuffs, "BOTTOMLEFT", 0, -8)
 
 	local PVPSound = ns.CreateCheckBox(general, "PVPSound", true, true)
 	PVPSound:SetPoint("LEFT", fasterLoot, "RIGHT", 240, 0)
@@ -252,13 +252,11 @@ do
 	local clickCast = ns.CreateCheckBox(general, "clickCast", true, true)
 	clickCast:SetPoint("TOPLEFT", progressBar, "BOTTOMLEFT", 0, -8)
 
-	local clickCast_filter = ns.CreateCheckBox(general, "clickCast_filter", true, true)
-	clickCast_filter:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 16, -4)
-
-	clickCast.children = {clickCast_filter}
+	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
+	alreadyKnown:SetPoint("LEFT", clickCast, "RIGHT", 240, 0)
 
 	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
-	cooldown:SetPoint("TOPLEFT", clickCast_filter, "BOTTOMLEFT", -16, -12)
+	cooldown:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -16)
 
 	local cooldownCount = ns.CreateCheckBox(general, "cooldownCount", true, true)
 	cooldownCount:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 0, -8)
@@ -689,10 +687,16 @@ do
 	local cbSeparate = ns.CreateCheckBox(unitframe, "cbSeparate", true, true)
 	cbSeparate:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
 
-	castbar.children = {cbSeparate}
+	local cbName = ns.CreateCheckBox(unitframe, "cbName", true, true)
+	cbName:SetPoint("TOPLEFT", cbSeparate, "BOTTOMLEFT", 0, -8)
+
+	local cbTimer = ns.CreateCheckBox(unitframe, "cbTimer", true, true)
+	cbTimer:SetPoint("LEFT", cbName, "RIGHT", 240, 0)
+
+	castbar.children = {cbSeparate, cbName, cbTimer}
 
 	local group = ns.addSubCategory(unitframe, ns.localization.unitframegroup)
-	group:SetPoint("TOPLEFT", cbSeparate, "BOTTOMLEFT", -32, -8)
+	group:SetPoint("TOPLEFT", cbName, "BOTTOMLEFT", -32, -8)
 
 	local enableGroup = ns.CreateCheckBox(unitframe, "enableGroup", true, true)
 	enableGroup:SetPoint("TOPLEFT", group, "BOTTOMLEFT", 16, -16)
@@ -703,10 +707,22 @@ do
 	local partyNameAlways = ns.CreateCheckBox(unitframe, "partyNameAlways", true, true)
 	partyNameAlways:SetPoint("LEFT", partyMissingHealth, "RIGHT", 240, 0)
 
-	enableGroup.children = {partyMissingHealth, partyNameAlways}
+	local party_horizon = ns.CreateCheckBox(unitframe, "party_horizon", true, true)
+	party_horizon:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", 0, -8)
+
+	local party_reverse = ns.CreateCheckBox(unitframe, "party_reverse", true, true)
+	party_reverse:SetPoint("LEFT", party_horizon, "RIGHT", 240, 0)
+
+	local raid_horizon = ns.CreateCheckBox(unitframe, "raid_horizon", true, true)
+	raid_horizon:SetPoint("TOPLEFT", party_horizon, "BOTTOMLEFT", 0, -8)
+
+	local raid_reverse = ns.CreateCheckBox(unitframe, "raid_reverse", true, true)
+	raid_reverse:SetPoint("LEFT", raid_horizon, "RIGHT", 240, 0)
+
+	enableGroup.children = {partyMissingHealth, partyNameAlways, party_horizon, party_reverse, raid_horizon, raid_reverse}
 
 	local misc = ns.addSubCategory(unitframe, ns.localization.unitframemisc)
-	misc:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", -32, -8)
+	misc:SetPoint("TOPLEFT", raid_horizon, "BOTTOMLEFT", -32, -8)
 
 	local enableBoss = ns.CreateCheckBox(unitframe, "enableBoss", true, true)
 	enableBoss:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 16, -16)
@@ -727,6 +743,10 @@ do
 		enableGroup:SetShown(shown)
 		partyNameAlways:SetShown(shown)
 		partyMissingHealth:SetShown(shown)
+		party_horizon:SetShown(shown)
+		party_reverse:SetShown(shown)
+		raid_horizon:SetShown(shown)
+		raid_reverse:SetShown(shown)
 
 		threat:SetShown(shown)
 		prediction:SetShown(shown)
@@ -748,62 +768,6 @@ do
 
 	enable:HookScript("OnClick", toggleUFOptions)
 	unitframe:HookScript("OnShow", toggleUFOptions)
-
-	--local castbar = ns.CreateCheckBox(unitframes, "castbar", true, true)
-	--castbar:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", 0, -8)
-
-	--local castbarSeparate = ns.CreateCheckBox(unitframes, "castbarSeparate", true, true)
-	--castbarSeparate:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
-
-	--castbar.children = {castbarSeparate}
-
-	--local absorb = ns.CreateCheckBox(unitframes, "absorb", true, true)
-	--absorb:SetPoint("TOPLEFT", castbarSeparate, "BOTTOMLEFT", -16, -8)
-
-	--local pvp = ns.CreateCheckBox(unitframes, "pvp", true, true)
-	--pvp:SetPoint("TOPLEFT", absorb, "BOTTOMLEFT", 0, -8)
-
-	--local statusIndicator = ns.CreateCheckBox(unitframes, "statusIndicator", true)
-	--statusIndicator:SetPoint("TOPLEFT", pvp, "BOTTOMLEFT", 0, -8)
-
-	--local statusIndicatorCombat = ns.CreateCheckBox(unitframes, "statusIndicatorCombat", true)
-	--statusIndicatorCombat:SetPoint("TOPLEFT", statusIndicator, "BOTTOMLEFT", 16, -8)
-
-	--statusIndicator.children = {statusIndicatorCombat}
-
-	--local enableGroup = ns.CreateCheckBox(unitframes, "enableGroup", true, true)
-	--enableGroup:SetPoint("LEFT", enable, "RIGHT", 240, 0)
-
-	--local showRaidFrames = ns.CreateCheckBox(unitframes, "showRaidFrames", true)
-	--showRaidFrames:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
-	--tinsert(ns.protectOptions, showRaidFrames)
-
-	--local limitRaidSize = ns.CreateCheckBox(unitframes, "limitRaidSize", true)
-	--limitRaidSize:SetPoint("TOPLEFT", showRaidFrames, "BOTTOMLEFT", 16, -8)
-	--tinsert(ns.protectOptions, limitRaidSize)
-
-	--local partyMissingHealth = ns.CreateCheckBox(unitframes, "partyMissingHealth", true, true)
-	--partyMissingHealth:SetPoint("TOPLEFT", limitRaidSize, "BOTTOMLEFT", 0, -8)
-
-	--local partyNameAlways = ns.CreateCheckBox(unitframes, "partyNameAlways", true, true)
-	--partyNameAlways:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", 0, -8)
-
-	--enableGroup.children = {showRaidFrames, limitRaidSize, partyNameAlways, partyMissingHealth}
-
-	--local enableArena = ns.CreateCheckBox(unitframes, "enableArena", true, true)
-	--enableArena:SetPoint("TOPLEFT", partyNameAlways, "BOTTOMLEFT", -32, -8)
-
-	--[[local layoutText = unitframe:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-	layoutText:SetPoint("TOP", 0, -408)
-	layoutText:SetText(ns.localization.layoutText)
-
-	unitframe.Layout = CreateFrame("Button", nil, unitframe, "UIPanelButtonTemplate")
-	unitframe.Layout:SetPoint("TOP", 0, -442)
-	unitframe.Layout:SetSize(128, 25)
-	tinsert(ns.buttons, unitframe.Layout)]]
-
-
-	
 end
 
 -- [[ Inventory ]]
@@ -954,7 +918,10 @@ do
 	local coords = ns.CreateCheckBox(map, "coords", true, true)
 	coords:SetPoint("TOPLEFT", worldMap, "BOTTOMLEFT", 16, -8)
 
-	worldMap.children = {coords}
+	local mapReveal = ns.CreateCheckBox(map, "mapReveal", true, true)
+	mapReveal:SetPoint("LEFT", coords, "RIGHT", 240, 0)
+
+	worldMap.children = {coords, mapReveal}
 
 	local smallmap = ns.addSubCategory(map, ns.localization.mapsmallmap)
 	smallmap:SetPoint("TOPLEFT", coords, "BOTTOMLEFT", -16, -16)
@@ -989,7 +956,7 @@ end
 -- [[ Credits ]]
 
 do
-	credits:SetSize(525, 600)
+	credits:SetSize(400, 540)
 	credits:SetPoint("CENTER")
 	credits:SetFrameStrata("DIALOG")
 	credits:EnableMouse(true)
