@@ -2,16 +2,15 @@ local F, C, L = unpack(select(2, ...))
 
 -- based on QuickQuest by p3lim
 
-local created
+--[[local created
 local function setupCheckButton()
 	if created then return end
 	local mono = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'OptionsCheckButtonTemplate')
 	mono:SetPoint('TOPRIGHT', -140, -2)
 	mono:SetSize(26, 26)
 	F.CreateCB(mono)
-	mono.text = F.CreateFS(mono, C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
-	mono.text:SetText(L['AutoQuest'])
-	mono.text:SetPoint('LEFT', 25, 0)
+	mono.text = F.CreateFS(mono, 12, nil, L['AutoQuest'], nil, nil, true, 'LEFT', 25, 0)
+
 	mono:SetChecked(C.automation.autoQuest)
 	mono:SetScript('OnClick', function(self)
 		C.automation.autoQuest = self:GetChecked()
@@ -19,7 +18,7 @@ local function setupCheckButton()
 
 	created = true
 end
-WorldMapFrame:HookScript('OnShow', setupCheckButton)
+WorldMapFrame:HookScript('OnShow', setupCheckButton)]]
 
 -- Function
 local strmatch = string.match
@@ -72,6 +71,7 @@ local ignoreQuestNPC = {
 	[98489] = true,		-- 海难俘虏
 	[135690] = true,	-- 亡灵舰长
 	[105387] = true,	-- 安杜斯
+	[93538] = true,		-- 达瑞妮斯
 }
 
 local function GetQuestLogQuests(onlyComplete)

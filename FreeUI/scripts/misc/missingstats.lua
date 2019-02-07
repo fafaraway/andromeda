@@ -6,7 +6,7 @@ function module:MissingStats()
 	if not C.general.missingStats then return end
 
 	local statPanel = CreateFrame('Frame', nil, CharacterFrameInsetRight)
-	statPanel:SetSize(200, 350)
+	statPanel:SetSize(200*C.Mult, 350*C.Mult)
 	statPanel:SetPoint('TOP', 0, -5)
 	local scrollFrame = CreateFrame('ScrollFrame', nil, statPanel, 'UIPanelScrollFrameTemplate')
 	scrollFrame:SetAllPoints()

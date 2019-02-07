@@ -51,7 +51,7 @@ local frames = {
 	["WorldStateScoreFrame"] = false,
 
 	-- Other AddOns
-	["BaudErrorFrame"] = false,
+	--["BaudErrorFrame"] = false,
 }
 
 -- Frame Existing Check
