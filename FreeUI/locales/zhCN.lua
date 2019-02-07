@@ -132,3 +132,12 @@ L['MOVER_UNITFRAME_RAID'] = 'raid'
 L["MOVER_UNITFRAME_PLAYER_CASTBAR"] = 'palyer castbar'
 L["MOVER_UNITFRAME_TARGET_CASTBAR"] = 'target castbar'
 L["MOVER_UNITFRAME_FOCUS_CASTBAR"] = 'focus castbar'
+
+
+
+
+-- Chat
+L["CHAT_HIDE"] = '隐藏聊天框'
+L["CHAT_SHOW"] = '显示聊天框'
+L["CHAT_JOIN_WC"] = '加入世界频道'
+L["CHAT_LEAVE_WC"] = '离开世界频道'

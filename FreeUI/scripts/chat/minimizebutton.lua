@@ -1,51 +1,29 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 
 if not C.chat.minimizeButton then return end
 
 local mb = CreateFrame('Button',nil,UIParent)
 mb:SetSize(16,16)
---mb.t=mb:CreateTexture(nil,'BORDER')
---mb.t:SetTexture('Interface\\CHATFRAME\\UI-ChatIcon-Minimize-Up.blp')
---mb.t:SetAllPoints(mb)
-mb.t = F.CreateFS(mb, C.font.pixel, 8, 'OUTLINEMONOCHROME')
-mb.t:SetText('-')
-mb.t:SetTextColor(228/255, 225/255, 16/255)
+
+mb.t = F.CreateFS(mb, 'pixel', nil, '-', nil, 'yellow', true, 'CENTER', 2, 1)
 
 mb:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 10, 10)
 F.Reskin(mb)
 mb:Show()
 
 local ChatHide = false
-mb:SetScript('onmousedown', function(self, button)
-	if ChatHide  == false then
-		if button == 'LeftButton' then
-			mb.t:SetText('-')
-mb.t:SetTextColor(228/255, 225/255, 16/255)
-		end
-	elseif ChatHide == true then
-		if button == 'LeftButton' then
-			mb.t:SetText('+')
-mb.t:SetTextColor(228/255, 225/255, 16/255)
-		end
-	end
-end)
-
-mb:SetScript('onmouseup', function(self, button)
-	if ChatHide  == false then
-		if button == 'LeftButton' then
-			mb.t:SetText('-')
-mb.t:SetTextColor(228/255, 225/255, 16/255)
-		end
-	elseif ChatHide == true then
-		if button == 'LeftButton' then
-			mb.t:SetText('+')
-mb.t:SetTextColor(228/255, 225/255, 16/255)
-		end
-	end
-end)
-
 mb:SetScript('OnMouseDown', function(self, button)
-	if C.Client == 'zhCN' and button == 'RightButton' then
+	if ChatHide == false then
+		if button == 'LeftButton' then
+			mb.t:SetText('-')
+		end
+	elseif ChatHide == true then
+		if button == 'LeftButton' then
+			mb.t:SetText('+')
+		end
+	end
+
+	if C.Client == 'zhCN' and button == 'RightButton' and ChatHide == false then
 		local inchannel = false
 		local channels = {GetChannelList()}
 		for i = 1, #channels do
@@ -66,11 +44,54 @@ mb:SetScript('OnMouseDown', function(self, button)
 	end
 end)
 
-mb:SetScript('onclick', function(self, button)
+mb:SetScript('OnMouseUp', function(self, button)
+	if ChatHide  == false then
+		if button == 'LeftButton' then
+			mb.t:SetText('-')
+		end
+	elseif ChatHide == true then
+		if button == 'LeftButton' then
+			mb.t:SetText('+')
+		end
+	end
+end)
+
+
+mb:HookScript("OnEnter", function(self)
+	GameTooltip:SetOwner(mb, "ANCHOR_NONE")
+	GameTooltip:SetPoint("BOTTOMLEFT", mb, "TOPRIGHT", 2, 2)
+	
+	if ChatHide  == false then
+		GameTooltip:AddDoubleLine(" ", C.LeftButton..L["CHAT_HIDE"].." ", 1,1,1, .9, .82, .62)
+
+		local inchannel = false
+		local channels = {GetChannelList()}
+		for i = 1, #channels do
+			if channels[i] == '大脚世界频道' then
+				inchannel = true
+				break
+			end
+		end
+		if inchannel then
+			GameTooltip:AddDoubleLine(" ", C.RightButton..L["CHAT_LEAVE_WC"].." ", 1,1,1, .9, .82, .62)
+		else
+			GameTooltip:AddDoubleLine(" ", C.RightButton..L["CHAT_JOIN_WC"].." ", 1,1,1, .9, .82, .62)
+		end
+	elseif ChatHide == true then
+		GameTooltip:AddDoubleLine(" ", C.LeftButton..L["CHAT_SHOW"].." ", 1,1,1, .9, .82, .62)
+	end
+
+	GameTooltip:Show()
+end)
+
+mb:HookScript("OnLeave", function(self)
+	GameTooltip:Hide()
+end)
+
+mb:SetScript('OnClick', function(self, button)
 	if ChatHide == false then
 
 		mb.t:SetText('+')
-		mb.t:SetTextColor(228/255, 225/255, 16/255)
 		--QuickJoinToastButton:Hide()
 		--GeneralDockManager:Hide()
 		--ChatFrameMenuButton:Hide()
@@ -91,7 +112,6 @@ mb:SetScript('onclick', function(self, button)
 	elseif ChatHide == true then
 
 		mb.t:SetText('-')
-		mb.t:SetTextColor(228/255, 225/255, 16/255)
 		--QuickJoinToastButton:Show()
 		--GeneralDockManager:Show()
 		--ChatFrameMenuButton:Show()

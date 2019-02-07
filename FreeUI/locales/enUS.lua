@@ -123,3 +123,12 @@ L['MOVER_UNITFRAME_RAID'] = 'raid'
 L["MOVER_UNITFRAME_PLAYER_CASTBAR"] = 'palyer castbar'
 L["MOVER_UNITFRAME_TARGET_CASTBAR"] = 'target castbar'
 L["MOVER_UNITFRAME_FOCUS_CASTBAR"] = 'focus castbar'
+
+
+
+
+-- Chat
+L["CHAT_HIDE"] = 'Hide chat frame'
+L["CHAT_SHOW"] = 'Show chat frame'
+L["CHAT_JOIN_WC"] = 'Join world channel (only for Chinese player)'
+L["CHAT_LEAVE_WC"] = 'Leave world channel'
