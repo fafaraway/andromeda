@@ -12,7 +12,7 @@ C.themes["Blizzard_OrderHallUI"] = function()
 
 	hooksecurefunc(OrderHallTalentFrame, "RefreshAllData", function(self)
 		if self.Border then self.Border:SetAlpha(0) end
-		if self.CurrencyBG then self.CurrencyBG:SetAlpha(0) end
+		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end
 		F.StripTextures(self)
 
 		for i = 1, self:GetNumChildren() do

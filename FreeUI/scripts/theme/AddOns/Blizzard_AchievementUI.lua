@@ -51,14 +51,16 @@ C.themes["Blizzard_AchievementUI"] = function()
 
 	hooksecurefunc("AchievementFrameCategories_DisplayButton", function(bu)
 		if bu.styled then return end
-
+		bu:SetHeight(22*C.Mult)
 		bu.background:Hide()
+		--bu.label:SetPoint("CENTER", bu, 0, -14)
+		
 		local bg = F.CreateBDFrame(bu, .25)
 		bg:SetPoint("TOPLEFT", 0, -1)
-		bg:SetPoint("BOTTOMRIGHT")
+		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 		bu:SetHighlightTexture(C.media.backdrop)
 		local hl = bu:GetHighlightTexture()
-		hl:SetVertexColor(r, g, b, .25)
+		hl:SetVertexColor(C.r, C.g, C.b, .25)
 		hl:SetPoint("TOPLEFT", bg, C.Mult, -C.Mult)
 		hl:SetPoint("BOTTOMRIGHT", bg, -C.Mult, C.Mult)
 

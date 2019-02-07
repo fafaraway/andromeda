@@ -15,6 +15,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 	F.CreateSD(WarboardQuestChoiceFrame)
 
 	hooksecurefunc(WarboardQuestChoiceFrame, "Update", function(self)
+		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
 			option.OptionText:SetTextColor(0, 0, 0)
