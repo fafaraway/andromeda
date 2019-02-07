@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 if not C.unitframe.enable then return end
 local module = F:GetModule("Unitframe")
 local tags = FreeUI.oUF.Tags
+local cfg = C.unitframe
 
 -- Short values
 local siValue = function(val)
@@ -89,33 +90,30 @@ local function shortName(unit, len)
 	return name
 end
 
-tags.Methods['free:partyname'] = function(unit)
+tags.Methods['free:partytext'] = function(unit)
+	local min, max = UnitHealth(unit), UnitHealthMax(unit)
 	if not UnitIsConnected(unit) then
-		return "Off"
+		return "|cffdbdbdbOff|r"
 	elseif UnitIsDead(unit) then
-		return "Dead"
+		return "|cffd52732Dead|r"
 	elseif UnitIsGhost(unit) then
-		return "Ghost"
+		return "|cff8850d5Ghost|r"
+	elseif cfg.partyMissingHealth and min ~= max then
+		return siValue(max-min)
+	end
+end
+tags.Events['free:partytext'] = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_POWER_UPDATE UNIT_CONNECTION'
+
+
+tags.Methods['free:partyname'] = function(unit)
+	if UnitInRaid('player') then
+		return shortName(unit, 2)
 	else
 		return shortName(unit, 4)
 	end
 end
-tags.Events['free:partyname'] = tags.Events.missinghp
+tags.Events['free:partyname'] = 'UNIT_NAME_UPDATE GROUP_ROSTER_UPDATE PLAYER_ENTERING_WORLD'
 
-tags.Methods['free:missinghealth'] = function(unit)
-	local min, max = UnitHealth(unit), UnitHealthMax(unit)
-
-	if not UnitIsConnected(unit) then
-		return "Off"
-	elseif UnitIsDead(unit) then
-		return "Dead"
-	elseif UnitIsGhost(unit) then
-		return "Ghost"
-	elseif min ~= max then
-		return siValue(max-min)
-	end
-end
-tags.Events['free:missinghealth'] = tags.Events.missinghp
 
 tags.Methods['free:power'] = function(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)

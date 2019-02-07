@@ -3,18 +3,18 @@ if not C.unitframe.enable then return end
 
 local module = F:RegisterModule('Unitframe')
 local oUF, cast = FreeUI.oUF, FreeUI.cast
-
-
+local cfg = C.unitframe
+local min, max = math.min, math.max
 
 function module:CreateBackDrop(self)
 	local bd = CreateFrame('Frame', nil, self)
 	bd:SetFrameStrata('BACKGROUND')
-	bd:SetPoint('TOPLEFT', -1, 1)
-	bd:SetPoint('BOTTOMRIGHT', 1, -1)
+	bd:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+	bd:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	bd:SetBackdrop({bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult})
-	bd:SetBackdropBorderColor(0, 0, 0)
+	bd:SetBackdropBorderColor(0, 0, 0, 1)
 	if C.unitframe.transMode then
-		bd:SetBackdropColor(0, 0, 0, .25)
+		bd:SetBackdropColor(.05, .05, .05, .25)
 	else
 		bd:SetBackdropColor(0, 0, 0, .45)
 	end
@@ -24,8 +24,8 @@ function module:CreateBackDrop(self)
 	if C.appearance.addShadowBorder then
 		local sd = CreateFrame('Frame', nil, bd)
 		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
-		sd:SetPoint('TOPLEFT', -4, 4)
-		sd:SetPoint('BOTTOMRIGHT', 4, -4)
+		sd:SetPoint('TOPLEFT', -4*C.Mult, 4*C.Mult)
+		sd:SetPoint('BOTTOMRIGHT', 4*C.Mult, -4*C.Mult)
 		sd:SetBackdropBorderColor(0, 0, 0, .35)
 		self.sd = sd
 	end
@@ -53,66 +53,61 @@ function module:CreateHeader(self)
 end
 
 
--- Selected frames name/border colour
-local function UpdateNameColour(self, unit)
-	--[[if UnitIsUnit(unit, 'target') then
-		self.Text:SetTextColor(.1, .7, 1)
-	elseif UnitIsDead(unit) then
-		self.Text:SetTextColor(.7, .2, .1)
-	elseif UnitIsGhost(unit) then
-		self.Text:SetTextColor(.7, .6, .8)
-	else
-		self.Text:SetTextColor(1, 1, 1)
-	end]]
-
-	local r, g, b
-	local _, class = UnitClass(unit)
-
-	if (UnitIsDead(unit) or UnitIsGhost(unit)) then
-
-		r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
-
-		self.Text:SetTextColor(r, g, b)
-	else
-		self.Text:SetTextColor(1, 1, 1)
-	end
-
-end
-
-local function UpdateNameColourAlt(self)
-	local frame = self:GetParent()
-	--[[if frame.unit then
-		if UnitIsUnit(frame.unit, 'target') then
-			frame.Text:SetTextColor(.1, .7, 1)
-		elseif UnitIsDead(frame.unit) then
-			frame.Text:SetTextColor(.7, .2, .1)
-		elseif UnitIsGhost(frame.unit) then
-			frame.Text:SetTextColor(.7, .6, .8)
+-- Sound stuff
+function module:PLAYER_FOCUS_CHANGED()
+	if UnitExists('focus') then
+		if UnitIsEnemy('focus', 'player') then
+			PlaySound('873')
+		elseif UnitIsFriend('player', 'focus') then
+			PlaySound('867')
 		else
-			frame.Text:SetTextColor(1, 1, 1)
+			PlaySound('871')
 		end
 	else
-		frame.Text:SetTextColor(1, 1, 1)
-	end]]
-
-	local r, g, b
-	local _, class = UnitClass(unit)
-	if frame.unit then
-		if UnitIsDead(frame.unit) or UnitIsGhost(frame.unit) then
-			r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b
-			frame.Text:SetTextColor(r, g, b)
-		else
-			frame.Text:SetTextColor(1, 1, 1)
-		end
+		PlaySound('684')
 	end
 end
 
-function module:CreateNameColour(self)
-	local nc = CreateFrame('Frame', nil, self)
-	nc:RegisterEvent('PLAYER_TARGET_CHANGED')
-	nc:SetScript('OnEvent', UpdateNameColourAlt)
+function module:PLAYER_TARGET_CHANGED()
+	if UnitExists('target') then
+		if UnitIsEnemy('target', 'player') then
+			PlaySound('873')
+		elseif UnitIsFriend('player', 'target') then
+			PlaySound('867')
+		else
+			PlaySound('871')
+		end
+	else
+		PlaySound('684')
+	end
 end
 
+local announcedPVP
+function module:UNIT_FACTION(unit, ...)
+	if unit ~= 'player' then return end
+
+	if UnitIsPVPFreeForAll('player') or UnitIsPVP('player') then
+		if not announcedPVP then
+			announcedPVP = true
+			PlaySound('4574')
+		end
+	else
+		announcedPVP = nil
+	end
+end
+
+function module:CreateSound()
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
+	f:RegisterEvent('PLAYER_TARGET_CHANGED')
+	f:RegisterEvent('UNIT_FACTION')
+	f:SetScript('OnEvent', function(self, event, ...)
+		module[event](module, ...)
+	end)
+end
+
+
+-- Border colour
 local function UpdateBorderColour(self)
 	local frame = self:GetParent()
 	if frame.unit then
@@ -127,9 +122,9 @@ local function UpdateBorderColour(self)
 end
 
 function module:CreateBorderColour(self)
-	local bc = CreateFrame('Frame', nil, self)
-	bc:RegisterEvent('PLAYER_TARGET_CHANGED')
-	bc:SetScript('OnEvent', UpdateBorderColour)
+	local f = CreateFrame('Frame', nil, self)
+	f:RegisterEvent('PLAYER_TARGET_CHANGED')
+	f:SetScript('OnEvent', UpdateBorderColour)
 end
 
 
@@ -162,18 +157,9 @@ local function PostUpdateHealth(Health, unit, min, max)
 		end
 	end
 
-	if self.Text then
-		if UnitIsDead(unit) or UnitIsGhost(unit) then
-			self.Text:SetTextColor(r, g, b)
-		else
-			self.Text:SetTextColor(1, 1, 1)
-		end
-	end
-
 	if C.unitframe.transMode then
 		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
-			--self.Healthdef:Hide()
-			self.Healthdef:SetAlpha(0)
+			self.Healthdef:Hide()
 		else
 			self.Healthdef:SetMinMaxValues(0, max)
 			self.Healthdef:SetValue(max-min)
@@ -188,8 +174,7 @@ local function PostUpdateHealth(Health, unit, min, max)
 				self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 			end
 
-			--self.Healthdef:Show()
-			self.Healthdef:SetAlpha(1)
+			self.Healthdef:Show()
 		end
 
 		if tapped or offline then
@@ -234,8 +219,8 @@ function module:CreateHealthBar(self)
 	Health:SetPoint('TOP')
 	Health:SetPoint('LEFT')
 	Health:SetPoint('RIGHT')
-	Health:SetPoint('BOTTOM', 0, 1 + C.unitframe.power_height)
-	Health:SetHeight(self:GetHeight() - C.unitframe.power_height - 1)
+	Health:SetPoint('BOTTOM', 0, 1*C.Mult + C.unitframe.power_height)
+	Health:SetHeight(self:GetHeight() - C.unitframe.power_height - 1*C.Mult)
 
 	self.Health = Health
 	Health.PostUpdate = PostUpdateHealth
@@ -417,8 +402,7 @@ function module:CreateAltPower(self)
 	abd:SetFrameLevel(bar:GetFrameLevel()-1)
 	F.CreateBD(abd, .5)
 
-	local text = F.CreateFS(bar, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-	text:SetJustifyH('CENTER')
+	local text = F.CreateFS(bar, 'pixel', nil, '', 'CENTER', nil, true)
 	text:SetPoint('BOTTOM', self, 'TOP', 0, 3)
 
 	self:Tag(text, '[altpower]')
@@ -434,9 +418,8 @@ end
 
 -- Health/Power/Classification text
 function module:CreateHealthText(self)
-	local HealthPoints = F.CreateFS(self.Health, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	local HealthPoints = F.CreateFS(self.Health, 'pixel', nil, '', 'LEFT', nil, true)
 	HealthPoints:SetPoint('BOTTOMLEFT', self.Health, 'TOPLEFT', 0, 3)
-	HealthPoints:SetJustifyH('LEFT')
 	
 	if self.unitStyle == 'player' then
 		self:Tag(HealthPoints, '[dead][offline][free:playerHealth]')
@@ -458,9 +441,8 @@ function module:CreateHealthText(self)
 end
 
 function module:CreatePowerText(self)
-	local PowerText = F.CreateFS(self.Power, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	local PowerText = F.CreateFS(self.Power, 'pixel', nil, '', 'RIGHT', nil, true)
 	PowerText:SetPoint('BOTTOMRIGHT', self.Health, 'TOPRIGHT', 0, 3)
-	PowerText:SetJustifyH('RIGHT')
 
 	if self.unitStyle == 'target' then
 		PowerText:ClearAllPoints()
@@ -477,162 +459,135 @@ function module:CreatePowerText(self)
 end
 
 function module:ClassificationText(self)
-	local Classification = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+	local Classification = F.CreateFS(self, 'pixel', nil, '', nil, nil, true)
 	Classification:SetPoint('BOTTOMLEFT', self.Power.Text, 'BOTTOMRIGHT', 3, 0)
 	self:Tag(Classification, '[free:classification]')
-end
 
-
--- Bar mover
-local function CreateBarMover(bar, text, value, anchor)
-	local mover = F.Mover(bar, text, value, anchor, bar:GetHeight()+bar:GetWidth()+5, bar:GetHeight()+5)
-	bar:ClearAllPoints()
-	bar:SetPoint("RIGHT", mover)
+	self.Classification = Classification
 end
 
 
 -- Cast bar
 function module:CreateCastBar(self)
-	if (not C.unitframe.castbar) then return end
+	if not C.unitframe.castbar then return end
 
-	local cb = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
-	cb:SetHeight(C.unitframe.cbHeight)
-	cb:SetWidth(self:GetWidth())
-	cb:SetAllPoints(self)
-	cb:SetStatusBarTexture(C.media.sbTex)
-	cb:GetStatusBarTexture():SetBlendMode('BLEND')
-	cb:SetStatusBarColor(0, 0, 0, 0)
-	cb:SetFrameLevel(self.Health:GetFrameLevel() + 3)
+	local Castbar = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
+	Castbar:SetAllPoints(self)
+	Castbar:SetStatusBarTexture(C.media.sbTex)
+	Castbar:GetStatusBarTexture():SetBlendMode('BLEND')
+	Castbar:SetStatusBarColor(0, 0, 0, 0)
+	Castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
+	self.Castbar = Castbar
 
-	cb.CastingColor = C.unitframe.cbCastingColor
-	cb.ChannelingColor = C.unitframe.cbChannelingColor
-	cb.notInterruptibleColor = C.unitframe.cbnotInterruptibleColor
-	cb.CompleteColor = C.unitframe.cbCompleteColor
-	cb.FailColor = C.unitframe.cbFailColor
+	local Spark = Castbar:CreateTexture(nil, 'OVERLAY')
+	Spark:SetBlendMode('ADD')
+	Spark:SetAlpha(.7)
+	Spark:SetHeight(Castbar:GetHeight()*2)
+	Castbar.Spark = Spark
 
-	local spark = cb:CreateTexture(nil, 'OVERLAY')
-	spark:SetBlendMode('ADD')
-	spark:SetAlpha(.7)
-	spark:SetHeight(cb:GetHeight()*2.5)
-	cb.Spark = spark
-
-	local name
-
+	local Text
 	if C.Client == 'zhCN' or C.Client == 'zhTW' then
-		name = F.CreateFS(cb, C.font.normal, 12, nil, {1, 1, 1}, {0, 0, 0}, 2, -2)
+		Text = F.CreateFS(Castbar, 11, nil, '', nil, nil, '2')
 	else
-		name = F.CreateFS(cb, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1, 1, 1}, {0, 0, 0}, 1, -1)
+		Text = F.CreateFS(Castbar, 'pixel', nil, '', nil, nil, true)
+	end
+	Text:SetPoint('CENTER', Castbar)
+	Text:Hide()
+	Castbar.Text = Text
+
+	local Time = F.CreateFS(Castbar, 'pixel', nil, '', nil, nil, true)
+	Time:SetPoint('BOTTOMRIGHT', Castbar, 'TOPRIGHT', 0, 6)
+	Time:Hide()
+	Castbar.Time = Time
+
+	local iconFrame = CreateFrame('Frame', nil, Castbar)
+	iconFrame:SetSize(self:GetHeight()+6, self:GetHeight()+6)
+	if self.unitStyle == 'targettarget' or self.unitStyle == 'focus' then
+		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
+	else
+		iconFrame:SetPoint('RIGHT', self, 'LEFT', -4, 0)
 	end
 
-	name:SetPoint('CENTER', self.Health)
-	cb.Text = name
-	name:Hide()
-
-	local timer = F.CreateFS(cb, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-	timer:SetPoint('BOTTOMRIGHT', cb, 'TOPRIGHT', 0, 6)
-	cb.Time = timer
-	timer:Hide()
-
-	local iconFrame = CreateFrame('Frame', nil, cb)
-	iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
-	iconFrame:SetSize(20, 20)
-
-	F.CreateSD(iconFrame)
-
-	local icon = iconFrame:CreateTexture(nil, 'OVERLAY')
-	icon:SetAllPoints(iconFrame)
-	icon:SetTexCoord(unpack(C.TexCoord))
-
-	cb.Icon = icon
+	local Icon = iconFrame:CreateTexture(nil, 'OVERLAY')
+	Icon:SetAllPoints(iconFrame)
+	Icon:SetTexCoord(unpack(C.TexCoord))
+	Castbar.Icon = Icon
 
 	local iconBG = iconFrame:CreateTexture(nil, 'BACKGROUND')
-	iconBG:SetPoint('TOPLEFT', -1 , 1)
-	iconBG:SetPoint('BOTTOMRIGHT', 1, -1)
+	iconBG:SetPoint('TOPLEFT', -C.Mult , C.Mult)
+	iconBG:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	iconBG:SetTexture(C.media.backdrop)
 	iconBG:SetVertexColor(0, 0, 0)
+	Castbar.iconBG = iconBG
 
-	cb.iconBG = iconBG
-
-	self.Castbar = cb
+	local iconSD = CreateFrame('Frame', nil, iconFrame)
+	iconSD:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+	iconSD:SetPoint('TOPLEFT', -4*C.Mult, 4*C.Mult)
+	iconSD:SetPoint('BOTTOMRIGHT', 4*C.Mult, -4*C.Mult)
+	iconSD:SetBackdropBorderColor(0, 0, 0, .35)
+	Castbar.iconSD = iconSD
 
 	if self.unitStyle == 'player' then
-		local safe = cb:CreateTexture(nil,'OVERLAY')
-		safe:SetTexture(C.media.backdrop)
-		safe:SetVertexColor(223/255, 63/255, 107/255, .6)
-		safe:SetPoint('TOPRIGHT')
-		safe:SetPoint('BOTTOMRIGHT')
-		cb.SafeZone = safe
+		local SafeZone = Castbar:CreateTexture(nil,'OVERLAY')
+		SafeZone:SetTexture(C.media.backdrop)
+		SafeZone:SetVertexColor(223/255, 63/255, 107/255, .6)
+		SafeZone:SetPoint('TOPRIGHT')
+		SafeZone:SetPoint('BOTTOMRIGHT')
+		Castbar.SafeZone = SafeZone
 	end
 
-	if self.unitStyle == 'target' or self.unitStyle == 'focus'
-		or (C.unitframe.cbSeparate and self.unitStyle == 'player') then
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('RIGHT', cb, 'LEFT', -4, 0)
-
-		name:ClearAllPoints()
-		name:SetPoint('BOTTOM', cb, 'TOP', 0, 4)
-
-		if C.unitframe.cbName then
-			name:Show()
+	if (self.unitStyle == 'player' and cfg.cbSeparate) or self.unitStyle == 'target' then
+		if cfg.cbName then
+			Text:Show()
 		end
-		if C.unitframe.cbTimer then
-			timer:Show()
+		if cfg.cbTimer then
+			Time:Show()
 		end
 
-		local bg = CreateFrame('Frame', nil, cb)
-		bg:SetPoint('TOPLEFT', -1, 1)
-		bg:SetPoint('BOTTOMRIGHT', 1, -1)
-		bg:SetFrameLevel(cb:GetFrameLevel()-1)
+		local bg = CreateFrame('Frame', nil, Castbar)
+		bg:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+		bg:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
+		bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
 
 		F.CreateBD(bg)
+		F.CreateTex(bg)
 		F.CreateSD(bg)
 	end
 
-	if (self.unitStyle == 'player' and C.unitframe.cbSeparate) then
-		--cb:ClearAllPoints()
-		--cb:SetPoint('TOP', self, 'BOTTOM', 0, -40)
-		
-		CreateBarMover(cb, L["MOVER_UNITFRAME_PLAYER_CASTBAR"], "PlayerCB", C.unitframe.player_cb_pos)
-
-	elseif self.unitStyle == 'player' then
+	if self.unitStyle == 'target' then
+		Castbar:SetSize(cfg.target_cb_width*C.Mult, cfg.target_cb_height*C.Mult)
 		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
-	elseif self.unitStyle == 'pet' or self.unitStyle == 'arena' or self.unitStyle == 'focustarget' then
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('RIGHT', self, 'LEFT', -4, 0)
-	elseif self.unitStyle == 'target' then
-		--cb:ClearAllPoints()
-		--cb:SetPoint('TOP', self, 'BOTTOM', 0, -40)
-
-		CreateBarMover(cb, L["MOVER_UNITFRAME_TARGET_CASTBAR"], "TargetCB", C.unitframe.target_cb_pos)
-
-	elseif self.unitStyle == 'focus' then
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('LEFT', cb, 'RIGHT', 4, 0)
-		cb:SetWidth(self:GetWidth() * 2 + 6)
-		--cb:ClearAllPoints()
-		--cb:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -80)
-
-		CreateBarMover(cb, L["MOVER_UNITFRAME_FOCUS_CASTBAR"], "FocusCB", C.unitframe.focus_cb_pos)
-	elseif self.unitStyle == 'targettarget' then
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
+		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
+		Spark:SetHeight(Castbar:GetHeight()*2)
+		Time:SetPoint('TOPRIGHT', Castbar, 'BOTTOMRIGHT', 0, -6)
+		Castbar:ClearAllPoints()
+		F.Mover(Castbar, L['MOVER_UNITFRAME_TARGET_CASTBAR'], "TargetCastbar", cfg.target_cb_pos, cfg.target_cb_width, cfg.target_cb_height)
 	end
 
+	if self.unitStyle == 'player' and cfg.cbSeparate then
+		Castbar:SetSize(cfg.player_cb_width*C.Mult, cfg.player_cb_height*C.Mult)
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
+		Spark:SetHeight(Castbar:GetHeight()*2)
+		Castbar:ClearAllPoints()
+		F.Mover(Castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], "PlayerCastbar", cfg.player_cb_pos, cfg.player_cb_width, cfg.player_cb_height)
+	end
 
+	Castbar.CastingColor = cfg.cbCastingColor
+	Castbar.ChannelingColor = cfg.cbChannelingColor
+	Castbar.notInterruptibleColor = cfg.cbnotInterruptibleColor
+	Castbar.CompleteColor = cfg.cbCompleteColor
+	Castbar.FailColor = cfg.cbFailColor
 
-
-
-
-	cb.OnUpdate = cast.OnCastbarUpdate
-	cb.PostCastStart = cast.PostCastStart
-	cb.PostChannelStart = cast.PostCastStart
-	cb.PostCastStop = cast.PostCastStop
-	cb.PostChannelStop = cast.PostChannelStop
-	cb.PostCastFailed = cast.PostCastFailed
-	cb.PostCastInterrupted = cast.PostCastFailed
-	cb.PostCastInterruptible = cast.PostUpdateInterruptible
-	cb.PostCastNotInterruptible = cast.PostUpdateInterruptible
+	Castbar.OnUpdate = cast.OnCastbarUpdate
+	Castbar.PostCastStart = cast.PostCastStart
+	Castbar.PostChannelStart = cast.PostCastStart
+	Castbar.PostCastStop = cast.PostCastStop
+	Castbar.PostChannelStop = cast.PostChannelStop
+	Castbar.PostCastFailed = cast.PostCastFailed
+	Castbar.PostCastInterrupted = cast.PostCastFailed
+	Castbar.PostCastInterruptible = cast.PostUpdateInterruptible
+	Castbar.PostCastNotInterruptible = cast.PostUpdateInterruptible
 end
 
 
@@ -1180,7 +1135,7 @@ end
 -- Indicator
 function module:CreateIndicator(self)
 	if self.unitStyle == 'player' then
-		local PvPIndicator = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0,0,0}, 1, -1)
+		local PvPIndicator = F.CreateFS(self, 'pixel', nil, '', nil, nil, true)
 		PvPIndicator:SetPoint('BOTTOMRIGHT', self.Health, 'TOPRIGHT', -50, 3)
 		PvPIndicator:SetText('P')
 
@@ -1209,7 +1164,7 @@ function module:CreateIndicator(self)
 
 
 		local statusIndicator = CreateFrame('Frame')
-		local statusText = F.CreateFS(self.Health, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
+		local statusText = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true)
 		statusText:SetPoint('LEFT', self.Health.value, 'RIGHT', 10, 0)
 
 		local function updateStatus()
@@ -1238,17 +1193,13 @@ function module:CreateIndicator(self)
 	end
 
 	if self.unitStyle == 'target' then
-		local QuestIndicator = F.CreateFS(self, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-		QuestIndicator:SetText('!')
-		QuestIndicator:SetTextColor(228/255, 225/255, 16/255)
-		QuestIndicator:SetPoint('RIGHT', self.Name, 'LEFT', -3, 0)
+		local QuestIndicator = F.CreateFS(self, 'pixel', nil, '!', nil, 'yellow', true)
+		QuestIndicator:SetPoint('BOTTOMLEFT', self.Classification, 'BOTTOMRIGHT', 3, 0)
 
 		self.QuestIndicator = QuestIndicator
 	end
 
-	local IndicatorParent = CreateFrame('Frame', nil, self)
-	IndicatorParent:SetFrameLevel(self.Health:GetFrameLevel() + 1)
-	local RaidTargetIndicator = IndicatorParent:CreateTexture()
+	local RaidTargetIndicator = self.Health:CreateTexture()
 	RaidTargetIndicator:SetTexture('Interface\\AddOns\\FreeUI\\assets\\UI-RaidTargetingIcons')
 	RaidTargetIndicator:SetSize(16, 16)
 
@@ -1257,9 +1208,9 @@ function module:CreateIndicator(self)
 	elseif self.unitStyle == 'targettarget' then
 		RaidTargetIndicator:SetPoint('LEFT', self, 'RIGHT', 3, 0)
 	elseif self.unitStyle == 'focus' then
-		RaidTargetIndicator:SetPoint('RIGHT', self, 'LEFT', -3, 0)
-	elseif self.unitStyle == 'focustarget' then
 		RaidTargetIndicator:SetPoint('LEFT', self, 'RIGHT', 3, 0)
+	elseif self.unitStyle == 'focustarget' then
+		RaidTargetIndicator:SetPoint('RIGHT', self, 'LEFT', -3, 0)
 	else
 		RaidTargetIndicator:SetPoint('CENTER', self, 'CENTER', 0, 20)
 	end
@@ -1267,18 +1218,16 @@ function module:CreateIndicator(self)
 	self.RaidTargetIndicator = RaidTargetIndicator
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		local ResurrectIndicator = IndicatorParent:CreateTexture(nil, 'OVERLAY')
+		local ResurrectIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 		ResurrectIndicator:SetSize(16, 16)
 		ResurrectIndicator:SetPoint('CENTER')
 		self.ResurrectIndicator = ResurrectIndicator
 
-		local LeaderIndicator = F.CreateFS(IndicatorParent, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-		LeaderIndicator:SetText('L')
-		LeaderIndicator:SetJustifyH('LEFT')
-		LeaderIndicator:SetPoint('TOPLEFT', self.Health, 2, -1)
+		local LeaderIndicator = F.CreateFS(self.Health, 'pixel', nil, 'L', 'LEFT', nil, true)
+		LeaderIndicator:SetPoint('TOPLEFT', self.Health, 2, -2)
 		self.LeaderIndicator = LeaderIndicator
 
-		local ReadyCheckIndicator = IndicatorParent:CreateTexture(nil, 'OVERLAY')
+		local ReadyCheckIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 		ReadyCheckIndicator:SetPoint('TOPLEFT', self.Health)
 		ReadyCheckIndicator:SetSize(16, 16)
 		self.ReadyCheckIndicator = ReadyCheckIndicator
@@ -1301,19 +1250,16 @@ function module:CreateIndicator(self)
 			end
 		end
 
-		local GroupRoleIndicator = F.CreateFS(IndicatorParent, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-		GroupRoleIndicator:SetJustifyH('CENTER')
+		local GroupRoleIndicator = F.CreateFS(self.Health, 'pixel', nil, '', 'CENTER', nil, true)
 		GroupRoleIndicator:SetPoint('BOTTOM', self.Health, 1, 1)
 		GroupRoleIndicator.Override = UpdateLFD
 		self.GroupRoleIndicator = GroupRoleIndicator
 
-		local PhaseIndicator = F.CreateFS(IndicatorParent, C.font.pixel, 8, 'OUTLINEMONOCHROME', {1,1,1}, {0,0,0}, 1, -1)
-		PhaseIndicator:SetText('?')
-		PhaseIndicator:SetJustifyH('RIGHT')
-		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -1)
+		local PhaseIndicator = F.CreateFS(self.Health, 'pixel', nil, '?', 'RIGHT', nil, true)
+		PhaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -2)
 		self.PhaseIndicator = PhaseIndicator
 
-		local Summon = CreateFrame('Frame', nil, IndicatorParent)
+		local Summon = CreateFrame('Frame', nil, self.Health)
 		Summon:SetPoint('CENTER', self.Health, 'CENTER')
 		Summon:SetSize(32, 32)
 		Summon:SetScript('OnLeave', GameTooltip_Hide)
@@ -1338,9 +1284,9 @@ function module:CreateName(self)
 	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
 
 	if C.Client == 'zhCN' or C.Client == 'zhTW' then
-		Name = F.CreateFS(self.Health, C.font.normal, 11, nil, nil, {0, 0, 0}, 2, -2)
+		Name = F.CreateFS(self.Health, 11, nil, '', nil, nil, '2')
 	else
-		Name = F.CreateFS(self.Health, C.font.pixel, 8, 'OUTLINEMONOCHROME', nil, {0, 0, 0}, 1, -1)
+		Name = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true)
 	end
 
 	Name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
@@ -1362,7 +1308,7 @@ function module:CreateName(self)
 		Name:ClearAllPoints()
 		Name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 		Name:SetJustifyH('LEFT')
-		Name:SetWidth(80)	
+		Name:SetWidth(80)
 	end
 
 	f:SetScript('OnEvent', function()
@@ -1378,14 +1324,27 @@ function module:CreateName(self)
 			else
 				Name:SetText(UnitName'focustarget')
 			end
-		elseif self.unitStyle == 'arena' then
-			self:Tag(Name, '[arenaspec] [name]')
 		else
 			self:Tag(Name, '[name]')
 		end
 	end)
 
 	self.Name = Name
+
+	if self.unitStyle == 'arena' then
+		local ArenaSpec
+		if C.Client == 'zhCN' or C.Client == 'zhTW' then
+			ArenaSpec = F.CreateFS(self.Health, 11, nil, '', nil, nil, '2')
+		else
+			ArenaSpec = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true)
+		end
+
+		ArenaSpec:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+		ArenaSpec:SetJustifyH('CENTER')
+		ArenaSpec:SetWidth(80)
+
+		self:Tag(ArenaSpec, '[arenaspec]')
+	end
 end
 
 function module:CreatePartyName(self)
@@ -1393,18 +1352,17 @@ function module:CreatePartyName(self)
 
 	if C.unitframe.partyNameAlways then
 		if C.Client == 'zhCN' or C.Client == 'zhTW' then
-			Text = F.CreateFSAlt(self.Health, 11, '', true, true, 'CENTER', 1, 0)
+			Text = F.CreateFS(self.Health, 11, nil, '', nil, nil, true, 'CENTER', 1, 0)
 		else
-			Text = F.CreateFSAlt(self.Health, 'pixel', '', true, true, 'CENTER', 1, 0)
+			Text = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true, 'CENTER', 1, 0)
 		end
 		self:Tag(Text, '[free:partyname]')
-	elseif C.unitframe.partyMissingHealth then
-		Text = F.CreateFSAlt(self.Health, 'pixel', '', true, true, 'CENTER', 1, 0)
-		self:Tag(Text, '[free:missinghealth]')
 	else
-		Text = F.CreateFSAlt(self.Health, 'pixel', '', true, true, 'CENTER', 1, 0)
-		self:Tag(Text, '[dead][offline]')
+		Text = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true, 'CENTER', 1, 0)
+		self:Tag(Text, '[free:partytext]')
 	end
+
+	
 	Text:SetJustifyH('CENTER')
 	self.Text = Text
 end

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+if not C.unitframe.enable then return end
 local oUF = FreeUI.oUF
 local format, tostring = string.format, tostring
 
@@ -9,7 +9,7 @@ local cfg = C.unitframe
 
 local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
-	self:SetSize(cfg.player_width, cfg.player_height)
+	self:SetSize(cfg.player_width*C.Mult, cfg.player_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -36,7 +36,7 @@ end
 
 local function CreatePetStyle(self)
 	self.unitStyle = 'pet'
-	self:SetSize(cfg.pet_width, cfg.pet_height)
+	self:SetSize(cfg.pet_width*C.Mult, cfg.pet_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -52,7 +52,7 @@ end
 
 local function CreateTargetStyle(self)
 	self.unitStyle = 'target'
-	self:SetSize(cfg.target_width, cfg.target_height)
+	self:SetSize(cfg.target_width*C.Mult, cfg.target_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -72,7 +72,7 @@ end
 
 local function CreateToTStyle(self)
 	self.unitStyle = 'targettarget'
-	self:SetSize(cfg.targettarget_width, cfg.targettarget_height)
+	self:SetSize(cfg.targettarget_width*C.Mult, cfg.targettarget_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -86,7 +86,7 @@ end
 
 local function CreateFocusStyle(self)
 	self.unitStyle = 'focus'
-	self:SetSize(cfg.focus_width, cfg.focus_height)
+	self:SetSize(cfg.focus_width*C.Mult, cfg.focus_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -102,7 +102,7 @@ end
 
 local function CreateFoTStyle(self)
 	self.unitStyle = 'focustarget'
-	self:SetSize(cfg.focustarget_width, cfg.focustarget_height)
+	self:SetSize(cfg.focustarget_width*C.Mult, cfg.focustarget_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -128,7 +128,6 @@ local function CreatePartyStyle(self)
 	module:CreateThreatIndicator(self)
 	module:CreateBuffs(self)
 	module:CreateDebuffs(self)
-	--module:CreateNameColour(self)
 	module:CreateBorderColour(self)
 	module:CreateDispellable(self, unit)
 	module:CreateSpellRange(self)
@@ -147,14 +146,13 @@ local function CreateRaidStyle(self)
 	module:CreateThreatIndicator(self)
 	module:CreateBuffs(self)
 	module:CreateDebuffs(self)
-	--module:CreateNameColour(self)
 	module:CreateBorderColour(self)
 	module:CreateSpellRange(self)
 end
 
 local function CreateBossStyle(self)
 	self.unitStyle = 'boss'
-	self:SetSize(cfg.boss_width, cfg.boss_height)
+	self:SetSize(cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -173,7 +171,7 @@ end
 
 local function CreateArenaStyle(self)
 	self.unitStyle = 'arena'
-	self:SetSize(cfg.arena_width, cfg.arena_height)
+	self:SetSize(cfg.arena_width*C.Mult, cfg.arena_height*C.Mult)
 
 	module:CreateBackDrop(self)
 	module:CreateHeader(self)
@@ -191,7 +189,7 @@ end
 
 
 function module:OnLogin()
-	if not cfg.enable then return end
+	
 	oUF:RegisterStyle("Player", CreatePlayerStyle)
 	oUF:RegisterStyle("Pet", CreatePetStyle)
 	oUF:RegisterStyle("Target", CreateTargetStyle)
@@ -201,27 +199,27 @@ function module:OnLogin()
 
 	oUF:SetActiveStyle("Player")
 	local player = oUF:Spawn("player", "oUF_Player")
-	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], "PlayerUF", cfg.player_pos, cfg.player_width, cfg.player_height)
+	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], "PlayerUF", cfg.player_pos, cfg.player_width*C.Mult, cfg.player_height*C.Mult)
 
 	oUF:SetActiveStyle("Pet")
 	local pet = oUF:Spawn("pet", "oUF_Pet")
-	F.Mover(pet, L['MOVER_UNITFRAME_PET'], "PetUF", cfg.pet_pos, cfg.pet_width, cfg.pet_height)
+	F.Mover(pet, L['MOVER_UNITFRAME_PET'], "PetUF", cfg.pet_pos, cfg.pet_width*C.Mult, cfg.pet_height*C.Mult)
 
 	oUF:SetActiveStyle("Target")
 	local target = oUF:Spawn("target", "oUF_Target")
-	F.Mover(target, L['MOVER_UNITFRAME_TARGET'], "TargetUF", cfg.target_pos, cfg.target_width, cfg.target_height)
+	F.Mover(target, L['MOVER_UNITFRAME_TARGET'], "TargetUF", cfg.target_pos, cfg.target_width*C.Mult, cfg.target_height*C.Mult)
 
 	oUF:SetActiveStyle("ToT")
 	local targettarget = oUF:Spawn("targettarget", "oUF_TargetTarget")
-	F.Mover(targettarget, L['MOVER_UNITFRAME_TARGETTARGET'], "TotUF", cfg.targettarget_pos, cfg.targettarget_width, cfg.targettarget_height)
+	F.Mover(targettarget, L['MOVER_UNITFRAME_TARGETTARGET'], "TotUF", cfg.targettarget_pos, cfg.targettarget_width*C.Mult, cfg.targettarget_height*C.Mult)
 
 	oUF:SetActiveStyle("Focus")
 	local focus = oUF:Spawn("focus", "oUF_Focus")
-	F.Mover(focus, L['MOVER_UNITFRAME_FOCUS'], "FocusUF", cfg.focus_pos, cfg.focus_width, cfg.focus_height)
+	F.Mover(focus, L['MOVER_UNITFRAME_FOCUS'], "FocusUF", cfg.focus_pos, cfg.focus_width*C.Mult, cfg.focus_height*C.Mult)
 
 	oUF:SetActiveStyle("FoT")
 	local focustarget = oUF:Spawn("focustarget", "oUF_FocusTarget")
-	F.Mover(focustarget, L['MOVER_UNITFRAME_FOCUSTARGET'], "FotUF", cfg.focustarget_pos, cfg.focustarget_width, cfg.focustarget_height)
+	F.Mover(focustarget, L['MOVER_UNITFRAME_FOCUSTARGET'], "FotUF", cfg.focustarget_pos, cfg.focustarget_width*C.Mult, cfg.focustarget_height*C.Mult)
 
 	
 	if cfg.enableBoss then
@@ -232,10 +230,10 @@ function module:OnLogin()
 			boss[i] = oUF:Spawn("boss"..i, "oUF_Boss"..i)
 			--local width, height = boss[i]:GetWidth(), boss[i]:GetHeight()
 			if i == 1 then
-				boss[i].mover = F.Mover(boss[i], L["MOVER_UNITFRAME_BOSS"], "BossFrame", cfg.boss_pos, cfg.boss_width, cfg.boss_height)
+				boss[i].mover = F.Mover(boss[i], L["MOVER_UNITFRAME_BOSS"], "BossFrame", cfg.boss_pos, cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 			else
 				--boss[i].mover = F.Mover(boss[i], L["MOVER_UNITFRAME_BOSS"]..i, "Boss"..i, {"BOTTOM", boss[i-1], "TOP", 0, 60}, width, height)
-				boss[i]:SetPoint("BOTTOM", boss[i-1], "TOP", 0, cfg.boss_padding)
+				boss[i]:SetPoint("BOTTOM", boss[i-1], "TOP", 0, cfg.boss_padding*C.Mult)
 			end
 		end
 	end
@@ -246,13 +244,13 @@ function module:OnLogin()
 		local arena = {}
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn("arena"..i, "oUF_Arena"..i)
-			arena[i]:SetAttribute('oUF-enableArenaPrep', false)
+			--arena[i]:SetAttribute('oUF-enableArenaPrep', false)
 			--local width, height = arena[i]:GetWidth(), arena[i]:GetHeight()
 			if i == 1 then
-				arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"], "ArenaFrame", cfg.arena_pos, cfg.arena_width, cfg.arena_height)
+				arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"], "ArenaFrame", cfg.arena_pos, cfg.arena_width*C.Mult, cfg.arena_height*C.Mult)
 			else
 				--arena[i].mover = F.Mover(arena[i], L["MOVER_UNITFRAME_ARENA"]..i, "Arena"..i, {"BOTTOM", arena[i-1], "TOP", 0, 80}, width, height)
-				arena[i]:SetPoint("BOTTOM", arena[i-1], "TOP", 0, cfg.arena_padding)
+				arena[i]:SetPoint("BOTTOM", arena[i-1], "TOP", 0, cfg.arena_padding*C.Mult)
 			end
 		end
 	end
@@ -269,8 +267,8 @@ function module:OnLogin()
 			'showParty', true,
 			'showPlayer', true,
 			'showSolo', false,
-			'xoffset', cfg.party_reverse and -cfg.party_padding or cfg.party_padding,
-			'yoffset', cfg.party_reverse and cfg.party_padding or -cfg.party_padding,
+			'xoffset', cfg.party_reverse and -cfg.party_padding*C.Mult or cfg.party_padding*C.Mult,
+			'yoffset', cfg.party_reverse and cfg.party_padding*C.Mult or -cfg.party_padding*C.Mult,
 			'maxColumns', 1,
 			'unitsperColumn', 5,
 			'columnSpacing', 0,
@@ -282,15 +280,12 @@ function module:OnLogin()
 			'oUF-initialConfigFunction', ([[
 				self:SetHeight(%d)
 				self:SetWidth(%d)
-			]]):format(cfg.party_height, cfg.party_width)
+			]]):format(cfg.party_height*C.Mult, cfg.party_width*C.Mult)
 		)
-
-		--for i = 1, 5 do
-		--	party[i] = "oUF_Party"..i
 
 
 		if cfg.party_horizon then
-			partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, cfg.party_width*5+cfg.party_padding*4, cfg.party_height)
+			partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, (cfg.party_width*5+cfg.party_padding*4)*C.Mult, cfg.party_height*C.Mult)
 			if cfg.party_reverse then
 				party:ClearAllPoints()
 				party:SetPoint("RIGHT", partyMover)
@@ -299,7 +294,7 @@ function module:OnLogin()
 				party:SetPoint("LEFT", partyMover)
 			end
 		else
-			partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, cfg.party_width, cfg.party_height*5+cfg.party_padding*4)
+			partyMover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], "PartyFrame", cfg.party_pos, cfg.party_width*C.Mult, (cfg.party_height*5+cfg.party_padding*4)*C.Mult)
 			if cfg.party_reverse then
 				party:ClearAllPoints()
 				party:SetPoint("BOTTOM", partyMover)
@@ -321,8 +316,8 @@ function module:OnLogin()
 			local raid = oUF:SpawnHeader(name, nil, "raid",
 			"showParty", false,
 			"showRaid", true,
-			"xoffset", cfg.raid_padding,
-			"yOffset", cfg.raid_padding,
+			"xoffset", cfg.raid_padding*C.Mult,
+			"yOffset", cfg.raid_padding*C.Mult,
 			"groupFilter", tostring(i),
 			"groupingOrder", "1,2,3,4,5,6,7,8",
 			"groupBy", "GROUP",
@@ -335,7 +330,7 @@ function module:OnLogin()
 			"oUF-initialConfigFunction", ([[
 			self:SetHeight(%d)
 			self:SetWidth(%d)
-			]]):format(cfg.raid_height, cfg.raid_width))
+			]]):format(cfg.raid_height*C.Mult, cfg.raid_width*C.Mult))
 			return raid
 		end
 
@@ -344,13 +339,13 @@ function module:OnLogin()
 			groups[i] = CreateRaid("oUF_Raid"..i, i)
 			if i == 1 then
 				if cfg.raid_horizon then
-					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, cfg.raid_width*5+cfg.raid_padding*4, cfg.raid_height*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1)))
+					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, (cfg.raid_width*5+cfg.raid_padding*4)*C.Mult, (cfg.raid_height*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1)))*C.Mult)
 					if cfg.raid_reverse then
 						groups[i]:ClearAllPoints()
 						groups[i]:SetPoint("BOTTOMLEFT", raidMover)
 					end
 				else
-					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, cfg.raid_width*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1)), cfg.raid_height*5+cfg.raid_padding*4)
+					raidMover = F.Mover(groups[i], L["MOVER_UNITFRAME_RAID"], "RaidFrame", cfg.raid_pos, (cfg.raid_width*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1)))*C.Mult, (cfg.raid_height*5+cfg.raid_padding*4)*C.Mult)
 					if cfg.raid_reverse then
 						groups[i]:ClearAllPoints()
 						groups[i]:SetPoint("TOPRIGHT", raidMover)
@@ -359,20 +354,20 @@ function module:OnLogin()
 			else
 				if cfg.raid_horizon then
 					if cfg.raid_reverse then
-						groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, cfg.raid_padding)
+						groups[i]:SetPoint("BOTTOMLEFT", groups[i-1], "TOPLEFT", 0, cfg.raid_padding*C.Mult)
 					else
-						groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, -cfg.raid_padding)
+						groups[i]:SetPoint("TOPLEFT", groups[i-1], "BOTTOMLEFT", 0, -cfg.raid_padding*C.Mult)
 					end
 				else
 					if cfg.raid_reverse then
-						groups[i]:SetPoint("TOPRIGHT", groups[i-1], "TOPLEFT", -cfg.raid_padding, 0)
+						groups[i]:SetPoint("TOPRIGHT", groups[i-1], "TOPLEFT", -cfg.raid_padding*C.Mult, 0)
 					else
-						groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", cfg.raid_padding, 0)
+						groups[i]:SetPoint("TOPLEFT", groups[i-1], "TOPRIGHT", cfg.raid_padding*C.Mult, 0)
 					end
 				end
 			end
 		end
 	end
 
-	self:TargetSound()
+	self:CreateSound()
 end

@@ -157,13 +157,22 @@ cast.PostCastStart = function(self, unit)
 			self.iconBG:SetVertexColor(1, 0, 0)
 		else
 			self.iconBG:SetVertexColor(0, 0, 0)
+		end
+	end
 
+	if self.iconSD then
+		if self.notInterruptible then
+			self.iconSD:SetBackdropBorderColor(1, 0, 0, .65)
+		else
+			self.iconSD:SetBackdropBorderColor(0, 0, 0, .35)
 		end
 	end
 
 	if unit == "pet" or unit == "targettarget" or unit == "focustarget" 
 		or unit:find("boss%d") or unit:find("arena%d") 
 		or (unit == "player" and not C.unitframe.cbSeparate) 
+		--or (unit == "target" and not C.unitframe.cbSeparate) 
+		or unit == "focus" 
 		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate) then
 		if C.unitframe.transMode then
 			self:SetStatusBarColor(.4, .4, .4, .45)

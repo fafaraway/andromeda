@@ -247,7 +247,7 @@ C['chat'] = {
 			['blockAddonAlert'] = true,
 				['addonBlockList'] = {
 					'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', ('%-'):rep(20),
-					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'blizzard.+验证码', '=>'
+					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'wow.+兑换码', 'wow.+验证码', '=>'
 					},
 }
 
@@ -287,7 +287,6 @@ C['unitframe'] = {
 			['cbnotInterruptibleColor'] = {160/255, 159/255, 161/255},
 			['cbCompleteColor'] = {63/255, 161/255, 124/255},
 			['cbFailColor'] = {187/255, 99/255, 110/255},
-			['cbHeight'] = 14,
 			['cbName'] = false,
 			['cbTimer'] = false,
 
@@ -302,9 +301,11 @@ C['unitframe'] = {
 		['altpower_height'] = 2,
 
 		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -360},
-		['player_cb_pos'] = {'TOPRIGHT', 'oUF_Player', 'BOTTOMRIGHT', 0, -60},
 		['player_width'] = 220,
 		['player_height'] = 16,
+		['player_cb_width'] = 220,
+		['player_cb_height'] = 20,
+		['player_cb_pos'] = {'TOPRIGHT', 'oUF_Player', 'BOTTOMRIGHT', -1, -60},
 		['player_frameVisibility'] = '[combat][mod:shift][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
 		['enableFrameVisibility'] = false,
 
@@ -314,16 +315,17 @@ C['unitframe'] = {
 		['pet_frameVisibility'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
 
 		['target_pos'] = {'LEFT', 'oUF_Player', 'RIGHT', 40, 60},
-		['target_cb_pos'] = {'TOPRIGHT', 'oUF_Target', 'BOTTOMRIGHT', 0, -12},
 		['target_width'] = 266,
 		['target_height'] = 16,
+		['target_cb_pos'] = {'TOPRIGHT', 'oUF_Target', 'BOTTOMRIGHT', -1, -10},
+		['target_cb_width'] = 266,
+		['target_cb_height'] = 10,
 
 		['targettarget_pos'] = {'LEFT', 'oUF_Target', 'RIGHT', 6, 0},
 		['targettarget_width'] = 80,
 		['targettarget_height'] = 16,
 
 		['focus_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -100, -60},
-		['focus_cb_pos'] = {'TOPRIGHT', 'oUF_Focus', 'BOTTOMRIGHT', 0, -40},
 		['focus_width'] = 80,
 		['focus_height'] = 16,
 

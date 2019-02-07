@@ -137,8 +137,6 @@
 	<Script file='scripts\unitframe\tags.lua'/>
 	<Script file='scripts\unitframe\colors.lua'/>
 	<Script file='scripts\unitframe\filterlist.lua'/>
-	<Script file='scripts\unitframe\arena.lua'/>
-	<Script file='scripts\unitframe\sound.lua'/>
 
 	<Script file='scripts\theme\Core.lua'/>
 	<Include file='scripts\theme\AddOns\AddOns.xml'/>
