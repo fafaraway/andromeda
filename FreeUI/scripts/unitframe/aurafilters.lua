@@ -43,8 +43,9 @@ module.ignoredDebuffs = {
 	[173657] = true, 	-- Defender Illona defeated
 	[206151] = true, 	-- 挑战者的负担
 	[260738] = true, 	-- 艾泽里特残渣
-	[279737] = true,
-	[264689] = true,
+	[279737] = true,	-- 准备作战 (海岛)
+	[264689] = true,	-- 疲倦
+	[289423] = true,	-- 死亡的重担
 }
 
 -- buffs cast by the player that healers want to see on party/raid frames
