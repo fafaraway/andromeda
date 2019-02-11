@@ -168,27 +168,40 @@ cast.PostCastStart = function(self, unit)
 		end
 	end
 
-	if unit == "pet" or unit == "targettarget" or unit == "focustarget" 
-		or unit:find("boss%d") or unit:find("arena%d") 
-		or (unit == "player" and not C.unitframe.cbSeparate) 
-		--or (unit == "target" and not C.unitframe.cbSeparate) 
-		or unit == "focus" 
-		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate) then
-		if C.unitframe.transMode then
-			self:SetStatusBarColor(.4, .4, .4, .45)
+	if self.bg and (unit == "target" and not C.unitframe.cbSeparate) then
+		if self.notInterruptible then
+			self.bg:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .5)
 		else
-			self:SetStatusBarColor(.4, .4, .4, .8)
+			self.bg:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
 		end
 	end
 
+	if unit == "pet" or unit == "targettarget" or unit == "focustarget" 
+		or unit:find("boss%d") or unit:find("arena%d") 
+		or (unit == "player" and not C.unitframe.cbSeparate) 
+		or (unit == "target" and not C.unitframe.cbSeparate) 
+		or unit == "focus" 
+		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate) then
+			if C.unitframe.transMode then
+				self:SetStatusBarColor(.4, .4, .4, .45)
+			else
+				self:SetStatusBarColor(.4, .4, .4, .8)
+			end
+	elseif (unit == "player" and C.unitframe.cbSeparate) then
+		self:SetStatusBarColor(C.r, C.g, C.b, 1)
+	end
 end
 
 cast.PostUpdateInterruptible = function(self, unit)
+	local r, g, b = unpack(self.notInterruptibleColor)
+
 	if self.notInterruptible then
 		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
 	else
 		self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
 	end
+
+
 end
 
 cast.PostCastStop = function(self)

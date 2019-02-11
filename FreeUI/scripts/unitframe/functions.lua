@@ -472,12 +472,24 @@ function module:CreateCastBar(self)
 	if not C.unitframe.castbar then return end
 
 	local Castbar = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
-	Castbar:SetAllPoints(self)
+	--Castbar:SetAllPoints(self)
+	Castbar:SetPoint('TOPLEFT', self, C.Mult, -C.Mult)
+	Castbar:SetPoint('BOTTOMRIGHT', self, -C.Mult, C.Mult)
 	Castbar:SetStatusBarTexture(C.media.sbTex)
 	Castbar:GetStatusBarTexture():SetBlendMode('BLEND')
 	Castbar:SetStatusBarColor(0, 0, 0, 0)
 	Castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
 	self.Castbar = Castbar
+
+	local bg = CreateFrame('Frame', nil, Castbar)
+	bg:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+	bg:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
+	bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
+	bg:SetBackdrop({bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult,})
+	bg:SetBackdropColor(C.appearance.backdropColour[1], C.appearance.backdropColour[2], C.appearance.backdropColour[3], a or C.appearance.backdropColour[4])
+	bg:SetBackdropBorderColor(0, 0, 0)
+	F.CreateTex(bg)
+	Castbar.bg = bg
 
 	local Spark = Castbar:CreateTexture(nil, 'OVERLAY')
 	Spark:SetBlendMode('ADD')
@@ -536,7 +548,7 @@ function module:CreateCastBar(self)
 		Castbar.SafeZone = SafeZone
 	end
 
-	if (self.unitStyle == 'player' and cfg.cbSeparate) or self.unitStyle == 'target' then
+	if (self.unitStyle == 'player' and cfg.cbSeparate) or (self.unitStyle == 'target' and cfg.cbSeparate) then
 		if cfg.cbName then
 			Text:Show()
 		end
@@ -544,20 +556,15 @@ function module:CreateCastBar(self)
 			Time:Show()
 		end
 
-		local bg = CreateFrame('Frame', nil, Castbar)
-		bg:SetPoint('TOPLEFT', -C.Mult, C.Mult)
-		bg:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
-		bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
-
-		F.CreateBD(bg)
-		F.CreateTex(bg)
 		F.CreateSD(bg)
+		Castbar.bgSD = bg.Shadow
 	end
 
-	if self.unitStyle == 'target' then
+	if self.unitStyle == 'target' and cfg.cbSeparate  then
 		Castbar:SetSize(cfg.target_cb_width*C.Mult, cfg.target_cb_height*C.Mult)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
+		iconFrame:SetSize(Castbar:GetHeight()+4, Castbar:GetHeight()+4)
 		Spark:SetHeight(Castbar:GetHeight()*2)
 		Time:SetPoint('TOPRIGHT', Castbar, 'BOTTOMRIGHT', 0, -6)
 		Castbar:ClearAllPoints()
