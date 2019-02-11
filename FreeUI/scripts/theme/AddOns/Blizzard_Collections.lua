@@ -596,6 +596,7 @@ C.themes["Blizzard_Collections"] = function()
 	F.ReskinPortraitFrame(WardrobeFrame)
 	F.Reskin(WardrobeTransmogFrame.ApplyButton)
 	F.StripTextures(WardrobeTransmogFrame.SpecButton)
+	F.ReskinArrow(WardrobeTransmogFrame.SpecButton, "down")
 	WardrobeTransmogFrame.SpecButton:SetPoint("RIGHT", WardrobeTransmogFrame.ApplyButton, "LEFT", -3, 0)
 	for i = 1, 10 do
 		select(i, WardrobeTransmogFrame.Model.ClearAllPendingButton:GetRegions()):Hide()
