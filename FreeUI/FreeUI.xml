@@ -128,7 +128,7 @@
 	<Script file='scripts\tooltip\hover.lua'/>
 	<Script file='scripts\tooltip\icon.lua'/>
 	<Script file='scripts\tooltip\extrainfo.lua'/>
-	<Script file='scripts\tooltip\ilvlSpec.lua'/>
+	<Script file='scripts\tooltip\specilvl.lua'/>
 	<Script file='scripts\tooltip\azeritetrait.lua'/>
 	<Script file='scripts\tooltip\clear.lua'/>
 
@@ -136,7 +136,7 @@
 	<Script file='scripts\unitframe\spawns.lua'/>
 	<Script file='scripts\unitframe\tags.lua'/>
 	<Script file='scripts\unitframe\colors.lua'/>
-	<Script file='scripts\unitframe\filterlist.lua'/>
+	<Script file='scripts\unitframe\aurafilters.lua'/>
 
 	<Script file='scripts\theme\Core.lua'/>
 	<Include file='scripts\theme\AddOns\AddOns.xml'/>

@@ -67,6 +67,7 @@ local function getTarget(unit)
 end
 
 GameTooltip:HookScript('OnTooltipSetUnit', function(self)
+	if self:IsForbidden() then return end
 	if(C.tooltip.combatHide and InCombatLockdown()) then
 		return self:Hide()
 	end
@@ -335,6 +336,7 @@ function F:ReskinTooltip()
 		if C.general.isDeveloper then print("Unknown tooltip spotted.") end
 		return
 	end
+	if self:IsForbidden() then return end
 	self:SetScale(1)
 
 	if not self.tipStyled then
