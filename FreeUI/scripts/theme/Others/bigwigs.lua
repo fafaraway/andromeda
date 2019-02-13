@@ -2,8 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("Theme")
 
 
-function module:BigWigs()
-	if not C.appearance.BW then return end
+function module:ReskinBigWigs()
+	if not C.appearance.reskinBW then return end
 	if not IsAddOnLoaded("BigWigs") then return end
 
 	-- Force Settings

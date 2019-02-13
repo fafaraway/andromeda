@@ -1,16 +1,22 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("Theme")
-if not C.appearance.WA then return end
+if not C.appearance.reskinWA then return end
 
-local function WA()
+local pairs = pairs
+
+local function ReskinWA()
 	local function Skin_WeakAuras(f, fType)
-		if not f or (f and f.styled) then return end
 		if fType == "icon" then
 			if not f.styled then
 				f.icon:SetTexCoord(unpack(C.TexCoord))
 				f.icon.SetTexCoord = F.Dummy
-				F.CreateBDFrame(f.icon)
-				F.CreateSD(f.icon)
+				local bg = F.CreateBDFrame(f.icon)
+				F.CreateSD(bg)
+
+				bg.Shadow:HookScript("OnUpdate", function(self)
+					self:SetAlpha(self:GetParent():GetAlpha())
+				end)
+
 				f.styled = true
 			end
 		elseif fType == "aurabar" then
@@ -19,11 +25,9 @@ local function WA()
 				F.CreateSD(f.bar)
 				f.icon:SetTexCoord(unpack(C.TexCoord))
 				f.icon.SetTexCoord = F.Dummy
-				--[[if f.icon then
-					f.iconFrame:SetAllPoints(f.icon)
-					F.CreateBDFrame(f.icon)
-					F.CreateSD(f.icon)
-				end]]
+				f.iconFrame:SetAllPoints(f.icon)
+				F.CreateSD(f.iconFrame)
+
 				f.styled = true
 			end
 		end
@@ -57,9 +61,9 @@ local function WA()
 
 	for weakAura in pairs(WeakAuras.regions) do
 		local regions = WeakAuras.regions[weakAura]
-		if regions.regionType == "icon" then
+		if regions.regionType == "icon" or regions.regionType == "aurabar" then
 			Skin_WeakAuras(regions.region, regions.regionType)
 		end
 	end
 end
-module:LoadWithAddOn("WeakAuras", "WeakAuras", WA)
+module:LoadWithAddOn("WeakAuras", "WeakAuras", ReskinWA)

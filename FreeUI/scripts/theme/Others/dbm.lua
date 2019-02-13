@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("Theme")
 
-function module:DBM()
-	if not C.appearance.DBM then return end
+function module:ReskinDBM()
+	if not C.appearance.reskinDBM then return end
 	if not IsAddOnLoaded("DBM-Core") then return end
 
 	local buttonsize = 22

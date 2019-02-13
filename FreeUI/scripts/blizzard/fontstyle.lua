@@ -7,7 +7,7 @@ _G.DAMAGE_TEXT_FONT = C.font.damage
 _G.NAMEPLATE_FONT = C.font.normal
 
 function module:FontStyle()
-	if not C.appearance.fontStyle then return end
+	if not C.appearance.reskinFonts then return end
 
 	local function SetFont(fontObj, fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)
 		if _G.type(fontObj) == "string" then fontObj = _G[fontObj] end

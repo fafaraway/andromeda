@@ -49,8 +49,8 @@ function module:LoadWithAddOn(addonName, value, func)
 end
 
 function module:OnLogin()
-	self:DBM()
-	self:Skada()
-	self:BigWigs()
-	self:PGF()
+	self:ReskinDBM()
+	self:ReskinSkada()
+	self:ReskinBigWigs()
+	self:ReskinPGF()
 end

@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("Theme")
 
-function module:Skada()
-	if not C.appearance.SKADA then return end
+function module:ReskinSkada()
+	if not C.appearance.ReskinSkada then return end
 	if not IsAddOnLoaded("Skada") then return end
 
 	-- Background + Textures

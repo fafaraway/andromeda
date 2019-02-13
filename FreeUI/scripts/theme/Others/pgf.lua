@@ -2,8 +2,8 @@ local F, C = unpack(select(2, ...))
 local module = F:GetModule('Theme')
 
 
-function module:PGF()
-	if not C.appearance.PGF then return end
+function module:ReskinPGF()
+	if not C.appearance.reskinPGF then return end
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local pairs = pairs

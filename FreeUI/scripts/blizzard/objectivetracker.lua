@@ -13,7 +13,7 @@ local otFont = {C.font.normal,12,nil}
 
 
 function module:QuestTracker()
-	if not C.appearance.objectiveTracker then return end
+	if not C.appearance.reskinQuestTracker then return end
 
 	-- Move Tracker Frame
 	local mover = CreateFrame("Frame", "ObjectiveTrackerFrameMover", ot)
@@ -54,25 +54,25 @@ function module:QuestTracker()
 
 
 	-- Show quest color and level
-		local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
-			if ENABLE_COLORBLIND_MODE == "1" then return end
+	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
+		if ENABLE_COLORBLIND_MODE == "1" then return end
 
-			for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
-				if title and not isHeader and button.questID == questID then
-					local title = "["..level.."] "..title
-					if isComplete then
-						title = "|cffff78ff"..title
-					elseif frequency == LE_QUEST_FREQUENCY_DAILY then
-						title = "|cff3399ff"..title
-					end
-					button.Text:SetText(title)
-					button.Text:SetPoint("TOPLEFT", 24, -5)
-					button.Text:SetWidth(205)
-					button.Text:SetWordWrap(false)
-					button.Check:SetPoint("LEFT", button.Text, button.Text:GetWrappedWidth(), 0)
+		for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
+			if title and not isHeader and button.questID == questID then
+				local title = "["..level.."] "..title
+				if isComplete then
+					title = "|cffff78ff"..title
+				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
+					title = "|cff3399ff"..title
 				end
+				button.Text:SetText(title)
+				button.Text:SetPoint("TOPLEFT", 24, -5)
+				button.Text:SetWidth(205)
+				button.Text:SetWordWrap(false)
+				button.Check:SetPoint("LEFT", button.Text, button.Text:GetWrappedWidth(), 0)
 			end
 		end
+	end
 	hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
 
 	--if not C.quests.questObjectiveTrackerStyle then return end

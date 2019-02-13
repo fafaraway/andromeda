@@ -60,16 +60,16 @@ C['appearance'] = {
 	['vignette'] = true,
 		['vignetteAlpha'] = .35,
 
-	['objectiveTracker'] = true,
-	['petBattle'] = true,
+	['reskinQuestTracker'] = true,
+	['reskinPetBattle'] = true,
 
-	['fontStyle'] = true,
+	['reskinFonts'] = true,
 
-	['DBM'] = true,
-	['BW'] = true,
-	['WA'] = true,
-	['PGF'] = true,
-	['SKADA'] = true,
+	['reskinDBM'] = true,
+	['reskinBW'] = true,
+	['reskinWA'] = true,
+	['reskinPGF'] = true,
+	['reskinSkada'] = true,
 }
 
 

@@ -348,19 +348,19 @@ do
 	local addons = ns.addSubCategory(appearance, ns.localization.appearanceaddons)
 	addons:SetPoint("TOPLEFT", objectiveTracker, "BOTTOMLEFT", 0, -20)
 
-	local DBM = ns.CreateCheckBox(appearance, "DBM", true, true)
+	local DBM = ns.CreateCheckBox(appearance, "reskinDBM", true, true)
 	DBM:SetPoint("TOPLEFT", addons, "BOTTOMLEFT", 0, -8)
 
-	local BW = ns.CreateCheckBox(appearance, "BW", true, true)
+	local BW = ns.CreateCheckBox(appearance, "reskinBW", true, true)
 	BW:SetPoint("LEFT", DBM, "RIGHT", 240, 0)
 
-	local WA = ns.CreateCheckBox(appearance, "WA", true, true)
+	local WA = ns.CreateCheckBox(appearance, "reskinWA", true, true)
 	WA:SetPoint("TOPLEFT", DBM, "BOTTOMLEFT", 0, -8)
 
-	local SKADA = ns.CreateCheckBox(appearance, "SKADA", true, true)
+	local SKADA = ns.CreateCheckBox(appearance, "reskinSkada", true, true)
 	SKADA:SetPoint("LEFT", WA, "RIGHT", 240, 0)
 
-	local PGF = ns.CreateCheckBox(appearance, "PGF", true, true)
+	local PGF = ns.CreateCheckBox(appearance, "reskinPGF", true, true)
 	PGF:SetPoint("TOPLEFT", WA, "BOTTOMLEFT", 0, -8)
 end
 
