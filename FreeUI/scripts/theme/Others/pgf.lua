@@ -46,6 +46,7 @@ function module:PGF()
 		if parent ~= LFGListFrame then
 			self:ClearAllPoints()
 			self:SetPoint("TOPLEFT", LFGListFrame, "TOPRIGHT", 4, 0)
+			self:SetPoint("BOTTOMLEFT", LFGListFrame, "BOTTOMRIGHT", 4, 0)
 		end
 	end)
 
