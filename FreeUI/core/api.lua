@@ -1341,7 +1341,19 @@ function F:CreateColorSwatch()
 	return swatch
 end
 
+function F:StyleSearchButton()
+	F.StripTextures(self)
+	if self.icon then
+		F.ReskinIcon(self.icon)
+	end
+	F.CreateBD(self, .25)
 
+	self:SetHighlightTexture(C.media.backdrop)
+	local hl = self:GetHighlightTexture()
+	hl:SetVertexColor(C.r, C.g, C.b, .25)
+	hl:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+	hl:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
+end
 
 
 -- mythic affixes
