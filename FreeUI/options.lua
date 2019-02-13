@@ -70,8 +70,6 @@ C['appearance'] = {
 	['WA'] = true,
 	['PGF'] = true,
 	['SKADA'] = true,
-
-
 }
 
 
@@ -215,7 +213,7 @@ C['tooltip'] = {
 		['hideRank'] = true,
 		['combatHide'] = false,
 		['ilvlSpec'] = true,
-			['ilvlSpecByShift'] = true,
+			['ilvlSpecByShift'] = false,
 		['extraInfo'] = true,
 		['azeriteTrait'] = true,
 		['linkHover'] = true,

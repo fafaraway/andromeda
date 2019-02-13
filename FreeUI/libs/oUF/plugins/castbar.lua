@@ -183,9 +183,9 @@ cast.PostCastStart = function(self, unit)
 		or unit == "focus" 
 		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate) then
 			if C.unitframe.transMode then
-				self:SetStatusBarColor(.4, .4, .4, .45)
+				self:SetStatusBarColor(.4, .4, .4, .25)
 			else
-				self:SetStatusBarColor(.4, .4, .4, .8)
+				self:SetStatusBarColor(.4, .4, .4, .55)
 			end
 	elseif (unit == "player" and C.unitframe.cbSeparate) then
 		self:SetStatusBarColor(C.r, C.g, C.b, 1)
@@ -222,9 +222,7 @@ end
 cast.PostCastFailed = function(self)
 	self:SetStatusBarColor(unpack(self.FailColor))
 	self:SetValue(self.max)
-	if not self.fadeOut then
-		self.fadeOut = true
-	end
+	self.fadeOut = true
 	self:Show()
 end
 
