@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule("Theme")
+if not C.appearance.WA then return end
 
 local function WA()
 	local function Skin_WeakAuras(f, fType)

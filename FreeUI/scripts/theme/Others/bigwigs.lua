@@ -3,7 +3,7 @@ local module = F:GetModule("Theme")
 
 
 function module:BigWigs()
-
+	if not C.appearance.BW then return end
 	if not IsAddOnLoaded("BigWigs") then return end
 
 	-- Force Settings
