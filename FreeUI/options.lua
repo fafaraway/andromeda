@@ -280,7 +280,8 @@ C['unitframe'] = {
 		['debuffbyPlayer'] = true,
 		
 		['castbar'] = true,
-			['cbSeparate'] = false,
+			['cbSeparate_palyer'] = true,
+			['cbSeparate_target'] = true,
 			['cbCastingColor'] = {110/255, 176/255, 216/255},
 			['cbChannelingColor'] = {92/255, 193/255, 216/255},
 			['cbnotInterruptibleColor'] = {162/255, 18/255, 24/255},

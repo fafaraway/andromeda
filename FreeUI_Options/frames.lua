@@ -684,16 +684,19 @@ do
 	local castbar = ns.CreateCheckBox(unitframe, "castbar", true, true)
 	castbar:SetPoint("TOPLEFT", castbarline, "BOTTOMLEFT", 16, -16)
 
-	local cbSeparate = ns.CreateCheckBox(unitframe, "cbSeparate", true, true)
-	cbSeparate:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
+	local cbSeparate_palyer = ns.CreateCheckBox(unitframe, "cbSeparate_palyer", true, true)
+	cbSeparate_palyer:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
+
+	local cbSeparate_target = ns.CreateCheckBox(unitframe, "cbSeparate_target", true, true)
+	cbSeparate_target:SetPoint("LEFT", cbSeparate_palyer, "RIGHT", 240, 0)
 
 	local cbName = ns.CreateCheckBox(unitframe, "cbName", true, true)
-	cbName:SetPoint("TOPLEFT", cbSeparate, "BOTTOMLEFT", 0, -8)
+	cbName:SetPoint("TOPLEFT", cbSeparate_palyer, "BOTTOMLEFT", 0, -8)
 
 	local cbTimer = ns.CreateCheckBox(unitframe, "cbTimer", true, true)
 	cbTimer:SetPoint("LEFT", cbName, "RIGHT", 240, 0)
 
-	castbar.children = {cbSeparate, cbName, cbTimer}
+	castbar.children = {cbSeparate_palyer, cbSeparate_target, cbName, cbTimer}
 
 	local group = ns.addSubCategory(unitframe, ns.localization.unitframegroup)
 	group:SetPoint("TOPLEFT", cbName, "BOTTOMLEFT", -32, -8)
@@ -757,8 +760,8 @@ do
 
 		castbarline:SetShown(shown)
 		castbar:SetShown(shown)
-		cbSeparate:SetShown(shown)
-
+		cbSeparate_palyer:SetShown(shown)
+		cbSeparate_target:SetShown(shown)
 		
 		misc:SetShown(shown)
 		enableBoss:SetShown(shown)

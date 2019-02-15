@@ -548,7 +548,7 @@ function module:CreateCastBar(self)
 		Castbar.SafeZone = SafeZone
 	end
 
-	if (self.unitStyle == 'player' and cfg.cbSeparate) or (self.unitStyle == 'target' and cfg.cbSeparate) then
+	if (self.unitStyle == 'player' and cfg.cbSeparate_palyer) or (self.unitStyle == 'target' and cfg.cbSeparate_target) then
 		if cfg.cbName then
 			Text:Show()
 		end
@@ -560,7 +560,7 @@ function module:CreateCastBar(self)
 		Castbar.bgSD = bg.Shadow
 	end
 
-	if self.unitStyle == 'target' and cfg.cbSeparate  then
+	if self.unitStyle == 'target' and cfg.cbSeparate_target  then
 		Castbar:SetSize(cfg.target_cb_width*C.Mult, cfg.target_cb_height*C.Mult)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
@@ -571,7 +571,7 @@ function module:CreateCastBar(self)
 		F.Mover(Castbar, L['MOVER_UNITFRAME_TARGET_CASTBAR'], "TargetCastbar", cfg.target_cb_pos, cfg.target_cb_width, cfg.target_cb_height)
 	end
 
-	if self.unitStyle == 'player' and cfg.cbSeparate then
+	if self.unitStyle == 'player' and cfg.cbSeparate_palyer then
 		Castbar:SetSize(cfg.player_cb_width*C.Mult, cfg.player_cb_height*C.Mult)
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
