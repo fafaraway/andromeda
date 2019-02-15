@@ -1,4 +1,5 @@
 local F, C = unpack(select(2, ...))
+if not C.chat.enable then return end
 local module = F:GetModule('chat')
 
 local bubbleHook = CreateFrame('Frame')

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+if not C.chat.enable then return end
 if not C.chat.minimizeButton then return end
 
 local mb = CreateFrame('Button',nil,UIParent)

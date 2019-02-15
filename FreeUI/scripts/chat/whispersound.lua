@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
+if not C.chat.enable then return end
 local module = F:GetModule('chat')
-
 
 function module:WhisperSound()
 	if not C.chat.whisperSound then return end

@@ -273,7 +273,23 @@ ns.localization.chatSubText = "Adjust the appearance and functionality of the ga
 ns.localization.chatenable = "Enable"
 ns.localization.chatenableTooltip = "Uncheck if you want to use another chat addon."
 
-
+ns.localization.chatlockPosition = "Lock position"
+ns.localization.chatuseOutline = "Outline"
+ns.localization.chatuseOutlineTooltip = "Add outline for chat text."
+ns.localization.chatwhisperSound = "Whisper alert"
+ns.localization.chatwhisperSoundTooltip = "Add sound alert for whisper messages."
+ns.localization.chattimeStamp = "Time stamp"
+ns.localization.chattimeStampTooltip = "Add customized time stamp."
+ns.localization.chatitemLinkLevel = "Item link level"
+ns.localization.chatitemLinkLevelTooltip = "Expand item links in chat or when you or someone in your group receives loot to display item slot and item level."
+ns.localization.chatspamageMeters = "Spamage meters"
+ns.localization.chatspamageMetersTooltip = "Suppresses chat messages from damage meters."
+ns.localization.chatminimizeButton = "Minimize button"
+ns.localization.chatminimizeButtonTooltip = "Add a button to hide chat frame."
+ns.localization.chatchannelSticky = "Channel sticky"
+ns.localization.chatlineFading = "Line fading"
+ns.localization.chatuseFilter = "Filters"
+ns.localization.chatuseFilterTooltip = "Filter some unnecessary lines."
 
 
 ns.localization.map = "Map"

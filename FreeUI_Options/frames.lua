@@ -903,6 +903,52 @@ do
 	local enable = ns.CreateCheckBox(chat, "enable", true, true)
 	enable:SetPoint("TOPLEFT", chat.subText, "BOTTOMLEFT", 0, -8)
 
+	local lockPosition = ns.CreateCheckBox(chat, "lockPosition", true, true)
+	lockPosition:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+
+	local useOutline = ns.CreateCheckBox(chat, "useOutline", true, true)
+	useOutline:SetPoint("LEFT", lockPosition, "RIGHT", 240, 0)
+
+	local whisperSound = ns.CreateCheckBox(chat, "whisperSound", true, true)
+	whisperSound:SetPoint("TOPLEFT", lockPosition, "BOTTOMLEFT", 0, -8)
+
+	local timeStamp = ns.CreateCheckBox(chat, "timeStamp", true, true)
+	timeStamp:SetPoint("LEFT", whisperSound, "RIGHT", 240, 0)
+
+	local itemLinkLevel = ns.CreateCheckBox(chat, "itemLinkLevel", true, true)
+	itemLinkLevel:SetPoint("TOPLEFT", whisperSound, "BOTTOMLEFT", 0, -8)
+
+	local spamageMeters = ns.CreateCheckBox(chat, "spamageMeters", true, true)
+	spamageMeters:SetPoint("LEFT", itemLinkLevel, "RIGHT", 240, 0)
+
+	local minimizeButton = ns.CreateCheckBox(chat, "minimizeButton", true, true)
+	minimizeButton:SetPoint("TOPLEFT", itemLinkLevel, "BOTTOMLEFT", 0, -8)
+
+	local channelSticky = ns.CreateCheckBox(chat, "channelSticky", true, true)
+	channelSticky:SetPoint("LEFT", minimizeButton, "RIGHT", 240, 0)
+
+	local lineFading = ns.CreateCheckBox(chat, "lineFading", true, true)
+	lineFading:SetPoint("TOPLEFT", minimizeButton, "BOTTOMLEFT", 0, -8)
+
+	local useFilter = ns.CreateCheckBox(chat, "useFilter", true, true)
+	useFilter:SetPoint("LEFT", lineFading, "RIGHT", 240, 0)
+
+	local function toggleChatOptions()
+		local shown = enable:GetChecked()
+		lockPosition:SetShown(shown)
+		useOutline:SetShown(shown)
+		whisperSound:SetShown(shown)
+		timeStamp:SetShown(shown)
+		itemLinkLevel:SetShown(shown)
+		spamageMeters:SetShown(shown)
+		minimizeButton:SetShown(shown)
+		channelSticky:SetShown(shown)
+		lineFading:SetShown(shown)
+		useFilter:SetShown(shown)
+	end
+
+	enable:HookScript("OnClick", toggleChatOptions)
+	chat:HookScript("OnShow", toggleChatOptions)
 end
 
 
