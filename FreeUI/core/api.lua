@@ -894,7 +894,12 @@ function F:PixelIcon(texture, highlight)
 	self.Icon:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 	self.Icon:SetTexCoord(unpack(C.TexCoord))
 	if texture then
-		self.Icon:SetTexture(texture)
+		local atlas = strmatch(texture, "Atlas:(.+)$")
+		if atlas then
+			self.Icon:SetAtlas(atlas)
+		else
+			self.Icon:SetTexture(texture)
+		end
 	end
 	if highlight and type(highlight) == "boolean" then
 		self:EnableMouse(true)
