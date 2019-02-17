@@ -328,22 +328,22 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 end
 
 function module:MapReveal()
-	--[[local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
-	bu:SetPoint("TOPRIGHT", -270, -2)
-	bu:SetSize(26, 26)
-	F.CreateCB(bu)
-	bu:SetChecked(C.map.mapReveal)
-	bu.text = F.CreateFS(bu, 12, nil, L["MapReveal"], nil, nil, true, "LEFT", 25, 0)
+	--local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
+	--bu:SetPoint("TOPRIGHT", -270, -2)
+	--bu:SetSize(26, 26)
+	--F.CreateCB(bu)
+	--bu:SetChecked(C.map.mapReveal)
+	--bu.text = F.CreateFS(bu, 12, nil, L["MapReveal"], nil, nil, true, "LEFT", 25, 0)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate("MapExplorationPinTemplate") do
 		hooksecurefunc(pin, "RefreshOverlays", MapExplorationPin_RefreshOverlays)
 	end
 
-	bu:SetScript("OnClick", function(self)
-		C.map.mapReveal = self:GetChecked()
+	--bu:SetScript("OnClick", function(self)
+	--	C.map.mapReveal = self:GetChecked()
 
-		for i = 1, #overlayTextures do
-			overlayTextures[i]:SetShown(C.map.mapReveal)
-		end
-	end)]]
+	--	for i = 1, #overlayTextures do
+	--		overlayTextures[i]:SetShown(C.map.mapReveal)
+	--	end
+	--end)
 end
