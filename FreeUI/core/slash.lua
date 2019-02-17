@@ -19,6 +19,12 @@ SlashCmdList['LEAVEPARTY'] = function()
 end
 SLASH_LEAVEPARTY1 = '/lg'
 
+SlashCmdList['RESETINSTANCES'] = function()
+	ResetInstances();
+end
+SLASH_RESETINSTANCES1 = '/rs'
+
+
 
 
 
