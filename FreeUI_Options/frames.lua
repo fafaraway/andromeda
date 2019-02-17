@@ -310,7 +310,7 @@ do
 	local addShadowBorder = ns.CreateCheckBox(appearance, "addShadowBorder", true, true)
 	addShadowBorder:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
 
-	local fontStyle = ns.CreateCheckBox(appearance, "fontStyle", true, true)
+	local fontStyle = ns.CreateCheckBox(appearance, "reskinFonts", true, true)
 	fontStyle:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
 
 	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
@@ -339,10 +339,10 @@ do
 	local skin = ns.addSubCategory(appearance, ns.localization.appearanceskin)
 	skin:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -100)
 
-	local objectiveTracker = ns.CreateCheckBox(appearance, "objectiveTracker", true, true)
+	local objectiveTracker = ns.CreateCheckBox(appearance, "reskinQuestTracker", true, true)
 	objectiveTracker:SetPoint("TOPLEFT", skin, "BOTTOMLEFT", 0, -8)
 
-	local petBattle = ns.CreateCheckBox(appearance, "petBattle", true, true)
+	local petBattle = ns.CreateCheckBox(appearance, "reskinPetBattle", true, true)
 	petBattle:SetPoint("LEFT", objectiveTracker, "RIGHT", 240, 0)
 
 	local addons = ns.addSubCategory(appearance, ns.localization.appearanceaddons)
