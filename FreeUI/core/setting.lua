@@ -73,6 +73,7 @@ function F:ForceDefaultSettings()
 	SetCVar("nameplateShowAll", 1)
 	SetCVar("nameplateMotion", 1)
 	SetCVar("nameplateShowFriendlyNPCs", 0)
+	SetCVar("nameplateOtherTopInset", 0.08)
 
 	SetCVar("alwaysShowActionBars", 0)
 	SetCVar("lockActionBars", 1)
@@ -90,12 +91,15 @@ function F:ForceDefaultSettings()
 	SetCVar("floatingCombatTextFloatMode", 1)
 	SetCVar("WorldTextScale", 1.5)
 
-	SetCVar("screenshotQuality", 10)
-	SetCVar("showTutorials", 0)
-	SetCVar("overrideArchive", 0)
-	
 	SetCVar("cameraDistanceMaxZoomFactor", 2.6)
 
+	SetCVar("screenshotQuality", 10)
+	SetCVar("showTutorials", 0)
+	SetCVar("profanityFilter", 0)
+	SetCVar("breakUpLargeNumbers", 1)
+	SetCVar("overrideArchive", 0)
+	SetCVar("cameraYawMoveSpeed", 120)
+	SetCVar("rawMouseEnable", 1)
 end
 
 
