@@ -56,6 +56,10 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		local item = self.RewardsFrame.OvermaxItem
 		item.Icon:SetDrawLayer("BORDER", 1)
 		F.ReskinIcon(item.Icon)
+
+		if self.CostFrame then
+			self.CostFrame.CostIcon:SetTexCoord(unpack(C.TexCoord))
+		end
 	end
 
 	function F:ReskinMissionTabs()
