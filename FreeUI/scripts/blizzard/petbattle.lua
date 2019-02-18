@@ -23,8 +23,8 @@ function module:PetBattleUI()
 	weather.Icon:SetPoint("TOP", frame.TopVersusText, "BOTTOM", 0, -15)
 	weather.Icon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateSD(weather.Icon)
-	if weather.Icon.Shadow then
-		weather.Icon.Shadow:SetFrameLevel(weather:GetFrameLevel())
+	if weather.Icon.sd then
+		weather.Icon.sd:SetFrameLevel(weather:GetFrameLevel())
 	end
 	weather.Duration:ClearAllPoints()
 	weather.Duration:SetPoint("CENTER", weather.Icon, 1, 0)
@@ -154,16 +154,16 @@ function module:PetBattleUI()
 			end
 		end
 		if self.glow then self.glow:Hide() end
-		if self.Icon.Shadow then
+		if self.Icon.sd then
 			local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex) - 1 or 1
 			local color = BAG_ITEM_QUALITY_COLORS[quality]
-			self.Icon.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+			self.Icon.sd:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end)
 
 	hooksecurefunc("PetBattleUnitFrame_UpdateHealthInstant", function(self)
-		if self.BorderDead and self.BorderDead:IsShown() and self.Icon.Shadow then
-			self.Icon.Shadow:SetBackdropBorderColor(1, .12, .24)
+		if self.BorderDead and self.BorderDead:IsShown() and self.Icon.sd then
+			self.Icon.sd:SetBackdropBorderColor(1, .12, .24)
 		end
 		if self.BorderDead and self.deadIcon then
 			self.deadIcon:SetShown(self.BorderDead:IsShown())
@@ -185,9 +185,9 @@ function module:PetBattleUI()
 					frame.styled = true
 				end
 				--[[if isBuff then
-					frame.Icon.Shadow:SetBackdropBorderColor(0, .6, .1)
+					frame.Icon.sd:SetBackdropBorderColor(0, .6, .1)
 				else
-					frame.Icon.Shadow:SetBackdropBorderColor(.8, 0, 0)
+					frame.Icon.sd:SetBackdropBorderColor(.8, 0, 0)
 				end]]
 
 				nextFrame = nextFrame + 1

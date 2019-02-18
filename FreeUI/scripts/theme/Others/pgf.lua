@@ -55,7 +55,7 @@ function module:ReskinPGF()
 		if tipStyled then return end
 		for i = 1, 15 do
 			local child = select(i, PremadeGroupsFilterDialog:GetChildren())
-			if child and child.Shadow then
+			if child and child.sd then
 				F.ReskinTooltip(child)
 				tipStyled = true
 				break

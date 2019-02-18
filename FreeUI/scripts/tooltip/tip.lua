@@ -354,8 +354,8 @@ function F:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	if self.bg.Shadow then
-		self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .5)
+	if self.bg.sd then
+		self.bg.sd:SetBackdropBorderColor(0, 0, 0, .5)
 	end
 	self.bg:SetBackdropBorderColor(0, 0, 0)
 
@@ -365,8 +365,8 @@ function F:ReskinTooltip()
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				if C.appearance.addShadowBorder and self.bg.Shadow then
-					self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .5)
+				if C.appearance.addShadowBorder and self.bg.sd then
+					self.bg.sd:SetBackdropBorderColor(color.r, color.g, color.b, .5)
 				else
 					self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 				end

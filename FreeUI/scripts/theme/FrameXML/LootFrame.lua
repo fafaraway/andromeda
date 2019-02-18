@@ -62,8 +62,8 @@ tinsert(C.themes["FreeUI"], function()
 		frame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
 		F.CreateBD(frame)
 		F.CreateSD(frame)
-		if frame.Shadow then
-			frame.Shadow:SetFrameLevel(bg:GetFrameLevel() - 1)
+		if frame.sd then
+			frame.sd:SetFrameLevel(bg:GetFrameLevel() - 1)
 		end
 		F.CreateBDFrame(frame.PromptFrame.Timer, .25)
 

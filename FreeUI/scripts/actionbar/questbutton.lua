@@ -183,8 +183,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
 	F.CreateSD(iconBG)
 
-	if iconBG.Shadow then
-		iconBG.Shadow:SetFrameLevel(self:GetFrameLevel())
+	if iconBG.sd then
+		iconBG.sd:SetFrameLevel(self:GetFrameLevel())
 	end
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 	self.HL:SetColorTexture(1, 1, 1, .25)
