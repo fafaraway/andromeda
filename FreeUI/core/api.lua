@@ -25,6 +25,8 @@ function F:CreateFS(size, flag, text, justify, colour, shadow, anchor, x, y)
 		fs:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
 	elseif size == 'pixelbig' then
 		fs:SetFont(C.font.pixel, 16, 'OUTLINEMONOCHROME')
+	elseif size == 'pixelCN' then
+		fs:SetFont(C.font.pixelCN, 10, 'OUTLINEMONOCHROME')
 	else
 		fs:SetFont(C.font.normal, size, flag)
 	end
@@ -92,20 +94,20 @@ end
 
 function F:CreateSD(a)
 	if not C.appearance.addShadowBorder then return end
-	if self.Shadow then return end
+	if self.sd then return end
 
 	local frame = self
 	if self:GetObjectType() == "Texture" then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
 
-	self.Shadow = CreateFrame("Frame", nil, frame)
-	self.Shadow:SetPoint("TOPLEFT", self, -3, 3)
-	self.Shadow:SetPoint("BOTTOMRIGHT", self, 3, -3)
-	self.Shadow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
-	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .5)
-	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
+	self.sd = CreateFrame("Frame", nil, frame)
+	self.sd:SetPoint("TOPLEFT", self, -3, 3)
+	self.sd:SetPoint("BOTTOMRIGHT", self, 3, -3)
+	self.sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+	self.sd:SetBackdropBorderColor(0, 0, 0, a or .5)
+	self.sd:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
-	return self.Shadow
+	return self.sd
 end
 
 function F:CreateBD(a)
