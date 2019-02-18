@@ -635,22 +635,14 @@ do
 	local transMode = ns.CreateCheckBox(unitframe, "transMode", true, true)
 	transMode:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
-	local healthClassColor = ns.CreateCheckBox(unitframe, "healthClassColor", true, true)
-	healthClassColor:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 16, -8)
-
-	local powerTypeColor = ns.CreateCheckBox(unitframe, "powerTypeColor", true, true)
-	powerTypeColor:SetPoint("TOPLEFT", healthClassColor, "BOTTOMLEFT", 0, -8)
-
-	transMode.children = {healthClassColor, powerTypeColor}
-
 	local gradient = ns.CreateCheckBox(unitframe, "gradient", true, true)
 	gradient:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
 
 	local portrait = ns.CreateCheckBox(unitframe, "portrait", true, true)
-	portrait:SetPoint("TOPLEFT", gradient, "BOTTOMLEFT", 0, -8)
+	portrait:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 0, -8)
 
 	local main = ns.addSubCategory(unitframe, ns.localization.unitframemain)
-	main:SetPoint("TOPLEFT", powerTypeColor, "BOTTOMLEFT", -32, -8)
+	main:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", -16, -8)
 
 	local threat = ns.CreateCheckBox(unitframe, "threat", true, true)
 	threat:SetPoint("TOPLEFT", main, "BOTTOMLEFT", 16, -16)
@@ -736,8 +728,6 @@ do
 	local function toggleUFOptions()
 		local shown = enable:GetChecked()
 		transMode:SetShown(shown)
-		healthClassColor:SetShown(shown)
-		powerTypeColor:SetShown(shown)
 		gradient:SetShown(shown)
 		main:SetShown(shown)
 		portrait:SetShown(shown)

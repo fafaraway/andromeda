@@ -131,6 +131,7 @@ local function CreatePartyStyle(self)
 	module:CreateBorderColour(self)
 	module:CreateDispellable(self, unit)
 	module:CreateSpellRange(self)
+	module:CreateNameColour(self)
 end
 
 local function CreateRaidStyle(self)
@@ -148,6 +149,7 @@ local function CreateRaidStyle(self)
 	module:CreateDebuffs(self)
 	module:CreateBorderColour(self)
 	module:CreateSpellRange(self)
+	module:CreateNameColour(self)
 end
 
 local function CreateBossStyle(self)

@@ -13,11 +13,7 @@ function module:CreateBackDrop(self)
 	bd:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	bd:SetBackdrop({bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult})
 	bd:SetBackdropBorderColor(0, 0, 0, 1)
-	if C.unitframe.transMode then
-		bd:SetBackdropColor(.05, .05, .05, .25)
-	else
-		bd:SetBackdropColor(0, 0, 0, .45)
-	end
+	bd:SetBackdropColor(0, 0, 0, 0)
 	F.CreateTex(bd)
 	self.bd = bd
 
@@ -107,6 +103,27 @@ function module:CreateSound()
 end
 
 
+-- Name colour
+local function updateNameColour(self)
+	local frame = self:GetParent()
+	if frame.unit then
+		if UnitIsUnit(frame.unit, "target") then
+			frame.Text:SetTextColor(.1, .7, 1)
+		else
+			frame.Text:SetTextColor(1, 1, 1)
+		end
+	else
+		frame.Text:SetTextColor(1, 1, 1)
+	end
+end
+
+function module:CreateNameColour(self)
+	local f = CreateFrame('Frame', nil, self)
+	f:RegisterEvent('PLAYER_TARGET_CHANGED')
+	f:SetScript('OnEvent', updateNameColour)
+end
+
+
 -- Border colour
 local function UpdateBorderColour(self)
 	local frame = self:GetParent()
@@ -164,35 +181,13 @@ local function PostUpdateHealth(Health, unit, min, max)
 			self.Healthdef:SetMinMaxValues(0, max)
 			self.Healthdef:SetValue(max-min)
 
-			if C.unitframe.healthClassColor then
-				if UnitIsPlayer(unit) then
-					self.Healthdef:GetStatusBarTexture():SetVertexColor(r, g, b)
-				else
-					self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
-				end
+			if UnitIsPlayer(unit) then
+				self.Healthdef:GetStatusBarTexture():SetVertexColor(r, g, b)
 			else
-				self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
+				self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
 			end
 
 			self.Healthdef:Show()
-		end
-
-		if tapped or offline then
-			if C.unitframe.gradient then
-				self.gradient:SetGradientAlpha('VERTICAL', .6, .6, .6, .6, .4, .4, .4, .6)
-			else
-				self.gradient:SetGradientAlpha('VERTICAL', .6, .6, .6, .6, .6, .6, .6, .6)
-			end
-		elseif UnitIsDead(unit) or UnitIsGhost(unit) then
-			if C.unitframe.gradient then
-				self.gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, 1, .1, .1, .1, 1)
-			end
-		else
-			if C.unitframe.gradient then
-				self.gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
-			else
-				self.gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, .6, .1, .1, .1, .6)
-			end
 		end
 	else
 		if UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -202,8 +197,26 @@ local function PostUpdateHealth(Health, unit, min, max)
 		if C.unitframe.gradient then
 			Health:GetStatusBarTexture():SetGradient('VERTICAL', r, g, b, r/2, g/2, b/2)
 		else
-			Health:GetStatusBarTexture():SetGradient('VERTICAL', r, g, b, r, g, b)
+			Health:SetStatusBarColor(r, g, b)
 		end
+	end
+
+	if C.unitframe.gradient then
+		if tapped or offline then
+			self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+		elseif UnitIsDead(unit) or UnitIsGhost(unit) then
+			self.gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, .6, .1, .1, .1, .6)
+		else
+			self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+		end
+	end
+
+	if tapped or offline then
+		self.bd:SetBackdropColor(.6, .6, .6, .5)
+	elseif UnitIsDead(unit) or UnitIsGhost(unit) then
+		self.bd:SetBackdropColor(0, 0, 0, .5)
+	else
+		self.bd:SetBackdropColor(.05, .05, .05, .5)
 	end
 end
 
@@ -225,20 +238,19 @@ function module:CreateHealthBar(self)
 	self.Health = Health
 	Health.PostUpdate = PostUpdateHealth
 
-	if C.unitframe.transMode then
-		local gradient = Health:CreateTexture(nil, 'BACKGROUND')
-		gradient:SetPoint('TOPLEFT')
-		gradient:SetPoint('BOTTOMRIGHT')
-		gradient:SetTexture(C.media.backdrop)
 
-		if C.unitframe.gradient then
-			gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
-		else
-			gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .3, .3, .3, .6)
-		end
+	local gradient = Health:CreateTexture(nil, 'BACKGROUND')
+	gradient:SetPoint('TOPLEFT')
+	gradient:SetPoint('BOTTOMRIGHT')
+	gradient:SetTexture(C.media.backdrop)
 
-		self.gradient = gradient
+	if C.unitframe.gradient then
+		gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
+	else
+		gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, 0, .1, .1, .1, 0)
 	end
+
+	self.gradient = gradient
 
 	if C.unitframe.transMode then
 		local Healthdef = CreateFrame('StatusBar', nil, self)
@@ -363,7 +375,7 @@ function module:CreatePowerBar(self)
 	Power.colorReaction = true
 
 	if C.unitframe.transMode then
-		if self.unitStyle == 'player' and C.unitframe.powerTypeColor then
+		if self.unitStyle == 'player' then
 			Power.colorPower = true
 		else
 			Power.colorClass = true
@@ -473,8 +485,8 @@ function module:CreateCastBar(self)
 
 	local Castbar = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
 	--Castbar:SetAllPoints(self)
-	Castbar:SetPoint('TOPLEFT', self, C.Mult, -C.Mult)
-	Castbar:SetPoint('BOTTOMRIGHT', self, -C.Mult, C.Mult)
+	Castbar:SetPoint('TOPLEFT', self)
+	Castbar:SetPoint('BOTTOMRIGHT', self)
 	Castbar:SetStatusBarTexture(C.media.sbTex)
 	Castbar:GetStatusBarTexture():SetBlendMode('BLEND')
 	Castbar:SetStatusBarColor(0, 0, 0, 0)
@@ -557,7 +569,7 @@ function module:CreateCastBar(self)
 		end
 
 		F.CreateSD(bg)
-		Castbar.bgSD = bg.Shadow
+		Castbar.bgSD = bg.sd
 	end
 
 	if self.unitStyle == 'target' and cfg.cbSeparate_target  then
@@ -941,7 +953,7 @@ function module:CreatePortrait(self)
 	local Portrait = CreateFrame('PlayerModel', nil, self)
 	Portrait:SetAllPoints(self)
 	Portrait:SetFrameLevel(self.Health:GetFrameLevel() + 2)
-	Portrait:SetAlpha(C.unitframe.portraitAlpha)
+	Portrait:SetAlpha(.1)
 	Portrait.PostUpdate = PostUpdatePortrait
 	self.Portrait = Portrait
 end
@@ -1290,7 +1302,9 @@ function module:CreateName(self)
 	f:RegisterEvent('PLAYER_TARGET_CHANGED')
 	f:RegisterEvent('PLAYER_FOCUS_CHANGED')
 
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
+	if C.general.isDeveloper then
+		Name = F.CreateFS(self.Health, 'pixelCN', nil, '', nil, nil, true)
+	elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 		Name = F.CreateFS(self.Health, 11, nil, '', nil, nil, '2')
 	else
 		Name = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true)
@@ -1340,7 +1354,9 @@ function module:CreateName(self)
 
 	if self.unitStyle == 'arena' then
 		local ArenaSpec
-		if C.Client == 'zhCN' or C.Client == 'zhTW' then
+		if C.general.isDeveloper then
+			ArenaSpec = F.CreateFS(self.Health, 'pixelCN', nil, '', nil, nil, true)
+		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 			ArenaSpec = F.CreateFS(self.Health, 11, nil, '', nil, nil, '2')
 		else
 			ArenaSpec = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true)
@@ -1358,7 +1374,9 @@ function module:CreatePartyName(self)
 	local Text
 
 	if C.unitframe.partyNameAlways then
-		if C.Client == 'zhCN' or C.Client == 'zhTW' then
+		if C.general.isDeveloper then
+			Text = F.CreateFS(self.Health, 'pixelCN', nil, '', nil, nil, true)
+		elseif C.Client == 'zhCN' or C.Client == 'zhTW' then
 			Text = F.CreateFS(self.Health, 11, nil, '', nil, nil, true, 'CENTER', 1, 0)
 		else
 			Text = F.CreateFS(self.Health, 'pixel', nil, '', nil, nil, true, 'CENTER', 1, 0)
@@ -1369,7 +1387,6 @@ function module:CreatePartyName(self)
 		self:Tag(Text, '[free:partytext]')
 	end
 
-	
 	Text:SetJustifyH('CENTER')
 	self.Text = Text
 end

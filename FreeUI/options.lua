@@ -258,27 +258,17 @@ C['unitframe'] = {
 	['enable'] = true,
 
 		['transMode'] = true,
-			['transModeAlpha'] = .1,
-			['healthClassColor'] = true,
-			['powerTypeColor'] = true,
-
-		['gradient'] = false,
-
-		['portrait'] = false,
-			['portraitAlpha'] = .1,
-
-		['spellRange'] = true,
-			['spellRangeAlpha'] = .4,
-
-		['classPower'] = true,
-			['classPower_height'] = 2,
-
+		['gradient'] = true,
+		['portrait'] = true,
 		['threat'] = true,
 		['prediction'] = true, 
 		['dispellable'] = true,
-
 		['debuffbyPlayer'] = true,
-		
+		['spellRange'] = true,
+			['spellRangeAlpha'] = .4,
+		['classPower'] = true,
+			['classPower_height'] = 2,
+			
 		['castbar'] = true,
 			['cbSeparate_palyer'] = true,
 			['cbSeparate_target'] = true,

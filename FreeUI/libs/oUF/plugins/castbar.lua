@@ -168,11 +168,13 @@ cast.PostCastStart = function(self, unit)
 		end
 	end
 
-	if self.bg and (unit == "target" and not C.unitframe.cbSeparate_target) then
-		if self.notInterruptible then
-			self.bg:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .5)
-		else
-			self.bg:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
+	if (unit == "target" and not C.unitframe.cbSeparate_target) or (unit == "player" and not C.unitframe.cbSeparate_player) then
+		if self:GetParent().sd then 
+			if self.notInterruptible then
+				self:GetParent().sd:SetBackdropBorderColor(1, 0, 0, .5)
+			else
+				self:GetParent().sd:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
+			end
 		end
 	end
 
@@ -183,9 +185,9 @@ cast.PostCastStart = function(self, unit)
 		or unit == "focus" 
 		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate_palyer) then
 			if C.unitframe.transMode then
-				self:SetStatusBarColor(.4, .4, .4, .25)
+				self:SetStatusBarColor(.4, .4, .4, .1)
 			else
-				self:SetStatusBarColor(.4, .4, .4, .55)
+				self:SetStatusBarColor(.4, .4, .4, .3)
 			end
 	elseif (unit == "player" and C.unitframe.cbSeparate_palyer) then
 		self:SetStatusBarColor(C.r, C.g, C.b, 1)
@@ -200,8 +202,6 @@ cast.PostUpdateInterruptible = function(self, unit)
 	else
 		self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
 	end
-
-
 end
 
 cast.PostCastStop = function(self)
@@ -211,6 +211,8 @@ cast.PostCastStop = function(self)
 	end
 	self:SetValue(self.max)
 	self:Show()
+
+	self:GetParent().sd:SetBackdropBorderColor(0, 0, 0, .35)
 end
 
 cast.PostChannelStop = function(self)
