@@ -58,6 +58,7 @@ C['font'] = {
 	['header']     = headerFont,
 	['chat']       = chatFont,
 	['pixel']      = assetsPath..'font\\pixel.ttf',
+	['pixelCN']    = 'Fonts\\pixfontCN.ttf',
 }
 
 if GetLocale() == 'ruRU' then
