@@ -8,22 +8,26 @@ SlashCmdList.RCSLASH = DoReadyCheck
 SLASH_RCSLASH1 = '/rc'
 
 SlashCmdList.ROLECHECK = InitiateRolePoll
-SLASH_ROLECHECK1 = '/rolecheck'
-SLASH_ROLECHECK2 = '/rolepoll'
+SLASH_ROLECHECK1 = '/rp'
 
 SlashCmdList.TICKET = ToggleHelpFrame
 SLASH_TICKET1 = '/gm'
 
-SlashCmdList['LEAVEPARTY'] = function()
+SlashCmdList.LEAVEPARTY = function()
 	LeaveParty();
 end
 SLASH_LEAVEPARTY1 = '/lg'
 
-SlashCmdList['RESETINSTANCES'] = function()
+SlashCmdList.RESETINSTANCES = function()
 	ResetInstances();
 end
 SLASH_RESETINSTANCES1 = '/rs'
 
+SlashCmdList.DEV = function() 
+	UIParentLoadAddOn('Blizzard_Console') 
+	DeveloperConsole:Toggle()
+end 
+SLASH_DEV1 = '/dev'
 
 
 
