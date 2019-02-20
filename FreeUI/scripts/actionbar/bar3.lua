@@ -23,7 +23,7 @@ function Bar:CreateBar3()
 	frame:SetScale(1)
 
 	if cfg.layoutStyle == 2 then
-		frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 6)
+		frame:SetPoint(unpack(cfg.bar1Pos))
 	else
 		local function positionBars()
 			if InCombatLockdown() then return end
@@ -68,7 +68,7 @@ function Bar:CreateBar3()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	--create the mouseover functionality
-	if cfg.bar3Mouseover or cfg.layoutStyle == 3 then
+	if (cfg.bar3Mouseover and cfg.layoutStyle == 1) or cfg.layoutStyle == 3 then
 		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
 	end
 end

@@ -1085,8 +1085,8 @@ end
 
 -- Smoothy
 local smoothing = {}
-local f = CreateFrame("Frame")
-f:SetScript("OnUpdate", function()
+local smoother = CreateFrame("Frame")
+smoother:SetScript("OnUpdate", function()
 	local limit = 30/GetFramerate()
 	for bar, value in pairs(smoothing) do
 		local cur = bar:GetValue()

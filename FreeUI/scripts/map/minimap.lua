@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("Map")
-
+local module = F:GetModule('Map')
+local size = C.map.miniMapSize
 
 function module:ReskinRegions()
 	-- Garrison
@@ -10,42 +10,42 @@ function module:ReskinRegions()
 
 	-- date
 	GameTimeFrame:ClearAllPoints()
-	GameTimeFrame:SetPoint("TOPRIGHT", Minimap, "TOPRIGHT", -1, -40)
+	GameTimeFrame:SetPoint('TOPRIGHT', Minimap, 'TOPRIGHT', -5, -(size/8*C.Mult)-6)
 	GameTimeFrame:SetSize(16, 8)
 	GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
-	GameTimeFrame:SetNormalTexture("")
-	GameTimeFrame:SetPushedTexture("")
-	GameTimeFrame:SetHighlightTexture("")
+	GameTimeFrame:SetNormalTexture('')
+	GameTimeFrame:SetPushedTexture('')
+	GameTimeFrame:SetHighlightTexture('')
 
 	local _, _, _, _, dateText = GameTimeFrame:GetRegions()
 	F.SetFS(dateText)
 	dateText:SetTextColor(147/255, 211/255, 231/255)
 	dateText:SetShadowOffset(0, 0)
-	dateText:SetPoint("CENTER")
+	dateText:SetPoint('CENTER')
 
 	-- Queue Status
 	QueueStatusMinimapButtonBorder:SetAlpha(0)
 	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:SetPoint("BOTTOMRIGHT", Minimap, 0, 36)
-	QueueStatusMinimapButton:SetHighlightTexture("")
-	QueueStatusMinimapButton.Eye.texture:SetTexture("")
+	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, (size/8*C.Mult)+6)
+	QueueStatusMinimapButton:SetHighlightTexture('')
+	QueueStatusMinimapButton.Eye.texture:SetTexture('')
 
 	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, (size/8*C.Mult)+6)
 
 	local dots = {}
 	for i = 1, 8 do
 		dots[i] = F.CreateFS(QueueStatusMinimapButton, 'pixelbig', nil, '.', nil, nil, true)
-		dots[i]:SetText(".")
+		dots[i]:SetText('.')
 	end
-	dots[1]:SetPoint("TOP", 2, 2)
-	dots[2]:SetPoint("TOPRIGHT", -6, -1)
-	dots[3]:SetPoint("RIGHT", -3, 2)
-	dots[4]:SetPoint("BOTTOMRIGHT", -6, 5)
-	dots[5]:SetPoint("BOTTOM", 2, 2)
-	dots[6]:SetPoint("BOTTOMLEFT", 9, 5)
-	dots[7]:SetPoint("LEFT", 6, 2)
-	dots[8]:SetPoint("TOPLEFT", 9, -1)
+	dots[1]:SetPoint('TOP', 2, 2)
+	dots[2]:SetPoint('TOPRIGHT', -6, -1)
+	dots[3]:SetPoint('RIGHT', -3, 2)
+	dots[4]:SetPoint('BOTTOMRIGHT', -6, 5)
+	dots[5]:SetPoint('BOTTOM', 2, 2)
+	dots[6]:SetPoint('BOTTOMLEFT', 9, 5)
+	dots[7]:SetPoint('LEFT', 6, 2)
+	dots[8]:SetPoint('TOPLEFT', 9, -1)
 
 	local counter = 0
 	local last = 0
@@ -69,11 +69,11 @@ function module:ReskinRegions()
 		end
 	end
 
-	hooksecurefunc("EyeTemplate_StartAnimating", function(eye)
-		eye:SetScript("OnUpdate", onUpdate)
+	hooksecurefunc('EyeTemplate_StartAnimating', function(eye)
+		eye:SetScript('OnUpdate', onUpdate)
 	end)
 
-	hooksecurefunc("EyeTemplate_StopAnimating", function(eye)
+	hooksecurefunc('EyeTemplate_StopAnimating', function(eye)
 		for i = 1, 8 do
 			dots[i]:Show()
 		end
@@ -83,13 +83,13 @@ function module:ReskinRegions()
 		diff = .014
 	end)
 
-	QueueStatusMinimapButton:HookScript("OnEnter", function()
+	QueueStatusMinimapButton:HookScript('OnEnter', function()
 		for i = 1, 8 do
 			dots[i]:SetTextColor(C.r, C.g, C.b)
 		end
 	end)
 
-	QueueStatusMinimapButton:HookScript("OnLeave", function()
+	QueueStatusMinimapButton:HookScript('OnLeave', function()
 		for i = 1, 8 do
 			dots[i]:SetTextColor(1, 1, 1)
 		end
@@ -97,75 +97,75 @@ function module:ReskinRegions()
 
 	-- Instance Difficulty
 	local difftext = {}
-	local rd = CreateFrame("Frame", nil, Minimap)
+	local rd = CreateFrame('Frame', nil, Minimap)
 	rd:SetSize(24, 8)
-	rd:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 5, -40)
-	rd:RegisterEvent("PLAYER_ENTERING_WORLD")
-	rd:RegisterEvent("CHALLENGE_MODE_START")
-	rd:RegisterEvent("CHALLENGE_MODE_COMPLETED")
-	rd:RegisterEvent("CHALLENGE_MODE_RESET")
-	rd:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
-	rd:RegisterEvent("GUILD_PARTY_STATE_UPDATED")
-	rd:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	rd:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 5, -(size/8*C.Mult)-6)
+	rd:RegisterEvent('PLAYER_ENTERING_WORLD')
+	rd:RegisterEvent('CHALLENGE_MODE_START')
+	rd:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+	rd:RegisterEvent('CHALLENGE_MODE_RESET')
+	rd:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
+	rd:RegisterEvent('GUILD_PARTY_STATE_UPDATED')
+	rd:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 
-	local rdt = F.CreateFS(rd, 'pixel', nil, '', nil, nil, true, "TOPLEFT", 0, 0)
+	local rdt = F.CreateFS(rd, 'pixel', nil, '', nil, nil, true, 'TOPLEFT', 0, 0)
 
-	rd:SetScript("OnEvent", function()
+	rd:SetScript('OnEvent', function()
 		local _, instanceType = IsInInstance()
 		local difficulty = select(3, GetInstanceInfo())
 		local numplayers = select(9, GetInstanceInfo())
-		local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or "";
+		local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or '';
 
-		if instanceType == "party" or instanceType == "raid" or instanceType == "scenario" then
+		if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
 			if (difficulty == 1) then
-				rdt:SetText("5N")
+				rdt:SetText('5N')
 			elseif difficulty == 2 then
-				rdt:SetText("5H")
+				rdt:SetText('5H')
 			elseif difficulty == 3 then
-				rdt:SetText("10N")
+				rdt:SetText('10N')
 			elseif difficulty == 4 then
-				rdt:SetText("25N")
+				rdt:SetText('25N')
 			elseif difficulty == 5 then
-				rdt:SetText("10H")
+				rdt:SetText('10H')
 			elseif difficulty == 6 then
-				rdt:SetText("25H")
+				rdt:SetText('25H')
 			elseif difficulty == 7 then
-				rdt:SetText("LFR")
+				rdt:SetText('LFR')
 			elseif difficulty == 8 then
-				rdt:SetText("M+"..mplusdiff)
+				rdt:SetText('M+'..mplusdiff)
 			elseif difficulty == 9 then
-				rdt:SetText("40R")
+				rdt:SetText('40R')
 			elseif difficulty == 11 or difficulty == 39 then
-				rdt:SetText("HScen")
+				rdt:SetText('HScen')
 			elseif difficulty == 12 or difficulty == 38 then
-				rdt:SetText("Scen")
+				rdt:SetText('Scen')
 			elseif difficulty == 40 then 
-				rdt:SetText("MScen")
+				rdt:SetText('MScen')
 			elseif difficulty == 14 then
-				rdt:SetText("N:"..numplayers)
+				rdt:SetText('N:'..numplayers)
 			elseif difficulty == 15 then
-				rdt:SetText("H:"..numplayers)
+				rdt:SetText('H:'..numplayers)
 			elseif difficulty == 16 then
-				rdt:SetText("M")
+				rdt:SetText('M')
 			elseif difficulty == 17 then
-				rdt:SetText("LFR:"..numplayers)
+				rdt:SetText('LFR:'..numplayers)
 			elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
-				rdt:SetText("EScen")
+				rdt:SetText('EScen')
 			elseif difficulty == 23 then
-				rdt:SetText("5M")
+				rdt:SetText('5M')
 			elseif difficulty == 24 or difficulty == 33 then
-				rdt:SetText("TW")
+				rdt:SetText('TW')
 			elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
-				rdt:SetText("PVP")
+				rdt:SetText('PVP')
 			elseif difficulty == 29 then
-				rdt:SetText("PvEvP")
+				rdt:SetText('PvEvP')
 			elseif difficulty == 147 then
-				rdt:SetText("WF")
+				rdt:SetText('WF')
 			end
-		elseif instanceType == "pvp" or instanceType == "arena" then
-			rdt:SetText("PVP")
+		elseif instanceType == 'pvp' or instanceType == 'arena' then
+			rdt:SetText('PVP')
 		else
-			rdt:SetText("")
+			rdt:SetText('')
 		end
 
 		if not IsInInstance() then
@@ -176,10 +176,10 @@ function module:ReskinRegions()
 	end)
 
 	-- mail
-	local mail = CreateFrame("Frame", "FreeUIMailFrame", Minimap)
+	local mail = CreateFrame('Frame', 'FreeUIMailFrame', Minimap)
 	mail:Hide()
-	mail:RegisterEvent("UPDATE_PENDING_MAIL")
-	mail:SetScript("OnEvent", function(self)
+	mail:RegisterEvent('UPDATE_PENDING_MAIL')
+	mail:SetScript('OnEvent', function(self)
 		if HasNewMail() then
 			self:Show()
 		else
@@ -187,25 +187,25 @@ function module:ReskinRegions()
 		end
 	end)
 
-	MiniMapMailFrame:HookScript("OnMouseUp", function(self)
+	MiniMapMailFrame:HookScript('OnMouseUp', function(self)
 		self:Hide()
 		mail:Hide()
 	end)
 
 	local mt = F.CreateFS(mail, 'pixel', nil, '<New Mail>', nil, 'green', true)
-	mt:SetPoint("BOTTOM", Minimap, 0, 36)
+	mt:SetPoint('BOTTOM', Minimap, 0, (size/8*C.Mult)+6)
 
 	MiniMapMailFrame:SetAlpha(0)
 	MiniMapMailFrame:SetSize(22, 10)
 	MiniMapMailFrame:ClearAllPoints()
-	MiniMapMailFrame:SetPoint("CENTER", mt)
+	MiniMapMailFrame:SetPoint('CENTER', mt)
 
 	-- Invites Icon
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
-	GameTimeCalendarInvitesTexture:SetParent("Minimap")
-	GameTimeCalendarInvitesTexture:SetPoint("TOPRIGHT")
-	local Invt = CreateFrame("Button", "FreeUIInvt", UIParent)
-	Invt:SetPoint("TOPRIGHT", Minimap, "BOTTOMLEFT", -20, -20)
+	GameTimeCalendarInvitesTexture:SetParent('Minimap')
+	GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
+	local Invt = CreateFrame('Button', 'FreeUIInvt', UIParent)
+	Invt:SetPoint('TOPRIGHT', Minimap, 'BOTTOMLEFT', -20, -20)
 	Invt:SetSize(300, 80)
 	F.CreateBD(Invt)
 
@@ -218,81 +218,81 @@ function module:ReskinRegions()
 			Invt:Hide()
 		end
 	end
-	F:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-	F:RegisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+	F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
 
-	Invt:SetScript("OnClick", function(_, btn)
+	Invt:SetScript('OnClick', function(_, btn)
 		Invt:Hide()
-		if btn == "LeftButton" then ToggleCalendar() end
-		F:UnregisterEvent("CALENDAR_UPDATE_PENDING_INVITES", updateInviteVisibility)
-		F:UnregisterEvent("PLAYER_ENTERING_WORLD", updateInviteVisibility)
+		if btn == 'LeftButton' then ToggleCalendar() end
+		F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
+		F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
 	end)
 
 	if TicketStatusFrame then
 		TicketStatusFrame:ClearAllPoints()
-		TicketStatusFrame:SetPoint("TOPLEFT", UIParent, 100, -100)
+		TicketStatusFrame:SetPoint('TOPLEFT', UIParent, 100, -100)
 		TicketStatusFrame.SetPoint = F.Dummy
 	end
 
 
-	local durabilityMover = F.CreateGear(DurabilityFrame, "FreeUIDurabilityFrameMover")
-	durabilityMover:SetPoint('RIGHT', Minimap, 'LEFT', -50, -250)
-	durabilityMover:SetFrameStrata("HIGH")
-	F.AddTooltip(durabilityMover, "ANCHOR_TOP", L["TOGGLE"], "system")
+	local durabilityMover = F.CreateGear(DurabilityFrame, 'FreeUIDurabilityFrameMover')
+	durabilityMover:SetPoint('BOTTOMLEFT', Minimap, 'TOPLEFT', 0, 0)
+	durabilityMover:SetFrameStrata('HIGH')
+	F.AddTooltip(durabilityMover, 'ANCHOR_TOP', L['TOGGLE'], 'system')
 	F.CreateMF(durabilityMover)
 
-	hooksecurefunc(DurabilityFrame, "SetPoint", function(_, _, parent)
+	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
 		if parent ~= durabilityMover then
 			DurabilityFrame:SetScale(.7)
 			DurabilityFrame:ClearAllPoints()
 			DurabilityFrame:SetClampedToScreen(true)
-			DurabilityFrame:SetPoint("BOTTOMRIGHT", durabilityMover, "BOTTOMLEFT", -5, 0)
+			DurabilityFrame:SetPoint('BOTTOMRIGHT', durabilityMover, 'BOTTOMLEFT', -5, 0)
 		end
 	end)
 
-	local vehicleMover = F.CreateGear(VehicleSeatIndicator, "FreeUIVehicleSeatMover")
-	vehicleMover:SetPoint('RIGHT', Minimap, 'LEFT', -150, -250)
-	vehicleMover:SetFrameStrata("HIGH")
-	F.AddTooltip(vehicleMover, "ANCHOR_TOP", L["TOGGLE"], "system")
+	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
+	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
+	vehicleMover:SetFrameStrata('HIGH')
+	F.AddTooltip(vehicleMover, 'ANCHOR_TOP', L['TOGGLE'], 'system')
 	F.CreateMF(vehicleMover)
 
-	hooksecurefunc(VehicleSeatIndicator, "SetPoint", function(_, _, parent)
+	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(_, _, parent)
 		if parent ~= vehicleMover then
 			VehicleSeatIndicator:SetScale(.7)
 			VehicleSeatIndicator:ClearAllPoints()
 			VehicleSeatIndicator:SetClampedToScreen(true)
-			VehicleSeatIndicator:SetPoint("BOTTOMRIGHT", vehicleMover, "BOTTOMLEFT", -5, 0)
+			VehicleSeatIndicator:SetPoint('BOTTOMRIGHT', vehicleMover, 'BOTTOMLEFT', -5, 0)
 		end
 	end)
 
 
 	-- move zonetextframe
-	ZoneTextFrame:SetFrameStrata("MEDIUM")
-	SubZoneTextFrame:SetFrameStrata("MEDIUM")
+	ZoneTextFrame:SetFrameStrata('MEDIUM')
+	SubZoneTextFrame:SetFrameStrata('MEDIUM')
 
 	ZoneTextString:ClearAllPoints()
-	ZoneTextString:SetPoint("CENTER", Minimap)
+	ZoneTextString:SetPoint('CENTER', Minimap)
 	ZoneTextString:SetWidth(230)
 	SubZoneTextString:SetWidth(230)
 	PVPInfoTextString:SetWidth(230)
 	PVPArenaTextString:SetWidth(230)
 
 	MinimapZoneTextButton:ClearAllPoints()
-	MinimapZoneTextButton:SetPoint("CENTER", Minimap)
-	MinimapZoneTextButton:SetFrameStrata("HIGH")
+	MinimapZoneTextButton:SetPoint('CENTER', Minimap)
+	MinimapZoneTextButton:SetFrameStrata('HIGH')
 	MinimapZoneTextButton:EnableMouse(false)
 	MinimapZoneTextButton:SetAlpha(0)
-	MinimapZoneText:SetPoint("CENTER", MinimapZoneTextButton)
+	MinimapZoneText:SetPoint('CENTER', MinimapZoneTextButton)
 
 	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
-	MinimapZoneText:SetJustifyH("CENTER")
+	MinimapZoneText:SetJustifyH('CENTER')
 
-	if C.Client == "zhCN" or C.Client == "zhTW" then
-		ZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
-		SubZoneTextString:SetFont(C.font.normal, 14, "OUTLINE")
-		PVPInfoTextString:SetFont(C.font.normal, 14, "OUTLINE")
-		PVPArenaTextString:SetFont(C.font.normal, 14, "OUTLINE")
-		MinimapZoneText:SetFont(C.font.normal, 14, "OUTLINE")
+	if C.Client == 'zhCN' or C.Client == 'zhTW' then
+		ZoneTextString:SetFont(C.font.normal, 14, 'OUTLINE')
+		SubZoneTextString:SetFont(C.font.normal, 14, 'OUTLINE')
+		PVPInfoTextString:SetFont(C.font.normal, 14, 'OUTLINE')
+		PVPArenaTextString:SetFont(C.font.normal, 14, 'OUTLINE')
+		MinimapZoneText:SetFont(C.font.normal, 14, 'OUTLINE')
 	else
 		F.SetFS(ZoneTextString)
 		F.SetFS(SubZoneTextString)
@@ -301,10 +301,10 @@ function module:ReskinRegions()
 		F.SetFS(MinimapZoneText)
 	end
 
-	Minimap:HookScript("OnEnter", function()
+	Minimap:HookScript('OnEnter', function()
 		MinimapZoneTextButton:SetAlpha(1)
 	end)
-	Minimap:HookScript("OnLeave", function()
+	Minimap:HookScript('OnLeave', function()
 		MinimapZoneTextButton:SetAlpha(0)
 	end)
 end
@@ -313,21 +313,21 @@ end
 function module:WhoPingsMyMap()
 	if not C.map.whoPings then return end
 
-	local f = CreateFrame("Frame", nil, Minimap)
+	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFS(f, 14, nil, '', nil, 'class', true, "CENTER", 0, 50)
+	f.text = F.CreateFS(f, 14, nil, '', nil, 'class', true, 'CENTER', 0, 50)
 
 	local anim = f:CreateAnimationGroup()
-	anim:SetScript("OnPlay", function() f:SetAlpha(1) end)
-	anim:SetScript("OnFinished", function() f:SetAlpha(0) end)
-	anim.fader = anim:CreateAnimation("Alpha")
+	anim:SetScript('OnPlay', function() f:SetAlpha(1) end)
+	anim:SetScript('OnFinished', function() f:SetAlpha(0) end)
+	anim.fader = anim:CreateAnimation('Alpha')
 	anim.fader:SetFromAlpha(1)
 	anim.fader:SetToAlpha(0)
 	anim.fader:SetDuration(3)
-	anim.fader:SetSmoothing("OUT")
+	anim.fader:SetSmoothing('OUT')
 	anim.fader:SetStartDelay(3)
 
-	F:RegisterEvent("MINIMAP_PING", function(_, unit)
+	F:RegisterEvent('MINIMAP_PING', function(_, unit)
 		local class = select(2, UnitClass(unit))
 		local r, g, b = F.ClassColor(class)
 		local name = GetUnitName(unit)
@@ -342,52 +342,42 @@ end
 function module:SetupMinimap()
 	if not C.map.miniMap then return end
 
-	-- Shape and Position
-	local scale = C.map.miniMapScale
-	local size = C.map.miniMapSize
-	local mask = 'Interface\\AddOns\\FreeUI\\assets\\rectangle'
-	local backdrop = {edgeFile = C.media.backdrop, edgeSize = 1}
-
-	function GetMinimapShape() return "SQUARE" end
+	local pos = C.map.miniMapPosition
+	function GetMinimapShape() return 'SQUARE' end
 	
 	MinimapCluster:EnableMouse(false)
-	Minimap:SetSize(size*scale, size*scale)
-	Minimap:SetScale(scale)
-	Minimap:SetMaskTexture(mask)
-	Minimap:SetHitRectInsets(0, 0, size/8, size/8)
-	Minimap:SetClampRectInsets(0, 0, -size/4, -size/4)
+	Minimap:SetSize(size*C.Mult, size*C.Mult)
+	Minimap:SetScale(1)
+	Minimap:SetMaskTexture('Interface\\AddOns\\FreeUI\\assets\\rectangle')
+	Minimap:SetHitRectInsets(0, 0, (size/8)*C.Mult, (size/8)*C.Mult)
+	Minimap:SetClampRectInsets(0, 0, 0, 0)
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
 	Minimap:EnableMouse(true)
-	Minimap:SetClampedToScreen(false)
+	Minimap:SetClampedToScreen(true)
 	Minimap:ClearAllPoints()
-	--Minimap:SetPoint(unpack(C.map.miniMapPosition))
 
-	local mover = F.Mover(Minimap, L["MOVER_MINIMAP"], "Minimap", C.map.miniMapPosition, Minimap:GetWidth()*scale, Minimap:GetHeight()*scale)
-	Minimap:SetPoint("TOPRIGHT", mover)
+	local mover = F.Mover(Minimap, L['MOVER_MINIMAP'], 'Minimap', {pos[1], pos[2], pos[3], pos[4], pos[5]-(size/8*C.Mult)}, Minimap:GetWidth(), Minimap:GetHeight())
+	Minimap:SetPoint('TOPRIGHT', mover)
 
-	BorderFrame = CreateFrame("Frame", nil, Minimap)
-	BorderFrame:SetPoint("TOPLEFT", Minimap, "TOPLEFT", -1, -(size/8*scale))
-	BorderFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", 1, (size/8*scale))
-	BorderFrame:SetBackdrop(backdrop)
-	BorderFrame:SetBackdropBorderColor(0, 0, 0)
-	BorderFrame:SetBackdropColor(0, 0, 0)
+	BorderFrame = CreateFrame('Frame', nil, Minimap)
+	BorderFrame:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 0, -(size/8*C.Mult))
+	BorderFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMRIGHT', 0, (size/8*C.Mult))
 	BorderFrame:SetFrameLevel(Minimap:GetFrameLevel() - 1)
-
-	F.CreateSD(BorderFrame)
+	local bg = F.CreateBDFrame(BorderFrame)
+	F.CreateSD(bg)
 
 	DropDownList1:SetClampedToScreen(true)
 
-
 	-- ClockFrame
-	LoadAddOn("Blizzard_TimeManager")
+	LoadAddOn('Blizzard_TimeManager')
 	local region = TimeManagerClockButton:GetRegions()
 	region:Hide()
 	TimeManagerClockButton:Hide()
 
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", function(_, zoom)
+	Minimap:SetScript('OnMouseWheel', function(_, zoom)
 		if zoom > 0 then
 			Minimap_ZoomIn()
 		else
@@ -395,35 +385,20 @@ function module:SetupMinimap()
 		end
 	end)
 
-	-- Click Func
-	--[[Minimap:SetScript("OnMouseUp", function(self, btn)
-		if btn == "MiddleButton" then
-			if not IsAddOnLoaded("Blizzard_Calendar") then
-				LoadAddOn('Blizzard_Calendar')
-			end
-			Calendar_Toggle()
-		elseif btn == "RightButton" then
-			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, -(self:GetWidth()*.7), (self:GetWidth()*.3))
-		else
-			Minimap_OnClick(self)
-		end
-	end)]]
-
 	-- Hide Blizz
 	local frames = {
-		"MinimapBorderTop",
-		"MinimapNorthTag",
-		"MinimapBorder",
-		"MinimapZoneTextButton",
-		"MinimapZoomOut",
-		"MinimapZoomIn",
-		"MiniMapWorldMapButton",
-		"MiniMapMailBorder",
-		"MiniMapTracking",
-		"MiniMapInstanceDifficulty",
-		"GuildInstanceDifficulty",
-		"MiniMapChallengeMode",
-
+		'MinimapBorderTop',
+		'MinimapNorthTag',
+		'MinimapBorder',
+		'MinimapZoneTextButton',
+		'MinimapZoomOut',
+		'MinimapZoomIn',
+		'MiniMapWorldMapButton',
+		'MiniMapMailBorder',
+		'MiniMapTracking',
+		'MiniMapInstanceDifficulty',
+		'GuildInstanceDifficulty',
+		'MiniMapChallengeMode',
 	}
 
 	for _, v in pairs(frames) do

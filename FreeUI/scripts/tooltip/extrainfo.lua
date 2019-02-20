@@ -8,6 +8,20 @@ local module = F:GetModule("Tooltip")
 function module:ExtraInfo()
 	if not C.tooltip.extraInfo then return end
 
+	local function AuraSource(self, unit, index, filter)
+		local unitCaster = select(7, UnitAura(unit, index, filter))
+		if unitCaster then
+			local name = GetUnitName(unitCaster, true)
+			local hexColor = F.HexRGB(F.UnitColor(unitCaster))
+			self:AddLine(" ")
+			self:AddDoubleLine(L["Castby"]..":", hexColor..name)
+			self:Show()
+		end
+	end
+	hooksecurefunc(GameTooltip, "SetUnitAura", AuraSource)
+
+
+
 	local types = {
 		spell = SPELLS.."ID:",
 		item = ITEMS.."ID:",
@@ -181,7 +195,6 @@ function module:ExtraInfo()
 			end)
 		end
 	end)
-
 end
 
 

@@ -1,17 +1,18 @@
 local F, C = unpack(select(2, ...))
 local Bar = F:GetModule("actionbars")
 local cfg = C.actionbar
+cfg.padding = cfg.padding*C.Mult
+cfg.margin = cfg.margin*C.Mult
 
 function Bar:CreateLeaveVehicle()
-
 	local num = 1
 	local buttonList = {}
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_LeaveVehicleBar", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeSmall + (num-1)*cfg.margin + 2*cfg.padding)
-	frame:SetHeight(cfg.buttonSizeSmall + 2*cfg.padding)
-	--frame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -6, 30)
+	frame:SetWidth(num*C.unitframe.player_height + (num-1)*cfg.margin + 2*cfg.padding)
+	frame:SetHeight(C.unitframe.player_height + 2*cfg.padding)
+	--frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 100)
 	frame:SetScale(1)
 
 
@@ -19,15 +20,16 @@ function Bar:CreateLeaveVehicle()
 	local button = CreateFrame("CheckButton", "FreeUI_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")
 	table.insert(buttonList, button) --add the button object to the list
 
-	button:SetSize(cfg.buttonSizeSmall, cfg.buttonSizeSmall)
+	button:SetSize(C.unitframe.player_height*C.Mult, C.unitframe.player_height*C.Mult)
 	button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
 
 	button:RegisterForClicks("AnyUp")
 	button.icon:SetTexture(nil)
-	--button.icon:SetTexCoord(.216, .784, .216, .784)
+	--[[button.icon:SetTexCoord(.216, .784, .216, .784)
 	button:SetNormalTexture(nil)
-	button:SetHighlightTexture(nil)
-	--button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+	button:GetPushedTexture():SetTexture(C.media.checked)]]
+	--F.CreateBD(button)
 	F.CreateSD(button)
 	F.ReskinClose(button)
 

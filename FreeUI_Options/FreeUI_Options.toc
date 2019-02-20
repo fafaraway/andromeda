@@ -2,14 +2,14 @@
 ## Title: |cffffffffFree|r|cff9c84efUI|r |cffdec35bOptions|r
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth, Solor
-## Version: 80100.02
+## Version: 80100.03
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
 freeui_options.lua
 
 localization\english.lua
-#localization\chinese.lua
+localization\chinese.lua
 
 frames.lua
 

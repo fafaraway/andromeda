@@ -4,6 +4,11 @@ local _, ns = ...
 local realm = GetRealmName()
 local name = UnitName("player")
 
+local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
+local fixedHeight = 768 / pysHeight
+local scale = tonumber(floor(fixedHeight*100 + .5)/100)
+mult = fixedHeight / scale
+
 -- [[ Variables ]]
 
 ns.locale = GetLocale()
@@ -257,7 +262,7 @@ end
 -- Sliders
 
 local function onValueChanged(self, value)
-	if self.option == 'uiScale' or self.option == 'vignetteAlpha' or self.option == 'spellRangeAlpha' then
+	if self.option == 'uiScale' then
 		value = string.format("%.2f", value)
 	else
 		value = floor(value+0.5)
@@ -450,8 +455,8 @@ ns.addCategory = function(name)
 	local tag = strlower(name)
 
 	local panel = CreateFrame("Frame", baseName..name, FreeUIOptionsPanel)
-	panel:SetSize(538, 668)
-	panel:SetPoint("RIGHT", -42, 0)
+	panel:SetSize(600*mult, 660*mult)
+	panel:SetPoint("RIGHT", 0, 0)
 	panel:Hide()
 
 	panel.Title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -462,12 +467,12 @@ ns.addCategory = function(name)
 	panel.subText:SetPoint("TOPLEFT", panel.Title, "BOTTOMLEFT", 0, -8)
 	panel.subText:SetJustifyH("LEFT")
 	panel.subText:SetJustifyV("TOP")
-	panel.subText:SetSize(607, 32)
+	panel.subText:SetSize(600*mult, 30*mult)
 	panel.subText:SetText(ns.localization[tag.."SubText"])
 
 	local tab = CreateFrame("Button", nil, FreeUIOptionsPanel)
 	tab:SetPoint("TOPLEFT", 11, -offset)
-	tab:SetSize(168, 32)
+	tab:SetSize(168*mult, 32*mult)
 
 	local icon = tab:CreateTexture(nil, "OVERLAY")
 	icon:SetSize(20, 20)
@@ -490,7 +495,7 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	offset = offset + 35
+	offset = (offset + 36)*mult
 end
 
 ns.addSubCategory = function(category, name)
@@ -499,7 +504,7 @@ ns.addSubCategory = function(category, name)
 	header:SetTextColor(179/255, 211/255, 243/255)
 
 	local line = category:CreateTexture(nil, "ARTWORK")
-	line:SetSize(500, 1)
+	line:SetSize(500*mult, 1*mult)
 	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
 	line:SetColorTexture(.5, .5, .5, .1)
 
@@ -613,7 +618,7 @@ init:SetScript("OnEvent", function()
 
 	local FreeUIOptionsPanel = FreeUIOptionsPanel
 
-	if C.unitframe.enable then
+	--[[if C.unitframe.enable then
 		FreeUIOptionsPanel:HookScript("OnShow", function()
 			oUF_Player:SetAlpha(0)
 			oUF_Target:SetAlpha(0)
@@ -631,7 +636,7 @@ init:SetScript("OnEvent", function()
 			oUF_Focus:SetAlpha(1)
 			oUF_FocusTarget:SetAlpha(1)
 		end)
-	end
+	end]]
 
 	local resetFrame = FreeUIOptionsPanel.resetFrame
 

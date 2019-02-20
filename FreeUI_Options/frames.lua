@@ -3,10 +3,15 @@ local _, ns = ...
 local realm = GetRealmName()
 local name = UnitName("player")
 
+local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
+local fixedHeight = 768 / pysHeight
+local scale = tonumber(floor(fixedHeight*100 + .5)/100)
+mult = fixedHeight / scale
+
 -- [[ Main window ]]
 
 local options = CreateFrame("Frame", "FreeUIOptionsPanel", UIParent)
-options:SetSize(780, 800)
+options:SetSize(800*mult, 800*mult)
 options:SetPoint("CENTER")
 options:SetFrameStrata("HIGH")
 options:EnableMouse(true)
@@ -301,55 +306,41 @@ do
 	local appearance = FreeUIOptionsPanel.appearance
 	appearance.tab.Icon:SetTexture("Interface\\Icons\\Spell_Shadow_DeathAndDecay")
 
-	local theme = ns.addSubCategory(appearance, ns.localization.appearancetheme)
-	theme:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
-
 	local enableTheme = ns.CreateCheckBox(appearance, "enableTheme", true, true)
-	enableTheme:SetPoint("TOPLEFT", theme, "BOTTOMLEFT", 0, -8)
+	enableTheme:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
+
+	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
+	vignette:SetPoint("LEFT", enableTheme, "RIGHT", 240, 0)
 
 	local addShadowBorder = ns.CreateCheckBox(appearance, "addShadowBorder", true, true)
 	addShadowBorder:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
 
 	local fontStyle = ns.CreateCheckBox(appearance, "reskinFonts", true, true)
-	fontStyle:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
+	fontStyle:SetPoint("LEFT", addShadowBorder, "RIGHT", 240, 0)
 
-	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
-	vignette:SetPoint("LEFT", addShadowBorder, "RIGHT", 240, 0)
-
-	local vignetteAlpha = ns.CreateNumberSlider(appearance, "vignetteAlpha", nil, nil, .1, 1, .1, true)
-	vignetteAlpha:SetPoint("TOPLEFT", vignette, "BOTTOMLEFT", 16, -20)
-
-	local function togglevignetteOptions()
-		local shown = vignette:GetChecked()
-		vignetteAlpha:SetShown(shown)
-	end
-
-	vignette:HookScript("OnClick", togglevignetteOptions)
-	vignetteAlpha:HookScript("OnShow", togglevignetteOptions)
-
-	local colours = ns.addSubCategory(appearance, ns.localization.appearanceColours)
-	colours:SetPoint("TOPLEFT", fontStyle, "BOTTOMLEFT", 0, -30)
+	--[[local line_1 = ns.addSubCategory(appearance, ns.localization.appearanceline_1)
+	line_1:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
 
 	local colourScheme = ns.CreateRadioButtonGroup(appearance, "colourScheme", 2, true, true)
-	colourScheme.buttons[1]:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 8, -30)
+	colourScheme.buttons[1]:SetPoint("TOPLEFT", line_1, "BOTTOMLEFT", 8, -8)
 
 	local customColour = ns.CreateColourPicker(appearance, "customColour", true)
-	customColour:SetPoint("LEFT", colourScheme.buttons[2].text, "RIGHT", 6, 0)
+	customColour:SetPoint("LEFT", colourScheme.buttons[2].text, "RIGHT", 6, 0)]]
 
-	local skin = ns.addSubCategory(appearance, ns.localization.appearanceskin)
-	skin:SetPoint("TOPLEFT", colours, "BOTTOMLEFT", 0, -100)
+	local line_2 = ns.addSubCategory(appearance, ns.localization.appearanceline_2)
+	line_2:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
 
 	local objectiveTracker = ns.CreateCheckBox(appearance, "reskinQuestTracker", true, true)
-	objectiveTracker:SetPoint("TOPLEFT", skin, "BOTTOMLEFT", 0, -8)
+	objectiveTracker:SetPoint("TOPLEFT", line_2, "BOTTOMLEFT", 0, -16)
 
 	local petBattle = ns.CreateCheckBox(appearance, "reskinPetBattle", true, true)
 	petBattle:SetPoint("LEFT", objectiveTracker, "RIGHT", 240, 0)
 
-	local addons = ns.addSubCategory(appearance, ns.localization.appearanceaddons)
-	addons:SetPoint("TOPLEFT", objectiveTracker, "BOTTOMLEFT", 0, -20)
+	local line_3 = ns.addSubCategory(appearance, ns.localization.appearanceline_3)
+	line_3:SetPoint("TOPLEFT", objectiveTracker, "BOTTOMLEFT", 0, -8)
 
 	local DBM = ns.CreateCheckBox(appearance, "reskinDBM", true, true)
-	DBM:SetPoint("TOPLEFT", addons, "BOTTOMLEFT", 0, -8)
+	DBM:SetPoint("TOPLEFT", line_3, "BOTTOMLEFT", 0, -16)
 
 	local BW = ns.CreateCheckBox(appearance, "reskinBW", true, true)
 	BW:SetPoint("LEFT", DBM, "RIGHT", 240, 0)
@@ -422,10 +413,10 @@ do
 	checkMail:SetPoint("TOPLEFT", checkBagsFull, "BOTTOMLEFT", 0, -8)
 
 	local alert = ns.addSubCategory(notification, ns.localization.notificationalert)
-	alert:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", -16, -20)
+	alert:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", -16, -8)
 
 	local interrupt = ns.CreateCheckBox(notification, "interrupt", true, true)
-	interrupt:SetPoint("TOPLEFT", alert, "BOTTOMLEFT", 0, -8)
+	interrupt:SetPoint("TOPLEFT", alert, "BOTTOMLEFT", 0, -16)
 
 	local interruptSound = ns.CreateCheckBox(notification, "interruptSound", true, true)
 	interruptSound:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 16, -8)
@@ -548,20 +539,11 @@ do
 	local layoutStyle = ns.CreateRadioButtonGroup(actionbar, "layoutStyle", 3, false, true)
 	layoutStyle.buttons[1]:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -30)
 
-	--local buttonSizeNormal = ns.CreateNumberSlider(actionbar, "buttonSizeNormal", nil, nil, 20, 50, 1, true)
-	--buttonSizeNormal:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 0, -130)
-
-	--local buttonSizeSmall = ns.CreateNumberSlider(actionbar, "buttonSizeSmall", nil, nil, 20, 50, 1, true)
-	--buttonSizeSmall:SetPoint("LEFT", buttonSizeNormal, "RIGHT", 120, 0)
-
-	--local buttonSizeBig = ns.CreateNumberSlider(actionbar, "buttonSizeBig", nil, nil, 20, 50, 1, true)
-	--buttonSizeBig:SetPoint("TOPLEFT", buttonSizeNormal, "BOTTOMLEFT", 0, -30)
-
-	--local buttonSizeHuge = ns.CreateNumberSlider(actionbar, "buttonSizeHuge", nil, nil, 20, 50, 1, true)
-	--buttonSizeHuge:SetPoint("LEFT", buttonSizeBig, "RIGHT", 120, 0)
+	local line_1 = ns.addSubCategory(actionbar, ns.localization.actionbarline_1)
+	line_1:SetPoint("TOPLEFT", layoutStyle.buttons[3], "BOTTOMLEFT", -16, -8)
 
 	local hotKey = ns.CreateCheckBox(actionbar, "hotKey", true, true)
-	hotKey:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -130)
+	hotKey:SetPoint("TOPLEFT", line_1, "BOTTOMLEFT", 16, -16)
 
 	local macroName = ns.CreateCheckBox(actionbar, "macroName", true, true)
 	macroName:SetPoint("LEFT", hotKey, "RIGHT", 240, 0)
@@ -572,33 +554,46 @@ do
 	local classColor = ns.CreateCheckBox(actionbar, "classColor", true, true)
 	classColor:SetPoint("LEFT", count, "RIGHT", 240, 0)
 
+	local line_2 = ns.addSubCategory(actionbar, ns.localization.actionbarline_2)
+	line_2:SetPoint("TOPLEFT", count, "BOTTOMLEFT", -16, -8)
 
-	local stanceBar = ns.CreateCheckBox(actionbar, "stanceBar", true, true)
-	stanceBar:SetPoint("TOPLEFT", count, "BOTTOMLEFT", 0, -16)
+	local bar3 = ns.CreateCheckBox(actionbar, "bar3", true, true)
+	bar3:SetPoint("TOPLEFT", line_2, "BOTTOMLEFT", 16, -16)
 
-	local stanceBarMouseover = ns.CreateCheckBox(actionbar, "stanceBarMouseover", true, true)
-	stanceBarMouseover:SetPoint("TOPLEFT", stanceBar, "BOTTOMLEFT", 16, -8)
+	local bar3Mouseover = ns.CreateCheckBox(actionbar, "bar3Mouseover", true, true)
+	bar3Mouseover:SetPoint("TOPLEFT", bar3, "BOTTOMLEFT", 16, -8)
 
-	stanceBar.children = {stanceBarMouseover}
-
-	local petBar = ns.CreateCheckBox(actionbar, "petBar", true, true)
-	petBar:SetPoint("LEFT", stanceBar, "RIGHT", 240, 0)
-
-	local petBarMouseover = ns.CreateCheckBox(actionbar, "petBarMouseover", true, true)
-	petBarMouseover:SetPoint("TOPLEFT", petBar, "BOTTOMLEFT", 16, -8)
-
-	petBar.children = {petBarMouseover}
+	bar3.children = {bar3Mouseover}
 
 	local sideBar = ns.CreateCheckBox(actionbar, "sideBar", true, true)
-	sideBar:SetPoint("TOPLEFT", stanceBarMouseover, "BOTTOMLEFT", -16, -8)
+	sideBar:SetPoint("LEFT", bar3, "RIGHT", 240, 0)
 
 	local sideBarMouseover = ns.CreateCheckBox(actionbar, "sideBarMouseover", true, true)
 	sideBarMouseover:SetPoint("TOPLEFT", sideBar, "BOTTOMLEFT", 16, -8)
 
 	sideBar.children = {sideBarMouseover}
 
+	local petBar = ns.CreateCheckBox(actionbar, "petBar", true, true)
+	petBar:SetPoint("TOPLEFT", bar3Mouseover, "BOTTOMLEFT", -16, -8)
+
+	local petBarMouseover = ns.CreateCheckBox(actionbar, "petBarMouseover", true, true)
+	petBarMouseover:SetPoint("TOPLEFT", petBar, "BOTTOMLEFT", 16, -8)
+
+	petBar.children = {petBarMouseover}
+
+	local stanceBar = ns.CreateCheckBox(actionbar, "stanceBar", true, true)
+	stanceBar:SetPoint("LEFT", petBar, "RIGHT", 240, 0)
+
+	local stanceBarMouseover = ns.CreateCheckBox(actionbar, "stanceBarMouseover", true, true)
+	stanceBarMouseover:SetPoint("TOPLEFT", stanceBar, "BOTTOMLEFT", 16, -8)
+
+	stanceBar.children = {stanceBarMouseover}
+
+	local line_3 = ns.addSubCategory(actionbar, ns.localization.actionbarline_3)
+	line_3:SetPoint("TOPLEFT", petBarMouseover, "BOTTOMLEFT", -32, -8)
+
 	local hoverBind = ns.CreateCheckBox(actionbar, "hoverBind", true, true)
-	hoverBind:SetPoint("TOPLEFT", sideBarMouseover, "BOTTOMLEFT", -16, -16)
+	hoverBind:SetPoint("TOPLEFT", line_3, "BOTTOMLEFT", 16, -16)
 
 
 	local function toggleActionBarsOptions()
@@ -612,6 +607,8 @@ do
 		stanceBarMouseover:SetShown(shown)
 		petBar:SetShown(shown)
 		petBarMouseover:SetShown(shown)
+		bar3:SetShown(shown)
+		bar3Mouseover:SetShown(shown)
 		sideBar:SetShown(shown)
 		sideBarMouseover:SetShown(shown)
 		layoutStyle.buttons[1]:SetShown(shown)
@@ -632,11 +629,19 @@ do
 	local enable = ns.CreateCheckBox(unitframe, "enable", true, true)
 	enable:SetPoint("TOPLEFT", unitframe.subText, "BOTTOMLEFT", 0, -8)
 
-	local transMode = ns.CreateCheckBox(unitframe, "transMode", true, true)
-	transMode:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+	local healer_layout = ns.CreateCheckBox(unitframe, "healer_layout", true, true)
+	healer_layout:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
 	local gradient = ns.CreateCheckBox(unitframe, "gradient", true, true)
-	gradient:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
+	gradient:SetPoint("LEFT", healer_layout, "RIGHT", 240, 0)
+
+	local transMode = ns.CreateCheckBox(unitframe, "transMode", true, true)
+	transMode:SetPoint("TOPLEFT", healer_layout, "BOTTOMLEFT", 0, -8)
+
+	local smoothHealthUpdate = ns.CreateCheckBox(unitframe, "smoothHealthUpdate", true, true)
+	smoothHealthUpdate:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
+
+	transMode.children = {smoothHealthUpdate}
 
 	local portrait = ns.CreateCheckBox(unitframe, "portrait", true, true)
 	portrait:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 0, -8)
@@ -647,11 +652,11 @@ do
 	local threat = ns.CreateCheckBox(unitframe, "threat", true, true)
 	threat:SetPoint("TOPLEFT", main, "BOTTOMLEFT", 16, -16)
 
-	local prediction = ns.CreateCheckBox(unitframe, "prediction", true, true)
-	prediction:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
+	local overAbsorb = ns.CreateCheckBox(unitframe, "overAbsorb", true, true)
+	overAbsorb:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
 
 	local classPower = ns.CreateCheckBox(unitframe, "classPower", true, true)
-	classPower:SetPoint("TOPLEFT", prediction, "BOTTOMLEFT", 0, -8)
+	classPower:SetPoint("TOPLEFT", overAbsorb, "BOTTOMLEFT", 0, -8)
 
 	local dispellable = ns.CreateCheckBox(unitframe, "dispellable", true, true)
 	dispellable:SetPoint("LEFT", threat, "RIGHT", 240, 0)
@@ -659,39 +664,22 @@ do
 	local spellRange = ns.CreateCheckBox(unitframe, "spellRange", true, true)
 	spellRange:SetPoint("TOPLEFT", dispellable, "BOTTOMLEFT", 0, -8)
 
-	local spellRangeAlpha = ns.CreateNumberSlider(unitframe, "spellRangeAlpha", nil, nil, .1, 1, .1, true)
-	spellRangeAlpha:SetPoint("TOPLEFT", spellRange, "BOTTOMLEFT", 16, -20)
-
-	local function toggleSpellRangeOptions()
-		local shown = spellRange:GetChecked()
-		spellRangeAlpha:SetShown(shown)
-	end
-
-	spellRange:HookScript("OnClick", toggleSpellRangeOptions)
-	spellRangeAlpha:HookScript("OnShow", toggleSpellRangeOptions)
-
 	local castbarline = ns.addSubCategory(unitframe, ns.localization.unitframecastbarline)
-	castbarline:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -16)
+	castbarline:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -8)
 
 	local castbar = ns.CreateCheckBox(unitframe, "castbar", true, true)
 	castbar:SetPoint("TOPLEFT", castbarline, "BOTTOMLEFT", 16, -16)
 
-	local cbSeparate_palyer = ns.CreateCheckBox(unitframe, "cbSeparate_palyer", true, true)
-	cbSeparate_palyer:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
+	local cbSeparate_player = ns.CreateCheckBox(unitframe, "cbSeparate_player", true, true)
+	cbSeparate_player:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
 
 	local cbSeparate_target = ns.CreateCheckBox(unitframe, "cbSeparate_target", true, true)
-	cbSeparate_target:SetPoint("LEFT", cbSeparate_palyer, "RIGHT", 240, 0)
+	cbSeparate_target:SetPoint("LEFT", cbSeparate_player, "RIGHT", 240, 0)
 
-	local cbName = ns.CreateCheckBox(unitframe, "cbName", true, true)
-	cbName:SetPoint("TOPLEFT", cbSeparate_palyer, "BOTTOMLEFT", 0, -8)
-
-	local cbTimer = ns.CreateCheckBox(unitframe, "cbTimer", true, true)
-	cbTimer:SetPoint("LEFT", cbName, "RIGHT", 240, 0)
-
-	castbar.children = {cbSeparate_palyer, cbSeparate_target, cbName, cbTimer}
+	castbar.children = {cbSeparate_player, cbSeparate_target}
 
 	local group = ns.addSubCategory(unitframe, ns.localization.unitframegroup)
-	group:SetPoint("TOPLEFT", cbName, "BOTTOMLEFT", -32, -8)
+	group:SetPoint("TOPLEFT", cbSeparate_player, "BOTTOMLEFT", -32, -8)
 
 	local enableGroup = ns.CreateCheckBox(unitframe, "enableGroup", true, true)
 	enableGroup:SetPoint("TOPLEFT", group, "BOTTOMLEFT", 16, -16)
@@ -702,22 +690,10 @@ do
 	local partyNameAlways = ns.CreateCheckBox(unitframe, "partyNameAlways", true, true)
 	partyNameAlways:SetPoint("LEFT", partyMissingHealth, "RIGHT", 240, 0)
 
-	local party_horizon = ns.CreateCheckBox(unitframe, "party_horizon", true, true)
-	party_horizon:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", 0, -8)
-
-	local party_reverse = ns.CreateCheckBox(unitframe, "party_reverse", true, true)
-	party_reverse:SetPoint("LEFT", party_horizon, "RIGHT", 240, 0)
-
-	local raid_horizon = ns.CreateCheckBox(unitframe, "raid_horizon", true, true)
-	raid_horizon:SetPoint("TOPLEFT", party_horizon, "BOTTOMLEFT", 0, -8)
-
-	local raid_reverse = ns.CreateCheckBox(unitframe, "raid_reverse", true, true)
-	raid_reverse:SetPoint("LEFT", raid_horizon, "RIGHT", 240, 0)
-
-	enableGroup.children = {partyMissingHealth, partyNameAlways, party_horizon, party_reverse, raid_horizon, raid_reverse}
+	enableGroup.children = {partyMissingHealth, partyNameAlways}
 
 	local misc = ns.addSubCategory(unitframe, ns.localization.unitframemisc)
-	misc:SetPoint("TOPLEFT", raid_horizon, "BOTTOMLEFT", -32, -8)
+	misc:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", -32, -8)
 
 	local enableBoss = ns.CreateCheckBox(unitframe, "enableBoss", true, true)
 	enableBoss:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 16, -16)
@@ -731,26 +707,23 @@ do
 		gradient:SetShown(shown)
 		main:SetShown(shown)
 		portrait:SetShown(shown)
+		healer_layout:SetShown(shown)
+		smoothHealthUpdate:SetShown(shown)
 
 		group:SetShown(shown)
 		enableGroup:SetShown(shown)
 		partyNameAlways:SetShown(shown)
 		partyMissingHealth:SetShown(shown)
-		party_horizon:SetShown(shown)
-		party_reverse:SetShown(shown)
-		raid_horizon:SetShown(shown)
-		raid_reverse:SetShown(shown)
 
 		threat:SetShown(shown)
-		prediction:SetShown(shown)
+		overAbsorb:SetShown(shown)
 		classPower:SetShown(shown)
 		dispellable:SetShown(shown)
 		spellRange:SetShown(shown)
-		spellRangeAlpha:SetShown(shown)
 
 		castbarline:SetShown(shown)
 		castbar:SetShown(shown)
-		cbSeparate_palyer:SetShown(shown)
+		cbSeparate_player:SetShown(shown)
 		cbSeparate_target:SetShown(shown)
 		
 		misc:SetShown(shown)
@@ -948,11 +921,8 @@ do
 	local map = FreeUIOptionsPanel.map
 	map.tab.Icon:SetTexture("Interface\\Icons\\Icon_TreasureMap")
 
-	local bigmap = ns.addSubCategory(map, ns.localization.mapbigmap)
-	bigmap:SetPoint("TOPLEFT", map.subText, "BOTTOMLEFT", 0, -8)
-
 	local worldMap = ns.CreateCheckBox(map, "worldMap", true, true)
-	worldMap:SetPoint("TOPLEFT", bigmap, "BOTTOMLEFT", 0, -8)
+	worldMap:SetPoint("TOPLEFT", map.subText, "BOTTOMLEFT", 0, -8)
 
 	local coords = ns.CreateCheckBox(map, "coords", true, true)
 	coords:SetPoint("TOPLEFT", worldMap, "BOTTOMLEFT", 16, -8)
@@ -962,17 +932,19 @@ do
 
 	worldMap.children = {coords, mapReveal}
 
-	local smallmap = ns.addSubCategory(map, ns.localization.mapsmallmap)
-	smallmap:SetPoint("TOPLEFT", coords, "BOTTOMLEFT", -16, -16)
+	local line = ns.addSubCategory(map, ns.localization.mapline)
+	line:SetPoint("TOPLEFT", coords, "BOTTOMLEFT", -16, -16)
 
 	local miniMap = ns.CreateCheckBox(map, "miniMap", true, true)
-	miniMap:SetPoint("TOPLEFT", smallmap, "BOTTOMLEFT", 0, -8)
+	miniMap:SetPoint("TOPLEFT", line, "BOTTOMLEFT", 0, -16)
 
 	local whoPings = ns.CreateCheckBox(map, "whoPings", true, true)
 	whoPings:SetPoint("TOPLEFT", miniMap, "BOTTOMLEFT", 16, -8)
 
-	miniMap.children = {whoPings}
+	local miniMapSize = ns.CreateNumberSlider(map, "miniMapSize", nil, nil, 100, 300, 1, true)
+	miniMapSize:SetPoint("TOPLEFT", whoPings, "BOTTOMLEFT", 0, -30)
 
+	miniMap.children = {miniMapSize, whoPings}
 end
 
 -- [[ Class specific ]]

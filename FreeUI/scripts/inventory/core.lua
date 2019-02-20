@@ -6,18 +6,16 @@ local module = F:RegisterModule('Inventory')
 local ipairs, strmatch = ipairs, string.match
 
 function module:ReverseSort()
-	C_Timer.After(.5, function()
-		for bag = 0, 4 do
-			local numSlots = GetContainerNumSlots(bag)
-			for slot = 1, numSlots do
-				local texture, _, locked = GetContainerItemInfo(bag, slot)
-				if texture and not locked then
-					PickupContainerItem(bag, slot)
-					PickupContainerItem(bag, numSlots+1 - slot)
-				end
+	for bag = 0, 4 do
+		local numSlots = GetContainerNumSlots(bag)
+		for slot = 1, numSlots do
+			local texture, _, locked = GetContainerItemInfo(bag, slot)
+			if texture and not locked then
+				PickupContainerItem(bag, slot)
+				PickupContainerItem(bag, numSlots+1 - slot)
 			end
 		end
-	end)
+	end
 end
 
 function module:UpdateAnchors(parent, bags)
@@ -199,7 +197,7 @@ function module:CreateSortButton(name)
 					UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
 				else
 					SortBags()
-					module:ReverseSort()
+					C_Timer.After(.5, module.ReverseSort)
 				end
 			else
 				SortBags()
@@ -226,7 +224,7 @@ function module:OnLogin()
 
 		f.main = MyContainer:New('Main', {Columns = C.inventory.bagColumns, Bags = 'bags'})
 		f.main:SetFilter(onlyBags, true)
-		f.main:SetPoint('BOTTOMRIGHT', -100, 100)
+		f.main:SetPoint('BOTTOMRIGHT', -50, 50)
 
 		f.junk = MyContainer:New('Junk', {Columns = C.inventory.bagColumns, Parent = f.main})
 		f.junk:SetFilter(bagsJunk, true)

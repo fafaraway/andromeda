@@ -1,7 +1,7 @@
 ﻿local F, C = unpack(select(2, ...))
 if not C.infobar.enable then return end
 
-local module = F:RegisterModule("Infobar")
+local module = F:RegisterModule('Infobar')
 
 
 local barAlpha, buttonAlpha
@@ -14,27 +14,27 @@ else
 	buttonAlpha = 1
 end
 
-local bar = CreateFrame("Frame", "FreeUIMenubar", UIParent)
-bar:SetFrameStrata("BACKGROUND")
-bar:SetPoint("TOPLEFT", -1, 1)
-bar:SetPoint("TOPRIGHT", 1, 1)
+local bar = CreateFrame('Frame', 'FreeUIMenubar', UIParent)
+bar:SetFrameStrata('BACKGROUND')
+bar:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+bar:SetPoint('TOPRIGHT', C.Mult, C.Mult)
 bar:SetHeight(C.infobar.height)
 F.CreateBD(bar, barAlpha)
 
-RegisterStateDriver(bar, "visibility", "[petbattle] hide; show")
+RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 
 bar.buttons = {}
 
 local function onEvent(event)
-	if event == "PLAYER_REGEN_DISABLED" then
+	if event == 'PLAYER_REGEN_DISABLED' then
 		bar:SetBackdropBorderColor(1, 0, 0)
 	else
 		bar:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
-F:RegisterEvent("PLAYER_REGEN_DISABLED", onEvent)
-F:RegisterEvent("PLAYER_REGEN_ENABLED", onEvent)
+F:RegisterEvent('PLAYER_REGEN_DISABLED', onEvent)
+F:RegisterEvent('PLAYER_REGEN_ENABLED', onEvent)
 
 
 module.POSITION_LEFT, module.POSITION_MIDDLE, module.POSITION_RIGHT = 1, 2, 3
@@ -46,7 +46,7 @@ local function fadeIn(self, elapsed)
 	else
 		barAlpha = .5
 		buttonAlpha = 1
-		self:SetScript("OnUpdate", nil)
+		self:SetScript('OnUpdate', nil)
 	end
 
 	self:SetBackdropColor(0, 0, 0, barAlpha)
@@ -63,7 +63,7 @@ local function fadeOut(self, elapsed)
 	else
 		barAlpha = .25
 		buttonAlpha = 0
-		self:SetScript("OnUpdate", nil)
+		self:SetScript('OnUpdate', nil)
 	end
 
 	self:SetBackdropColor(0, 0, 0, barAlpha)
@@ -74,21 +74,21 @@ local function fadeOut(self, elapsed)
 end
 
 local function showBar()
-	bar:SetScript("OnUpdate", fadeIn)
-	bar:SetFrameStrata("HIGH")
+	bar:SetScript('OnUpdate', fadeIn)
+	bar:SetFrameStrata('HIGH')
 end
 bar.showBar = showBar
 
 local function hideBar()
-	bar:SetScript("OnUpdate", fadeOut)
-	bar:SetFrameStrata("BACKGROUND")
+	bar:SetScript('OnUpdate', fadeOut)
+	bar:SetFrameStrata('BACKGROUND')
 end
 bar.hideBar = hideBar
 
 
 if C.infobar.mouseover then
-	bar:SetScript("OnEnter", showBar)
-	bar:SetScript("OnLeave", hideBar)
+	bar:SetScript('OnEnter', showBar)
+	bar:SetScript('OnLeave', hideBar)
 end
 
 local function buttonOnEnterNoFade(self)
@@ -121,13 +121,13 @@ local function reanchorButtons()
 
 		if bu:IsShown() then
 			if bu.position == module.POSITION_LEFT then
-				bu:SetPoint("LEFT", bar, "LEFT", leftOffset, 0)
-				leftOffset = leftOffset + (bu:GetWidth() - 1)
+				bu:SetPoint('LEFT', bar, 'LEFT', leftOffset, 0)
+				leftOffset = leftOffset + (bu:GetWidth() - C.Mult)
 			elseif bu.position == module.POSITION_RIGHT then
-				bu:SetPoint("RIGHT", bar, "RIGHT", rightOffset, 0)
-				rightOffset = rightOffset - (bu:GetWidth() - 1)
+				bu:SetPoint('RIGHT', bar, 'RIGHT', rightOffset, 0)
+				rightOffset = rightOffset - (bu:GetWidth() - C.Mult)
 			else
-				bu:SetPoint("CENTER", bar)
+				bu:SetPoint('CENTER', bar)
 			end
 		end
 	end
@@ -144,9 +144,9 @@ function module:hideButton(button)
 end
 
 function module:addButton(text, position, width, clickFunc)
-	local bu = CreateFrame("Button", nil, bar)
-	bu:SetPoint("TOP", bar, "TOP")
-	bu:SetPoint("BOTTOM", bar, "BOTTOM")
+	local bu = CreateFrame('Button', nil, bar)
+	bu:SetPoint('TOP', bar, 'TOP')
+	bu:SetPoint('BOTTOM', bar, 'BOTTOM')
 	bu:SetWidth(width)
 	F.CreateBD(bu, .1)
 
@@ -157,9 +157,9 @@ function module:addButton(text, position, width, clickFunc)
 	local buText = F.CreateFS(bu, 'pixel', nil, text, nil, nil, true, 'CENTER', 0, 0)
 	bu.Text = buText
 
-	bu:SetScript("OnMouseUp", clickFunc)
-	bu:SetScript("OnEnter", buttonOnEnter)
-	bu:SetScript("OnLeave", buttonOnLeave)
+	bu:SetScript('OnMouseUp', clickFunc)
+	bu:SetScript('OnEnter', buttonOnEnter)
+	bu:SetScript('OnLeave', buttonOnLeave)
 
 	bu.position = position
 

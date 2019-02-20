@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 if not C.infobar.enable then return end
 if not C.infobar.report then return end
-local module = F:GetModule("Infobar")
+local module = F:GetModule('Infobar')
 
 
 local time, date = time, date
@@ -10,10 +10,10 @@ local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
 local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
 
 local function updateTimerFormat(color, hour, minute)
-	if GetCVarBool("timeMgrUseMilitaryTime") then
+	if GetCVarBool('timeMgrUseMilitaryTime') then
 		return format(color..TIMEMANAGER_TICKER_24HOUR, hour, minute)
 	else
-		local timerUnit = DB.MyColor..(hour < 12 and "AM" or "PM")
+		local timerUnit = DB.MyColor..(hour < 12 and 'AM' or 'PM')
 		if hour > 12 then hour = hour - 12 end
 		return format(color..TIMEMANAGER_TICKER_12HOUR..timerUnit, hour, minute)
 	end
@@ -39,7 +39,7 @@ local function checkTimeWalker(event)
 
 	for i = 1, numEvents do
 		local info = C_Calendar.GetDayEvent(0, today, i)
-		if info and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= "END" then
+		if info and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
 			isTimeWalker = true
 			walkerTexture = info.iconTexture
 			break
@@ -47,7 +47,7 @@ local function checkTimeWalker(event)
 	end
 	F:UnregisterEvent(event, checkTimeWalker)
 end
-F:RegisterEvent("PLAYER_ENTERING_WORLD", checkTimeWalker)
+F:RegisterEvent('PLAYER_ENTERING_WORLD', checkTimeWalker)
 
 local function checkTexture(texture)
 	if not walkerTexture then return end
@@ -57,18 +57,18 @@ local function checkTexture(texture)
 end
 
 local questlist = {
-	{name = "Blingtron", id = 34774},
-	{name = "Mean One", id = 6983},
-	{name = "Timewarped", id = 40168, texture = 1129674},	-- TBC
-	{name = "Timewarped", id = 40173, texture = 1129686},	-- WotLK
-	{name = "Timewarped", id = 40786, texture = 1304688},	-- Cata
-	{name = "Timewarped", id = 45799, texture = 1530590},	-- MoP
+	{name = 'Blingtron', id = 34774},
+	{name = 'Mean One', id = 6983},
+	{name = 'Timewarped', id = 40168, texture = 1129674},	-- TBC
+	{name = 'Timewarped', id = 40173, texture = 1129686},	-- WotLK
+	{name = 'Timewarped', id = 40786, texture = 1304688},	-- Cata
+	{name = 'Timewarped', id = 45799, texture = 1530590},	-- MoP
 }
 
 
 
 local invIndex = {
-	[1] = {title = L["BfAInvasion"], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
+	[1] = {title = L['BfAInvasion'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
 }
 
 local mapAreaPoiIDs = {
@@ -115,8 +115,8 @@ end
 local title
 local function addTitle(text)
 	if not title then
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine(text..":", .6,.8,1)
+		GameTooltip:AddLine(' ')
+		GameTooltip:AddLine(text..':', .6,.8,1)
 		title = true
 	end
 end
@@ -128,12 +128,11 @@ function module:Report()
 
 	FreeUIReportButton = module:addButton('DAILY / WEEKLY', module.POSITION_RIGHT, 120, GarrisonLandingPage_Toggle)
 
-	FreeUIReportButton:HookScript("OnEnter", function(self)
+	FreeUIReportButton:HookScript('OnEnter', function(self)
 		RequestRaidInfo()
 
 		local r,g,b
-		GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
-		GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -15)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(C.InfoColor..L['DAILY_WEEKLY_INFO'])
 
@@ -165,7 +164,7 @@ function module:Report()
 			if isRaid and (locked or extended) then
 				addTitle(RAID_INFO)
 				if extended then r,g,b = .3,1,.3 else r,g,b = 1,1,1 end
-				GameTooltip:AddDoubleLine(name.." - "..diffName, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
+				GameTooltip:AddDoubleLine(name..' - '..diffName, SecondsToTime(reset, true, nil, 3), 1,1,1, r,g,b)
 			end
 		end
 
@@ -180,7 +179,7 @@ function module:Report()
 		if count > 0 then
 			addTitle(QUESTS_LABEL)
 			if count == maxCoins then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-			GameTooltip:AddDoubleLine(bonusName, count.."/"..maxCoins, 1,1,1, r,g,b)
+			GameTooltip:AddDoubleLine(bonusName, count..'/'..maxCoins, 1,1,1, r,g,b)
 		end
 
 		-- Invasions
@@ -192,19 +191,19 @@ function module:Report()
 			if timeLeft then
 				timeLeft = timeLeft/60
 				if timeLeft < 60 then r,g,b = 1,0,0 else r,g,b = 0,1,0 end
-				GameTooltip:AddDoubleLine(L["CurrentInvasion"]..zoneName, format("%.2d:%.2d", timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
+				GameTooltip:AddDoubleLine(L['CurrentInvasion']..zoneName, format('%.2d:%.2d', timeLeft/60, timeLeft%60), 1,1,1, r,g,b)
 			end
-			GameTooltip:AddDoubleLine(L["NextInvasion"]..GetNextLocation(nextTime, index), date("%m/%d %H:%M", nextTime), 1,1,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L['NextInvasion']..GetNextLocation(nextTime, index), date('%m/%d %H:%M', nextTime), 1,1,1, 1,1,1)
 		end
 
 		local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
-		if iwqID and UnitLevel("player") == 120 then
-			GameTooltip:AddLine(" ")
+		if iwqID and UnitLevel('player') == 120 then
+			GameTooltip:AddLine(' ')
 			if IsQuestFlaggedCompleted(iwqID) then
 				GameTooltip:AddDoubleLine(ISLANDS_HEADER, QUEST_COMPLETE, 1,1,1, 0,1,0)
 			else
 				local cur, max = select(4, GetQuestObjectiveInfo(iwqID, 1, false))
-				local stautsText = cur.."/"..max
+				local stautsText = cur..'/'..max
 				if not cur or not max then stautsText = LFG_LIST_LOADING end
 				GameTooltip:AddDoubleLine(ISLANDS_HEADER, stautsText, 1,1,1, 1,0,0)
 			end
@@ -212,24 +211,24 @@ function module:Report()
 
 		for _, v in pairs(questlist) do
 			if v.name and IsQuestFlaggedCompleted(v.id) then
-				if v.name == "Timewarped" and isTimeWalker and checkTexture(v.texture) or v.name ~= "Timewarped" then
-					GameTooltip:AddLine(" ")
+				if v.name == 'Timewarped' and isTimeWalker and checkTexture(v.texture) or v.name ~= 'Timewarped' then
+					GameTooltip:AddLine(' ')
 					addTitle(QUESTS_LABEL)
 					GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1,1,1, 0,1,0)
 				end
 			end
 		end
 
-		if UnitLevel("player") == 120 then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddDoubleLine(" ", C.LineString)
-			GameTooltip:AddDoubleLine(" ", C.LeftButton..L["ShowGarrionReport_BfA"], 1,1,1, .9, .82, .62)
+		if UnitLevel('player') == 120 then
+			GameTooltip:AddLine(' ')
+			GameTooltip:AddDoubleLine(' ', C.LineString)
+			GameTooltip:AddDoubleLine(' ', C.LeftButton..L['ShowGarrionReport_BfA'], 1,1,1, .9, .82, .62)
 		end
 		
 		GameTooltip:Show()
 	end)
 
-	FreeUIReportButton:HookScript("OnLeave", function(self)
+	FreeUIReportButton:HookScript('OnLeave', function(self)
 		GameTooltip:Hide()
 	end)
 

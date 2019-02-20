@@ -35,7 +35,6 @@
 	<Script file='scripts\actionbar\questbutton.lua'/>
 
 	<Script file='scripts\aura\buffframe.lua'/>
-	<Script file='scripts\aura\aurasource.lua'/>
 
 	<Script file='scripts\automation\actioncam.lua'/>
 	<Script file='scripts\automation\buy.lua'/>

@@ -107,7 +107,7 @@ end
 local function updateNameColour(self)
 	local frame = self:GetParent()
 	if frame.unit then
-		if UnitIsUnit(frame.unit, "target") then
+		if UnitIsUnit(frame.unit, 'target') then
 			frame.Text:SetTextColor(.1, .7, 1)
 		else
 			frame.Text:SetTextColor(1, 1, 1)
@@ -148,7 +148,7 @@ end
 -- Health
 local function PostUpdateHealth(Health, unit, min, max)
 	local self = Health:GetParent()
-	local r, g, b
+	--[[local r, g, b
 	local reaction = C.reactioncolours[UnitReaction(unit, 'player') or 5]
 
 	local offline = not UnitIsConnected(unit)
@@ -181,10 +181,14 @@ local function PostUpdateHealth(Health, unit, min, max)
 			self.Healthdef:SetMinMaxValues(0, max)
 			self.Healthdef:SetValue(max-min)
 
-			if UnitIsPlayer(unit) then
-				self.Healthdef:GetStatusBarTexture():SetVertexColor(r, g, b)
+			if cfg.classColor then
+				if UnitIsPlayer(unit) then
+					self.Healthdef:GetStatusBarTexture():SetVertexColor(r, g, b)
+				else
+					self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
+				end
 			else
-				self.Healthdef:GetStatusBarTexture():SetVertexColor(unpack(reaction))
+				self.Healthdef:GetStatusBarTexture():SetVertexColor(self.ColorGradient(min, max, unpack(self.colors.smooth)))
 			end
 
 			self.Healthdef:Show()
@@ -203,11 +207,11 @@ local function PostUpdateHealth(Health, unit, min, max)
 
 	if C.unitframe.gradient then
 		if tapped or offline then
-			self.gradient:SetGradientAlpha("VERTICAL", .6, .6, .6, .6, .4, .4, .4, .6)
+			self.gradient:SetGradientAlpha('VERTICAL', .6, .6, .6, .6, .4, .4, .4, .6)
 		elseif UnitIsDead(unit) or UnitIsGhost(unit) then
 			self.gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, .6, .1, .1, .1, .6)
 		else
-			self.gradient:SetGradientAlpha("VERTICAL", .3, .3, .3, .6, .1, .1, .1, .6)
+			self.gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
 		end
 	end
 
@@ -217,6 +221,45 @@ local function PostUpdateHealth(Health, unit, min, max)
 		self.bd:SetBackdropColor(0, 0, 0, .5)
 	else
 		self.bd:SetBackdropColor(.05, .05, .05, .5)
+	end]]
+
+	local reaction = oUF.colors.reaction[UnitReaction(unit, "player") or 5]
+	local offline = not UnitIsConnected(unit)
+	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
+
+	if unit == 'target' or unit:find('arena') then
+		if Health.value then
+			Health.value:SetTextColor(unpack(reaction))
+		end
+	end
+
+	local height = Health:GetHeight()
+	self.Health.bg:SetPoint('LEFT', Health:GetStatusBarTexture(), 'RIGHT')
+	self.Health.bg:SetHeight(height)
+
+	if C.unitframe.gradient then
+		self.gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
+	else
+		self.gradient:Hide()
+	end
+
+	if C.unitframe.transMode then
+		local _, class = UnitClass(unit)
+		local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+
+		if UnitIsPlayer(unit) and color then
+			self.Health.bg:SetVertexColor(color.r, color.g, color.b, 1)
+		else
+			self.Health.bg:SetVertexColor(unpack(reaction))
+		end
+
+		if tapped or offline then
+			self.Health:SetStatusBarColor(.6, .6, .6, .4)
+		elseif UnitIsDead(unit) or UnitIsGhost(unit) then
+			self.Health.bg:SetVertexColor(0, 0, 0, .8)
+		else
+			self.Health:SetStatusBarColor(0, 0, 0, .4)
+		end
 	end
 end
 
@@ -226,46 +269,50 @@ function module:CreateHealthBar(self)
 	Health:SetStatusBarTexture(C.media.sbTex)
 	Health:SetStatusBarColor(0, 0, 0, 0)
 
-	Health.frequentUpdates = true
-	F.SmoothBar(Health)
-
 	Health:SetPoint('TOP')
 	Health:SetPoint('LEFT')
 	Health:SetPoint('RIGHT')
-	Health:SetPoint('BOTTOM', 0, 1*C.Mult + C.unitframe.power_height)
-	Health:SetHeight(self:GetHeight() - C.unitframe.power_height - 1*C.Mult)
+	Health:SetPoint('BOTTOM', 0, C.Mult + C.unitframe.power_height)
+	Health:SetHeight(self:GetHeight() - C.unitframe.power_height - C.Mult)
 
+	local Background = Health:CreateTexture(nil, "BACKGROUND")
+	Background:SetTexture(C.media.sbTex)
+	Health.bg = Background
+
+	if C.unitframe.transMode then
+		Background:SetPoint"LEFT"
+		Background:SetPoint"RIGHT"
+		Background:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
+	else
+		Background:SetAllPoints(Health)
+		Background:SetVertexColor(.6, .6, .6, .8)
+		Background.multiplier = .25
+	end
+
+	if C.unitframe.transMode then
+		Health:SetStatusBarColor(0, 0, 0, .4)
+	else
+		Health.colorDisconnected = true
+		Health.colorTapping = true
+		Health.colorClass = true
+		Health.colorReaction = true
+
+		if cfg.smoothHealthUpdate then
+			Health.colorSmooth = true
+		end
+	end
+
+	Health.frequentUpdates = true
+	F.SmoothBar(Health)
+		
 	self.Health = Health
-	Health.PostUpdate = PostUpdateHealth
+	self.Health.PostUpdate = PostUpdateHealth
 
-
-	local gradient = Health:CreateTexture(nil, 'BACKGROUND')
+	local gradient = Health:CreateTexture(nil, 'OVERLAY')
 	gradient:SetPoint('TOPLEFT')
 	gradient:SetPoint('BOTTOMRIGHT')
 	gradient:SetTexture(C.media.backdrop)
-
-	if C.unitframe.gradient then
-		gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
-	else
-		gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, 0, .1, .1, .1, 0)
-	end
-
 	self.gradient = gradient
-
-	if C.unitframe.transMode then
-		local Healthdef = CreateFrame('StatusBar', nil, self)
-		Healthdef:SetFrameStrata('LOW')
-		--Healthdef:SetFrameLevel(self.Health:GetFrameLevel())
-		Healthdef:SetAllPoints(self.Health)
-		Healthdef:SetStatusBarTexture(C.media.sbTex)
-		Healthdef:GetStatusBarTexture():SetBlendMode('BLEND')
-		Healthdef:SetStatusBarColor(1, 1, 1)
-
-		Healthdef:SetReverseFill(true)
-		F.SmoothBar(Healthdef)
-
-		self.Healthdef = Healthdef
-	end
 end
 
 function module:CreateHealthPrediction(self)
@@ -298,24 +345,26 @@ function module:CreateHealthPrediction(self)
 	absorbBar:SetStatusBarColor(.8, .8, .8, .8)
 	absorbBar:SetWidth(self:GetWidth())
 
-	local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
-	overAbsorb:SetPoint('TOP', 0, 2)
-	overAbsorb:SetPoint('BOTTOM', 0, -2)
-	overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
-	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		overAbsorb:SetWidth(8)
-	else
-		overAbsorb:SetWidth(14)
-	end
-
 	self.HealthPrediction = {
 		myBar = myBar,
 		otherBar = otherBar,
 		absorbBar = absorbBar,
-		overAbsorb = overAbsorb,
 		maxOverflow = 1,
 		frequentUpdates = true,
 	}
+	
+	if cfg.overAbsorb then
+		local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
+		overAbsorb:SetPoint('TOP', 0, 2)
+		overAbsorb:SetPoint('BOTTOM', 0, -2)
+		overAbsorb:SetPoint('LEFT', self.Health, 'RIGHT', -4, 0)
+		if self.unitStyle == 'party' or self.unitStyle == 'raid' then
+			overAbsorb:SetWidth(8)
+		else
+			overAbsorb:SetWidth(14)
+		end
+		self.HealthPrediction["overAbsorb"] = overAbsorb
+	end
 end
 
 
@@ -354,14 +403,14 @@ function module:CreatePowerBar(self)
 
 	Power:SetPoint('LEFT')
 	Power:SetPoint('RIGHT')
-	Power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -1)
+	Power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
 
 	self.Power = Power
 
 	local Powertex = Power:CreateTexture(nil, 'OVERLAY')
-	Powertex:SetHeight(1)
-	Powertex:SetPoint('TOPLEFT', 0, 1)
-	Powertex:SetPoint('TOPRIGHT', 0, 1)
+	Powertex:SetHeight(C.Mult)
+	Powertex:SetPoint('TOPLEFT', 0, C.Mult)
+	Powertex:SetPoint('TOPRIGHT', 0, C.Mult)
 	Powertex:SetTexture(C.media.backdrop)
 	Powertex:SetVertexColor(0, 0, 0)
 
@@ -409,9 +458,9 @@ function module:CreateAltPower(self)
 	bar:SetSize(self:GetWidth(), C.unitframe.altpower_height)
 
 	local abd = CreateFrame('Frame', nil, bar)
-	abd:SetPoint('TOPLEFT', -1, 1)
-	abd:SetPoint('BOTTOMRIGHT', 1, -1)
-	abd:SetFrameLevel(bar:GetFrameLevel()-1)
+	abd:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+	abd:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
+	abd:SetFrameLevel(bar:GetFrameLevel() - 1)
 	F.CreateBD(abd, .5)
 
 	local text = F.CreateFS(bar, 'pixel', nil, '', 'CENTER', nil, true)
@@ -484,9 +533,7 @@ function module:CreateCastBar(self)
 	if not C.unitframe.castbar then return end
 
 	local Castbar = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
-	--Castbar:SetAllPoints(self)
-	Castbar:SetPoint('TOPLEFT', self)
-	Castbar:SetPoint('BOTTOMRIGHT', self)
+	Castbar:SetAllPoints(self)
 	Castbar:SetStatusBarTexture(C.media.sbTex)
 	Castbar:GetStatusBarTexture():SetBlendMode('BLEND')
 	Castbar:SetStatusBarColor(0, 0, 0, 0)
@@ -498,10 +545,17 @@ function module:CreateCastBar(self)
 	bg:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	bg:SetFrameLevel(Castbar:GetFrameLevel()-1)
 	bg:SetBackdrop({bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult,})
-	bg:SetBackdropColor(C.appearance.backdropColour[1], C.appearance.backdropColour[2], C.appearance.backdropColour[3], a or C.appearance.backdropColour[4])
+	bg:SetBackdropColor(0, 0, 0, 0)
 	bg:SetBackdropBorderColor(0, 0, 0)
 	F.CreateTex(bg)
 	Castbar.bg = bg
+
+	local sd = CreateFrame('Frame', nil, bg)
+	sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+	sd:SetPoint('TOPLEFT', -4*C.Mult, 4*C.Mult)
+	sd:SetPoint('BOTTOMRIGHT', 4*C.Mult, -4*C.Mult)
+	sd:SetBackdropBorderColor(0, 0, 0, .35)
+	Castbar.sd = sd
 
 	local Spark = Castbar:CreateTexture(nil, 'OVERLAY')
 	Spark:SetBlendMode('ADD')
@@ -525,11 +579,14 @@ function module:CreateCastBar(self)
 	Castbar.Time = Time
 
 	local iconFrame = CreateFrame('Frame', nil, Castbar)
+	iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
 	iconFrame:SetSize(self:GetHeight()+6, self:GetHeight()+6)
-	if self.unitStyle == 'targettarget' or self.unitStyle == 'focus' then
-		iconFrame:SetPoint('LEFT', self, 'RIGHT', 4, 0)
+
+
+	if self.unitStyle == 'focus' then
+		iconFrame:Hide()
 	else
-		iconFrame:SetPoint('RIGHT', self, 'LEFT', -4, 0)
+		iconFrame:Show()
 	end
 
 	local Icon = iconFrame:CreateTexture(nil, 'OVERLAY')
@@ -560,7 +617,7 @@ function module:CreateCastBar(self)
 		Castbar.SafeZone = SafeZone
 	end
 
-	if (self.unitStyle == 'player' and cfg.cbSeparate_palyer) or (self.unitStyle == 'target' and cfg.cbSeparate_target) then
+	if (self.unitStyle == 'player' and cfg.cbSeparate_player) or (self.unitStyle == 'target' and cfg.cbSeparate_target) then
 		if cfg.cbName then
 			Text:Show()
 		end
@@ -572,25 +629,30 @@ function module:CreateCastBar(self)
 		Castbar.bgSD = bg.sd
 	end
 
-	if self.unitStyle == 'target' and cfg.cbSeparate_target  then
+	if self.unitStyle == 'target' and cfg.cbSeparate_target then
 		Castbar:SetSize(cfg.target_cb_width*C.Mult, cfg.target_cb_height*C.Mult)
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
-		iconFrame:SetSize(Castbar:GetHeight()+4, Castbar:GetHeight()+4)
-		Spark:SetHeight(Castbar:GetHeight()*2)
-		Time:SetPoint('TOPRIGHT', Castbar, 'BOTTOMRIGHT', 0, -6)
 		Castbar:ClearAllPoints()
-		F.Mover(Castbar, L['MOVER_UNITFRAME_TARGET_CASTBAR'], "TargetCastbar", cfg.target_cb_pos, cfg.target_cb_width, cfg.target_cb_height)
+		iconFrame:SetSize(Castbar:GetHeight()+6, Castbar:GetHeight()+6)
+
+		F.Mover(Castbar, L['MOVER_UNITFRAME_TARGET_CASTBAR'], 'TargetCastbar', {'TOP', self, 'BOTTOM', -2, -10}, cfg.target_cb_width, cfg.target_cb_height)
+	elseif self.unitStyle == 'target' and not cfg.cbSeparate_target and cfg.healer_layout then
+		iconFrame:ClearAllPoints()
+		iconFrame:SetPoint('LEFT', Castbar, 'RIGHT', 4, 0)
 	end
 
-	if self.unitStyle == 'player' and cfg.cbSeparate_palyer then
+
+	if self.unitStyle == 'player' and cfg.cbSeparate_player then
 		Castbar:SetSize(cfg.player_cb_width*C.Mult, cfg.player_cb_height*C.Mult)
-		iconFrame:ClearAllPoints()
-		iconFrame:SetPoint('RIGHT', Castbar, 'LEFT', -4, 0)
-		Spark:SetHeight(Castbar:GetHeight()*2)
 		Castbar:ClearAllPoints()
-		F.Mover(Castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], "PlayerCastbar", cfg.player_cb_pos, cfg.player_cb_width, cfg.player_cb_height)
+		iconFrame:SetSize(Castbar:GetHeight()+6, Castbar:GetHeight()+6)
+
+		if cfg.healer_layout then
+			F.Mover(Castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], 'PlayerCastbar', {'CENTER', UIParent, 'CENTER', 0, -200}, cfg.player_cb_width, cfg.player_cb_height)
+		else
+			F.Mover(Castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], 'PlayerCastbar', {'TOP', self, 'BOTTOM', -2, -40}, cfg.player_cb_width, cfg.player_cb_height)
+		end
 	end
+
 
 	Castbar.CastingColor = cfg.cbCastingColor
 	Castbar.ChannelingColor = cfg.cbChannelingColor
@@ -654,8 +716,8 @@ end
 
 local function PostCreateIcon(element, button)
 	local bg = button:CreateTexture(nil, 'BACKGROUND')
-	bg:SetPoint('TOPLEFT', -1, 1)
-	bg:SetPoint('BOTTOMRIGHT', 1, -1)
+	bg:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+	bg:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	bg:SetTexture(C.media.backdrop)
 	bg:SetVertexColor(0, 0, 0)
 	button.bg = bg
@@ -824,7 +886,8 @@ local function AuraIconSize(w, n, s)
 	return (w-(n-1)*s)/n
 end
 
-function module:CreateAuras(self, num, perrow)
+function module:CreateAuras(self)
+	local num, perrow = 0, 0
 	local Auras = CreateFrame('Frame', nil, self)
 
 	if self.unitStyle == 'target' then
@@ -832,15 +895,30 @@ function module:CreateAuras(self, num, perrow)
 		Auras:SetPoint('BOTTOM', self, 'TOP', 0, 24)
 		Auras['growth-y'] = 'UP'
 		Auras['spacing-x'] = 5
+		num = cfg.target_auraTotal
+		perrow = cfg.target_auraPerRow
 	elseif self.unitStyle == 'pet' or self.unitStyle == 'focus' or self.unitStyle == 'boss' or self.unitStyle == 'arena' then
 		Auras.initialAnchor = 'TOPLEFT'
 		Auras:SetPoint('TOP', self, 'BOTTOM', 0, -6)
 		Auras['growth-y'] = 'DOWN'
 		Auras['spacing-x'] = 5
+	elseif self.unitStyle == 'pet' then
+		num = cfg.pet_auraTotal
+		perrow = cfg.pet_auraPerRow
+	elseif self.unitStyle == 'focus' then
+		num = cfg.focus_auraTotal
+		perrow = cfg.focus_auraPerRow
+	elseif self.unitStyle == 'boss' then
+		num = cfg.boss_auraTotal
+		perrow = cfg.boss_auraPerRow
+	elseif self.unitStyle == 'arena' then
+		num = cfg.arena_auraTotal
+		perrow = cfg.arena_auraPerRow
 	end
 
-	Auras.numTotal  = num
+	Auras.numTotal = num
 	Auras.iconsPerRow = perrow
+
 	Auras.gap = true
 	Auras.showDebuffType = true
 	Auras.showStealableBuffs = true
@@ -1319,17 +1397,17 @@ function module:CreateName(self)
 		Name:ClearAllPoints()
 		Name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 		Name:SetJustifyH('RIGHT')
-		Name:SetWidth(80)
+		Name:SetWidth(60)
 	elseif self.unitStyle == 'boss' then
 		Name:ClearAllPoints()
 		Name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 		Name:SetJustifyH('LEFT')
-		Name:SetWidth(100)
+		Name:SetWidth(60)
 	elseif self.unitStyle == 'arena' then
 		Name:ClearAllPoints()
 		Name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 		Name:SetJustifyH('LEFT')
-		Name:SetWidth(80)
+		Name:SetWidth(60)
 	end
 
 	f:SetScript('OnEvent', function()

@@ -16,7 +16,7 @@ function module:OnLogin()
 	frame:SetWidth(num*cfg.buttonSizeNormal + (num-1)*cfg.margin + 2*cfg.padding)
 	frame:SetHeight(cfg.buttonSizeNormal + 2*cfg.padding)
 
-	frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 6)
+	frame:SetPoint(unpack(cfg.bar1Pos))
 	frame:SetScale(1)
 
 	for i = 1, num do

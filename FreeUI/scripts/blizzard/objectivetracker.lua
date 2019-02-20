@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("blizzard")
+local module = F:GetModule('blizzard')
 
 local pairs = pairs
 local r, g, b =  165/255, 0, 48/255
@@ -16,29 +16,39 @@ function module:QuestTracker()
 	if not C.appearance.reskinQuestTracker then return end
 
 	-- Move Tracker Frame
-	local mover = CreateFrame("Frame", "ObjectiveTrackerFrameMover", ot)
-	mover:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, -25)
+	local mover = CreateFrame('Frame', 'ObjectiveTrackerFrameMover', ot)
+	mover:SetPoint('TOPRIGHT', UIParent, 'TOPRIGHT', -50, -300)
 	mover:SetSize(50, 50)
 	F.CreateMF(minimize, mover)
-	minimize:SetFrameStrata("HIGH")
-	minimize:HookScript("OnEnter", function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_TOP")
+	minimize:SetFrameStrata('HIGH')
+	minimize:HookScript('OnEnter', function(self)
+		GameTooltip:SetOwner(self, 'ANCHOR_TOP')
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L["TOGGLE"], 1, .8, 0)
+		GameTooltip:AddLine(L['TOGGLE'], 1, .8, 0)
 		GameTooltip:Show()
 	end)
-	minimize:HookScript("OnLeave", F.HideTooltip)
+	minimize:HookScript('OnLeave', F.HideTooltip)
 
-	hooksecurefunc(ot, "SetPoint", function(_, _, parent)
+	hooksecurefunc(ot, 'SetPoint', function(_, _, parent)
 		if parent ~= mover then
 			ot:ClearAllPoints()
-			ot:SetPoint("TOPRIGHT", mover, "CENTER", 15, 15)
+			ot:SetPoint('TOPRIGHT', mover)
 			ot:SetHeight(pysHeight/2)
-			ot:SetWidth(C.map.miniMapSize)
+			ot:SetWidth(240)
 		end
 	end)
 
-	RegisterStateDriver(ot, "visibility", "[petbattle] hide; show")
+	--[[local otMover = F.Mover(ot, L['MOVER_MINIMAP'], 'ObjectiveTrackerFrame', {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -340}, 240, 240)
+	hooksecurefunc(ot, 'SetPoint', function(_, _, parent)
+		if parent ~= otMover then
+			ot:ClearAllPoints()
+			ot:SetPoint('TOPRIGHT', otMover)
+			ot:SetHeight(800)
+			ot:SetWidth(240)
+		end
+	end)]]
+
+	RegisterStateDriver(ot, 'visibility', '[petbattle] hide; show')
 	
 	-- Questblock click enhant
 	local function QuestHook(id)
@@ -49,31 +59,31 @@ function module:QuestTracker()
 			QuestMapQuestOptions_ShareQuest(id)
 		end
 	end
-	hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(self, block) QuestHook(block.id) end)
-	hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self) QuestHook(self.questID) end)
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'OnBlockHeaderClick', function(self, block) QuestHook(block.id) end)
+	hooksecurefunc('QuestMapLogTitleButton_OnClick', function(self) QuestHook(self.questID) end)
 
 
 	-- Show quest color and level
 	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
-		if ENABLE_COLORBLIND_MODE == "1" then return end
+		if ENABLE_COLORBLIND_MODE == '1' then return end
 
 		for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
 			if title and not isHeader and button.questID == questID then
-				local title = "["..level.."] "..title
+				local title = '['..level..'] '..title
 				if isComplete then
-					title = "|cffff78ff"..title
+					title = '|cffff78ff'..title
 				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
-					title = "|cff3399ff"..title
+					title = '|cff3399ff'..title
 				end
 				button.Text:SetText(title)
-				button.Text:SetPoint("TOPLEFT", 24, -5)
+				button.Text:SetPoint('TOPLEFT', 24, -5)
 				button.Text:SetWidth(205)
 				button.Text:SetWordWrap(false)
-				button.Check:SetPoint("LEFT", button.Text, button.Text:GetWrappedWidth(), 0)
+				button.Check:SetPoint('LEFT', button.Text, button.Text:GetWrappedWidth(), 0)
 			end
 		end
 	end
-	hooksecurefunc("QuestLogQuests_AddQuestButton", Showlevel)
+	hooksecurefunc('QuestLogQuests_AddQuestButton', Showlevel)
 
 	--if not C.quests.questObjectiveTrackerStyle then return end
 
@@ -82,11 +92,11 @@ function module:QuestTracker()
 	local function reskinHeader(header)
 		-- header.Text:SetTextColor(r, g, b)
 		header.Background:Hide()
-		local bg = header:CreateTexture(nil, "ARTWORK")
-		bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
+		local bg = header:CreateTexture(nil, 'ARTWORK')
+		bg:SetTexture('Interface\\LFGFrame\\UI-LFG-SEPARATOR')
 		bg:SetTexCoord(0, .66, 0, .31)
 		bg:SetVertexColor(r, g, b, .8)
-		bg:SetPoint("BOTTOMLEFT", -30, -4)
+		bg:SetPoint('BOTTOMLEFT', -30, -4)
 		bg:SetSize(210, 30)
 	end
 
@@ -104,16 +114,16 @@ function module:QuestTracker()
 	local function reskinQuestIcon(self, block)
 		local itemButton = block.itemButton
 		if itemButton and not itemButton.styled then
-			itemButton:SetNormalTexture("")
-			itemButton:SetPushedTexture("")
+			itemButton:SetNormalTexture('')
+			itemButton:SetPushedTexture('')
 			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 			itemButton.icon:SetTexCoord(unpack(C.TexCoord))
 			local bg = F.CreateBDFrame(itemButton, 0)
 			F.CreateSD(itemButton)
 
 			itemButton.Count:ClearAllPoints()
-			itemButton.Count:SetPoint("TOP", itemButton, 2, -1)
-			itemButton.Count:SetJustifyH("CENTER")
+			itemButton.Count:SetPoint('TOP', itemButton, 2, -1)
+			itemButton.Count:SetJustifyH('CENTER')
 			F.SetFS(itemButton.Count)
 
 			itemButton.styled = true
@@ -121,8 +131,8 @@ function module:QuestTracker()
 
 		local rightButton = block.rightButton
 		if rightButton and not rightButton.styled then
-			rightButton:SetNormalTexture("")
-			rightButton:SetPushedTexture("")
+			rightButton:SetNormalTexture('')
+			rightButton:SetPushedTexture('')
 			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
 			local bg = F.CreateBDFrame(rightButton)
 			F.CreateSD(bg)
@@ -134,8 +144,8 @@ function module:QuestTracker()
 			rightButton.styled = true
 		end
 	end
-	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcon)
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcon)
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'SetBlockHeader', reskinQuestIcon)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, 'AddObjective', reskinQuestIcon)
 
 
 	-- Progressbars
@@ -151,27 +161,27 @@ function module:QuestTracker()
 			bar.BarFrame3:Hide()
 			bar.BarBG:Hide()
 			bar.BarGlow:Hide()
-			bar.IconBG:SetTexture("")
+			bar.IconBG:SetTexture('')
 			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.Dummy
 
-			bar:SetPoint("LEFT", 22, 0)
+			bar:SetPoint('LEFT', 22, 0)
 			bar:SetStatusBarTexture(C.media.sbTex)
 			bar:SetStatusBarColor(r, g, b)
 			bar:SetHeight(14)
 
 			local bg = F.CreateBDFrame(progressBar)
-			bg:SetPoint("TOPLEFT", bar, -C.Mult, C.Mult)
-			bg:SetPoint("BOTTOMRIGHT", bar, C.Mult, -C.Mult)
+			bg:SetPoint('TOPLEFT', bar, -C.Mult, C.Mult)
+			bg:SetPoint('BOTTOMRIGHT', bar, C.Mult, -C.Mult)
 			F.CreateSD(bg)
 
 			label:ClearAllPoints()
-			label:SetPoint("CENTER")
+			label:SetPoint('CENTER')
 			F.SetFS(label)
 
 			icon:SetMask(nil)
 			icon:SetTexCoord(unpack(C.TexCoord))
 			icon:ClearAllPoints()
-			icon:SetPoint("RIGHT", 30, 0)
+			icon:SetPoint('RIGHT', 30, 0)
 			icon:SetSize(24, 24)
 			icon.bg = F.CreateBDFrame(icon)
 			F.CreateSD(icon)
@@ -186,18 +196,18 @@ function module:QuestTracker()
 			icon.sd:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 		end
 	end
-	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-	hooksecurefunc(SCENARIO_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)
-	--hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,"AddProgressBar", reskinProgressbar)
+	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)
+	--hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,'AddProgressBar', reskinProgressbar)
 
-	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", function(_, _, line)
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'AddProgressBar', function(_, _, line)
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
 
 		if not bar.styled then
 			bar:ClearAllPoints()
-			bar:SetPoint("LEFT")
+			bar:SetPoint('LEFT')
 			for i = 1, 6 do
 				select(i, bar:GetRegions()):Hide()
 			end
@@ -214,18 +224,18 @@ function module:QuestTracker()
 
 
 	-- Blocks
-	hooksecurefunc("ScenarioStage_CustomizeBlock", function(block)
-		block.NormalBG:SetTexture("")
+	hooksecurefunc('ScenarioStage_CustomizeBlock', function(block)
+		block.NormalBG:SetTexture('')
 		if not block.bg then
 			block.bg = F.CreateBDFrame(block.GlowTexture)
-			block.bg:SetPoint("TOPLEFT", block.GlowTexture, 2, 0)
-			block.bg:SetPoint("BOTTOMRIGHT", block.GlowTexture, -2, 0)
+			block.bg:SetPoint('TOPLEFT', block.GlowTexture, 2, 0)
+			block.bg:SetPoint('BOTTOMRIGHT', block.GlowTexture, -2, 0)
 			--F.CreateBD(block.bg)
 			F.CreateSD(block.bg)
 		end
 	end)
 
-	hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, "Update", function()
+	hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, 'Update', function()
 		local widgetContainer = ScenarioStageBlock.WidgetContainer
 		if not widgetContainer then return end
 		local widgetFrame = widgetContainer:GetChildren()
@@ -241,14 +251,14 @@ function module:QuestTracker()
 		end
 	end)
 
-	hooksecurefunc("Scenario_ChallengeMode_ShowBlock", function()
+	hooksecurefunc('Scenario_ChallengeMode_ShowBlock', function()
 		local block = ScenarioChallengeModeBlock
 		if not block.bg then
 			block.TimerBG:Hide()
 			block.TimerBGBack:Hide()
 			block.timerbg = F.CreateBDFrame(block.TimerBGBack)
-			block.timerbg:SetPoint("TOPLEFT", block.TimerBGBack, 6, -2)
-			block.timerbg:SetPoint("BOTTOMRIGHT", block.TimerBGBack, -6, -5)
+			block.timerbg:SetPoint('TOPLEFT', block.TimerBGBack, 6, -2)
+			block.timerbg:SetPoint('BOTTOMRIGHT', block.TimerBGBack, -6, -5)
 			F.CreateBD(block.timerbg)
 
 			block.StatusBar:SetStatusBarTexture(C.media.sbTex)
@@ -257,21 +267,21 @@ function module:QuestTracker()
 
 			select(3, block:GetRegions()):Hide()
 			block.bg = F.CreateBDFrame(block)
-			block.bg:SetPoint("TOPLEFT", 4, -2)
-			block.bg:SetPoint("BOTTOMRIGHT", -4, 0)
+			block.bg:SetPoint('TOPLEFT', 4, -2)
+			block.bg:SetPoint('BOTTOMRIGHT', -4, 0)
 			F.CreateBD(block.bg)
 			F.CreateSD(block.bg)
 		end
 	end)
 
-	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", F.AffixesSetup)
+	hooksecurefunc('Scenario_ChallengeMode_SetUpAffixes', F.AffixesSetup)
 
 	-- Minimize button
 	F.ReskinExpandOrCollapse(minimize)
 	minimize:GetNormalTexture():SetAlpha(0)
 	minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375)
-	hooksecurefunc("ObjectiveTracker_Collapse", function() minimize.expTex:SetTexCoord(0, 0.4375, 0, 0.4375) end)
-	hooksecurefunc("ObjectiveTracker_Expand", function() minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375) end)
+	hooksecurefunc('ObjectiveTracker_Collapse', function() minimize.expTex:SetTexCoord(0, 0.4375, 0, 0.4375) end)
+	hooksecurefunc('ObjectiveTracker_Expand', function() minimize.expTex:SetTexCoord(0.5625, 1, 0, 0.4375) end)
 
 
 
@@ -279,7 +289,7 @@ function module:QuestTracker()
 
 	ot.HeaderMenu.Title:SetFont(unpack(otFontHeader))
 
-	for _, headerName in pairs({"QuestHeader", "AchievementHeader", "ScenarioHeader"}) do
+	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader'}) do
 		local header = BlocksFrame[headerName]
 		header.Text:SetFont(unpack(otFontHeader))
 		header.Text:SetTextColor(229/255, 209/255, 159/255, 1)
@@ -302,7 +312,7 @@ function module:QuestTracker()
 		header.Text:SetShadowOffset(2, -2)
 	end
 
-	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "SetBlockHeader", function(_, block)
+	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
 		if not block.headerStyled then
 			block.HeaderText:SetFont(otFont[1],otFont[2]+2,otFont[3])
 			block.HeaderText:SetShadowColor(0, 0, 0, 1)
@@ -311,7 +321,7 @@ function module:QuestTracker()
 		end
 	end)
 
-	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", function(_, block)
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
 		if not block.headerStyled then
 			block.HeaderText:SetFont(otFont[1],otFont[2]+2,otFont[3])
 			block.HeaderText:SetShadowColor(0, 0, 0, 1)
@@ -321,14 +331,14 @@ function module:QuestTracker()
 	end)
 
 
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", function(_, block)
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, 'AddObjective', function(_, block)
 		local line = block.currentLine
 
 		local p1, a, p2, x, y = line:GetPoint()
 		line:SetPoint(p1, a, p2, x, y - 4)
 	end)
 
-	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddObjective", function(self, block)
+	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'AddObjective', function(self, block)
 		if block.module == QUEST_TRACKER_MODULE or block.module == ACHIEVEMENT_TRACKER_MODULE then
 			local line = block.currentLine
 
@@ -355,7 +365,7 @@ function module:QuestTracker()
 		end
 	end
 
-	hooksecurefunc("ObjectiveTracker_AddBlock", function(block)
+	hooksecurefunc('ObjectiveTracker_AddBlock', function(block)
 		if block.lines then
 			for _, line in pairs(block.lines) do
 				if not line.styled then
@@ -377,7 +387,7 @@ function module:QuestTracker()
 
 		if not block.styled then
 			block.shouldFix = true
-			hooksecurefunc(block, "SetHeight", fixBlockHeight)
+			hooksecurefunc(block, 'SetHeight', fixBlockHeight)
 			block.styled = true
 		end
 	end)

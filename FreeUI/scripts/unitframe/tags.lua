@@ -1,8 +1,9 @@
 local F, C, L = unpack(select(2, ...))
+local _, ns = ...
 if not C.unitframe.enable then return end
-local module = F:GetModule("Unitframe")
-local tags = FreeUI.oUF.Tags
+local tags = ns.oUF.Tags
 local cfg = C.unitframe
+local module = F:GetModule("Unitframe")
 
 -- Short values
 local siValue = function(val)

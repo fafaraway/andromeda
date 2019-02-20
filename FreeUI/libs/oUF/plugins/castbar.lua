@@ -156,7 +156,7 @@ cast.PostCastStart = function(self, unit)
 		if self.notInterruptible then
 			self.iconBG:SetVertexColor(1, 0, 0)
 		else
-			self.iconBG:SetVertexColor(0, 0, 0)
+			self.iconBG:SetVertexColor(1, 1, 1)
 		end
 	end
 
@@ -169,34 +169,38 @@ cast.PostCastStart = function(self, unit)
 	end
 
 	if (unit == "target" and not C.unitframe.cbSeparate_target) or (unit == "player" and not C.unitframe.cbSeparate_player) then
-		if self:GetParent().sd then 
-			if self.notInterruptible then
-				self:GetParent().sd:SetBackdropBorderColor(1, 0, 0, .5)
-			else
-				self:GetParent().sd:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
-			end
+		if self.notInterruptible then
+			self.bg:SetBackdropBorderColor(1, 0, 0)
+			self.sd:SetBackdropBorderColor(1, 0, 0, .5)
+		else
+			self.bg:SetBackdropBorderColor(0, 0, 0)
+			self.sd:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
 		end
 	end
 
-	if unit == "pet" or unit == "targettarget" or unit == "focustarget" 
+	if (unit == "target" and C.unitframe.cbSeparate_target) or (unit == "player" and C.unitframe.cbSeparate_player) then
+		self.bg:SetBackdropColor(0, 0, 0, .6)
+	else
+		self.bg:SetBackdropColor(0, 0, 0, .2)
+	end
+
+	if unit == "pet" 
 		or unit:find("boss%d") or unit:find("arena%d") 
-		or (unit == "player" and not C.unitframe.cbSeparate_palyer) 
+		or (unit == "player" and not C.unitframe.cbSeparate_player) 
 		or (unit == "target" and not C.unitframe.cbSeparate_target) 
 		or unit == "focus" 
-		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate_palyer) then
-			if C.unitframe.transMode then
-				self:SetStatusBarColor(.4, .4, .4, .1)
+		or (UnitInVehicle("player") and unit == "vehicle" and not C.unitframe.cbSeparate_player) then
+			if self.notInterruptible then
+				self:SetStatusBarColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .4)
 			else
-				self:SetStatusBarColor(.4, .4, .4, .3)
+				self:SetStatusBarColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .4)
 			end
-	elseif (unit == "player" and C.unitframe.cbSeparate_palyer) then
+	elseif (unit == "player" and C.unitframe.cbSeparate_player) then
 		self:SetStatusBarColor(C.r, C.g, C.b, 1)
 	end
 end
 
 cast.PostUpdateInterruptible = function(self, unit)
-	local r, g, b = unpack(self.notInterruptibleColor)
-
 	if self.notInterruptible then
 		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
 	else
@@ -211,8 +215,6 @@ cast.PostCastStop = function(self)
 	end
 	self:SetValue(self.max)
 	self:Show()
-
-	self:GetParent().sd:SetBackdropBorderColor(0, 0, 0, .35)
 end
 
 cast.PostChannelStop = function(self)

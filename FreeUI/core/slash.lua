@@ -23,6 +23,11 @@ SlashCmdList.RESETINSTANCES = function()
 end
 SLASH_RESETINSTANCES1 = '/rs'
 
+SlashCmdList.SCREENSHOT = function()
+	Screenshot();
+end
+SLASH_SCREENSHOT1 = '/ss'
+
 SlashCmdList.DEV = function() 
 	UIParentLoadAddOn('Blizzard_Console') 
 	DeveloperConsole:Toggle()

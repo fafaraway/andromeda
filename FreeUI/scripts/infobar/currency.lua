@@ -78,9 +78,8 @@ function module:Currencies()
 		oldMoney = newMoney
 	end)
 
-	FreeUIMoneyButton:HookScript('OnEnter', function()
-		GameTooltip:SetOwner(Minimap, 'ANCHOR_NONE')
-		GameTooltip:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -5, -33)
+	FreeUIMoneyButton:HookScript('OnEnter', function(self)
+		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -15)
 
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(CURRENCY, .9, .82, .62)

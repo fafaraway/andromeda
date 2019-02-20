@@ -41,7 +41,7 @@ end
 
 local function UpdateTooltip(bar)
 	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
-	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -5, -33)
+	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -4, -(C.map.miniMapSize/8*C.Mult)-6)
 	
 	if UnitLevel("player") < MAX_PLAYER_LEVEL then
 		GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), C.r, C.g, C.b)
@@ -136,9 +136,9 @@ function module:ProgressBar()
 	if not C.general.progressBar or not C.map.miniMap then return end 
 
 	local bar = CreateFrame("StatusBar", nil, Minimap)
-	bar:SetPoint("TOP", Minimap, "BOTTOM", 0, 33)
-	bar:SetSize(256, 2)
-	bar:SetHitRectInsets(0, 0, 0, -10)
+	bar:SetPoint("BOTTOM", Minimap, "TOP", 0, -C.map.miniMapSize/8*C.Mult)
+	bar:SetSize(C.map.miniMapSize*C.Mult, 3*C.Mult)
+	bar:SetHitRectInsets(0, 0, -10, -10)
 	F.CreateSB(bar)
 	F.CreateBDFrame(bar)
 

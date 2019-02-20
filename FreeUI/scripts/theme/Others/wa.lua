@@ -18,9 +18,11 @@ local function ReskinWA()
 					self:SetAlpha(self:GetParent():GetAlpha())
 				end)
 
-				sd:HookScript("OnUpdate", function(self)
-					self:SetAlpha(self:GetParent():GetAlpha())
-				end)
+				if sd then
+					sd:HookScript("OnUpdate", function(self)
+						self:SetAlpha(self:GetParent():GetAlpha())
+					end)
+				end
 
 				f.styled = true
 			end

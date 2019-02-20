@@ -2,8 +2,18 @@ local F, C, L = unpack(select(2, ...))
 
 if not C.automation.autoRepair then return end
 
-local isShown, isBankEmpty
-local function autoRepair(override)
+local isShown, isBankEmpty, autoRepair
+
+local function delayFunc()
+	if isBankEmpty then
+		autoRepair(true)
+	else
+		UIErrorsFrame:AddMessage(format(C.RedColor..'%s:|r %s', L['guildRepair'], GetMoneyString(repairAllCost)))
+		print(format(C.RedColor..'%s:|r %s', L['guildRepair'], GetMoneyString(repairAllCost)))
+	end
+end
+
+function autoRepair(override)
 	if isShown and not override then return end
 	isShown = true
 	isBankEmpty = false
@@ -28,14 +38,7 @@ local function autoRepair(override)
 			end
 		end
 
-		C_Timer.After(.5, function()
-			if isBankEmpty then
-				autoRepair(true)
-			else
-				UIErrorsFrame:AddMessage(format(C.RedColor..'%s:|r %s', L['guildRepair'], GetMoneyString(repairAllCost)))
-				print(format(C.RedColor..'%s:|r %s', L['guildRepair'], GetMoneyString(repairAllCost)))
-			end
-		end)
+		C_Timer.After(.5, delayFunc)
 	end
 end
 

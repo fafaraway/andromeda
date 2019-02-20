@@ -91,30 +91,31 @@ C['actionbar'] = {
 
 		['layoutStyle'] = 1,
 
-		['bar3Mouseover'] = false,
+		['bar3'] = true,
+			['bar3Mouseover'] = true,
 		['stanceBar'] = true,
 			['stanceBarMouseover'] = false,
 		['petBar'] = true,
 			['petBarMouseover'] = false,
 		['sideBar'] = true,
-			['sideBarMouseover'] = false,
+			['sideBarMouseover'] = true,
 
+		['bar1Pos'] = {'BOTTOM', UIParent, 'BOTTOM', 0, 50},
 		['extraButtonPos'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 		['zoneAbilityPos'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 
-		['hoverBind'] = true,		
+		['hoverBind'] = true,
 }
 
 
 C['aura'] = {
 	['enable'] = true,
-		['position'] = {'TOPRIGHT', Minimap, 'TOPLEFT', -10, -36},
+		['position'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -50},
 		['buffSize'] = 42,
 		['debuffSize'] = 50,
-		['paddingX'] = 5,
+		['paddingX'] = 6,
 		['paddingY'] = 8,
 		['buffPerRow'] = 10,
-		['auraSource'] = true,
 }
 
 
@@ -125,10 +126,9 @@ C['map'] = {
 		['mapReveal'] = true,
 	['miniMap'] = true,
 		['miniMapScale'] = 1,
-		['miniMapPosition'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -22, 0},
-		['miniMapSize'] = 256,
+		['miniMapPosition'] = {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -50, 50},
+		['miniMapSize'] = 240,
 		['whoPings'] = true,
-		
 }
 
 
@@ -161,12 +161,12 @@ C['automation'] = {
 	['autoSellJunk'] = true,
 	['autoRepair'] = true,
 	['autoScreenShot'] = true,
-	['autoActionCam'] = true,
+	['autoActionCam'] = false,
 		['autoActionCam_full'] = false,
 	['autoQuest'] = true,
 	['autoBuyStack'] = true,
 	['autoTabBinder'] = true,
-	['autoAcceptInvite'] = true,
+	['autoAcceptInvite'] = false,
 	['autoInvite'] = true,
 		['autoInvite_keyword'] = 'invite',
 }
@@ -181,7 +181,7 @@ C['inventory'] = {
 		['reverseSort'] = true,
 		['itemLevel'] = true,
 		['newitemFlash'] = true,
-		['useCategory'] = false,
+		['useCategory'] = true,
 			['gearSetFilter'] = false,
 			['tradeGoodsFilter'] = true,
 			['questItemFilter'] = true,
@@ -205,7 +205,7 @@ C['infobar'] = {
 C['tooltip'] = {
 	['enable'] = true,
 		['cursor'] = false,
-		['position'] = {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -100, 100},
+		['position'] = {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -50, 300},
 		['hidePVP'] = true,
 		['hideFaction'] = true,
 		['hideTitle'] = true,
@@ -258,10 +258,13 @@ C['unitframe'] = {
 	['enable'] = true,
 
 		['transMode'] = true,
-		['gradient'] = true,
+		['smoothHealthUpdate'] = false,
+		['healer_layout'] = false,
+		['gradient'] = false,
 		['portrait'] = true,
 		['threat'] = true,
-		['prediction'] = true, 
+		['prediction'] = true,
+			['overAbsorb'] = true,
 		['dispellable'] = true,
 		['debuffbyPlayer'] = true,
 		['spellRange'] = true,
@@ -270,8 +273,8 @@ C['unitframe'] = {
 			['classPower_height'] = 2,
 			
 		['castbar'] = true,
-			['cbSeparate_palyer'] = true,
-			['cbSeparate_target'] = true,
+			['cbSeparate_player'] = false,
+			['cbSeparate_target'] = false,
 			['cbCastingColor'] = {110/255, 176/255, 216/255},
 			['cbChannelingColor'] = {92/255, 193/255, 216/255},
 			['cbnotInterruptibleColor'] = {157/255, 158/255, 163/255},
@@ -281,79 +284,96 @@ C['unitframe'] = {
 			['cbTimer'] = false,
 
 		['enableGroup'] = true,
-			['limitRaidSize'] = {1, 2, 3, 4},
 			['partyNameAlways'] = false,
 			['partyMissingHealth'] = false,
+
 		['enableBoss'] = true,
 		['enableArena'] = true,
 
 		['power_height'] = 2,
 		['altpower_height'] = 2,
 
-		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -360},
-		['player_width'] = 220,
+		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -100},
+		['player_pos_healer'] = {'RIGHT', UIParent, 'CENTER', -100, -100},
+		['player_width'] = 200,
 		['player_height'] = 16,
-		['player_cb_width'] = 220,
+		['player_cb_width'] = 196,
 		['player_cb_height'] = 20,
-		['player_cb_pos'] = {'TOPRIGHT', 'oUF_Player', 'BOTTOMRIGHT', -1, -60},
 		['player_frameVisibility'] = '[combat][mod:shift][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
 		['enableFrameVisibility'] = false,
 
 		['pet_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},
+		['pet_pos_healer'] = {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},
 		['pet_width'] = 68,
 		['pet_height'] = 16,
 		['pet_frameVisibility'] = '[nocombat,nomod,@target,noexists][@pet,noexists] hide; show',
+		['pet_auraPerRow'] = 3,
+		['pet_auraTotal'] = 9,
 
 		['target_pos'] = {'LEFT', 'oUF_Player', 'RIGHT', 40, 60},
-		['target_width'] = 266,
+		['target_pos_healer'] = {'LEFT', UIParent, 'CENTER', 100, -100},
+		['target_width'] = 200,
 		['target_height'] = 16,
-		['target_cb_pos'] = {'TOPRIGHT', 'oUF_Target', 'BOTTOMRIGHT', -1, -10},
-		['target_cb_width'] = 266,
+		['target_cb_width'] = 196,
 		['target_cb_height'] = 10,
+		['target_auraPerRow'] = 6,
+		['target_auraTotal'] = 36,
 
 		['targettarget_pos'] = {'LEFT', 'oUF_Target', 'RIGHT', 6, 0},
+		['targettarget_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -100},
 		['targettarget_width'] = 80,
+		['targettarget_width_healer'] = 120,
 		['targettarget_height'] = 16,
 
-		['focus_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -100, -60},
-		['focus_width'] = 80,
+		['focus_pos'] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -60},
+		['focus_pos_healer'] = {'RIGHT', 'oUF_Player', 'LEFT', -6, -60},
+		['focus_width'] = 97,
+		['focus_width_healer'] = 80,
 		['focus_height'] = 16,
+		['focus_auraPerRow'] = 3,
+		['focus_auraTotal'] = 9,
 
-		['focustarget_pos'] = {'RIGHT', 'oUF_Focus', 'LEFT', -6, 0},
-		['focustarget_width'] = 80,
+		['focustarget_pos'] = {'TOPRIGHT', 'oUF_Target', 'BOTTOMRIGHT', 0, -60},
+		['focustarget_pos_healer'] = {'RIGHT', 'oUF_Focus', 'LEFT', -6, 0},
+		['focustarget_width'] = 97,
+		['focustarget_width_healer'] = 80,
 		['focustarget_height'] = 16,
 
 		['party_pos'] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
+		['party_pos_healer'] = {'TOP', UIParent, 'CENTER', 0, -250},
 		['party_width'] = 90,
 		['party_height'] = 38,
+		['party_width_healer'] = 70,
+		['party_height_healer'] = 34,
 		['party_padding'] = 6,
-		['party_horizon'] = false,
-		['party_reverse'] = true,
 
-		['raid_pos'] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -40},
+		['raid_pos'] = {'RIGHT', Minimap, 'LEFT', -8, 0},
+		['raid_pos_healer'] = {'TOP', UIParent, 'CENTER', 0, -250},
 		['raid_width'] = 48,
 		['raid_height'] = 32,
 		['raid_padding'] = 5,
 		['raid_numGroups'] = '8',
-		['raid_horizon'] = true,
-		['raid_reverse'] = false,
 
 		['boss_pos'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
+		['boss_pos_healer'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
 		['boss_width'] = 166,
 		['boss_height'] = 20,
 		['boss_padding'] = 60,
+		['boss_auraPerRow'] = 5,
+		['boss_auraTotal'] = 15,
 
 		['arena_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
+		['arena_pos_healer'] = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
 		['arena_width'] = 166,
 		['arena_height'] = 16,
 		['arena_padding'] = 80,
-		
-		
+		['arena_auraPerRow'] = 6,
+		['arena_auraTotal'] = 18,
 }
 
 
 C['classmod'] = {
-	['havocFury'] = true,
+	['havocFury'] = false,
 }
 
 
