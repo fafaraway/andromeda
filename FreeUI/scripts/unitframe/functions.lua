@@ -983,7 +983,7 @@ end
 function module:CreateDebuffs(self)
 	local Debuffs = CreateFrame('Frame', nil, self)
 	
-	if self.unitStyle == 'party' then
+	if self.unitStyle == 'party' and not cfg.healer_layout then
 		Debuffs.initialAnchor = 'LEFT'
 		Debuffs['growth-x'] = 'RIGHT'
 		Debuffs:SetPoint('LEFT', self, 'RIGHT', 6, 0)
