@@ -34,10 +34,14 @@ tinsert(C.themes["FreeUI"], function()
 		styleRewardButton(moneyReward)
 	end)
 
-	local leaderIcon = LFGDungeonReadyDialogRoleIconLeaderIcon
+	LFGDungeonReadyDialogRoleIconLeaderIcon:SetTexture(nil)
+	local leaderFrame = CreateFrame("Frame", nil, LFGDungeonReadyDialog)
+	leaderFrame:SetFrameLevel(5)
+	leaderFrame:SetPoint("TOPLEFT", LFGDungeonReadyDialogRoleIcon, 4, -4)
+	leaderFrame:SetSize(19, 19)
+	local leaderIcon = leaderFrame:CreateTexture(nil, "ARTWORK")
+	leaderIcon:SetAllPoints()
 	F.ReskinRole(leaderIcon, "LEADER")
-	leaderIcon:ClearAllPoints()
-	leaderIcon:SetPoint("TOPLEFT", LFGDungeonReadyDialogRoleIcon, "TOPRIGHT", 3, 0)
 
 	local iconTexture = LFGDungeonReadyDialogRoleIconTexture
 	iconTexture:SetTexture(C.media.roleIcons)
@@ -45,7 +49,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	hooksecurefunc("LFGDungeonReadyPopup_Update", function()
 		LFGDungeonReadyDialog:SetBackdrop(nil)
-		leaderIcon.bg:SetShown(leaderIcon:IsShown())
+		leaderFrame:SetShown(LFGDungeonReadyDialogRoleIconLeaderIcon:IsShown())
 
 		if LFGDungeonReadyDialogRoleIcon:IsShown() then
 			local role = select(7, GetLFGProposal())
@@ -57,32 +61,25 @@ tinsert(C.themes["FreeUI"], function()
 		end
 	end)
 
+	local function reskinDialogReward(button)
+		if button.styled then return end
+
+		local border = _G[button:GetName().."Border"]
+		button.texture:SetTexCoord(unpack(C.TexCoord))
+		border:SetColorTexture(0, 0, 0)
+		border:SetDrawLayer("BACKGROUND")
+		border:SetPoint("TOPLEFT", button.texture, -C.Mult, C.Mult)
+		border:SetPoint("BOTTOMRIGHT", button.texture, C.Mult, -C.Mult)
+		button.styled = true
+	end
+
 	hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
-		if not button.styled then
-			local border = _G[button:GetName().."Border"]
-			button.texture:SetTexCoord(unpack(C.TexCoord))
-			border:SetColorTexture(0, 0, 0)
-			border:SetDrawLayer("BACKGROUND")
-			border:SetPoint("TOPLEFT", button.texture, -C.Mult, C.Mult)
-			border:SetPoint("BOTTOMRIGHT", button.texture, C.Mult, -C.Mult)
-
-			button.styled = true
-		end
-
+		reskinDialogReward(button)
 		button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
 	end)
 
 	hooksecurefunc("LFGDungeonReadyDialogReward_SetReward", function(button, dungeonID, rewardIndex, rewardType, rewardArg)
-		if not button.styled then
-			local border = _G[button:GetName().."Border"]
-			button.texture:SetTexCoord(unpack(C.TexCoord))
-			border:SetColorTexture(0, 0, 0)
-			border:SetDrawLayer("BACKGROUND")
-			border:SetPoint("TOPLEFT", button.texture, -1, 1)
-			border:SetPoint("BOTTOMRIGHT", button.texture, 1, -1)
-
-			button.styled = true
-		end
+		reskinDialogReward(button)
 
 		local texturePath
 		if rewardType == "reward" then
@@ -153,6 +150,19 @@ tinsert(C.themes["FreeUI"], function()
 
 	F.ReskinRole(LFGDungeonReadyStatusRolelessReady, "READY")
 
+	local function updateRoleBonus(roleButton)
+		if not roleButton.bg then return end
+		if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
+			if roleButton.cover:IsShown() then
+				roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
+			else
+				roleButton.bg:SetBackdropBorderColor(1, .9, .06)
+			end
+		else
+			roleButton.bg:SetBackdropBorderColor(0, 0, 0)
+		end
+	end
+
 	hooksecurefunc("LFG_SetRoleIconIncentive", function(roleButton, incentiveIndex)
 		if incentiveIndex then
 			local tex
@@ -164,16 +174,12 @@ tinsert(C.themes["FreeUI"], function()
 				tex = "Interface\\Icons\\INV_Misc_Coin_17"
 			end
 			roleButton.incentiveIcon.texture:SetTexture(tex)
-
-			if roleButton.cover:IsShown() then
-				roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
-			else
-				roleButton.bg:SetBackdropBorderColor(1, .9, .06)
-			end
-		else
-			roleButton.bg:SetBackdropBorderColor(0, 0, 0)
 		end
+
+		updateRoleBonus(roleButton)
 	end)
+
+	hooksecurefunc("LFG_EnableRoleButton", updateRoleBonus)
 
 	for i = 1, 5 do
 		local roleButton = _G["LFGDungeonReadyStatusIndividualPlayer"..i]
@@ -185,6 +191,7 @@ tinsert(C.themes["FreeUI"], function()
 			roleButton:SetPoint("LEFT", _G["LFGDungeonReadyStatusIndividualPlayer"..(i-1)], "RIGHT", 4, 0)
 		end
 	end
+
 	hooksecurefunc("LFGDungeonReadyStatusIndividual_UpdateIcon", function(button)
 		local role = select(2, GetLFGProposalMember(button:GetID()))
 		button.texture:SetTexCoord(F.GetRoleTexCoord(role))

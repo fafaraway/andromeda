@@ -16,59 +16,41 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	end
 
 	local function onDisable(self)
-		self:SetBackdropColor(r, g, b, .2)
+		self:SetBackdropColor(r, g, b, .25)
 	end
 
 	local function onClick(self)
 		self:GetFontString():SetTextColor(1, 1, 1)
 	end
 
-	for _, tabName in pairs({"EncounterJournalInstanceSelectSuggestTab", "EncounterJournalInstanceSelectDungeonTab", "EncounterJournalInstanceSelectRaidTab", "EncounterJournalInstanceSelectLootJournalTab"}) do
-		local tab = _G[tabName]
+	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab", "LootJournalTab"}) do
+		local tab = EncounterJournal.instanceSelect[tabName]
 		local text = tab:GetFontString()
 
-		tab:DisableDrawLayer("OVERLAY")
-
-		tab.mid:Hide()
-		tab.left:Hide()
-		tab.right:Hide()
-
-		tab.midHighlight:SetAlpha(0)
-		tab.leftHighlight:SetAlpha(0)
-		tab.rightHighlight:SetAlpha(0)
-
+		F.StripTextures(tab)
 		tab:SetHeight(tab.storedHeight)
 		tab.grayBox:GetRegions():SetAllPoints(tab)
-
 		text:SetPoint("CENTER")
 		text:SetTextColor(1, 1, 1)
+		F.Reskin(tab)
 
 		tab:HookScript("OnEnable", onEnable)
 		tab:HookScript("OnDisable", onDisable)
 		tab:HookScript("OnClick", onClick)
-
-		F.Reskin(tab)
 	end
 
-	EncounterJournalInstanceSelectSuggestTab:SetBackdropColor(r, g, b, .2)
+	EncounterJournalInstanceSelectSuggestTab:SetBackdropColor(r, g, b, .25)
 
 	-- [[ Side tabs ]]
 
-	EncounterJournalEncounterFrameInfoOverviewTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoOverviewTab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 9, -35)
-	EncounterJournalEncounterFrameInfoLootTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoLootTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoOverviewTab, "BOTTOM", 0, 1)
-	EncounterJournalEncounterFrameInfoBossTab:ClearAllPoints()
-	EncounterJournalEncounterFrameInfoBossTab:SetPoint("TOP", EncounterJournalEncounterFrameInfoLootTab, "BOTTOM", 0, 1)
-
-	local tabs = {EncounterJournalEncounterFrameInfoOverviewTab, EncounterJournalEncounterFrameInfoLootTab, EncounterJournalEncounterFrameInfoBossTab, EncounterJournalEncounterFrameInfoModelTab}
-	for _, tab in pairs(tabs) do
+	local tabs = {"overviewTab", "modelTab", "bossTab", "lootTab"}
+	for _, name in pairs(tabs) do
+		local tab = EncounterJournal.encounter.info[name]
 		tab:SetScale(.75)
-
 		tab:SetBackdrop({
 			bgFile = C.media.backdrop,
 			edgeFile = C.media.backdrop,
-			edgeSize = 1 / .75,
+			edgeSize =  C.Mult / .75,
 		})
 
 		tab:SetBackdropColor(0, 0, 0, .5)
@@ -77,7 +59,15 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		tab:SetNormalTexture("")
 		tab:SetPushedTexture("")
 		tab:SetDisabledTexture("")
-		tab:SetHighlightTexture("")
+
+		local hl = tab:GetHighlightTexture()
+		hl:SetColorTexture(r, g, b, .2)
+		hl:SetPoint("TOPLEFT", C.Mult, -C.Mult)
+		hl:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
+
+		if name == "overviewTab" then
+			tab:SetPoint("TOPLEFT", EncounterJournalEncounterFrameInfo, "TOPRIGHT", 13, -35)
+		end
 	end
 
 	-- [[ Instance select ]]
@@ -153,29 +143,28 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		end)
 	end
 
+	local function reskinHeader(header)
+		header.flashAnim.Play = F.Dummy
+		for i = 4, 18 do
+			select(i, header.button:GetRegions()):SetTexture("")
+		end
+		F.Reskin(header.button)
+		header.descriptionBG:SetAlpha(0)
+		header.descriptionBGBottom:SetAlpha(0)
+		header.description:SetTextColor(1, 1, 1)
+		header.button.title:SetTextColor(1, 1, 1)
+		header.button.title.SetTextColor = F.Dummy
+		header.button.expandedIcon:SetTextColor(1, 1, 1)
+		header.button.expandedIcon.SetTextColor = F.Dummy
+	end
+
 	hooksecurefunc("EncounterJournal_ToggleHeaders", function()
 		local index = 1
 		local header = _G["EncounterJournalInfoHeader"..index]
 		while header do
 			if not header.styled then
-				header.flashAnim.Play = F.Dummy
-
-				header.descriptionBG:SetAlpha(0)
-				header.descriptionBGBottom:SetAlpha(0)
-				for i = 4, 18 do
-					select(i, header.button:GetRegions()):SetTexture("")
-				end
-
-				header.description:SetTextColor(1, 1, 1)
-				header.button.title:SetTextColor(1, 1, 1)
-				header.button.title.SetTextColor = F.Dummy
-				header.button.expandedIcon:SetTextColor(1, 1, 1)
-				header.button.expandedIcon.SetTextColor = F.Dummy
-
-				F.Reskin(header.button)
-
-				header.button.abilityIcon:SetTexCoord(unpack(C.TexCoord))
-				header.button.bg = F.CreateBG(header.button.abilityIcon)
+				reskinHeader(header)
+				header.button.bg = F.ReskinIcon(header.button.abilityIcon)
 
 				header.styled = true
 			end
@@ -194,20 +183,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 	hooksecurefunc("EncounterJournal_SetUpOverview", function(self, _, index)
 		local header = self.overviews[index]
 		if not header.styled then
-			header.flashAnim.Play = F.Dummy
-
-			header.descriptionBG:SetAlpha(0)
-			header.descriptionBGBottom:SetAlpha(0)
-			for i = 4, 18 do
-				select(i, header.button:GetRegions()):SetTexture("")
-			end
-
-			header.button.title:SetTextColor(1, 1, 1)
-			header.button.title.SetTextColor = F.Dummy
-			header.button.expandedIcon:SetTextColor(1, 1, 1)
-			header.button.expandedIcon.SetTextColor = F.Dummy
-
-			F.Reskin(header.button)
+			reskinHeader(header)
 
 			header.styled = true
 		end
@@ -303,8 +279,10 @@ C.themes["Blizzard_EncounterJournal"] = function()
 
 	-- Tooltip
 	F.ReskinTooltip(EncounterJournalTooltip)
-	EncounterJournalTooltip.Item1.newBg = F.ReskinIcon(EncounterJournalTooltip.Item1.icon)
-	EncounterJournalTooltip.Item2.newBg = F.ReskinIcon(EncounterJournalTooltip.Item2.icon)
+	F.ReskinIcon(EncounterJournalTooltip.Item1.icon)
+	F.ReskinIcon(EncounterJournalTooltip.Item2.icon)
+	EncounterJournalTooltip.Item1.IconBorder:SetAlpha(0)
+	EncounterJournalTooltip.Item2.IconBorder:SetAlpha(0)
 
 	-- Suggestion 1
 
@@ -416,13 +394,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		EncounterJournal.LootJournal.ItemSetsFrame.ClassButton,
 	}
 	for _, btn in pairs(buttons) do
+		F.StripTextures(btn)
 		F.Reskin(btn)
-		btn.UpLeft:SetAlpha(0)
-		btn.UpRight:SetAlpha(0)
-		btn.DownLeft:SetAlpha(0)
-		btn.DownRight:SetAlpha(0)
-		btn.HighLeft:SetAlpha(0)
-		btn.HighRight:SetAlpha(0)
 	end
 
 	-- ItemSetsFrame
