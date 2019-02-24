@@ -641,8 +641,6 @@ do
 	local smoothHealthUpdate = ns.CreateCheckBox(unitframe, "smoothHealthUpdate", true, true)
 	smoothHealthUpdate:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
 
-	transMode.children = {smoothHealthUpdate}
-
 	local portrait = ns.CreateCheckBox(unitframe, "portrait", true, true)
 	portrait:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 0, -8)
 
