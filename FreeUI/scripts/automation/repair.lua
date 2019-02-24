@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 if not C.automation.autoRepair then return end
 
-local isShown, isBankEmpty, autoRepair
+local isShown, isBankEmpty, autoRepair, repairAllCost, canRepair
 
 local function delayFunc()
 	if isBankEmpty then
@@ -18,8 +18,8 @@ function autoRepair(override)
 	isShown = true
 	isBankEmpty = false
 
-	local repairAllCost, canRepair = GetRepairAllCost()
 	local myMoney = GetMoney()
+	repairAllCost, canRepair = GetRepairAllCost()
 
 	if canRepair and repairAllCost > 0 then
 		if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
