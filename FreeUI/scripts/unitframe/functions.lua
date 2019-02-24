@@ -19,7 +19,7 @@ function module:CreateBackDrop(self)
 
 	if C.appearance.addShadowBorder then
 		local sd = CreateFrame('Frame', nil, bd)
-		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+		sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4*C.Mult})
 		sd:SetPoint('TOPLEFT', -4*C.Mult, 4*C.Mult)
 		sd:SetPoint('BOTTOMRIGHT', 4*C.Mult, -4*C.Mult)
 		sd:SetBackdropBorderColor(0, 0, 0, .35)
@@ -223,7 +223,7 @@ local function PostUpdateHealth(Health, unit, min, max)
 		self.bd:SetBackdropColor(.05, .05, .05, .5)
 	end]]
 
-	local reaction = oUF.colors.reaction[UnitReaction(unit, "player") or 5]
+	local reaction = oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
 	local offline = not UnitIsConnected(unit)
 	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 
@@ -275,14 +275,14 @@ function module:CreateHealthBar(self)
 	Health:SetPoint('BOTTOM', 0, C.Mult + C.unitframe.power_height)
 	Health:SetHeight(self:GetHeight() - C.unitframe.power_height - C.Mult)
 
-	local Background = Health:CreateTexture(nil, "BACKGROUND")
+	local Background = Health:CreateTexture(nil, 'BACKGROUND')
 	Background:SetTexture(C.media.sbTex)
 	Health.bg = Background
 
 	if C.unitframe.transMode then
-		Background:SetPoint"LEFT"
-		Background:SetPoint"RIGHT"
-		Background:SetPoint("LEFT", Health:GetStatusBarTexture(), "RIGHT")
+		Background:SetPoint('LEFT')
+		Background:SetPoint('RIGHT')
+		Background:SetPoint('LEFT', Health:GetStatusBarTexture(), 'RIGHT')
 	else
 		Background:SetAllPoints(Health)
 		Background:SetVertexColor(.6, .6, .6, .8)
@@ -363,7 +363,7 @@ function module:CreateHealthPrediction(self)
 		else
 			overAbsorb:SetWidth(14)
 		end
-		self.HealthPrediction["overAbsorb"] = overAbsorb
+		self.HealthPrediction['overAbsorb'] = overAbsorb
 	end
 end
 
@@ -1531,3 +1531,6 @@ function module:HideBlizzRaidFrame()
 		CompactUnitFrameProfiles:UnregisterAllEvents()
 	end
 end
+
+
+

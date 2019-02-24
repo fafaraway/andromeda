@@ -156,7 +156,7 @@ cast.PostCastStart = function(self, unit)
 		if self.notInterruptible then
 			self.iconBG:SetVertexColor(1, 0, 0)
 		else
-			self.iconBG:SetVertexColor(1, 1, 1)
+			self.iconBG:SetVertexColor(unpack(self.CastingColor))
 		end
 	end
 
@@ -164,16 +164,14 @@ cast.PostCastStart = function(self, unit)
 		if self.notInterruptible then
 			self.iconSD:SetBackdropBorderColor(1, 0, 0, .65)
 		else
-			self.iconSD:SetBackdropBorderColor(0, 0, 0, .35)
+			self.iconSD:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .35)
 		end
 	end
 
 	if (unit == "target" and not C.unitframe.cbSeparate_target) or (unit == "player" and not C.unitframe.cbSeparate_player) then
 		if self.notInterruptible then
-			self.bg:SetBackdropBorderColor(1, 0, 0)
 			self.sd:SetBackdropBorderColor(1, 0, 0, .5)
 		else
-			self.bg:SetBackdropBorderColor(0, 0, 0)
 			self.sd:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
 		end
 	end
