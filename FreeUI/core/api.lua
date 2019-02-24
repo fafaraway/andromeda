@@ -101,9 +101,9 @@ function F:CreateSD(a)
 	local lvl = frame:GetFrameLevel()
 
 	self.sd = CreateFrame("Frame", nil, frame)
-	self.sd:SetPoint("TOPLEFT", self, -3, 3)
-	self.sd:SetPoint("BOTTOMRIGHT", self, 3, -3)
-	self.sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
+	self.sd:SetPoint("TOPLEFT", self, -3*C.Mult, 3*C.Mult)
+	self.sd:SetPoint("BOTTOMRIGHT", self, 3*C.Mult, -3*C.Mult)
+	self.sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4*C.Mult})
 	self.sd:SetBackdropBorderColor(0, 0, 0, a or .5)
 	self.sd:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 

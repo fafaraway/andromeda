@@ -58,13 +58,11 @@
 	<Script file='scripts\blizzard\fixes.lua'/>
 	<Script file='scripts\blizzard\fontstyle.lua'/>
 	<Script file='scripts\blizzard\loot.lua'/>
-	<Script file='scripts\blizzard\mirrorbar.lua'/>
 	<Script file='scripts\blizzard\moveblizzframe.lua'/>
 	<Script file='scripts\blizzard\objectivetracker.lua'/>
 	<Script file='scripts\blizzard\orderhallcommandbar.lua'/>
 	<Script file='scripts\blizzard\petbattle.lua'/>
 	<Script file='scripts\blizzard\raidmanager.lua'/>
-	<Script file='scripts\blizzard\timertracker.lua'/>
 
 	<Script file='scripts\chat\chat.lua'/>
 	<Script file='scripts\chat\abbreviate.lua'/>
