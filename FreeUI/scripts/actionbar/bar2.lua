@@ -1,18 +1,20 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
-local cfg = C.actionbar
-cfg.buttonSizeNormal = cfg.buttonSizeNormal*C.Mult
-cfg.padding = cfg.padding*C.Mult
-cfg.margin = cfg.margin*C.Mult
+local Bar = F:GetModule("Actionbar")
+
 
 function Bar:CreateBar2()
+	local cfg = C.actionbar
+	local buttonSize = cfg.buttonSizeNormal*C.Mult
+	local padding = cfg.padding*C.Mult
+	local margin = cfg.margin*C.Mult
+
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_ActionBar2", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeNormal + (num-1)*cfg.margin + 2*cfg.padding)
-	frame:SetHeight(cfg.buttonSizeNormal + 2*cfg.padding)
+	frame:SetWidth(num*buttonSize + (num-1)*margin + 2*padding)
+	frame:SetHeight(buttonSize + 2*padding)
 	frame:SetPoint("BOTTOM", 'FreeUI_ActionBar1', "TOP", 0, 0)
 	frame:SetScale(1)
 
@@ -23,13 +25,13 @@ function Bar:CreateBar2()
 	for i = 1, num do
 		local button = _G["MultiBarBottomLeftButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(cfg.buttonSizeNormal, cfg.buttonSizeNormal)
+		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
+			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 		else
 			local previous = _G["MultiBarBottomLeftButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
 		end
 	end
 

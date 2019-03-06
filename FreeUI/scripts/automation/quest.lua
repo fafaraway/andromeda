@@ -9,7 +9,7 @@ local function setupCheckButton()
 	mono:SetPoint('TOPRIGHT', -140, -2)
 	mono:SetSize(26, 26)
 	F.CreateCB(mono)
-	mono.text = F.CreateFS(mono, 12, nil, L['AutoQuest'], nil, nil, true, 'LEFT', 25, 0)
+	mono.text = F.CreateFS(mono, {C.font.normal, 12}, L['AutoQuest'], nil, nil, true, 'LEFT', 25, 0)
 
 	mono:SetChecked(C.automation.autoQuest)
 	mono:SetScript('OnClick', function(self)

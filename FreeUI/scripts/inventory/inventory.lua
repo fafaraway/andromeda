@@ -313,7 +313,7 @@ function module:OnLogin()
 		self.Azerite:SetAllPoints()
 
 		if C.inventory.itemLevel then
-			self.iLvl = F.CreateFS(self, 'pixel', nil, '', nil, nil, true, 'BOTTOMRIGHT', 2, 2)
+			self.iLvl = F.CreateFS(self, 'pixel', '', nil, nil, true, 'BOTTOMRIGHT', 2, 2)
 		end
 
 		local flash = self:CreateTexture(nil, 'ARTWORK')

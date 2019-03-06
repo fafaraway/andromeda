@@ -154,7 +154,7 @@ function module:addButton(text, position, width, clickFunc)
 		bu:SetAlpha(0)
 	end
 
-	local buText = F.CreateFS(bu, 'pixel', nil, text, nil, nil, true, 'CENTER', 0, 0)
+	local buText = F.CreateFS(bu, 'pixel', text, nil, nil, true, 'CENTER', 0, 0)
 	bu.Text = buText
 
 	bu:SetScript('OnMouseUp', clickFunc)

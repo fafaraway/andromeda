@@ -11,7 +11,7 @@ C.themes = {}
 C.themes["FreeUI"] = {}
 
 -- mirror bar
-local function ReskinMirrorBar(timer, value, maxvalue, scale, paused, label)
+--[[local function ReskinMirrorBar(timer, value, maxvalue, scale, paused, label)
 	local previous
 	for i = 1, MIRRORTIMER_NUMTIMERS, 1 do
 		local frame = _G["MirrorTimer"..i]
@@ -81,7 +81,7 @@ f:SetScript("OnEvent", function()
 			timer.skinned = true
 		end
 	end
-end)
+end)]]
 
 
 

@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 if not C.aura.enable then return end
-local module = F:RegisterModule('auras')
+local module = F:RegisterModule('Aura')
 
 
 local BuffFrame = BuffFrame
@@ -10,14 +10,8 @@ local parentFrame, buffAnchor, debuffAnchor
 local format, mod = string.format, mod
 
 function module:OnLogin()
-	--buffAnchor = CreateFrame('Frame', nil, UIParent)
-	--buffAnchor:SetPoint(unpack(C.aura.position))
-	--buffAnchor:SetSize((buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
-
-	--debuffAnchor = CreateFrame('Frame', nil, UIParent)
-	--debuffAnchor:SetPoint('TOPRIGHT', buffAnchor, 'BOTTOMRIGHT', 0, -offset+30)
-	--debuffAnchor:SetSize((debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
-
+	self:MissingBuff()
+	
 	parentFrame = CreateFrame("Frame", nil, UIParent)
 	parentFrame:SetSize(buffSize, buffSize)
 	buffAnchor = F.Mover(parentFrame, "Buffs", "BuffAnchor", C.aura.position, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
@@ -71,9 +65,9 @@ local function styleButton(bu, isDebuff)
 	bu.HL:SetAllPoints(icon)
 
 	local bg = F.CreateBG(bu)
-	local sd = F.CreateSD(bg)
+	local glow = F.CreateSD(bg, .5, 3, 3)
 	bu.bg = bg
-	bu.sd = sd
+	bu.glow = glow
 
 	bu.styled = true
 end
@@ -141,9 +135,11 @@ local function updateDebuffBorder(buttonName, index, filter)
 
 	if filter == 'HARMFUL' then
 		local color = DebuffTypeColor[debuffType or 'none']
-		bu.bg:SetVertexColor(color.r, color.g, color.b)
-		if bu.sd then
-			bu.sd:SetBackdropBorderColor(color.r, color.g, color.b, 1)
+		--bu.bg:SetVertexColor(color.r, color.g, color.b)
+		if bu.glow then
+			bu.glow:SetBackdropBorderColor(color.r, color.g, color.b, 1)
+		else
+			bu.glow:SetBackdropBorderColor(0, 0, 0, .5)
 		end
 	end
 end

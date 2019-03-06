@@ -1,12 +1,14 @@
-local F, C, L = unpack(select(2, ...))
 local _, ns = ...
+local F, C, L = unpack(select(2, ...))
+
 if not C.unitframe.enable then return end
-local oUF = ns.oUF
 
 local module = F:GetModule('Unitframe')
+local cfg = C.unitframe
+local oUF = ns.oUF
 
 local format, tostring = string.format, tostring
-local cfg = C.unitframe
+
 local Mover_Width, Mover_Height,
 	Player_Pos, Player_Height, Player_Width,
 	Pet_Pos, Pet_Height, Pet_Width,
@@ -62,22 +64,26 @@ local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
 	self:SetSize(cfg.player_width*C.Mult, cfg.player_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreateHealthText(self)
-	module:CreatePowerBar(self)
-	module:CreateHealthPrediction(self)
-	module:CreatePowerText(self)
-	module:CreatePortrait(self)
-	module:CreateAltPower(self)
-	module:CreateIndicator(self)
-	module:CreateCastBar(self)
-	module:CreateDispellable(self, unit)
+	module:AddhealthBar(self)
+	module:AddHealthPrediction(self)
+	module:AddPowerBar(self)
+	module:AddAlternativePower(self)
+	module:AddHealthValue(self)
+	module:AddPowerValue(self)
+	module:AddPortrait(self)
+	module:AddDispel(self)
+	module:AddCastBar(self)
+	module:AddRaidTargetIndicator(self)
+	module:AddStatusIndicator(self)
+	module:AddPvPIndicator(self)
+
+	module:ReskinMirrorBars()
+	module:ReskinTimerTrakcer(self)
+
 	if (C.Class == 'DEATHKNIGHT') then
-		module:CreateRunesBar(self)
+		module:AddRunes(self)
 	else
-		module:CreateClassPower(self)
+		module:AddClassPower(self)
 	end
 
 	if C.actionbar.enable then
@@ -89,151 +95,179 @@ local function CreatePetStyle(self)
 	self.unitStyle = 'pet'
 	self:SetSize(cfg.pet_width*C.Mult, cfg.pet_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreatePowerBar(self)
-	module:CreateHealthPrediction(self)
-	module:CreatePortrait(self)
-	module:CreateIndicator(self)
-	module:CreateCastBar(self)
-	module:CreateAuras(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddHealthPrediction(self)
+	module:AddPowerBar(self)
+	module:AddPortrait(self)
+	module:AddCastBar(self)
+	module:AddAuras(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
 end
 
 local function CreateTargetStyle(self)
 	self.unitStyle = 'target'
 	self:SetSize(cfg.target_width*C.Mult, cfg.target_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreateHealthText(self)
-	module:CreatePowerBar(self)
-	module:CreateHealthPrediction(self)
-	module:CreatePowerText(self)
-	module:ClassificationText(self)
-	module:CreatePortrait(self)
-	module:CreateName(self)
-	module:CreateIndicator(self)
-	module:CreateCastBar(self)
-	module:CreateAuras(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddHealthPrediction(self)
+	module:AddPowerBar(self)
+	module:AddPortrait(self)
+	module:AddNameText(self)
+	module:AddHealthValue(self)
+	module:AddPowerValue(self)
+	module:AddClassificationText(self)
+	module:AddCastBar(self)
+	module:AddAuras(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
+	module:AddQuestIndicator(self)
 end
 
 local function CreateTargetTargetStyle(self)
 	self.unitStyle = 'targettarget'
 	self:SetSize(TargetTarget_Width*C.Mult, cfg.targettarget_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreatePowerBar(self)
-	module:CreateName(self)
-	module:CreateIndicator(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddPowerBar(self)
+	module:AddNameText(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
 end
 
 local function CreateFocusStyle(self)
 	self.unitStyle = 'focus'
 	self:SetSize(Focus_Width*C.Mult, cfg.focus_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreatePowerBar(self)
-	module:CreateHealthPrediction(self)
-	module:CreateName(self)
-	module:CreateIndicator(self)
-	module:CreateCastBar(self)
-	module:CreateAuras(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddHealthPrediction(self)
+	module:AddPowerBar(self)
+	module:AddNameText(self)
+	module:AddCastBar(self)
+	module:AddAuras(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
 end
 
 local function CreateFocusTargetStyle(self)
 	self.unitStyle = 'focustarget'
 	self:SetSize(FocusTarget_Width*C.Mult, cfg.focustarget_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreatePowerBar(self)
-	module:CreateName(self)
-	module:CreateIndicator(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddPowerBar(self)
+	module:AddNameText(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
+end
+
+local function UpdateUnitBorderColour(self)
+	if (UnitIsUnit(self.unit, 'target')) then
+		self.Bg:SetBackdropBorderColor(1, 1, 1)
+	else
+		self.Bg:SetBackdropBorderColor(0, 0, 0)	
+	end
+end
+
+local function UpdateUnitNameColour(self)
+	if self.unitStyle == 'party' or self.unitStyle == 'raid' or self.unitStyle == 'boss' then
+		if (UnitIsUnit(self.unit, 'target')) then
+			self.Name:SetTextColor(.1, .7, 1)
+		elseif UnitIsDead(self.unit) then
+			self.Name:SetTextColor(1, 0, 0)
+		elseif UnitIsGhost(self.unit) then
+			self.Name:SetTextColor(.6, .3, .8)
+		else
+			self.Name:SetTextColor(1, 1, 1)
+		end
+	end
 end
 
 local function CreatePartyStyle(self)
 	self.unitStyle = 'party'
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreatePowerBar(self)
-	module:CreateHealthPrediction(self)
-	module:CreatePortrait(self)
-	module:CreatePartyName(self)
-	module:CreateIndicator(self)
-	module:CreateThreatIndicator(self)
-	module:CreateBuffs(self)
-	module:CreateDebuffs(self)
-	module:CreateBorderColour(self)
-	module:CreateDispellable(self, unit)
-	module:CreateSpellRange(self)
-	module:CreateNameColour(self)
+	module:AddhealthBar(self)
+	module:AddHealthPrediction(self)
+	module:AddPowerBar(self)
+	module:AddPortrait(self)
+	module:AddDispel(self)
+	module:AddNameText(self)
+	module:AddBuffs(self)
+	module:AddDebuffs(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
+	module:AddLeaderIndicator(self)
+	module:AddResurrectIndicator(self)
+	module:AddReadyCheckIndicator(self)
+	module:AddGroupRoleIndicator(self)
+	module:AddPhaseIndicator(self)
+	module:AddSummonIndicator(self)
+	module:AddThreatIndicator(self)
+
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
 
 local function CreateRaidStyle(self)
 	self.unitStyle = 'raid'
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreatePowerBar(self)
-	module:CreateHealthPrediction(self)
-	module:CreatePartyName(self)
-	module:CreateIndicator(self)
-	module:CreateThreatIndicator(self)
-	module:CreateBuffs(self)
-	module:CreateDebuffs(self)
-	module:CreateBorderColour(self)
-	module:CreateSpellRange(self)
-	module:CreateNameColour(self)
+	module:AddhealthBar(self)
+	module:AddHealthPrediction(self)
+	module:AddPowerBar(self)
+	module:AddDispel(self)
+	module:AddNameText(self)
+	module:AddBuffs(self)
+	module:AddDebuffs(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
+	module:AddLeaderIndicator(self)
+	module:AddResurrectIndicator(self)
+	module:AddReadyCheckIndicator(self)
+	module:AddGroupRoleIndicator(self)
+	module:AddPhaseIndicator(self)
+	module:AddSummonIndicator(self)
+
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
 
 local function CreateBossStyle(self)
 	self.unitStyle = 'boss'
 	self:SetSize(cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreateHealthText(self)
-	module:CreatePowerBar(self)
-	module:CreatePortrait(self)
-	module:CreateName(self)
-	module:CreateAltPower(self)
-	module:CreateIndicator(self)
-	module:CreateCastBar(self)
-	module:CreateAuras(self)
-	module:CreateBorderColour(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddPowerBar(self)
+	module:AddAlternativePower(self)
+	module:AddPortrait(self)
+	module:AddNameText(self)
+	module:AddHealthValue(self)
+	module:AddCastBar(self)
+	module:AddAuras(self)
+	module:AddRangeCheck(self)
+	module:AddRaidTargetIndicator(self)
+
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
 
 local function CreateArenaStyle(self)
 	self.unitStyle = 'arena'
 	self:SetSize(cfg.arena_width*C.Mult, cfg.arena_height*C.Mult)
 
-	module:CreateBackDrop(self)
-	module:CreateHeader(self)
-	module:CreateHealthBar(self)
-	module:CreateHealthText(self)
-	module:CreatePowerBar(self)
-	module:CreateName(self)
-	module:CreateIndicator(self)
-	module:CreateCastBar(self)
-	module:CreateAuras(self)
-	module:CreateSpellRange(self)
+	module:AddhealthBar(self)
+	module:AddPowerBar(self)
+	module:AddNameText(self)
+	module:AddHealthValue(self)
+	module:AddArenaSpec(self)
+	module:AddCastBar(self)
+	module:AddAuras(self)
+	module:AddRangeCheck(self)
+
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
 
 
@@ -285,11 +319,9 @@ function module:OnLogin()
 		local boss = {}
 		for i = 1, MAX_BOSS_FRAMES do
 			boss[i] = oUF:Spawn('boss'..i, 'oUF_Boss'..i)
-			--local width, height = boss[i]:GetWidth(), boss[i]:GetHeight()
 			if i == 1 then
 				boss[i].mover = F.Mover(boss[i], L['MOVER_UNITFRAME_BOSS'], 'BossFrame', Boss_Pos, cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 			else
-				--boss[i].mover = F.Mover(boss[i], L['MOVER_UNITFRAME_BOSS']..i, 'Boss'..i, {'BOTTOM', boss[i-1], 'TOP', 0, 60}, width, height)
 				boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, cfg.boss_padding*C.Mult)
 			end
 		end
@@ -301,20 +333,15 @@ function module:OnLogin()
 		local arena = {}
 		for i = 1, 5 do
 			arena[i] = oUF:Spawn('arena'..i, 'oUF_Arena'..i)
-			--arena[i]:SetAttribute('oUF-enableArenaPrep', false)
-			--local width, height = arena[i]:GetWidth(), arena[i]:GetHeight()
 			if i == 1 then
 				arena[i].mover = F.Mover(arena[i], L['MOVER_UNITFRAME_ARENA'], 'ArenaFrame', Arena_Pos, cfg.arena_width*C.Mult, cfg.arena_height*C.Mult)
 			else
-				--arena[i].mover = F.Mover(arena[i], L['MOVER_UNITFRAME_ARENA']..i, 'Arena'..i, {'BOTTOM', arena[i-1], 'TOP', 0, 80}, width, height)
 				arena[i]:SetPoint('BOTTOM', arena[i-1], 'TOP', 0, cfg.arena_padding*C.Mult)
 			end
 		end
 	end
 
 	if cfg.enableGroup then
-		module:HideBlizzRaidFrame()
-
 		oUF:RegisterStyle('Party', CreatePartyStyle)
 		oUF:SetActiveStyle('Party')
 
@@ -397,6 +424,4 @@ function module:OnLogin()
 			end
 		end
 	end
-
-	self:CreateSound()
 end

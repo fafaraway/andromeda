@@ -38,10 +38,6 @@
 	<Script file="elements\threatindicator.lua"/>
 	<Script file="elements\totems.lua"/>
 
-	<Script file='plugins\castbar.lua'/>
-	<Script file='plugins\dispellable.lua'/>
-	<Script file='plugins\spellrange.lua'/>
-
 	<Script file="finalize.lua"/>
 
 	<!-- Clique support -->

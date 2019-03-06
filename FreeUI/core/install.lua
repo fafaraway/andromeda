@@ -81,10 +81,10 @@ function F:HelloWorld()
 	body:SetWidth(f:GetWidth()-40)
 	body:SetPoint("TOPLEFT", f, "TOPLEFT", 20, -60)
 
-	local credits = F.CreateFS(f, 'pixel', nil, '', nil, nil, true, "BOTTOM", 0, 4)
+	local credits = F.CreateFS(f, 'pixel', '', nil, nil, true, "BOTTOM", 0, 4)
 	credits:SetText("|cff808080<|rFree|cff9c84efUI|r|cff808080>|r by |cffe8155cHaleth|r and |cff37b1d6Solor|r")
 
-	local sbt = F.CreateFS(sb, 'pixel', nil, '', nil, nil, true, "CENTER", 0, 0)
+	local sbt = F.CreateFS(sb, 'pixel', '', nil, nil, true, "CENTER", 0, 0)
 
 	local option1 = CreateFrame("Button", "FreeUI_Install_Option1", f, "UIPanelButtonTemplate")
 	option1:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 40, 20)

@@ -8,7 +8,6 @@
 	<Script file='options.lua'/>
 	<Script file='profiles.lua'/>
 
-	
 	<Script file='core\api.lua'/>
 	<Script file='core\setting.lua'/>
 	<Script file='core\gui.lua'/>
@@ -18,128 +17,19 @@
 
 	<Include file='libs\libs.xml'/>
 
-	<Script file='scripts\actionbar\fader.lua'/>
-	<Script file='scripts\actionbar\bar1.lua'/>
-	<Script file='scripts\actionbar\bar2.lua'/>
-	<Script file='scripts\actionbar\bar3.lua'/>
-	<Script file='scripts\actionbar\bar4.lua'/>
-	<Script file='scripts\actionbar\bar5.lua'/>
-	<Script file='scripts\actionbar\stancebar.lua'/>
-	<Script file='scripts\actionbar\petbar.lua'/>
-	<Script file='scripts\actionbar\extrabar.lua'/>
-	<Script file='scripts\actionbar\leave_vehicle.lua'/>
-	<Script file='scripts\actionbar\hide_blizzart.lua'/>
-	<Script file='scripts\actionbar\buttonstyle.lua'/>
-	<Script file='scripts\actionbar\rangecolor.lua'/>
-	<Script file='scripts\actionbar\keybind.lua'/>
-	<Script file='scripts\actionbar\questbutton.lua'/>
-
-	<Script file='scripts\aura\buffframe.lua'/>
-
-	<Script file='scripts\automation\actioncam.lua'/>
-	<Script file='scripts\automation\buy.lua'/>
-	<Script file='scripts\automation\invite.lua'/>
-	<Script file='scripts\automation\quest.lua'/>
-	<Script file='scripts\automation\repair.lua'/>
-	<Script file='scripts\automation\role.lua'/>
-	<Script file='scripts\automation\screenshot.lua'/>
-	<Script file='scripts\automation\sell.lua'/>
-	<Script file='scripts\automation\tabbinder.lua'/>
-
-	<Script file='scripts\inventory\core.lua'/>
-	<Script file='scripts\inventory\filter.lua'/>
-
-	<Script file='scripts\blizzard\blizzard.lua'/>
-	<Script file='scripts\blizzard\archaeologybar.lua'/>
-	<Script file='scripts\blizzard\colorpicker.lua'/>
-	<Script file='scripts\blizzard\colours.lua'/>
-	<Script file='scripts\blizzard\cooldown.lua'/>
-	<Script file='scripts\blizzard\errors.lua'/>
-	<Script file='scripts\blizzard\fixes.lua'/>
-	<Script file='scripts\blizzard\fontstyle.lua'/>
-	<Script file='scripts\blizzard\loot.lua'/>
-	<Script file='scripts\blizzard\moveblizzframe.lua'/>
-	<Script file='scripts\blizzard\objectivetracker.lua'/>
-	<Script file='scripts\blizzard\orderhallcommandbar.lua'/>
-	<Script file='scripts\blizzard\petbattle.lua'/>
-	<Script file='scripts\blizzard\raidmanager.lua'/>
-
-	<Script file='scripts\chat\chat.lua'/>
-	<Script file='scripts\chat\abbreviate.lua'/>
-	<Script file='scripts\chat\bubble.lua'/>
-	<Script file='scripts\chat\copyname.lua'/>
-	<Script file='scripts\chat\filter.lua'/>
-	<Script file='scripts\chat\itemlinklevel.lua'/>
-	<Script file='scripts\chat\minimizebutton.lua'/>
-	<Script file='scripts\chat\reallinks.lua'/>
-	<Script file='scripts\chat\spamagemeter.lua'/>
-	<Script file='scripts\chat\strings.lua'/>
-	<Script file='scripts\chat\tab.lua'/>
-	<Script file='scripts\chat\whispersound.lua'/>
-
-	<Script file='scripts\infobar\core.lua'/>
-	<Script file='scripts\infobar\stats.lua'/>
-	<Script file='scripts\infobar\micromenu.lua'/>
-	<Script file='scripts\infobar\dm.lua'/>
-	<Script file='scripts\infobar\spec.lua'/>
-	<Script file='scripts\infobar\friends.lua'/>
-	<Script file='scripts\infobar\currency.lua'/>
-	<Script file='scripts\infobar\report.lua'/>
-
-	<Script file='scripts\map\worldmap.lua'/>
-	<Script file='scripts\map\mapreveal.lua'/>
-	<Script file='scripts\map\minimap.lua'/>
-	<Script file='scripts\map\menu.lua'/>
-
-	<Script file='scripts\misc\misc.lua'/>
-	<Script file='scripts\misc\alreadyknown.lua'/>
-	<Script file='scripts\misc\camera.lua'/>
-	<Script file='scripts\misc\cooldownpulse.lua'/>
-	<Script file='scripts\misc\clickcast.lua'/>
-	<Script file='scripts\misc\itemlevel.lua'/>
-	<Script file='scripts\misc\focuser.lua'/>
-	<Script file='scripts\misc\marker.lua'/>
-	<Script file='scripts\misc\mail.lua'/>
-	<Script file='scripts\misc\lfgqueuetimer.lua'/>
-	<Script file='scripts\misc\progressbar.lua'/>
-	<Script file='scripts\misc\pvpqueuetimer.lua'/>
-	<Script file='scripts\misc\safequeue.lua'/>
-	<Script file='scripts\misc\sharedmedia.lua'/>
-	<Script file='scripts\misc\quickjoin.lua'/>
-	<Script file='scripts\misc\missingstats.lua'/>
-	<Script file='scripts\misc\missingbuffs.lua'/>
-	<Script file='scripts\misc\pvpsound.lua'/>
-	<Script file='scripts\misc\tradetabs.lua'/>
-	<Script file='scripts\misc\reputation.lua'/>
-
-	<Script file='scripts\notification\core.lua'/>
-	<Script file='scripts\notification\event.lua'/>
-	<Script file='scripts\notification\dispel.lua'/>
-	<Script file='scripts\notification\interrupt.lua'/>
-	<Script file='scripts\notification\rare.lua'/>
-	<Script file='scripts\notification\res.lua'/>
-	<Script file='scripts\notification\sap.lua'/>
-	<Script file='scripts\notification\spell.lua'/>
-
-	<Script file='scripts\tooltip\tip.lua'/>
-	<Script file='scripts\tooltip\hover.lua'/>
-	<Script file='scripts\tooltip\icon.lua'/>
-	<Script file='scripts\tooltip\extrainfo.lua'/>
-	<Script file='scripts\tooltip\specilvl.lua'/>
-	<Script file='scripts\tooltip\azeritetrait.lua'/>
-	<Script file='scripts\tooltip\clear.lua'/>
-
-	<Script file='scripts\unitframe\functions.lua'/>
-	<Script file='scripts\unitframe\spawns.lua'/>
-	<Script file='scripts\unitframe\tags.lua'/>
-	<Script file='scripts\unitframe\colors.lua'/>
-	<Script file='scripts\unitframe\aurafilters.lua'/>
-
-	<Script file='scripts\theme\Core.lua'/>
-	<Include file='scripts\theme\AddOns\AddOns.xml'/>
-	<Include file='scripts\theme\FrameXML\FrameXML.xml'/>
-	<Include file='scripts\theme\SharedXML\SharedXML.xml'/>
-	<Include file='scripts\theme\Others\Others.xml'/>
+	<Include file='scripts\actionbar\actionbar.xml'/>
+	<Include file='scripts\aura\aura.xml'/>
+	<Include file='scripts\automation\automation.xml'/>
+	<Include file='scripts\blizzard\blizzard.xml'/>
+	<Include file='scripts\chat\chat.xml'/>
+	<Include file='scripts\infobar\infobar.xml'/>
+	<Include file='scripts\inventory\inventory.xml'/>
+	<Include file='scripts\map\map.xml'/>
+	<Include file='scripts\misc\misc.xml'/>
+	<Include file='scripts\notification\notification.xml'/>
+	<Include file='scripts\theme\theme.xml'/>
+	<Include file='scripts\tooltip\tooltip.xml'/>
+	<Include file='scripts\unitframe\unitframe.xml'/>
 
 	<Script file='core\dev.lua'/>
 </Ui>

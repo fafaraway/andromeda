@@ -5,7 +5,7 @@ if not C.chat.minimizeButton then return end
 local mb = CreateFrame('Button',nil,UIParent)
 mb:SetSize(16,16)
 
-mb.t = F.CreateFS(mb, 'pixel', nil, '-', nil, 'yellow', true, 'CENTER', 2, 1)
+mb.t = F.CreateFS(mb, 'pixel', '-', nil, 'yellow', true, 'CENTER', 2, 1)
 
 mb:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 10, 10)
 F.Reskin(mb)

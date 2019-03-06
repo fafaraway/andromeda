@@ -1,19 +1,20 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
-local cfg = C.actionbar
-cfg.buttonSizeSmall = cfg.buttonSizeSmall*C.Mult
-cfg.padding = cfg.padding*C.Mult
-cfg.margin = cfg.margin*C.Mult
+local Bar = F:GetModule("Actionbar")
+
 
 function Bar:CreatePetbar()
+	local cfg = C.actionbar
+	local buttonSize = cfg.buttonSizeSmall*C.Mult
+	local padding = cfg.padding*C.Mult
+	local margin = cfg.margin*C.Mult
 
 	local num = NUM_PET_ACTION_SLOTS
 	local buttonList = {}
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_PetActionBar", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeSmall + (num-1)*(cfg.margin+2) + 2*cfg.padding)
-	frame:SetHeight(cfg.buttonSizeSmall + 2*cfg.padding)
+	frame:SetWidth(num*buttonSize + (num-1)*(margin+2) + 2*padding)
+	frame:SetHeight(buttonSize + 2*padding)
 	frame:SetScale(1)
 
 	local function positionBars()
@@ -40,13 +41,13 @@ function Bar:CreatePetbar()
 	for i = 1, num do
 		local button = _G["PetActionButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(cfg.buttonSizeSmall, cfg.buttonSizeSmall)
+		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("LEFT", frame, cfg.padding, 0)
+			button:SetPoint("LEFT", frame, padding, 0)
 		else
 			local previous = _G["PetActionButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin+2, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", margin+2, 0)
 		end
 		--cooldown fix
 		local cd = _G["PetActionButton"..i.."Cooldown"]

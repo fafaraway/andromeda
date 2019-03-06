@@ -73,6 +73,7 @@ C.Client = GetLocale()
 C.Version = GetAddOnMetadata("FreeUI", "Version")
 C.Title = GetAddOnMetadata("FreeUI", "Title")
 C.Support = GetAddOnMetadata("FreeUI", "X-Support")
+C.isNewPatch = GetBuildInfo() == "8.1.5"
 
 C.ClassColors = {}
 C.ClassList = {}

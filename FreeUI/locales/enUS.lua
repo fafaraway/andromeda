@@ -1,21 +1,22 @@
 local F, C, L = unpack(select(2, ...))
 
 
-L["VERSION_INFO"] = 'Type in /freeui for more help.'
+L['VERSION_INFO'] = 'Type in /freeui for more help.'
 
 
 -- tooltip
 L['RARE'] = 'Rare'
 
 -- automation
-L["STACK_BUYING_CHECK"] = "Are you sure to buy |cffff0000a stack|r of these?"
+L['STACK_BUYING_CHECK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
 
 
 -- misc
-L["EXTEND_INSTANCE"] = "Extend All Raids Lock"
-L["STRANGER"] = "Stranger"
-L["TOGGLE"] = "Drag to move"
-L["GET_NAKED"] = 'Undress'
+L['EXTEND_INSTANCE'] = 'Extend All Raids Lock'
+L['STRANGER'] = 'Stranger'
+L['TOGGLE'] = 'Drag to move'
+L['GET_NAKED'] = 'Undress'
+L['ACCOUNT_KEYSTONES'] = 'Account keystones'
 
 -- notification
 L['NOTIFICATION_RARE'] = 'Rare nearby! '
@@ -102,13 +103,13 @@ L['InviteDisable'] = 'Autoinvite OFF'
 
 
 -- Mover
-L["MOVER_PANEL"] = 'Mover console'
-L["MOVER_GRID"] = 'Grids'
-L["MOVER_TOOLTIP"] = 'tooltip'
-L["MOVER_MINIMAP"] = 'minimap'
-L["MOVER_RAIDMANAGER"] = 'RM'
-L["MOVER_RESET_CONFIRM"] = "Are you sure to reset frames position?"
-L["MOVER_CANCEL_CONFIRM"] = "Are you sure to reverse your positioning?"
+L['MOVER_PANEL'] = 'Mover console'
+L['MOVER_GRID'] = 'Grids'
+L['MOVER_TOOLTIP'] = 'tooltip'
+L['MOVER_MINIMAP'] = 'minimap'
+L['MOVER_RAIDMANAGER'] = 'RM'
+L['MOVER_RESET_CONFIRM'] = 'Are you sure to reset frames position?'
+L['MOVER_CANCEL_CONFIRM'] = 'Are you sure to reverse your positioning?'
 
 L['MOVER_UNITFRAME_PLAYER'] = 'player'
 L['MOVER_UNITFRAME_PET'] = 'pet'
@@ -120,15 +121,23 @@ L['MOVER_UNITFRAME_BOSS'] = 'boss'
 L['MOVER_UNITFRAME_ARENA'] = 'arena'
 L['MOVER_UNITFRAME_PARTY'] = 'party'
 L['MOVER_UNITFRAME_RAID'] = 'raid'
-L["MOVER_UNITFRAME_PLAYER_CASTBAR"] = 'palyer castbar'
-L["MOVER_UNITFRAME_TARGET_CASTBAR"] = 'target castbar'
-L["MOVER_UNITFRAME_FOCUS_CASTBAR"] = 'focus castbar'
+L['MOVER_UNITFRAME_PLAYER_CASTBAR'] = 'palyer castbar'
+L['MOVER_UNITFRAME_TARGET_CASTBAR'] = 'target castbar'
+
 
 
 
 
 -- Chat
-L["CHAT_HIDE"] = 'Hide chat frame'
-L["CHAT_SHOW"] = 'Show chat frame'
-L["CHAT_JOIN_WC"] = 'Join world channel (only for Chinese player)'
-L["CHAT_LEAVE_WC"] = 'Leave world channel'
+L['CHAT_HIDE'] = 'Hide chat frame'
+L['CHAT_SHOW'] = 'Show chat frame'
+L['CHAT_JOIN_WC'] = 'Join world channel (only for Chinese player)'
+L['CHAT_LEAVE_WC'] = 'Leave world channel'
+
+
+-- Aura
+L['MISSING_BUFF'] = 'Missing'
+
+
+-- Tooltip
+L["AURA_FROM"] = 'Castby'

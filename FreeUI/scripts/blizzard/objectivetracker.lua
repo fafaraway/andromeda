@@ -184,7 +184,7 @@ function module:QuestTracker()
 			icon:SetPoint('RIGHT', 30, 0)
 			icon:SetSize(24, 24)
 			icon.bg = F.CreateBDFrame(icon)
-			F.CreateSD(icon)
+			icon.glow = F.CreateSD(icon)
 
 			bar.styled = true
 		end
@@ -192,8 +192,8 @@ function module:QuestTracker()
 		if icon.bg then
 			icon.bg:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 		end
-		if icon.sd then
-			icon.sd:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
+		if icon.glow then
+			icon.glow:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 		end
 	end
 	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)

@@ -732,8 +732,8 @@ init:SetScript("OnEvent", function()
 	F.ReskinInput(resetFrame.charBox)
 
 
-	local title = F.CreateFS(FreeUIOptionsPanel, 18, nil, C.Title, nil, nil, true, "TOP", 0, -10)
-	local version = F.CreateFS(FreeUIOptionsPanel, 'pixel', nil, C.Version, nil, 'grey', false, "TOP", 0, -34)
+	local title = F.CreateFS(FreeUIOptionsPanel, {C.font.normal, 18}, C.Title, nil, nil, true, "TOP", 0, -10)
+	local version = F.CreateFS(FreeUIOptionsPanel, 'pixel', C.Version, nil, 'grey', false, "TOP", 0, -34)
 	local ll = CreateFrame("Frame", nil, FreeUIOptionsPanel)
 	ll:SetPoint("TOP", -50, -30)
 	F.CreateGF(ll, 100, 1, "Horizontal", .7, .7, .7, 0, .7)

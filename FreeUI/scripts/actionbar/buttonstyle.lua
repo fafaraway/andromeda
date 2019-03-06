@@ -58,14 +58,14 @@ local function applyBackground(bu)
 	if bu:GetFrameLevel() < 7 then bu:SetFrameLevel(7) end
 
 	bu.bg = F.CreateBDFrame(bu)
-	bu.sd = F.CreateSD(bu.bg, .5)
+	bu.glow = F.CreateSD(bu.bg, .35, 3, 3)
 
 	if C.actionbar.classColor then
 		bu.bg:SetBackdropBorderColor(r, g, b)
 	end
 
 	bu.bg = true
-	bu.sd = true
+	bu.glow = true
 end
 
 local function styleExtraActionButton(bu)

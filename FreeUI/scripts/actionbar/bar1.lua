@@ -1,20 +1,22 @@
 local F, C = unpack(select(2, ...))
-local module = F:RegisterModule("actionbars")
-local cfg = C.actionbar
-cfg.buttonSizeNormal = cfg.buttonSizeNormal*C.Mult
-cfg.padding = cfg.padding*C.Mult
-cfg.margin = cfg.margin*C.Mult
+local module = F:RegisterModule("Actionbar")
+
 
 function module:OnLogin()
+	local cfg = C.actionbar
 	if not cfg.enable then return end
+
+	local buttonSize = cfg.buttonSizeNormal*C.Mult
+	local padding = cfg.padding*C.Mult
+	local margin = cfg.margin*C.Mult
 
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_ActionBar1", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeNormal + (num-1)*cfg.margin + 2*cfg.padding)
-	frame:SetHeight(cfg.buttonSizeNormal + 2*cfg.padding)
+	frame:SetWidth(num*buttonSize + (num-1)*margin + 2*padding)
+	frame:SetHeight(buttonSize + 2*padding)
 
 	frame:SetPoint(unpack(cfg.bar1Pos))
 	frame:SetScale(1)
@@ -23,14 +25,14 @@ function module:OnLogin()
 		local button = _G["ActionButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
 		button:SetParent(frame)
-		button:SetSize(cfg.buttonSizeNormal, cfg.buttonSizeNormal)
+		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
+			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 		else
 			local previous = _G["ActionButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
 		end
 	end
 

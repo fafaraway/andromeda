@@ -95,13 +95,13 @@ local createSlot = function(id)
 	F.CreateSD(icon)
 	frame.icon = icon
 
-	local count = F.CreateFS(iconFrame, 'pixel', nil, '1', 'CENTER', nil, true, "TOP", 1, -2)
+	local count = F.CreateFS(iconFrame, 'pixel', '', 'CENTER', nil, true, "TOP", 1, -2)
 	--count:SetJustifyH('CENTER')
 	--count:SetPoint("TOP", iconFrame, 1, -2)
 	--count:SetText(1)
 	frame.count = count
 
-	local name = F.CreateFS(frame, 'pixel', nil, '', 'LEFT', nil, true)
+	local name = F.CreateFS(frame, 'pixel', '', 'LEFT', nil, true)
 	--name:SetJustifyH('LEFT')
 	name:SetPoint("RIGHT", frame)
 	name:SetPoint("LEFT", icon, "RIGHT", 8, 0)

@@ -27,9 +27,21 @@ secondErrorFrame:Hide()
 secondErrorFrame:SetFrameStrata("TOOLTIP")
 secondErrorFrame:SetFrameLevel(30)
 
-firstErrorFrame.text = F.CreateFS(firstErrorFrame, 13, nil, '', nil, nil, '2')
+
+if (C.Client == 'zhCN' or C.Client == 'zhTW') then
+	if C.general.isDeveloper then
+		firstErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixelhybrid', '', nil, nil, true)
+		secondErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixelhybrid', '', nil, nil, true)
+	else
+		firstErrorFrame.text = F.CreateFS(firstErrorFrame, {C.font.normal, 13, 'OUTLINE'}, '', nil, nil, true)
+		secondErrorFrame.text = F.CreateFS(firstErrorFrame, {C.font.normal, 13, 'OUTLINE'}, '', nil, nil, true)
+	end
+else
+	firstErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixel', '', nil, nil, true)
+	secondErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixel', '', nil, nil, true)
+end
+
 firstErrorFrame.text:SetPoint("TOP", UIParent, 0, -160)
-secondErrorFrame.text = F.CreateFS(secondErrorFrame, 13, nil, '', nil, nil, '2')
 secondErrorFrame.text:SetPoint("TOP", UIParent, 0, -180)
 
 local state = 0

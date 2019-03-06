@@ -23,8 +23,8 @@ function module:PetBattleUI()
 	weather.Icon:SetPoint("TOP", frame.TopVersusText, "BOTTOM", 0, -15)
 	weather.Icon:SetTexCoord(unpack(C.TexCoord))
 	F.CreateSD(weather.Icon)
-	if weather.Icon.sd then
-		weather.Icon.sd:SetFrameLevel(weather:GetFrameLevel())
+	if weather.Icon.glow then
+		weather.Icon.glow:SetFrameLevel(weather:GetFrameLevel())
 	end
 	weather.Duration:ClearAllPoints()
 	weather.Duration:SetPoint("CENTER", weather.Icon, 1, 0)
@@ -154,16 +154,16 @@ function module:PetBattleUI()
 			end
 		end
 		if self.glow then self.glow:Hide() end
-		if self.Icon.sd then
+		if self.Icon.glow then
 			local quality = C_PetBattles.GetBreedQuality(self.petOwner, self.petIndex) - 1 or 1
 			local color = BAG_ITEM_QUALITY_COLORS[quality]
-			self.Icon.sd:SetBackdropBorderColor(color.r, color.g, color.b)
+			self.Icon.glow:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end)
 
 	hooksecurefunc("PetBattleUnitFrame_UpdateHealthInstant", function(self)
-		if self.BorderDead and self.BorderDead:IsShown() and self.Icon.sd then
-			self.Icon.sd:SetBackdropBorderColor(1, .12, .24)
+		if self.BorderDead and self.BorderDead:IsShown() and self.Icon.glow then
+			self.Icon.glow:SetBackdropBorderColor(1, .12, .24)
 		end
 		if self.BorderDead and self.deadIcon then
 			self.deadIcon:SetShown(self.BorderDead:IsShown())
@@ -185,9 +185,9 @@ function module:PetBattleUI()
 					frame.styled = true
 				end
 				--[[if isBuff then
-					frame.Icon.sd:SetBackdropBorderColor(0, .6, .1)
+					frame.Icon.glow:SetBackdropBorderColor(0, .6, .1)
 				else
-					frame.Icon.sd:SetBackdropBorderColor(.8, 0, 0)
+					frame.Icon.glow:SetBackdropBorderColor(.8, 0, 0)
 				end]]
 
 				nextFrame = nextFrame + 1
@@ -256,7 +256,7 @@ function module:PetBattleUI()
 	F.CreateSD(skipButton)
 	skipButton:SetPushedTexture(C.media.backdrop)
 
-	skipButton.text = F.CreateFS(skipButton, 14, nil, PET_BATTLE_PASS, nil, nil, true, "BOTTOM", 1, 2)
+	skipButton.text = F.CreateFS(skipButton, {C.font.normal, 14}, PET_BATTLE_PASS, nil, nil, true, "BOTTOM", 1, 2)
 
 	local xpbar = PetBattleFrameXPBar
 	for i = 2, 4 do

@@ -1,19 +1,21 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
-local cfg = C.actionbar
-cfg.buttonSizeBig = cfg.buttonSizeBig*C.Mult
-cfg.padding = cfg.padding*C.Mult
-cfg.margin = cfg.margin*C.Mult
+local Bar = F:GetModule("Actionbar")
+
 
 function Bar:CreateStancebar()
+	local cfg = C.actionbar
+	local buttonSize = cfg.buttonSizeBig*C.Mult
+	local padding = cfg.padding*C.Mult
+	local margin = cfg.margin*C.Mult
+
 	local num = NUM_STANCE_SLOTS
 	local NUM_POSSESS_SLOTS = NUM_POSSESS_SLOTS
 	local buttonList = {}
 
 	--make a frame that fits the size of all microbuttons
 	local frame = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeBig + (num-1)*cfg.margin + 2*cfg.padding)
-	frame:SetHeight(cfg.buttonSizeBig + 2*cfg.padding)
+	frame:SetWidth(num*buttonSize + (num-1)*margin + 2*padding)
+	frame:SetHeight(buttonSize + 2*padding)
 	frame:SetScale(1)
 
 	local function positionBars()
@@ -43,13 +45,13 @@ function Bar:CreateStancebar()
 	for i = 1, num do
 		local button = _G["StanceButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(cfg.buttonSizeBig, cfg.buttonSizeBig)
+		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
+			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 		else
 			local previous = _G["StanceButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
 		end
 	end
 
@@ -64,13 +66,13 @@ function Bar:CreateStancebar()
 	for i = 1, NUM_POSSESS_SLOTS do
 		local button = _G["PossessButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(cfg.buttonSizeBig, cfg.buttonSizeBig)
+		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
+			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 		else
 			local previous = _G["PossessButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
 		end
 	end
 

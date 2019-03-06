@@ -161,7 +161,7 @@ function module:Friends()
 								name = F.HexRGB(color)..' '..charName
 							end
 							zoneColor = GetRealZoneText() == infoText and activeZone or inactiveZone
-							realmColor = GetRealmName() == realmName and activeZone or inactiveZone
+							realmColor = C.Realm == realmName and activeZone or inactiveZone
 						end
 
 						local cicon = BNet_GetClientEmbeddedTexture(client, 14, 14, 0, -1)

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Misc')
+local module = F:GetModule('Aura')
 
 module.BuffsList = {
 	MAGE = {
@@ -9,14 +9,14 @@ module.BuffsList = {
 			depend = 205022,
 			spec = 1,
 			combat = true,
-			instance = true,
+			instance = false,
 			pvp = true,
 		},
 		{	spells = {	-- 奥术智慧
 				[1459] = true,
 			},
 			depend = 1459,
-			instance = true,
+			instance = false,
 		},
 	},
 	PRIEST = {
@@ -24,7 +24,7 @@ module.BuffsList = {
 				[21562] = true,
 			},
 			depend = 21562,
-			instance = true,
+			instance = false,
 		},
 	},
 	WARRIOR = {
@@ -52,7 +52,7 @@ module.BuffsList = {
 			},
 			spec = 1,
 			combat = true,
-			instance = true,
+			instance = false,
 			pvp = true,
 		},
 		{	spells = {	-- 效果类毒药
@@ -104,12 +104,13 @@ local function AddMissingBuffs(cfg)
 	local frame = CreateFrame('Frame', nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
-	F.CreateSD(frame)
+	frame.glow = F.CreateSD(frame)
+	frame.glow:SetBackdropBorderColor(1, 0, 0, .65)
 	for spell in pairs(cfg.spells) do
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break
 	end
-	frame.text = F.CreateFS(frame, 'pixel', nil, 'Missing', nil, nil, true, 'TOP', 1, 15)
+	frame.text = F.CreateFS(frame, {C.font.normal, 12}, L['MISSING_BUFF'], nil, nil, true, 'TOP', 1, 15)
 	frame:Hide()
 	cfg.frame = frame
 
@@ -136,12 +137,12 @@ local function UpdateEvent()
 	UpdateAnchor()
 end
 
-function module:MissingBuffs()
+function module:MissingBuff()
 	if not groups then return end
 	if not C.general.missingBuffs then return end
 
 	parentFrame = CreateFrame('Frame', nil, UIParent)
-	parentFrame:SetPoint('TOPLEFT', 50, -100)
+	parentFrame:SetPoint('TOP', 0, -100)
 	parentFrame:SetSize(iconSize, iconSize)
 
 	F:RegisterEvent('UNIT_AURA', UpdateEvent, 'player')

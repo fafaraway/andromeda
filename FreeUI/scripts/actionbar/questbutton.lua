@@ -198,23 +198,23 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:SetPushedTexture(C.media.checked)
 	local push = self:GetPushedTexture()
 	push:SetBlendMode("ADD")
-	push:SetPoint("TOPLEFT", -1, 1)
-	push:SetPoint("BOTTOMRIGHT", 1, -1)
+	push:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+	push:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 
 	local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
 	Icon:SetAllPoints()
 	Icon:SetTexCoord(unpack(C.TexCoord))
 	
 	local iconBG = self:CreateTexture("$parentIcon", "BACKGROUND")
-	iconBG:SetPoint("TOPLEFT", -1 , 1)
-	iconBG:SetPoint("BOTTOMRIGHT", 1, -1)
+	iconBG:SetPoint("TOPLEFT", -C.Mult , C.Mult)
+	iconBG:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 	iconBG:SetTexture(C.media.backdrop)
 	iconBG:SetVertexColor(0, 1, 0)
 
 	F.CreateSD(iconBG)
 
-	if iconBG.sd then
-		iconBG.sd:SetFrameLevel(self:GetFrameLevel())
+	if iconBG.glow then
+		iconBG.glow:SetFrameLevel(self:GetFrameLevel())
 	end
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 	self.HL:SetColorTexture(1, 1, 1, .25)
@@ -232,8 +232,8 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	F.SetFS(Count)
 
 	local Cooldown = CreateFrame("Cooldown", "$parentCooldown", self, "CooldownFrameTemplate")
-	Cooldown:SetPoint("TOPLEFT", -1, 1)
-	Cooldown:SetPoint("BOTTOMRIGHT", 1, -1)
+	Cooldown:SetPoint("TOPLEFT", -C.Mult, C.Mult)
+	Cooldown:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
 	Cooldown:SetReverse(false)
 	Cooldown:Hide()
 	self.Cooldown = Cooldown

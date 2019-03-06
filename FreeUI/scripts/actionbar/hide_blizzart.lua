@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
+local Bar = F:GetModule("Actionbar")
 
 local _G = _G
 local next, tonumber = next, tonumber

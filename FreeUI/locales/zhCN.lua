@@ -8,15 +8,15 @@ if GetLocale() ~= 'zhCN' then return end
 L['RARE'] = '稀有'
 
 -- automation
-L["STACK_BUYING_CHECK"] = "是否购买|cffff0000一组|r下列物品？"
+L['STACK_BUYING_CHECK'] = '是否购买|cffff0000一组|r下列物品？'
 
 
 -- misc
-L["EXTEND_INSTANCE"] = "延长所有副本锁定"
-L["STRANGER"] = "陌生人"
-L["TOGGLE"] = "点击拖动"
-L["GET_NAKED"] = '脱衣'
-
+L['EXTEND_INSTANCE'] = '延长所有副本锁定'
+L['STRANGER'] = '陌生人'
+L['TOGGLE'] = '点击拖动'
+L['GET_NAKED'] = '脱衣'
+L['ACCOUNT_KEYSTONES'] = '账号角色钥石信息'
 
 
 -- notification
@@ -111,13 +111,13 @@ L['InviteDisable'] = '自动邀请功能关闭'
 
 
 -- Mover
-L["MOVER_PANEL"] = '移动控制'
-L["MOVER_GRID"] = '网格'
-L["MOVER_TOOLTIP"] = 'tooltip'
-L["MOVER_MINIMAP"] = 'minimap'
-L["MOVER_RAIDMANAGER"] = 'RM'
-L["MOVER_RESET_CONFIRM"] = "是否重置所有界面元素为默认位置？"
-L["MOVER_CANCEL_CONFIRM"] = "是否取消本次操作？"
+L['MOVER_PANEL'] = '移动控制'
+L['MOVER_GRID'] = '网格'
+L['MOVER_TOOLTIP'] = 'tooltip'
+L['MOVER_MINIMAP'] = 'minimap'
+L['MOVER_RAIDMANAGER'] = 'RM'
+L['MOVER_RESET_CONFIRM'] = '是否重置所有界面元素为默认位置？'
+L['MOVER_CANCEL_CONFIRM'] = '是否取消本次操作？'
 
 L['MOVER_UNITFRAME_PLAYER'] = 'player'
 L['MOVER_UNITFRAME_PET'] = 'pet'
@@ -129,15 +129,22 @@ L['MOVER_UNITFRAME_BOSS'] = 'boss'
 L['MOVER_UNITFRAME_ARENA'] = 'arena'
 L['MOVER_UNITFRAME_PARTY'] = 'party'
 L['MOVER_UNITFRAME_RAID'] = 'raid'
-L["MOVER_UNITFRAME_PLAYER_CASTBAR"] = 'palyer castbar'
-L["MOVER_UNITFRAME_TARGET_CASTBAR"] = 'target castbar'
-L["MOVER_UNITFRAME_FOCUS_CASTBAR"] = 'focus castbar'
+L['MOVER_UNITFRAME_PLAYER_CASTBAR'] = 'palyer castbar'
+L['MOVER_UNITFRAME_TARGET_CASTBAR'] = 'target castbar'
 
 
 
 
 -- Chat
-L["CHAT_HIDE"] = '隐藏聊天框'
-L["CHAT_SHOW"] = '显示聊天框'
-L["CHAT_JOIN_WC"] = '加入世界频道'
-L["CHAT_LEAVE_WC"] = '离开世界频道'
+L['CHAT_HIDE'] = '隐藏聊天框'
+L['CHAT_SHOW'] = '显示聊天框'
+L['CHAT_JOIN_WC'] = '加入世界频道'
+L['CHAT_LEAVE_WC'] = '离开世界频道'
+
+
+-- Aura
+L['MISSING_BUFF'] = '缺少'
+
+
+-- Tooltip
+L["AURA_FROM"] = '来自'

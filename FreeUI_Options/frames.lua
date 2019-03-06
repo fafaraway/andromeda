@@ -638,8 +638,8 @@ do
 	local transMode = ns.CreateCheckBox(unitframe, "transMode", true, true)
 	transMode:SetPoint("TOPLEFT", healer_layout, "BOTTOMLEFT", 0, -8)
 
-	local smoothHealthUpdate = ns.CreateCheckBox(unitframe, "smoothHealthUpdate", true, true)
-	smoothHealthUpdate:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
+	local classColour = ns.CreateCheckBox(unitframe, "classColour", true, true)
+	classColour:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
 
 	local portrait = ns.CreateCheckBox(unitframe, "portrait", true, true)
 	portrait:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 0, -8)
@@ -650,48 +650,46 @@ do
 	local threat = ns.CreateCheckBox(unitframe, "threat", true, true)
 	threat:SetPoint("TOPLEFT", main, "BOTTOMLEFT", 16, -16)
 
+	local healPrediction = ns.CreateCheckBox(unitframe, "healPrediction", true, true)
+	healPrediction:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
+
 	local overAbsorb = ns.CreateCheckBox(unitframe, "overAbsorb", true, true)
-	overAbsorb:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
+	overAbsorb:SetPoint("LEFT", healPrediction, "RIGHT", 240, 0)
 
 	local classPower = ns.CreateCheckBox(unitframe, "classPower", true, true)
-	classPower:SetPoint("TOPLEFT", overAbsorb, "BOTTOMLEFT", 0, -8)
+	classPower:SetPoint("TOPLEFT", healPrediction, "BOTTOMLEFT", 0, -8)
 
 	local dispellable = ns.CreateCheckBox(unitframe, "dispellable", true, true)
 	dispellable:SetPoint("LEFT", threat, "RIGHT", 240, 0)
 
 	local spellRange = ns.CreateCheckBox(unitframe, "spellRange", true, true)
-	spellRange:SetPoint("TOPLEFT", dispellable, "BOTTOMLEFT", 0, -8)
+	spellRange:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
 
 	local castbarline = ns.addSubCategory(unitframe, ns.localization.unitframecastbarline)
 	castbarline:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -8)
 
-	local castbar = ns.CreateCheckBox(unitframe, "castbar", true, true)
-	castbar:SetPoint("TOPLEFT", castbarline, "BOTTOMLEFT", 16, -16)
+	local enableCastbar = ns.CreateCheckBox(unitframe, "enableCastbar", true, true)
+	enableCastbar:SetPoint("TOPLEFT", castbarline, "BOTTOMLEFT", 16, -16)
 
-	local cbSeparate_player = ns.CreateCheckBox(unitframe, "cbSeparate_player", true, true)
-	cbSeparate_player:SetPoint("TOPLEFT", castbar, "BOTTOMLEFT", 16, -8)
+	local castbar_separatePlayer = ns.CreateCheckBox(unitframe, "castbar_separatePlayer", true, true)
+	castbar_separatePlayer:SetPoint("TOPLEFT", enableCastbar, "BOTTOMLEFT", 16, -8)
 
-	local cbSeparate_target = ns.CreateCheckBox(unitframe, "cbSeparate_target", true, true)
-	cbSeparate_target:SetPoint("LEFT", cbSeparate_player, "RIGHT", 240, 0)
+	local castbar_separateTarget = ns.CreateCheckBox(unitframe, "castbar_separateTarget", true, true)
+	castbar_separateTarget:SetPoint("LEFT", castbar_separatePlayer, "RIGHT", 240, 0)
 
-	castbar.children = {cbSeparate_player, cbSeparate_target}
+	enableCastbar.children = {castbar_separatePlayer, castbar_separateTarget}
 
 	local group = ns.addSubCategory(unitframe, ns.localization.unitframegroup)
-	group:SetPoint("TOPLEFT", cbSeparate_player, "BOTTOMLEFT", -32, -8)
+	group:SetPoint("TOPLEFT", castbar_separatePlayer, "BOTTOMLEFT", -32, -8)
 
 	local enableGroup = ns.CreateCheckBox(unitframe, "enableGroup", true, true)
 	enableGroup:SetPoint("TOPLEFT", group, "BOTTOMLEFT", 16, -16)
 
-	local partyMissingHealth = ns.CreateCheckBox(unitframe, "partyMissingHealth", true, true)
-	partyMissingHealth:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
-
-	local partyNameAlways = ns.CreateCheckBox(unitframe, "partyNameAlways", true, true)
-	partyNameAlways:SetPoint("LEFT", partyMissingHealth, "RIGHT", 240, 0)
-
-	enableGroup.children = {partyMissingHealth, partyNameAlways}
+	local showGroupName = ns.CreateCheckBox(unitframe, "showGroupName", true, true)
+	showGroupName:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
 
 	local misc = ns.addSubCategory(unitframe, ns.localization.unitframemisc)
-	misc:SetPoint("TOPLEFT", partyMissingHealth, "BOTTOMLEFT", -32, -8)
+	misc:SetPoint("TOPLEFT", showGroupName, "BOTTOMLEFT", -32, -8)
 
 	local enableBoss = ns.CreateCheckBox(unitframe, "enableBoss", true, true)
 	enableBoss:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 16, -16)
@@ -706,23 +704,23 @@ do
 		main:SetShown(shown)
 		portrait:SetShown(shown)
 		healer_layout:SetShown(shown)
-		smoothHealthUpdate:SetShown(shown)
+		classColour:SetShown(shown)
 
 		group:SetShown(shown)
 		enableGroup:SetShown(shown)
-		partyNameAlways:SetShown(shown)
-		partyMissingHealth:SetShown(shown)
+		showGroupName:SetShown(shown)
 
 		threat:SetShown(shown)
 		overAbsorb:SetShown(shown)
+		healPrediction:SetShown(shown)
 		classPower:SetShown(shown)
 		dispellable:SetShown(shown)
 		spellRange:SetShown(shown)
 
 		castbarline:SetShown(shown)
-		castbar:SetShown(shown)
-		cbSeparate_player:SetShown(shown)
-		cbSeparate_target:SetShown(shown)
+		enableCastbar:SetShown(shown)
+		castbar_separatePlayer:SetShown(shown)
+		castbar_separateTarget:SetShown(shown)
 		
 		misc:SetShown(shown)
 		enableBoss:SetShown(shown)

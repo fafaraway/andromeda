@@ -19,9 +19,6 @@ tinsert(C.themes["FreeUI"], function()
 		ShoppingTooltip2,
 		AutoCompleteBox,
 		FriendsTooltip,
-		WorldMapTooltip,
-		WorldMapCompareTooltip1,
-		WorldMapCompareTooltip2,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
 		NamePlateTooltip,
@@ -33,6 +30,12 @@ tinsert(C.themes["FreeUI"], function()
 		FloatingPetBattleAbilityTooltip,
 		IMECandidatesFrame,
 	}
+
+	if not C.isNewPatch then
+		tinsert(tooltips, WorldMapTooltip)
+		tinsert(tooltips, WorldMapCompareTooltip1)
+		tinsert(tooltips, WorldMapCompareTooltip2)
+	end
 
 	for _, f in pairs(tooltips) do
 		f:HookScript("OnShow", F.ReskinTooltip)

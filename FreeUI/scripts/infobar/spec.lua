@@ -75,6 +75,14 @@ function module:SpecTalent()
 				self.Text:SetFont(C.font.normal, 11)
 			end
 
+			if (C.Client == 'zhCN' or C.Client == 'zhTW') then
+				if C.general.isDeveloper then
+					self.Text:SetFont(C.font.pixelCN, 10, 'OUTLINEMONOCHROME')
+				else
+					self.Text:SetFont(C.font.normal, 11)
+				end
+			end
+
 			module:showButton(self)
 
 		else

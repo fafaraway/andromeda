@@ -15,6 +15,7 @@ local defaultSettings = {
 
 local accountSettings = {
 	totalGold = {},
+	keystoneInfo = {},
 }
 
 local function InitialSettings(source, target)

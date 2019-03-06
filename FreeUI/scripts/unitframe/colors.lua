@@ -1,14 +1,21 @@
-local F, C, L = unpack(select(2, ...))
 local _, ns = ...
-if not C.unitframe.enable then return end
-local oUF = ns.oUF
-local module = F:GetModule("Unitframe")
+local F, C, L = unpack(select(2, ...))
 
---oUF.colors.smooth = {1, 0, 0, .85, .8, .45, .1, .1, .1}
+if not C.unitframe.enable then return end
+
+local module = F:GetModule("Unitframe")
+local oUF = ns.oUF
+
 oUF.colors.power.MANA = {100/255, 149/255, 237/255}
 oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }
 oUF.colors.power.PAIN = { 255/255, 156/255, 0 }
+
+oUF.colors.runes = {
+	{151/255, 25/255, 0}, 			-- Blood
+	{193/255, 219/255, 233/255}, 	-- Frost
+	{98/255, 153/255, 51/255}, 		-- Unholy
+}
 
 oUF.colors.debuffType = {
 	Curse = {.8, 0, 1},

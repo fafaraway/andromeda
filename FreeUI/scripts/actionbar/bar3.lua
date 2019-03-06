@@ -1,11 +1,13 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
-local cfg = C.actionbar
-cfg.buttonSizeNormal = cfg.buttonSizeNormal*C.Mult
-cfg.padding = cfg.padding*C.Mult
-cfg.margin = cfg.margin*C.Mult
+local Bar = F:GetModule("Actionbar")
+
 
 function Bar:CreateBar3()
+	local cfg = C.actionbar
+	local buttonSize = cfg.buttonSizeNormal*C.Mult
+	local padding = cfg.padding*C.Mult
+	local margin = cfg.margin*C.Mult
+
 	local num = NUM_ACTIONBAR_BUTTONS
 	local buttonList = {}
 
@@ -13,11 +15,11 @@ function Bar:CreateBar3()
 	local frame = CreateFrame("Frame", "FreeUI_ActionBar3", UIParent, "SecureHandlerStateTemplate")
 
 	if cfg.layoutStyle == 2 then
-		frame:SetWidth(18*cfg.buttonSizeNormal + 17*cfg.margin + 2*cfg.padding)
-		frame:SetHeight(2*cfg.buttonSizeNormal + cfg.margin + 2*cfg.padding)
+		frame:SetWidth(18*buttonSize + 17*margin + 2*padding)
+		frame:SetHeight(2*buttonSize + margin + 2*padding)
 	else
-		frame:SetWidth(num*cfg.buttonSizeNormal + (num-1)*cfg.margin + 2*cfg.padding)
-		frame:SetHeight(cfg.buttonSizeNormal + 2*cfg.padding)
+		frame:SetWidth(num*buttonSize + (num-1)*margin + 2*padding)
+		frame:SetHeight(buttonSize + 2*padding)
 	end
 
 	frame:SetScale(1)
@@ -44,22 +46,22 @@ function Bar:CreateBar3()
 	for i = 1, num do
 		local button = _G["MultiBarBottomRightButton"..i]
 		table.insert(buttonList, button) --add the button object to the list
-		button:SetSize(cfg.buttonSizeNormal, cfg.buttonSizeNormal)
+		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("TOPLEFT", frame, cfg.padding, -cfg.padding)
+			button:SetPoint("TOPLEFT", frame, padding, -padding)
 		elseif (i == 4 and cfg.layoutStyle == 2) then
 			local previous = _G["MultiBarBottomRightButton1"]
-			button:SetPoint("TOP", previous, "BOTTOM", 0, -cfg.margin)
+			button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
 		elseif (i == 7 and cfg.layoutStyle == 2) then
 			local previous = _G["MultiBarBottomRightButton3"]
-			button:SetPoint("LEFT", previous, "RIGHT", 12*cfg.buttonSizeNormal+13*cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", 12*buttonSize+13*margin, 0)
 		elseif (i == 10 and cfg.layoutStyle == 2) then
 			local previous = _G["MultiBarBottomRightButton7"]
-			button:SetPoint("TOP", previous, "BOTTOM", 0, -cfg.margin)
+			button:SetPoint("TOP", previous, "BOTTOM", 0, -margin)
 		else
 			local previous = _G["MultiBarBottomRightButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", cfg.margin, 0)
+			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
 		end
 	end
 

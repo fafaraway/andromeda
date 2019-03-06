@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
+local Bar = F:GetModule("Actionbar")
 local cfg = C.actionbar
 
 function Bar:CreateExtrabar()
@@ -9,8 +9,8 @@ function Bar:CreateExtrabar()
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_ExtraActionBar", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*cfg.buttonSizeHuge + (num-1)*cfg.margin + 2*cfg.padding)
-	frame:SetHeight(cfg.buttonSizeHuge + 2*cfg.padding)
+	frame:SetWidth(num*cfg.buttonSizeHuge + (num-1)*cfg.margin*C.Mult + 2*cfg.padding*C.Mult)
+	frame:SetHeight(cfg.buttonSizeHuge*C.Mult + 2*cfg.padding*C.Mult)
 	frame:SetPoint(unpack(C.actionbar.extraButtonPos))
 	frame:SetScale(1)
 
@@ -24,7 +24,7 @@ function Bar:CreateExtrabar()
 	--the extra button
 	local button = ExtraActionButton1
 	table.insert(buttonList, button) --add the button object to the list
-	button:SetSize(cfg.buttonSizeHuge, cfg.buttonSizeHuge)
+	button:SetSize(cfg.buttonSizeHuge*C.Mult, cfg.buttonSizeHuge*C.Mult)
 
 	--show/hide the frame on a given state driver
 	frame.frameVisibility = "[extrabar] show; hide"
@@ -38,7 +38,7 @@ function Bar:CreateExtrabar()
 	ZoneAbilityFrame:SetPoint(unpack(C.actionbar.zoneAbilityPos))
 
 	local spellButton = ZoneAbilityFrame.SpellButton
-	spellButton:SetSize(cfg.buttonSizeHuge, cfg.buttonSizeHuge)
+	spellButton:SetSize(cfg.buttonSizeHuge*C.Mult, cfg.buttonSizeHuge*C.Mult)
 	spellButton.Style:SetAlpha(0)
 	spellButton.Icon:SetTexCoord(unpack(C.TexCoord))
 	spellButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)

@@ -1,17 +1,19 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
-local cfg = C.actionbar
-cfg.padding = cfg.padding*C.Mult
-cfg.margin = cfg.margin*C.Mult
+local Bar = F:GetModule("Actionbar")
+
 
 function Bar:CreateLeaveVehicle()
+	local cfg = C.actionbar
+	local padding = cfg.padding*C.Mult
+	local margin = cfg.margin*C.Mult
+
 	local num = 1
 	local buttonList = {}
 
 	--create the frame to hold the buttons
 	local frame = CreateFrame("Frame", "FreeUI_LeaveVehicleBar", UIParent, "SecureHandlerStateTemplate")
-	frame:SetWidth(num*C.unitframe.player_height + (num-1)*cfg.margin + 2*cfg.padding)
-	frame:SetHeight(C.unitframe.player_height + 2*cfg.padding)
+	frame:SetWidth(num*C.unitframe.player_height + (num-1)*margin + 2*padding)
+	frame:SetHeight(C.unitframe.player_height + 2*padding)
 	--frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 100)
 	frame:SetScale(1)
 
@@ -21,7 +23,7 @@ function Bar:CreateLeaveVehicle()
 	table.insert(buttonList, button) --add the button object to the list
 
 	button:SetSize(C.unitframe.player_height*C.Mult, C.unitframe.player_height*C.Mult)
-	button:SetPoint("BOTTOMLEFT", frame, cfg.padding, cfg.padding)
+	button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 
 	button:RegisterForClicks("AnyUp")
 	button.icon:SetTexture(nil)

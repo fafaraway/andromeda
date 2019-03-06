@@ -14,7 +14,7 @@ button:SetWidth(128)
 button:SetHeight(25)
 F.Reskin(button)
 
-local text = F.CreateFS(button, 'pixel', nil, '', nil, nil, true, "CENTER", 0, 0)
+local text = F.CreateFS(button, 'pixel', '', nil, nil, true, "CENTER", 0, 0)
 
 local processing = false
 

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local Bar = F:GetModule("actionbars")
+local Bar = F:GetModule("Actionbar")
 
 local IsUsableAction = _G.IsUsableAction
 local IsActionInRange = _G.IsActionInRange

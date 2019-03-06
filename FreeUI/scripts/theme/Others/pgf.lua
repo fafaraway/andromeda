@@ -43,7 +43,6 @@ function module:ReskinPGF()
 		F.StripTextures(self.Advanced)
 		F.StripTextures(self.Expression)
 		F.CreateGradient(F.CreateBDFrame(self.Expression, .25))
-		F.ReskinCheck(UsePFGButton)
 
 		local names = {"Difficulty", "Ilvl", "Noilvl", "Defeated", "Members", "Tanks", "Heals", "Dps"}
 		for _, name in pairs(names) do
@@ -62,5 +61,6 @@ function module:ReskinPGF()
 
 		styled = true
 	end)
+	F.ReskinCheck(UsePFGButton)
 end
 
