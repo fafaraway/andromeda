@@ -21,7 +21,7 @@ holder:SetPoint('BOTTOM')
 holder:SetWidth(200)
 holder:SetPoint('CENTER')
 
-local text = F.CreateFS(holder, 'pixel', nil, '', nil, nil, true, 'CENTER', 0, 0)
+local text = F.CreateFS(holder, 'pixel', '', nil, nil, true, 'CENTER', 0, 0)
 text:SetTextColor(C.r, C.g, C.b)
 text:SetDrawLayer('OVERLAY')
 
