@@ -171,11 +171,11 @@ end
 local function UpdateUnitNameColour(self)
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' or self.unitStyle == 'boss' then
 		if (UnitIsUnit(self.unit, 'target')) then
-			self.Name:SetTextColor(.1, .7, 1)
+			self.Name:SetTextColor(95/255, 222/255, 215/255)
 		elseif UnitIsDead(self.unit) then
-			self.Name:SetTextColor(1, 0, 0)
+			self.Name:SetTextColor(216/255, 67/255, 67/255)
 		elseif UnitIsGhost(self.unit) then
-			self.Name:SetTextColor(.6, .3, .8)
+			self.Name:SetTextColor(189/255, 105/255, 190/255)
 		else
 			self.Name:SetTextColor(1, 1, 1)
 		end

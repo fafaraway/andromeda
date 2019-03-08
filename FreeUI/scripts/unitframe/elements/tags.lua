@@ -51,15 +51,23 @@ end
 
 
 
+tags['free:dead'] = function(unit)
+	if UnitIsDead(unit) then
+		return '|cffd84343Dead|r'
+	elseif UnitIsGhost(unit) then
+		return '|cffbd69beGhost|r'
+	end
+end
+tagEvents['free:dead'] = 'UNIT_HEALTH'
+
+tags['free:offline'] = function(unit)
+	if not UnitIsConnected(unit) then
+		return '|cffccccccOff|r'
+	end
+end
+tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 tags['free:name'] = function(unit)
-	--local reaction = oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
-
-
-	--return format("%s%s|r", reaction, status)
-
-	--if unit == 'target' then
-
 	if (unit == 'targettarget' and UnitIsUnit("targettarget", "player")) or (unit == 'focustarget' and UnitIsUnit("focustarget", "player")) then
 		return '|cffff0000> YOU <|r'
 	else
@@ -69,20 +77,10 @@ tags['free:name'] = function(unit)
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'
 
-
-
-
-
-
 tags['free:health'] = function(unit)
-	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
+	local cur = UnitHealth(unit)
 
-	local color = ns.oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
-	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-
-	return format('|cff%02x%02x%02x%s|r', color[1] * 255, color[2] * 255, color[3] * 255, ShortenValue(cur))
-	
-	--return ShortenValue(cur)
+	return ShortenValue(cur)
 end
 tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
 
@@ -129,7 +127,6 @@ tags['free:altpower'] = function(unit)
 	end
 end
 tagEvents['free:altpower'] = 'UNIT_POWER_UPDATE'
-
 
 tags['free:groupname'] = function(unit)
 	if cfg.showGroupName then
@@ -198,19 +195,19 @@ function module:AddHealthValue(self)
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
 	if self.unitStyle == 'player' then
-		self:Tag(healthValue, '[dead][free:health]')
+		self:Tag(healthValue, '[free:dead][free:health]')
 	elseif self.unitStyle == 'target' then
-		self:Tag(healthValue, '[dead][offline][free:health] [free:percentage]')
+		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:percentage]')
 	elseif self.unitStyle == 'boss' then
 		healthValue:ClearAllPoints()
 		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 		healthValue:SetJustifyH('RIGHT')
-		self:Tag(healthValue, '[dead][free:percentage]')
+		self:Tag(healthValue, '[free:dead][free:health] [free:percentage]')
 	elseif self.unitStyle == 'arena' then
 		healthValue:ClearAllPoints()
 		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 		healthValue:SetJustifyH('RIGHT')
-		self:Tag(healthValue, '[dead][offline][free:health]')
+		self:Tag(healthValue, '[free:dead][free:offline][free:health]')
 	end
 
 	self.HealthValue = healthValue

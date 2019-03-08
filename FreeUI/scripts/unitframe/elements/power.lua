@@ -33,8 +33,6 @@ function module:AddPowerBar(self)
 	power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
 	power:SetStatusBarTexture(C.media.sbTex)
 	power:SetHeight(cfg.power_height*C.Mult)
-
-	power.frequentUpdates = true
 	F.SmoothBar(power)
 
 	local line = power:CreateTexture(nil, 'OVERLAY')
@@ -62,6 +60,7 @@ function module:AddPowerBar(self)
 		power.colorPower = true
 	end
 
+	power.frequentUpdates = true
 	power.PostUpdate = PostUpdatePower
 	self.Power = power
 end

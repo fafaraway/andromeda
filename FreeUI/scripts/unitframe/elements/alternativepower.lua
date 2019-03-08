@@ -22,6 +22,13 @@ local function UpdateTooltip(altPower)
 	GameTooltip:Show()
 end
 
+local function OnValueChanged(_, value)
+	local min, max = altPower:GetMinMaxValues()
+	local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
+	altPower:SetStatusBarColor(r, g, b)
+	altPowerCount:SetTextColor(r, g, b)
+end
+
 local function PostUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local perc = math.floor((cur/max)*100)
@@ -50,8 +57,9 @@ function module:AddAlternativePower(self)
 
 	altPower.colorSmooth = true
 	altPower.UpdateTooltip = UpdateTooltip
-	altPower:SetScript('OnEnter', OnEnter)
+	altPower:HookScript('OnEnter', OnEnter)
+	altPower:HookScript('OnValueChanged', OnValueChanged)
 
 	self.AlternativePower = altPower
-	self.AlternativePower.PostUpdate = PostUpdateAltPower
+	--self.AlternativePower.PostUpdate = PostUpdateAltPower
 end

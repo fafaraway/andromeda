@@ -51,9 +51,9 @@ local function updateCastBarTicks(bar, numTicks)
 		for i = 1, numTicks do
 			if not ticks[i] then
 				ticks[i] = bar:CreateTexture(nil, 'OVERLAY')
-				ticks[i]:SetTexture(DB.normTex)
+				ticks[i]:SetTexture(C.media.sbTex)
 				ticks[i]:SetVertexColor(0, 0, 0, .7)
-				ticks[i]:SetWidth(C.mult)
+				ticks[i]:SetWidth(C.Mult)
 				ticks[i]:SetHeight(bar:GetHeight())
 			end
 			ticks[i]:ClearAllPoints()
