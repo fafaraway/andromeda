@@ -157,8 +157,8 @@ function module:AddNameText(self)
 	local name
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-			if cfg.showGroupName and C.general.isDeveloper then
+		if (C.Client == 'zhCN' or C.Client == 'zhTW') and cfg.showGroupName then
+			if C.general.isDeveloper then
 				name = F.CreateFS(self.Health, 'pixelhybrid', '', nil, nil, true)
 			else
 				name = F.CreateFS(self.Health, {C.font.normal, 11, 'OUTLINE'}, '', nil, nil, true)
