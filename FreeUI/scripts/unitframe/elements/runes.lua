@@ -64,5 +64,5 @@ function module:AddRunes(self)
 	runes.colorSpec = true
 	runes.sortOrder = 'asc'
 	runes.PostUpdate = PostUpdateRune
-	self.Runes = Runes
+	self.Runes = runes
 end
