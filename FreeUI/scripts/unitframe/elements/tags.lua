@@ -79,8 +79,9 @@ tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLA
 
 tags['free:health'] = function(unit)
 	local cur = UnitHealth(unit)
+	local r, g, b = unpack(ns.oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 
-	return ShortenValue(cur)
+	return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, ShortenValue(cur))
 end
 tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
 
