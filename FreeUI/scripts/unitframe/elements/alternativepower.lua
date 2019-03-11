@@ -1,7 +1,8 @@
+local _, ns = ...
 local F, C, L = unpack(select(2, ...))
 
 local module = F:GetModule('Unitframe')
-
+local oUF = ns.oUF
 local cfg = C.unitframe
 
 local format, min, max, floor = string.format, math.min, math.max, math.floor
@@ -22,22 +23,21 @@ local function UpdateTooltip(altPower)
 	GameTooltip:Show()
 end
 
-local function OnValueChanged(_, value)
-	local min, max = altPower:GetMinMaxValues()
-	local r, g, b = self.ColorGradient(value, max, unpack(self.colors.smooth))
-	altPower:SetStatusBarColor(r, g, b)
-	altPowerCount:SetTextColor(r, g, b)
-end
-
 local function PostUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
+		local self = element.__owner
+		local value = self.AlternativePower.value
 		local perc = math.floor((cur/max)*100)
+		
 		if perc < 35 then
 			element:SetStatusBarColor(0, 1, 0)
+			value:SetTextColor(0, 1, 0)
 		elseif perc < 70 then
 			element:SetStatusBarColor(1, 1, 0)
+			value:SetTextColor(1, 1, 0)
 		else
 			element:SetStatusBarColor(1, 0, 0)
+			value:SetTextColor(1, 0, 0)
 		end
 	end
 end
@@ -51,15 +51,13 @@ function module:AddAlternativePower(self)
 	F.SmoothBar(altPower)
 	altPower.bg = F.CreateBDFrame(altPower)
 
-	local altPowerCount = F.CreateFS(altPower, 'pixel', '', 'CENTER', nil, true)
-	altPowerCount:SetPoint('BOTTOM', self, 'TOP', 0, 3)
-	self:Tag(altPowerCount, '[free:altpower]')
+	altPower.value = F.CreateFS(altPower, 'pixel', '', 'CENTER', nil, true)
+	altPower.value:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+	self:Tag(altPower.value, '[free:altpower]')
 
-	altPower.colorSmooth = true
 	altPower.UpdateTooltip = UpdateTooltip
-	altPower:HookScript('OnEnter', OnEnter)
-	altPower:HookScript('OnValueChanged', OnValueChanged)
+	altPower:SetScript('OnEnter', OnEnter)
 
 	self.AlternativePower = altPower
-	--self.AlternativePower.PostUpdate = PostUpdateAltPower
+	self.AlternativePower.PostUpdate = PostUpdateAltPower
 end

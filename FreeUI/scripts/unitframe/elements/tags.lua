@@ -78,6 +78,8 @@ end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'
 
 tags['free:health'] = function(unit)
+	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
+	
 	local cur = UnitHealth(unit)
 	local r, g, b = unpack(ns.oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 
@@ -221,6 +223,9 @@ function module:AddPowerValue(self)
 	if self.unitStyle == 'target' then
 		powerValue:ClearAllPoints()
 		powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
+	elseif self.unitStyle == 'boss' then
+		powerValue:ClearAllPoints()
+		powerValue:SetPoint('BOTTOM', self, 'TOP', 0, 3)
 	end
 
 	self:Tag(powerValue, '[powercolor][free:power]')

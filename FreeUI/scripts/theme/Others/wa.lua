@@ -27,14 +27,16 @@ local function ReskinWA()
 		elseif fType == "aurabar" then
 			if not f.styled then
 				local barbg = F.CreateBDFrame(f.bar, 0)
-				F.CreateSD(barbg)
+				local barglow = F.CreateSD(barbg, .35)
 
-				f.icon:SetTexCoord(unpack(C.TexCoord))
-				f.icon.SetTexCoord = F.Dummy
-				
-				local iconbg = F.CreateBDFrame(f.iconFrame, 0)
-				F.CreateSD(iconbg)
-				f.iconFrame:SetAllPoints(f.icon)
+				if f.icon then
+					f.icon:SetTexCoord(unpack(C.TexCoord))
+					f.icon.SetTexCoord = F.Dummy
+					
+					local iconbg = F.CreateBDFrame(f.iconFrame, 0)
+					F.CreateSD(iconbg)
+					f.iconFrame:SetAllPoints(f.icon)
+				end
 				
 				f.styled = true
 			end

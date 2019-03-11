@@ -121,7 +121,7 @@ function F:CreateBD(a)
 	F.CreateTex(self)
 end
 
-function F:CreateBG(offset)
+function F:CreateBG(offset, a)
 	local f = self
 	if self:GetObjectType() == 'Texture' then f = self:GetParent() end
 	offset = offset or C.Mult
@@ -130,7 +130,7 @@ function F:CreateBG(offset)
 	bg:SetPoint('TOPLEFT', self, -offset, offset)
 	bg:SetPoint('BOTTOMRIGHT', self, offset, -offset)
 	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0, 1)
+	bg:SetVertexColor(0, 0, 0, a or 1)
 
 	return bg
 end
@@ -788,7 +788,7 @@ end
 
 function F:CreateCheckBox()
 	local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
-	F.CreateCB(cb)
+	F.CreateCB(cb, .5)
 
 	cb.Type = 'CheckBox'
 	return cb
@@ -863,8 +863,8 @@ function F:CreateCB(a)
 	hl:SetPoint('BOTTOMRIGHT', -5, 5)
 	hl:SetVertexColor(r, g, b, .25)
 
-	local bd = F.CreateBGAlt(self, -4)
-	F.CreateBD(bd, a)
+	local bd = F.CreateBG(self, -4, a)
+	--F.CreateBD(bd, a)
 
 	local ch = self:GetCheckedTexture()
 	ch:SetDesaturated(true)
