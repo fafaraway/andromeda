@@ -104,8 +104,10 @@ local function AddMissingBuffs(cfg)
 	local frame = CreateFrame('Frame', nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
-	frame.glow = F.CreateSD(frame)
-	frame.glow:SetBackdropBorderColor(1, 1, 1, .65, 3, 3)
+	frame.glow = F.CreateSD(frame, .5, 3, 3)
+	if frame.glow then
+		frame.glow:SetBackdropBorderColor(1, 1, 1)
+	end
 	for spell in pairs(cfg.spells) do
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break

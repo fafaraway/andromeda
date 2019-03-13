@@ -12,15 +12,17 @@ local function ReskinWA()
 				f.icon.SetTexCoord = F.Dummy
 
 				local bg = F.CreateBDFrame(f, 0)
-				local sd = F.CreateSD(bg, .35, 3, 3)
+				local glow = F.CreateSD(bg, .35, 3, 3)
 
 				bg:HookScript("OnUpdate", function(self)
 					self:SetAlpha(self:GetParent():GetAlpha())
 				end)
 
-				sd:HookScript("OnUpdate", function(self)
-					self:SetAlpha(self:GetParent():GetAlpha())
-				end)
+				if glow then
+					glow:HookScript("OnUpdate", function(self)
+						self:SetAlpha(self:GetParent():GetAlpha())
+					end)
+				end
 
 				f.styled = true
 			end

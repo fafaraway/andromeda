@@ -211,10 +211,11 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	iconBG:SetTexture(C.media.backdrop)
 	iconBG:SetVertexColor(0, 1, 0)
 
-	F.CreateSD(iconBG)
+	iconBG.glow = F.CreateSD(iconBG, .5, 3, 3)
 
 	if iconBG.glow then
 		iconBG.glow:SetFrameLevel(self:GetFrameLevel())
+		iconBG.glow:SetBackdropBorderColor(0, 1, 0, .5)
 	end
 	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
 	self.HL:SetColorTexture(1, 1, 1, .25)
