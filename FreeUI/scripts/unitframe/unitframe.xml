@@ -1,7 +1,6 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='utility.lua'/>
 	<Script file='colors.lua'/>
-	<!-- <Script file='elements\custom\castbar.lua'/> -->
 	<Script file='elements\custom\dispellable.lua'/>
 	<Script file='elements\custom\spellrange.lua'/>
 	<Script file='elements\alternativepower.lua'/>

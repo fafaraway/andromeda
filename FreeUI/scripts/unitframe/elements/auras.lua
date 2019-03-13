@@ -1,6 +1,8 @@
 local _, ns = ...
 local F, C, L = unpack(select(2, ...))
 
+if not C.unitframe.enable then return end
+
 local module = F:GetModule('Unitframe')
 
 local cfg = C.unitframe

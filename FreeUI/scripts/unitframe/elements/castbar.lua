@@ -1,6 +1,8 @@
 local _, ns = ...
 local F, C, L = unpack(select(2, ...))
 
+if not C.unitframe.enable then return end
+
 local module, cfg = F:GetModule('Unitframe'), C.unitframe
 
 local unpack, GetTime, IsPlayerSpell = unpack, GetTime, IsPlayerSpell
@@ -162,18 +164,22 @@ local function PostCastStart(self, unit)
 	end
 
 	if self.iconGlow then
-		if self.notInterruptible then
-			self.iconGlow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .65)
-		else
-			self.iconGlow:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .65)
+		if self.iconGlow then
+			if self.notInterruptible then
+				self.iconGlow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .65)
+			else
+				self.iconGlow:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .65)
+			end
 		end
 	end
 
 	if (unit == 'player' and not C.unitframe.castbar_separatePlayer) or (unit == 'target' and not C.unitframe.castbar_separateTarget) then
-		if self.notInterruptible then
-			self.Glow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .5)
-		else
-			self.Glow:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
+		if self.Glow then
+			if self.notInterruptible then
+				self.Glow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .5)
+			else
+				self.Glow:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .5)
+			end
 		end
 	end
 

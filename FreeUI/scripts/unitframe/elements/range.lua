@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
-local module = F:GetModule('Unitframe')
+if not C.unitframe.enable then return end
 
-local cfg = C.unitframe
+local module, cfg = F:GetModule('Unitframe'), C.unitframe
 
 
 function module:AddRangeCheck(self)
