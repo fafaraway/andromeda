@@ -485,7 +485,7 @@ function module:OnLogin()
 		self:SetNormalTexture(nil)
 		self:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		self:SetPushedTexture(nil)
-		self:SetCheckedTexture(nil)
+		--self:SetCheckedTexture(nil)
 
 		self:SetSize(iconSize, iconSize)
 
@@ -500,11 +500,11 @@ function module:OnLogin()
 		local quality = id and select(3, GetItemInfo(id)) or 0
 		if quality == 1 then quality = 0 end
 		local color = BAG_ITEM_QUALITY_COLORS[quality]
-		if self:GetChecked() then
-			self.BG:SetVertexColor(color.r, color.g, color.b)
-		else
-			self.BG:SetVertexColor(0, 0, 0)
-		end
+		--if self:GetChecked() then
+		--	self.BG:SetVertexColor(color.r, color.g, color.b)
+		--else
+		--	self.BG:SetVertexColor(0, 0, 0)
+		--end
 	end
 
 	-- Fixes

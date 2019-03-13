@@ -52,7 +52,7 @@ function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
 	local isBankBag = (bagID>=5 and bagID<=11)
-	local button = setmetatable(CreateFrame("CheckButton", name, nil, (isBankBag and "BankItemButtonBagTemplate") or "ItemButtonTemplate"), self.__index)
+	local button = _G.setmetatable(_G.CreateFrame("ItemButton", name, nil), self.__index)
 
 	local invID = (isBankBag and (bagID-4)) or ContainerIDToInventoryID(bagID)
 	button.invID = invID
@@ -62,7 +62,13 @@ function BagButton:Create(bagID)
 
 	button:RegisterForDrag("LeftButton", "RightButton")
 	button:RegisterForClicks("anyUp")
-	button:SetCheckedTexture(self.checkedTex, "ADD")
+
+	local checked = button:CreateTexture(nil, "OVERLAY")
+	checked:SetTexture(self.checkedTex)
+	checked:SetVertexColor(1, 0.8, 0, 0.8)
+	checked:SetBlendMode("ADD")
+	checked:SetAllPoints()
+	button.checked = checked
 
 	button:SetSize(37, 37)
 
@@ -79,6 +85,10 @@ function BagButton:Create(bagID)
 	return button
 end
 
+function BagButton:GetBagID()
+	return self.bagID
+end
+
 function BagButton:Update()
 	local icon = GetInventoryItemTexture("player", (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
 	self.Icon:SetTexture(icon or self.bgTex)
@@ -87,14 +97,14 @@ function BagButton:Update()
 	if(self.bagID > NUM_BAG_SLOTS) then
 		if(self.bagID-NUM_BAG_SLOTS <= GetNumBankSlots()) then
 			self.Icon:SetVertexColor(1, 1, 1)
-			self.notBought = nil
+			self.notBought = false
 		else
 			self.notBought = true
 			self.Icon:SetVertexColor(1, 0, 0)
 		end
 	end
 
-	self:SetChecked(not self.hidden and not self.notBought)
+	self.checked:SetShown(not self.hidden and not self.notBought)
 
 	if(self.OnUpdate) then self:OnUpdate() end
 end
@@ -143,7 +153,7 @@ end
 
 function BagButton:OnClick()
 	if(self.notBought) then
-		self:SetChecked(nil)
+		self.checked:Hide()
 		BankFrame.nextSlotCost = GetBankSlotCost(GetNumBankSlots())
 		return StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
 	end
