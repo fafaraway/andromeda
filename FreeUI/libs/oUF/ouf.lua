@@ -1,6 +1,6 @@
 local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-oUF')
-local _VERSION = '9.0.1'
+local _VERSION = '9.1.0'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
 end
@@ -61,7 +61,7 @@ local function updateActiveUnit(self, event, unit)
 	if(not UnitExists(modUnit)) then return end
 
 	-- Change the active unit and run a full update.
-	if Private.UpdateUnits(self, modUnit, realUnit) then
+	if(Private.UpdateUnits(self, modUnit, realUnit)) then
 		self:UpdateAllElements('RefreshUnit')
 
 		return true
@@ -248,6 +248,15 @@ local function updatePet(self, event, unit)
 	end
 end
 
+local function updateRaid(self, event)
+	local unitGUID = UnitGUID(self.unit)
+	if(unitGUID and unitGUID ~= self.unitGUID) then
+		self.unitGUID = unitGUID
+
+		self:UpdateAllElements(event)
+	end
+end
+
 local function initObject(unit, style, styleFunc, header, ...)
 	local num = select('#', ...)
 	for i = 1, num do
@@ -274,7 +283,6 @@ local function initObject(unit, style, styleFunc, header, ...)
 		if(not (suffix == 'target' or objectUnit and objectUnit:match('target'))) then
 			object:RegisterEvent('UNIT_ENTERED_VEHICLE', updateActiveUnit)
 			object:RegisterEvent('UNIT_EXITED_VEHICLE', updateActiveUnit)
-			object:RegisterEvent('UNIT_EXITING_VEHICLE', updateActiveUnit)
 
 			-- We don't need to register UNIT_PET for the player unit. We register it
 			-- mainly because UNIT_EXITED_VEHICLE and UNIT_ENTERED_VEHICLE doesn't always
@@ -301,8 +309,9 @@ local function initObject(unit, style, styleFunc, header, ...)
 				oUF:HandleUnit(object)
 			end
 		else
-			-- Used to update frames when they change position in a group.
-			object:RegisterEvent('GROUP_ROSTER_UPDATE', object.UpdateAllElements, true)
+			-- update the frame when its prev unit is replaced with a new one
+			-- updateRaid relies on UnitGUID to detect the unit change
+			object:RegisterEvent('GROUP_ROSTER_UPDATE', updateRaid, true)
 
 			if(num > 1) then
 				if(object:GetParent() == header) then
@@ -617,7 +626,7 @@ do
 		local name = overrideName or generateName(nil, ...)
 		local header = CreateFrame('Frame', name, PetBattleFrameHider, template)
 
-		header:SetAttribute('template', 'oUF_ClickCastUnitTemplate')
+		header:SetAttribute('template', 'SecureUnitButtonTemplate, SecureHandlerStateTemplate, SecureHandlerEnterLeaveTemplate')
 		for i = 1, select('#', ...), 2 do
 			local att, val = select(i, ...)
 			if(not att) then break end
@@ -633,6 +642,35 @@ do
 
 		-- We set it here so layouts can't directly override it.
 		header:SetAttribute('initialConfigFunction', initialConfigFunction)
+		header:SetAttribute('_initialAttributeNames', '_onenter,_onleave,refreshUnitChange,_onstate-vehicleui')
+		header:SetAttribute('_initialAttribute-_onenter', [[
+			local snippet = self:GetAttribute('clickcast_onenter')
+			if(snippet) then
+				self:Run(snippet)
+			end
+		]])
+		header:SetAttribute('_initialAttribute-_onleave', [[
+			local snippet = self:GetAttribute('clickcast_onleave')
+			if(snippet) then
+				self:Run(snippet)
+			end
+		]])
+		header:SetAttribute('_initialAttribute-refreshUnitChange', [[
+			local unit = self:GetAttribute('unit')
+			if(unit) then
+				RegisterStateDriver(self, 'vehicleui', '[@' .. unit .. ',unithasvehicleui]vehicle; novehicle')
+			else
+				UnregisterStateDriver(self, 'vehicleui')
+			end
+		]])
+		header:SetAttribute('_initialAttribute-_onstate-vehicleui', [[
+			local unit = self:GetAttribute('unit')
+			if(newstate == 'vehicle' and unit and UnitPlayerOrPetInRaid(unit) and not UnitTargetsVehicleInRaidUI(unit)) then
+				self:SetAttribute('toggleForVehicle', false)
+			else
+				self:SetAttribute('toggleForVehicle', true)
+			end
+		]])
 		header:SetAttribute('oUF-headerType', isPetHeader and 'pet' or 'group')
 
 		if(Clique) then
