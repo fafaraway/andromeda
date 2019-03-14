@@ -85,22 +85,18 @@ function module:AddhealthBar(self)
 		health.bg:SetPoint('LEFT', health:GetStatusBarTexture(), 'RIGHT')
 	else
 		health.bg:SetAllPoints(health)
-		health.bg.multiplier = .1
+		health.bg.multiplier = .2
 	end
 
-	--if cfg.transMode then
-	--	health:SetStatusBarColor(0, 0, 0, .4)
-	--else
-		health.colorDisconnected = true
-		health.colorTapping = true
+	health.colorDisconnected = true
+	health.colorTapping = true
 
-		if cfg.classColour then
-			health.colorClass = true
-			health.colorReaction = true
-		else
-			health.colorSmooth = true
-		end
-	--end
+	if cfg.classColour then
+		health.colorClass = true
+		health.colorReaction = true
+	else
+		health.colorSmooth = true
+	end
 
 	health.frequentUpdates = true
 	F.SmoothBar(health)

@@ -239,10 +239,10 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	Cooldown:Hide()
 	self.Cooldown = Cooldown
 
-	local Artwork = self:CreateTexture("$parentArtwork", "ARTWORK")
+	local Artwork = self:CreateTexture("$parentArtwork", "OVERLAY")
 	Artwork:SetPoint("BOTTOMLEFT", -1, -3)
 	Artwork:SetSize(20, 20)
-	Artwork:SetTexture("Interface\\BUTTONS\\AdventureGuideMicrobuttonAlert")
+	Artwork:SetAtlas("adventureguide-microbutton-alert")
 	self.Artwork = Artwork
 
 	self:RegisterEvent("UPDATE_BINDINGS")

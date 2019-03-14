@@ -31,12 +31,6 @@ tinsert(C.themes["FreeUI"], function()
 		IMECandidatesFrame,
 	}
 
-	if not C.isNewPatch then
-		tinsert(tooltips, WorldMapTooltip)
-		tinsert(tooltips, WorldMapCompareTooltip1)
-		tinsert(tooltips, WorldMapCompareTooltip2)
-	end
-
 	for _, f in pairs(tooltips) do
 		f:HookScript("OnShow", F.ReskinTooltip)
 	end

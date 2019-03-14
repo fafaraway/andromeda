@@ -99,11 +99,7 @@ tinsert(C.themes["FreeUI"], function()
 		-- also fires for bag slots, we don't want that
 		if button.popoutButton then
 			button.IconBorder:SetTexture(C.media.backdrop)
-			if C.isNewPatch then
-				button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
-			else
-				button.icon:SetShown(button.hasItem)
-			end
+			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
 			colourPopout(button.popoutButton)
 		end
 	end)
@@ -170,9 +166,6 @@ tinsert(C.themes["FreeUI"], function()
 	F.ReskinScroll(PaperDollTitlesPaneScrollBar)
 	F.ReskinScroll(PaperDollEquipmentManagerPaneScrollBar)
 	F.StripTextures(PaperDollSidebarTabs)
-	if not C.isNewPatch then
-		PaperDollEquipmentManagerPaneEquipSet.ButtonBackground:Hide()
-	end
 	F.Reskin(PaperDollEquipmentManagerPaneEquipSet)
 	F.Reskin(PaperDollEquipmentManagerPaneSaveSet)
 
