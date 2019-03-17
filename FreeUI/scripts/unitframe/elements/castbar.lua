@@ -208,7 +208,7 @@ local function PostUpdateInterruptible(self, unit)
 end
 
 local function PostCastStop(self)
-	if not self.fadeOut then 
+	if not self.fadeOut then
 		self:SetStatusBarColor(unpack(self.CompleteColor))
 		self.fadeOut = true
 	end

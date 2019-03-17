@@ -1,10 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
--- Fix patch 27326
-do
-	GuildControlUIRankSettingsFrameRosterLabel = CreateFrame("Frame", nil, F.HiddenFrame)
-end
-
 
 -- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeCommunitiesTaint
 do

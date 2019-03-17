@@ -1,8 +1,14 @@
 ﻿local F, C, L = unpack(select(2, ...))
-if not C.inventory.enable then return end
-local cargBags = FreeUI.cargBags
 
+if not C.inventory.enable then return end
+
+local _, ns = ...
+local cargBags = ns.cargBags
 local module = F:GetModule("Inventory")
+
+local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY
+local LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_CONSUMABLE, LE_ITEM_CLASS_ITEM_ENHANCEMENT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
+local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 
 -- Custom filter
 local CustomFilterList = {
@@ -35,7 +41,7 @@ end
 local function isAzeriteArmor(item)
 	if not C.inventory.useCategory then return end
 	if not item.link then return end
-	return C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID(item.link) and not (C.inventory.gearSetFilter and item.isInSet)
+	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (C.inventory.gearSetFilter and item.isInSet)
 end
 
 local function isItemEquipment(item)
