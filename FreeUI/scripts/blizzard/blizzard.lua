@@ -17,7 +17,7 @@ end
 
 -- reposition alert popup
 function module:PositionAlert()
-	if C.general.alert then return end
+	if not C.general.alert then return end
 	local function alertFrameMover(self, ...)
 		_G.AlertFrame:ClearAllPoints()
 		_G.AlertFrame:SetPoint(unpack(C.general.alert_Position))
