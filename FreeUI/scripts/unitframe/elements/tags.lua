@@ -204,7 +204,7 @@ function module:AddHealthValue(self)
 		healthValue:ClearAllPoints()
 		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 		healthValue:SetJustifyH('RIGHT')
-		self:Tag(healthValue, '[free:dead][free:health] [free:percentage]')
+		self:Tag(healthValue, '[free:dead][free:health]')
 	elseif self.unitStyle == 'arena' then
 		healthValue:ClearAllPoints()
 		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -213,6 +213,14 @@ function module:AddHealthValue(self)
 	end
 
 	self.HealthValue = healthValue
+end
+
+function module:AddHealthPercentage(self)
+	local healthPercentage = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
+	healthPercentage:SetPoint('LEFT', self, 'RIGHT', 4, 0)
+
+	self:Tag(healthPercentage, '[free:percentage]')
+	self.HealthPercentage = healthPercentage
 end
 
 function module:AddPowerValue(self)
@@ -224,7 +232,7 @@ function module:AddPowerValue(self)
 		powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
 	elseif self.unitStyle == 'boss' then
 		powerValue:ClearAllPoints()
-		powerValue:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+		powerValue:SetPoint('BOTTOMRIGHT', self.HealthValue, 'BOTTOMLEFT', -4, 0)
 	end
 
 	self:Tag(powerValue, '[powercolor][free:power]')

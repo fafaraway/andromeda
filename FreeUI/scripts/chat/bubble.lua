@@ -33,7 +33,7 @@ local function styleBubble(frame)
 	})
 
 	frame:SetClampedToScreen(false)
-	frame:SetBackdropColor(0, 0, 0, .75)
+	frame:SetBackdropColor(0, 0, 0, .5)
 	frame:SetBackdropBorderColor(0, 0, 0)
 
 	frame:SetScale(_G.UIParent:GetScale())

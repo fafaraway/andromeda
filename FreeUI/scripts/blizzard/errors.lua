@@ -29,8 +29,17 @@ secondErrorFrame:SetFrameLevel(30)
 
 
 if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-	firstErrorFrame.text = F.CreateFS(firstErrorFrame, {C.font.normal, 13, 'OUTLINE'}, '', nil, nil, true)
-	secondErrorFrame.text = F.CreateFS(firstErrorFrame, {C.font.normal, 13, 'OUTLINE'}, '', nil, nil, true)
+	if C.general.isDeveloper then
+		firstErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixelhybrid', '', nil, nil, true)
+		secondErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixelhybrid', '', nil, nil, true)
+	else
+		firstErrorFrame.text = F.CreateFS(firstErrorFrame, {C.font.normal, 13}, '', nil, nil)
+		firstErrorFrame.text:SetShadowColor(0, 0, 0, 1)
+		firstErrorFrame.text:SetShadowOffset(2, -2)
+		secondErrorFrame.text = F.CreateFS(firstErrorFrame, {C.font.normal, 13}, '', nil, nil)
+		secondErrorFrame.text:SetShadowColor(0, 0, 0, 1)
+		secondErrorFrame.text:SetShadowOffset(2, -2)
+	end
 else
 	firstErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixel', '', nil, nil, true)
 	secondErrorFrame.text = F.CreateFS(firstErrorFrame, 'pixel', '', nil, nil, true)

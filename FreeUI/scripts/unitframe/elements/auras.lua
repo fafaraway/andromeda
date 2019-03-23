@@ -11,307 +11,49 @@ local myClass = C.Class
 local format, min, max, floor, mod, pairs = string.format, math.min, math.max, math.floor, mod, pairs
 
 
-local importantDebuffs = {
-	[  6788] = myClass == 'PRIEST',		-- Weakened Soul
-	[ 25771] = myClass == 'PALADIN',	-- Forbearance
+local ignoredDebuffs = {
+	[  6788] = myClass ~= 'PRIEST',		-- Weakened Soul
+	[ 25771] = myClass ~= 'PALADIN',	-- Forbearance
 
-	-- Mythic Dungeon
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[226512] = true,	-- 血池
-	[240447] = true,	-- 践踏
-	[288388] = true,	-- 夺魂
-
-	-- Siege of Boralus
-	[288694] = true,	-- 暗影碎击
-	[257169] = true,	-- 恐惧咆哮
-	[257168] = true,	-- 诅咒挥砍
-	[272588] = true,	-- 腐烂伤口
-	[272571] = true,	-- 窒息之水
-	[274991] = true,	-- 腐败之水
-	[275835] = true,	-- 钉刺之毒覆膜
-	[273930] = true,	-- 妨害切割
-	[257292] = true,	-- 沉重挥砍
-	[261428] = true,	-- 刽子手的套索
-	[256897] = true,	-- 咬合之颚
-	[272874] = true,	-- 践踏
-	[273470] = true,	-- 一枪毙命
-	[272834] = true,	-- 粘稠的口水
-	[272713] = true,	-- 碾压重击
-
-	-- The Underrot
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[278961] = true,	-- 衰弱意志
-	[265468] = true,	-- 枯萎诅咒
-	[259714] = true,	-- 腐烂孢子
-	[272180] = true,	-- 湮灭之球
-	[272609] = true,	-- 疯狂凝视
-	[269301] = true,	-- 腐败之血
-	[265533] = true,	-- 鲜血之喉
-	[265019] = true,	-- 狂野顺劈斩
-	[265377] = true,	-- 抓钩诱捕
-	[265625] = true,	-- 黑暗预兆
-	[260685] = true,	-- 戈霍恩之蚀
-	[266107] = true,	-- 嗜血成性
-	[260455] = true,	-- 锯齿利牙
-
-	-- Temple of Sethraliss
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[269686] = true,	-- 瘟疫
-	[268013] = true,	-- 烈焰震击
-	[268008] = true,	-- 毒蛇诱惑
-	[273563] = true,	-- 神经毒素
-	[272657] = true,	-- 毒性吐息
-	[267027] = true,	-- 细胞毒素
-	[272699] = true,	-- 毒性喷吐
-	[263371] = true,	-- 导电
-	[272655] = true,	-- 黄沙冲刷
-	[263914] = true,	-- 盲目之沙
-	[263958] = true,	-- 缠绕的蛇群
-	[266923] = true,	-- 充电
-	[268007] = true,	-- 心脏打击
-
-	-- Tol Dagor
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[260067] = true,	-- 恶毒槌击
-	[258128] = true,	-- 衰弱怒吼
-	[265889] = true,	-- 火把攻击
-	[257791] = true,	-- 恐惧咆哮
-	[258864] = true,	-- 火力压制
-	[257028] = true,	-- 点火器
-	[258917] = true,	-- 正义烈焰
-	[257777] = true,	-- 断筋剃刀
-	[258079] = true,	-- 巨口噬咬
-	[258058] = true,	-- 挤压
-	[260016] = true,	-- 瘙痒叮咬
-	[257119] = true,	-- 流沙陷阱
-	[258313] = true,	-- 手铐
-	[259711] = true,	-- 全面紧闭
-	[256201] = true,	-- 爆炎弹
-	[256101] = true,	-- 爆炸
-	[256044] = true,	-- 致命狙击
-	[256474] = true,	-- 竭心毒剂
-
-	-- The MOTHERLODE!!
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[263074] = true,	-- 溃烂撕咬
-	[280605] = true,	-- 脑部冻结
-	[257337] = true,	-- 电击之爪
-	[270882] = true,	-- 炽然的艾泽里特
-	[268797] = true,	-- 转化：敌人变粘液
-	[259856] = true,	-- 化学灼烧
-	[269302] = true,	-- 淬毒之刃
-	[280604] = true,	-- 冰镇汽水
-	[257371] = true,	-- 催泪毒气
-	[257544] = true,	-- 锯齿切割
-	[268846] = true,	-- 回声之刃
-	[262794] = true,	-- 能量鞭笞
-	[262513] = true,	-- 艾泽里特觅心者
-	[260829] = true,	-- 自控导弹
-	[260838] = true,	-- 自控导弹
-	[263637] = true,	-- 晾衣绳
-
-	-- Waycrest Manor
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[260741] = true,	-- 锯齿荨麻
-	[260703] = true,	-- 不稳定的符文印记
-	[263905] = true,	-- 符文劈斩
-	[265880] = true,	-- 恐惧印记
-	[265882] = true,	-- 萦绕恐惧
-	[264105] = true,	-- 符文印记
-	[264050] = true,	-- 被感染的荆棘
-	[261440] = true,	-- 恶性病原体
-	[263891] = true,	-- 缠绕荆棘
-	[264378] = true,	-- 碎裂灵魂
-	[266035] = true,	-- 碎骨片
-	[266036] = true,	-- 吸取精华
-	[260907] = true,	-- 灵魂操控
-	[264556] = true,	-- 刺裂打击
-	[265760] = true,	-- 荆棘弹幕
-	[260551] = true,	-- 灵魂荆棘
-	[263943] = true,	-- 蚀刻
-	[265881] = true,	-- 腐烂之触
-	[261438] = true,	-- 污秽攻击
-	[268202] = true,	-- 死亡棱镜
-	[268086] = true,	-- 恐怖光环
-
-	-- Freehold
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[258875] = true,	-- 眩晕酒桶
-	[274389] = true,	-- 捕鼠陷阱
-	[258323] = true,	-- 感染之伤
-	[257775] = true,	-- 瘟疫步
-	[257908] = true,	-- 浸油之刃
-	[257436] = true,	-- 毒性打击
-	[274555] = true,	-- 污染之咬
-	[256363] = true,	-- 裂伤拳
-	[281357] = true,	-- 水鼠啤酒
-	[278467] = true,	-- 腐蚀酒
-
-	-- Kings' Rest
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[265773] = true,	-- 吐金
-	[271640] = true,	-- 黑暗启示
-	[270492] = true,	-- 妖术
-	[267763] = true,	-- 恶疾排放
-	[276031] = true,	-- 深渊绝望
-	[270920] = true,	-- 诱惑
-	[270865] = true,	-- 隐秘刀刃
-	[271564] = true,	-- 防腐液
-	[270507] = true,	-- 毒幕
-	[267273] = true,	-- 毒性新星
-	[270003] = true,	-- 压制猛击
-	[270084] = true,	-- 飞斧弹幕
-	[267618] = true,	-- 排干体液
-	[267626] = true,	-- 干枯
-	[270487] = true,	-- 切裂之刃
-	[266238] = true,	-- 粉碎防御
-	[266231] = true,	-- 斩首之斧
-	[266191] = true,	-- 回旋飞斧
-	[272388] = true,	-- 暗影弹幕
-	[268796] = true,	-- 穿刺长矛
-	[270289] = true,	-- 净化光线
-
-	-- Atal'Dazar
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[252781] = true,	-- 不稳定的妖术
-	[250096] = true,	-- 毁灭痛苦
-	[253562] = true,	-- 野火
-	[255582] = true,	-- 熔化的黄金
-	[255041] = true,	-- 惊骇尖啸
-	[255371] = true,	-- 恐惧之面
-	[252687] = true,	-- 毒牙攻击
-	[254959] = true,	-- 灵魂燃烧
-	[255814] = true,	-- 撕裂重殴
-	[255421] = true,	-- 吞噬
-	[255434] = true,	-- 锯齿
-	[256577] = true,	-- 灵魂盛宴
-	[255558] = true,	-- 污血
-
-	-- Shrine of the Storm
-	[209858] = true,	-- 死疽
-	[240559] = true,	-- 重伤
-	[240443] = true,	-- 爆裂
-	[288388] = true,	-- 夺魂
-	[288694] = true,	-- 暗影碎击
-	[264560] = true,	-- 窒息海潮
-	[268233] = true,	-- 电化震击
-	[268322] = true,	-- 溺毙者之触
-	[268896] = true,	-- 心灵撕裂
-	[267034] = true,	-- 力量的低语
-	[276268] = true,	-- 沉重打击
-	[264166] = true,	-- 逆流
-	[264526] = true,	-- 深海之握
-	[274633] = true,	-- 碎甲重击
-	[268214] = true,	-- 割肉
-	[267818] = true,	-- 切割冲击
-	[268309] = true,	-- 无尽黑暗
-	[268317] = true,	-- 撕裂大脑
-	[268391] = true,	-- 心智突袭
-	[274720] = true,	-- 深渊打击
-	[267037] = true,	-- 力量的低语
-
-	-- Raid
-	-- Battle of Dazar'alor
-	[283573] = true,	-- 圣洁之刃，圣光勇士
-	[285671] = true,	-- 碾碎，丛林之王格洛恩
-	[285998] = true,	-- 凶狠咆哮
-	[285875] = true,	-- 撕裂噬咬
-	[283069] = true,	-- 原子烈焰
-	[286434] = true,	-- 死疽之核
-	[289406] = true,	-- 蛮兽压掷
-	[286988] = true,	-- 炽热余烬，玉火大师
-	[284374] = true,	-- 熔岩陷阱
-	[282037] = true,	-- 升腾之焰
-	[286379] = true,	-- 炎爆术
-	[285632] = true,	-- 追踪
-	[288151] = true,	-- 考验后遗症
-	[284089] = true,	-- 成功防御
-	[287424] = true,	-- 窃贼的报应，丰灵
-	[284527] = true,	-- 坚毅宝石
-	[284556] = true,	-- 暗影触痕
-	[284573] = true,	-- 顺风之力
-	[284664] = true,	-- 炽热
-	[284798] = true,	-- 极度炽热
-	[284802] = true,	-- 闪耀光环
-	[284817] = true,	-- 地之根系
-	[284881] = true,	-- 怒意释放
-	[283507] = true,	-- 爆裂充能
-	[287648] = true,	-- 爆裂充能
-	[287072] = true,	-- 液态黄金
-	[284424] = true,	-- 灼烧之地
-	[285014] = true,	-- 金币雨
-	[285479] = true,	-- 烈焰喷射
-	[283947] = true,	-- 烈焰喷射
-	[284470] = true,	-- 昏睡妖术
-	[282444] = true,	-- 裂爪猛击，神选者教团
-	[286838] = true,	-- 静电之球
-	[285879] = true,	-- 记忆清除
-	[282135] = true,	-- 恶意妖术
-	[282209] = true,	-- 掠食印记
-	[286821] = true,	-- 阿昆达的愤怒
-	[284831] = true,	-- 炽焰引爆，拉斯塔哈大王
-	[284662] = true,	-- 净化之印
-	[290450] = true,	-- 净化之印
-	[289858] = true,	-- 碾压
-	[284740] = true,	-- 重斧掷击
-	[284781] = true,	-- 重斧掷击
-	[285195] = true,	-- 寂灭凋零
-	[288449] = true,	-- 死亡之门
-	[284376] = true,	-- 死亡的存在
-	[285349] = true,	-- 赤焰瘟疫
-	[287147] = true,	-- 恐惧收割
-	[284168] = true,	-- 缩小，大工匠梅卡托克
-	[282182] = true,	-- 毁灭加农炮
-	[286516] = true,	-- 反干涉震击
-	[286480] = true,	-- 反干涉震击
-	[287167] = true,	-- 基因解组
-	[286105] = true,	-- 干涉
-	[286646] = true,	-- 千兆伏特充能
-	[285075] = true,	-- 冰封潮汐池，风暴之墙阻击战
-	[284121] = true,	-- 雷霆轰鸣
-	[285000] = true,	-- 海藻缠裹
-	[285350] = true,	-- 风暴哀嚎
-	[285426] = true,	-- 风暴哀嚎
-	[287490] = true,	-- 冻结，吉安娜
-	[287993] = true,	-- 寒冰之触
-	[285253] = true,	-- 寒冰碎片
-	[288394] = true,	-- 热量
-	[288212] = true,	-- 舷侧攻击
-	[288374] = true,	-- 破城者炮击
+	[ 57724] = true, 	-- Sated
+	[ 57723] = true,  	-- Exhaustion
+	[ 80354] = true,  	-- Temporal Displacement
+	[ 41425] = true,  	-- Hypothermia
+	[ 95809] = true,  	-- Insanity
+	[ 36032] = true,  	-- Arcane Blast
+	[ 26013] = true,  	-- Deserter
+	[ 95223] = true,  	-- Recently Mass Resurrected
+	[ 97821] = true,  	-- Void-Touched (death knight resurrect)
+	[ 36893] = true,  	-- Transporter Malfunction
+	[ 36895] = true,  	-- Transporter Malfunction
+	[ 36897] = true,  	-- Transporter Malfunction
+	[ 36899] = true,  	-- Transporter Malfunction
+	[ 36900] = true,  	-- Soul Split: Evil!
+	[ 36901] = true,  	-- Soul Split: Good
+	[ 25163] = true,  	-- Disgusting Oozeling Aura
+	[ 85178] = true,  	-- Shrink (Deviate Fish)
+	[  8064] = true,   	-- Sleepy (Deviate Fish)
+	[  8067] = true,   	-- Party Time! (Deviate Fish)
+	[ 24755] = true,  	-- Tricked or Treated (Hallow's End)
+	[ 42966] = true, 	-- Upset Tummy (Hallow's End)
+	[ 89798] = true, 	-- Master Adventurer Award (Maloriak kill title)
+	[  6788] = true,   	-- Weakened Soul
+	[ 92331] = true, 	-- Blind Spot (Jar of Ancient Remedies)
+	[ 71041] = true, 	-- Dungeon Deserter
+	[ 26218] = true,  	-- Mistletoe
+	[117870] = true,	-- Touch of the Titans
+	[173658] = true, 	-- Delvar Ironfist defeated
+	[173659] = true, 	-- Talonpriest Ishaal defeated
+	[173661] = true, 	-- Vivianne defeated
+	[173679] = true, 	-- Leorajh defeated
+	[173649] = true, 	-- Tormmok defeated
+	[173660] = true, 	-- Aeda Brightdawn defeated
+	[173657] = true, 	-- Defender Illona defeated
+	[206151] = true, 	-- 挑战者的负担
+	[260738] = true, 	-- 艾泽里特残渣
+	[279737] = true,	-- 准备作战 (海岛)
+	[264689] = true,	-- 疲倦
+	[289423] = true,	-- 死亡的重担
 }
 
 local importantBuffs = {
@@ -374,7 +116,6 @@ local importantBuffs = {
 
 	-- Demon Hunter
 	[196555] = true, 	-- 虚空行走
-	[188499] = true, 	-- 刃舞
 	[187827] = true, 	-- 恶魔变形 复仇
 	[209426] = true, 	-- 幻影打击
 	[212800] = true, 	-- 疾影
@@ -414,7 +155,7 @@ local importantBuffs = {
 	[202162] = true, 	-- 斗转星移
 
 	-- Mage
-	[45438] = true, 	-- 寒冰屏障
+	[ 45438] = true, 	-- 寒冰屏障
 	[198111] = true, 	-- 时光护盾
 	[113862] = true, 	-- 强化隐形术
 	[198065] = true, 	-- 陵彩屏障
@@ -551,7 +292,7 @@ end
 
 local function PostCreateIcon(element, button)
 	button.bg = F.CreateBG(button)
-	button.glow = F.CreateSD(button.bg)
+	button.glow = F.CreateSD(button.bg, .35, 2, 2)
 	
 	element.disableCooldown = true
 	button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -610,14 +351,14 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		button.bg:SetVertexColor(1, 1, 1)
 
 		if button.glow then
-			button.glow:SetBackdropBorderColor(1, 1, 1, .65)
+			button.glow:SetBackdropBorderColor(1, 1, 1, .5)
 		end
 	elseif button.isDebuff and element.showDebuffType then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		button.bg:SetVertexColor(color[1], color[2], color[3])
 
 		if button.glow then
-			button.glow:SetBackdropBorderColor(color[1], color[2], color[3], .65)
+			button.glow:SetBackdropBorderColor(color[1], color[2], color[3], .5)
 		end
 	elseif (style == 'party' or style == 'raid') and not button.isDebuff then
 		if button.glow then
@@ -627,7 +368,7 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		button.bg:SetVertexColor(0, 0, 0)
 
 		if button.glow then
-			button.glow:SetBackdropBorderColor(0, 0, 0, .65)
+			button.glow:SetBackdropBorderColor(0, 0, 0, .35)
 		end
 	end
 
@@ -677,7 +418,7 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 			return true
 		end
 	elseif style == 'party' or style == 'raid' then
-		if (button.isDebuff and importantDebuffs[spellID]) then
+		if (button.isDebuff and not ignoredDebuffs[spellID]) then
 			return true
 		elseif (button.isPlayer and classBuffs[myClass][spellID]) or (importantBuffs[spellID]) then
 			return true
@@ -760,7 +501,7 @@ end
 function module:AddBuffs(self)
 	local buffs = CreateFrame('Frame', nil, self)
 	buffs.initialAnchor = 'CENTER'
-	buffs:SetPoint('TOP', 0, -2)
+	--buffs:SetPoint('TOP', 0, -2)
 	buffs['growth-x'] = 'RIGHT'
 	buffs.spacing = 3
 	buffs.num = 3
@@ -769,10 +510,13 @@ function module:AddBuffs(self)
 		buffs.size = 18
 		buffs.PostUpdate = function(icons)
 			if icons.visibleBuffs == 3 then
+				buffs:ClearAllPoints()
 				buffs:SetPoint('TOP', -20, -2)
 			elseif icons.visibleBuffs == 2 then
+				buffs:ClearAllPoints()
 				buffs:SetPoint('TOP', -10, -2)
 			else
+				buffs:ClearAllPoints()
 				buffs:SetPoint('TOP', 0, -2)
 			end
 		end
@@ -780,10 +524,13 @@ function module:AddBuffs(self)
 		buffs.size = 12
 		buffs.PostUpdate = function(icons)
 			if icons.visibleBuffs == 3 then
+				buffs:ClearAllPoints()
 				buffs:SetPoint('TOP', -14, -2)
 			elseif icons.visibleBuffs == 2 then
+				buffs:ClearAllPoints()
 				buffs:SetPoint('TOP', -7, -2)
 			else
+				buffs:ClearAllPoints()
 				buffs:SetPoint('TOP', 0, -2)
 			end
 		end
@@ -822,8 +569,10 @@ function module:AddDebuffs(self)
 
 		debuffs.PostUpdate = function(icons)
 			if icons.visibleDebuffs == 2 then
+				debuffs:ClearAllPoints()
 				debuffs:SetPoint('BOTTOM', -9, 0)
 			else
+				debuffs:ClearAllPoints()
 				debuffs:SetPoint('BOTTOM')
 			end
 		end

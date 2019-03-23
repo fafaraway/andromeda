@@ -170,7 +170,7 @@ local function PostCastStart(self, unit)
 		end
 	end
 
-	if (unit == 'player' and not C.unitframe.castbar_separatePlayer) or (unit == 'target' and not C.unitframe.castbar_separateTarget) then
+	if (unit == 'player' and not C.unitframe.castbar_separatePlayer) or (unit == 'target' and not C.unitframe.castbar_separateTarget) or (unit == 'focus') then
 		if self.Glow then
 			if self.notInterruptible then
 				self.Glow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .5)
@@ -180,22 +180,28 @@ local function PostCastStart(self, unit)
 		end
 	end
 
-	if (unit == 'player' and C.unitframe.castbar_separatePlayer) or (unit == 'target' and C.unitframe.castbar_separateTarget) then
-		self.Bg:SetBackdropColor(0, 0, 0, .6)
-	else
-		self.Bg:SetBackdropColor(0, 0, 0, .2)
-	end
-
 	if (unit == 'player' and C.unitframe.castbar_separatePlayer) then
 		self:SetStatusBarColor(C.r, C.g, C.b, 1)
 	end
+	
+	if ((unit == 'player' and C.unitframe.castbar_separatePlayer) or (unit == 'target' and C.unitframe.castbar_separateTarget)) then
+		if self.notInterruptible then
+			self:SetStatusBarColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], 1)
+		else
+			self:SetStatusBarColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], 1)
+		end
 
-	if not ((unit == 'player' and C.unitframe.castbar_separatePlayer) or (unit == 'target' and C.unitframe.castbar_separateTarget)) then
+		self.Bg:SetBackdropColor(0, 0, 0, .6)
+		self.Bg:SetBackdropBorderColor(0, 0, 0, 1)
+	else
 		if self.notInterruptible then
 			self:SetStatusBarColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .4)
 		else
 			self:SetStatusBarColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .4)
 		end
+
+		self.Bg:SetBackdropColor(0, 0, 0, .2)
+		self.Bg:SetBackdropBorderColor(0, 0, 0, 0)
 	end
 end
 
@@ -235,6 +241,8 @@ function module:AddCastBar(self)
 
 	local castbar = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
 	castbar:SetAllPoints(self)
+	--castbar:SetPoint('TOPLEFT', self, 'TOPLEFT', C.Mult, -C.Mult)
+	--castbar:SetPoint('BOTTOMRIGHT', self, 'BOTTOMRIGHT', -C.Mult, C.Mult)
 	castbar:SetStatusBarTexture(C.media.sbTex)
 	castbar:GetStatusBarTexture():SetBlendMode('BLEND')
 	castbar:SetStatusBarColor(0, 0, 0, 0)
@@ -306,7 +314,8 @@ function module:AddCastBar(self)
 		castbar.decimal = '%.2f'
 	end
 
-	castbar.Bg = F.CreateBDFrame(castbar, .2)
+	
+	castbar.Bg = F.CreateBDFrame(castbar)
 	castbar.Glow = F.CreateSD(castbar.Bg, .35, 4, 4)
 	castbar.Icon = icon
 	castbar.iconBg = F.CreateBG(iconFrame)

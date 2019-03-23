@@ -247,9 +247,9 @@ local menuList = {
 
 -- right click for game menu, middle click for tracking menu
 Minimap:SetScript("OnMouseUp", function(self, button)
-	if (button == "RightButton") then
+	if (button == "MiddleButton") then
 		EasyMenu(menuList, menuFrame, self, 0, 0, "MENU", 3)
-	elseif (button == "MiddleButton") then
+	elseif (button == "RightButton") then
 		--ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, (Minimap:GetWidth() * .7), -3)
 		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, -(self:GetWidth()*.7), (self:GetWidth()*.3))
 	else

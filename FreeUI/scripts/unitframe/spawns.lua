@@ -204,6 +204,7 @@ local function CreatePartyStyle(self)
 	module:AddThreatIndicator(self)
 
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
 	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
@@ -228,6 +229,7 @@ local function CreateRaidStyle(self)
 	module:AddSummonIndicator(self)
 
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
 	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
@@ -237,18 +239,20 @@ local function CreateBossStyle(self)
 	self:SetSize(cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 
 	module:AddhealthBar(self)
+	module:AddHealthValue(self)
+	module:AddHealthPercentage(self)
 	module:AddPowerBar(self)
 	module:AddAlternativePower(self)
 	module:AddPowerValue(self)
 	module:AddPortrait(self)
 	module:AddNameText(self)
-	module:AddHealthValue(self)
 	module:AddCastBar(self)
 	module:AddAuras(self)
 	module:AddRangeCheck(self)
 	module:AddRaidTargetIndicator(self)
 
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
 	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end
@@ -267,6 +271,7 @@ local function CreateArenaStyle(self)
 	module:AddRangeCheck(self)
 
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
+	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
 	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 end

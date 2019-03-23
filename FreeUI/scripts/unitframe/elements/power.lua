@@ -12,10 +12,6 @@ local function PostUpdatePower(power, unit, cur, max, min)
 		power:SetValue(0)
 	end
 
-	if self.Power.Text then
-		self.Power.Text:SetTextColor(power:GetStatusBarColor())
-	end
-
 	if C.Class == 'DEMONHUNTER' and C.classmod.havocFury and self.unitStyle == 'player' then
 		local spec, cp = GetSpecialization() or 0, UnitPower(unit)
 		if spec == 1 and cp < 15 then
@@ -45,7 +41,7 @@ function module:AddPowerBar(self)
 	local bg = power:CreateTexture(nil, 'BACKGROUND')
 	bg:SetAllPoints()
 	bg:SetTexture(C.media.backdrop)
-	bg.multiplier = .1
+	bg.multiplier = .2
 	power.bg = bg
 
 	power.colorReaction = true
