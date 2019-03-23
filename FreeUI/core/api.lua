@@ -99,13 +99,13 @@ function F:CreateSD(a, m, s)
 	local frame = self
 	if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
-	if not m then m, s = 2, 3 end
+	if not m then m, s = 3, 3 end
 
 	self.glow = CreateFrame('Frame', nil, frame)
 	self.glow:SetPoint('TOPLEFT', self, -m*C.Mult, m*C.Mult)
 	self.glow:SetPoint('BOTTOMRIGHT', self, m*C.Mult, -m*C.Mult)
 	self.glow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = s*C.Mult})
-	self.glow:SetBackdropBorderColor(0, 0, 0, a or .5)
+	self.glow:SetBackdropBorderColor(0, 0, 0, a or .35)
 	self.glow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
 	return self.glow
