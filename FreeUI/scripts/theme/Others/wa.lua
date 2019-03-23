@@ -1,6 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("Theme")
 if not C.appearance.reskinWA then return end
+
+local module = F:GetModule("Theme")
+
 
 local pairs = pairs
 

@@ -72,9 +72,20 @@ function module:ReskinBigWigs()
 		local label = bar.candyBarLabel
 		local timer = bar.candyBarDuration
 
-		label:SetFont(C.font.normal, 11)
-		label:SetShadowColor(0, 0, 0, 1)
-		label:SetShadowOffset(2, -2)
+		if (C.Client == 'zhCN' or C.Client == 'zhTW') then
+			if C.general.isDeveloper then
+				label:SetFont(C.font.pixelCN, 10, 'OUTLINEMONOCHROME')
+				label:SetShadowColor(0, 0, 0, 1)
+				label:SetShadowOffset(1, -1)
+			else
+				label:SetFont(C.font.normal, 11)
+				label:SetShadowColor(0, 0, 0, 1)
+				label:SetShadowOffset(2, -2)
+			end
+		else
+			F.SetFS(label)
+		end
+
 		label:ClearAllPoints()
 		label:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
 		label:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
