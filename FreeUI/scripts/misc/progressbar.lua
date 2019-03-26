@@ -9,6 +9,16 @@ local FACTION_BAR_COLORS = FACTION_BAR_COLORS
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
 
+local colors = {
+	[1] = {139/255, 39/255, 60/255}, 	-- Exceptionally hostile
+	[2] = {217/255, 51/255, 22/255}, 	-- Very Hostile
+	[3] = {231/255, 87/255, 83/255}, 	-- Hostile
+	[4] = {213/255, 201/255, 128/255}, 	-- Neutral
+	[5] = {184/255, 243/255, 147/255}, 	-- Friendly
+	[6] = {115/255, 231/255, 62/255}, 	-- Very Friendly
+	[7] = {107/255, 231/255, 157/255}, 	-- Exceptionally friendly
+	[8] = {44/255, 153/255, 111/255}, 	-- Exalted / Paragon
+}
 
 local function UpdateBar(bar)
 	local rest = bar.restBar
@@ -26,6 +36,28 @@ local function UpdateBar(bar)
 			rest:Show()
 		end
 		if IsXPUserDisabled() then bar:SetStatusBarColor(.7, 0, 0) end
+	elseif GetWatchedFactionInfo() then
+		local _, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
+		local friendID, friendRep, _, _, _, _, _, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
+		local color = colors[standing]
+		if friendID then
+			if nextFriendThreshold then
+				barMin, barMax, value = friendThreshold, nextFriendThreshold, friendRep
+			else
+				barMin, barMax, value = 0, 1, 1
+			end
+			standing = 5
+		elseif C_Reputation.IsFactionParagon(factionID) then
+			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
+			currentValue = mod(currentValue, threshold)
+			barMin, barMax, value = 0, threshold, currentValue
+		else
+			if standing == MAX_REPUTATION_REACTION then barMin, barMax, value = 0, 1, 1 end
+		end
+		bar:SetStatusBarColor(color[1], color[2], color[3])
+		bar:SetMinMaxValues(barMin, barMax)
+		bar:SetValue(value)
+		bar:Show()
 	elseif C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
@@ -151,5 +183,4 @@ function module:ProgressBar()
 
 	self:SetupScript(bar)
 end
-
 
