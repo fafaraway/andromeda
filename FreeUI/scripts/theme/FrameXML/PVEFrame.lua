@@ -14,6 +14,7 @@ tinsert(C.themes["FreeUI"], function()
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 
+	local iconSize = 60-2*C.Mult
 	for i = 1, 4 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
@@ -27,8 +28,9 @@ tinsert(C.themes["FreeUI"], function()
 		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
 		bu.icon:SetDrawLayer("OVERLAY")
+		bu.icon:SetSize(iconSize, iconSize)
 		bu.icon.bg = F.CreateBG(bu.icon)
-		--bu.icon.bg:SetDrawLayer("ARTWORK")
+		bu.icon.bg:SetDrawLayer("ARTWORK")
 	end
 
 	hooksecurefunc("GroupFinderFrame_SelectGroupButton", function(index)

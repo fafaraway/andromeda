@@ -9,24 +9,24 @@ C.themes["Blizzard_PVPUI"] = function()
 
 	-- Category buttons
 
+	local iconSize = 60-2*C.Mult
 	for i = 1, 3 do
 		local bu = PVPQueueFrame["CategoryButton"..i]
 		local icon = bu.Icon
 		local cu = bu.CurrencyDisplay
 
 		bu.Ring:Hide()
-
-		F.Reskin(bu, true)
-
 		bu.Background:SetAllPoints()
 		bu.Background:SetColorTexture(r, g, b, .25)
 		bu.Background:Hide()
+		F.Reskin(bu, true)
 
 		icon:SetTexCoord(unpack(C.TexCoord))
 		icon:SetPoint("LEFT", bu, "LEFT")
 		icon:SetDrawLayer("OVERLAY")
+		icon:SetSize(iconSize, iconSize)
 		icon.bg = F.CreateBG(icon)
-		--icon.bg:SetDrawLayer("ARTWORK")
+		icon.bg:SetDrawLayer("ARTWORK")
 
 		if cu then
 			local ic = cu.Icon
