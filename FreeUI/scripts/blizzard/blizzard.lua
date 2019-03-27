@@ -13,6 +13,15 @@ function module:OnLogin()
 	self:RemoveTalkingHead()
 	self:RemoveBossBanner()
 	self:SkipAzeriteAnimation()
+
+	-- Unregister talent event
+	if PlayerTalentFrame then
+		PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+	else
+		hooksecurefunc('TalentFrame_LoadUI', function()
+			PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+		end)
+	end
 end
 
 -- reposition alert popup

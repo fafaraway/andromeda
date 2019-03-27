@@ -18,7 +18,7 @@ end
 
 local function reskinTimerBar(bar)
 	bar:SetSize(200, 20)
-	F.StripTextures(bar, true)
+	F.StripTextures(bar)
 
 	local statusbar = _G[bar:GetName().."StatusBar"]
 	if statusbar then
