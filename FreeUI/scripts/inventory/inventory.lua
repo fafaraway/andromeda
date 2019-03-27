@@ -9,17 +9,24 @@ local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBan
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
 
+local sortCache = {}
 function module:ReverseSort()
 	for bag = 0, 4 do
 		local numSlots = GetContainerNumSlots(bag)
 		for slot = 1, numSlots do
 			local texture, _, locked = GetContainerItemInfo(bag, slot)
-			if texture and not locked then
+			if (slot <= numSlots/2) and texture and not locked and not sortCache['b'..bag..'s'..slot] then
 				PickupContainerItem(bag, slot)
 				PickupContainerItem(bag, numSlots+1 - slot)
+				sortCache['b'..bag..'s'..slot] = true
+				C_Timer_After(.1, module.ReverseSort)
+				return
 			end
 		end
 	end
+
+	FreeUI_Backpack.isSorting = false
+	FreeUI_Backpack:BAG_UPDATE()
 end
 
 function module:UpdateAnchors(parent, bags)
@@ -77,7 +84,7 @@ function module:CreateInfoFrame()
 	search.highlightFunction = highlightFunction
 	search.isGlobal = true
 	search:SetPoint('LEFT', 0, 5)
-	F.StripTextures(search)
+	search:DisableDrawLayer('BACKGROUND')
 	local bg = F.CreateBG(search)
 	bg:SetPoint('TOPLEFT', -5, -5)
 	bg:SetPoint('BOTTOMRIGHT', 5, 5)
@@ -201,6 +208,8 @@ function module:CreateSortButton(name)
 					UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
 				else
 					SortBags()
+					wipe(sortCache)
+					FreeUI_Backpack.isSorting = true
 					C_Timer_After(.5, module.ReverseSort)
 				end
 			else
@@ -449,7 +458,7 @@ function module:OnLogin()
 		end
 		if label then
 			self.cat = self:CreateFontString(nil, 'OVERLAY')
-			self.cat:SetFont(C.font.normal, 11, "OUTLINE")
+			self.cat:SetFont(C.font.normal, 11, 'OUTLINE')
 			self.cat:SetText(label)
 			self.cat:SetPoint('TOPLEFT', 5, -4)
 			return
