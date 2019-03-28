@@ -56,12 +56,17 @@ function module:Currencies()
 	FreeUIMoneyButton:RegisterEvent('SEND_MAIL_COD_CHANGED')
 	FreeUIMoneyButton:RegisterEvent('PLAYER_TRADE_MONEY')
 	FreeUIMoneyButton:RegisterEvent('TRADE_MONEY_CHANGED')
+	FreeUIMoneyButton:RegisterEvent('TOKEN_MARKET_PRICE_UPDATED')
 	FreeUIMoneyButton:SetScript('OnEvent', function(self, event)
 		if event == 'PLAYER_ENTERING_WORLD' then
 			oldMoney = GetMoney()
+			C_WowTokenPublic.UpdateMarketPrice();
 			self:UnregisterEvent(event)
 		end
-
+		if event == 'TOKEN_MARKET_PRICE_UPDATED' then
+			C_WowTokenPublic.UpdateMarketPrice();
+			return
+		end
 		local newMoney = GetMoney()
 		local change = newMoney - oldMoney
 		if oldMoney > newMoney then
@@ -106,6 +111,10 @@ function module:Currencies()
 		end
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(TOTAL..':', getGoldString(totalGold), .6,.8,1, 1,1,1)
+
+		GameTooltip:AddLine(' ')
+		local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice();
+		GameTooltip:AddDoubleLine(L['TokenPrice'], getGoldString(tokenPrice), .6,.8,1, 1,1,1)
 
 		for i = 1, GetNumWatchedTokens() do
 			local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
