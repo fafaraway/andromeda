@@ -1,12 +1,12 @@
 local F, C = unpack(select(2, ...))
 if not C.tooltip.enable then return end
 if not C.tooltip.ilvlSpec then return end
-local module = F:GetModule("Tooltip")
+local module = F:GetModule('Tooltip')
 
 -- Credit: Cloudy Unit Info, by Cloudyfa
 local cache, weapon, currentUNIT, currentGUID = {}, {}
-local specPrefix = SPECIALIZATION..": "..C.InfoColor
-local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..": "..C.InfoColor
+local specPrefix = SPECIALIZATION..': '..C.InfoColor
+local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..': '..C.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local tinsert, max = table.insert, math.max
@@ -20,13 +20,13 @@ local function updateInspect(self, elapsed)
 		ClearInspectPlayer()
 
 		if currentUNIT and UnitGUID(currentUNIT) == currentGUID then
-			F:RegisterEvent("INSPECT_READY", module.GetInspectInfo)
+			F:RegisterEvent('INSPECT_READY', module.GetInspectInfo)
 			NotifyInspect(currentUNIT)
 		end
 	end
 end
-local updater = CreateFrame("Frame")
-updater:SetScript("OnUpdate", updateInspect)
+local updater = CreateFrame('Frame')
+updater:SetScript('OnUpdate', updateInspect)
 updater:Hide()
 
 local function inspectRequest(self)
@@ -40,22 +40,22 @@ local function inspectRequest(self)
 
 	module:InspectUnit(unit)
 end
-GameTooltip:HookScript("OnTooltipSetUnit", inspectRequest)
+GameTooltip:HookScript('OnTooltipSetUnit', inspectRequest)
 
 local function resetUnit(_, btn)
-	if btn == "LSHIFT" and UnitExists("mouseover") then
-		GameTooltip:SetUnit("mouseover")
+	if btn == 'LSHIFT' and UnitExists('mouseover') then
+		GameTooltip:SetUnit('mouseover')
 	end
 end
-F:RegisterEvent("MODIFIER_STATE_CHANGED", resetUnit)
+F:RegisterEvent('MODIFIER_STATE_CHANGED', resetUnit)
 
 function module:GetInspectInfo(...)
-	if self == "UNIT_INVENTORY_CHANGED" then
+	if self == 'UNIT_INVENTORY_CHANGED' then
 		local unit = ...
 		if UnitGUID(unit) == currentGUID then
 			module:InspectUnit(unit, true)
 		end
-	elseif self == "INSPECT_READY" then
+	elseif self == 'INSPECT_READY' then
 		local guid = ...
 		if guid == currentGUID then
 			local spec = module:GetUnitSpec(currentUNIT)
@@ -73,7 +73,7 @@ function module:GetInspectInfo(...)
 		F:UnregisterEvent(self, module.GetInspectInfo)
 	end
 end
-F:RegisterEvent("UNIT_INVENTORY_CHANGED", module.GetInspectInfo)
+F:RegisterEvent('UNIT_INVENTORY_CHANGED', module.GetInspectInfo)
 
 function module:SetupTooltip(spec, level)
 	local _, unit = GameTooltip:GetUnit()
@@ -81,7 +81,7 @@ function module:SetupTooltip(spec, level)
 
 	local specLine, levelLine
 	for i = 2, GameTooltip:NumLines() do
-		local line = _G["GameTooltipTextLeft"..i]
+		local line = _G['GameTooltipTextLeft'..i]
 		local text = line:GetText()
 		if text and strfind(text, specPrefix) then
 			specLine = line
@@ -133,14 +133,14 @@ function module:GetUnitItemLevel(unit)
 							boa = boa + 1
 						end
 
-						if unit ~= "player" then
+						if unit ~= 'player' then
 							level = F.GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
 							elseif i > 15 and quality == 6 then
-								local relics = {select(4, strsplit(":", itemLink))}
+								local relics = {select(4, strsplit(':', itemLink))}
 								for i = 1, 3 do
-									local relicID = relics[i] ~= "" and relics[i]
+									local relicID = relics[i] ~= '' and relics[i]
 									local relicLink = select(2, GetItemGem(itemLink, i))
 									if relicID and not relicLink then
 										delay = true
@@ -154,14 +154,14 @@ function module:GetUnitItemLevel(unit)
 
 								weapon[1] = level
 								haveWeapon = haveWeapon + 1
-								if slot == "INVTYPE_2HWEAPON" or slot == "INVTYPE_RANGED" or (slot == "INVTYPE_RANGEDRIGHT" and class == "HUNTER") then
+								if slot == 'INVTYPE_2HWEAPON' or slot == 'INVTYPE_RANGED' or (slot == 'INVTYPE_RANGEDRIGHT' and class == 'HUNTER') then
 									mainhand = true
 									twohand = twohand + 1
 								end
 							elseif i == 17 then
 								weapon[2] = level
 								haveWeapon = haveWeapon + 1
-								if slot == "INVTYPE_2HWEAPON" then
+								if slot == 'INVTYPE_2HWEAPON' then
 									offhand = true
 									twohand = twohand + 1
 								end
@@ -174,7 +174,7 @@ function module:GetUnitItemLevel(unit)
 	end
 
 	if not delay then
-		if unit == "player" then
+		if unit == 'player' then
 			ilvl = select(2, GetAverageItemLevel())
 		else
 			if hasArtifact or twohand == 2 then
@@ -196,8 +196,8 @@ function module:GetUnitItemLevel(unit)
 			ilvl = total / 16
 		end
 
-		if ilvl > 0 then ilvl = format("%d", ilvl) end
-		if boa > 0 then ilvl = ilvl.." |cff00ccff("..boa..HEIRLOOMS..")" end
+		if ilvl > 0 then ilvl = format('%.1f', ilvl) end
+		if boa > 0 then ilvl = ilvl..' |cff00ccff('..boa..HEIRLOOMS..')' end
 	else
 		ilvl = nil
 	end
@@ -209,7 +209,7 @@ function module:GetUnitSpec(unit)
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local specName
-	if unit == "player" then
+	if unit == 'player' then
 		local specIndex = GetSpecialization()
 		if specIndex then
 			specName = select(2, GetSpecializationInfo(specIndex))
@@ -227,9 +227,9 @@ end
 function module:InspectUnit(unit, forced)
 	local spec, level
 
-	if UnitIsUnit(unit, "player") then
-		spec = self:GetUnitSpec("player")
-		level = self:GetUnitItemLevel("player")
+	if UnitIsUnit(unit, 'player') then
+		spec = self:GetUnitSpec('player')
+		level = self:GetUnitItemLevel('player')
 		self:SetupTooltip(spec, level)
 	else
 		if not unit or UnitGUID(unit) ~= currentGUID then return end
@@ -242,7 +242,7 @@ function module:InspectUnit(unit, forced)
 
 		if not C.tooltip.ilvlSpecByShift and IsShiftKeyDown() then forced = true end
 		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
-		if not UnitIsVisible(unit) or UnitIsDeadOrGhost("player") or UnitOnTaxi("player") then return end
+		if not UnitIsVisible(unit) or UnitIsDeadOrGhost('player') or UnitOnTaxi('player') then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
 		self:SetupTooltip()
