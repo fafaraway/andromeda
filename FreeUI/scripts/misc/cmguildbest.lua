@@ -33,7 +33,7 @@ function module:CMGuildBest()
 		frame:SetPoint('BOTTOMRIGHT', -6, 80)
 		frame:SetSize(170, 105)
 		F.CreateBD(frame, .3)
-		F.CreateFS(frame, {C.font.normal, 14}, CHALLENGE_MODE_THIS_WEEK, nil, nil, true, 'TOPLEFT', 16, -6)
+		F.CreateFS(frame, {C.font.normal, 14}, GUILD, nil, nil, true, 'TOPLEFT', 16, -6)
 
 		frame.entries = {}
 		for i = 1, 4 do
@@ -118,10 +118,11 @@ function module:CMGuildBest()
 			GameTooltip:AddLine(L['ACCOUNT_KEYSTONES'])
 			for name, info in pairs(FreeUIGlobalConfig['keystoneInfo']) do
 				local name = Ambiguate(name, 'none')
-				local mapID, level, class = strsplit(':', info)
+				local mapID, level, class, faction = strsplit(':', info)
 				local color = F.HexRGB(F.ClassColor(class))
+				local infoColor = faction == 'Horde' and '|cffee1919' or '|cff00adf0'
 				local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
-				GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format(C.InfoColor..'%s(%s)|r', dungeon, level))
+				GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format(infoColor..'%s(%s)|r', dungeon, level))
 			end
 			GameTooltip:Show()
 		end)
@@ -144,6 +145,7 @@ function module:CMGuildBest()
 	F:RegisterEvent('ADDON_LOADED', ChallengesOnLoad)
 
 	-- Keystone Info
+	local myFaction = UnitFactionGroup('player')
 	local myFullName = C.Name..'-'..C.Realm
 	local function GetKeyInfo()
 		for bag = 0, 4 do
@@ -162,7 +164,7 @@ function module:CMGuildBest()
 		local link, itemString = GetKeyInfo()
 		if link then
 			local _, mapID, level = strsplit(':', itemString)
-			FreeUIGlobalConfig['keystoneInfo'][myFullName] = mapID..':'..level..':'..C.Class
+			FreeUIGlobalConfig['keystoneInfo'][myFullName] = mapID..':'..level..':'..C.Class..':'..myFaction
 		else
 			FreeUIGlobalConfig['keystoneInfo'][myFullName] = nil
 		end
