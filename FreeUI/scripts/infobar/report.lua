@@ -8,6 +8,7 @@ local time, date = time, date
 local strfind, format, floor = string.find, string.format, math.floor
 local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
 local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
+local invIndex = {}
 
 local function updateTimerFormat(color, hour, minute)
 	if GetCVarBool('timeMgrUseMilitaryTime') then
@@ -65,19 +66,24 @@ local questlist = {
 	{name = 'Timewarped', id = 45799, texture = 1530590},	-- MoP
 }
 
-
-
-local invIndex = {
-	[1] = {title = L['BfAInvasion'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
-}
+local getRegion = GetCVar('portal')
+if getRegion == 'EU' then
+	invIndex = {
+	  [1] = {title = L['BfAInvasion'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {3, 4, 1, 6, 2, 5}, baseTime = 1545058803}, -- 12/17/2018 15:00 [1]
+	}
+else 
+	invIndex = {
+		[1] = {title = L['BfAInvasion'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = 1546743600}, -- 1/6/2019 11:00 [1]
+	}
+end
 
 local mapAreaPoiIDs = {
-	[862] = 5973,
-	[863] = 5969,
-	[864] = 5970,
-	[896] = 5964,
-	[942] = 5966,
-	[895] = 5896,
+	[862] = 5973,	-- Zuldazar
+	[863] = 5969,	-- Nazmir
+	[864] = 5970,	-- Vol'dun
+	[896] = 5964,	-- Drustvar
+	[942] = 5966,	-- Stormsong Valley
+	[895] = 5896,	-- Tiragarde Sound
 }
 
 local function GetInvasionInfo(mapID)
