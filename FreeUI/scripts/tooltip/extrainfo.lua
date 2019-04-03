@@ -36,7 +36,7 @@ function module:ExtraInfo()
 			local itemStackCount = select(8, GetItemInfo(id))
 			local itemSellPrice = select(11, GetItemInfo(id))
 			if itemSellPrice and itemSellPrice ~= 0 and IsShiftKeyDown() then
-				self:AddDoubleLine(L['SellPrice']..':', '|cffffffff'..GetMoneyString(itemSellPrice)..'|r')
+				self:AddDoubleLine(L['TOOLTIP_SELL_PRICE']..':', '|cffffffff'..GetMoneyString(itemSellPrice)..'|r')
 			end
 			if bankCount > 0 and IsShiftKeyDown() then
 				self:AddDoubleLine(BAGSLOT..'/'..BANK..':', C.InfoColor..bagCount..'/'..bankCount)
@@ -44,7 +44,7 @@ function module:ExtraInfo()
 				self:AddDoubleLine(BAGSLOT..':', C.InfoColor..bagCount)
 			end
 			if itemStackCount and itemStackCount > 1 and IsShiftKeyDown() then
-				self:AddDoubleLine(L['StackCap']..':', C.InfoColor..itemStackCount)
+				self:AddDoubleLine(L['TOOLTIP_STACK_CAP']..':', C.InfoColor..itemStackCount)
 			end
 		end
 		
@@ -134,7 +134,7 @@ function module:ExtraInfo()
 		if unitCaster then
 			local name = GetUnitName(unitCaster, true)
 			local hexColor = F.HexRGB(F.UnitColor(unitCaster))
-			self:AddDoubleLine(L['AURA_FROM']..':', hexColor..name)
+			self:AddDoubleLine(L['TOOLTIP_AURA_FROM']..':', hexColor..name)
 			self:Show()
 		end
 	end

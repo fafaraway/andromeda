@@ -37,68 +37,105 @@ smoother:SetScript('OnUpdate', function()
 	end
 end)
 
-local function PixelPerfect()
+local function ForceDefaultSettings()
+	SetCVar('autoLootDefault', 1)
+	SetCVar('lootUnderMouse', 1)
 
-	local scale
-	local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
-	local fixedHeight = 768 / pysHeight
+	SetCVar('alwaysCompareItems', 0)
 
-	scale = tonumber(floor(fixedHeight*100 + .5)/100)
+	SetCVar('autoSelfCast', 1)
 
-	SetCVar("useUiScale", 1)
-	SetCVar("uiScale", scale)
-	UIParent:SetScale(scale)
+	SetCVar('nameplateShowEnemies', 1)
+	SetCVar('nameplateShowSelf', 0)
+	SetCVar('nameplateShowAll', 1)
+	SetCVar('nameplateMotion', 1)
+	SetCVar('nameplateShowFriendlyNPCs', 0)
+	SetCVar('nameplateOtherTopInset', 0.08)
+	SetCVar('nameplateSelectedScale', 1)
+	SetCVar('nameplateLargerScale', 1)
+
+	SetCVar('alwaysShowActionBars', 1)
+	SetCVar('lockActionBars', 1)
+	SetCVar('ActionButtonUseKeyDown', 1)
+	SetActionBarToggles(1, 1, 1, 1)
+	SHOW_MULTI_ACTIONBAR_4 = 1
+	SHOW_MULTI_ACTIONBAR_3 = 1
+	SHOW_MULTI_ACTIONBAR_2 = 1
+	SHOW_MULTI_ACTIONBAR_1 = 1
+	MultiActionBar_Update()
+	
+	SetCVar('floatingCombatTextCombatDamage', 1)
+	SetCVar('floatingCombatTextCombatHealing', 1)
+	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 1)
+	SetCVar('floatingCombatTextFloatMode', 1)
+	SetCVar('WorldTextScale', 1.5)
+
+	SetCVar('cameraDistanceMaxZoomFactor', 2.6)
+
+	SetCVar('screenshotQuality', 10)
+	SetCVar('showTutorials', 0)
+	SetCVar('gameTip', 0)
+	SetCVar('UberTooltips', 1)
+	SetCVar('profanityFilter', 0)
+	SetCVar('chatStyle', 'classic')
+	SetCVar('chatBubbles', 1)
+	SetCVar('breakUpLargeNumbers', 1)
+	SetCVar('overrideArchive', 0)
+	SetCVar('cameraYawMoveSpeed', 120)
+	SetCVar('rawMouseEnable', 1)
 end
 
+
+
 function F:HelloWorld()
-	local f = CreateFrame("Frame", "FreeUI_InstallFrame", UIParent)
+	local f = CreateFrame('Frame', 'FreeUI_InstallFrame', UIParent)
 	f:SetSize(400, 500)
-	f:SetPoint("CENTER")
-	f:SetFrameStrata("HIGH")
+	f:SetPoint('CENTER')
+	f:SetFrameStrata('HIGH')
 	F.CreateBD(f)
 	F.CreateSD(f)
 
-	local sb = CreateFrame("StatusBar", nil, f)
-	sb:SetPoint("BOTTOM", f, "BOTTOM", 0, 60)
+	local sb = CreateFrame('StatusBar', nil, f)
+	sb:SetPoint('BOTTOM', f, 'BOTTOM', 0, 60)
 	sb:SetSize(320, 20)
 	sb:SetStatusBarTexture(C.media.sbTex)
 	sb:Hide()
 	SmoothBar(sb)
 
-	local sbd = CreateFrame("Frame", nil, sb)
-	sbd:SetPoint("TOPLEFT", sb, -1, 1)
-	sbd:SetPoint("BOTTOMRIGHT", sb, 1, -1)
+	local sbd = CreateFrame('Frame', nil, sb)
+	sbd:SetPoint('TOPLEFT', sb, -1, 1)
+	sbd:SetPoint('BOTTOMRIGHT', sb, 1, -1)
 	sbd:SetFrameLevel(sb:GetFrameLevel()-1)
 	F.CreateBD(sbd, .25)
 
-	local header = f:CreateFontString(nil, "OVERLAY")
+	local header = f:CreateFontString(nil, 'OVERLAY')
 	header:SetFontObject(GameFontHighlightLarge)
-	header:SetPoint("TOP", f, "TOP", 0, -20)
+	header:SetPoint('TOP', f, 'TOP', 0, -20)
 
-	local body = f:CreateFontString(nil, "OVERLAY")
+	local body = f:CreateFontString(nil, 'OVERLAY')
 	body:SetFontObject(GameFontHighlight)
-	body:SetJustifyH("LEFT")
+	body:SetJustifyH('LEFT')
 	body:SetWidth(f:GetWidth()-40)
-	body:SetPoint("TOPLEFT", f, "TOPLEFT", 20, -60)
+	body:SetPoint('TOPLEFT', f, 'TOPLEFT', 20, -60)
 
-	local credits = F.CreateFS(f, 'pixel', '', nil, nil, true, "BOTTOM", 0, 4)
-	credits:SetText("|cff808080<|rFree|cff9c84efUI|r|cff808080>|r by |cffe8155cHaleth|r and |cff37b1d6Solor|r")
+	local credits = F.CreateFS(f, 'pixel', '', nil, nil, true, 'BOTTOM', 0, 4)
+	credits:SetText('|cff808080<|rFree|cff9c84efUI|r|cff808080>|r by |cffe8155cHaleth|r and |cff37b1d6Solor|r')
 
-	local sbt = F.CreateFS(sb, 'pixel', '', nil, nil, true, "CENTER", 0, 0)
+	local sbt = F.CreateFS(sb, 'pixel', '', nil, nil, true, 'CENTER', 0, 0)
 
-	local option1 = CreateFrame("Button", "FreeUI_Install_Option1", f, "UIPanelButtonTemplate")
-	option1:SetPoint("BOTTOMLEFT", f, "BOTTOMLEFT", 40, 20)
+	local option1 = CreateFrame('Button', 'FreeUI_Install_Option1', f, 'UIPanelButtonTemplate')
+	option1:SetPoint('BOTTOMLEFT', f, 'BOTTOMLEFT', 40, 20)
 	option1:SetSize(128, 25)
 
-	local option2 = CreateFrame("Button", "FreeUI_Install_Option2", f, "UIPanelButtonTemplate")
-	option2:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -40, 20)
+	local option2 = CreateFrame('Button', 'FreeUI_Install_Option2', f, 'UIPanelButtonTemplate')
+	option2:SetPoint('BOTTOMRIGHT', f, 'BOTTOMRIGHT', -40, 20)
 	option2:SetSize(128, 25)
 
-	local close = CreateFrame("Button", "FreeUI_Install_CloseButton", f, "UIPanelCloseButton")
-	close:SetPoint("TOPRIGHT", f, "TOPRIGHT")
-	close:SetScript("OnClick", function()
+	local close = CreateFrame('Button', 'FreeUI_Install_CloseButton', f, 'UIPanelCloseButton')
+	close:SetPoint('TOPRIGHT', f, 'TOPRIGHT')
+	close:SetScript('OnClick', function()
 		UIFrameFade(f,{
-			mode = "OUT",
+			mode = 'OUT',
 			timeToFade = 0.5,
 			finishedFunc = function(f) f:SetAlpha(1); f:Hide() end,
 			finishedArg1 = f,
@@ -113,41 +150,41 @@ function F:HelloWorld()
 
 	local step4 = function()
 		sb:SetValue(400)
-		PlaySoundFile("Sound\\interface\\LevelUp.wav")
-		header:SetText("Success!")
+		PlaySoundFile('Sound\\interface\\LevelUp.wav')
+		header:SetText('Success!')
 		body:SetText("Installation is complete.\n\nPlease click the 'Finish' button to reload the UI.\n\nEnjoy!")
-		sbt:SetText("4/4")
+		sbt:SetText('4/4')
 		option1:Hide()
-		option2:SetText("Finish")
+		option2:SetText('Finish')
 
-		option2:SetScript("OnClick", function()
-			FreeUIConfig["installComplete"] = true
+		option2:SetScript('OnClick', function()
+			FreeUIConfig['installComplete'] = true
 			ReloadUI()
 		end)
 	end
 
 	local step3 = function()
 		sb:SetValue(300)
-		header:SetText("3. Chat")
-		body:SetText("The third and final step applies the chat settings.\n\nThis step is recommended for any user.")
-		sbt:SetText("3/4")
+		header:SetText('3. Chat')
+		body:SetText('The third and final step applies the chat settings.\n\nThis step is recommended for any user.')
+		sbt:SetText('3/4')
 
-		option1:SetScript("OnClick", step4)
-		option2:SetScript("OnClick", function()
-			F:ForceChatSettings()
+		option1:SetScript('OnClick', step4)
+		option2:SetScript('OnClick', function()
+			--F:ForceChatSettings()
 			step4()
 		end)
 	end
 
 	local step2 = function()
 		sb:SetValue(200)
-		header:SetText("2. UI Scale")
-		body:SetText("The second step applies the correct UI scale.\n\nThis step is recommended for any user.")
-		sbt:SetText("2/4")
+		header:SetText('2. UI Scale')
+		body:SetText('The second step applies the correct UI scale.\n\nThis step is recommended for any user.')
+		sbt:SetText('2/4')
 
-		option1:SetScript("OnClick", step3)
-		option2:SetScript("OnClick", function()
-			PixelPerfect()
+		option1:SetScript('OnClick', step3)
+		option2:SetScript('OnClick', function()
+			F:SetupUIScale()
 			step3()
 		end)
 	end
@@ -157,19 +194,19 @@ function F:HelloWorld()
 		sb:Show()
 		sb:SetValue(0)
 		sb:SetValue(100)
-		sb:GetStatusBarTexture():SetGradient("VERTICAL", C.r, C.g, C.b, C.r, C.g, C.b)
-		header:SetText("1. CVars")
+		sb:GetStatusBarTexture():SetGradient('VERTICAL', C.r, C.g, C.b, C.r, C.g, C.b)
+		header:SetText('1. CVars')
 		body:SetText("These steps will apply the correct setup for FreeUI.\n\nThe first step applies the essential settings.\n\nThis is recommended for any user, unless you want to apply only a specific part of the settings.\n\nClick 'Continue' to apply the settings, or click 'Skip' if you wish to skip this step.")
-		sbt:SetText("1/4")
+		sbt:SetText('1/4')
 
 		option1:Show()
 
-		option1:SetText("Skip")
-		option2:SetText("Continue")
+		option1:SetText('Skip')
+		option2:SetText('Continue')
 
-		option1:SetScript("OnClick", step2)
-		option2:SetScript("OnClick", function()
-			F:ForceDefaultSettings()
+		option1:SetScript('OnClick', step2)
+		option2:SetScript('OnClick', function()
+			ForceDefaultSettings()
 			step2()
 		end)
 	end
@@ -179,95 +216,98 @@ function F:HelloWorld()
 
 	local tut4 = function()
 		sb:SetValue(600)
-		header:SetText("4. Finished")
-		body:SetText("WIP")
+		header:SetText('4. Finished')
+		body:SetText('WIP')
 
-		sbt:SetText("4/4")
+		sbt:SetText('4/4')
 
 		option1:Show()
 
-		option1:SetText("Close")
-		option2:SetText("Install")
+		option1:SetText('Close')
+		option2:SetText('Install')
 
-		option1:SetScript("OnClick", function()
+		option1:SetScript('OnClick', function()
 			UIFrameFade(f,{
-				mode = "OUT",
+				mode = 'OUT',
 				timeToFade = 0.5,
 				finishedFunc = function(f) f:Hide() end,
 				finishedArg1 = f,
 			})
 		end)
-		option2:SetScript("OnClick", step1)
+		option2:SetScript('OnClick', step1)
 	end
 
 	local tut3 = function()
 		sb:SetValue(300)
-		header:SetText("3. Features")
-		body:SetText("WIP")
+		header:SetText('3. Features')
+		body:SetText('WIP')
 
-		sbt:SetText("3/4")
+		sbt:SetText('3/4')
 
-		option2:SetScript("OnClick", tut4)
+		option2:SetScript('OnClick', tut4)
 	end
 
 	local tut2 = function()
 		sb:SetValue(200)
-		header:SetText("2. Unit frames")
-		body:SetText("WIP")
+		header:SetText('2. Unit frames')
+		body:SetText('WIP')
 
-		sbt:SetText("2/4")
+		sbt:SetText('2/4')
 
-		option2:SetScript("OnClick", tut3)
+		option2:SetScript('OnClick', tut3)
 	end
 
 	local tut1 = function()
 		sb:SetMinMaxValues(0, 600)
 		sb:Show()
 		sb:SetValue(100)
-		sb:GetStatusBarTexture():SetGradient("VERTICAL", C.r, C.g, C.b, C.r, C.g, C.b)
-		header:SetText("1. Essentials")
-		body:SetText("WIP")
+		sb:GetStatusBarTexture():SetGradient('VERTICAL', C.r, C.g, C.b, C.r, C.g, C.b)
+		header:SetText('1. Essentials')
+		body:SetText('WIP')
 
-		sbt:SetText("1/4")
+		sbt:SetText('1/4')
 
 		option1:Hide()
 
-		option2:SetText("Next")
+		option2:SetText('Next')
 
-		option2:SetScript("OnClick", tut2)
+		option2:SetScript('OnClick', tut2)
 	end
 
 
 
 
-	header:SetText("Hello")
+	header:SetText('Hello')
 	body:SetText("Thank you for choosing FreeUI!\n\nIn just a moment, you can get started. All that's needed is for the correct settings to be applied. Don't worry, none of your personal preferences will be changed.\n\nYou can also take a brief tutorial on some of the features of FreeUI, which is recommended if you're a new user.\n\nPress the 'Tutorial' button to do so now, or press 'Install' to go straight to the setup.")
 
 
-	option1:SetText("Tutorial")
-	option2:SetText("Install")
+	option1:SetText('Tutorial')
+	option2:SetText('Install')
 
-	option1:SetScript("OnClick", tut1)
-	option2:SetScript("OnClick", step1)
+	option1:SetScript('OnClick', tut1)
+	option2:SetScript('OnClick', step1)
 end
 	
 
 
 
 --function module:OnLogin()
---	if not FreeUIConfig["Install"] then
---		FreeUIConfig["Install"] = {}
+--	if not FreeUIConfig['Install'] then
+--		FreeUIConfig['Install'] = {}
 --F:HelloWorld()
 --	end
 	
---print(FreeUIConfig["Install"]["Complete"])
+--print(FreeUIConfig['Install']['Complete'])
 	
 --end
 
 
-local f = CreateFrame("Frame", nil, UIParent)
-f:RegisterEvent("PLAYER_LOGIN")
-f:SetScript("OnEvent", function(self, event, addon)
-	if FreeUIConfig["installComplete"] == true then return end
+local f = CreateFrame('Frame', nil, UIParent)
+f:RegisterEvent('PLAYER_LOGIN')
+f:SetScript('OnEvent', function(self, event, addon)
+	print(C.Title..' - '..C.GreyColor..C.Version)
+	print(C.MyColor..L['UIHELP'])
+
+	if FreeUIConfig['installComplete'] == true then return end
 	F:HelloWorld()
 end)

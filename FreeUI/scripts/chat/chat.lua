@@ -1,8 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 if not C.chat.enable then return end
-local module = F:RegisterModule('chat')
+local module = F:RegisterModule('Chat')
 
 
+local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 
 local function SkinChat(self)
 	if not self or (self and self.styled) then return end
@@ -22,7 +23,6 @@ local function SkinChat(self)
 		self:SetShadowOffset(2, -2)
 	end
 	
-	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetClampedToScreen(false)
 	if self:GetMaxLines() < 1024 then
 		self:SetMaxLines(1024)
@@ -61,9 +61,53 @@ local function SkinChat(self)
 end
 
 
--- scroll helper
+local cycles = {
+	{ chatType = "SAY", use = function() return 1 end },
+    { chatType = "PARTY", use = function() return IsInGroup() end },
+    { chatType = "RAID", use = function() return IsInRaid() end },
+    { chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
+    { chatType = "GUILD", use = function() return IsInGuild() end },
+	{ chatType = "CHANNEL", use = function(_, editbox)
+		if GetCVar("portal") ~= "CN" then return false end
+		local channels, inWorldChannel, number = {GetChannelList()}
+		for i = 1, #channels do
+			if channels[i] == "大脚世界频道" then
+				inWorldChannel = true
+				number = channels[i-1]
+				break
+			end
+		end
+		if inWorldChannel then
+			editbox:SetAttribute("channelTarget", number)
+			return true
+		else
+			return false
+		end
+	end },
+    { chatType = "SAY", use = function() return 1 end },
+}
+
+hooksecurefunc("ChatEdit_CustomTabPressed", function(self)
+	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
+    local currChatType = self:GetAttribute("chatType")
+    for i, curr in ipairs(cycles) do
+        if curr.chatType == currChatType then
+            local h, r, step = i+1, #cycles, 1
+            if IsShiftKeyDown() then h, r, step = i-1, 1, -1 end
+            for j = h, r, step do
+                if cycles[j]:use(self, currChatType) then
+                    self:SetAttribute("chatType", cycles[j].chatType)
+                    ChatEdit_UpdateHeader(self)
+                    return
+                end
+            end
+        end
+    end
+end)
+
+
 local function ScrollChat(frame, delta)
-	if IsControlKeyDown()  then--Faster Scroll
+	if IsControlKeyDown() then --Faster Scroll
 		if ( delta > 0 ) then --Faster scrolling by triggering a few scroll up in a loop
 			for i = 1,5 do 
 				frame:ScrollUp()
@@ -96,20 +140,7 @@ local function MakeScrollingDynamic(i)
 	ChatFrameNumberFrame:SetScript('OnMouseWheel', ScrollChat)
 end
 
--- 
-local function EnableClearCommand()
-	SLASH_CLEARCHAT1, SLASH_CLEARCHAT2 = '/c', '/clear';
-	
-	function SlashCmdList.CLEARCHAT()
-		for i = 1, NUM_CHAT_WINDOWS do
-			local chatFrameNumber = ('ChatFrame%d'):format(i)
-			local ChatFrameNumberFrame = _G[chatFrameNumber]
-			ChatFrameNumberFrame:Clear()
-		end
-	end
-end
 
--- chat frame fading
 local function EnableFading(i)
 	if not C.chat.lineFading then return end
 
@@ -121,7 +152,7 @@ local function EnableFading(i)
 	ChatFrameNumberFrame:SetFadeDuration(C.chat.fadeDuration)
 end
 
---
+
 local function DisableHoldAlt(i)
 	local chatFrameNumber = ('ChatFrame%d'):format(i)
 	local chatFrameNumberEditBox = _G[chatFrameNumber..'EditBox']
@@ -129,48 +160,8 @@ local function DisableHoldAlt(i)
 	chatFrameNumberEditBox:SetAltArrowKeyMode(false)
 end
 
--- url
-local function DetectUrls()
-	local newAddMsg = {}
-	local function AddMessage(frame, message, ...)
-		
-		if (message) then
-			message = gsub(message, '([wWhH][wWtT][wWtT][%.pP]%S+[^%p%s])', '|cffffffff|Hurl:%1|h[%1]|h|r')
-			message = gsub(message, ' ([_A-Za-z0-9-%.]+@[_A-Za-z0-9-]+%.+[_A-Za-z0-9-%.]+)%s?', '|cffffffff|Hurl:%1|h[%1]|h|r')
-			message = gsub(message, ' (%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?:%d%d?%d?%d?%d?)%s?', '|cffffffff|Hurl:%1|h[%1]|h|r')
-			message = gsub(message, ' (%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)%s?', '|cffffffff|Hurl:%1|h[%1]|h|r')
-			return newAddMsg[frame:GetName()](frame, message, ...)
-		end
-	end
 
-	for i = 1, NUM_CHAT_WINDOWS do
-		
-		if i ~= 2 then
-			local frame = _G[format('%s%d', 'ChatFrame', i)]
-			newAddMsg[format('%s%d', 'ChatFrame', i)] = frame.AddMessage
-			frame.AddMessage = AddMessage
-		end
-	end
-	
-	local orig = ChatFrame_OnHyperlinkShow
-	function ChatFrame_OnHyperlinkShow(frame, link, text, button)
-		local type, value = link:match('(%a+):(.+)')
-		
-		if ( type == 'url' ) then
-			local editBox = _G[frame:GetName()..'EditBox']
-			if editBox then
-				editBox:Show()
-				editBox:SetText(value)
-				editBox:SetFocus()
-				editBox:HighlightText()
-			end
-		else
-			orig(self, link, text, button)
-		end
-	end
-end
-
--- alt click invite
+-- alt click name to invite
 local DefaultSetItemRef = SetItemRef
 function SetItemRef(link, ...)
 	local type, value = link:match('(%a+):(.+)')
@@ -182,8 +173,8 @@ function SetItemRef(link, ...)
 	end
 end
 
--- sticky
-module.StickyTypeChannels = {
+local stickyTypeChannels = {}
+stickyTypeChannels = {
 	SAY = 1,
 	YELL = 0,
 	EMOTE = 0,
@@ -198,15 +189,15 @@ module.StickyTypeChannels = {
 	INSTANCE_CHAT = 1,
 	INSTANCE_CHAT_LEADER = 1,
 }
-local function MakeChannelsSticky()
+local function ChannelsSticky()
 	if not C.chat.channelSticky then return end
 
-	for i, v in pairs(module.StickyTypeChannels) do
+	for i, v in pairs(stickyTypeChannels) do
 		ChatTypeInfo[i].sticky = v
 	end
 end
 
--- whisper to target
+
 local function WhisperTarget()
 	hooksecurefunc('ChatEdit_OnSpacePressed', function(self)
 		if(string.sub(self:GetText(), 1, 3) == '/tt' and (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target'))) then
@@ -223,7 +214,7 @@ local function WhisperTarget()
 	end
 end
 
--- time stamp
+
 local function UpdateTimestamp()
 	local greyStamp = C.GreyColor..'%H:%M|r '
 	if C.chat.timeStamp then
@@ -233,38 +224,7 @@ local function UpdateTimestamp()
 	end
 end
 
--- lock position
-local function ForceChatSettings()
-	FCF_SetLocked(ChatFrame1, nil)
-	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint(unpack(C.chat.position))
 
-	for i = 1, NUM_CHAT_WINDOWS do
-		local cf = _G['ChatFrame'..i]
-		ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
-	end
-	FCF_SavePositionAndDimensions(ChatFrame1)
-	FCF_SetLocked(ChatFrame1, true)
-end
-
--- hide useless buttons
-local function HideForever(f)
-	f:SetScript('OnShow', f.Hide)
-	f:Hide()
-end
-local function RemoveUselessButtons()
-	HideForever(ChatFrameMenuButton)
-	HideForever(QuickJoinToastButton)
-	HideForever(GeneralDockManagerOverflowButton)
-
-	if not  C.chat.voiceButtons then
-		HideForever(ChatFrameChannelButton)
-		HideForever(ChatFrameToggleVoiceDeafenButton)
-		HideForever(ChatFrameToggleVoiceMuteButton)
-	end
-end
-
--- update chat edit box border color
 local function UpdateEditBoxBorderColor()
 	hooksecurefunc('ChatEdit_UpdateHeader', function()
 		local editBox = ChatEdit_ChooseBoxForSend()
@@ -280,46 +240,6 @@ local function UpdateEditBoxBorderColor()
 			editBox.bd:SetBackdropBorderColor(0, 0, 0)
 		else
 			editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r,ChatTypeInfo[mType].g,ChatTypeInfo[mType].b)
-		end
-	end)
-end
-
--- don't cut the toastframe
-local function AdjustBNToastFrame()
-	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
-end
-
--- voice chat stuff
-local function AdjustVoiceChatFrame()
-	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-50,50,50,-50)
-	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-	VoiceChatChannelActivatedNotification:SetClampRectInsets(-50,50,50,-50)
-	ChatAlertFrame:SetClampedToScreen(true)
-	ChatAlertFrame:SetClampRectInsets(-50,50,50,-50)
-end
-
--- selectable font size
-local function SetUpFont()
-	for i = 1, 15 do
-		CHAT_FONT_HEIGHTS[i] = i + 9
-	end
-end
-
---
-local function EasyResizing()
-	ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
-		if btn == 'LeftButton' then
-			if select(8, GetChatWindowInfo(1)) then
-				ChatFrame1:StartSizing('TOP')
-			end
-		end
-	end)
-	ChatFrame1Tab:SetScript('OnMouseUp', function(_, btn)
-		if btn == 'LeftButton' then
-			ChatFrame1:StopMovingOrSizing()
-			FCF_SavePositionAndDimensions(ChatFrame1)
 		end
 	end)
 end
@@ -340,47 +260,27 @@ function module:OnLogin()
 		end
 	end
 
-	--[[hooksecurefunc('FCF_OpenTemporaryWindow', function()
-		for _, chatFrameName in next, CHAT_FRAMES do
-			local frame = _G[chatFrameName]
-			if frame.isTemporary then
-				skinChat(frame)
-			end
-		end
-	end)]]
-
-	self:ChatFilter()
-	self:ChatAbbreviate()
-	self:WhisperSound()
-	self:ChatStrings()
-	self:ChatBubble()
-	self:ItemLinkLevel()
-	self:RealLinks()
-
-	UpdateTimestamp()
-	EnableClearCommand()
-	DetectUrls()
-	MakeChannelsSticky()
-	RemoveUselessButtons()
-	UpdateEditBoxBorderColor()
-	WhisperTarget()
-	AdjustBNToastFrame()
-	AdjustVoiceChatFrame()
-	SetUpFont()
-	EasyResizing()
-
-	if C.chat.lockPosition then
-		ForceChatSettings()
+	for i = 1, 15 do
+		CHAT_FONT_HEIGHTS[i] = i + 9
 	end
 
-	SetCVar('chatStyle', 'classic')
+	SetCVar("chatStyle", "classic")
 	F.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
-	-- ProfanityFilter
-	if not BNFeaturesEnabledAndConnected() then return end
-
-	SetCVar('profanityFilter', 0)
+	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
+		if btn == "LeftButton" then
+			if select(8, GetChatWindowInfo(1)) then
+				ChatFrame1:StartSizing("TOP")
+			end
+		end
+	end)
+	ChatFrame1Tab:SetScript("OnMouseUp", function(_, btn)
+		if btn == "LeftButton" then
+			ChatFrame1:StopMovingOrSizing()
+			FCF_SavePositionAndDimensions(ChatFrame1)
+		end
+	end)
 
 	ToggleChatColorNamesByClassGroup(true, 'SAY')
 	ToggleChatColorNamesByClassGroup(true, 'EMOTE')
@@ -404,4 +304,49 @@ function module:OnLogin()
 	ToggleChatColorNamesByClassGroup(true, 'CHANNEL5')
 	ToggleChatColorNamesByClassGroup(true, 'INSTANCE_CHAT')
 	ToggleChatColorNamesByClassGroup(true, 'INSTANCE_CHAT_LEADER')
+
+
+	BNToastFrame:SetClampedToScreen(true)
+	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
+
+	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-50,50,50,-50)
+	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-50,50,50,-50)
+	ChatAlertFrame:SetClampedToScreen(true)
+	ChatAlertFrame:SetClampRectInsets(-50,50,50,-50)
+
+	local function HideForever(f)
+		f:SetScript('OnShow', f.Hide)
+		f:Hide()
+	end
+
+	HideForever(ChatFrameMenuButton)
+	HideForever(QuickJoinToastButton)
+	HideForever(GeneralDockManagerOverflowButton)
+	HideForever(ChatFrameChannelButton)
+	HideForever(ChatFrameToggleVoiceDeafenButton)
+	HideForever(ChatFrameToggleVoiceMuteButton)
+
+	if C.chat.lockPosition then
+		F:RegisterEvent("UI_SCALE_CHANGED", function()
+			ChatFrame1:SetPoint(unpack(C.chat.position))
+		end)
+	end
+
+	UpdateTimestamp()
+	UpdateEditBoxBorderColor()
+	WhisperTarget()
+	ChannelsSticky()
+	
+	self:Filter()
+	self:Abbreviate()
+	self:Whisper()
+	self:ItemLink()
+	self:RealLink()
+	self:Button()
+	self:UrlCopy()
+	self:NameCopy()
+	self:Tab()
+	self:Spamagemeter()
 end

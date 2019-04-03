@@ -2,7 +2,6 @@ local _, ns = ...
 
 ns.localization.profile = "Character-specific settings"
 ns.localization.profileTooltip = "Switch between a profile that applies to all characters and one that is unique to this character."
-
 ns.localization.reset = "Reset"
 ns.localization.resetCheck = "Remove all saved options, and reset them to their default values."
 ns.localization.install = "Installer"
@@ -66,7 +65,8 @@ ns.localization.generalcameraIncrement = "Camera zoom speed"
 ns.localization.generaluiScaleAuto = "Force optimal UI scale"
 ns.localization.generaluiScaleAutoTooltip = "Automatically apply the best UI scale for current resolution."
 ns.localization.generaluiScale = "Customize UI scale"
-
+ns.localization.generalautoBubble = "Chat bubble"
+ns.localization.generalautoBubbleTooltip = "Only enable chat bubble in raid."
 
 
 
@@ -173,8 +173,8 @@ ns.localization.infobarstats = "Time/FPS/Latency"
 ns.localization.infobarstatsTooltip = "Show time/FPS/latency informations."
 ns.localization.infobarmicroMenu = "Micro menu"
 ns.localization.infobarmicroMenuTooltip = "Show game menu."
-ns.localization.infobarskadaTool = "Skada helper"
-ns.localization.infobarskadaToolTooltip = "Left click to toggle Skada panel\nRight click to hide Skada panel\nMiddle click to reset Skada data."
+ns.localization.infobarskadaHelper = "Skada helper"
+ns.localization.infobarskadaHelperTooltip = "Left click to toggle Skada panel\nRight click to hide Skada panel\nMiddle click to reset Skada data."
 ns.localization.infobarspecTalent = "Talent/Spec"
 ns.localization.infobarspecTalentTooltip = "Show talent and specialization\nLeft click to change specialization\nRight click to change loot specialization."
 ns.localization.infobarfriends = "Friends"
@@ -183,7 +183,8 @@ ns.localization.infobarcurrencies = "Currencies"
 ns.localization.infobarcurrenciesTooltip = "Show currencies and count."
 ns.localization.infobarreport = "Daily/weekly"
 ns.localization.infobarreportTooltip = "Show daily weekly informations."
-
+ns.localization.infobardurability = "Durability"
+ns.localization.infobardurabilityTooltip = "Show gears durability."
 
 
 
@@ -282,20 +283,20 @@ ns.localization.chatenableTooltip = "Uncheck if you want to use another chat add
 ns.localization.chatlockPosition = "Lock position"
 ns.localization.chatuseOutline = "Outline"
 ns.localization.chatuseOutlineTooltip = "Add outline for chat text."
-ns.localization.chatwhisperSound = "Whisper alert"
-ns.localization.chatwhisperSoundTooltip = "Add sound alert for whisper messages."
+ns.localization.chatwhisperAlert = "Whisper alert"
+ns.localization.chatwhisperAlertTooltip = "Add sound alert for whisper messages."
 ns.localization.chattimeStamp = "Time stamp"
 ns.localization.chattimeStampTooltip = "Add customized time stamp."
-ns.localization.chatitemLinkLevel = "Item link level"
-ns.localization.chatitemLinkLevelTooltip = "Expand item links in chat or when you or someone in your group receives loot to display item slot and item level."
-ns.localization.chatspamageMeters = "Spamage meters"
-ns.localization.chatspamageMetersTooltip = "Suppresses chat messages from damage meters."
-ns.localization.chatminimizeButton = "Minimize button"
-ns.localization.chatminimizeButtonTooltip = "Add a button to hide chat frame."
+ns.localization.chatitemLink = "Item link"
+ns.localization.chatitemLinkTooltip = "Expand item links in chat or when you or someone in your group receives loot to display item slot and item level."
+ns.localization.chatspamageMeter = "Spamage meter"
+ns.localization.chatspamageMeterTooltip = "Suppresses chat messages from damage meters."
+ns.localization.chatchatButton = "Chat button"
 ns.localization.chatchannelSticky = "Channel sticky"
 ns.localization.chatlineFading = "Line fading"
-ns.localization.chatuseFilter = "Filters"
-ns.localization.chatuseFilterTooltip = "Filter some unnecessary lines."
+ns.localization.chatuseFilter = "Chat filter"
+ns.localization.chatuseFilterTooltip = "Enable chat filter."
+
 
 
 ns.localization.map = "Map"

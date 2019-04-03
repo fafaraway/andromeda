@@ -12,17 +12,7 @@ local floor = math.floor
 local format = string.format
 
 
-local function ShortenValue(value)
-	if(value >= 1e9) then
-		return format('%.1fb', value / 1e9)
-	elseif(value >= 1e6) then
-		return format('%.1fm', value / 1e6)
-	elseif(value >= 1e4) then
-		return format('%.1fk', value / 1e3)
-	else
-		return value
-	end
-end
+
 
 local function usub(str, len)
 	local i = 1
@@ -82,7 +72,7 @@ tags['free:health'] = function(unit)
 	local cur = UnitHealth(unit)
 	local r, g, b = unpack(ns.oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 
-	return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, ShortenValue(cur))
+	return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F.Numb(cur))
 end
 tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
 
@@ -117,7 +107,7 @@ tags['free:power'] = function(unit)
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	if(cur == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
-	return ShortenValue(cur)
+	return F.Numb(cur)
 end
 tagEvents['free:power'] = 'UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER'
 

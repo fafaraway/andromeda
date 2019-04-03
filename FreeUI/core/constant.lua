@@ -73,7 +73,7 @@ C.Client = GetLocale()
 C.Version = GetAddOnMetadata("FreeUI", "Version")
 C.Title = GetAddOnMetadata("FreeUI", "Title")
 C.Support = GetAddOnMetadata("FreeUI", "X-Support")
-
+C.wowBuild = select(2, GetBuildInfo()); C.wowBuild = tonumber(C.wowBuild)
 
 C.ClassColors = {}
 C.ClassList = {}
@@ -102,13 +102,12 @@ C.LineString = C.GreyColor.."---------------"
 C.LeftButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t "
 C.RightButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t "
 C.MiddleButton = " |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t "
-
+C.CopyTex = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
 
 C.TexCoord = {.08, .92, .08, .92}
 
 
-local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
-local fixedHeight = 768 / pysHeight
-local scale = tonumber(floor(fixedHeight*100 + .5)/100)
+C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 
-C.Mult = fixedHeight / scale
+
+

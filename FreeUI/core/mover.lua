@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 
-
+local strsplit, ipairs, wipe = string.split, ipairs, table.wipe
 
 local toggle = 0
 
@@ -299,11 +299,16 @@ SlashCmdList.FREEUI = function(cmd)
 		end
 		CreateConsole()
 		UnlockElements()
-	else
+	elseif cmd == 'config' then
 		if FreeUIOptionsPanel then
 			FreeUIOptionsPanel:Show()
 			HideUIPanel(GameMenuFrame)
 			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+		end
+	else
+		for i, v in ipairs(L['SLASHCMD_HELP']) do
+			--print('|cff55c782'..('%s'):format(tostring(v))..'|r')
+			print(strsplit('-', tostring(v), 2))
 		end
 	end
 end

@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
 if not C.chat.enable then return end
-local module = F:GetModule('chat')
+local module = F:GetModule('Chat')
 
-function module:WhisperSound()
-	if not C.chat.whisperSound then return end
+function module:Whisper()
+	if not C.chat.whisperAlert then return end
 
 	local f = CreateFrame('Frame')
 	local soundFile = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper1.ogg'

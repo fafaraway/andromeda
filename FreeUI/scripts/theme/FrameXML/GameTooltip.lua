@@ -5,6 +5,61 @@ tinsert(C.themes["FreeUI"], function()
 	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
+	local function getBackdrop(self) return self.bg:GetBackdrop() end
+	local function getBackdropColor() return 0, 0, 0, .5 end
+	local function getBackdropBorderColor() return 0, 0, 0 end
+
+	function F:ReskinTooltip()
+		if not self then
+			if C.general.isDeveloper then print("Unknown tooltip spotted.") end
+			return
+		end
+
+		if self:IsForbidden() then return end
+
+		self:SetScale(1)
+
+		if not self.tipStyled then
+			self:SetBackdrop(nil)
+			self:DisableDrawLayer("BACKGROUND")
+			self.bg = F.CreateBDFrame(self, .5)
+			self.glow = F.CreateSD(self.bg, .5, 4, 4)
+
+			self.GetBackdrop = getBackdrop
+			self.GetBackdropColor = getBackdropColor
+			self.GetBackdropBorderColor = getBackdropBorderColor
+
+			self.tipStyled = true
+		end
+
+		if self.glow then
+			self.glow:SetBackdropBorderColor(0, 0, 0, .5)
+		end
+		self.bg:SetBackdropBorderColor(0, 0, 0)
+
+		if C.tooltip.enable and C.tooltip.borderColor and self.GetItem then
+			local _, item = self:GetItem()
+			if item then
+				local quality = select(3, GetItemInfo(item))
+				local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
+				if color then
+					if self.glow then
+						self.glow:SetBackdropBorderColor(color.r, color.g, color.b, .5)
+					else
+						self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+					end
+				end
+			end
+		end
+	end
+
+	hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
+		if not self.tipStyled then return end
+		self:SetBackdrop(nil)
+	end)
+
+	
+
 	local tooltips = {
 		ChatMenu,
 		EmoteMenu,
@@ -31,8 +86,9 @@ tinsert(C.themes["FreeUI"], function()
 		IMECandidatesFrame,
 	}
 
-	for _, f in pairs(tooltips) do
-		f:HookScript("OnShow", F.ReskinTooltip)
+	for _, tooltip in pairs(tooltips) do
+		--F.ReskinTooltip(tooltip)
+		tooltip:HookScript("OnShow", F.ReskinTooltip)
 	end
 
 	C_Timer.After(5, function()

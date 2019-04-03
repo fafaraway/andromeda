@@ -21,6 +21,8 @@ C['general'] = {
 	['quickMarking'] = true,
 	['quickFocusing'] = true,
 
+	['autoBubble'] = true,
+
 	
 	['clickCast'] = true,
 		['clickCast_filter'] = true,
@@ -39,6 +41,7 @@ C['general'] = {
 		['raidManager_Position'] = {'LEFT'},
 
 	['cameraIncrement'] = 5,
+	['numberFormatCN'] = false,
 	
 	['isDeveloper'] = false,
 }
@@ -194,11 +197,12 @@ C['infobar'] = {
 		['mouseover'] = true,
 		['stats'] = true,
 		['microMenu'] = true,
-		['skadaTool'] = true,
+		['skadaHelper'] = true,
 		['specTalent'] = true,
 		['friends'] = true,
 		['currencies'] = true,
 		['report'] = true,
+		['durability'] = true,
 }
 
 
@@ -211,6 +215,7 @@ C['tooltip'] = {
 		['hideTitle'] = true,
 		['hideRealm'] = true,
 		['hideRank'] = true,
+		['hideJunkGuild'] = true,
 		['combatHide'] = false,
 		['ilvlSpec'] = true,
 			['ilvlSpecByShift'] = false,
@@ -227,14 +232,18 @@ C['chat'] = {
 	['enable'] = true,
 		['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},
 		['lockPosition'] = true,
-		['itemLinkLevel'] = true,
-		['spamageMeters'] = true,
-		['whisperSound'] = true,
-		['minimizeButton'] = true,
+		['itemLink'] = true,
+		['spamageMeter'] = true,
+		['whisperAlert'] = true,
+		['chatButton'] = true,
+		['abbreviate'] = true,
+		['nameCopy'] = true,
+		['urlCopy'] = true,
+		['realLink'] = true,
+		['tab'] = true,
+		['channelSticky'] = true,
 		['useOutline'] = false,
 		['timeStamp'] = true,
-		['voiceButtons'] = false,
-		['channelSticky'] = true,
 		['lineFading'] = true,
 			['timeVisible'] = 20,
 			['fadeDuration'] = 6,
@@ -244,7 +253,7 @@ C['chat'] = {
 			['blockAddonAlert'] = true,
 				['addonBlockList'] = {
 					'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', ('%-'):rep(20),
-					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'wow.+兑换码', 'wow.+验证码', '=>'
+					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'wow.+兑换码', 'wow.+验证码', '=>', '【有爱插件】'
 					},
 }
 

@@ -2,8 +2,9 @@
 	<Script file='core.lua'/>
 	<Script file='stats.lua'/>
 	<Script file='micromenu.lua'/>
-	<Script file='dm.lua'/>
-	<Script file='spec.lua'/>
+	<Script file='skadahelper.lua'/>
+	<Script file='spectalent.lua'/>
+	<Script file='durability.lua'/>
 	<Script file='friends.lua'/>
 	<Script file='currency.lua'/>
 	<Script file='report.lua'/>

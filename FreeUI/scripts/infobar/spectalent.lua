@@ -1,19 +1,22 @@
 local F, C, L = unpack(select(2, ...))
 if not C.infobar.enable then return end
-if not C.infobar.specTalent then return end
+
 local module = F:GetModule('Infobar')
-
-local function addIcon(texture)
-	texture = texture and '|T'..texture..':12:16:0:0:50:50:4:46:4:46|t' or ''
-	return texture
-end
-
-local FreeUISpecButton = module.FreeUISpecButton
-local pvpTalents
 
 
 function module:SpecTalent()
-	FreeUISpecButton = module:addButton('', module.POSITION_RIGHT, 220, function(self, button)
+	if not C.infobar.specTalent then return end
+
+	local function addIcon(texture)
+		texture = texture and '|T'..texture..':12:16:0:0:50:50:4:46:4:46|t' or ''
+		return texture
+	end
+
+	local pvpTalents
+
+	local FreeUISpecButton = module.FreeUISpecButton
+
+	FreeUISpecButton = module:addButton('', module.POSITION_RIGHT, 200, function(self, button)
 		local currentSpec = GetSpecialization()
 		local numSpec = GetNumSpecializations()
 		if not (currentSpec and numSpec) then return end
@@ -66,13 +69,9 @@ function module:SpecTalent()
 			local lootrole = GetSpecializationRoleByID(lootSpecID)
 
 			if not lootname or name == lootname then
-				self.Text:SetText(format(SPECIALIZATION..': '..C.MyColor..'%s  |r'..ITEM_LOOT..':'..C.MyColor..' %s', name, name))
+				self.Text:SetText(format(L['INFOBAR_SPEC']..': '..C.MyColor..'%s  |r'..L['INFOBAR_LOOT']..':'..C.MyColor..' %s', name, name))
 			else
-				self.Text:SetText(format(SPECIALIZATION..': '..C.MyColor..'%s  |r'..ITEM_LOOT..':'..C.MyColor..' %s', name, lootname))
-			end
-
-			if C.Client == 'zhCN' or C.Client == 'zhTW' then
-				self.Text:SetFont(C.font.normal, 11)
+				self.Text:SetText(format(L['INFOBAR_SPEC']..': '..C.MyColor..'%s  |r'..L['INFOBAR_LOOT']..':'..C.MyColor..' %s', name, lootname))
 			end
 
 			if (C.Client == 'zhCN' or C.Client == 'zhTW') then
@@ -84,7 +83,6 @@ function module:SpecTalent()
 			end
 
 			module:showButton(self)
-
 		else
 			module:hideButton(self)
 		end
@@ -94,7 +92,7 @@ function module:SpecTalent()
 		if not GetSpecialization() then return end
 		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -15)
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(TALENTS_BUTTON, .9, .82, .62)
+		GameTooltip:AddLine(TALENTS_BUTTON, .9, .8, .6)
 		GameTooltip:AddLine(' ')
 
 		local _, specName, _, specIcon = GetSpecializationInfo(GetSpecialization())
@@ -104,7 +102,7 @@ function module:SpecTalent()
 			for c = 1, 3 do
 				local _, name, icon, selected = GetTalentInfo(t, c, 1)
 				if selected then
-					GameTooltip:AddLine(addIcon(icon)..' '..name, 1,1,1)
+					GameTooltip:AddLine(addIcon(icon)..' '..name, 1, 1, 1)
 				end
 			end
 		end
@@ -119,7 +117,7 @@ function module:SpecTalent()
 				for _, talentID in next, pvpTalents do
 					local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
 					if name and unlocked then
-						GameTooltip:AddLine(addIcon(icon)..' '..name, 1,1,1)
+						GameTooltip:AddLine(addIcon(icon)..' '..name, 1, 1, 1)
 					end
 				end
 			end
@@ -128,9 +126,9 @@ function module:SpecTalent()
 		end
 
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.LeftButton..L['ChangeSpec']..' ', 1,1,1, .9, .82, .62)
-		GameTooltip:AddDoubleLine(' ', C.RightButton..L['ChangeLootSpec']..' ', 1,1,1, .9, .82, .62)
-		GameTooltip:AddDoubleLine(' ', C.MiddleButton..L['SpecPanel']..' ', 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(' ', C.LeftButton..L['INFOBAR_OPEN_SPEC_PANEL']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.RightButton..L['INFOBAR_CHANGE_SPEC']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.MiddleButton..L['INFOBAR_CHANGE_LOOT_SPEC']..' ', 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

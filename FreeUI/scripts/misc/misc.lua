@@ -20,6 +20,19 @@ function module:OnLogin()
 	self:ExtendInstance()
 	self:CMGuildBest()
 
+	if C.general.autoBubble then
+		local function UpdateBubble()
+			local name, instType = GetInstanceInfo()
+			if name and instType == 'raid' then
+				SetCVar('chatBubbles', 1)
+			else
+				SetCVar('chatBubbles', 0)
+			end
+		end
+		UpdateBubble()
+		F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateBubble)
+	end
+
 	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
 end
 
@@ -63,7 +76,7 @@ function module:UndressButton()
 	local undress = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undress:SetSize(80, 22)
 	undress:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -1, 0)
-	undress:SetText(L['GET_NAKED'])
+	undress:SetText(L['NAKE_BUTTON'])
 	undress:SetScript('OnClick', function()
 		DressUpModel:Undress()
 	end)
@@ -71,7 +84,7 @@ function module:UndressButton()
 	local sideUndress = CreateFrame('Button', 'SideDressUpModelUndressButton', SideDressUpModel, 'UIPanelButtonTemplate')
 	sideUndress:SetSize(80, 22)
 	sideUndress:SetPoint('TOP', SideDressUpModelResetButton, 'BOTTOM', 0, -5)
-	sideUndress:SetText(L['GET_NAKED'])
+	sideUndress:SetText(L['NAKE_BUTTON'])
 	sideUndress:SetScript('OnClick', function()
 		SideDressUpModel:Undress()
 	end)
@@ -152,7 +165,7 @@ function module:HookParagonRep()
 			if factionID and C_Reputation.IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 				local barValue = mod(currentValue, threshold)
-				local factionStandingtext = C.InfoColor..L['Paragon']..floor(currentValue/threshold)
+				local factionStandingtext = C.InfoColor..L['PARAGON']..' ('..floor(currentValue/threshold)..')'
 
 				factionBar:SetMinMaxValues(0, threshold)
 				factionBar:SetValue(barValue)

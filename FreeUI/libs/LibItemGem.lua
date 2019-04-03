@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-if not C.chat.itemLinkLevel then return end
+if not C.chat.enable then return end
+if not C.chat.itemLink then return end
 
 -------------------------------------
 -- 物品寶石庫 Author: M

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("Misc")
+local module = F:GetModule('Misc')
 
 local format, pairs = string.format, pairs
 local min, mod, floor = math.min, mod, math.floor
@@ -14,8 +14,8 @@ local function UpdateBar(bar)
 	local rest = bar.restBar
 	if rest then rest:Hide() end
 
-	if UnitLevel("player") < MAX_PLAYER_LEVEL then
-		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
+	if UnitLevel('player') < MAX_PLAYER_LEVEL then
+		local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
 		bar:SetStatusBarColor(79/250, 167/250, 74/250)
 		bar:SetMinMaxValues(0, mxp)
 		bar:SetValue(xp)
@@ -40,30 +40,34 @@ local function UpdateBar(bar)
 end
 
 local function UpdateTooltip(bar)
-	GameTooltip:SetOwner(Minimap, "ANCHOR_NONE")
-	GameTooltip:SetPoint("TOPRIGHT", Minimap, "TOPLEFT", -4, -(C.map.miniMapSize/8*C.Mult)-6)
+	GameTooltip:SetOwner(Minimap, 'ANCHOR_NONE')
+	GameTooltip:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -4, -(C.map.miniMapSize/8*C.Mult)-6)
 	
-	if UnitLevel("player") < MAX_PLAYER_LEVEL then
-		GameTooltip:AddLine(LEVEL.." "..UnitLevel("player"), C.r, C.g, C.b)
+	if UnitLevel('player') < MAX_PLAYER_LEVEL then
+		GameTooltip:AddLine(LEVEL..' '..UnitLevel('player'), C.r, C.g, C.b)
 
-		local xp, mxp, rxp = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-		GameTooltip:AddDoubleLine(XP..":", xp.."/"..mxp.." ("..floor(xp/mxp*100).."%)", 1, 1, 1, 1,1,1)
+		local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
+		GameTooltip:AddDoubleLine(XP, xp..' / '..mxp..' ('..floor(xp/mxp*100)..'%)', 1, 1, 1, 1, 1, 1)
 		if rxp then
-			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26..":", "+"..rxp.." ("..floor(rxp/mxp*100).."%)", 1, 1, 1, 1,1,1)
+			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26, '+'..rxp..' ('..floor(rxp/mxp*100)..'%)', 1, 1, 1, 1, 1, 1)
 		end
-		if IsXPUserDisabled() then GameTooltip:AddLine("|cffff0000"..XP..LOCKED) end
-		GameTooltip:AddLine(" ")
+		if IsXPUserDisabled() then GameTooltip:AddLine('|cffff0000'..XP..LOCKED) end
 	end
 
 	if C_AzeriteItem.HasActiveAzeriteItem() then
 		local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
-		local azeriteItemName = azeriteItem:GetItemName()
-		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(C_AzeriteItem.FindActiveAzeriteItem())
+		local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
 		local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
-		GameTooltip:AddLine(azeriteItemName.." ("..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..")", 247/255, 225/255, 171/255)
-		GameTooltip:AddDoubleLine(ARTIFACT_POWER, F.Numb(xp).."/"..F.Numb(totalLevelXP).." ("..floor(xp/totalLevelXP*100).."%)", 1, 1, 1, 1,1,1)
-		GameTooltip:AddLine(" ")
+
+		azeriteItem:ContinueWithCancelOnItemLoad(function()
+			local azeriteItemName = azeriteItem:GetItemName()
+			if UnitLevel('player') < MAX_PLAYER_LEVEL then
+				GameTooltip:AddLine(' ')
+			end
+			GameTooltip:AddLine(azeriteItemName..' ('..format(SPELLBOOK_AVAILABLE_AT, currentLevel)..')', 247/255, 225/255, 171/255)
+			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(xp)..' / '..BreakUpLargeNumbers(totalLevelXP)..' ('..floor(xp/totalLevelXP*100)..'%)', 1, 1, 1, 1, 1, 1)
+		end)
 	end
 
 	if GetWatchedFactionInfo() then
@@ -73,7 +77,7 @@ local function UpdateTooltip(bar)
 		local standingtext
 		if friendID then
 			if maxRank > 0 then
-				name = name.." ("..currentRank.." / "..maxRank..")"
+				name = name..' ('..currentRank..' / '..maxRank..')'
 			end
 			if not nextFriendThreshold then
 				value = barMax - 1
@@ -84,27 +88,27 @@ local function UpdateTooltip(bar)
 				barMax = barMin + 1e3
 				value = barMax - 1
 			end
-			standingtext = GetText("FACTION_STANDING_LABEL"..standing, UnitSex("player"))
+			standingtext = GetText('FACTION_STANDING_LABEL'..standing, UnitSex('player'))
 		end
+		GameTooltip:AddLine(' ')
 		GameTooltip:AddLine(name, 62/250, 175/250, 227/250)
-		GameTooltip:AddDoubleLine(standingtext, value - barMin.."/"..barMax - barMin.." ("..floor((value - barMin)/(barMax - barMin)*100).."%)", 1,1,1, 1,1,1)
 		
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 			local paraCount = floor(currentValue/threshold)
 			currentValue = mod(currentValue, threshold)
-			GameTooltip:AddDoubleLine(L["ParagonRep"]..paraCount, currentValue.."/"..threshold.." ("..floor(currentValue/threshold*100).."%)", 131/250, 239/250, 131/250, 1,1,1)
-			GameTooltip:AddLine(" ")
+			GameTooltip:AddDoubleLine(L['PARAGON']..' ('..paraCount..')', currentValue..' / '..threshold..' ('..floor(currentValue/threshold*100)..'%)', 1, 1, 1, 1, 1, 1)
 		else
-			GameTooltip:AddLine(" ")
+			GameTooltip:AddDoubleLine(standingtext, value - barMin..' / '..barMax - barMin..' ('..floor((value - barMin)/(barMax - barMin)*100)..'%)', 1, 1, 1, 1, 1, 1)
 		end
 	end
 
-	--if IsWatchingHonorAsXP() then
-	if UnitLevel("player") == MAX_PLAYER_LEVEL then
-		local current, barMax, level = UnitHonor("player"), UnitHonorMax("player"), UnitHonorLevel("player")
+	if IsWatchingHonorAsXP() then
+	--if UnitLevel('player') == MAX_PLAYER_LEVEL then
+		local current, barMax, level = UnitHonor('player'), UnitHonorMax('player'), UnitHonorLevel('player')
+		GameTooltip:AddLine(' ')
 		GameTooltip:AddLine(HONOR, 177/250, 19/250, 0)
-		GameTooltip:AddDoubleLine(LEVEL.." "..level, current.."/"..barMax, 1, 1, 1, 1,1,1)
+		GameTooltip:AddDoubleLine(LEVEL..' ('..level..')', current..' / '..barMax..' ('..floor(current/barMax*100)..'%)', 1, 1, 1, 1, 1, 1)
 	end
 
 	GameTooltip:Show()
@@ -112,37 +116,37 @@ end
 
 function module:SetupScript(bar)
 	bar.eventList = {
-		"PLAYER_XP_UPDATE",
-		"PLAYER_LEVEL_UP",
-		"UPDATE_EXHAUSTION",
-		"PLAYER_ENTERING_WORLD",
-		"UPDATE_FACTION",
-		"ARTIFACT_XP_UPDATE",
-		"UNIT_INVENTORY_CHANGED",
-		"ENABLE_XP_GAIN",
-		"DISABLE_XP_GAIN",
-		"AZERITE_ITEM_EXPERIENCE_CHANGED",
-		"HONOR_XP_UPDATE",
+		'PLAYER_XP_UPDATE',
+		'PLAYER_LEVEL_UP',
+		'UPDATE_EXHAUSTION',
+		'PLAYER_ENTERING_WORLD',
+		'UPDATE_FACTION',
+		'ARTIFACT_XP_UPDATE',
+		'UNIT_INVENTORY_CHANGED',
+		'ENABLE_XP_GAIN',
+		'DISABLE_XP_GAIN',
+		'AZERITE_ITEM_EXPERIENCE_CHANGED',
+		'HONOR_XP_UPDATE',
 	}
 	for _, event in pairs(bar.eventList) do
 		bar:RegisterEvent(event)
 	end
-	bar:SetScript("OnEvent", UpdateBar)
-	bar:SetScript("OnEnter", UpdateTooltip)
-	bar:SetScript("OnLeave", F.HideTooltip)
+	bar:SetScript('OnEvent', UpdateBar)
+	bar:SetScript('OnEnter', UpdateTooltip)
+	bar:SetScript('OnLeave', F.HideTooltip)
 end
 
 function module:ProgressBar()
 	if not C.general.progressBar or not C.map.miniMap then return end 
 
-	local bar = CreateFrame("StatusBar", nil, Minimap)
-	bar:SetPoint("BOTTOM", Minimap, "TOP", 0, -C.map.miniMapSize/8*C.Mult)
+	local bar = CreateFrame('StatusBar', nil, Minimap)
+	bar:SetPoint('BOTTOM', Minimap, 'TOP', 0, -C.map.miniMapSize/8*C.Mult)
 	bar:SetSize(C.map.miniMapSize*C.Mult, 3*C.Mult)
 	bar:SetHitRectInsets(0, 0, -10, -10)
 	F.CreateSB(bar)
 	F.CreateBDFrame(bar)
 
-	local rest = CreateFrame("StatusBar", nil, bar)
+	local rest = CreateFrame('StatusBar', nil, bar)
 	rest:SetAllPoints()
 	rest:SetStatusBarTexture(C.media.sbTex)
 	rest:SetStatusBarColor(105/250, 194/250, 221/250, .9)

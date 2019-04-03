@@ -235,21 +235,17 @@ function module:ReskinRegions()
 	end
 
 
-	local durabilityMover = F.CreateGear(DurabilityFrame, 'FreeUIDurabilityFrameMover')
-	durabilityMover:SetPoint('BOTTOMLEFT', Minimap, 'TOPLEFT', 0, 0)
-	durabilityMover:SetFrameStrata('HIGH')
-	F.AddTooltip(durabilityMover, 'ANCHOR_TOP', L['TOGGLE'], 'system')
-	F.CreateMF(durabilityMover)
-
+	-- reposition durability frame
 	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
-		if parent ~= durabilityMover then
-			DurabilityFrame:SetScale(.7)
+		if parent ~= UIParent then
+			DurabilityFrame:SetScale(1)
 			DurabilityFrame:ClearAllPoints()
 			DurabilityFrame:SetClampedToScreen(true)
-			DurabilityFrame:SetPoint('BOTTOMRIGHT', durabilityMover, 'BOTTOMLEFT', -5, 0)
+			DurabilityFrame:SetPoint('TOP', UIParent, 'TOP', 0, -200)
 		end
 	end)
 
+	-- reposition vehicle indicator
 	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
 	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
 	vehicleMover:SetFrameStrata('HIGH')
@@ -266,7 +262,7 @@ function module:ReskinRegions()
 	end)
 
 
-	-- move zonetextframe
+	-- reposition zone text frame
 	ZoneTextFrame:SetFrameStrata('MEDIUM')
 	SubZoneTextFrame:SetFrameStrata('MEDIUM')
 
@@ -288,11 +284,11 @@ function module:ReskinRegions()
 	MinimapZoneText:SetJustifyH('CENTER')
 
 	if C.Client == 'zhCN' or C.Client == 'zhTW' then
-		ZoneTextString:SetFont(C.font.normal, 14, 'OUTLINE')
-		SubZoneTextString:SetFont(C.font.normal, 14, 'OUTLINE')
-		PVPInfoTextString:SetFont(C.font.normal, 14, 'OUTLINE')
-		PVPArenaTextString:SetFont(C.font.normal, 14, 'OUTLINE')
-		MinimapZoneText:SetFont(C.font.normal, 14, 'OUTLINE')
+		ZoneTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+		SubZoneTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+		PVPInfoTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+		PVPArenaTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+		MinimapZoneText:SetFont(C.font.normal, 16, 'OUTLINE')
 	else
 		F.SetFS(ZoneTextString)
 		F.SetFS(SubZoneTextString)
@@ -315,7 +311,7 @@ function module:WhoPingsMyMap()
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFS(f, {C.font.normal, 14}, '', nil, 'class', true, 'CENTER', 0, 50)
+	f.text = F.CreateFS(f, {C.font.normal, 16, 'OUTLINE'}, '', nil, 'class', true, 'CENTER', 0, 50)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript('OnPlay', function() f:SetAlpha(1) end)

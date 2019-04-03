@@ -630,6 +630,8 @@ function F:SetBD(x, y, x2, y2)
 	bg:SetFrameLevel(self:GetFrameLevel() - 1)
 	F.CreateBD(bg)
 	F.CreateSD(bg)
+
+	return bg
 end
 
 function F:ReskinPortraitFrame()
@@ -710,10 +712,7 @@ function F:ReskinGarrisonPortrait()
 	self.Level:ClearAllPoints()
 	self.Level:SetPoint('BOTTOM', self, 0, 12)
 
-	self.squareBG = F.CreateBDFrame(self, 1)
-	self.squareBG:SetFrameLevel(self:GetFrameLevel())
-	self.squareBG:SetPoint('TOPLEFT', 3, -3)
-	self.squareBG:SetPoint('BOTTOMRIGHT', -3, 11)
+	self.squareBG = F.CreateBDFrame(self.Portrait, 1)
 	
 	if self.PortraitRingCover then
 		self.PortraitRingCover:SetColorTexture(0, 0, 0)
@@ -916,8 +915,8 @@ function F:PixelIcon(texture, highlight)
 		self:EnableMouse(true)
 		self.HL = self:CreateTexture(nil, 'HIGHLIGHT')
 		self.HL:SetColorTexture(1, 1, 1, .25)
-		self.HL:SetPoint("TOPLEFT", C.Mult, -C.Mult)
-		self.HL:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
+		self.HL:SetPoint('TOPLEFT', C.Mult, -C.Mult)
+		self.HL:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
 	end
 end
 
@@ -978,16 +977,28 @@ end
 
 -- Numberize
 function F.Numb(n)
-	if n >= 1e12 then
-		return ('%.2ft'):format(n / 1e12)
-	elseif n >= 1e9 then
-		return ('%.2fb'):format(n / 1e9)
-	elseif n >= 1e6 then
-		return ('%.2fm'):format(n / 1e6)
-	elseif n >= 1e3 then
-		return ('%.1fk'):format(n / 1e3)
+	if C.general.numberFormatCN then
+		if n >= 1e12 then
+			return format('%.2f'..L['NUMBER_CAP_3'], n / 1e12)
+		elseif n >= 1e8 then
+			return format('%.2f'..L['NUMBER_CAP_2'], n / 1e8)
+		elseif n >= 1e4 then
+			return format('%.1f'..L['NUMBER_CAP_1'], n / 1e4)
+		else
+			return format('%.0f', n)
+		end
 	else
-		return ('%.0f'):format(n)
+		if n >= 1e12 then
+			return ('%.2ft'):format(n / 1e12)
+		elseif n >= 1e9 then
+			return ('%.2fb'):format(n / 1e9)
+		elseif n >= 1e6 then
+			return ('%.2fm'):format(n / 1e6)
+		elseif n >= 1e3 then
+			return ('%.1fk'):format(n / 1e3)
+		else
+			return ('%.0f'):format(n)
+		end
 	end
 end
 

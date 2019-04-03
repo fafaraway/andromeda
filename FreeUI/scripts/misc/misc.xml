@@ -14,6 +14,7 @@
 	<Script file='safequeue.lua'/>
 	<Script file='sharedmedia.lua'/>
 	<Script file='quickjoin.lua'/>
+	<Script file='randomhearthstone.lua'/>
 	<Script file='missingstats.lua'/>
 	<Script file='pvpsound.lua'/>
 	<Script file='tradetabs.lua'/>

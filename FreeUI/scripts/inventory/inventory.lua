@@ -85,9 +85,10 @@ function module:CreateInfoFrame()
 	search.isGlobal = true
 	search:SetPoint('LEFT', 0, 5)
 	search:DisableDrawLayer('BACKGROUND')
-	local bg = F.CreateBG(search)
+	local bg = F.CreateBDFrame(search, .8)
 	bg:SetPoint('TOPLEFT', -5, -5)
 	bg:SetPoint('BOTTOMRIGHT', 5, 5)
+	if F then F.CreateGradient(bg) end
 
 	local tag = self:SpawnPlugin('TagDisplay', '[money]  [currencies]', infoFrame)
 	F.SetFS(tag)
@@ -217,7 +218,7 @@ function module:CreateSortButton(name)
 			end
 		end
 	end)
-	F.AddTooltip(bu, 'ANCHOR_TOP', L['Sort'])
+	F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_SORT'])
 
 	return bu
 end
@@ -365,6 +366,14 @@ function module:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
+		if MerchantFrame:IsShown() then
+			if item.isInSet then
+				self:SetAlpha(.5)
+			else
+				self:SetAlpha(1)
+			end
+		end
+		
 		--[[if MerchantFrame:IsShown() and item.rarity == LE_ITEM_QUALITY_POOR and item.sellPrice > 0 then
 			self.junkIcon:SetAlpha(1)
 		else
@@ -438,10 +447,10 @@ function module:OnLogin()
 
 		local label
 		if strmatch(name, 'AzeriteItem$') then
-			label = L['AzeriteArmor']
+			label = L['INVENTORY_AZERITEARMOR']
 		elseif strmatch(name, 'Equipment$') then
 			if C.inventory.gearSetFilter then
-				label = L['EquipementSet']
+				label = L['INVENTORY_EQUIPEMENTSET']
 			else
 				label = BAG_FILTER_EQUIPMENT
 			end

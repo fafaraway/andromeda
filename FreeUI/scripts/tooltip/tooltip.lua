@@ -2,10 +2,6 @@ local F, C, L = unpack(select(2, ...))
 if not C.tooltip.enable then return end
 local module = F:RegisterModule('Tooltip')
 
-function module:OnLogin()
-	self:ExtraInfo()
-	self:AzeriteTrait()
-end
 
 local strfind, format, strupper, strsplit = string.find, string.format, string.upper, string.split
 local strlen, pairs = string.len, pairs
@@ -15,20 +11,27 @@ local FOREIGN_SERVER_LABEL, INTERACTIVE_SERVER_LABEL = FOREIGN_SERVER_LABEL, INT
 
 local classification = {
 	elite = ' |cffcc8800'..ELITE..'|r',
-	rare = ' |cffff99cc'..L['RARE']..'|r',
-	rareelite = ' |cffff99cc'..L['RARE']..'|r '..'|cffcc8800'..ELITE..'|r',
+	rare = ' |cffff99cc'..L['TOOLTIP_RARE']..'|r',
+	rareelite = ' |cffff99cc'..L['TOOLTIP_RARE']..'|r '..'|cffcc8800'..ELITE..'|r',
 	worldboss = ' |cffff0000'..BOSS..'|r',
 }
 
 local function getUnit(self)
-	local _, unit = self and self:GetUnit()
+	--[[local _, unit = self and self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()
 		if mFocus then
 			unit = mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit'))
 		end
 	end
-	return (unit or 'mouseover')
+	return (unit or 'mouseover')]]
+
+	local _, unit = self and self:GetUnit()
+	if not unit then
+		local mFocus = GetMouseFocus()
+		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit'))) or 'mouseover'
+	end
+	return unit
 end
 
 local function hideLines(self)
@@ -56,6 +59,16 @@ local function hideLines(self)
 			end
 		end
     end
+end
+
+local function getLevelLine(self)
+	for i = 2, self:NumLines() do
+		local tiptext = _G['GameTooltipTextLeft'..i]
+		local linetext = tiptext:GetText()
+		if linetext and strfind(linetext, LEVEL) then
+			return tiptext
+		end
+	end
 end
 
 local function getTarget(unit)
@@ -110,27 +123,32 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self)
 			if status then
 				status = format(' |cffffcc00[%s]|r', status)
 			end
-			GameTooltipTextLeft1:SetFormattedText('%s', hexColor..name..(status or ''))
+			GameTooltipTextLeft1:SetFormattedText('%s', name..(status or ''))
 
 			local guildName, rank, rankIndex, guildRealm = GetGuildInfo(unit)
 			local hasText = GameTooltipTextLeft2:GetText()
 			if guildName and hasText then
-				rankIndex = rankIndex + 1
-				if C.tooltip.hideRank then rank = '' end
-				if guildRealm and isShiftKeyDown then
-					guildName = guildName..'-'..guildRealm
-				end
-				--GameTooltipTextLeft2:SetText('<'..guildName..'> '..rank..'('..rankIndex..')')
-				GameTooltipTextLeft2:SetText('<'..guildName..'> '..rank)
-
 				local myGuild, _, _, myGuildRealm = GetGuildInfo('player')
 				if IsInGuild() and guildName == myGuild and guildRealm == myGuildRealm then
 					GameTooltipTextLeft2:SetTextColor(.25, 1, .25)
 				else
 					GameTooltipTextLeft2:SetTextColor(.6, .8, 1)
 				end
+
+				rankIndex = rankIndex + 1
+				if C.tooltip.hideRank then rank = '' end
+				if guildRealm and isShiftKeyDown then
+					guildName = guildName..'-'..guildRealm
+				end
+				if C.tooltip.hideJunkGuild and not isShiftKeyDown then
+					if strlen(guildName) > 31 then guildName = '...' end
+				end
+				GameTooltipTextLeft2:SetText('<'..guildName..'> '..rank..'('..rankIndex..')')
 			end
 		end
+
+		local line1 = GameTooltipTextLeft1:GetText()
+		GameTooltipTextLeft1:SetFormattedText('%s', hexColor..line1)
 
 		local alive = not UnitIsDeadOrGhost(unit)
 		local level
@@ -147,18 +165,11 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self)
 			local diff = GetCreatureDifficultyColor(level)
 			local classify = UnitClassification(unit)
 			local textLevel = format('%s%s%s|r', F.HexRGB(diff), boss or format('%d', level), classification[classify] or '')
-			local tiptextLevel
-			for i = 2, self:NumLines() do
-				local tiptext = _G['GameTooltipTextLeft'..i]
-				local linetext = tiptext:GetText()
-				if linetext and strfind(linetext, LEVEL) then
-					tiptextLevel = tiptext
-				end
-			end
+			local tiptextLevel = getLevelLine(self)
 
-			local pvpFlag = UnitIsPVP(unit) and format(' |cffff0000%s|r', PVP) or ''
-			local unitClass = isPlayer and format('%s %s', UnitRace(unit) or '', hexColor..(UnitClass(unit) or '')..'|r') or UnitCreatureType(unit) or ''
 			if tiptextLevel then
+				local pvpFlag = isPlayer and UnitIsPVP(unit) and format(' |cffff0000%s|r', PVP) or ''
+				local unitClass = isPlayer and format('%s %s', UnitRace(unit) or '', hexColor..(UnitClass(unit) or '')..'|r') or UnitCreatureType(unit) or ''
 				tiptextLevel:SetFormattedText(('%s%s %s %s'), textLevel, pvpFlag, unitClass, (not alive and '|cffCCCCCC'..DEAD..'|r' or ''))
 			end
 		end
@@ -170,28 +181,31 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self)
 			self:AddLine(TARGET..': '..tar)
 		end
 
-		if alive then
-			GameTooltipStatusBar:SetStatusBarColor(F.UnitColor(unit))
-		else
-			GameTooltipStatusBar:Hide()
-		end
-	else
-		GameTooltipStatusBar:SetStatusBarColor(0, .9, 0)
+		if not alive then GameTooltipStatusBar:Hide() end
 	end
 
-	if GameTooltipStatusBar:IsShown() then
+	if GameTooltipStatusBar:IsShown() and C.Mult and not GameTooltipStatusBar.bg then
 		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 1, -3)
-		GameTooltipStatusBar:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', -1, -3)
-		if C.Mult and not GameTooltipStatusBar.bg then
-			GameTooltipStatusBar:SetStatusBarTexture(C.media.sbTex)
-			GameTooltipStatusBar:SetHeight(2)
-			local bg = F.CreateBDFrame(GameTooltipStatusBar)
-			F.CreateSD(bg)
-			GameTooltipStatusBar.bg = bg
-		end
+		GameTooltipStatusBar:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', C.Mult, -3)
+		GameTooltipStatusBar:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', -C.Mult, -3)
+		GameTooltipStatusBar:SetStatusBarTexture(C.media.sbTex)
+		
+		GameTooltipStatusBar:SetHeight(2)
+		local bg = F.CreateBDFrame(GameTooltipStatusBar)
+		F.CreateSD(bg)
+		F.CreateTex(bg)
+		GameTooltipStatusBar.bg = bg
 	end
 end)
+
+local ssbc = CreateFrame('StatusBar').SetStatusBarColor
+GameTooltipStatusBar._SetStatusBarColor = ssbc
+function GameTooltipStatusBar:SetStatusBarColor(...)
+	local unit = getUnit(GameTooltip)
+	if(UnitExists(unit)) then
+		return self:_SetStatusBarColor(F.UnitColor(unit))
+	end
+end
 
 hooksecurefunc('GameTooltip_ShowStatusBar', function(self)
 	if self.statusBarPool then
@@ -324,58 +338,6 @@ hooksecurefunc('GameTooltip_ShowCompareItem', function(self, shift)
 	shoppingTooltip1:Show()
 end)
 
--- reskin tooltips
-local function getBackdrop(self) return self.bg:GetBackdrop() end
-local function getBackdropColor() return 0, 0, 0, .75 end
-local function getBackdropBorderColor() return 0, 0, 0 end
-
-function F:ReskinTooltip()
-	if not self then
-		if C.general.isDeveloper then print("Unknown tooltip spotted.") end
-		return
-	end
-	if self:IsForbidden() then return end
-	self:SetScale(1)
-
-	if not self.tipStyled then
-		self:SetBackdrop(nil)
-		self:DisableDrawLayer("BACKGROUND")
-		self.bg = F.CreateBDFrame(self)
-		self.glow = F.CreateSD(self.bg, .5, 4, 4)
-
-		self.GetBackdrop = getBackdrop
-		self.GetBackdropColor = getBackdropColor
-		self.GetBackdropBorderColor = getBackdropBorderColor
-		
-		self.tipStyled = true
-	end
-
-	if self.glow then
-		self.glow:SetBackdropBorderColor(0, 0, 0, .5)
-	end
-	self.bg:SetBackdropBorderColor(0, 0, 0)
-
-	if C.tooltip.enable and C.tooltip.borderColor and self.GetItem then
-		local _, item = self:GetItem()
-		if item then
-			local quality = select(3, GetItemInfo(item))
-			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
-			if color then
-				if self.glow then
-					self.glow:SetBackdropBorderColor(color.r, color.g, color.b, .5)
-				else
-					self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
-				end
-			end
-		end
-	end
-end
-
-hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
-	if not self.tipStyled then return end
-	self:SetBackdrop(nil)
-end)
-
 
 -- position
 local mover
@@ -393,4 +355,7 @@ hooksecurefunc('GameTooltip_SetDefaultAnchor', function(tooltip, parent)
 end)
 
 
-
+function module:OnLogin()
+	self:ExtraInfo()
+	self:AzeriteTrait()
+end

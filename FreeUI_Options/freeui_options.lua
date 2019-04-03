@@ -607,7 +607,6 @@ end]]
 
 
 
-
 local init = CreateFrame("Frame")
 init:RegisterEvent("PLAYER_LOGIN")
 init:SetScript("OnEvent", function()
@@ -672,6 +671,7 @@ init:SetScript("OnEvent", function()
 		FreeUIOptionsGlobal[realm][name] = self:GetChecked()
 		changeProfile()
 		displaySettings()
+		ReloadUI()
 	end)
 
 	F.CreateBD(FreeUIOptionsPanel)

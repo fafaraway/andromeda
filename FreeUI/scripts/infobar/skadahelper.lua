@@ -1,10 +1,12 @@
 local F, C, L = unpack(select(2, ...))
 if not C.infobar.enable then return end
-if not C.infobar.skadaTool then return end
+
 local module = F:GetModule('Infobar')
 
 
-function module:DMTool()
+function module:SkadaHelper()
+	if not C.infobar.skadaHelper then return end
+
 	local FreeUIDMButton = module.FreeUIDMButton
 
 	FreeUIDMButton = module:addButton('Toggle Skada', module.POSITION_LEFT, 120, function(self, button)
@@ -31,13 +33,13 @@ function module:DMTool()
 		GameTooltip:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -5, -33)
 
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine('Skada', .9, .82, .62)
+		GameTooltip:AddLine('Skada', .9, .8, .6)
 		GameTooltip:AddLine(' ')
 
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.LeftButton..'Skada:SetActive'..' ', 1,1,1, .9, .82, .62)
-		GameTooltip:AddDoubleLine(' ', C.RightButton..'Skada:SetInactive'..' ', 1,1,1, .9, .82, .62)
-		GameTooltip:AddDoubleLine(' ', C.MiddleButton..'Skada:Reset'..' ', 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(' ', C.LeftButton..'Skada:SetActive'..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.RightButton..'Skada:SetInactive'..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.MiddleButton..'Skada:Reset'..' ', 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

@@ -1,86 +1,85 @@
 local F, C, L = unpack(select(2, ...))
 if not C.infobar.enable then return end
-if not C.infobar.friends then return end
+
 local module = F:GetModule('Infobar')
-
-local friendTable, bnetTable, updateRequest = {}, {}
-local wowString, bnetString = L['WoW'], L['BN']
-local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
-local AFKTex = '|T'..FRIENDS_TEXTURE_AFK..':14:14:0:0:16:16:1:15:1:15|t'
-local DNDTex = '|T'..FRIENDS_TEXTURE_DND..':14:14:0:0:16:16:1:15:1:15|t'
-
-
-
-
-local function buildFriendTable(num)
-	wipe(friendTable)
-
-	for i = 1, num do
-		local info = C_FriendList.GetFriendInfoByIndex(i)
-		if info and info.connected then
-			local status = ''
-			if info.afk then
-				status = AFKTex
-			elseif info.dnd then
-				status = DNDTex
-			end
-			local class = C.ClassList[info.className]
-			friendTable[i] = {info.name, info.level, class, info.area, info.connected, status}
-		end
-	end
-
-	sort(friendTable, function(a, b)
-		if a[1] and b[1] then
-			return a[1] < b[1]
-		end
-	end)
-end
-
-local function buildBNetTable(num)
-	wipe(bnetTable)
-
-	for i = 1, num do
-		local bnetID, accountName, battleTag, isBattleTagPresence, charName, gameID, client, isOnline, _, isAFK, isDND = BNGetFriendInfo(i)
-
-		if isOnline then
-			local _, _, _, realmName, _, _, _, class, _, zoneName, _, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
-
-			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
-			class = C.ClassList[class]
-			accountName = isBattleTagPresence and battleTag or accountName
-
-			local status, infoText = ''
-			if isAFK or isGameAFK then
-				status = AFKTex
-			elseif isDND or isGameBusy then
-				status = DNDTex
-			else
-				status = ''
-			end
-			if client == BNET_CLIENT_WOW then
-				if not zoneName or zoneName == '' then
-					infoText = UNKNOWN
-				else
-					infoText = zoneName
-				end
-			else
-				infoText = gameText
-			end
-
-			bnetTable[i] = {bnetID, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText}
-		end
-	end
-
-	sort(bnetTable, function(a, b)
-		if a[5] and b[5] then
-			return a[5] > b[5]
-		end
-	end)
-end
 
 
 
 function module:Friends()
+	if not C.infobar.friends then return end
+
+	local friendTable, bnetTable, updateRequest = {}, {}
+	local wowString, bnetString = L['INFOBAR_WOW'], L['INFOBAR_BN']
+	local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
+	local AFKTex = '|T'..FRIENDS_TEXTURE_AFK..':14:14:0:0:16:16:1:15:1:15|t'
+	local DNDTex = '|T'..FRIENDS_TEXTURE_DND..':14:14:0:0:16:16:1:15:1:15|t'
+
+	local function buildFriendTable(num)
+		wipe(friendTable)
+
+		for i = 1, num do
+			local info = C_FriendList.GetFriendInfoByIndex(i)
+			if info and info.connected then
+				local status = ''
+				if info.afk then
+					status = AFKTex
+				elseif info.dnd then
+					status = DNDTex
+				end
+				local class = C.ClassList[info.className]
+				friendTable[i] = {info.name, info.level, class, info.area, info.connected, status}
+			end
+		end
+
+		sort(friendTable, function(a, b)
+			if a[1] and b[1] then
+				return a[1] < b[1]
+			end
+		end)
+	end
+
+	local function buildBNetTable(num)
+		wipe(bnetTable)
+
+		for i = 1, num do
+			local bnetID, accountName, battleTag, isBattleTagPresence, charName, gameID, client, isOnline, _, isAFK, isDND = BNGetFriendInfo(i)
+
+			if isOnline then
+				local _, _, _, realmName, _, _, _, class, _, zoneName, _, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
+
+				charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
+				class = C.ClassList[class]
+				accountName = isBattleTagPresence and battleTag or accountName
+
+				local status, infoText = ''
+				if isAFK or isGameAFK then
+					status = AFKTex
+				elseif isDND or isGameBusy then
+					status = DNDTex
+				else
+					status = ''
+				end
+				if client == BNET_CLIENT_WOW then
+					if not zoneName or zoneName == '' then
+						infoText = UNKNOWN
+					else
+						infoText = zoneName
+					end
+				else
+					infoText = gameText
+				end
+
+				bnetTable[i] = {bnetID, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText}
+			end
+		end
+
+		sort(bnetTable, function(a, b)
+			if a[5] and b[5] then
+				return a[5] > b[5]
+			end
+		end)
+	end
+
 	local FreeUIFriendsButton = module.FreeUIFriendsButton
 
 	FreeUIFriendsButton = module:addButton('', module.POSITION_RIGHT, 120, function(self, button)
@@ -107,7 +106,7 @@ function module:Friends()
 
 		local onlineFriends = C_FriendList.GetNumOnlineFriends()
 		local _, onlineBNet = BNGetNumFriends()
-		self.Text:SetText(format('%s: '..C.InfoColor..'%d', 'FRIENDS', onlineFriends + onlineBNet))
+		self.Text:SetText(format('%s: '..C.InfoColor..'%d', 'Friends', onlineFriends + onlineBNet))
 		updateRequest = false
 	end)
 
@@ -125,11 +124,11 @@ function module:Friends()
 
 		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -15)
 		GameTooltip:ClearLines()
-		GameTooltip:AddDoubleLine(FRIENDS_LIST, format('%s: %s/%s', GUILD_ONLINE_LABEL, totalOnline, totalFriends), .9, .82, .62, 1, 1, 1)
+		GameTooltip:AddDoubleLine(FRIENDS_LIST, format('%s: %s/%s', GUILD_ONLINE_LABEL, totalOnline, totalFriends), .9, .8, .6, 1, 1, 1)
 
 		if totalOnline == 0 then
 			GameTooltip:AddLine(' ')
-			GameTooltip:AddLine(L['NoOnline'], 1,1,1)
+			GameTooltip:AddLine(L['INFOBAR_NO_ONLINE'], 1,1,1)
 		else
 			if onlineFriends > 0 then
 				GameTooltip:AddLine(' ')
@@ -174,9 +173,9 @@ function module:Friends()
 			end
 		end
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', L['HoldShift'], 1,1,1, .6,.8,1)
-		GameTooltip:AddDoubleLine(' ', C.LeftButton..L['OpenFriendsPanel'], 1,1,1, .9, .82, .62)
-		GameTooltip:AddDoubleLine(' ', C.RightButton..L['AddFriend'], 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(' ', L['INFOBAR_HOLD_SHIFT'], 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(' ', C.LeftButton..L['INFOBAR_OPEN_FRIENDS_PANEL'], 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.RightButton..L['INFOBAR_ADD_FRIEND'], 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 
 		self:RegisterEvent('MODIFIER_STATE_CHANGED')

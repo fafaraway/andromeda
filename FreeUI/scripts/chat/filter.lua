@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 if not C.chat.enable then return end
-local module = F:GetModule('chat')
+local module = F:GetModule('Chat')
 
 local strmatch, strfind, format, gsub = string.match, string.find, string.format, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
@@ -148,7 +148,7 @@ end
 
 
 
-function module:ChatFilter()
+function module:Filter()
 	if C.chat.useFilter then
 		F:GenFilterList()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', genChatFilter)

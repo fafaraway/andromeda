@@ -165,6 +165,7 @@ StaticPopupDialogs["FREEUI_RESET"] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
+		FreeUIConfig = {}
 		FreeUIOptions = {}
 		FreeUIOptionsPerChar = {}
 		FreeUIOptionsGlobal[realm][name] = false
@@ -174,6 +175,8 @@ StaticPopupDialogs["FREEUI_RESET"] = {
 	whileDead = true,
 	hideOnEscape = true,
 }
+
+
 
 local ResetButton = CreateFrame("Button", nil, options, "UIPanelButtonTemplate")
 ResetButton:SetSize(128, 25)
@@ -257,11 +260,14 @@ do
 	local clickCast = ns.CreateCheckBox(general, "clickCast", true, true)
 	clickCast:SetPoint("TOPLEFT", progressBar, "BOTTOMLEFT", 0, -8)
 
+	local autoBubble = ns.CreateCheckBox(general, "autoBubble", true, true)
+	autoBubble:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -8)
+
 	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
 	alreadyKnown:SetPoint("LEFT", clickCast, "RIGHT", 240, 0)
 
 	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
-	cooldown:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -16)
+	cooldown:SetPoint("TOPLEFT", autoBubble, "BOTTOMLEFT", 0, -16)
 
 	local cooldownCount = ns.CreateCheckBox(general, "cooldownCount", true, true)
 	cooldownCount:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 0, -8)
@@ -292,12 +298,10 @@ do
 	local function toggleUIScaleOptions()
 		local shown = not uiScaleAuto:GetChecked()
 		uiScale:SetShown(shown)
-
 	end
 
 	uiScaleAuto:HookScript("OnClick", toggleUIScaleOptions)
 	uiScale:HookScript("OnShow", toggleUIScaleOptions)
-
 end
 
 -- [[ Appearance ]]
@@ -482,8 +486,11 @@ do
 	local specTalent = ns.CreateCheckBox(infobar, "specTalent", true, true)
 	specTalent:SetPoint("TOPLEFT", microMenu, "BOTTOMLEFT", 0, -8)
 
+	local durability = ns.CreateCheckBox(infobar, "durability", true, true)
+	durability:SetPoint("TOPLEFT", specTalent, "BOTTOMLEFT", 0, -8)
+
 	local friends = ns.CreateCheckBox(infobar, "friends", true, true)
-	friends:SetPoint("TOPLEFT", specTalent, "BOTTOMLEFT", 0, -8)
+	friends:SetPoint("TOPLEFT", durability, "BOTTOMLEFT", 0, -8)
 
 	local currencies = ns.CreateCheckBox(infobar, "currencies", true, true)
 	currencies:SetPoint("TOPLEFT", friends, "BOTTOMLEFT", 0, -8)
@@ -491,8 +498,8 @@ do
 	local report = ns.CreateCheckBox(infobar, "report", true, true)
 	report:SetPoint("TOPLEFT", currencies, "BOTTOMLEFT", 0, -8)
 
-	local skadaTool = ns.CreateCheckBox(infobar, "skadaTool", true, true)
-	skadaTool:SetPoint("TOPLEFT", report, "BOTTOMLEFT", 0, -8)
+	local skadaHelper = ns.CreateCheckBox(infobar, "skadaHelper", true, true)
+	skadaHelper:SetPoint("TOPLEFT", report, "BOTTOMLEFT", 0, -8)
 
 	local function toggleInfoBarOptions()
 		local shown = enable:GetChecked()
@@ -503,7 +510,8 @@ do
 		friends:SetShown(shown)
 		currencies:SetShown(shown)
 		report:SetShown(shown)
-		skadaTool:SetShown(shown)
+		skadaHelper:SetShown(shown)
+		durability:SetShown(shown)
 	end
 
 	enable:HookScript("OnClick", toggleInfoBarOptions)
@@ -868,26 +876,26 @@ do
 	local useOutline = ns.CreateCheckBox(chat, "useOutline", true, true)
 	useOutline:SetPoint("LEFT", lockPosition, "RIGHT", 240, 0)
 
-	local whisperSound = ns.CreateCheckBox(chat, "whisperSound", true, true)
-	whisperSound:SetPoint("TOPLEFT", lockPosition, "BOTTOMLEFT", 0, -8)
+	local whisperAlert = ns.CreateCheckBox(chat, "whisperAlert", true, true)
+	whisperAlert:SetPoint("TOPLEFT", lockPosition, "BOTTOMLEFT", 0, -8)
 
 	local timeStamp = ns.CreateCheckBox(chat, "timeStamp", true, true)
-	timeStamp:SetPoint("LEFT", whisperSound, "RIGHT", 240, 0)
+	timeStamp:SetPoint("LEFT", whisperAlert, "RIGHT", 240, 0)
 
-	local itemLinkLevel = ns.CreateCheckBox(chat, "itemLinkLevel", true, true)
-	itemLinkLevel:SetPoint("TOPLEFT", whisperSound, "BOTTOMLEFT", 0, -8)
+	local itemLink = ns.CreateCheckBox(chat, "itemLink", true, true)
+	itemLink:SetPoint("TOPLEFT", whisperAlert, "BOTTOMLEFT", 0, -8)
 
-	local spamageMeters = ns.CreateCheckBox(chat, "spamageMeters", true, true)
-	spamageMeters:SetPoint("LEFT", itemLinkLevel, "RIGHT", 240, 0)
+	local spamageMeter = ns.CreateCheckBox(chat, "spamageMeter", true, true)
+	spamageMeter:SetPoint("LEFT", itemLink, "RIGHT", 240, 0)
 
-	local minimizeButton = ns.CreateCheckBox(chat, "minimizeButton", true, true)
-	minimizeButton:SetPoint("TOPLEFT", itemLinkLevel, "BOTTOMLEFT", 0, -8)
+	local chatButton = ns.CreateCheckBox(chat, "chatButton", true, true)
+	chatButton:SetPoint("TOPLEFT", itemLink, "BOTTOMLEFT", 0, -8)
 
 	local channelSticky = ns.CreateCheckBox(chat, "channelSticky", true, true)
-	channelSticky:SetPoint("LEFT", minimizeButton, "RIGHT", 240, 0)
+	channelSticky:SetPoint("LEFT", chatButton, "RIGHT", 240, 0)
 
 	local lineFading = ns.CreateCheckBox(chat, "lineFading", true, true)
-	lineFading:SetPoint("TOPLEFT", minimizeButton, "BOTTOMLEFT", 0, -8)
+	lineFading:SetPoint("TOPLEFT", chatButton, "BOTTOMLEFT", 0, -8)
 
 	local useFilter = ns.CreateCheckBox(chat, "useFilter", true, true)
 	useFilter:SetPoint("LEFT", lineFading, "RIGHT", 240, 0)
@@ -896,11 +904,11 @@ do
 		local shown = enable:GetChecked()
 		lockPosition:SetShown(shown)
 		useOutline:SetShown(shown)
-		whisperSound:SetShown(shown)
+		whisperAlert:SetShown(shown)
 		timeStamp:SetShown(shown)
-		itemLinkLevel:SetShown(shown)
-		spamageMeters:SetShown(shown)
-		minimizeButton:SetShown(shown)
+		itemLink:SetShown(shown)
+		spamageMeter:SetShown(shown)
+		chatButton:SetShown(shown)
 		channelSticky:SetShown(shown)
 		lineFading:SetShown(shown)
 		useFilter:SetShown(shown)

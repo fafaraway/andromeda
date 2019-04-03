@@ -3,6 +3,7 @@
 	<Script file="AudioOptionsFrame.lua"/>
 	<Script file="BNet.lua"/>
 	<Script file="CharacterFrame.lua"/>
+	<Script file="ChatBubbles.lua"/>
 	<Script file="ChatConfigFrame.lua"/>
 	<Script file="ChatFrame.lua"/>
 	<Script file="CinematicFrame.lua"/>
