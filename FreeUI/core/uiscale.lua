@@ -35,7 +35,7 @@ function module:OnLogin()
 	
 	self:SetupUIScale()
 
-	F:RegisterEvent('UI_SCALE_CHANGED', module.SetupUIScale)
+	--F:RegisterEvent('UI_SCALE_CHANGED', module.SetupUIScale)
 
 
 	--print('cvar_useUiScale - '.._G.GetCVar('useUiScale'))
