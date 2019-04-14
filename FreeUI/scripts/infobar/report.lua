@@ -143,7 +143,18 @@ function module:Report()
 
 	local FreeUIReportButton = module.FreeUIReportButton
 
-	FreeUIReportButton = module:addButton('Report', module.POSITION_RIGHT, 120, GarrisonLandingPage_Toggle)
+	FreeUIReportButton = module:addButton('Report', module.POSITION_RIGHT, 120, function(self, button)
+		if button == 'LeftButton' then
+			HideUIPanel(GarrisonLandingPage)
+			ShowGarrisonLandingPage(LE_GARRISON_TYPE_8_0)
+		elseif button == 'RightButton' then
+			HideUIPanel(GarrisonLandingPage)
+			ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
+		elseif button == 'MiddleButton' then
+			HideUIPanel(GarrisonLandingPage)
+			ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+		end
+	end)
 
 	FreeUIReportButton:HookScript('OnEnter', function(self)
 		RequestRaidInfo()
