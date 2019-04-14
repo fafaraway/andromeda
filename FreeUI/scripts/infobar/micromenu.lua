@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-if not C.infobar.enable then return end
 
 local module = F:GetModule('Infobar')
 

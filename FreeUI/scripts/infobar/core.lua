@@ -2,11 +2,7 @@
 
 local module = F:RegisterModule('Infobar')
 
-
-
-function module:OnLogin()
-	if not C.infobar.enable then return end
-
+function module:Infobar()
 	local barAlpha, buttonAlpha
 
 	if C.infobar.mouseover then
@@ -174,8 +170,12 @@ function module:OnLogin()
 	end
 
 	bar.addButton = addButton
+end
 
+function module:OnLogin()
+	if not C.infobar.enable then return end
 
+	self:Infobar()
 	self:Stats()
 	self:MicroMenu()
 	self:SkadaHelper()
