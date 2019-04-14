@@ -28,7 +28,7 @@ function module:Currencies()
 	end
 
 	StaticPopupDialogs['RESETGOLD'] = {
-		text = L['RESET_GOLD_COUNT'],
+		text = L['INFOBAR_RESET_GOLD_COUNT'],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
