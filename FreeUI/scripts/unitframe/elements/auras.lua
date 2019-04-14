@@ -372,6 +372,12 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		end
 	end
 
+	if (button.isDebuff and not button.isPlayer) and (style == 'target' or style == 'boss' or style == 'arena') then
+		button.icon:SetDesaturated(true)
+	else
+		button.icon:SetDesaturated(false)
+	end
+
 	if duration then
 		button.bg:Show()
 
