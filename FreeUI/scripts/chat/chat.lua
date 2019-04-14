@@ -282,30 +282,6 @@ function module:OnLogin()
 		end
 	end)
 
-	ToggleChatColorNamesByClassGroup(true, 'SAY')
-	ToggleChatColorNamesByClassGroup(true, 'EMOTE')
-	ToggleChatColorNamesByClassGroup(true, 'YELL')
-	ToggleChatColorNamesByClassGroup(true, 'GUILD')
-	ToggleChatColorNamesByClassGroup(true, 'OFFICER')
-	ToggleChatColorNamesByClassGroup(true, 'GUILD_ACHIEVEMENT')
-	ToggleChatColorNamesByClassGroup(true, 'ACHIEVEMENT')
-	ToggleChatColorNamesByClassGroup(true, 'WHISPER')
-	ToggleChatColorNamesByClassGroup(true, 'PARTY')
-	ToggleChatColorNamesByClassGroup(true, 'PARTY_LEADER')
-	ToggleChatColorNamesByClassGroup(true, 'RAID')
-	ToggleChatColorNamesByClassGroup(true, 'RAID_LEADER')
-	ToggleChatColorNamesByClassGroup(true, 'RAID_WARNING')
-	ToggleChatColorNamesByClassGroup(true, 'BATTLEGROUND')
-	ToggleChatColorNamesByClassGroup(true, 'BATTLEGROUND_LEADER')
-	ToggleChatColorNamesByClassGroup(true, 'CHANNEL1')
-	ToggleChatColorNamesByClassGroup(true, 'CHANNEL2')
-	ToggleChatColorNamesByClassGroup(true, 'CHANNEL3')
-	ToggleChatColorNamesByClassGroup(true, 'CHANNEL4')
-	ToggleChatColorNamesByClassGroup(true, 'CHANNEL5')
-	ToggleChatColorNamesByClassGroup(true, 'INSTANCE_CHAT')
-	ToggleChatColorNamesByClassGroup(true, 'INSTANCE_CHAT_LEADER')
-
-
 	BNToastFrame:SetClampedToScreen(true)
 	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
 
@@ -329,9 +305,7 @@ function module:OnLogin()
 	HideForever(ChatFrameToggleVoiceMuteButton)
 
 	if C.chat.lockPosition then
-		F:RegisterEvent("UI_SCALE_CHANGED", function()
-			ChatFrame1:SetPoint(unpack(C.chat.position))
-		end)
+		ChatFrame1:SetPoint(unpack(C.chat.position))
 	end
 
 	UpdateTimestamp()
@@ -349,4 +323,17 @@ function module:OnLogin()
 	self:NameCopy()
 	self:Tab()
 	self:Spamagemeter()
+
+	if C.chat.autoBubble then
+		local function UpdateBubble()
+			local name, instType = GetInstanceInfo()
+			if name and instType == 'raid' then
+				SetCVar('chatBubbles', 1)
+			else
+				SetCVar('chatBubbles', 0)
+			end
+		end
+		UpdateBubble()
+		F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateBubble)
+	end
 end

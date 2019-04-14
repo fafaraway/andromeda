@@ -19,19 +19,7 @@ function module:OnLogin()
 	self:NakedIcon()
 	self:ExtendInstance()
 	self:CMGuildBest()
-
-	if C.general.autoBubble then
-		local function UpdateBubble()
-			local name, instType = GetInstanceInfo()
-			if name and instType == 'raid' then
-				SetCVar('chatBubbles', 1)
-			else
-				SetCVar('chatBubbles', 0)
-			end
-		end
-		UpdateBubble()
-		F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateBubble)
-	end
+	self:MailButton()
 
 	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
 end

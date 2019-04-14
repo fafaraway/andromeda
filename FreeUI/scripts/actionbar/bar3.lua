@@ -71,6 +71,6 @@ function Bar:CreateBar3()
 
 	--create the mouseover functionality
 	if (cfg.bar3Mouseover and cfg.layoutStyle == 1) or cfg.layoutStyle == 3 then
-		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		F.CreateButtonFrameFader(frame, buttonList, F.fader)
 	end
 end

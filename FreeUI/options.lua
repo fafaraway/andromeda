@@ -20,9 +20,6 @@ C['general'] = {
 	['paragonRep'] = true,
 	['quickMarking'] = true,
 	['quickFocusing'] = true,
-
-	['autoBubble'] = true,
-
 	
 	['clickCast'] = true,
 		['clickCast_filter'] = true,
@@ -56,9 +53,6 @@ C['appearance'] = {
 		['buttonGradientColour'] = {.15, .15, .15, .5},
 		['buttonSolidColour'] = {.05, .05, .05, .5},
 		['useButtonGradientColour'] = true,
-
-		['colourScheme'] = 1,
-			['customColour'] = {r = 1, g = 1, b = 1},
 
 	['vignette'] = true,
 		['vignetteAlpha'] = .35,
@@ -244,6 +238,7 @@ C['chat'] = {
 		['channelSticky'] = true,
 		['useOutline'] = false,
 		['timeStamp'] = true,
+		['autoBubble'] = false,
 		['lineFading'] = true,
 			['timeVisible'] = 20,
 			['fadeDuration'] = 6,
@@ -263,22 +258,23 @@ C['chat'] = {
 
 C['unitframe'] = {
 	['enable'] = true,
-
 		['transMode'] = true,
-		['classColour'] = true,
+		['colourSmooth'] = false,
 		['healer_layout'] = false,
-		['gradient'] = false,
 		['portrait'] = true,
 		['threat'] = true,
 		['healPrediction'] = true,
 		['overAbsorb'] = true,
 		['dispellable'] = true,
 		['debuffbyPlayer'] = true,
-		['spellRange'] = true,
-			['spellRangeAlpha'] = .4,
+		['rangeCheck'] = true,
+
 		['classPower'] = true,
 			['classPower_height'] = 2,
-			
+
+		['power_height'] = 2,
+		['altpower_height'] = 2,
+		
 		['enableCastbar'] = true,
 			['castbar_separatePlayer'] = false,
 			['castbar_separateTarget'] = false,
@@ -292,12 +288,12 @@ C['unitframe'] = {
 
 		['enableGroup'] = true,
 			['showGroupName'] = false,
+			['colourSmooth_Raid'] = true,
 
 		['enableBoss'] = true,
-		['enableArena'] = true,
+			['colourSmooth_Boss'] = true,
 
-		['power_height'] = 2,
-		['altpower_height'] = 2,
+		['enableArena'] = true,
 
 		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -100},
 		['player_pos_healer'] = {'RIGHT', UIParent, 'CENTER', -100, -100},
@@ -306,7 +302,7 @@ C['unitframe'] = {
 		['player_cb_width'] = 196,
 		['player_cb_height'] = 16,
 		['player_frameVisibility'] = '[combat][mod:shift][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
-		['enableFrameVisibility'] = false,
+		['frameVisibility'] = false,
 
 		['pet_pos'] = {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},
 		['pet_pos_healer'] = {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},

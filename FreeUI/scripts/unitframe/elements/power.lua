@@ -30,6 +30,9 @@ function module:AddPowerBar(self)
 	power:SetStatusBarTexture(C.media.sbTex)
 	power:SetHeight(cfg.power_height*C.Mult)
 	F.SmoothBar(power)
+	power.frequentUpdates = true
+
+	self.Power = power
 
 	local line = power:CreateTexture(nil, 'OVERLAY')
 	line:SetHeight(C.Mult)
@@ -44,7 +47,10 @@ function module:AddPowerBar(self)
 	bg.multiplier = .2
 	power.bg = bg
 
+	power.colorTapping = true
+	power.colorDisconnected = true
 	power.colorReaction = true
+	power.colorSelection = true
 
 	if cfg.transMode then
 		if self.unitStyle == 'player' then
@@ -56,7 +62,5 @@ function module:AddPowerBar(self)
 		power.colorPower = true
 	end
 
-	power.frequentUpdates = true
-	power.PostUpdate = PostUpdatePower
-	self.Power = power
+	self.Power.PostUpdate = PostUpdatePower
 end

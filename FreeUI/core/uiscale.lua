@@ -1,43 +1,50 @@
 local F, C, L = unpack(select(2, ...))
+local module = F:RegisterModule('UIScale')
 
+function module:SetupUIScale()
+	local _, height = GetPhysicalScreenSize()
+	local scale = C.general.uiScale
 
-local uiScale
-uiScale = 768 / C.ScreenHeight
-uiScale = tonumber(string.sub(uiScale, 0, 5))
+	if C.general.uiScaleAuto then
+		scale = 768 / height
+	end
 
-local mult = 768 / C.ScreenHeight / uiScale
-local Scale = function(x)
-	return mult * math.floor(x / mult + 0.5)
+	scale = tonumber(string.sub(scale, 0, 7))
+
+	C.Mult = 768 / height / scale
+	C.general.uiScale = scale
+
+	SetCVar('useUiScale', 1)
+
+	if scale < 0.64 then
+		SetCVar('uiScale', 1)
+		UIParent:SetScale(scale)
+	else
+		SetCVar('uiScale', scale)
+	end
 end
-C.Scale = function(x) return Scale(x) end
-C.Mult = mult
-C.noScaleMult = C.Mult * uiScale
+module:SetupUIScale()
 
+function module:OnLogin()
+	if FreeUIConfig['installComplete'] ~= true then return end
 
-
-function F:SetupUIScale()
 	if C.general.uiScaleAuto then
 		F.HideOption(Advanced_UseUIScale)
 		F.HideOption(Advanced_UIScaleSlider)
-		SetCVar('useUiScale', 0)
-		UIParent:SetScale(uiScale)
-	else
-		SetCVar('useUiScale', 1)
-		SetCVar('uiScale', C.general.uiScale)
 	end
+	
+	self:SetupUIScale()
+
+	F:RegisterEvent('UI_SCALE_CHANGED', module.SetupUIScale)
+
+
+	--print('cvar_useUiScale - '.._G.GetCVar('useUiScale'))
+	--print('cvar_uiScale - '.._G.GetCVar('uiscale'))
+	--print('UIParent_Scale - '.._G.UIParent:GetScale())
+	--print(C.general.uiScale)
+
+	--print(C.Mult)
 end
 
 
-local f = CreateFrame('Frame')
-f:RegisterEvent('PLAYER_ENTERING_WORLD')
-f:SetScript('OnEvent', function(self, event, addon)
-	if FreeUIConfig['installComplete'] ~= true then return end
 
-	F:SetupUIScale()
-
-	--print('cvarScale - '.._G.GetCVar('uiscale'))
-	--print('parentScale - '.._G.UIParent:GetScale())
-	--print(C.general.uiScale)
-	--print(uiScale)
-	--print(C.Mult)
-end)

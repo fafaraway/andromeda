@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-
+local module = F:RegisterModule('Install')
+local UIScale = F:GetModule('UIScale')
 
 local smoothing = {}
 local function Smooth(self, value)
@@ -53,6 +54,7 @@ local function ForceDefaultSettings()
 	SetCVar('nameplateOtherTopInset', 0.08)
 	SetCVar('nameplateSelectedScale', 1)
 	SetCVar('nameplateLargerScale', 1)
+	SetCVar('nameplateMinScale', 0.8)
 
 	SetCVar('alwaysShowActionBars', 1)
 	SetCVar('lockActionBars', 1)
@@ -85,6 +87,42 @@ local function ForceDefaultSettings()
 	SetCVar('rawMouseEnable', 1)
 end
 
+local function ForceChatSettings()
+	FCF_SetLocked(ChatFrame1, nil)
+	ChatFrame1:ClearAllPoints()
+	ChatFrame1:SetPoint(unpack(C.chat.position))
+	ChatFrame1:SetWidth(380)
+	ChatFrame1:SetHeight(200)
+	for i = 1, NUM_CHAT_WINDOWS do
+		local cf = _G['ChatFrame'..i]
+		ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
+	end
+	FCF_SavePositionAndDimensions(ChatFrame1)
+	FCF_SetLocked(ChatFrame1, true)
+
+	ToggleChatColorNamesByClassGroup(true, 'SAY')
+	ToggleChatColorNamesByClassGroup(true, 'EMOTE')
+	ToggleChatColorNamesByClassGroup(true, 'YELL')
+	ToggleChatColorNamesByClassGroup(true, 'GUILD')
+	ToggleChatColorNamesByClassGroup(true, 'OFFICER')
+	ToggleChatColorNamesByClassGroup(true, 'GUILD_ACHIEVEMENT')
+	ToggleChatColorNamesByClassGroup(true, 'ACHIEVEMENT')
+	ToggleChatColorNamesByClassGroup(true, 'WHISPER')
+	ToggleChatColorNamesByClassGroup(true, 'PARTY')
+	ToggleChatColorNamesByClassGroup(true, 'PARTY_LEADER')
+	ToggleChatColorNamesByClassGroup(true, 'RAID')
+	ToggleChatColorNamesByClassGroup(true, 'RAID_LEADER')
+	ToggleChatColorNamesByClassGroup(true, 'RAID_WARNING')
+	ToggleChatColorNamesByClassGroup(true, 'BATTLEGROUND')
+	ToggleChatColorNamesByClassGroup(true, 'BATTLEGROUND_LEADER')
+	ToggleChatColorNamesByClassGroup(true, 'CHANNEL1')
+	ToggleChatColorNamesByClassGroup(true, 'CHANNEL2')
+	ToggleChatColorNamesByClassGroup(true, 'CHANNEL3')
+	ToggleChatColorNamesByClassGroup(true, 'CHANNEL4')
+	ToggleChatColorNamesByClassGroup(true, 'CHANNEL5')
+	ToggleChatColorNamesByClassGroup(true, 'INSTANCE_CHAT')
+	ToggleChatColorNamesByClassGroup(true, 'INSTANCE_CHAT_LEADER')
+end
 
 
 function F:HelloWorld()
@@ -171,7 +209,7 @@ function F:HelloWorld()
 
 		option1:SetScript('OnClick', step4)
 		option2:SetScript('OnClick', function()
-			--F:ForceChatSettings()
+			ForceChatSettings()
 			step4()
 		end)
 	end
@@ -184,7 +222,7 @@ function F:HelloWorld()
 
 		option1:SetScript('OnClick', step3)
 		option2:SetScript('OnClick', function()
-			F:SetupUIScale()
+			UIScale:SetupUIScale()
 			step3()
 		end)
 	end
@@ -291,23 +329,12 @@ end
 
 
 
---function module:OnLogin()
---	if not FreeUIConfig['Install'] then
---		FreeUIConfig['Install'] = {}
---F:HelloWorld()
---	end
-	
---print(FreeUIConfig['Install']['Complete'])
-	
---end
-
-
-local f = CreateFrame('Frame', nil, UIParent)
-f:RegisterEvent('PLAYER_LOGIN')
-f:SetScript('OnEvent', function(self, event, addon)
+function module:OnLogin()
 	print(C.Title..' - '..C.GreyColor..C.Version)
 	print(C.MyColor..L['UIHELP'])
 
 	if FreeUIConfig['installComplete'] == true then return end
 	F:HelloWorld()
-end)
+end
+
+

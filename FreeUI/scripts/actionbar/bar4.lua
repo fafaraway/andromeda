@@ -50,7 +50,7 @@ function Bar:CreateBar4()
 
 	--create the mouseover functionality
 	if cfg.sideBar and cfg.sideBarMouseover then
-		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		F.CreateButtonFrameFader(frame, buttonList, F.fader)
 	end
 
 	--fix annoying visibility

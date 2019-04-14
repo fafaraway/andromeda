@@ -33,13 +33,12 @@ f:SetPoint("TOP", UIParent, "TOP", 0, -60)
 f:Hide()
 f:SetAlpha(0.1)
 f:SetScale(0.1)
-F.CreateBD(f)
-F.CreateSD(f)
+
 
 local icon = f:CreateTexture(nil, "OVERLAY")
 icon:SetSize(32, 32)
 icon:SetPoint("LEFT", f, "LEFT", 9, 0)
-F.CreateBG(icon)
+
 
 local sep = f:CreateTexture(nil, "BACKGROUND")
 sep:SetSize(1, 50)
@@ -247,6 +246,10 @@ end)
 
 
 function module:OnLogin()
+	F.CreateBD(f)
+	F.CreateSD(f)
+	F.CreateBG(icon)
+
 	self:Interrupt()
 	self:Dispel()
 	self:Spell()

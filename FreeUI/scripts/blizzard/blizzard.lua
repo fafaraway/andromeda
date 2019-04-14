@@ -14,6 +14,8 @@ function module:OnLogin()
 	self:RemoveTalkingHead()
 	self:RemoveBossBanner()
 	self:SkipAzeriteAnimation()
+	self:Errors()
+	self:ArchaeologyBar()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then

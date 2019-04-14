@@ -1,24 +1,27 @@
 local F, C = unpack(select(2, ...))
 
-C['actionbar']['fader'] = {
-	fadeInAlpha = 1,
-	fadeInDuration = 0.3,
-	fadeInSmooth = 'OUT',
-	fadeOutAlpha = 0,
-	fadeOutDuration = 0.9,
-	fadeOutSmooth = 'OUT',
-	fadeOutDelay = 0,
-}
-C['actionbar']['faderOnShow'] = {
-	fadeInAlpha = 1,
-	fadeInDuration = 0.3,
-	fadeInSmooth = 'OUT',
-	fadeOutAlpha = 0,
-	fadeOutDuration = 0.9,
-	fadeOutSmooth = 'OUT',
-	fadeOutDelay = 0,
-	trigger = 'OnShow',
-}
+
+
+F.fader = {
+    fadeInAlpha = 1,
+    fadeInDuration = 0.3,
+    fadeInSmooth = "OUT",
+    fadeOutAlpha = 0,
+    fadeOutDuration = 0.9,
+    fadeOutSmooth = "OUT",
+    fadeOutDelay = 0,
+  }
+
+  F.faderOnShow = {
+    fadeInAlpha = 1,
+    fadeInDuration = 0.3,
+    fadeInSmooth = "OUT",
+    fadeOutAlpha = 0,
+    fadeOutDuration = 0.9,
+    fadeOutSmooth = "OUT",
+    fadeOutDelay = 0,
+    trigger = "OnShow",
+  }
 
 local SpellFlyout = SpellFlyout
 
@@ -128,7 +131,7 @@ local function SpellFlyoutOnShow(self)
 end
 SpellFlyout:HookScript("OnShow", SpellFlyoutOnShow)
 
-local function CreateFrameFader(frame, faderConfig)
+function F:CreateFrameFader(frame, faderConfig)
 	if frame.faderConfig then return end
 	frame.faderConfig = faderConfig
 	CreateFaderAnimation(frame)
@@ -145,7 +148,7 @@ local function CreateFrameFader(frame, faderConfig)
 end
 
 function F:CreateButtonFrameFader(buttonList, faderConfig)
-	CreateFrameFader(self, faderConfig)
+	F:CreateFrameFader(self, faderConfig)
 	if faderConfig.trigger and faderConfig.trigger == "OnShow" then
 		return
 	end

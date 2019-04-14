@@ -12,7 +12,7 @@ function module:MissingStats()
 	local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 	local statPanel = CreateFrame('Frame', nil, CharacterFrameInsetRight)
-	statPanel:SetSize(200*C.Mult, 350*C.Mult)
+	statPanel:SetSize(200, 350)
 	statPanel:SetPoint('TOP', 0, -5)
 	local scrollFrame = CreateFrame('ScrollFrame', nil, statPanel, 'UIPanelScrollFrameTemplate')
 	scrollFrame:SetAllPoints()

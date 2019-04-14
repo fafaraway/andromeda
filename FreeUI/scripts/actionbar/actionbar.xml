@@ -1,5 +1,4 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='fader.lua'/>
 	<Script file='bar1.lua'/>
 	<Script file='bar2.lua'/>
 	<Script file='bar3.lua'/>

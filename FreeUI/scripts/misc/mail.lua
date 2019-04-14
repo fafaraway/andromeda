@@ -1,73 +1,75 @@
--- aMail by Alza, modified.
-
 local F, C, L = unpack(select(2, ...))
 
-if not C.general.mailButton then return end
+local module = F:GetModule('Misc')
 
--- Remove Open All Mail Button
-OpenAllMail:Hide()
-OpenAllMail:UnregisterAllEvents()
+function module:MailButton()
+	if not C.general.mailButton then return end
 
-local button = CreateFrame("Button", "aMailButton", InboxFrame, "UIPanelButtonTemplate")
-button:SetPoint("BOTTOM", InboxFrame, "BOTTOM", -20, 102)
-button:SetWidth(128)
-button:SetHeight(25)
-F.Reskin(button)
+	-- Remove Open All Mail Button
+	OpenAllMail:Hide()
+	OpenAllMail:UnregisterAllEvents()
 
-local text = F.CreateFS(button, 'pixel', '', nil, nil, true, "CENTER", 0, 0)
+	local button = CreateFrame('Button', 'FreeUIMailButton', InboxFrame, 'UIPanelButtonTemplate')
+	button:SetPoint('BOTTOM', InboxFrame, 'BOTTOM', -20, 102)
+	button:SetWidth(128)
+	button:SetHeight(25)
+	F.Reskin(button)
 
-local processing = false
+	local text = F.CreateFS(button, 'pixel', '', nil, nil, true, 'CENTER', 0, 0)
 
-local function OnEvent()
-	if(not MailFrame:IsShown()) then return end
+	local processing = false
 
-	local num = GetInboxNumItems()
+	local function OnEvent()
+		if(not MailFrame:IsShown()) then return end
 
-	local cash = 0
-	local items = 0
-	for i = 1, num do
-		local _, _, _, _, money, COD, _, item = GetInboxHeaderInfo(i)
-		if(item and COD<1) then items = items + item end
-		cash = cash + money
-	end
-	text:SetText(format("%d gold, %d items", floor(cash * 0.0001), items))
+		local num = GetInboxNumItems()
 
-	if(processing) then
-		if(num==0) then
-			processing = false
-			return
+		local cash = 0
+		local items = 0
+		for i = 1, num do
+			local _, _, _, _, money, COD, _, item = GetInboxHeaderInfo(i)
+			if(item and COD<1) then items = items + item end
+			cash = cash + money
 		end
+		text:SetText(format('%d gold, %d items', floor(cash * 0.0001), items))
 
-		for i = num, 1, -1 do
-			local _, _, _, _, money, COD, _, itemCount, _, _, _, _, isGM = GetInboxHeaderInfo(i)
-			if not isGM then
-				if(itemCount and COD<1) then
-					AutoLootMailItem(i)
-					return
-				end
-				if(money>0) then
-					TakeInboxMoney(i)
-					return
+		if(processing) then
+			if(num==0) then
+				processing = false
+				return
+			end
+
+			for i = num, 1, -1 do
+				local _, _, _, _, money, COD, _, itemCount, _, _, _, _, isGM = GetInboxHeaderInfo(i)
+				if not isGM then
+					if(itemCount and COD<1) then
+						AutoLootMailItem(i)
+						return
+					end
+					if(money>0) then
+						TakeInboxMoney(i)
+						return
+					end
 				end
 			end
 		end
 	end
-end
 
-local function OnClick()
-	FreeUIMailFrame:Hide()
-	MiniMapMailFrame:Hide()
-	if(not processing) then
-		processing = true
-		OnEvent()
+	local function OnClick()
+		FreeUIMailFrame:Hide()
+		MiniMapMailFrame:Hide()
+		if(not processing) then
+			processing = true
+			OnEvent()
+		end
 	end
-end
 
-local function OnHide()
-	processing = false
-end
+	local function OnHide()
+		processing = false
+	end
 
-button:RegisterEvent("MAIL_INBOX_UPDATE")
-button:SetScript("OnEvent", OnEvent)
-button:SetScript("OnClick", OnClick)
-button:SetScript("OnHide", OnHide)
+	button:RegisterEvent('MAIL_INBOX_UPDATE')
+	button:SetScript('OnEvent', OnEvent)
+	button:SetScript('OnClick', OnClick)
+	button:SetScript('OnHide', OnHide)
+end

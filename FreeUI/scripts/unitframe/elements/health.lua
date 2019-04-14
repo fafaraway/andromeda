@@ -8,45 +8,52 @@ local module, cfg = F:GetModule('Unitframe'), C.unitframe
 local oUF = ns.oUF
 
 
-local function PostUpdateHealth(health, unit)
+local function PostUpdateHealth(health, unit, min, max)
 	local self = health:GetParent()
-	local reaction = oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
+	local r, g, b
+	--local reaction = self.colors.reaction[UnitReaction(unit, 'player') or 5]
 	local offline = not UnitIsConnected(unit)
 	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
+	local style = health.__owner.unitStyle
 
-	self.Health.bg:SetPoint('LEFT', health:GetStatusBarTexture(), 'RIGHT')
-	self.Health.bg:SetHeight(health:GetHeight())
-
-	if cfg.gradient then
-		self.Gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
+	if tapped or offline then
+		r, g, b = .6, .6, .6
+	elseif UnitIsPlayer(unit) then
+		local _, class = UnitClass(unit)
+		if class then r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b else r, g, b = 1, 1, 1 end
 	else
-		self.Gradient:Hide()
+		--r, g, b = unpack(reaction)
+		r, g, b = UnitSelectionColor(unit)
 	end
 
-	if cfg.transMode then
-		local _, class = UnitClass(unit)
-		local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+	if cfg.transMode and self.Deficit then
+		self.Deficit:SetMinMaxValues(0, max)
+		self.Deficit:SetValue(max-min)
 
-		if tapped or offline then
-			self.Health:SetStatusBarColor(.6, .6, .6, .4)
-			self.Health.bg:SetVertexColor(.6, .6, .6)
-		elseif UnitIsDeadOrGhost(unit) then
-			self.Health:SetStatusBarColor(0, 0, 0, .4)
-			self.Health.bg:SetVertexColor(0, 0, 0, 1)
-		elseif UnitIsPlayer(unit) and color then
-			self.Health:SetStatusBarColor(0, 0, 0, .4)
-			self.Health.bg:SetVertexColor(color.r, color.g, color.b, 1)
+		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
+			--self.Deficit:Hide()
+			self.Deficit:SetValue(0)
 		else
-			self.Health:SetStatusBarColor(0, 0, 0, .4)
-			self.Health.bg:SetVertexColor(unpack(reaction))
+			if cfg.colourSmooth or (cfg.colourSmooth_Boss and style == 'boss') or (cfg.colourSmooth_Raid and style == 'raid') then
+				self.Deficit:GetStatusBarTexture():SetVertexColor(self:ColorGradient(min, max, unpack(self.colors.smooth)))
+			else
+				self.Deficit:GetStatusBarTexture():SetVertexColor(r, g, b)
+			end
+
+			--self.Deficit:Show()
 		end
+	end
+
+	if tapped or offline then
+		self.Gradient:SetGradientAlpha('VERTICAL', .6, .6, .6, .6, .4, .4, .4, .6)
+	elseif UnitIsDead(unit) or UnitIsGhost(unit) then
+		self.Gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, .6, 0, 0, 0, .6)
+	else
+		self.Gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
 	end
 end
 
 function module:AddhealthBar(self)
-	self.Bg = F.CreateBDFrame(self, 0)
-	self.Glow = F.CreateSD(self.Bg, .35, 3, 3)
-
 	local highlight = self:CreateTexture(nil, 'OVERLAY')
 	highlight:SetAllPoints()
 	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
@@ -65,47 +72,58 @@ function module:AddhealthBar(self)
 		highlight:Hide()
 	end)
 
+	self.Highlight = highlight
+
+
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetFrameStrata('LOW')
 	health:SetStatusBarTexture(C.media.sbTex)
 	health:GetStatusBarTexture():SetHorizTile(true)
-
+	health:SetStatusBarColor(0, 0, 0, 0)
 	health:SetPoint('TOP')
 	health:SetPoint('LEFT')
 	health:SetPoint('RIGHT')
 	health:SetPoint('BOTTOM', 0, C.Mult + cfg.power_height)
 	health:SetHeight(self:GetHeight() - cfg.power_height - C.Mult)
+	F.SmoothBar(health)
+	health.frequentUpdates = true
 
-	health.bg = health:CreateTexture(nil, 'BACKGROUND')
-	health.bg:SetTexture(C.media.sbTex)
+	self.Health = health
+
+	local gradient = health:CreateTexture(nil, 'BACKGROUND')
+	gradient:SetPoint('TOPLEFT')
+	gradient:SetPoint('BOTTOMRIGHT')
+	gradient:SetTexture(C.media.backdrop)
+	gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
+
+	self.Gradient = gradient
+
 
 	if cfg.transMode then
-		health.bg:SetPoint('LEFT')
-		health.bg:SetPoint('RIGHT')
-		health.bg:SetPoint('LEFT', health:GetStatusBarTexture(), 'RIGHT')
+		local deficit = CreateFrame('StatusBar', nil, self)
+		deficit:SetFrameStrata('LOW')
+		deficit:SetAllPoints(health)
+		deficit:SetStatusBarTexture(C.media.sbTex)
+		deficit:SetReverseFill(true)
+		F.SmoothBar(deficit)
+
+		self.Deficit = deficit
 	else
-		health.bg:SetAllPoints(health)
-		health.bg.multiplier = .2
+		health.colorTapping = true
+		health.colorDisconnected = true
+
+		if cfg.colourSmooth or (cfg.colourSmooth_Boss and self.unitStyle == 'boss') or (cfg.colourSmooth_Raid and self.unitStyle == 'raid') then
+			health.colorSmooth = true
+		else
+			health.colorClass = true
+			health.colorReaction = true
+			health.colorSelection = true
+		end
 	end
 
-	health.colorDisconnected = true
-	health.colorTapping = true
 
-	if cfg.classColour then
-		health.colorClass = true
-		health.colorReaction = true
-	else
-		health.colorSmooth = true
-	end
+	self.Bg = F.CreateBDFrame(self, 0.2)
+	self.Glow = F.CreateSD(self.Bg, .35, 3, 3)
 
-	health.frequentUpdates = true
-	F.SmoothBar(health)
-		
-	self.Health = health
 	self.Health.PostUpdate = PostUpdateHealth
-
-	local Gradient = health:CreateTexture(nil, 'OVERLAY')
-	Gradient:SetAllPoints(self)
-	Gradient:SetTexture(C.media.backdrop)
-	self.Gradient = Gradient
 end

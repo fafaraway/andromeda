@@ -6,6 +6,7 @@ if not C.unitframe.enable then return end
 local module = F:GetModule("Unitframe")
 local oUF = ns.oUF
 
+
 oUF.colors.power.MANA = {111/255, 185/255, 237/255}
 oUF.colors.power.ENERGY = {1, 222/255, 80/255}
 oUF.colors.power.FURY = { 54/255, 199/255, 63/255 }

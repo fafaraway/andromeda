@@ -8,9 +8,10 @@
 	<Script file='options.lua'/>
 	<Script file='profiles.lua'/>
 
-	<Script file='core\api.lua'/>
 	<Script file='core\uiscale.lua'/>
+	<Script file='core\api.lua'/>
 	<Script file='core\gui.lua'/>
+	<Script file='core\fader.lua'/>
 	<Script file='core\install.lua'/>
 	<Script file='core\mover.lua'/>
 	<Script file='core\slash.lua'/>

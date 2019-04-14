@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
+
+local module = F:GetModule("Misc")
+
 if not C.general.clickCast then return end
-
-
---	Simple click2cast spell binder(sBinder by Fernir)
 
 local SpellBinder = CreateFrame("Frame", "SpellBinder", SpellBookFrame, "ButtonFrameTemplate")
 SpellBinder:SetPoint("TOPLEFT", SpellBookFrame, "TOPRIGHT", 100, 0)
@@ -343,22 +343,26 @@ SpellBinder:SetScript("OnEvent", function(self, event, ...)
 	elseif event == "PLAYER_ENTERING_WORLD" or event == "GROUP_ROSTER_UPDATE" or event == "ZONE_CHANGED" or event == "ZONE_CHANGED_NEW_AREA" then
 		SpellBinder.UpdateAll()
 	end
+
+	if event == "PLAYER_ENTERING_WORLD" then
+		F.ReskinPortraitFrame(SpellBinder, true)
+		F.ReskinPortraitFrame(SpellBinder)
+
+		F.ReskinTab(SpellBinder.OpenButton)
+		F.CreateBDFrame(SpellBinder.OpenButton)
+
+		SpellBinder.OpenButton:SetNormalTexture("Interface\\ICONS\\Spell_holy_chastise")
+		SpellBinder.OpenButton:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
+
+		SpellBinder.OpenButton:SetCheckedTexture(C.media.checked)
+		SpellBinder.OpenButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+		SpellBinder.OpenButton:GetHighlightTexture():SetAllPoints(SpellBinder.OpenButton:GetNormalTexture())
+
+		F.CreateBG(SpellBinder.OpenButton)
+		F.ReskinClose(SpellBinderCloseButton)
+		F.ReskinScroll(SpellBinderScrollFrameSpellListScrollBar)
+	end
 end)
 
-F.ReskinPortraitFrame(SpellBinder, true)
-F.ReskinPortraitFrame(SpellBinder)
 
-F.ReskinTab(SpellBinder.OpenButton)
-F.CreateBDFrame(SpellBinder.OpenButton)
 
-SpellBinder.OpenButton:SetNormalTexture("Interface\\ICONS\\Spell_holy_chastise")
-SpellBinder.OpenButton:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
-
-SpellBinder.OpenButton:SetCheckedTexture(C.media.checked)
-SpellBinder.OpenButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
-SpellBinder.OpenButton:GetHighlightTexture():SetAllPoints(SpellBinder.OpenButton:GetNormalTexture())
-
-F.CreateBG(SpellBinder.OpenButton)
-F.CreateBD(SpellBinder)
-F.ReskinClose(SpellBinderCloseButton)
-F.ReskinScroll(SpellBinderScrollFrameSpellListScrollBar)

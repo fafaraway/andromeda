@@ -84,8 +84,8 @@ function module:Spell()
 	frame:SetScript('OnEvent', function(self, event)
 		local inInstance, instanceType = IsInInstance()
 		local _, subEvent, _, _, srcName, _, _, _, destName, _, _, spellID = CombatLogGetCurrentEventInfo() 
-		if not IsInGroup() or InCombatLockdown() or not subEvent or not spellID or not srcName then return end
-		if not UnitInRaid(srcName) and not UnitInParty(srcName) and not inInstance then return end
+		if not IsInGroup() or not inInstance or InCombatLockdown() or not subEvent or not spellID or not srcName then return end
+		if not UnitInRaid(srcName) and not UnitInParty(srcName) then return end
 
 		local srcName = srcName:gsub('%-[^|]+', '')
 		if subEvent == 'SPELL_CAST_SUCCESS' then

@@ -382,11 +382,7 @@ C.themes["Blizzard_Collections"] = function()
 		bu.cooldown:SetAllPoints(ic)
 		bu.slotFrameCollected:SetTexture("")
 		bu.slotFrameUncollected:SetTexture("")
-
-		ic:SetTexCoord(unpack(C.TexCoord))
-		local bg = F.CreateBG(bu)
-		bg:SetPoint("TOPLEFT", 2.8, -1.8)
-		bg:SetPoint("BOTTOMRIGHT", -2.8, 3.8)
+		F.ReskinIcon(ic)
 
 		hooksecurefunc(bu.name, "SetTextColor", changeTextColor)
 	end

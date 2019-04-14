@@ -119,9 +119,9 @@ local function CreateTargetStyle(self)
 	module:AddClassificationText(self)
 	module:AddCastBar(self)
 	module:AddAuras(self)
-	module:AddRangeCheck(self)
 	module:AddRaidTargetIndicator(self)
 	module:AddQuestIndicator(self)
+	module:AddRangeCheck(self)
 end
 
 local function CreateTargetTargetStyle(self)
@@ -131,8 +131,8 @@ local function CreateTargetTargetStyle(self)
 	module:AddhealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
-	module:AddRangeCheck(self)
 	module:AddRaidTargetIndicator(self)
+	module:AddRangeCheck(self)
 end
 
 local function CreateFocusStyle(self)
@@ -145,8 +145,8 @@ local function CreateFocusStyle(self)
 	module:AddNameText(self)
 	module:AddCastBar(self)
 	module:AddAuras(self)
-	module:AddRangeCheck(self)
 	module:AddRaidTargetIndicator(self)
+	module:AddRangeCheck(self)
 end
 
 local function CreateFocusTargetStyle(self)
@@ -156,8 +156,8 @@ local function CreateFocusTargetStyle(self)
 	module:AddhealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
-	module:AddRangeCheck(self)
 	module:AddRaidTargetIndicator(self)
+	module:AddRangeCheck(self)
 end
 
 local function UpdateUnitBorderColour(self)
@@ -290,11 +290,21 @@ function module:OnLogin()
 
 	oUF:SetActiveStyle('Player')
 	local player = oUF:Spawn('player', 'oUF_Player')
+	if cfg.frameVisibility then
+		player:Disable()
+		player.frameVisibility = cfg.frameVisibility
+		RegisterStateDriver(player, "visibility", cfg.player_frameVisibility)
+	end
 	Mover_Width, Mover_Height = player:GetWidth(), player:GetHeight()
 	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], 'PlayerFrame', Player_Pos, Mover_Width*C.Mult, Mover_Height*C.Mult)
 
 	oUF:SetActiveStyle('Pet')
 	local pet = oUF:Spawn('pet', 'oUF_Pet')
+	if cfg.frameVisibility then
+		pet:Disable()
+		pet.frameVisibility = cfg.frameVisibility
+		RegisterStateDriver(pet, "visibility", cfg.pet_frameVisibility)
+	end
 	Mover_Width, Mover_Height = pet:GetWidth(), pet:GetHeight()
 	F.Mover(pet, L['MOVER_UNITFRAME_PET'], 'PetFrame', Pet_Pos, Mover_Width*C.Mult, Mover_Height*C.Mult)
 

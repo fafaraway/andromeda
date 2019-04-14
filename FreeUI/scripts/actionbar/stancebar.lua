@@ -85,7 +85,7 @@ function Bar:CreateStancebar()
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	if cfg.stanceBar and cfg.stanceBarMouseover then
-		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		F.CreateButtonFrameFader(frame, buttonList, F.fader)
 	end
 
 end

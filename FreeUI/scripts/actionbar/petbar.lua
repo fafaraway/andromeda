@@ -64,6 +64,6 @@ function Bar:CreatePetbar()
 
 	--create the mouseover functionality
 	if cfg.petBar and cfg.petBarMouseover then
-		F.CreateButtonFrameFader(frame, buttonList, cfg.fader)
+		F.CreateButtonFrameFader(frame, buttonList, F.fader)
 	end
 end

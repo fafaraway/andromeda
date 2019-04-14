@@ -260,14 +260,11 @@ do
 	local clickCast = ns.CreateCheckBox(general, "clickCast", true, true)
 	clickCast:SetPoint("TOPLEFT", progressBar, "BOTTOMLEFT", 0, -8)
 
-	local autoBubble = ns.CreateCheckBox(general, "autoBubble", true, true)
-	autoBubble:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -8)
-
 	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
 	alreadyKnown:SetPoint("LEFT", clickCast, "RIGHT", 240, 0)
 
 	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
-	cooldown:SetPoint("TOPLEFT", autoBubble, "BOTTOMLEFT", 0, -16)
+	cooldown:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -16)
 
 	local cooldownCount = ns.CreateCheckBox(general, "cooldownCount", true, true)
 	cooldownCount:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 0, -8)
@@ -321,15 +318,6 @@ do
 
 	local fontStyle = ns.CreateCheckBox(appearance, "reskinFonts", true, true)
 	fontStyle:SetPoint("LEFT", addShadowBorder, "RIGHT", 240, 0)
-
-	--[[local line_1 = ns.addSubCategory(appearance, ns.localization.appearanceline_1)
-	line_1:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
-
-	local colourScheme = ns.CreateRadioButtonGroup(appearance, "colourScheme", 2, true, true)
-	colourScheme.buttons[1]:SetPoint("TOPLEFT", line_1, "BOTTOMLEFT", 8, -8)
-
-	local customColour = ns.CreateColourPicker(appearance, "customColour", true)
-	customColour:SetPoint("LEFT", colourScheme.buttons[2].text, "RIGHT", 6, 0)]]
 
 	local line_2 = ns.addSubCategory(appearance, ns.localization.appearanceline_2)
 	line_2:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
@@ -640,23 +628,23 @@ do
 	local healer_layout = ns.CreateCheckBox(unitframe, "healer_layout", true, true)
 	healer_layout:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
-	local gradient = ns.CreateCheckBox(unitframe, "gradient", true, true)
-	gradient:SetPoint("LEFT", healer_layout, "RIGHT", 240, 0)
-
 	local transMode = ns.CreateCheckBox(unitframe, "transMode", true, true)
-	transMode:SetPoint("TOPLEFT", healer_layout, "BOTTOMLEFT", 0, -8)
+	transMode:SetPoint("LEFT", healer_layout, "RIGHT", 240, 0)
 
-	local classColour = ns.CreateCheckBox(unitframe, "classColour", true, true)
-	classColour:SetPoint("LEFT", transMode, "RIGHT", 240, 0)
+	local colourSmooth = ns.CreateCheckBox(unitframe, "colourSmooth", true, true)
+	colourSmooth:SetPoint("TOPLEFT", healer_layout, "BOTTOMLEFT", 0, -8)
 
 	local portrait = ns.CreateCheckBox(unitframe, "portrait", true, true)
-	portrait:SetPoint("TOPLEFT", transMode, "BOTTOMLEFT", 0, -8)
+	portrait:SetPoint("LEFT", colourSmooth, "RIGHT", 240, 0)
 
-	local main = ns.addSubCategory(unitframe, ns.localization.unitframemain)
-	main:SetPoint("TOPLEFT", portrait, "BOTTOMLEFT", -16, -8)
+	local frameVisibility = ns.CreateCheckBox(unitframe, "frameVisibility", true, true)
+	frameVisibility:SetPoint("TOPLEFT", colourSmooth, "BOTTOMLEFT", 0, -8)
+
+	local line = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line:SetPoint("TOPLEFT", frameVisibility, "BOTTOMLEFT", -16, -8)
 
 	local threat = ns.CreateCheckBox(unitframe, "threat", true, true)
-	threat:SetPoint("TOPLEFT", main, "BOTTOMLEFT", 16, -16)
+	threat:SetPoint("TOPLEFT", line, "BOTTOMLEFT", 16, -16)
 
 	local healPrediction = ns.CreateCheckBox(unitframe, "healPrediction", true, true)
 	healPrediction:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
@@ -670,14 +658,14 @@ do
 	local dispellable = ns.CreateCheckBox(unitframe, "dispellable", true, true)
 	dispellable:SetPoint("LEFT", threat, "RIGHT", 240, 0)
 
-	local spellRange = ns.CreateCheckBox(unitframe, "spellRange", true, true)
-	spellRange:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
+	local rangeCheck = ns.CreateCheckBox(unitframe, "rangeCheck", true, true)
+	rangeCheck:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
 
-	local castbarline = ns.addSubCategory(unitframe, ns.localization.unitframecastbarline)
-	castbarline:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -8)
+	local line2 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line2:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -8)
 
 	local enableCastbar = ns.CreateCheckBox(unitframe, "enableCastbar", true, true)
-	enableCastbar:SetPoint("TOPLEFT", castbarline, "BOTTOMLEFT", 16, -16)
+	enableCastbar:SetPoint("TOPLEFT", line2, "BOTTOMLEFT", 16, -16)
 
 	local castbar_separatePlayer = ns.CreateCheckBox(unitframe, "castbar_separatePlayer", true, true)
 	castbar_separatePlayer:SetPoint("TOPLEFT", enableCastbar, "BOTTOMLEFT", 16, -8)
@@ -687,53 +675,69 @@ do
 
 	enableCastbar.children = {castbar_separatePlayer, castbar_separateTarget}
 
-	local group = ns.addSubCategory(unitframe, ns.localization.unitframegroup)
-	group:SetPoint("TOPLEFT", castbar_separatePlayer, "BOTTOMLEFT", -32, -8)
+	local line3 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line3:SetPoint("TOPLEFT", castbar_separatePlayer, "BOTTOMLEFT", -32, -8)
 
 	local enableGroup = ns.CreateCheckBox(unitframe, "enableGroup", true, true)
-	enableGroup:SetPoint("TOPLEFT", group, "BOTTOMLEFT", 16, -16)
+	enableGroup:SetPoint("TOPLEFT", line3, "BOTTOMLEFT", 16, -16)
 
 	local showGroupName = ns.CreateCheckBox(unitframe, "showGroupName", true, true)
 	showGroupName:SetPoint("TOPLEFT", enableGroup, "BOTTOMLEFT", 16, -8)
 
-	local misc = ns.addSubCategory(unitframe, ns.localization.unitframemisc)
-	misc:SetPoint("TOPLEFT", showGroupName, "BOTTOMLEFT", -32, -8)
+	local colourSmooth_Raid = ns.CreateCheckBox(unitframe, "colourSmooth_Raid", true, true)
+	colourSmooth_Raid:SetPoint("LEFT", showGroupName, "RIGHT", 240, 0)
+
+	enableGroup.children = {showGroupName, colourSmooth_Raid}
+
+	local line4 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line4:SetPoint("TOPLEFT", showGroupName, "BOTTOMLEFT", -32, -8)
 
 	local enableBoss = ns.CreateCheckBox(unitframe, "enableBoss", true, true)
-	enableBoss:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 16, -16)
+	enableBoss:SetPoint("TOPLEFT", line4, "BOTTOMLEFT", 16, -16)
+
+	local colourSmooth_Boss = ns.CreateCheckBox(unitframe, "colourSmooth_Boss", true, true)
+	colourSmooth_Boss:SetPoint("TOPLEFT", enableBoss, "BOTTOMLEFT", 16, -8)
+
+	enableBoss.children = {colourSmooth_Boss}
 
 	local enableArena = ns.CreateCheckBox(unitframe, "enableArena", true, true)
 	enableArena:SetPoint("LEFT", enableBoss, "RIGHT", 240, 0)
 
+	local line5 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line5:SetPoint("TOPLEFT", colourSmooth_Boss, "BOTTOMLEFT", -32, -8)
+
+	local debuffbyPlayer = ns.CreateCheckBox(unitframe, "debuffbyPlayer", true, true)
+	debuffbyPlayer:SetPoint("TOPLEFT", line5, "BOTTOMLEFT", 16, -16)
+
 	local function toggleUFOptions()
 		local shown = enable:GetChecked()
+		line:SetShown(shown)
 		transMode:SetShown(shown)
-		gradient:SetShown(shown)
-		main:SetShown(shown)
 		portrait:SetShown(shown)
 		healer_layout:SetShown(shown)
-		classColour:SetShown(shown)
+		colourSmooth:SetShown(shown)
+		frameVisibility:SetShown(shown)
 
-		group:SetShown(shown)
 		enableGroup:SetShown(shown)
 		showGroupName:SetShown(shown)
+		colourSmooth_Raid:SetShown(shown)
 
 		threat:SetShown(shown)
 		overAbsorb:SetShown(shown)
 		healPrediction:SetShown(shown)
 		classPower:SetShown(shown)
 		dispellable:SetShown(shown)
-		spellRange:SetShown(shown)
+		rangeCheck:SetShown(shown)
 
-		castbarline:SetShown(shown)
 		enableCastbar:SetShown(shown)
 		castbar_separatePlayer:SetShown(shown)
 		castbar_separateTarget:SetShown(shown)
 		
-		misc:SetShown(shown)
 		enableBoss:SetShown(shown)
+		colourSmooth_Boss:SetShown(shown)
 		enableArena:SetShown(shown)
 
+		debuffbyPlayer:SetShown(shown)
 	end
 
 	enable:HookScript("OnClick", toggleUFOptions)
@@ -900,6 +904,9 @@ do
 	local useFilter = ns.CreateCheckBox(chat, "useFilter", true, true)
 	useFilter:SetPoint("LEFT", lineFading, "RIGHT", 240, 0)
 
+	local autoBubble = ns.CreateCheckBox(chat, "autoBubble", true, true)
+	autoBubble:SetPoint("TOPLEFT", lineFading, "BOTTOMLEFT", 0, -8)
+
 	local function toggleChatOptions()
 		local shown = enable:GetChecked()
 		lockPosition:SetShown(shown)
@@ -912,6 +919,7 @@ do
 		channelSticky:SetShown(shown)
 		lineFading:SetShown(shown)
 		useFilter:SetShown(shown)
+		autoBubble:SetShown(shown)
 	end
 
 	enable:HookScript("OnClick", toggleChatOptions)

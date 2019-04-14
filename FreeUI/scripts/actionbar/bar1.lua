@@ -37,13 +37,20 @@ function module:OnLogin()
 	end
 
 	--show/hide the frame on a given state driver
-	if cfg.layoutStyle == 3 then
+	--[[if cfg.layoutStyle == 3 then
 		frame.frameVisibility = "[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide"
-		F.CreateButtonFrameFader(frame, buttonList, cfg.faderOnShow)
+		F.CreateButtonFrameFader(frame, buttonList, F.faderOnShow)
 	else
 		frame.frameVisibility = "[petbattle] hide; show"
 	end
+	RegisterStateDriver(frame, "visibility", frame.frameVisibility)]]
+
+	frame.frameVisibility = "[petbattle] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+
+	if cfg.layoutStyle == 3 then
+		F.CreateButtonFrameFader(frame, buttonList, F.fader)
+	end
 
 	--_onstate-page state driver
 	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"

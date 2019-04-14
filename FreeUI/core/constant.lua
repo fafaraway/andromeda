@@ -107,7 +107,6 @@ C.CopyTex = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
 C.TexCoord = {.08, .92, .08, .92}
 
 
-C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 
 
 
