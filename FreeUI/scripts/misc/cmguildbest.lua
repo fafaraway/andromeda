@@ -120,9 +120,9 @@ function module:CMGuildBest()
 				local name = Ambiguate(name, 'none')
 				local mapID, level, class, faction = strsplit(':', info)
 				local color = F.HexRGB(F.ClassColor(class))
-				local infoColor = faction == 'Horde' and '|cffee1919' or '|cff00adf0'
+				local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
 				local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
-				GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format(infoColor..'%s(%s)|r', dungeon, level))
+				GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
 			end
 			GameTooltip:Show()
 		end)
