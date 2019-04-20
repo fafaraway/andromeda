@@ -4,7 +4,8 @@ local cargBags = FreeUI.cargBags
 local module = F:RegisterModule('Inventory')
 
 local ipairs, strmatch, unpack = ipairs, string.match, unpack
-local BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
+local BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT = BAG_ITEM_QUALITY_COLORS, LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_ARTIFACT
+local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
@@ -231,7 +232,7 @@ function module:OnLogin()
 	Backpack:HookScript('OnHide', function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
 	local f = {}
-	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagTradeGoods, bagQuestItem, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent = self:GetFilters()
+	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagTradeGoods, bagQuestItem, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet = self:GetFilters()
 
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
@@ -251,6 +252,9 @@ function module:OnLogin()
 
 		f.consumble = MyContainer:New('Consumble', {Columns = C.inventory.bagColumns, Parent = f.main})
 		f.consumble:SetFilter(bagConsumble, true)
+
+		f.bagCompanion = MyContainer:New('BagCompanion', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.bagCompanion:SetFilter(bagMountPet, true)
 
 		f.tradegoods = MyContainer:New('TradeGoods', {Columns = C.inventory.bagColumns, Parent = f.main})
 		f.tradegoods:SetFilter(bagTradeGoods, true)
@@ -274,6 +278,9 @@ function module:OnLogin()
 
 		f.bankConsumble = MyContainer:New('BankConsumble', {Columns = C.inventory.bankColumns, Parent = f.bank})
 		f.bankConsumble:SetFilter(bankConsumble, true)
+
+		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = C.inventory.bankColumns, Parent = f.bank})
+		f.bankCompanion:SetFilter(bankMountPet, true)
 
 		f.reagent = MyContainer:New('Reagent', {Columns = C.inventory.bankColumns})
 		f.reagent:SetFilter(onlyReagent, true)
@@ -359,7 +366,7 @@ function module:OnLogin()
 		self.ShowNewItems = true
 	end
 
-	function MyButton:OnEnter()
+	function MyButton:ItemOnEnter()
 		if self.ShowNewItems then
 			if self.anim:IsPlaying() then self.anim:Stop() end
 		end
@@ -387,7 +394,7 @@ function module:OnLogin()
 		end
 
 		if C.inventory.itemLevel then
-			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or (item.equipLoc ~= '' and item.equipLoc ~= 'INVTYPE_TABARD' and item.equipLoc ~= 'INVTYPE_BODY' and item.equipLoc ~= 'INVTYPE_BAG')) then
+			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR) then
 				local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
 				self.iLvl:SetText(level)
@@ -433,8 +440,8 @@ function module:OnLogin()
 		local width, height = self:LayoutButtons('grid', self.Settings.Columns, 5, 5, -offset + 5)
 		self:SetSize(width + 10, height + offset)
 
-		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.tradegoods, f.questitem, f.junk})
-		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankConsumble})
+		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.bagCompanion, f.tradegoods, f.questitem, f.junk})
+		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankConsumble})
 	end
 
 	function MyContainer:OnCreate(name, settings)
@@ -462,8 +469,10 @@ function module:OnLogin()
 			label = BAG_FILTER_TRADE_GOODS
 		elseif strmatch(name, 'QuestItem$') then
 			label = AUCTION_CATEGORY_QUEST_ITEMS
-		elseif strmatch(name, 'Junk') then
+		elseif name == 'Junk' then
 			label = BAG_FILTER_JUNK
+		elseif strmatch(name, 'Companion') then
+			label = MOUNTS_AND_PETS
 		end
 		if label then
 			self.cat = self:CreateFontString(nil, 'OVERLAY')
