@@ -107,6 +107,6 @@ C.CopyTex = "Interface\\Buttons\\UI-GuildButton-PublicNote-Up"
 C.TexCoord = {.08, .92, .08, .92}
 
 
-
+C.isNewPatch = GetBuildInfo() == "8.2.0"
 
 
