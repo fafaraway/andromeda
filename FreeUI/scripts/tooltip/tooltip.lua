@@ -196,6 +196,8 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self)
 		F.CreateTex(bg)
 		GameTooltipStatusBar.bg = bg
 	end
+
+	module.InspectUnitSpecAndLevel(self)
 end)
 
 local ssbc = CreateFrame('StatusBar').SetStatusBarColor
