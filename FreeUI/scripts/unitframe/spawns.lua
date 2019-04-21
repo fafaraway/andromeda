@@ -64,7 +64,7 @@ local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
 	self:SetSize(cfg.player_width*C.Mult, cfg.player_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
 	module:AddAlternativePower(self)
@@ -86,6 +86,8 @@ local function CreatePlayerStyle(self)
 		module:AddClassPower(self)
 	end
 
+	if cfg.quakeTimer then module:AddQuakeTimer(self) end
+
 	if C.actionbar.enable then
 		FreeUI_LeaveVehicleButton:SetPoint('LEFT', self, 'RIGHT', 6, 0)
 	end
@@ -95,7 +97,7 @@ local function CreatePetStyle(self)
 	self.unitStyle = 'pet'
 	self:SetSize(cfg.pet_width*C.Mult, cfg.pet_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
 	module:AddPortrait(self)
@@ -109,7 +111,7 @@ local function CreateTargetStyle(self)
 	self.unitStyle = 'target'
 	self:SetSize(cfg.target_width*C.Mult, cfg.target_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
 	module:AddPortrait(self)
@@ -128,7 +130,7 @@ local function CreateTargetTargetStyle(self)
 	self.unitStyle = 'targettarget'
 	self:SetSize(TargetTarget_Width*C.Mult, cfg.targettarget_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
 	module:AddRaidTargetIndicator(self)
@@ -139,7 +141,7 @@ local function CreateFocusStyle(self)
 	self.unitStyle = 'focus'
 	self:SetSize(Focus_Width*C.Mult, cfg.focus_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
@@ -153,7 +155,7 @@ local function CreateFocusTargetStyle(self)
 	self.unitStyle = 'focustarget'
 	self:SetSize(FocusTarget_Width*C.Mult, cfg.focustarget_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
 	module:AddRaidTargetIndicator(self)
@@ -185,7 +187,7 @@ end
 local function CreatePartyStyle(self)
 	self.unitStyle = 'party'
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
 	module:AddPortrait(self)
@@ -212,7 +214,7 @@ end
 local function CreateRaidStyle(self)
 	self.unitStyle = 'raid'
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
 	module:AddDispel(self)
@@ -238,7 +240,7 @@ local function CreateBossStyle(self)
 	self.unitStyle = 'boss'
 	self:SetSize(cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddHealthValue(self)
 	module:AddHealthPercentage(self)
 	module:AddPowerBar(self)
@@ -261,7 +263,7 @@ local function CreateArenaStyle(self)
 	self.unitStyle = 'arena'
 	self:SetSize(cfg.arena_width*C.Mult, cfg.arena_height*C.Mult)
 
-	module:AddhealthBar(self)
+	module:AddHealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
 	module:AddHealthValue(self)

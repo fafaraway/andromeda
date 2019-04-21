@@ -365,7 +365,8 @@ ns.localization.unitframeenableArena = "Arena frames"
 ns.localization.unitframeenableArenaTooltip = "Enables arena frames, uncheck if you want to use another addon for arena frames."
 ns.localization.unitframedebuffbyPlayer = "Aura filter"
 ns.localization.unitframedebuffbyPlayerTooltip = "Only show debuffs that casted by player on target unitframe."
-
+ns.localization.unitframequakeTimer = "Quake timer"
+ns.localization.unitframequakeTimerTooltip = "Show quake timer bar."
 
 
 

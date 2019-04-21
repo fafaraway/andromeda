@@ -269,6 +269,10 @@ C['unitframe'] = {
 		['debuffbyPlayer'] = true,
 		['rangeCheck'] = true,
 
+		['quakeTimer'] = true,
+			['quakeTimer_width'] = 200,
+			['quakeTimer_height'] = 20,
+
 		['classPower'] = true,
 			['classPower_height'] = 2,
 

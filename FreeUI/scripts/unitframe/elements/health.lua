@@ -51,7 +51,7 @@ local function PostUpdateHealth(health, unit, min, max)
 	end
 end
 
-function module:AddhealthBar(self)
+function module:AddHealthBar(self)
 	local highlight = self:CreateTexture(nil, 'OVERLAY')
 	highlight:SetAllPoints()
 	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')

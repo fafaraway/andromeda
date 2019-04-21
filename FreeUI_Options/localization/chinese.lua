@@ -324,7 +324,8 @@ ns.localization.unitframeenableArena = "启用竞技场框体"
 ns.localization.unitframeenableArenaTooltip = "禁用此项如果你想要使用其他的竞技场框体类插件。"
 ns.localization.unitframedebuffbyPlayer = "光环过滤"
 ns.localization.unitframedebuffbyPlayerTooltip = "目标框体上只显示由玩家施放的减益光环。"
-
+ns.localization.unitframequakeTimer = "震荡提示"
+ns.localization.unitframequakeTimerTooltip = "显示震荡计时条。"
 
 
 

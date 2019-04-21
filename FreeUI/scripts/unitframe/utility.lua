@@ -65,6 +65,13 @@ function module:ReskinTimerTrakcer(self)
 end
 
 
+function module:createBarMover(bar, text, value, anchor)
+	local mover = F.Mover(bar, text, value, anchor, bar:GetHeight()+bar:GetWidth()+5, bar:GetHeight()+5)
+	bar:ClearAllPoints()
+	bar:SetPoint("RIGHT", mover)
+end
+
+
 local handler = CreateFrame('Frame')
 handler:SetScript('OnEvent', function(self, event, ...)
 	self[event](self, ...)

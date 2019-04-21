@@ -3,6 +3,7 @@
 	<Script file='colors.lua'/>
 	<Script file='elements\custom\dispellable.lua'/>
 	<Script file='elements\custom\spellrange.lua'/>
+	<Script file='elements\custom\quaketimer.lua'/>
 	<Script file='elements\alternativepower.lua'/>
 	<Script file='elements\auras.lua'/>
 	<Script file='elements\castbar.lua'/>
@@ -13,6 +14,7 @@
 	<Script file='elements\indicators.lua'/>
 	<Script file='elements\portrait.lua'/>
 	<Script file='elements\power.lua'/>
+	<Script file='elements\quaketimer.lua'/>
 	<Script file='elements\range.lua'/>
 	<Script file='elements\runes.lua'/>
 	<Script file='elements\tags.lua'/>

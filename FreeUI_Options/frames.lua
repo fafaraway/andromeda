@@ -646,6 +646,9 @@ do
 	local threat = ns.CreateCheckBox(unitframe, "threat", true, true)
 	threat:SetPoint("TOPLEFT", line, "BOTTOMLEFT", 16, -16)
 
+	local dispellable = ns.CreateCheckBox(unitframe, "dispellable", true, true)
+	dispellable:SetPoint("LEFT", threat, "RIGHT", 240, 0)
+
 	local healPrediction = ns.CreateCheckBox(unitframe, "healPrediction", true, true)
 	healPrediction:SetPoint("TOPLEFT", threat, "BOTTOMLEFT", 0, -8)
 
@@ -655,14 +658,14 @@ do
 	local classPower = ns.CreateCheckBox(unitframe, "classPower", true, true)
 	classPower:SetPoint("TOPLEFT", healPrediction, "BOTTOMLEFT", 0, -8)
 
-	local dispellable = ns.CreateCheckBox(unitframe, "dispellable", true, true)
-	dispellable:SetPoint("LEFT", threat, "RIGHT", 240, 0)
-
 	local rangeCheck = ns.CreateCheckBox(unitframe, "rangeCheck", true, true)
 	rangeCheck:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
 
+	local quakeTimer = ns.CreateCheckBox(unitframe, "quakeTimer", true, true)
+	quakeTimer:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
+
 	local line2 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line2:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", -16, -8)
+	line2:SetPoint("TOPLEFT", quakeTimer, "BOTTOMLEFT", -16, -8)
 
 	local enableCastbar = ns.CreateCheckBox(unitframe, "enableCastbar", true, true)
 	enableCastbar:SetPoint("TOPLEFT", line2, "BOTTOMLEFT", 16, -16)
@@ -728,6 +731,7 @@ do
 		classPower:SetShown(shown)
 		dispellable:SetShown(shown)
 		rangeCheck:SetShown(shown)
+		quakeTimer:SetShown(shown)
 
 		enableCastbar:SetShown(shown)
 		castbar_separatePlayer:SetShown(shown)
