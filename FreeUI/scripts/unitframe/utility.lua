@@ -20,7 +20,7 @@ local function reskinTimerBar(bar)
 	bar:SetSize(200, 20)
 	F.StripTextures(bar)
 
-	local statusbar = _G[bar:GetName().."StatusBar"]
+	local statusbar = _G[bar:GetName()..'StatusBar']
 	if statusbar then
 		statusbar:SetAllPoints()
 		statusbar:SetStatusBarTexture(C.media.sbTex)
@@ -28,7 +28,7 @@ local function reskinTimerBar(bar)
 		bar:SetStatusBarTexture(C.media.backdrop)
 	end
 
-	local text = _G[bar:GetName().."Text"]
+	local text = _G[bar:GetName()..'Text']
 	if text then
 		text:ClearAllPoints()
 		text:SetPoint('CENTER')
@@ -41,11 +41,11 @@ end
 function module:ReskinMirrorBars()
 	local previous
 	for i = 1, 3 do
-		local bar = _G["MirrorTimer"..i]
+		local bar = _G['MirrorTimer'..i]
 		reskinTimerBar(bar)
 
 		if previous then
-			bar:SetPoint("TOP", previous, "BOTTOM", 0, -5)
+			bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)
 		end
 		previous = bar
 	end
@@ -61,14 +61,14 @@ function module:ReskinTimerTrakcer(self)
 			end
 		end
 	end
-	self:RegisterEvent("START_TIMER", updateTimerTracker, true)
+	self:RegisterEvent('START_TIMER', updateTimerTracker, true)
 end
 
 
 function module:createBarMover(bar, text, value, anchor)
 	local mover = F.Mover(bar, text, value, anchor, bar:GetHeight()+bar:GetWidth()+5, bar:GetHeight()+5)
 	bar:ClearAllPoints()
-	bar:SetPoint("RIGHT", mover)
+	bar:SetPoint('RIGHT', mover)
 end
 
 
