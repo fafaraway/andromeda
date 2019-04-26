@@ -7,6 +7,8 @@ local module, cfg = F:GetModule('Unitframe'), C.unitframe
 
 
 function module:AddQuakeTimer(self)
+	if not cfg.enableCastbar then return end
+	
 	local bar = CreateFrame('StatusBar', nil, self)
 	bar:SetSize(cfg.quakeTimer_width, cfg.quakeTimer_height)
 	F.CreateSB(bar, true, 0, 1, 0)

@@ -122,7 +122,7 @@ local function Enable(self)
 		element.passColor = element.passColor or {0, 1, 0}
 		element.timerFormat = element.timerFormat or "%.2f | %.2f"
 		if not element:GetStatusBarTexture() then
-			element:SetStatusBarTexture([[Interface\ChatFrame\ChatFrameBackground]])
+			element:SetStatusBarTexture(C.media.sbTex)
 		end
 		element:SetScript("OnUpdate", updateTimer)
 
