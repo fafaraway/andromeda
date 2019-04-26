@@ -17,15 +17,6 @@ local classification = {
 }
 
 local function getUnit(self)
-	--[[local _, unit = self and self:GetUnit()
-	if not unit then
-		local mFocus = GetMouseFocus()
-		if mFocus then
-			unit = mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit'))
-		end
-	end
-	return (unit or 'mouseover')]]
-
 	local _, unit = self and self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()

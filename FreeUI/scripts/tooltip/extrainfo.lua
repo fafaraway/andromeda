@@ -34,10 +34,10 @@ function module:ExtraInfo()
 			local bagCount = GetItemCount(id)
 			local bankCount = GetItemCount(id, true) - GetItemCount(id)
 			local itemStackCount = select(8, GetItemInfo(id))
-			local itemSellPrice = select(11, GetItemInfo(id))
+			--[[local itemSellPrice = select(11, GetItemInfo(id))
 			if itemSellPrice and itemSellPrice ~= 0 and IsShiftKeyDown() then
 				self:AddDoubleLine(L['TOOLTIP_SELL_PRICE']..':', '|cffffffff'..GetMoneyString(itemSellPrice)..'|r')
-			end
+			end]]
 			if bankCount > 0 and IsShiftKeyDown() then
 				self:AddDoubleLine(BAGSLOT..'/'..BANK..':', C.InfoColor..bagCount..'/'..bankCount)
 			elseif bagCount > 1 and IsShiftKeyDown() then

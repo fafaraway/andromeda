@@ -16,7 +16,7 @@ if C.Client == "zhCN" then
 	DAMAGE_TEMPLATE = "伤害 %s - %s"
 	DPS_TEMPLATE = "每秒伤害 %s"
 	DURABILITY_TEMPLATE = "耐久 %d/%d"
-	SHIELD_BLOCK_TEMPLATE = "格挡 %d"
+	--SHIELD_BLOCK_TEMPLATE = "格挡 %d"
 
 	ENCHANTED_TOOLTIP_LINE = "|cff78c2e1%s|r"
 
@@ -174,9 +174,9 @@ Loader:SetScript("OnEvent", function(self, event, arg)
 end)
 
 
-GameTooltip_OnTooltipAddMoney = F.Dummy
+--GameTooltip_OnTooltipAddMoney = F.Dummy
 
---[[local showPriceFrames = {
+local showPriceFrames = {
 	"AuctionFrame",
 	"MerchantFrame",
 	"QuestRewardPanel",
@@ -195,6 +195,6 @@ function GameTooltip_OnTooltipAddMoney(...)
 			return prehook(...)
 		end
 	end
-end]]
+end
 
 

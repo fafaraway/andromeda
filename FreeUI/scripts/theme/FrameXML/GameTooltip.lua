@@ -51,6 +51,17 @@ tinsert(C.themes["FreeUI"], function()
 				end
 			end
 		end
+
+		if self.NumLines and self:NumLines() > 0 then
+			for index = 1, self:NumLines() do
+				if index == 1 then
+					_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 14, 'OUTLINE')
+				else
+					_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12, 'OUTLINE')
+				end
+				_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12, 'OUTLINE')
+			end
+		end
 	end
 
 	hooksecurefunc("GameTooltip_SetBackdropStyle", function(self)
