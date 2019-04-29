@@ -1,32 +1,30 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_WarboardUI"] = function()
-	local WarboardQuestChoiceFrame = _G.WarboardQuestChoiceFrame
-
-	F.ReskinClose(WarboardQuestChoiceFrame.CloseButton)
-
-	WarboardQuestChoiceFrame.BorderFrame.Header:SetAlpha(0)
-	WarboardQuestChoiceFrame.Background:Hide()
-	WarboardQuestChoiceFrame.NineSlice:Hide()
-	WarboardQuestChoiceFrame.Title.Left:Hide()
-	WarboardQuestChoiceFrame.Title.Middle:Hide()
-	WarboardQuestChoiceFrame.Title.Right:Hide()
-
-	F.CreateBD(WarboardQuestChoiceFrame)
-	F.CreateSD(WarboardQuestChoiceFrame)
 
 	hooksecurefunc(WarboardQuestChoiceFrame, "Update", function(self)
-		if self.CloseButton.Border then self.CloseButton.Border:SetAlpha(0) end
+		if not self.bg then
+			self.Background:Hide()
+			self.NineSlice:Hide()
+			self.Title:DisableDrawLayer("BACKGROUND")
+			self.Title.Text:SetTextColor(1, .8, 0)
+			self.Title.Text:SetFontObject(SystemFont_Huge2)
+			self.BorderFrame.Header:SetAlpha(0)
+			F.CreateBDFrame(self.Title, .25)
+			F.ReskinClose(self.CloseButton)
+			self.CloseButton.Border:SetAlpha(0)
+			self.bg = F.SetBD(self)
+		end
 
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
-			option.OptionText:SetTextColor(0, 0, 0)
 			option.Header.Text:SetTextColor(0, 0, 0)
-
+			option.OptionText:SetTextColor(1, 1, 1)
+			
 			for i = 1, option.WidgetContainer:GetNumChildren() do
 				local child = select(i, option.WidgetContainer:GetChildren())
 				if child.Text then
-					child.Text:SetTextColor(0, 0, 0)
+					child.Text:SetTextColor(1, 1, 1)
 				end
 
 				if child.Spell then
@@ -36,18 +34,18 @@ C.themes["Blizzard_WarboardUI"] = function()
 						child.Spell.bg = F.ReskinIcon(child.Spell.Icon)
 					end
 
-					child.Spell.Text:SetTextColor(0, 0, 0)
+					child.Spell.Text:SetTextColor(1, 1, 1)
 				end
 
 				for j = 1, child:GetNumChildren() do
 					local child2 = select(j, child:GetChildren())
 					if child2 then
 						if child2.Text then
-							child2.Text:SetTextColor(0, 0, 0)
+							child2.Text:SetTextColor(1, 1, 1)
 						end
 
 						if child2.LeadingText then
-							child2.LeadingText:SetTextColor(0, 0, 0)
+							child2.LeadingText:SetTextColor(1, 1, 1)
 						end
 
 						if child2.Icon and not child2.Icon.bg then
@@ -57,11 +55,14 @@ C.themes["Blizzard_WarboardUI"] = function()
 				end
 			end
 
-			if not option.styled then
+			if not option.bg then
 				F.Reskin(option.OptionButtonsContainer.OptionButton1)
 				F.Reskin(option.OptionButtonsContainer.OptionButton2)
-
-				option.styled = true
+				option.Background:SetAlpha(0)
+				local bg = F.CreateBDFrame(option, .25)
+				bg:SetPoint("TOPLEFT", -4, 0)
+				bg:SetPoint("BOTTOMRIGHT", 4, 0)
+				option.bg = bg
 			end
 		end
 	end)

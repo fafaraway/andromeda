@@ -55,11 +55,18 @@ tinsert(C.themes["FreeUI"], function()
 		if self.NumLines and self:NumLines() > 0 then
 			for index = 1, self:NumLines() do
 				if index == 1 then
-					_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 14, 'OUTLINE')
+					_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 13)
 				else
-					_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12, 'OUTLINE')
+					_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12)
 				end
-				_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12, 'OUTLINE')
+
+				_G[self:GetName().."TextLeft"..index]:SetFont(C.font.normal, 12)
+				_G[self:GetName().."TextLeft"..index]:SetShadowColor(0, 0, 0)
+				_G[self:GetName().."TextLeft"..index]:SetShadowOffset(2, -2)
+
+				_G[self:GetName().."TextRight"..index]:SetFont(C.font.normal, 12)
+				_G[self:GetName().."TextRight"..index]:SetShadowColor(0, 0, 0)
+				_G[self:GetName().."TextRight"..index]:SetShadowOffset(2, -2)
 			end
 		end
 	end

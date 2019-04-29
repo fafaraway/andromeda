@@ -15,6 +15,7 @@ tinsert(C.themes["FreeUI"], function()
 
 				local backdrop = _G[name..i.."Backdrop"]
 				if backdrop and not backdrop.styled then
+					if C.isNewPatch then F.StripTextures(backdrop) end
 					F.CreateBD(backdrop)
 					F.CreateSD(backdrop)
 					backdrop.styled = true
