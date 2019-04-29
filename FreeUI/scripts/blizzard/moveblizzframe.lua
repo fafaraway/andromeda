@@ -48,17 +48,15 @@ local frames = {
 	["TradeFrame"] = false,
 	["TutorialFrame"] = false,
 	["VideoOptionsFrame"] = false,
-	["WorldStateScoreFrame"] = false,
 
-	-- Other AddOns
-	--["BaudErrorFrame"] = false,
+	["BaudErrorFrame"] = false,
 }
 
 -- Frame Existing Check
 local function IsFrameExists()
 	for k in pairs(frames) do
 		local name = _G[k]
-		if not name then print("Frame not found:", k) end
+		if not name and C.isDeveloper then print("Frame not found:", k) end
 	end
 end
 

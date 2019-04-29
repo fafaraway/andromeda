@@ -24,12 +24,12 @@ function module:ArchaeologyBar()
 		frame.BarBorderAndOverlay:Hide()
 
 		if C.Client == 'zhCN' or C.Client == 'zhTW' then
-			frame.BarTitle:SetFont(C.font.normal, 12, "OUTLINE")
+			frame.BarTitle:SetFont(C.font.normal, 11, "OUTLINE")
 		else
 			F.SetFS(frame.BarTitle)
 		end
 
-		frame.BarTitle:SetPoint("CENTER", 0, 13)
+		frame.BarTitle:SetPoint("CENTER", 0, 16)
 
 		local width = C.unitframe.player_width
 		bar:SetWidth(width)

@@ -153,7 +153,7 @@ function module:HookParagonRep()
 			if factionID and C_Reputation.IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 				local barValue = mod(currentValue, threshold)
-				local factionStandingtext = C.InfoColor..L['PARAGON']..' ('..floor(currentValue/threshold)..')'
+				local factionStandingtext = L['PARAGON']..' ('..floor(currentValue/threshold)..')'
 
 				factionBar:SetMinMaxValues(0, threshold)
 				factionBar:SetValue(barValue)
