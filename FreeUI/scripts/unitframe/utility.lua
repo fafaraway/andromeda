@@ -219,6 +219,7 @@ function module:AddBackDrop(self)
 	self.Glow = glow
 end
 
+
 local function UpdateSelectedBorder(self)
 	if UnitIsUnit('target', self.unit) then
 		self.Border:Show()
@@ -237,3 +238,16 @@ function module:AddSelectedBorder(self)
 	self:RegisterEvent('GROUP_ROSTER_UPDATE', UpdateSelectedBorder, true)
 end
 
+
+function module:FormatTime(s)
+	local day, hour, minute = 86400, 3600, 60
+
+	if s >= day then
+		return format('%d', F.Round(s/day))
+	elseif s >= hour then
+		return format('%d', F.Round(s/hour))
+	elseif s >= minute then
+		return format('%d', F.Round(s/minute))
+	end
+	return format('%d', mod(s, minute))
+end

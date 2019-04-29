@@ -242,33 +242,19 @@ local classBuffs = {
 
 
 
-local function FormatAuraTime(s)
-	local day, hour, minute = 86400, 3600, 60
-
-	if s >= day then
-		return format('%d', F.Round(s/day))
-	elseif s >= hour then
-		return format('%d', F.Round(s/hour))
-	elseif s >= minute then
-		return format('%d', F.Round(s/minute))
-	end
-	return format('%d', mod(s, minute))
-end
-module.FormatTime = FormatAuraTime
-
 
 local function UpdateAuraTime(self, elapsed)
 	if(self.expiration) then
 		self.expiration = math.max(self.expiration - elapsed, 0)
 
 		if(self.expiration > 0 and self.expiration < 30) then
-			self.timer:SetText(FormatAuraTime(self.expiration))
+			self.timer:SetText(module:FormatTime(self.expiration))
 			self.timer:SetTextColor(1, 0, 0)
 		elseif(self.expiration > 30 and self.expiration < 60) then
-			self.timer:SetText(FormatAuraTime(self.expiration))
+			self.timer:SetText(module:FormatTime(self.expiration))
 			self.timer:SetTextColor(1, 1, 0)
 		elseif(self.expiration > 60 and self.expiration < 300) then
-			self.timer:SetText(FormatAuraTime(self.expiration))
+			self.timer:SetText(module:FormatTime(self.expiration))
 			self.timer:SetTextColor(1, 1, 1)
 		else
 			self.timer:SetText()
