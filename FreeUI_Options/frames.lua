@@ -661,11 +661,14 @@ do
 	local rangeCheck = ns.CreateCheckBox(unitframe, "rangeCheck", true, true)
 	rangeCheck:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
 
+	local fct = ns.CreateCheckBox(unitframe, "fct", true, true)
+	fct:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
+
 	local quakeTimer = ns.CreateCheckBox(unitframe, "quakeTimer", true, true)
-	quakeTimer:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
+	quakeTimer:SetPoint("LEFT", fct, "RIGHT", 240, 0)
 
 	local line2 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line2:SetPoint("TOPLEFT", quakeTimer, "BOTTOMLEFT", -16, -8)
+	line2:SetPoint("TOPLEFT", fct, "BOTTOMLEFT", -16, -8)
 
 	local enableCastbar = ns.CreateCheckBox(unitframe, "enableCastbar", true, true)
 	enableCastbar:SetPoint("TOPLEFT", line2, "BOTTOMLEFT", 16, -16)
@@ -732,6 +735,7 @@ do
 		dispellable:SetShown(shown)
 		rangeCheck:SetShown(shown)
 		quakeTimer:SetShown(shown)
+		fct:SetShown(shown)
 
 		enableCastbar:SetShown(shown)
 		castbar_separatePlayer:SetShown(shown)

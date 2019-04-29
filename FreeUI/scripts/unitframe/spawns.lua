@@ -4,8 +4,7 @@ local F, C, L = unpack(select(2, ...))
 if not C.unitframe.enable then return end
 
 local module = F:GetModule('Unitframe')
-local cfg = C.unitframe
-local oUF = ns.oUF
+local cfg, oUF = C.unitframe, ns.oUF
 
 local format, tostring = string.format, tostring
 
@@ -64,6 +63,7 @@ local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
 	self:SetSize(cfg.player_width*C.Mult, cfg.player_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
@@ -76,15 +76,15 @@ local function CreatePlayerStyle(self)
 	module:AddRaidTargetIndicator(self)
 	module:AddStatusIndicator(self)
 	module:AddPvPIndicator(self)
-
+	module:AddPlayerBuffTimer(self)
 	module:ReskinMirrorBars()
 	module:ReskinTimerTrakcer(self)
 
-	if (C.Class == 'DEATHKNIGHT') then
-		module:AddRunes(self)
-	else
-		module:AddClassPower(self)
-	end
+	if cfg.fct then module:AddFCT(self) end
+
+	if C.Class == 'DEATHKNIGHT' then module:AddRunes(self) end
+
+	if cfg.classPower then module:AddClassPower(self) end
 
 	if cfg.quakeTimer then module:AddQuakeTimer(self) end
 
@@ -97,6 +97,7 @@ local function CreatePetStyle(self)
 	self.unitStyle = 'pet'
 	self:SetSize(cfg.pet_width*C.Mult, cfg.pet_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
@@ -111,6 +112,7 @@ local function CreateTargetStyle(self)
 	self.unitStyle = 'target'
 	self:SetSize(cfg.target_width*C.Mult, cfg.target_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
@@ -124,12 +126,15 @@ local function CreateTargetStyle(self)
 	module:AddRaidTargetIndicator(self)
 	module:AddQuestIndicator(self)
 	module:AddRangeCheck(self)
+
+	if cfg.fct then module:AddFCT(self) end
 end
 
 local function CreateTargetTargetStyle(self)
 	self.unitStyle = 'targettarget'
 	self:SetSize(TargetTarget_Width*C.Mult, cfg.targettarget_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
@@ -141,6 +146,7 @@ local function CreateFocusStyle(self)
 	self.unitStyle = 'focus'
 	self:SetSize(Focus_Width*C.Mult, cfg.focus_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
@@ -155,6 +161,7 @@ local function CreateFocusTargetStyle(self)
 	self.unitStyle = 'focustarget'
 	self:SetSize(FocusTarget_Width*C.Mult, cfg.focustarget_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
@@ -162,31 +169,10 @@ local function CreateFocusTargetStyle(self)
 	module:AddRangeCheck(self)
 end
 
-local function UpdateUnitBorderColour(self)
-	if (UnitIsUnit(self.unit, 'target')) then
-		self.Bg:SetBackdropBorderColor(1, 1, 1)
-	else
-		self.Bg:SetBackdropBorderColor(0, 0, 0)	
-	end
-end
-
-local function UpdateUnitNameColour(self)
-	if self.unitStyle == 'party' or self.unitStyle == 'raid' or self.unitStyle == 'boss' then
-		if (UnitIsUnit(self.unit, 'target')) then
-			self.Name:SetTextColor(95/255, 222/255, 215/255)
-		elseif UnitIsDead(self.unit) then
-			self.Name:SetTextColor(216/255, 67/255, 67/255)
-		elseif UnitIsGhost(self.unit) then
-			self.Name:SetTextColor(189/255, 105/255, 190/255)
-		else
-			self.Name:SetTextColor(1, 1, 1)
-		end
-	end
-end
-
 local function CreatePartyStyle(self)
 	self.unitStyle = 'party'
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
@@ -204,16 +190,13 @@ local function CreatePartyStyle(self)
 	module:AddPhaseIndicator(self)
 	module:AddSummonIndicator(self)
 	module:AddThreatIndicator(self)
-
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
+	module:AddSelectedBorder(self)
 end
 
 local function CreateRaidStyle(self)
 	self.unitStyle = 'raid'
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthPrediction(self)
 	module:AddPowerBar(self)
@@ -229,17 +212,14 @@ local function CreateRaidStyle(self)
 	module:AddGroupRoleIndicator(self)
 	module:AddPhaseIndicator(self)
 	module:AddSummonIndicator(self)
-
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
+	module:AddSelectedBorder(self)
 end
 
 local function CreateBossStyle(self)
 	self.unitStyle = 'boss'
 	self:SetSize(cfg.boss_width*C.Mult, cfg.boss_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddHealthValue(self)
 	module:AddHealthPercentage(self)
@@ -252,17 +232,14 @@ local function CreateBossStyle(self)
 	module:AddAuras(self)
 	module:AddRangeCheck(self)
 	module:AddRaidTargetIndicator(self)
-
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
+	module:AddSelectedBorder(self)
 end
 
 local function CreateArenaStyle(self)
 	self.unitStyle = 'arena'
 	self:SetSize(cfg.arena_width*C.Mult, cfg.arena_height*C.Mult)
 
+	module:AddBackDrop(self)
 	module:AddHealthBar(self)
 	module:AddPowerBar(self)
 	module:AddNameText(self)
@@ -271,11 +248,7 @@ local function CreateArenaStyle(self)
 	module:AddCastBar(self)
 	module:AddAuras(self)
 	module:AddRangeCheck(self)
-
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitBorderColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitBorderColour, true)
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
-	self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
+	module:AddSelectedBorder(self)
 end
 
 
@@ -345,6 +318,7 @@ function module:OnLogin()
 		end
 	end
 
+
 	if cfg.enableArena then
 		oUF:RegisterStyle('Arena', CreateArenaStyle)
 		oUF:SetActiveStyle('Arena')
@@ -359,7 +333,14 @@ function module:OnLogin()
 		end
 	end
 
+
 	if cfg.enableGroup then
+		if IsAddOnLoaded('Blizzard_CompactRaidFrames') then
+			CompactRaidFrameManager:SetParent(FreeUIHider)
+			CompactUnitFrameProfiles:UnregisterAllEvents()
+		end
+
+
 		oUF:RegisterStyle('Party', CreatePartyStyle)
 		oUF:SetActiveStyle('Party')
 

@@ -326,6 +326,8 @@ ns.localization.unitframedebuffbyPlayer = "光环过滤"
 ns.localization.unitframedebuffbyPlayerTooltip = "目标框体上只显示由玩家施放的减益光环。"
 ns.localization.unitframequakeTimer = "震荡提示"
 ns.localization.unitframequakeTimerTooltip = "显示震荡计时条。"
+ns.localization.unitframefct = "战斗信息"
+ns.localization.unitframefctTooltip = "显示滚动战斗信息。"
 
 
 

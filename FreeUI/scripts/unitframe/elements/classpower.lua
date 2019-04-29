@@ -46,8 +46,6 @@ local function UpdateClassPowerColor(element)
 end
 
 function module:AddClassPower(self)
-	if not cfg.classPower then return end
-
 	local classPower = {}
 	classPower.UpdateColor = UpdateClassPowerColor
 	classPower.PostUpdate = PostUpdateClassPower

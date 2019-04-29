@@ -269,6 +269,13 @@ C['unitframe'] = {
 		['debuffbyPlayer'] = true,
 		['rangeCheck'] = true,
 
+		['fct'] = true,
+			['fct_Pet'] = true,
+			['fct_HotsandDots'] = true,
+			['fct_AutoAttack'] = true,
+			['fct_OverHealing'] = false,
+			['fct_AbbreviateNumbers'] = true,
+
 		['quakeTimer'] = true,
 			['quakeTimer_width'] = 200,
 			['quakeTimer_height'] = 20,

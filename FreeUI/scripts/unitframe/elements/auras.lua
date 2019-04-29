@@ -5,9 +5,8 @@ if not C.unitframe.enable then return end
 
 local module = F:GetModule('Unitframe')
 
-local cfg = C.unitframe
-local oUF = ns.oUF
-local myClass = C.Class
+local cfg, oUF, myClass = C.unitframe, ns.oUF, C.Class
+
 local format, min, max, floor, mod, pairs = string.format, math.min, math.max, math.floor, mod, pairs
 
 
@@ -54,6 +53,7 @@ local ignoredDebuffs = {
 	[279737] = true,	-- 准备作战 (海岛)
 	[264689] = true,	-- 疲倦
 	[289423] = true,	-- 死亡的重担
+	[283430] = true,	-- 工程学专精
 }
 
 local importantBuffs = {
@@ -254,6 +254,7 @@ local function FormatAuraTime(s)
 	end
 	return format('%d', mod(s, minute))
 end
+module.FormatTime = FormatAuraTime
 
 
 local function UpdateAuraTime(self, elapsed)

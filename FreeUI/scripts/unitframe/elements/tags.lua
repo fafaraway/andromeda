@@ -8,8 +8,7 @@ local tags = ns.oUF.Tags.Methods
 local tagEvents = ns.oUF.Tags.Events
 local tagSharedEvents = ns.oUF.Tags.SharedEvents
 
-local floor = math.floor
-local format = string.format
+local format, floor = string.format, math.floor
 
 
 
@@ -142,6 +141,20 @@ end
 tagEvents['free:groupname'] = 'UNIT_HEALTH GROUP_ROSTER_UPDATE PLAYER_ENTERING_WORLD'
 
 
+local function UpdateUnitNameColour(self)
+	if self.unitStyle == 'party' or self.unitStyle == 'raid' or self.unitStyle == 'boss' then
+		if (UnitIsUnit(self.unit, 'target')) then
+			self.Name:SetTextColor(95/255, 222/255, 215/255)
+		elseif UnitIsDead(self.unit) then
+			self.Name:SetTextColor(216/255, 67/255, 67/255)
+		elseif UnitIsGhost(self.unit) then
+			self.Name:SetTextColor(189/255, 105/255, 190/255)
+		else
+			self.Name:SetTextColor(1, 1, 1)
+		end
+	end
+end
+
 function module:AddNameText(self)
 	local name
 
@@ -180,6 +193,11 @@ function module:AddNameText(self)
 	end
 
 	self.Name = name
+
+	if self.unitStyle == 'party' or self.unitStyle == 'raid' or self.unitStyle == 'boss' then
+		self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
+		self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
+	end
 end
 
 function module:AddHealthValue(self)

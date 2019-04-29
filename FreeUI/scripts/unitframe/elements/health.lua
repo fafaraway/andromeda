@@ -9,19 +9,19 @@ local module, cfg = F:GetModule('Unitframe'), C.unitframe
 local function PostUpdateHealth(health, unit, min, max)
 	local self = health:GetParent()
 	local r, g, b
-	--local reaction = self.colors.reaction[UnitReaction(unit, 'player') or 5]
+	local reaction = self.colors.reaction[UnitReaction(unit, 'player') or 5]
 	local offline = not UnitIsConnected(unit)
 	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 	local style = health.__owner.unitStyle
 
 	if tapped or offline then
 		r, g, b = .6, .6, .6
-	elseif UnitIsPlayer(unit) then
+	elseif UnitIsPlayer(unit) or style == 'pet' then
 		local _, class = UnitClass(unit)
 		if class then r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b else r, g, b = 1, 1, 1 end
 	else
-		--r, g, b = unpack(reaction)
-		r, g, b = UnitSelectionColor(unit)
+		r, g, b = unpack(reaction)
+		--r, g, b = UnitSelectionColor(unit)
 	end
 
 	if cfg.transMode and self.Deficit then
@@ -52,27 +52,6 @@ local function PostUpdateHealth(health, unit, min, max)
 end
 
 function module:AddHealthBar(self)
-	local highlight = self:CreateTexture(nil, 'OVERLAY')
-	highlight:SetAllPoints()
-	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-	highlight:SetTexCoord(0, 1, .5, 1)
-	highlight:SetVertexColor(.6, .6, .6)
-	highlight:SetBlendMode('ADD')
-	highlight:Hide()
-
-	self:RegisterForClicks('AnyUp')
-	self:HookScript('OnEnter', function()
-		UnitFrame_OnEnter(self)
-		highlight:Show()
-	end)
-	self:HookScript('OnLeave', function()
-		UnitFrame_OnLeave(self)
-		highlight:Hide()
-	end)
-
-	self.Highlight = highlight
-
-
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetFrameStrata('LOW')
 	health:SetStatusBarTexture(C.media.sbTex)
@@ -115,13 +94,9 @@ function module:AddHealthBar(self)
 		else
 			health.colorClass = true
 			health.colorReaction = true
-			health.colorSelection = true
+			--health.colorSelection = true
 		end
 	end
-
-
-	self.Bg = F.CreateBDFrame(self, 0.2)
-	self.Glow = F.CreateSD(self.Bg, .35, 3, 3)
 
 	self.Health.PostUpdate = PostUpdateHealth
 end

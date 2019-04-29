@@ -50,9 +50,11 @@ function module:AddPowerBar(self)
 	power.colorTapping = true
 	power.colorDisconnected = true
 	power.colorReaction = true
-	power.colorSelection = true
+	--power.colorSelection = true
 
-	if cfg.transMode then
+	if self.unitStyle == 'pet' then
+		power.colorPower = true
+	elseif cfg.transMode then
 		if self.unitStyle == 'player' then
 			power.colorPower = true
 		else

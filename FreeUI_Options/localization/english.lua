@@ -367,7 +367,8 @@ ns.localization.unitframedebuffbyPlayer = "Aura filter"
 ns.localization.unitframedebuffbyPlayerTooltip = "Only show debuffs that casted by player on target unitframe."
 ns.localization.unitframequakeTimer = "Quake timer"
 ns.localization.unitframequakeTimerTooltip = "Show quake timer bar."
-
+ns.localization.unitframefct = "Floating combat text"
+ns.localization.unitframefctTooltip = "Show floating combat text."
 
 
 
