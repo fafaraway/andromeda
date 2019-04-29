@@ -18,7 +18,7 @@ function module:AzeriteTrait()
 		return #tipList
 	end
 
-	local iconString = "|T%s:24:24:0:0:64:64:4:60:4:60"
+	local iconString = "|T%s:18:22:0:0:64:64:5:59:5:59"
 	local function getIconString(icon, known)
 		if known then
 			return format(iconString..":255:255:255|t", icon)
