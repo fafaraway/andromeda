@@ -113,10 +113,8 @@ C.themes["Blizzard_Calendar"] = function()
 		F.CreateBD(hline)
 	end
 
-	if AuroraConfig.tooltips then
-		F.ReskinTooltip(CalendarContextMenu)
-		F.ReskinTooltip(CalendarInviteStatusContextMenu)
-	end
+	F.ReskinTooltip(CalendarContextMenu)
+	F.ReskinTooltip(CalendarInviteStatusContextMenu)
 
 	CalendarViewEventFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
 	CalendarViewHolidayFrame:SetPoint("TOPLEFT", CalendarFrame, "TOPRIGHT", -8, -24)
