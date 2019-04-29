@@ -121,7 +121,7 @@ function F:CreateBD(a)
 	F.CreateTex(self)
 end
 
-function F:CreateBG(offset, a)
+function F:CreateBG(offset)
 	local f = self
 	if self:GetObjectType() == 'Texture' then f = self:GetParent() end
 	offset = offset or C.Mult
@@ -130,7 +130,7 @@ function F:CreateBG(offset, a)
 	bg:SetPoint('TOPLEFT', self, -offset, offset)
 	bg:SetPoint('BOTTOMRIGHT', self, offset, -offset)
 	bg:SetTexture(C.media.backdrop)
-	bg:SetVertexColor(0, 0, 0, a or 1)
+	bg:SetVertexColor(0, 0, 0, 1)
 
 	return bg
 end
@@ -1069,6 +1069,7 @@ local BlizzTextures = {
 	'bgLeft',
 	'bgRight',
 	'FilligreeOverlay',
+	'Border',
 }
 
 function F:StripTextures(kill)
