@@ -6,6 +6,7 @@ if not C.unitframe.enable then return end
 local module = F:GetModule('Unitframe')
 
 local cfg, oUF, myClass = C.unitframe, ns.oUF, C.Class
+local FormatAuraTime = module.FormatAuraTime
 
 local format, min, max, floor, mod, pairs = string.format, math.min, math.max, math.floor, mod, pairs
 
@@ -248,13 +249,13 @@ local function UpdateAuraTime(self, elapsed)
 		self.expiration = math.max(self.expiration - elapsed, 0)
 
 		if(self.expiration > 0 and self.expiration < 30) then
-			self.timer:SetText(module:FormatTime(self.expiration))
+			self.timer:SetText(FormatAuraTime(self.expiration))
 			self.timer:SetTextColor(1, 0, 0)
 		elseif(self.expiration > 30 and self.expiration < 60) then
-			self.timer:SetText(module:FormatTime(self.expiration))
+			self.timer:SetText(FormatAuraTime(self.expiration))
 			self.timer:SetTextColor(1, 1, 0)
 		elseif(self.expiration > 60 and self.expiration < 300) then
-			self.timer:SetText(module:FormatTime(self.expiration))
+			self.timer:SetText(FormatAuraTime(self.expiration))
 			self.timer:SetTextColor(1, 1, 1)
 		else
 			self.timer:SetText()

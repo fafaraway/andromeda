@@ -239,7 +239,7 @@ function module:AddSelectedBorder(self)
 end
 
 
-function module:FormatTime(s)
+function module.FormatAuraTime(s)
 	local day, hour, minute = 86400, 3600, 60
 
 	if s >= day then
