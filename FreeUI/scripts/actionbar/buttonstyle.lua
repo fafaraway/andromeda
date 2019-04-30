@@ -200,7 +200,7 @@ function F:StyleActionButton(button, cfg)
 	local normalTexture = button:GetNormalTexture()
 	local pushedTexture = button:GetPushedTexture()
 	local highlightTexture = button:GetHighlightTexture()
-	
+
 	--normal buttons do not have a checked texture, but checkbuttons do and normal actionbuttons are checkbuttons
 	local checkedTexture = nil
 	if button.GetCheckedTexture then checkedTexture = button:GetCheckedTexture() end
