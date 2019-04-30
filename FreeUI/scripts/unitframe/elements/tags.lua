@@ -31,6 +31,8 @@ local function usub(str, len)
 end
 
 local function ShortenName(unit, len)
+	if not UnitIsConnected(unit) then return end
+
 	local name = UnitName(unit)
 	if name and name:len() > len then name = usub(name, len) end
 
@@ -120,16 +122,16 @@ end
 tagEvents['free:altpower'] = 'UNIT_POWER_UPDATE'
 
 tags['free:groupname'] = function(unit)
-	if cfg.showGroupName then
+	if not UnitIsConnected(unit) then
+		return 'Off'
+	elseif cfg.showGroupName then
 		if UnitInRaid('player') then
 			return ShortenName(unit, 2)
 		else
 			return ShortenName(unit, 4)
 		end
 	else
-		if not UnitIsConnected(unit) then
-			return 'Off'
-		elseif UnitIsDead(unit) then
+		if UnitIsDead(unit) then
 			return 'Dead'
 		elseif UnitIsGhost(unit) then
 			return 'Ghost'
@@ -138,7 +140,7 @@ tags['free:groupname'] = function(unit)
 		end
 	end
 end
-tagEvents['free:groupname'] = 'UNIT_HEALTH GROUP_ROSTER_UPDATE PLAYER_ENTERING_WORLD'
+tagEvents['free:groupname'] = 'UNIT_HEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
 
 
 local function UpdateUnitNameColour(self)
@@ -149,6 +151,8 @@ local function UpdateUnitNameColour(self)
 			self.Name:SetTextColor(216/255, 67/255, 67/255)
 		elseif UnitIsGhost(self.unit) then
 			self.Name:SetTextColor(189/255, 105/255, 190/255)
+		elseif not UnitIsConnected(self.unit) then
+			self.Name:SetTextColor(204/255, 204/255, 204/255)
 		else
 			self.Name:SetTextColor(1, 1, 1)
 		end
@@ -197,6 +201,7 @@ function module:AddNameText(self)
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' or self.unitStyle == 'boss' then
 		self:RegisterEvent('UNIT_HEALTH_FREQUENT', UpdateUnitNameColour, true)
 		self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateUnitNameColour, true)
+		self:RegisterEvent('UNIT_CONNECTION', UpdateUnitNameColour, true)
 	end
 end
 
