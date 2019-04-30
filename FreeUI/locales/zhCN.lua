@@ -90,9 +90,9 @@ L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
 L['INVENTORY_SORT'] = '整理'
 L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
 L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
-L['INVENTORY_DELETE_MODE_ENABLED'] = '背包物品摧毁模式已启用！你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
-L['INVENTORY_DELETE_MODE_DISABLED'] = '背包物品摧毁模式已禁用。'
-L['INVENTORY_DELETE_MODE'] = '开启物品摧毁模式' 
+L['INVENTORY_DELETE_MODE_ENABLED'] = '背包物品快速摧毁功能已启用！你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
+L['INVENTORY_DELETE_MODE_DISABLED'] = '背包物品快速摧毁功能已禁用。'
+L['INVENTORY_DELETE_MODE'] = '启用物品快速摧毁功能' 
 
 
 

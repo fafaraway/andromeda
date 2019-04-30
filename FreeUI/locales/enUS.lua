@@ -93,9 +93,9 @@ L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open character panel'
 L['INVENTORY_SORT'] = 'Sort'
 L['INVENTORY_AZERITEARMOR'] = 'Azerite Armor'
 L['INVENTORY_EQUIPEMENTSET'] = 'EquipmentSet Items'
-L['INVENTORY_DELETE_MODE_ENABLED'] = 'Item delete mode enabled! You can destroy container item by holding CTRL+ALT. The item quality must be lower then rare (blue).'
-L['INVENTORY_DELETE_MODE_DISABLED'] = 'Item delete mode disabled.'
-L['INVENTORY_DELETE_MODE'] = 'Enable item delete mode' 
+L['INVENTORY_DELETE_MODE_ENABLED'] = 'Item quickly delete mode enabled! You can destroy container item by holding CTRL+ALT. The item quality must be lower then rare (blue).'
+L['INVENTORY_DELETE_MODE_DISABLED'] = 'Item quickly delete mode disabled.'
+L['INVENTORY_DELETE_MODE'] = 'Enable quickly delete mode' 
 
 
 -- mover
