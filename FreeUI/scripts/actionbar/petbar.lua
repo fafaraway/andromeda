@@ -6,7 +6,7 @@ function Bar:CreatePetbar()
 	local cfg = C.actionbar
 	local buttonSize = cfg.buttonSizeSmall*C.Mult
 	local padding = cfg.padding*C.Mult
-	local margin = cfg.margin*C.Mult
+	local margin = (cfg.margin+4)*C.Mult
 
 	local num = NUM_PET_ACTION_SLOTS
 	local buttonList = {}
