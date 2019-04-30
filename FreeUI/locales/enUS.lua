@@ -84,7 +84,7 @@ L['INFOBAR_REALM_TIME'] = 'Realm Time'
 L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open addon list panel'
 L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open timer panel'
 
-L['INFOBAR_HANDS'] = 'Hans'
+L['INFOBAR_HANDS'] = 'Hands'
 L['INFOBAR_FEET'] = 'Feet'
 L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open character panel'
 
@@ -93,6 +93,9 @@ L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open character panel'
 L['INVENTORY_SORT'] = 'Sort'
 L['INVENTORY_AZERITEARMOR'] = 'Azerite Armor'
 L['INVENTORY_EQUIPEMENTSET'] = 'EquipmentSet Items'
+L['INVENTORY_DELETE_MODE_ENABLED'] = 'Item delete mode enabled! You can destroy container item by holding CTRL+ALT. The item quality must be lower then rare (blue).'
+L['INVENTORY_DELETE_MODE_DISABLED'] = 'Item delete mode disabled.'
+L['INVENTORY_DELETE_MODE'] = 'Enable item delete mode' 
 
 
 -- mover
@@ -127,7 +130,7 @@ L['CHAT_COPY'] = 'Chat copy'
 
 
 -- tooltip
-L["TOOLTIP_AURA_FROM"] = 'Castby'
+L['TOOLTIP_AURA_FROM'] = 'Castby'
 L['TOOLTIP_RARE'] = 'Rare'
 L['TOOLTIP_SELL_PRICE'] = 'Sell Price'
 L['TOOLTIP_STACK_CAP'] = 'Stack Caps'

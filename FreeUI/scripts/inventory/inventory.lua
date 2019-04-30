@@ -9,6 +9,8 @@ local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, EJ_LOOT_SLOT_FILTER_ARTIFACT_RE
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
+local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
+
 
 local sortCache = {}
 function module:ReverseSort()
@@ -62,7 +64,7 @@ local createIconButton = function (name, parent, texture, point)
 	F.CreateBD(button)
 	
 	button.icon = button:CreateTexture(nil, 'ARTWORK')
-	button.icon:SetPoint(point, button, point, point == 'BOTTOMLEFT' and 2 or -2, 2)
+	button.icon:SetPoint(point, button, point, point == 'CENTER' and 0 or -0, 0)
 	button.icon:SetWidth(16)
 	button.icon:SetHeight(16)
 	button.icon:SetTexture(texture)
@@ -224,6 +226,38 @@ function module:CreateSortButton(name)
 	return bu
 end
 
+local deleteEnable
+function module:CreateDeleteButton()
+	if not C.inventory.deleteButton then return end
+
+	local bu = F.CreateButton(self, 17, 17, true, 'Interface\\AddOns\\FreeUI\\assets\\SellJunk')
+	bu:SetScript('OnClick', function()
+		deleteEnable = not deleteEnable
+		if deleteEnable then
+			bu:SetBackdropBorderColor(1, 0, 0)
+			UIErrorsFrame:AddMessage(C.RedColor..L["INVENTORY_DELETE_MODE_ENABLED"])
+			print(C.RedColor..L["INVENTORY_DELETE_MODE_ENABLED"])
+		else
+			bu:SetBackdropBorderColor(0, 0, 0)
+			UIErrorsFrame:AddMessage(C.GreenColor..L["INVENTORY_DELETE_MODE_DISABLED"])
+			print(C.GreenColor..L['INVENTORY_DELETE_MODE_DISABLED'])
+		end
+	end)
+	F.AddTooltip(bu, 'ANCHOR_TOP', '|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t'..L['INVENTORY_DELETE_MODE'])
+
+	return bu
+end
+
+local function deleteButtonOnClick(self)
+	if not deleteEnable then return end
+	local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
+	if IsControlKeyDown() and IsAltKeyDown() and texture and quality < 3 then
+		PickupContainerItem(self.bagID, self.slotID)
+		DeleteCursorItem()
+	end
+end
+
+
 function module:OnLogin()
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -364,6 +398,10 @@ function module:OnLogin()
 		self.anim = anim
 
 		self.ShowNewItems = true
+
+		if C.inventory.deleteButton then
+			self:HookScript('OnClick', deleteButtonOnClick)
+		end
 	end
 
 	function MyButton:ItemOnEnter()
@@ -490,6 +528,7 @@ function module:OnLogin()
 			module.CreateBagBar(self, settings, 4)
 			buttons[2] = module.CreateRestoreButton(self, f)
 			buttons[3] = module.CreateBagToggle(self)
+			buttons[5] = module.CreateDeleteButton(self)
 		elseif name == 'Bank' then
 			module.CreateBagBar(self, settings, 7)
 			buttons[2] = module.CreateReagentButton(self, f)
@@ -500,8 +539,9 @@ function module:OnLogin()
 		end
 		buttons[4] = module.CreateSortButton(self, name)
 
-		for i = 1, 4 do
+		for i = 1, 5 do
 			local bu = buttons[i]
+			if not bu then break end
 			if i == 1 then
 				bu:SetPoint('TOPRIGHT', -5, -2)
 			else

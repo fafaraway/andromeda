@@ -178,6 +178,7 @@ C['inventory'] = {
 		['reverseSort'] = true,
 		['itemLevel'] = true,
 		['newitemFlash'] = true,
+		['deleteButton'] = true,
 		['useCategory'] = true,
 			['gearSetFilter'] = false,
 			['tradeGoodsFilter'] = true,

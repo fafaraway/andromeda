@@ -771,7 +771,7 @@ function F:ReskinMinMax()
 	end
 end
 
-function F:CreateButton(width, height, text, textColor, fontSize)
+function F:CreateButton(width, height, text, fontSize)
 	local bu = CreateFrame('Button', nil, self)
 	bu:SetSize(width, height)
 	F.CreateBD(bu, .3)
@@ -779,7 +779,7 @@ function F:CreateButton(width, height, text, textColor, fontSize)
 		F.PixelIcon(bu, fontSize, true)
 	else
 		F.CreateBC(bu)
-		bu.text = F.CreateFS(bu, {C.font.normal, fontSize or 12}, text, nil, textColor, true)
+		bu.text = F.CreateFS(bu, {C.font.normal, fontSize or 12}, text, nil, nil, true)
 	end
 
 	return bu
