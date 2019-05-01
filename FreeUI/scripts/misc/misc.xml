@@ -16,7 +16,6 @@
 	<Script file='pvpqueuetimer.lua'/>
 	<Script file='pvpsound.lua'/>
 	<Script file='quickjoin.lua'/>
-	<Script file='randomhearthstone.lua'/>
 	<Script file='reputation.lua'/>
 	<Script file='safequeue.lua'/>
 	<Script file='sharedmedia.lua'/>
