@@ -11,21 +11,18 @@ local cfg = {
 	['Merge'] = true,
 	['Periodic'] = true,
 	['Outline'] = false,
-	['Info'] = true,
-		['Info_width'] = 400,
-		['Info_height'] = 80,
-		['Info_position'] = {'CENTER', UIParent, 'CENTER', 0, 300},
-		['Info_font'] = {C.font.header, 26, 'OUTLINE'},
-	['Incoming'] = true,
-		['Incoming_width'] = 120,
-		['Incoming_height'] = 150,
-		['Incoming_position'] = {'CENTER', UIParent, 'CENTER', -300, 0},
-		['Incoming_font'] = {C.font.normal, 20, 'OUTLINE'},
-	['Outgoing'] = true,
-		['Outgoing_width'] = 120,
-		['Outgoing_height'] = 150,
-		['Outgoing_position'] = {'CENTER', UIParent, 'CENTER', 300, 0},
-		['Outgoing_font'] = {C.font.normal, 20, 'OUTLINE'},
+	['Info_width'] = 400,
+	['Info_height'] = 80,
+	['Info_position'] = {'CENTER', UIParent, 'CENTER', 0, 300},
+	['Info_font'] = {C.font.header, 26, 'OUTLINE'},
+	['Incoming_width'] = 120,
+	['Incoming_height'] = 150,
+	['Incoming_position'] = {'CENTER', UIParent, 'CENTER', -300, 0},
+	['Incoming_font'] = {C.font.normal, 20, 'OUTLINE'},
+	['Outgoing_width'] = 120,
+	['Outgoing_height'] = 150,
+	['Outgoing_position'] = {'CENTER', UIParent, 'CENTER', 300, 0},
+	['Outgoing_font'] = {C.font.normal, 20, 'OUTLINE'},
 }
 
 local dmgcolor = {
@@ -211,17 +208,23 @@ combatF:SetScript('OnEvent', function(_,event)
 end)
 
 function module:CombatText()
-	local InFrameMover = F.Mover(InFrame, L['MOVER_COMBATTEXT_INCOMING'], 'CTInFrame', cfg.Incoming_position, cfg.Incoming_width, cfg.Incoming_height)
-	InFrame:SetPoint('TOPRIGHT', InFrameMover)
-	InFrame:SetFont(cfg.Incoming_font[1], cfg.Incoming_font[2], cfg.Outline and cfg.Incoming_font[3])
+	if C.general.combatText_incoming then
+		local InFrameMover = F.Mover(InFrame, L['MOVER_COMBATTEXT_INCOMING'], 'CTInFrame', cfg.Incoming_position, cfg.Incoming_width, cfg.Incoming_height)
+		InFrame:SetPoint('TOPRIGHT', InFrameMover)
+		InFrame:SetFont(cfg.Incoming_font[1], cfg.Incoming_font[2], cfg.Outline and cfg.Incoming_font[3])
+	end
 
-	local OutFrameMover = F.Mover(OutFrame, L['MOVER_COMBATTEXT_OUTGOING'], 'CTOutFrame', cfg.Outgoing_position, cfg.Outgoing_width, cfg.Outgoing_height)
-	OutFrame:SetPoint('TOPRIGHT', OutFrameMover)
-	OutFrame:SetFont(cfg.Outgoing_font[1], cfg.Outgoing_font[2], cfg.Outline and cfg.Outgoing_font[3])
+	if C.general.combatText_outgoing then
+		local OutFrameMover = F.Mover(OutFrame, L['MOVER_COMBATTEXT_OUTGOING'], 'CTOutFrame', cfg.Outgoing_position, cfg.Outgoing_width, cfg.Outgoing_height)
+		OutFrame:SetPoint('TOPRIGHT', OutFrameMover)
+		OutFrame:SetFont(cfg.Outgoing_font[1], cfg.Outgoing_font[2], cfg.Outline and cfg.Outgoing_font[3])
+	end
 
-	local InfoFrameMover = F.Mover(InfoFrame, L['MOVER_COMBATTEXT_INFORMATION'], 'CTInfoFrame', cfg.Info_position, cfg.Info_width, cfg.Info_height)
-	InfoFrame:SetPoint('TOPRIGHT', InfoFrameMover)
-	InfoFrame:SetFont(cfg.Info_font[1], cfg.Info_font[2], cfg.Outline and cfg.Info_font[3])
+	if C.general.combatText_info then
+		local InfoFrameMover = F.Mover(InfoFrame, L['MOVER_COMBATTEXT_INFORMATION'], 'CTInfoFrame', cfg.Info_position, cfg.Info_width, cfg.Info_height)
+		InfoFrame:SetPoint('TOPRIGHT', InfoFrameMover)
+		InfoFrame:SetFont(cfg.Info_font[1], cfg.Info_font[2], cfg.Outline and cfg.Info_font[3])
+	end
 
 	if not cfg.Outline then
 		local frames = {InFrame, OutFrame, InfoFrame}

@@ -15,11 +15,15 @@ C['general'] = {
 	['missingBuffs'] = true,
 	['fasterLoot'] = true,
 	['PVPSound'] = true,
-	['combatText'] = true,
 	['progressBar'] = true,
 	['paragonRep'] = true,
 	['quickMarking'] = true,
 	['quickFocusing'] = true,
+
+	['combatText'] = true,
+		['combatText_info'] = true,
+		['combatText_incoming'] = true,
+		['combatText_outgoing'] = true,
 	
 	['clickCast'] = true,
 		['clickCast_filter'] = true,
