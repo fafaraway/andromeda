@@ -16,7 +16,7 @@ function module:AddQuakeTimer(self)
 
 	--bar.SpellName = F.CreateFS(bar, 'pixel', '', nil, nil, true, 'LEFT', 2, 0)
 	bar.Text = F.CreateFS(bar, 'pixel', '', nil, nil, true, 'CENTER', 0, 0)
-	module:createBarMover(bar, 'Quake Timer', 'QuakeTimerBar', {'CENTER', UIParent, 'CENTER', 0, 200})
+	module:createBarMover(bar, L['MOVER_QUAKE_TIMER'], 'QuakeTimerBar', {'CENTER', UIParent, 'CENTER', 0, 200})
 
 	local icon = bar:CreateTexture(nil, 'ARTWORK')
 	icon:SetSize(cfg.quakeTimer_height + 4, cfg.quakeTimer_height + 4)

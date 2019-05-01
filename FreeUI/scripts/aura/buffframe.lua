@@ -14,8 +14,8 @@ function module:OnLogin()
 	
 	parentFrame = CreateFrame("Frame", nil, UIParent)
 	parentFrame:SetSize(buffSize, buffSize)
-	buffAnchor = F.Mover(parentFrame, "Buffs", "BuffAnchor", C.aura.position, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
-	debuffAnchor = F.Mover(parentFrame, "Debuffs", "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset}, (debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
+	buffAnchor = F.Mover(parentFrame, L['MOVER_BUFFS'], "BuffAnchor", C.aura.position, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
+	debuffAnchor = F.Mover(parentFrame, L['MOVER_DEBUFFS'], "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset}, (debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
 	parentFrame:ClearAllPoints()
 	parentFrame:SetPoint("TOPRIGHT", buffAnchor)
 

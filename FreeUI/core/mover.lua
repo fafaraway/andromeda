@@ -116,7 +116,12 @@ function F:Mover(text, value, anchor, width, height)
 	mover:SetHeight(height or self:GetHeight())
 	F.CreateBD(mover)
 	F.CreateSD(mover)
-	F.CreateFS(mover, 'pixel', text, nil, 'yellow', true)
+
+	if (C.Client == 'zhCN' or C.Client == 'zhTW') then
+		F.CreateFS(mover, {C.font.normal, 11}, text, nil, 'yellow', true)
+	else
+		F.CreateFS(mover, 'pixel', text, nil, 'yellow', true)
+	end
 
 	tinsert(MoverList, mover)
 

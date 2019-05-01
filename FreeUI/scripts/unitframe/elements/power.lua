@@ -8,17 +8,23 @@ local module, cfg = F:GetModule('Unitframe'), C.unitframe
 
 local function PostUpdatePower(power, unit, cur, max, min)
 	local self = power:GetParent()
+	local style = self.unitStyle
+
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		power:SetValue(0)
 	end
 
-	if C.Class == 'DEMONHUNTER' and C.classmod.havocFury and self.unitStyle == 'player' then
+	if C.Class == 'DEMONHUNTER' and C.classmod.havocFury and style == 'player' then
 		local spec, cp = GetSpecialization() or 0, UnitPower(unit)
 		if spec == 1 and cp < 15 then
 			power:SetStatusBarColor(.5, .5, .5)
 		elseif spec == 1 and cp < 40 then
 			power:SetStatusBarColor(1, 0, 0)
 		end
+	end
+
+	if C.Class == 'ROGUE' and style == 'player' then
+		power:SetStatusBarColor(213/255, 192/255, 105/255)
 	end
 end
 

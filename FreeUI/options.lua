@@ -15,7 +15,7 @@ C['general'] = {
 	['missingBuffs'] = true,
 	['fasterLoot'] = true,
 	['PVPSound'] = true,
-
+	['combatText'] = true,
 	['progressBar'] = true,
 	['paragonRep'] = true,
 	['quickMarking'] = true,
@@ -269,13 +269,6 @@ C['unitframe'] = {
 		['dispellable'] = true,
 		['debuffbyPlayer'] = true,
 		['rangeCheck'] = true,
-
-		['fct'] = true,
-			['fct_Pet'] = true,
-			['fct_HotsandDots'] = true,
-			['fct_AutoAttack'] = true,
-			['fct_OverHealing'] = false,
-			['fct_AbbreviateNumbers'] = true,
 
 		['quakeTimer'] = true,
 			['quakeTimer_width'] = 200,

@@ -80,8 +80,6 @@ local function CreatePlayerStyle(self)
 	module:ReskinMirrorBars()
 	module:ReskinTimerTrakcer(self)
 
-	if cfg.fct then module:AddFCT(self) end
-
 	if C.Class == 'DEATHKNIGHT' then module:AddRunes(self) end
 
 	if cfg.classPower then module:AddClassPower(self) end
@@ -126,8 +124,6 @@ local function CreateTargetStyle(self)
 	module:AddRaidTargetIndicator(self)
 	module:AddQuestIndicator(self)
 	module:AddRangeCheck(self)
-
-	if cfg.fct then module:AddFCT(self) end
 end
 
 local function CreateTargetTargetStyle(self)

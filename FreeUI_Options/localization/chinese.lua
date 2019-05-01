@@ -60,6 +60,8 @@ ns.localization.generalcameraIncrement = "镜头调整速度"
 ns.localization.generaluiScaleAuto = "强制界面缩放"
 ns.localization.generaluiScaleAutoTooltip = "自动为当前分辨率使用最合适的界面缩放值。"
 ns.localization.generaluiScale = "自定义缩放"
+ns.localization.generalcombatText = "战斗信息"
+ns.localization.generalcombatTextTooltip = "启用简易滚动战斗信息。"
 
 
 
@@ -326,8 +328,7 @@ ns.localization.unitframedebuffbyPlayer = "光环过滤"
 ns.localization.unitframedebuffbyPlayerTooltip = "目标框体上只显示由玩家施放的减益光环。"
 ns.localization.unitframequakeTimer = "震荡提示"
 ns.localization.unitframequakeTimerTooltip = "显示震荡计时条。"
-ns.localization.unitframefct = "战斗信息"
-ns.localization.unitframefctTooltip = "显示滚动战斗信息。"
+
 
 
 

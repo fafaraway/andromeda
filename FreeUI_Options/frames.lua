@@ -263,8 +263,11 @@ do
 	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
 	alreadyKnown:SetPoint("LEFT", clickCast, "RIGHT", 240, 0)
 
+	local combatText = ns.CreateCheckBox(general, "combatText", true, true)
+	combatText:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -8)
+
 	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
-	cooldown:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -16)
+	cooldown:SetPoint("TOPLEFT", combatText, "BOTTOMLEFT", 0, -16)
 
 	local cooldownCount = ns.CreateCheckBox(general, "cooldownCount", true, true)
 	cooldownCount:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 0, -8)
@@ -661,14 +664,11 @@ do
 	local rangeCheck = ns.CreateCheckBox(unitframe, "rangeCheck", true, true)
 	rangeCheck:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
 
-	local fct = ns.CreateCheckBox(unitframe, "fct", true, true)
-	fct:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
-
 	local quakeTimer = ns.CreateCheckBox(unitframe, "quakeTimer", true, true)
-	quakeTimer:SetPoint("LEFT", fct, "RIGHT", 240, 0)
+	quakeTimer:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
 
 	local line2 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line2:SetPoint("TOPLEFT", fct, "BOTTOMLEFT", -16, -8)
+	line2:SetPoint("TOPLEFT", quakeTimer, "BOTTOMLEFT", -16, -8)
 
 	local enableCastbar = ns.CreateCheckBox(unitframe, "enableCastbar", true, true)
 	enableCastbar:SetPoint("TOPLEFT", line2, "BOTTOMLEFT", 16, -16)
@@ -735,7 +735,6 @@ do
 		dispellable:SetShown(shown)
 		rangeCheck:SetShown(shown)
 		quakeTimer:SetShown(shown)
-		fct:SetShown(shown)
 
 		enableCastbar:SetShown(shown)
 		castbar_separatePlayer:SetShown(shown)

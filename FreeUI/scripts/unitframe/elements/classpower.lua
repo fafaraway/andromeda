@@ -34,7 +34,7 @@ local function UpdateClassPowerColor(element)
 		elseif(playerClass == 'MAGE') then
 			r, g, b = 5/6, 1/2, 5/6
 		elseif(playerClass == 'ROGUE') then
-			r, g, b = 221/255, 0, 55/255
+			r, g, b = 179/255, 54/255, 16/255
 		end
 	end
 

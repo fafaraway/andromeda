@@ -65,6 +65,8 @@ ns.localization.generalcameraIncrement = "Camera zoom speed"
 ns.localization.generaluiScaleAuto = "Force optimal UI scale"
 ns.localization.generaluiScaleAutoTooltip = "Automatically apply the best UI scale for current resolution."
 ns.localization.generaluiScale = "Customize UI scale"
+ns.localization.generalcombatText = "Combat text"
+ns.localization.generalcombatTextTooltip = "Enable simple floating combat text."
 
 
 
@@ -367,8 +369,6 @@ ns.localization.unitframedebuffbyPlayer = "Aura filter"
 ns.localization.unitframedebuffbyPlayerTooltip = "Only show debuffs that casted by player on target unitframe."
 ns.localization.unitframequakeTimer = "Quake timer"
 ns.localization.unitframequakeTimerTooltip = "Show quake timer bar."
-ns.localization.unitframefct = "Floating combat text"
-ns.localization.unitframefctTooltip = "Show floating combat text."
 
 
 

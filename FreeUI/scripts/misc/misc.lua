@@ -20,6 +20,7 @@ function module:OnLogin()
 	self:ExtendInstance()
 	self:CMGuildBest()
 	self:MailButton()
+	self:CombatText()
 
 	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
 end

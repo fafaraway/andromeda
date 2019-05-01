@@ -2,7 +2,6 @@
 	<Script file='utility.lua'/>
 
 	<Script file='elements\custom\dispellable.lua'/>
-	<Script file='elements\custom\fct.lua'/>
 	<Script file='elements\custom\playerbufftimer.lua'/>
 	<Script file='elements\custom\quaketimer.lua'/>
 	<Script file='elements\custom\spellrange.lua'/>
@@ -12,7 +11,6 @@
 	<Script file='elements\castbar.lua'/>
 	<Script file='elements\classpower.lua'/>
 	<Script file='elements\dispellable.lua'/>
-	<Script file='elements\fct.lua'/>
 	<Script file='elements\health.lua'/>
 	<Script file='elements\healthprediction.lua'/>
 	<Script file='elements\indicators.lua'/>
