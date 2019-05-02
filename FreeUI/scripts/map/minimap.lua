@@ -1,16 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:GetModule('Map')
-local size = C.map.miniMapSize
 
-function module:ReskinRegions()
-	-- Garrison
+
+local function ReskinRegions()
 	GarrisonLandingPageMinimapButton:SetSize(1, 1)
 	GarrisonLandingPageMinimapButton:SetAlpha(0)
 	GarrisonLandingPageMinimapButton:EnableMouse(false)
 
-	-- date
+
 	GameTimeFrame:ClearAllPoints()
-	GameTimeFrame:SetPoint('TOPRIGHT', Minimap, 'TOPRIGHT', -5, -(size/8*C.Mult)-6)
+	GameTimeFrame:SetPoint('TOPRIGHT', Minimap, 'TOPRIGHT', -5, -(C.map.miniMapSize/8*C.Mult)-6)
 	GameTimeFrame:SetSize(16, 8)
 	GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 	GameTimeFrame:SetNormalTexture('')
@@ -23,83 +22,12 @@ function module:ReskinRegions()
 	dateText:SetShadowOffset(0, 0)
 	dateText:SetPoint('CENTER')
 
-	-- Queue Status
-	QueueStatusMinimapButtonBorder:SetAlpha(0)
-	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, (size/8*C.Mult)+6)
-	QueueStatusMinimapButton:SetHighlightTexture('')
-	QueueStatusMinimapButton.Eye.texture:SetTexture('')
+	
 
-	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, (size/8*C.Mult)+6)
-
-	local dots = {}
-	for i = 1, 8 do
-		dots[i] = F.CreateFS(QueueStatusMinimapButton, 'pixelbig', '.', nil, nil, true)
-		dots[i]:SetText('.')
-	end
-	dots[1]:SetPoint('TOP', 2, 2)
-	dots[2]:SetPoint('TOPRIGHT', -6, -1)
-	dots[3]:SetPoint('RIGHT', -3, 2)
-	dots[4]:SetPoint('BOTTOMRIGHT', -6, 5)
-	dots[5]:SetPoint('BOTTOM', 2, 2)
-	dots[6]:SetPoint('BOTTOMLEFT', 9, 5)
-	dots[7]:SetPoint('LEFT', 6, 2)
-	dots[8]:SetPoint('TOPLEFT', 9, -1)
-
-	local counter = 0
-	local last = 0
-	local interval = .06
-	local diff = .014
-
-	local function onUpdate(self, elapsed)
-		last = last + elapsed
-		if last >= interval then
-			counter = counter + 1
-
-			dots[counter]:SetShown(not dots[counter]:IsShown())
-
-			if counter == 8 then
-				counter = 0
-				diff = diff * -1
-			end
-
-			interval = interval + diff
-			last = 0
-		end
-	end
-
-	hooksecurefunc('EyeTemplate_StartAnimating', function(eye)
-		eye:SetScript('OnUpdate', onUpdate)
-	end)
-
-	hooksecurefunc('EyeTemplate_StopAnimating', function(eye)
-		for i = 1, 8 do
-			dots[i]:Show()
-		end
-		counter = 0
-		last = 0
-		interval = .06
-		diff = .014
-	end)
-
-	QueueStatusMinimapButton:HookScript('OnEnter', function()
-		for i = 1, 8 do
-			dots[i]:SetTextColor(C.r, C.g, C.b)
-		end
-	end)
-
-	QueueStatusMinimapButton:HookScript('OnLeave', function()
-		for i = 1, 8 do
-			dots[i]:SetTextColor(1, 1, 1)
-		end
-	end)
-
-	-- Instance Difficulty
 	local difftext = {}
 	local rd = CreateFrame('Frame', nil, Minimap)
 	rd:SetSize(24, 8)
-	rd:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 5, -(size/8*C.Mult)-6)
+	rd:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 5, -(C.map.miniMapSize/8*C.Mult)-6)
 	rd:RegisterEvent('PLAYER_ENTERING_WORLD')
 	rd:RegisterEvent('CHALLENGE_MODE_START')
 	rd:RegisterEvent('CHALLENGE_MODE_COMPLETED')
@@ -193,7 +121,7 @@ function module:ReskinRegions()
 	end)
 
 	local mt = F.CreateFS(mail, 'pixel', '<New Mail>', nil, 'yellow', true)
-	mt:SetPoint('BOTTOM', Minimap, 0, (size/8*C.Mult)+6)
+	mt:SetPoint('BOTTOM', Minimap, 0, (C.map.miniMapSize/8*C.Mult)+6)
 
 	MiniMapMailFrame:SetAlpha(0)
 	MiniMapMailFrame:SetSize(22, 10)
@@ -233,9 +161,118 @@ function module:ReskinRegions()
 		TicketStatusFrame:SetPoint('TOPLEFT', UIParent, 100, -100)
 		TicketStatusFrame.SetPoint = F.Dummy
 	end
+end
 
+local function ZoneText()
+	ZoneTextFrame:SetFrameStrata('MEDIUM')
+	SubZoneTextFrame:SetFrameStrata('MEDIUM')
 
-	-- reposition durability frame
+	ZoneTextString:ClearAllPoints()
+	ZoneTextString:SetPoint('CENTER', Minimap)
+	ZoneTextString:SetWidth(230)
+	SubZoneTextString:SetWidth(230)
+	PVPInfoTextString:SetWidth(230)
+	PVPArenaTextString:SetWidth(230)
+
+	MinimapZoneTextButton:ClearAllPoints()
+	MinimapZoneTextButton:SetPoint('TOP', Minimap, 0, -(C.map.miniMapSize/8+10))
+	MinimapZoneTextButton:SetFrameStrata('HIGH')
+	MinimapZoneTextButton:EnableMouse(false)
+	MinimapZoneTextButton:SetAlpha(0)
+	MinimapZoneText:SetPoint('CENTER', MinimapZoneTextButton)
+
+	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
+	MinimapZoneText:SetJustifyH('CENTER')
+
+	ZoneTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+	SubZoneTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+	PVPInfoTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+	PVPArenaTextString:SetFont(C.font.normal, 16, 'OUTLINE')
+	MinimapZoneText:SetFont(C.font.normal, 16, 'OUTLINE')
+
+	Minimap:HookScript('OnEnter', function()
+		MinimapZoneTextButton:SetAlpha(1)
+	end)
+
+	Minimap:HookScript('OnLeave', function()
+		MinimapZoneTextButton:SetAlpha(0)
+	end)
+end
+
+local function QueueStatus()
+	QueueStatusMinimapButtonBorder:SetAlpha(0)
+	QueueStatusMinimapButton:ClearAllPoints()
+	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, (C.map.miniMapSize/8*C.Mult)+6)
+	QueueStatusMinimapButton:SetHighlightTexture('')
+	QueueStatusMinimapButton.Eye.texture:SetTexture('')
+
+	QueueStatusFrame:ClearAllPoints()
+	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, (C.map.miniMapSize/8*C.Mult)+6)
+
+	local dots = {}
+	for i = 1, 8 do
+		dots[i] = F.CreateFS(QueueStatusMinimapButton, 'pixelbig', '.', nil, nil, true)
+		dots[i]:SetText('.')
+	end
+	dots[1]:SetPoint('TOP', 2, 2)
+	dots[2]:SetPoint('TOPRIGHT', -6, -1)
+	dots[3]:SetPoint('RIGHT', -3, 2)
+	dots[4]:SetPoint('BOTTOMRIGHT', -6, 5)
+	dots[5]:SetPoint('BOTTOM', 2, 2)
+	dots[6]:SetPoint('BOTTOMLEFT', 9, 5)
+	dots[7]:SetPoint('LEFT', 6, 2)
+	dots[8]:SetPoint('TOPLEFT', 9, -1)
+
+	local counter = 0
+	local last = 0
+	local interval = .06
+	local diff = .014
+
+	local function onUpdate(self, elapsed)
+		last = last + elapsed
+		if last >= interval then
+			counter = counter + 1
+
+			dots[counter]:SetShown(not dots[counter]:IsShown())
+
+			if counter == 8 then
+				counter = 0
+				diff = diff * -1
+			end
+
+			interval = interval + diff
+			last = 0
+		end
+	end
+
+	hooksecurefunc('EyeTemplate_StartAnimating', function(eye)
+		eye:SetScript('OnUpdate', onUpdate)
+	end)
+
+	hooksecurefunc('EyeTemplate_StopAnimating', function(eye)
+		for i = 1, 8 do
+			dots[i]:Show()
+		end
+		counter = 0
+		last = 0
+		interval = .06
+		diff = .014
+	end)
+
+	QueueStatusMinimapButton:HookScript('OnEnter', function()
+		for i = 1, 8 do
+			dots[i]:SetTextColor(C.r, C.g, C.b)
+		end
+	end)
+
+	QueueStatusMinimapButton:HookScript('OnLeave', function()
+		for i = 1, 8 do
+			dots[i]:SetTextColor(1, 1, 1)
+		end
+	end)
+end
+
+local function DurabilityIndicator()
 	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
 		if parent ~= UIParent then
 			DurabilityFrame:SetScale(1)
@@ -244,8 +281,9 @@ function module:ReskinRegions()
 			DurabilityFrame:SetPoint('TOP', UIParent, 'TOP', 0, -200)
 		end
 	end)
+end
 
-	-- reposition vehicle indicator
+local function VehicleIndicator()
 	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
 	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
 	vehicleMover:SetFrameStrata('HIGH')
@@ -260,58 +298,14 @@ function module:ReskinRegions()
 			VehicleSeatIndicator:SetPoint('BOTTOMRIGHT', vehicleMover, 'BOTTOMLEFT', -5, 0)
 		end
 	end)
-
-
-	-- reposition zone text frame
-	ZoneTextFrame:SetFrameStrata('MEDIUM')
-	SubZoneTextFrame:SetFrameStrata('MEDIUM')
-
-	ZoneTextString:ClearAllPoints()
-	ZoneTextString:SetPoint('CENTER', Minimap)
-	ZoneTextString:SetWidth(230)
-	SubZoneTextString:SetWidth(230)
-	PVPInfoTextString:SetWidth(230)
-	PVPArenaTextString:SetWidth(230)
-
-	MinimapZoneTextButton:ClearAllPoints()
-	MinimapZoneTextButton:SetPoint('CENTER', Minimap)
-	MinimapZoneTextButton:SetFrameStrata('HIGH')
-	MinimapZoneTextButton:EnableMouse(false)
-	MinimapZoneTextButton:SetAlpha(0)
-	MinimapZoneText:SetPoint('CENTER', MinimapZoneTextButton)
-
-	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
-	MinimapZoneText:SetJustifyH('CENTER')
-
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
-		ZoneTextString:SetFont(C.font.normal, 16, 'OUTLINE')
-		SubZoneTextString:SetFont(C.font.normal, 16, 'OUTLINE')
-		PVPInfoTextString:SetFont(C.font.normal, 16, 'OUTLINE')
-		PVPArenaTextString:SetFont(C.font.normal, 16, 'OUTLINE')
-		MinimapZoneText:SetFont(C.font.normal, 16, 'OUTLINE')
-	else
-		F.SetFS(ZoneTextString)
-		F.SetFS(SubZoneTextString)
-		F.SetFS(PVPInfoTextString)
-		F.SetFS(PVPArenaTextString)
-		F.SetFS(MinimapZoneText)
-	end
-
-	Minimap:HookScript('OnEnter', function()
-		MinimapZoneTextButton:SetAlpha(1)
-	end)
-	Minimap:HookScript('OnLeave', function()
-		MinimapZoneTextButton:SetAlpha(0)
-	end)
 end
 
-
-function module:WhoPingsMyMap()
+local function WhoPingsMyMap()
 	if not C.map.whoPings then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFS(f, {C.font.normal, 16, 'OUTLINE'}, '', nil, 'class', true, 'CENTER', 0, 50)
+	f.text = F.CreateFS(f, {C.font.normal, 14, 'OUTLINE'}, '', nil, 'class', true, 'TOP', 0, -4)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript('OnPlay', function() f:SetAlpha(1) end)
@@ -338,6 +332,7 @@ end
 function module:SetupMinimap()
 	if not C.map.miniMap then return end
 
+	local size = C.map.miniMapSize
 	local pos = C.map.miniMapPosition
 	function GetMinimapShape() return 'SQUARE' end
 	
@@ -349,7 +344,7 @@ function module:SetupMinimap()
 	Minimap:SetClampRectInsets(0, 0, 0, 0)
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
-	Minimap:EnableMouse(true)
+	--Minimap:EnableMouse(true)
 	Minimap:SetClampedToScreen(true)
 	Minimap:ClearAllPoints()
 
@@ -386,7 +381,6 @@ function module:SetupMinimap()
 		'MinimapBorderTop',
 		'MinimapNorthTag',
 		'MinimapBorder',
-		'MinimapZoneTextButton',
 		'MinimapZoomOut',
 		'MinimapZoomIn',
 		'MiniMapWorldMapButton',
@@ -401,6 +395,10 @@ function module:SetupMinimap()
 		F.HideObject(_G[v])
 	end
 
-	self:ReskinRegions()
-	self:WhoPingsMyMap()
+	DurabilityIndicator()
+	VehicleIndicator()
+	ReskinRegions()
+	ZoneText()
+	QueueStatus()
+	WhoPingsMyMap()
 end
