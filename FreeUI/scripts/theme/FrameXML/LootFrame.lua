@@ -1,10 +1,11 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	--[[LootFramePortraitOverlay:Hide()
+	LootFramePortraitOverlay:Hide()
 
 	hooksecurefunc("LootFrame_UpdateButton", function(index)
 		local ic = _G["LootButton"..index.."IconTexture"]
+		if not ic then return end
 
 		if not ic.bg then
 			local bu = _G["LootButton"..index]
@@ -21,7 +22,7 @@ tinsert(C.themes["FreeUI"], function()
 			bd:SetPoint("TOPLEFT")
 			bd:SetPoint("BOTTOMRIGHT", 114, 0)
 
-			ic:SetTexCoord(unpack(C.TexCoord))
+			ic:SetTexCoord(.08, .92, .08, .92)
 			ic.bg = F.CreateBG(ic)
 		end
 
@@ -41,7 +42,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	F.ReskinPortraitFrame(LootFrame)
 	F.ReskinArrow(LootFrameUpButton, "up")
-	F.ReskinArrow(LootFrameDownButton, "down")]]
+	F.ReskinArrow(LootFrameDownButton, "down")
 
 	-- Bonus roll
 
@@ -52,8 +53,9 @@ tinsert(C.themes["FreeUI"], function()
 		frame.IconBorder:Hide()
 		frame.BlackBackgroundHoist.Background:Hide()
 		frame.SpecRing:SetAlpha(0)
-		frame.SpecIcon:SetTexCoord(unpack(C.TexCoord))
-		local bg = F.CreateBDFrame(frame.SpecIcon)
+		frame.SpecIcon:SetPoint("TOPLEFT", 5, -5)
+		local bg = F.ReskinIcon(frame.SpecIcon)
+		bg:SetDrawLayer("OVERLAY", 1)
 		hooksecurefunc("BonusRollFrame_StartBonusRoll", function()
 			bg:SetShown(frame.SpecIcon:IsShown())
 		end)
@@ -62,9 +64,6 @@ tinsert(C.themes["FreeUI"], function()
 		frame.PromptFrame.Timer.Bar:SetTexture(C.media.backdrop)
 		F.CreateBD(frame)
 		F.CreateSD(frame)
-		if frame.glow then
-			frame.glow:SetFrameLevel(bg:GetFrameLevel() - 1)
-		end
 		F.CreateBDFrame(frame.PromptFrame.Timer, .25)
 
 		local from, to = "|T.+|t", "|T%%s:14:14:0:0:64:64:5:59:5:59|t"
@@ -74,7 +73,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	-- Loot Roll Frame
 
-	--[[hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
+	hooksecurefunc("GroupLootFrame_OpenNewFrame", function()
 		for i = 1, NUM_GROUP_LOOT_FRAMES do
 			local frame = _G["GroupLootFrame"..i]
 			if not frame.styled then
@@ -104,5 +103,5 @@ tinsert(C.themes["FreeUI"], function()
 				frame.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 			end
 		end
-	end)]]
+	end)
 end)
