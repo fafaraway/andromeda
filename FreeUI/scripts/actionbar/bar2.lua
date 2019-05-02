@@ -36,19 +36,19 @@ function Bar:CreateBar2()
 	end
 
 	--show/hide the frame on a given state driver
-	--[[if cfg.layoutStyle == 3 then
+	if cfg.layoutStyle == 3 then
 		frame.frameVisibility = "[mod:shift] show; hide"
 		F.CreateButtonFrameFader(frame, buttonList, F.faderOnShow)
 	else
 		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	end
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)]]
+	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
+	--[[frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
 	if cfg.layoutStyle == 3 then
 		F.CreateButtonFrameFader(frame, buttonList, F.fader)
-	end
+	end]]
 
 end
