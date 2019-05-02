@@ -10,7 +10,7 @@ function module:OnLogin()
 	self:PositionUIWidgets()
 	self:QuestTracker()
 	self:CooldownCount()
-	self:PositionAlert()
+	self:RepositionAlerts()
 	self:RemoveTalkingHead()
 	self:RemoveBossBanner()
 	self:SkipAzeriteAnimation()
@@ -27,12 +27,12 @@ function module:OnLogin()
 	end
 end
 
+
 -- reposition alert popup
-function module:PositionAlert()
-	if not C.general.alert then return end
+function module:RepositionAlerts()
 	local function alertFrameMover(self, ...)
 		_G.AlertFrame:ClearAllPoints()
-		_G.AlertFrame:SetPoint(unpack(C.general.alert_Position))
+		_G.AlertFrame:SetPoint('CENTER', UIParent, 0, 200)
 	end
 	hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', alertFrameMover)
 end
