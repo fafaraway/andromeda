@@ -198,7 +198,7 @@ local combatF = CreateFrame('Frame')
 combatF:RegisterEvent('PLAYER_REGEN_ENABLED')
 combatF:RegisterEvent('PLAYER_REGEN_DISABLED')
 combatF:SetScript('OnEvent', function(_,event)
-	if not cfg.Info then return end
+	if not C.general.combatText_info then return end
 
 	if event == 'PLAYER_REGEN_ENABLED' then
 		InfoFrame:AddMessage(LEAVING_COMBAT,0,1,0)
