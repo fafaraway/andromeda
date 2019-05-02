@@ -4,10 +4,6 @@ local _, ns = ...
 local realm = GetRealmName()
 local name = UnitName("player")
 
-local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
-local fixedHeight = 768 / pysHeight
-local scale = tonumber(floor(fixedHeight*100 + .5)/100)
-mult = fixedHeight / scale
 
 -- [[ Variables ]]
 
@@ -16,7 +12,6 @@ ns.localization = {}
 
 ns.categories = {}
 ns.buttons = {}
-ns.protectOptions = {}
 
 
 local checkboxes = {}
@@ -455,8 +450,8 @@ ns.addCategory = function(name)
 	local tag = strlower(name)
 
 	local panel = CreateFrame("Frame", baseName..name, FreeUIOptionsPanel)
-	panel:SetSize(600*mult, 660*mult)
-	panel:SetPoint("RIGHT", 0, 0)
+	panel:SetSize(570, 666)
+	panel:SetPoint("TOPRIGHT", -30, -58)
 	panel:Hide()
 
 	panel.Title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -467,12 +462,12 @@ ns.addCategory = function(name)
 	panel.subText:SetPoint("TOPLEFT", panel.Title, "BOTTOMLEFT", 0, -8)
 	panel.subText:SetJustifyH("LEFT")
 	panel.subText:SetJustifyV("TOP")
-	panel.subText:SetSize(600*mult, 30*mult)
+	panel.subText:SetSize(600, 30)
 	panel.subText:SetText(ns.localization[tag.."SubText"])
 
 	local tab = CreateFrame("Button", nil, FreeUIOptionsPanel)
-	tab:SetPoint("TOPLEFT", 11, -offset)
-	tab:SetSize(168*mult, 32*mult)
+	tab:SetPoint("TOPLEFT", 12, -offset)
+	tab:SetSize(168, 32)
 
 	local icon = tab:CreateTexture(nil, "OVERLAY")
 	icon:SetSize(20, 20)
@@ -495,7 +490,7 @@ ns.addCategory = function(name)
 
 	tinsert(panels, panel)
 
-	offset = (offset + 36)*mult
+	offset = offset + 36
 end
 
 ns.addSubCategory = function(category, name)
@@ -504,7 +499,7 @@ ns.addSubCategory = function(category, name)
 	header:SetTextColor(179/255, 211/255, 243/255)
 
 	local line = category:CreateTexture(nil, "ARTWORK")
-	line:SetSize(500*mult, 1*mult)
+	line:SetSize(500, 1)
 	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
 	line:SetColorTexture(.5, .5, .5, .1)
 
@@ -655,7 +650,6 @@ init:SetScript("OnEvent", function()
 			somethingChecked = true
 		end
 
-		--removeCharData(resetFrame.charBox)
 
 		if somethingChecked then
 			ReloadUI()
@@ -664,7 +658,6 @@ init:SetScript("OnEvent", function()
 		end
 	end)
 
-	--resetFrame.charBox:SetScript("OnEnterPressed", removeCharData)
 
 	FreeUIOptionsPanel.ProfileBox:SetChecked(FreeUIOptionsGlobal[realm][name])
 	FreeUIOptionsPanel.ProfileBox:SetScript("OnClick", function(self)
@@ -685,8 +678,7 @@ init:SetScript("OnEvent", function()
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
 	F.ReskinClose(FreeUIOptionsPanel.credits.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.ProfileBox)
-	F.ReskinCheck(resetFrame.Data)
-	F.ReskinCheck(resetFrame.Options)
+
 
 	for _, panel in pairs(panels) do
 		panel.tab:SetBackdrop({
@@ -696,6 +688,7 @@ init:SetScript("OnEvent", function()
 		panel.tab:SetBackdropColor(0, 0, 0, 0)
 		local bg = F.CreateBDFrame(panel.tab.Icon)
 		F.Reskin(panel.tab)
+
 	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)
@@ -724,12 +717,7 @@ init:SetScript("OnEvent", function()
 		F.CreateBG(picker)
 	end
 
-	for _, setting in pairs(ns.classOptions) do
-		local colour = C.ClassColors[setting.className]
-		setting.Text:SetTextColor(colour.r, colour.g, colour.b)
-	end
 
-	F.ReskinInput(resetFrame.charBox)
 
 
 	local title = F.CreateFS(FreeUIOptionsPanel, {C.font.normal, 18}, C.Title, nil, nil, true, "TOP", 0, -10)
@@ -748,19 +736,4 @@ init:SetScript("OnEvent", function()
 	displaySettings()
 end)
 
-local protect = CreateFrame("Frame")
-protect:RegisterEvent("PLAYER_REGEN_ENABLED")
-protect:RegisterEvent("PLAYER_REGEN_DISABLED")
-protect:SetScript("OnEvent", function(self, event)
-	if event == "PLAYER_REGEN_ENABLED" then
-		for _, option in next, ns.protectOptions do
-			option.Text:SetTextColor(1, 1, 1)
-			option:Enable()
-		end
-	else
-		for _, option in next, ns.protectOptions do
-			option.Text:SetTextColor(.5, .5, .5)
-			option:Disable()
-		end
-	end
-end)
+

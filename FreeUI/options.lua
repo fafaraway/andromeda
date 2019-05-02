@@ -28,7 +28,7 @@ C['general'] = {
 	['clickCast'] = true,
 		['clickCast_filter'] = true,
 	['cooldownCount'] = true,
-		['cooldownCount_decimal'] = true,
+		['cooldownCount_decimal'] = false,
 		['cooldownCount_font'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
 	['cooldownPulse'] = true,
 		['cooldownPulse_ignoredSpells'] = {
@@ -36,8 +36,6 @@ C['general'] = {
 			--GetSpellInfo(35395),	-- Crusader Strike
 		},
 
-	['alert'] = true,
-		['alert_Position'] = {'CENTER', UIParent, 'CENTER', 0, 200},
 	['raidManager'] = true,
 		['raidManager_Position'] = {'LEFT'},
 
@@ -280,6 +278,8 @@ C['unitframe'] = {
 
 		['classPower'] = true,
 			['classPower_height'] = 2,
+		['stagger'] = true,
+		['totems'] = true,
 
 		['power_height'] = 2,
 		['altpower_height'] = 2,

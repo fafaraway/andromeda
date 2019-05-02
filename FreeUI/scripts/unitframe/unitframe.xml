@@ -5,6 +5,7 @@
 	<Script file='elements\custom\playerbufftimer.lua'/>
 	<Script file='elements\custom\quaketimer.lua'/>
 	<Script file='elements\custom\spellrange.lua'/>
+	<Script file='elements\custom\totems.lua'/>
 	
 	<Script file='elements\alternativepower.lua'/>
 	<Script file='elements\auras.lua'/>
@@ -20,7 +21,9 @@
 	<Script file='elements\quaketimer.lua'/>
 	<Script file='elements\range.lua'/>
 	<Script file='elements\runes.lua'/>
+	<Script file='elements\stagger.lua'/>
 	<Script file='elements\tags.lua'/>
+	<Script file='elements\totems.lua'/>
 	
 	<Script file='spawns.lua'/>
 </Ui>

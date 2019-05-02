@@ -82,6 +82,10 @@ local function CreatePlayerStyle(self)
 
 	if C.Class == 'DEATHKNIGHT' then module:AddRunes(self) end
 
+	if C.Class == 'MONK' then module:AddStagger(self) end
+
+	if C.Class == 'SHAMAN' then module:AddTotems(self) end
+
 	if cfg.classPower then module:AddClassPower(self) end
 
 	if cfg.quakeTimer then module:AddQuakeTimer(self) end

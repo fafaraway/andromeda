@@ -3,15 +3,12 @@ local _, ns = ...
 local realm = GetRealmName()
 local name = UnitName("player")
 
-local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
-local fixedHeight = 768 / pysHeight
-local scale = tonumber(floor(fixedHeight*100 + .5)/100)
-mult = fixedHeight / scale
+
 
 -- [[ Main window ]]
 
 local options = CreateFrame("Frame", "FreeUIOptionsPanel", UIParent)
-options:SetSize(800*mult, 800*mult)
+options:SetSize(800, 800)
 options:SetPoint("CENTER")
 options:SetFrameStrata("HIGH")
 options:EnableMouse(true)
@@ -95,38 +92,6 @@ end)
 
 options.resetFrame = resetFrame
 
-resetFrame.Data = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
-resetFrame.Data:SetPoint("TOPLEFT", 16, -16)
-resetFrame.Data.Text:SetText(ns.localization.resetData)
-resetFrame.Data.tooltipText = ns.localization.resetDataTooltip
-
-resetFrame.Options = CreateFrame("CheckButton", nil, resetFrame, "InterfaceOptionsCheckButtonTemplate")
-resetFrame.Options:SetPoint("TOPLEFT", resetFrame.Data, "BOTTOMLEFT", 0, -8)
-resetFrame.Options.Text:SetText(ns.localization.resetOptions)
-resetFrame.Options.tooltipText = ns.localization.resetOptionsTooltip
-
-local charBox = CreateFrame("EditBox", "FreeUIOptionsPanelResetFrameCharBox", resetFrame)
-charBox:SetAutoFocus(false)
-charBox:SetWidth(180)
-charBox:SetHeight(20)
-charBox:SetMaxLetters(12)
-charBox:SetFontObject(GameFontHighlight)
-charBox:SetPoint("TOPLEFT", resetFrame.Options, "BOTTOMLEFT", 6, -34)
-
-charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxLeft")
-charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxRight")
-charBox:CreateTexture("FreeUIOptionsPanelResetFrameCharBoxMiddle")
-
-charBox:SetScript("OnEscapePressed", function(self)
-	self:ClearFocus()
-end)
-
-resetFrame.charBox = charBox
-
-local charBoxLabel = charBox:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-charBoxLabel:SetPoint("BOTTOMLEFT", charBox, "TOPLEFT", 0, 6)
-charBoxLabel:SetText(ns.localization.resetCharBox)
-
 resetFrame.Okay = CreateFrame("Button", nil, resetFrame, "UIPanelButtonTemplate")
 resetFrame.Okay:SetSize(128, 25)
 resetFrame.Okay:SetPoint("BOTTOMLEFT", 16, 16)
@@ -141,6 +106,7 @@ resetFrame.Cancel:SetScript("OnClick", function()
 	resetFrame:Hide()
 end)
 tinsert(ns.buttons, resetFrame.Cancel)
+
 
 local credits = CreateFrame("Frame", "FreeUIOptionsPanelCredits", UIParent)
 
@@ -204,7 +170,6 @@ ns.addCategory("inventory")
 ns.addCategory("tooltip")
 ns.addCategory("chat")
 ns.addCategory("map")
-ns.addCategory("classmod")
 
 CreditsButton:SetPoint("BOTTOM", InstallButton, "TOP", 0, 4)
 InstallButton:SetPoint("BOTTOM", ResetButton, "TOP", 0, 4)
@@ -658,17 +623,14 @@ do
 	local overAbsorb = ns.CreateCheckBox(unitframe, "overAbsorb", true, true)
 	overAbsorb:SetPoint("LEFT", healPrediction, "RIGHT", 240, 0)
 
-	local classPower = ns.CreateCheckBox(unitframe, "classPower", true, true)
-	classPower:SetPoint("TOPLEFT", healPrediction, "BOTTOMLEFT", 0, -8)
-
 	local rangeCheck = ns.CreateCheckBox(unitframe, "rangeCheck", true, true)
-	rangeCheck:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
+	rangeCheck:SetPoint("TOPLEFT", healPrediction, "BOTTOMLEFT", 0, -8)
 
 	local quakeTimer = ns.CreateCheckBox(unitframe, "quakeTimer", true, true)
-	quakeTimer:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
+	quakeTimer:SetPoint("LEFT", rangeCheck, "RIGHT", 240, 0)
 
 	local line2 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line2:SetPoint("TOPLEFT", quakeTimer, "BOTTOMLEFT", -16, -8)
+	line2:SetPoint("TOPLEFT", rangeCheck, "BOTTOMLEFT", -16, -8)
 
 	local enableCastbar = ns.CreateCheckBox(unitframe, "enableCastbar", true, true)
 	enableCastbar:SetPoint("TOPLEFT", line2, "BOTTOMLEFT", 16, -16)
@@ -712,8 +674,14 @@ do
 	local line5 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
 	line5:SetPoint("TOPLEFT", colourSmooth_Boss, "BOTTOMLEFT", -32, -8)
 
-	local debuffbyPlayer = ns.CreateCheckBox(unitframe, "debuffbyPlayer", true, true)
-	debuffbyPlayer:SetPoint("TOPLEFT", line5, "BOTTOMLEFT", 16, -16)
+	local classPower = ns.CreateCheckBox(unitframe, "classPower", true, true)
+	classPower:SetPoint("TOPLEFT", line5, "BOTTOMLEFT", 16, -16)
+
+	local stagger = ns.CreateCheckBox(unitframe, "stagger", true, true)
+	stagger:SetPoint("LEFT", classPower, "RIGHT", 240, 0)
+
+	local totems = ns.CreateCheckBox(unitframe, "totems", true, true)
+	totems:SetPoint("TOPLEFT", classPower, "BOTTOMLEFT", 0, -8)
 
 	local function toggleUFOptions()
 		local shown = enable:GetChecked()
@@ -731,7 +699,6 @@ do
 		threat:SetShown(shown)
 		overAbsorb:SetShown(shown)
 		healPrediction:SetShown(shown)
-		classPower:SetShown(shown)
 		dispellable:SetShown(shown)
 		rangeCheck:SetShown(shown)
 		quakeTimer:SetShown(shown)
@@ -744,7 +711,9 @@ do
 		colourSmooth_Boss:SetShown(shown)
 		enableArena:SetShown(shown)
 
-		debuffbyPlayer:SetShown(shown)
+		classPower:SetShown(shown)
+		stagger:SetShown(shown)
+		totems:SetShown(shown)
 	end
 
 	enable:HookScript("OnClick", toggleUFOptions)
@@ -966,22 +935,7 @@ do
 	miniMap.children = {miniMapSize, whoPings}
 end
 
--- [[ Class specific ]]
 
-do
-	local classmod = FreeUIOptionsPanel.classmod
-	classmod.tab.Icon:SetTexture("Interface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes")
-	local tcoords = CLASS_ICON_TCOORDS[select(2, UnitClass("player"))]
-	classmod.tab.Icon:SetTexCoord(tcoords[1] + 0.022, tcoords[2] - 0.025, tcoords[3] + 0.022, tcoords[4] - 0.025)
-
-	ns.classOptions = {}
-
-	local havocFury = ns.CreateCheckBox(classmod, "havocFury", true, true)
-	havocFury:SetPoint("TOPLEFT", classmod.subText, "BOTTOMLEFT", -2, -8)
-	havocFury.className = "DEMONHUNTER"
-	tinsert(ns.classOptions, havocFury)
-
-end
 
 -- [[ Credits ]]
 

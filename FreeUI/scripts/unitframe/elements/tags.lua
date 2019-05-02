@@ -58,7 +58,7 @@ end
 tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 tags['free:name'] = function(unit)
-	if (unit == 'targettarget' and UnitIsUnit("targettarget", "player")) or (unit == 'focustarget' and UnitIsUnit("focustarget", "player")) then
+	if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
 		return '|cffff0000> YOU <|r'
 	else
 		return ShortenName(unit, 6)
@@ -141,6 +141,18 @@ tags['free:groupname'] = function(unit)
 	end
 end
 tagEvents['free:groupname'] = 'UNIT_HEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
+
+tags['free:stagger'] = function(unit)
+	if unit ~= 'player' then return end
+
+	local cur = UnitStagger(unit) or 0
+	local perc = cur / UnitHealthMax(unit)
+
+	if cur == 0 then return end
+	
+	return F.Numb(cur)..' / '..C.MyColor..floor(perc*100 + .5)..'%'
+end
+tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
 
 
 local function UpdateUnitNameColour(self)
