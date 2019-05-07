@@ -15,11 +15,11 @@ local cfg = {
 	['Info_height'] = 80,
 	['Info_position'] = {'CENTER', UIParent, 'CENTER', 0, 300},
 	['Info_font'] = {C.font.header, 26, 'OUTLINE'},
-	['Incoming_width'] = 120,
+	['Incoming_width'] = 200,
 	['Incoming_height'] = 150,
 	['Incoming_position'] = {'CENTER', UIParent, 'CENTER', -300, 0},
 	['Incoming_font'] = {C.font.normal, 20, 'OUTLINE'},
-	['Outgoing_width'] = 120,
+	['Outgoing_width'] = 200,
 	['Outgoing_height'] = 150,
 	['Outgoing_position'] = {'CENTER', UIParent, 'CENTER', 300, 0},
 	['Outgoing_font'] = {C.font.normal, 20, 'OUTLINE'},
@@ -208,6 +208,8 @@ combatF:SetScript('OnEvent', function(_,event)
 end)
 
 function module:CombatText()
+	if not C.general.combatText then return end
+	
 	if C.general.combatText_incoming then
 		local InFrameMover = F.Mover(InFrame, L['MOVER_COMBATTEXT_INCOMING'], 'CTInFrame', cfg.Incoming_position, cfg.Incoming_width, cfg.Incoming_height)
 		InFrame:SetPoint('TOPRIGHT', InFrameMover)
@@ -234,7 +236,7 @@ function module:CombatText()
 		end
 	end
 
-	merge = cfg.merge and dmgMerge or DamageHealingString
+	merge = cfg.Merge and dmgMerge or DamageHealingString
 
 	eventFrame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 end
