@@ -16,8 +16,8 @@ if not C.unitframe.enable then return end
 * Note that SpellRange will automatically disable Range elements of frames.  *
 ****************************************************************************]]
 
-local oUF = select( 2, ... ).oUF or _G[ assert( GetAddOnMetadata( ..., "X-oUF" ), "X-oUF metadata missing in parent addon." ) ];
-assert( oUF, "Unable to locate oUF." );
+local _, ns = ...
+local oUF = ns.oUF
 
 local UpdateRate = 0.1
 

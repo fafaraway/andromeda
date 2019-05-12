@@ -420,7 +420,7 @@ function Bar:ReskinBars()
 				{'BOTTOMRIGHT', 2, 2},
 			},
 		},
-		buttonstyle = { file = ''},
+		buttonstyle = {file = ''},
 	}
 	F:StyleAllActionButtons(cfg)
 	hooksecurefunc('ActionButton_UpdateHotkeys', F.UpdateHotKey)
