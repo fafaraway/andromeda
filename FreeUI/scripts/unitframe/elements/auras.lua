@@ -105,7 +105,7 @@ local importantBuffs = {
 	[118337] = true,	-- Harden Skin
 
     -- Hunter
-    [ 53480] = true,	-- Roar of Sacrifice
+	[ 53480] = true,	-- Roar of Sacrifice
 	[264735] = true,	-- Survival of the Fittest (Pet Ability)
 	[281195] = true,	-- Survival of the Fittest (Lone Wolf)
 

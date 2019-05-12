@@ -302,13 +302,13 @@ local function WhoPingsMyMap()
 end
 
 local function WorldMarker()
-	if not IsAddOnLoaded("Blizzard_CompactRaidFrames") then return end
+	if not IsAddOnLoaded('Blizzard_CompactRaidFrames') then return end
 
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 
-	wm:SetParent("UIParent")
+	wm:SetParent('UIParent')
 	wm:ClearAllPoints()
-	wm:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 4, (C.map.miniMapSize/8*C.Mult)+6)
+	wm:SetPoint('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', 4, (C.map.miniMapSize/8*C.Mult)+6)
 	wm:SetSize(16, 16)
 	wm:Hide()
 
@@ -321,24 +321,24 @@ local function WorldMarker()
 	wm.MiddleRight:Hide()
 	wm.BottomMiddle:Hide()
 	wm.MiddleMiddle:Hide()
-	wm:SetNormalTexture("")
-	wm:SetHighlightTexture("")
+	wm:SetNormalTexture('')
+	wm:SetHighlightTexture('')
 
-	local marker = F.CreateFS(wm, 'pixelbig', '+', nil, nil, true, "CENTER", 1, 0)
+	local marker = F.CreateFS(wm, 'pixelbig', '+', nil, nil, true, 'CENTER', 1, 0)
 
-	wm:HookScript("OnEnter", function()
+	wm:HookScript('OnEnter', function()
 		marker:SetTextColor(C.r, C.g, C.b)
 	end)
 
-	wm:HookScript("OnLeave", function()
+	wm:HookScript('OnLeave', function()
 		marker:SetTextColor(1, 1, 1)
 	end)
 
-	wm:RegisterEvent("PLAYER_ENTERING_WORLD")
-	wm:RegisterEvent("GROUP_ROSTER_UPDATE")
-	wm:HookScript("OnEvent", function(self)
+	wm:RegisterEvent('PLAYER_ENTERING_WORLD')
+	wm:RegisterEvent('GROUP_ROSTER_UPDATE')
+	wm:HookScript('OnEvent', function(self)
 		local inRaid = IsInRaid()
-		if (inRaid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (not inRaid and IsInGroup()) then
+		if (inRaid and (UnitIsGroupLeader('player') or UnitIsGroupAssistant('player'))) or (not inRaid and IsInGroup()) then
 			self:Show()
 		else
 			self:Hide()

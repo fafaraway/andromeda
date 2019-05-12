@@ -17,6 +17,8 @@ function BLIZZARD:OnLogin()
 	self:DigSiteBar()
 	self:Loot()
 	self:RaidManager()
+	self:DurabilityIndicator()
+	self:VehicleIndicator()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -30,7 +32,7 @@ end
 
 
 -- reposition durability indicator
-local function DurabilityIndicator()
+function BLIZZARD:DurabilityIndicator()
 	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
 		if parent ~= UIParent then
 			DurabilityFrame:SetScale(1)
@@ -42,7 +44,7 @@ local function DurabilityIndicator()
 end
 
 -- reposition vehicle indicator
-local function VehicleIndicator()
+function BLIZZARD:VehicleIndicator()
 	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
 	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
 	vehicleMover:SetFrameStrata('HIGH')
