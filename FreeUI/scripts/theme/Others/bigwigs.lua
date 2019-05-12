@@ -42,8 +42,8 @@ function module:ReskinBigWigs()
 		F.CreateBD(bd)
 		F.CreateSD(bd)
 		bd:ClearAllPoints()
-		bd:SetPoint("TOPLEFT", bar, "TOPLEFT", -1, 1)
-		bd:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 1, -1)
+		bd:SetPoint("TOPLEFT", bar, "TOPLEFT", -C.Mult, C.Mult)
+		bd:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", C.Mult, -C.Mult)
 		bd:Show()
 
 		local tex = bar:GetIcon()
@@ -64,8 +64,8 @@ function module:ReskinBigWigs()
 			F.CreateBD(iconBd)
 			F.CreateSD(iconBd)
 			iconBd:ClearAllPoints()
-			iconBd:SetPoint("TOPLEFT", icon, "TOPLEFT", -1, 1)
-			iconBd:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 1, -1)
+			iconBd:SetPoint("TOPLEFT", icon, "TOPLEFT", -C.Mult, C.Mult)
+			iconBd:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", C.Mult, -C.Mult)
 			iconBd:Show()
 		end
 
@@ -75,15 +75,18 @@ function module:ReskinBigWigs()
 		if (C.Client == 'zhCN' or C.Client == 'zhTW') then
 			if C.general.isDeveloper then
 				label:SetFont(C.font.pixelCN, 10, 'OUTLINEMONOCHROME')
+				label.SetFont = F.Dummy
 				label:SetShadowColor(0, 0, 0, 1)
 				label:SetShadowOffset(1, -1)
 			else
 				label:SetFont(C.font.normal, 11)
+				label.SetFont = F.Dummy
 				label:SetShadowColor(0, 0, 0, 1)
 				label:SetShadowOffset(2, -2)
 			end
 		else
 			F.SetFS(label)
+			label.SetFont = F.Dummy
 		end
 
 		label:ClearAllPoints()
@@ -91,6 +94,7 @@ function module:ReskinBigWigs()
 		label:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
 
 		F.SetFS(timer)
+		timer.SetFont = F.Dummy
 		timer:ClearAllPoints()
 		timer:SetPoint("RIGHT", bar.candyBarBar, "RIGHT", -2, 8)
 		timer:SetPoint("LEFT", bar.candyBarBar, "LEFT", 2, 8)
