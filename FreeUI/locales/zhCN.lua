@@ -142,6 +142,7 @@ L['TOOLTIP_RARE'] = '稀有'
 L['TOOLTIP_AURA_FROM'] = '来自'
 L['TOOLTIP_SELL_PRICE'] = '售价'
 L['TOOLTIP_STACK_CAP'] = '堆叠上限'
+L['TOOLTIP_AZERITE_TRAIT'] = '艾泽里特特质'
 
 
 

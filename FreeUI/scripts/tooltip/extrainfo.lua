@@ -19,6 +19,7 @@ function module:ExtraInfo()
 		talent = TALENT..'ID:',
 		achievement = ACHIEVEMENTS..'ID:',
 		currency = CURRENCY..'ID:',
+		azerite = L['TOOLTIP_AZERITE_TRAIT']..'ID:',
 	}
 
 	local function addLine(self, id, type, noadd)
@@ -139,6 +140,12 @@ function module:ExtraInfo()
 		end
 	end
 	hooksecurefunc(GameTooltip, 'SetUnitAura', SetCaster)
+
+	-- Azerite traits
+	hooksecurefunc(GameTooltip, 'SetAzeritePower', function(self, ...)
+		local id = select(3, ...)
+		if id then addLine(self, id, types.azerite, true) end
+	end)
 
 
 	-- show itemid on WardrobeCollectionFrame

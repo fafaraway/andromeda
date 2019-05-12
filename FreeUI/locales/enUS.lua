@@ -141,8 +141,9 @@ L['CHAT_COPY'] = 'Chat copy'
 -- tooltip
 L['TOOLTIP_AURA_FROM'] = 'Castby'
 L['TOOLTIP_RARE'] = 'Rare'
-L['TOOLTIP_SELL_PRICE'] = 'Sell Price'
-L['TOOLTIP_STACK_CAP'] = 'Stack Caps'
+L['TOOLTIP_SELL_PRICE'] = 'Sell price'
+L['TOOLTIP_STACK_CAP'] = 'Stack caps'
+L['TOOLTIP_AZERITE_TRAIT'] = 'Azerite trait'
 
 
 
