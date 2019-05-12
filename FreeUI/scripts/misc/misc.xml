@@ -18,6 +18,5 @@
 	<Script file='quickjoin.lua'/>
 	<Script file='reputation.lua'/>
 	<Script file='safequeue.lua'/>
-	<Script file='sharedmedia.lua'/>
 	<Script file='tradetabs.lua'/>
 </Ui>

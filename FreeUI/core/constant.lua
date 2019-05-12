@@ -46,23 +46,23 @@ elseif GetLocale() == 'ruRU' then
 	headerFont = 'Fonts\\FRIZQT___CYR.ttf'
 	chatFont   = 'Fonts\\FRIZQT___CYR.ttf'
 else
-	normalFont = assetsPath..'font\\expresswaysb.ttf'
-	damageFont = assetsPath..'font\\PEPSI_pl.ttf'
-	headerFont = assetsPath..'font\\ExocetBlizzardMedium.ttf'
-	chatFont   = assetsPath..'font\\expresswaysb.ttf'
+	normalFont = assetsPath..'font\\\expresswaysb.ttf'
+	damageFont = assetsPath..'font\\\PEPSI_pl.ttf'
+	headerFont = assetsPath..'font\\\ExocetBlizzardMedium.ttf'
+	chatFont   = assetsPath..'font\\\expresswaysb.ttf'
 end
 
-C['font'] = {
+C.font = {
 	['normal']     = normalFont,
 	['damage']     = damageFont,
 	['header']     = headerFont,
 	['chat']       = chatFont,
-	['pixel']      = assetsPath..'font\\pixel.ttf',
+	['pixel']      = assetsPath..'font\\\pixel.ttf',
 	['pixelCN']    = 'Fonts\\pixfontCN.ttf',
 }
 
 if GetLocale() == 'ruRU' then
-	C.font.pixel = assetsPath..'font\\iFlash705.ttf'
+	C.font.pixel = assetsPath..'font\\\iFlash705.ttf'
 end
 
 
@@ -109,4 +109,41 @@ C.TexCoord = {.08, .92, .08, .92}
 
 C.isNewPatch = GetBuildInfo() == "8.2.0"
 
+
+
+
+local LSM = LibStub and LibStub("LibSharedMedia-3.0")
+if not LSM then return end
+
+local zhCN, zhTW, western = LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_zhTW, LSM.LOCALE_BIT_western
+
+
+LSM:Register("background", "FreeUI_BG", 			C.media.backdrop)
+
+LSM:Register("statusbar", "FreeUI_SB",  			C.media.sbTex)
+
+LSM:Register("font", "FreeUI_ExocetBlizzardLight", 	assetsPath..'font\\ExocetBlizzardLight.ttf', zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_ExocetBlizzardMedium", assetsPath..'font\\ExocetBlizzardMedium.ttf', zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_supereffective", 		assetsPath..'font\\supereffective.ttf', zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_pixel", 				assetsPath..'font\\pixel.ttf', zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_pixel_bold", 			assetsPath..'font\\pixel_bold.ttf', zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_PixfontCN", 			C.font.pixelCN, zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_Normal", 				C.font.normal, zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_Header", 				C.font.header, zhCN + zhTW + western)
+LSM:Register("font", "FreeUI_Chat", 				C.font.chat, zhCN + zhTW + western)
+
+LSM:Register("sound", "FreeUI_buzz", 				assetsPath..'sound\\buzz.ogg')
+LSM:Register("sound", "FreeUI_ding", 				assetsPath..'sound\\ding.ogg')
+LSM:Register("sound", "FreeUI_execute", 			assetsPath..'sound\\execute.ogg')
+LSM:Register("sound", "FreeUI_LowHealth", 			assetsPath..'sound\\LowHealth.ogg')
+LSM:Register("sound", "FreeUI_LowMana", 			assetsPath..'sound\\LowMana.ogg')
+LSM:Register("sound", "FreeUI_miss", 				assetsPath..'sound\\miss.mp3')
+LSM:Register("sound", "FreeUI_Proc", 				assetsPath..'sound\\Proc.ogg')
+LSM:Register("sound", "FreeUI_Shutupfool", 			assetsPath..'sound\\Shutupfool.ogg')
+LSM:Register("sound", "FreeUI_sound", 				assetsPath..'sound\\sound.mp3')
+LSM:Register("sound", "FreeUI_Warning", 			assetsPath..'sound\\Warning.ogg')
+LSM:Register("sound", "FreeUI_whisper", 			assetsPath..'sound\\whisper.ogg')
+LSM:Register("sound", "FreeUI_whisper1", 			assetsPath..'sound\\whisper1.ogg')
+LSM:Register("sound", "FreeUI_whisper2", 			assetsPath..'sound\\whisper2.ogg')
+LSM:Register("sound", "FreeUI_forthehorde", 		assetsPath..'sound\\forthehorde.mp3')
 
