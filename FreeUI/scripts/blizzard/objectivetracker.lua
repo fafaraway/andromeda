@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('blizzard')
+local BLIZZARD = F:GetModule('Blizzard')
 
 local pairs = pairs
 local r, g, b =  165/255, 0, 48/255
@@ -12,8 +12,8 @@ local otFontHeader = {C.font.header,16,nil}
 local otFont = {C.font.normal,12,nil}
 
 
-function module:QuestTracker()
-	if not C.appearance.reskinQuestTracker then return end
+function BLIZZARD:QuestTracker()
+	if not C.general.questTracker then return end
 
 	-- Move Tracker Frame
 	local mover = CreateFrame('Frame', 'ObjectiveTrackerFrameMover', ot)

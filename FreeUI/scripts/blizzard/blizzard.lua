@@ -1,13 +1,12 @@
 local F, C, L = unpack(select(2, ...))
+local BLIZZARD = F:RegisterModule('Blizzard')
 
-local module = F:RegisterModule('blizzard')
 
-
-function module:OnLogin()
-	self:FontStyle()
-	self:PetBattleUI()
-	self:EnhanceColorPicker()
-	self:PositionUIWidgets()
+function BLIZZARD:OnLogin()
+	self:Fonts()
+	self:PetBattle()
+	self:ColourPicker()
+	self:RepositionUIWidgets()
 	self:QuestTracker()
 	self:CooldownCount()
 	self:RepositionAlerts()
@@ -15,7 +14,9 @@ function module:OnLogin()
 	self:RemoveBossBanner()
 	self:SkipAzeriteAnimation()
 	self:Errors()
-	self:ArchaeologyBar()
+	self:DigSiteBar()
+	self:Loot()
+	self:RaidManager()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -28,8 +29,39 @@ function module:OnLogin()
 end
 
 
+-- reposition durability indicator
+local function DurabilityIndicator()
+	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
+		if parent ~= UIParent then
+			DurabilityFrame:SetScale(1)
+			DurabilityFrame:ClearAllPoints()
+			DurabilityFrame:SetClampedToScreen(true)
+			DurabilityFrame:SetPoint('TOP', UIParent, 'TOP', 0, -200)
+		end
+	end)
+end
+
+-- reposition vehicle indicator
+local function VehicleIndicator()
+	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
+	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
+	vehicleMover:SetFrameStrata('HIGH')
+	F.AddTooltip(vehicleMover, 'ANCHOR_TOP', L['TOGGLE'], 'system')
+	F.CreateMF(vehicleMover)
+
+	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(_, _, parent)
+		if parent ~= vehicleMover then
+			VehicleSeatIndicator:SetScale(.7)
+			VehicleSeatIndicator:ClearAllPoints()
+			VehicleSeatIndicator:SetClampedToScreen(true)
+			VehicleSeatIndicator:SetPoint('BOTTOMRIGHT', vehicleMover, 'BOTTOMLEFT', -5, 0)
+		end
+	end)
+end
+
+
 -- reposition alert popup
-function module:RepositionAlerts()
+function BLIZZARD:RepositionAlerts()
 	local function alertFrameMover(self, ...)
 		_G.AlertFrame:ClearAllPoints()
 		_G.AlertFrame:SetPoint('CENTER', UIParent, 0, 200)
@@ -38,7 +70,7 @@ function module:RepositionAlerts()
 end
 
 -- remove talking head
-function module:RemoveTalkingHead()
+function BLIZZARD:RemoveTalkingHead()
 	local f = CreateFrame('Frame')
 	function f:OnEvent(event, addon)
 		if C.general.hideTalkingHead then
@@ -55,13 +87,14 @@ function module:RemoveTalkingHead()
 end
 
 -- Remove Boss Banner
-function module:RemoveBossBanner()
+function BLIZZARD:RemoveBossBanner()
 	if C.general.hideBossBanner then
 		BossBanner:UnregisterAllEvents()
 	end
 end
 
-function module:PositionUIWidgets()
+-- Reposition UIWidgets
+function BLIZZARD:RepositionUIWidgets()
 	local function topCenterPosition(self, _, b)
 		local holder = _G.TopCenterContainerHolder
 		if b and (b ~= holder) then
@@ -136,7 +169,7 @@ do
 end
 
 
-function module:SkipAzeriteAnimation()
+function BLIZZARD:SkipAzeriteAnimation()
 	if not (IsAddOnLoaded('Blizzard_AzeriteUI')) then
     	UIParentLoadAddOn('Blizzard_AzeriteUI')
     end

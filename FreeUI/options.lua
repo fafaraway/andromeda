@@ -19,6 +19,8 @@ C['general'] = {
 	['paragonRep'] = true,
 	['quickMarking'] = true,
 	['quickFocusing'] = true,
+	['questTracker'] = true,
+	['petBattle'] = true,
 
 	['combatText'] = true,
 		['combatText_info'] = true,
@@ -30,6 +32,7 @@ C['general'] = {
 	['cooldownCount'] = true,
 		['cooldownCount_decimal'] = false,
 		['cooldownCount_font'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
+		['cooldownCount_overrideWA'] = false,
 	['cooldownPulse'] = true,
 		['cooldownPulse_ignoredSpells'] = {
 			--GetSpellInfo(6807),	-- Maul

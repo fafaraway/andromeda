@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("blizzard")
+local BLIZZARD = F:GetModule('Blizzard')
 
-function module:CooldownCount()
+function BLIZZARD:CooldownCount()
 	if not C.general.cooldownCount then return end
 
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
@@ -33,7 +33,7 @@ function module:CooldownCount()
 		else
 			self.text:SetFont(unpack(C.general.cooldownCount_font))
 			self.text:SetShadowColor(0, 0, 0, 0)
-			self.text:SetPoint("BOTTOM", 2, 2)
+			self.text:SetPoint('BOTTOM', 2, 2)
 
 			if self.enabled then
 				Timer_ForceUpdate(self)
@@ -59,21 +59,21 @@ function module:CooldownCount()
 
 	-- returns a new timer object
 	local function Timer_Create(self)
-		local scaler = CreateFrame("Frame", nil, self)
+		local scaler = CreateFrame('Frame', nil, self)
 		scaler:SetAllPoints(self)
 
-		local timer = CreateFrame("Frame", nil, scaler)
+		local timer = CreateFrame('Frame', nil, scaler)
 		timer:Hide()
 		timer:SetAllPoints(scaler)
-		timer:SetScript("OnUpdate", Timer_OnUpdate)
+		timer:SetScript('OnUpdate', Timer_OnUpdate)
 
-		local text = timer:CreateFontString(nil, "BACKGROUND")
-		text:SetPoint("CENTER", 2, 0)
-		text:SetJustifyH("CENTER")
+		local text = timer:CreateFontString(nil, 'BACKGROUND')
+		text:SetPoint('CENTER', 2, 0)
+		text:SetJustifyH('CENTER')
 		timer.text = text
 
 		Timer_OnSizeChanged(timer, scaler:GetSize())
-		scaler:SetScript("OnSizeChanged", function(_, ...) 
+		scaler:SetScript('OnSizeChanged', function(_, ...) 
 			Timer_OnSizeChanged(timer, ...) 
 		end)
 
@@ -83,6 +83,10 @@ function module:CooldownCount()
 
 	local function Timer_Start(self, start, duration)
 		if self:IsForbidden() or self.noOCC or hideNumbers[self] then return end
+		if C.general.cooldownCount_overrideWA and self:GetName() and strfind(self:GetName(), 'WeakAuras') then
+			self.noOCC = true
+			return
+		end
 
 		if start > 0 and duration > MIN_DURATION then
 			local timer = self.timer or Timer_Create(self)
@@ -126,8 +130,8 @@ function module:CooldownCount()
 	end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
-	hooksecurefunc(cooldownIndex, "SetCooldown", Timer_Start)
-	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", function(self)
+	hooksecurefunc(cooldownIndex, 'SetCooldown', Timer_Start)
+	hooksecurefunc('CooldownFrame_SetDisplayAsPercentage', function(self)
 		hideCooldownNumbers(self, true)
 	end)
 
@@ -159,7 +163,7 @@ function module:CooldownCount()
 		end
 	end
 
-	F:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", function()
+	F:RegisterEvent('ACTIONBAR_UPDATE_COOLDOWN', function()
 		for cooldown in pairs(active) do
 			Cooldown_Update(cooldown)
 		end
@@ -168,20 +172,20 @@ function module:CooldownCount()
 	local function ActionButton_Register(frame)
 		local cooldown = frame.cooldown
 		if not hooked[cooldown] then
-			cooldown:HookScript("OnShow", Cooldown_OnShow)
-			cooldown:HookScript("OnHide", Cooldown_OnHide)
+			cooldown:HookScript('OnShow', Cooldown_OnShow)
+			cooldown:HookScript('OnHide', Cooldown_OnHide)
 			hooked[cooldown] = true
 		end
 	end
 
-	if _G["ActionBarButtonEventsFrame"].frames then
-		for _, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
+	if _G['ActionBarButtonEventsFrame'].frames then
+		for _, frame in pairs(_G['ActionBarButtonEventsFrame'].frames) do
 			ActionButton_Register(frame)
 		end
 	end
-	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", ActionButton_Register)
+	hooksecurefunc('ActionBarButtonEventsFrame_RegisterFrame', ActionButton_Register)
 
 	-- Hide Default Cooldown
-	SetCVar("countdownForCooldowns", 0)
+	SetCVar('countdownForCooldowns', 0)
 	F.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
 end

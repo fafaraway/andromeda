@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("blizzard")
+local BLIZZARD = F:GetModule('Blizzard')
 
-function module:PetBattleUI()
-	if not C.appearance.reskinPetBattle then return end
+function BLIZZARD:PetBattle()
+	if not C.general.petBattle then return end
 	
 	local r, g, b = C.r, C.g, C.b
 

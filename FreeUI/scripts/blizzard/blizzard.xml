@@ -1,16 +1,16 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='blizzard.lua'/>
-	<Script file='archaeologybar.lua'/>
-	<Script file='colorpicker.lua'/>
+	<Script file='colourpicker.lua'/>
 	<Script file='colours.lua'/>
+	<Script file='commandbar.lua'/>
 	<Script file='cooldown.lua'/>
+	<Script file='digsitebar.lua'/>
 	<Script file='errors.lua'/>
 	<Script file='fixes.lua'/>
-	<Script file='fontstyle.lua'/>
+	<Script file='fonts.lua'/>
 	<Script file='loot.lua'/>
 	<Script file='moveblizzframe.lua'/>
 	<Script file='objectivetracker.lua'/>
-	<Script file='orderhallcommandbar.lua'/>
 	<Script file='petbattle.lua'/>
 	<Script file='raidmanager.lua'/>
 </Ui>

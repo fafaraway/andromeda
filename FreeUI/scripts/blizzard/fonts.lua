@@ -1,12 +1,13 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("blizzard")
+
+local BLIZZARD = F:GetModule('Blizzard')
 
 _G.STANDARD_TEXT_FONT = C.font.normal
 _G.UNIT_NAME_FONT = C.font.header
 _G.DAMAGE_TEXT_FONT = C.font.damage
 _G.NAMEPLATE_FONT = C.font.normal
 
-function module:FontStyle()
+function BLIZZARD:Fonts()
 	if not C.appearance.reskinFonts then return end
 
 	local function SetFont(fontObj, fontPath, fontSize, fontStyle, fontColor, shadowColor, shadowX, shadowY)

@@ -1,8 +1,7 @@
 local F, C, L = unpack(select(2, ...))
+local BLIZZARD = F:GetModule("Blizzard")
 
-local module = F:GetModule("blizzard")
-
-function module:ArchaeologyBar()
+function BLIZZARD:DigSiteBar()
 	local frame, xpBar
 	local customPosition = false
 

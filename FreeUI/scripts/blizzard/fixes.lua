@@ -5,15 +5,15 @@ local F, C, L = unpack(select(2, ...))
 do
 	if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
 		UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
-		hooksecurefunc("UIDropDownMenu_InitializeHelper", function(frame)
+		hooksecurefunc('UIDropDownMenu_InitializeHelper', function(frame)
 			if UIDROPDOWNMENU_OPEN_PATCH_VERSION ~= 1 then return end
 
-			if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, "displayMode") then
+			if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, 'displayMode') then
 				UIDROPDOWNMENU_OPEN_MENU = nil
-				local t, f, prefix, i = _G, issecurevariable, " \0", 1
+				local t, f, prefix, i = _G, issecurevariable, ' \0', 1
 				repeat
 					i, t[prefix .. i] = i+1
-				until f("UIDROPDOWNMENU_OPEN_MENU")
+				until f('UIDROPDOWNMENU_OPEN_MENU')
 			end
 		end)
 	end
@@ -24,11 +24,11 @@ end
 do
 	local done
 	local function fixBlizz(event, addon)
-		if event == "ADDON_LOADED" and addon == "Blizzard_Collections" then
-			CollectionsJournal:HookScript("OnShow", function()
+		if event == 'ADDON_LOADED' and addon == 'Blizzard_Collections' then
+			CollectionsJournal:HookScript('OnShow', function()
 				if not done then
 					if InCombatLockdown() then
-						F:RegisterEvent("PLAYER_REGEN_ENABLED", fixBlizz)
+						F:RegisterEvent('PLAYER_REGEN_ENABLED', fixBlizz)
 					else
 						F.CreateMF(CollectionsJournal)
 					end
@@ -36,11 +36,11 @@ do
 				end
 			end)
 			F:UnregisterEvent(event, fixBlizz)
-		elseif event == "PLAYER_REGEN_ENABLED" then
+		elseif event == 'PLAYER_REGEN_ENABLED' then
 			F.CreateMF(CollectionsJournal)
 			F:UnregisterEvent(event, fixBlizz)
 		end
 	end
 
-	F:RegisterEvent("ADDON_LOADED", fixBlizz)
+	F:RegisterEvent('ADDON_LOADED', fixBlizz)
 end
