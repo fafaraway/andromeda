@@ -58,124 +58,98 @@ local ignoredDebuffs = {
 }
 
 local importantBuffs = {
+	-- Immunities
+	[196555] = true,	-- Netherwalk (Demon Hunter)
+	[186265] = true,	-- Aspect of the Turtle (Hunter)
+	[ 45438] = true,	-- Ice Block (Mage)
+	[125174] = true,	-- Touch of Karma (Monk)
+	[228050] = true,	-- Divine Shield (Prot Paladin PVP)
+	[   642] = true,	-- Divine Shield (Paladin)
+	[199448] = true,	-- Blessing of Ultimate Sacrifice (Paladin)
+	[  1022] = true,	-- Blessing of Protection (Paladin)
+	[ 47788] = true,	-- Guardian Spirit (Priest)
+	[ 31224] = true,	-- Cloak of Shadows (Rogue)
+	[210918] = true,	-- Ethereal Form (Shaman)
+
 	-- Defensive buffs
 	-- Warrior
-	[199038] = true, 	-- 扶危助困
-	[   871] = true, 	-- 盾墙
-	[213871] = true, 	-- 护卫
-	[223658] = true, 	-- 捍卫
-	[184364] = true, 	-- 狂怒回复
-	[ 12975] = true, 	-- 破腹沉舟
+	[190456] = true,	-- Ignore Pain
+	[118038] = true,	-- Die by the Sword
+	[   871] = true,	-- Shield Wall
+	[213915] = true,	-- Mass Spell Reflection
+	[ 23920] = true,	-- Spell Reflection (Prot)
+	[216890] = true,	-- Spell Reflection (Arms/Fury)
+	[184364] = true,	-- Enraged Regeneration
+	[ 97463] = true,	-- Rallying Cry
+	[ 12975] = true,	-- Last Stand
 
 	-- Death Knight
-	[ 48707] = true, 	-- 反魔法护罩
-	[123981] = true, 	-- 永劫不复	
-	[145629] = true, 	-- 反魔法领域
-	[ 48792] = true, 	-- 冰封之韧
-	[ 48265] = true, 	-- 死亡脚步
-	[212552] = true, 	-- 幻影步
-	[ 81256] = true, 	-- 符文刃舞
-	[194844] = true, 	-- 白骨风暴
+	[ 48707] = true,	-- Anti-Magic Shell
+	[ 48792] = true,	-- Icebound Fortitude
+	[287081] = true,	-- Lichborne
+	[ 55233] = true,	-- Vampiric Blood
+	[194679] = true,	-- Rune Tap
+	[145629] = true,	-- Anti-Magic Zone
+	[ 81256] = true,	-- Dancing Rune Weapon
 
 	-- Paladin
-	[228050] = true, 	-- 被遗忘的女王护卫
-	[   642] = true, 	-- 圣盾术
-	[199448] = true, 	-- 无尽牺牲
-	[  1022] = true, 	-- 保护祝福
-	[204018] = true, 	-- 破咒祝福
-	[210256] = true, 	-- 庇护祝福
-	[  6940] = true, 	-- 牺牲祝福		
-	[ 86659] = true, 	-- 远古列王守卫	
-	[ 31850] = true, 	-- 炽热防御者
-	[204150] = true, 	-- 圣光护盾		
-	[ 31821] = true, 	-- 光环掌握
-	[   498] = true, 	-- 圣佑术	
-	[205191] = true, 	-- 以眼还眼	
-	[184662] = true, 	-- 复仇之盾
-	[  1044] = true, 	-- 自由祝福
-	[199545] = true, 	-- 荣耀战马
+	[204018] = true,	-- Blessing of Spellwarding
+	[  6940] = true,	-- Blessing of Sacrifice
+	[   498] = true,	-- Divine Protection
+	[ 31850] = true,	-- Ardent Defender
+	[ 86659] = true,	-- Guardian of Ancient Kings
+	[205191] = true,	-- Eye for an Eye
 
 	-- Shaman
-	[  8178] = true, 	-- 根基图腾
-	[210918] = true, 	-- 灵体形态
-	[207498] = true, 	-- 先祖护佑图腾
-	[ 98007] = true, 	-- 灵魂链接图腾
-	[204293] = true, 	-- 灵魂链接
-	[108271] = true, 	-- 星界转移
-    [201633] = true, 	-- 大地之墙图腾
-    [260881] = true, 	-- 大地之墙图腾
+	[108271] = true,	-- Astral Shift
+	[118337] = true,	-- Harden Skin
 
     -- Hunter
-    [186265] = true, 	-- 灵龟守护
-	[202748] = true, 	-- 生存战术
-	[248519] = true, 	-- 干涉
-	[ 53480] = true, 	-- 牺牲咆哮
-	[264735] = true, 	-- 优胜略汰
-	[281195] = true, 	-- 优胜略汰孤狼技能
-	[212704] = true, 	-- 野兽之心	
-	[ 54216] = true, 	-- 主人的召唤
+    [ 53480] = true,	-- Roar of Sacrifice
+	[264735] = true,	-- Survival of the Fittest (Pet Ability)
+	[281195] = true,	-- Survival of the Fittest (Lone Wolf)
 
 	-- Demon Hunter
-	[196555] = true, 	-- 虚空行走
-	[187827] = true, 	-- 恶魔变形 复仇
-	[209426] = true, 	-- 幻影打击
-	[212800] = true, 	-- 疾影
-	[207771] = true, 	-- 烈火烙印
-	[205629] = true, 	-- 恶魔践踏
-	[208796] = true, 	-- 锯齿尖刺
-	[162264] = true, 	-- 恶魔变形 浩劫
-	[206649] = true, 	-- 莱欧瑟拉斯之眼
+	[206804] = true,	-- Rain from Above
+	[187827] = true,	-- Metamorphosis (Vengeance)
+	[212800] = true,	-- Blur
+	[263648] = true,	-- Soul Barrier
 
 	-- Druid
-	[209753] = true, 	-- 旋风
-	[ 61336] = true, 	-- 生存本能
-	[102342] = true, 	-- 铁木树皮
-	[ 22812] = true, 	-- 树皮术
-	[201940] = true, 	-- 盟友守护
-	[236696] = true, 	-- 荆棘
-	[200947] = true, 	-- 侵蚀藤曼
-	[201664] = true, 	-- 挫志咆哮
-	[234084] = true, 	-- 明月繁星
+	[102342] = true,	-- Ironbark
+	[ 22812] = true,	-- Barkskin
+	[ 61336] = true,	-- Survival Instincts
 
 	-- Rogue
-	[ 11327] = true, 	-- 消失
-	[199754] = true, 	-- 还击
-	[  1966] = true, 	-- 佯攻
-	[197003] = true, 	-- 动若脱兔
+	[ 45182] = true,	-- Cheating Death
+	[  5277] = true,	-- Evasion
+	[199754] = true,	-- Riposte
+	[  1966] = true,	-- Feint
 
 	-- Monk
-	[122470] = true, 	-- 业报之触（敌方）
-	[125174] = true, 	-- 业报之触（自己）	
-	[116849] = true, 	-- 作茧缚命
-	[115176] = true, 	-- 禅悟冥想
-	[122278] = true, 	-- 躯不坏
-	[122783] = true, 	-- 散魔功
-	[120954] = true, 	-- 壮胆酒 酒仙
-	[201318] = true, 	-- 壮胆酒 风行
-	[243435] = true, 	-- 壮胆酒 织物
-	[202162] = true, 	-- 斗转星移
+	[120954] = true,	-- Fortifying Brew (Brewmaster)
+	[243435] = true,	-- Fortifying Brew (Mistweaver)
+	[201318] = true,	-- Fortifying Brew (Windwalker)
+	[115176] = true,	-- Zen Meditation
+	[116849] = true,	-- Life Cocoon
+	[122278] = true,	-- Dampen Harm
+	[122783] = true,	-- Diffuse Magic
 
 	-- Mage
-	[ 45438] = true, 	-- 寒冰屏障
-	[198111] = true, 	-- 时光护盾
-	[113862] = true, 	-- 强化隐形术
-	[198065] = true, 	-- 陵彩屏障
-	[198158] = true, 	-- 群体隐形
+	[198111] = true,	-- Temporal Shield
+	[113862] = true,	-- Greater Invisibility
 
 	-- Priest
-	[213602] = true, 	-- 强化渐隐术
-	[ 47585] = true, 	-- 消散
-	[ 33206] = true, 	-- 痛苦压制
-	[ 81782] = true, 	-- 真言术障
-	[ 47788] = true, 	-- 守护之魂
-	[232707] = true, 	-- 希望之光 
-	[199412] = true, 	-- 狂乱边缘
+	[ 47585] = true,	-- Dispersion
+	[ 33206] = true,	-- Pain Suppression
+	[213602] = true,	-- Greater Fade
+	[ 81782] = true,	-- Power Word: Barrier
+	[271466] = true,	-- Luminous Barrier
 
 	-- Warlock
-	[212295] = true, 	-- 虚空守卫
-	[104773] = true, 	-- 不灭决心
-	[108416] = true, 	-- 黑暗契约
-	[111400] = true, 	-- 爆燃冲刺	
+	[104773] = true, 	-- Unending Resolve
+	[108416] = true, 	-- Dark Pact
+	[212195] = true,	-- Nether Ward
 }
 
 local classBuffs = {
