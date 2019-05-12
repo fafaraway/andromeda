@@ -272,34 +272,6 @@ local function QueueStatus()
 	end)
 end
 
-local function DurabilityIndicator()
-	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
-		if parent ~= UIParent then
-			DurabilityFrame:SetScale(1)
-			DurabilityFrame:ClearAllPoints()
-			DurabilityFrame:SetClampedToScreen(true)
-			DurabilityFrame:SetPoint('TOP', UIParent, 'TOP', 0, -200)
-		end
-	end)
-end
-
-local function VehicleIndicator()
-	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
-	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
-	vehicleMover:SetFrameStrata('HIGH')
-	F.AddTooltip(vehicleMover, 'ANCHOR_TOP', L['TOGGLE'], 'system')
-	F.CreateMF(vehicleMover)
-
-	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(_, _, parent)
-		if parent ~= vehicleMover then
-			VehicleSeatIndicator:SetScale(.7)
-			VehicleSeatIndicator:ClearAllPoints()
-			VehicleSeatIndicator:SetClampedToScreen(true)
-			VehicleSeatIndicator:SetPoint('BOTTOMRIGHT', vehicleMover, 'BOTTOMLEFT', -5, 0)
-		end
-	end)
-end
-
 local function WhoPingsMyMap()
 	if not C.map.whoPings then return end
 
@@ -326,6 +298,51 @@ local function WhoPingsMyMap()
 		f.text:SetText(name)
 		f.text:SetTextColor(r, g, b)
 		anim:Play()
+	end)
+end
+
+local function WorldMarker()
+	if not IsAddOnLoaded("Blizzard_CompactRaidFrames") then return end
+
+	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
+
+	wm:SetParent("UIParent")
+	wm:ClearAllPoints()
+	wm:SetPoint("BOTTOMLEFT", Minimap, "BOTTOMLEFT", 4, (C.map.miniMapSize/8*C.Mult)+6)
+	wm:SetSize(16, 16)
+	wm:Hide()
+
+	wm.TopLeft:Hide()
+	wm.TopRight:Hide()
+	wm.BottomLeft:Hide()
+	wm.BottomRight:Hide()
+	wm.TopMiddle:Hide()
+	wm.MiddleLeft:Hide()
+	wm.MiddleRight:Hide()
+	wm.BottomMiddle:Hide()
+	wm.MiddleMiddle:Hide()
+	wm:SetNormalTexture("")
+	wm:SetHighlightTexture("")
+
+	local marker = F.CreateFS(wm, 'pixelbig', '+', nil, nil, true, "CENTER", 1, 0)
+
+	wm:HookScript("OnEnter", function()
+		marker:SetTextColor(C.r, C.g, C.b)
+	end)
+
+	wm:HookScript("OnLeave", function()
+		marker:SetTextColor(1, 1, 1)
+	end)
+
+	wm:RegisterEvent("PLAYER_ENTERING_WORLD")
+	wm:RegisterEvent("GROUP_ROSTER_UPDATE")
+	wm:HookScript("OnEvent", function(self)
+		local inRaid = IsInRaid()
+		if (inRaid and (UnitIsGroupLeader("player") or UnitIsGroupAssistant("player"))) or (not inRaid and IsInGroup()) then
+			self:Show()
+		else
+			self:Hide()
+		end
 	end)
 end
 
@@ -395,10 +412,9 @@ function module:SetupMinimap()
 		F.HideObject(_G[v])
 	end
 
-	DurabilityIndicator()
-	VehicleIndicator()
 	ReskinRegions()
 	ZoneText()
 	QueueStatus()
 	WhoPingsMyMap()
+	WorldMarker()
 end
