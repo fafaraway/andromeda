@@ -128,6 +128,24 @@ local function genAddonBlock(_, event, msg, author)
 	end
 end
 
+-- Block trash clubs
+local trashClubs = {'站桩', '致敬我们'}
+local function blockTrashClub(self)
+	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
+		local text = self.DoubleLine:GetText() or ''
+		for _, name in pairs(trashClubs) do
+			if strfind(text, name) then
+				self:Hide()
+				return
+			end
+		end
+	end
+end
+
+hooksecurefunc(BNToastFrame, 'ShowToast', function(self)
+	blockTrashClub(self)
+end)
+
 -- filter azerite info while islands-ing
 local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub('%%d/%%d ', '')
 local function filterAzeriteGain(_, _, msg)
