@@ -4,7 +4,7 @@ local module = F:GetModule('Chat')
 
 
 
-function module:Button()
+function module:ChatButton()
 	if not C.chat.chatButton then return end
 	
 	local gsub, format, tconcat, tostring = string.gsub, string.format, table.concat, tostring
@@ -23,8 +23,8 @@ function module:Button()
 	frame.close:SetPoint('TOPRIGHT', frame)
 
 	local scrollArea = CreateFrame('ScrollFrame', 'ChatCopyScrollFrame', frame, 'UIPanelScrollFrameTemplate')
-	scrollArea:SetPoint('TOPLEFT', frame, 'TOPLEFT', 10, -30)
-	scrollArea:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT', -30, 10)
+	scrollArea:SetPoint("TOPLEFT", 10, -30)
+	scrollArea:SetPoint("BOTTOMRIGHT", -28, 10)
 
 	local editBox = CreateFrame('EditBox', nil, frame)
 	editBox:SetMultiLine(true)
@@ -33,7 +33,7 @@ function module:Button()
 	editBox:SetAutoFocus(false)
 	editBox:SetFont(C.font.normal, 14)
 	editBox:SetWidth(scrollArea:GetWidth())
-	editBox:SetHeight(270)
+	editBox:SetHeight(scrollArea:GetHeight())
 	editBox:SetScript('OnEscapePressed', function() frame:Hide() end)
 	editBox:SetScript('OnTextChanged', function(_, userInput)
 		if userInput then return end

@@ -29,6 +29,7 @@ local FeastSpells = {
 	[259410] = true,  -- 船长盛宴
 	[276972] = true,  -- 秘法药锅
 	[286050] = true,  -- 鲜血大餐
+	[265116] = true,  -- 工程战复
 }
 
 local Bots = {

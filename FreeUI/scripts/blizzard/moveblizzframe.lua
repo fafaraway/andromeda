@@ -27,6 +27,7 @@ local frames = {
 	["LootFrame"] = false,
 	["MailFrame"] = false,
 	["MerchantFrame"] = false,
+	["ModelPreviewFrame"] = false,
 	["OpenMailFrame"] = false,
 	["PaperDollFrame"] = true,
 	["PetitionFrame"] = false,
