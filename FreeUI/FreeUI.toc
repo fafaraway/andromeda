@@ -2,7 +2,7 @@
 ## Title: |cffffffffFree|r|cff9c84efUI|r
 ## Notes: Minimalistic user interface.
 ## Author: Haleth, Solor
-## Version: 80100.09
+## Version: 80100.10
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
 ## X-Credits: Haleth, Gethe, siweia, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy
