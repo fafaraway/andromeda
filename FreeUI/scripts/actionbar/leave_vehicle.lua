@@ -22,7 +22,7 @@ function Bar:CreateLeaveVehicle()
 	local button = CreateFrame("CheckButton", "FreeUI_LeaveVehicleButton", frame, "ActionButtonTemplate, SecureHandlerClickTemplate")
 	table.insert(buttonList, button) --add the button object to the list
 
-	button:SetSize(C.unitframe.player_height*C.Mult, C.unitframe.player_height*C.Mult)
+	button:SetSize(C.unitframe.player_height, C.unitframe.player_height)
 	button:SetPoint("BOTTOMLEFT", frame, padding, padding)
 
 	button:RegisterForClicks("AnyUp")

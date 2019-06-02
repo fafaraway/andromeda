@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
 local pairs = pairs
-local r, g, b =  165/255, 0, 48/255
+local r, g, b =  C.r, C.g, C.b
 local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
@@ -34,7 +34,7 @@ function BLIZZARD:QuestTracker()
 			ot:ClearAllPoints()
 			ot:SetPoint('TOPRIGHT', mover)
 			ot:SetHeight(pysHeight/2)
-			ot:SetWidth(240)
+			--ot:SetWidth(240)
 		end
 	end)
 
@@ -85,10 +85,8 @@ function BLIZZARD:QuestTracker()
 	end
 	hooksecurefunc('QuestLogQuests_AddQuestButton', Showlevel)
 
-	--if not C.quests.questObjectiveTrackerStyle then return end
 
-
-	-- Headers
+	-- Headers background
 	local function reskinHeader(header)
 		-- header.Text:SetTextColor(r, g, b)
 		header.Background:Hide()
@@ -110,16 +108,16 @@ function BLIZZARD:QuestTracker()
 	for _, header in pairs(headers) do reskinHeader(header) end
 
 
-	-- QuestIcons
-	local function reskinQuestIcon(self, block)
+	-- Icons
+	local function reskinQuestIcon(_, block)
 		local itemButton = block.itemButton
 		if itemButton and not itemButton.styled then
 			itemButton:SetNormalTexture('')
 			itemButton:SetPushedTexture('')
-			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+			itemButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			itemButton.icon:SetTexCoord(unpack(C.TexCoord))
-			local bg = F.CreateBDFrame(itemButton, 0)
-			F.CreateSD(itemButton)
+			local bg = F.CreateBDFrame(itemButton.icon)
+			F.CreateSD(bg)
 
 			itemButton.Count:ClearAllPoints()
 			itemButton.Count:SetPoint('TOP', itemButton, 2, -1)
@@ -133,7 +131,7 @@ function BLIZZARD:QuestTracker()
 		if rightButton and not rightButton.styled then
 			rightButton:SetNormalTexture('')
 			rightButton:SetPushedTexture('')
-			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .3)
+			rightButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 			local bg = F.CreateBDFrame(rightButton)
 			F.CreateSD(bg)
 			rightButton:SetSize(18, 18)
@@ -149,30 +147,23 @@ function BLIZZARD:QuestTracker()
 
 
 	-- Progressbars
+	local function reskinBarTemplate(bar)
+		F.StripTextures(bar)
+		bar:SetStatusBarTexture(C.media.backdrop)
+		bar:GetStatusBarTexture():SetGradient('VERTICAL', r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
+		bar.bg = F.CreateBDFrame(bar)
+		F.CreateSD(bar.bg)
+	end
+
 	local function reskinProgressbar(_, _, line)
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
 		local icon = bar.Icon
 		local label = bar.Label
 
-		if not bar.styled then
-			bar.BarFrame:Hide()
-			bar.BarFrame2:Hide()
-			bar.BarFrame3:Hide()
-			bar.BarBG:Hide()
-			bar.BarGlow:Hide()
-			bar.IconBG:SetTexture('')
-			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.Dummy
-
-			bar:SetPoint('LEFT', 22, 0)
-			bar:SetStatusBarTexture(C.media.sbTex)
-			bar:SetStatusBarColor(r, g, b)
-			bar:SetHeight(14)
-
-			local bg = F.CreateBDFrame(progressBar)
-			bg:SetPoint('TOPLEFT', bar, -C.Mult, C.Mult)
-			bg:SetPoint('BOTTOMRIGHT', bar, C.Mult, -C.Mult)
-			F.CreateSD(bg)
+		if not bar.bg then
+			reskinBarTemplate(bar)
+			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.dummy
 
 			label:ClearAllPoints()
 			label:SetPoint('CENTER')
@@ -181,46 +172,41 @@ function BLIZZARD:QuestTracker()
 			icon:SetMask(nil)
 			icon:SetTexCoord(unpack(C.TexCoord))
 			icon:ClearAllPoints()
-			icon:SetPoint('RIGHT', 30, 0)
-			icon:SetSize(24, 24)
-			icon.bg = F.CreateBDFrame(icon)
-			icon.glow = F.CreateSD(icon)
+			icon:SetPoint('TOPLEFT', bar, 'TOPRIGHT', 5, 0)
+			icon:SetPoint('BOTTOMRIGHT', bar, 'BOTTOMRIGHT', 25, 0)
 
-			bar.styled = true
+			icon.bg = F.CreateBDFrame(icon)
+			icon.glow = F.CreateSD(icon.bg)
 		end
 
 		if icon.bg then
 			icon.bg:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
 		end
-		if icon.glow then
-			icon.glow:SetShown(icon:IsShown() and icon:GetTexture() ~= nil)
-		end
 	end
 	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)
 	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)
 	hooksecurefunc(SCENARIO_TRACKER_MODULE, 'AddProgressBar', reskinProgressbar)
-	--hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE,'AddProgressBar', reskinProgressbar)
 
 	hooksecurefunc(QUEST_TRACKER_MODULE, 'AddProgressBar', function(_, _, line)
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
 
-		if not bar.styled then
-			bar:ClearAllPoints()
-			bar:SetPoint('LEFT')
-			for i = 1, 6 do
-				select(i, bar:GetRegions()):Hide()
-			end
-			bar:SetStatusBarTexture(C.media.sbTex)
-			bar.Label:Show()
-			F.SetFS(bar.Label)
-			local oldBg = select(5, bar:GetRegions())
-			local bg = F.CreateBDFrame(oldBg)
-			F.CreateSD(bg)
-
-			bar.styled = true
+		if not bar.bg then
+			reskinBarTemplate(bar)
 		end
 	end)
+
+	local function reskinTimerBar(_, _, line)
+		local timerBar = line.TimerBar
+		local bar = timerBar.Bar
+
+		if not bar.bg then
+			reskinBarTemplate(bar)
+		end
+	end
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'AddTimerBar', reskinTimerBar)
+	hooksecurefunc(SCENARIO_TRACKER_MODULE, 'AddTimerBar', reskinTimerBar)
+	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, 'AddTimerBar', reskinTimerBar)
 
 
 	-- Blocks
@@ -228,9 +214,8 @@ function BLIZZARD:QuestTracker()
 		block.NormalBG:SetTexture('')
 		if not block.bg then
 			block.bg = F.CreateBDFrame(block.GlowTexture)
-			block.bg:SetPoint('TOPLEFT', block.GlowTexture, 2, 0)
-			block.bg:SetPoint('BOTTOMRIGHT', block.GlowTexture, -2, 0)
-			--F.CreateBD(block.bg)
+			block.bg:SetPoint('TOPLEFT', block.GlowTexture, 4, -2)
+			block.bg:SetPoint('BOTTOMRIGHT', block.GlowTexture, -4, 0)
 			F.CreateSD(block.bg)
 		end
 	end)
@@ -262,7 +247,7 @@ function BLIZZARD:QuestTracker()
 			F.CreateBD(block.timerbg)
 
 			block.StatusBar:SetStatusBarTexture(C.media.sbTex)
-			block.StatusBar:SetStatusBarColor(r, g, b)
+			block.StatusBar:GetStatusBarTexture():SetGradient('VERTICAL', r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
 			block.StatusBar:SetHeight(10)
 
 			select(3, block:GetRegions()):Hide()
@@ -285,8 +270,7 @@ function BLIZZARD:QuestTracker()
 
 
 
-	-- font
-
+	-- Fonts
 	ot.HeaderMenu.Title:SetFont(unpack(otFontHeader))
 
 	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader'}) do
