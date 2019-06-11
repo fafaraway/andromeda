@@ -254,7 +254,7 @@ C['chat'] = {
 			['blockAddonAlert'] = true,
 				['addonBlockList'] = {
 					'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', ('%-'):rep(20),
-					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'wow.+兑换码', 'wow.+验证码', '=>', '【有爱插件】'
+					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'wow.+兑换码', 'wow.+验证码', '=>', '【有爱插件】', '：.+>'
 					},
 }
 
@@ -284,7 +284,7 @@ C['unitframe'] = {
 		['stagger'] = true,
 		['totems'] = true,
 
-		['power_height'] = 2,
+		['power_height'] = 3,
 		['altpower_height'] = 2,
 		
 		['enableCastbar'] = true,

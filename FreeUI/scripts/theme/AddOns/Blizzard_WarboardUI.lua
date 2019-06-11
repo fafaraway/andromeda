@@ -1,6 +1,13 @@
 local F, C = unpack(select(2, ...))
 
 C.themes["Blizzard_WarboardUI"] = function()
+	local function forceProgressText(self)
+		if self.styled then return end
+
+		self:SetTextColor(1, 1, 1)
+		self.SetTextColor = F.Dummy
+		self.styled = true
+	end
 
 	hooksecurefunc(WarboardQuestChoiceFrame, "Update", function(self)
 		if not self.bg then
@@ -40,13 +47,8 @@ C.themes["Blizzard_WarboardUI"] = function()
 				for j = 1, child:GetNumChildren() do
 					local child2 = select(j, child:GetChildren())
 					if child2 then
-						if child2.Text then
-							child2.Text:SetTextColor(1, 1, 1)
-						end
-
-						if child2.LeadingText then
-							child2.LeadingText:SetTextColor(1, 1, 1)
-						end
+						if child2.Text then forceProgressText(child2.Text) end
+						if child2.LeadingText then forceProgressText(child2.LeadingText) end
 
 						if child2.Icon and not child2.Icon.bg then
 							child2.Icon.bg = F.ReskinIcon(child2.Icon)

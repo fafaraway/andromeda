@@ -1,12 +1,12 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("Actionbar")
+local Bar = F:GetModule('Actionbar')
 
 local _G = _G
 local next, tonumber = next, tonumber
 local ACTION_BUTTON_SHOW_GRID_REASON_CVAR = ACTION_BUTTON_SHOW_GRID_REASON_CVAR
 
 local scripts = {
-	"OnShow", "OnHide", "OnEvent", "OnEnter", "OnLeave", "OnUpdate", "OnValueChanged", "OnClick", "OnMouseDown", "OnMouseUp",
+	'OnShow', 'OnHide', 'OnEvent', 'OnEnter', 'OnLeave', 'OnUpdate', 'OnValueChanged', 'OnClick', 'OnMouseDown', 'OnMouseUp',
 }
 
 local framesToHide = {
@@ -33,7 +33,7 @@ function Bar:HideBlizz()
 	MainMenuBar:SetMovable(true)
 	MainMenuBar:SetUserPlaced(true)
 	MainMenuBar.ignoreFramePositionManager = true
-	MainMenuBar:SetAttribute("ignoreFramePositionManager", true)
+	MainMenuBar:SetAttribute('ignoreFramePositionManager', true)
 
 	for _, frame in next, framesToHide do
 		frame:SetParent(F.HiddenFrame)
@@ -48,7 +48,7 @@ function Bar:HideBlizz()
 	local function buttonShowGrid(name, showgrid)
 		for i = 1, 12 do
 			local button = _G[name..i]
-			button:SetAttribute("showgrid", showgrid)
+			button:SetAttribute('showgrid', showgrid)
 			ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
 		end
 	end
@@ -56,18 +56,18 @@ function Bar:HideBlizz()
 	local function ToggleButtonGrid()
 		if InCombatLockdown() then
 			updateAfterCombat = true
-			F:RegisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
+			F:RegisterEvent('PLAYER_REGEN_ENABLED', ToggleButtonGrid)
 		else
-			local showgrid = tonumber(GetCVar("alwaysShowActionBars"))
-			buttonShowGrid("ActionButton", showgrid)
-			buttonShowGrid("MultiBarBottomRightButton", showgrid)
+			local showgrid = tonumber(GetCVar('alwaysShowActionBars'))
+			buttonShowGrid('ActionButton', showgrid)
+			buttonShowGrid('MultiBarBottomRightButton', showgrid)
 			if updateAfterCombat then
-				F:UnregisterEvent("PLAYER_REGEN_ENABLED", ToggleButtonGrid)
+				F:UnregisterEvent('PLAYER_REGEN_ENABLED', ToggleButtonGrid)
 				updateAfterCombat = false
 			end
 		end
 	end
-	hooksecurefunc("MultiActionBar_UpdateGridVisibility", ToggleButtonGrid)
+	hooksecurefunc('MultiActionBar_UpdateGridVisibility', ToggleButtonGrid)
 
 	-- Update token panel
 	local function updateToken()
@@ -75,7 +75,7 @@ function Bar:HideBlizz()
 		TokenFrame_Update()
 		BackpackTokenFrame_Update()
 	end
-	F:RegisterEvent("CURRENCY_DISPLAY_UPDATE", updateToken)
+	F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', updateToken)
 end
 
 

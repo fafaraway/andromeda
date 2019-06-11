@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("Actionbar")
+local Bar = F:GetModule('Actionbar')
 
 
 function Bar:CreateStancebar()
@@ -13,7 +13,7 @@ function Bar:CreateStancebar()
 	local buttonList = {}
 
 	--make a frame that fits the size of all microbuttons
-	local frame = CreateFrame("Frame", "FreeUI_StanceBar", UIParent, "SecureHandlerStateTemplate")
+	local frame = CreateFrame('Frame', 'FreeUI_StanceBar', UIParent, 'SecureHandlerStateTemplate')
 	frame:SetWidth(num*buttonSize + (num-1)*margin + 2*padding)
 	frame:SetHeight(buttonSize + 2*padding)
 	frame:SetScale(1)
@@ -22,16 +22,16 @@ function Bar:CreateStancebar()
 		if InCombatLockdown() then return end
 		local leftShown, rightShown = MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown()
 		if leftShown and rightShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar3', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		elseif leftShown and not rightShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar2', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar2', 'TOP', 0, 0)
 		elseif rightShown and not leftShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar3', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		elseif not rightShown and not leftShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar1', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar1', 'TOP', 0, 0)
 		end
 	end
-	hooksecurefunc("MultiActionBar_Update", positionBars)
+	hooksecurefunc('MultiActionBar_Update', positionBars)
 
 	--STANCE BAR
 
@@ -43,15 +43,15 @@ function Bar:CreateStancebar()
 	StanceBarRight:SetTexture(nil)
 
 	for i = 1, num do
-		local button = _G["StanceButton"..i]
+		local button = _G['StanceButton'..i]
 		table.insert(buttonList, button) --add the button object to the list
 		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
+			button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 		else
-			local previous = _G["StanceButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
+			local previous = _G['StanceButton'..i-1]
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
@@ -64,25 +64,25 @@ function Bar:CreateStancebar()
 	PossessBackground2:SetTexture(nil)
 
 	for i = 1, NUM_POSSESS_SLOTS do
-		local button = _G["PossessButton"..i]
+		local button = _G['PossessButton'..i]
 		table.insert(buttonList, button) --add the button object to the list
 		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("BOTTOMLEFT", frame, padding, padding)
+			button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 		else
-			local previous = _G["PossessButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", margin, 0)
+			local previous = _G['PossessButton'..i-1]
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
 	--show/hide the frame on a given state driver
 	if cfg.stanceBar then
-		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
+		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 	else
-		frame.frameVisibility = "hide"
+		frame.frameVisibility = 'hide'
 	end
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
 	if cfg.stanceBar and cfg.stanceBarMouseover then
 		F.CreateButtonFrameFader(frame, buttonList, F.fader)

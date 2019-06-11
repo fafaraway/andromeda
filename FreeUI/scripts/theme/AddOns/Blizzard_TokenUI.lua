@@ -33,13 +33,22 @@ tinsert(C.themes["FreeUI"], function()
 				bu.icon:SetTexCoord(unpack(C.TexCoord))
 				bu.bg = F.CreateBG(bu.icon)
 
+				if bu.expandIcon then
+					bu.expBg = F.CreateBDFrame(bu.expandIcon, .25)
+					bu.expBg:SetPoint("TOPLEFT", bu.expandIcon, -3, 3)
+					bu.expBg:SetPoint("BOTTOMRIGHT", bu.expandIcon, 3, -3)
+					F.CreateGradient(bu.expBg)
+				end
+
 				bu.styled = true
 			end
 
 			if bu.isHeader then
 				bu.bg:Hide()
+				bu.expBg:Show()
 			else
 				bu.bg:Show()
+				bu.expBg:Hide()
 			end
 		end
 	end

@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("Actionbar")
+local Bar = F:GetModule('Actionbar')
 
 
 function Bar:CreatePetbar()
@@ -12,7 +12,7 @@ function Bar:CreatePetbar()
 	local buttonList = {}
 
 	--create the frame to hold the buttons
-	local frame = CreateFrame("Frame", "FreeUI_PetActionBar", UIParent, "SecureHandlerStateTemplate")
+	local frame = CreateFrame('Frame', 'FreeUI_PetActionBar', UIParent, 'SecureHandlerStateTemplate')
 	frame:SetWidth(num*buttonSize + (num-1)*(margin+2) + 2*padding)
 	frame:SetHeight(buttonSize + 2*padding)
 	frame:SetScale(1)
@@ -21,16 +21,16 @@ function Bar:CreatePetbar()
 		if InCombatLockdown() then return end
 		local leftShown, rightShown = MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown()
 		if leftShown and rightShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar3', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		elseif leftShown and not rightShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar2', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar2', 'TOP', 0, 0)
 		elseif rightShown and not leftShown then
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar3', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		else
-			frame:SetPoint("BOTTOM", 'FreeUI_ActionBar1', "TOP", 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar1', 'TOP', 0, 0)
 		end
 	end
-	hooksecurefunc("MultiActionBar_Update", positionBars)
+	hooksecurefunc('MultiActionBar_Update', positionBars)
 
 	--move the buttons into position and reparent them
 	PetActionBarFrame:SetParent(frame)
@@ -39,28 +39,29 @@ function Bar:CreatePetbar()
 	SlidingActionBarTexture1:SetTexture(nil)
 
 	for i = 1, num do
-		local button = _G["PetActionButton"..i]
+		local button = _G['PetActionButton'..i]
 		table.insert(buttonList, button) --add the button object to the list
+		table.insert(self.activeButtons, button)
 		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:SetPoint("LEFT", frame, padding, 0)
+			button:SetPoint('LEFT', frame, padding, 0)
 		else
-			local previous = _G["PetActionButton"..i-1]
-			button:SetPoint("LEFT", previous, "RIGHT", margin+2, 0)
+			local previous = _G['PetActionButton'..i-1]
+			button:SetPoint('LEFT', previous, 'RIGHT', margin+2, 0)
 		end
 		--cooldown fix
-		local cd = _G["PetActionButton"..i.."Cooldown"]
+		local cd = _G['PetActionButton'..i..'Cooldown']
 		cd:SetAllPoints(button)
 	end
 
 	--show/hide the frame on a given state driver
 	if cfg.petBar then
-		frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide"
+		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
 	else
-		frame.frameVisibility = "hide"
+		frame.frameVisibility = 'hide'
 	end
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
 	--create the mouseover functionality
 	if cfg.petBar and cfg.petBarMouseover then

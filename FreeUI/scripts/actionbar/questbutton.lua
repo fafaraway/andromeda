@@ -103,10 +103,10 @@ local itemAreas = {
 	[154878] = 895
 }
 
-local ExtraQuestButton = CreateFrame("Button", "ExtraQuestButton", UIParent, "SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate")
+local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
 ExtraQuestButton:SetMovable(true)
-ExtraQuestButton:RegisterEvent("PLAYER_LOGIN")
-ExtraQuestButton:SetScript("OnEvent", function(self, event, ...)
+ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
+ExtraQuestButton:SetScript('OnEvent', function(self, event, ...)
 	if(self[event]) then
 		self[event](self, event, ...)
 	elseif(self:IsEnabled()) then
@@ -114,28 +114,28 @@ ExtraQuestButton:SetScript("OnEvent", function(self, event, ...)
 	end
 end)
 
-local visibilityState = "[extrabar][petbattle] hide; show"
+local visibilityState = '[extrabar][petbattle] hide; show'
 local onAttributeChanged = [[
-	if(name == "item") then
+	if(name == 'item') then
 		if(value and not self:IsShown() and not HasExtraActionBar()) then
 			self:Show()
 		elseif(not value) then
 			self:Hide()
 			self:ClearBindings()
 		end
-	elseif(name == "state-visible") then
-		if(value == "show") then
-			self:CallMethod("Update")
+	elseif(name == 'state-visible') then
+		if(value == 'show') then
+			self:CallMethod('Update')
 		else
 			self:Hide()
 			self:ClearBindings()
 		end
 	end
-	if(self:IsShown() and (name == "item" or name == "binding")) then
+	if(self:IsShown() and (name == 'item' or name == 'binding')) then
 		self:ClearBindings()
-		local key = GetBindingKey("EXTRAACTIONBUTTON1")
+		local key = GetBindingKey('EXTRAACTIONBUTTON1')
 		if(key) then
-			self:SetBindingClick(1, key, self, "LeftButton")
+			self:SetBindingClick(1, key, self, 'LeftButton')
 		end
 	end
 ]]
@@ -157,13 +157,13 @@ function ExtraQuestButton:BAG_UPDATE_DELAYED()
 
 	if(self:IsShown() and self:IsEnabled()) then
 		local count = GetItemCount(self.itemLink)
-		self.Count:SetText(count and count > 1 and count or "")
+		self.Count:SetText(count and count > 1 and count or '')
 	end
 end
 
 function ExtraQuestButton:PLAYER_REGEN_ENABLED(event)
 	if(self.itemID) then
-		self:SetAttribute("item", "item:" .. self.itemID)
+		self:SetAttribute('item', 'item:' .. self.itemID)
 		self:UnregisterEvent(event)
 		self:BAG_UPDATE_COOLDOWN()
 	end
@@ -172,22 +172,22 @@ end
 function ExtraQuestButton:UPDATE_BINDINGS()
 	if(self:IsShown() and self:IsEnabled()) then
 		self:SetItem()
-		self:SetAttribute("binding", GetTime())
+		self:SetAttribute('binding', GetTime())
 	end
 end
 
 function ExtraQuestButton:PLAYER_LOGIN()
-	RegisterStateDriver(self, "visible", visibilityState)
-	self:SetAttribute("_onattributechanged", onAttributeChanged)
-	self:SetAttribute("type", "item")
+	RegisterStateDriver(self, 'visible', visibilityState)
+	self:SetAttribute('_onattributechanged', onAttributeChanged)
+	self:SetAttribute('type', 'item')
 
 	if(not self:GetPoint()) then
-		self:SetPoint("CENTER", ExtraActionButton1)
+		self:SetPoint('CENTER', ExtraActionButton1)
 	end
 
 	self:SetSize(ExtraActionButton1:GetSize())
 	self:SetScale(ExtraActionButton1:GetScale())
-	self:SetScript("OnLeave", F.HideTooltip)
+	self:SetScript('OnLeave', F.HideTooltip)
 	self:SetClampedToScreen(true)
 	self:SetToplevel(true)
 
@@ -197,17 +197,17 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
 	self:SetPushedTexture(C.media.checked)
 	local push = self:GetPushedTexture()
-	push:SetBlendMode("ADD")
-	push:SetPoint("TOPLEFT", -C.Mult, C.Mult)
-	push:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
+	push:SetBlendMode('ADD')
+	push:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+	push:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 
-	local Icon = self:CreateTexture("$parentIcon", "ARTWORK")
+	local Icon = self:CreateTexture('$parentIcon', 'ARTWORK')
 	Icon:SetAllPoints()
 	Icon:SetTexCoord(unpack(C.TexCoord))
 	
-	local iconBG = self:CreateTexture("$parentIcon", "BACKGROUND")
-	iconBG:SetPoint("TOPLEFT", -C.Mult , C.Mult)
-	iconBG:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
+	local iconBG = self:CreateTexture('$parentIcon', 'BACKGROUND')
+	iconBG:SetPoint('TOPLEFT', -C.Mult , C.Mult)
+	iconBG:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	iconBG:SetTexture(C.media.backdrop)
 	iconBG:SetVertexColor(0, 1, 0)
 
@@ -217,43 +217,43 @@ function ExtraQuestButton:PLAYER_LOGIN()
 		iconBG.glow:SetFrameLevel(self:GetFrameLevel())
 		iconBG.glow:SetBackdropBorderColor(0, 1, 0, .5)
 	end
-	self.HL = self:CreateTexture(nil, "HIGHLIGHT")
+	self.HL = self:CreateTexture(nil, 'HIGHLIGHT')
 	self.HL:SetColorTexture(1, 1, 1, .25)
 	self.HL:SetAllPoints(Icon)
 	self.Icon = Icon
 
-	local HotKey = self:CreateFontString("$parentHotKey", nil, "NumberFontNormal")
-	HotKey:SetPoint("TOP", 0, -5)
+	local HotKey = self:CreateFontString('$parentHotKey', nil, 'NumberFontNormal')
+	HotKey:SetPoint('TOP', 0, -5)
 	self.HotKey = HotKey
 	F.SetFS(HotKey)
 
-	local Count = self:CreateFontString("$parentCount", nil, "NumberFont_Shadow_Med")
-	Count:SetPoint("BOTTOMRIGHT", -3, 3)
+	local Count = self:CreateFontString('$parentCount', nil, 'NumberFont_Shadow_Med')
+	Count:SetPoint('BOTTOMRIGHT', -3, 3)
 	self.Count = Count
 	F.SetFS(Count)
 
-	local Cooldown = CreateFrame("Cooldown", "$parentCooldown", self, "CooldownFrameTemplate")
-	Cooldown:SetPoint("TOPLEFT", -C.Mult, C.Mult)
-	Cooldown:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
+	local Cooldown = CreateFrame('Cooldown', '$parentCooldown', self, 'CooldownFrameTemplate')
+	Cooldown:SetPoint('TOPLEFT', -C.Mult, C.Mult)
+	Cooldown:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
 	Cooldown:SetReverse(false)
 	Cooldown:Hide()
 	self.Cooldown = Cooldown
 
-	local Artwork = self:CreateTexture("$parentArtwork", "OVERLAY")
-	Artwork:SetPoint("BOTTOMLEFT", -1, -3)
+	local Artwork = self:CreateTexture('$parentArtwork', 'OVERLAY')
+	Artwork:SetPoint('BOTTOMLEFT', -1, -3)
 	Artwork:SetSize(20, 20)
-	Artwork:SetAtlas("adventureguide-microbutton-alert")
+	Artwork:SetAtlas('adventureguide-microbutton-alert')
 	self.Artwork = Artwork
 
-	self:RegisterEvent("UPDATE_BINDINGS")
-	self:RegisterEvent("BAG_UPDATE_COOLDOWN")
-	self:RegisterEvent("BAG_UPDATE_DELAYED")
-	self:RegisterEvent("QUEST_LOG_UPDATE")
-	self:RegisterEvent("QUEST_POI_UPDATE")
-	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
-	self:RegisterEvent("QUEST_ACCEPTED")
-	self:RegisterEvent("ZONE_CHANGED")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+	self:RegisterEvent('UPDATE_BINDINGS')
+	self:RegisterEvent('BAG_UPDATE_COOLDOWN')
+	self:RegisterEvent('BAG_UPDATE_DELAYED')
+	self:RegisterEvent('QUEST_LOG_UPDATE')
+	self:RegisterEvent('QUEST_POI_UPDATE')
+	self:RegisterEvent('QUEST_WATCH_LIST_CHANGED')
+	self:RegisterEvent('QUEST_ACCEPTED')
+	self:RegisterEvent('ZONE_CHANGED')
+	self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 end
 
 local activeWorldQuests = {}
@@ -276,12 +276,12 @@ function ExtraQuestButton:QUEST_ACCEPTED(_, questLogIndex, questID)
 	end
 end
 
-ExtraQuestButton:SetScript("OnEnter", function(self)
-	GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+ExtraQuestButton:SetScript('OnEnter', function(self)
+	GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
 	GameTooltip:SetHyperlink(self.itemLink)
 end)
 
-ExtraQuestButton:SetScript("OnUpdate", function(self, elapsed)
+ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
 	if(not self:IsEnabled()) then
 		return
 	end
@@ -291,7 +291,7 @@ ExtraQuestButton:SetScript("OnUpdate", function(self, elapsed)
 		local Icon = self.Icon
 
 		-- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
-		local inRange = IsItemInRange(self.itemLink, "target")
+		local inRange = IsItemInRange(self.itemLink, 'target')
 		if(HotKey:GetText() == RANGE_INDICATOR) then
 			if(inRange == false) then
 				HotKey:SetTextColor(1, .1, .1)
@@ -327,20 +327,20 @@ ExtraQuestButton:SetScript("OnUpdate", function(self, elapsed)
 	end
 end)
 
-ExtraQuestButton:SetScript("OnEnable", function(self)
-	RegisterStateDriver(self, "visible", visibilityState)
-	self:SetAttribute("_onattributechanged", onAttributeChanged)
+ExtraQuestButton:SetScript('OnEnable', function(self)
+	RegisterStateDriver(self, 'visible', visibilityState)
+	self:SetAttribute('_onattributechanged', onAttributeChanged)
 	self:Update()
 	self:SetItem()
 end)
 
-ExtraQuestButton:SetScript("OnDisable", function(self)
+ExtraQuestButton:SetScript('OnDisable', function(self)
 	if(not self:IsMovable()) then
 		self:SetMovable(true)
 	end
 
-	RegisterStateDriver(self, "visible", "show")
-	self:SetAttribute("_onattributechanged", nil)
+	RegisterStateDriver(self, 'visible', 'show')
+	self:SetAttribute('_onattributechanged', nil)
 	self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
 	self.HotKey:Hide()
 end)
@@ -358,7 +358,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 			return
 		end
 
-		local itemID = string.match(itemLink, "|Hitem:(.-):.-|h%[(.+)%]|h")
+		local itemID = string.match(itemLink, '|Hitem:(.-):.-|h%[(.+)%]|h')
 		self.itemID = tonumber(itemID)
 		self.itemLink = itemLink
 
@@ -369,7 +369,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 
 	if(self.itemID) then
 		local HotKey = self.HotKey
-		local key = GetBindingKey("EXTRAACTIONBUTTON1")
+		local key = GetBindingKey('EXTRAACTIONBUTTON1')
 		if(key) then
 			HotKey:SetText(GetBindingText(key, 1))
 			HotKey:Show()
@@ -381,9 +381,9 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 		end
 
 		if(InCombatLockdown()) then
-			self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			self:RegisterEvent('PLAYER_REGEN_ENABLED')
 		else
-			self:SetAttribute("item", "item:" .. self.itemID)
+			self:SetAttribute('item', 'item:' .. self.itemID)
 			self:BAG_UPDATE_COOLDOWN()
 		end
 	end
@@ -392,9 +392,9 @@ end
 function ExtraQuestButton:RemoveItem()
 	if(InCombatLockdown()) then
 		self.itemID = nil
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent('PLAYER_REGEN_ENABLED')
 	else
-		self:SetAttribute("item", nil)
+		self:SetAttribute('item', nil)
 	end
 end
 
@@ -410,11 +410,11 @@ local function GetClosestQuestItem()
 		if(itemLink) then
 			local areaID = questAreas[questID]
 			if(not areaID) then
-				areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
+				areaID = itemAreas[tonumber(string.match(itemLink, 'item:(%d+)'))]
 			end
 
 			local _, _, _, _, _, isComplete = GetQuestLogTitle(questLogIndex)
-			if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
+			if(areaID and (type(areaID) == 'boolean' or areaID == C_Map.GetBestMapForUnit('player'))) then
 				closestQuestLink = itemLink
 				closestQuestTexture = texture
 			elseif(not isComplete or (isComplete and showCompleted)) then
@@ -438,10 +438,10 @@ local function GetClosestQuestItem()
 				if(itemLink) then
 					local areaID = questAreas[questID]
 					if(not areaID) then
-						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
+						areaID = itemAreas[tonumber(string.match(itemLink, 'item:(%d+)'))]
 					end
 
-					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
+					if(areaID and (type(areaID) == 'boolean' or areaID == C_Map.GetBestMapForUnit('player'))) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then
@@ -467,10 +467,10 @@ local function GetClosestQuestItem()
 				if(itemLink) then
 					local areaID = questAreas[questID]
 					if(not areaID) then
-						areaID = itemAreas[tonumber(string.match(itemLink, "item:(%d+)"))]
+						areaID = itemAreas[tonumber(string.match(itemLink, 'item:(%d+)'))]
 					end
 
-					if(areaID and (type(areaID) == "boolean" or areaID == C_Map.GetBestMapForUnit("player"))) then
+					if(areaID and (type(areaID) == 'boolean' or areaID == C_Map.GetBestMapForUnit('player'))) then
 						closestQuestLink = itemLink
 						closestQuestTexture = texture
 					elseif(not isComplete or (isComplete and showCompleted)) then

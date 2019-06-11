@@ -47,7 +47,7 @@ local function PostUpdateHealth(health, unit, min, max)
 	elseif UnitIsDead(unit) or UnitIsGhost(unit) then
 		self.Gradient:SetGradientAlpha('VERTICAL', .1, .1, .1, .6, 0, 0, 0, .6)
 	else
-		self.Gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
+		self.Gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .2, .2, .2, .6)
 	end
 end
 
@@ -70,8 +70,7 @@ function module:AddHealthBar(self)
 	local gradient = health:CreateTexture(nil, 'BACKGROUND')
 	gradient:SetPoint('TOPLEFT')
 	gradient:SetPoint('BOTTOMRIGHT')
-	gradient:SetTexture(C.media.backdrop)
-	gradient:SetGradientAlpha('VERTICAL', .3, .3, .3, .6, .1, .1, .1, .6)
+	gradient:SetTexture(C.media.sbTex)
 
 	self.Gradient = gradient
 

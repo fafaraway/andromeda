@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule("Actionbar")
+local Bar = F:GetModule('Actionbar')
 local cfg = C.actionbar
 
 function Bar:CreateExtrabar()
@@ -8,7 +8,7 @@ function Bar:CreateExtrabar()
 	local buttonList = {}
 
 	--create the frame to hold the buttons
-	local frame = CreateFrame("Frame", "FreeUI_ExtraActionBar", UIParent, "SecureHandlerStateTemplate")
+	local frame = CreateFrame('Frame', 'FreeUI_ExtraActionBar', UIParent, 'SecureHandlerStateTemplate')
 	frame:SetWidth(num*cfg.buttonSizeHuge + (num-1)*cfg.margin*C.Mult + 2*cfg.padding*C.Mult)
 	frame:SetHeight(cfg.buttonSizeHuge*C.Mult + 2*cfg.padding*C.Mult)
 	frame:SetPoint(unpack(C.actionbar.extraButtonPos))
@@ -18,17 +18,19 @@ function Bar:CreateExtrabar()
 	ExtraActionBarFrame:SetParent(frame)
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraActionBarFrame:ClearAllPoints()
-	ExtraActionBarFrame:SetPoint("CENTER", 0, 0)
+	ExtraActionBarFrame:SetPoint('CENTER', 0, 0)
 	ExtraActionBarFrame.ignoreFramePositionManager = true
 
 	--the extra button
 	local button = ExtraActionButton1
 	table.insert(buttonList, button) --add the button object to the list
+	table.insert(self.activeButtons, button)
+	
 	button:SetSize(cfg.buttonSizeHuge*C.Mult, cfg.buttonSizeHuge*C.Mult)
 
 	--show/hide the frame on a given state driver
-	frame.frameVisibility = "[extrabar] show; hide"
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
+	frame.frameVisibility = '[extrabar] show; hide'
+	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
 
 	--zone ability
