@@ -163,7 +163,7 @@ function BLIZZARD:QuestTracker()
 
 		if not bar.bg then
 			reskinBarTemplate(bar)
-			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.dummy
+			BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.Dummy
 
 			label:ClearAllPoints()
 			label:SetPoint('CENTER')
