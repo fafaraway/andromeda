@@ -149,6 +149,7 @@ function BLIZZARD:QuestTracker()
 	-- Progressbars
 	local function reskinBarTemplate(bar)
 		F.StripTextures(bar)
+		bar:SetHeight(16)
 		bar:SetStatusBarTexture(C.media.backdrop)
 		bar:GetStatusBarTexture():SetGradient('VERTICAL', r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
 		bar.bg = F.CreateBDFrame(bar)
@@ -172,11 +173,11 @@ function BLIZZARD:QuestTracker()
 			icon:SetMask(nil)
 			icon:SetTexCoord(unpack(C.TexCoord))
 			icon:ClearAllPoints()
-			icon:SetPoint('TOPLEFT', bar, 'TOPRIGHT', 5, 0)
-			icon:SetPoint('BOTTOMRIGHT', bar, 'BOTTOMRIGHT', 25, 0)
+			icon:SetPoint('RIGHT', 30, 0)
+			icon:SetSize(24, 24)
 
 			icon.bg = F.CreateBDFrame(icon)
-			icon.glow = F.CreateSD(icon.bg)
+			F.CreateSD(icon.bg)
 		end
 
 		if icon.bg then

@@ -87,16 +87,14 @@ tinsert(C.themes["FreeUI"], function()
 		bu.Icon:SetTexCoord(unpack(C.TexCoord))
 		bu.Icon:SetDrawLayer("BACKGROUND", 1)
 
-		local iconBG = F.CreateBG(bu.Icon)
-
 		if isMapQuestInfo then
 			bu.Icon:SetSize(29, 29)
 		else
-			bu.Icon:SetSize(35, 35)
+			bu.Icon:SetSize(34, 34)
 		end
 
 		local bg = F.CreateBDFrame(bu, .25)
-		bg:SetPoint("TOPLEFT", iconBG, "TOPRIGHT")
+		bg:SetPoint("TOPLEFT", iconBG, "TOPRIGHT", 2, 0)
 		bg:SetPoint("BOTTOMRIGHT", iconBG, 100, 0)
 
 		bu.bg = bg
