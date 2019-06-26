@@ -19,7 +19,6 @@
 	<Include file='libs\libs.xml'/>
 
 	<Include file='scripts\actionbar\actionbar.xml'/>
-	<Include file='scripts\aura\aura.xml'/>
 	<Include file='scripts\automation\automation.xml'/>
 	<Include file='scripts\blizzard\blizzard.xml'/>
 	<Include file='scripts\chat\chat.xml'/>
@@ -28,9 +27,9 @@
 	<Include file='scripts\map\map.xml'/>
 	<Include file='scripts\misc\misc.xml'/>
 	<Include file='scripts\notification\notification.xml'/>
-	<Include file='scripts\theme\theme.xml'/>
-	<Include file='scripts\tooltip\tooltip.xml'/>
+	<Include file='scripts\tip\tip.xml'/>
 	<Include file='scripts\unitframe\unitframe.xml'/>
+	<Include file='scripts\theme\theme.xml'/>
 
 	<Script file='core\dev.lua'/>
 </Ui>

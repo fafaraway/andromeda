@@ -10,8 +10,9 @@ C.media = {
 	['arrowDown']  = assetsPath..'arrow-down-active',
 	['arrowLeft']  = assetsPath..'arrow-left-active',
 	['arrowRight'] = assetsPath..'arrow-right-active',
-	['backdrop']   = assetsPath..'blank',
-	['checked']    = assetsPath..'CheckButtonHilight',
+	['backdrop']   = 'Interface\\ChatFrame\\ChatFrameBackground',
+	['pushed']     = assetsPath..'pushed',
+	['checked']    = assetsPath..'checked',
 	['glowTex']    = assetsPath..'glowTex',
 	['gradient']   = assetsPath..'gradient',
 	['roleIcons']  = assetsPath..'UI-LFG-ICON-ROLES',
@@ -107,7 +108,7 @@ C.CopyTex = 'Interface\\Buttons\\UI-GuildButton-PublicNote-Up'
 C.TexCoord = {.08, .92, .08, .92}
 
 
-C.isNewPatch = GetBuildInfo() == '8.2.0'
+
 
 
 

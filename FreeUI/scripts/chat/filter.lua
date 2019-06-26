@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 if not C.chat.enable then return end
-local module = F:GetModule('Chat')
+local CHAT = F:GetModule('Chat')
 
 local strmatch, strfind, format, gsub = string.match, string.find, string.format, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
@@ -11,7 +11,7 @@ local Ambiguate, UnitIsUnit, BNGetGameAccountInfoByGUID, GetTime, SetCVar = Ambi
 local filterList = {}
 local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~', '%-', '%.'}
 
-function F:GenFilterList()
+function CHAT:GenFilterList()
 	F.SplitList(filterList, C.chat.filterList, true)
 end
 
@@ -166,9 +166,9 @@ end
 
 
 
-function module:Filter()
+function CHAT:Filter()
 	if C.chat.useFilter then
-		F:GenFilterList()
+		CHAT:GenFilterList()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', genChatFilter)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', genChatFilter)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', genChatFilter)

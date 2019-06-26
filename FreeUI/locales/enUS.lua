@@ -129,6 +129,10 @@ L['MOVER_DEBUFFS'] = 'debuffs'
 
 L['MOVER_QUAKE_TIMER'] = 'quake timer'
 
+L['MOVER_OBJECTIVE_TRACKER'] = 'objective tracker'
+L['MOVER_VEHICLE_INDICATOR'] = 'vehicle indicator'
+L['MOVER_DURABILITY_INDICATOR'] = 'durability indicator'
+
 
 -- Chat
 L['CHAT_HIDE'] = 'Hide chat frame'
@@ -138,19 +142,20 @@ L['CHAT_LEAVE_WC'] = 'Leave world channel'
 L['CHAT_COPY'] = 'Chat copy'
 
 
--- tooltip
+-- Tooltip
 L['TOOLTIP_AURA_FROM'] = 'Castby'
 L['TOOLTIP_RARE'] = 'Rare'
 L['TOOLTIP_SELL_PRICE'] = 'Sell price'
 L['TOOLTIP_STACK_CAP'] = 'Stack caps'
 L['TOOLTIP_AZERITE_TRAIT'] = 'Azerite trait'
+L['TOOLTIP_SECTION'] = 'Section'
+L['TOOLTIP_TARGETED'] = 'Targeted'
 
-
-
-L['UIHELP'] = 'Type in /freeui for more help.'
 
 
 -- Slash commands
+L['UIHELP'] = 'Type in /freeui for more help.'
+
 L['SLASHCMD_HELP'] = {
 	'Slash commands:',
 	'/rl     - Reload UI',

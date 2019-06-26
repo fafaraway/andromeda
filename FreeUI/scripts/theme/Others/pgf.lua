@@ -1,8 +1,8 @@
 local F, C = unpack(select(2, ...))
-local module = F:GetModule('Theme')
+local THEME = F:GetModule('Theme')
+local TOOLTIP = F:GetModule("Tooltip")
 
-
-function module:ReskinPGF()
+function THEME:ReskinPGF()
 	if not C.appearance.reskinPGF then return end
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
@@ -15,7 +15,7 @@ function module:ReskinPGF()
 		for i = 1, 15 do
 			local child = select(i, PremadeGroupsFilterDialog:GetChildren())
 			if child and child.Shadow then
-				F.ReskinTooltip(child)
+				TOOLTIP.ReskinTooltip(child)
 				tipStyled = true
 				break
 			end

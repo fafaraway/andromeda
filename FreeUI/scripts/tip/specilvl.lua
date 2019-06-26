@@ -1,19 +1,21 @@
 local F, C = unpack(select(2, ...))
-if not C.tooltip.enable then return end
-if not C.tooltip.ilvlSpec then return end
-local module = F:GetModule('Tooltip')
+local TOOLTIP = F:GetModule('Tooltip')
 
 -- Credit: Cloudy Unit Info, by Cloudyfa
-local cache, weapon, currentUNIT, currentGUID = {}, {}
+local select, max, strfind, format, strsplit = select, math.max, string.find, string.format, string.split
+local GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown = GetTime, CanInspect, NotifyInspect, ClearInspectPlayer, IsShiftKeyDown
+local UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi = UnitGUID, UnitClass, UnitIsUnit, UnitIsPlayer, UnitIsVisible, UnitIsDeadOrGhost, UnitOnTaxi
+local GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel = GetInventoryItemTexture, GetInventoryItemLink, GetItemInfo, GetItemGem, GetAverageItemLevel
+local GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpecializationInfoByID
+local HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
+
 local specPrefix = SPECIALIZATION..': '..C.InfoColor
 local levelPrefix = STAT_AVERAGE_ITEM_LEVEL..': '..C.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
-local LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
-local tinsert, max = table.insert, math.max
-local strfind, format, strsplit = string.find, string.format, string.split
+local cache, weapon, currentUNIT, currentGUID = {}, {}
 
-local function updateInspect(self, elapsed)
+function TOOLTIP:InspectOnUpdate(elapsed)
 	self.elapsed = (self.elapsed or frequency) + elapsed
 	if self.elapsed > frequency then
 		self.elapsed = 0
@@ -21,49 +23,50 @@ local function updateInspect(self, elapsed)
 		ClearInspectPlayer()
 
 		if currentUNIT and UnitGUID(currentUNIT) == currentGUID then
-			F:RegisterEvent('INSPECT_READY', module.GetInspectInfo)
+			F:RegisterEvent('INSPECT_READY', TOOLTIP.GetInspectInfo)
 			NotifyInspect(currentUNIT)
 		end
 	end
 end
+
 local updater = CreateFrame('Frame')
-updater:SetScript('OnUpdate', updateInspect)
+updater:SetScript('OnUpdate', TOOLTIP.InspectOnUpdate)
 updater:Hide()
 
-local function resetUnit(_, btn)
+function TOOLTIP:ResetUnit(btn)
 	if btn == 'LSHIFT' and UnitExists('mouseover') then
 		GameTooltip:SetUnit('mouseover')
 	end
 end
-F:RegisterEvent('MODIFIER_STATE_CHANGED', resetUnit)
+F:RegisterEvent('MODIFIER_STATE_CHANGED', TOOLTIP.ResetUnit)
 
-function module:GetInspectInfo(...)
+function TOOLTIP:GetInspectInfo(...)
 	if self == 'UNIT_INVENTORY_CHANGED' then
 		local unit = ...
 		if UnitGUID(unit) == currentGUID then
-			module:InspectUnit(unit, true)
+			TOOLTIP:InspectUnit(unit, true)
 		end
 	elseif self == 'INSPECT_READY' then
 		local guid = ...
 		if guid == currentGUID then
-			local spec = module:GetUnitSpec(currentUNIT)
-			local level = module:GetUnitItemLevel(currentUNIT)
+			local spec = TOOLTIP:GetUnitSpec(currentUNIT)
+			local level = TOOLTIP:GetUnitItemLevel(currentUNIT)
 			cache[guid].spec = spec
 			cache[guid].level = level
 			cache[guid].getTime = GetTime()
 
 			if spec and level then
-				module:SetupTooltip(spec, level)
+				TOOLTIP:SetupSpecLevel(spec, level)
 			else
-				module:InspectUnit(currentUNIT, true)
+				TOOLTIP:InspectUnit(currentUNIT, true)
 			end
 		end
-		F:UnregisterEvent(self, module.GetInspectInfo)
+		F:UnregisterEvent(self, TOOLTIP.GetInspectInfo)
 	end
 end
-F:RegisterEvent('UNIT_INVENTORY_CHANGED', module.GetInspectInfo)
+F:RegisterEvent('UNIT_INVENTORY_CHANGED', TOOLTIP.GetInspectInfo)
 
-function module:SetupTooltip(spec, level)
+function TOOLTIP:SetupSpecLevel(spec, level)
 	local _, unit = GameTooltip:GetUnit()
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
@@ -93,15 +96,13 @@ function module:SetupTooltip(spec, level)
 	end
 end
 
-function module:GetUnitItemLevel(unit)
+function TOOLTIP:GetUnitItemLevel(unit)
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local class = select(2, UnitClass(unit))
 	local ilvl, boa, total, haveWeapon, twohand = 0, 0, 0, 0, 0
 	local delay, mainhand, offhand, hasArtifact
-	wipe(weapon)
-	tinsert(weapon, 0)
-	tinsert(weapon, 0)
+	weapon[1], weapon[2] = 0, 0
 
 	for i = 1, 17 do
 		if i ~= 4 then
@@ -193,7 +194,7 @@ function module:GetUnitItemLevel(unit)
 	return ilvl
 end
 
-function module:GetUnitSpec(unit)
+function TOOLTIP:GetUnitSpec(unit)
 	if not unit or UnitGUID(unit) ~= currentGUID then return end
 
 	local specName
@@ -212,13 +213,13 @@ function module:GetUnitSpec(unit)
 	return specName
 end
 
-function module:InspectUnit(unit, forced)
+function TOOLTIP:InspectUnit(unit, forced)
 	local spec, level
 
 	if UnitIsUnit(unit, 'player') then
 		spec = self:GetUnitSpec('player')
 		level = self:GetUnitItemLevel('player')
-		self:SetupTooltip(spec, level)
+		self:SetupSpecLevel(spec, level)
 	else
 		if not unit or UnitGUID(unit) ~= currentGUID then return end
 		if not UnitIsPlayer(unit) then return end
@@ -226,19 +227,19 @@ function module:InspectUnit(unit, forced)
 		local currentDB = cache[currentGUID]
 		spec = currentDB.spec
 		level = currentDB.level
-		self:SetupTooltip(spec, level)
+		self:SetupSpecLevel(spec, level)
 
 		if not C.tooltip.ilvlSpecByShift and IsShiftKeyDown() then forced = true end
 		if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then updater.elapsed = frequency return end
 		if not UnitIsVisible(unit) or UnitIsDeadOrGhost('player') or UnitOnTaxi('player') then return end
 		if InspectFrame and InspectFrame:IsShown() then return end
 
-		self:SetupTooltip()
+		self:SetupSpecLevel()
 		updater:Show()
 	end
 end
 
-function module:InspectUnitSpecAndLevel()
+function TOOLTIP:InspectUnitSpecAndLevel()
 	if C.tooltip.ilvlSpecByShift and not IsShiftKeyDown() then return end
 
 	local _, unit = self:GetUnit()
@@ -247,5 +248,5 @@ function module:InspectUnitSpecAndLevel()
 	currentUNIT, currentGUID = unit, UnitGUID(unit)
 	if not cache[currentGUID] then cache[currentGUID] = {} end
 
-	module:InspectUnit(unit)
+	TOOLTIP:InspectUnit(unit)
 end

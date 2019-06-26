@@ -7,6 +7,7 @@ local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
 local minimize = ot.HeaderMenu.MinimizeButton
+local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
 
 local otFontHeader = {C.font.header,16,nil}
 local otFont = {C.font.normal,12,nil}
@@ -14,52 +15,30 @@ local otFont = {C.font.normal,12,nil}
 
 function BLIZZARD:QuestTracker()
 	if not C.general.questTracker then return end
-
-	-- Move Tracker Frame
-	local mover = CreateFrame('Frame', 'ObjectiveTrackerFrameMover', ot)
-	mover:SetPoint('TOPRIGHT', UIParent, 'TOPRIGHT', -50, -300)
-	mover:SetSize(50, 50)
-	F.CreateMF(minimize, mover)
-	minimize:SetFrameStrata('HIGH')
-	minimize:HookScript('OnEnter', function(self)
-		GameTooltip:SetOwner(self, 'ANCHOR_TOP')
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L['TOGGLE'], 1, .8, 0)
-		GameTooltip:Show()
-	end)
-	minimize:HookScript('OnLeave', F.HideTooltip)
-
-	hooksecurefunc(ot, 'SetPoint', function(_, _, parent)
-		if parent ~= mover then
-			ot:ClearAllPoints()
-			ot:SetPoint('TOPRIGHT', mover)
-			ot:SetHeight(pysHeight/2)
-			--ot:SetWidth(240)
-		end
-	end)
-
-	--[[local otMover = F.Mover(ot, L['MOVER_MINIMAP'], 'ObjectiveTrackerFrame', {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -340}, 240, 240)
-	hooksecurefunc(ot, 'SetPoint', function(_, _, parent)
-		if parent ~= otMover then
-			ot:ClearAllPoints()
-			ot:SetPoint('TOPRIGHT', otMover)
-			ot:SetHeight(800)
-			ot:SetWidth(240)
-		end
-	end)]]
-
-	RegisterStateDriver(ot, 'visibility', '[petbattle] hide; show')
 	
+	-- Mover for quest tracker
+	local frame = CreateFrame('Frame', 'FreeUIObjectiveTrackerMover', UIParent)
+	frame:SetSize(240, 50)
+	F.Mover(frame, L['MOVER_OBJECTIVE_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -300})
+
+	ot:ClearAllPoints()
+	ot:SetPoint('TOPRIGHT', frame)
+	ot:SetHeight(GetScreenHeight()*.7)
+	ot:SetClampedToScreen(false)
+	ot:SetMovable(true)
+	if ot:IsMovable() then ot:SetUserPlaced(true) end
+
+
 	-- Questblock click enhant
 	local function QuestHook(id)
 		local questLogIndex = GetQuestLogIndexByID(id)
-		if IsControlKeyDown() and CanAbandonQuest(id) then -- ctrl+click to abandon quest
+		if IsControlKeyDown() and CanAbandonQuest(id) then
 			QuestMapQuestOptions_AbandonQuest(id)
-		elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then -- alt+click to share quest
+		elseif IsAltKeyDown() and GetQuestLogPushable(questLogIndex) then
 			QuestMapQuestOptions_ShareQuest(id)
 		end
 	end
-	hooksecurefunc(QUEST_TRACKER_MODULE, 'OnBlockHeaderClick', function(self, block) QuestHook(block.id) end)
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'OnBlockHeaderClick', function(_, block) QuestHook(block.id) end)
 	hooksecurefunc('QuestMapLogTitleButton_OnClick', function(self) QuestHook(self.questID) end)
 
 

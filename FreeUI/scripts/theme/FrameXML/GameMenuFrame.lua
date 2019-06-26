@@ -7,11 +7,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.StripTextures(GameMenuFrame)
 	F.CreateBD(GameMenuFrame)
 	F.CreateSD(GameMenuFrame)
-
-	--[[hooksecurefunc("GameMenuFrame_UpdateVisibleButtons", function()
-		if not IsAddOnLoaded("FreeUI_Options") then return end
-		GameMenuFrame:SetHeight(360)
-	end)]]
+	GameMenuFrame.Border:Hide()
 
 	local buttons = {
 		GameMenuButtonHelp,

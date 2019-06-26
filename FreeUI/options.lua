@@ -1,7 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
--- All exceptions and special rules for these options are in profiles.lua!
-
 
 C['general'] = {
 	['uiScale'] = 1,
@@ -21,6 +19,10 @@ C['general'] = {
 	['quickFocusing'] = true,
 	['questTracker'] = true,
 	['petBattle'] = true,
+	['tradeTab'] = true,
+	['itemLevel'] = true,
+
+	['petFilter'] = true,
 
 	['combatText'] = true,
 		['combatText_info'] = true,
@@ -29,10 +31,10 @@ C['general'] = {
 	
 	['clickCast'] = true,
 		['clickCast_filter'] = true,
-	['cooldownCount'] = true,
-		['cooldownCount_decimal'] = false,
-		['cooldownCount_font'] = {'Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME'},
-		['cooldownCount_overrideWA'] = false,
+
+	['cooldown'] = true,
+		['cooldown_decimal'] = false,
+		['cooldown_overrideWA'] = false,
 	['cooldownPulse'] = true,
 		['cooldownPulse_ignoredSpells'] = {
 			--GetSpellInfo(6807),	-- Maul
@@ -48,11 +50,8 @@ C['general'] = {
 	['isDeveloper'] = false,
 }
 
-
-
-
 C['appearance'] = {
-	['enableTheme'] = true,
+	['useGlobalTheme'] = true,
 		['backdropColour'] = {0, 0, 0, .5},
 		['addShadowBorder'] = true,
 		['buttonGradientColour'] = {.15, .15, .15, .5},
@@ -73,7 +72,6 @@ C['appearance'] = {
 	['reskinPGF'] = true,
 	['reskinSkada'] = true,
 }
-
 
 C['actionbar'] = {
 	['enable'] = true,
@@ -109,18 +107,6 @@ C['actionbar'] = {
 		['hoverBind'] = true,
 }
 
-
-C['aura'] = {
-	['enable'] = true,
-		['position'] = {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -50},
-		['buffSize'] = 42,
-		['debuffSize'] = 50,
-		['paddingX'] = 6,
-		['paddingY'] = 8,
-		['buffPerRow'] = 10,
-}
-
-
 C['map'] = {
 	['worldMap'] = true,
 		['worldMapScale'] = 1,
@@ -132,7 +118,6 @@ C['map'] = {
 		['miniMapSize'] = 240,
 		['whoPings'] = true,
 }
-
 
 C['notification'] = {
 	['enableNotification'] = true,
@@ -155,7 +140,6 @@ C['notification'] = {
 	['sapped'] = true,
 }
 
-
 C['automation'] = {
 	['autoSetRole'] = true,
 		['autoSetRole_useSpec'] = true,
@@ -173,7 +157,6 @@ C['automation'] = {
 		['autoInvite_keyword'] = 'invite',
 }
 
-
 C['inventory'] = {
 	['enable'] = true,
 		['bagScale'] = 1,
@@ -190,7 +173,6 @@ C['inventory'] = {
 			['questItemFilter'] = true,
 }
 
-
 C['infobar'] = {
 	['enable'] = true,
 		['height'] = 20,
@@ -205,13 +187,11 @@ C['infobar'] = {
 		['durability'] = true,
 }
 
-
 C['tooltip'] = {
 	['enable'] = true,
 		['cursor'] = false,
 		['position'] = {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -50, 300},
-		['hidePVP'] = true,
-		['hideFaction'] = true,
+		['scale'] = 1,
 		['hideTitle'] = true,
 		['hideRealm'] = true,
 		['hideRank'] = true,
@@ -225,8 +205,9 @@ C['tooltip'] = {
 		['borderColor'] = true,
 		['tipIcon'] = true,
 		['tipClear'] = true,
-}
 
+		['targetBy'] = true,
+}
 
 C['chat'] = {
 	['enable'] = true,
@@ -241,7 +222,7 @@ C['chat'] = {
 		['urlCopy'] = true,
 		['realLink'] = true,
 		['tab'] = true,
-		['channelSticky'] = true,
+		['whisperSticky'] = true,
 		['useOutline'] = false,
 		['timeStamp'] = true,
 		['autoBubble'] = false,
@@ -257,10 +238,6 @@ C['chat'] = {
 					'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', 'wow.+兑换码', 'wow.+验证码', '=>', '【有爱插件】', '：.+>'
 					},
 }
-
-
-
-
 
 C['unitframe'] = {
 	['enable'] = true,
@@ -384,7 +361,6 @@ C['unitframe'] = {
 		['arena_auraPerRow'] = 6,
 		['arena_auraTotal'] = 18,
 }
-
 
 C['classmod'] = {
 	['havocFury'] = false,

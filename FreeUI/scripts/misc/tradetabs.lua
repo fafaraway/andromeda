@@ -1,5 +1,8 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
+-- TradeTabs, by tardmrr
+
+local pairs, ipairs, tinsert = pairs, ipairs, table.insert
 local TradeTabs = CreateFrame("Frame")
 
 local whitelist = {
@@ -31,7 +34,7 @@ local RUNEFORGING = 53428 -- Runeforging spellid
 local CHEF_HAT = 134020
 
 function TradeTabs:OnEvent(event, addon)
-	--if not C.general.tradeTabs then return end
+	if not C.general.tradeTab then return end
 	if event == "ADDON_LOADED" and addon == "Blizzard_TradeSkillUI" then
 		self:UnregisterEvent(event)
 		if InCombatLockdown() then
@@ -79,21 +82,18 @@ function TradeTabs:Initialize()
 
 	local parent = TradeSkillFrame
 	local tradeSpells = buildSpellList()
-	local i = 1
 	local prev, foundCooking
 
 	-- if player is a DK, insert runeforging at the top
 	if select(2, UnitClass("player")) == "DEATHKNIGHT" then
-		prev = self:CreateTab(i, parent, RUNEFORGING)
+		prev = self:CreateTab(parent, RUNEFORGING)
 		prev:SetPoint("TOPLEFT", parent, "TOPRIGHT", 2, -44)
-		i = i + 1
 	end
 
-	for i, slot in ipairs(tradeSpells) do
+	for _, slot in ipairs(tradeSpells) do
 		local _, spellID = GetSpellBookItemInfo(slot, BOOKTYPE_PROFESSION)
-		local tab = self:CreateTab(i, parent, spellID)
+		local tab = self:CreateTab(parent, spellID)
 		if spellID == 818 then foundCooking = true end
-		i = i + 1
 
 		local point, relPoint, x, y = "TOPLEFT", "BOTTOMLEFT", 0, -10
 		if not prev then
@@ -105,7 +105,7 @@ function TradeTabs:Initialize()
 	end
 
 	if foundCooking and PlayerHasToy(CHEF_HAT) and C_ToyBox.IsToyUsable(CHEF_HAT) then
-		local tab = self:CreateTab(i, parent, CHEF_HAT, true)
+		local tab = self:CreateTab(parent, CHEF_HAT, true)
 		tab:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -10)
 	end
 
@@ -121,7 +121,7 @@ end
 local function onLeave(self)
 	GameTooltip:Hide()
 	self:GetParent():UnlockHighlight()
-end   
+end
 
 local function updateSelection(self)
 	if IsCurrentSpell(self.spellID) then
@@ -132,7 +132,6 @@ local function updateSelection(self)
 		self.clickStopper:Hide()
 	end
 
-	-- CD monitoring
 	local start, duration
 	if self.type == "toy" then
 		start, duration = GetItemCooldown(self.spellID)
@@ -155,7 +154,14 @@ local function createClickStopper(button)
 	f:Hide()
 end
 
-function TradeTabs:CreateTab(i, parent, spellID, isToy)
+local function reskinTabs(button)
+	button:SetCheckedTexture(C.media.checked)
+	button:GetRegions():Hide()
+	F.CreateBG(button)
+	button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
+end
+
+function TradeTabs:CreateTab(parent, spellID, isToy)
 	local name, texture, _
 	if isToy then
 		_, name, texture = C_ToyBox.GetToyInfo(spellID)
@@ -174,12 +180,7 @@ function TradeTabs:CreateTab(i, parent, spellID, isToy)
 
 	button:SetNormalTexture(texture)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-
-	button:SetCheckedTexture(C.media.checked)
-	button:GetRegions():Hide()
-	F.CreateBDFrame(button)
-	button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
-
+	reskinTabs(button)
 	button.CD = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 	button.CD:SetAllPoints()
 
@@ -195,55 +196,3 @@ end
 
 TradeTabs:RegisterEvent("ADDON_LOADED")
 TradeTabs:SetScript("OnEvent", TradeTabs.OnEvent)
-
-
-
--- Fix Trade Skill Search
-hooksecurefunc("ChatEdit_InsertLink", function(text) -- shift-clicked
-	-- change from SearchBox:HasFocus to :IsShown again
-	if text and TradeSkillFrame and TradeSkillFrame:IsShown() then
-		local spellId = strmatch(text, "enchant:(%d+)")
-		local spell = GetSpellInfo(spellId)
-		local item = GetItemInfo(strmatch(text, "item:(%d+)") or 0)
-		local search = spell or item
-		if not search then return end
-		
-		-- search needs to be lowercase for .SetRecipeItemNameFilter
-		TradeSkillFrame.SearchBox:SetText(search:lower())
-		
-		-- jump to the recipe
-		if spell then -- can only select recipes on the learned tab
-			if PanelTemplates_GetSelectedTab(TradeSkillFrame.RecipeList) == 1 then
-				TradeSkillFrame:SelectRecipe(tonumber(spellId))
-			end
-		elseif item then
-			C_Timer.After(.1, function() -- wait a bit or we cant select the recipe yet
-				for _, v in pairs(TradeSkillFrame.RecipeList.dataList) do
-					if v.name == item then
-						--TradeSkillFrame.RecipeList:RefreshDisplay() -- didnt seem to help
-						TradeSkillFrame:SelectRecipe(v.recipeID)
-						return
-					end
-				end
-			end)
-		end
-	end
-end)
-
--- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
--- shift-leftclick should be reserved for the search box
-hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", function(_, button)
-	if TradeSkillFrame and TradeSkillFrame:IsShown() then
-		if button == "LeftButton" then
-			StackSplitFrame:Hide()
-		end
-	end
-end)
-
-hooksecurefunc("MerchantItemButton_OnModifiedClick", function(_, button)
-	if TradeSkillFrame and TradeSkillFrame:IsShown() then
-		if button == "LeftButton" then
-			StackSplitFrame:Hide()
-		end
-	end
-end)

@@ -1,7 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Aura')
+local MISC = F:GetModule('Misc')
 
-module.BuffsList = {
+
+MISC.BuffsList = {
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -9,14 +10,14 @@ module.BuffsList = {
 			depend = 205022,
 			spec = 1,
 			combat = true,
-			instance = false,
+			instance = true,
 			pvp = true,
 		},
 		{	spells = {	-- 奥术智慧
 				[1459] = true,
 			},
 			depend = 1459,
-			instance = false,
+			instance = true,
 		},
 	},
 	PRIEST = {
@@ -24,7 +25,7 @@ module.BuffsList = {
 				[21562] = true,
 			},
 			depend = 21562,
-			instance = false,
+			instance = true,
 		},
 	},
 	WARRIOR = {
@@ -32,7 +33,7 @@ module.BuffsList = {
 				[6673] = true,
 			},
 			depend = 6673,
-			instance = false,
+			instance = true,
 		},
 	},
 	SHAMAN = {
@@ -52,7 +53,7 @@ module.BuffsList = {
 			},
 			spec = 1,
 			combat = true,
-			instance = false,
+			instance = true,
 			pvp = true,
 		},
 		{	spells = {	-- 效果类毒药
@@ -64,12 +65,14 @@ module.BuffsList = {
 	},
 }
 
-local groups = module.BuffsList[C.Class]
+local groups = MISC.BuffsList[C.Class]
 local iconSize = 48
 local frames, parentFrame = {}
-local pairs, tinsert = pairs, table.insert
+local GetSpecialization, InCombatLockdown, GetZonePVPInfo, UnitInVehicle = GetSpecialization, InCombatLockdown, GetZonePVPInfo, UnitInVehicle
+local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
+local pairs, tinsert, next = pairs, table.insert, next
 
-local function UpdateMissingBuffs(cfg)
+function MISC:Reminder_Update(cfg)
 	local frame = cfg.frame
 	local depend = cfg.depend
 	local spec = cfg.spec
@@ -100,14 +103,11 @@ local function UpdateMissingBuffs(cfg)
 	end
 end
 
-local function AddMissingBuffs(cfg)
+function MISC:Reminder_Create(cfg)
 	local frame = CreateFrame('Frame', nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
-	frame.glow = F.CreateSD(frame, .5, 3, 3)
-	if frame.glow then
-		frame.glow:SetBackdropBorderColor(1, 1, 1)
-	end
+	F.CreateSD(frame)
 	for spell in pairs(cfg.spells) do
 		frame.Icon:SetTexture(GetSpellTexture(spell))
 		break
@@ -119,7 +119,7 @@ local function AddMissingBuffs(cfg)
 	tinsert(frames, frame)
 end
 
-local function UpdateAnchor()
+function MISC:Reminder_UpdateAnchor()
 	local index = 0
 	local offset = iconSize + 5
 	for _, frame in next, frames do
@@ -131,15 +131,15 @@ local function UpdateAnchor()
 	parentFrame:SetWidth(offset * index)
 end
 
-local function UpdateEvent()
+function MISC:Reminder_OnEvent()
 	for _, cfg in pairs(groups) do
-		if not cfg.frame then AddMissingBuffs(cfg) end
-		UpdateMissingBuffs(cfg)
+		if not cfg.frame then MISC:Reminder_Create(cfg) end
+		MISC:Reminder_Update(cfg)
 	end
-	UpdateAnchor()
+	MISC:Reminder_UpdateAnchor()
 end
 
-function module:MissingBuff()
+function MISC:MissingBuffs()
 	if not groups then return end
 	if not C.general.missingBuffs then return end
 
@@ -147,11 +147,11 @@ function module:MissingBuff()
 	parentFrame:SetPoint('TOP', 0, -100)
 	parentFrame:SetSize(iconSize, iconSize)
 
-	F:RegisterEvent('UNIT_AURA', UpdateEvent, 'player')
-	F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateEvent)
-	F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateEvent)
-	F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateEvent)
-	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateEvent)
-	F:RegisterEvent('UNIT_ENTERED_VEHICLE', UpdateEvent)
-	F:RegisterEvent('UNIT_EXITED_VEHICLE', UpdateEvent)
+	F:RegisterEvent('UNIT_AURA', MISC.Reminder_OnEvent, 'player')
+	F:RegisterEvent('UNIT_EXITED_VEHICLE', MISC.Reminder_OnEvent)
+	F:RegisterEvent('UNIT_ENTERED_VEHICLE', MISC.Reminder_OnEvent)
+	F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.Reminder_OnEvent)
+	F:RegisterEvent('PLAYER_REGEN_DISABLED', MISC.Reminder_OnEvent)
+	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', MISC.Reminder_OnEvent)
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', MISC.Reminder_OnEvent)
 end

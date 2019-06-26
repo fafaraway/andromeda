@@ -4,21 +4,22 @@ local BLIZZARD = F:RegisterModule('Blizzard')
 
 function BLIZZARD:OnLogin()
 	self:Fonts()
-	self:PetBattle()
+	self:BuffFrame()
+	self:ReskinPetBattleUI()
 	self:ColourPicker()
 	self:RepositionUIWidgets()
 	self:QuestTracker()
-	self:CooldownCount()
-	self:RepositionAlerts()
+	self:Cooldown()
 	self:RemoveTalkingHead()
 	self:RemoveBossBanner()
 	self:SkipAzeriteAnimation()
 	self:Errors()
-	self:DigSiteBar()
+	self:ReskinDigBar()
 	self:Loot()
 	self:RaidManager()
 	self:DurabilityIndicator()
 	self:VehicleIndicator()
+	self:QuickJoin()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -31,7 +32,7 @@ function BLIZZARD:OnLogin()
 end
 
 
--- reposition durability indicator
+-- Reposition durability indicator
 function BLIZZARD:DurabilityIndicator()
 	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
 		if parent ~= UIParent then
@@ -43,35 +44,22 @@ function BLIZZARD:DurabilityIndicator()
 	end)
 end
 
--- reposition vehicle indicator
+-- Reposition vehicle indicator
 function BLIZZARD:VehicleIndicator()
-	local vehicleMover = F.CreateGear(VehicleSeatIndicator, 'FreeUIVehicleSeatMover')
-	vehicleMover:SetPoint('BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0)
-	vehicleMover:SetFrameStrata('HIGH')
-	F.AddTooltip(vehicleMover, 'ANCHOR_TOP', L['TOGGLE'], 'system')
-	F.CreateMF(vehicleMover)
+	local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', UIParent)
+	frame:SetSize(125, 125)
+	local mover = F.Mover(frame, L['MOVER_VEHICLE_INDICATOR'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
 
-	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(_, _, parent)
-		if parent ~= vehicleMover then
-			VehicleSeatIndicator:SetScale(.7)
-			VehicleSeatIndicator:ClearAllPoints()
-			VehicleSeatIndicator:SetClampedToScreen(true)
-			VehicleSeatIndicator:SetPoint('BOTTOMRIGHT', vehicleMover, 'BOTTOMLEFT', -5, 0)
+	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
+		if parent == 'MinimapCluster' or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint('TOPLEFT', frame)
+			self:SetScale(.7)
 		end
 	end)
 end
 
-
--- reposition alert popup
-function BLIZZARD:RepositionAlerts()
-	local function alertFrameMover(self, ...)
-		_G.AlertFrame:ClearAllPoints()
-		_G.AlertFrame:SetPoint('CENTER', UIParent, 0, 200)
-	end
-	hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', alertFrameMover)
-end
-
--- remove talking head
+-- Remove talking head
 function BLIZZARD:RemoveTalkingHead()
 	local f = CreateFrame('Frame')
 	function f:OnEvent(event, addon)
@@ -119,7 +107,7 @@ function BLIZZARD:RepositionUIWidgets()
 	local belowMiniMapcontainer = _G.UIWidgetBelowMinimapContainerFrame
 
 	local topCenterHolder = CreateFrame('Frame', 'TopCenterContainerHolder', UIParent)
-	topCenterHolder:SetPoint("TOP", UIParent, "TOP", 0, -30)
+	topCenterHolder:SetPoint('TOP', UIParent, 'TOP', 0, -30)
 	topCenterHolder:SetSize(10, 58)
 
 	local belowMiniMapHolder = CreateFrame('Frame', 'BelowMinimapContainerHolder', UIParent)
@@ -186,3 +174,57 @@ function BLIZZARD:SkipAzeriteAnimation()
 end
 
 
+function BLIZZARD:ReskinDigBar()
+	local frame, xpBar
+	local customPosition = false
+
+	local function setPosition()
+		frame:SetPoint("TOP", UIParent, "TOP", 0, -50)
+	end
+
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("ADDON_LOADED")
+	f:SetScript("OnEvent", function(self, _, addon)
+		if addon ~= "Blizzard_ArchaeologyUI" then return end
+		self:UnregisterEvent("ADDON_LOADED")
+
+		frame = ArcheologyDigsiteProgressBar
+		local bar = frame.FillBar
+
+		frame.Shadow:Hide()
+		frame.BarBackground:Hide()
+		frame.BarBorderAndOverlay:Hide()
+
+		if C.Client == 'zhCN' or C.Client == 'zhTW' then
+			frame.BarTitle:SetFont(C.font.normal, 11, "OUTLINE")
+		else
+			F.SetFS(frame.BarTitle)
+		end
+
+		frame.BarTitle:SetPoint("CENTER", 0, 16)
+
+		local width = C.unitframe.player_width
+		bar:SetWidth(width)
+		frame.Flash:SetWidth(width + 22)
+
+		bar:SetStatusBarTexture(C.media.sbTex)
+		bar:SetStatusBarColor(221/255, 197/255, 162/255)
+
+		F.CreateBDFrame(bar)
+		F.CreateSD(bar)
+
+		--xpBar = FreeUIExpBar:GetParent()
+
+		frame:HookScript("OnShow", setPosition)
+		--xpBar:HookScript("OnShow", setPosition)
+		--xpBar:HookScript("OnHide", setPosition)
+
+		hooksecurefunc(frame, "SetPoint", function()
+			if not customPosition then
+				customPosition = true
+				setPosition()
+				customPosition = false
+			end
+		end)
+	end)
+end

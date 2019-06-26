@@ -1,24 +1,20 @@
 local F, C, L = unpack(select(2, ...))
-if not C.aura.enable then return end
-local module = F:RegisterModule('Aura')
+local BLIZZARD = F:GetModule('Blizzard')
 
 
 local BuffFrame = BuffFrame
-local buffsPerRow, buffSize, margin, offset = C.aura.buffPerRow, C.aura.buffSize, C.aura.paddingX, C.aura.paddingY
-local debuffsPerRow, debuffSize = C.aura.buffPerRow, C.aura.debuffSize
+local buffsPerRow, buffSize, margin, offset = 10, 42, 6, 8
+local debuffsPerRow, debuffSize = 10, 50
 local parentFrame, buffAnchor, debuffAnchor
 local format, mod = string.format, mod
 
-function module:OnLogin()
-	self:MissingBuff()
-	
+function BLIZZARD:BuffFrame()
 	parentFrame = CreateFrame("Frame", nil, UIParent)
 	parentFrame:SetSize(buffSize, buffSize)
-	buffAnchor = F.Mover(parentFrame, L['MOVER_BUFFS'], "BuffAnchor", C.aura.position, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
+	buffAnchor = F.Mover(parentFrame, L['MOVER_BUFFS'], "BuffAnchor", {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -50}, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)
 	debuffAnchor = F.Mover(parentFrame, L['MOVER_DEBUFFS'], "DebuffAnchor", {"TOPRIGHT", buffAnchor, "BOTTOMRIGHT", 0, -offset}, (debuffSize + margin)*debuffsPerRow, (debuffSize + offset)*2)
 	parentFrame:ClearAllPoints()
 	parentFrame:SetPoint("TOPRIGHT", buffAnchor)
-
 
 	for i = 1, 3 do
 		local enchant = _G['TempEnchant'..i]

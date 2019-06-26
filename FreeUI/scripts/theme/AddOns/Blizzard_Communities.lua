@@ -27,22 +27,20 @@ C.themes["Blizzard_Communities"] = function()
 		if frame.AcceptButton then F.Reskin(frame.AcceptButton) end
 		if frame.DeclineButton then F.Reskin(frame.DeclineButton) end
 
-		if C.isNewPatch then
-			local optionsList = frame.OptionsList
-			if optionsList then
-				F.ReskinDropDown(optionsList.ClubFocusDropdown)
-				optionsList.ClubFocusDropdown.GuildFocusDropdownLabel:SetWidth(150)
-				F.ReskinDropDown(optionsList.ClubSizeDropdown)
-				F.ReskinRole(optionsList.TankRoleFrame, "TANK")
-				F.ReskinRole(optionsList.HealerRoleFrame, "HEALER")
-				F.ReskinRole(optionsList.DpsRoleFrame, "DPS")
-				F.ReskinInput(optionsList.SearchBox)
-				optionsList.SearchBox:SetSize(118, 22)
-				F.Reskin(optionsList.Search)
-				optionsList.Search:ClearAllPoints()
-				optionsList.Search:SetPoint("TOPRIGHT", optionsList.SearchBox, "BOTTOMRIGHT", 0, -2)
-				F.Reskin(frame.PendingClubs)
-			end
+		local optionsList = frame.OptionsList
+		if optionsList then
+			F.ReskinDropDown(optionsList.ClubFocusDropdown)
+			optionsList.ClubFocusDropdown.GuildFocusDropdownLabel:SetWidth(150)
+			F.ReskinDropDown(optionsList.ClubSizeDropdown)
+			F.ReskinRole(optionsList.TankRoleFrame, "TANK")
+			F.ReskinRole(optionsList.HealerRoleFrame, "HEALER")
+			F.ReskinRole(optionsList.DpsRoleFrame, "DPS")
+			F.ReskinInput(optionsList.SearchBox)
+			optionsList.SearchBox:SetSize(118, 22)
+			F.Reskin(optionsList.Search)
+			optionsList.Search:ClearAllPoints()
+			optionsList.Search:SetPoint("TOPRIGHT", optionsList.SearchBox, "BOTTOMRIGHT", 0, -2)
+			F.Reskin(frame.PendingClubs)
 		end
 	end
 
@@ -203,7 +201,6 @@ C.themes["Blizzard_Communities"] = function()
 	local detailFrame = CommunitiesFrame.GuildMemberDetailFrame
 	F.StripTextures(detailFrame)
 	F.SetBD(detailFrame)
-	if not C.isNewPatch then detailFrame.BackBackground:Hide() end
 	F.ReskinClose(detailFrame.CloseButton)
 	F.Reskin(detailFrame.RemoveButton)
 	F.Reskin(detailFrame.GroupInviteButton)
@@ -217,7 +214,6 @@ C.themes["Blizzard_Communities"] = function()
 
 	do
 		local dialog = CommunitiesSettingsDialog
-		if not C.isNewPatch then F.StripTextures(dialog) end
 		F.SetBD(dialog)
 		F.Reskin(dialog.ChangeAvatarButton)
 		F.Reskin(dialog.Accept)
@@ -229,17 +225,6 @@ C.themes["Blizzard_Communities"] = function()
 		F.CreateBDFrame(dialog.Description, .25)
 		F.StripTextures(dialog.MessageOfTheDay)
 		F.CreateBDFrame(dialog.MessageOfTheDay, .25)
-
-		if C.isNewPatch then
-			dialog.BG:Hide()
-			F.ReskinCheck(dialog.ShouldListClub.Button)
-			F.ReskinCheck(dialog.AutoAcceptApplications.Button)
-			F.ReskinCheck(dialog.MaxLevelOnly.Button)
-			F.ReskinCheck(dialog.MinIlvlOnly.Button)
-			F.ReskinInput(dialog.MinIlvlOnly.EditBox)
-			F.ReskinDropDown(dialog.ClubFocusDropdown)
-			F.ReskinDropDown(dialog.LookingForDropdown)
-		end
 	end
 
 	do
@@ -396,19 +381,11 @@ C.themes["Blizzard_Communities"] = function()
 
 	F.StripTextures(CommunitiesFrameGuildDetailsFrame)
 
-	if C.isNewPatch then
-		hooksecurefunc("GuildNewsButton_SetNews", function(button)
-			if button.header:IsShown() then
-				button.header:SetAlpha(0)
-			end
-		end)
-	else
-		hooksecurefunc("CommunitiesGuildNewsButton_SetNews", function(button)
-			if button.header:IsShown() then
-				button.header:SetAlpha(0)
-			end
-		end)
-	end
+	hooksecurefunc("GuildNewsButton_SetNews", function(button)
+		if button.header:IsShown() then
+			button.header:SetAlpha(0)
+		end
+	end)
 
 	F.StripTextures(CommunitiesGuildNewsFiltersFrame)
 	CommunitiesGuildNewsFiltersFrameBg:Hide()

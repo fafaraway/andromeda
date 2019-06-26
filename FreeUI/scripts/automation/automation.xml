@@ -1,6 +1,5 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='actioncam.lua'/>
-	<Script file='buy.lua'/>
 	<Script file='invite.lua'/>
 	<Script file='quest.lua'/>
 	<Script file='repair.lua'/>

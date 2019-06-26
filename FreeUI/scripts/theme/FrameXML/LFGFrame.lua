@@ -92,9 +92,10 @@ tinsert(C.themes["FreeUI"], function()
 		end
 	end)
 
-	F.StripTextures(LFGDungeonReadyDialog, true)
+	F.StripTextures(LFGDungeonReadyDialog, 0)
 	F.SetBD(LFGDungeonReadyDialog)
 	F.CreateBD(LFGInvitePopup)
+	F.StripTextures(LFGInvitePopup)
 	F.CreateSD(LFGInvitePopup)
 	F.CreateBD(LFGDungeonReadyStatus)
 	F.CreateSD(LFGDungeonReadyStatus)

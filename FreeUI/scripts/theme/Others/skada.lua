@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("Theme")
+local THEME = F:GetModule("Theme")
 
-function module:ReskinSkada()
+function THEME:ReskinSkada()
 	if not C.appearance.ReskinSkada then return end
 	if not IsAddOnLoaded("Skada") then return end
 

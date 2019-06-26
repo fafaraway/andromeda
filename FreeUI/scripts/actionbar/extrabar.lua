@@ -24,7 +24,6 @@ function Bar:CreateExtrabar()
 	--the extra button
 	local button = ExtraActionButton1
 	table.insert(buttonList, button) --add the button object to the list
-	table.insert(self.activeButtons, button)
 	
 	button:SetSize(cfg.buttonSizeHuge*C.Mult, cfg.buttonSizeHuge*C.Mult)
 

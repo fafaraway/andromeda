@@ -6,7 +6,6 @@ function Bar:OnLogin()
 	local cfg = C.actionbar
 	if not cfg.enable then return end
 
-	self.activeButtons = {}
 	local buttonSize = cfg.buttonSizeNormal*C.Mult
 	local padding = cfg.padding*C.Mult
 	local margin = cfg.margin*C.Mult
@@ -25,7 +24,6 @@ function Bar:OnLogin()
 	for i = 1, num do
 		local button = _G['ActionButton'..i]
 		table.insert(buttonList, button) --add the button object to the list
-		table.insert(self.activeButtons, button)
 		button:SetParent(frame)
 		button:SetSize(buttonSize, buttonSize)
 		button:ClearAllPoints()
@@ -85,6 +83,7 @@ function Bar:OnLogin()
 	self:CreateLeaveVehicle()
 	self:HideBlizz()
 	self:ReskinBars()
+	self:HookActionEvents()
 
 	--vehicle fix
 	local function getActionTexture(button)

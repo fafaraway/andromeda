@@ -801,7 +801,7 @@ local function tooltipOnEnter(self)
 		elseif self.color == 'system' then
 			r, g, b = 1, .8, 0
 		end
-		GameTooltip:AddLine(self.text, r, g, b)
+		GameTooltip:AddLine(self.text, r, g, b, 1)
 	end
 	GameTooltip:Show()
 end
@@ -1144,7 +1144,7 @@ function F.FormatTime(s)
 	elseif s >= minute then
 		return format('|cff67acdb%d|r', s/minute), s % minute -- blue
 	elseif s < 5 then
-		if C.general.cooldownCount_decimal then
+		if C.general.cooldown_decimal then
 			return format('|cffc50046%.1f|r', s), s - format('%.1f', s)
 		else
 			return format('|cffc50046%d|r', s + .5), s - floor(s)
@@ -1299,14 +1299,14 @@ function F:ReskinRole(role)
 	if self.background then self.background:SetTexture('') end
 	local cover = self.cover or self.Cover
 	if cover then cover:SetTexture('') end
-	local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or (C.isNewPatch and self.Icon)
+	local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
 	if texture then
 		texture:SetTexture(C.media.roleIcons)
 		texture:SetTexCoord(F.GetRoleTexCoord(role))
 	end
 	self.bg = F.CreateBDFrame(self)
 
-	local checkButton = self.checkButton or self.CheckButton or (C.isNewPatch and self.CheckBox)
+	local checkButton = self.checkButton or self.CheckButton or self.CheckBox
 	if checkButton then
 		checkButton:SetFrameLevel(self:GetFrameLevel() + 2)
 		checkButton:SetPoint('BOTTOMLEFT', -2, -2)

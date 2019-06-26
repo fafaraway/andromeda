@@ -1,8 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-if not C.inventory.enable then return end
-local cargBags = FreeUI.cargBags
 local module = F:RegisterModule('Inventory')
 
+local cargBags = FreeUI.cargBags
 local ipairs, strmatch, unpack = ipairs, string.match, unpack
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
@@ -11,7 +10,6 @@ local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBan
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_Timer.After
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
-
 
 local sortCache = {}
 function module:ReverseSort()
@@ -229,22 +227,25 @@ end
 
 local deleteEnable
 function module:CreateDeleteButton()
-	if not C.inventory.deleteButton then return end
+	local disabledText = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t"..L["INVENTORY_DELETE_MODE"]
+	local enabledText = disabledText.."\n\n"..C.InfoColor..L["INVENTORY_DELETE_MODE_ENABLED"]
 
 	local bu = F.CreateButton(self, 17, 17, true, 'Interface\\AddOns\\FreeUI\\assets\\SellJunk')
-	bu:SetScript('OnClick', function()
+	bu:SetScript('OnClick', function(self)
 		deleteEnable = not deleteEnable
 		if deleteEnable then
-			bu:SetBackdropBorderColor(1, 0, 0)
+			self:SetBackdropBorderColor(1, .8, 0)
+			self.text = enabledText
 			UIErrorsFrame:AddMessage(C.RedColor..L["INVENTORY_DELETE_MODE_ENABLED"])
 			print(C.RedColor..L["INVENTORY_DELETE_MODE_ENABLED"])
 		else
-			bu:SetBackdropBorderColor(0, 0, 0)
+			self:SetBackdropBorderColor(0, 0, 0)
+			self.text = disabledText
 			UIErrorsFrame:AddMessage(C.GreenColor..L["INVENTORY_DELETE_MODE_DISABLED"])
 			print(C.GreenColor..L['INVENTORY_DELETE_MODE_DISABLED'])
 		end
 	end)
-	F.AddTooltip(bu, 'ANCHOR_TOP', '|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t'..L['INVENTORY_DELETE_MODE'])
+	F.AddTooltip(bu, 'ANCHOR_TOP', disabledText)
 
 	return bu
 end
@@ -260,9 +261,19 @@ end
 
 
 function module:OnLogin()
+	if not C.inventory.enable then return end
+
+	local bagsScale = C.inventory.bagScale
+	local bagsWidth = C.inventory.bagColumns
+	local bankWidth = C.inventory.bankColumns
+	local iconSize = C.inventory.itemSlotSize
+	local showItemLevel = C.inventory.itemLevel
+	local deleteButton = C.inventory.deleteButton
+	local itemSetFilter = C.inventory.gearSetFilter
+
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
-	Backpack:SetScale(C.inventory.bagScale)
+	Backpack:SetScale(bagsScale)
 	Backpack:HookScript('OnShow', function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
 	Backpack:HookScript('OnHide', function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
@@ -272,52 +283,52 @@ function module:OnLogin()
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
 
-		f.main = MyContainer:New('Main', {Columns = C.inventory.bagColumns, Bags = 'bags'})
+		f.main = MyContainer:New('Main', {Columns = bagsWidth, Bags = 'bags'})
 		f.main:SetFilter(onlyBags, true)
 		f.main:SetPoint('BOTTOMRIGHT', -50, 50)
 
-		f.junk = MyContainer:New('Junk', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.junk = MyContainer:New('Junk', {Columns = bagsWidth, Parent = f.main})
 		f.junk:SetFilter(bagsJunk, true)
 
-		f.azeriteItem = MyContainer:New('AzeriteItem', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.azeriteItem = MyContainer:New('AzeriteItem', {Columns = bagsWidth, Parent = f.main})
 		f.azeriteItem:SetFilter(bagAzeriteItem, true)
 
-		f.equipment = MyContainer:New('Equipment', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.equipment = MyContainer:New('Equipment', {Columns = bagsWidth, Parent = f.main})
 		f.equipment:SetFilter(bagEquipment, true)
 
-		f.consumble = MyContainer:New('Consumble', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.consumble = MyContainer:New('Consumble', {Columns = bagsWidth, Parent = f.main})
 		f.consumble:SetFilter(bagConsumble, true)
 
-		f.bagCompanion = MyContainer:New('BagCompanion', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.bagCompanion = MyContainer:New('BagCompanion', {Columns = bagsWidth, Parent = f.main})
 		f.bagCompanion:SetFilter(bagMountPet, true)
 
-		f.tradegoods = MyContainer:New('TradeGoods', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.tradegoods = MyContainer:New('TradeGoods', {Columns = bagsWidth, Parent = f.main})
 		f.tradegoods:SetFilter(bagTradeGoods, true)
 
-		f.questitem = MyContainer:New('QuestItem', {Columns = C.inventory.bagColumns, Parent = f.main})
+		f.questitem = MyContainer:New('QuestItem', {Columns = bagsWidth, Parent = f.main})
 		f.questitem:SetFilter(bagQuestItem, true)
 
-		f.bank = MyContainer:New('Bank', {Columns = C.inventory.bankColumns, Bags = 'bank'})
+		f.bank = MyContainer:New('Bank', {Columns = bankWidth, Bags = 'bank'})
 		f.bank:SetFilter(onlyBank, true)
 		f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
 		f.bank:Hide()
 
-		f.bankAzeriteItem = MyContainer:New('BankAzeriteItem', {Columns = C.inventory.bankColumns, Parent = f.bank})
+		f.bankAzeriteItem = MyContainer:New('BankAzeriteItem', {Columns = bankWidth, Parent = f.bank})
 		f.bankAzeriteItem:SetFilter(bankAzeriteItem, true)
 
-		f.bankLegendary = MyContainer:New('BankLegendary', {Columns = C.inventory.bankColumns, Parent = f.bank})
+		f.bankLegendary = MyContainer:New('BankLegendary', {Columns = bankWidth, Parent = f.bank})
 		f.bankLegendary:SetFilter(bankLegendary, true)
 
-		f.bankEquipment = MyContainer:New('BankEquipment', {Columns = C.inventory.bankColumns, Parent = f.bank})
+		f.bankEquipment = MyContainer:New('BankEquipment', {Columns = bankWidth, Parent = f.bank})
 		f.bankEquipment:SetFilter(bankEquipment, true)
 
-		f.bankConsumble = MyContainer:New('BankConsumble', {Columns = C.inventory.bankColumns, Parent = f.bank})
+		f.bankConsumble = MyContainer:New('BankConsumble', {Columns = bankWidth, Parent = f.bank})
 		f.bankConsumble:SetFilter(bankConsumble, true)
 
-		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = C.inventory.bankColumns, Parent = f.bank})
+		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = bankWidth, Parent = f.bank})
 		f.bankCompanion:SetFilter(bankMountPet, true)
 
-		f.reagent = MyContainer:New('Reagent', {Columns = C.inventory.bankColumns})
+		f.reagent = MyContainer:New('Reagent', {Columns = bankWidth})
 		f.reagent:SetFilter(onlyReagent, true)
 		f.reagent:SetPoint('BOTTOMLEFT', f.bank)
 		f.reagent:Hide()
@@ -339,7 +350,6 @@ function module:OnLogin()
 	local MyButton = Backpack:GetItemButtonClass()
 	MyButton:Scaffold('Default')
 
-	local iconSize = C.inventory.itemSlotSize
 	function MyButton:OnCreate()
 		self:SetNormalTexture(nil)
 		self:SetPushedTexture(nil)
@@ -369,7 +379,7 @@ function module:OnLogin()
 		self.Azerite:SetAtlas('AzeriteIconFrame')
 		self.Azerite:SetAllPoints()
 
-		if C.inventory.itemLevel then
+		if showItemLevel then
 			self.iLvl = F.CreateFS(self, 'pixel', '', nil, nil, true, 'BOTTOMRIGHT', 2, 2)
 		end
 
@@ -400,7 +410,7 @@ function module:OnLogin()
 
 		self.ShowNewItems = true
 
-		if C.inventory.deleteButton then
+		if deleteButton then
 			self:HookScript('OnClick', deleteButtonOnClick)
 		end
 	end
@@ -432,7 +442,7 @@ function module:OnLogin()
 			self.Azerite:SetAlpha(0)
 		end
 
-		if C.inventory.itemLevel then
+		if deleteButton then
 			if item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR) then
 				local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 				local color = BAG_ITEM_QUALITY_COLORS[item.rarity]
@@ -495,7 +505,7 @@ function module:OnLogin()
 		if strmatch(name, 'AzeriteItem$') then
 			label = L['INVENTORY_AZERITEARMOR']
 		elseif strmatch(name, 'Equipment$') then
-			if C.inventory.gearSetFilter then
+			if itemSetFilter then
 				label = L['INVENTORY_EQUIPEMENTSET']
 			else
 				label = BAG_FILTER_EQUIPMENT
@@ -529,7 +539,7 @@ function module:OnLogin()
 			module.CreateBagBar(self, settings, 4)
 			buttons[2] = module.CreateRestoreButton(self, f)
 			buttons[3] = module.CreateBagToggle(self)
-			buttons[5] = module.CreateDeleteButton(self)
+			if deleteButton then buttons[5] = module.CreateDeleteButton(self) end
 		elseif name == 'Bank' then
 			module.CreateBagBar(self, settings, 7)
 			buttons[2] = module.CreateReagentButton(self, f)

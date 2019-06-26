@@ -14,7 +14,7 @@ tinsert(C.themes["FreeUI"], function()
 		end
 		F.CreateBD(InterfaceOptionsFrame)
 		F.CreateSD(InterfaceOptionsFrame)
-		if C.isNewPatch then InterfaceOptionsFrame.Border:Hide() end
+		InterfaceOptionsFrame.Border:Hide()
 
 		InterfaceOptionsFrameHeader:SetTexture("")
 		InterfaceOptionsFrameHeader:ClearAllPoints()

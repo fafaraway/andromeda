@@ -1,8 +1,8 @@
-local F, C, L = unpack(select(2, ...))
-local module = F:GetModule("Theme")
+local F, C = unpack(select(2, ...))
+local THEME = F:GetModule('Theme')
 
 
-function module:ReskinBigWigs()
+function THEME:ReskinBW()
 	if not C.appearance.reskinBW then return end
 	if not IsAddOnLoaded("BigWigs") then return end
 

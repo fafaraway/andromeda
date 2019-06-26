@@ -1,11 +1,11 @@
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
-function BLIZZARD:PetBattle()
+local r, g, b, pairs = C.r, C.g, C.b, pairs
+
+function BLIZZARD:ReskinPetBattleUI()
 	if not C.general.petBattle then return end
 	
-	local r, g, b = C.r, C.g, C.b
-
 	-- Head Frame
 	local frame = PetBattleFrame
 	for i = 1, 3 do

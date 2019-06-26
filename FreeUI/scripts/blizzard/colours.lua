@@ -1,9 +1,16 @@
 local F, C = unpack(select(2, ...))
+local oUF = FreeUI.oUF
 
--- based on yClassColors by yleaf
+-- yClassColors, by yleaf
 
+local format, strsplit, ipairs, tinsert, strfind, gsub, strmatch, strsub, pairs, type = string.format, string.split, ipairs, table.insert, string.find, string.gsub, string.match, string.sub, pairs, type
+
+
+-- Colors
 local function classColor(class, showRGB)
 	local color = C.ClassColors[C.ClassList[class] or class]
+	if not color then color = C.ClassColors['PRIEST'] end
+
 	if showRGB then
 		return color.r, color.g, color.b
 	else
@@ -34,8 +41,12 @@ local function smoothColor(cur, max, color)
 	return F.HexRGB(r, g, b)
 end
 
-
 -- Guild
+local currentView
+local function setView(view)
+	currentView = view
+end
+
 local function updateGuildView()
 	currentView = currentView or GetCVar('guildRosterView')
 
@@ -83,10 +94,8 @@ local function updateGuildUI(event, addon)
 end
 F:RegisterEvent('ADDON_LOADED', updateGuildUI)
 
-
 -- Friends
 local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%%d', '%%s')
-FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%$d', '%$s')
 
 local function friendsFrame()
 	local scrollFrame = FriendsFrameFriendsScrollFrame
@@ -126,7 +135,6 @@ end
 hooksecurefunc(FriendsFrameFriendsScrollFrame, 'update', friendsFrame)
 hooksecurefunc('FriendsFrame_UpdateFriends', friendsFrame)
 
-
 -- Whoframe
 local columnTable = {}
 local function updateWhoList()
@@ -140,7 +148,6 @@ local function updateWhoList()
 		local nameText = _G['WhoFrameButton'..i..'Name']
 		local levelText = _G['WhoFrameButton'..i..'Level']
 		local variableText = _G['WhoFrameButton'..i..'Variable']
-
 		local info = C_FriendList.GetWhoInfo(index)
 		if info then
 			local guild, level, race, zone, class = info.fullGuildName, info.level, info.raceStr, info.area, info.filename
@@ -162,10 +169,7 @@ end
 hooksecurefunc('WhoList_Update', updateWhoList)
 
 
--- chat
-local strfind, format, gsub, strmatch, strsub = string.find, string.format, string.gsub, string.match, string.sub
-local pairs, type = pairs, type
-
+-- Chatframe
 local blizzHexColors = {}
 for class, color in pairs(C.ClassColors) do
 	blizzHexColors[color.colorStr] = class
@@ -222,10 +226,7 @@ do
 end
 
 
--- custom reputation color
-local _, ns = ...
-local oUF = ns.oUF
-
+-- Reputation
 hooksecurefunc('ReputationFrame_Update', function(showLFGPulse)
 	local numFactions = GetNumFactions()
 	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)

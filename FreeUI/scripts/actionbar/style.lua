@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
-local Bar = F:GetModule('Actionbar')
-
+local ACTIONBAR = F:GetModule('Actionbar')
+local _G = getfenv(0)
 local pairs, gsub = pairs, string.gsub
 
 local abFont = {C.font.pixel, 8, 'OUTLINEMONOCHROME'}
-local assetsPath = 'Interface\\Addons\\FreeUI\\assets\\actionbar\\'
+local assetsPath = 'Interface\\Addons\\FreeUI\\assets\\'
 local abAssets = {
 	normal		= assetsPath..'gloss',
 	flash		= assetsPath..'flash',
@@ -143,7 +143,7 @@ local replaces = {
 	{CAPSLOCK_KEY_TEXT, 'CL'},
 }
 
-function F:UpdateHotKey()
+function ACTIONBAR:UpdateHotKey()
 	local hotkey = _G[self:GetName()..'HotKey']
 
 	if hotkey and hotkey:IsShown() and not C.actionbar.hotKey then
@@ -182,7 +182,7 @@ end
 
 
 
-function F:StyleActionButton(button, cfg)
+function ACTIONBAR:StyleActionButton(button, cfg)
 	if not button then return end
 	if button.__styled then return end
 
@@ -242,7 +242,7 @@ function F:StyleActionButton(button, cfg)
 	if hotkey then
 		if C.actionbar.hotKey then
 			hotkey:SetParent(overlay)
-			F.UpdateHotKey(button)
+			ACTIONBAR.UpdateHotKey(button)
 			SetupFontString(hotkey, cfg.hotkey)
 		else
 			hotkey:Hide()
@@ -261,7 +261,7 @@ function F:StyleActionButton(button, cfg)
 end
 
 
-function F:StyleExtraActionButton(cfg)
+function ACTIONBAR:StyleExtraActionButton(cfg)
 	local button = ExtraActionButton1
 	if button.__styled then return end
 
@@ -298,7 +298,7 @@ function F:StyleExtraActionButton(cfg)
 	overlay:SetAllPoints()
 	if C.actionbar.hotKey then
 		hotkey:SetParent(overlay)
-		F.UpdateHotKey(button)
+		ACTIONBAR.UpdateHotKey(button)
 		SetupFontString(hotkey, cfg.hotkey)
 	else
 		hotkey:Hide()
@@ -314,36 +314,36 @@ function F:StyleExtraActionButton(cfg)
 end
 
 
-function F:StyleAllActionButtons(cfg)
+function ACTIONBAR:StyleAllActionButtons(cfg)
 	for i = 1, NUM_ACTIONBAR_BUTTONS do
-		F:StyleActionButton(_G['ActionButton'..i], cfg)
-		F:StyleActionButton(_G['MultiBarBottomLeftButton'..i], cfg)
-		F:StyleActionButton(_G['MultiBarBottomRightButton'..i], cfg)
-		F:StyleActionButton(_G['MultiBarRightButton'..i], cfg)
-		F:StyleActionButton(_G['MultiBarLeftButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['ActionButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['MultiBarBottomLeftButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['MultiBarBottomRightButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['MultiBarRightButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['MultiBarLeftButton'..i], cfg)
 	end
 
 	for i = 1, 6 do
-		F:StyleActionButton(_G['OverrideActionBarButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['OverrideActionBarButton'..i], cfg)
 	end
 
 	--petbar buttons
 	for i = 1, NUM_PET_ACTION_SLOTS do
-		F:StyleActionButton(_G['PetActionButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['PetActionButton'..i], cfg)
 	end
 
 	--stancebar buttons
 	for i = 1, NUM_STANCE_SLOTS do
-		F:StyleActionButton(_G['StanceButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['StanceButton'..i], cfg)
 	end
 
 	--possess buttons
 	for i = 1, NUM_POSSESS_SLOTS do
-		F:StyleActionButton(_G['PossessButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['PossessButton'..i], cfg)
 	end
 
 	--extra action button
-	F:StyleExtraActionButton(cfg)
+	ACTIONBAR:StyleExtraActionButton(cfg)
 
 	--spell flyout
 	SpellFlyoutBackgroundEnd:SetTexture(nil)
@@ -353,7 +353,7 @@ function F:StyleAllActionButtons(cfg)
 		local i = 1
 		local button = _G['SpellFlyoutButton'..i]
 		while button and button:IsShown() do
-			F:StyleActionButton(button, cfg)
+			ACTIONBAR:StyleActionButton(button, cfg)
 			i = i + 1
 			button = _G['SpellFlyoutButton'..i]
 		end
@@ -363,13 +363,13 @@ end
 
 
 
-function Bar:ReskinBars()
+function ACTIONBAR:ReskinBars()
 	local cfg = {
 		icon = {
 			texCoord = C.TexCoord,
 			points = {
-				{'TOPLEFT', 0, 0},
-				{'BOTTOMRIGHT', 0, 0},
+				{'TOPLEFT', C.Mult, -C.Mult},
+				{'BOTTOMRIGHT', -C.Mult, C.Mult},
 			},
 		},
 		flyoutBorder = {file = ''},
@@ -390,8 +390,8 @@ function Bar:ReskinBars()
 		highlightTexture = {
 			file = '',
 			points = {
-				{'TOPLEFT', 1, -1},
-				{'BOTTOMRIGHT', -1, 1},
+				{'TOPLEFT', C.Mult, -C.Mult},
+				{'BOTTOMRIGHT', -C.Mult, C.Mult},
 			},
 		},
 		cooldown = {
@@ -422,6 +422,6 @@ function Bar:ReskinBars()
 		},
 		buttonstyle = {file = ''},
 	}
-	F:StyleAllActionButtons(cfg)
-	hooksecurefunc('ActionButton_UpdateHotkeys', F.UpdateHotKey)
+	ACTIONBAR:StyleAllActionButtons(cfg)
+	hooksecurefunc('ActionButton_UpdateHotkeys', ACTIONBAR.UpdateHotKey)
 end

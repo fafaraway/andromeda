@@ -1,12 +1,40 @@
 local F, C, L = unpack(select(2, ...))
 local module = F:RegisterModule('Misc')
 
+local tostring, tonumber, pairs, select, random = tostring, tonumber, pairs, select, math.random
+local strsplit, strfind, strmatch, strupper, gsub = string.split, string.find, string.match, string.upper, gsub
+local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
+local GetNumArchaeologyRaces = GetNumArchaeologyRaces
+local GetNumArtifactsByRace = GetNumArtifactsByRace
+local GetArtifactInfoByRace = GetArtifactInfoByRace
+local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
+local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
+local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
+local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
+local EquipmentManager_RunAction = EquipmentManager_RunAction
+local GetInventoryItemTexture = GetInventoryItemTexture
+local GetItemInfo = GetItemInfo
+local BuyMerchantItem = BuyMerchantItem
+local GetMerchantItemLink = GetMerchantItemLink
+local GetMerchantItemMaxStack = GetMerchantItemMaxStack
+local GetItemQualityColor = GetItemQualityColor
+local Screenshot = Screenshot
+local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
+local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
+local GetNumSavedInstances = GetNumSavedInstances
+local GetInstanceInfo = GetInstanceInfo
+local GetSavedInstanceInfo = GetSavedInstanceInfo
+local SetSavedInstanceExtend = SetSavedInstanceExtend
+local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
+local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
+local EnumerateFrames = EnumerateFrames
+
 function module:OnLogin()
-	self:ItemLevel()
+	self:ShowItemLevel()
 	self:ProgressBar()
 	self:FlashCursor()
-	self:QuickJoin()
 	self:MissingStats()
+	self:MissingBuffs()
 	self:FasterLoot()
 	self:Vignette()
 	self:PVPMessageEnhancement()
@@ -21,8 +49,13 @@ function module:OnLogin()
 	self:CMGuildBest()
 	self:MailButton()
 	self:CombatText()
+	self:PetFilter()
 
 	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
+
+	if tonumber(GetCVar('cameraDistanceMaxZoomFactor')) ~= 2.6 then
+		SetCVar('cameraDistanceMaxZoomFactor', 2.6)
+	end
 end
 
 
@@ -153,14 +186,17 @@ function module:HookParagonRep()
 			local factionID = select(14, GetFactionInfo(factionIndex))
 			if factionID and C_Reputation.IsFactionParagon(factionID) then
 				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-				local barValue = mod(currentValue, threshold)
-				local factionStandingtext = L['PARAGON']..' ('..floor(currentValue/threshold)..')'
 
-				factionBar:SetMinMaxValues(0, threshold)
-				factionBar:SetValue(barValue)
-				factionStanding:SetText(factionStandingtext)
-				factionRow.standingText = factionStandingtext
-				factionRow.rolloverText = C.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+				if currentValue then
+					local barValue = mod(currentValue, threshold)
+					local factionStandingtext = L['PARAGON']..' ('..floor(currentValue/threshold)..')'
+
+					factionBar:SetMinMaxValues(0, threshold)
+					factionBar:SetValue(barValue)
+					factionStanding:SetText(factionStandingtext)
+					factionRow.standingText = factionStandingtext
+					factionRow.rolloverText = C.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
+				end
 			end
 		end
 	end
@@ -304,8 +340,6 @@ end
 
 -- TradeFrame hook
 do
-	local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
-	
 	local infoText = F.CreateFS(TradeFrame, {C.font.normal, 14}, '', nil, nil, true)
 	infoText:ClearAllPoints()
 	infoText:SetPoint('TOP', TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
@@ -326,3 +360,46 @@ do
 	end
 	hooksecurefunc('TradeFrame_Update', updateColor)
 end
+
+
+-- ALT+RightClick to buy a stack
+do
+	local cache = {}
+	local itemLink, id
+
+	StaticPopupDialogs['BUY_STACK'] = {
+		text = L['STACK_BUYING_CHECK'],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			if not itemLink then return end
+			BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+			cache[itemLink] = true
+			itemLink = nil
+		end,
+		hideOnEscape = 1,
+		hasItemFrame = 1,
+	}
+
+	local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
+	function MerchantItemButton_OnModifiedClick(self, ...)
+		if IsAltKeyDown() then
+			id = self:GetID()
+			itemLink = GetMerchantItemLink(id)
+			if not itemLink then return end
+			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
+			if maxStack and maxStack > 1 then
+				if not cache[itemLink] then
+					local r, g, b = GetItemQualityColor(quality or 1)
+					StaticPopup_Show('BUY_STACK', ' ', ' ', {['texture'] = texture, ['name'] = name, ['color'] = {r, g, b, 1}, ['link'] = itemLink, ['index'] = id, ['count'] = maxStack})
+				else
+					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+				end
+			end
+		end
+
+		old_MerchantItemButton_OnModifiedClick(self, ...)
+	end
+end
+
+

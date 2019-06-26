@@ -275,14 +275,14 @@ do
 	local appearance = FreeUIOptionsPanel.appearance
 	appearance.tab.Icon:SetTexture("Interface\\Icons\\Spell_Shadow_DeathAndDecay")
 
-	local enableTheme = ns.CreateCheckBox(appearance, "enableTheme", true, true)
-	enableTheme:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
+	local useGlobalTheme = ns.CreateCheckBox(appearance, "useGlobalTheme", true, true)
+	useGlobalTheme:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
 
 	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
-	vignette:SetPoint("LEFT", enableTheme, "RIGHT", 240, 0)
+	vignette:SetPoint("LEFT", useGlobalTheme, "RIGHT", 240, 0)
 
 	local addShadowBorder = ns.CreateCheckBox(appearance, "addShadowBorder", true, true)
-	addShadowBorder:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
+	addShadowBorder:SetPoint("TOPLEFT", useGlobalTheme, "BOTTOMLEFT", 0, -8)
 
 	local fontStyle = ns.CreateCheckBox(appearance, "reskinFonts", true, true)
 	fontStyle:SetPoint("LEFT", addShadowBorder, "RIGHT", 240, 0)

@@ -14,6 +14,7 @@ tinsert(C.themes["FreeUI"], function()
 	SendStationeryBackgroundRight:Hide()
 	InboxPrevPageButton:GetRegions():Hide()
 	InboxNextPageButton:GetRegions():Hide()
+	InboxTitleText:SetPoint("CENTER", MailFrame, 0, 195)
 
 	F.ReskinPortraitFrame(MailFrame)
 	F.ReskinPortraitFrame(OpenMailFrame)

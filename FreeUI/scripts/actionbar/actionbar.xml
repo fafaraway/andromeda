@@ -7,10 +7,9 @@
 	<Script file='stancebar.lua'/>
 	<Script file='petbar.lua'/>
 	<Script file='extrabar.lua'/>
-	<Script file='leave_vehicle.lua'/>
-	<Script file='hide_blizzart.lua'/>
-	<Script file='buttonstyle.lua'/>
-	<Script file='rangecolor.lua'/>
-	<Script file='keybind.lua'/>
-	<Script file='questbutton.lua'/>
+	<Script file='leavevehicle.lua'/>
+	<Script file='hideblizzart.lua'/>
+	<Script file='style.lua'/>
+	<Script file='range.lua'/>
+	<Script file='bind.lua'/>
 </Ui>

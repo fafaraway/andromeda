@@ -1,6 +1,13 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
+	local function alertFrameMover(self, ...)
+		_G.AlertFrame:ClearAllPoints()
+		_G.AlertFrame:SetPoint('CENTER', UIParent, 0, 200)
+	end
+	hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', alertFrameMover)
+
+	
 	-- Fix Alertframe bg
 	local function fixBg(frame)
 		if frame:GetObjectType() == "AnimationGroup" then
@@ -73,26 +80,27 @@ tinsert(C.themes["FreeUI"], function()
 				frame.shine:SetTexture("")
 			end
 		elseif frame.queue == LootAlertSystem then
+			local lootItem = frame.lootItem
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
 				frame.bg:SetPoint("TOPLEFT", frame, 13, -15)
-				frame.bg:SetPoint("BOTTOMRIGHT", frame, -13, 11)
+				frame.bg:SetPoint("BOTTOMRIGHT", frame, -13, 13)
 				F.CreateSD(frame.bg)
 
-				frame.Icon:SetTexCoord(unpack(C.TexCoord))
-				F.CreateBDFrame(frame.Icon)
-				frame.SpecRing:SetTexture("")
-				frame.SpecIcon:SetPoint("TOPLEFT", frame.Icon, -5, 5)
-				frame.SpecIcon.bg = F.ReskinIcon(frame.SpecIcon)
-				frame.SpecIcon.bg:SetDrawLayer("ARTWORK", 1)
+				lootItem.Icon:SetTexCoord(.08, .92, .08, .92)
+				F.CreateBDFrame(lootItem.Icon)
+				lootItem.SpecRing:SetTexture("")
+				lootItem.SpecIcon:SetPoint("TOPLEFT", lootItem.Icon, -5, 5)
+				lootItem.SpecIcon.bg = F.ReskinIcon(lootItem.SpecIcon)
+				lootItem.SpecIcon.bg:SetDrawLayer("ARTWORK", 1)
 			end
 			frame.glow:SetTexture("")
 			frame.shine:SetTexture("")
 			frame.Background:SetTexture("")
 			frame.PvPBackground:SetTexture("")
 			frame.BGAtlas:SetTexture("")
-			frame.IconBorder:SetTexture("")
-			frame.SpecIcon.bg:SetShown(frame.SpecIcon:IsShown() and frame.SpecIcon:GetTexture() ~= nil)
+			lootItem.IconBorder:SetTexture("")
+			lootItem.SpecIcon.bg:SetShown(lootItem.SpecIcon:IsShown() and lootItem.SpecIcon:GetTexture() ~= nil)
 		elseif frame.queue == LootUpgradeAlertSystem then
 			if not frame.bg then
 				frame.bg = F.CreateBDFrame(frame)
@@ -325,6 +333,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	-- BonusRollLootWonFrame
 	hooksecurefunc("LootWonAlertFrame_SetUp", function(frame)
+		local lootItem = frame.lootItem
 		if not frame.bg then
 			frame.bg = F.CreateBDFrame(frame)
 			frame.bg:SetPoint("TOPLEFT", 10, -10)
@@ -333,21 +342,21 @@ tinsert(C.themes["FreeUI"], function()
 			fixAnim(frame)
 
 			frame.shine:SetTexture("")
-			frame.Icon:SetTexCoord(unpack(C.TexCoord))
-			F.CreateBDFrame(frame.Icon)
+			lootItem.Icon:SetTexCoord(.08, .92, .08, .92)
+			F.CreateBDFrame(lootItem.Icon)
 
-			frame.SpecRing:SetTexture("")
-			frame.SpecIcon:SetPoint("TOPLEFT", frame.Icon, -5, 5)
-			frame.SpecIcon.bg = F.ReskinIcon(frame.SpecIcon)
-			frame.SpecIcon.bg:SetDrawLayer("ARTWORK", 1)
-			frame.SpecIcon.bg:SetShown(frame.SpecIcon:IsShown() and frame.SpecIcon:GetTexture() ~= nil)
+			lootItem.SpecRing:SetTexture("")
+			lootItem.SpecIcon:SetPoint("TOPLEFT", lootItem.Icon, -5, 5)
+			lootItem.SpecIcon.bg = F.ReskinIcon(lootItem.SpecIcon)
+			lootItem.SpecIcon.bg:SetDrawLayer("ARTWORK", 1)
+			lootItem.SpecIcon.bg:SetShown(lootItem.SpecIcon:IsShown() and lootItem.SpecIcon:GetTexture() ~= nil)
 		end
 
 		frame.glow:SetTexture("")
 		frame.Background:SetTexture("")
 		frame.PvPBackground:SetTexture("")
-		frame.BGAtlas:SetTexture("")			
-		frame.IconBorder:SetTexture("")
+		frame.BGAtlas:SetAlpha(0)
+		lootItem.IconBorder:SetTexture("")
 	end)
 
 	-- BonusRollMoneyWonFrame

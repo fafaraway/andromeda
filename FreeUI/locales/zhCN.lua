@@ -128,6 +128,10 @@ L['MOVER_DEBUFFS'] = '减益栏'
 
 L['MOVER_QUAKE_TIMER'] = '震荡计时条'
 
+L['MOVER_OBJECTIVE_TRACKER'] = '任务追踪栏'
+L['MOVER_VEHICLE_INDICATOR'] = '载具座位控制'
+L['MOVER_DURABILITY_INDICATOR'] = '耐久提示'
+
 
 -- Chat
 L['CHAT_HIDE'] = '隐藏聊天框'
@@ -137,19 +141,20 @@ L['CHAT_LEAVE_WC'] = '离开世界频道'
 L['CHAT_COPY'] = '复制聊天内容'
 
 
--- tootlip
+-- Tooltip
 L['TOOLTIP_RARE'] = '稀有'
 L['TOOLTIP_AURA_FROM'] = '来自'
 L['TOOLTIP_SELL_PRICE'] = '售价'
 L['TOOLTIP_STACK_CAP'] = '堆叠上限'
 L['TOOLTIP_AZERITE_TRAIT'] = '艾泽里特特质'
+L['TOOLTIP_SECTION'] = '段落'
+L['TOOLTIP_TARGETED'] = '关注'
 
-
-
-L['UIHELP'] = '输入 /freeui 获取帮助。'
 
 
 -- Slash commands
+L['UIHELP'] = '输入 /freeui 获取帮助。'
+
 L['SLASHCMD_HELP'] = {
 	'命令列表:',
 	'/rl - 重载界面',

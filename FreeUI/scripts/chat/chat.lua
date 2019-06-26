@@ -1,17 +1,23 @@
 local F, C, L = unpack(select(2, ...))
-if not C.chat.enable then return end
-local module = F:RegisterModule('Chat')
 
+local CHAT = F:RegisterModule('Chat')
 
+local maxLines = 1024
+local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
+local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
+local ChatEdit_UpdateHeader, GetChatWindowInfo, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChatWindowInfo, GetChannelList, GetCVar, SetCVar, Ambiguate
+local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant, InviteToGroup
+local BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = BNGetFriendInfoByID, BNGetGameAccountInfo, CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 
-local function SkinChat(self)
+
+function CHAT:ReskinChatFrame()
 	if not self or (self and self.styled) then return end
 
 	local name = self:GetName()
 	local fontSize = select(2, self:GetFont())
 	self:SetClampRectInsets(0, 0, 0, 0)
-	self:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
+	self:SetMaxResize(maxWidth, maxHeight)
 	self:SetMinResize(100, 50)
 	
 	if C.chat.useOutline then
@@ -24,8 +30,8 @@ local function SkinChat(self)
 	end
 	
 	self:SetClampedToScreen(false)
-	if self:GetMaxLines() < 1024 then
-		self:SetMaxLines(1024)
+	if self:GetMaxLines() < maxLines then
+		self:SetMaxLines(maxLines)
 	end
 
 	local eb = _G[name..'EditBox']
@@ -57,16 +63,28 @@ local function SkinChat(self)
 	F.HideObject(self.ScrollBar)
 	F.HideObject(self.ScrollToBottomButton)
 
+	BNToastFrame:SetClampedToScreen(true)
+	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
+
+	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-50,50,50,-50)
+
+	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-50,50,50,-50)
+	
+	ChatAlertFrame:SetClampedToScreen(true)
+	ChatAlertFrame:SetClampRectInsets(-50,50,50,-50)
+
 	self.styled = true
 end
 
 
 local cycles = {
 	{ chatType = "SAY", use = function() return 1 end },
-    { chatType = "PARTY", use = function() return IsInGroup() end },
-    { chatType = "RAID", use = function() return IsInRaid() end },
-    { chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
-    { chatType = "GUILD", use = function() return IsInGuild() end },
+	{ chatType = "PARTY", use = function() return IsInGroup() end },
+	{ chatType = "RAID", use = function() return IsInRaid() end },
+	{ chatType = "INSTANCE_CHAT", use = function() return IsPartyLFG() end },
+	{ chatType = "GUILD", use = function() return IsInGuild() end },
 	{ chatType = "CHANNEL", use = function(_, editbox)
 		if GetCVar("portal") ~= "CN" then return false end
 		local channels, inWorldChannel, number = {GetChannelList()}
@@ -84,88 +102,50 @@ local cycles = {
 			return false
 		end
 	end },
-    { chatType = "SAY", use = function() return 1 end },
+	{ chatType = "SAY", use = function() return 1 end },
 }
 
-hooksecurefunc("ChatEdit_CustomTabPressed", function(self)
+function CHAT:UpdateTabChannelSwitch()
 	if strsub(tostring(self:GetText()), 1, 1) == "/" then return end
-    local currChatType = self:GetAttribute("chatType")
-    for i, curr in ipairs(cycles) do
-        if curr.chatType == currChatType then
-            local h, r, step = i+1, #cycles, 1
-            if IsShiftKeyDown() then h, r, step = i-1, 1, -1 end
-            for j = h, r, step do
-                if cycles[j]:use(self, currChatType) then
-                    self:SetAttribute("chatType", cycles[j].chatType)
-                    ChatEdit_UpdateHeader(self)
-                    return
-                end
-            end
-        end
-    end
-end)
-
-
-local function ScrollChat(frame, delta)
-	if IsControlKeyDown() then --Faster Scroll
-		if ( delta > 0 ) then --Faster scrolling by triggering a few scroll up in a loop
-			for i = 1,5 do 
-				frame:ScrollUp()
+	local currChatType = self:GetAttribute("chatType")
+	for i, curr in ipairs(cycles) do
+		if curr.chatType == currChatType then
+			local h, r, step = i+1, #cycles, 1
+			if IsShiftKeyDown() then h, r, step = i-1, 1, -1 end
+			for j = h, r, step do
+				if cycles[j]:use(self, currChatType) then
+					self:SetAttribute("chatType", cycles[j].chatType)
+					ChatEdit_UpdateHeader(self)
+					return
+				end
 			end
-		elseif ( delta < 0 ) then
-			for i = 1,5 do 
-				frame:ScrollDown()
-			end
-		end
-	elseif IsAltKeyDown() then
-		if ( delta > 0 ) then --Scroll to the top or bottom
-			frame:ScrollToTop()
-		elseif ( delta < 0 ) then
-			frame:ScrollToBottom()
-		end
-	else
-		if delta > 0 then --Normal Scroll
-			frame:ScrollUp()
-		elseif delta < 0 then
-			frame:ScrollDown()
 		end
 	end
 end
+hooksecurefunc("ChatEdit_CustomTabPressed", CHAT.UpdateTabChannelSwitch)
 
-local function MakeScrollingDynamic(i)
-	local chatFrameNumber = ('ChatFrame%d'):format(i)
-	local ChatFrameNumberFrame = _G[chatFrameNumber]
-	
-	ChatFrameNumberFrame:EnableMouseWheel(true)
-	ChatFrameNumberFrame:SetScript('OnMouseWheel', ScrollChat)
+function CHAT:QuickMouseScroll(dir)
+	if dir > 0 then
+		if IsShiftKeyDown() then
+			self:ScrollToTop()
+		elseif IsControlKeyDown() then
+			self:ScrollUp()
+			self:ScrollUp()
+		end
+	else
+		if IsShiftKeyDown() then
+			self:ScrollToBottom()
+		elseif IsControlKeyDown() then
+			self:ScrollDown()
+			self:ScrollDown()
+		end
+	end
 end
+hooksecurefunc("FloatingChatFrame_OnMouseScroll", CHAT.QuickMouseScroll)
 
-
-local function EnableFading(i)
-	if not C.chat.lineFading then return end
-
-	local chatFrameNumber = ('ChatFrame%d'):format(i)
-	local ChatFrameNumberFrame = _G[chatFrameNumber]
-	
-	ChatFrameNumberFrame:SetFading(true)
-	ChatFrameNumberFrame:SetTimeVisible(C.chat.timeVisible)
-	ChatFrameNumberFrame:SetFadeDuration(C.chat.fadeDuration)
-end
-
-
-local function DisableHoldAlt(i)
-	local chatFrameNumber = ('ChatFrame%d'):format(i)
-	local chatFrameNumberEditBox = _G[chatFrameNumber..'EditBox']
-	
-	chatFrameNumberEditBox:SetAltArrowKeyMode(false)
-end
-
-
--- alt click name to invite
 local DefaultSetItemRef = SetItemRef
 function SetItemRef(link, ...)
 	local type, value = link:match('(%a+):(.+)')
-	--print(type)
 	if IsAltKeyDown() and type == 'player' then
 		InviteUnit(value:match('([^:]+)'))
 	else
@@ -173,30 +153,15 @@ function SetItemRef(link, ...)
 	end
 end
 
-local stickyTypeChannels = {}
-stickyTypeChannels = {
-	SAY = 1,
-	YELL = 0,
-	EMOTE = 0,
-	PARTY = 1,
-	PARTY_LEADER = 1,
-	RAID = 1,
-	GUILD = 1,
-	OFFICER = 1,
-	WHISPER = 1,
-	BN_WHISPER = 1,
-	CHANNEL = 1,
-	INSTANCE_CHAT = 1,
-	INSTANCE_CHAT_LEADER = 1,
-}
-local function ChannelsSticky()
-	if not C.chat.channelSticky then return end
-
-	for i, v in pairs(stickyTypeChannels) do
-		ChatTypeInfo[i].sticky = v
+local function WhisperSticky()
+	if C.chat.whisperSticky then
+		ChatTypeInfo["WHISPER"].sticky = 1
+		ChatTypeInfo["BN_WHISPER"].sticky = 1
+	else
+		ChatTypeInfo["WHISPER"].sticky = 0
+		ChatTypeInfo["BN_WHISPER"].sticky = 0
 	end
 end
-
 
 local function WhisperTarget()
 	hooksecurefunc('ChatEdit_OnSpacePressed', function(self)
@@ -214,7 +179,6 @@ local function WhisperTarget()
 	end
 end
 
-
 local function UpdateTimestamp()
 	local greyStamp = C.GreyColor..'%H:%M|r '
 	if C.chat.timeStamp then
@@ -223,7 +187,6 @@ local function UpdateTimestamp()
 		SetCVar('showTimestamps', 'none')
 	end
 end
-
 
 local function UpdateEditBoxBorderColor()
 	hooksecurefunc('ChatEdit_UpdateHeader', function()
@@ -244,30 +207,7 @@ local function UpdateEditBoxBorderColor()
 	end)
 end
 
-	
-
-function module:OnLogin()
-	for i = 1, NUM_CHAT_WINDOWS do
-		local chatFrameNumber = ('ChatFrame%d'):format(i)
-		local ChatFrameNumberFrame = _G[chatFrameNumber]
-
-		if ChatFrameNumberFrame then
-			SkinChat(_G['ChatFrame'..i])
-
-			MakeScrollingDynamic(i)
-			EnableFading(i)
-			DisableHoldAlt(i)
-		end
-	end
-
-	for i = 1, 15 do
-		CHAT_FONT_HEIGHTS[i] = i + 9
-	end
-
-	SetCVar("chatStyle", "classic")
-	F.HideOption(InterfaceOptionsSocialPanelChatStyle)
-	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
-
+local function ResizeChatFrame()
 	ChatFrame1Tab:HookScript("OnMouseDown", function(_, btn)
 		if btn == "LeftButton" then
 			if select(8, GetChatWindowInfo(1)) then
@@ -281,16 +221,45 @@ function module:OnLogin()
 			FCF_SavePositionAndDimensions(ChatFrame1)
 		end
 	end)
+end
 
-	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-15,15,15,-15)
+	
 
-	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-50,50,50,-50)
-	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-	VoiceChatChannelActivatedNotification:SetClampRectInsets(-50,50,50,-50)
-	ChatAlertFrame:SetClampedToScreen(true)
-	ChatAlertFrame:SetClampRectInsets(-50,50,50,-50)
+function CHAT:OnLogin()
+	if not C.chat.enable then return end
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		self.ReskinChatFrame(_G["ChatFrame"..i])
+
+		local chatFrameNumber = ('ChatFrame%d'):format(i)
+		local chatFrameNumberFrame = _G[chatFrameNumber]
+		if C.chat.lineFading then
+			chatFrameNumberFrame:SetFading(true)
+			chatFrameNumberFrame:SetTimeVisible(C.chat.timeVisible)
+			chatFrameNumberFrame:SetFadeDuration(C.chat.fadeDuration)
+		end
+	end
+
+	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+		for _, chatFrameName in next, CHAT_FRAMES do
+			local frame = _G[chatFrameName]
+			if frame.isTemporary then
+				self.ReskinChatFrame(frame)
+			end
+		end
+	end)
+
+
+	for i = 1, 15 do
+		CHAT_FONT_HEIGHTS[i] = i + 9
+	end
+
+	
+
+	SetCVar("chatStyle", "classic")
+	F.HideOption(InterfaceOptionsSocialPanelChatStyle)
+	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
+
 
 	local function HideForever(f)
 		f:SetScript('OnShow', f.Hide)
@@ -308,10 +277,11 @@ function module:OnLogin()
 		ChatFrame1:SetPoint(unpack(C.chat.position))
 	end
 
+	WhisperSticky()
+	WhisperTarget()
 	UpdateTimestamp()
 	UpdateEditBoxBorderColor()
-	WhisperTarget()
-	ChannelsSticky()
+	ResizeChatFrame()
 	
 	self:Filter()
 	self:Abbreviate()
@@ -334,6 +304,6 @@ function module:OnLogin()
 			end
 		end
 		UpdateBubble()
-		F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateBubble)
+		F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateBubble)
 	end
 end

@@ -188,7 +188,7 @@ function F:HelloWorld()
 
 	local step4 = function()
 		sb:SetValue(400)
-		PlaySoundFile('Sound\\interface\\LevelUp.wav')
+		--PlaySoundFile('Sound\\interface\\LevelUp.wav')
 		header:SetText('Success!')
 		body:SetText("Installation is complete.\n\nPlease click the 'Finish' button to reload the UI.\n\nEnjoy!")
 		sbt:SetText('4/4')

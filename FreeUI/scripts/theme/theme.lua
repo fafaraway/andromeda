@@ -15,7 +15,7 @@ C.themes['FreeUI'] = {}
 local loader = CreateFrame('Frame')
 loader:RegisterEvent('ADDON_LOADED')
 loader:SetScript('OnEvent', function(self, event, addon)
-	if not C.appearance.enableTheme then return end
+	if not C.appearance.useGlobalTheme then return end
 
 	local addonModule = C.themes[addon]
 	if addonModule then
@@ -53,7 +53,7 @@ end
 function module:OnLogin()
 	self:ReskinDBM()
 	self:ReskinSkada()
-	self:ReskinBigWigs()
+	self:ReskinBW()
 	self:ReskinPGF()
 end
 
