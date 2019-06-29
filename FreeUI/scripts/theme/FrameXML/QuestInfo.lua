@@ -102,26 +102,23 @@ tinsert(C.themes["FreeUI"], function()
 
 		bu.Icon:SetTexCoord(unpack(C.TexCoord))
 		bu.Icon:SetDrawLayer("BACKGROUND", 1)
-
 		if isMapQuestInfo then
 			bu.Icon:SetSize(29, 29)
 		else
 			bu.Icon:SetSize(34, 34)
 		end
 
+		local iconBG = F.CreateBG(bu.Icon)
 		local bg = F.CreateBDFrame(bu, .25)
 		bg:SetPoint("TOPLEFT", iconBG, "TOPRIGHT", 2, 0)
 		bg:SetPoint("BOTTOMRIGHT", iconBG, 100, 0)
-
 		bu.bg = bg
 	end
 
 	hooksecurefunc("QuestInfo_GetRewardButton", function(rewardsFrame, index)
 		local bu = rewardsFrame.RewardButtons[index]
-
 		if not bu.restyled then
 			restyleRewardButton(bu, rewardsFrame == MapQuestInfoRewardsFrame)
-
 			bu.restyled = true
 		end
 	end)
@@ -171,6 +168,7 @@ tinsert(C.themes["FreeUI"], function()
         local rewardsFrame = QuestInfoFrame.rewardsFrame
         local isQuestLog = QuestInfoFrame.questLog ~= nil
 		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
+
 		if numSpellRewards > 0 then
 			for reward in rewardsFrame.followerRewardPool:EnumerateActive() do
 				local portrait = reward.PortraitFrame
@@ -179,6 +177,7 @@ tinsert(C.themes["FreeUI"], function()
 					reward.BG:Hide()
 					reward.bg = F.CreateBDFrame(reward, .25)
 				end
+
 				if isQuestLog then
 					portrait:SetPoint("TOPLEFT", 2, 0)
 					reward.bg:SetPoint("TOPLEFT", 0, 1)
@@ -188,6 +187,7 @@ tinsert(C.themes["FreeUI"], function()
 					reward.bg:SetPoint("TOPLEFT", 0, -3)
 					reward.bg:SetPoint("BOTTOMRIGHT", 2, 7)
 				end
+
 				if portrait then
 					local color = BAG_ITEM_QUALITY_COLORS[portrait.quality or 1]
 					portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
@@ -206,19 +206,19 @@ tinsert(C.themes["FreeUI"], function()
 		end
 	end)
 
-	QuestInfoTitleHeader:SetTextColor(1, 1, 1)
+	QuestInfoTitleHeader:SetTextColor(1, .8, 0)
 	QuestInfoTitleHeader.SetTextColor = F.Dummy
 	QuestInfoTitleHeader:SetShadowColor(0, 0, 0)
 
-	QuestInfoDescriptionHeader:SetTextColor(1, 1, 1)
+	QuestInfoDescriptionHeader:SetTextColor(1, .8, 0)
 	QuestInfoDescriptionHeader.SetTextColor = F.Dummy
 	QuestInfoDescriptionHeader:SetShadowColor(0, 0, 0)
 
-	QuestInfoObjectivesHeader:SetTextColor(1, 1, 1)
+	QuestInfoObjectivesHeader:SetTextColor(1, .8, 0)
 	QuestInfoObjectivesHeader.SetTextColor = F.Dummy
 	QuestInfoObjectivesHeader:SetShadowColor(0, 0, 0)
 
-	QuestInfoRewardsFrame.Header:SetTextColor(1, 1, 1)
+	QuestInfoRewardsFrame.Header:SetTextColor(1, .8, 0)
 	QuestInfoRewardsFrame.Header.SetTextColor = F.Dummy
 	QuestInfoRewardsFrame.Header:SetShadowColor(0, 0, 0)
 
