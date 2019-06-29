@@ -31,5 +31,7 @@ function TOOLTIP:ScanTargets()
 end
 
 function TOOLTIP:TargetedInfo()
+	if not C.tooltip.targetBy then return end
+	
 	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end

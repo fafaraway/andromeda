@@ -79,6 +79,7 @@ function TOOLTIP:OnTooltipSetUnit()
 	local unit = TOOLTIP.GetUnit(self)
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
+		self.ttUnit = unit
 		local hexColor = F.HexRGB(F.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
 		if ricon and ricon > 8 then ricon = nil end
@@ -218,9 +219,6 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 	end
 end
 
-GameTooltip.FadeOut = function(self)
-	self:Hide()
-end
 
 local mover
 function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
@@ -247,7 +245,7 @@ function TOOLTIP:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer('BACKGROUND')
-		local bg = F.CreateBDFrame(self, .6)
+		local bg = F.CreateBDFrame(self, .5)
 		bg:SetFrameLevel(self:GetFrameLevel())
 		F.CreateSD(bg, .35)
 		F.CreateTex(bg)
@@ -314,8 +312,16 @@ end]]
 
 
 function TOOLTIP:OnLogin()
-
 	self:ReskinStatusBar()
+
+	local ssbc = CreateFrame('StatusBar').SetStatusBarColor
+	GameTooltipStatusBar._SetStatusBarColor = ssbc
+	function GameTooltipStatusBar:SetStatusBarColor(...)
+		local unit = TOOLTIP.GetUnit(GameTooltip)
+		if(UnitExists(unit)) then
+			return self:_SetStatusBarColor(F.UnitColor(unit))
+		end
+	end
 
 	GameTooltip:HookScript('OnTooltipSetUnit', self.OnTooltipSetUnit)
 
@@ -324,12 +330,32 @@ function TOOLTIP:OnLogin()
 	hooksecurefunc('GameTooltip_SetDefaultAnchor', self.GameTooltip_SetDefaultAnchor)
 	hooksecurefunc('GameTooltip_SetBackdropStyle', self.GameTooltip_SetBackdropStyle)
 
+	GameTooltip:HookScript('OnTooltipCleared', function(self)
+		self.ttUpdate = 1
+		self.ttNumLines = 0
+		self.ttUnit = nil
+	end)
+
+	GameTooltip:HookScript('OnUpdate', function(self, elapsed)
+		self.ttUpdate = (self.ttUpdate or 0) + elapsed
+		if(self.ttUpdate < .1) then return end
+		if(self.ttUnit and not UnitExists(self.ttUnit)) then self:Hide() return end
+		self:SetBackdropColor(0, 0, 0, .5)
+		self.ttUpdate = 0
+	end)
+
+	GameTooltip.FadeOut = function(self)
+		self:Hide()
+	end
+
 	GameTooltip_OnTooltipAddMoney = F.Dummy
 
-	self:ExtraInfo()
-	self:AzeriteTrait()
-	self:TargetedInfo()
 	self:ReskinTooltipIcons()
+	self:LinkHover()
+	self:ExtraInfo()
+	self:TargetedInfo()
+	self:PetInfo()
+	self:AzeriteTrait()
 end
 
 

@@ -234,7 +234,7 @@ do
 	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
 	cooldown:SetPoint("TOPLEFT", combatText, "BOTTOMLEFT", 0, -16)
 
-	local cooldownCount = ns.CreateCheckBox(general, "cooldownCount", true, true)
+	local cooldownCount = ns.CreateCheckBox(general, "cooldown", true, true)
 	cooldownCount:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 0, -8)
 
 	local cooldownCount_decimal = ns.CreateCheckBox(general, "cooldownCount_decimal", true, true)

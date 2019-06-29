@@ -13,7 +13,7 @@ local otFontHeader = {C.font.header,16,nil}
 local otFont = {C.font.normal,12,nil}
 
 
-function BLIZZARD:QuestTracker()
+function BLIZZARD:ReskinQuestTracker()
 	if not C.general.questTracker then return end
 	
 	-- Mover for quest tracker
@@ -23,7 +23,7 @@ function BLIZZARD:QuestTracker()
 
 	ot:ClearAllPoints()
 	ot:SetPoint('TOPRIGHT', frame)
-	ot:SetHeight(GetScreenHeight()*.7)
+	ot:SetHeight(pysHeight*.6)
 	ot:SetClampedToScreen(false)
 	ot:SetMovable(true)
 	if ot:IsMovable() then ot:SetUserPlaced(true) end
@@ -83,6 +83,7 @@ function BLIZZARD:QuestTracker()
 		ObjectiveTrackerBlocksFrame.ScenarioHeader,
 		BONUS_OBJECTIVE_TRACKER_MODULE.Header,
 		WORLD_QUEST_TRACKER_MODULE.Header,
+		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
 	}
 	for _, header in pairs(headers) do reskinHeader(header) end
 

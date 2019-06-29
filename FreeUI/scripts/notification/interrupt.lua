@@ -4,7 +4,7 @@ local module = F:GetModule('Notification')
 function module:Interrupt()
 	if not C.notification.interrupt then return end
 
-	local interruptSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\Shutupfool.ogg'
+	local interruptSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\interrupt.ogg'
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 	frame:SetScript('OnEvent', function(self)

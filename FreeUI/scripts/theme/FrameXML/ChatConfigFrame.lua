@@ -1,6 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
+	F.StripTextures(ChatConfigFrame)
 	F.CreateBD(ChatConfigFrame)
 	F.CreateSD(ChatConfigFrame)
 	ChatConfigFrameHeader:SetAlpha(0)

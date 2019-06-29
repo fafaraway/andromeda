@@ -67,8 +67,8 @@ function BLIZZARD:Fonts()
 	SetFont("NumberFont_Shadow_Small",         C.font.chat, 12, nil, nil, {0, 0, 0}, 1, -1)
 	SetFont("NumberFont_Shadow_Med",           C.font.chat, 14, nil, nil, {0, 0, 0}, 1, -1)
 
-	SetFont("Tooltip_Med",                     C.font.normal, 12, "OUTLINE", nil, {0, 0, 0}, 1, -1)
-	SetFont("Tooltip_Small",                   C.font.normal, 12, "OUTLINE", nil, {0, 0, 0}, 1, -1)
+	SetFont("Tooltip_Med",                     C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
+	SetFont("Tooltip_Small",                   C.font.normal, 12, nil, nil, {0, 0, 0}, 1, -1)
 
 
 	-- Fonts

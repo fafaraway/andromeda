@@ -4,11 +4,11 @@ local BLIZZARD = F:RegisterModule('Blizzard')
 
 function BLIZZARD:OnLogin()
 	self:Fonts()
-	self:BuffFrame()
+	self:ReskinBuffFrame()
 	self:ReskinPetBattleUI()
 	self:ColourPicker()
 	self:RepositionUIWidgets()
-	self:QuestTracker()
+	self:ReskinQuestTracker()
 	self:Cooldown()
 	self:RemoveTalkingHead()
 	self:RemoveBossBanner()
@@ -85,43 +85,15 @@ end
 
 -- Reposition UIWidgets
 function BLIZZARD:RepositionUIWidgets()
-	local function topCenterPosition(self, _, b)
-		local holder = _G.TopCenterContainerHolder
-		if b and (b ~= holder) then
+	UIWidgetTopCenterContainerFrame:ClearAllPoints()
+	UIWidgetTopCenterContainerFrame:SetPoint('TOP', 0, -30)
+
+	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
+		if parent == MinimapCluster then
 			self:ClearAllPoints()
-			self:SetPoint('CENTER', holder)
-			self:SetParent(holder)
+			self:SetPoint('TOP', UIParent, 0, -120)
 		end
-	end
-
-	local function belowMinimapPosition(self, _, b)
-		local holder = _G.BelowMinimapContainerHolder
-		if b and (b ~= holder) then
-			self:ClearAllPoints()
-			self:SetPoint('CENTER', holder, 'CENTER')
-			self:SetParent(holder)
-		end
-	end
-
-	local topCenterContainer = _G.UIWidgetTopCenterContainerFrame
-	local belowMiniMapcontainer = _G.UIWidgetBelowMinimapContainerFrame
-
-	local topCenterHolder = CreateFrame('Frame', 'TopCenterContainerHolder', UIParent)
-	topCenterHolder:SetPoint('TOP', UIParent, 'TOP', 0, -30)
-	topCenterHolder:SetSize(10, 58)
-
-	local belowMiniMapHolder = CreateFrame('Frame', 'BelowMinimapContainerHolder', UIParent)
-	belowMiniMapHolder:SetPoint('TOP', UIParent, 'TOP', 0, -120)
-	belowMiniMapHolder:SetSize(128, 40)
-
-	topCenterContainer:ClearAllPoints()
-	topCenterContainer:SetPoint('CENTER', topCenterHolder)
-
-	belowMiniMapcontainer:ClearAllPoints()
-	belowMiniMapcontainer:SetPoint('CENTER', belowMiniMapHolder, 'CENTER')
-
-	hooksecurefunc(topCenterContainer, 'SetPoint', topCenterPosition)
-	hooksecurefunc(belowMiniMapcontainer, 'SetPoint', belowMinimapPosition)
+	end)
 end
 
 
@@ -179,14 +151,14 @@ function BLIZZARD:ReskinDigBar()
 	local customPosition = false
 
 	local function setPosition()
-		frame:SetPoint("TOP", UIParent, "TOP", 0, -50)
+		frame:SetPoint('TOP', UIParent, 'TOP', 0, -50)
 	end
 
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("ADDON_LOADED")
-	f:SetScript("OnEvent", function(self, _, addon)
-		if addon ~= "Blizzard_ArchaeologyUI" then return end
-		self:UnregisterEvent("ADDON_LOADED")
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('ADDON_LOADED')
+	f:SetScript('OnEvent', function(self, _, addon)
+		if addon ~= 'Blizzard_ArchaeologyUI' then return end
+		self:UnregisterEvent('ADDON_LOADED')
 
 		frame = ArcheologyDigsiteProgressBar
 		local bar = frame.FillBar
@@ -196,12 +168,12 @@ function BLIZZARD:ReskinDigBar()
 		frame.BarBorderAndOverlay:Hide()
 
 		if C.Client == 'zhCN' or C.Client == 'zhTW' then
-			frame.BarTitle:SetFont(C.font.normal, 11, "OUTLINE")
+			frame.BarTitle:SetFont(C.font.normal, 11, 'OUTLINE')
 		else
 			F.SetFS(frame.BarTitle)
 		end
 
-		frame.BarTitle:SetPoint("CENTER", 0, 16)
+		frame.BarTitle:SetPoint('CENTER', 0, 16)
 
 		local width = C.unitframe.player_width
 		bar:SetWidth(width)
@@ -215,11 +187,11 @@ function BLIZZARD:ReskinDigBar()
 
 		--xpBar = FreeUIExpBar:GetParent()
 
-		frame:HookScript("OnShow", setPosition)
-		--xpBar:HookScript("OnShow", setPosition)
-		--xpBar:HookScript("OnHide", setPosition)
+		frame:HookScript('OnShow', setPosition)
+		--xpBar:HookScript('OnShow', setPosition)
+		--xpBar:HookScript('OnHide', setPosition)
 
-		hooksecurefunc(frame, "SetPoint", function()
+		hooksecurefunc(frame, 'SetPoint', function()
 			if not customPosition then
 				customPosition = true
 				setPosition()

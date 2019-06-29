@@ -23,13 +23,14 @@ function NOTIFICATION:RareAlert_Update(id)
 
 		local atlasWidth = width/(txRight-txLeft)
 		local atlasHeight = height/(txBottom-txTop)
-		local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+		local tex = format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+		local currrentTime = C.GreyColor..'['..date('%H:%M:%S')..'] |r'
 
-		UIErrorsFrame:AddMessage(C.InfoColor..L["NOTIFICATION_RARE"]..tex..(C.RedColor..info.name or ""))
-		print(C.InfoColor..L["NOTIFICATION_RARE"]..tex..C.RedColor..(info.name or ""))
+		UIErrorsFrame:AddMessage(currrentTime..C.InfoColor..L['NOTIFICATION_RARE']..tex..(C.RedColor..info.name or ''))
+		print(currrentTime..C.InfoColor..L['NOTIFICATION_RARE']..tex..C.RedColor..(info.name or ''))
 
-		if C.notification.rareSound or instType == "none" then
-			PlaySound(23404, "master")
+		if C.notification.rareSound or instType == 'none' then
+			PlaySound(23404, 'master')
 		end
 
 		cache[id] = true
@@ -39,22 +40,22 @@ function NOTIFICATION:RareAlert_Update(id)
 end
 
 function NOTIFICATION:RareAlert_CheckInstance()
-	local instID = select(8, GetInstanceInfo())
-	if instID and isIgnored[instID] then
-		F:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", NOTIFICATION.RareAlert_Update)
+	local _, instanceType, _, _, maxPlayers, _, _, instID = GetInstanceInfo()
+	if (instID and isIgnored[instID]) or (instanceType == 'scenario' and maxPlayers == 3) then
+		F:UnregisterEvent('VIGNETTE_MINIMAP_UPDATED', NOTIFICATION.RareAlert_Update)
 	else
-		F:RegisterEvent("VIGNETTE_MINIMAP_UPDATED", NOTIFICATION.RareAlert_Update)
+		F:RegisterEvent('VIGNETTE_MINIMAP_UPDATED', NOTIFICATION.RareAlert_Update)
 	end
 end
 
 function NOTIFICATION:Rare()
 	if C.notification.rare then
 		self:RareAlert_CheckInstance()
-		F:RegisterEvent("PLAYER_ENTERING_WORLD", self.RareAlert_CheckInstance)
+		F:RegisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
 	else
 		wipe(cache)
-		F:UnregisterEvent("VIGNETTE_MINIMAP_UPDATED", self.RareAlert_Update)
-		F:UnregisterEvent("PLAYER_ENTERING_WORLD", self.RareAlert_CheckInstance)
+		F:UnregisterEvent('VIGNETTE_MINIMAP_UPDATED', self.RareAlert_Update)
+		F:UnregisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
 	end
 end
 

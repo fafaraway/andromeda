@@ -90,14 +90,6 @@ function TOOLTIP:HyperLink_OnLeave(_, ...)
 	if orig2[self] then return orig2[self](self, ...) end
 end
 
-for i = 1, NUM_CHAT_WINDOWS do
-	local frame = _G['ChatFrame'..i]
-	orig1[frame] = frame:GetScript('OnHyperlinkEnter')
-	frame:SetScript('OnHyperlinkEnter', TOOLTIP.HyperLink_OnEnter)
-	orig2[frame] = frame:GetScript('OnHyperlinkLeave')
-	frame:SetScript('OnHyperlinkLeave', TOOLTIP.HyperLink_OnLeave)
-end
-
 local function hookCommunitiesFrame(event, addon)
 	if addon == 'Blizzard_Communities' then
 		CommunitiesFrame.Chat.MessageFrame:SetScript('OnHyperlinkEnter', TOOLTIP.HyperLink_OnEnter)
@@ -106,4 +98,18 @@ local function hookCommunitiesFrame(event, addon)
 		F:UnregisterEvent(event, hookCommunitiesFrame)
 	end
 end
-F:RegisterEvent('ADDON_LOADED', hookCommunitiesFrame)
+
+
+function TOOLTIP:LinkHover()
+	if not C.tooltip.linkHover then return end
+	
+	for i = 1, NUM_CHAT_WINDOWS do
+		local frame = _G['ChatFrame'..i]
+		orig1[frame] = frame:GetScript('OnHyperlinkEnter')
+		frame:SetScript('OnHyperlinkEnter', TOOLTIP.HyperLink_OnEnter)
+		orig2[frame] = frame:GetScript('OnHyperlinkLeave')
+		frame:SetScript('OnHyperlinkLeave', TOOLTIP.HyperLink_OnLeave)
+	end
+
+	F:RegisterEvent('ADDON_LOADED', hookCommunitiesFrame)
+end

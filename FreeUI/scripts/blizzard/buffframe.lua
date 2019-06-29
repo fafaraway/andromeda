@@ -8,7 +8,7 @@ local debuffsPerRow, debuffSize = 10, 50
 local parentFrame, buffAnchor, debuffAnchor
 local format, mod = string.format, mod
 
-function BLIZZARD:BuffFrame()
+function BLIZZARD:ReskinBuffFrame()
 	parentFrame = CreateFrame("Frame", nil, UIParent)
 	parentFrame:SetSize(buffSize, buffSize)
 	buffAnchor = F.Mover(parentFrame, L['MOVER_BUFFS'], "BuffAnchor", {'TOPRIGHT', UIParent, 'TOPRIGHT', -50, -50}, (buffSize + margin)*buffsPerRow, (buffSize + offset)*3)

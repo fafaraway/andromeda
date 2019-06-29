@@ -65,8 +65,17 @@ local function reskinQuestCurrencyRewardIcon(_, _, self)
 end
 
 function TOOLTIP:ReskinTooltipIcons()
+	if not C.tooltip.tipIcon then return end
+
 	TOOLTIP.HookTooltipMethod(GameTooltip)
 	TOOLTIP.HookTooltipMethod(ItemRefTooltip)
+
+	hooksecurefunc(GameTooltip, "SetAzeriteEssence", function(self)
+		TOOLTIP.SetupTooltipIcon(self)
+	end)
+	hooksecurefunc(GameTooltip, "SetAzeriteEssenceSlot", function(self)
+		TOOLTIP.SetupTooltipIcon(self)
+	end)
 
 	-- Tooltip rewards icon
 	_G.BONUS_OBJECTIVE_REWARD_WITH_COUNT_FORMAT = '|T%1$s:16:16:'..newString..'|t |cffffffff%2$s|r %3$s'

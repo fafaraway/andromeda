@@ -368,8 +368,8 @@ function ACTIONBAR:ReskinBars()
 		icon = {
 			texCoord = C.TexCoord,
 			points = {
-				{'TOPLEFT', C.Mult, -C.Mult},
-				{'BOTTOMRIGHT', -C.Mult, C.Mult},
+				{'TOPLEFT', 0, 0},
+				{'BOTTOMRIGHT', 0, 0},
 			},
 		},
 		flyoutBorder = {file = ''},

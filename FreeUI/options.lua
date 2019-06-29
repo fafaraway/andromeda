@@ -200,13 +200,13 @@ C['tooltip'] = {
 		['ilvlSpec'] = true,
 			['ilvlSpecByShift'] = false,
 		['extraInfo'] = true,
+			['extraInfoByShift'] = false,
 		['azeriteTrait'] = true,
 		['linkHover'] = true,
 		['borderColor'] = true,
 		['tipIcon'] = true,
-		['tipClear'] = true,
-
 		['targetBy'] = true,
+		['petInfo'] = true,
 }
 
 C['chat'] = {
@@ -363,7 +363,7 @@ C['unitframe'] = {
 }
 
 C['classmod'] = {
-	['havocFury'] = false,
+	['havocFury'] = true,
 }
 
 

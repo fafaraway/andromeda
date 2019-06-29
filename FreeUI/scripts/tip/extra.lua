@@ -93,6 +93,8 @@ function TOOLTIP:UpdateSpellCaster(...)
 end
 
 function TOOLTIP:ExtraInfo()
+	if not C.tooltip.extraInfo then return end
+
 	-- Update all
 	hooksecurefunc(GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
 	hooksecurefunc(ItemRefTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)

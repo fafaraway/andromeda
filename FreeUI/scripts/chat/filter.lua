@@ -146,24 +146,6 @@ hooksecurefunc(BNToastFrame, 'ShowToast', function(self)
 	blockTrashClub(self)
 end)
 
--- filter azerite info while islands-ing
-local azerite = ISLANDS_QUEUE_WEEKLY_QUEST_PROGRESS:gsub('%%d/%%d ', '')
-local function filterAzeriteGain(_, _, msg)
-	if strfind(msg, azerite) then
-		return true
-	end
-end
-
-local function isPlayerOnIslands()
-	local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
-	if instanceType == 'scenario' and maxPlayers == 3 then
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', filterAzeriteGain)
-	else
-		ChatFrame_RemoveMessageEventFilter('CHAT_MSG_SYSTEM', filterAzeriteGain)
-	end
-end
-
-
 
 
 function CHAT:Filter()
@@ -191,6 +173,4 @@ function CHAT:Filter()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', genAddonBlock)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', genAddonBlock)
 	end
-
-	F:RegisterEvent('PLAYER_ENTERING_WORLD', isPlayerOnIslands)
 end

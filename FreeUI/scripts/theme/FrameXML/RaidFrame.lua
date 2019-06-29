@@ -1,6 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
+	F.StripTextures(RaidInfoFrame)
 	F.CreateBD(RaidInfoFrame)
 	F.CreateSD(RaidInfoFrame)
 	F.ReskinCheck(RaidFrameAllAssistCheckButton)

@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-
 local _G = getfenv(0)
 local strfind, format, tinsert, ipairs, select = string.find, string.format, table.insert, ipairs, select
 local GetSpellInfo = GetSpellInfo
@@ -103,4 +102,3 @@ function TOOLTIP:AzeriteTrait()
 	ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
 	EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
 end
-

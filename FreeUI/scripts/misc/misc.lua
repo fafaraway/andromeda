@@ -148,7 +148,7 @@ end
 function module:FlightMasterWhistle()
 	local flightMastersWhistle_SpellID1 = 227334
 	local flightMastersWhistle_SpellID2 = 253937
-	local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\blowmywhistle.ogg'
+	local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\whistle.ogg'
 
 	local f = CreateFrame('frame')
 	f:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end);

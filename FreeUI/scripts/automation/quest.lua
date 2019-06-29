@@ -1,24 +1,24 @@
 local F, C, L = unpack(select(2, ...))
 
--- based on QuickQuest by p3lim
+-- QuickQuest, by p3lim
 
---[[local created
+
+local created
 local function setupCheckButton()
 	if created then return end
-	local mono = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'OptionsCheckButtonTemplate')
-	mono:SetPoint('TOPRIGHT', -140, -2)
+	local mono = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "OptionsCheckButtonTemplate")
+	mono:SetPoint("TOPRIGHT", -140, -2)
 	mono:SetSize(26, 26)
-	F.CreateCB(mono)
-	mono.text = F.CreateFS(mono, {C.font.normal, 12}, L['AutoQuest'], nil, nil, true, 'LEFT', 25, 0)
-
+	F.CreateCB(mono, .25)
+	mono.text = F.CreateFS(mono, {C.font.normal, 12}, L['AutoQuest'], nil, 'yellow', true, 'LEFT', 25, 0)
 	mono:SetChecked(C.automation.autoQuest)
-	mono:SetScript('OnClick', function(self)
+	mono:SetScript("OnClick", function(self)
 		C.automation.autoQuest = self:GetChecked()
 	end)
 
 	created = true
 end
-WorldMapFrame:HookScript('OnShow', setupCheckButton)]]
+WorldMapFrame:HookScript("OnShow", setupCheckButton)
 
 -- Function
 local strmatch = string.match

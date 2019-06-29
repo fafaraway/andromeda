@@ -22,7 +22,6 @@ function TOOLTIP:PetInfo_Reset()
 		self.petIcon:SetAlpha(0)
 	end
 end
-GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.PetInfo_Reset)
 
 function TOOLTIP:PetInfo_Setup()
 	local _, unit = self:GetUnit()
@@ -36,4 +35,11 @@ function TOOLTIP:PetInfo_Setup()
 	local speciesID = UnitBattlePetSpeciesID(unit)
 	self:AddDoubleLine(PET..ID..':', speciesID and (C.InfoColor..speciesID..'|r') or (C.GreyColor..UNKNOWN..'|r'))
 end
-GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.PetInfo_Setup)
+
+
+function TOOLTIP:PetInfo()
+	if not C.tooltip.petInfo then return end
+
+	GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.PetInfo_Reset)
+	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.PetInfo_Setup)
+end
