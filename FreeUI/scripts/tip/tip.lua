@@ -34,8 +34,8 @@ function TOOLTIP:GetUnit()
 end
 
 function TOOLTIP:HideLines()
-    for i = 3, self:NumLines() do
-        local tiptext = _G['GameTooltipTextLeft'..i]
+	for i = 3, self:NumLines() do
+		local tiptext = _G['GameTooltipTextLeft'..i]
 		local linetext = tiptext:GetText()
 		if linetext then
 			if linetext == PVP then
@@ -49,7 +49,7 @@ function TOOLTIP:HideLines()
 				tiptext:Hide()
 			end
 		end
-    end
+	end
 end
 
 function TOOLTIP:GetLevelLine()
@@ -259,28 +259,17 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg.glow:SetBackdropBorderColor(0, 0, 0, .35)
+	self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
 	if C.tooltip.borderColor and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				self.bg.glow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
+				self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
 			end
 		end
 	end
-
-	--[[if self.NumLines and self:NumLines() > 0 then
-		for index = 1, self:NumLines() do
-			if index == 1 then
-				_G[self:GetName()..'TextLeft'..index]:SetFont(C.font.normal, 14, 'OUTLINE')
-			else
-				_G[self:GetName()..'TextLeft'..index]:SetFont(C.font.normal, 12, 'OUTLINE')
-			end
-			_G[self:GetName()..'TextRight'..index]:SetFont(C.font.normal, 12, 'OUTLINE')
-		end
-	end]]
 end
 
 function TOOLTIP:GameTooltip_SetBackdropStyle()
@@ -288,27 +277,6 @@ function TOOLTIP:GameTooltip_SetBackdropStyle()
 	self:SetBackdrop(nil)
 end
 
-
---[[local showPriceFrames = {
-	"AuctionFrame",
-	"MerchantFrame",
-	"QuestRewardPanel",
-	"QuestFrameRewardPanel",
-}
-
-local prehook = GameTooltip_OnTooltipAddMoney
-
-function GameTooltip_OnTooltipAddMoney(...)
-	if IsShiftKeyDown() then
-		return prehook(...)
-	end
-	for _, name in pairs(showPriceFrames) do
-		local frame = _G[name]
-		if frame and frame:IsShown() then
-			return prehook(...)
-		end
-	end
-end]]
 
 
 function TOOLTIP:OnLogin()

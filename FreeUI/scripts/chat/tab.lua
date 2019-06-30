@@ -1,8 +1,7 @@
 local F, C = unpack(select(2, ...))
-if not C.chat.enable then return end
-local module = F:GetModule('Chat')
+local CHAT = F:GetModule('Chat')
 
-function module:Tab()
+function CHAT:Tab()
 	if not C.chat.tab then return end
 
 	CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0

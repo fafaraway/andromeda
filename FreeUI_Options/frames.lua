@@ -183,11 +183,11 @@ do
 	local general = FreeUIOptionsPanel.general
 	general.tab.Icon:SetTexture("Interface\\Icons\\INV_Misc_Gear_01")
 
-	local misc = ns.addSubCategory(general, ns.localization.generalmisc)
-	misc:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
+	local generalsub = ns.addSubCategory(general, ns.localization.generalsub)
+	generalsub:SetPoint("TOPLEFT", general.subText, "BOTTOMLEFT", 0, -8)
 
 	local hideTalkingHead = ns.CreateCheckBox(general, "hideTalkingHead", true, true)
-	hideTalkingHead:SetPoint("TOPLEFT", misc, "BOTTOMLEFT", 0, -8)
+	hideTalkingHead:SetPoint("TOPLEFT", generalsub, "BOTTOMLEFT", 0, -8)
 
 	local hideBossBanner = ns.CreateCheckBox(general, "hideBossBanner", true, true)
 	hideBossBanner:SetPoint("LEFT", hideTalkingHead, "RIGHT", 240, 0)
@@ -219,43 +219,40 @@ do
 	local progressBar = ns.CreateCheckBox(general, "progressBar", true, true)
 	progressBar:SetPoint("TOPLEFT", fasterLoot, "BOTTOMLEFT", 0, -8)
 
-	local raidManager = ns.CreateCheckBox(general, "raidManager", true, true)
-	raidManager:SetPoint("LEFT", progressBar, "RIGHT", 240, 0)
+	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
+	alreadyKnown:SetPoint("LEFT", progressBar, "RIGHT", 240, 0)
 
 	local clickCast = ns.CreateCheckBox(general, "clickCast", true, true)
 	clickCast:SetPoint("TOPLEFT", progressBar, "BOTTOMLEFT", 0, -8)
 
-	local alreadyKnown = ns.CreateCheckBox(general, "alreadyKnown", true, true)
-	alreadyKnown:SetPoint("LEFT", clickCast, "RIGHT", 240, 0)
-
 	local combatText = ns.CreateCheckBox(general, "combatText", true, true)
-	combatText:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -8)
+	combatText:SetPoint("LEFT", clickCast, "RIGHT", 240, 0)
 
-	local cooldown = ns.addSubCategory(general, ns.localization.generalcooldown)
-	cooldown:SetPoint("TOPLEFT", combatText, "BOTTOMLEFT", 0, -16)
+	local cooldownsub = ns.addSubCategory(general, ns.localization.generalcooldownsub)
+	cooldownsub:SetPoint("TOPLEFT", clickCast, "BOTTOMLEFT", 0, -16)
 
-	local cooldownCount = ns.CreateCheckBox(general, "cooldown", true, true)
-	cooldownCount:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 0, -8)
+	local cooldown = ns.CreateCheckBox(general, "cooldown", true, true)
+	cooldown:SetPoint("TOPLEFT", cooldownsub, "BOTTOMLEFT", 0, -8)
 
-	local cooldownCount_decimal = ns.CreateCheckBox(general, "cooldownCount_decimal", true, true)
-	cooldownCount_decimal:SetPoint("TOPLEFT", cooldownCount, "BOTTOMLEFT", 16, -4)
+	local cooldown_decimal = ns.CreateCheckBox(general, "cooldown_decimal", true, true)
+	cooldown_decimal:SetPoint("TOPLEFT", cooldown, "BOTTOMLEFT", 16, -4)
 
-	cooldownCount.children = {cooldownCount_decimal}
+	cooldown.children = {cooldown_decimal}
 
 	local cooldownPulse = ns.CreateCheckBox(general, "cooldownPulse", true, true)
-	cooldownPulse:SetPoint("LEFT", cooldownCount, "RIGHT", 240, 0)
+	cooldownPulse:SetPoint("LEFT", cooldown, "RIGHT", 240, 0)
 
-	local camera = ns.addSubCategory(general, ns.localization.generalcamera)
-	camera:SetPoint("TOPLEFT", cooldownCount_decimal, "BOTTOMLEFT", -16, -12)
+	local camerasub = ns.addSubCategory(general, ns.localization.generalcamerasub)
+	camerasub:SetPoint("TOPLEFT", cooldown_decimal, "BOTTOMLEFT", -16, -12)
 
 	local cameraIncrement = ns.CreateNumberSlider(general, "cameraIncrement", nil, nil, 1, 5, 1, true)
-	cameraIncrement:SetPoint("TOPLEFT", camera, "BOTTOMLEFT", 0, -30)
+	cameraIncrement:SetPoint("TOPLEFT", camerasub, "BOTTOMLEFT", 0, -30)
 
-	local uiscaleset = ns.addSubCategory(general, ns.localization.generaluiscaleset)
-	uiscaleset:SetPoint("TOPLEFT", cameraIncrement, "BOTTOMLEFT", 0, -30)
+	local uiscalesub = ns.addSubCategory(general, ns.localization.generaluiscalesub)
+	uiscalesub:SetPoint("TOPLEFT", cameraIncrement, "BOTTOMLEFT", 0, -30)
 
 	local uiScaleAuto = ns.CreateCheckBox(general, "uiScaleAuto", true, true)
-	uiScaleAuto:SetPoint("TOPLEFT", uiscaleset, "BOTTOMLEFT", 0, -8)
+	uiScaleAuto:SetPoint("TOPLEFT", uiscalesub, "BOTTOMLEFT", 0, -8)
 
 	local uiScale = ns.CreateNumberSlider(general, "uiScale", nil, nil, .4, 1.1, .01, true)
 	uiScale:SetPoint("TOPLEFT", uiScaleAuto, "BOTTOMLEFT", 0, -30)
@@ -275,32 +272,23 @@ do
 	local appearance = FreeUIOptionsPanel.appearance
 	appearance.tab.Icon:SetTexture("Interface\\Icons\\Spell_Shadow_DeathAndDecay")
 
-	local useGlobalTheme = ns.CreateCheckBox(appearance, "useGlobalTheme", true, true)
-	useGlobalTheme:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
+	local generalsub = ns.addSubCategory(appearance, ns.localization.appearancegeneralsub)
+	generalsub:SetPoint("TOPLEFT", appearance.subText, "BOTTOMLEFT", 0, -8)
 
-	local vignette = ns.CreateCheckBox(appearance, "vignette", true, true)
-	vignette:SetPoint("LEFT", useGlobalTheme, "RIGHT", 240, 0)
+	local enableTheme = ns.CreateCheckBox(appearance, "enableTheme", true, true)
+	enableTheme:SetPoint("TOPLEFT", generalsub, "BOTTOMLEFT", 0, -8)
 
-	local addShadowBorder = ns.CreateCheckBox(appearance, "addShadowBorder", true, true)
-	addShadowBorder:SetPoint("TOPLEFT", useGlobalTheme, "BOTTOMLEFT", 0, -8)
+	local enableVignette = ns.CreateCheckBox(appearance, "enableVignette", true, true)
+	enableVignette:SetPoint("LEFT", enableTheme, "RIGHT", 240, 0)
 
-	local fontStyle = ns.CreateCheckBox(appearance, "reskinFonts", true, true)
-	fontStyle:SetPoint("LEFT", addShadowBorder, "RIGHT", 240, 0)
+	local enableShadow = ns.CreateCheckBox(appearance, "enableShadow", true, true)
+	enableShadow:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
 
-	local line_2 = ns.addSubCategory(appearance, ns.localization.appearanceline_2)
-	line_2:SetPoint("TOPLEFT", addShadowBorder, "BOTTOMLEFT", 0, -8)
-
-	local objectiveTracker = ns.CreateCheckBox(appearance, "reskinQuestTracker", true, true)
-	objectiveTracker:SetPoint("TOPLEFT", line_2, "BOTTOMLEFT", 0, -16)
-
-	local petBattle = ns.CreateCheckBox(appearance, "reskinPetBattle", true, true)
-	petBattle:SetPoint("LEFT", objectiveTracker, "RIGHT", 240, 0)
-
-	local line_3 = ns.addSubCategory(appearance, ns.localization.appearanceline_3)
-	line_3:SetPoint("TOPLEFT", objectiveTracker, "BOTTOMLEFT", 0, -8)
+	local pluginsub = ns.addSubCategory(appearance, ns.localization.appearancepluginsub)
+	pluginsub:SetPoint("TOPLEFT", enableShadow, "BOTTOMLEFT", 0, -8)
 
 	local DBM = ns.CreateCheckBox(appearance, "reskinDBM", true, true)
-	DBM:SetPoint("TOPLEFT", line_3, "BOTTOMLEFT", 0, -16)
+	DBM:SetPoint("TOPLEFT", pluginsub, "BOTTOMLEFT", 0, -8)
 
 	local BW = ns.CreateCheckBox(appearance, "reskinBW", true, true)
 	BW:SetPoint("LEFT", DBM, "RIGHT", 240, 0)

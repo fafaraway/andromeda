@@ -93,7 +93,7 @@ local function HandleUpdateLimiter(self, elapsed)
 	end
 end
 
-function BLIZZARD:ColourPicker()
+function BLIZZARD:ReskinColourPicker()
 	if IsAddOnLoaded('ColorPickerPlus') then
 		return
 	end

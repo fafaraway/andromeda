@@ -4,8 +4,6 @@ local BLIZZARD = F:GetModule('Blizzard')
 -- Order Hall Command Bar by Paojy
 
 local OrderHall_eframe = CreateFrame('Frame')
-OrderHall_eframe:RegisterEvent('ADDON_LOADED')
-
 OrderHall_eframe:SetScript('OnEvent', function(self, event, arg1)
 	if event == 'ADDON_LOADED' and arg1 == 'Blizzard_OrderHallUI' then
 		OrderHall_eframe:RegisterEvent('DISPLAY_SIZE_CHANGED')
@@ -67,3 +65,7 @@ OrderHall_eframe:SetScript('OnEvent', function(self, event, arg1)
 		end)
 	end
 end)
+
+function BLIZZARD:ReskinCommandBar()
+	OrderHall_eframe:RegisterEvent('ADDON_LOADED')
+end

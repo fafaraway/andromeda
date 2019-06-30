@@ -36,7 +36,6 @@ function module:OnLogin()
 	self:MissingStats()
 	self:MissingBuffs()
 	self:FasterLoot()
-	self:Vignette()
 	self:PVPMessageEnhancement()
 	self:UndressButton()
 	self:FasterDelete()
@@ -64,21 +63,8 @@ end
 
 
 
--- adding a shadowed border to the UI window
-function module:Vignette()
-	if not C.appearance.vignette then return end
 
-	self.f = CreateFrame('Frame', 'ShadowBackground')
-	self.f:SetPoint('TOPLEFT')
-	self.f:SetPoint('BOTTOMRIGHT')
-	self.f:SetFrameLevel(0)
-	self.f:SetFrameStrata('BACKGROUND')
-	self.f.tex = self.f:CreateTexture()
-	self.f.tex:SetTexture([[Interface\Addons\FreeUI\assets\vignette.tga]])
-	self.f.tex:SetAllPoints(f)
 
-	self.f:SetAlpha(C.appearance.vignetteAlpha)
-end
 
 
 

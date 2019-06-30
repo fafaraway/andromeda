@@ -4,8 +4,6 @@ local BLIZZARD = F:GetModule('Blizzard')
 local r, g, b, pairs = C.r, C.g, C.b, pairs
 
 function BLIZZARD:ReskinPetBattleUI()
-	if not C.general.petBattle then return end
-	
 	-- Head Frame
 	local frame = PetBattleFrame
 	for i = 1, 3 do
@@ -22,6 +20,7 @@ function BLIZZARD:ReskinPetBattleUI()
 	weather.Icon:ClearAllPoints()
 	weather.Icon:SetPoint("TOP", frame.TopVersusText, "BOTTOM", 0, -15)
 	weather.Icon:SetTexCoord(unpack(C.TexCoord))
+	F.CreateBDFrame(weather.Icon)
 	F.CreateSD(weather.Icon)
 	weather.BackgroundArt:SetPoint("TOP", UIParent)
 	weather.Duration:ClearAllPoints()
@@ -46,6 +45,7 @@ function BLIZZARD:ReskinPetBattleUI()
 		unit.petIcon = unit:CreateTexture(nil, "ARTWORK")
 		unit.petIcon:SetSize(25, 25)
 		unit.petIcon:SetTexCoord(unpack(C.TexCoord))
+		F.CreateBDFrame(unit.petIcon)
 		F.CreateSD(unit.petIcon)
 		unit.PetType:SetAlpha(0)
 		unit.PetType:ClearAllPoints()
@@ -55,6 +55,7 @@ function BLIZZARD:ReskinPetBattleUI()
 		unit.Border:SetAlpha(0)
 		unit.Border2:SetAlpha(0)
 		unit.BorderFlash:SetAlpha(0)
+		F.CreateBDFrame(unit.Icon)
 		F.CreateSD(unit.Icon)
 
 		unit.LevelUnderlay:SetAlpha(0)
@@ -102,6 +103,7 @@ function BLIZZARD:ReskinPetBattleUI()
 		unit.BorderAlive:SetAlpha(0)
 		unit.BorderDead:SetAlpha(0)
 		unit.Icon:SetTexCoord(unpack(C.TexCoord))
+		F.CreateBDFrame(unit.Icon)
 		F.CreateSD(unit.Icon)
 
 		unit.deadIcon = unit:CreateTexture(nil, "ARTWORK")
@@ -233,9 +235,11 @@ function BLIZZARD:ReskinPetBattleUI()
 			bu:SetNormalTexture("")
 			bu:GetPushedTexture():SetTexture(C.media.backdrop)
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-			F.CreateSD(bu)
 
-			bu.Cooldown:SetFont(C.font.normal, 26, "OUTLINE")
+			F.CreateBDFrame(bu)
+
+
+			bu.Cooldown:SetFont(C.font.pixel, 16, "OUTLINEMONOCHROME")
 			bu.SelectedHighlight:ClearAllPoints()
 			bu.SelectedHighlight:SetPoint("TOPLEFT", bu, -12, 12)
 			bu.SelectedHighlight:SetPoint("BOTTOMRIGHT", bu, 12, -12)
@@ -251,8 +255,9 @@ function BLIZZARD:ReskinPetBattleUI()
 	end
 	F.PixelIcon(skipButton, "Interface\\Icons\\Ability_Foundryraid_Dormant", true)
 	skipButton.Icon:SetAllPoints()
-	F.CreateSD(skipButton)
+
 	skipButton:SetPushedTexture(C.media.backdrop)
+	F.CreateBDFrame(skipButton)
 
 	skipButton.text = F.CreateFS(skipButton, {C.font.normal, 14}, PET_BATTLE_PASS, nil, nil, true, "BOTTOM", 1, 2)
 
@@ -266,7 +271,9 @@ function BLIZZARD:ReskinPetBattleUI()
 	xpbar:SetParent(bar)
 	xpbar:SetWidth(bar:GetWidth())
 	xpbar:SetStatusBarTexture(C.media.sbTex)
-	F.CreateSD(xpbar)
+	F.SetFS(xpbar.TextString)
+	xpbar.bg = F.CreateBDFrame(xpbar)
+	F.CreateSD(xpbar.bg)
 	F.CreateTex(xpbar)
 
 	local turnTimer = bottomFrame.TurnTimer

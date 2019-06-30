@@ -26,6 +26,7 @@ C.themes["Blizzard_WarboardUI"] = function()
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
 			option.Header.Text:SetTextColor(0, 0, 0)
+			option.Header.Text:SetShadowColor(0, 0, 0, 0)
 			option.OptionText:SetTextColor(1, 1, 1)
 			
 			for i = 1, option.WidgetContainer:GetNumChildren() do

@@ -51,20 +51,16 @@ C['general'] = {
 }
 
 C['appearance'] = {
-	['useGlobalTheme'] = true,
+	['enableTheme'] = true,
 		['backdropColour'] = {0, 0, 0, .5},
-		['addShadowBorder'] = true,
 		['buttonGradientColour'] = {.15, .15, .15, .5},
 		['buttonSolidColour'] = {.05, .05, .05, .5},
 		['useButtonGradientColour'] = true,
 
-	['vignette'] = true,
+	['enableShadow'] = true,
+
+	['enableVignette'] = true,
 		['vignetteAlpha'] = .35,
-
-	['reskinQuestTracker'] = true,
-	['reskinPetBattle'] = true,
-
-	['reskinFonts'] = true,
 
 	['reskinDBM'] = true,
 	['reskinBW'] = true,

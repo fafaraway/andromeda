@@ -67,6 +67,8 @@ if GetLocale() == 'ruRU' then
 end
 
 
+
+
 C.Class = select(2, UnitClass('player'))
 C.Name = UnitName('player')
 C.Realm = GetRealmName()
@@ -107,6 +109,7 @@ C.CopyTex = 'Interface\\Buttons\\UI-GuildButton-PublicNote-Up'
 
 C.TexCoord = {.08, .92, .08, .92}
 
+C.AssetsPath = 'interface\\addons\\FreeUI\\assets\\'
 
 
 

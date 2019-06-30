@@ -3,7 +3,7 @@ local BLIZZARD = F:GetModule('Blizzard')
 
 
 
-function BLIZZARD:Loot()
+function BLIZZARD:ReskinLootFrame()
 	local iconsize = 32
 	local width = 200
 	local sq, ss, sn, st

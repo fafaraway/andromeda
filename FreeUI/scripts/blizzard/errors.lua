@@ -3,7 +3,7 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
 
-function BLIZZARD:Errors()
+function BLIZZARD:ReskinErrorFrame()
 	local holdtime = 0.52 -- hold time (seconds)
 	local fadeintime = 0.08 -- fadein time (seconds)
 	local fadeouttime = 0.16 -- fade out time (seconds)

@@ -7,7 +7,6 @@
 	<Script file='cooldown.lua'/>
 	<Script file='errors.lua'/>
 	<Script file='fixes.lua'/>
-	<Script file='fonts.lua'/>
 	<Script file='loot.lua'/>
 	<Script file='objectivetracker.lua'/>
 	<Script file='petbattle.lua'/>

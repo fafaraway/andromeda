@@ -6,11 +6,7 @@ local BLIZZARD = F:GetModule('Blizzard')
 
 
 function BLIZZARD:RaidManager()
-	if not C.general.raidManager then return end
-
 	local converttip
-
-	
 
 	local rm = CreateFrame('Frame', 'FreeUIRaidManager', UIParent)
 	rm:SetFrameStrata('MEDIUM')

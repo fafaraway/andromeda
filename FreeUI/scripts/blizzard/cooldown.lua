@@ -161,7 +161,7 @@ function BLIZZARD:RegisterActionButton()
 	end
 end
 
-function BLIZZARD:Cooldown()
+function BLIZZARD:ReskinCooldown()
 	if not C.general.cooldown then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index

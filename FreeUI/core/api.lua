@@ -93,22 +93,22 @@ function F:CreateTex()
 end
 
 function F:CreateSD(a, m, s)
-	if not C.appearance.addShadowBorder then return end
-	if self.glow then return end
+	if not C.appearance.enableShadow then return end
+	if self.Shadow then return end
 
 	local frame = self
 	if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
 	local lvl = frame:GetFrameLevel()
 	if not m then m, s = 3, 3 end
 
-	self.glow = CreateFrame('Frame', nil, frame)
-	self.glow:SetPoint('TOPLEFT', self, -m*C.Mult, m*C.Mult)
-	self.glow:SetPoint('BOTTOMRIGHT', self, m*C.Mult, -m*C.Mult)
-	self.glow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = s*C.Mult})
-	self.glow:SetBackdropBorderColor(0, 0, 0, a or .35)
-	self.glow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
+	self.Shadow = CreateFrame('Frame', nil, frame)
+	self.Shadow:SetPoint('TOPLEFT', self, -m*C.Mult, m*C.Mult)
+	self.Shadow:SetPoint('BOTTOMRIGHT', self, m*C.Mult, -m*C.Mult)
+	self.Shadow:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = s*C.Mult})
+	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .35)
+	self.Shadow:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
-	return self.glow
+	return self.Shadow
 end
 
 function F:CreateBD(a)
@@ -403,10 +403,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 		self:SetPoint(a1, p, a2, x, y)
 	end
 
-	self:SetNormalTexture('')
-	self:SetHighlightTexture('')
-	self:SetPushedTexture('')
-	self:SetDisabledTexture('')
+	F.StripTextures(self)
 	F.CreateBD(self, 0)
 	F.CreateGradient(self)
 

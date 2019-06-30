@@ -70,10 +70,10 @@ function TOOLTIP:ReskinTooltipIcons()
 	TOOLTIP.HookTooltipMethod(GameTooltip)
 	TOOLTIP.HookTooltipMethod(ItemRefTooltip)
 
-	hooksecurefunc(GameTooltip, "SetAzeriteEssence", function(self)
+	hooksecurefunc(GameTooltip, 'SetAzeriteEssence', function(self)
 		TOOLTIP.SetupTooltipIcon(self)
 	end)
-	hooksecurefunc(GameTooltip, "SetAzeriteEssenceSlot", function(self)
+	hooksecurefunc(GameTooltip, 'SetAzeriteEssenceSlot', function(self)
 		TOOLTIP.SetupTooltipIcon(self)
 	end)
 

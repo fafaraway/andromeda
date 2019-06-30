@@ -15,7 +15,7 @@ C.themes['FreeUI'] = {}
 local loader = CreateFrame('Frame')
 loader:RegisterEvent('ADDON_LOADED')
 loader:SetScript('OnEvent', function(self, event, addon)
-	if not C.appearance.useGlobalTheme then return end
+	if not C.appearance.enableTheme then return end
 
 	local addonModule = C.themes[addon]
 	if addonModule then
@@ -28,6 +28,22 @@ loader:SetScript('OnEvent', function(self, event, addon)
 		end
 	end
 end)
+
+
+function module:Vignette()
+	if not C.appearance.enableVignette then return end
+
+	self.f = CreateFrame('Frame', 'ShadowBackground')
+	self.f:SetPoint('TOPLEFT')
+	self.f:SetPoint('BOTTOMRIGHT')
+	self.f:SetFrameLevel(0)
+	self.f:SetFrameStrata('BACKGROUND')
+	self.f.tex = self.f:CreateTexture()
+	self.f.tex:SetTexture(C.AssetsPath..'vignette.tga')
+	self.f.tex:SetAllPoints(f)
+
+	self.f:SetAlpha(C.appearance.vignetteAlpha)
+end
 
 
 

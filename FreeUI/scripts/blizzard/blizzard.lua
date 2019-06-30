@@ -3,23 +3,23 @@ local BLIZZARD = F:RegisterModule('Blizzard')
 
 
 function BLIZZARD:OnLogin()
-	self:Fonts()
 	self:ReskinBuffFrame()
 	self:ReskinPetBattleUI()
-	self:ColourPicker()
+	self:ReskinColourPicker()
 	self:RepositionUIWidgets()
 	self:ReskinQuestTracker()
-	self:Cooldown()
+	self:ReskinCooldown()
 	self:RemoveTalkingHead()
 	self:RemoveBossBanner()
 	self:SkipAzeriteAnimation()
-	self:Errors()
+	self:ReskinErrorFrame()
 	self:ReskinDigBar()
-	self:Loot()
+	self:ReskinLootFrame()
 	self:RaidManager()
 	self:DurabilityIndicator()
 	self:VehicleIndicator()
 	self:QuickJoin()
+	self:ReskinCommandBar()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
