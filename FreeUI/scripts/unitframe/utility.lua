@@ -54,7 +54,7 @@ local function reskinTimerBar(bar)
 		statusbar:SetAllPoints()
 		statusbar:SetStatusBarTexture(C.media.sbTex)
 	else
-		bar:SetStatusBarTexture(C.media.backdrop)
+		bar:SetStatusBarTexture(C.media.bdTex)
 	end
 
 	local text = _G[bar:GetName()..'Text']

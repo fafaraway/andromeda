@@ -211,7 +211,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	local iconBG = self:CreateTexture('$parentIcon', 'BACKGROUND')
 	iconBG:SetPoint('TOPLEFT', -C.Mult , C.Mult)
 	iconBG:SetPoint('BOTTOMRIGHT', C.Mult, -C.Mult)
-	iconBG:SetTexture(C.media.backdrop)
+	iconBG:SetTexture(C.media.bdTex)
 	iconBG:SetVertexColor(0, 1, 0)
 
 	iconBG.glow = F.CreateSD(iconBG, .5, 3, 3)

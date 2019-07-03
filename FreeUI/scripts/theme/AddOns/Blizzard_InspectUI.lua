@@ -33,7 +33,7 @@ C.themes["Blizzard_InspectUI"] = function()
 	end
 
 	hooksecurefunc("InspectPaperDollItemSlotButton_Update", function(button)
-		button.IconBorder:SetTexture(C.media.backdrop)
+		button.IconBorder:SetTexture(C.media.bdTex)
 		button.icon:SetShown(button.hasItem)
 	end)
 

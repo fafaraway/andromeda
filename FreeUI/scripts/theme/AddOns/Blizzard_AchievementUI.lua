@@ -35,7 +35,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	AchievementFrameComparisonSummaryFriendBackground:Hide()
 
 	local function SetupButtonHighlight(button, bg)
-		button:SetHighlightTexture(C.media.backdrop)
+		button:SetHighlightTexture(C.media.bdTex)
 		local hl = button:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .25)
 		hl:SetPoint("TOPLEFT", bg, C.Mult, -C.Mult)
@@ -61,7 +61,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	AchievementFrameFilterDropDownText:SetPoint("CENTER", -10, 1)
 
 	F.StripTextures(AchievementFrameSummaryCategoriesStatusBar)
-	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(C.media.backdrop)
+	AchievementFrameSummaryCategoriesStatusBar:SetStatusBarTexture(C.media.bdTex)
 	AchievementFrameSummaryCategoriesStatusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetTextColor(1, 1, 1)
 	AchievementFrameSummaryCategoriesStatusBarTitle:SetPoint("LEFT", AchievementFrameSummaryCategoriesStatusBar, "LEFT", 6, 0)
@@ -90,7 +90,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		local ch = bu.tracked
 		ch:SetNormalTexture("")
 		ch:SetPushedTexture("")
-		ch:SetHighlightTexture(C.media.backdrop)
+		ch:SetHighlightTexture(C.media.bdTex)
 
 		local hl = ch:GetHighlightTexture()
 		hl:SetPoint("TOPLEFT", 4, -4)
@@ -145,7 +145,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 		local bar = _G["AchievementFrameProgressBar"..index]
 		if not bar.styled then
 			F.StripTextures(bar)
-			bar:SetStatusBarTexture(C.media.backdrop)
+			bar:SetStatusBarTexture(C.media.bdTex)
 			F.CreateBDFrame(bar, .25)
 
 			bar.styled = true
@@ -168,7 +168,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 				bu:DisableDrawLayer("BORDER")
 
 				local bd = bu.background
-				bd:SetTexture(C.media.backdrop)
+				bd:SetTexture(C.media.bdTex)
 				bd:SetVertexColor(0, 0, 0, .25)
 
 				bu.titleBar:Hide()
@@ -191,7 +191,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	for i = 1, 12 do
 		local bu = _G["AchievementFrameSummaryCategoriesCategory"..i]
 		F.StripTextures(bu)
-		bu:SetStatusBarTexture(C.media.backdrop)
+		bu:SetStatusBarTexture(C.media.bdTex)
 		bu:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 		F.CreateBDFrame(bu, .25)
 
@@ -227,7 +227,7 @@ C.themes["Blizzard_AchievementUI"] = function()
 	local bars = {AchievementFrameComparisonSummaryPlayerStatusBar, AchievementFrameComparisonSummaryFriendStatusBar}
 	for _, bar in pairs(bars) do
 		F.StripTextures(bar)
-		bar:SetStatusBarTexture(C.media.backdrop)
+		bar:SetStatusBarTexture(C.media.bdTex)
 		bar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .4, 0, 0, .6, 0)
 		bar.title:SetTextColor(1, 1, 1)
 		bar.title:SetPoint("LEFT", bar, "LEFT", 6, 0)

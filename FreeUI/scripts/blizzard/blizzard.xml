@@ -1,5 +1,6 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='blizzard.lua'/>
+	<Script file='alertframes.lua'/>
 	<Script file='buffframe.lua'/>
 	<Script file='colourpicker.lua'/>
 	<Script file='colours.lua'/>
@@ -8,8 +9,10 @@
 	<Script file='errors.lua'/>
 	<Script file='fixes.lua'/>
 	<Script file='loot.lua'/>
+	<Script file='mirrorbars.lua'/>
 	<Script file='objectivetracker.lua'/>
 	<Script file='petbattle.lua'/>
 	<Script file='quickjoin.lua'/>
 	<Script file='raidmanager.lua'/>
+	<Script file='timertracker.lua'/>
 </Ui>

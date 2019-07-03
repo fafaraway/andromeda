@@ -149,6 +149,9 @@ tinsert(C.themes["FreeUI"], function()
 	ReskinFont(SubZoneTextFont, headerFont, 40)
 	ReskinFont(WorldMapTextFont, headerFont, 40)
 
+	ReskinFont(ErrorFont, normalFont, 14)
+	ReskinFont(GameFontNormalHuge, normalFont, 14)
+
 
 	local yellowFonts = {
 		'GameFontNormal',

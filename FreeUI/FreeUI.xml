@@ -5,9 +5,10 @@
 	<Script file='locales\zhCN.lua'/>
 
 	<Script file='core\constant.lua'/>
+
 	<Script file='options.lua'/>
 	<Script file='profiles.lua'/>
-
+	
 	<Script file='core\uiscale.lua'/>
 	<Script file='core\api.lua'/>
 	<Script file='core\gui.lua'/>

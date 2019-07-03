@@ -141,7 +141,7 @@ C.themes["Blizzard_TalentUI"] = function()
 			F.Reskin(bu, true)
 
 			bu.learnedTex:SetTexture("")
-			bu.selectedTex:SetTexture(C.media.backdrop)
+			bu.selectedTex:SetTexture(C.media.bdTex)
 			bu.selectedTex:SetVertexColor(r, g, b, .2)
 			bu.selectedTex:SetDrawLayer("BACKGROUND")
 			bu.selectedTex:SetAllPoints()

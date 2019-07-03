@@ -68,7 +68,7 @@ C.themes["Blizzard_GuildControlUI"] = function()
 					-- can't get a backdrop frame to appear behind the checked texture for some reason
 					ch:SetNormalTexture("")
 					ch:SetPushedTexture("")
-					ch:SetHighlightTexture(C.media.backdrop)
+					ch:SetHighlightTexture(C.media.bdTex)
 
 					local hl = ch:GetHighlightTexture()
 					hl:SetPoint("TOPLEFT", 5, -5)

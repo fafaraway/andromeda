@@ -2,16 +2,15 @@ local F, C, L = unpack(select(2, ...))
 local MISC = F:GetModule('Misc')
 
 
-
 local pairs = pairs
 local SLOTIDS = {}
-for _, slot in pairs({"Head", "Neck", "Shoulder", "Shirt", "Chest", "Waist", "Legs", "Feet", "Wrist", "Hands", "Finger0", "Finger1", "Trinket0", "Trinket1", "Back", "MainHand", "SecondaryHand"}) do
-	SLOTIDS[slot] = GetInventorySlotInfo(slot.."Slot")
+for _, slot in pairs({'Head', 'Neck', 'Shoulder', 'Shirt', 'Chest', 'Waist', 'Legs', 'Feet', 'Wrist', 'Hands', 'Finger0', 'Finger1', 'Trinket0', 'Trinket1', 'Back', 'MainHand', 'SecondaryHand'}) do
+	SLOTIDS[slot] = GetInventorySlotInfo(slot..'Slot')
 end
 
 local myString = setmetatable({}, {
 	__index = function(t, i)
-		local gslot = _G["Character"..i.."Slot"]
+		local gslot = _G['Character'..i..'Slot']
 		if not gslot then return end
 		local fstr = F.CreateFS(gslot, 'pixel', '', nil, nil, true, 'BOTTOMRIGHT', 0, 2)
 		t[i] = fstr
@@ -21,7 +20,7 @@ local myString = setmetatable({}, {
 
 local tarString = setmetatable({}, {
 	__index = function(t, i)
-		local gslot = _G["Inspect"..i.."Slot"]
+		local gslot = _G['Inspect'..i..'Slot']
 		if not gslot then return end
 		local fstr = F.CreateFS(gslot, 'pixel', '', nil, nil, true, 'BOTTOMRIGHT', 0, 2)
 		t[i] = fstr
@@ -35,7 +34,7 @@ function MISC:ItemLevel_SetupLevel(unit, strType)
 	for slot, index in pairs(SLOTIDS) do
 		local str = strType[slot]
 		if not str then return end
-		str:SetText("")
+		str:SetText('')
 
 		local link = GetInventoryItemLink(unit, index)
 		if link and index ~= 4 then
@@ -69,8 +68,8 @@ function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
 		link = GetContainerItemLink(bag, slot)
 		level = F.GetItemLevel(link, bag, slot)
 	else
-		link = GetInventoryItemLink("player", slot)
-		level = F.GetItemLevel(link, "player", slot)
+		link = GetInventoryItemLink('player', slot)
+		level = F.GetItemLevel(link, 'player', slot)
 	end
 
 	local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
@@ -81,7 +80,7 @@ end
 function MISC:ItemLevel_FlyoutSetup()
 	local location = self.location
 	if not location or location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
-		if self.iLvl then self.iLvl:SetText("") end
+		if self.iLvl then self.iLvl:SetText('') end
 		return
 	end
 
@@ -100,7 +99,7 @@ function MISC:ItemLevel_ScrappingUpdate()
 	if not self.iLvl then
 		self.iLvl = F.CreateFS(self, 'pixel', '', nil, nil, true, 'BOTTOMRIGHT', 0, 2)
 	end
-	if not self.itemLink then self.iLvl:SetText("") return end
+	if not self.itemLink then self.iLvl:SetText('') return end
 
 	local quality = 1
 	if self.itemLocation and not self.item:IsItemEmpty() and self.item:GetItemName() then
@@ -113,9 +112,9 @@ function MISC:ItemLevel_ScrappingUpdate()
 end
 
 function MISC.ItemLevel_ScrappingShow(event, addon)
-	if addon == "Blizzard_ScrappingMachineUI" then
+	if addon == 'Blizzard_ScrappingMachineUI' then
 		for button in pairs(ScrappingMachineFrame.ItemSlots.scrapButtons.activeObjects) do
-			hooksecurefunc(button, "RefreshIcon", MISC.ItemLevel_ScrappingUpdate)
+			hooksecurefunc(button, 'RefreshIcon', MISC.ItemLevel_ScrappingUpdate)
 		end
 
 		F:UnregisterEvent(event, MISC.ItemLevel_ScrappingShow)
@@ -125,17 +124,17 @@ end
 function MISC:ShowItemLevel()
 	if not C.general.itemLevel then return end
 
-	hooksecurefunc("PaperDollItemSlotButton_OnShow", function()
-		MISC:ItemLevel_SetupLevel("player", myString)
+	hooksecurefunc('PaperDollItemSlotButton_OnShow', function()
+		MISC:ItemLevel_SetupLevel('player', myString)
 	end)
 
-	hooksecurefunc("PaperDollItemSlotButton_OnEvent", function(self, event, id)
-		if event == "PLAYER_EQUIPMENT_CHANGED" and self:GetID() == id then
-			MISC:ItemLevel_SetupLevel("player", myString)
+	hooksecurefunc('PaperDollItemSlotButton_OnEvent', function(self, event, id)
+		if event == 'PLAYER_EQUIPMENT_CHANGED' and self:GetID() == id then
+			MISC:ItemLevel_SetupLevel('player', myString)
 		end
 	end)
 
-	F:RegisterEvent("INSPECT_READY", self.ItemLevel_UpdateInspect)
-	hooksecurefunc("EquipmentFlyout_DisplayButton", self.ItemLevel_FlyoutSetup)
-	F:RegisterEvent("ADDON_LOADED", self.ItemLevel_ScrappingShow)
+	F:RegisterEvent('INSPECT_READY', self.ItemLevel_UpdateInspect)
+	hooksecurefunc('EquipmentFlyout_DisplayButton', self.ItemLevel_FlyoutSetup)
+	F:RegisterEvent('ADDON_LOADED', self.ItemLevel_ScrappingShow)
 end

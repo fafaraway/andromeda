@@ -13,7 +13,7 @@ tinsert(C.themes["FreeUI"], function()
 		local ic = bu.gameIcon
 
 		bu.background:Hide()
-		bu:SetHighlightTexture(C.media.backdrop)
+		bu:SetHighlightTexture(C.media.bdTex)
 		bu:GetHighlightTexture():SetVertexColor(.24, .56, 1, .2)
 
 		ic:SetSize(22, 22)

@@ -79,7 +79,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 		xpBar.XPLeft:Hide()
 		xpBar.XPRight:Hide()
 		select(4, xpBar:GetRegions()):Hide()
-		xpBar:SetStatusBarTexture(C.media.backdrop)
+		xpBar:SetStatusBarTexture(C.media.bdTex)
 		F.CreateBDFrame(xpBar, .25)
 	end
 
@@ -105,7 +105,7 @@ C.themes["Blizzard_GarrisonUI"] = function()
 				rareText:ClearAllPoints()
 				rareText:SetPoint("BOTTOMLEFT", button, 20, 10)
 				rareOverlay:SetDrawLayer("BACKGROUND")
-				rareOverlay:SetTexture(C.media.backdrop)
+				rareOverlay:SetTexture(C.media.bdTex)
 				rareOverlay:SetAllPoints()
 				rareOverlay:SetVertexColor(.098, .537, .969, .2)
 

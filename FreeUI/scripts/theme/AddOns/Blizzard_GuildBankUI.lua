@@ -89,7 +89,7 @@ C.themes["Blizzard_GuildBankUI"] = function()
 		for i = 1, NUM_GUILDBANK_COLUMNS do
 			for j = 1, NUM_SLOTS_PER_GUILDBANK_GROUP do
 				local bu = _G["GuildBankColumn"..i.."Button"..j]
-				bu.IconBorder:SetTexture(C.media.backdrop)
+				bu.IconBorder:SetTexture(C.media.bdTex)
 			end
 		end
 	end)

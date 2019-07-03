@@ -44,12 +44,12 @@ function module:AddPowerBar(self)
 	line:SetHeight(C.Mult)
 	line:SetPoint('TOPLEFT', 0, C.Mult)
 	line:SetPoint('TOPRIGHT', 0, C.Mult)
-	line:SetTexture(C.media.backdrop)
+	line:SetTexture(C.media.bdTex)
 	line:SetVertexColor(0, 0, 0)
 
 	local bg = power:CreateTexture(nil, 'BACKGROUND')
 	bg:SetAllPoints()
-	bg:SetTexture(C.media.backdrop)
+	bg:SetTexture(C.media.bdTex)
 	bg.multiplier = .2
 	power.bg = bg
 

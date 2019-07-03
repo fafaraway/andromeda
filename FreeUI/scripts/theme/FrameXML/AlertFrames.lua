@@ -1,13 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	local function alertFrameMover(self, ...)
-		_G.AlertFrame:ClearAllPoints()
-		_G.AlertFrame:SetPoint('CENTER', UIParent, 0, 200)
-	end
-	hooksecurefunc(_G.AlertFrame, 'UpdateAnchors', alertFrameMover)
-
-	
 	-- Fix Alertframe bg
 	local function fixBg(frame)
 		if frame:GetObjectType() == "AnimationGroup" then
@@ -121,8 +114,8 @@ tinsert(C.themes["FreeUI"], function()
 				frame.Icon:SetPoint("CENTER", frame.BaseQualityBorder)
 
 				frame.BaseQualityBorder:SetSize(52, 52)
-				frame.BaseQualityBorder:SetTexture(C.media.backdrop)
-				frame.UpgradeQualityBorder:SetTexture(C.media.backdrop)
+				frame.BaseQualityBorder:SetTexture(C.media.bdTex)
+				frame.UpgradeQualityBorder:SetTexture(C.media.bdTex)
 				frame.UpgradeQualityBorder:SetSize(52, 52)
 				frame.Background:SetTexture("")
 				frame.Sheen:SetTexture("")

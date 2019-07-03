@@ -8,7 +8,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 	TradeSkillFramePortrait:SetAlpha(0)
 
 	local rankFrame = TradeSkillFrame.RankFrame
-	rankFrame:SetStatusBarTexture(C.media.backdrop)
+	rankFrame:SetStatusBarTexture(C.media.bdTex)
 	rankFrame.SetStatusBarColor = F.Dummy
 	rankFrame:GetStatusBarTexture():SetGradient("VERTICAL", .1, .3, .9, .2, .4, 1)
 	rankFrame.BorderMid:Hide()
@@ -54,7 +54,7 @@ C.themes["Blizzard_TradeSkillUI"] = function()
 				if button.SubSkillRankBar then
 					local bar = button.SubSkillRankBar
 					F.StripTextures(bar)
-					bar:SetStatusBarTexture(C.media.backdrop)
+					bar:SetStatusBarTexture(C.media.bdTex)
 					bar:SetPoint("RIGHT", -6, 0)
 					F.CreateBDFrame(bar, .25)
 				end

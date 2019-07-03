@@ -36,7 +36,6 @@ function module:OnLogin()
 	self:MissingStats()
 	self:MissingBuffs()
 	self:FasterLoot()
-	self:PVPMessageEnhancement()
 	self:UndressButton()
 	self:FasterDelete()
 	self:FlightMasterWhistle()
@@ -49,6 +48,8 @@ function module:OnLogin()
 	self:MailButton()
 	self:CombatText()
 	self:PetFilter()
+	self:PVPMessageEnhancement()
+	self:Durability()
 
 	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
 
@@ -58,19 +59,7 @@ function module:OnLogin()
 end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
--- enhance PVP message
+-- Enhance PVP message
 function module:PVPMessageEnhancement(_, msg)
 	local _, instanceType = IsInInstance()
 	if instanceType == 'pvp' or instanceType == 'arena' then
@@ -78,8 +67,7 @@ function module:PVPMessageEnhancement(_, msg)
 	end
 end
 
-
--- undress button on dress up frame
+-- Undress button
 function module:UndressButton()
 	local undress = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undress:SetSize(80, 22)
@@ -101,14 +89,12 @@ function module:UndressButton()
 	F.Reskin(sideUndress)
 end
 
-
 -- Instant delete
 function module:FasterDelete()
 	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
 		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 	end)
 end
-
 
 -- Faster Looting
 function module:FasterLoot()
@@ -129,34 +115,31 @@ function module:FasterLoot()
 	end)
 end
 
-
--- plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
+-- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
 function module:FlightMasterWhistle()
 	local flightMastersWhistle_SpellID1 = 227334
 	local flightMastersWhistle_SpellID2 = 253937
-	local whistleSound = 'Interface\\Addons\\FreeUI\\assets\\sound\\whistle.ogg'
+	local whistleSound = C.AssetsPath..'sound\\whistle.ogg'
 
-	local f = CreateFrame('frame')
-	f:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end);
+	local whistle = CreateFrame('frame')
+	whistle:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end);
 
-	function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
+	function whistle:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
 		if (unit == 'player' and (spellID == flightMastersWhistle_SpellID1 or spellID == flightMastersWhistle_SpellID2)) then
 			PlaySoundFile(whistleSound)
 		end
 	end
-	f:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
+	whistle:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
 end
 
-
--- ready check in master sound
+-- Ready check in master sound
 function module:ReadyCheckEnhancement()
 	F:RegisterEvent('READY_CHECK', function()
 		PlaySound(SOUNDKIT.READY_CHECK, 'master')
 	end)
 end
 
-
--- paragon reputation
+-- Paragon reputation
 function module:HookParagonRep()
 	if not C.general.paragonRep then return end
 
@@ -188,8 +171,7 @@ function module:HookParagonRep()
 	end
 end
 
-
--- flash cursor
+-- Flash cursor
 function module:FlashCursor()
 	if not C.general.flashCursor then return end
 
@@ -226,7 +208,6 @@ function module:FlashCursor()
 	frame:SetScript('OnUpdate', OnUpdate);
 end
 
-
 -- Get Naked
 function module:NakedIcon()
 	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
@@ -249,7 +230,6 @@ function module:NakedIcon()
 		end
 	end)
 end
-
 
 -- Show BID and highlight price
 do
@@ -294,7 +274,6 @@ do
 	F:RegisterEvent('ADDON_LOADED', setupMisc)
 end
 
-
 -- Extend Instance
 function module:ExtendInstance()
 	local bu = CreateFrame('Button', nil, RaidInfoFrame)
@@ -323,7 +302,6 @@ function module:ExtendInstance()
 	end)
 end
 
-
 -- TradeFrame hook
 do
 	local infoText = F.CreateFS(TradeFrame, {C.font.normal, 14}, '', nil, nil, true)
@@ -346,7 +324,6 @@ do
 	end
 	hooksecurefunc('TradeFrame_Update', updateColor)
 end
-
 
 -- ALT+RightClick to buy a stack
 do

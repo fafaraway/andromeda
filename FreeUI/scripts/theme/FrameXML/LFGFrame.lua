@@ -150,7 +150,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	hooksecurefunc("SetCheckButtonIsRadio", function(button)
 		button:SetNormalTexture("")
-		button:SetHighlightTexture(C.media.backdrop)
+		button:SetHighlightTexture(C.media.bdTex)
 		button:SetCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check")
 		button:GetCheckedTexture():SetTexCoord(0, 1, 0, 1)
 		button:SetPushedTexture("")

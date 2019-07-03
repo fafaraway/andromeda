@@ -1,149 +1,149 @@
 local F, C, L = unpack(select(2, ...))
-
-local module = F:GetModule('Infobar')
-
+local INFOBAR = F:GetModule('Infobar')
 
 
-function module:Report()
+local time, date = time, date
+local strfind, format, floor = string.find, string.format, math.floor
+local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
+local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
+local invIndex = {}
+
+local FreeUIReportButton = INFOBAR.FreeUIReportButton
+
+local function updateTimerFormat(color, hour, minute)
+	if GetCVarBool('timeMgrUseMilitaryTime') then
+		return format(color..TIMEMANAGER_TICKER_24HOUR, hour, minute)
+	else
+		local timerUnit = DB.MyColor..(hour < 12 and 'AM' or 'PM')
+		if hour > 12 then hour = hour - 12 end
+		return format(color..TIMEMANAGER_TICKER_12HOUR..timerUnit, hour, minute)
+	end
+end
+
+-- Data
+local bonus = {
+	52834, 52838,	-- Gold
+	52835, 52839,	-- Honor
+	52837, 52840,	-- Resources
+}
+local bonusName = GetCurrencyInfo(1580)
+
+local isTimeWalker, walkerTexture
+local function checkTimeWalker(event)
+	local date = C_Calendar.GetDate()
+	C_Calendar.SetAbsMonth(date.month, date.year)
+	C_Calendar.OpenCalendar()
+
+	local today = date.monthDay
+	local numEvents = C_Calendar.GetNumDayEvents(0, today)
+	if numEvents <= 0 then return end
+
+	for i = 1, numEvents do
+		local info = C_Calendar.GetDayEvent(0, today, i)
+		if info and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
+			isTimeWalker = true
+			walkerTexture = info.iconTexture
+			break
+		end
+	end
+	F:UnregisterEvent(event, checkTimeWalker)
+end
+F:RegisterEvent('PLAYER_ENTERING_WORLD', checkTimeWalker)
+
+local function checkTexture(texture)
+	if not walkerTexture then return end
+	if walkerTexture == texture or walkerTexture == texture - 1 then
+		return true
+	end
+end
+
+local questlist = {
+	{name = L['INFOBAR_BLINGTRON'], id = 34774},
+	{name = L['INFOBAR_MEAN_ONE'], id = 6983},
+	{name = L['INFOBAR_TIMEWARPED'], id = 40168, texture = 1129674},	-- TBC
+	{name = L['INFOBAR_TIMEWARPED'], id = 40173, texture = 1129686},	-- WotLK
+	{name = L['INFOBAR_TIMEWARPED'], id = 40786, texture = 1304688},	-- Cata
+	{name = L['INFOBAR_TIMEWARPED'], id = 45799, texture = 1530590},	-- MoP
+}
+
+local region = GetCVar('portal')
+local legionZoneTime = {
+	['CN'] = 1546844400, -- CN time 1/7/2019 15:00 [1]
+	['EU'] = 1546786800, -- CN - 16
+	['US'] = 1546815600, -- CN - 8
+}
+local bfaZoneTime = {
+	['CN'] = 1546743600, -- CN time 1/6/2019 11:00 [1]
+	['EU'] = 1546768800, -- CN + 7
+	['US'] = 1546769340, -- CN + 16
+}
+
+local invIndex = {
+	[1] = {title = L['INFOBAR_INVASION_LEG'], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = legionZoneTime[region] or 1546844400}, -- 1/7/2019 15:00 [1]
+	[2] = {title = L['INFOBAR_INVASION_BFA'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or 1546743600},
+}
+
+local mapAreaPoiIDs = {
+	[630] = 5175,
+	[641] = 5210,
+	[650] = 5177,
+	[634] = 5178,
+
+	[862] = 5973,	-- Zuldazar
+	[863] = 5969,	-- Nazmir
+	[864] = 5970,	-- Vol'dun
+	[896] = 5964,	-- Drustvar
+	[942] = 5966,	-- Stormsong Valley
+	[895] = 5896,	-- Tiragarde Sound
+}
+
+local function GetInvasionInfo(mapID)
+	local areaPoiID = mapAreaPoiIDs[mapID]
+	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
+	local mapInfo = C_Map.GetMapInfo(mapID)
+	return seconds, mapInfo.name
+end
+
+local function CheckInvasion(index)
+	for _, mapID in pairs(invIndex[index].maps) do
+		local timeLeft, name = GetInvasionInfo(mapID)
+		if timeLeft and timeLeft > 0 then
+			return timeLeft, name
+		end
+	end
+end
+
+local function GetNextTime(baseTime, index)
+	local currentTime = time()
+	local duration = invIndex[index].duration
+	local elapsed = mod(currentTime - baseTime, duration)
+	return duration - elapsed + currentTime
+end
+
+local function GetNextLocation(nextTime, index)
+	local inv = invIndex[index]
+	local count = #inv.timeTable
+	local elapsed = nextTime - inv.baseTime
+	local round = mod(floor(elapsed / inv.duration) + 1, count)
+	if round == 0 then round = count end
+	return C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name
+end
+
+local title
+local function addTitle(text)
+	if not title then
+		GameTooltip:AddLine(' ')
+		GameTooltip:AddLine(text, .6,.8,1)
+		title = true
+	end
+end
+
+
+function INFOBAR:Report()
+	if not C.infobar.enable then return end
 	if not C.infobar.report then return end
 
-	local time, date = time, date
-	local strfind, format, floor = string.find, string.format, math.floor
-	local mod, tonumber, pairs, ipairs = mod, tonumber, pairs, ipairs
-	local TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM = TIMEMANAGER_TICKER_24HOUR, TIME_TWELVEHOURAM, TIME_TWELVEHOURPM
-	local invIndex = {}
-
-	local function updateTimerFormat(color, hour, minute)
-		if GetCVarBool('timeMgrUseMilitaryTime') then
-			return format(color..TIMEMANAGER_TICKER_24HOUR, hour, minute)
-		else
-			local timerUnit = DB.MyColor..(hour < 12 and 'AM' or 'PM')
-			if hour > 12 then hour = hour - 12 end
-			return format(color..TIMEMANAGER_TICKER_12HOUR..timerUnit, hour, minute)
-		end
-	end
-
-	-- Data
-	local bonus = {
-		52834, 52838,	-- Gold
-		52835, 52839,	-- Honor
-		52837, 52840,	-- Resources
-	}
-	local bonusName = GetCurrencyInfo(1580)
-
-	local isTimeWalker, walkerTexture
-	local function checkTimeWalker(event)
-		local date = C_Calendar.GetDate()
-		C_Calendar.SetAbsMonth(date.month, date.year)
-		C_Calendar.OpenCalendar()
-
-		local today = date.monthDay
-		local numEvents = C_Calendar.GetNumDayEvents(0, today)
-		if numEvents <= 0 then return end
-
-		for i = 1, numEvents do
-			local info = C_Calendar.GetDayEvent(0, today, i)
-			if info and strfind(info.title, PLAYER_DIFFICULTY_TIMEWALKER) and info.sequenceType ~= 'END' then
-				isTimeWalker = true
-				walkerTexture = info.iconTexture
-				break
-			end
-		end
-		F:UnregisterEvent(event, checkTimeWalker)
-	end
-	F:RegisterEvent('PLAYER_ENTERING_WORLD', checkTimeWalker)
-
-	local function checkTexture(texture)
-		if not walkerTexture then return end
-		if walkerTexture == texture or walkerTexture == texture - 1 then
-			return true
-		end
-	end
-
-	local questlist = {
-		{name = L['INFOBAR_BLINGTRON'], id = 34774},
-		{name = L['INFOBAR_MEAN_ONE'], id = 6983},
-		{name = L['INFOBAR_TIMEWARPED'], id = 40168, texture = 1129674},	-- TBC
-		{name = L['INFOBAR_TIMEWARPED'], id = 40173, texture = 1129686},	-- WotLK
-		{name = L['INFOBAR_TIMEWARPED'], id = 40786, texture = 1304688},	-- Cata
-		{name = L['INFOBAR_TIMEWARPED'], id = 45799, texture = 1530590},	-- MoP
-	}
-
-	local region = GetCVar('portal')
-	local legionZoneTime = {
-		['CN'] = 1546844400, -- CN time 1/7/2019 15:00 [1]
-		['EU'] = 1546786800, -- CN - 16
-		['US'] = 1546815600, -- CN - 8
-	}
-	local bfaZoneTime = {
-		['CN'] = 1546743600, -- CN time 1/6/2019 11:00 [1]
-		['EU'] = 1546768800, -- CN + 7
-		['US'] = 1546769340, -- CN + 16
-	}
-
-	local invIndex = {
-		[1] = {title = L['INFOBAR_INVASION_LEG'], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = legionZoneTime[region] or 1546844400}, -- 1/7/2019 15:00 [1]
-		[2] = {title = L['INFOBAR_INVASION_BFA'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or 1546743600},
-	}
-
-	local mapAreaPoiIDs = {
-		[630] = 5175,
-		[641] = 5210,
-		[650] = 5177,
-		[634] = 5178,
-
-		[862] = 5973,	-- Zuldazar
-		[863] = 5969,	-- Nazmir
-		[864] = 5970,	-- Vol'dun
-		[896] = 5964,	-- Drustvar
-		[942] = 5966,	-- Stormsong Valley
-		[895] = 5896,	-- Tiragarde Sound
-	}
-
-	local function GetInvasionInfo(mapID)
-		local areaPoiID = mapAreaPoiIDs[mapID]
-		local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
-		local mapInfo = C_Map.GetMapInfo(mapID)
-		return seconds, mapInfo.name
-	end
-
-	local function CheckInvasion(index)
-		for _, mapID in pairs(invIndex[index].maps) do
-			local timeLeft, name = GetInvasionInfo(mapID)
-			if timeLeft and timeLeft > 0 then
-				return timeLeft, name
-			end
-		end
-	end
-
-	local function GetNextTime(baseTime, index)
-		local currentTime = time()
-		local duration = invIndex[index].duration
-		local elapsed = mod(currentTime - baseTime, duration)
-		return duration - elapsed + currentTime
-	end
-
-	local function GetNextLocation(nextTime, index)
-		local inv = invIndex[index]
-		local count = #inv.timeTable
-		local elapsed = nextTime - inv.baseTime
-		local round = mod(floor(elapsed / inv.duration) + 1, count)
-		if round == 0 then round = count end
-		return C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name
-	end
-
-	local title
-	local function addTitle(text)
-		if not title then
-			GameTooltip:AddLine(' ')
-			GameTooltip:AddLine(text, .6,.8,1)
-			title = true
-		end
-	end
-
-	local FreeUIReportButton = module.FreeUIReportButton
-
-	FreeUIReportButton = module:addButton('Report', module.POSITION_RIGHT, 120, function(self, button)
+	FreeUIReportButton = INFOBAR:addButton('Report', INFOBAR.POSITION_RIGHT, 120, function(self, button)
 		if button == 'LeftButton' then
 			HideUIPanel(GarrisonLandingPage)
 			ShowGarrisonLandingPage(LE_GARRISON_TYPE_8_0)

@@ -26,7 +26,7 @@ icon:SetAllPoints(frame)
 local bg = frame:CreateTexture(nil, "BACKGROUND")
 bg:SetPoint("TOPLEFT", -1, 1)
 bg:SetPoint("BOTTOMRIGHT", 1, -1)
-bg:SetTexture(C.media.backdrop)
+bg:SetTexture(C.media.bdTex)
 bg:SetVertexColor(0, 0, 0)
 
 local sd = CreateFrame("Frame", nil, frame)

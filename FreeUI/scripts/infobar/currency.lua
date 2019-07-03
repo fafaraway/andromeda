@@ -1,46 +1,47 @@
 local F, C, L = unpack(select(2, ...))
+local INFOBAR = F:GetModule('Infobar')
 
-local module = F:GetModule('Infobar')
+
+local format, pairs, wipe = string.format, pairs, table.wipe
+
+local FreeUIMoneyButton = INFOBAR.FreeUIMoneyButton
+
+local profit, spent, oldMoney = 0, 0, 0
+local myName, myRealm = C.Name, C.Realm
+
+local function formatTextMoney(money)
+	return format('%s: '..C.InfoColor..'%d', 'Gold', money * .0001)
+end
+
+local function getClassIcon(class)
+	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
+	c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
+	local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:'..c1..':'..c2..':'..c3..':'..c4..'|t '
+	return classStr or ''
+end
+
+local function getGoldString(number)
+	local money = format('%.0f', number/1e4)
+	return GetMoneyString(money*1e4)
+end
+
+StaticPopupDialogs['RESETGOLD'] = {
+	text = L['INFOBAR_RESET_GOLD_COUNT'],
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		wipe(FreeUIGlobalConfig["totalGold"][myRealm])
+		FreeUIGlobalConfig['totalGold'][myRealm][myName] = {GetMoney(), C.Class}
+	end,
+	whileDead = 1,
+}
 
 
-function module:Currencies()
+function INFOBAR:Currencies()
+	if not C.infobar.enable then return end
 	if not C.infobar.currencies then return end
 
-	local format, pairs, wipe = string.format, pairs, table.wipe
-
-	local profit, spent, oldMoney = 0, 0, 0
-	local myName, myRealm = C.Name, C.Realm
-
-	local function formatTextMoney(money)
-		return format('%s: '..C.InfoColor..'%d', 'Gold', money * .0001)
-	end
-
-	local function getClassIcon(class)
-		local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
-		c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
-		local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:'..c1..':'..c2..':'..c3..':'..c4..'|t '
-		return classStr or ''
-	end
-
-	local function getGoldString(number)
-		local money = format('%.0f', number/1e4)
-		return GetMoneyString(money*1e4)
-	end
-
-	StaticPopupDialogs['RESETGOLD'] = {
-		text = L['INFOBAR_RESET_GOLD_COUNT'],
-		button1 = YES,
-		button2 = NO,
-		OnAccept = function()
-			wipe(FreeUIGlobalConfig["totalGold"][myRealm])
-			FreeUIGlobalConfig['totalGold'][myRealm][myName] = {GetMoney(), C.Class}
-		end,
-		whileDead = 1,
-	}
-
-	local FreeUIMoneyButton = module.FreeUIMoneyButton
-
-	FreeUIMoneyButton = module:addButton('', module.POSITION_RIGHT, 120, function(self, button)
+	FreeUIMoneyButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 120, function(self, button)
 		if button == 'RightButton' then
 			StaticPopup_Show('RESETGOLD')
 		else

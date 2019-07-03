@@ -682,7 +682,7 @@ init:SetScript("OnEvent", function()
 
 	for _, panel in pairs(panels) do
 		panel.tab:SetBackdrop({
-			bgFile = C.media.backdrop,
+			bgFile = C.media.bdTex,
 			insets = {top = 1},
 		})
 		panel.tab:SetBackdropColor(0, 0, 0, 0)
@@ -713,7 +713,7 @@ init:SetScript("OnEvent", function()
 	end
 
 	for _, picker in pairs(colourpickers) do
-		picker.tex:SetTexture(C.media.backdrop)
+		picker.tex:SetTexture(C.media.bdTex)
 		F.CreateBG(picker)
 	end
 

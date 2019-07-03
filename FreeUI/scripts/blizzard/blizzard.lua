@@ -5,7 +5,7 @@ local BLIZZARD = F:RegisterModule('Blizzard')
 function BLIZZARD:OnLogin()
 	self:ReskinBuffFrame()
 	self:ReskinPetBattleUI()
-	self:ReskinColourPicker()
+	self:ColourPickerEnhancement()
 	self:RepositionUIWidgets()
 	self:ReskinQuestTracker()
 	self:ReskinCooldown()
@@ -20,6 +20,7 @@ function BLIZZARD:OnLogin()
 	self:VehicleIndicator()
 	self:QuickJoin()
 	self:ReskinCommandBar()
+	self:RepositionAlertFrames()
 
 	-- Unregister talent event
 	if PlayerTalentFrame then
@@ -167,11 +168,7 @@ function BLIZZARD:ReskinDigBar()
 		frame.BarBackground:Hide()
 		frame.BarBorderAndOverlay:Hide()
 
-		if C.Client == 'zhCN' or C.Client == 'zhTW' then
-			frame.BarTitle:SetFont(C.font.normal, 11, 'OUTLINE')
-		else
-			F.SetFS(frame.BarTitle)
-		end
+		F.SetFS(frame.BarTitle, C.isCNClient)
 
 		frame.BarTitle:SetPoint('CENTER', 0, 16)
 

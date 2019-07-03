@@ -28,13 +28,13 @@ tinsert(C.themes["FreeUI"], function()
 
 	do
 		local line1 = LootHistoryFrame.ResizeButton:CreateTexture()
-		line1:SetTexture(C.media.backdrop)
+		line1:SetTexture(C.media.bdTex)
 		line1:SetVertexColor(.7, .7, .7)
 		line1:SetSize(30, 1)
 		line1:SetPoint("TOP")
 
 		local line2 = LootHistoryFrame.ResizeButton:CreateTexture()
-		line2:SetTexture(C.media.backdrop)
+		line2:SetTexture(C.media.bdTex)
 		line2:SetVertexColor(.7, .7, .7)
 		line2:SetSize(30, 1)
 		line2:SetPoint("TOP", 0, -3)

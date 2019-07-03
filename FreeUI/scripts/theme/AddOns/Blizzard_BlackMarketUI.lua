@@ -64,7 +64,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 				tex:SetPoint("BOTTOMRIGHT", 0, 5)
 				tex:SetColorTexture(0, 0, 0, .25)
 
-				bu:SetHighlightTexture(C.media.backdrop)
+				bu:SetHighlightTexture(C.media.bdTex)
 				local hl = bu:GetHighlightTexture()
 				hl:SetVertexColor(r, g, b, .2)
 				hl.SetAlpha = F.Dummy
@@ -75,7 +75,7 @@ C.themes["Blizzard_BlackMarketUI"] = function()
 				bu.Selection:ClearAllPoints()
 				bu.Selection:SetPoint("TOPLEFT", 0, -1)
 				bu.Selection:SetPoint("BOTTOMRIGHT", -1, 6)
-				bu.Selection:SetTexture(C.media.backdrop)
+				bu.Selection:SetTexture(C.media.bdTex)
 				bu.Selection:SetVertexColor(r, g, b, .1)
 
 				bu.reskinned = true

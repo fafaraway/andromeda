@@ -7,7 +7,7 @@ C.themes["Blizzard_Calendar"] = function()
 		_G["CalendarDayButton"..i.."DarkFrame"]:SetAlpha(.5)
 		local bu = _G["CalendarDayButton"..i]
 		bu:DisableDrawLayer("BACKGROUND")
-		bu:SetHighlightTexture(C.media.backdrop)
+		bu:SetHighlightTexture(C.media.bdTex)
 		local hl = bu:GetHighlightTexture()
 		hl:SetVertexColor(r, g, b, .25)
 		hl.SetAlpha = F.Dummy
@@ -76,7 +76,7 @@ C.themes["Blizzard_Calendar"] = function()
 	CalendarTodayTexture:Hide()
 
 	CalendarTodayFrame:SetBackdrop({
-		edgeFile = C.media.backdrop,
+		edgeFile = C.media.bdTex,
 		edgeSize = C.Mult,
 	})
 	CalendarTodayFrame:SetBackdropBorderColor(r, g, b)
@@ -130,7 +130,7 @@ C.themes["Blizzard_Calendar"] = function()
 	local line = CalendarMassInviteFrame:CreateTexture(nil, "BACKGROUND")
 	line:SetSize(240, 1)
 	line:SetPoint("TOP", CalendarMassInviteFrame, "TOP", 0, -150)
-	line:SetTexture(C.media.backdrop)
+	line:SetTexture(C.media.bdTex)
 	line:SetVertexColor(0, 0, 0)
 
 	CalendarMassInviteFrame:ClearAllPoints()

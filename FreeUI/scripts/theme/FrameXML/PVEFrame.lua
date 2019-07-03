@@ -19,7 +19,7 @@ tinsert(C.themes["FreeUI"], function()
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
-		bu.bg:SetTexture(C.media.backdrop)
+		bu.bg:SetTexture(C.media.bdTex)
 		bu.bg:SetVertexColor(r, g, b, .2)
 		bu.bg:SetAllPoints()
 

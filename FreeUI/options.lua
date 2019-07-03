@@ -21,6 +21,7 @@ C['general'] = {
 	['petBattle'] = true,
 	['tradeTab'] = true,
 	['itemLevel'] = true,
+	['durability'] = true,
 
 	['petFilter'] = true,
 
@@ -46,8 +47,6 @@ C['general'] = {
 
 	['cameraIncrement'] = 5,
 	['numberFormatCN'] = false,
-	
-	['isDeveloper'] = false,
 }
 
 C['appearance'] = {
@@ -284,7 +283,7 @@ C['unitframe'] = {
 		['player_pos_healer'] = {'RIGHT', UIParent, 'CENTER', -100, -100},
 		['player_width'] = 200,
 		['player_height'] = 16,
-		['player_cb_width'] = 196,
+		['player_cb_width'] = 200,
 		['player_cb_height'] = 16,
 		['player_frameVisibility'] = '[combat][mod:shift][@target,exists][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar] show; hide',
 		['frameVisibility'] = false,
@@ -301,7 +300,7 @@ C['unitframe'] = {
 		['target_pos_healer'] = {'LEFT', UIParent, 'CENTER', 100, -100},
 		['target_width'] = 200,
 		['target_height'] = 16,
-		['target_cb_width'] = 196,
+		['target_cb_width'] = 200,
 		['target_cb_height'] = 10,
 		['target_auraPerRow'] = 6,
 		['target_auraTotal'] = 36,

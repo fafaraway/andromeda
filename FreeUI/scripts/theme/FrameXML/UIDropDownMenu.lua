@@ -128,7 +128,7 @@ tinsert(C.themes["FreeUI"], function()
 							check:SetSize(20, 20)
 							check:SetDesaturated(true)
 						else
-							check:SetTexture(C.media.backdrop)
+							check:SetTexture(C.media.bdTex)
 							check:SetVertexColor(r, g, b, .6)
 							check:SetSize(10, 10)
 							check:SetDesaturated(false)

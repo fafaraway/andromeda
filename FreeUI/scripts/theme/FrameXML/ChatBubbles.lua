@@ -24,7 +24,7 @@ tinsert(C.themes["FreeUI"], function()
 		end
 
 		frame:SetBackdrop({
-			bgFile = C.media.backdrop,
+			bgFile = C.media.bdTex,
 			edgeFile = C.media.glowTex,
 			insets = {left = 3, right = 3, top = 3, bottom = 3},
 			tile = false, tileSize = 0, 

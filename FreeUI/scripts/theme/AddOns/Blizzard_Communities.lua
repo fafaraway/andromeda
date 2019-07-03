@@ -295,7 +295,7 @@ C.themes["Blizzard_Communities"] = function()
 						select(i, header:GetRegions()):Hide()
 					end
 					F.CreateBDFrame(header, .45)
-					header:SetHighlightTexture(C.media.backdrop)
+					header:SetHighlightTexture(C.media.bdTex)
 					header:GetHighlightTexture():SetVertexColor(r, g, b, .25)
 					F.CreateBDFrame(header.Icon)
 				end
@@ -318,7 +318,7 @@ C.themes["Blizzard_Communities"] = function()
 	local factionFrameBar = CommunitiesFrame.GuildBenefitsFrame.FactionFrame.Bar
 	F.StripTextures(factionFrameBar)
 	F.CreateBDFrame(factionFrameBar, .25)
-	factionFrameBar.Progress:SetTexture(C.media.backdrop)
+	factionFrameBar.Progress:SetTexture(C.media.bdTex)
 	factionFrameBar.Progress:SetAllPoints()
 
 	hooksecurefunc("CommunitiesGuildPerks_Update", function(self)

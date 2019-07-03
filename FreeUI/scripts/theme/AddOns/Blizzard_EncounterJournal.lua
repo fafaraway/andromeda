@@ -48,8 +48,8 @@ C.themes["Blizzard_EncounterJournal"] = function()
 		local tab = EncounterJournal.encounter.info[name]
 		tab:SetScale(.75)
 		tab:SetBackdrop({
-			bgFile = C.media.backdrop,
-			edgeFile = C.media.backdrop,
+			bgFile = C.media.bdTex,
+			edgeFile = C.media.bdTex,
 			edgeSize =  C.Mult / .75,
 		})
 
@@ -250,7 +250,7 @@ C.themes["Blizzard_EncounterJournal"] = function()
 			bu.icon.SetTexCoord = F.dummy
 			F.CreateBD(bu, .25)
 
-			bu:SetHighlightTexture(C.media.backdrop)
+			bu:SetHighlightTexture(C.media.bdTex)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .25)
 			hl:SetPoint("TOPLEFT", C.Mult, -C.Mult)

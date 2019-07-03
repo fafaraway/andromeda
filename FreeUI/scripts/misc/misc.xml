@@ -7,6 +7,7 @@
 	<Script file='combattext.lua'/>
 	<Script file='cooldownpulse.lua'/>
 	<Script file='dragemall.lua'/>
+	<Script file='durability.lua'/>
 	<Script file='extraquestbutton.lua'/>
 	<Script file='focuser.lua'/>
 	<Script file='itemlevel.lua'/>

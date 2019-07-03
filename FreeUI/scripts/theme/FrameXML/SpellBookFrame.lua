@@ -100,7 +100,7 @@ tinsert(C.themes["FreeUI"], function()
 
 		F.StripTextures(bu.statusBar)
 		bu.statusBar:SetHeight(10)
-		bu.statusBar:SetStatusBarTexture(C.media.backdrop)
+		bu.statusBar:SetStatusBarTexture(C.media.bdTex)
 		bu.statusBar:GetStatusBarTexture():SetGradient("VERTICAL", 0, .6, 0, 0, .8, 0)
 		bu.statusBar.rankText:SetPoint("CENTER")
 

@@ -254,12 +254,7 @@ function module:AddCastBar(self)
 	spark:SetAlpha(.7)
 	spark:SetHeight(castbar:GetHeight()*2)
 	
-	local text
-	if C.Client == 'zhCN' or C.Client == 'zhTW' then
-		text = F.CreateFS(castbar, {C.font.normal, 11}, '', nil, nil, '2')
-	else
-		text = F.CreateFS(castbar, 'pixel', '', nil, nil, true)
-	end
+	local text = F.CreateFS(castbar, (C.isCNClient and {C.font.normal, 11, 'OUTLINE'}) or 'pixel', '', nil, nil)
 	text:SetPoint('CENTER', castbar)
 	
 	local timer = F.CreateFS(castbar, 'pixel', '', nil, nil, true)
@@ -278,7 +273,7 @@ function module:AddCastBar(self)
 	
 	if self.unitStyle == 'player' then
 		local safeZone = castbar:CreateTexture(nil,'OVERLAY')
-		safeZone:SetTexture(C.media.backdrop)
+		safeZone:SetTexture(C.media.bdTex)
 		safeZone:SetVertexColor(223/255, 63/255, 107/255, .6)
 		safeZone:SetPoint('TOPRIGHT')
 		safeZone:SetPoint('BOTTOMRIGHT')
@@ -288,9 +283,9 @@ function module:AddCastBar(self)
 	if self.unitStyle == 'target' and cfg.castbar_separateTarget then
 		castbar:SetSize(self:GetWidth(), cfg.target_cb_height*C.Mult)
 		castbar:ClearAllPoints()
-		iconFrame:SetSize(castbar:GetHeight()+6, castbar:GetHeight()+6)
+		iconFrame:SetSize(castbar:GetHeight()+4, castbar:GetHeight()+4)
 
-		F.Mover(castbar, L['MOVER_UNITFRAME_TARGET_CASTBAR'], 'TargetCastbar', {'TOPRIGHT', self, 'BOTTOMRIGHT', -6*C.Mult, -10*C.Mult}, cfg.target_cb_width, cfg.target_cb_height)
+		F.Mover(castbar, L['MOVER_UNITFRAME_TARGET_CASTBAR'], 'TargetCastbar', {'TOPRIGHT', self, 'BOTTOMRIGHT', 0, -10}, cfg.target_cb_width, cfg.target_cb_height)
 	elseif (self.unitStyle == 'target' and not cfg.castbar_separateTarget and cfg.healer_layout) or (self.unitStyle == 'player' and not cfg.castbar_separateTarget) then
 		iconFrame:ClearAllPoints()
 		iconFrame:SetPoint('LEFT', castbar, 'RIGHT', 4*C.Mult, 0)
@@ -299,12 +294,14 @@ function module:AddCastBar(self)
 	if self.unitStyle == 'player' and cfg.castbar_separatePlayer then
 		castbar:SetSize(self:GetWidth(), cfg.player_cb_height*C.Mult)
 		castbar:ClearAllPoints()
-		iconFrame:SetSize(castbar:GetHeight()+6, castbar:GetHeight()+6)
+		iconFrame:SetSize(castbar:GetHeight()+4, castbar:GetHeight()+4)
+
+		castbar:SetParent(UIParent)
 
 		if cfg.healer_layout then
 			F.Mover(castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], 'PlayerCastbar', {'CENTER', UIParent, 'CENTER', 0, -200*C.Mult}, cfg.player_cb_width, cfg.player_cb_height)
 		else
-			F.Mover(castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], 'PlayerCastbar', {'TOPRIGHT', self, 'BOTTOMRIGHT', -6*C.Mult, -38*C.Mult}, cfg.player_cb_width, cfg.player_cb_height)
+			F.Mover(castbar, L['MOVER_UNITFRAME_PLAYER_CASTBAR'], 'PlayerCastbar', {'TOPLEFT', self, 'BOTTOMLEFT', 0, -40}, cfg.player_cb_width, cfg.player_cb_height)
 		end
 	end
 

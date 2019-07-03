@@ -57,14 +57,14 @@ C.themes["Blizzard_ArchaeologyUI"] = function()
 
 	ArchaeologyFrameRankBarBorder:Hide()
 	ArchaeologyFrameRankBarBackground:Hide()
-	ArchaeologyFrameRankBarBar:SetTexture(C.media.backdrop)
+	ArchaeologyFrameRankBarBar:SetTexture(C.media.bdTex)
 	ArchaeologyFrameRankBarBar:SetGradient("VERTICAL", 0, .65, 0, 0, .75, 0)
 	ArchaeologyFrameRankBar:SetHeight(14)
 	F.CreateBD(ArchaeologyFrameRankBar, .25)
 
 	ArchaeologyFrameArtifactPageSolveFrameStatusBarBarBG:Hide()
 	local bar = select(3, ArchaeologyFrameArtifactPageSolveFrameStatusBar:GetRegions())
-	bar:SetTexture(C.media.backdrop)
+	bar:SetTexture(C.media.bdTex)
 	bar:SetGradient("VERTICAL", .65, .25, 0, .75, .35, .1)
 	F.CreateBDFrame(ArchaeologyFrameArtifactPageSolveFrameStatusBar, .25)
 

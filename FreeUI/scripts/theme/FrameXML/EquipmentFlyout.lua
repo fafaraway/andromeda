@@ -26,7 +26,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		F.CreateBG(bu)
 
-		border:SetTexture(C.media.backdrop)
+		border:SetTexture(C.media.bdTex)
 		border.SetTexture = F.Dummy
 		border:SetPoint("TOPLEFT", -C.Mult, C.Mult)
 		border:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)

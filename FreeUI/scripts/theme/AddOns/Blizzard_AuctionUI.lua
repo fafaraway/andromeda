@@ -7,7 +7,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 	F.CreateBD(AuctionProgressFrame)
 	F.CreateSD(AuctionProgressFrame)
 
-	AuctionProgressBar:SetStatusBarTexture(C.media.backdrop)
+	AuctionProgressBar:SetStatusBarTexture(C.media.bdTex)
 	F.CreateBDFrame(AuctionProgressBar, .25)
 	F.ReskinIcon(AuctionProgressBar.Icon)
 
@@ -114,7 +114,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 			bg:SetPoint("TOPLEFT")
 			bg:SetPoint("BOTTOMRIGHT", 0, 5)
 
-			bu:SetHighlightTexture(C.media.backdrop)
+			bu:SetHighlightTexture(C.media.bdTex)
 			local hl = bu:GetHighlightTexture()
 			hl:SetVertexColor(r, g, b, .2)
 			hl:ClearAllPoints()
@@ -122,7 +122,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 			hl:SetPoint("BOTTOMRIGHT", -1, 6)
 
 			co:SetPoint("BOTTOMRIGHT", 2, 2)
-
 			F.SetFS(co)
 		end
 	end
@@ -154,7 +153,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 	F.CreateBD(AuctionsItemButton, .25)
 	local _, AuctionsItemButtonNameFrame = AuctionsItemButton:GetRegions()
 	AuctionsItemButtonNameFrame:Hide()
-
 	local hl = AuctionsItemButton:GetHighlightTexture()
 	hl:SetColorTexture(1, 1, 1, .25)
 	hl:SetPoint("TOPLEFT", C.Mult, -C.Mult)
@@ -196,7 +194,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 	local bg = F.CreateBDFrame(BrowseDropDown, 0)
 	bg:SetPoint("TOPLEFT", 16, -5)
 	bg:SetPoint("BOTTOMRIGHT", 109, 11)
-
 	F.CreateGradient(bg)
 
 	local colourArrow = F.colourArrow
@@ -215,7 +212,6 @@ C.themes["Blizzard_AuctionUI"] = function()
 	local BrowseWowTokenResults = BrowseWowTokenResults
 
 	F.Reskin(BrowseWowTokenResults.Buyout)
-
 	F.ReskinPortraitFrame(WowTokenGameTimeTutorial)
 	F.Reskin(StoreButton)
 	WowTokenGameTimeTutorial.LeftDisplay.Label:SetTextColor(1, 1, 1)
@@ -231,7 +227,7 @@ C.themes["Blizzard_AuctionUI"] = function()
 		local iconBorder = Token.IconBorder
 
 		Token.ItemBorder:Hide()
-		iconBorder:SetTexture(C.media.backdrop)
+		iconBorder:SetTexture(C.media.bdTex)
 		iconBorder:SetDrawLayer("BACKGROUND")
 		iconBorder:SetPoint("TOPLEFT", icon, -C.Mult, C.Mult)
 		iconBorder:SetPoint("BOTTOMRIGHT", icon, C.Mult, -C.Mult)

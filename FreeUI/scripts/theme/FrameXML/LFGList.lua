@@ -79,7 +79,7 @@ tinsert(C.themes["FreeUI"], function()
 
 			local hl = result:CreateTexture(nil, "BACKGROUND")
 			hl:SetAllPoints()
-			hl:SetTexture(C.media.backdrop)
+			hl:SetTexture(C.media.bdTex)
 			hl:SetVertexColor(r, g, b, .25)
 			hl:Hide()
 			result.hl = hl
@@ -116,7 +116,7 @@ tinsert(C.themes["FreeUI"], function()
 
 		local hl = header:CreateTexture(nil, "BACKGROUND")
 		hl:SetAllPoints()
-		hl:SetTexture(C.media.backdrop)
+		hl:SetTexture(C.media.bdTex)
 		hl:SetVertexColor(r, g, b, .25)
 		hl:Hide()
 		header.hl = hl

@@ -211,7 +211,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 			F.StripTextures(bar.Bar)
 			bar.Bar:SetStatusBarTexture(C.media.sbTex)
 			F.CreateBDFrame(bar)
-			bar:SetSize(216, 18)
+			bar:SetSize(216, 16)
 			F.SetFS(bar.Bar.Label)
 
 			bar.styled = true

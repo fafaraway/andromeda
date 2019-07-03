@@ -117,11 +117,7 @@ function F:Mover(text, value, anchor, width, height)
 	F.CreateBD(mover)
 	F.CreateSD(mover)
 
-	if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-		F.CreateFS(mover, {C.font.normal, 11}, text, nil, 'yellow', true)
-	else
-		F.CreateFS(mover, 'pixel', text, nil, 'yellow', true)
-	end
+	F.CreateFS(mover, (C.isCNClient and {C.font.normal, 11}) or 'pixel', text, nil, 'yellow', true)
 
 	tinsert(MoverList, mover)
 

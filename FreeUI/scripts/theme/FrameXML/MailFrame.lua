@@ -118,7 +118,7 @@ tinsert(C.themes["FreeUI"], function()
 		bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		ic:SetTexCoord(unpack(C.TexCoord))
 
-		border:SetTexture(C.media.backdrop)
+		border:SetTexture(C.media.bdTex)
 		border.SetTexture = F.Dummy
 		border:SetPoint("TOPLEFT", -C.Mult, C.Mult)
 		border:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)
@@ -130,7 +130,7 @@ tinsert(C.themes["FreeUI"], function()
 	hooksecurefunc("SendMailFrame_Update", function()
 		for i = 1, ATTACHMENTS_MAX_SEND do
 			local button = _G["SendMailAttachment"..i]
-			button.IconBorder:SetTexture(C.media.backdrop)
+			button.IconBorder:SetTexture(C.media.bdTex)
 			if button:GetNormalTexture() then
 				button:GetNormalTexture():SetTexCoord(unpack(C.TexCoord))
 			end

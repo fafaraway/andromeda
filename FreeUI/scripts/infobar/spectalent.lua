@@ -1,22 +1,22 @@
 local F, C, L = unpack(select(2, ...))
+local INFOBAR = F:GetModule('Infobar')
 
 
-local module = F:GetModule('Infobar')
+local function addIcon(texture)
+	texture = texture and '|T'..texture..':12:16:0:0:50:50:4:46:4:46|t' or ''
+	return texture
+end
+
+local pvpTalents
+
+local FreeUISpecButton = INFOBAR.FreeUISpecButton
 
 
-function module:SpecTalent()
+function INFOBAR:SpecTalent()
+	if not C.infobar.enable then return end
 	if not C.infobar.specTalent then return end
 
-	local function addIcon(texture)
-		texture = texture and '|T'..texture..':12:16:0:0:50:50:4:46:4:46|t' or ''
-		return texture
-	end
-
-	local pvpTalents
-
-	local FreeUISpecButton = module.FreeUISpecButton
-
-	FreeUISpecButton = module:addButton('', module.POSITION_RIGHT, 200, function(self, button)
+	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 200, function(self, button)
 		local currentSpec = GetSpecialization()
 		local numSpec = GetNumSpecializations()
 		if not (currentSpec and numSpec) then return end
@@ -74,17 +74,11 @@ function module:SpecTalent()
 				self.Text:SetText(format(L['INFOBAR_SPEC']..': '..C.MyColor..'%s  |r'..L['INFOBAR_LOOT']..':'..C.MyColor..' %s', name, lootname))
 			end
 
-			if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-				if C.general.isDeveloper then
-					self.Text:SetFont(C.font.pixelCN, 10, 'OUTLINEMONOCHROME')
-				else
-					self.Text:SetFont(C.font.normal, 11)
-				end
-			end
+			F.SetFS(self.Text, C.isCNClient)
 
-			module:showButton(self)
+			INFOBAR:showButton(self)
 		else
-			module:hideButton(self)
+			INFOBAR:hideButton(self)
 		end
 	end)
 

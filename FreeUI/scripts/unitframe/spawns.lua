@@ -76,8 +76,8 @@ local function CreatePlayerStyle(self)
 	module:AddStatusIndicator(self)
 	module:AddPvPIndicator(self)
 	module:AddPlayerBuffTimer(self)
-	module:ReskinMirrorBars()
-	module:ReskinTimerTrakcer(self)
+	--module:ReskinMirrorBars()
+	--module:ReskinTimerTrakcer(self)
 
 	if C.Class == 'DEATHKNIGHT' then module:AddRunes(self) end
 

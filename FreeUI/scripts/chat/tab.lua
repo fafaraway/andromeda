@@ -80,11 +80,7 @@ function CHAT:Tab()
 			frame:HookScript('OnEnter', OnEnter)
 			frame:HookScript('OnLeave', OnLeave)
 
-			if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-				frame:GetFontString():SetFont(C.font.chat, 11, 'OUTLINE')
-			else
-				F.SetFS(frame:GetFontString())
-			end
+			F.SetFS(frame:GetFontString(), C.isCNClient)
 
 			frame.Fane = true
 		end

@@ -233,7 +233,7 @@ function BLIZZARD:ReskinPetBattleUI()
 
 			bu.Icon:SetTexCoord(unpack(C.TexCoord))
 			bu:SetNormalTexture("")
-			bu:GetPushedTexture():SetTexture(C.media.backdrop)
+			bu:GetPushedTexture():SetTexture(C.media.bdTex)
 			bu:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 
 			F.CreateBDFrame(bu)
@@ -256,7 +256,7 @@ function BLIZZARD:ReskinPetBattleUI()
 	F.PixelIcon(skipButton, "Interface\\Icons\\Ability_Foundryraid_Dormant", true)
 	skipButton.Icon:SetAllPoints()
 
-	skipButton:SetPushedTexture(C.media.backdrop)
+	skipButton:SetPushedTexture(C.media.bdTex)
 	F.CreateBDFrame(skipButton)
 
 	skipButton.text = F.CreateFS(skipButton, {C.font.normal, 14}, PET_BATTLE_PASS, nil, nil, true, "BOTTOM", 1, 2)

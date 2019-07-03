@@ -34,7 +34,7 @@ C.themes["Blizzard_BindingUI"] = function()
 	hooksecurefunc("BindingButtonTemplate_SetupBindingButton", function(_, button)
 		if not button.styled then
 			local selected = button.selectedHighlight
-			selected:SetTexture(C.media.backdrop)
+			selected:SetTexture(C.media.bdTex)
 			selected:SetPoint("TOPLEFT", C.Mult, -C.Mult)
 			selected:SetPoint("BOTTOMRIGHT", -C.Mult, C.Mult)
 			selected:SetColorTexture(r, g, b, .25)

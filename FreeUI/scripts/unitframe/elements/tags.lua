@@ -175,27 +175,11 @@ function module:AddNameText(self)
 	local name
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		if (C.Client == 'zhCN' or C.Client == 'zhTW') and cfg.showGroupName then
-			if C.general.isDeveloper then
-				name = F.CreateFS(self.Health, 'pixelhybrid', '', nil, nil, true)
-			else
-				name = F.CreateFS(self.Health, {C.font.normal, 11, 'OUTLINE'}, '', nil, nil, true)
-			end
-		else
-			name = F.CreateFS(self.Health, 'pixel', '', nil, nil, true, 'CENTER', 1, 0)
-		end
+		name = F.CreateFS(self.Health, (C.isCNClient and cfg.showGroupName and C.NormalFont) or 'pixel', '', nil, nil, true)
 
 		self:Tag(name, '[free:groupname]')
 	else
-		if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-			if C.general.isDeveloper then
-				name = F.CreateFS(self.Health, 'pixelhybrid', '', nil, nil, true)
-			else
-				name = F.CreateFS(self.Health, {C.font.normal, 11, 'OUTLINE'}, '', nil, nil, true)
-			end
-		else
-			name = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
-		end
+		name = F.CreateFS(self.Health, (C.isCNClient and C.NormalFont) or 'pixel', '', nil, nil, true)
 
 		if self.unitStyle == 'target' or self.unitStyle == 'arena' then
 			name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -278,16 +262,7 @@ end
 function module:AddArenaSpec(self)
 	local arenaSpec
 
-	if (C.Client == 'zhCN' or C.Client == 'zhTW') then
-		if C.general.isDeveloper then
-			arenaSpec = F.CreateFS(self.Health, 'pixelhybrid', '', nil, nil, true)
-		else
-			arenaSpec = F.CreateFS(self.Health, {C.font.normal, 11, 'OUTLINE'}, '', nil, nil, true)
-		end
-	else
-		arenaSpec = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
-	end
-
+	arenaSpec = F.CreateFS(self.Health, (C.isCNClient and C.NormalFont) or 'pixel', '', nil, nil, true)
 	arenaSpec:SetPoint('BOTTOMLEFT', self.Name, 'BOTTOMRIGHT', 4, 0)
 
 	self:Tag(arenaSpec, '[arenaspec]')

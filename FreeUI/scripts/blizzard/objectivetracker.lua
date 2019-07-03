@@ -130,8 +130,8 @@ function BLIZZARD:ReskinQuestTracker()
 	local function reskinBarTemplate(bar)
 		F.StripTextures(bar)
 		bar:SetHeight(16)
-		bar:SetStatusBarTexture(C.media.backdrop)
-		bar:GetStatusBarTexture():SetGradient('VERTICAL', r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
+		bar:SetStatusBarTexture(C.media.sbTex)
+		--bar:GetStatusBarTexture():SetGradient('VERTICAL', r*.9, g*.9, b*.9, r*.4, g*.4, b*.4)
 		bar.bg = F.CreateBDFrame(bar)
 		F.CreateSD(bar.bg)
 	end
@@ -171,6 +171,9 @@ function BLIZZARD:ReskinQuestTracker()
 	hooksecurefunc(QUEST_TRACKER_MODULE, 'AddProgressBar', function(_, _, line)
 		local progressBar = line.ProgressBar
 		local bar = progressBar.Bar
+		local label = bar.Label
+		
+		F.SetFS(label)
 
 		if not bar.bg then
 			reskinBarTemplate(bar)

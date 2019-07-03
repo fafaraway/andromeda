@@ -22,8 +22,6 @@ function F:CreateFS(font, text, justify, colour, shadow, anchor, x, y)
 			fs:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
 		elseif font == 'pixelbig' then
 			fs:SetFont(C.font.pixel, 16, 'OUTLINEMONOCHROME')
-		elseif font == 'pixelhybrid' then
-			fs:SetFont(C.font.pixelCN, 10, 'OUTLINEMONOCHROME')
 		end
 	end
 
@@ -35,19 +33,21 @@ function F:CreateFS(font, text, justify, colour, shadow, anchor, x, y)
 		fs:SetJustifyH(justify)
 	end
 
-	if colour and type(colour) == 'table' then
-		fs:SetTextColor(colour[1], colour[2], colour[3])
-	elseif colour and type(colour) == 'string' then
-		if colour == 'class' then
-			fs:SetTextColor(C.r, C.g, C.b)
-		elseif colour == 'yellow' then
-			fs:SetTextColor(.9, .82, .62)
-		elseif colour == 'red' then
-			fs:SetTextColor(1, .15, .21)
-		elseif colour == 'green' then
-			fs:SetTextColor(.23, .62, .21)
-		elseif colour == 'grey' then
-			fs:SetTextColor(.5, .5, .5)
+	if colour then
+		if type(colour) == 'table' then
+			fs:SetTextColor(colour[1], colour[2], colour[3])
+		elseif type(colour) == 'string' then
+			if colour == 'class' then
+				fs:SetTextColor(C.r, C.g, C.b)
+			elseif colour == 'yellow' then
+				fs:SetTextColor(.9, .82, .62)
+			elseif colour == 'red' then
+				fs:SetTextColor(1, .15, .21)
+			elseif colour == 'green' then
+				fs:SetTextColor(.23, .62, .21)
+			elseif colour == 'grey' then
+				fs:SetTextColor(.5, .5, .5)
+			end
 		end
 	else
 		fs:SetTextColor(1, 1, 1)
@@ -69,12 +69,18 @@ function F:CreateFS(font, text, justify, colour, shadow, anchor, x, y)
 	return fs
 end
 
-function F.SetFS(fontObject, fontShadow)
-	fontObject:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
+function F.SetFS(fontObject, fontCN, fontShadow)
+	if fontCN and type(fontCN) == 'boolean' then
+		fontObject:SetFont(unpack(C.NormalFont))
+	else
+		fontObject:SetFont(unpack(C.PixelFont))
+	end
 
 	if fontShadow and type(fontShadow) == 'boolean' then
-		fontObject:SetShadowColor(0, 0, 0)
+		fontObject:SetShadowColor(0, 0, 0, 1)
 		fontObject:SetShadowOffset(1, -1)
+	else
+		fontObject:SetShadowColor(0, 0, 0, 0)
 	end
 end
 
@@ -113,7 +119,7 @@ end
 
 function F:CreateBD(a)
 	self:SetBackdrop({
-		bgFile = C.media.backdrop, edgeFile = C.media.backdrop, edgeSize = C.Mult,
+		bgFile = C.media.bdTex, edgeFile = C.media.bdTex, edgeSize = C.Mult,
 	})
 	self:SetBackdropColor(C.appearance.backdropColour[1], C.appearance.backdropColour[2], C.appearance.backdropColour[3], a or C.appearance.backdropColour[4])
 	self:SetBackdropBorderColor(0, 0, 0)
@@ -129,7 +135,7 @@ function F:CreateBG(offset)
 	local bg = f:CreateTexture(nil, 'BACKGROUND')
 	bg:SetPoint('TOPLEFT', self, -offset, offset)
 	bg:SetPoint('BOTTOMRIGHT', self, offset, -offset)
-	bg:SetTexture(C.media.backdrop)
+	bg:SetTexture(C.media.bdTex)
 	bg:SetVertexColor(0, 0, 0, 1)
 
 	return bg
@@ -153,7 +159,7 @@ function F:CreateGradient()
 	local tex = self:CreateTexture(nil, 'BORDER')
 	tex:SetPoint('TOPLEFT', C.Mult, -C.Mult)
 	tex:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
-	tex:SetTexture(C.appearance.useButtonGradientColour and C.media.gradient or C.media.backdrop)
+	tex:SetTexture(C.appearance.useButtonGradientColour and C.media.gradient or C.media.bdTex)
 
 	if C.appearance.useButtonGradientColour then
 		tex:SetVertexColor(unpack(C.appearance.buttonGradientColour))
@@ -251,7 +257,7 @@ function F:ReskinTab()
 	bg:SetPoint('TOPLEFT', 8, -3)
 	bg:SetPoint('BOTTOMRIGHT', -8, 0)
 	
-	self:SetHighlightTexture(C.media.backdrop)
+	self:SetHighlightTexture(C.media.bdTex)
 	local hl = self:GetHighlightTexture()
 	hl:SetAllPoints(bg)
 	hl:SetVertexColor(r, g, b, .25)
@@ -319,12 +325,12 @@ function F:ReskinScroll()
 	F.Reskin(up, true)
 	F.Reskin(down, true)
 
-	up:SetDisabledTexture(C.media.backdrop)
+	up:SetDisabledTexture(C.media.bdTex)
 	local dis1 = up:GetDisabledTexture()
 	dis1:SetVertexColor(0, 0, 0, .4)
 	dis1:SetDrawLayer('OVERLAY')
 
-	down:SetDisabledTexture(C.media.backdrop)
+	down:SetDisabledTexture(C.media.bdTex)
 	local dis2 = down:GetDisabledTexture()
 	dis2:SetVertexColor(0, 0, 0, .4)
 	dis2:SetDrawLayer('OVERLAY')
@@ -368,7 +374,7 @@ function F:ReskinDropDown()
 
 	F.Reskin(down, true)
 
-	down:SetDisabledTexture(C.media.backdrop)
+	down:SetDisabledTexture(C.media.bdTex)
 	local dis = down:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .4)
 	dis:SetDrawLayer('OVERLAY')
@@ -407,7 +413,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 	F.CreateBD(self, 0)
 	F.CreateGradient(self)
 
-	self:SetDisabledTexture(C.media.backdrop)
+	self:SetDisabledTexture(C.media.bdTex)
 	local dis = self:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .4)
 	dis:SetDrawLayer('OVERLAY')
@@ -456,7 +462,7 @@ function F:ReskinArrow(direction)
 	self:SetSize(18, 18)
 	F.Reskin(self, true)
 
-	self:SetDisabledTexture(C.media.backdrop)
+	self:SetDisabledTexture(C.media.bdTex)
 	local dis = self:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .3)
 	dis:SetDrawLayer('OVERLAY')
@@ -475,7 +481,7 @@ end
 function F:ReskinCheck()
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
-	self:SetHighlightTexture(C.media.backdrop)
+	self:SetHighlightTexture(C.media.bdTex)
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)
 	hl:SetPoint('BOTTOMRIGHT', -5, 5)
@@ -507,7 +513,7 @@ end
 function F:ReskinRadio()
 	self:SetNormalTexture('')
 	self:SetHighlightTexture('')
-	self:SetCheckedTexture(C.media.backdrop)
+	self:SetCheckedTexture(C.media.bdTex)
 
 	local ch = self:GetCheckedTexture()
 	ch:SetPoint('TOPLEFT', 4, -4)
@@ -633,7 +639,7 @@ end
 function F:ReskinColourSwatch()
 	local name = self:GetName()
 
-	self:SetNormalTexture(C.media.backdrop)
+	self:SetNormalTexture(C.media.bdTex)
 	local nt = self:GetNormalTexture()
 	nt:SetPoint('TOPLEFT', 3, -3)
 	nt:SetPoint('BOTTOMRIGHT', -3, 3)
@@ -842,7 +848,7 @@ end
 function F:CreateCB(a)
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
-	self:SetHighlightTexture(C.media.backdrop)
+	self:SetHighlightTexture(C.media.bdTex)
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)
 	hl:SetPoint('BOTTOMRIGHT', -5, 5)
@@ -906,26 +912,6 @@ function F:PixelIcon(texture, highlight)
 	end
 end
 
-function F:AuraIcon(highlight)
-	self.CD = CreateFrame('Cooldown', nil, self, 'CooldownFrameTemplate')
-	self.CD:SetAllPoints()
-	self.CD:SetReverse(true)
-	F.PixelIcon(self, nil, highlight)
-	F.CreateSD(self)
-end
-
-function F:CreateGear(name)
-	local bu = CreateFrame('Button', name, self)
-	bu:SetSize(22, 22)
-	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
-	bu.Icon:SetAllPoints()
-	bu.Icon:SetTexture(C.media.gearTex)
-	bu.Icon:SetTexCoord(0, .5, 0, .5)
-	bu:SetHighlightTexture(C.media.gearTex)
-	bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
-
-	return bu
-end
 
 -- Statusbar
 function F:CreateSB(spark, r, g, b)
@@ -939,12 +925,12 @@ function F:CreateSB(spark, r, g, b)
 	F.CreateBDFrame(self)
 	--self.BG = self:CreateTexture(nil, 'BACKGROUND')
 	--self.BG:SetAllPoints()
-	--self.BG:SetTexture(C.media.backdrop)
+	--self.BG:SetTexture(C.media.bdTex)
 	--self.BG:SetVertexColor(0, 0, 0, .5)
 	--F.CreateTex(self.BG)
 	if spark then
 		self.Spark = self:CreateTexture(nil, 'OVERLAY')
-		self.Spark:SetTexture(C.media.sparkTex)
+		self.Spark:SetTexture('Interface\\CastingBar\\UI-CastingBar-Spark')
 		self.Spark:SetBlendMode('ADD')
 		self.Spark:SetAlpha(.8)
 		self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
@@ -1170,7 +1156,7 @@ end
 function F:CooldownOnUpdate(elapsed, raw)
 	local formatTime = raw and F.FormatTimeRaw or F.FormatTime
 	self.elapsed = (self.elapsed or 0) + elapsed
-	if self.elapsed >= .1 then
+	if self.elapsed >= 0.1 then
 		local timeLeft = self.expiration - GetTime()
 		if timeLeft > 0 then
 			local text = formatTime(timeLeft)
@@ -1248,7 +1234,7 @@ function F:StyleSearchButton()
 	end
 	F.CreateBD(self, .25)
 
-	self:SetHighlightTexture(C.media.backdrop)
+	self:SetHighlightTexture(C.media.bdTex)
 	local hl = self:GetHighlightTexture()
 	hl:SetVertexColor(C.r, C.g, C.b, .25)
 	hl:SetPoint('TOPLEFT', C.Mult, -C.Mult)
@@ -1342,3 +1328,4 @@ local function CheckRole()
 end
 F:RegisterEvent('PLAYER_LOGIN', CheckRole)
 F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckRole)
+

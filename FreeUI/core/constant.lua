@@ -1,26 +1,21 @@
 local F, C, L = unpack(select(2, ...))
 
-local format, tonumber, floor, pairs = string.format, tonumber, math.floor, pairs
+local format, tonumber, pairs, select = string.format, tonumber, pairs, select
 
 local assetsPath = 'interface\\addons\\FreeUI\\assets\\'
-
-
 C.media = {
 	['arrowUp']    = assetsPath..'arrow-up-active',
 	['arrowDown']  = assetsPath..'arrow-down-active',
 	['arrowLeft']  = assetsPath..'arrow-left-active',
 	['arrowRight'] = assetsPath..'arrow-right-active',
-	['backdrop']   = 'Interface\\ChatFrame\\ChatFrameBackground',
+	['gradient']   = assetsPath..'gradient',
+	['bdTex']      = 'Interface\\ChatFrame\\ChatFrameBackground',
 	['pushed']     = assetsPath..'pushed',
 	['checked']    = assetsPath..'checked',
 	['glowTex']    = assetsPath..'glowTex',
-	['gradient']   = assetsPath..'gradient',
 	['roleIcons']  = assetsPath..'UI-LFG-ICON-ROLES',
 	['sbTex']      = assetsPath..'statusbar',
 	['bgTex']	   = assetsPath..'bgTex',
-	['sparkTex']   = 'Interface\\CastingBar\\UI-CastingBar-Spark',
-	['flashTex']   = 'Interface\\Cooldown\\star4',
-	['gearTex']    = 'Interface\\WorldMap\\Gear_64'
 }
 
 
@@ -59,13 +54,14 @@ C.font = {
 	['header']     = headerFont,
 	['chat']       = chatFont,
 	['pixel']      = assetsPath..'font\\pixel.ttf',
-	['pixelCN']    = 'Fonts\\pixfontCN.ttf',
 }
 
 if GetLocale() == 'ruRU' then
 	C.font.pixel = assetsPath..'font\\iFlash705.ttf'
 end
 
+C.NormalFont = {C.font.normal, 11, 'OUTLINE'}
+C.PixelFont = {C.font.pixel, 8, 'OUTLINEMONOCHROME'}
 
 
 
@@ -111,6 +107,25 @@ C.TexCoord = {.08, .92, .08, .92}
 
 C.AssetsPath = 'interface\\addons\\FreeUI\\assets\\'
 
+local dev = {'歸雁入胡天'}
+local function isDeveloper()
+	for _, name in pairs(dev) do
+		if UnitName('player') == name then
+			return true
+		end
+	end
+end
+C.isDeveloper = isDeveloper()
+
+
+
+local function isCNClient()
+	if GetLocale() == 'zhCN' or GetLocale() == 'zhTW' then
+		return true
+	end
+end
+C.isCNClient = isCNClient()
+
 
 
 
@@ -122,7 +137,7 @@ if not LSM then return end
 local zhCN, zhTW, western = LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_zhTW, LSM.LOCALE_BIT_western
 
 
-LSM:Register('background', 'FreeUI_BG', 			C.media.backdrop)
+LSM:Register('background', 'FreeUI_BG', 			C.media.bdTex)
 
 LSM:Register('statusbar', 'FreeUI_SB',  			C.media.sbTex)
 
@@ -131,7 +146,7 @@ LSM:Register('font', 'FreeUI_ExocetBlizzardMedium', assetsPath..'font\\ExocetBli
 LSM:Register('font', 'FreeUI_supereffective', 		assetsPath..'font\\supereffective.ttf', zhCN + zhTW + western)
 LSM:Register('font', 'FreeUI_pixel', 				assetsPath..'font\\pixel.ttf', zhCN + zhTW + western)
 LSM:Register('font', 'FreeUI_pixel_bold', 			assetsPath..'font\\pixel_bold.ttf', zhCN + zhTW + western)
-LSM:Register('font', 'FreeUI_PixfontCN', 			C.font.pixelCN, zhCN + zhTW + western)
+
 LSM:Register('font', 'FreeUI_Normal', 				C.font.normal, zhCN + zhTW + western)
 LSM:Register('font', 'FreeUI_Header', 				C.font.header, zhCN + zhTW + western)
 LSM:Register('font', 'FreeUI_Chat', 				C.font.chat, zhCN + zhTW + western)

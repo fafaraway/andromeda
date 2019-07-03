@@ -98,7 +98,7 @@ tinsert(C.themes["FreeUI"], function()
 	hooksecurefunc("PaperDollItemSlotButton_Update", function(button)
 		-- also fires for bag slots, we don't want that
 		if button.popoutButton then
-			button.IconBorder:SetTexture(C.media.backdrop)
+			button.IconBorder:SetTexture(C.media.bdTex)
 			button.icon:SetShown(GetInventoryItemTexture("player", button:GetID()) ~= nil)
 			colourPopout(button.popoutButton)
 		end

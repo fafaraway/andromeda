@@ -40,7 +40,7 @@ C.themes["Blizzard_ArtifactUI"] = function()
 			slot.HighlightTexture:SetAllPoints()
 
 			slot.Selected:SetDrawLayer("BACKGROUND")
-			slot.Selected:SetTexture(C.media.backdrop)
+			slot.Selected:SetTexture(C.media.bdTex)
 			slot.Selected:SetVertexColor(1, 1, 0)
 			slot.Selected:SetPoint("TOPLEFT", -C.Mult, C.Mult)
 			slot.Selected:SetPoint("BOTTOMRIGHT", C.Mult, -C.Mult)

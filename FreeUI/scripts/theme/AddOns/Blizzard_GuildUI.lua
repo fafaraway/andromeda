@@ -149,11 +149,11 @@ C.themes["Blizzard_GuildUI"] = function()
 		bg:SetPoint("TOPLEFT", 0, 0)
 		bg:SetPoint("BOTTOMRIGHT", 0, 1)
 
-		bu:GetRegions():SetTexture(C.media.backdrop)
+		bu:GetRegions():SetTexture(C.media.bdTex)
 		bu:GetRegions():SetVertexColor(r, g, b, .2)
 	end
 
-	GuildFactionBarProgress:SetTexture(C.media.backdrop)
+	GuildFactionBarProgress:SetTexture(C.media.bdTex)
 	GuildFactionBarLeft:Hide()
 	GuildFactionBarMiddle:Hide()
 	GuildFactionBarRight:Hide()
@@ -214,7 +214,7 @@ C.themes["Blizzard_GuildUI"] = function()
 			local bu = GuildRosterContainer.buttons[i]
 
 			if not bu.bg then
-				bu:SetHighlightTexture(C.media.backdrop)
+				bu:SetHighlightTexture(C.media.bdTex)
 				bu:GetHighlightTexture():SetVertexColor(r, g, b, .2)
 
 				bu.bg = F.CreateBG(bu.icon)
@@ -284,7 +284,7 @@ C.themes["Blizzard_GuildUI"] = function()
 
 					header.bg = F.CreateBDFrame(header, .25)
 					header.bg:SetAllPoints()
-					header:SetHighlightTexture(C.media.backdrop)
+					header:SetHighlightTexture(C.media.bdTex)
 					header:GetHighlightTexture():SetVertexColor(r, g, b, .25)
 				end
 			end
