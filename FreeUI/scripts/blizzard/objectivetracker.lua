@@ -3,7 +3,6 @@ local BLIZZARD = F:GetModule('Blizzard')
 
 local pairs = pairs
 local r, g, b =  C.r, C.g, C.b
-local pysWidth, pysHeight = _G.GetPhysicalScreenSize()
 local ot = ObjectiveTrackerFrame
 local BlocksFrame = ot.BlocksFrame
 local minimize = ot.HeaderMenu.MinimizeButton
@@ -23,7 +22,7 @@ function BLIZZARD:ReskinQuestTracker()
 
 	ot:ClearAllPoints()
 	ot:SetPoint('TOPRIGHT', frame)
-	ot:SetHeight(pysHeight*.6)
+	ot:SetHeight(GetScreenHeight()*.6)
 	ot:SetClampedToScreen(false)
 	ot:SetMovable(true)
 	if ot:IsMovable() then ot:SetUserPlaced(true) end
