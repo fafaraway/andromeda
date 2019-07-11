@@ -1,13 +1,14 @@
 local F, C, L = unpack(select(2, ...))
+local MISC = F:GetModule('Misc')
 
-local module = F:GetModule('Misc')
 
 local format, max = string.format, math.max
 local BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed = BreakUpLargeNumbers, GetMeleeHaste, UnitAttackSpeed
 local GetAverageItemLevel, C_PaperDollInfo_GetMinItemLevel = GetAverageItemLevel, C_PaperDollInfo.GetMinItemLevel
 local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
-function module:MissingStats()
+
+function MISC:MissingStats()
 	if not C.general.missingStats then return end
 	if IsAddOnLoaded('DejaCharacterStats') then return end
 
