@@ -49,7 +49,7 @@ end
 function BLIZZARD:VehicleIndicator()
 	local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', UIParent)
 	frame:SetSize(125, 125)
-	local mover = F.Mover(frame, L['MOVER_VEHICLE_INDICATOR'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
+	F.Mover(frame, L['MOVER_VEHICLE_INDICATOR'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
 
 	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then
