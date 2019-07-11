@@ -7,7 +7,6 @@ local function ReskinRegions()
 	GarrisonLandingPageMinimapButton:SetAlpha(0)
 	GarrisonLandingPageMinimapButton:EnableMouse(false)
 
-
 	GameTimeFrame:ClearAllPoints()
 	GameTimeFrame:SetPoint('TOPRIGHT', Minimap, 'TOPRIGHT', -5, -(C.map.miniMapSize/8*C.Mult)-6)
 	GameTimeFrame:SetSize(16, 8)
@@ -21,8 +20,6 @@ local function ReskinRegions()
 	dateText:SetTextColor(147/255, 211/255, 231/255)
 	dateText:SetShadowOffset(0, 0)
 	dateText:SetPoint('CENTER')
-
-	
 
 	local difftext = {}
 	local rd = CreateFrame('Frame', nil, Minimap)
@@ -151,7 +148,9 @@ local function ReskinRegions()
 
 	Invt:SetScript('OnClick', function(_, btn)
 		Invt:Hide()
-		if btn == 'LeftButton' then ToggleCalendar() end
+		if btn == 'LeftButton' and not InCombatLockdown() then
+			ToggleCalendar()
+		end
 		F:UnregisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
 		F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
 	end)

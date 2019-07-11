@@ -63,6 +63,7 @@ function INFOBAR:Durability()
 	if not C.infobar.durability then return end
 
 	FreeUIDurabilityButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 120, function(self, button)
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
 		ToggleCharacter('PaperDollFrame')
 	end)
 

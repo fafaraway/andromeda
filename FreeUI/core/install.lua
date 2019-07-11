@@ -88,7 +88,6 @@ local function ForceDefaultSettings()
 end
 
 local function ForceChatSettings()
-	FCF_SetLocked(ChatFrame1, nil)
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint(unpack(C.chat.position))
 	ChatFrame1:SetWidth(380)
@@ -98,7 +97,6 @@ local function ForceChatSettings()
 		ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
-	FCF_SetLocked(ChatFrame1, true)
 
 	ToggleChatColorNamesByClassGroup(true, 'SAY')
 	ToggleChatColorNamesByClassGroup(true, 'EMOTE')

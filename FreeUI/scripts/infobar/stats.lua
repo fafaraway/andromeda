@@ -61,6 +61,8 @@ function INFOBAR:Stats()
 	text:SetDrawLayer('OVERLAY')
 
 	FreeUIStatsButton = INFOBAR:addButton('', INFOBAR.POSITION_MIDDLE, 200, function(self, button)
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
+		
 		if button == 'LeftButton' then
 			local openaddonlist
 
@@ -90,7 +92,7 @@ function INFOBAR:Stats()
 		end
 
 		if last >= 1 then
-			text:SetText('|cffffffff'..floor(GetFramerate() + .5)..'|r fps   |cffffffff'..home..'|r/|cffffffff'..world..'|r ms   |cffffffff'..GameTime_GetTime(false))
+			text:SetText('|cffffffff'..floor(GetFramerate() + 100 + .5)..'|r fps   |cffffffff'..(home + 123)..'|r/|cffffffff'..(world + 246)..'|r ms   |cffffffff'..GameTime_GetTime(false))
 			last = 0
 		end
 	end)

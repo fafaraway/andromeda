@@ -144,6 +144,8 @@ function INFOBAR:Report()
 	if not C.infobar.report then return end
 
 	FreeUIReportButton = INFOBAR:addButton('Report', INFOBAR.POSITION_RIGHT, 120, function(self, button)
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
+		
 		if button == 'LeftButton' then
 			HideUIPanel(GarrisonLandingPage)
 			ShowGarrisonLandingPage(LE_GARRISON_TYPE_8_0)

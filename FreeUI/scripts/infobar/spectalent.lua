@@ -2,6 +2,9 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('Infobar')
 
 
+local currentSpec = GetSpecialization()
+local numSpec = GetNumSpecializations()
+
 local function addIcon(texture)
 	texture = texture and '|T'..texture..':12:16:0:0:50:50:4:46:4:46|t' or ''
 	return texture
@@ -17,8 +20,8 @@ function INFOBAR:SpecTalent()
 	if not C.infobar.specTalent then return end
 
 	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 200, function(self, button)
-		local currentSpec = GetSpecialization()
-		local numSpec = GetNumSpecializations()
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
+
 		if not (currentSpec and numSpec) then return end
 
 		if button == 'LeftButton' then

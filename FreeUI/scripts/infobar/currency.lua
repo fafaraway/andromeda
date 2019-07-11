@@ -45,6 +45,7 @@ function INFOBAR:Currencies()
 		if button == 'RightButton' then
 			StaticPopup_Show('RESETGOLD')
 		else
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
 			ToggleCharacter('TokenFrame')
 		end
 	end)
