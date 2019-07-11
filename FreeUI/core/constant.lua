@@ -1,69 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
-local format, tonumber, pairs, select = string.format, tonumber, pairs, select
-
-local assetsPath = 'interface\\addons\\FreeUI\\assets\\'
-C.media = {
-	['arrowUp']    = assetsPath..'arrow-up-active',
-	['arrowDown']  = assetsPath..'arrow-down-active',
-	['arrowLeft']  = assetsPath..'arrow-left-active',
-	['arrowRight'] = assetsPath..'arrow-right-active',
-	['gradient']   = assetsPath..'gradient',
-	['bdTex']      = 'Interface\\ChatFrame\\ChatFrameBackground',
-	['pushed']     = assetsPath..'pushed',
-	['checked']    = assetsPath..'checked',
-	['glowTex']    = assetsPath..'glowTex',
-	['roleIcons']  = assetsPath..'UI-LFG-ICON-ROLES',
-	['sbTex']      = assetsPath..'statusbar',
-	['bgTex']	   = assetsPath..'bgTex',
-}
-
-
-
-local normalFont, damageFont, headerFont, chatFont
-if GetLocale() == 'zhCN' then
-	normalFont = 'Fonts\\ARKai_T.ttf'
-	damageFont = 'Fonts\\ARKai_C.ttf'
-	headerFont = 'Fonts\\ARKai_T.ttf'
-	chatFont   = 'Fonts\\ARKai_T.ttf'
-elseif GetLocale() == 'zhTW' then
-	normalFont = 'Fonts\\blei00d.ttf'
-	damageFont = 'Fonts\\bKAI00M.ttf'
-	headerFont = 'Fonts\\blei00d.ttf'
-	chatFont   = 'Fonts\\blei00d.ttf'
-elseif GetLocale() == 'koKR' then
-	normalFont = 'Fonts\\2002.ttf'
-	damageFont = 'Fonts\\K_Damage.ttf'
-	headerFont = 'Fonts\\2002.ttf'
-	chatFont   = 'Fonts\\2002.ttf'
-elseif GetLocale() == 'ruRU' then
-	normalFont = 'Fonts\\FRIZQT___CYR.ttf'
-	damageFont = 'Fonts\\FRIZQT___CYR.ttf'
-	headerFont = 'Fonts\\FRIZQT___CYR.ttf'
-	chatFont   = 'Fonts\\FRIZQT___CYR.ttf'
-else
-	normalFont = assetsPath..'font\\expresswaysb.ttf'
-	damageFont = assetsPath..'font\\PEPSI_pl.ttf'
-	headerFont = assetsPath..'font\\ExocetBlizzardMedium.ttf'
-	chatFont   = assetsPath..'font\\expresswaysb.ttf'
-end
-
-C.font = {
-	['normal']     = normalFont,
-	['damage']     = damageFont,
-	['header']     = headerFont,
-	['chat']       = chatFont,
-	['pixel']      = assetsPath..'font\\pixel.ttf',
-}
-
-if GetLocale() == 'ruRU' then
-	C.font.pixel = assetsPath..'font\\iFlash705.ttf'
-end
-
-C.NormalFont = {C.font.normal, 11, 'OUTLINE'}
-C.PixelFont = {C.font.pixel, 8, 'OUTLINEMONOCHROME'}
-
-
 
 C.Class = select(2, UnitClass('player'))
 C.Name = UnitName('player')
@@ -102,10 +38,25 @@ C.LeftButton = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:51
 C.RightButton = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t '
 C.MiddleButton = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t '
 C.CopyTex = 'Interface\\Buttons\\UI-GuildButton-PublicNote-Up'
-
+C.AssetsPath = 'interface\\addons\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 
-C.AssetsPath = 'interface\\addons\\FreeUI\\assets\\'
+
+C.media = {
+	['arrowUp']    = C.AssetsPath..'arrow-up-active',
+	['arrowDown']  = C.AssetsPath..'arrow-down-active',
+	['arrowLeft']  = C.AssetsPath..'arrow-left-active',
+	['arrowRight'] = C.AssetsPath..'arrow-right-active',
+	['gradient']   = C.AssetsPath..'gradient',
+	['bdTex']      = 'Interface\\ChatFrame\\ChatFrameBackground',
+	['pushed']     = C.AssetsPath..'pushed',
+	['checked']    = C.AssetsPath..'checked',
+	['glowTex']    = C.AssetsPath..'glowTex',
+	['roleIcons']  = C.AssetsPath..'UI-LFG-ICON-ROLES',
+	['sbTex']      = C.AssetsPath..'statusbar',
+	['bgTex']	   = C.AssetsPath..'bgTex',
+}
+
 
 local dev = {'歸雁入胡天'}
 local function isDeveloper()
@@ -117,8 +68,6 @@ local function isDeveloper()
 end
 C.isDeveloper = isDeveloper()
 
-
-
 local function isCNClient()
 	if GetLocale() == 'zhCN' or GetLocale() == 'zhTW' then
 		return true
@@ -127,7 +76,48 @@ end
 C.isCNClient = isCNClient()
 
 
+local normalFont, damageFont, headerFont, chatFont
+if GetLocale() == 'zhCN' then
+	normalFont = 'Fonts\\ARKai_T.ttf'
+	damageFont = 'Fonts\\ARKai_C.ttf'
+	headerFont = 'Fonts\\ARKai_T.ttf'
+	chatFont   = 'Fonts\\ARKai_T.ttf'
+elseif GetLocale() == 'zhTW' then
+	normalFont = 'Fonts\\blei00d.ttf'
+	damageFont = 'Fonts\\bKAI00M.ttf'
+	headerFont = 'Fonts\\blei00d.ttf'
+	chatFont   = 'Fonts\\blei00d.ttf'
+elseif GetLocale() == 'koKR' then
+	normalFont = 'Fonts\\2002.ttf'
+	damageFont = 'Fonts\\K_Damage.ttf'
+	headerFont = 'Fonts\\2002.ttf'
+	chatFont   = 'Fonts\\2002.ttf'
+elseif GetLocale() == 'ruRU' then
+	normalFont = 'Fonts\\FRIZQT___CYR.ttf'
+	damageFont = 'Fonts\\FRIZQT___CYR.ttf'
+	headerFont = 'Fonts\\FRIZQT___CYR.ttf'
+	chatFont   = 'Fonts\\FRIZQT___CYR.ttf'
+else
+	normalFont = C.AssetsPath..'font\\expresswaysb.ttf'
+	damageFont = C.AssetsPath..'font\\PEPSI_pl.ttf'
+	headerFont = C.AssetsPath..'font\\ExocetBlizzardMedium.ttf'
+	chatFont   = C.AssetsPath..'font\\expresswaysb.ttf'
+end
 
+C.font = {
+	['normal']  = normalFont,
+	['damage']  = damageFont,
+	['header']  = headerFont,
+	['chat']    = chatFont,
+	['pixel']   = C.AssetsPath..'font\\pixel.ttf',
+}
+
+if GetLocale() == 'ruRU' then
+	C.font.pixel = C.AssetsPath..'font\\iFlash705.ttf'
+end
+
+C.NormalFont = {C.font.normal, 11, 'OUTLINE'}
+C.PixelFont = {C.font.pixel, 8, 'OUTLINEMONOCHROME'}
 
 
 
@@ -136,33 +126,32 @@ if not LSM then return end
 
 local zhCN, zhTW, western = LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_zhTW, LSM.LOCALE_BIT_western
 
-
 LSM:Register('background', 'FreeUI_BG', 			C.media.bdTex)
 
 LSM:Register('statusbar', 'FreeUI_SB',  			C.media.sbTex)
 
-LSM:Register('font', 'FreeUI_ExocetBlizzardLight', 	assetsPath..'font\\ExocetBlizzardLight.ttf', zhCN + zhTW + western)
-LSM:Register('font', 'FreeUI_ExocetBlizzardMedium', assetsPath..'font\\ExocetBlizzardMedium.ttf', zhCN + zhTW + western)
-LSM:Register('font', 'FreeUI_supereffective', 		assetsPath..'font\\supereffective.ttf', zhCN + zhTW + western)
-LSM:Register('font', 'FreeUI_pixel', 				assetsPath..'font\\pixel.ttf', zhCN + zhTW + western)
-LSM:Register('font', 'FreeUI_pixel_bold', 			assetsPath..'font\\pixel_bold.ttf', zhCN + zhTW + western)
+LSM:Register('font', 'FreeUI_ExocetBlizzardLight', 	C.AssetsPath..'font\\ExocetBlizzardLight.ttf', zhCN + zhTW + western)
+LSM:Register('font', 'FreeUI_ExocetBlizzardMedium', C.AssetsPath..'font\\ExocetBlizzardMedium.ttf', zhCN + zhTW + western)
+LSM:Register('font', 'FreeUI_supereffective', 		C.AssetsPath..'font\\supereffective.ttf', zhCN + zhTW + western)
+LSM:Register('font', 'FreeUI_pixel', 				C.AssetsPath..'font\\pixel.ttf', zhCN + zhTW + western)
+LSM:Register('font', 'FreeUI_pixel_bold', 			C.AssetsPath..'font\\pixel_bold.ttf', zhCN + zhTW + western)
 
 LSM:Register('font', 'FreeUI_Normal', 				C.font.normal, zhCN + zhTW + western)
 LSM:Register('font', 'FreeUI_Header', 				C.font.header, zhCN + zhTW + western)
 LSM:Register('font', 'FreeUI_Chat', 				C.font.chat, zhCN + zhTW + western)
 
-LSM:Register('sound', 'FreeUI_buzz', 				assetsPath..'sound\\buzz.ogg')
-LSM:Register('sound', 'FreeUI_ding', 				assetsPath..'sound\\ding.ogg')
-LSM:Register('sound', 'FreeUI_execute', 			assetsPath..'sound\\execute.ogg')
-LSM:Register('sound', 'FreeUI_LowHealth', 			assetsPath..'sound\\LowHealth.ogg')
-LSM:Register('sound', 'FreeUI_LowMana', 			assetsPath..'sound\\LowMana.ogg')
-LSM:Register('sound', 'FreeUI_miss', 				assetsPath..'sound\\miss.mp3')
-LSM:Register('sound', 'FreeUI_Proc', 				assetsPath..'sound\\Proc.ogg')
-LSM:Register('sound', 'FreeUI_Shutupfool', 			assetsPath..'sound\\Shutupfool.ogg')
-LSM:Register('sound', 'FreeUI_sound', 				assetsPath..'sound\\sound.mp3')
-LSM:Register('sound', 'FreeUI_Warning', 			assetsPath..'sound\\Warning.ogg')
-LSM:Register('sound', 'FreeUI_whisper', 			assetsPath..'sound\\whisper.ogg')
-LSM:Register('sound', 'FreeUI_whisper1', 			assetsPath..'sound\\whisper1.ogg')
-LSM:Register('sound', 'FreeUI_whisper2', 			assetsPath..'sound\\whisper2.ogg')
-LSM:Register('sound', 'FreeUI_forthehorde', 		assetsPath..'sound\\forthehorde.mp3')
+LSM:Register('sound', 'FreeUI_buzz', 				C.AssetsPath..'sound\\buzz.ogg')
+LSM:Register('sound', 'FreeUI_ding', 				C.AssetsPath..'sound\\ding.ogg')
+LSM:Register('sound', 'FreeUI_execute', 			C.AssetsPath..'sound\\execute.ogg')
+LSM:Register('sound', 'FreeUI_LowHealth', 			C.AssetsPath..'sound\\LowHealth.ogg')
+LSM:Register('sound', 'FreeUI_LowMana', 			C.AssetsPath..'sound\\LowMana.ogg')
+LSM:Register('sound', 'FreeUI_miss', 				C.AssetsPath..'sound\\miss.mp3')
+LSM:Register('sound', 'FreeUI_Proc', 				C.AssetsPath..'sound\\Proc.ogg')
+LSM:Register('sound', 'FreeUI_Shutupfool', 			C.AssetsPath..'sound\\Shutupfool.ogg')
+LSM:Register('sound', 'FreeUI_sound', 				C.AssetsPath..'sound\\sound.mp3')
+LSM:Register('sound', 'FreeUI_Warning', 			C.AssetsPath..'sound\\Warning.ogg')
+LSM:Register('sound', 'FreeUI_whisper', 			C.AssetsPath..'sound\\whisper.ogg')
+LSM:Register('sound', 'FreeUI_whisper1', 			C.AssetsPath..'sound\\whisper1.ogg')
+LSM:Register('sound', 'FreeUI_whisper2', 			C.AssetsPath..'sound\\whisper2.ogg')
+LSM:Register('sound', 'FreeUI_forthehorde', 		C.AssetsPath..'sound\\forthehorde.mp3')
 
