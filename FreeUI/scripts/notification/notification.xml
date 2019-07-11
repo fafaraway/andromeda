@@ -3,6 +3,7 @@
 	<Script file='event.lua'/>
 	<Script file='dispel.lua'/>
 	<Script file='interrupt.lua'/>
+	<Script file='quest.lua'/>
 	<Script file='rare.lua'/>
 	<Script file='res.lua'/>
 	<Script file='sap.lua'/>

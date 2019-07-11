@@ -115,14 +115,17 @@ C['map'] = {
 }
 
 C['notification'] = {
-	['enableNotification'] = true,
-
+	['enableBanner'] = true,
 		['playSounds'] = true,
 		['animations'] = true,
 		['timeShown'] = 5,
 
 		['checkBagsFull'] = true,
 		['checkMail'] = true,
+
+	['questNotifier'] = true,
+		['questProgress'] = true,
+		['onlyCompleteRing'] = true,
 
 	['interrupt'] = true,
 		['interruptSound'] = true,

@@ -43,6 +43,7 @@ L['NOTIFICATION_PORTAL'] = '<Attention>: %s opened %s!'
 L['NOTIFICATION_REFRESHMENTTABLE'] = '<Attention>: %s casted %s!'
 L['NOTIFICATION_RITUALOFSUMMONING'] = '<Attention>: %s is casting %s!'
 L['NOTIFICATION_SOULWELL'] = '<Attention>: %s casted %s!'
+L['NOTIFICATION_ACCEPT_QUEST'] = 'Accept quest: '
 
 
 -- infobar

@@ -40,6 +40,7 @@ L['NOTIFICATION_PORTAL'] = '<注意>：%s 开启了 %s！'
 L['NOTIFICATION_REFRESHMENTTABLE'] = '<注意>：%s 施放了 %s！'
 L['NOTIFICATION_RITUALOFSUMMONING'] = '<注意>：%s 正在施放 %s！'
 L['NOTIFICATION_SOULWELL'] = '<注意>：%s 施放了 %s！'
+L['NOTIFICATION_ACCEPT_QUEST'] = '接受任务：'
 
 
 -- infobar

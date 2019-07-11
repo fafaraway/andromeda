@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
-local module = F:RegisterModule("Notification")
+local NOTIFICATION = F:RegisterModule("Notification")
 
-if not C.notification.enableNotification then return end
+if not C.notification.enableBanner then return end
 
 local playSounds = C.notification.playSounds
 local animations = C.notification.animations
@@ -245,7 +245,7 @@ f:SetScript("OnMouseUp", function(self, button)
 end)
 
 
-function module:OnLogin()
+function NOTIFICATION:OnLogin()
 	F.CreateBD(f)
 	F.CreateSD(f)
 	F.CreateBG(icon)
@@ -256,4 +256,5 @@ function module:OnLogin()
 	self:Resurrect()
 	self:Sapped()
 	self:Rare()
+	self:QuestNotifier()
 end
