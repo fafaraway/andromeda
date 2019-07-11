@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
-local strfind, gsub, unpack = string.find, gsub, unpack
+local gsub, unpack = gsub, unpack
 local GetItemIcon, GetSpellTexture = GetItemIcon, GetSpellTexture
 local newString = '0:0:64:64:5:59:5:59'
 
