@@ -24,7 +24,7 @@ function NOTIFICATION:RareAlert_Update(id)
 		local atlasWidth = width/(txRight-txLeft)
 		local atlasHeight = height/(txBottom-txTop)
 		local tex = format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
-		local currrentTime = C.GreyColor..'['..date('%H:%M:%S')..'] |r'
+		local currrentTime = C.GreenColor..date('%H:%M')..' |r'
 
 		UIErrorsFrame:AddMessage(currrentTime..C.InfoColor..L['NOTIFICATION_RARE']..tex..(C.RedColor..info.name or ''))
 		print(currrentTime..C.InfoColor..L['NOTIFICATION_RARE']..tex..C.RedColor..(info.name or ''))
