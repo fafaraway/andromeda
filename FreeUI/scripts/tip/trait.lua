@@ -101,4 +101,5 @@ function TOOLTIP:AzeriteTrait()
 	ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
 	ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
 	EmbeddedItemTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
+	GameTooltipTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)
 end
