@@ -28,6 +28,7 @@ tinsert(C.themes["FreeUI"], function()
 	PVPMatchResults:HookScript("OnShow", stripBorders)
 	F.ReskinClose(PVPMatchResults.CloseButton)
 	F.StripTextures(PVPMatchResults.overlay)
+	PVPMatchResults.overlay.decorator:SetAlpha(0)
 
 	local content = PVPMatchResults.content
 	local tabContainer = content.tabContainer
