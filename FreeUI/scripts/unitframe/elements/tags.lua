@@ -1,14 +1,14 @@
-local _, ns = ...
 local F, C, L = unpack(select(2, ...))
-if not C.unitframe.enable then return end
-
-local module, cfg = F:GetModule('Unitframe'), C.unitframe
-
-local tags = ns.oUF.Tags.Methods
-local tagEvents = ns.oUF.Tags.Events
-local tagSharedEvents = ns.oUF.Tags.SharedEvents
+local UNITFRAME = F:GetModule('Unitframe')
 
 local format, floor = string.format, math.floor
+
+local cfg = C.unitframe
+local tags = FreeUI.oUF.Tags.Methods
+local tagEvents = FreeUI.oUF.Tags.Events
+local tagSharedEvents = FreeUI.oUF.Tags.SharedEvents
+
+
 
 
 
@@ -71,7 +71,7 @@ tags['free:health'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 	
 	local cur = UnitHealth(unit)
-	local r, g, b = unpack(ns.oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
+	local r, g, b = unpack(FreeUI.oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 
 	return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F.Numb(cur))
 end
@@ -171,15 +171,15 @@ local function UpdateUnitNameColour(self)
 	end
 end
 
-function module:AddNameText(self)
+function UNITFRAME:AddNameText(self)
 	local name
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		name = F.CreateFS(self.Health, (C.isCNClient and cfg.showGroupName and C.NormalFont) or 'pixel', '', nil, nil, true)
+		name = F.CreateFS(self.Health, (C.isCNClient and cfg.showGroupName and C.NormalFont) or 'pixel', '', nil, nil, not C.isCNClient)
 
 		self:Tag(name, '[free:groupname]')
 	else
-		name = F.CreateFS(self.Health, (C.isCNClient and C.NormalFont) or 'pixel', '', nil, nil, true)
+		name = F.CreateFS(self.Health, (C.isCNClient and C.NormalFont) or 'pixel', '', nil, nil, not C.isCNClient)
 
 		if self.unitStyle == 'target' or self.unitStyle == 'arena' then
 			name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -201,7 +201,7 @@ function module:AddNameText(self)
 	end
 end
 
-function module:AddHealthValue(self)
+function UNITFRAME:AddHealthValue(self)
 	local healthValue = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
@@ -224,7 +224,7 @@ function module:AddHealthValue(self)
 	self.HealthValue = healthValue
 end
 
-function module:AddHealthPercentage(self)
+function UNITFRAME:AddHealthPercentage(self)
 	local healthPercentage = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
 	healthPercentage:SetPoint('LEFT', self, 'RIGHT', 4, 0)
 
@@ -232,7 +232,7 @@ function module:AddHealthPercentage(self)
 	self.HealthPercentage = healthPercentage
 end
 
-function module:AddPowerValue(self)
+function UNITFRAME:AddPowerValue(self)
 	local powerValue = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
@@ -250,7 +250,7 @@ function module:AddPowerValue(self)
 	self.PowerValue = powerValue
 end
 
-function module:AddClassificationText(self)
+function UNITFRAME:AddClassificationText(self)
 	local classificationText = F.CreateFS(self.Health, 'pixel', '', nil, nil, true)
 	classificationText:SetPoint('BOTTOMLEFT', self.PowerValue, 'BOTTOMRIGHT', 4, 0)
 
@@ -259,10 +259,10 @@ function module:AddClassificationText(self)
 	self.ClassificationText = classificationText
 end
 
-function module:AddArenaSpec(self)
+function UNITFRAME:AddArenaSpec(self)
 	local arenaSpec
 
-	arenaSpec = F.CreateFS(self.Health, (C.isCNClient and C.NormalFont) or 'pixel', '', nil, nil, true)
+	arenaSpec = F.CreateFS(self.Health, (C.isCNClient and C.NormalFont) or 'pixel', '', nil, nil, not C.isCNClient)
 	arenaSpec:SetPoint('BOTTOMLEFT', self.Name, 'BOTTOMRIGHT', 4, 0)
 
 	self:Tag(arenaSpec, '[arenaspec]')
