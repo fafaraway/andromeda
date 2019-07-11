@@ -112,14 +112,14 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 		local faction = UnitFactionGroup("player")
 		local inInstance, instanceType = IsInInstance()
 
-		if instanceType == 'pvp' or instanceType == 'arena' then
+		--[[if instanceType == 'pvp' or instanceType == 'arena' then
 			-- just for fun :)
 			if faction == "Alliance" then
 				PlaySoundFile(forthealliance, "Master");
 			elseif faction == "Horde" then
 				PlaySoundFile(forthehorde, "Master");
 			end
-		end
+		end]]
 
 		DOTA_timer_reset = true;
 	end
