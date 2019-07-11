@@ -19,10 +19,10 @@ tinsert(C.themes["FreeUI"], function()
 	end
 
 
-	ReskinFont(RaidWarningFrame.slot1, normalFont, 16)
-	ReskinFont(RaidWarningFrame.slot2, normalFont, 16)
-	ReskinFont(RaidBossEmoteFrame.slot1, normalFont, 16)
-	ReskinFont(RaidBossEmoteFrame.slot2, normalFont, 16)
+	--ReskinFont(RaidWarningFrame.slot1, normalFont, 16)
+	--ReskinFont(RaidWarningFrame.slot2, normalFont, 16)
+	--ReskinFont(RaidBossEmoteFrame.slot1, normalFont, 16)
+	--ReskinFont(RaidBossEmoteFrame.slot2, normalFont, 16)
 
 	ReskinFont(AchievementFont_Small, normalFont, 12)
 

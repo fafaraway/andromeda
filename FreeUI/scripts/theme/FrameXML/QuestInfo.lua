@@ -3,10 +3,7 @@ local F, C = unpack(select(2, ...))
 tinsert(C.themes["FreeUI"], function()
 	local r, g, b = C.r, C.g, C.b
 
-	-- [[ Item reward highlight ]]
-
-	QuestInfoItemHighlight:GetRegions():Hide()
-
+	-- Item reward highlight
 	local function clearHighlight()
 		for _, button in pairs(QuestInfoRewardsFrame.RewardButtons) do
 			button.bg:SetBackdropColor(0, 0, 0, .25)
@@ -22,35 +19,12 @@ tinsert(C.themes["FreeUI"], function()
 		end
 	end
 
+	QuestInfoItemHighlight:GetRegions():Hide()
 	hooksecurefunc(QuestInfoItemHighlight, "SetPoint", setHighlight)
 	QuestInfoItemHighlight:HookScript("OnShow", setHighlight)
 	QuestInfoItemHighlight:HookScript("OnHide", clearHighlight)
 
-	-- [[ Shared ]]
-
-	local function restyleSpellButton(bu)
-		local name = bu:GetName()
-		local icon = bu.Icon
-
-		_G[name.."NameFrame"]:Hide()
-		_G[name.."SpellBorder"]:Hide()
-
-		icon:SetPoint("TOPLEFT", 3, -2)
-		icon:SetDrawLayer("ARTWORK")
-		icon:SetTexCoord(unpack(C.TexCoord))
-		F.CreateBG(icon)
-
-		local bg = CreateFrame("Frame", nil, bu)
-		bg:SetPoint("TOPLEFT", 2, -1)
-		bg:SetPoint("BOTTOMRIGHT", 0, 14)
-		bg:SetFrameLevel(0)
-		F.CreateBD(bg, .25)
-	end
-
-	-- [[ Objectives ]]
-
-	restyleSpellButton(QuestInfoSpellObjectiveFrame)
-
+	-- Quest objective text color
 	local function QuestInfo_GetQuestID()
 		if QuestInfoFrame.questLog then
 			return select(8, GetQuestLogTitle(GetQuestLogSelection()))
@@ -90,11 +64,28 @@ tinsert(C.themes["FreeUI"], function()
 			end
 		end
 	end
-
 	hooksecurefunc("QuestMapFrame_ShowQuestDetails", colourObjectivesText)
-	hooksecurefunc("QuestInfo_Display", colourObjectivesText)
 
-	-- [[ Quest rewards ]]
+	-- Reskin rewards
+	local function restyleSpellButton(bu)
+		local name = bu:GetName()
+		local icon = bu.Icon
+
+		_G[name.."NameFrame"]:Hide()
+		_G[name.."SpellBorder"]:Hide()
+
+		icon:SetPoint("TOPLEFT", 3, -2)
+		icon:SetDrawLayer("ARTWORK")
+		icon:SetTexCoord(unpack(C.TexCoord))
+		F.CreateBG(icon)
+
+		local bg = CreateFrame("Frame", nil, bu)
+		bg:SetPoint("TOPLEFT", 2, -1)
+		bg:SetPoint("BOTTOMRIGHT", 0, 14)
+		bg:SetFrameLevel(0)
+		F.CreateBD(bg, .25)
+	end
+	restyleSpellButton(QuestInfoSpellObjectiveFrame)
 
 	local function restyleRewardButton(bu, isMapQuestInfo)
 		bu.NameFrame:Hide()
@@ -132,22 +123,6 @@ tinsert(C.themes["FreeUI"], function()
 		restyleRewardButton(QuestInfoRewardsFrame[name])
 	end
 
-	-- Spell Rewards
-
-	local spellRewards = {QuestInfoRewardsFrame, MapQuestInfoRewardsFrame}
-	for _, rewardFrame in pairs(spellRewards) do
-		local spellRewardFrame = rewardFrame.spellRewardPool:Acquire()
-		local icon = spellRewardFrame.Icon
-		local nameFrame = spellRewardFrame.NameFrame
-
-		icon:SetTexCoord(unpack(C.TexCoord))
-		F.CreateBDFrame(icon)
-		nameFrame:Hide()
-		local bg = F.CreateBDFrame(nameFrame, .25)
-		bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
-		bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 101, -1)
-	end
-
 	-- Title Reward
 	do
 		local frame = QuestInfoPlayerTitleFrame
@@ -163,13 +138,20 @@ tinsert(C.themes["FreeUI"], function()
 		bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 220, -1)
 	end
 
-	-- Follower Rewards
+	-- Others
 	hooksecurefunc("QuestInfo_Display", function()
+		colourObjectivesText()
+
         local rewardsFrame = QuestInfoFrame.rewardsFrame
         local isQuestLog = QuestInfoFrame.questLog ~= nil
 		local numSpellRewards = isQuestLog and GetNumQuestLogRewardSpells() or GetNumRewardSpells()
 
 		if numSpellRewards > 0 then
+            -- Spell Headers
+            for spellHeader in rewardsFrame.spellHeaderPool:EnumerateActive() do
+				spellHeader:SetVertexColor(1, 1, 1)
+            end
+			-- Follower Rewards
 			for reward in rewardsFrame.followerRewardPool:EnumerateActive() do
 				local portrait = reward.PortraitFrame
 				if not reward.bg then
@@ -193,10 +175,26 @@ tinsert(C.themes["FreeUI"], function()
 					portrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 				end
 			end
+            -- Spell Rewards
+            for spellReward in rewardsFrame.spellRewardPool:EnumerateActive() do
+				if not spellReward.styled then
+					local icon = spellReward.Icon
+					local nameFrame = spellReward.NameFrame
+					icon:SetTexCoord(unpack(C.TexCoord))
+					F.CreateBDFrame(icon)
+					nameFrame:Hide()
+					local bg = F.CreateBDFrame(nameFrame, .25)
+					bg:SetPoint("TOPLEFT", icon, "TOPRIGHT", 0, 2)
+					bg:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT", 101, -1)
+
+					spellReward.styled = true
+				end
+			end
 		end
 	end)
 
-	-- [[ Change text colours ]]
+	-- Change text colors
+	QuestFont:SetTextColor(1, 1, 1)
 
 	hooksecurefunc(QuestInfoRequiredMoneyText, "SetTextColor", function(self, r)
 		if r == 0 then
@@ -206,51 +204,54 @@ tinsert(C.themes["FreeUI"], function()
 		end
 	end)
 
-	QuestInfoTitleHeader:SetTextColor(1, .8, 0)
-	QuestInfoTitleHeader.SetTextColor = F.Dummy
-	QuestInfoTitleHeader:SetShadowColor(0, 0, 0)
+	local function HookTextColor_Yellow(self)
+		if self.isSetting then return end
+		self.isSetting = true
+		self:SetTextColor(1, .8, 0)
+		self.isSetting = nil
+	end
 
-	QuestInfoDescriptionHeader:SetTextColor(1, .8, 0)
-	QuestInfoDescriptionHeader.SetTextColor = F.Dummy
-	QuestInfoDescriptionHeader:SetShadowColor(0, 0, 0)
+	local function SetTextColor_Yellow(font)
+		font:SetShadowColor(0, 0, 0)
+		font:SetTextColor(1, .8, 0)
+		hooksecurefunc(font, "SetTextColor", HookTextColor_Yellow)
+	end
 
-	QuestInfoObjectivesHeader:SetTextColor(1, .8, 0)
-	QuestInfoObjectivesHeader.SetTextColor = F.Dummy
-	QuestInfoObjectivesHeader:SetShadowColor(0, 0, 0)
+	local yellowish = {
+		QuestInfoTitleHeader,
+		QuestInfoDescriptionHeader,
+		QuestInfoObjectivesHeader,
+		QuestInfoRewardsFrame.Header,
+	}
+	for _, font in pairs(yellowish) do
+		SetTextColor_Yellow(font)
+	end
 
-	QuestInfoRewardsFrame.Header:SetTextColor(1, .8, 0)
-	QuestInfoRewardsFrame.Header.SetTextColor = F.Dummy
-	QuestInfoRewardsFrame.Header:SetShadowColor(0, 0, 0)
+	local function HookTextColor_White(self)
+		if self.isSetting then return end
+		self.isSetting = true
+		self:SetTextColor(1, 1, 1)
+		self.isSetting = nil
+	end
 
-	QuestInfoDescriptionText:SetTextColor(1, 1, 1)
-	QuestInfoDescriptionText.SetTextColor = F.Dummy
+	local function SetTextColor_White(font)
+		font:SetShadowColor(0, 0, 0)
+		font:SetTextColor(1, 1, 1)
+		hooksecurefunc(font, "SetTextColor", HookTextColor_White)
+	end
 
-	QuestInfoObjectivesText:SetTextColor(1, 1, 1)
-	QuestInfoObjectivesText.SetTextColor = F.Dummy
-
-	QuestInfoGroupSize:SetTextColor(1, 1, 1)
-	QuestInfoGroupSize.SetTextColor = F.Dummy
-
-	QuestInfoRewardText:SetTextColor(1, 1, 1)
-	QuestInfoRewardText.SetTextColor = F.Dummy
-
-	QuestInfoSpellObjectiveLearnLabel:SetTextColor(1, 1, 1)
-	QuestInfoSpellObjectiveLearnLabel.SetTextColor = F.Dummy
-
-	QuestInfoRewardsFrame.ItemChooseText:SetTextColor(1, 1, 1)
-	QuestInfoRewardsFrame.ItemChooseText.SetTextColor = F.Dummy
-
-	QuestInfoRewardsFrame.ItemReceiveText:SetTextColor(1, 1, 1)
-	QuestInfoRewardsFrame.ItemReceiveText.SetTextColor = F.Dummy
-
-	QuestInfoRewardsFrame.PlayerTitleText:SetTextColor(1, 1, 1)
-	QuestInfoRewardsFrame.PlayerTitleText.SetTextColor = F.Dummy
-
-	QuestInfoRewardsFrame.XPFrame.ReceiveText:SetTextColor(1, 1, 1)
-	QuestInfoRewardsFrame.XPFrame.ReceiveText.SetTextColor = F.Dummy
-
-	QuestInfoRewardsFrame.spellHeaderPool:Acquire():SetVertexColor(1, 1, 1)
-	QuestInfoRewardsFrame.spellHeaderPool:Acquire().SetVertexColor = F.Dummy
-
-	QuestFont:SetTextColor(1, 1, 1)
+	local whitish = {
+		QuestInfoDescriptionText,
+		QuestInfoObjectivesText,
+		QuestInfoGroupSize,
+		QuestInfoRewardText,
+		QuestInfoSpellObjectiveLearnLabel,
+		QuestInfoRewardsFrame.ItemChooseText,
+		QuestInfoRewardsFrame.ItemReceiveText,
+		QuestInfoRewardsFrame.PlayerTitleText,
+		QuestInfoRewardsFrame.XPFrame.ReceiveText,
+	}
+	for _, font in pairs(whitish) do
+		SetTextColor_White(font)
+	end
 end)
