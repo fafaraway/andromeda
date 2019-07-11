@@ -1,35 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule('Misc')
+local MISC = F:RegisterModule('Misc')
 
-local tostring, tonumber, pairs, select, random = tostring, tonumber, pairs, select, math.random
-local strsplit, strfind, strmatch, strupper, gsub = string.split, string.find, string.match, string.upper, gsub
-local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
-local GetNumArchaeologyRaces = GetNumArchaeologyRaces
-local GetNumArtifactsByRace = GetNumArtifactsByRace
-local GetArtifactInfoByRace = GetArtifactInfoByRace
-local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
-local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
-local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
-local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
-local EquipmentManager_RunAction = EquipmentManager_RunAction
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetItemInfo = GetItemInfo
-local BuyMerchantItem = BuyMerchantItem
-local GetMerchantItemLink = GetMerchantItemLink
-local GetMerchantItemMaxStack = GetMerchantItemMaxStack
-local GetItemQualityColor = GetItemQualityColor
-local Screenshot = Screenshot
-local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
-local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
-local GetNumSavedInstances = GetNumSavedInstances
-local GetInstanceInfo = GetInstanceInfo
-local GetSavedInstanceInfo = GetSavedInstanceInfo
-local SetSavedInstanceExtend = SetSavedInstanceExtend
-local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
-local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
-local EnumerateFrames = EnumerateFrames
 
-function module:OnLogin()
+function MISC:OnLogin()
 	self:ShowItemLevel()
 	self:ProgressBar()
 	self:FlashCursor()
@@ -43,7 +16,6 @@ function module:OnLogin()
 	self:Marker()
 	self:Focuser()
 	self:NakedIcon()
-	self:ExtendInstance()
 	self:CMGuildBest()
 	self:MailButton()
 	self:CombatText()
@@ -52,15 +24,11 @@ function module:OnLogin()
 	self:Durability()
 
 	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
-
-	if tonumber(GetCVar('cameraDistanceMaxZoomFactor')) ~= 2.6 then
-		SetCVar('cameraDistanceMaxZoomFactor', 2.6)
-	end
 end
 
 
 -- Enhance PVP message
-function module:PVPMessageEnhancement(_, msg)
+function MISC:PVPMessageEnhancement(_, msg)
 	local _, instanceType = IsInInstance()
 	if instanceType == 'pvp' or instanceType == 'arena' then
 		RaidNotice_AddMessage(RaidBossEmoteFrame, msg, ChatTypeInfo['RAID_BOSS_EMOTE']);
@@ -68,7 +36,7 @@ function module:PVPMessageEnhancement(_, msg)
 end
 
 -- Undress button
-function module:UndressButton()
+function MISC:UndressButton()
 	local undress = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undress:SetSize(80, 22)
 	undress:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -1, 0)
@@ -90,18 +58,19 @@ function module:UndressButton()
 end
 
 -- Instant delete
-function module:FasterDelete()
+function MISC:FasterDelete()
 	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
 		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 	end)
 end
 
 -- Faster Looting
-function module:FasterLoot()
+function MISC:FasterLoot()
 	if not C.general.fasterLoot then return end
-	local faster = CreateFrame('Frame')
-	faster:RegisterEvent('LOOT_READY')
-	faster:SetScript('OnEvent',function()
+
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('LOOT_READY')
+	f:SetScript('OnEvent',function()
 		local tDelay = 0
 		if GetTime() - tDelay >= 0.3 then
 			tDelay = GetTime()
@@ -116,31 +85,34 @@ function module:FasterLoot()
 end
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
-function module:FlightMasterWhistle()
-	local flightMastersWhistle_SpellID1 = 227334
-	local flightMastersWhistle_SpellID2 = 253937
+function MISC:FlightMasterWhistle()
 	local whistleSound = C.AssetsPath..'sound\\whistle.ogg'
+	local whistleSpellID = {
+		[227334] = true,
+		[253937] = true,
+	}
 
-	local whistle = CreateFrame('frame')
-	whistle:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end);
+	local f = CreateFrame('frame')
+	f:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end);
 
-	function whistle:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
-		if (unit == 'player' and (spellID == flightMastersWhistle_SpellID1 or spellID == flightMastersWhistle_SpellID2)) then
+	function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
+		if (unit == 'player' and whistleSpellID[spellID]) then
 			PlaySoundFile(whistleSound)
 		end
 	end
-	whistle:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
+	f:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
 end
 
+
 -- Ready check in master sound
-function module:ReadyCheckEnhancement()
+function MISC:ReadyCheckEnhancement()
 	F:RegisterEvent('READY_CHECK', function()
 		PlaySound(SOUNDKIT.READY_CHECK, 'master')
 	end)
 end
 
 -- Paragon reputation
-function module:HookParagonRep()
+function MISC:HookParagonRep()
 	if not C.general.paragonRep then return end
 
 	local numFactions = GetNumFactions()
@@ -172,13 +144,13 @@ function module:HookParagonRep()
 end
 
 -- Flash cursor
-function module:FlashCursor()
+function MISC:FlashCursor()
 	if not C.general.flashCursor then return end
 
-	local frame = CreateFrame('Frame', nil, UIParent);
-	frame:SetFrameStrata('TOOLTIP');
+	local f = CreateFrame('Frame', nil, UIParent);
+	f:SetFrameStrata('TOOLTIP');
 
-	local texture = frame:CreateTexture();
+	local texture = f:CreateTexture();
 	texture:SetTexture([[Interface\Cooldown\star4]]);
 	texture:SetBlendMode('ADD');
 	texture:SetAlpha(0.5);
@@ -205,23 +177,23 @@ function module:FlashCursor()
 			texture:Hide();
 		end
 	end
-	frame:SetScript('OnUpdate', OnUpdate);
+	f:SetScript('OnUpdate', OnUpdate);
 end
 
 -- Get Naked
-function module:NakedIcon()
-	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
-	bu:SetSize(31, 33)
-	bu:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
-	F.PixelIcon(bu, 'Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH', true)
-	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['GET_NAKED'])
+function MISC:NakedIcon()
+	local nakeButton = CreateFrame('Button', nil, CharacterFrameInsetRight)
+	nakeButton:SetSize(31, 33)
+	nakeButton:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
+	F.PixelIcon(nakeButton, 'Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH', true)
+	F.AddTooltip(nakeButton, 'ANCHOR_RIGHT', L['GET_NAKED'])
 
 	local function UnequipItemInSlot(i)
 		local action = EquipmentManager_UnequipItemInSlot(i)
 		EquipmentManager_RunAction(action)
 	end
 
-	bu:SetScript('OnDoubleClick', function()
+	nakeButton:SetScript('OnDoubleClick', function()
 		for i = 1, 17 do
 			local texture = GetInventoryItemTexture('player', i)
 			if texture then
@@ -272,34 +244,6 @@ do
 	end
 
 	F:RegisterEvent('ADDON_LOADED', setupMisc)
-end
-
--- Extend Instance
-function module:ExtendInstance()
-	local bu = CreateFrame('Button', nil, RaidInfoFrame)
-	bu:SetPoint('TOPRIGHT', -35, -5)
-	bu:SetSize(25, 25)
-	F.PixelIcon(bu, GetSpellTexture(80353), true)
-	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['EXTEND_INSTANCE'], 'system')
-
-	bu:SetScript('OnMouseUp', function(_, btn)
-		for i = 1, GetNumSavedInstances() do
-			local _, _, _, _, _, extended, _, isRaid = GetSavedInstanceInfo(i)
-			if isRaid then
-				if btn == 'LeftButton' then
-					if not extended then
-						SetSavedInstanceExtend(i, true)		-- extend
-					end
-				else
-					if extended then
-						SetSavedInstanceExtend(i, false)	-- cancel
-					end
-				end
-			end
-		end
-		RequestRaidInfo()
-		RaidInfoFrame_Update()
-	end)
 end
 
 -- TradeFrame hook
