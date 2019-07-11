@@ -111,10 +111,12 @@ function MAP:UpdateMapAnchor()
 end
 
 function MAP:WorldMapScale()
-	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-		local scale = WorldMapFrame:GetScale()
-		return x / scale, y / scale
+	if C.map.worldMapScale > 1 then
+		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+			local scale = WorldMapFrame:GetScale()
+			return x / scale, y / scale
+		end
 	end
 
 	F.CreateMF(WorldMapFrame, nil, true)

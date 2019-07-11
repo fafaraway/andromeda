@@ -1,31 +1,46 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule('UIScale')
+local UISCALE = F:RegisterModule('UIScale')
 
-function module:SetupUIScale()
+
+local min, max, tonumber = math.min, math.max, tonumber
+
+
+local function clipScale(scale)
+	return tonumber(format("%.5f", scale))
+end
+
+local function GetPerfectScale()
 	local _, height = GetPhysicalScreenSize()
 	local scale = C.general.uiScale
+	local bestScale = max(.4, min(1.15, 768 / height))
+	local pixelScale = 768 / height
 
-	if C.general.uiScaleAuto then
-		scale = 768 / height
-	end
+	if C.general.uiScaleAuto then scale = clipScale(bestScale) end
 
-	scale = tonumber(string.sub(scale, 0, 7))
+	C.Mult = (bestScale / scale) - ((bestScale - pixelScale) / scale)
 
-	C.Mult = 768 / height / scale
-	C.general.uiScale = scale
-
-	SetCVar('useUiScale', 1)
-
-	if scale < 0.64 then
-		SetCVar('uiScale', 1)
-		UIParent:SetScale(scale)
-	else
-		SetCVar('uiScale', scale)
-	end
+	return scale
 end
-module:SetupUIScale()
 
-function module:OnLogin()
+local isScaling = false
+function UISCALE:SetupUIScale()
+	if isScaling then return end
+	isScaling = true
+
+	local scale = GetPerfectScale()
+	local parentScale = UIParent:GetScale()
+	if scale ~= parentScale then
+		UIParent:SetScale(scale)
+	end
+
+	C.general.uiScale = clipScale(scale)
+
+	isScaling = false
+end
+UISCALE:SetupUIScale()
+
+
+function UISCALE:OnLogin()
 	if FreeUIConfig['installComplete'] ~= true then return end
 
 	if C.general.uiScaleAuto then
@@ -35,7 +50,6 @@ function module:OnLogin()
 	
 	self:SetupUIScale()
 
-	--F:RegisterEvent('UI_SCALE_CHANGED', module.SetupUIScale)
 
 
 	--print('cvar_useUiScale - '.._G.GetCVar('useUiScale'))

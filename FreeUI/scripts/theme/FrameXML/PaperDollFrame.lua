@@ -110,10 +110,6 @@ tinsert(C.themes["FreeUI"], function()
 	pane.ClassBackground:Hide()
 	local category = {pane.ItemLevelCategory, pane.AttributesCategory, pane.EnhancementsCategory}
 	for _, v in pairs(category) do
-		--v.Background:Hide()
-		--F.CreateGradient(v)
-		--F.CreateBD(v)
-
 		v.Background:SetTexture('Interface\\LFGFrame\\UI-LFG-SEPARATOR')
 		v.Background:SetTexCoord(0, .66, 0, .31)
 		v.Background:SetVertexColor(r, g, b, .8)
