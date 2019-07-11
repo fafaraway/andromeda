@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 if not C.chat.enable then return end
 local CHAT = F:GetModule('Chat')
 
-local strmatch, strfind, format, gsub = string.match, string.find, string.format, string.gsub
+local strfind, gsub = string.find, string.gsub
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
@@ -110,7 +110,7 @@ local function toggleBubble(party)
 	C_Timer_After(.01, toggleCVar)
 end
 
--- filter spam from addons
+-- Filter spam from addons
 local function genAddonBlock(_, event, msg, author)
 	local name = Ambiguate(author, 'none')
 	if UnitIsUnit(name, 'player') then return end
@@ -130,7 +130,7 @@ end
 
 -- Block trash clubs
 local trashClubs = {'站桩', '致敬我们'}
-local function blockTrashClub(self)
+local function BlockTrashClub(self)
 	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
 		local text = self.DoubleLine:GetText() or ''
 		for _, name in pairs(trashClubs) do
@@ -142,9 +142,7 @@ local function blockTrashClub(self)
 	end
 end
 
-hooksecurefunc(BNToastFrame, 'ShowToast', function(self)
-	blockTrashClub(self)
-end)
+hooksecurefunc(BNToastFrame, "ShowToast", BlockTrashClub)
 
 
 
