@@ -3,7 +3,7 @@ local F, C, L = unpack(select(2, ...))
 
 -- Sonic Reputation
 
-local SR_REP_MSG = "%s (%d/%d): %+d Reputation";
+local SR_REP_MSG = '%s (%d/%d): %+d Reputation';
 local rep = {};
 
 -- 额外声望
@@ -45,11 +45,11 @@ local function SR_Update()
 	end
 end
 function createMessage(msg)
-	local info = ChatTypeInfo["COMBAT_FACTION_CHANGE"];
+	local info = ChatTypeInfo['COMBAT_FACTION_CHANGE'];
 	for j = 1, 4, 1 do
-		local chatfrm = getglobal("ChatFrame"..j);
+		local chatfrm = getglobal('ChatFrame'..j);
 		for k,v in pairs(chatfrm.messageTypeList) do
-			if v == "COMBAT_FACTION_CHANGE" then
+			if v == 'COMBAT_FACTION_CHANGE' then
 				chatfrm:AddMessage(msg, info.r, info.g, info.b, info.id);
 				break;
 			end
@@ -70,7 +70,7 @@ function initExtraRep(factionID, name)
 	end
 end
 
-local frame = CreateFrame("Frame");
-frame:RegisterEvent("UPDATE_FACTION");
-frame:SetScript("OnEvent", SR_Update);
-ChatFrame_AddMessageEventFilter("CHAT_MSG_COMBAT_FACTION_CHANGE", function() return true; end);
+local frame = CreateFrame('Frame');
+frame:RegisterEvent('UPDATE_FACTION');
+frame:SetScript('OnEvent', SR_Update);
+ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', function() return true; end);

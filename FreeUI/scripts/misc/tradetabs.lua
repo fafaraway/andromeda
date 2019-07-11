@@ -3,7 +3,7 @@ local F, C = unpack(select(2, ...))
 -- TradeTabs, by tardmrr
 
 local pairs, ipairs, tinsert = pairs, ipairs, table.insert
-local TradeTabs = CreateFrame("Frame")
+local TradeTabs = CreateFrame('Frame')
 
 local whitelist = {
 	[171] = true, -- Alchemy
@@ -35,14 +35,14 @@ local CHEF_HAT = 134020
 
 function TradeTabs:OnEvent(event, addon)
 	if not C.general.tradeTab then return end
-	if event == "ADDON_LOADED" and addon == "Blizzard_TradeSkillUI" then
+	if event == 'ADDON_LOADED' and addon == 'Blizzard_TradeSkillUI' then
 		self:UnregisterEvent(event)
 		if InCombatLockdown() then
-			self:RegisterEvent("PLAYER_REGEN_ENABLED")
+			self:RegisterEvent('PLAYER_REGEN_ENABLED')
 		else
 			self:Initialize()
 		end
-	elseif event == "PLAYER_REGEN_ENABLED" then
+	elseif event == 'PLAYER_REGEN_ENABLED' then
 		self:UnregisterEvent(event)
 		self:Initialize()
 	end
@@ -78,16 +78,16 @@ local function buildSpellList()
 end
 
 function TradeTabs:Initialize()
-	if self.initialized or not IsAddOnLoaded("Blizzard_TradeSkillUI") then return end -- Shouldn't need this, but I'm paranoid
+	if self.initialized or not IsAddOnLoaded('Blizzard_TradeSkillUI') then return end -- Shouldn't need this, but I'm paranoid
 
 	local parent = TradeSkillFrame
 	local tradeSpells = buildSpellList()
 	local prev, foundCooking
 
 	-- if player is a DK, insert runeforging at the top
-	if select(2, UnitClass("player")) == "DEATHKNIGHT" then
+	if select(2, UnitClass('player')) == 'DEATHKNIGHT' then
 		prev = self:CreateTab(parent, RUNEFORGING)
-		prev:SetPoint("TOPLEFT", parent, "TOPRIGHT", 2, -44)
+		prev:SetPoint('TOPLEFT', parent, 'TOPRIGHT', 2, -44)
 	end
 
 	for _, slot in ipairs(tradeSpells) do
@@ -95,9 +95,9 @@ function TradeTabs:Initialize()
 		local tab = self:CreateTab(parent, spellID)
 		if spellID == 818 then foundCooking = true end
 
-		local point, relPoint, x, y = "TOPLEFT", "BOTTOMLEFT", 0, -10
+		local point, relPoint, x, y = 'TOPLEFT', 'BOTTOMLEFT', 0, -10
 		if not prev then
-			prev, relPoint, x, y = parent, "TOPRIGHT", 2, -40
+			prev, relPoint, x, y = parent, 'TOPRIGHT', 2, -40
 		end
 		tab:SetPoint(point, prev, relPoint, x, y)
 
@@ -106,14 +106,14 @@ function TradeTabs:Initialize()
 
 	if foundCooking and PlayerHasToy(CHEF_HAT) and C_ToyBox.IsToyUsable(CHEF_HAT) then
 		local tab = self:CreateTab(parent, CHEF_HAT, true)
-		tab:SetPoint("TOPLEFT", prev, "BOTTOMLEFT", 0, -10)
+		tab:SetPoint('TOPLEFT', prev, 'BOTTOMLEFT', 0, -10)
 	end
 
 	self.initialized = true
 end
 
 local function onEnter(self)
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 	GameTooltip:SetText(self.tooltip)
 	self:GetParent():LockHighlight()
 end
@@ -133,7 +133,7 @@ local function updateSelection(self)
 	end
 
 	local start, duration
-	if self.type == "toy" then
+	if self.type == 'toy' then
 		start, duration = GetItemCooldown(self.spellID)
 	else
 		start, duration = GetSpellCooldown(self.spellID)
@@ -144,11 +144,11 @@ local function updateSelection(self)
 end
 
 local function createClickStopper(button)
-	local f = CreateFrame("Frame", nil, button)
+	local f = CreateFrame('Frame', nil, button)
 	f:SetAllPoints(button)
 	f:EnableMouse(true)
-	f:SetScript("OnEnter", onEnter)
-	f:SetScript("OnLeave", onLeave)
+	f:SetScript('OnEnter', onEnter)
+	f:SetScript('OnLeave', onLeave)
 	button.clickStopper = f
 	f.tooltip = button.tooltip
 	f:Hide()
@@ -169,30 +169,30 @@ function TradeTabs:CreateTab(parent, spellID, isToy)
 		name, _, texture = GetSpellInfo(spellID)
 	end
 
-	local button = CreateFrame("CheckButton", nil, parent, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
+	local button = CreateFrame('CheckButton', nil, parent, 'SpellBookSkillLineTabTemplate, SecureActionButtonTemplate')
 	button.tooltip = name
 	button.spellID = spellID
 	button.spell = name
 	button:Show()
-	button.type = isToy and "toy" or "spell"
-	button:SetAttribute("type", button.type)
+	button.type = isToy and 'toy' or 'spell'
+	button:SetAttribute('type', button.type)
 	button:SetAttribute(button.type, name)
 
 	button:SetNormalTexture(texture)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	reskinTabs(button)
-	button.CD = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+	button.CD = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
 	button.CD:SetAllPoints()
 
-	button:SetScript("OnEvent", updateSelection)
-	button:RegisterEvent("TRADE_SKILL_SHOW")
-	button:RegisterEvent("TRADE_SKILL_CLOSE")
-	button:RegisterEvent("CURRENT_SPELL_CAST_CHANGED")
+	button:SetScript('OnEvent', updateSelection)
+	button:RegisterEvent('TRADE_SKILL_SHOW')
+	button:RegisterEvent('TRADE_SKILL_CLOSE')
+	button:RegisterEvent('CURRENT_SPELL_CAST_CHANGED')
 
 	createClickStopper(button)
 	updateSelection(button)
 	return button
 end
 
-TradeTabs:RegisterEvent("ADDON_LOADED")
-TradeTabs:SetScript("OnEvent", TradeTabs.OnEvent)
+TradeTabs:RegisterEvent('ADDON_LOADED')
+TradeTabs:SetScript('OnEvent', TradeTabs.OnEvent)
