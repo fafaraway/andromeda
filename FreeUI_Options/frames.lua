@@ -284,6 +284,9 @@ do
 	local enableShadow = ns.CreateCheckBox(appearance, "enableShadow", true, true)
 	enableShadow:SetPoint("TOPLEFT", enableTheme, "BOTTOMLEFT", 0, -8)
 
+	local reskinFont = ns.CreateCheckBox(appearance, "reskinFont", true, true)
+	reskinFont:SetPoint("LEFT", enableShadow, "RIGHT", 240, 0)
+
 	local pluginsub = ns.addSubCategory(appearance, ns.localization.appearancepluginsub)
 	pluginsub:SetPoint("TOPLEFT", enableShadow, "BOTTOMLEFT", 0, -8)
 
@@ -348,39 +351,34 @@ do
 	local notification = FreeUIOptionsPanel.notification
 	notification.tab.Icon:SetTexture("Interface\\Icons\\Ability_Warrior_RallyingCry")
 
-	local enable = ns.CreateCheckBox(notification, "enableNotification", true, true)
-	enable:SetPoint("TOPLEFT", notification.subText, "BOTTOMLEFT", 0, -8)
+	local banner = ns.addSubCategory(notification, ns.localization.notificationBanner)
+	banner:SetPoint("TOPLEFT", notification.subText, "BOTTOMLEFT", 0, -8)
+
+	local enable = ns.CreateCheckBox(notification, "enableBanner", true, true)
+	enable:SetPoint("TOPLEFT", banner, "BOTTOMLEFT", 0, -16)
 
 	local playSounds = ns.CreateCheckBox(notification, "playSounds", true, true)
 	playSounds:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
 
 	local checkBagsFull = ns.CreateCheckBox(notification, "checkBagsFull", true, true)
-	checkBagsFull:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
+	checkBagsFull:SetPoint("LEFT", playSounds, "RIGHT", 240, 0)
 
 	local checkMail = ns.CreateCheckBox(notification, "checkMail", true, true)
-	checkMail:SetPoint("TOPLEFT", checkBagsFull, "BOTTOMLEFT", 0, -8)
+	checkMail:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 
-	local alert = ns.addSubCategory(notification, ns.localization.notificationalert)
+	enable.children = {playSounds, checkBagsFull, checkMail}
+
+	local alert = ns.addSubCategory(notification, ns.localization.notificationAlert)
 	alert:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", -16, -8)
 
 	local interrupt = ns.CreateCheckBox(notification, "interrupt", true, true)
 	interrupt:SetPoint("TOPLEFT", alert, "BOTTOMLEFT", 0, -16)
 
-	local interruptSound = ns.CreateCheckBox(notification, "interruptSound", true, true)
-	interruptSound:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 16, -8)
-
-	interrupt.children = {interruptSound}
-
 	local dispel = ns.CreateCheckBox(notification, "dispel", true, true)
 	dispel:SetPoint("LEFT", interrupt, "RIGHT", 240, 0)
 
-	local dispelSound = ns.CreateCheckBox(notification, "dispelSound", true, true)
-	dispelSound:SetPoint("TOPLEFT", dispel, "BOTTOMLEFT", 16, -8)
-
-	dispel.children = {dispelSound}
-
 	local spell = ns.CreateCheckBox(notification, "spell", true, true)
-	spell:SetPoint("TOPLEFT", interruptSound, "BOTTOMLEFT", -16, -8)
+	spell:SetPoint("TOPLEFT", interrupt, "BOTTOMLEFT", 0, -8)
 
 	local resurrect = ns.CreateCheckBox(notification, "resurrect", true, true)
 	resurrect:SetPoint("LEFT", spell, "RIGHT", 240, 0)
@@ -388,25 +386,40 @@ do
 	local sapped = ns.CreateCheckBox(notification, "sapped", true, true)
 	sapped:SetPoint("TOPLEFT", spell, "BOTTOMLEFT", 0, -8)
 
+	local rares = ns.addSubCategory(notification, ns.localization.notificationRares)
+	rares:SetPoint("TOPLEFT", sapped, "BOTTOMLEFT", 0, -8)
+
 	local rare = ns.CreateCheckBox(notification, "rare", true, true)
-	rare:SetPoint("TOPLEFT", sapped, "BOTTOMLEFT", 0, -8)
+	rare:SetPoint("TOPLEFT", rares, "BOTTOMLEFT", 0, -16)
 
 	local rareSound = ns.CreateCheckBox(notification, "rareSound", true, true)
 	rareSound:SetPoint("TOPLEFT", rare, "BOTTOMLEFT", 16, -8)
 
 	rare.children = {rareSound}
-	
 
-	local function toggleNotificationOptions()
+	local quest = ns.addSubCategory(notification, ns.localization.notificationQuest)
+	quest:SetPoint("TOPLEFT", rareSound, "BOTTOMLEFT", -16, -8)
+	
+	local questNotifier = ns.CreateCheckBox(notification, "questNotifier", true, true)
+	questNotifier:SetPoint("TOPLEFT", quest, "BOTTOMLEFT", 0, -16)
+
+	local questProgress = ns.CreateCheckBox(notification, "questProgress", true, true)
+	questProgress:SetPoint("TOPLEFT", questNotifier, "BOTTOMLEFT", 16, -8)
+
+	local onlyCompleteRing = ns.CreateCheckBox(notification, "onlyCompleteRing", true, true)
+	onlyCompleteRing:SetPoint("TOPLEFT", questProgress, "BOTTOMLEFT", 0, -8)
+
+	questNotifier.children = {questProgress, onlyCompleteRing}
+
+	--[[local function toggleNotificationOptions()
 		local shown = enable:GetChecked()
 		checkBagsFull:SetShown(shown)
 		checkMail:SetShown(shown)
 		playSounds:SetShown(shown)
-
 	end
 
 	enable:HookScript("OnClick", toggleNotificationOptions)
-	notification:HookScript("OnShow", toggleNotificationOptions)
+	notification:HookScript("OnShow", toggleNotificationOptions)]]
 end
 
 -- [[ Info bar ]]
@@ -771,14 +784,8 @@ do
 	local combatHide = ns.CreateCheckBox(tooltip, "combatHide", true, true)
 	combatHide:SetPoint("LEFT", cursor, "RIGHT", 240, 0)
 
-	local hidePVP = ns.CreateCheckBox(tooltip, "hidePVP", true, true)
-	hidePVP:SetPoint("TOPLEFT", cursor, "BOTTOMLEFT", 0, -8)
-
-	local hideFaction = ns.CreateCheckBox(tooltip, "hideFaction", true, true)
-	hideFaction:SetPoint("LEFT", hidePVP, "RIGHT", 240, 0)
-
 	local hideTitle = ns.CreateCheckBox(tooltip, "hideTitle", true, true)
-	hideTitle:SetPoint("TOPLEFT", hidePVP, "BOTTOMLEFT", 0, -8)
+	hideTitle:SetPoint("TOPLEFT", cursor, "BOTTOMLEFT", 0, -8)
 
 	local hideRealm = ns.CreateCheckBox(tooltip, "hideRealm", true, true)
 	hideRealm:SetPoint("LEFT", hideTitle, "RIGHT", 240, 0)
@@ -792,26 +799,27 @@ do
 	local tipIcon = ns.CreateCheckBox(tooltip, "tipIcon", true, true)
 	tipIcon:SetPoint("TOPLEFT", hideRank, "BOTTOMLEFT", 0, -8)
 
-	local tipClear = ns.CreateCheckBox(tooltip, "tipClear", true, true)
-	tipClear:SetPoint("LEFT", tipIcon, "RIGHT", 240, 0)
-
-	local extraInfo = ns.CreateCheckBox(tooltip, "extraInfo", true, true)
-	extraInfo:SetPoint("TOPLEFT", tipIcon, "BOTTOMLEFT", 0, -8)
+	local linkHover = ns.CreateCheckBox(tooltip, "linkHover", true, true)
+	linkHover:SetPoint("LEFT", tipIcon, "RIGHT", 240, 0)
 
 	local azeriteTrait = ns.CreateCheckBox(tooltip, "azeriteTrait", true, true)
-	azeriteTrait:SetPoint("LEFT", extraInfo, "RIGHT", 240, 0)
+	azeriteTrait:SetPoint("TOPLEFT", tipIcon, "BOTTOMLEFT", 0, -8)
 
-	local linkHover = ns.CreateCheckBox(tooltip, "linkHover", true, true)
-	linkHover:SetPoint("TOPLEFT", extraInfo, "BOTTOMLEFT", 0, -8)
+	local extraInfo = ns.CreateCheckBox(tooltip, "extraInfo", true, true)
+	extraInfo:SetPoint("TOPLEFT", azeriteTrait, "BOTTOMLEFT", 0, -8)
+
+	local extraInfoByShift = ns.CreateCheckBox(tooltip, "extraInfoByShift", true, true)
+	extraInfoByShift:SetPoint("TOPLEFT", extraInfo, "BOTTOMLEFT", 16, -8)
 
 	local ilvlSpec = ns.CreateCheckBox(tooltip, "ilvlSpec", true, true)
-	ilvlSpec:SetPoint("LEFT", linkHover, "RIGHT", 240, 0)
+	ilvlSpec:SetPoint("LEFT", extraInfo, "RIGHT", 240, 0)
+
+	local ilvlSpecByShift = ns.CreateCheckBox(tooltip, "ilvlSpecByShift", true, true)
+	ilvlSpecByShift:SetPoint("TOPLEFT", ilvlSpec, "BOTTOMLEFT", 16, -8)
 
 	local function toggleTooltipOptions()
 		local shown = enable:GetChecked()
 		cursor:SetShown(shown)
-		hidePVP:SetShown(shown)
-		hideFaction:SetShown(shown)
 		hideTitle:SetShown(shown)
 		hideRealm:SetShown(shown)
 		hideRank:SetShown(shown)
@@ -821,7 +829,6 @@ do
 		linkHover:SetShown(shown)
 		borderColor:SetShown(shown)
 		tipIcon:SetShown(shown)
-		tipClear:SetShown(shown)
 		extraInfo:SetShown(shown)
 	end
 
