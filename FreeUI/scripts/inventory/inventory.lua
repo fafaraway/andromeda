@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule('Inventory')
+local INVENTORY = F:RegisterModule('Inventory')
 
 local cargBags = FreeUI.cargBags
 local ipairs, strmatch, unpack = ipairs, string.match, unpack
@@ -12,7 +12,7 @@ local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 
 local sortCache = {}
-function module:ReverseSort()
+function INVENTORY:ReverseSort()
 	for bag = 0, 4 do
 		local numSlots = GetContainerNumSlots(bag)
 		for slot = 1, numSlots do
@@ -21,7 +21,7 @@ function module:ReverseSort()
 				PickupContainerItem(bag, slot)
 				PickupContainerItem(bag, numSlots+1 - slot)
 				sortCache['b'..bag..'s'..slot] = true
-				C_Timer_After(.1, module.ReverseSort)
+				C_Timer_After(.1, INVENTORY.ReverseSort)
 				return
 			end
 		end
@@ -31,7 +31,7 @@ function module:ReverseSort()
 	FreeUI_Backpack:BAG_UPDATE()
 end
 
-function module:UpdateAnchors(parent, bags)
+function INVENTORY:UpdateAnchors(parent, bags)
 	local anchor = parent
 	for _, bag in ipairs(bags) do
 		if bag:GetHeight() > 45 then
@@ -46,7 +46,7 @@ function module:UpdateAnchors(parent, bags)
 	end
 end
 
-function module:SetBackground()
+function INVENTORY:SetBackground()
 	F.CreateBD(self)
 	F.CreateSD(self)
 end
@@ -71,7 +71,7 @@ local createIconButton = function (name, parent, texture, point)
 	return button
 end
 
-function module:CreateInfoFrame()
+function INVENTORY:CreateInfoFrame()
 	local infoFrame = CreateFrame('Button', nil, self)
 	infoFrame:SetPoint('TOPLEFT', 10, 2)
 	infoFrame:SetSize(140, 30)
@@ -97,12 +97,12 @@ function module:CreateInfoFrame()
 	tag:SetPoint('LEFT', searchIcon, 'RIGHT', 6, 0)
 end
 
-function module:CreateBagBar(settings, columns)
+function INVENTORY:CreateBagBar(settings, columns)
 	local bagBar = self:SpawnPlugin('BagBar', settings.Bags)
 	local width, height = bagBar:LayoutButtons('grid', columns, 5, 5, -5)
 	bagBar:SetSize(width + 10, height + 10)
 	bagBar:SetPoint('TOPRIGHT', self, 'BOTTOMRIGHT', 0, -5)
-	module.SetBackground(bagBar)
+	INVENTORY.SetBackground(bagBar)
 	bagBar.highlightFunction = highlightFunction
 	bagBar.isGlobal = true
 	bagBar:Hide()
@@ -110,7 +110,7 @@ function module:CreateBagBar(settings, columns)
 	self.BagBar = bagBar
 end
 
-function module:CreateCloseButton()
+function INVENTORY:CreateCloseButton()
 	local bu = F.CreateButton(self, 16, 16, true, '')
 	bu:SetPoint('TOPRIGHT', -5, -5)
 	bu:SetScript('OnClick', CloseAllBags)
@@ -120,7 +120,7 @@ function module:CreateCloseButton()
 	return bu
 end
 
-function module:CreateRestoreButton(f)
+function INVENTORY:CreateRestoreButton(f)
 	local bu = createIconButton('Restore', self, 'Interface\\AddOns\\FreeUI\\assets\\ResetNew', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		FreeUIConfig['tempAnchor'][f.main:GetName()] = nil
@@ -139,7 +139,7 @@ function module:CreateRestoreButton(f)
 	return bu
 end
 
-function module:CreateReagentButton(f)
+function INVENTORY:CreateReagentButton(f)
 	local bu = createIconButton('Reagent', self, 'Interface\\AddOns\\FreeUI\\assets\\Config', 'BOTTOMRIGHT')
 	bu:RegisterForClicks('AnyUp')
 	bu:SetScript('OnClick', function(_, btn)
@@ -159,7 +159,7 @@ function module:CreateReagentButton(f)
 	return bu
 end
 
-function module:CreateBankButton(f)
+function INVENTORY:CreateBankButton(f)
 	local bu = createIconButton('Bank', self, 'Interface\\AddOns\\FreeUI\\assets\\Config', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
@@ -173,7 +173,7 @@ function module:CreateBankButton(f)
 	return bu
 end
 
-function module:CreateDepositButton()
+function INVENTORY:CreateDepositButton()
 	local bu = createIconButton('Deposit', self, 'Interface\\AddOns\\FreeUI\\assets\\Deposit', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', DepositReagentBank)
 	F.AddTooltip(bu, 'ANCHOR_TOP', REAGENTBANK_DEPOSIT)
@@ -181,7 +181,7 @@ function module:CreateDepositButton()
 	return bu
 end
 
-function module:CreateBagToggle()
+function INVENTORY:CreateBagToggle()
 	local bu = createIconButton('BagToggle', self, 'Interface\\AddOns\\FreeUI\\assets\\BagToggle', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		ToggleFrame(self.BagBar)
@@ -198,7 +198,7 @@ function module:CreateBagToggle()
 	return bu
 end
 
-function module:CreateSortButton(name)
+function INVENTORY:CreateSortButton(name)
 	local bu = createIconButton('Sort', self, 'Interface\\AddOns\\FreeUI\\assets\\Restack', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		if name == 'Bank' then
@@ -213,7 +213,7 @@ function module:CreateSortButton(name)
 					SortBags()
 					wipe(sortCache)
 					FreeUI_Backpack.isSorting = true
-					C_Timer_After(.5, module.ReverseSort)
+					C_Timer_After(.5, INVENTORY.ReverseSort)
 				end
 			else
 				SortBags()
@@ -226,7 +226,7 @@ function module:CreateSortButton(name)
 end
 
 local deleteEnable
-function module:CreateDeleteButton()
+function INVENTORY:CreateDeleteButton()
 	local disabledText = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t"..L["INVENTORY_DELETE_MODE"]
 	local enabledText = disabledText.."\n\n"..C.InfoColor..L["INVENTORY_DELETE_MODE_ENABLED"]
 
@@ -260,7 +260,7 @@ local function deleteButtonOnClick(self)
 end
 
 
-function module:OnLogin()
+function INVENTORY:OnLogin()
 	if not C.inventory.enable then return end
 
 	local bagsScale = C.inventory.bagScale
@@ -278,7 +278,7 @@ function module:OnLogin()
 	Backpack:HookScript('OnHide', function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
 
 	local f = {}
-	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagTradeGoods, bagQuestItem, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet = self:GetFilters()
+	local onlyBags, bagAzeriteItem, bagEquipment, bagConsumble, bagTradeGoods, bagQuestItem, bagsJunk, onlyBank, bankAzeriteItem, bankLegendary, bankEquipment, bankConsumble, onlyReagent, bagMountPet, bankMountPet, bagMechagon, bankMechagon = self:GetFilters()
 
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
@@ -301,6 +301,9 @@ function module:OnLogin()
 
 		f.bagCompanion = MyContainer:New('BagCompanion', {Columns = bagsWidth, Parent = f.main})
 		f.bagCompanion:SetFilter(bagMountPet, true)
+
+		f.bagMechagon = MyContainer:New('BagMechagon', {Columns = bagsWidth, Parent = f.main})
+		f.bagMechagon:SetFilter(bagMechagon, true)
 
 		f.tradegoods = MyContainer:New('TradeGoods', {Columns = bagsWidth, Parent = f.main})
 		f.tradegoods:SetFilter(bagTradeGoods, true)
@@ -327,6 +330,9 @@ function module:OnLogin()
 
 		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = bankWidth, Parent = f.bank})
 		f.bankCompanion:SetFilter(bankMountPet, true)
+
+		f.bankMechagon = MyContainer:New('BankMechagon', {Columns = bankWidth, Parent = f.bank})
+		f.bankMechagon:SetFilter(bankMechagon, true)
 
 		f.reagent = MyContainer:New('Reagent', {Columns = bankWidth})
 		f.reagent:SetFilter(onlyReagent, true)
@@ -489,8 +495,8 @@ function module:OnLogin()
 		local width, height = self:LayoutButtons('grid', self.Settings.Columns, 5, 5, -offset + 5)
 		self:SetSize(width + 10, height + offset)
 
-		module:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.consumble, f.bagCompanion, f.tradegoods, f.questitem, f.junk})
-		module:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankConsumble})
+		INVENTORY:UpdateAnchors(f.main, {f.azeriteItem, f.equipment, f.bagCompanion, f.consumble, f.bagMechagon, f.tradegoods, f.questitem, f.junk})
+		INVENTORY:UpdateAnchors(f.bank, {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankConsumble, f.bankMechagon})
 	end
 
 	function MyContainer:OnCreate(name, settings)
@@ -498,7 +504,7 @@ function module:OnLogin()
 		self:SetParent(settings.Parent or Backpack)
 		self:SetFrameStrata('HIGH')
 		self:SetClampedToScreen(true)
-		module.SetBackground(self)
+		INVENTORY.SetBackground(self)
 		F.CreateMF(self, settings.Parent, true)
 
 		local label
@@ -522,6 +528,8 @@ function module:OnLogin()
 			label = BAG_FILTER_JUNK
 		elseif strmatch(name, 'Companion') then
 			label = MOUNTS_AND_PETS
+		elseif name == 'BagMechagon' then
+			label = L['INVENTORY_MECHAGON_STUFF']
 		end
 		if label then
 			self.cat = self:CreateFontString(nil, 'OVERLAY')
@@ -531,24 +539,24 @@ function module:OnLogin()
 			return
 		end
 
-		module.CreateInfoFrame(self)
+		INVENTORY.CreateInfoFrame(self)
 
 		local buttons = {}
-		buttons[1] = module.CreateCloseButton(self)
+		buttons[1] = INVENTORY.CreateCloseButton(self)
 		if name == 'Main' then
-			module.CreateBagBar(self, settings, 4)
-			buttons[2] = module.CreateRestoreButton(self, f)
-			buttons[3] = module.CreateBagToggle(self)
-			if deleteButton then buttons[5] = module.CreateDeleteButton(self) end
+			INVENTORY.CreateBagBar(self, settings, 4)
+			buttons[2] = INVENTORY.CreateRestoreButton(self, f)
+			buttons[3] = INVENTORY.CreateBagToggle(self)
+			if deleteButton then buttons[5] = INVENTORY.CreateDeleteButton(self) end
 		elseif name == 'Bank' then
-			module.CreateBagBar(self, settings, 7)
-			buttons[2] = module.CreateReagentButton(self, f)
-			buttons[3] = module.CreateBagToggle(self)
+			INVENTORY.CreateBagBar(self, settings, 7)
+			buttons[2] = INVENTORY.CreateReagentButton(self, f)
+			buttons[3] = INVENTORY.CreateBagToggle(self)
 		elseif name == 'Reagent' then
-			buttons[2] = module.CreateBankButton(self, f)
-			buttons[3] = module.CreateDepositButton(self)
+			buttons[2] = INVENTORY.CreateBankButton(self, f)
+			buttons[3] = INVENTORY.CreateDepositButton(self)
 		end
-		buttons[4] = module.CreateSortButton(self, name)
+		buttons[4] = INVENTORY.CreateSortButton(self, name)
 
 		for i = 1, 5 do
 			local bu = buttons[i]
