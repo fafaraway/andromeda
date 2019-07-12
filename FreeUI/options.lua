@@ -57,6 +57,7 @@ C['appearance'] = {
 		['useButtonGradientColour'] = true,
 
 	['enableShadow'] = true,
+	['reskinFont'] = true,
 
 	['enableVignette'] = true,
 		['vignetteAlpha'] = .35,
