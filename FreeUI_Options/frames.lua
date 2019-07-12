@@ -366,10 +366,16 @@ do
 	local checkMail = ns.CreateCheckBox(notification, "checkMail", true, true)
 	checkMail:SetPoint("TOPLEFT", playSounds, "BOTTOMLEFT", 0, -8)
 
-	enable.children = {playSounds, checkBagsFull, checkMail}
+	local autoRepairCost = ns.CreateCheckBox(notification, "autoRepairCost", true, true)
+	autoRepairCost:SetPoint("LEFT", checkMail, "RIGHT", 240, 0)
+
+	local autoSellJunk = ns.CreateCheckBox(notification, "autoSellJunk", true, true)
+	autoSellJunk:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", 0, -8)
+
+	enable.children = {playSounds, checkBagsFull, checkMail, autoRepairCost, autoSellJunk}
 
 	local alert = ns.addSubCategory(notification, ns.localization.notificationAlert)
-	alert:SetPoint("TOPLEFT", checkMail, "BOTTOMLEFT", -16, -8)
+	alert:SetPoint("TOPLEFT", autoSellJunk, "BOTTOMLEFT", -16, -8)
 
 	local interrupt = ns.CreateCheckBox(notification, "interrupt", true, true)
 	interrupt:SetPoint("TOPLEFT", alert, "BOTTOMLEFT", 0, -16)
@@ -410,16 +416,6 @@ do
 	onlyCompleteRing:SetPoint("TOPLEFT", questProgress, "BOTTOMLEFT", 0, -8)
 
 	questNotifier.children = {questProgress, onlyCompleteRing}
-
-	--[[local function toggleNotificationOptions()
-		local shown = enable:GetChecked()
-		checkBagsFull:SetShown(shown)
-		checkMail:SetShown(shown)
-		playSounds:SetShown(shown)
-	end
-
-	enable:HookScript("OnClick", toggleNotificationOptions)
-	notification:HookScript("OnShow", toggleNotificationOptions)]]
 end
 
 -- [[ Info bar ]]
@@ -730,25 +726,34 @@ do
 	local enable = ns.CreateCheckBox(inventory, "enable", true, true)
 	enable:SetPoint("TOPLEFT", inventory.subText, "BOTTOMLEFT", 0, -8)
 
+	local itemLevel = ns.CreateCheckBox(inventory, "itemLevel", true, true)
+	itemLevel:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+
+	local newitemFlash = ns.CreateCheckBox(inventory, "newitemFlash", true, true)
+	newitemFlash:SetPoint("LEFT", itemLevel, "RIGHT", 240, 0)
+
 	local useCategory = ns.CreateCheckBox(inventory, "useCategory", true, true)
-	useCategory:SetPoint("TOPLEFT", enable, "BOTTOMLEFT", 16, -8)
+	useCategory:SetPoint("TOPLEFT", itemLevel, "BOTTOMLEFT", 0, -8)
 
 	local gearSetFilter = ns.CreateCheckBox(inventory, "gearSetFilter", true, true)
-	gearSetFilter:SetPoint("TOPLEFT", useCategory, "BOTTOMLEFT", 0, -8)
+	gearSetFilter:SetPoint("TOPLEFT", useCategory, "BOTTOMLEFT", 16, -8)
 
-	useCategory.children = {gearSetFilter}
+	local tradeGoodsFilter = ns.CreateCheckBox(inventory, "tradeGoodsFilter", true, true)
+	tradeGoodsFilter:SetPoint("TOPLEFT", gearSetFilter, "BOTTOMLEFT", 0, -8)
+
+	local questItemFilter = ns.CreateCheckBox(inventory, "questItemFilter", true, true)
+	questItemFilter:SetPoint("TOPLEFT", tradeGoodsFilter, "BOTTOMLEFT", 0, -8)
+
+	local mechagonItemFilter = ns.CreateCheckBox(inventory, "mechagonItemFilter", true, true)
+	mechagonItemFilter:SetPoint("TOPLEFT", questItemFilter, "BOTTOMLEFT", 0, -8)
+
+	useCategory.children = {gearSetFilter, tradeGoodsFilter, questItemFilter, mechagonItemFilter}
 
 	local reverseSort = ns.CreateCheckBox(inventory, "reverseSort", true, true)
 	reverseSort:SetPoint("LEFT", useCategory, "RIGHT", 240, 0)
 
-	local itemLevel = ns.CreateCheckBox(inventory, "itemLevel", true, true)
-	itemLevel:SetPoint("TOPLEFT", gearSetFilter, "BOTTOMLEFT", 0, -8)
-
-	local newitemFlash = ns.CreateCheckBox(inventory, "newitemFlash", true, true)
-	newitemFlash:SetPoint("TOPLEFT", itemLevel, "BOTTOMLEFT", 0, -8)
-
 	local size = ns.CreateNumberSlider(inventory, "itemSlotSize", nil, nil, 20, 40, 1, true)
-	size:SetPoint("TOPLEFT", newitemFlash, "BOTTOMLEFT", 0, -30)
+	size:SetPoint("TOPLEFT", mechagonItemFilter, "BOTTOMLEFT", -32, -30)
 
 	local bagColumns = ns.CreateNumberSlider(inventory, "bagColumns", nil, nil, 8, 16, 1, true)
 	bagColumns:SetPoint("LEFT", size, "RIGHT", 120, 0)
@@ -758,6 +763,9 @@ do
 		local shown = enable:GetChecked()
 		useCategory:SetShown(shown)
 		gearSetFilter:SetShown(shown)
+		tradeGoodsFilter:SetShown(shown)
+		questItemFilter:SetShown(shown)
+		mechagonItemFilter:SetShown(shown)
 		reverseSort:SetShown(shown)
 		itemLevel:SetShown(shown)
 		newitemFlash:SetShown(shown)
@@ -830,6 +838,8 @@ do
 		borderColor:SetShown(shown)
 		tipIcon:SetShown(shown)
 		extraInfo:SetShown(shown)
+		ilvlSpecByShift:SetShown(shown)
+		extraInfoByShift:SetShown(shown)
 	end
 
 	enable:HookScript("OnClick", toggleTooltipOptions)

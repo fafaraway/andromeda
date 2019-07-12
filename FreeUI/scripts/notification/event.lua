@@ -16,7 +16,7 @@ local last = 0
 local function delayBagCheck(self, elapsed)
 	last = last + elapsed
 	if last > 1 then
-		self:SetScript("OnUpdate", nil)
+		self:SetScript('OnUpdate', nil)
 		last = 0
 		shouldAlertBags = true
 		alertBagsFull(self)
@@ -34,10 +34,10 @@ alertBagsFull = function(self)
 
 	if totalFree == 0 then
 		if shouldAlertBags then
-			F.Notification("Bags", "Your bags are full.", ToggleBackpack, "Interface\\Icons\\inv_misc_bag_08")
+			F.Notification(L['NOTIFICATION_BAG'], L['NOTIFICATION_BAG_FULL'], ToggleBackpack, 'Interface\\Icons\\inv_misc_bag_08')
 			shouldAlertBags = false
 		else
-			self:SetScript("OnUpdate", delayBagCheck)
+			self:SetScript('OnUpdate', delayBagCheck)
 		end
 	else
 		shouldAlertBags = false
@@ -51,7 +51,7 @@ local function alertMail()
 	if hasMail ~= newMail then
 		hasMail = newMail
 		if hasMail then
-			F.Notification("Mail", "You have new mail.", nil, "Interface\\Icons\\inv_letter_15", .08, .92, .08, .92)
+			F.Notification(L['NOTIFICATION_MAIL'], L['NOTIFICATION_NEW_MAIL'], nil, 'Interface\\Icons\\inv_letter_15', .08, .92, .08, .92)
 		end
 	end
 end
@@ -60,43 +60,43 @@ end
 
 -- [[ Handle events ]]
 
-local f = CreateFrame("Frame", nil, frame)
-f:RegisterEvent("PLAYER_ENTERING_WORLD")
+local f = CreateFrame('Frame', nil, frame)
+f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 if C.notification.checkBagsFull then
-	f:RegisterEvent("BAG_UPDATE")
+	f:RegisterEvent('BAG_UPDATE')
 end
 
 if C.notification.checkMail then
-	f:RegisterEvent("UPDATE_PENDING_MAIL")
+	f:RegisterEvent('UPDATE_PENDING_MAIL')
 end
 
-F.AddOptionsCallback("notifications", "checkBagsFull", function()
+F.AddOptionsCallback('notifications', 'checkBagsFull', function()
 	if C.notification.checkBagsFull then
-		f:RegisterEvent("BAG_UPDATE")
+		f:RegisterEvent('BAG_UPDATE')
 		alertBagsFull(f)
 	else
-		f:UnregisterEvent("BAG_UPDATE")
+		f:UnregisterEvent('BAG_UPDATE')
 	end
 end)
 
 
 
-F.AddOptionsCallback("notifications", "checkMail", function()
+F.AddOptionsCallback('notifications', 'checkMail', function()
 	if C.notification.checkMail then
-		f:RegisterEvent("UPDATE_PENDING_MAIL")
+		f:RegisterEvent('UPDATE_PENDING_MAIL')
 
 		alertMail()
 	else
 		hasMail = false
-		f:UnregisterEvent("UPDATE_PENDING_MAIL")
+		f:UnregisterEvent('UPDATE_PENDING_MAIL')
 	end
 end)
 
-f:SetScript("OnEvent", function(self, event)
-	if event == "BAG_UPDATE" then
+f:SetScript('OnEvent', function(self, event)
+	if event == 'BAG_UPDATE' then
 		alertBagsFull(self)
-	elseif event == "UPDATE_PENDING_MAIL" then
+	elseif event == 'UPDATE_PENDING_MAIL' then
 		alertMail()
 
 	end

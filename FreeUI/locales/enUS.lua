@@ -3,11 +3,10 @@ local F, C, L = unpack(select(2, ...))
 
 
 -- automation
-L['STACK_BUYING_CHECK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
-L['guildRepair'] = 'Repair cost covered by Guild Bank'
-L['repairCost'] = 'Repair cost'
-L['repairError'] = 'You have insufficient funds to repair your equipment!'
-L['SellJunk'] = 'Vendor trash sold'
+L['AUTOMATION_GUILD_REPAIR_COST'] = 'Repair cost covered by Guild Bank'
+L['AUTOMATION_REPAIR_COST'] = 'Repair cost'
+L['AUTOMATION_REPAIR_FAILED'] = 'You have insufficient funds to repair your equipment!'
+L['AUTOMATION_SELL_JUNK'] = 'Vendor trash sold'
 
 
 -- misc
@@ -28,6 +27,7 @@ L['InviteDisable'] = 'Autoinvite OFF'
 L['NUMBER_CAP_1'] = 'W'
 L['NUMBER_CAP_2'] = 'Y'
 L['NUMBER_CAP_3'] = 'Z'
+L['STACK_BUYING_CHECK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
 
 
 -- notification
@@ -44,6 +44,12 @@ L['NOTIFICATION_REFRESHMENTTABLE'] = '<Attention>: %s casted %s!'
 L['NOTIFICATION_RITUALOFSUMMONING'] = '<Attention>: %s is casting %s!'
 L['NOTIFICATION_SOULWELL'] = '<Attention>: %s casted %s!'
 L['NOTIFICATION_ACCEPT_QUEST'] = 'Accept quest: '
+L['NOTIFICATION_NEW_MAIL'] = 'You have new mail.'
+L['NOTIFICATION_BAG_FULL'] = 'Your bags are full.'
+L['NOTIFICATION_MAIL'] = 'MAIL'
+L['NOTIFICATION_BAG'] = 'BAG'
+L['NOTIFICATION_REPAIR'] = 'REPAIR'
+L['NOTIFICATION_SELL'] = 'SELL'
 
 
 -- infobar

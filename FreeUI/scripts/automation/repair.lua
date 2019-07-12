@@ -8,8 +8,11 @@ local function delayFunc()
 	if isBankEmpty then
 		autoRepair(true)
 	else
-		UIErrorsFrame:AddMessage(format(C.RedColor..'%s:|r %s', L['guildRepair'], GetMoneyString(repairAllCost)))
-		print(format(C.RedColor..'%s:|r %s', L['guildRepair'], GetMoneyString(repairAllCost)))
+		print(format(C.RedColor..'%s:|r %s', L['AUTOMATION_GUILD_REPAIR_COST'], GetMoneyString(repairAllCost)))
+
+		if (C.notification.enableBanner and C.notification.autoRepairCost) then
+			F.Notification(L['NOTIFICATION_REPAIR'], format(C.RedColor..'%s:|r %s', L['AUTOMATION_GUILD_REPAIR_COST'], GetMoneyString(repairAllCost)), 'Interface\\Icons\\INV_Hammer_20')
+		end
 	end
 end
 
@@ -27,13 +30,18 @@ function autoRepair(override)
 		else
 			if myMoney > repairAllCost then
 				RepairAllItems()
-				F.Notification("Repairs", format(C.RedColor..'%s:|r'..' %s', L['repairCost'], GetMoneyString(repairAllCost)), "Interface\\Icons\\INV_Hammer_20")
-				--UIErrorsFrame:AddMessage(format(C.RedColor..'%s:|r'..' %s', L['repairCost'], GetMoneyString(repairAllCost)))
-				print(format(C.RedColor..'%s:|r'..' %s', L['repairCost'], GetMoneyString(repairAllCost)))
+				print(format(C.RedColor..'%s:|r'..' %s', L['AUTOMATION_REPAIR_COST'], GetMoneyString(repairAllCost)))
+
+				if (C.notification.enableBanner and C.notification.autoRepairCost) then
+					F.Notification(L['NOTIFICATION_REPAIR'], format(C.RedColor..'%s:|r'..' %s', L['AUTOMATION_REPAIR_COST'], GetMoneyString(repairAllCost)), 'Interface\\Icons\\INV_Hammer_20')
+				end
 				return
 			else
-				UIErrorsFrame:AddMessage(C.InfoColor..L['repairError'])
-				print(C.InfoColor..L['repairError'])
+				print(C.InfoColor..L['AUTOMATION_REPAIR_FAILED'])
+
+				if (C.notification.enableBanner and C.notification.autoRepairCost) then
+					F.Notification(L['NOTIFICATION_REPAIR'], C.InfoColor..L['AUTOMATION_REPAIR_FAILED'], 'Interface\\Icons\\INV_Hammer_20')
+				end
 				return
 			end
 		end

@@ -123,6 +123,8 @@ C['notification'] = {
 
 		['checkBagsFull'] = true,
 		['checkMail'] = true,
+		['autoRepairCost'] = true,
+		['autoSellJunk'] = true,
 
 	['questNotifier'] = true,
 		['questProgress'] = true,

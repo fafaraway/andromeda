@@ -3,11 +3,10 @@ if GetLocale() ~= 'zhCN' then return end
 
 
 -- automation
-L['STACK_BUYING_CHECK'] = '是否购买|cffff0000一组|r下列物品？'
-L['guildRepair'] = '使用公会修理'
-L['repairCost'] = '自动修理花费'
-L['repairError'] = '没有足够的钱进行修理！'
-L['SellJunk'] = '自动出售垃圾'
+L['AUTOMATION_GUILD_REPAIR_COST'] = '使用公会修理'
+L['AUTOMATION_REPAIR_COST'] = '自动修理花费'
+L['AUTOMATION_REPAIR_FAILED'] = '没有足够的钱进行修理！'
+L['AUTOMATION_SELL_JUNK'] = '自动出售垃圾'
 
 
 -- misc
@@ -25,6 +24,7 @@ L['MapReveal'] = '去除地图迷雾'
 L['InviteInfo'] = '接受邀请'
 L['InviteEnable'] = '自动邀请功能启用'
 L['InviteDisable'] = '自动邀请功能关闭'
+L['STACK_BUYING_CHECK'] = '是否购买|cffff0000一组|r下列物品？'
 
 
 -- notification
@@ -41,6 +41,12 @@ L['NOTIFICATION_REFRESHMENTTABLE'] = '<注意>：%s 施放了 %s！'
 L['NOTIFICATION_RITUALOFSUMMONING'] = '<注意>：%s 正在施放 %s！'
 L['NOTIFICATION_SOULWELL'] = '<注意>：%s 施放了 %s！'
 L['NOTIFICATION_ACCEPT_QUEST'] = '接受任务：'
+L['NOTIFICATION_NEW_MAIL'] = '收到新邮件。'
+L['NOTIFICATION_BAG_FULL'] = '背包满了。'
+L['NOTIFICATION_MAIL'] = '邮件'
+L['NOTIFICATION_BAG'] = '背包'
+L['NOTIFICATION_REPAIR'] = '修理'
+L['NOTIFICATION_SELL'] = '售卖'
 
 
 -- infobar
