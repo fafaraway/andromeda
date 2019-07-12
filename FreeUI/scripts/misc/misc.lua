@@ -145,12 +145,6 @@ function MISC:FlightMasterWhistle()
 	f:RegisterEvent('UNIT_SPELLCAST_START')
 end
 
-
-
-
-
-
-
 -- Ready check in master sound
 function MISC:ReadyCheckEnhancement()
 	F:RegisterEvent('READY_CHECK', function()
