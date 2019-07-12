@@ -114,21 +114,41 @@ end
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
 function MISC:FlightMasterWhistle()
 	local whistleSound = C.AssetsPath..'sound\\whistle.ogg'
-	local whistleSpellID = {
-		[227334] = true,
-		[253937] = true,
-	}
+	local whistle_SpellID1 = 227334;
+	-- for some reason the whistle is two spells which results in dirty events being called
+	-- where spellID2 fires SUCCEEDED on spell cast start and spellID1 comes in later as the real SUCCEEDED
+	local whistle_SpellID2 = 253937;
+
+	local casting = false;
 
 	local f = CreateFrame('frame')
 	f:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end);
 
 	function f:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
-		if (unit == 'player' and whistleSpellID[spellID]) then
+		if (unit == 'player' and (spellID == whistle_SpellID1 or spellID == whistle_SpellID2)) then
+			if casting then
+				casting = false
+				return
+			end
+
 			PlaySoundFile(whistleSound)
+			casting = false
+		end
+	end
+
+	function f:UNIT_SPELLCAST_START(event, castGUID, spellID)
+		if spellID == whistle_SpellID1 then
+			casting = true
 		end
 	end
 	f:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
+	f:RegisterEvent('UNIT_SPELLCAST_START')
 end
+
+
+
+
+
 
 
 -- Ready check in master sound
