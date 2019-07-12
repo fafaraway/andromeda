@@ -2,7 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local NOTIFICATION = F:GetModule('Notification')
 
 
-local debugMode = false
 local completedQuest, initComplete = {}
 local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
 local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
@@ -26,7 +25,7 @@ end
 local function sendQuestMsg(msg)
 	if C.notification.onlyCompleteRing then return end
 
-	if debugMode and C.isDeveloper then
+	if C.isDeveloper then
 		print(msg)
 	elseif IsPartyLFG() then
 		SendChatMessage(msg, 'INSTANCE_CHAT')

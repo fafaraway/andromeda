@@ -1,13 +1,9 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
+local NOTIFICATION = F:GetModule('Notification')
 
-if not C.notification.enableNotification then return end
 
-local numInvites = 0 -- store amount of invites to compare later, and only show banner when invites differ; events fire multiple times
-local hasMail = false -- same with mail
-
--- [[ Functions ]]
-
--- Bags
+local numInvites = 0
+local hasMail = false
 
 local alertBagsFull
 local shouldAlertBags = false
@@ -44,8 +40,6 @@ alertBagsFull = function(self)
 	end
 end
 
--- Mail
-
 local function alertMail()
 	local newMail = HasNewMail()
 	if hasMail ~= newMail then
@@ -57,47 +51,23 @@ local function alertMail()
 end
 
 
+function NOTIFICATION:Events()
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
--- [[ Handle events ]]
-
-local f = CreateFrame('Frame', nil, frame)
-f:RegisterEvent('PLAYER_ENTERING_WORLD')
-
-if C.notification.checkBagsFull then
-	f:RegisterEvent('BAG_UPDATE')
-end
-
-if C.notification.checkMail then
-	f:RegisterEvent('UPDATE_PENDING_MAIL')
-end
-
-F.AddOptionsCallback('notifications', 'checkBagsFull', function()
 	if C.notification.checkBagsFull then
 		f:RegisterEvent('BAG_UPDATE')
-		alertBagsFull(f)
-	else
-		f:UnregisterEvent('BAG_UPDATE')
 	end
-end)
 
-
-
-F.AddOptionsCallback('notifications', 'checkMail', function()
 	if C.notification.checkMail then
 		f:RegisterEvent('UPDATE_PENDING_MAIL')
-
-		alertMail()
-	else
-		hasMail = false
-		f:UnregisterEvent('UPDATE_PENDING_MAIL')
 	end
-end)
 
-f:SetScript('OnEvent', function(self, event)
-	if event == 'BAG_UPDATE' then
-		alertBagsFull(self)
-	elseif event == 'UPDATE_PENDING_MAIL' then
-		alertMail()
-
-	end
-end)
+	f:SetScript('OnEvent', function(self, event)
+		if event == 'BAG_UPDATE' then
+			alertBagsFull(self)
+		elseif event == 'UPDATE_PENDING_MAIL' then
+			alertMail()
+		end
+	end)
+end

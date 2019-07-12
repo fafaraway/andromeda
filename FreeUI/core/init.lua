@@ -1,17 +1,17 @@
-local AddonName, core = ...
+local addonName, ns = ...
 
-core[1] = {} -- F, Functions
-core[2] = {} -- C, Constants/Config
-core[3] = {} -- L, Localisation
+ns[1] = {} -- F, Functions
+ns[2] = {} -- C, Constants/Config
+ns[3] = {} -- L, Localisation
 
-local F, C, L = unpack(core)
+_G[addonName] = ns
+
+FreeUIGlobalConfig, FreeUIConfig = {}, {}
+
+
+local F, C, L = unpack(ns)
+
 local pairs, next, tinsert = pairs, next, table.insert
-
-
--- [[ Saved variables ]]
-
-FreeUIGlobalConfig = FreeUIGlobalConfig or {}
-FreeUIConfig = FreeUIConfig or {}
 
 
 local defaultSettings = {
@@ -63,7 +63,6 @@ loader:SetScript('OnEvent', function(self, _, addon)
 end)
 
 
--- [[ Event handler ]]
 
 local events = {}
 
@@ -104,7 +103,6 @@ function F:UnregisterEvent(event, func)
 end
 
 
--- [[ Modules ]]
 
 local modules, initQueue = {}, {}
 
@@ -125,33 +123,6 @@ function F:GetModule(name)
 end
 
 
--- Options GUI callbacks
-
-F.AddOptionsCallback = function(category, option, func, widgetType)
-	if not IsAddOnLoaded('FreeUI_Options') then return end
-
-	if widgetType and widgetType == 'radio' then
-		local index = 1
-		local frame = FreeUIOptionsPanel[category][option..index]
-		while frame do
-			frame:HookScript('OnClick', func)
-
-			index = index + 1
-			frame = FreeUIOptionsPanel[category][option..index]
-		end
-	else
-		local frame = FreeUIOptionsPanel[category][option]
-
-		if frame:GetObjectType() == 'Slider' then
-			frame:HookScript('OnValueChanged', func)
-		else
-			frame:HookScript('OnClick', func)
-		end
-	end
-end
-
-
--- [[ Init ]]
 
 F:RegisterEvent('PLAYER_LOGIN', function()
 	for _, module in next, initQueue do
@@ -165,10 +136,7 @@ F:RegisterEvent('PLAYER_LOGIN', function()
 	C_Timer.After(3, collectgarbage)
 end)
 
-_G[AddonName] = core
 
-
--- [[ For secure frame hiding ]]
 
 local hider = CreateFrame('Frame', 'FreeUIHider', UIParent)
 hider:Hide()
