@@ -861,14 +861,14 @@ do
 	local useOutline = ns.CreateCheckBox(chat, "useOutline", true, true)
 	useOutline:SetPoint("LEFT", lockPosition, "RIGHT", 240, 0)
 
-	local whisperAlert = ns.CreateCheckBox(chat, "whisperAlert", true, true)
-	whisperAlert:SetPoint("TOPLEFT", lockPosition, "BOTTOMLEFT", 0, -8)
+	local whisperSound = ns.CreateCheckBox(chat, "whisperSound", true, true)
+	whisperSound:SetPoint("TOPLEFT", lockPosition, "BOTTOMLEFT", 0, -8)
 
 	local timeStamp = ns.CreateCheckBox(chat, "timeStamp", true, true)
-	timeStamp:SetPoint("LEFT", whisperAlert, "RIGHT", 240, 0)
+	timeStamp:SetPoint("LEFT", whisperSound, "RIGHT", 240, 0)
 
 	local itemLink = ns.CreateCheckBox(chat, "itemLink", true, true)
-	itemLink:SetPoint("TOPLEFT", whisperAlert, "BOTTOMLEFT", 0, -8)
+	itemLink:SetPoint("TOPLEFT", whisperSound, "BOTTOMLEFT", 0, -8)
 
 	local spamageMeter = ns.CreateCheckBox(chat, "spamageMeter", true, true)
 	spamageMeter:SetPoint("LEFT", itemLink, "RIGHT", 240, 0)
@@ -892,7 +892,7 @@ do
 		local shown = enable:GetChecked()
 		lockPosition:SetShown(shown)
 		useOutline:SetShown(shown)
-		whisperAlert:SetShown(shown)
+		whisperSound:SetShown(shown)
 		timeStamp:SetShown(shown)
 		itemLink:SetShown(shown)
 		spamageMeter:SetShown(shown)
