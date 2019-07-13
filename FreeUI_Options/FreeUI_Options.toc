@@ -2,7 +2,7 @@
 ## Title: |cffffffffFree|r|cff9c84efUI|r |cffdec35bOptions|r
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth, Solor
-## Version: 80200.06
+## Version: 80200.07
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
