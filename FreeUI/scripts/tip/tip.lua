@@ -83,8 +83,7 @@ function TOOLTIP:OnTooltipSetUnit()
 		local hexColor = F.HexRGB(F.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
 		if ricon and ricon > 8 then ricon = nil end
-		if ricon then
-			local text = GameTooltipTextLeft1:GetText()
+		if ricon and text then
 			GameTooltipTextLeft1:SetFormattedText(('%s %s'), ICON_LIST[ricon]..'18|t', text)
 		end
 
