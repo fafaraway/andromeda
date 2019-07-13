@@ -2,119 +2,149 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('Blizzard')
 
 
-local AchievementAnchor = CreateFrame('Frame', 'AchievementAnchor', UIParent)
-AchievementAnchor:SetWidth(230)
-AchievementAnchor:SetHeight(50)
-AchievementAnchor:SetPoint('CENTER', UIParent, 0, 200)
+local _G = getfenv(0)
+local ipairs, tremove = ipairs, table.remove
+local UIParent = _G.UIParent
+local AlertFrame = _G.AlertFrame
+local GroupLootContainer = _G.GroupLootContainer
 
-local alertBlacklist = {
-	GroupLootContainer = true,
-	TalkingHeadFrame = true
-}
+local POSITION, ANCHOR_POINT, YOFFSET = 'TOP', 'BOTTOM', -10
+local parentFrame
 
-local POSITION, ANCHOR_POINT, YOFFSET = 'BOTTOM', 'TOP', -9
-
-local function CheckGrow()
-	local point = AchievementAnchor:GetPoint()
-
-	if string.find(point, 'TOP') or point == 'CENTER' or point == 'LEFT' or point == 'RIGHT' then
+function BLIZZARD:AlertFrame_UpdateAnchor()
+	local y = select(2, parentFrame:GetCenter())
+	local screenHeight = UIParent:GetTop()
+	if y > screenHeight/2 then
 		POSITION = 'TOP'
 		ANCHOR_POINT = 'BOTTOM'
-		YOFFSET = 9
-		FIRST_YOFFSET = YOFFSET - 2
+		YOFFSET = -10
 	else
 		POSITION = 'BOTTOM'
 		ANCHOR_POINT = 'TOP'
-		YOFFSET = -9
-		FIRST_YOFFSET = YOFFSET + 2
+		YOFFSET = 10
+	end
+
+	self:ClearAllPoints()
+	self:SetPoint(POSITION, parentFrame)
+	GroupLootContainer:ClearAllPoints()
+	GroupLootContainer:SetPoint(POSITION, parentFrame)
+end
+
+function BLIZZARD:UpdatGroupLootContainer()
+	local lastIdx = nil
+
+	for i = 1, self.maxIndex do
+		local frame = self.rollFrames[i]
+		if frame then
+			frame:ClearAllPoints()
+			frame:SetPoint('CENTER', self, POSITION, 0, self.reservedSize * (i-1 + 0.5) * YOFFSET/10)
+			lastIdx = i
+		end
+	end
+
+	if lastIdx then
+		self:SetHeight(self.reservedSize * lastIdx)
+		self:Show()
+	else
+		self:Hide()
 	end
 end
 
-local ReplaceAnchors do
-	local function QueueAdjustAnchors(self, relativeAlert)
-		CheckGrow()
+function BLIZZARD:AlertFrame_SetPoint(relativeAlert)
+	self:ClearAllPoints()
+	self:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+end
 
-		for alertFrame in self.alertFramePool:EnumerateActive() do
-			alertFrame:ClearAllPoints()
-			alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
-			relativeAlert = alertFrame
-		end
-
-		return relativeAlert
+function BLIZZARD:AlertFrame_AdjustQueuedAnchors(relativeAlert)
+	for alertFrame in self.alertFramePool:EnumerateActive() do
+		BLIZZARD.AlertFrame_SetPoint(alertFrame, relativeAlert)
+		relativeAlert = alertFrame
 	end
 
-	local function SimpleAdjustAnchors(self, relativeAlert)
-		CheckGrow()
+	return relativeAlert
+end
 
-		if self.alertFrame:IsShown() then
-			self.alertFrame:ClearAllPoints()
-			self.alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
-			return self.alertFrame
-		end
-		return relativeAlert
+function BLIZZARD:AlertFrame_AdjustAnchors(relativeAlert)
+	if self.alertFrame:IsShown() then
+		BLIZZARD.AlertFrame_SetPoint(self.alertFrame, relativeAlert)
+		return self.alertFrame
 	end
 
-	local function AnchorAdjustAnchors(self, relativeAlert)
-		if self.anchorFrame:IsShown() then
-			return self.anchorFrame
-		end
-		return relativeAlert
+	return relativeAlert
+end
+
+function BLIZZARD:AlertFrame_AdjustAnchorsNonAlert(relativeAlert)
+	if self.anchorFrame:IsShown() then
+		BLIZZARD.AlertFrame_SetPoint(self.anchorFrame, relativeAlert)
+		return self.anchorFrame
 	end
 
-	function ReplaceAnchors(alertFrameSubSystem)
-		if alertFrameSubSystem.alertFramePool then
-			if alertBlacklist[alertFrameSubSystem.alertFramePool.frameTemplate] then
-				return alertFrameSubSystem.alertFramePool.frameTemplate, true
-			else
-				alertFrameSubSystem.AdjustAnchors = QueueAdjustAnchors
-			end
-		elseif alertFrameSubSystem.alertFrame then
-			local frame = alertFrameSubSystem.alertFrame
-			if alertBlacklist[frame:GetName()] then
-				return frame:GetName(), true
-			else
-				alertFrameSubSystem.AdjustAnchors = SimpleAdjustAnchors
-			end
-		elseif alertFrameSubSystem.anchorFrame then
-			local frame = alertFrameSubSystem.anchorFrame
-			if alertBlacklist[frame:GetName()] then
-				return frame:GetName(), true
-			else
-				alertFrameSubSystem.AdjustAnchors = AnchorAdjustAnchors
-			end
+	return relativeAlert
+end
+
+function BLIZZARD:AlertFrame_AdjustPosition()
+	if self.alertFramePool then
+		self.AdjustAnchors = BLIZZARD.AlertFrame_AdjustQueuedAnchors
+	elseif not self.anchorFrame then
+		self.AdjustAnchors = BLIZZARD.AlertFrame_AdjustAnchors
+	elseif self.anchorFrame then
+		self.AdjustAnchors = BLIZZARD.AlertFrame_AdjustAnchorsNonAlert
+	end
+end
+
+local function MoveTalkingHead()
+	local TalkingHeadFrame = _G.TalkingHeadFrame
+
+	TalkingHeadFrame.ignoreFramePositionManager = true
+	TalkingHeadFrame:ClearAllPoints()
+	TalkingHeadFrame:SetPoint('BOTTOM', 0, 120)
+
+	for index, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
+		if alertFrameSubSystem.anchorFrame and alertFrameSubSystem.anchorFrame == TalkingHeadFrame then
+			tremove(AlertFrame.alertFrameSubSystems, index)
 		end
 	end
 end
 
-function BLIZZARD:RepositionAlertFrames()
-	--if IsAddOnLoaded('MoveAnything') then return end
+local function NoTalkingHeads()
+	if not C.general.hideTalkingHead then return end
 
-	hooksecurefunc(AlertFrame, 'UpdateAnchors', function(self)
-		CheckGrow()
-		self:ClearAllPoints()
-		self:SetPoint(POSITION, AchievementAnchor, POSITION, 2, FIRST_YOFFSET)
+	hooksecurefunc(TalkingHeadFrame, 'Show', function(self)
+		self:Hide()
+	end)
+end
+
+local function TalkingHeadOnLoad(_, addon)
+	if addon == 'Blizzard_TalkingHeadUI' then
+		MoveTalkingHead()
+		NoTalkingHeads()
+		F:UnregisterEvent(event, TalkingHeadOnLoad)
+	end
+end
+
+function BLIZZARD:RepositionAlertFrame()
+	parentFrame = CreateFrame('Frame', nil, UIParent)
+	parentFrame:SetSize(200, 30)
+	F.Mover(parentFrame, L['MOVER_ALERT_FRAMES'], 'AlertFrames', {'CENTER', UIParent, 0, 200})
+
+	GroupLootContainer:EnableMouse(false)
+	GroupLootContainer.ignoreFramePositionManager = true
+
+	for _, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
+		BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
+	end
+
+	hooksecurefunc(AlertFrame, 'AddAlertFrameSubSystem', function(_, alertFrameSubSystem)
+		BLIZZARD.AlertFrame_AdjustPosition(alertFrameSubSystem)
 	end)
 
-	hooksecurefunc(AlertFrame, 'AddAlertFrameSubSystem', function(self, alertFrameSubSystem)
-		local _, isBlacklisted = ReplaceAnchors(alertFrameSubSystem)
-		if isBlacklisted then
-			for i, alertSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
-				if alertFrameSubSystem == alertSubSystem then
-					return table.remove(AlertFrame.alertFrameSubSystems, i)
-				end
-			end
-		end
-	end)
+	hooksecurefunc(AlertFrame, 'UpdateAnchors', BLIZZARD.AlertFrame_UpdateAnchor)
+	hooksecurefunc('GroupLootContainer_Update', BLIZZARD.UpdatGroupLootContainer)
 
-	local remove = {}
-	for i, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
-		local name, isBlacklisted = ReplaceAnchors(alertFrameSubSystem)
-		if isBlacklisted then
-			remove[i] = name
-		end
+	if IsAddOnLoaded('Blizzard_TalkingHeadUI') then
+		MoveTalkingHead()
+		NoTalkingHeads()
+	else
+		F:RegisterEvent('ADDON_LOADED', TalkingHeadOnLoad)
 	end
-
-	for i in next, remove do
-		table.remove(AlertFrame.alertFrameSubSystems, i)
-	end
-end
+end 

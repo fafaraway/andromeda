@@ -130,7 +130,7 @@ local function display(name, message, clickFunc, texture, ...)
 	showBanner()
 
 	if playSounds then
-		PlaySoundFile('Interface\\AddOns\\FreeUI\\assets\\sound\\notification.mp3')
+		PlaySoundFile(C.AssetsPath..'sound\\notification.mp3')
 	end
 end
 

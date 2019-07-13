@@ -4,7 +4,7 @@ local module = F:GetModule('Notification')
 function module:Dispel()
 	if not C.notification.dispel then return end
 
-	local dispelSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\buzz.ogg'
+	local dispelSound = C.AssetsPath..'sound\\buzz.ogg'
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 	frame:SetScript('OnEvent', function(self)

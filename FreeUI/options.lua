@@ -217,7 +217,7 @@ C['chat'] = {
 		['lockPosition'] = true,
 		['itemLink'] = true,
 		['spamageMeter'] = true,
-		['whisperAlert'] = true,
+		['whisperSound'] = true,
 		['chatButton'] = true,
 		['abbreviate'] = true,
 		['nameCopy'] = true,
@@ -229,7 +229,7 @@ C['chat'] = {
 		['timeStamp'] = true,
 		['autoBubble'] = false,
 		['lineFading'] = true,
-			['timeVisible'] = 20,
+			['timeVisible'] = 60,
 			['fadeDuration'] = 6,
 
 		['useFilter'] = true,
@@ -286,8 +286,8 @@ C['unitframe'] = {
 
 		['enableArena'] = true,
 
-		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -100},
-		['player_pos_healer'] = {'RIGHT', UIParent, 'CENTER', -100, -100},
+		['player_pos'] = {'TOP', UIParent, 'CENTER', 0, -300},
+		['player_pos_healer'] = {'RIGHT', UIParent, 'CENTER', -100, -200},
 		['player_width'] = 200,
 		['player_height'] = 16,
 		['player_cb_width'] = 200,
@@ -304,7 +304,7 @@ C['unitframe'] = {
 		['pet_auraTotal'] = 9,
 
 		['target_pos'] = {'LEFT', 'oUF_Player', 'RIGHT', 80, 60},
-		['target_pos_healer'] = {'LEFT', UIParent, 'CENTER', 100, -100},
+		['target_pos_healer'] = {'LEFT', UIParent, 'CENTER', 100, -200},
 		['target_width'] = 200,
 		['target_height'] = 16,
 		['target_cb_width'] = 200,
@@ -313,7 +313,7 @@ C['unitframe'] = {
 		['target_auraTotal'] = 36,
 
 		['targettarget_pos'] = {'LEFT', 'oUF_Target', 'RIGHT', 6, 0},
-		['targettarget_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -100},
+		['targettarget_pos_healer'] = {'CENTER', UIParent, 'CENTER', 0, -200},
 		['targettarget_width'] = 80,
 		['targettarget_width_healer'] = 120,
 		['targettarget_height'] = 16,

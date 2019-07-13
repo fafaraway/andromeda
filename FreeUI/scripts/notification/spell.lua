@@ -92,7 +92,7 @@ function module:Spell()
 		if subEvent == 'SPELL_CAST_SUCCESS' then
 			if FeastSpells[spellID] then 
 				SendChatMessage(format(L['NOTIFICATION_FEAST'], srcName, GetSpellLink(spellID)), say)
-				PlaySoundFile('Interface\\AddOns\\FreeUI\\assets\\sound\\feast.ogg', 'Master')
+				PlaySoundFile(C.AssetsPath..'sound\\feast.ogg', 'Master')
 			elseif spellID == 190336 then -- Conjure Refreshment Table
 				SendChatMessage(format(L['NOTIFICATION_REFRESHMENTTABLE'], srcName, GetSpellLink(spellID)), say)
 			elseif spellID == 698 then -- Ritual of Summoning

@@ -111,10 +111,8 @@ L['MOVER_PANEL'] = 'Mover console'
 L['MOVER_GRID'] = 'Grids'
 L['MOVER_TOOLTIP'] = 'tooltip'
 L['MOVER_MINIMAP'] = 'minimap'
-
 L['MOVER_RESET_CONFIRM'] = 'Are you sure to reset frames position?'
 L['MOVER_CANCEL_CONFIRM'] = 'Are you sure to reverse your positioning?'
-
 L['MOVER_UNITFRAME_PLAYER'] = 'player'
 L['MOVER_UNITFRAME_PET'] = 'pet'
 L['MOVER_UNITFRAME_TARGET'] = 'target'
@@ -127,19 +125,16 @@ L['MOVER_UNITFRAME_PARTY'] = 'party'
 L['MOVER_UNITFRAME_RAID'] = 'raid'
 L['MOVER_UNITFRAME_PLAYER_CASTBAR'] = 'palyer castbar'
 L['MOVER_UNITFRAME_TARGET_CASTBAR'] = 'target castbar'
-
 L['MOVER_COMBATTEXT_INFORMATION'] = 'combat text (information)'
 L['MOVER_COMBATTEXT_OUTGOING'] = 'combat text (outgoing)'
 L['MOVER_COMBATTEXT_INCOMING'] = 'combat text (incoming)'
-
 L['MOVER_BUFFS'] = 'buffs'
 L['MOVER_DEBUFFS'] = 'debuffs'
-
 L['MOVER_QUAKE_TIMER'] = 'quake timer'
-
 L['MOVER_OBJECTIVE_TRACKER'] = 'objective tracker'
 L['MOVER_VEHICLE_INDICATOR'] = 'vehicle indicator'
 L['MOVER_DURABILITY_INDICATOR'] = 'durability indicator'
+L['MOVER_ALERT_FRAMES'] = 'alert frames'
 
 
 -- Chat

@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local MISC = F:RegisterModule('Misc')
 
 
+local _G = getfenv(0)
 local tostring, tonumber, pairs, select, random, strsplit = tostring, tonumber, pairs, select, math.random, string.split
 local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
 local GetNumArchaeologyRaces = GetNumArchaeologyRaces
@@ -49,8 +50,7 @@ function MISC:OnLogin()
 	self:PetFilter()
 	self:PVPMessageEnhancement()
 	self:Durability()
-
-	hooksecurefunc('ReputationFrame_Update', self.HookParagonRep)
+	self:ParagonReputation()
 end
 
 
@@ -153,7 +153,7 @@ function MISC:ReadyCheckEnhancement()
 end
 
 -- Paragon reputation
-function MISC:HookParagonRep()
+local function HookParagonRep()
 	if not C.general.paragonRep then return end
 
 	local numFactions = GetNumFactions()
@@ -182,6 +182,11 @@ function MISC:HookParagonRep()
 			end
 		end
 	end
+end
+
+function MISC:ParagonReputation()
+	if not C.general.paragonRep then return end
+	hooksecurefunc('ReputationFrame_Update', HookParagonRep)
 end
 
 -- Flash cursor

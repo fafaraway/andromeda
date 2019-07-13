@@ -122,7 +122,7 @@ function MISC:MissingStats()
 		end
 		PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 
-		CharacterStatsPane.ItemLevelFrame.Value:SetFont('Interface\\AddOns\\FreeUI\\assets\\font\\ExocetBlizzardMedium.ttf', 20)
+		CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.AssetsPath..'font\\ExocetBlizzardMedium.ttf', 20)
 		CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
 		CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(2, -2)
 	end)

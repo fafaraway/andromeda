@@ -26,7 +26,7 @@ function BLIZZARD:OnSizeChanged(width)
 	if fontScale < MIN_SCALE then
 		self:Hide()
 	else
-		self.text:SetFont('Interface\\AddOns\\FreeUI\\assets\\font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME')
+		self.text:SetFont(C.AssetsPath..'font\\supereffective.ttf', 16, 'OUTLINEMONOCHROME')
 		self.text:SetShadowColor(0, 0, 0, 0)
 
 		if self.enabled then

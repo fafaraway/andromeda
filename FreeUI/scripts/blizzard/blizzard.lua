@@ -2,37 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:RegisterModule('Blizzard')
 
 
-function BLIZZARD:OnLogin()
-	self:ReskinBuffFrame()
-	self:ReskinPetBattleUI()
-	self:ColourPickerEnhancement()
-	self:RepositionUIWidgets()
-	self:ReskinQuestTracker()
-	self:ReskinCooldown()
-	self:RemoveTalkingHead()
-	self:RemoveBossBanner()
-	self:SkipAzeriteAnimation()
-	self:ReskinErrorFrame()
-	self:ReskinDigBar()
-	self:ReskinLootFrame()
-	self:RaidManager()
-	self:DurabilityIndicator()
-	self:VehicleIndicator()
-	self:QuickJoin()
-	self:ReskinCommandBar()
-	self:RepositionAlertFrames()
-
-	-- Unregister talent event
-	if PlayerTalentFrame then
-		PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
-	else
-		hooksecurefunc('TalentFrame_LoadUI', function()
-			PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
-		end)
-	end
-end
-
-
 -- Reposition durability indicator
 function BLIZZARD:DurabilityIndicator()
 	hooksecurefunc(DurabilityFrame, 'SetPoint', function(_, _, parent)
@@ -60,23 +29,6 @@ function BLIZZARD:VehicleIndicator()
 	end)
 end
 
--- Remove talking head
-function BLIZZARD:RemoveTalkingHead()
-	local f = CreateFrame('Frame')
-	function f:OnEvent(event, addon)
-		if C.general.hideTalkingHead then
-			if addon == 'Blizzard_TalkingHeadUI' then
-				hooksecurefunc('TalkingHeadFrame_PlayCurrent', function()
-					TalkingHeadFrame:Hide()
-				end)
-				self:UnregisterEvent(event)
-			end
-		end
-	end
-	f:RegisterEvent('ADDON_LOADED')
-	f:SetScript('OnEvent', f.OnEvent)
-end
-
 -- Remove Boss Banner
 function BLIZZARD:RemoveBossBanner()
 	if C.general.hideBossBanner then
@@ -97,45 +49,43 @@ function BLIZZARD:RepositionUIWidgets()
 	end)
 end
 
-
 -- Select target when click on raid units
-do
-	local function fixRaidGroupButton()
-		for i = 1, 40 do
-			local bu = _G['RaidGroupButton'..i]
-			if bu and bu.unit and not bu.clickFixed then
-				bu:SetAttribute('type', 'target')
-				bu:SetAttribute('unit', bu.unit)
+local function ClickToTarget()
+	for i = 1, 40 do
+		local bu = _G['RaidGroupButton'..i]
+		if bu and bu.unit and not bu.clickFixed then
+			bu:SetAttribute('type', 'target')
+			bu:SetAttribute('unit', bu.unit)
 
-				bu.clickFixed = true
-			end
+			bu.clickFixed = true
 		end
 	end
+end
 
-	local EventFrame = CreateFrame( 'Frame' )
-	EventFrame:RegisterEvent('ADDON_LOADED')
-	EventFrame:SetScript('OnEvent', function(self, event, addon)
+function BLIZZARD:FixRaidGroupButton()
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('ADDON_LOADED')
+	f:SetScript('OnEvent', function(self, event, addon)
 		if event == 'ADDON_LOADED' and addon == 'Blizzard_RaidUI' then
 			if not InCombatLockdown() then
-				fixRaidGroupButton()
+				ClickToTarget()
 				self:UnregisterAllEvents()
 			else
 				self:RegisterEvent('PLAYER_REGEN_ENABLED')
 			end
 		elseif event == 'PLAYER_REGEN_ENABLED' then
 			if RaidGroupButton1 and RaidGroupButton1:GetAttribute('type') ~= 'target' then
-				fixRaidGroupButton()
+				ClickToTarget()
 				self:UnregisterAllEvents()
 			end
 		end
 	end)
 end
 
-
 function BLIZZARD:SkipAzeriteAnimation()
 	if not (IsAddOnLoaded('Blizzard_AzeriteUI')) then
-    	UIParentLoadAddOn('Blizzard_AzeriteUI')
-    end
+		UIParentLoadAddOn('Blizzard_AzeriteUI')
+	end
 	hooksecurefunc(AzeriteEmpoweredItemUI,'OnItemSet',function(self)
 		local itemLocation = self.azeriteItemDataSource:GetItemLocation()
 		if self:IsAnyTierRevealing() then
@@ -145,7 +95,6 @@ function BLIZZARD:SkipAzeriteAnimation()
 		end
 	end)
 end
-
 
 function BLIZZARD:ReskinDigBar()
 	local frame, xpBar
@@ -196,4 +145,38 @@ function BLIZZARD:ReskinDigBar()
 			end
 		end)
 	end)
+end
+
+function BLIZZARD:RemoveNewTalentAlert()
+	if PlayerTalentFrame then
+		PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+	else
+		hooksecurefunc('TalentFrame_LoadUI', function()
+			PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+		end)
+	end
+end
+
+
+function BLIZZARD:OnLogin()
+	self:ReskinBuffFrame()
+	self:ReskinPetBattleUI()
+	self:ColourPickerEnhancement()
+	self:RepositionUIWidgets()
+	self:ReskinQuestTracker()
+	self:ReskinCooldown()
+	self:RemoveBossBanner()
+	self:SkipAzeriteAnimation()
+	self:ReskinErrorFrame()
+	self:ReskinDigBar()
+	self:ReskinLootFrame()
+	self:RaidManager()
+	self:DurabilityIndicator()
+	self:VehicleIndicator()
+	self:QuickJoin()
+	self:ReskinCommandBar()
+	self:RepositionAlertFrame()
+	self:RemoveNewTalentAlert()
+	self:FixRaidGroupButton()
+	self:RepositionAlertFrame()
 end

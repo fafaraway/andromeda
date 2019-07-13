@@ -109,10 +109,8 @@ L['MOVER_PANEL'] = '移动控制'
 L['MOVER_GRID'] = '网格'
 L['MOVER_TOOLTIP'] = '鼠标提示'
 L['MOVER_MINIMAP'] = '小地图'
-
 L['MOVER_RESET_CONFIRM'] = '是否重置所有界面元素为默认位置？'
 L['MOVER_CANCEL_CONFIRM'] = '是否取消本次操作？'
-
 L['MOVER_UNITFRAME_PLAYER'] = '玩家框体'
 L['MOVER_UNITFRAME_PET'] = '宠物框体'
 L['MOVER_UNITFRAME_TARGET'] = '目标框体'
@@ -125,19 +123,16 @@ L['MOVER_UNITFRAME_PARTY'] = '小队框体'
 L['MOVER_UNITFRAME_RAID'] = '团队框体'
 L['MOVER_UNITFRAME_PLAYER_CASTBAR'] = '玩家施法条'
 L['MOVER_UNITFRAME_TARGET_CASTBAR'] = '目标施法条'
-
 L['MOVER_COMBATTEXT_INFORMATION'] = '战斗信息（信息）'
 L['MOVER_COMBATTEXT_OUTGOING'] = '战斗信息（输出）'
 L['MOVER_COMBATTEXT_INCOMING'] = '战斗信息（受到）'
-
 L['MOVER_BUFFS'] = '增益栏'
 L['MOVER_DEBUFFS'] = '减益栏'
-
 L['MOVER_QUAKE_TIMER'] = '震荡计时条'
-
 L['MOVER_OBJECTIVE_TRACKER'] = '任务追踪栏'
 L['MOVER_VEHICLE_INDICATOR'] = '载具座位控制'
 L['MOVER_DURABILITY_INDICATOR'] = '耐久提示'
+L['MOVER_ALERT_FRAMES'] = '成就/拾取通知框体'
 
 
 -- Chat

@@ -1,15 +1,14 @@
 local F, C = unpack(select(2, ...))
-if not C.chat.enable then return end
-local module = F:GetModule('Chat')
+local CHAT = F:GetModule('Chat')
 
-function module:Whisper()
-	if not C.chat.whisperAlert then return end
+function CHAT:WhisperSound()
+	if not C.chat.whisperSound then return end
 
-	local f = CreateFrame('Frame')
-	local soundFile = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper1.ogg'
-	local soundFileAlt = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whisper2.ogg'
+	local soundFile_Normal = C.AssetsPath..'sound\\whisper_normal.ogg'
+	local soundFile_BN = C.AssetsPath..'sound\\whisper_bn.ogg'
 	local lastSoundTimer = 0
 
+	local f = CreateFrame('Frame')
 	f:RegisterEvent('CHAT_MSG_WHISPER')
 	f:RegisterEvent('CHAT_MSG_BN_WHISPER')
 	f:HookScript('OnEvent', function(self, event, msg, ...)
@@ -17,9 +16,9 @@ function module:Whisper()
 		if currentTime and currentTime - lastSoundTimer > 30 then
 			lastSoundTimer = currentTime
 			if event == 'CHAT_MSG_WHISPER' then
-				PlaySoundFile(soundFile, 'Master')
+				PlaySoundFile(soundFile_Normal, 'Master')
 			elseif event == 'CHAT_MSG_BN_WHISPER' then
-				PlaySoundFile(soundFileAlt, 'Master')
+				PlaySoundFile(soundFile_BN, 'Master')
 			end
 		end 
 	end)

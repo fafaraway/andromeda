@@ -74,7 +74,7 @@ end
 
 function module:AddRaidTargetIndicator(self)
 	local raidTargetIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
-	raidTargetIndicator:SetTexture('Interface\\AddOns\\FreeUI\\assets\\UI-RaidTargetingIcons')
+	raidTargetIndicator:SetTexture(C.AssetsPath..'UI-RaidTargetingIcons')
 	raidTargetIndicator:SetAlpha(.5)
 	raidTargetIndicator:SetSize(16, 16)
 	raidTargetIndicator:SetPoint('CENTER', self)

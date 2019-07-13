@@ -285,7 +285,7 @@ function CHAT:OnLogin()
 	
 	self:Filter()
 	self:Abbreviate()
-	self:Whisper()
+	self:WhisperSound()
 	self:ItemLink()
 	self:RealLink()
 	self:ChatButton()

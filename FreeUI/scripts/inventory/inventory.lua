@@ -77,7 +77,7 @@ function INVENTORY:CreateInfoFrame()
 	infoFrame:SetSize(140, 30)
 
 	local searchIcon = self:CreateTexture(nil, 'ARTWORK')
-	searchIcon:SetTexture('Interface\\AddOns\\FreeUI\\assets\\Search')
+	searchIcon:SetTexture(C.AssetsPath..'Search')
 	searchIcon:SetVertexColor(.8, .8, .8)
 	searchIcon:SetPoint('TOPLEFT', self, 'TOPLEFT', 6, -2)
 	searchIcon:SetSize(16, 16)
@@ -121,7 +121,7 @@ function INVENTORY:CreateCloseButton()
 end
 
 function INVENTORY:CreateRestoreButton(f)
-	local bu = createIconButton('Restore', self, 'Interface\\AddOns\\FreeUI\\assets\\ResetNew', 'BOTTOMRIGHT')
+	local bu = createIconButton('Restore', self, C.AssetsPath..'ResetNew', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		FreeUIConfig['tempAnchor'][f.main:GetName()] = nil
 		FreeUIConfig['tempAnchor'][f.bank:GetName()] = nil
@@ -140,7 +140,7 @@ function INVENTORY:CreateRestoreButton(f)
 end
 
 function INVENTORY:CreateReagentButton(f)
-	local bu = createIconButton('Reagent', self, 'Interface\\AddOns\\FreeUI\\assets\\Config', 'BOTTOMRIGHT')
+	local bu = createIconButton('Reagent', self, C.AssetsPath..'Config', 'BOTTOMRIGHT')
 	bu:RegisterForClicks('AnyUp')
 	bu:SetScript('OnClick', function(_, btn)
 		if not IsReagentBankUnlocked() then
@@ -160,7 +160,7 @@ function INVENTORY:CreateReagentButton(f)
 end
 
 function INVENTORY:CreateBankButton(f)
-	local bu = createIconButton('Bank', self, 'Interface\\AddOns\\FreeUI\\assets\\Config', 'BOTTOMRIGHT')
+	local bu = createIconButton('Bank', self, C.AssetsPath..'Config', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 		ReagentBankFrame:Hide()
@@ -174,7 +174,7 @@ function INVENTORY:CreateBankButton(f)
 end
 
 function INVENTORY:CreateDepositButton()
-	local bu = createIconButton('Deposit', self, 'Interface\\AddOns\\FreeUI\\assets\\Deposit', 'BOTTOMRIGHT')
+	local bu = createIconButton('Deposit', self, C.AssetsPath..'Deposit', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', DepositReagentBank)
 	F.AddTooltip(bu, 'ANCHOR_TOP', REAGENTBANK_DEPOSIT)
 
@@ -182,7 +182,7 @@ function INVENTORY:CreateDepositButton()
 end
 
 function INVENTORY:CreateBagToggle()
-	local bu = createIconButton('BagToggle', self, 'Interface\\AddOns\\FreeUI\\assets\\BagToggle', 'BOTTOMRIGHT')
+	local bu = createIconButton('BagToggle', self, C.AssetsPath..'BagToggle', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		ToggleFrame(self.BagBar)
 		if self.BagBar:IsShown() then
@@ -199,7 +199,7 @@ function INVENTORY:CreateBagToggle()
 end
 
 function INVENTORY:CreateSortButton(name)
-	local bu = createIconButton('Sort', self, 'Interface\\AddOns\\FreeUI\\assets\\Restack', 'BOTTOMRIGHT')
+	local bu = createIconButton('Sort', self, C.AssetsPath..'Restack', 'BOTTOMRIGHT')
 	bu:SetScript('OnClick', function()
 		if name == 'Bank' then
 			SortBankBags()
@@ -230,7 +230,7 @@ function INVENTORY:CreateDeleteButton()
 	local disabledText = "|TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:0|t"..L["INVENTORY_DELETE_MODE"]
 	local enabledText = disabledText.."\n\n"..C.InfoColor..L["INVENTORY_DELETE_MODE_ENABLED"]
 
-	local bu = F.CreateButton(self, 17, 17, true, 'Interface\\AddOns\\FreeUI\\assets\\SellJunk')
+	local bu = F.CreateButton(self, 17, 17, true, C.AssetsPath..'SellJunk')
 	bu:SetScript('OnClick', function(self)
 		deleteEnable = not deleteEnable
 		if deleteEnable then
