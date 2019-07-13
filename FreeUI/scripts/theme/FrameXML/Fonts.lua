@@ -19,11 +19,6 @@ local function ReskinFont(fontObj, fontPath, fontSize, fontFlag, fontColor)
 end
 
 
---ReskinFont(RaidWarningFrame.slot1, normalFont, 16)
---ReskinFont(RaidWarningFrame.slot2, normalFont, 16)
---ReskinFont(RaidBossEmoteFrame.slot1, normalFont, 16)
---ReskinFont(RaidBossEmoteFrame.slot2, normalFont, 16)
-
 ReskinFont(AchievementFont_Small, normalFont, 12)
 
 ReskinFont(CoreAbilityFont, headerFont, 32)
@@ -151,6 +146,11 @@ ReskinFont(WorldMapTextFont, headerFont, 40)
 
 ReskinFont(ErrorFont, normalFont, 14)
 ReskinFont(GameFontNormalHuge, normalFont, 14)
+
+ReskinFont(RaidWarningFrame.slot1, normalFont, 20)
+ReskinFont(RaidWarningFrame.slot2, normalFont, 20)
+ReskinFont(RaidBossEmoteFrame.slot1, normalFont, 20)
+ReskinFont(RaidBossEmoteFrame.slot2, normalFont, 20)
 
 
 local yellowFonts = {
