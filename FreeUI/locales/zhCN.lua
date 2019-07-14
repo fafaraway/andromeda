@@ -155,6 +155,8 @@ L['TOOLTIP_TARGETED'] = '关注'
 
 
 -- Slash commands
+L['RELOAD_CHECK'] = '|cffff2735需要重载界面来使改动生效。\n\n是否立即执行？|r'
+
 L['UIHELP'] = '输入 /freeui 获取帮助。'
 
 L['SLASHCMD_HELP'] = {
@@ -177,8 +179,9 @@ L['SLASHCMD_HELP'] = {
 
 	'/spec - 切换天赋',
 
-	'/freeui install - 打开安装窗口',
+	'/freeui install - 打开安装面板',
 	'/freeui config - 打开控制台',
 	'/freeui unlock - 解锁界面元素',
 	'/freeui reset  - 重置已保存的选项',
+	'/freeui clickcast  - 打开按键施法配置面板',
 }

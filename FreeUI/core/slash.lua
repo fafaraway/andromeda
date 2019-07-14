@@ -1,9 +1,76 @@
 local F, C, L = unpack(select(2, ...))
+local INSTALL = F:GetModule('Install')
+
+
+StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
+	text = L['MOVER_RESET_CONFIRM'],
+	button1 = OKAY,
+	button2 = CANCEL,
+	OnAccept = function()
+		wipe(FreeUIConfig['mover'])
+		ReloadUI()
+	end,
+	whileDead = true,
+	hideOnEscape = true,
+}
+
+StaticPopupDialogs['FREEUI_MOVER_CANCEL'] = {
+	text = L['MOVER_CANCEL_CONFIRM'],
+	button1 = OKAY,
+	button2 = CANCEL,
+	OnAccept = function()
+		F.CopyTable(BackupTable, FreeUIConfig['mover'])
+		ReloadUI()
+	end,
+	whileDead = true,
+	hideOnEscape = true,
+}
+
+StaticPopupDialogs['FREEUI_RELOAD'] = {
+	text = L['RELOAD_CHECK'],
+	button1 = APPLY,
+	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
+	OnAccept = function()
+		ReloadUI()
+	end,
+	whileDead = true,
+	hideOnEscape = true,
+}
+
+
 
 SlashCmdList.UIHELP = function()
 	for i, v in ipairs(L['SLASHCMD_HELP']) do print('|cff55c782'..('%s'):format(tostring(v))..'|r') end
 end
 SLASH_UIHELP1 = '/uihelp'
+
+SlashCmdList.FREEUI = function(cmd)
+	local cmd, args = strsplit(' ', cmd:lower(), 2)
+	if cmd == 'reset' then
+		StaticPopup_Show('FREEUI_RESET')
+	elseif cmd == 'install' then
+		INSTALL:HelloWorld()
+	elseif cmd == 'unlock' then
+		F:MoverConsole()
+	elseif cmd == 'config' then
+		if FreeUIOptionsPanel then
+			FreeUIOptionsPanel:Show()
+			HideUIPanel(GameMenuFrame)
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+		end
+	elseif cmd == 'clickcast' then
+		ToggleSpellBook(BOOKTYPE_SPELL)
+		SpellBinder:Show()
+		SpellBinder.sbOpen = true
+		SpellBinder:ToggleButtons()
+	else
+		for i, v in ipairs(L['SLASHCMD_HELP']) do
+			--print('|cff55c782'..('%s'):format(tostring(v))..'|r')
+			print(strsplit('-', tostring(v), 2))
+		end
+	end
+end
+SLASH_FREEUI1 = '/freeui'
 
 
 SlashCmdList.RELOADUI = ReloadUI

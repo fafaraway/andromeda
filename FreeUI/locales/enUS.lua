@@ -157,6 +157,8 @@ L['TOOLTIP_TARGETED'] = 'Targeted'
 
 
 -- Slash commands
+L['RELOAD_CHECK'] = '|cffff2735|cffff2735You need to reload the UI to apply your changes.\n\nWould you like to do so now?|r|r'
+
 L['UIHELP'] = 'Type in /freeui for more help.'
 
 L['SLASHCMD_HELP'] = {
