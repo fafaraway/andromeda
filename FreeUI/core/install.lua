@@ -1,6 +1,43 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:RegisterModule('Install')
-local UIScale = F:GetModule('UIScale')
+local INSTALL = F:RegisterModule('Install')
+
+local min, max, tonumber = math.min, math.max, tonumber
+
+local function clipScale(scale)
+	return tonumber(format("%.5f", scale))
+end
+
+local function GetPerfectScale()
+	local _, height = GetPhysicalScreenSize()
+	local scale = C.general.uiScale
+	local bestScale = max(.4, min(1.15, 768 / height))
+	local pixelScale = 768 / height
+
+	if C.general.uiScaleAuto then scale = clipScale(bestScale) end
+
+	C.Mult = (bestScale / scale) - ((bestScale - pixelScale) / scale)
+
+	return scale
+end
+
+local isScaling = false
+local function SetupUIScale()
+	if isScaling then return end
+	isScaling = true
+
+	local scale = GetPerfectScale()
+	local parentScale = UIParent:GetScale()
+	if scale ~= parentScale then
+		UIParent:SetScale(scale)
+	end
+
+	C.general.uiScale = clipScale(scale)
+
+	isScaling = false
+end
+SetupUIScale()
+INSTALL.SetupUIScale = SetupUIScale()
+
 
 local smoothing = {}
 local function Smooth(self, value)
@@ -38,6 +75,7 @@ smoother:SetScript('OnUpdate', function()
 	end
 end)
 
+
 local function ForceDefaultSettings()
 	SetCVar('autoLootDefault', 1)
 	SetCVar('lootUnderMouse', 1)
@@ -71,9 +109,7 @@ local function ForceDefaultSettings()
 	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 1)
 	SetCVar('floatingCombatTextFloatMode', 1)
 	SetCVar('WorldTextScale', 1.5)
-
 	SetCVar('cameraDistanceMaxZoomFactor', 2.6)
-
 	SetCVar('screenshotQuality', 10)
 	SetCVar('showTutorials', 0)
 	SetCVar('gameTip', 0)
@@ -85,6 +121,10 @@ local function ForceDefaultSettings()
 	SetCVar('overrideArchive', 0)
 	SetCVar('cameraYawMoveSpeed', 120)
 	SetCVar('rawMouseEnable', 1)
+	SetCVar('autoOpenLootHistory', 0)
+	SetCVar('lossOfControl', 0)
+	SetCVar('nameplateShowSelf', 0)
+	SetCVar('fstack_preferParentKeys', 0)
 end
 
 local function ForceChatSettings()
@@ -123,7 +163,7 @@ local function ForceChatSettings()
 end
 
 
-function F:HelloWorld()
+function INSTALL:HelloWorld()
 	local f = CreateFrame('Frame', 'FreeUI_InstallFrame', UIParent)
 	f:SetSize(400, 500)
 	f:SetPoint('CENTER')
@@ -220,7 +260,7 @@ function F:HelloWorld()
 
 		option1:SetScript('OnClick', step3)
 		option2:SetScript('OnClick', function()
-			UIScale:SetupUIScale()
+			SetupUIScale()
 			step3()
 		end)
 	end
@@ -327,12 +367,27 @@ end
 
 
 
-function module:OnLogin()
+function INSTALL:OnLogin()
 	print(C.Title..' - '..C.GreyColor..C.Version)
 	print(C.MyColor..L['UIHELP'])
 
-	if FreeUIConfig['installComplete'] == true then return end
-	F:HelloWorld()
+	if FreeUIConfig['installComplete'] ~= true then
+		INSTALL:HelloWorld()
+	else
+		if C.general.uiScaleAuto then
+			F.HideOption(Advanced_UseUIScale)
+			F.HideOption(Advanced_UIScaleSlider)
+		end
+		
+		SetupUIScale()
+	end
+
+	--print('cvar_useUiScale - '.._G.GetCVar('useUiScale'))
+	--print('cvar_uiScale - '.._G.GetCVar('uiscale'))
+	--print('UIParent_Scale - '.._G.UIParent:GetScale())
+	--print(C.general.uiScale)
+
+	--print(C.Mult)
 end
 
 
