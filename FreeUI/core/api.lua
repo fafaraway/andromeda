@@ -468,8 +468,7 @@ function F:ReskinArrow(direction)
 	dis:SetDrawLayer('OVERLAY')
 
 	local tex = self:CreateTexture(nil, 'ARTWORK')
-	local themeMediaPath = 'Interface\\AddOns\\FreeUI\\assets\\'
-	tex:SetTexture(themeMediaPath..'arrow-'..direction..'-active')
+	tex:SetTexture(C.AssetsPath..'arrow-'..direction..'-active')
 	tex:SetSize(8, 8)
 	tex:SetPoint('CENTER')
 	self.bgtex = tex
