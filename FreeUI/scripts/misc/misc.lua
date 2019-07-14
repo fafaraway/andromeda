@@ -147,10 +147,35 @@ end
 
 -- Ready check in master sound
 function MISC:ReadyCheckEnhancement()
-	F:RegisterEvent('READY_CHECK', function()
-		PlaySound(SOUNDKIT.READY_CHECK, 'master')
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('UPDATE_BATTLEFIELD_STATUS')
+	f:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH')
+	f:RegisterEvent('LFG_PROPOSAL_SHOW')
+	f:RegisterEvent('RESURRECT_REQUEST')
+	f:RegisterEvent('READY_CHECK')
+	f:SetScript('OnEvent', function(self, event)
+		if event == 'UPDATE_BATTLEFIELD_STATUS' then
+			for i = 1, GetMaxBattlefieldID() do
+				local status = GetBattlefieldStatus(i)
+				if status == 'confirm' then
+					PlaySound(SOUNDKIT.PVP_THROUGH_QUEUE, 'Master')
+					break
+				end
+				i = i + 1
+			end
+		elseif event == 'PET_BATTLE_QUEUE_PROPOSE_MATCH' then
+			PlaySound(SOUNDKIT.PVP_THROUGH_QUEUE, 'Master')
+		elseif event == 'LFG_PROPOSAL_SHOW' then
+			PlaySound(SOUNDKIT.READY_CHECK, 'Master')
+		elseif event == 'RESURRECT_REQUEST' then
+			PlaySound(37, 'Master')
+		elseif event == 'READY_CHECK' then
+			PlaySound(SOUNDKIT.READY_CHECK, 'master')
+		end
 	end)
 end
+
+
 
 -- Paragon reputation
 local function HookParagonRep()
