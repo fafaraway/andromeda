@@ -1,8 +1,8 @@
-local F, C
+local F, C, INSTALL
 local _, ns = ...
 
 local realm = GetRealmName()
-local name = UnitName("player")
+local name = UnitName('player')
 
 
 -- [[ Variables ]]
@@ -27,7 +27,7 @@ local oldColours = {}
 
 local overrideReload = false
 local userChangedSlider = true -- to use SetValue without triggering OnValueChanged
-local baseName = "FreeUIOptionsPanel"
+local baseName = 'FreeUIOptionsPanel'
 
 local r, g, b
 
@@ -112,9 +112,9 @@ local function toggle(self)
 	local checked = self:GetChecked()
 
 	if checked then
-		PlaySound("856")
+		PlaySound('856')
 	else
-		PlaySound("857")
+		PlaySound('857')
 	end
 
 	SaveValue(self, checked)
@@ -130,21 +130,17 @@ local function toggle(self)
 end
 
 ns.CreateCheckBox = function(parent, option, tooltipText, needsReload)
-	local f = CreateFrame("CheckButton", nil, parent, "InterfaceOptionsCheckButtonTemplate")
+	local f = CreateFrame('CheckButton', nil, parent.child, 'InterfaceOptionsCheckButtonTemplate')
 
 	f.group = parent.tag
 	f.option = option
 
 	f.Text:SetText(ns.localization[parent.tag..option])
-	if tooltipText then f.tooltipText = ns.localization[parent.tag..option.."Tooltip"] end
-
-	--[[if needsReload then
-		f.tooltipText = f.tooltipText and format("%s\n\n%s", f.tooltipText, ns.localization.requiresReload) or ns.localization.requiresReload
-	end]]
+	if tooltipText then f.tooltipText = ns.localization[parent.tag..option..'Tooltip'] end
 
 	f.needsReload = needsReload
 
-	f:SetScript("OnClick", toggle)
+	f:SetScript('OnClick', toggle)
 	parent[option] = f
 
 	tinsert(checkboxes, f)
@@ -174,7 +170,7 @@ local function toggleRadio(self)
 	self:SetChecked(true) -- don't allow deselecting
 	self.isChecked = true
 
-	PlaySound("856")
+	PlaySound('856')
 
 	SaveValue(self, self.index)
 
@@ -192,7 +188,7 @@ local function toggleRadio(self)
 end
 
 local function radioOnEnter(self)
-	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+	GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 	GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
 end
 
@@ -205,7 +201,7 @@ ns.CreateRadioButtonGroup = function(parent, option, numValues, tooltipText, nee
 	group.buttons = {}
 
 	for i = 1, numValues do
-		local f = CreateFrame("CheckButton", nil, parent, "UIRadioButtonTemplate")
+		local f = CreateFrame('CheckButton', nil, parent.child, 'UIRadioButtonTemplate')
 
 		f.parent = parent
 		f.group = parent.tag
@@ -215,21 +211,17 @@ ns.CreateRadioButtonGroup = function(parent, option, numValues, tooltipText, nee
 		f.text:SetFontObject(GameFontHighlight)
 		f.text:SetText(ns.localization[parent.tag..option..i])
 		if tooltipText then
-			f.tooltipText = ns.localization[parent.tag..option..i.."Tooltip"]
+			f.tooltipText = ns.localization[parent.tag..option..i..'Tooltip']
 		end
 
-		--if needsReload then
-		--	f.tooltipText = f.tooltipText and format("%s\n\n%s", f.tooltipText, ns.localization.requiresReload) or ns.localization.requiresReload
-		--end
-
 		if f.tooltipText then
-			f:HookScript("OnEnter", radioOnEnter)
-			f:HookScript("OnLeave", radioOnLeave)
+			f:HookScript('OnEnter', radioOnEnter)
+			f:HookScript('OnLeave', radioOnLeave)
 		end
 
 		f.needsReload = needsReload
 
-		f:SetScript("OnClick", toggleRadio)
+		f:SetScript('OnClick', toggleRadio)
 		parent[option..i] = f
 
 		-- return value
@@ -239,15 +231,15 @@ ns.CreateRadioButtonGroup = function(parent, option, numValues, tooltipText, nee
 		tinsert(radiobuttons, f)
 
 		if i > 1 then
-			f:SetPoint("TOP", parent[option..i-1], "BOTTOM", 0, -8)
+			f:SetPoint('TOP', parent[option..i-1], 'BOTTOM', 0, -8)
 		end
 	end
 
 	local firstOption = parent[option..1]
 
 	-- add header
-	local header = firstOption:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-	header:SetPoint("BOTTOMLEFT", firstOption, "TOPLEFT", 2, 5)
+	local header = firstOption:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
+	header:SetPoint('BOTTOMLEFT', firstOption, 'TOPLEFT', 2, 5)
 	header:SetText(ns.localization[parent.tag..option])
 	group.radioHeader = header
 
@@ -258,7 +250,7 @@ end
 
 local function onValueChanged(self, value)
 	if self.option == 'uiScale' then
-		value = string.format("%.2f", value)
+		value = string.format('%.2f', value)
 	else
 		value = floor(value+0.5)
 	end
@@ -282,7 +274,7 @@ end
 
 
 local function createSlider(parent, option, lowText, highText, low, high, step, needsReload)
-	local f = CreateFrame("Slider", baseName..option, parent, "OptionsSliderTemplate")
+	local f = CreateFrame('Slider', baseName..option, parent.child, 'OptionsSliderTemplate')
 
 	BlizzardOptionsPanel_Slider_Enable(f)
 
@@ -290,22 +282,18 @@ local function createSlider(parent, option, lowText, highText, low, high, step, 
 	f.option = option
 
 
-	_G[baseName..option.."Text"]:SetFontObject(GameFontHighlightSmall)
-	_G[baseName..option.."Text"]:SetText(ns.localization[parent.tag..option])
-	_G[baseName..option.."Low"]:SetText(lowText)
-	_G[baseName..option.."High"]:SetText(highText)
+	_G[baseName..option..'Text']:SetFontObject(GameFontHighlightSmall)
+	_G[baseName..option..'Text']:SetText(ns.localization[parent.tag..option])
+	_G[baseName..option..'Low']:SetText(lowText)
+	_G[baseName..option..'High']:SetText(highText)
 	f:SetMinMaxValues(low, high)
 	f:SetValueStep(step)
 
-	--if needsReload then
-	--	f.tooltipText = ns.localization.requiresReload
-	--end
-
-	f.tooltipText = ns.localization[parent.tag..option.."Tooltip"]
+	f.tooltipText = ns.localization[parent.tag..option..'Tooltip']
 
 	f.needsReload = needsReload
 
-	f:SetScript("OnValueChanged", onValueChanged)
+	f:SetScript('OnValueChanged', onValueChanged)
 	parent[option] = f
 
 	tinsert(sliders, f)
@@ -334,19 +322,23 @@ end
 ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, needsReload)
 	local slider = createSlider(parent, option, lowText, highText, low, high, step, needsReload)
 
-	local f = CreateFrame("EditBox", baseName..option.."TextInput", slider, "InputBoxTemplate")
+	local f = CreateFrame('EditBox', baseName..option..'TextInput', slider, 'InputBoxTemplate')
 	f:SetAutoFocus(false)
 	f:SetWidth(60)
 	f:SetHeight(20)
 	f:SetMaxLetters(8)
-	f:SetFontObject(GameFontHighlight)
+	
+	f:SetPoint('LEFT', slider, 'RIGHT', 20, 0)
 
-	f:SetPoint("LEFT", slider, "RIGHT", 20, 0)
+	f.num = f:GetRegions()
+	if f.num:GetObjectType() == 'FontString' then
+		f.num:SetJustifyH("CENTER")
+	end
 
-	f:SetScript("OnEscapePressed", onSliderEscapePressed)
-	f:SetScript("OnEnterPressed", onSliderEnterPressed)
-	f:SetScript("OnEditFocusGained", nil)
-	f:SetScript("OnEditFocusLost", onSliderEnterPressed)
+	f:SetScript('OnEscapePressed', onSliderEscapePressed)
+	f:SetScript('OnEnterPressed', onSliderEnterPressed)
+	f:SetScript('OnEditFocusGained', nil)
+	f:SetScript('OnEditFocusLost', onSliderEnterPressed)
 
 	slider.textInput = f
 
@@ -401,10 +393,10 @@ local function onColourSwatchClicked(self)
 end
 
 ns.CreateColourPicker = function(parent, option, needsReload)
-	local f = CreateFrame("Button", nil, parent)
+	local f = CreateFrame('Button', nil, parent)
 	f:SetSize(16, 16)
 
-	local tex = f:CreateTexture(nil, "OVERLAY")
+	local tex = f:CreateTexture(nil, 'OVERLAY')
 	tex:SetAllPoints()
 	f.tex = tex
 
@@ -413,7 +405,7 @@ ns.CreateColourPicker = function(parent, option, needsReload)
 
 	f.needsReload = needsReload
 
-	f:SetScript("OnClick", onColourSwatchClicked)
+	f:SetScript('OnClick', onColourSwatchClicked)
 	parent[option] = f
 
 	tinsert(colourpickers, f)
@@ -428,59 +420,58 @@ local activeTab = nil
 
 local function setActiveTab(tab)
 	activeTab = tab
-
 	activeTab:SetBackdropColor(r, g, b, .6)
-	--activeTab.topLine:Show()
-	--activeTab.bottomLine:Show()
-
 	activeTab.panel:Show()
 end
 
 local onTabClick = function(tab)
 	activeTab.panel:Hide()
-
 	activeTab:SetBackdropColor(0, 0, 0, 0)
-	--activeTab.topLine:Hide()
-	--activeTab.bottomLine:Hide()
-
 	setActiveTab(tab)
 end
 
 ns.addCategory = function(name)
 	local tag = strlower(name)
 
-	local panel = CreateFrame("Frame", baseName..name, FreeUIOptionsPanel)
-	panel:SetSize(570, 666)
-	panel:SetPoint("TOPRIGHT", -30, -58)
+	local panel = CreateFrame('ScrollFrame', baseName..name, FreeUIOptionsPanel, 'UIPanelScrollFrameTemplate')
+	panel:SetSize(460, 600)
+	panel:SetPoint('TOPLEFT', 190, -60)
 	panel:Hide()
 
-	panel.Title = panel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	panel.Title:SetPoint("TOPLEFT", 8, -16)
+	panel.child = CreateFrame('Frame', nil, panel)
+	panel.child:SetPoint("TOPLEFT", 0, 0)
+	panel.child:SetPoint("BOTTOMRIGHT", 0, 0)
+	panel.child:SetSize(460, 800)
+
+	panel:SetScrollChild(panel.child)
+
+	panel.Title = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge')
+	panel.Title:SetPoint('TOPLEFT', 8, -16)
 	panel.Title:SetText(ns.localization[tag])
 
-	panel.subText = panel:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-	panel.subText:SetPoint("TOPLEFT", panel.Title, "BOTTOMLEFT", 0, -8)
-	panel.subText:SetJustifyH("LEFT")
-	panel.subText:SetJustifyV("TOP")
+	panel.subText = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
+	panel.subText:SetPoint('TOPLEFT', panel.Title, 'BOTTOMLEFT', 0, -8)
+	panel.subText:SetJustifyH('LEFT')
+	panel.subText:SetJustifyV('TOP')
 	panel.subText:SetSize(600, 30)
-	panel.subText:SetText(ns.localization[tag.."SubText"])
+	panel.subText:SetText(ns.localization[tag..'SubText'])
 
-	local tab = CreateFrame("Button", nil, FreeUIOptionsPanel)
-	tab:SetPoint("TOPLEFT", 12, -offset)
-	tab:SetSize(168, 32)
+	local tab = CreateFrame('Button', nil, FreeUIOptionsPanel)
+	tab:SetPoint('TOPLEFT', 10, -offset)
+	tab:SetSize(160, 30)
 
-	local icon = tab:CreateTexture(nil, "OVERLAY")
+	local icon = tab:CreateTexture(nil, 'OVERLAY')
 	icon:SetSize(20, 20)
-	icon:SetPoint("LEFT", tab, 6, 0)
+	icon:SetPoint('LEFT', tab, 6, 0)
 	icon:SetTexCoord(.08, .92, .08, .92)
 	tab.Icon = icon
 
-	tab.Text = tab:CreateFontString(nil, "ARTWORK", "SystemFont_Shadow_Med3")
-	tab.Text:SetPoint("LEFT", icon, "RIGHT", 8, 0)
+	tab.Text = tab:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
+	tab.Text:SetPoint('LEFT', icon, 'RIGHT', 8, 0)
 	tab.Text:SetTextColor(.9, .9, .9)
 	tab.Text:SetText(ns.localization[tag])
 
-	tab:SetScript("OnMouseUp", onTabClick)
+	tab:SetScript('OnMouseUp', onTabClick)
 
 	tab.panel = panel
 	panel.tab = tab
@@ -494,17 +485,21 @@ ns.addCategory = function(name)
 end
 
 ns.addSubCategory = function(category, name)
-	local header = category:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	local header = category.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
 	header:SetText(name)
-	header:SetTextColor(179/255, 211/255, 243/255)
+	header:SetTextColor(.5, .5, .5)
 
-	local line = category:CreateTexture(nil, "ARTWORK")
-	line:SetSize(500, 1)
-	line:SetPoint("TOPLEFT", header, "BOTTOMLEFT", 0, -4)
+	local line = category.child:CreateTexture(nil, 'ARTWORK')
+	line:SetSize(480, 1)
+	line:SetPoint('TOPLEFT', header, 'BOTTOMLEFT', 0, -4)
 	line:SetColorTexture(.5, .5, .5, .1)
 
 	return header, line
 end
+
+
+
+
 
 -- [[ Init ]]
 
@@ -522,7 +517,7 @@ local function changeProfile()
 	for group, options in pairs(profile) do
 		if C[group] then
 			for option, value in pairs(options) do
-				if C[group][option] == nil or (group == "unitframes" and (tonumber(profile[group][option]) or type(profile[group][option]) == "table")) then
+				if C[group][option] == nil or (group == 'unitframes' and (tonumber(profile[group][option]) or type(profile[group][option]) == 'table')) then
 					profile[group][option] = nil
 				else
 					C[group][option] = value
@@ -565,130 +560,72 @@ local function displaySettings()
 	end
 end
 
---[[local function removeCharData(self)
-	self:ClearFocus()
 
-	--local realm = C.Realm
-	local charName = self:GetText()
-
-	self:SetText("")
-
-	if charName ~= "" then
-		local somethingDeleted = false
-
-		for varType, varTable in pairs(FreeUIGlobalConfig[realm]) do
-			print('1')
-			if varTable[charName] ~= nil then
-				varTable[charName] = nil
-				somethingDeleted = true
-				print('2')
-			end
-			print('3')
-		end
-
-		if FreeUIOptionsGlobal[realm][charName] ~= nil then
-			FreeUIOptionsGlobal[realm][charName] = nil
-			somethingDeleted = true
-		end
-
-		if somethingDeleted then
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..charName.." removed.", C.r, C.g, C.b)
-		else
-			DEFAULT_CHAT_FRAME:AddMessage("FreeUI: |cffffffffData for "..charName.." not found. Check the spelling of the name.", C.r, C.g, C.b)
-		end
-	end
-end]]
-
-
-
-
-local init = CreateFrame("Frame")
-init:RegisterEvent("PLAYER_LOGIN")
-init:SetScript("OnEvent", function()
+local init = CreateFrame('Frame')
+init:RegisterEvent('PLAYER_LOGIN')
+init:SetScript('OnEvent', function()
 	if not FreeUI then return end
 
 	F, C = unpack(FreeUI)
 	r, g, b = C.r, C.g, C.b
+	INSTALL = F:GetModule('Install')
+
+	StaticPopupDialogs['FREEUI_RESET'] = {
+		text = ns.localization.resetCheck,
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			FreeUIGlobalConfig = {}
+			FreeUIConfig = {}
+			FreeUIOptionsGlobal[realm][name] = false
+			FreeUIOptions = {}
+			FreeUIOptionsPerChar = {}
+			
+			C.options = FreeUIOptions
+			
+			ReloadUI()
+		end,
+		whileDead = true,
+		hideOnEscape = true,
+	}
 
 	local FreeUIOptionsPanel = FreeUIOptionsPanel
 
-	--[[if C.unitframe.enable then
-		FreeUIOptionsPanel:HookScript("OnShow", function()
-			oUF_Player:SetAlpha(0)
-			oUF_Target:SetAlpha(0)
-			oUF_Pet:SetAlpha(0)
-			oUF_TargetTarget:SetAlpha(0)
-			oUF_Focus:SetAlpha(0)
-			oUF_FocusTarget:SetAlpha(0)
-		end)
-
-		FreeUIOptionsPanel:HookScript("OnHide", function()
-			oUF_Player:SetAlpha(1)
-			oUF_Target:SetAlpha(1)
-			oUF_Pet:SetAlpha(1)
-			oUF_TargetTarget:SetAlpha(1)
-			oUF_Focus:SetAlpha(1)
-			oUF_FocusTarget:SetAlpha(1)
-		end)
-	end]]
-
-	local resetFrame = FreeUIOptionsPanel.resetFrame
-
-	resetFrame.Okay:SetScript("OnClick", function()
-		local somethingChecked = false
-
-		if resetFrame.Data:GetChecked() then
-			FreeUIGlobalConfig = {}
-			FreeUIConfig = {}
-			somethingChecked = true
-		end
-		if resetFrame.Options:GetChecked() then
-			FreeUIOptions = {}
-			FreeUIOptionsPerChar = {}
-			FreeUIOptionsGlobal[realm][name] = false
-			C.options = FreeUIOptions
-			somethingChecked = true
-		end
-
-
-		if somethingChecked then
-			ReloadUI()
-		else
-			resetFrame:Hide()
-		end
-	end)
-
-
 	FreeUIOptionsPanel.ProfileBox:SetChecked(FreeUIOptionsGlobal[realm][name])
-	FreeUIOptionsPanel.ProfileBox:SetScript("OnClick", function(self)
+	FreeUIOptionsPanel.ProfileBox:SetScript('OnClick', function(self)
 		FreeUIOptionsGlobal[realm][name] = self:GetChecked()
 		changeProfile()
 		displaySettings()
+
 		ReloadUI()
 	end)
 
+	FreeUIOptionsPanel.InstallButton:SetScript('OnClick', function()
+		INSTALL.HelloWorld()
+		FreeUIOptionsPanel:Hide()
+	end)
+
+	FreeUIOptionsPanel.ResetButton:SetScript('OnClick', function()
+		StaticPopup_Show('FREEUI_RESET')
+	end)
+
+	F.CreateMF(FreeUIOptionsPanel)
+
 	F.CreateBD(FreeUIOptionsPanel)
-	F.CreateBD(FreeUIOptionsPanel.popup)
-	F.CreateBD(FreeUIOptionsPanel.credits)
-	F.CreateBD(resetFrame)
 	F.CreateSD(FreeUIOptionsPanel)
-	F.CreateSD(FreeUIOptionsPanel.popup)
-	F.CreateSD(FreeUIOptionsPanel.credits)
-	F.CreateSD(resetFrame)
+
+	F.CreateBD(FreeUIOptionsPanel.CreditsFrame)
+	F.CreateSD(FreeUIOptionsPanel.CreditsFrame)
+
 	F.ReskinClose(FreeUIOptionsPanel.CloseButton)
-	F.ReskinClose(FreeUIOptionsPanel.credits.CloseButton)
+	F.ReskinClose(FreeUIOptionsPanel.CreditsFrame.CloseButton)
 	F.ReskinCheck(FreeUIOptionsPanel.ProfileBox)
 
-
 	for _, panel in pairs(panels) do
-		panel.tab:SetBackdrop({
-			bgFile = C.media.bdTex,
-			insets = {top = 1},
-		})
 		panel.tab:SetBackdropColor(0, 0, 0, 0)
 		local bg = F.CreateBDFrame(panel.tab.Icon)
 		F.Reskin(panel.tab)
-
+		F.ReskinScroll(panel.ScrollBar)
 	end
 
 	setActiveTab(FreeUIOptionsPanel.general.tab)
@@ -709,6 +646,7 @@ init:SetScript("OnEvent", function()
 		F.ReskinSlider(slider)
 		F.ReskinInput(slider.textInput)
 		F.SetFS(slider.textInput)
+		slider.textInput.num:SetTextColor(r, g, b)
 		--F.SetFS(slider.text)
 	end
 
@@ -717,23 +655,38 @@ init:SetScript("OnEvent", function()
 		F.CreateBG(picker)
 	end
 
+	
+	local title = F.CreateFS(FreeUIOptionsPanel, {C.font.normal, 18}, C.Title, nil, nil, true, 'TOP', 0, -10)
+	local version = F.CreateFS(FreeUIOptionsPanel, 'pixel', C.Version, nil, 'grey', false, 'TOP', 0, -34)
+	
+	local lineLeft = CreateFrame('Frame', nil, FreeUIOptionsPanel)
+	lineLeft:SetPoint('TOP', -50, -30)
+	F.CreateGF(lineLeft, 100, 1, 'Horizontal', .7, .7, .7, 0, .7)
+	lineLeft:SetFrameStrata('HIGH')
 
-
-
-	local title = F.CreateFS(FreeUIOptionsPanel, {C.font.normal, 18}, C.Title, nil, nil, true, "TOP", 0, -10)
-	local version = F.CreateFS(FreeUIOptionsPanel, 'pixel', C.Version, nil, 'grey', false, "TOP", 0, -34)
-	local ll = CreateFrame("Frame", nil, FreeUIOptionsPanel)
-	ll:SetPoint("TOP", -50, -30)
-	F.CreateGF(ll, 100, 1, "Horizontal", .7, .7, .7, 0, .7)
-	ll:SetFrameStrata("HIGH")
-	local lr = CreateFrame("Frame", nil, FreeUIOptionsPanel)
-	lr:SetPoint("TOP", 50, -30)
-	F.CreateGF(lr, 100, 1, "Horizontal", .7, .7, .7, .7, 0)
-	lr:SetFrameStrata("HIGH")
-
+	local lineRight = CreateFrame('Frame', nil, FreeUIOptionsPanel)
+	lineRight:SetPoint('TOP', 50, -30)
+	F.CreateGF(lineRight, 100, 1, 'Horizontal', .7, .7, .7, .7, 0)
+	lineRight:SetFrameStrata('HIGH')
 
 
 	displaySettings()
+
+
+	local menuButton = CreateFrame('Button', 'GameMenuFrameNDui', GameMenuFrame, 'GameMenuButtonTemplate')
+	menuButton:SetText(C.Title)
+	menuButton:SetPoint('TOP', GameMenuButtonAddons, 'BOTTOM', 0, -14)
+	GameMenuFrame:HookScript('OnShow', function(self)
+		GameMenuButtonLogout:SetPoint('TOP', menuButton, 'BOTTOM', 0, -14)
+		self:SetHeight(self:GetHeight() + menuButton:GetHeight() + 15)
+	end)
+
+	menuButton:SetScript('OnClick', function()
+		FreeUIOptionsPanel:Show()
+		HideUIPanel(GameMenuFrame)
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+	end)
+	F.Reskin(menuButton)
 end)
 
 

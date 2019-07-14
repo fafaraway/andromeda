@@ -6,13 +6,9 @@ ns.localization.reset = "Reset"
 ns.localization.resetCheck = "Remove all saved options, and reset them to their default values."
 ns.localization.install = "Installer"
 ns.localization.needReload = "|cffff2735You need to reload the UI to apply your changes.|r"
-ns.localization.needReloadPopup = "You need to reload the UI to apply your changes.\n\nWould you like to do so now?"
-ns.localization.requiresReload = "Changing this option requires a UI reload."
-ns.localization.reload = "Reload UI"
-ns.localization.resetData = "Remove data"
-ns.localization.resetDataTooltip = "Check to remove all saved data, such as how much money your characters have and click cast settings."
-ns.localization.resetOptions = "Remove saved options"
-ns.localization.resetOptionsTooltip = "Check to remove all saved options, and reset them to their default values."
+ns.localization.reloadCheck = "|cffff2735You need to reload the UI to apply your changes.\n\nWould you like to do so now?|r"
+
+
 ns.localization.author = "|cff808080<|rFree|cff9c84efUI|r|cff808080>|r by |cffe8155cHaleth|r and |cff37b1d6Solor|r"
 ns.localization.authorSubText = "|cff808080https://github.com/Solor/FreeUI|r"
 

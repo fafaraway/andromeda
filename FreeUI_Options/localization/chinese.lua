@@ -3,15 +3,12 @@ local _, ns = ...
 if ns.locale ~= "zhCN" and ns.locale ~= "zhTW" then return end
 
 ns.localization.profile = "角色单独配置"
-ns.localization.profileTooltip = "勾选该项则所有选择只对本角色生效。"
-ns.localization.resetCheck = "移除所有已保存的数据，重置为默认值。"
-ns.localization.install = "安装"
+ns.localization.profileTooltip = "为当前角色使用单独的选项配置。"
+ns.localization.reloadCheck = "|cffff2735是否重载界面来完成设置？|r"
 ns.localization.needReload = "|cffff2735重载界面来应用改动。|r"
-ns.localization.needReloadPopup = "需要重载界面来使改动生效。\n\n现在就重载界面么？"
-ns.localization.requiresReload = "这个选项需要重载界面来生效。"
-ns.localization.reload = "重载界面"
+ns.localization.install = "安装"
 ns.localization.reset = "重置选项"
-
+ns.localization.resetCheck = "|cffff2735是否移除所有已保存的选项并重置为默认值？|r"
 
 
 ns.localization.general = "综合"
