@@ -336,6 +336,7 @@ local ignoreProgressNPC = {
 	[126954] = true,
 	[124312] = true,
 	[141584] = true,
+	[326027] = true, -- 运输站回收生成器DX-82
 }
 
 QuickQuest:Register('QUEST_PROGRESS', function()
