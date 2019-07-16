@@ -1,50 +1,31 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-	local function restyleGarrisonFollowerTooltipTemplate(frame)
+	-- Tooltips
+	function F:ReskinGarrisonTooltip()
 		for i = 1, 9 do
-			select(i, frame:GetRegions()):Hide()
+			select(i, self:GetRegions()):Hide()
 		end
-
-		F.ReskinTooltip(frame)
+		if self.Icon then F.ReskinIcon(self.Icon) end
+		if self.CloseButton then F.ReskinClose(self.CloseButton) end
 	end
 
-	local function restyleGarrisonFollowerAbilityTooltipTemplate(frame)
-		for i = 1, 9 do
-			select(i, frame:GetRegions()):Hide()
-		end
-
-		F.ReskinIcon(frame.Icon)
-		F.ReskinTooltip(frame)
-	end
-
-	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonMissionTooltip)
-	F.ReskinClose(FloatingGarrisonMissionTooltip.CloseButton)
-
-	restyleGarrisonFollowerTooltipTemplate(GarrisonFollowerTooltip)
-	restyleGarrisonFollowerAbilityTooltipTemplate(GarrisonFollowerAbilityTooltip)
-
-	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonFollowerTooltip)
-	F.ReskinClose(FloatingGarrisonFollowerTooltip.CloseButton)
-
-	restyleGarrisonFollowerAbilityTooltipTemplate(FloatingGarrisonFollowerAbilityTooltip)
-	F.ReskinClose(FloatingGarrisonFollowerAbilityTooltip.CloseButton)
-
-	restyleGarrisonFollowerTooltipTemplate(GarrisonShipyardFollowerTooltip)
-	restyleGarrisonFollowerTooltipTemplate(FloatingGarrisonShipyardFollowerTooltip)
-	F.ReskinClose(FloatingGarrisonShipyardFollowerTooltip.CloseButton)
+	F.ReskinGarrisonTooltip(FloatingGarrisonMissionTooltip)
+	F.ReskinGarrisonTooltip(GarrisonFollowerTooltip)
+	F.ReskinGarrisonTooltip(FloatingGarrisonFollowerTooltip)
+	F.ReskinGarrisonTooltip(GarrisonFollowerAbilityTooltip)
+	F.ReskinGarrisonTooltip(FloatingGarrisonFollowerAbilityTooltip)
+	F.ReskinGarrisonTooltip(GarrisonShipyardFollowerTooltip)
+	F.ReskinGarrisonTooltip(FloatingGarrisonShipyardFollowerTooltip)
 
 	hooksecurefunc("GarrisonFollowerTooltipTemplate_SetGarrisonFollower", function(tooltipFrame)
 		-- Abilities
-
 		if tooltipFrame.numAbilitiesStyled == nil then
 			tooltipFrame.numAbilitiesStyled = 1
 		end
 
 		local numAbilitiesStyled = tooltipFrame.numAbilitiesStyled
-
 		local abilities = tooltipFrame.Abilities
-
 		local ability = abilities[numAbilitiesStyled]
 		while ability do
 			local icon = ability.Icon
@@ -59,15 +40,12 @@ tinsert(C.themes["FreeUI"], function()
 		tooltipFrame.numAbilitiesStyled = numAbilitiesStyled
 
 		-- Traits
-
 		if tooltipFrame.numTraitsStyled == nil then
 			tooltipFrame.numTraitsStyled = 1
 		end
 
 		local numTraitsStyled = tooltipFrame.numTraitsStyled
-
 		local traits = tooltipFrame.Traits
-
 		local trait = traits[numTraitsStyled]
 		while trait do
 			local icon = trait.Icon
