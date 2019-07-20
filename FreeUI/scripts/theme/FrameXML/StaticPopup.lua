@@ -118,6 +118,7 @@ tinsert(C.themes["FreeUI"], function()
 	F.CreateBD(PetBattleQueueReadyFrame)
 	F.CreateSD(PetBattleQueueReadyFrame)
 	F.CreateBG(PetBattleQueueReadyFrame.Art)
+	PetBattleQueueReadyFrame.Border:Hide()
 	F.Reskin(PetBattleQueueReadyFrame.AcceptButton)
 	F.Reskin(PetBattleQueueReadyFrame.DeclineButton)
 
