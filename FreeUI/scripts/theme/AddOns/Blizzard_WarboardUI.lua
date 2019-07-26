@@ -23,6 +23,8 @@ C.themes["Blizzard_WarboardUI"] = function()
 			self.bg = F.SetBD(self)
 		end
 
+		self.CloseButton:SetPoint("TOPRIGHT", -2, -2)
+
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
 			option.Header.Text:SetTextColor(0, 0, 0)

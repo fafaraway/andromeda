@@ -2,29 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local INSTALL = F:GetModule('Install')
 
 
-StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
-	text = L['MOVER_RESET_CONFIRM'],
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		wipe(FreeUIConfig['mover'])
-		ReloadUI()
-	end,
-	whileDead = true,
-	hideOnEscape = true,
-}
 
-StaticPopupDialogs['FREEUI_MOVER_CANCEL'] = {
-	text = L['MOVER_CANCEL_CONFIRM'],
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		F.CopyTable(BackupTable, FreeUIConfig['mover'])
-		ReloadUI()
-	end,
-	whileDead = true,
-	hideOnEscape = true,
-}
 
 StaticPopupDialogs['FREEUI_RELOAD'] = {
 	text = L['RELOAD_CHECK'],

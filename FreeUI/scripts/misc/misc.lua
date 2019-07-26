@@ -51,6 +51,7 @@ function MISC:OnLogin()
 	self:PVPMessageEnhancement()
 	self:Durability()
 	self:ParagonReputation()
+	self:TradeTargetInfo()
 end
 
 
@@ -91,24 +92,26 @@ function MISC:FasterDelete()
 	end)
 end
 
--- Faster Looting
-function MISC:FasterLoot()
-	if not C.general.fasterLoot then return end
-
-	local f = CreateFrame('Frame')
-	f:RegisterEvent('LOOT_READY')
-	f:SetScript('OnEvent',function()
-		local tDelay = 0
-		if GetTime() - tDelay >= 0.3 then
-			tDelay = GetTime()
-			if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
-				for i = GetNumLootItems(), 1, -1 do
-					LootSlot(i)
-				end
-				tDelay = GetTime()
+-- Faster looting
+local lootDelay = 0
+local function FasterLoot()
+	if GetTime() - lootDelay >= 0.3 then
+		lootDelay = GetTime()
+		if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
+			for i = GetNumLootItems(), 1, -1 do
+				LootSlot(i)
 			end
+			lootDelay = GetTime()
 		end
-	end)
+	end
+end
+
+function MISC:FasterLoot()
+	if C.general.fasterLoot then
+		F:RegisterEvent('LOOT_READY', FasterLoot)
+	else
+		F:UnregisterEvent('LOOT_READY', FasterLoot)
+	end
 end
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
@@ -174,8 +177,6 @@ function MISC:ReadyCheckEnhancement()
 		end
 	end)
 end
-
-
 
 -- Paragon reputation
 local function HookParagonRep()
@@ -253,31 +254,125 @@ end
 
 -- Get Naked
 function MISC:NakedIcon()
-	local nakeButton = CreateFrame('Button', nil, CharacterFrameInsetRight)
-	nakeButton:SetSize(31, 33)
-	nakeButton:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
-	F.PixelIcon(nakeButton, 'Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH', true)
-	F.AddTooltip(nakeButton, 'ANCHOR_RIGHT', L['GET_NAKED'])
+	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
+	bu:SetSize(31, 33)
+	bu:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
+	F.PixelIcon(bu, 'Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH', true)
+	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['MISC_GET_NAKED'])
 
 	local function UnequipItemInSlot(i)
 		local action = EquipmentManager_UnequipItemInSlot(i)
 		EquipmentManager_RunAction(action)
 	end
 
-	nakeButton:SetScript('OnDoubleClick', function()
+	bu:SetScript('OnDoubleClick', function()
 		for i = 1, 17 do
 			local texture = GetInventoryItemTexture('player', i)
 			if texture then
-				UnequipItemInSlot(i) 
+				UnequipItemInSlot(i)
 			end
 		end
 	end)
 end
 
+-- TradeFrame hook
+function MISC:TradeTargetInfo()
+	local infoText = F.CreateFS(TradeFrame, {C.font.normal, 14}, '', nil, nil, true)
+	infoText:ClearAllPoints()
+	infoText:SetPoint('TOP', TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
+
+	local function updateColor()
+		local r, g, b = F.UnitColor('NPC')
+		TradeFrameRecipientNameText:SetTextColor(r, g, b)
+
+		local guid = UnitGUID('NPC')
+		if not guid then return end
+		local text = '|cffff0000'..L['MISC_STRANGER']
+		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
+			text = '|cffffff00'..FRIEND
+		elseif IsGuildMember(guid) then
+			text = '|cff00ff00'..GUILD
+		end
+		infoText:SetText(text)
+	end
+	hooksecurefunc('TradeFrame_Update', updateColor)
+end
+
+-- Select target when click on raid units
+do
+	local function fixRaidGroupButton()
+		for i = 1, 40 do
+			local bu = _G['RaidGroupButton'..i]
+			if bu and bu.unit and not bu.clickFixed then
+				bu:SetAttribute('type', 'target')
+				bu:SetAttribute('unit', bu.unit)
+
+				bu.clickFixed = true
+			end
+		end
+	end
+
+	local function setupMisc(event, addon)
+		if event == 'ADDON_LOADED' and addon == 'Blizzard_RaidUI' then
+			if not InCombatLockdown() then
+				fixRaidGroupButton()
+			else
+				F:RegisterEvent('PLAYER_REGEN_ENABLED', setupMisc)
+			end
+			F:UnregisterEvent(event, setupMisc)
+		elseif event == 'PLAYER_REGEN_ENABLED' then
+			if RaidGroupButton1 and RaidGroupButton1:GetAttribute('type') ~= 'target' then
+				fixRaidGroupButton()
+				F:UnregisterEvent(event, setupMisc)
+			end
+		end
+	end
+
+	F:RegisterEvent('ADDON_LOADED', setupMisc)
+end
+
+-- ALT+RightClick to buy a stack
+do
+	local cache = {}
+	local itemLink, id
+
+	StaticPopupDialogs['BUY_STACK'] = {
+		text = L['MISC_STACK_BUYING_CHECK'],
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			if not itemLink then return end
+			BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+			cache[itemLink] = true
+			itemLink = nil
+		end,
+		hideOnEscape = 1,
+		hasItemFrame = 1,
+	}
+
+	local _MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
+	function MerchantItemButton_OnModifiedClick(self, ...)
+		if IsAltKeyDown() then
+			id = self:GetID()
+			itemLink = GetMerchantItemLink(id)
+			if not itemLink then return end
+			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
+			if maxStack and maxStack > 1 then
+				if not cache[itemLink] then
+					local r, g, b = GetItemQualityColor(quality or 1)
+					StaticPopup_Show('BUY_STACK', ' ', ' ', {['texture'] = texture, ['name'] = name, ['color'] = {r, g, b, 1}, ['link'] = itemLink, ['index'] = id, ['count'] = maxStack})
+				else
+					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+				end
+			end
+		end
+
+		_MerchantItemButton_OnModifiedClick(self, ...)
+	end
+end
+
 -- Show BID and highlight price
 do
-	local GetNumAuctionItems, GetAuctionItemInfo, SetMoneyFrameColor = GetNumAuctionItems, GetAuctionItemInfo, SetMoneyFrameColor
-
 	local function setupMisc(event, addon)
 		if addon == 'Blizzard_AuctionUI' then
 			hooksecurefunc('AuctionFrameBrowse_Update', function()
@@ -317,67 +412,69 @@ do
 	F:RegisterEvent('ADDON_LOADED', setupMisc)
 end
 
--- TradeFrame hook
+-- Archaeology counts
 do
-	local infoText = F.CreateFS(TradeFrame, {C.font.normal, 14}, '', nil, nil, true)
-	infoText:ClearAllPoints()
-	infoText:SetPoint('TOP', TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
-
-	local function updateColor()
-		local r, g, b = F.UnitColor('NPC')
-		TradeFrameRecipientNameText:SetTextColor(r, g, b)
-
-		local guid = UnitGUID('NPC')
-		if not guid then return end
-		local text = '|cffff0000'..L['STRANGER']
-		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
-			text = '|cffffff00'..FRIEND
-		elseif IsGuildMember(guid) then
-			text = '|cff00ff00'..GUILD
-		end
-		infoText:SetText(text)
-	end
-	hooksecurefunc('TradeFrame_Update', updateColor)
-end
-
--- ALT+RightClick to buy a stack
-do
-	local cache = {}
-	local itemLink, id
-
-	StaticPopupDialogs['BUY_STACK'] = {
-		text = L['STACK_BUYING_CHECK'],
-		button1 = YES,
-		button2 = NO,
-		OnAccept = function()
-			if not itemLink then return end
-			BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-			cache[itemLink] = true
-			itemLink = nil
-		end,
-		hideOnEscape = 1,
-		hasItemFrame = 1,
-	}
-
-	local old_MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
-	function MerchantItemButton_OnModifiedClick(self, ...)
-		if IsAltKeyDown() then
-			id = self:GetID()
-			itemLink = GetMerchantItemLink(id)
-			if not itemLink then return end
-			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
-			if maxStack and maxStack > 1 then
-				if not cache[itemLink] then
-					local r, g, b = GetItemQualityColor(quality or 1)
-					StaticPopup_Show('BUY_STACK', ' ', ' ', {['texture'] = texture, ['name'] = name, ['color'] = {r, g, b, 1}, ['link'] = itemLink, ['index'] = id, ['count'] = maxStack})
-				else
-					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-				end
+	local function CalculateArches()
+		print('|cff0080ff[FreeUI]'..'|c0000FF00'..L['MISC_ARCHAEOLOGY_COUNT']..':')
+		local total = 0
+		for i = 1, GetNumArchaeologyRaces() do
+			local numArtifacts = GetNumArtifactsByRace(i)
+			local count = 0
+			for j = 1, numArtifacts do
+				local completionCount = select(10, GetArtifactInfoByRace(i, j))
+				count = count + completionCount
+			end
+			local name = GetArchaeologyRaceInfo(i)
+			if numArtifacts > 1 then
+				print('     - |cfffed100'..name..': '..'|cff70C0F5'..count)
+				total = total + count
 			end
 		end
-
-		old_MerchantItemButton_OnModifiedClick(self, ...)
+		print('     - |c0000ff00'..TOTAL..': '..'|cffff0000'..total)
+		print(C.GreyColor..'------------------------')
 	end
+
+	local function AddCalculateIcon()
+		local bu = CreateFrame('Button', nil, ArchaeologyFrameCompletedPage)
+		bu:SetPoint('TOPRIGHT', -45, -45)
+		bu:SetSize(35, 35)
+		F.PixelIcon(bu, 'Interface\\ICONS\\Ability_Iyyokuk_Calculate', true)
+		F.AddTooltip(bu, 'ANCHOR_RIGHT', L['MISC_ARCHAEOLOGY_COUNT'], 'system')
+		bu:SetScript('OnMouseUp', CalculateArches)
+	end
+
+	local function setupMisc(event, addon)
+		if addon == 'Blizzard_ArchaeologyUI' then
+			AddCalculateIcon()
+
+			local frame = ArcheologyDigsiteProgressBar
+			local bar = frame.FillBar
+
+			frame.Shadow:Hide()
+			frame.BarBackground:Hide()
+			frame.BarBorderAndOverlay:Hide()
+
+			F.SetFS(frame.BarTitle, C.isCNClient)
+
+			frame.BarTitle:SetPoint('CENTER', frame)
+
+			bar:SetSize(200, 20)
+			frame.Flash:SetWidth(bar:GetWidth() + 20)
+
+			bar:SetStatusBarTexture(C.media.sbTex)
+			bar:SetStatusBarColor(221/255, 197/255, 162/255)
+
+			bar.bg = F.CreateBDFrame(bar)
+			F.CreateSD(bar.bg)
+
+			ArcheologyDigsiteProgressBar.ignoreFramePositionManager = true
+			ArcheologyDigsiteProgressBar:SetPoint('TOP', UIParent, 'TOP', 0, -50)
+
+			F.CreateMF(ArcheologyDigsiteProgressBar)
+
+			F:UnregisterEvent(event, setupMisc)
+		end
+	end
+
+	F:RegisterEvent('ADDON_LOADED', setupMisc)
 end
-
-

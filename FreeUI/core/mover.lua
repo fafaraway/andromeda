@@ -67,7 +67,7 @@ end
 local MoverList, BackupTable, f = {}, {}
 
 function F:Mover(text, value, anchor, width, height)
-	local key = 'mover'
+	local key = 'UIElementsMover'
 	if not FreeUIConfig[key] then FreeUIConfig[key] = {} end
 
 	local mover = CreateFrame('Frame', nil, UIParent)
@@ -125,6 +125,26 @@ local function LockElements()
 	clear()
 end
 
+StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
+	text = L['MOVER_RESET_CONFIRM'],
+	button1 = OKAY,
+	button2 = CANCEL,
+	OnAccept = function()
+		wipe(FreeUIConfig['UIElementsMover'])
+		ReloadUI()
+	end,
+}
+
+StaticPopupDialogs['FREEUI_MOVER_CANCEL'] = {
+	text = L['MOVER_CANCEL_CONFIRM'],
+	button1 = OKAY,
+	button2 = CANCEL,
+	OnAccept = function()
+		F.CopyTable(BackupTable, FreeUIConfig['UIElementsMover'])
+		ReloadUI()
+	end,
+}
+
 local function CreateConsole()
 	if f then return end
 
@@ -156,14 +176,14 @@ local function CreateConsole()
 	bu[3]:SetScript('OnClick', function()
 		--SlashCmdList['TOGGLEGRID']('64')
 		if toggle == 0 then
-		shade(1, 1, 1, 0.85)
-		crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
-		crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
-		crosshair('follow')
-		toggle = 1
+			shade(1, 1, 1, 0.85)
+			crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
+			crosshairTextureEW:SetColorTexture(0, 0, 0, 1)
+			crosshair('follow')
+			toggle = 1
 		else
 			toggle = 0
-		clear()
+			clear()
 		end
 	end)
 	-- Reset
@@ -196,7 +216,7 @@ function F:MoverConsole()
 	UnlockElements()
 end
 
---[[SlashCmdList['FREEUI_MOVER'] = function()
+SlashCmdList['FREEUI_MOVER'] = function()
 	if InCombatLockdown() then
 		UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
 		return
@@ -204,7 +224,7 @@ end
 	CreateConsole()
 	UnlockElements()
 end
-SLASH_FREEUI_MOVER1 = '/mover']]
+SLASH_FREEUI_MOVER1 = '/mover'
 
 
 

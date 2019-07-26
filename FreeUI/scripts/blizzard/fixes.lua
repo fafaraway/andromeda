@@ -54,12 +54,12 @@ end
 -- Fix trade skill search
 local pairs, tonumber, strmatch = pairs, tonumber, string.match
 
-hooksecurefunc("ChatEdit_InsertLink", function(text) -- shift-clicked
+hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
 	-- change from SearchBox:HasFocus to :IsShown again
 	if text and TradeSkillFrame and TradeSkillFrame:IsShown() then
-		local spellId = strmatch(text, "enchant:(%d+)")
+		local spellId = strmatch(text, 'enchant:(%d+)')
 		local spell = GetSpellInfo(spellId)
-		local item = GetItemInfo(strmatch(text, "item:(%d+)") or 0)
+		local item = GetItemInfo(strmatch(text, 'item:(%d+)') or 0)
 		local search = spell or item
 		if not search then return end
 
@@ -90,12 +90,43 @@ end)
 -- shift-leftclick should be reserved for the search box
 local function hideSplitFrame(_, button)
 	if TradeSkillFrame and TradeSkillFrame:IsShown() then
-		if button == "LeftButton" then
+		if button == 'LeftButton' then
 			StackSplitFrame:Hide()
 		end
 	end
 end
-hooksecurefunc("ContainerFrameItemButton_OnModifiedClick", hideSplitFrame)
-hooksecurefunc("MerchantItemButton_OnModifiedClick", hideSplitFrame)
+hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
+hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
+
+
+-- Fix blizz guild news hyperlink
+do
+	local function fixGuildNews(event, addon)
+		if addon ~= 'Blizzard_GuildUI' then return end
+
+		local _GuildNewsButton_OnEnter = GuildNewsButton_OnEnter
+		function GuildNewsButton_OnEnter(self)
+			if not (self.newsInfo and self.newsInfo.whatText) then return end
+			_GuildNewsButton_OnEnter(self)
+		end
+
+		F:UnregisterEvent(event, fixGuildNews)
+	end
+
+	local function fixCommunitiesNews(event, addon)
+		if addon ~= 'Blizzard_Communities' then return end
+
+		local _CommunitiesGuildNewsButton_OnEnter = CommunitiesGuildNewsButton_OnEnter
+		function CommunitiesGuildNewsButton_OnEnter(self)
+			if not (self.newsInfo and self.newsInfo.whatText) then return end
+			_CommunitiesGuildNewsButton_OnEnter(self)
+		end
+
+		F:UnregisterEvent(event, fixCommunitiesNews)
+	end
+
+	F:RegisterEvent('ADDON_LOADED', fixGuildNews)
+	F:RegisterEvent('ADDON_LOADED', fixCommunitiesNews)
+end
 
 

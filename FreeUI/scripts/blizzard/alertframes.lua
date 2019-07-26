@@ -122,7 +122,7 @@ local function TalkingHeadOnLoad(_, addon)
 	end
 end
 
-function BLIZZARD:RepositionAlertFrame()
+function BLIZZARD:ReanchorAlertFrame()
 	parentFrame = CreateFrame('Frame', nil, UIParent)
 	parentFrame:SetSize(200, 30)
 	F.Mover(parentFrame, L['MOVER_ALERT_FRAMES'], 'AlertFrames', {'CENTER', UIParent, 0, 200})

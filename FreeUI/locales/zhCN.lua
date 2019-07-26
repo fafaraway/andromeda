@@ -10,10 +10,8 @@ L['AUTOMATION_SELL_JUNK'] = '自动出售垃圾'
 
 
 -- misc
-L['EXTEND_INSTANCE'] = '延长所有副本锁定'
-L['STRANGER'] = '陌生人'
-L['TOGGLE'] = '点击拖动'
-L['GET_NAKED'] = '双击脱光装备'
+L['MISC_STRANGER'] = '陌生人'
+L['MISC_GET_NAKED'] = '双击脱光装备'
 L['NAKE_BUTTON'] = '脱衣'
 L['ACCOUNT_KEYSTONES'] = '账号角色钥石信息'
 L['PARAGON'] = '巅峰'
@@ -24,7 +22,8 @@ L['MapReveal'] = '去除地图迷雾'
 L['InviteInfo'] = '接受邀请'
 L['InviteEnable'] = '自动邀请功能启用'
 L['InviteDisable'] = '自动邀请功能关闭'
-L['STACK_BUYING_CHECK'] = '是否购买|cffff0000一组|r下列物品？'
+L['MISC_STACK_BUYING_CHECK'] = '是否购买|cffff0000一组|r下列物品？'
+L['MISC_ARCHAEOLOGY_COUNT'] = '考古统计'
 
 
 -- notification

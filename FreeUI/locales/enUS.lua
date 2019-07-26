@@ -10,10 +10,8 @@ L['AUTOMATION_SELL_JUNK'] = 'Vendor trash sold'
 
 
 -- misc
-L['EXTEND_INSTANCE'] = 'Extend All Raids Lock'
-L['STRANGER'] = 'Stranger'
-L['TOGGLE'] = 'Drag to move'
-L['GET_NAKED'] = 'Double click to remove gears'
+L['MISC_STRANGER'] = 'Stranger'
+L['MISC_GET_NAKED'] = 'Double click to remove gears'
 L['NAKE_BUTTON'] = 'Undress'
 L['ACCOUNT_KEYSTONES'] = 'Account keystones'
 L['PARAGON'] = 'Paragon'
@@ -27,7 +25,8 @@ L['InviteDisable'] = 'Autoinvite OFF'
 L['NUMBER_CAP_1'] = 'W'
 L['NUMBER_CAP_2'] = 'Y'
 L['NUMBER_CAP_3'] = 'Z'
-L['STACK_BUYING_CHECK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
+L['MISC_STACK_BUYING_CHECK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
+L['MISC_ARCHAEOLOGY_COUNT'] = 'Statistics of Archaeology'
 
 
 -- notification
