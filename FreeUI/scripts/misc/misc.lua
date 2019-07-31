@@ -257,7 +257,7 @@ function MISC:NakedIcon()
 	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
 	bu:SetSize(31, 33)
 	bu:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
-	F.PixelIcon(bu, 'Interface\\ICONS\\SPELL_SHADOW_TWISTEDFAITH', true)
+	F.PixelIcon(bu, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
 	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['MISC_GET_NAKED'])
 
 	local function UnequipItemInSlot(i)
