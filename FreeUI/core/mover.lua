@@ -110,7 +110,7 @@ local function UnlockElements()
 			mover:Show()
 		end
 	end
-	F.CopyTable(FreeUIConfig['mover'], BackupTable)
+	F.CopyTable(FreeUIConfig['UIElementsMover'], BackupTable)
 	f:Show()
 end
 

@@ -16,7 +16,7 @@ local pairs, next, tinsert = pairs, next, table.insert
 
 local defaultSettings = {
 	BfA = false,
-	mover = {},
+	UIElementsMover = {},
 	tempAnchor = {},
 	clickCast = {},
 	installComplete = false,
