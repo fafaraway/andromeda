@@ -278,7 +278,7 @@ C['unitframe'] = {
 			['castbar_showSpellTimer'] = false,
 
 		['enableGroup'] = true,
-			['showGroupName'] = false,
+			['groupNames'] = false,
 			['groupColourSmooth'] = true,
 			['groupFilter'] = 8,
 

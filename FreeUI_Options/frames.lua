@@ -503,8 +503,11 @@ do
 	local unitframe = FreeUIOptionsPanel.unitframe
 	unitframe.tab.Icon:SetTexture('Interface\\Icons\\Achievement_Character_Human_Female')
 
+	local line = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line:SetPoint('TOPLEFT', unitframe.subText, 'BOTTOMLEFT', 0, -8)
+
 	local enable = ns.CreateCheckBox(unitframe, 'enable', true, true)
-	enable:SetPoint('TOPLEFT', unitframe.subText, 'BOTTOMLEFT', 0, -8)
+	enable:SetPoint('TOPLEFT', line, 'BOTTOMLEFT', 0, -8)
 
 	local healer_layout = ns.CreateCheckBox(unitframe, 'healer_layout', true, true)
 	healer_layout:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 16, -8)
@@ -521,11 +524,11 @@ do
 	local frameVisibility = ns.CreateCheckBox(unitframe, 'frameVisibility', true, true)
 	frameVisibility:SetPoint('TOPLEFT', colourSmooth, 'BOTTOMLEFT', 0, -8)
 
-	local line = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line:SetPoint('TOPLEFT', frameVisibility, 'BOTTOMLEFT', -16, -8)
+	local line1 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line1:SetPoint('TOPLEFT', frameVisibility, 'BOTTOMLEFT', -16, -8)
 
 	local threat = ns.CreateCheckBox(unitframe, 'threat', true, true)
-	threat:SetPoint('TOPLEFT', line, 'BOTTOMLEFT', 16, -16)
+	threat:SetPoint('TOPLEFT', line1, 'BOTTOMLEFT', 16, -16)
 
 	local dispellable = ns.CreateCheckBox(unitframe, 'dispellable', true, true)
 	dispellable:SetPoint('LEFT', threat, 'RIGHT', 200, 0)
@@ -538,9 +541,6 @@ do
 
 	local rangeCheck = ns.CreateCheckBox(unitframe, 'rangeCheck', true, true)
 	rangeCheck:SetPoint('TOPLEFT', healPrediction, 'BOTTOMLEFT', 0, -8)
-
-	local quakeTimer = ns.CreateCheckBox(unitframe, 'quakeTimer', true, true)
-	quakeTimer:SetPoint('LEFT', rangeCheck, 'RIGHT', 200, 0)
 
 	local line2 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
 	line2:SetPoint('TOPLEFT', rangeCheck, 'BOTTOMLEFT', -16, -8)
@@ -562,16 +562,19 @@ do
 	local enableGroup = ns.CreateCheckBox(unitframe, 'enableGroup', true, true)
 	enableGroup:SetPoint('TOPLEFT', line3, 'BOTTOMLEFT', 16, -16)
 
-	local showGroupName = ns.CreateCheckBox(unitframe, 'showGroupName', true, true)
-	showGroupName:SetPoint('TOPLEFT', enableGroup, 'BOTTOMLEFT', 16, -8)
+	local groupNames = ns.CreateCheckBox(unitframe, 'groupNames', true, true)
+	groupNames:SetPoint('TOPLEFT', enableGroup, 'BOTTOMLEFT', 16, -8)
 
 	local groupColourSmooth = ns.CreateCheckBox(unitframe, 'groupColourSmooth', true, true)
-	groupColourSmooth:SetPoint('LEFT', showGroupName, 'RIGHT', 200, 0)
+	groupColourSmooth:SetPoint('LEFT', groupNames, 'RIGHT', 200, 0)
 
-	enableGroup.children = {showGroupName, groupColourSmooth}
+	local groupFilter = ns.CreateNumberSlider(unitframe, 'groupFilter', nil, nil, 1, 8, 1, true)
+	groupFilter:SetPoint('TOPLEFT', groupNames, 'BOTTOMLEFT', 0, -30)
+
+	enableGroup.children = {groupNames, groupColourSmooth, groupFilter}
 
 	local line4 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line4:SetPoint('TOPLEFT', showGroupName, 'BOTTOMLEFT', -32, -8)
+	line4:SetPoint('TOPLEFT', groupFilter, 'BOTTOMLEFT', -32, -30)
 
 	local enableBoss = ns.CreateCheckBox(unitframe, 'enableBoss', true, true)
 	enableBoss:SetPoint('TOPLEFT', line4, 'BOTTOMLEFT', 16, -16)
@@ -581,14 +584,17 @@ do
 
 	enableBoss.children = {bossColourSmooth}
 
-	local enableArena = ns.CreateCheckBox(unitframe, 'enableArena', true, true)
-	enableArena:SetPoint('LEFT', enableBoss, 'RIGHT', 200, 0)
-
 	local line5 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
 	line5:SetPoint('TOPLEFT', bossColourSmooth, 'BOTTOMLEFT', -32, -8)
 
+	local enableArena = ns.CreateCheckBox(unitframe, 'enableArena', true, true)
+	enableArena:SetPoint('TOPLEFT', line5, 'BOTTOMLEFT', 16, -16)
+
+	local line6 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
+	line6:SetPoint('TOPLEFT', enableArena, 'BOTTOMLEFT', -16, -8)
+
 	local classPower = ns.CreateCheckBox(unitframe, 'classPower', true, true)
-	classPower:SetPoint('TOPLEFT', line5, 'BOTTOMLEFT', 16, -16)
+	classPower:SetPoint('TOPLEFT', line6, 'BOTTOMLEFT', 16, -16)
 
 	local stagger = ns.CreateCheckBox(unitframe, 'stagger', true, true)
 	stagger:SetPoint('LEFT', classPower, 'RIGHT', 200, 0)
@@ -596,9 +602,17 @@ do
 	local totems = ns.CreateCheckBox(unitframe, 'totems', true, true)
 	totems:SetPoint('TOPLEFT', classPower, 'BOTTOMLEFT', 0, -8)
 
+	local quakeTimer = ns.CreateCheckBox(unitframe, 'quakeTimer', true, true)
+	quakeTimer:SetPoint('LEFT', totems, 'RIGHT', 200, 0)
+
 	local function toggleUFOptions()
 		local shown = enable:GetChecked()
 		line:SetShown(shown)
+		line1:SetShown(shown)
+		line2:SetShown(shown)
+		line3:SetShown(shown)
+		line4:SetShown(shown)
+		line5:SetShown(shown)
 		transMode:SetShown(shown)
 		portrait:SetShown(shown)
 		healer_layout:SetShown(shown)
@@ -606,16 +620,16 @@ do
 		frameVisibility:SetShown(shown)
 
 		enableGroup:SetShown(shown)
-		showGroupName:SetShown(shown)
+		groupNames:SetShown(shown)
 		groupColourSmooth:SetShown(shown)
+		groupFilter:SetShown(shown)
 
 		threat:SetShown(shown)
 		overAbsorb:SetShown(shown)
 		healPrediction:SetShown(shown)
 		dispellable:SetShown(shown)
 		rangeCheck:SetShown(shown)
-		quakeTimer:SetShown(shown)
-
+		
 		enableCastbar:SetShown(shown)
 		castbar_separatePlayer:SetShown(shown)
 		castbar_separateTarget:SetShown(shown)
@@ -627,6 +641,7 @@ do
 		classPower:SetShown(shown)
 		stagger:SetShown(shown)
 		totems:SetShown(shown)
+		quakeTimer:SetShown(shown)
 	end
 
 	enable:HookScript('OnClick', toggleUFOptions)

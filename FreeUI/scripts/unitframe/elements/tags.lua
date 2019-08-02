@@ -124,7 +124,7 @@ tagEvents['free:altpower'] = 'UNIT_POWER_UPDATE'
 tags['free:groupname'] = function(unit)
 	if not UnitIsConnected(unit) then
 		return 'Off'
-	elseif cfg.showGroupName then
+	elseif cfg.groupNames then
 		if UnitInRaid('player') then
 			return ShortenName(unit, 2)
 		else
@@ -175,7 +175,7 @@ function UNITFRAME:AddNameText(self)
 	local name
 
 	if self.unitStyle == 'party' or self.unitStyle == 'raid' then
-		name = F.CreateFS(self.Health, (C.isCNClient and cfg.showGroupName and C.NormalFont) or 'pixel', '', nil, nil, not C.isCNClient)
+		name = F.CreateFS(self.Health, (C.isCNClient and cfg.groupNames and C.NormalFont) or 'pixel', '', nil, nil, not C.isCNClient)
 
 		self:Tag(name, '[free:groupname]')
 	else
