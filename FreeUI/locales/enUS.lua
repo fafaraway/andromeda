@@ -14,7 +14,10 @@ L['MISC_STRANGER'] = 'Stranger'
 L['MISC_GET_NAKED'] = 'Double click to remove gears'
 L['NAKE_BUTTON'] = 'Undress'
 L['ACCOUNT_KEYSTONES'] = 'Account keystones'
-L['PARAGON'] = 'Paragon'
+L['MISC_REPUTATION'] = 'Reputation'
+L['MISC_PARAGON'] = 'Paragon'
+L['MISC_PARAGON_REPUTATION'] = 'Paragon reputation'
+L['MISC_PARAGON_NOTIFY'] = '巅峰声望已满注意兑换'
 L['MISSING_BUFF'] = 'Missing'
 L['Pull'] = 'Pull in 10s!'
 L['AutoQuest'] = 'Auto quest'
@@ -184,4 +187,5 @@ L['SLASHCMD_HELP'] = {
 	'/freeui config - Open FreeUI config panel',
 	'/freeui unlock - Unlock UI elements to move them',
 	'/freeui reset  - Reset all saved options data',
+	'/freeui clickcast  - Open click cast panel',
 }

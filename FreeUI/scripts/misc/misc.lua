@@ -50,7 +50,7 @@ function MISC:OnLogin()
 	self:PetFilter()
 	self:PVPMessageEnhancement()
 	self:Durability()
-	self:ParagonReputation()
+	self:ReputationEnhancement()
 	self:TradeTargetInfo()
 end
 
@@ -176,43 +176,6 @@ function MISC:ReadyCheckEnhancement()
 			PlaySound(SOUNDKIT.READY_CHECK, 'master')
 		end
 	end)
-end
-
--- Paragon reputation
-local function HookParagonRep()
-	if not C.general.paragonRep then return end
-
-	local numFactions = GetNumFactions()
-	local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
-	for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
-		local factionIndex = factionOffset + i
-		local factionRow = _G['ReputationBar'..i]
-		local factionBar = _G['ReputationBar'..i..'ReputationBar']
-		local factionStanding = _G['ReputationBar'..i..'ReputationBarFactionStanding']
-
-		if factionIndex <= numFactions then
-			local factionID = select(14, GetFactionInfo(factionIndex))
-			if factionID and C_Reputation.IsFactionParagon(factionID) then
-				local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
-
-				if currentValue then
-					local barValue = mod(currentValue, threshold)
-					local factionStandingtext = L['PARAGON']..' ('..floor(currentValue/threshold)..')'
-
-					factionBar:SetMinMaxValues(0, threshold)
-					factionBar:SetValue(barValue)
-					factionStanding:SetText(factionStandingtext)
-					factionRow.standingText = factionStandingtext
-					factionRow.rolloverText = C.InfoColor..format(REPUTATION_PROGRESS_FORMAT, barValue, threshold)
-				end
-			end
-		end
-	end
-end
-
-function MISC:ParagonReputation()
-	if not C.general.paragonRep then return end
-	hooksecurefunc('ReputationFrame_Update', HookParagonRep)
 end
 
 -- Flash cursor
