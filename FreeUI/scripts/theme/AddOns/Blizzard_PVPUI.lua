@@ -151,6 +151,7 @@ C.themes["Blizzard_PVPUI"] = function()
 	F.ReskinTooltip(ConquestTooltip)
 
 	local function ConquestFrameButton_OnEnter(self)
+		ConquestTooltip:ClearAllPoints()
 		ConquestTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT", 1, 0)
 	end
 
