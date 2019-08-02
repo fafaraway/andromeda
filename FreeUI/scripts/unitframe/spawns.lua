@@ -401,15 +401,15 @@ function module:OnLogin()
 		end
 
 		local groups = {}
-		for i = 1, cfg.raid_numGroups do
+		for i = 1, cfg.groupFilter do
 			groups[i] = CreateRaid('oUF_Raid'..i, i)
 			if i == 1 then
 				if cfg.healer_layout then
-					raidMover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', Raid_Pos, (cfg.raid_width*5+cfg.raid_padding*4), (cfg.raid_height*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1))))
+					raidMover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', Raid_Pos, (cfg.raid_width*5+cfg.raid_padding*4), (cfg.raid_height*cfg.groupFilter+(cfg.raid_padding*(cfg.groupFilter-1))))
 					groups[i]:ClearAllPoints()
 					groups[i]:SetPoint('TOPLEFT', raidMover)
 				else
-					raidMover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', Raid_Pos, (cfg.raid_width*cfg.raid_numGroups+(cfg.raid_padding*(cfg.raid_numGroups-1))), (cfg.raid_height*5+cfg.raid_padding*4))
+					raidMover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', Raid_Pos, (cfg.raid_width*cfg.groupFilter+(cfg.raid_padding*(cfg.groupFilter-1))), (cfg.raid_height*5+cfg.raid_padding*4))
 					groups[i]:ClearAllPoints()
 					groups[i]:SetPoint('TOPRIGHT', raidMover)
 				end

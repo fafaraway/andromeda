@@ -32,7 +32,7 @@ local function PostUpdateHealth(health, unit, min, max)
 			--self.Deficit:Hide()
 			self.Deficit:SetValue(0)
 		else
-			if cfg.colourSmooth or (cfg.colourSmooth_Boss and style == 'boss') or (cfg.colourSmooth_Raid and style == 'raid') then
+			if cfg.colourSmooth or (cfg.bossColourSmooth and style == 'boss') or (cfg.groupColourSmooth and style == 'raid') then
 				self.Deficit:GetStatusBarTexture():SetVertexColor(self:ColorGradient(min, max, unpack(self.colors.smooth)))
 			else
 				self.Deficit:GetStatusBarTexture():SetVertexColor(r, g, b)
@@ -88,7 +88,7 @@ function module:AddHealthBar(self)
 		health.colorTapping = true
 		health.colorDisconnected = true
 
-		if cfg.colourSmooth or (cfg.colourSmooth_Boss and self.unitStyle == 'boss') or (cfg.colourSmooth_Raid and self.unitStyle == 'raid') then
+		if cfg.colourSmooth or (cfg.bossColourSmooth and self.unitStyle == 'boss') or (cfg.groupColourSmooth and self.unitStyle == 'raid') then
 			health.colorSmooth = true
 		else
 			health.colorClass = true

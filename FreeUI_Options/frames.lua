@@ -565,10 +565,10 @@ do
 	local showGroupName = ns.CreateCheckBox(unitframe, 'showGroupName', true, true)
 	showGroupName:SetPoint('TOPLEFT', enableGroup, 'BOTTOMLEFT', 16, -8)
 
-	local colourSmooth_Raid = ns.CreateCheckBox(unitframe, 'colourSmooth_Raid', true, true)
-	colourSmooth_Raid:SetPoint('LEFT', showGroupName, 'RIGHT', 200, 0)
+	local groupColourSmooth = ns.CreateCheckBox(unitframe, 'groupColourSmooth', true, true)
+	groupColourSmooth:SetPoint('LEFT', showGroupName, 'RIGHT', 200, 0)
 
-	enableGroup.children = {showGroupName, colourSmooth_Raid}
+	enableGroup.children = {showGroupName, groupColourSmooth}
 
 	local line4 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
 	line4:SetPoint('TOPLEFT', showGroupName, 'BOTTOMLEFT', -32, -8)
@@ -576,16 +576,16 @@ do
 	local enableBoss = ns.CreateCheckBox(unitframe, 'enableBoss', true, true)
 	enableBoss:SetPoint('TOPLEFT', line4, 'BOTTOMLEFT', 16, -16)
 
-	local colourSmooth_Boss = ns.CreateCheckBox(unitframe, 'colourSmooth_Boss', true, true)
-	colourSmooth_Boss:SetPoint('TOPLEFT', enableBoss, 'BOTTOMLEFT', 16, -8)
+	local bossColourSmooth = ns.CreateCheckBox(unitframe, 'bossColourSmooth', true, true)
+	bossColourSmooth:SetPoint('TOPLEFT', enableBoss, 'BOTTOMLEFT', 16, -8)
 
-	enableBoss.children = {colourSmooth_Boss}
+	enableBoss.children = {bossColourSmooth}
 
 	local enableArena = ns.CreateCheckBox(unitframe, 'enableArena', true, true)
 	enableArena:SetPoint('LEFT', enableBoss, 'RIGHT', 200, 0)
 
 	local line5 = ns.addSubCategory(unitframe, ns.localization.unitframeline)
-	line5:SetPoint('TOPLEFT', colourSmooth_Boss, 'BOTTOMLEFT', -32, -8)
+	line5:SetPoint('TOPLEFT', bossColourSmooth, 'BOTTOMLEFT', -32, -8)
 
 	local classPower = ns.CreateCheckBox(unitframe, 'classPower', true, true)
 	classPower:SetPoint('TOPLEFT', line5, 'BOTTOMLEFT', 16, -16)
@@ -607,7 +607,7 @@ do
 
 		enableGroup:SetShown(shown)
 		showGroupName:SetShown(shown)
-		colourSmooth_Raid:SetShown(shown)
+		groupColourSmooth:SetShown(shown)
 
 		threat:SetShown(shown)
 		overAbsorb:SetShown(shown)
@@ -621,7 +621,7 @@ do
 		castbar_separateTarget:SetShown(shown)
 		
 		enableBoss:SetShown(shown)
-		colourSmooth_Boss:SetShown(shown)
+		bossColourSmooth:SetShown(shown)
 		enableArena:SetShown(shown)
 
 		classPower:SetShown(shown)

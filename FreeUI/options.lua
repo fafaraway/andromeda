@@ -279,10 +279,11 @@ C['unitframe'] = {
 
 		['enableGroup'] = true,
 			['showGroupName'] = false,
-			['colourSmooth_Raid'] = true,
+			['groupColourSmooth'] = true,
+			['groupFilter'] = 8,
 
 		['enableBoss'] = true,
-			['colourSmooth_Boss'] = true,
+			['bossColourSmooth'] = true,
 
 		['enableArena'] = true,
 
@@ -345,7 +346,6 @@ C['unitframe'] = {
 		['raid_width'] = 48,
 		['raid_height'] = 32,
 		['raid_padding'] = 5,
-		['raid_numGroups'] = '8',
 
 		['boss_pos'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
 		['boss_pos_healer'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
