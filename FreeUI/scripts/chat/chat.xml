@@ -1,13 +1,12 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='chat.lua'/>
+	<Script file='tabs.lua'/>
 	<Script file='abbreviate.lua'/>
+	<Script file='filters.lua'/>
+	<Script file='itemlinks.lua'/>
 	<Script file='namecopy.lua'/>
-	<Script file='filter.lua'/>
-	<Script file='itemlink.lua'/>
-	<Script file='button.lua'/>
-	<Script file='reallink.lua'/>
-	<Script file='spamagemeter.lua'/>
-	<Script file='tab.lua'/>
-	<Script file='whisper.lua'/>
+	<Script file='chatcopy.lua'/>
 	<Script file='urlcopy.lua'/>
+	<Script file='spamagemeter.lua'/>
+	<Script file='whisper.lua'/>
 </Ui>

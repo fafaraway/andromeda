@@ -11,8 +11,10 @@ StaticPopupDialogs['FREEUI_RELOAD'] = {
 	OnAccept = function()
 		ReloadUI()
 	end,
-	whileDead = true,
+	timeout = 0,
+	whileDead = 1,
 	hideOnEscape = true,
+	preferredIndex = 5,
 }
 
 
@@ -129,6 +131,46 @@ SlashCmdList.GROUPCONVERT = function()
 	end
 end
 SLASH_GROUPCONVERT1 = '/gc'
+
+
+function DisbandRaidGroup()
+	if InCombatLockdown() then return end
+
+	if UnitInRaid("player") then
+		SendChatMessage(L['MISC_DISBAND_GROUP'], "RAID")
+		for i = 1, GetNumGroupMembers() do
+			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+			if online and name ~= T.name then
+				UninviteUnit(name)
+			end
+		end
+	else
+		SendChatMessage(L['MISC_DISBAND_GROUP'], "PARTY")
+		for i = MAX_PARTY_MEMBERS, 1, -1 do
+			if GetNumGroupMembers(i) then
+				UninviteUnit(UnitName("party"..i))
+			end
+		end
+	end
+	LeaveParty()
+end
+
+StaticPopupDialogs.DISBAND_RAID = {
+	text = L_POPUP_DISBAND_RAID,
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = DisbandRaidGroup,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = true,
+	preferredIndex = 5,
+}
+
+SlashCmdList.GROUPDISBAND = function()
+	StaticPopup_Show("DISBAND_RAID")
+end
+SLASH_GROUPDISBAND1 = "/gd"
+
 
 
 

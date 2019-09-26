@@ -1,5 +1,7 @@
 local F, C = unpack(select(2, ...))
 
+if not C.general.extraQuestButton then return end
+
 -- ExtraQuestButton, by p3lim
 
 local strmatch = string.match

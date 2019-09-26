@@ -48,7 +48,7 @@ end
 
 
 function Misc:Focuser()
-	if not C.general.quickFocusing then return end
+	if not C.general.focuser then return end
 
 	-- Keybinding override so that models can be shift/alt/ctrl+clicked
 	local f = CreateFrame('CheckButton', 'FocuserButton', UIParent, 'SecureActionButtonTemplate')

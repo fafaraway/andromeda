@@ -1,12 +1,10 @@
 local F, C, L = unpack(select(2, ...))
 
 local type, pairs, tonumber, wipe = type, pairs, tonumber, table.wipe
-local strmatch, gmatch, strfind, format = string.match, string.gmatch, string.find, string.format
+local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, abs, floor = math.min, math.max, math.abs, math.floor
 
-
 local r, g, b = C.ClassColors[C.Class].r, C.ClassColors[C.Class].g, C.ClassColors[C.Class].b
-
 
 
 -- [[ Functions ]]
@@ -53,11 +51,16 @@ function F:CreateFS(font, text, justify, colour, shadow, anchor, x, y)
 		fs:SetTextColor(1, 1, 1)
 	end
 
-	if shadow and type(shadow) == 'boolean' then
-		fs:SetShadowColor(0, 0, 0, 1)
-		fs:SetShadowOffset(1, -1)
-	else
-		fs:SetShadowColor(0, 0, 0, 0)
+	if shadow then
+		if type(shadow) == 'table' then
+			fs:SetShadowColor(shadow[1], shadow[2], shadow[3], shadow[4])
+			fs:SetShadowOffset(shadow[5], shadow[6])
+		elseif type(shadow) == 'boolean' then
+			fs:SetShadowColor(0, 0, 0, 1)
+			fs:SetShadowOffset(1, -1)
+		else
+			fs:SetShadowColor(0, 0, 0, 0)
+		end
 	end
 
 	if anchor and x and y then
@@ -69,20 +72,75 @@ function F:CreateFS(font, text, justify, colour, shadow, anchor, x, y)
 	return fs
 end
 
-function F.SetFS(fontObject, fontCN, fontShadow)
-	if fontCN and type(fontCN) == 'boolean' then
+function F.SetFS(fontObject, isChinese, shadow)
+	if isChinese then
 		fontObject:SetFont(unpack(C.NormalFont))
 	else
 		fontObject:SetFont(unpack(C.PixelFont))
 	end
 
-	if fontShadow and type(fontShadow) == 'boolean' then
+	if shadow then
 		fontObject:SetShadowColor(0, 0, 0, 1)
 		fontObject:SetShadowOffset(1, -1)
 	else
 		fontObject:SetShadowColor(0, 0, 0, 0)
 	end
 end
+
+
+
+
+
+function F.SetFont(object, font, text, colour, shadow)
+	if type(font) == 'table' then
+		object:SetFont(font[1], font[2], font[3])
+	elseif type(font) == 'string' then
+		if font == 'pixel' then
+			object:SetFont(C.font.pixel, 8, 'OUTLINEMONOCHROME')
+		elseif font == 'standard' then
+			object:SetFont(C.font.normal, 12, 'OUTLINE')
+		end
+	end
+
+	if text then
+		object:SetText(text)
+	end
+
+	if colour then
+		if type(colour) == 'table' then
+			object:SetTextColor(colour[1], colour[2], colour[3])
+		elseif type(colour) == 'string' then
+			if colour == 'class' then
+				object:SetTextColor(C.r, C.g, C.b)
+			elseif colour == 'yellow' then
+				object:SetTextColor(.9, .8, .6)
+			elseif colour == 'red' then
+				object:SetTextColor(1, .2, .2)
+			elseif colour == 'green' then
+				object:SetTextColor(.2, .6, .2)
+			elseif colour == 'grey' then
+				object:SetTextColor(.5, .5, .5)
+			end
+		end
+	end
+
+	if shadow then
+		if type(shadow) == 'table' then
+			object:SetShadowColor(shadow[1], shadow[2], shadow[3], shadow[4])
+			object:SetShadowOffset(shadow[5], shadow[6])
+		elseif type(shadow) == 'boolean' then
+			object:SetShadowColor(0, 0, 0, 1)
+			object:SetShadowOffset(1, -1)
+		else
+			object:SetShadowColor(0, 0, 0, 0)
+		end
+	end
+end
+
+
+
+
+
 
 function F:CreateTex()
 	if self.Tex then return end
@@ -95,11 +153,11 @@ function F:CreateTex()
 	self.Tex:SetTexture(C.media.bgTex, true, true)
 	self.Tex:SetHorizTile(true)
 	self.Tex:SetVertTile(true)
-	self.Tex:SetBlendMode('BLEND')
+	self.Tex:SetBlendMode('ADD')
 end
 
 function F:CreateSD(a, m, s)
-	if not C.appearance.enableShadow then return end
+	if not C.appearance.shadow then return end
 	if self.Shadow then return end
 
 	local frame = self
@@ -121,7 +179,7 @@ function F:CreateBD(a)
 	self:SetBackdrop({
 		bgFile = C.media.bdTex, edgeFile = C.media.bdTex, edgeSize = C.Mult,
 	})
-	self:SetBackdropColor(C.appearance.backdropColour[1], C.appearance.backdropColour[2], C.appearance.backdropColour[3], a or C.appearance.backdropColour[4])
+	self:SetBackdropColor(C.appearance.backdropColour[1], C.appearance.backdropColour[2], C.appearance.backdropColour[3], a or C.appearance.backdropAlpha)
 	self:SetBackdropBorderColor(0, 0, 0)
 
 	F.CreateTex(self)
@@ -159,9 +217,9 @@ function F:CreateGradient()
 	local tex = self:CreateTexture(nil, 'BORDER')
 	tex:SetPoint('TOPLEFT', C.Mult, -C.Mult)
 	tex:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
-	tex:SetTexture(C.appearance.useButtonGradientColour and C.media.gradient or C.media.bdTex)
+	tex:SetTexture(C.appearance.gradient and C.media.gradient or C.media.bdTex)
 
-	if C.appearance.useButtonGradientColour then
+	if C.appearance.gradient then
 		tex:SetVertexColor(unpack(C.appearance.buttonGradientColour))
 	else
 		tex:SetVertexColor(unpack(C.appearance.buttonSolidColour))
@@ -231,7 +289,7 @@ function F.Reskin(f, noGlow)
 
 	--f:SetBackdropColor(.2, .2, .2, .7)
 
-	F.CreateBD(f, .0)
+	F.CreateBD(f, .25)
 
 	f.bgTex = F.CreateGradient(f)
 	
@@ -448,7 +506,7 @@ function F:ReskinInput(height, width)
 	bd:SetPoint('TOPLEFT', -2, 0)
 	bd:SetPoint('BOTTOMRIGHT')
 	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
+	F.CreateBD(bd)
 
 	local gradient = F.CreateGradient(self)
 	gradient:SetPoint('TOPLEFT', bd, C.Mult, -C.Mult)
@@ -481,6 +539,7 @@ function F:ReskinCheck()
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
 	self:SetHighlightTexture(C.media.bdTex)
+
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)
 	hl:SetPoint('BOTTOMRIGHT', -5, 5)
@@ -490,7 +549,7 @@ function F:ReskinCheck()
 	bd:SetPoint('TOPLEFT', 4, -4)
 	bd:SetPoint('BOTTOMRIGHT', -4, 4)
 	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
+	F.CreateBD(bd)
 
 	local tex = F.CreateGradient(self)
 	tex:SetPoint('TOPLEFT', 5, -5)
@@ -523,7 +582,7 @@ function F:ReskinRadio()
 	bd:SetPoint('TOPLEFT', 3, -3)
 	bd:SetPoint('BOTTOMRIGHT', -3, 3)
 	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
+	F.CreateBD(bd)
 	self.bd = bd
 
 	local tex = F.CreateGradient(self)
@@ -543,7 +602,7 @@ function F:ReskinSlider(verticle)
 	bd:SetPoint('BOTTOMRIGHT', -15, 3)
 	bd:SetFrameStrata('BACKGROUND')
 	bd:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bd, 0)
+	F.CreateBD(bd)
 
 	F.CreateGradient(bd)
 
@@ -609,16 +668,11 @@ function F:ReskinExpandOrCollapse()
 end
 
 function F:SetBD(x, y, x2, y2)
-	local bg = CreateFrame('Frame', nil, self)
-	if not x then
-		bg:SetPoint('TOPLEFT')
-		bg:SetPoint('BOTTOMRIGHT')
-	else
-		bg:SetPoint('TOPLEFT', x, y)
-		bg:SetPoint('BOTTOMRIGHT', x2, y2)
+	local bg = F.CreateBDFrame(self)
+	if x then
+		bg:SetPoint("TOPLEFT", x, y)
+		bg:SetPoint("BOTTOMRIGHT", x2, y2)
 	end
-	bg:SetFrameLevel(self:GetFrameLevel() - 1)
-	F.CreateBD(bg)
 	F.CreateSD(bg)
 
 	return bg
@@ -784,7 +838,19 @@ function F:CreateCheckBox()
 	return cb
 end
 
+function F:StyleSearchButton()
+	F.StripTextures(self)
+	if self.icon then
+		F.ReskinIcon(self.icon)
+	end
+	F.CreateBD(self, .25)
 
+	self:SetHighlightTexture(C.media.bdTex)
+	local hl = self:GetHighlightTexture()
+	hl:SetVertexColor(C.r, C.g, C.b, .25)
+	hl:SetPoint('TOPLEFT', C.Mult, -C.Mult)
+	hl:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
+end
 
 -- GameTooltip
 function F:HideTooltip()
@@ -911,7 +977,6 @@ function F:PixelIcon(texture, highlight)
 	end
 end
 
-
 -- Statusbar
 function F:CreateSB(spark, r, g, b)
 	self:SetStatusBarTexture(C.media.sbTex)
@@ -949,17 +1014,7 @@ end
 
 -- Numberize
 function F.Numb(n)
-	if C.general.numberFormatCN then
-		if n >= 1e12 then
-			return format('%.2f'..L['NUMBER_CAP_3'], n / 1e12)
-		elseif n >= 1e8 then
-			return format('%.2f'..L['NUMBER_CAP_2'], n / 1e8)
-		elseif n >= 1e4 then
-			return format('%.1f'..L['NUMBER_CAP_1'], n / 1e4)
-		else
-			return format('%.0f', n)
-		end
-	else
+	if C.general.numberFormat == 1 then
 		if n >= 1e12 then
 			return ('%.2ft'):format(n / 1e12)
 		elseif n >= 1e9 then
@@ -970,6 +1025,16 @@ function F.Numb(n)
 			return ('%.1fk'):format(n / 1e3)
 		else
 			return ('%.0f'):format(n)
+		end
+	elseif C.general.numberFormat == 2 then
+		if n >= 1e12 then
+			return format('%.2f'..L['MISC_NUMBER_CAP_3'], n / 1e12)
+		elseif n >= 1e8 then
+			return format('%.2f'..L['MISC_NUMBER_CAP_2'], n / 1e8)
+		elseif n >= 1e4 then
+			return format('%.1f'..L['MISC_NUMBER_CAP_1'], n / 1e4)
+		else
+			return format('%.0f', n)
 		end
 	end
 end
@@ -1193,54 +1258,87 @@ end
 
 -- Itemlevel
 local iLvlDB = {}
-local itemLevelString = _G['ITEM_LEVEL']:gsub('%%d', '')
+local itemLevelString = gsub(ITEM_LEVEL, '%%d', '')
+local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+local essenceTextureID = 2975691
 local tip = CreateFrame('GameTooltip', 'FreeUI_iLvlTooltip', nil, 'GameTooltipTemplate')
 
-function F.GetItemLevel(link, arg1, arg2)
-	if iLvlDB[link] then return iLvlDB[link] end
+local texturesDB, essencesDB = {}, {}
+function F:InspectItemTextures(clean, grabTextures)
+	wipe(texturesDB)
+	wipe(essencesDB)
 
-	tip:SetOwner(UIParent, 'ANCHOR_NONE')
-	if arg1 and type(arg1) == 'string' then
-		tip:SetInventoryItem(arg1, arg2)
-	elseif arg1 and type(arg1) == 'number' then
-		tip:SetBagItem(arg1, arg2)
-	else
-		tip:SetHyperlink(link)
-	end
+	for i = 1, 5 do
+		local tex = _G[tip:GetName().."Texture"..i]
+		local texture = tex and tex:GetTexture()
+		if not texture then break end
 
-	for i = 2, 5 do
-		local text = _G[tip:GetName()..'TextLeft'..i]:GetText() or ''
-		local found = text:find(itemLevelString)
-		if found then
-			local level = text:match('(%d+)%)?$')
-			iLvlDB[link] = tonumber(level)
-			break
+		if grabTextures then
+			if texture == essenceTextureID then
+				local selected = (texturesDB[i-1] ~= essenceTextureID and texturesDB[i-1]) or nil
+				essencesDB[i] = {selected, tex:GetAtlas(), texture}
+				if selected then texturesDB[i-1] = nil end
+			else
+				texturesDB[i] = texture
+			end
 		end
+
+		if clean then tex:SetTexture() end
 	end
-	return iLvlDB[link]
+
+	return texturesDB, essencesDB
 end
 
-function F.GetNPCID(guid)
-	local id = tonumber((guid or ''):match('%-(%d-)%-%x-$'))
-	return id
+function F:InspectItemInfo(text, iLvl, enchantText)
+	local itemLevel = strfind(text, itemLevelString) and strmatch(text, '(%d+)%)?$')
+	if itemLevel then iLvl = tonumber(itemLevel) end
+	local enchant = strmatch(text, enchantString)
+	if enchant then enchantText = enchant end
+
+	return iLvl, enchantText
 end
 
+function F.GetItemLevel(link, arg1, arg2, fullScan)
+	if fullScan then
+		F:InspectItemTextures(true)
+		tip:SetOwner(UIParent, 'ANCHOR_NONE')
+		tip:SetInventoryItem(arg1, arg2)
 
+		local iLvl, enchantText, gems, essences
+		gems, essences = F:InspectItemTextures(nil, true)
 
-function F:StyleSearchButton()
-	F.StripTextures(self)
-	if self.icon then
-		F.ReskinIcon(self.icon)
+		for i = 1, tip:NumLines() do
+			local text = _G[tip:GetName()..'TextLeft'..i]:GetText() or ''
+			iLvl, enchantText = F:InspectItemInfo(text, iLvl, enchantText)
+			if enchantText then break end
+		end
+
+		return iLvl, enchantText, gems, essences
+	else
+		if iLvlDB[link] then return iLvlDB[link] end
+
+		tip:SetOwner(UIParent, 'ANCHOR_NONE')
+		if arg1 and type(arg1) == 'string' then
+			tip:SetInventoryItem(arg1, arg2)
+		elseif arg1 and type(arg1) == 'number' then
+			tip:SetBagItem(arg1, arg2)
+		else
+			tip:SetHyperlink(link)
+		end
+
+		for i = 2, 5 do
+			local text = _G[tip:GetName()..'TextLeft'..i]:GetText() or ''
+			local found = strfind(text, itemLevelString)
+			if found then
+				local level = strmatch(text, '(%d+)%)?$')
+				iLvlDB[link] = tonumber(level)
+				break
+			end
+		end
+
+		return iLvlDB[link]
 	end
-	F.CreateBD(self, .25)
-
-	self:SetHighlightTexture(C.media.bdTex)
-	local hl = self:GetHighlightTexture()
-	hl:SetVertexColor(C.r, C.g, C.b, .25)
-	hl:SetPoint('TOPLEFT', C.Mult, -C.Mult)
-	hl:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
 end
-
 
 -- mythic affixes
 function F:AffixesSetup()
@@ -1258,7 +1356,6 @@ function F:AffixesSetup()
 		end
 	end
 end
-
 
 function F:GetRoleTexCoord()
 	if self == 'TANK' then
@@ -1309,23 +1406,64 @@ function F:ReskinRole(role)
 end
 
 
--- role updater
-local function CheckRole()
-	local tree = GetSpecialization()
-	if not tree then return end
-	local _, _, _, _, role, stat = GetSpecializationInfo(tree)
-	if role == 'TANK' then
-		C.PlayerRole = 'Tank'
-	elseif role == 'HEALER' then
-		C.PlayerRole = 'Healer'
-	elseif role == 'DAMAGER' then
-		if stat == 4 then	--1力量，2敏捷，4智力
-			C.PlayerRole = 'Caster'
+
+
+function F.GetNPCID(guid)
+	local id = tonumber((guid or ''):match('%-(%d-)%-%x-$'))
+	return id
+end
+
+
+
+-- Chat channel check
+F.CheckChat = function(warning)
+	if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
+		return 'INSTANCE_CHAT'
+	elseif IsInRaid(LE_PARTY_CATEGORY_HOME) then
+		if warning and (UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') or IsEveryoneAssistant()) then
+			return 'RAID_WARNING'
 		else
-			C.PlayerRole = 'Melee'
+			return 'RAID'
+		end
+	elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
+		return 'PARTY'
+	end
+	return 'SAY'
+end
+
+-- Player's role check
+local isCaster = {
+	DEATHKNIGHT = {nil, nil, nil},
+	DEMONHUNTER = {nil, nil},
+	DRUID = {true},					-- Balance
+	HUNTER = {nil, nil, nil},
+	MAGE = {true, true, true},
+	MONK = {nil, nil, nil},
+	PALADIN = {nil, nil, nil},
+	PRIEST = {nil, nil, true},		-- Shadow
+	ROGUE = {nil, nil, nil},
+	SHAMAN = {true},				-- Elemental
+	WARLOCK = {true, true, true},
+	WARRIOR = {nil, nil, nil}
+}
+
+local function CheckRole()
+	local spec = GetSpecialization()
+	local role = spec and GetSpecializationRole(spec)
+
+	if role == 'TANK' then
+		F.Role = 'Tank'
+	elseif role == 'HEALER' then
+		F.Role = 'Healer'
+	elseif role == 'DAMAGER' then
+		if isCaster[C.Class][spec] then
+			F.Role = 'Caster'
+		else
+			F.Role = 'Melee'
 		end
 	end
 end
-F:RegisterEvent('PLAYER_LOGIN', CheckRole)
-F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckRole)
-
+local RoleUpdater = CreateFrame('Frame')
+RoleUpdater:RegisterEvent('PLAYER_ENTERING_WORLD')
+RoleUpdater:RegisterEvent('PLAYER_TALENT_UPDATE')
+RoleUpdater:SetScript('OnEvent', CheckRole)

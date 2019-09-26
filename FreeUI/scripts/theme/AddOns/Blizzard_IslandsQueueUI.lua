@@ -4,6 +4,8 @@ C.themes["Blizzard_IslandsQueueUI"] = function()
 	F.ReskinPortraitFrame(IslandsQueueFrame)
 	IslandsQueueFrame.ArtOverlayFrame.PortraitFrame:SetAlpha(0)
 	IslandsQueueFrame.ArtOverlayFrame.portrait:SetAlpha(0)
+	IslandsQueueFrame.TitleBanner.Banner:Hide()
+	IslandsQueueFrame.DifficultySelectorFrame.Background:Hide()
 	F.Reskin(IslandsQueueFrame.DifficultySelectorFrame.QueueButton)
 	IslandsQueueFrame.HelpButton.Ring:SetAlpha(0)
 	local tutorial = IslandsQueueFrame.TutorialFrame

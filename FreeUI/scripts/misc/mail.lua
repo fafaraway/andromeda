@@ -1,6 +1,7 @@
 local F, C = unpack(select(2, ...))
 local MISC = F:GetModule('Misc')
 
+
 local mailButton = CreateFrame('Button', 'FreeUIMailButton', InboxFrame, 'UIPanelButtonTemplate')
 local text = F.CreateFS(mailButton, 'pixel', '', nil, nil, true, 'CENTER', 0, 0)
 
@@ -18,7 +19,7 @@ local function OnEvent()
 		if(item and COD<1) then items = items + item end
 		cash = cash + money
 	end
-	text:SetText(format('%d gold, %d items', floor(cash * 0.0001), items))
+	text:SetText(C.InfoColor..format('%d gold, %d items', floor(cash * 0.0001), items))
 
 	if(processing) then
 		if(num==0) then
@@ -56,8 +57,8 @@ local function OnHide()
 end
 
 
-function MISC:MailButton()
-	if not C.general.mailButton then return end
+function MISC:ColletMail()
+	if not C.general.colletMail then return end
 
 	OpenAllMail:Hide()
 	OpenAllMail:UnregisterAllEvents()

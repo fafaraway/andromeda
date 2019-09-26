@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local Misc = F:GetModule('Misc')
+local MISC = F:GetModule('Misc')
 
 
 local SLOTIDS = {}
@@ -54,10 +54,19 @@ function f:OnEvent(event)
 end
 
 
-function Misc:Durability()
+function MISC:Durability()
 	if not C.general.durability then return end
 
 	f:SetScript('OnEvent', f.OnEvent)
 	f:RegisterEvent('ADDON_LOADED')
 	f:RegisterEvent('UPDATE_INVENTORY_DURABILITY')
+
+	hooksecurefunc(DurabilityFrame, 'SetPoint', function(self, _, parent)
+		if parent == 'MinimapCluster' or parent == MinimapCluster then
+			self:SetScale(1)
+			self:ClearAllPoints()
+			self:SetClampedToScreen(true)
+			self:SetPoint('TOP', UIParent, 'TOP', 0, -200)
+		end
+	end)
 end

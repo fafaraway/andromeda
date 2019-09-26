@@ -10,26 +10,22 @@ tinsert(C.themes["FreeUI"], function()
 	F.StripTextures(DressUpFrameOutfitDropDown)
 	F.ReskinDropDown(DressUpFrameOutfitDropDown)
 	F.ReskinClose(DressUpFrameCloseButton, "TOPRIGHT", DressUpFrame, "TOPRIGHT", -10, 0)
-	DressUpFrame.ModelBackground:Hide()
-	F.CreateBDFrame(DressUpFrame.ModelBackground)
 
 	DressUpFrameOutfitDropDown:SetHeight(32)
 	DressUpFrameOutfitDropDown.SaveButton:SetPoint("LEFT", DressUpFrameOutfitDropDown, "RIGHT", -13, 2)
-	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -C.Mult, 0)
+	DressUpFrameResetButton:SetPoint("RIGHT", DressUpFrameCancelButton, "LEFT", -1, 0)
 
 	F.ReskinMinMax(MaximizeMinimizeFrame)
 
 	-- SideDressUp
 
 	F.StripTextures(SideDressUpFrame, 0)
-	select(5, SideDressUpModelCloseButton:GetRegions()):Hide()
+	F.SetBD(SideDressUpFrame)
+	F.Reskin(SideDressUpFrame.ResetButton)
+	F.ReskinClose(SideDressUpFrameCloseButton)
 
-	SideDressUpModel:HookScript("OnShow", function(self)
-		self:ClearAllPoints()
-		self:SetPoint("LEFT", self:GetParent():GetParent(), "RIGHT", C.Mult, 0)
+	SideDressUpFrame:HookScript("OnShow", function(self)
+		SideDressUpFrame:ClearAllPoints()
+		SideDressUpFrame:SetPoint("LEFT", self:GetParent(), "RIGHT", 3, 0)
 	end)
-
-	F.Reskin(SideDressUpModelResetButton)
-	F.ReskinClose(SideDressUpModelCloseButton)
-	F.SetBD(SideDressUpModel)
 end)

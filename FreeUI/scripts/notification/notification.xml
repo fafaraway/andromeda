@@ -1,7 +1,9 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='notification.lua'/>
 	<Script file='event.lua'/>
+	<Script file='buff.lua'/>
 	<Script file='dispel.lua'/>
+	<Script file='emergency.lua'/>
 	<Script file='interrupt.lua'/>
 	<Script file='quest.lua'/>
 	<Script file='rare.lua'/>

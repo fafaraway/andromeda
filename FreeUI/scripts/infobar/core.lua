@@ -7,7 +7,7 @@ if C.infobar.mouseover then
 	barAlpha = 0.25
 	buttonAlpha = 0
 else
-	barAlpha = 0.5
+	barAlpha = 0.65
 	buttonAlpha = 1
 end
 
@@ -171,7 +171,6 @@ function INFOBAR:OnLogin()
 	end
 
 	self:Stats()
-	self:MicroMenu()
 	self:SkadaHelper()
 	self:SpecTalent()
 	self:Durability()

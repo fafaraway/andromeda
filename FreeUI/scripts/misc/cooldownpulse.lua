@@ -1,4 +1,5 @@
 local F, C = unpack(select(2, ...))
+local MISC = F:GetModule('Misc')
 
 if not C.general.cooldownPulse then return end
 
@@ -15,29 +16,20 @@ local anchor = CreateFrame("Frame", "cooldownpulseAnchor", UIParent)
 anchor:SetSize(50, 50)
 anchor:SetPoint("CENTER",UIParent,"CENTER" ,0 ,100)
 
-local frame = CreateFrame("Frame", "cooldownpulseFrame", anchor)
+local frame = CreateFrame("Frame", "FreeUICooldownPulse", UIParent)
 frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
-frame:SetPoint("CENTER", anchor, "CENTER")
+frame:SetSize(50, 50)
+frame:SetPoint("CENTER",UIParent,"CENTER" ,0 ,100)
 
-local icon = frame:CreateTexture(nil, "BORDER")
-icon:SetTexCoord(unpack(C.TexCoord))
-icon:SetAllPoints(frame)
+frame.icon = frame:CreateTexture(nil, "BORDER")
+frame.icon:SetTexCoord(unpack(C.TexCoord))
+frame.icon:SetAllPoints(frame)
 
-local bg = frame:CreateTexture(nil, "BACKGROUND")
-bg:SetPoint("TOPLEFT", -1, 1)
-bg:SetPoint("BOTTOMRIGHT", 1, -1)
-bg:SetTexture(C.media.bdTex)
-bg:SetVertexColor(0, 0, 0)
-
-local sd = CreateFrame("Frame", nil, frame)
-sd:SetBackdrop({edgeFile = C.media.glowTex, edgeSize = 4})
-sd:SetPoint("TOPLEFT", -4, 4)
-sd:SetPoint("BOTTOMRIGHT", 4, -4)
-sd:SetBackdropBorderColor(0, 0, 0, .5)
+frame.bg = F.CreateBDFrame(frame)
+frame.bg:Hide()
+frame.shadow = F.CreateSD(frame.bg)
 
 
-
--- Utility Functions
 local function tcount(tab)
 	local n = 0
 	for _ in pairs(tab) do
@@ -55,8 +47,6 @@ local function GetPetActionIndexByName(name)
 	return nil
 end
 
-
--- Cooldown / Animation
 local function OnUpdate(_,update)
 	elapsed = elapsed + update
 	if (elapsed > 0.05) then
@@ -111,12 +101,12 @@ local function OnUpdate(_,update)
 		if (runtimer > (fadeInTime + holdTime + fadeOutTime)) then
 			tremove(animating,1)
 			runtimer = 0
-			icon:SetTexture(nil)
-			bg:Hide()
-			sd:Hide()
+			frame.icon:SetTexture(nil)
+			frame.bg:Hide()
+			frame.shadow:Hide()
 		else
-			if not icon:GetTexture() then
-				icon:SetTexture(animating[1][1])
+			if not frame.icon:GetTexture() then
+				frame.icon:SetTexture(animating[1][1])
 			end
 			local alpha = maxAlpha
 			if (runtimer < fadeInTime) then
@@ -128,13 +118,13 @@ local function OnUpdate(_,update)
 			local scale = iconSize+(iconSize*((animScale-1)*(runtimer/(fadeInTime+holdTime+fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
-			bg:Show()
-			sd:Show()
+			frame.bg:Show()
+			frame.shadow:Show()
 		end
 	end
 end
 
--- Event Handlers
+
 function frame:ADDON_LOADED(addon)
 	for _, v in pairs(C.general.cooldownPulse_ignoredSpells) do
 		C.general.cooldownPulse_ignoredSpells[v] = true
@@ -204,8 +194,4 @@ hooksecurefunc("UseContainerItem", function(bag,slot)
 	end
 end)
 
-SlashCmdList.cooldownpulse = function()
-	tinsert(animating, {GetSpellTexture(87214)})
-	frame:SetScript("OnUpdate", OnUpdate)
-end
-SLASH_cooldownpulse1 = "/cdpulse"
+

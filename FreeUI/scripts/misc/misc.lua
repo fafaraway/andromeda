@@ -3,86 +3,71 @@ local MISC = F:RegisterModule('Misc')
 
 
 local _G = getfenv(0)
-local tostring, tonumber, pairs, select, random, strsplit = tostring, tonumber, pairs, select, math.random, string.split
-local InCombatLockdown, IsModifiedClick, IsAltKeyDown = InCombatLockdown, IsModifiedClick, IsAltKeyDown
-local GetNumArchaeologyRaces = GetNumArchaeologyRaces
-local GetNumArtifactsByRace = GetNumArtifactsByRace
-local GetArtifactInfoByRace = GetArtifactInfoByRace
-local GetArchaeologyRaceInfo = GetArchaeologyRaceInfo
-local GetNumAuctionItems, GetAuctionItemInfo = GetNumAuctionItems, GetAuctionItemInfo
-local FauxScrollFrame_GetOffset, SetMoneyFrameColor = FauxScrollFrame_GetOffset, SetMoneyFrameColor
-local EquipmentManager_UnequipItemInSlot = EquipmentManager_UnequipItemInSlot
-local EquipmentManager_RunAction = EquipmentManager_RunAction
-local GetInventoryItemTexture = GetInventoryItemTexture
-local GetItemInfo = GetItemInfo
-local BuyMerchantItem = BuyMerchantItem
-local GetMerchantItemLink = GetMerchantItemLink
-local GetMerchantItemMaxStack = GetMerchantItemMaxStack
-local GetItemQualityColor = GetItemQualityColor
-local Screenshot = Screenshot
-local GetTime, GetCVarBool, SetCVar = GetTime, GetCVarBool, SetCVar
-local GetNumLootItems, LootSlot = GetNumLootItems, LootSlot
-local GetNumSavedInstances = GetNumSavedInstances
-local GetInstanceInfo = GetInstanceInfo
-local GetSavedInstanceInfo = GetSavedInstanceInfo
-local SetSavedInstanceExtend = SetSavedInstanceExtend
-local RequestRaidInfo, RaidInfoFrame_Update = RequestRaidInfo, RaidInfoFrame_Update
-local IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList_IsFriend = IsGuildMember, BNGetGameAccountInfoByGUID, C_FriendList.IsFriend
+local tostring, tonumber, pairs, select, random, strsplit, strmatch = tostring, tonumber, pairs, select, math.random, string.split, string.match
 
 
 function MISC:OnLogin()
-	self:ShowItemLevel()
-	self:ProgressBar()
-	self:FlashCursor()
-	self:MissingStats()
-	self:MissingBuffs()
+	self:ItemLevel()
+	self:Durability()
+	self:FullStats()
+
+
+	self:CommandBar()
+
+
+
+	self:AlertFrame()
+	self:ErrorFrame()
+	self:BuffFrame()
+	self:UIWidgetFrame()
+	self:ColorPicker()
+
 	self:FasterLoot()
-	self:UndressButton()
 	self:FasterDelete()
-	self:FlightMasterWhistle()
-	self:ReadyCheckEnhancement()
+
+	self:Whistle()
+	self:ReadyCheck()
 	self:Marker()
 	self:Focuser()
-	self:NakedIcon()
-	self:CMGuildBest()
-	self:MailButton()
+
+	self:GetNaked()
+
+	self:ColletMail()
+
+	self:GuildBest()
+	
 	self:CombatText()
+
+
 	self:PetFilter()
-	self:PVPMessageEnhancement()
-	self:Durability()
-	self:ReputationEnhancement()
+
+
+	self:PVPMessage()
+	self:PVPSound()
+	
+	self:Reputation()
 	self:TradeTargetInfo()
+	self:TicketStatusFrame()
+	self:VehicleIndicator()
+	self:HideBossBanner()
+
+	self:HideNewTalentAlert()
+	self:SkipAzeriteAnimation()
+
+	self:QuickJoin()
+	self:Cooldown()
+
+	CharacterMicroButtonAlert:EnableMouse(false)
+	F.HideOption(CharacterMicroButtonAlert)
 end
 
 
 -- Enhance PVP message
-function MISC:PVPMessageEnhancement(_, msg)
+function MISC:PVPMessage(_, msg)
 	local _, instanceType = IsInInstance()
 	if instanceType == 'pvp' or instanceType == 'arena' then
 		RaidNotice_AddMessage(RaidBossEmoteFrame, msg, ChatTypeInfo['RAID_BOSS_EMOTE']);
 	end
-end
-
--- Undress button
-function MISC:UndressButton()
-	local undress = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
-	undress:SetSize(80, 22)
-	undress:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -1, 0)
-	undress:SetText(L['NAKE_BUTTON'])
-	undress:SetScript('OnClick', function()
-		DressUpModel:Undress()
-	end)
-
-	local sideUndress = CreateFrame('Button', 'SideDressUpModelUndressButton', SideDressUpModel, 'UIPanelButtonTemplate')
-	sideUndress:SetSize(80, 22)
-	sideUndress:SetPoint('TOP', SideDressUpModelResetButton, 'BOTTOM', 0, -5)
-	sideUndress:SetText(L['NAKE_BUTTON'])
-	sideUndress:SetScript('OnClick', function()
-		SideDressUpModel:Undress()
-	end)
-
-	F.Reskin(undress)
-	F.Reskin(sideUndress)
 end
 
 -- Instant delete
@@ -115,7 +100,7 @@ function MISC:FasterLoot()
 end
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
-function MISC:FlightMasterWhistle()
+function MISC:Whistle()
 	local whistleSound = C.AssetsPath..'sound\\whistle.ogg'
 	local whistle_SpellID1 = 227334;
 	-- for some reason the whistle is two spells which results in dirty events being called
@@ -149,7 +134,7 @@ function MISC:FlightMasterWhistle()
 end
 
 -- Ready check in master sound
-function MISC:ReadyCheckEnhancement()
+function MISC:ReadyCheck()
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('UPDATE_BATTLEFIELD_STATUS')
 	f:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH')
@@ -178,57 +163,24 @@ function MISC:ReadyCheckEnhancement()
 	end)
 end
 
--- Flash cursor
-function MISC:FlashCursor()
-	if not C.general.flashCursor then return end
 
-	local f = CreateFrame('Frame', nil, UIParent);
-	f:SetFrameStrata('TOOLTIP');
-
-	local texture = f:CreateTexture();
-	texture:SetTexture([[Interface\Cooldown\star4]]);
-	texture:SetBlendMode('ADD');
-	texture:SetAlpha(0.5);
-
-	local x = 0;
-	local y = 0;
-	local speed = 0;
-	local function OnUpdate(_, elapsed)
-		local dX = x;
-		local dY = y;
-		x, y = GetCursorPosition();
-		dX = x - dX;
-		dY = y - dY;
-		local weight = 2048 ^ -elapsed;
-		speed = math.min(weight * speed + (1 - weight) * math.sqrt(dX * dX + dY * dY) / elapsed, 1024);
-		local size = speed / 6 - 16;
-		if (size > 0) then
-			local scale = UIParent:GetEffectiveScale();
-			texture:SetHeight(size);
-			texture:SetWidth(size);
-			texture:SetPoint('CENTER', UIParent, 'BOTTOMLEFT', (x + 0.5 * dX) / scale, (y + 0.5 * dY) / scale);
-			texture:Show();
-		else
-			texture:Hide();
-		end
-	end
-	f:SetScript('OnUpdate', OnUpdate);
-end
 
 -- Get Naked
-function MISC:NakedIcon()
-	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
-	bu:SetSize(31, 33)
-	bu:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
-	F.PixelIcon(bu, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
-	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['MISC_GET_NAKED'])
+function MISC:GetNaked()
+	if not C.general.getNaked then return end
+
+	local nakedButton = CreateFrame('Button', nil, CharacterFrameInsetRight)
+	nakedButton:SetSize(31, 33)
+	nakedButton:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -2)
+	F.PixelIcon(nakedButton, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
+	F.AddTooltip(nakedButton, 'ANCHOR_RIGHT', L['MISC_GET_NAKED'])
 
 	local function UnequipItemInSlot(i)
 		local action = EquipmentManager_UnequipItemInSlot(i)
 		EquipmentManager_RunAction(action)
 	end
 
-	bu:SetScript('OnDoubleClick', function()
+	nakedButton:SetScript('OnDoubleClick', function()
 		for i = 1, 17 do
 			local texture = GetInventoryItemTexture('player', i)
 			if texture then
@@ -236,6 +188,25 @@ function MISC:NakedIcon()
 			end
 		end
 	end)
+
+	local undressButton = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
+	undressButton:SetSize(80, 22)
+	undressButton:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -1, 0)
+	undressButton:SetText(L['NAKE_BUTTON'])
+	undressButton:SetScript('OnClick', function()
+		DressUpModel:Undress()
+	end)
+
+	local sideUndressButton = CreateFrame('Button', 'SideDressUpModelUndressButton', SideDressUpModel, 'UIPanelButtonTemplate')
+	sideUndressButton:SetSize(80, 22)
+	sideUndressButton:SetPoint('TOP', SideDressUpModelResetButton, 'BOTTOM', 0, -5)
+	sideUndressButton:SetText(L['NAKE_BUTTON'])
+	sideUndressButton:SetScript('OnClick', function()
+		SideDressUpModel:Undress()
+	end)
+
+	F.Reskin(undressButton)
+	F.Reskin(sideUndressButton)
 end
 
 -- TradeFrame hook
@@ -251,7 +222,7 @@ function MISC:TradeTargetInfo()
 		local guid = UnitGUID('NPC')
 		if not guid then return end
 		local text = '|cffff0000'..L['MISC_STRANGER']
-		if BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
+		if BNGetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) then
 			text = '|cffffff00'..FRIEND
 		elseif IsGuildMember(guid) then
 			text = '|cff00ff00'..GUILD
@@ -259,6 +230,151 @@ function MISC:TradeTargetInfo()
 		infoText:SetText(text)
 	end
 	hooksecurefunc('TradeFrame_Update', updateColor)
+end
+
+
+
+-- Restyle orderhall command bar
+function MISC:CommandBar()
+	if not C.general.vignette then return end
+
+	local f = CreateFrame('Frame')
+	f:SetScript('OnEvent', function(self, event, arg1)
+		if event == 'ADDON_LOADED' and arg1 == 'Blizzard_OrderHallUI' then
+			f:RegisterEvent('DISPLAY_SIZE_CHANGED')
+			f:RegisterEvent('UI_SCALE_CHANGED')
+			f:RegisterEvent('GARRISON_FOLLOWER_CATEGORIES_UPDATED')
+			f:RegisterEvent('GARRISON_FOLLOWER_ADDED')
+			f:RegisterEvent('GARRISON_FOLLOWER_REMOVED')
+
+			local bar = OrderHallCommandBar
+
+			bar:HookScript('OnShow', function()
+				if not bar.styled then
+					bar:EnableMouse(false)
+					bar.Background:SetAtlas(nil)
+
+					bar.ClassIcon:ClearAllPoints()
+					bar.ClassIcon:SetPoint('TOPLEFT', 30, -30)
+					bar.ClassIcon:SetSize(40,20)
+					bar.ClassIcon:SetAlpha(1)
+					local bg = F.CreateBDFrame(bar.ClassIcon)
+					F.CreateSD(bg)
+
+					bar.AreaName:ClearAllPoints()
+					bar.AreaName:SetPoint('LEFT', bar.ClassIcon, 'RIGHT', 5, 0)
+					bar.AreaName:SetFont(C.font.normal, 14, 'OUTLINE')
+					bar.AreaName:SetTextColor(1, 1, 1)
+					bar.AreaName:SetShadowOffset(0, 0)
+
+					bar.CurrencyIcon:ClearAllPoints()
+					bar.CurrencyIcon:SetPoint('LEFT', bar.AreaName, 'RIGHT', 5, 0)
+					bar.Currency:ClearAllPoints()
+					bar.Currency:SetPoint('LEFT', bar.CurrencyIcon, 'RIGHT', 5, 0)
+					bar.Currency:SetFont(C.font.normal, 14, 'OUTLINE')
+					bar.Currency:SetTextColor(1, 1, 1)
+					bar.Currency:SetShadowOffset(0, 0)
+
+					bar.WorldMapButton:Hide()
+
+					bar.styled = true
+				end
+			end)
+		elseif event ~= 'ADDON_LOADED' then
+			local index = 1
+			C_Timer.After(0.1, function()
+				for i, child in ipairs({bar:GetChildren()}) do
+					if child.Icon and child.Count and child.TroopPortraitCover then
+						child:SetPoint('TOPLEFT', bar.ClassIcon, 'BOTTOMLEFT', -5, -index*25+20)
+						child.TroopPortraitCover:Hide()
+
+						child.Icon:SetSize(40,20)
+						local bg = F.CreateBDFrame(child.Icon)
+						F.CreateSD(bg)
+
+						child.Count:SetFont(C.font.normal, 14, 'OUTLINE')
+						child.Count:SetTextColor(1, 1, 1)
+						child.Count:SetShadowOffset(0, 0)
+
+						index = index + 1
+					end
+				end
+			end)
+		end
+	end)
+
+	f:RegisterEvent('ADDON_LOADED')
+end
+
+-- Reanchor vehicle indicator
+function MISC:VehicleIndicator()
+	local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', UIParent)
+	frame:SetSize(125, 125)
+	F.Mover(frame, L['MOVER_VEHICLE_INDICATOR'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
+
+	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
+		if parent == 'MinimapCluster' or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint('TOPLEFT', frame)
+			self:SetScale(.7)
+		end
+	end)
+end
+
+-- Reanchor TicketStatusFrame
+function MISC:TicketStatusFrame()
+	hooksecurefunc(TicketStatusFrame, 'SetPoint', function(self, relF)
+		if relF == 'TOPRIGHT' then
+			self:ClearAllPoints()
+			self:SetPoint('TOP', UIParent, 'TOP', 0, -100)
+		end
+	end)
+end
+
+-- Remove Boss Banner
+function MISC:HideBossBanner()
+	if C.general.hideBossBanner then
+		BossBanner:UnregisterAllEvents()
+	end
+end
+
+-- Reanchor UIWidgetBelowMinimapContainerFrame
+function MISC:UIWidgetFrame()
+	UIWidgetTopCenterContainerFrame:ClearAllPoints()
+	UIWidgetTopCenterContainerFrame:SetPoint('TOP', 0, -30)
+
+	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
+		if parent == 'MinimapCluster' or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint('TOP', UIParent, 0, -120)
+		end
+	end)
+end
+
+
+function MISC:SkipAzeriteAnimation()
+	if not (IsAddOnLoaded('Blizzard_AzeriteUI')) then
+		UIParentLoadAddOn('Blizzard_AzeriteUI')
+	end
+	hooksecurefunc(AzeriteEmpoweredItemUI,'OnItemSet',function(self)
+		local itemLocation = self.azeriteItemDataSource:GetItemLocation()
+		if self:IsAnyTierRevealing() then
+			C_Timer.After(0.7,function() 
+				OpenAzeriteEmpoweredItemUIFromItemLocation(itemLocation)
+			end)
+		end
+	end)
+end
+
+
+function MISC:HideNewTalentAlert()
+	if PlayerTalentFrame then
+		PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+	else
+		hooksecurefunc('TalentFrame_LoadUI', function()
+			PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+		end)
+	end
 end
 
 -- Select target when click on raid units
@@ -309,8 +425,11 @@ do
 			cache[itemLink] = true
 			itemLink = nil
 		end,
-		hideOnEscape = 1,
 		hasItemFrame = 1,
+		timeout = 0,
+		whileDead = 1,
+		hideOnEscape = true,
+		preferredIndex = 5,
 	}
 
 	local _MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
@@ -440,4 +559,153 @@ do
 	end
 
 	F:RegisterEvent('ADDON_LOADED', setupMisc)
+end
+
+-- Temporary taint fix
+do
+	InterfaceOptionsFrameCancel:SetScript('OnClick', function()
+		InterfaceOptionsFrameOkay:Click()
+	end)
+
+	-- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeCommunitiesTaint
+	if (UIDROPDOWNMENU_OPEN_PATCH_VERSION or 0) < 1 then
+		UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
+		hooksecurefunc('UIDropDownMenu_InitializeHelper', function(frame)
+			if UIDROPDOWNMENU_OPEN_PATCH_VERSION ~= 1 then return end
+
+			if UIDROPDOWNMENU_OPEN_MENU and UIDROPDOWNMENU_OPEN_MENU ~= frame and not issecurevariable(UIDROPDOWNMENU_OPEN_MENU, 'displayMode') then
+				UIDROPDOWNMENU_OPEN_MENU = nil
+				local t, f, prefix, i = _G, issecurevariable, ' \0', 1
+				repeat
+					i, t[prefix .. i] = i+1
+				until f('UIDROPDOWNMENU_OPEN_MENU')
+			end
+		end)
+	end
+
+	-- https://www.townlong-yak.com/bugs/YhgQma-SetValueRefreshTaint
+	if (COMMUNITY_UIDD_REFRESH_PATCH_VERSION or 0) < 1 then
+		COMMUNITY_UIDD_REFRESH_PATCH_VERSION = 1
+		local function CleanDropdowns()
+			if COMMUNITY_UIDD_REFRESH_PATCH_VERSION ~= 1 then
+				return
+			end
+			local f, f2 = FriendsFrame, FriendsTabHeader
+			local s = f:IsShown()
+			f:Hide()
+			f:Show()
+			if not f2:IsShown() then
+				f2:Show()
+				f2:Hide()
+			end
+			if not s then
+				f:Hide()
+			end
+		end
+		hooksecurefunc('Communities_LoadUI', CleanDropdowns)
+		hooksecurefunc('SetCVar', function(n)
+			if n == 'lastSelectedClubId' then
+				CleanDropdowns()
+			end
+		end)
+	end
+end
+
+-- Fix Drag Collections taint
+do
+	local done
+	local function fixBlizz(event, addon)
+		if event == 'ADDON_LOADED' and addon == 'Blizzard_Collections' then
+			CollectionsJournal:HookScript('OnShow', function()
+				if not done then
+					if InCombatLockdown() then
+						F:RegisterEvent('PLAYER_REGEN_ENABLED', fixBlizz)
+					else
+						F.CreateMF(CollectionsJournal)
+					end
+					done = true
+				end
+			end)
+			F:UnregisterEvent(event, fixBlizz)
+		elseif event == 'PLAYER_REGEN_ENABLED' then
+			F.CreateMF(CollectionsJournal)
+			F:UnregisterEvent(event, fixBlizz)
+		end
+	end
+
+	F:RegisterEvent('ADDON_LOADED', fixBlizz)
+end
+
+-- Fix trade skill search
+hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked
+	-- change from SearchBox:HasFocus to :IsShown again
+	if text and TradeSkillFrame and TradeSkillFrame:IsShown() then
+		local spellId = strmatch(text, 'enchant:(%d+)')
+		local spell = GetSpellInfo(spellId)
+		local item = GetItemInfo(strmatch(text, 'item:(%d+)') or 0)
+		local search = spell or item
+		if not search then return end
+
+		-- search needs to be lowercase for .SetRecipeItemNameFilter
+		TradeSkillFrame.SearchBox:SetText(search)
+
+		-- jump to the recipe
+		if spell then -- can only select recipes on the learned tab
+			if PanelTemplates_GetSelectedTab(TradeSkillFrame.RecipeList) == 1 then
+				TradeSkillFrame:SelectRecipe(tonumber(spellId))
+			end
+		elseif item then
+			C_Timer.After(.1, function() -- wait a bit or we cant select the recipe yet
+				for _, v in pairs(TradeSkillFrame.RecipeList.dataList) do
+					if v.name == item then
+						--TradeSkillFrame.RecipeList:RefreshDisplay() -- didnt seem to help
+						TradeSkillFrame:SelectRecipe(v.recipeID)
+						return
+					end
+				end
+			end)
+		end
+	end
+end)
+
+-- make it only split stacks with shift-rightclick if the TradeSkillFrame is open
+-- shift-leftclick should be reserved for the search box
+local function hideSplitFrame(_, button)
+	if TradeSkillFrame and TradeSkillFrame:IsShown() then
+		if button == 'LeftButton' then
+			StackSplitFrame:Hide()
+		end
+	end
+end
+hooksecurefunc('ContainerFrameItemButton_OnModifiedClick', hideSplitFrame)
+hooksecurefunc('MerchantItemButton_OnModifiedClick', hideSplitFrame)
+
+-- Fix blizz guild news hyperlink
+do
+	local function fixGuildNews(event, addon)
+		if addon ~= 'Blizzard_GuildUI' then return end
+
+		local _GuildNewsButton_OnEnter = GuildNewsButton_OnEnter
+		function GuildNewsButton_OnEnter(self)
+			if not (self.newsInfo and self.newsInfo.whatText) then return end
+			_GuildNewsButton_OnEnter(self)
+		end
+
+		F:UnregisterEvent(event, fixGuildNews)
+	end
+
+	local function fixCommunitiesNews(event, addon)
+		if addon ~= 'Blizzard_Communities' then return end
+
+		local _CommunitiesGuildNewsButton_OnEnter = CommunitiesGuildNewsButton_OnEnter
+		function CommunitiesGuildNewsButton_OnEnter(self)
+			if not (self.newsInfo and self.newsInfo.whatText) then return end
+			_CommunitiesGuildNewsButton_OnEnter(self)
+		end
+
+		F:UnregisterEvent(event, fixCommunitiesNews)
+	end
+
+	F:RegisterEvent('ADDON_LOADED', fixGuildNews)
+	F:RegisterEvent('ADDON_LOADED', fixCommunitiesNews)
 end

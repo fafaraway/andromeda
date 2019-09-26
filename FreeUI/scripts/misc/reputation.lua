@@ -11,7 +11,6 @@ local SR_REP_MSG3 = C.RedColor..'%s (%d/10000): %+d '..L['MISC_PARAGON_REPUTATIO
 local rep = {}
 local extraRep = {}
 
-local f = CreateFrame('Frame')
 
 local function CreateMessage(msg)
 	local info = ChatTypeInfo['COMBAT_FACTION_CHANGE'];
@@ -109,7 +108,8 @@ local function HookParagonRep()
 end
 
 
-function MISC:ReputationEnhancement()
+function MISC:Reputation()
+	local f = CreateFrame('Frame')
 	f:RegisterEvent('UPDATE_FACTION')
 	f:SetScript('OnEvent', RepUpdate)
 

@@ -1,104 +1,15 @@
 local F, C, L = unpack(select(2, ...))
-local module = F:GetModule('Map')
+local MAP = F:GetModule('Map')
+
+
+local strmatch, strfind, strupper = string.match, string.find, string.upper
+local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 
 
 local function ReskinRegions()
 	GarrisonLandingPageMinimapButton:SetSize(1, 1)
 	GarrisonLandingPageMinimapButton:SetAlpha(0)
 	GarrisonLandingPageMinimapButton:EnableMouse(false)
-
-	GameTimeFrame:ClearAllPoints()
-	GameTimeFrame:SetPoint('TOPRIGHT', Minimap, 'TOPRIGHT', -5, -(C.map.miniMapSize/8*C.Mult)-6)
-	GameTimeFrame:SetSize(16, 8)
-	GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
-	GameTimeFrame:SetNormalTexture('')
-	GameTimeFrame:SetPushedTexture('')
-	GameTimeFrame:SetHighlightTexture('')
-
-	local _, _, _, _, dateText = GameTimeFrame:GetRegions()
-	F.SetFS(dateText)
-	dateText:SetTextColor(147/255, 211/255, 231/255)
-	dateText:SetShadowOffset(0, 0)
-	dateText:SetPoint('CENTER')
-
-	local difftext = {}
-	local rd = CreateFrame('Frame', nil, Minimap)
-	rd:SetSize(24, 8)
-	rd:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 5, -(C.map.miniMapSize/8*C.Mult)-6)
-	rd:RegisterEvent('PLAYER_ENTERING_WORLD')
-	rd:RegisterEvent('CHALLENGE_MODE_START')
-	rd:RegisterEvent('CHALLENGE_MODE_COMPLETED')
-	rd:RegisterEvent('CHALLENGE_MODE_RESET')
-	rd:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
-	rd:RegisterEvent('GUILD_PARTY_STATE_UPDATED')
-	rd:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-
-	local rdt = F.CreateFS(rd, 'pixel', '', nil, nil, true, 'TOPLEFT', 0, 0)
-
-	rd:SetScript('OnEvent', function()
-		local _, instanceType = IsInInstance()
-		local difficulty = select(3, GetInstanceInfo())
-		local numplayers = select(9, GetInstanceInfo())
-		local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or '';
-
-		if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
-			if (difficulty == 1) then
-				rdt:SetText('5N')
-			elseif difficulty == 2 then
-				rdt:SetText('5H')
-			elseif difficulty == 3 then
-				rdt:SetText('10N')
-			elseif difficulty == 4 then
-				rdt:SetText('25N')
-			elseif difficulty == 5 then
-				rdt:SetText('10H')
-			elseif difficulty == 6 then
-				rdt:SetText('25H')
-			elseif difficulty == 7 then
-				rdt:SetText('LFR')
-			elseif difficulty == 8 then
-				rdt:SetText('M+'..mplusdiff)
-			elseif difficulty == 9 then
-				rdt:SetText('40R')
-			elseif difficulty == 11 or difficulty == 39 then
-				rdt:SetText('HScen')
-			elseif difficulty == 12 or difficulty == 38 then
-				rdt:SetText('Scen')
-			elseif difficulty == 40 then 
-				rdt:SetText('MScen')
-			elseif difficulty == 14 then
-				rdt:SetText('N:'..numplayers)
-			elseif difficulty == 15 then
-				rdt:SetText('H:'..numplayers)
-			elseif difficulty == 16 then
-				rdt:SetText('M')
-			elseif difficulty == 17 then
-				rdt:SetText('LFR:'..numplayers)
-			elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
-				rdt:SetText('EScen')
-			elseif difficulty == 23 then
-				rdt:SetText('5M')
-			elseif difficulty == 24 or difficulty == 33 then
-				rdt:SetText('TW')
-			elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
-				rdt:SetText('PVP')
-			elseif difficulty == 29 then
-				rdt:SetText('PvEvP')
-			elseif difficulty == 147 then
-				rdt:SetText('WF')
-			end
-		elseif instanceType == 'pvp' or instanceType == 'arena' then
-			rdt:SetText('PVP')
-		else
-			rdt:SetText('')
-		end
-
-		if not IsInInstance() then
-			rdt:Hide()
-		else
-			rdt:Show()
-		end
-	end)
 
 	-- mail
 	local mail = CreateFrame('Frame', 'FreeUIMailFrame', Minimap)
@@ -130,18 +41,14 @@ local function ReskinRegions()
 	GameTimeCalendarInvitesTexture:SetParent('Minimap')
 	GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
 	local Invt = CreateFrame('Button', 'FreeUIInvt', UIParent)
-	Invt:SetPoint('TOPRIGHT', Minimap, 'BOTTOMLEFT', -20, -20)
+	Invt:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -6, -6)
 	Invt:SetSize(300, 80)
-	F.CreateBD(Invt)
-
+	F.CreateBDFrame(Invt)
+	F.CreateSD(Invt)
 	Invt.text = F.CreateFS(Invt, {C.font.normal, 14}, C.InfoColor..GAMETIME_TOOLTIP_CALENDAR_INVITES, nil, nil, true)
 
 	local function updateInviteVisibility()
-		if C_Calendar.GetNumPendingInvites() > 0 then
-			Invt:Show()
-		else
-			Invt:Hide()
-		end
+		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
 	end
 	F:RegisterEvent('CALENDAR_UPDATE_PENDING_INVITES', updateInviteVisibility)
 	F:RegisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
@@ -155,11 +62,116 @@ local function ReskinRegions()
 		F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateInviteVisibility)
 	end)
 
-	if TicketStatusFrame then
-		TicketStatusFrame:ClearAllPoints()
-		TicketStatusFrame:SetPoint('TOPLEFT', UIParent, 100, -100)
-		TicketStatusFrame.SetPoint = F.Dummy
+
+end
+
+local function ShowCalendar()
+	if C.map.calendar then
+		if not GameTimeFrame.styled then
+			GameTimeFrame:SetNormalTexture(nil)
+			GameTimeFrame:SetPushedTexture(nil)
+			GameTimeFrame:SetHighlightTexture(nil)
+			GameTimeFrame:SetSize(24, 12)
+			GameTimeFrame:SetParent(Minimap)
+			GameTimeFrame:ClearAllPoints()
+			GameTimeFrame:SetPoint('TOPRIGHT', Minimap, -4, -(C.map.miniMapSize/8*C.Mult)-6)
+			GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
+
+			for i = 1, GameTimeFrame:GetNumRegions() do
+				local region = select(i, GameTimeFrame:GetRegions())
+				if region.SetTextColor then
+					region:SetTextColor(147/255, 211/255, 231/255)
+					region:SetJustifyH('RIGHT')
+					F.SetFS(region)
+					break
+				end
+			end
+
+			GameTimeFrame.styled = true
+		end
+		GameTimeFrame:Show()
+	else
+		GameTimeFrame:Hide()
 	end
+end
+
+local function InstanceType()
+	local f = CreateFrame('Frame', nil, Minimap)
+	f:SetSize(24, 12)
+	f:SetPoint('TOPLEFT', Minimap, 4, -(C.map.miniMapSize/8*C.Mult)-6)
+	f.text = F.CreateFS(f, 'pixel', '', 'LEFT', nil, true, 'TOPLEFT', 0, 0)
+
+	f:RegisterEvent('PLAYER_ENTERING_WORLD')
+	f:RegisterEvent('CHALLENGE_MODE_START')
+	f:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+	f:RegisterEvent('CHALLENGE_MODE_RESET')
+	f:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
+	f:RegisterEvent('GUILD_PARTY_STATE_UPDATED')
+	f:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+	f:SetScript('OnEvent', function()
+		local _, instanceType = IsInInstance()
+		local difficulty = select(3, GetInstanceInfo())
+		local numplayers = select(9, GetInstanceInfo())
+		local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or '';
+
+		if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
+			if (difficulty == 1) then
+				f.text:SetText('5N')
+			elseif difficulty == 2 then
+				f.text:SetText('5H')
+			elseif difficulty == 3 then
+				f.text:SetText('10N')
+			elseif difficulty == 4 then
+				f.text:SetText('25N')
+			elseif difficulty == 5 then
+				f.text:SetText('10H')
+			elseif difficulty == 6 then
+				f.text:SetText('25H')
+			elseif difficulty == 7 then
+				f.text:SetText('LFR')
+			elseif difficulty == 8 then
+				f.text:SetText('M+'..mplusdiff)
+			elseif difficulty == 9 then
+				f.text:SetText('40R')
+			elseif difficulty == 11 or difficulty == 39 then
+				f.text:SetText('HScen')
+			elseif difficulty == 12 or difficulty == 38 then
+				f.text:SetText('Scen')
+			elseif difficulty == 40 then 
+				f.text:SetText('MScen')
+			elseif difficulty == 14 then
+				f.text:SetText('N:'..numplayers)
+			elseif difficulty == 15 then
+				f.text:SetText('H:'..numplayers)
+			elseif difficulty == 16 then
+				f.text:SetText('M')
+			elseif difficulty == 17 then
+				f.text:SetText('LFR:'..numplayers)
+			elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
+				f.text:SetText('EScen')
+			elseif difficulty == 23 then
+				f.text:SetText('5M')
+			elseif difficulty == 24 or difficulty == 33 then
+				f.text:SetText('TW')
+			elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
+				f.text:SetText('PVP')
+			elseif difficulty == 29 then
+				f.text:SetText('PvEvP')
+			elseif difficulty == 147 then
+				f.text:SetText('WF')
+			end
+		elseif instanceType == 'pvp' or instanceType == 'arena' then
+			f.text:SetText('PVP')
+		else
+			f.text:SetText('')
+		end
+
+		if not IsInInstance() then
+			f.text:Hide()
+		else
+			f.text:Show()
+		end
+	end)
 end
 
 local function ZoneText()
@@ -271,7 +283,7 @@ local function QueueStatus()
 	end)
 end
 
-local function WhoPingsMyMap()
+local function WhoPings()
 	if not C.map.whoPings then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
@@ -302,6 +314,7 @@ end
 
 local function WorldMarker()
 	if not IsAddOnLoaded('Blizzard_CompactRaidFrames') then return end
+	if not C.map.marker then return end
 
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 
@@ -345,7 +358,8 @@ local function WorldMarker()
 	end)
 end
 
-function module:SetupMinimap()
+
+function MAP:SetupMinimap()
 	if not C.map.miniMap then return end
 
 	local size = C.map.miniMapSize
@@ -354,7 +368,7 @@ function module:SetupMinimap()
 	
 	MinimapCluster:EnableMouse(false)
 	Minimap:SetSize(size*C.Mult, size*C.Mult)
-	Minimap:SetScale(1)
+	--Minimap:SetScale(1)
 	Minimap:SetMaskTexture(C.AssetsPath..'rectangle')
 	Minimap:SetHitRectInsets(0, 0, (size/8)*C.Mult, (size/8)*C.Mult)
 	Minimap:SetClampRectInsets(0, 0, 0, 0)
@@ -366,13 +380,14 @@ function module:SetupMinimap()
 
 	local mover = F.Mover(Minimap, L['MOVER_MINIMAP'], 'Minimap', {pos[1], pos[2], pos[3], pos[4], pos[5]-(size/8*C.Mult)}, Minimap:GetWidth(), Minimap:GetHeight())
 	Minimap:SetPoint('TOPRIGHT', mover)
+	Minimap.mover = mover
 
 	BorderFrame = CreateFrame('Frame', nil, Minimap)
 	BorderFrame:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 0, -(size/8*C.Mult))
 	BorderFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMRIGHT', 0, (size/8*C.Mult))
 	BorderFrame:SetFrameLevel(Minimap:GetFrameLevel() - 1)
-	local bg = F.CreateBDFrame(BorderFrame)
-	F.CreateSD(bg, .5, 4, 4)
+	local bg = F.CreateBDFrame(BorderFrame, 1)
+	F.CreateSD(bg)
 
 	DropDownList1:SetClampedToScreen(true)
 
@@ -412,8 +427,12 @@ function module:SetupMinimap()
 	end
 
 	ReskinRegions()
+	ShowCalendar()
+	InstanceType()
 	ZoneText()
 	QueueStatus()
-	WhoPingsMyMap()
+	WhoPings()
 	WorldMarker()
+	self:MicroMenu()
+	self:ProgressBar()
 end

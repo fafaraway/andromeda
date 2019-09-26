@@ -121,7 +121,7 @@ function MISC.ItemLevel_ScrappingShow(event, addon)
 	end
 end
 
-function MISC:ShowItemLevel()
+function MISC:ItemLevel()
 	if not C.general.itemLevel then return end
 
 	hooksecurefunc('PaperDollItemSlotButton_OnShow', function()

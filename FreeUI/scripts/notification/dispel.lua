@@ -2,8 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local module = F:GetModule('Notification')
 
 function module:Dispel()
-	if not C.notification.dispel then return end
-
 	local dispelSound = C.AssetsPath..'sound\\buzz.ogg'
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
@@ -12,18 +10,20 @@ function module:Dispel()
 		local inInstance, instanceType = IsInInstance()
 		if ((sourceGUID == UnitGUID('player')) or (sourceGUID == UnitGUID('pet'))) then
 			if (event == 'SPELL_DISPEL') then
-				if inInstance and IsInGroup() then
+				if C.notification.dispel then
+					PlaySoundFile(dispelSound, 'Master')
+				end
+
+				if C.notification.dispelAnnounce and inInstance and IsInGroup() then
 					SendChatMessage(L['NOTIFICATION_DISPELED']..destName..' '..GetSpellLink(spellID), say)
 				end
-				if C.notification.dispelSound then
-					PlaySoundFile(dispelSound, 'Master')
-				end
 			elseif (event == 'SPELL_STOLEN') then
-				if inInstance and IsInGroup() then
-					SendChatMessage(L['NOTIFICATION_STOLEN']..destName..' '..GetSpellLink(spellID), say)
-				end
-				if C.notification.dispelSound then
+				if C.notification.dispel then
 					PlaySoundFile(dispelSound, 'Master')
+				end
+
+				if C.notification.dispelAnnounce and inInstance and IsInGroup() then
+					SendChatMessage(L['NOTIFICATION_STOLEN']..destName..' '..GetSpellLink(spellID), say)
 				end
 			end
 		end

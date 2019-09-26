@@ -67,7 +67,7 @@ end
 local MoverList, BackupTable, f = {}, {}
 
 function F:Mover(text, value, anchor, width, height)
-	local key = 'UIElementsMover'
+	local key = 'UIElementsAnchor'
 	if not FreeUIConfig[key] then FreeUIConfig[key] = {} end
 
 	local mover = CreateFrame('Frame', nil, UIParent)
@@ -110,7 +110,7 @@ local function UnlockElements()
 			mover:Show()
 		end
 	end
-	F.CopyTable(FreeUIConfig['UIElementsMover'], BackupTable)
+	F.CopyTable(FreeUIConfig['UIElementsAnchor'], BackupTable)
 	f:Show()
 end
 
@@ -130,9 +130,13 @@ StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(FreeUIConfig['UIElementsMover'])
+		wipe(FreeUIConfig['UIElementsAnchor'])
 		ReloadUI()
 	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = true,
+	preferredIndex = 5,
 }
 
 StaticPopupDialogs['FREEUI_MOVER_CANCEL'] = {
@@ -140,9 +144,13 @@ StaticPopupDialogs['FREEUI_MOVER_CANCEL'] = {
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		F.CopyTable(BackupTable, FreeUIConfig['UIElementsMover'])
+		F.CopyTable(BackupTable, FreeUIConfig['UIElementsAnchor'])
 		ReloadUI()
 	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = true,
+	preferredIndex = 5,
 }
 
 local function CreateConsole()

@@ -1,8 +1,8 @@
 ## Interface: 80200
-## Title: |cffffffffFree|r|cff9c84efUI|r |cffdec35bOptions|r
+## Title: |cffffffffFree|r|cffb2b2b2UI|r |cffffa500Options|r
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth, Solor
-## Version: 80200.10
+## Version: 80200.11
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 

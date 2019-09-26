@@ -1,7 +1,13 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='bw.lua'/>
-	<Script file='dbm.lua'/>
-	<Script file='pgf.lua'/>
-	<Script file='skada.lua'/>
-	<Script file='wa.lua'/>
+	<Script file='fonts.lua'/>
+	<Script file='petbattle.lua'/>
+	<Script file='objectivetracker.lua'/>
+	<Script file='raidmanager.lua'/>
+	<Script file='mirrorbars.lua'/>
+	<Script file='timertracker.lua'/>
+	<Script file='BigWigs.lua'/>
+	<Script file='DBM.lua'/>
+	<Script file='PremadeGroupsFilter.lua'/>
+	<Script file='Skada.lua'/>
+	<Script file='WeakAuras.lua'/>
 </Ui>

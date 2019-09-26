@@ -186,7 +186,6 @@ function TOOLTIP:ReskinStatusBar()
 	GameTooltipStatusBar:SetHeight(2)
 	local bg = F.CreateBDFrame(GameTooltipStatusBar)
 	F.CreateSD(bg)
-	F.CreateTex(bg)
 end
 
 function TOOLTIP:GameTooltip_ShowStatusBar()
@@ -244,10 +243,9 @@ function TOOLTIP:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer('BACKGROUND')
-		local bg = F.CreateBDFrame(self, .5)
+		local bg = F.CreateBDFrame(self)
 		bg:SetFrameLevel(self:GetFrameLevel())
 		F.CreateSD(bg, .35)
-		F.CreateTex(bg)
 		self.bg = bg
 
 		-- other gametooltip-like support
@@ -258,14 +256,23 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+	
+	if self.bg.Shadow then
+		self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
+	end
+
 	if C.tooltip.borderColor and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
 			local color = BAG_ITEM_QUALITY_COLORS[quality or 1]
 			if color then
-				self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
+				if self.bg.Shadow then
+					self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
+				else
+					self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+				end
 			end
 		end
 	end

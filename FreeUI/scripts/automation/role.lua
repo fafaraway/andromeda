@@ -1,68 +1,28 @@
 local F, C, L = unpack(select(2, ...))
 
 
-local useSpec = C.automation.autoSetRole_useSpec
-local verbose = C.automation.autoSetRole_verbose
+if not C.automation.autoSetRole then return end
 
-local _, class = UnitClass('Player')
-local isPureClass
-if class == 'HUNTER' or class == 'MAGE' or class == 'ROGUE' or class == 'WARLOCK' then
-	isPureClass = true
-end
-
-local lastMsgTime = 0
-local function Print(msg)
-	if time() - lastMsgTime > 10 then
-		lastMsgTime = time()
-		DEFAULT_CHAT_FRAME:AddMessage('FreeUI: |cffffffff'..msg, C.r, C.g, C.b)
-	end
-end
-
-local function setRoleForSpec(self)
+local function SetRole()
 	local spec = GetSpecialization()
-	if spec then
-		UnitSetRole('player', select(6, GetSpecializationInfo(spec)))
-		if verbose then
-			Print('Role check: Setting role based on current spec.')
-		end
-	else
-		RolePollPopup_Show(self)
-		if verbose then
-			Print('Role check: You have no spec, cannot set automatically.')
-		end
-	end
-end
-
-local function autoSetRole(self, event)
-	if event ~= 'ROLE_POLL_BEGIN' or InCombatLockdown() then return end
-
-	if isPureClass then
-		UnitSetRole('player', 'DAMAGER')
-		if verbose then
-			Print('Role check: Setting role to dps.')
-		end
-	else
-		if UnitGroupRolesAssigned('player') == 'NONE' then
-			if useSpec then
-				setRoleForSpec(self)
-			else
-				if not self:IsShown() then
-					RolePollPopup_Show(self)
-				end
-			end
-		else
-			if useSpec then
-				setRoleForSpec(self)
-			else
-				if verbose then
-					Print('Role check: Role already set, doing nothing.')
+	if C.Level >= 10 and not InCombatLockdown() then
+		if spec == nil then
+			UnitSetRole('player', 'No Role')
+		elseif spec ~= nil then
+			if GetNumGroupMembers() > 1 then
+				local role = GetSpecializationRole(spec)
+				if UnitGroupRolesAssigned('player') ~= role then
+					UnitSetRole('player', role)
 				end
 			end
 		end
 	end
 end
 
-if C.automation.autoSetRole then
-	RolePollPopup:SetScript('OnEvent', autoSetRole)
-end
+local f = CreateFrame('Frame')
+f:RegisterEvent('PLAYER_TALENT_UPDATE')
+f:RegisterEvent('GROUP_ROSTER_UPDATE')
+f:SetScript('OnEvent', SetRole)
+
+RolePollPopup:UnregisterEvent('ROLE_POLL_BEGIN')
 

@@ -4,7 +4,7 @@ local INSTALL = F:RegisterModule('Install')
 local min, max, tonumber = math.min, math.max, tonumber
 
 local function clipScale(scale)
-	return tonumber(format("%.5f", scale))
+	return tonumber(format('%.5f', scale))
 end
 
 local function GetPerfectScale()
@@ -93,6 +93,7 @@ local function ForceDefaultSettings()
 	SetCVar('nameplateSelectedScale', 1)
 	SetCVar('nameplateLargerScale', 1)
 	SetCVar('nameplateMinScale', 0.8)
+	SetCVar('nameplateOverlapH', .8)
 
 	SetCVar('alwaysShowActionBars', 1)
 	SetCVar('lockActionBars', 1)
@@ -360,7 +361,8 @@ function INSTALL:HelloWorld()
 	option1:SetText('Tutorial')
 	option2:SetText('Install')
 
-	option1:SetScript('OnClick', tut1)
+	--option1:SetScript('OnClick', tut1)
+	option1:Disable()
 	option2:SetScript('OnClick', step1)
 end
 	

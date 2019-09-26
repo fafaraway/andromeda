@@ -7,7 +7,7 @@ local GetSpellInfo = GetSpellInfo
 local C_AzeriteEmpoweredItem_GetPowerInfo = C_AzeriteEmpoweredItem.GetPowerInfo
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_AzeriteEmpoweredItem_GetAllTierInfoByItemID = C_AzeriteEmpoweredItem.GetAllTierInfoByItemID
-local tipList, powerCache, tierCache = {}, {}, {}
+local tipList, powerList, powerCache, tierCache = {}, {}, {}, {}
 
 local iconString = '|T%s:18:22:0:0:64:64:5:59:5:59'
 local function getIconString(icon, known)
@@ -19,14 +19,18 @@ local function getIconString(icon, known)
 end
 
 function TOOLTIP:Azerite_ScanTooltip()
+	wipe(tipList)
+	wipe(powerList)
+
 	for i = 9, self:NumLines() do
 		local line = _G[self:GetName()..'TextLeft'..i]
 		local text = line:GetText()
-		if text and strfind(text, '%- ') then
+		local powerName = text and strmatch(text, '%- (.+)')
+		if powerName then
 			tinsert(tipList, i)
+			powerList[i] = powerName
 		end
 	end
-	return #tipList
 end
 
 function TOOLTIP:Azerite_PowerToSpell(id)
@@ -41,16 +45,6 @@ function TOOLTIP:Azerite_PowerToSpell(id)
 	return spellID
 end
 
-function TOOLTIP:Azerite_FindPower(powerName)
-	for i = 8, self:NumLines() do
-		local line = _G[self:GetName()..'TextLeft'..i]
-		local text = line:GetText()
-		if text and strfind(text, '%- '..powerName) then
-			return true
-		end
-	end
-end
-
 function TOOLTIP:Azerite_UpdateItem()
 	local link = select(2, self:GetItem())
 	if not link then return end
@@ -63,18 +57,23 @@ function TOOLTIP:Azerite_UpdateItem()
 	end
 	if not allTierInfo then return end
 
-	local count = TOOLTIP.Azerite_ScanTooltip(self)
+	TOOLTIP.Azerite_ScanTooltip(self)
+	if #tipList == 0 then return end
 	local index = 1
 	for i = 1, #allTierInfo do
 		local powerIDs = allTierInfo[i].azeritePowerIDs
 		if powerIDs[1] == 13 then break end
 
+		local lineIndex = tipList[index]
+		if not lineIndex then break end
+
 		local tooltipText = ''
 		for _, id in ipairs(powerIDs) do
 			local spellID = TOOLTIP:Azerite_PowerToSpell(id)
 			if not spellID then break end
+
 			local name, _, icon = GetSpellInfo(spellID)
-			local found = TOOLTIP.Azerite_FindPower(self, name)
+			local found = name == powerList[lineIndex]
 			if found then
 				tooltipText = tooltipText..' '..getIconString(icon, true)
 			else
@@ -82,19 +81,19 @@ function TOOLTIP:Azerite_UpdateItem()
 			end
 		end
 
-		if tooltipText ~= '' and count > 0 then
-			local lineIndex = tipList[index]
+		if tooltipText ~= '' then
 			local line = _G[self:GetName()..'TextLeft'..lineIndex]
 
-			line:SetText(tooltipText)
-			_G[self:GetName()..'TextLeft'..lineIndex+1]:SetText('')
-
-			count = count - 1
-			index = index + 1
+			if C.tooltip.azeriteTraitOnlyIcons then
+				line:SetText(tooltipText)
+				_G[self:GetName()..'TextLeft'..lineIndex+1]:SetText('')
+			else
+				line:SetText(line:GetText()..'\n '..tooltipText)
+			end
 		end
-	end
 
-	wipe(tipList)
+		index = index + 1
+	end
 end
 
 function TOOLTIP:AzeriteTrait()

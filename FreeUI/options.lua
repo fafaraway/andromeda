@@ -4,26 +4,31 @@ local F, C, L = unpack(select(2, ...))
 C['general'] = {
 	['uiScale'] = 1,
 	['uiScaleAuto'] = true,
+
 	['hideBossBanner'] = true,
 	['hideTalkingHead'] = true,
-	['flashCursor'] = true,
-	['mailButton'] = true, 				
+
+	['colletMail'] = true, 				
 	['alreadyKnown'] = true,
-	['missingStats'] = true,
-	['missingBuffs'] = true,
+	['tradeTabs'] = true,
+	['getNaked'] = true,
+	
+	['commandBar'] = true,
+	
 	['fasterLoot'] = true,
 	['PVPSound'] = true,
-	['progressBar'] = true,
-	['paragonRep'] = true,
-	['quickMarking'] = true,
-	['quickFocusing'] = true,
-	['questTracker'] = true,
-	['petBattle'] = true,
-	['tradeTab'] = true,
+
+	['marker'] = true,
+	['focuser'] = true,
+
+	['extraQuestButton'] = true,
+	
 	['itemLevel'] = true,
 	['durability'] = true,
+	['fullStats'] = true,
 
 	['petFilter'] = true,
+
 
 	['combatText'] = true,
 		['combatText_info'] = true,
@@ -31,7 +36,7 @@ C['general'] = {
 		['combatText_outgoing'] = true,
 	
 	['clickCast'] = true,
-		['clickCast_filter'] = true,
+		['clickCast_filter'] = false,
 
 	['cooldown'] = true,
 		['cooldown_decimal'] = false,
@@ -42,31 +47,45 @@ C['general'] = {
 			--GetSpellInfo(35395),	-- Crusader Strike
 		},
 
-	['raidManager'] = true,
-		['raidManager_Position'] = {'LEFT'},
 
-	['cameraIncrement'] = 5,
-	['numberFormatCN'] = false,
+	['camera'] = true,
+		['cameraZoomSpeed'] = 5,
+		['actionCam'] = false,
+		['actionCam_full'] = false,
+
+
+
+	['numberFormat'] = 1, -- 2 for Chinse number format (万/亿/兆)
+
+
+
+	
 }
 
 C['appearance'] = {
-	['enableTheme'] = true,
-		['backdropColour'] = {0, 0, 0, .5},
-		['buttonGradientColour'] = {.15, .15, .15, .5},
-		['buttonSolidColour'] = {.05, .05, .05, .5},
-		['useButtonGradientColour'] = true,
+	['themes'] = true,
+		['backdropColour'] = {.03, .03, .03},
+		['backdropAlpha'] = .7,
+		['buttonGradientColour'] = {.1, .1, .1, .5},
+		['buttonSolidColour'] = {.05, .05, .05, .7},
+		['gradient'] = true,
 
-	['enableShadow'] = true,
-	['reskinFont'] = true,
+	['shadow'] = true,
 
-	['enableVignette'] = true,
-		['vignetteAlpha'] = .35,
+	['flashCursor'] = true,
+	['vignette'] = true,
+		['vignetteAlpha'] = .8,
 
-	['reskinDBM'] = true,
-	['reskinBW'] = true,
-	['reskinWA'] = true,
-	['reskinPGF'] = true,
-	['reskinSkada'] = true,
+	['questTracker'] = true,
+	['petBattle'] = true,
+
+	['fonts'] = true,
+
+	['DBM'] = true,
+	['BigWigs'] = true,
+	['WeakAuras'] = true,
+	['PremadeGroupsFilter'] = true,
+	['Skada'] = true,
 }
 
 C['actionbar'] = {
@@ -104,15 +123,19 @@ C['actionbar'] = {
 }
 
 C['map'] = {
-	['worldMap'] = true,
-		['worldMapScale'] = 1,
-		['coords'] = true,
-		['mapReveal'] = true,
+	['worldMapScale'] = 1,
+	['coords'] = true,
+	['mapReveal'] = true,
+
 	['miniMap'] = true,
 		['miniMapScale'] = 1,
 		['miniMapPosition'] = {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -50, 50},
 		['miniMapSize'] = 240,
+		['marker'] = true,
 		['whoPings'] = true,
+		['microMenu'] = true,
+		['progressBar'] = true,
+		['calendar'] = true,
 }
 
 C['notification'] = {
@@ -131,25 +154,26 @@ C['notification'] = {
 		['onlyCompleteRing'] = true,
 
 	['interrupt'] = true,
-		['interruptSound'] = true,
+		['interruptAnnounce'] = true,
 	['dispel'] = true,
-		['dispelSound'] = true,
+		['dispelAnnounce'] = true,
 	['rare'] = true,
 		['rareSound'] = true,
-	['spell'] = true,
+	['vitalSpells'] = true,
 	['resurrect'] = true,
 	['sapped'] = true,
+	['buff'] = true,
+	['emergency'] = true,
+		['lowHealth'] = 0.5,
+		['lowMana'] = 0.3,
 }
 
 C['automation'] = {
 	['autoSetRole'] = true,
-		['autoSetRole_useSpec'] = true,
-		['autoSetRole_verbose'] = true,
+
 	['autoSellJunk'] = true,
 	['autoRepair'] = true,
 	['autoScreenShot'] = true,
-	['autoActionCam'] = false,
-		['autoActionCam_full'] = false,
 	['autoQuest'] = true,
 	['autoBuyStack'] = true,
 	['autoTabBinder'] = true,
@@ -204,6 +228,7 @@ C['tooltip'] = {
 		['extraInfo'] = true,
 			['extraInfoByShift'] = false,
 		['azeriteTrait'] = true,
+			['azeriteTraitOnlyIcons'] = true,
 		['linkHover'] = true,
 		['borderColor'] = true,
 		['tipIcon'] = true,
@@ -215,25 +240,26 @@ C['chat'] = {
 	['enable'] = true,
 		['position'] = {'BOTTOMLEFT', UIParent, 'BOTTOMLEFT', 50, 50},
 		['lockPosition'] = true,
-		['itemLink'] = true,
-		['spamageMeter'] = true,
-		['whisperSound'] = true,
-		['chatButton'] = true,
+		['fontOutline'] = true,
+		['tabs'] = true,
 		['abbreviate'] = true,
+		['fading'] = true,
+			['fadingVisible'] = 60,
+			['fadingDuration'] = 6,
+		['itemLinks'] = true,
+		['spamageMeter'] = true,
+		['chatCopy'] = true,
 		['nameCopy'] = true,
 		['urlCopy'] = true,
-		['realLink'] = true,
-		['tab'] = true,
+		['hideVoiceButtons'] = false,
 		['whisperSticky'] = true,
-		['useOutline'] = false,
-		['timeStamp'] = true,
+		['whisperAlert'] = true,
+			['lastAlertTimer'] = 30,
 		['autoBubble'] = false,
-		['lineFading'] = true,
-			['timeVisible'] = 60,
-			['fadeDuration'] = 6,
-
-		['useFilter'] = true,
-			['filterList'] = '',
+		['timeStamp'] = false,
+			['timeStampColor'] = {.5, .5, .5},
+		['filters'] = true,
+			['keywordsList'] = '',
 			['blockAddonAlert'] = true,
 				['addonBlockList'] = {
 					'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', ('%-'):rep(20),

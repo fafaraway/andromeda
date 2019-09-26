@@ -68,9 +68,9 @@ local questlist = {
 
 local region = GetCVar('portal')
 local legionZoneTime = {
-	['CN'] = 1546844400, -- CN time 1/7/2019 15:00 [1]
-	['EU'] = 1546786800, -- CN - 16
-	['US'] = 1546815600, -- CN - 8
+	['EU'] = 1565168400, -- CN - 16
+	['US'] = 1565197200, -- CN - 8
+	['CN'] = 1565226000, -- CN time 8/8/2019 09:00 [1]
 }
 local bfaZoneTime = {
 	['CN'] = 1546743600, -- CN time 1/6/2019 11:00 [1]
@@ -79,8 +79,8 @@ local bfaZoneTime = {
 }
 
 local invIndex = {
-	[1] = {title = L['INFOBAR_INVASION_LEG'], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3}, baseTime = legionZoneTime[region] or 1546844400}, -- 1/7/2019 15:00 [1]
-	[2] = {title = L['INFOBAR_INVASION_BFA'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or 1546743600},
+	[1] = {title = L['INFOBAR_INVASION_LEG'], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime['CN']}, -- need reviewed
+	[2] = {title = L['INFOBAR_INVASION_BFA'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or bfaZoneTime['CN']},
 }
 
 local mapAreaPoiIDs = {
@@ -123,6 +123,8 @@ end
 local function GetNextLocation(nextTime, index)
 	local inv = invIndex[index]
 	local count = #inv.timeTable
+	if count == 0 then return QUEUE_TIME_UNAVAILABLE end
+
 	local elapsed = nextTime - inv.baseTime
 	local round = mod(floor(elapsed / inv.duration) + 1, count)
 	if round == 0 then round = count end
@@ -233,19 +235,22 @@ function INFOBAR:Report()
 				if timeLeft < 60 then r, g, b = 1, 0, 0 else r, g, b = 0, 1, 0 end
 				GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_CURRENT']..zoneName, format('%.2d:%.2d', timeLeft/60, timeLeft%60), 1, 1, 1, r, g, b)
 			end
-			GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_NEXT']..GetNextLocation(nextTime, index), date('%m/%d %H:%M', nextTime), 1, 1, 1, 1, 1, 1)
+			local nextLocation = GetNextLocation(nextTime, index)
+			GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_NEXT']..nextLocation, date('%m/%d %H:%M', nextTime), 1,1,1, 1,1,1)
 		end
 
 		local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
 		if iwqID and UnitLevel('player') == 120 then
-			GameTooltip:AddLine(' ')
+			title = false
+			addTitle(ISLANDS_HEADER)
+
 			if IsQuestFlaggedCompleted(iwqID) then
-				GameTooltip:AddDoubleLine(ISLANDS_HEADER, QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
+				GameTooltip:AddDoubleLine(L['INFOBAR_ISLAND'], QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
 			else
 				local cur, max = select(4, GetQuestObjectiveInfo(iwqID, 1, false))
 				local stautsText = cur..'/'..max
 				if not cur or not max then stautsText = LFG_LIST_LOADING end
-				GameTooltip:AddDoubleLine(ISLANDS_HEADER, stautsText, 1, 1, 1, 1, 0, 0)
+				GameTooltip:AddDoubleLine(L['INFOBAR_ISLAND'], stautsText, 1, 1, 1, 1, 0, 0)
 			end
 		end
 

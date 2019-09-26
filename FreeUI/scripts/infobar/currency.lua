@@ -33,7 +33,10 @@ StaticPopupDialogs['RESETGOLD'] = {
 		wipe(FreeUIGlobalConfig["totalGold"][myRealm])
 		FreeUIGlobalConfig['totalGold'][myRealm][myName] = {GetMoney(), C.Class}
 	end,
+	timeout = 0,
 	whileDead = 1,
+	hideOnEscape = true,
+	preferredIndex = 5,
 }
 
 

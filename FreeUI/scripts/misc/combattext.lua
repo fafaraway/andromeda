@@ -211,19 +211,19 @@ function module:CombatText()
 	if not C.general.combatText then return end
 	
 	if C.general.combatText_incoming then
-		local InFrameMover = F.Mover(InFrame, L['MOVER_COMBATTEXT_INCOMING'], 'CTInFrame', cfg.Incoming_position, cfg.Incoming_width, cfg.Incoming_height)
+		local InFrameMover = F.Mover(InFrame, L['MOVER_COMBATTEXT_INCOMING'], 'CombatText_In', cfg.Incoming_position, cfg.Incoming_width, cfg.Incoming_height)
 		InFrame:SetPoint('TOPRIGHT', InFrameMover)
 		InFrame:SetFont(cfg.Incoming_font[1], cfg.Incoming_font[2], cfg.Outline and cfg.Incoming_font[3])
 	end
 
 	if C.general.combatText_outgoing then
-		local OutFrameMover = F.Mover(OutFrame, L['MOVER_COMBATTEXT_OUTGOING'], 'CTOutFrame', cfg.Outgoing_position, cfg.Outgoing_width, cfg.Outgoing_height)
+		local OutFrameMover = F.Mover(OutFrame, L['MOVER_COMBATTEXT_OUTGOING'], 'CombatText_Out', cfg.Outgoing_position, cfg.Outgoing_width, cfg.Outgoing_height)
 		OutFrame:SetPoint('TOPRIGHT', OutFrameMover)
 		OutFrame:SetFont(cfg.Outgoing_font[1], cfg.Outgoing_font[2], cfg.Outline and cfg.Outgoing_font[3])
 	end
 
 	if C.general.combatText_info then
-		local InfoFrameMover = F.Mover(InfoFrame, L['MOVER_COMBATTEXT_INFORMATION'], 'CTInfoFrame', cfg.Info_position, cfg.Info_width, cfg.Info_height)
+		local InfoFrameMover = F.Mover(InfoFrame, L['MOVER_COMBATTEXT_INFORMATION'], 'CombatText_Info', cfg.Info_position, cfg.Info_width, cfg.Info_height)
 		InfoFrame:SetPoint('TOPRIGHT', InfoFrameMover)
 		InfoFrame:SetFont(cfg.Info_font[1], cfg.Info_font[2], cfg.Outline and cfg.Info_font[3])
 	end

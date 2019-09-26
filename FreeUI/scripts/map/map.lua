@@ -123,6 +123,6 @@ end
 function MAP:OnLogin()
 	self:WorldMapScale()
 	self:SetupCoords()
-	self:SetupMinimap()
 	self:MapReveal()
+	self:SetupMinimap()
 end

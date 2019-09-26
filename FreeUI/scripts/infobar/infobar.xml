@@ -1,7 +1,6 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='core.lua'/>
 	<Script file='stats.lua'/>
-	<Script file='micromenu.lua'/>
 	<Script file='skadahelper.lua'/>
 	<Script file='spectalent.lua'/>
 	<Script file='durability.lua'/>

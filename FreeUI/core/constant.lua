@@ -1,9 +1,12 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
 
 C.Class = select(2, UnitClass('player'))
+C.Color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[C.Class]
 C.Name = UnitName('player')
+C.Level = UnitLevel('player')
 C.Realm = GetRealmName()
+C.Faction = UnitFactionGroup('player')
 C.Client = GetLocale()
 C.Version = GetAddOnMetadata('FreeUI', 'Version')
 C.Title = GetAddOnMetadata('FreeUI', 'Title')
@@ -28,7 +31,7 @@ C.r, C.g, C.b = C.ClassColors[C.Class].r, C.ClassColors[C.Class].g, C.ClassColor
 
 
 C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
-C.InfoColor = '|cffe5d19f'
+C.InfoColor = '|cffe9c55d'
 C.GreyColor = '|cff808080'
 C.RedColor = '|cffff2735'
 C.GreenColor = '|cff3a9d36'

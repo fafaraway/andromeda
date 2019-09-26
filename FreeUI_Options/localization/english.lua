@@ -1,18 +1,35 @@
 local _, ns = ...
 
+
+
+
+ns.localization.credits = "Credits"
+ns.localization.reset = "Reset"
+ns.localization.install = "Installer"
 ns.localization.profile = "Character-specific settings"
 ns.localization.profileTooltip = "Switch between a profile that applies to all characters and one that is unique to this character."
-ns.localization.reset = "Reset"
 ns.localization.resetCheck = "Remove all saved options, and reset them to their default values."
-ns.localization.install = "Installer"
 ns.localization.needReload = "|cffff2735You need to reload the UI to apply your changes.|r"
 ns.localization.reloadCheck = "|cffff2735You need to reload the UI to apply your changes.\n\nWould you like to do so now?|r"
 
 
-ns.localization.author = "|cff808080<|rFree|cff9c84efUI|r|cff808080>|r by |cffe8155cHaleth|r and |cff37b1d6Solor|r"
-ns.localization.authorSubText = "|cff808080https://github.com/Solor/FreeUI|r"
-
-
+ns.localization.author = "FreeUI Continued by Solor"
+ns.localization.authorSubText = "https://github.com/Solor/FreeUI"
+ns.localization.haleth = "Haleth"
+ns.localization.halethSubText = "For the original version of FreeUI"
+ns.localization.alza = "Alza"
+ns.localization.alzaSubText = "For AlzaUI, which once formed the basis for FreeUI"
+ns.localization.haste = "Haste"
+ns.localization.hasteSubText = "For the oUF framework, the foundation of the unit frames in this UI"
+ns.localization.tukz = "Tukz"
+ns.localization.tukzSubText = "For allowing the use of his code, and collaboration in UI development"
+ns.localization.zork = "Zork"
+ns.localization.zorkSubText = "For rActionBarStyler, rActionButtonStyler, and rBuffFrameStyler"
+ns.localization.siweia = "siweia"
+ns.localization.siweiaSubText = "For NDUI, which I stole a lot of codes from"
+ns.localization.others = "as well as..."
+ns.localization.othersSubText_1 = "Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath"
+ns.localization.othersSubText_2 = "Shestak, aliluya555, Paojy, Rubgrsch"
 
 
 ns.localization.general = "General"
@@ -155,6 +172,8 @@ ns.localization.notificationsappedTooltip = "Announce when a rogue saps you."
 ns.localization.notificationquestNotifier = "Quest notifier"
 ns.localization.notificationquestProgress = "Progress"
 ns.localization.notificationonlyCompleteRing = "Complete ring"
+ns.localization.notificationemergency = "Emergency"
+ns.localization.notificationemergencyTooltip = "Plays a sound alert when your health or mana reaches a critical level (health less than 50% or mana less than 30%)."
 
 
 
@@ -382,12 +401,5 @@ end
 
 ns.localization.classmodhavocFury = "|cffffffff Demon Hunter havoc fury"
 ns.localization.classmodhavocFuryTooltip = "Change fury colour based on current value."
-
-ns.localization.credits = "Credits"
-ns.localization.thankYou = "Thank you:"
-ns.localization.credits_1 = "Haleth, siweia"
-ns.localization.credits_2 = "Haste, Tukz, Zork"
-ns.localization.credits_3 = "|cff808080as well as...|r"
-ns.localization.credits_4 = "Elv, Lightspark, Allez, AlleyKat\n\nCaellian, p3lim, Shantalya, tekkub\n\nTuller, Wildbreath, aduth, silverwind\n\nNibelheim, humfras, aliluya555, Paojy"
 
 

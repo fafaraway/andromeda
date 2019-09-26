@@ -1,10 +1,8 @@
-local F, C, L = unpack(select(2, ...))
-if not C.chat.enable then return end
-local module = F:GetModule('Chat')
+local F, C = unpack(select(2, ...))
+local CHAT = F:GetModule('Chat')
 
 
-
-function module:NameCopy()
+function CHAT:NameCopy()
 	if not C.chat.nameCopy then return end
 	
 	local UnitPopupButtonsExtra = {

@@ -1,6 +1,7 @@
 local F, C = unpack(select(2, ...))
 local CHAT = F:GetModule('Chat')
 
+
 local strfind, strmatch, strsub, gsub = string.find, string.match, string.sub, string.gsub
 local strsplit, strlen = string.split, string.len
 

@@ -77,8 +77,8 @@ local PortalSpells = {
 
 
 
-function module:Spell()
-	if not C.notification.spell then return end
+function module:VitalSpells()
+	if not C.notification.vitalSpells then return end
 
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')

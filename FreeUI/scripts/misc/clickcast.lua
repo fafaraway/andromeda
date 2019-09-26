@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-
 local module = F:GetModule('Misc')
 
 if not C.general.clickCast then return end

@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-if GetLocale() ~= 'zhCN' then return end
 
+if (GetLocale() ~= 'zhCN' and GetLocale() ~= 'zhTW') then return end
 
 -- automation
 L['AUTOMATION_GUILD_REPAIR_COST'] = '使用公会修理'
@@ -27,6 +27,11 @@ L['InviteEnable'] = '自动邀请功能启用'
 L['InviteDisable'] = '自动邀请功能关闭'
 L['MISC_STACK_BUYING_CHECK'] = '是否购买|cffff0000一组|r下列物品？'
 L['MISC_ARCHAEOLOGY_COUNT'] = '考古统计'
+L['MISC_DISBAND_GROUP'] = '解散队伍'
+L['MISC_DISBAND_GROUP_CHECK'] = '你确定要解散队伍?'
+L['MISC_NUMBER_CAP_1'] = '万'
+L['MISC_NUMBER_CAP_2'] = '亿'
+L['MISC_NUMBER_CAP_3'] = '兆'
 
 
 -- notification
@@ -84,6 +89,7 @@ L['INFOBAR_OPEN_GARRION_REPORT'] = '打开任务报告'
 L['INFOBAR_BLINGTRON'] = '布林顿每日礼包'
 L['INFOBAR_MEAN_ONE'] = '冬幕节日常'
 L['INFOBAR_TIMEWARPED'] = '时光漫游徽章奖励'
+L['INFOBAR_ISLAND'] = '本周进度'
 
 L['INFOBAR_LOCAL_TIME'] = '本地时间'
 L['INFOBAR_REALM_TIME'] = '服务器时间'

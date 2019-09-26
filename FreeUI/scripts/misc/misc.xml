@@ -1,25 +1,39 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='misc.lua'/>
+	<Script file='actioncam.lua'/>
+	<Script file='alerts.lua'/>
 	<Script file='alreadyknown.lua'/>
+
+	<Script file='buffs.lua'/>
 	<Script file='camera.lua'/>
 	<Script file='clickcast.lua'/>
-	<Script file='cmguildbest.lua'/>
+	<Script file='colors.lua'/>
+	<Script file='colorpicker.lua'/>
 	<Script file='combattext.lua'/>
+	<Script file='cooldown.lua'/>
 	<Script file='cooldownpulse.lua'/>
 	<Script file='dragemall.lua'/>
 	<Script file='durability.lua'/>
+	<Script file='errors.lua'/>
 	<Script file='extraquestbutton.lua'/>
 	<Script file='focuser.lua'/>
+
+	<Script file='fullstates.lua'/>
+	<Script file='guildbest.lua'/>
 	<Script file='itemlevel.lua'/>
-	<Script file='lfgqueuetimer.lua'/>
+	<Script file='loot.lua'/>
 	<Script file='mail.lua'/>
 	<Script file='marker.lua'/>
-	<Script file='missingbuffs.lua'/>
-	<Script file='missingstats.lua'/>
+
 	<Script file='petfilter.lua'/>
-	<Script file='progressbar.lua'/>
-	<Script file='pvpqueuetimer.lua'/>
+
+
 	<Script file='pvpsound.lua'/>
+
+	<Script file='queuetimer_lfg.lua'/>
+	<Script file='queuetimer_pvp.lua'/>
+	<Script file='quickjoin.lua'/>
+
 	<Script file='reputation.lua'/>
 	<Script file='safequeue.lua'/>
 	<Script file='tradetabs.lua'/>

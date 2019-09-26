@@ -15,7 +15,7 @@ local menuList = {
 }
 
 function module:Marker()
-	if not C.general.quickMarking then return end
+	if not C.general.marker then return end
 	
 	WorldFrame:HookScript("OnMouseDown", function(self, button)
 		if button == "LeftButton" and IsAltKeyDown() and UnitExists("mouseover") then

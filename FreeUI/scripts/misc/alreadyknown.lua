@@ -1,5 +1,7 @@
 local F, C = unpack(select(2, ...))
 
+if not C.general.alreadyKnown then return end
+
 -- AlreadyKnown, by villiv
 
 local strmatch, strfind, strsplit, mod = string.match, string.find, string.split, mod

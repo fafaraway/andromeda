@@ -1,12 +1,12 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.themes["FreeUI"], function()
-    local r, g, b = C.r, C.g, C.b
+	local r, g, b = C.r, C.g, C.b
 
 	F.StripTextures(HelpFrame)
 	F.SetBD(HelpFrame)
 	HelpFrameHeader:Hide()
-    F.ReskinClose(HelpFrameCloseButton)
+	F.ReskinClose(HelpFrameCloseButton)
 
 	F.StripTextures(HelpFrameMainInset)
 	F.StripTextures(HelpFrameLeftInset)
@@ -61,7 +61,6 @@ tinsert(C.themes["FreeUI"], function()
 		local bu = _G["HelpFrameKnowledgebaseScrollFrameButton"..i]
 		bu:DisableDrawLayer("ARTWORK")
 		F.CreateBD(bu, 0)
-
 		F.CreateGradient(bu)
 	end
 
@@ -70,7 +69,7 @@ tinsert(C.themes["FreeUI"], function()
 	end
 
 	local function clearTab(f)
-		f.text:SetTextColor(1, .82, 0)
+		f.text:SetTextColor(1, .8, 0)
 	end
 
 	local function styleTab(bu)
@@ -92,7 +91,7 @@ tinsert(C.themes["FreeUI"], function()
 
 	HelpFrameCharacterStuckHearthstone:SetSize(56, 56)
 	F.CreateBG(HelpFrameCharacterStuckHearthstone)
-	HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(unpack(C.TexCoord))
+	HelpFrameCharacterStuckHearthstoneIconTexture:SetTexCoord(.08, .92, .08, .92)
 
 	F.Reskin(HelpBrowserNavHome)
 	F.Reskin(HelpBrowserNavReload)
@@ -114,7 +113,6 @@ tinsert(C.themes["FreeUI"], function()
 	F.StripTextures(BrowserSettingsTooltip)
 	F.CreateBD(BrowserSettingsTooltip)
 	F.CreateSD(BrowserSettingsTooltip)
-	F.Reskin(BrowserSettingsTooltip.CacheButton)
 	F.Reskin(BrowserSettingsTooltip.CookiesButton)
 	F.Reskin(ReportCheatingDialogReportButton)
 	F.Reskin(ReportCheatingDialogCancelButton)

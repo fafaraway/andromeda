@@ -2,6 +2,19 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('Infobar')
 
 
+local strfind, format, sort, wipe, unpack, tinsert = string.find, string.format, table.sort, table.wipe, unpack, table.insert
+local C_Timer_After = C_Timer.After
+local C_FriendList_GetNumFriends = C_FriendList.GetNumFriends
+local C_FriendList_GetNumOnlineFriends = C_FriendList.GetNumOnlineFriends
+local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+local BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture = BNet_GetClientEmbeddedTexture, BNet_GetValidatedCharacterName, BNet_GetClientTexture
+local CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor = CanCooperateWithGameAccount, GetRealZoneText, GetQuestDifficultyColor
+local BNGetNumFriends = BNGetNumFriends
+local BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL = BNET_CLIENT_WOW, UNKNOWN, GUILD_ONLINE_LABEL
+local FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_ONLINE, FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
+local WOW_PROJECT_ID = WOW_PROJECT_ID or 1
+local CLIENT_WOW_CLASSIC = "WoV" -- for sorting
+
 local friendTable, bnetTable, updateRequest = {}, {}
 local wowString, bnetString = L['INFOBAR_WOW'], L['INFOBAR_BN']
 local activeZone, inactiveZone = {r=.3, g=1, b=.3}, {r=.7, g=.7, b=.7}
@@ -9,6 +22,28 @@ local AFKTex = '|T'..FRIENDS_TEXTURE_AFK..':14:14:0:0:16:16:1:15:1:15|t'
 local DNDTex = '|T'..FRIENDS_TEXTURE_DND..':14:14:0:0:16:16:1:15:1:15|t'
 
 local FreeUIFriendsButton = INFOBAR.FreeUIFriendsButton
+
+local function CanCooperateWithUnit(gameAccountInfo)
+	return gameAccountInfo.playerGuid and (gameAccountInfo.factionName == C.Faction) and (gameAccountInfo.realmID ~= 0)
+end
+
+local function GetOnlineInfoText(client, isMobile, rafLinkType, locationText)
+	if not locationText or locationText == "" then
+		return UNKNOWN
+	end
+	if isMobile then
+		return LOCATION_MOBILE_APP
+	end
+	if (client == BNET_CLIENT_WOW) and (rafLinkType ~= Enum.RafLinkType.None) and not isMobile then
+		if rafLinkType == Enum.RafLinkType.Recruit then
+			return RAF_RECRUIT_FRIEND:format(locationText)
+		else
+			return RAF_RECRUITER_FRIEND:format(locationText)
+		end
+	end
+
+	return locationText
+end
 
 local function buildFriendTable(num)
 	wipe(friendTable)
@@ -38,42 +73,57 @@ local function buildBNetTable(num)
 	wipe(bnetTable)
 
 	for i = 1, num do
-		local bnetID, accountName, battleTag, isBattleTagPresence, charName, gameID, client, isOnline, _, isAFK, isDND = BNGetFriendInfo(i)
+		local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+		if accountInfo then
+			local accountName = accountInfo.accountName
+			local battleTag = accountInfo.battleTag
+			local isAFK = accountInfo.isAFK
+			local isDND = accountInfo.isDND
+			local note = accountInfo.note
+			local broadcastText = accountInfo.customMessage
+			local broadcastTime = accountInfo.customMessageTime
+			local rafLinkType = accountInfo.rafLinkType
 
-		if isOnline then
-			local _, _, _, realmName, _, _, _, class, _, zoneName, _, gameText, _, _, _, _, _, isGameAFK, isGameBusy = BNGetGameAccountInfo(gameID)
+			local gameAccountInfo = accountInfo.gameAccountInfo
+			local isOnline = gameAccountInfo.isOnline
+			local gameID = gameAccountInfo.gameAccountID
 
-			charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
-			class = C.ClassList[class]
-			accountName = isBattleTagPresence and battleTag or accountName
+			if isOnline and gameID then
+				local charName = gameAccountInfo.characterName
+				local client = gameAccountInfo.clientProgram
+				local class = gameAccountInfo.className or UNKNOWN
+				local zoneName = gameAccountInfo.areaName or UNKNOWN
+				local level = gameAccountInfo.characterLevel
+				local gameText = gameAccountInfo.richPresence or ""
+				local isGameAFK = gameAccountInfo.isGameAFK
+				local isGameBusy = gameAccountInfo.isGameBusy
+				local wowProjectID = gameAccountInfo.wowProjectID
+				local isMobile = gameAccountInfo.isWowMobile
+				local canCooperate = CanCooperateWithUnit(gameAccountInfo)
 
-			local status, infoText = ''
-			if isAFK or isGameAFK then
-				status = AFKTex
-			elseif isDND or isGameBusy then
-				status = DNDTex
-			else
-				status = ''
-			end
-			if client == BNET_CLIENT_WOW then
-				if not zoneName or zoneName == '' then
-					infoText = UNKNOWN
-				else
-					infoText = zoneName
+				charName = BNet_GetValidatedCharacterName(charName, battleTag, client)
+				class = C.ClassList[class]
+
+				local status = FRIENDS_TEXTURE_ONLINE
+				if isAFK or isGameAFK then
+					status = FRIENDS_TEXTURE_AFK
+				elseif isDND or isGameBusy then
+					status = FRIENDS_TEXTURE_DND
 				end
-			else
-				infoText = gameText
-			end
 
-			bnetTable[i] = {bnetID, accountName, charName, gameID, client, isOnline, status, realmName, class, infoText}
+				local infoText = GetOnlineInfoText(client, isMobile, rafLinkType, gameText)
+				if client == BNET_CLIENT_WOW and wowProjectID == WOW_PROJECT_ID then
+					infoText = GetOnlineInfoText(client, isMobile, rafLinkType, zoneName)
+				end
+
+				if client == BNET_CLIENT_WOW and wowProjectID ~= WOW_PROJECT_ID then client = CLIENT_WOW_CLASSIC end
+
+				tinsert(bnetTable, {i, accountName, charName, canCooperate, client, status, class, level, infoText, note, broadcastText, broadcastTime})
+			end
 		end
 	end
 
-	sort(bnetTable, function(a, b)
-		if a[5] and b[5] then
-			return a[5] > b[5]
-		end
-	end)
+	sort(bnetTable, sortBNFriends)
 end
 
 
@@ -111,7 +161,7 @@ function INFOBAR:Friends()
 		updateRequest = false
 	end)
 
-	FreeUIFriendsButton:HookScript('OnEnter', function(self)
+	--[[FreeUIFriendsButton:HookScript('OnEnter', function(self)
 		local numFriends, onlineFriends = C_FriendList.GetNumFriends(), C_FriendList.GetNumOnlineFriends()
 		local numBNet, onlineBNet = BNGetNumFriends()
 		local totalOnline = onlineFriends + onlineBNet
@@ -185,7 +235,7 @@ function INFOBAR:Friends()
 	FreeUIFriendsButton:HookScript('OnLeave', function(self)
 		GameTooltip:Hide()
 		self:UnregisterEvent('MODIFIER_STATE_CHANGED')
-	end)
+	end)--]]
 end
 
 

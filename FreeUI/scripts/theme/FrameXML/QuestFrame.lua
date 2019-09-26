@@ -10,12 +10,10 @@ tinsert(C.themes["FreeUI"], function()
 	QuestFrameDetailPanel:DisableDrawLayer("BORDER")
 	QuestFrameRewardPanel:DisableDrawLayer("BORDER")
 	QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
-
 	QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
 	QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
 	QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
 	QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
-
 	hooksecurefunc("QuestFrame_SetMaterial", function(frame)
 		_G[frame:GetName().."MaterialTopLeft"]:Hide()
 		_G[frame:GetName().."MaterialTopRight"]:Hide()
@@ -38,7 +36,7 @@ tinsert(C.themes["FreeUI"], function()
 		local na = _G["QuestProgressItem"..i.."NameFrame"]
 		local co = _G["QuestProgressItem"..i.."Count"]
 		ic:SetSize(40, 40)
-		ic:SetTexCoord(unpack(C.TexCoord))
+		ic:SetTexCoord(.08, .92, .08, .92)
 		ic:SetDrawLayer("OVERLAY")
 		F.CreateBD(bu, .25)
 		na:Hide()
@@ -86,30 +84,16 @@ tinsert(C.themes["FreeUI"], function()
 	CurrentQuestsText.SetTextColor = F.Dummy
 	CurrentQuestsText:SetShadowColor(0, 0, 0)
 
-	-- [[ Quest NPC model ]]
+	-- Quest NPC model
 
-	F.StripTextures(QuestNPCModel)
+	F.StripTextures(QuestModelScene)
 	F.StripTextures(QuestNPCModelTextFrame)
-
-	local npcbd = CreateFrame("Frame", nil, QuestNPCModel)
-	npcbd:SetPoint("TOPLEFT", -1, 1)
-	npcbd:SetPoint("RIGHT", 2, 0)
-	npcbd:SetPoint("BOTTOM", QuestNPCModelTextScrollFrame)
-	npcbd:SetFrameLevel(0)
-	F.CreateBD(npcbd)
-	F.CreateSD(npcbd)
-
-	local npcLine = CreateFrame("Frame", nil, QuestNPCModel)
-	npcLine:SetPoint("BOTTOMLEFT", 0, -1)
-	npcLine:SetPoint("BOTTOMRIGHT", 1, -1)
-	npcLine:SetHeight(C.Mult)
-	npcLine:SetFrameLevel(0)
-	F.CreateBD(npcLine, 0)
+	local bg = F.SetBD(QuestNPCModelTextFrame)
+	bg:SetPoint("TOPLEFT", QuestModelScene)
+	bg:SetFrameLevel(0)
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
-		x = x + 5
-		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
+		x = x + 6
+		QuestModelScene:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x, y)
 	end)
-
-	F.ReskinScroll(QuestNPCModelTextScrollFrameScrollBar)
 end)
