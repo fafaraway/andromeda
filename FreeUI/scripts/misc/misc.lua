@@ -12,7 +12,7 @@ function MISC:OnLogin()
 	self:FullStats()
 
 
-	self:CommandBar()
+
 
 
 
@@ -233,78 +233,6 @@ function MISC:TradeTargetInfo()
 end
 
 
-
--- Restyle orderhall command bar
-function MISC:CommandBar()
-	if not C.general.vignette then return end
-
-	local f = CreateFrame('Frame')
-	f:SetScript('OnEvent', function(self, event, arg1)
-		if event == 'ADDON_LOADED' and arg1 == 'Blizzard_OrderHallUI' then
-			f:RegisterEvent('DISPLAY_SIZE_CHANGED')
-			f:RegisterEvent('UI_SCALE_CHANGED')
-			f:RegisterEvent('GARRISON_FOLLOWER_CATEGORIES_UPDATED')
-			f:RegisterEvent('GARRISON_FOLLOWER_ADDED')
-			f:RegisterEvent('GARRISON_FOLLOWER_REMOVED')
-
-			local bar = OrderHallCommandBar
-
-			bar:HookScript('OnShow', function()
-				if not bar.styled then
-					bar:EnableMouse(false)
-					bar.Background:SetAtlas(nil)
-
-					bar.ClassIcon:ClearAllPoints()
-					bar.ClassIcon:SetPoint('TOPLEFT', 30, -30)
-					bar.ClassIcon:SetSize(40,20)
-					bar.ClassIcon:SetAlpha(1)
-					local bg = F.CreateBDFrame(bar.ClassIcon)
-					F.CreateSD(bg)
-
-					bar.AreaName:ClearAllPoints()
-					bar.AreaName:SetPoint('LEFT', bar.ClassIcon, 'RIGHT', 5, 0)
-					bar.AreaName:SetFont(C.font.normal, 14, 'OUTLINE')
-					bar.AreaName:SetTextColor(1, 1, 1)
-					bar.AreaName:SetShadowOffset(0, 0)
-
-					bar.CurrencyIcon:ClearAllPoints()
-					bar.CurrencyIcon:SetPoint('LEFT', bar.AreaName, 'RIGHT', 5, 0)
-					bar.Currency:ClearAllPoints()
-					bar.Currency:SetPoint('LEFT', bar.CurrencyIcon, 'RIGHT', 5, 0)
-					bar.Currency:SetFont(C.font.normal, 14, 'OUTLINE')
-					bar.Currency:SetTextColor(1, 1, 1)
-					bar.Currency:SetShadowOffset(0, 0)
-
-					bar.WorldMapButton:Hide()
-
-					bar.styled = true
-				end
-			end)
-		elseif event ~= 'ADDON_LOADED' then
-			local index = 1
-			C_Timer.After(0.1, function()
-				for i, child in ipairs({bar:GetChildren()}) do
-					if child.Icon and child.Count and child.TroopPortraitCover then
-						child:SetPoint('TOPLEFT', bar.ClassIcon, 'BOTTOMLEFT', -5, -index*25+20)
-						child.TroopPortraitCover:Hide()
-
-						child.Icon:SetSize(40,20)
-						local bg = F.CreateBDFrame(child.Icon)
-						F.CreateSD(bg)
-
-						child.Count:SetFont(C.font.normal, 14, 'OUTLINE')
-						child.Count:SetTextColor(1, 1, 1)
-						child.Count:SetShadowOffset(0, 0)
-
-						index = index + 1
-					end
-				end
-			end)
-		end
-	end)
-
-	f:RegisterEvent('ADDON_LOADED')
-end
 
 -- Reanchor vehicle indicator
 function MISC:VehicleIndicator()
@@ -708,4 +636,84 @@ do
 
 	F:RegisterEvent('ADDON_LOADED', fixGuildNews)
 	F:RegisterEvent('ADDON_LOADED', fixCommunitiesNews)
+end
+
+-- Restyle orderhall command bar
+do
+	if not C.general.commandBar then return end
+
+	local hall = CreateFrame('Frame', 'FreeUIOrderHallIcon', UIParent)
+	hall:SetSize(50, 50)
+	hall:SetPoint('TOP', 0, -30)
+	hall:SetFrameStrata('HIGH')
+	hall:Hide()
+	F.CreateMF(hall)
+	hall.Icon = hall:CreateTexture(nil, 'ARTWORK')
+	hall.Icon:SetAllPoints()
+	hall.Icon:SetTexture('Interface\\TargetingFrame\\UI-Classes-Circles')
+	hall.Icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[C.Class]))
+	hall.Category = {}
+
+	local function RetrieveData(self)
+		local currency = C_Garrison.GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
+		self.name, self.amount, self.texture = GetCurrencyInfo(currency)
+
+		local categoryInfo = C_Garrison.GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
+		self.numCategory = #categoryInfo
+		for i, category in ipairs(categoryInfo) do
+			self.Category[i] = {category.name, category.count, category.limit, category.description, category.icon}
+		end
+	end
+
+	local function hallIconOnEnter(self)
+		C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
+		RetrieveData(self)
+
+		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT', 5, -5)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(C.MyColor.._G['ORDER_HALL_'..C.Class])
+		GameTooltip:AddLine(' ')
+		local icon = ' |T'..self.texture..':12:12:0:0:50:50:4:46:4:46|t '
+		GameTooltip:AddDoubleLine(self.name, self.amount..icon, 1,1,1, 1,1,1)
+		local blank
+		for i = 1, self.numCategory do
+			if not blank then
+				GameTooltip:AddLine(' ')
+				blank = true
+			end
+			local name, count, limit, description = unpack(self.Category[i])
+			GameTooltip:AddDoubleLine(name, count..'/'..limit, 1,1,1, 1,1,1)
+			if IsShiftKeyDown() then
+				GameTooltip:AddLine(description, .6,.8,1,true)
+			end
+		end
+		GameTooltip:Show()
+
+		self:RegisterEvent('MODIFIER_STATE_CHANGED')
+	end
+
+	local function hallIconOnLeave(self)
+		GameTooltip:Hide()
+		self:UnregisterEvent('MODIFIER_STATE_CHANGED')
+	end
+
+	local function hallIconOnEvent(self, event, arg1)
+		if event == 'ADDON_LOADED' and arg1 == 'Blizzard_OrderHallUI' then
+			F.HideObject(OrderHallCommandBar)
+			GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
+			self:UnregisterEvent('ADDON_LOADED')
+		elseif event == 'UNIT_AURA' or event == 'PLAYER_ENTERING_WORLD' then
+			local inOrderHall = C_Garrison.IsPlayerInGarrison(LE_GARRISON_TYPE_7_0)
+			self:SetShown(inOrderHall)
+		elseif event == 'MODIFIER_STATE_CHANGED' and arg1 == 'LSHIFT' then
+			hallIconOnEnter(self)
+		end
+	end
+
+	hall:RegisterUnitEvent('UNIT_AURA', 'player')
+	hall:RegisterEvent('PLAYER_ENTERING_WORLD')
+	hall:RegisterEvent('ADDON_LOADED')
+	hall:SetScript('OnEvent', hallIconOnEvent)
+	hall:SetScript('OnEnter', hallIconOnEnter)
+	hall:SetScript('OnLeave', hallIconOnLeave)
 end
