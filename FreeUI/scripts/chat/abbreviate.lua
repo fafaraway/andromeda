@@ -158,8 +158,8 @@ function module:Abbreviate()
 	CREATED_ITEM = '+ %s : %s (Craft)'
 	CREATED_ITEM_MULTIPLE = '+ %s : %sx%d (Craft)'
 
-	TRADESKILL_LOG_FIRSTPERSON = '+ %s : %s (Craft)'
-	TRADESKILL_LOG_THIRDPERSON = '+ %s : %s (Craft)'
+--	TRADESKILL_LOG_FIRSTPERSON = '+ %s : %s (Craft)'
+--	TRADESKILL_LOG_THIRDPERSON = '+ %s : %s (Craft)'
 
 	ERR_SKILL_UP_SI = '|cffffffff%s|r |cff00adf0%d|r'
 
