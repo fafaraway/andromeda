@@ -19,7 +19,7 @@ function INFOBAR:SpecTalent()
 	if not C.infobar.enable then return end
 	if not C.infobar.specTalent then return end
 
-	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 200, function(self, button)
+	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 300, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
 
 		if not (currentSpec and numSpec) then return end
