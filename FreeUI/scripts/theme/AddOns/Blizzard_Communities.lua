@@ -12,7 +12,7 @@ C.themes["Blizzard_Communities"] = function()
 	F.ReskinArrow(CommunitiesFrame.AddToChatButton, "down")
 	F.ReskinDropDown(CommunitiesFrame.CommunitiesListDropDownMenu)
 
-	for _, name in next, {"GuildFinderFrame", "InvitationFrame", "TicketFrame"} do
+	for _, name in next, {"InvitationFrame", "TicketFrame"} do
 		local frame = CommunitiesFrame[name]
 		F.StripTextures(frame)
 		F.CreateBD(frame, .25)
