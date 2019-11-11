@@ -155,7 +155,6 @@ tinsert(C.themes["FreeUI"], function()
 
 				ic:SetTexCoord(unpack(C.TexCoord))
 				ic:SetDrawLayer("OVERLAY")
-				ic:SetPoint("LEFT", co, "RIGHT", 2, 0)
 				co:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
 
 				F.CreateBG(ic)
