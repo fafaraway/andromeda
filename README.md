@@ -1,4 +1,4 @@
-![logo](https://i.imgur.com/suwbGN9.png "logo")
+![logo](https://i.imgur.com/G2qQDW3.png "logo")
 
 ![WOW support](https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat "ShadowLands") ![latest release](https://img.shields.io/github/v/release/Solor/FreeUI?style=flat "latest release") ![release date](https://img.shields.io/github/release-date/Solor/FreeUI "release date") [![discord](https://img.shields.io/discord/242811601260904450?label=Discord&?style=flat "discord")](https://discord.gg/Uu28KQq)
 
