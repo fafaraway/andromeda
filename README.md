@@ -1,13 +1,11 @@
-<center><img src="https://i.imgur.com/Sib8Z3K.png" alt="logo" height="256" width="256" /></center>
-<br>
-<center><img src="https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat" alt="WOW support" />
-<img src="https://img.shields.io/github/v/release/Solor/FreeUI?style=flat" alt="latest release" />
-<img src="https://img.shields.io/github/release-date/Solor/FreeUI" alt="release date" />
-<a href="https://discord.gg/Uu28KQq"><img src="https://img.shields.io/discord/242811601260904450?label=Discord&?style=flat" alt="discord" /></a></center>
-<br>
-<center><p style="font-size:2em">MINIMALISTIC AESTHETIC PRACTICAL</p></center>
+![logo](https://i.imgur.com/Sib8Z3K.png "logo")
+
+![WOW support](https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat "ShadowLands") ![latest release](https://img.shields.io/github/v/release/Solor/FreeUI?style=flat "latest release") ![release date](https://img.shields.io/github/release-date/Solor/FreeUI "release date") [![discord](https://img.shields.io/discord/242811601260904450?label=Discord&?style=flat "discord")](https://discord.gg/Uu28KQq)
+
 
 ## FreeUI
+MINIMALISTIC AESTHETIC PRACTICAL
+
 This is a personal fork of [FreeUI](https://github.com/Haleth/FreeUI), updated and heavily modified.
 
 ## Screenshots
