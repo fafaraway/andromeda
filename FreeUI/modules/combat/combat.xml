@@ -1,0 +1,6 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='combat.lua'/>
+	<Script file='fct.lua'/>
+	<Script file='pvpsound.lua'/>
+	<Script file='tab.lua'/>
+</Ui>

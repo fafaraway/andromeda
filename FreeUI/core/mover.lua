@@ -1,10 +1,9 @@
 local F, C, L = unpack(select(2, ...))
+local MOVER = F:GetModule('Mover')
 
 
-local strsplit, ipairs, wipe = string.split, ipairs, table.wipe
-
+-- Grids
 local toggle = 0
-
 local shadeFrame = CreateFrame('Frame')
 local shadeTexture = shadeFrame:CreateTexture(nil, 'BACKGROUND', nil, -8)
 
@@ -63,22 +62,47 @@ local function crosshair(arg)
 end
 
 
+-- Movable Frame
+function F:CreateMF(parent, saved)
+	local frame = parent or self
+	frame:SetMovable(true)
+	frame:SetUserPlaced(true)
+	frame:SetClampedToScreen(true)
 
-local MoverList, BackupTable, f = {}, {}
+	self:EnableMouse(true)
+	self:RegisterForDrag("LeftButton")
+	self:SetScript("OnDragStart", function() frame:StartMoving() end)
+	self:SetScript("OnDragStop", function()
+		frame:StopMovingOrSizing()
+		if not saved then return end
+		local orig, _, tar, x, y = frame:GetPoint()
+		FreeUIConfig['uiTempAnchor'][frame:GetName()] = {orig, "UIParent", tar, x, y}
+	end)
+end
+
+function F:RestoreMF()
+	local name = self:GetName()
+	if name and FreeUIConfig['uiTempAnchor'][name] then
+		self:ClearAllPoints()
+		self:SetPoint(unpack(FreeUIConfig['uiTempAnchor'][name]))
+	end
+end
+
+
+-- Frame Mover
+local MoverList, f = {}
+local updater
 
 function F:Mover(text, value, anchor, width, height)
-	local key = 'UIElementsAnchor'
-	if not FreeUIConfig[key] then FreeUIConfig[key] = {} end
+	local key = 'uiAnchor'
 
 	local mover = CreateFrame('Frame', nil, UIParent)
 	mover:SetWidth(width or self:GetWidth())
 	mover:SetHeight(height or self:GetHeight())
-	F.CreateBD(mover)
-	F.CreateSD(mover)
-
-	F.CreateFS(mover, (C.isCNClient and {C.font.normal, 11}) or 'pixel', text, nil, 'yellow', true)
-
-	tinsert(MoverList, mover)
+	mover.bg = F.SetBD(mover)
+	mover:Hide()
+	mover.text = F.CreateFS(mover, C.Assets.Fonts.Normal, 12, 'OUTLINE', text, 'YELLOW')
+	mover.text:SetWordWrap(true)
 
 	if not FreeUIConfig[key][value] then 
 		mover:SetPoint(unpack(anchor))
@@ -90,37 +114,143 @@ function F:Mover(text, value, anchor, width, height)
 	mover:SetClampedToScreen(true)
 	mover:SetFrameStrata('HIGH')
 	mover:RegisterForDrag('LeftButton')
-	mover:SetScript('OnDragStart', function() mover:StartMoving() end)
-	mover:SetScript('OnDragStop', function()
-		mover:StopMovingOrSizing()
-		local orig, _, tar, x, y = mover:GetPoint()
-		FreeUIConfig[key][value] = {orig, 'UIParent', tar, x, y}
-	end)
-	mover:Hide()
+	mover.__key = key
+	mover.__value = value
+	mover.__anchor = anchor
+	mover:SetScript('OnEnter', MOVER.Mover_OnEnter)
+	mover:SetScript('OnLeave', MOVER.Mover_OnLeave)
+	mover:SetScript('OnDragStart', MOVER.Mover_OnDragStart)
+	mover:SetScript('OnDragStop', MOVER.Mover_OnDragStop)
+	mover:SetScript('OnMouseUp', MOVER.Mover_OnClick)
+
+	tinsert(MoverList, mover)
+
 	self:ClearAllPoints()
 	self:SetPoint('TOPLEFT', mover)
 
 	return mover
 end
 
-local function UnlockElements()
+function MOVER:CalculateMoverPoints(mover, trimX, trimY)
+	local screenWidth = F:Round(UIParent:GetRight())
+	local screenHeight = F:Round(UIParent:GetTop())
+	local screenCenter = F:Round(UIParent:GetCenter(), nil)
+	local x, y = mover:GetCenter()
+
+	local LEFT = screenWidth / 3
+	local RIGHT = screenWidth * 2 / 3
+	local TOP = screenHeight / 2
+	local point
+
+	if y >= TOP then
+		point = "TOP"
+		y = -(screenHeight - mover:GetTop())
+	else
+		point = "BOTTOM"
+		y = mover:GetBottom()
+	end
+
+	if x >= RIGHT then
+		point = point.."RIGHT"
+		x = mover:GetRight() - screenWidth
+	elseif x <= LEFT then
+		point = point.."LEFT"
+		x = mover:GetLeft()
+	else
+		x = x - screenCenter
+	end
+
+	x = x + (trimX or 0)
+	y = y + (trimY or 0)
+
+	return x, y, point
+end
+
+function MOVER:UpdateTrimFrame()
+	local x, y = MOVER:CalculateMoverPoints(self)
+	x, y = F:Round(x), F:Round(y)
+	f.__x:SetText(x)
+	f.__y:SetText(y)
+	f.__x.__current = x
+	f.__y.__current = y
+	f.__trimText:SetText(self.text:GetText())
+end
+
+function MOVER:DoTrim(trimX, trimY)
+	local mover = updater.__owner
+	if mover then
+		local x, y, point = MOVER:CalculateMoverPoints(mover, trimX, trimY)
+		x, y = F:Round(x), F:Round(y)
+		f.__x:SetText(x)
+		f.__y:SetText(y)
+		f.__x.__current = x
+		f.__y.__current = y
+		mover:ClearAllPoints()
+		mover:SetPoint(point, UIParent, point, x, y)
+		FreeUIConfig[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
+	end
+end
+
+function MOVER:Mover_OnClick(btn)
+	if IsShiftKeyDown() and btn == "RightButton" then
+		self:Hide()
+	elseif IsControlKeyDown() and btn == "RightButton" then
+		self:ClearAllPoints()
+		self:SetPoint(unpack(self.__anchor))
+		FreeUIConfig[self.__key][self.__value] = nil
+	end
+	updater.__owner = self
+	MOVER.UpdateTrimFrame(self)
+end
+
+function MOVER:Mover_OnEnter()
+	self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+	self.text:SetTextColor(1, .8, 0)
+end
+
+function MOVER:Mover_OnLeave()
+	self.bg:SetBackdropBorderColor(0, 0, 0)
+	self.text:SetTextColor(1, 1, 1)
+end
+
+function MOVER:Mover_OnDragStart()
+	self:StartMoving()
+	MOVER.UpdateTrimFrame(self)
+	updater.__owner = self
+	updater:Show()
+end
+
+function MOVER:Mover_OnDragStop()
+	self:StopMovingOrSizing()
+	local orig, _, tar, x, y = self:GetPoint()
+	x = F:Round(x)
+	y = F:Round(y)
+
+	self:ClearAllPoints()
+	self:SetPoint(orig, "UIParent", tar, x, y)
+	FreeUIConfig[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
+	MOVER.UpdateTrimFrame(self)
+	updater:Hide()
+end
+
+function MOVER:UnlockElements()
 	for i = 1, #MoverList do
 		local mover = MoverList[i]
 		if not mover:IsShown() then
 			mover:Show()
 		end
 	end
-	F.CopyTable(FreeUIConfig['UIElementsAnchor'], BackupTable)
+
 	f:Show()
 end
 
-local function LockElements()
+function MOVER:LockElements()
 	for i = 1, #MoverList do
 		local mover = MoverList[i]
 		mover:Hide()
 	end
 	f:Hide()
-	--SlashCmdList['TOGGLEGRID']('1')
+
 	toggle = 0
 	clear()
 end
@@ -130,59 +260,42 @@ StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(FreeUIConfig['UIElementsAnchor'])
+		wipe(FreeUIConfig['uiAnchor'])
 		ReloadUI()
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = true,
-	preferredIndex = 5,
 }
 
-StaticPopupDialogs['FREEUI_MOVER_CANCEL'] = {
-	text = L['MOVER_CANCEL_CONFIRM'],
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		F.CopyTable(BackupTable, FreeUIConfig['UIElementsAnchor'])
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = true,
-	preferredIndex = 5,
-}
 
+-- Mover Console
 local function CreateConsole()
 	if f then return end
 
 	f = CreateFrame('Frame', nil, UIParent)
 	f:SetPoint('TOP', 0, -150)
-	f:SetSize(296, 65)
+	f:SetSize(260, 70)
 	F.CreateBD(f)
 	F.CreateSD(f)
-	F.CreateMF(f)
-	F.CreateFS(f, {C.font.normal, 14}, L['MOVER_PANEL'], nil, 'yellow', true, 'TOP', 0, -10)
-	local bu, text = {}, {LOCK, CANCEL, L['MOVER_GRID'], RESET}
-	for i = 1, 4 do
-		bu[i] = F.CreateButton(f, 70, 28, text[i])
+	F.CreateFS(f, C.Assets.Fonts.Normal, 12, true, L['MOVER_PANEL'], 'YELLOW', nil, 'TOP', 0, -10)
+
+	local bu, text = {}, {LOCK, L['MOVER_GRID'], RESET}
+
+	for i = 1, 3 do
+		bu[i] = F.CreateButton(f, 80, 24, text[i])
 		F.Reskin(bu[i])
 		if i == 1 then
-			bu[i]:SetPoint('BOTTOMLEFT', 5, 5)
+			bu[i]:SetPoint('BOTTOMLEFT', 6, 6)
 		else
-			bu[i]:SetPoint('LEFT', bu[i-1], 'RIGHT', 2, 0)
+			bu[i]:SetPoint('LEFT', bu[i-1], 'RIGHT', 4, 0)
 		end
 	end
 
 	-- Lock
-	bu[1]:SetScript('OnClick', LockElements)
-	-- Cancel
-	bu[2]:SetScript('OnClick', function()
-		StaticPopup_Show('FREEUI_MOVER_CANCEL')
-	end)
+	bu[1]:SetScript('OnClick', MOVER.LockElements)
+
 	-- Grids
-	bu[3]:SetScript('OnClick', function()
-		--SlashCmdList['TOGGLEGRID']('64')
+	bu[2]:SetScript('OnClick', function()
 		if toggle == 0 then
 			shade(1, 1, 1, 0.85)
 			crosshairTextureNS:SetColorTexture(0, 0, 0, 1)
@@ -194,20 +307,99 @@ local function CreateConsole()
 			clear()
 		end
 	end)
+
 	-- Reset
-	bu[4]:SetScript('OnClick', function()
+	bu[3]:SetScript('OnClick', function()
 		StaticPopup_Show('FREEUI_MOVER_RESET')
 	end)
 
+	local header = CreateFrame('Frame', nil, f)
+	header:SetSize(260, 30)
+	header:SetPoint('TOP')
+	F.CreateMF(header, f)
+	local tips = C.InfoColor..'|nCTRL +'..C.Assets.Textures.btnright..L['MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.Textures.btnright..L['MOVER_HIDE_ELEMENT']
+	header.title = L['MOVER_TIPS']
+	F.AddTooltip(header, 'ANCHOR_TOP', tips)
+
+	local frame = CreateFrame('Frame', nil, f)
+	frame:SetSize(260, 100)
+	frame:SetPoint('TOP', f, 'BOTTOM', 0, -2)
+	F.CreateBD(frame)
+	F.CreateSD(frame)
+	F.CreateTex(frame)
+	f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Normal, 12, true, '', 'YELLOW', nil, 'BOTTOM', 0, 5)
+
+	local xBox = F.CreateEditBox(frame, 60, 22)
+	xBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -15)
+	F.CreateFS(xBox, C.Assets.Fonts.Number, 11, 'OUTLINE', 'X', 'YELLOW', true, 'LEFT', -20, 0)
+	xBox:SetJustifyH('CENTER')
+	xBox.__current = 0
+	xBox:HookScript('OnEnterPressed', function(self)
+		local text = self:GetText()
+		text = tonumber(text)
+		if text then
+			local diff = text - self.__current
+			self.__current = text
+			MOVER:DoTrim(diff)
+		end
+	end)
+	f.__x = xBox
+
+	local yBox = F.CreateEditBox(frame, 60, 22)
+	yBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -39)
+	F.CreateFS(yBox, C.Assets.Fonts.Number, 11, 'OUTLINE', 'Y', 'YELLOW', true, 'LEFT', -20, 0)
+	yBox:SetJustifyH('CENTER')
+	yBox.__current = 0
+	yBox:HookScript('OnEnterPressed', function(self)
+		local text = self:GetText()
+		text = tonumber(text)
+		if text then
+			local diff = text - self.__current
+			self.__current = text
+			MOVER:DoTrim(nil, diff)
+		end
+	end)
+	f.__y = yBox
+
+	local arrows = {}
+	local arrowIndex = {
+		[1] = {degree = 180, offset = -1, x = 28, y = 9},
+		[2] = {degree = 0, offset = 1, x = 72, y = 9},
+		[3] = {degree = 90, offset = 1, x = 50, y = 20},
+		[4] = {degree = -90, offset = -1, x = 50, y = -2},
+	}
+	local function arrowOnClick(self)
+		local modKey = IsModifierKeyDown()
+		if self.__index < 3 then
+			MOVER:DoTrim(self.__offset * (modKey and 10 or 1))
+		else
+			MOVER:DoTrim(nil, self.__offset * (modKey and 10 or 1))
+		end
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+	end
+
+	for i = 1, 4 do
+		arrows[i] = CreateFrame('Button', nil, frame)
+		arrows[i]:SetSize(20, 20)
+		F.PixelIcon(arrows[i], 'Interface\\OPTIONSFRAME\\VoiceChat-Play', true)
+		local arrowData = arrowIndex[i]
+		arrows[i].__index = i
+		arrows[i].__offset = arrowData.offset
+		arrows[i]:SetScript('OnClick', arrowOnClick)
+		arrows[i]:SetPoint('CENTER', arrowData.x, arrowData.y)
+		arrows[i].Icon:SetPoint('TOPLEFT', 3, -3)
+		arrows[i].Icon:SetPoint('BOTTOMRIGHT', -3, 3)
+		arrows[i].Icon:SetRotation(math.rad(arrowData.degree))
+	end
 
 	local function showLater(event)
 		if event == 'PLAYER_REGEN_DISABLED' then
 			if f:IsShown() then
-				LockElements()
+				MOVER:LockElements()
 				F:RegisterEvent('PLAYER_REGEN_ENABLED', showLater)
 			end
 		else
-			UnlockElements()
+			MOVER:UnlockElements()
 			F:UnregisterEvent(event, showLater)
 		end
 	end
@@ -221,20 +413,27 @@ function F:MoverConsole()
 		return
 	end
 	CreateConsole()
-	UnlockElements()
+	MOVER:UnlockElements()
 end
 
-SlashCmdList['FREEUI_MOVER'] = function()
-	if InCombatLockdown() then
-		UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
-		return
-	end
-	CreateConsole()
-	UnlockElements()
-end
-SLASH_FREEUI_MOVER1 = '/mover'
+-- SlashCmdList['FREEUI_MOVER'] = function()
+-- 	if InCombatLockdown() then
+-- 		UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
+-- 		return
+-- 	end
+-- 	CreateConsole()
+-- 	MOVER:UnlockElements()
+-- end
+-- SLASH_FREEUI_MOVER1 = '/mover'
 
 
+function MOVER:OnLogin()
+	updater = CreateFrame('Frame')
+	updater:Hide()
+	updater:SetScript('OnUpdate', function()
+		MOVER.UpdateTrimFrame(updater.__owner)
+	end)
+end 
 
 
 

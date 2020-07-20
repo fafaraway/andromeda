@@ -57,6 +57,13 @@ L['NOTIFICATION_SELL'] = 'SELL'
 
 
 -- infobar
+L['INFOBAR_CURRENCY'] = 'Currency'
+L['INFOBAR_DURABILITY'] = 'Durability'
+L['INFOBAR_FRIENDS'] = 'Friends'
+L['INFOBAR_GUILD'] = 'Guild'
+L['INFOBAR_GUILD_NONE'] = 'None'
+L['INFOBAR_REPORT'] = 'Report'
+
 L['INFOBAR_WOW'] = '<World of Warcraft>'
 L['INFOBAR_BN'] = '<Battle.NET>'
 L['INFOBAR_NO_ONLINE'] = 'No friends online at the moment.'
@@ -110,10 +117,18 @@ L['INVENTORY_DELETE_MODE_DISABLED'] = 'Item quickly delete mode disabled.'
 L['INVENTORY_DELETE_MODE'] = 'Enable quickly delete mode'
 L['INVENTORY_MECHAGON_STUFF'] = 'Mechagon stuff'
 
+L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
+L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
+L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。" 
+
+
 
 -- mover
 L['MOVER_PANEL'] = 'Mover console'
 L['MOVER_GRID'] = 'Grids'
+L['MOVER_RESET_ANCHOR'] = 'Reset this element to default position'
+L['MOVER_HIDE_ELEMENT'] = 'Hide this element'
+L['MOVER_TIPS'] = 'Tips'
 L['MOVER_TOOLTIP'] = 'tooltip'
 L['MOVER_MINIMAP'] = 'minimap'
 L['MOVER_RESET_CONFIRM'] = 'Are you sure to reset frames position?'
@@ -148,6 +163,8 @@ L['CHAT_SHOW'] = 'Show chat frame'
 L['CHAT_JOIN_WC'] = 'Join world channel (only for Chinese player)'
 L['CHAT_LEAVE_WC'] = 'Leave world channel'
 L['CHAT_COPY'] = 'Chat copy'
+L['CHAT_WHISPER_TELL'] = 'Tell'
+L['CHAT_WHISPER_FROM'] = 'From'
 
 
 -- Tooltip
@@ -158,6 +175,11 @@ L['TOOLTIP_STACK_CAP'] = 'Stack caps'
 L['TOOLTIP_AZERITE_TRAIT'] = 'Azerite trait'
 L['TOOLTIP_SECTION'] = 'Section'
 L['TOOLTIP_TARGETED'] = 'Targeted'
+
+
+-- Themes
+L["THEME_CONFLICTION_WARNING"] = "FreeUI includes an efficient built-in module of theme.\n\nIt's highly recommended that you disable any version of Aurora or Skinner."
+
 
 
 

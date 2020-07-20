@@ -1,5 +1,93 @@
 local F, C = unpack(select(2, ...))
 
+
+local defaultSettings = {
+	BfA = false,
+	classic = false,
+	
+	installComplete = false,
+
+	uiAnchor = {},
+	uiTempAnchor = {},
+
+	
+
+	mapReveal = false,
+	quickQuest = false,
+
+	clickCast = {},
+	
+	inventory = {
+		autoSellJunk = false,
+		autoRepair = false,
+		favouriteItems = {},
+	},
+	actionbar = {
+		bindType = 1,
+	},
+
+	unitframe = {
+		layout = 'DPS',
+	},
+	
+
+
+}
+
+local accountSettings = {
+
+	totalGold = {},
+	keystoneInfo = {},
+
+	customJunkList = {},
+}
+
+local function InitialSettings(source, target, fullClean)
+	for i, j in pairs(source) do
+		if type(j) == "table" then
+			if target[i] == nil then target[i] = {} end
+			for k, v in pairs(j) do
+				if target[i][k] == nil then
+					target[i][k] = v
+				end
+			end
+		else
+			if target[i] == nil then target[i] = j end
+		end
+	end
+
+	for i, j in pairs(target) do
+		if source[i] == nil then target[i] = nil end
+		if fullClean and type(j) == "table" then
+			for k, v in pairs(j) do
+				if type(v) ~= "table" and source[i] and source[i][k] == nil then
+					target[i][k] = nil
+				end
+			end
+		end
+	end
+end
+
+local loader = CreateFrame('Frame')
+loader:RegisterEvent('ADDON_LOADED')
+loader:SetScript('OnEvent', function(self, _, addon)
+	if addon ~= 'FreeUI' then return end
+
+	if not FreeUIConfig['BfA'] then
+		FreeUIConfig = {}
+		FreeUIConfig['BfA'] = true
+	end
+
+	InitialSettings(defaultSettings, FreeUIConfig, true)
+	InitialSettings(accountSettings, FreeUIGlobalConfig)
+	
+	F:SetupUIScale(true)
+
+	self:UnregisterAllEvents()
+end)
+
+
+
 if not IsAddOnLoaded("FreeUI_Options") then return end
 
 local realm = GetRealmName()

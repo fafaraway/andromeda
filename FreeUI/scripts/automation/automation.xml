@@ -1,9 +1,0 @@
-<Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='invite.lua'/>
-	<Script file='quest.lua'/>
-	<Script file='repair.lua'/>
-	<Script file='role.lua'/>
-	<Script file='screenshot.lua'/>
-	<Script file='sell.lua'/>
-	<Script file='tabbinder.lua'/>
-</Ui>

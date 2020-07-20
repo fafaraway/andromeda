@@ -1,16 +1,16 @@
-## Interface: 80200
-## Title: |cffffffffFree|r|cffb2b2b2UI|r |cffffa500Options|r
+## Interface: 80205
+## Title: |cffffffffFree|r|cffb2b2b2UI|r |cfffe8402Options|r
 ## Notes: Options GUI for FreeUI.
 ## Author: Haleth, Solor
-## Version: 80200.11
+## Version: 1.5
 ## SavedVariables: FreeUIOptionsGlobal, FreeUIOptions
 ## SavedVariablesPerCharacter: FreeUIOptionsPerChar
 
-freeui_options.lua
 
-localization\english.lua
-localization\chinese.lua
-
-frames.lua
+init.lua
+locales\zhCN.lua
+#locales\enUS.lua
+core.lua
+options.lua
 
 

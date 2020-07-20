@@ -1,0 +1,4 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='cooldown.lua'/>
+	<Script file='pulse.lua'/>
+</Ui>

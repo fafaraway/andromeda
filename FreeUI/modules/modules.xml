@@ -1,0 +1,17 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Include file='actionbar\actionbar.xml'/>
+	<Include file='announcement\announcement.xml'/>
+	<Include file='aura\aura.xml'/>
+	<Include file='automation\automation.xml'/>
+	<Include file='chat\chat.xml'/>
+	<Include file='combat\combat.xml'/>
+	<Include file='cooldown\cooldown.xml'/>
+	<Include file='infobar\infobar.xml'/>
+	<Include file='inventory\inventory.xml'/>
+	<Include file='map\map.xml'/>
+	<Include file='misc\misc.xml'/>
+	<Include file='notification\notification.xml'/>
+	<Include file='quest\quest.xml'/>
+	<Include file='tooltip\tooltip.xml'/>
+	<Include file='unitframe\unitframe.xml'/>
+</Ui>

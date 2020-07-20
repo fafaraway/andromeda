@@ -1,6 +1,4 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Include file='cargBags\cargBags.xml'/>
 	<Include file='oUF\oUF.xml'/>
-	<Script file='LibPlayerSpells-1.0\LibStub.lua'/>
-	<Include file='LibPlayerSpells-1.0\lib.xml'/>
 </Ui>

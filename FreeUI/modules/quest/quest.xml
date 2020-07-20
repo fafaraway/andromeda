@@ -1,0 +1,6 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='quest.lua'/>
+	<Script file='extraquestbutton.lua'/>
+	<Script file='notifier.lua'/>
+	<Script file='quickquest.lua'/>
+</Ui>

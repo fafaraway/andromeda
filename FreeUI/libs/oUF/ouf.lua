@@ -1,6 +1,6 @@
 local parent, ns = ...
 local global = GetAddOnMetadata(parent, 'X-oUF')
-local _VERSION = '9.2.0'
+local _VERSION = '@project-version@'
 if(_VERSION:find('project%-version')) then
 	_VERSION = 'devel'
 end
@@ -432,6 +432,7 @@ end
 
 --[[ oUF:GetActiveStyle()
 Used to get the active style.
+
 * self - the global oUF object
 --]]
 function oUF:GetActiveStyle()
