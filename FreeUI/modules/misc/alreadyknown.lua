@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 local MISC, cfg = F:GetModule('Misc'), C.General
 
-if not cfg.alreadyKnown then return end
+if not cfg.already_known then return end
 
 local select, mod = select, mod
 local strmatch, strfind, strsplit, format = string.match, string.find, string.split, string.format

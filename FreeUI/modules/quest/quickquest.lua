@@ -7,19 +7,19 @@ local QUEST, cfg = F:GetModule('Quest'), C.Quest
 local created
 local function setupCheckButton()
 	if created then return end
-	local bu = CreateFrame("CheckButton", nil, WorldMapFrame.BorderFrame, "InterfaceOptionsCheckButtonTemplate")
-	bu:Point("TOPRIGHT", -250, -2)
+	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
+	bu:Point('TOPRIGHT', -250, -2)
 	bu:Size(26)
 	F.ReskinCheck(bu)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 25, 0)
-	bu:SetChecked(FreeUIConfig['quickQuest'])
-	bu:SetScript("OnClick", function(self)
-		FreeUIConfig['quickQuest'] = self:GetChecked()
+	bu:SetChecked(FreeUIConfig['quick_quest'])
+	bu:SetScript('OnClick', function(self)
+		FreeUIConfig['quick_quest'] = self:GetChecked()
 	end)
 
 	created = true
 end
-WorldMapFrame:HookScript("OnShow", setupCheckButton)
+WorldMapFrame:HookScript('OnShow', setupCheckButton)
 
 -- Function
 local strmatch = string.match
@@ -32,7 +32,7 @@ QuickQuest:SetScript('OnEvent', function(self, event, ...) self[event](...) end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if FreeUIConfig['quickQuest'] and not IsModifierKeyDown() then
+		if FreeUIConfig['quick_quest'] and not IsModifierKeyDown() then
 			func(...)
 		end
 	end
@@ -231,9 +231,9 @@ QuickQuest:Register('GOSSIP_SHOW', function()
 			end
 
 			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-			if(instance ~= "raid" and not ignoreGossipNPC[npcID] and not (instance == "scenario" and mapID == 1626)) then
+			if(instance ~= 'raid' and not ignoreGossipNPC[npcID] and not (instance == 'scenario' and mapID == 1626)) then
 				local _, type = GetGossipOptions()
-				if(type == "gossip") then
+				if(type == 'gossip') then
 					SelectGossipOption(1)
 					return
 				end

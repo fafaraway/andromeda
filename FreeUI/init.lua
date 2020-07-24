@@ -75,28 +75,26 @@ function F:GetModule(name)
 	return modules[name]
 end
 
-F.oUF = engine.oUF
-F.cargBags = engine.cargBags
-F.Install = F:RegisterModule('Install')
-F.Mover = F:RegisterModule('Mover')
-F.Animation = F:RegisterModule('Logo')
-F.Theme = F:RegisterModule('Theme')
-F.Misc = F:RegisterModule('Misc')
-F.Actionbar = F:RegisterModule('Actionbar')
-F.Cooldown = F:RegisterModule('Cooldown')
-F.Aura = F:RegisterModule('Aura')
-F.Announcement = F:RegisterModule('Announcement')
-F.Chat = F:RegisterModule('Chat')
-F.Combat = F:RegisterModule('Combat')
-F.Infobar = F:RegisterModule('Infobar')
-F.Inventory = F:RegisterModule('Inventory')
-F.Map = F:RegisterModule('Map')
-F.Notification = F:RegisterModule('Notification')
-F.Quest = F:RegisterModule('Quest')
-F.Tooltip = F:RegisterModule('Tooltip')
-F.Unitframe = F:RegisterModule('Unitframe')
-F.Automation = F:RegisterModule('Automation')
-L.QUEST = {}
+
+F:RegisterModule('Install')
+F:RegisterModule('Mover')
+F:RegisterModule('Logo')
+F:RegisterModule('Theme')
+F:RegisterModule('Misc')
+F:RegisterModule('Actionbar')
+F:RegisterModule('Cooldown')
+F:RegisterModule('Aura')
+F:RegisterModule('Announcement')
+F:RegisterModule('Chat')
+F:RegisterModule('Combat')
+F:RegisterModule('Infobar')
+F:RegisterModule('Inventory')
+F:RegisterModule('Map')
+F:RegisterModule('Notification')
+F:RegisterModule('Quest')
+F:RegisterModule('Tooltip')
+F:RegisterModule('Unitframe')
+F:RegisterModule('Automation')
 
 
 -- UI scale
@@ -106,7 +104,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-	local scale = GetBestScale() * C.General.uiScale
+	local scale = GetBestScale() * C.General.ui_scale
 
 	if init then
 		local pixel = 1
@@ -135,7 +133,7 @@ end
 -- Init
 F:RegisterEvent('PLAYER_LOGIN', function()
 
-	if FreeUIConfig['installComplete'] then
+	if FreeUIConfig['installation_complete'] then
 
 		F:SetupUIScale()
 		F:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)

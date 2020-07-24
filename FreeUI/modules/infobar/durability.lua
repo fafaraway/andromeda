@@ -103,7 +103,7 @@ function INFOBAR:Durability()
 		end
 
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.btnleft..L['INFOBAR_OPEN_CHARACTER_PANEL']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_left..L['INFOBAR_OPEN_CHARACTER_PANEL']..' ', 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

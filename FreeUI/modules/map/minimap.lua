@@ -357,38 +357,29 @@ end
 
 
 function MAP:Minimap()
-	
-
-	function GetMinimapShape() return 'SQUARE' end
-
+	MinimapCluster:Hide()
 	MinimapCluster:EnableMouse(false)
-	-- MinimapCluster:SetClampedToScreen(true)
-	-- MinimapCluster:SetClampRectInsets(0, 0, size, size)
 
-	Minimap:Size(minimapSize, minimapSize)
+	local holder = CreateFrame('Frame', nil, UIParent)
+	holder:SetSize(256*minimapScale, 190*minimapScale)
+	F.SetBD(holder)
+
+	Minimap:Size(256, 256)
 	Minimap:SetScale(minimapScale)
 	Minimap:SetMaskTexture(C.Assets.Textures.mapmask)
-	Minimap:SetHitRectInsets(0, 0, minimapSize * marginScale, minimapSize * marginScale)
-	Minimap:SetClampRectInsets(0, 0, minimapSize, minimapSize)
+	Minimap:SetHitRectInsets(0, 0, 33 * minimapScale, 33 * minimapScale)
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)
 	Minimap:EnableMouse(true)
-	Minimap:SetClampedToScreen(true)
+	Minimap:SetClampedToScreen(false)
+	Minimap:SetParent(holder)
 	Minimap:ClearAllPoints()
+	Minimap:SetPoint('CENTER')
 
+	local mover = F.Mover(holder, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.General.ui_gap, C.General.ui_gap*minimapScale}, 256*minimapScale, 190*minimapScale)
+	holder:SetPoint('CENTER', mover)
+	holder.mover = mover
 
-	local mover = F.Mover(Minimap, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.General.gap, -C.General.gap*minimapScale}, Minimap:GetWidth()*minimapScale, Minimap:GetHeight()*minimapScale)
-	Minimap:SetPoint('CENTER', mover)
-	Minimap.mover = mover
-
-	--mover:SetClampedToScreen(true)
-	--mover:SetClampRectInsets(0, 0, size, size)
-
-	BorderFrame = CreateFrame('Frame', nil, Minimap)
-	BorderFrame:SetPoint('TOPLEFT', Minimap, 'TOPLEFT', 0, -(minimapSize * marginScale))
-	BorderFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMRIGHT', 0, (minimapSize * marginScale))
-	BorderFrame:SetFrameLevel(Minimap:GetFrameLevel() - 1)
-	local bg = F.CreateBDFrame(BorderFrame, 1, true)
 
 	DropDownList1:SetClampedToScreen(true)
 

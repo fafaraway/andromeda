@@ -10,6 +10,7 @@ local numPet = NUM_PET_ACTION_SLOTS
 local numStance = NUM_STANCE_SLOTS
 local numExtra = 1
 local buttonList = {}
+local gap = C.General.ui_gap
 
 
 function ACTIONBAR:CreateBar1()
@@ -17,7 +18,7 @@ function ACTIONBAR:CreateBar1()
 	frame:Width(numNormal*buttonSizeNormal + (numNormal-1)*margin + 2*padding)
 	frame:Height(buttonSizeNormal + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.General.gap}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap}
 
 	for i = 1, numNormal do
 		local button = _G['ActionButton'..i]
@@ -73,7 +74,7 @@ function ACTIONBAR:CreateBar2()
 	frame:Width(numNormal*buttonSizeNormal + (numNormal-1)*margin + 2*padding)
 	frame:Height(buttonSizeNormal + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.General.gap+buttonSizeNormal+padding}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap+buttonSizeNormal+padding}
 
 	MultiBarBottomLeft:SetParent(frame)
 	MultiBarBottomLeft:EnableMouse(false)
@@ -117,9 +118,9 @@ function ACTIONBAR:CreateBar3()
 	end
 
 	if cfg.bar3_divide then
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.General.gap}
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap}
 	else
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.General.gap+2*(buttonSizeNormal+2*padding)}
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap+2*(buttonSizeNormal+2*padding)}
 	end
 
 	MultiBarBottomRight:SetParent(frame)
@@ -248,7 +249,7 @@ function ACTIONBAR:CreatePetbar()
 	frame:Width(numPet*buttonSizeSmall + (numPet-1)*(margin+2) + 2*padding)
 	frame:Height(buttonSizeSmall + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.General.gap+2*(buttonSizeNormal+2*padding)}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap+2*(buttonSizeNormal+2*padding)}
 
 	PetActionBarFrame:SetParent(frame)
 	PetActionBarFrame:EnableMouse(false)

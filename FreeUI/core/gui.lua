@@ -1,48 +1,31 @@
 local F, C = unpack(select(2, ...))
 
 
-local defaultSettings = {
-	BfA = false,
-	classic = false,
-	
-	installComplete = false,
-
-	uiAnchor = {},
-	uiTempAnchor = {},
-
-	
-
-	mapReveal = false,
-	quickQuest = false,
-
-	clickCast = {},
-	
-	inventory = {
-		autoSellJunk = false,
-		autoRepair = false,
-		favouriteItems = {},
-	},
-	actionbar = {
-		bindType = 1,
-	},
-
-	unitframe = {
-		layout = 'DPS',
-	},
-	
-
-
+local characterSettings = {
+	['BfA'] = false,
+	['classic'] = false,
+	['installation_complete'] = false,
+	['ui_anchor'] = {},
+	['ui_anchor_temp'] = {},
+	['map_reveal'] = false,
+	['quick_quest'] = false,
+	['bind_type'] = 1,
+	['favourite_items'] = {},
+	['click_cast'] = {},
 }
 
 local accountSettings = {
-
-	totalGold = {},
-	keystoneInfo = {},
-
-	customJunkList = {},
+	['ui_scale'] = 1,
+	['ui_padding'] = 33,
+	['total_gold'] = {},
+	['auto_sell_junk'] = false,
+	['auto_repair'] = false,
+	['custom_junk_list'] = {},
+	['number_format'] = 1,
+	['keystone_info'] = {},
 }
 
-local function InitialSettings(source, target, fullClean)
+local function initSettings(source, target, fullClean)
 	for i, j in pairs(source) do
 		if type(j) == "table" then
 			if target[i] == nil then target[i] = {} end
@@ -78,8 +61,8 @@ loader:SetScript('OnEvent', function(self, _, addon)
 		FreeUIConfig['BfA'] = true
 	end
 
-	InitialSettings(defaultSettings, FreeUIConfig, true)
-	InitialSettings(accountSettings, FreeUIGlobalConfig)
+	initSettings(characterSettings, FreeUIConfig, true)
+	initSettings(accountSettings, FreeUIGlobalConfig)
 	
 	F:SetupUIScale(true)
 
@@ -87,23 +70,19 @@ loader:SetScript('OnEvent', function(self, _, addon)
 end)
 
 
-
-if not IsAddOnLoaded("FreeUI_Options") then return end
-
-local realm = GetRealmName()
-local name = UnitName("player")
+if not IsAddOnLoaded('FreeUI_Options') then return end
 
 -- create the profile boolean
 if not FreeUIOptionsGlobal then FreeUIOptionsGlobal = {} end
-if FreeUIOptionsGlobal[realm] == nil then FreeUIOptionsGlobal[realm] = {} end
-if FreeUIOptionsGlobal[realm][name] == nil then FreeUIOptionsGlobal[realm][name] = false end
+if FreeUIOptionsGlobal[C.MyRealm] == nil then FreeUIOptionsGlobal[C.MyRealm] = {} end
+if FreeUIOptionsGlobal[C.MyRealm][C.MyName] == nil then FreeUIOptionsGlobal[C.MyRealm][C.MyName] = false end
 
 -- create the main options table
 if FreeUIOptions == nil then FreeUIOptions = {} end
 
 -- determine which settings to use
 local profile
-if FreeUIOptionsGlobal[realm][name] == true then
+if FreeUIOptionsGlobal[C.MyRealm][C.MyName] == true then
 	if FreeUIOptionsPerChar == nil then
 		FreeUIOptionsPerChar = {}
 	end

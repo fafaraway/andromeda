@@ -349,9 +349,9 @@ function INFOBAR:Report()
 		if UnitLevel('player') == 120 then
 			GameTooltip:AddLine(' ')
 			GameTooltip:AddDoubleLine(' ', C.LineString)
-			GameTooltip:AddDoubleLine(' ', C.Assets.Textures.btnleft..L['INFOBAR_OPEN_BFA_REPORT'], 1, 1, 1, .9, .8, .6)
-			GameTooltip:AddDoubleLine(' ', C.Assets.Textures.btnright..L['INFOBAR_OPEN_LEG_REPORT'], 1, 1, 1, .9, .8, .6)
-			GameTooltip:AddDoubleLine(' ', C.Assets.Textures.btnmid..L['INFOBAR_OPEN_WOD_REPORT'], 1, 1, 1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_left..L['INFOBAR_OPEN_BFA_REPORT'], 1, 1, 1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_right..L['INFOBAR_OPEN_LEG_REPORT'], 1, 1, 1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_middle..L['INFOBAR_OPEN_WOD_REPORT'], 1, 1, 1, .9, .8, .6)
 		end
 		
 		GameTooltip:Show()

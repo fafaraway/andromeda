@@ -23,7 +23,7 @@ local function completeText(link)
 end
 
 local function sendQuestMsg(msg)
-	if debugMode and C.General.isDeveloper then
+	if debugMode and C.isDeveloper then
 		print(msg)
 	elseif IsPartyLFG() then
 		SendChatMessage(msg, 'INSTANCE_CHAT')

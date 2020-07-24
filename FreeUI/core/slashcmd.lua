@@ -3,6 +3,46 @@ local INSTALL = F:GetModule('Install')
 local ACTIONBAR = F:GetModule('Actionbar')
 
 
+StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
+	text = L['THEME_CONFLICTION_WARNING'],
+	button1 = DISABLE,
+	OnAccept = function()
+		DisableAddOn('Aurora', true)
+		DisableAddOn('AuroraClassic', true)
+		DisableAddOn('Skinner', true)
+		ReloadUI()
+	end,
+	hideOnEscape = false,
+	whileDead = 1,
+	timeout = 0,
+}
+
+--[[ StaticPopupDialogs['FREEUI_RELOAD'] = {
+	text = L['GUI_RELOAD_WARNING'],
+	button1 = APPLY,
+	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
+	OnAccept = function()
+		ReloadUI()
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = true,
+}
+
+StaticPopupDialogs['FREEUI_RESET'] = {
+	text = L['GUI_RESET_WARNING'],
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		FreeUIConfig = {}
+		FreeUIGlobalConfig = {}
+		ReloadUI()
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = false,
+} ]]
+
 local function printCommandsList()
 	for _, v in ipairs(L['COMMANDS_LIST']) do
 		local command, desc = strsplit('-', tostring(v))
@@ -83,7 +123,7 @@ SlashCmdList.SPEC = function(spec)
 			SetSpecialization(spec)
 		end
 	else
-		print("|cffffff00"..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL).."|r")
+		print('|cffffff00'..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL)..'|r')
 	end
 end
 SLASH_SPEC1 = '/spec'
@@ -115,8 +155,8 @@ SLASH_GROUPCONVERT1 = '/gc'
 function DisbandRaidGroup()
 	if InCombatLockdown() then return end
 
-	if UnitInRaid("player") then
-		SendChatMessage(L['MISC_DISBAND_GROUP'], "RAID")
+	if UnitInRaid('player') then
+		SendChatMessage(L['MISC_DISBAND_GROUP'], 'RAID')
 		for i = 1, GetNumGroupMembers() do
 			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
 			if online and name ~= T.name then
@@ -124,10 +164,10 @@ function DisbandRaidGroup()
 			end
 		end
 	else
-		SendChatMessage(L['MISC_DISBAND_GROUP'], "PARTY")
+		SendChatMessage(L['MISC_DISBAND_GROUP'], 'PARTY')
 		for i = MAX_PARTY_MEMBERS, 1, -1 do
 			if GetNumGroupMembers(i) then
-				UninviteUnit(UnitName("party"..i))
+				UninviteUnit(UnitName('party'..i))
 			end
 		end
 	end
@@ -146,9 +186,9 @@ StaticPopupDialogs.DISBAND_RAID = {
 }
 
 SlashCmdList.GROUPDISBAND = function()
-	StaticPopup_Show("DISBAND_RAID")
+	StaticPopup_Show('DISBAND_RAID')
 end
-SLASH_GROUPDISBAND1 = "/gd"
+SLASH_GROUPDISBAND1 = '/gd'
 
 
 

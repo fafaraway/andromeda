@@ -34,7 +34,7 @@ function AURA:OnLogin()
 	F.HideObject(_G.TemporaryEnchantFrame)
 
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', C.General.gap, -C.General.gap})
+	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', C.General.ui_gap, -C.General.ui_gap})
 	self.BuffFrame:ClearAllPoints()
 	self.BuffFrame:SetPoint('TOPRIGHT', buffAnchor)
 

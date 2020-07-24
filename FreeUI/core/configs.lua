@@ -2,115 +2,45 @@ local F, C = unpack(select(2, ...))
 
 
 local myClass = select(2, UnitClass('player'))
-local assets = 'Interface\\AddOns\\FreeUI\\assets\\'
 
-C['Assets'] = {
-	['Textures'] = {
-		['backdrop'] = "Interface\\ChatFrame\\ChatFrameBackground",
-		['bdstripe'] = assets..'textures\\bgTex',
-		['statusbar'] = assets..'textures\\normTex',
-		['sbstripe'] = assets..'textures\\striped',
-		['shadow'] = assets..'textures\\glowTex',
-		['tick'] = assets..'textures\\tickTex',
-		['check'] = assets..'textures\\checked',
-		['logo'] = assets..'textures\\logo_big_white',
-		['logo_small'] = assets..'textures\\logo_small_white',
-		['targeticon'] = assets..'textures\\UI-RaidTargetingIcons',
-		['rolesicon'] = assets..'textures\\RoleIcons',
-		['mapmask'] = assets..'textures\\rectangle',
-		['spark'] = "Interface\\CastingBar\\UI-CastingBar-Spark",
-		['vignetting'] = assets..'textures\\vignetting',
-		['arrowUp'] = assets..'textures\\arrow-up-active',
-		['arrowDown'] = assets..'textures\\arrow-down-active',
-		['arrowLeft'] = assets..'textures\\arrow-left-active',
-		['arrowRight'] = assets..'textures\\arrow-right-active',
-		['btnleft'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
-		['btnright'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',
-		['btnmid'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
-	},
 
-	['Button'] = {
-		['normal']  = assets.."button\\normal",
-		['flash']   = assets.."button\\flash",
-		['pushed']  = assets.."button\\pushed",
-		['checked'] = assets.."button\\checked",
-	},
 
-	['Inventory'] = {
-		['restore']   = assets..'inventory\\restore',
-		['toggle']    = assets..'inventory\\toggle',
-		['sort']      = assets..'inventory\\sort',
-		['reagen']    = assets..'inventory\\reagen',
-		['deposit']   = assets..'inventory\\deposit',
-		['delete']    = assets..'inventory\\delete',
-		['favourite'] = assets..'inventory\\favourite',
-		['split']     = assets..'inventory\\split',
-		['repair']    = assets..'inventory\\repair',
-		['sell']      = assets..'inventory\\sell',
-		['search']    = assets..'inventory\\search',
-		['junk']      = assets..'inventory\\junk',
-	},
-
-	['Sounds'] = {
-		['whisper'] = assets..'sounds\\whisper_normal.ogg',
-		['whisperBN'] = assets..'sounds\\whisper_bn.ogg',
-		['notification'] = assets..'sounds\\notification.ogg',
-		['feast'] = assets..'sounds\\feast.ogg',
-		['health'] = assets..'sounds\\health.ogg',
-		['mana'] = assets..'sounds\\mana.ogg',
-		['interrupt'] = assets..'sounds\\interrupt.ogg',
-		['dispel'] = assets..'sounds\\dispel.ogg',
-	},
-
-	['Fonts'] = {
-		['Normal'] = STANDARD_TEXT_FONT,
-		['Header'] = UNIT_NAME_FONT,
-		['Chat'] = STANDARD_TEXT_FONT,
-		['Number'] = STANDARD_TEXT_FONT,
-		['Pixel'] = assets..'fonts\\pixel.ttf',
-		['Cooldown'] = assets..'fonts\\cooldown.ttf',
-		['Symbol'] = assets..'fonts\\symbol.ttf',
-	},
-}
 
 C['General'] = {
-	['isDeveloper'] = false,
-	['uiScale'] = 1,
-	['numberFormat'] = 1, -- 2 for Chinse number format (万/亿/兆)
-	['gap'] = 33,
-	
-
-
-	['blizzMover'] = true,
-	['alreadyKnown'] = true,
-	
-	['hideBossBanner'] = true,
-	['hideTalkingHead'] = true,
+	['ui_scale'] = 1,
+	['number_format'] = 1,
+	['ui_gap'] = 33,
+	['blizz_mover'] = true,
+	['already_known'] = true,
+	['hide_boss_banner'] = true,
+	['hide_talking_head'] = true,
 	['item_level'] = true,
 		['merchant_ilvl'] = true,
 		['gem_enchant'] = true,
 		['azerite_traits'] = true,
-	['errors'] =true,
-	['mailButton'] = true,
-	['undressButton'] = true,
-	['tradeTargetInfo'] = true,
-	
+	['tidy_errors'] =true,
+	['mail_button'] = true,
+	['undress_button'] = true,
+	['trade_target_info'] = true,
 	['trade_tabs'] = true,
-	
-	['missingStats'] = true,
-	['petFilter'] = true,
-	
-	['keystone'] = true,
-	
+	['missing_stats'] = true,
+	['pet_filter'] = true,
+	['account_keystone'] = true,
 	['queue_timer'] = true,
 	['color_picker'] = true,
-	
 	['whistle'] = true,
 	['rare_alert'] = true,
-	
-	['groupTool'] = true,
-	['actionCam'] = true,
-	['fasterCam'] = true,
+	['group_tool'] = true,
+	['action_camera'] = true,
+	['faster_camera'] = true,
+
+	['block_stranger_invite'] = false,
+	['instant_loot'] = true,
+	['easy_mark'] = true,
+	['easy_delete'] = true,
+	['easy_naked'] = true,
+	['easy_focus'] = true,
+		['easy_focus_on_unitframes'] = false,
 }
 
 C['Theme'] = {
@@ -118,16 +48,16 @@ C['Theme'] = {
 	['vignetting'] = true,
 		['vignetting_alpha'] = .8,
 	['backdrop_color'] = {.05, .05, .05},
-	['backdrop_alpha'] = .65,
+	['backdrop_alpha'] = .6,
 	['backdrop_border_color'] = {0, 0, 0},
 	['backdrop_border_alpha'] = 1,
 	['flat_style'] = false,
 		['flat_color'] = {.06, .06, .06},
-		['flat_alpha'] = .7,
+		['flat_alpha'] = .65,
 	['gradient_color_primary'] = {.02, .02, .02},
-	['gradient_color_primary_alpha'] = .65,
+	['gradient_color_primary_alpha'] = .5,
 	['gradient_color_secondary'] = {.08, .08, .08},
-	['gradient_color_secondary_alpha'] = .65,
+	['gradient_color_secondary_alpha'] = .5,
 	['reskin_blizz'] = true,
 	['shadow_border'] = true,
 	
@@ -146,16 +76,17 @@ C['Notification'] = {
 
 C['Automation'] = {
 	['enable'] = true,
-		['easy_delete'] = true,
-		['easy_focus'] = true,
-			['easy_focus_on_ouf'] = false,
-		['easy_mark'] = true,
-		['easy_naked'] = true,
-		['easy_buy_stack'] = true,
-		['auto_screenshot'] = true,
-		['auto_reject_stranger'] = false,
-		['auto_toggle_chat_bubble'] = false,
-		['instant_loot'] = true,
+		
+		
+		
+		
+		['buy_stack'] = true,
+		['screenshot'] = true,
+
+
+		['auto_accept_invite'] = false,
+		['auto_invite_whisper'] = false,
+		['invite_keyword'] = 'inv'
 
 }
 
@@ -206,8 +137,10 @@ C['Chat'] = {
 		['urlCopy'] = true,
 		['voiceIcon'] = true,
 		['sticky'] = true,
-		['cycles'] =true,
+		['cycles'] = true,
 		['profanity'] = false,
+
+		['auto_toggle_chat_bubble'] = false,
 
 		['allowFriendsSpam'] = false,
 		['blockStranger'] = false,
@@ -300,32 +233,31 @@ C['Combat'] = {
 }
 
 C['Inventory'] = {
-	['enable'] = true,
-		['bagScale'] = 1,
+	['enable_module'] = true,
+		['scale'] = 1,
 		['offset'] = 26,
 		['spacing'] = 3,
-		['slotSize'] = 44,
-		['bagColumns'] = 10,
-		['bankColumns'] = 10,
-		['reverseSort'] = true,
-		['itemLevel'] = true,
-		['iLvlToShow'] = 1,
-		['newitemFlash'] = true,
-
-		['combineFreeSlots'] = true,
-		['splitCount'] = 1,
-		['specialColor'] = true,
-		['useCategory'] = true,
-			['gearSetFilter'] = false,
-			['tradeFilter'] = true,
-			['questFilter'] = true,
-			['junkFilter'] = true,
-			['AzeriteFilter'] = true,
-			['equipmentFilter'] = true,
-			['consumbleFilter'] = true,
-			['legendaryFilter'] = true,
-			['mountPetFilter'] = true,
-			['favouriteFilter'] = true,
+		['slot_size'] = 44,
+		['bag_columns'] = 10,
+		['bank_columns'] = 10,
+		['reverse_sort'] = true,
+		['item_level'] = true,
+			['item_level_to_show'] = 1,
+		['new_item_flash'] = true,
+		['combine_free_slots'] = true,
+		['split_count'] = 1,
+		['special_color'] = true,
+		['item_filter'] = true,
+			['item_filter_gear_set'] = false,
+			['item_filter_trade'] = true,
+			['item_filter_quest'] = true,
+			['item_filter_junk'] = true,
+			['item_filter_azerite'] = true,
+			['item_filter_equipment'] = true,
+			['item_filter_consumable'] = true,
+			['item_filter_legendary'] = true,
+			['item_filter_mount_pet'] = true,
+			['item_filter_favourite'] = true,
 }
 
 C['Map'] = {
@@ -369,9 +301,9 @@ C['Tooltip'] = {
 }
 
 C['Unitframe'] = {
-	['enable'] = true,
+	['enable_module'] = true,
 		['transparency'] = true,
-		['fader'] = true,
+		['fader'] = false,
 		['color_smooth'] = false,
 		['portrait'] = true,
 		['only_show_debuffs_by_player'] = true,
@@ -445,52 +377,33 @@ C['Unitframe'] = {
 			['groupByRole'] = true,
 			['groupReverse'] = false,
 
-			['partyPos'] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
-			['partySymmetryPos'] = {'TOP', UIParent, 'CENTER', 0, -250},
-			['partyWidth'] = 90,
-			['partySymmetryWidth'] = 70,
-			['partyHeight'] = 38,
-			['partySymmetryHeight'] = 34,
-			['partyPadding'] = 6,
+			['party_width'] = 90,
+			['party_height'] = 38,
+			['party_gap'] = 6,
 			['partyShowAuras'] = true,
 
-			['raidPos'] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10},
-			['raidSymmetryPos'] = {'TOP', UIParent, 'CENTER', 0, -250},
-			['raidWidth'] = 44,
-			['raidSymmetryWidth'] = 70,
-			['raidHeight'] = 32,
-			['raidSymmetryHeight'] = 32,
-			['raidPadding'] = 5,
+			['raid_width'] = 44,
+			['raid_height'] = 32,
+			['raid_gap'] = 5,
 			['raidShowAuras'] = true,
 
 		['boss'] = true,
 			['boss_color_smooth'] = true,
-			['bossPos'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
-			['bossSymmetryPos'] = {'LEFT', 'oUF_Target', 'RIGHT', 120, 160},
-			['bossWidth'] = 166,
-			['bossSymmetryWidth'] = 166,
-			['bossHeight'] = 20,
-			['bossSymmetryHeight'] = 20,
-			['bossPadding'] = 60,
+			['boss_width'] = 166,
+			['boss_height'] = 20,
+			['boss_gap'] = 60,
 			['bossShowAuras'] = true,
 			['bossAuraPerRow'] = 5,
 			['bossAuraTotal'] = 15,
 
 		['arena'] = true,
-			['arenaPos'] = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
-			['arenaSymmetryPos'] = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
-			['arenaWidth'] = 166,
-			['arenaSymmetryWidth'] = 166,
-			['arenaHeight'] = 16,
-			['arenaSymmetryHeight'] = 16,
-			['arenaPadding'] = 80,
+			['arena_width'] = 166,
+			['arena_height'] = 16,
+			['arena_gap'] = 80,
 			['arenaShowAuras'] = true,
 			['arenaAuraPerRow'] = 6,
 			['arenaAuraTotal'] = 18,
 }
-
-
-
 
 
 C['classmod'] = {

@@ -11,7 +11,7 @@ local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, 
 local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local InviteToGroup = C_PartyInfo.InviteUnit
-local gap = C.General.gap
+local gap = C.General.ui_gap
 
 
 local isScaling = false
@@ -231,6 +231,24 @@ function CHAT:ResizeChatFrame()
 	end)
 end
 
+local function updateChatBubble()
+	local name, instType = GetInstanceInfo()
+	if name and (instType == "raid" or instType == "party" or instType == "scenario" or instType == "pvp" or instType == "arena") then
+		SetCVar("chatBubbles", 1)
+	else
+		SetCVar("chatBubbles", 0)
+	end
+end
+
+function CHAT:AutoToggleChatBubble()
+	if cfg.auto_toggle_chat_bubble then
+		F:RegisterEvent("PLAYER_ENTERING_WORLD", updateChatBubble)
+	else
+		F:UnregisterEvent("PLAYER_ENTERING_WORLD", updateChatBubble)
+	end
+end
+
+
 function CHAT:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
 		self.RestyleChatFrame(_G["ChatFrame"..i])
@@ -283,6 +301,7 @@ function CHAT:OnLogin()
 	self:WhisperSticky()
 	self:WhisperTarget()
 	self:WhisperAlert()
+	self:AutoToggleChatBubble()
 
 
 	

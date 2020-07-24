@@ -1,45 +1,8 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='unitframe.lua'/>
+	<Script file='colors.lua'/>
+	<Script file='tags.lua'/>
+	<Script file='elements.lua'/>
+	<Script file='units.lua'/>
 	<Script file='clickcast.lua'/>
-	
-	<Script file='plugins\aurawatch.lua'/>
-	<Script file='plugins\debuffhighlight.lua'/>
-	<Script file='plugins\fader.lua'/>
-	<Script file='plugins\gcd.lua'/>
-	<Script file='plugins\raiddebuffs.lua'/>
-	<Script file='plugins\spellrange.lua'/>
-	<Script file='plugins\swing.lua'/>
-	<Script file='plugins\totems.lua'/>
-
-	<Script file='elements\alternativepower.lua'/>
-	<Script file='elements\auras.lua'/>
-	<Script file='elements\aurawatch.lua'/>
-	<Script file='elements\castbar.lua'/>
-	<Script file='elements\classpower.lua'/>
-	<Script file='elements\debuffhighlight.lua'/>
-	<Script file='elements\fader.lua'/>
-	<Script file='elements\gcd.lua'/>
-	<Script file='elements\health.lua'/>
-	<Script file='elements\healthprediction.lua'/>
-	<Script file='elements\indicators.lua'/>
-	<Script file='elements\portrait.lua'/>
-	<Script file='elements\power.lua'/>
-	<Script file='elements\raiddebuffs.lua'/>
-	<Script file='elements\spellrange.lua'/>
-	<Script file='elements\runes.lua'/>
-	<Script file='elements\stagger.lua'/>
-	<Script file='elements\swing.lua'/>
-	<Script file='elements\tags.lua'/>
-	<Script file='elements\totems.lua'/>
-	
-	<Script file='units\player.lua'/>
-	<Script file='units\pet.lua'/>
-	<Script file='units\target.lua'/>
-	<Script file='units\targettarget.lua'/>
-	<Script file='units\focus.lua'/>
-	<Script file='units\focustarget.lua'/>
-	<Script file='units\party.lua'/>
-	<Script file='units\raid.lua'/>
-	<Script file='units\boss.lua'/>
-	<Script file='units\arena.lua'/>
 </Ui>

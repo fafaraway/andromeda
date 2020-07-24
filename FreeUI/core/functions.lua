@@ -4,7 +4,7 @@ local F, C, L = unpack(select(2, ...))
 local type, pairs, tonumber, wipe, next, Lerp = type, pairs, tonumber, table.wipe, next, Lerp
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, abs = math.min, math.max, math.floor, math.abs
-local theme, assets = C.Theme, C.Assets.Textures
+local assets, cfg = C.Assets, C.Theme
 
 
 function F:Scale(x)
@@ -120,14 +120,14 @@ function F:CreateTex()
 
 	self.Tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
 	self.Tex:SetAllPoints(self)
-	self.Tex:SetTexture(assets.bdstripe, true, true)
+	self.Tex:SetTexture(assets.bg_tex, true, true)
 	self.Tex:SetHorizTile(true)
 	self.Tex:SetVertTile(true)
 	self.Tex:SetBlendMode('ADD')
 end
 
 function F:CreateSD(a, m, s, override)
-	if not override and not theme.shadow_border then return end
+	if not override and not cfg.shadow_border then return end
 	if self.Shadow then return end
 
 	local frame = self
@@ -137,7 +137,7 @@ function F:CreateSD(a, m, s, override)
 
 	self.Shadow = CreateFrame('Frame', nil, frame)
 	self.Shadow:SetOutside(self, m, m)
-	self.Shadow:SetBackdrop({edgeFile = assets.shadow, edgeSize = F:Scale(s)})
+	self.Shadow:SetBackdrop({edgeFile = assets.glow_tex, edgeSize = F:Scale(s)})
 	self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .35)
 	self.Shadow:SetFrameLevel(1)
 
@@ -161,8 +161,8 @@ function F:SetBackdrop(frame, a)
 	borders.LEFT:SetWidth(size)
 	borders.RIGHT:SetWidth(size)
 
-	F:SetBackdropColor(frame, theme.backdrop_color[1], theme.backdrop_color[2], theme.backdrop_color[3], a)
-	F:SetBackdropBorderColor(frame, theme.backdrop_border_color[1], theme.backdrop_border_color[2], theme.backdrop_border_color[3], theme.backdrop_border_color[4])
+	F:SetBackdropColor(frame, cfg.backdrop_color[1], cfg.backdrop_color[2], cfg.backdrop_color[3], a)
+	F:SetBackdropBorderColor(frame, cfg.backdrop_border_color[1], cfg.backdrop_border_color[2], cfg.backdrop_border_color[3], cfg.backdrop_border_color[4])
 end
 
 function F:SetBackdropColor(frame, r, g, b, a)
@@ -192,11 +192,11 @@ function F:PixelBorders(frame)
 		local borders = {}
 		for _, v in pairs(PIXEL_BORDERS) do
 			borders[v] = frame:CreateTexture(nil, 'BORDER', nil, 1)
-			borders[v]:SetTexture(assets.backdrop)
+			borders[v]:SetTexture(assets.bd_tex)
 		end
 
 		borders.CENTER = frame:CreateTexture(nil, 'BACKGROUND', nil, -1)
-		borders.CENTER:SetTexture(assets.backdrop)
+		borders.CENTER:SetTexture(assets.bd_tex)
 
 		borders.TOP:Point('BOTTOMLEFT', borders.CENTER, 'TOPLEFT', C.Mult, -C.Mult)
 		borders.TOP:Point('BOTTOMRIGHT', borders.CENTER, 'TOPRIGHT', -C.Mult, -C.Mult)
@@ -220,7 +220,7 @@ end
 function F:CreateBD(a)
 	self:SetBackdrop(nil)
 	F:PixelBorders(self)
-	F:SetBackdrop(self, a or theme.backdrop_alpha)
+	F:SetBackdrop(self, a or cfg.backdrop_alpha)
 
 	if not a then tinsert(C.Frames, self) end
 end
@@ -253,11 +253,11 @@ end
 function F:CreateGradient()
 	local tex = self:CreateTexture(nil, 'BORDER')
 	tex:SetInside()
-	tex:SetTexture(assets.backdrop)
-	if theme.flat_style then
-		tex:SetVertexColor(theme.flat_color[1], theme.flat_color[2], theme.flat_color[3], theme.flat_alpha)
+	tex:SetTexture(assets.bd_tex)
+	if cfg.flat_style then
+		tex:SetVertexColor(cfg.flat_color[1], cfg.flat_color[2], cfg.flat_color[3], cfg.flat_alpha)
 	else
-		tex:SetGradientAlpha('Vertical', theme.gradient_color_primary[1], theme.gradient_color_primary[2], theme.gradient_color_primary[3], theme.gradient_color_primary_alpha, theme.gradient_color_secondary[1], theme.gradient_color_secondary[2], theme.gradient_color_secondary[3], theme.gradient_color_secondary_alpha)
+		tex:SetGradientAlpha('Vertical', cfg.gradient_color_primary[1], cfg.gradient_color_primary[2], cfg.gradient_color_primary[3], cfg.gradient_color_primary_alpha, cfg.gradient_color_secondary[1], cfg.gradient_color_secondary[2], cfg.gradient_color_secondary[3], cfg.gradient_color_secondary_alpha)
 	end
 
 	return tex
@@ -287,26 +287,26 @@ end
 local function Button_OnEnter(self)
 	if not self:IsEnabled() then return end
 
-	if theme.flat_style then
+	if cfg.flat_style then
 		self.bgTex:SetVertexColor(C.r / 6, C.g / 6, C.b / 6)	
 	else
-		self:SetBackdropColor(C.r, C.g, C.b, .25)
+		--self:SetBackdropColor(C.r, C.g, C.b, .25)
 	end
 
-	self:SetBackdropBorderColor(C.r, C.g, C.b, theme.backdrop_border_alpha)
+	self:SetBackdropBorderColor(C.r, C.g, C.b, cfg.backdrop_border_alpha)
 	self.glow:SetAlpha(1)
 
 	CreatePulse(self.glow)
 end
 
 local function Button_OnLeave(self)
-	if theme.flat_style then
-		self.bgTex:SetVertexColor(theme.flat_color[1], theme.flat_color[2], theme.flat_color[3], theme.flat_alpha)
+	if cfg.flat_style then
+		self.bgTex:SetVertexColor(cfg.flat_color[1], cfg.flat_color[2], cfg.flat_color[3], cfg.flat_alpha)
 	else
-		self:SetBackdropColor(0, 0, 0, 0)
+		--self:SetBackdropColor(0, 0, 0, 0)
 	end
 
-	self:SetBackdropBorderColor(0, 0, 0, theme.backdrop_border_alpha)
+	self:SetBackdropBorderColor(cfg.backdrop_border_color[1], cfg.backdrop_border_color[2], cfg.backdrop_border_color[3], cfg.backdrop_border_alpha)
 	self.glow:SetScript('OnUpdate', nil)
 	self.glow:SetAlpha(0)
 end
@@ -368,7 +368,7 @@ function F:Reskin(noGlow)
 	if not noGlow then
 		self.glow = CreateFrame('Frame', nil, self)
 		self.glow:SetBackdrop({
-			edgeFile = assets.shadow,
+			edgeFile = assets.glow_tex,
 			edgeSize = 6,
 		})
 		self.glow:SetPoint('TOPLEFT', -6, 6)
@@ -388,7 +388,7 @@ local function Menu_OnLeave(self)
 	self.bg:SetBackdropBorderColor(0, 0, 0)
 end
 local function Menu_OnMouseUp(self)
-	self.bg:SetBackdropColor(unpack(backdropColor), theme.alpha)
+	self.bg:SetBackdropColor(unpack(backdropColor), cfg.alpha)
 end
 local function Menu_OnMouseDown(self)
 	self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
@@ -409,7 +409,7 @@ function F:ReskinTab()
 	bg:SetPoint('TOPLEFT', 8, -3)
 	bg:SetPoint('BOTTOMRIGHT', -8, 0)
 
-	self:SetHighlightTexture(assets.backdrop)
+	self:SetHighlightTexture(assets.bd_tex)
 	local hl = self:GetHighlightTexture()
 	hl:ClearAllPoints()
 	hl:SetInside(bg)
@@ -459,7 +459,7 @@ local function Scroll_OnEnter(self)
 	local thumb = self.thumb
 	if not thumb then return end
 	thumb.bg:SetBackdropColor(C.r, C.g, C.b, .25)
-	thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+	thumb.bg:SetBackdropBorderColor(0, 0, 0)
 end
 
 local function Scroll_OnLeave(self)
@@ -530,7 +530,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 	F.CreateBD(self, 0)
 	F.CreateGradient(self)
 
-	self:SetDisabledTexture(assets.backdrop)
+	self:SetDisabledTexture(assets.bd_tex)
 	local dis = self:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .4)
 	dis:SetDrawLayer('OVERLAY')
@@ -570,17 +570,17 @@ end
 F.ReskinInput = F.ReskinEditBox -- Deprecated
 
 local direcIndex = {
-	['up'] = assets.arrowUp,
-	['down'] = assets.arrowDown,
-	['left'] = assets.arrowLeft,
-	['right'] = assets.arrowRight,
+	['up'] = assets.arrow_up,
+	['down'] = assets.arrow_down,
+	['left'] = assets.arrow_left,
+	['right'] = assets.arrow_right,
 }
 
 function F:ReskinArrow(direction)
 	self:SetSize(17, 17)
 	F.Reskin(self, true)
 
-	self:SetDisabledTexture(assets.backdrop)
+	self:SetDisabledTexture(assets.bd_tex)
 	local dis = self:GetDisabledTexture()
 	dis:SetVertexColor(0, 0, 0, .3)
 	dis:SetDrawLayer('OVERLAY')
@@ -600,7 +600,7 @@ function F:ReskinFilterButton()
 	F.StripTextures(self)
 	F.Reskin(self)
 	self.Text:SetPoint('CENTER')
-	self.Icon:SetTexture(assets.arrowRight)
+	self.Icon:SetTexture(assets.arrow_right)
 	self.Icon:SetPoint('RIGHT', self, 'RIGHT', -5, 0)
 	self.Icon:SetSize(8, 8)
 end
@@ -619,7 +619,7 @@ function F:ReskinNavBar()
 	F.Reskin(overflowButton, true)
 
 	local tex = overflowButton:CreateTexture(nil, 'ARTWORK')
-	tex:SetTexture(assets.arrowLeft)
+	tex:SetTexture(assets.arrow_reft)
 	tex:SetSize(8, 8)
 	tex:SetPoint('CENTER')
 	overflowButton.bgTex = tex
@@ -633,9 +633,12 @@ end
 function F:ReskinCheck(forceSaturation)
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
-	self:SetHighlightTexture(assets.backdrop)
-	self:SetCheckedTexture(assets.tick)
-	self:SetDisabledCheckedTexture(assets.tick)
+	self:SetHighlightTexture(assets.bd_tex)
+	-- self:SetCheckedTexture(assets.tick_tex)
+	-- self:SetDisabledCheckedTexture(assets.tick_tex)
+
+	self:SetCheckedTexture(assets.norm_tex)
+	self:SetDisabledCheckedTexture(assets.norm_tex)
 
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)
@@ -647,12 +650,20 @@ function F:ReskinCheck(forceSaturation)
 	bd:SetPoint('BOTTOMRIGHT', -4, 4)
 	F.CreateGradient(bd)
 
+	-- local ch = self:GetCheckedTexture()
+	-- ch:SetTexture(assets.tick_tex)
+	-- ch:SetDesaturated(true)
+	-- ch:SetVertexColor(C.r, C.g, C.b)
+
 	local ch = self:GetCheckedTexture()
-	ch:SetTexture(assets.tick)
+	ch:SetPoint('TOPLEFT', 5, -5)
+	ch:SetPoint('BOTTOMRIGHT', -5, 5)
 	ch:SetDesaturated(true)
 	ch:SetVertexColor(C.r, C.g, C.b)
 
 	local dis = self:GetDisabledCheckedTexture()
+	dis:SetPoint('TOPLEFT', 5, -5)
+	dis:SetPoint('BOTTOMRIGHT', -5, 5)
 	dis:SetVertexColor(.3, .3, .3)
 
 	self.forceSaturation = forceSaturation
@@ -661,7 +672,7 @@ end
 function F:ReskinRadio()
 	self:SetNormalTexture('')
 	self:SetHighlightTexture('')
-	self:SetCheckedTexture(assets.backdrop)
+	self:SetCheckedTexture(assets.bd_tex)
 
 	local ch = self:GetCheckedTexture()
 	ch:SetPoint('TOPLEFT', 4, -4)
@@ -681,7 +692,7 @@ end
 function F:ReskinColorSwatch()
 	local frameName = self.GetName and self:GetName()
 
-	self:SetNormalTexture(assets.backdrop)
+	self:SetNormalTexture(assets.bd_tex)
 	local nt = self:GetNormalTexture()
 	nt:SetPoint('TOPLEFT', 3, -3)
 	nt:SetPoint('BOTTOMRIGHT', -3, 3)
@@ -832,7 +843,7 @@ function F:StyleSearchButton()
 	end
 	F.CreateBD(self, .25)
 
-	self:SetHighlightTexture(assets.backdrop)
+	self:SetHighlightTexture(assets.bd_tex)
 	local hl = self:GetHighlightTexture()
 	hl:SetVertexColor(C.r, C.g, C.b, .25)
 	hl:SetInside()
@@ -879,7 +890,7 @@ function F:ReskinRole(role)
 	if cover then cover:SetTexture('') end
 	local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
 	if texture then
-		texture:SetTexture(assets.rolesicon)
+		texture:SetTexture(assets.roles_icon)
 		texture:SetTexCoord(F.GetRoleTexCoord(role))
 	end
 	self.bg = F.CreateBDFrame(self)
@@ -1209,11 +1220,11 @@ local function Tooltip_OnEnter(self)
 		GameTooltip:SetSpellByID(self.text)
 	elseif self.text then
 		local r, g, b = 1, 1, 1
-		if self.color == 'class' then
+		if self.color == 'CLASS' then
 			r, g, b = C.r, C.g, C.b
-		elseif self.color == 'system' then
+		elseif self.color == 'SYSTEM' then
 			r, g, b = 1, .8, 0
-		elseif self.color == 'info' then
+		elseif self.color == 'INFO' then
 			r, g, b = .6, .8, 1
 		end
 		GameTooltip:AddLine(self.text, r, g, b, 1)
@@ -1258,15 +1269,29 @@ end
 
 function F:AuraIcon(highlight)
 	self.CD = CreateFrame('Cooldown', nil, self, 'CooldownFrameTemplate')
-	self.CD:SetAllPoints()
+	self.CD:SetInside()
 	self.CD:SetReverse(true)
 	F.PixelIcon(self, nil, highlight)
 	F.CreateSD(self)
 end
 
+function F:CreateGear(name)
+	local bu = CreateFrame('Button', name, self)
+	bu:SetSize(24, 24)
+	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+	bu.Icon:SetAllPoints()
+	bu.Icon:SetTexture(assets.gear_tex)
+	--bu.Icon:SetTexCoord(0, .5, 0, .5)
+	bu.Icon:SetVertexColor(1,1,1,1)
+	bu:SetHighlightTexture(assets.gear_tex)
+	--bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
+
+	return bu
+end
+
 -- Statusbar
 function F:CreateSB(spark, r, g, b)
-	self:SetStatusBarTexture(assets.statusbar)
+	self:SetStatusBarTexture(assets.norm_tex)
 	if r and g and b then
 		self:SetStatusBarColor(r, g, b)
 	else
@@ -1278,7 +1303,7 @@ function F:CreateSB(spark, r, g, b)
 
 	if spark then
 		self.Spark = self:CreateTexture(nil, 'OVERLAY')
-		self.Spark:SetTexture(assets.spark)
+		self.Spark:SetTexture(assets.spark_tex)
 		self.Spark:SetBlendMode('ADD')
 		self.Spark:SetAlpha(.8)
 		self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
@@ -1292,13 +1317,13 @@ function F:CreateGF(w, h, o, r, g, b, a1, a2)
 	self:SetFrameStrata('BACKGROUND')
 	local gf = self:CreateTexture(nil, 'BACKGROUND')
 	gf:SetAllPoints()
-	gf:SetTexture(assets.statusbar)
+	gf:SetTexture(assets.norm_tex)
 	gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
 end
 
 -- Numberize
 function F.Numb(n)
-	if C.General.numberFormat == 1 then
+	if cfg.number_format == 1 then
 		if n >= 1e12 then
 			return ('%.2ft'):format(n / 1e12)
 		elseif n >= 1e9 then
@@ -1310,7 +1335,7 @@ function F.Numb(n)
 		else
 			return ('%.0f'):format(n)
 		end
-	elseif C.General.numberFormat == 2 then
+	elseif cfg.number_format == 2 then
 		if n >= 1e12 then
 			return format('%.2f'..L['MISC_NUMBER_CAP_3'], n / 1e12)
 		elseif n >= 1e8 then
@@ -1820,3 +1845,63 @@ function F:CreateEditBox(width, height)
 	return eb
 end
 
+local function updateSliderEditBox(self)
+	local slider = self.__owner
+	local minValue, maxValue = slider:GetMinMaxValues()
+	local text = tonumber(self:GetText())
+	if not text then return end
+	text = min(maxValue, text)
+	text = max(minValue, text)
+	slider:SetValue(text)
+	self:SetText(text)
+	self:ClearFocus()
+end
+
+local function resetSliderValue(self)
+	local slider = self.__owner
+	if slider.__default then
+		slider:SetValue(slider.__default)
+	end
+end
+
+function F:CreateSlider(name, minValue, maxValue, step, x, y, width)
+	local slider = CreateFrame('Slider', nil, self, 'OptionsSliderTemplate')
+	slider:SetPoint('TOPLEFT', x, y)
+	slider:SetWidth(width or 120)
+	slider:SetMinMaxValues(minValue, maxValue)
+	slider:SetValueStep(step)
+	slider:SetObeyStepOnDrag(true)
+	slider:SetHitRectInsets(0, 0, 0, 0)
+	F.ReskinSlider(slider)
+
+	slider.Low:SetText(minValue)
+	slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
+	slider.Low:SetFont(C.Assets.font_normal, 11)
+	slider.High:SetText(maxValue)
+	slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
+	slider.High:SetFont(C.Assets.font_normal, 11)
+	slider.Text:ClearAllPoints()
+	slider.Text:SetPoint('CENTER', 0, 20)
+	slider.Text:SetText(C.InfoColor..name)
+	slider.value = F.CreateEditBox(slider, 30, 16)
+	slider.value:SetPoint('TOP', slider, 'BOTTOM')
+	slider.value:SetFont(C.Assets.font_normal, 11)
+	slider.value:SetJustifyH('CENTER')
+	slider.value.__owner = slider
+	slider.value:SetScript('OnEnterPressed', updateSliderEditBox)
+
+	slider.clicker = CreateFrame('Button', nil, slider)
+	slider.clicker:SetAllPoints(slider.Text)
+	slider.clicker.__owner = slider
+	slider.clicker:SetScript('OnDoubleClick', resetSliderValue)
+
+	return slider
+end
+
+function F:TogglePanel(frame)
+	if frame:IsShown() then
+		frame:Hide()
+	else
+		frame:Show()
+	end
+end

@@ -107,7 +107,7 @@ local function MoveTalkingHead()
 end
 
 local function NoTalkingHeads()
-	if not cfg.hideTalkingHead then return end
+	if not cfg.hide_talking_head then return end
 
 	hooksecurefunc(TalkingHeadFrame, 'Show', function(self)
 		self:Hide()

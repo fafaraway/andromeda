@@ -12,6 +12,7 @@
 	<Include file='misc\misc.xml'/>
 	<Include file='notification\notification.xml'/>
 	<Include file='quest\quest.xml'/>
+	<Include file='theme\theme.xml'/>
 	<Include file='tooltip\tooltip.xml'/>
 	<Include file='unitframe\unitframe.xml'/>
 </Ui>

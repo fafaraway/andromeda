@@ -1,19 +1,19 @@
 ## Interface: 80300
 ## Title: |cffffffffFree|r|cffb2b2b2UI|r
-## Notes: Minimalistic user interface.
+## Notes: A user interface replacement for World of Warcraft, minimalistic aesthetic and practical.
 ## Author: Haleth, Solor
 ## Version: 80300.1
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
-## X-Credits: Alza, Haste, Tukz, Zork, siweia, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, Shestak, aliluya555, Paojy, Rubgrsch
 ## OptionalDeps: FreeUI_Options, WeakAuras, Skada, DBM-Core, DBM-GUI
 ## SavedVariables: FreeUIGlobalConfig
 ## SavedVariablesPerCharacter: FreeUIConfig
 
 
-libs\libs.xml
+
 init.lua
+libs\libs.xml
 locales\locales.xml
+
 core\core.xml
 modules\modules.xml
-themes\themes.xml

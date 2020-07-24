@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME, cfg = F:GetModule('Unitframe'), C.Unitframe
 
-if not cfg.enable then return end
+if not cfg.enable_module then return end
 if not cfg.click_cast then return end
 
 local SpellBinder = CreateFrame('Frame', 'SpellBinder', SpellBookFrame, 'ButtonFrameTemplate')
@@ -343,7 +343,7 @@ SpellBinder:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 SpellBinder:RegisterEvent('PLAYER_TALENT_UPDATE')
 SpellBinder:SetScript('OnEvent', function(self, event, ...)
 	if event == 'PLAYER_LOGIN' then
-		DB = FreeUIConfig['clickCast']
+		DB = FreeUIConfig['click_cast']
 		DB.spells = DB.spells or {}
 		DB.frames = DB.frames or {}
 		DB.keys = DB.keys or {}

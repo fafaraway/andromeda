@@ -2,54 +2,12 @@ local F, C, L = unpack(select(2, ...))
 local AUTOMATION, cfg = F:GetModule('Automation'), C.Automation
 
 
-local AUTOMATION_LIST = {}
-
-function AUTOMATION:RegisterAutomation(name, func)
-	if not AUTOMATION_LIST[name] then
-		AUTOMATION_LIST[name] = func
-	end
-end
-
-function AUTOMATION:EasyDelete()
-	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
-		if cfg.easy_delete then
-			self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-		end
-	end)
-end
-
-local menuFrame = CreateFrame('Frame', nil, UIParent, 'UIDropDownMenuTemplate')
-local menuList = {
-	{text = L['AUTOMATION_MARK_CLEAR'], func = function() SetRaidTarget('target', 0) end},
-	{text = L['AUTOMATION_MARK_SKULL'], func = function() SetRaidTarget('target', 8) end},
-	{text = '|cffff0000'..L['AUTOMATION_MARK_CROSS'], func = function() SetRaidTarget('target', 7) end},
-	{text = '|cff00ffff'..L['AUTOMATION_MARK_SQUARE'], func = function() SetRaidTarget('target', 6) end},
-	{text = '|cffC7C7C7'..L['AUTOMATION_MARK_MOON'], func = function() SetRaidTarget('target', 5) end},
-	{text = '|cff00ff00'..L['AUTOMATION_MARK_TRIANGLE'], func = function() SetRaidTarget('target', 4) end},
-	{text = '|cff912CEE'..L['AUTOMATION_MARK_DIAMOND'], func = function() SetRaidTarget('target', 3) end},
-	{text = '|cffFF8000'..L['AUTOMATION_MARK_CIRCLE'], func = function() SetRaidTarget('target', 2) end},
-	{text = '|cffffff00'..L['AUTOMATION_MARK_STAR'], func = function() SetRaidTarget('target', 1) end},
-}
-	
-function AUTOMATION:EasyMark()
-	if not cfg.easy_mark then return end
-
-	WorldFrame:HookScript('OnMouseDown', function(self, button)
-		if button == 'LeftButton' and IsAltKeyDown() and UnitExists('mouseover') then
-			local inRaid = IsInRaid()
-			if (inRaid and (UnitIsGroupLeader('player') or UnitIsGroupAssistant('player'))) or not inRaid then
-				EasyMenu(menuList, menuFrame, 'cursor', 0, 0, 'MENU', 1)
-			end
-		end
-	end)
-end
-
-local function autoScreenshot()
+--[[ local function screenshot()
 	AUTOMATION.ScreenShotFrame.delay = 1
 	AUTOMATION.ScreenShotFrame:Show()
 end
 
-function AUTOMATION:AutoScreenshot()
+function AUTOMATION:Screenshot()
 	if not AUTOMATION.ScreenShotFrame then
 		AUTOMATION.ScreenShotFrame = CreateFrame('Frame')
 		AUTOMATION.ScreenShotFrame:Hide()
@@ -72,33 +30,9 @@ function AUTOMATION:AutoScreenshot()
 		F:UnregisterEvent('CHALLENGE_MODE_COMPLETED', autoScreenshot)
 		-- F:UnregisterEvent('UPDATE_BATTLEFIELD_STATUS', autoScreenshot)
 	end
-end
+end ]]
 
-function AUTOMATION:EasyNaked()
-	if not cfg.easy_naked then return end
-
-	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
-	bu:SetSize(31, 33)
-	bu:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -3)
-	F.PixelIcon(bu, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
-	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['AUTOMATION_GET_NAKED'])
-
-	local function UnequipItemInSlot(i)
-		local action = EquipmentManager_UnequipItemInSlot(i)
-		EquipmentManager_RunAction(action)
-	end
-
-	bu:SetScript('OnDoubleClick', function()
-		for i = 1, 17 do
-			local texture = GetInventoryItemTexture('player', i)
-			if texture then
-				UnequipItemInSlot(i)
-			end
-		end
-	end)
-end
-
-function AUTOMATION:EasyBuyStack()
+function AUTOMATION:BuyStack()
 	if not cfg.easy_buy_stack then return end
 
 	local cache = {}
@@ -139,54 +73,234 @@ function AUTOMATION:EasyBuyStack()
 	end
 end
 
-function AUTOMATION:AutoRejectStranger()
-	F:RegisterEvent('PARTY_INVITE_REQUEST', function(_, _, _, _, _, _, _, guid)
-		if cfg.auto_reject_stranger and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
-			DeclineGroup()
-			StaticPopup_Hide('PARTY_INVITE')
+
+function AUTOMATION:AcceptInvite()
+	local function CheckFriend(inviterGUID)
+		if C_BattleNet.GetAccountInfoByGUID(inviterGUID) or C_FriendList.IsFriend(inviterGUID) or IsGuildMember(inviterGUID) then
+			return true
+		end
+	end
+
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("PARTY_INVITE_REQUEST")
+	f:SetScript("OnEvent", function(_, _, name, _, _, _, _, _, inviterGUID)
+		if QueueStatusMinimapButton:IsShown() or GetNumGroupMembers() > 0 then return end
+		if CheckFriend(inviterGUID) then
+			RaidNotice_AddMessage(RaidWarningFrame, L_INFO_INVITE..name, {r = 0.41, g = 0.8, b = 0.94}, 3)
+			print(format("|cffffff00"..L_INFO_INVITE..name..".|r"))
+			AcceptGroup()
+			for i = 1, STATICPOPUP_NUMDIALOGS do
+				local frame = _G["StaticPopup"..i]
+				if frame:IsVisible() and frame.which == "PARTY_INVITE" then
+					frame.inviteAccepted = 1
+					StaticPopup_Hide("PARTY_INVITE")
+					return
+				elseif frame:IsVisible() and frame.which == "PARTY_INVITE_XREALM" then
+					frame.inviteAccepted = 1
+					StaticPopup_Hide("PARTY_INVITE_XREALM")
+					return
+				end
+			end
 		end
 	end)
 end
 
-local lootDelay = 0
-local function instantLoot()
-	if GetTime() - lootDelay >= 0.3 then
-		lootDelay = GetTime()
-		if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
-			for i = GetNumLootItems(), 1, -1 do
-				LootSlot(i)
+function AUTOMATION:InviteByKeyword()
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("CHAT_MSG_WHISPER")
+	f:RegisterEvent("CHAT_MSG_BN_WHISPER")
+	f:SetScript("OnEvent", function(_, event, arg1, arg2, ...)
+		if ((not UnitExists("party1") or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and arg1:lower():match(C.automation.invite_keyword)) and SavedOptionsPerChar.AutoInvite == true and not QueueStatusMinimapButton:IsShown() then
+			if event == "CHAT_MSG_WHISPER" then
+				InviteUnit(arg2)
+			elseif event == "CHAT_MSG_BN_WHISPER" then
+				local bnetIDAccount = select(11, ...)
+				local accountInfo = C_BattleNet.GetAccountInfoByID(bnetIDAccount)
+				BNInviteFriend(accountInfo.gameAccountInfo.gameAccountID)
 			end
-			lootDelay = GetTime()
+		end
+	end)
+
+	SlashCmdList.AUTOINVITE = function(msg)
+		if msg == "" then
+			if SavedOptionsPerChar.AutoInvite == true then
+				SavedOptionsPerChar.AutoInvite = false
+				print("|cffffff00"..L_INVITE_DISABLE..".|r")
+			else
+				SavedOptionsPerChar.AutoInvite = true
+				print("|cffffff00"..L_INVITE_ENABLE..C.automation.invite_keyword..".|r")
+				C.automation.invite_keyword = C.automation.invite_keyword
+			end
+		else
+			SavedOptionsPerChar.AutoInvite = true
+			print("|cffffff00"..L_INVITE_ENABLE..msg..".|r")
+			C.automation.invite_keyword = msg
 		end
 	end
+	SLASH_AUTOINVITE1 = "/ainv"
 end
 
-function AUTOMATION:InstantLoot()
-	if cfg.instant_loot then
-		F:RegisterEvent('LOOT_READY', instantLoot)
-	else
-		F:UnregisterEvent('LOOT_READY', instantLoot)
+function AUTOMATION:ConfirmRelease()
+	-- Auto release the spirit in battlegrounds
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("PLAYER_DEAD")
+	f:SetScript("OnEvent", function()
+		local inBattlefield = false
+		for i = 1, GetMaxBattlefieldID() do
+			local status = GetBattlefieldStatus(i)
+			if status == "active" then inBattlefield = true end
+		end
+		if C_DeathInfo.GetSelfResurrectOptions() and #C_DeathInfo.GetSelfResurrectOptions() > 0 then return end
+		local areaID = C_Map.GetBestMapForUnit("player") or 0
+		if areaID == 123 or areaID == 244 or areaID == 588 or areaID == 622 or areaID == 624 or inBattlefield == true then
+			RepopMe()
+		end
+	end)
+end
+
+function AUTOMATION:ConfirmResurrect()
+	local AutoResurrect = CreateFrame("Frame")
+	AutoResurrect:RegisterEvent("RESURRECT_REQUEST")
+	AutoResurrect:SetScript("OnEvent", function(_, event, name)
+		if event == "RESURRECT_REQUEST" then
+			if not UnitAffectingCombat(name) then
+				AcceptResurrect()
+				StaticPopup_Hide("RESURRECT_NO_TIMER")
+
+				C_Timer.After(2, function()
+					DoEmote("thank", name)
+				end)
+			end
+		end
+	end)
+end
+
+function AUTOMATION:ConfirmSummon()
+	local disable = false
+	local AutoSummon = CreateFrame("Frame")
+	AutoSummon:RegisterEvent("CONFIRM_SUMMON")
+	AutoSummon:SetScript("OnEvent", function(_, event)
+		if event == "CONFIRM_SUMMON" then
+			if not UnitAffectingCombat("player") and PlayerCanTeleport() then
+				StaticPopup_Show("CANCEL_SUMMON")
+				C_Timer.After(10, function()
+					if disable then return end
+					if not UnitAffectingCombat("player") and PlayerCanTeleport() then
+						C_SummonInfo.ConfirmSummon()
+						StaticPopup_Hide("CONFIRM_SUMMON")
+					end
+				end)
+			end
+		end
+	end)
+
+	StaticPopupDialogs["CANCEL_SUMMON"] = {
+		text = LFG_LIST_AUTO_ACCEPT.." ".. string.lower(SUMMONS);
+		button1 = CANCEL,
+		OnAccept = function(self)
+			disable = true
+		end,
+		timeout = 12,
+	}
+end
+
+function AUTOMATION:DeclineDuel()
+	local disable = false
+	local frame = CreateFrame("Frame")
+	frame:RegisterEvent("DUEL_REQUESTED")
+	frame:RegisterEvent("PET_BATTLE_PVP_DUEL_REQUESTED")
+	frame:SetScript("OnEvent", function(_, event, name)
+		if disable == true then return end
+		if event == "DUEL_REQUESTED" then
+			CancelDuel()
+			RaidNotice_AddMessage(RaidWarningFrame, L_INFO_DUEL..name, {r = 0.41, g = 0.8, b = 0.94}, 3)
+			print(format("|cffffff00"..L_INFO_DUEL..name.."."))
+			StaticPopup_Hide("DUEL_REQUESTED")
+		elseif event == "PET_BATTLE_PVP_DUEL_REQUESTED" then
+			C_PetBattles.CancelPVPDuel()
+			RaidNotice_AddMessage(RaidWarningFrame, L_INFO_PET_DUEL..name, {r = 0.41, g = 0.8, b = 0.94}, 3)
+			print(format("|cffffff00"..L_INFO_PET_DUEL..name.."."))
+			StaticPopup_Hide("PET_BATTLE_PVP_DUEL_REQUESTED")
+		end
+	end)
+
+	SlashCmdList.DISABLEDECLINE = function()
+		if not disable then
+			disable = true
+		else
+			disable = false
+		end
+	end
+	SLASH_DISABLEDECLINE1 = "/disduel"
+end
+
+function AUTOMATION:LoggingInRaid()
+	local frame = CreateFrame("Frame")
+	frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+	frame:SetScript("OnEvent", function()
+		local _, instanceType = IsInInstance()
+		if instanceType == "raid" and IsInRaid(LE_PARTY_CATEGORY_HOME) then
+			if not LoggingCombat() then
+				LoggingCombat(1)
+				print("|cffffff00"..COMBATLOGENABLED.."|r")
+			end
+		else
+			if LoggingCombat() then
+				LoggingCombat(0)
+				print("|cffffff00"..COMBATLOGDISABLED.."|r")
+			end
+		end
+	end)
+end
+
+function AUTOMATION:TakeScreenshot()
+	local function OnEvent()
+		C_Timer.After(1, function() Screenshot() end)
+	end
+
+	local frame = CreateFrame("Frame")
+	frame:RegisterEvent("ACHIEVEMENT_EARNED")
+	frame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
+	frame:SetScript("OnEvent", OnEvent)
+end
+
+function AUTOMATION:SetRole()
+	local prev = 0
+	local function SetRole()
+		if T.level >= 10 and not InCombatLockdown() and IsInGroup() and not IsPartyLFG() then
+			local spec = GetSpecialization()
+			if spec then
+				local role = GetSpecializationRole(spec)
+				if UnitGroupRolesAssigned("player") ~= role then
+					local t = GetTime()
+					if t - prev > 2 then
+						prev = t
+						UnitSetRole("player", role)
+					end
+				end
+			else
+				UnitSetRole("player", "No Role")
+			end
+		end
+	end
+
+	local frame = CreateFrame("Frame")
+	frame:RegisterEvent("PLAYER_TALENT_UPDATE")
+	frame:RegisterEvent("GROUP_ROSTER_UPDATE")
+	frame:SetScript("OnEvent", SetRole)
+
+	RolePollPopup:UnregisterEvent("ROLE_POLL_BEGIN")
+end
+
+
+
+
+local AUTOMATION_LIST = {}
+function AUTOMATION:RegisterAutomation(name, func)
+	if not AUTOMATION_LIST[name] then
+		AUTOMATION_LIST[name] = func
 	end
 end
-
-local function updateChatBubble()
-	local name, instType = GetInstanceInfo()
-	if name and (instType == "raid" or instType == "party" or instType == "scenario" or instType == "pvp" or instType == "arena") then
-		SetCVar("chatBubbles", 1)
-	else
-		SetCVar("chatBubbles", 0)
-	end
-end
-
-function AUTOMATION:AutoToggleBubble()
-	if cfg.auto_toggle_chat_bubble then
-		F:RegisterEvent("PLAYER_ENTERING_WORLD", updateChatBubble)
-	else
-		F:UnregisterEvent("PLAYER_ENTERING_WORLD", updateChatBubble)
-	end
-end
-
-
 
 function AUTOMATION:OnLogin()
 	if not cfg.enable then return end
@@ -197,12 +311,8 @@ function AUTOMATION:OnLogin()
 		end
 	end
 
-	self:EasyDelete()
-	self:EasyNaked()
-	self:EasyBuyStack()
-	self:EasyMark()
-	self:AutoScreenshot()
-	self:AutoRejectStranger()
-	self:AutoToggleBubble()
-	self:InstantLoot()
+
+	self:BuyStack()
+	self:TakeScreenshot()
+
 end

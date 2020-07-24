@@ -9,7 +9,7 @@ local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 
 function MISC:MissingStats()
-	if not cfg.missingStats then return end
+	if not cfg.missing_stats then return end
 	if IsAddOnLoaded('DejaCharacterStats') then return end
 
 	local statPanel = CreateFrame('Frame', nil, CharacterFrameInsetRight)

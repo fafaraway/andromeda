@@ -1,7 +1,7 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='configs.lua'/>
-	<Script file='profiles.lua'/>
 	<Script file='constants.lua'/>
+	<Script file='profiles.lua'/>
 	<Script file='functions.lua'/>
 	<Script file='gui.lua'/>
 	<Script file='install.lua'/>

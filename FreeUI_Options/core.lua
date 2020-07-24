@@ -21,14 +21,14 @@ local baseName = 'FreeUIOptionsFrame'
 
 local function createOptionsFrame(name)
 	local f = CreateFrame('Frame', name, UIParent)
-	f:SetSize(640, 700)
+	f:SetSize(600, 600)
 	f:SetPoint('CENTER')
 	f:SetFrameStrata('HIGH')
 	f:EnableMouse(true)
 	tinsert(UISpecialFrames, f:GetName())
 
 	f.line = f:CreateTexture()
-	f.line:SetSize(1, 600)
+	f.line:SetSize(1, 500)
 	f.line:SetPoint('TOPLEFT', 180, -60)
 	f.line:SetColorTexture(.5, .5, .5, .1)
 
@@ -213,21 +213,21 @@ local function toggle(self)
 end
 
 -- Check boxes
-ns.CreateCheckBox = function(parent, option)
+ns.CreateCheckBox = function(parent, option, extra)
 	local f = CreateFrame('CheckButton', nil, parent.child, 'InterfaceOptionsCheckButtonTemplate')
-
+	f:SetSize(20, 20)
 	f.group = parent.tag
 	f.option = option
 
-	--f.Text:SetText(ns.localization[parent.tag..'_'..option] or option)
+	f.Text:SetPoint('LEFT', f, 'RIGHT', 2, 0)
 	f.Text:SetText(ns.localization[strlower(parent.tag)][option] or option)
-	--f.tooltipText = ns.localization[parent.tag..'_'..option..'_tip'] or option
-	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or option
 
+	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or option
 
 	f.needsReload = true
 
 	f:SetScript('OnClick', toggle)
+
 	parent[option] = f
 
 	tinsert(ns.checkboxes, f)
@@ -482,9 +482,7 @@ ns.CreateEditBox = function(parent, option, needsReload, number)
 	label:SetPoint('LEFT', f, 'RIGHT', 10, 0)
 	label:SetText(ns.localization[strlower(parent.tag)][option] or option)
 
-	print(ns.localization[strlower(parent.tag)][option])
-
-	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or label
+	f.tooltipText = --[[ ns.localization[strlower(parent.tag)][option..'_tip'] or  ]]label
 
 	f:SetScript('OnEnter', function()
 		GameTooltip:SetOwner(f, 'ANCHOR_RIGHT', 5, 5)
@@ -551,6 +549,7 @@ local function onColourSwatchClicked(self)
 	ColorPickerFrame.previousValues = {originalR, originalG, originalB}
 	ColorPickerFrame.func = setColour
 	ColorPickerFrame.cancelFunc = resetColour
+	
 	ColorPickerFrame:Hide()
 	ColorPickerFrame:Show()
 end
@@ -558,21 +557,6 @@ end
 ns.CreateColourPicker = function(parent, option, needsReload)
 	local f = CreateFrame('Button', nil, parent)
 	f:SetSize(40, 20)
-
-	--[[f.label = f:CreateFontString(nil, 'OVERLAY', 'GameFontNormalTiny')
-	f.label:SetText(COLOR)
-	f.label:SetTextColor(1, 1, 1)
-	f.label:SetPoint('CENTER')
-	f.label:SetJustifyH('CENTER')--]]
-
-	--[[ f.text = f:CreateFontString(nil, 'OVERLAY', 'GameFontHighlight')
-	f.text:SetText(ns.localization[parent.tag..'_'..option] or option)
-	f.text:SetWidth(300)
-	f.text:SetHeight(20)
-	f.text:SetJustifyH('LEFT')
-	f.text:SetPoint('LEFT', 30, 2) ]]
-
-
 
 	local colortext = f:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 	colortext:SetText(COLOR)
@@ -594,6 +578,7 @@ ns.CreateColourPicker = function(parent, option, needsReload)
 	f.needsReload = needsReload
 
 	f:SetScript('OnClick', onColourSwatchClicked)
+
 	parent[option] = f
 
 	tinsert(ns.colourpickers, f)
@@ -680,14 +665,14 @@ ns.AddCategory = function(name)
 	--local tag = strlower(name)
 
 	local panel = CreateFrame('ScrollFrame', baseName..name, FreeUIOptionsFrame, 'UIPanelScrollFrameTemplate')
-	panel:SetSize(420, 600)
+	panel:SetSize(380, 500)
 	panel:SetPoint('TOPLEFT', 190, -60)
 	panel:Hide()
 
 	panel.child = CreateFrame('Frame', nil, panel)
 	panel.child:SetPoint('TOPLEFT', 0, 0)
 	panel.child:SetPoint('BOTTOMRIGHT', 0, 0)
-	panel.child:SetSize(420, 800)
+	panel.child:SetSize(420, 660)
 
 	panel:SetScrollChild(panel.child)
 
@@ -704,7 +689,7 @@ ns.AddCategory = function(name)
 
 	local tab = CreateFrame('Button', nil, FreeUIOptionsFrame)
 	tab:SetPoint('TOPLEFT', 10, -offset)
-	tab:SetSize(160, 30)
+	tab:SetSize(160, 28)
 
 	local icon = tab:CreateTexture(nil, 'OVERLAY')
 	icon:SetSize(20, 20)
@@ -728,7 +713,7 @@ ns.AddCategory = function(name)
 
 	tinsert(ns.panels, panel)
 
-	offset = offset + 36
+	offset = offset + 34
 end
 
 ns.AddSubCategory = function(category, name)
@@ -913,12 +898,13 @@ f:SetScript('OnEvent', function()
 		panel.Title:SetTextColor(C.r, C.g, C.b)
 		panel.subText:SetTextColor(.8, .8, .8)
 
-		F.CreateBDFrame(panel, .3, true)
+		F.CreateBDFrame(panel, .5, true)
 		F.ReskinScroll(panel.ScrollBar)
 		
 		F.ReskinIcon(panel.tab.icon)
 		F.Reskin(panel.tab)
 		panel.tab:SetBackdropColor(.03, .03, .03, .25)
+		panel.tab.Text:SetFont(C.Assets.Fonts.Normal, 14, 'OUTLINE')
 	end
 
 	ns.SetActiveTab(FreeUIOptionsFrame.General.tab)
@@ -950,6 +936,10 @@ f:SetScript('OnEvent', function()
 		--picker.text:SetTextColor(unpack(value))
 	end
 
+	for _, editbox in pairs(ns.editboxes) do
+		F.ReskinEditBox(editbox)
+	end
+
 	for _, dropdown in pairs(ns.dropdowns) do
 		F.ReskinDropDown(dropdown)
 	end
@@ -959,7 +949,7 @@ f:SetScript('OnEvent', function()
 	logo:SetPoint('TOP')
 	logo:SetTexture(C.Assets.Textures.logo_small)
 	logo:SetScale(.3)
-	--local logo = F.CreateFS(FreeUIOptionsFrame, 'Interface\\AddOns\\FreeUI\\assets\\fonts\\Hokjesgeest.otf', 20, 'OUTLINE', C.Title, nil, nil, 'TOP', 0, -6)
+	logo:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
 
 	local desc = F.CreateFS(FreeUIOptionsFrame, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'configuration', {.5,.5,.5}, true, 'TOP', 0, -36)
 

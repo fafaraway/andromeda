@@ -27,15 +27,16 @@ local function setupUIScale()
 	if not FreeUI_Options then return end
 	
 	FreeUIOptions['General'] = {}
+
 	if C.ScreenHeight >= 2000 then
-		C.General.uiScale = 2
-		FreeUIOptions['General']['uiScale'] = 2
+		C.General.ui_scale = 2
+		FreeUIOptions['General']['ui_scale'] = 2
 	elseif C.ScreenHeight >= 1500 then
-		C.General.uiScale = 1.4
-		FreeUIOptions['General']['uiScale'] = 1.4
+		C.General.ui_scale = 1.4
+		FreeUIOptions['General']['ui_scale'] = 1.4
 	else
-		C.General.uiScale = 1
-		FreeUIOptions['General']['uiScale'] = 1
+		C.General.ui_scale = 1
+		FreeUIOptions['General']['ui_scale'] = 1
 	end
 end
 
@@ -147,21 +148,21 @@ function INSTALL:HelloWorld()
 	F.CreateTex(installFrame)
 
 	local logo = installFrame:CreateTexture()
-	logo:SetTexture(C.Assets.Textures.logo_alt)
+	logo:SetSize(512, 128)
 	logo:SetPoint('TOP')
-	logo:SetSize(160, 40)
+	logo:SetTexture(C.Assets.Textures.logo_small)
+	logo:SetScale(.3)
+	logo:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
 
-	--local title = F.CreateFS(installFrame, C.AssetsPath..'fonts\\Hokjesgeest.otf', 20, true, 'Free'..C.MyColor..'UI', nil, nil, 'TOP', 0, -8)
-	local description = F.CreateFS(installFrame, C.Assets.Fonts.Normal, 11, 'OUTLINE', 'installation', 'grey', true, 'TOP', 0, -40)
-
+	local desc = F.CreateFS(installFrame, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'installation', {.5,.5,.5}, true, 'TOP', 0, -36)
 
 	local lineLeft = CreateFrame('Frame', nil, installFrame)
-	lineLeft:SetPoint('TOP', -60, -34)
+	lineLeft:SetPoint('TOP', -60, -30)
 	F.CreateGF(lineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
 	lineLeft:SetFrameStrata('HIGH')
 
 	local lineRight = CreateFrame('Frame', nil, installFrame)
-	lineRight:SetPoint('TOP', 60, -34)
+	lineRight:SetPoint('TOP', 60, -30)
 	F.CreateGF(lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
 	lineRight:SetFrameStrata('HIGH')
 
@@ -220,7 +221,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
 		rightButton:SetScript('OnClick', function()
-			FreeUIConfig['installComplete'] = true
+			FreeUIConfig['installation_complete'] = true
 			ReloadUI()
 		end)
 	end
@@ -382,7 +383,7 @@ end
 
 
 function INSTALL:OnLogin()
-	if not FreeUIConfig['installComplete'] then
+	if not FreeUIConfig['installation_complete'] then
 		self:HelloWorld()
 	end
 end

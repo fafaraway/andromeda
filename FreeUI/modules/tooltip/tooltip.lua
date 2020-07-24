@@ -232,7 +232,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
-			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.General.gap, 260}, 240, 120)
+			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.General.ui_gap, 260}, 240, 120)
 		end
 		self:SetOwner(parent, 'ANCHOR_NONE')
 		self:ClearAllPoints()
@@ -277,7 +277,7 @@ local function getBackdropBorderColor() return 0, 0, 0 end
 
 function TOOLTIP:ReskinTooltip()
 	if not self then
-		if C.General.isDeveloper then F.Print("Unknown tooltip spotted.") end
+		if C.isDeveloper then F.Print("Unknown tooltip spotted.") end
 		return
 	end
 	if self:IsForbidden() then return end

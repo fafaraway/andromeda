@@ -19,74 +19,59 @@ ns.AddCategory('Tooltip')
 ns.AddCategory('Unitframe')
 
 
-local function addGeneralOptions()
+do
 	local General = FreeUIOptionsFrame.General
 	General.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
 
 	local basic = ns.AddSubCategory(General, ns.localization.general.sub_basic)
 	basic:SetPoint('TOPLEFT', General.subText, 'BOTTOMLEFT', 0, -8)
 
-	local blizzMover = ns.CreateCheckBox(General, 'blizzMover')
+	local blizzMover = ns.CreateCheckBox(General, 'blizz_mover')
 	blizzMover:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local alreadyKnown = ns.CreateCheckBox(General, 'alreadyKnown')
+	local alreadyKnown = ns.CreateCheckBox(General, 'already_known')
 	alreadyKnown:SetPoint('LEFT', blizzMover, 'RIGHT', 160, 0)
 
-	local hideBossBanner = ns.CreateCheckBox(General, 'hideBossBanner')
+	local hideBossBanner = ns.CreateCheckBox(General, 'hide_boss_banner')
 	hideBossBanner:SetPoint('TOPLEFT', blizzMover, 'BOTTOMLEFT', 0, -8)
 
-	local hideTalkingHead = ns.CreateCheckBox(General, 'hideTalkingHead')
+	local hideTalkingHead = ns.CreateCheckBox(General, 'hide_talking_head')
 	hideTalkingHead:SetPoint('LEFT', hideBossBanner, 'RIGHT', 160, 0)
 
 	local itemLevel = ns.CreateCheckBox(General, 'item_level')
 	itemLevel:SetPoint('TOPLEFT', hideBossBanner, 'BOTTOMLEFT', 0, -8)
 
-
 	local merchantIlvl = ns.CreateCheckBox(General, 'merchant_ilvl')
 	merchantIlvl:SetPoint('LEFT', itemLevel, 'RIGHT', 160, 0)
-
-
 
 	local gemEnchant = ns.CreateCheckBox(General, 'gem_enchant')
 	gemEnchant:SetPoint('TOPLEFT', itemLevel, 'BOTTOMLEFT', 0, -8)
 
-
 	local azeriteTraits = ns.CreateCheckBox(General, 'azerite_traits')
 	azeriteTraits:SetPoint('LEFT', gemEnchant, 'RIGHT', 160, 0)
 
-
-
-
-
-
-	
-
-
-
-
-
-	local mailButton = ns.CreateCheckBox(General, 'mailButton')
+	local mailButton = ns.CreateCheckBox(General, 'mail_button')
 	mailButton:SetPoint('TOPLEFT', gemEnchant, 'BOTTOMLEFT', 0, -8)
 
-	local undressButton = ns.CreateCheckBox(General, 'undressButton')
+	local undressButton = ns.CreateCheckBox(General, 'undress_button')
 	undressButton:SetPoint('LEFT', mailButton, 'RIGHT', 160, 0)
 
-	local errors = ns.CreateCheckBox(General, 'errors')
+	local errors = ns.CreateCheckBox(General, 'tidy_errors')
 	errors:SetPoint('TOPLEFT', mailButton, 'BOTTOMLEFT', 0, -8)
 
 	local colorPicker = ns.CreateCheckBox(General, 'color_picker')
 	colorPicker:SetPoint('LEFT', errors, 'RIGHT', 160, 0)
 
-	local tradeTargetInfo = ns.CreateCheckBox(General, 'tradeTargetInfo')
+	local tradeTargetInfo = ns.CreateCheckBox(General, 'trade_target_info')
 	tradeTargetInfo:SetPoint('TOPLEFT', errors, 'BOTTOMLEFT', 0, -8)
 
-	local petFilter = ns.CreateCheckBox(General, 'petFilter')
+	local petFilter = ns.CreateCheckBox(General, 'pet_filter')
 	petFilter:SetPoint('LEFT', tradeTargetInfo, 'RIGHT', 160, 0)
 
 	local queueTimer = ns.CreateCheckBox(General, 'queue_timer')
 	queueTimer:SetPoint('TOPLEFT', tradeTargetInfo, 'BOTTOMLEFT', 0, -8)
 	
-	local keystone = ns.CreateCheckBox(General, 'keystone')
+	local keystone = ns.CreateCheckBox(General, 'account_keystone')
 	keystone:SetPoint('LEFT', queueTimer, 'RIGHT', 160, 0)
 
 	local tradeTabs = ns.CreateCheckBox(General, 'trade_tabs')
@@ -95,27 +80,50 @@ local function addGeneralOptions()
 	local rareAlert = ns.CreateCheckBox(General, 'rare_alert')
 	rareAlert:SetPoint('LEFT', tradeTabs, 'RIGHT', 160, 0)
 
-
-	local missingStats = ns.CreateCheckBox(General, 'missingStats')
+	local missingStats = ns.CreateCheckBox(General, 'missing_stats')
 	missingStats:SetPoint('TOPLEFT', tradeTabs, 'BOTTOMLEFT', 0, -8)
 
-	local camera = ns.AddSubCategory(General, ns.localization.general.sub_camera)
-	camera:SetPoint('TOPLEFT', missingStats, 'BOTTOMLEFT', 0, -16)
+	local delete = ns.CreateCheckBox(General, 'easy_delete')
+	delete:SetPoint('LEFT', missingStats, 'RIGHT', 160, 0)
 
-	local actionCam = ns.CreateCheckBox(General, 'actionCam')
+	local focus = ns.CreateCheckBox(General, 'easy_focus')
+	focus:SetPoint('TOPLEFT', missingStats, 'BOTTOMLEFT', 0, -8)
+
+	local ouf = ns.CreateCheckBox(General, 'easy_focus_on_ouf')
+	ouf:SetPoint('LEFT', focus, 'RIGHT', 160, 0)
+
+	focus.children = {ouf}
+
+	local loot = ns.CreateCheckBox(General, 'instant_loot')
+	loot:SetPoint('TOPLEFT', focus, 'BOTTOMLEFT', 0, -8)
+
+	local naked = ns.CreateCheckBox(General, 'easy_naked')
+	naked:SetPoint('LEFT', loot, 'RIGHT', 160, 0)
+
+	local mark = ns.CreateCheckBox(General, 'easy_mark')
+	mark:SetPoint('TOPLEFT', loot, 'BOTTOMLEFT', 0, -8)
+
+	local reject = ns.CreateCheckBox(General, 'auto_reject_stranger')
+	reject:SetPoint('LEFT', mark, 'RIGHT', 160, 0)
+
+	local camera = ns.AddSubCategory(General, ns.localization.general.sub_camera)
+	camera:SetPoint('TOPLEFT', mark, 'BOTTOMLEFT', 0, -16)
+
+	local actionCam = ns.CreateCheckBox(General, 'action_camera')
 	actionCam:SetPoint('TOPLEFT', camera, 'BOTTOMLEFT', 0, -8)
 
-	local fasterCam = ns.CreateCheckBox(General, 'fasterCam')
+	local fasterCam = ns.CreateCheckBox(General, 'faster_camera')
 	fasterCam:SetPoint('LEFT', actionCam, 'RIGHT', 160, 0)
 
 	local uiscale = ns.AddSubCategory(General, ns.localization.general.sub_uiscale)
 	uiscale:SetPoint('TOPLEFT', actionCam, 'BOTTOMLEFT', 0, -16)
 
-	local uiScaleMult = ns.CreateNumberSlider(General, 'uiScale', 1, 2, 1, 2, 0.1, true)
+	local uiScaleMult = ns.CreateNumberSlider(General, 'ui_scale', 1, 2, 1, 2, 0.1, true)
 	uiScaleMult:SetPoint('TOPLEFT', uiscale, 'BOTTOMLEFT', 16, -32)
 end
 
-local function addAuraOptions()
+
+do
 	local Aura = FreeUIOptionsFrame.Aura
 	Aura.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
 
@@ -173,44 +181,45 @@ local function addAuraOptions()
 	Aura:HookScript('OnShow', toggleAuraOptions)
 end
 
-local function addInventoryOptions()
+
+do
 	local Inventory = FreeUIOptionsFrame.Inventory
 	Inventory.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
 
 	local basic = ns.AddSubCategory(Inventory, ns.localization.inventory.sub_basic)
 	basic:SetPoint('TOPLEFT', Inventory.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(Inventory, 'enable')
+	local enable = ns.CreateCheckBox(Inventory, 'enable_module')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local newitemFlash = ns.CreateCheckBox(Inventory, 'newitemFlash')
+	local newitemFlash = ns.CreateCheckBox(Inventory, 'new_item_flash')
 	newitemFlash:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local reverseSort = ns.CreateCheckBox(Inventory, 'reverseSort')
+	local reverseSort = ns.CreateCheckBox(Inventory, 'reverse_sort')
 	reverseSort:SetPoint('LEFT', newitemFlash, 'RIGHT', 160, 0)
 
-	local combineFreeSlots = ns.CreateCheckBox(Inventory, 'combineFreeSlots')
+	local combineFreeSlots = ns.CreateCheckBox(Inventory, 'combine_free_slots')
 	combineFreeSlots:SetPoint('TOPLEFT', newitemFlash, 'BOTTOMLEFT', 0, -8)
 
-	local itemLevel = ns.CreateCheckBox(Inventory, 'itemLevel')
+	local itemLevel = ns.CreateCheckBox(Inventory, 'item_level')
 	itemLevel:SetPoint('LEFT', combineFreeSlots, 'RIGHT', 160, 0)
 
-	local useCategory = ns.CreateCheckBox(Inventory, 'useCategory')
+	local useCategory = ns.CreateCheckBox(Inventory, 'item_filter', setupItemFilters)
 	useCategory:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -8)
 
 	local size = ns.AddSubCategory(Inventory, ns.localization.inventory.sub_adjustment)
 	size:SetPoint('TOPLEFT', useCategory, 'BOTTOMLEFT', 0, -16)
 
-	local slotSize = ns.CreateNumberSlider(Inventory, 'slotSize', 20, 60, 20, 60, 1, true)
+	local slotSize = ns.CreateNumberSlider(Inventory, 'slot_size', 20, 60, 20, 60, 1, true)
 	slotSize:SetPoint('TOPLEFT', size, 'BOTTOMLEFT', 16, -32)
 
 	local spacing = ns.CreateNumberSlider(Inventory, 'spacing', 3, 6, 3, 6, 1, true)
 	spacing:SetPoint('LEFT', slotSize, 'RIGHT', 60, 0)
 
-	local bagColumns = ns.CreateNumberSlider(Inventory, 'bagColumns', 8, 16, 8, 16, 1, true)
+	local bagColumns = ns.CreateNumberSlider(Inventory, 'bag_columns', 8, 16, 8, 16, 1, true)
 	bagColumns:SetPoint('TOPLEFT', slotSize, 'BOTTOMLEFT', 0, -64)
 
-	local bankColumns = ns.CreateNumberSlider(Inventory, 'bankColumns', 8, 16, 8, 16, 1, true)
+	local bankColumns = ns.CreateNumberSlider(Inventory, 'bank_columns', 8, 16, 8, 16, 1, true)
 	bankColumns:SetPoint('LEFT', bagColumns, 'RIGHT', 60, 0)
 
 
@@ -232,7 +241,8 @@ local function addInventoryOptions()
 	Inventory:HookScript('OnShow', toggleInventoryOptions)
 end
 
-local function addCombatOptions()
+
+do
 	local Combat = FreeUIOptionsFrame.Combat
 	Combat.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
 
@@ -309,7 +319,8 @@ local function addCombatOptions()
 	Combat:HookScript('OnShow', toggleCombatOptions)
 end
 
-local function addCooldownOptions()
+
+do
 	local Cooldown = FreeUIOptionsFrame.Cooldown
 	Cooldown.tab.icon:SetTexture('Interface\\ICONS\\Spell_Nature_TimeStop')
 
@@ -348,7 +359,8 @@ local function addCooldownOptions()
 	Cooldown:HookScript('OnShow', toggleCooldownOptions)
 end
 
-local function addActionbarOptions()
+
+do
 	local Actionbar = FreeUIOptionsFrame.Actionbar
 	Actionbar.tab.icon:SetTexture('Interface\\ICONS\\Spell_Holy_SearingLightPriest')
 
@@ -470,7 +482,8 @@ local function addActionbarOptions()
 	Actionbar:HookScript('OnShow', toggleActionbarOptions)
 end
 
-local function addAnnouncementOptions()
+
+do
 	local Announcement = FreeUIOptionsFrame.Announcement
 	Announcement.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_RallyingCry')
 
@@ -541,7 +554,8 @@ local function addAnnouncementOptions()
 	Announcement:HookScript('OnShow', toggleAnnouncementOptions)
 end
 
-local function addUnitframeOptions()
+
+do
 	local Unitframe = FreeUIOptionsFrame.Unitframe
 	Unitframe.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
 
@@ -659,7 +673,8 @@ local function addUnitframeOptions()
 	Unitframe:HookScript('OnShow', toggleGroupOptions)
 end
 
-local function addThemeOptions()
+
+do
 	local Theme = FreeUIOptionsFrame.Theme
 	Theme.tab.icon:SetTexture('Interface\\ICONS\\Ability_Hunter_BeastWithin')
 
@@ -718,7 +733,8 @@ local function addThemeOptions()
 	flatAlpha:SetPoint('LEFT', flatColor, 'RIGHT', 160, 0)
 end
 
-local function addInfobarOptions()
+
+do
 	local Infobar = FreeUIOptionsFrame.Infobar
 	Infobar.tab.icon:SetTexture('Interface\\ICONS\\Ability_Priest_Ascension')
 
@@ -773,7 +789,8 @@ local function addInfobarOptions()
 	Infobar:HookScript('OnShow', toggleInfobarOptions)
 end
 
-local function addChatOptions()
+
+do
 	local Chat = FreeUIOptionsFrame.Chat
 	Chat.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
 
@@ -822,14 +839,11 @@ local function addChatOptions()
 	local urlCopy = ns.CreateCheckBox(Chat, 'urlCopy')
 	urlCopy:SetPoint('LEFT', chatCopy, 'RIGHT', 160, 0)
 
-	local blockStranger = ns.CreateCheckBox(Chat, 'blockStranger')
-	blockStranger:SetPoint('TOPLEFT', chatCopy, 'BOTTOMLEFT', 0, -8)
-
-	local allowFriendsSpam = ns.CreateCheckBox(Chat, 'allowFriendsSpam')
-	allowFriendsSpam:SetPoint('LEFT', blockStranger, 'RIGHT', 160, 0)
+	local bubble = ns.CreateCheckBox(Chat, 'auto_toggle_chat_bubble')
+	bubble:SetPoint('TOPLEFT', chatCopy, 'BOTTOMLEFT', 0, -8)
 
 	local filter = ns.AddSubCategory(Chat, ns.localization.chat.sub_filter)
-	filter:SetPoint('TOPLEFT', blockStranger, 'BOTTOMLEFT', 0, -16)
+	filter:SetPoint('TOPLEFT', bubble, 'BOTTOMLEFT', 0, -16)
 
 	local chatFilter = ns.CreateCheckBox(Chat, 'filters')
 	chatFilter:SetPoint('TOPLEFT', filter, 'BOTTOMLEFT', 0, -8)
@@ -837,8 +851,17 @@ local function addChatOptions()
 	local blockAddonSpam = ns.CreateCheckBox(Chat, 'blockAddonSpam')
 	blockAddonSpam:SetPoint('LEFT', chatFilter, 'RIGHT', 160, 0)
 
+	local blockStranger = ns.CreateCheckBox(Chat, 'blockStranger')
+	blockStranger:SetPoint('TOPLEFT', chatFilter, 'BOTTOMLEFT', 0, -8)
+
+	local allowFriendsSpam = ns.CreateCheckBox(Chat, 'allowFriendsSpam')
+	allowFriendsSpam:SetPoint('LEFT', blockStranger, 'RIGHT', 160, 0)
+
 	local profanity = ns.CreateCheckBox(Chat, 'profanity')
-	profanity:SetPoint('TOPLEFT', chatFilter, 'BOTTOMLEFT', 0, -8)
+	profanity:SetPoint('TOPLEFT', blockStranger, 'BOTTOMLEFT', 0, -8)
+
+	local invite_keyword = ns.CreateEditBox(Chat, "keywordsList", true)
+	invite_keyword:SetPoint("TOPLEFT", profanity, "BOTTOMLEFT", 6, -8)
 
 
 	local function toggleChatOptions()
@@ -862,13 +885,15 @@ local function addChatOptions()
 		allowFriendsSpam:SetShown(shown)
 		feature:SetShown(shown)
 		filter:SetShown(shown)
+		bubble:SetShown(shown)
 	end
 
 	enable:HookScript('OnClick', toggleChatOptions)
 	Chat:HookScript('OnShow', toggleChatOptions)
 end 
 
-local function addNotificationOptions()
+
+do
 	local Notification = FreeUIOptionsFrame.Notification
 	Notification.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
 
@@ -899,7 +924,8 @@ local function addNotificationOptions()
 	Notification:HookScript('OnShow', toggleNotificationOptions)
 end
 
-local function addAutomationOptions()
+
+do
 	local Automation = FreeUIOptionsFrame.Automation
 	Automation.tab.icon:SetTexture('Interface\\ICONS\\Ability_Siege_Engineer_Magnetic_Crush')
 
@@ -909,58 +935,33 @@ local function addAutomationOptions()
 	local enable = ns.CreateCheckBox(Automation, 'enable')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local focus = ns.CreateCheckBox(Automation, 'easy_focus')
-	focus:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local ouf = ns.CreateCheckBox(Automation, 'easy_focus_on_ouf')
-	ouf:SetPoint('LEFT', focus, 'RIGHT', 160, 0)
-
-	focus.children = {ouf}
+	local screen = ns.CreateCheckBox(Automation, 'auto_screenshot')
+	screen:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
 	local buyStack = ns.CreateCheckBox(Automation, 'easy_buy_stack')
-	buyStack:SetPoint('TOPLEFT', focus, 'BOTTOMLEFT', 0, -8)
+	buyStack:SetPoint('LEFT', screen, 'RIGHT', 160, 0)
 
-	local delete = ns.CreateCheckBox(Automation, 'easy_delete')
-	delete:SetPoint('LEFT', buyStack, 'RIGHT', 160, 0)
 
-	local loot = ns.CreateCheckBox(Automation, 'instant_loot')
-	loot:SetPoint('TOPLEFT', buyStack, 'BOTTOMLEFT', 0, -8)
-
-	local naked = ns.CreateCheckBox(Automation, 'easy_naked')
-	naked:SetPoint('LEFT', loot, 'RIGHT', 160, 0)
-
-	local screen = ns.CreateCheckBox(Automation, 'auto_screenshot')
-	screen:SetPoint('TOPLEFT', loot, 'BOTTOMLEFT', 0, -8)
-
-	local reject = ns.CreateCheckBox(Automation, 'auto_reject_stranger')
-	reject:SetPoint('LEFT', screen, 'RIGHT', 160, 0)
-
-	local bubble = ns.CreateCheckBox(Automation, 'auto_toggle_chat_bubble')
-	bubble:SetPoint('TOPLEFT', screen, 'BOTTOMLEFT', 0, -8)
-
-	local mark = ns.CreateCheckBox(Automation, 'easy_mark')
-	mark:SetPoint('LEFT', bubble, 'RIGHT', 160, 0)
+	local invite_keyword = ns.CreateEditBox(Automation, "invite_keyword", true)
+	invite_keyword:SetPoint("TOPLEFT", screen, "BOTTOMLEFT", 6, -8)
 
 
 	local function toggleAutomationOptions()
 		local shown = enable:GetChecked()
-		focus:SetShown(shown)
-		ouf:SetShown(shown)
+
 		buyStack:SetShown(shown)
-		delete:SetShown(shown)
-		loot:SetShown(shown)
-		naked:SetShown(shown)
+
 		screen:SetShown(shown)
-		reject:SetShown(shown)
-		bubble:SetShown(shown)
-		mark:SetShown(shown)
+
+
 	end
 
 	enable:HookScript('OnClick', toggleAutomationOptions)
 	Automation:HookScript('OnShow', toggleAutomationOptions)
 end
 
-local function addMapOptions()
+
+do
 	local Map = FreeUIOptionsFrame.Map
 	Map.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
 
@@ -1007,7 +1008,8 @@ local function addMapOptions()
 	Map:HookScript('OnShow', toggleMapOptions)
 end
 
-local function addQuestOptions()
+
+do
 	local Quest = FreeUIOptionsFrame.Quest
 	Quest.tab.icon:SetTexture('Interface\\ICONS\\ABILITY_Rogue_RollTheBones04')
 
@@ -1046,7 +1048,8 @@ local function addQuestOptions()
 	Quest:HookScript('OnShow', toggleQuestOptions)
 end
 
-local function addTooltipOptions()
+
+do
 	local Tooltip = FreeUIOptionsFrame.Tooltip
 	Tooltip.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
 
@@ -1125,20 +1128,8 @@ local function addTooltipOptions()
 	Tooltip:HookScript('OnShow', toggleTooltipOptions)
 end
 
-addGeneralOptions()
-addAuraOptions()
-addInventoryOptions()
-addCombatOptions()
-addCooldownOptions()
-addActionbarOptions()
-addUnitframeOptions()
-addThemeOptions()
-addInfobarOptions()
-addChatOptions()
-addNotificationOptions()
-addMapOptions()
-addQuestOptions()
-addTooltipOptions()
-addAnnouncementOptions()
-addAutomationOptions()
+
+
+
+
 

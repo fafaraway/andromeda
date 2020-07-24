@@ -300,8 +300,8 @@ function INFOBAR:Friends()
 
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.btnleft..L['INFOBAR_OPEN_FRIENDS_PANEL'], 1,1,1, .9, .8, .6)
-		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.btnright..L['INFOBAR_ADD_FRIEND'], 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_left..L['INFOBAR_OPEN_FRIENDS_PANEL'], 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_right..L['INFOBAR_ADD_FRIEND'], 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

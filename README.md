@@ -1,25 +1,23 @@
 ![logo](https://i.imgur.com/G2qQDW3.png "logo")
 
-![WOW support](https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat "ShadowLands") ![latest release](https://img.shields.io/github/v/release/Solor/FreeUI?style=flat "latest release") ![release date](https://img.shields.io/github/release-date/Solor/FreeUI "release date") [![discord](https://img.shields.io/discord/242811601260904450?label=Discord&?style=flat "discord")](https://discord.gg/Uu28KQq)
+[![discord](https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat "discord")](https://discord.gg/Uu28KQq) ![WOW support](https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat "ShadowLands") ![latest release](https://img.shields.io/github/v/release/Solor/FreeUI?style=flat "latest release") ![release date](https://img.shields.io/github/release-date/Solor/FreeUI "release date")
 
 
-## FreeUI
-MINIMALISTIC AESTHETIC PRACTICAL
-
-This is a personal fork of [FreeUI](https://github.com/Haleth/FreeUI), updated and heavily modified.
+## Abstract
+Minimalistic aesthetic and practical.
 
 ## Screenshots
 *  https://imgur.com/a/uUz7CuL
 
 ## Videos
-*  
+*  https://www.youtube.com/watch?v=nD-rWROl0YU
 
 ## Commands
-*  Use `"/freeui"` or `"/free"` to list all available commands.
-*  `/free install` open install panel
-*  `/free config` open config panel
-*  `/free unlock` unlock UI elements
-*  `/free reset` reset all saved options data
+*  `/free`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list all available commands
+*  `/free install`&nbsp;&nbsp;&nbsp;open install panel
+*  `/free config`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open config panel
+*  `/free unlock`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unlock UI elements
+*  `/free reset`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reset all saved options data
 
 ## Recommended Addons
 *  [DBM](https://github.com/DeadlyBossMods/DeadlyBossMods)
@@ -28,5 +26,5 @@ This is a personal fork of [FreeUI](https://github.com/Haleth/FreeUI), updated a
 *  [Simpy's icon pack](https://git.tukui.org/Simpy/interface/tree/master)
 
 ## Credits
-*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia), Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch
+*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia), Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch
 

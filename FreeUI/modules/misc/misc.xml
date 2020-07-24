@@ -6,12 +6,14 @@
 	<Script file='camera.lua'/>
 	<Script file='colorpicker.lua'/>
 	<Script file='colors.lua'/>
+	<Script file='focus.lua'/>
 	<Script file='missingstats.lua'/>
 	<Script file='grouptool.lua'/>
 	<Script file='keystone.lua'/>
 	<Script file='logo.lua'/>
 	<Script file='itemlevel.lua'/>
 	<Script file='mail.lua'/>
+	<Script file='mark.lua'/>
 	<Script file='orderhall.lua'/>
 	<Script file='petfilter.lua'/>
 	<Script file='queuetimer.lua'/>

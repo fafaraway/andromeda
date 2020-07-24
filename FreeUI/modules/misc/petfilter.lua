@@ -78,7 +78,7 @@ function MISC:PetTabs_Load(addon)
 end
 
 function MISC:PetTabs_Init()
-	if not cfg.petFilter then return end
+	if not cfg.pet_filter then return end
 
 	if IsAddOnLoaded("Blizzard_Collections") then
 		MISC:PetTabs_Create()

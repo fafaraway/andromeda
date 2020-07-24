@@ -58,7 +58,7 @@ end
 
 
 function MISC:MailButton()
-	if not cfg.mailButton then return end
+	if not cfg.mail_button then return end
 
 	OpenAllMail:Hide()
 	OpenAllMail:UnregisterAllEvents()

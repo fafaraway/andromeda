@@ -46,8 +46,15 @@ function MISC:OnLogin()
 	end
 
 
-
+	self:TutorialBuster()
 	self:Errors()
+
+
+	self:EasyDelete()
+	self:EasyNaked()
+	self:InstantLoot()
+	self:BlockStrangerInvite()
+
 
 	self:UndressButton()
 	self:BlowMyWhistle()
@@ -59,7 +66,7 @@ function MISC:OnLogin()
 	
 
 	-- Hide Bossbanner
-	if cfg.hideBossBanner then
+	if cfg.hide_boss_banner then
 		BossBanner:UnregisterAllEvents()
 	end
 
@@ -87,7 +94,22 @@ function MISC:OnLogin()
 		_AddonTooltip_Update(owner)
 	end
 
-	-- Get rid of blizz tutorials
+	
+
+	local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
+	if not LSM then return end
+
+	local chinese, western = LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_western
+
+	LSM:Register("statusbar", "!Free_statusbar", C.Assets.Textures.statusbar)
+	LSM:Register('font', '!Free_normal', C.Assets.Fonts.Normal, chinese + western)
+	LSM:Register('font', '!Free_number', C.Assets.Fonts.Number, chinese + western)
+	LSM:Register('font', '!Free_chat', C.Assets.Fonts.Chat, chinese + western)
+end
+
+
+
+function MISC:TutorialBuster()
 	if _G.IsAddOnLoaded('Blizzard_TalentUI') then
 		_G.PlayerTalentFrameSpecializationTutorialButton:Kill()
 		_G.PlayerTalentFrameTalentsTutorialButton:Kill()
@@ -126,21 +148,7 @@ function MISC:OnLogin()
 	_G.TalentMicroButtonAlert:UnregisterAllEvents()
 	_G.TalentMicroButtonAlert:SetParent(F.HiddenFrame)
 	_G.TalentMicroButtonAlert:Hide()
-
-	local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
-	if not LSM then return end
-
-	local chinese, western = LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_western
-
-	LSM:Register("statusbar", "!Free_statusbar", C.Assets.Textures.statusbar)
-	LSM:Register('font', '!Free_normal', C.Assets.Fonts.Normal, chinese + western)
-	LSM:Register('font', '!Free_number', C.Assets.Fonts.Number, chinese + western)
-	LSM:Register('font', '!Free_chat', C.Assets.Fonts.Chat, chinese + western)
 end
-
-
-
-
 
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
@@ -183,7 +191,7 @@ end
 
 -- Undress button
 function MISC:UndressButton()
-	if not cfg.undressButton then return end
+	if not cfg.undress_button then return end
 
 	local undressButton = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undressButton:SetSize(80, 22)
@@ -223,7 +231,7 @@ end
 
 -- Colorize trade target name 
 function MISC:TradeTargetInfo()
-	if not cfg.tradeTargetInfo then return end
+	if not cfg.trade_target_info then return end
 
 	local infoText = F.CreateFS(TradeFrame, C.Assets.Fonts.Normal, 14, true)
 	infoText:ClearAllPoints()
@@ -285,15 +293,8 @@ function MISC:UIWidgetFrameMover()
 	end)
 end
 
-
-
-
-
-
-
--- Errors
 function MISC:Errors()
-	if not cfg.errors then return end
+	if not cfg.tidy_errors then return end
 
 	local holdtime = 0.52 -- hold time (seconds)
 	local fadeintime = 0.08 -- fadein time (seconds)
@@ -341,8 +342,67 @@ function MISC:Errors()
 	end)
 end
 
+function MISC:EasyDelete()
+	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
+		if cfg.easy_delete then
+			self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+		end
+	end)
+end
 
+function MISC:EasyNaked()
+	if not cfg.easy_naked then return end
 
+	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
+	bu:SetSize(31, 33)
+	bu:SetPoint('RIGHT', PaperDollSidebarTab1, 'LEFT', -4, -3)
+	F.PixelIcon(bu, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
+	F.AddTooltip(bu, 'ANCHOR_RIGHT', L['AUTOMATION_GET_NAKED'])
+
+	local function UnequipItemInSlot(i)
+		local action = EquipmentManager_UnequipItemInSlot(i)
+		EquipmentManager_RunAction(action)
+	end
+
+	bu:SetScript('OnDoubleClick', function()
+		for i = 1, 17 do
+			local texture = GetInventoryItemTexture('player', i)
+			if texture then
+				UnequipItemInSlot(i)
+			end
+		end
+	end)
+end
+
+local lootDelay = 0
+local function instantLoot()
+	if GetTime() - lootDelay >= 0.3 then
+		lootDelay = GetTime()
+		if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
+			for i = GetNumLootItems(), 1, -1 do
+				LootSlot(i)
+			end
+			lootDelay = GetTime()
+		end
+	end
+end
+
+function MISC:InstantLoot()
+	if cfg.instant_loot then
+		F:RegisterEvent('LOOT_READY', instantLoot)
+	else
+		F:UnregisterEvent('LOOT_READY', instantLoot)
+	end
+end
+
+function MISC:BlockStrangerInvite()
+	F:RegisterEvent('PARTY_INVITE_REQUEST', function(_, _, _, _, _, _, _, guid)
+		if cfg.block_stranger_invite and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
+			DeclineGroup()
+			StaticPopup_Hide('PARTY_INVITE')
+		end
+	end)
+end
 
 
 -- Fix Drag Collections taint

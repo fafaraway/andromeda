@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 local MISC, cfg = F:GetModule('Misc'), C.General
 
-if not cfg.blizzMover then return end
+if not cfg.blizz_mover then return end
 
 
 local f = CreateFrame("Frame")

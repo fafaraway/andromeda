@@ -9,7 +9,7 @@ local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
 function QUEST:QuestTrackerMover()
 	local frame = CreateFrame("Frame", "FreeUIQuestMover", UIParent)
 	frame:SetSize(240, 50)
-	F.Mover(frame, L["MOVER_QUEST_TRACKER"], "QuestTracker", {"TOPRIGHT", UIParent, "TOPRIGHT", -C.General.gap, -140})
+	F.Mover(frame, L["MOVER_QUEST_TRACKER"], "QuestTracker", {"TOPRIGHT", UIParent, "TOPRIGHT", -C.General.ui_gap, -140})
 
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()

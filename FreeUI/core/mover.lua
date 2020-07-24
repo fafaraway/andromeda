@@ -76,15 +76,15 @@ function F:CreateMF(parent, saved)
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
-		FreeUIConfig['uiTempAnchor'][frame:GetName()] = {orig, "UIParent", tar, x, y}
+		FreeUIConfig['ui_anchor_temp'][frame:GetName()] = {orig, "UIParent", tar, x, y}
 	end)
 end
 
 function F:RestoreMF()
 	local name = self:GetName()
-	if name and FreeUIConfig['uiTempAnchor'][name] then
+	if name and FreeUIConfig['ui_anchor_temp'][name] then
 		self:ClearAllPoints()
-		self:SetPoint(unpack(FreeUIConfig['uiTempAnchor'][name]))
+		self:SetPoint(unpack(FreeUIConfig['ui_anchor_temp'][name]))
 	end
 end
 
@@ -94,14 +94,14 @@ local MoverList, f = {}
 local updater
 
 function F:Mover(text, value, anchor, width, height)
-	local key = 'uiAnchor'
+	local key = 'ui_anchor'
 
 	local mover = CreateFrame('Frame', nil, UIParent)
 	mover:SetWidth(width or self:GetWidth())
 	mover:SetHeight(height or self:GetHeight())
 	mover.bg = F.SetBD(mover)
 	mover:Hide()
-	mover.text = F.CreateFS(mover, C.Assets.Fonts.Normal, 12, 'OUTLINE', text, 'YELLOW')
+	mover.text = F.CreateFS(mover, C.Assets.Fonts.Normal, 12, 'OUTLINE', text)
 	mover.text:SetWordWrap(true)
 
 	if not FreeUIConfig[key][value] then 
@@ -260,7 +260,7 @@ StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(FreeUIConfig['uiAnchor'])
+		wipe(FreeUIConfig['ui_anchor'])
 		ReloadUI()
 	end,
 	timeout = 0,
@@ -317,7 +317,7 @@ local function CreateConsole()
 	header:SetSize(260, 30)
 	header:SetPoint('TOP')
 	F.CreateMF(header, f)
-	local tips = C.InfoColor..'|nCTRL +'..C.Assets.Textures.btnright..L['MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.Textures.btnright..L['MOVER_HIDE_ELEMENT']
+	local tips = C.InfoColor..'|nCTRL +'..C.Assets.Textures.mouse_right..L['MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.Textures.mouse_right..L['MOVER_HIDE_ELEMENT']
 	header.title = L['MOVER_TIPS']
 	F.AddTooltip(header, 'ANCHOR_TOP', tips)
 

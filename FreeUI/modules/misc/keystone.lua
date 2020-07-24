@@ -127,7 +127,7 @@ function MISC:KeystoneInfo_Create()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 		GameTooltip:AddLine(L['MISC_KEYSTONES'])
-		for name, info in pairs(FreeUIGlobalConfig['keystoneInfo']) do
+		for name, info in pairs(FreeUIGlobalConfig['keystone_info']) do
 			local name = Ambiguate(name, 'none')
 			local mapID, level, class, faction = strsplit(':', info)
 			local color = F.HexRGB(F.ClassColor(class))
@@ -142,7 +142,7 @@ function MISC:KeystoneInfo_Create()
 	button:SetScript('OnLeave', F.HideTooltip)
 	button:SetScript('OnMouseUp', function(_, btn)
 		if btn == 'MiddleButton' then
-			wipe(FreeUIGlobalConfig['keystoneInfo'])
+			wipe(FreeUIGlobalConfig['keystone_info'])
 		end
 	end)
 end
@@ -164,14 +164,14 @@ function MISC:KeystoneInfo_Update()
 	local link, itemString = MISC:KeystoneInfo_UpdateBag()
 	if link then
 		local _, mapID, level = strsplit(':', itemString)
-		FreeUIGlobalConfig['keystoneInfo'][myFullName] = mapID..':'..level..':'..C.MyClass..':'..myFaction
+		FreeUIGlobalConfig['keystone_info'][myFullName] = mapID..':'..level..':'..C.MyClass..':'..myFaction
 	else
-		FreeUIGlobalConfig['keystoneInfo'][myFullName] = nil
+		FreeUIGlobalConfig['keystone_info'][myFullName] = nil
 	end
 end
 
 function MISC:GuildBest()
-	if not cfg.keystone then return end
+	if not cfg.account_keystone then return end
 	
 	F:RegisterEvent('ADDON_LOADED', MISC.GuildBest_OnLoad)
 

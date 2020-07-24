@@ -1,17 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 
-if (GetLocale() ~= 'zhCN' and GetLocale() ~= 'zhTW') then return end
-
 
 -- Actionbar
 L['ACTIONBAR_LEAVE_VEHICLE'] = '离开载具按钮'
-L["ACTIONBAR_KEY_UNBOUND"] = "未绑定按键"
-L["ACTIONBAR_KEY_INDEX"] = "序号"
-L["ACTIONBAR_KEY_BINDING"] = "按键"
-L["ACTIONBAR_KEY_BOUND_TO"] = " 绑定按键"
-L["ACTIONBAR_SAVE_KEYBINDS"] = "按键设置已保存"
-L["ACTIONBAR_DISCARD_KEYBINDS"] = "按键设置已撤销"
-L["ACTIONBAR_CLEAR_BINDS"] = "%s |cff20ff20清除已绑定按键" 
+L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
+L['ACTIONBAR_KEY_INDEX'] = '序号'
+L['ACTIONBAR_KEY_BINDING'] = '按键'
+L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
+L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
+L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
+L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键' 
 
 
 -- Unitframe
@@ -152,6 +150,7 @@ L['INFOBAR_INFO'] = '信息'
 
 
 -- inventory
+L['INVENTORY'] = 'inventory'
 L['INVENTORY_NOTIFICATION_HEADER'] = '背包'
 L['INVENTORY_RESET_GOLD_COUNT'] = '重置金币统计数据'
 L['INVENTORY_SORT'] = '整理物品'
@@ -180,8 +179,8 @@ L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
 L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
 L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 
-L["INVENTORY_MARK_JUNK"] = "垃圾分类"
-L["INVENTORY_MARK_JUNK_ENABLED"] = "\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。"
+L['INVENTORY_MARK_JUNK'] = '垃圾分类'
+L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
 
 
 
@@ -227,7 +226,7 @@ L['MOVER_ACTIONBAR_PET'] = '宠物动作条'
 L['MOVER_ACTIONBAR_STANCE'] = 'actionbar_stance'
 L['MOVER_ACTIONBAR_EXTRA'] = '动作条额外按钮'
 L['MOVER_ACTIONBAR_VEHICLE'] = 'actionbar_vehicle'
-L["MOVER_COOLDOWN_PULSE"] = '冷却图标'
+L['MOVER_COOLDOWN_PULSE'] = '冷却图标'
 
 
 
@@ -281,10 +280,57 @@ L['INSTALL_BUTTON_CANCEL'] = '取消'
 
 
 -- Themes
-L["THEME_CONFLICTION_WARNING"] = "FreeUI includes an efficient built-in module of theme.\n\nIt's highly recommended that you disable any version of Aurora or Skinner."
+L['THEME_CONFLICTION_WARNING'] = "FreeUI includes an efficient built-in module of theme.\n\nIt's highly recommended that you disable any version of Aurora or Skinner."
+L['THEME_CURSOR_TRAIL'] = '鼠标轨迹'
+L['THEME_VIGNETTING'] = '暗角效果'
+L['THEME_VIGNETTING_ALPHA'] = '暗角透明度'
+
+L['THEME_RESKIN_BLIZZ'] = '美化游戏默认界面'
+L['THEME_SHADOW_BORDER'] = '添加阴影'
+L['THEME_UI_SCALE'] = '界面缩放'
+
+
+-- GUI
+L['GUI_TIPS'] = 'tips'
+L['GUI_ASTERISK_TIPS'] = 'asterisk tips'
+L['GUI_EDITBOX_TIP'] = 'editbox tip'
+L['GUI_RESET'] = '清空设置'
+L['GUI_RELOAD'] = '重载界面'
+L['GUI_IMPORT'] = '导入'
+L['GUI_IMPORT_TIP'] = '导入配置字符串'
+L['GUI_IMPORT_HEADER'] = 'import header'
+L['GUI_IMPORT_DATA_ERROR'] = '配置异常，导入失败！'
+L['GUI_IMPORT_DATA_WARNING'] = '是否确定载入配置？'
+L['GUI_EXPORT'] = '导出'
+L['GUI_EXPORT_TIP'] = '导出配置字符串'
+L['GUI_EXPORT_HEADER'] = 'export header'
+
+L['GUI_DATA_INFO'] = '配置信息'
+L['GUI_DATA_VERSION'] = '版本'
+L['GUI_DATA_CHARACTER'] = '角色'
+L['GUI_DATA_EXCEPTION'] = '配置异常'
+
+L['GUI_TAB_GENERAL'] = '综合'
+L['GUI_TAB_APPEARANCE'] = '外观'
+L['GUI_TAB_NOTIFY_ANNOUNCE'] = '通知提醒'
+L['GUI_TAB_INFOBAR'] = '信息条'
+L['GUI_TAB_CHAT'] = '聊天'
+L['GUI_TAB_AURA'] = '光环'
+L['GUI_TAB_ACTIONBAR'] = '动作条'
+L['GUI_TAB_COMBAT'] = '战斗'
+L['GUI_TAB_INVENTORY'] = '背包'
+L['GUI_TAB_MAP'] = '地图'
+L['GUI_TAB_QUEST'] = '任务'
+L['GUI_TAB_TOOLTIP'] = '鼠标提示'
+L['GUI_TAB_UNITFRAME'] = '头像框体'
+
+L["GUI_RELOAD_WARNING"] = 'reload warning'
+L['GUI_RESET_WARNING'] = 'reset warning'
+
+
 
 -- Version
-L["VERSION_OUTDATED"] = "Your version of FreeUI is out of date, the latest version is |cffff2020%s|r."
+L['VERSION_OUTDATED'] = 'Your version of FreeUI is out of date, the latest version is |cffff2020%s|r.'
 
 -- Slash commands
 L['COMMANDS_LIST_HINT'] = '可用命令：'
@@ -311,3 +357,17 @@ L['COMMANDS_LIST'] = {
 	'/bind - 绑定快捷键',
 	'/gm - 打开帮助面板',
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

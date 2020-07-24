@@ -37,8 +37,8 @@ function LOGO:Logo_Create()
 	local tex = frame:CreateTexture()
 	tex:SetAllPoints()
 	tex:SetTexture(C.Assets.Textures.logo)
-	tex:SetBlendMode('BLEND')
-	--tex:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
+	tex:SetBlendMode('ADD')
+	tex:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
 
 	local delayTime = 0
 	local timer1 = .5
@@ -114,7 +114,7 @@ end
 
 
 function LOGO:OnLogin()
-	if not FreeUIConfig['installComplete'] then return end
+	if not FreeUIConfig['installation_complete'] then return end
 	
 	self:LoginAnimation()
 end

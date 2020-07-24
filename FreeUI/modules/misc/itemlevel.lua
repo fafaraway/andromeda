@@ -315,8 +315,10 @@ local function MerchantItemlevel()
 			local itemLink = GetMerchantItemLink(index)
 			if itemLink then
 				local _, _, quality, itemlevel, _, _, _, _, _, _, _, itemClassID = GetItemInfo(itemLink)
+				local color = C.QualityColors[quality]
 				if (itemlevel and itemlevel > 1) and (quality and quality > 1) and (itemClassID == LE_ITEM_CLASS_WEAPON or itemClassID == LE_ITEM_CLASS_ARMOR) then
 					button.text:SetText(itemlevel)
+					button.text:SetTextColor(color.r, color.g, color.b)
 				end
 			end
 		end
