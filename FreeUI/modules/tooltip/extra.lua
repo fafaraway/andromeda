@@ -32,32 +32,43 @@ function TOOLTIP:AddLineForID(id, linkType, noadd)
 		local text = line:GetText()
 		if text and text == linkType then return end
 	end
-	
+
 	if not noadd then self:AddLine(' ') end
-
-	if linkType == types.item then
-		local bagCount = GetItemCount(id)
-		local bankCount = GetItemCount(id, true) - GetItemCount(id)
-		local itemStackCount = select(8, GetItemInfo(id))
-		local itemSellPrice = select(11, GetItemInfo(id))
-
-		if bankCount > 0 then
-			self:AddDoubleLine(BAGSLOT..'/'..BANK..':', C.InfoColor..bagCount..'/'..bankCount)
-		elseif bagCount > 0 then
-			self:AddDoubleLine(BAGSLOT..':', C.InfoColor..bagCount)
-		end
-		if itemStackCount and itemStackCount > 1 then
-			self:AddDoubleLine(L['TOOLTIP_STACK_CAP']..':', C.InfoColor..itemStackCount)
-		end
-
-		if itemSellPrice and itemSellPrice ~= 0 then
-			self:AddDoubleLine(L['TOOLTIP_SELL_PRICE']..':', '|cffffffff'..GetMoneyString(itemSellPrice)..'|r')
-		end
-	end
 
 	self:AddDoubleLine(linkType, format(C.InfoColor.."%s|r", id))
 	self:Show()
 end
+
+function TOOLTIP:ItemPrice()
+	if not IsAltKeyDown() then return end
+
+	local _, link = self:GetItem()
+	local itemSellPrice = select(11, GetItemInfo(link))
+
+	if itemSellPrice and itemSellPrice ~= 0 then
+		self:AddDoubleLine(L['TOOLTIP_SELL_PRICE']..':', '|cffffffff'..GetMoneyString(itemSellPrice)..'|r')
+	end
+end
+
+function TOOLTIP:ItemCount()
+	if not IsAltKeyDown() then return end
+
+	local _, link = self:GetItem()
+	local bagCount = GetItemCount(link)
+	local bankCount = GetItemCount(link, true) - GetItemCount(link)
+	local itemStackCount = select(8, GetItemInfo(link))
+
+	if bankCount > 0 then
+		self:AddDoubleLine(BAGSLOT..'/'..BANK..':', C.InfoColor..bagCount..'/'..bankCount)
+	elseif bagCount > 0 then
+		self:AddDoubleLine(BAGSLOT..':', C.InfoColor..bagCount)
+	end
+
+	if itemStackCount and itemStackCount > 1 then
+		self:AddDoubleLine(L['TOOLTIP_STACK_CAP']..':', C.InfoColor..itemStackCount)
+	end
+end
+
 
 function TOOLTIP:SetHyperLinkID(link)
 	local linkType, id = strmatch(link, '^(%a+):(%d+)')
@@ -93,10 +104,9 @@ function TOOLTIP:UpdateAuraSource(...)
 	if unitCaster then
 		local name = GetUnitName(unitCaster, true)
 		local hexColor = F.HexRGB(F.UnitColor(unitCaster))
-		if IsAltKeyDown() then
-			self:AddDoubleLine(L['TOOLTIP_AURA_FROM']..':', hexColor..name)
-			self:Show()
-		end
+
+		self:AddDoubleLine(L['TOOLTIP_AURA_FROM']..':', hexColor..name)
+		self:Show()
 	end
 end
 
@@ -159,6 +169,10 @@ function TOOLTIP:ExtraInfo()
 		hooksecurefunc(GameTooltip, 'SetAzeritePower', function(self, _, _, id)
 			if id then TOOLTIP.AddLineForID(self, id, types.azerite, true) end
 		end)
+
+
+		GameTooltip:HookScript("OnTooltipSetItem", TOOLTIP.ItemCount)
+		GameTooltip:HookScript("OnTooltipSetItem", TOOLTIP.ItemPrice)
 	end
 
 	-- Aura source

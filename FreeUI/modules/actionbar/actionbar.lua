@@ -411,7 +411,7 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 	button.icon:SetTexCoord(.216, .784, .216, .784)
 	button:SetNormalTexture(nil)
 	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	button:GetPushedTexture():SetTexture(C.Assets.Textures.pushed)
+	button:GetPushedTexture():SetTexture(C.Assets.button_pushed)
 	F.CreateBDFrame(button, nil, true)
 	frame.mover = F.Mover(frame, L['ACTIONBAR_LEAVE_VEHICLE'], 'LeaveVehicleButton', frame.Pos) ]]
 

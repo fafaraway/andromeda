@@ -130,8 +130,8 @@ function INFOBAR:Stats()
 
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_left..L['INFOBAR_OPEN_ADDON_PANEL']..' ', 1,1,1, .9, .82, .62)
-		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_right..L['INFOBAR_OPEN_TIMER_TRACKER']..' ', 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['INFOBAR_OPEN_ADDON_PANEL']..' ', 1,1,1, .9, .82, .62)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['INFOBAR_OPEN_TIMER_TRACKER']..' ', 1,1,1, .9, .82, .62)
 		GameTooltip:Show()
 	end)
 

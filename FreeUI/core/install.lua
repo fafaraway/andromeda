@@ -25,7 +25,7 @@ end
 
 local function setupUIScale()
 	if not FreeUI_Options then return end
-	
+
 	FreeUIOptions['General'] = {}
 
 	if C.ScreenHeight >= 2000 then
@@ -150,7 +150,7 @@ function INSTALL:HelloWorld()
 	local logo = installFrame:CreateTexture()
 	logo:SetSize(512, 128)
 	logo:SetPoint('TOP')
-	logo:SetTexture(C.Assets.Textures.logo_small)
+	logo:SetTexture(C.Assets.logo_small)
 	logo:SetScale(.3)
 	logo:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
 
@@ -166,7 +166,7 @@ function INSTALL:HelloWorld()
 	F.CreateGF(lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
 	lineRight:SetFrameStrata('HIGH')
 
-	
+
 
 
 
@@ -179,7 +179,7 @@ function INSTALL:HelloWorld()
 	local sb = CreateFrame('StatusBar', nil, installFrame)
 	sb:SetPoint('BOTTOM', installFrame, 'BOTTOM', 0, 60)
 	sb:SetSize(320, 20)
-	sb:SetStatusBarTexture(C.Assets.Textures.statusbar)
+	sb:SetStatusBarTexture(C.Assets.norm_tex)
 	sb:Hide()
 	F:SmoothBar(sb)
 	sb.bg = F.CreateBDFrame(sb)

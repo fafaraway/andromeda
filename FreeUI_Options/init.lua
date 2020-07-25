@@ -11,6 +11,7 @@ ns.colourpickers = {}
 ns.editboxes = {}
 ns.dropdowns = {}
 ns.panels = {}
+ns.sidePanels = {}
 
 ns.localization = {
 	general = {},
@@ -28,5 +29,5 @@ ns.localization = {
 	announcement = {},
 	audio = {},
 	misc = {},
-	credit = {},
+	dropdown = {},
 }

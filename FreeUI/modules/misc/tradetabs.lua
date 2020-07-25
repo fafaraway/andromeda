@@ -93,7 +93,7 @@ function MISC:TradeTabs_Reskin()
 	if not C.Theme.reskin_blizz then return end
 
 	for _, tab in pairs(tabList) do
-		tab:SetCheckedTexture(C.Assets.Textures.check)
+		tab:SetCheckedTexture(C.Assets.button_checked)
 		tab:GetRegions():Hide()
 		F.CreateBDFrame(tab)
 		local texture = tab:GetNormalTexture()

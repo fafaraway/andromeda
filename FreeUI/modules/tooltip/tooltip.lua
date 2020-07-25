@@ -189,7 +189,7 @@ function TOOLTIP:ReskinStatusBar()
 	self.StatusBar:ClearAllPoints()
 	self.StatusBar:SetPoint('BOTTOMLEFT', GameTooltip, 'TOPLEFT', 1, -4)
 	self.StatusBar:SetPoint('BOTTOMRIGHT', GameTooltip, 'TOPRIGHT', -1, -4)
-	self.StatusBar:SetStatusBarTexture(C.Assets.Textures.statusbar)
+	self.StatusBar:SetStatusBarTexture(C.Assets.norm_tex)
 	self.StatusBar:SetHeight(3)
 	F.CreateBDFrame(self.StatusBar)
 end
@@ -202,7 +202,7 @@ function TOOLTIP:GameTooltip_ShowStatusBar()
 	if bar and not bar.styled then
 		F.StripTextures(bar)
 		F.CreateBDFrame(bar, .25)
-		bar:SetStatusBarTexture(C.Assets.Textures.statusbar)
+		bar:SetStatusBarTexture(C.Assets.norm_tex)
 
 		bar.styled = true
 	end
@@ -216,7 +216,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 	if bar and not bar.styled then
 		F.StripTextures(bar.Bar)
 		F.CreateBDFrame(bar.Bar, .25)
-		bar.Bar:SetStatusBarTexture(C.Assets.Textures.statusbar)
+		bar.Bar:SetStatusBarTexture(C.Assets.norm_tex)
 
 		bar.styled = true
 	end
@@ -269,7 +269,7 @@ end
 
 -- Tooltip skin
 local fakeBg = CreateFrame("Frame", nil, UIParent)
-fakeBg:SetBackdrop({ bgFile = C.Assets.Textures.backdrop, edgeFile = C.Assets.Textures.backdrop, edgeSize = 1 })
+fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
 
 local function getBackdrop() return fakeBg:GetBackdrop() end
 local function getBackdropColor() return 0, 0, 0, .7 end

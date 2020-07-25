@@ -180,7 +180,7 @@ function INFOBAR:Guild()
 
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.Textures.mouse_left..L['INFOBAR_OPEN_GUILD_PANEL']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['INFOBAR_OPEN_GUILD_PANEL']..' ', 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

@@ -11,7 +11,7 @@ local Enable = function(self)
 	bar:Hide()
 
 	bar.spark = bar:CreateTexture(nil, "OVERLAY")
-	bar.spark:SetTexture(C.Assets.Textures.spark)
+	bar.spark:SetTexture(C.Assets.spark_tex)
 	bar.spark:SetVertexColor(unpack(bar.Color))
 	bar.spark:SetHeight(bar.Height)
 	bar.spark:SetWidth(bar.Width)

@@ -317,7 +317,7 @@ local function CreateConsole()
 	header:SetSize(260, 30)
 	header:SetPoint('TOP')
 	F.CreateMF(header, f)
-	local tips = C.InfoColor..'|nCTRL +'..C.Assets.Textures.mouse_right..L['MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.Textures.mouse_right..L['MOVER_HIDE_ELEMENT']
+	local tips = C.InfoColor..'|nCTRL +'..C.Assets.mouse_right..L['MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.mouse_right..L['MOVER_HIDE_ELEMENT']
 	header.title = L['MOVER_TIPS']
 	F.AddTooltip(header, 'ANCHOR_TOP', tips)
 

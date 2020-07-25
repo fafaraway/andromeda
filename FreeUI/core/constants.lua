@@ -5,9 +5,6 @@ local bit_band, bit_bor = bit.band, bit.bor
 local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
 local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
-STANDARD_TEXT_FONT = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
-UNIT_NAME_FONT     = 'Fonts\\FreeUI\\header.ttf'
-DAMAGE_TEXT_FONT   = 'Fonts\\FreeUI\\damage.ttf'
 
 C.Frames = {}
 C.Themes = {}
@@ -19,31 +16,29 @@ C.MyLevel = UnitLevel('player')
 C.MyFaction = select(2, UnitFactionGroup('player'))
 C.MyRace = select(2, UnitRace('player'))
 C.MyRealm = GetRealmName()
-
 C.Version = GetAddOnMetadata('FreeUI', 'Version')
 C.Support = GetAddOnMetadata("FreeUI", "X-Support")
-
 C.Client = GetLocale()
 C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 C.isNewPatch = GetBuildInfo() == '8.3.0'
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
+C.isDeveloper = false
 
 
-
-local assets = 'Interface\\AddOns\\FreeUI\\assets\\'
 C['Assets'] = {
 
-	['norm_tex'] = C.AssetsPath..'textures\\normTex',
-	['grad_tex'] = C.AssetsPath..'textures\\gradTex',
-	['flat_tex'] = C.AssetsPath..'textures\\flatTex',
+	['norm_tex'] = C.AssetsPath..'textures\\norm_tex',
+	['grad_tex'] = C.AssetsPath..'textures\\grad_tex',
+	['flat_tex'] = C.AssetsPath..'textures\\flat_tex',
 
 	['bd_tex'] = 'Interface\\ChatFrame\\ChatFrameBackground',
-	['bg_tex'] = C.AssetsPath..'textures\\bgTex',
-	['glow_tex'] = assets..'textures\\glowTex',
+	['bg_tex'] = C.AssetsPath..'textures\\bg_tex',
+	['glow_tex'] = C.AssetsPath..'textures\\glow_tex',
 
-	['tick_tex'] = C.AssetsPath..'textures\\tickTex',
+	['tick_tex'] = C.AssetsPath..'textures\\tick_tex',
+	['stripe_tex'] = C.AssetsPath..'textures\\stripe_tex',
 
 	['arrow_up'] = C.AssetsPath..'textures\\arrow-up-active',
 	['arrow_down'] = C.AssetsPath..'textures\\arrow-down-active',
@@ -55,10 +50,18 @@ C['Assets'] = {
 	['button_pushed']  = C.AssetsPath..'button\\pushed',
 	['button_checked'] = C.AssetsPath..'button\\checked',
 
+	['mask_tex'] = C.AssetsPath..'textures\\rectangle',
+
 	['roles_icon'] = C.AssetsPath..'textures\\roles_icon',
+	['target_icon'] = C.AssetsPath..'textures\\UI-RaidTargetingIcons',
 	['vig_tex'] = C.AssetsPath..'textures\\vignetting',
 	['spark_tex'] = 'Interface\\CastingBar\\UI-CastingBar-Spark',
 	['gear_tex'] = C.AssetsPath..'textures\\gear_tex',
+
+	['logo'] = C.AssetsPath..'textures\\logo_grey',
+	['logo_small'] = C.AssetsPath..'textures\\logo_small',
+
+	
 
 	['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
 	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',
@@ -66,48 +69,48 @@ C['Assets'] = {
 
 	['font_normal'] = STANDARD_TEXT_FONT,
 
-	['Textures'] = {
+	--[[ ['Textures'] = {
 		['backdrop'] = 'Interface\\ChatFrame\\ChatFrameBackground',
-		['bdstripe'] = assets..'textures\\bgTex',
-		['statusbar'] = assets..'textures\\normTex',
-		['sbstripe'] = assets..'textures\\striped',
-		['shadow'] = assets..'textures\\glowTex',
-		['tick'] = assets..'textures\\tickTex',
-		['check'] = assets..'textures\\checked',
-		['logo'] = assets..'textures\\logo_',
-		['logo_small'] = assets..'textures\\logo_small',
-		['targeticon'] = assets..'textures\\UI-RaidTargetingIcons',
-		['rolesicon'] = assets..'textures\\RoleIcons',
-		['mapmask'] = assets..'textures\\rectangle',
+		['bdstripe'] = C.AssetsPath..'textures\\bgTex',
+		['statusbar'] = C.AssetsPath..'textures\\normTex',
+		['sbstripe'] = C.AssetsPath..'textures\\striped',
+		['shadow'] = C.AssetsPath..'textures\\glowTex',
+		['tick'] = C.AssetsPath..'textures\\tickTex',
+		['check'] = C.AssetsPath..'textures\\checked',
+		['logo'] = C.AssetsPath..'textures\\logo_grey',
+		['logo_small'] = C.AssetsPath..'textures\\logo_small',
+		['targeticon'] = C.AssetsPath..'textures\\UI-RaidTargetingIcons',
+		['rolesicon'] = C.AssetsPath..'textures\\RoleIcons',
+		['mapmask'] = C.AssetsPath..'textures\\rectangle',
 		['spark'] = 'Interface\\CastingBar\\UI-CastingBar-Spark',
-		['vignetting'] = assets..'textures\\vignetting',
-		['arrowUp'] = assets..'textures\\arrow-up-active',
-		['arrowDown'] = assets..'textures\\arrow-down-active',
-		['arrowLeft'] = assets..'textures\\arrow-left-active',
-		['arrowRight'] = assets..'textures\\arrow-right-active',
+		['vignetting'] = C.AssetsPath..'textures\\vignetting',
+		['arrowUp'] = C.AssetsPath..'textures\\arrow-up-active',
+		['arrowDown'] = C.AssetsPath..'textures\\arrow-down-active',
+		['arrowLeft'] = C.AssetsPath..'textures\\arrow-left-active',
+		['arrowRight'] = C.AssetsPath..'textures\\arrow-right-active',
 		['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
 		['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',
 		['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
-	},
+	}, ]]
 
-	['Button'] = {
-		['normal']  = assets..'button\\normal',
-		['flash']   = assets..'button\\flash',
-		['pushed']  = assets..'button\\pushed',
-		['checked'] = assets..'button\\checked',
+	--[[ ['Button'] = {
+		['normal']  = C.AssetsPath..'button\\normal',
+		['flash']   = C.AssetsPath..'button\\flash',
+		['pushed']  = C.AssetsPath..'button\\pushed',
+		['checked'] = C.AssetsPath..'button\\checked',
 	},
-
+ ]]
 
 
 	['Sounds'] = {
-		['whisper'] = assets..'sounds\\whisper_normal.ogg',
-		['whisperBN'] = assets..'sounds\\whisper_bn.ogg',
-		['notification'] = assets..'sounds\\notification.ogg',
-		['feast'] = assets..'sounds\\feast.ogg',
-		['health'] = assets..'sounds\\health.ogg',
-		['mana'] = assets..'sounds\\mana.ogg',
-		['interrupt'] = assets..'sounds\\interrupt.ogg',
-		['dispel'] = assets..'sounds\\dispel.ogg',
+		['whisper'] = C.AssetsPath..'sounds\\whisper_normal.ogg',
+		['whisperBN'] = C.AssetsPath..'sounds\\whisper_bn.ogg',
+		['notification'] = C.AssetsPath..'sounds\\notification.ogg',
+		['feast'] = C.AssetsPath..'sounds\\feast.ogg',
+		['health'] = C.AssetsPath..'sounds\\health.ogg',
+		['mana'] = C.AssetsPath..'sounds\\mana.ogg',
+		['interrupt'] = C.AssetsPath..'sounds\\interrupt.ogg',
+		['dispel'] = C.AssetsPath..'sounds\\dispel.ogg',
 	},
 
 	['Fonts'] = {
@@ -115,9 +118,9 @@ C['Assets'] = {
 		['Header'] = UNIT_NAME_FONT,
 		['Chat'] = STANDARD_TEXT_FONT,
 		['Number'] = STANDARD_TEXT_FONT,
-		['Pixel'] = assets..'fonts\\pixel.ttf',
-		['Cooldown'] = assets..'fonts\\cooldown.ttf',
-		['Symbol'] = assets..'fonts\\symbol.ttf',
+		['Pixel'] = C.AssetsPath..'fonts\\pixel.ttf',
+		['Cooldown'] = C.AssetsPath..'fonts\\cooldown.ttf',
+		['Symbol'] = C.AssetsPath..'fonts\\symbol.ttf',
 	},
 }
 
@@ -176,12 +179,6 @@ NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, '000000', 'ffffff')
 TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, '000000', 'ffffff')
 IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, '000000', 'ffffff')
 
--- Flags
-function C:IsMyPet(flags)
-	return bit_band(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
-end
-C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
-C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 
 -- RoleUpdater
 local function CheckRole()

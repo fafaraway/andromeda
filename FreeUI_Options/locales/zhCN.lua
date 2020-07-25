@@ -16,6 +16,12 @@ ns.localization.misc = {
 	credit_body = "Haleth, siweia\nAlza, Haste, Tukz, Zork\nGethe, Elv, Allez, Lightspark, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath\nShestak, aliluya555, Paojy, Rubgrsch, aduth, silverwind, Nibelheim, humfras"
 }
 
+ns.localization.dropdown = {
+	normal = '默认',
+	gradient = '渐变',
+	flat = '平滑',
+}
+
 ns.localization.aura = {
 	header = "光环",
 	desc = "这些选项控制大部分和光环相关的设置。",
@@ -90,6 +96,9 @@ ns.localization.unitframe = {
 	enable = "启用",
 	enable_tip = "启用单位框体模块。",
 
+	texture = "材质样式",
+
+
 }
 
 ns.localization.inventory = {
@@ -97,22 +106,35 @@ ns.localization.inventory = {
 	desc = "这些选项控制大部分和背包相关的设置。",
 	sub_basic = '基础设定',
 	sub_adjustment = '调整',
-	enable = "启用",
-	enable_tip = "启用背包模块。",
-	newitemFlash = "新物品闪光",
-	newitemFlash_tip = "新获得的物品闪光。",
-	reverseSort = "反向整理",
-	reverseSort_tip = "物品优先整理到背包底部。",
-	combineFreeSlots = "整合空余格子",
-	combineFreeSlots_tip = "整合空余格子以节约空间。",
-	useCategory = "物品分类",
-	useCategory_tip = "启用物品分类，不同种类的物品分开归纳。",
-	itemLevel = "显示物品等级",
-	itemLevel_tip = "显示物品等级",
-	slotSize = '格子大小',
+	enable_module = "启用",
+	enable_module_tip = "启用背包模块。",
+	new_item_flash = "新物品闪光",
+	new_item_flash_tip = "新获得的物品闪光。",
+	reverse_sort = "反向整理",
+	reverse_sort_tip = "物品优先整理到背包底部。",
+	combine_free_slots = "整合空余格子",
+	combine_free_slots_tip = "整合空余格子以节约空间。",
+	item_filter = "物品分类",
+	item_filter_tip = "启用物品分类，不同种类的物品分开归纳。",
+	item_level = "显示物品等级",
+	item_level_tip = "显示物品等级",
+	slot_size = '格子大小',
 	spacing = '格子间隔',
-	bagColumns = '背包每行格子数量',
-	bankColumns = '银行每行格子数量',
+	bag_columns = '背包每行格子数量',
+	bank_columns = '银行每行格子数量',
+	bag_filters_header = '物品分类设置',
+	item_filter_gear_set = '装备配置方案',
+	item_filter_gear_set_tip = '装备配置方案代替原来的装备分类',
+	item_filter_trade = '商业物品',
+	item_filter_quest = '任务物品',
+	item_filter_junk = '垃圾',
+	item_filter_azerite = '艾泽里特装备',
+	item_filter_consumable = '消耗品',
+	item_filter_legendary = '传奇物品',
+	item_filter_mount_pet = '坐骑宠物',
+	item_filter_favourite = '个人偏好',
+	item_level_to_show = '物品等级阈值',
+	item_level_to_show_tip = '大于所设阈值时显示物品等级。',
 }
 
 ns.localization.general = {
@@ -206,6 +228,9 @@ ns.localization.automation = {
 	easy_buy_stack_tip = "商人窗口按住 Alt 键可以直接购买整组物品。",
 	auto_screenshot = "自动截图",
 	auto_screenshot_tip = "玩家获得成就或完成史诗地下城的时候自动截图。",
+
+	invite_keyword = '111',
+	invite_keyword_tip = '222',
 	
 
 }

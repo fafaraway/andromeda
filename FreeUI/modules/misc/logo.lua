@@ -36,7 +36,7 @@ function LOGO:Logo_Create()
 
 	local tex = frame:CreateTexture()
 	tex:SetAllPoints()
-	tex:SetTexture(C.Assets.Textures.logo)
+	tex:SetTexture(C.Assets.logo)
 	tex:SetBlendMode('ADD')
 	tex:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
 

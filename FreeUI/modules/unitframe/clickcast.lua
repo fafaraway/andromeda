@@ -261,7 +261,7 @@ hooksecurefunc(SpellBookFrame, 'Show', function()
 
 	if not tab.styled then
 		tab:GetRegions():Hide()
-		tab:SetCheckedTexture(C.Assets.Textures.check)
+		tab:SetCheckedTexture(C.Assets.button_checked)
 		tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 		F.CreateBDFrame(tab)
 

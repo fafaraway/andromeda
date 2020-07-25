@@ -366,7 +366,7 @@ function MAP:Minimap()
 
 	Minimap:Size(256, 256)
 	Minimap:SetScale(minimapScale)
-	Minimap:SetMaskTexture(C.Assets.Textures.mapmask)
+	Minimap:SetMaskTexture(C.Assets.mask_tex)
 	Minimap:SetHitRectInsets(0, 0, 33 * minimapScale, 33 * minimapScale)
 	Minimap:SetArchBlobRingScalar(0)
 	Minimap:SetQuestBlobRingScalar(0)

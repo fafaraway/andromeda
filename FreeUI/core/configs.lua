@@ -302,7 +302,8 @@ C['Tooltip'] = {
 
 C['Unitframe'] = {
 	['enable_module'] = true,
-		['transparency'] = true,
+		['transparency'] = false,
+		['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
 		['fader'] = false,
 		['color_smooth'] = false,
 		['portrait'] = true,

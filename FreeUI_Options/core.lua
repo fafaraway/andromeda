@@ -1,9 +1,10 @@
 local _, ns = ...
 
 
-local F, C
+local F, C 
 local realm = GetRealmName()
 local name = UnitName('player')
+
 
 
 -- [[ Variables ]]
@@ -21,15 +22,15 @@ local baseName = 'FreeUIOptionsFrame'
 
 local function createOptionsFrame(name)
 	local f = CreateFrame('Frame', name, UIParent)
-	f:SetSize(600, 600)
+	f:SetSize(600, 640)
 	f:SetPoint('CENTER')
 	f:SetFrameStrata('HIGH')
 	f:EnableMouse(true)
 	tinsert(UISpecialFrames, f:GetName())
 
 	f.line = f:CreateTexture()
-	f.line:SetSize(1, 500)
-	f.line:SetPoint('TOPLEFT', 180, -60)
+	f.line:SetSize(1, 540)
+	f.line:SetPoint('TOPLEFT', 180, -50)
 	f.line:SetColorTexture(.5, .5, .5, .1)
 
 	f.close = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
@@ -54,48 +55,6 @@ local function createOptionsFrame(name)
 	f.needReload:SetText(ns.localization.misc.need_reload)
 	f.needReload:Hide()
 
-	--[[ local credit = CreateFrame('Frame', 'FreeUICreditsPanel', UIParent)
-	credit:SetSize(500, 500)
-	credit:SetPoint('CENTER')
-	credit:SetFrameStrata('DIALOG')
-	credit:EnableMouse(true)
-	credit:Hide()
-	credit:SetScript('OnHide', function()
-		f:SetAlpha(1)
-	end)
-	tinsert(UISpecialFrames, credit:GetName())
-
-	credit.close = CreateFrame('Button', nil, credit, 'UIPanelButtonTemplate')
-	credit.close:SetSize(80, 24)
-	credit.close:SetPoint('BOTTOM', 0, 25)
-	credit.close:SetText(CLOSE)
-	credit.close:SetScript('OnClick', function()
-		credit:Hide()
-	end)
-	tinsert(ns.buttons, credit.close)
-
-	f.reset = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
-	f.reset:SetSize(120, 24)
-	f.reset:SetText(ns.localization.misc.reset)
-	f.reset:SetPoint('BOTTOMLEFT', f, 'BOTTOMLEFT', 30, 50)
-	tinsert(ns.buttons, f.reset)
-
-	f.credit = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
-	f.credit:SetSize(120, 24)
-	f.credit:SetText(ns.localization.misc.credit)
-	f.credit:SetPoint('BOTTOM', f.reset, 'TOP', 0, 4)
-	f.credit:SetScript('OnClick', function()
-		credit:Show()
-		f:SetAlpha(.2)
-	end)
-	tinsert(ns.buttons, f.credit)
-
-	f.install = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
-	f.install:SetSize(120, 24)
-	f.install:SetText(ns.localization.misc.install)
-	f.install:SetPoint('BOTTOM', f.credit, 'TOP', 0, 4)
-	tinsert(ns.buttons, f.install) ]]
-
 	f.profile = CreateFrame('CheckButton', nil, f, 'InterfaceOptionsCheckButtonTemplate')
 	f.profile:SetSize(24, 24)
 	f.profile:SetPoint('BOTTOMLEFT', 6, 6)
@@ -105,6 +64,19 @@ end
 
 
 -- [[ Functions ]]
+
+-- Create gear button and side panel
+local function createGearButton(self, name)
+	local bu = CreateFrame('Button', name, self)
+	bu:SetSize(20, 20)
+	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+	bu.Icon:SetAllPoints()
+	bu.Icon:SetTexture('Interface\\AddOns\\FreeUI\\assets\\textures\\gear_tex')
+	bu.Icon:SetVertexColor(216/255, 198/255, 92/255)
+	bu:SetHighlightTexture('Interface\\AddOns\\FreeUI\\assets\\textures\\gear_tex')
+
+	return bu
+end
 
 -- when an option needs a reload
 local function setReloadNeeded(isNeeded)
@@ -212,28 +184,43 @@ local function toggle(self)
 	end
 end
 
+
 -- Check boxes
-ns.CreateCheckBox = function(parent, option, extra)
+ns.CreateCheckBox = function(parent, option, extra, caution)
 	local f = CreateFrame('CheckButton', nil, parent.child, 'InterfaceOptionsCheckButtonTemplate')
 	f:SetSize(20, 20)
-	f.group = parent.tag
-	f.option = option
+	f:SetHitRectInsets(-5, -5, -5, -5)
 
 	f.Text:SetPoint('LEFT', f, 'RIGHT', 2, 0)
 	f.Text:SetText(ns.localization[strlower(parent.tag)][option] or option)
 
-	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or option
+	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or nil
+
+	if extra and type(extra) == "function" then
+		local bu = createGearButton(f, parent)
+		bu:SetPoint("LEFT", f.Text, "RIGHT", 0, 1)
+		bu:HookScript("OnClick", extra)
+
+		--f.Text:SetTextColor(41/255, 163/255, 41/255)
+	end
+
+	if caution then
+		f.Text:SetTextColor(207/255, 38/255, 14/255)
+	end
 
 	f.needsReload = true
 
 	f:SetScript('OnClick', toggle)
 
+	f.group = parent.tag
+	f.option = option
 	parent[option] = f
 
 	tinsert(ns.checkboxes, f)
 
 	return f
 end
+
 
 -- Radios
 local function toggleRadio(self)
@@ -482,7 +469,7 @@ ns.CreateEditBox = function(parent, option, needsReload, number)
 	label:SetPoint('LEFT', f, 'RIGHT', 10, 0)
 	label:SetText(ns.localization[strlower(parent.tag)][option] or option)
 
-	f.tooltipText = --[[ ns.localization[strlower(parent.tag)][option..'_tip'] or  ]]label
+	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or label
 
 	f:SetScript('OnEnter', function()
 		GameTooltip:SetOwner(f, 'ANCHOR_RIGHT', 5, 5)
@@ -587,29 +574,26 @@ ns.CreateColourPicker = function(parent, option, needsReload)
 end
 
 -- DropDown
---[[ local DropDownText = {
-	['interface\\addons\\FreeUI\\assets\\font\\supereffective.ttf'] = 'Pixel font',
-	[STANDARD_TEXT_FONT] = 'Normal font'
-}
-
-ns.CreateDropDown = function(parent, option, needsReload, text, tableValue)
+ns.CreateDropDown = function(parent, option, needsReload, tableValue, keyName)
 	local f = CreateFrame('Frame', parent:GetName()..option..'DropDown', parent, 'UIDropDownMenuTemplate')
-	UIDropDownMenu_SetWidth(f, 110)
+	UIDropDownMenu_SetWidth(f, 80)
 
 	UIDropDownMenu_Initialize(f, function(self)
 		local info = UIDropDownMenu_CreateInfo()
 		info.func = self.SetValue
 		for _, value in pairs(tableValue) do
-			info.text = DropDownText[value] or value
+			info.text = keyName and key or ns.dropdownList[value] or value
 			info.arg1 = value
+			info.arg2 = key
+			info.tooltipText = text
 			info.checked = value == f.selectedValue
 			UIDropDownMenu_AddButton(info)
 		end
 	end)
 
-	function f:SetValue(newValue)
+	function f:SetValue(newValue, newkey)
 		f.selectedValue = newValue
-		local text = DropDownText[newValue] or newValue
+		local text = keyName and newkey or ns.dropdownList[newValue] or newValue
 		UIDropDownMenu_SetText(f, text)
 		SaveValue(f, newValue)
 		old[f] = f.oldValue
@@ -618,11 +602,9 @@ ns.CreateDropDown = function(parent, option, needsReload, text, tableValue)
 	end
 
 	local label = f:CreateFontString(nil, 'OVERLAY', 'GameFontHighlight')
-	if text then
-		label:SetText(text)
-	else
-		label:SetText(ns.localization[parent.tag..'_'..option])
-	end
+
+	label:SetText(ns.localization[strlower(parent.tag)][option] or option)
+
 	label:SetWidth(440)
 	label:SetHeight(20)
 	label:SetJustifyH('LEFT')
@@ -638,15 +620,61 @@ ns.CreateDropDown = function(parent, option, needsReload, text, tableValue)
 	tinsert(ns.dropdowns, f)
 
 	return f
-end ]]
+end
+
+-- Side panel
+ns.ToggleSidePanel = function(name)
+	for _, frame in next, ns.sidePanels do
+		if frame:GetName() == name then
+			togglePanel(frame)
+		else
+			frame:Hide()
+		end
+	end
+end
+
+ns.CreateSidePanel = function(parent, name, title)
+	local frame = CreateFrame('Frame', name, parent)
+	frame:SetSize(200, 640)
+	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
+
+    frame:Hide()
+	parent:HookScript('OnHide', function()
+		if frame:IsShown() then frame:Hide() end
+    end)
+
+    frame.tag = name
+
+    frame.header = frame:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
+    frame.header:SetPoint('TOPLEFT', 20, -25)
+    frame.header:SetText('|cffe9c55d'..title..'|r')
+    frame.header:SetShadowColor(0, 0, 0, 1)
+	frame.header:SetShadowOffset(2, -2)
+
+    frame.bg = CreateFrame('Frame', nil, frame)
+    frame.bg:SetSize(180, 540)
+    frame.bg:SetPoint('TOPLEFT', 10, -50)
+
+    frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
+	frame.close:SetPoint('BOTTOM', 0, 6)
+	frame.close:SetSize(80, 24)
+	frame.close:SetText(CLOSE)
+	frame.close:SetScript('OnClick', function()
+		frame:Hide()
+    end)
+    
+	tinsert(ns.buttons, frame.close)
+    tinsert(ns.sidePanels, frame)
+
+	return frame
+end
+
 
 
 -- [[ Categories and tabs ]]
 
-local offset = 60
+local offset = 50
 local activeTab = nil
-
-createOptionsFrame(baseName)
 
 ns.SetActiveTab = function(tab)
 	activeTab = tab
@@ -665,8 +693,8 @@ ns.AddCategory = function(name)
 	--local tag = strlower(name)
 
 	local panel = CreateFrame('ScrollFrame', baseName..name, FreeUIOptionsFrame, 'UIPanelScrollFrameTemplate')
-	panel:SetSize(380, 500)
-	panel:SetPoint('TOPLEFT', 190, -60)
+	panel:SetSize(380, 540)
+	panel:SetPoint('TOPLEFT', 190, -50)
 	panel:Hide()
 
 	panel.child = CreateFrame('Frame', nil, panel)
@@ -705,6 +733,39 @@ ns.AddCategory = function(name)
 
 	tab:SetScript('OnMouseUp', onTabClick)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	--[[ panel.side = CreateFrame('Frame', nil, panel)
+	panel.side:SetSize(200, 600)
+	panel.side:SetPoint("TOPLEFT", FreeUIOptionsFrame, "TOPRIGHT", 3, 0)
+
+	panel.side.bg = CreateFrame("Frame", nil, panel.side)
+	panel.side.bg:SetSize(180, 500)
+	panel.side.bg:SetPoint("TOPLEFT", 10, -50)
+	
+
+	panel.side:Hide()
+
+
+	tinsert(ns.sidePanels, panel.side) ]]
+
+
+
+
+
+
 	tab.panel = panel
 	panel.tab = tab
 	panel.tag = tag
@@ -713,7 +774,7 @@ ns.AddCategory = function(name)
 
 	tinsert(ns.panels, panel)
 
-	offset = offset + 34
+	offset = offset + 32
 end
 
 ns.AddSubCategory = function(category, name)
@@ -748,7 +809,7 @@ local function changeProfile()
 	for group, options in pairs(profile) do
 		if C[group] then
 			for option, value in pairs(options) do
-				if C[group][option] == nil or (group == 'unitframes' and (tonumber(profile[group][option]) or type(profile[group][option]) == 'table')) then
+				if C[group][option] == nil then
 					profile[group][option] = nil
 				else
 					C[group][option] = value
@@ -792,12 +853,12 @@ local function displaySettings()
 		editbox.oldValue = C[editbox.group][editbox.option]
 	end
 
-	-- for _, dropdown in pairs(ns.dropdowns) do
-	-- 	local text = DropDownText[C[dropdown.group][dropdown.option]] or C[dropdown.group][dropdown.option]
-	-- 	UIDropDownMenu_SetText(dropdown, text)
-	-- 	dropdown.selectedValue = C[dropdown.group][dropdown.option]
-	-- 	dropdown.oldValue = C[dropdown.group][dropdown.option]
-	-- end
+	for _, dropdown in pairs(ns.dropdowns) do
+		local text = ns.dropdownList[C[dropdown.group][dropdown.option]] or C[dropdown.group][dropdown.option]
+		UIDropDownMenu_SetText(dropdown, text)
+		dropdown.selectedValue = C[dropdown.group][dropdown.option]
+		dropdown.oldValue = C[dropdown.group][dropdown.option]
+	end
 end
 
 local f = CreateFrame('Frame')
@@ -806,6 +867,12 @@ f:SetScript('OnEvent', function()
 	if not FreeUI then return end
 
 	F, C = unpack(FreeUI)
+
+	createOptionsFrame(baseName)
+
+	ns.AddCategories()
+	ns.AddAllOptions()
+
 
 	StaticPopupDialogs['FREEUI_RESET'] = {
 		text = ns.localization.misc.reset_check,
@@ -825,7 +892,6 @@ f:SetScript('OnEvent', function()
 		timeout = 0,
 		whileDead = 1,
 		hideOnEscape = false,
-		preferredIndex = 5,
 	}
 	
 	StaticPopupDialogs['FREEUI_PROFILE'] = {
@@ -851,7 +917,6 @@ f:SetScript('OnEvent', function()
 		timeout = 0,
 		whileDead = 1,
 		hideOnEscape = false,
-		preferredIndex = 5,
 	}
 	
 	StaticPopupDialogs['FREEUI_RELOAD'] = {
@@ -864,12 +929,10 @@ f:SetScript('OnEvent', function()
 		timeout = 0,
 		whileDead = 1,
 		hideOnEscape = true,
-		preferredIndex = 5,
 	}
 
 	F.CreateMF(FreeUIOptionsFrame)
 	F.CreateBDFrame(FreeUIOptionsFrame, nil, true)
-	--F.CreateBDFrame(FreeUICreditsPanel, nil, true)
 
 	FreeUIOptionsFrame.profile:SetChecked(FreeUIOptionsGlobal[realm][name])
 	FreeUIOptionsFrame.profile:SetScript("OnClick", function()
@@ -877,22 +940,12 @@ f:SetScript('OnEvent', function()
 	end)
 	F.ReskinCheck(FreeUIOptionsFrame.profile)
 
-	--[[ FreeUIOptionsFrame.install:SetScript('OnClick', function()
-		F:GetModule('Install'):HelloWorld()
-		FreeUIOptionsFrame:Hide()
-	end)
-
-	FreeUIOptionsFrame.reset:SetScript('OnClick', function()
-		StaticPopup_Show('FREEUI_RESET')
-	end) ]]
-
 	FreeUIOptionsFrame.okay:SetScript('OnClick', function()
 		f:Hide()
 		if ns.needReload then
 			StaticPopup_Show('FREEUI_RELOAD')
 		end
 	end)
-
 
 	for _, panel in pairs(ns.panels) do
 		panel.Title:SetTextColor(C.r, C.g, C.b)
@@ -933,7 +986,6 @@ f:SetScript('OnEvent', function()
 		local bg = F.CreateBDFrame(picker)
 		local value = C[picker.group][picker.option]
 		bg:SetBackdropColor(unpack(value))
-		--picker.text:SetTextColor(unpack(value))
 	end
 
 	for _, editbox in pairs(ns.editboxes) do
@@ -944,22 +996,28 @@ f:SetScript('OnEvent', function()
 		F.ReskinDropDown(dropdown)
 	end
 
+	for _, sidePanel in pairs(ns.sidePanels) do
+		F.SetBD(sidePanel)
+		F.CreateBDFrame(sidePanel.bg, .5, true)
+	end
+
+
 	local logo = FreeUIOptionsFrame:CreateTexture()
 	logo:SetSize(512, 128)
 	logo:SetPoint('TOP')
-	logo:SetTexture(C.Assets.Textures.logo_small)
+	logo:SetTexture(C.Assets.logo_small)
 	logo:SetScale(.3)
-	logo:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
+	--logo:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
 
-	local desc = F.CreateFS(FreeUIOptionsFrame, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'configuration', {.5,.5,.5}, true, 'TOP', 0, -36)
+	local desc = F.CreateFS(FreeUIOptionsFrame, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'v'..C.Version, {.7,.7,.7}, false, 'TOP', 0, -30)
 
 	local lineLeft = CreateFrame('Frame', nil, FreeUIOptionsFrame)
-	lineLeft:SetPoint('TOP', -60, -30)
+	lineLeft:SetPoint('TOP', -60, -26)
 	F.CreateGF(lineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
 	lineLeft:SetFrameStrata('HIGH')
 
 	local lineRight = CreateFrame('Frame', nil, FreeUIOptionsFrame)
-	lineRight:SetPoint('TOP', 60, -30)
+	lineRight:SetPoint('TOP', 60, -26)
 	F.CreateGF(lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
 	lineRight:SetFrameStrata('HIGH')
 
@@ -978,6 +1036,7 @@ f:SetScript('OnEvent', function()
 	end)
 
 	b:SetScript('OnClick', function()
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT) return end
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 		HideUIPanel(GameMenuFrame)
 		FreeUIOptionsFrame:Show()
