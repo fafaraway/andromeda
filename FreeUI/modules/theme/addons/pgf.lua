@@ -4,7 +4,7 @@ local TOOLTIP = F:GetModule('Tooltip')
 
 
 function THEME:ReskinPGF()
-    if not FreeUIGlobalConfig.reskin_pgf then return end
+    if not FreeUIConfigsGlobal.reskin_pgf then return end
 	if not IsAddOnLoaded("PremadeGroupsFilter") then return end
 
 	local tipStyled

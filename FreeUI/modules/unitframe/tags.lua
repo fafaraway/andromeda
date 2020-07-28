@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local oUF = FreeUI.oUF
+local oUF = F.oUF
 local cfg = C.Unitframe
 
 
@@ -36,7 +36,7 @@ end
 
 tags['free:health'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
-	
+
 	local cur = UnitHealth(unit)
 	local r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 
@@ -97,7 +97,8 @@ tags['free:name'] = function(unit)
 	if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
 		return C.RedColor..'<'..YOU..'>'
 	else
-		return shortenName(unit, 6)
+		--return shortenName(unit, 12)
+		return UnitName(unit)
 	end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'

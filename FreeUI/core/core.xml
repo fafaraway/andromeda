@@ -1,4 +1,5 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='core.lua'/>
 	<Script file='configs.lua'/>
 	<Script file='constants.lua'/>
 	<Script file='profiles.lua'/>

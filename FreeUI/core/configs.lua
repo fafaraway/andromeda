@@ -29,7 +29,7 @@ C['General'] = {
 	['queue_timer'] = true,
 	['color_picker'] = true,
 	['whistle'] = true,
-	['rare_alert'] = true,
+
 	['group_tool'] = true,
 	['action_camera'] = true,
 	['faster_camera'] = true,
@@ -72,6 +72,7 @@ C['Notification'] = {
 		['bag_full'] = true,
 		['new_mail'] = true,
 		['version_check'] = true,
+		['rare_alert'] = true,
 }
 
 C['Automation'] = {
@@ -122,9 +123,10 @@ C['Infobar'] = {
 
 C['Chat'] = {
 	['enable'] = true,
-		['lock'] = true,
-		['size'] = {300, 100},
-		['outline'] = false,
+		['lock_position'] = true,
+			['chat_size_width'] = 300,
+			['chat_size_height'] = 100,
+		['font_outline'] = false,
 		
 		['fading'] = true,
 			['fadingVisible'] = 60,
@@ -174,9 +176,9 @@ C['Aura'] = {
 }
 
 C['Actionbar'] = {
-	['enable'] = true,
+	['enable_actionbar'] = true,
 		['bar_padding'] = 3,
-		['bar_margin'] = 3,
+		['button_margin'] = 3,
 		['button_size_small'] = 22,
 		['button_size_normal'] = 28,
 		['button_size_big'] = 38,
@@ -201,18 +203,18 @@ C['Actionbar'] = {
 			['bar5_fade'] = false,
 		['pet_bar'] = false,
 			['pet_bar_fade'] = false,
-}
+		['enable_stance_bar'] = false,
+			['stance_bar_fade'] = false,
 
-C['Cooldown'] = {
-	['enable'] = true,
-		['decimal'] = false,
-			['decimalCount'] = 3,
-		['excludeWA'] = false,
-		['pulse'] = true,
-			['ignoredSpells'] = {
-				--GetSpellInfo(6807),	-- Maul
-				--GetSpellInfo(35395),	-- Crusader Strike
-			},
+		['enable_cooldown'] = true,
+			['use_decimal'] = false,
+				['decimal_countdown'] = 3,
+			['ignore_weakauras'] = false,
+			['cd_pulse'] = true,
+				['ignored_spells'] = {
+					--GetSpellInfo(6807),	-- Maul
+					--GetSpellInfo(35395),	-- Crusader Strike
+				},
 }
 
 C['Combat'] = {
@@ -288,21 +290,26 @@ C['Tooltip'] = {
 		['hide_in_combat'] = false,
 		['border_color'] = true,
 		['spec_ilvl'] = true,
-		['extra_info'] = true,
-		['azerite_trait'] = true,
+		['azerite_armor'] = true,
 		['link_hover'] = true,
-		['icon'] = true,
+		['tip_icon'] = true,
 		['target_by'] = true,
-		['pet_info'] = true,
+
+		['tip_backdrop_alpha'] = .6,
 		['header_font_size'] = 16,
 		['normal_font_size'] = 14,
-		['aura_source'] = true,
-		['mount_source'] = true,
+
+		['extra_info'] = true,
+			['various_id'] = true,
+			['item_count'] = true,
+			['item_price'] = true,
+			['aura_source'] = true,
+			['mount_source'] = true,
 }
 
 C['Unitframe'] = {
 	['enable_module'] = true,
-		['transparency'] = false,
+		['transparency'] = true,
 		['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
 		['fader'] = false,
 		['color_smooth'] = false,
@@ -315,7 +322,7 @@ C['Unitframe'] = {
 		['heal_prediction'] = true,
 			['heal_prediction_over_absorb'] = true,
 		['gcd_spark'] = true,
-		['swing_spark'] = true,
+		['swing_spark'] = false,
 		['debuff_highlight'] = true,
 		['corner_buffs'] = true,
 		['raid_debuffs'] = true,
@@ -332,48 +339,52 @@ C['Unitframe'] = {
 		['runes_bar'] = true,
 			['runes_bar_height'] = 2,
 
-		['castbar'] = true,
+		['enable_castbar'] = true,
 			['castbar_focus_separate'] = false,
 			['castbar_focus_width'] = 200,
 			['castbar_focus_height'] = 16,
 			['castbar_timer'] = true,
 		
+		['enable_player'] = true,
+			['player_width'] = 140,
+			['player_height'] = 14,
+			['player_auras'] = false,
+			['player_auras_number'] = 18,
+			['player_auras_number_per_row'] = 6,
+			['player_hide_tags'] = false,
 
-		['player_width'] = 140,
-		['player_height'] = 12,
-		['player_auras'] = false,
-		['player_auras_number'] = 18,
-		['player_auras_number_per_row'] = 6,
+		['enable_pet'] = true,
+			['pet_width'] = 50,
+			['pet_height'] = 14,
+			['pet_auras'] = true,
+			['pet_auras_number_per_row'] = 3,
+			['pet_auras_number'] = 12,
 
-		['pet_width'] = 50,
-		['pet_height'] = 12,
-		['pet_auras'] = true,
-		['pet_auras_number_per_row'] = 3,
-		['pet_auras_number'] = 12,
+		['enable_target'] = true,
+			['target_width'] = 240,
+			['target_height'] = 14,
+			['target_auras'] = true,
+			['target_auras_number_per_row'] = 7,
+			['target_auras_number'] = 35,
 
-		['target_width'] = 240,
-		['target_height'] = 12,
-		['target_auras'] = true,
-		['target_auras_number_per_row'] = 7,
-		['target_auras_number'] = 35,
+			['target_target_width'] = 80,
+			['target_target_height'] = 12,
 
-		['target_target_width'] = 80,
-		['target_target_height'] = 12,
+		['enable_focus'] = true,
+			['focus_width'] = 97,
+			['focus_height'] = 14,
+			['focus_auras'] = false,
+			['focus_auras_number_per_row'] = 4,
+			['focus_auras_number'] = 16,
 
-		['focus_width'] = 97,
-		['focus_height'] = 12,
-		['focus_auras'] = false,
-		['focus_auras_number_per_row'] = 4,
-		['focus_auras_number'] = 16,
+			['focus_target_width'] = 97,
+			['focus_target_height'] = 12,
 
-		['focus_target_width'] = 97,
-		['focus_target_height'] = 12,
-
-		['group'] = true,
+		['enable_group'] = true,
 			['group_names'] = false,
 			['group_color_smooth'] = false,
 			['groupFilter'] = 6,
-			['groupShowSolo'] = true,
+			['groupShowSolo'] = false,
 			['groupShowPlayer'] = true,
 			['groupByRole'] = true,
 			['groupReverse'] = false,
@@ -388,7 +399,7 @@ C['Unitframe'] = {
 			['raid_gap'] = 5,
 			['raidShowAuras'] = true,
 
-		['boss'] = true,
+		['enable_boss'] = true,
 			['boss_color_smooth'] = true,
 			['boss_width'] = 166,
 			['boss_height'] = 20,
@@ -397,7 +408,7 @@ C['Unitframe'] = {
 			['bossAuraPerRow'] = 5,
 			['bossAuraTotal'] = 15,
 
-		['arena'] = true,
+		['enable_arena'] = true,
 			['arena_width'] = 166,
 			['arena_height'] = 16,
 			['arena_gap'] = 80,
@@ -414,7 +425,7 @@ C['classmod'] = {
 
 
 
-C.ReminderBuffs = {
+C['ReminderBuffs'] = {
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -477,7 +488,7 @@ C.ReminderBuffs = {
 	},
 }
 
-C.CornerBuffs = {
+C['CornerBuffs'] = {
 	ALL = {},
 	
 	PRIEST = {
@@ -549,7 +560,7 @@ C.CornerBuffs = {
 	DEATHKNIGHT = {},
 }
 
-C.ClassBuffs = {
+C['ClassBuffs'] = {
 	['ALL'] = {},
 
 	['MAGE'] = {
@@ -572,7 +583,7 @@ C.ClassBuffs = {
 	['DEATHKNIGHT'] = {},
 }
 
-C.IgnoredDebuffs = {
+C['IgnoredDebuffs'] = {
 	[  6788] = myClass ~= 'PRIEST',		-- Weakened Soul
 	[ 25771] = myClass ~= 'PALADIN',	-- Forbearance
 
@@ -617,7 +628,7 @@ C.IgnoredDebuffs = {
 	[283430] = true,	-- 工程学专精
 }
 
-C.GroupBuffs = {
+C['GroupBuffs'] = {
 	-- Immunities
 	[196555] = true,	-- Netherwalk (Demon Hunter)
 	[186265] = true,	-- Aspect of the Turtle (Hunter)
@@ -712,4 +723,4 @@ C.GroupBuffs = {
 	[212195] = true,	-- Nether Ward
 }
 
-C.RaidDebuffs = {}
+C['RaidDebuffs'] = {}

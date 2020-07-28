@@ -343,7 +343,7 @@ SpellBinder:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 SpellBinder:RegisterEvent('PLAYER_TALENT_UPDATE')
 SpellBinder:SetScript('OnEvent', function(self, event, ...)
 	if event == 'PLAYER_LOGIN' then
-		DB = FreeUIConfig['click_cast']
+		DB = FreeUIConfigs['click_cast']
 		DB.spells = DB.spells or {}
 		DB.frames = DB.frames or {}
 		DB.keys = DB.keys or {}

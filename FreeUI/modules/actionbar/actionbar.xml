@@ -1,7 +1,9 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='actionbar.lua'/>
 	<Script file='bind.lua'/>
+	<Script file='cooldown.lua'/>
 	<Script file='fader.lua'/>
+	<Script file='pulse.lua'/>
 	<Script file='range.lua'/>
 	<Script file='style.lua'/>
 </Ui>

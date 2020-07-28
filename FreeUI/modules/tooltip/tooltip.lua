@@ -2,6 +2,9 @@ local F, C, L = unpack(select(2, ...))
 local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
 
 
+local wipe, tinsert, tconcat = table.wipe, table.insert, table.concat
+local IsInGroup, IsInRaid, GetNumGroupMembers = IsInGroup, IsInRaid, GetNumGroupMembers
+local UnitExists, UnitIsUnit, UnitIsDeadOrGhost, UnitName = UnitExists, UnitIsUnit, UnitIsDeadOrGhost, UnitName
 local strfind, format, strupper, strlen, pairs, unpack = string.find, string.format, string.upper, string.len, pairs, unpack
 local ICON_LIST = ICON_LIST
 local PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE = PVP, LEVEL, FACTION_HORDE, FACTION_ALLIANCE
@@ -16,6 +19,8 @@ local UnitIsWildBattlePet, UnitIsBattlePetCompanion, UnitBattlePetLevel = UnitIs
 local UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel = UnitIsPlayer, UnitName, UnitPVPName, UnitClass, UnitRace, UnitLevel
 local GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild = GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild
 local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAuras, C_PetBattles.GetAuraInfo
+
+local targetTable = {}
 
 local classification = {
 	elite = ' |cffcc8800'..ELITE..'|r',
@@ -222,6 +227,35 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 	end
 end
 
+function TOOLTIP:ScanTargets()
+	if not cfg.target_by then return end
+	if not IsInGroup() then return end
+
+	local _, unit = self:GetUnit()
+	if not UnitExists(unit) then return end
+
+	wipe(targetTable)
+
+	for i = 1, GetNumGroupMembers() do
+		local member = (IsInRaid() and 'raid'..i or 'party'..i)
+		if UnitIsUnit(unit, member..'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
+			local color = F.HexRGB(F.UnitColor(member))
+			local name = color..UnitName(member)..'|r'
+			tinsert(targetTable, name)
+		end
+	end
+
+	if #targetTable > 0 then
+		GameTooltip:AddLine(L['TOOLTIP_TARGETED']..C.InfoColor..'('..#targetTable..')|r '..tconcat(targetTable, ', '), nil, nil, nil, 1)
+	end
+end
+
+function TOOLTIP:TargetedInfo()
+	if not cfg.target_by then return end
+	
+	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
+end
+
 
 local mover
 function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
@@ -272,7 +306,7 @@ local fakeBg = CreateFrame("Frame", nil, UIParent)
 fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
 
 local function getBackdrop() return fakeBg:GetBackdrop() end
-local function getBackdropColor() return 0, 0, 0, .7 end
+local function getBackdropColor() return 0, 0, 0, 1 end
 local function getBackdropBorderColor() return 0, 0, 0 end
 
 function TOOLTIP:ReskinTooltip()
@@ -286,7 +320,7 @@ function TOOLTIP:ReskinTooltip()
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
 		self:DisableDrawLayer("BACKGROUND")
-		self.bg = F.CreateBDFrame(self, nil, true)
+		self.bg = F.CreateBDFrame(self, cfg.backdrop_alpha, true)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
 		F.CreateTex(self.bg)
@@ -318,7 +352,7 @@ function TOOLTIP:ReskinTooltip()
 				if self.bg.Shadow then
 					self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
 				end
-				end
+			end
 		end
 	end
 end
@@ -405,8 +439,7 @@ function TOOLTIP:OnLogin()
 	self:LinkHover()
 	self:ExtraInfo()
 	self:TargetedInfo()
-	self:PetInfo()
-	self:AzeriteTrait()
+	self:AzeriteArmor()
 end
 
 

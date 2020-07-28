@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local oUF = FreeUI.oUF
+local oUF = F.oUF
 local cfg = C.Unitframe
 
 
@@ -209,7 +209,7 @@ function UNITFRAME:AddPowerBar(self)
 end
 
 -- Alternative power
-local function OnEnter(altPower)
+local function altPowerOnEnter(altPower)
 	if (not altPower:IsVisible()) then return end
 
 	GameTooltip:SetOwner(altPower, 'ANCHOR_BOTTOMRIGHT')
@@ -258,7 +258,7 @@ function UNITFRAME:AddAlternativePowerBar(self)
 	altPower.bg = F.CreateBDFrame(altPower)
 
 	altPower.UpdateTooltip = UpdateTooltip
-	altPower:SetScript('OnEnter', OnEnter)
+	altPower:SetScript('OnEnter', altPowerOnEnter)
 
 	self.AlternativePower = altPower
 	self.AlternativePower.PostUpdate = PostUpdateAltPower
@@ -957,7 +957,7 @@ local function PostCastFailed(self)
 end
 
 function UNITFRAME:AddCastBar(self)
-	if not cfg.castbar then return end
+	if not cfg.enable_castbar then return end
 
 	local castbar = CreateFrame('StatusBar', 'oUF_Castbar'..self.unitStyle, self)
 	castbar:SetStatusBarTexture(cfg.texture)
@@ -1319,6 +1319,8 @@ end
 
 -- Indicatiors
 function UNITFRAME:AddPvPIndicator(self)
+	if cfg.player_hide_tags then return end
+	
 	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
@@ -1329,6 +1331,8 @@ function UNITFRAME:AddPvPIndicator(self)
 end
 
 function UNITFRAME:AddCombatIndicator(self)
+	if cfg.player_hide_tags then return end
+
 	local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
 	combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
 
@@ -1336,6 +1340,8 @@ function UNITFRAME:AddCombatIndicator(self)
 end
 
 function UNITFRAME:AddRestingIndicator(self)
+	if cfg.player_hide_tags then return end
+
 	local restingIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'Zzz', 'GREEN', 'THICK')
 	restingIndicator:SetPoint('BOTTOMRIGHT', self.PowerValue, 'BOTTOMLEFT', -5, 0)
 

@@ -1,7 +1,23 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local oUF = FreeUI.oUF
+local oUF = F.oUF
 local cfg = C.Unitframe
+
+
+local function tagsOnEnter(self)
+	self.HealthValue:Show()
+	self.PowerValue:Show()
+end
+
+local function tagsOnLeave(self)
+	self.HealthValue:Hide()
+	self.PowerValue:Hide()
+end
+
+local function updatePlayerTags(frame)
+	frame:HookScript('OnEnter', tagsOnEnter)
+	frame:HookScript('OnLeave', tagsOnLeave)
+end
 
 
 local function CreatePlayerStyle(self)
@@ -43,6 +59,7 @@ function UNITFRAME:SpawnPlayer()
 	oUF:SetActiveStyle('Player')
 
 	local player = oUF:Spawn('player', 'oUF_Player')
+	updatePlayerTags(oUF_Player)
 
 	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], 'PlayerFrame', {"BOTTOM", UIParent, "BOTTOM", 0, 220}, player:GetWidth(), player:GetHeight())
 
@@ -72,6 +89,8 @@ local function CreatePetStyle(self)
 end
 
 function UNITFRAME:SpawnPet()
+	if not cfg.enable_pet then return end
+
 	oUF:RegisterStyle('Pet', CreatePetStyle)
 	oUF:SetActiveStyle('Pet')
 

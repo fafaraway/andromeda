@@ -1,11 +1,11 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-local oUF = FreeUI.oUF
+local oUF = F.oUF
 local cfg = C.Unitframe
 
 
 function UNITFRAME:AddBackDrop(self)
-	local highlight = self:CreateTexture(nil, 'BORDER')
+	--[[ local highlight = self:CreateTexture(nil, 'BORDER')
 	highlight:SetAllPoints()
 	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
 	highlight:SetTexCoord(0, 1, .5, 1)
@@ -23,7 +23,7 @@ function UNITFRAME:AddBackDrop(self)
 		highlight:Hide()
 	end)
 
-	self.Highlight = highlight
+	self.Highlight = highlight ]]
 
 	F.CreateTex(self)
 
@@ -84,6 +84,12 @@ function UNITFRAME:AddHealthValueText(self)
 
 	if self.unitStyle == 'player' then
 		self:Tag(healthValue, '[free:dead][free:health]')
+
+		if cfg.player_hide_tags then
+			healthValue:Hide()
+		else
+			healthValue:Show()
+		end
 	elseif self.unitStyle == 'target' then
 		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
 	elseif self.unitStyle == 'boss' then
@@ -105,7 +111,9 @@ function UNITFRAME:AddPowerValueText(self)
 	local powerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
-	if self.unitStyle == 'target' then
+	if self.unitStyle == 'player' and cfg.player_hide_tags then
+		powerValue:Hide()
+	elseif self.unitStyle == 'target' then
 		powerValue:ClearAllPoints()
 		powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
 	elseif self.unitStyle == 'boss' then

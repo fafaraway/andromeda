@@ -6,7 +6,7 @@ engine[3] = {} -- L, Localisation
 
 _G[addonName] = engine
 
-FreeUIGlobalConfig, FreeUIConfig = {}, {}
+FreeUIConfigsGlobal, FreeUIConfigs = {}, {}
 
 
 local F, C, L = unpack(engine)
@@ -76,27 +76,6 @@ function F:GetModule(name)
 end
 
 
-F:RegisterModule('Install')
-F:RegisterModule('Mover')
-F:RegisterModule('Logo')
-F:RegisterModule('Theme')
-F:RegisterModule('Misc')
-F:RegisterModule('Actionbar')
-F:RegisterModule('Cooldown')
-F:RegisterModule('Aura')
-F:RegisterModule('Announcement')
-F:RegisterModule('Chat')
-F:RegisterModule('Combat')
-F:RegisterModule('Infobar')
-F:RegisterModule('Inventory')
-F:RegisterModule('Map')
-F:RegisterModule('Notification')
-F:RegisterModule('Quest')
-F:RegisterModule('Tooltip')
-F:RegisterModule('Unitframe')
-F:RegisterModule('Automation')
-
-
 -- UI scale
 local function GetBestScale()
 	local scale = max(.4, min(1.15, 768 / C.ScreenHeight))
@@ -133,7 +112,7 @@ end
 -- Init
 F:RegisterEvent('PLAYER_LOGIN', function()
 
-	if FreeUIConfig['installation_complete'] then
+	if FreeUIConfigs['installation_complete'] then
 
 		F:SetupUIScale()
 		F:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)

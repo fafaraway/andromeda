@@ -99,8 +99,8 @@ function TOOLTIP:Azerite_UpdateItem()
 	end
 end
 
-function TOOLTIP:AzeriteTrait()
-	if not cfg.azerite_trait then return end
+function TOOLTIP:AzeriteArmor()
+	if not cfg.azerite_armor then return end
 	if IsAddOnLoaded('AzeriteTooltip') then return end
 
 	GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)

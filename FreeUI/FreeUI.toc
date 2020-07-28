@@ -6,8 +6,8 @@
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
 ## OptionalDeps: FreeUI_Options, WeakAuras, Skada, DBM-Core, DBM-GUI
-## SavedVariables: FreeUIGlobalConfig
-## SavedVariablesPerCharacter: FreeUIConfig
+## SavedVariables: FreeUIConfigsGlobal
+## SavedVariablesPerCharacter: FreeUIConfigs
 
 
 

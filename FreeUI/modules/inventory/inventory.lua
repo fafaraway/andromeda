@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local INVENTORY, cfg = F:GetModule('Inventory'), C.Inventory
+local cargBags = F.cargBags
 
 
 local format, pairs, wipe, ipairs, strmatch, unpack, ceil = string.format, pairs, table.wipe, ipairs, string.match, unpack, math.ceil
@@ -93,8 +94,8 @@ StaticPopupDialogs['RESETGOLDCOUNT'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(FreeUIGlobalConfig['total_gold'][C.MyRealm])
-		FreeUIGlobalConfig['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		wipe(FreeUIConfigsGlobal['total_gold'][C.MyRealm])
+		FreeUIConfigsGlobal['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -131,8 +132,8 @@ function INVENTORY:CreateCurrencyFrame()
 			profit = profit + change
 		end
 
-		if not FreeUIGlobalConfig['total_gold'][C.MyRealm] then FreeUIGlobalConfig['total_gold'][C.MyRealm] = {} end
-		FreeUIGlobalConfig['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		if not FreeUIConfigsGlobal['total_gold'][C.MyRealm] then FreeUIConfigsGlobal['total_gold'][C.MyRealm] = {} end
+		FreeUIConfigsGlobal['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 
 		oldMoney = newMoney
 	end)
@@ -159,7 +160,7 @@ function INVENTORY:CreateCurrencyFrame()
 
 		local totalGold = 0
 		GameTooltip:AddLine(L['INFOBAR_CHARACTER'], .6,.8,1)
-		local thisRealmList = FreeUIGlobalConfig['total_gold'][C.MyRealm]
+		local thisRealmList = FreeUIConfigsGlobal['total_gold'][C.MyRealm]
 		for k, v in pairs(thisRealmList) do
 			local gold, class = unpack(v)
 			local r, g, b = F.ClassColor(class)
@@ -227,9 +228,9 @@ function INVENTORY:CreateRestoreButton(f)
 	local bu = F.CreateButton(self, 16, 16, true, icons.restore)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function()
-		FreeUIConfig['ui_anchor_temp'][f.main:GetName()] = nil
-		FreeUIConfig['ui_anchor_temp'][f.bank:GetName()] = nil
-		FreeUIConfig['ui_anchor_temp'][f.reagent:GetName()] = nil
+		FreeUIConfigs['ui_anchor_temp'][f.main:GetName()] = nil
+		FreeUIConfigs['ui_anchor_temp'][f.bank:GetName()] = nil
+		FreeUIConfigs['ui_anchor_temp'][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
 		f.main:SetPoint('BOTTOMRIGHT', -C.General.ui_gap, C.General.ui_gap)
 		f.bank:ClearAllPoints()
@@ -345,19 +346,19 @@ function INVENTORY:CreateRepairButton()
 	local enabledText = C.BlueColor..L['INVENTORY_AUTO_REPAIR_ENABLED']
 	local bu = F.CreateButton(self, 16, 16, true, icons.repair)
 
-	if FreeUIGlobalConfig['auto_repair'] then
+	if FreeUIConfigsGlobal['auto_repair'] then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	end
 
-	bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeUIGlobalConfig['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+	bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeUIConfigsGlobal['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 	F.AddTooltip(bu, 'ANCHOR_TOP')
 
 	bu:SetScript('OnClick', function(self)
-		FreeUIGlobalConfig['auto_repair'] = not FreeUIGlobalConfig['auto_repair']
+		FreeUIConfigsGlobal['auto_repair'] = not FreeUIConfigsGlobal['auto_repair']
 
-		if FreeUIGlobalConfig['auto_repair'] then
+		if FreeUIConfigsGlobal['auto_repair'] then
 			self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 		else
@@ -365,7 +366,7 @@ function INVENTORY:CreateRepairButton()
 			self.text = nil
 		end
 
-		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeUIGlobalConfig['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeUIConfigsGlobal['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 		self:GetScript('OnEnter')(self)
 	end)
 
@@ -376,19 +377,19 @@ function INVENTORY:CreateSellButton()
 	local enabledText = C.BlueColor..L['INVENTORY_SELL_JUNK_ENABLED']
 	local bu = F.CreateButton(self, 16, 16, true, icons.sell)
 
-	if FreeUIGlobalConfig['auto_sell_junk'] then
+	if FreeUIConfigsGlobal['auto_sell_junk'] then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	end
 
-	bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIGlobalConfig['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+	bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIConfigsGlobal['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 	F.AddTooltip(bu, 'ANCHOR_TOP')
 
 	bu:SetScript('OnClick', function(self)
-		FreeUIGlobalConfig['auto_sell_junk'] = not FreeUIGlobalConfig['auto_sell_junk']
+		FreeUIConfigsGlobal['auto_sell_junk'] = not FreeUIConfigsGlobal['auto_sell_junk']
 
-		if FreeUIGlobalConfig['auto_sell_junk'] then
+		if FreeUIConfigsGlobal['auto_sell_junk'] then
 			self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 		else
@@ -396,7 +397,7 @@ function INVENTORY:CreateSellButton()
 			self.text = nil
 		end
 		
-		bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIGlobalConfig['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+		bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIConfigsGlobal['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 		self:GetScript('OnEnter')(self)
 	end)
 
@@ -618,10 +619,10 @@ local function favouriteOnClick(self)
 
 	local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
-		if FreeUIConfig['favourite_items'][itemID] then
-			FreeUIConfig['favourite_items'][itemID] = nil
+		if FreeUIConfigs['favourite_items'][itemID] then
+			FreeUIConfigs['favourite_items'][itemID] = nil
 		else
-			FreeUIConfig['favourite_items'][itemID] = true
+			FreeUIConfigs['favourite_items'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -667,10 +668,10 @@ local function customJunkOnClick(self)
 	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
-		if FreeUIGlobalConfig['custom_junk_list'][itemID] then
-			FreeUIGlobalConfig['custom_junk_list'][itemID] = nil
+		if FreeUIConfigsGlobal['custom_junk_list'][itemID] then
+			FreeUIConfigsGlobal['custom_junk_list'][itemID] = nil
 		else
-			FreeUIGlobalConfig['custom_junk_list'][itemID] = true
+			FreeUIConfigsGlobal['custom_junk_list'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -748,7 +749,7 @@ function INVENTORY:OnLogin()
 	local itemSetFilter = cfg.item_filter_gear_set
 	local showNewItem = cfg.new_item_flash
 
-	local Backpack = FreeUI.cargBags:NewImplementation('FreeUI_Backpack')
+	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
 	Backpack:SetScale(bagsScale)
 	Backpack:HookScript('OnShow', function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
@@ -953,7 +954,7 @@ function INVENTORY:OnLogin()
 		end
 
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FreeUIGlobalConfig['custom_junk_list'][item.id]) and item.sellPrice > 0 then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FreeUIConfigsGlobal['custom_junk_list'][item.id]) and item.sellPrice > 0 then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -968,7 +969,7 @@ function INVENTORY:OnLogin()
 			self.IconOverlay:Hide()
 		end
 
-		if FreeUIConfig['favourite_items'][item.id] then
+		if FreeUIConfigs['favourite_items'][item.id] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()

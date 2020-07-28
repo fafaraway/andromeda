@@ -445,6 +445,10 @@ ns.localization.chat = {
 	blockAddonSpam_tip = '过滤插件自动发出的各类刷屏信息。',
 	profanity = '脏话过滤',
 	profanity_tip = '过滤脏话和敏感词，将其显示为乱码。',
+	keywordsList = '关键字列表',
+	keywordsList_tip = '输入关键字，用半角逗号分隔，完成后按回车。',
+	matches = '关键字匹配阈值',
+	matches_tip = '达到匹配阈值的聊天信息将被屏蔽。',
 }
 
 ns.localization.map = {
@@ -487,23 +491,29 @@ ns.localization.tooltip = {
 	border_color_tip = "鼠标提示的边框根据物品品质染色。",
 	spec_ilvl = "天赋装等",
 	spec_ilvl_tip = "按住 Alt 显示天赋装等。",
-	extra_info = "物品额外信息",
-	extra_info_tip = "按住 Alt 显示物品额外信息，比如堆叠售价标识等。",
-	azerite_trait = "艾泽里特特质",
-	azerite_trait_tip = "显示艾泽里特装备的特质。",
+	extra_info = "额外信息",
+	extra_info_tip = "按住 Alt 显示物品额外信息。",
+	azerite_armor = "艾泽里特装备信息简化",
+	azerite_armor_tip = "艾泽里特装备直接显示特质图标隐藏文字描述。",
 	link_hover = "聊天栏物品链接",
 	link_hover_tip = "显示聊天栏物品链接的鼠标提示。",
-	icon = "物品图标",
-	icon_tip = "显示物品图标。",
+	tip_icon = "显示图标",
+	tip_icon_tip = "在鼠标提示上显示相应的图标。",
 	target_by = "目标选中信息",
 	target_by_tip = "显示目标选中信息。",
-	pet_info = "宠物信息",
-	pet_info_tip = "显示宠物信息。",
+
 
 	aura_source = "光环来源",
-	aura_source_tip = "按住 Alt 显示光环的来源信息。",
+	aura_source_tip = "显示光环的施放者。",
 	mount_source = "坐骑来源",
-	mount_source_tip = "按住 Alt 显示坐骑的来源信息。",
+	mount_source_tip = "显示坐骑的来源信息。",
+
+	tip_backdrop_alpha = "透明度",
+	tip_backdrop_alpha_tip = "调整鼠标提示的透明度。",
+	header_font_size = "标题字体大小",
+	header_font_size_tip = "调整鼠标提示标题字体的大小。",
+	normal_font_size = "正文字体大小",
+	normal_font_size_tip = "调整鼠标提示正文字体的大小。",
 }
 
 ns.localization.audio = {

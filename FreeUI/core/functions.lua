@@ -787,11 +787,11 @@ function F:ReskinMinMax()
 			tinsert(button.pixels, vline)
 
 			if name == 'MaximizeButton' then
-				hline:SetPoint('TOPRIGHT', -4, -4)
-				vline:SetPoint('TOPRIGHT', -4, -4)
+				hline:Point("TOPRIGHT", -4, -4)
+				vline:Point("TOPRIGHT", -4, -4)
 			else
-				hline:SetPoint('BOTTOMLEFT', 4, 4)
-				vline:SetPoint('BOTTOMLEFT', 4, 4)
+				hline:Point("BOTTOMLEFT", 4, 4)
+				vline:Point("BOTTOMLEFT", 4, 4)
 			end
 
 			button:SetScript('OnEnter', F.Texture_OnEnter)
@@ -814,7 +814,6 @@ end
 function F:ReskinGarrisonPortrait()
 	self.Portrait:ClearAllPoints()
 	self.Portrait:SetPoint('TOPLEFT', 4, -4)
-	self.Portrait:SetMask('Interface\\Buttons\\WHITE8X8')
 	self.PortraitRing:Hide()
 	self.PortraitRingQuality:SetTexture('')
 	if self.Highlight then self.Highlight:Hide() end
@@ -1475,10 +1474,10 @@ function F.FormatTime(s)
 		return format('|cffffffff%d|r', s/hour), s % hour -- white
 	elseif s >= minute then
 		return format('|cff1e84d0%d|r', s/minute), s % minute -- blue
-	elseif s > C.Cooldown.decimalCount then
+	elseif s > C.Actionbar.decimal_countdown then
 		return format('|cffffe700%d|r', s), s - floor(s) -- yellow
 	else
-		if C.Cooldown.decimal then
+		if C.Actionbar.use_decimal then
 			return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
 		else
 			return format('|cfffd3612%d|r', s + .5), s - floor(s)
@@ -1493,7 +1492,7 @@ function F.FormatTimeRaw(s)
 		return format('%dh', s/hour)
 	elseif s >= minute then
 		return format('%dm', s/minute)
-	elseif s >= C.Cooldown.decimalCount then
+	elseif s >= C.Actionbar.decimal_countdown then
 		return floor(s)
 	else
 		return format('%d', s)
@@ -1809,7 +1808,6 @@ function F:CreateButton(width, height, text, fontSize)
 	bu:SetSize(width, height)
 	if type(text) == 'boolean' then
 		F.PixelIcon(bu, fontSize, true)
-		F.CreateBD(bu, .3)
 	else
 		F.Reskin(bu)
 		bu.text = F.CreateFS(bu, {C.Assets.Fonts.Normal, fontSize or 12, 'OUTLINE'}, nil, nil, text)

@@ -2,5 +2,6 @@
 	<Script file='notification.lua'/>
 	<Script file='bag.lua'/>
 	<Script file='mail.lua'/>
+	<Script file='rare.lua'/>
 	<Script file='version.lua'/>
 </Ui>

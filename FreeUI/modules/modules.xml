@@ -5,7 +5,6 @@
 	<Include file='automation\automation.xml'/>
 	<Include file='chat\chat.xml'/>
 	<Include file='combat\combat.xml'/>
-	<Include file='cooldown\cooldown.xml'/>
 	<Include file='infobar\infobar.xml'/>
 	<Include file='inventory\inventory.xml'/>
 	<Include file='map\map.xml'/>

@@ -345,16 +345,16 @@ function ACTIONBAR:CreateStancebar()
 		end
 	end
 
-	--[[ if cfg.stance_bar then
+	if cfg.enable_stance_bar then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-	
+
 		if cfg.stance_bar_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 	else
 		frame.frameVisibility = 'hide'
-	end ]]
-	frame.frameVisibility = 'hide'
+	end
+
 	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end
 
@@ -373,7 +373,7 @@ function ACTIONBAR:CreateExtrabar()
 
 	local button = ExtraActionButton1
 	table.insert(buttonList, button)
-	
+
 	button:Size(buttonSizeBig, buttonSizeBig)
 
 	frame.frameVisibility = '[extrabar] show; hide'
@@ -507,10 +507,10 @@ end
 
 
 function ACTIONBAR:OnLogin()
-	if not cfg.enable then return end
+	if not cfg.enable_actionbar then return end
 
 	padding = F:Scale(cfg.bar_padding)
-	margin = F:Scale(cfg.bar_margin)
+	margin = F:Scale(cfg.button_margin)
 	buttonSizeNormal = F:Scale(cfg.button_size_normal)
 	buttonSizeSmall = F:Scale(cfg.button_size_small)
 	buttonSizeBig = F:Scale(cfg.button_size_big)

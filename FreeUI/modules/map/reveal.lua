@@ -205,7 +205,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					texture:SetPoint('TOPLEFT', offsetX + (TILE_SIZE_WIDTH * (k-1)), -(offsetY + (TILE_SIZE_HEIGHT * (j - 1))))
 					texture:SetTexture(tonumber(fileDataIDs[((j - 1) * numTexturesWide) + k]), nil, nil, 'TRILINEAR')
 					texture:SetDrawLayer('ARTWORK', -1)
-					if FreeUIConfig['map_reveal'] then
+					if FreeUIConfigs['map_reveal'] then
 						texture:Show()
 						if fullUpdate then
 							pin.textureLoadGroup:AddTexture(texture)
@@ -236,7 +236,7 @@ function MAP:MapReveal()
 	bu:SetPoint('TOPRIGHT', -140, -2)
 	bu:SetSize(26, 26)
 	F.ReskinCheck(bu)
-	bu:SetChecked(FreeUIConfig['map_reveal'])
+	bu:SetChecked(FreeUIConfigs['map_reveal'])
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 25, 0)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate('MapExplorationPinTemplate') do
@@ -245,10 +245,10 @@ function MAP:MapReveal()
 	end
 
 	bu:SetScript('OnClick', function(self)
-		FreeUIConfig['map_reveal'] = self:GetChecked()
+		FreeUIConfigs['map_reveal'] = self:GetChecked()
 
 		for i = 1, #overlayTextures do
-			overlayTextures[i]:SetShown(FreeUIConfig['map_reveal'])
+			overlayTextures[i]:SetShown(FreeUIConfigs['map_reveal'])
 		end
 	end)
 end

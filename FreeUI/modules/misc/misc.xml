@@ -18,7 +18,6 @@
 	<Script file='petfilter.lua'/>
 	<Script file='queuetimer.lua'/>
 	<Script file='quickjoin.lua'/>
-	<Script file='rare.lua'/>
 	<Script file='reputation.lua'/>
 	<Script file='tradetabs.lua'/>
 </Ui>

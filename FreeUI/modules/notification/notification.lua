@@ -216,4 +216,5 @@ function NOTIFICATION:OnLogin()
 	self:NewMail()
 	self:BagFull()
 	self:VersionCheck()
+	self:RareAlert()
 end

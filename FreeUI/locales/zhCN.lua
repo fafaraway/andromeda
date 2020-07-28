@@ -76,7 +76,7 @@ L['MISC_NUMBER_CAP_1'] = '万'
 L['MISC_NUMBER_CAP_2'] = '亿'
 L['MISC_NUMBER_CAP_3'] = '兆'
 
-L['MISC_RARE_ALERT'] = '发现稀有'
+
 
 
 -- notification
@@ -86,6 +86,13 @@ L['NOTIFICATION_MAIL'] = '邮件'
 L['NOTIFICATION_BAG'] = '背包'
 L['NOTIFICATION_REPAIR'] = '修理'
 L['NOTIFICATION_SELL'] = '售卖'
+
+L['NOTIFICATION_RARE'] = '发现稀有'
+
+
+
+
+
 L['NOTIFICATION_VERSION_CHECK_HEADER'] = '版本检查'
 L['NOTIFICATION_VERSION_CHECK_DESC'] = '插件版本已过期，请注意及时更新！'
 
@@ -182,6 +189,9 @@ L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 L['INVENTORY_MARK_JUNK'] = '垃圾分类'
 L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
 
+L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
+L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
+L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。" 
 
 
 
@@ -243,11 +253,21 @@ L['TOOLTIP_RARE'] = '稀有'
 L['TOOLTIP_AURA_FROM'] = '来自'
 L['TOOLTIP_SELL_PRICE'] = '售价'
 L['TOOLTIP_STACK_CAP'] = '堆叠上限'
-L['TOOLTIP_AZERITE_TRAIT'] = '艾泽里特特质'
+L['TOOLTIP_ID_AZERITE_TRAIT'] = '艾泽里特特质'
+L['TOOLTIP_BAG'] = '背包'
+L['TOOLTIP_BANK'] = '银行'
+L['TOOLTIP_ID_SPELL'] = '法术ID'
+L['TOOLTIP_ID_ITEM'] = '物品ID'
+L['TOOLTIP_ID_COMPANION'] = '小宠物ID'
+L['TOOLTIP_ID_QUEST'] = '任务ID'
+L['TOOLTIP_ID_TALENT'] = '天赋ID'
+L['TOOLTIP_ID_ACHIEVEMENT'] = '成就ID'
+L['TOOLTIP_ID_CURRENCY'] = '货币ID'
+L['TOOLTIP_ID_VISUAL'] = 'Visual'
+L['TOOLTIP_ID_SOURCE'] = 'Source'
 L['TOOLTIP_SECTION'] = '段落'
 L['TOOLTIP_TARGETED'] = '关注'
 L['TOOLTIP_ILVL'] = '装等'
-L['TOOLTIP_ID'] = '标识：'
 
 
 -- Map
@@ -280,7 +300,7 @@ L['INSTALL_BUTTON_CANCEL'] = '取消'
 
 
 -- Themes
-L['THEME_CONFLICTION_WARNING'] = "FreeUI includes an efficient built-in module of theme.\n\nIt's highly recommended that you disable any version of Aurora or Skinner."
+L['THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
 L['THEME_CURSOR_TRAIL'] = '鼠标轨迹'
 L['THEME_VIGNETTING'] = '暗角效果'
 L['THEME_VIGNETTING_ALPHA'] = '暗角透明度'
@@ -291,42 +311,9 @@ L['THEME_UI_SCALE'] = '界面缩放'
 
 
 -- GUI
-L['GUI_TIPS'] = 'tips'
-L['GUI_ASTERISK_TIPS'] = 'asterisk tips'
-L['GUI_EDITBOX_TIP'] = 'editbox tip'
-L['GUI_RESET'] = '清空设置'
-L['GUI_RELOAD'] = '重载界面'
-L['GUI_IMPORT'] = '导入'
-L['GUI_IMPORT_TIP'] = '导入配置字符串'
-L['GUI_IMPORT_HEADER'] = 'import header'
-L['GUI_IMPORT_DATA_ERROR'] = '配置异常，导入失败！'
-L['GUI_IMPORT_DATA_WARNING'] = '是否确定载入配置？'
-L['GUI_EXPORT'] = '导出'
-L['GUI_EXPORT_TIP'] = '导出配置字符串'
-L['GUI_EXPORT_HEADER'] = 'export header'
-
-L['GUI_DATA_INFO'] = '配置信息'
-L['GUI_DATA_VERSION'] = '版本'
-L['GUI_DATA_CHARACTER'] = '角色'
-L['GUI_DATA_EXCEPTION'] = '配置异常'
-
-L['GUI_TAB_GENERAL'] = '综合'
-L['GUI_TAB_APPEARANCE'] = '外观'
-L['GUI_TAB_NOTIFY_ANNOUNCE'] = '通知提醒'
-L['GUI_TAB_INFOBAR'] = '信息条'
-L['GUI_TAB_CHAT'] = '聊天'
-L['GUI_TAB_AURA'] = '光环'
-L['GUI_TAB_ACTIONBAR'] = '动作条'
-L['GUI_TAB_COMBAT'] = '战斗'
-L['GUI_TAB_INVENTORY'] = '背包'
-L['GUI_TAB_MAP'] = '地图'
-L['GUI_TAB_QUEST'] = '任务'
-L['GUI_TAB_TOOLTIP'] = '鼠标提示'
-L['GUI_TAB_UNITFRAME'] = '头像框体'
-
-L["GUI_RELOAD_WARNING"] = 'reload warning'
-L['GUI_RESET_WARNING'] = 'reset warning'
-
+L['GUI_RELOAD_WARNING'] = '|cffff2020是否重载界面来完成设置？|r'
+L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r'
+L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
 
 
 -- Version

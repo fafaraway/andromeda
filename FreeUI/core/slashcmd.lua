@@ -17,7 +17,7 @@ StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
 	timeout = 0,
 }
 
---[[ StaticPopupDialogs['FREEUI_RELOAD'] = {
+StaticPopupDialogs['FREEUI_RELOAD'] = {
 	text = L['GUI_RELOAD_WARNING'],
 	button1 = APPLY,
 	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
@@ -34,14 +34,46 @@ StaticPopupDialogs['FREEUI_RESET'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		FreeUIConfig = {}
-		FreeUIGlobalConfig = {}
+		FreeUIConfigsGlobal = {}
+		FreeUIConfigs = {}
+		
+		FreeUIOptionsGlobal[C.MyRealm][C.MyName] = false
+		FreeUIOptions = {}
+		FreeUIOptionsPerChar = {}
+		
+		C.Options = FreeUIOptions
+
 		ReloadUI()
 	end,
 	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = false,
-} ]]
+}
+
+StaticPopupDialogs['FREEUI_PROFILE'] = {
+	text = L['GUI_PROFILE_WARNING'],
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function()
+		if FreeUIOptionsFrame.profile:GetChecked() then
+			FreeUIOptionsGlobal[C.MyRealm][C.MyName] = true
+		else
+			FreeUIOptionsGlobal[C.MyRealm][C.MyName] = false
+		end
+		changeProfile()
+		ReloadUI()
+	end,
+	OnCancel = function()
+		if FreeUIOptionsFrame.profile:GetChecked() then
+			FreeUIOptionsFrame.profile:SetChecked(false)
+		else
+			FreeUIOptionsFrame.profile:SetChecked(true)
+		end
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = false,
+}
 
 local function printCommandsList()
 	for _, v in ipairs(L['COMMANDS_LIST']) do

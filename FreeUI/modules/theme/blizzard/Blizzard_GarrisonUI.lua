@@ -11,25 +11,16 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 
 	function F:ReskinMissionPage()
 		F.StripTextures(self)
+		local bg = F.CreateBDFrame(self, .25)
+		bg:SetPoint("TOPLEFT", 3, 2)
+		bg:SetPoint("BOTTOMRIGHT", -3, -10)
+
+		self.Stage.Header:SetAlpha(0)
 		self.StartMissionButton.Flash:SetTexture("")
 		F.Reskin(self.StartMissionButton)
 		F.ReskinClose(self.CloseButton)
-
 		self.CloseButton:ClearAllPoints()
 		self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
-		select(4, self.Stage:GetRegions()):Hide()
-		select(5, self.Stage:GetRegions()):Hide()
-
-		local bg = F.CreateBDFrame(self.Stage)
-		bg:SetPoint("TOPLEFT", 4, 1)
-		bg:SetPoint("BOTTOMRIGHT", -4, -1)
-		local overlay = self.Stage:CreateTexture()
-		overlay:SetDrawLayer("ARTWORK", 3)
-		overlay:SetAllPoints(bg)
-		overlay:SetColorTexture(0, 0, 0, .5)
-		local iconbg = select(16, self:GetRegions())
-		iconbg:ClearAllPoints()
-		iconbg:SetPoint("TOPLEFT", 3, -1)
 
 		for i = 1, 3 do
 			local follower = self.Followers[i]
@@ -161,7 +152,20 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 					portrait:SetPoint("TOPLEFT", 4, -1)
 				end
 
+				if button.BusyFrame then
+					button.BusyFrame:SetInside()
+				end
+
 				button.restyled = true
+			end
+
+			if button.Counters then
+				for i = 1, #button.Counters do
+					local counter = button.Counters[i]
+					if counter and not counter.bg then
+						counter.bg = F.ReskinIcon(counter.Icon)
+					end
+				end
 			end
 
 			if button.Selection:IsShown() then
@@ -179,24 +183,25 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 
 	local function onShowFollower(followerList)
 		local self = followerList.followerTab
-		local abilities = self.AbilitiesFrame.Abilities
-		if not abilities then return end
-		if not self.numAbilitiesStyled then self.numAbilitiesStyled = 1 end
+		local abilitiesFrame = self.AbilitiesFrame
+		if not abilitiesFrame then return end
 
-		local numAbilitiesStyled = self.numAbilitiesStyled
-		local ability = abilities[numAbilitiesStyled]
-		while ability do
-			local icon = ability.IconButton.Icon
-			F.ReskinIcon(icon)
-
-			numAbilitiesStyled = numAbilitiesStyled + 1
-			ability = abilities[numAbilitiesStyled]
+		local abilities = abilitiesFrame.Abilities
+		if abilities then
+			for i = 1, #abilities do
+				local iconButton = abilities[i].IconButton
+				local icon = iconButton and iconButton.Icon
+				if icon and not icon.bg then
+					iconButton.Border:SetAlpha(0)
+					icon.bg = F.ReskinIcon(icon)
+				end
+			end
 		end
-		self.numAbilitiesStyled = numAbilitiesStyled
 
-		if self.AbilitiesFrame.Equipment then
-			for i = 1, 3 do
-				local equip = self.AbilitiesFrame.Equipment[i]
+		local equipment = abilitiesFrame.Equipment
+			if equipment then
+				for i = 1, #equipment do
+				local equip = equipment[i]
 				if equip and not equip.bg then
 					equip.Border:SetAlpha(0)
 					equip.BG:SetAlpha(0)
@@ -206,10 +211,14 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 			end
 		end
 
-		local iconTexture = self.AbilitiesFrame.CombatAllySpell[1].iconTexture
-		if not iconTexture.styled then
-			F.ReskinIcon(iconTexture)
-			iconTexture.styled = true
+		local combatAllySpell = abilitiesFrame.CombatAllySpell
+		if combatAllySpell then
+			for i = 1, #combatAllySpell do
+				local icon = combatAllySpell[i].iconTexture
+				if icon and not icon.bg then
+					icon.bg = F.ReskinIcon(icon)
+				end
+			end
 		end
 	end
 
@@ -577,14 +586,6 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 		end
 	end)
 
-	hooksecurefunc("GarrisonFollowerButton_SetCounterButton", function(button, _, index)
-		local counter = button.Counters[index]
-		if counter and not counter.styled then
-			F.ReskinIcon(counter.Icon)
-			counter.styled = true
-		end
-	end)
-
 	hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards)
 		if not self.numRewardsStyled then self.numRewardsStyled = 0 end
 
@@ -848,7 +849,8 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	F.ReskinGarrisonPortrait(allyPortrait)
 	OrderHallMissionFrame:HookScript("OnShow", function()
 		if allyPortrait:IsShown() then
-			allyPortrait.squareBG:SetBackdropBorderColor(allyPortrait.PortraitRingQuality:GetVertexColor())
+			local color = C.QualityColors[allyPortrait.quality or 1]
+			allyPortrait.squareBG:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 		combatAlly.Available.AddFollowerButton.EmptyPortrait:SetAlpha(0)
 		combatAlly.Available.AddFollowerButton.PortraitHighlight:SetAlpha(0)

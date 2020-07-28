@@ -61,7 +61,7 @@ function TOOLTIP:ReskinRewardIcon()
 end
 
 function TOOLTIP:ReskinTooltipIcons()
-	if not cfg.icon then return end
+	if not cfg.tip_icon then return end
 
 	TOOLTIP.HookTooltipMethod(GameTooltip)
 	TOOLTIP.HookTooltipMethod(ItemRefTooltip)

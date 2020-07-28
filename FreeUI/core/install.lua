@@ -64,7 +64,7 @@ local function setupChatFrame()
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
-	C.Chat.lock = true
+	C.Chat.lock_position = true
 end
 
 local function setupSkada()
@@ -221,7 +221,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
 		rightButton:SetScript('OnClick', function()
-			FreeUIConfig['installation_complete'] = true
+			FreeUIConfigs['installation_complete'] = true
 			ReloadUI()
 		end)
 	end
@@ -383,7 +383,7 @@ end
 
 
 function INSTALL:OnLogin()
-	if not FreeUIConfig['installation_complete'] then
+	if not FreeUIConfigs['installation_complete'] then
 		self:HelloWorld()
 	end
 end

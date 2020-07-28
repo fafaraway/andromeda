@@ -34,7 +34,7 @@ end
 local function isItemJunk(item)
 	if not cfg.item_filter then return end
 	if not cfg.item_filter_junk then return end
-	return (item.rarity == LE_ITEM_QUALITY_POOR or FreeUIGlobalConfig['custom_junk_list'][item.id]) and item.sellPrice and item.sellPrice > 0
+	return (item.rarity == LE_ITEM_QUALITY_POOR or FreeUIConfigsGlobal['custom_junk_list'][item.id]) and item.sellPrice and item.sellPrice > 0
 end
 
 local function isAzeriteArmor(item)
@@ -92,7 +92,7 @@ end
 local function isItemFavourite(item)
 	if not cfg.item_filter then return end
 	if not cfg.item_filter_favourite then return end
-	return item.id and FreeUIConfig['favourite_items'][item.id]
+	return item.id and FreeUIConfigs['favourite_items'][item.id]
 end
 
 local function isEmptySlot(item)

@@ -16,7 +16,7 @@ local gap = C.General.ui_gap
 
 local isScaling = false
 function CHAT:UpdateChatSize()
-	if not cfg.lock then return end
+	if not cfg.lock_position then return end
 	if isScaling then return end
 	isScaling = true
 
@@ -35,7 +35,7 @@ function CHAT:UpdateChatSize()
 	
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', gap, gap)
-	ChatFrame1:SetSize(unpack(cfg.size))
+	ChatFrame1:SetSize(cfg.chat_size_width, cfg.chat_size_height)
 
 	isScaling = false
 end
@@ -68,7 +68,7 @@ function CHAT:RestyleChatFrame()
 	end
 	
 	local fontSize = select(2, self:GetFont())
-	if cfg.outline then
+	if cfg.font_outline then
 		self:SetFont(C.Assets.Fonts.Chat, fontSize, 'OUTLINE')
 		self:SetShadowColor(0, 0, 0, 0)
 	else

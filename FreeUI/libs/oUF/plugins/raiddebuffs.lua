@@ -1,5 +1,6 @@
-local F, C = unpack(select(2, ...))
-local oUF = FreeUI.oUF
+local _, ns = ...
+local oUF = ns.oUF
+local F, C = unpack(ns)
 
 
 local RaidDebuffsIgnore, invalidPrio = {}, -1

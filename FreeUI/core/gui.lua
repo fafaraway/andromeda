@@ -56,13 +56,13 @@ loader:RegisterEvent('ADDON_LOADED')
 loader:SetScript('OnEvent', function(self, _, addon)
 	if addon ~= 'FreeUI' then return end
 
-	if not FreeUIConfig['BfA'] then
-		FreeUIConfig = {}
-		FreeUIConfig['BfA'] = true
+	if not FreeUIConfigs['BfA'] then
+		FreeUIConfigs = {}
+		FreeUIConfigs['BfA'] = true
 	end
 
-	initSettings(characterSettings, FreeUIConfig, true)
-	initSettings(accountSettings, FreeUIGlobalConfig)
+	initSettings(characterSettings, FreeUIConfigs, true)
+	initSettings(accountSettings, FreeUIConfigsGlobal)
 	
 	F:SetupUIScale(true)
 
@@ -108,4 +108,4 @@ for group, options in pairs(profile) do
 end
 
 -- add global options variable
-C.options = profile
+C.Options = profile

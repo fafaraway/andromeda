@@ -114,7 +114,7 @@ end
 
 
 function LOGO:OnLogin()
-	if not FreeUIConfig['installation_complete'] then return end
+	if not FreeUIConfigs['installation_complete'] then return end
 	
 	self:LoginAnimation()
 end

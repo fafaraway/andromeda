@@ -2,8 +2,6 @@ local _, ns = ...
 
 
 
-
-
 ns.textureList = {
 	'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
 	'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex',
@@ -17,62 +15,67 @@ ns.dropdownList = {
 }
 
 
-ns.AddCategories = function()
-	ns.AddCategory('General')
-	ns.AddCategory('Theme')
-	ns.AddCategory('Notification')
-	ns.AddCategory('Announcement')
-	ns.AddCategory('Automation')
-	ns.AddCategory('Infobar')
-	ns.AddCategory('Chat')
-	ns.AddCategory('Aura')
-	ns.AddCategory('Actionbar')
-	ns.AddCategory('Cooldown')
-	ns.AddCategory('Combat')
-	ns.AddCategory('Inventory')
-	ns.AddCategory('Map')
-	ns.AddCategory('Quest')
-	ns.AddCategory('Tooltip')
-	ns.AddCategory('Unitframe')
+
+local function updateBagStatus()
+	FreeUI[1]:GetModule("Inventory"):UpdateAllBags()
+
+	-- local label = BAG_FILTER_EQUIPMENT
+	-- if NDuiDB["Bags"]["ItemSetFilter"] then
+	-- 	label = L["Equipement Set"]
+	-- end
+	-- _G.NDui_BackpackEquipment.label:SetText(label)
+	-- _G.NDui_BackpackBankEquipment.label:SetText(label)
 end
 
 
-local function togglePanel(frame)
-	if frame:IsShown() then
-		frame:Hide()
-	else
-		frame:Show()
-	end
-end
+--[[ side panel functions ]]
 
-local function toggleSidePanel(name)
-	for _, frame in next, ns.sidePanels do
-		if frame:GetName() == name then
-			togglePanel(frame)
-		else
-			frame:Hide()
-		end
-	end
-end
-
+-- inventory
 local function setupItemLevel()
-	toggleSidePanel('itemLevelSide')
+	ns.ToggleSidePanel('itemLevelSide')
 end
 
 local function setupBagSize()
-	toggleSidePanel('bagSizeSide')
+	ns.ToggleSidePanel('bagSizeSide')
 end
 
 local function setupBagFilters()
-	toggleSidePanel('bagFilterSide')
+	ns.ToggleSidePanel('bagFilterSide')
 end
 
 local function setupBagIlvl()
-	toggleSidePanel('bagIlvlSide')
+	ns.ToggleSidePanel('bagIlvlSide')
+end
+
+-- chat
+local function setupChatFilter()
+	ns.ToggleSidePanel('chatFilterSide')
+end
+
+local function setupChatSize()
+	ns.ToggleSidePanel('chatSizeSide')
+end
+
+-- tooltip
+local function setupTipExtra()
+	ns.ToggleSidePanel('tipExtraSide')
+end
+
+local function setupTipFont()
+	ns.ToggleSidePanel('tipFontSide')
+end
+
+-- actionbar
+local function setupActionbarSize()
+	ns.ToggleSidePanel('actionbarSizeSide')
+end
+
+local function setupCooldown()
+	ns.ToggleSidePanel('cooldownSide')
 end
 
 
-local function addGeneralOptions()
+local function addGeneralSection()
 	local parent = FreeUIOptionsFrame.General
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
 
@@ -91,7 +94,7 @@ local function addGeneralOptions()
 	local hideTalkingHead = ns.CreateCheckBox(parent, 'hide_talking_head')
 	hideTalkingHead:SetPoint('LEFT', hideBossBanner, 'RIGHT', 160, 0)
 
-	local itemLevel = ns.CreateCheckBox(parent, 'item_level', setupItemLevel)
+	local itemLevel = ns.CreateCheckBox(parent, 'item_level', nil, setupItemLevel)
 	itemLevel:SetPoint('TOPLEFT', hideBossBanner, 'BOTTOMLEFT', 0, -8)
 
 	local mailButton = ns.CreateCheckBox(parent, 'mail_button')
@@ -121,8 +124,7 @@ local function addGeneralOptions()
 	local tradeTabs = ns.CreateCheckBox(parent, 'trade_tabs')
 	tradeTabs:SetPoint('TOPLEFT', queueTimer, 'BOTTOMLEFT', 0, -8)
 
-	local rareAlert = ns.CreateCheckBox(parent, 'rare_alert')
-	rareAlert:SetPoint('LEFT', tradeTabs, 'RIGHT', 160, 0)
+	
 
 	local missingStats = ns.CreateCheckBox(parent, 'missing_stats')
 	missingStats:SetPoint('TOPLEFT', tradeTabs, 'BOTTOMLEFT', 0, -8)
@@ -147,7 +149,7 @@ local function addGeneralOptions()
 	local mark = ns.CreateCheckBox(parent, 'easy_mark')
 	mark:SetPoint('TOPLEFT', loot, 'BOTTOMLEFT', 0, -8)
 
-	local reject = ns.CreateCheckBox(parent, 'auto_reject_stranger', nil, true)
+	local reject = ns.CreateCheckBox(parent, 'auto_reject_stranger', nil, nil, true)
 	reject:SetPoint('LEFT', mark, 'RIGHT', 160, 0)
 
 	local camera = ns.AddSubCategory(parent, ns.localization.general.sub_camera)
@@ -162,7 +164,7 @@ local function addGeneralOptions()
 	local uiscale = ns.AddSubCategory(parent, ns.localization.general.sub_uiscale)
 	uiscale:SetPoint('TOPLEFT', actionCam, 'BOTTOMLEFT', 0, -16)
 
-	local uiScaleMult = ns.CreateNumberSlider(parent, 'ui_scale', 1, 2, 1, 2, 0.1, true)
+	local uiScaleMult = ns.CreateNumberSlider(parent, 'ui_scale', 1, 2, 1, 2, 0.1, nil, true)
 	uiScaleMult:SetPoint('TOPLEFT', uiscale, 'BOTTOMLEFT', 16, -32)
 
 
@@ -184,7 +186,7 @@ local function addGeneralOptions()
 end
 
 
-local function addAuraOptions()
+local function addAuraSection()
 	local Aura = FreeUIOptionsFrame.Aura
 	Aura.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
 
@@ -206,22 +208,22 @@ local function addAuraOptions()
 	local size = ns.AddSubCategory(Aura, ns.localization.aura.sub_adjustment)
 	size:SetPoint('TOPLEFT', reminder, 'BOTTOMLEFT', 0, -16)
 
-	local buffSize = ns.CreateNumberSlider(Aura, 'buffSize', 20, 60, 20, 60, 1, true)
+	local buffSize = ns.CreateNumberSlider(Aura, 'buffSize', 20, 60, 20, 60, 1, nil, true)
 	buffSize:SetPoint('TOPLEFT', size, 'BOTTOMLEFT', 16, -32)
 
-	local debuffSize = ns.CreateNumberSlider(Aura, 'debuffSize', 20, 60, 20, 60, 1, true)
+	local debuffSize = ns.CreateNumberSlider(Aura, 'debuffSize', 20, 60, 20, 60, 1, nil, true)
 	debuffSize:SetPoint('LEFT', buffSize, 'RIGHT', 60, 0)
 
-	local buffsPerRow = ns.CreateNumberSlider(Aura, 'buffsPerRow', 6, 16, 6, 16, 1, true)
+	local buffsPerRow = ns.CreateNumberSlider(Aura, 'buffsPerRow', 6, 16, 6, 16, 1, nil, true)
 	buffsPerRow:SetPoint('TOPLEFT', buffSize, 'BOTTOMLEFT', 0, -64)
 
-	local debuffsPerRow = ns.CreateNumberSlider(Aura, 'debuffsPerRow', 6, 16, 6, 16, 1, true)
+	local debuffsPerRow = ns.CreateNumberSlider(Aura, 'debuffsPerRow', 6, 16, 6, 16, 1, nil, true)
 	debuffsPerRow:SetPoint('LEFT', buffsPerRow, 'RIGHT', 60, 0)
 
-	local margin = ns.CreateNumberSlider(Aura, 'margin', 3, 10, 3, 10, 1, true)
+	local margin = ns.CreateNumberSlider(Aura, 'margin', 3, 10, 3, 10, 1, nil, true)
 	margin:SetPoint('TOPLEFT', buffsPerRow, 'BOTTOMLEFT', 0, -64)
 
-	local offset = ns.CreateNumberSlider(Aura, 'offset', 6, 16, 6, 16, 1, true)
+	local offset = ns.CreateNumberSlider(Aura, 'offset', 6, 16, 6, 16, 1, nil, true)
 	offset:SetPoint('LEFT', margin, 'RIGHT', 60, 0)
 
 	local function toggleAuraOptions()
@@ -243,14 +245,14 @@ local function addAuraOptions()
 end
 
 
-local function addInventoryOptions()
+local function addInventorySection()
 	local parent = FreeUIOptionsFrame.Inventory
 	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
 
 	local basic = ns.AddSubCategory(parent, ns.localization.inventory.sub_basic)
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(parent, 'enable_module', setupBagSize)
+	local enable = ns.CreateCheckBox(parent, 'enable_module', nil, setupBagSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local newitemFlash = ns.CreateCheckBox(parent, 'new_item_flash')
@@ -262,10 +264,10 @@ local function addInventoryOptions()
 	local combineFreeSlots = ns.CreateCheckBox(parent, 'combine_free_slots')
 	combineFreeSlots:SetPoint('TOPLEFT', newitemFlash, 'BOTTOMLEFT', 0, -8)
 
-	local itemLevel = ns.CreateCheckBox(parent, 'item_level', setupBagIlvl)
+	local itemLevel = ns.CreateCheckBox(parent, 'item_level', nil, setupBagIlvl)
 	itemLevel:SetPoint('LEFT', combineFreeSlots, 'RIGHT', 160, 0)
 
-	local useCategory = ns.CreateCheckBox(parent, 'item_filter', setupBagFilters)
+	local useCategory = ns.CreateCheckBox(parent, 'item_filter', updateBagStatus, setupBagFilters)
 	useCategory:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -8)
 
 	local function toggleInventoryOptions()
@@ -286,19 +288,19 @@ local function addInventoryOptions()
 	local bagSizeSide = ns.CreateSidePanel(parent, 'bagSizeSide', ns.localization.inventory.sub_adjustment)
 
 
-	local slotSize = ns.CreateNumberSlider(parent, 'slot_size', 20, 60, 20, 60, 1, true)
+	local slotSize = ns.CreateNumberSlider(parent, 'slot_size', 20, 60, 20, 60, 1, nil, true)
 	slotSize:SetParent(bagSizeSide)
 	slotSize:SetPoint('TOP', bagSizeSide, 'TOP', 0, -80)
 
-	local spacing = ns.CreateNumberSlider(parent, 'spacing', 3, 6, 3, 6, 1, true)
+	local spacing = ns.CreateNumberSlider(parent, 'spacing', 3, 6, 3, 6, 1, nil, true)
 	spacing:SetParent(bagSizeSide)
 	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -60)
 
-	local bagColumns = ns.CreateNumberSlider(parent, 'bag_columns', 8, 16, 8, 16, 1, true)
+	local bagColumns = ns.CreateNumberSlider(parent, 'bag_columns', 8, 16, 8, 16, 1, nil, true)
 	bagColumns:SetParent(bagSizeSide)
 	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -60)
 
-	local bankColumns = ns.CreateNumberSlider(parent, 'bank_columns', 8, 16, 8, 16, 1, true)
+	local bankColumns = ns.CreateNumberSlider(parent, 'bank_columns', 8, 16, 8, 16, 1, nil, true)
 	bankColumns:SetParent(bagSizeSide)
 	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -60)
 
@@ -309,7 +311,7 @@ local function addInventoryOptions()
 
 	local itemLevelSide = ns.CreateSidePanel(parent, 'bagIlvlSide', ns.localization.inventory.item_level, true)
 
-	local iLvltoShow = ns.CreateNumberSlider(parent, 'item_level_to_show', 1, 500, 1, 500, 1, true)
+	local iLvltoShow = ns.CreateNumberSlider(parent, 'item_level_to_show', 1, 500, 1, 500, 1, nil, true)
 	iLvltoShow:SetParent(itemLevelSide)
 	iLvltoShow:SetPoint('TOP', itemLevelSide, 'TOP', 0, -80)
 
@@ -318,39 +320,39 @@ local function addInventoryOptions()
 
 	local bagFilterSide = ns.CreateSidePanel(parent, 'bagFilterSide', ns.localization.inventory.bag_filters_header)
 
-	local itemFilterJunk = ns.CreateCheckBox(parent, 'item_filter_junk')
+	local itemFilterJunk = ns.CreateCheckBox(parent, 'item_filter_junk', updateBagStatus)
 	itemFilterJunk:SetParent(bagFilterSide)
 	itemFilterJunk:SetPoint('TOPLEFT', bagFilterSide, 'TOPLEFT', 20, -60)
 
-	local itemFilterTrade = ns.CreateCheckBox(parent, 'item_filter_trade')
+	local itemFilterTrade = ns.CreateCheckBox(parent, 'item_filter_trade', updateBagStatus)
 	itemFilterTrade:SetParent(bagFilterSide)
 	itemFilterTrade:SetPoint('TOPLEFT', itemFilterJunk, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterConsumable = ns.CreateCheckBox(parent, 'item_filter_consumable')
+	local itemFilterConsumable = ns.CreateCheckBox(parent, 'item_filter_consumable', updateBagStatus)
 	itemFilterConsumable:SetParent(bagFilterSide)
 	itemFilterConsumable:SetPoint('TOPLEFT', itemFilterTrade, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterQuest = ns.CreateCheckBox(parent, 'item_filter_quest')
+	local itemFilterQuest = ns.CreateCheckBox(parent, 'item_filter_quest', updateBagStatus)
 	itemFilterQuest:SetParent(bagFilterSide)
 	itemFilterQuest:SetPoint('TOPLEFT', itemFilterConsumable, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterSet = ns.CreateCheckBox(parent, 'item_filter_gear_set')
+	local itemFilterSet = ns.CreateCheckBox(parent, 'item_filter_gear_set', updateBagStatus)
 	itemFilterSet:SetParent(bagFilterSide)
 	itemFilterSet:SetPoint('TOPLEFT', itemFilterQuest, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterAzerite = ns.CreateCheckBox(parent, 'item_filter_azerite')
+	local itemFilterAzerite = ns.CreateCheckBox(parent, 'item_filter_azerite', updateBagStatus)
 	itemFilterAzerite:SetParent(bagFilterSide)
 	itemFilterAzerite:SetPoint('TOPLEFT', itemFilterSet, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterMountPet = ns.CreateCheckBox(parent, 'item_filter_mount_pet')
+	local itemFilterMountPet = ns.CreateCheckBox(parent, 'item_filter_mount_pet', updateBagStatus)
 	itemFilterMountPet:SetParent(bagFilterSide)
 	itemFilterMountPet:SetPoint('TOPLEFT', itemFilterAzerite, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterFavourite = ns.CreateCheckBox(parent, 'item_filter_favourite')
+	local itemFilterFavourite = ns.CreateCheckBox(parent, 'item_filter_favourite', updateBagStatus)
 	itemFilterFavourite:SetParent(bagFilterSide)
 	itemFilterFavourite:SetPoint('TOPLEFT', itemFilterMountPet, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterLegendary = ns.CreateCheckBox(parent, 'item_filter_legendary')
+	local itemFilterLegendary = ns.CreateCheckBox(parent, 'item_filter_legendary', updateBagStatus)
 	itemFilterLegendary:SetParent(bagFilterSide)
 	itemFilterLegendary:SetPoint('TOPLEFT', itemFilterFavourite, 'BOTTOMLEFT', 00, -8)
 
@@ -358,7 +360,7 @@ local function addInventoryOptions()
 end
 
 
-local function addCombatOptions()
+local function addCombatSection()
 	local Combat = FreeUIOptionsFrame.Combat
 	Combat.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
 
@@ -407,7 +409,7 @@ local function addCombatOptions()
 	local adjustment = ns.AddSubCategory(Combat, ns.localization.combat.sub_adjustment)
 	adjustment:SetPoint('TOPLEFT', autoTab, 'BOTTOMLEFT', 0, -16)
 
-	local threshold = ns.CreateNumberSlider(Combat, 'health_alert_threshold', 0.2, 0.6, 0.2, 0.6, 0.1, true)
+	local threshold = ns.CreateNumberSlider(Combat, 'health_alert_threshold', 0.2, 0.6, 0.2, 0.6, 0.1, nil, true)
 	threshold:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
 	
 	health.children = {threshold}
@@ -436,138 +438,94 @@ local function addCombatOptions()
 end
 
 
-local function addCooldownOptions()
-	local Cooldown = FreeUIOptionsFrame.Cooldown
-	Cooldown.tab.icon:SetTexture('Interface\\ICONS\\Spell_Nature_TimeStop')
+local function addActionbarSection()
+	local parent = FreeUIOptionsFrame.Actionbar
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Holy_SearingLightPriest')
 
-	local basic = ns.AddSubCategory(Cooldown, ns.localization.cooldown.sub_basic)
-	basic:SetPoint('TOPLEFT', Cooldown.subText, 'BOTTOMLEFT', 0, -8)
+	local basic = ns.AddSubCategory(parent, ns.localization.actionbar.sub_basic)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(Cooldown, 'enable')
+	local enable = ns.CreateCheckBox(parent, 'enable', nil, setupActionbarSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local decimal = ns.CreateCheckBox(Cooldown, 'decimal')
-	decimal:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local excludeWA = ns.CreateCheckBox(Cooldown, 'excludeWA')
-	excludeWA:SetPoint('LEFT', decimal, 'RIGHT', 160, 0)
-
-	local pulse = ns.CreateCheckBox(Cooldown, 'pulse')
-	pulse:SetPoint('TOPLEFT', decimal, 'BOTTOMLEFT', 0, -8)
-
-	local adjustment = ns.AddSubCategory(Cooldown, ns.localization.cooldown.sub_adjustment)
-	adjustment:SetPoint('TOPLEFT', pulse, 'BOTTOMLEFT', 0, -16)
-
-	local decimalCount = ns.CreateNumberSlider(Cooldown, 'decimalCount', 1, 10, 10, 10, 1, true)
-	decimalCount:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
 
 
-	local function toggleCooldownOptions()
-		local shown = enable:GetChecked()
-		decimal:SetShown(shown)
-		excludeWA:SetShown(shown)
-		pulse:SetShown(shown)
-		decimalCount:SetShown(shown)
-		adjustment:SetShown(shown)
-	end
+	local class = ns.CreateCheckBox(parent, 'button_class_color')
+	class:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	enable:HookScript('OnClick', toggleCooldownOptions)
-	Cooldown:HookScript('OnShow', toggleCooldownOptions)
-end
+	local range = ns.CreateCheckBox(parent, 'button_range')
+	range:SetPoint('LEFT', class, 'RIGHT', 160, 0)
 
 
-local function addActionbarOptions()
-	local Actionbar = FreeUIOptionsFrame.Actionbar
-	Actionbar.tab.icon:SetTexture('Interface\\ICONS\\Spell_Holy_SearingLightPriest')
 
-	local basic = ns.AddSubCategory(Actionbar, ns.localization.actionbar.sub_basic)
-	basic:SetPoint('TOPLEFT', Actionbar.subText, 'BOTTOMLEFT', 0, -8)
+	local hotkey = ns.CreateCheckBox(parent, 'button_hotkey')
+	hotkey:SetPoint('TOPLEFT', class, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(Actionbar, 'enable')
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local hotkey = ns.CreateCheckBox(Actionbar, 'button_hotkey')
-	hotkey:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local macro = ns.CreateCheckBox(Actionbar, 'button_macro_name')
+	local macro = ns.CreateCheckBox(parent, 'button_macro_name')
 	macro:SetPoint('LEFT', hotkey, 'RIGHT', 160, 0)
 
-	local count = ns.CreateCheckBox(Actionbar, 'button_count')
+	local count = ns.CreateCheckBox(parent, 'button_count')
 	count:SetPoint('TOPLEFT', hotkey, 'BOTTOMLEFT', 0, -8)
 
-	local class = ns.CreateCheckBox(Actionbar, 'button_class_color')
-	class:SetPoint('LEFT', count, 'RIGHT', 160, 0)
 
-	local range = ns.CreateCheckBox(Actionbar, 'button_range')
-	range:SetPoint('TOPLEFT', count, 'BOTTOMLEFT', 0, -8)
 
-	local extend = ns.CreateCheckBox(Actionbar, 'bar3_divide')
-	extend:SetPoint('LEFT', range, 'RIGHT', 160, 0)
+	local cooldown = ns.CreateCheckBox(parent, 'enable_cooldown', nil, setupCooldown)
+	cooldown:SetPoint('LEFT', count, 'RIGHT', 160, 0)
 
-	local extra = ns.AddSubCategory(Actionbar, ns.localization.actionbar.sub_extra)
-	extra:SetPoint('TOPLEFT', range, 'BOTTOMLEFT', 0, -16)
+	local extra = ns.AddSubCategory(parent, ns.localization.actionbar.sub_extra)
+	extra:SetPoint('TOPLEFT', count, 'BOTTOMLEFT', 0, -16)
 
-	local bar1 = ns.CreateCheckBox(Actionbar, 'bar1')
+	local bar1 = ns.CreateCheckBox(parent, 'bar1')
 	bar1:SetPoint('TOPLEFT', extra, 'BOTTOMLEFT', 0, -8)
 
-	local bar1Fade = ns.CreateCheckBox(Actionbar, 'bar1_fade')
+	local bar1Fade = ns.CreateCheckBox(parent, 'bar1_fade')
 	bar1Fade:SetPoint('LEFT', bar1, 'RIGHT', 160, 0)
 
 	bar1.children = {bar1Fade}
 
-	local bar2 = ns.CreateCheckBox(Actionbar, 'bar2')
+	local bar2 = ns.CreateCheckBox(parent, 'bar2')
 	bar2:SetPoint('TOPLEFT', bar1, 'BOTTOMLEFT', 0, -8)
 
-	local bar2Fade = ns.CreateCheckBox(Actionbar, 'bar2_fade')
+	local bar2Fade = ns.CreateCheckBox(parent, 'bar2_fade')
 	bar2Fade:SetPoint('LEFT', bar2, 'RIGHT', 160, 0)
 
 	bar2.children = {bar2Fade}
 
-	local bar3 = ns.CreateCheckBox(Actionbar, 'bar3')
+	local bar3 = ns.CreateCheckBox(parent, 'bar3')
 	bar3:SetPoint('TOPLEFT', bar2, 'BOTTOMLEFT', 0, -8)
 
-	local bar3Fade = ns.CreateCheckBox(Actionbar, 'bar3_fade')
+	local bar3Fade = ns.CreateCheckBox(parent, 'bar3_fade')
 	bar3Fade:SetPoint('LEFT', bar3, 'RIGHT', 160, 0)
 
 	bar3.children = {bar3Fade}
 
-	local bar4 = ns.CreateCheckBox(Actionbar, 'bar4')
+	local bar4 = ns.CreateCheckBox(parent, 'bar4')
 	bar4:SetPoint('TOPLEFT', bar3, 'BOTTOMLEFT', 0, -8)
 
-	local bar4Fade = ns.CreateCheckBox(Actionbar, 'bar4_fade')
+	local bar4Fade = ns.CreateCheckBox(parent, 'bar4_fade')
 	bar4Fade:SetPoint('LEFT', bar4, 'RIGHT', 160, 0)
 
 	bar4.children = {bar4Fade}
 
-	local bar5 = ns.CreateCheckBox(Actionbar, 'bar5')
+	local bar5 = ns.CreateCheckBox(parent, 'bar5')
 	bar5:SetPoint('TOPLEFT', bar4, 'BOTTOMLEFT', 0, -8)
 
-	local bar5Fade = ns.CreateCheckBox(Actionbar, 'bar5_fade')
+	local bar5Fade = ns.CreateCheckBox(parent, 'bar5_fade')
 	bar5Fade:SetPoint('LEFT', bar5, 'RIGHT', 160, 0)
 
 	bar5.children = {bar5Fade}
 
-	local petBar = ns.CreateCheckBox(Actionbar, 'pet_bar')
+	local petBar = ns.CreateCheckBox(parent, 'pet_bar')
 	petBar:SetPoint('TOPLEFT', bar5, 'BOTTOMLEFT', 0, -8)
 
-	local petBarFade = ns.CreateCheckBox(Actionbar, 'pet_bar_fade')
+	local petBarFade = ns.CreateCheckBox(parent, 'pet_bar_fade')
 	petBarFade:SetPoint('LEFT', petBar, 'RIGHT', 160, 0)
 
 	petBar.children = {petBarFade}
 
-	local size = ns.AddSubCategory(Actionbar, ns.localization.actionbar.sub_adjustment)
-	size:SetPoint('TOPLEFT', petBar, 'BOTTOMLEFT', 0, -16)
 
-	local buttonSizeNormal = ns.CreateNumberSlider(Actionbar, 'button_size_normal', 20, 50, 20, 50, 1, true)
-	buttonSizeNormal:SetPoint('TOPLEFT', size, 'BOTTOMLEFT', 16, -32)
 
-	local buttonSizeSmall = ns.CreateNumberSlider(Actionbar, 'button_size_small', 20, 50, 20, 50, 1, true)
-	buttonSizeSmall:SetPoint('LEFT', buttonSizeNormal, 'RIGHT', 60, 0)
-
-	local buttonSizeBig = ns.CreateNumberSlider(Actionbar, 'button_size_big', 20, 50, 20, 50, 1, true)
-	buttonSizeBig:SetPoint('TOPLEFT', buttonSizeNormal, 'BOTTOMLEFT', 0, -64)
-
-	local function toggleActionbarOptions()
+	--[[ local function toggleActionbarOptions()
 		local shown = enable:GetChecked()
 		hotkey:SetShown(shown)
 		macro:SetShown(shown)
@@ -587,19 +545,63 @@ local function addActionbarOptions()
 		bar5Fade:SetShown(shown)
 		petBar:SetShown(shown)
 		petBarFade:SetShown(shown)
-		buttonSizeNormal:SetShown(shown)
-		buttonSizeSmall:SetShown(shown)
-		buttonSizeBig:SetShown(shown)
-		size:SetShown(shown)
+
 		extra:SetShown(shown)
 	end
 
 	enable:HookScript('OnClick', toggleActionbarOptions)
-	Actionbar:HookScript('OnShow', toggleActionbarOptions)
+	parent:HookScript('OnShow', toggleActionbarOptions) ]]
+
+	local cooldownSide = ns.CreateSidePanel(parent, 'cooldownSide', ns.localization.inventory.sub_adjustment)
+
+	local ignoreWA = ns.CreateCheckBox(parent, 'ignore_weakauras')
+	ignoreWA:SetParent(cooldownSide)
+	ignoreWA:SetPoint('TOPLEFT', cooldownSide, 'TOPLEFT', 20, -60)
+
+	local cdPulse = ns.CreateCheckBox(parent, 'cd_pulse')
+	cdPulse:SetParent(cooldownSide)
+	cdPulse:SetPoint('TOPLEFT', ignoreWA, 'BOTTOMLEFT', 0, -8)
+
+
+
+	local useDecimal = ns.CreateCheckBox(parent, 'use_decimal')
+	useDecimal:SetParent(cooldownSide)
+	useDecimal:SetPoint('TOPLEFT', cdPulse, 'BOTTOMLEFT', 0, -8)
+
+	local decimalCooldown = ns.CreateNumberSlider(parent, 'decimal_countdown', 1, 10, 1, 10, 1, nil, true)
+	decimalCooldown:SetParent(cooldownSide)
+	decimalCooldown:SetPoint('TOP', cooldownSide, 'TOP', 0, -160)
+
+
+
+
+	
+
+
+
+
+
+	local actionbarSizeSide = ns.CreateSidePanel(parent, 'actionbarSizeSide', ns.localization.inventory.sub_adjustment)
+
+	local buttonSizeSmall = ns.CreateNumberSlider(parent, 'button_size_small', 20, 50, 20, 50, 1, nil, true)
+	buttonSizeSmall:SetParent(actionbarSizeSide)
+	buttonSizeSmall:SetPoint('TOP', actionbarSizeSide, 'TOP', 0, -80)
+
+	local buttonSizeNormal = ns.CreateNumberSlider(parent, 'button_size_normal', 20, 50, 20, 50, 1, nil, true)
+	buttonSizeNormal:SetParent(buttonSizeSmall)
+	buttonSizeNormal:SetPoint('TOP', buttonSizeSmall, 'BOTTOM', 0, -60)
+
+	local buttonSizeBig = ns.CreateNumberSlider(parent, 'button_size_big', 20, 50, 20, 50, 1, nil, true)
+	buttonSizeBig:SetParent(actionbarSizeSide)
+	buttonSizeBig:SetPoint('TOP', buttonSizeNormal, 'BOTTOM', 0, -60)
+
+	local buttonMargin = ns.CreateNumberSlider(parent, 'button_margin', 0, 10, 0, 10, 1, nil, true)
+	buttonMargin:SetParent(actionbarSizeSide)
+	buttonMargin:SetPoint('TOP', buttonSizeBig, 'BOTTOM', 0, -60)
 end
 
 
-local function addAnnouncementOptions()
+local function addAnnouncementSection()
 	local Announcement = FreeUIOptionsFrame.Announcement
 	Announcement.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_RallyingCry')
 
@@ -671,7 +673,7 @@ local function addAnnouncementOptions()
 end
 
 
-local function addUnitframeOptions()
+local function addUnitframeSection()
 	local Unitframe = FreeUIOptionsFrame.Unitframe
 	Unitframe.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
 
@@ -795,7 +797,7 @@ local function addUnitframeOptions()
 end
 
 
-local function addThemeOptions()
+local function addThemeSection()
 	local Theme = FreeUIOptionsFrame.Theme
 	Theme.tab.icon:SetTexture('Interface\\ICONS\\Ability_Hunter_BeastWithin')
 
@@ -806,16 +808,23 @@ local function addThemeOptions()
 	cursorTrail:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local vignetting = ns.CreateCheckBox(Theme, 'vignetting')
-	vignetting:SetPoint('LEFT', cursorTrail, 'RIGHT', 160, 0)
+	vignetting:SetPoint('TOPLEFT', cursorTrail, 'BOTTOMLEFT', 0, -8)
 
 	local reskinBlizz = ns.CreateCheckBox(Theme, 'reskin_blizz')
-	reskinBlizz:SetPoint('TOPLEFT', cursorTrail, 'BOTTOMLEFT', 0, -8)
-
-	local flatStyle = ns.CreateCheckBox(Theme, 'flat_style')
-	flatStyle:SetPoint('LEFT', reskinBlizz, 'RIGHT', 160, 0)
+	reskinBlizz:SetPoint('TOPLEFT', vignetting, 'BOTTOMLEFT', 0, -8)
 
 	local shadowBorder = ns.CreateCheckBox(Theme, 'shadow_border')
 	shadowBorder:SetPoint('TOPLEFT', reskinBlizz, 'BOTTOMLEFT', 0, -8)
+
+
+
+	local vignettingAlpha = ns.CreateNumberSlider(Theme, 'vignetting_alpha', 0, 1, 0, 1, 0.1, nil, true)
+	vignettingAlpha:SetPoint('LEFT', cursorTrail, 'RIGHT', 160, -20)
+
+	local backdropAlpha = ns.CreateNumberSlider(Theme, 'backdrop_alpha', 0.1, 1, 0.1, 1, 0.01, nil, true)
+	backdropAlpha:SetPoint('TOP', vignettingAlpha, 'BOTTOM', 0, -60)
+
+
 
 	local addons = ns.AddSubCategory(Theme, ns.localization.theme.sub_addons)
 	addons:SetPoint('TOPLEFT', shadowBorder, 'BOTTOMLEFT', 0, -16)
@@ -838,24 +847,24 @@ local function addThemeOptions()
 	local backdropColor = ns.CreateColourPicker(Theme, 'backdrop_color', true)
 	backdropColor:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
 
-	local backdropAlpha = ns.CreateNumberSlider(Theme, 'backdrop_alpha', 0.1, 1, 0.1, 1, 0.01, true)
+	local backdropAlpha = ns.CreateNumberSlider(Theme, 'backdrop_alpha', 0.1, 1, 0.1, 1, 0.01, nil, true)
 	backdropAlpha:SetPoint('LEFT', backdropColor, 'RIGHT', 160, 0)
 
 	local backdropBorderColor = ns.CreateColourPicker(Theme, 'backdrop_border_color', true)
 	backdropBorderColor:SetPoint('TOPLEFT', backdropColor, 'BOTTOMLEFT', 0, -52)
 
-	local backdropBorderAlpha = ns.CreateNumberSlider(Theme, 'backdrop_border_alpha', 0.1, 1, 0.1, 1, 0.01, true)
+	local backdropBorderAlpha = ns.CreateNumberSlider(Theme, 'backdrop_border_alpha', 0.1, 1, 0.1, 1, 0.01, nil, true)
 	backdropBorderAlpha:SetPoint('LEFT', backdropBorderColor, 'RIGHT', 160, 0)
 
 	local flatColor = ns.CreateColourPicker(Theme, 'flat_color', true)
 	flatColor:SetPoint('TOPLEFT', backdropBorderColor, 'BOTTOMLEFT', 0, -52)
 
-	local flatAlpha = ns.CreateNumberSlider(Theme, 'flat_alpha', 0.1, 1, 0.1, 1, 0.01, true)
+	local flatAlpha = ns.CreateNumberSlider(Theme, 'flat_alpha', 0.1, 1, 0.1, 1, 0.01, nil, true)
 	flatAlpha:SetPoint('LEFT', flatColor, 'RIGHT', 160, 0)
 end
 
 
-local function addInfobarOptions()
+local function addInfobarSection()
 	local Infobar = FreeUIOptionsFrame.Infobar
 	Infobar.tab.icon:SetTexture('Interface\\ICONS\\Ability_Priest_Ascension')
 
@@ -889,7 +898,7 @@ local function addInfobarOptions()
 	local adjustment = ns.AddSubCategory(Infobar, ns.localization.infobar.sub_adjustment)
 	adjustment:SetPoint('TOPLEFT', report, 'BOTTOMLEFT', 0, -16)
 
-	local height = ns.CreateNumberSlider(Infobar, 'height', 10, 20, 10, 20, 1, true)
+	local height = ns.CreateNumberSlider(Infobar, 'height', 10, 20, 10, 20, 1, nil, true)
 	height:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
 
 
@@ -911,78 +920,75 @@ local function addInfobarOptions()
 end
 
 
-local function addChatOptions()
-	local Chat = FreeUIOptionsFrame.Chat
-	Chat.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
+local function addChatSection()
+	local parent = FreeUIOptionsFrame.Chat
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
 
-	local basic = ns.AddSubCategory(Chat, ns.localization.chat.sub_basic)
-	basic:SetPoint('TOPLEFT', Chat.subText, 'BOTTOMLEFT', 0, -8)
+	local basic = ns.AddSubCategory(parent, ns.localization.chat.sub_basic)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(Chat, 'enable')
+	local enable = ns.CreateCheckBox(parent, 'enable')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local lock = ns.CreateCheckBox(Chat, 'lock')
+	local lock = ns.CreateCheckBox(parent, 'lock_position', nil, setupChatSize)
 	lock:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local fading = ns.CreateCheckBox(Chat, 'fading')
+	local fading = ns.CreateCheckBox(parent, 'fading')
 	fading:SetPoint('LEFT', lock, 'RIGHT', 160, 0)
 
-	local outline = ns.CreateCheckBox(Chat, 'outline')
+	local outline = ns.CreateCheckBox(parent, 'font_outline')
 	outline:SetPoint('TOPLEFT', lock, 'BOTTOMLEFT', 0, -8)
 
-	local voiceIcon = ns.CreateCheckBox(Chat, 'voiceIcon')
+	local voiceIcon = ns.CreateCheckBox(parent, 'voiceIcon')
 	voiceIcon:SetPoint('LEFT', outline, 'RIGHT', 160, 0)
 
-	local feature = ns.AddSubCategory(Chat, ns.localization.chat.sub_feature)
+	local feature = ns.AddSubCategory(parent, ns.localization.chat.sub_feature)
 	feature:SetPoint('TOPLEFT', outline, 'BOTTOMLEFT', 0, -16)
 
-	local abbreviate = ns.CreateCheckBox(Chat, 'abbreviate')
+	local abbreviate = ns.CreateCheckBox(parent, 'abbreviate')
 	abbreviate:SetPoint('TOPLEFT', feature, 'BOTTOMLEFT', 0, -8)
 
-	local cycles = ns.CreateCheckBox(Chat, 'cycles')
+	local cycles = ns.CreateCheckBox(parent, 'cycles')
 	cycles:SetPoint('LEFT', abbreviate, 'RIGHT', 160, 0)
 
-	local itemLinks = ns.CreateCheckBox(Chat, 'itemLinks')
+	local itemLinks = ns.CreateCheckBox(parent, 'itemLinks')
 	itemLinks:SetPoint('TOPLEFT', abbreviate, 'BOTTOMLEFT', 0, -8)
 
-	local spamageMeter = ns.CreateCheckBox(Chat, 'spamageMeter')
+	local spamageMeter = ns.CreateCheckBox(parent, 'spamageMeter')
 	spamageMeter:SetPoint('LEFT', itemLinks, 'RIGHT', 160, 0)
 
-	local sticky = ns.CreateCheckBox(Chat, 'sticky')
+	local sticky = ns.CreateCheckBox(parent, 'sticky')
 	sticky:SetPoint('TOPLEFT', itemLinks, 'BOTTOMLEFT', 0, -8)
 
-	local whisperAlert = ns.CreateCheckBox(Chat, 'whisperAlert')
+	local whisperAlert = ns.CreateCheckBox(parent, 'whisperAlert')
 	whisperAlert:SetPoint('LEFT', sticky, 'RIGHT', 160, 0)
 
-	local chatCopy = ns.CreateCheckBox(Chat, 'chatCopy')
+	local chatCopy = ns.CreateCheckBox(parent, 'chatCopy')
 	chatCopy:SetPoint('TOPLEFT', sticky, 'BOTTOMLEFT', 0, -8)
 
-	local urlCopy = ns.CreateCheckBox(Chat, 'urlCopy')
+	local urlCopy = ns.CreateCheckBox(parent, 'urlCopy')
 	urlCopy:SetPoint('LEFT', chatCopy, 'RIGHT', 160, 0)
 
-	local bubble = ns.CreateCheckBox(Chat, 'auto_toggle_chat_bubble')
+	local bubble = ns.CreateCheckBox(parent, 'auto_toggle_chat_bubble')
 	bubble:SetPoint('TOPLEFT', chatCopy, 'BOTTOMLEFT', 0, -8)
 
-	local filter = ns.AddSubCategory(Chat, ns.localization.chat.sub_filter)
+	local filter = ns.AddSubCategory(parent, ns.localization.chat.sub_filter)
 	filter:SetPoint('TOPLEFT', bubble, 'BOTTOMLEFT', 0, -16)
 
-	local chatFilter = ns.CreateCheckBox(Chat, 'filters')
+	local chatFilter = ns.CreateCheckBox(parent, 'filters', nil, setupChatFilter)
 	chatFilter:SetPoint('TOPLEFT', filter, 'BOTTOMLEFT', 0, -8)
 
-	local blockAddonSpam = ns.CreateCheckBox(Chat, 'blockAddonSpam')
+	local blockAddonSpam = ns.CreateCheckBox(parent, 'blockAddonSpam')
 	blockAddonSpam:SetPoint('LEFT', chatFilter, 'RIGHT', 160, 0)
 
-	local blockStranger = ns.CreateCheckBox(Chat, 'blockStranger')
+	local blockStranger = ns.CreateCheckBox(parent, 'blockStranger')
 	blockStranger:SetPoint('TOPLEFT', chatFilter, 'BOTTOMLEFT', 0, -8)
 
-	local allowFriendsSpam = ns.CreateCheckBox(Chat, 'allowFriendsSpam')
+	local allowFriendsSpam = ns.CreateCheckBox(parent, 'allowFriendsSpam')
 	allowFriendsSpam:SetPoint('LEFT', blockStranger, 'RIGHT', 160, 0)
 
-	local profanity = ns.CreateCheckBox(Chat, 'profanity')
+	local profanity = ns.CreateCheckBox(parent, 'profanity')
 	profanity:SetPoint('TOPLEFT', blockStranger, 'BOTTOMLEFT', 0, -8)
-
-	local invite_keyword = ns.CreateEditBox(Chat, 'keywordsList', true)
-	invite_keyword:SetPoint('TOPLEFT', profanity, 'BOTTOMLEFT', 6, -8)
 
 
 	local function toggleChatOptions()
@@ -1010,43 +1016,71 @@ local function addChatOptions()
 	end
 
 	enable:HookScript('OnClick', toggleChatOptions)
-	Chat:HookScript('OnShow', toggleChatOptions)
+	parent:HookScript('OnShow', toggleChatOptions)
+
+
+
+
+	local chatSizeSide = ns.CreateSidePanel(parent, 'chatSizeSide', ns.localization.general.item_level)
+
+	local chatSizeWidth = ns.CreateNumberSlider(parent, 'chat_size_width', 100, 600, 100, 600, 1, nil, true)
+	chatSizeWidth:SetParent(chatSizeSide)
+	chatSizeWidth:SetPoint('TOP', chatSizeSide, 'TOP', 0, -80)
+
+	local chatSizeHeight = ns.CreateNumberSlider(parent, 'chat_size_height', 100, 600, 100, 600, 1, nil, true)
+	chatSizeHeight:SetParent(chatSizeSide)
+	chatSizeHeight:SetPoint('TOP', chatSizeWidth, 'BOTTOM', 0, -60)
+
+
+	local chatFilterSide = ns.CreateSidePanel(parent, 'chatFilterSide', ns.localization.general.item_level)
+
+	local filterMatches = ns.CreateNumberSlider(parent, 'matches', 1, 5, 1, 5, 1, nil, true)
+	filterMatches:SetParent(chatFilterSide)
+	filterMatches:SetPoint('TOP', chatFilterSide, 'TOP', 0, -80)
+
+	local keywordsList = ns.CreateEditBox(parent, 'keywordsList', true, nil, 140, 160, 999, nil, true)
+	keywordsList:SetParent(chatFilterSide)
+	keywordsList:SetPoint('TOP', filterMatches, 'BOTTOM', 0, -60)
 end 
 
 
-local function addNotificationOptions()
-	local Notification = FreeUIOptionsFrame.Notification
-	Notification.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
+local function addNotificationSection()
+	local parent = FreeUIOptionsFrame.Notification
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
 
-	local basic = ns.AddSubCategory(Notification, ns.localization.notification.sub_basic)
-	basic:SetPoint('TOPLEFT', Notification.subText, 'BOTTOMLEFT', 0, -8)
+	local basic = ns.AddSubCategory(parent, ns.localization.notification.sub_basic)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(Notification, 'enable')
+	local enable = ns.CreateCheckBox(parent, 'enable')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local bagFull = ns.CreateCheckBox(Notification, 'bag_full')
+	local bagFull = ns.CreateCheckBox(parent, 'bag_full')
 	bagFull:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local newMail = ns.CreateCheckBox(Notification, 'new_mail')
+	local newMail = ns.CreateCheckBox(parent, 'new_mail')
 	newMail:SetPoint('LEFT', bagFull, 'RIGHT', 160, 0)
 
-	local versionCheck = ns.CreateCheckBox(Notification, 'version_check')
-	versionCheck:SetPoint('TOPLEFT', bagFull, 'BOTTOMLEFT', 0, -8)
+	local rareAlert = ns.CreateCheckBox(parent, 'rare_alert')
+	rareAlert:SetPoint('TOPLEFT', bagFull, 'BOTTOMLEFT', 0, -8)
+
+	local versionCheck = ns.CreateCheckBox(parent, 'version_check')
+	versionCheck:SetPoint('LEFT', rareAlert, 'RIGHT', 160, 0)
 
 
 	local function toggleNotificationOptions()
 		local shown = enable:GetChecked()
 		bagFull:SetShown(shown)
 		newMail:SetShown(shown)
+		rareAlert:SetShown(shown)
 		versionCheck:SetShown(shown)
 	end
 
 	enable:HookScript('OnClick', toggleNotificationOptions)
-	Notification:HookScript('OnShow', toggleNotificationOptions)
+	parent:HookScript('OnShow', toggleNotificationOptions)
 end
 
 
-local function addAutomationOptions()
+local function addAutomationSection()
 	local Automation = FreeUIOptionsFrame.Automation
 	Automation.tab.icon:SetTexture('Interface\\ICONS\\Ability_Siege_Engineer_Magnetic_Crush')
 
@@ -1082,7 +1116,7 @@ local function addAutomationOptions()
 end
 
 
-local function addMapOptions()
+local function addMapSection()
 	local Map = FreeUIOptionsFrame.Map
 	Map.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
 
@@ -1102,16 +1136,13 @@ local function addMapOptions()
 	whoPings:SetPoint('TOPLEFT', miniMap, 'BOTTOMLEFT', 0, -8)
 
 	local microMenu = ns.CreateCheckBox(Map, 'microMenu')
-	microMenu:SetPoint('LEFT', whoPings, 'RIGHT', 160, 0)
+	microMenu:SetPoint('TOPLEFT', whoPings, 'BOTTOMLEFT', 0, -8)
 
 	local expBar = ns.CreateCheckBox(Map, 'expBar')
-	expBar:SetPoint('TOPLEFT', whoPings, 'BOTTOMLEFT', 0, -8)
+	expBar:SetPoint('TOPLEFT', microMenu, 'BOTTOMLEFT', 0, -8)
 
-	local adjustment = ns.AddSubCategory(Map, ns.localization.map.sub_adjustment)
-	adjustment:SetPoint('TOPLEFT', expBar, 'BOTTOMLEFT', 0, -16)
-
-	local minimapScale = ns.CreateNumberSlider(Map, 'minimapScale', 0.5, 1, 0.5, 1, 0.1, true)
-	minimapScale:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
+	local minimapScale = ns.CreateNumberSlider(Map, 'minimapScale', 0.5, 1, 0.5, 1, 0.1, nil, true)
+	minimapScale:SetPoint('LEFT', whoPings, 'RIGHT', 160, -20)
 
 
 	local function toggleMapOptions()
@@ -1122,7 +1153,6 @@ local function addMapOptions()
 		microMenu:SetShown(shown)
 		minimapScale:SetShown(shown)
 		miniMap:SetShown(shown)
-		adjustment:SetShown(shown)
 	end
 
 	enable:HookScript('OnClick', toggleMapOptions)
@@ -1130,7 +1160,7 @@ local function addMapOptions()
 end
 
 
-local function addQuestOptions()
+local function addQuestSection()
 	local Quest = FreeUIOptionsFrame.Quest
 	Quest.tab.icon:SetTexture('Interface\\ICONS\\ABILITY_Rogue_RollTheBones04')
 
@@ -1170,60 +1200,97 @@ local function addQuestOptions()
 end
 
 
-local function addTooltipOptions()
-	local Tooltip = FreeUIOptionsFrame.Tooltip
-	Tooltip.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
+local function addTooltipSection()
+	local parent = FreeUIOptionsFrame.Tooltip
+	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
 
-	local basic = ns.AddSubCategory(Tooltip, ns.localization.tooltip.sub_basic)
-	basic:SetPoint('TOPLEFT', Tooltip.subText, 'BOTTOMLEFT', 0, -8)
+	local basic = ns.AddSubCategory(parent, ns.localization.tooltip.sub_basic)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = ns.CreateCheckBox(Tooltip, 'enable')
+	local enable = ns.CreateCheckBox(parent, 'enable', nil, setupTipFont)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local cursor = ns.CreateCheckBox(Tooltip, 'follow_cursor')
+	local cursor = ns.CreateCheckBox(parent, 'follow_cursor')
 	cursor:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local combatHide = ns.CreateCheckBox(Tooltip, 'hide_in_combat')
+	local combatHide = ns.CreateCheckBox(parent, 'hide_in_combat')
 	combatHide:SetPoint('LEFT', cursor, 'RIGHT', 160, 0)
 
-	local tipIcon = ns.CreateCheckBox(Tooltip, 'icon')
+	local tipIcon = ns.CreateCheckBox(parent, 'tip_icon')
 	tipIcon:SetPoint('TOPLEFT', cursor, 'BOTTOMLEFT', 0, -8)
 
-	local borderColor = ns.CreateCheckBox(Tooltip, 'border_color')
+	local borderColor = ns.CreateCheckBox(parent, 'border_color')
 	borderColor:SetPoint('LEFT', tipIcon, 'RIGHT', 160, 0)
 
-	local hideTitle = ns.CreateCheckBox(Tooltip, 'hide_title')
+	local hideTitle = ns.CreateCheckBox(parent, 'hide_title')
 	hideTitle:SetPoint('TOPLEFT', tipIcon, 'BOTTOMLEFT', 0, -8)
 
-	local hideRealm = ns.CreateCheckBox(Tooltip, 'hide_realm')
+	local hideRealm = ns.CreateCheckBox(parent, 'hide_realm')
 	hideRealm:SetPoint('LEFT', hideTitle, 'RIGHT', 160, 0)
 
-	local hideRank = ns.CreateCheckBox(Tooltip, 'hide_rank')
+	local hideRank = ns.CreateCheckBox(parent, 'hide_rank')
 	hideRank:SetPoint('TOPLEFT', hideTitle, 'BOTTOMLEFT', 0, -8)
 
-	local targetBy = ns.CreateCheckBox(Tooltip, 'target_by')
+	local targetBy = ns.CreateCheckBox(parent, 'target_by')
 	targetBy:SetPoint('LEFT', hideRank, 'RIGHT', 160, 0)
 
-	local linkHover = ns.CreateCheckBox(Tooltip, 'link_hover')
+	local linkHover = ns.CreateCheckBox(parent, 'link_hover')
 	linkHover:SetPoint('TOPLEFT', hideRank, 'BOTTOMLEFT', 0, -8)
 
-	local extraInfo = ns.CreateCheckBox(Tooltip, 'extra_info')
-	extraInfo:SetPoint('LEFT', linkHover, 'RIGHT', 160, 0)
+	local azerite = ns.CreateCheckBox(parent, 'azerite_armor')
+	azerite:SetPoint('LEFT', linkHover, 'RIGHT', 160, 0)
 
-	local auraSource = ns.CreateCheckBox(Tooltip, 'aura_source')
-	auraSource:SetPoint('TOPLEFT', linkHover, 'BOTTOMLEFT', 0, -8)
+	local spec = ns.CreateCheckBox(parent, 'spec_ilvl')
+	spec:SetPoint('TOPLEFT', linkHover, 'BOTTOMLEFT', 0, -8)
 
-	local mountSource = ns.CreateCheckBox(Tooltip, 'mount_source')
-	mountSource:SetPoint('LEFT', auraSource, 'RIGHT', 160, 0)
+	local extraInfo = ns.CreateCheckBox(parent, 'extra_info', nil, setupTipExtra)
+	extraInfo:SetPoint('LEFT', spec, 'RIGHT', 160, 0)
 
-	local spec = ns.CreateCheckBox(Tooltip, 'spec_ilvl')
-	spec:SetPoint('TOPLEFT', auraSource, 'BOTTOMLEFT', 0, -8)
 
-	local azerite = ns.CreateCheckBox(Tooltip, 'azerite_trait')
-	azerite:SetPoint('LEFT', spec, 'RIGHT', 160, 0)
 
-	local pet = ns.CreateCheckBox(Tooltip, 'pet_info')
-	pet:SetPoint('TOPLEFT', spec, 'BOTTOMLEFT', 0, -8)
+
+	local tipFontSide = ns.CreateSidePanel(parent, 'tipFontSide', ns.localization.general.item_level)
+
+	local headerFontSize = ns.CreateNumberSlider(parent, 'header_font_size', 8, 20, 8, 20, 1, nil, true)
+	headerFontSize:SetParent(tipFontSide)
+	headerFontSize:SetPoint('TOP', tipFontSide, 'TOP', 0, -80)
+
+	local normalFontSize = ns.CreateNumberSlider(parent, 'normal_font_size', 8, 20, 8, 20, 1, nil, true)
+	normalFontSize:SetParent(tipFontSide)
+	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -60)
+
+	local backdropAlpha = ns.CreateNumberSlider(parent, 'tip_backdrop_alpha', 0.1, 1, 0.1, 1, 0.1, nil, true)
+	backdropAlpha:SetParent(tipFontSide)
+	backdropAlpha:SetPoint('TOP', normalFontSize, 'BOTTOM', 0, -60)
+
+
+
+
+	local tipExtraSide = ns.CreateSidePanel(parent, 'tipExtraSide', ns.localization.general.item_level)
+
+	local variousID = ns.CreateCheckBox(parent, 'various_id')
+	variousID:SetParent(tipExtraSide)
+	variousID:SetPoint('TOPLEFT', bagFilterSide, 'TOPLEFT', 20, -60)
+
+	local itemCount = ns.CreateCheckBox(parent, 'item_count')
+	itemCount:SetParent(tipExtraSide)
+	itemCount:SetPoint('TOPLEFT', variousID, 'BOTTOMLEFT', 00, -8)
+
+	local itemPrice = ns.CreateCheckBox(parent, 'item_price')
+	itemPrice:SetParent(tipExtraSide)
+	itemPrice:SetPoint('TOPLEFT', itemCount, 'BOTTOMLEFT', 00, -8)
+
+	local auraSource = ns.CreateCheckBox(parent, 'aura_source')
+	auraSource:SetParent(tipExtraSide)
+	auraSource:SetPoint('TOPLEFT', itemPrice, 'BOTTOMLEFT', 00, -8)
+
+	local mountSource = ns.CreateCheckBox(parent, 'mount_source')
+	mountSource:SetParent(tipExtraSide)
+	mountSource:SetPoint('TOPLEFT', auraSource, 'BOTTOMLEFT', 00, -8)
+
+
+
+
 
 
 	local function toggleTooltipOptions()
@@ -1240,32 +1307,48 @@ local function addTooltipOptions()
 		targetBy:SetShown(shown)
 		spec:SetShown(shown)
 		azerite:SetShown(shown)
-		pet:SetShown(shown)
 		auraSource:SetShown(shown)
 		mountSource:SetShown(shown)
 	end
 
 	enable:HookScript('OnClick', toggleTooltipOptions)
-	Tooltip:HookScript('OnShow', toggleTooltipOptions)
+	parent:HookScript('OnShow', toggleTooltipOptions)
 end
 
 
-ns.AddAllOptions = function()
-	addGeneralOptions()
-	addThemeOptions()
-	addNotificationOptions()
-	addAnnouncementOptions()
-	addAutomationOptions()
-	addInfobarOptions()
-	addChatOptions()
-	addAuraOptions()
-	addActionbarOptions()
-	addCooldownOptions()
-	addCombatOptions()
-	addInventoryOptions()
-	addMapOptions()
-	addQuestOptions()
-	addTooltipOptions()
-	addUnitframeOptions()
+ns.AddCategories = function()
+	ns.AddCategory('General')
+	ns.AddCategory('Theme')
+	ns.AddCategory('Notification')
+	ns.AddCategory('Announcement')
+	ns.AddCategory('Automation')
+	ns.AddCategory('Infobar')
+	ns.AddCategory('Chat')
+	ns.AddCategory('Aura')
+	ns.AddCategory('Actionbar')
+	ns.AddCategory('Combat')
+	ns.AddCategory('Inventory')
+	ns.AddCategory('Map')
+	ns.AddCategory('Quest')
+	ns.AddCategory('Tooltip')
+	ns.AddCategory('Unitframe')
+end
+
+ns.AddOptions = function()
+	addGeneralSection()
+	addThemeSection()
+	addNotificationSection()
+	addAnnouncementSection()
+	addAutomationSection()
+	addInfobarSection()
+	addChatSection()
+	addAuraSection()
+	addActionbarSection()
+	addCombatSection()
+	addInventorySection()
+	addMapSection()
+	addQuestSection()
+	addTooltipSection()
+	addUnitframeSection()
 end
 

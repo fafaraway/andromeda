@@ -72,7 +72,7 @@ local function createGearButton(self, name)
 	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture('Interface\\AddOns\\FreeUI\\assets\\textures\\gear_tex')
-	bu.Icon:SetVertexColor(216/255, 198/255, 92/255)
+	bu.Icon:SetVertexColor(.6, .6, .6)
 	bu:SetHighlightTexture('Interface\\AddOns\\FreeUI\\assets\\textures\\gear_tex')
 
 	return bu
@@ -121,12 +121,67 @@ local function checkIsReloadNeeded()
 end
 
 -- Called by every widget to save a value
-local function SaveValue(f, value)
-	if not C.options[f.group] then C.options[f.group] = {} end
-	if not C.options[f.group][f.option] then C.options[f.group][f.option] = {} end
+local function saveValue(f, value)
+	if not C.Options[f.group] then C.Options[f.group] = {} end
+	if not C.Options[f.group][f.option] then C.Options[f.group][f.option] = {} end
 
-	C.options[f.group][f.option] = value -- these are the saved variables
+	C.Options[f.group][f.option] = value -- these are the saved variables
 	C[f.group][f.option] = value -- and this is from the lua options
+end
+
+-- Side panel
+ns.CreateSidePanel = function(parent, name, title)
+	local frame = CreateFrame('Frame', name, parent)
+	frame:SetSize(200, 640)
+	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
+
+    frame:Hide()
+	parent:HookScript('OnHide', function()
+		if frame:IsShown() then frame:Hide() end
+    end)
+
+    frame.tag = name
+
+    frame.header = frame:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
+    frame.header:SetPoint('TOPLEFT', 20, -25)
+    frame.header:SetText('|cffe9c55d'..title..'|r')
+    frame.header:SetShadowColor(0, 0, 0, 1)
+	frame.header:SetShadowOffset(2, -2)
+
+    frame.bg = CreateFrame('Frame', nil, frame)
+    frame.bg:SetSize(180, 540)
+    frame.bg:SetPoint('TOPLEFT', 10, -50)
+
+    frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
+	frame.close:SetPoint('BOTTOM', 0, 6)
+	frame.close:SetSize(80, 24)
+	frame.close:SetText(CLOSE)
+	frame.close:SetScript('OnClick', function()
+		frame:Hide()
+    end)
+    
+	tinsert(ns.buttons, frame.close)
+    tinsert(ns.sidePanels, frame)
+
+	return frame
+end
+
+local function togglePanel(frame)
+	if frame:IsShown() then
+		frame:Hide()
+	else
+		frame:Show()
+	end
+end
+
+ns.ToggleSidePanel = function(name)
+	for _, frame in next, ns.sidePanels do
+		if frame:GetName() == name then
+			togglePanel(frame)
+		else
+			frame:Hide()
+		end
+	end
 end
 
 
@@ -163,7 +218,7 @@ local function toggleChildren(self, checked)
 	end
 end
 
-local function toggle(self)
+local function toggleAll(self)
 	local checked = self:GetChecked()
 
 	if checked then
@@ -172,7 +227,7 @@ local function toggle(self)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
 	end
 
-	SaveValue(self, checked)
+	saveValue(self, checked)
 	if self.children then toggleChildren(self, checked) end
 
 	if self.needsReload then
@@ -184,9 +239,8 @@ local function toggle(self)
 	end
 end
 
-
 -- Check boxes
-ns.CreateCheckBox = function(parent, option, extra, caution)
+ns.CreateCheckBox = function(parent, option, callback, extra, caution, needsReload)
 	local f = CreateFrame('CheckButton', nil, parent.child, 'InterfaceOptionsCheckButtonTemplate')
 	f:SetSize(20, 20)
 	f:SetHitRectInsets(-5, -5, -5, -5)
@@ -208,9 +262,12 @@ ns.CreateCheckBox = function(parent, option, extra, caution)
 		f.Text:SetTextColor(207/255, 38/255, 14/255)
 	end
 
-	f.needsReload = true
+	f.needsReload = needsReload
 
-	f:SetScript('OnClick', toggle)
+	f:SetScript('OnClick', toggleAll)
+	f:HookScript('OnClick', function()
+		if callback then callback() end
+	end)
 
 	f.group = parent.tag
 	f.option = option
@@ -220,7 +277,6 @@ ns.CreateCheckBox = function(parent, option, extra, caution)
 
 	return f
 end
-
 
 -- Radios
 local function toggleRadio(self)
@@ -247,7 +303,7 @@ local function toggleRadio(self)
 
 	PlaySound('856')
 
-	SaveValue(self, self.index)
+	saveValue(self, self.index)
 
 	if self.needsReload then
 		if oldRadioValues[self.group] == nil then
@@ -334,7 +390,7 @@ local function onValueChanged(self, value)
 	end
 
 	if userChangedSlider then
-		SaveValue(self, value)
+		saveValue(self, value)
 
 		if self.needsReload then
 			if self.step < 1 then
@@ -347,9 +403,9 @@ local function onValueChanged(self, value)
 	end
 end
 
-local function createSlider(parent, option, lowText, highText, low, high, step, needsReload)
+local function createSlider(parent, option, lowText, highText, low, high, step, callback, needsReload)
 	local f = CreateFrame('Slider', baseName..option, parent.child, 'OptionsSliderTemplate')
-	
+
 	BlizzardOptionsPanel_Slider_Enable(f)
 
 	f.group = parent.tag
@@ -363,12 +419,12 @@ local function createSlider(parent, option, lowText, highText, low, high, step, 
 	f.text:SetText(ns.localization[strlower(parent.tag)][option] or option)
 	f.lowText:SetText(lowText)
 	f.highText:SetText(highText)
-	
+
 	f.text:SetTextColor(1, 1, 1)
 	f.lowText:SetTextColor(.8, .8, .8)
 	f.highText:SetTextColor(.8, .8, .8)
 
-	f:SetWidth(120)
+	f:SetWidth(140)
 
 	f:SetMinMaxValues(low, high)
 	f:SetObeyStepOnDrag(true)
@@ -380,6 +436,11 @@ local function createSlider(parent, option, lowText, highText, low, high, step, 
 	f.step = step
 
 	f:SetScript('OnValueChanged', onValueChanged)
+
+	f:HookScript("OnValueChanged", function()
+		if callback then callback() end
+	end)
+
 	parent[option] = f
 
 	tinsert(ns.sliders, f)
@@ -405,15 +466,15 @@ local function onSliderEnterPressed(self)
 	self:ClearFocus()
 end
 
-ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, needsReload)
-	local slider = createSlider(parent, option, lowText, highText, low, high, step, needsReload)
+ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, step, callback, needsReload)
+	local slider = createSlider(parent, option, lowText, highText, low, high, step, callback, needsReload)
 
 	local f = CreateFrame('EditBox', baseName..option..'TextInput', slider, 'InputBoxTemplate')
 	f:SetAutoFocus(false)
 	f:SetWidth(36)
 	f:SetHeight(20)
 	f:SetMaxLetters(8)
-	
+
 	f:SetPoint('TOP', slider, 'BOTTOM', 0, -10)
 
 	f.num = f:GetRegions()
@@ -427,9 +488,9 @@ ns.CreateNumberSlider = function(parent, option, lowText, highText, low, high, s
 	f:SetScript('OnEditFocusGained', nil)
 	f:SetScript('OnEditFocusLost', onSliderEnterPressed)
 
+	
+
 	slider.textInput = f
-
-
 
 	return slider
 end
@@ -437,21 +498,22 @@ end
 -- EditBox
 local function onEnterPressed(self)
 	local value = self.valueNumber and tonumber(self:GetText()) or tostring(self:GetText())
-	SaveValue(self, value)
+	saveValue(self, value)
 	self:ClearFocus()
 	old[self] = self.oldValue
 	checkIsReloadNeeded()
 end
 
-ns.CreateEditBox = function(parent, option, needsReload, number)
+ns.CreateEditBox = function(parent, option, needsReload, number, height, width, letters, multiLine, callback)
 	local f = CreateFrame('EditBox', parent:GetName()..option..'TextInput', parent, 'InputBoxTemplate')
 	f:SetAutoFocus(false)
-	f:SetWidth(55)
-	f:SetHeight(20)
-	f:SetMaxLetters(8)
+	f:SetWidth(width or 55)
+	f:SetHeight(height or 20)
+	f:SetMaxLetters(letters or 8)
+	f:SetMultiLine(multiLine)
 	f:SetFontObject(GameFontHighlight)
 
-	f:SetPoint('LEFT', 40, 0)
+	--f:SetPoint('LEFT', 40, 0)
 
 	f.value = ''
 	f.valueNumber = number and true or false
@@ -462,14 +524,18 @@ ns.CreateEditBox = function(parent, option, needsReload, number)
 	f:SetScript('OnEditFocusGained', function() f.value = f:GetText() end)
 	f:SetScript('OnEditFocusLost', onEnterPressed)
 
-	local label = f:CreateFontString(nil, 'OVERLAY', 'GameFontHighlight')
-	label:SetWidth(440)
-	label:SetHeight(20)
-	label:SetJustifyH('LEFT')
-	label:SetPoint('LEFT', f, 'RIGHT', 10, 0)
-	label:SetText(ns.localization[strlower(parent.tag)][option] or option)
+	f:SetScript('OnEnterPressed', function()
+		if callback then callback() end
+	end)
 
-	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or label
+	f.label = f:CreateFontString(nil, 'OVERLAY', 'GameFontHighlight')
+	f.label:SetWidth(width or 55)
+	f.label:SetHeight(20)
+	f.label:SetJustifyH('LEFT')
+	f.label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 0, 0)
+	f.label:SetText(ns.localization[strlower(parent.tag)][option] or option)
+
+	f.tooltipText = ns.localization[strlower(parent.tag)][option..'_tip'] or option
 
 	f:SetScript('OnEnter', function()
 		GameTooltip:SetOwner(f, 'ANCHOR_RIGHT', 5, 5)
@@ -504,7 +570,7 @@ local function setColour()
 
 	currentColourOption:SetBackdropBorderColor(newR, newG, newB)
 	currentColourOption:SetBackdropColor(newR, newG, newB, 0.3)
-	SaveValue(currentColourOption, {newR, newG, newB})
+	saveValue(currentColourOption, {newR, newG, newB})
 
 	checkIsReloadNeeded()
 end
@@ -514,7 +580,7 @@ local function resetColour(previousValues)
 
 	currentColourOption:SetBackdropBorderColor(oldR, oldG, oldB)
 	currentColourOption:SetBackdropColor(oldR, oldG, oldB, 0.3)
-	SaveValue(currentColourOption, {oldR, oldG, oldB})
+	saveValue(currentColourOption, {oldR, oldG, oldB})
 
 	checkIsReloadNeeded()
 end
@@ -576,7 +642,7 @@ end
 -- DropDown
 ns.CreateDropDown = function(parent, option, needsReload, tableValue, keyName)
 	local f = CreateFrame('Frame', parent:GetName()..option..'DropDown', parent, 'UIDropDownMenuTemplate')
-	UIDropDownMenu_SetWidth(f, 80)
+	UIDropDownMenu_SetWidth(f, 100)
 
 	UIDropDownMenu_Initialize(f, function(self)
 		local info = UIDropDownMenu_CreateInfo()
@@ -595,7 +661,7 @@ ns.CreateDropDown = function(parent, option, needsReload, tableValue, keyName)
 		f.selectedValue = newValue
 		local text = keyName and newkey or ns.dropdownList[newValue] or newValue
 		UIDropDownMenu_SetText(f, text)
-		SaveValue(f, newValue)
+		saveValue(f, newValue)
 		old[f] = f.oldValue
 		checkIsReloadNeeded()
 		CloseDropDownMenus()
@@ -608,7 +674,7 @@ ns.CreateDropDown = function(parent, option, needsReload, tableValue, keyName)
 	label:SetWidth(440)
 	label:SetHeight(20)
 	label:SetJustifyH('LEFT')
-	label:SetPoint('LEFT', 150, 4)
+	label:SetPoint('BOTTOMLEFT', f, 'TOPLEFT', 18, -4)
 
 	f.group = parent.tag
 	f.option = option
@@ -621,54 +687,6 @@ ns.CreateDropDown = function(parent, option, needsReload, tableValue, keyName)
 
 	return f
 end
-
--- Side panel
-ns.ToggleSidePanel = function(name)
-	for _, frame in next, ns.sidePanels do
-		if frame:GetName() == name then
-			togglePanel(frame)
-		else
-			frame:Hide()
-		end
-	end
-end
-
-ns.CreateSidePanel = function(parent, name, title)
-	local frame = CreateFrame('Frame', name, parent)
-	frame:SetSize(200, 640)
-	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
-
-    frame:Hide()
-	parent:HookScript('OnHide', function()
-		if frame:IsShown() then frame:Hide() end
-    end)
-
-    frame.tag = name
-
-    frame.header = frame:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
-    frame.header:SetPoint('TOPLEFT', 20, -25)
-    frame.header:SetText('|cffe9c55d'..title..'|r')
-    frame.header:SetShadowColor(0, 0, 0, 1)
-	frame.header:SetShadowOffset(2, -2)
-
-    frame.bg = CreateFrame('Frame', nil, frame)
-    frame.bg:SetSize(180, 540)
-    frame.bg:SetPoint('TOPLEFT', 10, -50)
-
-    frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
-	frame.close:SetPoint('BOTTOM', 0, 6)
-	frame.close:SetSize(80, 24)
-	frame.close:SetText(CLOSE)
-	frame.close:SetScript('OnClick', function()
-		frame:Hide()
-    end)
-    
-	tinsert(ns.buttons, frame.close)
-    tinsert(ns.sidePanels, frame)
-
-	return frame
-end
-
 
 
 -- [[ Categories and tabs ]]
@@ -820,7 +838,7 @@ local function changeProfile()
 		end
 	end
 
-	C.options = profile
+	C.Options = profile
 end
 
 local function displaySettings()
@@ -871,21 +889,21 @@ f:SetScript('OnEvent', function()
 	createOptionsFrame(baseName)
 
 	ns.AddCategories()
-	ns.AddAllOptions()
+	ns.AddOptions()
 
 
-	StaticPopupDialogs['FREEUI_RESET'] = {
+	--[[ StaticPopupDialogs['FREEUI_RESET'] = {
 		text = ns.localization.misc.reset_check,
 		button1 = ACCEPT,
 		button2 = CANCEL,
 		OnAccept = function()
-			FreeUIGlobalConfig = {}
-			FreeUIConfig = {}
+			FreeUIConfigsGlobal = {}
+			FreeUIConfigs = {}
 			FreeUIOptionsGlobal[realm][name] = false
 			FreeUIOptions = {}
 			FreeUIOptionsPerChar = {}
 			
-			C.options = FreeUIOptions
+			C.Options = FreeUIOptions
 			
 			ReloadUI()
 		end,
@@ -929,7 +947,7 @@ f:SetScript('OnEvent', function()
 		timeout = 0,
 		whileDead = 1,
 		hideOnEscape = true,
-	}
+	} ]]
 
 	F.CreateMF(FreeUIOptionsFrame)
 	F.CreateBDFrame(FreeUIOptionsFrame, nil, true)

@@ -39,7 +39,7 @@ end
 function INFOBAR:SpecTalent()
 	if not cfg.spec then return end
 
-	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 200, function(self, button)
+	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 300, function(self, button)
 		local specIndex = GetSpecialization()
 		if not specIndex then return end
 
