@@ -1,48 +1,23 @@
-# name: "tagged-release"
-
-# on:
-#   push:
-#     branches:
-#       - "develop"
-
-# jobs:
-#   pre-release:
-#     name: "Tagged Release"
-#     runs-on: "ubuntu-latest"
-
-#     steps:
-#       # ...
-#       - name: "Build & test"
-#         run: |
-#           echo "done!"
-
-#       - uses: "marvinpinto/action-automatic-releases@latest"
-#         with:
-#           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-#           automatic_release_tag: "latest"
-#           prerelease: false
-
-
-
-name: Release
+name: "tagged-release"
 
 on:
   push:
     branches:
-      - "develop"
+      - "BfA"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  pre-release:
+    name: "Tagged Release"
+    runs-on: "ubuntu-latest"
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Generate Changelog
+      # ...
+      - name: "Build & test"
         run: |
           echo "done!"
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
