@@ -1,4 +1,30 @@
-name: "tagged-release"
+# name: "tagged-release"
+
+# on:
+#   push:
+#     branches:
+#       - "develop"
+
+# jobs:
+#   pre-release:
+#     name: "Tagged Release"
+#     runs-on: "ubuntu-latest"
+
+#     steps:
+#       # ...
+#       - name: "Build & test"
+#         run: |
+#           echo "done!"
+
+#       - uses: "marvinpinto/action-automatic-releases@latest"
+#         with:
+#           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#           automatic_release_tag: "latest"
+#           prerelease: false
+
+
+
+name: Release
 
 on:
   push:
@@ -6,18 +32,18 @@ on:
       - "develop"
 
 jobs:
-  pre-release:
-    name: "Tagged Release"
-    runs-on: "ubuntu-latest"
-
+  build:
+    runs-on: ubuntu-latest
     steps:
-      # ...
-      - name: "Build & test"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Generate Changelog
         run: |
           echo "done!"
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: false
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        # with:
+        #   body_path: ${{ github.workflow }}-CHANGELOG.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
