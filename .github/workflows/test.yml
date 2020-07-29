@@ -34,6 +34,8 @@ name: "tagged-release"
 
 on:
   push:
+    tags:        
+      - '*'
     branches:
       - "develop"
 
