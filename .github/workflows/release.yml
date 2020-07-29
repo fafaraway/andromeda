@@ -21,10 +21,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # tag_name: ${{ github.ref }}
-          # release_name: Release ${{ github.ref }}
-          # body: |
-          #   Changes in this Release
-          #   - First Change
-          #   - Second Change
+          release_name: $PREVIOUS_TAG
+          body: |
+            ## What’s Changed
+
+            $CHANGES
           draft: false
-          prerelease: true
+          prerelease: false
