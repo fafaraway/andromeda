@@ -13,11 +13,11 @@ Minimalistic aesthetic and practical.
 *  https://www.youtube.com/watch?v=nD-rWROl0YU
 
 ## Commands
-*  `/free`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list all available commands
-*  `/free install`&nbsp;&nbsp;&nbsp;open install panel
-*  `/free config`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;open config panel
-*  `/free unlock`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unlock UI elements
-*  `/free reset`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reset all saved options data
+*  `/free` list all available commands
+*  `/free install` open install panel
+*  `/free config` open config panel
+*  `/free unlock` unlock UI elements
+*  `/free reset` reset all saved options data
 
 ## Recommended Addons
 *  [DBM](https://github.com/DeadlyBossMods/DeadlyBossMods)
