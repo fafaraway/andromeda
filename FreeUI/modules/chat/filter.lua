@@ -2,7 +2,7 @@ local F, C = unpack(select(2, ...))
 local CHAT, cfg = F:GetModule('Chat'), C.Chat
 
 
-local strfind, strmatch, gsub = string.find, string.match, string.gsub
+local strfind, strmatch, gsub, strrep = string.find, string.match, string.gsub, string.rep
 local pairs, ipairs, tonumber = pairs, ipairs, tonumber
 local min, max, tremove = math.min, math.max, table.remove
 local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGuildMember, C_FriendList.IsFriend, IsGUIDInGroup, C_Timer.After
@@ -16,7 +16,7 @@ local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
 
 
 -- Filter Chat symbols
-local msgSymbols = {"`", "～", "＠", "＃", "^", "＊", "！", "？", "。", "|", " ", "—", "——", "￥", "’", "‘", "“", "”", "【", "】", "『", "』", "《", "》", "〈", "〉", "（", "）", "〔", "〕", "、", "，", "：", ",", "_", "/", "~"}
+local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '|', ' ', '—', '——', '￥', '’', '‘', '“', '”', '【', '】', '『', '』', '《', '》', '〈', '〉', '（', '）', '〔', '〕', '、', '，', '：', ',', '_', '/', '~'}
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
@@ -52,7 +52,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
 		return
 	end
 
-	if cfg.blockStranger and event == "CHAT_MSG_WHISPER" then return true end
+	if cfg.blockStranger and event == 'CHAT_MSG_WHISPER' then return true end
 
 	if C.BadBoys[name] and C.BadBoys[name] >= 5 then return true end
 
@@ -165,29 +165,36 @@ local function isItemHasLevel(link)
 	end
 end
 
-local function isItemHasGem(link)
-	local stats = GetItemStats(link)
-	for index in pairs(stats) do
-		if strfind(index, "EMPTY_SOCKET_") then
-			return "|TInterface\\ItemSocketingFrame\\UI-EmptySocket-Prismatic:0|t"
-		end
-	end
-	return ""
+local function GetSocketTexture(socket, count)
+	return strrep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-'..socket..':0|t', count)
 end
 
+local function isItemHasGem(link)
+	local text = ''
+	local stats = GetItemStats(link)
+	for stat, count in pairs(stats) do
+		local socket = strmatch(stat, 'EMPTY_SOCKET_(%S+)')
+		if socket then
+			text = text..GetSocketTexture(socket, count)
+		end
+	end
+	return text
+end
+
+local corruptedString = '|T3004126:0:0:0:0:64:64:5:59:5:59|t'
 local function isItemCorrupted(link)
-	return IsCorruptedItem(link) and "|T3004126:0:0:0:0:64:64:5:59:5:59|t" or ""
+	return IsCorruptedItem(link) and corruptedString or ''
 end
 
 local itemCache = {}
 local function convertItemLevel(link)
 	if itemCache[link] then return itemCache[link] end
 
-	local itemLink = strmatch(link, "|Hitem:.-|h")
+	local itemLink = strmatch(link, '|Hitem:.-|h')
 	if itemLink then
 		local name, itemLevel = isItemHasLevel(itemLink)
 		if name and itemLevel then
-			link = gsub(link, "|h%[(.-)%]|h", "|h["..name.."("..itemLevel..")]|h"..isItemCorrupted(itemLink)..isItemHasGem(itemLink))
+			link = gsub(link, '|h%[(.-)%]|h', '|h['..name..'('..itemLevel..')]|h'..isItemCorrupted(itemLink)..isItemHasGem(itemLink))
 			itemCache[link] = link
 		end
 	end
@@ -195,7 +202,7 @@ local function convertItemLevel(link)
 end
 
 function CHAT:UpdateChatItemLevel(_, msg, ...)
-	msg = gsub(msg, "(|Hitem:%d+:.-|h.-|h)", convertItemLevel)
+	msg = gsub(msg, '(|Hitem:%d+:.-|h.-|h)', convertItemLevel)
 	return false, msg, ...
 end
 
@@ -221,45 +228,45 @@ end
 function CHAT:ChatFilter()
 	if cfg.filters then
 		self:UpdateFilterList()
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", self.UpdateChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", self.UpdateChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", self.UpdateChatFilter)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_TEXT_EMOTE", self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', self.UpdateChatFilter)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_TEXT_EMOTE', self.UpdateChatFilter)
 	end
 
 	if cfg.blockAddonSpam then
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_EMOTE", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", self.UpdateAddOnBlocker)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.UpdateAddOnBlocker)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateAddOnBlocker)
 	end
 
 	hooksecurefunc(BNToastFrame, 'ShowToast', self.BlockTrashClub)
 
 	if cfg.itemLinks then
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_LOOT", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_SAY", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_RAID_LEADER", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_PARTY_LEADER", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_GUILD", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_BATTLEGROUND", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER_INFORM', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_GUILD', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_BATTLEGROUND', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.UpdateChatItemLevel)
 	end
 
 	F:RegisterEvent('PLAYER_ENTERING_WORLD', isPlayerOnIslands)
