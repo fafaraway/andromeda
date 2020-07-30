@@ -9,9 +9,12 @@ local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentI
 local BAGSLOT, BANK = BAGSLOT, BANK
 
 local mountCache = {}
-for _, mountID in ipairs(C_MountJournal.GetMountIDs()) do
-	mountCache[select(2, C_MountJournal.GetMountInfoByID(mountID))] = mountID
-end
+
+F:RegisterEvent('PLAYER_LOGIN', function()
+	for _, mountID in ipairs(C_MountJournal.GetMountIDs()) do
+		MountCache[select(2, C_MountJournal.GetMountInfoByID(mountID))] = mountID
+	end
+end)
 
 local types = {
 	spell = L['TOOLTIP_ID_SPELL'],
