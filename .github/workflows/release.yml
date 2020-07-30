@@ -1,23 +1,32 @@
-name: "tagged-release"
+name: Release
 
 on:
   push:
-    branches:
-      - "BfA"
+    tags:
+    - '*'
 
 jobs:
-  pre-release:
-    name: "Tagged Release"
-    runs-on: "ubuntu-latest"
-
+  release:
+    runs-on: ubuntu-latest
     steps:
-      # ...
-      - name: "Build & test"
-        run: |
-          echo "done!"
 
-      - uses: "marvinpinto/action-automatic-releases@latest"
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@v0.4.1
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          myToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
           prerelease: false
