@@ -1,11 +1,13 @@
+#@retail@
 ## Interface: 80300
+#@end-retail@
+## Version: @project-version@
 ## Title: |cffffffffFree|r|cffb2b2b2UI|r
 ## Notes: A user interface replacement for World of Warcraft, minimalistic aesthetic and practical.
 ## Author: Haleth, Solor
-## Version: 80300.1
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
-## OptionalDeps: FreeUI_Options, WeakAuras, Skada, DBM-Core, DBM-GUI
+## OptionalDeps: WeakAuras, Skada, DBM-Core, DBM-GUI
 ## SavedVariables: FreeUIConfigsGlobal
 ## SavedVariablesPerCharacter: FreeUIConfigs
 
