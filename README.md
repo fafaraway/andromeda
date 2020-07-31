@@ -1,6 +1,6 @@
 ![logo](https://i.imgur.com/G2qQDW3.png "logo")
 
-[![discord](https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat "discord")](https://discord.gg/Uu28KQq) ![WOW support](https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat "ShadowLands") ![Release](https://img.shields.io/github/workflow/status/Solor/FreeUI/Release) ![Date](https://img.shields.io/github/release-date/Solor/FreeUI "release date")
+[![discord](https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat "discord")](https://discord.gg/Uu28KQq) ![WOW support](https://img.shields.io/badge/WOW-ShadowLands-orange?style=flat "ShadowLands") ![Release](https://img.shields.io/github/workflow/status/Solor/FreeUI/Release) ![Release version](https://img.shields.io/github/v/release/Solor/FreeUI "Release version") ![Date](https://img.shields.io/github/release-date/Solor/FreeUI?label=date "release date")
 
 
 ## Abstract
