@@ -1,0 +1,6 @@
+package-as: FreeUI
+
+ignore:
+  - *.code-workspace
+  - !BaudErrorFrame
+  - FreeUI_Options
