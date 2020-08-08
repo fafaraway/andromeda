@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local THEME, cfg = F:GetModule("Theme"), C.Theme
+local THEME = F:GetModule("Theme")
 
 
 function THEME:DetectConfliction()
@@ -16,7 +16,7 @@ function THEME:LoadDefaultSkins()
 	end
 	wipe(C.BlizzThemes)
 
-	if not cfg.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	for addonName, func in pairs(C.Themes) do
 		local isLoaded, isFinished = IsAddOnLoaded(addonName)
@@ -37,7 +37,7 @@ end
 
 
 function THEME:CursorTrail()
-	if not cfg.cursor_trail then return end
+	if not FreeUIConfigs['theme']['cursor_trail'] then return end
 
 	local f = CreateFrame('Frame', nil, UIParent);
 	f:SetFrameStrata('TOOLTIP');
@@ -73,7 +73,7 @@ function THEME:CursorTrail()
 end
 
 function THEME:Vignetting()
-	if not cfg.vignetting then return end
+	if not FreeUIConfigs['theme']['vignetting'] then return end
 
 	local f = CreateFrame('Frame')
 	f:SetPoint('TOPLEFT')
@@ -84,7 +84,7 @@ function THEME:Vignetting()
 	f.tex:SetTexture(C.Assets.vig_tex)
 	f.tex:SetAllPoints(f)
 
-	f:SetAlpha(cfg.vignetting_alpha)
+	f:SetAlpha(FreeUIConfigs['theme']['vignetting_alpha'])
 end
 
 
@@ -100,7 +100,7 @@ function THEME:OnLogin()
 	self:ReskinPGF()
 	self:ReskinSkada()
 
-	
+
 end
 
 

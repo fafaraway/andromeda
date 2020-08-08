@@ -4,7 +4,6 @@
 	<Script file='constants.lua'/>
 	<Script file='profiles.lua'/>
 	<Script file='functions.lua'/>
-	<Script file='gui.lua'/>
 	<Script file='install.lua'/>
 	<Script file='mover.lua'/>
 	<Script file='slashcmd.lua'/>

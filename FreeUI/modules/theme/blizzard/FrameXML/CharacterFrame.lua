@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	local r, g, b = C.r, C.g, C.b
 
@@ -93,12 +93,12 @@ tinsert(C.BlizzThemes, function()
 
 		local arrow = popout:CreateTexture(nil, "OVERLAY")
 		if slot.verticalFlyout then
-			arrow:SetSize(13, 8)
-			arrow:SetTexture(C.Assets.arrowDown)
+			arrow:SetSize(14, 14)
+			F.SetupArrow(arrow, "down")
 			arrow:SetPoint("TOP", slot, "BOTTOM", 0, 1)
 		else
-			arrow:SetSize(8, 14)
-			arrow:SetTexture(C.Assets.arrowRight)
+			arrow:SetSize(14, 14)
+			F.SetupArrow(arrow, "right")
 			arrow:SetPoint("LEFT", slot, "RIGHT", -1, 0)
 		end
 		popout.arrow = arrow

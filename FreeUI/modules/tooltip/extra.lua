@@ -131,16 +131,7 @@ function TOOLTIP:SetItemID()
 	end
 end
 
-function TOOLTIP:AuraSource(...)
-	local unitCaster = select(7, UnitAura(...))
-	if unitCaster then
-		local name = GetUnitName(unitCaster, true)
-		local hexColor = F.HexRGB(F.UnitColor(unitCaster))
 
-		if name then TOOLTIP.AddLineForID(self, hexColor..name, L['TOOLTIP_AURA_FROM'], true) end
-		self:Show()
-	end
-end
 
 function TOOLTIP:MountSource(...)
 	local id = select(10, UnitAura(...))
@@ -250,10 +241,6 @@ function TOOLTIP:ExtraInfo()
 
 	if cfg.item_price then
 		GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.ItemPrice)
-	end
-
-	if cfg.aura_source then
-		hooksecurefunc(GameTooltip, 'SetUnitAura', TOOLTIP.AuraSource)
 	end
 
 	if cfg.mount_source then

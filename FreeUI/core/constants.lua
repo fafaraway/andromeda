@@ -17,7 +17,7 @@ C.MyFaction = select(2, UnitFactionGroup('player'))
 C.MyRace = select(2, UnitRace('player'))
 C.MyRealm = GetRealmName()
 C.Version = GetAddOnMetadata('FreeUI', 'Version')
-C.Support = GetAddOnMetadata("FreeUI", "X-Support")
+C.Support = GetAddOnMetadata('FreeUI', 'X-Support')
 C.Client = GetLocale()
 C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'
@@ -40,10 +40,8 @@ C['Assets'] = {
 	['tick_tex'] = C.AssetsPath..'textures\\tick_tex',
 	['stripe_tex'] = C.AssetsPath..'textures\\stripe_tex',
 
-	['arrow_up'] = C.AssetsPath..'textures\\arrow-up-active',
-	['arrow_down'] = C.AssetsPath..'textures\\arrow-down-active',
-	['arrow_left'] = C.AssetsPath..'textures\\arrow-left-active',
-	['arrow_right'] = C.AssetsPath..'textures\\arrow-right-active',
+	['close_tex'] = C.AssetsPath..'textures\\close_tex',
+	['arrow_tex'] = C.AssetsPath..'textures\\arrow_tex',
 
 	['button_normal']  = C.AssetsPath..'button\\normal',
 	['button_flash']   = C.AssetsPath..'button\\flash',
@@ -61,7 +59,7 @@ C['Assets'] = {
 	['logo'] = C.AssetsPath..'textures\\logo_grey',
 	['logo_small'] = C.AssetsPath..'textures\\logo_small',
 
-	
+
 
 	['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
 	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',

@@ -252,7 +252,7 @@ end
 
 function TOOLTIP:TargetedInfo()
 	if not cfg.target_by then return end
-	
+
 	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end
 
@@ -266,7 +266,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
-			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.General.ui_gap, 260}, 240, 120)
+			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], 260}, 240, 120)
 		end
 		self:SetOwner(parent, 'ANCHOR_NONE')
 		self:ClearAllPoints()
@@ -397,7 +397,7 @@ end
 
 function TOOLTIP:OnLogin()
 	GameTooltip.StatusBar = GameTooltipStatusBar
-	
+
 	local ssbc = CreateFrame('StatusBar').SetStatusBarColor
 	GameTooltipStatusBar._SetStatusBarColor = ssbc
 	function GameTooltipStatusBar:SetStatusBarColor(...)
@@ -440,6 +440,7 @@ function TOOLTIP:OnLogin()
 	self:ExtraInfo()
 	self:TargetedInfo()
 	self:AzeriteArmor()
+	self:ShowPvPRating()
 end
 
 

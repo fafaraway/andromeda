@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	local r, g, b = C.r, C.g, C.b
 
@@ -69,8 +69,8 @@ tinsert(C.BlizzThemes, function()
 			arrowButton:SetHighlightTexture("")
 
 			local tex = arrowButton:CreateTexture(nil, "ARTWORK")
-			tex:SetTexture(C.Assets.arrowDown)
-			tex:SetSize(8, 8)
+			F.SetupArrow(tex, "down")
+			tex:SetSize(14, 14)
 			tex:SetPoint("CENTER")
 			arrowButton.bgTex = tex
 

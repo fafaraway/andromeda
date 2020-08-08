@@ -1,13 +1,13 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	local function ReskinFont(font, size, flag, style, shadow, color)
 		local oldSize = select(2, font:GetFont())
 		size = size or oldSize
 		font:SetFont(header and C.Assets.Fonts.Header or C.Assets.Fonts.Normal, size, flag and "OUTLINE")
-		
+
 		if style == 'HEADER' then
 			font:SetFont(C.Assets.Fonts.Header, size, flag and "OUTLINE")
 		elseif style == 'NUMBER' then

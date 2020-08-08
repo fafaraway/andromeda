@@ -1,8 +1,15 @@
 local F, C = unpack(select(2, ...))
 
 
+C.DevsList = {
+	['呂碧城-白银之手'] = true,
+}
+local function isDeveloper()
+	return C.DevsList[C.MyName..'-'..C.MyRealm]
+end
+C.isDeveloper = isDeveloper()
 
-C.isDeveloper = true
+
 if not C.isDeveloper then return end
 
 C.Actionbar.bar1_visibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
@@ -16,12 +23,12 @@ C.Unitframe.target_height = 7
 
 
 -- Override fonts
-C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
+C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\out.ttf'
 C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-C.Assets.Fonts.Chat   = 'Fonts\\New folder\\Naowh.ttf'
+C.Assets.Fonts.Chat   = 'Fonts\\New folder\\out.ttf'
 C.Assets.Fonts.Number = 'Fonts\\FreeUI\\sarasa_tccc.ttf'
 
-STANDARD_TEXT_FONT = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
+STANDARD_TEXT_FONT = 'Fonts\\FreeUI\\out.ttf'
 UNIT_NAME_FONT     = 'Fonts\\FreeUI\\header.ttf'
 DAMAGE_TEXT_FONT   = 'Fonts\\FreeUI\\damage.ttf'
 

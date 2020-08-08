@@ -11,10 +11,6 @@ FreeUIConfigsGlobal, FreeUIConfigs = {}, {}
 
 local F, C, L = unpack(engine)
 
-local pairs, next, tinsert = pairs, next, table.insert
-local min, max = math.min, math.max
-local CombatLogGetCurrentEventInfo, GetPhysicalScreenSize = CombatLogGetCurrentEventInfo, GetPhysicalScreenSize
-
 
 -- Events
 local events = {}
@@ -83,7 +79,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-	local scale = GetBestScale() * C.General.ui_scale
+	local scale = GetBestScale() * FreeUIConfigsGlobal['ui_scale']
 
 	if init then
 		local pixel = 1

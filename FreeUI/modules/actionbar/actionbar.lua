@@ -10,7 +10,6 @@ local numPet = NUM_PET_ACTION_SLOTS
 local numStance = NUM_STANCE_SLOTS
 local numExtra = 1
 local buttonList = {}
-local gap = C.General.ui_gap
 
 
 function ACTIONBAR:CreateBar1()
@@ -18,7 +17,7 @@ function ACTIONBAR:CreateBar1()
 	frame:Width(numNormal*buttonSizeNormal + (numNormal-1)*margin + 2*padding)
 	frame:Height(buttonSizeNormal + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeUIConfigsGlobal['ui_gap']}
 
 	for i = 1, numNormal do
 		local button = _G['ActionButton'..i]
@@ -74,7 +73,7 @@ function ACTIONBAR:CreateBar2()
 	frame:Width(numNormal*buttonSizeNormal + (numNormal-1)*margin + 2*padding)
 	frame:Height(buttonSizeNormal + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap+buttonSizeNormal+padding}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeUIConfigsGlobal['ui_gap']+buttonSizeNormal+padding}
 
 	MultiBarBottomLeft:SetParent(frame)
 	MultiBarBottomLeft:EnableMouse(false)
@@ -94,7 +93,7 @@ function ACTIONBAR:CreateBar2()
 
 	if cfg.bar2 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-	
+
 		if cfg.bar2_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
@@ -118,9 +117,9 @@ function ACTIONBAR:CreateBar3()
 	end
 
 	if cfg.bar3_divide then
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap}
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeUIConfigsGlobal['ui_gap']}
 	else
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap+2*(buttonSizeNormal+2*padding)}
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeUIConfigsGlobal['ui_gap']+2*(buttonSizeNormal+2*padding)}
 	end
 
 	MultiBarBottomRight:SetParent(frame)
@@ -150,7 +149,7 @@ function ACTIONBAR:CreateBar3()
 
 	if cfg.bar3 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-		
+
 		if cfg.bar3_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
@@ -192,7 +191,7 @@ function ACTIONBAR:CreateBar4()
 
 	if cfg.bar4 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-		
+
 		if cfg.bar4_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
@@ -232,7 +231,7 @@ function ACTIONBAR:CreateBar5()
 
 	if cfg.bar5 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-		
+
 		if cfg.bar5_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
@@ -249,7 +248,7 @@ function ACTIONBAR:CreatePetbar()
 	frame:Width(numPet*buttonSizeSmall + (numPet-1)*(margin+2) + 2*padding)
 	frame:Height(buttonSizeSmall + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, gap+2*(buttonSizeNormal+2*padding)}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeUIConfigsGlobal['ui_gap']+2*(buttonSizeNormal+2*padding)}
 
 	PetActionBarFrame:SetParent(frame)
 	PetActionBarFrame:EnableMouse(false)
@@ -274,7 +273,7 @@ function ACTIONBAR:CreatePetbar()
 
 	if cfg.pet_bar then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
-	
+
 		if cfg.pet_bar_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end

@@ -25,6 +25,8 @@ function UNITFRAME:AddBackDrop(self)
 
 	self.Highlight = highlight ]]
 
+	self:RegisterForClicks('AnyUp')
+
 	F.CreateTex(self)
 
 	local bg = F.CreateBDFrame(self)
@@ -146,7 +148,7 @@ function UNITFRAME:OnLogin()
 	if not cfg.enable_module then return end
 
 	F:SetSmoothingAmount(.3)
-	
+
 	self:SpawnPlayer()
 	self:SpawnPet()
 	self:SpawnTarget()
@@ -154,7 +156,7 @@ function UNITFRAME:OnLogin()
 	self:SpawnFocus()
 	self:SpawnFocusTarget()
 
-	
+
 
 	if cfg.boss then
 		self:SpawnBoss()

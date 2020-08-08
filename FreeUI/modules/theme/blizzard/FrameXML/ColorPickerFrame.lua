@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	F.StripTextures(ColorPickerFrame.Header)
 	ColorPickerFrame.Header:ClearAllPoints()

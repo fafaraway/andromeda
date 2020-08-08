@@ -1,15 +1,15 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule("Theme")
+local THEME = F:GetModule('Theme')
 
 
 function THEME:ReskinSkada()
-	if not FreeUIConfigsGlobal.reskin_skada then return end
-	if not IsAddOnLoaded("Skada") then return end
+	if not FreeUIConfigs['theme']['reskin_skada'] then return end
+	if not IsAddOnLoaded('Skada') then return end
 
 	local pairs, ipairs, tinsert = pairs, ipairs, table.insert
 	local Skada = Skada
 	local barSpacing = 0
-	local barmod = Skada.displays["bar"]
+	local barmod = Skada.displays['bar']
 	local function StripOptions(options)
 		-- options.baroptions.args.barspacing = nil
 		-- options.titleoptions.args.texture = nil
@@ -29,7 +29,7 @@ function THEME:ReskinSkada()
 	end
 
 	for _, options in pairs(Skada.options.args.windows.args) do
-		if options.type == "group" then
+		if options.type == 'group' then
 			StripOptions(options.args)
 		end
 	end
@@ -52,15 +52,15 @@ function THEME:ReskinSkada()
 		end
 		window.bg:ClearAllPoints()
 		if win.db.enabletitle then
-			window.bg:SetPoint("TOPLEFT", window.button, "TOPLEFT", -3, 3)
+			window.bg:SetPoint('TOPLEFT', window.button, 'TOPLEFT', -3, 3)
 		else
-			window.bg:SetPoint("TOPLEFT", window, "TOPLEFT", -3, 3)
+			window.bg:SetPoint('TOPLEFT', window, 'TOPLEFT', -3, 3)
 		end
-		window.bg:SetPoint("BOTTOMRIGHT", window, "BOTTOMRIGHT", 3, -3)
+		window.bg:SetPoint('BOTTOMRIGHT', window, 'BOTTOMRIGHT', 3, -3)
 		window.button:SetBackdropColor(1, 1, 1, 0)
-		window.button:SetFrameStrata("MEDIUM")
+		window.button:SetFrameStrata('MEDIUM')
 		window.button:SetFrameLevel(5)
-		window:SetFrameStrata("MEDIUM")
+		window:SetFrameStrata('MEDIUM')
 	end
 
 	local function EmbedWindow(window, width, barheight, height, ofsx, ofsy)
@@ -73,7 +73,7 @@ function THEME:ReskinSkada()
 		window.db.spark = false
 		window.db.barslocked = true
 		window.bargroup:ClearAllPoints()
-		window.bargroup:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", ofsx, ofsy)
+		window.bargroup:SetPoint('BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', ofsx, ofsy)
 		barmod.ApplySettings(barmod, window)
 	end
 

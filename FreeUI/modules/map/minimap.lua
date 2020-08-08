@@ -136,7 +136,7 @@ local function InstanceType()
 				f.text:SetText('HScen')
 			elseif difficulty == 12 or difficulty == 38 then
 				f.text:SetText('Scen')
-			elseif difficulty == 40 then 
+			elseif difficulty == 40 then
 				f.text:SetText('MScen')
 			elseif difficulty == 14 then
 				f.text:SetText('N:'..numplayers)
@@ -376,7 +376,7 @@ function MAP:Minimap()
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint('CENTER')
 
-	local mover = F.Mover(holder, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.General.ui_gap, C.General.ui_gap*minimapScale}, 256*minimapScale, 190*minimapScale)
+	local mover = F.Mover(holder, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap']*minimapScale}, 256*minimapScale, 190*minimapScale)
 	holder:SetPoint('CENTER', mover)
 	holder.mover = mover
 

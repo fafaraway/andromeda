@@ -232,7 +232,7 @@ function INVENTORY:CreateRestoreButton(f)
 		FreeUIConfigs['ui_anchor_temp'][f.bank:GetName()] = nil
 		FreeUIConfigs['ui_anchor_temp'][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
-		f.main:SetPoint('BOTTOMRIGHT', -C.General.ui_gap, C.General.ui_gap)
+		f.main:SetPoint('BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'])
 		f.bank:ClearAllPoints()
 		f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
 		f.reagent:ClearAllPoints()
@@ -396,7 +396,7 @@ function INVENTORY:CreateSellButton()
 			self.Icon:SetVertexColor(.5, .5, .5, 1)
 			self.text = nil
 		end
-		
+
 		bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIConfigsGlobal['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 		self:GetScript('OnEnter')(self)
 	end)
@@ -754,7 +754,7 @@ function INVENTORY:OnLogin()
 	Backpack:SetScale(bagsScale)
 	Backpack:HookScript('OnShow', function() PlaySound(SOUNDKIT.IG_BACKPACK_OPEN) end)
 	Backpack:HookScript('OnHide', function() PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE) end)
-	
+
 	INVENTORY.Bags = Backpack
 	INVENTORY.BagsType = {}
 	INVENTORY.BagsType[0] = 0	-- backpack
@@ -769,7 +769,7 @@ function INVENTORY:OnLogin()
 
 		f.main = MyContainer:New('Main', {Columns = bagsWidth, Bags = 'bags'})
 		f.main:SetFilter(filters.onlyBags, true)
-		f.main:SetPoint('BOTTOMRIGHT', -C.General.ui_gap, C.General.ui_gap)
+		f.main:SetPoint('BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'])
 
 		f.junk = MyContainer:New('Junk', {Columns = bagsWidth, Parent = f.main})
 		f.junk:SetFilter(filters.bagsJunk, true)
@@ -1109,7 +1109,7 @@ function INVENTORY:OnLogin()
 			buttons[8] = INVENTORY.CreateCustomJunkButton(self)
 			buttons[9] = INVENTORY.CreateDeleteButton(self)
 			buttons[10] = INVENTORY.CreateSearchButton(self)
-			
+
 		elseif name == 'Bank' then
 			INVENTORY.CreateBagBar(self, settings, 7)
 			buttons[2] = INVENTORY.CreateReagentButton(self, f)

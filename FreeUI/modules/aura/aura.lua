@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA, cfg = F:GetModule('Aura'), C.Aura
+local AURA = F:GetModule('Aura')
 
 
 local _G = getfenv(0)
@@ -7,26 +7,24 @@ local format, floor, strmatch, select, unpack = format, floor, strmatch, select,
 local DebuffTypeColor = _G.DebuffTypeColor
 local UnitAura, GetTime = UnitAura, GetTime
 local GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo = GetInventoryItemQuality, GetInventoryItemTexture, GetItemQualityColor, GetWeaponEnchantInfo
-local margin, offset, settings = cfg.margin, cfg.offset
-
-
+local settings
 
 
 function AURA:OnLogin()
-	if not cfg.enable then return end
-	
+	if not FreeUIConfigs['aura']['enable_aura'] then return end
+
 	settings = {
 		Buffs = {
-			size = cfg.buffSize,
-			wrapAfter = cfg.buffsPerRow,
+			size = FreeUIConfigs['aura']['buff_size'],
+			wrapAfter = FreeUIConfigs['aura']['buffs_per_row'],
 			maxWraps = 3,
-			reverseGrow = cfg.reverseBuffs,
+			reverseGrow = FreeUIConfigs['aura']['reverse_buffs'],
 		},
 		Debuffs = {
-			size = cfg.debuffSize,
-			wrapAfter = cfg.debuffsPerRow,
+			size = FreeUIConfigs['aura']['debuff_size'],
+			wrapAfter = FreeUIConfigs['aura']['debuffs_per_row'],
 			maxWraps = 1,
-			reverseGrow = cfg.reverseDebuffs,
+			reverseGrow = FreeUIConfigs['aura']['reverse_debuffs'],
 		},
 	}
 
@@ -34,7 +32,7 @@ function AURA:OnLogin()
 	F.HideObject(_G.TemporaryEnchantFrame)
 
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', C.General.ui_gap, -C.General.ui_gap})
+	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap']})
 	self.BuffFrame:ClearAllPoints()
 	self.BuffFrame:SetPoint('TOPRIGHT', buffAnchor)
 
@@ -43,6 +41,7 @@ function AURA:OnLogin()
 	self.DebuffFrame:ClearAllPoints()
 	self.DebuffFrame:SetPoint('TOPRIGHT', debuffAnchor)
 
+	self:AddAuraSource()
 	self:InitReminder()
 end
 
@@ -187,12 +186,12 @@ function AURA:UpdateHeader(header)
 	header:SetAttribute('wrapAfter', cfg.wrapAfter)
 	header:SetAttribute('maxWraps', cfg.maxWraps)
 	header:SetAttribute('point', cfg.reverseGrow and 'TOPLEFT' or 'TOPRIGHT')
-	header:SetAttribute('minWidth', (cfg.size + margin)*cfg.wrapAfter)
-	header:SetAttribute('minHeight', (cfg.size + offset)*cfg.maxWraps)
-	header:SetAttribute('xOffset', (cfg.reverseGrow and 1 or -1) * (cfg.size + margin))
+	header:SetAttribute('minWidth', (cfg.size + FreeUIConfigs['aura']['margin'])*cfg.wrapAfter)
+	header:SetAttribute('minHeight', (cfg.size + FreeUIConfigs['aura']['offset'])*cfg.maxWraps)
+	header:SetAttribute('xOffset', (cfg.reverseGrow and 1 or -1) * (cfg.size + FreeUIConfigs['aura']['margin']))
 	header:SetAttribute('yOffset', 0)
 	header:SetAttribute('wrapXOffset', 0)
-	header:SetAttribute('wrapYOffset', -(cfg.size + offset))
+	header:SetAttribute('wrapYOffset', -(cfg.size + FreeUIConfigs['aura']['offset']))
 	header:SetAttribute('template', format('FreeUIAuraTemplate%d', cfg.size))
 
 	local index = 1

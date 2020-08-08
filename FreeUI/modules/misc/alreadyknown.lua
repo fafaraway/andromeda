@@ -18,7 +18,6 @@ local knowables = {
 	[LE_ITEM_CLASS_MISCELLANEOUS] = true,
 }
 local knowns = {}
-local tooltip = CreateFrame("GameTooltip", "AlreadyKnownTooltip", nil, "GameTooltipTemplate")
 
 local function isPetCollected(speciesID)
 	if not speciesID or speciesID == 0 then return end
@@ -31,24 +30,24 @@ end
 local function IsAlreadyKnown(link, index)
 	if not link then return end
 
-	if strmatch(link, "battlepet:") then
-		local speciesID = select(2, strsplit(":", link))
+	if strmatch(link, 'battlepet:') then
+		local speciesID = select(2, strsplit(':', link))
 		return isPetCollected(speciesID)
-	elseif strmatch(link, "item:") then
+	elseif strmatch(link, 'item:') then
 		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
 		if not name then return end
 
 		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
-			local speciesID = tooltip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
+			local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
 			return isPetCollected(speciesID)
 		else
 			if knowns[link] then return true end
 			if not knowables[itemClassID] then return end
 
-			tooltip:SetOwner(UIParent, "ANCHOR_NONE")
-			tooltip:SetHyperlink(link)
-			for i = 1, tooltip:NumLines() do
-				local text = _G[tooltip:GetName().."TextLeft"..i]:GetText() or ""
+			F.ScanTip:SetOwner(UIParent, 'ANCHOR_NONE')
+			F.ScanTip:SetHyperlink(link)
+			for i = 1, F.ScanTip:NumLines() do
+				local text = _G['NDui_ScanTooltipTextLeft'..i]:GetText() or ''
 				if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
 					knowns[link] = true
 					return true
@@ -65,7 +64,7 @@ local function Hook_UpdateMerchantInfo()
 		local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
 		if index > numItems then return end
 
-		local button = _G["MerchantItem"..i.."ItemButton"]
+		local button = _G['MerchantItem'..i..'ItemButton']
 		if button and button:IsShown() then
 			local _, _, _, _, numAvailable, isUsable = GetMerchantItemInfo(index)
 			if isUsable and IsAlreadyKnown(GetMerchantItemLink(index)) then
@@ -78,14 +77,14 @@ local function Hook_UpdateMerchantInfo()
 		end
 	end
 end
-hooksecurefunc("MerchantFrame_UpdateMerchantInfo", Hook_UpdateMerchantInfo)
+hooksecurefunc('MerchantFrame_UpdateMerchantInfo', Hook_UpdateMerchantInfo)
 
 local function Hook_UpdateBuybackInfo()
 	local numItems = GetNumBuybackItems()
 	for index = 1, BUYBACK_ITEMS_PER_PAGE do
 		if index > numItems then return end
 
-		local button = _G["MerchantItem"..index.."ItemButton"]
+		local button = _G['MerchantItem'..index..'ItemButton']
 		if button and button:IsShown() then
 			local _, _, _, _, _, isUsable = GetBuybackItemInfo(index)
 			if isUsable and IsAlreadyKnown(GetBuybackItemLink(index)) then
@@ -94,7 +93,7 @@ local function Hook_UpdateBuybackInfo()
 		end
 	end
 end
-hooksecurefunc("MerchantFrame_UpdateBuybackInfo", Hook_UpdateBuybackInfo)
+hooksecurefunc('MerchantFrame_UpdateBuybackInfo', Hook_UpdateBuybackInfo)
 
 -- auction house
 local function Hook_UpdateAuctionHouse(self)
@@ -110,9 +109,9 @@ local function Hook_UpdateAuctionHouse(self)
 			if button.rowData.itemKey.itemID then
 				local itemLink
 				if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-					itemLink = format("|Hbattlepet:%d::::::|h[Dummy]|h", button.rowData.itemKey.battlePetSpeciesID)
+					itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
 				else -- Normal item
-					itemLink = format("item:%d", button.rowData.itemKey.itemID)
+					itemLink = format('item:%d', button.rowData.itemKey.itemID)
 				end
 
 				if itemLink and IsAlreadyKnown(itemLink) then
@@ -137,14 +136,14 @@ end
 
 -- guild bank frame
 local function Hook_GuildBankUpdate()
-	if GuildBankFrame.mode ~= "bank" then return end
+	if GuildBankFrame.mode ~= 'bank' then return end
 
 	local tab = GetCurrentGuildBankTab()
 	for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
 		local index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
 		if index == 0 then index = NUM_SLOTS_PER_GUILDBANK_GROUP end
 
-		local button = _G["GuildBankColumn"..math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP).."Button"..index]
+		local button = _G['GuildBankColumn'..math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP)..'Button'..index]
 		if button and button:IsShown() then
 			local texture, _, locked = GetGuildBankItemInfo(tab, i)
 			if texture and not locked then
@@ -160,14 +159,14 @@ end
 
 
 local hookCount = 0
-local f = CreateFrame("Frame")
-f:RegisterEvent("ADDON_LOADED")
-f:SetScript("OnEvent", function(_, event, addon)
-	if addon == "Blizzard_AuctionHouseUI" then
-		hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList, "RefreshScrollFrame", Hook_UpdateAuctionHouse)
+local f = CreateFrame('Frame')
+f:RegisterEvent('ADDON_LOADED')
+f:SetScript('OnEvent', function(_, event, addon)
+	if addon == 'Blizzard_AuctionHouseUI' then
+		hooksecurefunc(AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
 		hookCount = hookCount + 1
-	elseif addon == "Blizzard_GuildBankUI" then
-		hooksecurefunc("GuildBankFrame_Update", Hook_GuildBankUpdate)
+	elseif addon == 'Blizzard_GuildBankUI' then
+		hooksecurefunc('GuildBankFrame_Update', Hook_GuildBankUpdate)
 		hookCount = hookCount + 1
 	end
 

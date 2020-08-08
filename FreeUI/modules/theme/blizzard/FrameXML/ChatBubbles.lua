@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	local bubbleHook = CreateFrame('Frame')
 	local last = 0
@@ -47,7 +47,7 @@ tinsert(C.BlizzThemes, function()
 
 		if tslu > .1 then
 			tslu = 0
-			
+
 			local newNumKids = WorldFrame:GetNumChildren()
 			if newNumKids ~= numKids then
 				for i = numKids + 1, newNumKids do

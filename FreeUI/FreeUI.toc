@@ -15,4 +15,5 @@ init.lua
 libs\libs.xml
 locales\locales.xml
 core\core.xml
+gui\gui.xml
 modules\modules.xml
