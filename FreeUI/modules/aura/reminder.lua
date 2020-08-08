@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA, cfg = F:GetModule('Aura'), C.Aura
+local AURA = F:GetModule('Aura')
 
 
 local pairs, tinsert, next = pairs, table.insert, next
@@ -7,7 +7,7 @@ local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, Ge
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 
-local iconSize = cfg.buffSize + 4
+local iconSize = 50
 local frames, parentFrame = {}
 
 
@@ -64,7 +64,7 @@ function AURA:Reminder_Create(cfg)
 		end
 	end
 	frame.Icon:SetTexture(texture)
-	
+
 	frame:Hide()
 	cfg.frame = frame
 
@@ -109,7 +109,7 @@ function AURA:InitReminder()
 	AURA:Reminder_AddRune()
 	if not groups then return end
 
-	if cfg.reminder then
+	if FreeUIConfigs['aura']['buff_reminder'] then
 		if not parentFrame then
 			parentFrame = CreateFrame('Frame', nil, UIParent)
 			parentFrame:SetPoint('CENTER', -220, 130)

@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	local r, g, b = C.r, C.g, C.b
 
@@ -106,8 +106,8 @@ tinsert(C.BlizzThemes, function()
 					hl:SetColorTexture(r, g, b, .2)
 
 					local arrow = _G["DropDownList"..level.."Button"..j.."ExpandArrow"]
-					arrow:SetNormalTexture(C.Assets.arrowRight)
-					arrow:SetSize(8, 8)
+					F.SetupArrow(arrow:GetNormalTexture(), "right")
+					arrow:SetSize(14, 14)
 				end
 
 				local uncheck = _G["DropDownList"..level.."Button"..j.."UnCheck"]

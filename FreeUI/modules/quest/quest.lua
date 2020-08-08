@@ -9,7 +9,7 @@ local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
 function QUEST:QuestTrackerMover()
 	local frame = CreateFrame("Frame", "FreeUIQuestMover", UIParent)
 	frame:SetSize(240, 50)
-	F.Mover(frame, L["MOVER_QUEST_TRACKER"], "QuestTracker", {"TOPRIGHT", UIParent, "TOPRIGHT", -C.General.ui_gap, -140})
+	F.Mover(frame, L["MOVER_QUEST_TRACKER"], "QuestTracker", {"TOPRIGHT", UIParent, "TOPRIGHT", -FreeUIConfigsGlobal['ui_gap'], -140})
 
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()
@@ -83,7 +83,7 @@ function QUEST:QuestRewardHighlight()
 		if rewardButton == nil or rewardButton.type ~= "choice" then
 			return
 		end
-		
+
 		QuestInfoItemHighlight:SetPoint("TOPLEFT", rewardButton, "TOPLEFT", -8, 7)
 		QuestInfoItemHighlight:Show()
 		QuestInfoFrame.itemChoice = rewardButton:GetID()
@@ -95,7 +95,7 @@ function QUEST:OnLogin()
 	self:QuestTrackerMover()
 
 	if not cfg.enable then return end
-	
+
 	self:QuestLevel()
 	self:QuestRewardHighlight()
 	self:QuestNotifier()

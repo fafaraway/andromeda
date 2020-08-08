@@ -11,7 +11,6 @@ local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, 
 local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local InviteToGroup = C_PartyInfo.InviteUnit
-local gap = C.General.ui_gap
 
 
 local isScaling = false
@@ -27,14 +26,14 @@ function CHAT:UpdateChatSize()
 	if ChatFrame1.FontStringContainer then
 		ChatFrame1.FontStringContainer:SetOutside(ChatFrame1)
 	end
-	
+
 	if ChatFrame1:IsShown() then
 		ChatFrame1:Hide()
 		ChatFrame1:Show()
 	end
-	
+
 	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', gap, gap)
+	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'])
 	ChatFrame1:SetSize(cfg.chat_size_width, cfg.chat_size_height)
 
 	isScaling = false
@@ -66,7 +65,7 @@ function CHAT:RestyleChatFrame()
 		self:SetTimeVisible(cfg.fadingVisible)
 		self:SetFadeDuration(cfg.fadingDuration)
 	end
-	
+
 	local fontSize = select(2, self:GetFont())
 	if cfg.font_outline then
 		self:SetFont(C.Assets.Fonts.Chat, fontSize, 'OUTLINE')
@@ -76,7 +75,7 @@ function CHAT:RestyleChatFrame()
 		self:SetShadowColor(0, 0, 0, 1)
 		self:SetShadowOffset(2, -2)
 	end
-	
+
 	self:SetClampedToScreen(false)
 	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(maxWidth, maxHeight)
@@ -124,7 +123,7 @@ function CHAT:RestyleChatFrame()
 	F.HideObject(self.ScrollBar)
 	F.HideObject(self.ScrollToBottomButton)
 
-	
+
 
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
 
@@ -304,20 +303,20 @@ function CHAT:OnLogin()
 	self:AutoToggleChatBubble()
 
 
-	
+
 
 
 	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-gap, gap, gap, -gap)
+	BNToastFrame:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
 
 	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-gap, gap, gap, -gap)
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
 
 	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-	VoiceChatChannelActivatedNotification:SetClampRectInsets(-gap, gap, gap, -gap)
-	
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
+
 	ChatAlertFrame:SetClampedToScreen(true)
-	ChatAlertFrame:SetClampRectInsets(-gap, gap, gap, -gap)
+	ChatAlertFrame:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
 
 	F.HideObject(_G.ChatFrameMenuButton)
 	F.HideObject(_G.QuickJoinToastButton)
@@ -329,7 +328,7 @@ function CHAT:OnLogin()
 	else
 		F.HideObject(_G.ChatFrameChannelButton)
 		F.HideObject(_G.ChatFrameToggleVoiceDeafenButton)
-		F.HideObject(_G.ChatFrameToggleVoiceMuteButton)	
+		F.HideObject(_G.ChatFrameToggleVoiceMuteButton)
 	end
 
 	-- ProfanityFilter

@@ -7,9 +7,9 @@ local myClass = select(2, UnitClass('player'))
 
 
 C['General'] = {
-	['ui_scale'] = 1,
+
 	['number_format'] = 1,
-	['ui_gap'] = 33,
+
 	['blizz_mover'] = true,
 	['already_known'] = true,
 	['hide_boss_banner'] = true,
@@ -43,7 +43,7 @@ C['General'] = {
 		['easy_focus_on_unitframes'] = false,
 }
 
-C['Theme'] = {
+--[[ C['Theme'] = {
 	['cursor_trail'] = true,
 	['vignetting'] = true,
 		['vignetting_alpha'] = .8,
@@ -60,12 +60,12 @@ C['Theme'] = {
 	['gradient_color_secondary_alpha'] = .5,
 	['reskin_blizz'] = true,
 	['shadow_border'] = true,
-	
+
 	['reskin_dbm'] = true,
 	['reskin_weakauras'] = true,
 	['reskin_pgf'] = true,
 	['reskin_skada'] = true,
-}
+} ]]
 
 C['Notification'] = {
 	['enable'] = true,
@@ -77,10 +77,10 @@ C['Notification'] = {
 
 C['Automation'] = {
 	['enable'] = true,
-		
-		
-		
-		
+
+
+
+
 		['buy_stack'] = true,
 		['screenshot'] = true,
 
@@ -127,7 +127,7 @@ C['Chat'] = {
 			['chat_size_width'] = 300,
 			['chat_size_height'] = 100,
 		['font_outline'] = false,
-		
+
 		['fading'] = true,
 			['fadingVisible'] = 60,
 			['fadingDuration'] = 6,
@@ -163,8 +163,8 @@ C['Chat'] = {
 		['trashClubs'] = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩'}
 }
 
-C['Aura'] = {
-	['enable'] = true,
+--[[ C['Aura'] = {
+	['enable_aura'] = true,
 		['margin'] = 6,
 		['offset'] = 12,
 		['buffSize'] = 40,
@@ -173,8 +173,8 @@ C['Aura'] = {
 		['debuffSize'] = 50,
 		['debuffsPerRow'] = 12,
 		['reverseDebuffs'] = true,
-		['reminder'] = true,	
-}
+		['reminder'] = true,
+} ]]
 
 C['Actionbar'] = {
 	['enable_actionbar'] = true,
@@ -183,13 +183,13 @@ C['Actionbar'] = {
 		['button_size_small'] = 22,
 		['button_size_normal'] = 28,
 		['button_size_big'] = 38,
-		
+
 		['button_hotkey'] = false,
 		['button_macro_name'] = false,
 		['button_count'] = false,
 		['button_class_color'] = false,
 		['button_range'] = true,
-		
+
 		['bar1'] = true,
 			['bar1_visibility'] = '[petbattle] hide; show',
 			['bar1_fade'] = false,
@@ -270,7 +270,7 @@ C['Map'] = {
 		['whoPings'] = true,
 		['worldMarker'] = true,
 		['microMenu'] = true,
-		['expBar'] = true,	
+		['expBar'] = true,
 }
 
 C['Quest'] = {
@@ -295,6 +295,7 @@ C['Tooltip'] = {
 		['link_hover'] = true,
 		['tip_icon'] = true,
 		['target_by'] = true,
+		['pvp_rating'] = true,
 
 		['tip_backdrop_alpha'] = .6,
 		['header_font_size'] = 16,
@@ -345,7 +346,7 @@ C['Unitframe'] = {
 			['castbar_focus_width'] = 200,
 			['castbar_focus_height'] = 16,
 			['castbar_timer'] = true,
-		
+
 		['enable_player'] = true,
 			['player_width'] = 140,
 			['player_height'] = 14,
@@ -491,7 +492,7 @@ C['ReminderBuffs'] = {
 
 C['CornerBuffs'] = {
 	ALL = {},
-	
+
 	PRIEST = {
 		{194384, 'TOPRIGHT',    {1, 1, 0.66}},              -- Atonement
 		{214206, 'TOPRIGHT',    {1, 1, 0.66}},              -- Atonement (PvP)
@@ -725,3 +726,117 @@ C['GroupBuffs'] = {
 }
 
 C['RaidDebuffs'] = {}
+
+
+
+
+
+C.CharacterSettings = {
+	['BfA'] = false,
+	['classic'] = false,
+	['installation_complete'] = false,
+	['ui_anchor'] = {},
+	['ui_anchor_temp'] = {},
+	['map_reveal'] = false,
+	['quick_quest'] = false,
+	['bind_type'] = 1,
+	['favourite_items'] = {},
+	['click_cast'] = {},
+
+
+	['theme'] = {
+		['cursor_trail'] = true,
+		['vignetting'] = true,
+			['vignetting_alpha'] = .8,
+		['backdrop_color'] = {.05, .05, .05},
+		['backdrop_alpha'] = .6,
+		['backdrop_border_color'] = {0, 0, 0},
+		['backdrop_border_alpha'] = 1,
+		['flat_style'] = false,
+			['flat_color'] = {.06, .06, .06},
+			['flat_alpha'] = .65,
+		['gradient_color_primary'] = {.02, .02, .02},
+		['gradient_color_primary_alpha'] = .5,
+		['gradient_color_secondary'] = {.08, .08, .08},
+		['gradient_color_secondary_alpha'] = .5,
+		['reskin_blizz'] = true,
+		['shadow_border'] = true,
+
+		['reskin_dbm'] = true,
+		['reskin_weakauras'] = true,
+		['reskin_pgf'] = true,
+		['reskin_skada'] = true,
+	},
+
+
+
+
+	['aura'] = {
+		['enable_aura'] = true,
+			['margin'] = 6,
+			['offset'] = 12,
+			['buff_size'] = 40,
+			['buffs_per_row'] = 12,
+			['reverse_buffs'] = true,
+			['debuff_size'] = 50,
+			['debuffs_per_row'] = 12,
+			['reverse_debuffs'] = true,
+			['buff_reminder'] = true,
+			['aura_source']	= true,
+	},
+}
+
+C.AccountSettings = {
+	['ui_scale'] = 1,
+	['ui_gap'] = 33,
+	['total_gold'] = {},
+	['auto_sell_junk'] = false,
+	['auto_repair'] = false,
+	['custom_junk_list'] = {},
+	['number_format'] = 1,
+	['keystone_info'] = {},
+}
+
+local function initSettings(source, target, fullClean)
+	for i, j in pairs(source) do
+		if type(j) == "table" then
+			if target[i] == nil then target[i] = {} end
+			for k, v in pairs(j) do
+				if target[i][k] == nil then
+					target[i][k] = v
+				end
+			end
+		else
+			if target[i] == nil then target[i] = j end
+		end
+	end
+
+	for i, j in pairs(target) do
+		if source[i] == nil then target[i] = nil end
+		if fullClean and type(j) == "table" then
+			for k, v in pairs(j) do
+				if type(v) ~= "table" and source[i] and source[i][k] == nil then
+					target[i][k] = nil
+				end
+			end
+		end
+	end
+end
+
+local loader = CreateFrame('Frame')
+loader:RegisterEvent('ADDON_LOADED')
+loader:SetScript('OnEvent', function(self, _, addon)
+	if addon ~= 'FreeUI' then return end
+
+	if not FreeUIConfigs['BfA'] then
+		FreeUIConfigs = {}
+		FreeUIConfigs['BfA'] = true
+	end
+
+	initSettings(C.CharacterSettings, FreeUIConfigs, true)
+	initSettings(C.AccountSettings, FreeUIConfigsGlobal)
+
+	F:SetupUIScale(true)
+
+	self:UnregisterAllEvents()
+end)

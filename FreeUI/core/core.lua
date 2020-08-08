@@ -5,6 +5,7 @@ local F = unpack(engine)
 F.oUF = engine.oUF
 F.cargBags = engine.cargBags
 
+F:RegisterModule('GUI')
 F:RegisterModule('Install')
 F:RegisterModule('Mover')
 F:RegisterModule('Logo')

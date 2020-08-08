@@ -1,0 +1,373 @@
+local F, C, L = unpack(select(2, ...))
+local GUI = F:GetModule('GUI')
+
+
+local sidePanels = {}
+local offset = 50
+local activeTab = nil
+
+
+local function SaveValue(key, value, newValue)
+	if key == 'ACCOUNT' then
+		if newValue ~= nil then
+			FreeUIConfigsGlobal[value] = newValue
+		else
+			return FreeUIConfigsGlobal[value]
+		end
+	else
+		if newValue ~= nil then
+			FreeUIConfigs[key][value] = newValue
+		else
+			return FreeUIConfigs[key][value]
+		end
+	end
+end
+
+local function toggleChildren(self, checked)
+	local tR, tG, tB
+	if checked then
+		tR, tG, tB = 1, 1, 1
+	else
+		tR, tG, tB = .3, .3, .3
+	end
+
+	for _, child in next, self.children do
+		if child.radioHeader then -- radio button group
+			child.radioHeader:SetTextColor(tR, tG, tB)
+
+			for _, radioButton in pairs(child.buttons) do
+				radioButton:SetEnabled(checked)
+				radioButton.text:SetTextColor(tR, tG, tB)
+			end
+		else
+			child:SetEnabled(checked)
+			child.Text:SetTextColor(tR, tG, tB)
+		end
+
+		if child.Low then
+			child.Low:SetTextColor(tR, tG, tB)
+			child.High:SetTextColor(tR, tG, tB)
+			child.value:SetTextColor(tR, tG, tB)
+			child:GetThumbTexture():SetVertexColor(tR, tG, tB)
+		end
+	end
+end
+
+local function onToggle(self)
+	local checked = self:GetChecked()
+
+	if checked then
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+	else
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+	end
+
+	--SaveValue(self, checked)
+	if self.children then toggleChildren(self, checked) end
+
+	-- if self.needsReload then
+	-- 	if old[self] == nil then
+	-- 		old[self] = not checked
+	-- 	end
+
+	-- 	checkIsReloadNeeded()
+	-- end
+end
+
+local function CreateOptionsFrame()
+	local f = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
+	f:SetSize(600, 640)
+	f:SetPoint('CENTER')
+	f:SetFrameStrata('HIGH')
+	f:EnableMouse(true)
+	F.CreateMF(f)
+	F.CreateBDFrame(f, nil, true)
+	tinsert(UISpecialFrames, f:GetName())
+
+	f.verticalLine = f:CreateTexture()
+	f.verticalLine:SetSize(1, 540)
+	f.verticalLine:SetPoint('TOPLEFT', 180, -50)
+	f.verticalLine:SetColorTexture(.5, .5, .5, .1)
+
+	f.logo = f:CreateTexture()
+	f.logo:SetSize(512, 128)
+	f.logo:SetPoint('TOP')
+	f.logo:SetTexture(C.Assets.logo_small)
+	f.logo:SetScale(.3)
+
+	f.desc = F.CreateFS(f, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', C.Version, {.7,.7,.7}, false, 'TOP', 0, -30)
+
+	f.horizontalLineLeft  = CreateFrame('Frame', nil, f)
+	f.horizontalLineLeft:SetPoint('TOP', -60, -26)
+	F.CreateGF(f.horizontalLineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
+	f.horizontalLineLeft:SetFrameStrata('HIGH')
+
+	f.horizontalLineRight = CreateFrame('Frame', nil, f)
+	f.horizontalLineRight:SetPoint('TOP', 60, -26)
+	F.CreateGF(f.horizontalLineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
+	f.horizontalLineRight:SetFrameStrata('HIGH')
+
+	f.close = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
+	f.close:SetPoint('BOTTOMRIGHT', -6, 6)
+	f.close:SetSize(80, 24)
+	f.close:SetText(CLOSE)
+	f.close:SetScript('OnClick', function()
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+		f:Hide()
+	end)
+	F.Reskin(f.close)
+
+	f.okay = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
+	f.okay:SetPoint('RIGHT', f.close, 'LEFT', -6, 0)
+	f.okay:SetSize(80, 24)
+	f.okay:SetText(APPLY)
+	--f.okay:Disable()
+	f.okay:SetScript('OnClick', function()
+		StaticPopup_Show('FREEUI_RELOAD')
+		f:Hide()
+	end)
+	F.Reskin(f.okay)
+end
+
+local function CreateGameMenuButton()
+	local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', GameMenuFrame, 'GameMenuButtonTemplate')
+	bu:SetText(C.Title)
+	bu:SetPoint('TOP', GameMenuButtonAddons, 'BOTTOM', 0, -14)
+	if FreeUIConfigs['theme']['reskin_blizz'] then F.Reskin(bu) end
+
+	GameMenuFrame:HookScript('OnShow', function(self)
+		GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)
+		self:SetHeight(self:GetHeight() + bu:GetHeight() + 15)
+	end)
+
+	bu:SetScript('OnClick', function()
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT) return end
+		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+		HideUIPanel(GameMenuFrame)
+		FreeUI_GUI:Show()
+	end)
+end
+
+
+function GUI.CreateSidePanel(parent, name, title)
+	local frame = CreateFrame('Frame', name, parent)
+	frame:SetSize(200, 640)
+	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
+	F.CreateBDFrame(frame, nil, true)
+    frame:Hide()
+	parent:HookScript('OnHide', function()
+		if frame:IsShown() then frame:Hide() end
+    end)
+
+   -- frame.tag = name
+
+    frame.header = frame:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
+    frame.header:SetPoint('TOPLEFT', 20, -25)
+    --frame.header:SetText('|cffe9c55d'..title..'|r')
+    frame.header:SetShadowColor(0, 0, 0, 1)
+	frame.header:SetShadowOffset(2, -2)
+
+    frame.bg = CreateFrame('Frame', nil, frame)
+    frame.bg:SetSize(180, 540)
+	frame.bg:SetPoint('TOPLEFT', 10, -50)
+	F.CreateBDFrame(frame.bg, .3)
+
+    frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
+	frame.close:SetPoint('BOTTOM', 0, 6)
+	frame.close:SetSize(80, 24)
+	frame.close:SetText(CLOSE)
+	frame.close:SetScript('OnClick', function()
+		frame:Hide()
+	end)
+	F.Reskin(frame.close)
+
+    tinsert(sidePanels, frame)
+
+	return frame
+end
+
+function GUI.ToggleSidePanel(name)
+	for _, frame in next, sidePanels do
+		if frame:GetName() == name then
+			F:TogglePanel(frame)
+		else
+			frame:Hide()
+		end
+	end
+end
+
+
+-- Check boxes
+GUI.CreateCheckBox = function(parent, key, value, callback, extra, caution)
+	local cb = F.CreateCheckBox(parent)
+	cb:SetSize(20, 20)
+	cb:SetHitRectInsets(-5, -5, -5, -5)
+
+	cb.Text = F.CreateFS(cb, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, nil, 'THICK', 'LEFT', 24, 0)
+
+	cb:SetChecked(SaveValue(key, value))
+	cb:SetScript('OnClick', function()
+		SaveValue(key, value, cb:GetChecked())
+		if callback then callback() end
+	end)
+	cb:HookScript('OnClick', onToggle)
+
+	if extra and type(extra) == 'function' then
+		local bu = F.CreateGearButton(parent)
+		bu:SetPoint('LEFT', cb.Text, 'RIGHT', -2, 1)
+		bu:SetScript('OnClick', extra)
+	end
+
+	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
+		cb.title = L['GUI_TIPS']
+		F.AddTooltip(cb, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
+	end
+
+	return cb
+end
+
+-- Sliders
+GUI.CreateSlider = function(parent, key, value, callback, low, high, step)
+	local slider = F.CreateSlider(parent, value, low, high, step, 140)
+	slider.Text:SetText(L['GUI_'..strupper(key)..'_'..strupper(value)] or value)
+	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
+	slider:SetValue(SaveValue(key, value))
+	slider:SetScript('OnValueChanged', function(_, v)
+		local current = F:Round(tonumber(v), 2)
+		SaveValue(key, value, current)
+		slider.value:SetText(current)
+		if callback then callback() end
+	end)
+
+	slider.value:SetText(F:Round(SaveValue(key, value), 2))
+
+	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
+		slider.title = L['GUI_TIPS']
+		F.AddTooltip(slider, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
+	end
+
+	return slider
+end
+
+-- Editbox
+GUI.CreateEditBox = function(parent, width, height, maxLetters)
+	local eb = F.CreateEditBox(parent, width, height)
+	eb:SetMaxLetters(maxLetters)
+	eb:SetText(SaveValue(key, value))
+
+	eb:HookScript("OnEscapePressed", function()
+		eb:SetText(SaveValue(key, value))
+	end)
+
+	eb:HookScript("OnEnterPressed", function()
+		SaveValue(key, value, eb:GetText())
+		if callback then callback() end
+	end)
+
+	eb.title = "Tips"
+	local tip = "EditBox Tip"
+	if tooltip then tip = tooltip.."|n"..tip end
+	F.AddTooltip(eb, "ANCHOR_RIGHT", tip, "INFO")
+
+	F.CreateFS(eb, C.Assets.Fonts.Normal, 12, nil, name, "SYSTEM", true, "CENTER", 0, 25)
+end
+
+
+local function SetActiveTab(tab)
+	activeTab = tab
+	activeTab:SetBackdropColor(C.r, C.g, C.b, .25)
+	activeTab.panel:Show()
+end
+
+local onTabClick = function(tab)
+	PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+	activeTab.panel:Hide()
+	activeTab:SetBackdropColor(0, 0, 0, 0)
+	SetActiveTab(tab)
+end
+
+GUI.AddCategory = function(name)
+	local tag = name
+	--local tag = strlower(name)
+
+	local panel = CreateFrame('ScrollFrame', 'FreeUI_GUI_'..name, FreeUI_GUI, 'UIPanelScrollFrameTemplate')
+	panel:SetSize(380, 540)
+	panel:SetPoint('TOPLEFT', 190, -50)
+	panel:Hide()
+	F.CreateBDFrame(panel, .3)
+
+	panel.child = CreateFrame('Frame', nil, panel)
+	panel.child:SetPoint('TOPLEFT', 0, 0)
+	panel.child:SetPoint('BOTTOMRIGHT', 0, 0)
+	panel.child:SetSize(420, 1)
+
+	panel:SetScrollChild(panel.child)
+	F.ReskinScroll(panel.ScrollBar)
+
+	panel.Title = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge')
+	panel.Title:SetPoint('TOPLEFT', 14, -16)
+	panel.Title:SetText(L['GUI_'..name..'_HEADER'] or name)
+
+	panel.subText = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
+	panel.subText:SetPoint('TOPLEFT', panel.Title, 'BOTTOMLEFT', 0, -8)
+	panel.subText:SetJustifyH('LEFT')
+	panel.subText:SetJustifyV('TOP')
+	panel.subText:SetSize(420, 30)
+	panel.subText:SetText(L['GUI_'..name..'_DESC'] or name)
+
+	local tab = CreateFrame('Button', nil, FreeUI_GUI)
+	tab:SetPoint('TOPLEFT', 10, -offset)
+	tab:SetSize(160, 28)
+	F.Reskin(tab)
+
+	local icon = tab:CreateTexture(nil, 'OVERLAY')
+	icon:SetSize(20, 20)
+	icon:SetPoint('LEFT', tab, 6, 0)
+	icon:SetTexture('Interface\\ICONS\\INV_Misc_QuestionMark')
+	F.ReskinIcon(icon)
+	tab.icon = icon
+
+	tab.Text = tab:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
+	tab.Text:SetPoint('LEFT', icon, 'RIGHT', 8, 0)
+	tab.Text:SetTextColor(.9, .9, .9)
+	tab.Text:SetText(L['GUI_'..name] or name)
+
+	tab:SetScript('OnMouseUp', onTabClick)
+
+
+	tab.panel = panel
+	panel.tab = tab
+	panel.tag = tag
+
+	FreeUI_GUI[tag] = panel
+
+
+	offset = offset + 32
+end
+
+GUI.AddSubCategory = function(category, name)
+	local header = category.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
+	header:SetText(name or category:GetName())
+	header:SetTextColor(233/255, 197/255, 93/255)
+
+	local line = category.child:CreateTexture(nil, 'ARTWORK')
+	line:SetSize(380, 1)
+	line:SetPoint('TOPLEFT', header, 'BOTTOMLEFT', 0, -4)
+	line:SetColorTexture(.5, .5, .5, .1)
+
+	return header, line
+end
+
+
+function GUI:OnLogin()
+
+	CreateOptionsFrame()
+	CreateGameMenuButton()
+
+	GUI.AddCategories()
+	GUI.AddOptions()
+
+	SetActiveTab(FreeUI_GUI.GENERAL.tab)
+
+end
+

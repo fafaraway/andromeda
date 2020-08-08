@@ -90,7 +90,7 @@ function MISC:TradeTabs_Update()
 end
 
 function MISC:TradeTabs_Reskin()
-	if not C.Theme.reskin_blizz then return end
+	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
 
 	for _, tab in pairs(tabList) do
 		tab:SetCheckedTexture(C.Assets.button_checked)

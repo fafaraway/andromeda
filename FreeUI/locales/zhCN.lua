@@ -1,24 +1,53 @@
 local F, C, L = unpack(select(2, ...))
 
 
--- Actionbar
-L['ACTIONBAR_LEAVE_VEHICLE'] = '离开载具按钮'
-L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
-L['ACTIONBAR_KEY_INDEX'] = '序号'
-L['ACTIONBAR_KEY_BINDING'] = '按键'
-L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
-L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
-L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
-L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键' 
+-- General
+L['GENERAL'] = '综合'
+L['GENERAL_HEADER'] = 'GENERAL_HEADER'
+L['GENERAL_DESC'] = 'GENERAL_DESC'
 
 
--- Unitframe
-L['UNITFRAME_SPELL_BINDER'] = '点击施法绑定'
-L['UNITFRAME_DEAD'] = '死亡'
-L['UNITFRAME_GHOST'] = '灵魂'
-L['UNITFRAME_OFFLINE'] = '离线'
+-- Themes
+L['THEME'] = '外观'
+L['THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
+L['THEME_CURSOR_TRAIL'] = '鼠标轨迹'
+L['THEME_VIGNETTING'] = '暗角效果'
+L['THEME_VIGNETTING_ALPHA'] = '暗角透明度'
+L['THEME_RESKIN_BLIZZ'] = '美化游戏默认界面'
+L['THEME_SHADOW_BORDER'] = '添加阴影'
+L['THEME_UI_SCALE'] = '界面缩放'
+
+
+-- notification
+L['NOTIFICATION'] = '提醒'
+L['NOTIFICATION_NEW_MAIL'] = '收到新邮件！'
+L['NOTIFICATION_BAG_FULL'] = '背包满了！'
+L['NOTIFICATION_MAIL'] = '邮件'
+L['NOTIFICATION_BAG'] = '背包'
+L['NOTIFICATION_REPAIR'] = '修理'
+L['NOTIFICATION_SELL'] = '售卖'
+L['NOTIFICATION_RARE'] = '发现稀有'
+L['NOTIFICATION_VERSION_CHECK_HEADER'] = '版本检查'
+L['NOTIFICATION_VERSION_CHECK_DESC'] = '插件版本已过期，请注意及时更新！'
+
+
+-- Announcement
+L['ANNOUNCEMENT'] = '通告'
+L['ANNOUNCEMENT_INTERRUPT'] = '打断了 %s 的 %s！'
+L['ANNOUNCEMENT_DISPEL'] = '驱散了 %s 的 %s！'
+L['ANNOUNCEMENT_STOLEN'] = '偷取了 %s 的 %s！'
+L['ANNOUNCEMENT_BATTLE_REZ'] = '%s 使用了 %s！'
+L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s 对 %s 使用了 %s！'
+L['ANNOUNCEMENT_CASTED'] = '%s 施放了 %s！'
+L['ANNOUNCEMENT_SUMMONING'] = '%s 正在进行 %s！'
+L['ANNOUNCEMENT_FEAST'] = '%s 摆出了 %s！'
+L['ANNOUNCEMENT_ITEM'] = '%s 放置了 %s！'
+L['ANNOUNCEMENT_PORTAL'] = '%s 开启了 %s！'
+L['ANNOUNCEMENT_SAPPED'] = '我被闷棍！'
+
 
 -- Automation
+L['AUTOMATION'] = '便利'
 L['AUTOMATION_MARK_CLEAR'] = '清除'
 L['AUTOMATION_MARK_SKULL'] = '骷髅'
 L['AUTOMATION_MARK_CROSS'] = '大叉'
@@ -32,28 +61,176 @@ L['AUTOMATION_GET_NAKED'] = '双击脱光装备'
 L['AUTOMATION_BUY_STACK'] = '是否购买|cffff0000一组|r下列物品？'
 
 
+-- Infobar
+L['INFOBAR'] = '信息条'
+L['INFOBAR_CURRENCY'] = '货币'
+L['INFOBAR_DURABILITY'] = '装备耐久'
+L['INFOBAR_FRIENDS'] = '朋友'
+L['INFOBAR_GUILD'] = '公会'
+L['INFOBAR_GUILD_NONE'] = '无'
+L['INFOBAR_REPORT'] = '报告'
+L['INFOBAR_WOW'] = '<魔兽世界>'
+L['INFOBAR_BN'] = '<战网好友>'
+L['INFOBAR_NO_ONLINE'] = '当前没有好友在线'
+L['INFOBAR_HOLD_SHIFT'] = '按住 <Shift> 展开详细信息'
+L['INFOBAR_OPEN_FRIENDS_PANEL'] = '打开好友面板'
+L['INFOBAR_ADD_FRIEND'] = '添加好友'
+L['INFOBAR_EARNED'] = '获得'
+L['INFOBAR_SPENT'] = '花费'
+L['INFOBAR_DEFICIT'] = '亏损'
+L['INFOBAR_PROFIT'] = '盈利'
+L['INFOBAR_SESSION'] = '本次登录'
+L['INFOBAR_CHARACTER'] = '服务器角色'
+L['INFOBAR_TOKEN_PRICE'] = '时光徽章'
+L['INFOBAR_OPEN_CURRENCY_PANEL'] = '打开货币面板'
+L['INFOBAR_RESET_GOLD_COUNT'] = '重置金币统计数据'
+L['INFOBAR_OPEN_GUILD_PANEL'] = '打开公会面板'
+L['INFOBAR_OPEN_SPEC_PANEL'] = '打开天赋面板'
+L['INFOBAR_CHANGE_SPEC'] = '切换专精'
+L['INFOBAR_SPEC'] = '专精'
+L['INFOBAR_LOOT'] = '拾取'
+L['INFOBAR_DAILY_WEEKLY_INFO'] = '日常/周常信息'
+L['INFOBAR_INVASION_LEG'] = '军团突袭'
+L['INFOBAR_INVASION_BFA'] = '阵营突袭'
+L['INFOBAR_INVASION_CURRENT'] = '当前'
+L['INFOBAR_INVASION_NEXT'] = '下次'
+L['INFOBAR_OPEN_BFA_REPORT'] = '打开任务报告(BFA)'
+L['INFOBAR_OPEN_LEG_REPORT'] = '打开任务报告(LEG)'
+L['INFOBAR_OPEN_WOD_REPORT'] = '打开任务报告(WOD)'
+L['INFOBAR_BLINGTRON'] = '布林顿每日礼包'
+L['INFOBAR_MEAN_ONE'] = '冬幕节日常'
+L['INFOBAR_TIMEWARPED'] = '时光漫游徽章奖励'
+L['INFOBAR_ISLAND'] = '本周进度'
+L['INFOBAR_LOCAL_TIME'] = '本地时间'
+L['INFOBAR_REALM_TIME'] = '服务器时间'
+L['INFOBAR_OPEN_ADDON_PANEL'] = '打开插件列表'
+L['INFOBAR_OPEN_TIMER_TRACKER'] = '打开计时器'
+L['INFOBAR_DURABILITY'] = '耐久'
+L['INFOBAR_HANDS'] = '手部'
+L['INFOBAR_FEET'] = '脚部'
+L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
+L['INFOBAR_INFO'] = '信息'
+
+
+-- Chat
+L['CHAT'] = '聊天'
+L['CHAT_TOGGLE_FRAME'] = '隐藏/显示聊天框'
+L['CHAT_TOGGLE_WC'] = '加入/离开世界频道'
+L['CHAT_COPY'] = '复制聊天内容'
+L['CHAT_WHISPER_TELL'] = '告诉'
+L['CHAT_WHISPER_FROM'] = '来自'
+
+
+-- Aura
+L['AURA'] = '光环'
+L['AURA_HEADER'] = 'AURA_HEADER'
+L['AURA_DESC'] = 'AURA_DESC'
+L['AURA_ENABLE'] = 'AURA_ENABLE'
+L['AURA_REMINDER'] = 'AURA_REMINDER'
+L['AURA_CASTBY'] = 'AURA_CASTBY'
+
+
+-- Actionbar
+L['ACTIONBAR'] = '动作条'
+L['ACTIONBAR_LEAVE_VEHICLE'] = '离开载具按钮'
+L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
+L['ACTIONBAR_KEY_INDEX'] = '序号'
+L['ACTIONBAR_KEY_BINDING'] = '按键'
+L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
+L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
+L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
+L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键'
+
+
 -- Combat
+L['COMBAT'] = '战斗'
 L['COMBAT_ENTER_COMBAT'] = '进入战斗'
 L['COMBAT_LEAVE_COMBAT'] = '离开战斗'
 
 
+-- inventory
+L['INVENTORY'] = '背包'
+L['INVENTORY_NOTIFICATION_HEADER'] = '背包'
+L['INVENTORY_RESET_GOLD_COUNT'] = '重置金币统计数据'
+L['INVENTORY_SORT'] = '整理物品'
+L['INVENTORY_RESET'] = '重置窗口位置'
+L['INVENTORY_BAGS'] = '打开背包栏位'
+L['INVENTORY_FREE_SLOTS'] = '剩余背包空间'
+L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
+L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
+L['INVENTORY_QUICK_DELETE_ENABLED'] = '\n快速摧毁功能已启用。\n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
+L['INVENTORY_QUICK_DELETE'] = '快速摧毁'
+L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '\n偏好选择功能已启用。\n你现在可以点击标记物品。\n若启用了物品分类存放，还可以将其添加到偏好选择分类中。\n此操作对垃圾物品无效。'
+L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
+L['INVENTORY_AUTO_REPAIR'] = '自动修理'
+L['INVENTORY_AUTO_REPAIR_ENABLED'] = '\n自动修理功能已启用。\n每次与商人对话都会自动修理你的装备。'
+L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
+L['INVENTORY_SELL_JUNK_ENABLED'] = '\n自动出售垃圾功能已启用。\n每次与商人对话都会自动出售垃圾物品。'
+L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
+L['INVENTORY_SEARCH'] = '搜索'
+L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
+L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
+L['INVENTORY_REPAIR_COST'] = '自动修理花费'
+L['INVENTORY_MARK_JUNK'] = '垃圾分类'
+L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
+L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
+L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
+L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。"
+
+
+-- Map
+L['MAP'] = '地图'
+L['MAP_CURSOR'] = '鼠标'
+L['MAP_REVEAL'] = '清除地图迷雾'
+L['MAP_PARAGON'] = 'Paragon'
+L['MAP_NEW_MAIL'] = '<新邮件>'
+
+
 -- Quest
+L['QUEST'] = '任务'
 L['QUEST_ACCEPT_QUEST'] = '接受任务：'
 L['QUEST_AUTOMATION'] = '自动交接任务'
 
 
--- Announcement
-L['ANNOUNCEMENT_INTERRUPT'] = '打断了 %s 的 %s！'
-L['ANNOUNCEMENT_DISPEL'] = '驱散了 %s 的 %s！'
-L['ANNOUNCEMENT_STOLEN'] = '偷取了 %s 的 %s！'
-L['ANNOUNCEMENT_BATTLE_REZ'] = '%s 使用了 %s！'
-L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s 对 %s 使用了 %s！'
-L['ANNOUNCEMENT_CASTED'] = '%s 施放了 %s！'
-L['ANNOUNCEMENT_SUMMONING'] = '%s 正在进行 %s！'
-L['ANNOUNCEMENT_FEAST'] = '%s 摆出了 %s！'
-L['ANNOUNCEMENT_ITEM'] = '%s 放置了 %s！'
-L['ANNOUNCEMENT_PORTAL'] = '%s 开启了 %s！'
-L['ANNOUNCEMENT_SAPPED'] = '我被闷棍！'
+-- Tooltip
+L['TOOLTIP'] = '鼠标提示'
+L['TOOLTIP_RARE'] = '稀有'
+L['TOOLTIP_AURA_FROM'] = '来自'
+L['TOOLTIP_SELL_PRICE'] = '售价'
+L['TOOLTIP_STACK_CAP'] = '堆叠上限'
+L['TOOLTIP_ID_AZERITE_TRAIT'] = '艾泽里特特质'
+L['TOOLTIP_BAG'] = '背包'
+L['TOOLTIP_BANK'] = '银行'
+L['TOOLTIP_ID_SPELL'] = '法术ID'
+L['TOOLTIP_ID_ITEM'] = '物品ID'
+L['TOOLTIP_ID_COMPANION'] = '小宠物ID'
+L['TOOLTIP_ID_QUEST'] = '任务ID'
+L['TOOLTIP_ID_TALENT'] = '天赋ID'
+L['TOOLTIP_ID_ACHIEVEMENT'] = '成就ID'
+L['TOOLTIP_ID_CURRENCY'] = '货币ID'
+L['TOOLTIP_ID_VISUAL'] = 'Visual'
+L['TOOLTIP_ID_SOURCE'] = 'Source'
+L['TOOLTIP_SECTION'] = '段落'
+L['TOOLTIP_TARGETED'] = '关注'
+L['TOOLTIP_ILVL'] = '装等'
+
+
+-- Unitframe
+L['UNITFRAME'] = '单位框体'
+L['UNITFRAME_SPELL_BINDER'] = '点击施法绑定'
+L['UNITFRAME_DEAD'] = '死亡'
+L['UNITFRAME_GHOST'] = '灵魂'
+L['UNITFRAME_OFFLINE'] = '离线'
+
+
+
+
+
+
+
+
+
+
 
 
 -- Misc
@@ -79,119 +256,14 @@ L['MISC_NUMBER_CAP_3'] = '兆'
 
 
 
--- notification
-L['NOTIFICATION_NEW_MAIL'] = '收到新邮件！'
-L['NOTIFICATION_BAG_FULL'] = '背包满了！'
-L['NOTIFICATION_MAIL'] = '邮件'
-L['NOTIFICATION_BAG'] = '背包'
-L['NOTIFICATION_REPAIR'] = '修理'
-L['NOTIFICATION_SELL'] = '售卖'
-
-L['NOTIFICATION_RARE'] = '发现稀有'
 
 
 
 
 
-L['NOTIFICATION_VERSION_CHECK_HEADER'] = '版本检查'
-L['NOTIFICATION_VERSION_CHECK_DESC'] = '插件版本已过期，请注意及时更新！'
-
-
--- Infobar
-L['INFOBAR_CURRENCY'] = '货币'
-L['INFOBAR_DURABILITY'] = '装备耐久'
-L['INFOBAR_FRIENDS'] = '朋友'
-L['INFOBAR_GUILD'] = '公会'
-L['INFOBAR_GUILD_NONE'] = '无'
-L['INFOBAR_REPORT'] = '报告'
-
-L['INFOBAR_WOW'] = '<魔兽世界>'
-L['INFOBAR_BN'] = '<战网好友>'
-L['INFOBAR_NO_ONLINE'] = '当前没有好友在线'
-L['INFOBAR_HOLD_SHIFT'] = '按住 <Shift> 展开详细信息'
-L['INFOBAR_OPEN_FRIENDS_PANEL'] = '打开好友面板'
-L['INFOBAR_ADD_FRIEND'] = '添加好友'
-
-L['INFOBAR_EARNED'] = '获得'
-L['INFOBAR_SPENT'] = '花费'
-L['INFOBAR_DEFICIT'] = '亏损'
-L['INFOBAR_PROFIT'] = '盈利'
-L['INFOBAR_SESSION'] = '本次登录'
-L['INFOBAR_CHARACTER'] = '服务器角色'
-L['INFOBAR_TOKEN_PRICE'] = '时光徽章'
-L['INFOBAR_OPEN_CURRENCY_PANEL'] = '打开货币面板'
-L['INFOBAR_RESET_GOLD_COUNT'] = '重置金币统计数据'
-L['INFOBAR_OPEN_GUILD_PANEL'] = '打开公会面板'
-L['INFOBAR_OPEN_SPEC_PANEL'] = '打开天赋面板'
-L['INFOBAR_CHANGE_SPEC'] = '切换专精'
-L['INFOBAR_SPEC'] = '专精'
-L['INFOBAR_LOOT'] = '拾取'
-
-L['INFOBAR_DAILY_WEEKLY_INFO'] = '日常/周常信息'
-L['INFOBAR_INVASION_LEG'] = '军团突袭'
-L['INFOBAR_INVASION_BFA'] = '阵营突袭'
-L['INFOBAR_INVASION_CURRENT'] = '当前'
-L['INFOBAR_INVASION_NEXT'] = '下次'
-L['INFOBAR_OPEN_BFA_REPORT'] = '打开任务报告(BFA)'
-L['INFOBAR_OPEN_LEG_REPORT'] = '打开任务报告(LEG)'
-L['INFOBAR_OPEN_WOD_REPORT'] = '打开任务报告(WOD)'
-L['INFOBAR_BLINGTRON'] = '布林顿每日礼包'
-L['INFOBAR_MEAN_ONE'] = '冬幕节日常'
-L['INFOBAR_TIMEWARPED'] = '时光漫游徽章奖励'
-L['INFOBAR_ISLAND'] = '本周进度'
-
-L['INFOBAR_LOCAL_TIME'] = '本地时间'
-L['INFOBAR_REALM_TIME'] = '服务器时间'
-L['INFOBAR_OPEN_ADDON_PANEL'] = '打开插件列表'
-L['INFOBAR_OPEN_TIMER_TRACKER'] = '打开计时器'
-
-L['INFOBAR_DURABILITY'] = '耐久'
-L['INFOBAR_HANDS'] = '手部'
-L['INFOBAR_FEET'] = '脚部'
-L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
-
-L['INFOBAR_INFO'] = '信息'
 
 
 
-
-
--- inventory
-L['INVENTORY'] = 'inventory'
-L['INVENTORY_NOTIFICATION_HEADER'] = '背包'
-L['INVENTORY_RESET_GOLD_COUNT'] = '重置金币统计数据'
-L['INVENTORY_SORT'] = '整理物品'
-L['INVENTORY_RESET'] = '重置窗口位置'
-L['INVENTORY_BAGS'] = '打开背包栏位'
-L['INVENTORY_FREE_SLOTS'] = '剩余背包空间'
-L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
-L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
-
-L['INVENTORY_QUICK_DELETE_ENABLED'] = '\n快速摧毁功能已启用。\n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
-L['INVENTORY_QUICK_DELETE'] = '快速摧毁'
-
-L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '\n偏好选择功能已启用。\n你现在可以点击标记物品。\n若启用了物品分类存放，还可以将其添加到偏好选择分类中。\n此操作对垃圾物品无效。'
-L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
-
-L['INVENTORY_AUTO_REPAIR'] = '自动修理'
-L['INVENTORY_AUTO_REPAIR_ENABLED'] = '\n自动修理功能已启用。\n每次与商人对话都会自动修理你的装备。'
-
-L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
-L['INVENTORY_SELL_JUNK_ENABLED'] = '\n自动出售垃圾功能已启用。\n每次与商人对话都会自动出售垃圾物品。'
-L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
-
-L['INVENTORY_SEARCH'] = '搜索'
-L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
-
-L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
-L['INVENTORY_REPAIR_COST'] = '自动修理花费'
-
-L['INVENTORY_MARK_JUNK'] = '垃圾分类'
-L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
-
-L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
-L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
-L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。" 
 
 
 
@@ -240,41 +312,13 @@ L['MOVER_COOLDOWN_PULSE'] = '冷却图标'
 
 
 
--- Chat
-L['CHAT_TOGGLE_FRAME'] = '隐藏/显示聊天框'
-L['CHAT_TOGGLE_WC'] = '加入/离开世界频道'
-L['CHAT_COPY'] = '复制聊天内容'
-L['CHAT_WHISPER_TELL'] = '告诉'
-L['CHAT_WHISPER_FROM'] = '来自'
 
 
--- Tooltip
-L['TOOLTIP_RARE'] = '稀有'
-L['TOOLTIP_AURA_FROM'] = '来自'
-L['TOOLTIP_SELL_PRICE'] = '售价'
-L['TOOLTIP_STACK_CAP'] = '堆叠上限'
-L['TOOLTIP_ID_AZERITE_TRAIT'] = '艾泽里特特质'
-L['TOOLTIP_BAG'] = '背包'
-L['TOOLTIP_BANK'] = '银行'
-L['TOOLTIP_ID_SPELL'] = '法术ID'
-L['TOOLTIP_ID_ITEM'] = '物品ID'
-L['TOOLTIP_ID_COMPANION'] = '小宠物ID'
-L['TOOLTIP_ID_QUEST'] = '任务ID'
-L['TOOLTIP_ID_TALENT'] = '天赋ID'
-L['TOOLTIP_ID_ACHIEVEMENT'] = '成就ID'
-L['TOOLTIP_ID_CURRENCY'] = '货币ID'
-L['TOOLTIP_ID_VISUAL'] = 'Visual'
-L['TOOLTIP_ID_SOURCE'] = 'Source'
-L['TOOLTIP_SECTION'] = '段落'
-L['TOOLTIP_TARGETED'] = '关注'
-L['TOOLTIP_ILVL'] = '装等'
 
 
--- Map
-L['MAP_CURSOR'] = '鼠标'
-L['MAP_REVEAL'] = '清除地图迷雾'
-L['MAP_PARAGON'] = 'Paragon'
-L['MAP_NEW_MAIL'] = '<新邮件>'
+
+
+
 
 
 -- Install
@@ -299,21 +343,40 @@ L['INSTALL_BUTTON_FINISH'] = '完成'
 L['INSTALL_BUTTON_CANCEL'] = '取消'
 
 
--- Themes
-L['THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
-L['THEME_CURSOR_TRAIL'] = '鼠标轨迹'
-L['THEME_VIGNETTING'] = '暗角效果'
-L['THEME_VIGNETTING_ALPHA'] = '暗角透明度'
 
-L['THEME_RESKIN_BLIZZ'] = '美化游戏默认界面'
-L['THEME_SHADOW_BORDER'] = '添加阴影'
-L['THEME_UI_SCALE'] = '界面缩放'
 
 
 -- GUI
+L['GUI_TIPS'] = '小提示'
 L['GUI_RELOAD_WARNING'] = '|cffff2020是否重载界面来完成设置？|r'
 L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r'
 L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
+
+L['GUI_AURA'] = '光环'
+L['GUI_AURA_HEADER'] = '光环'
+L['GUI_AURA_DESC'] = '这些选项控制大部分和光环相关的设置'
+L['GUI_AURA_BASIC'] = '基础设定'
+L['GUI_AURA_ENABLE_AURA'] = "启用"
+L['GUI_AURA_MARGIN'] = "图标间隔"
+L['GUI_AURA_OFFSET'] = "增益/减益栏间隔"
+L['GUI_AURA_BUFF_REMINDER'] = "缺失增益提醒"
+L['GUI_AURA_BUFF_REMINDER_TIP'] = "\n提醒你缺失的自身增益光环\n比如法师智力牧师耐力潜行者毒药战士攻强之类"
+L['GUI_AURA_BUFF_SIZE'] = "增益图标大小"
+L['GUI_AURA_BUFFS_PER_ROW'] = "增益图标每行数量"
+L['GUI_AURA_REVERSE_BUFFS'] = "反向排列增益光环"
+L['GUI_AURA_DEBUFF_SIZE'] = "减益图标大小"
+L['GUI_AURA_DEBUFFS_PER_ROW'] = "减益图标每行数量"
+L['GUI_AURA_REVERSE_DEBUFFS'] = "反向排列减益光环"
+L['GUI_AURA_AURA_SOURCE'] = '光环来源'
+
+
+
+
+
+
+
+
+
 
 
 -- Version

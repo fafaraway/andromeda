@@ -24,19 +24,12 @@ local function setupCVars()
 end
 
 local function setupUIScale()
-	if not FreeUI_Options then return end
-
-	FreeUIOptions['General'] = {}
-
 	if C.ScreenHeight >= 2000 then
-		C.General.ui_scale = 2
-		FreeUIOptions['General']['ui_scale'] = 2
+		FreeUIConfigsGlobal['ui_scale'] = 2
 	elseif C.ScreenHeight >= 1500 then
-		C.General.ui_scale = 1.4
-		FreeUIOptions['General']['ui_scale'] = 1.4
+		FreeUIConfigsGlobal['ui_scale'] = 1.4
 	else
-		C.General.ui_scale = 1
-		FreeUIOptions['General']['ui_scale'] = 1
+		FreeUIConfigsGlobal['ui_scale'] = 1
 	end
 end
 
@@ -46,9 +39,9 @@ local function setupActionbars()
 	SetCVar('alwaysShowActionBars', 1)
 
 	SetActionBarToggles(1, 1, 1, 1, 1)
-	
+
 	MultiActionBar_Update()
-	
+
 	MultiBarBottomLeft:SetShown(true)
 	MultiBarRight:SetShown(true)
 	MultiBarLeft:SetShown(true)
@@ -214,8 +207,8 @@ function INSTALL:HelloWorld()
 	local step6 = function()
 		sb:SetValue(600)
 		PlaySoundFile('Sound\\Spells\\LevelUp.wav')
-		headerText:SetText(L['INSTALL_HEADER_FIFTH'])
-		bodyText:SetText(L['INSTALL_BODY_FIFTH'])
+		--headerText:SetText(L['INSTALL_HEADER_FIFTH'])
+		--bodyText:SetText(L['INSTALL_BODY_FIFTH'])
 		sbt:SetText('6/6')
 		leftButton:Hide()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
@@ -228,8 +221,8 @@ function INSTALL:HelloWorld()
 
 	local step5 = function()
 		sb:SetValue(500)
-		headerText:SetText(L['INSTALL_HEADER_FIFTH'])
-		bodyText:SetText(L['INSTALL_BODY_FIFTH'])
+		--headerText:SetText(L['INSTALL_HEADER_FIFTH'])
+		--bodyText:SetText(L['INSTALL_BODY_FIFTH'])
 		sbt:SetText('5/6')
 
 		leftButton:SetScript('OnClick', step6)
@@ -242,8 +235,8 @@ function INSTALL:HelloWorld()
 
 	local step4 = function()
 		sb:SetValue(400)
-		headerText:SetText(L['INSTALL_HEADER_FOURTH'])
-		bodyText:SetText(L['INSTALL_BODY_FOURTH'])
+		--headerText:SetText(L['INSTALL_HEADER_FOURTH'])
+		--bodyText:SetText(L['INSTALL_BODY_FOURTH'])
 		sbt:SetText('4/6')
 
 		leftButton:SetScript('OnClick', step5)
@@ -255,8 +248,8 @@ function INSTALL:HelloWorld()
 
 	local step3 = function()
 		sb:SetValue(300)
-		headerText:SetText(L['INSTALL_HEADER_THIRD'])
-		bodyText:SetText(L['INSTALL_BODY_THIRD'])
+		--headerText:SetText(L['INSTALL_HEADER_THIRD'])
+		--bodyText:SetText(L['INSTALL_BODY_THIRD'])
 		sbt:SetText('3/6')
 
 		leftButton:SetScript('OnClick', step4)
@@ -268,8 +261,8 @@ function INSTALL:HelloWorld()
 
 	local step2 = function()
 		sb:SetValue(200)
-		headerText:SetText(L['INSTALL_HEADER_SECOND'])
-		bodyText:SetText(L['INSTALL_BODY_SECOND'])
+		--headerText:SetText(L['INSTALL_HEADER_SECOND'])
+		--bodyText:SetText(L['INSTALL_BODY_SECOND'])
 		sbt:SetText('2/6')
 
 		leftButton:SetScript('OnClick', step3)
@@ -287,8 +280,8 @@ function INSTALL:HelloWorld()
 		sb:SetValue(0)
 		sb:SetValue(100)
 		sb:SetStatusBarColor(C.r, C.g, C.b)
-		headerText:SetText(L['INSTALL_HEADER_FIRST'])
-		bodyText:SetText(L['INSTALL_BODY_FIRST'])
+		--headerText:SetText(L['INSTALL_HEADER_FIRST'])
+		--bodyText:SetText(L['INSTALL_BODY_FIRST'])
 		sbt:SetText('1/6')
 
 		leftButton:Show()

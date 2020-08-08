@@ -4,7 +4,7 @@ local F, C, L = unpack(select(2, ...))
 local type, pairs, tonumber, wipe, next, Lerp = type, pairs, tonumber, table.wipe, next, Lerp
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, abs = math.min, math.max, math.floor, math.abs
-local assets, cfg = C.Assets, C.Theme
+local assets = C.Assets
 
 
 function F:Scale(x)
@@ -14,7 +14,7 @@ end
 
 function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
 	local fs = self:CreateFontString(nil, 'OVERLAY')
-	
+
 	if font then
 		if type(font) == 'table' then
 			fs:SetFont(font[1], font[2], font[3])
@@ -127,7 +127,7 @@ function F:CreateTex()
 end
 
 function F:CreateSD(a, m, s, override)
-	if not override and not cfg.shadow_border then return end
+	if not override and not FreeUIConfigs['theme']['shadow_border'] then return end
 	if self.Shadow then return end
 
 	local frame = self
@@ -161,8 +161,8 @@ function F:SetBackdrop(frame, a)
 	borders.LEFT:SetWidth(size)
 	borders.RIGHT:SetWidth(size)
 
-	F:SetBackdropColor(frame, cfg.backdrop_color[1], cfg.backdrop_color[2], cfg.backdrop_color[3], a)
-	F:SetBackdropBorderColor(frame, cfg.backdrop_border_color[1], cfg.backdrop_border_color[2], cfg.backdrop_border_color[3], cfg.backdrop_border_color[4])
+	F:SetBackdropColor(frame, FreeUIConfigs['theme'].backdrop_color[1], FreeUIConfigs['theme'].backdrop_color[2], FreeUIConfigs['theme'].backdrop_color[3], a)
+	F:SetBackdropBorderColor(frame, FreeUIConfigs['theme'].backdrop_border_color[1], FreeUIConfigs['theme'].backdrop_border_color[2], FreeUIConfigs['theme'].backdrop_border_color[3], FreeUIConfigs['theme'].backdrop_border_color[4])
 end
 
 function F:SetBackdropColor(frame, r, g, b, a)
@@ -220,7 +220,7 @@ end
 function F:CreateBD(a)
 	self:SetBackdrop(nil)
 	F:PixelBorders(self)
-	F:SetBackdrop(self, a or cfg.backdrop_alpha)
+	F:SetBackdrop(self, a or FreeUIConfigs['theme'].backdrop_alpha)
 
 	if not a then tinsert(C.Frames, self) end
 end
@@ -254,10 +254,10 @@ function F:CreateGradient()
 	local tex = self:CreateTexture(nil, 'BORDER')
 	tex:SetInside()
 	tex:SetTexture(assets.bd_tex)
-	if cfg.flat_style then
-		tex:SetVertexColor(cfg.flat_color[1], cfg.flat_color[2], cfg.flat_color[3], cfg.flat_alpha)
+	if FreeUIConfigs['theme'].flat_style then
+		tex:SetVertexColor(FreeUIConfigs['theme'].flat_color[1], FreeUIConfigs['theme'].flat_color[2], FreeUIConfigs['theme'].flat_color[3], FreeUIConfigs['theme'].flat_alpha)
 	else
-		tex:SetGradientAlpha('Vertical', cfg.gradient_color_primary[1], cfg.gradient_color_primary[2], cfg.gradient_color_primary[3], cfg.gradient_color_primary_alpha, cfg.gradient_color_secondary[1], cfg.gradient_color_secondary[2], cfg.gradient_color_secondary[3], cfg.gradient_color_secondary_alpha)
+		tex:SetGradientAlpha('Vertical', FreeUIConfigs['theme'].gradient_color_primary[1], FreeUIConfigs['theme'].gradient_color_primary[2], FreeUIConfigs['theme'].gradient_color_primary[3], FreeUIConfigs['theme'].gradient_color_primary_alpha, FreeUIConfigs['theme'].gradient_color_secondary[1], FreeUIConfigs['theme'].gradient_color_secondary[2], FreeUIConfigs['theme'].gradient_color_secondary[3], FreeUIConfigs['theme'].gradient_color_secondary_alpha)
 	end
 
 	return tex
@@ -287,26 +287,26 @@ end
 local function Button_OnEnter(self)
 	if not self:IsEnabled() then return end
 
-	if cfg.flat_style then
-		self.bgTex:SetVertexColor(C.r / 6, C.g / 6, C.b / 6)	
+	if FreeUIConfigs['theme'].flat_style then
+		self.bgTex:SetVertexColor(C.r / 6, C.g / 6, C.b / 6)
 	else
 		--self:SetBackdropColor(C.r, C.g, C.b, .25)
 	end
 
-	self:SetBackdropBorderColor(C.r, C.g, C.b, cfg.backdrop_border_alpha)
+	self:SetBackdropBorderColor(C.r, C.g, C.b, FreeUIConfigs['theme'].backdrop_border_alpha)
 	self.glow:SetAlpha(1)
 
 	CreatePulse(self.glow)
 end
 
 local function Button_OnLeave(self)
-	if cfg.flat_style then
-		self.bgTex:SetVertexColor(cfg.flat_color[1], cfg.flat_color[2], cfg.flat_color[3], cfg.flat_alpha)
+	if FreeUIConfigs['theme'].flat_style then
+		self.bgTex:SetVertexColor(FreeUIConfigs['theme'].flat_color[1], FreeUIConfigs['theme'].flat_color[2], FreeUIConfigs['theme'].flat_color[3], FreeUIConfigs['theme'].flat_alpha)
 	else
 		--self:SetBackdropColor(0, 0, 0, 0)
 	end
 
-	self:SetBackdropBorderColor(cfg.backdrop_border_color[1], cfg.backdrop_border_color[2], cfg.backdrop_border_color[3], cfg.backdrop_border_alpha)
+	self:SetBackdropBorderColor(FreeUIConfigs['theme'].backdrop_border_color[1], FreeUIConfigs['theme'].backdrop_border_color[2], FreeUIConfigs['theme'].backdrop_border_color[3], FreeUIConfigs['theme'].backdrop_border_alpha)
 	self.glow:SetScript('OnUpdate', nil)
 	self.glow:SetAlpha(0)
 end
@@ -364,7 +364,7 @@ function F:Reskin(noGlow)
 	F.CreateBD(self, 0)
 
 	self.bgTex = F.CreateGradient(self)
-	
+
 	if not noGlow then
 		self.glow = CreateFrame('Frame', nil, self)
 		self.glow:SetBackdrop({
@@ -380,27 +380,6 @@ function F:Reskin(noGlow)
 		self:HookScript('OnLeave', Button_OnLeave)
 	end
 end
-
---[[ local function Menu_OnEnter(self)
-	self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-end
-local function Menu_OnLeave(self)
-	self.bg:SetBackdropBorderColor(0, 0, 0)
-end
-local function Menu_OnMouseUp(self)
-	self.bg:SetBackdropColor(unpack(backdropColor), cfg.alpha)
-end
-local function Menu_OnMouseDown(self)
-	self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
-end
-function F:ReskinMenuButton()
-	F.StripTextures(self)
-	self.bg = F.SetBD(self)
-	self:SetScript('OnEnter', Menu_OnEnter)
-	self:SetScript('OnLeave', Menu_OnLeave)
-	self:HookScript('OnMouseUp', Menu_OnMouseUp)
-	self:HookScript('OnMouseDown', Menu_OnMouseDown)
-end ]]
 
 function F:ReskinTab()
 	self:DisableDrawLayer('BACKGROUND')
@@ -442,13 +421,7 @@ function F:Texture_OnEnter()
 end
 
 function F:Texture_OnLeave()
-	if self.pixels then
-		for _, pixel in pairs(self.pixels) do
-			pixel:SetVertexColor(1, 1, 1)
-		end
-	elseif self.bd then
-		self.bd:SetBackdropBorderColor(0, 0, 0)
-	elseif self.bg then
+	if self.bg then
 		self.bg:SetBackdropColor(0, 0, 0, .25)
 	else
 		self.bgTex:SetVertexColor(1, 1, 1)
@@ -481,7 +454,7 @@ function F:ReskinScroll()
 	local thumb = GrabScrollBarElement(self, 'ThumbTexture') or GrabScrollBarElement(self, 'thumbTexture') or self.GetThumbTexture and self:GetThumbTexture()
 	if thumb then
 		thumb:SetAlpha(0)
-		thumb:SetWidth(17)
+		thumb:SetWidth(16)
 		self.thumb = thumb
 
 		local bg = F.CreateBDFrame(self, 0)
@@ -505,19 +478,18 @@ function F:ReskinDropDown()
 	local frameName = self.GetName and self:GetName()
 	local down = self.Button or frameName and (_G[frameName..'Button'] or _G[frameName..'_Button'])
 
-	down:ClearAllPoints()
-	down:SetPoint('RIGHT', -18, 2)
-	F.ReskinArrow(down, 'down')
-	down:SetSize(20, 20)
-
 	local bg = F.CreateBDFrame(self, 0)
 	bg:SetPoint('TOPLEFT', 16, -4)
 	bg:SetPoint('BOTTOMRIGHT', -18, 8)
 	F.CreateGradient(bg)
+
+	down:ClearAllPoints()
+	down:SetPoint('RIGHT', bg, -2, 0)
+	F.ReskinArrow(down, 'down')
 end
 
 function F:ReskinClose(a1, p, a2, x, y)
-	self:SetSize(17, 17)
+	self:SetSize(16, 16)
 
 	if not a1 then
 		self:SetPoint('TOPRIGHT', -6, -6)
@@ -536,15 +508,10 @@ function F:ReskinClose(a1, p, a2, x, y)
 	dis:SetDrawLayer('OVERLAY')
 	dis:SetAllPoints()
 
-	self.pixels = {}
-	for i = 1, 2 do
-		local tex = self:CreateTexture()
-		tex:SetColorTexture(1, 1, 1)
-		tex:SetSize(11, 2)
-		tex:SetPoint('CENTER')
-		tex:SetRotation(math.rad((i-1/2)*90))
-		tinsert(self.pixels, tex)
-	end
+	local tex = self:CreateTexture()
+	tex:SetTexture(assets.close_tex)
+	tex:SetAllPoints()
+	self.bgTex = tex
 
 	self:HookScript('OnEnter', F.Texture_OnEnter)
  	self:HookScript('OnLeave', F.Texture_OnLeave)
@@ -569,15 +536,20 @@ function F:ReskinEditBox(height, width)
 end
 F.ReskinInput = F.ReskinEditBox -- Deprecated
 
-local direcIndex = {
-	['up'] = assets.arrow_up,
-	['down'] = assets.arrow_down,
-	['left'] = assets.arrow_left,
-	['right'] = assets.arrow_right,
+local arrowDegree = {
+	['up'] = 0,
+	['down'] = 180,
+	['left'] = 90,
+	['right'] = -90,
 }
 
+function F:SetupArrow(direction)
+	self:SetTexture(assets.arrow_tex)
+	self:SetRotation(rad(arrowDegree[direction]))
+end
+
 function F:ReskinArrow(direction)
-	self:SetSize(17, 17)
+	self:SetSize(16, 16)
 	F.Reskin(self, true)
 
 	self:SetDisabledTexture(assets.bd_tex)
@@ -587,9 +559,8 @@ function F:ReskinArrow(direction)
 	dis:SetAllPoints()
 
 	local tex = self:CreateTexture(nil, 'ARTWORK')
-	tex:SetTexture(direcIndex[direction])
-	tex:SetSize(8, 8)
-	tex:SetPoint('CENTER')
+	tex:SetAllPoints()
+	F.SetupArrow(tex, direction)
 	self.bgTex = tex
 
 	self:HookScript('OnEnter', F.Texture_OnEnter)
@@ -600,9 +571,9 @@ function F:ReskinFilterButton()
 	F.StripTextures(self)
 	F.Reskin(self)
 	self.Text:SetPoint('CENTER')
-	self.Icon:SetTexture(assets.arrow_right)
-	self.Icon:SetPoint('RIGHT', self, 'RIGHT', -5, 0)
-	self.Icon:SetSize(8, 8)
+	F.SetupArrow(self.Icon, 'right')
+	self.Icon:SetPoint('RIGHT')
+	self.Icon:SetSize(14, 14)
 end
 
 function F:ReskinNavBar()
@@ -725,9 +696,9 @@ local function UpdateExpandOrCollapse(self, texture)
 	self:SetNormalTexture('')
 
 	if texture and texture ~= '' then
-		if texture:find('Plus') then
+		if strfind(texture, 'Plus') then
 			self.expTex:SetTexCoord(0, .4375, 0, .4375)
-		elseif texture:find('Minus') then
+		elseif strfind(texture, 'Minus') then
 			self.expTex:SetTexCoord(.5625, 1, 0, .4375)
 		end
 		self.bg:Show()
@@ -758,40 +729,25 @@ function F:ReskinExpandOrCollapse()
 	hooksecurefunc(self, 'SetNormalTexture', UpdateExpandOrCollapse)
 end
 
+local buttonNames = {'MaximizeButton', 'MinimizeButton'}
 function F:ReskinMinMax()
-	for _, name in next, {'MaximizeButton', 'MinimizeButton'} do
+	for _, name in next, buttonNames do
 		local button = self[name]
 		if button then
-			button:SetSize(17, 17)
+			button:SetSize(16, 16)
 			button:ClearAllPoints()
 			button:SetPoint('CENTER', -3, 0)
 			F.Reskin(button)
 
-			button.pixels = {}
-
 			local tex = button:CreateTexture()
-			tex:SetColorTexture(1, 1, 1)
-			tex:SetSize(11, 2)
+			tex:SetSize(16, 16)
 			tex:SetPoint('CENTER')
-			tex:SetRotation(math.rad(45))
-			tinsert(button.pixels, tex)
-
-			local hline = button:CreateTexture()
-			hline:SetColorTexture(1, 1, 1)
-			hline:SetSize(7, 2)
-			tinsert(button.pixels, hline)
-
-			local vline = button:CreateTexture()
-			vline:SetColorTexture(1, 1, 1)
-			vline:SetSize(2, 7)
-			tinsert(button.pixels, vline)
+			button.bgTex = tex
 
 			if name == 'MaximizeButton' then
-				hline:Point("TOPRIGHT", -4, -4)
-				vline:Point("TOPRIGHT", -4, -4)
+				F.SetupArrow(tex, 'up')
 			else
-				hline:Point("BOTTOMLEFT", 4, 4)
-				vline:Point("BOTTOMLEFT", 4, 4)
+				F.SetupArrow(tex, 'down')
 			end
 
 			button:SetScript('OnEnter', F.Texture_OnEnter)
@@ -1274,16 +1230,14 @@ function F:AuraIcon(highlight)
 	F.CreateSD(self)
 end
 
-function F:CreateGear(name)
+function F:CreateGearButton(name)
 	local bu = CreateFrame('Button', name, self)
-	bu:SetSize(24, 24)
+	bu:SetSize(20, 20)
 	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture(assets.gear_tex)
-	--bu.Icon:SetTexCoord(0, .5, 0, .5)
-	bu.Icon:SetVertexColor(1,1,1,1)
+	bu.Icon:SetVertexColor(.6, .6, .6)
 	bu:SetHighlightTexture(assets.gear_tex)
-	--bu:GetHighlightTexture():SetTexCoord(0, .5, 0, .5)
 
 	return bu
 end
@@ -1322,7 +1276,7 @@ end
 
 -- Numberize
 function F.Numb(n)
-	if cfg.number_format == 1 then
+	if FreeUIConfigs['theme'].number_format == 1 then
 		if n >= 1e12 then
 			return ('%.2ft'):format(n / 1e12)
 		elseif n >= 1e9 then
@@ -1334,7 +1288,7 @@ function F.Numb(n)
 		else
 			return ('%.0f'):format(n)
 		end
-	elseif cfg.number_format == 2 then
+	elseif FreeUIConfigs['theme'].number_format == 2 then
 		if n >= 1e12 then
 			return format('%.2f'..L['MISC_NUMBER_CAP_3'], n / 1e12)
 		elseif n >= 1e8 then
@@ -1544,7 +1498,8 @@ local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
 local essenceTextureID = 2975691
 local essenceDescription = GetSpellDescription(277253)
 local ITEM_SPELL_TRIGGER_ONEQUIP = ITEM_SPELL_TRIGGER_ONEQUIP
-local tip = CreateFrame('GameTooltip', 'FreeUI_iLvlTooltip', nil, 'GameTooltipTemplate')
+local tip = CreateFrame('GameTooltip', 'FreeUI_ScanTooltip', nil, 'GameTooltipTemplate')
+F.ScanTip = tip
 
 function F:InspectItemTextures()
 	if not tip.gems then
@@ -1649,7 +1604,7 @@ function F.GetItemLevel(link, arg1, arg2, fullScan)
 			tip:SetHyperlink(link)
 		end
 
-		local firstLine = _G.FreeUI_iLvlTooltipTextLeft1:GetText()
+		local firstLine = _G.FreeUI_ScanTooltipTextLeft1:GetText()
 		if firstLine == RETRIEVING_ITEM_INFO then
 			return 'tooSoon'
 		end
@@ -1682,224 +1637,367 @@ F.Print = function(...)
 	print(C.Title..C.GreyColor..':|r', ...)
 end
 
--- Add APIs
-local function WatchPixelSnap(frame, snap)
-	if (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
-		frame.PixelSnapDisabled = nil
-	end
-end
 
-local function DisablePixelSnap(frame)
-	if (frame and not frame:IsForbidden()) and not frame.PixelSnapDisabled then
-		if frame.SetSnapToPixelGrid then
-			frame:SetSnapToPixelGrid(false)
-			frame:SetTexelSnappingBias(0)
-		elseif frame.GetStatusBarTexture then
-			local texture = frame:GetStatusBarTexture()
-			if texture and texture.SetSnapToPixelGrid then
-				texture:SetSnapToPixelGrid(false)
-				texture:SetTexelSnappingBias(0)
-			end
+
+
+
+
+
+
+
+
+
+
+
+-- GUI elements
+do
+	function F:CreateButton(width, height, text, fontSize)
+		local bu = CreateFrame('Button', nil, self)
+		bu:SetSize(width, height)
+		if type(text) == 'boolean' then
+			F.PixelIcon(bu, fontSize, true)
+		else
+			F.Reskin(bu)
+			bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, fontSize or 12, nil, text, nil, true)
 		end
 
-		frame.PixelSnapDisabled = true
+		return bu
+	end
+
+	function F:CreateCheckBox()
+		local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
+		F.ReskinCheck(cb)
+
+		cb.Type = 'CheckBox'
+		return cb
+	end
+
+	local function editBoxClearFocus(self)
+		self:ClearFocus()
+	end
+
+	function F:CreateEditBox(width, height)
+		local eb = CreateFrame('EditBox', nil, self)
+		eb:SetSize(width, height)
+		eb:SetAutoFocus(false)
+		eb:SetTextInsets(5, 5, 0, 0)
+		eb:SetFont(C.Assets.Fonts.Normal, 12)
+		F.CreateBD(eb, .3)
+		F.CreateGradient(eb)
+		eb:SetScript('OnEscapePressed', editBoxClearFocus)
+		eb:SetScript('OnEnterPressed', editBoxClearFocus)
+
+		eb.Type = 'EditBox'
+		return eb
+	end
+
+	local function optOnClick(self)
+		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+		local opt = self.__owner.options
+		for i = 1, #opt do
+			if self == opt[i] then
+				opt[i]:SetBackdropColor(1, .8, 0, .3)
+				opt[i].selected = true
+			else
+				opt[i]:SetBackdropColor(0, 0, 0, .3)
+				opt[i].selected = false
+			end
+		end
+		self.__owner.Text:SetText(self.text)
+		self:GetParent():Hide()
+	end
+
+	local function optOnEnter(self)
+		if self.selected then return end
+		self:SetBackdropColor(1, 1, 1, .25)
+	end
+
+	local function optOnLeave(self)
+		if self.selected then return end
+		self:SetBackdropColor(0, 0, 0)
+	end
+
+	local function buttonOnShow(self)
+		self.__list:Hide()
+	end
+
+	local function buttonOnClick(self)
+		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
+		F:TogglePanel(self.__list)
+	end
+
+	function F:CreateDropDown(width, height, data)
+		local dd = CreateFrame('Frame', nil, self)
+		dd:SetSize(width, height)
+		F.CreateBD(dd)
+		dd:SetBackdropBorderColor(1, 1, 1, .2)
+		dd.Text = F.CreateFS(dd, C.Assets.Fonts.Normal, 12, nil, '', nil, true, 'LEFT', 5, 0)
+		dd.Text:SetPoint('RIGHT', -5, 0)
+		dd.options = {}
+
+		local bu = CreateFrame('Button', nil, dd)
+		bu:SetPoint('RIGHT', -5, 0)
+		F.ReskinArrow(bu, 'down')
+		bu:SetSize(18, 18)
+
+		local list = CreateFrame('Frame', nil, dd)
+		list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
+		F.CreateBD(list, 1)
+		list:SetBackdropBorderColor(1, 1, 1, .2)
+		list:Hide()
+		bu.__list = list
+		bu:SetScript('OnShow', buttonOnShow)
+		bu:SetScript('OnClick', buttonOnClick)
+		dd.button = bu
+
+		local opt, index = {}, 0
+		for i, j in pairs(data) do
+			opt[i] = CreateFrame('Button', nil, list)
+			opt[i]:SetPoint('TOPLEFT', 4, -4 - (i-1)*(height+2))
+			opt[i]:SetSize(width - 8, height)
+			F.CreateBD(opt[i])
+			local text = F.CreateFS(opt[i], C.Assets.Fonts.Normal, 12, nil, j, nil, true, 'LEFT', 5, 0)
+			text:SetPoint('RIGHT', -5, 0)
+			opt[i].text = j
+			opt[i].__owner = dd
+			opt[i]:SetScript('OnClick', optOnClick)
+			opt[i]:SetScript('OnEnter', optOnEnter)
+			opt[i]:SetScript('OnLeave', optOnLeave)
+
+			dd.options[i] = opt[i]
+			index = index + 1
+		end
+		list:SetSize(width, index*(height+2) + 6)
+
+		dd.Type = 'DropDown'
+		return dd
+	end
+
+	local function updatePicker()
+		local swatch = ColorPickerFrame.__swatch
+		local r, g, b = ColorPickerFrame:GetColorRGB()
+		swatch.tex:SetVertexColor(r, g, b)
+		swatch.color.r, swatch.color.g, swatch.color.b = r, g, b
+	end
+
+	local function cancelPicker()
+		local swatch = ColorPickerFrame.__swatch
+		local r, g, b = ColorPicker_GetPreviousValues()
+		swatch.tex:SetVertexColor(r, g, b)
+		swatch.color.r, swatch.color.g, swatch.color.b = r, g, b
+	end
+
+	local function openColorPicker(self)
+		local r, g, b = self.color.r, self.color.g, self.color.b
+		ColorPickerFrame.__swatch = self
+		ColorPickerFrame.func = updatePicker
+		ColorPickerFrame.previousValues = {r = r, g = g, b = b}
+		ColorPickerFrame.cancelFunc = cancelPicker
+		ColorPickerFrame:SetColorRGB(r, g, b)
+		ColorPickerFrame:Show()
+	end
+
+	function F:CreateColorSwatch(name, color)
+		color = color or {r=1, g=1, b=1}
+
+		local swatch = CreateFrame('Button', nil, self)
+		swatch:SetSize(18, 18)
+		F.CreateBD(swatch, 1)
+		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Normal, 12, nil, name, nil, true, 'LEFT', 26, 0)
+		local tex = swatch:CreateTexture()
+		tex:SetInside()
+		tex:SetTexture(C.Assets.bd_tex)
+		tex:SetVertexColor(color.r, color.g, color.b)
+
+		swatch.tex = tex
+		swatch.color = color
+		swatch:SetScript('OnClick', openColorPicker)
+
+		return swatch
+	end
+
+	local function updateSliderEditBox(self)
+		local slider = self.__owner
+		local minValue, maxValue = slider:GetMinMaxValues()
+		local text = tonumber(self:GetText())
+		if not text then return end
+		text = min(maxValue, text)
+		text = max(minValue, text)
+		slider:SetValue(text)
+		self:SetText(text)
+		self:ClearFocus()
+	end
+
+	local function resetSliderValue(self)
+		local slider = self.__owner
+		if slider.__default then
+			slider:SetValue(slider.__default)
+		end
+	end
+
+	function F:CreateSlider(name, minValue, maxValue, step, width)
+		local slider = CreateFrame('Slider', nil, self, 'OptionsSliderTemplate')
+		--slider:SetPoint('TOPLEFT', x, y)
+		slider:SetWidth(width or 200)
+		slider:SetMinMaxValues(minValue, maxValue)
+		slider:SetValueStep(step)
+		slider:SetObeyStepOnDrag(true)
+		slider:SetHitRectInsets(0, 0, 0, 0)
+		F.ReskinSlider(slider)
+
+		slider.Low:SetText(minValue)
+		slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
+		slider.Low:SetFont(C.Assets.Fonts.Number, 11)
+		slider.High:SetText(maxValue)
+		slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
+		slider.High:SetFont(C.Assets.Fonts.Number, 11)
+		slider.Text:ClearAllPoints()
+		slider.Text:SetPoint('CENTER', 0, 25)
+		slider.Text:SetText(name)
+		slider.Text:SetTextColor(1, 1, 1)
+		slider.Text:SetFont(C.Assets.Fonts.Number, 11)
+		slider.value = F.CreateEditBox(slider, 50, 20)
+		slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -6)
+		slider.value:SetJustifyH('CENTER')
+		slider.value:SetFont(C.Assets.Fonts.Number, 11)
+		slider.value.__owner = slider
+		slider.value:SetScript('OnEnterPressed', updateSliderEditBox)
+
+		slider.clicker = CreateFrame('Button', nil, slider)
+		slider.clicker:SetAllPoints(slider.Text)
+		slider.clicker.__owner = slider
+		slider.clicker:SetScript('OnDoubleClick', resetSliderValue)
+
+		return slider
+	end
+
+	function F:TogglePanel(frame)
+		if frame:IsShown() then
+			frame:Hide()
+		else
+			frame:Show()
+		end
 	end
 end
 
-local function Kill(object)
-	if object.UnregisterAllEvents then
-		object:UnregisterAllEvents()
-		object:SetParent(F.HiddenFrame)
-	else
-		object.Show = object.Hide
+-- Add APIs
+do
+	local function WatchPixelSnap(frame, snap)
+		if (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
+			frame.PixelSnapDisabled = nil
+		end
 	end
 
-	object:Hide()
-end
+	local function DisablePixelSnap(frame)
+		if (frame and not frame:IsForbidden()) and not frame.PixelSnapDisabled then
+			if frame.SetSnapToPixelGrid then
+				frame:SetSnapToPixelGrid(false)
+				frame:SetTexelSnappingBias(0)
+			elseif frame.GetStatusBarTexture then
+				local texture = frame:GetStatusBarTexture()
+				if texture and texture.SetSnapToPixelGrid then
+					texture:SetSnapToPixelGrid(false)
+					texture:SetTexelSnappingBias(0)
+				end
+			end
 
-local function Size(frame, width, height, ...)
-	assert(width)
-	frame:SetSize(F:Scale(width), F:Scale(height or width), ...)
-end
-
-local function Width(frame, width, ...)
-	assert(width)
-	frame:SetWidth(F:Scale(width), ...)
-end
-
-local function Height(frame, height, ...)
-	assert(height)
-	frame:SetHeight(F:Scale(height), ...)
-end
-
-local function Point(frame, arg1, arg2, arg3, arg4, arg5, ...)
-	if arg2 == nil then arg2 = frame:GetParent() end
-
-	if type(arg2) == 'number' then arg2 = F:Scale(arg2) end
-	if type(arg3) == 'number' then arg3 = F:Scale(arg3) end
-	if type(arg4) == 'number' then arg4 = F:Scale(arg4) end
-	if type(arg5) == 'number' then arg5 = F:Scale(arg5) end
-
-	frame:SetPoint(arg1, arg2, arg3, arg4, arg5, ...)
-end
-
-local function SetInside(frame, anchor, xOffset, yOffset, anchor2)
-	xOffset = xOffset or C.Mult
-	yOffset = yOffset or C.Mult
-	anchor = anchor or frame:GetParent()
-
-	DisablePixelSnap(frame)
-	frame:ClearAllPoints()
-	frame:Point('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
-	frame:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
-end
-
-local function SetOutside(frame, anchor, xOffset, yOffset, anchor2)
-	xOffset = xOffset or C.Mult
-	yOffset = yOffset or C.Mult
-	anchor = anchor or frame:GetParent()
-
-	DisablePixelSnap(frame)
-	frame:ClearAllPoints()
-	frame:Point('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
-	frame:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
-end
-
-local function addapi(object)
-	local mt = getmetatable(object).__index
-	if not object.Kill then mt.Kill = Kill end
-	if not object.Size then mt.Size = Size end
-	if not object.Width then mt.Width = Width end
-	if not object.Height then mt.Height = Height end
-	if not object.Point then mt.Point = Point end
-	if not object.SetInside then mt.SetInside = SetInside end
-	if not object.SetOutside then mt.SetOutside = SetOutside end
-	if not object.DisabledPixelSnap then
-		if mt.SetTexture then hooksecurefunc(mt, 'SetTexture', DisablePixelSnap) end
-		if mt.SetTexCoord then hooksecurefunc(mt, 'SetTexCoord', DisablePixelSnap) end
-		if mt.CreateTexture then hooksecurefunc(mt, 'CreateTexture', DisablePixelSnap) end
-		if mt.SetVertexColor then hooksecurefunc(mt, 'SetVertexColor', DisablePixelSnap) end
-		if mt.SetColorTexture then hooksecurefunc(mt, 'SetColorTexture', DisablePixelSnap) end
-		if mt.SetSnapToPixelGrid then hooksecurefunc(mt, 'SetSnapToPixelGrid', WatchPixelSnap) end
-		if mt.SetStatusBarTexture then hooksecurefunc(mt, 'SetStatusBarTexture', DisablePixelSnap) end
-		mt.DisabledPixelSnap = true
-	end
-end
-
-local handled = {['Frame'] = true}
-local object = CreateFrame('Frame')
-addapi(object)
-addapi(object:CreateTexture())
-addapi(object:CreateMaskTexture())
-
-object = EnumerateFrames()
-while object do
-	if not object:IsForbidden() and not handled[object:GetObjectType()] then
-		addapi(object)
-		handled[object:GetObjectType()] = true
+			frame.PixelSnapDisabled = true
+		end
 	end
 
-	object = EnumerateFrames(object)
-end
+	local function Kill(object)
+		if object.UnregisterAllEvents then
+			object:UnregisterAllEvents()
+			object:SetParent(F.HiddenFrame)
+		else
+			object.Show = object.Hide
+		end
 
--- GUI APIs
-function F:CreateButton(width, height, text, fontSize)
-	local bu = CreateFrame('Button', nil, self)
-	bu:SetSize(width, height)
-	if type(text) == 'boolean' then
-		F.PixelIcon(bu, fontSize, true)
-	else
-		F.Reskin(bu)
-		bu.text = F.CreateFS(bu, {C.Assets.Fonts.Normal, fontSize or 12, 'OUTLINE'}, nil, nil, text)
+		object:Hide()
 	end
 
-	return bu
-end
-
-function F:CreateCheckBox()
-	local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
-	F.ReskinCheck(cb)
-
-	cb.Type = 'CheckBox'
-	return cb
-end
-
-local function editBoxClearFocus(self)
-	self:ClearFocus()
-end
-
-function F:CreateEditBox(width, height)
-	local eb = CreateFrame('EditBox', nil, self)
-	eb:SetSize(width, height)
-	eb:SetAutoFocus(false)
-	eb:SetTextInsets(5, 5, 0, 0)
-	eb:SetFont(C.Assets.Fonts.Normal, 11, 'OUTLINE')
-	F.CreateBD(eb, .3)
-	F.CreateGradient(eb)
-	eb:SetScript('OnEscapePressed', editBoxClearFocus)
-	eb:SetScript('OnEnterPressed', editBoxClearFocus)
-
-	eb.Type = 'EditBox'
-	return eb
-end
-
-local function updateSliderEditBox(self)
-	local slider = self.__owner
-	local minValue, maxValue = slider:GetMinMaxValues()
-	local text = tonumber(self:GetText())
-	if not text then return end
-	text = min(maxValue, text)
-	text = max(minValue, text)
-	slider:SetValue(text)
-	self:SetText(text)
-	self:ClearFocus()
-end
-
-local function resetSliderValue(self)
-	local slider = self.__owner
-	if slider.__default then
-		slider:SetValue(slider.__default)
+	local function Size(frame, width, height, ...)
+		assert(width)
+		frame:SetSize(F:Scale(width), F:Scale(height or width), ...)
 	end
-end
 
-function F:CreateSlider(name, minValue, maxValue, step, x, y, width)
-	local slider = CreateFrame('Slider', nil, self, 'OptionsSliderTemplate')
-	slider:SetPoint('TOPLEFT', x, y)
-	slider:SetWidth(width or 120)
-	slider:SetMinMaxValues(minValue, maxValue)
-	slider:SetValueStep(step)
-	slider:SetObeyStepOnDrag(true)
-	slider:SetHitRectInsets(0, 0, 0, 0)
-	F.ReskinSlider(slider)
+	local function Width(frame, width, ...)
+		assert(width)
+		frame:SetWidth(F:Scale(width), ...)
+	end
 
-	slider.Low:SetText(minValue)
-	slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
-	slider.Low:SetFont(C.Assets.font_normal, 11)
-	slider.High:SetText(maxValue)
-	slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
-	slider.High:SetFont(C.Assets.font_normal, 11)
-	slider.Text:ClearAllPoints()
-	slider.Text:SetPoint('CENTER', 0, 20)
-	slider.Text:SetText(C.InfoColor..name)
-	slider.value = F.CreateEditBox(slider, 30, 16)
-	slider.value:SetPoint('TOP', slider, 'BOTTOM')
-	slider.value:SetFont(C.Assets.font_normal, 11)
-	slider.value:SetJustifyH('CENTER')
-	slider.value.__owner = slider
-	slider.value:SetScript('OnEnterPressed', updateSliderEditBox)
+	local function Height(frame, height, ...)
+		assert(height)
+		frame:SetHeight(F:Scale(height), ...)
+	end
 
-	slider.clicker = CreateFrame('Button', nil, slider)
-	slider.clicker:SetAllPoints(slider.Text)
-	slider.clicker.__owner = slider
-	slider.clicker:SetScript('OnDoubleClick', resetSliderValue)
+	local function Point(frame, arg1, arg2, arg3, arg4, arg5, ...)
+		if arg2 == nil then arg2 = frame:GetParent() end
 
-	return slider
-end
+		if type(arg2) == 'number' then arg2 = F:Scale(arg2) end
+		if type(arg3) == 'number' then arg3 = F:Scale(arg3) end
+		if type(arg4) == 'number' then arg4 = F:Scale(arg4) end
+		if type(arg5) == 'number' then arg5 = F:Scale(arg5) end
 
-function F:TogglePanel(frame)
-	if frame:IsShown() then
-		frame:Hide()
-	else
-		frame:Show()
+		frame:SetPoint(arg1, arg2, arg3, arg4, arg5, ...)
+	end
+
+	local function SetInside(frame, anchor, xOffset, yOffset, anchor2)
+		xOffset = xOffset or C.Mult
+		yOffset = yOffset or C.Mult
+		anchor = anchor or frame:GetParent()
+
+		DisablePixelSnap(frame)
+		frame:ClearAllPoints()
+		frame:Point('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
+		frame:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
+	end
+
+	local function SetOutside(frame, anchor, xOffset, yOffset, anchor2)
+		xOffset = xOffset or C.Mult
+		yOffset = yOffset or C.Mult
+		anchor = anchor or frame:GetParent()
+
+		DisablePixelSnap(frame)
+		frame:ClearAllPoints()
+		frame:Point('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
+		frame:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
+	end
+
+	local function addapi(object)
+		local mt = getmetatable(object).__index
+		if not object.Kill then mt.Kill = Kill end
+		if not object.Size then mt.Size = Size end
+		if not object.Width then mt.Width = Width end
+		if not object.Height then mt.Height = Height end
+		if not object.Point then mt.Point = Point end
+		if not object.SetInside then mt.SetInside = SetInside end
+		if not object.SetOutside then mt.SetOutside = SetOutside end
+		if not object.DisabledPixelSnap then
+			if mt.SetTexture then hooksecurefunc(mt, 'SetTexture', DisablePixelSnap) end
+			if mt.SetTexCoord then hooksecurefunc(mt, 'SetTexCoord', DisablePixelSnap) end
+			if mt.CreateTexture then hooksecurefunc(mt, 'CreateTexture', DisablePixelSnap) end
+			if mt.SetVertexColor then hooksecurefunc(mt, 'SetVertexColor', DisablePixelSnap) end
+			if mt.SetColorTexture then hooksecurefunc(mt, 'SetColorTexture', DisablePixelSnap) end
+			if mt.SetSnapToPixelGrid then hooksecurefunc(mt, 'SetSnapToPixelGrid', WatchPixelSnap) end
+			if mt.SetStatusBarTexture then hooksecurefunc(mt, 'SetStatusBarTexture', DisablePixelSnap) end
+			mt.DisabledPixelSnap = true
+		end
+	end
+
+	local handled = {['Frame'] = true}
+	local object = CreateFrame('Frame')
+	addapi(object)
+	addapi(object:CreateTexture())
+	addapi(object:CreateMaskTexture())
+
+	object = EnumerateFrames()
+	while object do
+		if not object:IsForbidden() and not handled[object:GetObjectType()] then
+			addapi(object)
+			handled[object:GetObjectType()] = true
+		end
+
+		object = EnumerateFrames(object)
 	end
 end
