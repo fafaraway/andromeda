@@ -12,7 +12,7 @@ local mountCache = {}
 
 F:RegisterEvent('PLAYER_LOGIN', function()
 	for _, mountID in ipairs(C_MountJournal.GetMountIDs()) do
-		MountCache[select(2, C_MountJournal.GetMountInfoByID(mountID))] = mountID
+		mountCache[select(2, C_MountJournal.GetMountInfoByID(mountID))] = mountID
 	end
 end)
 
