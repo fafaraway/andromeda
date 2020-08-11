@@ -1,32 +1,21 @@
-name: Release
+name: CI
 
 on:
   push:
     tags:
-    - '*'
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Generate changelog
-        id: changelog
-        uses: metcalfc/changelog-generator@v0.4.1
+      - uses: actions/checkout@v1
         with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACCESS_TOKEN }}
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: BigWigsMods/packager@master
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+          args: release.sh
