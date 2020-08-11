@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 function MISC:FasterCamera()
-	if not cfg.faster_camera then return end
+	if not FreeUIConfigs['faster_camera'] then return end
 
 	local oldZoomIn = CameraZoomIn
 	local oldZoomOut = CameraZoomOut
@@ -36,7 +36,7 @@ UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
 local function SetCam(cmd)
 	ConsoleExec('ActionCam ' .. cmd)
 end
-SetCam(cfg.action_camera and 'basic' or 'off')
+SetCam(FreeUIConfigs['action_camera'] and 'basic' or 'off')
 
 
 

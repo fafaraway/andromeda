@@ -1,9 +1,6 @@
-local _, ns = ...
-local F, C, L = unpack(ns)
-local MISC, cfg, oUF = F:GetModule('Misc'), C.General, ns.oUF
+local F, C = unpack(select(2, ...))
+local MISC, oUF = F:GetModule('Misc'), F.oUF
 
-
--- Base on yClassColors by yleaf
 
 local format, ipairs, tinsert = string.format, ipairs, table.insert
 local C_FriendList_GetWhoInfo = C_FriendList.GetWhoInfo

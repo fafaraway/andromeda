@@ -23,7 +23,7 @@ local function SaveValue(key, value, newValue)
 	end
 end
 
-local function toggleChildren(self, checked)
+local function ToggleChildren(self, checked)
 	local tR, tG, tB
 	if checked then
 		tR, tG, tB = 1, 1, 1
@@ -62,19 +62,12 @@ local function onToggle(self)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
 	end
 
-	--SaveValue(self, checked)
-	if self.children then toggleChildren(self, checked) end
-
-	-- if self.needsReload then
-	-- 	if old[self] == nil then
-	-- 		old[self] = not checked
-	-- 	end
-
-	-- 	checkIsReloadNeeded()
-	-- end
+	if self.children then
+		ToggleChildren(self, checked)
+	end
 end
 
-local function CreateOptionsFrame()
+local function CreateGUI()
 	local f = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
 	f:SetSize(600, 640)
 	f:SetPoint('CENTER')
@@ -148,131 +141,6 @@ local function CreateGameMenuButton()
 	end)
 end
 
-
-function GUI.CreateSidePanel(parent, name, title)
-	local frame = CreateFrame('Frame', name, parent)
-	frame:SetSize(200, 640)
-	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
-	F.CreateBDFrame(frame, nil, true)
-    frame:Hide()
-	parent:HookScript('OnHide', function()
-		if frame:IsShown() then frame:Hide() end
-    end)
-
-   -- frame.tag = name
-
-    frame.header = frame:CreateFontString(nil, 'ARTWORK', 'SystemFont_Shadow_Med3')
-    frame.header:SetPoint('TOPLEFT', 20, -25)
-    --frame.header:SetText('|cffe9c55d'..title..'|r')
-    frame.header:SetShadowColor(0, 0, 0, 1)
-	frame.header:SetShadowOffset(2, -2)
-
-    frame.bg = CreateFrame('Frame', nil, frame)
-    frame.bg:SetSize(180, 540)
-	frame.bg:SetPoint('TOPLEFT', 10, -50)
-	F.CreateBDFrame(frame.bg, .3)
-
-    frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
-	frame.close:SetPoint('BOTTOM', 0, 6)
-	frame.close:SetSize(80, 24)
-	frame.close:SetText(CLOSE)
-	frame.close:SetScript('OnClick', function()
-		frame:Hide()
-	end)
-	F.Reskin(frame.close)
-
-    tinsert(sidePanels, frame)
-
-	return frame
-end
-
-function GUI.ToggleSidePanel(name)
-	for _, frame in next, sidePanels do
-		if frame:GetName() == name then
-			F:TogglePanel(frame)
-		else
-			frame:Hide()
-		end
-	end
-end
-
-
--- Check boxes
-GUI.CreateCheckBox = function(parent, key, value, callback, extra, caution)
-	local cb = F.CreateCheckBox(parent)
-	cb:SetSize(20, 20)
-	cb:SetHitRectInsets(-5, -5, -5, -5)
-
-	cb.Text = F.CreateFS(cb, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, nil, 'THICK', 'LEFT', 24, 0)
-
-	cb:SetChecked(SaveValue(key, value))
-	cb:SetScript('OnClick', function()
-		SaveValue(key, value, cb:GetChecked())
-		if callback then callback() end
-	end)
-	cb:HookScript('OnClick', onToggle)
-
-	if extra and type(extra) == 'function' then
-		local bu = F.CreateGearButton(parent)
-		bu:SetPoint('LEFT', cb.Text, 'RIGHT', -2, 1)
-		bu:SetScript('OnClick', extra)
-	end
-
-	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
-		cb.title = L['GUI_TIPS']
-		F.AddTooltip(cb, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
-	end
-
-	return cb
-end
-
--- Sliders
-GUI.CreateSlider = function(parent, key, value, callback, low, high, step)
-	local slider = F.CreateSlider(parent, value, low, high, step, 140)
-	slider.Text:SetText(L['GUI_'..strupper(key)..'_'..strupper(value)] or value)
-	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
-	slider:SetValue(SaveValue(key, value))
-	slider:SetScript('OnValueChanged', function(_, v)
-		local current = F:Round(tonumber(v), 2)
-		SaveValue(key, value, current)
-		slider.value:SetText(current)
-		if callback then callback() end
-	end)
-
-	slider.value:SetText(F:Round(SaveValue(key, value), 2))
-
-	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
-		slider.title = L['GUI_TIPS']
-		F.AddTooltip(slider, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
-	end
-
-	return slider
-end
-
--- Editbox
-GUI.CreateEditBox = function(parent, width, height, maxLetters)
-	local eb = F.CreateEditBox(parent, width, height)
-	eb:SetMaxLetters(maxLetters)
-	eb:SetText(SaveValue(key, value))
-
-	eb:HookScript("OnEscapePressed", function()
-		eb:SetText(SaveValue(key, value))
-	end)
-
-	eb:HookScript("OnEnterPressed", function()
-		SaveValue(key, value, eb:GetText())
-		if callback then callback() end
-	end)
-
-	eb.title = "Tips"
-	local tip = "EditBox Tip"
-	if tooltip then tip = tooltip.."|n"..tip end
-	F.AddTooltip(eb, "ANCHOR_RIGHT", tip, "INFO")
-
-	F.CreateFS(eb, C.Assets.Fonts.Normal, 12, nil, name, "SYSTEM", true, "CENTER", 0, 25)
-end
-
-
 local function SetActiveTab(tab)
 	activeTab = tab
 	activeTab:SetBackdropColor(C.r, C.g, C.b, .25)
@@ -286,9 +154,8 @@ local onTabClick = function(tab)
 	SetActiveTab(tab)
 end
 
-GUI.AddCategory = function(name)
+local function AddCategory(name)
 	local tag = name
-	--local tag = strlower(name)
 
 	local panel = CreateFrame('ScrollFrame', 'FreeUI_GUI_'..name, FreeUI_GUI, 'UIPanelScrollFrameTemplate')
 	panel:SetSize(380, 540)
@@ -306,7 +173,7 @@ GUI.AddCategory = function(name)
 
 	panel.Title = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge')
 	panel.Title:SetPoint('TOPLEFT', 14, -16)
-	panel.Title:SetText(L['GUI_'..name..'_HEADER'] or name)
+	panel.Title:SetText(L['GUI_'..name] or name)
 
 	panel.subText = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
 	panel.subText:SetPoint('TOPLEFT', panel.Title, 'BOTTOMLEFT', 0, -8)
@@ -337,18 +204,15 @@ GUI.AddCategory = function(name)
 
 	tab.panel = panel
 	panel.tab = tab
-	panel.tag = tag
+	--panel.tag = tag
 
 	FreeUI_GUI[tag] = panel
-
 
 	offset = offset + 32
 end
 
-GUI.AddSubCategory = function(category, name)
-	local header = category.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
-	header:SetText(name or category:GetName())
-	header:SetTextColor(233/255, 197/255, 93/255)
+function GUI:AddSubCategory(category, name)
+	local header = F.CreateFS(category.child, C.Assets.Fonts.Normal, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
 
 	local line = category.child:CreateTexture(nil, 'ARTWORK')
 	line:SetSize(380, 1)
@@ -359,12 +223,148 @@ GUI.AddSubCategory = function(category, name)
 end
 
 
+function GUI:CreateSidePanel(parent, name, title)
+	local frame = CreateFrame('Frame', name, parent)
+	frame:SetSize(200, 640)
+	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
+	frame:Hide()
+
+	frame.header = F.CreateFS(frame, C.Assets.Fonts.Normal, 12, nil, title, 'YELLOW', 'THICK', 'TOPLEFT', 20, -25)
+
+	frame.bg = CreateFrame('Frame', nil, frame)
+	frame.bg:SetSize(180, 540)
+	frame.bg:SetPoint('TOPLEFT', 10, -50)
+	F.CreateBDFrame(frame.bg, .3)
+
+	frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
+	frame.close:SetPoint('BOTTOM', 0, 6)
+	frame.close:SetSize(80, 24)
+	frame.close:SetText(CLOSE)
+	frame.close:SetScript('OnClick', function()
+		frame:Hide()
+	end)
+
+	parent:HookScript('OnHide', function()
+		if frame:IsShown() then frame:Hide() end
+	end)
+
+	tinsert(sidePanels, frame)
+	F.CreateBDFrame(frame, nil, true)
+	F.Reskin(frame.close)
+
+	return frame
+end
+
+function GUI:ToggleSidePanel(name)
+	for _, frame in next, sidePanels do
+		if frame:GetName() == name then
+			F:TogglePanel(frame)
+		else
+			frame:Hide()
+		end
+	end
+end
+
+
+-- Check boxes
+function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
+	local cb = F.CreateCheckBox(parent)
+	cb:SetSize(20, 20)
+	cb:SetHitRectInsets(-5, -5, -5, -5)
+
+	cb.Text = F.CreateFS(cb, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 24, 0)
+
+	cb:SetChecked(SaveValue(key, value))
+	cb:SetScript('OnClick', function()
+		SaveValue(key, value, cb:GetChecked())
+		if callback then callback() end
+	end)
+	cb:HookScript('OnClick', onToggle)
+
+	if extra and type(extra) == 'function' then
+		local bu = F.CreateGearButton(parent)
+		bu:SetPoint('LEFT', cb.Text, 'RIGHT', 0, 1)
+		bu:SetScript('OnClick', extra)
+	end
+
+	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
+		cb.title = L['GUI_TIPS']
+		F.AddTooltip(cb, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
+	end
+
+	return cb
+end
+
+-- Sliders
+function GUI:CreateSlider(parent, key, value, callback, low, high, step)
+	local slider = F.CreateSlider(parent, value, low, high, step, 160)
+	slider.Text:SetText(L['GUI_'..strupper(key)..'_'..strupper(value)] or value)
+	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
+	slider:SetValue(SaveValue(key, value))
+	slider:SetScript('OnValueChanged', function(_, v)
+		local current = F:Round(tonumber(v), 2)
+		SaveValue(key, value, current)
+		slider.value:SetText(current)
+		if callback then callback() end
+	end)
+
+	slider.value:SetText(F:Round(SaveValue(key, value), 2))
+
+	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
+		slider.title = L['GUI_TIPS']
+		F.AddTooltip(slider, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
+	end
+
+	return slider
+end
+
+-- Editbox
+function GUI:CreateEditBox(parent, width, height, maxLetters)
+	local eb = F.CreateEditBox(parent, width, height)
+	eb:SetMaxLetters(maxLetters)
+	eb:SetText(SaveValue(key, value))
+
+	eb:HookScript("OnEscapePressed", function()
+		eb:SetText(SaveValue(key, value))
+	end)
+
+	eb:HookScript("OnEnterPressed", function()
+		SaveValue(key, value, eb:GetText())
+		if callback then callback() end
+	end)
+
+	eb.title = "Tips"
+	local tip = "EditBox Tip"
+	if tooltip then tip = tooltip.."|n"..tip end
+	F.AddTooltip(eb, "ANCHOR_RIGHT", tip, "INFO")
+
+	F.CreateFS(eb, C.Assets.Fonts.Normal, 12, nil, name, "SYSTEM", true, "CENTER", 0, 25)
+end
+
+
+
+
+
 function GUI:OnLogin()
 
-	CreateOptionsFrame()
+	CreateGUI()
 	CreateGameMenuButton()
 
-	GUI.AddCategories()
+	AddCategory('GENERAL')
+	AddCategory('APPEARANCE')
+	AddCategory('NOTIFICATION')
+	AddCategory('AUTOMATION')
+	AddCategory('INFOBAR')
+	AddCategory('CHAT')
+	AddCategory('AURA')
+	AddCategory('ACTIONBAR')
+	AddCategory('COMBAT')
+	AddCategory('INVENTORY')
+	AddCategory('MAP')
+	AddCategory('QUEST')
+	AddCategory('TOOLTIP')
+	AddCategory('UNITFRAME')
+
 	GUI.AddOptions()
 
 	SetActiveTab(FreeUI_GUI.GENERAL.tab)

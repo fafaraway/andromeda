@@ -1,8 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
--- Credit: PetJournal_QuickFilter, Integer
 local PET_TYPE_SUFFIX = PET_TYPE_SUFFIX
 local ipairs, IsShiftKeyDown = ipairs, IsShiftKeyDown
 local C_PetJournal_SetPetTypeFilter = C_PetJournal.SetPetTypeFilter
@@ -78,7 +77,7 @@ function MISC:PetTabs_Load(addon)
 end
 
 function MISC:PetTabs_Init()
-	if not cfg.pet_filter then return end
+	if not FreeUIConfigs['pet_filter'] then return end
 
 	if IsAddOnLoaded("Blizzard_Collections") then
 		MISC:PetTabs_Create()

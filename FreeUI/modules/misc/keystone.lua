@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
@@ -135,8 +135,8 @@ function MISC:KeystoneInfo_Create()
 			local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
 			GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
 		end
-		GameTooltip:AddDoubleLine(" ", C.LineString)
-		GameTooltip:AddDoubleLine(" ", C.ScrollButton..L["MISC_RESET_KEYSTONES"].." ", 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(' ', C.LineString)
+		GameTooltip:AddDoubleLine(' ', C.ScrollButton..L['MISC_RESET_KEYSTONES']..' ', 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	button:SetScript('OnLeave', F.HideTooltip)
@@ -171,11 +171,11 @@ function MISC:KeystoneInfo_Update()
 end
 
 function MISC:GuildBest()
-	if not cfg.account_keystone then return end
-	
+	if not FreeUIConfigs['account_keystone'] then return end
+
 	F:RegisterEvent('ADDON_LOADED', MISC.GuildBest_OnLoad)
 
 	MISC:KeystoneInfo_Update()
 	F:RegisterEvent('BAG_UPDATE', MISC.KeystoneInfo_Update)
 end
-MISC:RegisterMisc("GuildBest", MISC.GuildBest)
+MISC:RegisterMisc('GuildBest', MISC.GuildBest)

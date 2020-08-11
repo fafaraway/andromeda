@@ -6,7 +6,7 @@ local myClass = select(2, UnitClass('player'))
 
 
 
-C['General'] = {
+--[[ C['General'] = {
 
 	['number_format'] = 1,
 
@@ -41,7 +41,7 @@ C['General'] = {
 	['easy_naked'] = true,
 	['easy_focus'] = true,
 		['easy_focus_on_unitframes'] = false,
-}
+} ]]
 
 --[[ C['Theme'] = {
 	['cursor_trail'] = true,
@@ -273,14 +273,14 @@ C['Map'] = {
 		['expBar'] = true,
 }
 
-C['Quest'] = {
+--[[ C['Quest'] = {
 	['enable'] = true,
 		['questLevel'] = true,
 		['rewardHightlight'] = true,
 		['extraQuestButton'] = true,
 		['completeRing'] = true,
 		['questNotifier'] = false,
-}
+} ]]
 
 C['Tooltip'] = {
 	['enable'] = true,
@@ -738,10 +738,43 @@ C.CharacterSettings = {
 	['ui_anchor'] = {},
 	['ui_anchor_temp'] = {},
 	['map_reveal'] = false,
-	['quick_quest'] = false,
+
 	['bind_type'] = 1,
 	['favourite_items'] = {},
 	['click_cast'] = {},
+
+
+	['hide_boss_banner'] = true,
+	['hide_talking_head'] = true,
+	['item_level'] = true,
+		['merchant_ilvl'] = true,
+		['gem_enchant'] = true,
+		['azerite_traits'] = true,
+	['tidy_errors'] =true,
+	['mail_button'] = true,
+	['undress_button'] = true,
+	['trade_target_info'] = true,
+	['trade_tabs'] = true,
+	['missing_stats'] = true,
+	['pet_filter'] = true,
+	['account_keystone'] = true,
+	['queue_timer'] = true,
+	['color_picker'] = true,
+	['order_hall'] = true,
+	['blow_my_whistle'] = true,
+
+	['group_tool'] = true,
+	['action_camera'] = true,
+	['faster_camera'] = true,
+
+	['block_stranger_invite'] = false,
+	['instant_loot'] = true,
+	['easy_mark'] = true,
+	['easy_delete'] = true,
+	['easy_naked'] = true,
+	['easy_focus'] = true,
+		['easy_focus_on_unitframes'] = false,
+
 
 
 	['theme'] = {
@@ -766,6 +799,17 @@ C.CharacterSettings = {
 		['reskin_weakauras'] = true,
 		['reskin_pgf'] = true,
 		['reskin_skada'] = true,
+	},
+
+
+	['quest'] = {
+		['enable_quest'] = true,
+			['show_level'] = true,
+			['auto_select_reward'] = true,
+			['extra_quest_button'] = true,
+			['complete_ring'] = true,
+			['quest_notifier'] = false,
+			['quick_quest'] = false,
 	},
 
 

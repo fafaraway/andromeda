@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
-
+-- #TODO
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
@@ -49,7 +49,7 @@ local function RepUpdate()
 				InitExtraRep(factionID,name)
 				local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
 				value = currentValue % threshold
-				if hasRewardPending then 
+				if hasRewardPending then
 					value = value + threshold
 				end
 				local extraChange = value - extraRep[name];
@@ -120,4 +120,4 @@ function MISC:Reputation()
 	hooksecurefunc('ReputationFrame_Update', HookParagonRep)
 end
 
-MISC:RegisterMisc("Reputation", MISC.Reputation)
+MISC:RegisterMisc('Reputation', MISC.Reputation)
