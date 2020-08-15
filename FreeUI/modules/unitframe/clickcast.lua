@@ -135,7 +135,7 @@ SpellBinder.makeSpellsList = function(_, scroll, delete)
 				for frame in pairs(ClickCastFrames) do
 					local f
 					if frame and type(frame) == 'table' then f = frame:GetName() end
-					if f and DB.frames[frame] then
+					if f and SpellBinder.frames[frame] then
 						if _G[f]:CanChangeAttribute() or _G[f]:CanChangeProtectedState() then
 							if _G[f]:GetAttribute(spell.modifier..'type'..spell.button) ~= 'menu' then
 								_G[f]:RegisterForClicks('AnyDown')
@@ -174,9 +174,9 @@ SpellBinder.makeFramesList = function()
 		local v
 		if frame and type(frame) == 'table' then v = frame:GetName() end
 		if cfg.click_cast_filter ~= true then
-			if v then DB.frames[frame] = DB.frames[frame] or true end
+			if v then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
 		else
-			if v ~= 'oUF_Target' and v ~= 'oUF_Player' then DB.frames[frame] = DB.frames[frame] or true end
+			if v ~= 'oUF_Target' and v ~= 'oUF_Player' then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
 		end
 	end
 end
@@ -248,7 +248,7 @@ hooksecurefunc(SpellBookFrame, 'Hide', function()
 end)
 
 hooksecurefunc(SpellBookFrame, 'Show', function()
-	
+
 
 	local tab = SpellBinder.OpenButton
 	tab:SetNormalTexture('Interface\\ICONS\\Spell_Holy_Chastise')
@@ -327,7 +327,7 @@ end
 
 SpellBinder.UpdateAll = function()
 	if InCombatLockdown() then
-		SpellBinder:RegisterEvent("PLAYER_REGEN_ENABLED")
+		SpellBinder:RegisterEvent('PLAYER_REGEN_ENABLED')
 		return
 	end
 	SpellBinder:makeFramesList()
@@ -345,8 +345,8 @@ SpellBinder:SetScript('OnEvent', function(self, event, ...)
 	if event == 'PLAYER_LOGIN' then
 		DB = FreeUIConfigs['click_cast']
 		DB.spells = DB.spells or {}
-		DB.frames = DB.frames or {}
 		DB.keys = DB.keys or {}
+		SpellBinder.frames = SpellBinder.frames or {}
 		SpellBinder:makeFramesList()
 		SpellBinder:makeSpellsList(ScrollSpells.child, true)
 
@@ -365,9 +365,9 @@ SpellBinder:SetScript('OnEvent', function(self, event, ...)
 		self:UnregisterEvent('PLAYER_LOGIN')
 	elseif event == 'PLAYER_ENTERING_WORLD' or event == 'GROUP_ROSTER_UPDATE' or event == 'ZONE_CHANGED' or event == 'ZONE_CHANGED_NEW_AREA' then
 		C_Timer.After(0.5, function() SpellBinder.UpdateAll() end)
-	elseif event == "PLAYER_REGEN_ENABLED" then
+	elseif event == 'PLAYER_REGEN_ENABLED' then
 		SpellBinder.UpdateAll()
-		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+		self:UnregisterEvent('PLAYER_REGEN_ENABLED')
 	elseif event == 'PLAYER_TALENT_UPDATE' then
 		if DB then
 			for _, spell in ipairs(DB.spells) do
@@ -395,7 +395,7 @@ SpellBinder:SetScript('OnEvent', function(self, event, ...)
 	end
 end)
 
-F:RegisterEvent("PLAYER_ENTERING_WORLD", function()
+F:RegisterEvent('PLAYER_ENTERING_WORLD', function()
 	F.ReskinPortraitFrame(SpellBinder)
 	F.ReskinScroll(SpellBinderScrollFrameSpellListScrollBar)
 end)
