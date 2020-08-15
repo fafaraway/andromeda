@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local _G = getfenv(0)
@@ -63,10 +63,10 @@ function MISC:OnLogin()
 	self:TicketStatusFrameMover()
 	self:VehicleIndicatorMover()
 	self:UIWidgetFrameMover()
-	
+
 
 	-- Hide Bossbanner
-	if cfg.hide_boss_banner then
+	if FreeUIConfigs['hide_boss_banner'] then
 		BossBanner:UnregisterAllEvents()
 	end
 
@@ -84,7 +84,7 @@ function MISC:OnLogin()
 		PlaySound(SOUNDKIT.READY_CHECK, 'master')
 	end)
 
-	
+
 
 	-- Fix blizz bug in addon list
 	local _AddonTooltip_Update = AddonTooltip_Update
@@ -94,7 +94,7 @@ function MISC:OnLogin()
 		_AddonTooltip_Update(owner)
 	end
 
-	
+
 
 	local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
 	if not LSM then return end
@@ -153,7 +153,7 @@ end
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
 function MISC:BlowMyWhistle()
-	if not cfg.whistle then return end
+	if not FreeUIConfigs['blow_my_whistle'] then return end
 
 	local whistleSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whistle.ogg'
 	local whistle_SpellID1 = 227334;
@@ -191,7 +191,7 @@ end
 
 -- Undress button
 function MISC:UndressButton()
-	if not cfg.undress_button then return end
+	if not FreeUIConfigs['undress_button'] then return end
 
 	local undressButton = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undressButton:SetSize(80, 22)
@@ -229,9 +229,9 @@ function MISC:UndressButton()
 	F.Reskin(undressButton)
 end
 
--- Colorize trade target name 
+-- Colorize trade target name
 function MISC:TradeTargetInfo()
-	if not cfg.trade_target_info then return end
+	if not FreeUIConfigs['trade_target_info'] then return end
 
 	local infoText = F.CreateFS(TradeFrame, C.Assets.Fonts.Normal, 14, true)
 	infoText:ClearAllPoints()
@@ -294,7 +294,7 @@ function MISC:UIWidgetFrameMover()
 end
 
 function MISC:Errors()
-	if not cfg.tidy_errors then return end
+	if not FreeUIConfigs['tidy_errors'] then return end
 
 	local holdtime = 0.52 -- hold time (seconds)
 	local fadeintime = 0.08 -- fadein time (seconds)
@@ -344,14 +344,14 @@ end
 
 function MISC:EasyDelete()
 	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
-		if cfg.easy_delete then
+		if FreeUIConfigs['easy_delete'] then
 			self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 		end
 	end)
 end
 
 function MISC:EasyNaked()
-	if not cfg.easy_naked then return end
+	if not FreeUIConfigs['easy_naked'] then return end
 
 	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
 	bu:SetSize(31, 33)
@@ -388,7 +388,7 @@ local function instantLoot()
 end
 
 function MISC:InstantLoot()
-	if cfg.instant_loot then
+	if FreeUIConfigs['instant_loot'] then
 		F:RegisterEvent('LOOT_READY', instantLoot)
 	else
 		F:UnregisterEvent('LOOT_READY', instantLoot)
@@ -397,7 +397,7 @@ end
 
 function MISC:BlockStrangerInvite()
 	F:RegisterEvent('PARTY_INVITE_REQUEST', function(_, _, _, _, _, _, _, guid)
-		if cfg.block_stranger_invite and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
+		if FreeUIConfigs['block_stranger_invite'] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
 			DeclineGroup()
 			StaticPopup_Hide('PARTY_INVITE')
 		end

@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
 
-
+-- #TODO
 local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r"
 local clientLevelNameString = "|cffffffff%s|r (|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r%s) |cff%02x%02x%02x%s|r"
 local levelNameClassString = "|cff%02x%02x%02x%d|r %s%s%s"
@@ -138,7 +138,7 @@ function INFOBAR:Friends()
 
 	FreeUIFriendsButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 80, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
-		
+
 		if button == 'LeftButton' then
 			ToggleFriendsFrame()
 		elseif button == 'RightButton' then

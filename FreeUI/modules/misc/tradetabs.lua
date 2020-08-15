@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local pairs, unpack, tinsert, select = pairs, unpack, tinsert, select
@@ -29,9 +29,9 @@ function MISC:UpdateProfessions()
 	local prof1, prof2, _, fish, cook = GetProfessions()
 	local profs = {prof1, prof2, fish, cook}
 
-	if C.MyClass == "DEATHKNIGHT" then
+	if C.MyClass == 'DEATHKNIGHT' then
 		MISC:TradeTabs_Create(nil, RUNEFORGING_ID)
-	elseif C.MyClass == "ROGUE" and IsPlayerSpell(PICK_LOCK) then
+	elseif C.MyClass == 'ROGUE' and IsPlayerSpell(PICK_LOCK) then
 		MISC:TradeTabs_Create(nil, PICK_LOCK)
 	end
 
@@ -116,38 +116,38 @@ function MISC:TradeTabs_Create(slotID, spellID, toyID, itemID)
 		name, _, texture = GetSpellInfo(spellID)
 	end
 
-	local tab = CreateFrame("CheckButton", nil, TradeSkillFrame, "SpellBookSkillLineTabTemplate, SecureActionButtonTemplate")
+	local tab = CreateFrame('CheckButton', nil, TradeSkillFrame, 'SpellBookSkillLineTabTemplate, SecureActionButtonTemplate')
 	tab.tooltip = name
 	tab.slotID = slotID
 	tab.spellID = spellID
 	tab.itemID = toyID or itemID
-	tab.type = (toyID and "toy") or (itemID and "item") or "spell"
+	tab.type = (toyID and 'toy') or (itemID and 'item') or 'spell'
 	if slotID then
-		tab:SetScript("OnClick", MISC.TradeTabs_OnClick)
+		tab:SetScript('OnClick', MISC.TradeTabs_OnClick)
 	else
-		tab:SetAttribute("type", tab.type)
+		tab:SetAttribute('type', tab.type)
 		tab:SetAttribute(tab.type, name)
 	end
 	tab:SetNormalTexture(texture)
 	tab:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 	tab:Show()
 
-	tab.CD = CreateFrame("Cooldown", nil, tab, "CooldownFrameTemplate")
+	tab.CD = CreateFrame('Cooldown', nil, tab, 'CooldownFrameTemplate')
 	tab.CD:SetAllPoints()
 
-	tab.cover = CreateFrame("Frame", nil, tab)
+	tab.cover = CreateFrame('Frame', nil, tab)
 	tab.cover:SetAllPoints()
 	tab.cover:EnableMouse(true)
 
-	tab:SetPoint("TOPLEFT", TradeSkillFrame, "TOPRIGHT", 3, -index*42)
+	tab:SetPoint('TOPLEFT', TradeSkillFrame, 'TOPRIGHT', 3, -index*42)
 	tinsert(tabList, tab)
 	index = index + 1
 end
 
 function MISC:TradeTabs_FilterIcons()
 	local buttonList = {
-		[1] = {"Atlas:bags-greenarrow", TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes},
-		[2] = {"Interface\\RAIDFRAME\\ReadyCheck-Ready", CRAFT_IS_MAKEABLE, C_TradeSkillUI_GetOnlyShowMakeableRecipes, C_TradeSkillUI_SetOnlyShowMakeableRecipes},
+		[1] = {'Atlas:bags-greenarrow', TRADESKILL_FILTER_HAS_SKILL_UP, C_TradeSkillUI_GetOnlyShowSkillUpRecipes, C_TradeSkillUI_SetOnlyShowSkillUpRecipes},
+		[2] = {'Interface\\RAIDFRAME\\ReadyCheck-Ready', CRAFT_IS_MAKEABLE, C_TradeSkillUI_GetOnlyShowMakeableRecipes, C_TradeSkillUI_SetOnlyShowMakeableRecipes},
 	}
 
 	local function filterClick(self)
@@ -163,13 +163,13 @@ function MISC:TradeTabs_FilterIcons()
 
 	local buttons = {}
 	for index, value in pairs(buttonList) do
-		local bu = CreateFrame("Button", nil, TradeSkillFrame)
+		local bu = CreateFrame('Button', nil, TradeSkillFrame)
 		bu:SetSize(22, 22)
-		bu:SetPoint("RIGHT", TradeSkillFrame.FilterButton, "LEFT", -5 - (index-1)*27, 0)
+		bu:SetPoint('RIGHT', TradeSkillFrame.FilterButton, 'LEFT', -5 - (index-1)*27, 0)
 		F.PixelIcon(bu, value[1], true)
-		F.AddTooltip(bu, "ANCHOR_TOP", value[2])
+		F.AddTooltip(bu, 'ANCHOR_TOP', value[2])
 		bu.__value = value
-		bu:SetScript("OnClick", filterClick)
+		bu:SetScript('OnClick', filterClick)
 
 		buttons[index] = bu
 	end
@@ -183,7 +183,7 @@ function MISC:TradeTabs_FilterIcons()
 			end
 		end
 	end
-	F:RegisterEvent("TRADE_SKILL_LIST_UPDATE", updateFilterStatus)
+	F:RegisterEvent('TRADE_SKILL_LIST_UPDATE', updateFilterStatus)
 end
 
 function MISC:TradeTabs_OnLoad()
@@ -191,23 +191,23 @@ function MISC:TradeTabs_OnLoad()
 
 	MISC:TradeTabs_Reskin()
 	MISC:TradeTabs_Update()
-	F:RegisterEvent("TRADE_SKILL_SHOW", MISC.TradeTabs_Update)
-	F:RegisterEvent("TRADE_SKILL_CLOSE", MISC.TradeTabs_Update)
-	F:RegisterEvent("CURRENT_SPELL_CAST_CHANGED", MISC.TradeTabs_Update)
+	F:RegisterEvent('TRADE_SKILL_SHOW', MISC.TradeTabs_Update)
+	F:RegisterEvent('TRADE_SKILL_CLOSE', MISC.TradeTabs_Update)
+	F:RegisterEvent('CURRENT_SPELL_CAST_CHANGED', MISC.TradeTabs_Update)
 
 	MISC:TradeTabs_FilterIcons()
 end
 
 function MISC.TradeTabs_OnEvent(event, addon)
-	if event == "ADDON_LOADED" and addon == "Blizzard_TradeSkillUI" then
+	if event == 'ADDON_LOADED' and addon == 'Blizzard_TradeSkillUI' then
 		F:UnregisterEvent(event, MISC.TradeTabs_OnEvent)
 
 		if InCombatLockdown() then
-			F:RegisterEvent("PLAYER_REGEN_ENABLED", MISC.TradeTabs_OnEvent)
+			F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.TradeTabs_OnEvent)
 		else
 			MISC:TradeTabs_OnLoad()
 		end
-	elseif event == "PLAYER_REGEN_ENABLED" then
+	elseif event == 'PLAYER_REGEN_ENABLED' then
 		F:UnregisterEvent(event, MISC.TradeTabs_OnEvent)
 		MISC:TradeTabs_OnLoad()
 	end
@@ -215,8 +215,8 @@ end
 
 
 function MISC:TradeTabs()
-	if not cfg.trade_tabs then return end
+	if not FreeUIConfigs['trade_tabs'] then return end
 
 	F:RegisterEvent('ADDON_LOADED', MISC.TradeTabs_OnEvent)
 end
-MISC:RegisterMisc("TradeTabs", MISC.TradeTabs)
+MISC:RegisterMisc('TradeTabs', MISC.TradeTabs)

@@ -23,12 +23,12 @@ C.Unitframe.target_height = 7
 
 
 -- Override fonts
-C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\out.ttf'
+C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
 C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-C.Assets.Fonts.Chat   = 'Fonts\\New folder\\out.ttf'
+C.Assets.Fonts.Chat   = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
 C.Assets.Fonts.Number = 'Fonts\\FreeUI\\sarasa_tccc.ttf'
 
-STANDARD_TEXT_FONT = 'Fonts\\FreeUI\\out.ttf'
+STANDARD_TEXT_FONT = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
 UNIT_NAME_FONT     = 'Fonts\\FreeUI\\header.ttf'
 DAMAGE_TEXT_FONT   = 'Fonts\\FreeUI\\damage.ttf'
 

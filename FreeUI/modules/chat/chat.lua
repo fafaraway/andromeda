@@ -102,11 +102,11 @@ function CHAT:RestyleChatFrame()
 	lang:SetPoint('BOTTOMRIGHT', eb, 'BOTTOMRIGHT', 29, 0)
 	lang.bd = F.CreateBDFrame(lang, .6, true)
 
-	local tab = _G[name.."Tab"]
+	local tab = _G[name..'Tab']
 	tab:SetAlpha(1)
 	local tabFs = tab:GetFontString()
 	F.StripTextures(tab, 7)
-	hooksecurefunc(tab, "SetAlpha", CHAT.TabSetAlpha)
+	hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
 
 	if cfg.outline then
 		tabFs:SetFont(C.Assets.Fonts.Chat, 12, 'OUTLINE')
@@ -117,7 +117,7 @@ function CHAT:RestyleChatFrame()
 		tabFs:SetShadowOffset(2, -2)
 	end
 
-	if cfg.lock then F.StripTextures(self) end
+	if cfg.lock_position then F.StripTextures(self) end
 
 	F.HideObject(self.buttonFrame)
 	F.HideObject(self.ScrollBar)
@@ -193,7 +193,7 @@ function CHAT:UpdateTabChannelSwitch()
 		end
 	end
 end
-hooksecurefunc("ChatEdit_CustomTabPressed", CHAT.UpdateTabChannelSwitch)
+hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
 
 function CHAT:QuickMouseScroll(dir)
 	if dir > 0 then
@@ -212,7 +212,7 @@ function CHAT:QuickMouseScroll(dir)
 		end
 	end
 end
-hooksecurefunc("FloatingChatFrame_OnMouseScroll", CHAT.QuickMouseScroll)
+hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
 
 function CHAT:ResizeChatFrame()
 	ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
@@ -232,28 +232,28 @@ end
 
 local function updateChatBubble()
 	local name, instType = GetInstanceInfo()
-	if name and (instType == "raid" or instType == "party" or instType == "scenario" or instType == "pvp" or instType == "arena") then
-		SetCVar("chatBubbles", 1)
+	if name and (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
+		SetCVar('chatBubbles', 1)
 	else
-		SetCVar("chatBubbles", 0)
+		SetCVar('chatBubbles', 0)
 	end
 end
 
 function CHAT:AutoToggleChatBubble()
 	if cfg.auto_toggle_chat_bubble then
-		F:RegisterEvent("PLAYER_ENTERING_WORLD", updateChatBubble)
+		F:RegisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
 	else
-		F:UnregisterEvent("PLAYER_ENTERING_WORLD", updateChatBubble)
+		F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
 	end
 end
 
 
 function CHAT:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
-		self.RestyleChatFrame(_G["ChatFrame"..i])
+		self.RestyleChatFrame(_G['ChatFrame'..i])
 	end
 
-	hooksecurefunc("FCF_OpenTemporaryWindow", function()
+	hooksecurefunc('FCF_OpenTemporaryWindow', function()
 		for _, chatFrameName in next, CHAT_FRAMES do
 			local frame = _G[chatFrameName]
 			if frame.isTemporary then
@@ -262,7 +262,7 @@ function CHAT:OnLogin()
 		end
 	end)
 
-	hooksecurefunc("FCFTab_UpdateColors", self.UpdateTabColors)
+	hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
 
 	-- Font size
 	for i = 1, 15 do
@@ -270,15 +270,15 @@ function CHAT:OnLogin()
 	end
 
 	-- Default
-	SetCVar("chatStyle", "classic")
+	SetCVar('chatStyle', 'classic')
 	F.HideOption(InterfaceOptionsSocialPanelChatStyle)
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Lock chatframe
 	if cfg.lock then
 		self:UpdateChatSize()
-		hooksecurefunc("FCF_SavePositionAndDimensions", self.UpdateChatSize)
-		F:RegisterEvent("UI_SCALE_CHANGED", self.UpdateChatSize)
+		hooksecurefunc('FCF_SavePositionAndDimensions', self.UpdateChatSize)
+		F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
 	end
 
 	-- Remove player's realm name
@@ -323,7 +323,7 @@ function CHAT:OnLogin()
 
 	if cfg.voiceIcon then
 		_G.ChatFrameChannelButton:ClearAllPoints()
-		_G.ChatFrameChannelButton:SetPoint("TOPRIGHT", _G.ChatFrame1, "TOPLEFT", -6, -26)
+		_G.ChatFrameChannelButton:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, -26)
 		_G.ChatFrameChannelButton:SetParent(UIParent)
 	else
 		F.HideObject(_G.ChatFrameChannelButton)
@@ -335,10 +335,10 @@ function CHAT:OnLogin()
 	if not BNFeaturesEnabledAndConnected() then return end
 	if not cfg.profanity then
 		if C.isCNPortal then
-			ConsoleExec("portal TW")
+			ConsoleExec('portal TW')
 		end
-		SetCVar("profanityFilter", 0)
+		SetCVar('profanityFilter', 0)
 	else
-		SetCVar("profanityFilter", 1)
+		SetCVar('profanityFilter', 1)
 	end
 end

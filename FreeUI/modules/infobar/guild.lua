@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
 
-
+-- #TODO
 local tthead, ttsubh, ttoff = {r = 0.4, g = 0.78, b = 1}, {r = 0.75, g = 0.9, b = 1}, {r = .3, g = 1, b = .3}
 local activezone, inactivezone = {r = 0.3, g = 1.0, b = 0.3}, {r = 0.65, g = 0.65, b = 0.65}
 local guildInfoString = "%s [%d]"
@@ -91,7 +91,7 @@ function INFOBAR:Guild()
 
 	FreeUIGuildButton.onMouseUp = function(self, btn)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
-		
+
 		if IsInGuild() then
 			if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
 			GuildFrame_Toggle()
@@ -120,7 +120,7 @@ function INFOBAR:Guild()
 
 		if GuildInfo and GuildLevel then
 			GameTooltip:AddDoubleLine(GuildInfo, string.format('%s: %s/%s', GUILD_ONLINE_LABEL, online, #guildTable),.9, .8, .6, 1, 1, 1)
-	
+
 		end
 
 		if guildMotD ~= "" then

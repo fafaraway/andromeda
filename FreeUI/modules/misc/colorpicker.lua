@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local colorBuffer = {}
@@ -78,7 +78,7 @@ end
 -- load:SetScript('OnEvent', function(self)
 -- 	self:UnregisterAllEvents()
 function MISC:ColorPicker()
-	if not cfg.color_picker then return end
+	if not FreeUIConfigs['color_picker'] then return end
 	if IsAddOnLoaded('ColorPickerPlus') then return end
 
 	ColorPickerFrame:HookScript('OnShow', function()
@@ -278,4 +278,4 @@ function MISC:ColorPicker()
 	ColorPickerFrame:SetUserPlaced(true)
 	ColorPickerFrame:EnableKeyboard(false)
 end
-MISC:RegisterMisc("ColorPicker", MISC.ColorPicker)
+MISC:RegisterMisc('ColorPicker', MISC.ColorPicker)

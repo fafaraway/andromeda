@@ -9,7 +9,7 @@ local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 
 function MISC:MissingStats()
-	if not cfg.missing_stats then return end
+	if not FreeUIConfigs['missing_stats'] then return end
 	if IsAddOnLoaded('DejaCharacterStats') then return end
 
 	local statPanel = CreateFrame('Frame', nil, CharacterFrameInsetRight)
@@ -30,7 +30,7 @@ function MISC:MissingStats()
 			statPanel:Hide()
 		else
 			statPanel:Show()
-		end	
+		end
 	end)
 
 	-- Change default data

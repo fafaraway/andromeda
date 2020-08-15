@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local menuFrame = CreateFrame('Frame', nil, UIParent, 'UIDropDownMenuTemplate')
@@ -14,9 +14,9 @@ local menuList = {
 	{text = '|cffFF8000'..L['AUTOMATION_MARK_CIRCLE'], func = function() SetRaidTarget('target', 2) end},
 	{text = '|cffffff00'..L['AUTOMATION_MARK_STAR'], func = function() SetRaidTarget('target', 1) end},
 }
-	
+
 function MISC:EasyMark()
-	if not cfg.easy_mark then return end
+	if not FreeUIConfigs['easy_mark'] then return end
 
 	WorldFrame:HookScript('OnMouseDown', function(self, button)
 		if button == 'LeftButton' and IsAltKeyDown() and UnitExists('mouseover') then

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local _G = getfenv(0)
@@ -47,7 +47,7 @@ end
 
 
 function MISC:Focuser()
-	if not cfg.easy_focus then return end
+	if not FreeUIConfigs['easy_focus'] then return end
 
 	-- Keybinding override so that models can be shift/alt/ctrl+clicked
 	local f = CreateFrame('CheckButton', 'FocuserButton', UIParent, 'SecureActionButtonTemplate')
@@ -57,8 +57,8 @@ function MISC:Focuser()
 
 	hooksecurefunc('CreateFrame', MISC.Focuser_CreateFrameHook)
 
-	if not cfg.easy_focus_on_unitframes then return end
-	
+	if not FreeUIConfigs['easy_focus_on_unitframes'] then return end
+
 	MISC:Focuser_OnEvent()
 	F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.Focuser_OnEvent)
 	F:RegisterEvent('GROUP_ROSTER_UPDATE', MISC.Focuser_OnEvent)
