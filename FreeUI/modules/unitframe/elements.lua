@@ -93,7 +93,7 @@ end
 
 -- Health prediction
 function UNITFRAME:AddHealthPrediction(self)
-	if cfg.heal_prediction then 
+	if cfg.heal_prediction then
 		local myBar = CreateFrame('StatusBar', nil, self.Health)
 		myBar:SetPoint('TOP')
 		myBar:SetPoint('BOTTOM')
@@ -129,7 +129,7 @@ function UNITFRAME:AddHealthPrediction(self)
 			frequentUpdates = true,
 		}
 	end
-	
+
 	if cfg.heal_prediction_over_absorb then
 		local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
 		overAbsorb:SetPoint('TOP', 0, 2)
@@ -233,7 +233,7 @@ local function PostUpdateAltPower(element, _, cur, _, max)
 
 		element:SetStatusBarColor(r, g, b)
 		value:SetTextColor(r, g, b)
-		
+
 		--[[ local perc = math.floor((cur/max)*100)
 		if perc < 35 then
 			element:SetStatusBarColor(0, 1, 0)
@@ -283,7 +283,7 @@ end
 local function PostCreateIcon(element, button)
 	button.bg = F.CreateBDFrame(button)
 	button.glow = F.CreateSD(button.bg, .35, 2, 2)
-	
+
 	element.disableCooldown = true
 	button:SetFrameLevel(element:GetFrameLevel() + 4)
 
@@ -507,7 +507,7 @@ function UNITFRAME:AddBuffs(self)
 	buffs['growth-x'] = 'RIGHT'
 	buffs.spacing = 3
 	buffs.num = 2
-	
+
 	if style == 'party' then
 		buffs.size = 18
 		buffs.PostUpdate = function(icons)
@@ -546,7 +546,7 @@ end
 function UNITFRAME:AddDebuffs(self)
 	local style = self.unitStyle
 	local debuffs = CreateFrame('Frame', nil, self)
-	
+
 	if style == 'party' and not cfg.symmetry then
 		debuffs.initialAnchor = 'LEFT'
 		debuffs['growth-x'] = 'RIGHT'
@@ -804,7 +804,7 @@ local function OnCastbarUpdate(self, elapsed)
 			return
 		end
 
-		if self.__owner.unit == 'player' then
+		if self.__owner.unit == 'player' and self.Time then
 			if self.delay ~= 0 then
 				self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
 			else
@@ -813,12 +813,12 @@ local function OnCastbarUpdate(self, elapsed)
 					self.Lag:SetFormattedText('%d ms', self.SafeZone.timeDiff * 1000)
 				end
 			end
-		else
-			if duration > 1e4 then
-				self.Time:SetText('∞')
-			else
-				self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
-			end
+		-- else
+		-- 	if duration > 1e4 then
+		-- 		self.Time:SetText('∞')
+		-- 	else
+		-- 		self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
+		-- 	end
 		end
 		self.duration = duration
 		self:SetValue(duration)
@@ -972,7 +972,7 @@ function UNITFRAME:AddCastBar(self)
 	if self.unitStyle == 'focus' and cfg.castbar_focus_separate then
 		castbar:SetSize(cfg.castbar_focus_width, cfg.castbar_focus_height)
 		castbar:ClearAllPoints()
-		
+
 		F.Mover(castbar, L['MOVER_UNITFRAME_FOCUS_CASTBAR'], 'FocusCastbar', {'CENTER', UIParent, 'CENTER', 0, 200}, cfg.castbar_focus_width, cfg.castbar_focus_height)
 	else
 		castbar:SetAllPoints(self)
@@ -988,13 +988,13 @@ function UNITFRAME:AddCastBar(self)
 	spark:SetSize(20, castbar:GetHeight() * 2)
 	castbar.Spark = spark
 
-	
+
 	if cfg.castbar_timer then
 		local timer = F.CreateFS(castbar, C.Assets.Fonts.Number, 11, 'OUTLINE')
 		timer:SetPoint('CENTER', castbar)
 		castbar.Time = timer
 	end
-	
+
 	local iconFrame = CreateFrame('Frame', nil, castbar)
 	if cfg.castbar_focus_separate and self.unitStyle == 'focus' then
 		iconFrame:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
@@ -1016,7 +1016,7 @@ function UNITFRAME:AddCastBar(self)
 	castbar.Icon = icon
 	castbar.iconBg = F.CreateBDFrame(iconFrame)
 	castbar.iconGlow = F.CreateSD(iconFrame, .35, 4, 4)
-	
+
 	if self.unitStyle == 'player' then
 		local safeZone = castbar:CreateTexture(nil,'OVERLAY')
 		safeZone:SetTexture(C.Assets.bd_tex)
@@ -1027,7 +1027,7 @@ function UNITFRAME:AddCastBar(self)
 	end
 
 	castbar.decimal = '%.1f'
-	
+
 	castbar.CastingColor = {110/255, 176/255, 216/255}
 	castbar.ChannelingColor = {92/255, 193/255, 216/255}
 	castbar.notInterruptibleColor = {190/255, 10/255, 18/255}
@@ -1087,12 +1087,12 @@ end
 
 function UNITFRAME:AddClassPower(self)
 	if not cfg.class_power_bar then return end
-	
+
 	local classPower = {}
 	classPower.UpdateColor = UpdateClassPowerColor
 	classPower.PostUpdate = PostUpdateClassPower
 
-	for index = 1, 6 do 
+	for index = 1, 6 do
 		local Bar = CreateFrame('StatusBar', nil, self)
 		Bar:SetHeight(cfg.class_power_bar_height)
 		Bar:SetStatusBarTexture(cfg.texture)
@@ -1117,7 +1117,7 @@ function UNITFRAME:AddClassPower(self)
 		self.AlternativePower:HookScript('OnHide', MoveClassPowerBar)
 		MoveClassPowerBar()
 
-		classPower[index] = Bar	
+		classPower[index] = Bar
 	end
 
 	self.ClassPower = classPower
@@ -1147,7 +1147,7 @@ end
 
 function UNITFRAME:AddRunes(self)
 	if not cfg.runes_bar then return end
-	
+
 	local runes = {}
 	local maxRunes = 6
 
@@ -1187,7 +1187,7 @@ end
 -- Stagger
 function UNITFRAME:AddStagger(self)
 	if not cfg.stagger_bar then return end
-	
+
 	local stagger = CreateFrame('StatusBar', nil, self)
 	stagger:SetSize(self:GetWidth(), cfg.stagger_bar_height)
 	stagger:SetStatusBarTexture(cfg.texture)
@@ -1223,7 +1223,7 @@ local TotemsColor = {
 
 function UNITFRAME:AddTotems(self)
 	if not cfg.totems_bar then return end
-	
+
 	local totems = {}
 	local maxTotems = 5
 
@@ -1320,7 +1320,7 @@ end
 -- Indicatiors
 function UNITFRAME:AddPvPIndicator(self)
 	if cfg.player_hide_tags then return end
-	
+
 	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
