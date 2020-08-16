@@ -235,7 +235,7 @@ C['Combat'] = {
 		['auto_tab'] = true,
 }
 
-C['Inventory'] = {
+--[[ C['Inventory'] = {
 	['enable_module'] = true,
 		['scale'] = 1,
 		['offset'] = 26,
@@ -261,7 +261,7 @@ C['Inventory'] = {
 			['item_filter_legendary'] = true,
 			['item_filter_mount_pet'] = true,
 			['item_filter_favourite'] = true,
-}
+} ]]
 
 C['Map'] = {
 	['enable'] = true,
@@ -313,7 +313,7 @@ C['Unitframe'] = {
 	['enable_module'] = true,
 		['transparency'] = true,
 		['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
-		['fader'] = false,
+		['fader'] = true,
 		['color_smooth'] = false,
 		['portrait'] = true,
 		['only_show_debuffs_by_player'] = true,
@@ -345,7 +345,7 @@ C['Unitframe'] = {
 			['castbar_focus_separate'] = false,
 			['castbar_focus_width'] = 200,
 			['castbar_focus_height'] = 16,
-			['castbar_timer'] = true,
+			['castbar_timer'] = false,
 
 		['enable_player'] = true,
 			['player_width'] = 140,
@@ -828,14 +828,43 @@ C.CharacterSettings = {
 			['buff_reminder'] = true,
 			['aura_source']	= true,
 	},
+
+	['inventory'] = {
+		['enable_module'] = true,
+			['scale'] = 1,
+			['offset'] = 26,
+			['spacing'] = 3,
+			['slot_size'] = 44,
+			['bag_columns'] = 10,
+			['bank_columns'] = 10,
+			['reverse_sort'] = true,
+			['item_level'] = true,
+				['item_level_to_show'] = 1,
+			['new_item_flash'] = true,
+			['combine_free_slots'] = true,
+			['split_count'] = 1,
+			['special_color'] = true,
+			['item_filter'] = true,
+				['item_filter_gear_set'] = false,
+				['item_filter_trade'] = true,
+				['item_filter_quest'] = true,
+				['item_filter_junk'] = true,
+				['item_filter_azerite'] = true,
+				['item_filter_equipment'] = true,
+				['item_filter_consumable'] = true,
+				['item_filter_legendary'] = true,
+				['item_filter_mount_pet'] = true,
+				['item_filter_favourite'] = true,
+			['auto_sell_junk'] = false,
+			['auto_repair'] = false,
+	}
 }
 
 C.AccountSettings = {
 	['ui_scale'] = 1,
 	['ui_gap'] = 33,
 	['total_gold'] = {},
-	['auto_sell_junk'] = false,
-	['auto_repair'] = false,
+
 	['custom_junk_list'] = {},
 	['number_format'] = 1,
 	['keystone_info'] = {},

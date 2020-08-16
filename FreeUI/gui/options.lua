@@ -325,62 +325,51 @@ local function addQuestSection()
 
 end
 
---[[ local function addInventorySection()
-	local parent = FreeUIOptionsFrame.Inventory
+local function addInventorySection()
+	local parent = FreeUI_GUI.INVENTORY
 	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
 
-	local basic = GUI:AddSubCategory(parent, 'GUI.localization.inventory.sub_basic')
+	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'enable_module', nil, setupBagSize)
+	local enable = GUI:CreateCheckBox(parent, 'inventory', 'enable_module', nil, setupBagSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local newitemFlash = GUI:CreateCheckBox(parent, 'new_item_flash')
+	local newitemFlash = GUI:CreateCheckBox(parent, 'inventory', 'new_item_flash')
 	newitemFlash:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local reverseSort = GUI:CreateCheckBox(parent, 'reverse_sort')
+	local reverseSort = GUI:CreateCheckBox(parent, 'inventory', 'reverse_sort')
 	reverseSort:SetPoint('LEFT', newitemFlash, 'RIGHT', 160, 0)
 
-	local combineFreeSlots = GUI:CreateCheckBox(parent, 'combine_free_slots')
+	local combineFreeSlots = GUI:CreateCheckBox(parent, 'inventory', 'combine_free_slots')
 	combineFreeSlots:SetPoint('TOPLEFT', newitemFlash, 'BOTTOMLEFT', 0, -8)
 
-	local itemLevel = GUI:CreateCheckBox(parent, 'item_level', nil, setupBagIlvl)
+	local itemLevel = GUI:CreateCheckBox(parent, 'inventory', 'item_level', nil, setupBagIlvl)
 	itemLevel:SetPoint('LEFT', combineFreeSlots, 'RIGHT', 160, 0)
 
-	local useCategory = GUI:CreateCheckBox(parent, 'item_filter', updateBagStatus, setupBagFilters)
+	local useCategory = GUI:CreateCheckBox(parent, 'inventory', 'item_filter', updateBagStatus, setupBagFilters)
 	useCategory:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -8)
 
-	local function toggleInventoryOptions()
-		local shown = enable:GetChecked()
-		newitemFlash:SetShown(shown)
-		reverseSort:SetShown(shown)
-		itemLevel:SetShown(shown)
-		combineFreeSlots:SetShown(shown)
-		useCategory:SetShown(shown)
-	end
-
-	enable:HookScript('OnClick', toggleInventoryOptions)
-	parent:HookScript('OnShow', toggleInventoryOptions)
 
 
 
 
-	local bagSizeSide = GUI:CreateSidePanel(parent, 'bagSizeSide', 'GUI.localization.inventory.sub_adjustment')
+	local bagSizeSide = GUI:CreateSidePanel(parent, 'bagSizeSide')
 
 
-	local slotSize = GUI:CreateSlider(parent, 'slot_size', 20, 60, 20, 60, 1, nil, true)
+	local slotSize = GUI:CreateSlider(parent, 'inventory', 'slot_size', nil, 20, 60, 1)
 	slotSize:SetParent(bagSizeSide)
 	slotSize:SetPoint('TOP', bagSizeSide, 'TOP', 0, -80)
 
-	local spacing = GUI:CreateSlider(parent, 'spacing', 3, 6, 3, 6, 1, nil, true)
+	local spacing = GUI:CreateSlider(parent, 'inventory', 'spacing', nil, 3, 6, 1)
 	spacing:SetParent(bagSizeSide)
 	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -60)
 
-	local bagColumns = GUI:CreateSlider(parent, 'bag_columns', 8, 16, 8, 16, 1, nil, true)
+	local bagColumns = GUI:CreateSlider(parent, 'inventory', 'bag_columns', nil, 8, 16, 1)
 	bagColumns:SetParent(bagSizeSide)
 	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -60)
 
-	local bankColumns = GUI:CreateSlider(parent, 'bank_columns', 8, 16, 8, 16, 1, nil, true)
+	local bankColumns = GUI:CreateSlider(parent, 'inventory', 'bank_columns', nil, 8, 16, 1)
 	bankColumns:SetParent(bagSizeSide)
 	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -60)
 
@@ -389,55 +378,57 @@ end
 
 
 
-	local itemLevelSide = GUI:CreateSidePanel(parent, 'bagIlvlSide', 'GUI.localization.inventory.item_level', true)
+	local itemLevelSide = GUI:CreateSidePanel(parent, 'bagIlvlSide')
 
-	local iLvltoShow = GUI:CreateSlider(parent, 'item_level_to_show', 1, 500, 1, 500, 1, nil, true)
+	local iLvltoShow = GUI:CreateSlider(parent, 'inventory', 'item_level_to_show', nil, 1, 500, 1)
 	iLvltoShow:SetParent(itemLevelSide)
 	iLvltoShow:SetPoint('TOP', itemLevelSide, 'TOP', 0, -80)
 
 	itemLevel.children = {iLvltoShow}
 
 
-	local bagFilterSide = GUI:CreateSidePanel(parent, 'bagFilterSide', 'GUI.localization.inventory.bag_filters_header')
+	local bagFilterSide = GUI:CreateSidePanel(parent, 'bagFilterSide')
 
-	local itemFilterJunk = GUI:CreateCheckBox(parent, 'item_filter_junk', updateBagStatus)
+	local itemFilterJunk = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_junk', updateBagStatus)
 	itemFilterJunk:SetParent(bagFilterSide)
 	itemFilterJunk:SetPoint('TOPLEFT', bagFilterSide, 'TOPLEFT', 20, -60)
 
-	local itemFilterTrade = GUI:CreateCheckBox(parent, 'item_filter_trade', updateBagStatus)
+	local itemFilterTrade = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_trade', updateBagStatus)
 	itemFilterTrade:SetParent(bagFilterSide)
 	itemFilterTrade:SetPoint('TOPLEFT', itemFilterJunk, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterConsumable = GUI:CreateCheckBox(parent, 'item_filter_consumable', updateBagStatus)
+	local itemFilterConsumable = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_consumable', updateBagStatus)
 	itemFilterConsumable:SetParent(bagFilterSide)
 	itemFilterConsumable:SetPoint('TOPLEFT', itemFilterTrade, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterQuest = GUI:CreateCheckBox(parent, 'item_filter_quest', updateBagStatus)
+	local itemFilterQuest = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_quest', updateBagStatus)
 	itemFilterQuest:SetParent(bagFilterSide)
 	itemFilterQuest:SetPoint('TOPLEFT', itemFilterConsumable, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterSet = GUI:CreateCheckBox(parent, 'item_filter_gear_set', updateBagStatus)
+	local itemFilterSet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_gear_set', updateBagStatus)
 	itemFilterSet:SetParent(bagFilterSide)
 	itemFilterSet:SetPoint('TOPLEFT', itemFilterQuest, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterAzerite = GUI:CreateCheckBox(parent, 'item_filter_azerite', updateBagStatus)
+	local itemFilterAzerite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_azerite', updateBagStatus)
 	itemFilterAzerite:SetParent(bagFilterSide)
 	itemFilterAzerite:SetPoint('TOPLEFT', itemFilterSet, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterMountPet = GUI:CreateCheckBox(parent, 'item_filter_mount_pet', updateBagStatus)
+	local itemFilterMountPet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_mount_pet', updateBagStatus)
 	itemFilterMountPet:SetParent(bagFilterSide)
 	itemFilterMountPet:SetPoint('TOPLEFT', itemFilterAzerite, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterFavourite = GUI:CreateCheckBox(parent, 'item_filter_favourite', updateBagStatus)
+	local itemFilterFavourite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_favourite', updateBagStatus)
 	itemFilterFavourite:SetParent(bagFilterSide)
 	itemFilterFavourite:SetPoint('TOPLEFT', itemFilterMountPet, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterLegendary = GUI:CreateCheckBox(parent, 'item_filter_legendary', updateBagStatus)
+	local itemFilterLegendary = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_legendary', updateBagStatus)
 	itemFilterLegendary:SetParent(bagFilterSide)
 	itemFilterLegendary:SetPoint('TOPLEFT', itemFilterFavourite, 'BOTTOMLEFT', 00, -8)
 
 	useCategory.children = {itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 end
+
+--[[
 
 
 local function addCombatSection()
@@ -1172,7 +1163,7 @@ GUI.AddOptions = function()
 	addAuraSection()
 	-- addActionbarSection()
 	-- addCombatSection()
-	-- addInventorySection()
+	addInventorySection()
 	-- addMapSection()
 	addQuestSection()
 	-- addTooltipSection()

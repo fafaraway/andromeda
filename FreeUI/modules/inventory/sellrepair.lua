@@ -43,7 +43,7 @@ local function startSelling()
 end
 
 local function updateSelling(event, ...)
-	if not FreeUIConfigsGlobal['auto_sell_junk'] then return end
+	if not FreeUIConfigs['inventory']['auto_sell_junk'] then return end
 
 	local _, arg = ...
 	if event == 'MERCHANT_SHOW' then
@@ -70,7 +70,7 @@ function autoRepair(override)
 	local myMoney = GetMoney()
 	repairAllCost, canRepair = GetRepairAllCost()
 
-	if canRepair and repairAllCost > 0 and FreeUIConfigsGlobal['auto_repair'] then
+	if canRepair and repairAllCost > 0 and FreeUIConfigs['inventory']['auto_repair'] then
 		if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
 			RepairAllItems(true)
 		else
@@ -96,7 +96,7 @@ local function merchantClose()
 end
 
 local function merchantShow()
-	if IsControlKeyDown() or not FreeUIConfigsGlobal['auto_repair'] or not CanMerchantRepair() then return end
+	if IsControlKeyDown() or not FreeUIConfigs['inventory']['auto_repair'] or not CanMerchantRepair() then return end
 	autoRepair()
 	F:RegisterEvent('MERCHANT_CLOSED', merchantClose)
 end
