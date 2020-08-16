@@ -1641,18 +1641,6 @@ end
 
 -- GUI elements
 do
-	function F:CreateGearButton(name)
-		local bu = CreateFrame('Button', name, self)
-		bu:SetSize(20, 20)
-		bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
-		bu.Icon:SetAllPoints()
-		bu.Icon:SetTexture(assets.gear_tex)
-		bu.Icon:SetVertexColor(.6, .6, .6)
-		bu:SetHighlightTexture(assets.gear_tex)
-
-		return bu
-	end
-
 	function F:CreateButton(width, height, text, fontSize)
 		local bu = CreateFrame('Button', nil, self)
 		bu:SetSize(width, height)

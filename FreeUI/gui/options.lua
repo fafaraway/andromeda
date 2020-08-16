@@ -238,12 +238,12 @@ local function addAppearanceSection()
 
 	local vignettingAlphaSide = GUI:CreateSidePanel(parent, 'vignettingAlphaSide', 'GUI.localization.inventory.sub_adjustment')
 
-	local vignettingAlpha = GUI:CreateSlider(vignettingAlphaSide, 'theme', 'vignetting_alpha', nil, 0, 1, 0.1)
+	local vignettingAlpha = GUI:CreateSlider(vignettingAlphaSide, 'theme', 'vignetting_alpha', nil, {0, 1, 0.1})
 	vignettingAlpha:SetPoint('TOP', 0, -80)
 
 	local backdropAlphaSide = GUI:CreateSidePanel(parent, 'backdropAlphaSide', 'GUI.localization.inventory.sub_adjustment')
 
-	local backdropAlpha = GUI:CreateSlider(backdropAlphaSide, 'theme', 'backdrop_alpha', nil, 0.1, 1, 0.01)
+	local backdropAlpha = GUI:CreateSlider(backdropAlphaSide, 'theme', 'backdrop_alpha', nil, {0.1, 1, 0.01})
 	backdropAlpha:SetPoint('TOP', 0, -80)
 
 end
@@ -274,22 +274,22 @@ local function addAuraSection()
 	local adjustment = GUI:AddSubCategory(parent, L['GUI_AURA_SUB_ADJUSTMENT'])
 	adjustment:SetPoint('TOPLEFT', auraSource, 'BOTTOMLEFT', 0, -16)
 
-	local buffSize = GUI:CreateSlider(parent, 'aura', 'buff_size', nil, 20, 50, 1)
+	local buffSize = GUI:CreateSlider(parent, 'aura', 'buff_size', nil, {20, 50, 1})
 	buffSize:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 0, -40)
 
-	local buffsPerRow = GUI:CreateSlider(parent, 'aura', 'buffs_per_row', nil, 6, 16, 1)
+	local buffsPerRow = GUI:CreateSlider(parent, 'aura', 'buffs_per_row', nil, {6, 16, 1})
 	buffsPerRow:SetPoint('LEFT', buffSize, 'RIGHT', 20, 0)
 
-	local debuffSize = GUI:CreateSlider(parent, 'aura', 'debuff_size', nil, 20, 50, 1)
+	local debuffSize = GUI:CreateSlider(parent, 'aura', 'debuff_size', nil, {20, 50, 1})
 	debuffSize:SetPoint('TOPLEFT', buffSize, 'BOTTOMLEFT', 0, -80)
 
-	local debuffsPerRow = GUI:CreateSlider(parent, 'aura', 'debuffs_per_row', nil, 6, 16, 1)
+	local debuffsPerRow = GUI:CreateSlider(parent, 'aura', 'debuffs_per_row', nil, {6, 16, 1})
 	debuffsPerRow:SetPoint('LEFT', debuffSize, 'RIGHT', 20, 0)
 
-	local margin = GUI:CreateSlider(parent, 'aura', 'margin', nil, 3, 10, 1)
+	local margin = GUI:CreateSlider(parent, 'aura', 'margin', nil, {3, 10, 1})
 	margin:SetPoint('TOPLEFT', debuffSize, 'BOTTOMLEFT', 0, -80)
 
-	local offset = GUI:CreateSlider(parent, 'aura', 'offset', nil, 6, 16, 1)
+	local offset = GUI:CreateSlider(parent, 'aura', 'offset', nil, {6, 16, 1})
 	offset:SetPoint('LEFT', margin, 'RIGHT', 20, 0)
 
 
@@ -351,36 +351,28 @@ local function addInventorySection()
 	useCategory:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -8)
 
 
-
-
-
 	local bagSizeSide = GUI:CreateSidePanel(parent, 'bagSizeSide')
 
-
-	local slotSize = GUI:CreateSlider(parent, 'inventory', 'slot_size', nil, 20, 60, 1)
+	local slotSize = GUI:CreateSlider(parent, 'inventory', 'slot_size', nil, {20, 60, 1})
 	slotSize:SetParent(bagSizeSide)
 	slotSize:SetPoint('TOP', bagSizeSide, 'TOP', 0, -80)
 
-	local spacing = GUI:CreateSlider(parent, 'inventory', 'spacing', nil, 3, 6, 1)
+	local spacing = GUI:CreateSlider(parent, 'inventory', 'spacing', nil, {3, 6, 1})
 	spacing:SetParent(bagSizeSide)
 	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -60)
 
-	local bagColumns = GUI:CreateSlider(parent, 'inventory', 'bag_columns', nil, 8, 16, 1)
+	local bagColumns = GUI:CreateSlider(parent, 'inventory', 'bag_columns', nil, {8, 16, 1})
 	bagColumns:SetParent(bagSizeSide)
 	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -60)
 
-	local bankColumns = GUI:CreateSlider(parent, 'inventory', 'bank_columns', nil, 8, 16, 1)
+	local bankColumns = GUI:CreateSlider(parent, 'inventory', 'bank_columns', nil, {8, 16, 1})
 	bankColumns:SetParent(bagSizeSide)
 	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -60)
-
-	enable.children = {slotSize, spacing, bagColumns, bankColumns}
-
-
 
 
 	local itemLevelSide = GUI:CreateSidePanel(parent, 'bagIlvlSide')
 
-	local iLvltoShow = GUI:CreateSlider(parent, 'inventory', 'item_level_to_show', nil, 1, 500, 1)
+	local iLvltoShow = GUI:CreateSlider(parent, 'inventory', 'item_level_to_show', nil, {1, 500, 1})
 	iLvltoShow:SetParent(itemLevelSide)
 	iLvltoShow:SetPoint('TOP', itemLevelSide, 'TOP', 0, -80)
 
@@ -426,6 +418,8 @@ local function addInventorySection()
 	itemFilterLegendary:SetPoint('TOPLEFT', itemFilterFavourite, 'BOTTOMLEFT', 00, -8)
 
 	useCategory.children = {itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
+
+	enable.children = {newitemFlash, reverseSort, combineFreeSlots, itemLevel, useCategory, slotSize, spacing, bagColumns, bankColumns, iLvltoShow, itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 end
 
 --[[

@@ -2,6 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
 
+local checkboxes = {}
 local sidePanels = {}
 local offset = 50
 local activeTab = nil
@@ -42,6 +43,7 @@ local function ToggleChildren(self, checked)
 		else
 			child:SetEnabled(checked)
 			child.Text:SetTextColor(tR, tG, tB)
+
 		end
 
 		if child.Low then
@@ -49,6 +51,12 @@ local function ToggleChildren(self, checked)
 			child.High:SetTextColor(tR, tG, tB)
 			child.value:SetTextColor(tR, tG, tB)
 			child:GetThumbTexture():SetVertexColor(tR, tG, tB)
+		end
+	end
+
+	for _, frame in next, sidePanels do
+		if not checked then
+			frame:Hide()
 		end
 	end
 end
@@ -265,6 +273,17 @@ function GUI:ToggleSidePanel(name)
 	end
 end
 
+function GUI:CreateGearButton(name)
+	local bu = CreateFrame('Button', name, self)
+	bu:SetSize(20, 20)
+	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+	bu.Icon:SetAllPoints()
+	bu.Icon:SetTexture(C.Assets.gear_tex)
+	bu.Icon:SetVertexColor(.6, .6, .6)
+	bu:SetHighlightTexture(C.Assets.gear_tex)
+
+	return bu
+end
 
 -- Check boxes
 function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
@@ -282,9 +301,11 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 	cb:HookScript('OnClick', onToggle)
 
 	if extra and type(extra) == 'function' then
-		local bu = F.CreateGearButton(parent)
+		local bu = GUI.CreateGearButton(parent)
 		bu:SetPoint('LEFT', cb.Text, 'RIGHT', 0, 1)
 		bu:SetScript('OnClick', extra)
+
+		cb.gear = bu
 	end
 
 	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
@@ -292,12 +313,16 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 		F.AddTooltip(cb, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
 	end
 
+	tinsert(checkboxes, cb)
+
 	return cb
 end
 
 -- Sliders
-function GUI:CreateSlider(parent, key, value, callback, low, high, step)
-	local slider = F.CreateSlider(parent, value, low, high, step, 160)
+function GUI:CreateSlider(parent, key, value, callback, extra)
+	local minValue, maxValue, step = unpack(extra)
+
+	local slider = F.CreateSlider(parent, value, minValue, maxValue, step, 160)
 	slider.Text:SetText(L['GUI_'..strupper(key)..'_'..strupper(value)] or value)
 	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 	slider:SetValue(SaveValue(key, value))
@@ -342,7 +367,11 @@ function GUI:CreateEditBox(parent, width, height, maxLetters)
 end
 
 
-
+local function UpdateSettings()
+	for _, box in pairs(checkboxes) do
+		if box.children then ToggleChildren(box, box:GetChecked()) end
+	end
+end
 
 
 function GUI:OnLogin()
@@ -368,6 +397,8 @@ function GUI:OnLogin()
 	GUI.AddOptions()
 
 	SetActiveTab(FreeUI_GUI.GENERAL.tab)
+
+	UpdateSettings()
 
 end
 
