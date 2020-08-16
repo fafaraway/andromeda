@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST, cfg = F:GetModule('Quest'), C.Quest
+local QUEST = F:GetModule('Quest')
 
 
 local debugMode = false
@@ -52,7 +52,7 @@ local questMatches = {
 }
 
 function QUEST:FindQuestProgress(_, msg)
-	if not cfg.questNotifier then return end
+	if not FreeUIConfigs['quest']['quest_notifier'] then return end
 
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
@@ -107,7 +107,7 @@ function QUEST:FindWorldQuestComplete(questID)
 end
 
 function QUEST:QuestNotifier()
-	if cfg.completeRing then
+	if FreeUIConfigs['quest']['complete_ring'] then
 		self:FindQuestComplete()
 		F:RegisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
 		F:RegisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)

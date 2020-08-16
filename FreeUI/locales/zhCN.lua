@@ -353,9 +353,8 @@ L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重�
 L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
 
 L['GUI_AURA'] = '光环'
-L['GUI_AURA_HEADER'] = '光环'
 L['GUI_AURA_DESC'] = '这些选项控制大部分和光环相关的设置'
-L['GUI_AURA_BASIC'] = '基础设定'
+L['GUI_AURA_SUB_BASIC'] = '基础设定'
 L['GUI_AURA_ENABLE_AURA'] = "启用"
 L['GUI_AURA_MARGIN'] = "图标间隔"
 L['GUI_AURA_OFFSET'] = "增益/减益栏间隔"
@@ -368,11 +367,12 @@ L['GUI_AURA_DEBUFF_SIZE'] = "减益图标大小"
 L['GUI_AURA_DEBUFFS_PER_ROW'] = "减益图标每行数量"
 L['GUI_AURA_REVERSE_DEBUFFS'] = "反向排列减益光环"
 L['GUI_AURA_AURA_SOURCE'] = '光环来源'
+L['GUI_AURA_SUB_ADJUSTMENT'] = '调整'
 
 
-
-
-
+L['GUI_APPEARANCE'] = '外观'
+L['GUI_APPEARANCE_DESC'] = '这些选项控制大部分和外观相关的设置'
+L['GUI_APPEARANCE_SUB_BASIC'] = '基础设定'
 
 
 

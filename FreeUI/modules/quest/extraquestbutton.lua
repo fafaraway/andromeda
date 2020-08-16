@@ -1,8 +1,6 @@
-local F, C, L = unpack(select(2, ...))
-local QUEST, cfg = F:GetModule('Quest'), C.Quest
+local F, C = unpack(select(2, ...))
+local QUEST = F:GetModule('Quest')
 
-
-if not cfg.extraQuestButton then return end
 
 -- ExtraQuestButton, by p3lim
 

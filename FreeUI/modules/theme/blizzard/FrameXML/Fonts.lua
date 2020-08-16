@@ -184,7 +184,7 @@ tinsert(C.BlizzThemes, function()
 		local bu = PaperDollTitlesPane.buttons
 		for i = 1, #bu do
 			if not bu[i].fontStyled then
-				ReskinFont(bu[i].text, 13, true)
+				ReskinFont(bu[i].text, 13, nil, true)
 				bu[i].fontStyled = true
 			end
 		end

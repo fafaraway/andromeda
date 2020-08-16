@@ -17,7 +17,7 @@ function MISC:DialogHideInSecond()
 
 	if pendingFrame.informational then
 		StaticPopupSpecial_Hide(pendingFrame)
-	elseif pendingFrame == "LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS" then
+	elseif pendingFrame == 'LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS' then
 		StaticPopup_Hide(pendingFrame)
 	end
 	pendingFrame = nil
@@ -29,22 +29,22 @@ function MISC:HookDialogOnShow()
 end
 
 function MISC:QuickJoin()
-	if C.Client == "zhCN" then
-		StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"].text = "针对此项活动，你的队伍人数已满，将被移出列表。"
+	if C.Client == 'zhCN' then
+		StaticPopupDialogs['LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS'].text = '针对此项活动，你的队伍人数已满，将被移出列表。'
 	end
 
 	for i = 1, 10 do
-		local bu = _G["LFGListSearchPanelScrollFrameButton"..i]
+		local bu = _G['LFGListSearchPanelScrollFrameButton'..i]
 		if bu then
-			bu:HookScript("OnDoubleClick", MISC.HookApplicationClick)
+			bu:HookScript('OnDoubleClick', MISC.HookApplicationClick)
 		end
 	end
 
-	hooksecurefunc("LFGListInviteDialog_Accept", function()
+	hooksecurefunc('LFGListInviteDialog_Accept', function()
 		if PVEFrame:IsShown() then HideUIPanel(PVEFrame) end
 	end)
 
-	hooksecurefunc("StaticPopup_Show", MISC.HookDialogOnShow)
-	hooksecurefunc("LFGListInviteDialog_Show", MISC.HookDialogOnShow)
+	hooksecurefunc('StaticPopup_Show', MISC.HookDialogOnShow)
+	hooksecurefunc('LFGListInviteDialog_Show', MISC.HookDialogOnShow)
 end
-MISC:RegisterMisc("QuickJoin", MISC.QuickJoin)
+MISC:RegisterMisc('QuickJoin', MISC.QuickJoin)

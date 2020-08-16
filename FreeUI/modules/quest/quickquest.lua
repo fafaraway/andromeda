@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST, cfg = F:GetModule('Quest'), C.Quest
+local QUEST = F:GetModule('Quest')
 
 
 -- QuickQuest, by p3lim
@@ -12,9 +12,9 @@ local function setupCheckButton()
 	bu:Size(26)
 	F.ReskinCheck(bu)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 25, 0)
-	bu:SetChecked(FreeUIConfigs['quick_quest'])
+	bu:SetChecked(FreeUIConfigs['quest']['quick_quest'])
 	bu:SetScript('OnClick', function(self)
-		FreeUIConfigs['quick_quest'] = self:GetChecked()
+		FreeUIConfigs['quest']['quick_quest'] = self:GetChecked()
 	end)
 
 	created = true
@@ -32,7 +32,7 @@ QuickQuest:SetScript('OnEvent', function(self, event, ...) self[event](...) end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if FreeUIConfigs['quick_quest'] and not IsModifierKeyDown() then
+		if FreeUIConfigs['quest']['quick_quest'] and not IsModifierKeyDown() then
 			func(...)
 		end
 	end

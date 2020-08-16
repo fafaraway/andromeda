@@ -33,7 +33,7 @@ function TOOLTIP:GetUnit()
 	local _, unit = self and self:GetUnit()
 	if not unit then
 		local mFocus = GetMouseFocus()
-		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute("unit"))) or "mouseover"
+		unit = mFocus and (mFocus.unit or (mFocus.GetAttribute and mFocus:GetAttribute('unit'))) or 'mouseover'
 	end
 	return unit
 end
@@ -278,31 +278,31 @@ end
 function TOOLTIP:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppingTooltip2, _, secondaryItemShown)
 	local point = shoppingTooltip1:GetPoint(2)
 	if secondaryItemShown then
-		if point == "TOP" then
+		if point == 'TOP' then
 			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPLEFT", anchorFrame, "TOPRIGHT", 4, 0)
+			shoppingTooltip1:SetPoint('TOPLEFT', anchorFrame, 'TOPRIGHT', 4, 0)
 			shoppingTooltip2:ClearAllPoints()
-			shoppingTooltip2:SetPoint("TOPLEFT", shoppingTooltip1, "TOPRIGHT", 4, 0)
-		elseif point == "RIGHT" then
+			shoppingTooltip2:SetPoint('TOPLEFT', shoppingTooltip1, 'TOPRIGHT', 4, 0)
+		elseif point == 'RIGHT' then
 			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPRIGHT", anchorFrame, "TOPLEFT", -4, 0)
+			shoppingTooltip1:SetPoint('TOPRIGHT', anchorFrame, 'TOPLEFT', -4, 0)
 			shoppingTooltip2:ClearAllPoints()
-			shoppingTooltip2:SetPoint("TOPRIGHT", shoppingTooltip1, "TOPLEFT", -4, 0)
+			shoppingTooltip2:SetPoint('TOPRIGHT', shoppingTooltip1, 'TOPLEFT', -4, 0)
 		end
 	else
-		if point == "LEFT" then
+		if point == 'LEFT' then
 			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPLEFT", anchorFrame, "TOPRIGHT", 4, 0)
-		elseif point == "RIGHT" then
+			shoppingTooltip1:SetPoint('TOPLEFT', anchorFrame, 'TOPRIGHT', 4, 0)
+		elseif point == 'RIGHT' then
 			shoppingTooltip1:ClearAllPoints()
-			shoppingTooltip1:SetPoint("TOPRIGHT", anchorFrame, "TOPLEFT", -4, 0)
+			shoppingTooltip1:SetPoint('TOPRIGHT', anchorFrame, 'TOPLEFT', -4, 0)
 		end
 	end
 end
 
 
 -- Tooltip skin
-local fakeBg = CreateFrame("Frame", nil, UIParent)
+local fakeBg = CreateFrame('Frame', nil, UIParent)
 fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
 
 local function getBackdrop() return fakeBg:GetBackdrop() end
@@ -311,7 +311,7 @@ local function getBackdropBorderColor() return 0, 0, 0 end
 
 function TOOLTIP:ReskinTooltip()
 	if not self then
-		if C.isDeveloper then F.Print("Unknown tooltip spotted.") end
+		if C.isDeveloper then F.Print('Unknown tooltip spotted.') end
 		return
 	end
 	if self:IsForbidden() then return end
@@ -319,7 +319,7 @@ function TOOLTIP:ReskinTooltip()
 
 	if not self.tipStyled then
 		self:SetBackdrop(nil)
-		self:DisableDrawLayer("BACKGROUND")
+		self:DisableDrawLayer('BACKGROUND')
 		self.bg = F.CreateBDFrame(self, cfg.backdrop_alpha, true)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
@@ -377,18 +377,18 @@ function TOOLTIP:SetTooltipFonts()
 	TooltipSetFont(GameTooltipTextSmall, textSize)
 	if GameTooltip.hasMoney then
 		for i = 1, GameTooltip.numMoneyFrames do
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."PrefixText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."SuffixText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."GoldButtonText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."SilverButtonText"], textSize)
-			TooltipSetFont(_G["GameTooltipMoneyFrame"..i.."CopperButtonText"], textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'PrefixText'], textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'SuffixText'], textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'GoldButtonText'], textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'SilverButtonText'], textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'CopperButtonText'], textSize)
 		end
 	end
 
 	for _, tt in ipairs(GameTooltip.shoppingTooltips) do
 		for i = 1, tt:GetNumRegions() do
 			local region = select(i, tt:GetRegions())
-			if region:IsObjectType("FontString") then
+			if region:IsObjectType('FontString') then
 				TooltipSetFont(region, textSize)
 			end
 		end
@@ -407,13 +407,13 @@ function TOOLTIP:OnLogin()
 		end
 	end
 
-	GameTooltip:HookScript("OnTooltipCleared", self.OnTooltipCleared)
-	GameTooltip:HookScript("OnTooltipSetUnit", self.OnTooltipSetUnit)
-	hooksecurefunc("GameTooltip_ShowStatusBar", self.GameTooltip_ShowStatusBar)
-	hooksecurefunc("GameTooltip_ShowProgressBar", self.GameTooltip_ShowProgressBar)
-	hooksecurefunc("GameTooltip_SetDefaultAnchor", self.GameTooltip_SetDefaultAnchor)
-	hooksecurefunc("GameTooltip_SetBackdropStyle", self.GameTooltip_SetBackdropStyle)
-	hooksecurefunc("GameTooltip_AnchorComparisonTooltips", self.GameTooltip_ComparisonFix)
+	GameTooltip:HookScript('OnTooltipCleared', self.OnTooltipCleared)
+	GameTooltip:HookScript('OnTooltipSetUnit', self.OnTooltipSetUnit)
+	hooksecurefunc('GameTooltip_ShowStatusBar', self.GameTooltip_ShowStatusBar)
+	hooksecurefunc('GameTooltip_ShowProgressBar', self.GameTooltip_ShowProgressBar)
+	hooksecurefunc('GameTooltip_SetDefaultAnchor', self.GameTooltip_SetDefaultAnchor)
+	hooksecurefunc('GameTooltip_SetBackdropStyle', self.GameTooltip_SetBackdropStyle)
+	hooksecurefunc('GameTooltip_AnchorComparisonTooltips', self.GameTooltip_ComparisonFix)
 
 	GameTooltip:HookScript('OnTooltipCleared', function(self)
 		self.ttUpdate = 1
@@ -455,9 +455,9 @@ local function addonStyled(_, addon)
 		tipTable[addon] = nil
 	end
 end
-F:RegisterEvent("ADDON_LOADED", addonStyled)
+F:RegisterEvent('ADDON_LOADED', addonStyled)
 
-TOOLTIP:RegisterTooltips("FreeUI", function()
+TOOLTIP:RegisterTooltips('FreeUI', function()
 	local tooltips = {
 		ChatMenu,
 		EmoteMenu,
@@ -493,28 +493,28 @@ TOOLTIP:RegisterTooltips("FreeUI", function()
 		IMECandidatesFrame
 	}
 	for _, f in pairs(tooltips) do
-		f:HookScript("OnShow", TOOLTIP.ReskinTooltip)
+		f:HookScript('OnShow', TOOLTIP.ReskinTooltip)
 	end
 
 	-- DropdownMenu
 	local function reskinDropdown()
-		for _, name in pairs({"DropDownList", "L_DropDownList", "Lib_DropDownList"}) do
+		for _, name in pairs({'DropDownList', 'L_DropDownList', 'Lib_DropDownList'}) do
 			for i = 1, UIDROPDOWNMENU_MAXLEVELS do
-				local menu = _G[name..i.."MenuBackdrop"]
+				local menu = _G[name..i..'MenuBackdrop']
 				if menu and not menu.styled then
-					menu:HookScript("OnShow", TOOLTIP.ReskinTooltip)
+					menu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
 					menu.styled = true
 				end
 			end
 		end
 	end
-	hooksecurefunc("UIDropDownMenu_CreateFrames", reskinDropdown)
+	hooksecurefunc('UIDropDownMenu_CreateFrames', reskinDropdown)
 
 	-- IME
 	IMECandidatesFrame.selection:SetVertexColor(C.r, C.g, C.b)
 
 	-- Pet Tooltip
-	PetBattlePrimaryUnitTooltip:HookScript("OnShow", function(self)
+	PetBattlePrimaryUnitTooltip:HookScript('OnShow', function(self)
 		self.Border:SetAlpha(0)
 		if not self.iconStyled then
 			if self.glow then self.glow:Hide() end
@@ -523,7 +523,7 @@ TOOLTIP:RegisterTooltips("FreeUI", function()
 		end
 	end)
 
-	hooksecurefunc("PetBattleUnitTooltip_UpdateForUnit", function(self)
+	hooksecurefunc('PetBattleUnitTooltip_UpdateForUnit', function(self)
 		local nextBuff, nextDebuff = 1, 1
 		for i = 1, C_PetBattles_GetNumAuras(self.petOwner, self.petIndex) do
 			local _, _, _, isBuff = C_PetBattles_GetAuraInfo(self.petOwner, self.petIndex, i)
@@ -567,8 +567,8 @@ TOOLTIP:RegisterTooltips("FreeUI", function()
 		end
 	end)
 
-	if IsAddOnLoaded("BattlePetBreedID") then
-		hooksecurefunc("BPBID_SetBreedTooltip", function(parent)
+	if IsAddOnLoaded('BattlePetBreedID') then
+		hooksecurefunc('BPBID_SetBreedTooltip', function(parent)
 			if parent == FloatingBattlePetTooltip then
 				TOOLTIP.ReskinTooltip(BPBID_BreedTooltip2)
 			else
@@ -577,9 +577,9 @@ TOOLTIP:RegisterTooltips("FreeUI", function()
 		end)
 	end
 
-	if IsAddOnLoaded("MythicDungeonTools") then
+	if IsAddOnLoaded('MythicDungeonTools') then
 		local styledMDT
-		hooksecurefunc(MDT, "ShowInterface", function()
+		hooksecurefunc(MDT, 'ShowInterface', function()
 			if not styledMDT then
 				TOOLTIP.ReskinTooltip(MDT.tooltip)
 				TOOLTIP.ReskinTooltip(MDT.pullTooltip)
@@ -587,4 +587,66 @@ TOOLTIP:RegisterTooltips("FreeUI", function()
 			end
 		end)
 	end
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_DebugTools', function()
+	TOOLTIP.ReskinTooltip(FrameStackTooltip)
+	TOOLTIP.ReskinTooltip(EventTraceTooltip)
+	FrameStackTooltip:SetScale(UIParent:GetScale())
+	EventTraceTooltip:SetParent(UIParent)
+	EventTraceTooltip:SetFrameStrata('TOOLTIP')
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_Collections', function()
+	PetJournalPrimaryAbilityTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	PetJournalSecondaryAbilityTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	PetJournalPrimaryAbilityTooltip.Delimiter1:SetHeight(1)
+	PetJournalPrimaryAbilityTooltip.Delimiter1:SetColorTexture(0, 0, 0)
+	PetJournalPrimaryAbilityTooltip.Delimiter2:SetHeight(1)
+	PetJournalPrimaryAbilityTooltip.Delimiter2:SetColorTexture(0, 0, 0)
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_GarrisonUI', function()
+	local gt = {
+		GarrisonMissionMechanicTooltip,
+		GarrisonMissionMechanicFollowerCounterTooltip,
+		GarrisonShipyardMapMissionTooltip,
+		GarrisonBonusAreaTooltip,
+		GarrisonBuildingFrame.BuildingLevelTooltip,
+		GarrisonFollowerAbilityWithoutCountersTooltip,
+		GarrisonFollowerMissionAbilityWithoutCountersTooltip
+	}
+	for _, f in pairs(gt) do
+		f:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	end
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_PVPUI', function()
+	ConquestTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_Contribution', function()
+	ContributionBuffTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	ContributionBuffTooltip.Icon:SetTexCoord(unpack(C.TexCoord))
+	ContributionBuffTooltip.Border:SetAlpha(0)
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_EncounterJournal', function()
+	EncounterJournalTooltip:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	EncounterJournalTooltip.Item1.icon:SetTexCoord(unpack(C.TexCoord))
+	EncounterJournalTooltip.Item1.IconBorder:SetAlpha(0)
+	EncounterJournalTooltip.Item2.icon:SetTexCoord(unpack(C.TexCoord))
+	EncounterJournalTooltip.Item2.IconBorder:SetAlpha(0)
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_Calendar', function()
+	CalendarContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	CalendarInviteStatusContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+end)
+
+TOOLTIP:RegisterTooltips('Blizzard_IslandsQueueUI', function()
+	local tooltip = IslandsQueueFrameTooltip:GetParent()
+	tooltip.IconBorder:SetAlpha(0)
+	tooltip.Icon:SetTexCoord(unpack(C.TexCoord))
+	tooltip:GetParent():HookScript('OnShow', TOOLTIP.ReskinTooltip)
 end)

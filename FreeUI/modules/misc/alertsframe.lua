@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local _G = getfenv(0)
@@ -8,7 +8,7 @@ local UIParent = _G.UIParent
 local AlertFrame = _G.AlertFrame
 local GroupLootContainer = _G.GroupLootContainer
 
-local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10
+local POSITION, ANCHOR_POINT, YOFFSET = 'TOP', 'BOTTOM', -10
 local parentFrame
 
 function MISC:AlertFrame_UpdateAnchor()
@@ -107,7 +107,7 @@ local function MoveTalkingHead()
 end
 
 local function NoTalkingHeads()
-	if not cfg.hide_talking_head then return end
+	if not FreeUIConfigs['hide_talking_head'] then return end
 
 	hooksecurefunc(TalkingHeadFrame, 'Show', function(self)
 		self:Hide()
@@ -125,7 +125,7 @@ end
 function MISC:AlertFrame_Setup()
 	parentFrame = CreateFrame('Frame', nil, UIParent)
 	parentFrame:SetSize(200, 30)
-	F.Mover(parentFrame, L['MOVER_ALERT_FRAMES'], 'AlertFrames', {"TOP", UIParent, 0, -100})
+	F.Mover(parentFrame, L['MOVER_ALERT_FRAMES'], 'AlertFrames', {'TOP', UIParent, 0, -100})
 
 	GroupLootContainer:EnableMouse(false)
 	GroupLootContainer.ignoreFramePositionManager = true
@@ -147,5 +147,5 @@ function MISC:AlertFrame_Setup()
 	else
 		F:RegisterEvent('ADDON_LOADED', TalkingHeadOnLoad)
 	end
-end 
-MISC:RegisterMisc("AlertFrame", MISC.AlertFrame_Setup)
+end
+MISC:RegisterMisc('AlertFrame', MISC.AlertFrame_Setup)

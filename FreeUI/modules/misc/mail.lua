@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local mailButton = CreateFrame('Button', 'FreeUI_MailButton', InboxFrame, 'UIPanelButtonTemplate')
@@ -58,7 +58,7 @@ end
 
 
 function MISC:MailButton()
-	if not cfg.mail_button then return end
+	if not FreeUIConfigs['mail_button'] then return end
 
 	OpenAllMail:Hide()
 	OpenAllMail:UnregisterAllEvents()
@@ -74,4 +74,4 @@ function MISC:MailButton()
 	mailButton:SetScript('OnHide', OnHide)
 end
 
-MISC:RegisterMisc("MailButton", MISC.MailButton)
+MISC:RegisterMisc('MailButton', MISC.MailButton)

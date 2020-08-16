@@ -1230,17 +1230,7 @@ function F:AuraIcon(highlight)
 	F.CreateSD(self)
 end
 
-function F:CreateGearButton(name)
-	local bu = CreateFrame('Button', name, self)
-	bu:SetSize(20, 20)
-	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
-	bu.Icon:SetAllPoints()
-	bu.Icon:SetTexture(assets.gear_tex)
-	bu.Icon:SetVertexColor(.6, .6, .6)
-	bu:SetHighlightTexture(assets.gear_tex)
 
-	return bu
-end
 
 -- Statusbar
 function F:CreateSB(spark, r, g, b)
@@ -1276,7 +1266,7 @@ end
 
 -- Numberize
 function F.Numb(n)
-	if FreeUIConfigs['theme'].number_format == 1 then
+	if FreeUIConfigsGlobal['number_format'] == 1 then
 		if n >= 1e12 then
 			return ('%.2ft'):format(n / 1e12)
 		elseif n >= 1e9 then
@@ -1288,7 +1278,7 @@ function F.Numb(n)
 		else
 			return ('%.0f'):format(n)
 		end
-	elseif FreeUIConfigs['theme'].number_format == 2 then
+	elseif FreeUIConfigsGlobal['number_format'] == 2 then
 		if n >= 1e12 then
 			return format('%.2f'..L['MISC_NUMBER_CAP_3'], n / 1e12)
 		elseif n >= 1e8 then
@@ -1651,6 +1641,18 @@ end
 
 -- GUI elements
 do
+	function F:CreateGearButton(name)
+		local bu = CreateFrame('Button', name, self)
+		bu:SetSize(20, 20)
+		bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+		bu.Icon:SetAllPoints()
+		bu.Icon:SetTexture(assets.gear_tex)
+		bu.Icon:SetVertexColor(.6, .6, .6)
+		bu:SetHighlightTexture(assets.gear_tex)
+
+		return bu
+	end
+
 	function F:CreateButton(width, height, text, fontSize)
 		local bu = CreateFrame('Button', nil, self)
 		bu:SetSize(width, height)

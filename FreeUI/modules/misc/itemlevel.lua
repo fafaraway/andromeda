@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, TOOLTIP, cfg = F:GetModule('Misc'), F:GetModule('Tooltip'), C.General
+local MISC, TOOLTIP = F:GetModule('Misc'), F:GetModule('Tooltip')
 
 
 local pairs, select, next, type, unpack = pairs, select, next, type, unpack
@@ -9,23 +9,23 @@ local EquipmentManager_UnpackLocation, EquipmentManager_GetItemInfoByLocation = 
 local C_AzeriteEmpoweredItem_IsPowerSelected = C_AzeriteEmpoweredItem.IsPowerSelected
 
 local inspectSlots = {
-	"Head",
-	"Neck",
-	"Shoulder",
-	"Shirt",
-	"Chest",
-	"Waist",
-	"Legs",
-	"Feet",
-	"Wrist",
-	"Hands",
-	"Finger0",
-	"Finger1",
-	"Trinket0",
-	"Trinket1",
-	"Back",
-	"MainHand",
-	"SecondaryHand",
+	'Head',
+	'Neck',
+	'Shoulder',
+	'Shirt',
+	'Chest',
+	'Waist',
+	'Legs',
+	'Feet',
+	'Wrist',
+	'Hands',
+	'Finger0',
+	'Finger1',
+	'Trinket0',
+	'Trinket1',
+	'Back',
+	'MainHand',
+	'SecondaryHand',
 }
 
 function MISC:GetSlotAnchor(index)
@@ -99,7 +99,7 @@ local function GetSlotItemLocation(id)
 end
 
 function MISC:ItemLevel_UpdateTraits(button, id, link)
-	if not cfg.azerite_traits then return end
+	if not FreeUIConfigs['azerite_traits'] then return end
 
 	local empoweredItemLocation = GetSlotItemLocation(id)
 	if not empoweredItemLocation then return end
@@ -116,7 +116,7 @@ function MISC:ItemLevel_UpdateTraits(button, id, link)
 			if selected then
 				local spellID = TOOLTIP:Azerite_PowerToSpell(powerID)
 				local name, _, icon = GetSpellInfo(spellID)
-				local texture = button["textureIcon"..i]
+				local texture = button['textureIcon'..i]
 				if name and texture then
 					texture:SetTexture(icon)
 					texture.bg:Show()
@@ -129,7 +129,7 @@ end
 function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	local infoType = type(info)
 	local level
-	if infoType == "table" then
+	if infoType == 'table' then
 		level = info.iLvl
 	else
 		level = info
@@ -141,7 +141,7 @@ function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 		slotFrame.iLvlText:SetTextColor(color.r, color.g, color.b)
 	end
 
-	if infoType == "table" then
+	if infoType == 'table' then
 		local enchant = info.enchantText
 		if enchant then
 			slotFrame.enchantText:SetText(enchant)
@@ -149,7 +149,7 @@ function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 
 		local gemStep, essenceStep = 1, 1
 		for i = 1, 10 do
-			local texture = slotFrame["textureIcon"..i]
+			local texture = slotFrame['textureIcon'..i]
 			local bg = texture.bg
 			local gem = info.gems and info.gems[gemStep]
 			local essence = not gem and (info.essences and info.essences[essenceStep])
@@ -182,8 +182,8 @@ end
 function MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 	C_Timer.After(.1, function()
 		local quality = select(3, GetItemInfo(link))
-		local info = F.GetItemLevel(link, unit, index, cfg.gem_enchant)
-		if info == "tooSoon" then return end
+		local info = F.GetItemLevel(link, unit, index, FreeUIConfigs['gem_enchant'])
+		if info == 'tooSoon' then return end
 		MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	end)
 end
@@ -195,11 +195,11 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
 
 	for index, slot in pairs(inspectSlots) do
 		if index ~= 4 then
-			local slotFrame = _G[strType..slot.."Slot"]
-			slotFrame.iLvlText:SetText("")
-			slotFrame.enchantText:SetText("")
+			local slotFrame = _G[strType..slot..'Slot']
+			slotFrame.iLvlText:SetText('')
+			slotFrame.enchantText:SetText('')
 			for i = 1, 10 do
-				local texture = slotFrame["textureIcon"..i]
+				local texture = slotFrame['textureIcon'..i]
 				texture:SetTexture(nil)
 				texture.bg:Hide()
 			end
@@ -207,14 +207,14 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
 			local link = GetInventoryItemLink(unit, index)
 			if link then
 				local quality = select(3, GetItemInfo(link))
-				local info = F.GetItemLevel(link, unit, index, cfg.gem_enchant)
-				if info == "tooSoon" then
+				local info = F.GetItemLevel(link, unit, index, FreeUIConfigs['gem_enchant'])
+				if info == 'tooSoon' then
 					MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 				else
 					MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 				end
 
-				if strType == "Character" then
+				if strType == 'Character' then
 					MISC:ItemLevel_UpdateTraits(slotFrame, index, link)
 				end
 			end
@@ -296,7 +296,7 @@ function MISC.ItemLevel_ScrappingShow(event, addon)
 end
 
 local function MerchantItemlevel()
-	if not cfg.merchant_ilvl then return end
+	if not FreeUIConfigs['merchant_ilvl'] then return end
 
 	local numItems = GetMerchantNumItems()
 
@@ -304,12 +304,12 @@ local function MerchantItemlevel()
 		local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
 		if index > numItems then return end
 
-		local button = _G["MerchantItem"..i.."ItemButton"]
+		local button = _G['MerchantItem'..i..'ItemButton']
 		if button and button:IsShown() then
 			if not button.text then
 				button.text = F.CreateFS(button, C.Assets.Fonts.Number, 11, 'OUTLINE', '', 'YELLOW', true, 'BOTTOMRIGHT', -1, 1)
 			else
-				button.text:SetText("")
+				button.text:SetText('')
 			end
 
 			local itemLink = GetMerchantItemLink(index)
@@ -327,7 +327,7 @@ end
 
 
 function MISC:ItemLevel()
-	if not cfg.item_level then return end
+	if not FreeUIConfigs['item_level'] then return end
 
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript('OnShow', MISC.ItemLevel_UpdatePlayer)
@@ -343,6 +343,6 @@ function MISC:ItemLevel()
 	F:RegisterEvent('ADDON_LOADED', MISC.ItemLevel_ScrappingShow)
 
 	-- iLvl on MerchantFrame
-	hooksecurefunc("MerchantFrame_UpdateMerchantInfo", MerchantItemlevel)
+	hooksecurefunc('MerchantFrame_UpdateMerchantInfo', MerchantItemlevel)
 end
-MISC:RegisterMisc("GearInfo", MISC.ItemLevel)
+MISC:RegisterMisc('GearInfo', MISC.ItemLevel)

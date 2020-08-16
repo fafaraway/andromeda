@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC = F:GetModule('Misc')
 
 
 local LFGTimer = CreateFrame('Frame', nil, _G.LFGDungeonReadyDialog)
@@ -85,7 +85,7 @@ local function UpdatePVPTimer()
 end
 
 function MISC:QueueTimer()
-	if not cfg.queue_timer then return end
+	if not FreeUIConfigs['queue_timer'] then return end
 
 	LFGTimer:RegisterEvent('LFG_PROPOSAL_SHOW')
 	LFGTimer:SetScript('OnEvent', function(self)
