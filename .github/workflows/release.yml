@@ -5,18 +5,22 @@ on:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+'
 
-env:
-  GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-
 jobs:
+
   release:
+
     runs-on: ubuntu-latest
+
+    env:
+      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
 
-      - uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Clone project
+        uses: actions/checkout@v2
 
-      - uses: BigWigsMods/packager@master
+      - name: Package and release
+        uses: BigWigsMods/packager@master
         with:
           args: release.sh
