@@ -10,12 +10,12 @@ local animScale, iconSize, holdTime, threshold = 1.5, 50, 0, 8
 local cooldowns, animating, watching = {}, {}, {}
 
 
-local frame = CreateFrame("Frame", "FreeUICooldownPulse", UIParent)
-frame:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+local frame = CreateFrame('Frame', 'FreeUICooldownPulse', UIParent)
+frame:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 frame:SetSize(50, 50)
---frame:SetPoint("CENTER",UIParent,"CENTER" ,0 ,100)
+--frame:SetPoint('CENTER', UIParent,'CENTER', 0, 100)
 
-frame.icon = frame:CreateTexture(nil, "BORDER")
+frame.icon = frame:CreateTexture(nil, 'BORDER')
 frame.icon:SetTexCoord(unpack(C.TexCoord))
 frame.icon:SetAllPoints(frame)
 
@@ -43,15 +43,15 @@ local function OnUpdate(_,update)
 		for i,v in pairs(watching) do
 			if (GetTime() >= v[1] + 0.5) then
 				local start, duration, enabled, texture, isPet, name
-				if (v[2] == "spell") then
+				if (v[2] == 'spell') then
 					name = GetSpellInfo(v[3])
 					texture = GetSpellTexture(v[3])
 					start, duration, enabled = GetSpellCooldown(v[3])
-				elseif (v[2] == "item") then
+				elseif (v[2] == 'item') then
 					name = GetItemInfo(i)
 					texture = v[3]
 					start, duration, enabled = GetItemCooldown(i)
-				elseif (v[2] == "pet") then
+				elseif (v[2] == 'pet') then
 					name, texture = GetPetActionInfo(v[3])
 					start, duration, enabled = GetPetActionCooldown(v[3])
 					isPet = true
@@ -65,7 +65,7 @@ local function OnUpdate(_,update)
 							cooldowns[i] = { start, duration, texture, isPet, name }
 						end
 					end
-					if (not (enabled == 0 and v[2] == "spell")) then
+					if (not (enabled == 0 and v[2] == 'spell')) then
 						watching[i] = nil
 					end
 				end
@@ -78,14 +78,14 @@ local function OnUpdate(_,update)
 				cooldowns[i] = nil
 			end
 		end
-		
+
 		elapsed = 0
 		if (#animating == 0 and tcount(watching) == 0 and tcount(cooldowns) == 0) then
-			frame:SetScript("OnUpdate", nil)
+			frame:SetScript('OnUpdate', nil)
 			return
 		end
 	end
-	
+
 	if (#animating > 0) then
 		runtimer = runtimer + update
 		if (runtimer > (fadeInTime + holdTime + fadeOutTime)) then
@@ -116,41 +116,41 @@ function frame:ADDON_LOADED(addon)
 	for _, v in pairs(cfg.ignored_spells) do
 		cfg.ignored_spells[v] = true
 	end
-	self:UnregisterEvent("ADDON_LOADED")
+	self:UnregisterEvent('ADDON_LOADED')
 end
-frame:RegisterEvent("ADDON_LOADED")
+frame:RegisterEvent('ADDON_LOADED')
 
 function frame:UNIT_SPELLCAST_SUCCEEDED(unit,lineID,spellID)
-	if (unit == "player") then
-		watching[spellID] = {GetTime(),"spell",spellID}
-		self:SetScript("OnUpdate", OnUpdate)
+	if (unit == 'player') then
+		watching[spellID] = {GetTime(),'spell',spellID}
+		self:SetScript('OnUpdate', OnUpdate)
 	end
 end
-frame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+frame:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
 
 function frame:COMBAT_LOG_EVENT_UNFILTERED()
 	local _,event,_,_,_,sourceFlags,_,_,_,_,_,spellID = CombatLogGetCurrentEventInfo()
-	if (event == "SPELL_CAST_SUCCESS") then
+	if (event == 'SPELL_CAST_SUCCESS') then
 		if (bit.band(sourceFlags,COMBATLOG_OBJECT_TYPE_PET) == COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags,COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
 			local name = GetSpellInfo(spellID)
 			local index = GetPetActionIndexByName(name)
 			if (index and not select(7,GetPetActionInfo(index))) then
-				watching[spellID] = {GetTime(),"pet",index}
+				watching[spellID] = {GetTime(),'pet',index}
 			elseif (not index and spellID) then
-				watching[spellID] = {GetTime(),"spell",spellID}
+				watching[spellID] = {GetTime(),'spell',spellID}
 			else
 				return
 			end
-			self:SetScript("OnUpdate", OnUpdate)
+			self:SetScript('OnUpdate', OnUpdate)
 		end
 	end
 end
-frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 
 function frame:PLAYER_ENTERING_WORLD()
 	local inInstance,instanceType = IsInInstance()
-	if (inInstance and instanceType == "arena") then
-		self:SetScript("OnUpdate", nil)
+	if (inInstance and instanceType == 'arena') then
+		self:SetScript('OnUpdate', nil)
 		wipe(cooldowns)
 		wipe(watching)
 	end
@@ -158,31 +158,31 @@ function frame:PLAYER_ENTERING_WORLD()
 	frame.bg = F.CreateBDFrame(frame, nil, true)
 	frame.bg:Hide()
 
-	F.Mover(frame, L["MOVER_COOLDOWN_PULSE"], "CooldownPulse", {"CENTER",UIParent,"CENTER" ,0 ,100})
+	F.Mover(frame, L['MOVER_COOLDOWN_PULSE'], 'CooldownPulse', {'CENTER', UIParent, 'CENTER', 0, 100})
 end
-frame:RegisterEvent("PLAYER_ENTERING_WORLD")
+frame:RegisterEvent('PLAYER_ENTERING_WORLD')
 
-hooksecurefunc("UseAction", function(slot)
+hooksecurefunc('UseAction', function(slot)
 	local actionType,itemID = GetActionInfo(slot)
-	if (actionType == "item") then
+	if (actionType == 'item') then
 		local texture = GetActionTexture(slot)
-		watching[itemID] = {GetTime(),"item",texture}
+		watching[itemID] = {GetTime(),'item',texture}
 	end
 end)
 
-hooksecurefunc("UseInventoryItem", function(slot)
-	local itemID = GetInventoryItemID("player", slot);
+hooksecurefunc('UseInventoryItem', function(slot)
+	local itemID = GetInventoryItemID('player', slot);
 	if (itemID) then
-		local texture = GetInventoryItemTexture("player", slot)
-		watching[itemID] = {GetTime(),"item",texture}
+		local texture = GetInventoryItemTexture('player', slot)
+		watching[itemID] = {GetTime(),'item',texture}
 	end
 end)
 
-hooksecurefunc("UseContainerItem", function(bag,slot)
+hooksecurefunc('UseContainerItem', function(bag,slot)
 	local itemID = GetContainerItemID(bag, slot)
 	if (itemID) then
 		local texture = select(10, GetItemInfo(itemID))
-		watching[itemID] = {GetTime(),"item",texture}
+		watching[itemID] = {GetTime(),'item',texture}
 	end
 end)
 
