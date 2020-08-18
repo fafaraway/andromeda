@@ -223,7 +223,7 @@ function GUI:AddSubCategory(category, name)
 	local header = F.CreateFS(category.child, C.Assets.Fonts.Normal, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
 
 	local line = category.child:CreateTexture(nil, 'ARTWORK')
-	line:SetSize(380, 1)
+	line:SetSize(350, 1)
 	line:SetPoint('TOPLEFT', header, 'BOTTOMLEFT', 0, -4)
 	line:SetColorTexture(.5, .5, .5, .1)
 
@@ -368,7 +368,7 @@ end
 
 -- Dropdown
 function GUI:CreateDropdown(parent, key, value, callback, extra)
-	local dropdown = F.CreateDropDown(parent, 140, 24, extra)
+	local dropdown = F.CreateDropDown(parent, 120, 22, extra)
 
 	dropdown.Text:SetText(extra[SaveValue(key, value)])
 
@@ -376,10 +376,10 @@ function GUI:CreateDropdown(parent, key, value, callback, extra)
 	dropdown.button:HookScript('OnClick', function()
 		for num = 1, #extra do
 			if num == SaveValue(key, value) then
-				opt[num]:SetBackdropColor(1, .8, 0, .3)
+				opt[num]:SetBackdropColor(C.r, C.g, C.b, .25)
 				opt[num].selected = true
 			else
-				opt[num]:SetBackdropColor(0, 0, 0, .3)
+				opt[num]:SetBackdropColor(0, 0, 0, .25)
 				opt[num].selected = false
 			end
 		end
@@ -391,7 +391,7 @@ function GUI:CreateDropdown(parent, key, value, callback, extra)
 		end)
 	end
 
-	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'INFO', 'THICK', 'CENTER', 0, 25)
+	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 11, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'INFO', 'THICK', 'CENTER', 0, 25)
 
 	return dropdown
 end

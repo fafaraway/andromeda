@@ -863,19 +863,16 @@ C.CharacterSettings = {
 			['fader'] = true,
 			['color_smooth'] = false,
 			['portrait'] = true,
-			['only_show_debuffs_by_player'] = true,
-			['click_cast'] = true,
-				['click_cast_filter'] = false,
-			['threat'] = true,
+
+			['debuffs_by_player'] = true,
+
 			['range_check'] = true,
 			['heal_prediction'] = true,
-				['heal_prediction_over_absorb'] = true,
+			['over_absorb'] = true,
 			['gcd_spark'] = true,
 
-			['debuff_highlight'] = true,
-			['corner_buffs'] = true,
-			['raid_debuffs'] = true,
-				['raid_debuffs_click_through'] = false,
+
+
 
 			['power_bar_height'] = 2,
 			['alternative_power_height'] = 2,
@@ -900,7 +897,6 @@ C.CharacterSettings = {
 				['player_auras'] = false,
 				['player_auras_number'] = 18,
 				['player_auras_number_per_row'] = 6,
-				['player_hide_tags'] = true,
 
 			['enable_pet'] = true,
 				['pet_width'] = 50,
@@ -932,11 +928,17 @@ C.CharacterSettings = {
 			['enable_group'] = true,
 				['group_names'] = false,
 				['group_color_smooth'] = false,
-				['groupFilter'] = 6,
-				['groupShowSolo'] = false,
-				['groupShowPlayer'] = true,
-				['groupByRole'] = true,
-				['groupReverse'] = false,
+				['group_filter'] = 6,
+
+				['group_by_role'] = true,
+				['group_reverse'] = false,
+				['group_threat'] = true,
+				['group_click_cast'] = true,
+				['group_click_cast_filter'] = false,
+				['debuff_highlight'] = true,
+				['corner_buffs'] = true,
+				['raid_debuffs'] = true,
+				['raid_debuffs_click_through'] = false,
 
 				['party_width'] = 90,
 				['party_height'] = 38,

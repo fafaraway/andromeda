@@ -171,7 +171,7 @@ SpellBinder.makeFramesList = function()
 	for frame in pairs(ClickCastFrames) do
 		local v
 		if frame and type(frame) == 'table' then v = frame:GetName() end
-		if FreeUIConfigs.unitframe.click_cast_filter ~= true then
+		if FreeUIConfigs.unitframe.group_click_cast_filter ~= true then
 			if v then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
 		else
 			if v ~= 'oUF_Target' and v ~= 'oUF_Player' then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
@@ -341,8 +341,9 @@ SpellBinder:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 SpellBinder:RegisterEvent('PLAYER_TALENT_UPDATE')
 SpellBinder:SetScript('OnEvent', function(self, event, ...)
 	if event == 'PLAYER_LOGIN' then
-		if not FreeUIConfigs.unitframe.enable_unitframe then return end
-		if not FreeUIConfigs.unitframe.click_cast then return end
+		-- if not FreeUIConfigs.unitframe.enable_unitframe then return end
+		-- if not FreeUIConfigs.unitframe.enable_group then return end
+		-- if not FreeUIConfigs.unitframe.group_click_cast then return end
 
 		DB = FreeUIConfigs['click_cast']
 		DB.spells = DB.spells or {}

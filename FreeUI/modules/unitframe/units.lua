@@ -3,22 +3,6 @@ local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.oUF
 
 
-local function tagsOnEnter(self)
-	self.HealthValue:Show()
-	self.PowerValue:Show()
-end
-
-local function tagsOnLeave(self)
-	self.HealthValue:Hide()
-	self.PowerValue:Hide()
-end
-
-local function updatePlayerTags(frame)
-	frame:HookScript('OnEnter', tagsOnEnter)
-	frame:HookScript('OnLeave', tagsOnLeave)
-end
-
-
 local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
 	self:SetSize(FreeUIConfigs.unitframe.player_width, FreeUIConfigs.unitframe.player_height)
@@ -58,9 +42,8 @@ function UNITFRAME:SpawnPlayer()
 	oUF:SetActiveStyle('Player')
 
 	local player = oUF:Spawn('player', 'oUF_Player')
-	updatePlayerTags(oUF_Player)
 
-	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], 'PlayerFrame', {"BOTTOM", UIParent, "BOTTOM", 0, 220}, player:GetWidth(), player:GetHeight())
+	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], 'PlayerFrame', {'BOTTOM', UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
 	if not C.Actionbar.enable then return end
 	FreeUI_LeaveVehicleBar:SetParent(player)
@@ -99,11 +82,11 @@ function UNITFRAME:SpawnPet()
 end
 
 local playTargetSound = function(self, event)
-    if event == "PLAYER_TARGET_CHANGED" then
+    if event == 'PLAYER_TARGET_CHANGED' then
         if (UnitExists(self.unit)) then
-            if (UnitIsEnemy(self.unit, "player")) then
+            if (UnitIsEnemy(self.unit, 'player')) then
                 PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
-            elseif (UnitIsFriend("player", self.unit)) then
+            elseif (UnitIsFriend('player', self.unit)) then
                 PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
             else
                 PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
@@ -134,9 +117,9 @@ local function CreateTargetStyle(self)
 	UNITFRAME:AddFader(self)
 	UNITFRAME:AddFCF(self)
 
-	self:RegisterEvent("PLAYER_TARGET_CHANGED", playTargetSound)
-	self.Health:SetScript("OnShow", function()
-        playTargetSound(self, "PLAYER_TARGET_CHANGED")
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', playTargetSound)
+	self.Health:SetScript('OnShow', function()
+        playTargetSound(self, 'PLAYER_TARGET_CHANGED')
     end)
 end
 
@@ -146,7 +129,7 @@ function UNITFRAME:SpawnTarget()
 
 	local target = oUF:Spawn('target', 'oUF_Target')
 
-	F.Mover(target, L['MOVER_UNITFRAME_TARGET'], 'TargetFrame', {"LEFT", 'oUF_Player', "RIGHT", 60, 80}, target:GetWidth(), target:GetHeight())
+	F.Mover(target, L['MOVER_UNITFRAME_TARGET'], 'TargetFrame', {'LEFT', 'oUF_Player', 'RIGHT', 60, 80}, target:GetWidth(), target:GetHeight())
 end
 
 local function CreateTargetTargetStyle(self)
@@ -172,7 +155,7 @@ function UNITFRAME:SpawnTargetTarget()
 end
 
 local playFocusSound = function(self, event)
-	if event == "PLAYER_FOCUS_CHANGED" then
+	if event == 'PLAYER_FOCUS_CHANGED' then
 		if UnitExists(self.unit) then
 			if UnitIsEnemy(self.unit, 'player') then
 				PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
@@ -202,13 +185,15 @@ local function CreateFocusStyle(self)
 	UNITFRAME:AddRangeCheck(self)
 	UNITFRAME:AddFader(self)
 
-	self:RegisterEvent("PLAYER_FOCUS_CHANGED", playFocusSound)
-	self.Health:SetScript("OnShow", function()
-        playFocusSound(self, "PLAYER_FOCUS_CHANGED")
+	self:RegisterEvent('PLAYER_FOCUS_CHANGED', playFocusSound)
+	self.Health:SetScript('OnShow', function()
+        playFocusSound(self, 'PLAYER_FOCUS_CHANGED')
     end)
 end
 
 function UNITFRAME:SpawnFocus()
+	if not FreeUIConfigs.unitframe.enable_focus then return end
+
 	oUF:RegisterStyle('Focus', CreateFocusStyle)
 	oUF:SetActiveStyle('Focus')
 
@@ -342,24 +327,25 @@ function UNITFRAME:SpawnParty()
 	local party = oUF:SpawnHeader('oUF_Party', nil, 'custom [@raid6,exists] hide;show',
 		'oUF-initialConfigFunction', [[
 			local header = self:GetParent()
-			self:SetWidth(header:GetAttribute("initial-width"))
-			self:SetHeight(header:GetAttribute("initial-height"))
+			self:SetWidth(header:GetAttribute('initial-width'))
+			self:SetHeight(header:GetAttribute('initial-height'))
 		]],
 
-		"initial-width", FreeUIConfigs.unitframe.party_width,
-		"initial-height", FreeUIConfigs.unitframe.party_height,
+		'initial-width', FreeUIConfigs.unitframe.party_width,
+		'initial-height', FreeUIConfigs.unitframe.party_height,
 
 		'showParty', true,
-		'showPlayer', FreeUIConfigs.unitframe.groupShowPlayer,
-		'showSolo', FreeUIConfigs.unitframe.groupShowSolo,
+		'showRaid', false,
+		'showPlayer', true,
+		'showSolo', true,
 
 		'xoffset', FreeUIConfigs.unitframe.party_gap,
 		'yoffset', FreeUIConfigs.unitframe.party_gap,
 
 		'point', 'BOTTOM',
 
-		'groupBy', FreeUIConfigs.unitframe.groupByRole and 'ASSIGNEDROLE',
-		'groupingOrder', FreeUIConfigs.unitframe.groupByRole and 'TANK,HEALER,DAMAGER,NONE')
+		'groupBy', FreeUIConfigs.unitframe.group_by_role and 'ASSIGNEDROLE',
+		'groupingOrder', FreeUIConfigs.unitframe.group_by_role and 'TANK,HEALER,DAMAGER,NONE')
 
 	mover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, FreeUIConfigs.unitframe.party_width, ((FreeUIConfigs.unitframe.party_height * 5) + (FreeUIConfigs.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
@@ -398,18 +384,18 @@ function UNITFRAME:SpawnRaid()
 	local mover
 	local function CreateRaid(name, i)
 		local raid = oUF:SpawnHeader(name, nil, 'custom [@raid6,exists] show;hide',
-		"oUF-initialConfigFunction", [[
+		'oUF-initialConfigFunction', [[
 			local header = self:GetParent()
-			self:SetWidth(header:GetAttribute("initial-width"))
-			self:SetHeight(header:GetAttribute("initial-height"))
+			self:SetWidth(header:GetAttribute('initial-width'))
+			self:SetHeight(header:GetAttribute('initial-height'))
 		]],
-		"initial-width", FreeUIConfigs.unitframe.raid_width,
-		"initial-height", FreeUIConfigs.unitframe.raid_height,
+		'initial-width', FreeUIConfigs.unitframe.raid_width,
+		'initial-height', FreeUIConfigs.unitframe.raid_height,
 
 		'showParty', true,
 		'showRaid', true,
 
-		'xoffset', (FreeUIConfigs.unitframe.groupReverse and -FreeUIConfigs.unitframe.raid_gap) or FreeUIConfigs.unitframe.raid_gap,
+		'xoffset', (FreeUIConfigs.unitframe.group_reverse and -FreeUIConfigs.unitframe.raid_gap) or FreeUIConfigs.unitframe.raid_gap,
 		'yOffset', -FreeUIConfigs.unitframe.raid_gap,
 
 		'groupFilter', tostring(i),
@@ -417,21 +403,21 @@ function UNITFRAME:SpawnRaid()
 		'groupBy', 'GROUP',
 		'sortMethod', 'INDEX',
 
-		'columnAnchorPoint', FreeUIConfigs.unitframe.groupReverse and 'RIGHT' or 'LEFT',
-		'point', FreeUIConfigs.unitframe.groupReverse and 'RIGHT' or 'LEFT')
+		'columnAnchorPoint', FreeUIConfigs.unitframe.group_reverse and 'RIGHT' or 'LEFT',
+		'point', FreeUIConfigs.unitframe.group_reverse and 'RIGHT' or 'LEFT')
 
 		return raid
 	end
 
 	local groups = {}
-	for i = 1, FreeUIConfigs.unitframe.groupFilter do
+	for i = 1, FreeUIConfigs.unitframe.group_filter do
 		groups[i] = CreateRaid('oUF_Raid'..i, i)
 		if i == 1 then
-			mover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (FreeUIConfigs.unitframe.raid_width * 5) + (FreeUIConfigs.unitframe.raid_gap * 4), (FreeUIConfigs.unitframe.raid_height * FreeUIConfigs.unitframe.groupFilter) + FreeUIConfigs.unitframe.raid_gap * (FreeUIConfigs.unitframe.groupFilter - 1))
+			mover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (FreeUIConfigs.unitframe.raid_width * 5) + (FreeUIConfigs.unitframe.raid_gap * 4), (FreeUIConfigs.unitframe.raid_height * FreeUIConfigs.unitframe.group_filter) + FreeUIConfigs.unitframe.raid_gap * (FreeUIConfigs.unitframe.group_filter - 1))
 			groups[i]:ClearAllPoints()
-			groups[i]:SetPoint((FreeUIConfigs.unitframe.groupReverse and 'TOPRIGHT') or 'TOPLEFT', mover)
+			groups[i]:SetPoint((FreeUIConfigs.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', mover)
 		else
-			groups[i]:SetPoint((FreeUIConfigs.unitframe.groupReverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (FreeUIConfigs.unitframe.groupReverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -FreeUIConfigs.unitframe.raid_gap)
+			groups[i]:SetPoint((FreeUIConfigs.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (FreeUIConfigs.unitframe.group_reverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -FreeUIConfigs.unitframe.raid_gap)
 		end
 	end
 end

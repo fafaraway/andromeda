@@ -405,18 +405,12 @@ hooksecurefunc('PanelTemplates_DeselectTab', resetTabAnchor)
 hooksecurefunc('PanelTemplates_SelectTab', resetTabAnchor)
 
 function F:Texture_OnEnter()
-	if not self:IsEnabled() then return end
-
-	if self.pixels then
-		for _, pixel in pairs(self.pixels) do
-			pixel:SetVertexColor(C.r, C.g, C.b)
+	if self:IsEnabled() then
+		if self.bg then
+			self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
+		else
+			self.bgTex:SetVertexColor(C.r, C.g, C.b)
 		end
-	elseif self.bd then
-		self.bd:SetBackdropBorderColor(C.r, C.g, C.b)
-	elseif self.bg then
-		self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
-	else
-		self.bgTex:SetVertexColor(C.r, C.g, C.b)
 	end
 end
 
@@ -424,7 +418,7 @@ function F:Texture_OnLeave()
 	if self.bg then
 		self.bg:SetBackdropColor(0, 0, 0, .25)
 	else
-		self.bgTex:SetVertexColor(1, 1, 1)
+		self.bgTex:SetVertexColor(.6, .6, .6)
 	end
 end
 
@@ -559,6 +553,7 @@ function F:ReskinArrow(direction)
 	dis:SetAllPoints()
 
 	local tex = self:CreateTexture(nil, 'ARTWORK')
+	tex:SetVertexColor(.6, .6, .6)
 	tex:SetAllPoints()
 	F.SetupArrow(tex, direction)
 	self.bgTex = tex
@@ -604,12 +599,12 @@ end
 function F:ReskinCheck(forceSaturation)
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
-	self:SetHighlightTexture(assets.bd_tex)
+	self:SetHighlightTexture(assets.grad_tex)
 	-- self:SetCheckedTexture(assets.tick_tex)
 	-- self:SetDisabledCheckedTexture(assets.tick_tex)
 
-	self:SetCheckedTexture(assets.norm_tex)
-	self:SetDisabledCheckedTexture(assets.norm_tex)
+	self:SetCheckedTexture(assets.grad_tex)
+	self:SetDisabledCheckedTexture(assets.grad_tex)
 
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)
@@ -1721,7 +1716,7 @@ do
 		dd:SetSize(width, height)
 		F.CreateBD(dd)
 		dd:SetBackdropBorderColor(1, 1, 1, .2)
-		dd.Text = F.CreateFS(dd, C.Assets.Fonts.Normal, 12, nil, '', nil, true, 'LEFT', 5, 0)
+		dd.Text = F.CreateFS(dd, C.Assets.Fonts.Normal, 11, nil, '', nil, true, 'LEFT', 5, 0)
 		dd.Text:SetPoint('RIGHT', -5, 0)
 		dd.options = {}
 
@@ -1746,7 +1741,7 @@ do
 			opt[i]:SetPoint('TOPLEFT', 4, -4 - (i-1)*(height+2))
 			opt[i]:SetSize(width - 8, height)
 			F.CreateBD(opt[i])
-			local text = F.CreateFS(opt[i], C.Assets.Fonts.Normal, 12, nil, j, nil, true, 'LEFT', 5, 0)
+			local text = F.CreateFS(opt[i], C.Assets.Fonts.Normal, 11, nil, j, nil, true, 'LEFT', 5, 0)
 			text:SetPoint('RIGHT', -5, 0)
 			opt[i].text = j
 			opt[i].__owner = dd

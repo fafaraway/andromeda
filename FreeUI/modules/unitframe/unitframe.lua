@@ -85,12 +85,6 @@ function UNITFRAME:AddHealthValueText(self)
 
 	if self.unitStyle == 'player' then
 		self:Tag(healthValue, '[free:dead][free:health]')
-
-		if FreeUIConfigs.unitframe.player_hide_tags then
-			healthValue:Hide()
-		else
-			healthValue:Show()
-		end
 	elseif self.unitStyle == 'target' then
 		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
 	elseif self.unitStyle == 'boss' then
@@ -112,9 +106,7 @@ function UNITFRAME:AddPowerValueText(self)
 	local powerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
-	if self.unitStyle == 'player' and FreeUIConfigs.unitframe.player_hide_tags then
-		powerValue:Hide()
-	elseif self.unitStyle == 'target' then
+	if self.unitStyle == 'target' then
 		powerValue:ClearAllPoints()
 		powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
 	elseif self.unitStyle == 'boss' then
@@ -149,29 +141,32 @@ function UNITFRAME:OnLogin()
 	F:SetSmoothingAmount(.3)
 
 	self:SpawnPlayer()
-	self:SpawnPet()
 	self:SpawnTarget()
 	self:SpawnTargetTarget()
-	self:SpawnFocus()
-	self:SpawnFocusTarget()
 
+	if FreeUIConfigs.unitframe.enable_pet then
+		self:SpawnPet()
+	end
 
+	if FreeUIConfigs.unitframe.enable_focus then
+		self:SpawnFocus()
+		self:SpawnFocusTarget()
+	end
 
-	if FreeUIConfigs.unitframe.boss then
+	if FreeUIConfigs.unitframe.enable_boss then
 		self:SpawnBoss()
 	end
 
-	if FreeUIConfigs.unitframe.arena then
+	if FreeUIConfigs.unitframe.enable_arena then
 		self:SpawnArena()
 	end
 
 
-	if not FreeUIConfigs.unitframe.group then return end
+	if not FreeUIConfigs.unitframe.enable_group then return end
 
-	-- Hide Default RaidFrame
 	if CompactRaidFrameManager_SetSetting then
-		CompactRaidFrameManager_SetSetting("IsShown", "0")
-		UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")
+		CompactRaidFrameManager_SetSetting('IsShown', '0')
+		UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
 		CompactRaidFrameManager:UnregisterAllEvents()
 		CompactRaidFrameManager:SetParent(F.HiddenFrame)
 	end

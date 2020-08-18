@@ -129,7 +129,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		}
 	end
 
-	if FreeUIConfigs.unitframe.heal_prediction_over_absorb then
+	if FreeUIConfigs.unitframe.over_absorb then
 		local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
 		overAbsorb:SetPoint('TOP', 0, 2)
 		overAbsorb:SetPoint('BOTTOM', 0, -2)
@@ -408,13 +408,13 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 			return false
 		end
 	elseif style == 'target' and FreeUIConfigs.unitframe.target_auras then
-		if FreeUIConfigs.unitframe.only_show_debuffs_by_player and button.isDebuff and not button.isPlayer then
+		if FreeUIConfigs.unitframe.debuff_by_player and button.isDebuff and not button.isPlayer then
 			return false
 		else
 			return true
 		end
 	elseif style == 'boss' and FreeUIConfigs.unitframe.bossShowAuras then
-		if FreeUIConfigs.unitframe.only_show_debuffs_by_player and button.isDebuff and not button.isPlayer then
+		if FreeUIConfigs.unitframe.debuff_by_player and button.isDebuff and not button.isPlayer then
 			return false
 		else
 			return true
@@ -1284,15 +1284,13 @@ function UNITFRAME:AddGCDSpark(self)
 	self.GCD:SetWidth(self:GetWidth())
 	self.GCD:SetHeight(6)
 
-	self.GCD.Color = {C.r, C.g, C.b}
+	self.GCD.Color = {1, 1, 1}
 	self.GCD.Height = 6
 	self.GCD.Width = 6
 end
 
 -- Indicatiors
 function UNITFRAME:AddPvPIndicator(self)
-	if FreeUIConfigs.unitframe.player_hide_tags then return end
-
 	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
@@ -1303,8 +1301,6 @@ function UNITFRAME:AddPvPIndicator(self)
 end
 
 function UNITFRAME:AddCombatIndicator(self)
-	if FreeUIConfigs.unitframe.player_hide_tags then return end
-
 	local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
 	combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
 
@@ -1312,8 +1308,6 @@ function UNITFRAME:AddCombatIndicator(self)
 end
 
 function UNITFRAME:AddRestingIndicator(self)
-	if FreeUIConfigs.unitframe.player_hide_tags then return end
-
 	local restingIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'Zzz', 'GREEN', 'THICK')
 	restingIndicator:SetPoint('BOTTOMRIGHT', self.PowerValue, 'BOTTOMLEFT', -5, 0)
 
@@ -1409,6 +1403,8 @@ local function UpdateThreat(self, event, unit)
 end
 
 function UNITFRAME:AddThreatIndicator(self)
+	if not FreeUIConfigs.unitframe.group_threat then return end
+
 	self.ThreatIndicator = {
 		IsObjectType = function() end,
 		Override = UpdateThreat,
