@@ -859,7 +859,7 @@ C.CharacterSettings = {
 	['unitframe'] = {
 		['enable_unitframe'] = true,
 			['transparency'] = true,
-			['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
+			['texture_style'] = 1,
 			['fader'] = true,
 			['color_smooth'] = false,
 			['portrait'] = true,
@@ -964,6 +964,8 @@ C.CharacterSettings = {
 				['arenaShowAuras'] = true,
 				['arenaAuraPerRow'] = 6,
 				['arenaAuraTotal'] = 18,
+
+			['test'] = 1,
 	},
 }
 
@@ -977,9 +979,15 @@ C.AccountSettings = {
 	['keystone_info'] = {},
 }
 
+local textureList = {
+	[1] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
+	[2] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex',
+	[3] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex',
+}
+
 local function initSettings(source, target, fullClean)
 	for i, j in pairs(source) do
-		if type(j) == "table" then
+		if type(j) == 'table' then
 			if target[i] == nil then target[i] = {} end
 			for k, v in pairs(j) do
 				if target[i][k] == nil then
@@ -993,9 +1001,9 @@ local function initSettings(source, target, fullClean)
 
 	for i, j in pairs(target) do
 		if source[i] == nil then target[i] = nil end
-		if fullClean and type(j) == "table" then
+		if fullClean and type(j) == 'table' then
 			for k, v in pairs(j) do
-				if type(v) ~= "table" and source[i] and source[i][k] == nil then
+				if type(v) ~= 'table' and source[i] and source[i][k] == nil then
 					target[i][k] = nil
 				end
 			end
@@ -1017,6 +1025,8 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	initSettings(C.AccountSettings, FreeUIConfigsGlobal)
 
 	F:SetupUIScale(true)
+
+	C.Assets.norm_tex = textureList[FreeUIConfigs.unitframe.texture_style]
 
 	self:UnregisterAllEvents()
 end)

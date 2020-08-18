@@ -285,37 +285,37 @@ function GUI:CreateGearButton(name)
 	return bu
 end
 
--- Check boxes
+-- Checkboxes
 function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
-	local cb = F.CreateCheckBox(parent)
-	cb:SetSize(20, 20)
-	cb:SetHitRectInsets(-5, -5, -5, -5)
+	local checkbox = F.CreateCheckBox(parent)
+	checkbox:SetSize(20, 20)
+	checkbox:SetHitRectInsets(-5, -5, -5, -5)
 
-	cb.Text = F.CreateFS(cb, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 24, 0)
+	checkbox.Text = F.CreateFS(checkbox, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 24, 0)
 
-	cb:SetChecked(SaveValue(key, value))
-	cb:SetScript('OnClick', function()
-		SaveValue(key, value, cb:GetChecked())
+	checkbox:SetChecked(SaveValue(key, value))
+	checkbox:SetScript('OnClick', function()
+		SaveValue(key, value, checkbox:GetChecked())
 		if callback then callback() end
 	end)
-	cb:HookScript('OnClick', onToggle)
+	checkbox:HookScript('OnClick', onToggle)
 
 	if extra and type(extra) == 'function' then
 		local bu = GUI.CreateGearButton(parent)
-		bu:SetPoint('LEFT', cb.Text, 'RIGHT', 0, 1)
+		bu:SetPoint('LEFT', checkbox.Text, 'RIGHT', 0, 1)
 		bu:SetScript('OnClick', extra)
 
-		cb.gear = bu
+		checkbox.gear = bu
 	end
 
 	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
-		cb.title = L['GUI_TIPS']
-		F.AddTooltip(cb, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
+		checkbox.title = L['GUI_TIPS']
+		F.AddTooltip(checkbox, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'INFO')
 	end
 
-	tinsert(checkboxes, cb)
+	tinsert(checkboxes, checkbox)
 
-	return cb
+	return checkbox
 end
 
 -- Sliders
@@ -345,26 +345,57 @@ end
 
 -- Editbox
 function GUI:CreateEditBox(parent, width, height, maxLetters)
-	local eb = F.CreateEditBox(parent, width, height)
-	eb:SetMaxLetters(maxLetters)
-	eb:SetText(SaveValue(key, value))
+	local editbox = F.CreateEditBox(parent, width, height)
+	editbox:SetMaxLetters(maxLetters)
+	editbox:SetText(SaveValue(key, value))
 
-	eb:HookScript("OnEscapePressed", function()
-		eb:SetText(SaveValue(key, value))
+	editbox:HookScript('OnEscapePressed', function()
+		editbox:SetText(SaveValue(key, value))
 	end)
 
-	eb:HookScript("OnEnterPressed", function()
-		SaveValue(key, value, eb:GetText())
+	editbox:HookScript('OnEnterPressed', function()
+		SaveValue(key, value, editbox:GetText())
 		if callback then callback() end
 	end)
 
-	eb.title = "Tips"
-	local tip = "EditBox Tip"
-	if tooltip then tip = tooltip.."|n"..tip end
-	F.AddTooltip(eb, "ANCHOR_RIGHT", tip, "INFO")
+	editbox.title = 'Tips'
+	local tip = 'EditBox Tip'
+	if tooltip then tip = tooltip..'|n'..tip end
+	F.AddTooltip(editbox, 'ANCHOR_RIGHT', tip, 'INFO')
 
-	F.CreateFS(eb, C.Assets.Fonts.Normal, 12, nil, name, "SYSTEM", true, "CENTER", 0, 25)
+	F.CreateFS(editbox, C.Assets.Fonts.Normal, 12, nil, name, 'SYSTEM', true, 'CENTER', 0, 25)
 end
+
+-- Dropdown
+function GUI:CreateDropdown(parent, key, value, callback, extra)
+	local dropdown = F.CreateDropDown(parent, 140, 24, extra)
+
+	dropdown.Text:SetText(extra[SaveValue(key, value)])
+
+	local opt = dropdown.options
+	dropdown.button:HookScript('OnClick', function()
+		for num = 1, #extra do
+			if num == SaveValue(key, value) then
+				opt[num]:SetBackdropColor(1, .8, 0, .3)
+				opt[num].selected = true
+			else
+				opt[num]:SetBackdropColor(0, 0, 0, .3)
+				opt[num].selected = false
+			end
+		end
+	end)
+	for i in pairs(extra) do
+		opt[i]:HookScript('OnClick', function()
+			SaveValue(key, value, i)
+			if callback then callback() end
+		end)
+	end
+
+	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'INFO', 'THICK', 'CENTER', 0, 25)
+
+	return dropdown
+end
+
 
 
 local function UpdateSettings()

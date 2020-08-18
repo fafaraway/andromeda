@@ -2,31 +2,10 @@ local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
 
-GUI.textureList = {
-	'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
-	'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex',
-	'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex',
-}
-
-GUI.dropdownList = {
-	['Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex'] = 'GUI.localization.dropdown.normal',
-	['Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex'] = 'GUI.localization.dropdown.gradient',
-	['Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex'] = 'GUI.localization.dropdown.flat',
-}
-
-
-
-
+--[[ callback ]]
 
 local function UpdateBagStatus()
-	FreeUI[1]:GetModule("Inventory"):UpdateAllBags()
-
-	-- local label = BAG_FILTER_EQUIPMENT
-	-- if NDuiDB["Bags"]["ItemSetFilter"] then
-	-- 	label = L["Equipement Set"]
-	-- end
-	-- _G.NDui_BackpackEquipment.label:SetText(label)
-	-- _G.NDui_BackpackBankEquipment.label:SetText(label)
+	F:GetModule('Inventory'):UpdateAllBags()
 end
 
 
@@ -422,6 +401,24 @@ local function InventoryOptions()
 	enable.children = {newitemFlash, reverseSort, combineFreeSlots, itemLevel, useCategory, slotSize, spacing, bagColumns, bankColumns, iLvltoShow, itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 end
 
+local function UnitframeOptions()
+	local parent = FreeUI_GUI.UNITFRAME
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'unitframe', 'enable_unitframe')
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+
+
+	local texture = GUI:CreateDropdown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']})
+	texture:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 00, -30)
+
+
+end
+
 --[[
 
 
@@ -707,25 +704,6 @@ local function addAnnouncementSection()
 
 	enable:HookScript('OnClick', toggleAnnouncementOptions)
 	Announcement:HookScript('OnShow', toggleAnnouncementOptions)
-end
-
-
-local function addUnitframeSection()
-	local Unitframe = FreeUIOptionsFrame.Unitframe
-	Unitframe.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
-
-	local basic = GUI:AddSubCategory(Unitframe, 'GUI.localization.unitframe.sub_basic')
-	basic:SetPoint('TOPLEFT', Unitframe.subText, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(Unitframe, 'enable')
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-
-
-	local texture = GUI.CreateDropDown(Unitframe, 'texture', true, GUI.textureList, true)
-	texture:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 00, -30)
-
-
 end
 
 
@@ -1161,6 +1139,6 @@ function GUI:AddOptions()
 	-- addMapOptions()
 	QuestOptions()
 	-- addTooltipOptions()
-	-- addUnitframeOptions()
+	UnitframeOptions()
 end
 
