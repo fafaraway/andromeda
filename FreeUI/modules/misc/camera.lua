@@ -28,7 +28,7 @@ function MISC:FasterCamera()
 	end
 end
 
-MISC:RegisterMisc("FasterCamera", MISC.FasterCamera)
+MISC:RegisterMisc('FasterCamera', MISC.FasterCamera)
 
 
 
@@ -36,9 +36,11 @@ UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
 local function SetCam(cmd)
 	ConsoleExec('ActionCam ' .. cmd)
 end
-SetCam(FreeUIConfigs['action_camera'] and 'basic' or 'off')
+function MISC:CombatCamera()
+	SetCam(FreeUIConfigs['action_camera'] and 'basic' or 'off')
+end
 
-
+MISC:RegisterMisc('CombatCamera', MISC.CombatCamera)
 
 
 
