@@ -18,7 +18,7 @@ GUI.dropdownList = {
 
 
 
-local function updateBagStatus()
+local function UpdateBagStatus()
 	FreeUI[1]:GetModule("Inventory"):UpdateAllBags()
 
 	-- local label = BAG_FILTER_EQUIPMENT
@@ -33,55 +33,55 @@ end
 --[[ side panel functions ]]
 
 -- appearance
-local function setupVignettingAlpha()
+local function SetupVignettingAlpha()
 	GUI:ToggleSidePanel('vignettingAlphaSide')
 end
 
-local function setupBackdropAlpha()
+local function SetupBackdropAlpha()
 	GUI:ToggleSidePanel('backdropAlphaSide')
 end
 
 -- inventory
-local function setupItemLevel()
+local function SetupItemLevel()
 	GUI:ToggleSidePanel('itemLevelSide')
 end
 
-local function setupBagSize()
+local function SetupBagSize()
 	GUI:ToggleSidePanel('bagSizeSide')
 end
 
-local function setupBagFilters()
+local function SetupBagFilters()
 	GUI:ToggleSidePanel('bagFilterSide')
 end
 
-local function setupBagIlvl()
+local function SetupBagIlvl()
 	GUI:ToggleSidePanel('bagIlvlSide')
 end
 
 -- chat
-local function setupChatFilter()
+local function SetupChatFilter()
 	GUI:ToggleSidePanel('chatFilterSide')
 end
 
-local function setupChatSize()
+local function SetupChatSize()
 	GUI:ToggleSidePanel('chatSizeSide')
 end
 
 -- tooltip
-local function setupTipExtra()
+local function SetupTipExtra()
 	GUI:ToggleSidePanel('tipExtraSide')
 end
 
-local function setupTipFont()
+local function SetupTipFont()
 	GUI:ToggleSidePanel('tipFontSide')
 end
 
 -- actionbar
-local function setupActionbarSize()
+local function SetupActionbarSize()
 	GUI:ToggleSidePanel('actionbarSizeSide')
 end
 
-local function setupCooldown()
+local function SetupCooldown()
 	GUI:ToggleSidePanel('cooldownSide')
 end
 
@@ -106,7 +106,7 @@ end
 	local hideTalkingHead = GUI:CreateCheckBox(parent, 'hide_talking_head')
 	hideTalkingHead:SetPoint('LEFT', hideBossBanner, 'RIGHT', 160, 0)
 
-	local itemLevel = GUI:CreateCheckBox(parent, 'item_level', nil, setupItemLevel)
+	local itemLevel = GUI:CreateCheckBox(parent, 'item_level', nil, SetupItemLevel)
 	itemLevel:SetPoint('TOPLEFT', hideBossBanner, 'BOTTOMLEFT', 0, -8)
 
 	local mailButton = GUI:CreateCheckBox(parent, 'mail_button')
@@ -198,7 +198,7 @@ end
 end ]]
 
 
-local function addAppearanceSection()
+local function AppearanceOptions()
 	local parent = FreeUI_GUI.APPEARANCE
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Hunter_BeastWithin')
 
@@ -208,10 +208,10 @@ local function addAppearanceSection()
 	local cursorTrail = GUI:CreateCheckBox(parent, 'theme', 'cursor_trail')
 	cursorTrail:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local vignetting = GUI:CreateCheckBox(parent, 'theme', 'vignetting', nil, setupVignettingAlpha)
+	local vignetting = GUI:CreateCheckBox(parent, 'theme', 'vignetting', nil, SetupVignettingAlpha)
 	vignetting:SetPoint('LEFT', cursorTrail, 'RIGHT', 160, 0)
 
-	local reskinBlizz = GUI:CreateCheckBox(parent, 'theme', 'reskin_blizz', nil, setupBackdropAlpha)
+	local reskinBlizz = GUI:CreateCheckBox(parent, 'theme', 'reskin_blizz', nil, SetupBackdropAlpha)
 	reskinBlizz:SetPoint('TOPLEFT', cursorTrail, 'BOTTOMLEFT', 0, -8)
 
 	local shadowBorder = GUI:CreateCheckBox(parent, 'theme', 'shadow_border')
@@ -249,7 +249,7 @@ local function addAppearanceSection()
 end
 
 
-local function addAuraSection()
+local function AuraOptions()
 	local parent = FreeUI_GUI.AURA
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
 
@@ -298,7 +298,7 @@ local function addAuraSection()
 end
 
 
-local function addQuestSection()
+local function QuestOptions()
 	local parent = FreeUI_GUI.QUEST
 	parent.tab.icon:SetTexture('Interface\\ICONS\\ABILITY_Rogue_RollTheBones04')
 
@@ -325,14 +325,14 @@ local function addQuestSection()
 
 end
 
-local function addInventorySection()
+local function InventoryOptions()
 	local parent = FreeUI_GUI.INVENTORY
 	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'inventory', 'enable_module', nil, setupBagSize)
+	local enable = GUI:CreateCheckBox(parent, 'inventory', 'enable_module', nil, SetupBagSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local newitemFlash = GUI:CreateCheckBox(parent, 'inventory', 'new_item_flash')
@@ -344,10 +344,10 @@ local function addInventorySection()
 	local combineFreeSlots = GUI:CreateCheckBox(parent, 'inventory', 'combine_free_slots')
 	combineFreeSlots:SetPoint('TOPLEFT', newitemFlash, 'BOTTOMLEFT', 0, -8)
 
-	local itemLevel = GUI:CreateCheckBox(parent, 'inventory', 'item_level', nil, setupBagIlvl)
+	local itemLevel = GUI:CreateCheckBox(parent, 'inventory', 'item_level', nil, SetupBagIlvl)
 	itemLevel:SetPoint('LEFT', combineFreeSlots, 'RIGHT', 160, 0)
 
-	local useCategory = GUI:CreateCheckBox(parent, 'inventory', 'item_filter', updateBagStatus, setupBagFilters)
+	local useCategory = GUI:CreateCheckBox(parent, 'inventory', 'item_filter', UpdateBagStatus, SetupBagFilters)
 	useCategory:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -8)
 
 
@@ -381,39 +381,39 @@ local function addInventorySection()
 
 	local bagFilterSide = GUI:CreateSidePanel(parent, 'bagFilterSide')
 
-	local itemFilterJunk = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_junk', updateBagStatus)
+	local itemFilterJunk = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_junk', UpdateBagStatus)
 	itemFilterJunk:SetParent(bagFilterSide)
 	itemFilterJunk:SetPoint('TOPLEFT', bagFilterSide, 'TOPLEFT', 20, -60)
 
-	local itemFilterTrade = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_trade', updateBagStatus)
+	local itemFilterTrade = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_trade', UpdateBagStatus)
 	itemFilterTrade:SetParent(bagFilterSide)
 	itemFilterTrade:SetPoint('TOPLEFT', itemFilterJunk, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterConsumable = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_consumable', updateBagStatus)
+	local itemFilterConsumable = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_consumable', UpdateBagStatus)
 	itemFilterConsumable:SetParent(bagFilterSide)
 	itemFilterConsumable:SetPoint('TOPLEFT', itemFilterTrade, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterQuest = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_quest', updateBagStatus)
+	local itemFilterQuest = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_quest', UpdateBagStatus)
 	itemFilterQuest:SetParent(bagFilterSide)
 	itemFilterQuest:SetPoint('TOPLEFT', itemFilterConsumable, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterSet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_gear_set', updateBagStatus)
+	local itemFilterSet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_gear_set', UpdateBagStatus)
 	itemFilterSet:SetParent(bagFilterSide)
 	itemFilterSet:SetPoint('TOPLEFT', itemFilterQuest, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterAzerite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_azerite', updateBagStatus)
+	local itemFilterAzerite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_azerite', UpdateBagStatus)
 	itemFilterAzerite:SetParent(bagFilterSide)
 	itemFilterAzerite:SetPoint('TOPLEFT', itemFilterSet, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterMountPet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_mount_pet', updateBagStatus)
+	local itemFilterMountPet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_mount_pet', UpdateBagStatus)
 	itemFilterMountPet:SetParent(bagFilterSide)
 	itemFilterMountPet:SetPoint('TOPLEFT', itemFilterAzerite, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterFavourite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_favourite', updateBagStatus)
+	local itemFilterFavourite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_favourite', UpdateBagStatus)
 	itemFilterFavourite:SetParent(bagFilterSide)
 	itemFilterFavourite:SetPoint('TOPLEFT', itemFilterMountPet, 'BOTTOMLEFT', 00, -8)
 
-	local itemFilterLegendary = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_legendary', updateBagStatus)
+	local itemFilterLegendary = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_legendary', UpdateBagStatus)
 	itemFilterLegendary:SetParent(bagFilterSide)
 	itemFilterLegendary:SetPoint('TOPLEFT', itemFilterFavourite, 'BOTTOMLEFT', 00, -8)
 
@@ -510,7 +510,7 @@ local function addActionbarSection()
 	local basic = GUI:AddSubCategory(parent, 'GUI.localization.actionbar.sub_basic')
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'enable', nil, setupActionbarSize)
+	local enable = GUI:CreateCheckBox(parent, 'enable', nil, SetupActionbarSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 
@@ -534,7 +534,7 @@ local function addActionbarSection()
 
 
 
-	local cooldown = GUI:CreateCheckBox(parent, 'enable_cooldown', nil, setupCooldown)
+	local cooldown = GUI:CreateCheckBox(parent, 'enable_cooldown', nil, SetupCooldown)
 	cooldown:SetPoint('LEFT', count, 'RIGHT', 160, 0)
 
 	local extra = GUI:AddSubCategory(parent, 'GUI.localization.actionbar.sub_extra')
@@ -795,7 +795,7 @@ local function addChatSection()
 	local enable = GUI:CreateCheckBox(parent, 'enable')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local lock = GUI:CreateCheckBox(parent, 'lock_position', nil, setupChatSize)
+	local lock = GUI:CreateCheckBox(parent, 'lock_position', nil, SetupChatSize)
 	lock:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
 	local fading = GUI:CreateCheckBox(parent, 'fading')
@@ -840,7 +840,7 @@ local function addChatSection()
 	local filter = GUI:AddSubCategory(parent, 'GUI.localization.chat.sub_filter')
 	filter:SetPoint('TOPLEFT', bubble, 'BOTTOMLEFT', 0, -16)
 
-	local chatFilter = GUI:CreateCheckBox(parent, 'filters', nil, setupChatFilter)
+	local chatFilter = GUI:CreateCheckBox(parent, 'filters', nil, SetupChatFilter)
 	chatFilter:SetPoint('TOPLEFT', filter, 'BOTTOMLEFT', 0, -8)
 
 	local blockAddonSpam = GUI:CreateCheckBox(parent, 'blockAddonSpam')
@@ -1035,7 +1035,7 @@ local function addTooltipSection()
 	local basic = GUI:AddSubCategory(parent, 'GUI.localization.tooltip.sub_basic')
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'enable', nil, setupTipFont)
+	local enable = GUI:CreateCheckBox(parent, 'enable', nil, SetupTipFont)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local cursor = GUI:CreateCheckBox(parent, 'follow_cursor')
@@ -1071,7 +1071,7 @@ local function addTooltipSection()
 	local spec = GUI:CreateCheckBox(parent, 'spec_ilvl')
 	spec:SetPoint('TOPLEFT', linkHover, 'BOTTOMLEFT', 0, -8)
 
-	local extraInfo = GUI:CreateCheckBox(parent, 'extra_info', nil, setupTipExtra)
+	local extraInfo = GUI:CreateCheckBox(parent, 'extra_info', nil, SetupTipExtra)
 	extraInfo:SetPoint('LEFT', spec, 'RIGHT', 160, 0)
 
 
@@ -1146,21 +1146,21 @@ end ]]
 
 
 
-GUI.AddOptions = function()
-	--addGeneralSection()
-	addAppearanceSection()
-	-- addNotificationSection()
-	-- addAnnouncementSection()
-	-- addAutomationSection()
-	-- addInfobarSection()
-	-- addChatSection()
-	addAuraSection()
-	-- addActionbarSection()
-	-- addCombatSection()
-	addInventorySection()
-	-- addMapSection()
-	addQuestSection()
-	-- addTooltipSection()
-	-- addUnitframeSection()
+function GUI:AddOptions()
+	--addGeneralOptions()
+	AppearanceOptions()
+	-- addNotificationOptions()
+	-- addAnnouncementOptions()
+	-- addAutomationOptions()
+	-- addInfobarOptions()
+	-- addChatOptions()
+	AuraOptions()
+	-- addActionbarOptions()
+	-- addCombatOptions()
+	InventoryOptions()
+	-- addMapOptions()
+	QuestOptions()
+	-- addTooltipOptions()
+	-- addUnitframeOptions()
 end
 
