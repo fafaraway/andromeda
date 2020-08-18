@@ -96,12 +96,14 @@ function MISC:OnLogin()
 
 
 
-	local LSM = LibStub and LibStub("LibSharedMedia-3.0", true)
+	local LSM = LibStub and LibStub('LibSharedMedia-3.0', true)
 	if not LSM then return end
 
 	local chinese, western = LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_western
 
-	LSM:Register("statusbar", "!Free_statusbar", C.Assets.norm_tex)
+	LSM:Register('statusbar', '!Free_norm', C.Assets.norm_tex)
+	LSM:Register('statusbar', '!Free_grad', C.Assets.grad_tex)
+	LSM:Register('statusbar', '!Free_flat', C.Assets.flat_tex)
 	LSM:Register('font', '!Free_normal', C.Assets.Fonts.Normal, chinese + western)
 	LSM:Register('font', '!Free_number', C.Assets.Fonts.Number, chinese + western)
 	LSM:Register('font', '!Free_chat', C.Assets.Fonts.Chat, chinese + western)
