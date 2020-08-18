@@ -394,9 +394,9 @@ function GUI:OnLogin()
 	AddCategory('TOOLTIP')
 	AddCategory('UNITFRAME')
 
-	GUI.AddOptions()
-
 	SetActiveTab(FreeUI_GUI.GENERAL.tab)
+
+	self.AddOptions()
 
 	UpdateSettings()
 
