@@ -737,7 +737,7 @@ end
 
 
 function INVENTORY:OnLogin()
-	if not FreeUIConfigs['inventory']['enable_module'] then return end
+	if not FreeUIConfigs['inventory']['enable_inventory'] then return end
 
 	INVENTORY:AutoSellJunk()
 	INVENTORY:AutoRepair()
