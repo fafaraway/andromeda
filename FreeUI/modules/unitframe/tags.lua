@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.oUF
-local cfg = C.Unitframe
 
 
 local tags = oUF.Tags.Methods
@@ -72,7 +71,7 @@ tags['free:stagger'] = function(unit)
 	local perc = cur / UnitHealthMax(unit)
 
 	if cur == 0 then return end
-	
+
 	return F.Numb(cur)..' / '..C.MyColor..floor(perc*100 + .5)..'%'
 end
 tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
@@ -104,7 +103,7 @@ end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'
 
 tags['free:groupname'] = function(unit)
-	if cfg.group_names then
+	if FreeUIConfigs.unitframe.group_names then
 		if UnitInRaid('player') then
 			return shortenName(unit, 2)
 		else

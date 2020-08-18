@@ -220,11 +220,7 @@ C['Actionbar'] = {
 
 C['Combat'] = {
 	['enable'] = true,
-		['fct_incoming'] = true,
-		['fct_outgoing'] = true,
-		['fct_pet'] = true,
-		['fct_merge'] = true,
-		['fct_periodic'] = true,
+
 
 		['combat_alert'] = true,
 		['health_alert'] = true,
@@ -309,7 +305,7 @@ C['Tooltip'] = {
 			['mount_source'] = true,
 }
 
-C['Unitframe'] = {
+--[[ C['Unitframe'] = {
 	['enable_module'] = true,
 		['transparency'] = true,
 		['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
@@ -324,7 +320,7 @@ C['Unitframe'] = {
 		['heal_prediction'] = true,
 			['heal_prediction_over_absorb'] = true,
 		['gcd_spark'] = true,
-		['swing_spark'] = false,
+
 		['debuff_highlight'] = true,
 		['corner_buffs'] = true,
 		['raid_debuffs'] = true,
@@ -417,7 +413,7 @@ C['Unitframe'] = {
 			['arenaShowAuras'] = true,
 			['arenaAuraPerRow'] = 6,
 			['arenaAuraTotal'] = 18,
-}
+} ]]
 
 
 C['classmod'] = {
@@ -781,8 +777,9 @@ C.CharacterSettings = {
 		['cursor_trail'] = true,
 		['vignetting'] = true,
 			['vignetting_alpha'] = .8,
+
 		['backdrop_color'] = {.05, .05, .05},
-		['backdrop_alpha'] = .6,
+		['backdrop_alpha'] = .7,
 		['backdrop_border_color'] = {0, 0, 0},
 		['backdrop_border_alpha'] = 1,
 		['flat_style'] = false,
@@ -830,7 +827,7 @@ C.CharacterSettings = {
 	},
 
 	['inventory'] = {
-		['enable_module'] = true,
+		['enable_inventory'] = true,
 			['scale'] = 1,
 			['offset'] = 26,
 			['spacing'] = 3,
@@ -857,7 +854,117 @@ C.CharacterSettings = {
 				['item_filter_favourite'] = true,
 			['auto_sell_junk'] = false,
 			['auto_repair'] = false,
-	}
+	},
+
+	['unitframe'] = {
+		['enable_unitframe'] = true,
+			['transparency'] = true,
+			['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
+			['fader'] = true,
+			['color_smooth'] = false,
+			['portrait'] = true,
+			['only_show_debuffs_by_player'] = true,
+			['click_cast'] = true,
+				['click_cast_filter'] = false,
+			['threat'] = true,
+			['range_check'] = true,
+			['heal_prediction'] = true,
+				['heal_prediction_over_absorb'] = true,
+			['gcd_spark'] = true,
+
+			['debuff_highlight'] = true,
+			['corner_buffs'] = true,
+			['raid_debuffs'] = true,
+				['raid_debuffs_click_through'] = false,
+
+			['power_bar_height'] = 2,
+			['alternative_power_height'] = 2,
+			['class_power_bar'] = true,
+				['class_power_bar_height'] = 2,
+			['stagger_bar'] = true,
+				['stagger_bar_height'] = 2,
+			['totems_bar'] = true,
+				['totems_bar_height'] = 2,
+			['runes_bar'] = true,
+				['runes_bar_height'] = 2,
+
+			['enable_castbar'] = true,
+				['castbar_focus_separate'] = false,
+				['castbar_focus_width'] = 200,
+				['castbar_focus_height'] = 16,
+				['castbar_timer'] = false,
+
+			['enable_player'] = true,
+				['player_width'] = 140,
+				['player_height'] = 14,
+				['player_auras'] = false,
+				['player_auras_number'] = 18,
+				['player_auras_number_per_row'] = 6,
+				['player_hide_tags'] = true,
+
+			['enable_pet'] = true,
+				['pet_width'] = 50,
+				['pet_height'] = 14,
+				['pet_auras'] = true,
+				['pet_auras_number_per_row'] = 3,
+				['pet_auras_number'] = 12,
+
+			['enable_target'] = true,
+				['target_width'] = 240,
+				['target_height'] = 14,
+				['target_auras'] = true,
+				['target_auras_number_per_row'] = 7,
+				['target_auras_number'] = 35,
+
+				['target_target_width'] = 80,
+				['target_target_height'] = 12,
+
+			['enable_focus'] = true,
+				['focus_width'] = 97,
+				['focus_height'] = 14,
+				['focus_auras'] = false,
+				['focus_auras_number_per_row'] = 4,
+				['focus_auras_number'] = 16,
+
+				['focus_target_width'] = 97,
+				['focus_target_height'] = 12,
+
+			['enable_group'] = true,
+				['group_names'] = false,
+				['group_color_smooth'] = false,
+				['groupFilter'] = 6,
+				['groupShowSolo'] = false,
+				['groupShowPlayer'] = true,
+				['groupByRole'] = true,
+				['groupReverse'] = false,
+
+				['party_width'] = 90,
+				['party_height'] = 38,
+				['party_gap'] = 6,
+				['partyShowAuras'] = true,
+
+				['raid_width'] = 44,
+				['raid_height'] = 32,
+				['raid_gap'] = 5,
+				['raidShowAuras'] = true,
+
+			['enable_boss'] = true,
+				['boss_color_smooth'] = true,
+				['boss_width'] = 166,
+				['boss_height'] = 20,
+				['boss_gap'] = 60,
+				['bossShowAuras'] = true,
+				['bossAuraPerRow'] = 5,
+				['bossAuraTotal'] = 15,
+
+			['enable_arena'] = true,
+				['arena_width'] = 166,
+				['arena_height'] = 16,
+				['arena_gap'] = 80,
+				['arenaShowAuras'] = true,
+				['arenaAuraPerRow'] = 6,
+				['arenaAuraTotal'] = 18,
+	},
 }
 
 C.AccountSettings = {

@@ -101,7 +101,7 @@ local function setupSkada()
 						},
 						["point"] = "CENTER",
 						["smoothing"] = true,
-						["bartexture"] = "!Free_statusbar",
+						["bartexture"] = "!Free_norm",
 						["title"] = {
 							["textcolor"] = {
 								["b"] = 0.7098039215686275,

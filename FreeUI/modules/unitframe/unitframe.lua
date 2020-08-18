@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.oUF
-local cfg = C.Unitframe
 
 
 function UNITFRAME:AddBackDrop(self)
@@ -87,7 +86,7 @@ function UNITFRAME:AddHealthValueText(self)
 	if self.unitStyle == 'player' then
 		self:Tag(healthValue, '[free:dead][free:health]')
 
-		if cfg.player_hide_tags then
+		if FreeUIConfigs.unitframe.player_hide_tags then
 			healthValue:Hide()
 		else
 			healthValue:Show()
@@ -113,7 +112,7 @@ function UNITFRAME:AddPowerValueText(self)
 	local powerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
-	if self.unitStyle == 'player' and cfg.player_hide_tags then
+	if self.unitStyle == 'player' and FreeUIConfigs.unitframe.player_hide_tags then
 		powerValue:Hide()
 	elseif self.unitStyle == 'target' then
 		powerValue:ClearAllPoints()
@@ -145,7 +144,7 @@ end
 
 
 function UNITFRAME:OnLogin()
-	if not cfg.enable_module then return end
+	if not FreeUIConfigs.unitframe.enable_unitframe then return end
 
 	F:SetSmoothingAmount(.3)
 
@@ -158,16 +157,16 @@ function UNITFRAME:OnLogin()
 
 
 
-	if cfg.boss then
+	if FreeUIConfigs.unitframe.boss then
 		self:SpawnBoss()
 	end
 
-	if cfg.arena then
+	if FreeUIConfigs.unitframe.arena then
 		self:SpawnArena()
 	end
 
 
-	if not cfg.group then return end
+	if not FreeUIConfigs.unitframe.group then return end
 
 	-- Hide Default RaidFrame
 	if CompactRaidFrameManager_SetSetting then

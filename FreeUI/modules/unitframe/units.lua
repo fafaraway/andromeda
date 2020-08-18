@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.oUF
-local cfg = C.Unitframe
 
 
 local function tagsOnEnter(self)
@@ -22,7 +21,7 @@ end
 
 local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
-	self:SetSize(cfg.player_width, cfg.player_height)
+	self:SetSize(FreeUIConfigs.unitframe.player_width, FreeUIConfigs.unitframe.player_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -40,8 +39,8 @@ local function CreatePlayerStyle(self)
 	UNITFRAME:AddRestingIndicator(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddGCDSpark(self)
-	UNITFRAME:AddSwingSpark(self)
 	UNITFRAME:AddFader(self)
+	UNITFRAME:AddFCF(self)
 
 	if C.MyClass == 'DEATHKNIGHT' then
 		UNITFRAME:AddRunes(self)
@@ -74,7 +73,7 @@ end
 
 local function CreatePetStyle(self)
 	self.unitStyle = 'pet'
-	self:SetSize(cfg.pet_width, cfg.pet_height)
+	self:SetSize(FreeUIConfigs.unitframe.pet_width, FreeUIConfigs.unitframe.pet_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -89,7 +88,7 @@ local function CreatePetStyle(self)
 end
 
 function UNITFRAME:SpawnPet()
-	if not cfg.enable_pet then return end
+	if not FreeUIConfigs.unitframe.enable_pet then return end
 
 	oUF:RegisterStyle('Pet', CreatePetStyle)
 	oUF:SetActiveStyle('Pet')
@@ -117,7 +116,7 @@ end
 
 local function CreateTargetStyle(self)
 	self.unitStyle = 'target'
-	self:SetSize(cfg.target_width, cfg.target_height)
+	self:SetSize(FreeUIConfigs.unitframe.target_width, FreeUIConfigs.unitframe.target_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -133,6 +132,7 @@ local function CreateTargetStyle(self)
 	UNITFRAME:AddQuestIndicator(self)
 	UNITFRAME:AddRangeCheck(self)
 	UNITFRAME:AddFader(self)
+	UNITFRAME:AddFCF(self)
 
 	self:RegisterEvent("PLAYER_TARGET_CHANGED", playTargetSound)
 	self.Health:SetScript("OnShow", function()
@@ -151,7 +151,7 @@ end
 
 local function CreateTargetTargetStyle(self)
 	self.unitStyle = 'targettarget'
-	self:SetSize(cfg.target_target_width, cfg.target_target_height)
+	self:SetSize(FreeUIConfigs.unitframe.target_target_width, FreeUIConfigs.unitframe.target_target_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -189,7 +189,7 @@ end
 
 local function CreateFocusStyle(self)
 	self.unitStyle = 'focus'
-	self:SetSize(cfg.focus_width, cfg.focus_height)
+	self:SetSize(FreeUIConfigs.unitframe.focus_width, FreeUIConfigs.unitframe.focus_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -219,7 +219,7 @@ end
 
 local function CreateFocusTargetStyle(self)
 	self.unitStyle = 'focustarget'
-	self:SetSize(cfg.focus_target_width, cfg.focus_target_height)
+	self:SetSize(FreeUIConfigs.unitframe.focus_target_width, FreeUIConfigs.unitframe.focus_target_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -241,7 +241,7 @@ end
 
 local function CreateBossStyle(self)
 	self.unitStyle = 'boss'
-	self:SetSize(cfg.boss_width, cfg.boss_height)
+	self:SetSize(FreeUIConfigs.unitframe.boss_width, FreeUIConfigs.unitframe.boss_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -250,7 +250,7 @@ local function CreateBossStyle(self)
 	UNITFRAME:AddPowerValueText(self)
 	UNITFRAME:AddAlternativePowerBar(self)
 	UNITFRAME:AddAlternativePowerValueText(self)
-	
+
 	UNITFRAME:AddPortrait(self)
 	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddCastBar(self)
@@ -269,16 +269,16 @@ function UNITFRAME:SpawnBoss()
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn('boss'..i, 'oUF_Boss'..i)
 		if i == 1 then
-			boss[i].mover = F.Mover(boss[i], L['MOVER_UNITFRAME_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 120, 160}, cfg.boss_width, cfg.boss_height)
+			boss[i].mover = F.Mover(boss[i], L['MOVER_UNITFRAME_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 120, 160}, FreeUIConfigs.unitframe.boss_width, FreeUIConfigs.unitframe.boss_height)
 		else
-			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, cfg.boss_gap)
+			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, FreeUIConfigs.unitframe.boss_gap)
 		end
 	end
 end
 
 local function CreateArenaStyle(self)
 	self.unitStyle = 'arena'
-	self:SetSize(cfg.arena_width, cfg.arena_height)
+	self:SetSize(FreeUIConfigs.unitframe.arena_width, FreeUIConfigs.unitframe.arena_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -300,9 +300,9 @@ function UNITFRAME:SpawnArena()
 	for i = 1, 5 do
 		arena[i] = oUF:Spawn('arena'..i, 'oUF_Arena'..i)
 		if i == 1 then
-			arena[i].mover = F.Mover(arena[i], L['MOVER_UNITFRAME_ARENA'], 'ArenaFrame', {'RIGHT', 'oUF_Player', 'LEFT', -300, 300}, cfg.arena_width, cfg.arena_height)
+			arena[i].mover = F.Mover(arena[i], L['MOVER_UNITFRAME_ARENA'], 'ArenaFrame', {'RIGHT', 'oUF_Player', 'LEFT', -300, 300}, FreeUIConfigs.unitframe.arena_width, FreeUIConfigs.unitframe.arena_height)
 		else
-			arena[i]:SetPoint('BOTTOM', arena[i-1], 'TOP', 0, cfg.arena_gap)
+			arena[i]:SetPoint('BOTTOM', arena[i-1], 'TOP', 0, FreeUIConfigs.unitframe.arena_gap)
 		end
 	end
 end
@@ -346,22 +346,22 @@ function UNITFRAME:SpawnParty()
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
 
-		"initial-width", cfg.party_width,
-		"initial-height", cfg.party_height,
+		"initial-width", FreeUIConfigs.unitframe.party_width,
+		"initial-height", FreeUIConfigs.unitframe.party_height,
 
 		'showParty', true,
-		'showPlayer', cfg.groupShowPlayer,
-		'showSolo', cfg.groupShowSolo,
-		
-		'xoffset', cfg.party_gap,
-		'yoffset', cfg.party_gap,
+		'showPlayer', FreeUIConfigs.unitframe.groupShowPlayer,
+		'showSolo', FreeUIConfigs.unitframe.groupShowSolo,
+
+		'xoffset', FreeUIConfigs.unitframe.party_gap,
+		'yoffset', FreeUIConfigs.unitframe.party_gap,
 
 		'point', 'BOTTOM',
 
-		'groupBy', cfg.groupByRole and 'ASSIGNEDROLE',
-		'groupingOrder', cfg.groupByRole and 'TANK,HEALER,DAMAGER,NONE')
+		'groupBy', FreeUIConfigs.unitframe.groupByRole and 'ASSIGNEDROLE',
+		'groupingOrder', FreeUIConfigs.unitframe.groupByRole and 'TANK,HEALER,DAMAGER,NONE')
 
-	mover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, cfg.party_width, ((cfg.party_height * 5) + (cfg.party_gap * 4)))
+	mover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, FreeUIConfigs.unitframe.party_width, ((FreeUIConfigs.unitframe.party_height * 5) + (FreeUIConfigs.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
 	party:SetPoint('BOTTOM', mover)
 end
@@ -403,35 +403,35 @@ function UNITFRAME:SpawnRaid()
 			self:SetWidth(header:GetAttribute("initial-width"))
 			self:SetHeight(header:GetAttribute("initial-height"))
 		]],
-		"initial-width", cfg.raid_width,
-		"initial-height", cfg.raid_height,
+		"initial-width", FreeUIConfigs.unitframe.raid_width,
+		"initial-height", FreeUIConfigs.unitframe.raid_height,
 
 		'showParty', true,
 		'showRaid', true,
 
-		'xoffset', (cfg.groupReverse and -cfg.raid_gap) or cfg.raid_gap,
-		'yOffset', -cfg.raid_gap,
+		'xoffset', (FreeUIConfigs.unitframe.groupReverse and -FreeUIConfigs.unitframe.raid_gap) or FreeUIConfigs.unitframe.raid_gap,
+		'yOffset', -FreeUIConfigs.unitframe.raid_gap,
 
 		'groupFilter', tostring(i),
 		'groupingOrder', '1,2,3,4,5,6,7,8',
 		'groupBy', 'GROUP',
 		'sortMethod', 'INDEX',
 
-		'columnAnchorPoint', cfg.groupReverse and 'RIGHT' or 'LEFT',
-		'point', cfg.groupReverse and 'RIGHT' or 'LEFT')
-		
+		'columnAnchorPoint', FreeUIConfigs.unitframe.groupReverse and 'RIGHT' or 'LEFT',
+		'point', FreeUIConfigs.unitframe.groupReverse and 'RIGHT' or 'LEFT')
+
 		return raid
 	end
 
 	local groups = {}
-	for i = 1, cfg.groupFilter do
+	for i = 1, FreeUIConfigs.unitframe.groupFilter do
 		groups[i] = CreateRaid('oUF_Raid'..i, i)
 		if i == 1 then
-			mover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (cfg.raid_width * 5) + (cfg.raid_gap * 4), (cfg.raid_height * cfg.groupFilter) + cfg.raid_gap * (cfg.groupFilter - 1))
+			mover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (FreeUIConfigs.unitframe.raid_width * 5) + (FreeUIConfigs.unitframe.raid_gap * 4), (FreeUIConfigs.unitframe.raid_height * FreeUIConfigs.unitframe.groupFilter) + FreeUIConfigs.unitframe.raid_gap * (FreeUIConfigs.unitframe.groupFilter - 1))
 			groups[i]:ClearAllPoints()
-			groups[i]:SetPoint((cfg.groupReverse and 'TOPRIGHT') or 'TOPLEFT', mover)
+			groups[i]:SetPoint((FreeUIConfigs.unitframe.groupReverse and 'TOPRIGHT') or 'TOPLEFT', mover)
 		else
-			groups[i]:SetPoint((cfg.groupReverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (cfg.groupReverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -cfg.raid_gap)
+			groups[i]:SetPoint((FreeUIConfigs.unitframe.groupReverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (FreeUIConfigs.unitframe.groupReverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -FreeUIConfigs.unitframe.raid_gap)
 		end
 	end
 end
