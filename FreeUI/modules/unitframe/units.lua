@@ -71,8 +71,6 @@ local function CreatePetStyle(self)
 end
 
 function UNITFRAME:SpawnPet()
-	if not FreeUIConfigs.unitframe.enable_pet then return end
-
 	oUF:RegisterStyle('Pet', CreatePetStyle)
 	oUF:SetActiveStyle('Pet')
 
@@ -192,8 +190,6 @@ local function CreateFocusStyle(self)
 end
 
 function UNITFRAME:SpawnFocus()
-	if not FreeUIConfigs.unitframe.enable_focus then return end
-
 	oUF:RegisterStyle('Focus', CreateFocusStyle)
 	oUF:SetActiveStyle('Focus')
 
