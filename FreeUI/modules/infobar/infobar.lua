@@ -154,8 +154,8 @@ bar.addButton = addButton
 function INFOBAR:OnLogin()
 	if not cfg.enable then return end
 
-	bar:Point((cfg.top and 'TOPLEFT') or 'BOTTOMLEFT', 0, 0)
-	bar:Point((cfg.top and 'TOPRIGHT') or 'BOTTOMRIGHT', 0, 0)
+	bar:SetPoint((cfg.top and 'TOPLEFT') or 'BOTTOMLEFT', 0, 0)
+	bar:SetPoint((cfg.top and 'TOPRIGHT') or 'BOTTOMRIGHT', 0, 0)
 
 	bar:SetFrameStrata('BACKGROUND')
 	bar:SetHeight(cfg.height)

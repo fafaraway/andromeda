@@ -8,7 +8,7 @@ local created
 local function setupCheckButton()
 	if created then return end
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
-	bu:Point('TOPRIGHT', -250, -2)
+	bu:SetPoint('TOPRIGHT', -250, -2)
 	bu:Size(26)
 	F.ReskinCheck(bu)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 25, 0)

@@ -74,8 +74,8 @@ tinsert(C.BlizzThemes, function()
 
 		if not self.bg then
 			self.bg = F.SetBD(self)
-			self.bg:Point("TOPLEFT", self.LeftBar, -2, 2)
-			self.bg:Point("BOTTOMRIGHT", self.RightBar, 2, -2)
+			self.bg:SetPoint("TOPLEFT", self.LeftBar, -2, 2)
+			self.bg:SetPoint("BOTTOMRIGHT", self.RightBar, 2, -2)
 		end
 	end)
 

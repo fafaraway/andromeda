@@ -49,7 +49,7 @@ local function Calendar()
 		GameTimeFrame:SetSize(24, 12)
 		GameTimeFrame:SetParent(Minimap)
 		GameTimeFrame:ClearAllPoints()
-		GameTimeFrame:Point('TOPRIGHT', Minimap, -4, -(minimapSize / 8) - 6)
+		GameTimeFrame:SetPoint('TOPRIGHT', Minimap, -4, -(minimapSize / 8) - 6)
 		GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 
 		for i = 1, GameTimeFrame:GetNumRegions() do
@@ -97,7 +97,7 @@ end
 local function InstanceType()
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetSize(24, 12)
-	f:Point('TOPLEFT', Minimap, 4, -(minimapSize / 8) - 6)
+	f:SetPoint('TOPLEFT', Minimap, 4, -(minimapSize / 8) - 6)
 	f.text = F.CreateFS(f, C.Assets.Fonts.Number, 12, 'OUTLINE', '', nil, false, 'TOPLEFT', 0, 0)
 
 	f:RegisterEvent('PLAYER_ENTERING_WORLD')
@@ -185,7 +185,7 @@ local function ZoneText()
 	PVPArenaTextString:SetWidth(230)
 
 	MinimapZoneTextButton:ClearAllPoints()
-	MinimapZoneTextButton:Point('TOP', Minimap, 0, -(minimapSize / 8 + 10))
+	MinimapZoneTextButton:SetPoint('TOP', Minimap, 0, -(minimapSize / 8 + 10))
 	MinimapZoneTextButton:SetFrameStrata('HIGH')
 	MinimapZoneTextButton:EnableMouse(false)
 	MinimapZoneTextButton:SetAlpha(0)
@@ -212,12 +212,12 @@ end
 local function QueueStatus()
 	QueueStatusMinimapButtonBorder:SetAlpha(0)
 	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:Point('BOTTOMRIGHT', Minimap, 0, minimapSize / 8 + 6)
+	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, minimapSize / 8 + 6)
 	QueueStatusMinimapButton:SetHighlightTexture('')
 	QueueStatusMinimapButton.Eye.texture:SetTexture('')
 
 	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:Point('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, minimapSize / 8 + 6)
+	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, minimapSize / 8 + 6)
 
 	local dots = {}
 	for i = 1, 8 do
@@ -316,7 +316,7 @@ local function WorldMarker()
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent('UIParent')
 	wm:ClearAllPoints()
-	wm:Point('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', 4, minimapSize/8 + 6)
+	wm:SetPoint('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', 4, minimapSize/8 + 6)
 	wm:Size(16)
 	wm:Hide()
 

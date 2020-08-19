@@ -27,10 +27,10 @@ function ACTIONBAR:CreateBar1()
 		button:ClearAllPoints()
 
 		if i == 1 then
-			button:Point('BOTTOMLEFT', frame, padding, padding)
+			button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 		else
 			local previous = _G['ActionButton'..i-1]
-			button:Point('LEFT', previous, 'RIGHT', margin, 0)
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
@@ -84,10 +84,10 @@ function ACTIONBAR:CreateBar2()
 		button:Size(buttonSizeNormal, buttonSizeNormal)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:Point('BOTTOMLEFT', frame, padding, padding)
+			button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 		else
 			local previous = _G['MultiBarBottomLeftButton'..i-1]
-			button:Point('LEFT', previous, 'RIGHT', margin, 0)
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
@@ -131,19 +131,19 @@ function ACTIONBAR:CreateBar3()
 		button:Size(buttonSizeNormal, buttonSizeNormal)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:Point('TOPLEFT', frame, padding, -padding)
+			button:SetPoint('TOPLEFT', frame, padding, -padding)
 		elseif (i == 4 and cfg.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton1']
-			button:Point('TOP', previous, 'BOTTOM', 0, -padding)
+			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		elseif (i == 7 and cfg.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton3']
-			button:Point('TOPLEFT', previous, 'TOPRIGHT', 12*buttonSizeNormal+13*margin, 0)
+			button:SetPoint('TOPLEFT', previous, 'TOPRIGHT', 12*buttonSizeNormal+13*margin, 0)
 		elseif (i == 10 and cfg.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton7']
-			button:Point('TOP', previous, 'BOTTOM', 0, -padding)
+			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		else
 			local previous = _G['MultiBarBottomRightButton'..i-1]
-			button:Point('LEFT', previous, 'RIGHT', margin, 0)
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
@@ -181,10 +181,10 @@ function ACTIONBAR:CreateBar4()
 		button:ClearAllPoints()
 
 		if i == 1 then
-			button:Point('TOPRIGHT', frame, -padding, -padding)
+			button:SetPoint('TOPRIGHT', frame, -padding, -padding)
 		else
 			local previous = _G['MultiBarRightButton'..i-1]
-			button:Point('TOP', previous, 'BOTTOM', 0, -margin)
+			button:SetPoint('TOP', previous, 'BOTTOM', 0, -margin)
 		end
 
 	end
@@ -222,10 +222,10 @@ function ACTIONBAR:CreateBar5()
 		button:Size(buttonSizeSmall, buttonSizeSmall)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:Point('TOPRIGHT', frame, -padding, -padding)
+			button:SetPoint('TOPRIGHT', frame, -padding, -padding)
 		else
 			local previous = _G['MultiBarLeftButton'..i-1]
-			button:Point('TOP', previous, 'BOTTOM', 0, -margin)
+			button:SetPoint('TOP', previous, 'BOTTOM', 0, -margin)
 		end
 	end
 
@@ -261,10 +261,10 @@ function ACTIONBAR:CreatePetbar()
 		button:Size(buttonSizeSmall, buttonSizeSmall)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:Point('LEFT', frame, padding, 0)
+			button:SetPoint('LEFT', frame, padding, 0)
 		else
 			local previous = _G['PetActionButton'..i-1]
-			button:Point('LEFT', previous, 'RIGHT', margin+2, 0)
+			button:SetPoint('LEFT', previous, 'RIGHT', margin+2, 0)
 		end
 		--cooldown fix
 		local cd = _G['PetActionButton'..i..'Cooldown']
@@ -294,13 +294,13 @@ function ACTIONBAR:CreateStancebar()
 		if InCombatLockdown() then return end
 		local leftShown, rightShown = MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown()
 		if leftShown and rightShown then
-			frame:Point('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		elseif leftShown and not rightShown then
-			frame:Point('BOTTOM', 'FreeUI_ActionBar2', 'TOP', 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar2', 'TOP', 0, 0)
 		elseif rightShown and not leftShown then
-			frame:Point('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		elseif not rightShown and not leftShown then
-			frame:Point('BOTTOM', 'FreeUI_ActionBar1', 'TOP', 0, 0)
+			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar1', 'TOP', 0, 0)
 		end
 	end
 	hooksecurefunc('MultiActionBar_Update', positionBars)
@@ -318,10 +318,10 @@ function ACTIONBAR:CreateStancebar()
 		button:Size(buttonSizeBig, buttonSizeBig)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:Point('BOTTOMLEFT', frame, padding, padding)
+			button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 		else
 			local previous = _G['StanceButton'..i-1]
-			button:Point('LEFT', previous, 'RIGHT', margin, 0)
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
@@ -337,10 +337,10 @@ function ACTIONBAR:CreateStancebar()
 		button:Size(buttonSizeBig, buttonSizeBig)
 		button:ClearAllPoints()
 		if i == 1 then
-			button:Point('BOTTOMLEFT', frame, padding, padding)
+			button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 		else
 			local previous = _G['PossessButton'..i-1]
-			button:Point('LEFT', previous, 'RIGHT', margin, 0)
+			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
 
@@ -367,7 +367,7 @@ function ACTIONBAR:CreateExtrabar()
 	ExtraActionBarFrame:SetParent(frame)
 	ExtraActionBarFrame:EnableMouse(false)
 	ExtraActionBarFrame:ClearAllPoints()
-	ExtraActionBarFrame:Point('CENTER', 0, 0)
+	ExtraActionBarFrame:SetPoint('CENTER', 0, 0)
 	ExtraActionBarFrame.ignoreFramePositionManager = true
 
 	local button = ExtraActionButton1
@@ -384,7 +384,7 @@ function ACTIONBAR:CreateExtrabar()
 	ZoneAbilityFrame:ClearAllPoints()
 	ZoneAbilityFrame.ignoreFramePositionManager = true
 	ZoneAbilityFrameNormalTexture:SetAlpha(0)
-	ZoneAbilityFrame:Point('CENTER', UIParent, 'CENTER', 0, 300)
+	ZoneAbilityFrame:SetPoint('CENTER', UIParent, 'CENTER', 0, 300)
 
 	local spellButton = ZoneAbilityFrame.SpellButton
 	spellButton:Size(buttonSizeBig, buttonSizeBig)
@@ -402,7 +402,7 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 
 	local button = CreateFrame('CheckButton', 'FreeUI_LeaveVehicleButton', frame, 'ActionButtonTemplate, SecureHandlerClickTemplate')
 	table.insert(buttonList, button)
-	button:Point('BOTTOMLEFT', frame, padding, padding)
+	button:SetPoint('BOTTOMLEFT', frame, padding, padding)
 	button:Size(buttonSizeBig, buttonSizeBig)
 	button:RegisterForClicks('AnyUp')
 

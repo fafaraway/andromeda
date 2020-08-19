@@ -41,8 +41,8 @@ end
 
 local function UpdateTooltip(bar)
 	GameTooltip:SetOwner(Minimap, 'ANCHOR_NONE')
-	GameTooltip:Point('TOPRIGHT', Minimap, 'TOPLEFT', -4, -(256 / 8 - 6))
-	
+	GameTooltip:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -4, -(256 / 8 - 6))
+
 	if UnitLevel('player') < MAX_PLAYER_LEVEL then
 		GameTooltip:AddLine(LEVEL..' '..UnitLevel('player'), C.r, C.g, C.b)
 
@@ -92,7 +92,7 @@ local function UpdateTooltip(bar)
 		end
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddLine(name, 62/250, 175/250, 227/250)
-		
+
 		if C_Reputation.IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 			local paraCount = floor(currentValue/threshold)
@@ -137,10 +137,10 @@ function MAP:SetupScript(bar)
 end
 
 function MAP:ExpBar()
-	if not cfg.expBar then return end 
+	if not cfg.expBar then return end
 
 	local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', Minimap)
-	bar:Point('BOTTOM', Minimap, 'TOP', 0, -(256 / 8 ))
+	bar:SetPoint('BOTTOM', Minimap, 'TOP', 0, -(256 / 8 ))
 	bar:Size(Minimap:GetWidth(), 3)
 	bar:SetHitRectInsets(0, 0, -10, -10)
 	F.CreateSB(bar)
