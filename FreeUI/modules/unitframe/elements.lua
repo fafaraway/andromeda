@@ -250,7 +250,7 @@ end
 function UNITFRAME:AddAlternativePowerBar(self)
 	local altPower = CreateFrame('StatusBar', nil, self)
 	altPower:SetStatusBarTexture(C.Assets.norm_tex)
-	altPower:Point('TOP', self.Power, 'BOTTOM', 0, -2)
+	altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
 	altPower:Size(self:GetWidth(), FreeUIConfigs.unitframe.alternative_power_height)
 	altPower:EnableMouse(true)
 	F:SmoothBar(altPower)
@@ -408,13 +408,13 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 			return false
 		end
 	elseif style == 'target' and FreeUIConfigs.unitframe.target_auras then
-		if FreeUIConfigs.unitframe.debuff_by_player and button.isDebuff and not button.isPlayer then
+		if FreeUIConfigs.unitframe.target_debuffs_by_player and button.isDebuff and not button.isPlayer then
 			return false
 		else
 			return true
 		end
-	elseif style == 'boss' and FreeUIConfigs.unitframe.bossShowAuras then
-		if FreeUIConfigs.unitframe.debuff_by_player and button.isDebuff and not button.isPlayer then
+	elseif style == 'boss' and FreeUIConfigs.unitframe.boss_auras then
+		if FreeUIConfigs.unitframe.boss_debuffs_by_player and button.isDebuff and not button.isPlayer then
 			return false
 		else
 			return true
@@ -473,8 +473,8 @@ function UNITFRAME:AddAuras(self)
 			auras.numTotal = FreeUIConfigs.unitframe.focus_auras_number
 			auras.iconsPerRow = FreeUIConfigs.unitframe.focus_auras_number_per_row
 		elseif style == 'boss' then
-			auras.numTotal = FreeUIConfigs.unitframe.bossAuraTotal
-			auras.iconsPerRow = FreeUIConfigs.unitframe.bossAuraPerRow
+			auras.numTotal = FreeUIConfigs.unitframe.boss_auras_number
+			auras.iconsPerRow = FreeUIConfigs.unitframe.boss_auras_number_per_row
 		elseif style == 'arena' then
 			auras.numTotal = FreeUIConfigs.unitframe.arenaAuraTotal
 			auras.iconsPerRow = FreeUIConfigs.unitframe.arenaAuraPerRow
@@ -598,8 +598,8 @@ local CornerBuffsAnchor = {
 
 function UNITFRAME:CreateCornerBuffIcon(icon)
 	F.CreateBDFrame(icon)
-	icon.icon:Point('TOPLEFT', 1, -1)
-	icon.icon:Point('BOTTOMRIGHT', -1, 1)
+	icon.icon:SetPoint('TOPLEFT', 1, -1)
+	icon.icon:SetPoint('BOTTOMRIGHT', -1, 1)
 	icon.icon:SetTexCoord(unpack(C.TexCoord))
 	icon.icon:SetDrawLayer('ARTWORK')
 
@@ -612,7 +612,7 @@ function UNITFRAME:CreateCornerBuffIcon(icon)
 end
 
 function UNITFRAME:AddCornerBuff(self)
-	if not FreeUIConfigs.unitframe.corner_buffs then return end
+	if not FreeUIConfigs.unitframe.group_corner_buffs then return end
 
 	local Auras = CreateFrame('Frame', nil, self)
 	Auras:SetPoint('TOPLEFT', self.Health, 2, -2)
@@ -670,16 +670,16 @@ end
 
 -- Debuff highlight
 function UNITFRAME:AddDebuffHighlight(self)
-	if not FreeUIConfigs.unitframe.debuff_highlight then return end
+	if not FreeUIConfigs.unitframe.group_debuff_highlight then return end
 
 	self.DebuffHighlight = self:CreateTexture(nil, 'OVERLAY')
-    self.DebuffHighlight:SetAllPoints(self)
-    self.DebuffHighlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-    self.DebuffHighlight:SetTexCoord(0, 1, .5, 1)
-    self.DebuffHighlight:SetVertexColor(.6, .6, .6, 0)
-    self.DebuffHighlight:SetBlendMode('ADD')
-    self.DebuffHighlightAlpha = 1
-    self.DebuffHighlightFilter = true
+	self.DebuffHighlight:SetAllPoints(self)
+	self.DebuffHighlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+	self.DebuffHighlight:SetTexCoord(0, 1, .5, 1)
+	self.DebuffHighlight:SetVertexColor(.6, .6, .6, 0)
+	self.DebuffHighlight:SetBlendMode('ADD')
+	self.DebuffHighlightAlpha = 1
+	self.DebuffHighlightFilter = true
 end
 
 -- Raid debuffs
@@ -726,7 +726,7 @@ function UNITFRAME:AddRaidDebuffs(self)
 
 	bu.ShowDispellableDebuff = true
 	bu.ShowDebuffBorder = true
-	bu.FilterDispellableDebuff = true
+	bu.FilterDispellableDebuff = false
 
 	bu.Debuffs = C.RaidDebuffs
 
@@ -846,9 +846,15 @@ local function OnCastSent(self)
 end
 
 local function PostCastStart(self, unit)
+	local castingColor = FreeUIConfigs.unitframe.castingColor
+	local notInterruptibleColor = FreeUIConfigs.unitframe.notInterruptibleColor
+
 	self:SetAlpha(1)
 	self.Spark:Show()
-	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
+
+	self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b)
+
+
 
 	if unit == 'vehicle' or UnitInVehicle('player') then
 		if self.SafeZone then self.SafeZone:Hide() end
@@ -873,7 +879,7 @@ local function PostCastStart(self, unit)
 		end
 		updateCastBarTicks(self, numTicks)
 	elseif not UnitIsUnit(unit, 'player') and self.notInterruptible then
-		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
+		self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
 	end
 
 	if self.Icon and not self.Icon:GetTexture() then
@@ -882,42 +888,42 @@ local function PostCastStart(self, unit)
 
 	if self.iconBg then
 		if self.notInterruptible then
-			self.iconBg:SetBackdropColor(unpack(self.notInterruptibleColor))
+			self.iconBg:SetBackdropColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
 		else
-			self.iconBg:SetBackdropColor(unpack(self.CastingColor))
+			self.iconBg:SetBackdropColor(castingColor.r, castingColor.g, castingColor.b)
 		end
 	end
 
 	if self.iconGlow then
 		if self.notInterruptible then
-			self.iconGlow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .5)
+			self.iconGlow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .5)
 		else
-			self.iconGlow:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .35)
+			self.iconGlow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
 		end
 	end
 
 	if self.Glow and not (FreeUIConfigs.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
 		if self.notInterruptible then
-			self.Glow:SetBackdropBorderColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .35)
+			self.Glow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .35)
 		else
-			self.Glow:SetBackdropBorderColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .35)
+			self.Glow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
 		end
 	end
 
 	if FreeUIConfigs.unitframe.castbar_focus_separate and self.__owner.unit == 'focus' then
 		if self.notInterruptible then
-			self:SetStatusBarColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], 1)
+			self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, 1)
 		else
-			self:SetStatusBarColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], 1)
+			self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b, 1)
 		end
 
 		self.Bg:SetBackdropColor(0, 0, 0, .6)
 		self.Bg:SetBackdropBorderColor(0, 0, 0, 1)
 	else
 		if self.notInterruptible then
-			self:SetStatusBarColor(self.notInterruptibleColor[1], self.notInterruptibleColor[2], self.notInterruptibleColor[3], .4)
+			self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .4)
 		else
-			self:SetStatusBarColor(self.CastingColor[1], self.CastingColor[2], self.CastingColor[3], .4)
+			self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b, .4)
 		end
 
 		self.Bg:SetBackdropColor(0, 0, 0, .2)
@@ -926,16 +932,21 @@ local function PostCastStart(self, unit)
 end
 
 local function PostUpdateInterruptible(self, unit)
+	local castingColor = FreeUIConfigs.unitframe.castingColor
+	local notInterruptibleColor = FreeUIConfigs.unitframe.notInterruptibleColor
+
 	if not UnitIsUnit(unit, 'player') and self.notInterruptible then
-		self:SetStatusBarColor(unpack(self.notInterruptibleColor))
+		self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
 	else
-		self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
+		self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b)
 	end
 end
 
 local function PostCastStop(self)
+	local completeColor = FreeUIConfigs.unitframe.completeColor
+
 	if not self.fadeOut then
-		self:SetStatusBarColor(unpack(self.CompleteColor))
+		self:SetStatusBarColor(completeColor.r, completeColor.g, completeColor.b)
 		self.fadeOut = true
 	end
 	self:SetValue(self.max)
@@ -949,7 +960,9 @@ local function PostChannelStop(self)
 end
 
 local function PostCastFailed(self)
-	self:SetStatusBarColor(unpack(self.FailColor))
+	local failColor = FreeUIConfigs.unitframe.failColor
+
+	self:SetStatusBarColor(failColor.r, failColor.g, failColor.b)
 	self:SetValue(self.max)
 	self.fadeOut = true
 	self:Show()
@@ -1026,12 +1039,6 @@ function UNITFRAME:AddCastBar(self)
 	end
 
 	castbar.decimal = '%.1f'
-
-	castbar.CastingColor = {110/255, 176/255, 216/255}
-	castbar.ChannelingColor = {92/255, 193/255, 216/255}
-	castbar.notInterruptibleColor = {190/255, 10/255, 18/255}
-	castbar.CompleteColor = {63/255, 161/255, 124/255}
-	castbar.FailColor = {187/255, 99/255, 110/255}
 
 	castbar.OnUpdate = OnCastbarUpdate
 	castbar.PostCastStart = PostCastStart
@@ -1291,6 +1298,8 @@ end
 
 -- Indicatiors
 function UNITFRAME:AddPvPIndicator(self)
+	if not FreeUIConfigs.unitframe.player_pvp_indicator then return end
+
 	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
@@ -1301,6 +1310,8 @@ function UNITFRAME:AddPvPIndicator(self)
 end
 
 function UNITFRAME:AddCombatIndicator(self)
+	if not FreeUIConfigs.unitframe.player_combat_indicator then return end
+
 	local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
 	combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
 
@@ -1308,6 +1319,8 @@ function UNITFRAME:AddCombatIndicator(self)
 end
 
 function UNITFRAME:AddRestingIndicator(self)
+	if not FreeUIConfigs.unitframe.player_resting_indicator then return end
+
 	local restingIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'Zzz', 'GREEN', 'THICK')
 	restingIndicator:SetPoint('BOTTOMRIGHT', self.PowerValue, 'BOTTOMLEFT', -5, 0)
 
@@ -1315,6 +1328,8 @@ function UNITFRAME:AddRestingIndicator(self)
 end
 
 function UNITFRAME:AddQuestIndicator(self)
+	if not FreeUIConfigs.unitframe.quest_indicator then return end
+
 	local questIndicator = F.CreateFS(self, C.Assets.Fonts.Number, 11, nil, '*', 'YELLOW', 'THICK')
 	questIndicator:SetPoint('BOTTOMRIGHT', self.Name, 'BOTTOMLEFT', -3, 0)
 
@@ -1322,6 +1337,8 @@ function UNITFRAME:AddQuestIndicator(self)
 end
 
 function UNITFRAME:AddRaidTargetIndicator(self)
+	if not FreeUIConfigs.unitframe.target_icon_indicator then return end
+
 	local raidTargetIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	raidTargetIndicator:SetTexture(C.Assets.target_icon)
 	raidTargetIndicator:SetAlpha(.5)
@@ -1332,6 +1349,8 @@ function UNITFRAME:AddRaidTargetIndicator(self)
 end
 
 function UNITFRAME:AddResurrectIndicator(self)
+	if not FreeUIConfigs.unitframe.group_resurrect_indicator then return end
+
 	local resurrectIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	resurrectIndicator:SetSize(16, 16)
 	resurrectIndicator:SetPoint('CENTER')
@@ -1340,6 +1359,8 @@ function UNITFRAME:AddResurrectIndicator(self)
 end
 
 function UNITFRAME:AddReadyCheckIndicator(self)
+	if not FreeUIConfigs.unitframe.group_ready_check_indicator then return end
+
 	local readyCheckIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	readyCheckIndicator:SetPoint('CENTER', self.Health)
 	readyCheckIndicator:SetSize(16, 16)
@@ -1347,6 +1368,8 @@ function UNITFRAME:AddReadyCheckIndicator(self)
 end
 
 function UNITFRAME:AddGroupRoleIndicator(self)
+	if not FreeUIConfigs.unitframe.group_role_indicator then return end
+
 	local UpdateLFD = function(self, event)
 		local lfdrole = self.GroupRoleIndicator
 		local role = UnitGroupRolesAssigned(self.unit)
@@ -1371,18 +1394,24 @@ function UNITFRAME:AddGroupRoleIndicator(self)
 end
 
 function UNITFRAME:AddLeaderIndicator(self)
-    local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'L', nil, true, 'TOPLEFT', 2, -2)
+	if not FreeUIConfigs.unitframe.group_leader_indicator then return end
 
-    self.LeaderIndicator = leaderIndicator
+	local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'L', nil, true, 'TOPLEFT', 2, -2)
+
+	self.LeaderIndicator = leaderIndicator
 end
 
 function UNITFRAME:AddPhaseIndicator(self)
+	if not FreeUIConfigs.unitframe.group_phase_indicator then return end
+
 	local phaseIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Number, 11, nil, '?', nil, 'THICK', 'RIGHT', nil, true)
 	phaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -2)
 	self.PhaseIndicator = phaseIndicator
 end
 
 function UNITFRAME:AddSummonIndicator(self)
+	if not FreeUIConfigs.unitframe.group_summon_indicator then return end
+
 	local summonIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	summonIndicator:SetSize(36, 36)
 	summonIndicator:SetPoint('CENTER')
@@ -1403,7 +1432,7 @@ local function UpdateThreat(self, event, unit)
 end
 
 function UNITFRAME:AddThreatIndicator(self)
-	if not FreeUIConfigs.unitframe.group_threat then return end
+	if not FreeUIConfigs.unitframe.group_threat_indicator then return end
 
 	self.ThreatIndicator = {
 		IsObjectType = function() end,
@@ -1429,16 +1458,23 @@ end
 
 -- Spell range
 function UNITFRAME:AddRangeCheck(self)
-	if not FreeUIConfigs.unitframe.range_check then return end
-
-	self.SpellRange = {
-		insideAlpha = 1,
-		outsideAlpha = 0.5
-	}
+	if FreeUIConfigs.unitframe.range_check then
+		self.SpellRange = {
+			insideAlpha = 1,
+			outsideAlpha = FreeUIConfigs.unitframe.range_check_alpha,
+		}
+	else
+		self.Range = {
+			insideAlpha = 1,
+			outsideAlpha = FreeUIConfigs.unitframe.range_check_alpha,
+		}
+	end
 end
 
 -- Floating combat feedback
 function UNITFRAME:AddFCF(self)
+	if not FreeUIConfigs.unitframe.floating_combat_text then return end
+
 	local parentFrame = CreateFrame('Frame', nil, UIParent)
 	local fcf = CreateFrame('Frame', 'oUF_CombatTextFrame', parentFrame)
 	fcf:SetSize(32, 32)

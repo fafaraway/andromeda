@@ -95,6 +95,14 @@ local function SetupRangeCheckAlpha()
 	GUI:ToggleSidePanel('rangeCheckAlphaSide')
 end
 
+local function SetupCastbarColor()
+	GUI:ToggleSidePanel('castbarColorSide')
+end
+
+local function SetupCastbarSize()
+	GUI:ToggleSidePanel('castbarSizeSide')
+end
+
 
 
 -- options section
@@ -433,17 +441,17 @@ local function UnitframeOptions()
 	local transparency = GUI:CreateCheckBox(parent, 'unitframe', 'transparency')
 	transparency:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local texture = GUI:CreateDropdown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']})
+	local texture = GUI:CreateDropDown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']})
 	texture:SetPoint('LEFT', transparency, 'RIGHT', 160, 0)
 
 	local portrait = GUI:CreateCheckBox(parent, 'unitframe', 'portrait')
 	portrait:SetPoint('TOPLEFT', transparency, 'BOTTOMLEFT', 0, -8)
 
 	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'fader')
-	fader:SetPoint('TOPLEFT', portrait, 'BOTTOMLEFT', 0, -8)
+	fader:SetPoint('LEFT', portrait, 'RIGHT', 160, 0)
 
 	local feature = GUI:AddSubCategory(parent)
-	feature:SetPoint('TOPLEFT', fader, 'BOTTOMLEFT', 0, -16)
+	feature:SetPoint('TOPLEFT', portrait, 'BOTTOMLEFT', 0, -16)
 
 	local rangeCheck = GUI:CreateCheckBox(parent, 'unitframe', 'range_check', nil, SetupRangeCheckAlpha)
 	rangeCheck:SetPoint('TOPLEFT', feature, 'BOTTOMLEFT', 0, -8)
@@ -457,20 +465,87 @@ local function UnitframeOptions()
 	local overAbsorb = GUI:CreateCheckBox(parent, 'unitframe', 'over_absorb')
 	overAbsorb:SetPoint('LEFT', healPrediction, 'RIGHT', 160, 0)
 
-	local debuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'debuffs_by_player')
+	local debuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'target_debuffs_by_player')
 	debuffsByPlayer:SetPoint('TOPLEFT', healPrediction, 'BOTTOMLEFT', 0, -8)
 
+	local classPowerBar = GUI:CreateCheckBox(parent, 'unitframe', 'class_power_bar')
+	classPowerBar:SetPoint('LEFT', debuffsByPlayer, 'RIGHT', 160, 0)
+
+	local staggerBar = GUI:CreateCheckBox(parent, 'unitframe', 'stagger_bar')
+	staggerBar:SetPoint('TOPLEFT', debuffsByPlayer, 'BOTTOMLEFT', 0, -8)
+
+	local totemsBar = GUI:CreateCheckBox(parent, 'unitframe', 'totems_bar')
+	totemsBar:SetPoint('LEFT', staggerBar, 'RIGHT', 160, 0)
+
+	local runesBar = GUI:CreateCheckBox(parent, 'unitframe', 'runes_bar')
+	runesBar:SetPoint('TOPLEFT', staggerBar, 'BOTTOMLEFT', 0, -8)
+
+
+	local rangeCheckAlphaSide = GUI:CreateSidePanel(parent, 'rangeCheckAlphaSide')
+
+	local rangeCheckAlpha = GUI:CreateSlider(rangeCheckAlphaSide, 'unitframe', 'range_check_alpha', nil, {0.3, 1, 0.1})
+	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide, 'TOP', 0, -90)
+
+
+
+	local castbar = GUI:AddSubCategory(parent)
+	castbar:SetPoint('TOPLEFT', runesBar, 'BOTTOMLEFT', 0, -16)
+
+	local enableCastbar = GUI:CreateCheckBox(parent, 'unitframe', 'enable_castbar', nil, SetupCastbarColor)
+	enableCastbar:SetPoint('TOPLEFT', castbar, 'BOTTOMLEFT', 0, -8)
+
+	local castbarTimer = GUI:CreateCheckBox(parent, 'unitframe', 'castbar_timer')
+	castbarTimer:SetPoint('LEFT', enableCastbar, 'RIGHT', 160, 0)
+
+	local castbarFocusSeparate = GUI:CreateCheckBox(parent, 'unitframe', 'castbar_focus_separate', nil, SetupCastbarSize)
+	castbarFocusSeparate:SetPoint('TOPLEFT', enableCastbar, 'BOTTOMLEFT', 0, -8)
+
+
+	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
+
+	local castingColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'castingColor')
+	castingColor:SetPoint('TOPLEFT', castbarColorSide, 'TOPLEFT', 20, -60)
+
+	local notInterruptibleColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'notInterruptibleColor')
+	notInterruptibleColor:SetPoint('TOP', castingColor, 'BOTTOM', 0, -16)
+
+
+	local completeColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'completeColor')
+	completeColor:SetPoint('TOP', notInterruptibleColor, 'BOTTOM', 0, -16)
+
+	local failColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'failColor')
+	failColor:SetPoint('TOP', completeColor, 'BOTTOM', 0, -16)
+
+
+	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')
+
+	local castbarFocusWidth = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_width', nil, {100, 400, 1})
+	castbarFocusWidth:SetPoint('TOP', castbarSizeSide, 'TOP', 0, -94)
+
+	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
+	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -66)
+
+
 	local pet = GUI:AddSubCategory(parent)
-	pet:SetPoint('TOPLEFT', debuffsByPlayer, 'BOTTOMLEFT', 0, -16)
+	pet:SetPoint('TOPLEFT', castbarFocusSeparate, 'BOTTOMLEFT', 0, -16)
 
 	local enablePet = GUI:CreateCheckBox(parent, 'unitframe', 'enable_pet', nil, SetupPetSize)
 	enablePet:SetPoint('TOPLEFT', pet, 'BOTTOMLEFT', 0, -8)
+
+	local petAura = GUI:CreateCheckBox(parent, 'unitframe', 'pet_auras')
+	petAura:SetPoint('LEFT', enablePet, 'RIGHT', 160, 0)
 
 	local focus = GUI:AddSubCategory(parent)
 	focus:SetPoint('TOPLEFT', enablePet, 'BOTTOMLEFT', 0, -16)
 
 	local enableFocus = GUI:CreateCheckBox(parent, 'unitframe', 'enable_focus', nil, SetupFocusSize)
 	enableFocus:SetPoint('TOPLEFT', focus, 'BOTTOMLEFT', 0, -8)
+
+	local focusAura = GUI:CreateCheckBox(parent, 'unitframe', 'focus_auras')
+	focusAura:SetPoint('LEFT', enableFocus, 'RIGHT', 160, 0)
+
+
+
 
 	local group = GUI:AddSubCategory(parent)
 	group:SetPoint('TOPLEFT', enableFocus, 'BOTTOMLEFT', 0, -16)
@@ -480,18 +555,41 @@ local function UnitframeOptions()
 
 
 	local groupNames = GUI:CreateCheckBox(parent, 'unitframe', 'group_names')
-	groupNames:SetPoint('TOPLEFT', enableGroup, 'BOTTOMLEFT', 0, -8)
+	groupNames:SetPoint('LEFT', enableGroup, 'RIGHT', 160, 0)
 
 	local groupColorSmooth = GUI:CreateCheckBox(parent, 'unitframe', 'group_color_smooth')
-	groupColorSmooth:SetPoint('LEFT', groupNames, 'RIGHT', 160, 0)
+	groupColorSmooth:SetPoint('TOPLEFT', enableGroup, 'BOTTOMLEFT', 0, -8)
+
+	local groupThreat = GUI:CreateCheckBox(parent, 'unitframe', 'group_threat')
+	groupThreat:SetPoint('LEFT', groupColorSmooth, 'RIGHT', 160, 0)
+
+
 
 
 
 	local boss = GUI:AddSubCategory(parent)
-	boss:SetPoint('TOPLEFT', groupNames, 'BOTTOMLEFT', 0, -16)
+	boss:SetPoint('TOPLEFT', groupColorSmooth, 'BOTTOMLEFT', 0, -16)
 
 	local enableBoss = GUI:CreateCheckBox(parent, 'unitframe', 'enable_boss', nil, SetupBossSize)
 	enableBoss:SetPoint('TOPLEFT', boss, 'BOTTOMLEFT', 0, -8)
+
+	local bossAura = GUI:CreateCheckBox(parent, 'unitframe', 'boss_auras')
+	bossAura:SetPoint('LEFT', enableBoss, 'RIGHT', 160, 0)
+
+	local bossColorSmooth = GUI:CreateCheckBox(parent, 'unitframe', 'boss_color_smooth')
+	bossColorSmooth:SetPoint('TOPLEFT', enableBoss, 'BOTTOMLEFT', 0, -8)
+
+	local bossDebuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'boss_debuffs_by_player')
+	bossDebuffsByPlayer:SetPoint('LEFT', bossColorSmooth, 'RIGHT', 160, 0)
+
+	local arena = GUI:AddSubCategory(parent)
+	arena:SetPoint('TOPLEFT', bossColorSmooth, 'BOTTOMLEFT', 0, -16)
+
+	local enableArena = GUI:CreateCheckBox(parent, 'unitframe', 'enable_arena', nil, SetupArenaSize)
+	enableArena:SetPoint('TOPLEFT', arena, 'BOTTOMLEFT', 0, -8)
+
+
+
 
 
 

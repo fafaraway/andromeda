@@ -1786,9 +1786,9 @@ do
 		color = color or {r=1, g=1, b=1}
 
 		local swatch = CreateFrame('Button', nil, self)
-		swatch:SetSize(18, 18)
+		swatch:SetSize(20, 12)
 		F.CreateBD(swatch, 1)
-		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Normal, 12, nil, name, nil, true, 'LEFT', 26, 0)
+		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Normal, 11, nil, name, nil, true, 'LEFT', 24, 0)
 		local tex = swatch:CreateTexture()
 		tex:SetInside()
 		tex:SetTexture(C.Assets.bd_tex)

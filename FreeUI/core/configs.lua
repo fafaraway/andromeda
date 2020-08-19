@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 
-local myClass = select(2, UnitClass('player'))
+
 
 
 
@@ -421,7 +421,7 @@ C['classmod'] = {
 }
 
 
-
+local myClass = select(2, UnitClass('player'))
 
 C['ReminderBuffs'] = {
 	MAGE = {
@@ -864,18 +864,19 @@ C.CharacterSettings = {
 			['color_smooth'] = false,
 			['portrait'] = true,
 
-			['debuffs_by_player'] = true,
-
 			['range_check'] = true,
+				['range_check_alpha'] = 0.4,
 			['heal_prediction'] = true,
 			['over_absorb'] = true,
 			['gcd_spark'] = true,
+			['floating_combat_text'] = true,
 
-
-
+			['target_icon_indicator'] = true,
+			['quest_indicator'] = true,
 
 			['power_bar_height'] = 2,
 			['alternative_power_height'] = 2,
+
 			['class_power_bar'] = true,
 				['class_power_bar_height'] = 2,
 			['stagger_bar'] = true,
@@ -886,6 +887,11 @@ C.CharacterSettings = {
 				['runes_bar_height'] = 2,
 
 			['enable_castbar'] = true,
+				['castingColor'] = {r=.43, g=.69, b=.85},
+				['notInterruptibleColor'] = {r=.75, g=.04, b=.07},
+				['completeColor'] = {r=.25, g=.63, b=.49},
+				['failColor'] = {r=.73, g=.39, b=.43},
+
 				['castbar_focus_separate'] = false,
 				['castbar_focus_width'] = 200,
 				['castbar_focus_height'] = 16,
@@ -897,6 +903,10 @@ C.CharacterSettings = {
 				['player_auras'] = false,
 				['player_auras_number'] = 18,
 				['player_auras_number_per_row'] = 6,
+
+				['player_pvp_indicator'] = true,
+				['player_combat_indicator'] = true,
+				['player_resting_indicator'] = true,
 
 			['enable_pet'] = true,
 				['pet_width'] = 50,
@@ -911,6 +921,7 @@ C.CharacterSettings = {
 				['target_auras'] = true,
 				['target_auras_number_per_row'] = 7,
 				['target_auras_number'] = 35,
+				['target_debuffs_by_player'] = true,
 
 				['target_target_width'] = 80,
 				['target_target_height'] = 12,
@@ -932,32 +943,43 @@ C.CharacterSettings = {
 
 				['group_by_role'] = true,
 				['group_reverse'] = false,
-				['group_threat'] = true,
+
 				['group_click_cast'] = true,
 				['group_click_cast_filter'] = false,
-				['debuff_highlight'] = true,
-				['corner_buffs'] = true,
-				['raid_debuffs'] = true,
-				['raid_debuffs_click_through'] = false,
+				['group_debuff_highlight'] = true,
+				['group_corner_buffs'] = true,
+
+
+				['group_threat_indicator'] = true,
+				['group_leader_indicator'] = true,
+				['group_role_indicator'] = true,
+				['group_summon_indicator'] = true,
+				['group_phase_indicator'] = true,
+				['group_ready_check_indicator'] = true,
+				['group_resurrect_indicator'] = true,
+
 
 				['party_width'] = 90,
 				['party_height'] = 38,
 				['party_gap'] = 6,
-				['partyShowAuras'] = true,
+				['party_buffs'] = true,
+				['party_debuffs'] = true,
 
 				['raid_width'] = 44,
 				['raid_height'] = 32,
 				['raid_gap'] = 5,
-				['raidShowAuras'] = true,
+				['raid_debuffs'] = true,
+				['raid_debuffs_click_through'] = false,
 
 			['enable_boss'] = true,
 				['boss_color_smooth'] = true,
 				['boss_width'] = 166,
 				['boss_height'] = 20,
 				['boss_gap'] = 60,
-				['bossShowAuras'] = true,
-				['bossAuraPerRow'] = 5,
-				['bossAuraTotal'] = 15,
+				['boss_auras'] = true,
+				['boss_auras_number_per_row'] = 5,
+				['boss_auras_number'] = 15,
+				['boss_debuffs_by_player'] = true,
 
 			['enable_arena'] = true,
 				['arena_width'] = 166,
@@ -966,8 +988,6 @@ C.CharacterSettings = {
 				['arenaShowAuras'] = true,
 				['arenaAuraPerRow'] = 6,
 				['arenaAuraTotal'] = 18,
-
-			['test'] = 1,
 	},
 }
 

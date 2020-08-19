@@ -239,10 +239,9 @@ function GUI:CreateSidePanel(parent, name, title)
 
 	frame.header = F.CreateFS(frame, C.Assets.Fonts.Normal, 12, nil, title, 'YELLOW', 'THICK', 'TOPLEFT', 20, -25)
 
-	frame.bg = CreateFrame('Frame', nil, frame)
-	frame.bg:SetSize(180, 540)
-	frame.bg:SetPoint('TOPLEFT', 10, -50)
-	F.CreateBDFrame(frame.bg, .3)
+	frame.child = CreateFrame('Frame', nil, frame)
+	frame.child:SetSize(180, 540)
+	frame.child:SetPoint('TOPLEFT', 10, -50)
 
 	frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
 	frame.close:SetPoint('BOTTOM', 0, 6)
@@ -257,7 +256,9 @@ function GUI:CreateSidePanel(parent, name, title)
 	end)
 
 	tinsert(sidePanels, frame)
+
 	F.CreateBDFrame(frame, nil, true)
+	F.CreateBDFrame(frame.child, .3)
 	F.Reskin(frame.close)
 
 	return frame
@@ -287,7 +288,7 @@ end
 
 -- Checkboxes
 function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
-	local checkbox = F.CreateCheckBox(parent)
+	local checkbox = F.CreateCheckBox(parent.child)
 	checkbox:SetSize(20, 20)
 	checkbox:SetHitRectInsets(-5, -5, -5, -5)
 
@@ -301,7 +302,7 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 	checkbox:HookScript('OnClick', onToggle)
 
 	if extra and type(extra) == 'function' then
-		local bu = GUI.CreateGearButton(parent)
+		local bu = GUI.CreateGearButton(parent.child)
 		bu:SetPoint('LEFT', checkbox.Text, 'RIGHT', 0, 1)
 		bu:SetScript('OnClick', extra)
 
@@ -367,8 +368,8 @@ function GUI:CreateEditBox(parent, width, height, maxLetters)
 end
 
 -- Dropdown
-function GUI:CreateDropdown(parent, key, value, callback, extra)
-	local dropdown = F.CreateDropDown(parent, 120, 22, extra)
+function GUI:CreateDropDown(parent, key, value, callback, extra)
+	local dropdown = F.CreateDropDown(parent.child, 120, 22, extra)
 
 	dropdown.Text:SetText(extra[SaveValue(key, value)])
 
@@ -391,9 +392,17 @@ function GUI:CreateDropdown(parent, key, value, callback, extra)
 		end)
 	end
 
-	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 11, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'INFO', 'THICK', 'CENTER', 0, 25)
+	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 11, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'INFO', 'THICK', 'CENTER', 0, 20)
 
 	return dropdown
+end
+
+
+function GUI:CreateColorSwatch(parent, key, value)
+	local f = F.CreateColorSwatch(parent.child, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, SaveValue(key, value))
+	local width = 30
+
+	return f
 end
 
 
