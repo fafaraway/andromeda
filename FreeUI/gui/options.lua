@@ -256,13 +256,13 @@ local function AppearanceOptions()
 	local vignettingAlphaSide = GUI:CreateSidePanel(parent, 'vignettingAlphaSide')
 
 	local vignettingAlpha = GUI:CreateSlider(vignettingAlphaSide, 'theme', 'vignetting_alpha', nil, {0, 1, 0.1})
-	vignettingAlpha:SetPoint('TOP', 0, -90)
+	vignettingAlpha:SetPoint('TOP', vignettingAlphaSide.child, 'TOP', 0, -30)
 
 
 	local backdropAlphaSide = GUI:CreateSidePanel(parent, 'backdropAlphaSide')
 
 	local backdropAlpha = GUI:CreateSlider(backdropAlphaSide, 'theme', 'backdrop_alpha', nil, {0.1, 1, 0.01})
-	backdropAlpha:SetPoint('TOP', 0, -90)
+	backdropAlpha:SetPoint('TOP', backdropAlphaSide.child, 'TOP', 0, -30)
 
 end
 
@@ -290,10 +290,11 @@ local function AuraOptions()
 	reminder:SetPoint('LEFT', auraSource, 'RIGHT', 160, 0)
 
 
+	-- aura size side panel
 	local auraSizeSide = GUI:CreateSidePanel(parent, 'auraSizeSide')
 
 	local buffSize = GUI:CreateSlider(auraSizeSide, 'aura', 'buff_size', nil, {20, 50, 1})
-	buffSize:SetPoint('TOP', auraSizeSide, 'TOP', 0, -90)
+	buffSize:SetPoint('TOP', auraSizeSide.child, 'TOP', 0, -30)
 
 	local buffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'buffs_per_row', nil, {6, 16, 1})
 	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -66)
@@ -312,7 +313,6 @@ local function AuraOptions()
 
 
 	enable.children = {reverseBuffs, reverseDebuffs, auraSource, reminder, buffSize, buffsPerRow, debuffSize, debuffsPerRow, margin, offset}
-
 end
 
 
@@ -367,14 +367,48 @@ local function InventoryOptions()
 	local itemLevel = GUI:CreateCheckBox(parent, 'inventory', 'item_level', nil, SetupBagIlvl)
 	itemLevel:SetPoint('LEFT', combineFreeSlots, 'RIGHT', 160, 0)
 
-	local useCategory = GUI:CreateCheckBox(parent, 'inventory', 'item_filter', UpdateBagStatus, SetupBagFilters)
-	useCategory:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -8)
+
+	local filter = GUI:AddSubCategory(parent)
+	filter:SetPoint('TOPLEFT', combineFreeSlots, 'BOTTOMLEFT', 0, -16)
+
+	local useCategory = GUI:CreateCheckBox(parent, 'inventory', 'item_filter', UpdateBagStatus)
+	useCategory:SetPoint('TOPLEFT', filter, 'BOTTOMLEFT', 0, -8)
+
+	local itemFilterLegendary = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_legendary', UpdateBagStatus)
+	itemFilterLegendary:SetPoint('LEFT', useCategory, 'RIGHT', 160, 0)
+
+	local itemFilterJunk = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_junk', UpdateBagStatus)
+	itemFilterJunk:SetPoint('TOPLEFT', useCategory, 'BOTTOMLEFT', 0, -8)
+
+	local itemFilterTrade = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_trade', UpdateBagStatus)
+	itemFilterTrade:SetPoint('LEFT', itemFilterJunk, 'RIGHT', 160, 0)
+
+	local itemFilterConsumable = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_consumable', UpdateBagStatus)
+	itemFilterConsumable:SetPoint('TOPLEFT', itemFilterJunk, 'BOTTOMLEFT', 0, -8)
+
+	local itemFilterQuest = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_quest', UpdateBagStatus)
+	itemFilterQuest:SetPoint('LEFT', itemFilterConsumable, 'RIGHT', 160, 0)
+
+	local itemFilterSet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_gear_set', UpdateBagStatus)
+	itemFilterSet:SetPoint('TOPLEFT', itemFilterConsumable, 'BOTTOMLEFT', 0, -8)
+
+	local itemFilterAzerite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_azerite', UpdateBagStatus)
+	itemFilterAzerite:SetPoint('LEFT', itemFilterSet, 'RIGHT', 160, 0)
+
+	local itemFilterMountPet = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_mount_pet', UpdateBagStatus)
+	itemFilterMountPet:SetPoint('TOPLEFT', itemFilterSet, 'BOTTOMLEFT', 0, -8)
+
+	local itemFilterFavourite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_favourite', UpdateBagStatus)
+	itemFilterFavourite:SetPoint('LEFT', itemFilterMountPet, 'RIGHT', 160, 0)
+
+	useCategory.children = {itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 
 
+	-- bag size side panel
 	local bagSizeSide = GUI:CreateSidePanel(parent, 'bagSizeSide')
 
 	local slotSize = GUI:CreateSlider(bagSizeSide, 'inventory', 'slot_size', nil, {20, 60, 1})
-	slotSize:SetPoint('TOP', bagSizeSide, 'TOP', 0, -90)
+	slotSize:SetPoint('TOP', bagSizeSide.child, 'TOP', 0, -30)
 
 	local spacing = GUI:CreateSlider(bagSizeSide, 'inventory', 'spacing', nil, {3, 6, 1})
 	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -66)
@@ -386,44 +420,14 @@ local function InventoryOptions()
 	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -66)
 
 
+	-- item level to show side panel
 	local itemLevelSide = GUI:CreateSidePanel(parent, 'bagIlvlSide')
 
 	local iLvltoShow = GUI:CreateSlider(itemLevelSide, 'inventory', 'item_level_to_show', nil, {1, 500, 1})
-	iLvltoShow:SetPoint('TOP', itemLevelSide, 'TOP', 0, -90)
+	iLvltoShow:SetPoint('TOP', itemLevelSide.child, 'TOP', 0, -30)
 
 	itemLevel.children = {iLvltoShow}
 
-
-	local bagFilterSide = GUI:CreateSidePanel(parent, 'bagFilterSide')
-
-	local itemFilterJunk = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_junk', UpdateBagStatus)
-	itemFilterJunk:SetPoint('TOPLEFT', bagFilterSide, 'TOPLEFT', 20, -60)
-
-	local itemFilterTrade = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_trade', UpdateBagStatus)
-	itemFilterTrade:SetPoint('TOPLEFT', itemFilterJunk, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterConsumable = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_consumable', UpdateBagStatus)
-	itemFilterConsumable:SetPoint('TOPLEFT', itemFilterTrade, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterQuest = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_quest', UpdateBagStatus)
-	itemFilterQuest:SetPoint('TOPLEFT', itemFilterConsumable, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterSet = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_gear_set', UpdateBagStatus)
-	itemFilterSet:SetPoint('TOPLEFT', itemFilterQuest, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterAzerite = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_azerite', UpdateBagStatus)
-	itemFilterAzerite:SetPoint('TOPLEFT', itemFilterSet, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterMountPet = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_mount_pet', UpdateBagStatus)
-	itemFilterMountPet:SetPoint('TOPLEFT', itemFilterAzerite, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterFavourite = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_favourite', UpdateBagStatus)
-	itemFilterFavourite:SetPoint('TOPLEFT', itemFilterMountPet, 'BOTTOMLEFT', 00, -8)
-
-	local itemFilterLegendary = GUI:CreateCheckBox(bagFilterSide, 'inventory', 'item_filter_legendary', UpdateBagStatus)
-	itemFilterLegendary:SetPoint('TOPLEFT', itemFilterFavourite, 'BOTTOMLEFT', 00, -8)
-
-	useCategory.children = {itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 
 	enable.children = {newitemFlash, reverseSort, combineFreeSlots, itemLevel, useCategory, slotSize, spacing, bagColumns, bankColumns, iLvltoShow, itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 end
@@ -449,6 +453,7 @@ local function UnitframeOptions()
 
 	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'fader')
 	fader:SetPoint('LEFT', portrait, 'RIGHT', 160, 0)
+
 
 	local feature = GUI:AddSubCategory(parent)
 	feature:SetPoint('TOPLEFT', portrait, 'BOTTOMLEFT', 0, -16)
@@ -481,13 +486,6 @@ local function UnitframeOptions()
 	runesBar:SetPoint('TOPLEFT', staggerBar, 'BOTTOMLEFT', 0, -8)
 
 
-	local rangeCheckAlphaSide = GUI:CreateSidePanel(parent, 'rangeCheckAlphaSide')
-
-	local rangeCheckAlpha = GUI:CreateSlider(rangeCheckAlphaSide, 'unitframe', 'range_check_alpha', nil, {0.3, 1, 0.1})
-	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide, 'TOP', 0, -90)
-
-
-
 	local castbar = GUI:AddSubCategory(parent)
 	castbar:SetPoint('TOPLEFT', runesBar, 'BOTTOMLEFT', 0, -16)
 
@@ -501,31 +499,6 @@ local function UnitframeOptions()
 	castbarFocusSeparate:SetPoint('TOPLEFT', enableCastbar, 'BOTTOMLEFT', 0, -8)
 
 
-	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
-
-	local castingColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'castingColor')
-	castingColor:SetPoint('TOPLEFT', castbarColorSide, 'TOPLEFT', 20, -60)
-
-	local notInterruptibleColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'notInterruptibleColor')
-	notInterruptibleColor:SetPoint('TOP', castingColor, 'BOTTOM', 0, -16)
-
-
-	local completeColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'completeColor')
-	completeColor:SetPoint('TOP', notInterruptibleColor, 'BOTTOM', 0, -16)
-
-	local failColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'failColor')
-	failColor:SetPoint('TOP', completeColor, 'BOTTOM', 0, -16)
-
-
-	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')
-
-	local castbarFocusWidth = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_width', nil, {100, 400, 1})
-	castbarFocusWidth:SetPoint('TOP', castbarSizeSide, 'TOP', 0, -94)
-
-	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
-	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -66)
-
-
 	local pet = GUI:AddSubCategory(parent)
 	pet:SetPoint('TOPLEFT', castbarFocusSeparate, 'BOTTOMLEFT', 0, -16)
 
@@ -534,6 +507,7 @@ local function UnitframeOptions()
 
 	local petAura = GUI:CreateCheckBox(parent, 'unitframe', 'pet_auras')
 	petAura:SetPoint('LEFT', enablePet, 'RIGHT', 160, 0)
+
 
 	local focus = GUI:AddSubCategory(parent)
 	focus:SetPoint('TOPLEFT', enablePet, 'BOTTOMLEFT', 0, -16)
@@ -545,14 +519,11 @@ local function UnitframeOptions()
 	focusAura:SetPoint('LEFT', enableFocus, 'RIGHT', 160, 0)
 
 
-
-
 	local group = GUI:AddSubCategory(parent)
 	group:SetPoint('TOPLEFT', enableFocus, 'BOTTOMLEFT', 0, -16)
 
 	local enableGroup = GUI:CreateCheckBox(parent, 'unitframe', 'enable_group', nil, SetupGroupSize)
 	enableGroup:SetPoint('TOPLEFT', group, 'BOTTOMLEFT', 0, -8)
-
 
 	local groupNames = GUI:CreateCheckBox(parent, 'unitframe', 'group_names')
 	groupNames:SetPoint('LEFT', enableGroup, 'RIGHT', 160, 0)
@@ -560,15 +531,42 @@ local function UnitframeOptions()
 	local groupColorSmooth = GUI:CreateCheckBox(parent, 'unitframe', 'group_color_smooth')
 	groupColorSmooth:SetPoint('TOPLEFT', enableGroup, 'BOTTOMLEFT', 0, -8)
 
-	local groupThreat = GUI:CreateCheckBox(parent, 'unitframe', 'group_threat')
-	groupThreat:SetPoint('LEFT', groupColorSmooth, 'RIGHT', 160, 0)
+	local threatIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_threat_indicator')
+	threatIndicator:SetPoint('LEFT', groupColorSmooth, 'RIGHT', 160, 0)
 
+	local leaderIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_leader_indicator')
+	leaderIndicator:SetPoint('TOPLEFT', groupColorSmooth, 'BOTTOMLEFT', 0, -8)
 
+	local roleIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_role_indicator')
+	roleIndicator:SetPoint('LEFT', leaderIndicator, 'RIGHT', 160, 0)
 
+	local summonIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_summon_indicator')
+	summonIndicator:SetPoint('TOPLEFT', leaderIndicator, 'BOTTOMLEFT', 0, -8)
+
+	local phaseIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_phase_indicator')
+	phaseIndicator:SetPoint('LEFT', summonIndicator, 'RIGHT', 160, 0)
+
+	local readyCheckIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_ready_check_indicator')
+	readyCheckIndicator:SetPoint('TOPLEFT', summonIndicator, 'BOTTOMLEFT', 0, -8)
+
+	local resurrectIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_resurrect_indicator')
+	resurrectIndicator:SetPoint('LEFT', readyCheckIndicator, 'RIGHT', 160, 0)
+
+	local cornerBuffs = GUI:CreateCheckBox(parent, 'unitframe', 'group_corner_buffs')
+	cornerBuffs:SetPoint('TOPLEFT', readyCheckIndicator, 'BOTTOMLEFT', 0, -8)
+
+	local debuffHighlight = GUI:CreateCheckBox(parent, 'unitframe', 'group_debuff_highlight')
+	debuffHighlight:SetPoint('LEFT', cornerBuffs, 'RIGHT', 160, 0)
+
+	local raidDebuffs = GUI:CreateCheckBox(parent, 'unitframe', 'raid_debuffs')
+	raidDebuffs:SetPoint('TOPLEFT', cornerBuffs, 'BOTTOMLEFT', 0, -8)
+
+	local clickCast = GUI:CreateCheckBox(parent, 'unitframe', 'group_click_cast')
+	clickCast:SetPoint('LEFT', raidDebuffs, 'RIGHT', 160, 0)
 
 
 	local boss = GUI:AddSubCategory(parent)
-	boss:SetPoint('TOPLEFT', groupColorSmooth, 'BOTTOMLEFT', 0, -16)
+	boss:SetPoint('TOPLEFT', raidDebuffs, 'BOTTOMLEFT', 0, -16)
 
 	local enableBoss = GUI:CreateCheckBox(parent, 'unitframe', 'enable_boss', nil, SetupBossSize)
 	enableBoss:SetPoint('TOPLEFT', boss, 'BOTTOMLEFT', 0, -8)
@@ -582,6 +580,7 @@ local function UnitframeOptions()
 	local bossDebuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'boss_debuffs_by_player')
 	bossDebuffsByPlayer:SetPoint('LEFT', bossColorSmooth, 'RIGHT', 160, 0)
 
+
 	local arena = GUI:AddSubCategory(parent)
 	arena:SetPoint('TOPLEFT', bossColorSmooth, 'BOTTOMLEFT', 0, -16)
 
@@ -593,11 +592,11 @@ local function UnitframeOptions()
 
 
 
-
+	-- unitframes size side panel
 	local unitSizeSide = GUI:CreateSidePanel(parent, 'unitSizeSide')
 
 	local playerWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_width', nil, {80, 200, 1})
-	playerWidth:SetPoint('TOP', unitSizeSide, 'TOP', 0, -90)
+	playerWidth:SetPoint('TOP', unitSizeSide.child, 'TOP', 0, -30)
 
 	local playerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_height', nil, {10, 30, 1})
 	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -66)
@@ -616,6 +615,57 @@ local function UnitframeOptions()
 
 	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {10, 30, 1})
 	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -66)
+
+	-- group size side panel
+	local groupSizeSide = GUI:CreateSidePanel(parent, 'groupSizeSide')
+
+	local partyWidth = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_width', nil, {20, 100, 1})
+	partyWidth:SetPoint('TOP', groupSizeSide.child, 'TOP', 0, -30)
+
+	local partyHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_height', nil, {20, 100, 1})
+	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -66)
+
+	local partyGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_gap', nil, {5, 20, 1})
+	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -66)
+
+	local raidWidth = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_width', nil, {20, 100, 1})
+	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -66)
+
+	local raidHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_height', nil, {20, 100, 1})
+	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -66)
+
+	local raidGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_gap', nil, {5, 20, 1})
+	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -66)
+
+	-- castbar color side panel
+	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
+
+	local castingColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'castingColor')
+	castingColor:SetPoint('TOPLEFT', castbarColorSide.child, 'TOPLEFT', 10, -10)
+
+	local notInterruptibleColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'notInterruptibleColor')
+	notInterruptibleColor:SetPoint('TOP', castingColor, 'BOTTOM', 0, -16)
+
+	local completeColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'completeColor')
+	completeColor:SetPoint('TOP', notInterruptibleColor, 'BOTTOM', 0, -16)
+
+	local failColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'failColor')
+	failColor:SetPoint('TOP', completeColor, 'BOTTOM', 0, -16)
+
+	-- castbar size side panel
+	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')
+
+	local castbarFocusWidth = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_width', nil, {100, 400, 1})
+	castbarFocusWidth:SetPoint('TOP', castbarSizeSide.child, 'TOP', 0, -30)
+
+	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
+	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -66)
+
+	-- range check alpha side panel
+	local rangeCheckAlphaSide = GUI:CreateSidePanel(parent, 'rangeCheckAlphaSide')
+
+	local rangeCheckAlpha = GUI:CreateSlider(rangeCheckAlphaSide, 'unitframe', 'range_check_alpha', nil, {0.3, 1, 0.1})
+	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide.child, 'TOP', 0, -30)
 
 
 end
