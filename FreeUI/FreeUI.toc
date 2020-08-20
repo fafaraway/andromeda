@@ -7,6 +7,7 @@
 ## Author: Haleth, Solor
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
+## X-WoWI-ID: 23258
 ## OptionalDeps: WeakAuras, Skada, DBM-Core, DBM-GUI
 ## SavedVariables: FreeUIConfigsGlobal
 ## SavedVariablesPerCharacter: FreeUIConfigs
