@@ -252,38 +252,38 @@ local function Enable(self, UnitID)
 		assert(type( SpellRange ) == 'table', 'oUF layout addon using invalid SpellRange element.')
 		assert(type(SpellRange.Update) == 'function' or (tonumber(SpellRange.insideAlpha) and tonumber(SpellRange.outsideAlpha)), 'oUF layout addon omitted required SpellRange properties.')
 
-			if (self.Range) then -- Disable default range checking
-				self:DisableElement('Range')
-				self.Range = nil -- Prevent range element from enabling, since enable order isn't stable
-			end
-
-			SpellRange.__owner = self
-			SpellRange.ForceUpdate = ForceUpdate
-			if (not UpdateFrame) then
-				UpdateFrame = CreateFrame('Frame')
-				UpdateFrame:SetScript('OnUpdate', OnUpdate)
-				UpdateFrame:SetScript('OnEvent', OnSpellsChanged)
-			end
-			if (not next(Objects)) then -- First object
-				UpdateFrame:Show()
-				UpdateFrame:RegisterEvent('SPELLS_CHANGED')
-				OnSpellsChanged() -- Recheck spells immediately
-			end
-
-			Objects[self] = true
-			return true
+		if (self.Range) then -- Disable default range checking
+			self:DisableElement('Range')
+			self.Range = nil -- Prevent range element from enabling, since enable order isn't stable
 		end
-	end
 
-	--- Called by oUF to disable range checking on a unit frame.
-	local function Disable(self)
-		Objects[self] = nil
-		ObjectRanges[self] = nil
-
-		if (not next(Objects))then -- Last object
-			UpdateFrame:Hide()
-			UpdateFrame:UnregisterEvent('SPELLS_CHANGED')
+		SpellRange.__owner = self
+		SpellRange.ForceUpdate = ForceUpdate
+		if (not UpdateFrame) then
+			UpdateFrame = CreateFrame('Frame')
+			UpdateFrame:SetScript('OnUpdate', OnUpdate)
+			UpdateFrame:SetScript('OnEvent', OnSpellsChanged)
 		end
-	end
+		if (not next(Objects)) then -- First object
+			UpdateFrame:Show()
+			UpdateFrame:RegisterEvent('SPELLS_CHANGED')
+			OnSpellsChanged() -- Recheck spells immediately
+		end
 
-	oUF:AddElement('SpellRange', Update, Enable, Disable)
+		Objects[self] = true
+		return true
+	end
+end
+
+--- Called by oUF to disable range checking on a unit frame.
+local function Disable(self)
+	Objects[self] = nil
+	ObjectRanges[self] = nil
+
+	if (not next(Objects))then -- Last object
+		UpdateFrame:Hide()
+		UpdateFrame:UnregisterEvent('SPELLS_CHANGED')
+	end
+end
+
+oUF:AddElement('SpellRange', Update, Enable, Disable)
