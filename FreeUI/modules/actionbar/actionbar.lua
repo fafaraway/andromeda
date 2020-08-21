@@ -534,6 +534,14 @@ function ACTIONBAR:OnLogin()
 	F.HideOption(InterfaceOptionsActionBarsPanelStackRightBars)
 	F.HideOption(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
 
+	if PlayerTalentFrame then
+		PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+	else
+		hooksecurefunc('TalentFrame_LoadUI', function()
+			PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+		end)
+	end
+
 	--vehicle fix
 	--[[ local function getActionTexture(button)
 		return GetActionTexture(button.action)
