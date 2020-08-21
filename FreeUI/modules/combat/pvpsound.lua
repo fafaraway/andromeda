@@ -8,7 +8,7 @@ local FILTER_ENEMY_NPC = bit.bor (COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_O
 local playerName, playerGUID = UnitName('player'), UnitGUID('player')
 local lastKill, killCount, streakCount = nil, 0, 0
 local deathsTable, killsTable = {}, {}
-local debug = true
+local debugMode = false
 
 local soundsTable = {
 	['firstblood'] = C.AssetsPath..'sounds\\killingblows\\kill\\firstblood.ogg',
@@ -36,7 +36,7 @@ local function playSound(file)
 end
 
 local function printMessage(str)
-	if not debug then return end
+	if not debugMode then return end
 
 	F.Print(str)
 end
@@ -48,7 +48,7 @@ local function OnEvent(self, event)
 		local toEnemy, fromEnemy, fromMyPets
 
 		if destName and not CombatLog_Object_IsA(destFlags, COMBATLOG_OBJECT_NONE) then
-			toEnemy = CombatLog_Object_IsA(destFlags, debug and FILTER_ENEMY_NPC or FILTER_ENEMY_PLAYERS)
+			toEnemy = CombatLog_Object_IsA(destFlags, debugMode and FILTER_ENEMY_NPC or FILTER_ENEMY_PLAYERS)
 		end
 
 		if sourceName and not CombatLog_Object_IsA(sourceFlags, COMBATLOG_OBJECT_NONE) then
