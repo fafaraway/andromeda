@@ -53,27 +53,27 @@ function COOLDOWN:TimerOnUpdate(elapsed)
 end
 
 function COOLDOWN:OnCreate()
-	local frameName = self.GetName and self:GetName() or ""
+	local frameName = self.GetName and self:GetName() or ''
 
-	local scaler = CreateFrame("Frame", nil, self)
+	local scaler = CreateFrame('Frame', nil, self)
 	scaler:SetAllPoints(self)
 
-	local timer = CreateFrame("Frame", nil, scaler)
+	local timer = CreateFrame('Frame', nil, scaler)
 	timer:Hide()
 	timer:SetAllPoints(scaler)
-	timer:SetScript("OnUpdate", COOLDOWN.TimerOnUpdate)
+	timer:SetScript('OnUpdate', COOLDOWN.TimerOnUpdate)
 
-	local text = timer:CreateFontString(nil, "BACKGROUND")
-	text:SetPoint("CENTER", 1, 0)
-	text:SetJustifyH("CENTER")
+	local text = timer:CreateFontString(nil, 'BACKGROUND')
+	text:SetPoint('CENTER', 1, 0)
+	text:SetJustifyH('CENTER')
 	timer.text = text
 
-	if not cfg.ignore_weakauras and strfind(frameName, "WeakAurasCooldown") then
-		text:SetPoint("BOTTOM", 1, -6)
+	if not cfg.ignore_weakauras and strfind(frameName, 'WeakAurasCooldown') then
+		text:SetPoint('BOTTOM', 1, -6)
 	end
 
 	COOLDOWN.OnSizeChanged(timer, scaler:GetSize())
-	scaler:SetScript("OnSizeChanged", function(_, ...)
+	scaler:SetScript('OnSizeChanged', function(_, ...)
 		COOLDOWN.OnSizeChanged(timer, ...)
 	end)
 
@@ -85,8 +85,8 @@ function COOLDOWN:StartTimer(start, duration)
 	if self:IsForbidden() then return end
 	if self.noOCC or hideNumbers[self] then return end
 
-	local frameName = self.GetName and self:GetName() or ""
-	if cfg.ignore_weakauras and strfind(frameName, "WeakAuras") then
+	local frameName = self.GetName and self:GetName() or ''
+	if cfg.ignore_weakauras and strfind(frameName, 'WeakAuras') then
 		self.noOCC = true
 		return
 	end
@@ -162,8 +162,8 @@ end
 function COOLDOWN:RegisterActionButton()
 	local cooldown = self.cooldown
 	if not hooked[cooldown] then
-		cooldown:HookScript("OnShow", COOLDOWN.CooldownOnShow)
-		cooldown:HookScript("OnHide", COOLDOWN.CooldownOnHide)
+		cooldown:HookScript('OnShow', COOLDOWN.CooldownOnShow)
+		cooldown:HookScript('OnHide', COOLDOWN.CooldownOnHide)
 
 		hooked[cooldown] = true
 	end
@@ -174,20 +174,20 @@ function COOLDOWN:OnLogin()
 	if IsAddOnLoaded('OmniCC') then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
-	hooksecurefunc(cooldownIndex, "SetCooldown", COOLDOWN.StartTimer)
+	hooksecurefunc(cooldownIndex, 'SetCooldown', COOLDOWN.StartTimer)
 
-	hooksecurefunc("CooldownFrame_SetDisplayAsPercentage", COOLDOWN.HideCooldownNumbers)
+	hooksecurefunc('CooldownFrame_SetDisplayAsPercentage', COOLDOWN.HideCooldownNumbers)
 
-	F:RegisterEvent("ACTIONBAR_UPDATE_COOLDOWN", COOLDOWN.ActionbarUpateCooldown)
+	F:RegisterEvent('ACTIONBAR_UPDATE_COOLDOWN', COOLDOWN.ActionbarUpateCooldown)
 
-	if _G["ActionBarButtonEventsFrame"].frames then
-		for _, frame in pairs(_G["ActionBarButtonEventsFrame"].frames) do
+	if _G['ActionBarButtonEventsFrame'].frames then
+		for _, frame in pairs(_G['ActionBarButtonEventsFrame'].frames) do
 			COOLDOWN.RegisterActionButton(frame)
 		end
 	end
-	hooksecurefunc("ActionBarButtonEventsFrame_RegisterFrame", COOLDOWN.RegisterActionButton)
+	hooksecurefunc('ActionBarButtonEventsFrame_RegisterFrame', COOLDOWN.RegisterActionButton)
 
 	-- Hide Default Cooldown
-	SetCVar("countdownForCooldowns", 0)
+	SetCVar('countdownForCooldowns', 0)
 	F.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
 end
