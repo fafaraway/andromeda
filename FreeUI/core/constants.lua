@@ -56,49 +56,11 @@ C['Assets'] = {
 	['spark_tex'] = 'Interface\\CastingBar\\UI-CastingBar-Spark',
 	['gear_tex'] = C.AssetsPath..'textures\\gear_tex',
 
-	['logo'] = C.AssetsPath..'textures\\logo_grey',
-	['logo_small'] = C.AssetsPath..'textures\\logo_small',
-
-
+	['logo'] = C.AssetsPath..'textures\\logo',
 
 	['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
 	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',
 	['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
-
-	['font_normal'] = STANDARD_TEXT_FONT,
-
-	--[[ ['Textures'] = {
-		['backdrop'] = 'Interface\\ChatFrame\\ChatFrameBackground',
-		['bdstripe'] = C.AssetsPath..'textures\\bgTex',
-		['statusbar'] = C.AssetsPath..'textures\\normTex',
-		['sbstripe'] = C.AssetsPath..'textures\\striped',
-		['shadow'] = C.AssetsPath..'textures\\glowTex',
-		['tick'] = C.AssetsPath..'textures\\tickTex',
-		['check'] = C.AssetsPath..'textures\\checked',
-		['logo'] = C.AssetsPath..'textures\\logo_grey',
-		['logo_small'] = C.AssetsPath..'textures\\logo_small',
-		['targeticon'] = C.AssetsPath..'textures\\UI-RaidTargetingIcons',
-		['rolesicon'] = C.AssetsPath..'textures\\RoleIcons',
-		['mapmask'] = C.AssetsPath..'textures\\rectangle',
-		['spark'] = 'Interface\\CastingBar\\UI-CastingBar-Spark',
-		['vignetting'] = C.AssetsPath..'textures\\vignetting',
-		['arrowUp'] = C.AssetsPath..'textures\\arrow-up-active',
-		['arrowDown'] = C.AssetsPath..'textures\\arrow-down-active',
-		['arrowLeft'] = C.AssetsPath..'textures\\arrow-left-active',
-		['arrowRight'] = C.AssetsPath..'textures\\arrow-right-active',
-		['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
-		['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',
-		['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
-	}, ]]
-
-	--[[ ['Button'] = {
-		['normal']  = C.AssetsPath..'button\\normal',
-		['flash']   = C.AssetsPath..'button\\flash',
-		['pushed']  = C.AssetsPath..'button\\pushed',
-		['checked'] = C.AssetsPath..'button\\checked',
-	},
- ]]
-
 
 	['Sounds'] = {
 		['whisper'] = C.AssetsPath..'sounds\\whisper_normal.ogg',
@@ -112,10 +74,11 @@ C['Assets'] = {
 	},
 
 	['Fonts'] = {
-		['Normal'] = STANDARD_TEXT_FONT,
-		['Header'] = UNIT_NAME_FONT,
-		['Chat'] = STANDARD_TEXT_FONT,
-		['Number'] = STANDARD_TEXT_FONT,
+		['Normal'] = C.AssetsPath..'fonts\\normal.ttf',
+		['Header'] = C.AssetsPath..'fonts\\header.ttf',
+		['Chat'] = C.AssetsPath..'fonts\\chat.ttf',
+		['Number'] = C.AssetsPath..'fonts\\number.ttf',
+		['Combat'] = C.AssetsPath..'fonts\\combat.ttf',
 		['Pixel'] = C.AssetsPath..'fonts\\pixel.ttf',
 		['Cooldown'] = C.AssetsPath..'fonts\\cooldown.ttf',
 		['Symbol'] = C.AssetsPath..'fonts\\symbol.ttf',
@@ -205,3 +168,5 @@ function C:IsMyPet(flags)
 end
 C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
+
+
