@@ -2,12 +2,12 @@ local F, C, L = unpack(select(2, ...))
 local INSTALL = F:GetModule('Install')
 
 
-local function setupCVars()
+local function SetupCVars()
 	SetCVar('autoLootDefault', 1)
 	SetCVar('lootUnderMouse', 1)
 	SetCVar('alwaysCompareItems', 0)
 	SetCVar('autoSelfCast', 1)
-	SetCVar("cameraDistanceMaxZoomFactor", 2.6)
+	SetCVar('cameraDistanceMaxZoomFactor', 2.6)
 	SetCVar('nameplateShowSelf', 0)
 	SetCVar('nameplateShowEnemies', 1)
 	SetCVar('nameplateMotion', 1)
@@ -23,7 +23,7 @@ local function setupCVars()
 	SetCVar('rawMouseEnable', 1)
 end
 
-local function setupUIScale()
+local function SetupUIScale()
 	if C.ScreenHeight >= 2000 then
 		FreeUIConfigsGlobal['ui_scale'] = 2
 	elseif C.ScreenHeight >= 1500 then
@@ -33,7 +33,7 @@ local function setupUIScale()
 	end
 end
 
-local function setupActionbars()
+local function SetupActionbars()
 	SetCVar('lockActionBars', 1)
 	SetCVar('ActionButtonUseKeyDown', 1)
 	SetCVar('alwaysShowActionBars', 1)
@@ -48,87 +48,87 @@ local function setupActionbars()
 	MultiBarBottomRight:SetShown(true)
 end
 
-local function setupChatFrame()
-	F:GetModule("Chat"):UpdateChatSize()
+local function SetupChatFrame()
+	F:GetModule('Chat'):UpdateChatSize()
 
 	for i = 1, NUM_CHAT_WINDOWS do
-		local cf = _G["ChatFrame"..i]
-		ChatFrame_RemoveMessageGroup(cf, "CHANNEL")
+		local cf = _G['ChatFrame'..i]
+		ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
 	C.Chat.lock_position = true
 end
 
-local function setupSkada()
-	if not IsAddOnLoaded("Skada") then return end
+local function SetupSkada()
+	if not IsAddOnLoaded('Skada') then return end
 	if SkadaDB then wipe(SkadaDB) end
 
 	SkadaDB = {
-		["hasUpgraded"] = true,
-		["profiles"] = {
-			["Default"] = {
-				["showtotals"] = true,
-				["showself"] = true,
-				["icon"] = {
-					["hide"] = true,
+		['hasUpgraded'] = true,
+		['profiles'] = {
+			['Default'] = {
+				['showtotals'] = true,
+				['showself'] = true,
+				['icon'] = {
+					['hide'] = true,
 				},
-				["windows"] = {
+				['windows'] = {
 					{
-						["barheight"] = 18,
-						["classicons"] = false,
-						["barfont"] = "!Free_normal",
-						["barfontflags"] = "OUTLINE",
-						["barfontsize"] = 12,
-						["barbgcolor"] = {
-							["a"] = 0,
-							["b"] = 0,
-							["g"] = 0,
-							["r"] = 0,
+						['barheight'] = 18,
+						['classicons'] = false,
+						['barfont'] = '!Free_normal',
+						['barfontflags'] = 'OUTLINE',
+						['barfontsize'] = 12,
+						['barbgcolor'] = {
+							['a'] = 0,
+							['b'] = 0,
+							['g'] = 0,
+							['r'] = 0,
 						},
-						["barcolor"] = {
-							["a"] = 0.5400000214576721,
-							["b"] = 0.4117647058823529,
-							["g"] = 0.4117647058823529,
-							["r"] = 0.4117647058823529,
+						['barcolor'] = {
+							['a'] = 0.5400000214576721,
+							['b'] = 0.4117647058823529,
+							['g'] = 0.4117647058823529,
+							['r'] = 0.4117647058823529,
 						},
-						["background"] = {
-							["color"] = {
-								["a"] = 0,
+						['background'] = {
+							['color'] = {
+								['a'] = 0,
 							},
-							["bordertexture"] = "None",
-							["texture"] = "None",
+							['bordertexture'] = 'None',
+							['texture'] = 'None',
 						},
-						["point"] = "CENTER",
-						["smoothing"] = true,
-						["bartexture"] = "!Free_norm",
-						["title"] = {
-							["textcolor"] = {
-								["b"] = 0.7098039215686275,
-								["g"] = 0.7098039215686275,
-								["r"] = 0.7098039215686275,
+						['point'] = 'CENTER',
+						['smoothing'] = true,
+						['bartexture'] = '!Free_norm',
+						['title'] = {
+							['textcolor'] = {
+								['b'] = 0.7098039215686275,
+								['g'] = 0.7098039215686275,
+								['r'] = 0.7098039215686275,
 							},
-							["color"] = {
-								["a"] = 0,
-								["b"] = 0,
-								["g"] = 0,
-								["r"] = 0,
+							['color'] = {
+								['a'] = 0,
+								['b'] = 0,
+								['g'] = 0,
+								['r'] = 0,
 							},
-							["font"] = "!Free_normal",
-							["fontsize"] = 12,
-							["fontflags"] = "OUTLINE",
-							["texture"] = "Solid",
+							['font'] = '!Free_normal',
+							['fontsize'] = 12,
+							['fontflags'] = 'OUTLINE',
+							['texture'] = 'Solid',
 						},
 					},
 				},
-				["tooltiprows"] = 10,
-				["setformat"] = 8,
+				['tooltiprows'] = 10,
+				['setformat'] = 8,
 			},
 		},
 	}
 end
 
-local function setupAddons()
+local function SetupAddons()
 end
 
 function INSTALL:HelloWorld()
@@ -140,22 +140,17 @@ function INSTALL:HelloWorld()
 	F.CreateSD(installFrame)
 	F.CreateTex(installFrame)
 
-	local logo = installFrame:CreateTexture()
-	logo:SetSize(512, 128)
-	logo:SetPoint('TOP')
-	logo:SetTexture(C.Assets.logo_small)
-	logo:SetScale(.3)
-	logo:SetGradientAlpha('Vertical', C.r, C.g, C.b, 1, 1, 1, 1, 1)
+	local logo = F.CreateFS(installFrame, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
 
-	local desc = F.CreateFS(installFrame, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', 'installation', {.5,.5,.5}, true, 'TOP', 0, -36)
+	local desc = F.CreateFS(installFrame, C.Assets.Fonts.Number, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	local lineLeft = CreateFrame('Frame', nil, installFrame)
-	lineLeft:SetPoint('TOP', -60, -30)
+	lineLeft:SetPoint('TOP', -60, -26)
 	F.CreateGF(lineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
 	lineLeft:SetFrameStrata('HIGH')
 
 	local lineRight = CreateFrame('Frame', nil, installFrame)
-	lineRight:SetPoint('TOP', 60, -30)
+	lineRight:SetPoint('TOP', 60, -26)
 	F.CreateGF(lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
 	lineRight:SetFrameStrata('HIGH')
 
@@ -227,8 +222,8 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step6)
 		rightButton:SetScript('OnClick', function()
-			setupSkada()
-			setupAddons()
+			SetupSkada()
+			SetupAddons()
 			step6()
 		end)
 	end
@@ -241,7 +236,7 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step5)
 		rightButton:SetScript('OnClick', function()
-			setupActionbars()
+			SetupActionbars()
 			step5()
 		end)
 	end
@@ -254,7 +249,7 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step4)
 		rightButton:SetScript('OnClick', function()
-			setupChatFrame()
+			SetupChatFrame()
 			step4()
 		end)
 	end
@@ -267,7 +262,7 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step3)
 		rightButton:SetScript('OnClick', function()
-			setupUIScale()
+			SetupUIScale()
 			F.SetupUIScale(true)
 			F.SetupUIScale()
 			step3()
@@ -290,7 +285,7 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step2)
 		rightButton:SetScript('OnClick', function()
-			setupCVars()
+			SetupCVars()
 			step2()
 		end)
 	end
@@ -376,8 +371,8 @@ end
 
 
 function INSTALL:OnLogin()
-	if not FreeUIConfigs['installation_complete'] then
-		self:HelloWorld()
-	end
+	if FreeUIConfigs['installation_complete'] then return end
+
+	self:HelloWorld()
 end
 
