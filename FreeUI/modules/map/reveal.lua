@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP, cfg = F:GetModule('Map'), C.Map
+local MAP = F:GetModule('Map')
 
 
 -----------------------------
@@ -205,7 +205,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					texture:SetPoint('TOPLEFT', offsetX + (TILE_SIZE_WIDTH * (k-1)), -(offsetY + (TILE_SIZE_HEIGHT * (j - 1))))
 					texture:SetTexture(tonumber(fileDataIDs[((j - 1) * numTexturesWide) + k]), nil, nil, 'TRILINEAR')
 					texture:SetDrawLayer('ARTWORK', -1)
-					if FreeUIConfigs['map_reveal'] then
+					if FreeUIConfigs.map.map_reveal then
 						texture:Show()
 						if fullUpdate then
 							pin.textureLoadGroup:AddTexture(texture)
@@ -233,11 +233,11 @@ function MAP:MapReveal()
 	if IsAddOnLoaded('Leatrix_Maps') then return end
 
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'OptionsCheckButtonTemplate')
-	bu:SetPoint('TOPRIGHT', -140, -2)
-	bu:SetSize(26, 26)
+	bu:SetPoint('TOPRIGHT', -140, -4)
+	bu:Size(22)
 	F.ReskinCheck(bu)
-	bu:SetChecked(FreeUIConfigs['map_reveal'])
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 25, 0)
+	bu:SetChecked(FreeUIConfigs.map.map_reveal)
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 22, 0)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate('MapExplorationPinTemplate') do
 		hooksecurefunc(pin, 'RefreshOverlays', MapExplorationPin_RefreshOverlays)
@@ -245,10 +245,10 @@ function MAP:MapReveal()
 	end
 
 	bu:SetScript('OnClick', function(self)
-		FreeUIConfigs['map_reveal'] = self:GetChecked()
+		FreeUIConfigs.map.map_reveal = self:GetChecked()
 
 		for i = 1, #overlayTextures do
-			overlayTextures[i]:SetShown(FreeUIConfigs['map_reveal'])
+			overlayTextures[i]:SetShown(FreeUIConfigs.map.map_reveal)
 		end
 	end)
 end

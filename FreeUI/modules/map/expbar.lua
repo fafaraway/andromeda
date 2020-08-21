@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP, cfg = F:GetModule('Map'), C.Map
+local MAP = F:GetModule('Map')
 
 
 local format, pairs = string.format, pairs
@@ -137,10 +137,10 @@ function MAP:SetupScript(bar)
 end
 
 function MAP:ExpBar()
-	if not cfg.expBar then return end
+	if not FreeUIConfigs.map.progress_bar then return end
 
 	local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', Minimap)
-	bar:SetPoint('BOTTOM', Minimap, 'TOP', 0, -(256 / 8 ))
+	bar:SetPoint('BOTTOM', Minimap, 'TOP', 0, -(Minimap:GetHeight() / 8 ))
 	bar:Size(Minimap:GetWidth(), 3)
 	bar:SetHitRectInsets(0, 0, -10, -10)
 	F.CreateSB(bar)
