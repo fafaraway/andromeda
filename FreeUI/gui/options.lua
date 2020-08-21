@@ -702,23 +702,23 @@ local function UnitframeOptions()
 	local playerWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_width', nil, {80, 200, 1})
 	playerWidth:SetPoint('TOP', unitSizeSide.child, 'TOP', 0, -30)
 
-	local playerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_height', nil, {10, 30, 1})
+	local playerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_height', nil, {6, 30, 1})
 	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -66)
 
 	local targetWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_width', nil, {80, 200, 1})
 	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -66)
 
-	local targetHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_height', nil, {10, 30, 1})
+	local targetHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_height', nil, {6, 30, 1})
 	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -66)
 
 	local totWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_width', nil, {80, 200, 1})
 	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -66)
 
-	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {10, 30, 1})
+	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {6, 30, 1})
 	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -66)
 
-	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {10, 30, 1})
-	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -66)
+	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {2, 8, 1})
+	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -66)
 
 	-- group size side panel
 	local groupSizeSide = GUI:CreateSidePanel(parent, 'groupSizeSide')
