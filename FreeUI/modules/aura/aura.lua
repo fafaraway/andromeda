@@ -41,7 +41,6 @@ function AURA:OnLogin()
 	self.DebuffFrame:ClearAllPoints()
 	self.DebuffFrame:SetPoint('TOPRIGHT', debuffAnchor)
 
-	self:AddAuraSource()
 	self:InitReminder()
 end
 
