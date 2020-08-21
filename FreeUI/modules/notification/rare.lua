@@ -27,7 +27,7 @@ function NOTIFICATION:RareAlert_Update(id)
 		local tex = format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 
 		--UIErrorsFrame:AddMessage(C.InfoColor..L['NOTIFICATION_RARE']..C.RedColor..' ('..tex..(info.name or '')..')')
-		F.Print(C.InfoColor..L['NOTIFICATION_RARE']..C.RedColor..' ('..tex..(info.name or '')..')')
+		F.Print(C.InfoColor..L['NOTIFICATION_RARE']..C.BlueColor..' ('..tex..(info.name or '')..')')
 
 		F:CreateNotification(L['NOTIFICATION_RARE'], C.BlueColor..tex..(info.name or ''), nil, 'Interface\\ICONS\\INV_Letter_20')
 
