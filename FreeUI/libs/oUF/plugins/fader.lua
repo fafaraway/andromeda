@@ -3,9 +3,29 @@ local oUF = ns.oUF
 local F, C = unpack(ns)
 
 
-
 local strmatch, gmatch = string.match, string.gmatch
 local objects, addon = {}, CreateFrame("Frame")
+
+local _, powerToken = _G.UnitPowerType("player")
+local reversePowers = {
+    ["RAGE"] = true,
+    ["RUNIC_POWER"] = true,
+    ["POWER_TYPE_SUN_POWER"] = true,
+    ["LUNAR_POWER"] = true,
+    ["INSANITY"] = true,
+    ["MAELSTROM"] = true,
+    ["FURY"] = true,
+    ["PAIN"] = true,
+}
+
+local function isPowerRested(token)
+    if reversePowers[token] then
+        return _G.UnitPower("player") == 0
+    else
+        return _G.UnitPower("player") == _G.UnitPowerMax("player")
+    end
+end
+
 
 -- Events
 local events = setmetatable({
@@ -24,12 +44,13 @@ local events = setmetatable({
 	UnitMaxHealth = "UNIT_HEALTH",
 	PlayerMaxMana = "UNIT_POWER_UPDATE",
 	UnitMaxMana = "UNIT_POWER_UPDATE",
+	PlayerHasPower = "UNIT_POWER_UPDATE",
 	Stealth = "UPDATE_STEALTH",
 	PlayerNotMaxHealth = "UNIT_HEALTH",
 	PlayerNotMaxMana = "UNIT_POWER_UPDATE",
 	Arena = "ZONE_CHANGED_NEW_AREA",
     Instance = "PLAYER_ENTERING_WORLD",
-    
+
 
     PlayerCasting = "UNIT_SPELLCAST_START:UNIT_SPELLCAST_FAILED:UNIT_SPELLCAST_STOP",
     PlayerChanneling = "UNIT_SPELLCAST_CHANNEL_START:UNIT_SPELLCAST_CHANNEL_UPDATE:UNIT_SPELLCAST_CHANNEL_STOP",
@@ -56,18 +77,28 @@ local conditions = setmetatable({
 	PlayerMaxHealth = function(_, unit) return unit and not UnitIsDeadOrGhost("player") and UnitHealth("player") == UnitHealthMax("player") end,
 	UnitMaxMana = function(_, unit) return unit and not UnitIsDeadOrGhost(unit) and UnitPower(unit) == UnitPowerMax(unit) end,
 	PlayerMaxMana = function(_, unit) return unit and not UnitIsDeadOrGhost("player") and UnitPower("player") == UnitPowerMax("player") end,
+
 	Stealth = IsStealthed,
 	Flying = IsFlying,
 	Resting = IsResting,
 	Combat = InCombatLockdown,
-	PlayerNotMaxHealth = function(_, unit) return unit and UnitHealth("player") ~= UnitHealthMax("player") end,
+
+	PlayerNotMaxHealth = function(_, unit)
+		return unit and UnitHealth("player") ~= UnitHealthMax("player")
+	end,
+
 	PlayerNotMaxMana = function(_, unit)
-		local _, powerTypeString = UnitPowerType("player")
-		if powerTypeString ~= "RAGE" and powerTypeString ~= "RUNIC_POWER" then
+		if powerToken == "MANA" then
 			return unit and UnitPower("player") ~= UnitPowerMax("player")
 		end
+	end,
+
+	PlayerHasPower = function(_, unit)
+		if not isPowerRested(powerToken) then
+			return unit
+		end
     end,
-    
+
     PlayerCasting = function(_, unit)
         if UnitCastingInfo("player") then
             return unit
@@ -81,7 +112,9 @@ local conditions = setmetatable({
     end,
 
 	Arena = function(_, unit) return unit and GetZonePVPInfo() == "arena" end,
+
 	Instance = function(_, unit) return unit and IsInInstance() == true end,
+
 }, {__index = function(t, k)
 	local cond = strmatch(k, "not(.+)")
 	assert(rawget(t, cond), format("Missing condition %s", k))
@@ -127,7 +160,7 @@ local function UpdateAlpha(obj)
 	--obj:SetAlpha(alpha)
 	-- obj:SetScript("OnEnter", function(self) self:SetAlpha(1) UnitFrame_OnEnter(obj) end)
     -- obj:SetScript("OnLeave", function(self) self:SetAlpha(alpha) UnitFrame_OnLeave(obj) end)
-    
+
     F:UIFrameFadeIn(obj, 0.3, obj:GetAlpha(), alpha)
 
     obj:SetScript("OnEnter", function(self)
