@@ -1,76 +1,47 @@
 local F, C, L = unpack(select(2, ...))
-local COMBAT, cfg = F:GetModule('Combat'), C.Combat
+local COMBAT = F:GetModule('Combat')
 
 
-local function updateAlert(self, color, text)
+local timer = 0
+local playedHp
+
+local function UpdateAlert(self, color, text)
 	self.top:SetVertexColor(color[1], color[2], color[3], color[4])
 	self.bottom:SetVertexColor(color[1], color[2], color[3], color[4])
 	self.text:SetText(text)
 	self.text:SetTextColor(color[1], color[2], color[3], color[4])
-	
+
 	self:Show()
 end
 
-local ca = CreateFrame('Frame', 'FreeUI_CombatAlert', UIParent)
-ca:SetSize(418, 72)
-ca:SetPoint('TOP', 0, -240)
-ca:SetScale(1)
-ca:Hide()
-
-ca.bg = ca:CreateTexture(nil, 'BACKGROUND')
-ca.bg:SetTexture([[Interface\LevelUp\LevelUpTex]])
-ca.bg:SetPoint('BOTTOM')
-ca.bg:SetSize(326, 103)
-ca.bg:SetTexCoord(0.00195313, 0.63867188, 0.03710938, 0.23828125)
-ca.bg:SetVertexColor(0, 0, 0, .75)
-
-ca.top = ca:CreateTexture(nil, 'BACKGROUND')
-ca.top:SetDrawLayer('BACKGROUND', 2)
-ca.top:SetTexture([[Interface\LevelUp\LevelUpTex]])
-ca.top:SetPoint('TOP')
-ca.top:SetSize(418, 7)
-ca.top:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
-
-ca.bottom = ca:CreateTexture(nil, 'BACKGROUND')
-ca.bottom:SetDrawLayer('BACKGROUND', 2)
-ca.bottom:SetTexture([[Interface\LevelUp\LevelUpTex]])
-ca.bottom:SetPoint('BOTTOM')
-ca.bottom:SetSize(418, 7)
-ca.bottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
-
-ca.text = F.CreateFS(ca, C.Assets.Fonts.Header, 30, nil, '', nil, 'THICK', 'CENTER', 0, -6)
-ca.text:SetJustifyH('CENTER')
-
-local timer = 0
-ca:SetScript('OnShow', function(self)
+local function OnShow(self)
 	timer = 0
 	self:SetScript('OnUpdate', function(self, elasped)
 		timer = timer + elasped
-		
+
 		if timer < 0.5 then
 			self:SetAlpha(timer * 2)
 		end
-		
+
 		if timer > 1 and timer < 2 then
 			self:SetAlpha(1 - (timer - 1) * 2)
 		end
-		
+
 		if timer >= 2 then
 			self:Hide()
 		end
 	end)
-end)
+end
 
-local playedHp
-ca:SetScript('OnEvent', function(self, event, unit)
+local function OnEvent(self, event, unit)
 	-- Enter combat
 	if event == 'PLAYER_REGEN_DISABLED' then
-		updateAlert(self, {1, 210/255, 0, 1}, L['COMBAT_ENTER_COMBAT'])
+		UpdateAlert(self, {1, 210/255, 0, 1}, L['COMBAT_ENTER_COMBAT'])
 	end
 
 	-- Leave combat
 	if event == 'PLAYER_REGEN_ENABLED' then
-		updateAlert(self, {32/255, 1, 32/255, 1}, L['COMBAT_LEAVE_COMBAT'])
+		UpdateAlert(self, {32/255, 1, 32/255, 1}, L['COMBAT_LEAVE_COMBAT'])
 	end
 
 	-- Interrup Dispel Stolen
@@ -93,7 +64,7 @@ ca:SetScript('OnEvent', function(self, event, unit)
 
 	if unit ~= 'player' then return end
 	if event == 'UNIT_HEALTH' or event == 'UNIT_MAXHEALTH' then
-		if cfg.health_alert and (UnitHealth('player') / UnitHealthMax('player')) < cfg.health_alert_threshold then
+		if FreeUIConfigs.combat.health_alert and (UnitHealth('player') / UnitHealthMax('player')) < FreeUIConfigs.combat.health_alert_threshold then
 			if not playedHp then
 				playedHp = true
 
@@ -103,42 +74,63 @@ ca:SetScript('OnEvent', function(self, event, unit)
 			playedHp = false
 		end
 	end
-end)
-
-function COMBAT:CombatAlert()
-	if cfg.combat_alert then
-		ca:RegisterEvent('PLAYER_REGEN_ENABLED')
-		ca:RegisterEvent('PLAYER_REGEN_DISABLED')
-	end
-
-	if cfg.health_alert then
-		ca:RegisterEvent('UNIT_HEALTH')
-		ca:RegisterEvent('UNIT_MAXHEALTH')
-	end	
-
-	if cfg.spell_alert then
-		ca:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-	end
 end
 
+function COMBAT:CombatAlert()
+	local f = CreateFrame('Frame', 'FreeUI_CombatAlert', UIParent)
+	f:SetSize(380, 66)
+	f:SetPoint('CENTER', 0, 260)
+	f:SetScale(.8)
+	f:Hide()
 
-local COMBAT_LIST = {}
+	f.bg = f:CreateTexture(nil, 'BACKGROUND')
+	f.bg:SetTexture([[Interface\LevelUp\LevelUpTex]])
+	f.bg:SetPoint('BOTTOM')
+	f.bg:SetSize(326, 103)
+	f.bg:SetTexCoord(0.00195313, 0.63867188, 0.03710938, 0.23828125)
+	f.bg:SetVertexColor(0, 0, 0, .75)
 
-function COMBAT:RegisterCombat(name, func)
-	if not COMBAT_LIST[name] then
-		COMBAT_LIST[name] = func
+	f.top = f:CreateTexture(nil, 'BACKGROUND')
+	f.top:SetDrawLayer('BACKGROUND', 2)
+	f.top:SetTexture([[Interface\LevelUp\LevelUpTex]])
+	f.top:SetPoint('TOP')
+	f.top:SetSize(380, 7)
+	f.top:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
+
+	f.bottom = f:CreateTexture(nil, 'BACKGROUND')
+	f.bottom:SetDrawLayer('BACKGROUND', 2)
+	f.bottom:SetTexture([[Interface\LevelUp\LevelUpTex]])
+	f.bottom:SetPoint('BOTTOM')
+	f.bottom:SetSize(380, 7)
+	f.bottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
+
+	f.text = F.CreateFS(f, C.Assets.Fonts.Header, 36, nil, '', nil, 'THICK', 'CENTER', 0, -6)
+	f.text:SetJustifyH('CENTER')
+
+	f:SetScript('OnShow', OnShow)
+	f:SetScript('OnEvent', OnEvent)
+
+
+	if FreeUIConfigs.combat.combat_alert then
+		f:RegisterEvent('PLAYER_REGEN_ENABLED')
+		f:RegisterEvent('PLAYER_REGEN_DISABLED')
+	end
+
+	if FreeUIConfigs.combat.health_alert then
+		f:RegisterEvent('UNIT_HEALTH')
+		f:RegisterEvent('UNIT_MAXHEALTH')
+	end
+
+	if FreeUIConfigs.combat.spell_alert then
+		f:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 	end
 end
 
 
 function COMBAT:OnLogin()
-	if not cfg.enable then return end
-
-	for name, func in next, COMBAT_LIST do
-		if name and type(func) == "function" then
-			func()
-		end
-	end
+	if not FreeUIConfigs.combat.enable_combat then return end
 
 	self:CombatAlert()
+	self:AutoTab()
+	self:PvPSound()
 end
