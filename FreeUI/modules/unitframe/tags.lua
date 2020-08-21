@@ -33,6 +33,10 @@ local function shortenName(unit, len)
 	return name
 end
 
+local function AbbrName(str)
+    return str:sub(1,1)..'.'
+end
+
 tags['free:health'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 
@@ -93,11 +97,14 @@ end
 tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 tags['free:name'] = function(unit)
+	local name = UnitName(unit)
+
 	if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
 		return C.RedColor..'<'..YOU..'>'
 	else
-		--return shortenName(unit, 12)
-		return UnitName(unit)
+		if name then -- 名字里有中文字符但没有对应中文字体的情况下会返回nil
+			return (name:gsub('(%S+) ', AbbrName))
+		end
 	end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'

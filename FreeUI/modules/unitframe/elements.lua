@@ -1493,7 +1493,7 @@ function UNITFRAME:AddFCF(self)
 	fcf.showPets = true
 	fcf.showHots = true
 	fcf.showAutoAttack = true
-	fcf.showOverHealing = true
+	fcf.showOverHealing = false
 	fcf.abbreviateNumbers = true
 	self.FloatingCombatFeedback = fcf
 end
