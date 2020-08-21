@@ -1,5 +1,5 @@
-local F, C = unpack(select(2, ...))
-local MISC = F:GetModule('Misc')
+local F, C, L = unpack(select(2, ...))
+local BLIZZARD = F:GetModule('Blizzard')
 
 -- #TODO
 local f = CreateFrame('Frame')
