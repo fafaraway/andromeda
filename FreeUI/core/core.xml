@@ -5,5 +5,5 @@
 	<Script file='profiles.lua'/>
 	<Script file='functions.lua'/>
 	<Script file='mover.lua'/>
-	<Script file='slashcmd.lua'/>
+	<Script file='slash.lua'/>
 </Ui>

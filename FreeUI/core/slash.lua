@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 local INSTALL = F:GetModule('Install')
-local ACTIONBAR = F:GetModule('Actionbar')
 
 
 StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
@@ -36,11 +35,11 @@ StaticPopupDialogs['FREEUI_RESET'] = {
 	OnAccept = function()
 		FreeUIConfigsGlobal = {}
 		FreeUIConfigs = {}
-		
+
 		FreeUIOptionsGlobal[C.MyRealm][C.MyName] = false
 		FreeUIOptions = {}
 		FreeUIOptionsPerChar = {}
-		
+
 		C.Options = FreeUIOptions
 
 		ReloadUI()
@@ -141,10 +140,10 @@ SlashCmdList.CLEARCHAT = function()
 end
 SLASH_CLEARCHAT1 = '/clear'
 
-SlashCmdList.DEV = function() 
-	UIParentLoadAddOn('Blizzard_Console') 
+SlashCmdList.DEV = function()
+	UIParentLoadAddOn('Blizzard_Console')
 	DeveloperConsole:Toggle()
-end 
+end
 SLASH_DEV1 = '/dev'
 
 
@@ -228,17 +227,41 @@ SLASH_GROUPDISBAND1 = '/gd'
 SlashCmdList['INSTANCEID'] = function()
 	local name, instanceType, difficultyID, difficultyName, _, _, _, instanceMapID = GetInstanceInfo()
 	print(C.LineString)
-	print(C.InfoColor..'Name: '..C.RedColor..name)
-	print(C.InfoColor..'instanceType: '..C.RedColor..instanceType)
-	print(C.InfoColor..'difficultyID: '..C.RedColor..difficultyID)
-	print(C.InfoColor..'difficultyName: '..C.RedColor..difficultyName)
-	print(C.InfoColor..'instanceMapID: '..C.RedColor..instanceMapID)
+	F.Print(C.InfoColor..'Name '..C.RedColor..name)
+	F.Print(C.InfoColor..'instanceType '..C.RedColor..instanceType)
+	F.Print(C.InfoColor..'difficultyID '..C.RedColor..difficultyID)
+	F.Print(C.InfoColor..'difficultyName '..C.RedColor..difficultyName)
+	F.Print(C.InfoColor..'instanceMapID '..C.RedColor..instanceMapID)
 	print(C.LineString)
 end
 SLASH_INSTANCEID1 = '/getinstid'
 
 
 
+SlashCmdList['QUESTCHECK'] = function(id)
+	if id == '' then
+		F.Print(C.RedColor..'Please enter a Quest ID.|r')
+	else
+		local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(id)
+		F.Print(C.BlueColor..'Quest ID |r |Hquest:'..id..'|h['..id..']|h')
+
+		if isCompleted == true then
+			F.Print(C.InfoColor..'Complete|r (YES)')
+		else
+			F.Print(C.InfoColor..'Complete|r (NO)')
+		end
+	end
+end
+SLASH_QUESTCHECK1 = '/qc'
 
 
-
+SlashCmdList['UISCALECHECK'] = function()
+	print(C.LineString)
+	F.Print('C.ScreenWidth '..C.ScreenWidth)
+	F.Print('C.ScreenHeight '..C.ScreenHeight)
+	F.Print('C.Mult '..C.Mult)
+	F.Print('uiScale '..FreeUIConfigsGlobal['ui_scale'])
+	F.Print('UIParentScale '..UIParent:GetScale())
+	print(C.LineString)
+end
+SLASH_UISCALECHECK1 = '/getuiscale'
