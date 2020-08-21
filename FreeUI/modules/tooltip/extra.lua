@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
+local TOOLTIP = F:GetModule('Tooltip')
 
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
@@ -131,7 +131,16 @@ function TOOLTIP:SetItemID()
 	end
 end
 
+function TOOLTIP:AuraSource(...)
+	local unitCaster = select(7, UnitAura(...))
+	if unitCaster then
+		local name = GetUnitName(unitCaster, true)
+		local hexColor = F.HexRGB(F.UnitColor(unitCaster))
 
+		if name then TOOLTIP.AddLineForID(self, hexColor..name, L['TOOLTIP_AURA_FROM'], true) end
+		self:Show()
+	end
+end
 
 function TOOLTIP:MountSource(...)
 	local id = select(10, UnitAura(...))
@@ -171,9 +180,7 @@ end
 
 
 function TOOLTIP:ExtraInfo()
-	if not cfg.extra_info then return end
-
-	if cfg.various_id then
+	if FreeUIConfigs.tooltip.various_id then
 		-- Update all
 		hooksecurefunc(GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
 		hooksecurefunc(ItemRefTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
@@ -235,15 +242,19 @@ function TOOLTIP:ExtraInfo()
 		GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.Companion)
 	end
 
-	if cfg.item_count then
+	if FreeUIConfigs.tooltip.item_count then
 		GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.ItemCount)
 	end
 
-	if cfg.item_price then
+	if FreeUIConfigs.tooltip.item_price then
 		GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.ItemPrice)
 	end
 
-	if cfg.mount_source then
+	if FreeUIConfigs.tooltip.aura_source then
+		hooksecurefunc(GameTooltip, 'SetUnitAura', TOOLTIP.AuraSource)
+	end
+
+	if FreeUIConfigs.tooltip.mount_source then
 		hooksecurefunc(GameTooltip, 'SetUnitAura', TOOLTIP.MountSource)
 	end
 end

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
+local TOOLTIP = F:GetModule('Tooltip')
 
 
 local active = false
@@ -54,7 +54,7 @@ end)
 
 
 function TOOLTIP:ShowPvPRating()
-	if not cfg.pvp_rating then return end
+	if not FreeUIConfigs.tooltip.pvp_rating then return end
 
 	GameTooltip:HookScript('OnTooltipSetUnit', function(self)
 		if InCombatLockdown() then return end

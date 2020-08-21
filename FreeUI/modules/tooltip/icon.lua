@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
+local TOOLTIP = F:GetModule('Tooltip')
 
 
 local gsub, unpack = gsub, unpack
@@ -61,7 +61,7 @@ function TOOLTIP:ReskinRewardIcon()
 end
 
 function TOOLTIP:ReskinTooltipIcons()
-	if not cfg.tip_icon then return end
+	if not FreeUIConfigs.tooltip.tip_icon then return end
 
 	TOOLTIP.HookTooltipMethod(GameTooltip)
 	TOOLTIP.HookTooltipMethod(ItemRefTooltip)
