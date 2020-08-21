@@ -218,7 +218,7 @@ C['Actionbar'] = {
 				},
 }
 
-C['Combat'] = {
+--[[ C['Combat'] = {
 	['enable'] = true,
 
 
@@ -229,7 +229,7 @@ C['Combat'] = {
 
 		['pvp_sound'] = true,
 		['auto_tab'] = true,
-}
+} ]]
 
 --[[ C['Inventory'] = {
 	['enable_module'] = true,
@@ -259,7 +259,7 @@ C['Combat'] = {
 			['item_filter_favourite'] = true,
 } ]]
 
-C['Map'] = {
+--[[ C['Map'] = {
 	['enable'] = true,
 		['coords'] = true,
 		['minimapScale'] = 1,
@@ -267,7 +267,7 @@ C['Map'] = {
 		['worldMarker'] = true,
 		['microMenu'] = true,
 		['expBar'] = true,
-}
+} ]]
 
 --[[ C['Quest'] = {
 	['enable'] = true,
@@ -278,7 +278,7 @@ C['Map'] = {
 		['questNotifier'] = false,
 } ]]
 
-C['Tooltip'] = {
+--[[ C['Tooltip'] = {
 	['enable'] = true,
 		['follow_cursor'] = false,
 		['hide_title'] = true,
@@ -303,7 +303,7 @@ C['Tooltip'] = {
 			['item_price'] = true,
 			['aura_source'] = true,
 			['mount_source'] = true,
-}
+} ]]
 
 --[[ C['Unitframe'] = {
 	['enable_module'] = true,
@@ -740,23 +740,14 @@ C.CharacterSettings = {
 	['click_cast'] = {},
 
 
-	['hide_boss_banner'] = true,
-	['hide_talking_head'] = true,
+
 	['item_level'] = true,
 		['merchant_ilvl'] = true,
 		['gem_enchant'] = true,
 		['azerite_traits'] = true,
-	['tidy_errors'] =true,
-	['mail_button'] = true,
-	['undress_button'] = true,
-	['trade_target_info'] = true,
-	['trade_tabs'] = true,
-	['missing_stats'] = true,
-	['pet_filter'] = true,
-	['account_keystone'] = true,
-	['queue_timer'] = true,
-	['color_picker'] = true,
-	['order_hall'] = true,
+
+
+
 	['blow_my_whistle'] = true,
 
 	['group_tool'] = true,
@@ -766,12 +757,37 @@ C.CharacterSettings = {
 	['block_stranger_invite'] = false,
 	['instant_loot'] = true,
 	['easy_mark'] = true,
-	['easy_delete'] = true,
-	['easy_naked'] = true,
+
+
 	['easy_focus'] = true,
 		['easy_focus_on_unitframes'] = false,
 
 
+	['blizzard'] = {
+		['hide_talkinghead'] = true,
+		['hide_bossbanner'] = true,
+		['missing_stats'] = true,
+		['mail_button'] = true,
+		['orderhall_icon'] = true,
+		['tradeskill_tabs'] = true,
+		['undress_button'] = true,
+		['trade_target_info'] = true,
+		['tidy_errors'] = true,
+		['naked_button'] = true,
+		['queue_timer'] = true,
+		['easy_delete'] = true,
+		['pet_filter'] = true,
+	},
+
+	['combat'] = {
+		['enable_combat'] = true,
+			['combat_alert'] = true,
+			['health_alert'] = true,
+				['health_alert_threshold'] = 0.3,
+			['spell_alert'] = true,
+			['pvp_sound'] = true,
+			['auto_tab'] = true,
+	},
 
 	['theme'] = {
 		['cursor_trail'] = true,
@@ -798,19 +814,15 @@ C.CharacterSettings = {
 		['reskin_skada'] = true,
 	},
 
-
 	['quest'] = {
 		['enable_quest'] = true,
-			['show_level'] = true,
-			['auto_select_reward'] = true,
-			['extra_quest_button'] = true,
+			['quest_level'] = true,
+			['reward_highlight'] = true,
+			['extra_button'] = true,
+			['quest_progress'] = true,
 			['complete_ring'] = true,
-			['quest_notifier'] = false,
 			['quick_quest'] = false,
 	},
-
-
-
 
 	['aura'] = {
 		['enable_aura'] = true,
@@ -823,7 +835,6 @@ C.CharacterSettings = {
 			['debuffs_per_row'] = 12,
 			['reverse_debuffs'] = true,
 			['buff_reminder'] = true,
-			['aura_source']	= true,
 	},
 
 	['inventory'] = {
@@ -989,6 +1000,46 @@ C.CharacterSettings = {
 				['arenaAuraPerRow'] = 6,
 				['arenaAuraTotal'] = 18,
 	},
+
+	['tooltip'] = {
+		['enable_tooltip'] = true,
+			['follow_cursor'] = false,
+			['hide_title'] = true,
+			['hide_realm'] = true,
+			['hide_rank'] = true,
+			['hide_in_combat'] = false,
+			['border_color'] = true,
+			['spec_ilvl'] = true,
+			['azerite_armor'] = true,
+			['link_hover'] = true,
+			['tip_icon'] = true,
+			['target_by'] = true,
+			['pvp_rating'] = true,
+
+			['header_font_size'] = 16,
+			['normal_font_size'] = 14,
+
+			['various_id'] = true,
+			['item_count'] = true,
+			['item_price'] = true,
+			['aura_source'] = true,
+			['mount_source'] = true,
+	},
+
+	['map'] = {
+		['enable_map'] = true,
+			['map_scale'] = 1,
+			['map_reveal'] = false,
+			['coords'] = true,
+			['minimap_scale'] = 1,
+			['new_mail'] = true,
+			['calendar'] = true,
+			['instance_type'] = true,
+			['who_pings'] = true,
+			['world_marker'] = true,
+			['micro_menu'] = true,
+			['progress_bar'] = true,
+	}
 }
 
 C.AccountSettings = {
@@ -1033,9 +1084,9 @@ local function initSettings(source, target, fullClean)
 	end
 end
 
-local loader = CreateFrame('Frame')
-loader:RegisterEvent('ADDON_LOADED')
-loader:SetScript('OnEvent', function(self, _, addon)
+local f = CreateFrame('Frame')
+f:RegisterEvent('ADDON_LOADED')
+f:SetScript('OnEvent', function(self, _, addon)
 	if addon ~= 'FreeUI' then return end
 
 	if not FreeUIConfigs['BfA'] then

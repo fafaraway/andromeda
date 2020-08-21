@@ -61,7 +61,13 @@ local function ToggleChildren(self, checked)
 	end
 end
 
-local function onToggle(self)
+local function UpdateSettings()
+	for _, box in pairs(checkboxes) do
+		if box.children then ToggleChildren(box, box:GetChecked()) end
+	end
+end
+
+local function OnToggle(self)
 	local checked = self:GetChecked()
 
 	if checked then
@@ -70,9 +76,13 @@ local function onToggle(self)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
 	end
 
+	UpdateSettings()
+
 	if self.children then
 		ToggleChildren(self, checked)
 	end
+
+	UpdateSettings()
 end
 
 local function CreateGUI()
@@ -90,13 +100,8 @@ local function CreateGUI()
 	f.verticalLine:SetPoint('TOPLEFT', 180, -50)
 	f.verticalLine:SetColorTexture(.5, .5, .5, .1)
 
-	f.logo = f:CreateTexture()
-	f.logo:SetSize(512, 128)
-	f.logo:SetPoint('TOP')
-	f.logo:SetTexture(C.Assets.logo_small)
-	f.logo:SetScale(.3)
-
-	f.desc = F.CreateFS(f, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', C.Version, {.7,.7,.7}, false, 'TOP', 0, -30)
+	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
+	f.desc = F.CreateFS(f, C.Assets.Fonts.Number, 10, nil, 'Version: '..C.Version, {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	f.horizontalLineLeft  = CreateFrame('Frame', nil, f)
 	f.horizontalLineLeft:SetPoint('TOP', -60, -26)
@@ -165,30 +170,27 @@ end
 local function AddCategory(name)
 	local tag = name
 
-	local panel = CreateFrame('ScrollFrame', 'FreeUI_GUI_'..name, FreeUI_GUI, 'UIPanelScrollFrameTemplate')
-	panel:SetSize(380, 540)
-	panel:SetPoint('TOPLEFT', 190, -50)
-	panel:Hide()
-	F.CreateBDFrame(panel, .3)
+	local f = CreateFrame('ScrollFrame', 'FreeUI_GUI_'..name, FreeUI_GUI, 'UIPanelScrollFrameTemplate')
+	f:SetSize(380, 540)
+	f:SetPoint('TOPLEFT', 190, -50)
+	f:Hide()
+	F.CreateBDFrame(f, .3)
 
-	panel.child = CreateFrame('Frame', nil, panel)
-	panel.child:SetPoint('TOPLEFT', 0, 0)
-	panel.child:SetPoint('BOTTOMRIGHT', 0, 0)
-	panel.child:SetSize(420, 1)
+	f.child = CreateFrame('Frame', nil, f)
+	f.child:SetPoint('TOPLEFT', 0, 0)
+	f.child:SetPoint('BOTTOMRIGHT', 0, 0)
+	f.child:SetSize(420, 1)
 
-	panel:SetScrollChild(panel.child)
-	F.ReskinScroll(panel.ScrollBar)
+	f:SetScrollChild(f.child)
+	F.ReskinScroll(f.ScrollBar)
 
-	panel.Title = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontNormalLarge')
-	panel.Title:SetPoint('TOPLEFT', 14, -16)
-	panel.Title:SetText(L['GUI_'..name] or name)
+	f.Title = F.CreateFS(f.child, C.Assets.Fonts.Normal, 14, nil, L['GUI_'..name] or name, 'YELLOW', 'THICK', 'TOPLEFT', 14, -16)
 
-	panel.subText = panel.child:CreateFontString(nil, 'ARTWORK', 'GameFontHighlightSmall')
-	panel.subText:SetPoint('TOPLEFT', panel.Title, 'BOTTOMLEFT', 0, -8)
-	panel.subText:SetJustifyH('LEFT')
-	panel.subText:SetJustifyV('TOP')
-	panel.subText:SetSize(420, 30)
-	panel.subText:SetText(L['GUI_'..name..'_DESC'] or name)
+	f.subText = F.CreateFS(f.child, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..name..'_DESC'] or name, 'GREY', 'THICK')
+	f.subText:SetPoint('TOPLEFT', f.Title, 'BOTTOMLEFT', 0, -8)
+	f.subText:SetJustifyH('LEFT')
+	f.subText:SetJustifyV('TOP')
+	f.subText:SetSize(420, 30)
 
 	local tab = CreateFrame('Button', nil, FreeUI_GUI)
 	tab:SetPoint('TOPLEFT', 10, -offset)
@@ -209,12 +211,10 @@ local function AddCategory(name)
 
 	tab:SetScript('OnMouseUp', onTabClick)
 
+	tab.panel = f
+	f.tab = tab
 
-	tab.panel = panel
-	panel.tab = tab
-	--panel.tag = tag
-
-	FreeUI_GUI[tag] = panel
+	FreeUI_GUI[tag] = f
 
 	offset = offset + 32
 end
@@ -227,41 +227,42 @@ function GUI:AddSubCategory(category, name)
 	line:SetPoint('TOPLEFT', header, 'BOTTOMLEFT', 0, -4)
 	line:SetColorTexture(.5, .5, .5, .1)
 
+	header.line = line
+
 	return header, line
 end
 
-
 function GUI:CreateSidePanel(parent, name, title)
-	local frame = CreateFrame('Frame', name, parent)
-	frame:SetSize(200, 640)
-	frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
-	frame:Hide()
+	local f = CreateFrame('Frame', name, parent)
+	f:SetSize(200, 640)
+	f:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
+	f:Hide()
 
-	frame.header = F.CreateFS(frame, C.Assets.Fonts.Normal, 12, nil, title, 'YELLOW', 'THICK', 'TOPLEFT', 20, -25)
+	f.header = F.CreateFS(f, C.Assets.Fonts.Normal, 12, nil, title, 'YELLOW', 'THICK', 'TOPLEFT', 20, -25)
 
-	frame.child = CreateFrame('Frame', nil, frame)
-	frame.child:SetSize(180, 540)
-	frame.child:SetPoint('TOPLEFT', 10, -50)
+	f.child = CreateFrame('Frame', nil, f)
+	f.child:SetSize(180, 540)
+	f.child:SetPoint('TOPLEFT', 10, -50)
 
-	frame.close = CreateFrame('Button', nil, frame, 'UIPanelButtonTemplate')
-	frame.close:SetPoint('BOTTOM', 0, 6)
-	frame.close:SetSize(80, 24)
-	frame.close:SetText(CLOSE)
-	frame.close:SetScript('OnClick', function()
-		frame:Hide()
+	f.close = CreateFrame('Button', nil, f, 'UIPanelButtonTemplate')
+	f.close:SetPoint('BOTTOM', 0, 6)
+	f.close:SetSize(80, 24)
+	f.close:SetText(CLOSE)
+	f.close:SetScript('OnClick', function()
+		f:Hide()
 	end)
 
 	parent:HookScript('OnHide', function()
-		if frame:IsShown() then frame:Hide() end
+		if f:IsShown() then f:Hide() end
 	end)
 
-	tinsert(sidePanels, frame)
+	tinsert(sidePanels, f)
 
-	F.CreateBDFrame(frame, nil, true)
-	F.CreateBDFrame(frame.child, .3)
-	F.Reskin(frame.close)
+	F.CreateBDFrame(f, nil, true)
+	F.CreateBDFrame(f.child, .3)
+	F.Reskin(f.close)
 
-	return frame
+	return f
 end
 
 function GUI:ToggleSidePanel(name)
@@ -299,14 +300,14 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 		SaveValue(key, value, checkbox:GetChecked())
 		if callback then callback() end
 	end)
-	checkbox:HookScript('OnClick', onToggle)
+	checkbox:HookScript('OnClick', OnToggle)
 
 	if extra and type(extra) == 'function' then
 		local bu = GUI.CreateGearButton(parent.child)
 		bu:SetPoint('LEFT', checkbox.Text, 'RIGHT', 0, 1)
 		bu:SetScript('OnClick', extra)
 
-		checkbox.gear = bu
+		checkbox.bu = bu
 	end
 
 	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
@@ -397,7 +398,7 @@ function GUI:CreateDropDown(parent, key, value, callback, extra)
 	return dropdown
 end
 
-
+-- Colorswatch
 function GUI:CreateColorSwatch(parent, key, value)
 	local f = F.CreateColorSwatch(parent.child, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, SaveValue(key, value))
 	local width = 30
@@ -406,22 +407,14 @@ function GUI:CreateColorSwatch(parent, key, value)
 end
 
 
-
-local function UpdateSettings()
-	for _, box in pairs(checkboxes) do
-		if box.children then ToggleChildren(box, box:GetChecked()) end
-	end
-end
-
-
 function GUI:OnLogin()
 
 	CreateGUI()
 	CreateGameMenuButton()
 
-	AddCategory('GENERAL')
 	AddCategory('APPEARANCE')
 	AddCategory('NOTIFICATION')
+	AddCategory('ANNOUNCEMENT')
 	AddCategory('AUTOMATION')
 	AddCategory('INFOBAR')
 	AddCategory('CHAT')
@@ -433,12 +426,13 @@ function GUI:OnLogin()
 	AddCategory('QUEST')
 	AddCategory('TOOLTIP')
 	AddCategory('UNITFRAME')
+	AddCategory('MISC')
+	AddCategory('CREDITS')
 
-	SetActiveTab(FreeUI_GUI.GENERAL.tab)
+	SetActiveTab(FreeUI_GUI.APPEARANCE.tab)
 
 	self.AddOptions()
 
 	UpdateSettings()
-
 end
 

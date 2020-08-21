@@ -8,6 +8,10 @@ local function UpdateBagStatus()
 	F:GetModule('Inventory'):UpdateAllBags()
 end
 
+local function UpdateMinimapScale()
+	F:GetModule('Map'):UpdateMinimapScale()
+end
+
 
 --[[ side panel functions ]]
 
@@ -53,12 +57,8 @@ local function SetupChatSize()
 end
 
 -- tooltip
-local function SetupTipExtra()
-	GUI:ToggleSidePanel('tipExtraSide')
-end
-
-local function SetupTipFont()
-	GUI:ToggleSidePanel('tipFontSide')
+local function SetupTipFontSize()
+	GUI:ToggleSidePanel('tipFontSizeSide')
 end
 
 -- actionbar
@@ -101,6 +101,16 @@ end
 
 local function SetupCastbarSize()
 	GUI:ToggleSidePanel('castbarSizeSide')
+end
+
+-- combat
+local function SetupHealthThreshold()
+	GUI:ToggleSidePanel('healthThresholdSide')
+end
+
+-- map
+local function SetupMapScale()
+	GUI:ToggleSidePanel('mapScaleSide')
 end
 
 
@@ -266,7 +276,6 @@ local function AppearanceOptions()
 
 end
 
-
 local function AuraOptions()
 	local parent = FreeUI_GUI.AURA
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
@@ -283,11 +292,8 @@ local function AuraOptions()
 	local reverseDebuffs = GUI:CreateCheckBox(parent, 'aura', 'reverse_debuffs')
 	reverseDebuffs:SetPoint('LEFT', reverseBuffs, 'RIGHT', 160, 0)
 
-	local auraSource = GUI:CreateCheckBox(parent, 'aura', 'aura_source')
-	auraSource:SetPoint('TOPLEFT', reverseBuffs, 'BOTTOMLEFT', 0, -8)
-
 	local reminder = GUI:CreateCheckBox(parent, 'aura', 'buff_reminder')
-	reminder:SetPoint('LEFT', auraSource, 'RIGHT', 160, 0)
+	reminder:SetPoint('TOPLEFT', reverseBuffs, 'BOTTOMLEFT', 0, -8)
 
 
 	-- aura size side panel
@@ -313,8 +319,19 @@ local function AuraOptions()
 
 
 	enable.children = {reverseBuffs, reverseDebuffs, auraSource, reminder, buffSize, buffsPerRow, debuffSize, debuffsPerRow, margin, offset}
-end
 
+
+	local function toggleAuraOptions()
+		local shown = enable:GetChecked()
+		enable.bu:SetShown(shown)
+		reverseBuffs:SetShown(shown)
+		reverseDebuffs:SetShown(shown)
+		reminder:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleAuraOptions)
+	parent:HookScript('OnShow', toggleAuraOptions)
+end
 
 local function QuestOptions()
 	local parent = FreeUI_GUI.QUEST
@@ -326,23 +343,87 @@ local function QuestOptions()
 	local enable = GUI:CreateCheckBox(parent, 'quest', 'enable_quest')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local questLevel = GUI:CreateCheckBox(parent, 'quest', 'show_level')
+	local questLevel = GUI:CreateCheckBox(parent, 'quest', 'quest_level')
 	questLevel:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local rewardHightlight = GUI:CreateCheckBox(parent, 'quest', 'auto_select_reward')
+	local rewardHightlight = GUI:CreateCheckBox(parent, 'quest', 'reward_highlight')
 	rewardHightlight:SetPoint('LEFT', questLevel, 'RIGHT', 160, 0)
 
+	local questProgress = GUI:CreateCheckBox(parent, 'quest', 'quest_progress')
+	questProgress:SetPoint('TOPLEFT', questLevel, 'BOTTOMLEFT', 0, -8)
+
 	local completeRing = GUI:CreateCheckBox(parent, 'quest', 'complete_ring')
-	completeRing:SetPoint('TOPLEFT', questLevel, 'BOTTOMLEFT', 0, -8)
+	completeRing:SetPoint('LEFT', questProgress, 'RIGHT', 160, 0)
 
-	local questNotifier = GUI:CreateCheckBox(parent, 'quest', 'quest_notifier')
-	questNotifier:SetPoint('LEFT', completeRing, 'RIGHT', 160, 0)
+	local extraButton = GUI:CreateCheckBox(parent, 'quest', 'extra_button')
+	extraButton:SetPoint('TOPLEFT', questProgress, 'BOTTOMLEFT', 0, -8)
 
-	local extraQuestButton = GUI:CreateCheckBox(parent, 'quest', 'extra_quest_button')
-	extraQuestButton:SetPoint('TOPLEFT', completeRing, 'BOTTOMLEFT', 0, -8)
 
-	enable.children = {questLevel, rewardHightlight, completeRing, questNotifier, extraQuestButton}
+	local function toggleQuestOptions()
+		local shown = enable:GetChecked()
+		questLevel:SetShown(shown)
+		rewardHightlight:SetShown(shown)
+		questProgress:SetShown(shown)
+		completeRing:SetShown(shown)
+		extraButton:SetShown(shown)
+	end
 
+	enable:HookScript('OnClick', toggleQuestOptions)
+	parent:HookScript('OnShow', toggleQuestOptions)
+end
+
+local function CombatOptions()
+	local parent = FreeUI_GUI.COMBAT
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'combat', 'enable_combat')
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+	local combat = GUI:CreateCheckBox(parent, 'combat', 'combat_alert')
+	combat:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+
+	local health = GUI:CreateCheckBox(parent, 'combat', 'health_alert', nil, SetupHealthThreshold)
+	health:SetPoint('LEFT', combat, 'RIGHT', 160, 0)
+
+	local spell = GUI:CreateCheckBox(parent, 'combat', 'spell_alert')
+	spell:SetPoint('TOPLEFT', combat, 'BOTTOMLEFT', 0, -8)
+
+	local pvp = GUI:AddSubCategory(parent)
+	pvp:SetPoint('TOPLEFT', spell, 'BOTTOMLEFT', 0, -16)
+
+	local autoTab = GUI:CreateCheckBox(parent, 'combat', 'auto_tab')
+	autoTab:SetPoint('TOPLEFT', pvp, 'BOTTOMLEFT', 0, -8)
+
+	local PVPSound = GUI:CreateCheckBox(parent, 'combat', 'pvp_sound')
+	PVPSound:SetPoint('LEFT', autoTab, 'RIGHT', 160, 0)
+
+
+	local healthThresholdSide = GUI:CreateSidePanel(parent, 'healthThresholdSide')
+
+	local healthThreshold = GUI:CreateSlider(healthThresholdSide, 'combat', 'health_alert_threshold', nil, {0.1, 0.8, 0.1})
+	healthThreshold:SetPoint('TOP', healthThresholdSide.child, 'TOP', 0, -30)
+
+
+	health.children = {healthThreshold}
+
+
+	local function toggleCombatOptions()
+		local shown = enable:GetChecked()
+		combat:SetShown(shown)
+		health:SetShown(shown)
+		health.bu:SetShown(shown)
+		spell:SetShown(shown)
+		pvp:SetShown(shown)
+		pvp.line:SetShown(shown)
+		autoTab:SetShown(shown)
+		PVPSound:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleCombatOptions)
+	parent:HookScript('OnShow', toggleCombatOptions)
 end
 
 local function InventoryOptions()
@@ -429,7 +510,30 @@ local function InventoryOptions()
 	itemLevel.children = {iLvltoShow}
 
 
-	enable.children = {newitemFlash, reverseSort, combineFreeSlots, itemLevel, useCategory, slotSize, spacing, bagColumns, bankColumns, iLvltoShow, itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
+	local function toggleInventoryOptions()
+		local shown = enable:GetChecked()
+		enable.bu:SetShown(shown)
+		newitemFlash:SetShown(shown)
+		reverseSort:SetShown(shown)
+		combineFreeSlots:SetShown(shown)
+		itemLevel:SetShown(shown)
+		itemLevel.bu:SetShown(shown)
+		filter:SetShown(shown)
+		filter.line:SetShown(shown)
+		useCategory:SetShown(shown)
+		itemFilterLegendary:SetShown(shown)
+		itemFilterMountPet:SetShown(shown)
+		itemFilterFavourite:SetShown(shown)
+		itemFilterTrade:SetShown(shown)
+		itemFilterQuest:SetShown(shown)
+		itemFilterJunk:SetShown(shown)
+		itemFilterSet:SetShown(shown)
+		itemFilterAzerite:SetShown(shown)
+		itemFilterConsumable:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleInventoryOptions)
+	parent:HookScript('OnShow', toggleInventoryOptions)
 end
 
 local function UnitframeOptions()
@@ -670,86 +774,173 @@ local function UnitframeOptions()
 
 end
 
---[[
+local function TooltipOptions()
+	local parent = FreeUI_GUI.TOOLTIP
+	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
 
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
-local function addCombatSection()
-	local Combat = FreeUIOptionsFrame.Combat
-	Combat.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
-
-	local basic = GUI:AddSubCategory(Combat, 'GUI.localization.combat.sub_basic')
-	basic:SetPoint('TOPLEFT', Combat.subText, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(Combat, 'enable')
+	local enable = GUI:CreateCheckBox(parent, 'tooltip', 'enable_tooltip', nil, SetupTipFontSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local combat = GUI:CreateCheckBox(Combat, 'combat_alert')
-	combat:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+	local cursor = GUI:CreateCheckBox(parent, 'tooltip', 'follow_cursor')
+	cursor:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local health = GUI:CreateCheckBox(Combat, 'health_alert')
-	health:SetPoint('LEFT', combat, 'RIGHT', 160, 0)
+	local combatHide = GUI:CreateCheckBox(parent, 'tooltip', 'hide_in_combat')
+	combatHide:SetPoint('LEFT', cursor, 'RIGHT', 160, 0)
 
-	local spell = GUI:CreateCheckBox(Combat, 'spell_alert')
-	spell:SetPoint('TOPLEFT', combat, 'BOTTOMLEFT', 0, -8)
+	local tipIcon = GUI:CreateCheckBox(parent, 'tooltip', 'tip_icon')
+	tipIcon:SetPoint('TOPLEFT', cursor, 'BOTTOMLEFT', 0, -8)
 
-	local fct = GUI:AddSubCategory(Combat, 'GUI.localization.combat.sub_fct')
-	fct:SetPoint('TOPLEFT', spell, 'BOTTOMLEFT', 0, -16)
+	local borderColor = GUI:CreateCheckBox(parent, 'tooltip', 'border_color')
+	borderColor:SetPoint('LEFT', tipIcon, 'RIGHT', 160, 0)
 
-	local outgoing = GUI:CreateCheckBox(Combat, 'fct_outgoing')
-	outgoing:SetPoint('TOPLEFT', fct, 'BOTTOMLEFT', 0, -8)
+	local hideTitle = GUI:CreateCheckBox(parent, 'tooltip', 'hide_title')
+	hideTitle:SetPoint('TOPLEFT', tipIcon, 'BOTTOMLEFT', 0, -8)
 
-	local incoming = GUI:CreateCheckBox(Combat, 'fct_incoming')
-	incoming:SetPoint('LEFT', outgoing, 'RIGHT', 160, 0)
+	local hideRealm = GUI:CreateCheckBox(parent, 'tooltip', 'hide_realm')
+	hideRealm:SetPoint('LEFT', hideTitle, 'RIGHT', 160, 0)
 
-	local pet = GUI:CreateCheckBox(Combat, 'fct_pet')
-	pet:SetPoint('TOPLEFT', outgoing, 'BOTTOMLEFT', 0, -8)
+	local hideRank = GUI:CreateCheckBox(parent, 'tooltip', 'hide_rank')
+	hideRank:SetPoint('TOPLEFT', hideTitle, 'BOTTOMLEFT', 0, -8)
 
-	local periodic = GUI:CreateCheckBox(Combat, 'fct_periodic')
-	periodic:SetPoint('LEFT', pet, 'RIGHT', 160, 0)
+	local targetBy = GUI:CreateCheckBox(parent, 'tooltip', 'target_by')
+	targetBy:SetPoint('LEFT', hideRank, 'RIGHT', 160, 0)
 
-	local merge = GUI:CreateCheckBox(Combat, 'fct_merge')
-	merge:SetPoint('TOPLEFT', pet, 'BOTTOMLEFT', 0, -8)
+	local linkHover = GUI:CreateCheckBox(parent, 'tooltip', 'link_hover')
+	linkHover:SetPoint('TOPLEFT', hideRank, 'BOTTOMLEFT', 0, -8)
 
-	local pvp = GUI:AddSubCategory(Combat, 'GUI.localization.combat.sub_pvp')
-	pvp:SetPoint('TOPLEFT', merge, 'BOTTOMLEFT', 0, -16)
+	local azeriteArmor = GUI:CreateCheckBox(parent, 'tooltip', 'azerite_armor')
+	azeriteArmor:SetPoint('LEFT', linkHover, 'RIGHT', 160, 0)
 
-	local autoTab = GUI:CreateCheckBox(Combat, 'auto_tab')
-	autoTab:SetPoint('TOPLEFT', pvp, 'BOTTOMLEFT', 0, -8)
+	local specIlvl = GUI:CreateCheckBox(parent, 'tooltip', 'spec_ilvl')
+	specIlvl:SetPoint('TOPLEFT', linkHover, 'BOTTOMLEFT', 0, -8)
 
-	local PVPSound = GUI:CreateCheckBox(Combat, 'pvp_sound')
-	PVPSound:SetPoint('LEFT', autoTab, 'RIGHT', 160, 0)
+	local pvpRating = GUI:CreateCheckBox(parent, 'tooltip', 'pvp_rating')
+	pvpRating:SetPoint('LEFT', specIlvl, 'RIGHT', 160, 0)
 
-	local adjustment = GUI:AddSubCategory(Combat, 'GUI.localization.combat.sub_adjustment')
-	adjustment:SetPoint('TOPLEFT', autoTab, 'BOTTOMLEFT', 0, -16)
+	local itemCount = GUI:CreateCheckBox(parent, 'tooltip', 'item_count')
+	itemCount:SetPoint('TOPLEFT', specIlvl, 'BOTTOMLEFT', 0, -8)
 
-	local threshold = GUI:CreateSlider(Combat, 'health_alert_threshold', 0.2, 0.6, 0.2, 0.6, 0.1, nil, true)
-	threshold:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
+	local itemPrice = GUI:CreateCheckBox(parent, 'tooltip', 'item_price')
+	itemPrice:SetPoint('LEFT', itemCount, 'RIGHT', 160, 0)
 
-	health.children = {threshold}
+	local variousID = GUI:CreateCheckBox(parent, 'tooltip', 'various_id')
+	variousID:SetPoint('TOPLEFT', itemCount, 'BOTTOMLEFT', 0, -8)
+
+	local auraSource = GUI:CreateCheckBox(parent, 'tooltip', 'aura_source')
+	auraSource:SetPoint('LEFT', variousID, 'RIGHT', 160, 0)
+
+	local mountSource = GUI:CreateCheckBox(parent, 'tooltip', 'mount_source')
+	mountSource:SetPoint('TOPLEFT', variousID, 'BOTTOMLEFT', 0, -8)
 
 
-	local function toggleCombatOptions()
+	-- tooltip font size side panel
+	local tipFontSizeSide = GUI:CreateSidePanel(parent, 'tipFontSizeSide')
+
+	local headerFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'header_font_size', nil, {8, 20, 1})
+	headerFontSize:SetPoint('TOP', tipFontSizeSide.child, 'TOP', 0, -30)
+
+	local normalFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'normal_font_size', nil, {8, 20, 1})
+	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -66)
+
+	enable.children = {headerFontSize, normalFontSize}
+
+
+	local function toggleTooltipOptions()
 		local shown = enable:GetChecked()
-		outgoing:SetShown(shown)
-		incoming:SetShown(shown)
-		pet:SetShown(shown)
-		merge:SetShown(shown)
-		periodic:SetShown(shown)
-		combat:SetShown(shown)
-		spell:SetShown(shown)
-		health:SetShown(shown)
-		PVPSound:SetShown(shown)
-		autoTab:SetShown(shown)
-		adjustment:SetShown(shown)
-		threshold:SetShown(shown)
-		fct:SetShown(shown)
-		pvp:SetShown(shown)
+		enable.bu:SetShown(shown)
+		cursor:SetShown(shown)
+		combatHide:SetShown(shown)
+		tipIcon:SetShown(shown)
+		borderColor:SetShown(shown)
+		hideTitle:SetShown(shown)
+		hideRealm:SetShown(shown)
+		hideRank:SetShown(shown)
+		targetBy:SetShown(shown)
+		linkHover:SetShown(shown)
+		azeriteArmor:SetShown(shown)
+		specIlvl:SetShown(shown)
+		pvpRating:SetShown(shown)
+		variousID:SetShown(shown)
+		itemCount:SetShown(shown)
+		itemPrice:SetShown(shown)
+		auraSource:SetShown(shown)
+		mountSource:SetShown(shown)
 	end
 
-	enable:HookScript('OnClick', toggleCombatOptions)
-	Combat:HookScript('OnShow', toggleCombatOptions)
+	enable:HookScript('OnClick', toggleTooltipOptions)
+	parent:HookScript('OnShow', toggleTooltipOptions)
 end
 
+local function MapOptions()
+	local parent = FreeUI_GUI.MAP
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'map', 'enable_map', nil, SetupMapScale)
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+	local coords = GUI:CreateCheckBox(parent, 'map', 'coords')
+	coords:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+
+	local miniMap = GUI:AddSubCategory(parent)
+	miniMap:SetPoint('TOPLEFT', coords, 'BOTTOMLEFT', 0, -16)
+
+	local newMail = GUI:CreateCheckBox(parent, 'map', 'new_mail')
+	newMail:SetPoint('TOPLEFT', miniMap, 'BOTTOMLEFT', 0, -8)
+
+	local calendar = GUI:CreateCheckBox(parent, 'map', 'calendar')
+	calendar:SetPoint('LEFT', newMail, 'RIGHT', 160, 0)
+
+	local instanceType = GUI:CreateCheckBox(parent, 'map', 'instance_type')
+	instanceType:SetPoint('TOPLEFT', newMail, 'BOTTOMLEFT', 0, -8)
+
+	local whoPings = GUI:CreateCheckBox(parent, 'map', 'who_pings')
+	whoPings:SetPoint('LEFT', instanceType, 'RIGHT', 160, 0)
+
+	local microMenu = GUI:CreateCheckBox(parent, 'map', 'micro_menu')
+	microMenu:SetPoint('TOPLEFT', instanceType, 'BOTTOMLEFT', 0, -8)
+
+	local worldMarker = GUI:CreateCheckBox(parent, 'map', 'world_marker')
+	worldMarker:SetPoint('LEFT', microMenu, 'RIGHT', 160, 0)
+
+	local expBar = GUI:CreateCheckBox(parent, 'map', 'progress_bar')
+	expBar:SetPoint('TOPLEFT', microMenu, 'BOTTOMLEFT', 0, -8)
+
+
+	-- map size side panel
+	local mapScaleSide = GUI:CreateSidePanel(parent, 'mapScaleSide')
+
+	local mapScale = GUI:CreateSlider(mapScaleSide, 'map', 'map_scale', UpdateMinimapScale, {0.5, 1, 0.1})
+	mapScale:SetPoint('TOP', mapScaleSide.child, 'TOP', 0, -30)
+
+	local minimapScale = GUI:CreateSlider(mapScaleSide, 'map', 'minimap_scale', UpdateMinimapScale, {0.5, 1, 0.1})
+	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -66)
+
+
+	local function toggleMapOptions()
+		local shown = enable:GetChecked()
+		enable.bu:SetShown(shown)
+		coords:SetShown(shown)
+		miniMap:SetShown(shown)
+		newMail:SetShown(shown)
+		calendar:SetShown(shown)
+		instanceType:SetShown(shown)
+		whoPings:SetShown(shown)
+		expBar:SetShown(shown)
+		microMenu:SetShown(shown)
+		worldMarker:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleMapOptions)
+	parent:HookScript('OnShow', toggleMapOptions)
+end
+
+--[[
 
 local function addActionbarSection()
 	local parent = FreeUIOptionsFrame.Actionbar
@@ -1210,167 +1401,9 @@ local function addAutomationSection()
 end
 
 
-local function addMapSection()
-	local Map = FreeUIOptionsFrame.Map
-	Map.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
-
-	local basic = GUI:AddSubCategory(Map, 'GUI.localization.map.sub_basic')
-	basic:SetPoint('TOPLEFT', Map.subText, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(Map, 'enable')
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local coords = GUI:CreateCheckBox(Map, 'coords')
-	coords:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local miniMap = GUI:AddSubCategory(Map, 'GUI.localization.map.sub_minimap')
-	miniMap:SetPoint('TOPLEFT', coords, 'BOTTOMLEFT', 0, -16)
-
-	local whoPings = GUI:CreateCheckBox(Map, 'whoPings')
-	whoPings:SetPoint('TOPLEFT', miniMap, 'BOTTOMLEFT', 0, -8)
-
-	local microMenu = GUI:CreateCheckBox(Map, 'microMenu')
-	microMenu:SetPoint('TOPLEFT', whoPings, 'BOTTOMLEFT', 0, -8)
-
-	local expBar = GUI:CreateCheckBox(Map, 'expBar')
-	expBar:SetPoint('TOPLEFT', microMenu, 'BOTTOMLEFT', 0, -8)
-
-	local minimapScale = GUI:CreateSlider(Map, 'minimapScale', 0.5, 1, 0.5, 1, 0.1, nil, true)
-	minimapScale:SetPoint('LEFT', whoPings, 'RIGHT', 160, -20)
 
 
-	local function toggleMapOptions()
-		local shown = enable:GetChecked()
-		coords:SetShown(shown)
-		whoPings:SetShown(shown)
-		expBar:SetShown(shown)
-		microMenu:SetShown(shown)
-		minimapScale:SetShown(shown)
-		miniMap:SetShown(shown)
-	end
-
-	enable:HookScript('OnClick', toggleMapOptions)
-	Map:HookScript('OnShow', toggleMapOptions)
-end
-
-
-
-
-
-local function addTooltipSection()
-	local parent = FreeUIOptionsFrame.Tooltip
-	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
-
-	local basic = GUI:AddSubCategory(parent, 'GUI.localization.tooltip.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(parent, 'enable', nil, SetupTipFont)
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local cursor = GUI:CreateCheckBox(parent, 'follow_cursor')
-	cursor:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local combatHide = GUI:CreateCheckBox(parent, 'hide_in_combat')
-	combatHide:SetPoint('LEFT', cursor, 'RIGHT', 160, 0)
-
-	local tipIcon = GUI:CreateCheckBox(parent, 'tip_icon')
-	tipIcon:SetPoint('TOPLEFT', cursor, 'BOTTOMLEFT', 0, -8)
-
-	local borderColor = GUI:CreateCheckBox(parent, 'border_color')
-	borderColor:SetPoint('LEFT', tipIcon, 'RIGHT', 160, 0)
-
-	local hideTitle = GUI:CreateCheckBox(parent, 'hide_title')
-	hideTitle:SetPoint('TOPLEFT', tipIcon, 'BOTTOMLEFT', 0, -8)
-
-	local hideRealm = GUI:CreateCheckBox(parent, 'hide_realm')
-	hideRealm:SetPoint('LEFT', hideTitle, 'RIGHT', 160, 0)
-
-	local hideRank = GUI:CreateCheckBox(parent, 'hide_rank')
-	hideRank:SetPoint('TOPLEFT', hideTitle, 'BOTTOMLEFT', 0, -8)
-
-	local targetBy = GUI:CreateCheckBox(parent, 'target_by')
-	targetBy:SetPoint('LEFT', hideRank, 'RIGHT', 160, 0)
-
-	local linkHover = GUI:CreateCheckBox(parent, 'link_hover')
-	linkHover:SetPoint('TOPLEFT', hideRank, 'BOTTOMLEFT', 0, -8)
-
-	local azerite = GUI:CreateCheckBox(parent, 'azerite_armor')
-	azerite:SetPoint('LEFT', linkHover, 'RIGHT', 160, 0)
-
-	local spec = GUI:CreateCheckBox(parent, 'spec_ilvl')
-	spec:SetPoint('TOPLEFT', linkHover, 'BOTTOMLEFT', 0, -8)
-
-	local extraInfo = GUI:CreateCheckBox(parent, 'extra_info', nil, SetupTipExtra)
-	extraInfo:SetPoint('LEFT', spec, 'RIGHT', 160, 0)
-
-
-
-
-	local tipFontSide = GUI:CreateSidePanel(parent, 'tipFontSide', 'GUI.localization.general.item_level')
-
-	local headerFontSize = GUI:CreateSlider(parent, 'header_font_size', 8, 20, 8, 20, 1, nil, true)
-	headerFontSize:SetParent(tipFontSide)
-	headerFontSize:SetPoint('TOP', tipFontSide, 'TOP', 0, -80)
-
-	local normalFontSize = GUI:CreateSlider(parent, 'normal_font_size', 8, 20, 8, 20, 1, nil, true)
-	normalFontSize:SetParent(tipFontSide)
-	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -60)
-
-	local backdropAlpha = GUI:CreateSlider(parent, 'tip_backdrop_alpha', 0.1, 1, 0.1, 1, 0.1, nil, true)
-	backdropAlpha:SetParent(tipFontSide)
-	backdropAlpha:SetPoint('TOP', normalFontSize, 'BOTTOM', 0, -60)
-
-
-
-
-	local tipExtraSide = GUI:CreateSidePanel(parent, 'tipExtraSide', 'GUI.localization.general.item_level')
-
-	local variousID = GUI:CreateCheckBox(parent, 'various_id')
-	variousID:SetParent(tipExtraSide)
-	variousID:SetPoint('TOPLEFT', bagFilterSide, 'TOPLEFT', 20, -60)
-
-	local itemCount = GUI:CreateCheckBox(parent, 'item_count')
-	itemCount:SetParent(tipExtraSide)
-	itemCount:SetPoint('TOPLEFT', variousID, 'BOTTOMLEFT', 00, -8)
-
-	local itemPrice = GUI:CreateCheckBox(parent, 'item_price')
-	itemPrice:SetParent(tipExtraSide)
-	itemPrice:SetPoint('TOPLEFT', itemCount, 'BOTTOMLEFT', 00, -8)
-
-	local auraSource = GUI:CreateCheckBox(parent, 'aura_source')
-	auraSource:SetParent(tipExtraSide)
-	auraSource:SetPoint('TOPLEFT', itemPrice, 'BOTTOMLEFT', 00, -8)
-
-	local mountSource = GUI:CreateCheckBox(parent, 'mount_source')
-	mountSource:SetParent(tipExtraSide)
-	mountSource:SetPoint('TOPLEFT', auraSource, 'BOTTOMLEFT', 00, -8)
-
-
-
-
-
-
-	local function toggleTooltipOptions()
-		local shown = enable:GetChecked()
-		cursor:SetShown(shown)
-		hideTitle:SetShown(shown)
-		hideRealm:SetShown(shown)
-		hideRank:SetShown(shown)
-		combatHide:SetShown(shown)
-		linkHover:SetShown(shown)
-		borderColor:SetShown(shown)
-		tipIcon:SetShown(shown)
-		extraInfo:SetShown(shown)
-		targetBy:SetShown(shown)
-		spec:SetShown(shown)
-		azerite:SetShown(shown)
-		auraSource:SetShown(shown)
-		mountSource:SetShown(shown)
-	end
-
-	enable:HookScript('OnClick', toggleTooltipOptions)
-	parent:HookScript('OnShow', toggleTooltipOptions)
-end ]]
+ ]]
 
 
 
@@ -1385,11 +1418,11 @@ function GUI:AddOptions()
 	-- addChatOptions()
 	AuraOptions()
 	-- addActionbarOptions()
-	-- addCombatOptions()
+	CombatOptions()
 	InventoryOptions()
-	-- addMapOptions()
+	MapOptions()
 	QuestOptions()
-	-- addTooltipOptions()
+	TooltipOptions()
 	UnitframeOptions()
 end
 
