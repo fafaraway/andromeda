@@ -113,6 +113,10 @@ local function SetupMapScale()
 	GUI:ToggleSidePanel('mapScaleSide')
 end
 
+-- infobar
+local function SetupInfoBarHeight()
+	GUI:ToggleSidePanel('infoBarHeightSide')
+end
 
 
 -- options section
@@ -246,9 +250,12 @@ local function AppearanceOptions()
 	local shadowBorder = GUI:CreateCheckBox(parent, 'theme', 'shadow_border')
 	shadowBorder:SetPoint('LEFT', reskinBlizz, 'RIGHT', 160, 0)
 
+	local adjustFont = GUI:CreateCheckBox(parent, 'theme', 'adjust_font')
+	adjustFont:SetPoint('TOPLEFT', reskinBlizz, 'BOTTOMLEFT', 0, -8)
+
 
 	local addons = GUI:AddSubCategory(parent)
-	addons:SetPoint('TOPLEFT', reskinBlizz, 'BOTTOMLEFT', 0, -16)
+	addons:SetPoint('TOPLEFT', adjustFont, 'BOTTOMLEFT', 0, -16)
 
 	local DBM = GUI:CreateCheckBox(parent, 'theme', 'reskin_dbm')
 	DBM:SetPoint('TOPLEFT', addons, 'BOTTOMLEFT', 0, -8)
@@ -266,13 +273,13 @@ local function AppearanceOptions()
 	local vignettingAlphaSide = GUI:CreateSidePanel(parent, 'vignettingAlphaSide')
 
 	local vignettingAlpha = GUI:CreateSlider(vignettingAlphaSide, 'theme', 'vignetting_alpha', nil, {0, 1, 0.1})
-	vignettingAlpha:SetPoint('TOP', vignettingAlphaSide.child, 'TOP', 0, -30)
+	vignettingAlpha:SetPoint('TOP', vignettingAlphaSide.child, 'TOP', 0, -24)
 
 
 	local backdropAlphaSide = GUI:CreateSidePanel(parent, 'backdropAlphaSide')
 
 	local backdropAlpha = GUI:CreateSlider(backdropAlphaSide, 'theme', 'backdrop_alpha', nil, {0.1, 1, 0.01})
-	backdropAlpha:SetPoint('TOP', backdropAlphaSide.child, 'TOP', 0, -30)
+	backdropAlpha:SetPoint('TOP', backdropAlphaSide.child, 'TOP', 0, -24)
 
 end
 
@@ -284,7 +291,7 @@ local function AuraOptions()
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'aura', 'enable_aura', nil, SetupAuraSize)
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -16)
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local reverseBuffs = GUI:CreateCheckBox(parent, 'aura', 'reverse_buffs')
 	reverseBuffs:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
@@ -300,22 +307,22 @@ local function AuraOptions()
 	local auraSizeSide = GUI:CreateSidePanel(parent, 'auraSizeSide')
 
 	local buffSize = GUI:CreateSlider(auraSizeSide, 'aura', 'buff_size', nil, {20, 50, 1})
-	buffSize:SetPoint('TOP', auraSizeSide.child, 'TOP', 0, -30)
+	buffSize:SetPoint('TOP', auraSizeSide.child, 'TOP', 0, -24)
 
 	local buffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'buffs_per_row', nil, {6, 16, 1})
-	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -66)
+	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -50)
 
 	local debuffSize = GUI:CreateSlider(auraSizeSide, 'aura', 'debuff_size', nil, {20, 50, 1})
-	debuffSize:SetPoint('TOP', buffsPerRow, 'BOTTOM', 0, -66)
+	debuffSize:SetPoint('TOP', buffsPerRow, 'BOTTOM', 0, -50)
 
 	local debuffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'debuffs_per_row', nil, {6, 16, 1})
-	debuffsPerRow:SetPoint('TOP', debuffSize, 'BOTTOM', 0, -66)
+	debuffsPerRow:SetPoint('TOP', debuffSize, 'BOTTOM', 0, -50)
 
 	local margin = GUI:CreateSlider(auraSizeSide, 'aura', 'margin', nil, {3, 10, 1})
-	margin:SetPoint('TOP', debuffsPerRow, 'BOTTOM', 0, -66)
+	margin:SetPoint('TOP', debuffsPerRow, 'BOTTOM', 0, -50)
 
 	local offset = GUI:CreateSlider(auraSizeSide, 'aura', 'offset', nil, {6, 16, 1})
-	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -66)
+	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -50)
 
 
 	enable.children = {reverseBuffs, reverseDebuffs, auraSource, reminder, buffSize, buffsPerRow, debuffSize, debuffsPerRow, margin, offset}
@@ -404,7 +411,7 @@ local function CombatOptions()
 	local healthThresholdSide = GUI:CreateSidePanel(parent, 'healthThresholdSide')
 
 	local healthThreshold = GUI:CreateSlider(healthThresholdSide, 'combat', 'health_alert_threshold', nil, {0.1, 0.8, 0.1})
-	healthThreshold:SetPoint('TOP', healthThresholdSide.child, 'TOP', 0, -30)
+	healthThreshold:SetPoint('TOP', healthThresholdSide.child, 'TOP', 0, -24)
 
 
 	health.children = {healthThreshold}
@@ -489,23 +496,23 @@ local function InventoryOptions()
 	local bagSizeSide = GUI:CreateSidePanel(parent, 'bagSizeSide')
 
 	local slotSize = GUI:CreateSlider(bagSizeSide, 'inventory', 'slot_size', nil, {20, 60, 1})
-	slotSize:SetPoint('TOP', bagSizeSide.child, 'TOP', 0, -30)
+	slotSize:SetPoint('TOP', bagSizeSide.child, 'TOP', 0, -24)
 
 	local spacing = GUI:CreateSlider(bagSizeSide, 'inventory', 'spacing', nil, {3, 6, 1})
-	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -66)
+	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -50)
 
 	local bagColumns = GUI:CreateSlider(bagSizeSide, 'inventory', 'bag_columns', nil, {8, 16, 1})
-	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -66)
+	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -50)
 
 	local bankColumns = GUI:CreateSlider(bagSizeSide, 'inventory', 'bank_columns', nil, {8, 16, 1})
-	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -66)
+	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -50)
 
 
 	-- item level to show side panel
 	local itemLevelSide = GUI:CreateSidePanel(parent, 'bagIlvlSide')
 
 	local iLvltoShow = GUI:CreateSlider(itemLevelSide, 'inventory', 'item_level_to_show', nil, {1, 500, 1})
-	iLvltoShow:SetPoint('TOP', itemLevelSide.child, 'TOP', 0, -30)
+	iLvltoShow:SetPoint('TOP', itemLevelSide.child, 'TOP', 0, -24)
 
 	itemLevel.children = {iLvltoShow}
 
@@ -662,15 +669,15 @@ local function UnitframeOptions()
 	local debuffHighlight = GUI:CreateCheckBox(parent, 'unitframe', 'group_debuff_highlight')
 	debuffHighlight:SetPoint('LEFT', cornerBuffs, 'RIGHT', 160, 0)
 
-	local raidDebuffs = GUI:CreateCheckBox(parent, 'unitframe', 'raid_debuffs')
-	raidDebuffs:SetPoint('TOPLEFT', cornerBuffs, 'BOTTOMLEFT', 0, -8)
+	local groupDebuffs = GUI:CreateCheckBox(parent, 'unitframe', 'group_debuffs')
+	groupDebuffs:SetPoint('TOPLEFT', cornerBuffs, 'BOTTOMLEFT', 0, -8)
 
 	local clickCast = GUI:CreateCheckBox(parent, 'unitframe', 'group_click_cast')
-	clickCast:SetPoint('LEFT', raidDebuffs, 'RIGHT', 160, 0)
+	clickCast:SetPoint('LEFT', groupDebuffs, 'RIGHT', 160, 0)
 
 
 	local boss = GUI:AddSubCategory(parent)
-	boss:SetPoint('TOPLEFT', raidDebuffs, 'BOTTOMLEFT', 0, -16)
+	boss:SetPoint('TOPLEFT', groupDebuffs, 'BOTTOMLEFT', 0, -16)
 
 	local enableBoss = GUI:CreateCheckBox(parent, 'unitframe', 'enable_boss', nil, SetupBossSize)
 	enableBoss:SetPoint('TOPLEFT', boss, 'BOTTOMLEFT', 0, -8)
@@ -700,46 +707,50 @@ local function UnitframeOptions()
 	local unitSizeSide = GUI:CreateSidePanel(parent, 'unitSizeSide')
 
 	local playerWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_width', nil, {80, 200, 1})
-	playerWidth:SetPoint('TOP', unitSizeSide.child, 'TOP', 0, -30)
+	playerWidth:SetPoint('TOP', unitSizeSide.child, 'TOP', 0, -24)
 
 	local playerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_height', nil, {6, 30, 1})
-	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -66)
+	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -50)
 
 	local targetWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_width', nil, {80, 200, 1})
-	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -66)
+	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -50)
 
 	local targetHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_height', nil, {6, 30, 1})
-	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -66)
+	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -50)
 
 	local totWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_width', nil, {80, 200, 1})
-	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -66)
+	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -50)
 
 	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {6, 30, 1})
-	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -66)
+	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -50)
 
 	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {2, 8, 1})
-	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -66)
+	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -50)
+
+	local altPowerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'alternative_power_height', nil, {2, 8, 1})
+	altPowerHeight:SetPoint('TOP', powerHeight, 'BOTTOM', 0, -50)
+
 
 	-- group size side panel
 	local groupSizeSide = GUI:CreateSidePanel(parent, 'groupSizeSide')
 
 	local partyWidth = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_width', nil, {20, 100, 1})
-	partyWidth:SetPoint('TOP', groupSizeSide.child, 'TOP', 0, -30)
+	partyWidth:SetPoint('TOP', groupSizeSide.child, 'TOP', 0, -24)
 
 	local partyHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_height', nil, {20, 100, 1})
-	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -66)
+	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -50)
 
 	local partyGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_gap', nil, {5, 20, 1})
-	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -66)
+	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -50)
 
 	local raidWidth = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_width', nil, {20, 100, 1})
-	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -66)
+	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -50)
 
 	local raidHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_height', nil, {20, 100, 1})
-	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -66)
+	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -50)
 
 	local raidGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_gap', nil, {5, 20, 1})
-	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -66)
+	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -50)
 
 	-- castbar color side panel
 	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
@@ -760,16 +771,16 @@ local function UnitframeOptions()
 	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')
 
 	local castbarFocusWidth = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_width', nil, {100, 400, 1})
-	castbarFocusWidth:SetPoint('TOP', castbarSizeSide.child, 'TOP', 0, -30)
+	castbarFocusWidth:SetPoint('TOP', castbarSizeSide.child, 'TOP', 0, -24)
 
 	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
-	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -66)
+	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -50)
 
 	-- range check alpha side panel
 	local rangeCheckAlphaSide = GUI:CreateSidePanel(parent, 'rangeCheckAlphaSide')
 
 	local rangeCheckAlpha = GUI:CreateSlider(rangeCheckAlphaSide, 'unitframe', 'range_check_alpha', nil, {0.3, 1, 0.1})
-	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide.child, 'TOP', 0, -30)
+	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide.child, 'TOP', 0, -24)
 
 
 end
@@ -840,10 +851,10 @@ local function TooltipOptions()
 	local tipFontSizeSide = GUI:CreateSidePanel(parent, 'tipFontSizeSide')
 
 	local headerFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'header_font_size', nil, {8, 20, 1})
-	headerFontSize:SetPoint('TOP', tipFontSizeSide.child, 'TOP', 0, -30)
+	headerFontSize:SetPoint('TOP', tipFontSizeSide.child, 'TOP', 0, -24)
 
 	local normalFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'normal_font_size', nil, {8, 20, 1})
-	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -66)
+	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -50)
 
 	enable.children = {headerFontSize, normalFontSize}
 
@@ -916,10 +927,10 @@ local function MapOptions()
 	local mapScaleSide = GUI:CreateSidePanel(parent, 'mapScaleSide')
 
 	local mapScale = GUI:CreateSlider(mapScaleSide, 'map', 'map_scale', UpdateMinimapScale, {0.5, 1, 0.1})
-	mapScale:SetPoint('TOP', mapScaleSide.child, 'TOP', 0, -30)
+	mapScale:SetPoint('TOP', mapScaleSide.child, 'TOP', 0, -24)
 
 	local minimapScale = GUI:CreateSlider(mapScaleSide, 'map', 'minimap_scale', UpdateMinimapScale, {0.5, 1, 0.1})
-	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -66)
+	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -50)
 
 
 	local function toggleMapOptions()
@@ -938,6 +949,65 @@ local function MapOptions()
 
 	enable:HookScript('OnClick', toggleMapOptions)
 	parent:HookScript('OnShow', toggleMapOptions)
+end
+
+local function InfobarOptions()
+	local parent = FreeUI_GUI.INFOBAR
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Priest_Ascension')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'infobar', 'enable_infobar', nil, SetupInfoBarHeight)
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+	local anchorTop = GUI:CreateCheckBox(parent, 'infobar', 'anchor_top')
+	anchorTop:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+
+	local mouseover = GUI:CreateCheckBox(parent, 'infobar', 'mouseover')
+	mouseover:SetPoint('LEFT', anchorTop, 'RIGHT', 160, 0)
+
+	local stats = GUI:CreateCheckBox(parent, 'infobar', 'stats')
+	stats:SetPoint('TOPLEFT', anchorTop, 'BOTTOMLEFT', 0, -8)
+
+	local report = GUI:CreateCheckBox(parent, 'infobar', 'report')
+	report:SetPoint('LEFT', stats, 'RIGHT', 160, 0)
+
+	local friends = GUI:CreateCheckBox(parent, 'infobar', 'friends')
+	friends:SetPoint('TOPLEFT', stats, 'BOTTOMLEFT', 0, -8)
+
+	local guild = GUI:CreateCheckBox(parent, 'infobar', 'guild')
+	guild:SetPoint('LEFT', friends, 'RIGHT', 160, 0)
+
+	local durability = GUI:CreateCheckBox(parent, 'infobar', 'durability')
+	durability:SetPoint('TOPLEFT', friends, 'BOTTOMLEFT', 0, -8)
+
+	local spec = GUI:CreateCheckBox(parent, 'infobar', 'spec')
+	spec:SetPoint('LEFT', durability, 'RIGHT', 160, 0)
+
+
+	-- infobar height side panel
+	local infoBarHeightSide = GUI:CreateSidePanel(parent, 'infoBarHeightSide')
+
+	local barHeight = GUI:CreateSlider(infoBarHeightSide, 'infobar', 'bar_height', nil, {10, 20, 1})
+	barHeight:SetPoint('TOP', infoBarHeightSide.child, 'TOP', 0, -24)
+
+
+	local function toggleInfobarOptions()
+		local shown = enable:GetChecked()
+		enable.bu:SetShown(shown)
+		anchorTop:SetShown(shown)
+		mouseover:SetShown(shown)
+		stats:SetShown(shown)
+		spec:SetShown(shown)
+		report:SetShown(shown)
+		durability:SetShown(shown)
+		guild:SetShown(shown)
+		friends:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleInfobarOptions)
+	parent:HookScript('OnShow', toggleInfobarOptions)
 end
 
 --[[
@@ -1149,60 +1219,7 @@ local function addAnnouncementSection()
 end
 
 
-local function addInfobarSection()
-	local Infobar = FreeUIOptionsFrame.Infobar
-	Infobar.tab.icon:SetTexture('Interface\\ICONS\\Ability_Priest_Ascension')
 
-	local basic = GUI:AddSubCategory(Infobar, 'GUI.localization.infobar.sub_basic')
-	basic:SetPoint('TOPLEFT', Infobar.subText, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(Infobar, 'enable')
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local mouseover = GUI:CreateCheckBox(Infobar, 'mouseover')
-	mouseover:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local stats = GUI:CreateCheckBox(Infobar, 'stats')
-	stats:SetPoint('LEFT', mouseover, 'RIGHT', 160, 0)
-
-	local friends = GUI:CreateCheckBox(Infobar, 'friends')
-	friends:SetPoint('TOPLEFT', mouseover, 'BOTTOMLEFT', 0, -8)
-
-	local guild = GUI:CreateCheckBox(Infobar, 'guild')
-	guild:SetPoint('LEFT', friends, 'RIGHT', 160, 0)
-
-	local durability = GUI:CreateCheckBox(Infobar, 'durability')
-	durability:SetPoint('TOPLEFT', friends, 'BOTTOMLEFT', 0, -8)
-
-	local spec = GUI:CreateCheckBox(Infobar, 'spec')
-	spec:SetPoint('LEFT', durability, 'RIGHT', 160, 0)
-
-	local report = GUI:CreateCheckBox(Infobar, 'report')
-	report:SetPoint('TOPLEFT', durability, 'BOTTOMLEFT', 0, -8)
-
-	local adjustment = GUI:AddSubCategory(Infobar, 'GUI.localization.infobar.sub_adjustment')
-	adjustment:SetPoint('TOPLEFT', report, 'BOTTOMLEFT', 0, -16)
-
-	local height = GUI:CreateSlider(Infobar, 'height', 10, 20, 10, 20, 1, nil, true)
-	height:SetPoint('TOPLEFT', adjustment, 'BOTTOMLEFT', 16, -32)
-
-
-	local function toggleInfobarOptions()
-		local shown = enable:GetChecked()
-		mouseover:SetShown(shown)
-		stats:SetShown(shown)
-		spec:SetShown(shown)
-		report:SetShown(shown)
-		durability:SetShown(shown)
-		guild:SetShown(shown)
-		friends:SetShown(shown)
-		height:SetShown(shown)
-		adjustment:SetShown(shown)
-	end
-
-	enable:HookScript('OnClick', toggleInfobarOptions)
-	Infobar:HookScript('OnShow', toggleInfobarOptions)
-end
 
 
 local function addChatSection()
@@ -1414,7 +1431,7 @@ function GUI:AddOptions()
 	-- addNotificationOptions()
 	-- addAnnouncementOptions()
 	-- addAutomationOptions()
-	-- addInfobarOptions()
+	InfobarOptions()
 	-- addChatOptions()
 	AuraOptions()
 	-- addActionbarOptions()
