@@ -261,7 +261,7 @@ local function onEvent(self, event, ...)
 				text = "-"..formatNumber(self, amount)
 
 				if critical or crushing then
-					multiplier = 1.25
+					multiplier = 1
 					critMark = true
 				end
 			elseif value.suffix == "HEAL" then
@@ -278,7 +278,7 @@ local function onEvent(self, event, ...)
 				text = "+"..formatNumber(self, amount)..overhealText
 
 				if critical then
-					multiplier = 1.25
+					multiplier = 1
 					critMark = true
 				end
 			elseif value.suffix == "MISS" then
@@ -322,7 +322,8 @@ local function onEvent(self, event, ...)
 		string.scrollTime = element.scrollTime
 		string.xDirection = element.xDirection
 		string.yDirection = element.yDirection
-		string.x = element.xDirection * xOffsetsByAnimation[animation] * (critMark and -1 or 1)
+		--string.x = element.xDirection * xOffsetsByAnimation[animation] * (critMark and -1 or 1)
+		string.x = element.xDirection * xOffsetsByAnimation[animation]
 		string.y = element.yDirection * yOffsetsByAnimation[animation]
 		string:SetPoint("CENTER", element, "CENTER", string.x, string.y)
 		string:SetAlpha(0)
