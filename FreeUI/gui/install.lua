@@ -3,24 +3,143 @@ local INSTALL = F:GetModule('Install')
 
 
 local function SetupCVars()
+	-- credit EKE
+
+	SetCVar('deselectOnClick', 1)
+	SetCVar('useUiScale', 0)
+	SetCVar('WorldTextScale', 1.5)
+	SetCVar('missingTransmogSourceInItemTooltips', 1)
+	SetCVar('movieSubtitle', 1)
+	SetCVar('scriptErrors', 0)
+
+	-- map
+	SetCVar('rotateMinimap', 0)
+	SetCVar('mapFade', 1)
+
+	-- display
+	SetCVar('Outline', 3)
+	SetCVar('findYourselfMode', 2)
+	SetCVar('showTutorials', 0)
+	SetCVar('hideAdventureJournalAlerts', 0)
+	SetCVar('showNPETutorials', 0)
+
+	-- control
+	SetCVar('autoDismountFlying', 0)
+	SetCVar('autoDismount', 1)
+	SetCVar('autoClearAFK', 0)
 	SetCVar('autoLootDefault', 1)
 	SetCVar('lootUnderMouse', 1)
+	SetCVar('interactOnLeftClick', 1)
+	SetCVar('autoOpenLootHistory', 0)
+	SetCVar('UberTooltips', 1)
 	SetCVar('alwaysCompareItems', 0)
+
+	-- social
+	SetCVar('profanityFilter', 0)
+	SetCVar('spamFilter', 1)
+	SetCVar('guildMemberNotify', 0)
+	SetCVar('BlockTrades', 0)
+	SetCVar('blockChannelInvites', 0)
+
+	-- chat
+	SetCVar('chatBubbles', 1)
+	SetCVar('chatBubblesParty', 1)
+	SetCVar('chatStyle', 'classic')
+	SetCVar('chatClassColorOverride', 0)
+	SetCVar('whisperMode', 'inline')
+	SetCVar('showToastOnline', 1)
+	SetCVar('showToastOffline', 1)
+	SetCVar('showToastBroadcast',1)
+	SetCVar('showToastFriendRequest',1)
+	SetCVar('showToastWindow',1)
+
+	-- names
+	SetCVar('UnitNameOwn', 0)
+	SetCVar('UnitNameNonCombatCreatureName', 0)
+	SetCVar('UnitNameNPC', 1)
+	SetCVar('UnitNameFriendlyPlayerName', 1)
+	SetCVar('UnitNameFriendlyPetName', 0)
+	SetCVar('UnitNameFriendlyGuardianName', 0)
+	SetCVar('UnitNameFriendlyTotemName', 0)
+	SetCVar('UnitNameEnemyPlayerName', 1)
+	SetCVar('UnitNameEnemyPetName', 1)
+	SetCVar('UnitNameEnemyGuardianName', 1)
+	SetCVar('UnitNameEnemyTotemName', 1)
+	SetCVar('UnitNameGuildTitle', 0)
+	SetCVar('UnitNamePlayerPVPTitle', 1)
+
+	-- combat
+	SetCVar('showTargetOfTarget', 1)
+	SetCVar('doNotFlashLowHealthWarning', 0)
+	SetCVar('lossOfControl', 1)
+	SetCVar('spellActivationOverlayOpacity', 0)
 	SetCVar('autoSelfCast', 1)
-	SetCVar('cameraDistanceMaxZoomFactor', 2.6)
+	SetCVar('stopAutoAttackOnTargetChange', 0)
+	SetCVar('breakUpLargeNumbers', 1)
+	SetCVar('TargetNearestUseNew', 1)
+	SetCVar('advancedCombatLogging', 1)
+
+	-- combat text
+	SetCVar('enableFloatingCombatText', 0)
+	SetCVar('floatingCombatTextCombatDamage', 1)
+	SetCVar('floatingCombatTextCombatHealing', 1)
+	SetCVar('floatingCombatTextCombatDamageDirectionalOffset', 5)
+	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 0) -- 0 old style 1 new style
+	SetCVar('floatingCombatTextFloatMode', 1) -- 1 up 2 down 3 curve
+
+	-- nameplates
 	SetCVar('nameplateShowSelf', 0)
+	SetCVar('nameplateShowAll', 1)
+	SetCVar('ShowClassColorInNameplate', 1)
 	SetCVar('nameplateShowEnemies', 1)
+	SetCVar('nameplateShowEnemyGuardians', 1)
+	SetCVar('nameplateShowEnemyMinions', 1)
+	SetCVar('nameplateShowEnemyPets', 1)
+	SetCVar('nameplateShowEnemyTotems', 1)
+	SetCVar('nameplateShowEnemyMinus', 1)
 	SetCVar('nameplateMotion', 1)
+	SetCVar('nameplateOverlapH',  0.3) -- default .8
+	SetCVar('nameplateOverlapV',  0.7) -- default 1.1
 	SetCVar('nameplateSelectedScale', 1)
-	SetCVar('nameplateLargerScale', 1)
-	SetCVar('nameplateMinScale', 0.8)
+	SetCVar('namePlateMinScale', 1)
+	SetCVar('namePlateMaxScale', 1)
+	SetCVar('nameplateMinAlpha', 0.7) -- default .6
+	SetCVar('nameplateSelectedScale', 1.2)
+	SetCVar('nameplateOccludedAlphaMult', 0.2) -- default .4
+	SetCVar('nameplateOtherTopInset', -1) -- default .08
+	SetCVar('nameplateOtherBottomInset', -1) -- default .1
+	SetCVar('nameplateMaxDistance', 45) -- default 60
+	SetCVar('nameplateLargerScale', 1) -- boss
+	SetCVar('nameplateLargeTopInset', 0.08)
+	SetCVar('nameplateLargeBottomInset', 0.1)
+
+	-- quest
 	SetCVar('autoQuestWatch', 1)
+	SetCVar('autoQuestProgress', 1)
+	SetCVar('showQuestTrackingTooltips', 1)
+
+	-- hardcore
 	SetCVar('overrideArchive', 0)
-	SetCVar('chatClassColorOverride', '0')
-	SetCVar('screenshotQuality', 10)
-	SetCVar('showTutorials', 0)
+	SetCVar('violenceLevel', 5)
+
+	-- graphical
+	SetCVar('ffxGlow', 1)
+	SetCVar('ffxDeath', 1)
+	SetCVar('SkyCloudLOD', 3)
+
+	-- camera
+	SetCVar('cameraSmoothStyle', 0)
+	SetCVar('cameraSmoothTrackingStyle', 0)
 	SetCVar('cameraYawMoveSpeed', 120)
+	SetCVar('cameraDistanceMaxZoomFactor', 2.6)
+
+	-- screenshot
+	SetCVar('screenshotQuality', 10)
+	SetCVar('screenshotFormat', 'png')
+
+	-- mouse
 	SetCVar('rawMouseEnable', 1)
+	SetCVar('cursorsizepreferred', 1)
 end
 
 local function SetupUIScale()
@@ -34,8 +153,10 @@ local function SetupUIScale()
 end
 
 local function SetupActionbars()
-	SetCVar('lockActionBars', 1)
+	SetCVar('countdownForCooldowns', 0)
 	SetCVar('ActionButtonUseKeyDown', 1)
+	SetCVar('secureAbilityToggle', 1)
+	SetCVar('lockActionBars', 1)
 	SetCVar('alwaysShowActionBars', 1)
 
 	SetActionBarToggles(1, 1, 1, 1, 1)
@@ -132,79 +253,81 @@ local function SetupAddons()
 end
 
 function INSTALL:HelloWorld()
-	local installFrame = CreateFrame('Frame', 'FreeUI_InstallFrame', UIParent)
-	installFrame:SetSize(400, 400)
-	installFrame:SetPoint('CENTER')
-	installFrame:SetFrameStrata('HIGH')
-	F.CreateBD(installFrame)
-	F.CreateSD(installFrame)
-	F.CreateTex(installFrame)
+	local f = CreateFrame('Frame', 'FreeUI_InstallFrame', UIParent)
+	f:SetSize(400, 400)
+	f:SetPoint('CENTER')
+	f:SetFrameStrata('HIGH')
+	F.CreateBD(f, nil, true)
+	F.CreateTex(f)
 
-	local logo = F.CreateFS(installFrame, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
+	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
+	f.desc = F.CreateFS(f, C.Assets.Fonts.Number, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
-	local desc = F.CreateFS(installFrame, C.Assets.Fonts.Number, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
+	f.lineLeft = CreateFrame('Frame', nil, f)
+	f.lineLeft:SetPoint('TOP', -60, -26)
+	F.CreateGF(f.lineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
+	f.lineLeft:SetFrameStrata('HIGH')
 
-	local lineLeft = CreateFrame('Frame', nil, installFrame)
-	lineLeft:SetPoint('TOP', -60, -26)
-	F.CreateGF(lineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
-	lineLeft:SetFrameStrata('HIGH')
+	f.lineRight = CreateFrame('Frame', nil, f)
+	f.lineRight:SetPoint('TOP', 60, -26)
+	F.CreateGF(f.lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
+	f.lineRight:SetFrameStrata('HIGH')
 
-	local lineRight = CreateFrame('Frame', nil, installFrame)
-	lineRight:SetPoint('TOP', 60, -26)
-	F.CreateGF(lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
-	lineRight:SetFrameStrata('HIGH')
+	f.body = CreateFrame('Frame', nil, f)
+	f.body:SetSize(380, 304)
+	f.body:SetPoint('TOPLEFT', 10, -50)
+	F.CreateBD(f.body, .3)
 
+	local headerText = F.CreateFS(f.body, C.Assets.Fonts.Normal, 16, true, nil, 'YELLOW', nil, 'TOPLEFT', 10, -20)
+	headerText:SetWidth(360)
 
-
-
-
-	local headerText = F.CreateFS(installFrame, C.Assets.Fonts.Chat, 16, true, nil, 'YELLOW', nil, 'TOPLEFT', 20, -70)
-	local bodyText = F.CreateFS(installFrame, C.Assets.Fonts.Normal, 12, true, nil, nil, nil, 'TOPLEFT', 20, -100)
+	local bodyText = F.CreateFS(f.body, C.Assets.Fonts.Normal, 12, true, nil, nil, nil, 'TOPLEFT', 10, -50)
 	bodyText:SetJustifyH('LEFT')
 	bodyText:SetWordWrap(true)
-	bodyText:SetWidth(installFrame:GetWidth()-40)
+	bodyText:SetWidth(360)
 
-	local sb = CreateFrame('StatusBar', nil, installFrame)
-	sb:SetPoint('BOTTOM', installFrame, 'BOTTOM', 0, 60)
-	sb:SetSize(320, 20)
-	sb:SetStatusBarTexture(C.Assets.norm_tex)
-	sb:Hide()
-	F:SmoothBar(sb)
-	sb.bg = F.CreateBDFrame(sb)
-	sb.glow = F.CreateSD(sb.bg)
-	sb.glow:SetBackdropBorderColor(C.r, C.g, C.b, 1)
+	local progressBar = CreateFrame('StatusBar', nil, f.body)
+	progressBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
+	progressBar:SetSize(320, 20)
+	progressBar:SetStatusBarTexture(C.Assets.norm_tex)
+	progressBar:Hide()
+	F:SmoothBar(progressBar)
 
-	local sbt = F.CreateFS(sb, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, true, 'CENTER', 0, 0)
+	F.CreateBDFrame(progressBar, .3)
+	progressBar.shadow = F.CreateSD(progressBar)
+	progressBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b)
 
-	local leftButton = CreateFrame('Button', 'FreeUI_Install_LeftButton', installFrame, 'UIPanelButtonTemplate')
-	leftButton:SetPoint('BOTTOMLEFT', installFrame, 'BOTTOMLEFT', 40, 20)
-	leftButton:SetSize(120, 26)
+	local progressBarText = F.CreateFS(progressBar, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
+
+	local leftButton = CreateFrame('Button', 'FreeUI_Install_LeftButton', f, 'UIPanelButtonTemplate')
+	leftButton:SetPoint('BOTTOM', -52, 10)
+	leftButton:SetSize(100, 26)
 	F.Reskin(leftButton)
 
-	local rightButton = CreateFrame('Button', 'FreeUI_Install_RightButton', installFrame, 'UIPanelButtonTemplate')
-	rightButton:SetPoint('BOTTOMRIGHT', installFrame, 'BOTTOMRIGHT', -40, 20)
-	rightButton:SetSize(120, 26)
+	local rightButton = CreateFrame('Button', 'FreeUI_Install_RightButton', f, 'UIPanelButtonTemplate')
+	rightButton:SetPoint('BOTTOM', 52, 10)
+	rightButton:SetSize(100, 26)
 	F.Reskin(rightButton)
 
-	local closeButton = CreateFrame('Button', 'FreeUI_Install_CloseButton', installFrame, 'UIPanelCloseButton')
-	closeButton:SetPoint('TOPRIGHT', installFrame, 'TOPRIGHT')
+	local closeButton = CreateFrame('Button', 'FreeUI_Install_CloseButton', f, 'UIPanelCloseButton')
+	closeButton:SetPoint('TOPRIGHT', f, 'TOPRIGHT')
 	closeButton:SetScript('OnClick', function()
-		UIFrameFade(installFrame,{
+		UIFrameFade(f,{
 			mode = 'OUT',
 			timeToFade = 0.5,
-			finishedFunc = function(installFrame) installFrame:SetAlpha(1); installFrame:Hide() end,
-			finishedArg1 = installFrame,
+			finishedFunc = function(f) f:SetAlpha(1); f:Hide() end,
+			finishedArg1 = f,
 		})
 	end)
 	F.ReskinClose(closeButton)
 
 
 	local step6 = function()
-		sb:SetValue(600)
+		progressBar:SetValue(600)
 		PlaySoundFile('Sound\\Spells\\LevelUp.wav')
-		--headerText:SetText(L['INSTALL_HEADER_FIFTH'])
-		--bodyText:SetText(L['INSTALL_BODY_FIFTH'])
-		sbt:SetText('6/6')
+		headerText:SetText(L['INSTALL_HEADER_COMPLETE'])
+		bodyText:SetText(L['INSTALL_BODY_COMPLETE'])
+		progressBarText:SetText('6/6')
 		leftButton:Hide()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
@@ -215,10 +338,10 @@ function INSTALL:HelloWorld()
 	end
 
 	local step5 = function()
-		sb:SetValue(500)
-		--headerText:SetText(L['INSTALL_HEADER_FIFTH'])
-		--bodyText:SetText(L['INSTALL_BODY_FIFTH'])
-		sbt:SetText('5/6')
+		progressBar:SetValue(500)
+		headerText:SetText(L['INSTALL_HEADER_ADDON'])
+		bodyText:SetText(L['INSTALL_BODY_ADDON'])
+		progressBarText:SetText('5/6')
 
 		leftButton:SetScript('OnClick', step6)
 		rightButton:SetScript('OnClick', function()
@@ -229,10 +352,10 @@ function INSTALL:HelloWorld()
 	end
 
 	local step4 = function()
-		sb:SetValue(400)
-		--headerText:SetText(L['INSTALL_HEADER_FOURTH'])
-		--bodyText:SetText(L['INSTALL_BODY_FOURTH'])
-		sbt:SetText('4/6')
+		progressBar:SetValue(400)
+		headerText:SetText(L['INSTALL_HEADER_ACTIONBAR'])
+		bodyText:SetText(L['INSTALL_BODY_ACTIONBAR'])
+		progressBarText:SetText('4/6')
 
 		leftButton:SetScript('OnClick', step5)
 		rightButton:SetScript('OnClick', function()
@@ -242,10 +365,10 @@ function INSTALL:HelloWorld()
 	end
 
 	local step3 = function()
-		sb:SetValue(300)
-		--headerText:SetText(L['INSTALL_HEADER_THIRD'])
-		--bodyText:SetText(L['INSTALL_BODY_THIRD'])
-		sbt:SetText('3/6')
+		progressBar:SetValue(300)
+		headerText:SetText(L['INSTALL_HEADER_CHAT'])
+		bodyText:SetText(L['INSTALL_BODY_CHAT'])
+		progressBarText:SetText('3/6')
 
 		leftButton:SetScript('OnClick', step4)
 		rightButton:SetScript('OnClick', function()
@@ -255,10 +378,10 @@ function INSTALL:HelloWorld()
 	end
 
 	local step2 = function()
-		sb:SetValue(200)
-		--headerText:SetText(L['INSTALL_HEADER_SECOND'])
-		--bodyText:SetText(L['INSTALL_BODY_SECOND'])
-		sbt:SetText('2/6')
+		progressBar:SetValue(200)
+		headerText:SetText(L['INSTALL_HEADER_UISCALE'])
+		bodyText:SetText(L['INSTALL_BODY_UISCALE'])
+		progressBarText:SetText('2/6')
 
 		leftButton:SetScript('OnClick', step3)
 		rightButton:SetScript('OnClick', function()
@@ -270,14 +393,14 @@ function INSTALL:HelloWorld()
 	end
 
 	local step1 = function()
-		sb:SetMinMaxValues(0, 600)
-		sb:Show()
-		sb:SetValue(0)
-		sb:SetValue(100)
-		sb:SetStatusBarColor(C.r, C.g, C.b)
-		--headerText:SetText(L['INSTALL_HEADER_FIRST'])
-		--bodyText:SetText(L['INSTALL_BODY_FIRST'])
-		sbt:SetText('1/6')
+		progressBar:SetMinMaxValues(0, 600)
+		progressBar:Show()
+		progressBar:SetValue(0)
+		progressBar:SetValue(100)
+		progressBar:SetStatusBarColor(C.r, C.g, C.b)
+		headerText:SetText(L['INSTALL_HEADER_BASIC'])
+		bodyText:SetText(L['INSTALL_BODY_BASIC'])
+		progressBarText:SetText('1/6')
 
 		leftButton:Show()
 		leftButton:SetText(L['INSTALL_BUTTON_SKIP'])
@@ -291,67 +414,6 @@ function INSTALL:HelloWorld()
 	end
 
 
-	local tut4 = function()
-		sb:SetValue(400)
-		headerText:SetText('4. Finished')
-		bodyText:SetText('WIP')
-
-		sbt:SetText('4/4')
-
-		leftButton:Show()
-
-		leftButton:SetText('Close')
-		rightButton:SetText('Install')
-
-		leftButton:SetScript('OnClick', function()
-			UIFrameFade(installFrame,{
-				mode = 'OUT',
-				timeToFade = 0.5,
-				finishedFunc = function(installFrame) installFrame:Hide() end,
-				finishedArg1 = installFrame,
-			})
-		end)
-		rightButton:SetScript('OnClick', step1)
-	end
-
-	local tut3 = function()
-		sb:SetValue(300)
-		headerText:SetText('3. Features')
-		bodyText:SetText('WIP')
-
-		sbt:SetText('3/4')
-
-		rightButton:SetScript('OnClick', tut4)
-	end
-
-	local tut2 = function()
-		sb:SetValue(200)
-		headerText:SetText('2. Unit frames')
-		bodyText:SetText('WIP')
-
-		sbt:SetText('2/4')
-
-		rightButton:SetScript('OnClick', tut3)
-	end
-
-	local tut1 = function()
-		sb:SetMinMaxValues(0, 400)
-		sb:Show()
-		sb:SetValue(100)
-		sb:GetStatusBarTexture():SetGradient('VERTICAL', C.r, C.g, C.b, C.r, C.g, C.b)
-		headerText:SetText('1. Essentials')
-		bodyText:SetText('WIP')
-
-		sbt:SetText('1/4')
-
-		leftButton:Hide()
-
-		rightButton:SetText('Next')
-
-		rightButton:SetScript('OnClick', tut2)
-	end
-
-
 	headerText:SetText(L['INSTALL_HEADER_HELLO'])
 	bodyText:SetText(L['INSTALL_BODY_WELCOME'])
 
@@ -359,11 +421,11 @@ function INSTALL:HelloWorld()
 	rightButton:SetText(L['INSTALL_BUTTON_INSTALL'])
 
 	leftButton:SetScript('OnClick', function()
-		UIFrameFade(installFrame,{
+		UIFrameFade(f,{
 			mode = 'OUT',
 			timeToFade = 0.5,
-			finishedFunc = function(installFrame) installFrame:Hide() end,
-			finishedArg1 = installFrame,
+			finishedFunc = function(f) f:Hide() end,
+			finishedArg1 = f,
 		})
 	end)
 	rightButton:SetScript('OnClick', step1)
