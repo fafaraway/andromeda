@@ -10,6 +10,7 @@
 	<Script file='fonts.lua'/>
 	<Script file='friends.lua'/>
 	<Script file='mail.lua'/>
+	<Script file='mover.lua'/>
 	<Script file='orderhall.lua'/>
 	<Script file='quickjoin.lua'/>
 	<Script file='tradeskill.lua'/>
