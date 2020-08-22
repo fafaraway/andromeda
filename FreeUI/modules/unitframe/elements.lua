@@ -43,9 +43,9 @@ local function PostUpdateHealth(health, unit, min, max)
 	if tapped or offline then
 		self.Bg:SetBackdropColor(.4, .4, .4, .6)
 	elseif UnitIsDead(unit) or UnitIsGhost(unit) then
-		self.Bg:SetBackdropColor(0, 0, 0, .6)
+		self.Bg:SetBackdropColor(0, 0, 0, .8)
 	else
-		self.Bg:SetBackdropColor(.2, .2, .2, .6)
+		self.Bg:SetBackdropColor(.02, .02, .02, .6)
 	end
 end
 
@@ -710,7 +710,8 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu:SetPoint('CENTER')
 	bu:SetFrameLevel(self.Health:GetFrameLevel() + 6)
 	bu.bg = F.CreateBDFrame(bu)
-	bu.glow = F.CreateSD(bu.bg, .35)
+	bu.glow = F.CreateSD(bu.bg)
+	bu.glow:SetFrameLevel(bu:GetFrameLevel() - 1)
 	bu:Hide()
 
 	bu.icon = bu:CreateTexture(nil, 'ARTWORK')
