@@ -90,8 +90,8 @@ SlashCmdList.FREEUI = function(cmd)
 	elseif cmd == 'unlock' then
 		F:MoverConsole()
 	elseif cmd == 'config' then
-		if FreeUIOptionsFrame then
-			FreeUIOptionsFrame:Show()
+		if FreeUI_GUI then
+			FreeUI_GUI:Show()
 			HideUIPanel(GameMenuFrame)
 			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 		else
@@ -109,119 +109,39 @@ SLASH_FREEUI1 = '/freeui'
 SLASH_FREEUI2 = '/free'
 
 
+--[[ dev tools ]]
+
 SlashCmdList.RELOADUI = ReloadUI
 SLASH_RELOADUI1 = '/rl'
 
-SlashCmdList.RCSLASH = DoReadyCheck
-SLASH_RCSLASH1 = '/rc'
-
-SlashCmdList.ROLEPOLL = InitiateRolePoll
-SLASH_ROLEPOLL1 = '/rp'
-
-SlashCmdList.LEAVEPARTY = function()
-	LeaveParty();
+SlashCmdList['FSTACK'] = function()
+	UIParentLoadAddOn('Blizzard_DebugTools')
+	FrameStackTooltip_Toggle()
 end
-SLASH_LEAVEPARTY1 = '/lg'
+SLASH_FSTACK1 = '/fs'
 
-SlashCmdList.RESETINSTANCES = function()
-	ResetInstances();
-end
-SLASH_RESETINSTANCES1 = '/rs'
-
-SlashCmdList.SCREENSHOT = function()
-	Screenshot();
-end
-SLASH_SCREENSHOT1 = '/ss'
-
-SlashCmdList.CLEARCHAT = function()
-	for i = 1, NUM_CHAT_WINDOWS do
-		_G[format('ChatFrame%d', i)]:Clear()
+SlashCmdList['FRAMENAME'] = function()
+	local frame = EnumerateFrames()
+	while frame do
+		if (frame:IsVisible() and MouseIsOver(frame)) then
+			print(frame:GetName() or string.format(UNKNOWN..': [%s]', tostring(frame)))
+		end
+		frame = EnumerateFrames(frame)
 	end
 end
-SLASH_CLEARCHAT1 = '/clear'
+SLASH_FRAMENAME1 = '/fsn'
+
+SlashCmdList['EVENTTRACE'] = function(msg)
+	UIParentLoadAddOn('Blizzard_DebugTools')
+	EventTraceFrame_HandleSlashCmd(msg)
+end
+SLASH_EVENTTRACE1 = '/et'
 
 SlashCmdList.DEV = function()
 	UIParentLoadAddOn('Blizzard_Console')
 	DeveloperConsole:Toggle()
 end
 SLASH_DEV1 = '/dev'
-
-
-
-SlashCmdList.SPEC = function(spec)
-	if C.MyLevel >= SHOW_SPEC_LEVEL then
-		if GetSpecialization() ~= tonumber(spec) then
-			SetSpecialization(spec)
-		end
-	else
-		print('|cffffff00'..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL)..'|r')
-	end
-end
-SLASH_SPEC1 = '/spec'
-
-SlashCmdList.INSTTELEPORT = function()
-	local inInstance = IsInInstance()
-	if inInstance then
-		LFGTeleport(true)
-	else
-		LFGTeleport()
-	end
-end
-SLASH_INSTTELEPORT1 = '/tp'
-
-SlashCmdList.GROUPCONVERT = function()
-	if GetNumGroupMembers() > 0 then
-		if UnitInRaid('player') and (UnitIsGroupLeader('player')) then
-			ConvertToParty()
-		elseif UnitInParty('player') and (UnitIsGroupLeader('player')) then
-			ConvertToRaid()
-		end
-	else
-		print('|cffffff00'..ERR_NOT_IN_GROUP..'|r')
-	end
-end
-SLASH_GROUPCONVERT1 = '/gc'
-
-
-function DisbandRaidGroup()
-	if InCombatLockdown() then return end
-
-	if UnitInRaid('player') then
-		SendChatMessage(L['MISC_DISBAND_GROUP'], 'RAID')
-		for i = 1, GetNumGroupMembers() do
-			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-			if online and name ~= T.name then
-				UninviteUnit(name)
-			end
-		end
-	else
-		SendChatMessage(L['MISC_DISBAND_GROUP'], 'PARTY')
-		for i = MAX_PARTY_MEMBERS, 1, -1 do
-			if GetNumGroupMembers(i) then
-				UninviteUnit(UnitName('party'..i))
-			end
-		end
-	end
-	LeaveParty()
-end
-
-StaticPopupDialogs.DISBAND_RAID = {
-	text = L_POPUP_DISBAND_RAID,
-	button1 = ACCEPT,
-	button2 = CANCEL,
-	OnAccept = DisbandRaidGroup,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = true,
-	preferredIndex = 5,
-}
-
-SlashCmdList.GROUPDISBAND = function()
-	StaticPopup_Show('DISBAND_RAID')
-end
-SLASH_GROUPDISBAND1 = '/gd'
-
-
 
 
 SlashCmdList['INSTANCEID'] = function()
@@ -235,8 +155,6 @@ SlashCmdList['INSTANCEID'] = function()
 	print(C.LineString)
 end
 SLASH_INSTANCEID1 = '/getinstid'
-
-
 
 SlashCmdList['QUESTCHECK'] = function(id)
 	if id == '' then
@@ -254,7 +172,6 @@ SlashCmdList['QUESTCHECK'] = function(id)
 end
 SLASH_QUESTCHECK1 = '/qc'
 
-
 SlashCmdList['UISCALECHECK'] = function()
 	print(C.LineString)
 	F.Print('C.ScreenWidth '..C.ScreenWidth)
@@ -265,3 +182,259 @@ SlashCmdList['UISCALECHECK'] = function()
 	print(C.LineString)
 end
 SLASH_UISCALECHECK1 = '/getuiscale'
+
+
+--[[ dungeon ]]
+
+SlashCmdList['DGR'] = function(msg)
+	ResetInstances()
+end
+SLASH_DGR1 = '/dgr'
+
+SlashCmdList['DGT'] = function(msg)
+	local inInstance, _ = IsInInstance()
+	if inInstance then
+		LFGTeleport(true)
+	else
+		LFGTeleport()
+	end
+end
+SLASH_DGT1 = '/dgt'
+
+SlashCmdList['DGFIVE'] = function(msg)
+	SetDungeonDifficultyID(1)
+end
+SLASH_DGFIVE1 = '/5n'
+
+SlashCmdList['DGHERO'] = function(msg)
+	SetDungeonDifficultyID(2)
+end
+SLASH_DGHERO1 = '/5h'
+
+SlashCmdList['DGMYTH'] = function(msg)
+	SetDungeonDifficultyID(23)
+end
+SLASH_DGMYTH1 = '/5m'
+
+SlashCmdList['RAIDTENMAN'] = function(msg)
+	SetRaidDifficultyID(3)
+end
+SLASH_RAIDTENMAN1 = '/10n'
+
+SlashCmdList['RAIDTENHERO'] = function(msg)
+	SetRaidDifficultyID(5)
+end
+SLASH_RAIDTENHERO1 = '/10h'
+
+SlashCmdList['RAIDTFMAN'] = function(msg)
+	SetRaidDifficultyID(4)
+end
+SLASH_RAIDTFMAN1 = '/25n'
+
+SlashCmdList['RAIDTFHERO'] = function(msg)
+	SetRaidDifficultyID(6)
+end
+SLASH_RAIDTFHERO1 = '/25h'
+
+SlashCmdList['FLEXNORMAL'] = function(msg)
+	SetRaidDifficultyID(14)
+end
+SLASH_FLEXNORMAL1 = '/nm'
+
+SlashCmdList['FLEXHERO'] = function(msg)
+	SetRaidDifficultyID(15)
+end
+SLASH_FLEXHERO1 = '/hm'
+
+SlashCmdList['MYTH'] = function(msg)
+	SetRaidDifficultyID(16)
+end
+SLASH_MYTH1 = '/mm'
+
+StaticPopupDialogs['LeaveBattleField'] = {
+	text = LEAVE_BATTLEGROUND,
+	button1 = YES,
+	button2 = NO,
+	timeout = 20,
+	whileDead = true,
+	hideOnEscape = true,
+	OnAccept = function() LeaveBattlefield() end,
+	OnCancel = function() end,
+	preferredIndex = 5,
+}
+
+SlashCmdList['LEAVEBATTLEFIELD'] = function(msg)
+	local _, instanceType = IsInInstance()
+	if instanceType == 'arena' or instanceType == 'pvp' then
+		if instanceType == 'pvp' then
+			instanceType = 'battleground'
+		elseif instanceType == 'arena' then
+			if select(2, IsActiveBattlefieldArena()) then
+				instanceType = 'rated arena match'
+			else
+				instanceType = 'arena skirmish'
+			end
+		end
+
+		StaticPopup_Show('LeaveBattleField')
+	end
+end
+SLASH_LEAVEBATTLEFIELD1 = '/lbg'
+
+
+-- [[ group ]] --
+
+SlashCmdList['READYCHECK'] = function()
+	DoReadyCheck()
+end
+SLASH_READYCHECK1 = '/rdc'
+
+SlashCmdList['ROLECHECK'] = function()
+	InitiateRolePoll()
+end
+SLASH_ROLECHECK1 = '/rpc'
+
+SlashCmdList['LEAVEGROUP'] = function()
+	LeaveParty()
+end
+SLASH_LEAVEGROUP1 = '/lg'
+
+SlashCmdList['SETEVERYONEISASSISTANT'] = function()
+	SetEveryoneIsAssistant(true)
+end
+SLASH_SETEVERYONEISASSISTANT1 = '/seia'
+
+SlashCmdList['RAIDTOPARTY'] = function()
+	if IsInRaid() then
+		if (GetNumGroupMembers() <= MEMBERS_PER_RAID_GROUP) then
+			if UnitIsGroupLeader('player') then
+				ConvertToParty()
+				print(CONVERT_TO_PARTY)
+			else
+				print(ERR_GUILD_PERMISSIONS)
+			end
+		else
+			print(ERR_READY_CHECK_THROTTLED)
+		end
+	elseif (IsInGroup() and not IsInRaid()) then
+		print(ERR_NOT_IN_RAID)
+	else
+		print(ERR_NOT_IN_GROUP)
+	end
+end
+SLASH_RAIDTOPARTY1 = '/rtp'
+
+SlashCmdList['PARTYTORAID'] = function(msg)
+	if IsInRaid() then
+		print(ERR_PARTY_CONVERTED_TO_RAID)
+	elseif (IsInGroup() and UnitIsGroupLeader('player')) and not IsInRaid() then
+		ConvertToRaid()
+		print(CONVERT_TO_RAID)
+	elseif (IsInGroup() and not UnitIsGroupLeader('player')) and not IsInRaid() then
+		print(LFG_LIST_NOT_LEADER)
+	else
+		print(ERR_NOT_IN_GROUP)
+	end
+end
+SLASH_PARTYTORAID1 = '/ptr'
+
+SlashCmdList.GROUPCONVERT = function()
+	if GetNumGroupMembers() > 0 then
+		if UnitInRaid('player') and (UnitIsGroupLeader('player')) then
+			ConvertToParty()
+		elseif UnitInParty('player') and (UnitIsGroupLeader('player')) then
+			ConvertToRaid()
+		end
+	else
+		print(ERR_NOT_IN_GROUP)
+	end
+end
+SLASH_GROUPCONVERT1 = '/gc'
+
+local GroupDisband = function()
+	local pName = UnitName('player')
+	if IsInRaid() then
+		for i = 1, GetNumGroupMembers() do
+			local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+			if online and name ~= pName then
+				UninviteUnit(name)
+				SendChatMessage('Disbanding group.', 'RAID')
+			end
+		end
+	else
+		for i = MAX_PARTY_MEMBERS, 1, -1 do
+			if (UnitExists('party'..i)) then
+				UninviteUnit(UnitName('party'..i))
+				SendChatMessage('Disbanding group.', 'PARTY')
+			end
+		end
+	end
+	LeaveParty()
+end
+
+StaticPopupDialogs['DISBAND_RAID'] = {
+	text = TEAM_DISBAND,
+	button1 = YES,
+	button2 = NO,
+	OnAccept = GroupDisband,
+	timeout = 20,
+	whileDead = true,
+	hideOnEscape = true,
+	preferredIndex = 5,
+}
+
+SlashCmdList['GROUPDISBAND'] = function(msg)
+	if  IsInRaid() then
+		StaticPopup_Show('DISBAND_RAID')
+	end
+end
+SLASH_GROUPDISBAND1 = '/gd'
+
+
+--[[ misc ]]
+
+SlashCmdList.SCREENSHOT = function()
+	Screenshot();
+end
+SLASH_SCREENSHOT1 = '/ss'
+
+SlashCmdList.CLEARCHAT = function()
+	for i = 1, NUM_CHAT_WINDOWS do
+		_G[format('ChatFrame%d', i)]:Clear()
+	end
+end
+SLASH_CLEARCHAT1 = '/clear'
+
+SlashCmdList['MOUNTSPECIAL'] = function()
+	if GetUnitSpeed('player') == 0 then
+		DoEmote('MOUNTSPECIAL')
+	end
+end
+SLASH_MOUNTSPECIAL1 = '/ms'
+
+SlashCmdList['BNBROADCAST'] = function(msg, editbox)
+	BNSetCustomMessage(msg)
+end
+SLASH_BNBROADCAST1 = '/bn'
+
+SlashCmdList.SPEC = function(spec)
+	if C.MyLevel >= SHOW_SPEC_LEVEL then
+		if GetSpecialization() ~= tonumber(spec) then
+			SetSpecialization(spec)
+		end
+	else
+		print('|cffffff00'..format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, SHOW_SPEC_LEVEL)..'|r')
+	end
+end
+SLASH_SPEC1 = '/spec'
+
+
+
+
+
+
+
+
+
+
+
