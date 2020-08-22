@@ -133,6 +133,19 @@ local function CreateGUI()
 		f:Hide()
 	end)
 	F.Reskin(f.okay)
+
+	local function CombatLockdown(event)
+		if event == 'PLAYER_REGEN_DISABLED' then
+			if f:IsShown() then
+				f:Hide()
+				F:RegisterEvent('PLAYER_REGEN_ENABLED', CombatLockdown)
+			end
+		else
+			f:Show()
+			F:UnregisterEvent(event, CombatLockdown)
+		end
+	end
+	F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)
 end
 
 local function CreateGameMenuButton()
