@@ -215,7 +215,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	SetupTexture(pushedTexture, cfg.pushedTexture, 'SetPushedTexture', button)
 	SetupTexture(highlightTexture, cfg.highlightTexture, 'SetHighlightTexture', button)
 	SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
-	
+
 	-- highlightTexture:SetColorTexture(1, 1, 1, .25)
 	-- checkedTexture:SetColorTexture(1, .8, 0, .25)
 
@@ -412,8 +412,8 @@ function ACTIONBAR:RestyleButtons()
 		},
 		cooldown = {
 			points = {
-				{'TOPLEFT', C.Mult, -C.Mult},
-				{'BOTTOMRIGHT', -C.Mult, C.Mult},
+				{'TOPLEFT', 0, 0},
+				{'BOTTOMRIGHT', 0, 0},
 			},
 		},
 		name = {
