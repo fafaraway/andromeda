@@ -161,8 +161,8 @@ function F:SetBackdrop(frame, a)
 	borders.LEFT:SetWidth(size)
 	borders.RIGHT:SetWidth(size)
 
-	F:SetBackdropColor(frame, FreeUIConfigs['theme'].backdrop_color[1], FreeUIConfigs['theme'].backdrop_color[2], FreeUIConfigs['theme'].backdrop_color[3], a)
-	F:SetBackdropBorderColor(frame, FreeUIConfigs['theme'].backdrop_border_color[1], FreeUIConfigs['theme'].backdrop_border_color[2], FreeUIConfigs['theme'].backdrop_border_color[3], FreeUIConfigs['theme'].backdrop_border_color[4])
+	F:SetBackdropColor(frame, FreeUIConfigs['theme'].backdrop_color[1], FreeUIConfigs['theme'].backdrop_color[2], FreeUIConfigs['theme'].backdrop_color[3], a or FreeUIConfigs['theme'].backdrop_alpha)
+	F:SetBackdropBorderColor(frame, 0, 0, 0, 1)
 end
 
 function F:SetBackdropColor(frame, r, g, b, a)
@@ -293,7 +293,7 @@ local function Button_OnEnter(self)
 		--self:SetBackdropColor(C.r, C.g, C.b, .25)
 	end
 
-	self:SetBackdropBorderColor(C.r, C.g, C.b, FreeUIConfigs['theme'].backdrop_border_alpha)
+	self:SetBackdropBorderColor(C.r, C.g, C.b, 1)
 	self.glow:SetAlpha(1)
 
 	CreatePulse(self.glow)
@@ -306,7 +306,7 @@ local function Button_OnLeave(self)
 		--self:SetBackdropColor(0, 0, 0, 0)
 	end
 
-	self:SetBackdropBorderColor(FreeUIConfigs['theme'].backdrop_border_color[1], FreeUIConfigs['theme'].backdrop_border_color[2], FreeUIConfigs['theme'].backdrop_border_color[3], FreeUIConfigs['theme'].backdrop_border_alpha)
+	self:SetBackdropBorderColor(0, 0, 0, 1)
 	self.glow:SetScript('OnUpdate', nil)
 	self.glow:SetAlpha(0)
 end
@@ -504,6 +504,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 
 	local tex = self:CreateTexture()
 	tex:SetTexture(assets.close_tex)
+	tex:SetVertexColor(.6, .6, .6)
 	tex:SetAllPoints()
 	self.bgTex = tex
 
@@ -673,14 +674,15 @@ function F:ReskinSlider(verticle)
 	self:SetBackdrop(nil)
 	F.StripTextures(self)
 
-	local bd = F.CreateBDFrame(self, 0)
+	local bd = F.CreateBDFrame(self, .5)
 	bd:SetPoint('TOPLEFT', 14, -2)
 	bd:SetPoint('BOTTOMRIGHT', -15, 3)
 	bd:SetFrameStrata('BACKGROUND')
 	F.CreateGradient(bd)
 
 	local thumb = self:GetThumbTexture()
-	thumb:SetTexture('Interface\\CastingBar\\UI-CastingBar-Spark')
+	thumb:SetTexture(assets.spark_tex)
+	thumb:SetVertexColor(1, 1, 1, .8)
 	thumb:SetBlendMode('ADD')
 	if verticle then thumb:SetRotation(math.rad(90)) end
 end
@@ -1837,7 +1839,7 @@ do
 		slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
 		slider.High:SetFont(C.Assets.Fonts.Number, 11)
 		slider.Text:ClearAllPoints()
-		slider.Text:SetPoint('CENTER', 0, 25)
+		slider.Text:SetPoint('BOTTOM', slider, 'TOP', 0, 4)
 		slider.Text:SetText(name)
 		slider.Text:SetTextColor(1, 1, 1)
 		slider.Text:SetFont(C.Assets.Fonts.Number, 11)
