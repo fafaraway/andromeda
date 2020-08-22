@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('Infobar')
 
 
 local format, gsub, sort, floor, modf, select = string.format, string.gsub, table.sort, math.floor, math.modf, select
@@ -28,7 +28,7 @@ local function getItemDurability()
 	for i = 1, 10 do
 		if GetInventoryItemLink('player', localSlots[i][1]) then
 			local current, max = GetInventoryItemDurability(localSlots[i][1])
-			if current then 
+			if current then
 				localSlots[i][3] = current/max
 				numSlots = numSlots + 1
 			end
@@ -59,7 +59,7 @@ end
 
 
 function INFOBAR:Durability()
-	if not cfg.durability then return end
+	if not FreeUIConfigs.infobar.durability then return end
 
 	FreeUIDurabilityButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 120, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
@@ -87,7 +87,7 @@ function INFOBAR:Durability()
 
 	FreeUIDurabilityButton:HookScript('OnEnter', function(self)
 		local total, equipped = GetAverageItemLevel()
-		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -15)
+		GameTooltip:SetOwner(self, (FreeUIConfigs.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeUIConfigs.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 		--GameTooltip:AddDoubleLine(DURABILITY, format('%s: %d/%d', STAT_AVERAGE_ITEM_LEVEL, equipped, total), .9, .8, .6, 1,1,1)
 		GameTooltip:AddLine(DURABILITY, .9, .8, .6)

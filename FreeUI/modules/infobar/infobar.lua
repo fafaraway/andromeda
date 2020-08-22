@@ -1,15 +1,8 @@
 ﻿local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('Infobar')
 
 
 local barAlpha, buttonAlpha
-if cfg.mouseover then
-	barAlpha = 0.25
-	buttonAlpha = 0
-else
-	barAlpha = 0.65
-	buttonAlpha = 1
-end
 
 local bar = CreateFrame('Frame', 'FreeUI_Infobar', UIParent)
 bar.buttons = {}
@@ -79,14 +72,14 @@ local function buttonOnLeaveNoFade(self)
 end
 
 local function buttonOnEnter(self)
-	if cfg.mouseover then
+	if FreeUIConfigs.infobar.mouseover then
 		showBar()
 	end
 	self:SetBackdropColor(C.r, C.g, C.b, .4)
 end
 
 local function buttonOnLeave(self)
-	if cfg.mouseover then
+	if FreeUIConfigs.infobar.mouseover then
 		hideBar()
 	end
 	self:SetBackdropColor(0, 0, 0, .1)
@@ -129,11 +122,11 @@ function INFOBAR:addButton(text, position, width, clickFunc)
 	bu:SetWidth(width)
 	F.CreateBD(bu, .1)
 
-	if cfg.mouseover then
+	if FreeUIConfigs.infobar.mouseover then
 		bu:SetAlpha(0)
 	end
 
-	local buText = F.CreateFS(bu, C.Assets.Fonts.Number, cfg.fontSize, nil, text, nil, true, 'CENTER', 0, 0)
+	local buText = F.CreateFS(bu, C.Assets.Fonts.Number, 11, nil, text, nil, true, 'CENTER', 0, 0)
 	bu.Text = buText
 
 	bu:SetScript('OnMouseUp', clickFunc)
@@ -152,13 +145,26 @@ bar.addButton = addButton
 
 
 function INFOBAR:OnLogin()
-	if not cfg.enable then return end
+	if not FreeUIConfigs.infobar.enable_infobar then return end
 
-	bar:SetPoint((cfg.top and 'TOPLEFT') or 'BOTTOMLEFT', 0, 0)
-	bar:SetPoint((cfg.top and 'TOPRIGHT') or 'BOTTOMRIGHT', 0, 0)
+	if FreeUIConfigs.infobar.mouseover then
+		barAlpha = 0.25
+		buttonAlpha = 0
+	else
+		barAlpha = 0.65
+		buttonAlpha = 1
+	end
+
+	if FreeUIConfigs.infobar.anchor_top then
+		bar:SetPoint('TOPLEFT', 0, 0)
+		bar:SetPoint('TOPRIGHT', 0, 0)
+	else
+		bar:SetPoint('BOTTOMLEFT', 0, 0)
+		bar:SetPoint('BOTTOMRIGHT', 0, 0)
+	end
 
 	bar:SetFrameStrata('BACKGROUND')
-	bar:SetHeight(cfg.height)
+	bar:SetHeight(FreeUIConfigs.infobar.bar_height)
 	bar.bg = F.CreateBDFrame(bar, barAlpha)
 
 	RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
@@ -166,7 +172,7 @@ function INFOBAR:OnLogin()
 	F:RegisterEvent('PLAYER_REGEN_DISABLED', onEvent)
 	F:RegisterEvent('PLAYER_REGEN_ENABLED', onEvent)
 
-	if cfg.mouseover then
+	if FreeUIConfigs.infobar.mouseover then
 		bar:SetScript('OnEnter', showBar)
 		bar:SetScript('OnLeave', hideBar)
 	end

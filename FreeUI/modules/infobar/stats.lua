@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('Infobar')
 
 
 local format, min = string.format, math.min
@@ -46,22 +46,22 @@ end
 
 
 function INFOBAR:Stats()
-	if not cfg.stats then return end
+	if not FreeUIConfigs.infobar.stats then return end
 
 	local holder = CreateFrame('Frame', nil, FreeUI_Infobar)
 	holder:SetFrameLevel(3)
 	holder:SetPoint('TOP')
 	holder:SetPoint('BOTTOM')
-	holder:SetWidth(200)
+	holder:SetWidth(180)
 	holder:SetPoint('CENTER')
 
-	local text = F.CreateFS(holder, C.Assets.Fonts.Number, cfg.fontSize, nil, text, nil, true, 'CENTER', 0, 0)
+	local text = F.CreateFS(holder, C.Assets.Fonts.Number, 11, nil, text, nil, true, 'CENTER', 0, 0)
 	text:SetTextColor(C.r, C.g, C.b)
 	text:SetDrawLayer('OVERLAY')
 
 	FreeUIStatsButton = INFOBAR:addButton('', INFOBAR.POSITION_MIDDLE, 200, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
-		
+
 		if button == 'LeftButton' then
 			local openaddonlist
 
@@ -79,7 +79,7 @@ function INFOBAR:Stats()
 		end
 	end)
 
-	FreeUIStatsButton:SetWidth(250)
+	FreeUIStatsButton:SetWidth(200)
 
 	FreeUIStatsButton:SetScript('OnUpdate', function(self, elapsed)
 		last = last + elapsed
@@ -112,7 +112,7 @@ function INFOBAR:Stats()
 		end
 		sort(addons, order)
 
-		GameTooltip:SetOwner(self, (cfg.top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (cfg.top and -15) or 15)
+		GameTooltip:SetOwner(self, (FreeUIConfigs.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeUIConfigs.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 		local today = C_Calendar.GetDate()
 		local w, m, d, y = today.weekday, today.month, today.monthDay, today.year

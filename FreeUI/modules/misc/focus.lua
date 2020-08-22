@@ -63,4 +63,4 @@ function MISC:Focuser()
 	F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.Focuser_OnEvent)
 	F:RegisterEvent('GROUP_ROSTER_UPDATE', MISC.Focuser_OnEvent)
 end
-MISC:RegisterMisc("Focuser", MISC.Focuser)
+MISC:RegisterMisc('Focuser', MISC.Focuser)
