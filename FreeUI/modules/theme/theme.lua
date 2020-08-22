@@ -74,6 +74,7 @@ end
 
 function THEME:Vignetting()
 	if not FreeUIConfigs['theme']['vignetting'] then return end
+	if FreeUIConfigs['theme']['vignetting_alpha'] == 0 then return end
 
 	local f = CreateFrame('Frame')
 	f:SetPoint('TOPLEFT')
