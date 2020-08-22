@@ -25,16 +25,10 @@ local function CreatePlayerStyle(self)
 	UNITFRAME:AddGCDSpark(self)
 	UNITFRAME:AddFader(self)
 	UNITFRAME:AddFCF(self)
-
-	if C.MyClass == 'DEATHKNIGHT' then
-		UNITFRAME:AddRunes(self)
-	elseif C.MyClass == 'MONK' then
-		UNITFRAME:AddStagger(self)
-	elseif C.MyClass == 'SHAMAN' then
-		UNITFRAME:AddTotems(self)
-	else
-		UNITFRAME:AddClassPower(self)
-	end
+	UNITFRAME:AddClassPower(self)
+	UNITFRAME:AddRunes(self)
+	UNITFRAME:AddStagger(self)
+	UNITFRAME:AddTotems(self)
 end
 
 function UNITFRAME:SpawnPlayer()
@@ -298,11 +292,7 @@ local function CreatePartyStyle(self)
 	UNITFRAME:AddPortrait(self)
 	UNITFRAME:AddGroupNameText(self)
 	UNITFRAME:AddLeaderIndicator(self)
-	-- UNITFRAME:AddBuffs(self)
-	-- UNITFRAME:AddDebuffs(self)
-	UNITFRAME:AddRangeCheck(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
-
 	UNITFRAME:AddResurrectIndicator(self)
 	UNITFRAME:AddReadyCheckIndicator(self)
 	UNITFRAME:AddGroupRoleIndicator(self)
@@ -310,9 +300,11 @@ local function CreatePartyStyle(self)
 	UNITFRAME:AddSummonIndicator(self)
 	UNITFRAME:AddThreatIndicator(self)
 	UNITFRAME:AddSelectedBorder(self)
-	UNITFRAME:AddCornerBuff(self)
+	UNITFRAME:AddRangeCheck(self)
+	UNITFRAME:AddCornerBuffs(self)
 	UNITFRAME:AddRaidDebuffs(self)
 	UNITFRAME:AddDebuffHighlight(self)
+	UNITFRAME:AddPartySpells(self)
 end
 
 function UNITFRAME:SpawnParty()
@@ -357,18 +349,15 @@ local function CreateRaidStyle(self)
 	UNITFRAME:AddPowerBar(self)
 	UNITFRAME:AddGroupNameText(self)
 	UNITFRAME:AddLeaderIndicator(self)
-	--UNITFRAME:AddBuffs(self)
-	--UNITFRAME:AddDebuffs(self)
-	UNITFRAME:AddRangeCheck(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
-
 	UNITFRAME:AddResurrectIndicator(self)
 	UNITFRAME:AddReadyCheckIndicator(self)
 	UNITFRAME:AddGroupRoleIndicator(self)
 	UNITFRAME:AddPhaseIndicator(self)
 	UNITFRAME:AddSummonIndicator(self)
 	UNITFRAME:AddSelectedBorder(self)
-	UNITFRAME:AddCornerBuff(self)
+	UNITFRAME:AddRangeCheck(self)
+	UNITFRAME:AddCornerBuffs(self)
 	UNITFRAME:AddRaidDebuffs(self)
 	UNITFRAME:AddDebuffHighlight(self)
 end

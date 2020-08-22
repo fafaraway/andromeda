@@ -3,6 +3,13 @@ local UNITFRAME = F:GetModule('Unitframe')
 local oUF = F.oUF
 
 
+local strmatch, format, wipe, tinsert = string.match, string.format, table.wipe, table.insert
+local pairs, ipairs, next, tonumber, unpack, gsub = pairs, ipairs, next, tonumber, unpack, gsub
+local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
+local InCombatLockdown = InCombatLockdown
+local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
+local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+
 -- Health
 local function PostUpdateHealth(health, unit, min, max)
 	local self = health:GetParent()
@@ -232,18 +239,6 @@ local function PostUpdateAltPower(element, _, cur, _, max)
 
 		element:SetStatusBarColor(r, g, b)
 		value:SetTextColor(r, g, b)
-
-		--[[ local perc = math.floor((cur/max)*100)
-		if perc < 35 then
-			element:SetStatusBarColor(0, 1, 0)
-			value:SetTextColor(0, 1, 0)
-		elseif perc < 70 then
-			element:SetStatusBarColor(1, 1, 0)
-			value:SetTextColor(1, 1, 0)
-		else
-			element:SetStatusBarColor(1, 0, 0)
-			value:SetTextColor(1, 0, 0)
-		end ]]
 	end
 end
 
@@ -498,174 +493,98 @@ function UNITFRAME:AddAuras(self)
 	self.Auras = auras
 end
 
-function UNITFRAME:AddBuffs(self)
-	local style = self.unitStyle
-	local buffs = CreateFrame('Frame', nil, self)
+-- Corner buffs
+local found = {}
+local auraFilter = {'HELPFUL', 'HARMFUL'}
 
-	buffs.initialAnchor = 'CENTER'
-	buffs['growth-x'] = 'RIGHT'
-	buffs.spacing = 3
-	buffs.num = 2
+function UNITFRAME:UpdateCornerBuffs(event, unit)
+	if event == 'UNIT_AURA' and self.unit ~= unit then return end
 
-	if style == 'party' then
-		buffs.size = 18
-		buffs.PostUpdate = function(icons)
-			if icons.visibleBuffs == 2 then
-				buffs:ClearAllPoints()
-				buffs:SetPoint('TOP', -((buffs.size + buffs.spacing)/2), -2)
-			else
-				buffs:ClearAllPoints()
-				buffs:SetPoint('TOP', 0, -2)
-			end
-		end
-	else
-		buffs.size = 12
-		buffs.PostUpdate = function(icons)
-			if icons.visibleBuffs == 2 then
-				buffs:ClearAllPoints()
-				buffs:SetPoint('TOP', -((buffs.size + buffs.spacing)/2), -2)
-			else
-				buffs:ClearAllPoints()
-				buffs:SetPoint('TOP', 0, -2)
-			end
-		end
-	end
+	local spellList = C.CornerBuffs[C.MyClass]
+	local buttons = self.BuffIndicator
+	unit = self.unit
 
-	buffs:SetSize((buffs.size * buffs.num) + (buffs.num - 1) * buffs.spacing, buffs.size)
+	wipe(found)
+	for _, filter in next, auraFilter do
+		for i = 1, 32 do
+			local name, texture, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
+			if not name then break end
+			local value = spellList[spellID]
+			if value and (value[3] or caster == 'player' or caster == 'pet') then
+				for _, bu in pairs(buttons) do
+					if bu.anchor == value[1] then
 
-	buffs.disableCooldown = true
-	buffs.disableMouse = true
-	buffs.PostCreateIcon = PostCreateIcon
-	buffs.PostUpdateIcon = PostUpdateIcon
-	buffs.CustomFilter = CustomFilter
+						if duration and duration > 0 then
+							bu.cd:SetCooldown(expiration - duration, duration)
+							bu.cd:Show()
+						else
+							bu.cd:Hide()
+						end
 
-	self.Buffs = buffs
-end
+						bu.icon:SetVertexColor(unpack(value[2]))
 
-function UNITFRAME:AddDebuffs(self)
-	local style = self.unitStyle
-	local debuffs = CreateFrame('Frame', nil, self)
+						bu:Show()
+						found[bu.anchor] = true
 
-	if style == 'party' and not FreeUIConfigs.unitframe.symmetry then
-		debuffs.initialAnchor = 'LEFT'
-		debuffs['growth-x'] = 'RIGHT'
-		debuffs:SetPoint('LEFT', self, 'RIGHT', 6, 0)
-		debuffs.size = 24
-		debuffs.num = 4
-		debuffs.disableCooldown = false
-		debuffs.disableMouse = false
-	else
-		debuffs.initialAnchor = 'CENTER'
-		debuffs['growth-x'] = 'RIGHT'
-		debuffs:SetPoint('BOTTOM', 0, FreeUIConfigs.unitframe.power_bar_height - 1)
-		debuffs.size = 16
-		debuffs.num = 2
-		debuffs.disableCooldown = true
-		debuffs.disableMouse = true
-
-		debuffs.PostUpdate = function(icons)
-			if icons.visibleDebuffs == 2 then
-				debuffs:ClearAllPoints()
-				debuffs:SetPoint('BOTTOM', -9, 0)
-			else
-				debuffs:ClearAllPoints()
-				debuffs:SetPoint('BOTTOM')
+						break
+					end
+				end
 			end
 		end
 	end
 
-	debuffs.spacing = 5
-	debuffs:SetSize((debuffs.size * debuffs.num) + (debuffs.num -1 ) * debuffs.spacing, debuffs.size)
-	debuffs.showDebuffType = true
-	debuffs.PostCreateIcon = PostCreateIcon
-	debuffs.PostUpdateIcon = PostUpdateIcon
-	debuffs.CustomFilter = CustomFilter
-
-	self.Debuffs = debuffs
-end
-
--- Aura watch
-local CornerBuffsAnchor = {
-	TOPLEFT = {6, 1},
-	TOPRIGHT = {-6, 1},
-	BOTTOMLEFT = {6, 1},
-	BOTTOMRIGHT = {-6, 1},
-	LEFT = {6, 1},
-	RIGHT = {-6, 1},
-	TOP = {0, 0},
-	BOTTOM = {0, 0},
-}
-
-function UNITFRAME:CreateCornerBuffIcon(icon)
-	F.CreateBDFrame(icon)
-	icon.icon:SetPoint('TOPLEFT', 1, -1)
-	icon.icon:SetPoint('BOTTOMRIGHT', -1, 1)
-	icon.icon:SetTexCoord(unpack(C.TexCoord))
-	icon.icon:SetDrawLayer('ARTWORK')
-
-	if (icon.cd) then
-		icon.cd:SetHideCountdownNumbers(true)
-		icon.cd:SetReverse(true)
+	for _, bu in pairs(buttons) do
+		if not found[bu.anchor] then
+			bu:Hide()
+		end
 	end
-
-	icon.overlay:SetTexture()
 end
 
-function UNITFRAME:AddCornerBuff(self)
+function UNITFRAME:RefreshCornerBuffs(bu)
+	bu:SetScript('OnUpdate', nil)
+	bu.icon:SetTexture(C.Assets.bd_tex)
+
+	bu.icon:Show()
+	bu.cd:Show()
+	bu.bg:Show()
+end
+
+function UNITFRAME:AddCornerBuffs(self)
 	if not FreeUIConfigs.unitframe.group_corner_buffs then return end
 
-	local Auras = CreateFrame('Frame', nil, self)
-	Auras:SetPoint('TOPLEFT', self.Health, 2, -2)
-	Auras:SetPoint('BOTTOMRIGHT', self.Health, -2, 2)
-	Auras:SetFrameLevel(self.Health:GetFrameLevel() + 5)
-	Auras.presentAlpha = 1
-	Auras.missingAlpha = 0
-	Auras.icons = {}
-	Auras.PostCreateIcon = UNITFRAME.CreateCornerBuffIcon
-	Auras.strictMatching = true
-	Auras.hideCooldown = true
+	local parent = CreateFrame('Frame', nil, self.Health)
+	parent:SetPoint('TOPLEFT', 4, -4)
+	parent:SetPoint('BOTTOMRIGHT', -4, 4)
 
-	local buffs = {}
+	local anchors = {'TOPLEFT', 'TOP', 'TOPRIGHT', 'LEFT', 'RIGHT', 'BOTTOMLEFT', 'BOTTOM', 'BOTTOMRIGHT'}
+	local buttons = {}
+	for _, anchor in pairs(anchors) do
+		local bu = CreateFrame('Frame', nil, parent)
+		bu:SetFrameLevel(self.Health:GetFrameLevel()+2)
+		bu:SetSize(5, 5)
+		bu:SetScale(1)
+		bu:SetPoint(anchor)
+		bu:Hide()
 
-	if (C.CornerBuffs['ALL']) then
-		for key, value in pairs(C.CornerBuffs['ALL']) do
-			tinsert(buffs, value)
-		end
+		bu.bg = F.CreateBDFrame(bu)
+		bu.icon = bu:CreateTexture(nil, 'BORDER')
+		bu.icon:SetInside(bu.bg)
+		bu.icon:SetTexCoord(unpack(C.TexCoord))
+
+		bu.cd = CreateFrame('Cooldown', nil, bu, 'CooldownFrameTemplate')
+		bu.cd:SetInside(bu.bg)
+		bu.cd:SetReverse(true)
+		bu.cd:SetHideCountdownNumbers(true)
+
+		bu.anchor = anchor
+		tinsert(buttons, bu)
+
+		UNITFRAME:RefreshCornerBuffs(bu)
 	end
 
-	if (C.CornerBuffs[C.MyClass]) then
-		for key, value in pairs(C.CornerBuffs[C.MyClass]) do
-			tinsert(buffs, value)
-		end
-	end
-
-	if buffs then
-		for key, spell in pairs(buffs) do
-			local Icon = CreateFrame('Frame', nil, Auras)
-			Icon.spellID = spell[1]
-			Icon.anyUnit = spell[4]
-			Icon:Size(6)
-			Icon:SetPoint(spell[2], 0, 0)
-
-			local Texture = Icon:CreateTexture(nil, 'OVERLAY')
-			Texture:SetAllPoints(Icon)
-			Texture:SetTexture(C.Assets.bd_tex)
-
-			if (spell[3]) then
-				Texture:SetVertexColor(unpack(spell[3]))
-			else
-				Texture:SetVertexColor(0.8, 0.8, 0.8)
-			end
-
-			local Count = F.CreateFS(Icon, C.Assets.Fonts.Number, 11, 'OUTLINE')
-			Count:SetPoint('CENTER', unpack(CornerBuffsAnchor[spell[2]]))
-			Icon.count = Count
-
-			Auras.icons[spell[1]] = Icon
-		end
-	end
-
-	self.AuraWatch = Auras
+	self.BuffIndicator = buttons
+	self:RegisterEvent('UNIT_AURA', UNITFRAME.UpdateCornerBuffs)
+	self:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateCornerBuffs, true)
 end
 
 -- Debuff highlight
@@ -682,7 +601,7 @@ function UNITFRAME:AddDebuffHighlight(self)
 	self.DebuffHighlightFilter = true
 end
 
--- Raid debuffs
+-- Group debuffs
 function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 	local instName = EJ_GetInstanceInfo(instID)
 	if not instName then print('Invalid instance ID: '..instID) return end
@@ -694,21 +613,13 @@ function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 	C.RaidDebuffs[instName][spellID] = level
 end
 
-local function buttonOnEnter(self)
-	if not self.index then return end
-	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
-	GameTooltip:ClearLines()
-	GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
-	GameTooltip:Show()
-end
-
 function UNITFRAME:AddRaidDebuffs(self)
-	if not FreeUIConfigs.unitframe.raid_debuffs then return end
+	if not FreeUIConfigs.unitframe.group_debuffs then return end
 
 	local bu = CreateFrame('Frame', nil, self)
-	bu:Size(self:GetHeight() * .6)
+	bu:Size(self:GetHeight() * .5)
 	bu:SetPoint('CENTER')
-	bu:SetFrameLevel(self.Health:GetFrameLevel() + 6)
+	bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
 	bu.bg = F.CreateBDFrame(bu)
 	bu.glow = F.CreateSD(bu.bg)
 	bu.glow:SetFrameLevel(bu:GetFrameLevel() - 1)
@@ -717,13 +628,9 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu.icon = bu:CreateTexture(nil, 'ARTWORK')
 	bu.icon:SetAllPoints()
 	bu.icon:SetTexCoord(unpack(C.TexCoord))
+
 	bu.count = F.CreateFS(bu, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, nil, 'TOPRIGHT', 2, 4)
 	bu.timer = F.CreateFS(bu, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, nil, 'BOTTOMLEFT', 2, -4)
-
-	if not FreeUIConfigs.unitframe.raid_debuffs_click_through then
-		bu:SetScript('OnEnter', buttonOnEnter)
-		bu:SetScript('OnLeave', F.HideTooltip)
-	end
 
 	bu.ShowDispellableDebuff = true
 	bu.ShowDebuffBorder = true
@@ -1092,6 +999,16 @@ local function UpdateClassPowerColor(element)
 	end
 end
 
+local function UpdatePosition(index, bar)
+	if(index == 1) then
+		if self.AlternativePower:IsShown() then
+			Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
+		else
+			Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
+		end
+	end
+end
+
 function UNITFRAME:AddClassPower(self)
 	if not FreeUIConfigs.unitframe.class_power_bar then return end
 
@@ -1153,6 +1070,7 @@ local function PostUpdateRune(element, runemap)
 end
 
 function UNITFRAME:AddRunes(self)
+	if C.MyClass ~= 'DEATHKNIGHT' then return end
 	if not FreeUIConfigs.unitframe.runes_bar then return end
 
 	local runes = {}
@@ -1193,6 +1111,7 @@ end
 
 -- Stagger
 function UNITFRAME:AddStagger(self)
+	if C.MyClass ~= 'MONK' then return end
 	if not FreeUIConfigs.unitframe.stagger_bar then return end
 
 	local stagger = CreateFrame('StatusBar', nil, self)
@@ -1229,6 +1148,7 @@ local TotemsColor = {
 }
 
 function UNITFRAME:AddTotems(self)
+	if C.MyClass ~= 'SHAMAN' then return end
 	if not FreeUIConfigs.unitframe.totems_bar then return end
 
 	local totems = {}
@@ -1419,6 +1339,7 @@ function UNITFRAME:AddSummonIndicator(self)
 	self.SummonIndicator = summonIndicator
 end
 
+-- Threat
 local function UpdateThreat(self, event, unit)
 	if not self.Glow or self.unit ~= unit then return end
 
@@ -1496,4 +1417,125 @@ function UNITFRAME:AddFCF(self)
 	fcf.showOverHealing = false
 	fcf.abbreviateNumbers = true
 	self.FloatingCombatFeedback = fcf
+end
+
+-- Party spells
+local watchingList = {}
+function UNITFRAME:PartyWatcherPostUpdate(button, unit, spellID)
+	local guid = UnitGUID(unit)
+	if not watchingList[guid] then watchingList[guid] = {} end
+	watchingList[guid][spellID] = button
+end
+
+function UNITFRAME:HandleCDMessage(...)
+	local prefix, msg = ...
+	if prefix ~= 'ZenTracker' then return end
+
+	local _, msgType, guid, spellID, duration, remaining = strsplit(':', msg)
+	if msgType == 'U' then
+		spellID = tonumber(spellID)
+		duration = tonumber(duration)
+		remaining = tonumber(remaining)
+		local button = watchingList[guid] and watchingList[guid][spellID]
+		if button then
+			local start = GetTime() + remaining - duration
+			if start > 0 and duration > 1.5 then
+				button.CD:SetCooldown(start, duration)
+			end
+		end
+	end
+end
+
+local lastUpdate = 0
+function UNITFRAME:SendCDMessage()
+	local thisTime = GetTime()
+	if thisTime - lastUpdate >= 5 then
+		local value = watchingList[UNITFRAME.myGUID]
+		if value then
+			for spellID in pairs(value) do
+				local start, duration, enabled = GetSpellCooldown(spellID)
+				if enabled ~= 0 and start ~= 0 then
+					local remaining = start + duration - thisTime
+					if remaining < 0 then remaining = 0 end
+					C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY') -- sync to others
+				end
+			end
+		end
+		lastUpdate = thisTime
+	end
+end
+
+local lastSyncTime = 0
+function UNITFRAME:UpdateSyncStatus()
+	if IsInGroup() and not IsInRaid() and FreeUIConfigs.unitframe.party_spell_sync then
+		local thisTime = GetTime()
+		if thisTime - lastSyncTime > 5 then
+			C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY') -- handshake to ZenTracker
+			lastSyncTime = thisTime
+		end
+		F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
+	else
+		F:UnregisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
+	end
+end
+
+function UNITFRAME:SyncWithZenTracker()
+	if not FreeUIConfigs.unitframe.party_spell_sync then return end
+
+	UNITFRAME.myGUID = UnitGUID('player')
+	C_ChatInfo.RegisterAddonMessagePrefix('ZenTracker')
+	F:RegisterEvent('CHAT_MSG_ADDON', UNITFRAME.HandleCDMessage)
+
+	UNITFRAME:UpdateSyncStatus()
+	F:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateSyncStatus)
+end
+
+function UNITFRAME:AddPartySpells(self)
+	if not FreeUIConfigs.unitframe.party_spell_watcher then return end
+
+	local horizon = true
+	local otherSide = false
+	local relF = horizon and 'BOTTOMLEFT' or 'TOPRIGHT'
+	local relT = 'TOPLEFT'
+	local xOffset = horizon and 0 or -5
+	local yOffset = horizon and 5 or 0
+	local margin = horizon and 2 or -2
+	if otherSide then
+		relF = 'TOPLEFT'
+		relT = horizon and 'BOTTOMLEFT' or 'TOPRIGHT'
+		xOffset = horizon and 0 or 5
+		yOffset = horizon and -(self.Power:GetHeight()+8) or 0
+		margin = 2
+	end
+	local rel1 = not horizon and not otherSide and 'RIGHT' or 'LEFT'
+	local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
+	local buttons = {}
+	local maxIcons = 6
+	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()+self.Power:GetHeight()+3)
+	if iconSize > 34 then iconSize = 34 end
+
+	for i = 1, maxIcons do
+		local bu = CreateFrame('Frame', nil, self)
+		bu:SetSize(iconSize, iconSize)
+		F.AuraIcon(bu)
+		bu.CD:SetReverse(false)
+		if i == 1 then
+			bu:SetPoint(relF, self, relT, xOffset, yOffset)
+		elseif i == 4 and horizon then
+			bu:SetPoint(relF, buttons[i-3], relT, 0, margin)
+		else
+			bu:SetPoint(rel1, buttons[i-1], rel2, margin, 0)
+		end
+		bu:Hide()
+
+		buttons[i] = bu
+	end
+
+	buttons.__max = maxIcons
+	buttons.PartySpells = C.PartySpells
+	buttons.TalentCDFix = C.TalentCDFix
+	self.PartyWatcher = buttons
+	if FreeUIConfigs.unitframe.party_spell_sync then
+		self.PartyWatcher.PostUpdate = UNITFRAME.PartyWatcherPostUpdate
+	end
 end
