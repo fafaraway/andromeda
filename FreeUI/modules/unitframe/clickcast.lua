@@ -304,7 +304,7 @@ local addSpell = function(self, button)
 			local originalbutton = button
 			local modifier = ''
 
-			--if IsShiftKeyDown() then modifier = 'Shift-'..modifier end
+			if IsShiftKeyDown() then modifier = 'Shift-'..modifier end
 			if IsControlKeyDown() then modifier = 'Ctrl-'..modifier end
 			if IsAltKeyDown() then modifier = 'Alt-'..modifier end
 
