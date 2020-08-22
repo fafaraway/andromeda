@@ -26,5 +26,5 @@ Minimalistic aesthetic and practical.
 *  [Simpy's icon pack](https://git.tukui.org/Simpy/interface/tree/master)
 
 ## Credits
-*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia), Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch
+*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia), Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE
 
