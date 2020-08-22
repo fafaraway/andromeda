@@ -1,15 +1,15 @@
 local F, C, L = unpack(select(2, ...))
-local THEME = F:GetModule("Theme")
+local THEME = F:GetModule('Theme')
 
 
 function THEME:DetectConfliction()
-	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") or IsAddOnLoaded("Skinner") then
-		StaticPopup_Show("THEME_CONFLICTION_WARNING")
+	if IsAddOnLoaded('AuroraClassic') or IsAddOnLoaded('Aurora') or IsAddOnLoaded('Skinner') then
+		StaticPopup_Show('THEME_CONFLICTION_WARNING')
 	end
 end
 
 function THEME:LoadDefaultSkins()
-	if IsAddOnLoaded("AuroraClassic") or IsAddOnLoaded("Aurora") or IsAddOnLoaded("Skinner") then return end
+	if IsAddOnLoaded('AuroraClassic') or IsAddOnLoaded('Aurora') or IsAddOnLoaded('Skinner') then return end
 
 	for _, func in pairs(C.BlizzThemes) do
 		func()
@@ -26,7 +26,7 @@ function THEME:LoadDefaultSkins()
 		end
 	end
 
-	F:RegisterEvent("ADDON_LOADED", function(_, addonName)
+	F:RegisterEvent('ADDON_LOADED', function(_, addonName)
 		local func = C.Themes[addonName]
 		if func then
 			func()
@@ -97,7 +97,7 @@ function THEME:OnLogin()
 	self:Vignetting()
 
 	self:ReskinDBMBar()
-	self:ReskinDBMGUI()
+	self:Test()
 	self:ReskinPGF()
 	self:ReskinSkada()
 
@@ -108,18 +108,18 @@ end
 function THEME:LoadWithAddOn(addonName, func)
 	local function loadFunc(event, addon)
 
-		if event == "PLAYER_ENTERING_WORLD" then
+		if event == 'PLAYER_ENTERING_WORLD' then
 			F:UnregisterEvent(event, loadFunc)
 			if IsAddOnLoaded(addonName) then
 				func()
-				F:UnregisterEvent("ADDON_LOADED", loadFunc)
+				F:UnregisterEvent('ADDON_LOADED', loadFunc)
 			end
-		elseif event == "ADDON_LOADED" and addon == addonName then
+		elseif event == 'ADDON_LOADED' and addon == addonName then
 			func()
 			F:UnregisterEvent(event, loadFunc)
 		end
 	end
 
-	F:RegisterEvent("PLAYER_ENTERING_WORLD", loadFunc)
-	F:RegisterEvent("ADDON_LOADED", loadFunc)
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', loadFunc)
+	F:RegisterEvent('ADDON_LOADED', loadFunc)
 end
