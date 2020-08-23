@@ -254,8 +254,8 @@ L['MISC_NUMBER_CAP_2'] = '亿'
 L['MISC_NUMBER_CAP_3'] = '兆'
 
 
-
-
+L['MISC_DECLINE_INVITE'] = '自动拒绝了 %s 的组队邀请'
+L['MISC_ACCEPT_INVITE'] = '自动接受了 %s 的组队邀请'
 
 
 
@@ -352,6 +352,7 @@ L['GUI_RELOAD_WARNING'] = '|cffff2020是否重载界面来完成设置？|r'
 L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r'
 L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
 
+
 L['GUI_AURA'] = '光环'
 L['GUI_AURA_DESC'] = '这些选项控制大部分和光环相关的设置'
 L['GUI_AURA_SUB_BASIC'] = '基础设定'
@@ -369,11 +370,12 @@ L['GUI_AURA_REVERSE_DEBUFFS'] = '反向排列减益光环'
 L['GUI_AURA_AURA_SOURCE'] = '光环来源'
 L['GUI_AURA_SUB_ADJUSTMENT'] = '调整'
 
+L['GUI_MISC_INVITE_KEYWORD'] = '密语邀请关键字'
+L['GUI_MISC_INVITE_KEYWORD_TIP'] = '输入1-5个字符然后按下回车'
 
 L['GUI_APPEARANCE'] = '外观'
 L['GUI_APPEARANCE_DESC'] = '这些选项控制大部分和外观相关的设置'
 L['GUI_APPEARANCE_SUB_BASIC'] = '基础设定'
-
 
 L['GUI_UNITFRAME_TEXTURE_STYLE'] = '材质风格'
 L['GUI_UNITFRAME_TEXTURE_NORM'] = '默认'
@@ -388,9 +390,12 @@ L['GUI_DATA_CHARACTER'] = '角色'
 L['GUI_DATA_EXCEPTION'] = '数据异常'
 L['GUI_DATA_IMPORT'] = '导入'
 L['GUI_DATA_EXPORT'] = '导出'
-L['GUI_DATA_IMPORT_HEADER'] = '设置导入'
-L['GUI_DATA_EXPORT_HEADER'] = '设置导出'
-
+L['GUI_DATA_IMPORT_HEADER'] = '导入字符串'
+L['GUI_DATA_EXPORT_HEADER'] = '导出字符串'
+L['GUI_DATA_RESET'] = '重置'
+L['GUI_DATA_RESET_TIP'] = '清除 |cffe9c55dFreeUI|r 已保存的数据，将所有选项重置为 |cffe9c55dFreeUI|r 默认值。'
+L['GUI_DATA_IMPORT_TIP'] = '导入 |cffe9c55dFreeUI|r 的配置字符串。'
+L['GUI_DATA_EXPORT_TIP'] = '将当前的 |cffe9c55dFreeUI|r 配置导出为字符串。'
 
 
 -- Version
