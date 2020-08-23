@@ -1,0 +1,7 @@
+<Bindings>
+
+	<Binding name='Toggle GUI' category='FREEUI'>
+		FreeUI_GUI:Show()
+	</Binding>
+
+</Bindings>
