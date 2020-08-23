@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('NOTIFICATION'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local alertBagsFull
@@ -39,7 +39,7 @@ end
 
 
 function NOTIFICATION:BagFull()
-	if not cfg.bag_full then return end
+	if not FreeUIConfigs.notification.bag_full then return end
 
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('BAG_UPDATE')

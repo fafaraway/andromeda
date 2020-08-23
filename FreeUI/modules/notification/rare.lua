@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('NOTIFICATION'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
@@ -51,7 +51,7 @@ function NOTIFICATION:RareAlert_CheckInstance()
 end
 
 function NOTIFICATION:RareAlert()
-	if cfg.rare_alert then
+	if FreeUIConfigs.notification.rare_found then
 		self:RareAlert_CheckInstance()
 		F:RegisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
 	else

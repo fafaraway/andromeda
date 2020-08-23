@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('NOTIFICATION'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local check = function(self, event, prefix, message, _, sender)
@@ -25,7 +25,7 @@ end
 
 
 function NOTIFICATION:VersionCheck()
-    if not cfg.version_check then return end
+    if not FreeUIConfigs.notification.version_check then return end
 
     local frame = CreateFrame('Frame')
     frame:RegisterEvent('PLAYER_ENTERING_WORLD')

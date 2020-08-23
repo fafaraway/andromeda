@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('NOTIFICATION'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local playSounds = true
@@ -173,8 +173,7 @@ end
 
 
 function NOTIFICATION:OnLogin()
-	F.CreateBDFrame(f)
-	F.CreateSD(f)
+	F.CreateBDFrame(f, nil, true)
 	F.CreateTex(f)
 	F.ReskinIcon(icon)
 
@@ -212,7 +211,7 @@ function NOTIFICATION:OnLogin()
 		end
 	end)
 
-	if not cfg.enable then return end
+	if not FreeUIConfigs.notification.enable_notification then return end
 	self:NewMail()
 	self:BagFull()
 	self:VersionCheck()
