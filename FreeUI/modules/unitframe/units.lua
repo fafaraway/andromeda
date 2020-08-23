@@ -189,7 +189,7 @@ function UNITFRAME:SpawnFocus()
 
 	local focus = oUF:Spawn('focus', 'oUF_Focus')
 
-	F.Mover(focus, L['MOVER_UNITFRAME_FOCUS'], 'FocusFrame', {'TOPRIGHT', 'oUF_Player', 'TOPLEFT', -120, 0}, focus:GetWidth(), focus:GetHeight())
+	F.Mover(focus, L['MOVER_UNITFRAME_FOCUS'], 'FocusFrame', {'TOPRIGHT', 'oUF_Player', 'TOPLEFT', -80, 0}, focus:GetWidth(), focus:GetHeight())
 end
 
 local function CreateFocusTargetStyle(self)
@@ -335,9 +335,9 @@ function UNITFRAME:SpawnParty()
 		'groupBy', FreeUIConfigs.unitframe.group_by_role and 'ASSIGNEDROLE',
 		'groupingOrder', FreeUIConfigs.unitframe.group_by_role and 'TANK,HEALER,DAMAGER,NONE')
 
-	mover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, FreeUIConfigs.unitframe.party_width, ((FreeUIConfigs.unitframe.party_height * 5) + (FreeUIConfigs.unitframe.party_gap * 4)))
+	mover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -80, 80}, FreeUIConfigs.unitframe.party_width, ((FreeUIConfigs.unitframe.party_height * 5) + (FreeUIConfigs.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
-	party:SetPoint('BOTTOM', mover)
+	party:SetPoint('BOTTOMRIGHT', mover)
 end
 
 local function CreateRaidStyle(self)
