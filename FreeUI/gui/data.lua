@@ -2,6 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
 
+local dataFrame
+
 function GUI:ExportData()
 	local text = 'FreeUISettings:'..C.Version..':'..C.MyName..':'..C.MyClass
 	for KEY, VALUE in pairs(FreeUIConfigs) do
@@ -12,7 +14,6 @@ function GUI:ExportData()
 						for k, v in pairs(value) do
 							text = text..';'..KEY..':'..key..':'..k..':'..v
 						end
-
 					elseif KEY == 'ui_anchor' or KEY == 'click_cast' then
 						text = text..';'..KEY..':'..key
 						for _, v in ipairs(value) do
@@ -58,7 +59,7 @@ function GUI:ImportData()
 	local profile = dataFrame.editBox:GetText()
 	if F:IsBase64(profile) then profile = F:Decode(profile) end
 	local options = {strsplit(';', profile)}
-	local title, _, _, class = strsplit(':', options[1])
+	local title, _, _, _ = strsplit(':', options[1])
 
 	if title ~= 'FreeUISettings' then
 		UIErrorsFrame:AddMessage(C.RedColor..L['GUI_IMPORT_DATA_ERROR'])
@@ -119,7 +120,7 @@ end
 function GUI:CreateDataFrame()
 	if dataFrame then dataFrame:Show() return end
 
-	dataFrame = CreateFrame('Frame', nil, UIParent)
+	dataFrame = CreateFrame('Frame', 'FreeUI_Data', UIParent)
 	dataFrame:SetPoint('CENTER')
 	dataFrame:SetSize(500, 500)
 	dataFrame:SetFrameStrata('DIALOG')
