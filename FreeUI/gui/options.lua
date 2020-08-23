@@ -230,6 +230,17 @@ end
 	itemLevel.children = {gemEnchant, azeriteTraits, merchantIlvl}
 end ]]
 
+local function MiscOptions()
+	local parent = FreeUI_GUI.MISC
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+
+	local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 30, 5})
+	keyword:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 20, -40)
+end
 
 local function AppearanceOptions()
 	local parent = FreeUI_GUI.APPEARANCE
@@ -1047,8 +1058,8 @@ local function DataOptions()
 
 	btnExport:SetScript('OnEnter', function()
 		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(btnExport, 'ANCHOR_BOTTOM')
-		GameTooltip:SetPoint('TOP', 0, -4)
+		GameTooltip:SetOwner(btnExport, 'ANCHOR_NONE')
+		GameTooltip:SetPoint('BOTTOM', btnExport, 'TOP', 0, 10)
 		GameTooltip:AddLine(L['GUI_TIPS'])
 		GameTooltip:AddLine(L['GUI_DATA_EXPORT_TIP'], .6, .8, 1, 1)
 		GameTooltip:Show()
@@ -1068,8 +1079,8 @@ local function DataOptions()
 
 	btnImport:SetScript('OnEnter', function()
 		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(btnImport, 'ANCHOR_BOTTOM')
-		GameTooltip:SetPoint('TOP', 0, -4)
+		GameTooltip:SetOwner(btnImport, 'ANCHOR_NONE')
+		GameTooltip:SetPoint('BOTTOM', btnImport, 'TOP', 0, 10)
 		GameTooltip:AddLine(L['GUI_TIPS'])
 		GameTooltip:AddLine(L['GUI_DATA_IMPORT_TIP'], .6, .8, 1, 1)
 		GameTooltip:Show()
@@ -1086,8 +1097,8 @@ local function DataOptions()
 
 	btnReset:SetScript('OnEnter', function()
 		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(btnReset, 'ANCHOR_BOTTOM')
-		GameTooltip:SetPoint('TOP', 0, -4)
+		GameTooltip:SetOwner(btnReset, 'ANCHOR_NONE')
+		GameTooltip:SetPoint('BOTTOM', btnReset, 'TOP', 0, 10)
 		GameTooltip:AddLine(L['GUI_TIPS'])
 		GameTooltip:AddLine(L['GUI_DATA_RESET_TIP'], .6, .8, 1, 1)
 		GameTooltip:Show()
@@ -1095,6 +1106,10 @@ local function DataOptions()
 	btnReset:SetScript('OnLeave', F.HideTooltip)
 
 
+	local buttons = {btnExport, btnImport, btnReset}
+	for _, button in pairs(buttons) do
+		F.Reskin(button)
+	end
 end
 
 local function NotificationOptions()
@@ -1531,5 +1546,6 @@ function GUI:AddOptions()
 	TooltipOptions()
 	UnitframeOptions()
 	DataOptions()
+	MiscOptions()
 end
 
