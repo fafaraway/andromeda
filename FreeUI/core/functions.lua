@@ -1165,7 +1165,7 @@ local function Tooltip_OnEnter(self)
 			r, g, b = C.r, C.g, C.b
 		elseif self.color == 'SYSTEM' then
 			r, g, b = 1, .8, 0
-		elseif self.color == 'INFO' then
+		elseif self.color == 'BLUE' then
 			r, g, b = .6, .8, 1
 		end
 		GameTooltip:AddLine(self.text, r, g, b, 1)
