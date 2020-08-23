@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local INSTALL = F:GetModule('INSTALL')
+local GUI = F:GetModule('GUI')
 
 
 StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
@@ -82,6 +83,8 @@ SlashCmdList.FREEUI = function(cmd)
 
 	elseif cmd == 'help' then
 		printCommandsList()
+	elseif cmd == 'ver' or cmd == 'version' then
+		F.Print(C.Version)
 	else
 		printCommandsList()
 	end
