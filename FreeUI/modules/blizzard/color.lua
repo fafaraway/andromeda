@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local BLIZZARD = F:GetModule('BLIZZARD')
 local oUF = F.oUF
 
 

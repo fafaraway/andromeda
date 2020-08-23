@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AUTOMATION, cfg = F:GetModule('Automation'), C.Automation
+local AUTOMATION, cfg = F:GetModule('AUTOMATION'), C.Automation
 
 
 --[[ local function screenshot()
@@ -304,7 +304,7 @@ end
 
 function AUTOMATION:OnLogin()
 	if not cfg.enable then return end
-	
+
 	for name, func in next, AUTOMATION_LIST do
 		if name and type(func) == 'function' then
 			func()

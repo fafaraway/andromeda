@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA = F:GetModule('Aura')
+local AURA = F:GetModule('AURA')
 
 
 local _G = getfenv(0)

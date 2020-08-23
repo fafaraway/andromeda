@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('Infobar')
+local INFOBAR = F:GetModule('INFOBAR')
 
 -- #TODO
 local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r"

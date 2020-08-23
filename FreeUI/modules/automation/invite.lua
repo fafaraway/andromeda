@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AUTOMATION, cfg = F:GetModule('Automation'), C.Automation
+local AUTOMATION, cfg = F:GetModule('AUTOMATION'), C.Automation
 
 
 -- Auto accept invites from guild members or friends

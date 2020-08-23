@@ -1,2 +1,2 @@
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F:GetModule('Blizzard')
+local BLIZZARD = F:GetModule('BLIZZARD')

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local COMBAT = F:GetModule('Combat')
+local COMBAT = F:GetModule('COMBAT')
 
 
 local timer = 0

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INVENTORY = F:GetModule('Inventory')
+local INVENTORY = F:GetModule('INVENTORY')
 local cargBags = F.cargBags
 
 
@@ -619,10 +619,10 @@ local function favouriteOnClick(self)
 
 	local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
-		if FreeUIConfigs['favourite_items'][itemID] then
-			FreeUIConfigs['favourite_items'][itemID] = nil
+		if FreeUIConfigs['inventory']['favourite_items'][itemID] then
+			FreeUIConfigs['inventory']['favourite_items'][itemID] = nil
 		else
-			FreeUIConfigs['favourite_items'][itemID] = true
+			FreeUIConfigs['inventory']['favourite_items'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -969,7 +969,7 @@ function INVENTORY:OnLogin()
 			self.IconOverlay:Hide()
 		end
 
-		if FreeUIConfigs['favourite_items'][item.id] then
+		if FreeUIConfigs['inventory']['favourite_items'][item.id] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()

@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local COOLDOWN, cfg = F:GetModule('Cooldown'), C.Actionbar
+local COOLDOWN, cfg = F:GetModule('COOLDOWN'), C.Actionbar
 
 
 local FONT_SIZE = 24

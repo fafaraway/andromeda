@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local LOGO = F:GetModule('Logo')
+local LOGO = F:GetModule('LOGO')
 
 
 local soundID = SOUNDKIT.UI_LEGENDARY_LOOT_TOAST

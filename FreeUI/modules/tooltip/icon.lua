@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('Tooltip')
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 local gsub, unpack = gsub, unpack

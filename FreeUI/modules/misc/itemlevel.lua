@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, TOOLTIP = F:GetModule('Misc'), F:GetModule('Tooltip')
+local MISC, TOOLTIP = F:GetModule('MISC'), F:GetModule('TOOLTIP')
 
 
 local pairs, select, next, type, unpack = pairs, select, next, type, unpack

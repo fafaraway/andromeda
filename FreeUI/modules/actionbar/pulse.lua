@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.Actionbar
+local MISC, cfg = F:GetModule('MISC'), C.Actionbar
 
 
 if not cfg.cd_pulse then return end

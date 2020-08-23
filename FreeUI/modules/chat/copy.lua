@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local CHAT, cfg = F:GetModule('Chat'), C.Chat
+local CHAT, cfg = F:GetModule('CHAT'), C.Chat
 
 
 local _G = getfenv(0)
@@ -77,7 +77,7 @@ function CHAT:ChatCopy_OnClick(btn)
 		end
 		if inchannel then
 			LeaveChannelByName('大脚世界频道')
-			F.Print(C.RedColor..'离开|r '..'世界频道')  
+			F.Print(C.RedColor..'离开|r '..'世界频道')
 		else
 			JoinPermanentChannel('大脚世界频道' ,nil ,1)
 			ChatFrame_AddChannel(ChatFrame1, '大脚世界频道')

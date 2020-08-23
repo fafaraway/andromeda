@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local CHAT, cfg = F:GetModule('Chat'), C.Chat
+local CHAT, cfg = F:GetModule('CHAT'), C.Chat
 
 
 local maxLines = 1024

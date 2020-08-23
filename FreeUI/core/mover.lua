@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MOVER = F:GetModule('Mover')
+local MOVER = F:GetModule('MOVER')
 
 
 -- Grids
@@ -104,7 +104,7 @@ function F:Mover(text, value, anchor, width, height)
 	mover.text = F.CreateFS(mover, C.Assets.Fonts.Normal, 12, 'OUTLINE', text)
 	mover.text:SetWordWrap(true)
 
-	if not FreeUIConfigs[key][value] then 
+	if not FreeUIConfigs[key][value] then
 		mover:SetPoint(unpack(anchor))
 	else
 		mover:SetPoint(unpack(FreeUIConfigs[key][value]))
@@ -433,7 +433,7 @@ function MOVER:OnLogin()
 	updater:SetScript('OnUpdate', function()
 		MOVER.UpdateTrimFrame(updater.__owner)
 	end)
-end 
+end
 
 
 

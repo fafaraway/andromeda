@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INSTALL = F:GetModule('Install')
+local INSTALL = F:GetModule('INSTALL')
 
 
 StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
@@ -36,12 +36,6 @@ StaticPopupDialogs['FREEUI_RESET'] = {
 		FreeUIConfigsGlobal = {}
 		FreeUIConfigs = {}
 
-		FreeUIOptionsGlobal[C.MyRealm][C.MyName] = false
-		FreeUIOptions = {}
-		FreeUIOptionsPerChar = {}
-
-		C.Options = FreeUIOptions
-
 		ReloadUI()
 	end,
 	timeout = 0,
@@ -49,25 +43,12 @@ StaticPopupDialogs['FREEUI_RESET'] = {
 	hideOnEscape = false,
 }
 
-StaticPopupDialogs['FREEUI_PROFILE'] = {
-	text = L['GUI_PROFILE_WARNING'],
-	button1 = ACCEPT,
-	button2 = CANCEL,
+StaticPopupDialogs['FREEUI_IMPORT_DATA'] = {
+	text = L['GUI_IMPORT_DATA_WARNING'],
+	button1 = YES,
+	button2 = NO,
 	OnAccept = function()
-		if FreeUIOptionsFrame.profile:GetChecked() then
-			FreeUIOptionsGlobal[C.MyRealm][C.MyName] = true
-		else
-			FreeUIOptionsGlobal[C.MyRealm][C.MyName] = false
-		end
-		changeProfile()
-		ReloadUI()
-	end,
-	OnCancel = function()
-		if FreeUIOptionsFrame.profile:GetChecked() then
-			FreeUIOptionsFrame.profile:SetChecked(false)
-		else
-			FreeUIOptionsFrame.profile:SetChecked(true)
-		end
+		GUI:ImportData()
 	end,
 	timeout = 0,
 	whileDead = 1,

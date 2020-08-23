@@ -254,11 +254,7 @@ function F:CreateGradient()
 	local tex = self:CreateTexture(nil, 'BORDER')
 	tex:SetInside()
 	tex:SetTexture(assets.bd_tex)
-	if FreeUIConfigs['theme'].flat_style then
-		tex:SetVertexColor(FreeUIConfigs['theme'].flat_color[1], FreeUIConfigs['theme'].flat_color[2], FreeUIConfigs['theme'].flat_color[3], FreeUIConfigs['theme'].flat_alpha)
-	else
-		tex:SetGradientAlpha('Vertical', FreeUIConfigs['theme'].gradient_color_primary[1], FreeUIConfigs['theme'].gradient_color_primary[2], FreeUIConfigs['theme'].gradient_color_primary[3], FreeUIConfigs['theme'].gradient_color_primary_alpha, FreeUIConfigs['theme'].gradient_color_secondary[1], FreeUIConfigs['theme'].gradient_color_secondary[2], FreeUIConfigs['theme'].gradient_color_secondary[3], FreeUIConfigs['theme'].gradient_color_secondary_alpha)
-	end
+	tex:SetGradientAlpha('Vertical', FreeUIConfigs['theme'].gradient_color_primary[1], FreeUIConfigs['theme'].gradient_color_primary[2], FreeUIConfigs['theme'].gradient_color_primary[3], FreeUIConfigs['theme'].gradient_color_primary_alpha, FreeUIConfigs['theme'].gradient_color_secondary[1], FreeUIConfigs['theme'].gradient_color_secondary[2], FreeUIConfigs['theme'].gradient_color_secondary[3], FreeUIConfigs['theme'].gradient_color_secondary_alpha)
 
 	return tex
 end
@@ -287,12 +283,6 @@ end
 local function Button_OnEnter(self)
 	if not self:IsEnabled() then return end
 
-	if FreeUIConfigs['theme'].flat_style then
-		self.bgTex:SetVertexColor(C.r / 6, C.g / 6, C.b / 6)
-	else
-		--self:SetBackdropColor(C.r, C.g, C.b, .25)
-	end
-
 	self:SetBackdropBorderColor(C.r, C.g, C.b, 1)
 	self.glow:SetAlpha(1)
 
@@ -300,12 +290,6 @@ local function Button_OnEnter(self)
 end
 
 local function Button_OnLeave(self)
-	if FreeUIConfigs['theme'].flat_style then
-		self.bgTex:SetVertexColor(FreeUIConfigs['theme'].flat_color[1], FreeUIConfigs['theme'].flat_color[2], FreeUIConfigs['theme'].flat_color[3], FreeUIConfigs['theme'].flat_alpha)
-	else
-		--self:SetBackdropColor(0, 0, 0, 0)
-	end
-
 	self:SetBackdropBorderColor(0, 0, 0, 1)
 	self.glow:SetScript('OnUpdate', nil)
 	self.glow:SetAlpha(0)
@@ -418,7 +402,7 @@ function F:Texture_OnLeave()
 	if self.bg then
 		self.bg:SetBackdropColor(0, 0, 0, .25)
 	else
-		self.bgTex:SetVertexColor(.6, .6, .6)
+		self.bgTex:SetVertexColor(1, 1, 1)
 	end
 end
 
@@ -504,7 +488,7 @@ function F:ReskinClose(a1, p, a2, x, y)
 
 	local tex = self:CreateTexture()
 	tex:SetTexture(assets.close_tex)
-	tex:SetVertexColor(.6, .6, .6)
+	tex:SetVertexColor(1, 1, 1)
 	tex:SetAllPoints()
 	self.bgTex = tex
 
@@ -554,7 +538,7 @@ function F:ReskinArrow(direction)
 	dis:SetAllPoints()
 
 	local tex = self:CreateTexture(nil, 'ARTWORK')
-	tex:SetVertexColor(.6, .6, .6)
+	tex:SetVertexColor(1, 1, 1)
 	tex:SetAllPoints()
 	F.SetupArrow(tex, direction)
 	self.bgTex = tex
@@ -600,12 +584,12 @@ end
 function F:ReskinCheck(forceSaturation)
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
-	self:SetHighlightTexture(assets.grad_tex)
+	self:SetHighlightTexture(assets.flat_tex)
 	-- self:SetCheckedTexture(assets.tick_tex)
 	-- self:SetDisabledCheckedTexture(assets.tick_tex)
 
-	self:SetCheckedTexture(assets.grad_tex)
-	self:SetDisabledCheckedTexture(assets.grad_tex)
+	self:SetCheckedTexture(assets.flat_tex)
+	self:SetDisabledCheckedTexture(assets.flat_tex)
 
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)

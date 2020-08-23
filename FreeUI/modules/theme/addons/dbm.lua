@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('Theme')
-local TOOLTIP = F:GetModule('Tooltip')
+local THEME = F:GetModule('THEME')
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 function THEME:ReskinDBMBar()

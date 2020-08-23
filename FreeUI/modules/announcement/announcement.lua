@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ANNOUNCEMENT, cfg = F:GetModule('Announcement'), C.Announcement
+local ANNOUNCEMENT, cfg = F:GetModule('ANNOUNCEMENT'), C.Announcement
 
 
 local combatRez = {
@@ -113,7 +113,7 @@ function ANNOUNCEMENT:UpdateEvents(...)
 		if not (cfg.my_interrupt and isMine) then return end
 
 		F.Print(format(L['ANNOUNCEMENT_INTERRUPT'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)))
-	
+
 		SendChatMessage(format(L['ANNOUNCEMENT_INTERRUPT'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
 	end
 
@@ -179,7 +179,7 @@ function ANNOUNCEMENT:UpdateEvents(...)
 		end
 	end
 
-	if event == 'SPELL_AURA_APPLIED' or event == 'SPELL_AURA_REFRESH' then 
+	if event == 'SPELL_AURA_APPLIED' or event == 'SPELL_AURA_REFRESH' then
 		if not (cfg.get_sapped and destName == C.MyName and sourceSpellId == 6770) then return end
 
 		SendChatMessage(L['COMBAT_ANNOUCE_SAPPED'], 'SAY')

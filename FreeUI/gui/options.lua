@@ -5,11 +5,11 @@ local GUI = F:GetModule('GUI')
 --[[ callback ]]
 
 local function UpdateBagStatus()
-	F:GetModule('Inventory'):UpdateAllBags()
+	F:GetModule('INVENTORY'):UpdateAllBags()
 end
 
 local function UpdateMinimapScale()
-	F:GetModule('Map'):UpdateMinimapScale()
+	F:GetModule('MAP'):UpdateMinimapScale()
 end
 
 
@@ -269,6 +269,16 @@ local function AppearanceOptions()
 	local PGF = GUI:CreateCheckBox(parent, 'theme', 'reskin_pgf')
 	PGF:SetPoint('LEFT', Skada, 'RIGHT', 160, 0)
 
+	local other = GUI:AddSubCategory(parent)
+	other:SetPoint('TOPLEFT', Skada, 'BOTTOMLEFT', 0, -16)
+
+
+	local uiScale = GUI:CreateSlider(parent, 'ACCOUNT', 'ui_scale', nil, {.4, 2, .01})
+	uiScale:SetPoint('TOPLEFT', other, 'BOTTOMLEFT', 0, -24)
+
+	local texture = GUI:CreateDropDown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']})
+	texture:SetPoint('LEFT', uiScale, 'RIGHT', 80, 0)
+
 
 	local vignettingAlphaSide = GUI:CreateSidePanel(parent, 'vignettingAlphaSide')
 
@@ -323,9 +333,6 @@ local function AuraOptions()
 
 	local offset = GUI:CreateSlider(auraSizeSide, 'aura', 'offset', nil, {6, 16, 1})
 	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -50)
-
-
-	enable.children = {reverseBuffs, reverseDebuffs, auraSource, reminder, buffSize, buffsPerRow, debuffSize, debuffsPerRow, margin, offset}
 
 
 	local function toggleAuraOptions()
@@ -412,9 +419,6 @@ local function CombatOptions()
 
 	local healthThreshold = GUI:CreateSlider(healthThresholdSide, 'combat', 'health_alert_threshold', nil, {0.1, 0.8, 0.1})
 	healthThreshold:SetPoint('TOP', healthThresholdSide.child, 'TOP', 0, -24)
-
-
-	health.children = {healthThreshold}
 
 
 	local function toggleCombatOptions()
@@ -556,8 +560,7 @@ local function UnitframeOptions()
 	local transparency = GUI:CreateCheckBox(parent, 'unitframe', 'transparency')
 	transparency:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local texture = GUI:CreateDropDown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']})
-	texture:SetPoint('LEFT', transparency, 'RIGHT', 160, 0)
+
 
 	local portrait = GUI:CreateCheckBox(parent, 'unitframe', 'portrait')
 	portrait:SetPoint('TOPLEFT', transparency, 'BOTTOMLEFT', 0, -8)
@@ -724,10 +727,10 @@ local function UnitframeOptions()
 	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {6, 30, 1})
 	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -50)
 
-	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {2, 8, 1})
+	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {1, 8, 1})
 	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -50)
 
-	local altPowerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'alternative_power_height', nil, {2, 8, 1})
+	local altPowerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'alternative_power_height', nil, {1, 8, 1})
 	altPowerHeight:SetPoint('TOP', powerHeight, 'BOTTOM', 0, -50)
 
 
@@ -855,8 +858,6 @@ local function TooltipOptions()
 
 	local normalFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'normal_font_size', nil, {8, 20, 1})
 	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -50)
-
-	enable.children = {headerFontSize, normalFontSize}
 
 
 	local function toggleTooltipOptions()

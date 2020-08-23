@@ -1,5 +1,5 @@
 ﻿local F, C = unpack(select(2, ...))
-local INVENTORY = F:GetModule('Inventory')
+local INVENTORY = F:GetModule('INVENTORY')
 
 
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_COMMON, LE_ITEM_QUALITY_LEGENDARY
@@ -92,7 +92,7 @@ end
 local function isItemFavourite(item)
 	if not FreeUIConfigs['inventory']['item_filter'] then return end
 	if not FreeUIConfigs['inventory']['item_filter_favourite'] then return end
-	return item.id and FreeUIConfigs['favourite_items'][item.id]
+	return item.id and FreeUIConfigs['inventory']['favourite_items'][item.id]
 end
 
 local function isEmptySlot(item)

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UNITFRAME')
 local oUF = F.oUF
 
 
@@ -16,11 +16,15 @@ local function PostUpdateHealth(health, unit, min, max)
 	local r, g, b
 	local reaction = oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
 	local offline = not UnitIsConnected(unit)
+	local dead = UnitIsDead(unit)
+	local ghost = UnitIsGhost(unit)
 	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 	local style = health.__owner.unitStyle
 
-	if tapped or offline then
-		r, g, b = .6, .6, .6
+	if offline then
+		r, g, b = unpack(oUF.colors.disconnected)
+	elseif tapped then
+		r, g, b = unpack(oUF.colors.tapped)
 	elseif UnitIsPlayer(unit) or style == 'pet' then
 		local _, class = UnitClass(unit)
 		if class then r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b else r, g, b = 1, 1, 1 end
@@ -33,7 +37,7 @@ local function PostUpdateHealth(health, unit, min, max)
 		self.Deficit:SetMinMaxValues(0, max)
 		self.Deficit:SetValue(max-min)
 
-		if offline or UnitIsDead(unit) or UnitIsGhost(unit) then
+		if offline or dead or ghost then
 			--self.Deficit:Hide()
 			self.Deficit:SetValue(0)
 		else
@@ -47,12 +51,14 @@ local function PostUpdateHealth(health, unit, min, max)
 		end
 	end
 
-	if tapped or offline then
+	if offline then
 		self.Bg:SetBackdropColor(.4, .4, .4, .6)
-	elseif UnitIsDead(unit) or UnitIsGhost(unit) then
+	elseif tapped then
+		self.Bg:SetBackdropColor(.4, .4, .4, .6)
+	elseif dead or ghost then
 		self.Bg:SetBackdropColor(0, 0, 0, .8)
 	else
-		self.Bg:SetBackdropColor(.02, .02, .02, .6)
+		self.Bg:SetBackdropColor(.02, .02, .02, .5)
 	end
 end
 

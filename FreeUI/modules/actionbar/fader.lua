@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('Actionbar'), C.Actionbar
+local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
 
 
 ACTIONBAR.fader = {

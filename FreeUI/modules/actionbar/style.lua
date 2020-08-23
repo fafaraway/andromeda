@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('Actionbar')
+local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 local _G = getfenv(0)
 local pairs, gsub = pairs, string.gsub

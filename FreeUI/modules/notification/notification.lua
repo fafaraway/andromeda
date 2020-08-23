@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('Notification'), C.Notification
+local NOTIFICATION, cfg = F:GetModule('NOTIFICATION'), C.Notification
 
 
 local playSounds = true
@@ -184,20 +184,20 @@ function NOTIFICATION:OnLogin()
 		self:SetAlpha(1)
 		self:SetScript('OnUpdate', expand)
 	end)
-	
+
 	f:SetScript('OnLeave', fadeTimer)
-	
+
 	f:SetScript('OnMouseUp', function(self, button)
 		self:SetScript('OnUpdate', nil)
 		self:Hide()
 		self:SetScale(0.1)
 		self:SetAlpha(0.1)
 		bannerShown = false
-	
+
 		if button ~= 'RightButton' and f.clickFunc then
 			f.clickFunc()
 		end
-	
+
 		if IsShiftKeyDown() then
 			handler:SetScript('OnUpdate', nil)
 			incoming = {}

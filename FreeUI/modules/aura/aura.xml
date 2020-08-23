@@ -6,7 +6,7 @@
 		</Attributes>
 		<Scripts>
 			<OnLoad>
-				FreeUI[1]:GetModule('Aura'):CreateAuraIcon(self)
+				FreeUI[1]:GetModule('AURA'):CreateAuraIcon(self)
 				self:RegisterForClicks('RightButtonUp')
 			</OnLoad>
 			<OnEnter>

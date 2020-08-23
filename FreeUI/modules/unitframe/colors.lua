@@ -1,11 +1,11 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UNITFRAME')
 local colors = F.oUF.colors
 
 
-colors.disconnected = {
-	0.5, 0.5, 0.5
-}
+colors.health = {.02, .02, .02}
+colors.disconnected = {.4, .4, .4}
+colors.tapped = {.4, .4, .4}
 
 colors.reaction = {
 	[1] = {1.00, 0.32, 0.29}, 	-- Hated

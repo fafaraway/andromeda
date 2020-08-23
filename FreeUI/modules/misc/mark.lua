@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F:GetModule('Misc')
+local MISC = F:GetModule('MISC')
 
 
 local menuFrame = CreateFrame('Frame', 'FreeUI_MarkingFrame', UIParent, 'UIDropDownMenuTemplate')

@@ -54,11 +54,7 @@ local function ToggleChildren(self, checked)
 		end
 	end
 
-	for _, frame in next, sidePanels do
-		if not checked then
-			frame:Hide()
-		end
-	end
+
 end
 
 local function UpdateSettings()
@@ -76,13 +72,19 @@ local function OnToggle(self)
 		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
 	end
 
-	UpdateSettings()
+	--UpdateSettings()
 
 	if self.children then
 		ToggleChildren(self, checked)
 	end
 
-	UpdateSettings()
+	for _, frame in next, sidePanels do
+		if not checked then
+			frame:Hide()
+		end
+	end
+
+	--UpdateSettings()
 end
 
 local function CreateGUI()
@@ -133,6 +135,26 @@ local function CreateGUI()
 		f:Hide()
 	end)
 	F.Reskin(f.okay)
+
+	local import = F.CreateButton(f, 59, 20, L["GUI_DATA_IMPORT"])
+	import:SetPoint("RIGHT", f.okay, "LEFT", -4, 0)
+	import:SetScript("OnClick", function()
+		f:Hide()
+		GUI:CreateDataFrame()
+		dataFrame.Header:SetText(L["GUI_DATA_IMPORT_HEADER"])
+		dataFrame.text:SetText(L["GUI_DATA_IMPORT"])
+		dataFrame.editBox:SetText("")
+	end)
+
+	local export = F.CreateButton(f, 59, 20, L["GUI_DATA_EXPORT"])
+	export:SetPoint("RIGHT", import, "LEFT", -4, 0)
+	export:SetScript("OnClick", function()
+		f:Hide()
+		GUI:CreateDataFrame()
+		dataFrame.Header:SetText(L["GUI_DATA_EXPORT_HEADER"])
+		dataFrame.text:SetText(OKAY)
+		GUI:ExportData()
+	end)
 
 	local function CombatLockdown(event)
 		if event == 'PLAYER_REGEN_DISABLED' then

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('Actionbar'), C.Actionbar
+local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
 
 
 local next, pairs, unpack = next, pairs, unpack

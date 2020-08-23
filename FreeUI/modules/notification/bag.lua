@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('Notification'), C.Notification
+local NOTIFICATION, cfg = F:GetModule('NOTIFICATION'), C.Notification
 
 
 local alertBagsFull

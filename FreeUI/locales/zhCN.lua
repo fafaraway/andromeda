@@ -173,9 +173,9 @@ L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
 L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 L['INVENTORY_MARK_JUNK'] = '垃圾分类'
 L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
-L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
-L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
-L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。"
+L['INVENTORY_QUICK_SPLIT'] = '快速拆分'
+L['INVENTORY_SPLIT_COUNT'] = '拆分个数'
+L['INVENTORY_SPLIT_MODE_ENABLED'] = '|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。'
 
 
 -- Map
@@ -355,17 +355,17 @@ L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/�
 L['GUI_AURA'] = '光环'
 L['GUI_AURA_DESC'] = '这些选项控制大部分和光环相关的设置'
 L['GUI_AURA_SUB_BASIC'] = '基础设定'
-L['GUI_AURA_ENABLE_AURA'] = "启用"
-L['GUI_AURA_MARGIN'] = "图标间隔"
-L['GUI_AURA_OFFSET'] = "增益/减益栏间隔"
-L['GUI_AURA_BUFF_REMINDER'] = "缺失增益提醒"
-L['GUI_AURA_BUFF_REMINDER_TIP'] = "\n提醒你缺失的自身增益光环\n比如法师智力牧师耐力潜行者毒药战士攻强之类"
-L['GUI_AURA_BUFF_SIZE'] = "增益图标大小"
-L['GUI_AURA_BUFFS_PER_ROW'] = "增益图标每行数量"
-L['GUI_AURA_REVERSE_BUFFS'] = "反向排列增益光环"
-L['GUI_AURA_DEBUFF_SIZE'] = "减益图标大小"
-L['GUI_AURA_DEBUFFS_PER_ROW'] = "减益图标每行数量"
-L['GUI_AURA_REVERSE_DEBUFFS'] = "反向排列减益光环"
+L['GUI_AURA_ENABLE_AURA'] = '启用'
+L['GUI_AURA_MARGIN'] = '图标间隔'
+L['GUI_AURA_OFFSET'] = '增益/减益栏间隔'
+L['GUI_AURA_BUFF_REMINDER'] = '缺失增益提醒'
+L['GUI_AURA_BUFF_REMINDER_TIP'] = '\n提醒你缺失的自身增益光环\n比如法师智力牧师耐力潜行者毒药战士攻强之类'
+L['GUI_AURA_BUFF_SIZE'] = '增益图标大小'
+L['GUI_AURA_BUFFS_PER_ROW'] = '增益图标每行数量'
+L['GUI_AURA_REVERSE_BUFFS'] = '反向排列增益光环'
+L['GUI_AURA_DEBUFF_SIZE'] = '减益图标大小'
+L['GUI_AURA_DEBUFFS_PER_ROW'] = '减益图标每行数量'
+L['GUI_AURA_REVERSE_DEBUFFS'] = '反向排列减益光环'
 L['GUI_AURA_AURA_SOURCE'] = '光环来源'
 L['GUI_AURA_SUB_ADJUSTMENT'] = '调整'
 
@@ -380,7 +380,16 @@ L['GUI_UNITFRAME_TEXTURE_NORM'] = '默认'
 L['GUI_UNITFRAME_TEXTURE_GRAD'] = '渐变'
 L['GUI_UNITFRAME_TEXTURE_FLAT'] = '扁平'
 
-
+L['GUI_IMPORT_DATA_ERROR'] = '数据异常，导入失败！'
+L['GUI_IMPORT_DATA_WARNING'] = '|cffff2020是否导入数据？|r'
+L['GUI_DATA_INFO'] = '数据信息'
+L['GUI_DATA_VERSION'] = '版本'
+L['GUI_DATA_CHARACTER'] = '角色'
+L['GUI_DATA_EXCEPTION'] = '数据异常'
+L['GUI_DATA_IMPORT'] = '导入'
+L['GUI_DATA_EXPORT'] = '导出'
+L['GUI_DATA_IMPORT_HEADER'] = '设置导入'
+L['GUI_DATA_EXPORT_HEADER'] = '设置导出'
 
 
 

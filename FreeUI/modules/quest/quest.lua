@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F:GetModule('Quest')
+local QUEST = F:GetModule('QUEST')
 
 
 local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2

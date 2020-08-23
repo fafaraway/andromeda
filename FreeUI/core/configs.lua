@@ -780,10 +780,10 @@ C.CharacterSettings = {
 	['installation_complete'] = false,
 	['ui_anchor'] = {},
 	['ui_anchor_temp'] = {},
-	['map_reveal'] = false,
+
 
 	['bind_type'] = 1,
-	['favourite_items'] = {},
+
 	['click_cast'] = {},
 
 
@@ -843,10 +843,6 @@ C.CharacterSettings = {
 		['adjust_font'] = true,
 		['backdrop_color'] = {.03, .03, .03},
 		['backdrop_alpha'] = .7,
-
-		['flat_style'] = false,
-			['flat_color'] = {.06, .06, .06},
-			['flat_alpha'] = .65,
 		['gradient_color_primary'] = {.02, .02, .02},
 		['gradient_color_primary_alpha'] = .5,
 		['gradient_color_secondary'] = {.08, .08, .08},
@@ -898,6 +894,7 @@ C.CharacterSettings = {
 			['combine_free_slots'] = true,
 			['split_count'] = 1,
 			['special_color'] = true,
+			['favourite_items'] = {},
 			['item_filter'] = true,
 				['item_filter_gear_set'] = false,
 				['item_filter_trade'] = true,
@@ -931,8 +928,8 @@ C.CharacterSettings = {
 			['target_icon_indicator'] = true,
 			['quest_indicator'] = true,
 
-			['power_bar_height'] = 2,
-			['alternative_power_height'] = 2,
+			['power_bar_height'] = 1,
+			['alternative_power_height'] = 1,
 
 			['class_power_bar'] = true,
 				['class_power_bar_height'] = 2,
@@ -956,7 +953,7 @@ C.CharacterSettings = {
 
 			['enable_player'] = true,
 				['player_width'] = 140,
-				['player_height'] = 14,
+				['player_height'] = 8,
 				['player_auras'] = false,
 				['player_auras_number'] = 18,
 				['player_auras_number_per_row'] = 6,
@@ -967,31 +964,31 @@ C.CharacterSettings = {
 
 			['enable_pet'] = true,
 				['pet_width'] = 50,
-				['pet_height'] = 14,
+				['pet_height'] = 8,
 				['pet_auras'] = true,
 				['pet_auras_number_per_row'] = 3,
 				['pet_auras_number'] = 12,
 
 			['enable_target'] = true,
 				['target_width'] = 240,
-				['target_height'] = 14,
+				['target_height'] = 8,
 				['target_auras'] = true,
 				['target_auras_number_per_row'] = 7,
 				['target_auras_number'] = 35,
 				['target_debuffs_by_player'] = true,
 
 				['target_target_width'] = 80,
-				['target_target_height'] = 12,
+				['target_target_height'] = 8,
 
 			['enable_focus'] = true,
-				['focus_width'] = 97,
-				['focus_height'] = 14,
+				['focus_width'] = 80,
+				['focus_height'] = 8,
 				['focus_auras'] = false,
 				['focus_auras_number_per_row'] = 4,
 				['focus_auras_number'] = 16,
 
-				['focus_target_width'] = 97,
-				['focus_target_height'] = 12,
+				['focus_target_width'] = 80,
+				['focus_target_height'] = 8,
 
 			['enable_group'] = true,
 				['group_names'] = false,
@@ -1017,8 +1014,8 @@ C.CharacterSettings = {
 				['group_ready_check_indicator'] = true,
 				['group_resurrect_indicator'] = true,
 
-				['party_width'] = 90,
-				['party_height'] = 38,
+				['party_width'] = 60,
+				['party_height'] = 34,
 				['party_gap'] = 6,
 
 				['raid_width'] = 44,

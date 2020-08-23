@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local MISC = F:GetModule('Misc')
+local MISC = F:GetModule('MISC')
 
 -- #TODO
 local select, mod = select, mod
