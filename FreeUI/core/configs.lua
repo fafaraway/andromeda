@@ -67,13 +67,13 @@ local F, C = unpack(select(2, ...))
 	['reskin_skada'] = true,
 } ]]
 
-C['Notification'] = {
+--[[ C['Notification'] = {
 	['enable'] = true,
 		['bag_full'] = true,
 		['new_mail'] = true,
 		['version_check'] = true,
 		['rare_alert'] = true,
-}
+} ]]
 
 C['Automation'] = {
 	['enable'] = true,
@@ -718,7 +718,7 @@ C['RaidDebuffs'] = {}
 
 
 
-C.PartySpells = {
+C['PartySpells'] = {
 	[57994]  = 12,	-- 风剪
 	[1766]   = 15,	-- 脚踢
 	[6552]   = 15,	-- 拳击
@@ -754,7 +754,7 @@ C.PartySpells = {
 	[186265] = 180,	-- 灵龟守护
 }
 
-C.TalentCDFix = {
+C['TalentCDFix'] = {
 	[740]	 = 120,	-- 宁静
 	[2094]   = 90,	-- 致盲
 	[15286]  = 75,	-- 吸血鬼的拥抱
@@ -786,14 +786,10 @@ C.CharacterSettings = {
 
 	['click_cast'] = {},
 
-
-
 	['item_level'] = true,
 		['merchant_ilvl'] = true,
 		['gem_enchant'] = true,
 		['azerite_traits'] = true,
-
-
 
 	['blow_my_whistle'] = true,
 
@@ -808,6 +804,9 @@ C.CharacterSettings = {
 
 	['easy_focus'] = true,
 		['easy_focus_on_unitframes'] = false,
+
+
+
 
 
 	['blizzard'] = {
@@ -981,13 +980,13 @@ C.CharacterSettings = {
 				['target_target_height'] = 8,
 
 			['enable_focus'] = true,
-				['focus_width'] = 80,
+				['focus_width'] = 60,
 				['focus_height'] = 8,
 				['focus_auras'] = false,
 				['focus_auras_number_per_row'] = 4,
 				['focus_auras_number'] = 16,
 
-				['focus_target_width'] = 80,
+				['focus_target_width'] = 60,
 				['focus_target_height'] = 8,
 
 			['enable_group'] = true,
@@ -1045,6 +1044,8 @@ C.CharacterSettings = {
 
 	['tooltip'] = {
 		['enable_tooltip'] = true,
+			['header_font_size'] = 16,
+			['normal_font_size'] = 14,
 			['follow_cursor'] = false,
 			['hide_title'] = true,
 			['hide_realm'] = true,
@@ -1056,16 +1057,12 @@ C.CharacterSettings = {
 			['link_hover'] = true,
 			['tip_icon'] = true,
 			['target_by'] = true,
-			['pvp_rating'] = true,
-
-			['header_font_size'] = 16,
-			['normal_font_size'] = 14,
-
-			['various_id'] = true,
+			['pvp_rating'] = false,
+			['various_ids'] = true,
 			['item_count'] = true,
 			['item_price'] = true,
 			['aura_source'] = true,
-			['mount_source'] = true,
+			['mount_source'] = false,
 	},
 
 	['map'] = {
@@ -1094,7 +1091,23 @@ C.CharacterSettings = {
 			['guild'] = true,
 			['friends'] = true,
 			['report'] = true,
-	}
+	},
+
+	['notification'] = {
+		['enable_notification'] = true,
+			['bag_full'] = true,
+			['new_mail'] = true,
+			['version_check'] = true,
+			['rare_found'] = true,
+	},
+
+	['misc'] = {
+		['accept_acquaintance_invite'] = false,
+		['block_stranger_invite'] = false,
+		['invite_keyword'] = 'inv',
+		['invite_whisper'] = true,
+		['invite_only_guild'] = true,
+	},
 }
 
 C.AccountSettings = {

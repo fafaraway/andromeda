@@ -87,6 +87,18 @@ local function OnToggle(self)
 	--UpdateSettings()
 end
 
+local function CombatLockdown(event)
+	if event == 'PLAYER_REGEN_DISABLED' then
+		if FreeUI_GUI:IsShown() then
+			FreeUI_GUI:Hide()
+			F:RegisterEvent('PLAYER_REGEN_ENABLED', CombatLockdown)
+		end
+	else
+		FreeUI_GUI:Show()
+		F:UnregisterEvent(event, CombatLockdown)
+	end
+end
+
 local function CreateGUI()
 	local f = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
 	f:SetSize(600, 640)
@@ -138,29 +150,29 @@ local function CreateGUI()
 	F.Reskin(btnApply)
 	f.Apply = btnApply
 
-	local btnImport = F.CreateButton(f, 59, 20, L["GUI_DATA_IMPORT"])
-	btnImport:SetPoint("RIGHT", btnApply, "LEFT", -4, 0)
-	btnImport:SetScript("OnClick", function()
+	local btnImport = F.CreateButton(f, 59, 20, L['GUI_DATA_IMPORT'])
+	btnImport:SetPoint('RIGHT', btnApply, 'LEFT', -4, 0)
+	btnImport:SetScript('OnClick', function()
 		f:Hide()
 		GUI:CreateDataFrame()
-		FreeUI_Data.Header:SetText(L["GUI_DATA_IMPORT_HEADER"])
-		FreeUI_Data.text:SetText(L["GUI_DATA_IMPORT"])
-		FreeUI_Data.editBox:SetText("")
+		FreeUI_Data.Header:SetText(L['GUI_DATA_IMPORT_HEADER'])
+		FreeUI_Data.text:SetText(L['GUI_DATA_IMPORT'])
+		FreeUI_Data.editBox:SetText('')
 	end)
 	f.Import = btnImport
 
-	local btnExport = F.CreateButton(f, 59, 20, L["GUI_DATA_EXPORT"])
-	btnExport:SetPoint("RIGHT", btnImport, "LEFT", -4, 0)
-	btnExport:SetScript("OnClick", function()
+	local btnExport = F.CreateButton(f, 59, 20, L['GUI_DATA_EXPORT'])
+	btnExport:SetPoint('RIGHT', btnImport, 'LEFT', -4, 0)
+	btnExport:SetScript('OnClick', function()
 		f:Hide()
 		GUI:CreateDataFrame()
-		FreeUI_Data.Header:SetText(L["GUI_DATA_EXPORT_HEADER"])
+		FreeUI_Data.Header:SetText(L['GUI_DATA_EXPORT_HEADER'])
 		FreeUI_Data.text:SetText(OKAY)
 		GUI:ExportData()
 	end)
 	f.Export = btnExport
 
-	local function CombatLockdown(event)
+	--[[ local function CombatLockdown(event)
 		if event == 'PLAYER_REGEN_DISABLED' then
 			if f:IsShown() then
 				f:Hide()
@@ -171,7 +183,7 @@ local function CreateGUI()
 			F:UnregisterEvent(event, CombatLockdown)
 		end
 	end
-	F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)
+	F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown) ]]
 end
 
 local function CreateGameMenuButton()
@@ -329,7 +341,7 @@ end
 -- Checkboxes
 function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 	local checkbox = F.CreateCheckBox(parent.child)
-	checkbox:SetSize(18, 18)
+	checkbox:SetSize(20, 20)
 	checkbox:SetHitRectInsets(-5, -5, -5, -5)
 
 	checkbox.Text = F.CreateFS(checkbox, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 20, 0)
@@ -440,7 +452,6 @@ end
 -- Colorswatch
 function GUI:CreateColorSwatch(parent, key, value)
 	local f = F.CreateColorSwatch(parent.child, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, SaveValue(key, value))
-	local width = 30
 
 	return f
 end
@@ -466,12 +477,14 @@ function GUI:OnLogin()
 	AddCategory('TOOLTIP')
 	AddCategory('UNITFRAME')
 	AddCategory('MISC')
-	AddCategory('CREDITS')
+	AddCategory('DATA')
 
 	SetActiveTab(FreeUI_GUI.APPEARANCE.tab)
 
 	self.AddOptions()
 
 	UpdateSettings()
+
+	F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)
 end
 

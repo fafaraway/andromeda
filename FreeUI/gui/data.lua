@@ -126,7 +126,7 @@ function GUI:CreateDataFrame()
 	dataFrame:SetFrameStrata('DIALOG')
 	F.CreateMF(dataFrame)
 	F.SetBD(dataFrame)
-	dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Normal, 14, nil, L['GUI_DATA_EXPORT_HEADER'], nil, true, 'TOP', 0, -5)
+	dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Normal, 14, nil, L['GUI_DATA_EXPORT_HEADER'], 'YELLOW', true, 'TOP', 0, -5)
 
 	local scrollArea = CreateFrame('ScrollFrame', nil, dataFrame, 'UIPanelScrollFrameTemplate')
 	scrollArea:SetPoint('TOPLEFT', 10, -30)

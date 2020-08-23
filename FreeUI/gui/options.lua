@@ -320,19 +320,19 @@ local function AuraOptions()
 	buffSize:SetPoint('TOP', auraSizeSide.child, 'TOP', 0, -24)
 
 	local buffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'buffs_per_row', nil, {6, 16, 1})
-	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -50)
+	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -48)
 
 	local debuffSize = GUI:CreateSlider(auraSizeSide, 'aura', 'debuff_size', nil, {20, 50, 1})
-	debuffSize:SetPoint('TOP', buffsPerRow, 'BOTTOM', 0, -50)
+	debuffSize:SetPoint('TOP', buffsPerRow, 'BOTTOM', 0, -48)
 
 	local debuffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'debuffs_per_row', nil, {6, 16, 1})
-	debuffsPerRow:SetPoint('TOP', debuffSize, 'BOTTOM', 0, -50)
+	debuffsPerRow:SetPoint('TOP', debuffSize, 'BOTTOM', 0, -48)
 
 	local margin = GUI:CreateSlider(auraSizeSide, 'aura', 'margin', nil, {3, 10, 1})
-	margin:SetPoint('TOP', debuffsPerRow, 'BOTTOM', 0, -50)
+	margin:SetPoint('TOP', debuffsPerRow, 'BOTTOM', 0, -48)
 
 	local offset = GUI:CreateSlider(auraSizeSide, 'aura', 'offset', nil, {6, 16, 1})
-	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -50)
+	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -48)
 
 
 	local function toggleAuraOptions()
@@ -503,13 +503,13 @@ local function InventoryOptions()
 	slotSize:SetPoint('TOP', bagSizeSide.child, 'TOP', 0, -24)
 
 	local spacing = GUI:CreateSlider(bagSizeSide, 'inventory', 'spacing', nil, {3, 6, 1})
-	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -50)
+	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -48)
 
 	local bagColumns = GUI:CreateSlider(bagSizeSide, 'inventory', 'bag_columns', nil, {8, 16, 1})
-	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -50)
+	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -48)
 
 	local bankColumns = GUI:CreateSlider(bagSizeSide, 'inventory', 'bank_columns', nil, {8, 16, 1})
-	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -50)
+	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -48)
 
 
 	-- item level to show side panel
@@ -709,29 +709,45 @@ local function UnitframeOptions()
 	-- unitframes size side panel
 	local unitSizeSide = GUI:CreateSidePanel(parent, 'unitSizeSide')
 
-	local playerWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_width', nil, {80, 200, 1})
+	local playerWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_width', nil, {50, 200, 1})
 	playerWidth:SetPoint('TOP', unitSizeSide.child, 'TOP', 0, -24)
 
 	local playerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_height', nil, {6, 30, 1})
-	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -50)
+	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -48)
 
-	local targetWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_width', nil, {80, 200, 1})
-	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -50)
+	local targetWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_width', nil, {50, 200, 1})
+	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -48)
 
 	local targetHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_height', nil, {6, 30, 1})
-	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -50)
+	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -48)
 
-	local totWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_width', nil, {80, 200, 1})
-	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -50)
+	local totWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_width', nil, {50, 200, 1})
+	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -48)
 
 	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {6, 30, 1})
-	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -50)
+	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -48)
 
-	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {1, 8, 1})
-	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -50)
+	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {1, 10, 1})
+	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -48)
 
-	local altPowerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'alternative_power_height', nil, {1, 8, 1})
-	altPowerHeight:SetPoint('TOP', powerHeight, 'BOTTOM', 0, -50)
+	local altPowerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'alternative_power_height', nil, {1, 10, 1})
+	altPowerHeight:SetPoint('TOP', powerHeight, 'BOTTOM', 0, -48)
+
+
+	-- focus size side panel
+	local focusSizeSide = GUI:CreateSidePanel(parent, 'focusSizeSide')
+
+	local focusWidth = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_width', nil, {50, 300, 1})
+	focusWidth:SetPoint('TOP', focusSizeSide.child, 'TOP', 0, -24)
+
+	local focusHeight = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_height', nil, {6, 30, 1})
+	focusHeight:SetPoint('TOP', focusWidth, 'BOTTOM', 0, -48)
+
+	local focusTargetWidth = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_target_width', nil, {50, 300, 1})
+	focusTargetWidth:SetPoint('TOP', focusHeight, 'BOTTOM', 0, -48)
+
+	local focusTargetHeight = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_target_height', nil, {6, 30, 1})
+	focusTargetHeight:SetPoint('TOP', focusTargetWidth, 'BOTTOM', 0, -48)
 
 
 	-- group size side panel
@@ -741,19 +757,19 @@ local function UnitframeOptions()
 	partyWidth:SetPoint('TOP', groupSizeSide.child, 'TOP', 0, -24)
 
 	local partyHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_height', nil, {20, 100, 1})
-	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -50)
+	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -48)
 
 	local partyGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_gap', nil, {5, 20, 1})
-	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -50)
+	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -48)
 
 	local raidWidth = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_width', nil, {20, 100, 1})
-	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -50)
+	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -48)
 
 	local raidHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_height', nil, {20, 100, 1})
-	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -50)
+	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -48)
 
 	local raidGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_gap', nil, {5, 20, 1})
-	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -50)
+	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -48)
 
 	-- castbar color side panel
 	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
@@ -777,7 +793,7 @@ local function UnitframeOptions()
 	castbarFocusWidth:SetPoint('TOP', castbarSizeSide.child, 'TOP', 0, -24)
 
 	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
-	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -50)
+	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -48)
 
 	-- range check alpha side panel
 	local rangeCheckAlphaSide = GUI:CreateSidePanel(parent, 'rangeCheckAlphaSide')
@@ -840,7 +856,7 @@ local function TooltipOptions()
 	local itemPrice = GUI:CreateCheckBox(parent, 'tooltip', 'item_price')
 	itemPrice:SetPoint('LEFT', itemCount, 'RIGHT', 160, 0)
 
-	local variousID = GUI:CreateCheckBox(parent, 'tooltip', 'various_id')
+	local variousID = GUI:CreateCheckBox(parent, 'tooltip', 'various_ids')
 	variousID:SetPoint('TOPLEFT', itemCount, 'BOTTOMLEFT', 0, -8)
 
 	local auraSource = GUI:CreateCheckBox(parent, 'tooltip', 'aura_source')
@@ -857,7 +873,7 @@ local function TooltipOptions()
 	headerFontSize:SetPoint('TOP', tipFontSizeSide.child, 'TOP', 0, -24)
 
 	local normalFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'normal_font_size', nil, {8, 20, 1})
-	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -50)
+	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -48)
 
 
 	local function toggleTooltipOptions()
@@ -931,7 +947,7 @@ local function MapOptions()
 	mapScale:SetPoint('TOP', mapScaleSide.child, 'TOP', 0, -24)
 
 	local minimapScale = GUI:CreateSlider(mapScaleSide, 'map', 'minimap_scale', UpdateMinimapScale, {0.5, 1, 0.1})
-	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -50)
+	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -48)
 
 
 	local function toggleMapOptions()
@@ -954,7 +970,7 @@ end
 
 local function InfobarOptions()
 	local parent = FreeUI_GUI.INFOBAR
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Priest_Ascension')
+	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Horn_04')
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
@@ -1009,6 +1025,111 @@ local function InfobarOptions()
 
 	enable:HookScript('OnClick', toggleInfobarOptions)
 	parent:HookScript('OnShow', toggleInfobarOptions)
+end
+
+local function DataOptions()
+	local parent = FreeUI_GUI.DATA
+	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Blingtron')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+	local btnExport = F.CreateButton(parent.child, 80, 26, L['GUI_DATA_EXPORT'])
+	btnExport:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 10, -20)
+	btnExport:SetScript('OnClick', function()
+		if FreeUI_GUI then FreeUI_GUI:Hide() end
+
+		GUI:CreateDataFrame()
+		FreeUI_Data.Header:SetText(L['GUI_DATA_EXPORT_HEADER'])
+		FreeUI_Data.text:SetText(OKAY)
+		GUI:ExportData()
+	end)
+
+	btnExport:SetScript('OnEnter', function()
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(btnExport, 'ANCHOR_BOTTOM')
+		GameTooltip:SetPoint('TOP', 0, -4)
+		GameTooltip:AddLine(L['GUI_TIPS'])
+		GameTooltip:AddLine(L['GUI_DATA_EXPORT_TIP'], .6, .8, 1, 1)
+		GameTooltip:Show()
+	end)
+	btnExport:SetScript('OnLeave', F.HideTooltip)
+
+	local btnImport = F.CreateButton(parent.child, 80, 26, L['GUI_DATA_IMPORT'])
+	btnImport:SetPoint('LEFT', btnExport, 'RIGHT', 10, 0)
+	btnImport:SetScript('OnClick', function()
+		if FreeUI_GUI then FreeUI_GUI:Hide() end
+
+		GUI:CreateDataFrame()
+		FreeUI_Data.Header:SetText(L['GUI_DATA_IMPORT_HEADER'])
+		FreeUI_Data.text:SetText(L['GUI_DATA_IMPORT'])
+		FreeUI_Data.editBox:SetText('')
+	end)
+
+	btnImport:SetScript('OnEnter', function()
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(btnImport, 'ANCHOR_BOTTOM')
+		GameTooltip:SetPoint('TOP', 0, -4)
+		GameTooltip:AddLine(L['GUI_TIPS'])
+		GameTooltip:AddLine(L['GUI_DATA_IMPORT_TIP'], .6, .8, 1, 1)
+		GameTooltip:Show()
+	end)
+	btnImport:SetScript('OnLeave', F.HideTooltip)
+
+	local btnReset = F.CreateButton(parent.child, 80, 26, L['GUI_DATA_RESET'])
+	btnReset:SetPoint('LEFT', btnImport, 'RIGHT', 10, 0)
+	btnReset:SetScript('OnClick', function()
+		if FreeUI_GUI then FreeUI_GUI:Hide() end
+
+		StaticPopup_Show('FREEUI_RESET')
+	end)
+
+	btnReset:SetScript('OnEnter', function()
+		GameTooltip:ClearLines()
+		GameTooltip:SetOwner(btnReset, 'ANCHOR_BOTTOM')
+		GameTooltip:SetPoint('TOP', 0, -4)
+		GameTooltip:AddLine(L['GUI_TIPS'])
+		GameTooltip:AddLine(L['GUI_DATA_RESET_TIP'], .6, .8, 1, 1)
+		GameTooltip:Show()
+	end)
+	btnReset:SetScript('OnLeave', F.HideTooltip)
+
+
+end
+
+local function NotificationOptions()
+	local parent = FreeUI_GUI.NOTIFICATION
+	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'notification', 'enable_notification')
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+	local bagFull = GUI:CreateCheckBox(parent, 'notification', 'bag_full')
+	bagFull:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+
+	local newMail = GUI:CreateCheckBox(parent, 'notification', 'new_mail')
+	newMail:SetPoint('LEFT', bagFull, 'RIGHT', 160, 0)
+
+	local rareAlert = GUI:CreateCheckBox(parent, 'notification', 'rare_found')
+	rareAlert:SetPoint('TOPLEFT', bagFull, 'BOTTOMLEFT', 0, -8)
+
+	local versionCheck = GUI:CreateCheckBox(parent, 'notification', 'version_check')
+	versionCheck:SetPoint('LEFT', rareAlert, 'RIGHT', 160, 0)
+
+
+	local function toggleNotificationOptions()
+		local shown = enable:GetChecked()
+		bagFull:SetShown(shown)
+		newMail:SetShown(shown)
+		rareAlert:SetShown(shown)
+		versionCheck:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleNotificationOptions)
+	parent:HookScript('OnShow', toggleNotificationOptions)
 end
 
 --[[
@@ -1347,40 +1468,7 @@ local function addChatSection()
 end
 
 
-local function addNotificationSection()
-	local parent = FreeUIOptionsFrame.Notification
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
 
-	local basic = GUI:AddSubCategory(parent, 'GUI.localization.notification.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(parent, 'enable')
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local bagFull = GUI:CreateCheckBox(parent, 'bag_full')
-	bagFull:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local newMail = GUI:CreateCheckBox(parent, 'new_mail')
-	newMail:SetPoint('LEFT', bagFull, 'RIGHT', 160, 0)
-
-	local rareAlert = GUI:CreateCheckBox(parent, 'rare_alert')
-	rareAlert:SetPoint('TOPLEFT', bagFull, 'BOTTOMLEFT', 0, -8)
-
-	local versionCheck = GUI:CreateCheckBox(parent, 'version_check')
-	versionCheck:SetPoint('LEFT', rareAlert, 'RIGHT', 160, 0)
-
-
-	local function toggleNotificationOptions()
-		local shown = enable:GetChecked()
-		bagFull:SetShown(shown)
-		newMail:SetShown(shown)
-		rareAlert:SetShown(shown)
-		versionCheck:SetShown(shown)
-	end
-
-	enable:HookScript('OnClick', toggleNotificationOptions)
-	parent:HookScript('OnShow', toggleNotificationOptions)
-end
 
 
 local function addAutomationSection()
@@ -1429,7 +1517,7 @@ end
 function GUI:AddOptions()
 	--addGeneralOptions()
 	AppearanceOptions()
-	-- addNotificationOptions()
+	NotificationOptions()
 	-- addAnnouncementOptions()
 	-- addAutomationOptions()
 	InfobarOptions()
@@ -1442,5 +1530,6 @@ function GUI:AddOptions()
 	QuestOptions()
 	TooltipOptions()
 	UnitframeOptions()
+	DataOptions()
 end
 
