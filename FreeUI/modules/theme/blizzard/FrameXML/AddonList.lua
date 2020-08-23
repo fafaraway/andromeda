@@ -17,7 +17,7 @@ tinsert(C.BlizzThemes, function()
 
 	for i = 1, MAX_ADDONS_DISPLAYED do
 		local checkbox = _G["AddonListEntry"..i.."Enabled"]
-		F.ReskinCheck(checkbox, true)
+		F.ReskinCheck(checkbox, false, true)
 		F.Reskin(_G["AddonListEntry"..i.."Load"])
 	end
 

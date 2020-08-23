@@ -581,15 +581,18 @@ function F:ReskinNavBar()
 	self.navBarStyled = true
 end
 
-function F:ReskinCheck(forceSaturation)
+function F:ReskinCheck(flat, forceSaturation)
 	self:SetNormalTexture('')
 	self:SetPushedTexture('')
 	self:SetHighlightTexture(assets.flat_tex)
-	-- self:SetCheckedTexture(assets.tick_tex)
-	-- self:SetDisabledCheckedTexture(assets.tick_tex)
 
-	self:SetCheckedTexture(assets.flat_tex)
-	self:SetDisabledCheckedTexture(assets.flat_tex)
+	if flat then
+		self:SetCheckedTexture(assets.flat_tex)
+		self:SetDisabledCheckedTexture(assets.flat_tex)
+	else
+		self:SetCheckedTexture(assets.tick_tex)
+		self:SetDisabledCheckedTexture(assets.tick_tex)
+	end
 
 	local hl = self:GetHighlightTexture()
 	hl:SetPoint('TOPLEFT', 5, -5)
@@ -601,21 +604,23 @@ function F:ReskinCheck(forceSaturation)
 	bd:SetPoint('BOTTOMRIGHT', -4, 4)
 	F.CreateGradient(bd)
 
-	-- local ch = self:GetCheckedTexture()
-	-- ch:SetTexture(assets.tick_tex)
-	-- ch:SetDesaturated(true)
-	-- ch:SetVertexColor(C.r, C.g, C.b)
+	if flat then
+		local ch = self:GetCheckedTexture()
+		ch:SetPoint('TOPLEFT', 5, -5)
+		ch:SetPoint('BOTTOMRIGHT', -5, 5)
+		ch:SetDesaturated(true)
+		ch:SetVertexColor(C.r, C.g, C.b)
 
-	local ch = self:GetCheckedTexture()
-	ch:SetPoint('TOPLEFT', 5, -5)
-	ch:SetPoint('BOTTOMRIGHT', -5, 5)
-	ch:SetDesaturated(true)
-	ch:SetVertexColor(C.r, C.g, C.b)
-
-	local dis = self:GetDisabledCheckedTexture()
-	dis:SetPoint('TOPLEFT', 5, -5)
-	dis:SetPoint('BOTTOMRIGHT', -5, 5)
-	dis:SetVertexColor(.3, .3, .3)
+		local dis = self:GetDisabledCheckedTexture()
+		dis:SetPoint('TOPLEFT', 5, -5)
+		dis:SetPoint('BOTTOMRIGHT', -5, 5)
+		dis:SetVertexColor(.3, .3, .3)
+	else
+		local ch = self:GetCheckedTexture()
+		ch:SetTexture(assets.tick_tex)
+		ch:SetDesaturated(true)
+		ch:SetVertexColor(C.r, C.g, C.b)
+	end
 
 	self.forceSaturation = forceSaturation
 end
@@ -1637,7 +1642,7 @@ do
 
 	function F:CreateCheckBox()
 		local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
-		F.ReskinCheck(cb)
+		F.ReskinCheck(cb, true)
 
 		cb.Type = 'CheckBox'
 		return cb
