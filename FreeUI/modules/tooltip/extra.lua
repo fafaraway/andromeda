@@ -180,7 +180,7 @@ end
 
 
 function TOOLTIP:ExtraInfo()
-	if FreeUIConfigs.tooltip.various_id then
+	if FreeUIConfigs.tooltip.various_ids then
 		-- Update all
 		hooksecurefunc(GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
 		hooksecurefunc(ItemRefTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
