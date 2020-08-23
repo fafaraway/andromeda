@@ -298,7 +298,7 @@ local function CreateOption(i)
 
 			if tooltip then
 				cb.title = 'Tips'
-				F.AddTooltip(cb, 'ANCHOR_RIGHT', tooltip, 'INFO')
+				F.AddTooltip(cb, 'ANCHOR_RIGHT', tooltip, 'BLUE')
 			end
 
 		elseif optType == 3 then
@@ -322,7 +322,7 @@ local function CreateOption(i)
 			s.value:SetText(F:Round(SaveValue(key, value), 2))
 			if tooltip then
 				s.title = 'Tips'
-				F.AddTooltip(s, 'ANCHOR_RIGHT', tooltip, 'INFO')
+				F.AddTooltip(s, 'ANCHOR_RIGHT', tooltip, 'BLUE')
 			end
 
 		else
