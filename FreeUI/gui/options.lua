@@ -610,9 +610,18 @@ local function UnitframeOptions()
 	local runesBar = GUI:CreateCheckBox(parent, 'unitframe', 'runes_bar')
 	runesBar:SetPoint('TOPLEFT', staggerBar, 'BOTTOMLEFT', 0, -8)
 
+	local altPower = GUI:CreateCheckBox(parent, 'unitframe', 'alt_power')
+	altPower:SetPoint('LEFT', runesBar, 'RIGHT', 160, 0)
+
+	local fct = GUI:CreateCheckBox(parent, 'unitframe', 'floating_combat_feedback')
+	fct:SetPoint('TOPLEFT', runesBar, 'BOTTOMLEFT', 0, -8)
+
+	local hideTags = GUI:CreateCheckBox(parent, 'unitframe', 'player_hide_tags')
+	hideTags:SetPoint('LEFT', fct, 'RIGHT', 160, 0)
+
 
 	local castbar = GUI:AddSubCategory(parent)
-	castbar:SetPoint('TOPLEFT', runesBar, 'BOTTOMLEFT', 0, -16)
+	castbar:SetPoint('TOPLEFT', fct, 'BOTTOMLEFT', 0, -16)
 
 	local enableCastbar = GUI:CreateCheckBox(parent, 'unitframe', 'enable_castbar', nil, SetupCastbarColor)
 	enableCastbar:SetPoint('TOPLEFT', castbar, 'BOTTOMLEFT', 0, -8)

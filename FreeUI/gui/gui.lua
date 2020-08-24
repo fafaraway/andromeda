@@ -3,7 +3,7 @@ local GUI = F:GetModule('GUI')
 
 
 local checkboxes, sidePanels = {}, {}
-local guiTab, guiPage, f = {}, {}
+local guiTab, guiPage = {}, {}
 
 local tabsList = {
 	'APPEARANCE',
@@ -257,26 +257,21 @@ local function CreateGUI()
 	F.Reskin(btnApply)
 
 
-
-
-
-
 	for i, name in pairs(tabsList) do
 		guiTab[i] = CreateTab(f, i, name)
-
-
 
 		guiPage[i] = CreateFrame('ScrollFrame', 'FreeUI_GUI_'..name, f, 'UIPanelScrollFrameTemplate')
 		guiPage[i]:SetPoint('TOPLEFT', 190, -50)
 		guiPage[i]:SetSize(380, 540)
 		F.CreateBDFrame(guiPage[i], .3)
 		guiPage[i]:Hide()
+
 		guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])
 		guiPage[i].child:SetSize(380, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
 		F.ReskinScroll(guiPage[i].ScrollBar)
 
-		local header = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Normal, 14, nil, name or nil, 'CLASS', 'THICK', 'TOPLEFT', 14, -16)
+		local header = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Header, 14, nil, name or nil, 'CLASS', 'THICK', 'TOPLEFT', 14, -16)
 		guiPage[i].header = header
 
 		local desc = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Normal, 12, nil, name, {.8, .8, .8}, 'THICK')
@@ -290,8 +285,6 @@ local function CreateGUI()
 		FreeUI_GUI[name].header = header
 		FreeUI_GUI[name].desc = desc
 	end
-
-	GUI:AddOptions()
 
 	SelectTab(1)
 end
@@ -315,6 +308,7 @@ local function CreateGameMenuButton()
 	end)
 end
 
+-- Subcategory
 function GUI:AddSubCategory(category, name)
 	local header = F.CreateFS(category, C.Assets.Fonts.Normal, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
 
@@ -328,15 +322,14 @@ function GUI:AddSubCategory(category, name)
 	return header, line
 end
 
-
 -- Side panel
-function GUI:CreateSidePanel(parent, name, title)
+function GUI:CreateSidePanel(parent, name, header)
 	local f = CreateFrame('Frame', name, (parent:GetParent()):GetParent())
 	f:SetSize(200, 640)
 	f:SetPoint('TOPLEFT', (parent:GetParent()):GetParent(), 'TOPRIGHT', 3, 0)
 	f:Hide()
 
-	f.header = F.CreateFS(f, C.Assets.Fonts.Normal, 12, nil, title, 'YELLOW', 'THICK', 'TOPLEFT', 20, -25)
+	f.header = F.CreateFS(f, C.Assets.Fonts.Normal, 12, nil, header, 'YELLOW', 'THICK', 'TOPLEFT', 20, -25)
 
 	f.child = CreateFrame('Frame', nil, f)
 	f.child:SetSize(180, 540)
@@ -490,6 +483,8 @@ end
 function GUI:OnLogin()
 	CreateGUI()
 	CreateGameMenuButton()
+
+	GUI:AddOptions()
 
 	UpdateSettings()
 
