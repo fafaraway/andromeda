@@ -953,7 +953,7 @@ C.CharacterSettings = {
 				['player_combat_indicator'] = true,
 				['player_resting_indicator'] = true,
 
-				['player_hide_tags'] = false,
+				['player_hide_tags'] = true,
 
 			['enable_pet'] = true,
 				['pet_width'] = 50,
