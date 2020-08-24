@@ -178,7 +178,7 @@ local function SetupChatFrame()
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
-	C.Chat.lock_position = true
+	FreeDB.chat.lock_position = true
 end
 
 local function SetupSkada()
