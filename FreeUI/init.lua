@@ -5,6 +5,7 @@ engine[2] = {} -- C, Constants/Config
 engine[3] = {} -- L, Localisation
 
 _G[addonName] = engine
+_G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
 
 FreeUIConfigsGlobal, FreeUIConfigs = {}, {}
 
