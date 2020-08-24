@@ -57,7 +57,6 @@ local questMatches = {
 
 function QUEST:FindQuestProgress(_, msg)
 	if not FreeDB.quest.quest_progress then return end
-	if FreeDB.quest.only_complete_ring then return end
 
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
