@@ -1,6 +1,6 @@
 <Bindings>
 
-	<Binding name='Toggle GUI' category='FREEUI'>
+	<Binding name='Toggle GUI' category='BINDING_HEADER_FREEUI'>
 		FreeUI_GUI:Show()
 	</Binding>
 

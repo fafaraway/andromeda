@@ -2,6 +2,8 @@ local _, engine = ...
 local F = unpack(engine)
 
 
+_G.BINDING_HEADER_FREEUI = C.Title
+
 F.oUF = engine.oUF
 F.cargBags = engine.cargBags
 
