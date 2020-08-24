@@ -371,7 +371,7 @@ L['GUI_AURA_AURA_SOURCE'] = '光环来源'
 L['GUI_AURA_SUB_ADJUSTMENT'] = '调整'
 
 L['GUI_MISC_INVITE_KEYWORD'] = '密语邀请关键字'
-L['GUI_MISC_INVITE_KEYWORD_TIP'] = '输入1-5个字符然后按下回车'
+L['GUI_MISC_INVITE_KEYWORD_TIP'] = '输入完成后按下回车'
 
 L['GUI_APPEARANCE'] = '外观'
 L['GUI_APPEARANCE_DESC'] = '这些选项控制大部分和外观相关的设置'

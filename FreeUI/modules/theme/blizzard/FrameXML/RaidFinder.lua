@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeDB['theme']['reskin_blizz'] then return end
 
 	RaidFinderFrameBottomInset:Hide()
 	RaidFinderFrameRoleBackground:Hide()

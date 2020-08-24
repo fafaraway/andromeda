@@ -45,15 +45,15 @@ local iconsList = {
 local function SaveValue(key, value, newValue)
 	if key == 'ACCOUNT' then
 		if newValue ~= nil then
-			FreeUIConfigsGlobal[value] = newValue
+			FreeADB[value] = newValue
 		else
-			return FreeUIConfigsGlobal[value]
+			return FreeADB[value]
 		end
 	else
 		if newValue ~= nil then
-			FreeUIConfigs[key][value] = newValue
+			FreeDB[key][value] = newValue
 		else
-			return FreeUIConfigs[key][value]
+			return FreeDB[key][value]
 		end
 	end
 end
@@ -293,7 +293,7 @@ local function CreateGameMenuButton()
 	local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', GameMenuFrame, 'GameMenuButtonTemplate')
 	bu:SetText(C.Title)
 	bu:SetPoint('TOP', GameMenuButtonAddons, 'BOTTOM', 0, -14)
-	if FreeUIConfigs['theme']['reskin_blizz'] then F.Reskin(bu) end
+	if FreeDB['theme']['reskin_blizz'] then F.Reskin(bu) end
 
 	GameMenuFrame:HookScript('OnShow', function(self)
 		GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)

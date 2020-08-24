@@ -94,8 +94,8 @@ StaticPopupDialogs['RESETGOLDCOUNT'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(FreeUIConfigsGlobal['total_gold'][C.MyRealm])
-		FreeUIConfigsGlobal['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		wipe(FreeADB['total_gold'][C.MyRealm])
+		FreeADB['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -132,8 +132,8 @@ function INVENTORY:CreateCurrencyFrame()
 			profit = profit + change
 		end
 
-		if not FreeUIConfigsGlobal['total_gold'][C.MyRealm] then FreeUIConfigsGlobal['total_gold'][C.MyRealm] = {} end
-		FreeUIConfigsGlobal['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		if not FreeADB['total_gold'][C.MyRealm] then FreeADB['total_gold'][C.MyRealm] = {} end
+		FreeADB['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 
 		oldMoney = newMoney
 	end)
@@ -160,7 +160,7 @@ function INVENTORY:CreateCurrencyFrame()
 
 		local totalGold = 0
 		GameTooltip:AddLine(L['INFOBAR_CHARACTER'], .6,.8,1)
-		local thisRealmList = FreeUIConfigsGlobal['total_gold'][C.MyRealm]
+		local thisRealmList = FreeADB['total_gold'][C.MyRealm]
 		for k, v in pairs(thisRealmList) do
 			local gold, class = unpack(v)
 			local r, g, b = F.ClassColor(class)
@@ -228,11 +228,11 @@ function INVENTORY:CreateRestoreButton(f)
 	local bu = F.CreateButton(self, 16, 16, true, icons.restore)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function()
-		FreeUIConfigs['ui_anchor_temp'][f.main:GetName()] = nil
-		FreeUIConfigs['ui_anchor_temp'][f.bank:GetName()] = nil
-		FreeUIConfigs['ui_anchor_temp'][f.reagent:GetName()] = nil
+		FreeDB['ui_anchor_temp'][f.main:GetName()] = nil
+		FreeDB['ui_anchor_temp'][f.bank:GetName()] = nil
+		FreeDB['ui_anchor_temp'][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
-		f.main:SetPoint('BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'])
+		f.main:SetPoint('BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap'])
 		f.bank:ClearAllPoints()
 		f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
 		f.reagent:ClearAllPoints()
@@ -322,7 +322,7 @@ function INVENTORY:CreateSortButton(name)
 		elseif name == 'Reagent' then
 			SortReagentBankBags()
 		else
-			if FreeUIConfigs['inventory']['reverse_sort'] then
+			if FreeDB['inventory']['reverse_sort'] then
 				if InCombatLockdown() then
 					UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
 				else
@@ -346,19 +346,19 @@ function INVENTORY:CreateRepairButton()
 	local enabledText = C.BlueColor..L['INVENTORY_AUTO_REPAIR_ENABLED']
 	local bu = F.CreateButton(self, 16, 16, true, icons.repair)
 
-	if FreeUIConfigs['inventory']['auto_repair'] then
+	if FreeDB['inventory']['auto_repair'] then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	end
 
-	bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeUIConfigs['inventory']['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+	bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeDB['inventory']['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 	F.AddTooltip(bu, 'ANCHOR_TOP')
 
 	bu:SetScript('OnClick', function(self)
-		FreeUIConfigs['inventory']['auto_repair'] = not FreeUIConfigs['inventory']['auto_repair']
+		FreeDB['inventory']['auto_repair'] = not FreeDB['inventory']['auto_repair']
 
-		if FreeUIConfigs['inventory']['auto_repair'] then
+		if FreeDB['inventory']['auto_repair'] then
 			self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 		else
@@ -366,7 +366,7 @@ function INVENTORY:CreateRepairButton()
 			self.text = nil
 		end
 
-		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeUIConfigs['inventory']['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeDB['inventory']['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 		self:GetScript('OnEnter')(self)
 	end)
 
@@ -377,19 +377,19 @@ function INVENTORY:CreateSellButton()
 	local enabledText = C.BlueColor..L['INVENTORY_SELL_JUNK_ENABLED']
 	local bu = F.CreateButton(self, 16, 16, true, icons.sell)
 
-	if FreeUIConfigs['inventory']['auto_sell_junk'] then
+	if FreeDB['inventory']['auto_sell_junk'] then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	end
 
-	bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIConfigs['inventory']['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+	bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeDB['inventory']['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 	F.AddTooltip(bu, 'ANCHOR_TOP')
 
 	bu:SetScript('OnClick', function(self)
-		FreeUIConfigs['inventory']['auto_sell_junk'] = not FreeUIConfigs['inventory']['auto_sell_junk']
+		FreeDB['inventory']['auto_sell_junk'] = not FreeDB['inventory']['auto_sell_junk']
 
-		if FreeUIConfigs['inventory']['auto_sell_junk'] then
+		if FreeDB['inventory']['auto_sell_junk'] then
 			self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 		else
@@ -397,7 +397,7 @@ function INVENTORY:CreateSellButton()
 			self.text = nil
 		end
 
-		bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeUIConfigs['inventory']['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+		bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeDB['inventory']['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
 		self:GetScript('OnEnter')(self)
 	end)
 
@@ -519,7 +519,7 @@ end
 local splitEnable
 local function saveSplitCount(self)
 	local count = self:GetText() or ''
-	FreeUIConfigs['inventory']['split_count'] = tonumber(count) or 1
+	FreeDB['inventory']['split_count'] = tonumber(count) or 1
 end
 
 function INVENTORY:CreateSplitButton()
@@ -551,7 +551,7 @@ function INVENTORY:CreateSplitButton()
 			bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 			splitFrame:Show()
-			editbox:SetText(FreeUIConfigs['inventory']['split_count'])
+			editbox:SetText(FreeDB['inventory']['split_count'])
 		else
 			self.__turnOff()
 		end
@@ -572,8 +572,8 @@ local function splitOnClick(self)
 	PickupContainerItem(self.bagID, self.slotID)
 
 	local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
-	if texture and not locked and itemCount and itemCount > FreeUIConfigs['inventory']['split_count'] then
-		SplitContainerItem(self.bagID, self.slotID, FreeUIConfigs['inventory']['split_count'])
+	if texture and not locked and itemCount and itemCount > FreeDB['inventory']['split_count'] then
+		SplitContainerItem(self.bagID, self.slotID, FreeDB['inventory']['split_count'])
 
 		local bagID, slotID = INVENTORY:GetEmptySlot('Main')
 		if slotID then
@@ -619,10 +619,10 @@ local function favouriteOnClick(self)
 
 	local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
-		if FreeUIConfigs['inventory']['favourite_items'][itemID] then
-			FreeUIConfigs['inventory']['favourite_items'][itemID] = nil
+		if FreeDB['inventory']['favourite_items'][itemID] then
+			FreeDB['inventory']['favourite_items'][itemID] = nil
 		else
-			FreeUIConfigs['inventory']['favourite_items'][itemID] = true
+			FreeDB['inventory']['favourite_items'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -668,10 +668,10 @@ local function customJunkOnClick(self)
 	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
-		if FreeUIConfigsGlobal['custom_junk_list'][itemID] then
-			FreeUIConfigsGlobal['custom_junk_list'][itemID] = nil
+		if FreeADB['custom_junk_list'][itemID] then
+			FreeADB['custom_junk_list'][itemID] = nil
 		else
-			FreeUIConfigsGlobal['custom_junk_list'][itemID] = true
+			FreeADB['custom_junk_list'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -737,17 +737,17 @@ end
 
 
 function INVENTORY:OnLogin()
-	if not FreeUIConfigs['inventory']['enable_inventory'] then return end
+	if not FreeDB['inventory']['enable_inventory'] then return end
 
 	INVENTORY:AutoSellJunk()
 	INVENTORY:AutoRepair()
 
-	local bagsScale = FreeUIConfigs['inventory']['scale']
-	local bagsWidth = FreeUIConfigs['inventory']['bag_columns']
-	local bankWidth = FreeUIConfigs['inventory']['bank_columns']
-	local iconSize = FreeUIConfigs['inventory']['slot_size']
-	local itemSetFilter = FreeUIConfigs['inventory']['item_filter_gear_set']
-	local showNewItem = FreeUIConfigs['inventory']['new_item_flash']
+	local bagsScale = FreeDB['inventory']['scale']
+	local bagsWidth = FreeDB['inventory']['bag_columns']
+	local bankWidth = FreeDB['inventory']['bank_columns']
+	local iconSize = FreeDB['inventory']['slot_size']
+	local itemSetFilter = FreeDB['inventory']['item_filter_gear_set']
+	local showNewItem = FreeDB['inventory']['new_item_flash']
 
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -769,7 +769,7 @@ function INVENTORY:OnLogin()
 
 		f.main = MyContainer:New('Main', {Columns = bagsWidth, Bags = 'bags'})
 		f.main:SetFilter(filters.onlyBags, true)
-		f.main:SetPoint('BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'])
+		f.main:SetPoint('BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap'])
 
 		f.junk = MyContainer:New('Junk', {Columns = bagsWidth, Parent = f.main})
 		f.junk:SetFilter(filters.bagsJunk, true)
@@ -954,7 +954,7 @@ function INVENTORY:OnLogin()
 		end
 
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FreeUIConfigsGlobal['custom_junk_list'][item.id]) and item.sellPrice > 0 then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FreeADB['custom_junk_list'][item.id]) and item.sellPrice > 0 then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -969,7 +969,7 @@ function INVENTORY:OnLogin()
 			self.IconOverlay:Hide()
 		end
 
-		if FreeUIConfigs['inventory']['favourite_items'][item.id] then
+		if FreeDB['inventory']['favourite_items'][item.id] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()
@@ -983,9 +983,9 @@ function INVENTORY:OnLogin()
 			end
 		end
 
-		if FreeUIConfigs['inventory']['item_level'] and isItemNeedsLevel(item) then
+		if FreeDB['inventory']['item_level'] and isItemNeedsLevel(item) then
 			local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level < FreeUIConfigs['inventory']['item_level_to_show'] then level = '' end
+			if level < FreeDB['inventory']['item_level_to_show'] then level = '' end
 			local color = C.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -993,7 +993,7 @@ function INVENTORY:OnLogin()
 			self.iLvl:SetText('')
 		end
 
-		if FreeUIConfigs['inventory']['special_color'] then
+		if FreeDB['inventory']['special_color'] then
 			local bagType = INVENTORY.BagsType[item.bagID]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
@@ -1024,14 +1024,14 @@ function INVENTORY:OnLogin()
 		self:SortButtons('bagSlot')
 
 		local columns = self.Settings.Columns
-		local offset = FreeUIConfigs['inventory']['offset']
-		local spacing = FreeUIConfigs['inventory']['spacing']
+		local offset = FreeDB['inventory']['offset']
+		local spacing = FreeDB['inventory']['spacing']
 		local xOffset = 5
 		local yOffset = -offset + xOffset
 		local _, height = self:LayoutButtons('grid', columns, spacing, xOffset, yOffset)
 		local width = columns * (iconSize+spacing)-spacing
 		if self.freeSlot then
-			if FreeUIConfigs['inventory']['combine_free_slots'] then
+			if FreeDB['inventory']['combine_free_slots'] then
 				local numSlots = #self.buttons + 1
 				local row = ceil(numSlots / columns)
 				local col = numSlots % columns
@@ -1178,6 +1178,6 @@ function INVENTORY:OnLogin()
 	BankFrameItemButton_Update = F.Dummy
 
 	-- Sort order
-	SetSortBagsRightToLeft(not FreeUIConfigs['inventory']['reverse_sort'])
+	SetSortBagsRightToLeft(not FreeDB['inventory']['reverse_sort'])
 	SetInsertItemsLeftToRight(false)
 end

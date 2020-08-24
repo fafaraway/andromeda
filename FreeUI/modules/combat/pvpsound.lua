@@ -152,7 +152,7 @@ local function OnEvent(self, event)
 end
 
 function COMBAT:PvPSound()
-	if not FreeUIConfigs.combat.pvp_sound then return end
+	if not FreeDB.combat.pvp_sound then return end
 
 	local f = CreateFrame('Frame')
 	f:SetScript('OnEvent', OnEvent)

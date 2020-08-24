@@ -15,7 +15,7 @@ end
 
 
 function NOTIFICATION:NewMail()
-	if not FreeUIConfigs.notification.new_mail then return end
+	if not FreeDB.notification.new_mail then return end
 
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('UPDATE_PENDING_MAIL')

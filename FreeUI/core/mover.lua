@@ -76,15 +76,15 @@ function F:CreateMF(parent, saved)
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
-		FreeUIConfigs['ui_anchor_temp'][frame:GetName()] = {orig, "UIParent", tar, x, y}
+		FreeDB['ui_anchor_temp'][frame:GetName()] = {orig, "UIParent", tar, x, y}
 	end)
 end
 
 function F:RestoreMF()
 	local name = self:GetName()
-	if name and FreeUIConfigs['ui_anchor_temp'][name] then
+	if name and FreeDB['ui_anchor_temp'][name] then
 		self:ClearAllPoints()
-		self:SetPoint(unpack(FreeUIConfigs['ui_anchor_temp'][name]))
+		self:SetPoint(unpack(FreeDB['ui_anchor_temp'][name]))
 	end
 end
 
@@ -104,10 +104,10 @@ function F:Mover(text, value, anchor, width, height)
 	mover.text = F.CreateFS(mover, C.Assets.Fonts.Normal, 12, 'OUTLINE', text)
 	mover.text:SetWordWrap(true)
 
-	if not FreeUIConfigs[key][value] then
+	if not FreeDB[key][value] then
 		mover:SetPoint(unpack(anchor))
 	else
-		mover:SetPoint(unpack(FreeUIConfigs[key][value]))
+		mover:SetPoint(unpack(FreeDB[key][value]))
 	end
 	mover:EnableMouse(true)
 	mover:SetMovable(true)
@@ -187,7 +187,7 @@ function MOVER:DoTrim(trimX, trimY)
 		f.__y.__current = y
 		mover:ClearAllPoints()
 		mover:SetPoint(point, UIParent, point, x, y)
-		FreeUIConfigs[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
+		FreeDB[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
 	end
 end
 
@@ -197,7 +197,7 @@ function MOVER:Mover_OnClick(btn)
 	elseif IsControlKeyDown() and btn == "RightButton" then
 		self:ClearAllPoints()
 		self:SetPoint(unpack(self.__anchor))
-		FreeUIConfigs[self.__key][self.__value] = nil
+		FreeDB[self.__key][self.__value] = nil
 	end
 	updater.__owner = self
 	MOVER.UpdateTrimFrame(self)
@@ -228,7 +228,7 @@ function MOVER:Mover_OnDragStop()
 
 	self:ClearAllPoints()
 	self:SetPoint(orig, "UIParent", tar, x, y)
-	FreeUIConfigs[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
+	FreeDB[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
 	MOVER.UpdateTrimFrame(self)
 	updater:Hide()
 end
@@ -260,7 +260,7 @@ StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(FreeUIConfigs['ui_anchor'])
+		wipe(FreeDB['ui_anchor'])
 		ReloadUI()
 	end,
 	timeout = 0,

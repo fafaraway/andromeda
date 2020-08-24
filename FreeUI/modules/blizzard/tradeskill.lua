@@ -90,7 +90,7 @@ function BLIZZARD:TradeTabs_Update()
 end
 
 function BLIZZARD:TradeTabs_Reskin()
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeDB['theme']['reskin_blizz'] then return end
 
 	for _, tab in pairs(tabList) do
 		tab:SetCheckedTexture(C.Assets.button_checked)
@@ -214,7 +214,7 @@ function BLIZZARD.TradeTabs_OnEvent(event, addon)
 end
 
 function BLIZZARD:TradeTabs()
-	if not FreeUIConfigs.blizzard.tradeskill_tabs then return end
+	if not FreeDB.blizzard.tradeskill_tabs then return end
 
 	F:RegisterEvent('ADDON_LOADED', BLIZZARD.TradeTabs_OnEvent)
 end

@@ -135,7 +135,7 @@ SpellBinder.makeFramesList = function()
 	for frame in pairs(ClickCastFrames) do
 		local v
 		if frame and type(frame) == 'table' then v = frame:GetName() end
-		if FreeUIConfigs.unitframe.group_click_cast_filter ~= true then
+		if FreeDB.unitframe.group_click_cast_filter ~= true then
 			if v then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
 		else
 			if v ~= 'oUF_Target' and v ~= 'oUF_Player' then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
@@ -229,9 +229,9 @@ end
 
 
 function UNITFRAME:ClickCast()
-	if not FreeUIConfigs.unitframe.enable_unitframe then return end
-	if not FreeUIConfigs.unitframe.enable_group then return end
-	if not FreeUIConfigs.unitframe.group_click_cast then return end
+	if not FreeDB.unitframe.enable_unitframe then return end
+	if not FreeDB.unitframe.enable_group then return end
+	if not FreeDB.unitframe.group_click_cast then return end
 
 
 	SpellBinder.OpenButton = CreateFrame('CheckButton', 'SpellBinderOpenButton', _G['SpellBookSkillLineTab1'], 'SpellBookSkillLineTabTemplate')
@@ -300,7 +300,7 @@ function UNITFRAME:ClickCast()
 	end)
 
 
-	DB = FreeUIConfigs['unitframe']['group_click_cast_config']
+	DB = FreeDB['unitframe']['group_click_cast_config']
 	DB.spells = DB.spells or {}
 	DB.keys = DB.keys or {}
 	SpellBinder.frames = SpellBinder.frames or {}

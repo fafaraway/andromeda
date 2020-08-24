@@ -16,4 +16,9 @@
 
 	<Script file='reputation.lua'/>
 
+
+
+
+	<Script file='invite.lua'/>
+
 </Ui>

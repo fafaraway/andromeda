@@ -84,7 +84,7 @@ end
 
 
 function COMBAT:AutoTab()
-	if not FreeUIConfigs.combat.auto_tab then return end
+	if not FreeDB.combat.auto_tab then return end
 
 	local f = CreateFrame('Frame')
 	f:SetScript('OnEvent', OnEvent)

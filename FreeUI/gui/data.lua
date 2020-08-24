@@ -6,7 +6,7 @@ local dataFrame
 
 function GUI:ExportData()
 	local text = 'FreeUISettings:'..C.Version..':'..C.MyName..':'..C.MyClass
-	for KEY, VALUE in pairs(FreeUIConfigs) do
+	for KEY, VALUE in pairs(FreeDB) do
 		if type(VALUE) == 'table' then
 			for key, value in pairs(VALUE) do
 				if type(value) == 'table' then
@@ -26,7 +26,7 @@ function GUI:ExportData()
 						end
 					end
 				else
-					if FreeUIConfigs[KEY][key] ~= C.CharacterSettings[KEY][key] then
+					if FreeDB[KEY][key] ~= C.CharacterSettings[KEY][key] then
 						text = text..';'..KEY..':'..key..':'..tostring(value)
 					end
 				end
@@ -34,7 +34,7 @@ function GUI:ExportData()
 		end
 	end
 
-	for KEY, VALUE in pairs(FreeUIConfigsGlobal) do
+	for KEY, VALUE in pairs(FreeADB) do
 		if KEY == 'custom_junk_list' then
 			text = text..';ACCOUNT:'..KEY
 			for spellID in pairs(VALUE) do
@@ -70,31 +70,31 @@ function GUI:ImportData()
 		local option = options[i]
 		local key, value, arg1 = strsplit(':', option)
 		if arg1 == 'true' or arg1 == 'false' then
-			FreeUIConfigs[key][value] = toBoolean(arg1)
+			FreeDB[key][value] = toBoolean(arg1)
 		elseif arg1 == 'EMPTYTABLE' then
-			FreeUIConfigs[key][value] = {}
+			FreeDB[key][value] = {}
 		elseif strfind(value, 'Color') and (arg1 == 'r' or arg1 == 'g' or arg1 == 'b') then
 			local color = select(4, strsplit(':', option))
-			if FreeUIConfigs[key][value] then
-				FreeUIConfigs[key][value][arg1] = tonumber(color)
+			if FreeDB[key][value] then
+				FreeDB[key][value][arg1] = tonumber(color)
 			end
 		elseif value == 'favourite_items' then
 			local items = {select(3, strsplit(':', option))}
 			for _, itemID in next, items do
-				FreeUIConfigs[key][value][tonumber(itemID)] = true
+				FreeDB[key][value][tonumber(itemID)] = true
 			end
 		elseif key == 'ui_anchor' then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(':', option))
 			value = tonumber(value) or value
 			x = tonumber(x)
 			y = tonumber(y)
-			FreeUIConfigs[key][value] = {relFrom, parent, relTo, x, y}
+			FreeDB[key][value] = {relFrom, parent, relTo, x, y}
 
 		elseif key == 'ACCOUNT' then
 			if value == 'custom_junk_list' then
 				local spells = {select(3, strsplit(':', option))}
 				for _, spellID in next, spells do
-					FreeUIConfigsGlobal[value][tonumber(spellID)] = true
+					FreeADB[value][tonumber(spellID)] = true
 				end
 			end
 		end

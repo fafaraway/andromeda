@@ -100,7 +100,7 @@ function TOOLTIP:Azerite_UpdateItem()
 end
 
 function TOOLTIP:AzeriteArmor()
-	if not FreeUIConfigs.tooltip.azerite_armor then return end
+	if not FreeDB.tooltip.azerite_armor then return end
 	if IsAddOnLoaded('AzeriteTooltip') then return end
 
 	GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)

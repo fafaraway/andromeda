@@ -64,7 +64,7 @@ local function OnEvent(self, event, unit)
 
 	if unit ~= 'player' then return end
 	if event == 'UNIT_HEALTH' or event == 'UNIT_MAXHEALTH' then
-		if FreeUIConfigs.combat.health_alert and (UnitHealth('player') / UnitHealthMax('player')) < FreeUIConfigs.combat.health_alert_threshold then
+		if FreeDB.combat.health_alert and (UnitHealth('player') / UnitHealthMax('player')) < FreeDB.combat.health_alert_threshold then
 			if not playedHp then
 				playedHp = true
 
@@ -111,24 +111,24 @@ function COMBAT:CombatAlert()
 	f:SetScript('OnEvent', OnEvent)
 
 
-	if FreeUIConfigs.combat.combat_alert then
+	if FreeDB.combat.combat_alert then
 		f:RegisterEvent('PLAYER_REGEN_ENABLED')
 		f:RegisterEvent('PLAYER_REGEN_DISABLED')
 	end
 
-	if FreeUIConfigs.combat.health_alert then
+	if FreeDB.combat.health_alert then
 		f:RegisterEvent('UNIT_HEALTH')
 		f:RegisterEvent('UNIT_MAXHEALTH')
 	end
 
-	if FreeUIConfigs.combat.spell_alert then
+	if FreeDB.combat.spell_alert then
 		f:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 	end
 end
 
 
 function COMBAT:OnLogin()
-	if not FreeUIConfigs.combat.enable_combat then return end
+	if not FreeDB.combat.enable_combat then return end
 
 	self:CombatAlert()
 	self:AutoTab()

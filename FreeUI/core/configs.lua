@@ -75,21 +75,7 @@ local F, C = unpack(select(2, ...))
 		['rare_alert'] = true,
 } ]]
 
-C['Automation'] = {
-	['enable'] = true,
 
-
-
-
-		['buy_stack'] = true,
-		['screenshot'] = true,
-
-
-		['auto_accept_invite'] = false,
-		['auto_invite_whisper'] = false,
-		['invite_keyword'] = 'inv'
-
-}
 
 C['Announcement'] = {
 	['enable'] = true,
@@ -121,7 +107,7 @@ C['Announcement'] = {
 		['report'] = true,
 } ]]
 
-C['Chat'] = {
+--[[ C['Chat'] = {
 	['enable'] = true,
 		['lock_position'] = true,
 			['chat_size_width'] = 300,
@@ -161,7 +147,7 @@ C['Chat'] = {
 			'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', '汐寒', 'wow.+兑换码', 'wow.+验证码', '【有爱插件】', '：.+>', '|Hspell.+=>'
 		},
 		['trashClubs'] = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩'}
-}
+} ]]
 
 --[[ C['Aura'] = {
 	['enable_aura'] = true,
@@ -1117,6 +1103,46 @@ C.CharacterSettings = {
 		['invite_whisper'] = true,
 		['invite_only_guild'] = true,
 	},
+
+	['chat'] = {
+		['enable'] = true,
+			['lock_position'] = true,
+				['window_width'] = 300,
+				['window_height'] = 100,
+			['font_outline'] = false,
+
+			['fade_out'] = true,
+				['fading_visible'] = 60,
+				['fading_duration'] = 6,
+
+			['abbr_channel_names'] = true,
+			['item_links'] = true,
+			['spamage_meter'] = true,
+
+			['copy_button'] = true,
+			['voice_icon'] = true,
+
+			['tab_cycle'] = true,
+
+			['smart_bubble'] = false,
+
+			['whisper_sticky'] = true,
+			['whisper_sound'] = true,
+				['sound_timer'] = 30,
+
+			['allow_friends_spam'] = false,
+			['block_stranger_whisper'] = false,
+
+			['filters'] = true,
+			['matche_number'] = 1,
+			['keywords_list'] = '%*',
+			['block_addon_spam'] = true,
+			['addon_keywords_list'] = {
+				'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', string.rep('%-', 20),
+				'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', '汐寒', 'wow.+兑换码', 'wow.+验证码', '【有爱插件】', '：.+>', '|Hspell.+=>'
+			},
+			['trash_clubs'] = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩'}
+	}
 }
 
 C.AccountSettings = {
@@ -1166,17 +1192,17 @@ f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(self, _, addon)
 	if addon ~= 'FreeUI' then return end
 
-	if not FreeUIConfigs['BfA'] then
-		FreeUIConfigs = {}
-		FreeUIConfigs['BfA'] = true
+	if not FreeDB['BfA'] then
+		FreeDB = {}
+		FreeDB['BfA'] = true
 	end
 
-	initSettings(C.CharacterSettings, FreeUIConfigs, true)
-	initSettings(C.AccountSettings, FreeUIConfigsGlobal)
+	initSettings(C.CharacterSettings, FreeDB, true)
+	initSettings(C.AccountSettings, FreeADB)
 
 	F:SetupUIScale(true)
 
-	C.Assets.norm_tex = textureList[FreeUIConfigs.unitframe.texture_style]
+	C.Assets.norm_tex = textureList[FreeDB.unitframe.texture_style]
 
 	self:UnregisterAllEvents()
 end)

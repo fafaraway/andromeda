@@ -180,7 +180,7 @@ end
 
 
 function TOOLTIP:ExtraInfo()
-	if FreeUIConfigs.tooltip.various_ids then
+	if FreeDB.tooltip.various_ids then
 		-- Update all
 		hooksecurefunc(GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
 		hooksecurefunc(ItemRefTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
@@ -242,19 +242,19 @@ function TOOLTIP:ExtraInfo()
 		GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.Companion)
 	end
 
-	if FreeUIConfigs.tooltip.item_count then
+	if FreeDB.tooltip.item_count then
 		GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.ItemCount)
 	end
 
-	if FreeUIConfigs.tooltip.item_price then
+	if FreeDB.tooltip.item_price then
 		GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.ItemPrice)
 	end
 
-	if FreeUIConfigs.tooltip.aura_source then
+	if FreeDB.tooltip.aura_source then
 		hooksecurefunc(GameTooltip, 'SetUnitAura', TOOLTIP.AuraSource)
 	end
 
-	if FreeUIConfigs.tooltip.mount_source then
+	if FreeDB.tooltip.mount_source then
 		hooksecurefunc(GameTooltip, 'SetUnitAura', TOOLTIP.MountSource)
 	end
 end

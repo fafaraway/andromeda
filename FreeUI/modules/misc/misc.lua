@@ -21,23 +21,15 @@ function MISC:OnLogin()
 	end
 
 
-
-
-
-
-
 	self:InstantLoot()
-	self:BlockStrangerInvite()
-
-
 
 	self:BlowMyWhistle()
-
 
 	self:ForceWarning()
 	self:FasterCamera()
 	self:CombatCamera()
 
+	_G.BINDING_HEADER_FREEUI = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 	-- Registering fonts in LibSharedMedia
 	local LSM = LibStub and LibStub:GetLibrary('LibSharedMedia-3.0', true)
@@ -74,7 +66,7 @@ end
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
 function MISC:BlowMyWhistle()
-	if not FreeUIConfigs['blow_my_whistle'] then return end
+	if not FreeDB['blow_my_whistle'] then return end
 
 	local whistleSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whistle.ogg'
 	local whistle_SpellID1 = 227334;
@@ -145,7 +137,7 @@ hooksecurefunc('ShowReadyCheck', ShowReadyCheckHook)
 
 
 function MISC:FasterCamera()
-	if not FreeUIConfigs['faster_camera'] then return end
+	if not FreeDB['faster_camera'] then return end
 
 	local oldZoomIn = CameraZoomIn
 	local oldZoomOut = CameraZoomOut
@@ -175,7 +167,7 @@ local function SetCam(cmd)
 	ConsoleExec('ActionCam ' .. cmd)
 end
 function MISC:CombatCamera()
-	SetCam(FreeUIConfigs['action_camera'] and 'basic' or 'off')
+	SetCam(FreeDB['action_camera'] and 'basic' or 'off')
 end
 
 
@@ -194,21 +186,14 @@ local function instantLoot()
 end
 
 function MISC:InstantLoot()
-	if FreeUIConfigs['instant_loot'] then
+	if FreeDB['instant_loot'] then
 		F:RegisterEvent('LOOT_READY', instantLoot)
 	else
 		F:UnregisterEvent('LOOT_READY', instantLoot)
 	end
 end
 
-function MISC:BlockStrangerInvite()
-	F:RegisterEvent('PARTY_INVITE_REQUEST', function(_, _, _, _, _, _, _, guid)
-		if FreeUIConfigs['block_stranger_invite'] and not (C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or IsGuildMember(guid)) then
-			DeclineGroup()
-			StaticPopup_Hide('PARTY_INVITE')
-		end
-	end)
-end
+
 
 
 -- auto select current event boss from LFD tool

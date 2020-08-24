@@ -236,10 +236,10 @@ end
 
 function ACTIONBAR:Bind_Deactivate(save)
 	if save == true then
-		SaveBindings(FreeUIConfigs['bind_type'])
+		SaveBindings(FreeDB['bind_type'])
 		F.Print(C.GreenColor..L['ACTIONBAR_SAVE_KEYBINDS'])
 	else
-		LoadBindings(FreeUIConfigs['bind_type'])
+		LoadBindings(FreeDB['bind_type'])
 		F.Print(C.GreenColor..L['ACTIONBAR_DISCARD_KEYBINDS'])
 	end
 
@@ -272,10 +272,10 @@ function ACTIONBAR:Bind_CreateDialog()
 		ACTIONBAR:Bind_Deactivate()
 	end)
 	local box = F.CreateCheckBox(frame)
-	box:SetChecked(FreeUIConfigs['bind_type'] == 2)
+	box:SetChecked(FreeDB['bind_type'] == 2)
 	box:SetPoint('RIGHT', text, 'LEFT', -5, -0)
 	box:SetScript('OnClick', function(self)
-		FreeUIConfigs['bind_type'] = self:GetChecked() and 2 or 1
+		FreeDB['bind_type'] = self:GetChecked() and 2 or 1
 	end)
 
 	ACTIONBAR.keybindDialog = frame

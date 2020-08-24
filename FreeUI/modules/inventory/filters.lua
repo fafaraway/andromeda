@@ -19,7 +19,7 @@ local CustomFilterList = {
 }
 
 local function isCustomFilter(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
 	return CustomFilterList[item.id]
 end
 
@@ -32,22 +32,22 @@ local function isItemInBank(item)
 end
 
 local function isItemJunk(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_junk'] then return end
-	return (item.rarity == LE_ITEM_QUALITY_POOR or FreeUIConfigsGlobal['custom_junk_list'][item.id]) and item.sellPrice and item.sellPrice > 0
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_junk'] then return end
+	return (item.rarity == LE_ITEM_QUALITY_POOR or FreeADB['custom_junk_list'][item.id]) and item.sellPrice and item.sellPrice > 0
 end
 
 local function isAzeriteArmor(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_azerite'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_azerite'] then return end
 	if not item.link then return end
-	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (FreeUIConfigs['inventory']['item_filter_gear_set'] and item.isInSet)
+	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (FreeDB['inventory']['item_filter_gear_set'] and item.isInSet)
 end
 
 local function isItemEquipment(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_equipment'] then return end
-	if FreeUIConfigs['inventory']['item_filter_gear_set'] then
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_equipment'] then return end
+	if FreeDB['inventory']['item_filter_gear_set'] then
 		return item.isInSet
 	else
 		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
@@ -55,15 +55,15 @@ local function isItemEquipment(item)
 end
 
 local function isItemConsumable(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_consumable'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_consumable'] then return end
 	if isCustomFilter(item) == false then return end
 	return isCustomFilter(item) or (item.classID and (item.classID == LE_ITEM_CLASS_CONSUMABLE or item.classID == LE_ITEM_CLASS_ITEM_ENHANCEMENT))
 end
 
 local function isItemLegendary(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_legendary'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_legendary'] then return end
 	return item.rarity == LE_ITEM_QUALITY_LEGENDARY
 end
 
@@ -72,31 +72,31 @@ local isPetToy = {
 }
 
 local function isMountAndPet(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_mount_pet'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_mount_pet'] then return end
 	return (not isPetToy[item.id]) and item.classID == LE_ITEM_CLASS_MISCELLANEOUS and (item.subClassID == LE_ITEM_MISCELLANEOUS_MOUNT or item.subClassID == LE_ITEM_MISCELLANEOUS_COMPANION_PET)
 end
 
 local function isTradeGoods(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_trade'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_trade'] then return end
 	return item.classID == LE_ITEM_CLASS_TRADEGOODS
 end
 
 local function isItemQuest(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_quest'] then return end
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_quest'] then return end
 	return item.classID == LE_ITEM_CLASS_QUESTITEM
 end
 
 local function isItemFavourite(item)
-	if not FreeUIConfigs['inventory']['item_filter'] then return end
-	if not FreeUIConfigs['inventory']['item_filter_favourite'] then return end
-	return item.id and FreeUIConfigs['inventory']['favourite_items'][item.id]
+	if not FreeDB['inventory']['item_filter'] then return end
+	if not FreeDB['inventory']['item_filter_favourite'] then return end
+	return item.id and FreeDB['inventory']['favourite_items'][item.id]
 end
 
 local function isEmptySlot(item)
-	if not FreeUIConfigs['inventory']['combine_free_slots'] then return end
+	if not FreeDB['inventory']['combine_free_slots'] then return end
 	return INVENTORY.initComplete and not item.texture and INVENTORY.BagsType[item.bagID] == 0
 end
 

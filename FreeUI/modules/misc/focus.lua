@@ -47,7 +47,7 @@ end
 
 
 function MISC:Focuser()
-	if not FreeUIConfigs['easy_focus'] then return end
+	if not FreeDB['easy_focus'] then return end
 
 	-- Keybinding override so that models can be shift/alt/ctrl+clicked
 	local f = CreateFrame('CheckButton', 'FocuserButton', UIParent, 'SecureActionButtonTemplate')
@@ -57,7 +57,7 @@ function MISC:Focuser()
 
 	hooksecurefunc('CreateFrame', MISC.Focuser_CreateFrameHook)
 
-	if not FreeUIConfigs['easy_focus_on_unitframes'] then return end
+	if not FreeDB['easy_focus_on_unitframes'] then return end
 
 	MISC:Focuser_OnEvent()
 	F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.Focuser_OnEvent)

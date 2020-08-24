@@ -25,7 +25,7 @@ end
 
 
 function NOTIFICATION:VersionCheck()
-    if not FreeUIConfigs.notification.version_check then return end
+    if not FreeDB.notification.version_check then return end
 
     local frame = CreateFrame('Frame')
     frame:RegisterEvent('PLAYER_ENTERING_WORLD')

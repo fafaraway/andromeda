@@ -77,7 +77,7 @@ function MAP:UpdateMapID()
 end
 
 function MAP:AddCoords()
-	if not FreeUIConfigs.map.coords then return end
+	if not FreeDB.map.coords then return end
 
 	playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
 	cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
@@ -105,7 +105,7 @@ function MAP:UpdateMapAnchor()
 end
 
 function MAP:WorldMapScale()
-	mapScale = FreeUIConfigs.map.map_scale
+	mapScale = FreeDB.map.map_scale
 
 	if mapScale > 1 then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
@@ -121,7 +121,7 @@ end
 
 
 function MAP:OnLogin()
-	if not FreeUIConfigs.map.enable_map then return end
+	if not FreeDB.map.enable_map then return end
 
 	self:WorldMapScale()
 	self:AddCoords()

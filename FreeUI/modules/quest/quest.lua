@@ -9,7 +9,7 @@ local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
 function QUEST:ObjectiveTrackerMover()
 	local frame = CreateFrame('Frame', 'FreeUIQuestMover', UIParent)
 	frame:SetSize(240, 50)
-	F.Mover(frame, L['MOVER_QUEST_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -FreeUIConfigsGlobal['ui_gap'], -140})
+	F.Mover(frame, L['MOVER_QUEST_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -FreeADB['ui_gap'], -140})
 
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()
@@ -21,7 +21,7 @@ function QUEST:ObjectiveTrackerMover()
 end
 
 function QUEST:QuestLevel()
-	if not FreeUIConfigs.quest.quest_level then return end
+	if not FreeDB.quest.quest_level then return end
 
 	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
 		if ENABLE_COLORBLIND_MODE == '1' then return end
@@ -48,7 +48,7 @@ function QUEST:QuestLevel()
 end
 
 function QUEST:RewardHighlight()
-	if not FreeUIConfigs.quest.reward_highlight then return end
+	if not FreeDB.quest.reward_highlight then return end
 
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('QUEST_COMPLETE')

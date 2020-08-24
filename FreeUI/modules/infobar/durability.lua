@@ -59,7 +59,7 @@ end
 
 
 function INFOBAR:Durability()
-	if not FreeUIConfigs.infobar.durability then return end
+	if not FreeDB.infobar.durability then return end
 
 	FreeUIDurabilityButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 120, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
@@ -87,7 +87,7 @@ function INFOBAR:Durability()
 
 	FreeUIDurabilityButton:HookScript('OnEnter', function(self)
 		local total, equipped = GetAverageItemLevel()
-		GameTooltip:SetOwner(self, (FreeUIConfigs.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeUIConfigs.infobar.anchor_top and -15) or 15)
+		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 		--GameTooltip:AddDoubleLine(DURABILITY, format('%s: %d/%d', STAT_AVERAGE_ITEM_LEVEL, equipped, total), .9, .8, .6, 1,1,1)
 		GameTooltip:AddLine(DURABILITY, .9, .8, .6)

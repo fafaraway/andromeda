@@ -127,7 +127,7 @@ function BLIZZARD:KeystoneInfo_Create()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 		GameTooltip:AddLine(L['BLIZZARD_KEYSTONES'])
-		for name, info in pairs(FreeUIConfigsGlobal['keystone_info']) do
+		for name, info in pairs(FreeADB['keystone_info']) do
 			local name = Ambiguate(name, 'none')
 			local mapID, level, class, faction = strsplit(':', info)
 			local color = F.HexRGB(F.ClassColor(class))
@@ -142,7 +142,7 @@ function BLIZZARD:KeystoneInfo_Create()
 	button:SetScript('OnLeave', F.HideTooltip)
 	button:SetScript('OnMouseUp', function(_, btn)
 		if btn == 'MiddleButton' then
-			wipe(FreeUIConfigsGlobal['keystone_info'])
+			wipe(FreeADB['keystone_info'])
 		end
 	end)
 end
@@ -164,9 +164,9 @@ function BLIZZARD:KeystoneInfo_Update()
 	local link, itemString = BLIZZARD:KeystoneInfo_UpdateBag()
 	if link then
 		local _, mapID, level = strsplit(':', itemString)
-		FreeUIConfigsGlobal['keystone_info'][myFullName] = mapID..':'..level..':'..C.MyClass..':'..myFaction
+		FreeADB['keystone_info'][myFullName] = mapID..':'..level..':'..C.MyClass..':'..myFaction
 	else
-		FreeUIConfigsGlobal['keystone_info'][myFullName] = nil
+		FreeADB['keystone_info'][myFullName] = nil
 	end
 end
 

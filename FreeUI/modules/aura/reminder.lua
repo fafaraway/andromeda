@@ -109,7 +109,7 @@ function AURA:InitReminder()
 	AURA:Reminder_AddRune()
 	if not groups then return end
 
-	if FreeUIConfigs['aura']['buff_reminder'] then
+	if FreeDB['aura']['buff_reminder'] then
 		if not parentFrame then
 			parentFrame = CreateFrame('Frame', nil, UIParent)
 			parentFrame:SetPoint('CENTER', -220, 130)

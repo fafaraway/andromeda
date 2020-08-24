@@ -137,7 +137,7 @@ function MAP:SetupScript(bar)
 end
 
 function MAP:ExpBar()
-	if not FreeUIConfigs.map.progress_bar then return end
+	if not FreeDB.map.progress_bar then return end
 
 	local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', Minimap)
 	bar:SetPoint('BOTTOM', Minimap, 'TOP', 0, -(Minimap:GetHeight() / 8 ))

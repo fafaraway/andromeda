@@ -13,7 +13,7 @@ local function ReskinRegions()
 end
 
 local function NewMail()
-	if not FreeUIConfigs.map.new_mail then return end
+	if not FreeDB.map.new_mail then return end
 
 	local mail = CreateFrame('Frame', 'FreeUIMailFrame', Minimap)
 	mail:Hide()
@@ -41,7 +41,7 @@ local function NewMail()
 end
 
 local function Calendar()
-	if not FreeUIConfigs.map.calendar then return end
+	if not FreeDB.map.calendar then return end
 
 	if not GameTimeFrame.styled then
 		GameTimeFrame:SetNormalTexture(nil)
@@ -96,7 +96,7 @@ local function CalendarInvites()
 end
 
 local function InstanceType()
-	if not FreeUIConfigs.map.instance_type then return end
+	if not FreeDB.map.instance_type then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetSize(24, 12)
@@ -285,7 +285,7 @@ local function QueueStatus()
 end
 
 local function WhoPings()
-	if not FreeUIConfigs.map.who_pings then return end
+	if not FreeDB.map.who_pings then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
@@ -314,7 +314,7 @@ local function WhoPings()
 end
 
 local function WorldMarker()
-	if not FreeUIConfigs.map.world_marker then return end
+	if not FreeDB.map.world_marker then return end
 	if not IsAddOnLoaded('Blizzard_CompactRaidFrames') then return end
 
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
@@ -361,7 +361,7 @@ end
 function MAP:UpdateMinimapScale()
 	local width = Minimap:GetWidth()
 	local height = Minimap:GetHeight()*(190/256)
-	local scale = FreeUIConfigs.map.minimap_scale
+	local scale = FreeDB.map.minimap_scale
 	Minimap:SetScale(scale)
 	Minimap.mover:SetSize(width*scale, height*scale)
 	Minimap.bg:SetSize(width*scale, height*scale)
@@ -372,11 +372,11 @@ function MAP:Minimap()
 	DropDownList1:SetClampedToScreen(true)
 
 	local bg = CreateFrame('Frame', nil, UIParent)
-	bg:SetSize(256*FreeUIConfigs.map.minimap_scale, 190*FreeUIConfigs.map.minimap_scale)
+	bg:SetSize(256*FreeDB.map.minimap_scale, 190*FreeDB.map.minimap_scale)
 	F.SetBD(bg)
 
 	Minimap:Size(256, 256)
-	Minimap:SetScale(FreeUIConfigs.map.minimap_scale)
+	Minimap:SetScale(FreeDB.map.minimap_scale)
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
 
 	Minimap:EnableMouse(true)
@@ -385,7 +385,7 @@ function MAP:Minimap()
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint('CENTER')
 
-	local mover = F.Mover(bg, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap']})
+	local mover = F.Mover(bg, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap']})
 	bg:ClearAllPoints()
 	bg:SetPoint('CENTER', mover)
 	Minimap.mover = mover

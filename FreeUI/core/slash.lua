@@ -34,8 +34,8 @@ StaticPopupDialogs['FREEUI_RESET'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		FreeUIConfigsGlobal = {}
-		FreeUIConfigs = {}
+		FreeADB = {}
+		FreeDB = {}
 
 		ReloadUI()
 	end,
@@ -161,7 +161,7 @@ SlashCmdList['UISCALECHECK'] = function()
 	F.Print('C.ScreenWidth '..C.ScreenWidth)
 	F.Print('C.ScreenHeight '..C.ScreenHeight)
 	F.Print('C.Mult '..C.Mult)
-	F.Print('uiScale '..FreeUIConfigsGlobal['ui_scale'])
+	F.Print('uiScale '..FreeADB['ui_scale'])
 	F.Print('UIParentScale '..UIParent:GetScale())
 	print(C.LineString)
 end
@@ -413,7 +413,19 @@ end
 SLASH_SPEC1 = '/spec'
 
 
+hooksecurefunc('ChatEdit_OnSpacePressed', function(self)
+	if(string.sub(self:GetText(), 1, 3) == '/tt' and (UnitCanCooperate('player', 'target') or UnitIsUnit('player', 'target'))) then
+		self:SetText(SLASH_SMART_WHISPER1 .. ' ' .. GetUnitName('target', true):gsub(' ', '') .. ' ')
+		ChatEdit_ParseText(self, 0)
+	end
+end)
 
+SLASH_WHISPERTARGET1 = '/tt'
+SlashCmdList.WHISPERTARGET = function(str)
+	if(UnitCanCooperate('player', 'target')) then
+		SendChatMessage(str, 'WHISPER', GetDefaultLanguage('player'), GetUnitName('target', true):gsub(' ', ''))
+	end
+end
 
 
 

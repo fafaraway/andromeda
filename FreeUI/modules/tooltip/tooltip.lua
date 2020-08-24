@@ -83,7 +83,7 @@ end
 
 function TOOLTIP:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
-	if FreeUIConfigs.tooltip.hide_in_combat and InCombatLockdown() then self:Hide() return end
+	if FreeDB.tooltip.hide_in_combat and InCombatLockdown() then self:Hide() return end
 
 	TOOLTIP.HideLines(self)
 
@@ -104,11 +104,11 @@ function TOOLTIP:OnTooltipSetUnit()
 			local name, realm = UnitName(unit)
 			local pvpName = UnitPVPName(unit)
 			local relationship = UnitRealmRelationship(unit)
-			if not FreeUIConfigs.tooltip.hide_title and pvpName then
+			if not FreeDB.tooltip.hide_title and pvpName then
 				name = pvpName
 			end
 			if realm and realm ~= '' then
-				if isShiftKeyDown or not FreeUIConfigs.tooltip.hide_realm then
+				if isShiftKeyDown or not FreeDB.tooltip.hide_realm then
 					name = name..'-'..realm
 				elseif relationship == LE_REALM_RELATION_COALESCED then
 					name = name..FOREIGN_SERVER_LABEL
@@ -134,7 +134,7 @@ function TOOLTIP:OnTooltipSetUnit()
 				end
 
 				rankIndex = rankIndex + 1
-				if FreeUIConfigs.tooltip.hide_rank then rank = '' end
+				if FreeDB.tooltip.hide_rank then rank = '' end
 				if guildRealm and isShiftKeyDown then
 					guildName = guildName..'-'..guildRealm
 				end
@@ -228,7 +228,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 end
 
 function TOOLTIP:ScanTargets()
-	if not FreeUIConfigs.tooltip.target_by then return end
+	if not FreeDB.tooltip.target_by then return end
 	if not IsInGroup() then return end
 
 	local _, unit = self:GetUnit()
@@ -251,7 +251,7 @@ function TOOLTIP:ScanTargets()
 end
 
 function TOOLTIP:TargetedInfo()
-	if not FreeUIConfigs.tooltip.target_by then return end
+	if not FreeDB.tooltip.target_by then return end
 
 	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end
@@ -262,11 +262,11 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 	if self:IsForbidden() then return end
 	if not parent then return end
 
-	if FreeUIConfigs.tooltip.follow_cursor then
+	if FreeDB.tooltip.follow_cursor then
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
-			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], 260}, 240, 120)
+			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], 260}, 240, 120)
 		end
 		self:SetOwner(parent, 'ANCHOR_NONE')
 		self:ClearAllPoints()
@@ -342,7 +342,7 @@ function TOOLTIP:ReskinTooltip()
 		self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
 	end
 
-	if FreeUIConfigs.tooltip.border_color and self.GetItem then
+	if FreeDB.tooltip.border_color and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
@@ -369,8 +369,8 @@ local function TooltipSetFont(font, size)
 end
 
 function TOOLTIP:SetTooltipFonts()
-	local textSize = FreeUIConfigs.tooltip.normal_font_size
-	local headerSize = FreeUIConfigs.tooltip.header_font_size
+	local textSize = FreeDB.tooltip.normal_font_size
+	local headerSize = FreeDB.tooltip.header_font_size
 
 	TooltipSetFont(GameTooltipHeaderText, headerSize)
 	TooltipSetFont(GameTooltipText, textSize)
@@ -396,7 +396,7 @@ function TOOLTIP:SetTooltipFonts()
 end
 
 function TOOLTIP:OnLogin()
-	if not FreeUIConfigs.tooltip.enable_tooltip then return end
+	if not FreeDB.tooltip.enable_tooltip then return end
 
 	GameTooltip.StatusBar = GameTooltipStatusBar
 

@@ -99,7 +99,7 @@ local function GetSlotItemLocation(id)
 end
 
 function MISC:ItemLevel_UpdateTraits(button, id, link)
-	if not FreeUIConfigs['azerite_traits'] then return end
+	if not FreeDB['azerite_traits'] then return end
 
 	local empoweredItemLocation = GetSlotItemLocation(id)
 	if not empoweredItemLocation then return end
@@ -182,7 +182,7 @@ end
 function MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 	C_Timer.After(.1, function()
 		local quality = select(3, GetItemInfo(link))
-		local info = F.GetItemLevel(link, unit, index, FreeUIConfigs['gem_enchant'])
+		local info = F.GetItemLevel(link, unit, index, FreeDB['gem_enchant'])
 		if info == 'tooSoon' then return end
 		MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	end)
@@ -207,7 +207,7 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
 			local link = GetInventoryItemLink(unit, index)
 			if link then
 				local quality = select(3, GetItemInfo(link))
-				local info = F.GetItemLevel(link, unit, index, FreeUIConfigs['gem_enchant'])
+				local info = F.GetItemLevel(link, unit, index, FreeDB['gem_enchant'])
 				if info == 'tooSoon' then
 					MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 				else
@@ -296,7 +296,7 @@ function MISC.ItemLevel_ScrappingShow(event, addon)
 end
 
 local function MerchantItemlevel()
-	if not FreeUIConfigs['merchant_ilvl'] then return end
+	if not FreeDB['merchant_ilvl'] then return end
 
 	local numItems = GetMerchantNumItems()
 
@@ -327,7 +327,7 @@ end
 
 
 function MISC:ItemLevel()
-	if not FreeUIConfigs['item_level'] then return end
+	if not FreeDB['item_level'] then return end
 
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript('OnShow', MISC.ItemLevel_UpdatePlayer)

@@ -209,7 +209,7 @@ function NOTIFICATION:OnLogin()
 		end
 	end)
 
-	if not FreeUIConfigs.notification.enable_notification then return end
+	if not FreeDB.notification.enable_notification then return end
 	self:NewMail()
 	self:BagFull()
 	self:VersionCheck()

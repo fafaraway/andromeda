@@ -26,7 +26,7 @@ local menuList = {
 }
 
 function MISC:EasyMark()
-	if not FreeUIConfigs['easy_mark'] then return end
+	if not FreeDB['easy_mark'] then return end
 
 	WorldFrame:HookScript('OnMouseDown', function(_, button)
 		if button == 'LeftButton' and IsAltKeyDown() and UnitExists('mouseover') then

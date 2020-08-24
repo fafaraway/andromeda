@@ -102,7 +102,7 @@ end
 
 
 function TOOLTIP:LinkHover()
-	if not FreeUIConfigs.tooltip.link_hover then return end
+	if not FreeDB.tooltip.link_hover then return end
 
 	for i = 1, NUM_CHAT_WINDOWS do
 		local frame = _G['ChatFrame'..i]

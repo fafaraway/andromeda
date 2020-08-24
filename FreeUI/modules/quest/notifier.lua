@@ -17,7 +17,7 @@ local function acceptText(link, daily)
 end
 
 local function completeText(link)
-	if FreeUIConfigs.quest.complete_ring then
+	if FreeDB.quest.complete_ring then
 		PlaySound(soundKitID, 'Master')
 	end
 
@@ -25,7 +25,7 @@ local function completeText(link)
 end
 
 local function sendQuestMsg(msg)
-	if not FreeUIConfigs.quest.quest_progress then return end
+	if not FreeDB.quest.quest_progress then return end
 
 	if C.isDeveloper then
 		F.Print(msg)
@@ -56,8 +56,8 @@ local questMatches = {
 }
 
 function QUEST:FindQuestProgress(_, msg)
-	if not FreeUIConfigs.quest.quest_progress then return end
-	if FreeUIConfigs.quest.only_complete_ring then return end
+	if not FreeDB.quest.quest_progress then return end
+	if FreeDB.quest.only_complete_ring then return end
 
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
@@ -112,7 +112,7 @@ function QUEST:FindWorldQuestComplete(questID)
 end
 
 function QUEST:QuestNotifier()
-	--if FreeUIConfigs.quest.quest_progress then
+	--if FreeDB.quest.quest_progress then
 		self:FindQuestComplete()
 		F:RegisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
 		F:RegisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)

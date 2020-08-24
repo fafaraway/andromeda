@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local CHAT, cfg = F:GetModule('CHAT'), C.Chat
+local CHAT = F:GetModule('CHAT')
 
 
 local firstLines = {
@@ -135,7 +135,7 @@ end
 
 
 function CHAT:Spamagemeter()
-	if not cfg.spamageMeter then return end
+	if not FreeDB.chat.spamage_meter then return end
 
 	for _, event in pairs(events) do
 		ChatFrame_AddMessageEventFilter(event, ParseChatEvent)

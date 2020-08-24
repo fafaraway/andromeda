@@ -127,7 +127,7 @@ function F:CreateTex()
 end
 
 function F:CreateSD(a, m, s, override)
-	if not override and not FreeUIConfigs['theme']['shadow_border'] then return end
+	if not override and not FreeDB['theme']['shadow_border'] then return end
 	if self.Shadow then return end
 
 	local frame = self
@@ -161,7 +161,7 @@ function F:SetBackdrop(frame, a)
 	borders.LEFT:SetWidth(size)
 	borders.RIGHT:SetWidth(size)
 
-	F:SetBackdropColor(frame, FreeUIConfigs['theme'].backdrop_color[1], FreeUIConfigs['theme'].backdrop_color[2], FreeUIConfigs['theme'].backdrop_color[3], a or FreeUIConfigs['theme'].backdrop_alpha)
+	F:SetBackdropColor(frame, FreeDB['theme'].backdrop_color[1], FreeDB['theme'].backdrop_color[2], FreeDB['theme'].backdrop_color[3], a or FreeDB['theme'].backdrop_alpha)
 	F:SetBackdropBorderColor(frame, 0, 0, 0, 1)
 end
 
@@ -220,7 +220,7 @@ end
 function F:CreateBD(a)
 	self:SetBackdrop(nil)
 	F:PixelBorders(self)
-	F:SetBackdrop(self, a or FreeUIConfigs['theme'].backdrop_alpha)
+	F:SetBackdrop(self, a or FreeDB['theme'].backdrop_alpha)
 
 	if not a then tinsert(C.Frames, self) end
 end
@@ -254,7 +254,7 @@ function F:CreateGradient()
 	local tex = self:CreateTexture(nil, 'BORDER')
 	tex:SetInside()
 	tex:SetTexture(assets.bd_tex)
-	tex:SetGradientAlpha('Vertical', FreeUIConfigs['theme'].gradient_color_primary[1], FreeUIConfigs['theme'].gradient_color_primary[2], FreeUIConfigs['theme'].gradient_color_primary[3], FreeUIConfigs['theme'].gradient_color_primary_alpha, FreeUIConfigs['theme'].gradient_color_secondary[1], FreeUIConfigs['theme'].gradient_color_secondary[2], FreeUIConfigs['theme'].gradient_color_secondary[3], FreeUIConfigs['theme'].gradient_color_secondary_alpha)
+	tex:SetGradientAlpha('Vertical', FreeDB['theme'].gradient_color_primary[1], FreeDB['theme'].gradient_color_primary[2], FreeDB['theme'].gradient_color_primary[3], FreeDB['theme'].gradient_color_primary_alpha, FreeDB['theme'].gradient_color_secondary[1], FreeDB['theme'].gradient_color_secondary[2], FreeDB['theme'].gradient_color_secondary[3], FreeDB['theme'].gradient_color_secondary_alpha)
 
 	return tex
 end
@@ -1252,7 +1252,7 @@ end
 
 -- Numberize
 function F.Numb(n)
-	if FreeUIConfigsGlobal['number_format'] == 1 then
+	if FreeADB['number_format'] == 1 then
 		if n >= 1e12 then
 			return ('%.2ft'):format(n / 1e12)
 		elseif n >= 1e9 then
@@ -1264,7 +1264,7 @@ function F.Numb(n)
 		else
 			return ('%.0f'):format(n)
 		end
-	elseif FreeUIConfigsGlobal['number_format'] == 2 then
+	elseif FreeADB['number_format'] == 2 then
 		if n >= 1e12 then
 			return format('%.2f'..L['MISC_NUMBER_CAP_3'], n / 1e12)
 		elseif n >= 1e8 then

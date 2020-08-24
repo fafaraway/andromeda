@@ -54,7 +54,7 @@ end)
 
 
 function TOOLTIP:ShowPvPRating()
-	if not FreeUIConfigs.tooltip.pvp_rating then return end
+	if not FreeDB.tooltip.pvp_rating then return end
 
 	GameTooltip:HookScript('OnTooltipSetUnit', function(self)
 		if InCombatLockdown() then return end

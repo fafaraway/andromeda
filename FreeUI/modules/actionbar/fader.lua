@@ -86,7 +86,7 @@ local function IsMouseOverFrame(frame)
 end
 
 local function IsMinimalMode()
-	if FreeUIConfigs['minimal'] then
+	if FreeDB['minimal'] then
 		if UnitExists('target') then return true end
 		if UnitExists('focus') then return true end
 		if InCombatLockdown() then return true end

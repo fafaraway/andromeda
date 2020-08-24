@@ -5,21 +5,20 @@ engine[2] = {} -- C, Constants/Config
 engine[3] = {} -- L, Localisation
 
 _G[addonName] = engine
-_G.BINDING_HEADER_FREEUI = GetAddOnMetadata(..., 'Title')
 
-FreeUIConfigsGlobal, FreeUIConfigs = {}, {}
+FreeADB, FreeDB = {}, {}
 
 
-local F, C, L = unpack(engine)
+local F, C = unpack(engine)
 
 
 -- Events
 local events = {}
 
-local host = CreateFrame("Frame")
-host:SetScript("OnEvent", function(_, event, ...)
+local host = CreateFrame('Frame')
+host:SetScript('OnEvent', function(_, event, ...)
 	for func in pairs(events[event]) do
-		if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+		if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
 			func(event, CombatLogGetCurrentEventInfo())
 		else
 			func(event, ...)
@@ -57,7 +56,7 @@ end
 local modules, initQueue = {}, {}
 
 function F:RegisterModule(name)
-	if modules[name] then print("Module <"..name.."> has been registered.") return end
+	if modules[name] then print('Module <'..name..'> has been registered.') return end
 	local module = {}
 	module.name = name
 	modules[name] = module
@@ -67,7 +66,7 @@ function F:RegisterModule(name)
 end
 
 function F:GetModule(name)
-	if not modules[name] then print("Module <"..name.."> does not exist.") return end
+	if not modules[name] then print('Module <'..name..'> does not exist.') return end
 
 	return modules[name]
 end
@@ -80,7 +79,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-	local scale = GetBestScale() * FreeUIConfigsGlobal['ui_scale']
+	local scale = GetBestScale() * FreeADB['ui_scale']
 
 	if init then
 		local pixel = 1
@@ -96,7 +95,7 @@ local function UpdatePixelScale(event)
 	if isScaling then return end
 	isScaling = true
 
-	if event == "UI_SCALE_CHANGED" then
+	if event == 'UI_SCALE_CHANGED' then
 		C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 	end
 	F:SetupUIScale(true)
@@ -109,10 +108,10 @@ end
 -- Init
 F:RegisterEvent('PLAYER_LOGIN', function()
 
-	if FreeUIConfigs['installation_complete'] then
+	if FreeDB['installation_complete'] then
 
 		F:SetupUIScale()
-		F:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
+		F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
 
 		F.HideOption(Advanced_UseUIScale)
 		F.HideOption(Advanced_UIScaleSlider)

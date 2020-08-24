@@ -39,7 +39,7 @@ end
 
 
 function NOTIFICATION:BagFull()
-	if not FreeUIConfigs.notification.bag_full then return end
+	if not FreeDB.notification.bag_full then return end
 
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('BAG_UPDATE')

@@ -16,7 +16,7 @@ function THEME:LoadDefaultSkins()
 	end
 	wipe(C.BlizzThemes)
 
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeDB['theme']['reskin_blizz'] then return end
 
 	for addonName, func in pairs(C.Themes) do
 		local isLoaded, isFinished = IsAddOnLoaded(addonName)
@@ -37,7 +37,7 @@ end
 
 
 function THEME:CursorTrail()
-	if not FreeUIConfigs['theme']['cursor_trail'] then return end
+	if not FreeDB['theme']['cursor_trail'] then return end
 
 	local f = CreateFrame('Frame', nil, UIParent);
 	f:SetFrameStrata('TOOLTIP');
@@ -73,8 +73,8 @@ function THEME:CursorTrail()
 end
 
 function THEME:Vignetting()
-	if not FreeUIConfigs['theme']['vignetting'] then return end
-	if FreeUIConfigs['theme']['vignetting_alpha'] == 0 then return end
+	if not FreeDB['theme']['vignetting'] then return end
+	if FreeDB['theme']['vignetting_alpha'] == 0 then return end
 
 	local f = CreateFrame('Frame')
 	f:SetPoint('TOPLEFT')
@@ -85,7 +85,7 @@ function THEME:Vignetting()
 	f.tex:SetTexture(C.Assets.vig_tex)
 	f.tex:SetAllPoints(f)
 
-	f:SetAlpha(FreeUIConfigs['theme']['vignetting_alpha'])
+	f:SetAlpha(FreeDB['theme']['vignetting_alpha'])
 end
 
 

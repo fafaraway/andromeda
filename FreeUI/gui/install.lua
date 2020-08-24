@@ -144,11 +144,11 @@ end
 
 local function SetupUIScale()
 	if C.ScreenHeight >= 2000 then
-		FreeUIConfigsGlobal['ui_scale'] = 2
+		FreeADB['ui_scale'] = 2
 	elseif C.ScreenHeight >= 1500 then
-		FreeUIConfigsGlobal['ui_scale'] = 1.4
+		FreeADB['ui_scale'] = 1.4
 	else
-		FreeUIConfigsGlobal['ui_scale'] = 1
+		FreeADB['ui_scale'] = 1
 	end
 end
 
@@ -332,7 +332,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
 		rightButton:SetScript('OnClick', function()
-			FreeUIConfigs['installation_complete'] = true
+			FreeDB['installation_complete'] = true
 			ReloadUI()
 		end)
 	end
@@ -433,7 +433,7 @@ end
 
 
 function INSTALL:OnLogin()
-	if FreeUIConfigs['installation_complete'] then return end
+	if FreeDB['installation_complete'] then return end
 
 	self:HelloWorld()
 end

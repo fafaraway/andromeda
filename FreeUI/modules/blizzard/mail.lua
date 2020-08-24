@@ -57,7 +57,7 @@ local function OnHide()
 end
 
 function BLIZZARD:MailButton()
-	if not FreeUIConfigs.blizzard.mail_button then return end
+	if not FreeDB.blizzard.mail_button then return end
 
 	OpenAllMail:Hide()
 	OpenAllMail:UnregisterAllEvents()

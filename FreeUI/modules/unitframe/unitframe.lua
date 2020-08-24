@@ -3,7 +3,7 @@ local UNITFRAME = F:GetModule('UNITFRAME')
 
 
 function UNITFRAME:OnLogin()
-	if not FreeUIConfigs.unitframe.enable_unitframe then return end
+	if not FreeDB.unitframe.enable_unitframe then return end
 
 	F:SetSmoothingAmount(.3)
 
@@ -11,25 +11,25 @@ function UNITFRAME:OnLogin()
 	self:SpawnTarget()
 	self:SpawnTargetTarget()
 
-	if FreeUIConfigs.unitframe.enable_pet then
+	if FreeDB.unitframe.enable_pet then
 		self:SpawnPet()
 	end
 
-	if FreeUIConfigs.unitframe.enable_focus then
+	if FreeDB.unitframe.enable_focus then
 		self:SpawnFocus()
 		self:SpawnFocusTarget()
 	end
 
-	if FreeUIConfigs.unitframe.enable_boss then
+	if FreeDB.unitframe.enable_boss then
 		self:SpawnBoss()
 	end
 
-	if FreeUIConfigs.unitframe.enable_arena then
+	if FreeDB.unitframe.enable_arena then
 		self:SpawnArena()
 	end
 
 
-	if not FreeUIConfigs.unitframe.enable_group then return end
+	if not FreeDB.unitframe.enable_group then return end
 
 	if CompactRaidFrameManager_SetSetting then
 		CompactRaidFrameManager_SetSetting('IsShown', '0')

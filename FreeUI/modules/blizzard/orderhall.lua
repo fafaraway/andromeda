@@ -109,7 +109,7 @@ function BLIZZARD:OrderHall_OnLoad(addon)
 end
 
 function BLIZZARD:OrderHall_OnInit()
-	if not FreeUIConfigs.blizzard.orderhall_icon then return end
+	if not FreeDB.blizzard.orderhall_icon then return end
 
 	if IsAddOnLoaded('Blizzard_OrderHallUI') then
 		BLIZZARD:OrderHall_CreateIcon()

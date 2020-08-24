@@ -6,7 +6,7 @@ tinsert(C.BlizzThemes, function()
 	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeDB['theme']['reskin_blizz'] then return end
 
 	-- Tooltips
 	function F:ReskinGarrisonTooltip()

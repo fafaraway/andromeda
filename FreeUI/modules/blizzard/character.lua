@@ -9,7 +9,7 @@ local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
 
 
 function BLIZZARD:MissingStats()
-	if not FreeUIConfigs.blizzard.missing_stats then return end
+	if not FreeDB.blizzard.missing_stats then return end
 	if IsAddOnLoaded('DejaCharacterStats') then return end
 
 	local statPanel = CreateFrame('Frame', nil, CharacterFrameInsetRight)
@@ -130,7 +130,7 @@ function BLIZZARD:MissingStats()
 end
 
 function BLIZZARD:NakedButton()
-	if not FreeUIConfigs.blizzard.naked_button then return end
+	if not FreeDB.blizzard.naked_button then return end
 
 	local bu = CreateFrame('Button', nil, CharacterFrameInsetRight)
 	bu:SetSize(31, 33)

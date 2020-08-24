@@ -4,7 +4,7 @@ local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 function THEME:ReskinPGF()
-    if not FreeUIConfigs['theme']['reskin_pgf'] then return end
+    if not FreeDB['theme']['reskin_pgf'] then return end
 	if not IsAddOnLoaded('PremadeGroupsFilter') then return end
 
 	local tipStyled
