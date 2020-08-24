@@ -25,7 +25,6 @@ F:RegisterModule('NOTIFICATION')
 F:RegisterModule('QUEST')
 F:RegisterModule('TOOLTIP')
 F:RegisterModule('UNITFRAME')
-F:RegisterModule('AUTOMATION')
 
 
 F.INSTALL = F:GetModule('INSTALL')
@@ -48,4 +47,4 @@ F.NOTIFICATION = F:GetModule('NOTIFICATION')
 F.QUEST = F:GetModule('QUEST')
 F.TOOLTIP = F:GetModule('TOOLTIP')
 F.UNITFRAME = F:GetModule('UNITFRAME')
-F.AUTOMATION = F:GetModule('AUTOMATION')
+
