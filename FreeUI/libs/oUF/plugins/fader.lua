@@ -152,18 +152,11 @@ local function UpdateAlpha(obj)
 		obj.inRangeAlpha = alpha
 		obj.outsideRangeAlpha = alpha * obj.outsideRangeAlphaPerc
     end
-    -- if obj.SpellRange then
-	-- 	obj.insideAlpha = alpha
-	-- 	obj.outsideAlpha = alpha * obj.outsideAlphaPerc
-	-- end
 
-	--obj:SetAlpha(alpha)
-	-- obj:SetScript("OnEnter", function(self) self:SetAlpha(1) UnitFrame_OnEnter(obj) end)
-    -- obj:SetScript("OnLeave", function(self) self:SetAlpha(alpha) UnitFrame_OnLeave(obj) end)
 
     F:UIFrameFadeIn(obj, 0.3, obj:GetAlpha(), alpha)
 
-    obj:SetScript("OnEnter", function(self)
+    --[[ obj:SetScript("OnEnter", function(self)
         F:UIFrameFadeIn(self, 0.3, self:GetAlpha(), 1)
         UnitFrame_OnEnter(obj)
     end)
@@ -171,8 +164,7 @@ local function UpdateAlpha(obj)
     obj:SetScript("OnLeave", function(self)
         F:UIFrameFadeOut(self, 0.3, self:GetAlpha(), alpha)
         UnitFrame_OnLeave(obj)
-    end)
-
+    end) ]]
 
 end
 

@@ -281,6 +281,7 @@ function THEME:ReskinDBMGUI()
 end
 
 function THEME:Test()
+	if not IsAddOnLoaded('DBM-GUI') then return end
 	tinsert(UISpecialFrames, _G['DBM_GUI_OptionsFrame'])
 
 
