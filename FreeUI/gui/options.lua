@@ -125,7 +125,7 @@ end
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
 
 	local basic = GUI:AddSubCategory(parent, 'GUI.localization.general.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local blizzMover = GUI:CreateCheckBox(parent, 'blizz_mover')
 	blizzMover:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -232,10 +232,10 @@ end ]]
 
 local function MiscOptions()
 	local parent = FreeUI_GUI.MISC
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 
 	local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 30, 5})
@@ -244,10 +244,10 @@ end
 
 local function AppearanceOptions()
 	local parent = FreeUI_GUI.APPEARANCE
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Hunter_BeastWithin')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Hunter_BeastWithin')
 
 	local basic = GUI:AddSubCategory(parent, L['GUI_APPEARANCE_SUB_BASIC'])
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local cursorTrail = GUI:CreateCheckBox(parent, 'theme', 'cursor_trail')
 	cursorTrail:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -306,10 +306,10 @@ end
 
 local function AuraOptions()
 	local parent = FreeUI_GUI.AURA
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
 
 	local basic = GUI:AddSubCategory(parent, L['GUI_AURA_SUB_BASIC'])
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'aura', 'enable_aura', nil, SetupAuraSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -360,10 +360,10 @@ end
 
 local function QuestOptions()
 	local parent = FreeUI_GUI.QUEST
-	parent.tab.icon:SetTexture('Interface\\ICONS\\ABILITY_Rogue_RollTheBones04')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\ABILITY_Rogue_RollTheBones04')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'quest', 'enable_quest')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -399,10 +399,10 @@ end
 
 local function CombatOptions()
 	local parent = FreeUI_GUI.COMBAT
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'combat', 'enable_combat')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -450,10 +450,10 @@ end
 
 local function InventoryOptions()
 	local parent = FreeUI_GUI.INVENTORY
-	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'inventory', 'enable_inventory', nil, SetupBagSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -560,10 +560,10 @@ end
 
 local function UnitframeOptions()
 	local parent = FreeUI_GUI.UNITFRAME
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'unitframe', 'enable_unitframe', nil, SetupUnitSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -817,10 +817,10 @@ end
 
 local function TooltipOptions()
 	local parent = FreeUI_GUI.TOOLTIP
-	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'tooltip', 'enable_tooltip', nil, SetupTipFontSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -915,10 +915,10 @@ end
 
 local function MapOptions()
 	local parent = FreeUI_GUI.MAP
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'map', 'enable_map', nil, SetupMapScale)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -981,10 +981,10 @@ end
 
 local function InfobarOptions()
 	local parent = FreeUI_GUI.INFOBAR
-	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Horn_04')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Horn_04')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'infobar', 'enable_infobar', nil, SetupInfoBarHeight)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -1040,12 +1040,12 @@ end
 
 local function DataOptions()
 	local parent = FreeUI_GUI.DATA
-	parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Blingtron')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Blingtron')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local btnExport = F.CreateButton(parent.child, 80, 26, L['GUI_DATA_EXPORT'])
+	local btnExport = F.CreateButton(parent, 80, 26, L['GUI_DATA_EXPORT'])
 	btnExport:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 10, -20)
 	btnExport:SetScript('OnClick', function()
 		if FreeUI_GUI then FreeUI_GUI:Hide() end
@@ -1066,7 +1066,7 @@ local function DataOptions()
 	end)
 	btnExport:SetScript('OnLeave', F.HideTooltip)
 
-	local btnImport = F.CreateButton(parent.child, 80, 26, L['GUI_DATA_IMPORT'])
+	local btnImport = F.CreateButton(parent, 80, 26, L['GUI_DATA_IMPORT'])
 	btnImport:SetPoint('LEFT', btnExport, 'RIGHT', 10, 0)
 	btnImport:SetScript('OnClick', function()
 		if FreeUI_GUI then FreeUI_GUI:Hide() end
@@ -1087,7 +1087,7 @@ local function DataOptions()
 	end)
 	btnImport:SetScript('OnLeave', F.HideTooltip)
 
-	local btnReset = F.CreateButton(parent.child, 80, 26, L['GUI_DATA_RESET'])
+	local btnReset = F.CreateButton(parent, 80, 26, L['GUI_DATA_RESET'])
 	btnReset:SetPoint('LEFT', btnImport, 'RIGHT', 10, 0)
 	btnReset:SetScript('OnClick', function()
 		if FreeUI_GUI then FreeUI_GUI:Hide() end
@@ -1114,10 +1114,10 @@ end
 
 local function NotificationOptions()
 	local parent = FreeUI_GUI.NOTIFICATION
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
 
 	local basic = GUI:AddSubCategory(parent)
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'notification', 'enable_notification')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -1147,6 +1147,17 @@ local function NotificationOptions()
 	parent:HookScript('OnShow', toggleNotificationOptions)
 end
 
+
+
+
+
+
+
+
+
+
+
+
 --[[
 
 local function addActionbarSection()
@@ -1154,7 +1165,7 @@ local function addActionbarSection()
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Holy_SearingLightPriest')
 
 	local basic = GUI:AddSubCategory(parent, 'GUI.localization.actionbar.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'enable', nil, SetupActionbarSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -1364,7 +1375,7 @@ local function addChatSection()
 	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
 
 	local basic = GUI:AddSubCategory(parent, 'GUI.localization.chat.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.subText, 'BOTTOMLEFT', 0, -8)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'enable')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
@@ -1531,7 +1542,7 @@ end
 
 function GUI:AddOptions()
 	--addGeneralOptions()
-	AppearanceOptions()
+
 	NotificationOptions()
 	-- addAnnouncementOptions()
 	-- addAutomationOptions()
@@ -1545,6 +1556,8 @@ function GUI:AddOptions()
 	QuestOptions()
 	TooltipOptions()
 	UnitframeOptions()
+
+	AppearanceOptions()
 	DataOptions()
 	MiscOptions()
 end
