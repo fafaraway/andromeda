@@ -249,6 +249,8 @@ local function PostUpdateAltPower(element, _, cur, _, max)
 end
 
 function UNITFRAME:AddAlternativePowerBar(self)
+	if not FreeUIConfigs.unitframe.alt_power then return end
+
 	local altPower = CreateFrame('StatusBar', nil, self)
 	altPower:SetStatusBarTexture(C.Assets.norm_tex)
 	altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
