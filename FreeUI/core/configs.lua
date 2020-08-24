@@ -784,7 +784,7 @@ C.CharacterSettings = {
 
 	['bind_type'] = 1,
 
-	['click_cast'] = {},
+
 
 	['item_level'] = true,
 		['merchant_ilvl'] = true,
@@ -922,12 +922,18 @@ C.CharacterSettings = {
 			['heal_prediction'] = true,
 			['over_absorb'] = true,
 			['gcd_spark'] = true,
-			['floating_combat_text'] = true,
+			['floating_combat_feedback'] = true,
+				['fcf_pet'] = true,
+				['fcf_hot'] = true,
+				['fcf_over_healing'] = false,
+				['fcf_auto_attack'] = true,
+				['fcf_abbr_number'] = true,
 
 			['target_icon_indicator'] = true,
 			['quest_indicator'] = true,
 
 			['power_bar_height'] = 1,
+			['alt_power'] = true,
 			['alternative_power_height'] = 1,
 
 			['class_power_bar'] = true,
@@ -960,6 +966,8 @@ C.CharacterSettings = {
 				['player_pvp_indicator'] = true,
 				['player_combat_indicator'] = true,
 				['player_resting_indicator'] = true,
+
+				['player_hide_tags'] = false,
 
 			['enable_pet'] = true,
 				['pet_width'] = 50,
@@ -999,6 +1007,7 @@ C.CharacterSettings = {
 
 				['group_click_cast'] = true,
 				['group_click_cast_filter'] = false,
+				['group_click_cast_config'] = {},
 				['group_debuff_highlight'] = true,
 				['group_corner_buffs'] = true,
 				['group_debuffs'] = true,

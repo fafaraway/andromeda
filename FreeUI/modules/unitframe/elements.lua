@@ -10,6 +10,42 @@ local InCombatLockdown = InCombatLockdown
 local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 
+
+-- Frame backdrop
+function UNITFRAME:AddBackDrop(self)
+	--[[ local highlight = self:CreateTexture(nil, 'BORDER')
+	highlight:SetAllPoints()
+	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+	highlight:SetTexCoord(0, 1, .5, 1)
+	highlight:SetVertexColor(.6, .6, .6)
+	highlight:SetBlendMode('ADD')
+	highlight:Hide()
+
+	self:RegisterForClicks('AnyUp')
+	self:HookScript('OnEnter', function()
+		UnitFrame_OnEnter(self)
+		highlight:Show()
+	end)
+	self:HookScript('OnLeave', function()
+		UnitFrame_OnLeave(self)
+		highlight:Hide()
+	end)
+
+	self.Highlight = highlight ]]
+
+	self:RegisterForClicks('AnyUp')
+
+	F.CreateTex(self)
+
+	local bg = F.CreateBDFrame(self)
+	bg:SetBackdropBorderColor(0, 0, 0, 1)
+	bg:SetBackdropColor(0, 0, 0, 0)
+	self.Bg = bg
+
+	local glow = F.CreateSD(self.Bg)
+	self.Glow = glow
+end
+
 -- Health
 local function PostUpdateHealth(health, unit, min, max)
 	local self = health:GetParent()
@@ -1402,7 +1438,7 @@ end
 
 -- Floating combat feedback
 function UNITFRAME:AddFCF(self)
-	if not FreeUIConfigs.unitframe.floating_combat_text then return end
+	if not FreeUIConfigs.unitframe.floating_combat_feedback then return end
 
 	local parentFrame = CreateFrame('Frame', nil, UIParent)
 	local fcf = CreateFrame('Frame', 'oUF_CombatTextFrame', parentFrame)
@@ -1419,11 +1455,11 @@ function UNITFRAME:AddFCF(self)
 
 	fcf.font = C.Assets.Fonts.Number
 	fcf.fontFlags = nil
-	fcf.showPets = true
-	fcf.showHots = true
-	fcf.showAutoAttack = true
-	fcf.showOverHealing = false
-	fcf.abbreviateNumbers = true
+	fcf.showPets = FreeUIConfigs.unitframe.fcf_pet
+	fcf.showHots = FreeUIConfigs.unitframe.fcf_hot
+	fcf.showAutoAttack = FreeUIConfigs.unitframe.fcf_auto_attack
+	fcf.showOverHealing = FreeUIConfigs.unitframe.fcf_over_healing
+	fcf.abbreviateNumbers = FreeUIConfigs.unitframe.fcf_abbr_number
 	self.FloatingCombatFeedback = fcf
 end
 
@@ -1546,4 +1582,181 @@ function UNITFRAME:AddPartySpells(self)
 	if FreeUIConfigs.unitframe.party_spell_sync then
 		self.PartyWatcher.PostUpdate = UNITFRAME.PartyWatcherPostUpdate
 	end
+end
+
+-- Group frame border
+local function UpdateSelectedBorder(self)
+	if UnitIsUnit('target', self.unit) then
+		self.Border:Show()
+	else
+		self.Border:Hide()
+	end
+end
+
+function UNITFRAME:AddSelectedBorder(self)
+	local border = F.CreateBDFrame(self.Bg)
+	border:SetBackdropBorderColor(1, 1, 1, 1)
+	border:SetBackdropColor(0, 0, 0, 0)
+	border:SetFrameLevel(self:GetFrameLevel()+5)
+	border:Hide()
+
+	self.Border = border
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateSelectedBorder, true)
+	self:RegisterEvent('GROUP_ROSTER_UPDATE', UpdateSelectedBorder, true)
+end
+
+-- Tags
+function UNITFRAME:AddGroupNameText(self)
+	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Normal, 11, nil, nil, nil, 'THICK')
+
+	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
+	self.GroupName = groupName
+end
+
+function UNITFRAME:AddNameText(self)
+	local name = F.CreateFS(self.Health, C.Assets.Fonts.Normal, 11, nil, nil, nil, 'THICK')
+
+	if self.unitStyle == 'target' then
+		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+	elseif self.unitStyle == 'arena' or self.unitStyle == 'boss' then
+		name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+	else
+		name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+	end
+
+	self:Tag(name, '[free:name] [arenaspec]')
+	self.Name = name
+end
+
+function UNITFRAME:AddHealthValueText(self)
+	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Number, 11, nil, nil, nil, 'THICK')
+	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+
+	if self.unitStyle == 'player' then
+		self:Tag(healthValue, '[free:dead][free:health]')
+	elseif self.unitStyle == 'target' then
+		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
+	elseif self.unitStyle == 'boss' then
+		healthValue:ClearAllPoints()
+		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+		healthValue:SetJustifyH('RIGHT')
+		self:Tag(healthValue, '[free:dead][free:health] [free:healthpercentage]')
+	elseif self.unitStyle == 'arena' then
+		healthValue:ClearAllPoints()
+		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+		healthValue:SetJustifyH('RIGHT')
+		self:Tag(healthValue, '[free:dead][free:offline][free:health]')
+	end
+
+	self.HealthValue = healthValue
+end
+
+function UNITFRAME:AddPowerValueText(self)
+	local powerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
+	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+
+	if self.unitStyle == 'target' then
+		powerValue:ClearAllPoints()
+		powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
+	elseif self.unitStyle == 'boss' then
+		powerValue:ClearAllPoints()
+		powerValue:SetPoint('BOTTOMRIGHT', self.HealthValue, 'BOTTOMLEFT', -4, 0)
+	end
+
+	self:Tag(powerValue, '[powercolor][free:power]')
+	powerValue.frequentUpdates = true
+
+	self.PowerValue = powerValue
+end
+
+function UNITFRAME:AddAlternativePowerValueText(self)
+	local altPowerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
+
+	if self.unitStyle == 'boss' then
+		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
+	else
+		altPowerValue:SetPoint('BOTTOM', self.Health, 'TOP', 4, 0)
+	end
+
+	self:Tag(altPowerValue, '[free:altpower]')
+
+	self.AlternativePowerValue = altPowerValue
+end
+
+-- Text string all in one
+function UNITFRAME:AddTextString()
+	local style = self.unitStyle
+	local name, groupName, health, power, altPower, pvp, combat, resting, quest
+
+
+	name = F.CreateFS(self.Health, C.Assets.Fonts.Normal, 11, nil, nil, nil, 'THICK')
+
+	if style == 'target' then
+		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+	elseif style == 'arena' or style == 'boss' then
+		name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+	else
+		name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+	end
+
+	self:Tag(name, '[free:name] [arenaspec]')
+	self.Name = name
+
+
+	groupName = F.CreateFS(self.Health, C.Assets.Fonts.Normal, 11, nil, nil, nil, 'THICK')
+
+	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
+	self.GroupName = groupName
+
+
+	health = F.CreateFS(self.Health, C.Assets.Fonts.Number, 11, nil, nil, nil, 'THICK')
+	health:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+
+	if style == 'player' then
+		self:Tag(health, '[free:dead][free:health]')
+	elseif style == 'target' then
+		self:Tag(health, '[free:dead][free:offline][free:health] [free:healthpercentage]')
+	elseif style == 'boss' then
+		health:ClearAllPoints()
+		health:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+		health:SetJustifyH('RIGHT')
+		self:Tag(health, '[free:dead][free:health] [free:healthpercentage]')
+	elseif style == 'arena' then
+		health:ClearAllPoints()
+		health:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+		health:SetJustifyH('RIGHT')
+		self:Tag(health, '[free:dead][free:offline][free:health]')
+	end
+
+	self.HealthValue = health
+
+
+	power = F.CreateFS(self.Health, C.Assets.Fonts.Number, 11, nil, nil, nil, 'THICK')
+	power:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+
+	if style == 'target' then
+		power:ClearAllPoints()
+		power:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
+	elseif style == 'boss' then
+		power:ClearAllPoints()
+		power:SetPoint('BOTTOMRIGHT', self.HealthValue, 'BOTTOMLEFT', -4, 0)
+	end
+
+	self:Tag(power, '[powercolor][free:power]')
+	power.frequentUpdates = true
+
+	self.PowerValue = power
+
+
+	altPower = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
+
+	if style == 'boss' then
+		altPower:SetPoint('LEFT', self, 'RIGHT', 2, 0)
+	else
+		altPower:SetPoint('BOTTOM', self.Health, 'TOP', 4, 0)
+	end
+
+	self:Tag(altPower, '[free:altpower]')
+
+	self.AlternativePowerValue = altPower
 end

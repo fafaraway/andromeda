@@ -3,6 +3,16 @@ local UNITFRAME = F:GetModule('UNITFRAME')
 local oUF = F.oUF
 
 
+local function tagsOnEnter(self)
+	self.HealthValue:Show()
+	self.PowerValue:Show()
+end
+
+local function tagsOnLeave(self)
+	self.HealthValue:Hide()
+	self.PowerValue:Hide()
+end
+
 local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
 	self:SetSize(FreeUIConfigs.unitframe.player_width, FreeUIConfigs.unitframe.player_height)
@@ -36,6 +46,18 @@ function UNITFRAME:SpawnPlayer()
 	oUF:SetActiveStyle('Player')
 
 	local player = oUF:Spawn('player', 'oUF_Player')
+
+	if FreeUIConfigs.unitframe.player_hide_tags then
+		player.HealthValue:Hide()
+		player.PowerValue:Hide()
+
+		if player.PvPIndicator then player.PvPIndicator = F.Dummy end
+		if player.CombatIndicator then player.CombatIndicator = F.Dummy end
+		if player.RestingIndicator then player.RestingIndicator = F.Dummy end
+
+		player:HookScript('OnEnter', tagsOnEnter)
+		player:HookScript('OnLeave', tagsOnLeave)
+	end
 
 	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], 'PlayerFrame', {'BOTTOM', UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
