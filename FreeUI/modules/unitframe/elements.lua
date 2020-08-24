@@ -1263,6 +1263,7 @@ end
 -- Indicatiors
 function UNITFRAME:AddPvPIndicator(self)
 	if not FreeDB.unitframe.player_pvp_indicator then return end
+	if FreeDB.unitframe.player_hide_tags then return end
 
 	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
@@ -1275,6 +1276,7 @@ end
 
 function UNITFRAME:AddCombatIndicator(self)
 	if not FreeDB.unitframe.player_combat_indicator then return end
+	if FreeDB.unitframe.player_hide_tags then return end
 
 	local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
 	combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
@@ -1284,6 +1286,7 @@ end
 
 function UNITFRAME:AddRestingIndicator(self)
 	if not FreeDB.unitframe.player_resting_indicator then return end
+	if FreeDB.unitframe.player_hide_tags then return end
 
 	local restingIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'Zzz', 'GREEN', 'THICK')
 	restingIndicator:SetPoint('BOTTOMRIGHT', self.PowerValue, 'BOTTOMLEFT', -5, 0)
@@ -1294,10 +1297,10 @@ end
 function UNITFRAME:AddQuestIndicator(self)
 	if not FreeDB.unitframe.quest_indicator then return end
 
-	local questIndicator = F.CreateFS(self, C.Assets.Fonts.Number, 11, nil, '*', 'YELLOW', 'THICK')
-	questIndicator:SetPoint('BOTTOMRIGHT', self.Name, 'BOTTOMLEFT', -3, 0)
+	local QuestMobIndicator = F.CreateFS(self, C.Assets.Fonts.Number, 11, nil, '!', 'YELLOW', 'THICK')
+	QuestMobIndicator:SetPoint('BOTTOMRIGHT', self.Name, 'BOTTOMLEFT', -3, 0)
 
-	self.QuestIndicator = questIndicator
+	self.QuestMobIndicator = QuestMobIndicator
 end
 
 function UNITFRAME:AddRaidTargetIndicator(self)

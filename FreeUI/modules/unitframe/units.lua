@@ -51,10 +51,6 @@ function UNITFRAME:SpawnPlayer()
 		player.HealthValue:Hide()
 		player.PowerValue:Hide()
 
-		if player.PvPIndicator then player.PvPIndicator = F.Dummy end
-		if player.CombatIndicator then player.CombatIndicator = F.Dummy end
-		if player.RestingIndicator then player.RestingIndicator = F.Dummy end
-
 		player:HookScript('OnEnter', tagsOnEnter)
 		player:HookScript('OnLeave', tagsOnLeave)
 	end
