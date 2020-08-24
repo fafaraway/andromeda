@@ -110,7 +110,6 @@ function CHAT:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, li
 end
 
 -- Block addon msg
-local addonBlockList = FreeDB.chat.addon_keywords_list
 
 local cvar
 local function toggleCVar(value)
@@ -129,7 +128,7 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 	local name = Ambiguate(author, 'none')
 	if UnitIsUnit(name, 'player') then return end
 
-	for _, word in ipairs(addonBlockList) do
+	for _, word in ipairs(FreeDB.chat.addon_keywords_list) do
 		if strfind(msg, word) then
 			if event == 'CHAT_MSG_SAY' or event == 'CHAT_MSG_YELL' then
 				CHAT:ToggleChatBubble()
@@ -142,11 +141,10 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 end
 
 -- Block trash clubs
-local trashClubs = FreeDB.chat.trash_clubs
 function CHAT:BlockTrashClub()
 	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
 		local text = self.DoubleLine:GetText() or ''
-		for _, name in pairs(trashClubs) do
+		for _, name in pairs(FreeDB.chat.trash_clubs) do
 			if strfind(text, name) then
 				self:Hide()
 				return

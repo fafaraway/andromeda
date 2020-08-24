@@ -298,7 +298,6 @@ function CHAT:OnLogin()
 	self:UrlCopy()
 	self:Spamagemeter()
 	self:WhisperSticky()
-	self:WhisperTarget()
 	self:WhisperAlert()
 	self:AutoToggleChatBubble()
 

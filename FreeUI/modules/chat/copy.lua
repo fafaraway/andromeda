@@ -207,11 +207,11 @@ function CHAT:SearchForURL(text, ...)
 	end
 	if not foundurl then
 		--http://www.google.com
-		text = gsub(text, '(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)', highlightURL)
+		text = gsub(text, "(%s?)(%a+://[%w_/%.%?%%=~&-'%-]+)(%s?)", highlightURL)
 	end
 	if not foundurl then
 		--www.google.com
-		text = gsub(text, '(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)', highlightURL)
+		text = gsub(text, "(%s?)(www%.[%w_/%.%?%%=~&-'%-]+)(%s?)", highlightURL)
 	end
 	if not foundurl then
 		--lol@lol.com
