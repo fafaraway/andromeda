@@ -571,20 +571,17 @@ local function UnitframeOptions()
 	local transparency = GUI:CreateCheckBox(parent, 'unitframe', 'transparency')
 	transparency:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-
+	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'fader')
+	fader:SetPoint('LEFT', transparency, 'RIGHT', 160, 0)
 
 	local portrait = GUI:CreateCheckBox(parent, 'unitframe', 'portrait')
 	portrait:SetPoint('TOPLEFT', transparency, 'BOTTOMLEFT', 0, -8)
 
-	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'fader')
-	fader:SetPoint('LEFT', portrait, 'RIGHT', 160, 0)
-
-
-	local feature = GUI:AddSubCategory(parent)
-	feature:SetPoint('TOPLEFT', portrait, 'BOTTOMLEFT', 0, -16)
+	local colorSmooth = GUI:CreateCheckBox(parent, 'unitframe', 'color_smooth')
+	colorSmooth:SetPoint('LEFT', portrait, 'RIGHT', 160, 0)
 
 	local rangeCheck = GUI:CreateCheckBox(parent, 'unitframe', 'range_check', nil, SetupRangeCheckAlpha)
-	rangeCheck:SetPoint('TOPLEFT', feature, 'BOTTOMLEFT', 0, -8)
+	rangeCheck:SetPoint('TOPLEFT', portrait, 'BOTTOMLEFT', 0, -8)
 
 	local gcdSpark = GUI:CreateCheckBox(parent, 'unitframe', 'gcd_spark')
 	gcdSpark:SetPoint('LEFT', rangeCheck, 'RIGHT', 160, 0)
