@@ -173,4 +173,5 @@ function UNITFRAME:OnLogin()
 
 	self:SpawnParty()
 	self:SpawnRaid()
+	self:ClickCast()
 end
