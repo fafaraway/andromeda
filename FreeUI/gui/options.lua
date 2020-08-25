@@ -1153,7 +1153,127 @@ local function NotificationOptions()
 	parent:HookScript('OnShow', toggleNotificationOptions)
 end
 
+local function ChatOptions()
+	local parent = FreeUI_GUI.CHAT
+	--parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
 
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'chat', 'enable')
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+	local lock = GUI:CreateCheckBox(parent, 'chat', 'lock_position', nil, SetupChatSize)
+	lock:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+
+	local fading = GUI:CreateCheckBox(parent, 'chat', 'fade_out', nil, SetupChatFading)
+	fading:SetPoint('LEFT', lock, 'RIGHT', 160, 0)
+
+	local outline = GUI:CreateCheckBox(parent, 'chat', 'font_outline')
+	outline:SetPoint('TOPLEFT', lock, 'BOTTOMLEFT', 0, -8)
+
+	local voiceIcon = GUI:CreateCheckBox(parent, 'chat', 'voice_icon')
+	voiceIcon:SetPoint('LEFT', outline, 'RIGHT', 160, 0)
+
+	local feature = GUI:AddSubCategory(parent)
+	feature:SetPoint('TOPLEFT', outline, 'BOTTOMLEFT', 0, -16)
+
+	local abbreviate = GUI:CreateCheckBox(parent, 'chat', 'abbr_channel_names')
+	abbreviate:SetPoint('TOPLEFT', feature, 'BOTTOMLEFT', 0, -8)
+
+	local cycles = GUI:CreateCheckBox(parent, 'chat', 'tab_cycle')
+	cycles:SetPoint('LEFT', abbreviate, 'RIGHT', 160, 0)
+
+	local itemLinks = GUI:CreateCheckBox(parent, 'chat', 'item_links')
+	itemLinks:SetPoint('TOPLEFT', abbreviate, 'BOTTOMLEFT', 0, -8)
+
+	local spamageMeter = GUI:CreateCheckBox(parent, 'chat', 'spamage_meter')
+	spamageMeter:SetPoint('LEFT', itemLinks, 'RIGHT', 160, 0)
+
+	local sticky = GUI:CreateCheckBox(parent, 'chat', 'whisper_sticky')
+	sticky:SetPoint('TOPLEFT', itemLinks, 'BOTTOMLEFT', 0, -8)
+
+	local whisperAlert = GUI:CreateCheckBox(parent, 'chat', 'whisper_sound', nil, SetupWhisperTimer)
+	whisperAlert:SetPoint('LEFT', sticky, 'RIGHT', 160, 0)
+
+	local chatCopy = GUI:CreateCheckBox(parent, 'chat', 'copy_button')
+	chatCopy:SetPoint('TOPLEFT', sticky, 'BOTTOMLEFT', 0, -8)
+
+
+
+	local bubble = GUI:CreateCheckBox(parent, 'chat', 'smart_bubble')
+	bubble:SetPoint('TOPLEFT', chatCopy, 'BOTTOMLEFT', 0, -8)
+
+	local filter = GUI:AddSubCategory(parent)
+	filter:SetPoint('TOPLEFT', bubble, 'BOTTOMLEFT', 0, -16)
+
+	local chatFilter = GUI:CreateCheckBox(parent, 'chat', 'filters', nil, SetupChatFilter)
+	chatFilter:SetPoint('TOPLEFT', filter, 'BOTTOMLEFT', 0, -8)
+
+	local blockAddonSpam = GUI:CreateCheckBox(parent, 'chat', 'block_addon_spam')
+	blockAddonSpam:SetPoint('LEFT', chatFilter, 'RIGHT', 160, 0)
+
+	local blockStranger = GUI:CreateCheckBox(parent, 'chat', 'block_stranger_whisper')
+	blockStranger:SetPoint('TOPLEFT', chatFilter, 'BOTTOMLEFT', 0, -8)
+
+	local allowFriendsSpam = GUI:CreateCheckBox(parent, 'chat', 'allow_friends_spam')
+	allowFriendsSpam:SetPoint('LEFT', blockStranger, 'RIGHT', 160, 0)
+
+
+
+
+	local function toggleChatOptions()
+		local shown = enable:GetChecked()
+		lock:SetShown(shown)
+		fading:SetShown(shown)
+		outline:SetShown(shown)
+		voiceIcon:SetShown(shown)
+		abbreviate:SetShown(shown)
+		whisperAlert:SetShown(shown)
+		itemLinks:SetShown(shown)
+		spamageMeter:SetShown(shown)
+		sticky:SetShown(shown)
+		cycles:SetShown(shown)
+
+		chatCopy:SetShown(shown)
+
+		chatFilter:SetShown(shown)
+		blockAddonSpam:SetShown(shown)
+		blockStranger:SetShown(shown)
+		allowFriendsSpam:SetShown(shown)
+		feature:SetShown(shown)
+		filter:SetShown(shown)
+		bubble:SetShown(shown)
+	end
+
+	enable:HookScript('OnClick', toggleChatOptions)
+	parent:HookScript('OnShow', toggleChatOptions)
+
+
+
+
+	local chatSizeSide = GUI:CreateSidePanel(parent, 'chatSizeSide')
+
+	local chatSizeWidth = GUI:CreateSlider(parent, 'chat', 'window_width', nil, {100, 600, 1})
+	chatSizeWidth:SetParent(chatSizeSide)
+	chatSizeWidth:SetPoint('TOP', chatSizeSide, 'TOP', 0, -80)
+
+	local chatSizeHeight = GUI:CreateSlider(parent, 'chat', 'window_height', nil, {100, 600, 1})
+	chatSizeHeight:SetParent(chatSizeSide)
+	chatSizeHeight:SetPoint('TOP', chatSizeWidth, 'BOTTOM', 0, -60)
+
+
+	local chatFilterSide = GUI:CreateSidePanel(parent, 'chatFilterSide')
+
+	local filterMatches = GUI:CreateSlider(parent, 'chat', 'matche_number', nil, {1, 5, 1})
+	filterMatches:SetParent(chatFilterSide)
+	filterMatches:SetPoint('TOP', chatFilterSide, 'TOP', 0, -80)
+
+	local keywordsList = GUI:CreateEditBox(parent, 'chat', 'keywords_list', nil, {140, 140})
+	keywordsList:SetParent(chatFilterSide)
+	keywordsList:SetPoint('TOP', filterMatches, 'BOTTOM', 0, -60)
+
+end
 
 
 
@@ -1376,128 +1496,7 @@ end
 
 
 
-local function addChatSection()
-	local parent = FreeUIOptionsFrame.Chat
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
 
-	local basic = GUI:AddSubCategory(parent, 'GUI.localization.chat.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
-
-	local enable = GUI:CreateCheckBox(parent, 'enable')
-	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local lock = GUI:CreateCheckBox(parent, 'lock_position', nil, SetupChatSize)
-	lock:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
-
-	local fading = GUI:CreateCheckBox(parent, 'fading')
-	fading:SetPoint('LEFT', lock, 'RIGHT', 160, 0)
-
-	local outline = GUI:CreateCheckBox(parent, 'font_outline')
-	outline:SetPoint('TOPLEFT', lock, 'BOTTOMLEFT', 0, -8)
-
-	local voiceIcon = GUI:CreateCheckBox(parent, 'voiceIcon')
-	voiceIcon:SetPoint('LEFT', outline, 'RIGHT', 160, 0)
-
-	local feature = GUI:AddSubCategory(parent, 'GUI.localization.chat.sub_feature')
-	feature:SetPoint('TOPLEFT', outline, 'BOTTOMLEFT', 0, -16)
-
-	local abbreviate = GUI:CreateCheckBox(parent, 'abbreviate')
-	abbreviate:SetPoint('TOPLEFT', feature, 'BOTTOMLEFT', 0, -8)
-
-	local cycles = GUI:CreateCheckBox(parent, 'cycles')
-	cycles:SetPoint('LEFT', abbreviate, 'RIGHT', 160, 0)
-
-	local itemLinks = GUI:CreateCheckBox(parent, 'itemLinks')
-	itemLinks:SetPoint('TOPLEFT', abbreviate, 'BOTTOMLEFT', 0, -8)
-
-	local spamageMeter = GUI:CreateCheckBox(parent, 'spamageMeter')
-	spamageMeter:SetPoint('LEFT', itemLinks, 'RIGHT', 160, 0)
-
-	local sticky = GUI:CreateCheckBox(parent, 'sticky')
-	sticky:SetPoint('TOPLEFT', itemLinks, 'BOTTOMLEFT', 0, -8)
-
-	local whisperAlert = GUI:CreateCheckBox(parent, 'whisperAlert')
-	whisperAlert:SetPoint('LEFT', sticky, 'RIGHT', 160, 0)
-
-	local chatCopy = GUI:CreateCheckBox(parent, 'chatCopy')
-	chatCopy:SetPoint('TOPLEFT', sticky, 'BOTTOMLEFT', 0, -8)
-
-	local urlCopy = GUI:CreateCheckBox(parent, 'urlCopy')
-	urlCopy:SetPoint('LEFT', chatCopy, 'RIGHT', 160, 0)
-
-	local bubble = GUI:CreateCheckBox(parent, 'auto_toggle_chat_bubble')
-	bubble:SetPoint('TOPLEFT', chatCopy, 'BOTTOMLEFT', 0, -8)
-
-	local filter = GUI:AddSubCategory(parent, 'GUI.localization.chat.sub_filter')
-	filter:SetPoint('TOPLEFT', bubble, 'BOTTOMLEFT', 0, -16)
-
-	local chatFilter = GUI:CreateCheckBox(parent, 'filters', nil, SetupChatFilter)
-	chatFilter:SetPoint('TOPLEFT', filter, 'BOTTOMLEFT', 0, -8)
-
-	local blockAddonSpam = GUI:CreateCheckBox(parent, 'blockAddonSpam')
-	blockAddonSpam:SetPoint('LEFT', chatFilter, 'RIGHT', 160, 0)
-
-	local blockStranger = GUI:CreateCheckBox(parent, 'blockStranger')
-	blockStranger:SetPoint('TOPLEFT', chatFilter, 'BOTTOMLEFT', 0, -8)
-
-	local allowFriendsSpam = GUI:CreateCheckBox(parent, 'allowFriendsSpam')
-	allowFriendsSpam:SetPoint('LEFT', blockStranger, 'RIGHT', 160, 0)
-
-	local profanity = GUI:CreateCheckBox(parent, 'profanity')
-	profanity:SetPoint('TOPLEFT', blockStranger, 'BOTTOMLEFT', 0, -8)
-
-
-	local function toggleChatOptions()
-		local shown = enable:GetChecked()
-		lock:SetShown(shown)
-		fading:SetShown(shown)
-		outline:SetShown(shown)
-		voiceIcon:SetShown(shown)
-		abbreviate:SetShown(shown)
-		whisperAlert:SetShown(shown)
-		itemLinks:SetShown(shown)
-		spamageMeter:SetShown(shown)
-		sticky:SetShown(shown)
-		cycles:SetShown(shown)
-		profanity:SetShown(shown)
-		chatCopy:SetShown(shown)
-		urlCopy:SetShown(shown)
-		chatFilter:SetShown(shown)
-		blockAddonSpam:SetShown(shown)
-		blockStranger:SetShown(shown)
-		allowFriendsSpam:SetShown(shown)
-		feature:SetShown(shown)
-		filter:SetShown(shown)
-		bubble:SetShown(shown)
-	end
-
-	enable:HookScript('OnClick', toggleChatOptions)
-	parent:HookScript('OnShow', toggleChatOptions)
-
-
-
-
-	local chatSizeSide = GUI:CreateSidePanel(parent, 'chatSizeSide', 'GUI.localization.general.item_level')
-
-	local chatSizeWidth = GUI:CreateSlider(parent, 'chat_size_width', 100, 600, 100, 600, 1, nil, true)
-	chatSizeWidth:SetParent(chatSizeSide)
-	chatSizeWidth:SetPoint('TOP', chatSizeSide, 'TOP', 0, -80)
-
-	local chatSizeHeight = GUI:CreateSlider(parent, 'chat_size_height', 100, 600, 100, 600, 1, nil, true)
-	chatSizeHeight:SetParent(chatSizeSide)
-	chatSizeHeight:SetPoint('TOP', chatSizeWidth, 'BOTTOM', 0, -60)
-
-
-	local chatFilterSide = GUI:CreateSidePanel(parent, 'chatFilterSide', 'GUI.localization.general.item_level')
-
-	local filterMatches = GUI:CreateSlider(parent, 'matches', 1, 5, 1, 5, 1, nil, true)
-	filterMatches:SetParent(chatFilterSide)
-	filterMatches:SetPoint('TOP', chatFilterSide, 'TOP', 0, -80)
-
-	local keywordsList = GUI.CreateEditBox(parent, 'keywordsList', true, nil, 140, 160, 999, nil, true)
-	keywordsList:SetParent(chatFilterSide)
-	keywordsList:SetPoint('TOP', filterMatches, 'BOTTOM', 0, -60)
-end
 
 
 
@@ -1553,7 +1552,7 @@ function GUI:AddOptions()
 	-- addAnnouncementOptions()
 	-- addAutomationOptions()
 	InfobarOptions()
-	-- addChatOptions()
+	ChatOptions()
 	AuraOptions()
 	-- addActionbarOptions()
 	CombatOptions()
