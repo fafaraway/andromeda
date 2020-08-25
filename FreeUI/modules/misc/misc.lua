@@ -29,6 +29,9 @@ function MISC:OnLogin()
 	self:FasterCamera()
 	self:CombatCamera()
 
+
+
+
 	_G.BINDING_HEADER_FREEUI = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 	-- Registering fonts in LibSharedMedia

@@ -785,11 +785,10 @@ C.CharacterSettings = {
 
 	['block_stranger_invite'] = false,
 	['instant_loot'] = true,
-	['easy_mark'] = true,
 
 
-	['easy_focus'] = true,
-		['easy_focus_on_unitframes'] = false,
+
+
 
 
 
@@ -818,7 +817,10 @@ C.CharacterSettings = {
 				['health_alert_threshold'] = 0.3,
 			['spell_alert'] = true,
 			['pvp_sound'] = true,
-			['auto_tab'] = true,
+			['easy_tab'] = true,
+			['easy_focus'] = true,
+				['easy_focus_on_unitframes'] = false,
+			['easy_mark'] = true,
 	},
 
 	['theme'] = {
@@ -1110,32 +1112,26 @@ C.CharacterSettings = {
 				['window_width'] = 300,
 				['window_height'] = 100,
 			['font_outline'] = false,
-
 			['fade_out'] = true,
 				['fading_visible'] = 60,
 				['fading_duration'] = 6,
 
 			['abbr_channel_names'] = true,
-			['item_links'] = true,
-			['spamage_meter'] = true,
-
 			['copy_button'] = true,
 			['voice_button'] = true,
-
 			['tab_cycle'] = true,
-
 			['smart_bubble'] = false,
-
 			['whisper_sticky'] = true,
 			['whisper_sound'] = true,
 				['sound_timer'] = 30,
 
-			['allow_friends_spam'] = false,
-			['block_stranger_whisper'] = false,
-
+			['item_links'] = true,
+			['spamage_meter'] = true,
 			['filters'] = true,
 			['matche_number'] = 1,
 			['keywords_list'] = '%*',
+			['allow_friends_spam'] = false,
+			['block_stranger_whisper'] = false,
 			['block_addon_spam'] = true,
 			['addon_keywords_list'] = {
 				'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', string.rep('%-', 20),

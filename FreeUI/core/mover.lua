@@ -255,17 +255,7 @@ function MOVER:LockElements()
 	clear()
 end
 
-StaticPopupDialogs['FREEUI_MOVER_RESET'] = {
-	text = L['MOVER_RESET_CONFIRM'],
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		wipe(FreeDB['ui_anchor'])
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-}
+
 
 
 -- Mover Console
@@ -310,7 +300,7 @@ local function CreateConsole()
 
 	-- Reset
 	bu[3]:SetScript('OnClick', function()
-		StaticPopup_Show('FREEUI_MOVER_RESET')
+		StaticPopup_Show('FREEUI_RESET_ANCHOR')
 	end)
 
 	local header = CreateFrame('Frame', nil, f)
@@ -415,16 +405,6 @@ function F:MoverConsole()
 	CreateConsole()
 	MOVER:UnlockElements()
 end
-
--- SlashCmdList['FREEUI_MOVER'] = function()
--- 	if InCombatLockdown() then
--- 		UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
--- 		return
--- 	end
--- 	CreateConsole()
--- 	MOVER:UnlockElements()
--- end
--- SLASH_FREEUI_MOVER1 = '/mover'
 
 
 function MOVER:OnLogin()

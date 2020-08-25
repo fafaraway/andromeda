@@ -5,14 +5,12 @@
 
 
 
-	<Script file='focus.lua'/>
 
 	<Script file='grouptool.lua'/>
 
 	<Script file='logo.lua'/>
 	<Script file='itemlevel.lua'/>
 
-	<Script file='mark.lua'/>
 
 	<Script file='reputation.lua'/>
 

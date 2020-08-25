@@ -89,19 +89,6 @@ local function getClassIcon(class)
 	return classStr or ''
 end
 
-StaticPopupDialogs['RESETGOLDCOUNT'] = {
-	text = L['INVENTORY_RESET_GOLD_COUNT'],
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		wipe(FreeADB['total_gold'][C.MyRealm])
-		FreeADB['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = true,
-}
-
 function INVENTORY:CreateCurrencyFrame()
 	local currencyFrame = CreateFrame('Button', nil, self)
 	currencyFrame:SetPoint('TOPLEFT', 6, 0)
@@ -206,7 +193,7 @@ function INVENTORY:CreateCurrencyFrame()
 			end
 			securecall(ToggleStoreUI)
 		elseif btn == 'MiddleButton' then
-			StaticPopup_Show('RESETGOLDCOUNT')
+			StaticPopup_Show('FREEUI_RESET_GOLD')
 		end
 	end)
 end

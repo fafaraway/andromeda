@@ -1,7 +1,11 @@
 <Bindings>
 
-	<Binding name='Toggle GUI' category='BINDING_HEADER_FREEUI'>
-		FreeUI_GUI:Show()
+	<Binding name='GUI' category='BINDING_HEADER_FREEUI'>
+		Toggle_FreeUI_GUI()
+	</Binding>
+
+	<Binding name='Toggle Quest Tracker' category='BINDING_HEADER_FREEUI'>
+		ObjectiveTracker_MinimizeButton_OnClick()
 	</Binding>
 
 </Bindings>

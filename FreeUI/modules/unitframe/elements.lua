@@ -1686,7 +1686,7 @@ function UNITFRAME:AddAlternativePowerValueText(self)
 	self.AlternativePowerValue = altPowerValue
 end
 
--- Text string all in one
+-- Text string all in one #TODO
 function UNITFRAME:AddTextString()
 	local style = self.unitStyle
 	local name, groupName, health, power, altPower, pvp, combat, resting, quest

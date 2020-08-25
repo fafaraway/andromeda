@@ -21,15 +21,14 @@ local tabsList = {
 	'UNITFRAME',
 	'MISC',
 	'DATA',
+	'CREDIT',
 }
 
 local iconsList = {
-	'Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon',
 	'Interface\\ICONS\\Ability_Hunter_BeastWithin',
 	'Interface\\ICONS\\Ability_Warrior_Revenge',
 	'Interface\\ICONS\\Ability_Warrior_RallyingCry',
-	'Interface\\ICONS\\Ability_Siege_Engineer_Magnetic_Crush',
-	'Interface\\ICONS\\Ability_Priest_Ascension',
+	'Interface\\ICONS\\INV_Misc_Horn_04',
 	'Interface\\ICONS\\Spell_Shadow_Seduction',
 	'Interface\\ICONS\\Spell_Shadow_Shadesofdarkness',
 	'Interface\\ICONS\\Spell_Holy_SearingLightPriest',
@@ -39,6 +38,9 @@ local iconsList = {
 	'Interface\\ICONS\\ABILITY_Rogue_RollTheBones04',
 	'Interface\\ICONS\\INV_Misc_ScrollUnrolled03d',
 	'Interface\\ICONS\\Ability_Mage_MassInvisibility',
+	'Interface\\ICONS\\Misc_Legionfall_Paladin',
+	'Interface\\ICONS\\INV_Misc_Blingtron',
+	'Interface\\ICONS\\INV_Misc_CelebrationCake_01',
 }
 
 
@@ -148,6 +150,14 @@ local function CombatLockdown(event)
 	else
 		FreeUI_GUI:Show()
 		F:UnregisterEvent(event, CombatLockdown)
+	end
+end
+
+function Toggle_FreeUI_GUI() -- this is for binding usage
+	if FreeUI_GUI:IsShown() then
+		FreeUI_GUI:Hide()
+	else
+		FreeUI_GUI:Show()
 	end
 end
 

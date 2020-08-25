@@ -29,7 +29,7 @@ StaticPopupDialogs['FREEUI_RELOAD'] = {
 	hideOnEscape = true,
 }
 
-StaticPopupDialogs['FREEUI_RESET'] = {
+StaticPopupDialogs['FREEUI_RESET_ALL'] = {
 	text = L['GUI_RESET_WARNING'],
 	button1 = YES,
 	button2 = NO,
@@ -55,6 +55,33 @@ StaticPopupDialogs['FREEUI_IMPORT_DATA'] = {
 	whileDead = 1,
 	hideOnEscape = false,
 }
+
+StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
+	text = L['MOVER_RESET_CONFIRM'],
+	button1 = OKAY,
+	button2 = CANCEL,
+	OnAccept = function()
+		wipe(FreeDB['ui_anchor'])
+		ReloadUI()
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = false,
+}
+
+StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
+	text = L['INVENTORY_RESET_GOLD_COUNT'],
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		wipe(FreeADB['total_gold'][C.MyRealm])
+		FreeADB['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = true,
+}
+
 
 local function printCommandsList()
 	for _, v in ipairs(L['COMMANDS_LIST']) do

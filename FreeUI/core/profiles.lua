@@ -11,14 +11,13 @@ end
 
 C.isDeveloper = isDeveloper()
 
-
 if C.isDeveloper then
-	C.Actionbar.bar1_visibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
+	--C.Actionbar.bar1_visibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
 end
 
 if C.isDeveloper then
 	C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
-	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\庞门正道粗书体_猫啃网.ttf'
+	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
 	C.Assets.Fonts.Chat   = 'Fonts\\FreeUI\\sarasa_aleo_bold.ttf'
 	C.Assets.Fonts.Number = 'Fonts\\FreeUI\\sarasa_tccc_semibold.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'

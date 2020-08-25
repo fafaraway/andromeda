@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AUTOMATION, cfg = F:GetModule('AUTOMATION'), C.Automation
+local MISC, cfg = F:GetModule('AUTOMATION'), C.Automation
 
 
 --[[ local function screenshot()
@@ -38,7 +38,7 @@ function AUTOMATION:BuyStack()
 	local cache = {}
 	local itemLink, id
 
-	StaticPopupDialogs['BUY_STACK'] = {
+	StaticPopupDialogs['FREEUI_BUY_STACK'] = {
 		text = L['AUTOMATION_BUY_STACK'],
 		button1 = YES,
 		button2 = NO,
@@ -62,7 +62,7 @@ function AUTOMATION:BuyStack()
 			if maxStack and maxStack > 1 then
 				if not cache[itemLink] then
 					local r, g, b = GetItemQualityColor(quality or 1)
-					StaticPopup_Show('BUY_STACK', ' ', ' ', {['texture'] = texture, ['name'] = name, ['color'] = {r, g, b, 1}, ['link'] = itemLink, ['index'] = id, ['count'] = maxStack})
+					StaticPopup_Show('FREEUI_BUY_STACK', ' ', ' ', {['texture'] = texture, ['name'] = name, ['color'] = {r, g, b, 1}, ['link'] = itemLink, ['index'] = id, ['count'] = maxStack})
 				else
 					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
 				end
@@ -74,71 +74,7 @@ function AUTOMATION:BuyStack()
 end
 
 
-function AUTOMATION:AcceptInvite()
-	local function CheckFriend(inviterGUID)
-		if C_BattleNet.GetAccountInfoByGUID(inviterGUID) or C_FriendList.IsFriend(inviterGUID) or IsGuildMember(inviterGUID) then
-			return true
-		end
-	end
 
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("PARTY_INVITE_REQUEST")
-	f:SetScript("OnEvent", function(_, _, name, _, _, _, _, _, inviterGUID)
-		if QueueStatusMinimapButton:IsShown() or GetNumGroupMembers() > 0 then return end
-		if CheckFriend(inviterGUID) then
-			RaidNotice_AddMessage(RaidWarningFrame, L_INFO_INVITE..name, {r = 0.41, g = 0.8, b = 0.94}, 3)
-			print(format("|cffffff00"..L_INFO_INVITE..name..".|r"))
-			AcceptGroup()
-			for i = 1, STATICPOPUP_NUMDIALOGS do
-				local frame = _G["StaticPopup"..i]
-				if frame:IsVisible() and frame.which == "PARTY_INVITE" then
-					frame.inviteAccepted = 1
-					StaticPopup_Hide("PARTY_INVITE")
-					return
-				elseif frame:IsVisible() and frame.which == "PARTY_INVITE_XREALM" then
-					frame.inviteAccepted = 1
-					StaticPopup_Hide("PARTY_INVITE_XREALM")
-					return
-				end
-			end
-		end
-	end)
-end
-
-function AUTOMATION:InviteByKeyword()
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("CHAT_MSG_WHISPER")
-	f:RegisterEvent("CHAT_MSG_BN_WHISPER")
-	f:SetScript("OnEvent", function(_, event, arg1, arg2, ...)
-		if ((not UnitExists("party1") or UnitIsGroupLeader("player") or UnitIsGroupAssistant("player")) and arg1:lower():match(C.automation.invite_keyword)) and SavedOptionsPerChar.AutoInvite == true and not QueueStatusMinimapButton:IsShown() then
-			if event == "CHAT_MSG_WHISPER" then
-				InviteUnit(arg2)
-			elseif event == "CHAT_MSG_BN_WHISPER" then
-				local bnetIDAccount = select(11, ...)
-				local accountInfo = C_BattleNet.GetAccountInfoByID(bnetIDAccount)
-				BNInviteFriend(accountInfo.gameAccountInfo.gameAccountID)
-			end
-		end
-	end)
-
-	SlashCmdList.AUTOINVITE = function(msg)
-		if msg == "" then
-			if SavedOptionsPerChar.AutoInvite == true then
-				SavedOptionsPerChar.AutoInvite = false
-				print("|cffffff00"..L_INVITE_DISABLE..".|r")
-			else
-				SavedOptionsPerChar.AutoInvite = true
-				print("|cffffff00"..L_INVITE_ENABLE..C.automation.invite_keyword..".|r")
-				C.automation.invite_keyword = C.automation.invite_keyword
-			end
-		else
-			SavedOptionsPerChar.AutoInvite = true
-			print("|cffffff00"..L_INVITE_ENABLE..msg..".|r")
-			C.automation.invite_keyword = msg
-		end
-	end
-	SLASH_AUTOINVITE1 = "/ainv"
-end
 
 function AUTOMATION:ConfirmRelease()
 	-- Auto release the spirit in battlegrounds
@@ -295,24 +231,3 @@ end
 
 
 
-local AUTOMATION_LIST = {}
-function AUTOMATION:RegisterAutomation(name, func)
-	if not AUTOMATION_LIST[name] then
-		AUTOMATION_LIST[name] = func
-	end
-end
-
-function AUTOMATION:OnLogin()
-	if not cfg.enable then return end
-
-	for name, func in next, AUTOMATION_LIST do
-		if name and type(func) == 'function' then
-			func()
-		end
-	end
-
-
-	self:BuyStack()
-	self:TakeScreenshot()
-
-end

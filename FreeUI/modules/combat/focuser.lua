@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F:GetModule('MISC')
+local COMBAT = F:GetModule('COMBAT')
 
 
 local _G = getfenv(0)
@@ -10,9 +10,9 @@ local modifier = 'shift' -- shift, alt or ctrl
 local mouseButton = '1' -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any
 local pending = {}
 
-function MISC:Focuser_Setup()
+function COMBAT:Focuser_Setup()
 	if not self or self.focuser then return end
-	if self:GetName() and strmatch(self:GetName(), 'oUF_NPs') then return end
+	if self:GetName() and (not FreeDB.combat.easy_focus_on_unitframes and strmatch(self:GetName(), 'oUF_')) then return end
 
 	if not InCombatLockdown() then
 		self:SetAttribute(modifier..'-type'..mouseButton, 'focus')
@@ -23,31 +23,31 @@ function MISC:Focuser_Setup()
 	end
 end
 
-function MISC:Focuser_CreateFrameHook(name, _, template)
+function COMBAT:Focuser_CreateFrameHook(name, _, template)
 	if name and template == 'SecureUnitButtonTemplate' then
-		MISC.Focuser_Setup(_G[name])
+		COMBAT.Focuser_Setup(_G[name])
 	end
 end
 
-function MISC.Focuser_OnEvent(event)
+function COMBAT.Focuser_OnEvent(event)
 	if event == 'PLAYER_REGEN_ENABLED' then
 		if next(pending) then
 			for frame in next, pending do
-				MISC.Focuser_Setup(frame)
+				COMBAT.Focuser_Setup(frame)
 			end
 		end
 	else
 		for _, object in next, F.oUF.objects do
 			if not object.focuser then
-				MISC.Focuser_Setup(object)
+				COMBAT.Focuser_Setup(object)
 			end
 		end
 	end
 end
 
 
-function MISC:Focuser()
-	if not FreeDB['easy_focus'] then return end
+function COMBAT:Focuser()
+	if not FreeDB.combat.easy_focus then return end
 
 	-- Keybinding override so that models can be shift/alt/ctrl+clicked
 	local f = CreateFrame('CheckButton', 'FocuserButton', UIParent, 'SecureActionButtonTemplate')
@@ -55,12 +55,9 @@ function MISC:Focuser()
 	f:SetAttribute('macrotext', '/focus mouseover')
 	SetOverrideBindingClick(FocuserButton, true, modifier..'-BUTTON'..mouseButton, 'FocuserButton')
 
-	hooksecurefunc('CreateFrame', MISC.Focuser_CreateFrameHook)
+	hooksecurefunc('CreateFrame', COMBAT.Focuser_CreateFrameHook)
 
-	if not FreeDB['easy_focus_on_unitframes'] then return end
-
-	MISC:Focuser_OnEvent()
-	F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.Focuser_OnEvent)
-	F:RegisterEvent('GROUP_ROSTER_UPDATE', MISC.Focuser_OnEvent)
+	COMBAT:Focuser_OnEvent()
+	F:RegisterEvent('PLAYER_REGEN_ENABLED', COMBAT.Focuser_OnEvent)
+	F:RegisterEvent('GROUP_ROSTER_UPDATE', COMBAT.Focuser_OnEvent)
 end
-MISC:RegisterMisc('Focuser', MISC.Focuser)

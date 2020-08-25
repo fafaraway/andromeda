@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F:GetModule('MISC')
+local COMBAT = F:GetModule('COMBAT')
 
 
 local menuFrame = CreateFrame('Frame', 'FreeUI_MarkingFrame', UIParent, 'UIDropDownMenuTemplate')
@@ -25,8 +25,8 @@ local menuList = {
 		func = function() SetRaidTarget('target', 1) end},
 }
 
-function MISC:EasyMark()
-	if not FreeDB['easy_mark'] then return end
+function COMBAT:Marker()
+	if not FreeDB.combat.easy_mark then return end
 
 	WorldFrame:HookScript('OnMouseDown', function(_, button)
 		if button == 'LeftButton' and IsAltKeyDown() and UnitExists('mouseover') then
@@ -38,4 +38,3 @@ function MISC:EasyMark()
 	end)
 end
 
-MISC:RegisterMisc('EasyMark', MISC.EasyMark)

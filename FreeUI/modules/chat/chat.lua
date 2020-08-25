@@ -39,7 +39,7 @@ function CHAT:UpdateChatSize()
 	isScaling = false
 end
 
-function CHAT:TabSetAlpha(alpha)
+--[[ function CHAT:TabSetAlpha(alpha)
 	if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
 		self:SetAlpha(1)
 	elseif alpha < .6 then
@@ -53,7 +53,7 @@ function CHAT:UpdateTabColors(selected)
 	else
 		self:GetFontString():SetTextColor(.5, .5, .5)
 	end
-end
+end ]]
 
 function CHAT:RestyleChatFrame()
 	if not self or (self and self.styled) then return end
@@ -102,20 +102,20 @@ function CHAT:RestyleChatFrame()
 	lang:SetPoint('BOTTOMRIGHT', eb, 'BOTTOMRIGHT', 29, 0)
 	lang.bd = F.CreateBDFrame(lang, .6, true)
 
-	local tab = _G[name..'Tab']
-	tab:SetAlpha(1)
-	local tabFs = tab:GetFontString()
-	F.StripTextures(tab, 7)
-	hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
+	-- local tab = _G[name..'Tab']
+	-- tab:SetAlpha(1)
+	-- local tabFs = tab:GetFontString()
+	-- F.StripTextures(tab, 7)
+	-- hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
 
-	if FreeDB.chat.outline then
-		tabFs:SetFont(C.Assets.Fonts.Chat, 12, 'OUTLINE')
-		tabFs:SetShadowColor(0, 0, 0, 0)
-	else
-		tabFs:SetFont(C.Assets.Fonts.Chat, 12)
-		tabFs:SetShadowColor(0, 0, 0, 1)
-		tabFs:SetShadowOffset(2, -2)
-	end
+	-- if FreeDB.chat.outline then
+	-- 	tabFs:SetFont(C.Assets.Fonts.Chat, 12, 'OUTLINE')
+	-- 	tabFs:SetShadowColor(0, 0, 0, 0)
+	-- else
+	-- 	tabFs:SetFont(C.Assets.Fonts.Chat, 12)
+	-- 	tabFs:SetShadowColor(0, 0, 0, 1)
+	-- 	tabFs:SetShadowOffset(2, -2)
+	-- end
 
 	if FreeDB.chat.lock_position then F.StripTextures(self) end
 
@@ -262,7 +262,7 @@ function CHAT:OnLogin()
 		end
 	end)
 
-	hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
+	--hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
 
 	-- Font size
 	for i = 1, 15 do
@@ -300,6 +300,7 @@ function CHAT:OnLogin()
 	self:WhisperSticky()
 	self:WhisperAlert()
 	self:AutoToggleChatBubble()
+	self:RestyleTabs()
 
 
 

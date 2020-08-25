@@ -2,7 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local COMBAT = F:GetModule('COMBAT')
 
 
-local RTB_Fail, RTB_DefaultKey, LastTargetKey, TargetKey, CurrentBind, Success = false, true
+local RTB_Fail, RTB_DefaultKey = false, true
+local LastTargetKey, TargetKey, CurrentBind, Success
 
 local function OnEvent(self, event, ...)
 	if event == 'CHAT_MSG_SYSTEM' then
@@ -82,18 +83,14 @@ local function OnEvent(self, event, ...)
 	end
 end
 
+function COMBAT:Tabber()
+	if not FreeDB.combat.easy_tab then return end
 
-function COMBAT:AutoTab()
-	if not FreeDB.combat.auto_tab then return end
-
-	local f = CreateFrame('Frame')
-	f:SetScript('OnEvent', OnEvent)
-
-	f:RegisterEvent('PLAYER_ENTERING_WORLD')
-	f:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-	f:RegisterEvent('PLAYER_REGEN_ENABLED')
-	f:RegisterEvent('DUEL_REQUESTED')
-	f:RegisterEvent('DUEL_FINISHED')
-	f:RegisterEvent('CHAT_MSG_SYSTEM')
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', OnEvent)
+	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', OnEvent)
+	F:RegisterEvent('PLAYER_REGEN_ENABLED', OnEvent)
+	F:RegisterEvent('DUEL_REQUESTED', OnEvent)
+	F:RegisterEvent('DUEL_FINISHED', OnEvent)
+	F:RegisterEvent('CHAT_MSG_SYSTEM', OnEvent)
 end
 

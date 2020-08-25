@@ -131,6 +131,8 @@ function COMBAT:OnLogin()
 	if not FreeDB.combat.enable_combat then return end
 
 	self:CombatAlert()
-	self:AutoTab()
 	self:PvPSound()
+	self:Tabber()
+	self:Focuser()
+	self:Marker()
 end
