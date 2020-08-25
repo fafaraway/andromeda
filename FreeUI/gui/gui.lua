@@ -172,7 +172,7 @@ end
 
 local function tabOnEnter(self)
 	if self.checked then return end
-	self:SetBackdropColor(cr, cg, cb, .3)
+	self:SetBackdropColor(C.r, C.g, C.b, .3)
 end
 
 local function tabOnLeave(self)
@@ -415,13 +415,21 @@ function GUI:CreateSlider(parent, key, value, callback, extra)
 end
 
 -- Editbox
-function GUI:CreateEditBox(parent, key, value, callback, extra, multiLine)
-	local width, height, maxLetters = unpack(extra)
+function GUI:CreateEditBox(parent, key, value, callback, extra)
+	local width, height = unpack(extra)
 
 	local editbox = F.CreateEditBox(parent, width, height)
-	editbox:SetMultiLine(multiLine)
-	editbox:SetMaxLetters(maxLetters)
+	editbox:EnableMouse(true)
+	editbox:SetMultiLine(true)
+	editbox:SetMaxLetters(9999)
 	editbox:SetText(SaveValue(key, value))
+	editbox:SetJustifyH('LEFT')
+	editbox:SetJustifyV('TOP')
+
+	editbox.text = editbox:GetRegions()
+	-- if editbox.text:GetObjectType() == 'FontString' then
+	-- 	editbox.text:SetJustifyH("RIGHT")
+	-- end
 
 	editbox:HookScript('OnEscapePressed', function()
 		editbox:SetText(SaveValue(key, value))
@@ -432,7 +440,9 @@ function GUI:CreateEditBox(parent, key, value, callback, extra, multiLine)
 		if callback then callback() end
 	end)
 
-	editbox.title = F.CreateFS(editbox, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'SYSTEM', true, 'CENTER', 0, 25)
+	editbox.title = F.CreateFS(editbox, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'SYSTEM', true)
+	editbox.title:SetPoint('BOTTOM', editbox, 'TOP', 0, 6)
+
 
 	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
 		editbox.title = L['GUI_TIPS']
