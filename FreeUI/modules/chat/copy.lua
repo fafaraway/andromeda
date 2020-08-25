@@ -1,4 +1,4 @@
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local CHAT = F:GetModule('CHAT')
 
 
@@ -141,6 +141,7 @@ function CHAT:ChatCopy_Create()
 	local copy = CreateFrame('Button', nil, UIParent)
 	copy:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, 0)
 	copy:SetSize(20, 20)
+	F.Reskin(copy)
 	copy.Icon = copy:CreateTexture(nil, 'ARTWORK')
 	copy.Icon:SetPoint('TOPLEFT', 2, -2)
 	copy.Icon:SetPoint('BOTTOMRIGHT', -2, 2)
@@ -148,7 +149,7 @@ function CHAT:ChatCopy_Create()
 	copy:RegisterForClicks('AnyUp')
 	copy:SetScript('OnClick', self.ChatCopy_OnClick)
 
-	copy:SetScript('OnEnter', function(self)
+	copy:HookScript('OnEnter', function(self)
 		GameTooltip:SetOwner(copy, 'ANCHOR_TOPRIGHT')
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
@@ -158,11 +159,11 @@ function CHAT:ChatCopy_Create()
 		GameTooltip:Show()
 	end)
 
-	copy:SetScript('OnLeave', function(self)
+	copy:HookScript('OnLeave', function(self)
 		GameTooltip:Hide()
 	end)
 
-	F.Reskin(copy)
+
 	F.ReskinClose(frame.close)
 	F.ReskinScroll(ChatCopyScrollFrameScrollBar)
 end

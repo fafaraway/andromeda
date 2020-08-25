@@ -1120,7 +1120,7 @@ C.CharacterSettings = {
 			['spamage_meter'] = true,
 
 			['copy_button'] = true,
-			['voice_icon'] = true,
+			['voice_button'] = true,
 
 			['tab_cycle'] = true,
 
