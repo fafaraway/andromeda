@@ -431,7 +431,7 @@ function GUI:CreateSlider(parent, key, value, callback, extra)
 
 	local slider = F.CreateSlider(parent, value, minValue, maxValue, step, 160)
 	slider.Text:SetText(L['GUI_'..strupper(key)..'_'..strupper(value)] or value)
-	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
+	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or (key == 'APPEARANCE' and C.AccountSettings['appearance'][value]) or C.CharacterSettings[key][value]
 	slider:SetValue(SaveValue(key, value))
 	slider:SetScript('OnValueChanged', function(_, v)
 		local current = F:Round(tonumber(v), 2)

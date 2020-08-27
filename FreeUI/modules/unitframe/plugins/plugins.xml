@@ -1,10 +1,10 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='plugins\debuffhighlight.lua'/>
-	<Script file='plugins\fader.lua'/>
-	<Script file='plugins\floatingcombatfeedback.lua'/>
-	<Script file='plugins\gloablcooldown.lua'/>
-	<Script file='plugins\partywatcher.lua'/>
-	<Script file='plugins\raiddebuffs.lua'/>
-	<Script file='plugins\spellrange.lua'/>
-	<Script file='plugins\totems.lua'/>
+	<Script file='debuffhighlight.lua'/>
+	<Script file='fader.lua'/>
+	<Script file='floatingcombatfeedback.lua'/>
+	<Script file='gloablcooldown.lua'/>
+	<Script file='partywatcher.lua'/>
+	<Script file='raiddebuffs.lua'/>
+	<Script file='spellrange.lua'/>
+	<Script file='totems.lua'/>
 </Ui>

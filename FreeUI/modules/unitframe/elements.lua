@@ -284,7 +284,7 @@ local function PostUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local self = element.__owner
 		local value = self.AlternativePowerValue
-		local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+		local r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
 
 		element:SetStatusBarColor(r, g, b)
 		value:SetTextColor(r, g, b)
@@ -1244,12 +1244,27 @@ function UNITFRAME:AddFader(self)
 	if not FreeDB.unitframe.fader then return end
 
 	self.Fader = {
-		[1] = {Combat = 1, Arena = 1, Instance = 1},
-		[2] = {PlayerTarget = 1, PlayerFocus = 1, PlayerNotMaxHealth = 1, PlayerNotMaxMana = 1, PlayerHasPower = 1, PlayerCasting = 1},
-		[3] = {notCombat = 0, PlayerTaxi = 0},
+		[1] = {Combat = 1},
+		[2] = {PlayerTarget = 1, PlayerNotMaxHealth = 1, PlayerCasting = 1},
+		[3] = {notCombat = 0},
 	}
 
 	self.NormalAlpha = 1
+end
+
+-- Spell range
+function UNITFRAME:AddRangeCheck(self)
+	if FreeDB.unitframe.range_check then
+		self.SpellRange = {
+			insideAlpha = 1,
+			outsideAlpha = FreeDB.unitframe.range_check_alpha,
+		}
+	else
+		self.Range = {
+			insideAlpha = 1,
+			outsideAlpha = FreeDB.unitframe.range_check_alpha,
+		}
+	end
 end
 
 -- GCD
@@ -1420,21 +1435,6 @@ function UNITFRAME:AddPortrait(self)
 	portrait:SetAlpha(.1)
 	portrait.PostUpdate = PostUpdatePortrait
 	self.Portrait = portrait
-end
-
--- Spell range
-function UNITFRAME:AddRangeCheck(self)
-	if FreeDB.unitframe.range_check then
-		self.SpellRange = {
-			insideAlpha = 1,
-			outsideAlpha = FreeDB.unitframe.range_check_alpha,
-		}
-	else
-		self.Range = {
-			insideAlpha = 1,
-			outsideAlpha = FreeDB.unitframe.range_check_alpha,
-		}
-	end
 end
 
 -- Floating combat feedback
@@ -1676,7 +1676,7 @@ function UNITFRAME:AddAlternativePowerValueText(self)
 	if self.unitStyle == 'boss' then
 		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
 	else
-		altPowerValue:SetPoint('BOTTOM', self.Health, 'TOP', 4, 0)
+		altPowerValue:SetPoint('BOTTOM', self.Health, 'TOP', 0, 3)
 	end
 
 	self:Tag(altPowerValue, '[free:altpower]')

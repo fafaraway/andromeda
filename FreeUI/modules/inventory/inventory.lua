@@ -119,8 +119,8 @@ function INVENTORY:CreateCurrencyFrame()
 			profit = profit + change
 		end
 
-		if not FreeADB['total_gold'][C.MyRealm] then FreeADB['total_gold'][C.MyRealm] = {} end
-		FreeADB['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		if not FreeADB['gold_count'][C.MyRealm] then FreeADB['gold_count'][C.MyRealm] = {} end
+		FreeADB['gold_count'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 
 		oldMoney = newMoney
 	end)
@@ -147,7 +147,7 @@ function INVENTORY:CreateCurrencyFrame()
 
 		local totalGold = 0
 		GameTooltip:AddLine(L['INFOBAR_CHARACTER'], .6,.8,1)
-		local thisRealmList = FreeADB['total_gold'][C.MyRealm]
+		local thisRealmList = FreeADB['gold_count'][C.MyRealm]
 		for k, v in pairs(thisRealmList) do
 			local gold, class = unpack(v)
 			local r, g, b = F.ClassColor(class)

@@ -5,7 +5,6 @@ local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber,
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, rad = math.min, math.max, math.floor, math.rad
 local assets = C.Assets
-local cr, cg, cb = C.r, C.g, C.b
 local backdropColor = {.03, .03, .03}
 local gradientColor = {.02, .02, .02, .5, .08, .08, .08, .5}
 
@@ -414,7 +413,7 @@ do
 		if type(colour) == 'table' then
 			fs:SetTextColor(colour[1], colour[2], colour[3])
 		elseif colour == 'CLASS' then
-			fs:SetTextColor(cr, cg, cb)
+			fs:SetTextColor(C.r, C.g, C.b)
 		elseif colour == 'YELLOW' then
 			fs:SetTextColor(.9, .82, .62)
 		elseif colour == 'RED' then
@@ -463,7 +462,7 @@ do
 			object:SetTextColor(colour[1], colour[2], colour[3])
 		elseif type(colour) == 'string' then
 			if colour == 'CLASS' then
-				object:SetTextColor(cr, cg, cb)
+				object:SetTextColor(C.r, C.g, C.b)
 			elseif colour == 'YELLOW' then
 				object:SetTextColor(.9, .8, .6)
 			elseif colour == 'RED' then
@@ -510,7 +509,7 @@ do
 		elseif self.text then
 			local r, g, b = 1, 1, 1
 			if self.color == 'CLASS' then
-				r, g, b = cr, cg, cb
+				r, g, b = C.r, C.g, C.b
 			elseif self.color == 'SYSTEM' then
 				r, g, b = 1, .8, 0
 			elseif self.color == 'BLUE' then
@@ -773,7 +772,7 @@ do
 		if r and g and b then
 			self:SetStatusBarColor(r, g, b)
 		else
-			self:SetStatusBarColor(cr, cg, cb)
+			self:SetStatusBarColor(C.r, C.g, C.b)
 		end
 
 		local bg = F.SetBD(self)
@@ -814,7 +813,7 @@ do
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
 
-		self:SetBackdropBorderColor(cr, cg, cb, 1)
+		self:SetBackdropBorderColor(C.r, C.g, C.b, 1)
 		self.glow:SetAlpha(1)
 
 		CreatePulse(self.glow)
@@ -888,7 +887,7 @@ do
 			})
 			self.glow:SetPoint('TOPLEFT', -6, 6)
 			self.glow:SetPoint('BOTTOMRIGHT', 6, -6)
-			self.glow:SetBackdropBorderColor(cr, cg, cb)
+			self.glow:SetBackdropBorderColor(C.r, C.g, C.b)
 			self.glow:SetAlpha(0)
 
 			self:HookScript('OnEnter', Button_OnEnter)
@@ -897,7 +896,7 @@ do
 	end
 
 	local function Menu_OnEnter(self)
-		self.bg:SetBackdropBorderColor(cr, cg, cb)
+		self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
 	end
 
 	local function Menu_OnLeave(self)
@@ -909,7 +908,7 @@ do
 	end
 
 	local function Menu_OnMouseDown(self)
-		self.bg:SetBackdropColor(cr, cg, cb, .25)
+		self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
 	end
 
 	function F:ReskinMenuButton()
@@ -933,7 +932,7 @@ do
 		local hl = self:GetHighlightTexture()
 		hl:ClearAllPoints()
 		hl:SetInside(bg)
-		hl:SetVertexColor(cr, cg, cb, .25)
+		hl:SetVertexColor(C.r, C.g, C.b, .25)
 	end
 
 	local function resetTabAnchor(tab)
@@ -949,7 +948,7 @@ do
 	local function Scroll_OnEnter(self)
 		local thumb = self.thumb
 		if not thumb then return end
-		thumb.bg:SetBackdropColor(cr, cg, cb, .25)
+		thumb.bg:SetBackdropColor(C.r, C.g, C.b, .25)
 		thumb.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 
@@ -1011,9 +1010,9 @@ do
 	function F:Texture_OnEnter()
 		if self:IsEnabled() then
 			if self.bg then
-				self.bg:SetBackdropColor(cr, cg, cb, .25)
+				self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
 			else
-				self.bgTex:SetVertexColor(cr, cg, cb)
+				self.bgTex:SetVertexColor(C.r, C.g, C.b)
 			end
 		end
 	end
@@ -1160,7 +1159,7 @@ do
 		local hl = self:GetHighlightTexture()
 		hl:SetPoint('TOPLEFT', 5, -5)
 		hl:SetPoint('BOTTOMRIGHT', -5, 5)
-		hl:SetVertexColor(cr, cg, cb, .25)
+		hl:SetVertexColor(C.r, C.g, C.b, .25)
 
 		local bd = F.CreateBDFrame(self, 0)
 		bd:SetPoint('TOPLEFT', 4, -4)
@@ -1172,7 +1171,7 @@ do
 			ch:SetPoint('TOPLEFT', 5, -5)
 			ch:SetPoint('BOTTOMRIGHT', -5, 5)
 			ch:SetDesaturated(true)
-			ch:SetVertexColor(cr, cg, cb)
+			ch:SetVertexColor(C.r, C.g, C.b)
 
 			local dis = self:GetDisabledCheckedTexture()
 			dis:SetPoint('TOPLEFT', 5, -5)
@@ -1182,7 +1181,7 @@ do
 			local ch = self:GetCheckedTexture()
 			ch:SetTexture(assets.tick_tex)
 			ch:SetDesaturated(true)
-			ch:SetVertexColor(cr, cg, cb)
+			ch:SetVertexColor(C.r, C.g, C.b)
 		end
 
 		self.forceSaturation = forceSaturation
@@ -1196,7 +1195,7 @@ do
 		local ch = self:GetCheckedTexture()
 		ch:SetPoint('TOPLEFT', 4, -4)
 		ch:SetPoint('BOTTOMRIGHT', -4, 4)
-		ch:SetVertexColor(cr, cg, cb, .6)
+		ch:SetVertexColor(C.r, C.g, C.b, .6)
 
 		local bd = F.CreateBDFrame(self, 0)
 		bd:SetPoint('TOPLEFT', 3, -3)
@@ -1353,7 +1352,7 @@ do
 
 		self:SetHighlightTexture(assets.bd_tex)
 		local hl = self:GetHighlightTexture()
-		hl:SetVertexColor(cr, cg, cb, .25)
+		hl:SetVertexColor(C.r, C.g, C.b, .25)
 		hl:SetInside()
 	end
 

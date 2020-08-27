@@ -74,8 +74,8 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(FreeADB['total_gold'][C.MyRealm])
-		FreeADB['total_gold'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		wipe(FreeADB['gold_count'][C.MyRealm])
+		FreeADB['gold_count'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
 	whileDead = 1,

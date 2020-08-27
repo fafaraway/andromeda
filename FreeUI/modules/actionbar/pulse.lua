@@ -8,17 +8,11 @@ local GetTime = GetTime
 local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
 local animScale, iconSize, holdTime, threshold = 1.5, 50, 0, 8
 local cooldowns, animating, watching = {}, {}, {}
-
-
 local frame = CreateFrame('Frame', 'FreeUICooldownPulse', UIParent)
+
 frame:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
-frame:SetSize(50, 50)
+
 --frame:SetPoint('CENTER', UIParent,'CENTER', 0, 100)
-
-frame.icon = frame:CreateTexture(nil, 'BORDER')
-frame.icon:SetTexCoord(unpack(C.TexCoord))
-frame.icon:SetAllPoints(frame)
-
 
 local function tcount(tab)
 	local n = 0
@@ -148,6 +142,14 @@ end
 frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 
 function frame:PLAYER_ENTERING_WORLD()
+
+	--frame:SetSize(50, 50)
+	F.Mover(frame, L['MOVER_COOLDOWN_PULSE'], 'CooldownPulse', {'CENTER', UIParent, 'CENTER', 0, 100}, 50, 50)
+
+	frame.icon = frame:CreateTexture(nil, 'BORDER')
+	frame.icon:SetTexCoord(unpack(C.TexCoord))
+	frame.icon:SetAllPoints(frame)
+
 	local inInstance,instanceType = IsInInstance()
 	if (inInstance and instanceType == 'arena') then
 		self:SetScript('OnUpdate', nil)
@@ -158,7 +160,7 @@ function frame:PLAYER_ENTERING_WORLD()
 	frame.bg = F.CreateBDFrame(frame, nil, true)
 	frame.bg:Hide()
 
-	F.Mover(frame, L['MOVER_COOLDOWN_PULSE'], 'CooldownPulse', {'CENTER', UIParent, 'CENTER', 0, 100})
+
 end
 frame:RegisterEvent('PLAYER_ENTERING_WORLD')
 

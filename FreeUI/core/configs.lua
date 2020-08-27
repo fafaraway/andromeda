@@ -897,7 +897,7 @@ C.CharacterSettings = {
 
 			['power_bar_height'] = 1,
 			['alt_power'] = true,
-			['alternative_power_height'] = 1,
+			['alternative_power_height'] = 2,
 
 			['class_power_bar'] = true,
 				['class_power_bar_height'] = 2,
@@ -1120,7 +1120,7 @@ C.CharacterSettings = {
 C.AccountSettings = {
 	['ui_scale'] = 1,
 	['ui_gap'] = 33,
-	['total_gold'] = {},
+	['gold_count'] = {},
 
 	['custom_junk_list'] = {},
 	['number_format'] = 1,

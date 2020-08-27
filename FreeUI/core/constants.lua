@@ -101,6 +101,13 @@ for class, value in pairs(colors) do
 	C.ClassColors[class].colorStr = value.colorStr
 end
 
+--[[ C.r = C.ClassColors[C.MyClass].r
+C.g = C.ClassColors[C.MyClass].g
+C.b = C.ClassColors[C.MyClass].b
+
+C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
+C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r' ]]
+
 C.InfoColor = '|cffe9c55d'
 C.YellowColor = '|cffffd200'
 C.GreyColor = '|cff808080'
