@@ -39,16 +39,6 @@
 	<Script file="elements\threatindicator.lua"/>
 	<Script file="elements\totems.lua"/>
 
-	<Script file='plugins\debuffhighlight.lua'/>
-	<Script file='plugins\fader.lua'/>
-	<Script file='plugins\floatingcombatfeedback.lua'/>
-	<Script file='plugins\gloablcooldown.lua'/>
-	<Script file='plugins\partywatcher.lua'/>
-	<Script file='plugins\questmobindicator.lua'/>
-	<Script file='plugins\raiddebuffs.lua'/>
-	<Script file='plugins\spellrange.lua'/>
-	<Script file='plugins\totems.lua'/>
-
 	<Script file="finalize.lua"/>
 
 	<!--

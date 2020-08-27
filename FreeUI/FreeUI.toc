@@ -13,9 +13,8 @@
 ## SavedVariablesPerCharacter: FreeDB
 
 
-
-init.lua
 libs\libs.xml
+init.lua
 locales\locales.xml
 core\core.xml
 gui\gui.xml

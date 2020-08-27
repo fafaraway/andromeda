@@ -11,8 +11,8 @@ local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 
 -- Colors
 local function classColor(class, showRGB)
-	local color = C.ClassColors[C.ClassList[class] or class]
-	if not color then color = C.ClassColors['PRIEST'] end
+	local color = FreeADB['class_colors'][C.ClassList[class] or class]
+	if not color then color = FreeADB['class_colors']['PRIEST'] end
 
 	if showRGB then
 		return color.r, color.g, color.b

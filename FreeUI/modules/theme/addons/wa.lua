@@ -33,7 +33,7 @@ local function updateWeakAuras(f, fType)
 end
 
 local function ReskinWeakAuras()
-	if not FreeDB['theme']['reskin_weakauras'] then return end
+	if not FreeADB.appearance.reskin_weakauras then return end
 
 	local regionTypes = WeakAuras.regionTypes
 	local Create_Icon, Modify_Icon = regionTypes.icon.create, regionTypes.icon.modify

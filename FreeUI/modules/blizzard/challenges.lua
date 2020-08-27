@@ -21,7 +21,7 @@ function BLIZZARD:GuildBest_UpdateTooltip()
 	GameTooltip:SetText(name, 1, 1, 1)
 	GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
 	for i = 1, #leaderInfo.members do
-		local classColorStr = C.ClassColors[leaderInfo.members[i].classFileName].colorStr
+		local classColorStr = FreeADB.class_colors[leaderInfo.members[i].classFileName].colorStr
 		GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr,leaderInfo.members[i].name));
 	end
 	GameTooltip:Show()
@@ -66,7 +66,7 @@ function BLIZZARD:GuildBest_SetUp(leaderInfo)
 		str = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
 	end
 
-	local classColorStr = C.ClassColors[leaderInfo.classFileName].colorStr
+	local classColorStr = FreeADB.class_colors[leaderInfo.classFileName].colorStr
 	self.CharacterName:SetText(format(str, classColorStr, leaderInfo.name))
 	self.Level:SetText(leaderInfo.keystoneLevel)
 end

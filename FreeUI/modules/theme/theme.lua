@@ -2,6 +2,9 @@ local F, C, L = unpack(select(2, ...))
 local THEME = F:GetModule('THEME')
 
 
+C.Themes = {}
+C.BlizzThemes = {}
+
 function THEME:DetectConfliction()
 	if IsAddOnLoaded('AuroraClassic') or IsAddOnLoaded('Aurora') or IsAddOnLoaded('Skinner') then
 		StaticPopup_Show('THEME_CONFLICTION_WARNING')
@@ -16,7 +19,7 @@ function THEME:LoadDefaultSkins()
 	end
 	wipe(C.BlizzThemes)
 
-	if not FreeDB['theme']['reskin_blizz'] then return end
+	if not FreeADB.appearance.reskin_blizz then return end
 
 	for addonName, func in pairs(C.Themes) do
 		local isLoaded, isFinished = IsAddOnLoaded(addonName)
@@ -35,9 +38,8 @@ function THEME:LoadDefaultSkins()
 	end)
 end
 
-
 function THEME:CursorTrail()
-	if not FreeDB['theme']['cursor_trail'] then return end
+	if not FreeADB.appearance.cursor_trail then return end
 
 	local f = CreateFrame('Frame', nil, UIParent);
 	f:SetFrameStrata('TOOLTIP');
@@ -73,8 +75,8 @@ function THEME:CursorTrail()
 end
 
 function THEME:Vignetting()
-	if not FreeDB['theme']['vignetting'] then return end
-	if FreeDB['theme']['vignetting_alpha'] == 0 then return end
+	if not FreeADB.appearance.vignetting then return end
+	if FreeADB.appearance.vignetting_alpha == 0 then return end
 
 	local f = CreateFrame('Frame')
 	f:SetPoint('TOPLEFT')
@@ -85,9 +87,8 @@ function THEME:Vignetting()
 	f.tex:SetTexture(C.Assets.vig_tex)
 	f.tex:SetAllPoints(f)
 
-	f:SetAlpha(FreeDB['theme']['vignetting_alpha'])
+	f:SetAlpha(FreeADB.appearance.vignetting_alpha)
 end
-
 
 function THEME:OnLogin()
 	self:DetectConfliction()
@@ -103,7 +104,6 @@ function THEME:OnLogin()
 
 
 end
-
 
 function THEME:LoadWithAddOn(addonName, func)
 	local function loadFunc(event, addon)

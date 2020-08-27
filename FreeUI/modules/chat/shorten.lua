@@ -19,7 +19,7 @@ local function GetColor(className, isLocal)
 			end
 		end
 	end
-	local tbl = C.ClassColors[className]
+	local tbl = FreeADB.class_colors[className]
 	local color = ('%02x%02x%02x'):format(tbl.r*255, tbl.g*255, tbl.b*255)
 	return color
 end

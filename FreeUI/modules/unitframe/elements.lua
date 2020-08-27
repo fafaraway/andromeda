@@ -63,7 +63,8 @@ local function PostUpdateHealth(health, unit, min, max)
 		r, g, b = unpack(oUF.colors.tapped)
 	elseif UnitIsPlayer(unit) or style == 'pet' then
 		local _, class = UnitClass(unit)
-		if class then r, g, b = C.ClassColors[class].r, C.ClassColors[class].g, C.ClassColors[class].b else r, g, b = 1, 1, 1 end
+		local color = FreeADB.class_colors[class]
+		if class then r, g, b = color.r, color.g, color.b else r, g, b = 1, 1, 1 end
 	else
 		r, g, b = unpack(reaction)
 		--r, g, b = UnitSelectionColor(unit)
@@ -196,6 +197,9 @@ end
 local function PostUpdatePower(power, unit, cur, max, min)
 	local self = power:GetParent()
 	local style = self.unitStyle
+	local _, powerToken = UnitPowerType(unit)
+	-- local color = FreeADB['power_colors'][powerToken] or {1, 1, 1}
+	-- local r, g, b = color.r, color.g, color.b
 
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		power:SetValue(0)
@@ -208,6 +212,8 @@ local function PostUpdatePower(power, unit, cur, max, min)
 		elseif spec == 1 and cp < 40 then
 			power:SetStatusBarColor(1, 0, 0)
 		end
+	-- else
+	-- 	power:SetStatusBarColor(r, g, b)
 	end
 end
 
@@ -218,6 +224,7 @@ function UNITFRAME:AddPowerBar(self)
 	power:SetPoint('TOP', self.Health, 'BOTTOM', 0, -C.Mult)
 	power:SetStatusBarTexture(C.Assets.norm_tex)
 	power:SetHeight(FreeDB.unitframe.power_bar_height)
+
 	F:SmoothBar(power)
 	power.frequentUpdates = true
 
@@ -1292,15 +1299,6 @@ function UNITFRAME:AddRestingIndicator(self)
 	restingIndicator:SetPoint('BOTTOMRIGHT', self.PowerValue, 'BOTTOMLEFT', -5, 0)
 
 	self.RestingIndicator = restingIndicator
-end
-
-function UNITFRAME:AddQuestIndicator(self)
-	if not FreeDB.unitframe.quest_indicator then return end
-
-	local QuestMobIndicator = F.CreateFS(self, C.Assets.Fonts.Number, 11, nil, '!', 'YELLOW', 'THICK')
-	QuestMobIndicator:SetPoint('BOTTOMRIGHT', self.Name, 'BOTTOMLEFT', -3, 0)
-
-	self.QuestMobIndicator = QuestMobIndicator
 end
 
 function UNITFRAME:AddRaidTargetIndicator(self)

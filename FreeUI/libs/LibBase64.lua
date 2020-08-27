@@ -6,8 +6,10 @@ Description: A library to encode and decode Base64 strings
 License: MIT
 ]]
 
-local F = unpack(select(2, ...))
+local parent, ns = ...
+ns.LibBase64 = {}
 
+local LibBase64 = ns.LibBase64
 local wipe, type, error, format, strsub, strchar, strbyte, tconcat = wipe, type, error, format, strsub, strchar, strbyte, table.concat
 local _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 local byteToNum, numToChar = {}, {}
@@ -31,7 +33,8 @@ local whitespace = {
 -- @param lineEnding a string to end each line with. This is "\r\n" by default.
 -- @usage LibBase64.Encode("Hello, how are you doing today?") == "SGVsbG8sIGhvdyBhcmUgeW91IGRvaW5nIHRvZGF5Pw=="
 -- @return a Base64-encoded string
-function F:Encode(text, maxLineLength, lineEnding)
+
+function LibBase64:Encode(text, maxLineLength, lineEnding)
 	if type(text) ~= "string" then
 		error(format("Bad argument #1 to `Encode'. Expected string, got %q", type(text)), 2)
 	end
@@ -93,7 +96,8 @@ local t2 = {}
 -- @param text a Base64-encoded string
 -- @usage LibBase64.Encode("SGVsbG8sIGhvdyBhcmUgeW91IGRvaW5nIHRvZGF5Pw==") == "Hello, how are you doing today?"
 -- @return a bytestring
-function F:Decode(text)
+
+function LibBase64:Decode(text)
 	if type(text) ~= "string" then
 		error(format("Bad argument #1 to `Decode'. Expected string, got %q", type(text)), 2)
 	end
@@ -139,7 +143,7 @@ function F:Decode(text)
 	return s
 end
 
-function F:IsBase64(text)
+function LibBase64:IsBase64(text)
 	if type(text) ~= "string" then
 		error(format("Bad argument #1 to `IsBase64'. Expected string, got %q", type(text)), 2)
 	end

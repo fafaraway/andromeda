@@ -45,7 +45,27 @@ local iconsList = {
 
 
 local function SaveValue(key, value, newValue)
-	if key == 'ACCOUNT' then
+	if key == 'CLASSCOLORS' then
+		if newValue ~= nil then
+			FreeADB['class_colors'][value] = newValue
+		else
+			return FreeADB['class_colors'][value]
+		end
+	elseif key == 'POWERCOLORS' then
+		if newValue ~= nil then
+			FreeADB['power_colors'][value] = newValue
+		else
+			return FreeADB['power_colors'][value]
+		end
+
+	elseif key == 'APPEARANCE' then
+		if newValue ~= nil then
+			FreeADB['appearance'][value] = newValue
+		else
+			return FreeADB['appearance'][value]
+		end
+
+	elseif key == 'ACCOUNT' then
 		if newValue ~= nil then
 			FreeADB[value] = newValue
 		else
@@ -193,11 +213,17 @@ end
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame('Button', nil, parent)
 	tab:SetSize(160, 28)
-	tab:SetPoint('TOPLEFT', 10, -32*i - 20)
+
 
 	F.Reskin(tab)
 
 	tab.index = i
+
+	if tab.index >= 15 then
+		tab:SetPoint('TOPLEFT', 10, -32*i - 50)
+	else
+		tab:SetPoint('TOPLEFT', 10, -32*i - 20)
+	end
 
 	parent[name] = tab
 
@@ -303,7 +329,7 @@ local function CreateGameMenuButton()
 	local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', GameMenuFrame, 'GameMenuButtonTemplate')
 	bu:SetText(C.Title)
 	bu:SetPoint('TOP', GameMenuButtonAddons, 'BOTTOM', 0, -14)
-	if FreeDB['theme']['reskin_blizz'] then F.Reskin(bu) end
+	if FreeADB.appearance.reskin_blizz then F.Reskin(bu) end
 
 	GameMenuFrame:HookScript('OnShow', function(self)
 		GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)

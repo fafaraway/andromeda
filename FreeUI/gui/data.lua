@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
-
+local LibBase64 = F.LibBase64
 
 local dataFrame
 
@@ -43,7 +43,7 @@ function GUI:ExportData()
 		end
 	end
 
-	dataFrame.editBox:SetText(F:Encode(text))
+	dataFrame.editBox:SetText(LibBase64:Encode(text))
 	dataFrame.editBox:HighlightText()
 end
 
@@ -57,7 +57,7 @@ end
 
 function GUI:ImportData()
 	local profile = dataFrame.editBox:GetText()
-	if F:IsBase64(profile) then profile = F:Decode(profile) end
+	if LibBase64:IsBase64(profile) then profile = LibBase64:Decode(profile) end
 	local options = {strsplit(';', profile)}
 	local title, _, _, _ = strsplit(':', options[1])
 
@@ -105,7 +105,7 @@ end
 
 local function UpdateTooltip()
 	local profile = dataFrame.editBox:GetText()
-	if F:IsBase64(profile) then profile = F:Decode(profile) end
+	if LibBase64:IsBase64(profile) then profile = LibBase64:Decode(profile) end
 	local option = strsplit(';', profile)
 	local title, version, name, class = strsplit(':', option)
 	if title == 'FreeUISettings' then

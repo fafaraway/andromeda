@@ -242,35 +242,35 @@ local function AppearanceOptions()
 	local basic = GUI:AddSubCategory(parent, L['GUI_APPEARANCE_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local cursorTrail = GUI:CreateCheckBox(parent, 'theme', 'cursor_trail')
+	local cursorTrail = GUI:CreateCheckBox(parent, 'appearance', 'cursor_trail')
 	cursorTrail:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local vignetting = GUI:CreateCheckBox(parent, 'theme', 'vignetting', nil, SetupVignettingAlpha)
+	local vignetting = GUI:CreateCheckBox(parent, 'appearance', 'vignetting', nil, SetupVignettingAlpha)
 	vignetting:SetPoint('LEFT', cursorTrail, 'RIGHT', 160, 0)
 
-	local reskinBlizz = GUI:CreateCheckBox(parent, 'theme', 'reskin_blizz', nil, SetupBackdropAlpha)
+	local reskinBlizz = GUI:CreateCheckBox(parent, 'appearance', 'reskin_blizz', nil, SetupBackdropAlpha)
 	reskinBlizz:SetPoint('TOPLEFT', cursorTrail, 'BOTTOMLEFT', 0, -8)
 
-	local shadowBorder = GUI:CreateCheckBox(parent, 'theme', 'shadow_border')
+	local shadowBorder = GUI:CreateCheckBox(parent, 'appearance', 'shadow_border')
 	shadowBorder:SetPoint('LEFT', reskinBlizz, 'RIGHT', 160, 0)
 
-	local adjustFont = GUI:CreateCheckBox(parent, 'theme', 'adjust_font')
+	local adjustFont = GUI:CreateCheckBox(parent, 'appearance', 'adjust_font')
 	adjustFont:SetPoint('TOPLEFT', reskinBlizz, 'BOTTOMLEFT', 0, -8)
 
 
 	local addons = GUI:AddSubCategory(parent)
 	addons:SetPoint('TOPLEFT', adjustFont, 'BOTTOMLEFT', 0, -16)
 
-	local DBM = GUI:CreateCheckBox(parent, 'theme', 'reskin_dbm')
+	local DBM = GUI:CreateCheckBox(parent, 'appearance', 'reskin_dbm')
 	DBM:SetPoint('TOPLEFT', addons, 'BOTTOMLEFT', 0, -8)
 
-	local WeakAuras = GUI:CreateCheckBox(parent, 'theme', 'reskin_weakauras')
+	local WeakAuras = GUI:CreateCheckBox(parent, 'appearance', 'reskin_weakauras')
 	WeakAuras:SetPoint('LEFT', DBM, 'RIGHT', 160, 0)
 
-	local Skada = GUI:CreateCheckBox(parent, 'theme', 'reskin_skada')
+	local Skada = GUI:CreateCheckBox(parent, 'appearance', 'reskin_skada')
 	Skada:SetPoint('TOPLEFT', DBM, 'BOTTOMLEFT', 0, -8)
 
-	local PGF = GUI:CreateCheckBox(parent, 'theme', 'reskin_pgf')
+	local PGF = GUI:CreateCheckBox(parent, 'appearance', 'reskin_pgf')
 	PGF:SetPoint('LEFT', Skada, 'RIGHT', 160, 0)
 
 	local other = GUI:AddSubCategory(parent)
@@ -286,13 +286,13 @@ local function AppearanceOptions()
 
 	local vignettingAlphaSide = GUI:CreateSidePanel(parent, 'vignettingAlphaSide')
 
-	local vignettingAlpha = GUI:CreateSlider(vignettingAlphaSide, 'theme', 'vignetting_alpha', nil, {0, 1, 0.1})
+	local vignettingAlpha = GUI:CreateSlider(vignettingAlphaSide, 'appearance', 'vignetting_alpha', nil, {0, 1, 0.1})
 	vignettingAlpha:SetPoint('TOP', vignettingAlphaSide.child, 'TOP', 0, -24)
 
 
 	local backdropAlphaSide = GUI:CreateSidePanel(parent, 'backdropAlphaSide')
 
-	local backdropAlpha = GUI:CreateSlider(backdropAlphaSide, 'theme', 'backdrop_alpha', nil, {0.1, 1, 0.01})
+	local backdropAlpha = GUI:CreateSlider(backdropAlphaSide, 'appearance', 'backdrop_alpha', nil, {0.1, 1, 0.01})
 	backdropAlpha:SetPoint('TOP', backdropAlphaSide.child, 'TOP', 0, -24)
 
 end
@@ -543,12 +543,12 @@ local function ChatOptions()
 		cycles:SetShown(shown)
 		chatCopy:SetShown(shown)
 		chatFilter:SetShown(shown)
+		chatFilter.bu:SetShown(shown)
 		blockAddonSpam:SetShown(shown)
 		blockStranger:SetShown(shown)
 		allowFriendsSpam:SetShown(shown)
 		feature:SetShown(shown)
 		filter:SetShown(shown)
-		filter.bu:SetShown(shown)
 		bubble:SetShown(shown)
 	end
 
@@ -1391,6 +1391,53 @@ local function UnitframeOptions()
 
 	local failColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'failColor')
 	failColor:SetPoint('TOP', completeColor, 'BOTTOM', 0, -16)
+
+
+
+	local deathknight = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'DEATHKNIGHT')
+	deathknight:SetPoint('TOP', failColor, 'BOTTOM', 0, -46)
+
+	local warrior = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'WARRIOR')
+	warrior:SetPoint('TOP', deathknight, 'BOTTOM', 0, -16)
+
+	local paladin = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'PALADIN')
+	paladin:SetPoint('TOP', warrior, 'BOTTOM', 0, -16)
+
+	local mage = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'MAGE')
+	mage:SetPoint('TOP', paladin, 'BOTTOM', 0, -16)
+
+	local priest = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'PRIEST')
+	priest:SetPoint('TOP', mage, 'BOTTOM', 0, -16)
+
+	local hunter = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'HUNTER')
+	hunter:SetPoint('TOP', priest, 'BOTTOM', 0, -16)
+
+	local warlock = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'WARLOCK')
+	warlock:SetPoint('TOP', hunter, 'BOTTOM', 0, -16)
+
+	local demonhunter = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'DEMONHUNTER')
+	demonhunter:SetPoint('TOP', warlock, 'BOTTOM', 0, -16)
+
+	local rogue = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'ROGUE')
+	rogue:SetPoint('TOP', demonhunter, 'BOTTOM', 0, -16)
+
+	local druid = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'DRUID')
+	druid:SetPoint('TOP', rogue, 'BOTTOM', 0, -16)
+
+	local monk = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'MONK')
+	monk:SetPoint('TOP', druid, 'BOTTOM', 0, -16)
+
+	local shaman = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'SHAMAN')
+	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
+
+
+	local mana = GUI:CreateColorSwatch(castbarColorSide, 'POWERCOLORS', 'MANA')
+	mana:SetPoint('TOP', shaman, 'BOTTOM', 0, -16)
+
+	local rage = GUI:CreateColorSwatch(castbarColorSide, 'POWERCOLORS', 'RAGE')
+	rage:SetPoint('TOP', mana, 'BOTTOM', 0, -16)
+
+
 
 	-- castbar size side panel
 	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')

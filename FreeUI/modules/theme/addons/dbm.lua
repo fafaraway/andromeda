@@ -22,7 +22,7 @@ function THEME:ReskinDBMBar()
 	end
 
 	if not IsAddOnLoaded('DBM-Core') then return end
-	if not FreeDB['theme']['reskin_dbm'] then return end
+	if not FreeADB.appearance.reskin_dbm then return end
 
 	local buttonsize = 24
 
@@ -171,7 +171,7 @@ function THEME:ReskinDBMBar()
 end
 
 function THEME:ReskinDBMGUI()
-	if not FreeDB['theme']['reskin_dbm'] then return end
+	if not FreeADB.appearance.reskin_dbm then return end
 	if not IsAddOnLoaded('DBM-GUI') then return end
 
 	tinsert(UISpecialFrames, 'DBM_GUI_OptionsFrame')

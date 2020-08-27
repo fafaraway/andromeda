@@ -90,7 +90,7 @@ function BLIZZARD:TradeTabs_Update()
 end
 
 function BLIZZARD:TradeTabs_Reskin()
-	if not FreeDB['theme']['reskin_blizz'] then return end
+	if not FreeADB.appearance.reskin_blizz then return end
 
 	for _, tab in pairs(tabList) do
 		tab:SetCheckedTexture(C.Assets.button_checked)

@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeDB['theme']['reskin_blizz'] then return end
+	if not FreeADB.appearance.reskin_blizz then return end
 
 	local function styleRewardButton(button)
 		if not button or button.styled then return end

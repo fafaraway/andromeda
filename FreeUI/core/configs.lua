@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 
-
+local colors = F.oUF.colors
 
 
 
@@ -407,8 +407,6 @@ C['classmod'] = {
 }
 
 
-local myClass = select(2, UnitClass('player'))
-
 C['ReminderBuffs'] = {
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
@@ -560,8 +558,8 @@ C['ClassBuffs'] = {
 }
 
 C['IgnoredDebuffs'] = {
-	[  6788] = myClass ~= 'PRIEST',		-- Weakened Soul
-	[ 25771] = myClass ~= 'PALADIN',	-- Forbearance
+	[  6788] = C.MyClass ~= 'PRIEST',	-- Weakened Soul
+	[ 25771] = C.MyClass ~= 'PALADIN',	-- Forbearance
 
 	[ 57724] = true, 	-- Sated
 	[ 57723] = true,  	-- Exhaustion
@@ -790,10 +788,6 @@ C.CharacterSettings = {
 
 
 
-
-
-
-
 	['blizzard'] = {
 		['hide_talkinghead'] = true,
 		['hide_bossbanner'] = true,
@@ -823,25 +817,7 @@ C.CharacterSettings = {
 			['easy_mark'] = true,
 	},
 
-	['theme'] = {
-		['cursor_trail'] = true,
-		['vignetting'] = true,
-			['vignetting_alpha'] = .8,
-		['adjust_font'] = true,
-		['backdrop_color'] = {.03, .03, .03},
-		['backdrop_alpha'] = .7,
-		['gradient_color_primary'] = {.02, .02, .02},
-		['gradient_color_primary_alpha'] = .5,
-		['gradient_color_secondary'] = {.08, .08, .08},
-		['gradient_color_secondary_alpha'] = .5,
-		['reskin_blizz'] = true,
-		['shadow_border'] = true,
 
-		['reskin_dbm'] = true,
-		['reskin_weakauras'] = true,
-		['reskin_pgf'] = true,
-		['reskin_skada'] = true,
-	},
 
 	['quest'] = {
 		['enable_quest'] = true,
@@ -918,7 +894,6 @@ C.CharacterSettings = {
 				['fcf_abbr_number'] = true,
 
 			['target_icon_indicator'] = true,
-			['quest_indicator'] = true,
 
 			['power_bar_height'] = 1,
 			['alt_power'] = true,
@@ -1141,6 +1116,7 @@ C.CharacterSettings = {
 	}
 }
 
+
 C.AccountSettings = {
 	['ui_scale'] = 1,
 	['ui_gap'] = 33,
@@ -1149,6 +1125,39 @@ C.AccountSettings = {
 	['custom_junk_list'] = {},
 	['number_format'] = 1,
 	['keystone_info'] = {},
+
+	['appearance'] = {
+		['cursor_trail'] = true,
+		['vignetting'] = true,
+			['vignetting_alpha'] = .8,
+		['adjust_font'] = true,
+
+		['backdrop_alpha'] = .7,
+
+		['reskin_blizz'] = true,
+		['shadow_border'] = true,
+
+		['reskin_dbm'] = true,
+		['reskin_weakauras'] = true,
+		['reskin_pgf'] = true,
+		['reskin_skada'] = true,
+	},
+
+	['class_colors'] = C.ClassColors,
+	['power_colors'] = {
+		['MANA'] = {r=colors.power.MANA[1], g=colors.power.MANA[2], b=colors.power.MANA[3]},
+		['RAGE'] = {r=colors.power.RAGE[1], g=colors.power.RAGE[2], b=colors.power.RAGE[3]},
+		['FOCUS'] = {r=colors.power.FOCUS[1], g=colors.power.FOCUS[2], b=colors.power.FOCUS[3]},
+		['ENERGY'] = {r=colors.power.ENERGY[1], g=colors.power.ENERGY[2], b=colors.power.ENERGY[3]},
+		['RUNIC_POWER'] = {r=colors.power.RUNIC_POWER[1], g=colors.power.RUNIC_POWER[2], b=colors.power.RUNIC_POWER[3]},
+		['LUNAR_POWER'] = {r=colors.power.LUNAR_POWER[1], g=colors.power.LUNAR_POWER[2], b=colors.power.LUNAR_POWER[3]},
+		['MAELSTROM'] = {r=colors.power.MAELSTROM[1], g=colors.power.MAELSTROM[2], b=colors.power.MAELSTROM[3]},
+		['INSANITY'] = {r=colors.power.INSANITY[1], g=colors.power.INSANITY[2], b=colors.power.INSANITY[3]},
+		['FURY'] = {r=colors.power.FURY[1], g=colors.power.FURY[2], b=colors.power.FURY[3]},
+		['PAIN'] = {r=colors.power.PAIN[1], g=colors.power.PAIN[2], b=colors.power.PAIN[3]},
+	},
+	['reaction_colors'] = {},
+
 }
 
 local textureList = {
@@ -1183,6 +1192,14 @@ local function initSettings(source, target, fullClean)
 	end
 end
 
+
+
+
+
+
+
+
+
 local f = CreateFrame('Frame')
 f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(self, _, addon)
@@ -1199,6 +1216,13 @@ f:SetScript('OnEvent', function(self, _, addon)
 	F:SetupUIScale(true)
 
 	C.Assets.norm_tex = textureList[FreeDB.unitframe.texture_style]
+
+	C.r = FreeADB.class_colors[C.MyClass].r
+	C.g = FreeADB.class_colors[C.MyClass].g
+	C.b = FreeADB.class_colors[C.MyClass].b
+
+	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
+	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 	self:UnregisterAllEvents()
 end)

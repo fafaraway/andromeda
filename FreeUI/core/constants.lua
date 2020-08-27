@@ -6,9 +6,8 @@ local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0
 local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
 
-C.Frames = {}
-C.Themes = {}
-C.BlizzThemes = {}
+
+
 
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
@@ -24,6 +23,7 @@ C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 C.isNewPatch = GetBuildInfo() == '8.3.0'
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
+C.TexCoord = {.08, .92, .08, .92}
 C.isDeveloper = false
 
 
@@ -86,7 +86,6 @@ C['Assets'] = {
 }
 
 
-
 C.ClassList = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 	C.ClassList[v] = k
@@ -101,11 +100,7 @@ for class, value in pairs(colors) do
 	C.ClassColors[class].b = value.b
 	C.ClassColors[class].colorStr = value.colorStr
 end
-C.r = C.ClassColors[C.MyClass].r
-C.g = C.ClassColors[C.MyClass].g
-C.b = C.ClassColors[C.MyClass].b
 
-C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
 C.InfoColor = '|cffe9c55d'
 C.YellowColor = '|cffffd200'
 C.GreyColor = '|cff808080'
@@ -125,8 +120,8 @@ C.QualityColors[-1] = {r = 0, g = 0, b = 0}
 C.QualityColors[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
 C.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
 
-C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
-C.TexCoord = {.08, .92, .08, .92}
+
+
 
 
 GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', GOLD_AMOUNT_SYMBOL)
