@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA = F:GetModule('Aura')
+local AURA = F:GetModule('AURA')
 
 
 local pairs, tinsert, next = pairs, table.insert, next
@@ -109,7 +109,7 @@ function AURA:InitReminder()
 	AURA:Reminder_AddRune()
 	if not groups then return end
 
-	if FreeUIConfigs['aura']['buff_reminder'] then
+	if FreeDB['aura']['buff_reminder'] then
 		if not parentFrame then
 			parentFrame = CreateFrame('Frame', nil, UIParent)
 			parentFrame:SetPoint('CENTER', -220, 130)

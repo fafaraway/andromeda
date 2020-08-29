@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC, cfg = F:GetModule('Misc'), C.General
+local MISC, cfg = F:GetModule('MISC'), C.General
 
 -- # TODO need refactor group tool
 
@@ -38,22 +38,22 @@ local function ButtonTemplate(button, parent, size, a1, a2, x, y, fsize, text, t
 	local bu = CreateFrame('Button', button, f)
 	bu:SetSize(size, size)
 	bu:SetPoint(a1, parent, a2, x, y)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Symbol, fsize, nil, text, nil, true, 'CENTER', 0, 0) 
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Symbol, fsize, nil, text, nil, true, 'CENTER', 0, 0)
 	bu.text:SetTextColor(1, 1, 1, .2)
 
 	--bu:RegisterEvent('PLAYER_ENTERING_WORLD')
 	--bu:RegisterEvent('GROUP_ROSTER_UPDATE')
 
 	bu:SetScript('OnEnter', function(self)
-		self.text:SetTextColor(C.r, C.g, C.b, 1) 
+		self.text:SetTextColor(C.r, C.g, C.b, 1)
 		GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 		if tip then GameTooltip:AddLine(tip) else GameTooltip:AddLine(converttip) end
 		GameTooltip:Show()
 	end)
 
-	bu:SetScript('OnLeave', function(self) 
+	bu:SetScript('OnLeave', function(self)
 		self.text:SetTextColor(1, 1, 1, .2)
-		GameTooltip:Hide()	
+		GameTooltip:Hide()
 	end)
 end
 
@@ -91,7 +91,7 @@ local function CreateButtons()
 		end
 	end)
 
-	
+
 
 	ButtonTemplate('raid', rolecheck, 30, 'TOP', 'BOTTOM', -2, 0, 24, 'r', RAID_CONTROL)
 	raid:SetScript('OnMouseUp', function(self) ToggleFriendsFrame(3) end)
@@ -114,7 +114,7 @@ local function CreateButtons()
 	ButtonTemplate('mark', convert, 30, 'TOP', 'BOTTOM', -4, -2, 24, 'y', 'mark')
 
 	ButtonTemplate('disband', mark, 30, 'TOP', 'BOTTOM', 2, 0, 24, 'Z', PARTY_LEAVE)
-	disband:SetScript('OnMouseUp', function(self) 
+	disband:SetScript('OnMouseUp', function(self)
 		LeaveParty()
 	end)
 end
@@ -160,7 +160,7 @@ end)--]]
 -- 	if InCombatLockdown() then
 -- 		self:RegisterEvent("PLAYER_REGEN_ENABLED")
 -- 		return
--- 	end	
+-- 	end
 -- 	if CheckRaidStatus() then
 -- 		f:Show()
 -- 	else

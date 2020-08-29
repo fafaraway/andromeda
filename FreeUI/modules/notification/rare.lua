@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('Notification'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
@@ -27,7 +27,7 @@ function NOTIFICATION:RareAlert_Update(id)
 		local tex = format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', filename, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 
 		--UIErrorsFrame:AddMessage(C.InfoColor..L['NOTIFICATION_RARE']..C.RedColor..' ('..tex..(info.name or '')..')')
-		F.Print(C.InfoColor..L['NOTIFICATION_RARE']..C.RedColor..' ('..tex..(info.name or '')..')')
+		F.Print(C.InfoColor..L['NOTIFICATION_RARE']..C.BlueColor..' ('..tex..(info.name or '')..')')
 
 		F:CreateNotification(L['NOTIFICATION_RARE'], C.BlueColor..tex..(info.name or ''), nil, 'Interface\\ICONS\\INV_Letter_20')
 
@@ -51,7 +51,7 @@ function NOTIFICATION:RareAlert_CheckInstance()
 end
 
 function NOTIFICATION:RareAlert()
-	if cfg.rare_alert then
+	if FreeDB.notification.rare_found then
 		self:RareAlert_CheckInstance()
 		F:RegisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
 	else

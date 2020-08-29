@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 local _G = getfenv(0)
@@ -100,7 +100,7 @@ function TOOLTIP:Azerite_UpdateItem()
 end
 
 function TOOLTIP:AzeriteArmor()
-	if not cfg.azerite_armor then return end
+	if not FreeDB.tooltip.azerite_armor then return end
 	if IsAddOnLoaded('AzeriteTooltip') then return end
 
 	GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Azerite_UpdateItem)

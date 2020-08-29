@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeADB.appearance.reskin_blizz then return end
 
 	F.ReskinPortraitFrame(AddonList)
 	F.Reskin(AddonListEnableAllButton)
@@ -17,7 +17,7 @@ tinsert(C.BlizzThemes, function()
 
 	for i = 1, MAX_ADDONS_DISPLAYED do
 		local checkbox = _G["AddonListEntry"..i.."Enabled"]
-		F.ReskinCheck(checkbox, true)
+		F.ReskinCheck(checkbox, false, true)
 		F.Reskin(_G["AddonListEntry"..i.."Load"])
 	end
 

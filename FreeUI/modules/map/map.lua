@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP, cfg = F:GetModule('Map'), C.Map
+local MAP = F:GetModule('MAP')
 
 
 local select = select
@@ -8,7 +8,6 @@ local CreateVector2D = CreateVector2D
 local UnitPosition = UnitPosition
 local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local worldMapScale = 1
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
 local currentMapID, playerCoords, cursorCoords, mapScale
@@ -78,7 +77,7 @@ function MAP:UpdateMapID()
 end
 
 function MAP:AddCoords()
-	if not cfg.coords then return end
+	if not FreeDB.map.coords then return end
 
 	playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
 	cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
@@ -106,7 +105,7 @@ function MAP:UpdateMapAnchor()
 end
 
 function MAP:WorldMapScale()
-	mapScale = worldMapScale
+	mapScale = FreeDB.map.map_scale
 
 	if mapScale > 1 then
 		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
@@ -122,8 +121,8 @@ end
 
 
 function MAP:OnLogin()
-	if not cfg.enable then return end
-	
+	if not FreeDB.map.enable_map then return end
+
 	self:WorldMapScale()
 	self:AddCoords()
 	self:MapReveal()

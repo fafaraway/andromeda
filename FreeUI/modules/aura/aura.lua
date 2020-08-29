@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA = F:GetModule('Aura')
+local AURA = F:GetModule('AURA')
 
 
 local _G = getfenv(0)
@@ -11,20 +11,20 @@ local settings
 
 
 function AURA:OnLogin()
-	if not FreeUIConfigs['aura']['enable_aura'] then return end
+	if not FreeDB['aura']['enable_aura'] then return end
 
 	settings = {
 		Buffs = {
-			size = FreeUIConfigs['aura']['buff_size'],
-			wrapAfter = FreeUIConfigs['aura']['buffs_per_row'],
+			size = FreeDB['aura']['buff_size'],
+			wrapAfter = FreeDB['aura']['buffs_per_row'],
 			maxWraps = 3,
-			reverseGrow = FreeUIConfigs['aura']['reverse_buffs'],
+			reverseGrow = FreeDB['aura']['reverse_buffs'],
 		},
 		Debuffs = {
-			size = FreeUIConfigs['aura']['debuff_size'],
-			wrapAfter = FreeUIConfigs['aura']['debuffs_per_row'],
+			size = FreeDB['aura']['debuff_size'],
+			wrapAfter = FreeDB['aura']['debuffs_per_row'],
 			maxWraps = 1,
-			reverseGrow = FreeUIConfigs['aura']['reverse_debuffs'],
+			reverseGrow = FreeDB['aura']['reverse_debuffs'],
 		},
 	}
 
@@ -32,7 +32,7 @@ function AURA:OnLogin()
 	F.HideObject(_G.TemporaryEnchantFrame)
 
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap']})
+	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', FreeADB['ui_gap'], -FreeADB['ui_gap']})
 	self.BuffFrame:ClearAllPoints()
 	self.BuffFrame:SetPoint('TOPRIGHT', buffAnchor)
 
@@ -41,7 +41,6 @@ function AURA:OnLogin()
 	self.DebuffFrame:ClearAllPoints()
 	self.DebuffFrame:SetPoint('TOPRIGHT', debuffAnchor)
 
-	self:AddAuraSource()
 	self:InitReminder()
 end
 
@@ -186,12 +185,12 @@ function AURA:UpdateHeader(header)
 	header:SetAttribute('wrapAfter', cfg.wrapAfter)
 	header:SetAttribute('maxWraps', cfg.maxWraps)
 	header:SetAttribute('point', cfg.reverseGrow and 'TOPLEFT' or 'TOPRIGHT')
-	header:SetAttribute('minWidth', (cfg.size + FreeUIConfigs['aura']['margin'])*cfg.wrapAfter)
-	header:SetAttribute('minHeight', (cfg.size + FreeUIConfigs['aura']['offset'])*cfg.maxWraps)
-	header:SetAttribute('xOffset', (cfg.reverseGrow and 1 or -1) * (cfg.size + FreeUIConfigs['aura']['margin']))
+	header:SetAttribute('minWidth', (cfg.size + FreeDB['aura']['margin'])*cfg.wrapAfter)
+	header:SetAttribute('minHeight', (cfg.size + FreeDB['aura']['offset'])*cfg.maxWraps)
+	header:SetAttribute('xOffset', (cfg.reverseGrow and 1 or -1) * (cfg.size + FreeDB['aura']['margin']))
 	header:SetAttribute('yOffset', 0)
 	header:SetAttribute('wrapXOffset', 0)
-	header:SetAttribute('wrapYOffset', -(cfg.size + FreeUIConfigs['aura']['offset']))
+	header:SetAttribute('wrapYOffset', -(cfg.size + FreeDB['aura']['offset']))
 	header:SetAttribute('template', format('FreeUIAuraTemplate%d', cfg.size))
 
 	local index = 1

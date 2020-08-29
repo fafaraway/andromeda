@@ -1,42 +1,42 @@
 ﻿local F, C, L = unpack(select(2, ...))
-local COMBAT, cfg = F:GetModule('Combat'), C.Combat
+local COMBAT = F:GetModule('COMBAT')
 
 
-local assets = 'Interface\\AddOns\\FreeUI\\assets\\'
+local FILTER_MY_PETS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_OBJECT, COMBATLOG_OBJECT_TYPE_GUARDIAN, COMBATLOG_OBJECT_TYPE_PET)
+local FILTER_ENEMY_PLAYERS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PLAYER)
+local FILTER_ENEMY_NPC = bit.bor (COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PLAYER, COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_TYPE_NPC)
 local playerName, playerGUID = UnitName('player'), UnitGUID('player')
-local toEnemy, fromEnemy, fromMyPets
 local lastKill, killCount, streakCount = nil, 0, 0
-local deathsList, killsList = {}, {}
-local debug = false
+local deathsTable, killsTable = {}, {}
+local debugMode = false
 
-local soundsList = {
-	['firstblood'] = assets..'sounds\\killingblows\\kill\\firstblood.ogg',
-	['killingspree'] = assets..'sounds\\killingblows\\kill\\killingspree.ogg',
-	['rampage'] = assets..'sounds\\killingblows\\kill\\rampage.ogg',
-	['dominating'] = assets..'sounds\\killingblows\\kill\\dominating.ogg',
-	['unstoppable'] = assets..'sounds\\killingblows\\kill\\unstoppable.ogg',
-	['godlike'] = assets..'sounds\\killingblows\\kill\\godlike.ogg',
-	['wickedsick'] = assets..'sounds\\killingblows\\kill\\wickedsick.ogg',
+local soundsTable = {
+	['firstblood'] = C.AssetsPath..'sounds\\killingblows\\kill\\firstblood.ogg',
+	['killingspree'] = C.AssetsPath..'sounds\\killingblows\\kill\\killingspree.ogg',
+	['rampage'] = C.AssetsPath..'sounds\\killingblows\\kill\\rampage.ogg',
+	['dominating'] = C.AssetsPath..'sounds\\killingblows\\kill\\dominating.ogg',
+	['unstoppable'] = C.AssetsPath..'sounds\\killingblows\\kill\\unstoppable.ogg',
+	['godlike'] = C.AssetsPath..'sounds\\killingblows\\kill\\godlike.ogg',
+	['wickedsick'] = C.AssetsPath..'sounds\\killingblows\\kill\\wickedsick.ogg',
 
-	['doublekill'] = assets..'sounds\\killingblows\\multikill\\doublekill.ogg',
-	['multikill'] = assets..'sounds\\killingblows\\multikill\\multikill.ogg',
-	['megakill'] = assets..'sounds\\killingblows\\multikill\\megakill.ogg',
-	['ultrakill'] = assets..'sounds\\killingblows\\multikill\\ultrakill.ogg',
-	['monsterkill'] = assets..'sounds\\killingblows\\multikill\\monsterkill.ogg',
-	['ludicrouskill'] = assets..'sounds\\killingblows\\multikill\\ludicrouskill.ogg',
-	['holyshit'] = assets..'sounds\\killingblows\\multikill\\holyshit.ogg',
+	['doublekill'] = C.AssetsPath..'sounds\\killingblows\\multikill\\doublekill.ogg',
+	['multikill'] = C.AssetsPath..'sounds\\killingblows\\multikill\\multikill.ogg',
+	['megakill'] = C.AssetsPath..'sounds\\killingblows\\multikill\\megakill.ogg',
+	['ultrakill'] = C.AssetsPath..'sounds\\killingblows\\multikill\\ultrakill.ogg',
+	['monsterkill'] = C.AssetsPath..'sounds\\killingblows\\multikill\\monsterkill.ogg',
+	['ludicrouskill'] = C.AssetsPath..'sounds\\killingblows\\multikill\\ludicrouskill.ogg',
+	['holyshit'] = C.AssetsPath..'sounds\\killingblows\\multikill\\holyshit.ogg',
 
-	['denied'] = assets..'sounds\\killingblows\\revenge\\denied.ogg',
-	['retribution'] = assets..'sounds\\killingblows\\revenge\\retribution.ogg',
+	['denied'] = C.AssetsPath..'sounds\\killingblows\\revenge\\denied.ogg',
+	['retribution'] = C.AssetsPath..'sounds\\killingblows\\revenge\\retribution.ogg',
 }
 
 local function playSound(file)
 	PlaySoundFile(file, 'Master')
-	-- PlaySoundFile(file, 'SFX')
 end
 
 local function printMessage(str)
-	if not debug then return end
+	if not debugMode then return end
 
 	F.Print(str)
 end
@@ -45,12 +45,10 @@ local function OnEvent(self, event)
 	if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
 		local timestamp, type, _,  sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags, _, _, swingOverkill, _, _, spellOverkill = CombatLogGetCurrentEventInfo()
 
-		local FILTER_MY_PETS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_OBJECT, COMBATLOG_OBJECT_TYPE_GUARDIAN, COMBATLOG_OBJECT_TYPE_PET)
-		local FILTER_ENEMY_PLAYERS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PLAYER) --COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_TYPE_NPC
-		local FILTER_ENEMY_NPC = bit.bor (COMBATLOG_OBJECT_AFFILIATION_MASK, COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PLAYER, COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_TYPE_NPC)
+		local toEnemy, fromEnemy, fromMyPets
 
 		if destName and not CombatLog_Object_IsA(destFlags, COMBATLOG_OBJECT_NONE) then
-			toEnemy = CombatLog_Object_IsA(destFlags, debug and FILTER_ENEMY_NPC or FILTER_ENEMY_PLAYERS)
+			toEnemy = CombatLog_Object_IsA(destFlags, debugMode and FILTER_ENEMY_NPC or FILTER_ENEMY_PLAYERS)
 		end
 
 		if sourceName and not CombatLog_Object_IsA(sourceFlags, COMBATLOG_OBJECT_NONE) then
@@ -62,6 +60,12 @@ local function OnEvent(self, event)
 		or (type == 'SWING_DAMAGE' and destGUID ~= playerGUID and fromMyPets and toEnemy and swingOverkill >= 0)
 		or ((type == 'RANGE_DAMAGE' or type == 'SPELL_DAMAGE' or type == 'SPELL_PERIODIC_DAMAGE') and destGUID ~= playerGUID and fromMyPets and toEnemy and spellOverkill >= 0) then
 
+			if (killsTable[destName] and (timestamp - killsTable[destName]) < 5) then
+				return
+			else
+				killsTable[destName] = timestamp
+			end
+
 			if lastKill and (timestamp - lastKill < 17) then
 				streakCount = streakCount + 1
 			else
@@ -70,54 +74,53 @@ local function OnEvent(self, event)
 			end
 
 			if streakCount == 2 then
-				playSound(soundsList.doublekill)
+				playSound(soundsTable.doublekill)
 				printMessage('Double Kill')
 			elseif streakCount == 3 then
-				playSound(soundsList.multikill)
+				playSound(soundsTable.multikill)
 				printMessage('Multi Kill')
 			elseif streakCount == 4 then
-				playSound(soundsList.megakill)
+				playSound(soundsTable.megakill)
 				printMessage('Mega Kill')
 			elseif streakCount == 5 then
-				playSound(soundsList.ultrakill)
+				playSound(soundsTable.ultrakill)
 				printMessage('Ultra Kill')
 			elseif streakCount == 6 then
-				playSound(soundsList.monsterkill)
+				playSound(soundsTable.monsterkill)
 				printMessage('Monster Kill')
 			elseif streakCount == 7 then
-				playSound(soundsList.ludicrouskill)
+				playSound(soundsTable.ludicrouskill)
 				printMessage('Ludicrous Kill')
 			elseif streakCount >= 8 then
-				playSound(soundsList.holyshit)
+				playSound(soundsTable.holyshit)
 				printMessage('Holy Shit')
 
 			elseif streakCount <= 1 then
-				killsList[destName] = timestamp
-				if (deathsList[destName] and (timestamp - deathsList[destName]) < 90) then
-					deathsList[destName] = nil
-					playSound(soundsList.retribution)
+				if (deathsTable[destName] and (timestamp - deathsTable[destName]) < 90) then
+					deathsTable[destName] = nil
+					playSound(soundsTable.retribution)
 					printMessage('Retribution')
 				elseif killCount == 1 then
-					playSound(soundsList.firstblood)
+					playSound(soundsTable.firstblood)
 					printMessage('First Blood')
 				elseif killCount == 2 then
-					playSound(soundsList.killingspree)
+					playSound(soundsTable.killingspree)
 					printMessage('Killing Spree')
 				elseif killCount == 3 then
-					playSound(soundsList.rampage)
+					playSound(soundsTable.rampage)
 					printMessage('Rampage')
 				elseif killCount == 4 then
-					playSound(soundsList.dominating)
+					playSound(soundsTable.dominating)
 					printMessage('Dominating')
 				elseif killCount == 5 then
-					playSound(soundsList.unstoppable)
+					playSound(soundsTable.unstoppable)
 					printMessage('Unstoppable')
 				elseif killCount == 6 then
-					playSound(soundsList.godlike)
+					playSound(soundsTable.godlike)
 					printMessage('GodLike')
 				elseif killCount >= 7 then
-					playSound(soundsList.wickedsick)
-					printMessage('Whicked Sick')
+					playSound(soundsTable.wickedsick)
+					printMessage('Wicked Sick')
 				end
 			end
 
@@ -126,10 +129,16 @@ local function OnEvent(self, event)
 		elseif (type == 'SWING_DAMAGE' and fromEnemy and destGUID == playerGUID and swingOverkill >= 0)
 		or ((type == 'RANGE_DAMAGE' or type == 'SPELL_DAMAGE' or type == 'SPELL_PERIODIC_DAMAGE') and fromEnemy and destGUID == playerGUID and spellOverkill>= 0) then
 			if sourceName ~= nil and sourceName ~= playerName then
-				deathsList[sourceName] = timestamp
-				if killsList[sourceName] and (timestamp - killsList[sourceName]) < 90 then
-					killsList[sourceName] = nil
-					playSound(soundsList.denied)
+
+				if (deathsTable[sourceName] and (timestamp - deathsTable[sourceName]) < 5) then
+					return
+				else
+					deathsTable[sourceName] = timestamp
+				end
+
+				if killsTable[sourceName] and (timestamp - killsTable[sourceName]) < 90 then
+					killsTable[sourceName] = nil
+					playSound(soundsTable.denied)
 					printMessage('Denied')
 				end
 			end
@@ -143,7 +152,7 @@ local function OnEvent(self, event)
 end
 
 function COMBAT:PvPSound()
-	if not cfg.pvp_sound then return end
+	if not FreeDB.combat.pvp_sound then return end
 
 	local f = CreateFrame('Frame')
 	f:SetScript('OnEvent', OnEvent)
@@ -151,5 +160,3 @@ function COMBAT:PvPSound()
 	f:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 	f:RegisterEvent('PLAYER_DEAD')
 end
-
-COMBAT:RegisterCombat("PvPSound", COMBAT.PvPSound)

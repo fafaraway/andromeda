@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('Theme')
-local TOOLTIP = F:GetModule('Tooltip')
+local THEME = F:GetModule('THEME')
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 function THEME:ReskinDBMBar()
@@ -22,7 +22,7 @@ function THEME:ReskinDBMBar()
 	end
 
 	if not IsAddOnLoaded('DBM-Core') then return end
-	if not FreeUIConfigs['theme']['reskin_dbm'] then return end
+	if not FreeADB.appearance.reskin_dbm then return end
 
 	local buttonsize = 24
 
@@ -171,7 +171,7 @@ function THEME:ReskinDBMBar()
 end
 
 function THEME:ReskinDBMGUI()
-	if not FreeUIConfigs['theme']['reskin_dbm'] then return end
+	if not FreeADB.appearance.reskin_dbm then return end
 	if not IsAddOnLoaded('DBM-GUI') then return end
 
 	tinsert(UISpecialFrames, 'DBM_GUI_OptionsFrame')
@@ -279,6 +279,64 @@ function THEME:ReskinDBMGUI()
 		DBM_GUI_OptionsFrameBossMods:HookScript('OnShow', restyleGUI)
 	end)
 end
---THEME:LoadWithAddOn('DBM-GUI', reskinDBMGUI)
 
+function THEME:Test()
+	if not IsAddOnLoaded('DBM-GUI') then return end
+	tinsert(UISpecialFrames, _G['DBM_GUI_OptionsFrame'])
+
+
+	F.StripTextures(_G['DBM_GUI_OptionsFrame'])
+	F.CreateBDFrame(_G['DBM_GUI_OptionsFrame'], nil, true)
+	F.CreateTex(_G['DBM_GUI_OptionsFrame'])
+
+	_G['DBM_GUI_OptionsFrameHeader']:ClearAllPoints()
+	_G['DBM_GUI_OptionsFrameHeader']:SetPoint('TOP', _G['DBM_GUI_OptionsFrame'], 0, 2)
+
+	_G['DBM_GUI_OptionsFrameWebsite']:Hide()
+	_G['DBM_GUI_OptionsFrameRevision']:Hide()
+	_G['DBM_GUI_OptionsFrameTranslation']:Hide()
+	_G['DBM_GUI_OptionsFrameWebsiteButton']:Hide()
+
+	_G['DBM_GUI_OptionsFrameOkay']:ClearAllPoints()
+	_G['DBM_GUI_OptionsFrameOkay']:SetPoint('BOTTOMRIGHT', -20, 20)
+	F.Reskin(_G['DBM_GUI_OptionsFrameOkay'])
+
+	F.StripTextures(_G['DBM_GUI_OptionsFramePanelContainer'])
+	F.CreateBDFrame(_G['DBM_GUI_OptionsFramePanelContainer'], .3)
+	F.StripTextures(_G['DBM_GUI_OptionsFramePanelContainerFOV'])
+	F.ReskinScroll(_G['DBM_GUI_OptionsFramePanelContainerFOVScrollBar'])
+
+	_G['DBM_GUI_OptionsFramePanelContainerHeaderText']:Hide()
+
+	DBM_GUI_OptionsFrame:HookScript('OnShow', function()
+	end)
+
+	local dbmtabs = {
+		'DBM_GUI_OptionsFrameTab1',
+		'DBM_GUI_OptionsFrameTab2',
+	}
+
+	for i = 1, 2 do
+		local tab = _G[dbmtabs[i]]
+		F.StripTextures(tab)
+
+		if tab and not tab.styled then
+			--F.ReskinTab(tab)
+
+			tab.styled = true
+		end
+	end
+
+	_G['DBM_GUI_OptionsFrameList']:HookScript('OnShow', function(self)
+		F.StripTextures(self)
+
+		if not self.styled then
+			F.CreateBDFrame(self, .3)
+
+			self.styled = true
+		end
+	end)
+
+
+end
 

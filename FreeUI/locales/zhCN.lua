@@ -173,9 +173,9 @@ L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
 L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 L['INVENTORY_MARK_JUNK'] = '垃圾分类'
 L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
-L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
-L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
-L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。"
+L['INVENTORY_QUICK_SPLIT'] = '快速拆分'
+L['INVENTORY_SPLIT_COUNT'] = '拆分个数'
+L['INVENTORY_SPLIT_MODE_ENABLED'] = '|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。'
 
 
 -- Map
@@ -254,8 +254,8 @@ L['MISC_NUMBER_CAP_2'] = '亿'
 L['MISC_NUMBER_CAP_3'] = '兆'
 
 
-
-
+L['MISC_DECLINE_INVITE'] = '自动拒绝了 %s 的组队邀请'
+L['MISC_ACCEPT_INVITE'] = '自动接受了 %s 的组队邀请'
 
 
 
@@ -323,19 +323,19 @@ L['MOVER_COOLDOWN_PULSE'] = '冷却图标'
 
 -- Install
 L['INSTALL_HEADER_HELLO'] = '你好'
-L['INSTALL_HEADER_FIRST'] = '基础设置'
-L['INSTALL_HEADER_SECOND'] = '界面缩放'
-L['INSTALL_HEADER_THIRD'] = '聊天设置'
-L['INSTALL_HEADER_FOURTH'] = '插件设置'
-L['INSTALL_HEADER_FIFTH'] = '安装成功！'
-L['INSTALL_BODY_WELCOME'] = '欢迎使用 FreeUI ！\n\n在开始使用前需要调整一些设定来更好的搭配 FreeUI 工作。\n\n如果你是 FreeUI 的新用户，你也可以点击下方的教程按钮来熟悉各项功能。\n\n点击安装按钮将直接进入安装步骤。'
-L['INSTALL_BODY_FIRST'] = '这些安装步骤将为 FreeUI 调整各类合适的设定。\n\n第一步将会调整一些 CVars 设定。\n\n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
-L['INSTALL_BODY_SECOND'] = '这个步骤将会为游戏界面设定合适的缩放值。'
-L['INSTALL_BODY_THIRD'] = '这个步骤将会调整一些聊天栏相关的设定。'
-L['INSTALL_BODY_FOURTH'] = '这个步骤将自动配置 Bigwigs 和 Skada 的设定并使其配合 FreeUI 的界面风格与布局。'
-L['INSTALL_BODY_FIFTH'] = '安装已经成功完成。\n\n请点击下方完成按钮重载界面。'
-
-L['INSTALL_BUTTON_TUTORIAL'] = '教程'
+L['INSTALL_BODY_WELCOME'] = '欢迎使用 |cffe9c55dFreeUI|r ！\n\n在开始使用前需要调整一些设定来更好的搭配 |cffe9c55dFreeUI|r 工作。\n\n点击安装按钮将进入安装步骤。'
+L['INSTALL_HEADER_BASIC'] = '基础设置'
+L['INSTALL_BODY_BASIC'] = '这些安装步骤将为 |cffe9c55dFreeUI|r 调整各类合适的设定。\n\n第一步将会调整一些 |cffe9c55dCVars|r 设定。\n\n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
+L['INSTALL_HEADER_UISCALE'] = '界面缩放'
+L['INSTALL_BODY_UISCALE'] = '这个步骤将会为游戏界面设定合适的缩放值。'
+L['INSTALL_HEADER_CHAT'] = '聊天设置'
+L['INSTALL_BODY_CHAT'] = '这个步骤将会调整聊天栏相关的设定。'
+L['INSTALL_HEADER_ACTIONBAR'] = '动作条设置'
+L['INSTALL_BODY_ACTIONBAR'] = '这个步骤将会调整动作条相关的设定。'
+L['INSTALL_HEADER_ADDON'] = '插件设置'
+L['INSTALL_BODY_ADDON'] = '这个步骤将会调整 |cffe9c55dDBM|r 和 |cffe9c55dSkada|r 的设定以使其配合 |cffe9c55dFreeUI|r 的界面风格与布局。'
+L['INSTALL_HEADER_COMPLETE'] = '安装成功！'
+L['INSTALL_BODY_COMPLETE'] = '安装已经成功完成。\n\n请点击下方完成按钮重载界面。\n\n记住在游戏中你可以通过输入 |cffe9c55d/free|r 来获取详细的帮助或是直接输入 |cffe9c55d/free config|r 来打开控制面板更改各类设定。'
 L['INSTALL_BUTTON_INSTALL'] = '安装'
 L['INSTALL_BUTTON_SKIP'] = '跳过'
 L['INSTALL_BUTTON_CONTINUE'] = '继续'
@@ -347,36 +347,55 @@ L['INSTALL_BUTTON_CANCEL'] = '取消'
 
 
 -- GUI
-L['GUI_TIPS'] = '小提示'
+L['GUI_TIPS'] = '提示'
 L['GUI_RELOAD_WARNING'] = '|cffff2020是否重载界面来完成设置？|r'
 L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r'
 L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
 
+
 L['GUI_AURA'] = '光环'
 L['GUI_AURA_DESC'] = '这些选项控制大部分和光环相关的设置'
 L['GUI_AURA_SUB_BASIC'] = '基础设定'
-L['GUI_AURA_ENABLE_AURA'] = "启用"
-L['GUI_AURA_MARGIN'] = "图标间隔"
-L['GUI_AURA_OFFSET'] = "增益/减益栏间隔"
-L['GUI_AURA_BUFF_REMINDER'] = "缺失增益提醒"
-L['GUI_AURA_BUFF_REMINDER_TIP'] = "\n提醒你缺失的自身增益光环\n比如法师智力牧师耐力潜行者毒药战士攻强之类"
-L['GUI_AURA_BUFF_SIZE'] = "增益图标大小"
-L['GUI_AURA_BUFFS_PER_ROW'] = "增益图标每行数量"
-L['GUI_AURA_REVERSE_BUFFS'] = "反向排列增益光环"
-L['GUI_AURA_DEBUFF_SIZE'] = "减益图标大小"
-L['GUI_AURA_DEBUFFS_PER_ROW'] = "减益图标每行数量"
-L['GUI_AURA_REVERSE_DEBUFFS'] = "反向排列减益光环"
+L['GUI_AURA_ENABLE_AURA'] = '启用'
+L['GUI_AURA_MARGIN'] = '图标间隔'
+L['GUI_AURA_OFFSET'] = '增益/减益栏间隔'
+L['GUI_AURA_BUFF_REMINDER'] = '缺失增益提醒'
+L['GUI_AURA_BUFF_REMINDER_TIP'] = '\n提醒你缺失的自身增益光环\n比如法师智力牧师耐力潜行者毒药战士攻强之类'
+L['GUI_AURA_BUFF_SIZE'] = '增益图标大小'
+L['GUI_AURA_BUFFS_PER_ROW'] = '增益图标每行数量'
+L['GUI_AURA_REVERSE_BUFFS'] = '反向排列增益光环'
+L['GUI_AURA_DEBUFF_SIZE'] = '减益图标大小'
+L['GUI_AURA_DEBUFFS_PER_ROW'] = '减益图标每行数量'
+L['GUI_AURA_REVERSE_DEBUFFS'] = '反向排列减益光环'
 L['GUI_AURA_AURA_SOURCE'] = '光环来源'
 L['GUI_AURA_SUB_ADJUSTMENT'] = '调整'
 
+L['GUI_MISC_INVITE_KEYWORD'] = '密语邀请关键字'
+L['GUI_MISC_INVITE_KEYWORD_TIP'] = '输入完成后按下回车'
 
 L['GUI_APPEARANCE'] = '外观'
 L['GUI_APPEARANCE_DESC'] = '这些选项控制大部分和外观相关的设置'
 L['GUI_APPEARANCE_SUB_BASIC'] = '基础设定'
 
+L['GUI_UNITFRAME_TEXTURE_STYLE'] = '材质风格'
+L['GUI_UNITFRAME_TEXTURE_NORM'] = '默认'
+L['GUI_UNITFRAME_TEXTURE_GRAD'] = '渐变'
+L['GUI_UNITFRAME_TEXTURE_FLAT'] = '扁平'
 
-
-
+L['GUI_IMPORT_DATA_ERROR'] = '数据异常，导入失败！'
+L['GUI_IMPORT_DATA_WARNING'] = '|cffff2020是否导入数据？|r'
+L['GUI_DATA_INFO'] = '数据信息'
+L['GUI_DATA_VERSION'] = '版本'
+L['GUI_DATA_CHARACTER'] = '角色'
+L['GUI_DATA_EXCEPTION'] = '数据异常'
+L['GUI_DATA_IMPORT'] = '导入'
+L['GUI_DATA_EXPORT'] = '导出'
+L['GUI_DATA_IMPORT_HEADER'] = '导入字符串'
+L['GUI_DATA_EXPORT_HEADER'] = '导出字符串'
+L['GUI_DATA_RESET'] = '重置'
+L['GUI_DATA_RESET_TIP'] = '清除 |cffe9c55dFreeUI|r 已保存的数据，将所有选项重置为 |cffe9c55dFreeUI|r 默认值。'
+L['GUI_DATA_IMPORT_TIP'] = '导入 |cffe9c55dFreeUI|r 的配置字符串。'
+L['GUI_DATA_EXPORT_TIP'] = '将当前的 |cffe9c55dFreeUI|r 配置导出为字符串。'
 
 
 -- Version

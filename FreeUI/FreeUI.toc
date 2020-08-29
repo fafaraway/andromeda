@@ -7,14 +7,14 @@
 ## Author: Haleth, Solor
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
+## X-WoWI-ID: 23258
 ## OptionalDeps: WeakAuras, Skada, DBM-Core, DBM-GUI
-## SavedVariables: FreeUIConfigsGlobal
-## SavedVariablesPerCharacter: FreeUIConfigs
+## SavedVariables: FreeADB
+## SavedVariablesPerCharacter: FreeDB
 
 
-
-init.lua
 libs\libs.xml
+init.lua
 locales\locales.xml
 core\core.xml
 gui\gui.xml

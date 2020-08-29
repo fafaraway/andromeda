@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('Notification'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local playSounds = true
@@ -25,14 +25,12 @@ sep:SetSize(1, 50)
 sep:SetPoint('LEFT', icon, 'RIGHT', 9, 0)
 sep:SetColorTexture(0, 0, 0)
 
-local title = f:CreateFontString(nil, 'OVERLAY')
-title:SetFont(C.Assets.Fonts.Normal, 14, 'OUTLINE')
+local title = F.CreateFS(f, C.Assets.Fonts.Normal, 14, nil, '', 'YELLOW', 'THICK')
 title:SetPoint('TOPLEFT', sep, 'TOPRIGHT', 9, -9)
 title:SetPoint('RIGHT', f, -9, 0)
-title:SetJustifyH('CENTER')
+title:SetJustifyH('LEFT')
 
-local text = f:CreateFontString(nil, 'OVERLAY')
-text:SetFont(C.Assets.Fonts.Normal, 12, 'OUTLINE')
+local text = F.CreateFS(f, C.Assets.Fonts.Normal, 12, nil, '', 'YELLOW', 'THICK')
 text:SetPoint('BOTTOMLEFT', sep, 'BOTTOMRIGHT', 9, 9)
 text:SetPoint('RIGHT', f, -9, 0)
 text:SetJustifyH('LEFT')
@@ -173,8 +171,7 @@ end
 
 
 function NOTIFICATION:OnLogin()
-	F.CreateBDFrame(f)
-	F.CreateSD(f)
+	F.CreateBDFrame(f, nil, true)
 	F.CreateTex(f)
 	F.ReskinIcon(icon)
 
@@ -184,20 +181,20 @@ function NOTIFICATION:OnLogin()
 		self:SetAlpha(1)
 		self:SetScript('OnUpdate', expand)
 	end)
-	
+
 	f:SetScript('OnLeave', fadeTimer)
-	
+
 	f:SetScript('OnMouseUp', function(self, button)
 		self:SetScript('OnUpdate', nil)
 		self:Hide()
 		self:SetScale(0.1)
 		self:SetAlpha(0.1)
 		bannerShown = false
-	
+
 		if button ~= 'RightButton' and f.clickFunc then
 			f.clickFunc()
 		end
-	
+
 		if IsShiftKeyDown() then
 			handler:SetScript('OnUpdate', nil)
 			incoming = {}
@@ -212,7 +209,7 @@ function NOTIFICATION:OnLogin()
 		end
 	end)
 
-	if not cfg.enable then return end
+	if not FreeDB.notification.enable_notification then return end
 	self:NewMail()
 	self:BagFull()
 	self:VersionCheck()

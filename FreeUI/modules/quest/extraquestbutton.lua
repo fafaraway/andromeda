@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local QUEST = F:GetModule('Quest')
+local QUEST = F:GetModule('QUEST')
 
 
 -- ExtraQuestButton, by p3lim
@@ -363,7 +363,7 @@ function ExtraQuestButton:SetItem(itemLink, texture)
 			HotKey:Hide()
 		end
 
-		--if C.Actionbar.enable then F:GetModule('Actionbar').UpdateHotKey(self) end
+		--if C.Actionbar.enable then F:GetModule('ACTIONBAR').UpdateHotKey(self) end
 
 		if(InCombatLockdown()) then
 			self:RegisterEvent('PLAYER_REGEN_ENABLED')

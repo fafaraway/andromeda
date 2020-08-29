@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local LOGO = F:GetModule('Logo')
+local LOGO = F:GetModule('LOGO')
 
 
 local soundID = SOUNDKIT.UI_LEGENDARY_LOOT_TOAST
@@ -38,7 +38,7 @@ function LOGO:Logo_Create()
 	tex:SetAllPoints()
 	tex:SetTexture(C.Assets.logo)
 	tex:SetBlendMode('ADD')
-	tex:SetGradientAlpha('Vertical', 1, 1, 1, 1, C.r, C.g, C.b, 1)
+	tex:SetGradientAlpha('Vertical',  C.r, C.g, C.b, 1, 1, 1, 1, 1)
 
 	local delayTime = 0
 	local timer1 = .5
@@ -114,7 +114,7 @@ end
 
 
 function LOGO:OnLogin()
-	if not FreeUIConfigs['installation_complete'] then return end
-	
+	if not FreeDB['installation_complete'] then return end
+
 	self:LoginAnimation()
 end

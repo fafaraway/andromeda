@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('INFOBAR')
 
 
 local time, date = time, date
@@ -91,7 +91,7 @@ local horrificVisions = {
 	[2] = {id = 57844, desc = '465 (5+4)'},
 	[3] = {id = 57847, desc = '460 (5+3)'},
 	[4] = {id = 57843, desc = '455 (5+2)'},
-	[5] = {id = 57846, desc = '450 (5+1)'},	
+	[5] = {id = 57846, desc = '450 (5+1)'},
 	[6] = {id = 57842, desc = '445 (5+0)'},
 	[7] = {id = 57845, desc = '430 (3+0)'},
 	[8] = {id = 57841, desc = '420 (1+0)'},
@@ -182,7 +182,7 @@ end
 
 
 function INFOBAR:Report()
-	if not cfg.report then return end
+	if not FreeDB.infobar.report then return end
 
 	FreeUIReportButton = INFOBAR:addButton(L['INFOBAR_REPORT'], INFOBAR.POSITION_RIGHT, 80, function(self, button)
 		if button == 'LeftButton' then
@@ -204,7 +204,7 @@ function INFOBAR:Report()
 		RequestRaidInfo()
 
 		local r, g, b
-		GameTooltip:SetOwner(self, (cfg.top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (cfg.top and -15) or 15)
+		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(L['INFOBAR_DAILY_WEEKLY_INFO'], .9, .8, .6)
 
@@ -353,7 +353,7 @@ function INFOBAR:Report()
 			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['INFOBAR_OPEN_LEG_REPORT'], 1, 1, 1, .9, .8, .6)
 			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle..L['INFOBAR_OPEN_WOD_REPORT'], 1, 1, 1, .9, .8, .6)
 		end
-		
+
 		GameTooltip:Show()
 	end)
 

@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local CHAT, cfg = F:GetModule('Chat'), C.Chat
+local CHAT = F:GetModule('CHAT')
 
 
 local strfind, strmatch, gsub, strrep = string.find, string.match, string.gsub, string.rep
@@ -20,7 +20,7 @@ local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
-	F.SplitList(FilterList, cfg.keywordsList, true)
+	F.SplitList(FilterList, FreeDB.chat.keywords_list, true)
 end
 
 -- ECF strings compare
@@ -48,11 +48,11 @@ local chatLines, prevLineID, filterResult = {}, 0, false
 function CHAT:GetFilterResult(event, msg, name, flag, guid)
 	if name == C.MyName or (event == 'CHAT_MSG_WHISPER' and flag == 'GM') or flag == 'DEV' then
 		return
-	elseif guid and cfg.allowFriendsSpam and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or (IsInInstance() and IsGUIDInGroup(guid))) then
+	elseif guid and FreeDB.chat.allow_friends_spam and (IsGuildMember(guid) or BNGetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) or (IsInInstance() and IsGUIDInGroup(guid))) then
 		return
 	end
 
-	if cfg.blockStranger and event == 'CHAT_MSG_WHISPER' then return true end
+	if FreeDB.chat.block_stranger_whisper and event == 'CHAT_MSG_WHISPER' then return true end
 
 	if C.BadBoys[name] and C.BadBoys[name] >= 5 then return true end
 
@@ -75,7 +75,7 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
 		end
 	end
 
-	if matches >= cfg.matches then
+	if matches >= FreeDB.chat.matche_number then
 		return true
 	end
 
@@ -110,7 +110,6 @@ function CHAT:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, li
 end
 
 -- Block addon msg
-local addonBlockList = cfg.addonBlockList
 
 local cvar
 local function toggleCVar(value)
@@ -129,7 +128,7 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 	local name = Ambiguate(author, 'none')
 	if UnitIsUnit(name, 'player') then return end
 
-	for _, word in ipairs(addonBlockList) do
+	for _, word in ipairs(FreeDB.chat.addon_keywords_list) do
 		if strfind(msg, word) then
 			if event == 'CHAT_MSG_SAY' or event == 'CHAT_MSG_YELL' then
 				CHAT:ToggleChatBubble()
@@ -142,11 +141,10 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 end
 
 -- Block trash clubs
-local trashClubs = cfg.trashClubs
 function CHAT:BlockTrashClub()
 	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
 		local text = self.DoubleLine:GetText() or ''
-		for _, name in pairs(trashClubs) do
+		for _, name in pairs(FreeDB.chat.trash_clubs) do
 			if strfind(text, name) then
 				self:Hide()
 				return
@@ -226,7 +224,7 @@ end
 
 
 function CHAT:ChatFilter()
-	if cfg.filters then
+	if FreeDB.chat.filters then
 		self:UpdateFilterList()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatFilter)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatFilter)
@@ -236,7 +234,7 @@ function CHAT:ChatFilter()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_TEXT_EMOTE', self.UpdateChatFilter)
 	end
 
-	if cfg.blockAddonSpam then
+	if FreeDB.chat.block_addon_spam then
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateAddOnBlocker)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateAddOnBlocker)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_EMOTE', self.UpdateAddOnBlocker)
@@ -251,7 +249,7 @@ function CHAT:ChatFilter()
 
 	hooksecurefunc(BNToastFrame, 'ShowToast', self.BlockTrashClub)
 
-	if cfg.itemLinks then
+	if FreeDB.chat.item_links then
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatItemLevel)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatItemLevel)

@@ -1,13 +1,10 @@
 local F, C, L = unpack(select(2, ...))
-local MAP, cfg = F:GetModule('Map'), C.Map
+local MAP = F:GetModule('MAP')
 
 
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
 
-local minimapSize = 256
-local minimapScale = cfg.minimapScale
-local marginScale = 33 / minimapSize
 
 local function ReskinRegions()
 	GarrisonLandingPageMinimapButton:SetSize(1, 1)
@@ -16,6 +13,8 @@ local function ReskinRegions()
 end
 
 local function NewMail()
+	if not FreeDB.map.new_mail then return end
+
 	local mail = CreateFrame('Frame', 'FreeUIMailFrame', Minimap)
 	mail:Hide()
 	mail:RegisterEvent('UPDATE_PENDING_MAIL')
@@ -33,7 +32,7 @@ local function NewMail()
 	end)
 
 	mail.text = F.CreateFS(mail, C.Assets.Fonts.Number, 12, nil, L['MAP_NEW_MAIL'], 'BLUE', 'THICK')
-	mail.text:SetPoint('BOTTOM', Minimap, 0, minimapSize / 8 + 6)
+	mail.text:SetPoint('BOTTOM', Minimap, 0, 256 / 8 + 6)
 
 	MiniMapMailFrame:SetAlpha(0)
 	MiniMapMailFrame:SetSize(22, 10)
@@ -42,6 +41,8 @@ local function NewMail()
 end
 
 local function Calendar()
+	if not FreeDB.map.calendar then return end
+
 	if not GameTimeFrame.styled then
 		GameTimeFrame:SetNormalTexture(nil)
 		GameTimeFrame:SetPushedTexture(nil)
@@ -49,7 +50,7 @@ local function Calendar()
 		GameTimeFrame:SetSize(24, 12)
 		GameTimeFrame:SetParent(Minimap)
 		GameTimeFrame:ClearAllPoints()
-		GameTimeFrame:Point('TOPRIGHT', Minimap, -4, -(minimapSize / 8) - 6)
+		GameTimeFrame:SetPoint('TOPRIGHT', Minimap, -4, -(256 / 8) - 6)
 		GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 
 		for i = 1, GameTimeFrame:GetNumRegions() do
@@ -65,9 +66,9 @@ local function Calendar()
 		GameTimeFrame.styled = true
 	end
 	GameTimeFrame:Show()
+end
 
-
-	-- Invites Icon
+local function CalendarInvites()
 	GameTimeCalendarInvitesTexture:ClearAllPoints()
 	GameTimeCalendarInvitesTexture:SetParent('Minimap')
 	GameTimeCalendarInvitesTexture:SetPoint('TOPRIGHT')
@@ -95,9 +96,11 @@ local function Calendar()
 end
 
 local function InstanceType()
+	if not FreeDB.map.instance_type then return end
+
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetSize(24, 12)
-	f:Point('TOPLEFT', Minimap, 4, -(minimapSize / 8) - 6)
+	f:SetPoint('TOPLEFT', Minimap, 4, -(256 / 8) - 6)
 	f.text = F.CreateFS(f, C.Assets.Fonts.Number, 12, 'OUTLINE', '', nil, false, 'TOPLEFT', 0, 0)
 
 	f:RegisterEvent('PLAYER_ENTERING_WORLD')
@@ -173,55 +176,47 @@ local function InstanceType()
 	end)
 end
 
-local function ZoneText()
-	ZoneTextFrame:SetFrameStrata('MEDIUM')
-	SubZoneTextFrame:SetFrameStrata('MEDIUM')
+local function UpdateZoneTextString()
+	if GetSubZoneText() == '' then
+		Minimap.zoneText:SetText(GetZoneText())
+	else
+		Minimap.zoneText:SetText(GetSubZoneText())
+	end
+	Minimap.zoneText:SetTextColor(ZoneTextString:GetTextColor())
+end
 
+local function AddZoneText()
+	ZoneTextFrame:SetFrameStrata('TOOLTIP')
+	SubZoneTextFrame:SetFrameStrata('TOOLTIP')
 	ZoneTextString:ClearAllPoints()
-	ZoneTextString:SetPoint('CENTER', Minimap)
-	ZoneTextString:SetWidth(230)
-	SubZoneTextString:SetWidth(230)
-	PVPInfoTextString:SetWidth(230)
-	PVPArenaTextString:SetWidth(230)
+	ZoneTextString:SetPoint('TOP', Minimap.bg, 0, -10)
+	ZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
+	SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
+	PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22)
+	PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22)
 
-	MinimapZoneTextButton:ClearAllPoints()
-	MinimapZoneTextButton:Point('TOP', Minimap, 0, -(minimapSize / 8 + 10))
-	MinimapZoneTextButton:SetFrameStrata('HIGH')
-	MinimapZoneTextButton:EnableMouse(false)
-	MinimapZoneTextButton:SetAlpha(0)
+	local zoneText = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, nil, '', nil, 'THICK')
+	zoneText:SetPoint('TOP', Minimap.bg)
+	zoneText:SetSize(Minimap:GetWidth(), 30)
+	zoneText:SetJustifyH('CENTER')
+	zoneText:Hide()
 
-	MinimapZoneText:SetPoint('CENTER', MinimapZoneTextButton)
-	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
-	MinimapZoneText:SetJustifyH('CENTER')
-
-	ZoneTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	SubZoneTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	PVPInfoTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	PVPArenaTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	MinimapZoneText:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-
-	Minimap:HookScript('OnEnter', function()
-		MinimapZoneTextButton:SetAlpha(1)
-	end)
-
-	Minimap:HookScript('OnLeave', function()
-		MinimapZoneTextButton:SetAlpha(0)
-	end)
+	Minimap.zoneText = zoneText
 end
 
 local function QueueStatus()
 	QueueStatusMinimapButtonBorder:SetAlpha(0)
 	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:Point('BOTTOMRIGHT', Minimap, 0, minimapSize / 8 + 6)
+	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, 256 / 8 + 6)
 	QueueStatusMinimapButton:SetHighlightTexture('')
 	QueueStatusMinimapButton.Eye.texture:SetTexture('')
 
 	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:Point('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, minimapSize / 8 + 6)
+	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, 256 / 8 + 6)
 
 	local dots = {}
 	for i = 1, 8 do
-		dots[i] = F.CreateFS(QueueStatusMinimapButton, C.Assets.Fonts.Pixel, 16, "OUTLINE, MONOCHROME", '.', nil, true)
+		dots[i] = F.CreateFS(QueueStatusMinimapButton, C.Assets.Fonts.Pixel, 16, 'OUTLINE, MONOCHROME', '.', nil, true)
 	end
 	dots[1]:SetPoint('TOP', 2, 2)
 	dots[2]:SetPoint('TOPRIGHT', -6, -1)
@@ -282,7 +277,7 @@ local function QueueStatus()
 end
 
 local function WhoPings()
-	if not cfg.whoPings then return end
+	if not FreeDB.map.who_pings then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
@@ -311,12 +306,13 @@ local function WhoPings()
 end
 
 local function WorldMarker()
+	if not FreeDB.map.world_marker then return end
 	if not IsAddOnLoaded('Blizzard_CompactRaidFrames') then return end
 
 	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
 	wm:SetParent('UIParent')
 	wm:ClearAllPoints()
-	wm:Point('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', 4, minimapSize/8 + 6)
+	wm:SetPoint('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', 4, 256/8 + 6)
 	wm:Size(16)
 	wm:Hide()
 
@@ -332,7 +328,7 @@ local function WorldMarker()
 	wm:SetNormalTexture('')
 	wm:SetHighlightTexture('')
 
-	wm.text = F.CreateFS(wm, C.Assets.Fonts.Pixel, 16, "OUTLINEMONOCHROME", '+', nil, true, 'CENTER', 1, 0)
+	wm.text = F.CreateFS(wm, C.Assets.Fonts.Pixel, 16, 'OUTLINEMONOCHROME', '+', nil, true, 'CENTER', 1, 0)
 
 	wm:HookScript('OnEnter', function()
 		wm.text:SetTextColor(C.r, C.g, C.b)
@@ -354,34 +350,56 @@ local function WorldMarker()
 	end)
 end
 
+function MAP:UpdateMinimapScale()
+	local width = Minimap:GetWidth()
+	local height = Minimap:GetHeight()*(190/256)
+	local scale = FreeDB.map.minimap_scale
+	Minimap:SetScale(scale)
+	Minimap.mover:SetSize(width*scale, height*scale)
+	Minimap.bg:SetSize(width*scale, height*scale)
+end
 
 
 function MAP:Minimap()
-	MinimapCluster:Hide()
-	MinimapCluster:EnableMouse(false)
+	DropDownList1:SetClampedToScreen(true)
 
-	local holder = CreateFrame('Frame', nil, UIParent)
-	holder:SetSize(256*minimapScale, 190*minimapScale)
-	F.SetBD(holder)
+	local bg = CreateFrame('Frame', nil, UIParent)
+	bg:SetSize(256*FreeDB.map.minimap_scale, 190*FreeDB.map.minimap_scale)
+	F.SetBD(bg)
 
+	Minimap:SetFrameStrata('BACKGROUND')
 	Minimap:Size(256, 256)
-	Minimap:SetScale(minimapScale)
+	Minimap:SetScale(FreeDB.map.minimap_scale)
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
-	Minimap:SetHitRectInsets(0, 0, 33 * minimapScale, 33 * minimapScale)
-	Minimap:SetArchBlobRingScalar(0)
-	Minimap:SetQuestBlobRingScalar(0)
+
 	Minimap:EnableMouse(true)
 	Minimap:SetClampedToScreen(false)
-	Minimap:SetParent(holder)
+	Minimap:SetParent(bg)
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint('CENTER')
 
-	local mover = F.Mover(holder, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap']*minimapScale}, 256*minimapScale, 190*minimapScale)
-	holder:SetPoint('CENTER', mover)
-	holder.mover = mover
+	local mover = F.Mover(bg, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap']})
+	bg:ClearAllPoints()
+	bg:SetPoint('CENTER', mover)
+	Minimap.mover = mover
+	Minimap.bg = bg
 
+	self:UpdateMinimapScale()
 
-	DropDownList1:SetClampedToScreen(true)
+	-- Zone text
+	AddZoneText()
+
+	Minimap:HookScript('OnUpdate', function()
+		UpdateZoneTextString()
+	end)
+
+	Minimap:HookScript('OnEnter', function()
+		Minimap.zoneText:Show()
+	end)
+
+	Minimap:HookScript('OnLeave', function()
+		Minimap.zoneText:Hide()
+	end)
 
 	-- ClockFrame
 	LoadAddOn('Blizzard_TimeManager')
@@ -412,17 +430,22 @@ function MAP:Minimap()
 		'MiniMapInstanceDifficulty',
 		'GuildInstanceDifficulty',
 		'MiniMapChallengeMode',
+		'MinimapZoneTextButton',
 	}
 
 	for _, v in pairs(frames) do
 		F.HideObject(_G[v])
 	end
 
+	MinimapCluster:EnableMouse(false)
+	Minimap:SetArchBlobRingScalar(0)
+	Minimap:SetQuestBlobRingScalar(0)
+
 	ReskinRegions()
 	Calendar()
+	CalendarInvites()
 	NewMail()
 	InstanceType()
-	ZoneText()
 	QueueStatus()
 	WhoPings()
 	WorldMarker()

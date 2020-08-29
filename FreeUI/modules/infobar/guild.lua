@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('INFOBAR')
 
 -- #TODO
 local tthead, ttsubh, ttoff = {r = 0.4, g = 0.78, b = 1}, {r = 0.75, g = 0.9, b = 1}, {r = .3, g = 1, b = .3}
@@ -70,7 +70,7 @@ end
 local FreeUIFriendsButton = INFOBAR.FreeUIGuildButton
 
 function INFOBAR:Guild()
-	if not cfg.guild then return end
+	if not FreeDB.infobar.guild then return end
 
 	FreeUIGuildButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 80)
 
@@ -115,7 +115,7 @@ function INFOBAR:Guild()
 		local online = totalOnline
 		local GuildInfo, GuildRank, GuildLevel = GetGuildInfo("player")
 
-		GameTooltip:SetOwner(self, (cfg.top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (cfg.top and -15) or 15)
+		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 
 		if GuildInfo and GuildLevel then

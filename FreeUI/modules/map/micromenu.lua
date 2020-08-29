@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local MAP, cfg = F:GetModule('Map'), C.Map
+local MAP = F:GetModule('MAP')
 
 
-local menuFrame = CreateFrame('Frame', 'MinimapRightClickMenu', UIParent, 'UIDropDownMenuTemplate')
+local menuFrame = CreateFrame('Frame', 'MinimapRightClickMenu', Minimap, 'UIDropDownMenuTemplate')
 local menuList = {
 	{
 		text = MAINMENU_BUTTON,
@@ -13,14 +13,14 @@ local menuList = {
 		text = CHARACTER_BUTTON,
 		icon = 'Interface\\PaperDollInfoFrame\\UI-EquipmentManager-Toggle',
 		func = function()
-			securecall(ToggleCharacter, 'PaperDollFrame') 
+			securecall(ToggleCharacter, 'PaperDollFrame')
 		end,
 		notCheckable = true,
 	},
 	{
 		text = SPELLBOOK_ABILITIES_BUTTON,
 		icon = 'Interface\\MINIMAP\\TRACKING\\Class',
-		func = function() 
+		func = function()
 			--securecall(ToggleSpellBook, SpellBookFrame)
 			if not SpellBookFrame:IsShown() then
 				ShowUIPanel(SpellBookFrame)
@@ -33,7 +33,7 @@ local menuList = {
 	{
 		text = TALENTS_BUTTON,
 		icon = 'Interface\\MINIMAP\\TRACKING\\Ammunition',
-		func = function() 
+		func = function()
 			if (not PlayerTalentFrame) then
 				LoadAddOn('Blizzard_TalentUI')
 			end
@@ -47,15 +47,15 @@ local menuList = {
 	{
 		text = ACHIEVEMENT_BUTTON,
 		icon = 'Interface\\ACHIEVEMENTFRAME\\UI-Achievement-Shield',
-		func = function() 
-			securecall(ToggleAchievementFrame) 
+		func = function()
+			securecall(ToggleAchievementFrame)
 		end,
 		notCheckable = true,
 	},
 	{
 		text = MAP_AND_QUEST_LOG,
 		icon = 'Interface\\GossipFrame\\ActiveQuestIcon',
-		func = function() 
+		func = function()
 			securecall(ToggleFrame, WorldMapFrame)
 		end,
 		notCheckable = true,
@@ -64,7 +64,7 @@ local menuList = {
 		text = COMMUNITIES,
 		icon = 'Interface\\GossipFrame\\ChatBubbleGossipIcon',
 		arg1 = IsInGuild('player'),
-		func = function() 
+		func = function()
 			ToggleCommunitiesFrame()
 		end,
 		notCheckable = true,
@@ -73,7 +73,7 @@ local menuList = {
 		text = GUILD,
 		icon = 'Interface\\GossipFrame\\TabardGossipIcon',
 		arg1 = IsInGuild('player'),
-		func = function() 
+		func = function()
 			if (not GuildFrame) then
 				LoadAddOn('Blizzard_GuildUI')
 			end
@@ -85,15 +85,15 @@ local menuList = {
 	{
 		text = SOCIAL_BUTTON,
 		icon = 'Interface\\FriendsFrame\\PlusManz-BattleNet',
-		func = function() 
-			securecall(ToggleFriendsFrame, 1) 
+		func = function()
+			securecall(ToggleFriendsFrame, 1)
 		end,
 		notCheckable = true,
 	},
 	{
 		text = GROUP_FINDER,
 		icon = 'Interface\\LFGFRAME\\BattleNetWorking0',
-		func = function() 
+		func = function()
 			securecall(ToggleLFDParentFrame)
 			--securecall(PVEFrame_ToggleFrame, 'GroupFinderFrame')
 		end,
@@ -102,18 +102,18 @@ local menuList = {
 	{
 		text = COLLECTIONS,
 		icon = 'Interface\\MINIMAP\\TRACKING\\Reagents',
-		func = function() 
+		func = function()
 			if InCombatLockdown() then
 				print('|cffffff00'..ERR_NOT_IN_COMBAT..'|r') return
 			end
 			securecall(ToggleCollectionsJournal, 1)
 		end,
 		notCheckable = true,
-	},	
+	},
 	{
 		text = ADVENTURE_JOURNAL,
 		icon = 'Interface\\MINIMAP\\TRACKING\\Profession',
-		func = function() 
+		func = function()
 			securecall(ToggleEncounterJournal)
 		end,
 		notCheckable = true,
@@ -150,7 +150,7 @@ local menuList = {
 	{
 		text = GARRISON_LANDING_PAGE_TITLE,
 		icon = 'Interface\\HELPFRAME\\OpenTicketIcon',
-		func = function()			
+		func = function()
 			securecall(ShowGarrisonLandingPage, 2)
 			--HideUIPanel(GarrisonLandingPage)
 			--ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
@@ -160,7 +160,7 @@ local menuList = {
 	{
 		text = ORDER_HALL_LANDING_PAGE_TITLE,
 		icon = 'Interface\\GossipFrame\\WorkOrderGossipIcon',
-		func = function()			
+		func = function()
 			securecall(ShowGarrisonLandingPage, 3)
 			--HideUIPanel(GarrisonLandingPage)
 			--ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
@@ -170,15 +170,15 @@ local menuList = {
 	{
 		text = PLAYER_V_PLAYER,
 		icon = 'Interface\\MINIMAP\\TRACKING\\BattleMaster',
-		func = function() 
-			securecall(TogglePVPUI, 1) 
+		func = function()
+			securecall(TogglePVPUI, 1)
 		end,
 		notCheckable = true,
 	},
 	{
 		text = RAID,
 		icon = 'Interface\\TARGETINGFRAME\\UI-TargetingFrame-Skull',
-		func = function() 
+		func = function()
 			securecall(ToggleFriendsFrame, 3)
 		end,
 		notCheckable = true,
@@ -186,16 +186,16 @@ local menuList = {
 	{
 		text = GM_EMAIL_NAME,
 		icon = 'Interface\\CHATFRAME\\UI-ChatIcon-Blizz',
-		func = function() 
-			securecall(ToggleHelpFrame) 
+		func = function()
+			securecall(ToggleHelpFrame)
 		end,
 		notCheckable = true,
 	},
 	{
 		text = SLASH_CALENDAR1:gsub('/(.*)','%1'),
 		func = function()
-			if not CalendarFrame then 
-				LoadAddOn('Blizzard_Calendar') 
+			if not CalendarFrame then
+				LoadAddOn('Blizzard_Calendar')
 			end
 			Calendar_Toggle()
 		end,
@@ -205,8 +205,8 @@ local menuList = {
 		text = BATTLEFIELD_MINIMAP,
 		colorCode = '|cff999999',
 		func = function()
-			if not BattlefieldMapFrame then 
-				LoadAddOn('Blizzard_BattlefieldMap') 
+			if not BattlefieldMapFrame then
+				LoadAddOn('Blizzard_BattlefieldMap')
 			end
 			BattlefieldMapFrame:Toggle()
 		end,
@@ -227,15 +227,16 @@ f:SetScript('OnEvent', function()
 end)
 f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
+
 function MAP:MicroMenu()
-	if not cfg.microMenu then return end
-	
+	if not FreeDB.map.micro_menu then return end
+
 	Minimap:SetScript('OnMouseUp', function(self, button)
 		if (button == 'MiddleButton') then
 			EasyMenu(menuList, menuFrame, self, 0, 0, 'MENU', 3)
 		elseif (button == 'RightButton') then
 			--ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, (Minimap:GetWidth() * .7), -3)
-			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, Minimap, 0, 0)
+			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown,self, -(self:GetWidth()*.7), (self:GetWidth()*.3))
 		else
 			Minimap_OnClick(self)
 		end

@@ -1,9 +1,9 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('Theme')
+local THEME = F:GetModule('THEME')
 
 
 function THEME:ReskinSkada()
-	if not FreeUIConfigs['theme']['reskin_skada'] then return end
+	if not FreeADB.appearance.reskin_skada then return end
 	if not IsAddOnLoaded('Skada') then return end
 
 	local pairs, ipairs, tinsert = pairs, ipairs, table.insert

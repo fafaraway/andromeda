@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 -- Credit: Cloudy Unit Info, by Cloudyfa
@@ -241,7 +241,7 @@ function TOOLTIP:InspectUnit(unit, forced)
 end
 
 function TOOLTIP:InspectUnitSpecAndLevel()
-	if not cfg.spec_ilvl or not IsAltKeyDown() then return end
+	if not FreeDB.tooltip.spec_ilvl or not IsAltKeyDown() then return end
 
 	local _, unit = self:GetUnit()
 	if not unit or not CanInspect(unit) then return end

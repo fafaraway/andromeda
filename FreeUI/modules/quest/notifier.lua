@@ -1,8 +1,7 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F:GetModule('Quest')
+local QUEST = F:GetModule('QUEST')
 
 
-local debugMode = false
 local completedQuest, initComplete = {}
 local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
 local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
@@ -18,13 +17,18 @@ local function acceptText(link, daily)
 end
 
 local function completeText(link)
-	PlaySound(soundKitID, 'Master')
+	if FreeDB.quest.complete_ring then
+		PlaySound(soundKitID, 'Master')
+	end
+
 	return format('%s %s', link, QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
-	if debugMode and C.isDeveloper then
-		print(msg)
+	if not FreeDB.quest.quest_progress then return end
+
+	if C.isDeveloper then
+		F.Print(msg)
 	elseif IsPartyLFG() then
 		SendChatMessage(msg, 'INSTANCE_CHAT')
 	elseif IsInRaid() then
@@ -52,7 +56,7 @@ local questMatches = {
 }
 
 function QUEST:FindQuestProgress(_, msg)
-	if not FreeUIConfigs['quest']['quest_notifier'] then return end
+	if not FreeDB.quest.quest_progress then return end
 
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
@@ -107,17 +111,17 @@ function QUEST:FindWorldQuestComplete(questID)
 end
 
 function QUEST:QuestNotifier()
-	if FreeUIConfigs['quest']['complete_ring'] then
+	--if FreeDB.quest.quest_progress then
 		self:FindQuestComplete()
 		F:RegisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
 		F:RegisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)
 		F:RegisterEvent('QUEST_TURNED_IN', self.FindWorldQuestComplete)
 		F:RegisterEvent('UI_INFO_MESSAGE', self.FindQuestProgress)
-	else
-		wipe(completedQuest)
-		F:UnregisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
-		F:UnregisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)
-		F:UnregisterEvent('QUEST_TURNED_IN', self.FindWorldQuestComplete)
-		F:UnregisterEvent('UI_INFO_MESSAGE', self.FindQuestProgress)
-	end
+	-- else
+	-- 	wipe(completedQuest)
+	-- 	F:UnregisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
+	-- 	F:UnregisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)
+	-- 	F:UnregisterEvent('QUEST_TURNED_IN', self.FindWorldQuestComplete)
+	-- 	F:UnregisterEvent('UI_INFO_MESSAGE', self.FindQuestProgress)
+	-- end
 end

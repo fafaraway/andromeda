@@ -6,19 +6,19 @@ engine[3] = {} -- L, Localisation
 
 _G[addonName] = engine
 
-FreeUIConfigsGlobal, FreeUIConfigs = {}, {}
+FreeADB, FreeDB = {}, {}
 
 
-local F, C, L = unpack(engine)
+local F, C = unpack(engine)
 
 
 -- Events
 local events = {}
 
-local host = CreateFrame("Frame")
-host:SetScript("OnEvent", function(_, event, ...)
+local host = CreateFrame('Frame')
+host:SetScript('OnEvent', function(_, event, ...)
 	for func in pairs(events[event]) do
-		if event == "COMBAT_LOG_EVENT_UNFILTERED" then
+		if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
 			func(event, CombatLogGetCurrentEventInfo())
 		else
 			func(event, ...)
@@ -56,7 +56,7 @@ end
 local modules, initQueue = {}, {}
 
 function F:RegisterModule(name)
-	if modules[name] then print("Module <"..name.."> has been registered.") return end
+	if modules[name] then print('Module <'..name..'> has been registered.') return end
 	local module = {}
 	module.name = name
 	modules[name] = module
@@ -66,10 +66,56 @@ function F:RegisterModule(name)
 end
 
 function F:GetModule(name)
-	if not modules[name] then print("Module <"..name.."> does not exist.") return end
+	if not modules[name] then print('Module <'..name..'> does not exist.') return end
 
 	return modules[name]
 end
+
+F.oUF = engine.oUF
+F.cargBags = engine.cargBags
+F.LibBase64 = engine.LibBase64
+
+F:RegisterModule('INSTALL')
+F:RegisterModule('GUI')
+F:RegisterModule('MOVER')
+F:RegisterModule('LOGO')
+F:RegisterModule('THEME')
+F:RegisterModule('BLIZZARD')
+F:RegisterModule('MISC')
+F:RegisterModule('ACTIONBAR')
+F:RegisterModule('COOLDOWN')
+F:RegisterModule('AURA')
+F:RegisterModule('ANNOUNCEMENT')
+F:RegisterModule('CHAT')
+F:RegisterModule('COMBAT')
+F:RegisterModule('INFOBAR')
+F:RegisterModule('INVENTORY')
+F:RegisterModule('MAP')
+F:RegisterModule('NOTIFICATION')
+F:RegisterModule('QUEST')
+F:RegisterModule('TOOLTIP')
+F:RegisterModule('UNITFRAME')
+
+F.INSTALL = F:GetModule('INSTALL')
+F.GUI = F:GetModule('GUI')
+F.MOVER = F:GetModule('MOVER')
+F.LOGO = F:GetModule('LOGO')
+F.THEME = F:GetModule('THEME')
+F.BLIZZARD = F:GetModule('BLIZZARD')
+F.MISC = F:GetModule('MISC')
+F.ACTIONBAR = F:GetModule('ACTIONBAR')
+F.COOLDOWN = F:GetModule('COOLDOWN')
+F.AURA = F:GetModule('AURA')
+F.ANNOUNCEMENT = F:GetModule('ANNOUNCEMENT')
+F.CHAT = F:GetModule('CHAT')
+F.COMBAT = F:GetModule('COMBAT')
+F.INFOBAR = F:GetModule('INFOBAR')
+F.INVENTORY = F:GetModule('INVENTORY')
+F.MAP = F:GetModule('MAP')
+F.NOTIFICATION = F:GetModule('NOTIFICATION')
+F.QUEST = F:GetModule('QUEST')
+F.TOOLTIP = F:GetModule('TOOLTIP')
+F.UNITFRAME = F:GetModule('UNITFRAME')
 
 
 -- UI scale
@@ -79,7 +125,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-	local scale = GetBestScale() * FreeUIConfigsGlobal['ui_scale']
+	local scale = GetBestScale() * FreeADB['ui_scale']
 
 	if init then
 		local pixel = 1
@@ -95,7 +141,7 @@ local function UpdatePixelScale(event)
 	if isScaling then return end
 	isScaling = true
 
-	if event == "UI_SCALE_CHANGED" then
+	if event == 'UI_SCALE_CHANGED' then
 		C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 	end
 	F:SetupUIScale(true)
@@ -108,10 +154,10 @@ end
 -- Init
 F:RegisterEvent('PLAYER_LOGIN', function()
 
-	if FreeUIConfigs['installation_complete'] then
+	if FreeDB['installation_complete'] then
 
 		F:SetupUIScale()
-		F:RegisterEvent("UI_SCALE_CHANGED", UpdatePixelScale)
+		F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
 
 		F.HideOption(Advanced_UseUIScale)
 		F.HideOption(Advanced_UIScaleSlider)

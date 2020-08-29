@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION, cfg = F:GetModule('Notification'), C.Notification
+local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 
 local hasMail = false
@@ -15,7 +15,7 @@ end
 
 
 function NOTIFICATION:NewMail()
-	if not cfg.new_mail then return end
+	if not FreeDB.notification.new_mail then return end
 
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('UPDATE_PENDING_MAIL')

@@ -1,27 +1,27 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F:GetModule('Quest')
+local QUEST = F:GetModule('QUEST')
 
 
 local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
 local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
 
 
-function QUEST:QuestTrackerMover()
+function QUEST:ObjectiveTrackerMover()
 	local frame = CreateFrame('Frame', 'FreeUIQuestMover', UIParent)
 	frame:SetSize(240, 50)
-	F.Mover(frame, L['MOVER_QUEST_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -FreeUIConfigsGlobal['ui_gap'], -140})
+	F.Mover(frame, L['MOVER_QUEST_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -FreeADB['ui_gap'], -140})
 
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()
 	tracker:SetPoint('TOPRIGHT', frame)
-	tracker:SetHeight(C.ScreenHeight/1.7*C.Mult)
+	tracker:SetHeight(C.ScreenHeight/2*C.Mult)
 	tracker:SetClampedToScreen(false)
 	tracker:SetMovable(true)
 	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
 end
 
 function QUEST:QuestLevel()
-	if not FreeUIConfigs['quest']['show_level'] then return end
+	if not FreeDB.quest.quest_level then return end
 
 	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
 		if ENABLE_COLORBLIND_MODE == '1' then return end
@@ -47,8 +47,8 @@ function QUEST:QuestLevel()
 	hooksecurefunc('QuestLogQuests_AddQuestButton', Showlevel)
 end
 
-function QUEST:QuestRewardHighlight()
-	if not FreeUIConfigs['quest']['auto_select_reward'] then return end
+function QUEST:RewardHighlight()
+	if not FreeDB.quest.reward_highlight then return end
 
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('QUEST_COMPLETE')
@@ -92,11 +92,8 @@ end
 
 
 function QUEST:OnLogin()
-	self:QuestTrackerMover()
-
-	if not FreeUIConfigs['quest']['enable_quest'] then return end
-
+	self:ObjectiveTrackerMover()
 	self:QuestLevel()
-	self:QuestRewardHighlight()
+	self:RewardHighlight()
 	self:QuestNotifier()
 end

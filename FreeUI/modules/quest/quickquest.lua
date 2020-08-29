@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F:GetModule('Quest')
+local QUEST = F:GetModule('QUEST')
 
 
 -- QuickQuest, by p3lim
@@ -8,13 +8,13 @@ local created
 local function setupCheckButton()
 	if created then return end
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
-	bu:Point('TOPRIGHT', -250, -2)
-	bu:Size(26)
+	bu:SetPoint('TOPRIGHT', -250, -4)
+	bu:Size(22)
 	F.ReskinCheck(bu)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 25, 0)
-	bu:SetChecked(FreeUIConfigs['quest']['quick_quest'])
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 22, 0)
+	bu:SetChecked(FreeDB.quest.quick_quest)
 	bu:SetScript('OnClick', function(self)
-		FreeUIConfigs['quest']['quick_quest'] = self:GetChecked()
+		FreeDB.quest.quick_quest = self:GetChecked()
 	end)
 
 	created = true
@@ -32,7 +32,7 @@ QuickQuest:SetScript('OnEvent', function(self, event, ...) self[event](...) end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if FreeUIConfigs['quest']['quick_quest'] and not IsModifierKeyDown() then
+		if FreeDB.quest.quick_quest and not IsModifierKeyDown() then
 			func(...)
 		end
 	end

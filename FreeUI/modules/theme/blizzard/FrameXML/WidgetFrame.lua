@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeADB.appearance.reskin_blizz then return end
 
 	-- Credit: ShestakUI
 	local atlasColors = {
@@ -74,8 +74,8 @@ tinsert(C.BlizzThemes, function()
 
 		if not self.bg then
 			self.bg = F.SetBD(self)
-			self.bg:Point("TOPLEFT", self.LeftBar, -2, 2)
-			self.bg:Point("BOTTOMRIGHT", self.RightBar, 2, -2)
+			self.bg:SetPoint("TOPLEFT", self.LeftBar, -2, 2)
+			self.bg:SetPoint("BOTTOMRIGHT", self.RightBar, 2, -2)
 		end
 	end)
 

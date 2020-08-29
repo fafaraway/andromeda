@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('Actionbar'), C.Actionbar
+local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
 
 
 ACTIONBAR.fader = {
@@ -86,7 +86,7 @@ local function IsMouseOverFrame(frame)
 end
 
 local function IsMinimalMode()
-	if FreeUIConfigs['minimal'] then
+	if FreeDB['minimal'] then
 		if UnitExists('target') then return true end
 		if UnitExists('focus') then return true end
 		if InCombatLockdown() then return true end

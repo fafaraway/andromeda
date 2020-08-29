@@ -1,6 +1,7 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='combat.lua'/>
-	<Script file='fct.lua'/>
+	<Script file='focuser.lua'/>
+	<Script file='marker.lua'/>
 	<Script file='pvpsound.lua'/>
-	<Script file='tab.lua'/>
+	<Script file='tabber.lua'/>
 </Ui>

@@ -1,5 +1,5 @@
-local F, C, L = unpack(select(2, ...))
-local CHAT, cfg = F:GetModule('Chat'), C.Chat
+local F, C = unpack(select(2, ...))
+local CHAT = F:GetModule('CHAT')
 
 
 local maxLines = 1024
@@ -15,7 +15,7 @@ local InviteToGroup = C_PartyInfo.InviteUnit
 
 local isScaling = false
 function CHAT:UpdateChatSize()
-	if not cfg.lock_position then return end
+	if not FreeDB.chat.lock_position then return end
 	if isScaling then return end
 	isScaling = true
 
@@ -33,13 +33,13 @@ function CHAT:UpdateChatSize()
 	end
 
 	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'])
-	ChatFrame1:SetSize(cfg.chat_size_width, cfg.chat_size_height)
+	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', FreeADB['ui_gap'], FreeADB['ui_gap'])
+	ChatFrame1:SetSize(FreeDB.chat.window_width, FreeDB.chat.window_height)
 
 	isScaling = false
 end
 
-function CHAT:TabSetAlpha(alpha)
+--[[ function CHAT:TabSetAlpha(alpha)
 	if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
 		self:SetAlpha(1)
 	elseif alpha < .6 then
@@ -53,21 +53,21 @@ function CHAT:UpdateTabColors(selected)
 	else
 		self:GetFontString():SetTextColor(.5, .5, .5)
 	end
-end
+end ]]
 
 function CHAT:RestyleChatFrame()
 	if not self or (self and self.styled) then return end
 
 	local name = self:GetName()
 
-	if cfg.fading then
+	if FreeDB.chat.fade_out then
 		self:SetFading(true)
-		self:SetTimeVisible(cfg.fadingVisible)
-		self:SetFadeDuration(cfg.fadingDuration)
+		self:SetTimeVisible(FreeDB.chat.fading_visible)
+		self:SetFadeDuration(FreeDB.chat.fading_duration)
 	end
 
 	local fontSize = select(2, self:GetFont())
-	if cfg.font_outline then
+	if FreeDB.chat.font_outline then
 		self:SetFont(C.Assets.Fonts.Chat, fontSize, 'OUTLINE')
 		self:SetShadowColor(0, 0, 0, 0)
 	else
@@ -102,22 +102,22 @@ function CHAT:RestyleChatFrame()
 	lang:SetPoint('BOTTOMRIGHT', eb, 'BOTTOMRIGHT', 29, 0)
 	lang.bd = F.CreateBDFrame(lang, .6, true)
 
-	local tab = _G[name..'Tab']
-	tab:SetAlpha(1)
-	local tabFs = tab:GetFontString()
-	F.StripTextures(tab, 7)
-	hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
+	-- local tab = _G[name..'Tab']
+	-- tab:SetAlpha(1)
+	-- local tabFs = tab:GetFontString()
+	-- F.StripTextures(tab, 7)
+	-- hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
 
-	if cfg.outline then
-		tabFs:SetFont(C.Assets.Fonts.Chat, 12, 'OUTLINE')
-		tabFs:SetShadowColor(0, 0, 0, 0)
-	else
-		tabFs:SetFont(C.Assets.Fonts.Chat, 12)
-		tabFs:SetShadowColor(0, 0, 0, 1)
-		tabFs:SetShadowOffset(2, -2)
-	end
+	-- if FreeDB.chat.outline then
+	-- 	tabFs:SetFont(C.Assets.Fonts.Chat, 12, 'OUTLINE')
+	-- 	tabFs:SetShadowColor(0, 0, 0, 0)
+	-- else
+	-- 	tabFs:SetFont(C.Assets.Fonts.Chat, 12)
+	-- 	tabFs:SetShadowColor(0, 0, 0, 1)
+	-- 	tabFs:SetShadowOffset(2, -2)
+	-- end
 
-	if cfg.lock_position then F.StripTextures(self) end
+	if FreeDB.chat.lock_position then F.StripTextures(self) end
 
 	F.HideObject(self.buttonFrame)
 	F.HideObject(self.ScrollBar)
@@ -176,7 +176,7 @@ local cycles = {
 }
 
 function CHAT:UpdateTabChannelSwitch()
-	if not cfg.cycles then return end
+	if not FreeDB.chat.tab_cycle then return end
 	if strsub(tostring(self:GetText()), 1, 1) == '/' then return end
 	local currChatType = self:GetAttribute('chatType')
 	for i, curr in ipairs(cycles) do
@@ -240,7 +240,7 @@ local function updateChatBubble()
 end
 
 function CHAT:AutoToggleChatBubble()
-	if cfg.auto_toggle_chat_bubble then
+	if FreeDB.chat.smart_bubble then
 		F:RegisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
 	else
 		F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
@@ -262,7 +262,7 @@ function CHAT:OnLogin()
 		end
 	end)
 
-	hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
+	--hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
 
 	-- Font size
 	for i = 1, 15 do
@@ -275,7 +275,7 @@ function CHAT:OnLogin()
 	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Lock chatframe
-	if cfg.lock then
+	if FreeDB.chat.lock_position then
 		self:UpdateChatSize()
 		hooksecurefunc('FCF_SavePositionAndDimensions', self.UpdateChatSize)
 		F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
@@ -298,30 +298,30 @@ function CHAT:OnLogin()
 	self:UrlCopy()
 	self:Spamagemeter()
 	self:WhisperSticky()
-	self:WhisperTarget()
 	self:WhisperAlert()
 	self:AutoToggleChatBubble()
+	self:RestyleTabs()
 
 
 
 
 
 	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
+	BNToastFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
 
 	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
 
 	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-	VoiceChatChannelActivatedNotification:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
 
 	ChatAlertFrame:SetClampedToScreen(true)
-	ChatAlertFrame:SetClampRectInsets(-FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], FreeUIConfigsGlobal['ui_gap'], -FreeUIConfigsGlobal['ui_gap'])
+	ChatAlertFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
 
 	F.HideObject(_G.ChatFrameMenuButton)
 	F.HideObject(_G.QuickJoinToastButton)
 
-	if cfg.voiceIcon then
+	if FreeDB.chat.voice_button then
 		_G.ChatFrameChannelButton:ClearAllPoints()
 		_G.ChatFrameChannelButton:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, -26)
 		_G.ChatFrameChannelButton:SetParent(UIParent)
@@ -333,12 +333,9 @@ function CHAT:OnLogin()
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
-	if not cfg.profanity then
-		if C.isCNPortal then
-			ConsoleExec('portal TW')
-		end
-		SetCVar('profanityFilter', 0)
-	else
-		SetCVar('profanityFilter', 1)
+
+	if C.isCNPortal then
+		ConsoleExec('portal TW')
 	end
+	SetCVar('profanityFilter', 0)
 end

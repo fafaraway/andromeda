@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('INFOBAR')
 
 -- #TODO
 local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r"
@@ -134,7 +134,7 @@ end
 
 
 function INFOBAR:Friends()
-	if not cfg.friends then return end
+	if not FreeDB.infobar.friends then return end
 
 	FreeUIFriendsButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 80, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
@@ -191,7 +191,7 @@ function INFOBAR:Friends()
 		end
 
 		if not BNConnected() then
-			GameTooltip:SetOwner(self, (cfg.top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (cfg.top and -15) or 15)
+			GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(BN_CHAT_DISCONNECTED)
 			GameTooltip:Show()
@@ -203,7 +203,7 @@ function INFOBAR:Friends()
 		local zonec, classc, levelc, realmc, grouped
 
 		if (totalonline > 0) then
-			GameTooltip:SetOwner(self, (cfg.top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (cfg.top and -15) or 15)
+			GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 			GameTooltip:ClearLines()
 			GameTooltip:AddDoubleLine(FRIENDS_LIST, format('%s: %s/%s', GUILD_ONLINE_LABEL, totalonline, #BNTable), .9, .8, .6, 1, 1, 1)
 			GameTooltip:AddLine(" ")

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP, cfg = F:GetModule('Tooltip'), C.Tooltip
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 local strmatch, strsplit, tonumber = string.match, string.split, tonumber
@@ -102,8 +102,8 @@ end
 
 
 function TOOLTIP:LinkHover()
-	if not cfg.link_hover then return end
-	
+	if not FreeDB.tooltip.link_hover then return end
+
 	for i = 1, NUM_CHAT_WINDOWS do
 		local frame = _G['ChatFrame'..i]
 		orig1[frame] = frame:GetScript('OnHyperlinkEnter')

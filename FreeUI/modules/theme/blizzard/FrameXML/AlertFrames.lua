@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeUIConfigs['theme']['reskin_blizz'] then return end
+	if not FreeADB.appearance.reskin_blizz then return end
 
 	-- Fix Alertframe bg
 	local function fixBg(frame)
@@ -9,7 +9,7 @@ tinsert(C.BlizzThemes, function()
 			frame = frame:GetParent()
 		end
 		if frame.bg then
-			frame.bg:SetBackdropColor(0, 0, 0, FreeUIConfigsGlobal.backdrop_alpha)
+			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.backdrop_alpha)
 			if frame.bg.Shadow then
 				frame.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
 			end
@@ -19,7 +19,7 @@ tinsert(C.BlizzThemes, function()
 	local function fixParentbg(frame)
 		frame = frame:GetParent():GetParent()
 		if frame.bg then
-			frame.bg:SetBackdropColor(0, 0, 0, FreeUIConfigsGlobal.backdrop_alpha)
+			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.backdrop_alpha)
 			if frame.bg.Shadow then
 				frame.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
 			end

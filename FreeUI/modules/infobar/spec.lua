@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR, cfg = F:GetModule('Infobar'), C.Infobar
+local INFOBAR = F:GetModule('INFOBAR')
 
 
 local format, wipe, select, next = string.format, table.wipe, select, next
@@ -37,9 +37,9 @@ local function clickFunc(i, isLoot)
 end
 
 function INFOBAR:SpecTalent()
-	if not cfg.spec then return end
+	if not FreeDB.infobar.spec then return end
 
-	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 300, function(self, button)
+	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 200, function(self, button)
 		local specIndex = GetSpecialization()
 		if not specIndex then return end
 
@@ -105,7 +105,7 @@ function INFOBAR:SpecTalent()
 
 	FreeUISpecButton:HookScript('OnEnter', function(self)
 		if not GetSpecialization() then return end
-		GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -15)
+		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(TALENTS_BUTTON, .9, .8, .6)
 		GameTooltip:AddLine(' ')

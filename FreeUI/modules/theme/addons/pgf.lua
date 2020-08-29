@@ -1,10 +1,10 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('Theme')
-local TOOLTIP = F:GetModule('Tooltip')
+local THEME = F:GetModule('THEME')
+local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 function THEME:ReskinPGF()
-    if not FreeUIConfigs['theme']['reskin_pgf'] then return end
+    if not FreeADB.appearance.reskin_pgf then return end
 	if not IsAddOnLoaded('PremadeGroupsFilter') then return end
 
 	local tipStyled

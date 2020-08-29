@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local MISC = F:GetModule('Misc')
+local MISC = F:GetModule('MISC')
 
 -- #TODO
 local select, mod = select, mod
@@ -46,7 +46,7 @@ local function IsAlreadyKnown(link, index)
 			F.ScanTip:SetOwner(UIParent, 'ANCHOR_NONE')
 			F.ScanTip:SetHyperlink(link)
 			for i = 1, F.ScanTip:NumLines() do
-				local text = _G['NDui_ScanTooltipTextLeft'..i]:GetText() or ''
+				local text = _G['FreeUI_ScanTooltipTextLeft'..i]:GetText() or ''
 				if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
 					knowns[link] = true
 					return true

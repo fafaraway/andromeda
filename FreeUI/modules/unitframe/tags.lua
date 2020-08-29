@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('Unitframe')
+local UNITFRAME = F:GetModule('UNITFRAME')
 local oUF = F.oUF
-local cfg = C.Unitframe
 
 
 local tags = oUF.Tags.Methods
@@ -34,6 +33,10 @@ local function shortenName(unit, len)
 	return name
 end
 
+local function AbbrName(str)
+    return str:sub(1,1)..'.'
+end
+
 tags['free:health'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 
@@ -48,7 +51,7 @@ tags['free:healthpercentage'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+	local r, g, b = F.ColorGradient(cur / max, unpack(oUF.colors.smooth))
 	r, g, b = r * 255, g * 255, b * 255
 
 	if cur ~= max then
@@ -58,9 +61,13 @@ end
 tagEvents['free:healthpercentage'] = 'UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
 
 tags['free:power'] = function(unit)
+	local _, powerToken = UnitPowerType(unit)
+	local color = FreeADB['power_colors'][powerToken] or {1, 1, 1}
+	local r, g, b = color.r, color.g, color.b
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	if(cur == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
+	--return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F.Numb(cur))
 	return F.Numb(cur)
 end
 tagEvents['free:power'] = 'UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER'
@@ -72,7 +79,7 @@ tags['free:stagger'] = function(unit)
 	local perc = cur / UnitHealthMax(unit)
 
 	if cur == 0 then return end
-	
+
 	return F.Numb(cur)..' / '..C.MyColor..floor(perc*100 + .5)..'%'
 end
 tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
@@ -94,17 +101,20 @@ end
 tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 tags['free:name'] = function(unit)
+	local name = UnitName(unit)
+
 	if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
 		return C.RedColor..'<'..YOU..'>'
 	else
-		--return shortenName(unit, 12)
-		return UnitName(unit)
+		if name then -- 名字里有中文字符但没有对应中文字体的情况下会返回nil
+			return (name:gsub('(%S+) ', AbbrName))
+		end
 	end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'
 
 tags['free:groupname'] = function(unit)
-	if cfg.group_names then
+	if FreeDB.unitframe.group_names then
 		if UnitInRaid('player') then
 			return shortenName(unit, 2)
 		else

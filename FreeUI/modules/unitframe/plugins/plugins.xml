@@ -1,0 +1,10 @@
+<Ui xmlns='http://www.blizzard.com/wow/ui/'>
+	<Script file='debuffhighlight.lua'/>
+	<Script file='fader.lua'/>
+	<Script file='floatingcombatfeedback.lua'/>
+	<Script file='gloablcooldown.lua'/>
+	<Script file='partywatcher.lua'/>
+	<Script file='raiddebuffs.lua'/>
+	<Script file='spellrange.lua'/>
+	<Script file='totems.lua'/>
+</Ui>

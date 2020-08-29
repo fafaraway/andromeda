@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INVENTORY = F:GetModule('Inventory')
+local INVENTORY = F:GetModule('INVENTORY')
 
 
 local format, wipe = string.format, table.wipe
@@ -30,7 +30,7 @@ local function startSelling()
 			if link then
 				local price = select(11, GetItemInfo(link))
 				local _, count, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(bag, slot)
-				if (quality == 0 or FreeUIConfigsGlobal['custom_junk_list'][itemID]) and price > 0 and not cache['b'..bag..'s'..slot] then
+				if (quality == 0 or FreeADB['custom_junk_list'][itemID]) and price > 0 and not cache['b'..bag..'s'..slot] then
 					sellCount = sellCount + price*count
 					cache['b'..bag..'s'..slot] = true
 					UseContainerItem(bag, slot)
@@ -43,7 +43,7 @@ local function startSelling()
 end
 
 local function updateSelling(event, ...)
-	if not FreeUIConfigsGlobal['auto_sell_junk'] then return end
+	if not FreeDB['inventory']['auto_sell_junk'] then return end
 
 	local _, arg = ...
 	if event == 'MERCHANT_SHOW' then
@@ -70,7 +70,7 @@ function autoRepair(override)
 	local myMoney = GetMoney()
 	repairAllCost, canRepair = GetRepairAllCost()
 
-	if canRepair and repairAllCost > 0 and FreeUIConfigsGlobal['auto_repair'] then
+	if canRepair and repairAllCost > 0 and FreeDB['inventory']['auto_repair'] then
 		if (not override) and IsInGuild() and CanGuildBankRepair() and GetGuildBankWithdrawMoney() >= repairAllCost then
 			RepairAllItems(true)
 		else
@@ -96,7 +96,7 @@ local function merchantClose()
 end
 
 local function merchantShow()
-	if IsControlKeyDown() or not FreeUIConfigsGlobal['auto_repair'] or not CanMerchantRepair() then return end
+	if IsControlKeyDown() or not FreeDB['inventory']['auto_repair'] or not CanMerchantRepair() then return end
 	autoRepair()
 	F:RegisterEvent('MERCHANT_CLOSED', merchantClose)
 end
