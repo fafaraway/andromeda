@@ -72,7 +72,7 @@ local FreeUIFriendsButton = INFOBAR.FreeUIGuildButton
 function INFOBAR:Guild()
 	if not FreeDB.infobar.guild then return end
 
-	FreeUIGuildButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 80)
+	FreeUIGuildButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 100)
 
 	FreeUIGuildButton:RegisterEvent('GUILD_ROSTER_UPDATE')
 	FreeUIGuildButton:RegisterEvent('PLAYER_GUILD_UPDATE')

@@ -136,7 +136,7 @@ end
 function INFOBAR:Friends()
 	if not FreeDB.infobar.friends then return end
 
-	FreeUIFriendsButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 80, function(self, button)
+	FreeUIFriendsButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 100, function(self, button)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
 
 		if button == 'LeftButton' then

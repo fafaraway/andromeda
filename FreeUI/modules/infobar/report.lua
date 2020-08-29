@@ -184,7 +184,7 @@ end
 function INFOBAR:Report()
 	if not FreeDB.infobar.report then return end
 
-	FreeUIReportButton = INFOBAR:addButton(L['INFOBAR_REPORT'], INFOBAR.POSITION_RIGHT, 80, function(self, button)
+	FreeUIReportButton = INFOBAR:addButton(L['INFOBAR_REPORT'], INFOBAR.POSITION_RIGHT, 100, function(self, button)
 		if button == 'LeftButton' then
 			HideUIPanel(GarrisonLandingPage)
 			if not C_Garrison.HasGarrison(LE_GARRISON_TYPE_8_0) then return end

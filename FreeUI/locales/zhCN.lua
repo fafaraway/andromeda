@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+--if not C.isChinses then return end
 
 -- General
 L['GENERAL'] = '综合'
@@ -63,7 +63,7 @@ L['AUTOMATION_BUY_STACK'] = '是否购买|cffff0000一组|r下列物品？'
 
 -- Infobar
 L['INFOBAR'] = '信息条'
-L['INFOBAR_CURRENCY'] = '货币'
+L['INFOBAR_CURRENCY'] = '金币统计'
 L['INFOBAR_DURABILITY'] = '装备耐久'
 L['INFOBAR_FRIENDS'] = '朋友'
 L['INFOBAR_GUILD'] = '公会'
@@ -75,15 +75,8 @@ L['INFOBAR_NO_ONLINE'] = '当前没有好友在线'
 L['INFOBAR_HOLD_SHIFT'] = '按住 <Shift> 展开详细信息'
 L['INFOBAR_OPEN_FRIENDS_PANEL'] = '打开好友面板'
 L['INFOBAR_ADD_FRIEND'] = '添加好友'
-L['INFOBAR_EARNED'] = '获得'
-L['INFOBAR_SPENT'] = '花费'
-L['INFOBAR_DEFICIT'] = '亏损'
-L['INFOBAR_PROFIT'] = '盈利'
-L['INFOBAR_SESSION'] = '本次登录'
-L['INFOBAR_CHARACTER'] = '服务器角色'
-L['INFOBAR_TOKEN_PRICE'] = '时光徽章'
-L['INFOBAR_OPEN_CURRENCY_PANEL'] = '打开货币面板'
-L['INFOBAR_RESET_GOLD_COUNT'] = '重置金币统计数据'
+
+
 L['INFOBAR_OPEN_GUILD_PANEL'] = '打开公会面板'
 L['INFOBAR_OPEN_SPEC_PANEL'] = '打开天赋面板'
 L['INFOBAR_CHANGE_SPEC'] = '切换专精'
@@ -105,9 +98,6 @@ L['INFOBAR_LOCAL_TIME'] = '本地时间'
 L['INFOBAR_REALM_TIME'] = '服务器时间'
 L['INFOBAR_OPEN_ADDON_PANEL'] = '打开插件列表'
 L['INFOBAR_OPEN_TIMER_TRACKER'] = '打开计时器'
-L['INFOBAR_DURABILITY'] = '耐久'
-L['INFOBAR_HANDS'] = '手部'
-L['INFOBAR_FEET'] = '脚部'
 L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
 L['INFOBAR_INFO'] = '信息'
 
@@ -176,6 +166,14 @@ L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾
 L['INVENTORY_QUICK_SPLIT'] = '快速拆分'
 L['INVENTORY_SPLIT_COUNT'] = '拆分个数'
 L['INVENTORY_SPLIT_MODE_ENABLED'] = '|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。'
+L['INVENTORY_GOLD_COUNT'] = '金币统计'
+L['INVENTORY_EARNED'] = '获得'
+L['INVENTORY_SPENT'] = '花费'
+L['INVENTORY_DEFICIT'] = '亏损'
+L['INVENTORY_PROFIT'] = '盈利'
+L['INVENTORY_SESSION'] = '本次登录'
+L['INVENTORY_CHARACTER'] = '服务器角色'
+L['INVENTORY_GOLD_TOTAL'] = '总共'
 
 
 -- Map

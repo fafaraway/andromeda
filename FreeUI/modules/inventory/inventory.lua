@@ -78,10 +78,6 @@ end
 
 local profit, spent, oldMoney = 0, 0, 0
 
-local function formatTextMoney(money)
-	return format('%s: '..C.InfoColor..'%d', L['INFOBAR_CURRENCY'], money * .0001)
-end
-
 local function getClassIcon(class)
 	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
 	c1, c2, c3, c4 = (c1+.03)*50, (c2-.03)*50, (c3+.03)*50, (c4-.03)*50
@@ -132,21 +128,21 @@ function INVENTORY:CreateCurrencyFrame()
 	currencyFrame:SetScript('OnEnter', function(self)
 		GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(CURRENCY, .9, .8, .6)
+		GameTooltip:AddLine(L['INVENTORY_GOLD_COUNT'], .9, .8, .6)
 		GameTooltip:AddLine(' ')
 
-		GameTooltip:AddLine(L['INFOBAR_SESSION'], .6,.8,1)
-		GameTooltip:AddDoubleLine(L['INFOBAR_EARNED'], GetMoneyString(profit), 1,1,1, 1, 1, 1)
-		GameTooltip:AddDoubleLine(L['INFOBAR_SPENT'], GetMoneyString(spent), 1,1,1, 1, 1, 1)
+		GameTooltip:AddLine(L['INVENTORY_SESSION'], .6,.8,1)
+		GameTooltip:AddDoubleLine(L['INVENTORY_EARNED'], GetMoneyString(profit), 1,1,1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(L['INVENTORY_SPENT'], GetMoneyString(spent), 1,1,1, 1, 1, 1)
 		if profit < spent then
-			GameTooltip:AddDoubleLine(L['INFOBAR_DEFICIT'], GetMoneyString(spent-profit), 1,0,0, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L['INVENTORY_DEFICIT'], GetMoneyString(spent-profit), 1,0,0, 1, 1, 1)
 		elseif profit > spent then
-			GameTooltip:AddDoubleLine(L['INFOBAR_PROFIT'], GetMoneyString(profit-spent), 0,1,0, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L['INVENTORY_PROFIT'], GetMoneyString(profit-spent), 0,1,0, 1, 1, 1)
 		end
 		GameTooltip:AddLine(' ')
 
 		local totalGold = 0
-		GameTooltip:AddLine(L['INFOBAR_CHARACTER'], .6,.8,1)
+		GameTooltip:AddLine(L['INVENTORY_CHARACTER'], .6,.8,1)
 		local thisRealmList = FreeADB['gold_count'][C.MyRealm]
 		for k, v in pairs(thisRealmList) do
 			local gold, class = unpack(v)
@@ -155,7 +151,7 @@ function INVENTORY:CreateCurrencyFrame()
 			totalGold = totalGold + gold
 		end
 		GameTooltip:AddLine(' ')
-		GameTooltip:AddDoubleLine(TOTAL, GetMoneyString(totalGold), .6,.8,1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(L['INVENTORY_GOLD_TOTAL'], GetMoneyString(totalGold), .6,.8,1, 1, 1, 1)
 
 		for i = 1, GetNumWatchedTokens() do
 			local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)

@@ -1,111 +1,94 @@
 local F, C, L = unpack(select(2, ...))
 
 
-
--- automation
-L['AUTOMATION_GUILD_REPAIR_COST'] = 'Repair cost covered by Guild Bank'
-L['AUTOMATION_REPAIR_COST'] = 'Repair cost'
-L['AUTOMATION_REPAIR_FAILED'] = 'You have insufficient funds to repair your equipment!'
-L['AUTOMATION_SELL_JUNK'] = 'Vendor trash sold'
+-- Misc
 
 
--- misc
-L['MISC_STRANGER'] = 'Stranger'
-L['MISC_GET_NAKED'] = 'Double click to remove gears'
-L['NAKE_BUTTON'] = 'Undress'
-L['ACCOUNT_KEYSTONES'] = 'Account keystones'
-L['MISC_REPUTATION'] = 'Reputation'
-L['MISC_PARAGON'] = 'Paragon'
-L['MISC_PARAGON_REPUTATION'] = 'Paragon reputation'
-L['MISC_PARAGON_NOTIFY'] = '巅峰声望已满注意兑换'
-L['MISSING_BUFF'] = 'Missing'
-L['Pull'] = 'Pull in 10s!'
-L['AutoQuest'] = 'Auto quest'
-L['MapReveal'] = 'Map reveal'
-L['InviteInfo'] = 'Accepted invite from'
-L['InviteEnable'] = 'Autoinvite ON'
-L['InviteDisable'] = 'Autoinvite OFF'
-L['MISC_STACK_BUYING_CHECK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
-L['MISC_ARCHAEOLOGY_COUNT'] = 'Statistics of Archaeology'
-L['MISC_DISBAND_GROUP'] = 'Disbanding group'
-L['MISC_DISBAND_GROUP_CHECK'] = 'Are you sure you want to disband the group?'
-L['MISC_NUMBER_CAP_1'] = ''
-L['MISC_NUMBER_CAP_2'] = ''
-L['MISC_NUMBER_CAP_3'] = ''
+-- Themes
+L['THEME'] = 'Appearance'
+L['THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
+L['THEME_CURSOR_TRAIL'] = 'Cursor trail'
+L['THEME_VIGNETTING'] = 'Vignetting'
+L['THEME_VIGNETTING_ALPHA'] = 'Vignetting alpha'
+L['THEME_RESKIN_BLIZZ'] = 'Restyle blizzard frames'
+L['THEME_SHADOW_BORDER'] = 'Shadow border'
+L['THEME_UI_SCALE'] = 'UI Scale'
 
 
--- notification
-L['NOTIFICATION_RARE'] = 'Rare nearby! '
-L['NOTIFICATION_INTERRUPTED'] = 'Interrupted: '
-L['NOTIFICATION_DISPELED'] = 'Dispeled: '
-L['NOTIFICATION_STOLEN'] = 'Stolen: '
-L['NOTIFICATION_RESNOTARGET'] = '<Attention>: %s casted %s!'
-L['NOTIFICATION_RESTARGET'] = '<Attention>: %s casted %s on %s!'
-L['NOTIFICATION_BOTTOY'] = '<Attention>: %s puts %s!'
-L['NOTIFICATION_FEAST'] = '<Attention>: %s puts %s!'
-L['NOTIFICATION_PORTAL'] = '<Attention>: %s opened %s!'
-L['NOTIFICATION_REFRESHMENTTABLE'] = '<Attention>: %s casted %s!'
-L['NOTIFICATION_RITUALOFSUMMONING'] = '<Attention>: %s is casting %s!'
-L['NOTIFICATION_SOULWELL'] = '<Attention>: %s casted %s!'
-L['NOTIFICATION_ACCEPT_QUEST'] = 'Accept quest: '
-L['NOTIFICATION_NEW_MAIL'] = 'You have new mail.'
-L['NOTIFICATION_BAG_FULL'] = 'Your bags are full.'
-L['NOTIFICATION_MAIL'] = 'MAIL'
-L['NOTIFICATION_BAG'] = 'BAG'
-L['NOTIFICATION_REPAIR'] = 'REPAIR'
-L['NOTIFICATION_SELL'] = 'SELL'
+-- Notification
+L['NOTIFICATION'] = 'Notification'
+L['NOTIFICATION_NEW_MAIL'] = 'New mail!'
+L['NOTIFICATION_BAG_FULL'] = 'Bag full!'
+L['NOTIFICATION_MAIL'] = 'Mail'
+L['NOTIFICATION_BAG'] = 'Bag'
+L['NOTIFICATION_REPAIR'] = 'Repair'
+L['NOTIFICATION_SELL'] = 'Sell'
+L['NOTIFICATION_RARE'] = 'Rare found!'
+L['NOTIFICATION_VERSION_CHECK_HEADER'] = 'Version check'
+L['NOTIFICATION_VERSION_CHECK_DESC'] = 'FreeUI has been out of date, the latest release is %s'
 
 
--- infobar
-L['INFOBAR_CURRENCY'] = 'Currency'
+-- Announcement
+L['ANNOUNCEMENT'] = 'Announcement'
+L['ANNOUNCEMENT_INTERRUPT'] = 'Interrup %s\'s %s'
+L['ANNOUNCEMENT_DISPEL'] = 'Dispel %s\'s %s'
+L['ANNOUNCEMENT_STOLEN'] = 'Stolen %s\'s %s'
+L['ANNOUNCEMENT_BATTLE_REZ'] = '%s casted %s'
+L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s casted %s on %s'
+L['ANNOUNCEMENT_CASTED'] = '%s casted %s'
+L['ANNOUNCEMENT_SUMMONING'] = '%s is casting %s'
+L['ANNOUNCEMENT_FEAST'] = '%s put %s'
+L['ANNOUNCEMENT_ITEM'] = '%s put %s'
+L['ANNOUNCEMENT_PORTAL'] = '%s opened %s'
+L['ANNOUNCEMENT_SAPPED'] = 'SAPPED!'
+
+
+-- Infobar
+L['INFOBAR'] = 'Infobar'
+L['INFOBAR_CURRENCY'] = 'Gold count'
 L['INFOBAR_DURABILITY'] = 'Durability'
 L['INFOBAR_FRIENDS'] = 'Friends'
 L['INFOBAR_GUILD'] = 'Guild'
 L['INFOBAR_GUILD_NONE'] = 'None'
 L['INFOBAR_REPORT'] = 'Report'
-
 L['INFOBAR_WOW'] = '<World of Warcraft>'
-L['INFOBAR_BN'] = '<Battle.NET>'
-L['INFOBAR_NO_ONLINE'] = 'No friends online at the moment.'
+L['INFOBAR_BN'] = '<Battle.Net>'
+L['INFOBAR_NO_ONLINE'] = 'No friends online'
 L['INFOBAR_HOLD_SHIFT'] = 'Hold <Shift>'
 L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Open friends panel'
 L['INFOBAR_ADD_FRIEND'] = 'Add friend'
-
-L['INFOBAR_EARNED'] = 'Earned'
-L['INFOBAR_SPENT'] = 'Spent'
-L['INFOBAR_DEFICIT'] = 'Deficit'
-L['INFOBAR_PROFIT'] = 'Profit'
-L['INFOBAR_SESSION'] = 'Session'
-L['INFOBAR_TOKEN_PRICE'] = 'Token price'
-L['INFOBAR_CHARACTER'] = 'Characters in realm'
 L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Open currency panel'
-L['INFOBAR_RESET_GOLD_COUNT'] = 'Are you sure to reset the gold count?'
-
-L['INFOBAR_OPEN_SPEC_PANEL'] = 'Open talent panel'
+L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
+L['INFOBAR_OPEN_GUILD_PANEL'] = 'Open guild panel'
+L['INFOBAR_OPEN_SPEC_PANEL'] = 'Open specialization panel'
 L['INFOBAR_CHANGE_SPEC'] = 'Change specialization'
-L['INFOBAR_CHANGE_LOOT_SPEC'] = 'Change loot specialization'
-L['INFOBAR_SPEC'] = 'Spec'
+L['INFOBAR_SPEC'] = 'Specialization'
 L['INFOBAR_LOOT'] = 'Loot'
-
 L['INFOBAR_DAILY_WEEKLY_INFO'] = 'Daily/weekly information'
 L['INFOBAR_INVASION_LEG'] = 'Legion Invasion'
 L['INFOBAR_INVASION_BFA'] = 'Faction Invasion'
 L['INFOBAR_INVASION_CURRENT'] = 'Current'
 L['INFOBAR_INVASION_NEXT'] = 'Next'
-L['INFOBAR_OPEN_GARRION_REPORT'] = 'Open mission report'
+L['INFOBAR_OPEN_BFA_REPORT'] = 'Open mission report (BFA)'
+L['INFOBAR_OPEN_LEG_REPORT'] = 'Open mission report (LEG)'
+L['INFOBAR_OPEN_WOD_REPORT'] = 'Open mission report (WOD)'
 L['INFOBAR_BLINGTRON'] = 'Blingtron Daily Gift'
 L['INFOBAR_MEAN_ONE'] = 'Feast of Winter Veil'
 L['INFOBAR_TIMEWARPED'] = '500 Timewarped Badges'
 L['INFOBAR_ISLAND'] = 'progress'
-
-L['INFOBAR_LOCAL_TIME'] = 'Local Time'
-L['INFOBAR_REALM_TIME'] = 'Realm Time'
-L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open addon list panel'
-L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open timer panel'
-
-L['INFOBAR_HANDS'] = 'Hands'
-L['INFOBAR_FEET'] = 'Feet'
+L['INFOBAR_LOCAL_TIME'] = 'Local time'
+L['INFOBAR_REALM_TIME'] = 'Realm time'
+L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open addon panel'
+L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open timer tracker'
 L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open character panel'
+L['INFOBAR_INFO'] = 'Information'
+
+
+
+
+
+
+
 
 
 -- inventory
@@ -116,10 +99,24 @@ L['INVENTORY_DELETE_MODE_ENABLED'] = 'Item quickly delete mode enabled! You can 
 L['INVENTORY_DELETE_MODE_DISABLED'] = 'Item quickly delete mode disabled.'
 L['INVENTORY_DELETE_MODE'] = 'Enable quickly delete mode'
 L['INVENTORY_MECHAGON_STUFF'] = 'Mechagon stuff'
-
 L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
 L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
-L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。" 
+L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。"
+
+L['INVENTORY_GOLD_COUNT'] = 'Gold count'
+L['INVENTORY_EARNED'] = 'Earned'
+L['INVENTORY_SPENT'] = 'spent'
+L['INVENTORY_DEFICIT'] = 'Deficit'
+L['INVENTORY_PROFIT'] = 'Profit'
+L['INVENTORY_SESSION'] = 'Session'
+L['INVENTORY_CHARACTER'] = 'Character in realm'
+L['INVENTORY_GOLD_TOTAL'] = 'Total'
+
+
+
+
+
+
 
 
 
@@ -177,8 +174,6 @@ L['TOOLTIP_SECTION'] = 'Section'
 L['TOOLTIP_TARGETED'] = 'Targeted'
 
 
--- Themes
-L["THEME_CONFLICTION_WARNING"] = "FreeUI includes an efficient built-in module of theme.\n\nIt's highly recommended that you disable any version of Aurora or Skinner."
 
 
 
