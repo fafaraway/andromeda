@@ -109,8 +109,8 @@ C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
 C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r' ]]
 
 C.InfoColor = '|cffe9c55d'
-C.YellowColor = '|cffffd200'
-C.GreyColor = '|cff808080'
+C.YellowColor = '|cffffff00'
+C.GreyColor = '|cff7f7f7f'
 C.RedColor = '|cffff2020'
 C.GreenColor = '|cff20ff20'
 C.BlueColor = '|cff82c5ff'

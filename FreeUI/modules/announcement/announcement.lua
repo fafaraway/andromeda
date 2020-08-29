@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ANNOUNCEMENT, cfg = F:GetModule('ANNOUNCEMENT'), C.Announcement
+local ANNOUNCEMENT = F:GetModule('ANNOUNCEMENT')
 
 
 local combatRez = {
@@ -110,35 +110,33 @@ function ANNOUNCEMENT:UpdateEvents(...)
 	if destName then destName = destName:gsub('%-[^|]+', '') end
 
 	if event == 'SPELL_INTERRUPT' then
-		if not (cfg.my_interrupt and isMine) then return end
-
-		F.Print(format(L['ANNOUNCEMENT_INTERRUPT'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)))
+		if not (FreeDB.announcement.my_interrupt and isMine) then return end
 
 		SendChatMessage(format(L['ANNOUNCEMENT_INTERRUPT'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
 	end
 
 	if event == 'SPELL_DISPEL' then
-		if not (cfg.my_dispel and isMine) then return end
+		if not (FreeDB.announcement.my_dispel and isMine) then return end
 
 		SendChatMessage(format(L['ANNOUNCEMENT_DISPEL'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
 	end
 
 	if event == 'SPELL_STOLEN' then
-		if not (cfg.my_dispel and isMine) then return end
+		if not (FreeDB.announcement.my_dispel and isMine) then return end
 
 		SendChatMessage(format(L['ANNOUNCEMENT_STOLEN'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
 	end
 
 	if event == 'SPELL_CAST_SUCCESS' then
-		if cfg.feast_cauldron and feasts[sourceSpellId] then
+		if FreeDB.announcement.feast_cauldron and feasts[sourceSpellId] then
 			SendChatMessage(format(L['ANNOUNCEMENT_FEAST'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.conjure_refreshment and (sourceSpellId == 190336) then
+		if FreeDB.announcement.conjure_refreshment and (sourceSpellId == 190336) then
 			SendChatMessage(format(L['ANNOUNCEMENT_FEAST'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.combat_rez and combatRez[sourceSpellId] then
+		if FreeDB.announcement.combat_rez and combatRez[sourceSpellId] then
 			if destName == nil then
 				SendChatMessage(format(L['COMBAT_ANNOUCE_BATTLE_REZ'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 			else
@@ -148,39 +146,39 @@ function ANNOUNCEMENT:UpdateEvents(...)
 	end
 
 	if event == 'SPELL_SUMMON' then
-		if cfg.bot_codex and bots[sourceSpellId] then
+		if FreeDB.announcement.bot_codex and bots[sourceSpellId] then
 			SendChatMessage(format(L['COMBAT_AANNOUNCEMENT_ITEMNNOUCE_CASTED'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.mail_service and (sourceSpellId == 261602) then -- Katy Stampwhistle
+		if FreeDB.announcement.mail_service and (sourceSpellId == 261602) then -- Katy Stampwhistle
 			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 	end
 
 	if event == 'SPELL_CREATE' then
-		if cfg.mage_portal and portals[sourceSpellId] then
+		if FreeDB.announcement.mage_portal and portals[sourceSpellId] then
 			SendChatMessage(format(L['ANNOUNCEMENT_PORTAL'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.ritual_of_summoning and (sourceSpellId == 698) then
+		if FreeDB.announcement.ritual_of_summoning and (sourceSpellId == 698) then
 			SendChatMessage(format(L['COMBAT_ANNOUCE_CASTED'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.create_soulwell and (sourceSpellId == 29893) then
+		if FreeDB.announcement.create_soulwell and (sourceSpellId == 29893) then
 			SendChatMessage(format(L['COMBAT_ANNOUCE_CASTED'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.mail_service and (sourceSpellId == 54710) then -- MOLL-E
+		if FreeDB.announcement.mail_service and (sourceSpellId == 54710) then -- MOLL-E
 			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 
-		if cfg.special_toy and toys[sourceSpellId] then
+		if FreeDB.announcement.special_toy and toys[sourceSpellId] then
 			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end
 	end
 
 	if event == 'SPELL_AURA_APPLIED' or event == 'SPELL_AURA_REFRESH' then
-		if not (cfg.get_sapped and destName == C.MyName and sourceSpellId == 6770) then return end
+		if not (FreeDB.announcement.get_sapped and destName == C.MyName and sourceSpellId == 6770) then return end
 
 		SendChatMessage(L['COMBAT_ANNOUCE_SAPPED'], 'SAY')
 		F.Print(L['COMBAT_ANNOUCE_SAPPED']..(sourceName or '(unknown)'))
@@ -192,7 +190,7 @@ function ANNOUNCEMENT:OnLogin()
 	if not IsInInstance() then return end
 	if not IsInGroup() then return end
 
-	if cfg.enable then
+	if FreeDB.announcement.enable_announcement then
 		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
 	else
 		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)

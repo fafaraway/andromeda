@@ -13,7 +13,7 @@ local function UpdateMinimapScale()
 end
 
 
---[[ side panel functions ]]
+--[[ side panel ]]
 
 -- appearance
 local function SetupVignettingAlpha()
@@ -104,6 +104,22 @@ end
 
 local function SetupCastbarSize()
 	GUI:ToggleSidePanel('castbarSizeSide')
+end
+
+local function SetupClassPower()
+	GUI:ToggleSidePanel('classPowerSide')
+end
+
+local function SetupAltPower()
+	GUI:ToggleSidePanel('altPowerSide')
+end
+
+local function SetupPower()
+	GUI:ToggleSidePanel('powerSide')
+end
+
+local function SetupCombatText()
+	GUI:ToggleSidePanel('combatTextSide')
 end
 
 -- combat
@@ -333,52 +349,51 @@ local function NotificationOptions()
 end
 
 local function AnnouncementOptions()
-	local Announcement = FreeUIOptionsFrame.Announcement
-	Announcement.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_RallyingCry')
+	local parent = FreeUI_GUI.ANNOUNCEMENT
 
-	local basic = GUI:AddSubCategory(Announcement, 'GUI.localization.announcement.sub_basic')
-	basic:SetPoint('TOPLEFT', Announcement.subText, 'BOTTOMLEFT', 0, -8)
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(Announcement, 'enable')
+	local enable = GUI:CreateCheckBox(parent, 'announcement', 'enable_announcement')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local feast = GUI:CreateCheckBox(Announcement, 'feast_cauldron')
+	local feast = GUI:CreateCheckBox(parent, 'announcement', 'feast_cauldron')
 	feast:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local bot = GUI:CreateCheckBox(Announcement, 'bot_codex')
+	local bot = GUI:CreateCheckBox(parent, 'announcement', 'bot_codex')
 	bot:SetPoint('LEFT', feast, 'RIGHT', 160, 0)
 
-	local refreshment = GUI:CreateCheckBox(Announcement, 'conjure_refreshment')
+	local refreshment = GUI:CreateCheckBox(parent, 'announcement', 'conjure_refreshment')
 	refreshment:SetPoint('TOPLEFT', feast, 'BOTTOMLEFT', 0, -8)
 
-	local soulwell = GUI:CreateCheckBox(Announcement, 'create_soulwell')
+	local soulwell = GUI:CreateCheckBox(parent, 'announcement', 'create_soulwell')
 	soulwell:SetPoint('LEFT', refreshment, 'RIGHT', 160, 0)
 
-	local summoning = GUI:CreateCheckBox(Announcement, 'ritual_of_summoning')
+	local summoning = GUI:CreateCheckBox(parent, 'announcement', 'ritual_of_summoning')
 	summoning:SetPoint('TOPLEFT', refreshment, 'BOTTOMLEFT', 0, -8)
 
-	local portal = GUI:CreateCheckBox(Announcement, 'mage_portal')
+	local portal = GUI:CreateCheckBox(parent, 'announcement', 'mage_portal')
 	portal:SetPoint('LEFT', summoning, 'RIGHT', 160, 0)
 
-	local mail = GUI:CreateCheckBox(Announcement, 'mail_service')
+	local mail = GUI:CreateCheckBox(parent, 'announcement', 'mail_service')
 	mail:SetPoint('TOPLEFT', summoning, 'BOTTOMLEFT', 0, -8)
 
-	local toy = GUI:CreateCheckBox(Announcement, 'special_toy')
+	local toy = GUI:CreateCheckBox(parent, 'announcement', 'special_toy')
 	toy:SetPoint('LEFT', mail, 'RIGHT', 160, 0)
 
-	local combat = GUI:AddSubCategory(Announcement, 'GUI.localization.announcement.sub_combat')
+	local combat = GUI:AddSubCategory(parent)
 	combat:SetPoint('TOPLEFT', mail, 'BOTTOMLEFT', 0, -16)
 
-	local interrupt = GUI:CreateCheckBox(Announcement, 'my_interrupt')
+	local interrupt = GUI:CreateCheckBox(parent, 'announcement', 'my_interrupt')
 	interrupt:SetPoint('TOPLEFT', combat, 'BOTTOMLEFT', 0, -8)
 
-	local dispel = GUI:CreateCheckBox(Announcement, 'my_dispel')
+	local dispel = GUI:CreateCheckBox(parent, 'announcement', 'my_dispel')
 	dispel:SetPoint('LEFT', interrupt, 'RIGHT', 160, 0)
 
-	local rez = GUI:CreateCheckBox(Announcement, 'combat_rez')
+	local rez = GUI:CreateCheckBox(parent, 'announcement', 'combat_rez')
 	rez:SetPoint('TOPLEFT', interrupt, 'BOTTOMLEFT', 0, -8)
 
-	local sapped = GUI:CreateCheckBox(Announcement, 'get_sapped')
+	local sapped = GUI:CreateCheckBox(parent, 'announcement', 'get_sapped')
 	sapped:SetPoint('LEFT', rez, 'RIGHT', 160, 0)
 
 
@@ -400,7 +415,7 @@ local function AnnouncementOptions()
 	end
 
 	enable:HookScript('OnClick', toggleAnnouncementOptions)
-	Announcement:HookScript('OnShow', toggleAnnouncementOptions)
+	parent:HookScript('OnShow', toggleAnnouncementOptions)
 end
 
 local function InfobarOptions()
@@ -836,7 +851,6 @@ end
 
 local function InventoryOptions()
 	local parent = FreeUI_GUI.INVENTORY
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Bag_30')
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1149,7 +1163,6 @@ end
 
 local function UnitframeOptions()
 	local parent = FreeUI_GUI.UNITFRAME
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Mage_MassInvisibility')
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1184,7 +1197,7 @@ local function UnitframeOptions()
 	local debuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'target_debuffs_by_player')
 	debuffsByPlayer:SetPoint('TOPLEFT', healPrediction, 'BOTTOMLEFT', 0, -8)
 
-	local classPowerBar = GUI:CreateCheckBox(parent, 'unitframe', 'class_power_bar')
+	local classPowerBar = GUI:CreateCheckBox(parent, 'unitframe', 'class_power_bar', nil, SetupClassPower)
 	classPowerBar:SetPoint('LEFT', debuffsByPlayer, 'RIGHT', 160, 0)
 
 	local staggerBar = GUI:CreateCheckBox(parent, 'unitframe', 'stagger_bar')
@@ -1193,14 +1206,14 @@ local function UnitframeOptions()
 	local totemsBar = GUI:CreateCheckBox(parent, 'unitframe', 'totems_bar')
 	totemsBar:SetPoint('LEFT', staggerBar, 'RIGHT', 160, 0)
 
-	local runesBar = GUI:CreateCheckBox(parent, 'unitframe', 'runes_bar')
-	runesBar:SetPoint('TOPLEFT', staggerBar, 'BOTTOMLEFT', 0, -8)
+	local powerBar = GUI:CreateCheckBox(parent, 'unitframe', 'power_bar', nil, SetupPower)
+	powerBar:SetPoint('TOPLEFT', staggerBar, 'BOTTOMLEFT', 0, -8)
 
-	local altPower = GUI:CreateCheckBox(parent, 'unitframe', 'alt_power')
-	altPower:SetPoint('LEFT', runesBar, 'RIGHT', 160, 0)
+	local altPower = GUI:CreateCheckBox(parent, 'unitframe', 'alt_power', nil, SetupAltPower)
+	altPower:SetPoint('LEFT', powerBar, 'RIGHT', 160, 0)
 
-	local fct = GUI:CreateCheckBox(parent, 'unitframe', 'floating_combat_feedback')
-	fct:SetPoint('TOPLEFT', runesBar, 'BOTTOMLEFT', 0, -8)
+	local fct = GUI:CreateCheckBox(parent, 'unitframe', 'combat_text', nil, SetupCombatText)
+	fct:SetPoint('TOPLEFT', powerBar, 'BOTTOMLEFT', 0, -8)
 
 	local hideTags = GUI:CreateCheckBox(parent, 'unitframe', 'player_hide_tags')
 	hideTags:SetPoint('LEFT', fct, 'RIGHT', 160, 0)
@@ -1336,8 +1349,48 @@ local function UnitframeOptions()
 	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {1, 10, 1})
 	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -48)
 
-	local altPowerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'alternative_power_height', nil, {1, 10, 1})
-	altPowerHeight:SetPoint('TOP', powerHeight, 'BOTTOM', 0, -48)
+
+	-- alt power side panel
+	local altPowerSide = GUI:CreateSidePanel(parent, 'altPowerSide')
+
+	local altPowerHeight = GUI:CreateSlider(altPowerSide, 'unitframe', 'alt_power_height', nil, {1, 10, 1})
+	altPowerHeight:SetPoint('TOP', altPowerSide.child, 'TOP', 0, -24)
+
+	-- power side panel
+	local powerSide = GUI:CreateSidePanel(parent, 'powerSide')
+
+	local powerHeight = GUI:CreateSlider(powerSide, 'unitframe', 'power_bar_height', nil, {1, 10, 1})
+	powerHeight:SetPoint('TOP', powerSide.child, 'TOP', 0, -24)
+
+	local mana = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'MANA')
+	mana:SetPoint('TOPLEFT', powerSide.child, 'TOPLEFT', 10, -80)
+
+	local rage = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'RAGE')
+	rage:SetPoint('TOP', mana, 'BOTTOM', 0, -16)
+
+	local focus = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'FOCUS')
+	focus:SetPoint('TOP', rage, 'BOTTOM', 0, -16)
+
+	local energy = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'ENERGY')
+	energy:SetPoint('TOP', focus, 'BOTTOM', 0, -16)
+
+	local runic = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'RUNIC_POWER')
+	runic:SetPoint('TOP', energy, 'BOTTOM', 0, -16)
+
+	local lunar = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'LUNAR_POWER')
+	lunar:SetPoint('TOP', runic, 'BOTTOM', 0, -16)
+
+	local maelstrom = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'MAELSTROM')
+	maelstrom:SetPoint('TOP', lunar, 'BOTTOM', 0, -16)
+
+	local insanity = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'INSANITY')
+	insanity:SetPoint('TOP', maelstrom, 'BOTTOM', 0, -16)
+
+	local fury = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'FURY')
+	fury:SetPoint('TOP', insanity, 'BOTTOM', 0, -16)
+
+	local pain = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'PAIN')
+	pain:SetPoint('TOP', fury, 'BOTTOM', 0, -16)
 
 
 	-- focus size side panel
@@ -1376,6 +1429,7 @@ local function UnitframeOptions()
 
 	local raidGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_gap', nil, {5, 20, 1})
 	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -48)
+
 
 	-- castbar color side panel
 	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
@@ -1431,11 +1485,6 @@ local function UnitframeOptions()
 	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
 
 
-	local mana = GUI:CreateColorSwatch(castbarColorSide, 'POWERCOLORS', 'MANA')
-	mana:SetPoint('TOP', shaman, 'BOTTOM', 0, -16)
-
-	local rage = GUI:CreateColorSwatch(castbarColorSide, 'POWERCOLORS', 'RAGE')
-	rage:SetPoint('TOP', mana, 'BOTTOM', 0, -16)
 
 
 
@@ -1448,6 +1497,7 @@ local function UnitframeOptions()
 	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
 	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -48)
 
+
 	-- range check alpha side panel
 	local rangeCheckAlphaSide = GUI:CreateSidePanel(parent, 'rangeCheckAlphaSide')
 
@@ -1455,6 +1505,42 @@ local function UnitframeOptions()
 	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide.child, 'TOP', 0, -24)
 
 
+	-- class power side panel
+	local classPowerSide = GUI:CreateSidePanel(parent, 'classPowerSide')
+
+	local comboPoints = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'combo_points')
+	comboPoints:SetPoint('TOPLEFT', classPowerSide.child, 'TOPLEFT', 10, -10)
+
+	local soulShards = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'soul_shards')
+	soulShards:SetPoint('TOP', comboPoints, 'BOTTOM', 0, -16)
+
+	local holyPower = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'holy_power')
+	holyPower:SetPoint('TOP', soulShards, 'BOTTOM', 0, -16)
+
+	local arcaneCharges = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'arcane_charges')
+	arcaneCharges:SetPoint('TOP', holyPower, 'BOTTOM', 0, -16)
+
+	local chiOrbs = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'chi_orbs')
+	chiOrbs:SetPoint('TOP', arcaneCharges, 'BOTTOM', 0, -16)
+
+
+	-- combat text side panel
+	local combatTextSide = GUI:CreateSidePanel(parent, 'combatTextSide')
+
+	local ctAutoAttack = GUI:CreateCheckBox(combatTextSide, 'unitframe', 'ct_auto_attack')
+	ctAutoAttack:SetPoint('TOPLEFT', combatTextSide.child, 'TOPLEFT', 10, -16)
+
+	local ctPet = GUI:CreateCheckBox(combatTextSide, 'unitframe', 'ct_pet')
+	ctPet:SetPoint('TOP', ctAutoAttack, 'BOTTOM', 0, -8)
+
+	local ctHot = GUI:CreateCheckBox(combatTextSide, 'unitframe', 'ct_hot')
+	ctHot:SetPoint('TOP', ctPet, 'BOTTOM', 0, -8)
+
+	local ctOverHealing = GUI:CreateCheckBox(combatTextSide, 'unitframe', 'ct_over_healing')
+	ctOverHealing:SetPoint('TOP', ctHot, 'BOTTOM', 0, -8)
+
+	local ctAbbrNumber = GUI:CreateCheckBox(combatTextSide, 'unitframe', 'ct_abbr_number')
+	ctAbbrNumber:SetPoint('TOP', ctOverHealing, 'BOTTOM', 0, -8)
 end
 
 local function MiscOptions()
@@ -1549,8 +1635,8 @@ function GUI:AddOptions()
 	--addGeneralOptions()
 
 	NotificationOptions()
-	-- addAnnouncementOptions()
-	-- addAutomationOptions()
+	AnnouncementOptions()
+
 	InfobarOptions()
 	ChatOptions()
 	AuraOptions()

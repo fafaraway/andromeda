@@ -7,6 +7,12 @@ colors.health = {.02, .02, .02}
 colors.disconnected = {.4, .4, .4}
 colors.tapped = {.4, .4, .4}
 
+colors.smooth = {
+	1, 0, 0,
+	1, 1, 0,
+	0, 1, 0
+}
+
 colors.reaction = {
 	[1] = {1.00, 0.32, 0.29}, 	-- Hated
 	[2] = {1.00, 0.32, 0.29}, 	-- Hostile

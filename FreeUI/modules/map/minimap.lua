@@ -176,40 +176,32 @@ local function InstanceType()
 	end)
 end
 
-local function ZoneText()
-	ZoneTextFrame:SetFrameStrata('MEDIUM')
-	SubZoneTextFrame:SetFrameStrata('MEDIUM')
+local function UpdateZoneTextString()
+	if GetSubZoneText() == '' then
+		Minimap.zoneText:SetText(GetZoneText())
+	else
+		Minimap.zoneText:SetText(GetSubZoneText())
+	end
+	Minimap.zoneText:SetTextColor(ZoneTextString:GetTextColor())
+end
 
+local function AddZoneText()
+	ZoneTextFrame:SetFrameStrata('TOOLTIP')
+	SubZoneTextFrame:SetFrameStrata('TOOLTIP')
 	ZoneTextString:ClearAllPoints()
-	ZoneTextString:SetPoint('CENTER', Minimap)
-	ZoneTextString:SetWidth(230)
-	SubZoneTextString:SetWidth(230)
-	PVPInfoTextString:SetWidth(230)
-	PVPArenaTextString:SetWidth(230)
+	ZoneTextString:SetPoint('TOP', Minimap.bg, 0, -10)
+	ZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
+	SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
+	PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22)
+	PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22)
 
-	MinimapZoneTextButton:ClearAllPoints()
-	MinimapZoneTextButton:SetPoint('TOP', Minimap, 0, -(256 / 8 + 10))
-	MinimapZoneTextButton:SetFrameStrata('HIGH')
-	MinimapZoneTextButton:EnableMouse(false)
-	MinimapZoneTextButton:SetAlpha(0)
+	local zoneText = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, nil, '', nil, 'THICK')
+	zoneText:SetPoint('TOP', Minimap.bg)
+	zoneText:SetSize(Minimap:GetWidth(), 30)
+	zoneText:SetJustifyH('CENTER')
+	zoneText:Hide()
 
-	MinimapZoneText:SetPoint('CENTER', MinimapZoneTextButton)
-	MinimapZoneText:SetShadowColor(0, 0, 0, 0)
-	MinimapZoneText:SetJustifyH('CENTER')
-
-	ZoneTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	SubZoneTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	PVPInfoTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	PVPArenaTextString:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-	MinimapZoneText:SetFont(C.Assets.Fonts.Normal, 16, 'OUTLINE')
-
-	Minimap:HookScript('OnEnter', function()
-		MinimapZoneTextButton:SetAlpha(1)
-	end)
-
-	Minimap:HookScript('OnLeave', function()
-		MinimapZoneTextButton:SetAlpha(0)
-	end)
+	Minimap.zoneText = zoneText
 end
 
 local function QueueStatus()
@@ -375,6 +367,7 @@ function MAP:Minimap()
 	bg:SetSize(256*FreeDB.map.minimap_scale, 190*FreeDB.map.minimap_scale)
 	F.SetBD(bg)
 
+	Minimap:SetFrameStrata('BACKGROUND')
 	Minimap:Size(256, 256)
 	Minimap:SetScale(FreeDB.map.minimap_scale)
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
@@ -392,6 +385,21 @@ function MAP:Minimap()
 	Minimap.bg = bg
 
 	self:UpdateMinimapScale()
+
+	-- Zone text
+	AddZoneText()
+
+	Minimap:HookScript('OnUpdate', function()
+		UpdateZoneTextString()
+	end)
+
+	Minimap:HookScript('OnEnter', function()
+		Minimap.zoneText:Show()
+	end)
+
+	Minimap:HookScript('OnLeave', function()
+		Minimap.zoneText:Hide()
+	end)
 
 	-- ClockFrame
 	LoadAddOn('Blizzard_TimeManager')
@@ -422,6 +430,7 @@ function MAP:Minimap()
 		'MiniMapInstanceDifficulty',
 		'GuildInstanceDifficulty',
 		'MiniMapChallengeMode',
+		'MinimapZoneTextButton',
 	}
 
 	for _, v in pairs(frames) do
@@ -437,7 +446,6 @@ function MAP:Minimap()
 	CalendarInvites()
 	NewMail()
 	InstanceType()
-	ZoneText()
 	QueueStatus()
 	WhoPings()
 	WorldMarker()

@@ -51,7 +51,7 @@ tags['free:healthpercentage'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
 
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-	local r, g, b = ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+	local r, g, b = F.ColorGradient(cur / max, unpack(oUF.colors.smooth))
 	r, g, b = r * 255, g * 255, b * 255
 
 	if cur ~= max then

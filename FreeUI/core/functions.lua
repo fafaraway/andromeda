@@ -3,7 +3,7 @@ local F, C, L = unpack(select(2, ...))
 
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
 local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
-local min, max, floor, rad = math.min, math.max, math.floor, math.rad
+local min, max, floor, rad, modf = math.min, math.max, math.floor, math.rad, math.modf
 local assets = C.Assets
 local backdropColor = {.03, .03, .03}
 local gradientColor = {.02, .02, .02, .5, .08, .08, .08, .5}
@@ -168,6 +168,21 @@ do
 		end
 		return r, g, b
 	end
+
+	function F.ColorGradient(perc, ...)
+		if perc >= 1 then
+			return select(select('#', ...) - 2, ...)
+		elseif perc <= 0 then
+			return ...
+		end
+
+		local num = select('#', ...) / 3
+		local segment, relperc = modf(perc*(num-1))
+		local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
+
+		return r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc
+	end
+
 end
 
 

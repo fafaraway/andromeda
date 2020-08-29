@@ -43,124 +43,7 @@ local colors = F.oUF.colors
 		['easy_focus_on_unitframes'] = false,
 } ]]
 
---[[ C['Theme'] = {
-	['cursor_trail'] = true,
-	['vignetting'] = true,
-		['vignetting_alpha'] = .8,
-	['backdrop_color'] = {.05, .05, .05},
-	['backdrop_alpha'] = .6,
-	['backdrop_border_color'] = {0, 0, 0},
-	['backdrop_border_alpha'] = 1,
-	['flat_style'] = false,
-		['flat_color'] = {.06, .06, .06},
-		['flat_alpha'] = .65,
-	['gradient_color_primary'] = {.02, .02, .02},
-	['gradient_color_primary_alpha'] = .5,
-	['gradient_color_secondary'] = {.08, .08, .08},
-	['gradient_color_secondary_alpha'] = .5,
-	['reskin_blizz'] = true,
-	['shadow_border'] = true,
 
-	['reskin_dbm'] = true,
-	['reskin_weakauras'] = true,
-	['reskin_pgf'] = true,
-	['reskin_skada'] = true,
-} ]]
-
---[[ C['Notification'] = {
-	['enable'] = true,
-		['bag_full'] = true,
-		['new_mail'] = true,
-		['version_check'] = true,
-		['rare_alert'] = true,
-} ]]
-
-
-
-C['Announcement'] = {
-	['enable'] = true,
-		['my_interrupt'] = true,
-		['my_dispel'] = true,
-		['get_sapped'] = true,
-		['combat_rez'] = true,
-		['feast_cauldron'] = true,
-		['bot_codex'] = true,
-		['mage_portal'] = true,
-		['ritual_of_summoning'] = true,
-		['create_soulwell'] = true,
-		['mail_service'] = true,
-		['conjure_refreshment'] = true,
-		['special_toy'] = true,
-}
-
---[[ C['Infobar'] = {
-	['enable'] = true,
-		['fontSize'] = 11,
-		['top'] = true,
-		['height'] = 14,
-		['mouseover'] = true,
-		['stats'] = true,
-		['spec'] = true,
-		['durability'] = true,
-		['guild'] = true,
-		['friends'] = true,
-		['report'] = true,
-} ]]
-
---[[ C['Chat'] = {
-	['enable'] = true,
-		['lock_position'] = true,
-			['chat_size_width'] = 300,
-			['chat_size_height'] = 100,
-		['font_outline'] = false,
-
-		['fading'] = true,
-			['fadingVisible'] = 60,
-			['fadingDuration'] = 6,
-
-		['abbreviate'] = true,
-		['itemLinks'] = true,
-		['spamageMeter'] = true,
-		['chatCopy'] = true,
-		['urlCopy'] = true,
-		['voiceIcon'] = true,
-		['sticky'] = true,
-		['cycles'] = true,
-		['profanity'] = false,
-
-		['auto_toggle_chat_bubble'] = false,
-
-		['allowFriendsSpam'] = false,
-		['blockStranger'] = false,
-		['matches'] = 1,
-
-		['whisperColor'] = true,
-		['whisperTarget'] = true,
-		['whisperAlert'] = true,
-			['lastAlertTimer'] = 30,
-
-		['filters'] = true,
-		['keywordsList'] = '%*',
-		['blockAddonSpam'] = true,
-		['addonBlockList'] = {
-			'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', string.rep('%-', 20),
-			'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', '汐寒', 'wow.+兑换码', 'wow.+验证码', '【有爱插件】', '：.+>', '|Hspell.+=>'
-		},
-		['trashClubs'] = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩'}
-} ]]
-
---[[ C['Aura'] = {
-	['enable_aura'] = true,
-		['margin'] = 6,
-		['offset'] = 12,
-		['buffSize'] = 40,
-		['buffsPerRow'] = 12,
-		['reverseBuffs'] = true,
-		['debuffSize'] = 50,
-		['debuffsPerRow'] = 12,
-		['reverseDebuffs'] = true,
-		['reminder'] = true,
-} ]]
 
 C['Actionbar'] = {
 	['enable_actionbar'] = true,
@@ -204,202 +87,7 @@ C['Actionbar'] = {
 				},
 }
 
---[[ C['Combat'] = {
-	['enable'] = true,
 
-
-		['combat_alert'] = true,
-		['health_alert'] = true,
-			['health_alert_threshold'] = 0.3,
-		['spell_alert'] = true,
-
-		['pvp_sound'] = true,
-		['auto_tab'] = true,
-} ]]
-
---[[ C['Inventory'] = {
-	['enable_module'] = true,
-		['scale'] = 1,
-		['offset'] = 26,
-		['spacing'] = 3,
-		['slot_size'] = 44,
-		['bag_columns'] = 10,
-		['bank_columns'] = 10,
-		['reverse_sort'] = true,
-		['item_level'] = true,
-			['item_level_to_show'] = 1,
-		['new_item_flash'] = true,
-		['combine_free_slots'] = true,
-		['split_count'] = 1,
-		['special_color'] = true,
-		['item_filter'] = true,
-			['item_filter_gear_set'] = false,
-			['item_filter_trade'] = true,
-			['item_filter_quest'] = true,
-			['item_filter_junk'] = true,
-			['item_filter_azerite'] = true,
-			['item_filter_equipment'] = true,
-			['item_filter_consumable'] = true,
-			['item_filter_legendary'] = true,
-			['item_filter_mount_pet'] = true,
-			['item_filter_favourite'] = true,
-} ]]
-
---[[ C['Map'] = {
-	['enable'] = true,
-		['coords'] = true,
-		['minimapScale'] = 1,
-		['whoPings'] = true,
-		['worldMarker'] = true,
-		['microMenu'] = true,
-		['expBar'] = true,
-} ]]
-
---[[ C['Quest'] = {
-	['enable'] = true,
-		['questLevel'] = true,
-		['rewardHightlight'] = true,
-		['extraQuestButton'] = true,
-		['completeRing'] = true,
-		['questNotifier'] = false,
-} ]]
-
---[[ C['Tooltip'] = {
-	['enable'] = true,
-		['follow_cursor'] = false,
-		['hide_title'] = true,
-		['hide_realm'] = true,
-		['hide_rank'] = true,
-		['hide_in_combat'] = false,
-		['border_color'] = true,
-		['spec_ilvl'] = true,
-		['azerite_armor'] = true,
-		['link_hover'] = true,
-		['tip_icon'] = true,
-		['target_by'] = true,
-		['pvp_rating'] = true,
-
-		['tip_backdrop_alpha'] = .6,
-		['header_font_size'] = 16,
-		['normal_font_size'] = 14,
-
-		['extra_info'] = true,
-			['various_id'] = true,
-			['item_count'] = true,
-			['item_price'] = true,
-			['aura_source'] = true,
-			['mount_source'] = true,
-} ]]
-
---[[ C['Unitframe'] = {
-	['enable_module'] = true,
-		['transparency'] = true,
-		['texture'] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
-		['fader'] = true,
-		['color_smooth'] = false,
-		['portrait'] = true,
-		['only_show_debuffs_by_player'] = true,
-		['click_cast'] = true,
-			['click_cast_filter'] = false,
-		['threat'] = true,
-		['range_check'] = true,
-		['heal_prediction'] = true,
-			['heal_prediction_over_absorb'] = true,
-		['gcd_spark'] = true,
-
-		['debuff_highlight'] = true,
-		['corner_buffs'] = true,
-		['raid_debuffs'] = true,
-			['raid_debuffs_click_through'] = false,
-
-		['power_bar_height'] = 2,
-		['alternative_power_height'] = 2,
-		['class_power_bar'] = true,
-			['class_power_bar_height'] = 2,
-		['stagger_bar'] = true,
-			['stagger_bar_height'] = 2,
-		['totems_bar'] = true,
-			['totems_bar_height'] = 2,
-		['runes_bar'] = true,
-			['runes_bar_height'] = 2,
-
-		['enable_castbar'] = true,
-			['castbar_focus_separate'] = false,
-			['castbar_focus_width'] = 200,
-			['castbar_focus_height'] = 16,
-			['castbar_timer'] = false,
-
-		['enable_player'] = true,
-			['player_width'] = 140,
-			['player_height'] = 14,
-			['player_auras'] = false,
-			['player_auras_number'] = 18,
-			['player_auras_number_per_row'] = 6,
-			['player_hide_tags'] = false,
-
-		['enable_pet'] = true,
-			['pet_width'] = 50,
-			['pet_height'] = 14,
-			['pet_auras'] = true,
-			['pet_auras_number_per_row'] = 3,
-			['pet_auras_number'] = 12,
-
-		['enable_target'] = true,
-			['target_width'] = 240,
-			['target_height'] = 14,
-			['target_auras'] = true,
-			['target_auras_number_per_row'] = 7,
-			['target_auras_number'] = 35,
-
-			['target_target_width'] = 80,
-			['target_target_height'] = 12,
-
-		['enable_focus'] = true,
-			['focus_width'] = 97,
-			['focus_height'] = 14,
-			['focus_auras'] = false,
-			['focus_auras_number_per_row'] = 4,
-			['focus_auras_number'] = 16,
-
-			['focus_target_width'] = 97,
-			['focus_target_height'] = 12,
-
-		['enable_group'] = true,
-			['group_names'] = false,
-			['group_color_smooth'] = false,
-			['groupFilter'] = 6,
-			['groupShowSolo'] = false,
-			['groupShowPlayer'] = true,
-			['groupByRole'] = true,
-			['groupReverse'] = false,
-
-			['party_width'] = 90,
-			['party_height'] = 38,
-			['party_gap'] = 6,
-			['partyShowAuras'] = true,
-
-			['raid_width'] = 44,
-			['raid_height'] = 32,
-			['raid_gap'] = 5,
-			['raidShowAuras'] = true,
-
-		['enable_boss'] = true,
-			['boss_color_smooth'] = true,
-			['boss_width'] = 166,
-			['boss_height'] = 20,
-			['boss_gap'] = 60,
-			['bossShowAuras'] = true,
-			['bossAuraPerRow'] = 5,
-			['bossAuraTotal'] = 15,
-
-		['enable_arena'] = true,
-			['arena_width'] = 166,
-			['arena_height'] = 16,
-			['arena_gap'] = 80,
-			['arenaShowAuras'] = true,
-			['arenaAuraPerRow'] = 6,
-			['arenaAuraTotal'] = 18,
-} ]]
 
 
 C['classmod'] = {
@@ -785,7 +473,21 @@ C.CharacterSettings = {
 	['instant_loot'] = true,
 
 
-
+	['announcement'] = {
+		['enable_announcement'] = true,
+			['my_interrupt'] = true,
+			['my_dispel'] = true,
+			['get_sapped'] = true,
+			['combat_rez'] = true,
+			['feast_cauldron'] = true,
+			['bot_codex'] = true,
+			['mage_portal'] = true,
+			['ritual_of_summoning'] = true,
+			['create_soulwell'] = true,
+			['mail_service'] = true,
+			['conjure_refreshment'] = true,
+			['special_toy'] = true,
+	},
 
 
 	['blizzard'] = {
@@ -886,27 +588,27 @@ C.CharacterSettings = {
 			['heal_prediction'] = true,
 			['over_absorb'] = true,
 			['gcd_spark'] = true,
-			['floating_combat_feedback'] = true,
-				['fcf_pet'] = true,
-				['fcf_hot'] = true,
-				['fcf_over_healing'] = false,
-				['fcf_auto_attack'] = true,
-				['fcf_abbr_number'] = true,
+			['combat_text'] = true,
+				['ct_pet'] = true,
+				['ct_hot'] = true,
+				['ct_over_healing'] = false,
+				['ct_auto_attack'] = true,
+				['ct_abbr_number'] = true,
 
 			['target_icon_indicator'] = true,
 
+			['power_bar'] = true,
 			['power_bar_height'] = 1,
 			['alt_power'] = true,
-			['alternative_power_height'] = 2,
+			['alt_power_height'] = 2,
 
 			['class_power_bar'] = true,
 				['class_power_bar_height'] = 2,
+			['runes_timer'] = true,
 			['stagger_bar'] = true,
-				['stagger_bar_height'] = 2,
 			['totems_bar'] = true,
-				['totems_bar_height'] = 2,
-			['runes_bar'] = true,
-				['runes_bar_height'] = 2,
+
+
 
 			['enable_castbar'] = true,
 				['castingColor'] = {r=.43, g=.69, b=.85},
@@ -1143,19 +845,112 @@ C.AccountSettings = {
 		['reskin_skada'] = true,
 	},
 
-	['class_colors'] = C.ClassColors,
-	['power_colors'] = {
-		['MANA'] = {r=colors.power.MANA[1], g=colors.power.MANA[2], b=colors.power.MANA[3]},
-		['RAGE'] = {r=colors.power.RAGE[1], g=colors.power.RAGE[2], b=colors.power.RAGE[3]},
-		['FOCUS'] = {r=colors.power.FOCUS[1], g=colors.power.FOCUS[2], b=colors.power.FOCUS[3]},
-		['ENERGY'] = {r=colors.power.ENERGY[1], g=colors.power.ENERGY[2], b=colors.power.ENERGY[3]},
-		['RUNIC_POWER'] = {r=colors.power.RUNIC_POWER[1], g=colors.power.RUNIC_POWER[2], b=colors.power.RUNIC_POWER[3]},
-		['LUNAR_POWER'] = {r=colors.power.LUNAR_POWER[1], g=colors.power.LUNAR_POWER[2], b=colors.power.LUNAR_POWER[3]},
-		['MAELSTROM'] = {r=colors.power.MAELSTROM[1], g=colors.power.MAELSTROM[2], b=colors.power.MAELSTROM[3]},
-		['INSANITY'] = {r=colors.power.INSANITY[1], g=colors.power.INSANITY[2], b=colors.power.INSANITY[3]},
-		['FURY'] = {r=colors.power.FURY[1], g=colors.power.FURY[2], b=colors.power.FURY[3]},
-		['PAIN'] = {r=colors.power.PAIN[1], g=colors.power.PAIN[2], b=colors.power.PAIN[3]},
+	['class_colors'] = {
+		["DEATHKNIGHT"] = {
+			["b"] = 0.2274504750967026,
+			["colorStr"] = "ffc31d39",
+			["g"] = 0.117646798491478,
+			["r"] = 0.7686257362365723,
+		},
+		["WARRIOR"] = {
+			["b"] = 0.4274509803921568,
+			["colorStr"] = "ffc69b6d",
+			["g"] = 0.6078431372549019,
+			["r"] = 0.7764705882352941,
+		},
+		["PALADIN"] = {
+			["b"] = 0.7294101715087891,
+			["colorStr"] = "fff38bb9",
+			["g"] = 0.549018383026123,
+			["r"] = 0.9568606615066528,
+		},
+		["MAGE"] = {
+			["b"] = 0.9176450371742249,
+			["colorStr"] = "ff3ec5e9",
+			["g"] = 0.7764688730239868,
+			["r"] = 0.2470582872629166,
+		},
+		["PRIEST"] = {
+			["b"] = 0.9999977946281433,
+			["colorStr"] = "fffefefe",
+			["g"] = 0.9999977946281433,
+			["r"] = 0.9999977946281433,
+		},
+		["SHAMAN"] = {
+			["b"] = 0.8666647672653198,
+			["colorStr"] = "ff006fdc",
+			["g"] = 0.4392147064208984,
+			["r"] = 0,
+		},
+		["WARLOCK"] = {
+			["b"] = 0.9294097423553467,
+			["colorStr"] = "ff8686ec",
+			["g"] = 0.5294106006622314,
+			["r"] = 0.5294106006622314,
+		},
+		["DEMONHUNTER"] = {
+			["b"] = 0.7882335782051086,
+			["colorStr"] = "ffa22fc8",
+			["g"] = 0.188234880566597,
+			["r"] = 0.639214277267456,
+		},
+		["ROGUE"] = {
+			["b"] = 0.4078422486782074,
+			["colorStr"] = "fffef367",
+			["g"] = 0.9568606615066528,
+			["r"] = 0.9999977946281433,
+		},
+		["DRUID"] = {
+			["b"] = 0.03921560198068619,
+			["colorStr"] = "fffe7b09",
+			["g"] = 0.4862734377384186,
+			["r"] = 0.9999977946281433,
+		},
+		["MONK"] = {
+			["b"] = 0.588234007358551,
+			["colorStr"] = "ff00fe95",
+			["g"] = 0.9999977946281433,
+			["r"] = 0,
+		},
+		["HUNTER"] = {
+			["b"] = 0.447057843208313,
+			["colorStr"] = "ffa9d271",
+			["g"] = 0.8274491429328918,
+			["r"] = 0.6666651964187622,
+		},
 	},
+
+	['power_colors'] = {
+		['MANA'] = {r = 0.46, g = 0.82, b = 0.93},
+		['RAGE'] = {r = 1.00, g = 0.00, b = 0.00},
+		['FOCUS'] = {r = 1.00, g = 0.50, b = 0.25},
+		['ENERGY'] = {r = 1.00, g = 1.00, b = 0.00},
+		['RUNIC_POWER'] = {r = 0.00, g = 0.82, b = 1.00},
+		['LUNAR_POWER'] = {r = 0.30, g = 0.52, b = 0.90},
+		['MAELSTROM'] = {r = 0.00, g = 0.50, b = 1.00},
+		['INSANITY'] = {r = 0.40, g = 0, b = 0.80},
+		['FURY'] = {r = 0.788, g = 0.259, b = 0.992},
+		['PAIN'] = {r = 255/255, g = 156/255, b = 0},
+	},
+
+	['class_power_colors'] = {
+		['combo_points'] = {
+			r = 1.00, g = 0.96, b = 0.41
+		},
+		['chi_orbs'] = {
+			r = 0.71, g = 1.0, b = 0.92
+		},
+		['soul_shards'] = {
+			r = 0.50, g = 0.32, b = 0.55
+		},
+		['arcane_charges'] = {
+			r = 0.1, g = 0.1, b = 0.98
+		},
+		['holy_power'] = {
+			r = 0.95, g = 0.90, b = 0.60
+		},
+	},
+
 	['reaction_colors'] = {},
 
 }

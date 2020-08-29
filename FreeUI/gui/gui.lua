@@ -57,7 +57,12 @@ local function SaveValue(key, value, newValue)
 		else
 			return FreeADB['power_colors'][value]
 		end
-
+	elseif key == 'CLASSPOWERCOLORS' then
+		if newValue ~= nil then
+			FreeADB['class_power_colors'][value] = newValue
+		else
+			return FreeADB['class_power_colors'][value]
+		end
 	elseif key == 'APPEARANCE' then
 		if newValue ~= nil then
 			FreeADB['appearance'][value] = newValue

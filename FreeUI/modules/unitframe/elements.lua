@@ -79,7 +79,7 @@ local function PostUpdateHealth(health, unit, min, max)
 			self.Deficit:SetValue(0)
 		else
 			if FreeDB.unitframe.color_smooth or (FreeDB.unitframe.boss_color_smooth and style == 'boss') or (FreeDB.unitframe.group_color_smooth and style == 'raid') then
-				self.Deficit:GetStatusBarTexture():SetVertexColor(self:ColorGradient(min, max, unpack(self.colors.smooth)))
+				self.Deficit:GetStatusBarTexture():SetVertexColor(F.ColorGradient(min / max, unpack(oUF.colors.smooth)))
 			else
 				self.Deficit:GetStatusBarTexture():SetVertexColor(r, g, b)
 			end
@@ -284,7 +284,7 @@ local function PostUpdateAltPower(element, _, cur, _, max)
 	if cur and max then
 		local self = element.__owner
 		local value = self.AlternativePowerValue
-		local r, g, b = oUF.ColorGradient(cur, max, 0.69, 0.31, 0.31, 0.65, 0.63, 0.35, 0.33, 0.59, 0.33)
+		local r, g, b = F.ColorGradient(cur / max, unpack(oUF.colors.smooth))
 
 		element:SetStatusBarColor(r, g, b)
 		value:SetTextColor(r, g, b)
@@ -297,7 +297,7 @@ function UNITFRAME:AddAlternativePowerBar(self)
 	local altPower = CreateFrame('StatusBar', nil, self)
 	altPower:SetStatusBarTexture(C.Assets.norm_tex)
 	altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)
-	altPower:Size(self:GetWidth(), FreeDB.unitframe.alternative_power_height)
+	altPower:Size(self:GetWidth(), FreeDB.unitframe.alt_power_height)
 	altPower:EnableMouse(true)
 	F:SmoothBar(altPower)
 	altPower.bg = F.CreateBDFrame(altPower)
@@ -1011,153 +1011,148 @@ function UNITFRAME:AddCastBar(self)
 end
 
 -- Class power
-local function PostUpdateClassPower(element, power, maxPower, diff, powerType)
-	if(diff) then
-		for index = 1, maxPower do
-			local Bar = element[index]
-			local maxWidth, gap = FreeDB.unitframe.player_width, 3
+function UNITFRAME.PostUpdateClassPower(element, cur, max, diff, powerType)
+	local maxWidth, gap = FreeDB.unitframe.player_width, 3
 
-			Bar:SetWidth((maxWidth - (maxPower - 1) * gap) / maxPower)
+	if not cur or cur == 0 then
+		for i = 1, 6 do
+			element[i].bg:Hide()
+		end
+	else
+		for i = 1, max do
+			element[i].bg:Show()
+		end
+	end
 
-			if(index > 1) then
-				Bar:ClearAllPoints()
-				Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
-			end
+	if diff then
+		for i = 1, max do
+			element[i]:SetWidth((maxWidth - (max-1)*gap)/max)
+		end
+
+		for i = max + 1, 6 do
+			element[i].bg:Hide()
 		end
 	end
 end
 
-local function UpdateClassPowerColor(element)
-	local r, g, b = 1, 1, 2/5
-	if not UnitHasVehicleUI('player') then
-		if C.MyClass == 'MONK' then
-			r, g, b = 0, 4/5, 3/5
-		elseif C.MyClass == 'WARLOCK' then
-			r, g, b = 2/3, 1/3, 2/3
-		elseif C.MyClass == 'PALADIN' then
-			r, g, b = 238/255, 220/255, 127/255
-		elseif C.MyClass == 'MAGE' then
-			r, g, b = 5/6, 1/2, 5/6
-		elseif C.MyClass == 'ROGUE' then
-			r, g, b = 179/255, 54/255, 16/255
-		end
+function UNITFRAME.UpdateClassPowerColor(element)
+	if UnitHasVehicleUI('player') then return end
+
+	local colors = FreeADB.class_power_colors
+	local r, g, b
+
+	if C.MyClass == 'MONK' then -- Chi Orbs
+		r, g, b = colors.chi_orbs.r, colors.chi_orbs.g, colors.chi_orbs.b
+	elseif C.MyClass == 'WARLOCK' then -- Soul Shards
+		r, g, b = colors.soul_shards.r, colors.soul_shards.g, colors.soul_shards.b
+	elseif C.MyClass == 'PALADIN' then -- Holy Power
+		r, g, b = colors.holy_power.r, colors.holy_power.g, colors.holy_power.b
+	elseif C.MyClass == 'MAGE' then -- Arcane Charges
+		r, g, b = colors.arcane_charges.r, colors.arcane_charges.g, colors.arcane_charges.b
+	elseif C.MyClass == 'ROGUE' or C.MyClass == 'DRUID' then -- Combo Points
+		r, g, b = colors.combo_points.r, colors.combo_points.g, colors.combo_points.b
+	else
+		r, g, b = 1, 1, 1
 	end
 
 	for index = 1, #element do
 		local Bar = element[index]
 		Bar:SetStatusBarColor(r, g, b)
-		Bar.bg:SetBackdropColor(r * 1/3, g * 1/3, b * 1/3)
+		Bar.bg:SetVertexColor(r * 1/3, g * 1/3, b * 1/3, 0)
 	end
 end
 
-local function UpdatePosition(index, bar)
-	if(index == 1) then
-		if self.AlternativePower:IsShown() then
-			Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
+function UNITFRAME:OnUpdateRunes(elapsed)
+	local duration = self.duration + elapsed
+	self.duration = duration
+	self:SetValue(duration)
+
+	if self.timer then
+		local remain = self.runeDuration - duration
+		if remain > 0 then
+			self.timer:SetText(F.FormatTime(remain))
 		else
-			Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
+			self.timer:SetText(nil)
 		end
 	end
 end
 
-function UNITFRAME:AddClassPower(self)
-	if not FreeDB.unitframe.class_power_bar then return end
-
-	local classPower = {}
-	classPower.UpdateColor = UpdateClassPowerColor
-	classPower.PostUpdate = PostUpdateClassPower
-
-	for index = 1, 6 do
-		local Bar = CreateFrame('StatusBar', nil, self)
-		Bar:SetHeight(FreeDB.unitframe.class_power_bar_height)
-		Bar:SetStatusBarTexture(C.Assets.norm_tex)
-		Bar:SetBackdropColor(0, 0, 0)
-
-		Bar.bg = F.CreateBDFrame(Bar)
-
-		if(index == 1) then
-			Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
-		end
-
-		local function MoveClassPowerBar()
-			if(index == 1) then
-				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
-				else
-					Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
-				end
-			end
-		end
-		self.AlternativePower:HookScript('OnShow', MoveClassPowerBar)
-		self.AlternativePower:HookScript('OnHide', MoveClassPowerBar)
-		MoveClassPowerBar()
-
-		classPower[index] = Bar
-	end
-
-	self.ClassPower = classPower
-end
-
--- Runes
-local function PostUpdateRune(element, runemap)
-	local maxRunes = 6
+function UNITFRAME.PostUpdateRunes(element, runemap)
 	for index, runeID in next, runemap do
-		local Bar = element[index]
-		local runeReady = select(3, GetRuneCooldown(runeID))
-		local maxWidth, gap = FreeDB.unitframe.player_width, 3
-		if Bar:IsShown() and not runeReady then
-			Bar:SetAlpha(.45)
-		else
-			Bar:SetAlpha(1)
-		end
-
-		Bar:SetWidth((maxWidth - (maxRunes - 1) * gap) / maxRunes)
-
-		if(index > 1) then
-			Bar:ClearAllPoints()
-			Bar:SetPoint('LEFT', element[index - 1], 'RIGHT', gap, 0)
+		local rune = element[index]
+		local start, duration, runeReady = GetRuneCooldown(runeID)
+		if rune:IsShown() then
+			if runeReady then
+				rune:SetAlpha(1)
+				rune:SetScript('OnUpdate', nil)
+				if rune.timer then rune.timer:SetText(nil) end
+			elseif start then
+				rune:SetAlpha(.6)
+				rune.runeDuration = duration
+				rune:SetScript('OnUpdate', UNITFRAME.OnUpdateRunes)
+			end
 		end
 	end
 end
 
-function UNITFRAME:AddRunes(self)
-	if C.MyClass ~= 'DEATHKNIGHT' then return end
-	if not FreeDB.unitframe.runes_bar then return end
+function UNITFRAME:AddClassPowerBar(self)
+	local gap = 3
+	local barWidth = FreeDB.unitframe.player_width
+	local barHeight = FreeDB.unitframe.class_power_bar_height
 
-	local runes = {}
-	local maxRunes = 6
+	local bar = CreateFrame('Frame', 'oUF_ClassPowerBar', self)
+	bar:SetSize(barWidth, barHeight)
 
-	for index = 1, maxRunes do
-		local Bar = CreateFrame('StatusBar', nil, self)
-		Bar:SetHeight(FreeDB.unitframe.runes_bar_height)
-		Bar:SetStatusBarTexture(C.Assets.norm_tex)
-
-		F.CreateBDFrame(Bar)
-
-		local function MoveRunesBar()
-			if(index == 1) then
-				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0,-3)
-				else
-					Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
-				end
-			end
-		end
-		self.AlternativePower:HookScript('OnShow', MoveRunesBar)
-		self.AlternativePower:HookScript('OnHide', MoveRunesBar)
-		MoveRunesBar()
-
-		local Background = Bar:CreateTexture(nil, 'BORDER')
-		Background:SetAllPoints()
-		Bar.bg = Background
-
-		runes[index] = Bar
+	if self.AlternativePower:IsShown() then
+		bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
+	else
+		bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
 	end
 
-	runes.colorSpec = true
-	runes.sortOrder = 'asc'
-	runes.PostUpdate = PostUpdateRune
-	self.Runes = runes
+	self.AlternativePower:HookScript('OnShow', function()
+		bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
+	end)
+
+	self.AlternativePower:HookScript('OnHide', function()
+		bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
+	end)
+
+	local bars = {}
+	for i = 1, 6 do
+		bars[i] = CreateFrame('StatusBar', nil, bar)
+		bars[i]:SetHeight(barHeight)
+		bars[i]:SetWidth((barWidth - 5*gap) / 6)
+		bars[i]:SetStatusBarTexture(C.Assets.norm_tex)
+		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
+
+		F.CreateBDFrame(bars[i], 0, true)
+
+		if i == 1 then
+			bars[i]:SetPoint('BOTTOMLEFT')
+		else
+			bars[i]:SetPoint('LEFT', bars[i-1], 'RIGHT', gap, 0)
+		end
+
+		bars[i].bg = bar:CreateTexture(nil, 'BACKGROUND')
+		bars[i].bg:SetAllPoints(bars[i])
+		bars[i].bg:SetTexture(C.Assets.bd_tex)
+		bars[i].bg.multiplier = .25
+
+		if C.MyClass == 'DEATHKNIGHT' and FreeDB.unitframe.runes_timer then
+			bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Number, 11, nil, '')
+		end
+	end
+
+	if C.MyClass == 'DEATHKNIGHT' then
+		bars.colorSpec = true
+		bars.sortOrder = 'asc'
+		bars.PostUpdate = UNITFRAME.PostUpdateRunes
+		self.Runes = bars
+	else
+		bars.PostUpdate = UNITFRAME.PostUpdateClassPower
+		bars.UpdateColor = UNITFRAME.UpdateClassPowerColor
+		self.ClassPower = bars
+	end
 end
 
 -- Stagger
@@ -1166,7 +1161,7 @@ function UNITFRAME:AddStagger(self)
 	if not FreeDB.unitframe.stagger_bar then return end
 
 	local stagger = CreateFrame('StatusBar', nil, self)
-	stagger:SetSize(self:GetWidth(), FreeDB.unitframe.stagger_bar_height)
+	stagger:SetSize(self:GetWidth(), FreeDB.unitframe.class_power_bar_height)
 	stagger:SetStatusBarTexture(C.Assets.norm_tex)
 
 	local bg = F.CreateBDFrame(stagger)
@@ -1190,7 +1185,7 @@ function UNITFRAME:AddStagger(self)
 end
 
 -- Totems
-local TotemsColor = {
+local totemsColor = {
 	{ 0.71, 0.29, 0.13 }, -- red    181 /  73 /  33
 	{ 0.26, 0.71, 0.13 }, -- green   67 / 181 /  33
 	{ 0.13, 0.55, 0.71 }, -- blue    33 / 141 / 181
@@ -1212,26 +1207,28 @@ function UNITFRAME:AddTotems(self)
 
 	for slot = 1, maxTotems do
 		local totem = CreateFrame('StatusBar', nil, self)
-		local color = TotemsColor[slot]
+		local color = totemsColor[slot]
 		local r, g, b = color[1], color[2], color[3]
 		totem:SetStatusBarTexture(C.Assets.norm_tex)
 		totem:SetStatusBarColor(r, g, b)
-		totem:SetSize(width, FreeDB.unitframe.totems_bar_height)
-
+		totem:SetSize(width, FreeDB.unitframe.class_power_bar_height)
+		print('totems')
 		F.CreateBDFrame(totem)
 
-		local function MoveTotemsBar()
+		totem:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
+
+		--[[ local function MoveTotemsBar()
 			if(index == 1) then
 				if self.AlternativePower:IsShown() then
-					Bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
+					totem:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
 				else
-					Bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
+					totem:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
 				end
 			end
 		end
 		self.AlternativePower:HookScript('OnShow', MoveTotemsBar)
 		self.AlternativePower:HookScript('OnHide', MoveTotemsBar)
-		MoveTotemsBar()
+		MoveTotemsBar() ]]
 
 		totems[slot] = totem
 	end
@@ -1439,7 +1436,7 @@ end
 
 -- Floating combat feedback
 function UNITFRAME:AddFCF(self)
-	if not FreeDB.unitframe.floating_combat_feedback then return end
+	if not FreeDB.unitframe.combat_text then return end
 
 	local parentFrame = CreateFrame('Frame', nil, UIParent)
 	local fcf = CreateFrame('Frame', 'oUF_CombatTextFrame', parentFrame)
@@ -1456,11 +1453,11 @@ function UNITFRAME:AddFCF(self)
 
 	fcf.font = C.Assets.Fonts.Number
 	fcf.fontFlags = nil
-	fcf.showPets = FreeDB.unitframe.fcf_pet
-	fcf.showHots = FreeDB.unitframe.fcf_hot
-	fcf.showAutoAttack = FreeDB.unitframe.fcf_auto_attack
-	fcf.showOverHealing = FreeDB.unitframe.fcf_over_healing
-	fcf.abbreviateNumbers = FreeDB.unitframe.fcf_abbr_number
+	fcf.showPets = FreeDB.unitframe.ct_pet
+	fcf.showHots = FreeDB.unitframe.ct_hot
+	fcf.showAutoAttack = FreeDB.unitframe.ct_auto_attack
+	fcf.showOverHealing = FreeDB.unitframe.ct_over_healing
+	fcf.abbreviateNumbers = FreeDB.unitframe.ct_abbr_number
 	self.FloatingCombatFeedback = fcf
 end
 
@@ -1538,16 +1535,16 @@ end
 function UNITFRAME:AddPartySpells(self)
 	if not FreeDB.unitframe.party_spell_watcher then return end
 
-	local horizon = true
+	local horizon = false
 	local otherSide = false
-	local relF = horizon and 'BOTTOMLEFT' or 'TOPRIGHT'
-	local relT = 'TOPLEFT'
+	local relF = horizon and 'BOTTOMLEFT' or 'RIGHT'
+	local relT = horizon and 'TOPLEFT' or 'LEFT'
 	local xOffset = horizon and 0 or -5
 	local yOffset = horizon and 5 or 0
 	local margin = horizon and 2 or -2
 	if otherSide then
-		relF = 'TOPLEFT'
-		relT = horizon and 'BOTTOMLEFT' or 'TOPRIGHT'
+		relF = horizon and 'TOPLEFT' or 'LEFT'
+		relT = horizon and 'BOTTOMLEFT' or 'RIGHT'
 		xOffset = horizon and 0 or 5
 		yOffset = horizon and -(self.Power:GetHeight()+8) or 0
 		margin = 2
@@ -1556,7 +1553,7 @@ function UNITFRAME:AddPartySpells(self)
 	local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
 	local buttons = {}
 	local maxIcons = 6
-	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()+self.Power:GetHeight()+3)
+	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()*.7)
 	if iconSize > 34 then iconSize = 34 end
 
 	for i = 1, maxIcons do
