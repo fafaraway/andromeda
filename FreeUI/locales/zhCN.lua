@@ -175,9 +175,8 @@ end
 --[[ Combat ]]
 
 do
-	L['COMBAT'] = '战斗'
-	L['COMBAT_ENTER_COMBAT'] = '进入战斗'
-	L['COMBAT_LEAVE_COMBAT'] = '离开战斗'
+	L['COMBAT_ENTER'] = '进入战斗'
+	L['COMBAT_LEAVE'] = '离开战斗'
 end
 
 

@@ -36,12 +36,12 @@ end
 local function OnEvent(self, event, unit)
 	-- Enter combat
 	if event == 'PLAYER_REGEN_DISABLED' then
-		UpdateAlert(self, {1, 210/255, 0, 1}, L['COMBAT_ENTER_COMBAT'])
+		UpdateAlert(self, {1, 210/255, 0, 1}, L['COMBAT_ENTER'])
 	end
 
 	-- Leave combat
 	if event == 'PLAYER_REGEN_ENABLED' then
-		UpdateAlert(self, {32/255, 1, 32/255, 1}, L['COMBAT_LEAVE_COMBAT'])
+		UpdateAlert(self, {32/255, 1, 32/255, 1}, L['COMBAT_LEAVE'])
 	end
 
 	-- Interrup Dispel Stolen
