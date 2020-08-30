@@ -10,9 +10,9 @@ local QUEST_COMPLETE, LE_QUEST_TAG_TYPE_PROFESSION, LE_QUEST_FREQUENCY_DAILY = Q
 
 local function acceptText(link, daily)
 	if daily then
-		return format('%s [%s]%s', L['QUEST_ACCEPT_QUEST'], DAILY, link)
+		return format('%s [%s]%s', L['QUEST_ACCEPT'], DAILY, link)
 	else
-		return format('%s %s', L['QUEST_ACCEPT_QUEST'], link)
+		return format('%s %s', L['QUEST_ACCEPT'], link)
 	end
 end
 

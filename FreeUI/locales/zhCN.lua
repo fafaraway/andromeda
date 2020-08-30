@@ -226,8 +226,7 @@ end
 --[[ Quest ]]
 
 do
-	L['QUEST'] = '任务'
-	L['QUEST_ACCEPT_QUEST'] = '接受任务：'
+	L['QUEST_ACCEPT'] = '接受任务：'
 	L['QUEST_AUTOMATION'] = '自动交接任务'
 end
 
