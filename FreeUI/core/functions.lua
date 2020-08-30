@@ -28,11 +28,11 @@ do
 			end
 		elseif FreeADB['number_format'] == 2 then
 			if n >= 1e12 then
-				return format('%.2f'..L['MISC_NUMBER_CAP_3'], n / 1e12)
+				return format('%.2f'..L['MISC_NUMBER_CAP'][3], n / 1e12)
 			elseif n >= 1e8 then
-				return format('%.2f'..L['MISC_NUMBER_CAP_2'], n / 1e8)
+				return format('%.2f'..L['MISC_NUMBER_CAP'][2], n / 1e8)
 			elseif n >= 1e4 then
-				return format('%.2f'..L['MISC_NUMBER_CAP_1'], n / 1e4)
+				return format('%.2f'..L['MISC_NUMBER_CAP'][1], n / 1e4)
 			else
 				return format('%.0f', n)
 			end
@@ -190,14 +190,13 @@ do
 		return format('%s%02x%02x%02x%s', header or '|cff', r*255, g*255, b*255, ending or '')
 	end
 
-	function F.HexToRGB(hex, division)
+	function F.HexToRGB(hex)
 		local a, r, g, b = strmatch(hex, '^|?c?(%x%x)(%x%x)(%x%x)(%x?%x?)|?r?$')
 		if not a then return 0, 0, 0, 0 end
 		if b == '' then r, g, b, a = a, r, g, 'ff' end
 
 		return tonumber(r, 16), tonumber(g, 16), tonumber(b, 16), tonumber(a, 16)
 	end
-
 
 	function F.TextGradient(text, ...)
 		local msg, len, idx = '', utf8len(text), 0
