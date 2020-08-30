@@ -140,16 +140,12 @@ function ANNOUNCEMENT:UpdateEvents(...)
 			if destName == nil then
 				SendChatMessage(format(L['COMBAT_ANNOUCE_BATTLE_REZ'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 			else
-				SendChatMessage(format(L['COMBAT_ANNOUCE_BATTLE_REZ_TARGET'], sourceName, destName, GetSpellLink(sourceSpellId)), 'SAY')
+				SendChatMessage(format(L['COMBAT_ANNOUCE_BATTLE_REZ_TARGET'], sourceName, GetSpellLink(sourceSpellId), destName), 'SAY')
 			end
 		end
 	end
 
 	if event == 'SPELL_SUMMON' then
-		if FreeDB.announcement.bot_codex and bots[sourceSpellId] then
-			SendChatMessage(format(L['COMBAT_AANNOUNCEMENT_ITEMNNOUCE_CASTED'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
-		end
-
 		if FreeDB.announcement.mail_service and (sourceSpellId == 261602) then -- Katy Stampwhistle
 			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
 		end

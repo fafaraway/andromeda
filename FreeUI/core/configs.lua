@@ -482,7 +482,6 @@ C.CharacterSettings = {
 			['feast_cauldron'] = true,
 			['bot_codex'] = true,
 			['mage_portal'] = true,
-			['ritual_of_summoning'] = true,
 			['create_soulwell'] = true,
 			['mail_service'] = true,
 			['conjure_refreshment'] = true,
