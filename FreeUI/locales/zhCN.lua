@@ -226,6 +226,7 @@ end
 --[[ Quest ]]
 
 do
+	L['QUEST_MOVER_TRACKER'] = '任务追踪'
 	L['QUEST_ACCEPT'] = '接受任务：'
 	L['QUEST_AUTOMATION'] = '自动交接任务'
 end
