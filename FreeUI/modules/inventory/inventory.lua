@@ -222,7 +222,7 @@ function INVENTORY:CreateRestoreButton(f)
 		f.reagent:SetPoint('BOTTOMLEFT', f.bank)
 		PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
 	end)
-	bu.title = L['INVENTORY_RESET']
+	bu.title = L['INVENTORY_ANCHOR_RESET']
 	F.AddTooltip(bu, 'ANCHOR_TOP')
 
 	return bu

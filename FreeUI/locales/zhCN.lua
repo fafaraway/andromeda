@@ -180,11 +180,9 @@ end
 --[[ Inventory ]]
 
 do
-	L['INVENTORY'] = '背包'
 	L['INVENTORY_NOTIFICATION_HEADER'] = '背包'
-	L['INVENTORY_RESET_GOLD_COUNT'] = '重置金币统计数据'
-	L['INVENTORY_SORT'] = '整理物品'
-	L['INVENTORY_RESET'] = '重置窗口位置'
+	L['INVENTORY_SORT'] = '整理背包'
+	L['INVENTORY_ANCHOR_RESET'] = '重置窗口位置'
 	L['INVENTORY_BAGS'] = '打开背包栏位'
 	L['INVENTORY_FREE_SLOTS'] = '剩余背包空间'
 	L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
@@ -195,13 +193,13 @@ do
 	L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
 	L['INVENTORY_AUTO_REPAIR'] = '自动修理'
 	L['INVENTORY_AUTO_REPAIR_ENABLED'] = '\n自动修理功能已启用。\n每次与商人对话都会自动修理你的装备。'
+	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
+	L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 	L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
 	L['INVENTORY_SELL_JUNK_ENABLED'] = '\n自动出售垃圾功能已启用。\n每次与商人对话都会自动出售垃圾物品。'
 	L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
 	L['INVENTORY_SEARCH'] = '搜索'
 	L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
-	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
-	L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 	L['INVENTORY_MARK_JUNK'] = '垃圾分类'
 	L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
 	L['INVENTORY_QUICK_SPLIT'] = '快速拆分'
@@ -209,12 +207,12 @@ do
 	L['INVENTORY_SPLIT_MODE_ENABLED'] = '|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。'
 	L['INVENTORY_GOLD_COUNT'] = '金币统计'
 	L['INVENTORY_EARNED'] = '获得'
-	L['INVENTORY_SPENT'] = '花费'
+	L['INVENTORY_SPENT'] = '支出'
 	L['INVENTORY_DEFICIT'] = '亏损'
 	L['INVENTORY_PROFIT'] = '盈利'
 	L['INVENTORY_SESSION'] = '本次登录'
 	L['INVENTORY_CHARACTER'] = '服务器角色'
-	L['INVENTORY_GOLD_TOTAL'] = '总共'
+	L['INVENTORY_GOLD_TOTAL'] = '总计'
 end
 
 
