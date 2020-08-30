@@ -125,7 +125,7 @@ end
 function BLIZZARD:AlertFrame_Setup()
 	parentFrame = CreateFrame('Frame', nil, UIParent)
 	parentFrame:SetSize(200, 30)
-	F.Mover(parentFrame, L['MOVER_ALERT_FRAMES'], 'AlertFrames', {'TOP', UIParent, 0, -100})
+	F.Mover(parentFrame, L['BLIZZARD_MOVER_ALERT'], 'AlertFrames', {'TOP', UIParent, 0, -100})
 
 	GroupLootContainer:EnableMouse(false)
 	GroupLootContainer.ignoreFramePositionManager = true

@@ -42,7 +42,7 @@ function BLIZZARD:UndressButton()
 	local undressButton = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undressButton:SetSize(80, 22)
 	undressButton:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -1, 0)
-	undressButton:SetText(L['MISC_UNDRESS'])
+	undressButton:SetText(L['BLIZZARD_UNDRESS'])
 	undressButton:RegisterForClicks('AnyUp')
 	undressButton:SetScript('OnClick', function(_, button)
 		local actor = DressUpFrame.ModelScene:GetPlayerActor()
@@ -88,7 +88,7 @@ function BLIZZARD:TradeTargetInfo()
 
 		local guid = UnitGUID('NPC')
 		if not guid then return end
-		local text = C.RedColor..L['MISC_STRANGER']
+		local text = C.RedColor..L['BLIZZARD_STRANGER']
 		if C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) then
 			text = C.GreenColor..FRIEND
 		elseif IsGuildMember(guid) then
@@ -159,7 +159,7 @@ end
 function BLIZZARD:VehicleIndicatorMover()
 	local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', UIParent)
 	frame:SetSize(100, 100)
-	F.Mover(frame, L['MOVER_VEHICLE_INDICATOR'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
+	F.Mover(frame, L['BLIZZARD_MOVER_VEHICLE'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
 
 	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then
@@ -182,7 +182,7 @@ end
 function BLIZZARD:UIWidgetMover()
 	local frame = CreateFrame('Frame', 'NDuiUIWidgetMover', UIParent)
 	frame:SetSize(200, 50)
-	F.Mover(frame, L['MOVER_UIWIDGETFRAME'], 'UIWidgetFrame', {'TOP', 0, -30})
+	F.Mover(frame, L['BLIZZARD_MOVER_UIWIDGET'], 'UIWidgetFrame', {'TOP', 0, -30})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then

@@ -136,7 +136,7 @@ function BLIZZARD:KeystoneInfo_Create()
 			GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
 		end
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.ScrollButton..L['BLIZZARD_RESET_KEYSTONES']..' ', 1,1,1, .6,.8,1)
+		GameTooltip:AddDoubleLine(' ', C.ScrollButton..L['BLIZZARD_KEYSTONES_RESET']..' ', 1,1,1, .6,.8,1)
 		GameTooltip:Show()
 	end)
 	button:SetScript('OnLeave', F.HideTooltip)

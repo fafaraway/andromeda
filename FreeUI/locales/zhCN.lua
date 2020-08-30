@@ -33,6 +33,20 @@ do
 end
 
 
+--[[ Blizzard ]]
+do
+	L['BLIZZARD_MOVER_ALERT'] = 'Alert frame'
+	L['BLIZZARD_MOVER_VEHICLE'] = 'Vehicle indicator'
+	L['BLIZZARD_MOVER_UIWIDGET'] = 'UIWidget frame'
+	L['BLIZZARD_UNDRESS'] = '脱衣'
+	L['BLIZZARD_STRANGER'] = '陌生人'
+	L['BLIZZARD_KEYSTONES'] = '钥石信息'
+	L['BLIZZARD_KEYSTONES_RESET'] = '清除已保存的钥石信息'
+	L['BLIZZARD_GET_NAKED'] = '双击脱光装备'
+	L['BLIZZARD_ORDERHALL_TIP'] = '按住<Shift>显示详细信息'
+end
+
+
 --[[ Themes ]]
 
 do
