@@ -1,4 +1,4 @@
-name: CI
+name: Release
 
 on:
   push:
@@ -22,7 +22,12 @@ jobs:
         with:
           fetch-depth: 50
 
-      - name: Package and release
+      - name: Package and release on Github
         uses: BigWigsMods/packager@master
         with:
           args: release.sh
+
+      - name: Package and release on WoWInterface
+        uses: BigWigsMods/packager@master
+        with:
+          args: -w 23258
