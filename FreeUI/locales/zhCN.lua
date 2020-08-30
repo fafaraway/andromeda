@@ -139,12 +139,8 @@ end
 --[[ Aura ]]
 
 do
-	L['AURA'] = '光环'
-	L['AURA_HEADER'] = 'AURA_HEADER'
-	L['AURA_DESC'] = 'AURA_DESC'
-	L['AURA_ENABLE'] = 'AURA_ENABLE'
-	L['AURA_REMINDER'] = 'AURA_REMINDER'
-	L['AURA_CASTBY'] = 'AURA_CASTBY'
+	L['AURA_MOVER_BUFFS'] = '增益光环'
+	L['AURA_MOVER_DEBUFFS'] = '减益光环'
 end
 
 

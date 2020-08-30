@@ -32,12 +32,12 @@ function AURA:OnLogin()
 	F.HideObject(_G.TemporaryEnchantFrame)
 
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	local buffAnchor = F.Mover(self.BuffFrame, L['MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', FreeADB['ui_gap'], -FreeADB['ui_gap']})
+	local buffAnchor = F.Mover(self.BuffFrame, L['AURA_MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', FreeADB['ui_gap'], -FreeADB['ui_gap']})
 	self.BuffFrame:ClearAllPoints()
 	self.BuffFrame:SetPoint('TOPRIGHT', buffAnchor)
 
 	self.DebuffFrame = self:CreateAuraHeader('HARMFUL')
-	local debuffAnchor = F.Mover(self.DebuffFrame, L['MOVER_DEBUFFS'], 'DebuffsFrame', {'TOPLEFT', buffAnchor, 'BOTTOMLEFT', 0, -2})
+	local debuffAnchor = F.Mover(self.DebuffFrame, L['AURA_MOVER_DEBUFFS'], 'DebuffsFrame', {'TOPLEFT', buffAnchor, 'BOTTOMLEFT', 0, -2})
 	self.DebuffFrame:ClearAllPoints()
 	self.DebuffFrame:SetPoint('TOPRIGHT', debuffAnchor)
 

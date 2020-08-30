@@ -7,7 +7,7 @@ local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, Ge
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 
-local iconSize = 50
+local iconSize = 36
 local frames, parentFrame = {}
 
 
@@ -55,7 +55,8 @@ function AURA:Reminder_Create(cfg)
 	local frame = CreateFrame('Frame', nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
-	F.CreateSD(frame)
+	frame.glow = F.CreateSD(frame)
+	frame.glow:SetBackdropBorderColor(1, 0, 0)
 	local texture = cfg.texture
 	if not texture then
 		for spellID in pairs(cfg.spells) do
@@ -112,7 +113,7 @@ function AURA:InitReminder()
 	if FreeDB['aura']['buff_reminder'] then
 		if not parentFrame then
 			parentFrame = CreateFrame('Frame', nil, UIParent)
-			parentFrame:SetPoint('CENTER', -220, 130)
+			parentFrame:SetPoint('TOP', 0, -100)
 			parentFrame:SetSize(iconSize, iconSize)
 		end
 		parentFrame:Show()
