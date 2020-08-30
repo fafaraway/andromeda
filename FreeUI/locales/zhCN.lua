@@ -97,44 +97,41 @@ end
 --[[ Infobar ]]
 
 do
-	L['INFOBAR'] = '信息条'
-	L['INFOBAR_CURRENCY'] = '金币统计'
 	L['INFOBAR_DURABILITY'] = '装备耐久'
+	L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
+
 	L['INFOBAR_FRIENDS'] = '朋友'
-	L['INFOBAR_GUILD'] = '公会'
-	L['INFOBAR_GUILD_NONE'] = '无'
-	L['INFOBAR_REPORT'] = '报告'
-	L['INFOBAR_WOW'] = '<魔兽世界>'
-	L['INFOBAR_BN'] = '<战网好友>'
-	L['INFOBAR_NO_ONLINE'] = '当前没有好友在线'
-	L['INFOBAR_HOLD_SHIFT'] = '按住 <Shift> 展开详细信息'
 	L['INFOBAR_OPEN_FRIENDS_PANEL'] = '打开好友面板'
 	L['INFOBAR_ADD_FRIEND'] = '添加好友'
 
-
+	L['INFOBAR_GUILD'] = '公会'
+	L['INFOBAR_GUILD_NONE'] = '无'
 	L['INFOBAR_OPEN_GUILD_PANEL'] = '打开公会面板'
-	L['INFOBAR_OPEN_SPEC_PANEL'] = '打开天赋面板'
-	L['INFOBAR_CHANGE_SPEC'] = '切换专精'
-	L['INFOBAR_SPEC'] = '专精'
-	L['INFOBAR_LOOT'] = '拾取'
+
+	L['INFOBAR_REPORT'] = '报告'
 	L['INFOBAR_DAILY_WEEKLY_INFO'] = '日常/周常信息'
-	L['INFOBAR_INVASION_LEG'] = '军团突袭'
-	L['INFOBAR_INVASION_BFA'] = '阵营突袭'
-	L['INFOBAR_INVASION_CURRENT'] = '当前'
-	L['INFOBAR_INVASION_NEXT'] = '下次'
-	L['INFOBAR_OPEN_BFA_REPORT'] = '打开任务报告(BFA)'
-	L['INFOBAR_OPEN_LEG_REPORT'] = '打开任务报告(LEG)'
-	L['INFOBAR_OPEN_WOD_REPORT'] = '打开任务报告(WOD)'
 	L['INFOBAR_BLINGTRON'] = '布林顿每日礼包'
 	L['INFOBAR_MEAN_ONE'] = '冬幕节日常'
 	L['INFOBAR_TIMEWARPED'] = '时光漫游徽章奖励'
-	L['INFOBAR_ISLAND'] = '本周进度'
+	L['INFOBAR_INVASION_LEG'] = '军团突袭'
+	L['INFOBAR_INVASION_BFA'] = '阵营突袭'
+	L['INFOBAR_INVASION_CURRENT'] = '当前: '
+	L['INFOBAR_INVASION_NEXT'] = '下次: '
+	L['INFOBAR_LESSER_VISION'] = '恩佐斯的小幻象'
+	L['INFOBAR_ISLAND'] = '海岛探险'
+	L['INFOBAR_OPEN_BFA_REPORT'] = '打开任务报告(BFA)'
+	L['INFOBAR_OPEN_LEG_REPORT'] = '打开任务报告(LEG)'
+	L['INFOBAR_OPEN_WOD_REPORT'] = '打开任务报告(WOD)'
+
+	L['INFOBAR_SPEC'] = '专精'
+	L['INFOBAR_LOOT'] = '拾取'
+	L['INFOBAR_OPEN_SPEC_PANEL'] = '打开天赋面板'
+	L['INFOBAR_CHANGE_SPEC'] = '切换专精和拾取'
+
 	L['INFOBAR_LOCAL_TIME'] = '本地时间'
 	L['INFOBAR_REALM_TIME'] = '服务器时间'
 	L['INFOBAR_OPEN_ADDON_PANEL'] = '打开插件列表'
 	L['INFOBAR_OPEN_TIMER_TRACKER'] = '打开计时器'
-	L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
-	L['INFOBAR_INFO'] = '信息'
 end
 
 

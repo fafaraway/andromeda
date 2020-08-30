@@ -292,7 +292,7 @@ function INFOBAR:Report()
 		for _, id in pairs(lesserVisions) do
 			if IsQuestFlaggedCompleted(id) then
 				addTitle(QUESTS_LABEL)
-				GameTooltip:AddDoubleLine(L['LesserVision'], QUEST_COMPLETE, 1,1,1, 1,0,0)
+				GameTooltip:AddDoubleLine(L['INFOBAR_LESSER_VISION'], QUEST_COMPLETE, 1,1,1, 1,0,0)
 				break
 			end
 		end
