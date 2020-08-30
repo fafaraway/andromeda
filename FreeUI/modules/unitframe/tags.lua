@@ -86,7 +86,7 @@ tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
 
 tags['free:dead'] = function(unit)
 	if UnitIsDead(unit) then
-		return '|cffd84343'..L['UNITFRAME_DEAD']
+		return '|cffd84343'..DEAD
 	elseif UnitIsGhost(unit) then
 		return '|cffbd69be'..L['UNITFRAME_GHOST']
 	end

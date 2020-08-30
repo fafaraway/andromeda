@@ -5,7 +5,7 @@ local UNITFRAME = F:GetModule('UNITFRAME')
 local SpellBinder = CreateFrame('Frame', 'SpellBinder', SpellBookFrame, 'ButtonFrameTemplate')
 SpellBinder:SetPoint('TOPLEFT', SpellBookFrame, 'TOPRIGHT', 40, 0)
 SpellBinder:SetWidth(300)
-SpellBinder.title = F.CreateFS(SpellBinder, C.Assets.Fonts.Normal, 14, true, L['UNITFRAME_SPELL_BINDER'], 'YELLOW', nil, 'TOP', 0, -20)
+SpellBinder.title = F.CreateFS(SpellBinder, C.Assets.Fonts.Normal, 14, true, L['UNITFRAME_CLICK_CAST_BINDING'], 'YELLOW', nil, 'TOP', 0, -20)
 
 SpellBinderCloseButton:SetPoint('TOPRIGHT', self, -6, -16)
 SpellBinder:Hide()

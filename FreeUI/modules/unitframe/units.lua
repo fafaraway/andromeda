@@ -54,7 +54,7 @@ function UNITFRAME:SpawnPlayer()
 		player:HookScript('OnLeave', tagsOnLeave)
 	end
 
-	F.Mover(player, L['MOVER_UNITFRAME_PLAYER'], 'PlayerFrame', {'BOTTOM', UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
+	F.Mover(player, L['UNITFRAME_MOVER_PLAYER'], 'PlayerFrame', {'BOTTOM', UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
 	if not C.Actionbar.enable then return end
 	FreeUI_LeaveVehicleBar:SetParent(player)
@@ -87,7 +87,7 @@ function UNITFRAME:SpawnPet()
 
 	local pet = oUF:Spawn('pet', 'oUF_Pet')
 
-	F.Mover(pet, L['MOVER_UNITFRAME_PET'], 'PetFrame', {'RIGHT', 'oUF_Player', 'LEFT', -6, 0}, pet:GetWidth(), pet:GetHeight())
+	F.Mover(pet, L['UNITFRAME_MOVER_PET'], 'PetFrame', {'RIGHT', 'oUF_Player', 'LEFT', -6, 0}, pet:GetWidth(), pet:GetHeight())
 end
 
 local playTargetSound = function(self, event)
@@ -137,7 +137,7 @@ function UNITFRAME:SpawnTarget()
 
 	local target = oUF:Spawn('target', 'oUF_Target')
 
-	F.Mover(target, L['MOVER_UNITFRAME_TARGET'], 'TargetFrame', {'LEFT', 'oUF_Player', 'RIGHT', 60, 80}, target:GetWidth(), target:GetHeight())
+	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'LEFT', 'oUF_Player', 'RIGHT', 60, 80}, target:GetWidth(), target:GetHeight())
 end
 
 local function CreateTargetTargetStyle(self)
@@ -159,7 +159,7 @@ function UNITFRAME:SpawnTargetTarget()
 
 	local targettarget = oUF:Spawn('targettarget', 'oUF_TargetTarget')
 
-	F.Mover(targettarget, L['MOVER_UNITFRAME_TARGETTARGET'], 'TargetTargetFrame', {'LEFT', 'oUF_Target', 'RIGHT', 6, 0}, targettarget:GetWidth(), targettarget:GetHeight())
+	F.Mover(targettarget, L['UNITFRAME_MOVER_TARGETTARGET'], 'TargetTargetFrame', {'LEFT', 'oUF_Target', 'RIGHT', 6, 0}, targettarget:GetWidth(), targettarget:GetHeight())
 end
 
 local playFocusSound = function(self, event)
@@ -205,7 +205,7 @@ function UNITFRAME:SpawnFocus()
 
 	local focus = oUF:Spawn('focus', 'oUF_Focus')
 
-	F.Mover(focus, L['MOVER_UNITFRAME_FOCUS'], 'FocusFrame', {'TOPRIGHT', 'oUF_Player', 'TOPLEFT', -80, 0}, focus:GetWidth(), focus:GetHeight())
+	F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame', {'TOPRIGHT', 'oUF_Player', 'TOPLEFT', -80, 0}, focus:GetWidth(), focus:GetHeight())
 end
 
 local function CreateFocusTargetStyle(self)
@@ -227,7 +227,7 @@ function UNITFRAME:SpawnFocusTarget()
 
 	local focustarget = oUF:Spawn('focustarget', 'oUF_FocusTarget')
 
-	F.Mover(focustarget, L['MOVER_UNITFRAME_FOCUSTARGET'], 'FocusTargetFrame', {'TOPRIGHT', 'oUF_Focus', 'TOPLEFT', -6, 0}, focustarget:GetWidth(), focustarget:GetHeight())
+	F.Mover(focustarget, L['UNITFRAME_MOVER_FOCUSTARGET'], 'FocusTargetFrame', {'TOPRIGHT', 'oUF_Focus', 'TOPLEFT', -6, 0}, focustarget:GetWidth(), focustarget:GetHeight())
 end
 
 local function CreateBossStyle(self)
@@ -260,7 +260,7 @@ function UNITFRAME:SpawnBoss()
 	for i = 1, MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn('boss'..i, 'oUF_Boss'..i)
 		if i == 1 then
-			boss[i].mover = F.Mover(boss[i], L['MOVER_UNITFRAME_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 120, 160}, FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)
+			boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 120, 160}, FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)
 		else
 			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, FreeDB.unitframe.boss_gap)
 		end
@@ -291,7 +291,7 @@ function UNITFRAME:SpawnArena()
 	for i = 1, 5 do
 		arena[i] = oUF:Spawn('arena'..i, 'oUF_Arena'..i)
 		if i == 1 then
-			arena[i].mover = F.Mover(arena[i], L['MOVER_UNITFRAME_ARENA'], 'ArenaFrame', {'RIGHT', 'oUF_Player', 'LEFT', -300, 300}, FreeDB.unitframe.arena_width, FreeDB.unitframe.arena_height)
+			arena[i].mover = F.Mover(arena[i], L['UNITFRAME_MOVER_ARENA'], 'ArenaFrame', {'RIGHT', 'oUF_Player', 'LEFT', -300, 300}, FreeDB.unitframe.arena_width, FreeDB.unitframe.arena_height)
 		else
 			arena[i]:SetPoint('BOTTOM', arena[i-1], 'TOP', 0, FreeDB.unitframe.arena_gap)
 		end
@@ -351,7 +351,7 @@ function UNITFRAME:SpawnParty()
 		'groupBy', FreeDB.unitframe.group_by_role and 'ASSIGNEDROLE',
 		'groupingOrder', FreeDB.unitframe.group_by_role and 'TANK,HEALER,DAMAGER,NONE')
 
-	mover = F.Mover(party, L['MOVER_UNITFRAME_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -80, 80}, FreeDB.unitframe.party_width, ((FreeDB.unitframe.party_height * 5) + (FreeDB.unitframe.party_gap * 4)))
+	mover = F.Mover(party, L['UNITFRAME_MOVER_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -80, 80}, FreeDB.unitframe.party_width, ((FreeDB.unitframe.party_height * 5) + (FreeDB.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
 	party:SetPoint('BOTTOMRIGHT', mover)
 end
@@ -414,7 +414,7 @@ function UNITFRAME:SpawnRaid()
 	for i = 1, FreeDB.unitframe.group_filter do
 		groups[i] = CreateRaid('oUF_Raid'..i, i)
 		if i == 1 then
-			mover = F.Mover(groups[i], L['MOVER_UNITFRAME_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (FreeDB.unitframe.raid_width * 5) + (FreeDB.unitframe.raid_gap * 4), (FreeDB.unitframe.raid_height * FreeDB.unitframe.group_filter) + FreeDB.unitframe.raid_gap * (FreeDB.unitframe.group_filter - 1))
+			mover = F.Mover(groups[i], L['UNITFRAME_MOVER_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (FreeDB.unitframe.raid_width * 5) + (FreeDB.unitframe.raid_gap * 4), (FreeDB.unitframe.raid_height * FreeDB.unitframe.group_filter) + FreeDB.unitframe.raid_gap * (FreeDB.unitframe.group_filter - 1))
 			groups[i]:ClearAllPoints()
 			groups[i]:SetPoint((FreeDB.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', mover)
 		else

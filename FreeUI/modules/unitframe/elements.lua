@@ -944,7 +944,7 @@ function UNITFRAME:AddCastBar(self)
 		castbar:SetSize(FreeDB.unitframe.castbar_focus_width, FreeDB.unitframe.castbar_focus_height)
 		castbar:ClearAllPoints()
 
-		F.Mover(castbar, L['MOVER_UNITFRAME_FOCUS_CASTBAR'], 'FocusCastbar', {'CENTER', UIParent, 'CENTER', 0, 200}, FreeDB.unitframe.castbar_focus_width, FreeDB.unitframe.castbar_focus_height)
+		F.Mover(castbar, L['UNITFRAME_MOVER_CASTBAR'], 'FocusCastbar', {'CENTER', UIParent, 'CENTER', 0, 200}, FreeDB.unitframe.castbar_focus_width, FreeDB.unitframe.castbar_focus_height)
 	else
 		castbar:SetAllPoints(self)
 		castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
@@ -1442,9 +1442,9 @@ function UNITFRAME:AddFCF(self)
 	local fcf = CreateFrame('Frame', 'oUF_CombatTextFrame', parentFrame)
 	fcf:SetSize(32, 32)
 	if self.unitStyle == 'player' then
-		F.Mover(fcf, L['MOVER_COMBATTEXT_INCOMING'], 'PlayerCombatText', {'CENTER', -300, 0})
+		F.Mover(fcf, L['UNITFRAME_MOVER_INCOMING'], 'PlayerCombatText', {'CENTER', -300, 0})
 	else
-		F.Mover(fcf, L['MOVER_COMBATTEXT_OUTGOING'], 'TargetCombatText', {'CENTER', 300, 0})
+		F.Mover(fcf, L['UNITFRAME_MOVER_OUTGOING'], 'TargetCombatText', {'CENTER', 300, 0})
 	end
 
 	for i = 1, 36 do
