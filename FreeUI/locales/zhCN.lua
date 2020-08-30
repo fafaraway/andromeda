@@ -269,6 +269,8 @@ do
 	L['UNITFRAME_MOVER_PARTY'] = '小队框体'
 	L['UNITFRAME_MOVER_RAID'] = '团队框体'
 	L['UNITFRAME_CLICK_CAST_BINDING'] = '点击施法绑定'
+	L['UNITFRAME_CLICK_CAST_TIP'] = '提示'
+	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + 任意鼠标按键点击想绑定的技能\n对小队或团队框体使用绑定的快捷键就能直接施放技能'
 	L['UNITFRAME_GHOST'] = '灵魂'
 	L['UNITFRAME_OFFLINE'] = '离线'
 end
@@ -342,6 +344,12 @@ do
 	L['GUI_UNITFRAME_TEXTURE_NORM'] = '默认'
 	L['GUI_UNITFRAME_TEXTURE_GRAD'] = '渐变'
 	L['GUI_UNITFRAME_TEXTURE_FLAT'] = '扁平'
+
+
+
+	L['GUI_NUMBER_FORMAT'] = '数字格式'
+	L['GUI_NUMBER_FORMAT_EN'] = 'k/b/m'
+	L['GUI_NUMBER_FORMAT_CN'] = '万/亿/兆'
 
 	L['GUI_IMPORT_DATA_ERROR'] = '数据异常，导入失败！'
 	L['GUI_IMPORT_DATA_WARNING'] = '|cffff2020是否导入数据？|r'

@@ -6,12 +6,12 @@ local checkboxes, sidePanels = {}, {}
 local guiTab, guiPage = {}, {}
 
 local tabsList = {
-	'APPEARANCE',
+	L['GUI_APPEARANCE'],
 	'NOTIFICATION',
 	'ANNOUNCEMENT',
 	'INFOBAR',
 	'CHAT',
-	'AURA',
+	L['GUI_AURA'],
 	'ACTIONBAR',
 	'COMBAT',
 	'INVENTORY',
@@ -218,8 +218,6 @@ end
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame('Button', nil, parent)
 	tab:SetSize(160, 28)
-
-
 	F.Reskin(tab)
 
 	tab.index = i
@@ -238,7 +236,7 @@ local function CreateTab(parent, i, name)
 	tab.icon:SetTexture(iconsList[i])
 	F.ReskinIcon(tab.icon)
 
-	tab.text = F.CreateFS(tab, C.Assets.Fonts.Normal, 13, nil, name or nil, nil, 'THICK')
+	tab.text = F.CreateFS(tab, C.Assets.Fonts.Normal, 13, nil, name, nil, 'THICK')
 	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 8, 0)
 
 	tab:HookScript('OnClick', tabOnClick)
@@ -301,7 +299,7 @@ local function CreateGUI()
 	for i, name in pairs(tabsList) do
 		guiTab[i] = CreateTab(f, i, name)
 
-		guiPage[i] = CreateFrame('ScrollFrame', 'FreeUI_GUI_'..name, f, 'UIPanelScrollFrameTemplate')
+		guiPage[i] = CreateFrame('ScrollFrame', nil, f, 'UIPanelScrollFrameTemplate')
 		guiPage[i]:SetPoint('TOPLEFT', 190, -50)
 		guiPage[i]:SetSize(380, 540)
 		F.CreateBDFrame(guiPage[i], .3)
@@ -322,9 +320,9 @@ local function CreateGUI()
 		desc:SetSize(360, 30)
 		guiPage[i].desc = desc
 
-		FreeUI_GUI[name] = guiPage[i].child
-		FreeUI_GUI[name].header = header
-		FreeUI_GUI[name].desc = desc
+		FreeUI_GUI[i] = guiPage[i].child
+		FreeUI_GUI[i].header = header
+		FreeUI_GUI[i].desc = desc
 	end
 
 	SelectTab(1)
@@ -494,7 +492,7 @@ function GUI:CreateEditBox(parent, key, value, callback, extra)
 end
 
 -- Dropdown
-function GUI:CreateDropDown(parent, key, value, callback, extra)
+function GUI:CreateDropDown(parent, key, value, callback, extra, label)
 	local dropdown = F.CreateDropDown(parent, 120, 22, extra)
 
 	dropdown.Text:SetText(extra[SaveValue(key, value)])
@@ -518,7 +516,7 @@ function GUI:CreateDropDown(parent, key, value, callback, extra)
 		end)
 	end
 
-	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 11, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'INFO', 'THICK', 'CENTER', 0, 20)
+	F.CreateFS(dropdown, C.Assets.Fonts.Normal, 11, nil, label or value, 'INFO', 'THICK', 'CENTER', 0, 20)
 
 	return dropdown
 end

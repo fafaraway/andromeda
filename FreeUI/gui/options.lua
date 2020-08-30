@@ -252,10 +252,9 @@ end ]]
 
 
 local function AppearanceOptions()
-	local parent = FreeUI_GUI.APPEARANCE
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Hunter_BeastWithin')
+	local parent = FreeUI_GUI[1]
 
-	local basic = GUI:AddSubCategory(parent, L['GUI_APPEARANCE_SUB_BASIC'])
+	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local cursorTrail = GUI:CreateCheckBox(parent, 'APPEARANCE', 'cursor_trail')
@@ -296,7 +295,7 @@ local function AppearanceOptions()
 	local uiScale = GUI:CreateSlider(parent, 'ACCOUNT', 'ui_scale', nil, {.4, 2, .01})
 	uiScale:SetPoint('TOPLEFT', other, 'BOTTOMLEFT', 0, -24)
 
-	local texture = GUI:CreateDropDown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']})
+	local texture = GUI:CreateDropDown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']}, L['GUI_UNITFRAME_TEXTURE_STYLE'])
 	texture:SetPoint('LEFT', uiScale, 'RIGHT', 80, 0)
 
 
@@ -314,8 +313,7 @@ local function AppearanceOptions()
 end
 
 local function NotificationOptions()
-	local parent = FreeUI_GUI.NOTIFICATION
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Warrior_Revenge')
+	local parent = FreeUI_GUI[2]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -349,7 +347,7 @@ local function NotificationOptions()
 end
 
 local function AnnouncementOptions()
-	local parent = FreeUI_GUI.ANNOUNCEMENT
+	local parent = FreeUI_GUI[3]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -419,8 +417,7 @@ local function AnnouncementOptions()
 end
 
 local function InfobarOptions()
-	local parent = FreeUI_GUI.INFOBAR
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Horn_04')
+	local parent = FreeUI_GUI[4]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -478,8 +475,7 @@ local function InfobarOptions()
 end
 
 local function ChatOptions()
-	local parent = FreeUI_GUI.CHAT
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Seduction')
+	local parent = FreeUI_GUI[5]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -599,8 +595,7 @@ local function ChatOptions()
 end
 
 local function AuraOptions()
-	local parent = FreeUI_GUI.AURA
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Shadow_Shadesofdarkness')
+	local parent = FreeUI_GUI[6]
 
 	local basic = GUI:AddSubCategory(parent, L['GUI_AURA_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -787,8 +782,7 @@ local function ActionbarOptions()
 end
 
 local function CombatOptions()
-	local parent = FreeUI_GUI.COMBAT
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Parry')
+	local parent = FreeUI_GUI[8]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -850,7 +844,7 @@ local function CombatOptions()
 end
 
 local function InventoryOptions()
-	local parent = FreeUI_GUI.INVENTORY
+	local parent = FreeUI_GUI[9]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -959,8 +953,7 @@ local function InventoryOptions()
 end
 
 local function MapOptions()
-	local parent = FreeUI_GUI.MAP
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Achievement_Ashran_Tourofduty')
+	local parent = FreeUI_GUI[10]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1025,8 +1018,7 @@ local function MapOptions()
 end
 
 local function QuestOptions()
-	local parent = FreeUI_GUI.QUEST
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\ABILITY_Rogue_RollTheBones04')
+	local parent = FreeUI_GUI[11]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1064,8 +1056,7 @@ local function QuestOptions()
 end
 
 local function TooltipOptions()
-	local parent = FreeUI_GUI.TOOLTIP
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_ScrollUnrolled03d')
+	local parent = FreeUI_GUI[12]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1162,7 +1153,7 @@ local function TooltipOptions()
 end
 
 local function UnitframeOptions()
-	local parent = FreeUI_GUI.UNITFRAME
+	local parent = FreeUI_GUI[13]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1544,8 +1535,7 @@ local function UnitframeOptions()
 end
 
 local function MiscOptions()
-	local parent = FreeUI_GUI.MISC
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
+	local parent = FreeUI_GUI[14]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1553,11 +1543,14 @@ local function MiscOptions()
 
 	local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 30, 5})
 	keyword:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 20, -40)
+
+
+	local numberFormat = GUI:CreateDropDown(parent, 'ACCOUNT', 'number_format', nil, {L['GUI_NUMBER_FORMAT_EN'], L['GUI_NUMBER_FORMAT_CN']}, L['GUI_NUMBER_FORMAT'])
+	numberFormat:SetPoint('LEFT', keyword, 'RIGHT', 80, 0)
 end
 
 local function DataOptions()
-	local parent = FreeUI_GUI.DATA
-	--parent.tab.icon:SetTexture('Interface\\ICONS\\INV_Misc_Blingtron')
+	local parent = FreeUI_GUI[15]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1633,6 +1626,9 @@ end
 
 function GUI:AddOptions()
 	--addGeneralOptions()
+	-- addActionbarOptions()
+
+	AppearanceOptions()
 
 	NotificationOptions()
 	AnnouncementOptions()
@@ -1640,7 +1636,7 @@ function GUI:AddOptions()
 	InfobarOptions()
 	ChatOptions()
 	AuraOptions()
-	-- addActionbarOptions()
+
 	CombatOptions()
 	InventoryOptions()
 	MapOptions()
@@ -1648,7 +1644,7 @@ function GUI:AddOptions()
 	TooltipOptions()
 	UnitframeOptions()
 
-	AppearanceOptions()
+
 	DataOptions()
 	MiscOptions()
 end
