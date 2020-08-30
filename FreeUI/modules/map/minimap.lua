@@ -378,7 +378,7 @@ function MAP:Minimap()
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint('CENTER')
 
-	local mover = F.Mover(bg, L['MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap']})
+	local mover = F.Mover(bg, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap']})
 	bg:ClearAllPoints()
 	bg:SetPoint('CENTER', mover)
 	Minimap.mover = mover
