@@ -141,10 +141,9 @@ end
 --[[ Chat ]]
 
 do
-	L['CHAT'] = '聊天'
-	L['CHAT_TOGGLE_FRAME'] = '隐藏/显示聊天框'
+	L['CHAT_TOGGLE_PANEL'] = '隐藏/显示聊天框'
 	L['CHAT_TOGGLE_WC'] = '加入/离开世界频道'
-	L['CHAT_COPY'] = '复制聊天内容'
+	L['CHAT_COPY'] = '复制聊天框内容'
 	L['CHAT_WHISPER_TELL'] = '告诉'
 	L['CHAT_WHISPER_FROM'] = '来自'
 end
