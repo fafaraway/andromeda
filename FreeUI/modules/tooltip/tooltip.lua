@@ -266,7 +266,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
-			mover = F.Mover(self, L['MOVER_TOOLTIP'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], 260}, 240, 120)
+			mover = F.Mover(self, L['TOOLTIP_MOVER'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], 260}, 240, 120)
 		end
 		self:SetOwner(parent, 'ANCHOR_NONE')
 		self:ClearAllPoints()

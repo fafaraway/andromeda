@@ -90,7 +90,7 @@ function TOOLTIP:ItemCount()
 	local itemStackCount = select(8, GetItemInfo(link))
 
 	if bankCount > 0 then
-		self:AddDoubleLine(L['TOOLTIP_BAG']..'/'..L['TOOLTIP_BANK']..':', '|cffffffff'..bagCount..'/'..bankCount)
+		self:AddDoubleLine(L['TOOLTIP_BAG']..'/'..BANK..':', '|cffffffff'..bagCount..'/'..bankCount)
 	elseif bagCount > 0 then
 		self:AddDoubleLine(L['TOOLTIP_BAG']..':', '|cffffffff'..bagCount)
 	end

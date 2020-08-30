@@ -50,14 +50,7 @@ end
 --[[ Themes ]]
 
 do
-	L['THEME'] = '外观'
-	L['THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
-	L['THEME_CURSOR_TRAIL'] = '鼠标轨迹'
-	L['THEME_VIGNETTING'] = '暗角效果'
-	L['THEME_VIGNETTING_ALPHA'] = '暗角透明度'
-	L['THEME_RESKIN_BLIZZ'] = '美化游戏默认界面'
-	L['THEME_SHADOW_BORDER'] = '添加阴影'
-	L['THEME_UI_SCALE'] = '界面缩放'
+
 end
 
 
@@ -234,14 +227,13 @@ end
 
 -- Tooltip
 do
-	L['TOOLTIP'] = '鼠标提示'
+	L['TOOLTIP_MOVER'] = '鼠标提示'
 	L['TOOLTIP_RARE'] = '稀有'
 	L['TOOLTIP_AURA_FROM'] = '来自'
 	L['TOOLTIP_SELL_PRICE'] = '售价'
 	L['TOOLTIP_STACK_CAP'] = '堆叠上限'
 	L['TOOLTIP_ID_AZERITE_TRAIT'] = '艾泽里特特质'
 	L['TOOLTIP_BAG'] = '背包'
-	L['TOOLTIP_BANK'] = '银行'
 	L['TOOLTIP_ID_SPELL'] = '法术ID'
 	L['TOOLTIP_ID_ITEM'] = '物品ID'
 	L['TOOLTIP_ID_COMPANION'] = '小宠物ID'
@@ -349,6 +341,9 @@ do
 	L['GUI_RELOAD_WARNING'] = '|cffff2020是否重载界面来完成设置？|r'
 	L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r'
 	L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
+
+	L['GUI_THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
+
 
 
 	L['GUI_AURA'] = '光环'
