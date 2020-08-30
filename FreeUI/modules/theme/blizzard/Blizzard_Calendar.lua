@@ -65,6 +65,7 @@ C.Themes["Blizzard_Calendar"] = function()
 	reskinCalendarPage(CalendarViewEventFrame)
 	reskinCalendarPage(CalendarTexturePickerFrame)
 	reskinCalendarPage(CalendarEventPickerFrame)
+	reskinCalendarPage(CalendarViewRaidFrame)
 
 	local frames = {
 		CalendarViewEventTitleFrame, CalendarViewHolidayTitleFrame, CalendarViewRaidTitleFrame, CalendarCreateEventTitleFrame, CalendarTexturePickerTitleFrame, CalendarMassInviteTitleFrame
