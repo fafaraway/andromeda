@@ -41,7 +41,7 @@ function ACTIONBAR:CreateBar1()
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
-		frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_BAR1'], 'Bar1', frame.Pos)
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR1'], 'Bar1', frame.Pos)
 	else
 		frame.frameVisibility = 'hide'
 	end
@@ -98,7 +98,7 @@ function ACTIONBAR:CreateBar2()
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
-		frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_BAR2'], 'Bar2', frame.Pos)
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR2'], 'Bar2', frame.Pos)
 	else
 		frame.frameVisibility = 'hide'
 	end
@@ -154,7 +154,7 @@ function ACTIONBAR:CreateBar3()
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
-		frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_BAR3'], 'Bar3', frame.Pos)
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR3'], 'Bar3', frame.Pos)
 	else
 		frame.frameVisibility = 'hide'
 	end
@@ -196,7 +196,7 @@ function ACTIONBAR:CreateBar4()
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
-		frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_BAR4'], 'Bar4', frame.Pos)
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR4'], 'Bar4', frame.Pos)
 	else
 		frame.frameVisibility = 'hide'
 	end
@@ -236,7 +236,7 @@ function ACTIONBAR:CreateBar5()
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
-		frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_BAR5'], 'Bar5', frame.Pos)
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR5'], 'Bar5', frame.Pos)
 	else
 		frame.frameVisibility = 'hide'
 	end
@@ -278,7 +278,7 @@ function ACTIONBAR:CreatePetbar()
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
-		frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_PET'], 'Petbar', frame.Pos)
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_PET'], 'Petbar', frame.Pos)
 	else
 		frame.frameVisibility = 'hide'
 	end
@@ -378,7 +378,7 @@ function ACTIONBAR:CreateExtrabar()
 	frame.frameVisibility = '[extrabar] show; hide'
 	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
-	frame.mover = F.Mover(frame, L['MOVER_ACTIONBAR_EXTRA'], 'Extrabar', frame.Pos)
+	frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_EXTRA'], 'Extrabar', frame.Pos)
 
 	--zone ability
 	ZoneAbilityFrame:ClearAllPoints()

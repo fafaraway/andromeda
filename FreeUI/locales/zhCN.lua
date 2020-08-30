@@ -146,15 +146,23 @@ end
 --[[ Actionbar ]]
 
 do
-	L['ACTIONBAR'] = '动作条'
-	L['ACTIONBAR_LEAVE_VEHICLE'] = '离开载具按钮'
+	L['ACTIONBAR_MOVER_BAR1'] = 'Actionbar 1'
+	L['ACTIONBAR_MOVER_BAR2'] = 'Actionbar 2'
+	L['ACTIONBAR_MOVER_BAR3'] = 'Actionbar 3'
+	L['ACTIONBAR_MOVER_BAR4'] = 'Actionbar 4'
+	L['ACTIONBAR_MOVER_BAR5'] = 'Actionbar 5'
+	L['ACTIONBAR_MOVER_PET'] = 'Actionbar pet'
+	L['ACTIONBAR_MOVER_STANCE'] = 'Actionbar stance'
+	L['ACTIONBAR_MOVER_EXTRA'] = 'Actionbar extra'
+	L['ACTIONBAR_MOVER_VEHICLE'] = 'Actionbar vehicle'
+	L['ACTIONBAR_MOVER_COOLDOWN'] = '冷却图标'
 	L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
 	L['ACTIONBAR_KEY_INDEX'] = '序号'
 	L['ACTIONBAR_KEY_BINDING'] = '按键'
 	L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
 	L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
 	L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
-	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键'
+	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
 end
 
 
@@ -295,15 +303,7 @@ do
 	L['MOVER_DURABILITY_INDICATOR'] = '耐久提示'
 	L['MOVER_ALERT_FRAMES'] = '成就/拾取通知框体'
 	L['MOVER_UIWIDGETFRAME'] = 'UIWidgetFrame'
-	L['MOVER_ACTIONBAR_BAR1'] = '动作条第一栏'
-	L['MOVER_ACTIONBAR_BAR2'] = '动作条第二栏'
-	L['MOVER_ACTIONBAR_BAR3'] = '动作条第三栏'
-	L['MOVER_ACTIONBAR_BAR4'] = '动作条第四栏'
-	L['MOVER_ACTIONBAR_BAR5'] = '动作条第五栏'
-	L['MOVER_ACTIONBAR_PET'] = '宠物动作条'
-	L['MOVER_ACTIONBAR_STANCE'] = 'actionbar_stance'
-	L['MOVER_ACTIONBAR_EXTRA'] = '动作条额外按钮'
-	L['MOVER_ACTIONBAR_VEHICLE'] = 'actionbar_vehicle'
+
 	L['MOVER_COOLDOWN_PULSE'] = '冷却图标'
 end
 

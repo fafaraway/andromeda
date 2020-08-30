@@ -144,7 +144,7 @@ frame:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 function frame:PLAYER_ENTERING_WORLD()
 
 	--frame:SetSize(50, 50)
-	F.Mover(frame, L['MOVER_COOLDOWN_PULSE'], 'CooldownPulse', {'CENTER', UIParent, 'CENTER', 0, 100}, 50, 50)
+	F.Mover(frame, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 'CENTER', 0, 100}, 50, 50)
 
 	frame.icon = frame:CreateTexture(nil, 'BORDER')
 	frame.icon:SetTexCoord(unpack(C.TexCoord))
