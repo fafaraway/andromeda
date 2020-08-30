@@ -5,24 +5,19 @@ local F, C, L = unpack(select(2, ...))
 --[[ Misc ]]
 
 do
-	L['MISC_STRANGER'] = '陌生人'
+	L['MISC_NUMBER_CAP'] = {'万', '亿', '兆'}
 
-	L['MISC_UNDRESS'] = '脱衣'
-	L['MISC_KEYSTONES'] = '账号角色钥石信息'
-	L['MISC_RESET_KEYSTONES'] = '重置钥石信息'
+
 	L['MISC_REPUTATION'] = '声望'
 	L['MISC_PARAGON'] = '巅峰'
 	L['MISC_PARAGON_REPUTATION'] = '巅峰声望'
 	L['MISC_PARAGON_NOTIFY'] = '巅峰声望已满注意兑换'
 	L['MISC_ORDERHALL_TIP'] = '按住Shift显示详细信息'
-	L['MISC_GOLD'] = '金币'
-	L['MISC_ITEM'] = '物品'
+
 
 	L['MISC_DISBAND_GROUP'] = '解散队伍'
 	L['MISC_DISBAND_GROUP_CHECK'] = '你确定要解散队伍?'
-	L['MISC_NUMBER_CAP_1'] = '万'
-	L['MISC_NUMBER_CAP_2'] = '亿'
-	L['MISC_NUMBER_CAP_3'] = '兆'
+
 
 
 	L['MISC_DECLINE_INVITE'] = '自动拒绝了 %s 的组队邀请'
@@ -279,34 +274,6 @@ do
 end
 
 
---[[ Mover ]]
-
-do
-	L['MOVER_PANEL'] = '界面元素位置调整'
-	L['MOVER_GRID'] = '网格'
-	L['MOVER_RESET_ANCHOR'] = '重置该界面元素的默认位置'
-	L['MOVER_HIDE_ELEMENT'] = '隐藏该界面元素'
-	L['MOVER_TIPS'] = '提示'
-	L['MOVER_TOOLTIP'] = '鼠标提示'
-	L['MOVER_MINIMAP'] = '小地图'
-	L['MOVER_RESET_CONFIRM'] = '是否重置所有界面元素为默认位置？'
-	L['MOVER_CANCEL_CONFIRM'] = '是否取消本次操作？'
-
-	L['MOVER_COMBATTEXT_INFORMATION'] = '战斗信息（信息）'
-	L['MOVER_COMBATTEXT_OUTGOING'] = '战斗信息（输出）'
-	L['MOVER_COMBATTEXT_INCOMING'] = '战斗信息（受到）'
-	L['MOVER_BUFFS'] = '增益栏'
-	L['MOVER_DEBUFFS'] = '减益栏'
-	L['MOVER_QUAKE_TIMER'] = '震荡计时条'
-	L['MOVER_QUEST_TRACKER'] = '任务追踪栏'
-	L['MOVER_VEHICLE_INDICATOR'] = '载具座位控制'
-	L['MOVER_DURABILITY_INDICATOR'] = '耐久提示'
-	L['MOVER_ALERT_FRAMES'] = '成就/拾取通知框体'
-	L['MOVER_UIWIDGETFRAME'] = 'UIWidgetFrame'
-
-	L['MOVER_COOLDOWN_PULSE'] = '冷却图标'
-end
-
 
 --[[ Install ]]
 
@@ -344,7 +311,7 @@ do
 	L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
 
 	L['GUI_THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
-
+	L['GUI_RESET_GOLD_COUNT'] = '|cffff2020是否重置金币统计数据？|r'
 
 
 	L['GUI_AURA'] = '光环'
@@ -390,6 +357,15 @@ do
 	L['GUI_DATA_RESET_TIP'] = '清除 |cffe9c55dFreeUI|r 已保存的数据，将所有选项重置为 |cffe9c55dFreeUI|r 默认值。'
 	L['GUI_DATA_IMPORT_TIP'] = '导入 |cffe9c55dFreeUI|r 的配置字符串。'
 	L['GUI_DATA_EXPORT_TIP'] = '将当前的 |cffe9c55dFreeUI|r 配置导出为字符串。'
+
+
+	L['GUI_MOVER_PANEL'] = '界面元素位置调整'
+	L['GUI_MOVER_GRID'] = '网格'
+	L['GUI_MOVER_RESET_ANCHOR'] = '重置该界面元素的默认位置'
+	L['GUI_MOVER_HIDE_ELEMENT'] = '隐藏该界面元素'
+	L['GUI_MOVER_TIPS'] = '提示'
+	L['GUI_MOVER_RESET_WARNING'] = '是否重置所有界面元素为默认位置？'
+	L['GUI_MOVER_CANCEL_WARNING'] = '是否取消本次操作？'
 end
 
 

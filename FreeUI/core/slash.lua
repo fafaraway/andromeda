@@ -4,7 +4,7 @@ local GUI = F:GetModule('GUI')
 
 
 StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
-	text = L['THEME_CONFLICTION_WARNING'],
+	text = L['GUI_THEME_CONFLICTION_WARNING'],
 	button1 = DISABLE,
 	OnAccept = function()
 		DisableAddOn('Aurora', true)
@@ -57,7 +57,7 @@ StaticPopupDialogs['FREEUI_IMPORT_DATA'] = {
 }
 
 StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
-	text = L['MOVER_RESET_CONFIRM'],
+	text = L['GUI_MOVER_RESET_WARNING'],
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
@@ -70,7 +70,7 @@ StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
 }
 
 StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
-	text = L['INVENTORY_RESET_GOLD_COUNT'],
+	text = L['GUI_RESET_GOLD_COUNT'],
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()

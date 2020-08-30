@@ -267,9 +267,9 @@ local function CreateConsole()
 	f:SetSize(260, 70)
 	F.CreateBD(f)
 	F.CreateSD(f)
-	F.CreateFS(f, C.Assets.Fonts.Normal, 12, true, L['MOVER_PANEL'], 'YELLOW', nil, 'TOP', 0, -10)
+	F.CreateFS(f, C.Assets.Fonts.Normal, 12, true, L['GUI_MOVER_PANEL'], 'YELLOW', nil, 'TOP', 0, -10)
 
-	local bu, text = {}, {LOCK, L['MOVER_GRID'], RESET}
+	local bu, text = {}, {LOCK, L['GUI_MOVER_GRID'], RESET}
 
 	for i = 1, 3 do
 		bu[i] = F.CreateButton(f, 80, 24, text[i])
@@ -307,8 +307,8 @@ local function CreateConsole()
 	header:SetSize(260, 30)
 	header:SetPoint('TOP')
 	F.CreateMF(header, f)
-	local tips = C.InfoColor..'|nCTRL +'..C.Assets.mouse_right..L['MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.mouse_right..L['MOVER_HIDE_ELEMENT']
-	header.title = L['MOVER_TIPS']
+	local tips = C.InfoColor..'|nCTRL +'..C.Assets.mouse_right..L['GUI_MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.mouse_right..L['GUI_MOVER_HIDE_ELEMENT']
+	header.title = L['GUI_MOVER_TIPS']
 	F.AddTooltip(header, 'ANCHOR_TOP', tips)
 
 	local frame = CreateFrame('Frame', nil, f)
