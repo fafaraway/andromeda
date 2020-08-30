@@ -6,8 +6,8 @@ local check = function(self, event, prefix, message, _, sender)
 	if event == 'CHAT_MSG_ADDON' then
 		if prefix ~= 'FreeUIVersion' or sender == C.MyName then return end
 		if tonumber(message) ~= nil and tonumber(message) > tonumber(C.Version) then
-			F:CreateNotification(L['NOTIFICATION_VERSION_CHECK_HEADER'], C.BlueColor..L['NOTIFICATION_VERSION_CHECK_DESC'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
-			F.Print(format(L['VERSION_OUTDATED'], C.Version))
+			F:CreateNotification(L['NOTIFICATION_VERSION'], C.BlueColor..L['NOTIFICATION_VERSION_OUTDATE'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
+			F.Print(format(L['NOTIFICATION_VERSION_OUTDATE'], C.Version))
 			self:UnregisterEvent('CHAT_MSG_ADDON')
 		end
 	else

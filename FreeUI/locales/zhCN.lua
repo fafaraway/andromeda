@@ -64,17 +64,13 @@ end
 --[[ Notification ]]
 
 do
-	L['NOTIFICATION'] = '提醒'
 	L['NOTIFICATION_NEW_MAIL'] = '收到新邮件！'
 	L['NOTIFICATION_BAG_FULL'] = '背包满了！'
 	L['NOTIFICATION_MAIL'] = '邮件'
 	L['NOTIFICATION_BAG'] = '背包'
-	L['NOTIFICATION_REPAIR'] = '修理'
-	L['NOTIFICATION_SELL'] = '售卖'
 	L['NOTIFICATION_RARE'] = '发现稀有'
-	L['NOTIFICATION_VERSION_CHECK_HEADER'] = '版本检查'
-	L['NOTIFICATION_VERSION_CHECK_DESC'] = '插件版本已过期，请注意及时更新！'
-	L['VERSION_OUTDATED'] = 'Your version of FreeUI is out of date, the latest version is |cffff2020%s|r.'
+	L['NOTIFICATION_VERSION'] = '版本检查'
+	L['NOTIFICATION_VERSION_OUTDATE'] = '你的 FreeUI 已经过期，最新版为 %s'
 end
 
 
@@ -219,10 +215,10 @@ end
 --[[ Map ]]
 
 do
-	L['MAP'] = '地图'
+	L['MAP_MOVER_MINIMAP'] = '小地图'
 	L['MAP_CURSOR'] = '鼠标'
 	L['MAP_REVEAL'] = '清除地图迷雾'
-	L['MAP_PARAGON'] = 'Paragon'
+	L['MAP_PARAGON'] = '巅峰'
 	L['MAP_NEW_MAIL'] = '<新邮件>'
 end
 
