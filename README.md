@@ -1,5 +1,3 @@
-<br>
-<br>
 <h1 align="center"><img src="https://i.imgur.com/GRLVXDx.png" alt="FreeUI Logo" /></h1>
 <div align="center">
   <strong>Minimalist, Aesthetic, Practical</strong>
