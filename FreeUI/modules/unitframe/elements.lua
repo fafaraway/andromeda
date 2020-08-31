@@ -78,7 +78,7 @@ local function PostUpdateHealth(health, unit, min, max)
 			--self.Deficit:Hide()
 			self.Deficit:SetValue(0)
 		else
-			if FreeDB.unitframe.color_smooth or (FreeDB.unitframe.boss_color_smooth and style == 'boss') or (FreeDB.unitframe.group_color_smooth and style == 'raid') then
+			if FreeDB.unitframe.color_smooth or (FreeDB.unitframe.boss_color_smooth and style == 'boss') or (FreeDB.unitframe.group_color_smooth and (style == 'raid' or style == 'party')) then
 				self.Deficit:GetStatusBarTexture():SetVertexColor(F.ColorGradient(min / max, unpack(oUF.colors.smooth)))
 			else
 				self.Deficit:GetStatusBarTexture():SetVertexColor(r, g, b)

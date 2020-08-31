@@ -47,46 +47,43 @@ function QUEST:QuestLevel()
 	hooksecurefunc('QuestLogQuests_AddQuestButton', Showlevel)
 end
 
-function QUEST:RewardHighlight()
-	if not FreeDB.quest.reward_highlight then return end
+local function SetRewardHighlight(self, reward)
+	if not self.rewardHighlightFrame then
+		self.rewardHighlightFrame = CreateFrame(Frame, QuesterRewardHighlight, QuestInfoRewardsFrame, AutoCastShineTemplate)
+		self.rewardHighlightFrame:SetScript(OnHide, function(frame) AutoCastShine_AutoCastStop(frame) end)
+	end
 
+	self.rewardHighlightFrame:ClearAllPoints()
+	self.rewardHighlightFrame:SetAllPoints(reward)
+	self.rewardHighlightFrame:Show()
+
+	AutoCastShine_AutoCastStart(self.rewardHighlightFrame)
+end
+
+function QUEST:QUEST_COMPLETE()
 	local frame = CreateFrame('Frame')
 	frame:RegisterEvent('QUEST_COMPLETE')
 	frame:SetScript('OnEvent', function(self, event, ...)
-		local num = GetNumQuestChoices()
-		if num == nil or num < 2 then
-			return
+		if self.rewardHighlightFrame then
+			self.rewardHighlightFrame:Hide()
 		end
 
-		local maxSellPrice = -1
-		local mostExpensiveItemIndex = -1
-		local mostExpensiveItemLink = nil
-		for x = 1, num do
-			local link = GetQuestItemLink('choice', x)
-			if link == nil then
-				return
-			end
+		if not FreeDB.quest.reward_highlight then return end
 
-			local _, _, _, _, _, _, _, _, _, _, sellPriceInCopper = GetItemInfo(link)
-			if sellPriceInCopper ~= nil and sellPriceInCopper > maxSellPrice then
-				maxSellPrice = sellPriceInCopper
-				mostExpensiveItemIndex = x
-				mostExpensiveItemLink = link
+		local bestprice, bestitem = 0, 0
+		for i = 1, GetNumQuestChoices() do
+			local link, name, _, qty = GetQuestItemLink(choice, i), GetQuestItemInfo(choice, i)
+			local price = link and select(11, GetItemInfo(link))
+			if not price then return end
+			price = price * (qty or 1)
+			if price > bestprice then
+				bestprice = price
+				bestitem = i
 			end
 		end
-
-		if mostExpensiveItemIndex < 1 then
-			return
+		if bestitem > 0 then
+			SetRewardHighlight(self, _G[(QuestInfoRewardsFrameQuestInfoItem%dIconTexture):format(bestitem)])
 		end
-
-		local rewardButton = _G['QuestInfoRewardsFrameQuestInfoItem'..mostExpensiveItemIndex]
-		if rewardButton == nil or rewardButton.type ~= 'choice' then
-			return
-		end
-
-		QuestInfoItemHighlight:SetPoint('TOPLEFT', rewardButton, 'TOPLEFT', -8, 7)
-		QuestInfoItemHighlight:Show()
-		QuestInfoFrame.itemChoice = rewardButton:GetID()
 	end)
 end
 
@@ -94,6 +91,6 @@ end
 function QUEST:OnLogin()
 	self:ObjectiveTrackerMover()
 	self:QuestLevel()
-	self:RewardHighlight()
 	self:QuestNotifier()
+	self:QUEST_COMPLETE()
 end
