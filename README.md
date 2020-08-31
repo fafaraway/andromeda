@@ -1,6 +1,6 @@
 <h1 align="center"><img src="https://i.imgur.com/GRLVXDx.png" alt="FreeUI Logo" /></h1>
 <div align="center">
-  <strong>Minimalist, Aesthetic, Practical</strong>
+  <h1>Minimalist, Aesthetic, Practical</h1>
 </div>
 <br />
 <div align="center">
