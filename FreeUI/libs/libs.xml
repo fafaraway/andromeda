@@ -1,6 +1,9 @@
-<Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Include file='cargBags\cargBags.xml'/>
-	<Include file='oUF\oUF.xml'/>
-	<Include file='UTF8\UTF8.xml'/>
-	<Script file='LibBase64.lua'/>
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="UTF8\UTF8.xml"/>
+	<Include file="cargBags\cargBags.xml"/>
+	<Include file="oUF\oUF.xml"/>
+	<Script file="LibStub.lua"/>
+	<Script file="CallbackHandler-1.0.lua"/>
+	<Script file="LibBase64-1.0.lua"/>
+	<Script file="LibRangeCheck-2.0.lua"/>
 </Ui>

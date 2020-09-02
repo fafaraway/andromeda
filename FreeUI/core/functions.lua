@@ -61,10 +61,10 @@ do
 			return format('|cffffffff%d|r', s/hour), s % hour -- white
 		elseif s >= minute then
 			return format('|cff1e84d0%d|r', s/minute), s % minute -- blue
-		elseif s > C.Actionbar.decimal_countdown then
+		elseif s > FreeDB.actionbar.decimal_countdown then
 			return format('|cffffe700%d|r', s), s - floor(s) -- yellow
 		else
-			if C.Actionbar.use_decimal then
+			if FreeDB.actionbar.use_decimal then
 				return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
 			else
 				return format('|cfffd3612%d|r', s + .5), s - floor(s)

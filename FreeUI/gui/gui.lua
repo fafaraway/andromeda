@@ -178,7 +178,7 @@ local function CombatLockdown(event)
 	end
 end
 
-function Toggle_FreeUI_GUI() -- this is for binding usage
+function TOGGLE_FREEUI_GUI() -- this is for binding usage
 	if FreeUI_GUI:IsShown() then
 		FreeUI_GUI:Hide()
 	else

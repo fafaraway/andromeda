@@ -50,24 +50,28 @@ end
 local function PostUpdateHealth(health, unit, min, max)
 	local self = health:GetParent()
 	local r, g, b
-	local reaction = oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
-	local offline = not UnitIsConnected(unit)
-	local dead = UnitIsDead(unit)
-	local ghost = UnitIsGhost(unit)
-	local tapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
+	local reactionColor = oUF.colors.reaction[UnitReaction(unit, 'player') or 5]
+	local isOffline = not UnitIsConnected(unit)
+	local isDead = UnitIsDead(unit)
+	local isGhost = UnitIsGhost(unit)
+	local isTapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 	local style = health.__owner.unitStyle
 
-	if offline then
+	if isOffline then
 		r, g, b = unpack(oUF.colors.disconnected)
-	elseif tapped then
+	elseif isTapped then
 		r, g, b = unpack(oUF.colors.tapped)
 	elseif UnitIsPlayer(unit) or style == 'pet' then
 		local _, class = UnitClass(unit)
 		local color = FreeADB.class_colors[class]
-		if class then r, g, b = color.r, color.g, color.b else r, g, b = 1, 1, 1 end
+
+		if class then
+			r, g, b = color.r, color.g, color.b
+		else
+			r, g, b = 1, 1, 1
+		end
 	else
-		r, g, b = unpack(reaction)
-		--r, g, b = UnitSelectionColor(unit)
+		r, g, b = unpack(reactionColor)
 	end
 
 	if FreeDB.unitframe.transparency and self.Deficit then
@@ -75,7 +79,6 @@ local function PostUpdateHealth(health, unit, min, max)
 		self.Deficit:SetValue(max-min)
 
 		if offline or dead or ghost then
-			--self.Deficit:Hide()
 			self.Deficit:SetValue(0)
 		else
 			if FreeDB.unitframe.color_smooth or (FreeDB.unitframe.boss_color_smooth and style == 'boss') or (FreeDB.unitframe.group_color_smooth and (style == 'raid' or style == 'party')) then
@@ -83,16 +86,14 @@ local function PostUpdateHealth(health, unit, min, max)
 			else
 				self.Deficit:GetStatusBarTexture():SetVertexColor(r, g, b)
 			end
-
-			--self.Deficit:Show()
 		end
 	end
 
-	if offline then
+	if isOffline then
 		self.Bg:SetBackdropColor(.4, .4, .4, .6)
-	elseif tapped then
+	elseif isTapped then
 		self.Bg:SetBackdropColor(.4, .4, .4, .6)
-	elseif dead or ghost then
+	elseif isDead or isGhost then
 		self.Bg:SetBackdropColor(0, 0, 0, .8)
 	else
 		self.Bg:SetBackdropColor(.02, .02, .02, .5)
@@ -133,6 +134,7 @@ function UNITFRAME:AddHealthBar(self)
 		else
 			health.colorClass = true
 			health.colorReaction = true
+			health.colorClassPet = true
 			--health.colorSelection = true
 		end
 	end
@@ -1212,7 +1214,6 @@ function UNITFRAME:AddTotems(self)
 		totem:SetStatusBarTexture(C.Assets.norm_tex)
 		totem:SetStatusBarColor(r, g, b)
 		totem:SetSize(width, FreeDB.unitframe.class_power_bar_height)
-		print('totems')
 		F.CreateBDFrame(totem)
 
 		totem:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
@@ -1238,30 +1239,39 @@ end
 
 -- Fader
 function UNITFRAME:AddFader(self)
-	if not FreeDB.unitframe.fader then return end
+	if not FreeDB.unitframe.combat_fader then return end
 
 	self.Fader = {
 		[1] = {Combat = 1},
-		[2] = {PlayerTarget = 1, PlayerNotMaxHealth = 1, PlayerCasting = 1},
+		[2] = {PlayerTarget = 1, PlayerFocus, PlayerNotMaxHealth = 1, PlayerCasting = 1},
 		[3] = {notCombat = 0},
 	}
 
 	self.NormalAlpha = 1
 end
 
--- Spell range
+-- Range check
 function UNITFRAME:AddRangeCheck(self)
-	if FreeDB.unitframe.range_check then
-		self.SpellRange = {
-			insideAlpha = 1,
-			outsideAlpha = FreeDB.unitframe.range_check_alpha,
-		}
-	else
-		self.Range = {
-			insideAlpha = 1,
-			outsideAlpha = FreeDB.unitframe.range_check_alpha,
-		}
+	if not FreeDB.unitframe.range_check then return end
+
+	--[[ self.Range = {
+		insideAlpha = 1,
+		outsideAlpha = FreeDB.unitframe.range_check_alpha,
+	} ]]
+
+
+	if not self.RangeCheck then
+		self.RangeCheck = {}
 	end
+	self.RangeCheck.enabled = true
+	self.RangeCheck.insideAlpha = 1
+	self.RangeCheck.outsideAlpha = 0.4
+
+	-- self.RangeCheck.PostUpdate = UNITFRAME.RangeCheckPostUpdate
+	-- self.RangeCheck.Override = UNITFRAME.RangeCheckUpdate
+
+	-- self.Alpha = {}
+	-- self.Alpha.current = 1
 end
 
 -- GCD
@@ -1681,6 +1691,7 @@ function UNITFRAME:AddAlternativePowerValueText(self)
 	self.AlternativePowerValue = altPowerValue
 end
 
+
 -- Text string all in one #TODO
 function UNITFRAME:AddTextString()
 	local style = self.unitStyle
@@ -1758,3 +1769,74 @@ function UNITFRAME:AddTextString()
 
 	self.AlternativePowerValue = altPower
 end
+
+
+
+-- Range check stuff
+--[[ function UNITFRAME:RangeCheckPostUpdate(self, unit)
+
+	if InCombatLockdown() then
+		self:SetAlpha(self.Alpha.range)
+		return
+	end
+
+	if not self.Animator then
+		self:SetAlpha(self.Alpha.range)
+		return
+	end
+
+	if self.Animator:IsPlaying() then
+		if self.Alpha.inRange == false then
+			self.Animator:Stop()
+			self:SetAlpha(self.Alpha.range)
+			self.Alpha.current = self.Alpha.range
+		end
+	else
+		self:SetAlpha(self.Alpha.range)
+	end
+end
+
+function UNITFRAME.RangeCheckUpdate(self, isInRange, event)
+	local element = self.RangeCheck
+	local unit = self.unit
+
+	if not self.Alpha then
+		self.Alpha = {}
+	end
+
+	local currentAlpha = self.Alpha.target or 1 -- Work with combat fader
+	local insideAlpha = currentAlpha * element.insideAlpha
+	local outsideAlpha = currentAlpha * element.outsideAlpha
+
+	if(element.PreUpdate) then
+		element:PreUpdate()
+	end
+
+	if element.enabled == true then
+		if isInRange then
+			--self:SetAlpha(insideAlpha)
+			self.Alpha.range = insideAlpha
+			self.Alpha.inRange = true
+		else
+			--self:SetAlpha(outsideAlpha)
+			self.Alpha.range = outsideAlpha
+			self.Alpha.inRange = false
+		end
+		if(element.PostUpdate) then
+			return element:PostUpdate(self, unit)
+		end
+	else
+		--self:SetAlpha(1)
+		self.Alpha.range = 1
+		self.Alpha.inRange = true
+		self:DisableElement('RangeCheck')
+	end
+end ]]
+
+
+
+
+
+
+
+

@@ -1,9 +1,10 @@
-<Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='core.lua'/>
-	<Script file='constants.lua'/>
-	<Script file='configs.lua'/>
-	<Script file='profiles.lua'/>
-	<Script file='functions.lua'/>
-	<Script file='mover.lua'/>
-	<Script file='slash.lua'/>
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="core.lua"/>
+	<Script file="constants.lua"/>
+	<Script file="configs.lua"/>
+	<Script file="profiles.lua"/>
+	<Script file="functions.lua"/>
+	<Script file="logo.lua"/>
+	<Script file="mover.lua"/>
+	<Script file="slash.lua"/>
 </Ui>

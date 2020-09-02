@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
+local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 
 local next, pairs, unpack = next, pairs, unpack
@@ -96,7 +96,7 @@ local function button_UpdateUsable(button)
 end
 
 function ACTIONBAR:ButtonRange()
-	if not cfg.button_range then return end
+	if not FreeDB.actionbar.button_range then return end
 
 	hooksecurefunc('ActionButton_OnUpdate', self.Register)
 	hooksecurefunc('ActionButton_Update', self.UpdateButtonStatus)

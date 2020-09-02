@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
+local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 
 local next, tonumber, unpack, select = next, tonumber, unpack, select
@@ -34,10 +34,10 @@ function ACTIONBAR:CreateBar1()
 		end
 	end
 
-	if cfg.bar1 then
-		frame.frameVisibility = cfg.bar1_visibility
+	if FreeDB.actionbar.bar1 then
+		frame.frameVisibility = FreeDB.actionbar.bar1_visibility
 
-		if cfg.bar1_fade then
+		if FreeDB.actionbar.bar1_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
@@ -91,10 +91,10 @@ function ACTIONBAR:CreateBar2()
 		end
 	end
 
-	if cfg.bar2 then
+	if FreeDB.actionbar.bar2 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if cfg.bar2_fade then
+		if FreeDB.actionbar.bar2_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
@@ -108,7 +108,7 @@ end
 function ACTIONBAR:CreateBar3()
 	local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', UIParent, 'SecureHandlerStateTemplate')
 
-	if cfg.bar3_divide then
+	if FreeDB.actionbar.bar3_divide then
 		frame:Width(18*buttonSizeNormal + 17*margin + 2*padding)
 		frame:Height(2*buttonSizeNormal + margin + 2*padding)
 	else
@@ -116,7 +116,7 @@ function ACTIONBAR:CreateBar3()
 		frame:Height(buttonSizeNormal + 2*padding)
 	end
 
-	if cfg.bar3_divide then
+	if FreeDB.actionbar.bar3_divide then
 		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']}
 	else
 		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+2*(buttonSizeNormal+2*padding)}
@@ -132,13 +132,13 @@ function ACTIONBAR:CreateBar3()
 		button:ClearAllPoints()
 		if i == 1 then
 			button:SetPoint('TOPLEFT', frame, padding, -padding)
-		elseif (i == 4 and cfg.bar3_divide) then
+		elseif (i == 4 and FreeDB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton1']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
-		elseif (i == 7 and cfg.bar3_divide) then
+		elseif (i == 7 and FreeDB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton3']
 			button:SetPoint('TOPLEFT', previous, 'TOPRIGHT', 12*buttonSizeNormal+13*margin, 0)
-		elseif (i == 10 and cfg.bar3_divide) then
+		elseif (i == 10 and FreeDB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton7']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		else
@@ -147,10 +147,10 @@ function ACTIONBAR:CreateBar3()
 		end
 	end
 
-	if cfg.bar3 then
+	if FreeDB.actionbar.bar3 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if cfg.bar3_fade then
+		if FreeDB.actionbar.bar3_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
@@ -189,10 +189,10 @@ function ACTIONBAR:CreateBar4()
 
 	end
 
-	if cfg.bar4 then
+	if FreeDB.actionbar.bar4 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if cfg.bar4_fade then
+		if FreeDB.actionbar.bar4_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
@@ -229,10 +229,10 @@ function ACTIONBAR:CreateBar5()
 		end
 	end
 
-	if cfg.bar5 then
+	if FreeDB.actionbar.bar5 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if cfg.bar5_fade then
+		if FreeDB.actionbar.bar5_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
@@ -271,10 +271,10 @@ function ACTIONBAR:CreatePetbar()
 		cd:SetAllPoints(button)
 	end
 
-	if cfg.pet_bar then
+	if FreeDB.actionbar.pet_bar then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
 
-		if cfg.pet_bar_fade then
+		if FreeDB.actionbar.pet_bar_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 
@@ -344,10 +344,10 @@ function ACTIONBAR:CreateStancebar()
 		end
 	end
 
-	if cfg.enable_stance_bar then
+	if FreeDB.actionbar.enable_stance_bar then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if cfg.stance_bar_fade then
+		if FreeDB.actionbar.stance_bar_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
 		end
 	else
@@ -506,13 +506,13 @@ end
 
 
 function ACTIONBAR:OnLogin()
-	if not cfg.enable_actionbar then return end
+	if not FreeDB.actionbar.enable_actionbar then return end
 
-	padding = F:Scale(cfg.bar_padding)
-	margin = F:Scale(cfg.button_margin)
-	buttonSizeNormal = F:Scale(cfg.button_size_normal)
-	buttonSizeSmall = F:Scale(cfg.button_size_small)
-	buttonSizeBig = F:Scale(cfg.button_size_big)
+	padding = F:Scale(FreeDB.actionbar.bar_padding)
+	margin = F:Scale(FreeDB.actionbar.button_margin)
+	buttonSizeNormal = F:Scale(FreeDB.actionbar.button_size_normal)
+	buttonSizeSmall = F:Scale(FreeDB.actionbar.button_size_small)
+	buttonSizeBig = F:Scale(FreeDB.actionbar.button_size_big)
 
 	self:CreateBar1()
 	self:CreateBar2()

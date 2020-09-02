@@ -127,26 +127,11 @@ end
 tagEvents['free:groupname'] = 'UNIT_HEALTH GROUP_ROSTER_UPDATE UNIT_CONNECTION'
 
 tags['free:resting'] = function(unit)
-	if IsResting() then
+	if(unit == 'player' and IsResting()) then
 		return '|cff2C8D51Zzz|r'
-	else
-		return ' '
 	end
 end
 tagEvents['free:resting'] = 'PLAYER_UPDATE_RESTING'
-
-
-
-tags['free:combat'] = function(unit)
-	if InCombatLockdown() then
-		return '|cffff2020!|r'
-	else
-		return ' '
-	end
-end
-tagEvents['free:combat'] = 'PLAYER_REGEN_DISABLED PLAYER_REGEN_ENABLED'
-
-
 
 tags['free:classification'] = function(unit)
 	local class, level = UnitClassification(unit), UnitLevel(unit)

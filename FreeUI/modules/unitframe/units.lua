@@ -56,7 +56,7 @@ function UNITFRAME:SpawnPlayer()
 
 	F.Mover(player, L['UNITFRAME_MOVER_PLAYER'], 'PlayerFrame', {'BOTTOM', UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
-	if not C.Actionbar.enable then return end
+	if not FreeDB.actionbar.enable_actionbar then return end
 	FreeUI_LeaveVehicleBar:SetParent(player)
 	FreeUI_LeaveVehicleButton:ClearAllPoints()
 	FreeUI_LeaveVehicleButton:SetPoint('LEFT', player, 'RIGHT', 4, 0 )
@@ -76,9 +76,8 @@ local function CreatePetStyle(self)
 	UNITFRAME:AddPortrait(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddAuras(self)
-	UNITFRAME:AddRangeCheck(self)
-	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddFader(self)
+	UNITFRAME:AddRaidTargetIndicator(self)
 end
 
 function UNITFRAME:SpawnPet()
@@ -122,7 +121,6 @@ local function CreateTargetStyle(self)
 	UNITFRAME:AddAuras(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddRangeCheck(self)
-	UNITFRAME:AddFader(self)
 	UNITFRAME:AddFCF(self)
 
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', playTargetSound)
@@ -137,7 +135,7 @@ function UNITFRAME:SpawnTarget()
 
 	local target = oUF:Spawn('target', 'oUF_Target')
 
-	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'LEFT', 'oUF_Player', 'RIGHT', 60, 80}, target:GetWidth(), target:GetHeight())
+	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'BOTTOM', UIParent, 'BOTTOM', 240, 300}, target:GetWidth(), target:GetHeight())
 end
 
 local function CreateTargetTargetStyle(self)
@@ -150,7 +148,6 @@ local function CreateTargetTargetStyle(self)
 	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddRangeCheck(self)
-	UNITFRAME:AddFader(self)
 end
 
 function UNITFRAME:SpawnTargetTarget()
@@ -191,7 +188,6 @@ local function CreateFocusStyle(self)
 	UNITFRAME:AddAuras(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddRangeCheck(self)
-	UNITFRAME:AddFader(self)
 
 	self:RegisterEvent('PLAYER_FOCUS_CHANGED', playFocusSound)
 	self.Health:SetScript('OnShow', function()
@@ -205,7 +201,7 @@ function UNITFRAME:SpawnFocus()
 
 	local focus = oUF:Spawn('focus', 'oUF_Focus')
 
-	F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame', {'TOPRIGHT', 'oUF_Player', 'TOPLEFT', -80, 0}, focus:GetWidth(), focus:GetHeight())
+	F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame', {'BOTTOM', UIParent, 'BOTTOM', -200, 220}, focus:GetWidth(), focus:GetHeight())
 end
 
 local function CreateFocusTargetStyle(self)
@@ -218,7 +214,6 @@ local function CreateFocusTargetStyle(self)
 	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddRangeCheck(self)
-	UNITFRAME:AddFader(self)
 end
 
 function UNITFRAME:SpawnFocusTarget()
@@ -341,7 +336,7 @@ function UNITFRAME:SpawnParty()
 		'showParty', true,
 		'showRaid', false,
 		'showPlayer', true,
-		'showSolo', true,
+		'showSolo', false,
 
 		'xoffset', FreeDB.unitframe.party_gap,
 		'yoffset', FreeDB.unitframe.party_gap,
