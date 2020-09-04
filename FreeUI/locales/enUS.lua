@@ -1,211 +1,421 @@
 local F, C, L = unpack(select(2, ...))
+--if not C.isChinses then return end
 
 
--- Misc
+--[[ Misc ]]
+
+do
+	L['MISC_NUMBER_CAP'] = {'万', '亿', '兆'}
 
 
--- Themes
-L['THEME'] = 'Appearance'
-L['THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
-L['THEME_CURSOR_TRAIL'] = 'Cursor trail'
-L['THEME_VIGNETTING'] = 'Vignetting'
-L['THEME_VIGNETTING_ALPHA'] = 'Vignetting alpha'
-L['THEME_RESKIN_BLIZZ'] = 'Restyle blizzard frames'
-L['THEME_SHADOW_BORDER'] = 'Shadow border'
-L['THEME_UI_SCALE'] = 'UI Scale'
+	L['MISC_REPUTATION'] = 'Reputation'
+	L['MISC_PARAGON'] = 'Paragon'
+	L['MISC_PARAGON_REPUTATION'] = 'Paragon Reputation'
+	L['MISC_PARAGON_NOTIFY'] = 'Paragon Full, go redeem!'
+	L['MISC_ORDERHALL_TIP'] = 'Hold Shift to display detailed information'
 
 
--- Notification
-L['NOTIFICATION'] = 'Notification'
-L['NOTIFICATION_NEW_MAIL'] = 'New mail!'
-L['NOTIFICATION_BAG_FULL'] = 'Bag full!'
-L['NOTIFICATION_MAIL'] = 'Mail'
-L['NOTIFICATION_BAG'] = 'Bag'
-L['NOTIFICATION_REPAIR'] = 'Repair'
-L['NOTIFICATION_SELL'] = 'Sell'
-L['NOTIFICATION_RARE'] = 'Rare found!'
-L['NOTIFICATION_VERSION_CHECK_HEADER'] = 'Version check'
-L['NOTIFICATION_VERSION_CHECK_DESC'] = 'FreeUI has been out of date, the latest release is %s'
-
-
--- Announcement
-L['ANNOUNCEMENT'] = 'Announcement'
-L['ANNOUNCEMENT_INTERRUPT'] = 'Interrup %s\'s %s'
-L['ANNOUNCEMENT_DISPEL'] = 'Dispel %s\'s %s'
-L['ANNOUNCEMENT_STOLEN'] = 'Stolen %s\'s %s'
-L['ANNOUNCEMENT_BATTLE_REZ'] = '%s casted %s'
-L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s casted %s on %s'
-L['ANNOUNCEMENT_CASTED'] = '%s casted %s'
-L['ANNOUNCEMENT_SUMMONING'] = '%s is casting %s'
-L['ANNOUNCEMENT_FEAST'] = '%s put %s'
-L['ANNOUNCEMENT_ITEM'] = '%s put %s'
-L['ANNOUNCEMENT_PORTAL'] = '%s opened %s'
-L['ANNOUNCEMENT_SAPPED'] = 'SAPPED!'
-
-
--- Infobar
-L['INFOBAR'] = 'Infobar'
-L['INFOBAR_CURRENCY'] = 'Gold count'
-L['INFOBAR_DURABILITY'] = 'Durability'
-L['INFOBAR_FRIENDS'] = 'Friends'
-L['INFOBAR_GUILD'] = 'Guild'
-L['INFOBAR_GUILD_NONE'] = 'None'
-L['INFOBAR_REPORT'] = 'Report'
-L['INFOBAR_WOW'] = '<World of Warcraft>'
-L['INFOBAR_BN'] = '<Battle.Net>'
-L['INFOBAR_NO_ONLINE'] = 'No friends online'
-L['INFOBAR_HOLD_SHIFT'] = 'Hold <Shift>'
-L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Open friends panel'
-L['INFOBAR_ADD_FRIEND'] = 'Add friend'
-L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Open currency panel'
-L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
-L['INFOBAR_OPEN_GUILD_PANEL'] = 'Open guild panel'
-L['INFOBAR_OPEN_SPEC_PANEL'] = 'Open specialization panel'
-L['INFOBAR_CHANGE_SPEC'] = 'Change specialization'
-L['INFOBAR_SPEC'] = 'Specialization'
-L['INFOBAR_LOOT'] = 'Loot'
-L['INFOBAR_DAILY_WEEKLY_INFO'] = 'Daily/weekly information'
-L['INFOBAR_INVASION_LEG'] = 'Legion Invasion'
-L['INFOBAR_INVASION_BFA'] = 'Faction Invasion'
-L['INFOBAR_INVASION_CURRENT'] = 'Current'
-L['INFOBAR_INVASION_NEXT'] = 'Next'
-L['INFOBAR_OPEN_BFA_REPORT'] = 'Open mission report (BFA)'
-L['INFOBAR_OPEN_LEG_REPORT'] = 'Open mission report (LEG)'
-L['INFOBAR_OPEN_WOD_REPORT'] = 'Open mission report (WOD)'
-L['INFOBAR_BLINGTRON'] = 'Blingtron Daily Gift'
-L['INFOBAR_MEAN_ONE'] = 'Feast of Winter Veil'
-L['INFOBAR_TIMEWARPED'] = '500 Timewarped Badges'
-L['INFOBAR_ISLAND'] = 'progress'
-L['INFOBAR_LOCAL_TIME'] = 'Local time'
-L['INFOBAR_REALM_TIME'] = 'Realm time'
-L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open addon panel'
-L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open timer tracker'
-L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open character panel'
-L['INFOBAR_INFO'] = 'Information'
+	L['MISC_DISBAND_GROUP'] = 'Disband Group'
+	L['MISC_DISBAND_GROUP_CHECK'] = 'Are you sure you want to disband the group?'
 
 
 
+	L['MISC_DECLINE_INVITE'] = 'Automatically declined group invitation from %s'
+	L['MISC_ACCEPT_INVITE'] = 'Automatically accepted group invitation from %s'
+
+	L['AUTOMATION_GET_NAKED'] = '双击脱光装备'
+	L['AUTOMATION_BUY_STACK'] = 'Buy a stack of |cfff0000the following items?|r'
+end
 
 
+--[[ Blizzard ]]
+do
+	L['BLIZZARD_MOVER_ALERT'] = 'Alert frame'
+	L['BLIZZARD_MOVER_VEHICLE'] = 'Vehicle indicator'
+	L['BLIZZARD_MOVER_UIWIDGET'] = 'UIWidget frame'
+	L['BLIZZARD_UNDRESS'] = 'Undress'
+	L['BLIZZARD_STRANGER'] = 'Stranger'
+	L['BLIZZARD_KEYSTONES'] = 'Keystone Information'
+	L['BLIZZARD_KEYSTONES_RESET'] = 'Reset keystone information'
+	L['BLIZZARD_GET_NAKED'] = '双击脱光装备'
+	L['BLIZZARD_ORDERHALL_TIP'] = 'Hold <Shift> to display detailed information'
+end
 
 
+--[[ Themes ]]
+
+do
+
+end
 
 
--- inventory
-L['INVENTORY_SORT'] = 'Sort'
-L['INVENTORY_AZERITEARMOR'] = 'Azerite Armor'
-L['INVENTORY_EQUIPEMENTSET'] = 'EquipmentSet Items'
-L['INVENTORY_DELETE_MODE_ENABLED'] = 'Item quickly delete mode enabled! You can destroy container item by holding CTRL+ALT. The item quality must be lower then rare (blue).'
-L['INVENTORY_DELETE_MODE_DISABLED'] = 'Item quickly delete mode disabled.'
-L['INVENTORY_DELETE_MODE'] = 'Enable quickly delete mode'
-L['INVENTORY_MECHAGON_STUFF'] = 'Mechagon stuff'
-L["INVENTORY_QUICK_SPLIT"] = "快速拆分"
-L["INVENTORY_SPLIT_COUNT"] = "拆分个数"
-L["INVENTORY_SPLIT_MODE_ENABLED"] = "|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。"
+--[[ Notification ]]
 
-L['INVENTORY_GOLD_COUNT'] = 'Gold count'
-L['INVENTORY_EARNED'] = 'Earned'
-L['INVENTORY_SPENT'] = 'spent'
-L['INVENTORY_DEFICIT'] = 'Deficit'
-L['INVENTORY_PROFIT'] = 'Profit'
-L['INVENTORY_SESSION'] = 'Session'
-L['INVENTORY_CHARACTER'] = 'Character in realm'
-L['INVENTORY_GOLD_TOTAL'] = 'Total'
+do
+	L['NOTIFICATION_NEW_MAIL'] = 'You have new mail!'
+	L['NOTIFICATION_BAG_FULL'] = 'Your bag is full!'
+	L['NOTIFICATION_MAIL'] = 'Mail'
+	L['NOTIFICATION_BAG'] = 'Bag'
+	L['NOTIFICATION_RARE'] = 'Found rare!'
+	L['NOTIFICATION_VERSION'] = 'Version Check'
+	L['NOTIFICATION_VERSION_OUTDATE'] = 'Your FreeUI version has expired, latest is %s'
+end
 
 
+--[[ Announcement ]]
+
+do
+	L['ANNOUNCEMENT_INTERRUPT'] = 'Interrupted %s of %s!'
+	L['ANNOUNCEMENT_DISPEL'] = 'Dispelled %s of %s!'
+	L['ANNOUNCEMENT_STOLEN'] = 'Stole %s of %s!'
+	L['ANNOUNCEMENT_BATTLE_REZ'] = '%s used %s!'
+	L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s used %s in %s!'
+	L['ANNOUNCEMENT_CASTED'] = '%s cast %s!'
+	L['ANNOUNCEMENT_FEAST'] = '%s 摆出了 %s！'
+	L['ANNOUNCEMENT_ITEM'] = '%s placed %s!'
+	L['ANNOUNCEMENT_PORTAL'] = '%s opened %s!'
+	L['ANNOUNCEMENT_SAPPED'] = 'Sapped!'
+end
 
 
+--[[ Infobar ]]
+
+do
+	L['INFOBAR_DURABILITY'] = 'Durability'
+	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open the character panel'
+
+	L['INFOBAR_FRIENDS'] = 'Friends'
+	L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Open the friends panel'
+	L['INFOBAR_ADD_FRIEND'] = 'Add friend'
+
+	L['INFOBAR_GUILD'] = 'Guild'
+	L['INFOBAR_GUILD_NONE'] = 'No Guild'
+	L['INFOBAR_OPEN_GUILD_PANEL'] = 'Open the guild panel'
+
+	L['INFOBAR_REPORT'] = 'Report'
+	L['INFOBAR_DAILY_WEEKLY_INFO'] = 'Daily/weekly information'
+	L['INFOBAR_BLINGTRON'] = 'Blingtron Daily'
+	L['INFOBAR_MEAN_ONE'] = 'Winter Veil Daily'
+	L['INFOBAR_TIMEWARPED'] = 'Timewalking Badge Reward'
+	L['INFOBAR_INVASION_LEG'] = 'Legion invasions'
+	L['INFOBAR_INVASION_BFA'] = 'BFA invasions'
+	L['INFOBAR_INVASION_CURRENT'] = 'Current: '
+	L['INFOBAR_INVASION_NEXT'] = 'Next: '
+	L['INFOBAR_LESSER_VISION'] = 'Lesser Vision of N\'zoth'
+	L['INFOBAR_ISLAND'] = 'Island Expedition'
+	L['INFOBAR_OPEN_BFA_REPORT'] = 'Open report(BFA)'
+	L['INFOBAR_OPEN_LEG_REPORT'] = 'Open report(LEG)'
+	L['INFOBAR_OPEN_WOD_REPORT'] = 'Open report(WOD)'
+
+	L['INFOBAR_SPEC'] = 'Specialization'
+	L['INFOBAR_LOOT'] = 'Loot Specialization'
+	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Open the specialization panel'
+	L['INFOBAR_CHANGE_SPEC'] = 'Change specialization'
+
+	L['INFOBAR_LOCAL_TIME'] = 'Local Time'
+	L['INFOBAR_REALM_TIME'] = 'Realm Time'
+	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open addon panel'
+	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open the timer'
+end
 
 
+--[[ Chat ]]
+
+do
+	L['CHAT_TOGGLE_PANEL'] = 'Hide/Show chat box'
+	L['CHAT_TOGGLE_WC'] = 'Join/Leave Channel'
+	L['CHAT_COPY'] = 'Copy chat text'
+	L['CHAT_WHISPER_TELL'] = 'To'
+	L['CHAT_WHISPER_FROM'] = 'From'
+end
 
 
+--[[ Aura ]]
 
--- mover
-L['MOVER_PANEL'] = 'Mover console'
-L['MOVER_GRID'] = 'Grids'
-L['MOVER_RESET_ANCHOR'] = 'Reset this element to default position'
-L['MOVER_HIDE_ELEMENT'] = 'Hide this element'
-L['MOVER_TIPS'] = 'Tips'
-L['MOVER_TOOLTIP'] = 'tooltip'
-L['MOVER_MINIMAP'] = 'minimap'
-L['MOVER_RESET_CONFIRM'] = 'Are you sure to reset frames position?'
-L['MOVER_CANCEL_CONFIRM'] = 'Are you sure to reverse your positioning?'
-L['MOVER_UNITFRAME_PLAYER'] = 'player'
-L['MOVER_UNITFRAME_PET'] = 'pet'
-L['MOVER_UNITFRAME_TARGET'] = 'target'
-L['MOVER_UNITFRAME_TARGETTARGET'] = 'targettarget'
-L['MOVER_UNITFRAME_FOCUS'] = 'focus'
-L['MOVER_UNITFRAME_FOCUSTARGET'] = 'focustarget'
-L['MOVER_UNITFRAME_BOSS'] = 'boss'
-L['MOVER_UNITFRAME_ARENA'] = 'arena'
-L['MOVER_UNITFRAME_PARTY'] = 'party'
-L['MOVER_UNITFRAME_RAID'] = 'raid'
-L['MOVER_UNITFRAME_PLAYER_CASTBAR'] = 'palyer castbar'
-L['MOVER_UNITFRAME_TARGET_CASTBAR'] = 'target castbar'
-L['MOVER_COMBATTEXT_INFORMATION'] = 'combat text (information)'
-L['MOVER_COMBATTEXT_OUTGOING'] = 'combat text (outgoing)'
-L['MOVER_COMBATTEXT_INCOMING'] = 'combat text (incoming)'
-L['MOVER_BUFFS'] = 'buffs'
-L['MOVER_DEBUFFS'] = 'debuffs'
-L['MOVER_QUAKE_TIMER'] = 'quake timer'
-L['MOVER_OBJECTIVE_TRACKER'] = 'objective tracker'
-L['MOVER_VEHICLE_INDICATOR'] = 'vehicle indicator'
-L['MOVER_DURABILITY_INDICATOR'] = 'durability indicator'
-L['MOVER_ALERT_FRAMES'] = 'alert frames'
+do
+	L['AURA_MOVER_BUFFS'] = 'Buffs'
+	L['AURA_MOVER_DEBUFFS'] = 'Debuffs'
+end
 
 
--- Chat
-L['CHAT_HIDE'] = 'Hide chat frame'
-L['CHAT_SHOW'] = 'Show chat frame'
-L['CHAT_JOIN_WC'] = 'Join world channel (only for Chinese player)'
-L['CHAT_LEAVE_WC'] = 'Leave world channel'
-L['CHAT_COPY'] = 'Chat copy'
-L['CHAT_WHISPER_TELL'] = 'Tell'
-L['CHAT_WHISPER_FROM'] = 'From'
+--[[ Actionbar ]]
+
+do
+	L['ACTIONBAR_MOVER_BAR1'] = 'Actionbar 1'
+	L['ACTIONBAR_MOVER_BAR2'] = 'Actionbar 2'
+	L['ACTIONBAR_MOVER_BAR3'] = 'Actionbar 3'
+	L['ACTIONBAR_MOVER_BAR4'] = 'Actionbar 4'
+	L['ACTIONBAR_MOVER_BAR5'] = 'Actionbar 5'
+	L['ACTIONBAR_MOVER_PET'] = 'Actionbar pet'
+	L['ACTIONBAR_MOVER_STANCE'] = 'Actionbar stance'
+	L['ACTIONBAR_MOVER_EXTRA'] = 'Actionbar extra'
+	L['ACTIONBAR_MOVER_VEHICLE'] = 'Actionbar vehicle'
+	L['ACTIONBAR_MOVER_COOLDOWN'] = 'Cooldown'
+	L['ACTIONBAR_KEY_UNBOUND'] = 'Unbound Button'
+	L['ACTIONBAR_KEY_INDEX'] = '序号'
+	L['ACTIONBAR_KEY_BINDING'] = 'Key Binding'
+	L['ACTIONBAR_KEY_BOUND_TO'] = ' Bound button'
+	L['ACTIONBAR_SAVE_KEYBINDS'] = 'Keybinds saved'
+	L['ACTIONBAR_DISCARD_KEYBINDS'] = 'Discard keybinds?'
+	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20 Clear keybinds |r'
+end
+
+
+--[[ Combat ]]
+
+do
+	L['COMBAT_ENTER'] = 'Entered Combat'
+	L['COMBAT_LEAVE'] = 'Left Combat'
+end
+
+
+--[[ Inventory ]]
+
+do
+	L['INVENTORY_NOTIFICATION_HEADER'] = 'Backpack'
+	L['INVENTORY_SORT'] = 'Sort bags'
+	L['INVENTORY_ANCHOR_RESET'] = 'Reset window position'
+	L['INVENTORY_BAGS'] = 'Show bags'
+	L['INVENTORY_FREE_SLOTS'] = 'Remaining bag space'
+	L['INVENTORY_AZERITEARMOR'] = 'Azerite Armor'
+	L['INVENTORY_EQUIPEMENTSET'] = 'Equipment Set'
+	L['INVENTORY_QUICK_DELETE_ENABLED'] = '\nQuick destroy is enabled.\nYou can hold CTRL+ALT while clicking to destroy items in bags lower quality than blue.'
+	L['INVENTORY_QUICK_DELETE'] = 'Quick Delete'
+	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '\nFavorites enabled.\nYou can now click to mark items.\nIf classified storage of items is enabled, you can also add it to the favorites category.\nThis operation is invalid for junk items.'
+	L['INVENTORY_PICK_FAVOURITE'] = 'Choose favorite'
+	L['INVENTORY_AUTO_REPAIR'] = 'Auto Repair'
+	L['INVENTORY_AUTO_REPAIR_ENABLED'] = '\nAuto repair is enabled.\nYour equipment will be repaired automatically every time you talk to the merchant.'
+	L['INVENTORY_REPAIR_ERROR'] = 'Not enough money to repair!'
+	L['INVENTORY_REPAIR_COST'] = 'Automatic repair cost'
+	L['INVENTORY_SELL_JUNK'] = 'Auto sell junk'
+	L['INVENTORY_SELL_JUNK_ENABLED'] = '\nThe automatic sale of junk has been enabled.\nEvery time you talk to a merchant, you will automatically sell junk items.'
+	L['INVENTORY_SELL_JUNK_EARN'] = 'Automatically sell junk'
+	L['INVENTORY_SEARCH'] = 'Search'
+	L['INVENTORY_SEARCH_ENABLED'] = 'Enter item name to search'
+	L['INVENTORY_MARK_JUNK'] = 'Mark junk'
+	L['INVENTORY_MARK_JUNK_ENABLED'] = '\nClick to categorize sellable items as junk.\nWhen you turn on automatic junk selling, these items will also be sold together.\nThis list is shared by accounts.'
+	L['INVENTORY_QUICK_SPLIT'] = 'Quick split'
+	L['INVENTORY_SPLIT_COUNT'] = 'Split count'
+	L['INVENTORY_SPLIT_MODE_ENABLED'] = '\nClick to split the stacked items, number of splits per click can be adjusted in left input box.'
+	L['INVENTORY_GOLD_COUNT'] = 'Gold Count'
+	L['INVENTORY_EARNED'] = 'Earned'
+	L['INVENTORY_SPENT'] = 'Spent'
+	L['INVENTORY_DEFICIT'] = 'Loss'
+	L['INVENTORY_PROFIT'] = 'Profit'
+	L['INVENTORY_SESSION'] = 'This session'
+	L['INVENTORY_CHARACTER'] = 'Character'
+	L['INVENTORY_GOLD_TOTAL'] = 'Total'
+end
+
+
+--[[ Map ]]
+
+do
+	L['MAP_MOVER_MINIMAP'] = 'Minimap'
+	L['MAP_CURSOR'] = 'Cursor'
+	L['MAP_REVEAL'] = 'Remove map fog'
+	L['MAP_PARAGON'] = 'Paragon'
+	L['MAP_NEW_MAIL'] = '<New Mail>'
+end
+
+
+--[[ Quest ]]
+
+do
+	L['QUEST_MOVER_TRACKER'] = 'Quest tracker'
+	L['QUEST_ACCEPT'] = 'Accept quest'
+	L['QUEST_AUTOMATION'] = 'Auto turn-in'
+end
 
 
 -- Tooltip
-L['TOOLTIP_AURA_FROM'] = 'Castby'
-L['TOOLTIP_RARE'] = 'Rare'
-L['TOOLTIP_SELL_PRICE'] = 'Sell price'
-L['TOOLTIP_STACK_CAP'] = 'Stack caps'
-L['TOOLTIP_AZERITE_TRAIT'] = 'Azerite trait'
-L['TOOLTIP_SECTION'] = 'Section'
-L['TOOLTIP_TARGETED'] = 'Targeted'
+do
+	L['TOOLTIP_MOVER'] = 'Tooltip'
+	L['TOOLTIP_RARE'] = 'Rare'
+	L['TOOLTIP_AURA_FROM'] = 'From'
+	L['TOOLTIP_SELL_PRICE'] = 'Sell Price'
+	L['TOOLTIP_STACK_CAP'] = 'Stack Limit'
+	L['TOOLTIP_ID_AZERITE_TRAIT'] = 'Azerite Traits'
+	L['TOOLTIP_BAG'] = 'Bag'
+	L['TOOLTIP_ID_SPELL'] = 'Spell ID'
+	L['TOOLTIP_ID_ITEM'] = 'Item ID'
+	L['TOOLTIP_ID_COMPANION'] = 'Pet ID'
+	L['TOOLTIP_ID_QUEST'] = 'Quest ID'
+	L['TOOLTIP_ID_TALENT'] = 'Talent ID'
+	L['TOOLTIP_ID_ACHIEVEMENT'] = 'Achievement ID'
+	L['TOOLTIP_ID_CURRENCY'] = 'Currency ID'
+	L['TOOLTIP_ID_VISUAL'] = 'Visual'
+	L['TOOLTIP_ID_SOURCE'] = 'Source'
+	L['TOOLTIP_SECTION'] = '段落'
+	L['TOOLTIP_TARGETED'] = 'Target'
+	L['TOOLTIP_ILVL'] = 'iLvl'
+end
 
+
+--[[ Unitframe ]]
+
+do
+	L['UNITFRAME_MOVER_INCOMING'] = 'Incoming damage and healing'
+	L['UNITFRAME_MOVER_OUTGOING'] = 'Outgoing damage and healing'
+	L['UNITFRAME_MOVER_CASTBAR'] = 'Castbar'
+	L['UNITFRAME_MOVER_PLAYER'] = 'Player frame'
+	L['UNITFRAME_MOVER_PET'] = 'Pet frame'
+	L['UNITFRAME_MOVER_TARGET'] = 'Target frame'
+	L['UNITFRAME_MOVER_TARGETTARGET'] = 'Target of Target frame'
+	L['UNITFRAME_MOVER_FOCUS'] = 'Focus frame'
+	L['UNITFRAME_MOVER_FOCUSTARGET'] = 'Focus target frame'
+	L['UNITFRAME_MOVER_BOSS'] = 'Boss Frame'
+	L['UNITFRAME_MOVER_ARENA'] = 'Arena frame'
+	L['UNITFRAME_MOVER_PARTY'] = 'Party frame'
+	L['UNITFRAME_MOVER_RAID'] = 'Raid frame'
+	L['UNITFRAME_CLICK_CAST_BINDING'] = 'Click-cast binding'
+	L['UNITFRAME_CLICK_CAST_TIP'] = 'Prompt'
+	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + any mouse click on the skill you want to bind.\nUse the bound shortcut key on the group frame to cast the skill.'
+	L['UNITFRAME_GHOST'] = 'Ghost'
+	L['UNITFRAME_OFFLINE'] = 'Offline'
+end
+
+
+
+--[[ Install ]]
+
+do
+	L['INSTALL_HEADER_HELLO'] = 'Hello'
+	L['INSTALL_BODY_WELCOME'] = 'Welcome to |cffe9c55dFreeUI|r!\n\nYou need to adjust some settings before you start using it to better work with |cffe9c55dFreeUI|r.\n\nClick the install button to enter the installation step.'
+	L['INSTALL_HEADER_BASIC'] = 'Basic Settings'
+	L['INSTALL_BODY_BASIC'] = 'These installation steps will adjust various suitable settings for |cffe9c55dFreeUI|r.\n\nThe first step will adjust some |cffe9c55dCVars|r settings.\n\nClick the continue button below to apply the settings, or click the skip button t o skip these settings.'
+	L['INSTALL_HEADER_UISCALE'] = 'UIScale'
+	L['INSTALL_BODY_UISCALE'] = 'This step will set the appropriate scale for the interface.'
+	L['INSTALL_HEADER_CHAT'] = 'Chat'
+	L['INSTALL_BODY_CHAT'] = 'This step will adjust settings related to the chat'
+	L['INSTALL_HEADER_ACTIONBAR'] = 'Actionbars'
+	L['INSTALL_BODY_ACTIONBAR'] = 'This step will adjust settings related to actionbars.'
+	L['INSTALL_HEADER_ADDON'] = 'Addons'
+	L['INSTALL_BODY_ADDON'] = 'This step will adjust the settings of |cffe9c55dDBM|r and |cffe9c55dSkada|r to match the interface style and layout of |cffe9c55dFreeUI|r.'
+	L['INSTALL_HEADER_COMPLETE'] = 'Success!'
+	L['INSTALL_BODY_COMPLETE'] = 'The installation has completed successfully.\n\nPlease click the Finish button below to reload the interface.\n\nRemember in the game you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/freeconfig|r to open the control panel and change various settings.'
+	L['INSTALL_BUTTON_INSTALL'] = 'Install'
+	L['INSTALL_BUTTON_SKIP'] = 'Skip'
+	L['INSTALL_BUTTON_CONTINUE'] = 'Continue'
+	L['INSTALL_BUTTON_FINISH'] = 'Finish'
+	L['INSTALL_BUTTON_CANCEL'] = 'Cancel'
+end
+
+
+
+
+--[[ GUI ]]
+
+do
+	L['GUI_TIPS'] = 'Prompt'
+	L['GUI_RELOAD_WARNING'] = '|cffff2020Reload UI to apply settings?|r'
+	L['GUI_RESET_WARNING'] = '|cffff2020Remove all saved options and reset to default values?|r'
+	L['GUI_PROFILE_WARNING'] = '|cffff2020Profile warning.|r'
+
+	L['GUI_THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
+	L['GUI_RESET_GOLD_COUNT'] = '|cffff2020Reset gold stats?|r'
+
+
+	L['GUI_AURA'] = 'Auras'
+	L['GUI_AURA_DESC'] = 'These options control settings related to auras'
+	L['GUI_AURA_SUB_BASIC'] = 'Basic setting'
+	L['GUI_AURA_ENABLE_AURA'] = 'Enable'
+	L['GUI_AURA_MARGIN'] = 'Margin'
+	L['GUI_AURA_OFFSET'] = 'Offset'
+	L['GUI_AURA_BUFF_REMINDER'] = 'Missing buff reminder'
+	L['GUI_AURA_BUFF_REMINDER_TIP'] = '\nReminds you of the missing self-buff aura\nFor Example, Mage Intelligence, Priest Stamina, Rogue Poison, etc.'
+	L['GUI_AURA_BUFF_SIZE'] = 'Buff icon size'
+	L['GUI_AURA_BUFFS_PER_ROW'] = 'Buffs per row'
+	L['GUI_AURA_REVERSE_BUFFS'] = 'Reverse buffs'
+	L['GUI_AURA_DEBUFF_SIZE'] = 'Debuff icon size'
+	L['GUI_AURA_DEBUFFS_PER_ROW'] = 'Debuffs per row'
+	L['GUI_AURA_REVERSE_DEBUFFS'] = 'Reverse debuffs'
+	L['GUI_AURA_AURA_SOURCE'] = 'Aura source'
+	L['GUI_AURA_SUB_ADJUSTMENT'] = 'Adjustment'
+
+	L['GUI_MISC_INVITE_KEYWORD'] = 'Keyword invitation'
+	L['GUI_MISC_INVITE_KEYWORD_TIP'] = 'After typing, press enter'
+
+	L['GUI_APPEARANCE'] = 'Appearance'
+	L['GUI_APPEARANCE_DESC'] = 'These options control most appearance-related settings.'
+	L['GUI_APPEARANCE_SUB_BASIC'] = 'Basic setting'
+
+	L['GUI_UNITFRAME_TEXTURE_STYLE'] = 'Texture style'
+	L['GUI_UNITFRAME_TEXTURE_NORM'] = 'Default'
+	L['GUI_UNITFRAME_TEXTURE_GRAD'] = 'Gradient'
+	L['GUI_UNITFRAME_TEXTURE_FLAT'] = 'Flat'
+
+
+
+	L['GUI_NUMBER_FORMAT'] = 'Number format'
+	L['GUI_NUMBER_FORMAT_EN'] = 'k/b/m'
+	L['GUI_NUMBER_FORMAT_CN'] = '万/亿/兆'
+
+	L['GUI_IMPORT_DATA_ERROR'] = 'Data is abnormal, import failed!'
+	L['GUI_IMPORT_DATA_WARNING'] = '|cffff2020Import data?|r'
+	L['GUI_DATA_INFO'] = 'Data information'
+	L['GUI_DATA_VERSION'] = 'Version'
+	L['GUI_DATA_CHARACTER'] = 'Character'
+	L['GUI_DATA_EXCEPTION'] = 'Abnormal data'
+	L['GUI_DATA_IMPORT'] = 'Import'
+	L['GUI_DATA_EXPORT'] = 'Export'
+	L['GUI_DATA_IMPORT_HEADER'] = 'Import string'
+	L['GUI_DATA_EXPORT_HEADER'] = 'Export string'
+	L['GUI_DATA_RESET'] = 'Reset data'
+	L['GUI_DATA_RESET_TIP'] = 'Clear the saved data of |cffe9c55dFreeUI|r and reset all options to the default values of |cffe9c55dFreeUI|r.'
+	L['GUI_DATA_IMPORT_TIP'] = 'Import config string of |cffe9c55dFreeUI|r.'
+	L['GUI_DATA_EXPORT_TIP'] = 'Export config string of |cffe9c55dFreeUI|r.'
+
+
+	L['GUI_MOVER_PANEL'] = 'Frame adjustment'
+	L['GUI_MOVER_GRID'] = 'Grid'
+	L['GUI_MOVER_RESET_ANCHOR'] = 'Reset frame position'
+	L['GUI_MOVER_HIDE_ELEMENT'] = 'Hide frame'
+	L['GUI_MOVER_TIPS'] = 'Prompt'
+	L['GUI_MOVER_RESET_WARNING'] = 'Do you want to reset all interface elements to their default positions?'
+	L['GUI_MOVER_CANCEL_WARNING'] = 'Do you want to cancel this operation?'
+end
 
 
 
 
 
 -- Slash commands
-L['RELOAD_CHECK'] = '|cffff2735|cffff2735You need to reload the UI to apply your changes.\n\nWould you like to do so now?|r|r'
+L['COMMANDS_LIST_HINT'] = 'Available commands:'
+L['COMMANDS_LIST'] = {
+	'/free install - Open installation panel',
+	'/free config - Open configuration panel',
+	'/free unlock - Unlock interface',
+	'/free reset - Reset all saved options to default values.',
 
-L['UIHELP'] = 'Type in /freeui for more help.'
+	'/free dps - Use default DPS layout',
+	'/free healer - Use a layout that is more friendly to healers',
+	'/free minimal - Use minimal mode, where avatar and actionbar are hidden by default.',
 
-L['SLASHCMD_HELP'] = {
-	'Slash commands:',
-	'/rl     - Reload UI',
-	'/rc     - Ready check',
-	'/rp     - Roll poll',
-
-	'/gm     - Open help panel',
-
-	'/gc     - Party/raid convert',
-	'/lg     - Leave group',
-
-	'/rs     - Reset instance',
-
-	'/ss     - Screenshot',
-
-	'/clear  - Clear chat',
-	'/tt     - Whisper to target',
-
-	'/spec   - Switch specialization',
-
-	'/freeui install - Open FreeUI install panel',
-	'/freeui config - Open FreeUI config panel',
-	'/freeui unlock - Unlock UI elements to move them',
-	'/freeui reset  - Reset all saved options data',
-	'/freeui clickcast  - Open click cast panel',
+	'/rl - Reload UI',
+	'/ss - Screenshots',
+	'/clear - Clear the chat window',
+	'/rc - Ready Check',
+	'/rp - 职责确认',
+	'/gc - 小队/团队转换',
+	'/lg - Leave group',
+	'/rs - 重置副本',
+	'/tt - Tell target',
+	'/spec - Switch spec',
+	'/bind - Bind keys',
+	'/gm - Opens the help panel',
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
