@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
+local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 
 ACTIONBAR.fader = {
@@ -201,6 +201,7 @@ local function UpdateExtraFader()
 		OffFrameHandler(button)
 	end
 end
+
 F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateExtraFader)
 F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateExtraFader)
 F:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateExtraFader)

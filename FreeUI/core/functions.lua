@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
-local strmatch, gmatch, strfind, format, gsub, utf8len, utf8sub = string.match, string.gmatch, string.find, string.format, string.gsub, string.utf8len, string.utf8sub
+local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
 local min, max, floor, rad, modf = math.min, math.max, math.floor, math.rad, math.modf
 local assets = C.Assets
 local backdropColor = {.03, .03, .03}
@@ -61,10 +61,10 @@ do
 			return format('|cffffffff%d|r', s/hour), s % hour -- white
 		elseif s >= minute then
 			return format('|cff1e84d0%d|r', s/minute), s % minute -- blue
-		elseif s > C.Actionbar.decimal_countdown then
+		elseif s > FreeDB.actionbar.decimal_countdown then
 			return format('|cffffe700%d|r', s), s - floor(s) -- yellow
 		else
-			if C.Actionbar.use_decimal then
+			if FreeDB.actionbar.use_decimal then
 				return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
 			else
 				return format('|cfffd3612%d|r', s + .5), s - floor(s)
@@ -196,31 +196,6 @@ do
 		if b == '' then r, g, b, a = a, r, g, 'ff' end
 
 		return tonumber(r, 16), tonumber(g, 16), tonumber(b, 16), tonumber(a, 16)
-	end
-
-	function F.TextGradient(text, ...)
-		local msg, len, idx = '', utf8len(text), 0
-
-		for i = 1, len do
-			local x = utf8sub(text, i, i)
-			if strmatch(x, '%s') then
-				msg = msg .. x
-				idx = idx + 1
-			else
-				local num = select('#', ...) / 3
-				local segment, relperc = modf((idx/len)*num)
-				local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
-
-				if not r2 then
-					msg = msg .. F.RGBToHex(r1, g1, b1, nil, x..'|r')
-				else
-					msg = msg .. F.RGBToHex(r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc, nil, x..'|r')
-					idx = idx + 1
-				end
-			end
-		end
-
-		return msg
 	end
 end
 

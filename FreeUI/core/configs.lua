@@ -45,47 +45,7 @@ local colors = F.oUF.colors
 
 
 
-C['Actionbar'] = {
-	['enable_actionbar'] = true,
-		['bar_padding'] = 3,
-		['button_margin'] = 3,
-		['button_size_small'] = 22,
-		['button_size_normal'] = 28,
-		['button_size_big'] = 38,
 
-		['button_hotkey'] = false,
-		['button_macro_name'] = false,
-		['button_count'] = false,
-		['button_class_color'] = false,
-		['button_range'] = true,
-
-		['bar1'] = true,
-			['bar1_visibility'] = '[petbattle] hide; show',
-			['bar1_fade'] = false,
-		['bar2'] = true,
-			['bar2_fade'] = false,
-		['bar3'] = true,
-			['bar3_divide'] = true,
-			['bar3_fade'] = false,
-		['bar4'] = false,
-			['bar4_fade'] = false,
-		['bar5'] = false,
-			['bar5_fade'] = false,
-		['pet_bar'] = false,
-			['pet_bar_fade'] = false,
-		['enable_stance_bar'] = false,
-			['stance_bar_fade'] = false,
-
-		['enable_cooldown'] = true,
-			['use_decimal'] = false,
-				['decimal_countdown'] = 3,
-			['ignore_weakauras'] = false,
-			['cd_pulse'] = true,
-				['ignored_spells'] = {
-					--GetSpellInfo(6807),	-- Maul
-					--GetSpellInfo(35395),	-- Crusader Strike
-				},
-}
 
 
 
@@ -454,7 +414,7 @@ C.CharacterSettings = {
 	['ui_anchor_temp'] = {},
 
 
-	['bind_type'] = 1,
+
 
 
 
@@ -578,12 +538,11 @@ C.CharacterSettings = {
 		['enable_unitframe'] = true,
 			['transparency'] = true,
 			['texture_style'] = 1,
-			['fader'] = true,
+			['combat_fader'] = true,
 			['color_smooth'] = false,
 			['portrait'] = true,
+			['class_color'] = true,
 
-			['range_check'] = true,
-				['range_check_alpha'] = 0.4,
 			['heal_prediction'] = true,
 			['over_absorb'] = true,
 			['gcd_spark'] = true,
@@ -668,7 +627,8 @@ C.CharacterSettings = {
 
 				['group_by_role'] = true,
 				['group_reverse'] = false,
-
+				['range_check'] = true,
+					['range_check_alpha'] = 0.4,
 				['group_click_cast'] = true,
 				['group_click_cast_filter'] = false,
 				['group_click_cast_config'] = {},
@@ -814,6 +774,52 @@ C.CharacterSettings = {
 				'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', '汐寒', 'wow.+兑换码', 'wow.+验证码', '【有爱插件】', '：.+>', '|Hspell.+=>'
 			},
 			['trash_clubs'] = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩'}
+	},
+
+	['actionbar'] = {
+		['enable_actionbar'] = true,
+			['bar_padding'] = 3,
+			['button_margin'] = 3,
+			['button_size_small'] = 22,
+			['button_size_normal'] = 28,
+			['button_size_big'] = 38,
+
+			['button_hotkey'] = false,
+			['button_macro_name'] = false,
+			['button_count'] = false,
+			['button_class_color'] = false,
+			['button_range'] = true,
+
+			['bar1'] = true,
+				['bar1_visibility'] = '[petbattle] hide; show',
+				['bar1_fade'] = false,
+			['bar2'] = true,
+				['bar2_fade'] = false,
+			['bar3'] = true,
+				['bar3_divide'] = true,
+				['bar3_fade'] = false,
+			['bar4'] = false,
+				['bar4_fade'] = false,
+			['bar5'] = false,
+				['bar5_fade'] = false,
+			['pet_bar'] = false,
+				['pet_bar_fade'] = false,
+			['enable_stance_bar'] = false,
+				['stance_bar_fade'] = false,
+
+			['bind_type'] = 1,
+
+			['enable_cooldown'] = true,
+				['use_decimal'] = true,
+					['decimal_countdown'] = 3,
+				['override_weakauras'] = true,
+				['cd_pulse'] = true,
+					['pulse_sound'] = false,
+					['pulse_sound_file'] = '',
+					['ignored_spells'] = {
+						--GetSpellInfo(6807),	-- Maul
+						--GetSpellInfo(35395),	-- Crusader Strike
+					},
 	}
 }
 
@@ -844,113 +850,172 @@ C.AccountSettings = {
 		['reskin_skada'] = true,
 	},
 
-	['class_colors'] = {
-		["DEATHKNIGHT"] = {
-			["b"] = 0.2274504750967026,
-			["colorStr"] = "ffc31d39",
-			["g"] = 0.117646798491478,
-			["r"] = 0.7686257362365723,
+	["reaction_colors"] = {
+	},
+
+	["power_colors"] = {
+		["PAIN"] = {
+			["b"] = 0,
+			["g"] = 0.611764705882353,
+			["r"] = 1,
+		},
+		["FURY"] = {
+			["b"] = 0.992,
+			["g"] = 0.259,
+			["r"] = 0.788,
+		},
+		["FOCUS"] = {
+			["b"] = 0.1529411764705883,
+			["colorStr"] = "fff06327",
+			["g"] = 0.3882352941176471,
+			["r"] = 0.9411764705882353,
+		},
+		["LUNAR_POWER"] = {
+			["b"] = 0.9,
+			["g"] = 0.52,
+			["r"] = 0.3,
+		},
+		["RAGE"] = {
+			["b"] = 0.196078431372549,
+			["colorStr"] = "ffdc3c32",
+			["g"] = 0.2352941176470588,
+			["r"] = 0.8627450980392157,
+		},
+		["MAELSTROM"] = {
+			["b"] = 1,
+			["g"] = 0.5,
+			["r"] = 0,
+		},
+		["MANA"] = {
+			["b"] = 0.93,
+			["g"] = 0.82,
+			["r"] = 0.46,
+		},
+		["RUNIC_POWER"] = {
+			["b"] = 1,
+			["g"] = 0.82,
+			["r"] = 0,
+		},
+		["INSANITY"] = {
+			["b"] = 0.8,
+			["g"] = 0,
+			["r"] = 0.4,
+		},
+		["ENERGY"] = {
+			["b"] = 0.4549019607843137,
+			["colorStr"] = "ffe9c374",
+			["g"] = 0.7647058823529411,
+			["r"] = 0.9137254901960784,
+		},
+	},
+
+	["class_colors"] = {
+		["HUNTER"] = {
+			["r"] = 0.1529411764705883,
+			["colorStr"] = "ff27b61f",
+			["g"] = 0.7137254901960784,
+			["b"] = 0.1215686274509804,
 		},
 		["WARRIOR"] = {
-			["b"] = 0.4274509803921568,
-			["colorStr"] = "ffc69b6d",
-			["g"] = 0.6078431372549019,
 			["r"] = 0.7764705882352941,
+			["colorStr"] = "ffc6925f",
+			["g"] = 0.5725490196078431,
+			["b"] = 0.3725490196078432,
 		},
 		["PALADIN"] = {
-			["b"] = 0.7294101715087891,
-			["colorStr"] = "fff38bb9",
-			["g"] = 0.549018383026123,
-			["r"] = 0.9568606615066528,
+			["r"] = 0.9568627450980391,
+			["colorStr"] = "fff3547d",
+			["g"] = 0.3294117647058824,
+			["b"] = 0.4901960784313725,
 		},
 		["MAGE"] = {
-			["b"] = 0.9176450371742249,
-			["colorStr"] = "ff3ec5e9",
-			["g"] = 0.7764688730239868,
-			["r"] = 0.2470582872629166,
+			["r"] = 0.4313725490196079,
+			["colorStr"] = "ff6eb2e2",
+			["g"] = 0.6980392156862745,
+			["b"] = 0.8862745098039215,
 		},
 		["PRIEST"] = {
-			["b"] = 0.9999977946281433,
-			["colorStr"] = "fffefefe",
-			["g"] = 0.9999977946281433,
-			["r"] = 0.9999977946281433,
+			["r"] = 0.8941176470588235,
+			["colorStr"] = "ffe3e3e3",
+			["g"] = 0.8941176470588235,
+			["b"] = 0.8941176470588235,
 		},
 		["SHAMAN"] = {
-			["b"] = 0.8666647672653198,
-			["colorStr"] = "ff006fdc",
-			["g"] = 0.4392147064208984,
-			["r"] = 0,
+			["r"] = 0.3647058823529412,
+			["colorStr"] = "ff5d6ddd",
+			["g"] = 0.4274509803921568,
+			["b"] = 0.8666666666666667,
 		},
 		["WARLOCK"] = {
-			["b"] = 0.9294097423553467,
-			["colorStr"] = "ff8686ec",
-			["g"] = 0.5294106006622314,
-			["r"] = 0.5294106006622314,
+			["r"] = 0.7137254901960784,
+			["colorStr"] = "ffb6aae0",
+			["g"] = 0.6666666666666666,
+			["b"] = 0.8784313725490196,
 		},
 		["DEMONHUNTER"] = {
-			["b"] = 0.7882335782051086,
-			["colorStr"] = "ffa22fc8",
-			["g"] = 0.188234880566597,
-			["r"] = 0.639214277267456,
+			["r"] = 0.8862745098039215,
+			["colorStr"] = "ffe23bdf",
+			["g"] = 0.2313725490196079,
+			["b"] = 0.8745098039215686,
 		},
 		["ROGUE"] = {
-			["b"] = 0.4078422486782074,
-			["colorStr"] = "fffef367",
-			["g"] = 0.9568606615066528,
-			["r"] = 0.9999977946281433,
+			["r"] = 0.9411764705882353,
+			["colorStr"] = "fff0de79",
+			["g"] = 0.8705882352941177,
+			["b"] = 0.4784313725490196,
 		},
 		["DRUID"] = {
-			["b"] = 0.03921560198068619,
-			["colorStr"] = "fffe7b09",
-			["g"] = 0.4862734377384186,
-			["r"] = 0.9999977946281433,
+			["r"] = 0.9529411764705882,
+			["colorStr"] = "fff38e3f",
+			["g"] = 0.5568627450980392,
+			["b"] = 0.2470588235294118,
 		},
 		["MONK"] = {
-			["b"] = 0.588234007358551,
-			["colorStr"] = "ff00fe95",
-			["g"] = 0.9999977946281433,
-			["r"] = 0,
+			["r"] = 0.2392156862745098,
+			["colorStr"] = "ff3cd9a6",
+			["g"] = 0.8509803921568627,
+			["b"] = 0.6509803921568628,
 		},
-		["HUNTER"] = {
-			["b"] = 0.447057843208313,
-			["colorStr"] = "ffa9d271",
-			["g"] = 0.8274491429328918,
-			["r"] = 0.6666651964187622,
-		},
-	},
-
-	['power_colors'] = {
-		['MANA'] = {r = 0.46, g = 0.82, b = 0.93},
-		['RAGE'] = {r = 1.00, g = 0.00, b = 0.00},
-		['FOCUS'] = {r = 1.00, g = 0.50, b = 0.25},
-		['ENERGY'] = {r = 1.00, g = 1.00, b = 0.00},
-		['RUNIC_POWER'] = {r = 0.00, g = 0.82, b = 1.00},
-		['LUNAR_POWER'] = {r = 0.30, g = 0.52, b = 0.90},
-		['MAELSTROM'] = {r = 0.00, g = 0.50, b = 1.00},
-		['INSANITY'] = {r = 0.40, g = 0, b = 0.80},
-		['FURY'] = {r = 0.788, g = 0.259, b = 0.992},
-		['PAIN'] = {r = 255/255, g = 156/255, b = 0},
-	},
-
-	['class_power_colors'] = {
-		['combo_points'] = {
-			r = 1.00, g = 0.96, b = 0.41
-		},
-		['chi_orbs'] = {
-			r = 0.71, g = 1.0, b = 0.92
-		},
-		['soul_shards'] = {
-			r = 0.50, g = 0.32, b = 0.55
-		},
-		['arcane_charges'] = {
-			r = 0.1, g = 0.1, b = 0.98
-		},
-		['holy_power'] = {
-			r = 0.95, g = 0.90, b = 0.60
+		["DEATHKNIGHT"] = {
+			["r"] = 0.7686274509803921,
+			["colorStr"] = "ffc31d36",
+			["g"] = 0.1137254901960784,
+			["b"] = 0.2117647058823529,
 		},
 	},
 
-	['reaction_colors'] = {},
+	["class_power_colors"] = {
+		["soul_shards"] = {
+			["b"] = 0.8,
+			["colorStr"] = "ffde3ecc",
+			["g"] = 0.2431372549019608,
+			["r"] = 0.8705882352941177,
+		},
+		["chi_orbs"] = {
+			["b"] = 0.7647058823529411,
+			["colorStr"] = "ff7fe3c3",
+			["g"] = 0.8941176470588235,
+			["r"] = 0.4980392156862745,
+		},
+		["arcane_charges"] = {
+			["b"] = 0.9058823529411765,
+			["colorStr"] = "ff4e86e7",
+			["g"] = 0.5254901960784314,
+			["r"] = 0.3058823529411765,
+		},
+		["holy_power"] = {
+			["b"] = 0.5333333333333333,
+			["colorStr"] = "fff2d388",
+			["g"] = 0.8313725490196078,
+			["r"] = 0.9490196078431372,
+		},
+		["combo_points"] = {
+			["b"] = 0.2235294117647059,
+			["colorStr"] = "ffee4838",
+			["g"] = 0.2823529411764706,
+			["r"] = 0.9333333333333333,
+		},
+	},
 
 }
 

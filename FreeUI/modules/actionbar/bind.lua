@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR, cfg = F:GetModule('ACTIONBAR'), C.Actionbar
+local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 
 local _G = _G
@@ -236,10 +236,10 @@ end
 
 function ACTIONBAR:Bind_Deactivate(save)
 	if save == true then
-		SaveBindings(FreeDB['bind_type'])
+		SaveBindings(FreeDB.actionbar.bind_type)
 		F.Print(C.GreenColor..L['ACTIONBAR_SAVE_KEYBINDS'])
 	else
-		LoadBindings(FreeDB['bind_type'])
+		LoadBindings(FreeDB.actionbar.bind_type)
 		F.Print(C.GreenColor..L['ACTIONBAR_DISCARD_KEYBINDS'])
 	end
 
@@ -272,10 +272,10 @@ function ACTIONBAR:Bind_CreateDialog()
 		ACTIONBAR:Bind_Deactivate()
 	end)
 	local box = F.CreateCheckBox(frame)
-	box:SetChecked(FreeDB['bind_type'] == 2)
+	box:SetChecked(FreeDB.actionbar.bind_type == 2)
 	box:SetPoint('RIGHT', text, 'LEFT', -5, -0)
 	box:SetScript('OnClick', function(self)
-		FreeDB['bind_type'] = self:GetChecked() and 2 or 1
+		FreeDB.actionbar.bind_type = self:GetChecked() and 2 or 1
 	end)
 
 	ACTIONBAR.keybindDialog = frame

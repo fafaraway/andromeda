@@ -1,22 +1,6 @@
-<Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='misc.lua'/>
-
-	<Script file='alreadyknown.lua'/>
-
-
-
-
-	<Script file='grouptool.lua'/>
-
-	<Script file='logo.lua'/>
-	<Script file='itemlevel.lua'/>
-
-
-	<Script file='reputation.lua'/>
-
-
-
-
-	<Script file='invite.lua'/>
-
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="misc.lua"/>
+	<Script file="AlreadyKnown.lua"/>
+	<Script file="DragEmAll.lua"/>
+	<Script file="itemlevel.lua"/>
 </Ui>

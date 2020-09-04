@@ -1,6 +1,6 @@
-local _, ns = ...
-local oUF = ns.oUF
-local F, C = unpack(ns)
+local F, C = unpack(select(2, ...))
+local UNITFRAME = F:GetModule('UNITFRAME')
+local oUF = F.oUF
 
 
 local strmatch, gmatch = string.match, string.gmatch
@@ -153,8 +153,8 @@ local function UpdateAlpha(obj)
 		obj.outsideRangeAlpha = alpha * obj.outsideRangeAlphaPerc
     end
 
+	F:UIFrameFadeIn(obj, 0.3, obj:GetAlpha(), alpha)
 
-    F:UIFrameFadeIn(obj, 0.3, obj:GetAlpha(), alpha)
 
     --[[ obj:SetScript("OnEnter", function(self)
         F:UIFrameFadeIn(self, 0.3, self:GetAlpha(), 1)

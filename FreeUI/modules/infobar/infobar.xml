@@ -1,9 +1,9 @@
-<Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='infobar.lua'/>
-	<Script file='stats.lua'/>
-	<Script file='spec.lua'/>
-	<Script file='durability.lua'/>
-	<Script file='guild.lua'/>
-	<Script file='friend.lua'/>
-	<Script file='report.lua'/>
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="infobar.lua"/>
+	<Script file="stats.lua"/>
+	<Script file="spec.lua"/>
+	<Script file="durability.lua"/>
+	<Script file="guild.lua"/>
+	<Script file="friend.lua"/>
+	<Script file="report.lua"/>
 </Ui>

@@ -122,6 +122,10 @@ local function SetupCombatText()
 	GUI:ToggleSidePanel('combatTextSide')
 end
 
+local function SetupClassColor()
+	GUI:ToggleSidePanel('classColorSide')
+end
+
 -- combat
 local function SetupHealthThreshold()
 	GUI:ToggleSidePanel('healthThresholdSide')
@@ -648,137 +652,113 @@ local function AuraOptions()
 end
 
 local function ActionbarOptions()
-	local parent = FreeUIOptionsFrame.Actionbar
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Spell_Holy_SearingLightPriest')
+	local parent = FreeUI_GUI[7]
 
-	local basic = GUI:AddSubCategory(parent, 'GUI.localization.actionbar.sub_basic')
+	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'enable', nil, SetupActionbarSize)
+	local enable = GUI:CreateCheckBox(parent, 'actionbar', 'enable_actionbar', nil, SetupActionbarSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-
-
-	local class = GUI:CreateCheckBox(parent, 'button_class_color')
+	local class = GUI:CreateCheckBox(parent, 'actionbar', 'button_class_color')
 	class:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local range = GUI:CreateCheckBox(parent, 'button_range')
+	local range = GUI:CreateCheckBox(parent, 'actionbar', 'button_range')
 	range:SetPoint('LEFT', class, 'RIGHT', 160, 0)
 
-
-
-	local hotkey = GUI:CreateCheckBox(parent, 'button_hotkey')
+	local hotkey = GUI:CreateCheckBox(parent, 'actionbar', 'button_hotkey')
 	hotkey:SetPoint('TOPLEFT', class, 'BOTTOMLEFT', 0, -8)
 
-	local macro = GUI:CreateCheckBox(parent, 'button_macro_name')
+	local macro = GUI:CreateCheckBox(parent, 'actionbar', 'button_macro_name')
 	macro:SetPoint('LEFT', hotkey, 'RIGHT', 160, 0)
 
-	local count = GUI:CreateCheckBox(parent, 'button_count')
+	local count = GUI:CreateCheckBox(parent, 'actionbar', 'button_count')
 	count:SetPoint('TOPLEFT', hotkey, 'BOTTOMLEFT', 0, -8)
 
-
-
-	local cooldown = GUI:CreateCheckBox(parent, 'enable_cooldown', nil, SetupCooldown)
+	local cooldown = GUI:CreateCheckBox(parent, 'actionbar', 'enable_cooldown', nil, SetupCooldown)
 	cooldown:SetPoint('LEFT', count, 'RIGHT', 160, 0)
 
-	local extra = GUI:AddSubCategory(parent, 'GUI.localization.actionbar.sub_extra')
+	local extra = GUI:AddSubCategory(parent)
 	extra:SetPoint('TOPLEFT', count, 'BOTTOMLEFT', 0, -16)
 
-	local bar1 = GUI:CreateCheckBox(parent, 'bar1')
+	local bar1 = GUI:CreateCheckBox(parent, 'actionbar', 'bar1')
 	bar1:SetPoint('TOPLEFT', extra, 'BOTTOMLEFT', 0, -8)
 
-	local bar1Fade = GUI:CreateCheckBox(parent, 'bar1_fade')
+	local bar1Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar1_fade')
 	bar1Fade:SetPoint('LEFT', bar1, 'RIGHT', 160, 0)
 
 	bar1.children = {bar1Fade}
 
-	local bar2 = GUI:CreateCheckBox(parent, 'bar2')
+	local bar2 = GUI:CreateCheckBox(parent, 'actionbar', 'bar2')
 	bar2:SetPoint('TOPLEFT', bar1, 'BOTTOMLEFT', 0, -8)
 
-	local bar2Fade = GUI:CreateCheckBox(parent, 'bar2_fade')
+	local bar2Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar2_fade')
 	bar2Fade:SetPoint('LEFT', bar2, 'RIGHT', 160, 0)
 
 	bar2.children = {bar2Fade}
 
-	local bar3 = GUI:CreateCheckBox(parent, 'bar3')
+	local bar3 = GUI:CreateCheckBox(parent, 'actionbar', 'bar3')
 	bar3:SetPoint('TOPLEFT', bar2, 'BOTTOMLEFT', 0, -8)
 
-	local bar3Fade = GUI:CreateCheckBox(parent, 'bar3_fade')
+	local bar3Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar3_fade')
 	bar3Fade:SetPoint('LEFT', bar3, 'RIGHT', 160, 0)
 
 	bar3.children = {bar3Fade}
 
-	local bar4 = GUI:CreateCheckBox(parent, 'bar4')
+	local bar4 = GUI:CreateCheckBox(parent, 'actionbar', 'bar4')
 	bar4:SetPoint('TOPLEFT', bar3, 'BOTTOMLEFT', 0, -8)
 
-	local bar4Fade = GUI:CreateCheckBox(parent, 'bar4_fade')
+	local bar4Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar4_fade')
 	bar4Fade:SetPoint('LEFT', bar4, 'RIGHT', 160, 0)
 
 	bar4.children = {bar4Fade}
 
-	local bar5 = GUI:CreateCheckBox(parent, 'bar5')
+	local bar5 = GUI:CreateCheckBox(parent, 'actionbar', 'bar5')
 	bar5:SetPoint('TOPLEFT', bar4, 'BOTTOMLEFT', 0, -8)
 
-	local bar5Fade = GUI:CreateCheckBox(parent, 'bar5_fade')
+	local bar5Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar5_fade')
 	bar5Fade:SetPoint('LEFT', bar5, 'RIGHT', 160, 0)
 
 	bar5.children = {bar5Fade}
 
-	local petBar = GUI:CreateCheckBox(parent, 'pet_bar')
+	local petBar = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar')
 	petBar:SetPoint('TOPLEFT', bar5, 'BOTTOMLEFT', 0, -8)
 
-	local petBarFade = GUI:CreateCheckBox(parent, 'pet_bar_fade')
+	local petBarFade = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar_fade')
 	petBarFade:SetPoint('LEFT', petBar, 'RIGHT', 160, 0)
 
 	petBar.children = {petBarFade}
 
 
-	local cooldownSide = GUI:CreateSidePanel(parent, 'cooldownSide', 'GUI.localization.inventory.sub_adjustment')
+	local cooldownSide = GUI:CreateSidePanel(parent, 'cooldownSide')
 
-	local ignoreWA = GUI:CreateCheckBox(parent, 'ignore_weakauras')
-	ignoreWA:SetParent(cooldownSide)
-	ignoreWA:SetPoint('TOPLEFT', cooldownSide, 'TOPLEFT', 20, -60)
+	local overrideWA = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'override_weakauras')
+	overrideWA:SetPoint('TOPLEFT', cooldownSide.child, 'TOPLEFT', 10, -16)
 
-	local cdPulse = GUI:CreateCheckBox(parent, 'cd_pulse')
-	cdPulse:SetParent(cooldownSide)
-	cdPulse:SetPoint('TOPLEFT', ignoreWA, 'BOTTOMLEFT', 0, -8)
+	local cdPulse = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'cd_pulse')
+	cdPulse:SetPoint('TOP', overrideWA, 'BOTTOM', 0, -8)
 
+	local useDecimal = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'use_decimal')
+	useDecimal:SetPoint('TOP', cdPulse, 'BOTTOM', 0, -8)
 
-
-	local useDecimal = GUI:CreateCheckBox(parent, 'use_decimal')
-	useDecimal:SetParent(cooldownSide)
-	useDecimal:SetPoint('TOPLEFT', cdPulse, 'BOTTOMLEFT', 0, -8)
-
-	local decimalCooldown = GUI:CreateSlider(parent, 'decimal_countdown', 1, 10, 1, 10, 1, nil, true)
-	decimalCooldown:SetParent(cooldownSide)
-	decimalCooldown:SetPoint('TOP', cooldownSide, 'TOP', 0, -160)
+	local decimalCooldown = GUI:CreateSlider(cooldownSide, 'actionbar', 'decimal_countdown', nil, {1, 10, 1})
+	decimalCooldown:SetPoint('TOP', cooldownSide.child, 'TOP', 0, -120)
 
 
 
+	local actionbarSizeSide = GUI:CreateSidePanel(parent, 'actionbarSizeSide')
 
+	local buttonSizeSmall = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_size_small', nil, {20, 50, 1})
+	buttonSizeSmall:SetPoint('TOP', actionbarSizeSide.child, 'TOP', 0, -24)
 
+	local buttonSizeNormal = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_size_normal', nil, {20, 50, 1})
+	buttonSizeNormal:SetPoint('TOP', buttonSizeSmall, 'BOTTOM', 0, -48)
 
+	local buttonSizeBig = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_size_big', nil, {20, 50, 1})
+	buttonSizeBig:SetPoint('TOP', buttonSizeNormal, 'BOTTOM', 0, -48)
 
-
-
-
-	local actionbarSizeSide = GUI:CreateSidePanel(parent, 'actionbarSizeSide', 'GUI.localization.inventory.sub_adjustment')
-
-	local buttonSizeSmall = GUI:CreateSlider(parent, 'button_size_small', 20, 50, 20, 50, 1, nil, true)
-	buttonSizeSmall:SetParent(actionbarSizeSide)
-	buttonSizeSmall:SetPoint('TOP', actionbarSizeSide, 'TOP', 0, -80)
-
-	local buttonSizeNormal = GUI:CreateSlider(parent, 'button_size_normal', 20, 50, 20, 50, 1, nil, true)
-	buttonSizeNormal:SetParent(buttonSizeSmall)
-	buttonSizeNormal:SetPoint('TOP', buttonSizeSmall, 'BOTTOM', 0, -60)
-
-	local buttonSizeBig = GUI:CreateSlider(parent, 'button_size_big', 20, 50, 20, 50, 1, nil, true)
-	buttonSizeBig:SetParent(actionbarSizeSide)
-	buttonSizeBig:SetPoint('TOP', buttonSizeNormal, 'BOTTOM', 0, -60)
-
-	local buttonMargin = GUI:CreateSlider(parent, 'button_margin', 0, 10, 0, 10, 1, nil, true)
-	buttonMargin:SetParent(actionbarSizeSide)
-	buttonMargin:SetPoint('TOP', buttonSizeBig, 'BOTTOM', 0, -60)
+	local buttonMargin = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_margin', nil, {0, 10, 1})
+	buttonMargin:SetPoint('TOP', buttonSizeBig, 'BOTTOM', 0, -48)
 end
 
 local function CombatOptions()
@@ -1164,41 +1144,23 @@ local function UnitframeOptions()
 	local transparency = GUI:CreateCheckBox(parent, 'unitframe', 'transparency')
 	transparency:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'fader')
-	fader:SetPoint('LEFT', transparency, 'RIGHT', 160, 0)
-
 	local portrait = GUI:CreateCheckBox(parent, 'unitframe', 'portrait')
-	portrait:SetPoint('TOPLEFT', transparency, 'BOTTOMLEFT', 0, -8)
+	portrait:SetPoint('LEFT', transparency, 'RIGHT', 160, 0)
 
-	local colorSmooth = GUI:CreateCheckBox(parent, 'unitframe', 'color_smooth')
-	colorSmooth:SetPoint('LEFT', portrait, 'RIGHT', 160, 0)
+	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'combat_fader')
+	fader:SetPoint('TOPLEFT', transparency, 'BOTTOMLEFT', 0, -8)
 
 	local rangeCheck = GUI:CreateCheckBox(parent, 'unitframe', 'range_check', nil, SetupRangeCheckAlpha)
-	rangeCheck:SetPoint('TOPLEFT', portrait, 'BOTTOMLEFT', 0, -8)
+	rangeCheck:SetPoint('LEFT', fader, 'RIGHT', 160, 0)
 
-	local gcdSpark = GUI:CreateCheckBox(parent, 'unitframe', 'gcd_spark')
-	gcdSpark:SetPoint('LEFT', rangeCheck, 'RIGHT', 160, 0)
+	local colorSmooth = GUI:CreateCheckBox(parent, 'unitframe', 'color_smooth')
+	colorSmooth:SetPoint('TOPLEFT', fader, 'BOTTOMLEFT', 0, -8)
 
-	local healPrediction = GUI:CreateCheckBox(parent, 'unitframe', 'heal_prediction')
-	healPrediction:SetPoint('TOPLEFT', rangeCheck, 'BOTTOMLEFT', 0, -8)
-
-	local overAbsorb = GUI:CreateCheckBox(parent, 'unitframe', 'over_absorb')
-	overAbsorb:SetPoint('LEFT', healPrediction, 'RIGHT', 160, 0)
-
-	local debuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'target_debuffs_by_player')
-	debuffsByPlayer:SetPoint('TOPLEFT', healPrediction, 'BOTTOMLEFT', 0, -8)
-
-	local classPowerBar = GUI:CreateCheckBox(parent, 'unitframe', 'class_power_bar', nil, SetupClassPower)
-	classPowerBar:SetPoint('LEFT', debuffsByPlayer, 'RIGHT', 160, 0)
-
-	local staggerBar = GUI:CreateCheckBox(parent, 'unitframe', 'stagger_bar')
-	staggerBar:SetPoint('TOPLEFT', debuffsByPlayer, 'BOTTOMLEFT', 0, -8)
-
-	local totemsBar = GUI:CreateCheckBox(parent, 'unitframe', 'totems_bar')
-	totemsBar:SetPoint('LEFT', staggerBar, 'RIGHT', 160, 0)
+	local classColor = GUI:CreateCheckBox(parent, 'unitframe', 'class_color', nil, SetupClassColor)
+	classColor:SetPoint('LEFT', colorSmooth, 'RIGHT', 160, 0)
 
 	local powerBar = GUI:CreateCheckBox(parent, 'unitframe', 'power_bar', nil, SetupPower)
-	powerBar:SetPoint('TOPLEFT', staggerBar, 'BOTTOMLEFT', 0, -8)
+	powerBar:SetPoint('TOPLEFT', colorSmooth, 'BOTTOMLEFT', 0, -8)
 
 	local altPower = GUI:CreateCheckBox(parent, 'unitframe', 'alt_power', nil, SetupAltPower)
 	altPower:SetPoint('LEFT', powerBar, 'RIGHT', 160, 0)
@@ -1206,12 +1168,33 @@ local function UnitframeOptions()
 	local fct = GUI:CreateCheckBox(parent, 'unitframe', 'combat_text', nil, SetupCombatText)
 	fct:SetPoint('TOPLEFT', powerBar, 'BOTTOMLEFT', 0, -8)
 
+	local gcdSpark = GUI:CreateCheckBox(parent, 'unitframe', 'gcd_spark')
+	gcdSpark:SetPoint('LEFT', fct, 'RIGHT', 160, 0)
+
+	local healPrediction = GUI:CreateCheckBox(parent, 'unitframe', 'heal_prediction')
+	healPrediction:SetPoint('TOPLEFT', fct, 'BOTTOMLEFT', 0, -8)
+
+	local overAbsorb = GUI:CreateCheckBox(parent, 'unitframe', 'over_absorb')
+	overAbsorb:SetPoint('LEFT', healPrediction, 'RIGHT', 160, 0)
+
+	local classPowerBar = GUI:CreateCheckBox(parent, 'unitframe', 'class_power_bar', nil, SetupClassPower)
+	classPowerBar:SetPoint('TOPLEFT', healPrediction, 'BOTTOMLEFT', 0, -8)
+
+	local staggerBar = GUI:CreateCheckBox(parent, 'unitframe', 'stagger_bar')
+	staggerBar:SetPoint('LEFT', classPowerBar, 'RIGHT', 160, 0)
+
+	local totemsBar = GUI:CreateCheckBox(parent, 'unitframe', 'totems_bar')
+	totemsBar:SetPoint('TOPLEFT', classPowerBar, 'BOTTOMLEFT', 0, -8)
+
 	local hideTags = GUI:CreateCheckBox(parent, 'unitframe', 'player_hide_tags')
-	hideTags:SetPoint('LEFT', fct, 'RIGHT', 160, 0)
+	hideTags:SetPoint('LEFT', totemsBar, 'RIGHT', 160, 0)
+
+	local debuffsByPlayer = GUI:CreateCheckBox(parent, 'unitframe', 'target_debuffs_by_player')
+	debuffsByPlayer:SetPoint('TOPLEFT', totemsBar, 'BOTTOMLEFT', 0, -8)
 
 
 	local castbar = GUI:AddSubCategory(parent)
-	castbar:SetPoint('TOPLEFT', fct, 'BOTTOMLEFT', 0, -16)
+	castbar:SetPoint('TOPLEFT', debuffsByPlayer, 'BOTTOMLEFT', 0, -16)
 
 	local enableCastbar = GUI:CreateCheckBox(parent, 'unitframe', 'enable_castbar', nil, SetupCastbarColor)
 	enableCastbar:SetPoint('TOPLEFT', castbar, 'BOTTOMLEFT', 0, -8)
@@ -1258,26 +1241,8 @@ local function UnitframeOptions()
 	local threatIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_threat_indicator')
 	threatIndicator:SetPoint('LEFT', groupColorSmooth, 'RIGHT', 160, 0)
 
-	local leaderIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_leader_indicator')
-	leaderIndicator:SetPoint('TOPLEFT', groupColorSmooth, 'BOTTOMLEFT', 0, -8)
-
-	local roleIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_role_indicator')
-	roleIndicator:SetPoint('LEFT', leaderIndicator, 'RIGHT', 160, 0)
-
-	local summonIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_summon_indicator')
-	summonIndicator:SetPoint('TOPLEFT', leaderIndicator, 'BOTTOMLEFT', 0, -8)
-
-	local phaseIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_phase_indicator')
-	phaseIndicator:SetPoint('LEFT', summonIndicator, 'RIGHT', 160, 0)
-
-	local readyCheckIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_ready_check_indicator')
-	readyCheckIndicator:SetPoint('TOPLEFT', summonIndicator, 'BOTTOMLEFT', 0, -8)
-
-	local resurrectIndicator = GUI:CreateCheckBox(parent, 'unitframe', 'group_resurrect_indicator')
-	resurrectIndicator:SetPoint('LEFT', readyCheckIndicator, 'RIGHT', 160, 0)
-
 	local cornerBuffs = GUI:CreateCheckBox(parent, 'unitframe', 'group_corner_buffs')
-	cornerBuffs:SetPoint('TOPLEFT', readyCheckIndicator, 'BOTTOMLEFT', 0, -8)
+	cornerBuffs:SetPoint('TOPLEFT', groupColorSmooth, 'BOTTOMLEFT', 0, -8)
 
 	local debuffHighlight = GUI:CreateCheckBox(parent, 'unitframe', 'group_debuff_highlight')
 	debuffHighlight:SetPoint('LEFT', cornerBuffs, 'RIGHT', 160, 0)
@@ -1438,44 +1403,44 @@ local function UnitframeOptions()
 	failColor:SetPoint('TOP', completeColor, 'BOTTOM', 0, -16)
 
 
+	-- class color side panel
+	local classColorSide = GUI:CreateSidePanel(parent, 'classColorSide')
 
-	local deathknight = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'DEATHKNIGHT')
-	deathknight:SetPoint('TOP', failColor, 'BOTTOM', 0, -46)
+	local deathknight = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'DEATHKNIGHT')
+	deathknight:SetPoint('TOPLEFT', classColorSide.child, 'TOPLEFT', 10, -10)
 
-	local warrior = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'WARRIOR')
+	local warrior = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'WARRIOR')
 	warrior:SetPoint('TOP', deathknight, 'BOTTOM', 0, -16)
 
-	local paladin = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'PALADIN')
+	local paladin = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'PALADIN')
 	paladin:SetPoint('TOP', warrior, 'BOTTOM', 0, -16)
 
-	local mage = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'MAGE')
+	local mage = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'MAGE')
 	mage:SetPoint('TOP', paladin, 'BOTTOM', 0, -16)
 
-	local priest = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'PRIEST')
+	local priest = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'PRIEST')
 	priest:SetPoint('TOP', mage, 'BOTTOM', 0, -16)
 
-	local hunter = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'HUNTER')
+	local hunter = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'HUNTER')
 	hunter:SetPoint('TOP', priest, 'BOTTOM', 0, -16)
 
-	local warlock = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'WARLOCK')
+	local warlock = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'WARLOCK')
 	warlock:SetPoint('TOP', hunter, 'BOTTOM', 0, -16)
 
-	local demonhunter = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'DEMONHUNTER')
+	local demonhunter = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'DEMONHUNTER')
 	demonhunter:SetPoint('TOP', warlock, 'BOTTOM', 0, -16)
 
-	local rogue = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'ROGUE')
+	local rogue = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'ROGUE')
 	rogue:SetPoint('TOP', demonhunter, 'BOTTOM', 0, -16)
 
-	local druid = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'DRUID')
+	local druid = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'DRUID')
 	druid:SetPoint('TOP', rogue, 'BOTTOM', 0, -16)
 
-	local monk = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'MONK')
+	local monk = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'MONK')
 	monk:SetPoint('TOP', druid, 'BOTTOM', 0, -16)
 
-	local shaman = GUI:CreateColorSwatch(castbarColorSide, 'CLASSCOLORS', 'SHAMAN')
+	local shaman = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'SHAMAN')
 	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
-
-
 
 
 
@@ -1626,7 +1591,7 @@ end
 
 function GUI:AddOptions()
 	--addGeneralOptions()
-	-- addActionbarOptions()
+	ActionbarOptions()
 
 	AppearanceOptions()
 

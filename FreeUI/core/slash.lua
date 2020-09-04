@@ -106,8 +106,6 @@ SlashCmdList.FREEUI = function(cmd)
 		else
 			UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT)
 		end
-
-
 	elseif cmd == 'help' then
 		printCommandsList()
 	elseif cmd == 'ver' or cmd == 'version' then

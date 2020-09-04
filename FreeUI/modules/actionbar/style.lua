@@ -119,7 +119,7 @@ local function SetupBackdrop(button)
 	F.CreateBD(button)
 	F.CreateTex(button)
 	F.CreateSD(button)
-	if C.Actionbar.button_class_color then
+	if FreeDB.actionbar.button_class_color then
 		button:SetBackdropColor(C.r, C.g, C.b, .5)
 		button:SetBackdropBorderColor(C.r, C.g, C.b)
 	else
@@ -154,7 +154,7 @@ local replaces = {
 
 function ACTIONBAR:UpdateHotKey()
 	local hotkey = _G[self:GetName()..'HotKey']
-	if hotkey and hotkey:IsShown() and not C.Actionbar.button_hotkey then
+	if hotkey and hotkey:IsShown() and not FreeDB.actionbar.button_hotkey then
 		hotkey:Hide()
 		return
 	end
@@ -226,7 +226,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	local overlay = CreateFrame('Frame', nil, button)
 	overlay:SetAllPoints()
 	if count then
-		if C.Actionbar.button_count then
+		if FreeDB.actionbar.button_count then
 			count:SetParent(overlay)
 			SetupFontString(count, cfg.count)
 		else
@@ -234,7 +234,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 		end
 	end
 	if hotkey then
-		if C.Actionbar.button_hotkey then
+		if FreeDB.actionbar.button_hotkey then
 			hotkey:SetParent(overlay)
 			ACTIONBAR.UpdateHotKey(button)
 			SetupFontString(hotkey, cfg.hotkey)
@@ -243,7 +243,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 		end
 	end
 	if name then
-		if C.Actionbar.button_macro_name then
+		if FreeDB.actionbar.button_macro_name then
 			name:SetParent(overlay)
 			SetupFontString(name, cfg.name)
 		else
@@ -295,14 +295,14 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 	--hotkey, count
 	local overlay = CreateFrame('Frame', nil, button)
 	overlay:SetAllPoints()
-	if C.Actionbar.button_hotkey then
+	if FreeDB.actionbar.button_hotkey then
 		hotkey:SetParent(overlay)
 		ACTIONBAR.UpdateHotKey(button)
 		SetupFontString(hotkey, cfg.hotkey)
 	else
 		hotkey:Hide()
 	end
-	if C.Actionbar.button_count then
+	if FreeDB.actionbar.button_count then
 		count:SetParent(overlay)
 		SetupFontString(count, cfg.count)
 	else
@@ -442,7 +442,7 @@ function ACTIONBAR:RestyleButtons()
 	-- Update hotkeys
 	hooksecurefunc('ActionButton_UpdateHotkeys', ACTIONBAR.UpdateHotKey)
 	hooksecurefunc('PetActionButton_SetHotkeys', ACTIONBAR.UpdateHotKey)
-	if C.Actionbar.button_hotkey then
+	if FreeDB.actionbar.button_hotkey then
 		ACTIONBAR:UpdateStanceHotKey()
 		F:RegisterEvent('UPDATE_BINDINGS', ACTIONBAR.UpdateStanceHotKey)
 	end

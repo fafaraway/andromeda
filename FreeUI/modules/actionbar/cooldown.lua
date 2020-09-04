@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local COOLDOWN, cfg = F:GetModule('COOLDOWN'), C.Actionbar
+local COOLDOWN = F:GetModule('COOLDOWN')
 
 
 local FONT_SIZE = 24
@@ -68,7 +68,7 @@ function COOLDOWN:OnCreate()
 	text:SetJustifyH('CENTER')
 	timer.text = text
 
-	if not cfg.ignore_weakauras and strfind(frameName, 'WeakAurasCooldown') then
+	if FreeDB.actionbar.override_weakauras and strfind(frameName, 'WeakAurasCooldown') then
 		text:SetPoint('BOTTOM', 1, -6)
 	end
 
@@ -86,7 +86,7 @@ function COOLDOWN:StartTimer(start, duration)
 	if self.noOCC or hideNumbers[self] then return end
 
 	local frameName = self.GetName and self:GetName() or ''
-	if cfg.ignore_weakauras and strfind(frameName, 'WeakAuras') then
+	if not FreeDB.actionbar.override_weakauras and strfind(frameName, 'WeakAuras') then
 		self.noOCC = true
 		return
 	end
@@ -170,8 +170,7 @@ function COOLDOWN:RegisterActionButton()
 end
 
 function COOLDOWN:OnLogin()
-	if not cfg.enable_cooldown then return end
-	if IsAddOnLoaded('OmniCC') then return end
+	if not FreeDB.actionbar.enable_cooldown then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, 'SetCooldown', COOLDOWN.StartTimer)
@@ -190,4 +189,6 @@ function COOLDOWN:OnLogin()
 	-- Hide Default Cooldown
 	SetCVar('countdownForCooldowns', 0)
 	F.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
+
+	self:CooldownPulse()
 end

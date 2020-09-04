@@ -5,6 +5,6 @@
 	<Script file='gloablcooldown.lua'/>
 	<Script file='partywatcher.lua'/>
 	<Script file='raiddebuffs.lua'/>
-	<Script file='spellrange.lua'/>
 	<Script file='totems.lua'/>
+	<Script file='rangecheck.lua'/>
 </Ui>

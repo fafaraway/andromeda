@@ -49,8 +49,8 @@ end
 
 local function SetRewardHighlight(self, reward)
 	if not self.rewardHighlightFrame then
-		self.rewardHighlightFrame = CreateFrame(Frame, QuesterRewardHighlight, QuestInfoRewardsFrame, AutoCastShineTemplate)
-		self.rewardHighlightFrame:SetScript(OnHide, function(frame) AutoCastShine_AutoCastStop(frame) end)
+		self.rewardHighlightFrame = CreateFrame('Frame', 'QuesterRewardHighlight', QuestInfoRewardsFrame, 'AutoCastShineTemplate')
+		self.rewardHighlightFrame:SetScript('OnHide', function(frame) AutoCastShine_AutoCastStop(frame) end)
 	end
 
 	self.rewardHighlightFrame:ClearAllPoints()
@@ -72,7 +72,7 @@ function QUEST:QUEST_COMPLETE()
 
 		local bestprice, bestitem = 0, 0
 		for i = 1, GetNumQuestChoices() do
-			local link, name, _, qty = GetQuestItemLink(choice, i), GetQuestItemInfo(choice, i)
+			local link, name, _, qty = GetQuestItemLink('choice', i), GetQuestItemInfo('choice', i)
 			local price = link and select(11, GetItemInfo(link))
 			if not price then return end
 			price = price * (qty or 1)
@@ -82,7 +82,7 @@ function QUEST:QUEST_COMPLETE()
 			end
 		end
 		if bestitem > 0 then
-			SetRewardHighlight(self, _G[(QuestInfoRewardsFrameQuestInfoItem%dIconTexture):format(bestitem)])
+			SetRewardHighlight(self, _G[('QuestInfoRewardsFrameQuestInfoItem%dIconTexture'):format(bestitem)])
 		end
 	end)
 end

@@ -1,10 +1,15 @@
-![logo](https://i.imgur.com/GRLVXDx.png "logo")
-
-[![discord](https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat "discord")](https://discord.gg/Uu28KQq) ![WOW support](https://img.shields.io/badge/WOW-Shadowlands-orange?style=flat "ShadowLands") ![build](https://img.shields.io/github/workflow/status/Solor/FreeUI/CI) ![tag](https://img.shields.io/github/v/tag/Solor/FreeUI) ![Date](https://img.shields.io/github/release-date/Solor/FreeUI "release date")
-
-
-## Abstract
-Minimalistic aesthetic and practical.
+<h1 align="center"><img src="https://i.imgur.com/GRLVXDx.png" alt="FreeUI Logo" /></h1>
+<div align="center">
+  <h1>Minimalist, Aesthetic, Practical</h1>
+</div>
+<br />
+<div align="center">
+  <a href="https://discord.gg/Uu28KQq">
+    <img src="https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat-square" alt="Discord" />
+  </a> <img src="https://img.shields.io/badge/WOW-Shadowlands-orange?style=flat-square" alt="Shadowlands"> <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Solor/FreeUI/Release?style=flat-square"> <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Solor/FreeUI?style=flat-square"> <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Solor/FreeUI?style=flat-square">
+</div>
+<br>
+<br>
 
 ## Screenshots
 *  https://imgur.com/a/uUz7CuL
