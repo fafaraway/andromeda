@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
---if not C.isChinses then return end
+if not C.isChinses then return end
 
 
 --[[ Misc ]]
@@ -387,10 +387,6 @@ L['COMMANDS_LIST'] = {
 	'/free config - 打开控制台。',
 	'/free unlock - 解锁界面元素，解锁后可以自由移动界面元素。',
 	'/free reset - 重置所有保存的选项恢复到默认值。',
-
-	'/free dps - 使用默认头像布局。',
-	'/free healer - 使用对治疗职业更友好的对称型布局。',
-	'/free minimal - 使用简洁模式，此模式下头像和动作条默认隐藏。',
 
 	'/rl - 重载界面',
 	'/ss - 屏幕截图',

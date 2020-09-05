@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
---if not C.isChinses then return end
+
 
 
 --[[ Misc ]]
@@ -70,8 +70,8 @@ do
 	L['ANNOUNCEMENT_STOLEN'] = 'Stole %s of %s!'
 	L['ANNOUNCEMENT_BATTLE_REZ'] = '%s used %s!'
 	L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s used %s in %s!'
-	L['ANNOUNCEMENT_CASTED'] = '%s cast %s!'
-	L['ANNOUNCEMENT_FEAST'] = '%s 摆出了 %s！'
+	L['ANNOUNCEMENT_CASTED'] = '%s casted %s!'
+	L['ANNOUNCEMENT_FEAST'] = '%s placed %s！'
 	L['ANNOUNCEMENT_ITEM'] = '%s placed %s!'
 	L['ANNOUNCEMENT_PORTAL'] = '%s opened %s!'
 	L['ANNOUNCEMENT_SAPPED'] = 'Sapped!'
@@ -152,7 +152,7 @@ do
 	L['ACTIONBAR_MOVER_VEHICLE'] = 'Actionbar vehicle'
 	L['ACTIONBAR_MOVER_COOLDOWN'] = 'Cooldown'
 	L['ACTIONBAR_KEY_UNBOUND'] = 'Unbound Button'
-	L['ACTIONBAR_KEY_INDEX'] = '序号'
+	L['ACTIONBAR_KEY_INDEX'] = 'Index'
 	L['ACTIONBAR_KEY_BINDING'] = 'Key Binding'
 	L['ACTIONBAR_KEY_BOUND_TO'] = ' Bound button'
 	L['ACTIONBAR_SAVE_KEYBINDS'] = 'Keybinds saved'
@@ -388,18 +388,14 @@ L['COMMANDS_LIST'] = {
 	'/free unlock - Unlock interface',
 	'/free reset - Reset all saved options to default values.',
 
-	'/free dps - Use default DPS layout',
-	'/free healer - Use a layout that is more friendly to healers',
-	'/free minimal - Use minimal mode, where avatar and actionbar are hidden by default.',
-
 	'/rl - Reload UI',
 	'/ss - Screenshots',
 	'/clear - Clear the chat window',
 	'/rc - Ready Check',
-	'/rp - 职责确认',
-	'/gc - 小队/团队转换',
+	'/rp - Roll poll',
+	'/gc - Party/Raid convert',
 	'/lg - Leave group',
-	'/rs - 重置副本',
+	'/rs - Reset instance',
 	'/tt - Tell target',
 	'/spec - Switch spec',
 	'/bind - Bind keys',
