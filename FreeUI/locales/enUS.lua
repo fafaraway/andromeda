@@ -107,8 +107,8 @@ do
 	L['INFOBAR_OPEN_LEG_REPORT'] = 'Open report(LEG)'
 	L['INFOBAR_OPEN_WOD_REPORT'] = 'Open report(WOD)'
 
-	L['INFOBAR_SPEC'] = 'Specialization'
-	L['INFOBAR_LOOT'] = 'Loot Specialization'
+	L['INFOBAR_SPEC'] = 'Spec'
+	L['INFOBAR_LOOT'] = 'Loot'
 	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Open the specialization panel'
 	L['INFOBAR_CHANGE_SPEC'] = 'Change specialization'
 
