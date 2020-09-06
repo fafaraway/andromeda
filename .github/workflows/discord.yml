@@ -26,6 +26,6 @@ jobs:
           username: "GitHub Actions"
           avatar-url: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png'
           title: ""
-          description: "v**${{ steps.vars.outputs.tag }}** has been released.\nhttps://github.com/Solor/ci_test/releases/download/${{ steps.vars.outputs.tag }}/ci_test-${{ steps.vars.outputs.tag }}.zip"
+          description: "v**${{ steps.vars.outputs.tag }}** has been released.\nhttps://github.com/Solor/FreeUI/releases/download/${{ steps.vars.outputs.tag }}/FreeUI-${{ steps.vars.outputs.tag }}.zip"
           include-details: "false"
           color-success: "#4287f5"
