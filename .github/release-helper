@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# Ensure that the GITHUB_TOKEN secret is included
+if [[ -z "$GITHUB_TOKEN" ]]; then
+  echo "Set the GITHUB_TOKEN env variable."
+  exit 1
+fi
+
+# Prepare the headers for our curl-command.
+AUTH_HEADER="Authorization: Token ${GITHUB_TOKEN}"
+
+REQUEST_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}"
+echo "Request URL is ${REQUEST_URL}"
+
+# Generate a temporary file.
+tmp=$(mktemp)
+
+# Request - capturing HTTP response-code in our output file.
+response=$(curl \
+    -sSL \
+    -H "${AUTH_HEADER}" \
+    --write-out "%{http_code}" \
+    --output $tmp \
+    "${REQUEST_URL}")
+
+# If the curl-command returned a non-zero response we must abort
+if [ "$?" -ne 0 ]; then
+    echo "**********************************"
+    echo " curl command did not return zero."
+    echo " Aborting"
+    echo "**********************************"
+    cat $tmp
+    rm $tmp
+    exit 1
+fi
+
+# If request is not successful, we must abort
+if [ $response -ge 400 ]; then
+    echo "***************************"
+    echo " request failed."
+    echo " Aborting"
+    echo " HTTP status is $response"
+    echo "**********************************"
+    cat $tmp
+    rm $tmp
+    exit 1
+fi
+
+# Show pretty output, since we already have jq
+echo ::set-output name=COMMIT_MESSAGE::`cat $tmp | jq .commit.message`
+rm $tmp

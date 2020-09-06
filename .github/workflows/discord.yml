@@ -1,0 +1,43 @@
+name: Discord notification
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+
+  notification:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 0
+
+      - name: Set output
+        id: vars
+        run: |
+          echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Run Helper
+        id: helper
+        run: "chmod +x ./.github/release-helper && bash ./.github/release-helper"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Discord notification
+        if: success()
+        uses: appleboy/discord-action@master
+        with:
+          webhook_id: ${{ secrets.WEBHOOK_ID }}
+          webhook_token: ${{ secrets.WEBHOOK_TOKEN }}
+          color: "#48f442"
+          username: "GitHub"
+          avatar_url: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          message: "FreeUI ${{ steps.vars.outputs.tag }} has been released.\n\nDownload:\nhttps://github.com/Solor/FreeUI/releases/tag/${{ steps.vars.outputs.tag }}\n\nChanges:\n${{ steps.helper.outputs.COMMIT_MESSAGE }}"
+
+
+
