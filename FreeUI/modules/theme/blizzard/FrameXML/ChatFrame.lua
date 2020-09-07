@@ -10,6 +10,7 @@ tinsert(C.BlizzThemes, function()
 	F.SetBD(BNToastFrame)
 	BNToastFrame.TooltipFrame:SetBackdrop(nil)
 	F.SetBD(BNToastFrame.TooltipFrame)
+	F.ReskinClose(BNToastFrame.CloseButton)
 
 	-- Battletag invite frame
 	local border, send, cancel = BattleTagInviteFrame:GetChildren()
