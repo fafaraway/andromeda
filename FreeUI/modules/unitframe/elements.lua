@@ -675,7 +675,9 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
 	bu.bg = F.CreateBDFrame(bu)
 	bu.glow = F.CreateSD(bu.bg)
-	bu.glow:SetFrameLevel(bu:GetFrameLevel() - 1)
+	if bu.glow then
+		bu.glow:SetFrameLevel(bu:GetFrameLevel() - 1)
+	end
 	bu:Hide()
 
 	bu.icon = bu:CreateTexture(nil, 'ARTWORK')
