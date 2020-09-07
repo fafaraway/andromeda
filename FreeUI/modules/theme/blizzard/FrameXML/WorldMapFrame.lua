@@ -17,6 +17,7 @@ tinsert(C.BlizzThemes, function()
 	overlayFrames[2]:DisableDrawLayer("OVERLAY")
 
 	local sideToggle = WorldMapFrame.SidePanelToggle
+	sideToggle:SetFrameLevel(3)
 	sideToggle.OpenButton:GetRegions():Hide()
 	F.ReskinArrow(sideToggle.OpenButton, "right")
 	sideToggle.CloseButton:GetRegions():Hide()
