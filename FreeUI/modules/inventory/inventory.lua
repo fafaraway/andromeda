@@ -718,6 +718,13 @@ function INVENTORY:UpdateAllBags()
 	end
 end
 
+function INVENTORY:OpenBags()
+	OpenAllBags(true)
+end
+
+function INVENTORY:CloseBags()
+	CloseAllBags()
+end
 
 function INVENTORY:OnLogin()
 	if not FreeDB['inventory']['enable_inventory'] then return end
@@ -921,9 +928,9 @@ function INVENTORY:OnLogin()
 	local function GetIconOverlayAtlas(item)
 		if not item.link then return end
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
-			return "AzeriteIconFrame"
+			return 'AzeriteIconFrame'
 		elseif IsCorruptedItem(item.link) then
-			return "Nzoth-inventory-icon"
+			return 'Nzoth-inventory-icon'
 		end
 	end
 
@@ -1152,15 +1159,21 @@ function INVENTORY:OnLogin()
 		end
 	end
 
-	-- Fixes
+	-- Sort order
+	SetSortBagsRightToLeft(not FreeDB['inventory']['reverse_sort'])
+	SetInsertItemsLeftToRight(false)
+
+	-- Init
 	ToggleAllBags()
 	ToggleAllBags()
 	INVENTORY.initComplete = true
 
+	F:RegisterEvent('TRADE_SHOW', INVENTORY.OpenBags)
+	F:RegisterEvent('TRADE_CLOSED', INVENTORY.CloseBags)
+	F:RegisterEvent('AUCTION_HOUSE_SHOW', INVENTORY.OpenBags)
+	F:RegisterEvent('AUCTION_HOUSE_CLOSED', INVENTORY.CloseBags)
+
+	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end
 	BankFrameItemButton_Update = F.Dummy
-
-	-- Sort order
-	SetSortBagsRightToLeft(not FreeDB['inventory']['reverse_sort'])
-	SetInsertItemsLeftToRight(false)
 end
