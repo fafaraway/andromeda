@@ -29,6 +29,7 @@
 *  [WeakAuras](https://github.com/WeakAuras/WeakAuras2)
 *  [Kui_Nameplates](https://github.com/kesava-wow/kuinameplates2)
 *  [Simpy's icon pack](https://git.tukui.org/Simpy/interface/tree/master)
+*  [Chinese font pack](https://1drv.ms/u/s!AocaDk73Gt7sgrZmwW0iTELqw2uQvQ?e=OQVeHe)
 
 ## Credits
 *  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia), Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE
