@@ -293,7 +293,7 @@ do
 	L['INSTALL_HEADER_ADDON'] = 'Addons'
 	L['INSTALL_BODY_ADDON'] = 'This step will adjust the settings of |cffe9c55dDBM|r and |cffe9c55dSkada|r to match the interface style and layout of |cffe9c55dFreeUI|r.'
 	L['INSTALL_HEADER_COMPLETE'] = 'Success!'
-	L['INSTALL_BODY_COMPLETE'] = 'The installation has completed successfully.\n\nPlease click the Finish button below to reload the interface.\n\nRemember in the game you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/freeconfig|r to open the control panel and change various settings.'
+	L['INSTALL_BODY_COMPLETE'] = 'The installation has completed successfully.\n\nPlease click the Finish button below to reload the interface.\n\nRemember in the game you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the control panel and change various settings.'
 	L['INSTALL_BUTTON_INSTALL'] = 'Install'
 	L['INSTALL_BUTTON_SKIP'] = 'Skip'
 	L['INSTALL_BUTTON_CONTINUE'] = 'Continue'
