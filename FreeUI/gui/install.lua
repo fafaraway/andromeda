@@ -295,7 +295,9 @@ function INSTALL:HelloWorld()
 
 	F.CreateBDFrame(progressBar, .3)
 	progressBar.shadow = F.CreateSD(progressBar)
-	progressBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b)
+	if progressBar.shadow then
+		progressBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b)
+	end
 
 	local progressBarText = F.CreateFS(progressBar, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
 
