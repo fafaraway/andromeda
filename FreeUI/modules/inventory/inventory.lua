@@ -805,7 +805,7 @@ function INVENTORY:OnLogin()
 		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = bankWidth, Parent = f.bank})
 		f.bankCompanion:SetFilter(filters.bankMountPet, true)
 
-		f.bankGoods = MyContainer:New('BankGoods', {Columns = bankWidth, Parent = f.main})
+		f.bankGoods = MyContainer:New('BankGoods', {Columns = bankWidth, Parent = f.bank})
 		f.bankGoods:SetFilter(filters.bankGoods, true)
 
 		f.bankFavourite = MyContainer:New('BankFavourite', {Columns = bankWidth, Parent = f.bank})
