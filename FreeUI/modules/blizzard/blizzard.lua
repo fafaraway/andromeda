@@ -18,7 +18,8 @@ function BLIZZARD:OnLogin()
 		end
 	end
 
-	self:RemoveBossBanner()
+	self:ToggleBossBanner()
+	self:ToggleBossEmote()
 	self:UndressButton()
 	self:TradeTargetInfo()
 	self:TidyErrors()
@@ -30,10 +31,23 @@ function BLIZZARD:OnLogin()
 end
 
 
-function BLIZZARD:RemoveBossBanner()
-	if not FreeDB.blizzard.hide_bossbanner then return end
+function BLIZZARD:ToggleBossBanner()
+	if FreeDB.blizzard.hide_boss_banner then
+		BossBanner:UnregisterAllEvents()
+	else
+		BossBanner:RegisterEvent('BOSS_KILL')
+		BossBanner:RegisterEvent('ENCOUNTER_LOOT_RECEIVED')
+	end
+end
 
-	BossBanner:UnregisterAllEvents()
+function BLIZZARD:ToggleBossEmote()
+	if FreeDB.blizzard.hide_boss_emote then
+		RaidBossEmoteFrame:UnregisterAllEvents()
+	else
+		RaidBossEmoteFrame:RegisterEvent('RAID_BOSS_EMOTE')
+		RaidBossEmoteFrame:RegisterEvent('RAID_BOSS_WHISPER')
+		RaidBossEmoteFrame:RegisterEvent('CLEAR_BOSS_EMOTES')
+	end
 end
 
 function BLIZZARD:UndressButton()

@@ -451,7 +451,8 @@ C.CharacterSettings = {
 
 	['blizzard'] = {
 		['hide_talkinghead'] = true,
-		['hide_bossbanner'] = true,
+		['hide_boss_banner'] = true,
+		['hide_boss_emote'] = true,
 		['missing_stats'] = true,
 		['mail_button'] = true,
 		['orderhall_icon'] = true,

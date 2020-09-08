@@ -16,10 +16,10 @@ if C.isDeveloper then
 end
 
 if C.isDeveloper then
-	C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\sarasa_newjune_semibold.ttf'
+	C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\normal.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-	C.Assets.Fonts.Chat   = 'Fonts\\FreeUI\\sarasa_aleo_bold.ttf'
-	C.Assets.Fonts.Number = 'Fonts\\FreeUI\\sarasa_tccc_semibold.ttf'
+	C.Assets.Fonts.Chat   = 'Fonts\\FreeUI\\chat.ttf'
+	C.Assets.Fonts.Number = 'Fonts\\FreeUI\\number.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
 elseif C.Client == 'zhCN' then
 	C.Assets.Fonts.Normal = 'Fonts\\ARKai_T.ttf'
