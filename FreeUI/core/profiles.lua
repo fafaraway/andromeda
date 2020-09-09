@@ -12,10 +12,6 @@ end
 C.isDeveloper = isDeveloper()
 
 if C.isDeveloper then
-	--C.Actionbar.bar1_visibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
-end
-
-if C.isDeveloper then
 	C.Assets.Fonts.Normal = 'Fonts\\FreeUI\\normal.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
 	C.Assets.Fonts.Chat   = 'Fonts\\FreeUI\\chat.ttf'
