@@ -93,7 +93,7 @@ end
 SlashCmdList.FREEUI = function(cmd)
 	local cmd, args = strsplit(' ', cmd:lower(), 2)
 	if cmd == 'reset' then
-		StaticPopup_Show('FREEUI_RESET')
+		StaticPopup_Show('FREEUI_RESET_ALL')
 	elseif cmd == 'install' then
 		INSTALL:HelloWorld()
 	elseif cmd == 'unlock' then
