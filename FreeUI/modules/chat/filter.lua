@@ -163,6 +163,19 @@ local function isItemHasLevel(link)
 	end
 end
 
+local socketWatchList = {
+	['BLUE'] = true,
+	['RED'] = true,
+	['YELLOW'] = true,
+	['COGWHEEL'] = true,
+	['HYDRAULIC'] = true,
+	['META'] = true,
+	['PRISMATIC'] = true,
+	['PUNCHCARDBLUE'] = true,
+	['PUNCHCARDRED'] = true,
+	['PUNCHCARDYELLOW'] = true,
+}
+
 local function GetSocketTexture(socket, count)
 	return strrep('|TInterface\\ItemSocketingFrame\\UI-EmptySocket-'..socket..':0|t', count)
 end
@@ -172,7 +185,7 @@ local function isItemHasGem(link)
 	local stats = GetItemStats(link)
 	for stat, count in pairs(stats) do
 		local socket = strmatch(stat, 'EMPTY_SOCKET_(%S+)')
-		if socket then
+		if socket and socketWatchList[socket] then
 			text = text..GetSocketTexture(socket, count)
 		end
 	end
