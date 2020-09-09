@@ -849,6 +849,7 @@ C.AccountSettings = {
 		['reskin_weakauras'] = true,
 		['reskin_pgf'] = true,
 		['reskin_skada'] = true,
+		['reskin_wowlua'] = true,
 	},
 
 	['reaction_colors'] = {

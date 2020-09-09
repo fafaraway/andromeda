@@ -292,8 +292,11 @@ local function AppearanceOptions()
 	local PGF = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_pgf')
 	PGF:SetPoint('LEFT', Skada, 'RIGHT', 160, 0)
 
+	local WowLua = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_wowlua')
+	WowLua:SetPoint('TOPLEFT', Skada, 'BOTTOMLEFT', 0, -8)
+
 	local other = GUI:AddSubCategory(parent)
-	other:SetPoint('TOPLEFT', Skada, 'BOTTOMLEFT', 0, -16)
+	other:SetPoint('TOPLEFT', WowLua, 'BOTTOMLEFT', 0, -16)
 
 
 	local uiScale = GUI:CreateSlider(parent, 'ACCOUNT', 'ui_scale', nil, {.4, 2, .01})
@@ -1590,7 +1593,6 @@ end
 
 
 function GUI:AddOptions()
-	--addGeneralOptions()
 	ActionbarOptions()
 
 	AppearanceOptions()

@@ -101,7 +101,7 @@ function THEME:OnLogin()
 	self:Test()
 	self:ReskinPGF()
 	self:ReskinSkada()
-
+	self:ReskinWowLua()
 
 end
 

@@ -3,4 +3,5 @@
     <Script file="pgf.lua"/>
     <Script file="skada.lua"/>
     <Script file="wa.lua"/>
+	<Script file="wowlua.lua"/>
 </Ui>
