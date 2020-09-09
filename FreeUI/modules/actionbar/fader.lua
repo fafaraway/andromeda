@@ -85,18 +85,19 @@ local function IsMouseOverFrame(frame)
 	return false
 end
 
-local function IsMinimalMode()
-	if FreeDB['minimal'] then
+local function IsFadeMode()
+	-- if FreeDB.actionbar.bar1_fade then
 		if UnitExists('target') then return true end
-		if UnitExists('focus') then return true end
-		if InCombatLockdown() then return true end
-	else
-		return false
-	end
+		--if UnitExists('focus') then return true end
+		if UnitAffectingCombat('player') then return true end
+	-- else
+	-- 	return false
+	-- end
 end
 
 local function FrameHandler(frame)
-	if IsMouseOverFrame(frame) or IsMinimalMode() then
+	--if IsMouseOverFrame(frame) then
+	if IsFadeMode() then
 		StartFadeIn(frame)
 	else
 		StartFadeOut(frame)
@@ -131,7 +132,7 @@ local function SpellFlyoutOnShow(self)
 end
 SpellFlyout:HookScript('OnShow', SpellFlyoutOnShow)
 
---[[ local function OnShow(self)
+local function OnShow(self)
 	if self.fader then
 		StartFadeIn(self)
 	end
@@ -141,7 +142,7 @@ local function OnHide(self)
 	if self.fader then
 		StartFadeOut(self)
 	end
-end ]]
+end
 
 --[[ local function CreateFrameFader(frame, faderConfig)
 	if frame.faderConfig then return end

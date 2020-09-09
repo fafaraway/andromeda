@@ -35,7 +35,11 @@ function ACTIONBAR:CreateBar1()
 	end
 
 	if FreeDB.actionbar.bar1 then
-		frame.frameVisibility = FreeDB.actionbar.bar1_visibility
+		if FreeDB.actionbar.bar1_minimal then
+			frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
+		else
+			frame.frameVisibility = '[petbattle] hide; show'
+		end
 
 		if FreeDB.actionbar.bar1_fade then
 			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
