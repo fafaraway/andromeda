@@ -164,8 +164,8 @@ end
 --[[ Combat ]]
 
 do
-	L['COMBAT_ENTER'] = 'Entered Combat'
-	L['COMBAT_LEAVE'] = 'Left Combat'
+	L['COMBAT_ENTER'] = '++ COMBAT ++'
+	L['COMBAT_LEAVE'] = '-- COMBAT --'
 end
 
 
