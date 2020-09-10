@@ -295,8 +295,15 @@ local function AppearanceOptions()
 	local WowLua = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_wowlua')
 	WowLua:SetPoint('TOPLEFT', Skada, 'BOTTOMLEFT', 0, -8)
 
+	local toasts = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_toasts')
+	toasts:SetPoint('LEFT', WowLua, 'RIGHT', 160, 0)
+
+	local meetingStone = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_meetingstone')
+	meetingStone:SetPoint('TOPLEFT', WowLua, 'BOTTOMLEFT', 0, -8)
+
+
 	local other = GUI:AddSubCategory(parent)
-	other:SetPoint('TOPLEFT', WowLua, 'BOTTOMLEFT', 0, -16)
+	other:SetPoint('TOPLEFT', meetingStone, 'BOTTOMLEFT', 0, -16)
 
 
 	local uiScale = GUI:CreateSlider(parent, 'ACCOUNT', 'ui_scale', nil, {.4, 2, .01})
