@@ -182,74 +182,44 @@ local function SetupChatFrame()
 end
 
 local function SetupSkada()
-	if not IsAddOnLoaded('Skada') then return end
-	if SkadaDB then wipe(SkadaDB) end
+	if not SkadaDB then return end
 
-	SkadaDB = {
-		['hasUpgraded'] = true,
-		['profiles'] = {
-			['Default'] = {
-				['showtotals'] = true,
-				['showself'] = true,
-				['icon'] = {
-					['hide'] = true,
-				},
-				['windows'] = {
-					{
-						['barheight'] = 18,
-						['classicons'] = false,
-						['barfont'] = '!Free_normal',
-						['barfontflags'] = 'OUTLINE',
-						['barfontsize'] = 12,
-						['barbgcolor'] = {
-							['a'] = 0,
-							['b'] = 0,
-							['g'] = 0,
-							['r'] = 0,
-						},
-						['barcolor'] = {
-							['a'] = 0.5400000214576721,
-							['b'] = 0.4117647058823529,
-							['g'] = 0.4117647058823529,
-							['r'] = 0.4117647058823529,
-						},
-						['background'] = {
-							['color'] = {
-								['a'] = 0,
-							},
-							['bordertexture'] = 'None',
-							['texture'] = 'None',
-						},
-						['point'] = 'CENTER',
-						['smoothing'] = true,
-						['bartexture'] = '!Free_norm',
-						['title'] = {
-							['textcolor'] = {
-								['b'] = 0.7098039215686275,
-								['g'] = 0.7098039215686275,
-								['r'] = 0.7098039215686275,
-							},
-							['color'] = {
-								['a'] = 0,
-								['b'] = 0,
-								['g'] = 0,
-								['r'] = 0,
-							},
-							['font'] = '!Free_normal',
-							['fontsize'] = 12,
-							['fontflags'] = 'OUTLINE',
-							['texture'] = 'Solid',
-						},
-					},
-				},
-				['tooltiprows'] = 10,
-				['setformat'] = 8,
-			},
-		},
-	}
+	SkadaDB['profiles']['Default'].showtotals = true
+	SkadaDB['profiles']['Default'].showself = true
+	SkadaDB['profiles']['Default']['icon'].hide = true
+	SkadaDB['profiles']['Default'].showtotals = true
+	SkadaDB['profiles']['Default']['windows'].barfont = '!Free_normal'
+	SkadaDB['profiles']['Default']['windows'].smoothing = true
+	SkadaDB['profiles']['Default']['windows'].bartexture = '!Free_norm'
+end
+
+local function SetupDBM()
+	if not DBM_AllSavedOptions then return end
+
+	_G.DBM_AllSavedOptions['Default']['BlockVersionUpdateNotice'] = true
+	_G.DBM_AllSavedOptions['Default']['EventSoundVictory'] = 'None'
+
+	if not _G.DBT_AllPersistentOptions then return end
+
+	_G.DBT_AllPersistentOptions['HugeBarsEnabled'] = false
+
+	_G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 20
+	_G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 20
+	_G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwards = true
+	_G.DBT_AllPersistentOptions['Default']['DBM'].InlineIcons = false
+	_G.DBT_AllPersistentOptions['Default']['DBM'].Width = 160
+	_G.DBT_AllPersistentOptions['Default']['DBM'].FlashBar = true
+
+	_G.DBM_MinimapIcon['hide'] = true
+
+	if IsAddOnLoaded('DBM-VPYike') then
+		_G.DBM_AllSavedOptions['Default']['CountdownVoice'] = 'VP:Yike'
+		_G.DBM_AllSavedOptions['Default']['ChosenVoicePack'] = 'Yike'
+	end
 end
 
 local function SetupAddons()
+
 end
 
 function INSTALL:HelloWorld()
@@ -348,6 +318,7 @@ function INSTALL:HelloWorld()
 		leftButton:SetScript('OnClick', step6)
 		rightButton:SetScript('OnClick', function()
 			SetupSkada()
+			SetupDBM()
 			SetupAddons()
 			step6()
 		end)
