@@ -1245,8 +1245,8 @@ function UNITFRAME:AddFader(self)
 
 	self.Fader = {
 		[1] = {Combat = 1},
-		[2] = {PlayerTarget = 1, PlayerFocus, PlayerNotMaxHealth = 1, PlayerCasting = 1},
-		[3] = {notCombat = 0},
+		[2] = {PlayerTarget = 1, PlayerNotMaxHealth = 1, PlayerCasting = 1},
+		[3] = {notCombat = 0, UnitTaxi = 0},
 	}
 
 	self.NormalAlpha = 1
