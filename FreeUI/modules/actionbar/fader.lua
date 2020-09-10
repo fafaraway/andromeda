@@ -85,19 +85,21 @@ local function IsMouseOverFrame(frame)
 	return false
 end
 
-local function IsFadeMode()
-	-- if FreeDB.actionbar.bar1_fade then
-		if UnitExists('target') then return true end
-		--if UnitExists('focus') then return true end
-		if UnitAffectingCombat('player') then return true end
-	-- else
-	-- 	return false
-	-- end
+local function IsFadeMode(frame)
+	if UnitExists('target') then return true end
+	if UnitAffectingCombat('player') then return true end
+
+	if MouseIsOver(frame) then return true end
+	if not SpellFlyout:IsShown() then return false end
+	if not SpellFlyout.__faderParent then return false end
+	if SpellFlyout.__faderParent == frame and MouseIsOver(SpellFlyout) then return true end
+
+	return false
 end
 
 local function FrameHandler(frame)
 	--if IsMouseOverFrame(frame) then
-	if IsFadeMode() then
+	if IsFadeMode(frame) then
 		StartFadeIn(frame)
 	else
 		StartFadeOut(frame)
