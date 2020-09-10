@@ -1,11 +1,12 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('THEME')
-local TOOLTIP = F:GetModule('TOOLTIP')
+local THEME, TOOLTIP = F.THEME, F.TOOLTIP
+
+local _G = getfenv(0)
 
 
-function THEME:ReskinDBMBar()
-	local RaidNotice_AddMessage_ = RaidNotice_AddMessage
-	RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
+function THEME:ReskinDBM()
+	local RaidNotice_AddMessage_ = _G.RaidNotice_AddMessage
+	_G.RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
 		if strfind(textString, '|T') then
 			if strmatch(textString, ':(%d+):(%d+)') then
 				local size1, size2 = strmatch(textString, ':(%d+):(%d+)')
@@ -105,7 +106,7 @@ function THEME:ReskinDBMBar()
 					name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
 					name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth()*.85, 8)
 					name.SetPoint = F.Dummy
-					name:SetFont(C.Assets.Fonts.Normal, 12, 'OUTLINE')
+					name:SetFont(C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK')
 					name.SetFont = F.Dummy
 					name:SetJustifyH('LEFT')
 					name:SetWordWrap(false)
@@ -118,7 +119,7 @@ function THEME:ReskinDBMBar()
 					timer:ClearAllPoints()
 					timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 8)
 					timer.SetPoint = F.Dummy
-					timer:SetFont(C.Assets.Fonts.Number, 11, 'OUTLINE')
+					timer:SetFont(C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK')
 					timer.SetFont = F.Dummy
 					timer:SetJustifyH('RIGHT')
 					timer:SetShadowColor(0, 0, 0, 0)
@@ -135,17 +136,17 @@ function THEME:ReskinDBMBar()
 			end
 		end
 	end
-	hooksecurefunc(DBT, 'CreateBar', SkinBars)
+	hooksecurefunc(_G.DBT, 'CreateBar', SkinBars)
 
 	local function SkinRange()
-		if DBMRangeCheckRadar and not DBMRangeCheckRadar.styled then
-			TOOLTIP.ReskinTooltip(DBMRangeCheckRadar)
-			DBMRangeCheckRadar.styled = true
+		if _G.DBMRangeCheckRadar and not _G.DBMRangeCheckRadar.styled then
+			TOOLTIP.ReskinTooltip(_G.DBMRangeCheckRadar)
+			_G.DBMRangeCheckRadar.styled = true
 		end
 
-		if DBMRangeCheck and not DBMRangeCheck.styled then
-			TOOLTIP.ReskinTooltip(DBMRangeCheck)
-			DBMRangeCheck.styled = true
+		if _G.DBMRangeCheck and not _G.DBMRangeCheck.styled then
+			TOOLTIP.ReskinTooltip(_G.DBMRangeCheck)
+			_G.DBMRangeCheck.styled = true
 		end
 	end
 	hooksecurefunc(DBM.RangeCheck, 'Show', SkinRange)
@@ -153,190 +154,7 @@ function THEME:ReskinDBMBar()
 	if DBM.InfoFrame then
 		DBM.InfoFrame:Show(5, 'test')
 		DBM.InfoFrame:Hide()
-		DBMInfoFrame:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+		_G.DBMInfoFrame:HookScript('OnShow', TOOLTIP.ReskinTooltip)
 	end
-
-	-- Force Settings
-	if not DBM_AllSavedOptions['Default'] then DBM_AllSavedOptions['Default'] = {} end
-	DBM_AllSavedOptions['Default']['BlockVersionUpdateNotice'] = true
-	DBM_AllSavedOptions['Default']['EventSoundVictory'] = 'None'
-	DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 20
-	DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 20
-	DBT_AllPersistentOptions['HugeBarsEnabled'] = false
-	DBT_AllPersistentOptions['HugeScale'] = 1.0
-	if IsAddOnLoaded('DBM-VPYike') then
-		DBM_AllSavedOptions['Default']['CountdownVoice'] = 'VP:Yike'
-		DBM_AllSavedOptions['Default']['ChosenVoicePack'] = 'Yike'
-	end
-end
-
-function THEME:ReskinDBMGUI()
-	if not FreeADB.appearance.reskin_dbm then return end
-	if not IsAddOnLoaded('DBM-GUI') then return end
-
-	tinsert(UISpecialFrames, 'DBM_GUI_OptionsFrame')
-
-	F.StripTextures(_G['DBM_GUI_OptionsFrame'])
-	F.CreateBDFrame(_G['DBM_GUI_OptionsFrame'], nil, true)
-	F.CreateTex(_G['DBM_GUI_OptionsFrame'])
-
-	_G['DBM_GUI_OptionsFrameHeader']:ClearAllPoints()
-	_G['DBM_GUI_OptionsFrameHeader']:SetPoint('TOP', DBM_GUI_OptionsFrame, 0, 7)
-
-	_G['DBM_GUI_OptionsFrameWebsite']:Hide()
-	_G['DBM_GUI_OptionsFrameRevision']:Hide()
-	_G['DBM_GUI_OptionsFrameTranslation']:Hide()
-
-	F.StripTextures(_G['DBM_GUI_OptionsFramePanelContainer'])
-	F.CreateBDFrame(_G['DBM_GUI_OptionsFramePanelContainer'])
-	F.ReskinScroll(_G['DBM_GUI_OptionsFramePanelContainerFOVScrollBar'])
-
-	_G['DBM_GUI_OptionsFrameTab1']:ClearAllPoints()
-	_G['DBM_GUI_OptionsFrameTab1']:SetPoint('TOPLEFT', _G['DBM_GUI_OptionsFrameBossMods'], 'TOPLEFT', 10, 26)
-	_G['DBM_GUI_OptionsFrameTab2']:ClearAllPoints()
-	_G['DBM_GUI_OptionsFrameTab2']:SetPoint('TOPLEFT', _G['DBM_GUI_OptionsFrameTab1'], 'TOPRIGHT', 6, 0)
-
-
-	local dbmtabs = {
-		'DBM_GUI_OptionsFrameTab1',
-		'DBM_GUI_OptionsFrameTab2',
-	}
-
-	for i = 1, 2 do
-		local tab = _G[dbmtabs[i]]
-		F.StripTextures(tab)
-
-		if tab and not tab.styled then
-			F.ReskinTab(tab)
-
-			tab.styled = true
-		end
-	end
-
-	_G['DBM_GUI_OptionsFrameBossMods']:HookScript('OnShow', function(self)
-		F.StripTextures(self)
-
-		if not self.styled then
-			F.CreateBDFrame(self)
-
-			self.styled = true
-		end
-	end)
-
-	_G['DBM_GUI_OptionsFrameDBMOptions']:HookScript('OnShow', function(self)
-		F.StripTextures(self)
-
-		if not self.styled then
-			F.CreateBDFrame(self)
-
-			self.styled = true
-		end
-	end)
-
-	local dbmbuttons = {
-		'DBM_GUI_OptionsFrameWebsiteButton',
-		'DBM_GUI_OptionsFrameOkay',
-	}
-
-	for i = 1, 2 do
-		local buttons = _G[dbmbuttons[i]]
-		if buttons and not buttons.overlay then
-			F.Reskin(buttons)
-		end
-	end
-
-
-	local count = 1
-	local function restyleGUI()
-		local option = _G['DBM_GUI_Option_'..count]
-		while option do
-			local objType = option:GetObjectType()
-			if objType == 'CheckButton' then
-				F.ReskinCheck(option)
-			elseif objType == 'Slider' then
-				F.ReskinSlider(option)
-			elseif objType == 'EditBox' then
-				F.ReskinInput(option)
-			elseif option:GetName():find('DropDown') then
-				F.ReskinDropDown(option)
-			elseif objType == 'Button' then
-				F.Reskin(option)
-			elseif objType == 'Frame' then
-				option:SetBackdrop(nil)
-			end
-
-			count = count + 1
-			option = _G['DBM_GUI_Option_'..count]
-			if not option then
-				option = _G['DBM_GUI_DropDown'..count]
-			end
-		end
-	end
-
-	DBM:RegisterOnGuiLoadCallback(function()
-		restyleGUI()
-		hooksecurefunc(DBM_GUI, 'UpdateModList', restyleGUI)
-		DBM_GUI_OptionsFrameBossMods:HookScript('OnShow', restyleGUI)
-	end)
-end
-
-function THEME:Test()
-	if not IsAddOnLoaded('DBM-GUI') then return end
-	tinsert(UISpecialFrames, _G['DBM_GUI_OptionsFrame'])
-
-
-	F.StripTextures(_G['DBM_GUI_OptionsFrame'])
-	F.CreateBDFrame(_G['DBM_GUI_OptionsFrame'], nil, true)
-	F.CreateTex(_G['DBM_GUI_OptionsFrame'])
-
-	_G['DBM_GUI_OptionsFrameHeader']:ClearAllPoints()
-	_G['DBM_GUI_OptionsFrameHeader']:SetPoint('TOP', _G['DBM_GUI_OptionsFrame'], 0, 2)
-
-	_G['DBM_GUI_OptionsFrameWebsite']:Hide()
-	_G['DBM_GUI_OptionsFrameRevision']:Hide()
-	_G['DBM_GUI_OptionsFrameTranslation']:Hide()
-	_G['DBM_GUI_OptionsFrameWebsiteButton']:Hide()
-
-	_G['DBM_GUI_OptionsFrameOkay']:ClearAllPoints()
-	_G['DBM_GUI_OptionsFrameOkay']:SetPoint('BOTTOMRIGHT', -20, 20)
-	F.Reskin(_G['DBM_GUI_OptionsFrameOkay'])
-
-	F.StripTextures(_G['DBM_GUI_OptionsFramePanelContainer'])
-	F.CreateBDFrame(_G['DBM_GUI_OptionsFramePanelContainer'], .3)
-	F.StripTextures(_G['DBM_GUI_OptionsFramePanelContainerFOV'])
-	F.ReskinScroll(_G['DBM_GUI_OptionsFramePanelContainerFOVScrollBar'])
-
-	_G['DBM_GUI_OptionsFramePanelContainerHeaderText']:Hide()
-
-	DBM_GUI_OptionsFrame:HookScript('OnShow', function()
-	end)
-
-	local dbmtabs = {
-		'DBM_GUI_OptionsFrameTab1',
-		'DBM_GUI_OptionsFrameTab2',
-	}
-
-	for i = 1, 2 do
-		local tab = _G[dbmtabs[i]]
-		F.StripTextures(tab)
-
-		if tab and not tab.styled then
-			--F.ReskinTab(tab)
-
-			tab.styled = true
-		end
-	end
-
-	_G['DBM_GUI_OptionsFrameList']:HookScript('OnShow', function(self)
-		F.StripTextures(self)
-
-		if not self.styled then
-			F.CreateBDFrame(self, .3)
-
-			self.styled = true
-		end
-	end)
-
-
 end
 

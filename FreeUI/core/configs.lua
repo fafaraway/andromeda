@@ -850,6 +850,8 @@ C.AccountSettings = {
 		['reskin_pgf'] = true,
 		['reskin_skada'] = true,
 		['reskin_wowlua'] = true,
+		['reskin_toasts'] = true,
+		['reskin_meetingstone'] = true,
 	},
 
 	['reaction_colors'] = {

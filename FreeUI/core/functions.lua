@@ -1098,6 +1098,7 @@ do
 		bg:SetPoint('TOPLEFT', -2, 0)
 		bg:SetPoint('BOTTOMRIGHT')
 		F.CreateGradient(bg)
+		self.bg = bg
 
 		if height then self:SetHeight(height) end
 		if width then self:SetWidth(width) end

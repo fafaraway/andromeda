@@ -1,8 +1,10 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('THEME')
+local THEME = F.THEME
+
+local _G = getfenv(0)
 
 
-local function updateWeakAuras(f, fType)
+local function ReskinWeakAuras(f, fType)
 	if fType == 'icon' then
 		if not f.styled then
 			f.icon:SetTexCoord(unpack(C.TexCoord))
@@ -32,44 +34,85 @@ local function updateWeakAuras(f, fType)
 	end
 end
 
-local function ReskinWeakAuras()
+local function UpdateWeakAuras()
 	if not FreeADB.appearance.reskin_weakauras then return end
 
-	local regionTypes = WeakAuras.regionTypes
+	local regionTypes = _G.WeakAuras.regionTypes
 	local Create_Icon, Modify_Icon = regionTypes.icon.create, regionTypes.icon.modify
 	local Create_AuraBar, Modify_AuraBar = regionTypes.aurabar.create, regionTypes.aurabar.modify
 
-
 	regionTypes.icon.create = function(parent, data)
 		local region = Create_Icon(parent, data)
-		updateWeakAuras(region, 'icon')
+		ReskinWeakAuras(region, 'icon')
 		return region
 	end
 
 	regionTypes.aurabar.create = function(parent)
 		local region = Create_AuraBar(parent)
-		updateWeakAuras(region, 'aurabar')
+		ReskinWeakAuras(region, 'aurabar')
 		return region
 	end
 
 	regionTypes.icon.modify = function(parent, region, data)
 		Modify_Icon(parent, region, data)
-		updateWeakAuras(region, 'icon')
+		ReskinWeakAuras(region, 'icon')
 	end
 
 	regionTypes.aurabar.modify = function(parent, region, data)
 		Modify_AuraBar(parent, region, data)
-		updateWeakAuras(region, 'aurabar')
+		ReskinWeakAuras(region, 'aurabar')
 	end
 
-	for weakAura in pairs(WeakAuras.regions) do
-		local regions = WeakAuras.regions[weakAura]
+	for weakAura in pairs(_G.WeakAuras.regions) do
+		local regions = _G.WeakAuras.regions[weakAura]
 		if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
-			updateWeakAuras(regions.region, regions.regionType)
+			ReskinWeakAuras(regions.region, regions.regionType)
 		end
 	end
 end
 
-THEME:LoadWithAddOn('WeakAuras', ReskinWeakAuras)
+THEME:LoadWithAddOn('WeakAuras', UpdateWeakAuras)
 
 
+--[[ function THEME:WeakAurasOptions()
+	if not IsAddOnLoaded('WeakAuras') then return end
+
+	local function ReskinWAOptions()
+		local frame = _G.WeakAurasOptions
+		if not frame then return end
+
+		F.StripTextures(frame)
+		F.SetBD(frame)
+		F.ReskinInput(frame.filterInput)
+		F.Reskin(_G.WASettingsButton)
+
+		local closeBG = select(1, frame:GetChildren())
+		F.StripTextures(closeBG)
+
+		local close = closeBG:GetChildren()
+		close:ClearAllPoints()
+		close:SetPoint('TOPRIGHT', frame, 'TOPRIGHT')
+
+		local minmizeBG = select(5, frame:GetChildren())
+		F.StripTextures(minmizeBG)
+
+		local minmize = minmizeBG:GetChildren()
+		minmize:ClearAllPoints()
+		minmize:SetPoint('RIGHT', close, 'LEFT')
+
+		for i = 1, frame.texteditor.frame:GetNumChildren() do
+			local child = select(i, frame.texteditor.frame:GetChildren())
+			if child:GetObjectType() == 'Button' and child:GetText() then
+				F.Reskin(child)
+			end
+		end
+	end
+
+	local function loadFunc(event, addon)
+		if addon == 'WeakAurasOptions' then
+			hooksecurefunc(_G.WeakAuras, 'CreateFrame', ReskinWAOptions)
+			F:UnregisterEvent(event, loadFunc)
+		end
+	end
+	F:RegisterEvent('ADDON_LOADED', loadFunc)
+end ]]

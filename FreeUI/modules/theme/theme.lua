@@ -97,12 +97,12 @@ function THEME:OnLogin()
 	self:CursorTrail()
 	self:Vignetting()
 
-	self:ReskinDBMBar()
-	self:Test()
+	self:ReskinDBM()
 	self:ReskinPGF()
 	self:ReskinSkada()
 	self:ReskinWowLua()
-
+	self:ReskinToasts()
+	self:ReskinMeetingStone()
 end
 
 function THEME:LoadWithAddOn(addonName, func)
