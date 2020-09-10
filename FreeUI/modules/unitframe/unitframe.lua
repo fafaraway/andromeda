@@ -32,6 +32,10 @@ function UNITFRAME:OnLogin()
 		self:SpawnArena()
 	end
 
+	if FreeDB.unitframe.enable_nameplate then
+		self:SpawnNameplate()
+	end
+
 
 	if not FreeDB.unitframe.enable_group then return end
 

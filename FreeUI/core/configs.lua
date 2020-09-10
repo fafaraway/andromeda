@@ -593,6 +593,10 @@ C.CharacterSettings = {
 
 				['player_hide_tags'] = true,
 
+			['enable_nameplate'] = true,
+				['nameplate_width'] = 140,
+				['nameplate_height'] = 20,
+
 			['enable_pet'] = true,
 				['pet_width'] = 50,
 				['pet_height'] = 8,

@@ -5,5 +5,6 @@
 	<Script file="tags.lua"/>
 	<Script file="elements.lua"/>
 	<Script file="units.lua"/>
+	<Script file="nameplate.lua"/>
 	<Script file="clickcast.lua"/>
 </Ui>
