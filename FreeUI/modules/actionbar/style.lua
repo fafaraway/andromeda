@@ -1,8 +1,5 @@
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('ACTIONBAR')
-
-local _G = getfenv(0)
-local pairs, gsub = pairs, string.gsub
+local ACTIONBAR = F.ACTIONBAR
 
 
 local function CallButtonFunctionByName(button, func, ...)
@@ -166,7 +163,7 @@ function ACTIONBAR:UpdateHotKey()
 		text = gsub(text, value[1], value[2])
 	end
 
-	if text == RANGE_INDICATOR then
+	if text == _G.RANGE_INDICATOR then
 		hotkey:SetText('')
 	else
 		hotkey:SetText(text)
@@ -206,7 +203,9 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	SetupBackdrop(button)
 
 	--textures
-	SetupTexture(icon, cfg.icon, 'SetTexture', icon)
+	if not button.__lockIcon then
+		SetupTexture(icon, cfg.icon, 'SetTexture', icon)
+	end
 	SetupTexture(flash, cfg.flash, 'SetTexture', flash)
 	SetupTexture(flyoutBorder, cfg.flyoutBorder, 'SetTexture', flyoutBorder)
 	SetupTexture(flyoutBorderShadow, cfg.flyoutBorderShadow, 'SetTexture', flyoutBorderShadow)
@@ -260,7 +259,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 end
 
 function ACTIONBAR:StyleExtraActionButton(cfg)
-	local button = ExtraActionButton1
+	local button = _G.ExtraActionButton1
 	if button.__styled then return end
 
 	local buttonName = button:GetName()
@@ -313,14 +312,14 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 end
 
 function ACTIONBAR:UpdateStanceHotKey()
-	for i = 1, NUM_STANCE_SLOTS do
+	for i = 1, _G.NUM_STANCE_SLOTS do
 		_G['StanceButton'..i..'HotKey']:SetText(GetBindingKey('SHAPESHIFTBUTTON'..i))
 		ACTIONBAR.UpdateHotKey(_G['StanceButton'..i])
 	end
 end
 
 function ACTIONBAR:StyleAllActionButtons(cfg)
-	for i = 1, NUM_ACTIONBAR_BUTTONS do
+	for i = 1, _G.NUM_ACTIONBAR_BUTTONS do
 		ACTIONBAR:StyleActionButton(_G['ActionButton'..i], cfg)
 		ACTIONBAR:StyleActionButton(_G['MultiBarBottomLeftButton'..i], cfg)
 		ACTIONBAR:StyleActionButton(_G['MultiBarBottomRightButton'..i], cfg)
@@ -333,27 +332,32 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
 	end
 
 	--petbar buttons
-	for i = 1, NUM_PET_ACTION_SLOTS do
+	for i = 1, _G.NUM_PET_ACTION_SLOTS do
 		ACTIONBAR:StyleActionButton(_G['PetActionButton'..i], cfg)
 	end
 
 	--stancebar buttons
-	for i = 1, NUM_STANCE_SLOTS do
+	for i = 1, _G.NUM_STANCE_SLOTS do
 		ACTIONBAR:StyleActionButton(_G['StanceButton'..i], cfg)
 	end
 
 	--possess buttons
-	for i = 1, NUM_POSSESS_SLOTS do
+	for i = 1, _G.NUM_POSSESS_SLOTS do
 		ACTIONBAR:StyleActionButton(_G['PossessButton'..i], cfg)
+	end
+
+	--leave vehicle
+	if FreeDB.unitframe.enable_unitframe and FreeDB.unitframe.combat_fader then
+		ACTIONBAR:StyleActionButton(_G['FreeUI_LeaveVehicleButton'], cfg)
 	end
 
 	--extra action button
 	ACTIONBAR:StyleExtraActionButton(cfg)
 
 	--spell flyout
-	SpellFlyoutBackgroundEnd:SetTexture(nil)
-	SpellFlyoutHorizontalBackground:SetTexture(nil)
-	SpellFlyoutVerticalBackground:SetTexture(nil)
+	_G.SpellFlyoutBackgroundEnd:SetTexture(nil)
+	_G.SpellFlyoutHorizontalBackground:SetTexture(nil)
+	_G.SpellFlyoutVerticalBackground:SetTexture(nil)
 	local function checkForFlyoutButtons()
 		local i = 1
 		local button = _G['SpellFlyoutButton'..i]
@@ -363,7 +367,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
 			button = _G['SpellFlyoutButton'..i]
 		end
 	end
-	SpellFlyout:HookScript('OnShow', checkForFlyoutButtons)
+	_G.SpellFlyout:HookScript('OnShow', checkForFlyoutButtons)
 end
 
 function ACTIONBAR:RestyleButtons()

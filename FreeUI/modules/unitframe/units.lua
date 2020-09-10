@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('UNITFRAME')
+local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
 
@@ -54,15 +54,17 @@ function UNITFRAME:SpawnPlayer()
 		player:HookScript('OnLeave', tagsOnLeave)
 	end
 
-	F.Mover(player, L['UNITFRAME_MOVER_PLAYER'], 'PlayerFrame', {'BOTTOM', UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
+	F.Mover(player, L['UNITFRAME_MOVER_PLAYER'], 'PlayerFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
-	if not FreeDB.actionbar.enable_actionbar then return end
-	FreeUI_LeaveVehicleBar:SetParent(player)
-	FreeUI_LeaveVehicleButton:ClearAllPoints()
-	FreeUI_LeaveVehicleButton:SetPoint('LEFT', player, 'RIGHT', 4, 0 )
-	F.ReskinClose(FreeUI_LeaveVehicleButton)
-	F.CreateSD(FreeUI_LeaveVehicleButton)
-	FreeUI_LeaveVehicleButton:SetSize(player:GetHeight()+4, player:GetHeight()+4)
+	if FreeDB.actionbar.enable_actionbar then
+		if FreeDB.unitframe.combat_fader then return end
+		FreeUI_LeaveVehicleBar:SetParent(player)
+		FreeUI_LeaveVehicleButton:ClearAllPoints()
+		FreeUI_LeaveVehicleButton:SetPoint('LEFT', player, 'RIGHT', 4, 0 )
+		F.ReskinClose(FreeUI_LeaveVehicleButton)
+		F.CreateSD(FreeUI_LeaveVehicleButton)
+		FreeUI_LeaveVehicleButton:SetSize(player:GetHeight()+4, player:GetHeight()+4)
+	end
 end
 
 local function CreatePetStyle(self)
@@ -93,14 +95,14 @@ local playTargetSound = function(self, event)
     if event == 'PLAYER_TARGET_CHANGED' then
         if (UnitExists(self.unit)) then
             if (UnitIsEnemy(self.unit, 'player')) then
-                PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
+                PlaySound(_G.SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
             elseif (UnitIsFriend('player', self.unit)) then
-                PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
+                PlaySound(_G.SOUNDKIT.IG_CHARACTER_NPC_SELECT)
             else
-                PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
+                PlaySound(_G.SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
             end
         else
-            PlaySound(SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
+            PlaySound(_G.SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
         end
     end
 end
@@ -135,7 +137,7 @@ function UNITFRAME:SpawnTarget()
 
 	local target = oUF:Spawn('target', 'oUF_Target')
 
-	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'BOTTOM', UIParent, 'BOTTOM', 240, 300}, target:GetWidth(), target:GetHeight())
+	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', 240, 300}, target:GetWidth(), target:GetHeight())
 end
 
 local function CreateTargetTargetStyle(self)
@@ -163,14 +165,14 @@ local playFocusSound = function(self, event)
 	if event == 'PLAYER_FOCUS_CHANGED' then
 		if UnitExists(self.unit) then
 			if UnitIsEnemy(self.unit, 'player') then
-				PlaySound(SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
+				PlaySound(_G.SOUNDKIT.IG_CREATURE_AGGRO_SELECT)
 			elseif UnitIsFriend('player', self.unit) then
-				PlaySound(SOUNDKIT.IG_CHARACTER_NPC_SELECT)
+				PlaySound(_G.SOUNDKIT.IG_CHARACTER_NPC_SELECT)
 			else
-				PlaySound(SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
+				PlaySound(_G.SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT)
 			end
 		else
-			PlaySound(SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
+			PlaySound(_G.SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT)
 		end
 	end
 end
@@ -201,7 +203,7 @@ function UNITFRAME:SpawnFocus()
 
 	local focus = oUF:Spawn('focus', 'oUF_Focus')
 
-	F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame', {'BOTTOM', UIParent, 'BOTTOM', -200, 220}, focus:GetWidth(), focus:GetHeight())
+	F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', -200, 220}, focus:GetWidth(), focus:GetHeight())
 end
 
 local function CreateFocusTargetStyle(self)
@@ -252,7 +254,7 @@ function UNITFRAME:SpawnBoss()
 
 	local boss = {}
 
-	for i = 1, MAX_BOSS_FRAMES do
+	for i = 1,  _G.MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn('boss'..i, 'oUF_Boss'..i)
 		if i == 1 then
 			boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 120, 160}, FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)

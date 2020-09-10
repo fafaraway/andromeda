@@ -1,13 +1,13 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('ACTIONBAR')
+local ACTIONBAR = F.ACTIONBAR
 
 
+local _G = getfenv(0)
 local next, tonumber, unpack, select = next, tonumber, unpack, select
-local ACTION_BUTTON_SHOW_GRID_REASON_CVAR = ACTION_BUTTON_SHOW_GRID_REASON_CVAR
 local margin, padding, buttonSizeSmall, buttonSizeNormal, buttonSizeBig
-local numNormal = NUM_ACTIONBAR_BUTTONS
-local numPet = NUM_PET_ACTION_SLOTS
-local numStance = NUM_STANCE_SLOTS
+local numNormal = _G.NUM_ACTIONBAR_BUTTONS
+local numPet = _G.NUM_PET_ACTION_SLOTS
+local numStance = _G.NUM_STANCE_SLOTS
 local numExtra = 1
 local buttonList = {}
 
@@ -79,8 +79,8 @@ function ACTIONBAR:CreateBar2()
 
 	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+buttonSizeNormal+padding}
 
-	MultiBarBottomLeft:SetParent(frame)
-	MultiBarBottomLeft:EnableMouse(false)
+	_G.MultiBarBottomLeft:SetParent(frame)
+	_G.MultiBarBottomLeft:EnableMouse(false)
 
 	for i = 1, numNormal do
 		local button = _G['MultiBarBottomLeftButton'..i]
@@ -126,8 +126,8 @@ function ACTIONBAR:CreateBar3()
 		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+2*(buttonSizeNormal+2*padding)}
 	end
 
-	MultiBarBottomRight:SetParent(frame)
-	MultiBarBottomRight:EnableMouse(false)
+	_G.MultiBarBottomRight:SetParent(frame)
+	_G.MultiBarBottomRight:EnableMouse(false)
 
 	for i = 1, numNormal do
 		local button = _G['MultiBarBottomRightButton'..i]
@@ -172,9 +172,9 @@ function ACTIONBAR:CreateBar4()
 
 	frame.Pos = {'RIGHT', UIParent, 'RIGHT', -4, 0}
 
-	MultiBarRight:SetParent(frame)
-	MultiBarRight:EnableMouse(false)
-	hooksecurefunc(MultiBarRight, 'SetScale', function(self, scale)
+	_G.MultiBarRight:SetParent(frame)
+	_G.MultiBarRight:EnableMouse(false)
+	hooksecurefunc(_G.MultiBarRight, 'SetScale', function(self, scale)
 		if scale < 1 then self:SetScale(1) end
 	end)
 
@@ -214,9 +214,9 @@ function ACTIONBAR:CreateBar5()
 
 	frame.Pos = {'RIGHT', 'FreeUI_ActionBar4', 'LEFT', 0, 0}
 
-	MultiBarLeft:SetParent(frame)
-	MultiBarLeft:EnableMouse(false)
-	hooksecurefunc(MultiBarLeft, 'SetScale', function(self, scale)
+	_G.MultiBarLeft:SetParent(frame)
+	_G.MultiBarLeft:EnableMouse(false)
+	hooksecurefunc(_G.MultiBarLeft, 'SetScale', function(self, scale)
 		if scale < 1 then self:SetScale(1) end
 	end)
 
@@ -254,10 +254,10 @@ function ACTIONBAR:CreatePetbar()
 
 	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+2*(buttonSizeNormal+2*padding)}
 
-	PetActionBarFrame:SetParent(frame)
-	PetActionBarFrame:EnableMouse(false)
-	SlidingActionBarTexture0:SetTexture(nil)
-	SlidingActionBarTexture1:SetTexture(nil)
+	_G.PetActionBarFrame:SetParent(frame)
+	_G.PetActionBarFrame:EnableMouse(false)
+	_G.SlidingActionBarTexture0:SetTexture(nil)
+	_G.SlidingActionBarTexture1:SetTexture(nil)
 
 	for i = 1, numPet do
 		local button = _G['PetActionButton'..i]
@@ -296,7 +296,7 @@ function ACTIONBAR:CreateStancebar()
 
 	local function positionBars()
 		if InCombatLockdown() then return end
-		local leftShown, rightShown = MultiBarBottomLeft:IsShown(), MultiBarBottomRight:IsShown()
+		local leftShown, rightShown = _G.MultiBarBottomLeft:IsShown(), _G.MultiBarBottomRight:IsShown()
 		if leftShown and rightShown then
 			frame:SetPoint('BOTTOM', 'FreeUI_ActionBar3', 'TOP', 0, 0)
 		elseif leftShown and not rightShown then
@@ -310,11 +310,11 @@ function ACTIONBAR:CreateStancebar()
 	hooksecurefunc('MultiActionBar_Update', positionBars)
 
 	-- STANCE BAR
-	StanceBarFrame:SetParent(frame)
-	StanceBarFrame:EnableMouse(false)
-	StanceBarLeft:SetTexture(nil)
-	StanceBarMiddle:SetTexture(nil)
-	StanceBarRight:SetTexture(nil)
+	_G.StanceBarFrame:SetParent(frame)
+	_G.StanceBarFrame:EnableMouse(false)
+	_G.StanceBarLeft:SetTexture(nil)
+	_G.StanceBarMiddle:SetTexture(nil)
+	_G.StanceBarRight:SetTexture(nil)
 
 	for i = 1, numStance do
 		local button = _G['StanceButton'..i]
@@ -330,12 +330,12 @@ function ACTIONBAR:CreateStancebar()
 	end
 
 	-- POSSESS BAR
-	PossessBarFrame:SetParent(frame)
-	PossessBarFrame:EnableMouse(false)
-	PossessBackground1:SetTexture(nil)
-	PossessBackground2:SetTexture(nil)
+	_G.PossessBarFrame:SetParent(frame)
+	_G.PossessBarFrame:EnableMouse(false)
+	_G.PossessBackground1:SetTexture(nil)
+	_G.PossessBackground2:SetTexture(nil)
 
-	for i = 1, NUM_POSSESS_SLOTS do
+	for i = 1, _G.NUM_POSSESS_SLOTS do
 		local button = _G['PossessButton'..i]
 		table.insert(buttonList, button)
 		button:Size(buttonSizeBig, buttonSizeBig)
@@ -365,16 +365,16 @@ function ACTIONBAR:CreateExtrabar()
 	local frame = CreateFrame('Frame', 'FreeUI_ExtraActionBar', UIParent, 'SecureHandlerStateTemplate')
 	frame:Width(numExtra*buttonSizeBig + (numExtra-1)*margin + 2*padding)
 	frame:Height(buttonSizeBig + 2*padding)
-	frame.Pos = {'CENTER', UIParent, 'CENTER', 0, 200}
+	frame.Pos = {'CENTER', UIParent, 'CENTER', 0, 300}
 	frame:SetScale(1)
 
-	ExtraActionBarFrame:SetParent(frame)
-	ExtraActionBarFrame:EnableMouse(false)
-	ExtraActionBarFrame:ClearAllPoints()
-	ExtraActionBarFrame:SetPoint('CENTER', 0, 0)
-	ExtraActionBarFrame.ignoreFramePositionManager = true
+	_G.ExtraActionBarFrame:SetParent(frame)
+	_G.ExtraActionBarFrame:EnableMouse(false)
+	_G.ExtraActionBarFrame:ClearAllPoints()
+	_G.ExtraActionBarFrame:SetPoint('CENTER', 0, 0)
+	_G.ExtraActionBarFrame.ignoreFramePositionManager = true
 
-	local button = ExtraActionButton1
+	local button = _G.ExtraActionButton1
 	table.insert(buttonList, button)
 
 	button:Size(buttonSizeBig, buttonSizeBig)
@@ -385,12 +385,12 @@ function ACTIONBAR:CreateExtrabar()
 	frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_EXTRA'], 'Extrabar', frame.Pos)
 
 	--zone ability
-	ZoneAbilityFrame:ClearAllPoints()
-	ZoneAbilityFrame.ignoreFramePositionManager = true
-	ZoneAbilityFrameNormalTexture:SetAlpha(0)
-	ZoneAbilityFrame:SetPoint('CENTER', UIParent, 'CENTER', 0, 300)
+	_G.ZoneAbilityFrame:ClearAllPoints()
+	_G.ZoneAbilityFrame.ignoreFramePositionManager = true
+	_G.ZoneAbilityFrameNormalTexture:SetAlpha(0)
+	_G.ZoneAbilityFrame:SetPoint('CENTER', UIParent, 'CENTER', 0, 300)
 
-	local spellButton = ZoneAbilityFrame.SpellButton
+	local spellButton = _G.ZoneAbilityFrame.SpellButton
 	spellButton:Size(buttonSizeBig, buttonSizeBig)
 	spellButton.Style:SetAlpha(0)
 	spellButton.Icon:SetTexCoord(unpack(C.TexCoord))
@@ -402,30 +402,36 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 	local frame = CreateFrame('Frame', 'FreeUI_LeaveVehicleBar', UIParent, 'SecureHandlerStateTemplate')
 	frame:Width(numExtra*buttonSizeBig + (numExtra-1)*margin + 2*padding)
 	frame:Height(buttonSizeBig + 2*padding)
-	frame.Pos = {'CENTER', UIParent, 'CENTER', 0, 100}
+	frame.Pos = {'CENTER', UIParent, 'CENTER', 0, 200}
 
 	local button = CreateFrame('CheckButton', 'FreeUI_LeaveVehicleButton', frame, 'ActionButtonTemplate, SecureHandlerClickTemplate')
 	table.insert(buttonList, button)
-	button:SetPoint('BOTTOMLEFT', frame, padding, padding)
-	button:Size(buttonSizeBig, buttonSizeBig)
+
 	button:RegisterForClicks('AnyUp')
 
-	--[[ button.icon:SetTexture('INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up')
-	button.icon:SetTexCoord(.216, .784, .216, .784)
-	button:SetNormalTexture(nil)
-	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	button:GetPushedTexture():SetTexture(C.Assets.button_pushed)
-	F.CreateBDFrame(button, nil, true)
-	frame.mover = F.Mover(frame, L['ACTIONBAR_LEAVE_VEHICLE'], 'LeaveVehicleButton', frame.Pos) ]]
+	button.__lockIcon = true
 
-	local function onClick(self)
-		if UnitOnTaxi('player') then TaxiRequestEarlyLanding() else VehicleExit() end
-		self:SetChecked(false)
+
+	if FreeDB.unitframe.enable_unitframe and FreeDB.unitframe.combat_fader then
+		button:SetSize(buttonSizeNormal, buttonSizeNormal)
+		button:SetPoint('BOTTOMLEFT', frame, padding, padding)
+
+		button.icon:SetTexture('INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up')
+		button.icon:SetTexCoord(.216, .784, .216, .784)
+
+		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_VEHICLE'], 'LeaveVehicleButton', frame.Pos)
 	end
 
-	button:SetScript('OnClick', onClick)
-	button:HookScript('OnEnter', MainMenuBarVehicleLeaveButton_OnEnter)
+
+	button:HookScript('OnEnter', _G.MainMenuBarVehicleLeaveButton_OnEnter)
 	button:HookScript('OnLeave', F.HideTooltip)
+	button:SetScript('OnClick', function(self)
+		if UnitOnTaxi('player') then TaxiRequestEarlyLanding() else VehicleExit() end
+		self:SetChecked(true)
+	end)
+	button:SetScript('OnShow', function(self)
+		self:SetChecked(false)
+	end)
 
 	frame.frameVisibility = '[canexitvehicle]c;[mounted]m;n'
 	RegisterStateDriver(frame, 'exit', frame.frameVisibility)
@@ -439,15 +445,15 @@ local scripts = {
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	_G.MainMenuBar, _G.OverrideActionBar,
 }
 
 local framesToDisable = {
-	MainMenuBar,
-	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
-	ActionBarDownButton, ActionBarUpButton, MainMenuBarVehicleLeaveButton,
-	OverrideActionBar,
-	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
+	_G.MainMenuBar,
+	_G.MicroButtonAndBagsBar, _G.MainMenuBarArtFrame, _G.StatusTrackingBarManager,
+	_G.ActionBarDownButton, _G.ActionBarUpButton, _G.MainMenuBarVehicleLeaveButton,
+	_G.OverrideActionBar,
+	_G.OverrideActionBarExpBar, _G.OverrideActionBarHealthBar, _G.OverrideActionBarPowerBar, _G.OverrideActionBarPitchFrame,
 }
 
 local function DisableAllScripts(frame)
@@ -459,10 +465,10 @@ local function DisableAllScripts(frame)
 end
 
 function ACTIONBAR:RemoveBlizzArt()
-	MainMenuBar:SetMovable(true)
-	MainMenuBar:SetUserPlaced(true)
-	MainMenuBar.ignoreFramePositionManager = true
-	MainMenuBar:SetAttribute('ignoreFramePositionManager', true)
+	_G.MainMenuBar:SetMovable(true)
+	_G.MainMenuBar:SetUserPlaced(true)
+	_G.MainMenuBar.ignoreFramePositionManager = true
+	_G.MainMenuBar:SetAttribute('ignoreFramePositionManager', true)
 
 	for _, frame in next, framesToHide do
 		frame:SetParent(F.HiddenFrame)
@@ -478,7 +484,7 @@ function ACTIONBAR:RemoveBlizzArt()
 		for i = 1, 12 do
 			local button = _G[name..i]
 			button:SetAttribute('showgrid', showgrid)
-			ActionButton_ShowGrid(button, ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
+			_G.ActionButton_ShowGrid(button, _G.ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
 		end
 	end
 
@@ -501,9 +507,9 @@ function ACTIONBAR:RemoveBlizzArt()
 
 	-- Update token panel
 	local function updateToken()
-		TokenFrame_LoadUI()
-		TokenFrame_Update()
-		BackpackTokenFrame_Update()
+		_G.TokenFrame_LoadUI()
+		_G.TokenFrame_Update()
+		_G.BackpackTokenFrame_Update()
 	end
 	F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', updateToken)
 end
@@ -531,18 +537,18 @@ function ACTIONBAR:OnLogin()
 	self:RestyleButtons()
 	self:ButtonRange()
 
-	F.HideOption(InterfaceOptionsActionBarsPanelBottomLeft)
-	F.HideOption(InterfaceOptionsActionBarsPanelBottomRight)
-	F.HideOption(InterfaceOptionsActionBarsPanelRight)
-	F.HideOption(InterfaceOptionsActionBarsPanelRightTwo)
-	F.HideOption(InterfaceOptionsActionBarsPanelStackRightBars)
-	F.HideOption(InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomLeft)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomRight)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelRight)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelRightTwo)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelStackRightBars)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelAlwaysShowActionBars)
 
-	if PlayerTalentFrame then
-		PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+	if _G.PlayerTalentFrame then
+		_G.PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
 	else
 		hooksecurefunc('TalentFrame_LoadUI', function()
-			PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
+			_G.PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
 		end)
 	end
 
