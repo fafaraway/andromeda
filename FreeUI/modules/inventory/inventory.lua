@@ -13,6 +13,12 @@ local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 local IsCorruptedItem = IsCorruptedItem
+local Ambiguate = Ambiguate
+
+local crossRealms = GetAutoCompleteRealms()
+if not crossRealms or #crossRealms == 0 then
+	crossRealms = {[1]=C.MyRealm}
+end
 
 local icons = {
 	['restore']   = C.AssetsPath..'inventory\\restore',
@@ -116,7 +122,9 @@ function INVENTORY:CreateCurrencyFrame()
 		end
 
 		if not FreeADB['gold_count'][C.MyRealm] then FreeADB['gold_count'][C.MyRealm] = {} end
-		FreeADB['gold_count'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		if not FreeADB['gold_count'][C.MyRealm][C.MyName] then FreeADB['gold_count'][C.MyRealm][C.MyName] = {} end
+		FreeADB['gold_count'][C.MyRealm][C.MyName][1] = GetMoney()
+		FreeADB['gold_count'][C.MyRealm][C.MyName][2] = C.MyClass
 
 		oldMoney = newMoney
 	end)
@@ -143,13 +151,20 @@ function INVENTORY:CreateCurrencyFrame()
 
 		local totalGold = 0
 		GameTooltip:AddLine(L['INVENTORY_CHARACTER'], .6,.8,1)
-		local thisRealmList = FreeADB['gold_count'][C.MyRealm]
-		for k, v in pairs(thisRealmList) do
-			local gold, class = unpack(v)
-			local r, g, b = F.ClassColor(class)
-			GameTooltip:AddDoubleLine(getClassIcon(class)..k, GetMoneyString(gold), r,g,b, 1, 1, 1)
-			totalGold = totalGold + gold
+
+		for _, realm in pairs(crossRealms) do
+			local thisRealmList = FreeADB['gold_count'][realm]
+			if thisRealmList then
+				for k, v in pairs(thisRealmList) do
+					local name = Ambiguate(k..'-'..realm, 'none')
+					local gold, class = unpack(v)
+					local r, g, b = F.ClassColor(class)
+					GameTooltip:AddDoubleLine(getClassIcon(class)..name, GetMoneyString(gold), r,g,b, 1,1,1)
+					totalGold = totalGold + gold
+				end
+			end
 		end
+
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(L['INVENTORY_GOLD_TOTAL'], GetMoneyString(totalGold), .6,.8,1, 1, 1, 1)
 

@@ -3,6 +3,11 @@ local INSTALL = F:GetModule('INSTALL')
 local GUI = F:GetModule('GUI')
 
 
+local crossRealms = GetAutoCompleteRealms()
+if not crossRealms or #crossRealms == 0 then
+	crossRealms = {[1]=C.MyRealm}
+end
+
 StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
 	text = L['GUI_THEME_CONFLICTION_WARNING'],
 	button1 = DISABLE,
@@ -74,7 +79,12 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(FreeADB['gold_count'][C.MyRealm])
+		for _, realm in pairs(crossRealms) do
+			if FreeADB['gold_count'][realm] then
+				wipe(FreeADB['gold_count'][realm])
+			end
+		end
+
 		FreeADB['gold_count'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
