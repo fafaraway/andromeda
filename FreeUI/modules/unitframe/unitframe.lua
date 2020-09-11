@@ -7,8 +7,6 @@ function UNITFRAME:OnLogin()
 
 	F:SetSmoothingAmount(.3)
 
-
-
 	self:SetColors()
 
 	self:SpawnPlayer()
@@ -30,10 +28,6 @@ function UNITFRAME:OnLogin()
 
 	if FreeDB.unitframe.enable_arena then
 		self:SpawnArena()
-	end
-
-	if FreeDB.unitframe.enable_nameplate then
-		self:SpawnNameplate()
 	end
 
 

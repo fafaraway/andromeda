@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 
-local colors = F.oUF.colors
+
 
 
 
@@ -593,9 +593,7 @@ C.CharacterSettings = {
 
 				['player_hide_tags'] = true,
 
-			['enable_nameplate'] = true,
-				['nameplate_width'] = 140,
-				['nameplate_height'] = 20,
+
 
 			['enable_pet'] = true,
 				['pet_width'] = 50,
@@ -678,6 +676,27 @@ C.CharacterSettings = {
 				['arenaShowAuras'] = true,
 				['arenaAuraPerRow'] = 6,
 				['arenaAuraTotal'] = 18,
+	},
+
+	['nameplate'] = {
+		['enable_nameplate'] = true,
+			['plate_width'] = 140,
+			['plate_height'] = 20,
+			['friendly_class_color'] = false,
+			['hostile_class_color'] = true,
+			['tank_mode'] = false,
+
+			['custom_unit_color'] = true,
+			['custom_color'] = {r=0, g=.8, b=.3},
+			['custom_unit_list'] = '',
+			['secure_color'] = {r=1, g=0, b=1},
+			['trans_color'] = {r=1, g=.8, b=0},
+			['insecure_color'] = {r=1, g=0, b=0},
+			['off_tank_color'] = {r=.2, g=.7, b=.5},
+			['dps_revert_threat'] = false,
+			['show_power_list'] = '',
+			['target_indicator'] = true,
+			['target_color'] = {r=.63, g=.82, b=.89}
 	},
 
 	['tooltip'] = {
