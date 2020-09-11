@@ -404,6 +404,63 @@ C['TalentCDFix'] = {
 }
 
 
+-- 取自地城手册的段落ID
+-- 纯数字则为GUID，选择目标后输入/getnpc获取
+local function GetSectionInfo(id)
+	return C_EncounterJournal.GetSectionInfo(id).title
+end
+
+-- 特殊单位的染色列表
+C['CustomUnits'] = {
+	[120651] = true, -- 爆炸物
+	[141851] = true, -- 戈霍恩之嗣
+	[153377] = true, -- 粘液，麦卡贡
+	[155432] = true, -- 魔力使者
+	[155433] = true, -- 虚触使者
+	[155434] = true, -- 潮汐使者
+	[161895] = true, -- 彼岸之物
+	[153527] = true, -- 亚基虫群领袖
+	[153401] = true, -- 克熙尔支配者
+	[157610] = true, -- 克熙尔支配者
+	[156795] = true, -- 军情七处线人
+
+	[GetSectionInfo(14544)] = true,	-- 海拉加尔观雾者
+	[GetSectionInfo(14595)] = true,	-- 深渊追猎者
+	[GetSectionInfo(16588)] = true,	-- 尖啸反舌鸟
+	[GetSectionInfo(16350)] = true,	-- 瓦里玛萨斯之影
+
+	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
+	[GetSectionInfo(18104)] = true,	-- 散疫触须
+	[GetSectionInfo(18232)] = true,	-- 艾什凡炮手
+	[GetSectionInfo(18499)] = true,	-- 凝结之血
+	[GetSectionInfo(18078)] = true,	-- 蛛魔编织者
+	[GetSectionInfo(18007)] = true,	-- 瘟疫聚合体
+	[GetSectionInfo(18053)] = true,	-- 灵魂荆棘
+	[GetSectionInfo(18312)] = true,	-- 血面兽
+	[GetSectionInfo(18890)] = true,	-- 夏尔扎克斯
+	[GetSectionInfo(18321)] = true,	-- 缠绕的蛇群
+	[GetSectionInfo(18271)] = true,	-- 爆裂图腾
+	[GetSectionInfo(17026)] = true,	-- 眩晕酒桶
+	[GetSectionInfo(19656)] = true,	-- 僵尸尘图腾
+	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
+	[GetSectionInfo(19279)] = true,	-- 谄媚海妖
+	[GetSectionInfo(19019)] = true,	-- 贪婪的追猎者
+	["爆裂工虫"] = true,
+	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
+	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
+	[GetSectionInfo(21329)] = true,	-- 聚合增生
+}
+
+-- 显示能量值的单位
+C['ShowPowerList'] = {
+	[155432] = true, -- 魔力使者
+	[152703] = true, -- 步行震击者X1型，麦卡贡
+	[163746] = true, -- 步行震击者X1型
+	[GetSectionInfo(13015)] = true,	-- 清扫器
+	[GetSectionInfo(15903)] = true,	-- 泰沙拉克的余烬
+	[GetSectionInfo(18540)] = true,	-- 纳兹曼尼鲜血妖术师
+	[GetSectionInfo(18539)] = true,	-- 碾压者
+}
 
 
 C.CharacterSettings = {
@@ -680,8 +737,8 @@ C.CharacterSettings = {
 
 	['nameplate'] = {
 		['enable_nameplate'] = true,
-			['plate_width'] = 140,
-			['plate_height'] = 20,
+			['plate_width'] = 50,
+			['plate_height'] = 5,
 			['friendly_class_color'] = false,
 			['hostile_class_color'] = true,
 			['tank_mode'] = false,
@@ -695,8 +752,8 @@ C.CharacterSettings = {
 			['off_tank_color'] = {r=.2, g=.7, b=.5},
 			['dps_revert_threat'] = false,
 			['show_power_list'] = '',
-			['target_indicator'] = true,
-			['target_color'] = {r=.63, g=.82, b=.89}
+			['selected_indicator'] = true,
+			['selected_color'] = {r=.73, g=.92, b=.99}
 	},
 
 	['tooltip'] = {

@@ -892,6 +892,8 @@ local function PostCastStart(self, unit)
 		self.Bg:SetBackdropColor(0, 0, 0, .2)
 		self.Bg:SetBackdropBorderColor(0, 0, 0, 0)
 	end
+
+	self.Text:SetText('') -- disable casting spell name, we only need interrupt info
 end
 
 local function PostUpdateInterruptible(self, unit)
@@ -969,6 +971,11 @@ function UNITFRAME:AddCastBar(self)
 		timer:SetPoint('CENTER', castbar)
 		castbar.Time = timer
 	end
+
+	local text = F.CreateFS(castbar, C.Assets.Fonts.Number, 9, 'OUTLINE')
+	text:SetPoint('TOP', castbar, 'BOTTOM', 0, -2)
+	text:Hide()
+	castbar.Text = text
 
 	local iconFrame = CreateFrame('Frame', nil, castbar)
 	if FreeDB.unitframe.castbar_focus_separate and self.unitStyle == 'focus' then
