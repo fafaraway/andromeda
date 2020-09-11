@@ -24,13 +24,11 @@
 *  `/free unlock` unlock UI elements
 *  `/free reset` reset all saved options data
 
-## Recommended Addons
-*  [DBM](https://github.com/DeadlyBossMods/DeadlyBossMods)
-*  [WeakAuras](https://github.com/WeakAuras/WeakAuras2)
-*  [Kui_Nameplates](https://github.com/kesava-wow/kuinameplates2)
+## Additional
 *  [Simpy's icon pack](https://git.tukui.org/Simpy/interface/tree/master)
 *  [Chinese font pack](https://1drv.ms/u/s!AocaDk73Gt7sgrZmwW0iTELqw2uQvQ?e=OQVeHe)
 
 ## Credits
-*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia), Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE
+*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia)
+*  Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE
 
