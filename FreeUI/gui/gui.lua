@@ -19,6 +19,7 @@ local tabsList = {
 	'QUEST',
 	'TOOLTIP',
 	'UNITFRAME',
+	'NAMEPLATE',
 	'MISC',
 	'DATA',
 	'CREDIT',
@@ -38,9 +39,10 @@ local iconsList = {
 	'Interface\\ICONS\\ABILITY_Rogue_RollTheBones04',
 	'Interface\\ICONS\\INV_Misc_ScrollUnrolled03d',
 	'Interface\\ICONS\\Ability_Mage_MassInvisibility',
-	'Interface\\ICONS\\Misc_Legionfall_Paladin',
+	'Interface\\ICONS\\ability_mage_GreaterInvisibility',
+	'Interface\\ICONS\\misc_rune_pvp_Random',
 	'Interface\\ICONS\\INV_Misc_Blingtron',
-	'Interface\\ICONS\\INV_Misc_CelebrationCake_01',
+	'Interface\\ICONS\\Ability_DeathKnight_HeartstopAura',
 }
 
 
@@ -222,11 +224,11 @@ local function CreateTab(parent, i, name)
 
 	tab.index = i
 
-	if tab.index >= 15 then
-		tab:SetPoint('TOPLEFT', 10, -32*i - 50)
-	else
-		tab:SetPoint('TOPLEFT', 10, -32*i - 20)
-	end
+	-- if tab.index >= 15 then
+	-- 	tab:SetPoint('TOPLEFT', 10, -32*i - 50)
+	-- else
+	tab:SetPoint('TOPLEFT', 10, -31*i - 20)
+	-- end
 
 	parent[name] = tab
 

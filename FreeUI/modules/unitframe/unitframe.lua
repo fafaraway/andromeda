@@ -7,8 +7,6 @@ function UNITFRAME:OnLogin()
 
 	F:SetSmoothingAmount(.3)
 
-
-
 	self:SetColors()
 
 	self:SpawnPlayer()

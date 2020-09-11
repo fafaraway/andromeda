@@ -5,7 +5,7 @@ local colors = F.oUF.colors
 
 colors.health = {.02, .02, .02}
 colors.disconnected = {.4, .4, .4}
-colors.tapped = {.4, .4, .4}
+colors.tapped = {.6, .6, .6}
 
 colors.smooth = {
 	1, 0, 0,

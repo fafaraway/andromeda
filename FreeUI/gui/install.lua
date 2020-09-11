@@ -101,10 +101,10 @@ local function SetupCVars()
 	SetCVar('nameplateOverlapH',  0.3) -- default .8
 	SetCVar('nameplateOverlapV',  0.7) -- default 1.1
 	SetCVar('nameplateSelectedScale', 1)
-	SetCVar('namePlateMinScale', 1)
+	SetCVar('namePlateMinScale', 0.8)
 	SetCVar('namePlateMaxScale', 1)
 	SetCVar('nameplateMinAlpha', 0.7) -- default .6
-	SetCVar('nameplateSelectedScale', 1.2)
+	SetCVar('nameplateSelectedScale', 1)
 	SetCVar('nameplateOccludedAlphaMult', 0.2) -- default .4
 	SetCVar('nameplateOtherTopInset', -1) -- default .08
 	SetCVar('nameplateOtherBottomInset', -1) -- default .1

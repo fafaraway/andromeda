@@ -1510,7 +1510,7 @@ local function UnitframeOptions()
 end
 
 local function MiscOptions()
-	local parent = FreeUI_GUI[14]
+	local parent = FreeUI_GUI[15]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1525,7 +1525,7 @@ local function MiscOptions()
 end
 
 local function DataOptions()
-	local parent = FreeUI_GUI[15]
+	local parent = FreeUI_GUI[16]
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)

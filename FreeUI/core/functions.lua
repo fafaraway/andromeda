@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 
 
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
-local strmatch, gmatch, strfind, format, gsub = string.match, string.gmatch, string.find, string.format, string.gsub
+local strmatch, gmatch, strfind, format, gsub, sub = string.match, string.gmatch, string.find, string.format, string.gsub, string.sub
 local min, max, floor, rad, modf = math.min, math.max, math.floor, math.rad, math.modf
 local assets = C.Assets
 local backdropColor = {.03, .03, .03}
@@ -183,20 +183,10 @@ do
 		return r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc
 	end
 
-	function F.RGBToHex(r, g, b, header, ending)
-		r = r <= 1 and r >= 0 and r or 1
-		g = g <= 1 and g >= 0 and g or 1
-		b = b <= 1 and b >= 0 and b or 1
-		return format('%s%02x%02x%02x%s', header or '|cff', r*255, g*255, b*255, ending or '')
-	end
-
 	function F.HexToRGB(hex)
-		local a, r, g, b = strmatch(hex, '^|?c?(%x%x)(%x%x)(%x%x)(%x?%x?)|?r?$')
-		if not a then return 0, 0, 0, 0 end
-		if b == '' then r, g, b, a = a, r, g, 'ff' end
-
-		return tonumber(r, 16), tonumber(g, 16), tonumber(b, 16), tonumber(a, 16)
+		return tonumber('0x'..sub(hex, 1, 2)) / 255, tonumber('0x'..sub(hex, 3, 4)) / 255, tonumber('0x'..sub(hex, 5, 6)) / 255
 	end
+
 end
 
 
