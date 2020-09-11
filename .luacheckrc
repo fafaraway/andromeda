@@ -13,6 +13,8 @@ ignore = {
 	"211/F", -- Unused local variable "F"
 	"211/C", -- Unused local variable "C"
 	"211/L", -- Unused local variable "L"
+	"42.", -- Shadowing a local variable, an argument, a loop variable.
+	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
 }
 
 globals = {
