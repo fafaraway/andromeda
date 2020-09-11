@@ -26,7 +26,7 @@ local function isMessageProtected(msg)
 end
 
 local function colorReplace(msg, r, g, b)
-	local hexRGB = F.HexRGB(r, g, b)
+	local hexRGB = F.RGBToHex(r, g, b)
 	local hexReplace = format('|r%s', hexRGB)
 	msg = gsub(msg, '|r', hexReplace)
 	msg = format('%s%s|r', hexRGB, msg)

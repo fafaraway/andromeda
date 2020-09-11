@@ -972,7 +972,7 @@ function UNITFRAME:AddCastBar(self)
 		castbar.Time = timer
 	end
 
-	local text = F.CreateFS(castbar, C.Assets.Fonts.Number, 9, 'OUTLINE')
+	local text = F.CreateFS(castbar, C.Assets.Fonts.Normal, 9, 'OUTLINE')
 	text:SetPoint('TOP', castbar, 'BOTTOM', 0, -2)
 	text:Hide()
 	castbar.Text = text

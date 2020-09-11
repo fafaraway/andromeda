@@ -135,7 +135,7 @@ function TOOLTIP:AuraSource(...)
 	local unitCaster = select(7, UnitAura(...))
 	if unitCaster then
 		local name = GetUnitName(unitCaster, true)
-		local hexColor = F.HexRGB(F.UnitColor(unitCaster))
+		local hexColor = F.RGBToHex(F.UnitColor(unitCaster))
 
 		if name then TOOLTIP.AddLineForID(self, hexColor..name, L['TOOLTIP_AURA_FROM'], true) end
 		self:Show()

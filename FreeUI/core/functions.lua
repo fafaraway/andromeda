@@ -135,13 +135,17 @@ end
 --[[ Color ]]
 
 do
-	function F.HexRGB(r, g, b)
+	function F.RGBToHex(r, g, b)
 		if r then
 			if type(r) == 'table' then
 				if r.r then r, g, b = r.r, r.g, r.b else r, g, b = unpack(r) end
 			end
 			return format('|cff%02x%02x%02x', r*255, g*255, b*255)
 		end
+	end
+
+	function F.HexToRGB(hex)
+		return tonumber('0x'..sub(hex, 1, 2)) / 255, tonumber('0x'..sub(hex, 3, 4)) / 255, tonumber('0x'..sub(hex, 5, 6)) / 255
 	end
 
 	function F.ClassColor(class)
@@ -182,11 +186,6 @@ do
 
 		return r1+(r2-r1)*relperc, g1+(g2-g1)*relperc, b1+(b2-b1)*relperc
 	end
-
-	function F.HexToRGB(hex)
-		return tonumber('0x'..sub(hex, 1, 2)) / 255, tonumber('0x'..sub(hex, 3, 4)) / 255, tonumber('0x'..sub(hex, 5, 6)) / 255
-	end
-
 end
 
 

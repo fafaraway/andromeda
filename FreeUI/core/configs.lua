@@ -742,18 +742,18 @@ C.CharacterSettings = {
 			['friendly_class_color'] = false,
 			['hostile_class_color'] = true,
 			['tank_mode'] = false,
-
-			['custom_unit_color'] = true,
-			['custom_color'] = {r=0, g=.8, b=.3},
-			['custom_unit_list'] = '',
 			['secure_color'] = {r=1, g=0, b=1},
 			['trans_color'] = {r=1, g=.8, b=0},
 			['insecure_color'] = {r=1, g=0, b=0},
 			['off_tank_color'] = {r=.2, g=.7, b=.5},
 			['dps_revert_threat'] = false,
+			['custom_unit_color'] = true,
+			['custom_color'] = {r=0, g=.8, b=.3},
+			['custom_unit_list'] = '',
 			['show_power_list'] = '',
 			['selected_indicator'] = true,
-			['selected_color'] = {r=.73, g=.92, b=.99}
+			['selected_color'] = {r=.73, g=.92, b=.99},
+			['interrupt_name'] = true,
 	},
 
 	['tooltip'] = {

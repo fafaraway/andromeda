@@ -128,7 +128,7 @@ function INFOBAR:Guild()
 			GameTooltip:AddLine(string.format(guildMotDString, GUILD_MOTD, guildMotD), ttsubh.r, ttsubh.g, ttsubh.b, 1)
 		end
 
-		local col = F.HexRGB(ttsubh.r, ttsubh.g, ttsubh.b)
+		local col = F.RGBToHex(ttsubh.r, ttsubh.g, ttsubh.b)
 
 		local _, _, standingID, barMin, barMax, barValue = GetGuildFactionInfo()
 

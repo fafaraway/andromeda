@@ -327,15 +327,17 @@ function NAMEPLATE:UpdateCastbarInterrupt(...)
 		if nameplate and nameplate.Castbar then
 			local _, class = GetPlayerInfoByGUID(sourceGUID)
 			local r, g, b = F.ClassColor(class)
-			local color = F.HexRGB(r, g, b)
+			local color = F.RGBToHex(r, g, b)
 			sourceName = Ambiguate(sourceName, 'short')
 			nameplate.Castbar.Text:Show()
-			nameplate.Castbar.Text:SetText(INTERRUPTED..' > '..color..sourceName)
+			nameplate.Castbar.Text:SetText(color..sourceName..'|r '..INTERRUPTED)
 		end
 	end
 end
 
 function NAMEPLATE:AddInterruptInfo()
+	if not FreeDB.nameplate.interrupt_name then return end
+
 	F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', self.UpdateCastbarInterrupt)
 end
 
@@ -412,7 +414,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 
 	if event ~= 'NAME_PLATE_UNIT_REMOVED' then
 
-		NAMEPLATE.UpdateTargetChange(self)
+		NAMEPLATE.UpdateSelectedChange(self)
 
 		NAMEPLATE.UpdateUnitClassify(self, unit)
 
