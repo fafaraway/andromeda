@@ -2,11 +2,14 @@ local F, C, L = unpack(select(2, ...))
 local MISC = F:GetModule('MISC')
 
 
+local strlower = string.lower
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
 local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_FriendList_IsFriend = C_FriendList.IsFriend
 local InviteToGroup = C_PartyInfo.InviteUnit
+
+
 
 local function CheckFriend(GUID)
 	if C_BattleNet_GetAccountInfoByID(GUID) or C_FriendList_IsFriend(GUID) or IsGuildMember(GUID) then
@@ -105,3 +108,74 @@ function MISC:WhisperInvite()
 	F:RegisterEvent('CHAT_MSG_WHISPER', MISC.OnChatWhisper)
 	F:RegisterEvent('CHAT_MSG_BN_WHISPER', MISC.OnChatWhisper)
 end
+
+
+
+
+
+
+
+
+-- auto invite by whisper
+local f = CreateFrame('Frame', UIParent)
+f:RegisterEvent('CHAT_MSG_WHISPER')
+f:RegisterEvent('CHAT_MSG_BN_WHISPER')
+
+-- EVENT 返回值 1密語 2角色id 12guid 13戰網好友的角色id
+f:SetScript('OnEvent',function(self, event, msg, name, _, _, _, _, _, _, _, _, _, _, presenceID)
+	for _, word in pairs(FreeADB.group_invite_keywords) do
+		if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(word) then
+			if event == 'CHAT_MSG_BN_WHISPER' then
+				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
+
+				if accountInfo then
+					local gameAccountInfo = accountInfo.gameAccountInfo
+					local gameID = gameAccountInfo.gameAccountID
+
+					if gameID then
+						local charName = gameAccountInfo.characterName
+						local realmName = gameAccountInfo.realmName
+
+						if CanCooperateWithGameAccount(accountInfo) then
+							BNInviteFriend(gameID)
+						end
+					end
+				end
+			else
+				InviteToGroup(name)
+			end
+		end
+	end
+
+	for _, Gword in pairs(FreeADB.guild_invite_keywords) do
+		if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(Gword) then
+			if event == 'CHAT_MSG_BN_WHISPER' then
+				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
+
+				if accountInfo then
+					local gameAccountInfo = accountInfo.gameAccountInfo
+					local gameID = gameAccountInfo.gameAccountID
+
+					if gameID then
+						local charName = gameAccountInfo.characterName
+						local realmName = gameAccountInfo.realmName
+
+						if CanCooperateWithGameAccount(accountInfo) then
+							local dialog = StaticPopup_Show('FREEUI_GUILD_INVITE', name)
+
+							if (dialog) then
+								dialog.data = charName..'-'..realmName
+							end
+						end
+					end
+				end
+			else
+				local dialog = StaticPopup_Show('FREEUI_GUILD_INVITE', name)
+
+				if (dialog) then
+					dialog.data = name
+				end
+			end
+		end
+	end
+end)
