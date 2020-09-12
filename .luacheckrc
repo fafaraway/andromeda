@@ -12,6 +12,7 @@ ignore = {
 globals = {
 	'FreeDB',
 	'FreeADB',
+	'Free_GUI',
 	'FreeUI_LeaveVehicleBar',
 	'FreeUI_LeaveVehicleButton',
 }
