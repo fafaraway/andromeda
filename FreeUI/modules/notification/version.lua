@@ -1,36 +1,87 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION = F:GetModule('NOTIFICATION')
+local NOTIFICATION = F.NOTIFICATION
 
 
-local check = function(self, event, prefix, message, _, sender)
-	if event == 'CHAT_MSG_ADDON' then
-		if prefix ~= 'FreeUIVersion' or sender == C.MyName then return end
-		if tonumber(message) ~= nil and tonumber(message) > tonumber(C.Version) then
-			F:CreateNotification(L['NOTIFICATION_VERSION'], C.BlueColor..L['NOTIFICATION_VERSION_OUTDATE'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
-			F.Print(format(L['NOTIFICATION_VERSION_OUTDATE'], C.Version))
-			self:UnregisterEvent('CHAT_MSG_ADDON')
-		end
-	else
-		if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) then
-			C_ChatInfo.SendAddonMessage('FreeUIVersion', tonumber(C.Version), 'INSTANCE_CHAT')
-		elseif IsInRaid(LE_PARTY_CATEGORY_HOME) then
-			C_ChatInfo.SendAddonMessage('FreeUIVersion', tonumber(C.Version), 'RAID')
-		elseif IsInGroup(LE_PARTY_CATEGORY_HOME) then
-			C_ChatInfo.SendAddonMessage('FreeUIVersion', tonumber(C.Version), 'PARTY')
-		elseif IsInGuild() then
-			C_ChatInfo.SendAddonMessage('FreeUIVersion', tonumber(C.Version), 'GUILD')
-		end
+local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+
+local lastVCTime, isVCInit = 0
+
+local function msgChannel()
+	return IsPartyLFG() and 'INSTANCE_CHAT' or IsInRaid() and 'RAID' or 'PARTY'
+end
+
+function NOTIFICATION:VersionCheck_Compare(new, old)
+	local new1, new2 = strsplit('.', new)
+	new1, new2 = tonumber(new1), tonumber(new2)
+
+	local old1, old2 = strsplit('.', old)
+	old1, old2 = tonumber(old1), tonumber(old2)
+
+	if new1 > old1 or (new1 == old1 and new2 > old2) then
+		return 'IsNew'
+	elseif new1 < old1 or (new1 == old1 and new2 < old2) then
+		return 'IsOld'
 	end
 end
 
+function NOTIFICATION:VersionCheck_Create(text)
+	if not FreeDB.notification.version_check then return end
+
+	F:CreateNotification(L['NOTIFICATION_VERSION'], C.BlueColor..L['NOTIFICATION_VERSION_OUTDATE'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
+	F.Print(format(L['NOTIFICATION_VERSION_OUTDATE'], text))
+end
+
+function NOTIFICATION:VersionCheck_Init()
+	if not isVCInit then
+		local status = NOTIFICATION:VersionCheck_Compare(FreeADB['detect_version'], C.Version)
+		if status == 'IsNew' then
+			local release = gsub(FreeADB['detect_version'], '(%d+)$', '0')
+			NOTIFICATION:VersionCheck_Create(release)
+		elseif status == 'IsOld' then
+			FreeADB['detect_version'] = C.Version
+		end
+
+		isVCInit = true
+	end
+end
+
+function NOTIFICATION:VersionCheck_Send(channel)
+	if GetTime() - lastVCTime >= 10 then
+		C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', FreeADB['detect_version'], channel)
+		lastVCTime = GetTime()
+	end
+end
+
+function NOTIFICATION:VersionCheck_Update(...)
+	local prefix, msg, distType, author = ...
+	if prefix ~= 'FreeUIVersionCheck' then return end
+	if Ambiguate(author, 'none') == C.MyName then return end
+
+	local status = NOTIFICATION:VersionCheck_Compare(msg, FreeADB['detect_version'])
+	if status == 'IsNew' then
+		FreeADB['detect_version'] = msg
+	elseif status == 'IsOld' then
+		NOTIFICATION:VersionCheck_Send(distType)
+	end
+
+	NOTIFICATION:VersionCheck_Init()
+end
+
+function NOTIFICATION:VersionCheck_UpdateGroup()
+	if not IsInGroup() then return end
+	NOTIFICATION:VersionCheck_Send(msgChannel())
+end
 
 function NOTIFICATION:VersionCheck()
-    if not FreeDB.notification.version_check then return end
+	NOTIFICATION:VersionCheck_Init()
+	C_ChatInfo_RegisterAddonMessagePrefix('FreeUIVersionCheck')
+	F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
 
-    local frame = CreateFrame('Frame')
-    frame:RegisterEvent('PLAYER_ENTERING_WORLD')
-    frame:RegisterEvent('GROUP_ROSTER_UPDATE')
-    frame:RegisterEvent('CHAT_MSG_ADDON')
-    frame:SetScript('OnEvent', check)
-    C_ChatInfo.RegisterAddonMessagePrefix('FreeUIVersion')
+	if IsInGuild() then
+		C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', C.Version, 'GUILD')
+		lastVCTime = GetTime()
+	end
+	NOTIFICATION:VersionCheck_UpdateGroup()
+	F:RegisterEvent('GROUP_ROSTER_UPDATE', NOTIFICATION.VersionCheck_UpdateGroup)
 end
