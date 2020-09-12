@@ -247,6 +247,62 @@ function CHAT:AutoToggleChatBubble()
 	end
 end
 
+-- alt + left click for group invite
+-- ctrl + left click for guild invite
+local function ClickToInvite(self, link, _, button)
+	if not FreeDB.chat.click_to_invite then return end
+
+	local type, value = link:match('(%a+):(.+)')
+	local hide
+
+	if button == 'LeftButton' and IsModifierKeyDown() then
+		if type == 'player' then
+			local unit = value:match('([^:]+)')
+
+			if IsAltKeyDown() then
+				InviteToGroup(unit)
+
+				hide = true
+			elseif IsControlKeyDown() then
+				GuildInvite(unit)
+
+				hide = true
+			end
+		elseif type == 'BNplayer' then
+			local _, bnID = value:match('([^:]*):([^:]*):')
+			if not bnID then return end
+
+			local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
+			if not accountInfo then return end
+
+			local gameAccountInfo = accountInfo.gameAccountInfo
+			local gameID = gameAccountInfo.gameAccountID
+
+			if gameID and CanCooperateWithGameAccount(accountInfo) then
+				if IsAltKeyDown() then
+					BNInviteFriend(gameID)
+
+					hide = true
+				elseif IsControlKeyDown() then
+					local charName = gameAccountInfo.characterName
+					local realmName = gameAccountInfo.realmName
+
+					GuildInvite(charName..'-'..realmName)
+
+					hide = true
+				end
+			end
+		end
+	else
+
+		return
+	end
+
+	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
+end
+
+
+
 
 function CHAT:OnLogin()
 	for i = 1, NUM_CHAT_WINDOWS do
@@ -281,14 +337,7 @@ function CHAT:OnLogin()
 		F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
 	end
 
-	-- Remove player's realm name
-	local function RemoveRealmName(self, event, msg, author, ...)
-		local realm = string.gsub(C.MyRealm, ' ', '')
-		if msg:find('-' .. realm) then
-			return false, gsub(msg, '%-'..realm, ''), author, ...
-		end
-	end
-	ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', RemoveRealmName)
+	hooksecurefunc('ChatFrame_OnHyperlinkShow', ClickToInvite)
 
 	self:UpdateEditBoxBorderColor()
 	self:ResizeChatFrame()
