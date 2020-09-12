@@ -22,7 +22,7 @@ local tabsList = {
 	'NAMEPLATE',
 	'MISC',
 	'DATA',
-	'CREDIT',
+	'CREDITS',
 }
 
 local iconsList = {
@@ -39,31 +39,37 @@ local iconsList = {
 	'Interface\\ICONS\\ABILITY_Rogue_RollTheBones04',
 	'Interface\\ICONS\\INV_Misc_ScrollUnrolled03d',
 	'Interface\\ICONS\\Ability_Mage_MassInvisibility',
-	'Interface\\ICONS\\ability_mage_GreaterInvisibility',
+	'Interface\\ICONS\\Spell_BurningSoul',
 	'Interface\\ICONS\\misc_rune_pvp_Random',
 	'Interface\\ICONS\\INV_Misc_Blingtron',
-	'Interface\\ICONS\\Ability_DeathKnight_HeartstopAura',
+	'Interface\\ICONS\\Raf-Icon',
 }
 
 
 local function SaveValue(key, value, newValue)
-	if key == 'CLASSCOLORS' then
+	if key == 'CLASS_COLORS' then
 		if newValue ~= nil then
 			FreeADB['class_colors'][value] = newValue
 		else
 			return FreeADB['class_colors'][value]
 		end
-	elseif key == 'POWERCOLORS' then
+	elseif key == 'POWER_COLORS' then
 		if newValue ~= nil then
 			FreeADB['power_colors'][value] = newValue
 		else
 			return FreeADB['power_colors'][value]
 		end
-	elseif key == 'CLASSPOWERCOLORS' then
+	elseif key == 'CLASS_POWER_COLORS' then
 		if newValue ~= nil then
 			FreeADB['class_power_colors'][value] = newValue
 		else
 			return FreeADB['class_power_colors'][value]
+		end
+	elseif key == 'REACTION_COLORS' then
+		if newValue ~= nil then
+			FreeADB['reaction_colors'][value] = newValue
+		else
+			return FreeADB['reaction_colors'][value]
 		end
 	elseif key == 'APPEARANCE' then
 		if newValue ~= nil then
@@ -224,11 +230,11 @@ local function CreateTab(parent, i, name)
 
 	tab.index = i
 
-	-- if tab.index >= 15 then
-	-- 	tab:SetPoint('TOPLEFT', 10, -32*i - 50)
-	-- else
-	tab:SetPoint('TOPLEFT', 10, -31*i - 20)
-	-- end
+	if tab.index >= 16 then
+		tab:SetPoint('TOPLEFT', 10, -31*i - 30)
+	else
+		tab:SetPoint('TOPLEFT', 10, -31*i - 20)
+	end
 
 	parent[name] = tab
 
@@ -323,6 +329,7 @@ local function CreateGUI()
 		guiPage[i].desc = desc
 
 		FreeUI_GUI[i] = guiPage[i].child
+		FreeUI_GUI[i].tab = guiTab[i]
 		FreeUI_GUI[i].header = header
 		FreeUI_GUI[i].desc = desc
 	end

@@ -4,15 +4,99 @@ local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
 
-local wipe = wipe
-local INTERRUPTED = INTERRUPTED
+local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
+local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 
+function NAMEPLATE:PlateInsideView()
+	if FreeDB.nameplate.inside_view then
+		SetCVar('nameplateOtherTopInset', .05)
+		SetCVar('nameplateOtherBottomInset', .08)
+	else
+		SetCVar('nameplateOtherTopInset', -1)
+		SetCVar('nameplateOtherBottomInset', -1)
+	end
+end
+
+function NAMEPLATE:UpdatePlateScale()
+	SetCVar('namePlateMinScale', FreeDB.nameplate.min_scale)
+	SetCVar('namePlateMaxScale', FreeDB.nameplate.min_scale)
+end
+
+function NAMEPLATE:UpdatePlateTargetScale()
+	SetCVar('nameplateLargerScale', FreeDB.nameplate.target_scale)
+	SetCVar('nameplateSelectedScale', FreeDB.nameplate.target_scale)
+end
+
+function NAMEPLATE:UpdatePlateAlpha()
+	SetCVar('nameplateMinAlpha', FreeDB.nameplate.min_alpha)
+	SetCVar('nameplateMaxAlpha', FreeDB.nameplate.min_alpha)
+	SetCVar('nameplateSelectedAlpha', 1)
+end
+
+function NAMEPLATE:UpdatePlateOccludedAlpha()
+	SetCVar('nameplateOccludedAlphaMult', FreeDB.nameplate.occluded_alpha)
+end
+
+function NAMEPLATE:UpdatePlateDistance()
+	SetCVar('nameplateMaxDistance', FreeDB.nameplate.max_distance)
+end
+
+function NAMEPLATE:UpdatePlateVerticalSpacing()
+	SetCVar('nameplateOverlapV', FreeDB.nameplate.vertical_spacing)
+end
+
+function NAMEPLATE:UpdatePlateHorizontalSpacing()
+	SetCVar('nameplateOverlapH', FreeDB.nameplate.horizontal_spacing)
+end
 
 function NAMEPLATE:UpdateClickableSize()
 	if InCombatLockdown() then return end
-	C_NamePlate.SetNamePlateEnemySize(FreeDB.nameplate.plate_width*FreeADB['ui_scale'], FreeDB.nameplate.plate_height*FreeADB['ui_scale']+40)
-	C_NamePlate.SetNamePlateFriendlySize(FreeDB.nameplate.plate_width*FreeADB['ui_scale'], FreeDB.nameplate.plate_height*FreeADB['ui_scale']+40)
+	C_NamePlate.SetNamePlateEnemySize(FreeDB.nameplate.plate_width * FreeADB['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['ui_scale'] + 40)
+	C_NamePlate.SetNamePlateFriendlySize(FreeDB.nameplate.plate_width * FreeADB['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['ui_scale'] + 40)
 end
+
+
+function NAMEPLATE:SetupCVars()
+	NAMEPLATE:PlateInsideView()
+
+	NAMEPLATE:UpdatePlateDistance()
+
+	NAMEPLATE:UpdatePlateVerticalSpacing()
+	NAMEPLATE:UpdatePlateHorizontalSpacing()
+
+	NAMEPLATE:UpdatePlateAlpha()
+	NAMEPLATE:UpdatePlateOccludedAlpha()
+
+	NAMEPLATE:UpdatePlateScale()
+	NAMEPLATE:UpdatePlateTargetScale()
+
+	SetCVar('nameplateShowSelf', 0)
+	SetCVar('nameplateResourceOnTarget', 0)
+	F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
+	F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
+
+	NAMEPLATE:UpdateClickableSize()
+	hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
+end
+
+function NAMEPLATE:BlockAddons()
+	if not DBM or not DBM.Nameplate then return end
+
+	function DBM.Nameplate:SupportedNPMod()
+		return true
+	end
+
+	local function showAurasForDBM(_, _, _, spellID)
+		if not tonumber(spellID) then return end
+		if not C.PlateAuraWhiteList[spellID] then
+			C.PlateAuraWhiteList[spellID] = true
+		end
+	end
+	hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)
+end
+
+
+
 
 
 -- Elements
@@ -41,6 +125,7 @@ function NAMEPLATE:UpdateUnitPower()
 		self.powerText:Hide()
 	end
 end
+
 
 -- Off-tank threat color
 local groupRoles, isInGroup = {}
@@ -84,6 +169,7 @@ function NAMEPLATE:CheckTankStatus(unit)
 	end
 end
 
+
 -- Update unit color
 function NAMEPLATE:UpdateColor(_, unit)
 	if not unit or self.unit ~= unit then return end
@@ -101,6 +187,7 @@ function NAMEPLATE:UpdateColor(_, unit)
 	local insecureColor = FreeDB.nameplate.insecure_color
 	local revertThreat = FreeDB.nameplate.dps_revert_threat
 	local offTankColor = FreeDB.nameplate.off_tank_color
+	local friendlyColor = FreeDB.nameplate.friendly_color
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
@@ -112,7 +199,7 @@ function NAMEPLATE:UpdateColor(_, unit)
 			if FreeDB.nameplate.friendly_class_color then
 				r, g, b = F.UnitColor(unit)
 			else
-				r, g, b = .3, .3, 1
+				r, g, b = friendlyColor.r, friendlyColor.g, friendlyColor.b
 			end
 		elseif isPlayer and (not isFriendly) and FreeDB.nameplate.hostile_class_color then
 			r, g, b = F.UnitColor(unit)
@@ -171,7 +258,7 @@ function NAMEPLATE:UpdateThreatColor(_, unit)
 end
 
 function NAMEPLATE:AddThreatIndicator(self)
-	local frameHeight = 4
+	if not FreeDB.nameplate.threat_indicator then return end
 
 	local frame = CreateFrame('Frame', nil, self)
 	frame:SetAllPoints()
@@ -181,7 +268,7 @@ function NAMEPLATE:AddThreatIndicator(self)
 	local threat = frame:CreateTexture(nil, 'OVERLAY')
 	threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 0)
 	threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, 0)
-	threat:SetHeight(frameHeight)
+	threat:SetHeight(4)
 	threat:SetTexture(C.Assets.glow_top_tex)
 	threat:Hide()
 
@@ -191,9 +278,8 @@ end
 
 
 -- Target indicator
-function NAMEPLATE:UpdateSelectedChange()
+function NAMEPLATE:UpdateTargetChange()
 	local element = self.TargetIndicator
-	if not FreeDB.nameplate.selected_indicator then return end
 
 	if UnitIsUnit(self.unit, 'target') and not UnitIsUnit(self.unit, 'player') then
 		element:Show()
@@ -202,7 +288,7 @@ function NAMEPLATE:UpdateSelectedChange()
 	end
 end
 
-function NAMEPLATE:UpdateSelectedIndicator()
+function NAMEPLATE:UpdateTargetIndicator()
 	local element = self.TargetIndicator
 
 	if FreeDB.nameplate.selected_indicator then
@@ -212,9 +298,10 @@ function NAMEPLATE:UpdateSelectedIndicator()
 	end
 end
 
-function NAMEPLATE:AddSelectedIndicator(self)
-	local frameHeight = 4
-	local color = FreeDB.nameplate.selected_color
+function NAMEPLATE:AddTargetIndicator(self)
+	if not FreeDB.nameplate.target_indicator then return end
+
+	local color = FreeDB.nameplate.target_color
 	local r, g, b = color.r, color.g, color.b
 
 	local frame = CreateFrame('Frame', nil, self)
@@ -225,13 +312,14 @@ function NAMEPLATE:AddSelectedIndicator(self)
 	local texBot = frame:CreateTexture(nil, 'OVERLAY')
 	texBot:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, 0)
 	texBot:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
-	texBot:SetHeight(frameHeight)
+	texBot:SetHeight(4)
 	texBot:SetTexture(C.Assets.glow_bottom_tex)
 	texBot:SetVertexColor(r, g, b, .85)
 
 	self.TargetIndicator = frame
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateSelectedChange, true)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
 end
+
 
 -- Mouseover indicator
 function NAMEPLATE:IsMouseoverUnit()
@@ -282,19 +370,18 @@ function NAMEPLATE:AddHighlight(self)
 	self.HighlightUpdater = f
 end
 
+
 -- Unit classification
 local classify = {
-	rare = {1, 1, 1, true},
-	rareelite = {1, .1, .1},
-	worldboss = {0, 1, 0},
+	rare = 'VignetteKill',
+	rareelite = 'VignetteKill',
+	worldboss = 'VignetteKillElite',
 }
 
 function NAMEPLATE:AddRareIndicator(self)
-	local iconFrame = CreateFrame('Frame', nil, self)
-	iconFrame:SetAllPoints()
+	if not FreeDB.nameplate.classify_indicator then return end
 
-	local icon = iconFrame:CreateTexture(nil, 'ARTWORK')
-	icon:SetAtlas('VignetteKill')
+	local icon = self:CreateTexture(nil, 'ARTWORK')
 	icon:SetPoint('LEFT', self, 'RIGHT')
 	icon:SetSize(8, 8)
 	icon:Hide()
@@ -306,9 +393,8 @@ function NAMEPLATE:UpdateUnitClassify(unit)
 	if self.ClassifyIndicator then
 		local class = UnitClassification(unit)
 		if class and classify[class] then
-			local r, g, b, desature = unpack(classify[class])
-			self.ClassifyIndicator:SetVertexColor(r, g, b)
-			self.ClassifyIndicator:SetDesaturated(desature)
+			local tex = classify[class]
+			self.ClassifyIndicator:SetAtlas(tex)
 			self.ClassifyIndicator:Show()
 		else
 			self.ClassifyIndicator:Hide()
@@ -316,6 +402,46 @@ function NAMEPLATE:UpdateUnitClassify(unit)
 	end
 end
 
+
+-- Scale plates for explosives
+local hasExplosives
+local id = 120651
+function NAMEPLATE:UpdateExplosives(event, unit)
+	if not hasExplosives or unit ~= self.unit then return end
+
+	local npcID = self.npcID
+	if event == 'NAME_PLATE_UNIT_ADDED' and npcID == id then
+		self:SetScale(FreeADB.ui_scale * 1.25)
+	elseif event == 'NAME_PLATE_UNIT_REMOVED' then
+		self:SetScale(FreeADB.ui_scale)
+	end
+end
+
+local function checkInstance()
+	local name, _, instID = GetInstanceInfo()
+	if name and instID == 8 then
+		hasExplosives = true
+	else
+		hasExplosives = false
+	end
+end
+
+local function checkAffixes(event)
+	local affixes = C_MythicPlus_GetCurrentAffixes()
+	if not affixes then return end
+	if affixes[3] and affixes[3].id == 13 then
+		checkInstance()
+		F:RegisterEvent(event, checkInstance)
+		F:RegisterEvent('CHALLENGE_MODE_START', checkInstance)
+	end
+	F:UnregisterEvent(event, checkAffixes)
+end
+
+function NAMEPLATE:CheckExplosives()
+	if not FreeDB.nameplate.explosive_scale then return end
+
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', checkAffixes)
+end
 
 
 -- Interrupt info on castbars
@@ -342,16 +468,12 @@ function NAMEPLATE:AddInterruptInfo()
 end
 
 
-
-
-
-
-
+-- create plate
 local platesList = {}
 local function CreateNameplateStyle(self)
-	self.unitStyle = 'nameplate'
+	self.unitStyle = 'plate'
 	self:SetSize(FreeDB.nameplate.plate_width, FreeDB.nameplate.plate_height)
-	self:SetPoint('CENTER')
+	self:SetPoint('CENTER', 0, -10)
 	self:SetScale(1)
 
 	local health = CreateFrame('StatusBar', nil, self)
@@ -364,21 +486,44 @@ local function CreateNameplateStyle(self)
 	self.Health.UpdateColor = NAMEPLATE.UpdateColor
 
 
-	NAMEPLATE:AddSelectedIndicator(self)
+
+	local name = F.CreateFS(self, C.Assets.Fonts.Normal, 9, nil, nil, nil, 'THICK')
+	name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+	self:Tag(name, '[free:name]')
+	self.Name = name
+
+	UNITFRAME:AddHealthPrediction(self)
+	NAMEPLATE:AddTargetIndicator(self)
 	NAMEPLATE:AddHighlight(self)
 	NAMEPLATE:AddRareIndicator(self)
 	NAMEPLATE:AddThreatIndicator(self)
 	UNITFRAME:AddCastBar(self)
+	UNITFRAME:AddRaidTargetIndicator(self)
+	UNITFRAME:AddAuras(self)
 
 	platesList[self] = self:GetName()
 end
 
 
+
+
+function NAMEPLATE:UpdateNameplateAuras()
+	local element = self.Auras
+	element:SetPoint('BOTTOM', self, 'TOP', 0, 8)
+	element.numTotal = FreeDB.nameplate.aura_number
+	element.size = FreeDB.nameplate.aura_size
+	element:SetWidth(self:GetWidth())
+	element:SetHeight((element.size + element.spacing) * 2)
+	element:ForceUpdate()
+end
+
+
+
 function NAMEPLATE:RefreshNameplats()
 	for nameplate in pairs(platesList) do
-
-		NAMEPLATE.UpdateSelectedIndicator(nameplate)
-		NAMEPLATE.UpdateSelectedChange(nameplate)
+		NAMEPLATE.UpdateNameplateAuras()
+		NAMEPLATE.UpdateTargetIndicator(nameplate)
+		NAMEPLATE.UpdateTargetChange(nameplate)
 	end
 	NAMEPLATE:UpdateClickableSize()
 end
@@ -388,6 +533,58 @@ function NAMEPLATE:RefreshAllPlates()
 end
 
 
+local DisabledElements = {
+	'Health', 'Castbar', 'HealPredictionAndAbsorb', 'PvPClassificationIndicator', 'ThreatIndicator'
+}
+function NAMEPLATE:UpdatePlateByType()
+	local name = self.Name
+	local raidtarget = self.RaidTargetIndicator
+	local classify = self.ClassifyIndicator
+
+	name:ClearAllPoints()
+	raidtarget:ClearAllPoints()
+
+	for _, element in pairs(DisabledElements) do
+		if not self:IsElementEnabled(element) then
+			self:EnableElement(element)
+		end
+	end
+
+	name:SetJustifyH('CENTER')
+	self:Tag(name, '[free:name]')
+	name:UpdateTag()
+	name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+
+	raidtarget:SetPoint('CENTER', self)
+	raidtarget:SetParent(self.Health)
+
+	classify:Show()
+
+	NAMEPLATE.UpdateTargetIndicator(self)
+end
+
+
+function NAMEPLATE:RefreshPlateType(unit)
+	self.reaction = UnitReaction(unit, 'player')
+	self.isFriendly = self.reaction and self.reaction >= 5
+
+	if self.previousType == nil then
+		NAMEPLATE.UpdatePlateByType(self)
+	end
+end
+
+
+function NAMEPLATE:OnUnitFactionChanged(unit)
+	local nameplate = C_NamePlate_GetNamePlateForUnit(unit, issecure())
+	local unitFrame = nameplate and nameplate.unitFrame
+	if unitFrame and unitFrame.unitName then
+		NAMEPLATE.RefreshPlateType(unitFrame, unit)
+	end
+end
+
+function NAMEPLATE:RefreshPlateOnFactionChanged()
+	F:RegisterEvent('UNIT_FACTION', NAMEPLATE.OnUnitFactionChanged)
+end
 
 
 function NAMEPLATE:PostUpdatePlates(event, unit)
@@ -405,7 +602,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 		local blizzPlate = self:GetParent().UnitFrame
 		self.widget = blizzPlate.WidgetContainer
 
-		--NAMEPLATE.RefreshPlateType(self, unit)
+		NAMEPLATE.RefreshPlateType(self, unit)
 	elseif event == 'NAME_PLATE_UNIT_REMOVED' then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
@@ -413,13 +610,11 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 	end
 
 	if event ~= 'NAME_PLATE_UNIT_REMOVED' then
-
-		NAMEPLATE.UpdateSelectedChange(self)
-
+		NAMEPLATE.UpdateTargetChange(self)
 		NAMEPLATE.UpdateUnitClassify(self, unit)
-
 	end
 
+	NAMEPLATE.UpdateExplosives(self, event, unit)
 end
 
 
@@ -427,10 +622,14 @@ end
 function NAMEPLATE:OnLogin()
 	if not FreeDB.nameplate.enable_nameplate then return end
 
+	self:SetupCVars()
+	self:BlockAddons()
 	self:CreateUnitTable()
 	self:CreatePowerUnitTable()
+	self:CheckExplosives()
 	self:AddInterruptInfo()
 	self:UpdateGroupRoles()
+	self:RefreshPlateOnFactionChanged()
 
 	oUF:RegisterStyle('Nameplate', CreateNameplateStyle)
 	oUF:SetActiveStyle('Nameplate')

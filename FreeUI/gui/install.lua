@@ -84,34 +84,28 @@ local function SetupCVars()
 	SetCVar('floatingCombatTextCombatDamage', 1)
 	SetCVar('floatingCombatTextCombatHealing', 1)
 	SetCVar('floatingCombatTextCombatDamageDirectionalOffset', 5)
-	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 0) -- 0 old style 1 new style
-	SetCVar('floatingCombatTextFloatMode', 1) -- 1 up 2 down 3 curve
+	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 1) -- 0 old style 1-5 new style
+	SetCVar('floatingCombatTextFloatMode', 3) -- 1 up 2 down 3 curve
 
 	-- nameplates
-	SetCVar('nameplateShowSelf', 0)
+
 	SetCVar('nameplateShowAll', 1)
-	SetCVar('ShowClassColorInNameplate', 1)
+
 	SetCVar('nameplateShowEnemies', 1)
 	SetCVar('nameplateShowEnemyGuardians', 1)
 	SetCVar('nameplateShowEnemyMinions', 1)
 	SetCVar('nameplateShowEnemyPets', 1)
 	SetCVar('nameplateShowEnemyTotems', 1)
 	SetCVar('nameplateShowEnemyMinus', 1)
+
 	SetCVar('nameplateMotion', 1)
-	SetCVar('nameplateOverlapH',  0.3) -- default .8
-	SetCVar('nameplateOverlapV',  0.7) -- default 1.1
-	SetCVar('nameplateSelectedScale', 1)
-	SetCVar('namePlateMinScale', 0.8)
-	SetCVar('namePlateMaxScale', 1)
-	SetCVar('nameplateMinAlpha', 0.7) -- default .6
-	SetCVar('nameplateSelectedScale', 1)
-	SetCVar('nameplateOccludedAlphaMult', 0.2) -- default .4
-	SetCVar('nameplateOtherTopInset', -1) -- default .08
-	SetCVar('nameplateOtherBottomInset', -1) -- default .1
-	SetCVar('nameplateMaxDistance', 45) -- default 60
-	SetCVar('nameplateLargerScale', 1) -- boss
-	SetCVar('nameplateLargeTopInset', 0.08)
-	SetCVar('nameplateLargeBottomInset', 0.1)
+
+
+
+
+
+
+
 
 	-- quest
 	SetCVar('autoQuestWatch', 1)

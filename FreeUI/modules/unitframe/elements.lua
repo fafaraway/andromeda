@@ -13,27 +13,15 @@ local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 
 -- Frame backdrop
 function UNITFRAME:AddBackDrop(self)
-	--[[ local highlight = self:CreateTexture(nil, 'BORDER')
-	highlight:SetAllPoints()
-	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-	highlight:SetTexCoord(0, 1, .5, 1)
-	highlight:SetVertexColor(.6, .6, .6)
-	highlight:SetBlendMode('ADD')
-	highlight:Hide()
-
 	self:RegisterForClicks('AnyUp')
+
 	self:HookScript('OnEnter', function()
 		UnitFrame_OnEnter(self)
-		highlight:Show()
 	end)
+
 	self:HookScript('OnLeave', function()
 		UnitFrame_OnLeave(self)
-		highlight:Hide()
 	end)
-
-	self.Highlight = highlight ]]
-
-	self:RegisterForClicks('AnyUp')
 
 	F.CreateTex(self)
 
@@ -44,6 +32,27 @@ function UNITFRAME:AddBackDrop(self)
 
 	local glow = F.CreateSD(self.Bg)
 	self.Glow = glow
+end
+
+-- Mouseover highlight
+function UNITFRAME:AddHighlight(self)
+	local highlight = self:CreateTexture(nil, 'OVERLAY')
+	highlight:SetAllPoints()
+	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+	highlight:SetTexCoord(0, 1, .5, 1)
+	highlight:SetVertexColor(.6, .6, .6)
+	highlight:SetBlendMode('BLEND')
+	highlight:Hide()
+
+	self.Highlight = highlight
+
+	self:HookScript('OnEnter', function()
+		highlight:Show()
+	end)
+
+	self:HookScript('OnLeave', function()
+		highlight:Hide()
+	end)
 end
 
 -- Health
@@ -327,7 +336,9 @@ local function UpdateAuraTooltip(aura)
 	GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
 end
 
-local function PostCreateIcon(element, button)
+function UNITFRAME.PostCreateIcon(element, button)
+	local style = element.__owner.unitStyle
+
 	button.bg = F.CreateBDFrame(button)
 	button.glow = F.CreateSD(button.bg, .35, 2, 2)
 
@@ -344,15 +355,21 @@ local function PostCreateIcon(element, button)
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	button.count = button:CreateFontString(nil, 'OVERLAY')
+	if style == 'plate' then
+		button.count = F.CreateFS(button, C.Assets.Fonts.Cooldown, 10, nil, nil, nil, 'THICK')
+	else
+		button.count = F.CreateFS(button, C.Assets.Fonts.Number, 10, nil, nil, nil, 'THICK')
+	end
 	button.count:ClearAllPoints()
 	button.count:SetPoint('TOPRIGHT', button, 2, 4)
-	F.SetFS(button.count, C.Assets.Fonts.Number, 11, 'OUTLINE')
 
-	button.timer = button:CreateFontString(nil, 'OVERLAY')
+	if style == 'plate' then
+		button.timer = F.CreateFS(button, C.Assets.Fonts.Cooldown, 10, nil, nil, nil, 'THICK')
+	else
+		button.timer = F.CreateFS(button, C.Assets.Fonts.Number, 10, nil, nil, nil, 'THICK')
+	end
 	button.timer:ClearAllPoints()
 	button.timer:SetPoint('BOTTOMLEFT', button, 2, -4)
-	F.SetFS(button.timer, C.Assets.Fonts.Number, 11, 'OUTLINE')
 
 	button.UpdateTooltip = UpdateAuraTooltip
 	button:SetScript('OnEnter', AuraOnEnter)
@@ -364,28 +381,49 @@ local function PostCreateIcon(element, button)
 	end)
 end
 
-local function PostUpdateIcon(element, unit, button, index, _, duration, _, debuffType)
+local filteredStyle = {
+	['target'] = true,
+	['nameplate'] = true,
+	['boss'] = true,
+	['arena'] = true,
+}
+
+function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
+	if duration then
+		button.bg:Show()
+
+		if button.glow then
+			button.glow:Show()
+		end
+	end
+
 	local style = element.__owner.unitStyle
-	local _, _, _, _, duration, expiration, owner, canStealOrPurge = UnitAura(unit, index, button.filter)
+	local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-	if not (style == 'party' and button.isDebuff) then
-		button:SetSize(element.size, element.size*.75)
-	end
+	button:SetSize(element.size, element.size * .75)
 
-	if duration and duration > 0 then
-		button.expiration = expiration
-		button:SetScript('OnUpdate', F.CooldownOnUpdate)
-		button.timer:Show()
+	if button.isDebuff and filteredStyle[style] and not button.isPlayer then
+		button.icon:SetDesaturated(true)
 	else
-		button:SetScript('OnUpdate', nil)
+		button.icon:SetDesaturated(false)
+	end
+
+	if element.disableCooldown then
+		if duration and duration > 0 then
+			button.expiration = expiration
+			button:SetScript('OnUpdate', F.CooldownOnUpdate)
+			button.timer:Show()
+		else
+			button:SetScript('OnUpdate', nil)
+			button.timer:Hide()
+		end
+	end
+
+	if style == 'pet' then
 		button.timer:Hide()
 	end
 
-	if (style == 'party' and not button.isDebuff) or style == 'raid' or style == 'pet' then
-		button.timer:Hide()
-	end
-
-	if canStealOrPurge and (style ~= 'party' or style ~= 'raid') then
+	if canStealOrPurge then
 		button.bg:SetBackdropColor(1, 1, 1)
 
 		if button.glow then
@@ -393,34 +431,17 @@ local function PostUpdateIcon(element, unit, button, index, _, duration, _, debu
 		end
 	elseif button.isDebuff and element.showDebuffType then
 		local color = oUF.colors.debuffType[debuffType] or oUF.colors.debuffType.none
+
 		button.bg:SetBackdropColor(color[1], color[2], color[3])
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(color[1], color[2], color[3], .5)
-		end
-	elseif (style == 'party' or style == 'raid') and not button.isDebuff then
-		if button.glow then
-			button.glow:SetBackdropBorderColor(0, 0, 0, 0)
 		end
 	else
 		button.bg:SetBackdropColor(0, 0, 0)
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(0, 0, 0, .35)
-		end
-	end
-
-	if (button.isDebuff and not button.isPlayer) and (style == 'target' or style == 'boss' or style == 'arena') then
-		button.icon:SetDesaturated(true)
-	else
-		button.icon:SetDesaturated(false)
-	end
-
-	if duration then
-		button.bg:Show()
-
-		if button.glow then
-			button.glow:Show()
 		end
 	end
 end
@@ -432,15 +453,17 @@ end
 
 local function BolsterPostUpdate(element)
 	if not element.bolsterIndex then return end
+
 	for _, button in pairs(element) do
 		if button == element.bolsterIndex then
 			button.count:SetText(element.bolster)
+
 			return
 		end
 	end
 end
 
-local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID)
 	local style = element.__owner.unitStyle
 
 	if name and spellID == 209859 then
@@ -467,14 +490,6 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		else
 			return true
 		end
-	elseif style == 'party' or style == 'raid' then
-		if button.isDebuff and not C.IgnoredDebuffs[spellID] then
-			return true
-		elseif C.GroupBuffs[spellID] then
-			return true
-		else
-			return false
-		end
 	elseif style == 'focus' and FreeDB.unitframe.focus_auras then
 		if button.isDebuff and button.isPlayer then
 			return true
@@ -485,34 +500,46 @@ local function CustomFilter(element, unit, button, name, _, _, _, _, _, caster, 
 		return true
 	elseif style == 'pet' and FreeDB.unitframe.pet_auras then
 		return true
+	elseif style == 'plate' and FreeDB.nameplate.plate_auras then
+		if button.isDebuff and button.isPlayer then
+			return true
+		else
+			return false
+		end
 	end
 end
 
-local function PostUpdateGapIcon(self, unit, icon, visibleBuffs)
-	icon:Hide()
+function UNITFRAME.PostUpdateGapIcon(_, _, icon)
+	if icon.bg and icon.bg:IsShown() then
+		icon.bg:Hide()
+	end
+	if icon.glow and icon.glow:IsShown() then
+		icon.glow:Hide()
+	end
 end
 
-local function AuraIconSize(width, num, spacing)
-	return (width - (num - 1) * spacing) / num
+local function getIconSize(w, n, s)
+	return (w - (n - 1) * s) / n
 end
 
 function UNITFRAME:AddAuras(self)
 	local style = self.unitStyle
 	local auras = CreateFrame('Frame', nil, self)
+	auras.gap = true
+	auras.spacing = 5
 
 	if style == 'player' or style == 'target' then
 		auras.initialAnchor = 'BOTTOMLEFT'
 		auras:SetPoint('BOTTOM', self, 'TOP', 0, 24)
 		auras['growth-y'] = 'UP'
-		auras['spacing-x'] = 5
 
 		auras.numTotal = (style == 'player' and FreeDB.unitframe.player_auras_number) or FreeDB.unitframe.target_auras_number
 		auras.iconsPerRow = (style == 'player' and FreeDB.unitframe.player_auras_number_per_row) or FreeDB.unitframe.target_auras_number_per_row
+
 	elseif style == 'pet' or style == 'focus' or style == 'boss' or style == 'arena' then
 		auras.initialAnchor = 'TOPLEFT'
 		auras:SetPoint('TOP', self, 'BOTTOM', 0, -6)
 		auras['growth-y'] = 'DOWN'
-		auras['spacing-x'] = 5
 
 		if style == 'pet' then
 			auras.numTotal = FreeDB.unitframe.pet_auras_number
@@ -527,19 +554,33 @@ function UNITFRAME:AddAuras(self)
 			auras.numTotal = FreeDB.unitframe.arenaAuraTotal
 			auras.iconsPerRow = FreeDB.unitframe.arenaAuraPerRow
 		end
+
+	elseif style == 'plate' then
+		auras.initialAnchor = 'BOTTOMLEFT'
+		auras:SetPoint('BOTTOM', self, 'TOP', 0, 8)
+		auras['growth-y'] = 'UP'
+
+		auras.size = FreeDB.nameplate.aura_size
+		auras.numTotal = FreeDB.nameplate.aura_number
+		auras.gap = false
+		auras.disableMouse = true
 	end
 
-	auras.size = AuraIconSize(self:GetWidth(), auras.iconsPerRow, auras['spacing-x'])
-	auras:SetWidth(self:GetWidth())
-	auras:SetHeight((auras.size) * F:Round(auras.numTotal / auras.iconsPerRow))
+	local width = self:GetWidth()
+	local maxAuras = auras.numTotal or auras.numBuffs + auras.numDebuffs
+	local maxLines = auras.iconsPerRow and floor(maxAuras/auras.iconsPerRow + .5) or 2
 
-	auras.gap = true
+	auras.size = auras.iconsPerRow and getIconSize(width, auras.iconsPerRow, auras.spacing) or auras.size
+	auras:SetWidth(width)
+	auras:SetHeight((auras.size + auras.spacing) * maxLines)
+
+
 	auras.showDebuffType = true
 	auras.showStealableBuffs = true
-	auras.CustomFilter = CustomFilter
-	auras.PostCreateIcon = PostCreateIcon
-	auras.PostUpdateIcon = PostUpdateIcon
-	auras.PostUpdateGapIcon = PostUpdateGapIcon
+	auras.CustomFilter = UNITFRAME.CustomFilter
+	auras.PostCreateIcon = UNITFRAME.PostCreateIcon
+	auras.PostUpdateIcon = UNITFRAME.PostUpdateIcon
+	auras.PostUpdateGapIcon = UNITFRAME.PostUpdateGapIcon
 	auras.PreUpdate = BolsterPreUpdate
 	auras.PostUpdate = BolsterPostUpdate
 
@@ -1314,10 +1355,18 @@ end
 
 function UNITFRAME:AddCombatIndicator(self)
 	if not FreeDB.unitframe.player_combat_indicator then return end
-	if FreeDB.unitframe.player_hide_tags then return end
+	--if FreeDB.unitframe.player_hide_tags then return end
 
-	local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
-	combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
+	-- local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
+	-- combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
+
+
+	local combatIndicator = self:CreateTexture(nil, 'OVERLAY')
+	combatIndicator:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 0)
+	combatIndicator:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 0)
+	combatIndicator:SetHeight(6)
+	combatIndicator:SetTexture(C.Assets.glow_top_tex)
+	combatIndicator:SetVertexColor(1, 0, 0, .7)
 
 	self.CombatIndicator = combatIndicator
 end

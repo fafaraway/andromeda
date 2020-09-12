@@ -3,10 +3,7 @@ local INSTALL = F:GetModule('INSTALL')
 local GUI = F:GetModule('GUI')
 
 
-local crossRealms = GetAutoCompleteRealms()
-if not crossRealms or #crossRealms == 0 then
-	crossRealms = {[1]=C.MyRealm}
-end
+
 
 StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
 	text = L['GUI_THEME_CONFLICTION_WARNING'],
@@ -74,6 +71,11 @@ StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
 	hideOnEscape = false,
 }
 
+local crossRealms = GetAutoCompleteRealms()
+if not crossRealms or #crossRealms == 0 then
+	crossRealms = {[1]=C.MyRealm}
+end
+
 StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	text = L['GUI_RESET_GOLD_COUNT'],
 	button1 = YES,
@@ -89,6 +91,22 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	end,
 	timeout = 0,
 	whileDead = 1,
+	hideOnEscape = true,
+}
+
+StaticPopupDialogs['FREEUI_GUILD_INVITE'] = {
+	-- 'Do you want to invite %s to your guild?'
+	text = format(ERR_GUILD_INVITE_S, '%s'),
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function(self, data)
+		GuildInvite(data)
+	end,
+	OnCancel = function()
+		return
+	end,
+	timeout = 0,
+	whileDead = true,
 	hideOnEscape = true,
 }
 

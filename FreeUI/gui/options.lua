@@ -126,6 +126,25 @@ local function SetupClassColor()
 	GUI:ToggleSidePanel('classColorSide')
 end
 
+-- plate
+local function SetupPlateSize()
+	GUI:ToggleSidePanel('plateSizeSide')
+end
+
+local function SetupPlateAuraSize()
+	GUI:ToggleSidePanel('plateAuraSizeSide')
+end
+
+local function SetupTargetColor()
+	GUI:ToggleSidePanel('targetColorSide')
+end
+
+local function SetupThreatColors()
+	GUI:ToggleSidePanel('threatColorsSide')
+end
+
+
+
 -- combat
 local function SetupHealthThreshold()
 	GUI:ToggleSidePanel('healthThresholdSide')
@@ -530,6 +549,9 @@ local function ChatOptions()
 	local bubble = GUI:CreateCheckBox(parent, 'chat', 'smart_bubble')
 	bubble:SetPoint('TOPLEFT', sticky, 'BOTTOMLEFT', 0, -8)
 
+	local clickInvite = GUI:CreateCheckBox(parent, 'chat', 'click_to_invite')
+	clickInvite:SetPoint('LEFT', bubble, 'RIGHT', 160, 0)
+
 	local filter = GUI:AddSubCategory(parent)
 	filter:SetPoint('TOPLEFT', bubble, 'BOTTOMLEFT', 0, -16)
 
@@ -567,6 +589,7 @@ local function ChatOptions()
 		sticky:SetShown(shown)
 		cycles:SetShown(shown)
 		chatCopy:SetShown(shown)
+		clickInvite:SetShown(shown)
 		chatFilter:SetShown(shown)
 		chatFilter.bu:SetShown(shown)
 		blockAddonSpam:SetShown(shown)
@@ -587,7 +610,7 @@ local function ChatOptions()
 	chatSizeWidth:SetPoint('TOP', chatSizeSide.child, 'TOP', 0, -24)
 
 	local chatSizeHeight = GUI:CreateSlider(chatSizeSide, 'chat', 'window_height', nil, {100, 600, 1})
-	chatSizeHeight:SetPoint('TOP', chatSizeWidth, 'BOTTOM', 0, -48)
+	chatSizeHeight:SetPoint('TOP', chatSizeWidth, 'BOTTOM', 0, -56)
 
 
 	local chatFadingSide = GUI:CreateSidePanel(parent, 'chatFadingSide')
@@ -596,7 +619,7 @@ local function ChatOptions()
 	fadingVisible:SetPoint('TOP', chatFadingSide.child, 'TOP', 0, -24)
 
 	local fadingDuration = GUI:CreateSlider(chatFadingSide, 'chat', 'fading_duration', nil, {1, 6, 1})
-	fadingDuration:SetPoint('TOP', fadingVisible, 'BOTTOM', 0, -48)
+	fadingDuration:SetPoint('TOP', fadingVisible, 'BOTTOM', 0, -56)
 
 
 	local chatFilterSide = GUI:CreateSidePanel(parent, 'chatFilterSide')
@@ -605,7 +628,7 @@ local function ChatOptions()
 	filterMatches:SetPoint('TOP', chatFilterSide.child, 'TOP', 0, -24)
 
 	local keywordsList = GUI:CreateEditBox(chatFilterSide, 'chat', 'keywords_list', nil, {140, 140})
-	keywordsList:SetPoint('TOP', filterMatches, 'BOTTOM', 0, -48)
+	keywordsList:SetPoint('TOP', filterMatches, 'BOTTOM', 0, -56)
 end
 
 local function AuraOptions()
@@ -634,19 +657,19 @@ local function AuraOptions()
 	buffSize:SetPoint('TOP', auraSizeSide.child, 'TOP', 0, -24)
 
 	local buffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'buffs_per_row', nil, {6, 16, 1})
-	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -48)
+	buffsPerRow:SetPoint('TOP', buffSize, 'BOTTOM', 0, -56)
 
 	local debuffSize = GUI:CreateSlider(auraSizeSide, 'aura', 'debuff_size', nil, {20, 50, 1})
-	debuffSize:SetPoint('TOP', buffsPerRow, 'BOTTOM', 0, -48)
+	debuffSize:SetPoint('TOP', buffsPerRow, 'BOTTOM', 0, -56)
 
 	local debuffsPerRow = GUI:CreateSlider(auraSizeSide, 'aura', 'debuffs_per_row', nil, {6, 16, 1})
-	debuffsPerRow:SetPoint('TOP', debuffSize, 'BOTTOM', 0, -48)
+	debuffsPerRow:SetPoint('TOP', debuffSize, 'BOTTOM', 0, -56)
 
 	local margin = GUI:CreateSlider(auraSizeSide, 'aura', 'margin', nil, {3, 10, 1})
-	margin:SetPoint('TOP', debuffsPerRow, 'BOTTOM', 0, -48)
+	margin:SetPoint('TOP', debuffsPerRow, 'BOTTOM', 0, -56)
 
 	local offset = GUI:CreateSlider(auraSizeSide, 'aura', 'offset', nil, {6, 16, 1})
-	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -48)
+	offset:SetPoint('TOP', margin, 'BOTTOM', 0, -56)
 
 
 	local function toggleAuraOptions()
@@ -762,13 +785,13 @@ local function ActionbarOptions()
 	buttonSizeSmall:SetPoint('TOP', actionbarSizeSide.child, 'TOP', 0, -24)
 
 	local buttonSizeNormal = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_size_normal', nil, {20, 50, 1})
-	buttonSizeNormal:SetPoint('TOP', buttonSizeSmall, 'BOTTOM', 0, -48)
+	buttonSizeNormal:SetPoint('TOP', buttonSizeSmall, 'BOTTOM', 0, -56)
 
 	local buttonSizeBig = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_size_big', nil, {20, 50, 1})
-	buttonSizeBig:SetPoint('TOP', buttonSizeNormal, 'BOTTOM', 0, -48)
+	buttonSizeBig:SetPoint('TOP', buttonSizeNormal, 'BOTTOM', 0, -56)
 
 	local buttonMargin = GUI:CreateSlider(actionbarSizeSide, 'actionbar', 'button_margin', nil, {0, 10, 1})
-	buttonMargin:SetPoint('TOP', buttonSizeBig, 'BOTTOM', 0, -48)
+	buttonMargin:SetPoint('TOP', buttonSizeBig, 'BOTTOM', 0, -56)
 end
 
 local function CombatOptions()
@@ -898,13 +921,13 @@ local function InventoryOptions()
 	slotSize:SetPoint('TOP', bagSizeSide.child, 'TOP', 0, -24)
 
 	local spacing = GUI:CreateSlider(bagSizeSide, 'inventory', 'spacing', nil, {3, 6, 1})
-	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -48)
+	spacing:SetPoint('TOP', slotSize, 'BOTTOM', 0, -56)
 
 	local bagColumns = GUI:CreateSlider(bagSizeSide, 'inventory', 'bag_columns', nil, {8, 16, 1})
-	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -48)
+	bagColumns:SetPoint('TOP', spacing, 'BOTTOM', 0, -56)
 
 	local bankColumns = GUI:CreateSlider(bagSizeSide, 'inventory', 'bank_columns', nil, {8, 16, 1})
-	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -48)
+	bankColumns:SetPoint('TOP', bagColumns, 'BOTTOM', 0, -56)
 
 
 	-- item level to show side panel
@@ -986,7 +1009,7 @@ local function MapOptions()
 	mapScale:SetPoint('TOP', mapScaleSide.child, 'TOP', 0, -24)
 
 	local minimapScale = GUI:CreateSlider(mapScaleSide, 'map', 'minimap_scale', UpdateMinimapScale, {0.5, 1, 0.1})
-	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -48)
+	minimapScale:SetPoint('TOP', mapScale, 'BOTTOM', 0, -56)
 
 
 	local function toggleMapOptions()
@@ -1113,7 +1136,7 @@ local function TooltipOptions()
 	headerFontSize:SetPoint('TOP', tipFontSizeSide.child, 'TOP', 0, -24)
 
 	local normalFontSize = GUI:CreateSlider(tipFontSizeSide, 'tooltip', 'normal_font_size', nil, {8, 20, 1})
-	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -48)
+	normalFontSize:SetPoint('TOP', headerFontSize, 'BOTTOM', 0, -56)
 
 
 	local function toggleTooltipOptions()
@@ -1226,11 +1249,11 @@ local function UnitframeOptions()
 	petAura:SetPoint('LEFT', enablePet, 'RIGHT', 160, 0)
 
 
-	local focus = GUI:AddSubCategory(parent)
-	focus:SetPoint('TOPLEFT', enablePet, 'BOTTOMLEFT', 0, -16)
+	local focusSub = GUI:AddSubCategory(parent)
+	focusSub:SetPoint('TOPLEFT', enablePet, 'BOTTOMLEFT', 0, -16)
 
 	local enableFocus = GUI:CreateCheckBox(parent, 'unitframe', 'enable_focus', nil, SetupFocusSize)
-	enableFocus:SetPoint('TOPLEFT', focus, 'BOTTOMLEFT', 0, -8)
+	enableFocus:SetPoint('TOPLEFT', focusSub, 'BOTTOMLEFT', 0, -8)
 
 	local focusAura = GUI:CreateCheckBox(parent, 'unitframe', 'focus_auras')
 	focusAura:SetPoint('LEFT', enableFocus, 'RIGHT', 160, 0)
@@ -1298,22 +1321,19 @@ local function UnitframeOptions()
 	playerWidth:SetPoint('TOP', unitSizeSide.child, 'TOP', 0, -24)
 
 	local playerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'player_height', nil, {6, 30, 1})
-	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -48)
+	playerHeight:SetPoint('TOP', playerWidth, 'BOTTOM', 0, -56)
 
 	local targetWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_width', nil, {50, 200, 1})
-	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -48)
+	targetWidth:SetPoint('TOP', playerHeight, 'BOTTOM', 0, -56)
 
 	local targetHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_height', nil, {6, 30, 1})
-	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -48)
+	targetHeight:SetPoint('TOP', targetWidth, 'BOTTOM', 0, -56)
 
 	local totWidth = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_width', nil, {50, 200, 1})
-	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -48)
+	totWidth:SetPoint('TOP', targetHeight, 'BOTTOM', 0, -56)
 
 	local totHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'target_target_height', nil, {6, 30, 1})
-	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -48)
-
-	local powerHeight = GUI:CreateSlider(unitSizeSide, 'unitframe', 'power_bar_height', nil, {1, 10, 1})
-	powerHeight:SetPoint('TOP', totHeight, 'BOTTOM', 0, -48)
+	totHeight:SetPoint('TOP', totWidth, 'BOTTOM', 0, -56)
 
 
 	-- alt power side panel
@@ -1328,34 +1348,34 @@ local function UnitframeOptions()
 	local powerHeight = GUI:CreateSlider(powerSide, 'unitframe', 'power_bar_height', nil, {1, 10, 1})
 	powerHeight:SetPoint('TOP', powerSide.child, 'TOP', 0, -24)
 
-	local mana = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'MANA')
+	local mana = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'MANA')
 	mana:SetPoint('TOPLEFT', powerSide.child, 'TOPLEFT', 10, -80)
 
-	local rage = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'RAGE')
+	local rage = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'RAGE')
 	rage:SetPoint('TOP', mana, 'BOTTOM', 0, -16)
 
-	local focus = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'FOCUS')
+	local focus = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'FOCUS')
 	focus:SetPoint('TOP', rage, 'BOTTOM', 0, -16)
 
-	local energy = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'ENERGY')
+	local energy = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'ENERGY')
 	energy:SetPoint('TOP', focus, 'BOTTOM', 0, -16)
 
-	local runic = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'RUNIC_POWER')
+	local runic = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'RUNIC_POWER')
 	runic:SetPoint('TOP', energy, 'BOTTOM', 0, -16)
 
-	local lunar = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'LUNAR_POWER')
+	local lunar = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'LUNAR_POWER')
 	lunar:SetPoint('TOP', runic, 'BOTTOM', 0, -16)
 
-	local maelstrom = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'MAELSTROM')
+	local maelstrom = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'MAELSTROM')
 	maelstrom:SetPoint('TOP', lunar, 'BOTTOM', 0, -16)
 
-	local insanity = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'INSANITY')
+	local insanity = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'INSANITY')
 	insanity:SetPoint('TOP', maelstrom, 'BOTTOM', 0, -16)
 
-	local fury = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'FURY')
+	local fury = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'FURY')
 	fury:SetPoint('TOP', insanity, 'BOTTOM', 0, -16)
 
-	local pain = GUI:CreateColorSwatch(powerSide, 'POWERCOLORS', 'PAIN')
+	local pain = GUI:CreateColorSwatch(powerSide, 'POWER_COLORS', 'PAIN')
 	pain:SetPoint('TOP', fury, 'BOTTOM', 0, -16)
 
 
@@ -1366,13 +1386,13 @@ local function UnitframeOptions()
 	focusWidth:SetPoint('TOP', focusSizeSide.child, 'TOP', 0, -24)
 
 	local focusHeight = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_height', nil, {6, 30, 1})
-	focusHeight:SetPoint('TOP', focusWidth, 'BOTTOM', 0, -48)
+	focusHeight:SetPoint('TOP', focusWidth, 'BOTTOM', 0, -56)
 
 	local focusTargetWidth = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_target_width', nil, {50, 300, 1})
-	focusTargetWidth:SetPoint('TOP', focusHeight, 'BOTTOM', 0, -48)
+	focusTargetWidth:SetPoint('TOP', focusHeight, 'BOTTOM', 0, -56)
 
 	local focusTargetHeight = GUI:CreateSlider(focusSizeSide, 'unitframe', 'focus_target_height', nil, {6, 30, 1})
-	focusTargetHeight:SetPoint('TOP', focusTargetWidth, 'BOTTOM', 0, -48)
+	focusTargetHeight:SetPoint('TOP', focusTargetWidth, 'BOTTOM', 0, -56)
 
 
 	-- group size side panel
@@ -1382,19 +1402,19 @@ local function UnitframeOptions()
 	partyWidth:SetPoint('TOP', groupSizeSide.child, 'TOP', 0, -24)
 
 	local partyHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_height', nil, {20, 100, 1})
-	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -48)
+	partyHeight:SetPoint('TOP', partyWidth, 'BOTTOM', 0, -56)
 
 	local partyGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'party_gap', nil, {5, 20, 1})
-	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -48)
+	partyGap:SetPoint('TOP', partyHeight, 'BOTTOM', 0, -56)
 
 	local raidWidth = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_width', nil, {20, 100, 1})
-	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -48)
+	raidWidth:SetPoint('TOP', partyGap, 'BOTTOM', 0, -56)
 
 	local raidHeight = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_height', nil, {20, 100, 1})
-	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -48)
+	raidHeight:SetPoint('TOP', raidWidth, 'BOTTOM', 0, -56)
 
 	local raidGap = GUI:CreateSlider(groupSizeSide, 'unitframe', 'raid_gap', nil, {5, 20, 1})
-	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -48)
+	raidGap:SetPoint('TOP', raidHeight, 'BOTTOM', 0, -56)
 
 
 	-- castbar color side panel
@@ -1416,40 +1436,40 @@ local function UnitframeOptions()
 	-- class color side panel
 	local classColorSide = GUI:CreateSidePanel(parent, 'classColorSide')
 
-	local deathknight = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'DEATHKNIGHT')
+	local deathknight = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'DEATHKNIGHT')
 	deathknight:SetPoint('TOPLEFT', classColorSide.child, 'TOPLEFT', 10, -10)
 
-	local warrior = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'WARRIOR')
+	local warrior = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'WARRIOR')
 	warrior:SetPoint('TOP', deathknight, 'BOTTOM', 0, -16)
 
-	local paladin = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'PALADIN')
+	local paladin = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'PALADIN')
 	paladin:SetPoint('TOP', warrior, 'BOTTOM', 0, -16)
 
-	local mage = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'MAGE')
+	local mage = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'MAGE')
 	mage:SetPoint('TOP', paladin, 'BOTTOM', 0, -16)
 
-	local priest = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'PRIEST')
+	local priest = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'PRIEST')
 	priest:SetPoint('TOP', mage, 'BOTTOM', 0, -16)
 
-	local hunter = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'HUNTER')
+	local hunter = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'HUNTER')
 	hunter:SetPoint('TOP', priest, 'BOTTOM', 0, -16)
 
-	local warlock = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'WARLOCK')
+	local warlock = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'WARLOCK')
 	warlock:SetPoint('TOP', hunter, 'BOTTOM', 0, -16)
 
-	local demonhunter = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'DEMONHUNTER')
+	local demonhunter = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'DEMONHUNTER')
 	demonhunter:SetPoint('TOP', warlock, 'BOTTOM', 0, -16)
 
-	local rogue = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'ROGUE')
+	local rogue = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'ROGUE')
 	rogue:SetPoint('TOP', demonhunter, 'BOTTOM', 0, -16)
 
-	local druid = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'DRUID')
+	local druid = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'DRUID')
 	druid:SetPoint('TOP', rogue, 'BOTTOM', 0, -16)
 
-	local monk = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'MONK')
+	local monk = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'MONK')
 	monk:SetPoint('TOP', druid, 'BOTTOM', 0, -16)
 
-	local shaman = GUI:CreateColorSwatch(classColorSide, 'CLASSCOLORS', 'SHAMAN')
+	local shaman = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'SHAMAN')
 	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
 
 
@@ -1461,7 +1481,7 @@ local function UnitframeOptions()
 	castbarFocusWidth:SetPoint('TOP', castbarSizeSide.child, 'TOP', 0, -24)
 
 	local castbarFocusHeight = GUI:CreateSlider(castbarSizeSide, 'unitframe', 'castbar_focus_height', nil, {8, 30, 1})
-	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -48)
+	castbarFocusHeight:SetPoint('TOP', castbarFocusWidth, 'BOTTOM', 0, -56)
 
 
 	-- range check alpha side panel
@@ -1474,19 +1494,19 @@ local function UnitframeOptions()
 	-- class power side panel
 	local classPowerSide = GUI:CreateSidePanel(parent, 'classPowerSide')
 
-	local comboPoints = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'combo_points')
+	local comboPoints = GUI:CreateColorSwatch(classPowerSide, 'CLASS_POWER_COLORS', 'combo_points')
 	comboPoints:SetPoint('TOPLEFT', classPowerSide.child, 'TOPLEFT', 10, -10)
 
-	local soulShards = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'soul_shards')
+	local soulShards = GUI:CreateColorSwatch(classPowerSide, 'CLASS_POWER_COLORS', 'soul_shards')
 	soulShards:SetPoint('TOP', comboPoints, 'BOTTOM', 0, -16)
 
-	local holyPower = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'holy_power')
+	local holyPower = GUI:CreateColorSwatch(classPowerSide, 'CLASS_POWER_COLORS', 'holy_power')
 	holyPower:SetPoint('TOP', soulShards, 'BOTTOM', 0, -16)
 
-	local arcaneCharges = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'arcane_charges')
+	local arcaneCharges = GUI:CreateColorSwatch(classPowerSide, 'CLASS_POWER_COLORS', 'arcane_charges')
 	arcaneCharges:SetPoint('TOP', holyPower, 'BOTTOM', 0, -16)
 
-	local chiOrbs = GUI:CreateColorSwatch(classPowerSide, 'CLASSPOWERCOLORS', 'chi_orbs')
+	local chiOrbs = GUI:CreateColorSwatch(classPowerSide, 'CLASS_POWER_COLORS', 'chi_orbs')
 	chiOrbs:SetPoint('TOP', arcaneCharges, 'BOTTOM', 0, -16)
 
 
@@ -1509,6 +1529,127 @@ local function UnitframeOptions()
 	ctAbbrNumber:SetPoint('TOP', ctOverHealing, 'BOTTOM', 0, -8)
 end
 
+local function NamePlateOptions()
+	local parent = FreeUI_GUI[14]
+
+	local basic = GUI:AddSubCategory(parent)
+	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
+
+	local enable = GUI:CreateCheckBox(parent, 'nameplate', 'enable_nameplate', nil, SetupPlateSize)
+	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+
+
+
+	local targetIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'target_indicator', nil, SetupTargetColor)
+	targetIndicator:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
+
+	local threatIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'threat_indicator')
+	threatIndicator:SetPoint('LEFT', targetIndicator, 'RIGHT', 160, 0)
+
+	local classifyIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'classify_indicator')
+	classifyIndicator:SetPoint('TOPLEFT', targetIndicator, 'BOTTOMLEFT', 0, -8)
+
+	local explosiveScale = GUI:CreateCheckBox(parent, 'nameplate', 'explosive_scale')
+	explosiveScale:SetPoint('LEFT', classifyIndicator, 'RIGHT', 160, 0)
+
+	local plateAura = GUI:CreateCheckBox(parent, 'nameplate', 'plate_auras', nil, SetupPlateAuraSize)
+	plateAura:SetPoint('TOPLEFT', classifyIndicator, 'BOTTOMLEFT', 0, -8)
+
+
+	local colors = GUI:AddSubCategory(parent)
+	colors:SetPoint('TOPLEFT', plateAura, 'BOTTOMLEFT', 0, -16)
+
+	local hostileCC = GUI:CreateCheckBox(parent, 'nameplate', 'hostile_class_color')
+	hostileCC:SetPoint('TOPLEFT', colors, 'BOTTOMLEFT', 0, -8)
+
+	local friendlyCC = GUI:CreateCheckBox(parent, 'nameplate', 'friendly_class_color')
+	friendlyCC:SetPoint('LEFT', hostileCC, 'RIGHT', 160, 0)
+
+	local tankMode = GUI:CreateCheckBox(parent, 'nameplate', 'tank_mode', nil, SetupThreatColors)
+	tankMode:SetPoint('TOPLEFT', hostileCC, 'BOTTOMLEFT', 0, -8)
+
+	local reverThreat = GUI:CreateCheckBox(parent, 'nameplate', 'dps_revert_threat')
+	reverThreat:SetPoint('LEFT', tankMode, 'RIGHT', 160, 0)
+
+
+	local cvars = GUI:AddSubCategory(parent)
+	cvars:SetPoint('TOPLEFT', tankMode, 'BOTTOMLEFT', 0, -16)
+
+	local minScale = GUI:CreateSlider(parent, 'nameplate', 'min_scale', nil, {0.1, 1, 0.1})
+	minScale:SetPoint('TOPLEFT', cvars, 'BOTTOMLEFT', 0, -32)
+
+	local targetScale = GUI:CreateSlider(parent, 'nameplate', 'target_scale', nil, {1, 2, 0.1})
+	targetScale:SetPoint('LEFT', minScale, 'RIGHT', 20, 0)
+
+	local minAlpha = GUI:CreateSlider(parent, 'nameplate', 'min_alpha', nil, {0.1, 1, 0.1})
+	minAlpha:SetPoint('TOPLEFT', minScale, 'BOTTOMLEFT', 0, -56)
+
+	local occludedAlpha = GUI:CreateSlider(parent, 'nameplate', 'occluded_alpha', nil, {0.1, 1, 0.1})
+	occludedAlpha:SetPoint('LEFT', minAlpha, 'RIGHT', 20, 0)
+
+	local verticalSpacing = GUI:CreateSlider(parent, 'nameplate', 'vertical_spacing', nil, {0.1, 2, 0.1})
+	verticalSpacing:SetPoint('TOPLEFT', minAlpha, 'BOTTOMLEFT', 0, -56)
+
+	local horizontalSpacing = GUI:CreateSlider(parent, 'nameplate', 'horizontal_spacing', nil, {0.1, 2, 0.1})
+	horizontalSpacing:SetPoint('LEFT', verticalSpacing, 'RIGHT', 20, 0)
+
+
+	-- plate size side panel
+	local plateSizeSide = GUI:CreateSidePanel(parent, 'plateSizeSide')
+
+	local plateWidth = GUI:CreateSlider(plateSizeSide, 'nameplate', 'plate_width', nil, {40, 200, 1})
+	plateWidth:SetPoint('TOP', plateSizeSide.child, 'TOP', 0, -24)
+
+	local plateHeight = GUI:CreateSlider(plateSizeSide, 'nameplate', 'plate_height', nil, {6, 30, 1})
+	plateHeight:SetPoint('TOP', plateWidth, 'BOTTOM', 0, -56)
+
+	local friendlyColor = GUI:CreateColorSwatch(plateSizeSide, 'nameplate', 'friendly_color')
+	friendlyColor:SetPoint('TOPLEFT', plateSizeSide.child, 'TOPLEFT', 10, -160)
+
+	local reactionHostile = GUI:CreateColorSwatch(plateSizeSide, 'REACTION_COLORS', 'hostile')
+	reactionHostile:SetPoint('TOP', friendlyColor, 'BOTTOM', 0, -16)
+
+	local reactionNeutral = GUI:CreateColorSwatch(plateSizeSide, 'REACTION_COLORS', 'neutral')
+	reactionNeutral:SetPoint('TOP', reactionHostile, 'BOTTOM', 0, -16)
+
+	local reactionFriendly = GUI:CreateColorSwatch(plateSizeSide, 'REACTION_COLORS', 'friendly')
+	reactionFriendly:SetPoint('TOP', reactionNeutral, 'BOTTOM', 0, -16)
+
+
+	-- plate aura size side panel
+	local plateAuraSizeSide = GUI:CreateSidePanel(parent, 'plateAuraSizeSide')
+
+	local auraSize = GUI:CreateSlider(plateAuraSizeSide, 'nameplate', 'aura_size', nil, {16, 30, 1})
+	auraSize:SetPoint('TOP', plateAuraSizeSide.child, 'TOP', 0, -24)
+
+	local auraNumber = GUI:CreateSlider(plateAuraSizeSide, 'nameplate', 'aura_number', nil, {3, 9, 1})
+	auraNumber:SetPoint('TOP', auraSize, 'BOTTOM', 0, -56)
+
+
+	-- plate selected indicator color side panel
+	local targetColorSide = GUI:CreateSidePanel(parent, 'targetColorSide')
+
+	local selectedColor = GUI:CreateColorSwatch(targetColorSide, 'nameplate', 'target_color')
+	selectedColor:SetPoint('TOPLEFT', targetColorSide.child, 'TOPLEFT', 10, -10)
+
+
+	-- plate threat color side panel
+	local threatColorsSide = GUI:CreateSidePanel(parent, 'threatColorsSide')
+
+	local secureColor = GUI:CreateColorSwatch(threatColorsSide, 'nameplate', 'secure_color')
+	secureColor:SetPoint('TOPLEFT', threatColorsSide.child, 'TOPLEFT', 10, -10)
+
+	local transColor = GUI:CreateColorSwatch(threatColorsSide, 'nameplate', 'trans_color')
+	transColor:SetPoint('TOP', secureColor, 'BOTTOM', 0, -16)
+
+	local insecureColor = GUI:CreateColorSwatch(threatColorsSide, 'nameplate', 'insecure_color')
+	insecureColor:SetPoint('TOP', transColor, 'BOTTOM', 0, -16)
+
+	local offTankColor = GUI:CreateColorSwatch(threatColorsSide, 'nameplate', 'off_tank_color')
+	offTankColor:SetPoint('TOP', insecureColor, 'BOTTOM', 0, -16)
+end
+
 local function MiscOptions()
 	local parent = FreeUI_GUI[15]
 
@@ -1526,6 +1667,7 @@ end
 
 local function DataOptions()
 	local parent = FreeUI_GUI[16]
+	parent.tab.text:SetTextColor(F.HexToRGB('bd3a49'))
 
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
@@ -1597,6 +1739,11 @@ local function DataOptions()
 	end
 end
 
+local function CreditsOptions()
+	local parent = FreeUI_GUI[17]
+	parent.tab.text:SetTextColor(F.HexToRGB('507ab5'))
+
+end
 
 
 function GUI:AddOptions()
@@ -1617,9 +1764,9 @@ function GUI:AddOptions()
 	QuestOptions()
 	TooltipOptions()
 	UnitframeOptions()
-
-
-	DataOptions()
+	NamePlateOptions()
 	MiscOptions()
+	DataOptions()
+	CreditsOptions()
 end
 

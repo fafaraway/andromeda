@@ -13,16 +13,7 @@ colors.smooth = {
 	0, 1, 0,
 }
 
-colors.reaction = {
-	[1] = {1.00, 0.32, 0.29}, 	-- Hated
-	[2] = {1.00, 0.32, 0.29}, 	-- Hostile
-	[3] = {1.00, 0.32, 0.29}, 	-- Unfriendly
-	[4] = {1.00, 0.93, 0.47}, 	-- Neutral
-	[5] = {0.34, 1.00, 0.36}, 	-- Friendly
-	[6] = {0.34, 1.00, 0.36}, 	-- Honored
-	[7] = {0.34, 1.00, 0.36}, 	-- Revered
-	[8] = {0.34, 1.00, 0.36}, 	-- Exalted
-}
+
 
 colors.debuffType = {
 	['Curse']   = {0.8, 0, 1},
@@ -42,6 +33,7 @@ colors.runes = {
 function UNITFRAME:SetColors()
 	local classColor = FreeADB.class_colors
 	local powerColor = FreeADB.power_colors
+	local reactionColor = FreeADB.reaction_colors
 
 	colors.class = {
 		['ROGUE'] = {
@@ -164,6 +156,17 @@ function UNITFRAME:SetColors()
 		powerColor.PAIN.r,
 		powerColor.PAIN.g,
 		powerColor.PAIN.b
+	}
+
+	colors.reaction = {
+		[1] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
+		[2] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
+		[3] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
+		[4] = {reactionColor.neutral.r, reactionColor.neutral.g, reactionColor.neutral.b},
+		[5] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
+		[6] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
+		[7] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
+		[8] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
 	}
 end
 
