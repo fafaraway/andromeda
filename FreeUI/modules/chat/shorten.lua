@@ -35,9 +35,15 @@ local function FormatBNPlayerName(misc, id, moreMisc, fakeName, tag, colon)
 	return misc..id..moreMisc..fakeName..tag..(colon == ':' and ':' or colon)
 end
 
-
 local function FormatPlayerName(info, name)
 	return format('|Hplayer:%s|h%s|h', info, gsub(name, '%-[^|]+', ''))
+end
+
+local function RemoveRealmName(self, event, msg, author, ...)
+	local realm = string.gsub(C.MyRealm, ' ', '')
+	if msg:find('-' .. realm) then
+		return false, gsub(msg, '%-'..realm, ''), author, ...
+	end
 end
 
 function CHAT:UpdateChannelNames(text, ...)
@@ -74,6 +80,8 @@ function CHAT:Abbreviate()
 			chatFrame.AddMessage = CHAT.UpdateChannelNames
 		end
 	end
+
+	ChatFrame_AddMessageEventFilter('CHAT_MSG_SYSTEM', RemoveRealmName)
 
 	--online/offline info
 	ERR_FRIEND_ONLINE_SS = gsub(ERR_FRIEND_ONLINE_SS, '%]%|h', ']|h|cff00c957')
