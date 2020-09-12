@@ -26,8 +26,6 @@ function NOTIFICATION:VersionCheck_Compare(new, old)
 end
 
 function NOTIFICATION:VersionCheck_Create(text)
-	if not FreeDB.notification.version_check then return end
-
 	F:CreateNotification(L['NOTIFICATION_VERSION'], C.BlueColor..L['NOTIFICATION_VERSION_OUTDATE'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
 	F.Print(format(L['NOTIFICATION_VERSION_OUTDATE'], text))
 end
@@ -74,6 +72,9 @@ function NOTIFICATION:VersionCheck_UpdateGroup()
 end
 
 function NOTIFICATION:VersionCheck()
+	if not FreeDB.notification.version_check then return end
+	if C.isDeveloper then return end
+
 	NOTIFICATION:VersionCheck_Init()
 	C_ChatInfo_RegisterAddonMessagePrefix('FreeUIVersionCheck')
 	F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)

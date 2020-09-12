@@ -58,7 +58,7 @@ do
 	L['NOTIFICATION_BAG'] = 'Bag'
 	L['NOTIFICATION_RARE'] = 'Found rare!'
 	L['NOTIFICATION_VERSION'] = 'Version Check'
-	L['NOTIFICATION_VERSION_OUTDATE'] = 'Your FreeUI version has expired, latest is %s'
+	L['NOTIFICATION_VERSION_OUTDATE'] = 'FreeUI has been out of date, the latest release is |cff82c5ff%s|r'
 end
 
 
