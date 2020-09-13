@@ -478,7 +478,7 @@ local function CreateNameplateStyle(self)
 
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetAllPoints()
-	health:SetStatusBarTexture(C.Assets.norm_tex)
+	health:SetStatusBarTexture(C.Assets.statusbar_tex)
 	health.backdrop = F.CreateBDFrame(health, nil, true)
 	F:SmoothBar(health)
 

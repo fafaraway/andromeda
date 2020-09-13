@@ -607,7 +607,7 @@ C.CharacterSettings = {
 	['unitframe'] = {
 		['enable_unitframe'] = true,
 			['transparency'] = true,
-			['texture_style'] = 1,
+
 			['combat_fader'] = true,
 				['fader_alpha'] = 0,
 				['fader_smooth'] = true,
@@ -862,6 +862,13 @@ C.CharacterSettings = {
 		['invite_keyword'] = 'inv',
 		['invite_whisper'] = true,
 		['invite_only_guild'] = true,
+
+
+		['auto_screenshot'] = true,
+			['screenshot_achievement'] = true,
+			['screenshot_challenge'] = true,
+			['screenshot_levelup'] = false,
+			['screenshot_dead'] = false,
 	},
 
 	['chat'] = {
@@ -937,6 +944,7 @@ C.CharacterSettings = {
 				['override_weakauras'] = true,
 				['cd_pulse'] = true,
 					['pulse_sound'] = false,
+					['pulse_size'] = 32,
 					['pulse_sound_file'] = '',
 					['ignored_spells'] = {
 						--GetSpellInfo(6807),	-- Maul
@@ -955,6 +963,7 @@ C.AccountSettings = {
 	['custom_junk_list'] = {},
 	['number_format'] = 1,
 	['keystone_info'] = {},
+	['texture_style'] = 1,
 
 	['group_invite_keywords'] = {'inv', '+++', '111'},
 
@@ -1221,7 +1230,7 @@ f:SetScript('OnEvent', function(self, _, addon)
 
 	F:SetupUIScale(true)
 
-	C.Assets.norm_tex = textureList[FreeDB.unitframe.texture_style]
+	C.Assets.statusbar_tex = textureList[FreeADB.texture_style]
 
 	C.r = FreeADB.class_colors[C.MyClass].r
 	C.g = FreeADB.class_colors[C.MyClass].g

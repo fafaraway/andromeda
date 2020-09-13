@@ -335,7 +335,7 @@ local function AppearanceOptions()
 	local uiScale = GUI:CreateSlider(parent, 'ACCOUNT', 'ui_scale', nil, {.4, 2, .01})
 	uiScale:SetPoint('TOPLEFT', other, 'BOTTOMLEFT', 0, -24)
 
-	local texture = GUI:CreateDropDown(parent, 'unitframe', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']}, L['GUI_UNITFRAME_TEXTURE_STYLE'])
+	local texture = GUI:CreateDropDown(parent, 'ACCOUNT', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']}, L['GUI_UNITFRAME_TEXTURE_STYLE'])
 	texture:SetPoint('LEFT', uiScale, 'RIGHT', 80, 0)
 
 
@@ -775,14 +775,17 @@ local function ActionbarOptions()
 	local overrideWA = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'override_weakauras')
 	overrideWA:SetPoint('TOPLEFT', cooldownSide.child, 'TOPLEFT', 10, -16)
 
-	local cdPulse = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'cd_pulse')
-	cdPulse:SetPoint('TOP', overrideWA, 'BOTTOM', 0, -8)
-
 	local useDecimal = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'use_decimal')
-	useDecimal:SetPoint('TOP', cdPulse, 'BOTTOM', 0, -8)
+	useDecimal:SetPoint('TOP', overrideWA, 'BOTTOM', 0, -8)
 
 	local decimalCooldown = GUI:CreateSlider(cooldownSide, 'actionbar', 'decimal_countdown', nil, {1, 10, 1})
-	decimalCooldown:SetPoint('TOP', cooldownSide.child, 'TOP', 0, -120)
+	decimalCooldown:SetPoint('TOP', cooldownSide.child, 'TOP', 0, -90)
+
+	local cdPulse = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'cd_pulse')
+	cdPulse:SetPoint('TOP', useDecimal, 'BOTTOM', 0, -80)
+
+	local pulseSize = GUI:CreateSlider(cooldownSide, 'actionbar', 'pulse_size', nil, {20, 50, 1})
+	pulseSize:SetPoint('TOP', decimalCooldown, 'TOP', 0, -100)
 
 
 

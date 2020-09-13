@@ -33,6 +33,8 @@ C['Assets'] = {
 	['grad_tex'] = C.AssetsPath..'textures\\grad_tex',
 	['flat_tex'] = C.AssetsPath..'textures\\flat_tex',
 
+	['statusbar_tex'] = C.AssetsPath..'textures\\norm_tex',
+
 	['bd_tex'] = 'Interface\\ChatFrame\\ChatFrameBackground',
 	['bg_tex'] = C.AssetsPath..'textures\\bg_tex',
 	['glow_tex'] = C.AssetsPath..'textures\\glow_tex',

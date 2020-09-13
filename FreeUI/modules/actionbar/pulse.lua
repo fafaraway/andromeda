@@ -134,7 +134,7 @@ local function OnUpdate(_, update)
 		runtimer = runtimer + update
 
 		if (runtimer > (fadeInTime + holdTime + fadeOutTime)) then
-			tremove(animating,1)
+			tremove(animating, 1)
 			runtimer = 0
 			frame.icon:SetTexture(nil)
 			frame.bg:Hide()
@@ -156,7 +156,7 @@ local function OnUpdate(_, update)
 
 			frame:SetAlpha(alpha)
 
-			local scale = iconSize + (iconSize * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
+			local scale = FreeDB.actionbar.pulse_size + (FreeDB.actionbar.pulse_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
 			frame.bg:Show()
@@ -221,10 +221,10 @@ end
 function COOLDOWN:CooldownPulse()
 	if not FreeDB.actionbar.cd_pulse then return end
 
-	frame:SetSize(50, 50)
+	--frame:SetSize(FreeDB.actionbar.pulse_size, FreeDB.actionbar.pulse_size)
 	--frame:SetPoint('CENTER', UIParent, 0, 100)
 
-	F.Mover(frame, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, 50, 50)
+	F.Mover(frame, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, FreeDB.actionbar.pulse_size, FreeDB.actionbar.pulse_size)
 
 	frame.bg = F.CreateBDFrame(frame, nil, true)
 	frame.bg:Hide()
