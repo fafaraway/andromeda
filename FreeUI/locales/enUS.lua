@@ -276,6 +276,16 @@ do
 end
 
 
+--[[ Nameplate ]]
+do
+	L['NAMEPLATE_SUB_BASIC'] = 'Basic'
+
+	L['NAMEPLATE_NAME'] = 'Nameplate'
+	L['NAMEPLATE_DESC'] = 'Controls nameplate\'s appearance and behavior.'
+	L['NAMEPLATE_ENABLE_NAMEPLATE'] = 'Enable'
+	L['NAMEPLATE_ENABLE_NAMEPLATE_TIP'] = 'Uncheck this if you perfer other nameplate addon.'
+end
+
 
 --[[ Install ]]
 
@@ -307,7 +317,7 @@ end
 --[[ GUI ]]
 
 do
-	L['GUI_TIPS'] = 'Prompt'
+	L['GUI_TIP'] = 'Hint'
 	L['GUI_RELOAD_WARNING'] = '|cffff2020Reload UI to apply settings?|r'
 	L['GUI_RESET_WARNING'] = '|cffff2020Remove all saved options and reset to default values?|r'
 	L['GUI_PROFILE_WARNING'] = '|cffff2020Profile warning.|r'
@@ -344,6 +354,8 @@ do
 	L['GUI_UNITFRAME_TEXTURE_NORM'] = 'Default'
 	L['GUI_UNITFRAME_TEXTURE_GRAD'] = 'Gradient'
 	L['GUI_UNITFRAME_TEXTURE_FLAT'] = 'Flat'
+
+
 
 
 

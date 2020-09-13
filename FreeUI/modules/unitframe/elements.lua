@@ -1287,41 +1287,37 @@ function UNITFRAME:AddTotems(self)
 	self.CustomTotems = totems
 end
 
--- Fader
-function UNITFRAME:AddFader(self)
+-- Combat fader
+function UNITFRAME:AddCombatFader(self)
 	if not FreeDB.unitframe.combat_fader then return end
 
-	self.Fader = {
-		[1] = {Combat = 1},
-		[2] = {PlayerTarget = 1, PlayerNotMaxHealth = 1, PlayerCasting = 1},
-		[3] = {notCombat = 0, UnitTaxi = 0},
-	}
+	if not self.Fader then
+		self.Fader = {}
+	end
 
-	self.NormalAlpha = 1
+	self.Fader.maxAlhpa = 1
+	self.Fader.minAlpha = FreeDB.unitframe.fader_alpha
+	self.Fader.smooth = FreeDB.unitframe.fader_smooth
+	self.Fader.combat = FreeDB.unitframe.fader_combat
+	self.Fader.target = FreeDB.unitframe.fader_target
+	self.Fader.casting = FreeDB.unitframe.fader_casting
+	self.Fader.injured = FreeDB.unitframe.fader_injured
+	self.Fader.mana = FreeDB.unitframe.fader_mana
+	self.Fader.power = FreeDB.unitframe.fader_power
+	self.Fader.hover = FreeDB.unitframe.fader_hover
 end
 
 -- Range check
 function UNITFRAME:AddRangeCheck(self)
 	if not FreeDB.unitframe.range_check then return end
 
-	--[[ self.Range = {
-		insideAlpha = 1,
-		outsideAlpha = FreeDB.unitframe.range_check_alpha,
-	} ]]
-
-
 	if not self.RangeCheck then
 		self.RangeCheck = {}
 	end
+
 	self.RangeCheck.enabled = true
 	self.RangeCheck.insideAlpha = 1
 	self.RangeCheck.outsideAlpha = 0.4
-
-	-- self.RangeCheck.PostUpdate = UNITFRAME.RangeCheckPostUpdate
-	-- self.RangeCheck.Override = UNITFRAME.RangeCheckUpdate
-
-	-- self.Alpha = {}
-	-- self.Alpha.current = 1
 end
 
 -- GCD

@@ -126,6 +126,10 @@ local function SetupClassColor()
 	GUI:ToggleSidePanel('classColorSide')
 end
 
+local function SetupCombatFader()
+	GUI:ToggleSidePanel('combatFaderSide')
+end
+
 -- plate
 local function SetupPlateSize()
 	GUI:ToggleSidePanel('plateSizeSide')
@@ -143,6 +147,9 @@ local function SetupThreatColors()
 	GUI:ToggleSidePanel('threatColorsSide')
 end
 
+local function SetupCustomPlate()
+	GUI:ToggleSidePanel('customPlateSide')
+end
 
 
 -- combat
@@ -627,7 +634,7 @@ local function ChatOptions()
 	local filterMatches = GUI:CreateSlider(chatFilterSide, 'chat', 'matche_number', nil, {1, 5, 1})
 	filterMatches:SetPoint('TOP', chatFilterSide.child, 'TOP', 0, -24)
 
-	local keywordsList = GUI:CreateEditBox(chatFilterSide, 'chat', 'keywords_list', nil, {140, 140})
+	local keywordsList = GUI:CreateEditBox(chatFilterSide, 'chat', 'keywords_list', nil, {140, 140, 999, true})
 	keywordsList:SetPoint('TOP', filterMatches, 'BOTTOM', 0, -56)
 end
 
@@ -1180,7 +1187,7 @@ local function UnitframeOptions()
 	local portrait = GUI:CreateCheckBox(parent, 'unitframe', 'portrait')
 	portrait:SetPoint('LEFT', transparency, 'RIGHT', 160, 0)
 
-	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'combat_fader')
+	local fader = GUI:CreateCheckBox(parent, 'unitframe', 'combat_fader', nil, SetupCombatFader)
 	fader:SetPoint('TOPLEFT', transparency, 'BOTTOMLEFT', 0, -8)
 
 	local rangeCheck = GUI:CreateCheckBox(parent, 'unitframe', 'range_check', nil, SetupRangeCheckAlpha)
@@ -1342,6 +1349,7 @@ local function UnitframeOptions()
 	local altPowerHeight = GUI:CreateSlider(altPowerSide, 'unitframe', 'alt_power_height', nil, {1, 10, 1})
 	altPowerHeight:SetPoint('TOP', altPowerSide.child, 'TOP', 0, -24)
 
+
 	-- power side panel
 	local powerSide = GUI:CreateSidePanel(parent, 'powerSide')
 
@@ -1473,7 +1481,6 @@ local function UnitframeOptions()
 	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
 
 
-
 	-- castbar size side panel
 	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')
 
@@ -1489,6 +1496,39 @@ local function UnitframeOptions()
 
 	local rangeCheckAlpha = GUI:CreateSlider(rangeCheckAlphaSide, 'unitframe', 'range_check_alpha', nil, {0.3, 1, 0.1})
 	rangeCheckAlpha:SetPoint('TOP', rangeCheckAlphaSide.child, 'TOP', 0, -24)
+
+
+	-- combat fader alpha side panel
+	local combatFaderSide = GUI:CreateSidePanel(parent, 'combatFaderSide')
+
+	local combatFaderAlpha = GUI:CreateSlider(combatFaderSide, 'unitframe', 'fader_alpha', nil, {0, 1, 0.1})
+	combatFaderAlpha:SetPoint('TOP', combatFaderSide.child, 'TOP', 0, -24)
+
+	local faderSmooth = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_smooth')
+	faderSmooth:SetPoint('TOPLEFT', combatFaderSide.child, 'TOPLEFT', 10, -80)
+
+	local faderHover = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_hover')
+	faderHover:SetPoint('TOPLEFT', faderSmooth, 'BOTTOMLEFT', 0, -8)
+
+
+
+	local faderCombat = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_combat')
+	faderCombat:SetPoint('TOPLEFT', faderHover, 'BOTTOMLEFT', 0, -8)
+
+	local faderTarget = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_target')
+	faderTarget:SetPoint('TOPLEFT', faderCombat, 'BOTTOMLEFT', 0, -8)
+
+	local faderCasting = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_casting')
+	faderCasting:SetPoint('TOPLEFT', faderTarget, 'BOTTOMLEFT', 0, -8)
+
+	local faderInjured = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_injured')
+	faderInjured:SetPoint('TOPLEFT', faderCasting, 'BOTTOMLEFT', 0, -8)
+
+	local faderMana = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_mana')
+	faderMana:SetPoint('TOPLEFT', faderInjured, 'BOTTOMLEFT', 0, -8)
+
+	local faderPower = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_power')
+	faderPower:SetPoint('TOPLEFT', faderMana, 'BOTTOMLEFT', 0, -8)
 
 
 	-- class power side panel
@@ -1538,9 +1578,6 @@ local function NamePlateOptions()
 	local enable = GUI:CreateCheckBox(parent, 'nameplate', 'enable_nameplate', nil, SetupPlateSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-
-
-
 	local targetIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'target_indicator', nil, SetupTargetColor)
 	targetIndicator:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
@@ -1572,9 +1609,12 @@ local function NamePlateOptions()
 	local reverThreat = GUI:CreateCheckBox(parent, 'nameplate', 'dps_revert_threat')
 	reverThreat:SetPoint('LEFT', tankMode, 'RIGHT', 160, 0)
 
+	local customPlate = GUI:CreateCheckBox(parent, 'nameplate', 'custom_unit_color', nil, SetupCustomPlate)
+	customPlate:SetPoint('TOPLEFT', tankMode, 'BOTTOMLEFT', 0, -8)
+
 
 	local cvars = GUI:AddSubCategory(parent)
-	cvars:SetPoint('TOPLEFT', tankMode, 'BOTTOMLEFT', 0, -16)
+	cvars:SetPoint('TOPLEFT', customPlate, 'BOTTOMLEFT', 0, -16)
 
 	local minScale = GUI:CreateSlider(parent, 'nameplate', 'min_scale', nil, {0.1, 1, 0.1})
 	minScale:SetPoint('TOPLEFT', cvars, 'BOTTOMLEFT', 0, -32)
@@ -1634,6 +1674,18 @@ local function NamePlateOptions()
 	selectedColor:SetPoint('TOPLEFT', targetColorSide.child, 'TOPLEFT', 10, -10)
 
 
+	-- custom unit side panel
+	local customPlateSide = GUI:CreateSidePanel(parent, 'customPlateSide')
+
+	local customColor = GUI:CreateColorSwatch(customPlateSide, 'nameplate', 'custom_color')
+	customColor:SetPoint('TOPLEFT', customPlateSide.child, 'TOPLEFT', 10, -10)
+
+	local unitList = GUI:CreateEditBox(customPlateSide, 'nameplate', 'custom_unit_list', nil, {140, 140, 999, true})
+	unitList:SetPoint('TOPLEFT', customPlateSide.child, 'TOPLEFT', 10, -60)
+
+
+
+
 	-- plate threat color side panel
 	local threatColorsSide = GUI:CreateSidePanel(parent, 'threatColorsSide')
 
@@ -1657,7 +1709,7 @@ local function MiscOptions()
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 
-	local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 30, 5})
+	local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 20, 5, false})
 	keyword:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 20, -40)
 
 

@@ -6,12 +6,12 @@ local checkboxes, sidePanels = {}, {}
 local guiTab, guiPage = {}, {}
 
 local tabsList = {
-	L['GUI_APPEARANCE'],
+	'APPEARANCE',
 	'NOTIFICATION',
 	'ANNOUNCEMENT',
 	'INFOBAR',
 	'CHAT',
-	L['GUI_AURA'],
+	'GUI_AURA',
 	'ACTIONBAR',
 	'COMBAT',
 	'INVENTORY',
@@ -244,7 +244,7 @@ local function CreateTab(parent, i, name)
 	tab.icon:SetTexture(iconsList[i])
 	F.ReskinIcon(tab.icon)
 
-	tab.text = F.CreateFS(tab, C.Assets.Fonts.Normal, 13, nil, name, nil, 'THICK')
+	tab.text = F.CreateFS(tab, C.Assets.Fonts.Normal, 13, nil, L[strupper(name)..'_NAME'] or nil, nil, 'THICK')
 	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 8, 0)
 
 	tab:HookScript('OnClick', tabOnClick)
@@ -318,10 +318,10 @@ local function CreateGUI()
 		guiPage[i]:SetScrollChild(guiPage[i].child)
 		F.ReskinScroll(guiPage[i].ScrollBar)
 
-		local header = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Header, 14, nil, name or nil, 'CLASS', 'THICK', 'TOPLEFT', 14, -16)
+		local header = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Header, 14, nil, L[strupper(name)..'_NAME'] or nil, 'CLASS', 'THICK', 'TOPLEFT', 14, -16)
 		guiPage[i].header = header
 
-		local desc = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Normal, 12, nil, name, {.8, .8, .8}, 'THICK')
+		local desc = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Normal, 12, nil, L[strupper(name)..'_DESC'] or nil, {.8, .8, .8}, 'THICK')
 		desc:SetPoint('TOPLEFT', header, 'BOTTOMLEFT', 0, -8)
 		desc:SetJustifyH('LEFT')
 		desc:SetJustifyV('TOP')
@@ -410,7 +410,7 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 	checkbox:SetSize(20, 20)
 	checkbox:SetHitRectInsets(-5, -5, -5, -5)
 
-	checkbox.Text = F.CreateFS(checkbox, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 20, 0)
+	checkbox.Text = F.CreateFS(checkbox, C.Assets.Fonts.Normal, 12, nil, L[strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 20, 0)
 
 	checkbox:SetChecked(SaveValue(key, value))
 	checkbox:SetScript('OnClick', function()
@@ -427,9 +427,9 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 		checkbox.bu = bu
 	end
 
-	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
-		checkbox.title = L['GUI_TIPS']
-		F.AddTooltip(checkbox, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
+	if L[strupper(key)..'_'..strupper(value)..'_TIP'] then
+		checkbox.title = L['GUI_TIP']
+		F.AddTooltip(checkbox, 'ANCHOR_RIGHT', L[strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
 	end
 
 	tinsert(checkboxes, checkbox)
@@ -464,12 +464,13 @@ end
 
 -- Editbox
 function GUI:CreateEditBox(parent, key, value, callback, extra)
-	local width, height = unpack(extra)
+	local width, height, maxLetters, multiLine = unpack(extra)
 
 	local editbox = F.CreateEditBox(parent, width, height)
 	editbox:EnableMouse(true)
-	editbox:SetMultiLine(true)
-	editbox:SetMaxLetters(9999)
+	editbox:SetMultiLine(multiLine)
+	editbox:SetMaxLetters(maxLetters)
+	editbox:SetSpacing(3)
 	editbox:SetText(SaveValue(key, value))
 	editbox:SetJustifyH('LEFT')
 	editbox:SetJustifyV('TOP')
