@@ -305,6 +305,8 @@ end
 
 
 function CHAT:OnLogin()
+	if not FreeDB.chat.enable_chat then return end
+
 	for i = 1, NUM_CHAT_WINDOWS do
 		self.RestyleChatFrame(_G['ChatFrame'..i])
 	end

@@ -865,7 +865,7 @@ C.CharacterSettings = {
 	},
 
 	['chat'] = {
-		['enable'] = true,
+		['enable_chat'] = true,
 			['lock_position'] = true,
 				['window_width'] = 300,
 				['window_height'] = 100,

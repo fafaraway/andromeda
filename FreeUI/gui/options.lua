@@ -520,7 +520,7 @@ local function ChatOptions()
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'chat', 'enable')
+	local enable = GUI:CreateCheckBox(parent, 'chat', 'enable_chat')
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local lock = GUI:CreateCheckBox(parent, 'chat', 'lock_position', nil, SetupChatSize)
