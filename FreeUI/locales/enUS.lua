@@ -45,13 +45,21 @@ end
 --[[ Themes ]]
 
 do
+	L['APPEARANCE_SUB_BASIC'] = 'Basic'
 
+	L['APPEARANCE_NAME'] = 'Appearance'
+	L['APPEARANCE_DESC'] = 'Controls FreeUI\'s appearance.'
 end
 
 
 --[[ Notification ]]
 
 do
+	L['NOTIFICATION_SUB_BASIC'] = 'Basic'
+
+	L['NOTIFICATION_NAME'] = 'Notification'
+	L['NOTIFICATION_DESC'] = 'Notifies some specific events.'
+
 	L['NOTIFICATION_NEW_MAIL'] = 'You have new mail!'
 	L['NOTIFICATION_BAG_FULL'] = 'Your bag is full!'
 	L['NOTIFICATION_MAIL'] = 'Mail'
@@ -65,6 +73,11 @@ end
 --[[ Announcement ]]
 
 do
+	L['ANNOUNCEMENT_SUB_BASIC'] = 'Basic'
+
+	L['ANNOUNCEMENT_NAME'] = 'Announcement'
+	L['ANNOUNCEMENT_DESC'] = 'Announces some specific situation.'
+
 	L['ANNOUNCEMENT_INTERRUPT'] = 'Interrupted %s of %s!'
 	L['ANNOUNCEMENT_DISPEL'] = 'Dispelled %s of %s!'
 	L['ANNOUNCEMENT_STOLEN'] = 'Stole %s of %s!'
@@ -81,6 +94,11 @@ end
 --[[ Infobar ]]
 
 do
+	L['INFOBAR_SUB_BASIC'] = 'Basic'
+
+	L['INFOBAR_NAME'] = 'Infobar'
+	L['INFOBAR_DESC'] = 'Provides many helpful information.'
+
 	L['INFOBAR_DURABILITY'] = 'Durability'
 	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Open the character panel'
 
@@ -122,6 +140,11 @@ end
 --[[ Chat ]]
 
 do
+	L['CHAT_SUB_BASIC'] = 'Basic'
+
+	L['CHAT_NAME'] = 'Chat'
+	L['CHAT_DESC'] = 'Controls most of chat related settings.'
+
 	L['CHAT_TOGGLE_PANEL'] = 'Hide/Show chat box'
 	L['CHAT_TOGGLE_WC'] = 'Join/Leave Channel'
 	L['CHAT_COPY'] = 'Copy chat text'
@@ -133,6 +156,11 @@ end
 --[[ Aura ]]
 
 do
+	L['AURA_SUB_BASIC'] = 'Basic'
+
+	L['AURA_NAME'] = 'Aura'
+	L['AURA_DESC'] = 'Controls most of aura related settings.'
+
 	L['AURA_MOVER_BUFFS'] = 'Buffs'
 	L['AURA_MOVER_DEBUFFS'] = 'Debuffs'
 end
@@ -141,15 +169,20 @@ end
 --[[ Actionbar ]]
 
 do
-	L['ACTIONBAR_MOVER_BAR1'] = 'Actionbar 1'
-	L['ACTIONBAR_MOVER_BAR2'] = 'Actionbar 2'
-	L['ACTIONBAR_MOVER_BAR3'] = 'Actionbar 3'
-	L['ACTIONBAR_MOVER_BAR4'] = 'Actionbar 4'
-	L['ACTIONBAR_MOVER_BAR5'] = 'Actionbar 5'
-	L['ACTIONBAR_MOVER_PET'] = 'Actionbar pet'
-	L['ACTIONBAR_MOVER_STANCE'] = 'Actionbar stance'
-	L['ACTIONBAR_MOVER_EXTRA'] = 'Actionbar extra'
-	L['ACTIONBAR_MOVER_VEHICLE'] = 'Actionbar vehicle'
+	L['ACTIONBAR_SUB_BASIC'] = 'Basic'
+
+	L['ACTIONBAR_NAME'] = 'Actionbar'
+	L['ACTIONBAR_DESC'] = 'Controls actionbar\'s appearance and behavior.'
+
+	L['ACTIONBAR_MOVER_BAR1'] = 'bar 1'
+	L['ACTIONBAR_MOVER_BAR2'] = 'bar 2'
+	L['ACTIONBAR_MOVER_BAR3'] = 'bar 3'
+	L['ACTIONBAR_MOVER_BAR4'] = 'bar 4'
+	L['ACTIONBAR_MOVER_BAR5'] = 'bar 5'
+	L['ACTIONBAR_MOVER_PET'] = 'pet bar'
+	L['ACTIONBAR_MOVER_STANCE'] = 'stance bar'
+	L['ACTIONBAR_MOVER_EXTRA'] = 'extra bar'
+	L['ACTIONBAR_MOVER_VEHICLE'] = 'vehicle bar'
 	L['ACTIONBAR_MOVER_COOLDOWN'] = 'Cooldown'
 	L['ACTIONBAR_KEY_UNBOUND'] = 'Unbound Button'
 	L['ACTIONBAR_KEY_INDEX'] = 'Index'
@@ -164,6 +197,11 @@ end
 --[[ Combat ]]
 
 do
+	L['COMBAT_SUB_BASIC'] = 'Basic'
+
+	L['COMBAT_NAME'] = 'Combat'
+	L['COMBAT_DESC'] = 'Controls combat related settings.'
+
 	L['COMBAT_ENTER'] = '++ COMBAT ++'
 	L['COMBAT_LEAVE'] = '-- COMBAT --'
 end
@@ -172,6 +210,11 @@ end
 --[[ Inventory ]]
 
 do
+	L['INVENTORY_SUB_BASIC'] = 'Basic'
+
+	L['INVENTORY_NAME'] = 'Inventory'
+	L['INVENTORY_DESC'] = 'Controls inventory\'s appearance and behavior.'
+
 	L['INVENTORY_NOTIFICATION_HEADER'] = 'Backpack'
 	L['INVENTORY_SORT'] = 'Sort bags'
 	L['INVENTORY_ANCHOR_RESET'] = 'Reset window position'
@@ -211,6 +254,11 @@ end
 --[[ Map ]]
 
 do
+	L['MAP_SUB_BASIC'] = 'Basic'
+
+	L['MAP_NAME'] = 'Map'
+	L['MAP_DESC'] = 'Controls map related settings.'
+
 	L['MAP_MOVER_MINIMAP'] = 'Minimap'
 	L['MAP_CURSOR'] = 'Cursor'
 	L['MAP_REVEAL'] = 'Remove map fog'
@@ -222,6 +270,11 @@ end
 --[[ Quest ]]
 
 do
+	L['QUEST_SUB_BASIC'] = 'Basic'
+
+	L['QUEST_NAME'] = 'Quest'
+	L['QUEST_DESC'] = 'Controls quest related settings.'
+
 	L['QUEST_MOVER_TRACKER'] = 'Quest tracker'
 	L['QUEST_ACCEPT'] = 'Accept quest'
 	L['QUEST_AUTOMATION'] = 'Auto turn-in'
@@ -230,6 +283,11 @@ end
 
 -- Tooltip
 do
+	L['TOOLTIP_SUB_BASIC'] = 'Basic'
+
+	L['TOOLTIP_NAME'] = 'Tooltip'
+	L['TOOLTIP_DESC'] = 'Controls tooltip\'s appearance and behavior.'
+
 	L['TOOLTIP_MOVER'] = 'Tooltip'
 	L['TOOLTIP_RARE'] = 'Rare'
 	L['TOOLTIP_AURA_FROM'] = 'From'
@@ -255,6 +313,11 @@ end
 --[[ Unitframe ]]
 
 do
+	L['UNITFRAME_SUB_BASIC'] = 'Basic'
+
+	L['UNITFRAME_NAME'] = 'Unitframe'
+	L['UNITFRAME_DESC'] = 'Controls unitframe related settings.'
+
 	L['UNITFRAME_MOVER_INCOMING'] = 'Incoming damage and healing'
 	L['UNITFRAME_MOVER_OUTGOING'] = 'Outgoing damage and healing'
 	L['UNITFRAME_MOVER_CASTBAR'] = 'Castbar'
@@ -284,6 +347,13 @@ do
 	L['NAMEPLATE_DESC'] = 'Controls nameplate\'s appearance and behavior.'
 	L['NAMEPLATE_ENABLE_NAMEPLATE'] = 'Enable'
 	L['NAMEPLATE_ENABLE_NAMEPLATE_TIP'] = 'Uncheck this if you perfer other nameplate addon.'
+end
+
+
+--[[ Data ]]
+do
+	L['DATA_NAME'] = 'Data'
+	L['DATA_DESC'] = 'Controls addon\'s data.'
 end
 
 

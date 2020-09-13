@@ -11,7 +11,7 @@ local tabsList = {
 	'ANNOUNCEMENT',
 	'INFOBAR',
 	'CHAT',
-	'GUI_AURA',
+	'AURA',
 	'ACTIONBAR',
 	'COMBAT',
 	'INVENTORY',
@@ -27,7 +27,7 @@ local tabsList = {
 
 local iconsList = {
 	'Interface\\ICONS\\Ability_Hunter_BeastWithin',
-	'Interface\\ICONS\\Ability_Warrior_Revenge',
+	'Interface\\ICONS\\Ability_Mage_ColdAsIce',
 	'Interface\\ICONS\\Ability_Warrior_RallyingCry',
 	'Interface\\ICONS\\INV_Misc_Horn_04',
 	'Interface\\ICONS\\Spell_Shadow_Seduction',
@@ -39,7 +39,7 @@ local iconsList = {
 	'Interface\\ICONS\\ABILITY_Rogue_RollTheBones04',
 	'Interface\\ICONS\\INV_Misc_ScrollUnrolled03d',
 	'Interface\\ICONS\\Ability_Mage_MassInvisibility',
-	'Interface\\ICONS\\Spell_BurningSoul',
+	'Interface\\ICONS\\Ability_Racial_WardoftheLoaNature',
 	'Interface\\ICONS\\misc_rune_pvp_Random',
 	'Interface\\ICONS\\INV_Misc_Blingtron',
 	'Interface\\ICONS\\Raf-Icon',
