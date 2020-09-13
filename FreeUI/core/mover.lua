@@ -126,7 +126,7 @@ function F:Mover(text, value, anchor, width, height)
 	tinsert(MoverList, mover)
 
 	self:ClearAllPoints()
-	self:SetPoint('TOPLEFT', mover)
+	self:SetPoint('CENTER', mover)
 
 	return mover
 end
