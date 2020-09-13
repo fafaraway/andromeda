@@ -73,6 +73,34 @@ local function SetupCooldown()
 	GUI:ToggleSidePanel('cooldownSide')
 end
 
+local function SetupBar1Fade()
+	GUI:ToggleSidePanel('bar1FadeSide')
+end
+
+local function SetupBar2Fade()
+	GUI:ToggleSidePanel('bar2FadeSide')
+end
+
+local function SetupBar3()
+	GUI:ToggleSidePanel('bar3Side')
+end
+
+local function SetupBar3Fade()
+	GUI:ToggleSidePanel('bar3FadeSide')
+end
+
+local function SetupBar4Fade()
+	GUI:ToggleSidePanel('bar4FadeSide')
+end
+
+local function SetupBar5Fade()
+	GUI:ToggleSidePanel('bar5FadeSide')
+end
+
+local function SetupPetBarFade()
+	GUI:ToggleSidePanel('petBarFadeSide')
+end
+
 -- unitframe
 local function SetupUnitSize()
 	GUI:ToggleSidePanel('unitSizeSide')
@@ -724,7 +752,7 @@ local function ActionbarOptions()
 	local bar1 = GUI:CreateCheckBox(parent, 'actionbar', 'bar1')
 	bar1:SetPoint('TOPLEFT', extra, 'BOTTOMLEFT', 0, -8)
 
-	local bar1Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar1_fade')
+	local bar1Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar1_fade', nil, SetupBar1Fade)
 	bar1Fade:SetPoint('LEFT', bar1, 'RIGHT', 160, 0)
 
 	bar1.children = {bar1Fade}
@@ -732,15 +760,15 @@ local function ActionbarOptions()
 	local bar2 = GUI:CreateCheckBox(parent, 'actionbar', 'bar2')
 	bar2:SetPoint('TOPLEFT', bar1, 'BOTTOMLEFT', 0, -8)
 
-	local bar2Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar2_fade')
+	local bar2Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar2_fade', nil, SetupBar2Fade)
 	bar2Fade:SetPoint('LEFT', bar2, 'RIGHT', 160, 0)
 
 	bar2.children = {bar2Fade}
 
-	local bar3 = GUI:CreateCheckBox(parent, 'actionbar', 'bar3')
+	local bar3 = GUI:CreateCheckBox(parent, 'actionbar', 'bar3', nil, SetupBar3)
 	bar3:SetPoint('TOPLEFT', bar2, 'BOTTOMLEFT', 0, -8)
 
-	local bar3Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar3_fade')
+	local bar3Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar3_fade', nil, SetupBar3Fade)
 	bar3Fade:SetPoint('LEFT', bar3, 'RIGHT', 160, 0)
 
 	bar3.children = {bar3Fade}
@@ -748,7 +776,7 @@ local function ActionbarOptions()
 	local bar4 = GUI:CreateCheckBox(parent, 'actionbar', 'bar4')
 	bar4:SetPoint('TOPLEFT', bar3, 'BOTTOMLEFT', 0, -8)
 
-	local bar4Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar4_fade')
+	local bar4Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar4_fade', nil, SetupBar4Fade)
 	bar4Fade:SetPoint('LEFT', bar4, 'RIGHT', 160, 0)
 
 	bar4.children = {bar4Fade}
@@ -756,7 +784,7 @@ local function ActionbarOptions()
 	local bar5 = GUI:CreateCheckBox(parent, 'actionbar', 'bar5')
 	bar5:SetPoint('TOPLEFT', bar4, 'BOTTOMLEFT', 0, -8)
 
-	local bar5Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar5_fade')
+	local bar5Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar5_fade', nil, SetupBar5Fade)
 	bar5Fade:SetPoint('LEFT', bar5, 'RIGHT', 160, 0)
 
 	bar5.children = {bar5Fade}
@@ -764,10 +792,128 @@ local function ActionbarOptions()
 	local petBar = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar')
 	petBar:SetPoint('TOPLEFT', bar5, 'BOTTOMLEFT', 0, -8)
 
-	local petBarFade = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar_fade')
+	local petBarFade = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar_fade', nil, SetupPetBarFade)
 	petBarFade:SetPoint('LEFT', petBar, 'RIGHT', 160, 0)
 
 	petBar.children = {petBarFade}
+
+
+	local stanceBar = GUI:CreateCheckBox(parent, 'actionbar', 'stance_bar')
+	stanceBar:SetPoint('TOPLEFT', petBar, 'BOTTOMLEFT', 0, -8)
+
+
+	local bar1FadeSide = GUI:CreateSidePanel(parent, 'bar1FadeSide')
+
+	local bar1FadeInAlpha = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'bar1_fade_in_alpha', nil, {0.1, 1, 0.1})
+	bar1FadeInAlpha:SetPoint('TOP', bar1FadeSide.child, 'TOP', 0, -24)
+
+	local bar1FadeOutAlpha = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'bar1_fade_out_alpha', nil, {0.1, 1, 0.1})
+	bar1FadeOutAlpha:SetPoint('TOP', bar1FadeInAlpha, 'BOTTOM', 0, -56)
+
+	local bar1FadeHover = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_hover')
+	bar1FadeHover:SetPoint('TOPLEFT', bar1FadeSide.child, 'TOPLEFT', 10, -150)
+
+	local bar1FadeCombat = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_combat')
+	bar1FadeCombat:SetPoint('TOPLEFT', bar1FadeHover, 'BOTTOMLEFT', 0, -8)
+
+	local bar1FadeTarget = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_target')
+	bar1FadeTarget:SetPoint('TOPLEFT', bar1FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+
+	local bar2FadeSide = GUI:CreateSidePanel(parent, 'bar2FadeSide')
+
+	local bar2FadeInAlpha = GUI:CreateSlider(bar2FadeSide, 'actionbar', 'bar2_fade_in_alpha', nil, {0.1, 1, 0.1})
+	bar2FadeInAlpha:SetPoint('TOP', bar2FadeSide.child, 'TOP', 0, -24)
+
+	local bar2FadeOutAlpha = GUI:CreateSlider(bar2FadeSide, 'actionbar', 'bar2_fade_out_alpha', nil, {0.1, 1, 0.1})
+	bar2FadeOutAlpha:SetPoint('TOP', bar2FadeInAlpha, 'BOTTOM', 0, -56)
+
+	local bar2FadeHover = GUI:CreateCheckBox(bar2FadeSide, 'actionbar', 'bar2_fade_hover')
+	bar2FadeHover:SetPoint('TOPLEFT', bar2FadeSide.child, 'TOPLEFT', 10, -150)
+
+	local bar2FadeCombat = GUI:CreateCheckBox(bar2FadeSide, 'actionbar', 'bar2_fade_combat')
+	bar2FadeCombat:SetPoint('TOPLEFT', bar2FadeHover, 'BOTTOMLEFT', 0, -8)
+
+	local bar2FadeTarget = GUI:CreateCheckBox(bar2FadeSide, 'actionbar', 'bar2_fade_target')
+	bar2FadeTarget:SetPoint('TOPLEFT', bar2FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+
+	local bar3Side = GUI:CreateSidePanel(parent, 'bar3Side')
+
+	local bar3Divide = GUI:CreateCheckBox(bar3Side, 'actionbar', 'bar3_divide')
+	bar3Divide:SetPoint('TOPLEFT', bar3Side.child, 'TOPLEFT', 10, -16)
+
+
+	local bar3FadeSide = GUI:CreateSidePanel(parent, 'bar3FadeSide')
+
+	local bar3FadeInAlpha = GUI:CreateSlider(bar3FadeSide, 'actionbar', 'bar3_fade_in_alpha', nil, {0.1, 1, 0.1})
+	bar3FadeInAlpha:SetPoint('TOP', bar3FadeSide.child, 'TOP', 0, -24)
+
+	local bar3FadeOutAlpha = GUI:CreateSlider(bar3FadeSide, 'actionbar', 'bar3_fade_out_alpha', nil, {0.1, 1, 0.1})
+	bar3FadeOutAlpha:SetPoint('TOP', bar3FadeInAlpha, 'BOTTOM', 0, -56)
+
+	local bar3FadeHover = GUI:CreateCheckBox(bar3FadeSide, 'actionbar', 'bar3_fade_hover')
+	bar3FadeHover:SetPoint('TOPLEFT', bar3FadeSide.child, 'TOPLEFT', 10, -150)
+
+	local bar3FadeCombat = GUI:CreateCheckBox(bar3FadeSide, 'actionbar', 'bar3_fade_combat')
+	bar3FadeCombat:SetPoint('TOPLEFT', bar3FadeHover, 'BOTTOMLEFT', 0, -8)
+
+	local bar3FadeTarget = GUI:CreateCheckBox(bar3FadeSide, 'actionbar', 'bar3_fade_target')
+	bar3FadeTarget:SetPoint('TOPLEFT', bar3FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+
+	local bar4FadeSide = GUI:CreateSidePanel(parent, 'bar4FadeSide')
+
+	local bar4FadeInAlpha = GUI:CreateSlider(bar4FadeSide, 'actionbar', 'bar4_fade_in_alpha', nil, {0.1, 1, 0.1})
+	bar4FadeInAlpha:SetPoint('TOP', bar4FadeSide.child, 'TOP', 0, -24)
+
+	local bar4FadeOutAlpha = GUI:CreateSlider(bar4FadeSide, 'actionbar', 'bar4_fade_out_alpha', nil, {0.1, 1, 0.1})
+	bar4FadeOutAlpha:SetPoint('TOP', bar4FadeInAlpha, 'BOTTOM', 0, -56)
+
+	local bar4FadeHover = GUI:CreateCheckBox(bar4FadeSide, 'actionbar', 'bar4_fade_hover')
+	bar4FadeHover:SetPoint('TOPLEFT', bar4FadeSide.child, 'TOPLEFT', 10, -150)
+
+	local bar4FadeCombat = GUI:CreateCheckBox(bar4FadeSide, 'actionbar', 'bar4_fade_combat')
+	bar4FadeCombat:SetPoint('TOPLEFT', bar4FadeHover, 'BOTTOMLEFT', 0, -8)
+
+	local bar4FadeTarget = GUI:CreateCheckBox(bar4FadeSide, 'actionbar', 'bar4_fade_target')
+	bar4FadeTarget:SetPoint('TOPLEFT', bar4FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+
+	local bar5FadeSide = GUI:CreateSidePanel(parent, 'bar5FadeSide')
+
+	local bar5FadeInAlpha = GUI:CreateSlider(bar5FadeSide, 'actionbar', 'bar5_fade_in_alpha', nil, {0.1, 1, 0.1})
+	bar5FadeInAlpha:SetPoint('TOP', bar5FadeSide.child, 'TOP', 0, -24)
+
+	local bar5FadeOutAlpha = GUI:CreateSlider(bar5FadeSide, 'actionbar', 'bar5_fade_out_alpha', nil, {0.1, 1, 0.1})
+	bar5FadeOutAlpha:SetPoint('TOP', bar5FadeInAlpha, 'BOTTOM', 0, -56)
+
+	local bar5FadeHover = GUI:CreateCheckBox(bar5FadeSide, 'actionbar', 'bar5_fade_hover')
+	bar5FadeHover:SetPoint('TOPLEFT', bar5FadeSide.child, 'TOPLEFT', 10, -150)
+
+	local bar5FadeCombat = GUI:CreateCheckBox(bar5FadeSide, 'actionbar', 'bar5_fade_combat')
+	bar5FadeCombat:SetPoint('TOPLEFT', bar5FadeHover, 'BOTTOMLEFT', 0, -8)
+
+	local bar5FadeTarget = GUI:CreateCheckBox(bar5FadeSide, 'actionbar', 'bar5_fade_target')
+	bar5FadeTarget:SetPoint('TOPLEFT', bar5FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+
+	local petBarFadeSide = GUI:CreateSidePanel(parent, 'petBarFadeSide')
+
+	local petBarFadeInAlpha = GUI:CreateSlider(petBarFadeSide, 'actionbar', 'pet_bar_fade_in_alpha', nil, {0.1, 1, 0.1})
+	petBarFadeInAlpha:SetPoint('TOP', petBarFadeSide.child, 'TOP', 0, -24)
+
+	local petBarFadeOutAlpha = GUI:CreateSlider(petBarFadeSide, 'actionbar', 'pet_bar_fade_out_alpha', nil, {0.1, 1, 0.1})
+	petBarFadeOutAlpha:SetPoint('TOP', petBarFadeInAlpha, 'BOTTOM', 0, -56)
+
+	local petBarFadeHover = GUI:CreateCheckBox(petBarFadeSide, 'actionbar', 'pet_bar_fade_hover')
+	petBarFadeHover:SetPoint('TOPLEFT', petBarFadeSide.child, 'TOPLEFT', 10, -150)
+
+	local petBarFadeCombat = GUI:CreateCheckBox(petBarFadeSide, 'actionbar', 'pet_bar_fade_combat')
+	petBarFadeCombat:SetPoint('TOPLEFT', petBarFadeHover, 'BOTTOMLEFT', 0, -8)
+
+	local petBarFadeTarget = GUI:CreateCheckBox(petBarFadeSide, 'actionbar', 'pet_bar_fade_target')
+	petBarFadeTarget:SetPoint('TOPLEFT', petBarFadeCombat, 'BOTTOMLEFT', 0, -8)
 
 
 	local cooldownSide = GUI:CreateSidePanel(parent, 'cooldownSide')

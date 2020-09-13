@@ -35,15 +35,22 @@ function ACTIONBAR:CreateBar1()
 	end
 
 	if FreeDB.actionbar.bar1 then
-		if FreeDB.actionbar.bar1_minimal then
+		if C.isDeveloper then
 			frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
 		else
 			frame.frameVisibility = '[petbattle] hide; show'
 		end
 
-		if FreeDB.actionbar.bar1_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
+		frame.fader = {
+			enable = FreeDB.actionbar.bar1_fade,
+			fadeInAlpha = FreeDB.actionbar.bar1_fade_in_alpha,
+			fadeOutAlpha = FreeDB.actionbar.bar1_fade_out_alpha,
+			combat = FreeDB.actionbar.bar1_fade_combat,
+			target = FreeDB.actionbar.bar1_fade_target,
+			hover = FreeDB.actionbar.bar1_fade_hover,
+		}
+
+		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR1'], 'Bar1', frame.Pos)
 	else
@@ -98,9 +105,16 @@ function ACTIONBAR:CreateBar2()
 	if FreeDB.actionbar.bar2 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if FreeDB.actionbar.bar2_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
+		frame.fader = {
+			enable = FreeDB.actionbar.bar2_fade,
+			fadeInAlpha = FreeDB.actionbar.bar2_fade_in_alpha,
+			fadeOutAlpha = FreeDB.actionbar.bar2_fade_out_alpha,
+			combat = FreeDB.actionbar.bar2_fade_combat,
+			target = FreeDB.actionbar.bar2_fade_target,
+			hover = FreeDB.actionbar.bar2_fade_hover,
+		}
+
+		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR2'], 'Bar2', frame.Pos)
 	else
@@ -154,9 +168,16 @@ function ACTIONBAR:CreateBar3()
 	if FreeDB.actionbar.bar3 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if FreeDB.actionbar.bar3_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
+		frame.fader = {
+			enable = FreeDB.actionbar.bar3_fade,
+			fadeInAlpha = FreeDB.actionbar.bar3_fade_in_alpha,
+			fadeOutAlpha = FreeDB.actionbar.bar3_fade_out_alpha,
+			combat = FreeDB.actionbar.bar3_fade_combat,
+			target = FreeDB.actionbar.bar3_fade_target,
+			hover = FreeDB.actionbar.bar3_fade_hover,
+		}
+
+		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR3'], 'Bar3', frame.Pos)
 	else
@@ -196,9 +217,17 @@ function ACTIONBAR:CreateBar4()
 	if FreeDB.actionbar.bar4 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if FreeDB.actionbar.bar4_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
+		frame.fader = {
+			enable = FreeDB.actionbar.bar4_fade,
+			fadeInAlpha = FreeDB.actionbar.bar4_fade_in_alpha,
+			fadeOutAlpha = FreeDB.actionbar.bar4_fade_out_alpha,
+			combat = FreeDB.actionbar.bar4_fade_combat,
+			target = FreeDB.actionbar.bar4_fade_target,
+			hover = FreeDB.actionbar.bar4_fade_hover,
+		}
+
+		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
+
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR4'], 'Bar4', frame.Pos)
 	else
@@ -236,9 +265,17 @@ function ACTIONBAR:CreateBar5()
 	if FreeDB.actionbar.bar5 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 
-		if FreeDB.actionbar.bar5_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
+		frame.fader = {
+			enable = FreeDB.actionbar.bar5_fade,
+			fadeInAlpha = FreeDB.actionbar.bar5_fade_in_alpha,
+			fadeOutAlpha = FreeDB.actionbar.bar5_fade_out_alpha,
+			combat = FreeDB.actionbar.bar5_fade_combat,
+			target = FreeDB.actionbar.bar5_fade_target,
+			hover = FreeDB.actionbar.bar5_fade_hover,
+		}
+
+		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
+
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_BAR5'], 'Bar5', frame.Pos)
 	else
@@ -278,9 +315,16 @@ function ACTIONBAR:CreatePetbar()
 	if FreeDB.actionbar.pet_bar then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; [pet] show; hide'
 
-		if FreeDB.actionbar.pet_bar_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
+		frame.fader = {
+			enable = FreeDB.actionbar.pet_bar_fade,
+			fadeInAlpha = FreeDB.actionbar.pet_bar_fade_in_alpha,
+			fadeOutAlpha = FreeDB.actionbar.pet_bar_fade_out_alpha,
+			combat = FreeDB.actionbar.pet_bar_fade_combat,
+			target = FreeDB.actionbar.pet_bar_fade_target,
+			hover = FreeDB.actionbar.pet_bar_fade_hover,
+		}
+
+		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_PET'], 'Petbar', frame.Pos)
 	else
@@ -348,12 +392,8 @@ function ACTIONBAR:CreateStancebar()
 		end
 	end
 
-	if FreeDB.actionbar.enable_stance_bar then
+	if FreeDB.actionbar.stance_bar then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-
-		if FreeDB.actionbar.stance_bar_fade then
-			ACTIONBAR.CreateButtonFrameFader(frame, buttonList, ACTIONBAR.fader)
-		end
 	else
 		frame.frameVisibility = 'hide'
 	end
