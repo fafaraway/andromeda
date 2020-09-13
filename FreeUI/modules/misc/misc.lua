@@ -28,6 +28,7 @@ function MISC:OnLogin()
 	self:ForceWarning()
 	self:FasterCamera()
 	self:CombatCamera()
+	self:Screenshot()
 
 
 
@@ -197,6 +198,47 @@ function MISC:InstantLoot()
 end
 
 
+
+do
+	local delay, time = 1, 0
+	local function OnUpdate(self, elapsed)
+		time = time + elapsed
+
+		if time >= delay then
+			Screenshot()
+			time = 0
+			self:SetScript('OnUpdate', nil)
+		end
+	end
+
+	local function OnEvent(self)
+		self:SetScript('OnUpdate', OnUpdate)
+	end
+
+	function MISC:Screenshot()
+		if not FreeDB.misc.auto_screenshot then return end
+
+		local f = CreateFrame('Frame')
+
+		if FreeDB.misc.screenshot_achievement then
+			f:RegisterEvent('ACHIEVEMENT_EARNED')
+		end
+
+		if FreeDB.misc.screenshot_dead then
+			f:RegisterEvent('PLAYER_DEAD')
+		end
+
+		if FreeDB.misc.screenshot_levelup then
+			f:RegisterEvent('PLAYER_LEVEL_UP')
+		end
+
+		if FreeDB.misc.screenshot_challenge then
+			f:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+		end
+
+		f:SetScript('OnEvent', OnEvent)
+	end
+end
 
 
 -- auto select current event boss from LFD tool
