@@ -1,26 +1,34 @@
 local F, C = unpack(select(2, ...))
-local CHAT = F:GetModule('CHAT')
+local CHAT = F.CHAT
 
 
 local firstLines = {
-	'^Recount - (.*)$', 				-- Recount
-
-	'^Skada: (.*) for (.*):$',			-- Skada enUS
-	'^Skada: (.*) für (.*):$',			-- Skada deDE
-	'^Skada: (.*) pour (.*):$',			-- Skada frFR
-	'^Отчёт Skada: (.*), с (.*):$',		-- Skada ruRU
-	'^Skada: (.*) por (.*):$',			-- Skada esES/ptBR
-	'^Skada: (.*) per (.*):$',			-- Skada itIT
-	'^(.*) 의 Skada 보고 (.*):$',			-- Skada koKR
-	'^Skada：(.*)：$',					-- Skada zhCN
-	'^Skada:(.*)來自(.*):$',			-- Skada zhTW
-
-	'^Details!:(.*)$'					-- Details!
+	'^Recount - (.*)$', 									-- Recount
+	'^Skada: (.*) for (.*):$',								-- Skada enUS
+	'^Skada: (.*) für (.*):$',								-- Skada deDE
+	'^Skada: (.*) pour (.*):$',								-- Skada frFR
+	'^Отчёт Skada: (.*), с (.*):$',							-- Skada ruRU
+	'^Skada: (.*) por (.*):$',								-- Skada esES/ptBR
+	'^Skada: (.*) per (.*):$',								-- Skada itIT
+	'^(.*) 의 Skada 보고 (.*):$',							-- Skada koKR
+	'^Skada：(.*)：$',										-- Skada zhCN
+	'^Skada:(.*)來自(.*):$',								-- Skada zhTW
+	'^(.*) Done for (.*)$',									-- TinyDPS enUS
+	'^(.*) für (.*)$',										-- TinyDPS deDE
+	'데미지량 -(.*)$',											-- TinyDPS koKR
+	'힐량 -(.*)$',											-- TinyDPS koKR
+	'Урон:(.*)$',											-- TinyDPS ruRU
+	'Исцеление:(.*)$',										-- TinyDPS ruRU
+	'^Numeration: (.*) - (.*)$',							-- Numeration
+	'alDamageMeter : (.*)$',								-- alDamageMeter
+	'^Details!: (.*)$'										-- Details!
 }
 
 local nextLines = {
-	'^(%d+)\. (.*)$',					-- Recount, Details! and Skada
-	'^(.*)   (.*)$',					-- Additional Skada
+	'^(%d+)\. (.*)$',										-- Recount, Details! and Skada
+	'^(.*)   (.*)$',										-- Additional Skada
+	'^[+-]%d+.%d',											-- Numeration deathlog details
+	'^(%d+). (.*):(.*)(%d+)(.*)(%d+)%%(.*)%((%d+)%)$'		-- TinyDPS
 }
 
 local meters = {}
@@ -41,16 +49,15 @@ local events = {
 	'CHAT_MSG_YELL'
 }
 
-local function FilterLine(event, source, message, ...)
-	local spam = false
-	for k, v in ipairs(nextLines) do
+local function FilterLine(event, source, message)
+	for _, v in ipairs(nextLines) do
 		if message:match(v) then
 			local curTime = time()
-			for i, j in ipairs(meters) do
+			for _, j in ipairs(meters) do
 				local elapsed = curTime - j.time
 				if j.source == source and j.event == event and elapsed < 1 then
 					local toInsert = true
-					for a, b in ipairs(j.data) do
+					for _, b in ipairs(j.data) do
 						if b == message then
 							toInsert = false
 						end
@@ -65,7 +72,7 @@ local function FilterLine(event, source, message, ...)
 		end
 	end
 
-	for k, v in ipairs(firstLines) do
+	for _, v in ipairs(firstLines) do
 		local newID = 0
 		if message:match(v) then
 			local curTime = time()
@@ -104,7 +111,7 @@ function SetItemRef(link, text, button, frame)
 		ItemRefTooltip:ClearLines()
 		ItemRefTooltip:AddLine(meters[meterID].title)
 		ItemRefTooltip:AddLine(string.format(BY_SOURCE..': %s', meters[meterID].source))
-		for k, v in ipairs(meters[meterID].data) do
+		for _, v in ipairs(meters[meterID].data) do
 			local left, right = v:match('^(.*)  (.*)$')
 			if left and right then
 				ItemRefTooltip:AddDoubleLine(left, right, 1, 1, 1, 1, 1, 1)
@@ -118,7 +125,7 @@ function SetItemRef(link, text, button, frame)
 	end
 end
 
-local function ParseChatEvent(self, event, message, sender, ...)
+local function ParseChatEvent(_, event, message, sender, ...)
 	for _, value in ipairs(events) do
 		if event == value then
 			local isRecount, isFirstLine, newMessage = FilterLine(event, sender, message)
