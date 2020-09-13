@@ -91,7 +91,7 @@ local function Enable(self, unit)
 
 		if element.target then
 			self:HookScript('OnShow', Path)
-			self:RegisterEvent('UNIT_TARGET', Path, true)
+			--self:RegisterEvent('UNIT_TARGET', Path, true)
 			self:RegisterEvent('PLAYER_TARGET_CHANGED', Path, true)
 		end
 
@@ -134,7 +134,7 @@ local function Disable(self, unit)
 		end
 
 		if element.target then
-			self:UnregisterEvent('UNIT_TARGET', Path)
+			--self:UnregisterEvent('UNIT_TARGET', Path)
 			self:UnregisterEvent('PLAYER_TARGET_CHANGED', Path)
 		end
 
