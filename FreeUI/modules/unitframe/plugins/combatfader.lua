@@ -56,7 +56,7 @@ local function Update(self)
 		end
 	else
 		if element.smooth then
-			F:UIFrameFadeOut(self, 0.3, self:GetAlpha(), element.minAlpha or 1)
+			F:UIFrameFadeOut(self, 0.3, self:GetAlpha(), element.minAlpha or 0)
 		else
 			self:SetAlpha(element.minAlpha or 0.3)
 		end
