@@ -20,8 +20,8 @@ function COOLDOWN:ForceUpdate()
 	self:Show()
 end
 
-function COOLDOWN:OnSizeChanged(width)
-	local fontScale = floor(width + 0.5) / ICON_SIZE
+function COOLDOWN:OnSizeChanged(width, height)
+	local fontScale = F:Round((width+height)/2) / ICON_SIZE
 	if fontScale == self.fontScale then return end
 	self.fontScale = fontScale
 
@@ -83,11 +83,11 @@ end
 
 function COOLDOWN:StartTimer(start, duration)
 	if self:IsForbidden() then return end
-	if self.noOCC or hideNumbers[self] then return end
+	if self.noCooldownCount or hideNumbers[self] then return end
 
-	local frameName = self.GetName and self:GetName() or ''
-	if not FreeDB.actionbar.override_weakauras and strfind(frameName, 'WeakAuras') then
-		self.noOCC = true
+	local frameName = self.GetName and self:GetName()
+	if not FreeDB.actionbar.override_weakauras and frameName and strfind(frameName, 'WeakAuras') then
+		self.noCooldownCount = true
 		return
 	end
 

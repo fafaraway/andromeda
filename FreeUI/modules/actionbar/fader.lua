@@ -9,7 +9,6 @@ local SpellFlyout = SpellFlyout
 local function CheckCondition(frame)
 	if (frame.faderConfig.combat and UnitAffectingCombat('player')) then return true end
 	if (frame.faderConfig.target and UnitExists('target')) then return true end
-
 	if (frame.faderConfig.hover and MouseIsOver(frame)) then return true end
 
 	if not SpellFlyout:IsShown() then return false end
@@ -25,16 +24,16 @@ local function FrameHandler(frame)
 	if CheckCondition(frame) then
 		F:UIFrameFadeIn(frame, FreeDB.actionbar.fade_duration, frame:GetAlpha(), frame.faderConfig.fadeInAlpha or 1)
 
-		for _, button in pairs(buttonsList) do
-			button:EnableMouse(true)
-		end
+		-- for _, button in pairs(buttonsList) do
+		-- 	button:EnableMouse(true)
+		-- end
 
 	else
 		F:UIFrameFadeOut(frame, FreeDB.actionbar.fade_duration, frame:GetAlpha(), frame.faderConfig.fadeOutAlpha or 0)
 
-		for _, button in pairs(buttonsList) do
-			button:EnableMouse(false)
-		end
+		-- for _, button in pairs(buttonsList) do
+		-- 	button:EnableMouse(false)
+		-- end
 
 	end
 end

@@ -35,11 +35,11 @@ function ACTIONBAR:CreateBar1()
 	end
 
 	if FreeDB.actionbar.bar1 then
-		if C.isDeveloper then
-			frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
-		else
+		-- if C.isDeveloper then
+		-- 	frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
+		-- else
 			frame.frameVisibility = '[petbattle] hide; show'
-		end
+		-- end
 
 		frame.fader = {
 			enable = FreeDB.actionbar.bar1_fade,
@@ -449,7 +449,7 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 
 	button:RegisterForClicks('AnyUp')
 
-	button.__lockIcon = true
+	button.icon.__lockdown = true
 
 
 	if FreeDB.unitframe.enable_unitframe and FreeDB.unitframe.combat_fader then
@@ -458,6 +458,7 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 
 		button.icon:SetTexture('INTERFACE\\VEHICLES\\UI-Vehicles-Button-Exit-Up')
 		button.icon:SetTexCoord(.216, .784, .216, .784)
+		button.icon:SetDrawLayer('ARTWORK')
 
 		frame.mover = F.Mover(frame, L['ACTIONBAR_MOVER_VEHICLE'], 'LeaveVehicleButton', frame.Pos)
 	end
