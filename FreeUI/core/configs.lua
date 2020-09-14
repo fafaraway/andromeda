@@ -611,6 +611,8 @@ C.CharacterSettings = {
 			['combat_fader'] = true,
 				['fader_alpha'] = 0,
 				['fader_smooth'] = true,
+				['fader_arena'] = true,
+				['fader_instance'] = true,
 				['fader_hover'] = false,
 				['fader_combat'] = true,
 				['fader_target'] = true,
@@ -661,7 +663,7 @@ C.CharacterSettings = {
 				['castbar_timer'] = false,
 
 			['enable_player'] = true,
-				['player_width'] = 140,
+				['player_width'] = 120,
 				['player_height'] = 8,
 				['player_auras'] = false,
 				['player_auras_number'] = 18,
@@ -683,14 +685,14 @@ C.CharacterSettings = {
 				['pet_auras_number'] = 12,
 
 			['enable_target'] = true,
-				['target_width'] = 240,
+				['target_width'] = 160,
 				['target_height'] = 8,
 				['target_auras'] = true,
 				['target_auras_number_per_row'] = 7,
 				['target_auras_number'] = 35,
 				['target_debuffs_by_player'] = true,
 
-				['target_target_width'] = 80,
+				['target_target_width'] = 60,
 				['target_target_height'] = 8,
 
 			['enable_focus'] = true,
@@ -728,19 +730,19 @@ C.CharacterSettings = {
 				['group_ready_check_indicator'] = true,
 				['group_resurrect_indicator'] = true,
 
-				['party_width'] = 60,
+				['party_width'] = 54,
 				['party_height'] = 34,
 				['party_gap'] = 6,
 
 				['raid_width'] = 44,
-				['raid_height'] = 32,
+				['raid_height'] = 30,
 				['raid_gap'] = 5,
 
 
 
 			['enable_boss'] = true,
 				['boss_color_smooth'] = true,
-				['boss_width'] = 166,
+				['boss_width'] = 120,
 				['boss_height'] = 20,
 				['boss_gap'] = 60,
 				['boss_auras'] = true,
@@ -749,7 +751,7 @@ C.CharacterSettings = {
 				['boss_debuffs_by_player'] = true,
 
 			['enable_arena'] = true,
-				['arena_width'] = 166,
+				['arena_width'] = 120,
 				['arena_height'] = 16,
 				['arena_gap'] = 80,
 				['arenaShowAuras'] = true,

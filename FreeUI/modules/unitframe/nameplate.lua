@@ -7,6 +7,9 @@ local oUF = F.oUF
 local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 
+
+--[[ CVars ]]
+
 function NAMEPLATE:PlateInsideView()
 	if FreeDB.nameplate.inside_view then
 		SetCVar('nameplateOtherTopInset', .05)
@@ -55,7 +58,6 @@ function NAMEPLATE:UpdateClickableSize()
 	C_NamePlate.SetNamePlateFriendlySize(FreeDB.nameplate.plate_width * FreeADB['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['ui_scale'] + 40)
 end
 
-
 function NAMEPLATE:SetupCVars()
 	NAMEPLATE:PlateInsideView()
 
@@ -79,6 +81,7 @@ function NAMEPLATE:SetupCVars()
 	hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 end
 
+-- DBM
 function NAMEPLATE:BlockAddons()
 	if not DBM or not DBM.Nameplate then return end
 
@@ -96,10 +99,8 @@ function NAMEPLATE:BlockAddons()
 end
 
 
+--[[ Elements ]]
 
-
-
--- Elements
 local customUnits = {}
 function NAMEPLATE:CreateUnitTable()
 	wipe(customUnits)
@@ -468,7 +469,8 @@ function NAMEPLATE:AddInterruptInfo()
 end
 
 
--- create plate
+--[[ Create plate ]]
+
 local platesList = {}
 local function CreateNameplateStyle(self)
 	self.unitStyle = 'plate'
@@ -484,8 +486,6 @@ local function CreateNameplateStyle(self)
 
 	self.Health = health
 	self.Health.UpdateColor = NAMEPLATE.UpdateColor
-
-
 
 	local name = F.CreateFS(self, C.Assets.Fonts.Normal, 9, nil, nil, nil, 'THICK')
 	name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
@@ -517,8 +517,6 @@ function NAMEPLATE:UpdateNameplateAuras()
 	element:ForceUpdate()
 end
 
-
-
 function NAMEPLATE:RefreshNameplats()
 	for nameplate in pairs(platesList) do
 		NAMEPLATE.UpdateNameplateAuras()
@@ -534,8 +532,13 @@ end
 
 
 local DisabledElements = {
-	'Health', 'Castbar', 'HealPredictionAndAbsorb', 'PvPClassificationIndicator', 'ThreatIndicator'
+	'Health',
+	'Castbar',
+	'HealPredictionAndAbsorb',
+	'PvPClassificationIndicator',
+	'ThreatIndicator',
 }
+
 function NAMEPLATE:UpdatePlateByType()
 	local name = self.Name
 	local raidtarget = self.RaidTargetIndicator
@@ -562,7 +565,6 @@ function NAMEPLATE:UpdatePlateByType()
 
 	NAMEPLATE.UpdateTargetIndicator(self)
 end
-
 
 function NAMEPLATE:RefreshPlateType(unit)
 	self.reaction = UnitReaction(unit, 'player')

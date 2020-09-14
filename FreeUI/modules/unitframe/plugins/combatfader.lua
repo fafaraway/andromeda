@@ -41,6 +41,8 @@ local function Update(self)
 	local element = self.Fader
 
 	if
+		(element.arena and (GetZonePVPInfo() == 'arena')) or
+		(element.instance and (IsInInstance() == true)) or
 		(element.combat and UnitAffectingCombat(unit)) or
 		(element.target and UnitExists('target')) or
 		(element.casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
@@ -84,6 +86,11 @@ local function Enable(self, unit)
 			self:HookScript('OnLeave', Path)
 		end
 
+		if element.arena or element.instance then
+			self:RegisterEvent('PLAYER_ENTERING_WORLD', Path, true)
+			self:RegisterEvent('ZONE_CHANGED_NEW_AREA', Path, true)
+		end
+
 		if element.combat then
 			self:RegisterEvent('PLAYER_REGEN_ENABLED', Path, true)
 			self:RegisterEvent('PLAYER_REGEN_DISABLED', Path, true)
@@ -91,7 +98,6 @@ local function Enable(self, unit)
 
 		if element.target then
 			self:HookScript('OnShow', Path)
-			--self:RegisterEvent('UNIT_TARGET', Path, true)
 			self:RegisterEvent('PLAYER_TARGET_CHANGED', Path, true)
 		end
 
@@ -128,13 +134,17 @@ local function Disable(self, unit)
 
 		if not unitList[unit] then return end
 
+		if element.arena or element.instance then
+			self:UnregisterEvent('PLAYER_ENTERING_WORLD', Path, true)
+			self:UnregisterEvent('ZONE_CHANGED_NEW_AREA', Path, true)
+		end
+
 		if element.combat then
 			self:UnregisterEvent('PLAYER_REGEN_ENABLED', Path)
 			self:UnregisterEvent('PLAYER_REGEN_DISABLED', Path)
 		end
 
 		if element.target then
-			--self:UnregisterEvent('UNIT_TARGET', Path)
 			self:UnregisterEvent('PLAYER_TARGET_CHANGED', Path)
 		end
 

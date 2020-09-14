@@ -1298,13 +1298,15 @@ function UNITFRAME:AddCombatFader(self)
 	self.Fader.maxAlhpa = 1
 	self.Fader.minAlpha = FreeDB.unitframe.fader_alpha
 	self.Fader.smooth = FreeDB.unitframe.fader_smooth
+	self.Fader.hover = FreeDB.unitframe.fader_hover
+	self.Fader.arena = FreeDB.unitframe.fader_arena
+	self.Fader.instance = FreeDB.unitframe.fader_instance
 	self.Fader.combat = FreeDB.unitframe.fader_combat
 	self.Fader.target = FreeDB.unitframe.fader_target
 	self.Fader.casting = FreeDB.unitframe.fader_casting
 	self.Fader.injured = FreeDB.unitframe.fader_injured
 	self.Fader.mana = FreeDB.unitframe.fader_mana
 	self.Fader.power = FreeDB.unitframe.fader_power
-	self.Fader.hover = FreeDB.unitframe.fader_hover
 end
 
 -- Range check
@@ -1351,18 +1353,13 @@ end
 
 function UNITFRAME:AddCombatIndicator(self)
 	if not FreeDB.unitframe.player_combat_indicator then return end
-	--if FreeDB.unitframe.player_hide_tags then return end
-
-	-- local combatIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, '!', 'RED', 'THICK')
-	-- combatIndicator:SetPoint('BOTTOMLEFT', self.PvPIndicator, 'BOTTOMRIGHT', 5, 0)
-
 
 	local combatIndicator = self:CreateTexture(nil, 'OVERLAY')
 	combatIndicator:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 0)
 	combatIndicator:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 0)
 	combatIndicator:SetHeight(6)
 	combatIndicator:SetTexture(C.Assets.glow_top_tex)
-	combatIndicator:SetVertexColor(1, 0, 0, .7)
+	combatIndicator:SetVertexColor(1, 0, 0, .5)
 
 	self.CombatIndicator = combatIndicator
 end

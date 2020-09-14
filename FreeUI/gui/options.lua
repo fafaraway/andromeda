@@ -1659,10 +1659,14 @@ local function UnitframeOptions()
 	local faderHover = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_hover')
 	faderHover:SetPoint('TOPLEFT', faderSmooth, 'BOTTOMLEFT', 0, -8)
 
+	local faderArena = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_arena')
+	faderArena:SetPoint('TOPLEFT', faderHover, 'BOTTOMLEFT', 0, -8)
 
+	local faderInstance = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_instance')
+	faderInstance:SetPoint('TOPLEFT', faderArena, 'BOTTOMLEFT', 0, -8)
 
 	local faderCombat = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_combat')
-	faderCombat:SetPoint('TOPLEFT', faderHover, 'BOTTOMLEFT', 0, -8)
+	faderCombat:SetPoint('TOPLEFT', faderInstance, 'BOTTOMLEFT', 0, -8)
 
 	local faderTarget = GUI:CreateCheckBox(combatFaderSide, 'unitframe', 'fader_target')
 	faderTarget:SetPoint('TOPLEFT', faderCombat, 'BOTTOMLEFT', 0, -8)

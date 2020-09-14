@@ -78,7 +78,6 @@ local function CreatePetStyle(self)
 	UNITFRAME:AddPortrait(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddAuras(self)
-	UNITFRAME:AddCombatFader(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 end
 
@@ -91,7 +90,7 @@ function UNITFRAME:SpawnPet()
 	F.Mover(pet, L['UNITFRAME_MOVER_PET'], 'PetFrame', {'RIGHT', 'oUF_Player', 'LEFT', -6, 0}, pet:GetWidth(), pet:GetHeight())
 end
 
-local playTargetSound = function(self, event)
+local function targetSound(self, event)
     if event == 'PLAYER_TARGET_CHANGED' then
         if (UnitExists(self.unit)) then
             if (UnitIsEnemy(self.unit, 'player')) then
@@ -125,9 +124,9 @@ local function CreateTargetStyle(self)
 	UNITFRAME:AddRangeCheck(self)
 	UNITFRAME:AddFCF(self)
 
-	self:RegisterEvent('PLAYER_TARGET_CHANGED', playTargetSound)
+	self:RegisterEvent('PLAYER_TARGET_CHANGED', targetSound)
 	self.Health:SetScript('OnShow', function()
-        playTargetSound(self, 'PLAYER_TARGET_CHANGED')
+        targetSound(self, 'PLAYER_TARGET_CHANGED')
     end)
 end
 
@@ -137,7 +136,7 @@ function UNITFRAME:SpawnTarget()
 
 	local target = oUF:Spawn('target', 'oUF_Target')
 
-	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', 240, 300}, target:GetWidth(), target:GetHeight())
+	F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', 170, 300}, target:GetWidth(), target:GetHeight())
 end
 
 local function CreateTargetTargetStyle(self)
@@ -161,7 +160,7 @@ function UNITFRAME:SpawnTargetTarget()
 	F.Mover(targettarget, L['UNITFRAME_MOVER_TARGETTARGET'], 'TargetTargetFrame', {'LEFT', 'oUF_Target', 'RIGHT', 6, 0}, targettarget:GetWidth(), targettarget:GetHeight())
 end
 
-local playFocusSound = function(self, event)
+local function focusSound(self, event)
 	if event == 'PLAYER_FOCUS_CHANGED' then
 		if UnitExists(self.unit) then
 			if UnitIsEnemy(self.unit, 'player') then
@@ -191,9 +190,9 @@ local function CreateFocusStyle(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddRangeCheck(self)
 
-	self:RegisterEvent('PLAYER_FOCUS_CHANGED', playFocusSound)
+	self:RegisterEvent('PLAYER_FOCUS_CHANGED', focusSound)
 	self.Health:SetScript('OnShow', function()
-        playFocusSound(self, 'PLAYER_FOCUS_CHANGED')
+        focusSound(self, 'PLAYER_FOCUS_CHANGED')
     end)
 end
 
