@@ -7,7 +7,7 @@ local function SetupCVars()
 
 	SetCVar('deselectOnClick', 1)
 	SetCVar('useUiScale', 0)
-	SetCVar('WorldTextScale', 1.5)
+	SetCVar('WorldTextScale', 1.2)
 	SetCVar('missingTransmogSourceInItemTooltips', 1)
 	SetCVar('movieSubtitle', 1)
 	SetCVar('scriptErrors', 0)
@@ -83,29 +83,19 @@ local function SetupCVars()
 	SetCVar('enableFloatingCombatText', 0)
 	SetCVar('floatingCombatTextCombatDamage', 1)
 	SetCVar('floatingCombatTextCombatHealing', 1)
-	SetCVar('floatingCombatTextCombatDamageDirectionalOffset', 5)
-	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 1) -- 0 old style 1-5 new style
-	SetCVar('floatingCombatTextFloatMode', 3) -- 1 up 2 down 3 curve
+	SetCVar('floatingCombatTextFloatMode', 1) -- 1 up 2 down 3 curve
+	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 0) -- 0 old style 1-5 new style
+	SetCVar('floatingCombatTextCombatDamageDirectionalOffset', 4)
 
 	-- nameplates
-
 	SetCVar('nameplateShowAll', 1)
-
 	SetCVar('nameplateShowEnemies', 1)
 	SetCVar('nameplateShowEnemyGuardians', 1)
 	SetCVar('nameplateShowEnemyMinions', 1)
 	SetCVar('nameplateShowEnemyPets', 1)
 	SetCVar('nameplateShowEnemyTotems', 1)
 	SetCVar('nameplateShowEnemyMinus', 1)
-
 	SetCVar('nameplateMotion', 1)
-
-
-
-
-
-
-
 
 	-- quest
 	SetCVar('autoQuestWatch', 1)
@@ -157,16 +147,16 @@ local function SetupActionbars()
 
 	MultiActionBar_Update()
 
-	MultiBarBottomLeft:SetShown(true)
-	MultiBarRight:SetShown(true)
-	MultiBarLeft:SetShown(true)
-	MultiBarBottomRight:SetShown(true)
+	_G.MultiBarBottomLeft:SetShown(true)
+	_G.MultiBarRight:SetShown(true)
+	_G.MultiBarLeft:SetShown(true)
+	_G.MultiBarBottomRight:SetShown(true)
 end
 
 local function SetupChatFrame()
 	F:GetModule('CHAT'):UpdateChatSize()
 
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, _G.NUM_CHAT_WINDOWS do
 		local cf = _G['ChatFrame'..i]
 		ChatFrame_RemoveMessageGroup(cf, 'CHANNEL')
 	end
@@ -278,12 +268,7 @@ function INSTALL:HelloWorld()
 	local closeButton = CreateFrame('Button', 'FreeUI_Install_CloseButton', f, 'UIPanelCloseButton')
 	closeButton:SetPoint('TOPRIGHT', f, 'TOPRIGHT')
 	closeButton:SetScript('OnClick', function()
-		UIFrameFade(f,{
-			mode = 'OUT',
-			timeToFade = 0.5,
-			finishedFunc = function(f) f:SetAlpha(1); f:Hide() end,
-			finishedArg1 = f,
-		})
+		f:Hide()
 	end)
 	F.ReskinClose(closeButton)
 
@@ -388,12 +373,7 @@ function INSTALL:HelloWorld()
 	rightButton:SetText(L['INSTALL_BUTTON_INSTALL'])
 
 	leftButton:SetScript('OnClick', function()
-		UIFrameFade(f,{
-			mode = 'OUT',
-			timeToFade = 0.5,
-			finishedFunc = function(f) f:Hide() end,
-			finishedArg1 = f,
-		})
+		f:Hide()
 	end)
 	rightButton:SetScript('OnClick', step1)
 end
