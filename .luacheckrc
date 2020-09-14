@@ -15,6 +15,11 @@ globals = {
 	'FreeUI_GUI',
 	'FreeUI_LeaveVehicleBar',
 	'FreeUI_LeaveVehicleButton',
+	'SkadaDB',
+	'DBM',
+	'DBM_MinimapIcon',
+	'DBM_AllSavedOptions',
+	'DBT_AllPersistentOptions',
 }
 read_globals = {
     '8.0_WARFRONTS_-_ARATHI_-_CONSTRUCT_BUILDING_-_BARRACKS',
