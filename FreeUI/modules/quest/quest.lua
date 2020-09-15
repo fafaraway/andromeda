@@ -1,10 +1,16 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F:GetModule('QUEST')
+local QUEST = F.QUEST
 
 
 local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
 local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
 
+
+function QUEST:UpdateTrackerScale()
+	local tracker = ObjectiveTrackerFrame
+	local scale = FreeDB.quest.tracker_scale
+	tracker:SetScale(scale)
+end
 
 function QUEST:ObjectiveTrackerMover()
 	local frame = CreateFrame('Frame', 'FreeUIQuestMover', UIParent)
@@ -90,6 +96,7 @@ end
 
 function QUEST:OnLogin()
 	self:ObjectiveTrackerMover()
+	self:UpdateTrackerScale()
 	self:QuestLevel()
 	self:QuestNotifier()
 	self:QUEST_COMPLETE()
