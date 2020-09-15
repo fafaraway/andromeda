@@ -1,15 +1,19 @@
 local F, C, L = unpack(select(2, ...))
-local GUI = F:GetModule('GUI')
+local GUI = F.GUI
 
 
 --[[ callback ]]
 
 local function UpdateBagStatus()
-	F:GetModule('INVENTORY'):UpdateAllBags()
+	F.INVENTORY:UpdateAllBags()
 end
 
 local function UpdateMinimapScale()
-	F:GetModule('MAP'):UpdateMinimapScale()
+	F.MAP:UpdateMinimapScale()
+end
+
+local function UpdateQuestTrackerScale()
+	F.QUEST:UpdateTrackerScale()
 end
 
 
@@ -179,7 +183,6 @@ local function SetupCustomPlate()
 	GUI:ToggleSidePanel('customPlateSide')
 end
 
-
 -- combat
 local function SetupHealthThreshold()
 	GUI:ToggleSidePanel('healthThresholdSide')
@@ -195,119 +198,13 @@ local function SetupInfoBarHeight()
 	GUI:ToggleSidePanel('infoBarHeightSide')
 end
 
-
--- options section
---[[ local function addGeneralSection()
-	local parent = FreeUIOptionsFrame.General
-	parent.tab.icon:SetTexture('Interface\\ICONS\\Ability_Crown_of_the_Heavens_Icon')
-
-	local basic = GUI:AddSubCategory(parent, 'GUI.localization.general.sub_basic')
-	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
-
-	local blizzMover = GUI:CreateCheckBox(parent, 'blizz_mover')
-	blizzMover:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-
-	local alreadyKnown = GUI:CreateCheckBox(parent, 'already_known')
-	alreadyKnown:SetPoint('LEFT', blizzMover, 'RIGHT', 160, 0)
-
-	local hideBossBanner = GUI:CreateCheckBox(parent, 'hide_boss_banner')
-	hideBossBanner:SetPoint('TOPLEFT', blizzMover, 'BOTTOMLEFT', 0, -8)
-
-	local hideTalkingHead = GUI:CreateCheckBox(parent, 'hide_talking_head')
-	hideTalkingHead:SetPoint('LEFT', hideBossBanner, 'RIGHT', 160, 0)
-
-	local itemLevel = GUI:CreateCheckBox(parent, 'item_level', nil, SetupItemLevel)
-	itemLevel:SetPoint('TOPLEFT', hideBossBanner, 'BOTTOMLEFT', 0, -8)
-
-	local mailButton = GUI:CreateCheckBox(parent, 'mail_button')
-	mailButton:SetPoint('TOPLEFT', itemLevel, 'BOTTOMLEFT', 0, -8)
-
-	local undressButton = GUI:CreateCheckBox(parent, 'undress_button')
-	undressButton:SetPoint('LEFT', mailButton, 'RIGHT', 160, 0)
-
-	local errors = GUI:CreateCheckBox(parent, 'tidy_errors')
-	errors:SetPoint('TOPLEFT', mailButton, 'BOTTOMLEFT', 0, -8)
-
-	local colorPicker = GUI:CreateCheckBox(parent, 'color_picker')
-	colorPicker:SetPoint('LEFT', errors, 'RIGHT', 160, 0)
-
-	local tradeTargetInfo = GUI:CreateCheckBox(parent, 'trade_target_info')
-	tradeTargetInfo:SetPoint('TOPLEFT', errors, 'BOTTOMLEFT', 0, -8)
-
-	local petFilter = GUI:CreateCheckBox(parent, 'pet_filter')
-	petFilter:SetPoint('LEFT', tradeTargetInfo, 'RIGHT', 160, 0)
-
-	local queueTimer = GUI:CreateCheckBox(parent, 'queue_timer')
-	queueTimer:SetPoint('TOPLEFT', tradeTargetInfo, 'BOTTOMLEFT', 0, -8)
-
-	local keystone = GUI:CreateCheckBox(parent, 'account_keystone')
-	keystone:SetPoint('LEFT', queueTimer, 'RIGHT', 160, 0)
-
-	local tradeTabs = GUI:CreateCheckBox(parent, 'trade_tabs')
-	tradeTabs:SetPoint('TOPLEFT', queueTimer, 'BOTTOMLEFT', 0, -8)
+-- quest
+local function SetupQuestTracker()
+	GUI:ToggleSidePanel('trackerScaleSide')
+end
 
 
-
-	local missingStats = GUI:CreateCheckBox(parent, 'missing_stats')
-	missingStats:SetPoint('TOPLEFT', tradeTabs, 'BOTTOMLEFT', 0, -8)
-
-	local delete = GUI:CreateCheckBox(parent, 'easy_delete')
-	delete:SetPoint('LEFT', missingStats, 'RIGHT', 160, 0)
-
-	local focus = GUI:CreateCheckBox(parent, 'easy_focus')
-	focus:SetPoint('TOPLEFT', missingStats, 'BOTTOMLEFT', 0, -8)
-
-	local ouf = GUI:CreateCheckBox(parent, 'easy_focus_on_ouf')
-	ouf:SetPoint('LEFT', focus, 'RIGHT', 160, 0)
-
-	focus.children = {ouf}
-
-	local loot = GUI:CreateCheckBox(parent, 'instant_loot')
-	loot:SetPoint('TOPLEFT', focus, 'BOTTOMLEFT', 0, -8)
-
-	local naked = GUI:CreateCheckBox(parent, 'easy_naked')
-	naked:SetPoint('LEFT', loot, 'RIGHT', 160, 0)
-
-	local mark = GUI:CreateCheckBox(parent, 'easy_mark')
-	mark:SetPoint('TOPLEFT', loot, 'BOTTOMLEFT', 0, -8)
-
-	local reject = GUI:CreateCheckBox(parent, 'auto_reject_stranger', nil, nil, true)
-	reject:SetPoint('LEFT', mark, 'RIGHT', 160, 0)
-
-	local camera = GUI:AddSubCategory(parent, 'GUI.localization.general.sub_camera')
-	camera:SetPoint('TOPLEFT', mark, 'BOTTOMLEFT', 0, -16)
-
-	local actionCam = GUI:CreateCheckBox(parent, 'action_camera')
-	actionCam:SetPoint('TOPLEFT', camera, 'BOTTOMLEFT', 0, -8)
-
-	local fasterCam = GUI:CreateCheckBox(parent, 'faster_camera')
-	fasterCam:SetPoint('LEFT', actionCam, 'RIGHT', 160, 0)
-
-	local uiscale = GUI:AddSubCategory(parent, 'GUI.localization.general.sub_uiscale')
-	uiscale:SetPoint('TOPLEFT', actionCam, 'BOTTOMLEFT', 0, -16)
-
-	local uiScaleMult = GUI:CreateSlider(parent, 'ui_scale', 1, 2, 1, 2, 0.1, nil, true)
-	uiScaleMult:SetPoint('TOPLEFT', uiscale, 'BOTTOMLEFT', 16, -32)
-
-
-	local itemLevelSide = GUI:CreateSidePanel(parent, 'itemLevelSide', 'GUI.localization.general.item_level', true)
-
-	local gemEnchant = GUI:CreateCheckBox(parent, 'gem_enchant')
-	gemEnchant:SetParent(itemLevelSide)
-	gemEnchant:SetPoint('TOPLEFT', itemLevelSide, 'TOPLEFT', 20, -60)
-
-	local azeriteTraits = GUI:CreateCheckBox(parent, 'azerite_traits')
-	azeriteTraits:SetParent(itemLevelSide)
-	azeriteTraits:SetPoint('TOPLEFT', gemEnchant, 'BOTTOMLEFT', 00, -8)
-
-	local merchantIlvl = GUI:CreateCheckBox(parent, 'merchant_ilvl')
-	merchantIlvl:SetParent(itemLevelSide)
-	merchantIlvl:SetPoint('TOPLEFT', azeriteTraits, 'BOTTOMLEFT', 00, -8)
-
-	itemLevel.children = {gemEnchant, azeriteTraits, merchantIlvl}
-end ]]
-
-
+--[[ module options ]]
 
 local function AppearanceOptions()
 	local parent = FreeUI_GUI[1]
@@ -802,22 +699,79 @@ local function ActionbarOptions()
 	stanceBar:SetPoint('TOPLEFT', petBar, 'BOTTOMLEFT', 0, -8)
 
 
-	local bar1FadeSide = GUI:CreateSidePanel(parent, 'bar1FadeSide')
 
-	local bar1FadeInAlpha = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'bar1_fade_in_alpha', nil, {0.1, 1, 0.1})
-	bar1FadeInAlpha:SetPoint('TOP', bar1FadeSide.child, 'TOP', 0, -24)
+	local function toggleActionbarOptions()
+		local shown = enable:GetChecked()
+		enable.bu:SetShown(shown)
+		class:SetShown(shown)
+		range:SetShown(shown)
+		macro:SetShown(shown)
+		hotkey:SetShown(shown)
+		count:SetShown(shown)
+		cooldown:SetShown(shown)
+		cooldown.bu:SetShown(shown)
+		extra:SetShown(shown)
+		extra.line:SetShown(shown)
+		bar1:SetShown(shown)
+		bar1Fade:SetShown(shown)
+		bar1Fade.bu:SetShown(shown)
+		bar2:SetShown(shown)
+		bar2Fade:SetShown(shown)
+		bar2Fade.bu:SetShown(shown)
+		bar3:SetShown(shown)
+		bar3.bu:SetShown(shown)
+		bar3Fade:SetShown(shown)
+		bar3Fade.bu:SetShown(shown)
+		bar4:SetShown(shown)
+		bar4Fade:SetShown(shown)
+		bar4Fade.bu:SetShown(shown)
+		bar5:SetShown(shown)
+		bar5Fade:SetShown(shown)
+		bar5Fade.bu:SetShown(shown)
+		petBar:SetShown(shown)
+		petBarFade:SetShown(shown)
+		petBarFade.bu:SetShown(shown)
+		stanceBar:SetShown(shown)
 
-	local bar1FadeOutAlpha = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'bar1_fade_out_alpha', nil, {0.1, 1, 0.1})
-	bar1FadeOutAlpha:SetPoint('TOP', bar1FadeInAlpha, 'BOTTOM', 0, -56)
+	end
 
-	local bar1FadeHover = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_hover')
-	bar1FadeHover:SetPoint('TOPLEFT', bar1FadeSide.child, 'TOPLEFT', 10, -150)
+	enable:HookScript('OnClick', toggleActionbarOptions)
+	parent:HookScript('OnShow', toggleActionbarOptions)
 
-	local bar1FadeCombat = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_combat')
-	bar1FadeCombat:SetPoint('TOPLEFT', bar1FadeHover, 'BOTTOMLEFT', 0, -8)
 
-	local bar1FadeTarget = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_target')
-	bar1FadeTarget:SetPoint('TOPLEFT', bar1FadeCombat, 'BOTTOMLEFT', 0, -8)
+	do
+		local bar1FadeSide = GUI:CreateSidePanel(parent, 'bar1FadeSide')
+
+		local fadeInDuration = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'fade_in_duration', nil, {0.1, 2, 0.1})
+		fadeInDuration:SetPoint('TOP', bar1FadeSide.child, 'TOP', 0, -24)
+
+		local fadeOutDuration = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'fade_out_duration', nil, {0.1, 2, 0.1})
+		fadeOutDuration:SetPoint('TOP', fadeInDuration, 'BOTTOM', 0, -56)
+
+		local fadeSmooth = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'fade_smooth')
+		fadeSmooth:SetPoint('TOPLEFT', bar1FadeSide.child, 'TOPLEFT', 10, -150)
+
+		local bar1FadeInAlpha = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'bar1_fade_in_alpha', nil, {0.1, 1, 0.1})
+		bar1FadeInAlpha:SetPoint('TOP', bar1FadeSide.child, 'TOP', 0, -200)
+
+		local bar1FadeOutAlpha = GUI:CreateSlider(bar1FadeSide, 'actionbar', 'bar1_fade_out_alpha', nil, {0.1, 1, 0.1})
+		bar1FadeOutAlpha:SetPoint('TOP', bar1FadeInAlpha, 'BOTTOM', 0, -56)
+
+		local bar1FadeHover = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_hover')
+		bar1FadeHover:SetPoint('TOPLEFT', bar1FadeSide.child, 'TOPLEFT', 10, -320)
+
+		local bar1FadeCombat = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_combat')
+		bar1FadeCombat:SetPoint('TOPLEFT', bar1FadeHover, 'BOTTOMLEFT', 0, -8)
+
+		local bar1FadeTarget = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_target')
+		bar1FadeTarget:SetPoint('TOPLEFT', bar1FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+		local bar1FadeArena = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_arena')
+		bar1FadeArena:SetPoint('TOPLEFT', bar1FadeTarget, 'BOTTOMLEFT', 0, -8)
+
+		local bar1FadeInstance = GUI:CreateCheckBox(bar1FadeSide, 'actionbar', 'bar1_fade_instance')
+		bar1FadeInstance:SetPoint('TOPLEFT', bar1FadeArena, 'BOTTOMLEFT', 0, -8)
+	end
 
 
 	local bar2FadeSide = GUI:CreateSidePanel(parent, 'bar2FadeSide')
@@ -836,6 +790,12 @@ local function ActionbarOptions()
 
 	local bar2FadeTarget = GUI:CreateCheckBox(bar2FadeSide, 'actionbar', 'bar2_fade_target')
 	bar2FadeTarget:SetPoint('TOPLEFT', bar2FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+	local bar2FadeArena = GUI:CreateCheckBox(bar2FadeSide, 'actionbar', 'bar2_fade_arena')
+	bar2FadeArena:SetPoint('TOPLEFT', bar2FadeTarget, 'BOTTOMLEFT', 0, -8)
+
+	local bar2FadeInstance = GUI:CreateCheckBox(bar2FadeSide, 'actionbar', 'bar2_fade_instance')
+	bar2FadeInstance:SetPoint('TOPLEFT', bar2FadeArena, 'BOTTOMLEFT', 0, -8)
 
 
 	local bar3Side = GUI:CreateSidePanel(parent, 'bar3Side')
@@ -861,6 +821,12 @@ local function ActionbarOptions()
 	local bar3FadeTarget = GUI:CreateCheckBox(bar3FadeSide, 'actionbar', 'bar3_fade_target')
 	bar3FadeTarget:SetPoint('TOPLEFT', bar3FadeCombat, 'BOTTOMLEFT', 0, -8)
 
+	local bar3FadeArena = GUI:CreateCheckBox(bar3FadeSide, 'actionbar', 'bar3_fade_arena')
+	bar3FadeArena:SetPoint('TOPLEFT', bar3FadeTarget, 'BOTTOMLEFT', 0, -8)
+
+	local bar3FadeInstance = GUI:CreateCheckBox(bar3FadeSide, 'actionbar', 'bar3_fade_instance')
+	bar3FadeInstance:SetPoint('TOPLEFT', bar3FadeArena, 'BOTTOMLEFT', 0, -8)
+
 
 	local bar4FadeSide = GUI:CreateSidePanel(parent, 'bar4FadeSide')
 
@@ -878,6 +844,12 @@ local function ActionbarOptions()
 
 	local bar4FadeTarget = GUI:CreateCheckBox(bar4FadeSide, 'actionbar', 'bar4_fade_target')
 	bar4FadeTarget:SetPoint('TOPLEFT', bar4FadeCombat, 'BOTTOMLEFT', 0, -8)
+
+	local bar4FadeArena = GUI:CreateCheckBox(bar4FadeSide, 'actionbar', 'bar4_fade_arena')
+	bar4FadeArena:SetPoint('TOPLEFT', bar4FadeTarget, 'BOTTOMLEFT', 0, -8)
+
+	local bar4FadeInstance = GUI:CreateCheckBox(bar4FadeSide, 'actionbar', 'bar4_fade_instance')
+	bar4FadeInstance:SetPoint('TOPLEFT', bar4FadeArena, 'BOTTOMLEFT', 0, -8)
 
 
 	local bar5FadeSide = GUI:CreateSidePanel(parent, 'bar5FadeSide')
@@ -897,6 +869,12 @@ local function ActionbarOptions()
 	local bar5FadeTarget = GUI:CreateCheckBox(bar5FadeSide, 'actionbar', 'bar5_fade_target')
 	bar5FadeTarget:SetPoint('TOPLEFT', bar5FadeCombat, 'BOTTOMLEFT', 0, -8)
 
+	local bar5FadeArena = GUI:CreateCheckBox(bar5FadeSide, 'actionbar', 'bar5_fade_arena')
+	bar5FadeArena:SetPoint('TOPLEFT', bar5FadeTarget, 'BOTTOMLEFT', 0, -8)
+
+	local bar5FadeInstance = GUI:CreateCheckBox(bar5FadeSide, 'actionbar', 'bar5_fade_instance')
+	bar5FadeInstance:SetPoint('TOPLEFT', bar5FadeArena, 'BOTTOMLEFT', 0, -8)
+
 
 	local petBarFadeSide = GUI:CreateSidePanel(parent, 'petBarFadeSide')
 
@@ -914,6 +892,12 @@ local function ActionbarOptions()
 
 	local petBarFadeTarget = GUI:CreateCheckBox(petBarFadeSide, 'actionbar', 'pet_bar_fade_target')
 	petBarFadeTarget:SetPoint('TOPLEFT', petBarFadeCombat, 'BOTTOMLEFT', 0, -8)
+
+	local petBarFadeArena = GUI:CreateCheckBox(petBarFadeSide, 'actionbar', 'petBar_fade_arena')
+	petBarFadeArena:SetPoint('TOPLEFT', petBarFadeTarget, 'BOTTOMLEFT', 0, -8)
+
+	local petBarFadeInstance = GUI:CreateCheckBox(petBarFadeSide, 'actionbar', 'petBar_fade_instance')
+	petBarFadeInstance:SetPoint('TOPLEFT', petBarFadeArena, 'BOTTOMLEFT', 0, -8)
 
 
 	local cooldownSide = GUI:CreateSidePanel(parent, 'cooldownSide')
@@ -1192,7 +1176,7 @@ local function QuestOptions()
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'quest', 'enable_quest')
+	local enable = GUI:CreateCheckBox(parent, 'quest', 'enable_quest', nil, SetupQuestTracker)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local questLevel = GUI:CreateCheckBox(parent, 'quest', 'quest_level')
@@ -1211,8 +1195,17 @@ local function QuestOptions()
 	extraButton:SetPoint('TOPLEFT', questProgress, 'BOTTOMLEFT', 0, -8)
 
 
+	do
+		local trackerScaleSide = GUI:CreateSidePanel(parent, 'trackerScaleSide')
+
+		local trackerScale = GUI:CreateSlider(trackerScaleSide, 'quest', 'tracker_scale', UpdateQuestTrackerScale, {0.5, 2, 0.1})
+		trackerScale:SetPoint('TOP', trackerScaleSide.child, 'TOP', 0, -24)
+	end
+
+
 	local function toggleQuestOptions()
 		local shown = enable:GetChecked()
+		enable.bu:SetShown(shown)
 		questLevel:SetShown(shown)
 		rewardHightlight:SetShown(shown)
 		questProgress:SetShown(shown)
