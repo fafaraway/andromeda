@@ -2,6 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 
 
+GUI.UnitframeOptionsList = {}
+
 local checkboxes, sidePanels = {}, {}
 local guiTab, guiPage = {}, {}
 
@@ -392,15 +394,20 @@ function GUI:CreateBarWidgets(parent, texture)
 end
 
 -- Subcategory
-function GUI:AddSubCategory(category, name)
-	local header = F.CreateFS(category, C.Assets.Fonts.Normal, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
+function GUI:AddSubCategory(parent, name)
+	local header = F.CreateFS(parent, C.Assets.Fonts.Normal, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
 
-	local line = category:CreateTexture(nil, 'ARTWORK')
+	local line = parent:CreateTexture(nil, 'ARTWORK')
 	line:SetSize(350, 1)
 	line:SetPoint('TOPLEFT', header, 'BOTTOMLEFT', 0, -4)
 	line:SetColorTexture(.5, .5, .5, .1)
 
 	header.line = line
+
+	if parent == FreeUI_GUI[13] and header:GetText() ~= L['UNITFRAME_SUB_BASIC'] then
+		tinsert(GUI.UnitframeOptionsList, header)
+		tinsert(GUI.UnitframeOptionsList, line)
+	end
 
 	return header, line
 end
@@ -455,7 +462,7 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, color)
 	checkbox:HookScript('OnClick', OnToggle)
 
 	if extra and type(extra) == 'function' then
-		local bu = CreateGearButton(parent)
+		local bu = CreateGearButton(checkbox)
 		bu:SetPoint('LEFT', checkbox.Text, 'RIGHT', 0, 1)
 		bu:SetScript('OnClick', extra)
 
@@ -468,6 +475,14 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, color)
 	end
 
 	tinsert(checkboxes, checkbox)
+
+
+	if parent == FreeUI_GUI[13] and value ~= 'enable_unitframe' then
+		tinsert(GUI.UnitframeOptionsList, checkbox)
+	end
+	if parent == FreeUI_GUI[13] then
+		tinsert(GUI.UnitframeOptionsList, checkbox.bu)
+	end
 
 	return checkbox
 end

@@ -305,6 +305,21 @@ local function CreateNamePlateAuraFilter(parent)
 end
 
 
+--[[  ]]
+
+local function ToggleOptions()
+	local shown = GUI.EnableUnitframe:GetChecked()
+
+	for _, option in pairs(GUI.UnitframeOptionsList) do
+		option:SetShown(shown)
+	end
+end
+
+
+
+
+
+
 
 --[[ module options ]]
 
@@ -1418,12 +1433,15 @@ end
 
 local function UnitframeOptions()
 	local parent = FreeUI_GUI[13]
+	parent:HookScript('OnShow', ToggleOptions)
 
-	local basic = GUI:AddSubCategory(parent)
+	local basic = GUI:AddSubCategory(parent, L['UNITFRAME_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'unitframe', 'enable_unitframe', nil, SetupUnitSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+	GUI.EnableUnitframe = enable
+	enable:HookScript('OnClick', ToggleOptions)
 
 	local transparency = GUI:CreateCheckBox(parent, 'unitframe', 'transparency')
 	transparency:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
@@ -1824,6 +1842,9 @@ local function UnitframeOptions()
 
 	local ctAbbrNumber = GUI:CreateCheckBox(combatTextSide, 'unitframe', 'ct_abbr_number')
 	ctAbbrNumber:SetPoint('TOP', ctOverHealing, 'BOTTOM', 0, -8)
+
+
+
 end
 
 local function NamePlateOptions()
@@ -1868,6 +1889,8 @@ local function NamePlateOptions()
 
 	local reverThreat = GUI:CreateCheckBox(parent, 'nameplate', 'dps_revert_threat')
 	reverThreat:SetPoint('LEFT', tankMode, 'RIGHT', 160, 0)
+
+	tankMode.children = {reverThreat}
 
 	local customPlate = GUI:CreateCheckBox(parent, 'nameplate', 'custom_unit_color', UpdateNameplateCustomUnitList, SetupCustomPlate)
 	customPlate:SetPoint('TOPLEFT', tankMode, 'BOTTOMLEFT', 0, -8)

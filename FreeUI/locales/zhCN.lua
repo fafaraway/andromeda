@@ -256,6 +256,11 @@ end
 --[[ Unitframe ]]
 
 do
+	L['UNITFRAME_NAME'] = '头像框体'
+	L['UNITFRAME_DESC'] = '设置头像框体的外观和功能'
+
+	L['UNITFRAME_SUB_BASIC'] = '基础'
+
 	L['UNITFRAME_MOVER_INCOMING'] = '承受伤害和治疗'
 	L['UNITFRAME_MOVER_OUTGOING'] = '输出伤害和治疗'
 	L['UNITFRAME_MOVER_CASTBAR'] = '焦点施法条'
@@ -328,8 +333,8 @@ do
 	L['NAMEPLATE_AURA_BLACK_LIST'] = '黑名单'
 	L['NAMEPLATE_AURA_INCORRECT_ID'] = '你输入的法术ID不存在'
 	L['NAMEPLATE_AURA_EXISTING_ID'] = '你已经添加过该法术ID'
-	L['NAMEPLATE_AURA_WHITE_LIST_ADD_ID'] = '填入想要显示的法术ID然后点击添加按钮。'
-	L['NAMEPLATE_AURA_BLACK_LIST_ADD_ID'] = '填入想要忽略的法术ID然后点击添加按钮。'
+	L['NAMEPLATE_AURA_WHITE_LIST_ADD_ID'] = '|n填入想要显示的法术ID然后点击添加按钮。'
+	L['NAMEPLATE_AURA_BLACK_LIST_ADD_ID'] = '|n填入想要忽略的法术ID然后点击添加按钮。'
 
 	L['NAMEPLATE_MIN_SCALE'] = '非目标姓名板缩放'
 	L['NAMEPLATE_TARGET_SCALE'] = '目标姓名板缩放'
