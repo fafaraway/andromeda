@@ -1,9 +1,7 @@
 local F, C = unpack(select(2, ...))
-local CHAT = F:GetModule('CHAT')
+local CHAT = F.CHAT
 
 
-local maxLines = 1024
-local maxWidth, maxHeight = UIParent:GetWidth(), UIParent:GetHeight()
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
 local ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate
@@ -11,6 +9,9 @@ local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, 
 local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local InviteToGroup = C_PartyInfo.InviteUnit
+
+local maxLines = 1024
+local isBattleNet
 
 
 local isScaling = false
@@ -39,24 +40,39 @@ function CHAT:UpdateChatSize()
 	isScaling = false
 end
 
---[[ function CHAT:TabSetAlpha(alpha)
-	if alpha ~= 1 and (not self.isDocked or GeneralDockManager.selected:GetID() == self:GetID()) then
+function CHAT:TabSetAlpha(alpha)
+	if self.glow:IsShown() and alpha ~= 1 then
 		self:SetAlpha(1)
-	elseif alpha < .6 then
-		self:SetAlpha(.6)
 	end
 end
 
 function CHAT:UpdateTabColors(selected)
-	if selected then
-		self:GetFontString():SetTextColor(C.r, C.g, C.b)
+	if self.glow:IsShown() then
+		if isBattleNet then
+			self.Text:SetTextColor(0, 1, .96)
+		else
+			self.Text:SetTextColor(1, .5, 1)
+		end
+	elseif selected then
+		self.Text:SetTextColor(1, .8, 0)
 	else
-		self:GetFontString():SetTextColor(.5, .5, .5)
+		self.Text:SetTextColor(.5, .5, .5)
 	end
-end ]]
+end
+
+function CHAT:UpdateTabEventColors(event)
+	local tab = _G[self:GetName()..'Tab']
+	if event == 'CHAT_MSG_WHISPER' then
+		isBattleNet = nil
+		FCFTab_UpdateColors(tab)
+	elseif event == 'CHAT_MSG_BN_WHISPER' then
+		isBattleNet = true
+		FCFTab_UpdateColors(tab)
+	end
+end
 
 function CHAT:RestyleChatFrame()
-	if not self or (self and self.styled) then return end
+	if not self or self.styled then return end
 
 	local name = self:GetName()
 
@@ -67,18 +83,13 @@ function CHAT:RestyleChatFrame()
 	end
 
 	local fontSize = select(2, self:GetFont())
-	if FreeDB.chat.font_outline then
-		self:SetFont(C.Assets.Fonts.Chat, fontSize, 'OUTLINE')
-		self:SetShadowColor(0, 0, 0, 0)
-	else
-		self:SetFont(C.Assets.Fonts.Chat, fontSize, nil)
-		self:SetShadowColor(0, 0, 0, 1)
-		self:SetShadowOffset(2, -2)
-	end
+	self:SetFont(C.Assets.Fonts.Chat, fontSize, FreeDB.chat.font_outline and 'OUTLINE')
+	self:SetShadowColor(0, 0, 0, FreeDB.chat.font_outline and 0 or 1)
+	self:SetShadowOffset(2, -2)
 
 	self:SetClampedToScreen(false)
 	self:SetClampRectInsets(0, 0, 0, 0)
-	self:SetMaxResize(maxWidth, maxHeight)
+	self:SetMaxResize(C.ScreenWidth, C.ScreenHeight)
 	self:SetMinResize(100, 50)
 	if self:GetMaxLines() < maxLines then
 		self:SetMaxLines(maxLines)
@@ -102,28 +113,44 @@ function CHAT:RestyleChatFrame()
 	lang:SetPoint('BOTTOMRIGHT', eb, 'BOTTOMRIGHT', 29, 0)
 	lang.bd = F.CreateBDFrame(lang, .6, true)
 
-	-- local tab = _G[name..'Tab']
-	-- tab:SetAlpha(1)
-	-- local tabFs = tab:GetFontString()
-	-- F.StripTextures(tab, 7)
-	-- hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
+	local tab = _G[name..'Tab']
+	tab:SetAlpha(1)
+	tab.Text:SetFont(C.Assets.Fonts.Chat, 12, FreeDB.chat.outline and 'OUTLINE')
+	tab.Text:SetShadowColor(0, 0, 0, FreeDB.chat.outline and 0 or 1)
+	tab.Text:SetShadowOffset(2, -2)
+	F.StripTextures(tab, 7)
+	hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
 
-	-- if FreeDB.chat.outline then
-	-- 	tabFs:SetFont(C.Assets.Fonts.Chat, 12, 'OUTLINE')
-	-- 	tabFs:SetShadowColor(0, 0, 0, 0)
-	-- else
-	-- 	tabFs:SetFont(C.Assets.Fonts.Chat, 12)
-	-- 	tabFs:SetShadowColor(0, 0, 0, 1)
-	-- 	tabFs:SetShadowOffset(2, -2)
-	-- end
-
-	if FreeDB.chat.lock_position then F.StripTextures(self) end
+	F.StripTextures(self)
 
 	F.HideObject(self.buttonFrame)
 	F.HideObject(self.ScrollBar)
 	F.HideObject(self.ScrollToBottomButton)
 
+	F.HideObject(_G.ChatFrameMenuButton)
+	F.HideObject(_G.QuickJoinToastButton)
 
+	if FreeDB.chat.voice_button then
+		_G.ChatFrameChannelButton:ClearAllPoints()
+		_G.ChatFrameChannelButton:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, -26)
+		_G.ChatFrameChannelButton:SetParent(UIParent)
+	else
+		F.HideObject(_G.ChatFrameChannelButton)
+		F.HideObject(_G.ChatFrameToggleVoiceDeafenButton)
+		F.HideObject(_G.ChatFrameToggleVoiceMuteButton)
+	end
+
+	BNToastFrame:SetClampedToScreen(true)
+	BNToastFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+
+	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+
+	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+
+	ChatAlertFrame:SetClampedToScreen(true)
+	ChatAlertFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
 
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
 
@@ -193,7 +220,6 @@ function CHAT:UpdateTabChannelSwitch()
 		end
 	end
 end
-hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
 
 function CHAT:QuickMouseScroll(dir)
 	if dir > 0 then
@@ -212,7 +238,6 @@ function CHAT:QuickMouseScroll(dir)
 		end
 	end
 end
-hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
 
 function CHAT:ResizeChatFrame()
 	ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
@@ -230,7 +255,7 @@ function CHAT:ResizeChatFrame()
 	end)
 end
 
-local function updateChatBubble()
+local function UpdateChatBubble()
 	local name, instType = GetInstanceInfo()
 	if name and (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
 		SetCVar('chatBubbles', 1)
@@ -241,15 +266,15 @@ end
 
 function CHAT:AutoToggleChatBubble()
 	if FreeDB.chat.smart_bubble then
-		F:RegisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
+		F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
 	else
-		F:UnregisterEvent('PLAYER_ENTERING_WORLD', updateChatBubble)
+		F:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
 	end
 end
 
 -- alt + left click for group invite
 -- ctrl + left click for guild invite
-local function ClickToInvite(self, link, _, button)
+function CHAT:ClickToInvite(link, _, button)
 	if not FreeDB.chat.click_to_invite then return end
 
 	local type, value = link:match('(%a+):(.+)')
@@ -302,17 +327,15 @@ local function ClickToInvite(self, link, _, button)
 end
 
 
-
-
 function CHAT:OnLogin()
 	if not FreeDB.chat.enable_chat then return end
 
-	for i = 1, NUM_CHAT_WINDOWS do
+	for i = 1, _G.NUM_CHAT_WINDOWS do
 		self.RestyleChatFrame(_G['ChatFrame'..i])
 	end
 
 	hooksecurefunc('FCF_OpenTemporaryWindow', function()
-		for _, chatFrameName in next, CHAT_FRAMES do
+		for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
 			local frame = _G[chatFrameName]
 			if frame.isTemporary then
 				self.RestyleChatFrame(frame)
@@ -320,17 +343,18 @@ function CHAT:OnLogin()
 		end
 	end)
 
-	--hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
+	-- update tabs
+	hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
+	hooksecurefunc('FloatingChatFrame_OnEvent', self.UpdateTabEventColors)
 
 	-- Font size
 	for i = 1, 15 do
-		CHAT_FONT_HEIGHTS[i] = i + 9
+		_G.CHAT_FONT_HEIGHTS[i] = i + 9
 	end
 
 	-- Default
-	SetCVar('chatStyle', 'classic')
-	F.HideOption(InterfaceOptionsSocialPanelChatStyle)
-	CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
+	F.HideOption(_G.InterfaceOptionsSocialPanelChatStyle)
+	_G.CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Lock chatframe
 	if FreeDB.chat.lock_position then
@@ -339,7 +363,11 @@ function CHAT:OnLogin()
 		F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
 	end
 
-	hooksecurefunc('ChatFrame_OnHyperlinkShow', ClickToInvite)
+
+	hooksecurefunc('ChatFrame_OnHyperlinkShow', CHAT.ClickToInvite)
+	hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
+	hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
+
 
 	self:UpdateEditBoxBorderColor()
 	self:ResizeChatFrame()
@@ -351,36 +379,7 @@ function CHAT:OnLogin()
 	self:WhisperSticky()
 	self:WhisperAlert()
 	self:AutoToggleChatBubble()
-	self:RestyleTabs()
 
-
-
-
-
-	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
-
-	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
-
-	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-	VoiceChatChannelActivatedNotification:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
-
-	ChatAlertFrame:SetClampedToScreen(true)
-	ChatAlertFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
-
-	F.HideObject(_G.ChatFrameMenuButton)
-	F.HideObject(_G.QuickJoinToastButton)
-
-	if FreeDB.chat.voice_button then
-		_G.ChatFrameChannelButton:ClearAllPoints()
-		_G.ChatFrameChannelButton:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, -26)
-		_G.ChatFrameChannelButton:SetParent(UIParent)
-	else
-		F.HideObject(_G.ChatFrameChannelButton)
-		F.HideObject(_G.ChatFrameToggleVoiceDeafenButton)
-		F.HideObject(_G.ChatFrameToggleVoiceMuteButton)
-	end
 
 	-- ProfanityFilter
 	if not BNFeaturesEnabledAndConnected() then return end
