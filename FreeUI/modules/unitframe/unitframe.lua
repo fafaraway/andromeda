@@ -8,8 +8,6 @@ function UNITFRAME:OnLogin()
 
 	F:SetSmoothingAmount(.3)
 
-	COLORS:UpdateColors()
-
 	self:SpawnPlayer()
 	self:SpawnTarget()
 	self:SpawnTargetTarget()
