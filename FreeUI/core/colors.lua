@@ -168,3 +168,7 @@ function COLORS:UpdateColors()
 	}
 end
 
+
+function COLORS:OnLogin()
+	COLORS:UpdateColors()
+end
