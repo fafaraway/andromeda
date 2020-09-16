@@ -91,8 +91,8 @@ function NAMEPLATE:BlockAddons()
 
 	local function showAurasForDBM(_, _, _, spellID)
 		if not tonumber(spellID) then return end
-		if not C.PlateAuraWhiteList[spellID] then
-			C.PlateAuraWhiteList[spellID] = true
+		if not C.AuraWhiteList[spellID] then
+			C.AuraWhiteList[spellID] = true
 		end
 	end
 	hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)
@@ -473,7 +473,7 @@ end
 
 local platesList = {}
 local function CreateNameplateStyle(self)
-	self.unitStyle = 'plate'
+	self.unitStyle = 'nameplate'
 	self:SetSize(FreeDB.nameplate.plate_width, FreeDB.nameplate.plate_height)
 	self:SetPoint('CENTER', 0, -10)
 	self:SetScale(1)

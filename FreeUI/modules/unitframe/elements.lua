@@ -72,7 +72,7 @@ local function PostUpdateHealth(health, unit, min, max)
 		r, g, b = unpack(oUF.colors.tapped)
 	elseif UnitIsPlayer(unit) or style == 'pet' then
 		local _, class = UnitClass(unit)
-		local color = FreeADB.class_colors[class]
+		local color = FreeADB.colors.class[class]
 
 		if class then
 			r, g, b = color.r, color.g, color.b
@@ -355,7 +355,7 @@ function UNITFRAME.PostCreateIcon(element, button)
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	if style == 'plate' then
+	if style == 'nameplate' then
 		button.count = F.CreateFS(button, C.Assets.Fonts.Cooldown, 10, nil, nil, nil, 'THICK')
 	else
 		button.count = F.CreateFS(button, C.Assets.Fonts.Number, 10, nil, nil, nil, 'THICK')
@@ -363,7 +363,7 @@ function UNITFRAME.PostCreateIcon(element, button)
 	button.count:ClearAllPoints()
 	button.count:SetPoint('TOPRIGHT', button, 2, 4)
 
-	if style == 'plate' then
+	if style == 'nameplate' then
 		button.timer = F.CreateFS(button, C.Assets.Fonts.Cooldown, 10, nil, nil, nil, 'THICK')
 	else
 		button.timer = F.CreateFS(button, C.Assets.Fonts.Number, 10, nil, nil, nil, 'THICK')
@@ -463,7 +463,7 @@ local function BolsterPostUpdate(element)
 	end
 end
 
-function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.unitStyle
 
 	if name and spellID == 209859 then
@@ -472,6 +472,10 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 			element.bolsterIndex = button
 			return true
 		end
+
+	elseif style == 'party' or style == 'raid' then
+
+
 	elseif style == 'player' and FreeDB.unitframe.player_auras then
 		if C.ClassBuffs['ALL'][spellID] or C.ClassBuffs[C.MyClass][spellID] then
 			return true
@@ -500,12 +504,18 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 		return true
 	elseif style == 'pet' and FreeDB.unitframe.pet_auras then
 		return true
-	elseif style == 'plate' and FreeDB.nameplate.plate_auras then
-		if button.isDebuff and button.isPlayer then
+	elseif style == 'nameplate' and FreeDB.nameplate.plate_auras then
+
+		if FreeADB['nameplate_aura_filter'][2][spellID] or C.AuraBlackList[spellID] then
+			return false
+		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
+			return true
+		elseif FreeADB['nameplate_aura_filter'][1][spellID] or C.AuraWhiteList[spellID] then
 			return true
 		else
-			return false
+			return caster == 'player' or caster == 'pet' or caster == 'vehicle'
 		end
+
 	end
 end
 
@@ -555,7 +565,7 @@ function UNITFRAME:AddAuras(self)
 			auras.iconsPerRow = FreeDB.unitframe.arenaAuraPerRow
 		end
 
-	elseif style == 'plate' then
+	elseif style == 'nameplate' then
 		auras.initialAnchor = 'BOTTOMLEFT'
 		auras:SetPoint('BOTTOM', self, 'TOP', 0, 8)
 		auras['growth-y'] = 'UP'

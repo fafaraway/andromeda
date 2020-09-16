@@ -16,6 +16,25 @@ local function UpdateQuestTrackerScale()
 	F.QUEST:UpdateTrackerScale()
 end
 
+local function UpdateNameplateCustomUnitList()
+	F.NAMEPLATE:CreateUnitTable()
+end
+
+local function RefreshNameplates()
+	F.NAMEPLATE:RefreshAllPlates()
+end
+
+local function UpdateNameplateCVars()
+	F.NAMEPLATE:PlateInsideView()
+	F.NAMEPLATE:UpdatePlateScale()
+	F.NAMEPLATE:UpdatePlateTargetScale()
+	F.NAMEPLATE:UpdatePlateAlpha()
+	F.NAMEPLATE:UpdatePlateOccludedAlpha()
+	F.NAMEPLATE:UpdatePlateDistance()
+	F.NAMEPLATE:UpdatePlateVerticalSpacing()
+	F.NAMEPLATE:UpdatePlateHorizontalSpacing()
+end
+
 
 --[[ side panel ]]
 
@@ -167,12 +186,8 @@ local function SetupPlateSize()
 	GUI:ToggleSidePanel('plateSizeSide')
 end
 
-local function SetupPlateAuraSize()
-	GUI:ToggleSidePanel('plateAuraSizeSide')
-end
-
-local function SetupTargetColor()
-	GUI:ToggleSidePanel('targetColorSide')
+local function SetupPlateAura()
+	GUI:ToggleSidePanel('FreeUI_SetupPlateAura')
 end
 
 local function SetupThreatColors()
@@ -202,6 +217,93 @@ end
 local function SetupQuestTracker()
 	GUI:ToggleSidePanel('trackerScaleSide')
 end
+
+
+--[[  ]]
+
+local function sortBars(barTable)
+	local num = 1
+	for _, bar in pairs(barTable) do
+		if num == 1 then
+			bar:SetPoint('TOPLEFT', 2, -4)
+		else
+			bar:SetPoint('TOPLEFT', 2, -4 - (25 * (num - 1)))
+		end
+		num = num + 1
+	end
+end
+
+local function CreateNamePlateAuraFilter(parent)
+	local plateAuraSide = GUI:CreateSidePanel(parent, 'FreeUI_SetupPlateAura')
+
+	local auraSize = GUI:CreateSlider(plateAuraSide, 'nameplate', 'aura_size', RefreshNameplates, {16, 30, 1})
+	auraSize:SetPoint('TOP', plateAuraSide.child, 'TOP', 0, -24)
+
+	local auraNumber = GUI:CreateSlider(plateAuraSide, 'nameplate', 'aura_number', RefreshNameplates, {3, 9, 1})
+	auraNumber:SetPoint('TOP', auraSize, 'BOTTOM', 0, -56)
+
+	local frameData = {
+		[1] = {header = L['NAMEPLATE_AURA_WHITE_LIST'], tip = L['NAMEPLATE_AURA_WHITE_LIST_ADD_ID'], offset = -220, barList = {}},
+		[2] = {header = L['NAMEPLATE_AURA_BLACK_LIST'], tip = L['NAMEPLATE_AURA_BLACK_LIST_ADD_ID'], offset = -400, barList = {}},
+	}
+
+	local function createBar(parent, index, spellID)
+		local name, _, texture = GetSpellInfo(spellID)
+		local bar = CreateFrame('Frame', nil, parent)
+		bar:SetSize(140, 18)
+		frameData[index].barList[spellID] = bar
+
+		local icon, close = GUI:CreateBarWidgets(bar, texture)
+		F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
+		close:SetScript('OnClick', function()
+			bar:Hide()
+			FreeADB['nameplate_aura_filter'][index][spellID] = nil
+			frameData[index].barList[spellID] = nil
+			sortBars(frameData[index].barList)
+		end)
+
+		local spellName = F.CreateFS(bar, C.Assets.Fonts.Normal, 11, nil, name, nil, true, 'LEFT', 24, 0)
+		spellName:SetWidth(120)
+		spellName:SetJustifyH('LEFT')
+		if index == 2 then spellName:SetTextColor(1, 0, 0) end
+
+		sortBars(frameData[index].barList)
+	end
+
+	local function addClick(parent, index)
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(C.RedColor..'Incorrect SpellID') return end
+		if FreeADB['nameplate_aura_filter'][index][spellID] then UIErrorsFrame:AddMessage(C.RedColor..'Existing ID') return end
+
+		FreeADB['nameplate_aura_filter'][index][spellID] = true
+		createBar(parent.child, index, spellID)
+		parent.box:SetText('')
+	end
+
+	for index, value in ipairs(frameData) do
+		F.CreateFS(plateAuraSide, C.Assets.Fonts.Normal, 12, nil, value.header, 'BLUE', true, 'TOPLEFT', 20, value.offset)
+		local frame = CreateFrame('Frame', nil, plateAuraSide)
+		frame:SetSize(160, 170)
+		frame:SetPoint('TOPLEFT', 10, value.offset - 10)
+
+		local scroll = GUI:CreateScroll(frame, 140, 120)
+		scroll.box = F.CreateEditBox(frame, 90, 20)
+		scroll.box:SetPoint('TOPLEFT', 10, -10)
+		scroll.box.title = value.header
+		F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
+
+		scroll.add = F.CreateButton(frame, 40, 20, ADD, 10)
+		scroll.add:SetPoint('TOPRIGHT', -10, -10)
+		scroll.add:SetScript('OnClick', function()
+			addClick(scroll, index)
+		end)
+
+		for spellID in pairs(FreeADB['nameplate_aura_filter'][index]) do
+			createBar(scroll.child, index, spellID)
+		end
+	end
+end
+
 
 
 --[[ module options ]]
@@ -1622,6 +1724,15 @@ local function UnitframeOptions()
 	local shaman = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'SHAMAN')
 	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
 
+	local reactionHostile = GUI:CreateColorSwatch(classColorSide, 'REACTION_COLORS', 'hostile')
+	reactionHostile:SetPoint('TOP', shaman, 'BOTTOM', 0, -32)
+
+	local reactionNeutral = GUI:CreateColorSwatch(classColorSide, 'REACTION_COLORS', 'neutral')
+	reactionNeutral:SetPoint('TOP', reactionHostile, 'BOTTOM', 0, -16)
+
+	local reactionFriendly = GUI:CreateColorSwatch(classColorSide, 'REACTION_COLORS', 'friendly')
+	reactionFriendly:SetPoint('TOP', reactionNeutral, 'BOTTOM', 0, -16)
+
 
 	-- castbar size side panel
 	local castbarSizeSide = GUI:CreateSidePanel(parent, 'castbarSizeSide')
@@ -1718,30 +1829,33 @@ end
 local function NamePlateOptions()
 	local parent = FreeUI_GUI[14]
 
-	local basic = GUI:AddSubCategory(parent)
+	local basic = GUI:AddSubCategory(parent, L['NAMEPLATE_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'nameplate', 'enable_nameplate', nil, SetupPlateSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
-	local targetIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'target_indicator', nil, SetupTargetColor)
+	local targetIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'target_indicator', RefreshNameplates)
 	targetIndicator:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
 
-	local threatIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'threat_indicator')
+	local threatIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'threat_indicator', RefreshNameplates)
 	threatIndicator:SetPoint('LEFT', targetIndicator, 'RIGHT', 160, 0)
 
-	local classifyIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'classify_indicator')
+	local classifyIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'classify_indicator', RefreshNameplates)
 	classifyIndicator:SetPoint('TOPLEFT', targetIndicator, 'BOTTOMLEFT', 0, -8)
 
-	local explosiveScale = GUI:CreateCheckBox(parent, 'nameplate', 'explosive_scale')
+	local explosiveScale = GUI:CreateCheckBox(parent, 'nameplate', 'explosive_scale', RefreshNameplates)
 	explosiveScale:SetPoint('LEFT', classifyIndicator, 'RIGHT', 160, 0)
 
-	local plateAura = GUI:CreateCheckBox(parent, 'nameplate', 'plate_auras', nil, SetupPlateAuraSize)
-	plateAura:SetPoint('TOPLEFT', classifyIndicator, 'BOTTOMLEFT', 0, -8)
+	local interruptName = GUI:CreateCheckBox(parent, 'nameplate', 'interrupt_name', RefreshNameplates)
+	interruptName:SetPoint('TOPLEFT', classifyIndicator, 'BOTTOMLEFT', 0, -8)
+
+	local plateAura = GUI:CreateCheckBox(parent, 'nameplate', 'plate_auras', RefreshNameplates, SetupPlateAura)
+	plateAura:SetPoint('LEFT', interruptName, 'RIGHT', 160, 0)
 
 
-	local colors = GUI:AddSubCategory(parent)
-	colors:SetPoint('TOPLEFT', plateAura, 'BOTTOMLEFT', 0, -16)
+	local colors = GUI:AddSubCategory(parent, L['NAMEPLATE_SUB_COLOR'])
+	colors:SetPoint('TOPLEFT', interruptName, 'BOTTOMLEFT', 0, -16)
 
 	local hostileCC = GUI:CreateCheckBox(parent, 'nameplate', 'hostile_class_color')
 	hostileCC:SetPoint('TOPLEFT', colors, 'BOTTOMLEFT', 0, -8)
@@ -1755,69 +1869,49 @@ local function NamePlateOptions()
 	local reverThreat = GUI:CreateCheckBox(parent, 'nameplate', 'dps_revert_threat')
 	reverThreat:SetPoint('LEFT', tankMode, 'RIGHT', 160, 0)
 
-	local customPlate = GUI:CreateCheckBox(parent, 'nameplate', 'custom_unit_color', nil, SetupCustomPlate)
+	local customPlate = GUI:CreateCheckBox(parent, 'nameplate', 'custom_unit_color', UpdateNameplateCustomUnitList, SetupCustomPlate)
 	customPlate:SetPoint('TOPLEFT', tankMode, 'BOTTOMLEFT', 0, -8)
 
 
-	local cvars = GUI:AddSubCategory(parent)
+	local cvars = GUI:AddSubCategory(parent, L['NAMEPLATE_SUB_CVARS'])
 	cvars:SetPoint('TOPLEFT', customPlate, 'BOTTOMLEFT', 0, -16)
 
-	local minScale = GUI:CreateSlider(parent, 'nameplate', 'min_scale', nil, {0.1, 1, 0.1})
+	local minScale = GUI:CreateSlider(parent, 'nameplate', 'min_scale', UpdateNameplateCVars, {0.1, 1, 0.1})
 	minScale:SetPoint('TOPLEFT', cvars, 'BOTTOMLEFT', 0, -32)
 
-	local targetScale = GUI:CreateSlider(parent, 'nameplate', 'target_scale', nil, {1, 2, 0.1})
+	local targetScale = GUI:CreateSlider(parent, 'nameplate', 'target_scale', UpdateNameplateCVars, {1, 2, 0.1})
 	targetScale:SetPoint('LEFT', minScale, 'RIGHT', 20, 0)
 
-	local minAlpha = GUI:CreateSlider(parent, 'nameplate', 'min_alpha', nil, {0.1, 1, 0.1})
+	local minAlpha = GUI:CreateSlider(parent, 'nameplate', 'min_alpha', UpdateNameplateCVars, {0.1, 1, 0.1})
 	minAlpha:SetPoint('TOPLEFT', minScale, 'BOTTOMLEFT', 0, -56)
 
-	local occludedAlpha = GUI:CreateSlider(parent, 'nameplate', 'occluded_alpha', nil, {0.1, 1, 0.1})
+	local occludedAlpha = GUI:CreateSlider(parent, 'nameplate', 'occluded_alpha', UpdateNameplateCVars, {0.1, 1, 0.1})
 	occludedAlpha:SetPoint('LEFT', minAlpha, 'RIGHT', 20, 0)
 
-	local verticalSpacing = GUI:CreateSlider(parent, 'nameplate', 'vertical_spacing', nil, {0.1, 2, 0.1})
+	local verticalSpacing = GUI:CreateSlider(parent, 'nameplate', 'vertical_spacing', UpdateNameplateCVars, {0.1, 2, 0.1})
 	verticalSpacing:SetPoint('TOPLEFT', minAlpha, 'BOTTOMLEFT', 0, -56)
 
-	local horizontalSpacing = GUI:CreateSlider(parent, 'nameplate', 'horizontal_spacing', nil, {0.1, 2, 0.1})
+	local horizontalSpacing = GUI:CreateSlider(parent, 'nameplate', 'horizontal_spacing', UpdateNameplateCVars, {0.1, 2, 0.1})
 	horizontalSpacing:SetPoint('LEFT', verticalSpacing, 'RIGHT', 20, 0)
+
+	local maxDistance = GUI:CreateSlider(parent, 'nameplate', 'max_distance', UpdateNameplateCVars, {40, 60, 1})
+	maxDistance:SetPoint('TOPLEFT', verticalSpacing, 'BOTTOMLEFT', 0, -56)
 
 
 	-- plate size side panel
 	local plateSizeSide = GUI:CreateSidePanel(parent, 'plateSizeSide')
 
-	local plateWidth = GUI:CreateSlider(plateSizeSide, 'nameplate', 'plate_width', nil, {40, 200, 1})
+	local plateWidth = GUI:CreateSlider(plateSizeSide, 'nameplate', 'plate_width', RefreshNameplates, {40, 200, 1})
 	plateWidth:SetPoint('TOP', plateSizeSide.child, 'TOP', 0, -24)
 
-	local plateHeight = GUI:CreateSlider(plateSizeSide, 'nameplate', 'plate_height', nil, {6, 30, 1})
+	local plateHeight = GUI:CreateSlider(plateSizeSide, 'nameplate', 'plate_height', RefreshNameplates, {6, 30, 1})
 	plateHeight:SetPoint('TOP', plateWidth, 'BOTTOM', 0, -56)
 
-	local friendlyColor = GUI:CreateColorSwatch(plateSizeSide, 'nameplate', 'friendly_color')
-	friendlyColor:SetPoint('TOPLEFT', plateSizeSide.child, 'TOPLEFT', 10, -160)
-
-	local reactionHostile = GUI:CreateColorSwatch(plateSizeSide, 'REACTION_COLORS', 'hostile')
-	reactionHostile:SetPoint('TOP', friendlyColor, 'BOTTOM', 0, -16)
-
-	local reactionNeutral = GUI:CreateColorSwatch(plateSizeSide, 'REACTION_COLORS', 'neutral')
-	reactionNeutral:SetPoint('TOP', reactionHostile, 'BOTTOM', 0, -16)
-
-	local reactionFriendly = GUI:CreateColorSwatch(plateSizeSide, 'REACTION_COLORS', 'friendly')
-	reactionFriendly:SetPoint('TOP', reactionNeutral, 'BOTTOM', 0, -16)
 
 
-	-- plate aura size side panel
-	local plateAuraSizeSide = GUI:CreateSidePanel(parent, 'plateAuraSizeSide')
-
-	local auraSize = GUI:CreateSlider(plateAuraSizeSide, 'nameplate', 'aura_size', nil, {16, 30, 1})
-	auraSize:SetPoint('TOP', plateAuraSizeSide.child, 'TOP', 0, -24)
-
-	local auraNumber = GUI:CreateSlider(plateAuraSizeSide, 'nameplate', 'aura_number', nil, {3, 9, 1})
-	auraNumber:SetPoint('TOP', auraSize, 'BOTTOM', 0, -56)
 
 
-	-- plate selected indicator color side panel
-	local targetColorSide = GUI:CreateSidePanel(parent, 'targetColorSide')
-
-	local selectedColor = GUI:CreateColorSwatch(targetColorSide, 'nameplate', 'target_color')
-	selectedColor:SetPoint('TOPLEFT', targetColorSide.child, 'TOPLEFT', 10, -10)
+	CreateNamePlateAuraFilter(parent)
 
 
 	-- custom unit side panel
@@ -1826,7 +1920,7 @@ local function NamePlateOptions()
 	local customColor = GUI:CreateColorSwatch(customPlateSide, 'nameplate', 'custom_color')
 	customColor:SetPoint('TOPLEFT', customPlateSide.child, 'TOPLEFT', 10, -10)
 
-	local unitList = GUI:CreateEditBox(customPlateSide, 'nameplate', 'custom_unit_list', nil, {140, 140, 999, true})
+	local unitList = GUI:CreateEditBox(customPlateSide, 'nameplate', 'custom_unit_list', UpdateNameplateCustomUnitList, {140, 140, 999, true})
 	unitList:SetPoint('TOPLEFT', customPlateSide.child, 'TOPLEFT', 10, -60)
 
 

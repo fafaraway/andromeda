@@ -1,5 +1,6 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F:GetModule('UNITFRAME')
+local UNITFRAME = F.UNITFRAME
+local COLORS = F.COLORS
 
 
 function UNITFRAME:OnLogin()
@@ -7,7 +8,7 @@ function UNITFRAME:OnLogin()
 
 	F:SetSmoothingAmount(.3)
 
-	self:SetColors()
+	COLORS:UpdateColors()
 
 	self:SpawnPlayer()
 	self:SpawnTarget()

@@ -1,4 +1,5 @@
 local F, C, L = unpack(select(2, ...))
+local COLORS = F.COLORS
 
 
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
@@ -149,7 +150,7 @@ do
 	end
 
 	function F.ClassColor(class)
-		local color = FreeADB['class_colors'][class]
+		local color = FreeADB['colors']['class'][class]
 		if not color then return 1, 1, 1 end
 		return color.r, color.g, color.b
 	end
@@ -1834,6 +1835,8 @@ do
 		local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
+
+		COLORS.UpdateColors()
 	end
 
 	local function cancelPicker()

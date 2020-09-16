@@ -265,7 +265,7 @@ C['TalentCDFix'] = {
 }
 
 
-C['PlateAuraWhiteList'] = {
+C['AuraWhiteList'] = {
 	-- Buffs
 	[642]		= true,		-- 圣盾术
 	[1022]		= true,		-- 保护之手
@@ -402,7 +402,7 @@ C['PlateAuraWhiteList'] = {
 	[255433]	= true,		-- 奥术易伤，寂灭者阿古斯
 }
 
-C['PlateAuraBlackList'] = {
+C['AuraBlackList'] = {
 	[15407]		= true,		-- 精神鞭笞
 	--[1490]	= true,		-- 混乱烙印
 	--[113746]	= true,		-- 玄秘掌
@@ -776,7 +776,7 @@ C.CharacterSettings = {
 			['dps_revert_threat'] = false,
 
 			['custom_unit_color'] = true,
-			['custom_color'] = {r=0, g=.8, b=.3},
+			['custom_color'] = {r=.8, g=.42, b=.31},
 			['custom_unit_list'] = '',
 			['show_power_list'] = '',
 			['target_indicator'] = true,
@@ -1039,187 +1039,50 @@ C.AccountSettings = {
 		['reskin_meetingstone'] = true,
 	},
 
-	['reaction_colors'] = {
-		['friendly'] = {
-			['b'] = 0.36,
-			['g'] = 1,
-			['r'] = 0.34,
+	['colors'] = {
+		['class'] = {
+			['HUNTER']      = {r = 0.15, g = 0.71, b = 0.12},
+			['WARRIOR']     = {r = 0.78, g = 0.57, b = 0.37},
+			['PALADIN']     = {r = 0.96, g = 0.33, b = 0.49},
+			['MAGE']        = {r = 0.43, g = 0.71, b = 0.89},
+			['PRIEST']      = {r = 0.89, g = 0.89, b = 0.89},
+			['SHAMAN']      = {r = 0.27, g = 0.27, b = 0.76},
+			['WARLOCK']     = {r = 0.71, g = 0.67, b = 0.88},
+			['DEMONHUNTER'] = {r = 0.89, g = 0.23, b = 0.87},
+			['ROGUE']       = {r = 0.94, g = 0.87, b = 0.48},
+			['DRUID']       = {r = 0.95, g = 0.56, b = 0.25},
+			['MONK']        = {r = 0.24, g = 0.85, b = 0.65},
+			['DEATHKNIGHT'] = {r = 0.77, g = 0.11, b = 0.21},
 		},
-		['neutral'] = {
-			['b'] = 0.47,
-			['g'] = 0.93,
-			['r'] = 1,
-		},
-		['hostile'] = {
-			['b'] = 0.29,
-			['g'] = 0.32,
-			['r'] = 1,
-		},
-	},
 
-	['power_colors'] = {
-		['PAIN'] = {
-			['b'] = 0,
-			['g'] = 0.611764705882353,
-			['r'] = 1,
+		['power'] = {
+			['PAIN']        = {b = 0.00, g = 0.61, r = 1.00},
+			['FURY']        = {b = 0.99, g = 0.26, r = 0.79},
+			['FOCUS']       = {b = 0.15, g = 0.39, r = 0.94},
+			['LUNAR_POWER'] = {b = 0.90, g = 0.52, r = 0.30},
+			['RAGE']        = {b = 0.21, g = 0.24, r = 0.86},
+			['MAELSTROM']   = {b = 1.00, g = 0.50, r = 0.00},
+			['MANA']        = {b = 0.93, g = 0.82, r = 0.46},
+			['RUNIC_POWER'] = {b = 1.00, g = 0.82, r = 0.00},
+			['INSANITY']    = {b = 0.80, g = 0.00, r = 0.40},
+			['ENERGY']      = {b = 0.45, g = 0.76, r = 0.91},
 		},
-		['FURY'] = {
-			['b'] = 0.992,
-			['g'] = 0.259,
-			['r'] = 0.788,
-		},
-		['FOCUS'] = {
-			['b'] = 0.1529411764705883,
-			['colorStr'] = 'fff06327',
-			['g'] = 0.3882352941176471,
-			['r'] = 0.9411764705882353,
-		},
-		['LUNAR_POWER'] = {
-			['b'] = 0.9,
-			['g'] = 0.52,
-			['r'] = 0.3,
-		},
-		['RAGE'] = {
-			['b'] = 0.196078431372549,
-			['colorStr'] = 'ffdc3c32',
-			['g'] = 0.2352941176470588,
-			['r'] = 0.8627450980392157,
-		},
-		['MAELSTROM'] = {
-			['b'] = 1,
-			['g'] = 0.5,
-			['r'] = 0,
-		},
-		['MANA'] = {
-			['b'] = 0.93,
-			['g'] = 0.82,
-			['r'] = 0.46,
-		},
-		['RUNIC_POWER'] = {
-			['b'] = 1,
-			['g'] = 0.82,
-			['r'] = 0,
-		},
-		['INSANITY'] = {
-			['b'] = 0.8,
-			['g'] = 0,
-			['r'] = 0.4,
-		},
-		['ENERGY'] = {
-			['b'] = 0.4549019607843137,
-			['colorStr'] = 'ffe9c374',
-			['g'] = 0.7647058823529411,
-			['r'] = 0.9137254901960784,
-		},
-	},
 
-	['class_colors'] = {
-		['HUNTER'] = {
-			['r'] = 0.1529411764705883,
-			['colorStr'] = 'ff27b61f',
-			['g'] = 0.7137254901960784,
-			['b'] = 0.1215686274509804,
+		['class_power'] = {
+			['soul_shards']    = {r = 0.87, g = 0.24, b = 0.8},
+			['chi_orbs']       = {r = 0.49, g = 0.89, b = 0.76},
+			['arcane_charges'] = {r = 0.31, g = 0.53, b = 0.91},
+			['holy_power']     = {r = 0.95, g = 0.83, b = 0.53},
+			['combo_points']   = {r = 0.93, g = 0.28, b = 0.22},
 		},
-		['WARRIOR'] = {
-			['r'] = 0.7764705882352941,
-			['colorStr'] = 'ffc6925f',
-			['g'] = 0.5725490196078431,
-			['b'] = 0.3725490196078432,
-		},
-		['PALADIN'] = {
-			['r'] = 0.9568627450980391,
-			['colorStr'] = 'fff3547d',
-			['g'] = 0.3294117647058824,
-			['b'] = 0.4901960784313725,
-		},
-		['MAGE'] = {
-			['r'] = 0.4313725490196079,
-			['colorStr'] = 'ff6eb2e2',
-			['g'] = 0.6980392156862745,
-			['b'] = 0.8862745098039215,
-		},
-		['PRIEST'] = {
-			['r'] = 0.8941176470588235,
-			['colorStr'] = 'ffe3e3e3',
-			['g'] = 0.8941176470588235,
-			['b'] = 0.8941176470588235,
-		},
-		['SHAMAN'] = {
-			['r'] = 0.2745098039215687,
-			['colorStr'] = 'ff4646c3',
-			['g'] = 0.2745098039215687,
-			['b'] = 0.7647058823529411,
-		},
-		['WARLOCK'] = {
-			['r'] = 0.7137254901960784,
-			['colorStr'] = 'ffb6aae0',
-			['g'] = 0.6666666666666666,
-			['b'] = 0.8784313725490196,
-		},
-		['DEMONHUNTER'] = {
-			['r'] = 0.8862745098039215,
-			['colorStr'] = 'ffe23bdf',
-			['g'] = 0.2313725490196079,
-			['b'] = 0.8745098039215686,
-		},
-		['ROGUE'] = {
-			['r'] = 0.9411764705882353,
-			['colorStr'] = 'fff0de79',
-			['g'] = 0.8705882352941177,
-			['b'] = 0.4784313725490196,
-		},
-		['DRUID'] = {
-			['r'] = 0.9529411764705882,
-			['colorStr'] = 'fff38e3f',
-			['g'] = 0.5568627450980392,
-			['b'] = 0.2470588235294118,
-		},
-		['MONK'] = {
-			['r'] = 0.2392156862745098,
-			['colorStr'] = 'ff3cd9a6',
-			['g'] = 0.8509803921568627,
-			['b'] = 0.6509803921568628,
-		},
-		['DEATHKNIGHT'] = {
-			['r'] = 0.7686274509803921,
-			['colorStr'] = 'ffc31d36',
-			['g'] = 0.1137254901960784,
-			['b'] = 0.2117647058823529,
-		},
-	},
 
-	['class_power_colors'] = {
-		['soul_shards'] = {
-			['b'] = 0.8,
-			['colorStr'] = 'ffde3ecc',
-			['g'] = 0.2431372549019608,
-			['r'] = 0.8705882352941177,
+		['reaction'] = {
+			['hostile']  = {r = 0.91, g = 0.16, b = 0.21}, -- hostile
+			['neutral']  = {r = 1.00, g = 0.93, b = 0.47}, -- neutral
+			['friendly'] = {r = 0.34, g = 1.00, b = 0.36}, -- friendly
+
 		},
-		['chi_orbs'] = {
-			['b'] = 0.7647058823529411,
-			['colorStr'] = 'ff7fe3c3',
-			['g'] = 0.8941176470588235,
-			['r'] = 0.4980392156862745,
-		},
-		['arcane_charges'] = {
-			['b'] = 0.9058823529411765,
-			['colorStr'] = 'ff4e86e7',
-			['g'] = 0.5254901960784314,
-			['r'] = 0.3058823529411765,
-		},
-		['holy_power'] = {
-			['b'] = 0.5333333333333333,
-			['colorStr'] = 'fff2d388',
-			['g'] = 0.8313725490196078,
-			['r'] = 0.9490196078431372,
-		},
-		['combo_points'] = {
-			['b'] = 0.2235294117647059,
-			['colorStr'] = 'ffee4838',
-			['g'] = 0.2823529411764706,
-			['r'] = 0.9333333333333333,
-		},
-	},
+	}
 
 }
 
@@ -1280,9 +1143,9 @@ f:SetScript('OnEvent', function(self, _, addon)
 
 	C.Assets.statusbar_tex = textureList[FreeADB.texture_style]
 
-	C.r = FreeADB.class_colors[C.MyClass].r
-	C.g = FreeADB.class_colors[C.MyClass].g
-	C.b = FreeADB.class_colors[C.MyClass].b
+	C.r = FreeADB.colors.class[C.MyClass].r
+	C.g = FreeADB.colors.class[C.MyClass].g
+	C.b = FreeADB.colors.class[C.MyClass].b
 
 	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
 	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'

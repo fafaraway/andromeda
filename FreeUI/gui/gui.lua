@@ -49,27 +49,27 @@ local iconsList = {
 local function SaveValue(key, value, newValue)
 	if key == 'CLASS_COLORS' then
 		if newValue ~= nil then
-			FreeADB['class_colors'][value] = newValue
+			FreeADB['colors']['class'][value] = newValue
 		else
-			return FreeADB['class_colors'][value]
+			return FreeADB['colors']['class'][value]
 		end
 	elseif key == 'POWER_COLORS' then
 		if newValue ~= nil then
-			FreeADB['power_colors'][value] = newValue
+			FreeADB['colors']['power'][value] = newValue
 		else
-			return FreeADB['power_colors'][value]
+			return FreeADB['colors']['power'][value]
 		end
 	elseif key == 'CLASS_POWER_COLORS' then
 		if newValue ~= nil then
-			FreeADB['class_power_colors'][value] = newValue
+			FreeADB['colors']['class_power'][value] = newValue
 		else
-			return FreeADB['class_power_colors'][value]
+			return FreeADB['colors']['class_power'][value]
 		end
 	elseif key == 'REACTION_COLORS' then
 		if newValue ~= nil then
-			FreeADB['reaction_colors'][value] = newValue
+			FreeADB['colors']['reaction'][value] = newValue
 		else
-			return FreeADB['reaction_colors'][value]
+			return FreeADB['colors']['reaction'][value]
 		end
 	elseif key == 'APPEARANCE' then
 		if newValue ~= nil then
@@ -356,6 +356,41 @@ local function CreateGameMenuButton()
 	end)
 end
 
+
+function GUI:CreateScroll(parent, width, height, text)
+	local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
+	scroll:SetSize(width, height)
+	scroll:SetPoint('BOTTOMLEFT', 10, 10)
+	F.CreateBDFrame(scroll, .35)
+	if text then
+		F.CreateFS(scroll, C.Assets.Fonts.Normal, 12, nil, text, nil, false, 'TOPLEFT', 5, 20)
+	end
+	scroll.child = CreateFrame('Frame', nil, scroll)
+	scroll.child:SetSize(width, 1)
+	scroll:SetScrollChild(scroll.child)
+	F.ReskinScroll(scroll.ScrollBar)
+
+	return scroll
+end
+
+function GUI:CreateBarWidgets(parent, texture)
+	local icon = CreateFrame('Frame', nil, parent)
+	icon:SetSize(16, 16)
+	icon:SetPoint('LEFT', 5, 0)
+	F.PixelIcon(icon, texture, true)
+
+	local close = CreateFrame('Button', nil, parent)
+	close:SetSize(16, 16)
+	close:SetPoint('RIGHT', -5, 0)
+	close.Icon = close:CreateTexture(nil, 'ARTWORK')
+	close.Icon:SetAllPoints()
+	close.Icon:SetTexture(C.Assets.close_tex)
+	close.Icon:SetVertexColor(1, 0, 0)
+	close:SetHighlightTexture(close.Icon:GetTexture())
+
+	return icon, close
+end
+
 -- Subcategory
 function GUI:AddSubCategory(category, name)
 	local header = F.CreateFS(category, C.Assets.Fonts.Normal, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
@@ -405,12 +440,12 @@ function GUI:CreateSidePanel(parent, name, header)
 end
 
 -- Checkbox
-function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
+function GUI:CreateCheckBox(parent, key, value, callback, extra, color)
 	local checkbox = F.CreateCheckBox(parent)
 	checkbox:SetSize(20, 20)
 	checkbox:SetHitRectInsets(-5, -5, -5, -5)
 
-	checkbox.Text = F.CreateFS(checkbox, C.Assets.Fonts.Normal, 12, nil, L[strupper(key)..'_'..strupper(value)] or value, caution and 'RED' or nil, 'THICK', 'LEFT', 20, 0)
+	checkbox.Text = F.CreateFS(checkbox, C.Assets.Fonts.Normal, 12, nil, L[strupper(key)..'_'..strupper(value)] or value, color or nil, 'THICK', 'LEFT', 20, 0)
 
 	checkbox:SetChecked(SaveValue(key, value))
 	checkbox:SetScript('OnClick', function()
@@ -428,7 +463,7 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, caution)
 	end
 
 	if L[strupper(key)..'_'..strupper(value)..'_TIP'] then
-		checkbox.title = L['GUI_TIP']
+		checkbox.title = L[strupper(key)..'_'..strupper(value)]
 		F.AddTooltip(checkbox, 'ANCHOR_RIGHT', L[strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
 	end
 
@@ -442,7 +477,7 @@ function GUI:CreateSlider(parent, key, value, callback, extra)
 	local minValue, maxValue, step = unpack(extra)
 
 	local slider = F.CreateSlider(parent, value, minValue, maxValue, step, 160)
-	slider.Text:SetText(L['GUI_'..strupper(key)..'_'..strupper(value)] or value)
+	slider.Text:SetText(L[strupper(key)..'_'..strupper(value)] or value)
 	slider.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or (key == 'APPEARANCE' and C.AccountSettings['appearance'][value]) or C.CharacterSettings[key][value]
 	slider:SetValue(SaveValue(key, value))
 	slider:SetScript('OnValueChanged', function(_, v)
@@ -454,9 +489,9 @@ function GUI:CreateSlider(parent, key, value, callback, extra)
 
 	slider.value:SetText(F:Round(SaveValue(key, value), 2))
 
-	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
-		slider.title = L['GUI_TIPS']
-		F.AddTooltip(slider, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
+	if L[strupper(key)..'_'..strupper(value)..'_TIP'] then
+		slider.title = L[strupper(key)..'_'..strupper(value)]
+		F.AddTooltip(slider, 'ANCHOR_RIGHT', L[strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
 	end
 
 	return slider
@@ -477,7 +512,7 @@ function GUI:CreateEditBox(parent, key, value, callback, extra)
 
 	editbox.text = editbox:GetRegions()
 	-- if editbox.text:GetObjectType() == 'FontString' then
-	-- 	editbox.text:SetJustifyH("RIGHT")
+	-- 	editbox.text:SetJustifyH('RIGHT')
 	-- end
 
 	editbox:HookScript('OnEscapePressed', function()
@@ -489,13 +524,13 @@ function GUI:CreateEditBox(parent, key, value, callback, extra)
 		if callback then callback() end
 	end)
 
-	editbox.title = F.CreateFS(editbox, C.Assets.Fonts.Normal, 12, nil, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, 'SYSTEM', true)
+	editbox.title = F.CreateFS(editbox, C.Assets.Fonts.Normal, 12, nil, L[strupper(key)..'_'..strupper(value)] or value, 'SYSTEM', true)
 	editbox.title:SetPoint('BOTTOM', editbox, 'TOP', 0, 6)
 
 
-	if L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'] then
-		editbox.title = L['GUI_TIPS']
-		F.AddTooltip(editbox, 'ANCHOR_RIGHT', L['GUI_'..strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
+	if L[strupper(key)..'_'..strupper(value)..'_TIP'] then
+		editbox.title = L[strupper(key)..'_'..strupper(value)]
+		F.AddTooltip(editbox, 'ANCHOR_RIGHT', L[strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
 	end
 
 	return editbox
@@ -533,9 +568,14 @@ end
 
 -- Color swatch
 function GUI:CreateColorSwatch(parent, key, value)
-	local f = F.CreateColorSwatch(parent, L['GUI_'..strupper(key)..'_'..strupper(value)] or value, SaveValue(key, value))
+	local swatch = F.CreateColorSwatch(parent, L[strupper(key)..'_'..strupper(value)] or value, SaveValue(key, value))
 
-	return f
+	if L[strupper(key)..'_'..strupper(value)..'_TIP'] then
+		swatch.title = L[strupper(key)..'_'..strupper(value)]
+		F.AddTooltip(swatch, 'ANCHOR_RIGHT', L[strupper(key)..'_'..strupper(value)..'_TIP'], 'BLUE')
+	end
+
+	return swatch
 end
 
 

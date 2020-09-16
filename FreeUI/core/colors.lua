@@ -1,21 +1,19 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
-local colors = F.oUF.colors
+local COLORS = F.COLORS
+local oUF = F.oUF
 
 
-colors.health = {.02, .02, .02}
-colors.disconnected = {.4, .4, .4}
-colors.tapped = {.6, .6, .6}
+oUF.colors.health = {.02, .02, .02}
+oUF.colors.disconnected = {.4, .4, .4}
+oUF.colors.tapped = {.6, .6, .6}
 
-colors.smooth = {
+oUF.colors.smooth = {
 	1, 0, 0,
 	1, 1, 0,
 	0, 1, 0,
 }
 
-
-
-colors.debuffType = {
+oUF.colors.debuffType = {
 	['Curse']   = {0.8, 0, 1},
 	['Disease'] = {0.8, 0.6, 0},
 	['Magic']   = {0, 0.8, 1},
@@ -23,19 +21,19 @@ colors.debuffType = {
 	['none']    = {0, 0, 0}
 }
 
-colors.runes = {
+oUF.colors.runes = {
 	[1] = {151/255, 25/255, 0}, -- Blood
 	[2] = {193/255, 219/255, 233/255}, -- Frost
 	[3] = {98/255, 153/255, 51/255}, -- Unholy
 }
 
 
-function UNITFRAME:SetColors()
-	local classColor = FreeADB.class_colors
-	local powerColor = FreeADB.power_colors
-	local reactionColor = FreeADB.reaction_colors
+function COLORS:UpdateColors()
+	local classColor = FreeADB.colors.class
+	local powerColor = FreeADB.colors.power
+	local reactionColor = FreeADB.colors.reaction
 
-	colors.class = {
+	oUF.colors.class = {
 		['ROGUE'] = {
 			classColor.ROGUE.r,
 			classColor.ROGUE.g,
@@ -98,67 +96,67 @@ function UNITFRAME:SetColors()
 		},
 	}
 
-	colors.power.MANA = {
+	oUF.colors.power.MANA = {
 		powerColor.MANA.r,
 		powerColor.MANA.g,
 		powerColor.MANA.b
 	}
 
-	colors.power.RAGE = {
+	oUF.colors.power.RAGE = {
 		powerColor.RAGE.r,
 		powerColor.RAGE.g,
 		powerColor.RAGE.b
 	}
 
-	colors.power.FOCUS = {
+	oUF.colors.power.FOCUS = {
 		powerColor.FOCUS.r,
 		powerColor.FOCUS.g,
 		powerColor.FOCUS.b
 	}
 
-	colors.power.ENERGY = {
+	oUF.colors.power.ENERGY = {
 		powerColor.ENERGY.r,
 		powerColor.ENERGY.g,
 		powerColor.ENERGY.b
 	}
 
-	colors.power.RUNIC_POWER = {
+	oUF.colors.power.RUNIC_POWER = {
 		powerColor.RUNIC_POWER.r,
 		powerColor.RUNIC_POWER.g,
 		powerColor.RUNIC_POWER.b
 	}
 
-	colors.power.LUNAR_POWER = {
+	oUF.colors.power.LUNAR_POWER = {
 		powerColor.LUNAR_POWER.r,
 		powerColor.LUNAR_POWER.g,
 		powerColor.LUNAR_POWER.b
 	}
 
-	colors.power.MAELSTROM = {
+	oUF.colors.power.MAELSTROM = {
 		powerColor.MAELSTROM.r,
 		powerColor.MAELSTROM.g,
 		powerColor.MAELSTROM.b
 	}
 
-	colors.power.INSANITY = {
+	oUF.colors.power.INSANITY = {
 		powerColor.INSANITY.r,
 		powerColor.INSANITY.g,
 		powerColor.INSANITY.b
 	}
 
-	colors.power.FURY = {
+	oUF.colors.power.FURY = {
 		powerColor.FURY.r,
 		powerColor.FURY.g,
 		powerColor.FURY.b
 	}
 
-	colors.power.PAIN = {
+	oUF.colors.power.PAIN = {
 		powerColor.PAIN.r,
 		powerColor.PAIN.g,
 		powerColor.PAIN.b
 	}
 
-	colors.reaction = {
+	oUF.colors.reaction = {
 		[1] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
 		[2] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
 		[3] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},

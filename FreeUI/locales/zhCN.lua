@@ -45,7 +45,8 @@ end
 --[[ Themes ]]
 
 do
-
+	L['APPEARANCE_NAME'] = '外观'
+	L['APPEARANCE_DESC'] = '调整用户界面的外观'
 end
 
 
@@ -273,6 +274,72 @@ do
 	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + 任意鼠标按键点击想绑定的技能\n对小队或团队框体使用绑定的快捷键就能直接施放技能'
 	L['UNITFRAME_GHOST'] = '灵魂'
 	L['UNITFRAME_OFFLINE'] = '离线'
+end
+
+
+--[[ Nameplate ]]
+do
+	L['NAMEPLATE_NAME'] = '姓名板'
+	L['NAMEPLATE_DESC'] = '设置姓名板的外观和功能'
+
+	L['NAMEPLATE_SUB_BASIC'] = '基础'
+	L['NAMEPLATE_SUB_COLOR'] = '颜色'
+	L['NAMEPLATE_SUB_CVARS'] = 'CVars'
+
+	L['NAMEPLATE_ENABLE_NAMEPLATE'] = '启用姓名板模块'
+	L['NAMEPLATE_ENABLE_NAMEPLATE_TIP'] = '|n如果想要使用其他的姓名板插件，请先禁用该模块。'
+
+	L['NAMEPLATE_PLATE_WIDTH'] = '宽度'
+	L['NAMEPLATE_PLATE_HEIGHT'] = '高度'
+
+	L['NAMEPLATE_FRIENDLY_CLASS_COLOR'] = '友方职业染色'
+	L['NAMEPLATE_FRIENDLY_CLASS_COLOR_TIP'] = '|n友方玩家的姓名板根据职业染色。'
+	L['NAMEPLATE_HOSTILE_CLASS_COLOR'] = '敌方职业染色'
+	L['NAMEPLATE_HOSTILE_CLASS_COLOR_TIP'] = '|n敌方玩家的姓名板根据职业染色。'
+	L['NAMEPLATE_TANK_MODE'] = '强制仇恨染色'
+	L['NAMEPLATE_TANK_MODE_TIP'] = '|n非坦克专精强制使用坦克模式的染色逻辑。'
+	L['NAMEPLATE_DPS_REVERT_THREAT'] = '反转仇恨染色'
+	L['NAMEPLATE_DPS_REVERT_THREAT_TIP'] = '|n非坦克专精使用反转的坦克模式染色逻辑。'
+	L['NAMEPLATE_SECURE_COLOR'] = '仇恨稳固'
+	L['NAMEPLATE_TRANS_COLOR'] = '仇恨不稳'
+	L['NAMEPLATE_INSECURE_COLOR'] = '仇恨丢失'
+	L['NAMEPLATE_OFF_TANK_COLOR'] = '副坦仇恨'
+
+	L['NAMEPLATE_CUSTOM_UNIT_COLOR'] = '自定义染色'
+	L['NAMEPLATE_CUSTOM_UNIT_COLOR_TIP'] = '|n为特定的单位使用自定义染色。'
+	L['NAMEPLATE_CUSTOM_COLOR'] = '自定义颜色'
+	L['NAMEPLATE_CUSTOM_UNIT_LIST'] = '单位列表'
+	L['NAMEPLATE_CUSTOM_UNIT_LIST_TIP'] = '|n输入名字，以空格隔开，输入完毕按下回车。'
+
+	L['NAMEPLATE_TARGET_INDICATOR'] = '目标指示器'
+	L['NAMEPLATE_TARGET_COLOR'] = '目标指示器颜色'
+	L['NAMEPLATE_THREAT_INDICATOR'] = '仇恨指示器'
+	L['NAMEPLATE_CLASSIFY_INDICATOR'] = '稀有指示器'
+	L['NAMEPLATE_EXPLOSIVE_SCALE'] = '爆炸物智能缩放'
+	L['NAMEPLATE_EXPLOSIVE_SCALE_TIP'] = '|n大秘境中爆炸物的姓名板放大。'
+	L['NAMEPLATE_INTERRUPT_NAME'] = '打断信息'
+	L['NAMEPLATE_INTERRUPT_NAME_TIP'] = '|n在姓名板上显示成功打断此次读条的队友名字。'
+
+	L['NAMEPLATE_PLATE_AURAS'] = '显示光环'
+	L['NAMEPLATE_PLATE_AURAS_TIP'] = '|n默认显示所有你施放的减益光环，可以通过黑/白名单来调整你想要显示或忽略的光环。'
+	L['NAMEPLATE_AURA_SIZE'] = '光环大小'
+	L['NAMEPLATE_AURA_NUMBER'] = '光环最大数量'
+	L['NAMEPLATE_AURA_WHITE_LIST'] = '白名单'
+	L['NAMEPLATE_AURA_BLACK_LIST'] = '黑名单'
+	L['NAMEPLATE_AURA_INCORRECT_ID'] = '你输入的法术ID不存在'
+	L['NAMEPLATE_AURA_EXISTING_ID'] = '你已经添加过该法术ID'
+	L['NAMEPLATE_AURA_WHITE_LIST_ADD_ID'] = '填入想要显示的法术ID然后点击添加按钮。'
+	L['NAMEPLATE_AURA_BLACK_LIST_ADD_ID'] = '填入想要忽略的法术ID然后点击添加按钮。'
+
+	L['NAMEPLATE_MIN_SCALE'] = '非目标姓名板缩放'
+	L['NAMEPLATE_TARGET_SCALE'] = '目标姓名板缩放'
+	L['NAMEPLATE_MIN_ALPHA'] = '非目标姓名板透明度'
+	L['NAMEPLATE_OCCLUDED_ALPHA'] = '遮挡的姓名板透明度'
+	L['NAMEPLATE_VERTICAL_SPACING'] = '纵向间隔'
+	L['NAMEPLATE_HORIZONTAL_SPACING'] = '横向间隔'
+	L['NAMEPLATE_MAX_DISTANCE'] = '最大显示距离'
+
+	L['NAMEPLATE_FRIENDLY_COLOR'] = '友方玩家默认颜色'
 end
 
 
