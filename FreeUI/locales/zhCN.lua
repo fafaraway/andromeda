@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-if not (GetLocale() == 'zhCN' or GetLocale() == 'zhTW') then return end
 
 
 --[[ Misc ]]
@@ -53,6 +52,9 @@ end
 --[[ Notification ]]
 
 do
+	L['NOTIFICATION_NAME'] = '提醒'
+	L['NOTIFICATION_DESC'] = '提醒一些需要注意的事件'
+
 	L['NOTIFICATION_NEW_MAIL'] = '收到新邮件！'
 	L['NOTIFICATION_BAG_FULL'] = '背包满了！'
 	L['NOTIFICATION_MAIL'] = '邮件'
@@ -66,6 +68,9 @@ end
 --[[ Announcement ]]
 
 do
+	L['ANNOUNCEMENT_NAME'] = '通告'
+	L['ANNOUNCEMENT_DESC'] = '根据情景通告一些特定的事件'
+
 	L['ANNOUNCEMENT_INTERRUPT'] = '打断了 %s 的 %s！'
 	L['ANNOUNCEMENT_DISPEL'] = '驱散了 %s 的 %s！'
 	L['ANNOUNCEMENT_STOLEN'] = '偷取了 %s 的 %s！'
@@ -82,6 +87,9 @@ end
 --[[ Infobar ]]
 
 do
+	L['INFOBAR_NAME'] = '信息条'
+	L['INFOBAR_DESC'] = '提供一些常用的游戏信息'
+
 	L['INFOBAR_DURABILITY'] = '装备耐久'
 	L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
 
@@ -123,6 +131,9 @@ end
 --[[ Chat ]]
 
 do
+	L['CHAT_NAME'] = '聊天'
+	L['CHAT_DESC'] = '设置聊天相关的外观和功能'
+
 	L['CHAT_TOGGLE_PANEL'] = '隐藏/显示聊天框'
 	L['CHAT_TOGGLE_WC'] = '加入/离开世界频道'
 	L['CHAT_COPY'] = '复制聊天框内容'
@@ -134,6 +145,9 @@ end
 --[[ Aura ]]
 
 do
+	L['AURA_NAME'] = '光环'
+	L['AURA_DESC'] = '设置玩家光环相关的外观和功能'
+
 	L['AURA_MOVER_BUFFS'] = '增益光环'
 	L['AURA_MOVER_DEBUFFS'] = '减益光环'
 end
@@ -142,6 +156,9 @@ end
 --[[ Actionbar ]]
 
 do
+	L['ACTIONBAR_NAME'] = '动作条'
+	L['ACTIONBAR_DESC'] = '设置动作条的外观和功能'
+
 	L['ACTIONBAR_MOVER_BAR1'] = 'Actionbar 1'
 	L['ACTIONBAR_MOVER_BAR2'] = 'Actionbar 2'
 	L['ACTIONBAR_MOVER_BAR3'] = 'Actionbar 3'
@@ -165,6 +182,9 @@ end
 --[[ Combat ]]
 
 do
+	L['COMBAT_NAME'] = '背包'
+	L['COMBAT_DESC'] = '设置战斗相关的功能'
+
 	L['COMBAT_ENTER'] = '进入战斗'
 	L['COMBAT_LEAVE'] = '离开战斗'
 end
@@ -173,6 +193,9 @@ end
 --[[ Inventory ]]
 
 do
+	L['INVENTORY_NAME'] = '背包'
+	L['INVENTORY_DESC'] = '设置背包的外观和功能'
+
 	L['INVENTORY_NOTIFICATION_HEADER'] = '背包'
 	L['INVENTORY_SORT'] = '整理背包'
 	L['INVENTORY_ANCHOR_RESET'] = '重置窗口位置'
@@ -212,6 +235,9 @@ end
 --[[ Map ]]
 
 do
+	L['MAP_NAME'] = '地图'
+	L['MAP_DESC'] = '设置世界地图和小地图的外观和功能'
+
 	L['MAP_MOVER_MINIMAP'] = '小地图'
 	L['MAP_CURSOR'] = '鼠标'
 	L['MAP_REVEAL'] = '清除地图迷雾'
@@ -223,6 +249,9 @@ end
 --[[ Quest ]]
 
 do
+	L['QUEST_NAME'] = '任务'
+	L['QUEST_DESC'] = '交接任务以及任务追踪相关的选项'
+
 	L['QUEST_MOVER_TRACKER'] = '任务追踪'
 	L['QUEST_ACCEPT'] = '接受任务：'
 	L['QUEST_AUTOMATION'] = '自动交接任务'
@@ -231,6 +260,9 @@ end
 
 -- Tooltip
 do
+	L['TOOLTIP_NAME'] = '鼠标提示'
+	L['TOOLTIP_DESC'] = '设置鼠标提示的外观和功能'
+
 	L['TOOLTIP_MOVER'] = '鼠标提示'
 	L['TOOLTIP_RARE'] = '稀有'
 	L['TOOLTIP_AURA_FROM'] = '来自'
@@ -331,10 +363,10 @@ do
 	L['NAMEPLATE_AURA_NUMBER'] = '光环最大数量'
 	L['NAMEPLATE_AURA_WHITE_LIST'] = '白名单'
 	L['NAMEPLATE_AURA_BLACK_LIST'] = '黑名单'
+	L['NAMEPLATE_AURA_WHITE_LIST_TIP'] = '|n填入想要显示的法术ID然后点击添加按钮。'
+	L['NAMEPLATE_AURA_BLACK_LIST_TIP'] = '|n填入想要忽略的法术ID然后点击添加按钮。'
 	L['NAMEPLATE_AURA_INCORRECT_ID'] = '你输入的法术ID不存在'
 	L['NAMEPLATE_AURA_EXISTING_ID'] = '你已经添加过该法术ID'
-	L['NAMEPLATE_AURA_WHITE_LIST_ADD_ID'] = '|n填入想要显示的法术ID然后点击添加按钮。'
-	L['NAMEPLATE_AURA_BLACK_LIST_ADD_ID'] = '|n填入想要忽略的法术ID然后点击添加按钮。'
 
 	L['NAMEPLATE_MIN_SCALE'] = '非目标姓名板缩放'
 	L['NAMEPLATE_TARGET_SCALE'] = '目标姓名板缩放'
@@ -343,8 +375,6 @@ do
 	L['NAMEPLATE_VERTICAL_SPACING'] = '纵向间隔'
 	L['NAMEPLATE_HORIZONTAL_SPACING'] = '横向间隔'
 	L['NAMEPLATE_MAX_DISTANCE'] = '最大显示距离'
-
-	L['NAMEPLATE_FRIENDLY_COLOR'] = '友方玩家默认颜色'
 end
 
 

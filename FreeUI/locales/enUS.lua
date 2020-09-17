@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-
+if (GetLocale() == 'zhCN' or GetLocale() == 'zhTW') then return end
 
 
 --[[ Misc ]]

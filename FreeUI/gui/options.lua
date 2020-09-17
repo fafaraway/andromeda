@@ -243,8 +243,8 @@ local function CreateNamePlateAuraFilter(parent)
 	auraNumber:SetPoint('TOP', auraSize, 'BOTTOM', 0, -56)
 
 	local frameData = {
-		[1] = {header = L['NAMEPLATE_AURA_WHITE_LIST'], tip = L['NAMEPLATE_AURA_WHITE_LIST_ADD_ID'], offset = -220, barList = {}},
-		[2] = {header = L['NAMEPLATE_AURA_BLACK_LIST'], tip = L['NAMEPLATE_AURA_BLACK_LIST_ADD_ID'], offset = -400, barList = {}},
+		[1] = {header = L['NAMEPLATE_AURA_WHITE_LIST'], tip = L['NAMEPLATE_AURA_WHITE_LIST_TIP'], offset = -220, barList = {}},
+		[2] = {header = L['NAMEPLATE_AURA_BLACK_LIST'], tip = L['NAMEPLATE_AURA_BLACK_LIST_TIP'], offset = -400, barList = {}},
 	}
 
 	local function createBar(parent, index, spellID)
