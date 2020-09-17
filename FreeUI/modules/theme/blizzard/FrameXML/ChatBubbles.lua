@@ -62,7 +62,9 @@ tinsert(C.BlizzThemes, function()
 
 			for i, frame in next, bubbles do
 				local r, g, b = frame.text:GetTextColor()
-				frame.Shadow:SetBackdropBorderColor(r, g, b, .75)
+				if frame.Shadow then
+					frame.Shadow:SetBackdropBorderColor(r, g, b, .75)
+				end
 			end
 		end
 	end)
