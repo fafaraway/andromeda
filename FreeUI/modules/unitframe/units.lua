@@ -79,7 +79,6 @@ local function CreatePetStyle(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddAuras(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
-	UNITFRAME:AddCombatFader(self)
 end
 
 function UNITFRAME:SpawnPet()
