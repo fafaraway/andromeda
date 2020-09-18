@@ -1100,7 +1100,7 @@ end
 function UNITFRAME.UpdateClassPowerColor(element)
 	if UnitHasVehicleUI('player') then return end
 
-	local colors = FreeADB.color.class_power
+	local colors = FreeADB.colors.class_power
 	local r, g, b
 
 	if C.MyClass == 'MONK' then -- Chi Orbs
