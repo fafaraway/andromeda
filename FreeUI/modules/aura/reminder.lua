@@ -56,7 +56,9 @@ function AURA:Reminder_Create(cfg)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
 	frame.glow = F.CreateSD(frame)
-	frame.glow:SetBackdropBorderColor(1, 0, 0)
+	if frame.glow then
+		frame.glow:SetBackdropBorderColor(1, 0, 0)
+	end
 	local texture = cfg.texture
 	if not texture then
 		for spellID in pairs(cfg.spells) do
