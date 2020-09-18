@@ -182,7 +182,7 @@ end
 --[[ Combat ]]
 
 do
-	L['COMBAT_NAME'] = '背包'
+	L['COMBAT_NAME'] = '战斗'
 	L['COMBAT_DESC'] = '设置战斗相关的功能'
 
 	L['COMBAT_ENTER'] = '进入战斗'
