@@ -187,7 +187,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:SetAttribute('type', 'item')
 
 	if(not self:GetPoint()) then
-		self:SetPoint('CENTER', UIParent, 'CENTER', 0, 200)
+		self:SetPoint('CENTER', ExtraActionButton1)
 	end
 
 	self:SetSize(ExtraActionButton1:GetSize())
