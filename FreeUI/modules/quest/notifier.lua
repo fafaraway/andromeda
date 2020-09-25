@@ -25,11 +25,11 @@ local function completeText(link)
 end
 
 local function sendQuestMsg(msg)
+	if C.isDeveloper then F.Print(msg) end
+
 	if not FreeDB.quest.quest_progress then return end
 
-	if C.isDeveloper then
-		F.Print(msg)
-	elseif IsPartyLFG() then
+	if IsPartyLFG() then
 		SendChatMessage(msg, 'INSTANCE_CHAT')
 	elseif IsInRaid() then
 		SendChatMessage(msg, 'RAID')
