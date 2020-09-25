@@ -583,7 +583,7 @@ do
 
 		self.Shadow = CreateFrame('Frame', nil, frame)
 		self.Shadow:SetOutside(self, m, m)
-		self.Shadow:SetBackdrop({edgeFile = assets.glow_tex, edgeSize = F:Scale(s)})
+		self.Shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = F:Scale(s)})
 		self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .35)
 		self.Shadow:SetFrameLevel(1)
 
@@ -901,7 +901,7 @@ do
 		if not noGlow then
 			self.glow = CreateFrame('Frame', nil, self)
 			self.glow:SetBackdrop({
-				edgeFile = assets.glow_tex,
+				edgeFile = assets.shadow_tex,
 				edgeSize = 6,
 			})
 			self.glow:SetPoint('TOPLEFT', -6, 6)
@@ -1254,8 +1254,9 @@ do
 		F.CreateGradient(bd)
 
 		local thumb = self:GetThumbTexture()
-		thumb:SetTexture(assets.spark_tex)
-		thumb:SetVertexColor(1, 1, 1, .8)
+		thumb:SetHeight(self:GetHeight() + 12)
+		thumb:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])
+		thumb:SetVertexColor(1, 1, 1, .5)
 		thumb:SetBlendMode('ADD')
 		if verticle then thumb:SetRotation(math.rad(90)) end
 	end
@@ -2065,14 +2066,21 @@ do
 end
 
 
--- Print
-function F.Print(...)
-	print(C.Title..C.GreyColor..':|r', ...)
+do
+	function F.Print(...)
+		print(C.Title..C.GreyColor..':|r', ...)
+	end
+
+
+	function F.MultiCheck(check, ...)
+		for i = 1, select('#', ...) do
+			if check == select(i, ...) then
+				return true
+			end
+		end
+		return false
+	end
 end
-
-
-
-
 
 
 
