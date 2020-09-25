@@ -6,8 +6,8 @@ engine[3] = {} -- L, Localisation
 
 _G[addonName] = engine
 
-FreeADB, FreeDB = {}, {}
-
+FreeADB, FreeGoldCount, FreeKeyStone = {}, {}, {}
+FreeDB, FreeSpellBinding = {}, {}
 
 local F, C = unpack(engine)
 
