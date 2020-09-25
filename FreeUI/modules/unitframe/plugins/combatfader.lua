@@ -53,14 +53,30 @@ local function Update(self)
 	then
 		if element.smooth then
 			F:UIFrameFadeIn(self, 0.3, self:GetAlpha(), element.maxAlpha or 1)
+
+			if _G.oUF_Pet then
+				F:UIFrameFadeIn(_G.oUF_Pet, 0.3, self:GetAlpha(), element.maxAlpha or 1)
+			end
 		else
 			self:SetAlpha(element.maxAlpha or 1)
+
+			if _G.oUF_Pet then
+				_G.oUF_Pet:SetAlpha(element.maxAlpha or 1)
+			end
 		end
 	else
 		if element.smooth then
 			F:UIFrameFadeOut(self, 0.3, self:GetAlpha(), element.minAlpha or 0)
+
+			if _G.oUF_Pet then
+				F:UIFrameFadeOut(_G.oUF_Pet, 0.3, self:GetAlpha(), element.minAlpha or 0)
+			end
 		else
 			self:SetAlpha(element.minAlpha or 0.3)
+
+			if _G.oUF_Pet then
+				_G.oUF_Pet:SetAlpha(element.minAlpha or 0.3)
+			end
 		end
 	end
 end

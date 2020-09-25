@@ -55,7 +55,7 @@ C['classmod'] = {
 }
 
 
-C['ReminderBuffs'] = {
+C['ReminderBuffsList'] = {
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -119,7 +119,7 @@ C['ReminderBuffs'] = {
 }
 
 
-C['CornerBuffs'] = {
+C['CornerBuffsList'] = {
 	['PRIEST'] = {
 		[194384] = {'TOPRIGHT', {1, 1, .66}},			-- 救赎
 		[214206] = {'TOPRIGHT', {1, 1, .66}},			-- 救赎(PvP)
@@ -182,7 +182,9 @@ C['CornerBuffs'] = {
 	['DEATHKNIGHT'] = {},
 }
 
-C['ClassBuffs'] = {
+-- # TODO
+-- this filter is for player
+C['ClassBuffsList'] = {
 	['ALL'] = {},
 
 	['MAGE'] = {
@@ -206,12 +208,12 @@ C['ClassBuffs'] = {
 }
 
 
-C['RaidDebuffs'] = {}
+C['RaidDebuffsList'] = {}
 
 
 
 
-C['PartySpells'] = {
+C['PartySpellsList'] = {
 	[57994]  = 12,	-- 风剪
 	[1766]   = 15,	-- 脚踢
 	[6552]   = 15,	-- 拳击
@@ -247,7 +249,7 @@ C['PartySpells'] = {
 	[186265] = 180,	-- 灵龟守护
 }
 
-C['TalentCDFix'] = {
+C['TalentCDFixList'] = {
 	[740]	 = 120,	-- 宁静
 	[2094]   = 90,	-- 致盲
 	[15286]  = 75,	-- 吸血鬼的拥抱
@@ -423,7 +425,7 @@ local function GetSectionInfo(id)
 end
 
 -- 特殊单位的染色列表
-C['CustomUnits'] = {
+C['NPSpecialUnitsList'] = {
 	[120651] = true, -- 爆炸物
 	[141851] = true, -- 戈霍恩之嗣
 	[153377] = true, -- 粘液，麦卡贡
@@ -464,7 +466,7 @@ C['CustomUnits'] = {
 }
 
 -- 显示能量值的单位
-C['ShowPowerList'] = {
+C['NPShowPowerUnitsList'] = {
 	[155432] = true, -- 魔力使者
 	[152703] = true, -- 步行震击者X1型，麦卡贡
 	[163746] = true, -- 步行震击者X1型
@@ -607,8 +609,6 @@ C.CharacterSettings = {
 
 	['unitframe'] = {
 		['enable_unitframe'] = true,
-			['transparency'] = true,
-
 			['combat_fader'] = true,
 				['fader_alpha'] = 0,
 				['fader_smooth'] = true,
@@ -650,13 +650,15 @@ C.CharacterSettings = {
 			['stagger_bar'] = true,
 			['totems_bar'] = true,
 
-
+			['debuff_type'] = true,
+			['stealable_buffs'] = true,
+			['only_show_player'] = true,
 
 			['enable_castbar'] = true,
-				['castingColor'] = {r=.43, g=.69, b=.85},
-				['notInterruptibleColor'] = {r=.75, g=.04, b=.07},
-				['completeColor'] = {r=.25, g=.63, b=.49},
-				['failColor'] = {r=.73, g=.39, b=.43},
+				['casting_color'] = {r=.43, g=.69, b=.85},
+				['casting_not_interruptible_color'] = {r=.75, g=.04, b=.07},
+				['casting_complete_color'] = {r=.25, g=.63, b=.49},
+				['casting_fail_color'] = {r=.73, g=.39, b=.43},
 
 				['castbar_focus_separate'] = false,
 				['castbar_focus_width'] = 200,
@@ -667,31 +669,23 @@ C.CharacterSettings = {
 				['player_width'] = 120,
 				['player_height'] = 8,
 				['player_auras'] = false,
-				['player_auras_number'] = 18,
-				['player_auras_number_per_row'] = 6,
 
-				['player_pvp_indicator'] = true,
 				['player_combat_indicator'] = true,
 				['player_resting_indicator'] = true,
 
 				['player_hide_tags'] = true,
 
-
-
 			['enable_pet'] = true,
 				['pet_width'] = 50,
 				['pet_height'] = 8,
 				['pet_auras'] = true,
-				['pet_auras_number_per_row'] = 3,
-				['pet_auras_number'] = 12,
+				['pet_auras_per_row'] = 3,
 
 			['enable_target'] = true,
 				['target_width'] = 160,
 				['target_height'] = 8,
 				['target_auras'] = true,
-				['target_auras_number_per_row'] = 7,
-				['target_auras_number'] = 35,
-				['target_debuffs_by_player'] = true,
+				['target_auras_per_row'] = 6,
 
 				['target_target_width'] = 60,
 				['target_target_height'] = 8,
@@ -700,8 +694,7 @@ C.CharacterSettings = {
 				['focus_width'] = 60,
 				['focus_height'] = 8,
 				['focus_auras'] = false,
-				['focus_auras_number_per_row'] = 4,
-				['focus_auras_number'] = 16,
+				['focus_auras_per_row'] = 4,
 
 				['focus_target_width'] = 60,
 				['focus_target_height'] = 8,
@@ -715,8 +708,6 @@ C.CharacterSettings = {
 				['group_reverse'] = false,
 
 				['group_click_cast'] = true,
-				['group_click_cast_filter'] = false,
-				['group_click_cast_config'] = {},
 				['group_debuff_highlight'] = true,
 				['group_corner_buffs'] = true,
 				['group_debuffs'] = true,
@@ -739,31 +730,26 @@ C.CharacterSettings = {
 				['raid_height'] = 30,
 				['raid_gap'] = 5,
 
-
-
 			['enable_boss'] = true,
 				['boss_color_smooth'] = true,
 				['boss_width'] = 120,
 				['boss_height'] = 20,
 				['boss_gap'] = 60,
 				['boss_auras'] = true,
-				['boss_auras_number_per_row'] = 5,
-				['boss_auras_number'] = 15,
-				['boss_debuffs_by_player'] = true,
+				['boss_auras_per_row'] = 6,
 
 			['enable_arena'] = true,
 				['arena_width'] = 120,
 				['arena_height'] = 16,
 				['arena_gap'] = 80,
-				['arenaShowAuras'] = true,
-				['arenaAuraPerRow'] = 6,
-				['arenaAuraTotal'] = 18,
+				['arena_auras'] = true,
+				['arena_auras_per_row'] = 6,
 	},
 
 	['nameplate'] = {
 		['enable_nameplate'] = true,
-			['plate_width'] = 66,
-			['plate_height'] = 6,
+			['plate_width'] = 76,
+			['plate_height'] = 8,
 			['friendly_class_color'] = false,
 			['friendly_color'] = {r=.3, g=.3, b=1},
 			['hostile_class_color'] = true,
@@ -787,7 +773,7 @@ C.CharacterSettings = {
 			['explosive_scale'] = false,
 
 			['plate_auras'] = true,
-				['aura_size'] = 18,
+				['aura_size'] = 22,
 				['aura_number'] = 6,
 
 			['inside_view'] = true,
@@ -1005,11 +991,11 @@ C.AccountSettings = {
 	['ui_scale'] = 1,
 	['ui_gap'] = 33,
 	['detect_version'] = C.Version,
-	['gold_count'] = {},
+
 
 	['custom_junk_list'] = {},
 	['number_format'] = 1,
-	['keystone_info'] = {},
+
 	['texture_style'] = 1,
 
 

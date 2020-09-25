@@ -1690,16 +1690,16 @@ local function UnitframeOptions()
 	-- castbar color side panel
 	local castbarColorSide = GUI:CreateSidePanel(parent, 'castbarColorSide')
 
-	local castingColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'castingColor')
+	local castingColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'casting_color')
 	castingColor:SetPoint('TOPLEFT', castbarColorSide.child, 'TOPLEFT', 10, -10)
 
-	local notInterruptibleColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'notInterruptibleColor')
+	local notInterruptibleColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'casting_not_interruptible_color')
 	notInterruptibleColor:SetPoint('TOP', castingColor, 'BOTTOM', 0, -16)
 
-	local completeColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'completeColor')
+	local completeColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'casting_complete_color')
 	completeColor:SetPoint('TOP', notInterruptibleColor, 'BOTTOM', 0, -16)
 
-	local failColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'failColor')
+	local failColor = GUI:CreateColorSwatch(castbarColorSide, 'unitframe', 'casting_fail_color')
 	failColor:SetPoint('TOP', completeColor, 'BOTTOM', 0, -16)
 
 
@@ -1972,12 +1972,24 @@ local function MiscOptions()
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 
-	local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 20, 5, false})
+	local hideBossBanner = GUI:CreateCheckBox(parent, 'blizzard', 'hide_boss_banner')
+	hideBossBanner:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
+
+	local hideTalkingHead = GUI:CreateCheckBox(parent, 'blizzard', 'hide_talking_head')
+	hideTalkingHead:SetPoint('LEFT', hideBossBanner, 'RIGHT', 160, 0)
+
+	local mailButton = GUI:CreateCheckBox(parent, 'blizzard', 'mail_button')
+	mailButton:SetPoint('TOPLEFT', hideBossBanner, 'BOTTOMLEFT', 0, -8)
+
+	local undressButton = GUI:CreateCheckBox(parent, 'blizzard', 'undress_button')
+	undressButton:SetPoint('LEFT', mailButton, 'RIGHT', 160, 0)
+
+
+	--[[ local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 20, 5, false})
 	keyword:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 20, -40)
 
-
 	local numberFormat = GUI:CreateDropDown(parent, 'ACCOUNT', 'number_format', nil, {L['GUI_NUMBER_FORMAT_EN'], L['GUI_NUMBER_FORMAT_CN']}, L['GUI_NUMBER_FORMAT'])
-	numberFormat:SetPoint('LEFT', keyword, 'RIGHT', 80, 0)
+	numberFormat:SetPoint('LEFT', keyword, 'RIGHT', 80, 0) ]]
 end
 
 local function DataOptions()

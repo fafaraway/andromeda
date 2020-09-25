@@ -27,8 +27,6 @@ local function CreatePlayerStyle(self)
 	UNITFRAME:AddAlternativePowerValueText(self)
 	UNITFRAME:AddPortrait(self)
 	UNITFRAME:AddCastBar(self)
-	UNITFRAME:AddAuras(self)
-	UNITFRAME:AddPvPIndicator(self)
 	UNITFRAME:AddCombatIndicator(self)
 	UNITFRAME:AddRestingIndicator(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
@@ -79,7 +77,6 @@ local function CreatePetStyle(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddAuras(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
-	UNITFRAME:AddCombatFader(self)
 end
 
 function UNITFRAME:SpawnPet()
@@ -118,7 +115,6 @@ local function CreateTargetStyle(self)
 	UNITFRAME:AddPortrait(self)
 	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddHealthValueText(self)
-	UNITFRAME:AddPowerValueText(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddAuras(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
@@ -339,7 +335,7 @@ function UNITFRAME:SpawnParty()
 		'showParty', true,
 		'showRaid', false,
 		'showPlayer', true,
-		'showSolo', false,
+		'showSolo', C.isDeveloper,
 
 		'xoffset', FreeDB.unitframe.party_gap,
 		'yoffset', FreeDB.unitframe.party_gap,

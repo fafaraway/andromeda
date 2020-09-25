@@ -8,12 +8,17 @@ function UNITFRAME:OnLogin()
 
 	F:SetSmoothingAmount(.3)
 
-	self:SpawnPlayer()
-	self:SpawnTarget()
-	self:SpawnTargetTarget()
+	if FreeDB.unitframe.enable_player then
+		self:SpawnPlayer()
+	end
 
 	if FreeDB.unitframe.enable_pet then
 		self:SpawnPet()
+	end
+
+	if FreeDB.unitframe.enable_target then
+		self:SpawnTarget()
+		self:SpawnTargetTarget()
 	end
 
 	if FreeDB.unitframe.enable_focus then
@@ -32,7 +37,7 @@ function UNITFRAME:OnLogin()
 
 	if not FreeDB.unitframe.enable_group then return end
 
-	if CompactRaidFrameManager_SetSetting then
+	if CompactRaidFrameManager_SetSetting then -- get rid of blizz raid frame
 		CompactRaidFrameManager_SetSetting('IsShown', '0')
 		UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
 		CompactRaidFrameManager:UnregisterAllEvents()

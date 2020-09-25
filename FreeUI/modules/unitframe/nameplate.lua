@@ -4,7 +4,7 @@ local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
 
-local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
+local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 
 
@@ -105,14 +105,14 @@ local customUnits = {}
 function NAMEPLATE:CreateUnitTable()
 	wipe(customUnits)
 	if not FreeDB.nameplate.custom_unit_color then return end
-	F.CopyTable(C.CustomUnits, customUnits)
+	F.CopyTable(C.NPSpecialUnitsList, customUnits)
 	F.SplitList(customUnits, FreeDB.nameplate.custom_unit_list)
 end
 
 local showPowerList = {}
 function NAMEPLATE:CreatePowerUnitTable()
 	wipe(showPowerList)
-	F.CopyTable(C.ShowPowerList, showPowerList)
+	F.CopyTable(C.NPShowPowerUnitsList, showPowerList)
 	F.SplitList(showPowerList, FreeDB.nameplate.show_power_list)
 end
 
@@ -270,7 +270,7 @@ function NAMEPLATE:AddThreatIndicator(self)
 	threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 0)
 	threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, 0)
 	threat:SetHeight(4)
-	threat:SetTexture(C.Assets.glow_top_tex)
+	threat:SetTexture(C.Assets.glow_tex)
 	threat:Hide()
 
 	self.ThreatIndicator = threat
@@ -314,7 +314,8 @@ function NAMEPLATE:AddTargetIndicator(self)
 	texBot:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, 0)
 	texBot:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
 	texBot:SetHeight(4)
-	texBot:SetTexture(C.Assets.glow_bottom_tex)
+	texBot:SetTexture(C.Assets.glow_tex)
+	texBot:SetRotation(rad(180))
 	texBot:SetVertexColor(r, g, b, .85)
 
 	self.TargetIndicator = frame
@@ -374,9 +375,9 @@ end
 
 -- Unit classification
 local classify = {
-	rare = 'VignetteKill',
-	rareelite = 'VignetteKill',
-	worldboss = 'VignetteKillElite',
+	rare = {.5, 1, .5, 1},
+	rareelite = {.5, 1, .5, 1},
+	worldboss = {0, .5, 0, .5},
 }
 
 function NAMEPLATE:AddRareIndicator(self)
@@ -384,7 +385,7 @@ function NAMEPLATE:AddRareIndicator(self)
 
 	local icon = self:CreateTexture(nil, 'ARTWORK')
 	icon:SetPoint('LEFT', self, 'RIGHT')
-	icon:SetSize(8, 8)
+	icon:SetSize(16, 16)
 	icon:Hide()
 
 	self.ClassifyIndicator = icon
@@ -394,8 +395,9 @@ function NAMEPLATE:UpdateUnitClassify(unit)
 	if self.ClassifyIndicator then
 		local class = UnitClassification(unit)
 		if class and classify[class] then
-			local tex = classify[class]
-			self.ClassifyIndicator:SetAtlas(tex)
+			local texCoord = classify[class]
+			self.ClassifyIndicator:SetTexture(C.Assets.classify_tex)
+			self.ClassifyIndicator:SetTexCoord(unpack(texCoord))
 			self.ClassifyIndicator:Show()
 		else
 			self.ClassifyIndicator:Hide()
@@ -476,7 +478,15 @@ local function CreateNameplateStyle(self)
 	self.unitStyle = 'nameplate'
 	self:SetSize(FreeDB.nameplate.plate_width, FreeDB.nameplate.plate_height)
 	self:SetPoint('CENTER', 0, -10)
-	self:SetScale(1)
+
+	-- set 1:1 scale from screen width
+	--[[ local screen_size = {GetPhysicalScreenSize()}
+	if screen_size and screen_size[2] then
+		self.uiscale = 768 / screen_size[2]
+	end
+	self:SetScale(self.uiscale) ]]
+
+	self:SetScale(UIParent:GetScale())
 
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetAllPoints()
@@ -487,11 +497,8 @@ local function CreateNameplateStyle(self)
 	self.Health = health
 	self.Health.UpdateColor = NAMEPLATE.UpdateColor
 
-	local name = F.CreateFS(self, C.Assets.Fonts.Normal, 9, nil, nil, nil, 'THICK')
-	name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
-	self:Tag(name, '[free:name]')
-	self.Name = name
 
+	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddHealthPrediction(self)
 	NAMEPLATE:AddTargetIndicator(self)
 	NAMEPLATE:AddHighlight(self)
@@ -503,9 +510,6 @@ local function CreateNameplateStyle(self)
 
 	platesList[self] = self:GetName()
 end
-
-
-
 
 function NAMEPLATE:UpdateNameplateAuras()
 	local element = self.Auras
@@ -519,7 +523,7 @@ end
 
 function NAMEPLATE:RefreshNameplats()
 	for nameplate in pairs(platesList) do
-		NAMEPLATE.UpdateNameplateAuras()
+		NAMEPLATE.UpdateNameplateAuras(nameplate)
 		NAMEPLATE.UpdateTargetIndicator(nameplate)
 		NAMEPLATE.UpdateTargetChange(nameplate)
 	end
