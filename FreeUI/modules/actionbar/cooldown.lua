@@ -68,7 +68,7 @@ function COOLDOWN:OnCreate()
 	text:SetJustifyH('CENTER')
 	timer.text = text
 
-	if FreeDB.actionbar.override_weakauras and strfind(frameName, 'WeakAurasCooldown') then
+	if FreeDB.cooldown.override_weakauras and strfind(frameName, 'WeakAurasCooldown') then
 		text:SetPoint('BOTTOM', 1, -6)
 	end
 
@@ -86,7 +86,7 @@ function COOLDOWN:StartTimer(start, duration)
 	if self.noCooldownCount or hideNumbers[self] then return end
 
 	local frameName = self.GetName and self:GetName()
-	if not FreeDB.actionbar.override_weakauras and frameName and strfind(frameName, 'WeakAuras') then
+	if not FreeDB.cooldown.override_weakauras and frameName and strfind(frameName, 'WeakAuras') then
 		self.noCooldownCount = true
 		return
 	end
@@ -170,7 +170,7 @@ function COOLDOWN:RegisterActionButton()
 end
 
 function COOLDOWN:OnLogin()
-	if not FreeDB.actionbar.enable_cooldown then return end
+	if not FreeDB.cooldown.enable_cooldown then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, 'SetCooldown', COOLDOWN.StartTimer)

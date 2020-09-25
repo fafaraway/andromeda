@@ -757,7 +757,7 @@ local function ActionbarOptions()
 	local count = GUI:CreateCheckBox(parent, 'actionbar', 'button_count')
 	count:SetPoint('TOPLEFT', hotkey, 'BOTTOMLEFT', 0, -8)
 
-	local cooldown = GUI:CreateCheckBox(parent, 'actionbar', 'enable_cooldown', nil, SetupCooldown)
+	local cooldown = GUI:CreateCheckBox(parent, 'cooldown', 'enable_cooldown', nil, SetupCooldown)
 	cooldown:SetPoint('LEFT', count, 'RIGHT', 160, 0)
 
 	local extra = GUI:AddSubCategory(parent)
@@ -1019,19 +1019,19 @@ local function ActionbarOptions()
 
 	local cooldownSide = GUI:CreateSidePanel(parent, 'cooldownSide')
 
-	local overrideWA = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'override_weakauras')
+	local overrideWA = GUI:CreateCheckBox(cooldownSide, 'cooldown', 'override_weakauras')
 	overrideWA:SetPoint('TOPLEFT', cooldownSide.child, 'TOPLEFT', 10, -16)
 
-	local useDecimal = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'use_decimal')
+	local useDecimal = GUI:CreateCheckBox(cooldownSide, 'cooldown', 'decimal')
 	useDecimal:SetPoint('TOP', overrideWA, 'BOTTOM', 0, -8)
 
-	local decimalCooldown = GUI:CreateSlider(cooldownSide, 'actionbar', 'decimal_countdown', nil, {1, 10, 1})
+	local decimalCooldown = GUI:CreateSlider(cooldownSide, 'cooldown', 'decimal_countdown', nil, {1, 10, 1})
 	decimalCooldown:SetPoint('TOP', cooldownSide.child, 'TOP', 0, -90)
 
-	local cdPulse = GUI:CreateCheckBox(cooldownSide, 'actionbar', 'cd_pulse')
+	local cdPulse = GUI:CreateCheckBox(cooldownSide, 'cooldown', 'pulse')
 	cdPulse:SetPoint('TOP', useDecimal, 'BOTTOM', 0, -80)
 
-	local pulseSize = GUI:CreateSlider(cooldownSide, 'actionbar', 'pulse_size', nil, {20, 50, 1})
+	local pulseSize = GUI:CreateSlider(cooldownSide, 'cooldown', 'icon_size', nil, {20, 50, 1})
 	pulseSize:SetPoint('TOP', decimalCooldown, 'TOP', 0, -100)
 
 

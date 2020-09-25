@@ -899,12 +899,12 @@ C.CharacterSettings = {
 			['bar_padding'] = 3,
 			['button_margin'] = 3,
 			['button_size_small'] = 22,
-			['button_size_normal'] = 24,
-			['button_size_big'] = 26,
+			['button_size_normal'] = 26,
+			['button_size_big'] = 30,
 
 			['button_hotkey'] = false,
 			['button_macro_name'] = false,
-			['button_count'] = false,
+			['button_count'] = true,
 			['button_class_color'] = false,
 			['button_range'] = true,
 
@@ -970,19 +970,21 @@ C.CharacterSettings = {
 			['stance_bar'] = false,
 
 			['bind_type'] = 1,
+	},
 
-			['enable_cooldown'] = true,
-				['use_decimal'] = true,
-					['decimal_countdown'] = 3,
-				['override_weakauras'] = true,
-				['cd_pulse'] = true,
-					['pulse_sound'] = false,
-					['pulse_size'] = 32,
-					['pulse_sound_file'] = '',
-					['ignored_spells'] = {
-						--GetSpellInfo(6807),	-- Maul
-						--GetSpellInfo(35395),	-- Crusader Strike
-					},
+	['cooldown'] = {
+		['enable_cooldown'] = true,
+			['use_decimal'] = true,
+				['decimal_countdown'] = 3,
+			['override_weakauras'] = true,
+			['pulse'] = true,
+				['sound'] = false,
+				['icon_size'] = 32,
+				['sound_file'] = '',
+				['ignored_spells'] = {
+					--GetSpellInfo(6807),	-- Maul
+					--GetSpellInfo(35395),	-- Crusader Strike
+				},
 	}
 }
 
