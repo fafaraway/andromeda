@@ -175,7 +175,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local myBar = CreateFrame('StatusBar', nil, self.Health)
 		myBar:SetPoint('TOP')
 		myBar:SetPoint('BOTTOM')
-		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'RIGHT')
+		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'LEFT')
 		myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		myBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		myBar:SetStatusBarColor(0, .8, .8, .6)
@@ -184,7 +184,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local otherBar = CreateFrame('StatusBar', nil, self.Health)
 		otherBar:SetPoint('TOP')
 		otherBar:SetPoint('BOTTOM')
-		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), 'RIGHT')
+		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), 'LEFT')
 		otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		otherBar:SetStatusBarColor(0, .6, .6, .6)
@@ -193,7 +193,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local absorbBar = CreateFrame('StatusBar', nil, self.Health)
 		absorbBar:SetPoint('TOP')
 		absorbBar:SetPoint('BOTTOM')
-		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'RIGHT')
+		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'LEFT')
 		absorbBar:SetStatusBarTexture(C.Assets.stripe_tex)
 		absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		absorbBar:SetStatusBarColor(.8, .8, .8, .8)
@@ -278,14 +278,12 @@ function UNITFRAME:AddPowerBar(self)
 
 	if self.unitStyle == 'pet' then
 		power.colorPower = true
-	elseif FreeDB.unitframe.transparency then
+	else
 		if self.unitStyle == 'player' then
 			power.colorPower = true
 		else
 			power.colorClass = true
 		end
-	else
-		power.colorPower = true
 	end
 
 	self.Power.PostUpdate = PostUpdatePower
@@ -520,17 +518,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 end
 
 function UNITFRAME.PostUpdateGapIcon(_, _, icon)
-	if icon.bg and icon.bg:IsShown() then
-		icon.bg:Hide()
-	end
-
-	if icon.glow and icon.glow:IsShown() then
-		icon.glow:Hide()
-	end
-
-	if icon.time and icon.time:IsShown() then
-		icon.time:Hide()
-	end
+	icon:Hide()
 end
 
 local function getIconSize(w, n, s)
