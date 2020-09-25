@@ -121,10 +121,10 @@ function INVENTORY:CreateCurrencyFrame()
 			profit = profit + change
 		end
 
-		if not FreeADB['gold_count'][C.MyRealm] then FreeADB['gold_count'][C.MyRealm] = {} end
-		if not FreeADB['gold_count'][C.MyRealm][C.MyName] then FreeADB['gold_count'][C.MyRealm][C.MyName] = {} end
-		FreeADB['gold_count'][C.MyRealm][C.MyName][1] = GetMoney()
-		FreeADB['gold_count'][C.MyRealm][C.MyName][2] = C.MyClass
+		if not FreeGoldCount[C.MyRealm] then FreeGoldCount[C.MyRealm] = {} end
+		if not FreeGoldCount[C.MyRealm][C.MyName] then FreeGoldCount[C.MyRealm][C.MyName] = {} end
+		FreeGoldCount[C.MyRealm][C.MyName][1] = GetMoney()
+		FreeGoldCount[C.MyRealm][C.MyName][2] = C.MyClass
 
 		oldMoney = newMoney
 	end)
@@ -153,7 +153,7 @@ function INVENTORY:CreateCurrencyFrame()
 		GameTooltip:AddLine(L['INVENTORY_CHARACTER'], .6,.8,1)
 
 		for _, realm in pairs(crossRealms) do
-			local thisRealmList = FreeADB['gold_count'][realm]
+			local thisRealmList = FreeGoldCount[realm]
 			if thisRealmList then
 				for k, v in pairs(thisRealmList) do
 					local name = Ambiguate(k..'-'..realm, 'none')

@@ -82,12 +82,12 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	button2 = NO,
 	OnAccept = function()
 		for _, realm in pairs(crossRealms) do
-			if FreeADB['gold_count'][realm] then
-				wipe(FreeADB['gold_count'][realm])
+			if FreeGoldCount[realm] then
+				wipe(FreeGoldCount[realm])
 			end
 		end
 
-		FreeADB['gold_count'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		FreeGoldCount[C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
 	whileDead = 1,

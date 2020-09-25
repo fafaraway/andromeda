@@ -142,11 +142,8 @@ SpellBinder.makeFramesList = function()
 	for frame in pairs(ClickCastFrames) do
 		local v
 		if frame and type(frame) == 'table' then v = frame:GetName() end
-		if FreeDB.unitframe.group_click_cast_filter ~= true then
-			if v then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
-		else
-			if v ~= 'oUF_Target' and v ~= 'oUF_Player' then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
-		end
+
+		if v ~= 'oUF_Target' and v ~= 'oUF_Player' then SpellBinder.frames[frame] = SpellBinder.frames[frame] or true end
 	end
 end
 
@@ -311,7 +308,7 @@ function UNITFRAME:ClickCast()
 	end)
 
 
-	DB = FreeDB['unitframe']['group_click_cast_config']
+	DB = FreeSpellBinding
 	DB.spells = DB.spells or {}
 	DB.keys = DB.keys or {}
 	SpellBinder.frames = SpellBinder.frames or {}
