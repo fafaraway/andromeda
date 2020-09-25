@@ -37,6 +37,7 @@ C['Assets'] = {
 
 	['bd_tex'] = 'Interface\\ChatFrame\\ChatFrameBackground',
 	['bg_tex'] = C.AssetsPath..'textures\\bg_tex',
+	['shadow_tex'] = C.AssetsPath..'textures\\shadow_tex',
 	['glow_tex'] = C.AssetsPath..'textures\\glow_tex',
 
 	['tick_tex'] = C.AssetsPath..'textures\\tick_tex',
@@ -44,11 +45,6 @@ C['Assets'] = {
 
 	['close_tex'] = C.AssetsPath..'textures\\close_tex',
 	['arrow_tex'] = C.AssetsPath..'textures\\arrow_tex',
-
-	['arrow_left_tex'] = C.AssetsPath..'textures\\arrow_left_tex',
-	['arrow_right_tex'] = C.AssetsPath..'textures\\arrow_right_tex',
-	['glow_top_tex'] = C.AssetsPath..'textures\\glow_top_tex',
-	['glow_bottom_tex'] = C.AssetsPath..'textures\\glow_bottom_tex',
 
 	['button_normal']  = C.AssetsPath..'button\\normal',
 	['button_flash']   = C.AssetsPath..'button\\flash',
@@ -60,8 +56,9 @@ C['Assets'] = {
 	['roles_icon'] = C.AssetsPath..'textures\\roles_icon',
 	['target_icon'] = C.AssetsPath..'textures\\UI-RaidTargetingIcons',
 	['vig_tex'] = C.AssetsPath..'textures\\vignetting',
-	['spark_tex'] = 'Interface\\CastingBar\\UI-CastingBar-Spark',
+	['spark_tex'] = C.AssetsPath..'textures\\spark_tex',
 	['gear_tex'] = C.AssetsPath..'textures\\gear_tex',
+	['classify_tex'] = C.AssetsPath..'textures\\state_icons',
 
 	['logo'] = C.AssetsPath..'textures\\logo',
 
