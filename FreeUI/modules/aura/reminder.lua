@@ -12,7 +12,7 @@ local frames, parentFrame = {}
 
 
 
-local groups = C.ReminderBuffs[C.MyClass]
+local groups = C.ReminderBuffsList[C.MyClass]
 
 function AURA:Reminder_Update(cfg)
 	local frame = cfg.frame
