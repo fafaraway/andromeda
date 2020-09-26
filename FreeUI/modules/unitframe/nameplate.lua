@@ -495,8 +495,8 @@ local function CreateNameplateStyle(self)
 	F:SmoothBar(health)
 
 	self.Health = health
+	self.Health.frequentUpdates = true
 	self.Health.UpdateColor = NAMEPLATE.UpdateColor
-
 
 	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddHealthPrediction(self)
