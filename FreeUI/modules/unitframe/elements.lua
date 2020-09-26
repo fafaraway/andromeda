@@ -163,6 +163,7 @@ function UNITFRAME:AddHealthBar(self)
 	end
 
 	self.Health = health
+	self.Health.frequentUpdates = true
 	self.Health.PreUpdate = OverrideHealth
 	self.Health.PostUpdate = PostUpdateHealth
 end

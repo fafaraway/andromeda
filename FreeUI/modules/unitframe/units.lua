@@ -335,7 +335,7 @@ function UNITFRAME:SpawnParty()
 		'showParty', true,
 		'showRaid', false,
 		'showPlayer', true,
-		'showSolo', C.isDeveloper,
+		'showSolo', false,
 
 		'xoffset', FreeDB.unitframe.party_gap,
 		'yoffset', FreeDB.unitframe.party_gap,

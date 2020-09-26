@@ -6,6 +6,7 @@ local GetTime = GetTime
 local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
 local animScale, iconSize, holdTime, threshold = 1.5, 50, 0, 3
 local cooldowns, animating, watching = {}, {}, {}
+local bg
 
 
 local anchor = CreateFrame('Frame', 'FreeUI_CooldownPulse', UIParent)
@@ -135,6 +136,7 @@ local function OnUpdate(_, update)
 			tremove(animating, 1)
 			runtimer = 0
 			icon:SetTexture(nil)
+			bg:Hide()
 		else
 			if not icon:GetTexture() then
 				icon:SetTexture(animating[1][1])
@@ -153,6 +155,7 @@ local function OnUpdate(_, update)
 			local scale = FreeDB.cooldown.icon_size + (FreeDB.cooldown.icon_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
+			bg:Show()
 		end
 	end
 end
@@ -198,8 +201,6 @@ function frame:COMBAT_LOG_EVENT_UNFILTERED()
 end
 
 function frame:PLAYER_ENTERING_WORLD()
-
-
 	local _, instanceType = IsInInstance()
 	if instanceType == 'arena' then
 		self:SetScript('OnUpdate', nil)
@@ -212,7 +213,7 @@ end
 function COOLDOWN:CooldownPulse()
 	if not FreeDB.cooldown.pulse then return end
 
-	F.CreateBDFrame(frame, nil, true)
+	bg = F.CreateBDFrame(frame, nil, true)
 	icon:SetTexCoord(unpack(C.TexCoord))
 	F.Mover(anchor, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, FreeDB.cooldown.icon_size, FreeDB.cooldown.icon_size)
 
