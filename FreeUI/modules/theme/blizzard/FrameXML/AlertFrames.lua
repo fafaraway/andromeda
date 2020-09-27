@@ -9,7 +9,7 @@ tinsert(C.BlizzThemes, function()
 			frame = frame:GetParent()
 		end
 		if frame.bg then
-			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.backdrop_alpha)
+			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
 			if frame.bg.Shadow then
 				frame.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
 			end
@@ -19,7 +19,7 @@ tinsert(C.BlizzThemes, function()
 	local function fixParentbg(frame)
 		frame = frame:GetParent():GetParent()
 		if frame.bg then
-			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.backdrop_alpha)
+			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
 			if frame.bg.Shadow then
 				frame.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
 			end
