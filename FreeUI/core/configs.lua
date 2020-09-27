@@ -1028,21 +1028,6 @@ C.AccountSettings = {
 	},
 
 	['colors'] = {
-		['class'] = {
-			['HUNTER']      = {r = 0.15, g = 0.71, b = 0.12},
-			['WARRIOR']     = {r = 0.78, g = 0.57, b = 0.37},
-			['PALADIN']     = {r = 0.96, g = 0.33, b = 0.49},
-			['MAGE']        = {r = 0.43, g = 0.71, b = 0.89},
-			['PRIEST']      = {r = 0.89, g = 0.89, b = 0.89},
-			['SHAMAN']      = {r = 0.27, g = 0.27, b = 0.76},
-			['WARLOCK']     = {r = 0.71, g = 0.67, b = 0.88},
-			['DEMONHUNTER'] = {r = 0.89, g = 0.23, b = 0.87},
-			['ROGUE']       = {r = 0.94, g = 0.87, b = 0.48},
-			['DRUID']       = {r = 0.95, g = 0.56, b = 0.25},
-			['MONK']        = {r = 0.24, g = 0.85, b = 0.65},
-			['DEATHKNIGHT'] = {r = 0.77, g = 0.11, b = 0.21},
-		},
-
 		['power'] = {
 			['PAIN']        = {b = 0.00, g = 0.61, r = 1.00},
 			['FURY']        = {b = 0.99, g = 0.26, r = 0.79},
@@ -1130,13 +1115,6 @@ f:SetScript('OnEvent', function(self, _, addon)
 	F:SetupUIScale(true)
 
 	C.Assets.statusbar_tex = textureList[FreeADB.texture_style]
-
-	C.r = FreeADB.colors.class[C.MyClass].r
-	C.g = FreeADB.colors.class[C.MyClass].g
-	C.b = FreeADB.colors.class[C.MyClass].b
-
-	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
-	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 	self:UnregisterAllEvents()
 end)

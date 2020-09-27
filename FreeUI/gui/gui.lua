@@ -49,13 +49,7 @@ local iconsList = {
 
 
 local function SaveValue(key, value, newValue)
-	if key == 'CLASS_COLORS' then
-		if newValue ~= nil then
-			FreeADB['colors']['class'][value] = newValue
-		else
-			return FreeADB['colors']['class'][value]
-		end
-	elseif key == 'POWER_COLORS' then
+	if key == 'POWER_COLORS' then
 		if newValue ~= nil then
 			FreeADB['colors']['power'][value] = newValue
 		else

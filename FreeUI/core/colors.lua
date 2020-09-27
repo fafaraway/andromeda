@@ -29,72 +29,8 @@ oUF.colors.runes = {
 
 
 function COLORS:UpdateColors()
-	local classColor = FreeADB.colors.class
 	local powerColor = FreeADB.colors.power
 	local reactionColor = FreeADB.colors.reaction
-
-	oUF.colors.class = {
-		['ROGUE'] = {
-			classColor.ROGUE.r,
-			classColor.ROGUE.g,
-			classColor.ROGUE.b,
-		},
-		['DRUID'] = {
-			classColor.DRUID.r,
-			classColor.DRUID.g,
-			classColor.DRUID.b,
-		},
-		['HUNTER'] = {
-			classColor.HUNTER.r,
-			classColor.HUNTER.g,
-			classColor.HUNTER.b,
-		},
-		['MAGE'] = {
-			classColor.MAGE.r,
-			classColor.MAGE.g,
-			classColor.MAGE.b,
-		},
-		['PALADIN'] = {
-			classColor.PALADIN.r,
-			classColor.PALADIN.g,
-			classColor.PALADIN.b,
-		},
-		['PRIEST'] = {
-			classColor.PRIEST.r,
-			classColor.PRIEST.g,
-			classColor.PRIEST.b,
-		},
-		['SHAMAN'] = {
-			classColor.SHAMAN.r,
-			classColor.SHAMAN.g,
-			classColor.SHAMAN.b,
-		},
-		['WARLOCK'] = {
-			classColor.WARLOCK.r,
-			classColor.WARLOCK.g,
-			classColor.WARLOCK.b,
-		},
-		['WARRIOR'] = {
-			classColor.WARRIOR.r,
-			classColor.WARRIOR.g,
-			classColor.WARRIOR.b,
-		},
-		['DEATHKNIGHT'] = {
-			classColor.DEATHKNIGHT.r,
-			classColor.DEATHKNIGHT.g,
-			classColor.DEATHKNIGHT.b,
-		},
-		['DEMONHUNTER'] = {
-			classColor.DEMONHUNTER.r,
-			classColor.DEMONHUNTER.g,
-			classColor.DEMONHUNTER.b,
-		},
-		['MONK'] = {
-			classColor.MONK.r,
-			classColor.MONK.g,
-			classColor.MONK.b,
-		},
-	}
 
 	oUF.colors.power.MANA = {
 		powerColor.MANA.r,

@@ -150,7 +150,7 @@ do
 	end
 
 	function F.ClassColor(class)
-		local color = FreeADB['colors']['class'][class]
+		local color = C.ClassColors[class]
 		if not color then return 1, 1, 1 end
 		return color.r, color.g, color.b
 	end

@@ -1706,44 +1706,8 @@ local function UnitframeOptions()
 	-- class color side panel
 	local classColorSide = GUI:CreateSidePanel(parent, 'classColorSide')
 
-	local deathknight = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'DEATHKNIGHT')
-	deathknight:SetPoint('TOPLEFT', classColorSide.child, 'TOPLEFT', 10, -10)
-
-	local warrior = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'WARRIOR')
-	warrior:SetPoint('TOP', deathknight, 'BOTTOM', 0, -16)
-
-	local paladin = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'PALADIN')
-	paladin:SetPoint('TOP', warrior, 'BOTTOM', 0, -16)
-
-	local mage = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'MAGE')
-	mage:SetPoint('TOP', paladin, 'BOTTOM', 0, -16)
-
-	local priest = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'PRIEST')
-	priest:SetPoint('TOP', mage, 'BOTTOM', 0, -16)
-
-	local hunter = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'HUNTER')
-	hunter:SetPoint('TOP', priest, 'BOTTOM', 0, -16)
-
-	local warlock = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'WARLOCK')
-	warlock:SetPoint('TOP', hunter, 'BOTTOM', 0, -16)
-
-	local demonhunter = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'DEMONHUNTER')
-	demonhunter:SetPoint('TOP', warlock, 'BOTTOM', 0, -16)
-
-	local rogue = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'ROGUE')
-	rogue:SetPoint('TOP', demonhunter, 'BOTTOM', 0, -16)
-
-	local druid = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'DRUID')
-	druid:SetPoint('TOP', rogue, 'BOTTOM', 0, -16)
-
-	local monk = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'MONK')
-	monk:SetPoint('TOP', druid, 'BOTTOM', 0, -16)
-
-	local shaman = GUI:CreateColorSwatch(classColorSide, 'CLASS_COLORS', 'SHAMAN')
-	shaman:SetPoint('TOP', monk, 'BOTTOM', 0, -16)
-
 	local reactionHostile = GUI:CreateColorSwatch(classColorSide, 'REACTION_COLORS', 'hostile')
-	reactionHostile:SetPoint('TOP', shaman, 'BOTTOM', 0, -32)
+	reactionHostile:SetPoint('TOPLEFT', classColorSide.child, 'TOPLEFT', 10, -10)
 
 	local reactionNeutral = GUI:CreateColorSwatch(classColorSide, 'REACTION_COLORS', 'neutral')
 	reactionNeutral:SetPoint('TOP', reactionHostile, 'BOTTOM', 0, -16)
