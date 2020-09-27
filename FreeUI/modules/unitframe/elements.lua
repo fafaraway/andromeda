@@ -996,9 +996,10 @@ function UNITFRAME:AddCastBar(self)
 	self.Castbar = castbar
 
 	local spark = castbar:CreateTexture(nil, 'OVERLAY')
+	spark:SetTexture(C.Assets.spark_tex)
 	spark:SetBlendMode('ADD')
 	spark:SetAlpha(.7)
-	spark:SetSize(20, castbar:GetHeight() * 2)
+	spark:SetSize(12, castbar:GetHeight() * 2)
 	castbar.Spark = spark
 
 
