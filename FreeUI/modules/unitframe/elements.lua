@@ -90,11 +90,15 @@ local function OverrideHealth(self, event, unit)
 	local health = self.Health
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
 	local isOffline = not UnitIsConnected(unit)
+	local isDead = UnitIsDead(unit)
+	local isGhost = UnitIsGhost(unit)
 
 	health:SetMinMaxValues(0, max)
 
 	if isOffline then
 		health:SetValue(max)
+	elseif isDead or isGhost then
+		self:SetValue(0)
 	else
 		if max == cur then
 			health:SetValue(0)
@@ -113,6 +117,8 @@ local function PostUpdateHealth(self, unit, min, max)
 
 	if isOffline then
 		self:SetValue(max)
+	elseif isDead or isGhost then
+		self:SetValue(0)
 	else
 		if max == min then
 			self:SetValue(0)
