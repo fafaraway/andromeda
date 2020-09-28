@@ -1528,35 +1528,6 @@ function UNITFRAME:AddPortrait(self)
 end
 
 
---[[ Floating combat feedback ]]
-
-function UNITFRAME:AddFCF(self)
-	if not FreeDB.unitframe.combat_text then return end
-
-	local parentFrame = CreateFrame('Frame', nil, UIParent)
-	local fcf = CreateFrame('Frame', 'oUF_CombatTextFrame', parentFrame)
-	fcf:SetSize(32, 32)
-	if self.unitStyle == 'player' then
-		F.Mover(fcf, L['UNITFRAME_MOVER_INCOMING'], 'PlayerCombatText', {'CENTER', -300, 0})
-	else
-		F.Mover(fcf, L['UNITFRAME_MOVER_OUTGOING'], 'TargetCombatText', {'CENTER', 300, 0})
-	end
-
-	for i = 1, 36 do
-		fcf[i] = parentFrame:CreateFontString('$parentText', 'OVERLAY')
-	end
-
-	fcf.font = C.Assets.Fonts.Number
-	fcf.fontFlags = nil
-	fcf.showPets = FreeDB.unitframe.ct_pet
-	fcf.showHots = FreeDB.unitframe.ct_hot
-	fcf.showAutoAttack = FreeDB.unitframe.ct_auto_attack
-	fcf.showOverHealing = FreeDB.unitframe.ct_over_healing
-	fcf.abbreviateNumbers = FreeDB.unitframe.ct_abbr_number
-	self.FloatingCombatFeedback = fcf
-end
-
-
 --[[ Party spells ]]
 
 local watchingList = {}

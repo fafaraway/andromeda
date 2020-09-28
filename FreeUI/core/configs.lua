@@ -548,6 +548,12 @@ C.CharacterSettings = {
 			['easy_focus'] = true,
 				['easy_focus_on_unitframes'] = false,
 			['easy_mark'] = true,
+			['fct'] = true,
+				['fct_pet'] = true,
+				['fct_periodic'] = true,
+				['fct_merge'] = true,
+				['fct_in'] = true,
+				['fct_out'] = true,
 	},
 
 
@@ -630,12 +636,6 @@ C.CharacterSettings = {
 			['heal_prediction'] = true,
 			['over_absorb'] = true,
 			['gcd_spark'] = true,
-			['combat_text'] = true,
-				['ct_pet'] = true,
-				['ct_hot'] = true,
-				['ct_over_healing'] = false,
-				['ct_auto_attack'] = true,
-				['ct_abbr_number'] = true,
 
 			['target_icon_indicator'] = true,
 

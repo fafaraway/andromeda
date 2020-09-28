@@ -71,9 +71,9 @@ do
 	L['ANNOUNCEMENT_NAME'] = '通告'
 	L['ANNOUNCEMENT_DESC'] = '根据情景通告一些特定的事件'
 
-	L['ANNOUNCEMENT_INTERRUPT'] = '打断了 %s 的 %s！'
-	L['ANNOUNCEMENT_DISPEL'] = '驱散了 %s 的 %s！'
-	L['ANNOUNCEMENT_STOLEN'] = '偷取了 %s 的 %s！'
+	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %s - %s！'
+	L['ANNOUNCEMENT_DISPEL'] = '驱散 %s - %s！'
+	L['ANNOUNCEMENT_STOLEN'] = '偷取 %s - %s！'
 	L['ANNOUNCEMENT_BATTLE_REZ'] = '%s 使用了 %s！'
 	L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s 使用了 %s 在 %s！'
 	L['ANNOUNCEMENT_CASTED'] = '%s 施放了 %s！'
@@ -187,6 +187,8 @@ do
 
 	L['COMBAT_ENTER'] = '进入战斗'
 	L['COMBAT_LEAVE'] = '离开战斗'
+	L['COMBAT_MOVER_IN'] = 'FCT Player'
+	L['COMBAT_MOVER_OUT'] = 'FCT Target'
 end
 
 
