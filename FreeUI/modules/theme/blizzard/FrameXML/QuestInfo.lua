@@ -136,7 +136,7 @@ tinsert(C.BlizzThemes, function()
 	end
 
 	-- Others
-	hooksecurefunc("QuestInfo_Display", function()
+	hooksecurefunc("QuestInfo_Display", function(template, parentFrame)
 		colourObjectivesText()
 
         local rewardsFrame = QuestInfoFrame.rewardsFrame
@@ -186,6 +186,18 @@ tinsert(C.BlizzThemes, function()
 					spellReward.styled = true
 				end
 			end
+		end
+
+		if template.canHaveSealMaterial then
+			local text = QuestInfoSealFrame.Text:GetText()
+			if text and text:find("|cff042c54") then
+				QuestInfoSealFrame.Text:SetText(string.gsub(text, "|cff042c54", "|cff1C86EE"))
+			elseif text and text:find("|cff480404") then
+					QuestInfoSealFrame.Text:SetText(string.gsub(text, "|cff480404", "|cffc20606"))
+			end
+			F.SetFS(QuestInfoSealFrame.Text, C.Assets.Fonts.Header, 18)
+			QuestInfoSealFrame.Text:SetShadowColor(0, 0, 0, 1)
+			QuestInfoSealFrame.Text:SetShadowOffset(2, -2)
 		end
 	end)
 
