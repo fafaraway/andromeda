@@ -739,7 +739,7 @@ local function ActionbarOptions()
 	local basic = GUI:AddSubCategory(parent)
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'actionbar', 'enable_actionbar', nil, SetupActionbarSize)
+	local enable = GUI:CreateCheckBox(parent, 'actionbar', 'enable_actionbar', nil, SetupActionbarSize, nil, true)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local class = GUI:CreateCheckBox(parent, 'actionbar', 'button_class_color')

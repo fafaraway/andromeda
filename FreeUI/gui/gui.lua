@@ -163,11 +163,11 @@ local function OnToggle(self)
 		ToggleChildren(self, checked)
 	end
 
-	for _, frame in next, sidePanels do
-		if not checked then
-			frame:Hide()
-		end
-	end
+	-- for _, frame in next, sidePanels do
+	-- 	if not checked then
+	-- 		frame:Hide()
+	-- 	end
+	-- end
 end
 
 local function CombatLockdown(event)
@@ -441,7 +441,7 @@ function GUI:CreateSidePanel(parent, name, header)
 end
 
 -- Checkbox
-function GUI:CreateCheckBox(parent, key, value, callback, extra, color)
+function GUI:CreateCheckBox(parent, key, value, callback, extra, color, toggle)
 	local checkbox = F.CreateCheckBox(parent)
 	checkbox:SetSize(20, 20)
 	checkbox:SetHitRectInsets(-5, -5, -5, -5)
@@ -454,6 +454,17 @@ function GUI:CreateCheckBox(parent, key, value, callback, extra, color)
 		if callback then callback() end
 	end)
 	checkbox:HookScript('OnClick', OnToggle)
+
+	if toggle then
+		checkbox:HookScript('OnClick', function()
+			local checked = checkbox:GetChecked()
+			for _, frame in next, sidePanels do
+				if not checked then
+					frame:Hide()
+				end
+			end
+		end)
+	end
 
 	if extra and type(extra) == 'function' then
 		local bu = CreateGearButton(checkbox)
