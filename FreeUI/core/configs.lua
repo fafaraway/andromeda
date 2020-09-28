@@ -564,7 +564,7 @@ C.CharacterSettings = {
 			['quest_level'] = true,
 			['reward_highlight'] = true,
 			['extra_button'] = true,
-			['quest_progress'] = true,
+			['quest_progress'] = false,
 			['complete_ring'] = true,
 			['quick_quest'] = false,
 	},
