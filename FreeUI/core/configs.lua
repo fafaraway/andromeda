@@ -1262,10 +1262,10 @@ f:SetScript('OnEvent', function(self, _, addon)
 		C.ClassColors[class].b = value.b
 		C.ClassColors[class].colorStr = value.colorStr
 
-		_G.RAID_CLASS_COLORS[class].r = value.r
-		_G.RAID_CLASS_COLORS[class].g = value.g
-		_G.RAID_CLASS_COLORS[class].b = value.b
-		_G.RAID_CLASS_COLORS[class].colorStr = value.colorStr
+		-- _G.RAID_CLASS_COLORS[class].r = value.r
+		-- _G.RAID_CLASS_COLORS[class].g = value.g
+		-- _G.RAID_CLASS_COLORS[class].b = value.b
+		-- _G.RAID_CLASS_COLORS[class].colorStr = value.colorStr
 	end
 
 	C.r = C.ClassColors[C.MyClass].r
