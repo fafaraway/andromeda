@@ -84,7 +84,7 @@ local function SetupCVars()
 	SetCVar('floatingCombatTextCombatDamage', 1)
 	SetCVar('floatingCombatTextCombatHealing', 1)
 	SetCVar('floatingCombatTextFloatMode', 1) -- 1 up 2 down 3 curve
-	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 0) -- 0 old style 1-5 new style
+	SetCVar('floatingCombatTextCombatDamageDirectionalScale', 1) -- 0 old style 1-5 new style
 	SetCVar('floatingCombatTextCombatDamageDirectionalOffset', 4)
 
 	-- nameplates

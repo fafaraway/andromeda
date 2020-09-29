@@ -90,27 +90,33 @@ C['Assets'] = {
 }
 
 
+-- C.ClassList = {}
+-- for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+-- 	C.ClassList[v] = k
+-- end
+
+-- C.ClassColors = {}
+-- local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+-- for class, value in pairs(colors) do
+-- 	C.ClassColors[class] = {}
+-- 	C.ClassColors[class].r = value.r
+-- 	C.ClassColors[class].g = value.g
+-- 	C.ClassColors[class].b = value.b
+-- 	C.ClassColors[class].colorStr = value.colorStr
+-- end
+
+-- C.r = C.ClassColors[C.MyClass].r
+-- C.g = C.ClassColors[C.MyClass].g
+-- C.b = C.ClassColors[C.MyClass].b
+
+-- C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
+-- C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
+
 C.ClassList = {}
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
 	C.ClassList[v] = k
 end
-
 C.ClassColors = {}
-local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
-for class, value in pairs(colors) do
-	C.ClassColors[class] = {}
-	C.ClassColors[class].r = value.r
-	C.ClassColors[class].g = value.g
-	C.ClassColors[class].b = value.b
-	C.ClassColors[class].colorStr = value.colorStr
-end
-
-C.r = C.ClassColors[C.MyClass].r
-C.g = C.ClassColors[C.MyClass].g
-C.b = C.ClassColors[C.MyClass].b
-
-C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
-C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 C.InfoColor = '|cffe9c55d'
 C.YellowColor = '|cffffff00'
@@ -121,6 +127,7 @@ C.BlueColor = '|cff82c5ff'
 C.OrangeColor = '|cffff7f3f'
 C.PurpleColor = '|cffa571df'
 C.LineString = C.GreyColor..'---------------'
+
 
 C.QualityColors = {}
 local qualityColors = BAG_ITEM_QUALITY_COLORS

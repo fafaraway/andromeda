@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
+local COLORS = F.COLORS
 local oUF = F.oUF
 
 
@@ -33,6 +34,16 @@ function UNITFRAME:AddBackDrop(self)
 
 	local glow = F.CreateSD(self.Bg)
 	self.Glow = glow
+
+	if not self.unitStyle == 'player' then return end
+
+	local width = FreeDB.unitframe.player_width
+	local height = FreeDB.unitframe.class_power_bar_height
+
+	local holder = CreateFrame('Frame', nil, self)
+	holder:SetSize(width, height)
+	holder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+	self.classPowerBarHolder = holder
 end
 
 
@@ -113,7 +124,6 @@ local function PostUpdateHealth(self, unit, min, max)
 	local isOffline = not UnitIsConnected(unit)
 	local isDead = UnitIsDead(unit)
 	local isGhost = UnitIsGhost(unit)
-	local isTapped = not UnitPlayerControlled(unit) and UnitIsTapDenied(unit)
 
 	if isOffline then
 		self:SetValue(max)
@@ -127,11 +137,7 @@ local function PostUpdateHealth(self, unit, min, max)
 		end
 	end
 
-	if isOffline then
-		parent.Bg:SetBackdropColor(.4, .4, .4, .6)
-	elseif isTapped then
-		parent.Bg:SetBackdropColor(.4, .4, .4, .6)
-	elseif isDead or isGhost then
+	if isDead or isGhost then
 		parent.Bg:SetBackdropColor(0, 0, 0, .8)
 	else
 		parent.Bg:SetBackdropColor(.02, .02, .02, .5)
@@ -154,6 +160,14 @@ function UNITFRAME:AddHealthBar(self)
 	health:SetPoint('RIGHT')
 	health:SetPoint('BOTTOM', 0, C.Mult + FreeDB.unitframe.power_bar_height)
 	health:SetHeight(self:GetHeight() - FreeDB.unitframe.power_bar_height - C.Mult)
+
+	if not FreeDB.unitframe.transparent_mode then
+		local bg = health:CreateTexture(nil, 'BACKGROUND')
+		bg:SetAllPoints(health)
+		bg:SetTexture(C.Assets.bd_tex)
+		bg.multiplier = .25
+		health.bg = bg
+	end
 
 	F:SmoothBar(health)
 
@@ -233,26 +247,28 @@ local function PostUpdatePower(power, unit, cur, max, min)
 	local self = power:GetParent()
 	local style = self.unitStyle
 	local _, powerToken = UnitPowerType(unit)
-	-- local color = FreeADB['power_colors'][powerToken] or {1, 1, 1}
-	-- local r, g, b = color.r, color.g, color.b
+	local color = FreeADB['colors']['power'][powerToken] or {1, 1, 1}
+	local r, g, b = color.r, color.g, color.b
 
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		power:SetValue(0)
 	end
 
+	--power:SetStatusBarColor(r, g, b)
+
 	if C.MyClass == 'DEMONHUNTER' and C.classmod.havocFury and style == 'player' then
-		local spec, cp = GetSpecialization() or 0, UnitPower(unit)
-		if spec == 1 and cp < 15 then
+		local spec = GetSpecialization() or 0
+		if spec == 1 and cur < 15 then
 			power:SetStatusBarColor(.5, .5, .5)
-		elseif spec == 1 and cp < 40 then
+		elseif spec == 1 and cur < 40 then
 			power:SetStatusBarColor(1, 0, 0)
 		end
-	-- else
-	-- 	power:SetStatusBarColor(r, g, b)
 	end
 end
 
 function UNITFRAME:AddPowerBar(self)
+	local style = self.unitStyle
+
 	local power = CreateFrame('StatusBar', nil, self)
 	power:SetPoint('LEFT')
 	power:SetPoint('RIGHT')
@@ -275,7 +291,7 @@ function UNITFRAME:AddPowerBar(self)
 	local bg = power:CreateTexture(nil, 'BACKGROUND')
 	bg:SetAllPoints()
 	bg:SetTexture(C.Assets.bd_tex)
-	bg.multiplier = .2
+	bg.multiplier = .25
 	power.bg = bg
 
 	power.colorTapping = true
@@ -283,14 +299,12 @@ function UNITFRAME:AddPowerBar(self)
 	power.colorReaction = true
 	--power.colorSelection = true
 
-	if self.unitStyle == 'pet' then
+	if style == 'pet' or style == 'player' then
 		power.colorPower = true
+	elseif style == 'party' or style == 'raid' then
+		power.altPowerColor = true
 	else
-		if self.unitStyle == 'player' then
-			power.colorPower = true
-		else
-			power.colorClass = true
-		end
+		power.colorClass = true
 	end
 
 	self.Power.PostUpdate = PostUpdatePower
@@ -339,6 +353,16 @@ function UNITFRAME:AddAlternativePowerBar(self)
 
 	altPower.UpdateTooltip = UpdateTooltip
 	altPower:SetScript('OnEnter', altPowerOnEnter)
+
+	altPower:HookScript('OnShow', function()
+		self.classPowerBarHolder:ClearAllPoints()
+		self.classPowerBarHolder:SetPoint('TOPLEFT', altPower, 'BOTTOMLEFT', 0, -3)
+	end)
+
+	altPower:HookScript('OnHide', function()
+		self.classPowerBarHolder:ClearAllPoints()
+		self.classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+	end)
 
 	self.AlternativePower = altPower
 	self.AlternativePower.PostUpdate = PostUpdateAltPower
@@ -435,7 +459,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 			button.glow:SetBackdropBorderColor(1, 1, 1, .5)
 		end
 	elseif button.isDebuff and element.showDebuffType then
-		local color = oUF.colors.debuffType[debuffType] or oUF.colors.debuffType.none
+		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 
 		button.bg:SetBackdropColor(color[1], color[2], color[3])
 
@@ -576,7 +600,7 @@ function UNITFRAME:AddAuras(self)
 	auras:SetWidth(width)
 	auras:SetHeight((auras.size + auras.spacing) * maxLines)
 
-	auras.onlyShowPlayer = FreeDB.unitframe.only_show_player
+	auras.onlyShowPlayer = FreeDB.unitframe.debuffs_by_player
 	auras.showDebuffType = FreeDB.unitframe.debuff_type
 	auras.showStealableBuffs = FreeDB.unitframe.stealable_buffs
 	auras.CustomFilter = UNITFRAME.CustomFilter
@@ -1089,6 +1113,8 @@ function UNITFRAME.PostUpdateClassPower(element, cur, max, diff, powerType)
 			element[i].bg:Hide()
 		end
 	end
+
+
 end -- #TODO need a better way to update classpowerbar anchor
 
 function UNITFRAME.UpdateClassPowerColor(element)
@@ -1156,26 +1182,9 @@ function UNITFRAME:AddClassPowerBar(self)
 	local barWidth = FreeDB.unitframe.player_width
 	local barHeight = FreeDB.unitframe.class_power_bar_height
 
-	local bar = CreateFrame('Frame', 'oUF_ClassPowerBar', self)
-	bar:SetSize(barWidth, barHeight)
-
-	if self.AlternativePower:IsShown() then
-		bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
-	else
-		bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
-	end
-
-	self.AlternativePower:HookScript('OnShow', function()
-		bar:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
-	end)
-
-	self.AlternativePower:HookScript('OnHide', function()
-		bar:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
-	end)
-
 	local bars = {}
 	for i = 1, 6 do
-		bars[i] = CreateFrame('StatusBar', nil, bar)
+		bars[i] = CreateFrame('StatusBar', nil, self.classPowerBarHolder)
 		bars[i]:SetHeight(barHeight)
 		bars[i]:SetWidth((barWidth - 5*gap) / 6)
 		bars[i]:SetStatusBarTexture(C.Assets.statusbar_tex)
@@ -1189,7 +1198,7 @@ function UNITFRAME:AddClassPowerBar(self)
 			bars[i]:SetPoint('LEFT', bars[i-1], 'RIGHT', gap, 0)
 		end
 
-		bars[i].bg = bar:CreateTexture(nil, 'BACKGROUND')
+		bars[i].bg = self.classPowerBarHolder:CreateTexture(nil, 'BACKGROUND')
 		bars[i].bg:SetAllPoints(bars[i])
 		bars[i].bg:SetTexture(C.Assets.bd_tex)
 		bars[i].bg.multiplier = .25
@@ -1218,24 +1227,13 @@ function UNITFRAME:AddStagger(self)
 	if C.MyClass ~= 'MONK' then return end
 	if not FreeDB.unitframe.stagger_bar then return end
 
-	local stagger = CreateFrame('StatusBar', nil, self)
-	stagger:SetSize(self:GetWidth(), FreeDB.unitframe.class_power_bar_height)
+	local stagger = CreateFrame('StatusBar', nil, self.classPowerBarHolder)
+	stagger:SetAllPoints(self.classPowerBarHolder)
 	stagger:SetStatusBarTexture(C.Assets.statusbar_tex)
 
 	F.CreateBDFrame(stagger)
 
-	local function MoveStaggerBar()
-		if self.AlternativePower:IsShown() then
-			stagger:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', 0, -3)
-		else
-			stagger:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', 0, -3)
-		end
-	end
-	self.AlternativePower:HookScript('OnShow', MoveStaggerBar)
-	self.AlternativePower:HookScript('OnHide', MoveStaggerBar)
-	MoveStaggerBar()
-
-	local text = F.CreateFS(stagger, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, true)
+	local text = F.CreateFS(stagger, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK')
 	text:SetPoint('TOP', stagger, 'BOTTOM', 0, -4)
 	self:Tag(text, '[free:stagger]')
 
@@ -1266,7 +1264,7 @@ function UNITFRAME:AddTotems(self)
 	spacing = width + spacing
 
 	for slot = 1, maxTotems do
-		local totem = CreateFrame('StatusBar', nil, self)
+		local totem = CreateFrame('StatusBar', nil, self.classPowerBarHolder)
 		local color = totemsColor[slot]
 		local r, g, b = color[1], color[2], color[3]
 		totem:SetStatusBarTexture(C.Assets.statusbar_tex)
@@ -1274,20 +1272,7 @@ function UNITFRAME:AddTotems(self)
 		totem:SetSize(width, FreeDB.unitframe.class_power_bar_height)
 		F.CreateBDFrame(totem)
 
-		totem:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
-
-		--[[ local function MoveTotemsBar()
-			if(index == 1) then
-				if self.AlternativePower:IsShown() then
-					totem:SetPoint('TOPLEFT', self.AlternativePower, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
-				else
-					totem:SetPoint('TOPLEFT', self.Power, 'BOTTOMLEFT', (slot - 1) * spacing + 1, -3)
-				end
-			end
-		end
-		self.AlternativePower:HookScript('OnShow', MoveTotemsBar)
-		self.AlternativePower:HookScript('OnHide', MoveTotemsBar)
-		MoveTotemsBar() ]]
+		totem:SetPoint('TOPLEFT', self.classPowerBarHolder, 'TOPLEFT', (slot - 1) * spacing + 1, 0)
 
 		totems[slot] = totem
 	end
@@ -1355,7 +1340,6 @@ end
 
 function UNITFRAME:AddPvPIndicator(self)
 	if not FreeDB.unitframe.player_pvp_indicator then return end
-	if FreeDB.unitframe.player_hide_tags then return end
 
 	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)

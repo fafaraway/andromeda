@@ -3,108 +3,107 @@ local COLORS = F.COLORS
 local oUF = F.oUF
 
 
-oUF.colors.health = {.02, .02, .02}
-oUF.colors.disconnected = {.4, .4, .4}
-oUF.colors.tapped = {.6, .6, .6}
+COLORS.health = {.02, .02, .02}
+COLORS.dead = {0, 0, 0}
+COLORS.disconnected = {.4, .4, .4}
+COLORS.tapped = {.6, .6, .6}
 
-oUF.colors.smooth = {
+COLORS.smooth = {
 	1, 0, 0,
 	1, 1, 0,
 	0, 1, 0,
 }
 
-oUF.colors.debuffType = {
-	['Curse']   = {0.8, 0, 1},
-	['Disease'] = {0.8, 0.6, 0},
-	['Magic']   = {0, 0.8, 1},
-	['Poison']  = {0, 0.8, 0},
-	['none']    = {0, 0, 0}
-}
 
-oUF.colors.runes = {
+
+COLORS.runes = {
 	[1] = {151/255, 25/255, 0}, -- Blood
 	[2] = {193/255, 219/255, 233/255}, -- Frost
 	[3] = {98/255, 153/255, 51/255}, -- Unholy
 }
 
 
-function COLORS:UpdateColors()
-	local powerColor = FreeADB.colors.power
-	local reactionColor = FreeADB.colors.reaction
 
-	oUF.colors.power.MANA = {
-		powerColor.MANA.r,
-		powerColor.MANA.g,
-		powerColor.MANA.b
-	}
 
-	oUF.colors.power.RAGE = {
-		powerColor.RAGE.r,
-		powerColor.RAGE.g,
-		powerColor.RAGE.b
-	}
 
-	oUF.colors.power.FOCUS = {
-		powerColor.FOCUS.r,
-		powerColor.FOCUS.g,
-		powerColor.FOCUS.b
-	}
-
-	oUF.colors.power.ENERGY = {
-		powerColor.ENERGY.r,
-		powerColor.ENERGY.g,
-		powerColor.ENERGY.b
-	}
-
-	oUF.colors.power.RUNIC_POWER = {
-		powerColor.RUNIC_POWER.r,
-		powerColor.RUNIC_POWER.g,
-		powerColor.RUNIC_POWER.b
-	}
-
-	oUF.colors.power.LUNAR_POWER = {
-		powerColor.LUNAR_POWER.r,
-		powerColor.LUNAR_POWER.g,
-		powerColor.LUNAR_POWER.b
-	}
-
-	oUF.colors.power.MAELSTROM = {
-		powerColor.MAELSTROM.r,
-		powerColor.MAELSTROM.g,
-		powerColor.MAELSTROM.b
-	}
-
-	oUF.colors.power.INSANITY = {
-		powerColor.INSANITY.r,
-		powerColor.INSANITY.g,
-		powerColor.INSANITY.b
-	}
-
-	oUF.colors.power.FURY = {
-		powerColor.FURY.r,
-		powerColor.FURY.g,
-		powerColor.FURY.b
-	}
-
-	oUF.colors.power.PAIN = {
-		powerColor.PAIN.r,
-		powerColor.PAIN.g,
-		powerColor.PAIN.b
-	}
-
-	oUF.colors.reaction = {
-		[1] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
-		[2] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
-		[3] = {reactionColor.hostile.r, reactionColor.hostile.g, reactionColor.hostile.b},
-		[4] = {reactionColor.neutral.r, reactionColor.neutral.g, reactionColor.neutral.b},
-		[5] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
-		[6] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
-		[7] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
-		[8] = {reactionColor.friendly.r, reactionColor.friendly.g, reactionColor.friendly.b},
+local function SetDebuffTypeColors()
+	oUF.colors.debuff = {
+		['Curse']   = {0.8, 0, 1},
+		['Disease'] = {0.8, 0.6, 0},
+		['Magic']   = {0, 0.8, 1},
+		['Poison']  = {0, 0.8, 0},
+		['none']    = {0, 0, 0}
 	}
 end
 
+local function SetClassColors()
+	local colors = FreeADB.colors.class
+
+	for class, value in pairs(colors) do
+		oUF.colors.class[class] = {value.r, value.g, value.b}
+	end
+end
+
+local function SetPowerColors()
+	local colors = FreeADB.colors.power
+
+	for type, value in pairs(colors) do
+		oUF.colors.power[type] = {value.r, value.g, value.b}
+	end
+end
+
+local function SetClassPowerColors()
+	local colors = FreeADB.colors.class_power
+
+	for type, value in pairs(colors) do
+		oUF.colors.power[type] = {value.r, value.g, value.b}
+	end
+end
+
+local function SetRuneColors()
+	local colors = FreeADB.colors.dk_rune
+
+	oUF.colors.runes = {
+		{colors.blood.r, colors.blood.g, colors.blood.b},
+		{colors.frost.r, colors.frost.g, colors.frost.b},
+		{colors.unholy.r, colors.unholy.g, colors.unholy.b},
+	}
+end
+
+local function SetReactionColors()
+	local color = FreeADB.colors.reaction
+
+	oUF.colors.reaction = {
+		[1] = {color.hostile.r, color.hostile.g, color.hostile.b},
+		[2] = {color.hostile.r, color.hostile.g, color.hostile.b},
+		[3] = {color.hostile.r, color.hostile.g, color.hostile.b},
+		[4] = {color.neutral.r, color.neutral.g, color.neutral.b},
+		[5] = {color.friendly.r, color.friendly.g, color.friendly.b},
+		[6] = {color.friendly.r, color.friendly.g, color.friendly.b},
+		[7] = {color.friendly.r, color.friendly.g, color.friendly.b},
+		[8] = {color.friendly.r, color.friendly.g, color.friendly.b},
+	}
+end
+
+function COLORS:UpdateColors()
+	SetClassColors()
+	SetPowerColors()
+	SetClassPowerColors()
+	SetRuneColors()
+	SetReactionColors()
+end
+
+
+
+
+
+
 
 function COLORS:OnLogin()
-	COLORS:UpdateColors()
+	SetDebuffTypeColors()
+	SetClassColors()
+	SetPowerColors()
+	SetClassPowerColors()
+	SetRuneColors()
+	SetReactionColors()
 end

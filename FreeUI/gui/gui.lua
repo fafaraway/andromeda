@@ -10,7 +10,6 @@ local guiTab, guiPage = {}, {}
 local tabsList = {
 	'APPEARANCE',
 	'NOTIFICATION',
-	'ANNOUNCEMENT',
 	'INFOBAR',
 	'CHAT',
 	'AURA',
@@ -30,7 +29,6 @@ local tabsList = {
 local iconsList = {
 	'Interface\\ICONS\\Ability_Hunter_BeastWithin',
 	'Interface\\ICONS\\Ability_Mage_ColdAsIce',
-	'Interface\\ICONS\\Ability_Warrior_RallyingCry',
 	'Interface\\ICONS\\INV_Misc_Horn_04',
 	'Interface\\ICONS\\Spell_Shadow_Seduction',
 	'Interface\\ICONS\\Spell_Shadow_Shadesofdarkness',
@@ -49,7 +47,13 @@ local iconsList = {
 
 
 local function SaveValue(key, value, newValue)
-	if key == 'POWER_COLORS' then
+	if key == 'CLASS_COLORS' then
+		if newValue ~= nil then
+			FreeADB['colors']['class'][value] = newValue
+		else
+			return FreeADB['colors']['class'][value]
+		end
+	elseif key == 'POWER_COLORS' then
 		if newValue ~= nil then
 			FreeADB['colors']['power'][value] = newValue
 		else
@@ -60,6 +64,12 @@ local function SaveValue(key, value, newValue)
 			FreeADB['colors']['class_power'][value] = newValue
 		else
 			return FreeADB['colors']['class_power'][value]
+		end
+	elseif key == 'RUNE_COLORS' then
+		if newValue ~= nil then
+			FreeADB['colors']['dk_rune'][value] = newValue
+		else
+			return FreeADB['colors']['dk_rune'][value]
 		end
 	elseif key == 'REACTION_COLORS' then
 		if newValue ~= nil then
@@ -226,11 +236,11 @@ local function CreateTab(parent, i, name)
 
 	tab.index = i
 
-	if tab.index >= 16 then
-		tab:SetPoint('TOPLEFT', 10, -31*i - 30)
-	else
-		tab:SetPoint('TOPLEFT', 10, -31*i - 20)
-	end
+	-- if tab.index >= 15 then
+	-- 	tab:SetPoint('TOPLEFT', 10, -31*i - 30)
+	-- else
+	tab:SetPoint('TOPLEFT', 10, -31*i - 20)
+	-- end
 
 	parent[name] = tab
 

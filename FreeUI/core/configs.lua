@@ -459,7 +459,7 @@ C['NPSpecialUnitsList'] = {
 	[GetSectionInfo(19393)] = true,	-- 雪怒之魂
 	[GetSectionInfo(19279)] = true,	-- 谄媚海妖
 	[GetSectionInfo(19019)] = true,	-- 贪婪的追猎者
-	["爆裂工虫"] = true,
+	['爆裂工虫'] = true,
 	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
 	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
 	[GetSectionInfo(21329)] = true,	-- 聚合增生
@@ -615,6 +615,7 @@ C.CharacterSettings = {
 
 	['unitframe'] = {
 		['enable_unitframe'] = true,
+			['transparent_mode'] = true,
 			['combat_fader'] = true,
 				['fader_alpha'] = 0,
 				['fader_smooth'] = true,
@@ -646,13 +647,13 @@ C.CharacterSettings = {
 
 			['class_power_bar'] = true,
 				['class_power_bar_height'] = 2,
-			['runes_timer'] = true,
+			['runes_timer'] = false,
 			['stagger_bar'] = true,
 			['totems_bar'] = true,
 
 			['debuff_type'] = true,
 			['stealable_buffs'] = true,
-			['only_show_player'] = true,
+			['debuffs_by_player'] = true,
 
 			['enable_castbar'] = true,
 				['casting_color'] = {r=.43, g=.69, b=.85},
@@ -1028,6 +1029,81 @@ C.AccountSettings = {
 	},
 
 	['colors'] = {
+		['class'] = {
+			['HUNTER'] = {
+				['b'] = 0.2549019607843137,
+				['colorStr'] = 'ff33b541',
+				['g'] = 0.7098039215686275,
+				['r'] = 0.2,
+			},
+			['WARRIOR'] = {
+				['b'] = 0.392156862745098,
+				['colorStr'] = 'ffc79b64',
+				['g'] = 0.6078431372549019,
+				['r'] = 0.7803921568627451,
+			},
+			['PALADIN'] = {
+				['b'] = 0.4235294117647059,
+				['colorStr'] = 'ffee556c',
+				['g'] = 0.3333333333333333,
+				['r'] = 0.9333333333333333,
+			},
+			['MAGE'] = {
+				['b'] = 0.8901960784313725,
+				['colorStr'] = 'ff7ea8e3',
+				['g'] = 0.6588235294117647,
+				['r'] = 0.4941176470588236,
+			},
+			['PRIEST'] = {
+				['b'] = 0.8313725490196078,
+				['colorStr'] = 'ffd3d3d3',
+				['g'] = 0.8313725490196078,
+				['r'] = 0.8313725490196078,
+			},
+			['DEATHKNIGHT'] = {
+				['b'] = 0.2235294117647059,
+				['colorStr'] = 'ffc32838',
+				['g'] = 0.1568627450980392,
+				['r'] = 0.7686274509803921,
+			},
+			['WARLOCK'] = {
+				['b'] = 0.8784313725490196,
+				['colorStr'] = 'ffa5a3e0',
+				['g'] = 0.6392156862745098,
+				['r'] = 0.6470588235294118,
+			},
+			['DEMONHUNTER'] = {
+				['b'] = 0.8901960784313725,
+				['colorStr'] = 'ffd259e3',
+				['g'] = 0.3490196078431372,
+				['r'] = 0.8235294117647058,
+			},
+			['ROGUE'] = {
+				['b'] = 0.4980392156862745,
+				['colorStr'] = 'ffe9cb7f',
+				['g'] = 0.796078431372549,
+				['r'] = 0.9137254901960784,
+			},
+			['DRUID'] = {
+				['b'] = 0.2666666666666667,
+				['colorStr'] = 'fff27944',
+				['g'] = 0.4784313725490196,
+				['r'] = 0.9490196078431372,
+			},
+			['MONK'] = {
+				['b'] = 0.6,
+				['colorStr'] = 'ff48d599',
+				['g'] = 0.8352941176470589,
+				['r'] = 0.2823529411764706,
+			},
+			['SHAMAN'] = {
+				['b'] = 0.8156862745098039,
+				['colorStr'] = 'ff4949d0',
+				['g'] = 0.2901960784313725,
+				['r'] = 0.2901960784313725,
+			},
+		},
+
 		['power'] = {
 			['PAIN']        = {b = 0.00, g = 0.61, r = 1.00},
 			['FURY']        = {b = 0.99, g = 0.26, r = 0.79},
@@ -1042,18 +1118,78 @@ C.AccountSettings = {
 		},
 
 		['class_power'] = {
-			['soul_shards']    = {r = 0.87, g = 0.24, b = 0.8},
-			['chi_orbs']       = {r = 0.49, g = 0.89, b = 0.76},
-			['arcane_charges'] = {r = 0.31, g = 0.53, b = 0.91},
-			['holy_power']     = {r = 0.95, g = 0.83, b = 0.53},
-			['combo_points']   = {r = 0.93, g = 0.28, b = 0.22},
+			['soul_shards'] = {
+				['b'] = 0.8705882352941177,
+				['colorStr'] = 'ff8e47de',
+				['g'] = 0.2784313725490196,
+				['r'] = 0.5568627450980392,
+			},
+			['chi_orbs'] = {
+				['b'] = 0.6980392156862745,
+				['colorStr'] = 'ff6cd8b2',
+				['g'] = 0.8470588235294118,
+				['r'] = 0.4235294117647059,
+			},
+			['arcane_charges'] = {
+				['b'] = 0.8627450980392157,
+				['colorStr'] = 'ff4e75dc',
+				['g'] = 0.4588235294117647,
+				['r'] = 0.3058823529411765,
+			},
+			['holy_power'] = {
+				['b'] = 0.5372549019607843,
+				['colorStr'] = 'ffe8c989',
+				['g'] = 0.788235294117647,
+				['r'] = 0.9098039215686274,
+			},
+			['combo_points'] = {
+				['b'] = 0.2274509803921569,
+				['colorStr'] = 'ffed3c3a',
+				['g'] = 0.2392156862745098,
+				['r'] = 0.9294117647058824,
+			},
+		},
+
+		['dk_rune'] = {
+			['unholy'] = {
+				['b'] = 0.3686274509803922,
+				['colorStr'] = 'ff77c95e',
+				['g'] = 0.788235294117647,
+				['r'] = 0.4666666666666667,
+			},
+			['frost'] = {
+				['b'] = 0.788235294117647,
+				['colorStr'] = 'ff5573c9',
+				['g'] = 0.4509803921568628,
+				['r'] = 0.3333333333333333,
+			},
+			['blood'] = {
+				['b'] = 0.1568627450980392,
+				['colorStr'] = 'ffbb2828',
+				['g'] = 0.1568627450980392,
+				['r'] = 0.7333333333333333,
+			},
 		},
 
 		['reaction'] = {
-			['hostile']  = {r = 0.91, g = 0.16, b = 0.21}, -- hostile
-			['neutral']  = {r = 1.00, g = 0.93, b = 0.47}, -- neutral
-			['friendly'] = {r = 0.34, g = 1.00, b = 0.36}, -- friendly
-
+			['neutral'] = {
+				['b'] = 0.4549019607843137,
+				['colorStr'] = 'ffffdb74',
+				['g'] = 0.8588235294117647,
+				['r'] = 1,
+			},
+			['hostile'] = {
+				['b'] = 0.2078431372549019,
+				['colorStr'] = 'ffd33734',
+				['g'] = 0.2156862745098039,
+				['r'] = 0.8313725490196078,
+			},
+			['friendly'] = {
+				['b'] = 0.4745098039215686,
+				['colorStr'] = 'ff71e079',
+				['g'] = 0.8784313725490196,
+				['r'] = 0.4431372549019608,
+			},
 		},
 	}
 
@@ -1115,6 +1251,29 @@ f:SetScript('OnEvent', function(self, _, addon)
 	F:SetupUIScale(true)
 
 	C.Assets.statusbar_tex = textureList[FreeADB.texture_style]
+
+
+	local colors = FreeADB.colors.class
+
+	for class, value in pairs(colors) do
+		C.ClassColors[class] = {}
+		C.ClassColors[class].r = value.r
+		C.ClassColors[class].g = value.g
+		C.ClassColors[class].b = value.b
+		C.ClassColors[class].colorStr = value.colorStr
+
+		_G.RAID_CLASS_COLORS[class].r = value.r
+		_G.RAID_CLASS_COLORS[class].g = value.g
+		_G.RAID_CLASS_COLORS[class].b = value.b
+		_G.RAID_CLASS_COLORS[class].colorStr = value.colorStr
+	end
+
+	C.r = C.ClassColors[C.MyClass].r
+	C.g = C.ClassColors[C.MyClass].g
+	C.b = C.ClassColors[C.MyClass].b
+
+	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
+	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 	self:UnregisterAllEvents()
 end)
