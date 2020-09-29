@@ -2,59 +2,6 @@ local F, C = unpack(select(2, ...))
 
 
 
-
-
-
-
---[[ C['General'] = {
-
-	['number_format'] = 1,
-
-	['blizz_mover'] = true,
-	['already_known'] = true,
-	['hide_boss_banner'] = true,
-	['hide_talking_head'] = true,
-	['item_level'] = true,
-		['merchant_ilvl'] = true,
-		['gem_enchant'] = true,
-		['azerite_traits'] = true,
-	['tidy_errors'] =true,
-	['mail_button'] = true,
-	['undress_button'] = true,
-	['trade_target_info'] = true,
-	['trade_tabs'] = true,
-	['missing_stats'] = true,
-	['pet_filter'] = true,
-	['account_keystone'] = true,
-	['queue_timer'] = true,
-	['color_picker'] = true,
-	['whistle'] = true,
-
-	['group_tool'] = true,
-	['action_camera'] = true,
-	['faster_camera'] = true,
-
-	['block_stranger_invite'] = false,
-	['instant_loot'] = true,
-	['easy_mark'] = true,
-	['easy_delete'] = true,
-	['easy_naked'] = true,
-	['easy_focus'] = true,
-		['easy_focus_on_unitframes'] = false,
-} ]]
-
-
-
-
-
-
-
-
-C['classmod'] = {
-	['havocFury'] = true,
-}
-
-
 C['ReminderBuffsList'] = {
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
@@ -208,9 +155,9 @@ C['ClassBuffsList'] = {
 }
 
 
-C['RaidDebuffsList'] = {}
+C['RaidDebuffsList'] = {
 
-
+}
 
 
 C['PartySpellsList'] = {
@@ -485,10 +432,6 @@ C.CharacterSettings = {
 	['ui_anchor_temp'] = {},
 
 
-
-
-
-
 	['item_level'] = true,
 		['merchant_ilvl'] = true,
 		['gem_enchant'] = true,
@@ -518,7 +461,6 @@ C.CharacterSettings = {
 			['conjure_refreshment'] = true,
 			['special_toy'] = true,
 	},
-
 
 	['blizzard'] = {
 		['hide_talkinghead'] = true,
@@ -555,8 +497,6 @@ C.CharacterSettings = {
 				['fct_in'] = true,
 				['fct_out'] = true,
 	},
-
-
 
 	['quest'] = {
 		['enable_quest'] = true,
@@ -1192,8 +1132,8 @@ C.AccountSettings = {
 			},
 		},
 	}
-
 }
+
 
 local textureList = {
 	[1] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
@@ -1226,13 +1166,6 @@ local function initSettings(source, target, fullClean)
 		end
 	end
 end
-
-
-
-
-
-
-
 
 
 local f = CreateFrame('Frame')

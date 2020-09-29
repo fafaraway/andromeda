@@ -106,9 +106,7 @@ local function OverrideHealth(self, event, unit)
 
 	health:SetMinMaxValues(0, max)
 
-	if isOffline then
-		health:SetValue(max)
-	elseif isDead or isGhost then
+	if isDead or isGhost or isOffline then
 		self:SetValue(0)
 	else
 		if max == cur then
@@ -125,9 +123,7 @@ local function PostUpdateHealth(self, unit, min, max)
 	local isDead = UnitIsDead(unit)
 	local isGhost = UnitIsGhost(unit)
 
-	if isOffline then
-		self:SetValue(max)
-	elseif isDead or isGhost then
+	if isDead or isGhost or isOffline then
 		self:SetValue(0)
 	else
 		if max == min then
@@ -139,6 +135,8 @@ local function PostUpdateHealth(self, unit, min, max)
 
 	if isDead or isGhost then
 		parent.Bg:SetBackdropColor(0, 0, 0, .8)
+	elseif isOffline then
+		parent.Bg:SetBackdropColor(.4, .4, .4, .5)
 	else
 		parent.Bg:SetBackdropColor(.02, .02, .02, .5)
 	end
@@ -246,22 +244,17 @@ end
 local function PostUpdatePower(power, unit, cur, max, min)
 	local self = power:GetParent()
 	local style = self.unitStyle
-	local _, powerToken = UnitPowerType(unit)
-	local color = FreeADB['colors']['power'][powerToken] or {1, 1, 1}
-	local r, g, b = color.r, color.g, color.b
 
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		power:SetValue(0)
 	end
 
-	--power:SetStatusBarColor(r, g, b)
-
-	if C.MyClass == 'DEMONHUNTER' and C.classmod.havocFury and style == 'player' then
+	if C.MyClass == 'DEMONHUNTER' and style == 'player' and C.isDeveloper then
 		local spec = GetSpecialization() or 0
 		if spec == 1 and cur < 15 then
 			power:SetStatusBarColor(.5, .5, .5)
 		elseif spec == 1 and cur < 40 then
-			power:SetStatusBarColor(1, 0, 0)
+			power:SetStatusBarColor(0, .61, 0)
 		end
 	end
 end
