@@ -453,7 +453,7 @@ C.Themes["Blizzard_Collections"] = function()
 			local header = HeirloomsJournal.heirloomHeaderFrames[i]
 			if not header.styled then
 				header.text:SetTextColor(1, 1, 1)
-				header.text:SetFont(C.HeaderFont, 16, "OUTLINE")
+				header.text:SetFont(C.Assets.Fonts.Header, 16, "OUTLINE")
 
 				header.styled = true
 			end
