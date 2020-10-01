@@ -254,7 +254,7 @@ local function PostUpdatePower(power, unit, cur, max, min)
 		if spec == 1 and cur < 15 then
 			power:SetStatusBarColor(.5, .5, .5)
 		elseif spec == 1 and cur < 40 then
-			power:SetStatusBarColor(0, .61, 0)
+			power:SetStatusBarColor(1, .8, 0)
 		end
 	end
 end
@@ -294,8 +294,8 @@ function UNITFRAME:AddPowerBar(self)
 
 	if style == 'pet' or style == 'player' then
 		power.colorPower = true
-	elseif style == 'party' or style == 'raid' then
-		power.altPowerColor = true
+	-- elseif style == 'party' or style == 'raid' then
+	-- 	power.altPowerColor = true
 	else
 		power.colorClass = true
 	end
