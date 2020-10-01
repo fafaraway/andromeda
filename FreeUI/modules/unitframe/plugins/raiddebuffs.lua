@@ -120,10 +120,10 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
 			end
 		end
 
-		local c = oUF.colors.debuffType[debuffType] or oUF.colors.debuffType.none
+		local c = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 		if rd.ShowDebuffBorder then
 			if rd.bg then
-				rd.bg:SetBackdropBorderColor(c[1], c[2], c[3])	
+				rd.bg:SetBackdropBorderColor(c[1], c[2], c[3])
 			end
 
 			if rd.glow then
