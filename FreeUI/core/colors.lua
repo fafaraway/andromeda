@@ -3,29 +3,6 @@ local COLORS = F.COLORS
 local oUF = F.oUF
 
 
-COLORS.health = {.02, .02, .02}
-COLORS.dead = {0, 0, 0}
-COLORS.disconnected = {.4, .4, .4}
-COLORS.tapped = {.6, .6, .6}
-
-COLORS.smooth = {
-	1, 0, 0,
-	1, 1, 0,
-	0, 1, 0,
-}
-
-
-
-COLORS.runes = {
-	[1] = {151/255, 25/255, 0}, -- Blood
-	[2] = {193/255, 219/255, 233/255}, -- Frost
-	[3] = {98/255, 153/255, 51/255}, -- Unholy
-}
-
-
-
-
-
 local function SetDebuffTypeColors()
 	oUF.colors.debuff = {
 		['Curse']   = {0.8, 0, 1},
@@ -92,11 +69,6 @@ function COLORS:UpdateColors()
 	SetRuneColors()
 	SetReactionColors()
 end
-
-
-
-
-
 
 
 function COLORS:OnLogin()

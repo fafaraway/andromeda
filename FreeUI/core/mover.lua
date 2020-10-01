@@ -70,13 +70,13 @@ function F:CreateMF(parent, saved)
 	frame:SetClampedToScreen(true)
 
 	self:EnableMouse(true)
-	self:RegisterForDrag("LeftButton")
-	self:SetScript("OnDragStart", function() frame:StartMoving() end)
-	self:SetScript("OnDragStop", function()
+	self:RegisterForDrag('LeftButton')
+	self:SetScript('OnDragStart', function() frame:StartMoving() end)
+	self:SetScript('OnDragStop', function()
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
-		FreeDB['ui_anchor_temp'][frame:GetName()] = {orig, "UIParent", tar, x, y}
+		FreeDB['ui_anchor_temp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
 	end)
 end
 
@@ -143,18 +143,18 @@ function MOVER:CalculateMoverPoints(mover, trimX, trimY)
 	local point
 
 	if y >= TOP then
-		point = "TOP"
+		point = 'TOP'
 		y = -(screenHeight - mover:GetTop())
 	else
-		point = "BOTTOM"
+		point = 'BOTTOM'
 		y = mover:GetBottom()
 	end
 
 	if x >= RIGHT then
-		point = point.."RIGHT"
+		point = point..'RIGHT'
 		x = mover:GetRight() - screenWidth
 	elseif x <= LEFT then
-		point = point.."LEFT"
+		point = point..'LEFT'
 		x = mover:GetLeft()
 	else
 		x = x - screenCenter
@@ -187,14 +187,14 @@ function MOVER:DoTrim(trimX, trimY)
 		f.__y.__current = y
 		mover:ClearAllPoints()
 		mover:SetPoint(point, UIParent, point, x, y)
-		FreeDB[mover.__key][mover.__value] = {point, "UIParent", point, x, y}
+		FreeDB[mover.__key][mover.__value] = {point, 'UIParent', point, x, y}
 	end
 end
 
 function MOVER:Mover_OnClick(btn)
-	if IsShiftKeyDown() and btn == "RightButton" then
+	if IsShiftKeyDown() and btn == 'RightButton' then
 		self:Hide()
-	elseif IsControlKeyDown() and btn == "RightButton" then
+	elseif IsControlKeyDown() and btn == 'RightButton' then
 		self:ClearAllPoints()
 		self:SetPoint(unpack(self.__anchor))
 		FreeDB[self.__key][self.__value] = nil
@@ -227,8 +227,8 @@ function MOVER:Mover_OnDragStop()
 	y = F:Round(y)
 
 	self:ClearAllPoints()
-	self:SetPoint(orig, "UIParent", tar, x, y)
-	FreeDB[self.__key][self.__value] = {orig, "UIParent", tar, x, y}
+	self:SetPoint(orig, 'UIParent', tar, x, y)
+	FreeDB[self.__key][self.__value] = {orig, 'UIParent', tar, x, y}
 	MOVER.UpdateTrimFrame(self)
 	updater:Hide()
 end
