@@ -251,7 +251,7 @@ function UNITFRAME:SpawnBoss()
 	for i = 1,  _G.MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn('boss'..i, 'oUF_Boss'..i)
 		if i == 1 then
-			boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 120, 160}, FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)
+			boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 150, 120}, FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)
 		else
 			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, FreeDB.unitframe.boss_gap)
 		end
@@ -343,7 +343,7 @@ function UNITFRAME:SpawnParty()
 		'groupBy', FreeDB.unitframe.group_by_role and 'ASSIGNEDROLE',
 		'groupingOrder', FreeDB.unitframe.group_by_role and 'TANK,HEALER,DAMAGER,NONE')
 
-	mover = F.Mover(party, L['UNITFRAME_MOVER_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -80, 80}, FreeDB.unitframe.party_width, ((FreeDB.unitframe.party_height * 5) + (FreeDB.unitframe.party_gap * 4)))
+	mover = F.Mover(party, L['UNITFRAME_MOVER_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, FreeDB.unitframe.party_width, ((FreeDB.unitframe.party_height * 5) + (FreeDB.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
 	party:SetPoint('BOTTOMRIGHT', mover)
 end
