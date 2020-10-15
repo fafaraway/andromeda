@@ -1,6 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local r, g, b = C.r, C.g, C.b
 local select, pairs = select, pairs
 
 local function reskinQuestIcon(button)
@@ -120,6 +119,8 @@ local function updateMawBuffInfo(button, buffInfo)
 end
 
 tinsert(C.BlizzThemes, function()
+	local r, g, b = C.r, C.g, C.b
+
 	-- QuestIcons
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)
 	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)

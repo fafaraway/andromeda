@@ -113,8 +113,6 @@ F:RegisterEvent('PLAYER_LOGIN', function()
 		F:SetupUIScale()
 		F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
 
-		F.HideOption(_G.Advanced_UseUIScale)
-		F.HideOption(_G.Advanced_UIScaleSlider)
 	else
 		F:SetupUIScale(true)
 	end

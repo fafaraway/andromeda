@@ -4,8 +4,8 @@ local function ReskinReagentButton(reagent)
 	reagent.bg = F.ReskinIcon(reagent.Icon)
 	reagent.NameFrame:Hide()
 	local bg = F.CreateBDFrame(reagent.NameFrame, .2)
-	bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.mult)
-	bg:SetPoint("BOTTOMRIGHT", -4, C.mult)
+	bg:SetPoint("TOPLEFT", reagent.Icon, "TOPRIGHT", 2, C.Mult)
+	bg:SetPoint("BOTTOMRIGHT", -4, C.Mult)
 	if reagent.SelectedTexture then
 		reagent.SelectedTexture:SetColorTexture(1, 1, 1, .25)
 		reagent.SelectedTexture:SetInside(reagent.bg)
@@ -166,7 +166,7 @@ C.Themes["Blizzard_TradeSkillUI"] = function()
 
 				button.NameFrame:Hide()
 				local bg = F.CreateBDFrame(button.NameFrame, .2)
-				bg:SetPoint("TOPLEFT", button.Icon, "TOPRIGHT", 2, C.mult)
+				bg:SetPoint("TOPLEFT", button.Icon, "TOPRIGHT", 2, C.Mult)
 				bg:SetPoint("BOTTOMRIGHT", -4, 5)
 			end
 		end

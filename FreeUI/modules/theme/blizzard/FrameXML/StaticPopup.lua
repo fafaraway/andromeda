@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local r, g, b = C.r, C.g, C.b
 
 local function colorMinimize(f)
 	if f:IsEnabled() then
@@ -13,6 +12,8 @@ end
 
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
+
+	local r, g, b = C.r, C.g, C.b
 
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]

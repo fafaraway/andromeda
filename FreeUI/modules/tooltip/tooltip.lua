@@ -196,7 +196,7 @@ function TOOLTIP:ReskinStatusBar()
 	self.StatusBar:SetPoint('BOTTOMRIGHT', GameTooltip, 'TOPRIGHT', -1, -4)
 	self.StatusBar:SetStatusBarTexture(C.Assets.norm_tex)
 	self.StatusBar:SetHeight(3)
-	F.CreateBDFrame(self.StatusBar)
+	F.SetBD(self.StatusBar)
 end
 
 function TOOLTIP:GameTooltip_ShowStatusBar()
@@ -302,13 +302,6 @@ end
 
 
 -- Tooltip skin
-local fakeBg = CreateFrame('Frame', nil, UIParent)
-fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
-
-local function getBackdrop() return fakeBg:GetBackdrop() end
-local function getBackdropColor() return 0, 0, 0, 1 end
-local function getBackdropBorderColor() return 0, 0, 0 end
-
 function TOOLTIP:ReskinTooltip()
 	if not self then
 		if C.isDeveloper then F.Print('Unknown tooltip spotted.') end
@@ -318,20 +311,20 @@ function TOOLTIP:ReskinTooltip()
 	self:SetScale(1)
 
 	if not self.tipStyled then
-		self:SetBackdrop(nil)
+		if self.SetBackdrop then self:SetBackdrop(nil) end
 		self:DisableDrawLayer('BACKGROUND')
-		self.bg = F.CreateBDFrame(self, nil, true)
+		self.bg = F.SetBD(self)
 		self.bg:SetInside(self)
 		self.bg:SetFrameLevel(self:GetFrameLevel())
-		F.CreateTex(self.bg)
-
-		-- other gametooltip-like support
-		self.GetBackdrop = getBackdrop
-		self.GetBackdropColor = getBackdropColor
-		self.GetBackdropBorderColor = getBackdropBorderColor
 
 		if self.StatusBar then
 			TOOLTIP.ReskinStatusBar(self)
+		end
+
+		if self.GetBackdrop then
+			self.GetBackdrop = self.bg.GetBackdrop
+			self.GetBackdropColor = self.bg.GetBackdropColor
+			self.GetBackdropBorderColor = self.bg.GetBackdropBorderColor
 		end
 
 		self.tipStyled = true
@@ -357,7 +350,7 @@ function TOOLTIP:ReskinTooltip()
 	end
 end
 
-function TOOLTIP:GameTooltip_SetBackdropStyle()
+function TOOLTIP:SharedTooltip_SetBackdropStyle()
 	if not self.tipStyled then return end
 	self:SetBackdrop(nil)
 end
@@ -409,13 +402,13 @@ function TOOLTIP:OnLogin()
 		end
 	end
 
-	GameTooltip:HookScript('OnTooltipCleared', self.OnTooltipCleared)
-	GameTooltip:HookScript('OnTooltipSetUnit', self.OnTooltipSetUnit)
-	hooksecurefunc('GameTooltip_ShowStatusBar', self.GameTooltip_ShowStatusBar)
-	hooksecurefunc('GameTooltip_ShowProgressBar', self.GameTooltip_ShowProgressBar)
-	hooksecurefunc('GameTooltip_SetDefaultAnchor', self.GameTooltip_SetDefaultAnchor)
-	hooksecurefunc('GameTooltip_SetBackdropStyle', self.GameTooltip_SetBackdropStyle)
-	hooksecurefunc('GameTooltip_AnchorComparisonTooltips', self.GameTooltip_ComparisonFix)
+	GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
+	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
+	hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
+	hooksecurefunc('GameTooltip_ShowProgressBar', TOOLTIP.GameTooltip_ShowProgressBar)
+	hooksecurefunc('GameTooltip_SetDefaultAnchor', TOOLTIP.GameTooltip_SetDefaultAnchor)
+	hooksecurefunc('SharedTooltip_SetBackdropStyle', TOOLTIP.SharedTooltip_SetBackdropStyle)
+	hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
 
 	GameTooltip:HookScript('OnTooltipCleared', function(self)
 		self.ttUpdate = 1
@@ -436,13 +429,13 @@ function TOOLTIP:OnLogin()
 
 	GameTooltip_OnTooltipAddMoney = F.Dummy
 
-	self:SetTooltipFonts()
-	self:ReskinTooltipIcons()
-	self:LinkHover()
-	self:ExtraInfo()
-	self:TargetedInfo()
-	self:AzeriteArmor()
-	self:ShowPvPRating()
+	TOOLTIP:SetTooltipFonts()
+	TOOLTIP:ReskinTooltipIcons()
+	TOOLTIP:LinkHover()
+	TOOLTIP:ExtraInfo()
+	TOOLTIP:TargetedInfo()
+	TOOLTIP:AzeriteArmor()
+	TOOLTIP:ShowPvPRating()
 end
 
 
@@ -475,9 +468,9 @@ TOOLTIP:RegisterTooltips('FreeUI', function()
 		AutoCompleteBox,
 		FriendsTooltip,
 		QuestScrollFrame.StoryTooltip,
+		QuestScrollFrame.CampaignTooltip,
 		GeneralDockManagerOverflowButtonList,
 		ReputationParagonTooltip,
-		QuestScrollFrame.WarCampaignTooltip,
 		NamePlateTooltip,
 		QueueStatusFrame,
 		FloatingGarrisonFollowerTooltip,
@@ -492,7 +485,8 @@ TOOLTIP:RegisterTooltips('FreeUI', function()
 		PetBattlePrimaryUnitTooltip,
 		FloatingBattlePetTooltip,
 		FloatingPetBattleAbilityTooltip,
-		IMECandidatesFrame
+		IMECandidatesFrame,
+		QuickKeybindTooltip
 	}
 	for _, f in pairs(tooltips) do
 		f:HookScript('OnShow', TOOLTIP.ReskinTooltip)

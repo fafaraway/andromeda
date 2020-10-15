@@ -1,7 +1,7 @@
-## Interface: 80200
+## Interface: 90001
 ## Title: oUF
 ## Author: Haste, lightspark, p3lim, Rainrider
-## Version: @project-version@
+## Version: 10.0.1
 ## Notes: Unit frame framework. Does nothing by itself.
 ## OptionalDeps: Clique
 ## X-oUF: oUF

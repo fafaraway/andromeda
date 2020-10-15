@@ -1,5 +1,5 @@
 #@retail@
-## Interface: 80300
+## Interface: 90001
 #@end-retail@
 ## Version: @project-version@
 ## Title: |cffffffffFree|r|cffb2b2b2UI|r

@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local r, g, b = C.r, C.g, C.b
 
 local function clearHighlight()
 	for _, button in pairs(QuestInfoRewardsFrame.RewardButtons) do
@@ -114,6 +113,8 @@ end
 
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
+
+	local r, g, b = C.r, C.g, C.b
 
 	-- Item reward highlight
 	QuestInfoItemHighlight:GetRegions():Hide()

@@ -45,7 +45,7 @@ tags['free:health'] = function(unit)
 
 	return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F.Numb(cur))
 end
-tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
+tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH'
 
 tags['free:healthpercentage'] = function(unit)
 	if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then return end
@@ -58,7 +58,7 @@ tags['free:healthpercentage'] = function(unit)
 		return format('|cff%02x%02x%02x%d%%|r', r, g, b, floor(cur / max * 100 + 0.5))
 	end
 end
-tagEvents['free:healthpercentage'] = 'UNIT_CONNECTION UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH'
+tagEvents['free:healthpercentage'] = 'UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH'
 
 tags['free:power'] = function(unit)
 	local _, powerToken = UnitPowerType(unit)

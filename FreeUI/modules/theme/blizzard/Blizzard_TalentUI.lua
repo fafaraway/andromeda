@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local r, g, b = C.r, C.g, C.b
 
 local function ReanchorTutorial(button)
 	button.Ring:Hide()
@@ -10,8 +9,8 @@ local function ReskinPvPTalent(self)
 	if not self.styled then
 		F.ReskinIcon(self.Icon)
 		local bg = F.CreateBDFrame(self, .25)
-		bg:SetPoint("TOPLEFT", self.Icon, "TOPRIGHT", 0, C.mult)
-		bg:SetPoint("BOTTOMRIGHT", -1, C.mult)
+		bg:SetPoint("TOPLEFT", self.Icon, "TOPRIGHT", 0, C.Mult)
+		bg:SetPoint("BOTTOMRIGHT", -1, C.Mult)
 		local hl = self:GetHighlightTexture()
 		hl:SetColorTexture(1, 1, 1, .1)
 		hl:SetInside(bg)
@@ -23,6 +22,8 @@ local function ReskinPvPTalent(self)
 end
 
 C.Themes["Blizzard_TalentUI"] = function()
+	local r, g, b = C.r, C.g, C.b
+
 	PlayerTalentFrameTalents:DisableDrawLayer("BORDER")
 	PlayerTalentFrameTalentsBg:Hide()
 	ReanchorTutorial(PlayerTalentFrameTalentsTutorialButton)

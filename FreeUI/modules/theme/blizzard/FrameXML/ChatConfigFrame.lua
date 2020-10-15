@@ -58,7 +58,7 @@ tinsert(C.BlizzThemes, function()
 	end
 
 	local line = ChatConfigFrame:CreateTexture()
-	line:SetSize(C.mult, 460)
+	line:SetSize(C.Mult, 460)
 	line:SetPoint("TOPLEFT", ChatConfigCategoryFrame, "TOPRIGHT")
 	line:SetColorTexture(1, 1, 1, .25)
 

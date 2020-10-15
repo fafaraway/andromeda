@@ -262,7 +262,7 @@ do
 	end
 end
 
-do
+--[[ do
 	-- remove tutorial buttons
 	if _G.IsAddOnLoaded('Blizzard_TalentUI') then
 		_G.PlayerTalentFrameSpecializationTutorialButton:Kill()
@@ -320,4 +320,4 @@ do
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('VARIABLES_LOADED')
 	f:SetScript('OnEvent', OnEvent)
-end
+end ]]

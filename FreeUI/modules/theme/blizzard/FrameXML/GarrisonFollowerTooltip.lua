@@ -2,8 +2,8 @@ local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
 	-- Tooltip close buttons
-	F.ReskinClose(ItemRefCloseButton)
 	F.ReskinClose(ItemRefTooltip.CloseButton)
+	F.ReskinClose(FloatingBattlePetTooltip.CloseButton)
 	F.ReskinClose(FloatingPetBattleAbilityTooltip.CloseButton)
 
 	if not FreeADB.appearance.reskin_blizz then return end

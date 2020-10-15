@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local r, g, b = C.r, C.g, C.b
 
 local function ReskinMissionPage(self)
 	F.StripTextures(self)
@@ -378,6 +377,8 @@ local function ReskinMissionBoards(self)
 end
 
 C.Themes["Blizzard_GarrisonUI"] = function()
+	local r, g, b = C.r, C.g, C.b
+
 	-- Tooltips
 	F.ReskinGarrisonTooltip(GarrisonFollowerAbilityWithoutCountersTooltip)
 	F.ReskinGarrisonTooltip(GarrisonFollowerMissionAbilityWithoutCountersTooltip)

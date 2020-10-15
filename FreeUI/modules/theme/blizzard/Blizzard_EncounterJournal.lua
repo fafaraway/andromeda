@@ -1,7 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local r, g, b = C.r, C.g, C.b
-
 local function onEnable(self)
 	self:SetHeight(self.storedHeight) -- prevent it from resizing
 	self.__bg:SetBackdropColor(0, 0, 0, 0)
@@ -95,6 +93,8 @@ local function reskinFilterToggle(button)
 end
 
 C.Themes["Blizzard_EncounterJournal"] = function()
+	local r, g, b = C.r, C.g, C.b
+
 	-- Tabs
 	for _, tabName in pairs({"suggestTab", "dungeonsTab", "raidsTab", "LootJournalTab"}) do
 		local tab = EncounterJournal.instanceSelect[tabName]

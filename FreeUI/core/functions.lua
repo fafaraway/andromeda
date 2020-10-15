@@ -632,6 +632,8 @@ end
 do
 	-- Setup backdrop
 	C.Frames = {}
+
+	local defaultBackdrop = {bgFile = assets.bd_tex, edgeFile = assets.bd_tex}
 	function F:CreateBD(a)
 		defaultBackdrop.edgeSize = C.Mult
 		self:SetBackdrop(defaultBackdrop)
@@ -825,14 +827,14 @@ do
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
 
-		self:SetBackdropBorderColor(C.r, C.g, C.b, 1)
+		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, 1)
 		self.glow:SetAlpha(1)
 
 		CreatePulse(self.glow)
 	end
 
 	local function Button_OnLeave(self)
-		self:SetBackdropBorderColor(0, 0, 0, 1)
+		self.__bg:SetBackdropBorderColor(0, 0, 0, 1)
 		self.glow:SetScript('OnUpdate', nil)
 		self.glow:SetAlpha(0)
 	end
@@ -892,7 +894,7 @@ do
 		self.__bg:SetAllPoints()
 
 		if not noGlow then
-			self.glow = CreateFrame('Frame', nil, self)
+			self.glow = CreateFrame('Frame', nil, self, 'BackdropTemplate')
 			self.glow:SetBackdrop({
 				edgeFile = assets.shadow_tex,
 				edgeSize = 6,
@@ -1392,8 +1394,8 @@ do
 			local background = self.HealthBar.Background
 			background:SetAlpha(0)
 			background:ClearAllPoints()
-			background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', C.mult, 6)
-			background:SetPoint('BOTTOMRIGHT', self.squareBG, 'BOTTOMRIGHT', -C.mult, C.mult)
+			background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', C.Mult, 6)
+			background:SetPoint('BOTTOMRIGHT', self.squareBG, 'BOTTOMRIGHT', -C.Mult, C.Mult)
 			self.HealthBar.Health:SetTexture(C.Assets.norm_tex)
 		end
 	end

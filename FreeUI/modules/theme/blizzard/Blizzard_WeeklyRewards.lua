@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local r, g, b = C.r, C.g, C.b
 
 -- /run UIParent_OnEvent({}, "WEEKLY_REWARDS_SHOW")
 
@@ -45,6 +44,7 @@ local function ReskinActivityFrame(frame, isObject)
 end
 
 C.Themes["Blizzard_WeeklyRewards"] = function()
+	local r, g, b = C.r, C.g, C.b
 	local WeeklyRewardsFrame = WeeklyRewardsFrame
 
 	F.StripTextures(WeeklyRewardsFrame)

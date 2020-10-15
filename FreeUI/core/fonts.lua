@@ -134,7 +134,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.SystemFont_Shadow_Med1_Outline, 12)
 	SetFont(_G.SystemFont_Shadow_Med2)
 	SetFont(_G.SystemFont_Shadow_Med3)
-	SetFont(_G.SystemFont_Shadow_Outline_Huge2)
+
 	SetFont(_G.SystemFont_Shadow_Huge1)
 	SetFont(_G.SystemFont_Shadow_Huge2)
 	SetFont(_G.SystemFont_Shadow_Huge3)
@@ -202,12 +202,12 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.CombatTextFont, 150, COMBAT, 'THINOUTLINE')
 
 
-	_G.GameFontBlackMedium:SetTextColor(1, 1, 1)
-	_G.CoreAbilityFont:SetTextColor(1, 1, 1)
+	-- _G.GameFontBlackMedium:SetTextColor(1, 1, 1)
+	-- _G.CoreAbilityFont:SetTextColor(1, 1, 1)
 
-	_G.NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, '000000', 'ffffff')
-	_G.TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, '000000', 'ffffff')
-	_G.IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, '000000', 'ffffff')
+	-- _G.NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, '000000', 'ffffff')
+	-- _G.TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, '000000', 'ffffff')
+	-- _G.IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, '000000', 'ffffff')
 
 	self:SetScript('OnEvent', nil)
 	self:UnregisterAllEvents()

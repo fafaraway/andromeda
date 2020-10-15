@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="actionbar\actionbar.xml"/>
+	<!-- <Include file="actionbar\actionbar.xml"/>
 	<Include file="announcement\announcement.xml"/>
 	<Include file="aura\aura.xml"/>
 	<Include file="blizzard\blizzard.xml"/>
@@ -10,7 +10,7 @@
 	<Include file="map\map.xml"/>
 	<Include file="misc\misc.xml"/>
 	<Include file="notification\notification.xml"/>
-	<Include file="quest\quest.xml"/>
+	<Include file="quest\quest.xml"/> -->
 	<Include file="theme\theme.xml"/>
 	<Include file="tooltip\tooltip.xml"/>
 	<Include file="unitframe\unitframe.xml"/>
