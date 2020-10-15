@@ -2,7 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local AURA = F:GetModule('AURA')
 
 
-local _G = getfenv(0)
 local format, floor, strmatch, select, unpack = format, floor, strmatch, select, unpack
 local DebuffTypeColor = _G.DebuffTypeColor
 local UnitAura, GetTime = UnitAura, GetTime
@@ -31,17 +30,17 @@ function AURA:OnLogin()
 	F.HideObject(_G.BuffFrame)
 	F.HideObject(_G.TemporaryEnchantFrame)
 
-	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	local buffAnchor = F.Mover(self.BuffFrame, L['AURA_MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', C.UIGap, -C.UIGap})
-	self.BuffFrame:ClearAllPoints()
-	self.BuffFrame:SetPoint('TOPRIGHT', buffAnchor)
+	AURA.BuffFrame = AURA:CreateAuraHeader('HELPFUL')
+	AURA.BuffFrame.mover = F.Mover(AURA.BuffFrame, L['AURA_MOVER_BUFFS'], 'BuffAnchor', {'TOPLEFT', UIParent, 'TOPLEFT', C.UIGap, -C.UIGap})
+	AURA.BuffFrame:ClearAllPoints()
+	AURA.BuffFrame:SetPoint('TOPRIGHT', AURA.BuffFrame.mover)
 
-	self.DebuffFrame = self:CreateAuraHeader('HARMFUL')
-	local debuffAnchor = F.Mover(self.DebuffFrame, L['AURA_MOVER_DEBUFFS'], 'DebuffsFrame', {'TOPLEFT', buffAnchor, 'BOTTOMLEFT', 0, -2})
-	self.DebuffFrame:ClearAllPoints()
-	self.DebuffFrame:SetPoint('TOPRIGHT', debuffAnchor)
+	AURA.DebuffFrame = AURA:CreateAuraHeader('HARMFUL')
+	AURA.DebuffFrame.mover = F.Mover(AURA.DebuffFrame, L['AURA_MOVER_DEBUFFS'], 'DebuffAnchor', {'TOPRIGHT', AURA.BuffFrame.mover, 'BOTTOMRIGHT', 0, -2})
+	AURA.DebuffFrame:ClearAllPoints()
+	AURA.DebuffFrame:SetPoint('TOPRIGHT', AURA.DebuffFrame.mover)
 
-	self:InitReminder()
+	AURA:InitReminder()
 end
 
 local day, hour, minute = 86400, 3600, 60
@@ -102,7 +101,6 @@ function AURA:UpdateAuras(button, index)
 			else
 				button.timeLeft = timeLeft
 			end
-			-- need reviewed
 			button.nextUpdate = -1
 			AURA.UpdateTimer(button, 0)
 		else
@@ -171,6 +169,15 @@ function AURA:OnAttributeChanged(attribute, value)
 	end
 end
 
+function AURA:UpdateOptions()
+	AURA.settings.Buffs.size = FreeDB['aura']['buff_size']
+	AURA.settings.Buffs.wrapAfter = FreeDB['aura']['buffs_per_row']
+	AURA.settings.Buffs.reverseGrow = FreeDB['aura']['reverse_buffs']
+	AURA.settings.Debuffs.size = FreeDB['aura']['debuff_size']
+	AURA.settings.Debuffs.wrapAfter = FreeDB['aura']['debuffs_per_row']
+	AURA.settings.Debuffs.reverseGrow = FreeDB['aura']['reverse_debuffs']
+end
+
 function AURA:UpdateHeader(header)
 	local cfg = settings.Debuffs
 	if header:GetAttribute('filter') == 'HELPFUL' then
@@ -193,12 +200,16 @@ function AURA:UpdateHeader(header)
 	header:SetAttribute('wrapYOffset', -(cfg.size + FreeDB['aura']['offset']))
 	header:SetAttribute('template', format('FreeUIAuraTemplate%d', cfg.size))
 
+	--local fontSize = floor(cfg.size/30*12 + .5)
 	local index = 1
 	local child = select(index, header:GetChildren())
 	while child do
 		if (floor(child:GetWidth() * 100 + .5) / 100) ~= cfg.size then
 			child:SetSize(cfg.size, cfg.size)
 		end
+
+		-- child.count:SetFont(C.Assets.Fonts.Cooldown, fontSize, 'OUTLINE')
+		-- child.timer:SetFont(C.Assets.Fonts.Cooldown, fontSize, 'OUTLINE')
 
 		--Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
 		if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then

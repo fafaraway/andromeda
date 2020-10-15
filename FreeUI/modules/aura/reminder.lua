@@ -6,12 +6,9 @@ local pairs, tinsert, next = pairs, table.insert, next
 local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
-
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo
 local iconSize = 36
 local frames, parentFrame = {}
-
-
-
 local groups = C.ReminderBuffsList[C.MyClass]
 
 function AURA:Reminder_Update(cfg)
@@ -24,6 +21,7 @@ function AURA:Reminder_Update(cfg)
 	local cooldown = cfg.cooldown
 	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
 	local inInst, instType = IsInInstance()
+	local weaponIndex = cfg.weaponIndex
 
 	if cooldown and GetItemCooldown(cooldown) > 0 then -- check rune cooldown
 		frame:Hide()
@@ -39,6 +37,14 @@ function AURA:Reminder_Update(cfg)
 
 	frame:Hide()
 	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') and not UnitIsDeadOrGhost('player') then
+		if weaponIndex then
+			local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
+			if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
+				frame:Hide()
+				return
+			end
+		end
+	else
 		for i = 1, 32 do
 			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
 			if not name then break end
