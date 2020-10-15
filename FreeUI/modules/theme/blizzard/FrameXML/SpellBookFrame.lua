@@ -164,9 +164,9 @@ tinsert(C.BlizzThemes, function()
 		end
 	end)
 
-	F.CreateBD(SecondaryProfession1, .25)
-	F.CreateBD(SecondaryProfession2, .25)
-	F.CreateBD(SecondaryProfession3, .25)
+	F.CreateBDFrame(SecondaryProfession1, .25)
+	F.CreateBDFrame(SecondaryProfession2, .25)
+	F.CreateBDFrame(SecondaryProfession3, .25)
 	F.ReskinArrow(SpellBookPrevPageButton, "left")
 	F.ReskinArrow(SpellBookNextPageButton, "right")
 	SpellBookPageText:SetTextColor(.8, .8, .8)

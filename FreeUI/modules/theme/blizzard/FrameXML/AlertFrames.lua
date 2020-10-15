@@ -1,48 +1,48 @@
 local F, C = unpack(select(2, ...))
 
+-- Fix Alertframe bg
+local function fixBg(frame)
+	if frame:GetObjectType() == "AnimationGroup" then
+		frame = frame:GetParent()
+	end
+	if frame.bg then
+		frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
+		if frame.bg.__shadow then
+			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
+		end
+	end
+end
+
+local function fixParentbg(frame)
+	frame = frame:GetParent():GetParent()
+	if frame.bg then
+		frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
+		if frame.bg.__shadow then
+			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
+		end
+	end
+end
+
+local function fixAnim(frame)
+	if frame.hooked then return end
+
+	frame:HookScript("OnEnter", fixBg)
+	frame:HookScript("OnShow", fixBg)
+	frame.animIn:HookScript("OnFinished", fixBg)
+	if frame.animArrows then
+		frame.animArrows:HookScript("OnPlay", fixBg)
+		frame.animArrows:HookScript("OnFinished", fixBg)
+	end
+	if frame.Arrows and frame.Arrows.ArrowsAnim then
+		frame.Arrows.ArrowsAnim:HookScript("OnPlay", fixParentbg)
+		frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
+	end
+
+	frame.hookded = true
+end
+
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
-
-	-- Fix Alertframe bg
-	local function fixBg(frame)
-		if frame:GetObjectType() == "AnimationGroup" then
-			frame = frame:GetParent()
-		end
-		if frame.bg then
-			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
-			if frame.bg.Shadow then
-				frame.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
-			end
-		end
-	end
-
-	local function fixParentbg(frame)
-		frame = frame:GetParent():GetParent()
-		if frame.bg then
-			frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
-			if frame.bg.Shadow then
-				frame.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .4)
-			end
-		end
-	end
-
-	local function fixAnim(frame)
-		if frame.hooked then return end
-
-		frame:HookScript("OnEnter", fixBg)
-		frame:HookScript("OnShow", fixBg)
-		frame.animIn:HookScript("OnFinished", fixBg)
-		if frame.animArrows then
-			frame.animArrows:HookScript("OnPlay", fixBg)
-			frame.animArrows:HookScript("OnFinished", fixBg)
-		end
-		if frame.Arrows and frame.Arrows.ArrowsAnim then
-			frame.Arrows.ArrowsAnim:HookScript("OnPlay", fixParentbg)
-			frame.Arrows.ArrowsAnim:HookScript("OnFinished", fixParentbg)
-		end
-
-		frame.hookded = true
-	end
 
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 
@@ -151,13 +151,13 @@ tinsert(C.BlizzThemes, function()
 		elseif frame.queue == WorldQuestCompleteAlertSystem then
 			if not frame.bg then
 				frame.bg = F.SetBD(frame)
-				frame.bg:SetPoint("TOPLEFT", 3, -9)
-				frame.bg:SetPoint("BOTTOMRIGHT", -3, 6)
+				frame.bg:SetPoint("TOPLEFT", 4, -7)
+				frame.bg:SetPoint("BOTTOMRIGHT", -4, 8)
 
 				F.ReskinIcon(frame.QuestTexture)
 				frame.shine:SetTexture("")
 				frame:DisableDrawLayer("BORDER")
-				select(6, frame:GetRegions()):SetFontObject(NumberFont_GameNormal)
+				frame.ToastText:SetFontObject(NumberFont_GameNormal)
 			end
 		elseif frame.queue == GarrisonTalentAlertSystem then
 			if not frame.bg then
@@ -286,7 +286,7 @@ tinsert(C.BlizzThemes, function()
 				frame.Background3:SetTexture("")
 				frame.glow:SetTexture("")
 			end
-		elseif frame.queue == NewPetAlertSystem or frame.queue == NewMountAlertSystem or frame.queue == NewToyAlertSystem then
+		elseif frame.queue == NewPetAlertSystem or frame.queue == NewMountAlertSystem or frame.queue == NewToyAlertSystem or frame.queue == NewRuneforgePowerAlertSystem then
 			if not frame.bg then
 				frame.bg = F.SetBD(frame)
 				frame.bg:SetPoint("TOPLEFT", 12, -13)

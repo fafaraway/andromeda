@@ -1,8 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 C.Themes["Blizzard_VoidStorageUI"] = function()
-	F.SetBD(VoidStorageFrame, 20, 0, 0, 20)
-	F.CreateBD(VoidStoragePurchaseFrame)
+	F.SetBD(VoidStorageFrame, nil, 20, 0, 0, 20)
+	F.CreateBDFrame(VoidStoragePurchaseFrame)
 	F.StripTextures(VoidStorageBorderFrame)
 	F.StripTextures(VoidStorageDepositFrame)
 	F.StripTextures(VoidStorageWithdrawFrame)
@@ -68,7 +68,6 @@ C.Themes["Blizzard_VoidStorageUI"] = function()
 	VoidStorageFrame.Page1:SetPoint("LEFT", VoidStorageFrame, "TOPRIGHT", 2, -60)
 
 	F.Reskin(VoidStoragePurchaseButton)
-	F.Reskin(VoidStorageHelpBoxButton)
 	F.Reskin(VoidStorageTransferButton)
 	F.ReskinClose(VoidStorageBorderFrame.CloseButton)
 	F.ReskinInput(VoidItemSearchBox)

@@ -36,8 +36,9 @@ tinsert(C.BlizzThemes, function()
 		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		bu.icon:SetInside()
 		bu.IconOverlay:SetInside()
+		bu.IconOverlay2:SetInside()
 		bu.bg = F.CreateBDFrame(bu.icon, .25)
-		F.HookIconBorderColor(bu.IconBorder)
+		F.ReskinIconBorder(bu.IconBorder)
 	end
 
 	for i = 1, MAX_TRADE_ITEMS do

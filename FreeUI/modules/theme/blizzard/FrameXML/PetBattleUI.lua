@@ -45,7 +45,7 @@ tinsert(C.BlizzThemes, function()
 		unit.Border:SetAlpha(0)
 		unit.Border2:SetAlpha(0)
 		unit.BorderFlash:SetAlpha(0)
-		unit.Iconbg = F.CreateBDFrame(unit.Icon, nil, true)
+		unit.Iconbg = F.SetBD(unit.Icon)
 
 		unit.LevelUnderlay:SetAlpha(0)
 		unit.Level:SetFontObject(SystemFont_Shadow_Huge1)
@@ -239,14 +239,14 @@ tinsert(C.BlizzThemes, function()
 	xpbar:SetParent(bar)
 	xpbar:SetWidth(bar:GetWidth())
 	xpbar:SetStatusBarTexture(C.Assets.norm_tex)
-	F.CreateBDFrame(xpbar, nil, true)
+	F.SetBD(xpbar)
 
 	local turnTimer = bottomFrame.TurnTimer
 	turnTimer:SetParent(bar)
 	turnTimer:SetSize(xpbar:GetWidth()+4, xpbar:GetHeight()+10)
 	turnTimer:ClearAllPoints()
 	turnTimer:SetPoint("BOTTOM", bar, "TOP", 0, 7)
-	turnTimer.bg = F.CreateBDFrame(turnTimer, nil, true)
+	turnTimer.bg = F.SetBD(turnTimer)
 	turnTimer.Bar:ClearAllPoints()
 	turnTimer.Bar:SetPoint("LEFT", 2, 0)
 	turnTimer.TimerText:ClearAllPoints()
@@ -286,19 +286,20 @@ tinsert(C.BlizzThemes, function()
 	end
 
 	-- Petbar Background
-	local bgLeft = CreateFrame("Frame", nil, UIParent)
-	bgLeft:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOM", 0, 3)
-	F.CreateGF(bgLeft, 180, 68, "Horizontal", 0, 0, 0, 0, .5)
-	local lineLeft = CreateFrame("Frame", nil, bgLeft)
-	lineLeft:SetPoint("BOTTOMRIGHT", bgLeft, "TOPRIGHT")
-	F.CreateGF(lineLeft, 180, C.Mult, "Horizontal", r, g, b, 0, .7)
-	RegisterStateDriver(bgLeft, "visibility", visibleState)
+	local width, height = 180, 68
+	local anchors = {
+		["BOTTOMRIGHT"] = {0, .5},
+		["BOTTOMLEFT"] = {.5, 0}
+	}
+	for anchor, v in pairs(anchors) do
+		local frame = CreateFrame("Frame", nil, UIParent)
+		frame:SetSize(width, height)
+		frame:SetPoint(anchor, UIParent, "BOTTOM", 0, 3)
+		local tex = F.SetGradient(frame, "H", 0, 0, 0, v[1], v[2], width, height)
+		tex:SetPoint("CENTER")
+		local line = F.SetGradient(frame, "H", r, g, b, v[1], v[2], width, C.Mult)
+		line:SetPoint("BOTTOM", frame, "TOP")
 
-	local bgRight = CreateFrame("Frame", nil, UIParent)
-	bgRight:SetPoint("BOTTOMLEFT", UIParent, "BOTTOM", 0, 3)
-	F.CreateGF(bgRight, 180, 68, "Horizontal", 0, 0, 0, .5, 0)
-	local lineRight = CreateFrame("Frame", nil, bgRight)
-	lineRight:SetPoint("BOTTOMLEFT", bgRight, "TOPLEFT")
-	F.CreateGF(lineRight, 180, C.Mult, "Horizontal", r, g, b, .7, 0)
-	RegisterStateDriver(bgRight, "visibility", visibleState)
+		RegisterStateDriver(frame, "visibility", visibleState)
+	end
 end)

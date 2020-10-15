@@ -8,16 +8,16 @@ C.Themes["Blizzard_LookingForGuildUI"] = function()
 		if styled then return end
 
 		F.ReskinPortraitFrame(LookingForGuildFrame)
-		F.CreateBD(LookingForGuildInterestFrame, .25)
+		F.CreateBDFrame(LookingForGuildInterestFrame, .25)
 		LookingForGuildInterestFrameBg:Hide()
-		F.CreateBD(LookingForGuildAvailabilityFrame, .25)
+		F.CreateBDFrame(LookingForGuildAvailabilityFrame, .25)
 		LookingForGuildAvailabilityFrameBg:Hide()
-		F.CreateBD(LookingForGuildRolesFrame, .25)
+		F.CreateBDFrame(LookingForGuildRolesFrame, .25)
 		LookingForGuildRolesFrameBg:Hide()
-		F.CreateBD(LookingForGuildCommentFrame, .25)
+		F.CreateBDFrame(LookingForGuildCommentFrame, .25)
 		LookingForGuildCommentFrameBg:Hide()
 		F.StripTextures(LookingForGuildCommentInputFrame)
-		F.CreateBD(LookingForGuildCommentInputFrame, .12)
+		F.CreateBDFrame(LookingForGuildCommentInputFrame, .12)
 		F.SetBD(GuildFinderRequestMembershipFrame)
 
 		for i = 1, 3 do

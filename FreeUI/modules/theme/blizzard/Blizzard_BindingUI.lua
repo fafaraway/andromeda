@@ -5,24 +5,19 @@ C.Themes["Blizzard_BindingUI"] = function()
 
 	local KeyBindingFrame = KeyBindingFrame
 
-	KeyBindingFrame.Header = KeyBindingFrame.Header or KeyBindingFrame.header -- deprecated in 8.3
 	F.StripTextures(KeyBindingFrame.Header)
-	KeyBindingFrame.scrollFrame.scrollBorderTop:SetTexture("")
-	KeyBindingFrame.scrollFrame.scrollBorderBottom:SetTexture("")
-	KeyBindingFrame.scrollFrame.scrollBorderMiddle:SetTexture("")
-	KeyBindingFrame.scrollFrame.scrollFrameScrollBarBackground:SetTexture("")
 	F.StripTextures(KeyBindingFrame.categoryList)
 	KeyBindingFrame.bindingsContainer:SetBackdrop(nil)
 
+	F.StripTextures(KeyBindingFrame)
 	F.SetBD(KeyBindingFrame)
-	KeyBindingFrame.BG:Hide()
 	F.Reskin(KeyBindingFrame.defaultsButton)
+	F.Reskin(KeyBindingFrame.quickKeybindButton)
 	F.Reskin(KeyBindingFrame.unbindButton)
 	F.Reskin(KeyBindingFrame.okayButton)
 	F.Reskin(KeyBindingFrame.cancelButton)
 	F.ReskinCheck(KeyBindingFrame.characterSpecificButton)
 	F.ReskinScroll(KeyBindingFrameScrollFrameScrollBar)
-	KeyBindingFrameScrollFrame.scrollFrameScrollBarBackground:Hide()
 
 	for i = 1, KEY_BINDINGS_DISPLAYED do
 		local button1 = _G["KeyBindingFrameKeyBinding"..i.."Key1Button"]
@@ -42,18 +37,20 @@ C.Themes["Blizzard_BindingUI"] = function()
 		end
 	end)
 
-	KeyBindingFrame.Header.Text = KeyBindingFrame.Header.Text or KeyBindingFrame.Header.text -- deprecated in 8.3
-	KeyBindingFrame.Header.Text:ClearAllPoints()
-	KeyBindingFrame.Header.Text:SetPoint("TOP", KeyBindingFrame, "TOP", 0, -8)
-	KeyBindingFrame.unbindButton:ClearAllPoints()
-	KeyBindingFrame.unbindButton:SetPoint("BOTTOMRIGHT", -207, 16)
-	KeyBindingFrame.okayButton:ClearAllPoints()
-	KeyBindingFrame.okayButton:SetPoint("BOTTOMLEFT", KeyBindingFrame.unbindButton, "BOTTOMRIGHT", 1, 0)
-	KeyBindingFrame.cancelButton:ClearAllPoints()
-	KeyBindingFrame.cancelButton:SetPoint("BOTTOMLEFT", KeyBindingFrame.okayButton, "BOTTOMRIGHT", 1, 0)
-
 	local line = KeyBindingFrame:CreateTexture(nil, "ARTWORK")
-	line:SetSize(1, 546)
+	line:SetSize(C.Mult, 546)
 	line:SetPoint("LEFT", 205, 10)
-	line:SetColorTexture(1, 1, 1, .2)
+	line:SetColorTexture(1, 1, 1, .25)
+
+	-- QuickKeybindFrame
+
+	local frame = QuickKeybindFrame
+	F.StripTextures(frame)
+	F.StripTextures(frame.Header)
+	F.SetBD(frame)
+	F.ReskinCheck(frame.characterSpecificButton)
+	frame.characterSpecificButton:SetSize(24, 24)
+	F.Reskin(frame.okayButton)
+	F.Reskin(frame.defaultsButton)
+	F.Reskin(frame.cancelButton)
 end

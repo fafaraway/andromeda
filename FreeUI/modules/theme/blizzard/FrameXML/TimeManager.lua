@@ -25,7 +25,7 @@ tinsert(C.BlizzThemes, function()
 	F.StripTextures(StopwatchFrame)
 	F.StripTextures(StopwatchTabFrame)
 	F.SetBD(StopwatchFrame)
-	F.ReskinClose(StopwatchCloseButton, "TOPRIGHT", StopwatchFrame, "TOPRIGHT", -2, -2)
+	F.ReskinClose(StopwatchCloseButton, StopwatchFrame, -2, -2)
 
 	local reset = StopwatchResetButton
 	reset:GetNormalTexture():SetTexCoord(.25, .75, .27, .75)

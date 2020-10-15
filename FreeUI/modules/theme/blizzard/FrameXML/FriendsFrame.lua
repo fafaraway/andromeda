@@ -112,12 +112,11 @@ tinsert(C.BlizzThemes, function()
 
 	local broadcastFrame = FriendsFrameBattlenetFrame.BroadcastFrame
 	F.StripTextures(broadcastFrame)
-	F.SetBD(broadcastFrame, 10, -10, -10, 10)
+	F.SetBD(broadcastFrame, nil, 10, -10, -10, 10)
 	broadcastFrame.EditBox:DisableDrawLayer("BACKGROUND")
-	local bg = F.CreateBDFrame(broadcastFrame.EditBox, 0)
+	local bg = F.CreateBDFrame(broadcastFrame.EditBox, 0, true)
 	bg:SetPoint("TOPLEFT", -2, -2)
 	bg:SetPoint("BOTTOMRIGHT", 2, 2)
-	F.CreateGradient(bg)
 	F.Reskin(broadcastFrame.UpdateButton)
 	F.Reskin(broadcastFrame.CancelButton)
 	broadcastFrame:ClearAllPoints()
@@ -168,10 +167,9 @@ tinsert(C.BlizzThemes, function()
 
 	F.StripTextures(WhoFrameListInset)
 	WhoFrameEditBoxInset:Hide()
-	local whoBg = F.CreateBDFrame(WhoFrameEditBox, 0)
+	local whoBg = F.CreateBDFrame(WhoFrameEditBox, 0, true)
 	whoBg:SetPoint("TOPLEFT", WhoFrameEditBoxInset)
 	whoBg:SetPoint("BOTTOMRIGHT", WhoFrameEditBoxInset, -1, 1)
-	F.CreateGradient(whoBg)
 
 	for i = 1, 3 do
 		F.StripTextures(_G["FriendsTabHeaderTab"..i])

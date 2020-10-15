@@ -1,31 +1,94 @@
 local F, C = unpack(select(2, ...))
 
+local function styleRewardButton(button)
+	if not button or button.styled then return end
+
+	local buttonName = button:GetName()
+	local icon = _G[buttonName.."IconTexture"]
+	local shortageBorder = _G[buttonName.."ShortageBorder"]
+	local count = _G[buttonName.."Count"]
+	local nameFrame = _G[buttonName.."NameFrame"]
+	local border = button.IconBorder
+
+	button.bg = F.ReskinIcon(icon)
+	local bg = F.CreateBDFrame(button, .25)
+	bg:SetPoint("TOPLEFT", button.bg, "TOPRIGHT")
+	bg:SetPoint("BOTTOMRIGHT", button.bg, "BOTTOMRIGHT", 100, 0)
+
+	if shortageBorder then shortageBorder:SetAlpha(0) end
+	if count then count:SetDrawLayer("OVERLAY") end
+	if nameFrame then nameFrame:SetAlpha(0) end
+	if border then F.ReskinIconBorder(border) end
+
+	button.styled = true
+end
+
+local function reskinDialogReward(button)
+	if button.styled then return end
+
+	local border = _G[button:GetName().."Border"]
+	button.texture:SetTexCoord(unpack(C.TexCoord))
+	border:SetColorTexture(0, 0, 0)
+	border:SetDrawLayer("BACKGROUND")
+	border:SetOutside(button.texture)
+	button.styled = true
+end
+
+local function reskinRoleButton(buttons, role)
+	for _, roleButton in pairs(buttons) do
+		F.ReskinRole(roleButton, role)
+	end
+end
+
+local function updateRoleBonus(roleButton)
+	if not roleButton.bg then return end
+	if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
+		if roleButton.cover:IsShown() then
+			roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
+		else
+			roleButton.bg:SetBackdropBorderColor(1, .9, .06)
+		end
+	else
+		roleButton.bg:SetBackdropBorderColor(0, 0, 0)
+	end
+end
+
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
 
-	local function styleRewardButton(button)
-		if not button or button.styled then return end
+	-- LFDFrame
+	hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button)
+		if not button.expandOrCollapseButton.styled then
+			F.ReskinCheck(button.enableButton)
+			F.ReskinCollapse(button.expandOrCollapseButton)
 
-		local buttonName = button:GetName()
-		local icon = _G[buttonName.."IconTexture"]
-		local shortageBorder = _G[buttonName.."ShortageBorder"]
-		local count = _G[buttonName.."Count"]
-		local nameFrame = _G[buttonName.."NameFrame"]
-		local border = button.IconBorder
+			button.expandOrCollapseButton.styled = true
+		end
 
-		if shortageBorder then shortageBorder:SetAlpha(0) end
-		if count then count:SetDrawLayer("OVERLAY") end
-		if nameFrame then nameFrame:SetAlpha(0) end
-		if border then border:SetAlpha(0) end
+		button.enableButton:GetCheckedTexture():SetDesaturated(true)
+	end)
 
-		local icbg = F.ReskinIcon(icon)
-		local bg = F.CreateBDFrame(button, .25)
-		bg:SetPoint("TOPLEFT", icbg, "TOPRIGHT")
-		bg:SetPoint("BOTTOMRIGHT", icbg, "BOTTOMRIGHT", 100, 0)
+	F.StripTextures(LFDParentFrame)
+	LFDQueueFrameBackground:Hide()
+	F.SetBD(LFDRoleCheckPopup)
+	LFDRoleCheckPopup.Border:Hide()
+	F.Reskin(LFDRoleCheckPopupAcceptButton)
+	F.Reskin(LFDRoleCheckPopupDeclineButton)
+	F.ReskinScroll(LFDQueueFrameSpecificListScrollFrameScrollBar)
+	F.StripTextures(LFDQueueFrameRandomScrollFrameScrollBar, 0)
+	F.ReskinScroll(LFDQueueFrameRandomScrollFrameScrollBar)
+	F.ReskinDropDown(LFDQueueFrameTypeDropDown)
+	F.Reskin(LFDQueueFrameFindGroupButton)
+	F.Reskin(LFDQueueFramePartyBackfillBackfillButton)
+	F.Reskin(LFDQueueFramePartyBackfillNoBackfillButton)
+	F.Reskin(LFDQueueFrameNoLFDWhileLFRLeaveQueueButton)
+	styleRewardButton(LFDQueueFrameRandomScrollFrameChildFrameMoneyReward)
 
-		button.styled = true
-	end
+	LFDQueueFrameRandomScrollFrame:SetWidth(LFDQueueFrameRandomScrollFrame:GetWidth()+1)
+	LFDQueueFrameSpecificListScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameSpecificListScrollFrameScrollBar, "BOTTOM", 0, 2)
+	LFDQueueFrameRandomScrollFrameScrollBarScrollDownButton:SetPoint("TOP", LFDQueueFrameRandomScrollFrameScrollBar, "BOTTOM", 0, 2)
 
+	-- LFGFrame
 	hooksecurefunc("LFGRewardsFrame_SetItemButton", function(parentFrame, _, index)
 		local parentName = parentFrame:GetName()
 		local button = _G[parentName.."Item"..index]
@@ -62,17 +125,6 @@ tinsert(C.BlizzThemes, function()
 		end
 	end)
 
-	local function reskinDialogReward(button)
-		if button.styled then return end
-
-		local border = _G[button:GetName().."Border"]
-		button.texture:SetTexCoord(unpack(C.TexCoord))
-		border:SetColorTexture(0, 0, 0)
-		border:SetDrawLayer("BACKGROUND")
-		border:SetOutside(button.texture)
-		button.styled = true
-	end
-
 	hooksecurefunc("LFGDungeonReadyDialogReward_SetMisc", function(button)
 		reskinDialogReward(button)
 		button.texture:SetTexture("Interface\\Icons\\inv_misc_coin_02")
@@ -105,12 +157,6 @@ tinsert(C.BlizzThemes, function()
 	F.Reskin(LFGInvitePopupDeclineButton)
 	F.ReskinClose(LFGDungeonReadyDialogCloseButton)
 	F.ReskinClose(LFGDungeonReadyStatusCloseButton)
-
-	local function reskinRoleButton(buttons, role)
-		for _, roleButton in pairs(buttons) do
-			F.ReskinRole(roleButton, role)
-		end
-	end
 
 	local tanks = {
 		LFDQueueFrameRoleButtonTank,
@@ -155,19 +201,6 @@ tinsert(C.BlizzThemes, function()
 		button:SetDisabledCheckedTexture("Interface\\Buttons\\UI-CheckBox-Check-Disabled")
 		button:GetDisabledCheckedTexture():SetTexCoord(0, 1, 0, 1)
 	end)
-
-	local function updateRoleBonus(roleButton)
-		if not roleButton.bg then return end
-		if roleButton.shortageBorder and roleButton.shortageBorder:IsShown() then
-			if roleButton.cover:IsShown() then
-				roleButton.bg:SetBackdropBorderColor(.5, .45, .03)
-			else
-				roleButton.bg:SetBackdropBorderColor(1, .9, .06)
-			end
-		else
-			roleButton.bg:SetBackdropBorderColor(0, 0, 0)
-		end
-	end
 
 	hooksecurefunc("LFG_SetRoleIconIncentive", function(roleButton, incentiveIndex)
 		if incentiveIndex then

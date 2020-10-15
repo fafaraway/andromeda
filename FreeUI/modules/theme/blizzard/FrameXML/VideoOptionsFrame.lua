@@ -35,13 +35,16 @@ tinsert(C.BlizzThemes, function()
 		RaidButton:DisableDrawLayer("BACKGROUND")
 
 		local hline = Display_:CreateTexture(nil, "ARTWORK")
-		hline:SetSize(580, 1)
+		hline:SetSize(580, C.Mult)
 		hline:SetPoint("TOPLEFT", GraphicsButton, "BOTTOMLEFT", 14, -4)
 		hline:SetColorTexture(1, 1, 1, .2)
 
-		F.CreateBD(AudioOptionsSoundPanelPlayback, .25)
-		F.CreateBD(AudioOptionsSoundPanelHardware, .25)
-		F.CreateBD(AudioOptionsSoundPanelVolume, .25)
+		F.StripTextures(AudioOptionsSoundPanelPlayback)
+		F.CreateBDFrame(AudioOptionsSoundPanelPlayback, .25)
+		F.StripTextures(AudioOptionsSoundPanelHardware)
+		F.CreateBDFrame(AudioOptionsSoundPanelHardware, .25)
+		F.StripTextures(AudioOptionsSoundPanelVolume)
+		F.CreateBDFrame(AudioOptionsSoundPanelVolume, .25)
 
 		AudioOptionsSoundPanelPlaybackTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelPlayback, "TOPLEFT", 5, 2)
 		AudioOptionsSoundPanelHardwareTitle:SetPoint("BOTTOMLEFT", AudioOptionsSoundPanelHardware, "TOPLEFT", 5, 2)
@@ -54,7 +57,7 @@ tinsert(C.BlizzThemes, function()
 			"Display_AntiAliasingDropDown",
 			"Display_VerticalSyncDropDown",
 			"Graphics_TextureResolutionDropDown",
-			"Graphics_FilteringDropDown",
+			"Graphics_SpellDensityDropDown",
 			"Graphics_ProjectedTexturesDropDown",
 			"Graphics_ShadowsDropDown",
 			"Graphics_LiquidDetailDropDown",
@@ -64,7 +67,7 @@ tinsert(C.BlizzThemes, function()
 			"Graphics_DepthEffectsDropDown",
 			"Graphics_OutlineModeDropDown",
 			"RaidGraphics_TextureResolutionDropDown",
-			"RaidGraphics_FilteringDropDown",
+			"RaidGraphics_SpellDensityDropDown",
 			"RaidGraphics_ProjectedTexturesDropDown",
 			"RaidGraphics_ShadowsDropDown",
 			"RaidGraphics_LiquidDetailDropDown",
@@ -74,6 +77,9 @@ tinsert(C.BlizzThemes, function()
 			"RaidGraphics_DepthEffectsDropDown",
 			"RaidGraphics_OutlineModeDropDown",
 			"Advanced_BufferingDropDown",
+			"Advanced_FilteringDropDown",
+			"Advanced_RTShadowQualityDropDown",
+			"Advanced_SSAOTypeDropDown", -- not in ptr
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",
@@ -92,7 +98,7 @@ tinsert(C.BlizzThemes, function()
 		}
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
-			if not dropdown then
+			if not dropdown and C.isDeveloper then
 				print(dropdowns[i], "not found.")
 			else
 				F.ReskinDropDown(dropdown)
@@ -101,6 +107,7 @@ tinsert(C.BlizzThemes, function()
 
 		local sliders = {
 			"Display_RenderScaleSlider",
+			"Display_UIScaleSlider",
 			"Graphics_Quality",
 			"Graphics_ViewDistanceSlider",
 			"Graphics_EnvironmentalDetailSlider",
@@ -109,9 +116,9 @@ tinsert(C.BlizzThemes, function()
 			"RaidGraphics_ViewDistanceSlider",
 			"RaidGraphics_EnvironmentalDetailSlider",
 			"RaidGraphics_GroundClutterSlider",
-			"Advanced_UIScaleSlider",
 			"Advanced_MaxFPSSlider",
 			"Advanced_MaxFPSBKSlider",
+			"Advanced_TargetFPSSlider",
 			"Advanced_GammaSlider",
 			"Advanced_ContrastSlider",
 			"Advanced_BrightnessSlider",
@@ -127,7 +134,7 @@ tinsert(C.BlizzThemes, function()
 		}
 		for i = 1, #sliders do
 			local slider = _G[sliders[i]]
-			if not slider then
+			if not slider and C.isDeveloper then
 				print(sliders[i], "not found.")
 			else
 				F.ReskinSlider(slider)
@@ -135,10 +142,11 @@ tinsert(C.BlizzThemes, function()
 		end
 
 		local checkboxes = {
+			"Display_UseUIScale",
 			"Display_RaidSettingsEnabledCheckBox",
-			"Advanced_UseUIScale",
 			"Advanced_MaxFPSCheckBox",
 			"Advanced_MaxFPSBKCheckBox",
+			"Advanced_TargetFPSCheckBox",
 			"NetworkOptionsPanelOptimizeSpeed",
 			"NetworkOptionsPanelUseIPv6",
 			"NetworkOptionsPanelAdvancedCombatLogging",
@@ -158,7 +166,7 @@ tinsert(C.BlizzThemes, function()
 		}
 		for i = 1, #checkboxes do
 			local checkbox = _G[checkboxes[i]]
-			if not checkbox then
+			if not checkbox and C.isDeveloper then
 				print(checkboxes[i], "not found.")
 			else
 				F.ReskinCheck(checkbox)
@@ -182,4 +190,13 @@ tinsert(C.BlizzThemes, function()
 			self.styled = true
 		end
 	end)
+
+	-- Deprecated
+	F.StripTextures(AudioOptionsFrame.Header)
+	AudioOptionsFrame.Header:ClearAllPoints()
+	AudioOptionsFrame.Header:SetPoint("TOP", AudioOptionsFrame, 0, 0)
+	F.SetBD(AudioOptionsFrame)
+	F.Reskin(AudioOptionsFrameOkay)
+	F.Reskin(AudioOptionsFrameCancel)
+	F.Reskin(AudioOptionsFrameDefaults)
 end)

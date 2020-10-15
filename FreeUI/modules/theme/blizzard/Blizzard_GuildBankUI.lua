@@ -46,7 +46,7 @@ C.Themes["Blizzard_GuildBankUI"] = function()
 	F.StripTextures(GuildBankPopupFrame.BorderBox)
 	GuildBankPopupFrame.BG:Hide()
 	F.SetBD(GuildBankPopupFrame)
-	F.CreateBD(GuildBankPopupEditBox, .25)
+	F.CreateBDFrame(GuildBankPopupEditBox, .25)
 	GuildBankPopupFrame:SetPoint("TOPLEFT", GuildBankFrame, "TOPRIGHT", 2, -30)
 	GuildBankPopupFrame:SetHeight(525)
 
@@ -63,7 +63,7 @@ C.Themes["Blizzard_GuildBankUI"] = function()
 			button.bg = F.CreateBDFrame(button, .3)
 			button.bg:SetBackdropColor(.3, .3, .3, .3)
 			button.searchOverlay:SetOutside()
-			F.HookIconBorderColor(button.IconBorder)
+			F.ReskinIconBorder(button.IconBorder)
 		end
 	end
 

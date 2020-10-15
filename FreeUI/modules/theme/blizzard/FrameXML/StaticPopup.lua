@@ -1,23 +1,23 @@
 local F, C = unpack(select(2, ...))
+local r, g, b = C.r, C.g, C.b
+
+local function colorMinimize(f)
+	if f:IsEnabled() then
+		f.minimize:SetVertexColor(r, g, b)
+	end
+end
+
+local function clearMinimize(f)
+	f.minimize:SetVertexColor(1, 1, 1)
+end
 
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
 
-	local r, g, b = C.r, C.g, C.b
-
-	local function colourMinimize(f)
-		if f:IsEnabled() then
-			f.minimize:SetVertexColor(r, g, b)
-		end
-	end
-
-	local function clearMinimize(f)
-		f.minimize:SetVertexColor(1, 1, 1)
-	end
-
 	for i = 1, 4 do
 		local frame = _G["StaticPopup"..i]
 		local bu = _G["StaticPopup"..i.."ItemFrame"]
+		local icon = _G["StaticPopup"..i.."ItemFrameIconTexture"]
 		local close = _G["StaticPopup"..i.."CloseButton"]
 
 		local gold = _G["StaticPopup"..i.."MoneyInputFrameGold"]
@@ -25,31 +25,30 @@ tinsert(C.BlizzThemes, function()
 		local copper = _G["StaticPopup"..i.."MoneyInputFrameCopper"]
 
 		_G["StaticPopup"..i.."ItemFrameNameFrame"]:Hide()
-		_G["StaticPopup"..i.."ItemFrameIconTexture"]:SetTexCoord(unpack(C.TexCoord))
 
 		bu:SetNormalTexture("")
 		bu:SetHighlightTexture("")
 		bu:SetPushedTexture("")
-		F.CreateBDFrame(bu)
-		bu.IconBorder:SetAlpha(0)
-		frame["Border"]:Hide()
+		bu.bg = F.ReskinIcon(icon)
+		F.ReskinIconBorder(bu.IconBorder)
 
 		silver:SetPoint("LEFT", gold, "RIGHT", 1, 0)
 		copper:SetPoint("LEFT", silver, "RIGHT", 1, 0)
 
+		frame.Border:Hide()
 		F.SetBD(frame)
 		for j = 1, 4 do
 			F.Reskin(frame["button"..j])
 		end
-		F.Reskin(frame["extraButton"])
+		F.Reskin(frame.extraButton)
 		F.ReskinClose(close)
 
 		close.minimize = close:CreateTexture(nil, "OVERLAY")
-		close.minimize:SetSize(9, 1)
+		close.minimize:SetSize(9, C.Mult)
 		close.minimize:SetPoint("CENTER")
 		close.minimize:SetTexture(C.Assets.bd_tex)
 		close.minimize:SetVertexColor(1, 1, 1)
-		close:HookScript("OnEnter", colourMinimize)
+		close:HookScript("OnEnter", colorMinimize)
 		close:HookScript("OnLeave", clearMinimize)
 
 		F.ReskinInput(_G["StaticPopup"..i.."EditBox"], 20)
@@ -99,14 +98,10 @@ tinsert(C.BlizzThemes, function()
 			closeButton:SetPushedTexture("")
 
 			if info.closeButtonIsHide then
-				for _, pixel in pairs(closeButton.pixels) do
-					pixel:Hide()
-				end
+				closeButton.__texture:Hide()
 				closeButton.minimize:Show()
 			else
-				for _, pixel in pairs(closeButton.pixels) do
-					pixel:Show()
-				end
+				closeButton.__texture:Show()
 				closeButton.minimize:Hide()
 			end
 		end

@@ -5,7 +5,7 @@ C.Themes["Blizzard_BattlefieldMap"] = function()
 	local BorderFrame = BattlefieldMapFrame.BorderFrame
 
 	F.StripTextures(BorderFrame)
-	F.SetBD(BattlefieldMapFrame, -1, 1, -1, 2)
+	F.SetBD(BattlefieldMapFrame, nil, -1, 3, -1, 2)
 	F.ReskinClose(BorderFrame.CloseButton)
 
 	F.StripTextures(OpacityFrame)

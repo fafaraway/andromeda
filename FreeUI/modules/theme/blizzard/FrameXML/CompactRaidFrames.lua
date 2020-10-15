@@ -28,6 +28,7 @@ tinsert(C.BlizzThemes, function()
 		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup7,
 		CompactRaidFrameManagerDisplayFrameFilterOptionsFilterGroup8,
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
+		CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
 		CompactRaidFrameManagerDisplayFrameLockedModeToggle,
@@ -49,7 +50,7 @@ tinsert(C.BlizzThemes, function()
 	select(1, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 	select(4, CompactRaidFrameManagerDisplayFrame:GetRegions()):SetAlpha(0)
 
-	local bd = F.CreateBDFrame(CompactRaidFrameManager, nil, true)
+	local bd = F.SetBD(CompactRaidFrameManager)
 	bd:SetPoint("TOPLEFT")
 	bd:SetPoint("BOTTOMRIGHT", -9, 9)
 	F.ReskinDropDown(CompactRaidFrameManagerDisplayFrameProfileSelector)

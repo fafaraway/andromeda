@@ -8,7 +8,7 @@ local function reskinPartyPose(frame)
 	F.CreateBDFrame(frame.ModelScene, .25)
 
 	local rewardFrame = frame.RewardAnimations.RewardFrame
-	local bg = F.CreateBDFrame(rewardFrame, nil, true)
+	local bg = F.SetBD(rewardFrame)
 	bg:SetPoint("TOPLEFT", -5, 5)
 	bg:SetPoint("BOTTOMRIGHT", rewardFrame.NameFrame, 0, -5)
 	rewardFrame.NameFrame:SetAlpha(0)

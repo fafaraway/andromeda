@@ -59,7 +59,7 @@ C.Themes["Blizzard_ArchaeologyUI"] = function()
 	ArchaeologyFrameRankBarBar:SetTexture(C.Assets.bd_tex)
 	ArchaeologyFrameRankBarBar:SetGradient("VERTICAL", 0, .65, 0, 0, .75, 0)
 	ArchaeologyFrameRankBar:SetHeight(14)
-	F.CreateBD(ArchaeologyFrameRankBar, .25)
+	F.CreateBDFrame(ArchaeologyFrameRankBar, .25)
 	F.ReskinIcon(ArchaeologyFrameArtifactPageIcon)
 
 	F.StripTextures(ArchaeologyFrameArtifactPageSolveFrameStatusBar)

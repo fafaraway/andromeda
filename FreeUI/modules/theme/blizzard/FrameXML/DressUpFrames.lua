@@ -20,6 +20,8 @@ tinsert(C.BlizzThemes, function()
 	DressUpFrame.ModelBackground:Hide()
 	F.CreateBDFrame(DressUpFrame.ModelScene)
 
+	F.ReskinCheck(TransmogAndMountDressupFrame.ShowMountCheckButton)
+
 	-- SideDressUp
 
 	F.StripTextures(SideDressUpFrame, 0)

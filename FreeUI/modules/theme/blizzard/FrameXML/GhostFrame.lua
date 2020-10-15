@@ -10,7 +10,7 @@ tinsert(C.BlizzThemes, function()
 	end
 	F.ReskinIcon(GhostFrameContentsFrameIcon)
 
-	local bg = F.SetBD(GhostFrame)
+	local bg = F.SetBD(GhostFrame, 0)
 	F.CreateGradient(bg)
 	GhostFrame:SetHighlightTexture(C.Assets.bd_tex)
 	GhostFrame:GetHighlightTexture():SetVertexColor(r, g, b, .25)

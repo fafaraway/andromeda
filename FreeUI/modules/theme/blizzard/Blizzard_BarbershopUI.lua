@@ -1,32 +1,60 @@
 local F, C = unpack(select(2, ...))
+local TOOLTIP = F.TOOLTIP
 
 C.Themes["Blizzard_BarbershopUI"] = function()
-	for i = 1, 3 do
-		select(i, BarberShopFrame:GetRegions()):Hide()
-	end
-	BarberShopFrameMoneyFrame:GetRegions():Hide()
-	BarberShopAltFormFrameBackground:Hide()
-	BarberShopAltFormFrameBorder:Hide()
+	local frame = BarberShopFrame
 
-	BarberShopAltFormFrame:ClearAllPoints()
-	BarberShopAltFormFrame:SetPoint("BOTTOM", BarberShopFrame, "TOP", 0, -74)
+	F.Reskin(frame.AcceptButton)
+	F.Reskin(frame.CancelButton)
+	F.Reskin(frame.ResetButton)
+end
 
-	F.SetBD(BarberShopFrame, 44, -75, -40, 44)
-	F.SetBD(BarberShopAltFormFrame, 0, 0, 2, -2)
+local function ReskinCustomizeButton(button)
+	F.Reskin(button)
+	button.__bg:SetInside(nil, 3, 3)
+end
 
-	F.Reskin(BarberShopFrameOkayButton)
-	F.Reskin(BarberShopFrameCancelButton)
-	F.Reskin(BarberShopFrameResetButton)
+local function ReskinCustomizeTooltip(tooltip)
+	TOOLTIP.ReskinTooltip(tooltip)
+	tooltip:SetScale(UIParent:GetScale())
+end
 
-	for i = 1, #BarberShopFrame.Selector do
-		local prevBtn, nextBtn = BarberShopFrame.Selector[i]:GetChildren()
-		F.ReskinArrow(prevBtn, "left")
-		F.ReskinArrow(nextBtn, "right")
-	end
+C.Themes["Blizzard_CharacterCustomize"] = function()
+	local frame = CharCustomizeFrame
 
-	-- [[ Banner frame ]]
+	ReskinCustomizeButton(frame.SmallButtons.ResetCameraButton)
+	ReskinCustomizeButton(frame.SmallButtons.ZoomOutButton)
+	ReskinCustomizeButton(frame.SmallButtons.ZoomInButton)
+	ReskinCustomizeButton(frame.SmallButtons.RotateLeftButton)
+	ReskinCustomizeButton(frame.SmallButtons.RotateRightButton)
 
-	BarberShopBannerFrameBGTexture:Hide()
+	hooksecurefunc(frame, "SetSelectedCatgory", function(self)
+		for button in self.selectionPopoutPool:EnumerateActive() do
+			if not button.styled then
+				F.ReskinArrow(button.DecrementButton, "left")
+				F.ReskinArrow(button.IncrementButton, "right")
 
-	F.SetBD(BarberShopBannerFrame, 25, -80, -20, 75)
+				local popoutButton = button.SelectionPopoutButton
+				popoutButton.HighlightTexture:SetAlpha(0)
+				popoutButton.NormalTexture:SetAlpha(0)
+				ReskinCustomizeButton(popoutButton)
+				F.StripTextures(popoutButton.Popout)
+				local bg = F.SetBD(popoutButton.Popout, 1)
+				bg:SetFrameLevel(popoutButton.Popout:GetFrameLevel())
+
+				button.styled = true
+			end
+		end
+
+		local optionPool = self.pools:GetPool("CharCustomizeOptionCheckButtonTemplate")
+		for button in optionPool:EnumerateActive() do
+			if not button.styled then
+				F.ReskinCheck(button.Button)
+				button.styled = true
+			end
+		end
+	end)
+
+	ReskinCustomizeTooltip(CharCustomizeTooltip)
+	ReskinCustomizeTooltip(CharCustomizeNoHeaderTooltip)
 end

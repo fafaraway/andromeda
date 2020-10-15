@@ -57,7 +57,7 @@ tinsert(C.BlizzThemes, function()
 			navButton.arrowDown:SetAlpha(0)
 			navButton.selected:SetDrawLayer("BACKGROUND", 1)
 			navButton.selected:SetColorTexture(r, g, b, .25)
-			navButton.selected:SetAllPoints(navButton.bgTex)
+			navButton.selected:SetInside(navButton.__bg)
 
 			navButton:HookScript("OnClick", function()
 				moveNavButtons(self)
@@ -72,7 +72,7 @@ tinsert(C.BlizzThemes, function()
 			F.SetupArrow(tex, "down")
 			tex:SetSize(14, 14)
 			tex:SetPoint("CENTER")
-			arrowButton.bgTex = tex
+			arrowButton.__texture = tex
 
 			arrowButton:SetScript("OnEnter", F.Texture_OnEnter)
 			arrowButton:SetScript("OnLeave", F.Texture_OnLeave)

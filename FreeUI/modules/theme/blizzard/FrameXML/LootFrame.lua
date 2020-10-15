@@ -79,7 +79,7 @@ tinsert(C.BlizzThemes, function()
 			if not frame.styled then
 				frame.Border:SetAlpha(0)
 				frame.Background:SetAlpha(0)
-				frame.bg = F.CreateBDFrame(frame, nil, true)
+				frame.bg = F.SetBD(frame)
 
 				frame.Timer.Bar:SetTexture(C.Assets.bd_tex)
 				frame.Timer.Bar:SetVertexColor(1, .8, 0)

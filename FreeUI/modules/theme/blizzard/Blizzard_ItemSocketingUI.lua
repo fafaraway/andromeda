@@ -44,7 +44,7 @@ C.Themes["Blizzard_ItemSocketingUI"] = function()
 
 	F.ReskinPortraitFrame(ItemSocketingFrame)
 	ItemSocketingFrame.BackgroundColor:SetAlpha(0)
-	F.CreateBD(ItemSocketingScrollFrame, .25)
+	F.CreateBDFrame(ItemSocketingScrollFrame, .25)
 	F.Reskin(ItemSocketingSocketButton)
 	F.ReskinScroll(ItemSocketingScrollFrameScrollBar)
 end

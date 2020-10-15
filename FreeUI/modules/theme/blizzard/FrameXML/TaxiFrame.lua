@@ -9,6 +9,6 @@ tinsert(C.BlizzThemes, function()
 	TaxiFrame.TitleBg:Hide()
 	TaxiFrame.TopTileStreaks:Hide()
 
-	F.SetBD(TaxiFrame, 3, -23, -5, 3)
-	F.ReskinClose(TaxiFrame.CloseButton, "TOPRIGHT", TaxiRouteMap, "TOPRIGHT", -6, -6)
+	F.SetBD(TaxiFrame, nil, 3, -23, -5, 3)
+	F.ReskinClose(TaxiFrame.CloseButton, TaxiRouteMap)
 end)

@@ -1,71 +1,56 @@
 local F, C = unpack(select(2, ...))
 
+local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
+
+local function reskinChatBubble(chatbubble)
+	if chatbubble.styled then return end
+
+	local frame = chatbubble:GetChildren()
+	if frame and not frame:IsForbidden() then
+		local bg = F.SetBD(frame)
+		bg:SetScale(UIParent:GetEffectiveScale())
+		bg:SetInside(frame, 6, 6)
+
+		frame:SetBackdrop(nil)
+		frame.Tail:SetAlpha(0)
+		--frame.String:SetFont(C.Assets.Fonts.Chat, 14)
+	end
+
+	chatbubble.styled = true
+end
+
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
 
-	local bubbleHook = CreateFrame('Frame')
-	local last = 0
-	local numKids = 0
-	local noscalemult = 1
-	local tslu = 0
-	local bubbles = {}
+	local events = {
+		CHAT_MSG_SAY = "chatBubbles",
+		CHAT_MSG_YELL = "chatBubbles",
+		CHAT_MSG_MONSTER_SAY = "chatBubbles",
+		CHAT_MSG_MONSTER_YELL = "chatBubbles",
+		CHAT_MSG_PARTY = "chatBubblesParty",
+		CHAT_MSG_PARTY_LEADER = "chatBubblesParty",
+		CHAT_MSG_MONSTER_PARTY = "chatBubblesParty",
+	}
 
-	local function styleBubble(frame)
-		if frame:IsForbidden() then return end
-
-		for i = 1, frame:GetNumRegions() do
-			local region = select(i, frame:GetRegions())
-			if region:GetObjectType() == 'Texture' then
-				region:SetTexture(nil)
-			elseif region:GetObjectType() == 'FontString' then
-				frame.text = region
-			end
-		end
-
-		frame:SetClampedToScreen(false)
-
-		F.CreateBD(frame)
-		F.CreateSD(frame)
-		F.CreateTex(frame)
-		frame:SetScale(UIParent:GetScale())
-
-		tinsert(bubbles, frame)
+	local bubbleHook = CreateFrame("Frame")
+	for event in next, events do
+		bubbleHook:RegisterEvent(event)
 	end
-
-	local function isChatBubble(frame)
-		if frame:IsForbidden() then return end
-		if frame:GetName() then return end
-		local region = frame:GetRegions()
-		if region and region:IsObjectType('Texture') then
-			return region:GetTexture() == [[Interface\Tooltips\ChatBubble-Background]]
-		end
-	end
-
-
-	bubbleHook:SetScript('OnUpdate', function(self, elapsed)
-		tslu = tslu + elapsed
-
-		if tslu > .1 then
-			tslu = 0
-
-			local newNumKids = WorldFrame:GetNumChildren()
-			if newNumKids ~= numKids then
-				for i = numKids + 1, newNumKids do
-					local frame = select(i, WorldFrame:GetChildren())
-
-					if isChatBubble(frame) then
-						styleBubble(frame)
-					end
-				end
-				numKids = newNumKids
-			end
-
-			for i, frame in next, bubbles do
-				local r, g, b = frame.text:GetTextColor()
-				if frame.Shadow then
-					frame.Shadow:SetBackdropBorderColor(r, g, b, .75)
-				end
-			end
+	bubbleHook:SetScript("OnEvent", function(self, event)
+		if GetCVarBool(events[event]) then
+			self.elapsed = 0
+			self:Show()
 		end
 	end)
+
+	bubbleHook:SetScript("OnUpdate", function(self, elapsed)
+		self.elapsed = self.elapsed + elapsed
+		if self.elapsed > .1 then
+			for _, chatbubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
+				reskinChatBubble(chatbubble)
+			end
+			self:Hide()
+		end
+	end)
+	bubbleHook:Hide()
 end)

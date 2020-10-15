@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
-local THEME = F:GetModule('THEME')
-local TOOLTIP = F:GetModule('TOOLTIP')
+local THEME = F.THEME
+local TOOLTIP = F.TOOLTIP
 
 
 function THEME:ReskinPGF()
@@ -8,10 +8,10 @@ function THEME:ReskinPGF()
 	if not IsAddOnLoaded('PremadeGroupsFilter') then return end
 
 	local tipStyled
-	hooksecurefunc(PremadeGroupsFilter.Debug, 'PopupMenu_Initialize', function()
+	hooksecurefunc(_G.PremadeGroupsFilter.Debug, 'PopupMenu_Initialize', function()
 		if tipStyled then return end
-		for i = 1, PremadeGroupsFilterDialog:GetNumChildren() do
-			local child = select(i, PremadeGroupsFilterDialog:GetChildren())
+		for i = 1, _G.PremadeGroupsFilterDialog:GetNumChildren() do
+			local child = select(i, _G.PremadeGroupsFilterDialog:GetChildren())
 			if child and child.Shadow then
 				TOOLTIP.ReskinTooltip(child)
 				tipStyled = true
@@ -20,22 +20,20 @@ function THEME:ReskinPGF()
 		end
 	end)
 
-	hooksecurefunc(PremadeGroupsFilterDialog, 'SetPoint', function(self, _, parent)
-		if parent ~= LFGListFrame then
+	hooksecurefunc(_G.PremadeGroupsFilterDialog, 'SetPoint', function(self, _, parent)
+		if parent ~= _G.LFGListFrame then
 			self:ClearAllPoints()
-			self:SetPoint('TOPLEFT', LFGListFrame, 'TOPRIGHT', 5, C.Mult)
+			self:SetPoint('TOPLEFT', _G.LFGListFrame, 'TOPRIGHT', 5, C.Mult)
 		end
 	end)
 
 	local pairs = pairs
 	local styled
-	hooksecurefunc(PremadeGroupsFilterDialog, 'Show', function(self)
+	hooksecurefunc(_G.PremadeGroupsFilterDialog, 'Show', function(self)
 		if styled then return end
 
 		F.StripTextures(self)
-		F.CreateBD(self)
-		F.CreateSD(self)
-		F.CreateTex(self)
+		F.SetBD(self)
 		F.ReskinClose(self.CloseButton)
 		F.Reskin(self.ResetButton)
 		F.Reskin(self.RefreshButton)
@@ -73,6 +71,6 @@ function THEME:ReskinPGF()
 		styled = true
 	end)
 
-	F.ReskinCheck(UsePFGButton)
-	UsePFGButton.text:SetWidth(35)
+	F.ReskinCheck(_G.UsePFGButton)
+	_G.UsePFGButton.text:SetWidth(35)
 end

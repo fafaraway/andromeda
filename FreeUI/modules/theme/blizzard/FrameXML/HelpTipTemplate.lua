@@ -12,21 +12,6 @@ tinsert(C.BlizzThemes, function()
 		end
 	end
 
-	local microButtons = {
-		CharacterMicroButtonAlert,
-		TalentMicroButtonAlert,
-		CollectionsMicroButtonAlert,
-		LFDMicroButtonAlert,
-		EJMicroButtonAlert,
-		StoreMicroButtonAlert,
-		GuildMicroButtonAlert,
-		ZoneAbilityButtonAlert,
-	}
-
-	for _, frame in pairs(microButtons) do
-		reskinAlertFrame(frame)
-	end
-
 	hooksecurefunc(HelpTip, "Show", function(self)
 		for frame in self.framePool:EnumerateActive() do
 			reskinAlertFrame(frame)

@@ -6,7 +6,6 @@ C.Themes["Blizzard_AchievementUI"] = function()
 	F.StripTextures(AchievementFrame, true)
 	F.SetBD(AchievementFrame)
 	AchievementFrameCategories:SetBackdrop(nil)
-	AchievementFrameSummary:SetBackdrop(nil)
 	AchievementFrameSummaryBackground:Hide()
 	AchievementFrameSummary:GetChildren():Hide()
 	AchievementFrameCategoriesContainerScrollBarBG:SetAlpha(0)
@@ -91,19 +90,17 @@ C.Themes["Blizzard_AchievementUI"] = function()
 		ch:SetPushedTexture("")
 		ch:SetHighlightTexture(C.Assets.bd_tex)
 
-		local hl = ch:GetHighlightTexture()
-		hl:SetPoint("TOPLEFT", 4, -4)
-		hl:SetPoint("BOTTOMRIGHT", -4, 4)
-		hl:SetVertexColor(r, g, b, .25)
-
 		local check = ch:GetCheckedTexture()
 		check:SetDesaturated(true)
 		check:SetVertexColor(r, g, b)
 
-		local tex = F.CreateGradient(ch)
-		tex:SetPoint("TOPLEFT", 4, -4)
-		tex:SetPoint("BOTTOMRIGHT", -4, 4)
-		F.CreateBDFrame(tex)
+		local bg = F.CreateBDFrame(ch, 0, true)
+		bg:SetPoint("TOPLEFT", 2, -2)
+		bg:SetPoint("BOTTOMRIGHT", -2, 2)
+
+		local hl = ch:GetHighlightTexture()
+		hl:SetInside(bg)
+		hl:SetVertexColor(r, g, b, .25)
 	end
 
 	AchievementFrameAchievementsContainerButton1.background:SetPoint("TOPLEFT", AchievementFrameAchievementsContainerButton1, "TOPLEFT", 2, -3)
@@ -210,7 +207,7 @@ C.Themes["Blizzard_AchievementUI"] = function()
 	end
 
 	AchievementFrameComparisonHeader:SetPoint("BOTTOMRIGHT", AchievementFrameComparison, "TOPRIGHT", 39, 26)
-	local headerbg = F.CreateBDFrame(AchievementFrameComparisonHeader, nil, true)
+	local headerbg = F.SetBD(AchievementFrameComparisonHeader)
 	headerbg:SetPoint("TOPLEFT", 20, -20)
 	headerbg:SetPoint("BOTTOMRIGHT", -28, -5)
 
@@ -268,10 +265,10 @@ C.Themes["Blizzard_AchievementUI"] = function()
 
 	F.StripTextures(AchievementFrame.searchPreviewContainer)
 	AchievementFrame.searchPreviewContainer:ClearAllPoints()
-	AchievementFrame.searchPreviewContainer:SetPoint("TOPLEFT", AchievementFrame, "TOPRIGHT", 7, -1)
-	local bg = F.CreateBDFrame(AchievementFrame.searchPreviewContainer, nil, true)
-	bg:SetPoint("TOPLEFT", -2, 2)
-	bg:SetPoint("BOTTOMRIGHT", showAllSearchResults, 2, -2)
+	AchievementFrame.searchPreviewContainer:SetPoint("TOPLEFT", AchievementFrame, "TOPRIGHT", 7, -2)
+	local bg = F.SetBD(AchievementFrame.searchPreviewContainer)
+	bg:SetPoint("TOPLEFT", -3, 3)
+	bg:SetPoint("BOTTOMRIGHT", showAllSearchResults, 3, -3)
 
 	for i = 1, 5 do
 		F.StyleSearchButton(AchievementFrame.searchPreviewContainer["searchPreview"..i])
@@ -282,7 +279,7 @@ C.Themes["Blizzard_AchievementUI"] = function()
 		local result = AchievementFrame.searchResults
 		result:SetPoint("BOTTOMLEFT", AchievementFrame, "BOTTOMRIGHT", 15, -1)
 		F.StripTextures(result)
-		local bg = F.CreateBDFrame(result, nil, bg)
+		local bg = F.SetBD(result)
 		bg:SetPoint("TOPLEFT", -10, 0)
 		bg:SetPoint("BOTTOMRIGHT")
 
@@ -292,8 +289,9 @@ C.Themes["Blizzard_AchievementUI"] = function()
 			local bu = _G["AchievementFrameScrollFrameButton"..i]
 			F.StripTextures(bu)
 			F.ReskinIcon(bu.icon)
-			F.CreateBD(bu, .25)
-			SetupButtonHighlight(bu, bu)
+			local bg = F.CreateBDFrame(bu, .25)
+			bg:SetInside()
+			SetupButtonHighlight(bu, bg)
 		end
 	end
 

@@ -1,5 +1,12 @@
 local F, C = unpack(select(2, ...))
 
+local MAX_CONTAINER_ITEMS = 36
+
+local function replaceSortTexture(texture)
+	texture:SetTexture("Interface\\Icons\\INV_Pet_Broom") -- HD version
+	texture:SetTexCoord(unpack(C.TexCoord))
+end
+
 tinsert(C.BlizzThemes, function()
 	if not FreeADB.appearance.reskin_blizz then return end
 
@@ -9,11 +16,7 @@ tinsert(C.BlizzThemes, function()
 		local con = _G["ContainerFrame"..i]
 		local name = _G["ContainerFrame"..i.."Name"]
 
-		for j = 1, 5 do
-			select(j, con:GetRegions()):SetAlpha(0)
-		end
-		select(7, con:GetRegions()):SetAlpha(0)
-
+		F.StripTextures(con, true)
 		con.PortraitButton.Highlight:SetTexture("")
 
 		name:ClearAllPoints()
@@ -40,14 +43,14 @@ tinsert(C.BlizzThemes, function()
 			newItemTexture:SetSize(1, 1)
 
 			button.searchOverlay:SetOutside()
-			F.HookIconBorderColor(button.IconBorder)
+			F.ReskinIconBorder(button.IconBorder)
 		end
 
-		local f = F.CreateBDFrame(con, nil, true)
+		local f = F.SetBD(con)
 		f:SetPoint("TOPLEFT", 8, -4)
 		f:SetPoint("BOTTOMRIGHT", -4, 3)
 
-		F.ReskinClose(_G["ContainerFrame"..i.."CloseButton"], "TOPRIGHT", con, "TOPRIGHT", -6, -6)
+		F.ReskinClose(_G["ContainerFrame"..i.."CloseButton"])
 	end
 
 	for i = 1, 3 do
@@ -77,8 +80,8 @@ tinsert(C.BlizzThemes, function()
 		end
 	end)
 
-	BagItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
-	BagItemAutoSortButton:GetPushedTexture():SetTexCoord(.17, .83, .17, .83)
+	replaceSortTexture(BagItemAutoSortButton:GetNormalTexture())
+	replaceSortTexture(BagItemAutoSortButton:GetPushedTexture())
 	F.CreateBDFrame(BagItemAutoSortButton)
 
 	local highlight = BagItemAutoSortButton:GetHighlightTexture()

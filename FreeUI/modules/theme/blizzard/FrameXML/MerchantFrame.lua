@@ -42,8 +42,9 @@ tinsert(C.BlizzThemes, function()
 
 		icon:SetInside()
 		button.bg = F.ReskinIcon(icon)
-		F.HookIconBorderColor(button.IconBorder)
+		F.ReskinIconBorder(button.IconBorder)
 		button.IconOverlay:SetInside()
+		button.IconOverlay2:SetInside()
 
 		name:SetFontObject(Number12Font)
 		name:SetPoint("LEFT", button, "RIGHT", 2, 9)
@@ -101,4 +102,14 @@ tinsert(C.BlizzThemes, function()
 			MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 65, 73)
 		end
 	end)
+
+	-- StackSplitFrame
+
+	local StackSplitFrame = StackSplitFrame
+	F.StripTextures(StackSplitFrame)
+	F.SetBD(StackSplitFrame)
+	F.Reskin(StackSplitFrame.OkayButton)
+	F.Reskin(StackSplitFrame.CancelButton)
+	F.ReskinArrow(StackSplitFrame.LeftButton, "left")
+	F.ReskinArrow(StackSplitFrame.RightButton, "right")
 end)

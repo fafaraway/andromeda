@@ -28,7 +28,7 @@ tinsert(C.BlizzThemes, function()
 
 		bu.icon:SetTexCoord(unpack(C.TexCoord))
 		bu.bg = F.CreateBDFrame(bu.icon, .25)
-		F.HookIconBorderColor(bu.IconBorder)
+		F.ReskinIconBorder(bu.IconBorder)
 
 		local questTexture = bu.IconQuestTexture
 		questTexture:SetDrawLayer("BACKGROUND")
@@ -41,7 +41,6 @@ tinsert(C.BlizzThemes, function()
 
 	for i = 1, 7 do
 		local bag = BankSlotsFrame["Bag"..i]
-
 		bag:SetNormalTexture("")
 		bag:SetPushedTexture("")
 		bag:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -50,8 +49,7 @@ tinsert(C.BlizzThemes, function()
 
 		bag.icon:SetTexCoord(unpack(C.TexCoord))
 		bag.bg = F.CreateBDFrame(bag.icon, .25)
-
-		F.HookIconBorderColor(bag.IconBorder)
+		F.ReskinIconBorder(bag.IconBorder)
 	end
 
 	BankItemAutoSortButton:GetNormalTexture():SetTexCoord(.17, .83, .17, .83)
