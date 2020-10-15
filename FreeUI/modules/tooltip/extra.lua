@@ -3,9 +3,11 @@ local TOOLTIP = F:GetModule('TOOLTIP')
 
 
 local strmatch, format, tonumber, select = string.match, string.format, tonumber, select
-local UnitAura, GetItemCount, GetItemInfo, GetUnitName, GetCurrencyListLink = UnitAura, GetItemCount, GetItemInfo, GetUnitName, GetCurrencyListLink
+local UnitAura, GetItemCount, GetItemInfo, GetUnitName = UnitAura, GetItemCount, GetItemInfo, GetUnitName
+local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local UnitBattlePetType, UnitBattlePetSpeciesID = UnitBattlePetType, UnitBattlePetSpeciesID
 local C_TradeSkillUI_GetRecipeReagentItemLink = C_TradeSkillUI.GetRecipeReagentItemLink
+local C_CurrencyInfo_GetCurrencyListLink = C_CurrencyInfo.GetCurrencyListLink
 local BAGSLOT, BANK = BAGSLOT, BANK
 
 local mountCache = {}
@@ -124,7 +126,7 @@ end
 function TOOLTIP:SetItemID()
 	local link = select(2, self:GetItem())
 	if link then
-		local id = strmatch(link, 'item:(%d+):')
+		local id = GetItemInfoFromHyperlink(link)
 		local keystone = strmatch(link, '|Hkeystone:([0-9]+):')
 		if keystone then id = tonumber(keystone) end
 		if id then TOOLTIP.AddLineForID(self, id, types.item) end
@@ -221,7 +223,7 @@ function TOOLTIP:ExtraInfo()
 
 		-- Currencies
 		hooksecurefunc(GameTooltip, 'SetCurrencyToken', function(self, index)
-			local id = tonumber(strmatch(GetCurrencyListLink(index), 'currency:(%d+)'))
+			local id = tonumber(strmatch(C_CurrencyInfo_GetCurrencyListLink(index), 'currency:(%d+)'))
 			if id then TOOLTIP.AddLineForID(self, id, types.currency) end
 		end)
 
@@ -270,8 +272,8 @@ end
 
 local f = CreateFrame('frame')
 f:RegisterEvent('ADDON_LOADED')
-f:SetScript('OnEvent', function(_, _, what)
-	if what == 'Blizzard_Collections' then
+f:SetScript('OnEvent', function(_, _, addon)
+	if addon == 'Blizzard_Collections' then
 		hooksecurefunc('WardrobeCollectionFrame_SetAppearanceTooltip', function(self, sources)
 			local visualIDs = {}
 			local sourceIDs = {}

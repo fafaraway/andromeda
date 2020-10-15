@@ -435,7 +435,7 @@ function TOOLTIP:OnLogin()
 	TOOLTIP:ExtraInfo()
 	TOOLTIP:TargetedInfo()
 	TOOLTIP:AzeriteArmor()
-	TOOLTIP:ShowPvPRating()
+	TOOLTIP:ConduitCollectionData()
 end
 
 
