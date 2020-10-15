@@ -195,7 +195,7 @@ tinsert(C.BlizzThemes, function()
 			elseif text and text:find("|cff480404") then
 					QuestInfoSealFrame.Text:SetText(string.gsub(text, "|cff480404", "|cffc20606"))
 			end
-			F.SetFS(QuestInfoSealFrame.Text, C.Assets.Fonts.Header, 18)
+			F.SetFS(QuestInfoSealFrame.Text, C.Assets.Fonts.Bold, 18)
 			QuestInfoSealFrame.Text:SetShadowColor(0, 0, 0, 1)
 			QuestInfoSealFrame.Text:SetShadowOffset(2, -2)
 		end

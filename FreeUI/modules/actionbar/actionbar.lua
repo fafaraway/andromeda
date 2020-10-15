@@ -17,7 +17,17 @@ function ACTIONBAR:CreateBar1()
 	frame:Width(numNormal*buttonSizeNormal + (numNormal-1)*margin + 2*padding)
 	frame:Height(buttonSizeNormal + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
+
+	if FreeDB.actionbar.glow then
+		local tex = frame:CreateTexture(nil, 'OVERLAY')
+		tex:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, padding)
+		tex:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, padding)
+		tex:SetHeight(30)
+		tex:SetTexture(C.Assets.glow_tex)
+		tex:SetRotation(rad(180))
+		tex:SetVertexColor(0, 0, 0, .5)
+	end
 
 	for i = 1, numNormal do
 		local button = _G['ActionButton'..i]
@@ -86,7 +96,16 @@ function ACTIONBAR:CreateBar2()
 	frame:Width(numNormal*buttonSizeNormal + (numNormal-1)*margin + 2*padding)
 	frame:Height(buttonSizeNormal + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+buttonSizeNormal+padding}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap+buttonSizeNormal+padding}
+
+	if FreeDB.actionbar.glow then
+		local tex = frame:CreateTexture(nil, 'OVERLAY')
+		tex:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, -padding)
+		tex:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, -padding)
+		tex:SetHeight(30)
+		tex:SetTexture(C.Assets.glow_tex)
+		tex:SetVertexColor(0, 0, 0, .5)
+	end
 
 	_G.MultiBarBottomLeft:SetParent(frame)
 	_G.MultiBarBottomLeft:EnableMouse(false)
@@ -139,9 +158,9 @@ function ACTIONBAR:CreateBar3()
 	end
 
 	if FreeDB.actionbar.bar3_divide then
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']}
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
 	else
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+2*(buttonSizeNormal+2*padding)}
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap+2*(buttonSizeNormal+2*padding)}
 	end
 
 	_G.MultiBarBottomRight:SetParent(frame)
@@ -299,7 +318,7 @@ function ACTIONBAR:CreatePetbar()
 	frame:Width(numPet*buttonSizeSmall + (numPet-1)*(margin+2) + 2*padding)
 	frame:Height(buttonSizeSmall + 2*padding)
 
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, FreeADB['ui_gap']+2*(buttonSizeNormal+2*padding)}
+	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap+2*(buttonSizeNormal+2*padding)}
 
 	_G.PetActionBarFrame:SetParent(frame)
 	_G.PetActionBarFrame:EnableMouse(false)

@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local COLORS = F.COLORS
 local oUF = F.oUF
 
 
@@ -62,16 +61,7 @@ local function SetReactionColors()
 	}
 end
 
-function COLORS:UpdateColors()
-	SetClassColors()
-	SetPowerColors()
-	SetClassPowerColors()
-	SetRuneColors()
-	SetReactionColors()
-end
-
-
-function COLORS:OnLogin()
+function F:UpdateColors()
 	SetDebuffTypeColors()
 	SetClassColors()
 	SetPowerColors()
@@ -79,3 +69,4 @@ function COLORS:OnLogin()
 	SetRuneColors()
 	SetReactionColors()
 end
+

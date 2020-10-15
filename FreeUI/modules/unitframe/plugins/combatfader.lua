@@ -46,7 +46,7 @@ local function Update(self)
 		(element.combat and UnitAffectingCombat(unit)) or
 		(element.target and UnitExists('target')) or
 		(element.casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
-		(element.injured and (UnitHealth(unit) < UnitHealthMax(unit))) or
+		(element.injured and (UnitHealth(unit) < UnitHealthMax(unit)) and not UnitIsDead(unit) and not UnitIsGhost(unit)) or
 		(element.mana and (powerToken == 'MANA' and (UnitPower('player') ~= UnitPowerMax('player')))) or
 		(element.power and (not isPowerRested(powerToken))) or
 		(element.hover and GetMouseFocus() == self)

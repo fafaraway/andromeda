@@ -68,7 +68,7 @@ local faneifyTab = function(frame, sel)
 		frame:HookScript('OnEnter', OnEnter)
 		frame:HookScript('OnLeave', OnLeave)
 
-		frame:GetFontString():SetFont(C.Assets.Fonts.Number, 10, 'OUTLINE')
+		frame:GetFontString():SetFont(C.Assets.Fonts.Regular, 10, 'OUTLINE')
 
 		frame.f = true
 	end

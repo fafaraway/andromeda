@@ -24,6 +24,7 @@ C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 C.isNewPatch = GetBuildInfo() == '8.3.0'
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
+C.UIGap = 33
 C.isDeveloper = false
 
 
@@ -78,10 +79,10 @@ C['Assets'] = {
 	},
 
 	['Fonts'] = {
-		['Normal'] = C.AssetsPath..'fonts\\normal.ttf',
-		['Header'] = C.AssetsPath..'fonts\\header.ttf',
+		['Regular'] = C.AssetsPath..'fonts\\regular.ttf',
+		['Condensed'] = C.AssetsPath..'fonts\\condensed.ttf',
+		['Bold'] = C.AssetsPath..'fonts\\bold.ttf',
 		['Chat'] = C.AssetsPath..'fonts\\chat.ttf',
-		['Number'] = C.AssetsPath..'fonts\\number.ttf',
 		['Combat'] = C.AssetsPath..'fonts\\combat.ttf',
 		['Pixel'] = C.AssetsPath..'fonts\\pixel.ttf',
 		['Cooldown'] = C.AssetsPath..'fonts\\cooldown.ttf',
@@ -142,16 +143,14 @@ C.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
 
 
 
-GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', GOLD_AMOUNT_SYMBOL)
-SILVER_AMOUNT_SYMBOL = format('|cffd0d0d0%s|r', SILVER_AMOUNT_SYMBOL)
-COPPER_AMOUNT_SYMBOL = format('|cffc77050%s|r', COPPER_AMOUNT_SYMBOL)
-COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
-SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
-GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'
+_G.GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', GOLD_AMOUNT_SYMBOL)
+_G.SILVER_AMOUNT_SYMBOL = format('|cffd0d0d0%s|r', SILVER_AMOUNT_SYMBOL)
+_G.COPPER_AMOUNT_SYMBOL = format('|cffc77050%s|r', COPPER_AMOUNT_SYMBOL)
+_G.COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
+_G.SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
+_G.GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'
 
-NORMAL_QUEST_DISPLAY = gsub(NORMAL_QUEST_DISPLAY, '000000', 'ffffff')
-TRIVIAL_QUEST_DISPLAY = gsub(TRIVIAL_QUEST_DISPLAY, '000000', 'ffffff')
-IGNORED_QUEST_DISPLAY = gsub(IGNORED_QUEST_DISPLAY, '000000', 'ffffff')
+
 
 
 -- RoleUpdater
@@ -183,3 +182,13 @@ C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_R
 C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 
 
+C.DevsList = {
+	['Dontbeshy-死亡之翼'] = true,
+	['Kangrinboqe-死亡之翼'] = true,
+}
+
+local function isDeveloper()
+	return C.DevsList[C.MyName..'-'..C.MyRealm]
+end
+
+C.isDeveloper = isDeveloper()

@@ -79,8 +79,8 @@ end
 function MAP:AddCoords()
 	if not FreeDB.map.coords then return end
 
-	playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
-	cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Normal, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
+	playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
+	cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
 
 	F.HideObject(WorldMapFrame.BorderFrame.Tutorial)
 
@@ -122,6 +122,14 @@ end
 
 function MAP:OnLogin()
 	if not FreeDB.map.enable_map then return end
+
+	-- Remove from frame manager
+	WorldMapFrame:ClearAllPoints()
+	WorldMapFrame:SetPoint('CENTER') -- init anchor
+	WorldMapFrame:SetAttribute('UIPanelLayout-area', nil)
+	WorldMapFrame:SetAttribute('UIPanelLayout-enabled', false)
+	WorldMapFrame:SetAttribute('UIPanelLayout-allowOtherPanels', true)
+	tinsert(_G.UISpecialFrames, 'WorldMapFrame')
 
 	self:WorldMapScale()
 	self:AddCoords()

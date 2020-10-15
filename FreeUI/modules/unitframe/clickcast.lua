@@ -12,7 +12,7 @@ SpellBinder:SetWidth(300)
 local header = CreateFrame('Frame', nil, SpellBinder)
 header:SetSize(260, 20)
 header:SetPoint('TOP')
-local text = F.CreateFS(header, C.Assets.Fonts.Normal, 12, true, L['UNITFRAME_CLICK_CAST_BINDING'], 'YELLOW', nil, 'TOP', 0, -10)
+local text = F.CreateFS(header, C.Assets.Fonts.Regular, 12, true, L['UNITFRAME_CLICK_CAST_BINDING'], 'YELLOW', nil, 'TOP', 0, -10)
 local tips = L['UNITFRAME_CLICK_CAST_DESC']
 header.title = L['UNITFRAME_CLICK_CAST_TIP']
 F.AddTooltip(header, 'ANCHOR_TOP', tips)

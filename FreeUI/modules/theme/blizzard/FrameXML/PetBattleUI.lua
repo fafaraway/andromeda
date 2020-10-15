@@ -217,7 +217,7 @@ tinsert(C.BlizzThemes, function()
 				bu.Icon:SetInside()
 			end
 
-			bu.Cooldown:SetFont(C.Assets.Fonts.Number, 11, "OUTLINE")
+			bu.Cooldown:SetFont(C.Assets.Fonts.Regular, 11, "OUTLINE")
 			bu.SelectedHighlight:ClearAllPoints()
 			bu.SelectedHighlight:SetPoint("TOPLEFT", bu, -12, 12)
 			bu.SelectedHighlight:SetPoint("BOTTOMRIGHT", bu, 12, -12)

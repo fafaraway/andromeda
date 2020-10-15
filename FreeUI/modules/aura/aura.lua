@@ -32,7 +32,7 @@ function AURA:OnLogin()
 	F.HideObject(_G.TemporaryEnchantFrame)
 
 	self.BuffFrame = self:CreateAuraHeader('HELPFUL')
-	local buffAnchor = F.Mover(self.BuffFrame, L['AURA_MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', FreeADB['ui_gap'], -FreeADB['ui_gap']})
+	local buffAnchor = F.Mover(self.BuffFrame, L['AURA_MOVER_BUFFS'], 'BuffsFrame', {'TOPLEFT', UIParent, 'TOPLEFT', C.UIGap, -C.UIGap})
 	self.BuffFrame:ClearAllPoints()
 	self.BuffFrame:SetPoint('TOPRIGHT', buffAnchor)
 
@@ -121,7 +121,7 @@ function AURA:UpdateAuras(button, index)
 			local color = DebuffTypeColor[debuffType or 'none']
 			button:SetBackdropBorderColor(color.r, color.g, color.b)
 			if button.Shadow then
-				button.Shadow:SetBackdropBorderColor(color.r, color.g, color.b)
+				button.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
 			end
 		else
 			button:SetBackdropBorderColor(0, 0, 0)
@@ -243,9 +243,9 @@ function AURA:CreateAuraIcon(button)
 	button.icon:SetInside()
 	button.icon:SetTexCoord(unpack(C.TexCoord))
 
-	button.count = F.CreateFS(button, C.Assets.Fonts.Number, 11, 'OUTLINE', text, nil, true, 'TOP', 1, 4)
+	button.count = F.CreateFS(button, C.Assets.Fonts.Regular, 11, 'OUTLINE', text, nil, true, 'TOP', 1, 4)
 
-	button.timer = F.CreateFS(button, C.Assets.Fonts.Number, 11, 'OUTLINE', text, nil, true, 'BOTTOM', 1, -4)
+	button.timer = F.CreateFS(button, C.Assets.Fonts.Regular, 11, 'OUTLINE', text, nil, true, 'BOTTOM', 1, -4)
 
 	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT')
 	button.highlight:SetColorTexture(1, 1, 1, .25)

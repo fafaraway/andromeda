@@ -2,5 +2,6 @@
 	<Script file="misc.lua"/>
 	<Script file="alreadyknown.lua"/>
 	<Script file="dragemall.lua"/>
+	<Script file="grouptool.lua"/>
 	<Script file="itemlevel.lua"/>
 </Ui>

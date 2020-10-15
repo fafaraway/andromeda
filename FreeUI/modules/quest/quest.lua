@@ -15,7 +15,7 @@ end
 function QUEST:ObjectiveTrackerMover()
 	local frame = CreateFrame('Frame', 'FreeUIQuestMover', UIParent)
 	frame:SetSize(240, 50)
-	F.Mover(frame, L['QUEST_MOVER_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -FreeADB['ui_gap'], -140})
+	F.Mover(frame, L['QUEST_MOVER_TRACKER'], 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -C.UIGap, -60})
 
 	local tracker = ObjectiveTrackerFrame
 	tracker:ClearAllPoints()

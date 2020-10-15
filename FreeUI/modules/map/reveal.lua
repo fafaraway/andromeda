@@ -237,7 +237,7 @@ function MAP:MapReveal()
 	bu:Size(22)
 	F.ReskinCheck(bu)
 	bu:SetChecked(FreeDB.map.map_reveal)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 22, 0)
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 22, 0)
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate('MapExplorationPinTemplate') do
 		hooksecurefunc(pin, 'RefreshOverlays', MapExplorationPin_RefreshOverlays)

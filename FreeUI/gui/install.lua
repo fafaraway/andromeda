@@ -128,11 +128,11 @@ end
 
 local function SetupUIScale()
 	if C.ScreenHeight >= 2000 then
-		FreeADB['ui_scale'] = 2
+		FreeADB.appearance.ui_scale = 2
 	elseif C.ScreenHeight >= 1500 then
-		FreeADB['ui_scale'] = 1.4
+		FreeADB.appearance.ui_scale = 1.4
 	else
-		FreeADB['ui_scale'] = 1
+		FreeADB.appearance.ui_scale = 1
 	end
 end
 
@@ -215,7 +215,7 @@ function INSTALL:HelloWorld()
 	F.CreateTex(f)
 
 	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
-	f.desc = F.CreateFS(f, C.Assets.Fonts.Number, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
+	f.desc = F.CreateFS(f, C.Assets.Fonts.Regular, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	f.lineLeft = CreateFrame('Frame', nil, f)
 	f.lineLeft:SetPoint('TOP', -60, -26)
@@ -232,10 +232,10 @@ function INSTALL:HelloWorld()
 	f.body:SetPoint('TOPLEFT', 10, -50)
 	F.CreateBD(f.body, .3)
 
-	local headerText = F.CreateFS(f.body, C.Assets.Fonts.Normal, 16, true, nil, 'YELLOW', nil, 'TOPLEFT', 10, -20)
+	local headerText = F.CreateFS(f.body, C.Assets.Fonts.Regular, 16, true, nil, 'YELLOW', nil, 'TOPLEFT', 10, -20)
 	headerText:SetWidth(360)
 
-	local bodyText = F.CreateFS(f.body, C.Assets.Fonts.Normal, 12, true, nil, nil, nil, 'TOPLEFT', 10, -50)
+	local bodyText = F.CreateFS(f.body, C.Assets.Fonts.Regular, 12, true, nil, nil, nil, 'TOPLEFT', 10, -50)
 	bodyText:SetJustifyH('LEFT')
 	bodyText:SetWordWrap(true)
 	bodyText:SetWidth(360)
@@ -253,7 +253,7 @@ function INSTALL:HelloWorld()
 		progressBar.shadow:SetBackdropBorderColor(C.r, C.g, C.b)
 	end
 
-	local progressBarText = F.CreateFS(progressBar, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
+	local progressBarText = F.CreateFS(progressBar, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'CENTER', 0, 0)
 
 	local leftButton = CreateFrame('Button', 'FreeUI_Install_LeftButton', f, 'UIPanelButtonTemplate')
 	leftButton:SetPoint('BOTTOM', -52, 10)

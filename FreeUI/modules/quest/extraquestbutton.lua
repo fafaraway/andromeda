@@ -214,9 +214,9 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self.HL:SetAllPoints(Icon)
 	self.Icon = Icon
 
-	self.HotKey = F.CreateFS(self, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, true, 'TOP', 0, -5)
+	self.HotKey = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'TOP', 0, -5)
 
-	self.Count = F.CreateFS(self, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -3, 3)
+	self.Count = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -3, 3)
 
 	local Cooldown = CreateFrame('Cooldown', '$parentCooldown', self, 'CooldownFrameTemplate')
 	Cooldown:SetInside()

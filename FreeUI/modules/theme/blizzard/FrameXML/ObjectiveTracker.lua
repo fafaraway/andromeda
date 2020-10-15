@@ -39,8 +39,8 @@ tinsert(C.BlizzThemes, function()
 		local bg = header:CreateTexture(nil, "ARTWORK")
 		bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
 		bg:SetTexCoord(0, .66, 0, .31)
-		bg:SetVertexColor(r, g, b, .8)
-		bg:SetPoint("BOTTOMLEFT", 0, -4)
+		bg:SetVertexColor(r, g, b, 1)
+		bg:SetPoint("CENTER", header, -20, -4)
 		bg:SetSize(250, 30)
 	end
 
@@ -168,26 +168,26 @@ tinsert(C.BlizzThemes, function()
 	local tracker = ObjectiveTrackerFrame
 	local BlocksFrame = tracker.BlocksFrame
 
-	tracker.HeaderMenu.Title:SetFont(C.Assets.Fonts.Header, 16)
+	tracker.HeaderMenu.Title:SetFont(C.Assets.Fonts.Bold, 16)
 
 	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader'}) do
 		local header = BlocksFrame[headerName]
-		header.Text:SetFont(C.Assets.Fonts.Header, 16)
+		header.Text:SetFont(C.Assets.Fonts.Bold, 16)
 	end
 
 	do
 		local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
-		header.Text:SetFont(C.Assets.Fonts.Header, 16)
+		header.Text:SetFont(C.Assets.Fonts.Bold, 16)
 	end
 
 	do
 		local header = WORLD_QUEST_TRACKER_MODULE.Header
-		header.Text:SetFont(C.Assets.Fonts.Header, 16)
+		header.Text:SetFont(C.Assets.Fonts.Bold, 16)
 	end
 
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
 		if not block.headerStyled then
-			block.HeaderText:SetFont(C.Assets.Fonts.Normal, 15)
+			block.HeaderText:SetFont(C.Assets.Fonts.Regular, 15)
 			block.HeaderText:SetShadowColor(0, 0, 0, 1)
 			block.HeaderText:SetShadowOffset(2, -2)
 			block.headerStyled = true
@@ -196,7 +196,7 @@ tinsert(C.BlizzThemes, function()
 
 	hooksecurefunc(QUEST_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
 		if not block.headerStyled then
-			block.HeaderText:SetFont(C.Assets.Fonts.Normal, 15)
+			block.HeaderText:SetFont(C.Assets.Fonts.Regular, 15)
 			block.HeaderText:SetShadowColor(0, 0, 0, 1)
 			block.HeaderText:SetShadowOffset(2, -2)
 			block.headerStyled = true
@@ -241,13 +241,13 @@ tinsert(C.BlizzThemes, function()
 		if block.lines then
 			for _, line in pairs(block.lines) do
 				if not line.styled then
-					line.Text:SetFont(C.Assets.Fonts.Normal, 14)
+					line.Text:SetFont(C.Assets.Fonts.Regular, 14)
 					line.Text:SetShadowColor(0, 0, 0, 1)
 					line.Text:SetShadowOffset(2, -2)
 					line.Text:SetSpacing(2)
 
 					if line.Dash then
-						line.Text:SetFont(C.Assets.Fonts.Normal, 14)
+						line.Text:SetFont(C.Assets.Fonts.Regular, 14)
 						line.Text:SetShadowColor(0, 0, 0, 1)
 						line.Text:SetShadowOffset(2, -2)
 					end

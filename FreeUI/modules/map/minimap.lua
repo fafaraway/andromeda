@@ -31,7 +31,7 @@ local function NewMail()
 		mail:Hide()
 	end)
 
-	mail.text = F.CreateFS(mail, C.Assets.Fonts.Number, 12, nil, L['MAP_NEW_MAIL'], 'BLUE', 'THICK')
+	mail.text = F.CreateFS(mail, C.Assets.Fonts.Regular, 12, nil, L['MAP_NEW_MAIL'], 'BLUE', 'THICK')
 	mail.text:SetPoint('BOTTOM', Minimap, 0, 256 / 8 + 6)
 
 	MiniMapMailFrame:SetAlpha(0)
@@ -58,7 +58,7 @@ local function Calendar()
 			if region.SetTextColor then
 				region:SetTextColor(147/255, 211/255, 231/255)
 				region:SetJustifyH('RIGHT')
-				F.SetFS(region, C.Assets.Fonts.Number, 12, 'OUTLINE')
+				F.SetFS(region, C.Assets.Fonts.Regular, 12, 'OUTLINE')
 				break
 			end
 		end
@@ -77,7 +77,7 @@ local function CalendarInvites()
 	Invt:SetSize(300, 80)
 	F.CreateBDFrame(Invt)
 	F.CreateSD(Invt)
-	Invt.text = F.CreateFS(Invt, C.Assets.Fonts.Normal, 14, 'OUTLINE', GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
+	Invt.text = F.CreateFS(Invt, C.Assets.Fonts.Regular, 14, 'OUTLINE', GAMETIME_TOOLTIP_CALENDAR_INVITES, 'BLUE')
 
 	local function updateInviteVisibility()
 		Invt:SetShown(C_Calendar.GetNumPendingInvites() > 0)
@@ -101,7 +101,7 @@ local function InstanceType()
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetSize(24, 12)
 	f:SetPoint('TOPLEFT', Minimap, 4, -(256 / 8) - 6)
-	f.text = F.CreateFS(f, C.Assets.Fonts.Number, 12, 'OUTLINE', '', nil, false, 'TOPLEFT', 0, 0)
+	f.text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, 'OUTLINE', '', nil, false, 'TOPLEFT', 0, 0)
 
 	f:RegisterEvent('PLAYER_ENTERING_WORLD')
 	f:RegisterEvent('CHALLENGE_MODE_START')
@@ -190,12 +190,12 @@ local function AddZoneText()
 	SubZoneTextFrame:SetFrameStrata('TOOLTIP')
 	ZoneTextString:ClearAllPoints()
 	ZoneTextString:SetPoint('TOP', Minimap.bg, 0, -10)
-	ZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
-	SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
-	PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22)
-	PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22)
+	ZoneTextString:SetFont(C.Assets.Fonts.Bold, 22)
+	SubZoneTextString:SetFont(C.Assets.Fonts.Bold, 22)
+	PVPInfoTextString:SetFont(C.Assets.Fonts.Bold, 22)
+	PVPArenaTextString:SetFont(C.Assets.Fonts.Bold, 22)
 
-	local zoneText = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, nil, '', nil, 'THICK')
+	local zoneText = F.CreateFS(Minimap, C.Assets.Fonts.Bold, 16, nil, '', nil, 'THICK')
 	zoneText:SetPoint('TOP', Minimap.bg)
 	zoneText:SetSize(Minimap:GetWidth(), 30)
 	zoneText:SetJustifyH('CENTER')
@@ -281,7 +281,7 @@ local function WhoPings()
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
-	f.text = F.CreateFS(f, C.Assets.Fonts.Normal, 14, true, '', 'CLASS', false, 'TOP', 0, -4)
+	f.text = F.CreateFS(f, C.Assets.Fonts.Regular, 14, true, '', 'CLASS', false, 'TOP', 0, -4)
 
 	local anim = f:CreateAnimationGroup()
 	anim:SetScript('OnPlay', function() f:SetAlpha(1) end)
@@ -302,51 +302,6 @@ local function WhoPings()
 		f.text:SetText(name)
 		f.text:SetTextColor(r, g, b)
 		anim:Play()
-	end)
-end
-
-local function WorldMarker()
-	if not FreeDB.map.world_marker then return end
-	if not IsAddOnLoaded('Blizzard_CompactRaidFrames') then return end
-
-	local wm = CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton
-	wm:SetParent('UIParent')
-	wm:ClearAllPoints()
-	wm:SetPoint('BOTTOMLEFT', Minimap, 'BOTTOMLEFT', 4, 256/8 + 6)
-	wm:Size(16)
-	wm:Hide()
-
-	wm.TopLeft:Hide()
-	wm.TopRight:Hide()
-	wm.BottomLeft:Hide()
-	wm.BottomRight:Hide()
-	wm.TopMiddle:Hide()
-	wm.MiddleLeft:Hide()
-	wm.MiddleRight:Hide()
-	wm.BottomMiddle:Hide()
-	wm.MiddleMiddle:Hide()
-	wm:SetNormalTexture('')
-	wm:SetHighlightTexture('')
-
-	wm.text = F.CreateFS(wm, C.Assets.Fonts.Pixel, 16, 'OUTLINEMONOCHROME', '+', nil, true, 'CENTER', 1, 0)
-
-	wm:HookScript('OnEnter', function()
-		wm.text:SetTextColor(C.r, C.g, C.b)
-	end)
-
-	wm:HookScript('OnLeave', function()
-		wm.text:SetTextColor(1, 1, 1)
-	end)
-
-	wm:RegisterEvent('PLAYER_ENTERING_WORLD')
-	wm:RegisterEvent('GROUP_ROSTER_UPDATE')
-	wm:HookScript('OnEvent', function(self)
-		local inRaid = IsInRaid()
-		if (inRaid and (UnitIsGroupLeader('player') or UnitIsGroupAssistant('player'))) or (not inRaid and IsInGroup()) then
-			self:Show()
-		else
-			self:Hide()
-		end
 	end)
 end
 
@@ -378,7 +333,7 @@ function MAP:Minimap()
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint('CENTER')
 
-	local mover = F.Mover(bg, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap']})
+	local mover = F.Mover(bg, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap})
 	bg:ClearAllPoints()
 	bg:SetPoint('CENTER', mover)
 	Minimap.mover = mover
@@ -448,7 +403,6 @@ function MAP:Minimap()
 	InstanceType()
 	QueueStatus()
 	WhoPings()
-	WorldMarker()
 	self:MicroMenu()
 	self:ExpBar()
 end

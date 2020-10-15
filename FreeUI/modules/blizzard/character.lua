@@ -123,7 +123,7 @@ function BLIZZARD:MissingStats()
 		end
 		PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 
-		CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Fonts.Number, 14)
+		CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Fonts.Regular, 14)
 		CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
 		CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(2, -2)
 	end)
@@ -153,5 +153,20 @@ function BLIZZARD:NakedButton()
 	end)
 end
 
+function BLIZZARD:TitleFontSize()
+	hooksecurefunc('PaperDollTitlesPane_UpdateScrollFrame', function()
+		local bu = _G.PaperDollTitlesPane.buttons
+		for i = 1, #bu do
+			if not bu[i].fontStyled then
+				bu[i].text:SetFont(C.Assets.Fonts.Regular, 13)
+				bu[i].text:SetShadowColor(0, 0, 0, 1)
+				bu[i].text:SetShadowOffset(1, -1)
+				bu[i].fontStyled = true
+			end
+		end
+	end)
+end
+
 BLIZZARD:RegisterBlizz('MissingStats', BLIZZARD.MissingStats)
 BLIZZARD:RegisterBlizz('NakedButton', BLIZZARD.NakedButton)
+BLIZZARD:RegisterBlizz('TitleFontSize', BLIZZARD.TitleFontSize)

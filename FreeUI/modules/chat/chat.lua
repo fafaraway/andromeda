@@ -34,7 +34,7 @@ function CHAT:UpdateChatSize()
 	end
 
 	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', FreeADB['ui_gap'], FreeADB['ui_gap'])
+	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', C.UIGap, C.UIGap)
 	ChatFrame1:SetSize(FreeDB.chat.window_width, FreeDB.chat.window_height)
 
 	isScaling = false
@@ -141,16 +141,16 @@ function CHAT:RestyleChatFrame()
 	end
 
 	BNToastFrame:SetClampedToScreen(true)
-	BNToastFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+	BNToastFrame:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
 
 	VoiceChatPromptActivateChannel:SetClampedToScreen(true)
-	VoiceChatPromptActivateChannel:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+	VoiceChatPromptActivateChannel:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
 
 	VoiceChatChannelActivatedNotification:SetClampedToScreen(true)
-	VoiceChatChannelActivatedNotification:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+	VoiceChatChannelActivatedNotification:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
 
 	ChatAlertFrame:SetClampedToScreen(true)
-	ChatAlertFrame:SetClampRectInsets(-FreeADB['ui_gap'], FreeADB['ui_gap'], FreeADB['ui_gap'], -FreeADB['ui_gap'])
+	ChatAlertFrame:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
 
 	self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
 

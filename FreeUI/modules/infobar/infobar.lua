@@ -126,7 +126,7 @@ function INFOBAR:addButton(text, position, width, clickFunc)
 		bu:SetAlpha(0)
 	end
 
-	local buText = F.CreateFS(bu, C.Assets.Fonts.Number, 11, nil, text, nil, true, 'CENTER', 0, 0)
+	local buText = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, text, nil, true, 'CENTER', 0, 0)
 	bu.Text = buText
 
 	bu:SetScript('OnMouseUp', clickFunc)

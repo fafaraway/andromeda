@@ -69,17 +69,14 @@ local function OnEvent(self, event, unit)
 
 		if eventType == 'SPELL_INTERRUPT' and isMine then
 			PlaySoundFile(C.Assets.Sounds.interrupt, 'Master')
-			SendMsg(format(L['ANNOUNCEMENT_INTERRUPT'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)))
 		end
 
 		if eventType == 'SPELL_DISPEL' and isMine then
 			PlaySoundFile(C.Assets.Sounds.dispel, 'Master')
-			SendMsg(format(L['ANNOUNCEMENT_DISPEL'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)))
 		end
 
 		if eventType == 'SPELL_STOLEN' and isMine then
 			PlaySoundFile(C.Assets.Sounds.dispel, 'Master')
-			SendMsg(format(L['ANNOUNCEMENT_STOLEN'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)))
 		end
 	end
 
@@ -125,7 +122,7 @@ function COMBAT:CombatAlert()
 	f.bottom:SetSize(418, 7)
 	f.bottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
 
-	f.text = F.CreateFS(f, C.Assets.Fonts.Header, 36, nil, '', nil, 'THICK', 'CENTER', 0, 0)
+	f.text = F.CreateFS(f, C.Assets.Fonts.Bold, 36, nil, '', nil, 'THICK', 'CENTER', 0, 0)
 	f.text:SetJustifyH('CENTER')
 
 	f:SetScript('OnShow', OnShow)
@@ -152,6 +149,7 @@ function COMBAT:OnLogin()
 	if not FreeDB.combat.enable_combat then return end
 
 	self:CombatAlert()
+	self:Announcement()
 	self:FloatingCombatText()
 	self:PvPSound()
 	self:Tabber()

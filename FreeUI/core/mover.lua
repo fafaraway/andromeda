@@ -101,7 +101,7 @@ function F:Mover(text, value, anchor, width, height)
 	mover:SetHeight(height or self:GetHeight())
 	mover.bg = F.SetBD(mover)
 	mover:Hide()
-	mover.text = F.CreateFS(mover, C.Assets.Fonts.Normal, 12, 'OUTLINE', text)
+	mover.text = F.CreateFS(mover, C.Assets.Fonts.Regular, 12, 'OUTLINE', text)
 	mover.text:SetWordWrap(true)
 
 	if not FreeDB[key][value] then
@@ -267,9 +267,9 @@ local function CreateConsole()
 	f:SetSize(260, 70)
 	F.CreateBD(f)
 	F.CreateSD(f)
-	F.CreateFS(f, C.Assets.Fonts.Normal, 12, true, L['GUI_MOVER_PANEL'], 'YELLOW', nil, 'TOP', 0, -10)
+	F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L.GUI.MOVER.TITLE, 'YELLOW', nil, 'TOP', 0, -10)
 
-	local bu, text = {}, {LOCK, L['GUI_MOVER_GRID'], RESET}
+	local bu, text = {}, {LOCK, L.GUI.MOVER.GRID, RESET}
 
 	for i = 1, 3 do
 		bu[i] = F.CreateButton(f, 80, 24, text[i])
@@ -307,8 +307,8 @@ local function CreateConsole()
 	header:SetSize(260, 30)
 	header:SetPoint('TOP')
 	F.CreateMF(header, f)
-	local tips = C.InfoColor..'|nCTRL +'..C.Assets.mouse_right..L['GUI_MOVER_RESET_ANCHOR']..'|nSHIFT +'..C.Assets.mouse_right..L['GUI_MOVER_HIDE_ELEMENT']
-	header.title = L['GUI_MOVER_TIPS']
+	local tips = C.InfoColor..'|nCTRL +'..C.Assets.mouse_right..L.GUI.MOVER.RESET_ELEMENT..'|nSHIFT +'..C.Assets.mouse_right..L.GUI.MOVER.HIDE_ELEMENT
+	header.title = L.GUI.HINT
 	F.AddTooltip(header, 'ANCHOR_TOP', tips)
 
 	local frame = CreateFrame('Frame', nil, f)
@@ -317,11 +317,11 @@ local function CreateConsole()
 	F.CreateBD(frame)
 	F.CreateSD(frame)
 	F.CreateTex(frame)
-	f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Normal, 12, true, '', 'YELLOW', nil, 'BOTTOM', 0, 5)
+	f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, true, '', 'YELLOW', nil, 'BOTTOM', 0, 5)
 
 	local xBox = F.CreateEditBox(frame, 60, 22)
 	xBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -15)
-	F.CreateFS(xBox, C.Assets.Fonts.Number, 11, 'OUTLINE', 'X', 'YELLOW', true, 'LEFT', -20, 0)
+	F.CreateFS(xBox, C.Assets.Fonts.Regular, 11, 'OUTLINE', 'X', 'YELLOW', true, 'LEFT', -20, 0)
 	xBox:SetJustifyH('CENTER')
 	xBox.__current = 0
 	xBox:HookScript('OnEnterPressed', function(self)
@@ -337,7 +337,7 @@ local function CreateConsole()
 
 	local yBox = F.CreateEditBox(frame, 60, 22)
 	yBox:SetPoint('TOPRIGHT', frame, 'TOP', -12, -39)
-	F.CreateFS(yBox, C.Assets.Fonts.Number, 11, 'OUTLINE', 'Y', 'YELLOW', true, 'LEFT', -20, 0)
+	F.CreateFS(yBox, C.Assets.Fonts.Regular, 11, 'OUTLINE', 'Y', 'YELLOW', true, 'LEFT', -20, 0)
 	yBox:SetJustifyH('CENTER')
 	yBox.__current = 0
 	yBox:HookScript('OnEnterPressed', function(self)

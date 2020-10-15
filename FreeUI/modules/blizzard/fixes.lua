@@ -180,6 +180,21 @@ do
 	end
 end
 
+-- Fix WhoFrame level column width
+do
+	hooksecurefunc('WhoList_Update', function()
+		local buttons = _G.WhoListScrollFrame.buttons
+		for i = 1, #buttons do
+			local button = buttons[i]
+			local level = button.Level
+			if level and not level.fontStyled then
+				level:SetWidth(32)
+				level:SetJustifyH('LEFT')
+				level.fontStyled = true
+			end
+		end
+	end)
+end
 
 -- Fix Trade Skill Search
 hooksecurefunc('ChatEdit_InsertLink', function(text) -- shift-clicked

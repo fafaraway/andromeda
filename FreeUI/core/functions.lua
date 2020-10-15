@@ -15,7 +15,7 @@ local gradientColor = {.02, .02, .02, .5, .08, .08, .08, .5}
 do
 	-- Numberize
 	function F.Numb(n)
-		if FreeADB['number_format'] == 1 then
+		if FreeDB.misc.number_format == 1 then
 			if n >= 1e12 then
 				return ('%.2ft'):format(n / 1e12)
 			elseif n >= 1e9 then
@@ -27,7 +27,7 @@ do
 			else
 				return ('%.0f'):format(n)
 			end
-		elseif FreeADB['number_format'] == 2 then
+		elseif FreeDB.misc.number_format == 2 then
 			if n >= 1e12 then
 				return format('%.2f'..L['MISC_NUMBER_CAP'][3], n / 1e12)
 			elseif n >= 1e8 then
@@ -326,6 +326,30 @@ do
 			return iLvlDB[link]
 		end
 	end
+
+	function F.isItemBOA(link, arg1, arg2)
+		tip:SetOwner(UIParent, "ANCHOR_NONE")
+		if arg1 and type(arg1) == 'string' then
+			tip:SetInventoryItem(arg1, arg2)
+		elseif arg1 and type(arg1) == 'number' then
+			tip:SetBagItem(arg1, arg2)
+		else
+			tip:SetHyperlink(link)
+		end
+
+		for i = 2, 5 do
+			local line = _G[tip:GetName()..'TextLeft'..i]
+			if line then
+				local text = line:GetText() or ''
+				local found = strfind(text, _G.ITEM_BNETACCOUNTBOUND) or strfind(text, ITEM_ACCOUNTBOUND) or strfind(text, ITEM_BIND_TO_BNETACCOUNT)
+				if found then
+					return true
+				end
+			end
+		end
+
+		return false
+	end
 end
 
 
@@ -422,7 +446,7 @@ do
 				fs:SetFont(font, size, flag and 'OUTLINE')
 			end
 		else
-			fs:SetFont(C.Assets.Fonts.Normal, 12, 'OUTLINE')
+			fs:SetFont(C.Assets.Fonts.Regular, 12, 'OUTLINE')
 		end
 
 		if text then
@@ -923,15 +947,15 @@ do
 	end
 
 	local function Menu_OnMouseUp(self)
-		self.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
+		self.bg:SetBackdropColor(0, 0, 0)
 	end
 
 	local function Menu_OnMouseDown(self)
-		self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
+		self.bg:SetBackdropColor(C.r, C.g, C.b)
 	end
 
 	function F:ReskinMenuButton()
-		F.StripTextures(self)
+		--F.StripTextures(self)
 		self.bg = F.SetBD(self)
 		self:SetScript('OnEnter', Menu_OnEnter)
 		self:SetScript('OnLeave', Menu_OnLeave)
@@ -1715,7 +1739,7 @@ do
 			F.PixelIcon(bu, fontSize, true)
 		else
 			F.Reskin(bu)
-			bu.text = F.CreateFS(bu, C.Assets.Fonts.Normal, fontSize or 12, nil, text, nil, true)
+			bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, fontSize or 12, nil, text, nil, true)
 		end
 
 		return bu
@@ -1738,7 +1762,7 @@ do
 		eb:SetSize(width, height)
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 5, 5)
-		eb:SetFont(C.Assets.Fonts.Normal, 11)
+		eb:SetFont(C.Assets.Fonts.Regular, 11)
 		F.CreateBD(eb, .3)
 		F.CreateGradient(eb)
 		eb:SetScript('OnEscapePressed', editBoxClearFocus)
@@ -1788,7 +1812,7 @@ do
 		dd:SetSize(width, height)
 		F.CreateBD(dd)
 		dd:SetBackdropBorderColor(1, 1, 1, .2)
-		dd.Text = F.CreateFS(dd, C.Assets.Fonts.Normal, 11, nil, '', nil, true, 'LEFT', 5, 0)
+		dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
 		dd.Text:SetPoint('RIGHT', -5, 0)
 		dd.options = {}
 
@@ -1813,7 +1837,7 @@ do
 			opt[i]:SetPoint('TOPLEFT', 4, -4 - (i-1)*(height+2))
 			opt[i]:SetSize(width - 8, height)
 			F.CreateBD(opt[i])
-			local text = F.CreateFS(opt[i], C.Assets.Fonts.Normal, 11, nil, j, nil, true, 'LEFT', 5, 0)
+			local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
 			text:SetPoint('RIGHT', -5, 0)
 			opt[i].text = j
 			opt[i].__owner = dd
@@ -1837,7 +1861,7 @@ do
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
 
-		COLORS.UpdateColors()
+		F.UpdateColors()
 	end
 
 	local function cancelPicker()
@@ -1864,7 +1888,7 @@ do
 		local swatch = CreateFrame('Button', nil, self)
 		swatch:SetSize(20, 12)
 		F.CreateBD(swatch, 1)
-		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Normal, 11, nil, name, nil, true, 'LEFT', 24, 0)
+		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'LEFT', 24, 0)
 		local tex = swatch:CreateTexture()
 		tex:SetInside()
 		tex:SetTexture(C.Assets.bd_tex)
@@ -1908,19 +1932,19 @@ do
 
 		slider.Low:SetText(minValue)
 		slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
-		slider.Low:SetFont(C.Assets.Fonts.Number, 11)
+		slider.Low:SetFont(C.Assets.Fonts.Regular, 11)
 		slider.High:SetText(maxValue)
 		slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
-		slider.High:SetFont(C.Assets.Fonts.Number, 11)
+		slider.High:SetFont(C.Assets.Fonts.Regular, 11)
 		slider.Text:ClearAllPoints()
 		slider.Text:SetPoint('BOTTOM', slider, 'TOP', 0, 4)
 		slider.Text:SetText(name)
 		slider.Text:SetTextColor(1, 1, 1)
-		slider.Text:SetFont(C.Assets.Fonts.Number, 11)
+		slider.Text:SetFont(C.Assets.Fonts.Regular, 11)
 		slider.value = F.CreateEditBox(slider, 50, 20)
 		slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -6)
 		slider.value:SetJustifyH('CENTER')
-		slider.value:SetFont(C.Assets.Fonts.Number, 11)
+		slider.value:SetFont(C.Assets.Fonts.Regular, 11)
 		slider.value.__owner = slider
 		slider.value:SetScript('OnEnterPressed', updateSliderEditBox)
 

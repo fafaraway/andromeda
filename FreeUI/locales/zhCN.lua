@@ -1,6 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 
 
+--[[ Binding ]]
+
+do
+	_G.BINDING_HEADER_FREEUI = 'FreeUI'
+	_G.BINDING_NAME_TOGGLE_FREEUI_GUI = '开关设置面板'
+	_G.BINDING_NAME_TOGGLE_QUEST_TRACKER = '开关任务追踪'
+end
+
+
 --[[ Misc ]]
 
 do
@@ -24,6 +33,21 @@ do
 
 	L['AUTOMATION_GET_NAKED'] = '双击脱光装备'
 	L['AUTOMATION_BUY_STACK'] = '是否购买|cffff0000一组|r下列物品？'
+
+
+	L['MISC_GROUP_TOOL'] = '团队工具'
+	L['MISC_FOOD'] = '食物'
+	L['MISC_FLASK'] = '合剂'
+	L['MISC_LACK'] = '缺少'
+	L['MISC_PLAYER_COUNT'] = '%s名玩家'
+	L['MISC_COUNT_DOWN'] = '开始/取消倒计时'
+	L['MISC_CHECK_STATUS'] = '食物合剂检查'
+	L['MISC_BUFFS_READY'] = '食物合剂检查: 已齐全'
+	L['MISC_RAID_BUFF_CHECK'] = '食物合剂检查:'
+	L['MISC_EXRT_POTION_CHECK'] = 'ExRT药水使用报告'
+	L['MISC_ADDON_REQUIRED'] = '你没有安装DBM或者BigWigs'
+	L['MISC_DISBAND_CHECK'] = '是否|cffff0000解散|r当前队伍或者团队?'
+	L['MISC_DISBAND_PROCESS'] = '团队解散中'
 end
 
 
@@ -38,14 +62,28 @@ do
 	L['BLIZZARD_KEYSTONES_RESET'] = '清除已保存的钥石信息'
 	L['BLIZZARD_GET_NAKED'] = '双击脱光装备'
 	L['BLIZZARD_ORDERHALL_TIP'] = '按住<Shift>显示详细信息'
+	L['BLIZZARD_GOLD'] = '金币'
 end
 
 
---[[ Themes ]]
+--[[ Appearance ]]
 
 do
 	L['APPEARANCE_NAME'] = '外观'
 	L['APPEARANCE_DESC'] = '调整用户界面的外观'
+
+	L['APPEARANCE_CURSOR_TRAIL'] = '鼠标闪光'
+	L['APPEARANCE_VIGNETTING'] = '暗角效果'
+	L['APPEARANCE_VIGNETTING_ALPHA'] = '暗角透明度'
+	L['APPEARANCE_RESKIN_BLIZZ'] = '美化默认界面'
+	L['APPEARANCE_RESKIN_BLIZZ_TIP'] = '\n美化游戏内的所有默认界面，统一为黑色透明风格。'
+	L['APPEARANCE_BACKDROP_ALPHA'] = '背景透明度'
+	L['APPEARANCE_BACKDROP_ALPHA_TIP'] = '\n调整窗口面板的背景透明度。'
+	L['APPEARANCE_SHADOW_BORDER'] = '阴影边框'
+	L['APPEARANCE_SHADOW_BORDER_TIP'] = '\n界面元素外围添加一圈阴影'
+
+	L['APPEARANCE_UI_SCALE'] = '界面缩放'
+	L['APPEARANCE_UI_SCALE_TIP'] = '\n调整界面的整体缩放\n推荐设置\n1080P = 1\n1440P = 1.4\n2160P = 2'
 end
 
 
@@ -62,25 +100,6 @@ do
 	L['NOTIFICATION_RARE'] = '发现稀有'
 	L['NOTIFICATION_VERSION'] = '版本检查'
 	L['NOTIFICATION_VERSION_OUTDATE'] = '你的 FreeUI 已经过期，最新版为 %s'
-end
-
-
---[[ Announcement ]]
-
-do
-	L['ANNOUNCEMENT_NAME'] = '通告'
-	L['ANNOUNCEMENT_DESC'] = '根据情景通告一些特定的事件'
-
-	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %s - %s！'
-	L['ANNOUNCEMENT_DISPEL'] = '驱散 %s - %s！'
-	L['ANNOUNCEMENT_STOLEN'] = '偷取 %s - %s！'
-	L['ANNOUNCEMENT_BATTLE_REZ'] = '%s 使用了 %s！'
-	L['ANNOUNCEMENT_BATTLE_REZ_TARGET'] = '%s 使用了 %s 在 %s！'
-	L['ANNOUNCEMENT_CASTED'] = '%s 施放了 %s！'
-	L['ANNOUNCEMENT_FEAST'] = '%s 摆出了 %s！'
-	L['ANNOUNCEMENT_ITEM'] = '%s 放置了 %s！'
-	L['ANNOUNCEMENT_PORTAL'] = '%s 开启了 %s！'
-	L['ANNOUNCEMENT_SAPPED'] = '我被闷棍！'
 end
 
 
@@ -187,8 +206,40 @@ do
 
 	L['COMBAT_ENTER'] = '进入战斗'
 	L['COMBAT_LEAVE'] = '离开战斗'
-	L['COMBAT_MOVER_IN'] = 'FCT Player'
-	L['COMBAT_MOVER_OUT'] = 'FCT Target'
+	L['COMBAT_MOVER_IN'] = 'FCT Incoming'
+	L['COMBAT_MOVER_OUT'] = 'FCT Outgoing'
+
+
+	L['COMBAT_SUB_BASIC'] = '基础'
+	L['COMBAT_SUB_PVP'] = 'PVP'
+
+	L['COMBAT_ENABLE_COMBAT'] = '启用战斗模块'
+	L['COMBAT_COMBAT_ALERT'] = '进出战斗提示'
+	L['COMBAT_HEALTH_ALERT'] = '低血量提示'
+	L['COMBAT_HEALTH_ALERT_THRESHOLD'] = '血量阈值'
+	L['COMBAT_SPELL_ALERT'] = '特殊技能提示'
+	L['COMBAT_PVP_SOUND'] = '击杀音效'
+	L['COMBAT_EASY_TAB'] = '自动切换Tab逻辑'
+	L['COMBAT_EASY_FOCUS'] = '快速设定焦点'
+	L['COMBAT_EASY_MARK'] = '快速设定标记'
+	L['COMBAT_FCT'] = '滚动战斗信息'
+	L['COMBAT_FCT_IN'] = '受到的伤害和治疗'
+	L['COMBAT_FCT_OUT'] = '输出的伤害和治疗'
+	L['COMBAT_FCT_PET'] = '宠物伤害'
+	L['COMBAT_FCT_PERIODIC'] = '周期性伤害'
+	L['COMBAT_FCT_MERGE'] = '合并数据'
+end
+
+
+--[[ Announcement ]]
+
+do
+	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %s %s'
+	L['ANNOUNCEMENT_DISPEL'] = '驱散 %s %s'
+	L['ANNOUNCEMENT_STOLEN'] = '偷取 %s %s'
+	L['ANNOUNCEMENT_CASTED'] = '%s 使用了 %s'
+	L['ANNOUNCEMENT_BATTLE_RESURRECTION'] = '%s 使用 %s 战复了自己'
+	L['ANNOUNCEMENT_BATTLE_RESURRECTION_TARGET'] = '%s 使用 %s 战复了 %s'
 end
 
 
@@ -411,76 +462,194 @@ end
 --[[ GUI ]]
 
 do
-	L['GUI_TIPS'] = '提示'
-	L['GUI_RELOAD_WARNING'] = '|cffff2020是否重载界面来完成设置？|r'
-	L['GUI_RESET_WARNING'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r'
-	L['GUI_PROFILE_WARNING'] = '|cffff2020是否转换选项配置为角色单独/账号通用？|r'
-
-	L['GUI_THEME_CONFLICTION_WARNING'] = 'FreeUI includes an efficient built-in module of theme.\n\nIt\'s highly recommended that you disable any version of Aurora or Skinner.'
-	L['GUI_RESET_GOLD_COUNT'] = '|cffff2020是否重置金币统计数据？|r'
-
-
-	-- L['GUI_AURA'] = '光环'
-	-- L['GUI_AURA_DESC'] = '这些选项控制大部分和光环相关的设置'
-	-- L['GUI_AURA_SUB_BASIC'] = '基础设定'
-	-- L['GUI_AURA_ENABLE_AURA'] = '启用'
-	-- L['GUI_AURA_MARGIN'] = '图标间隔'
-	-- L['GUI_AURA_OFFSET'] = '增益/减益栏间隔'
-	-- L['GUI_AURA_BUFF_REMINDER'] = '缺失增益提醒'
-	-- L['GUI_AURA_BUFF_REMINDER_TIP'] = '\n提醒你缺失的自身增益光环\n比如法师智力牧师耐力潜行者毒药战士攻强之类'
-	-- L['GUI_AURA_BUFF_SIZE'] = '增益图标大小'
-	-- L['GUI_AURA_BUFFS_PER_ROW'] = '增益图标每行数量'
-	-- L['GUI_AURA_REVERSE_BUFFS'] = '反向排列增益光环'
-	-- L['GUI_AURA_DEBUFF_SIZE'] = '减益图标大小'
-	-- L['GUI_AURA_DEBUFFS_PER_ROW'] = '减益图标每行数量'
-	-- L['GUI_AURA_REVERSE_DEBUFFS'] = '反向排列减益光环'
-	-- L['GUI_AURA_AURA_SOURCE'] = '光环来源'
-	-- L['GUI_AURA_SUB_ADJUSTMENT'] = '调整'
 
 	L['GUI_MISC_INVITE_KEYWORD'] = '密语邀请关键字'
 	L['GUI_MISC_INVITE_KEYWORD_TIP'] = '输入完成后按下回车'
-
-	L['GUI_APPEARANCE'] = '外观'
-	L['GUI_APPEARANCE_DESC'] = '这些选项控制大部分和外观相关的设置'
-	L['GUI_APPEARANCE_SUB_BASIC'] = '基础设定'
 
 	L['GUI_UNITFRAME_TEXTURE_STYLE'] = '材质风格'
 	L['GUI_UNITFRAME_TEXTURE_NORM'] = '默认'
 	L['GUI_UNITFRAME_TEXTURE_GRAD'] = '渐变'
 	L['GUI_UNITFRAME_TEXTURE_FLAT'] = '扁平'
 
-
-
 	L['GUI_NUMBER_FORMAT'] = '数字格式'
 	L['GUI_NUMBER_FORMAT_EN'] = 'k/b/m'
 	L['GUI_NUMBER_FORMAT_CN'] = '万/亿/兆'
 
-	L['GUI_IMPORT_DATA_ERROR'] = '数据异常，导入失败！'
-	L['GUI_IMPORT_DATA_WARNING'] = '|cffff2020是否导入数据？|r'
-	L['GUI_DATA_INFO'] = '数据信息'
-	L['GUI_DATA_VERSION'] = '版本'
-	L['GUI_DATA_CHARACTER'] = '角色'
-	L['GUI_DATA_EXCEPTION'] = '数据异常'
-	L['GUI_DATA_IMPORT'] = '导入'
-	L['GUI_DATA_EXPORT'] = '导出'
-	L['GUI_DATA_IMPORT_HEADER'] = '导入字符串'
-	L['GUI_DATA_EXPORT_HEADER'] = '导出字符串'
-	L['GUI_DATA_RESET'] = '重置'
-	L['GUI_DATA_RESET_TIP'] = '清除 |cffe9c55dFreeUI|r 已保存的数据，将所有选项重置为 |cffe9c55dFreeUI|r 默认值。'
-	L['GUI_DATA_IMPORT_TIP'] = '导入 |cffe9c55dFreeUI|r 的配置字符串。'
-	L['GUI_DATA_EXPORT_TIP'] = '将当前的 |cffe9c55dFreeUI|r 配置导出为字符串。'
 
 
-	L['GUI_MOVER_PANEL'] = '界面元素位置调整'
-	L['GUI_MOVER_GRID'] = '网格'
-	L['GUI_MOVER_RESET_ANCHOR'] = '重置该界面元素的默认位置'
-	L['GUI_MOVER_HIDE_ELEMENT'] = '隐藏该界面元素'
-	L['GUI_MOVER_TIPS'] = '提示'
-	L['GUI_MOVER_RESET_WARNING'] = '是否重置所有界面元素为默认位置？'
-	L['GUI_MOVER_CANCEL_WARNING'] = '是否取消本次操作？'
+
+
 end
 
+L.GUI = {
+	['HINT'] = '提示',
+	['RELOAD'] = '|cffff2020是否重载界面来完成设置？|r',
+	['RESET_OPTIONS'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r',
+	['RESET_GOLD'] = '|cffff2020是否重置金币统计数据？|r',
 
+	['MOVER'] = {
+		['TITLE'] = '界面元素位置调整',
+		['GRID'] = '网格',
+		['RESET_ELEMENT'] = '重置该界面元素的默认位置',
+		['HIDE_ELEMENT'] = '隐藏该界面元素',
+		['RESET'] = '是否重置所有界面元素为默认位置？',
+
+		['GROUP_TOOL'] = '团队工具',
+	},
+
+	['DATA'] = {
+		['TITLE'] = '',
+		['IMPORT_ERROR'] = '数据异常，导入失败！',
+		['IMPORT_WARNING'] = '|cffff2020是否导入数据？|r',
+		['INFO'] = '数据信息',
+		['VERSION'] = '版本',
+		['CHARACTER'] = '角色',
+		['EXCEPTION'] = '数据异常',
+		['IMPORT'] = '导入',
+		['EXPORT'] = '导出',
+		['IMPORT_TITLE'] = '导入字符串',
+		['EXPORT_TITLE'] = '导出字符串',
+		['RESET'] = '重置',
+		['RESET_TIP'] = '清除 |cffe9c55dFreeUI|r 已保存的数据，将所有选项重置为 |cffe9c55dFreeUI|r 默认值。',
+		['IMPORT_TIP'] = '导入 |cffe9c55dFreeUI|r 的配置字符串。',
+		['EXPORT_TIP'] = '将当前的 |cffe9c55dFreeUI|r 配置导出为字符串。',
+	},
+
+	['MISC'] = {
+		['TITLE'] = '',
+	},
+
+	['APPEARANCE'] = {
+		['TITLE'] = '',
+	},
+
+	['NOTIFICATION'] = {
+		['TITLE'] = '',
+	},
+
+	['INFOBAR'] = {
+		['TITLE'] = '',
+	},
+
+	['CHAT'] = {
+		['TITLE'] = '',
+	},
+
+	['AURA'] = {
+		['TITLE'] = '',
+	},
+
+	['ACTIONBAR'] = {
+		['TITLE'] = '',
+	},
+
+	['COMBAT'] = {
+		['TITLE'] = '',
+	},
+
+	['ANNOUNCEMENT'] = {
+		['ENABLE'] = '副本通告',
+		['INTERRUPT'] = '成功打断施法',
+		['DISPEL'] = '成功驱散增益',
+		['STOLEN'] = '成功偷取增益',
+		['FEAST'] = '大餐',
+		['CAULDRON'] = '药锅',
+		['CODEX'] = '圣典',
+		['REFRESHMENT'] = '法师餐桌',
+		['SOULWELL'] = '术士灵魂井',
+		['REPAIR'] = '修理',
+		['MAIL'] = '邮件',
+		['BATTLE_RESURRECTION'] = '战斗复活',
+		['PORTAL'] = '法师传送门',
+		['TOY'] = '特殊玩具',
+	},
+
+	['INVENTORY'] = {
+		['TITLE'] = '',
+	},
+
+	['MAP'] = {
+		['TITLE'] = '',
+	},
+
+	['QUEST'] = {
+		['TITLE'] = '',
+	},
+
+	['TOOLTIP'] = {
+		['TITLE'] = '',
+	},
+
+	['UNITFRAME'] = {
+		['TITLE'] = '',
+	},
+
+	['NAMEPLATE'] = {
+		['TITLE'] = '姓名板',
+		['DESC'] = '设置姓名板的外观和功能',
+
+		['SUB_BASIC'] = '基础',
+		['SUB_COLOR'] = '颜色',
+		['SUB_CVARS'] = 'CVars',
+
+		['ENABLE'] = '启用姓名板模块',
+		['ENABLE_TIP'] = '|n如果想要使用其他的姓名板插件，请先禁用该模块。',
+
+		['PLATE_WIDTH'] = '宽度',
+		['PLATE_HEIGHT'] = '高度',
+
+		['FRIENDLY_CLASS_COLOR'] = '友方职业染色',
+		['FRIENDLY_CLASS_COLOR_TIP'] = '|n友方玩家的姓名板根据职业染色。',
+		['HOSTILE_CLASS_COLOR'] = '敌方职业染色',
+		['HOSTILE_CLASS_COLOR_TIP'] = '|n敌方玩家的姓名板根据职业染色。',
+		['TANK_MODE'] = '强制仇恨染色',
+		['TANK_MODE_TIP'] = '|n非坦克专精强制使用坦克模式的染色逻辑。',
+		['DPS_REVERT_THREAT'] = '反转仇恨染色',
+		['DPS_REVERT_THREAT_TIP'] = '|n非坦克专精使用反转的坦克模式染色逻辑。',
+		['SECURE_COLOR'] = '仇恨稳固',
+		['TRANS_COLOR'] = '仇恨不稳',
+		['INSECURE_COLOR'] = '仇恨丢失',
+		['OFF_TANK_COLOR'] = '副坦仇恨',
+
+		['CUSTOM_UNIT_COLOR'] = '自定义染色',
+		['CUSTOM_UNIT_COLOR_TIP'] = '|n为特定的单位使用自定义染色。',
+		['CUSTOM_COLOR'] = '自定义颜色',
+		['CUSTOM_UNIT_LIST'] = '单位列表',
+		['CUSTOM_UNIT_LIST_TIP'] = '|n输入名字，以空格隔开，输入完毕按下回车。',
+
+		['TARGET_INDICATOR'] = '目标指示器',
+		['TARGET_COLOR'] = '目标指示器颜色',
+		['THREAT_INDICATOR'] = '仇恨指示器',
+		['CLASSIFY_INDICATOR'] = '稀有指示器',
+		['EXPLOSIVE_SCALE'] = '爆炸物智能缩放',
+		['EXPLOSIVE_SCALE_TIP'] = '|n大秘境中爆炸物的姓名板放大。',
+		['INTERRUPT_NAME'] = '打断信息',
+		['INTERRUPT_NAME_TIP'] = '|n在姓名板上显示成功打断此次读条的队友名字。',
+
+		['PLATE_AURAS'] = '显示光环',
+		['PLATE_AURAS_TIP'] = '|n默认显示所有你施放的减益光环，可以通过黑/白名单来调整你想要显示或忽略的光环。',
+		['AURA_SIZE'] = '光环大小',
+		['AURA_NUMBER'] = '光环最大数量',
+		['AURA_WHITE_LIST'] = '白名单',
+		['AURA_BLACK_LIST'] = '黑名单',
+		['AURA_WHITE_LIST_TIP'] = '|n填入想要显示的法术ID然后点击添加按钮。',
+		['AURA_BLACK_LIST_TIP'] = '|n填入想要忽略的法术ID然后点击添加按钮。',
+		['AURA_INCORRECT_ID'] = '你输入的法术ID不存在',
+		['AURA_EXISTING_ID'] = '你已经添加过该法术ID',
+
+		['MIN_SCALE'] = '非目标姓名板缩放',
+		['TARGET_SCALE'] = '目标姓名板缩放',
+		['MIN_ALPHA'] = '非目标姓名板透明度',
+		['OCCLUDED_ALPHA'] = '遮挡的姓名板透明度',
+		['VERTICAL_SPACING'] = '纵向间隔',
+		['HORIZONTAL_SPACING'] = '横向间隔',
+		['MAX_DISTANCE'] = '最大显示距离',
+	},
+
+	['CREDITS'] = {
+		['TITLE'] = '',
+	},
+}
 
 
 

@@ -419,7 +419,7 @@ function ACTIONBAR:RestyleButtons()
 			},
 		},
 		name = {
-			font = {C.Assets.Fonts.Normal, 11, 'OUTLINE'},
+			font = {C.Assets.Fonts.Regular, 11, 'OUTLINE'},
 			points = {
 				{'BOTTOMLEFT', 0, 2},
 			},

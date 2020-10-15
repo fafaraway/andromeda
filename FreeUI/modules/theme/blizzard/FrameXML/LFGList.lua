@@ -112,7 +112,7 @@ tinsert(C.BlizzThemes, function()
 	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader"}) do
 		local header = ApplicationViewer[headerName]
 		F.StripTextures(header)
-		header.Label:SetFont(C.Assets.Fonts.Normal, 14, "OUTLINE")
+		header.Label:SetFont(C.Assets.Fonts.Regular, 14, "OUTLINE")
 		header.Label:SetShadowColor(0, 0, 0, 0)
 		header:SetHighlightTexture("")
 

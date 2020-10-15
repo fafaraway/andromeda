@@ -130,7 +130,7 @@ function INVENTORY:CreateCurrencyFrame()
 	end)
 
 	local tag = self:SpawnPlugin('TagDisplay', '[money]  [currencies]', currencyFrame)
-	F.SetFS(tag, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK', 'TOPLEFT', 0, -3)
+	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'TOPLEFT', 0, -3)
 
 
 	currencyFrame:SetScript('OnEnter', function(self)
@@ -230,7 +230,7 @@ function INVENTORY:CreateRestoreButton(f)
 		FreeDB['ui_anchor_temp'][f.bank:GetName()] = nil
 		FreeDB['ui_anchor_temp'][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
-		f.main:SetPoint('BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap'])
+		f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
 		f.bank:ClearAllPoints()
 		f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
 		f.reagent:ClearAllPoints()
@@ -499,7 +499,7 @@ function INVENTORY:CreateFreeSlots()
 	slot.__name = name
 
 	local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-	F.SetFS(tag, C.Assets.Fonts.Number, 11, nil, '', 'CLASS', 'THICK', 'BOTTOMRIGHT', -2, 2)
+	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', 'CLASS', 'THICK', 'BOTTOMRIGHT', -2, 2)
 	tag.__name = name
 
 	self.freeSlot = slot
@@ -526,7 +526,7 @@ function INVENTORY:CreateSplitButton()
 	local splitFrame = CreateFrame('Frame', nil, self)
 	splitFrame:SetSize(100, 50)
 	splitFrame:SetPoint('TOPRIGHT', self, 'TOPLEFT', -5, 0)
-	F.CreateFS(splitFrame, C.Assets.Fonts.Normal, 12, nil, L['INVENTORY_SPLIT_COUNT'], 'YELLOW', 'THICK', 'TOP', 1, -5)
+	F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['INVENTORY_SPLIT_COUNT'], 'YELLOW', 'THICK', 'TOP', 1, -5)
 	F.SetBD(splitFrame)
 	splitFrame:Hide()
 	local editbox = F.CreateEditBox(splitFrame, 90, 20)
@@ -774,7 +774,7 @@ function INVENTORY:OnLogin()
 
 		f.main = MyContainer:New('Main', {Columns = bagsWidth, Bags = 'bags'})
 		f.main:SetFilter(filters.onlyBags, true)
-		f.main:SetPoint('BOTTOMRIGHT', -FreeADB['ui_gap'], FreeADB['ui_gap'])
+		f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
 
 		f.junk = MyContainer:New('Junk', {Columns = bagsWidth, Parent = f.main})
 		f.junk:SetFilter(filters.bagsJunk, true)
@@ -867,7 +867,7 @@ function INVENTORY:OnLogin()
 
 		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(C.TexCoord))
-		F.SetFS(self.Count, C.Assets.Fonts.Number, 11, 'OUTLINE', '', nil, false, 'BOTTOMRIGHT', -2, 2)
+		F.SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, false, 'BOTTOMRIGHT', -2, 2)
 		self.Cooldown:SetInside()
 		self.IconOverlay:SetInside()
 
@@ -883,8 +883,9 @@ function INVENTORY:OnLogin()
 		self.Favourite:SetSize(30, 30)
 		self.Favourite:SetPoint('TOPLEFT', -12, 9)
 
-		self.Quest = F.CreateFS(self, C.Assets.Fonts.Number, 11, nil, '!', nil, 'THICK', 'TOPLEFT', 2, -2)
-		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK', 'BOTTOMRIGHT', -2, 2)
+		self.Quest = F.CreateFS(self, C.Assets.Fonts.Regular, 11, nil, '!', nil, 'THICK', 'TOPLEFT', 2, -2)
+		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'BOTTOMRIGHT', -2, 2)
+		self.BindType = F.CreateFS(self, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'TOPLEFT', 2, -2)
 
 		local flash = self:CreateTexture(nil, 'ARTWORK')
 		flash:SetTexture('Interface\\Cooldown\\star4')
@@ -1005,6 +1006,20 @@ function INVENTORY:OnLogin()
 		else
 			self:SetBackdropColor(.3, .3, .3, .25)
 		end
+
+		if FreeDB.inventory.bind_type then
+			local itemLink = GetContainerItemLink(item.bagID, item.slotID)
+			if not itemLink then return end
+			local _, _, _, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
+
+			if F.isItemBOA(item.link, item.bagID, item.slotID) then
+				self.BindType:SetText('|cff00ccffBOA|r')
+			elseif bindType == 2 then
+				self.BindType:SetText('|cff1eff00BOE|r')
+			else
+				self.BindType:SetText('')
+			end
+		end
 	end
 
 	function MyButton:OnUpdateQuest(item)
@@ -1096,7 +1111,7 @@ function INVENTORY:OnLogin()
 			label = AUCTION_CATEGORY_TRADE_GOODS
 		end
 		if label then
-			self.cat = F.CreateFS(self, C.Assets.Fonts.Normal, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
+			self.cat = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
 			return
 		end
 

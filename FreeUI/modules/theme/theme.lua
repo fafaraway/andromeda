@@ -5,11 +5,6 @@ local THEME = F:GetModule('THEME')
 C.Themes = {}
 C.BlizzThemes = {}
 
-function THEME:DetectConfliction()
-	if IsAddOnLoaded('AuroraClassic') or IsAddOnLoaded('Aurora') or IsAddOnLoaded('Skinner') then
-		StaticPopup_Show('THEME_CONFLICTION_WARNING')
-	end
-end
 
 function THEME:LoadDefaultSkins()
 	if IsAddOnLoaded('AuroraClassic') or IsAddOnLoaded('Aurora') or IsAddOnLoaded('Skinner') then return end
@@ -91,7 +86,6 @@ function THEME:Vignetting()
 end
 
 function THEME:OnLogin()
-	self:DetectConfliction()
 	self:LoadDefaultSkins()
 
 	self:CursorTrail()
@@ -99,14 +93,13 @@ function THEME:OnLogin()
 
 	self:ReskinDBM()
 	self:ReskinPGF()
-	self:ReskinSkada()
 	self:ReskinWowLua()
-	self:ReskinToasts()
-	self:ReskinMeetingStone()
 end
 
-function THEME:LoadWithAddOn(addonName, func)
+
+function THEME:LoadWithAddOn(addonName, value, func)
 	local function loadFunc(event, addon)
+		if not FreeADB['appearance'][value] then return end
 
 		if event == 'PLAYER_ENTERING_WORLD' then
 			F:UnregisterEvent(event, loadFunc)
@@ -123,3 +116,4 @@ function THEME:LoadWithAddOn(addonName, func)
 	F:RegisterEvent('PLAYER_ENTERING_WORLD', loadFunc)
 	F:RegisterEvent('ADDON_LOADED', loadFunc)
 end
+

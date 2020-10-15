@@ -57,7 +57,7 @@ function AURA:Reminder_Create(cfg)
 	F.PixelIcon(frame)
 	frame.glow = F.CreateSD(frame)
 	if frame.glow then
-		frame.glow:SetBackdropBorderColor(1, 0, 0)
+		frame.glow:SetBackdropBorderColor(1, 0, 0, .35)
 	end
 	local texture = cfg.texture
 	if not texture then

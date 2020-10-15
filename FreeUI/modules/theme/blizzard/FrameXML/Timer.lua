@@ -9,7 +9,7 @@ tinsert(C.BlizzThemes, function()
 			if region:GetObjectType() == 'Texture' then
 				region:SetTexture(nil)
 			elseif region:GetObjectType() == 'FontString' then
-				F.SetFS(region, C.Assets.Fonts.Normal, 11, nil)
+				F.SetFS(region, C.Assets.Fonts.Regular, 11, nil)
 				region:SetShadowColor(0, 0, 0, 1)
 				region:SetShadowOffset(2, -2)
 			end

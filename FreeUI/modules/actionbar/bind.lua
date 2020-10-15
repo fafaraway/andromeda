@@ -257,9 +257,9 @@ function ACTIONBAR:Bind_CreateDialog()
 	frame:SetSize(320, 100)
 	frame:SetPoint('TOP', 0, -135)
 	F.SetBD(frame)
-	F.CreateFS(frame, C.Assets.Fonts.Normal, 14, nil, KEY_BINDING, false, true, 'TOP', 0, -10)
+	F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, KEY_BINDING, false, true, 'TOP', 0, -10)
 
-	local text = F.CreateFS(frame, C.Assets.Fonts.Normal, 12, nil, CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
+	local text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
 
 	local button1 = F.CreateButton(frame, 120, 26, APPLY, 12)
 	button1:SetPoint('BOTTOMLEFT', 25, 10)

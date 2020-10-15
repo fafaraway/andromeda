@@ -1,26 +1,10 @@
 local F, C, L = unpack(select(2, ...))
-local INSTALL = F:GetModule('INSTALL')
-local GUI = F:GetModule('GUI')
+local INSTALL = F.INSTALL
+local GUI = F.GUI
 
-
-
-
-StaticPopupDialogs['THEME_CONFLICTION_WARNING'] = {
-	text = L['GUI_THEME_CONFLICTION_WARNING'],
-	button1 = DISABLE,
-	OnAccept = function()
-		DisableAddOn('Aurora', true)
-		DisableAddOn('AuroraClassic', true)
-		DisableAddOn('Skinner', true)
-		ReloadUI()
-	end,
-	hideOnEscape = false,
-	whileDead = 1,
-	timeout = 0,
-}
 
 StaticPopupDialogs['FREEUI_RELOAD'] = {
-	text = L['GUI_RELOAD_WARNING'],
+	text = L.GUI.RELOAD,
 	button1 = APPLY,
 	button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
 	OnAccept = function()
@@ -31,8 +15,8 @@ StaticPopupDialogs['FREEUI_RELOAD'] = {
 	hideOnEscape = true,
 }
 
-StaticPopupDialogs['FREEUI_RESET_ALL'] = {
-	text = L['GUI_RESET_WARNING'],
+StaticPopupDialogs['FREEUI_RESET_OPTIONS'] = {
+	text = L.GUI.RESET_OPTIONS,
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -47,7 +31,7 @@ StaticPopupDialogs['FREEUI_RESET_ALL'] = {
 }
 
 StaticPopupDialogs['FREEUI_IMPORT_DATA'] = {
-	text = L['GUI_IMPORT_DATA_WARNING'],
+	text = L.GUI.DATA.IMPORT_WARNING,
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -59,11 +43,11 @@ StaticPopupDialogs['FREEUI_IMPORT_DATA'] = {
 }
 
 StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
-	text = L['GUI_MOVER_RESET_WARNING'],
+	text = L.GUI.MOVER.RESET,
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(FreeDB['ui_anchor'])
+		wipe(FreeDB.ui_anchor)
 		ReloadUI()
 	end,
 	timeout = 0,
@@ -77,7 +61,7 @@ if not crossRealms or #crossRealms == 0 then
 end
 
 StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
-	text = L['GUI_RESET_GOLD_COUNT'],
+	text = L.GUI.RESET_GOLD,
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
@@ -118,22 +102,16 @@ local function printCommandsList()
 	end
 end
 
-SlashCmdList.FREEUI = function(cmd)
-	local cmd, args = strsplit(' ', cmd:lower(), 2)
+SlashCmdList.FREEUI = function(str)
+	local cmd, _ = strsplit(' ', str:lower(), 2)
 	if cmd == 'reset' then
-		StaticPopup_Show('FREEUI_RESET_ALL')
+		StaticPopup_Show('FREEUI_RESET_OPTIONS')
 	elseif cmd == 'install' then
 		INSTALL:HelloWorld()
 	elseif cmd == 'unlock' then
 		F:MoverConsole()
 	elseif cmd == 'config' then
-		if FreeUI_GUI then
-			FreeUI_GUI:Show()
-			HideUIPanel(GameMenuFrame)
-			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-		else
-			UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT)
-		end
+		F.ToggleGUI()
 	elseif cmd == 'help' then
 		printCommandsList()
 	elseif cmd == 'ver' or cmd == 'version' then
@@ -214,11 +192,33 @@ SlashCmdList['UISCALECHECK'] = function()
 	F.Print('C.ScreenWidth '..C.ScreenWidth)
 	F.Print('C.ScreenHeight '..C.ScreenHeight)
 	F.Print('C.Mult '..C.Mult)
-	F.Print('uiScale '..FreeADB['ui_scale'])
+	F.Print('uiScale '..FreeADB.appearance.ui_scale)
 	F.Print('UIParentScale '..UIParent:GetScale())
 	print(C.LineString)
 end
 SLASH_UISCALECHECK1 = '/getuiscale'
+
+SlashCmdList['ITEMINFO'] = function(id)
+	if id == '' then
+		F.Print(C.RedColor..'Please enter a item ID.|r')
+	else
+		local name, link, rarity, level, minLevel, type, subType, stackCount, equipLoc, icon, sellPrice, classID, subClassID, bindType  = GetItemInfo(id)
+
+		print(C.LineString)
+		F.Print('Name: '.. name)
+		F.Print('Link: '.. link)
+		F.Print('Rarity: '.. rarity)
+		F.Print('Level: '.. level)
+		F.Print('MinLevel: '.. minLevel)
+		F.Print('Type: '.. type)
+		F.Print('SubType: '.. subType)
+		F.Print('ClassID: '.. classID)
+		F.Print('SubClassID: '.. subClassID)
+		F.Print('BindType: '.. bindType)
+		print(C.LineString)
+	end
+end
+SLASH_ITEMINFO1 = '/getiteminfo'
 
 
 --[[ dungeon ]]

@@ -1,10 +1,10 @@
 <Bindings>
 
-	<Binding name="GUI" category="BINDING_HEADER_FREEUI">
-		TOGGLE_FREEUI_GUI()
+	<Binding name='TOGGLE_FREEUI_GUI' category='ADDONS' header='FREEUI'>
+		FreeUI[1].ToggleGUI()
 	</Binding>
 
-	<Binding name="Toggle Quest Tracker" category="BINDING_HEADER_FREEUI">
+	<Binding name='TOGGLE_QUEST_TRACKER' category='ADDONS'>
 		ObjectiveTracker_MinimizeButton_OnClick()
 	</Binding>
 

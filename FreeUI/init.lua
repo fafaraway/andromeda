@@ -79,7 +79,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-	local scale = GetBestScale() * FreeADB['ui_scale']
+	local scale = GetBestScale() * FreeADB.appearance.ui_scale
 
 	if init then
 		local pixel = 1

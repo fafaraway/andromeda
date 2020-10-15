@@ -12,50 +12,50 @@ local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 
 function NAMEPLATE:PlateInsideView()
 	if FreeDB.nameplate.inside_view then
-		SetCVar('nameplateOtherTopInset', .05)
-		SetCVar('nameplateOtherBottomInset', .08)
+		_G.SetCVar('nameplateOtherTopInset', .05)
+		_G.SetCVar('nameplateOtherBottomInset', .08)
 	else
-		SetCVar('nameplateOtherTopInset', -1)
-		SetCVar('nameplateOtherBottomInset', -1)
+		_G.SetCVar('nameplateOtherTopInset', -1)
+		_G.SetCVar('nameplateOtherBottomInset', -1)
 	end
 end
 
 function NAMEPLATE:UpdatePlateScale()
-	SetCVar('namePlateMinScale', FreeDB.nameplate.min_scale)
-	SetCVar('namePlateMaxScale', FreeDB.nameplate.min_scale)
+	_G.SetCVar('namePlateMinScale', FreeDB.nameplate.min_scale)
+	_G.SetCVar('namePlateMaxScale', FreeDB.nameplate.min_scale)
 end
 
 function NAMEPLATE:UpdatePlateTargetScale()
-	SetCVar('nameplateLargerScale', FreeDB.nameplate.target_scale)
-	SetCVar('nameplateSelectedScale', FreeDB.nameplate.target_scale)
+	_G.SetCVar('nameplateLargerScale', FreeDB.nameplate.target_scale)
+	_G.SetCVar('nameplateSelectedScale', FreeDB.nameplate.target_scale)
 end
 
 function NAMEPLATE:UpdatePlateAlpha()
-	SetCVar('nameplateMinAlpha', FreeDB.nameplate.min_alpha)
-	SetCVar('nameplateMaxAlpha', FreeDB.nameplate.min_alpha)
-	SetCVar('nameplateSelectedAlpha', 1)
+	_G.SetCVar('nameplateMinAlpha', FreeDB.nameplate.min_alpha)
+	_G.SetCVar('nameplateMaxAlpha', FreeDB.nameplate.min_alpha)
+	_G.SetCVar('nameplateSelectedAlpha', 1)
 end
 
 function NAMEPLATE:UpdatePlateOccludedAlpha()
-	SetCVar('nameplateOccludedAlphaMult', FreeDB.nameplate.occluded_alpha)
+	_G.SetCVar('nameplateOccludedAlphaMult', FreeDB.nameplate.occluded_alpha)
 end
 
 function NAMEPLATE:UpdatePlateDistance()
-	SetCVar('nameplateMaxDistance', FreeDB.nameplate.max_distance)
+	_G.SetCVar('nameplateMaxDistance', FreeDB.nameplate.max_distance)
 end
 
 function NAMEPLATE:UpdatePlateVerticalSpacing()
-	SetCVar('nameplateOverlapV', FreeDB.nameplate.vertical_spacing)
+	_G.SetCVar('nameplateOverlapV', FreeDB.nameplate.vertical_spacing)
 end
 
 function NAMEPLATE:UpdatePlateHorizontalSpacing()
-	SetCVar('nameplateOverlapH', FreeDB.nameplate.horizontal_spacing)
+	_G.SetCVar('nameplateOverlapH', FreeDB.nameplate.horizontal_spacing)
 end
 
 function NAMEPLATE:UpdateClickableSize()
 	if InCombatLockdown() then return end
-	C_NamePlate.SetNamePlateEnemySize(FreeDB.nameplate.plate_width * FreeADB['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['ui_scale'] + 40)
-	C_NamePlate.SetNamePlateFriendlySize(FreeDB.nameplate.plate_width * FreeADB['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['ui_scale'] + 40)
+	C_NamePlate.SetNamePlateEnemySize(FreeDB.nameplate.plate_width * FreeADB['appearance']['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['appearance']['ui_scale'] + 40)
+	C_NamePlate.SetNamePlateFriendlySize(FreeDB.nameplate.plate_width * FreeADB['appearance']['ui_scale'], FreeDB.nameplate.plate_height * FreeADB['appearance']['ui_scale'] + 40)
 end
 
 function NAMEPLATE:SetupCVars()
@@ -72,8 +72,8 @@ function NAMEPLATE:SetupCVars()
 	NAMEPLATE:UpdatePlateScale()
 	NAMEPLATE:UpdatePlateTargetScale()
 
-	SetCVar('nameplateShowSelf', 0)
-	SetCVar('nameplateResourceOnTarget', 0)
+	_G.SetCVar('nameplateShowSelf', 0)
+	_G.SetCVar('nameplateResourceOnTarget', 0)
 	F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
 	F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
 
@@ -626,7 +626,7 @@ end
 
 
 function NAMEPLATE:OnLogin()
-	if not FreeDB.nameplate.enable_nameplate then return end
+	if not FreeDB.nameplate.enable then return end
 
 	self:SetupCVars()
 	self:BlockAddons()

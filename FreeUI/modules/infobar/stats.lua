@@ -55,7 +55,7 @@ function INFOBAR:Stats()
 	holder:SetWidth(180)
 	holder:SetPoint('CENTER')
 
-	local text = F.CreateFS(holder, C.Assets.Fonts.Number, 11, nil, text, nil, true, 'CENTER', 0, 0)
+	local text = F.CreateFS(holder, C.Assets.Fonts.Regular, 11, nil, text, nil, true, 'CENTER', 0, 0)
 	text:SetTextColor(C.r, C.g, C.b)
 	text:SetDrawLayer('OVERLAY')
 

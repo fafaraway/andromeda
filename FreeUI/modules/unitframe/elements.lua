@@ -122,6 +122,7 @@ local function PostUpdateHealth(self, unit, min, max)
 	local isOffline = not UnitIsConnected(unit)
 	local isDead = UnitIsDead(unit)
 	local isGhost = UnitIsGhost(unit)
+	local isTapped = UnitIsTapDenied(unit)
 
 	if isDead or isGhost or isOffline then
 		self:SetValue(0)
@@ -135,7 +136,7 @@ local function PostUpdateHealth(self, unit, min, max)
 
 	if isDead or isGhost then
 		parent.Bg:SetBackdropColor(0, 0, 0, .8)
-	elseif isOffline then
+	elseif isOffline or isTapped then
 		parent.Bg:SetBackdropColor(.4, .4, .4, .5)
 	else
 		parent.Bg:SetBackdropColor(.02, .02, .02, .5)
@@ -1027,12 +1028,12 @@ function UNITFRAME:AddCastBar(self)
 
 
 	if FreeDB.unitframe.castbar_timer then
-		local timer = F.CreateFS(castbar, C.Assets.Fonts.Number, 11, 'OUTLINE')
+		local timer = F.CreateFS(castbar, C.Assets.Fonts.Regular, 11, 'OUTLINE')
 		timer:SetPoint('CENTER', castbar)
 		castbar.Time = timer
 	end
 
-	local text = F.CreateFS(castbar, C.Assets.Fonts.Normal, 9, 'OUTLINE')
+	local text = F.CreateFS(castbar, C.Assets.Fonts.Regular, 9, 'OUTLINE')
 	text:SetPoint('TOP', castbar, 'BOTTOM', 0, -2)
 	text:Hide()
 	castbar.Text = text
@@ -1197,7 +1198,7 @@ function UNITFRAME:AddClassPowerBar(self)
 		bars[i].bg.multiplier = .25
 
 		if C.MyClass == 'DEATHKNIGHT' and FreeDB.unitframe.runes_timer then
-			bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Number, 11, nil, '')
+			bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, nil, '')
 		end
 	end
 
@@ -1226,7 +1227,7 @@ function UNITFRAME:AddStagger(self)
 
 	F.CreateBDFrame(stagger)
 
-	local text = F.CreateFS(stagger, C.Assets.Fonts.Number, 11, nil, '', nil, 'THICK')
+	local text = F.CreateFS(stagger, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
 	text:SetPoint('TOP', stagger, 'BOTTOM', 0, -4)
 	self:Tag(text, '[free:stagger]')
 
@@ -1334,7 +1335,7 @@ end
 function UNITFRAME:AddPvPIndicator(self)
 	if not FreeDB.unitframe.player_pvp_indicator then return end
 
-	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Number, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
+	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Regular, 11, nil}, nil, nil, 'P', 'RED', 'THICK')
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
 	pvpIndicator.SetTexture = F.Dummy
@@ -1447,7 +1448,7 @@ end
 function UNITFRAME:AddPhaseIndicator(self)
 	if not FreeDB.unitframe.group_phase_indicator then return end
 
-	local phaseIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Number, 11, nil, '?', nil, 'THICK', 'RIGHT', nil, true)
+	local phaseIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '?', nil, true, 'RIGHT', nil, true)
 	phaseIndicator:SetPoint('TOPRIGHT', self.Health, 0, -2)
 	self.PhaseIndicator = phaseIndicator
 end
@@ -1631,14 +1632,14 @@ end
 --[[ Tags ]]
 
 function UNITFRAME:AddGroupNameText(self)
-	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Normal, 11, nil, nil, nil, 'THICK')
+	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil, nil, nil, 'THICK')
 
 	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
 	self.GroupName = groupName
 end
 
 function UNITFRAME:AddNameText(self)
-	local name = F.CreateFS(self.Health, C.Assets.Fonts.Normal, 11, nil, nil, nil, 'THICK')
+	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
 
 	if self.unitStyle == 'target' then
 		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1655,11 +1656,11 @@ function UNITFRAME:AddNameText(self)
 end
 
 function UNITFRAME:AddHealthValueText(self)
-	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Number, 11, nil, nil, nil, 'THICK')
+	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
 	if self.unitStyle == 'player' then
-		self:Tag(healthValue, '[free:dead][free:health]')
+		self:Tag(healthValue, '[free:health]')
 	elseif self.unitStyle == 'target' then
 		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
 	elseif self.unitStyle == 'boss' then
@@ -1678,7 +1679,7 @@ function UNITFRAME:AddHealthValueText(self)
 end
 
 function UNITFRAME:AddPowerValueText(self)
-	local powerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
+	local powerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Regular, 11, nil}, nil, nil, nil, nil, 'THICK')
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
 	if self.unitStyle == 'target' then
@@ -1696,7 +1697,7 @@ function UNITFRAME:AddPowerValueText(self)
 end
 
 function UNITFRAME:AddAlternativePowerValueText(self)
-	local altPowerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Number, 11, nil}, nil, nil, nil, nil, 'THICK')
+	local altPowerValue = F.CreateFS(self.Health, {C.Assets.Fonts.Regular, 11, nil}, nil, nil, nil, nil, 'THICK')
 
 	if self.unitStyle == 'boss' then
 		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)

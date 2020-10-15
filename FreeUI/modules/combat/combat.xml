@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="combat.lua"/>
+	<Script file="announcement.lua"/>
 	<Script file="fct.lua"/>
 	<Script file="focuser.lua"/>
 	<Script file="marker.lua"/>

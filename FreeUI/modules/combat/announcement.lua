@@ -1,15 +1,16 @@
 local F, C, L = unpack(select(2, ...))
-local ANNOUNCEMENT = F:GetModule('ANNOUNCEMENT')
+local COMBAT = F.COMBAT
 
 
-local combatRez = {
-	[61999] = true,	 -- Raise Ally
-	[20484] = true,	 -- Rebirth
-	[20707] = true,	 -- Soulstone
-	[265116] = true, -- 不穩定的時間轉移器（工程學）
+local battleRez = {
+	[61999] = true,		-- Raise Ally
+	[20484] = true,		-- Rebirth
+	[20707] = true,		-- Soulstone
+	[265116] = true,	-- 不穩定的時間轉移器（工程學）
+    [345130] = true		-- Disposable Spectrophasic Reanimator（工程學）
 }
 
-local bots = {
+local repair = {
 	[22700] = true,		-- 修理機器人74A型
 	[44389] = true,		-- 修理機器人110G型
 	[54711] = true,		-- 廢料機器人
@@ -34,12 +35,20 @@ local bots = {
 	[200223] = true,	-- 热砧模式(里弗斯)
 	[200225] = true,	-- 热砧模式(里弗斯)
 	[199109] = true,	-- 自動鐵錘
-	[226241] = true,	-- 宁神圣典
-	[256230] = true,	-- 静心圣典
-	[265116] = true, 	-- Unstable Temporal Time Shifter
+
 }
 
-local feasts = {
+local mail = {
+	[261602] = true,	-- Katy Stampwhistle
+	[54710] = true,		-- MOLL-E
+}
+
+local codex = {
+	[226241] = true,	-- 宁神圣典
+	[256230] = true,	-- 静心圣典
+}
+
+local feast = {
 	[185709] = true,  -- Sugar-Crusted Fish Feast
 	[126492] = true,  -- 燒烤盛宴
 	[126494] = true,  -- 豪华燒烤盛宴
@@ -62,9 +71,16 @@ local feasts = {
 	[201352] = true,  -- 苏拉玛奢华大餐
 	[259409] = true,  -- 海帆盛宴
 	[259410] = true,  -- 船长盛宴佳肴
-	[276972] = true,  -- 神秘大鍋
 	[286050] = true,  -- 血潤盛宴
 	[297048] = true,  -- 饿了没
+}
+
+local cauldron = {
+	[276972] = true,	-- 神秘大鍋
+}
+
+local refreshment = {
+	[190336] = true,	-- Conjure Refreshment
 }
 
 local portals = {
@@ -101,8 +117,21 @@ local toys = {
 	[49844] = true,		-- 恐酒遙控器
 }
 
+local function CheckChannel()
+	return IsPartyLFG() and 'INSTANCE_CHAT' or IsInRaid() and 'RAID' or 'PARTY'
+end
 
-function ANNOUNCEMENT:UpdateEvents(...)
+local debugMode = false
+local function SendMsg(text)
+	if debugMode then
+		F.Print(text)
+	end
+
+	--SendChatMessage(text, CheckChannel())
+	SendChatMessage(text, 'SAY')
+end
+
+function COMBAT:UpdateEvents(...)
 	local _, event, _, sourceGUID, sourceName, _, _, _, destName, _, _, sourceSpellId, _, _, targetSpellId = ...
 	local isMine = (sourceGUID == UnitGUID('player') or sourceGUID == UnitGUID('pet'))
 
@@ -110,85 +139,85 @@ function ANNOUNCEMENT:UpdateEvents(...)
 	if destName then destName = destName:gsub('%-[^|]+', '') end
 
 	if event == 'SPELL_INTERRUPT' then
-		if not (FreeDB.announcement.my_interrupt and isMine) then return end
+		if not (FreeDB.announcement.interrupt and isMine) then return end
 
-		SendChatMessage(format(L['ANNOUNCEMENT_INTERRUPT'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
+		SendMsg(format(L['ANNOUNCEMENT_INTERRUPT'], destName, GetSpellLink(targetSpellId)))
 	end
 
 	if event == 'SPELL_DISPEL' then
-		if not (FreeDB.announcement.my_dispel and isMine) then return end
+		if not (FreeDB.announcement.dispel and isMine) then return end
 
-		SendChatMessage(format(L['ANNOUNCEMENT_DISPEL'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
+		SendMsg(format(L['ANNOUNCEMENT_DISPEL'], destName, GetSpellLink(targetSpellId)))
 	end
 
 	if event == 'SPELL_STOLEN' then
-		if not (FreeDB.announcement.my_dispel and isMine) then return end
+		if not (FreeDB.announcement.stolen and isMine) then return end
 
-		SendChatMessage(format(L['ANNOUNCEMENT_STOLEN'], C.RedColor..destName..'|r', GetSpellLink(targetSpellId)), 'SAY')
+		SendMsg(format(L['ANNOUNCEMENT_STOLEN'], destName, GetSpellLink(targetSpellId)))
 	end
 
 	if event == 'SPELL_CAST_SUCCESS' then
-		if FreeDB.announcement.feast_cauldron and feasts[sourceSpellId] then
-			SendChatMessage(format(L['ANNOUNCEMENT_FEAST'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.feast and feast[sourceSpellId] then
+			SendChatMessage(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
 
-		if FreeDB.announcement.conjure_refreshment and (sourceSpellId == 190336) then
-			SendChatMessage(format(L['ANNOUNCEMENT_FEAST'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.cauldron and cauldron[sourceSpellId] then
+			SendChatMessage(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
 
-		if FreeDB.announcement.combat_rez and combatRez[sourceSpellId] then
+		if FreeDB.announcement.refreshment and refreshment[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
+		end
+
+		if FreeDB.announcement.battle_resurrection and battleRez[sourceSpellId] then
 			if destName == nil then
-				SendChatMessage(format(L['COMBAT_ANNOUCE_BATTLE_REZ'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+				SendMsg(format(L['ANNOUNCEMENT_BATTLE_RESURRECTION'], sourceName, GetSpellLink(sourceSpellId)))
 			else
-				SendChatMessage(format(L['COMBAT_ANNOUCE_BATTLE_REZ_TARGET'], sourceName, GetSpellLink(sourceSpellId), destName), 'SAY')
+				SendMsg(format(L['ANNOUNCEMENT_BATTLE_RESURRECTION_TARGET'], sourceName, GetSpellLink(sourceSpellId), destName))
 			end
 		end
 	end
 
 	if event == 'SPELL_SUMMON' then
-		if FreeDB.announcement.mail_service and (sourceSpellId == 261602) then -- Katy Stampwhistle
-			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.mail and mail[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
+		end
+
+		if FreeDB.announcement.repair and repair[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
+		end
+
+		if FreeDB.announcement.codex and codex[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
 	end
 
 	if event == 'SPELL_CREATE' then
-		if FreeDB.announcement.mage_portal and portals[sourceSpellId] then
-			SendChatMessage(format(L['ANNOUNCEMENT_PORTAL'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.portal and portals[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
 
-		if FreeDB.announcement.ritual_of_summoning and (sourceSpellId == 698) then
-			SendChatMessage(format(L['COMBAT_ANNOUCE_CASTED'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.soulwell and (sourceSpellId == 29893) then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
 
-		if FreeDB.announcement.create_soulwell and (sourceSpellId == 29893) then
-			SendChatMessage(format(L['COMBAT_ANNOUCE_CASTED'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.mail and mail[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
 
-		if FreeDB.announcement.mail_service and (sourceSpellId == 54710) then -- MOLL-E
-			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
+		if FreeDB.announcement.toy and toys[sourceSpellId] then
+			SendMsg(format(L['ANNOUNCEMENT_CASTED'], sourceName, GetSpellLink(sourceSpellId)))
 		end
-
-		if FreeDB.announcement.special_toy and toys[sourceSpellId] then
-			SendChatMessage(format(L['ANNOUNCEMENT_ITEM'], sourceName, GetSpellLink(sourceSpellId)), 'SAY')
-		end
-	end
-
-	if event == 'SPELL_AURA_APPLIED' or event == 'SPELL_AURA_REFRESH' then
-		if not (FreeDB.announcement.get_sapped and destName == C.MyName and sourceSpellId == 6770) then return end
-
-		SendChatMessage(L['COMBAT_ANNOUCE_SAPPED'], 'SAY')
-		F.Print(L['COMBAT_ANNOUCE_SAPPED']..(sourceName or '(unknown)'))
 	end
 end
 
 
-function ANNOUNCEMENT:OnLogin()
-	if not IsInInstance() then return end
-	if not IsInGroup() then return end
+function COMBAT:Announcement()
+	if not (IsInInstance() and IsInGroup()) then return end
 
-	if FreeDB.announcement.enable_announcement then
-		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
+	if FreeDB.announcement.enable then
+		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', COMBAT.UpdateEvents)
 	else
-		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
+		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', COMBAT.UpdateEvents)
 	end
 end

@@ -62,7 +62,7 @@ function GUI:ImportData()
 	local title, _, _, _ = strsplit(':', options[1])
 
 	if title ~= 'FreeUISettings' then
-		UIErrorsFrame:AddMessage(C.RedColor..L['GUI_IMPORT_DATA_ERROR'])
+		UIErrorsFrame:AddMessage(C.RedColor..L.GUI.DATA.IMPORT_ERROR)
 		return
 	end
 
@@ -126,7 +126,7 @@ function GUI:CreateDataFrame()
 	dataFrame:SetFrameStrata('DIALOG')
 	F.CreateMF(dataFrame)
 	F.SetBD(dataFrame)
-	dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Normal, 14, nil, L['GUI_DATA_EXPORT_HEADER'], 'YELLOW', true, 'TOP', 0, -5)
+	dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Regular, 14, nil, L.GUI.DATA.EXPORT_TITLE, 'YELLOW', true, 'TOP', 0, -5)
 
 	local scrollArea = CreateFrame('ScrollFrame', nil, dataFrame, 'UIPanelScrollFrameTemplate')
 	scrollArea:SetPoint('TOPLEFT', 10, -30)
@@ -140,7 +140,7 @@ function GUI:CreateDataFrame()
 	editBox:EnableMouse(true)
 	editBox:SetAutoFocus(true)
 	editBox:SetTextInsets(5, 5, 5, 5)
-	editBox:SetFont(C.Assets.Fonts.Normal, 12)
+	editBox:SetFont(C.Assets.Fonts.Regular, 12)
 	editBox:SetWidth(scrollArea:GetWidth())
 	editBox:SetHeight(scrollArea:GetHeight())
 	editBox:SetScript('OnEscapePressed', function() dataFrame:Hide() end)
@@ -164,11 +164,11 @@ function GUI:CreateDataFrame()
 		GameTooltip:ClearLines()
 
 		if dataFrame.version then
-			GameTooltip:AddLine(L['GUI_DATA_INFO'])
-			GameTooltip:AddDoubleLine(L['GUI_DATA_VERSION'], dataFrame.version, .6,.8,1, 1,1,1)
-			GameTooltip:AddDoubleLine(L['GUI_DATA_CHARACTER'], dataFrame.name, .6,.8,1, F.ClassColor(dataFrame.class))
+			GameTooltip:AddLine(L.GUI.DATA.INFO)
+			GameTooltip:AddDoubleLine(L.GUI.DATA.VERSION, dataFrame.version, .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L.GUI.DATA.CHARACTER, dataFrame.name, .6,.8,1, F.ClassColor(dataFrame.class))
 		else
-			GameTooltip:AddLine(L['GUI_DATA_EXCEPTION'], 1,0,0)
+			GameTooltip:AddLine(L.GUI.DATA.EXCEPTION, 1,0,0)
 		end
 
 		GameTooltip:Show()

@@ -266,7 +266,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
-			mover = F.Mover(self, L['TOOLTIP_MOVER'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -FreeADB['ui_gap'], 260}, 240, 120)
+			mover = F.Mover(self, L['TOOLTIP_MOVER'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, 260}, 240, 120)
 		end
 		self:SetOwner(parent, 'ANCHOR_NONE')
 		self:ClearAllPoints()
@@ -363,7 +363,7 @@ function TOOLTIP:GameTooltip_SetBackdropStyle()
 end
 
 local function TooltipSetFont(font, size)
-	font:SetFont(C.Assets.Fonts.Normal, size)
+	font:SetFont(C.Assets.Fonts.Regular, size)
 	font:SetShadowColor(0, 0, 0, 1)
 	font:SetShadowOffset(2, -2)
 end

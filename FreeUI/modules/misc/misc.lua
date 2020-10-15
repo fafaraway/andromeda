@@ -21,7 +21,6 @@ function MISC:OnLogin()
 	end
 
 
-	self:InstantLoot()
 
 	self:BlowMyWhistle()
 
@@ -33,7 +32,7 @@ function MISC:OnLogin()
 
 
 
-	_G.BINDING_HEADER_FREEUI = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
+
 
 	-- Registering fonts in LibSharedMedia
 	local LSM = LibStub and LibStub:GetLibrary('LibSharedMedia-3.0', true)
@@ -52,10 +51,10 @@ function MISC:OnLogin()
 		LOCALE_MASK = 128
 	end
 
-	LSM:Register(LSM.MediaType.FONT, '!Free_normal', C.Assets.Fonts.Normal, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_number', C.Assets.Fonts.Number, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_normal', C.Assets.Fonts.Regular, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_number', C.Assets.Fonts.Regular, LOCALE_MASK)
 	LSM:Register(LSM.MediaType.FONT, '!Free_chat', C.Assets.Fonts.Chat, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_header', C.Assets.Fonts.Header, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_header', C.Assets.Fonts.Bold, LOCALE_MASK)
 	LSM:Register(LSM.MediaType.FONT, '!Free_combat', C.Assets.Fonts.Combat, LOCALE_MASK)
 
 	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_norm', C.AssetsPath..'textures\\norm_tex')
@@ -176,26 +175,7 @@ end
 
 
 
-local lootDelay = 0
-local function instantLoot()
-	if GetTime() - lootDelay >= 0.3 then
-		lootDelay = GetTime()
-		if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
-			for i = GetNumLootItems(), 1, -1 do
-				LootSlot(i)
-			end
-			lootDelay = GetTime()
-		end
-	end
-end
 
-function MISC:InstantLoot()
-	if FreeDB['instant_loot'] then
-		F:RegisterEvent('LOOT_READY', instantLoot)
-	else
-		F:UnregisterEvent('LOOT_READY', instantLoot)
-	end
-end
 
 
 

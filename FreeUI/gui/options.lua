@@ -104,10 +104,6 @@ local function SetupBar2Fade()
 	GUI:ToggleSidePanel('bar2FadeSide')
 end
 
-local function SetupBar3()
-	GUI:ToggleSidePanel('bar3Side')
-end
-
 local function SetupBar3Fade()
 	GUI:ToggleSidePanel('bar3FadeSide')
 end
@@ -203,6 +199,10 @@ local function SetupFCT()
 	GUI:ToggleSidePanel('fctSide')
 end
 
+local function SetupAnnouncement()
+	GUI:ToggleSidePanel('announcementSide')
+end
+
 -- map
 local function SetupMapScale()
 	GUI:ToggleSidePanel('mapScaleSide')
@@ -262,7 +262,7 @@ local function CreateNamePlateAuraFilter(parent)
 			sortBars(frameData[index].barList)
 		end)
 
-		local spellName = F.CreateFS(bar, C.Assets.Fonts.Normal, 11, nil, name, nil, true, 'LEFT', 24, 0)
+		local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'LEFT', 24, 0)
 		spellName:SetWidth(120)
 		spellName:SetJustifyH('LEFT')
 		if index == 2 then spellName:SetTextColor(1, 0, 0) end
@@ -281,7 +281,7 @@ local function CreateNamePlateAuraFilter(parent)
 	end
 
 	for index, value in ipairs(frameData) do
-		F.CreateFS(plateAuraSide, C.Assets.Fonts.Normal, 12, nil, value.header, 'BLUE', true, 'TOPLEFT', 20, value.offset)
+		F.CreateFS(plateAuraSide, C.Assets.Fonts.Regular, 12, nil, value.header, 'BLUE', true, 'TOPLEFT', 20, value.offset)
 		local frame = CreateFrame('Frame', nil, plateAuraSide)
 		frame:SetSize(160, 170)
 		frame:SetPoint('TOPLEFT', 10, value.offset - 10)
@@ -307,13 +307,7 @@ end
 
 --[[  ]]
 
-local function ToggleOptions()
-	local shown = GUI.EnableUnitframe:GetChecked()
 
-	for _, option in pairs(GUI.UnitframeOptionsList) do
-		option:SetShown(shown)
-	end
-end
 
 
 
@@ -341,43 +335,31 @@ local function AppearanceOptions()
 	local shadowBorder = GUI:CreateCheckBox(parent, 'APPEARANCE', 'shadow_border')
 	shadowBorder:SetPoint('LEFT', reskinBlizz, 'RIGHT', 160, 0)
 
-	local adjustFont = GUI:CreateCheckBox(parent, 'APPEARANCE', 'adjust_font')
-	adjustFont:SetPoint('TOPLEFT', reskinBlizz, 'BOTTOMLEFT', 0, -8)
-
 
 	local addons = GUI:AddSubCategory(parent)
-	addons:SetPoint('TOPLEFT', adjustFont, 'BOTTOMLEFT', 0, -16)
+	addons:SetPoint('TOPLEFT', reskinBlizz, 'BOTTOMLEFT', 0, -16)
 
 	local DBM = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_dbm')
 	DBM:SetPoint('TOPLEFT', addons, 'BOTTOMLEFT', 0, -8)
 
-	local WeakAuras = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_weakauras')
-	WeakAuras:SetPoint('LEFT', DBM, 'RIGHT', 160, 0)
-
-	local Skada = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_skada')
-	Skada:SetPoint('TOPLEFT', DBM, 'BOTTOMLEFT', 0, -8)
-
-	local PGF = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_pgf')
-	PGF:SetPoint('LEFT', Skada, 'RIGHT', 160, 0)
+	local BigWigs = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_bigwigs')
+	BigWigs:SetPoint('LEFT', DBM, 'RIGHT', 160, 0)
 
 	local WowLua = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_wowlua')
-	WowLua:SetPoint('TOPLEFT', Skada, 'BOTTOMLEFT', 0, -8)
+	WowLua:SetPoint('TOPLEFT', DBM, 'BOTTOMLEFT', 0, -8)
 
-	local toasts = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_toasts')
-	toasts:SetPoint('LEFT', WowLua, 'RIGHT', 160, 0)
-
-	local meetingStone = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_meetingstone')
-	meetingStone:SetPoint('TOPLEFT', WowLua, 'BOTTOMLEFT', 0, -8)
+	local PGF = GUI:CreateCheckBox(parent, 'APPEARANCE', 'reskin_pgf')
+	PGF:SetPoint('LEFT', WowLua, 'RIGHT', 160, 0)
 
 
 	local other = GUI:AddSubCategory(parent)
-	other:SetPoint('TOPLEFT', meetingStone, 'BOTTOMLEFT', 0, -16)
+	other:SetPoint('TOPLEFT', WowLua, 'BOTTOMLEFT', 0, -16)
 
 
-	local uiScale = GUI:CreateSlider(parent, 'ACCOUNT', 'ui_scale', nil, {.4, 2, .01})
+	local uiScale = GUI:CreateSlider(parent, 'APPEARANCE', 'ui_scale', nil, {.4, 2, .01})
 	uiScale:SetPoint('TOPLEFT', other, 'BOTTOMLEFT', 0, -24)
 
-	local texture = GUI:CreateDropDown(parent, 'ACCOUNT', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']}, L['GUI_UNITFRAME_TEXTURE_STYLE'])
+	local texture = GUI:CreateDropDown(parent, 'APPEARANCE', 'texture_style', nil, {L['GUI_UNITFRAME_TEXTURE_NORM'], L['GUI_UNITFRAME_TEXTURE_GRAD'], L['GUI_UNITFRAME_TEXTURE_FLAT']}, L['GUI_UNITFRAME_TEXTURE_STYLE'])
 	texture:SetPoint('LEFT', uiScale, 'RIGHT', 80, 0)
 
 
@@ -699,7 +681,7 @@ local function ActionbarOptions()
 	local bar1Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar1_fade', nil, SetupBar1Fade)
 	bar1Fade:SetPoint('LEFT', bar1, 'RIGHT', 160, 0)
 
-	bar1.children = {bar1Fade}
+	bar1.sub = {bar1Fade}
 
 	local bar2 = GUI:CreateCheckBox(parent, 'actionbar', 'bar2')
 	bar2:SetPoint('TOPLEFT', bar1, 'BOTTOMLEFT', 0, -8)
@@ -707,15 +689,15 @@ local function ActionbarOptions()
 	local bar2Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar2_fade', nil, SetupBar2Fade)
 	bar2Fade:SetPoint('LEFT', bar2, 'RIGHT', 160, 0)
 
-	bar2.children = {bar2Fade}
+	bar2.sub = {bar2Fade}
 
-	local bar3 = GUI:CreateCheckBox(parent, 'actionbar', 'bar3', nil, SetupBar3)
+	local bar3 = GUI:CreateCheckBox(parent, 'actionbar', 'bar3')
 	bar3:SetPoint('TOPLEFT', bar2, 'BOTTOMLEFT', 0, -8)
 
 	local bar3Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar3_fade', nil, SetupBar3Fade)
 	bar3Fade:SetPoint('LEFT', bar3, 'RIGHT', 160, 0)
 
-	bar3.children = {bar3Fade}
+	bar3.sub = {bar3Fade}
 
 	local bar4 = GUI:CreateCheckBox(parent, 'actionbar', 'bar4')
 	bar4:SetPoint('TOPLEFT', bar3, 'BOTTOMLEFT', 0, -8)
@@ -723,7 +705,7 @@ local function ActionbarOptions()
 	local bar4Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar4_fade', nil, SetupBar4Fade)
 	bar4Fade:SetPoint('LEFT', bar4, 'RIGHT', 160, 0)
 
-	bar4.children = {bar4Fade}
+	bar4.sub = {bar4Fade}
 
 	local bar5 = GUI:CreateCheckBox(parent, 'actionbar', 'bar5')
 	bar5:SetPoint('TOPLEFT', bar4, 'BOTTOMLEFT', 0, -8)
@@ -731,7 +713,7 @@ local function ActionbarOptions()
 	local bar5Fade = GUI:CreateCheckBox(parent, 'actionbar', 'bar5_fade', nil, SetupBar5Fade)
 	bar5Fade:SetPoint('LEFT', bar5, 'RIGHT', 160, 0)
 
-	bar5.children = {bar5Fade}
+	bar5.sub = {bar5Fade}
 
 	local petBar = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar')
 	petBar:SetPoint('TOPLEFT', bar5, 'BOTTOMLEFT', 0, -8)
@@ -739,7 +721,7 @@ local function ActionbarOptions()
 	local petBarFade = GUI:CreateCheckBox(parent, 'actionbar', 'pet_bar_fade', nil, SetupPetBarFade)
 	petBarFade:SetPoint('LEFT', petBar, 'RIGHT', 160, 0)
 
-	petBar.children = {petBarFade}
+	petBar.sub = {petBarFade}
 
 
 	local stanceBar = GUI:CreateCheckBox(parent, 'actionbar', 'stance_bar')
@@ -766,7 +748,6 @@ local function ActionbarOptions()
 		bar2Fade:SetShown(shown)
 		bar2Fade.bu:SetShown(shown)
 		bar3:SetShown(shown)
-		bar3.bu:SetShown(shown)
 		bar3Fade:SetShown(shown)
 		bar3Fade.bu:SetShown(shown)
 		bar4:SetShown(shown)
@@ -984,7 +965,7 @@ end
 local function CombatOptions()
 	local parent = FreeUI_GUI[7]
 
-	local basic = GUI:AddSubCategory(parent)
+	local basic = GUI:AddSubCategory(parent, L['COMBAT_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
 	local enable = GUI:CreateCheckBox(parent, 'combat', 'enable_combat')
@@ -999,23 +980,31 @@ local function CombatOptions()
 	local spell = GUI:CreateCheckBox(parent, 'combat', 'spell_alert')
 	spell:SetPoint('TOPLEFT', combat, 'BOTTOMLEFT', 0, -8)
 
-	local easyMark = GUI:CreateCheckBox(parent, 'combat', 'easy_mark')
-	easyMark:SetPoint('LEFT', spell, 'RIGHT', 160, 0)
+	local announcement = GUI:CreateCheckBox(parent, 'announcement', 'enable', nil, SetupAnnouncement)
+	announcement:SetPoint('LEFT', spell, 'RIGHT', 160, 0)
 
 	local easyFocus = GUI:CreateCheckBox(parent, 'combat', 'easy_focus')
 	easyFocus:SetPoint('TOPLEFT', spell, 'BOTTOMLEFT', 0, -8)
 
+	local easyMark = GUI:CreateCheckBox(parent, 'combat', 'easy_mark')
+	easyMark:SetPoint('LEFT', easyFocus, 'RIGHT', 160, 0)
+
 	local fct = GUI:CreateCheckBox(parent, 'combat', 'fct', nil, SetupFCT)
-	fct:SetPoint('LEFT', easyFocus, 'RIGHT', 160, 0)
+	fct:SetPoint('TOPLEFT', easyFocus, 'BOTTOMLEFT', 0, -8)
 
-	local pvp = GUI:AddSubCategory(parent)
-	pvp:SetPoint('TOPLEFT', easyFocus, 'BOTTOMLEFT', 0, -16)
+	local pvp = GUI:AddSubCategory(parent, L['COMBAT_SUB_PVP'])
+	pvp:SetPoint('TOPLEFT', fct, 'BOTTOMLEFT', 0, -16)
 
-	local autoTab = GUI:CreateCheckBox(parent, 'combat', 'auto_tab')
+	local autoTab = GUI:CreateCheckBox(parent, 'combat', 'easy_tab')
 	autoTab:SetPoint('TOPLEFT', pvp, 'BOTTOMLEFT', 0, -8)
 
 	local PVPSound = GUI:CreateCheckBox(parent, 'combat', 'pvp_sound')
 	PVPSound:SetPoint('LEFT', autoTab, 'RIGHT', 160, 0)
+
+
+
+
+	enable.sub = {combat, health, spell, announcement, easyFocus, easyMark, fct, PVPSound, autoTab}
 
 
 	local healthThresholdSide = GUI:CreateSidePanel(parent, 'healthThresholdSide')
@@ -1042,22 +1031,66 @@ local function CombatOptions()
 	fctMerge:SetPoint('TOP', fctPeriodic, 'BOTTOM', 0, -8)
 
 
-	local function toggleCombatOptions()
-		local shown = enable:GetChecked()
-		combat:SetShown(shown)
-		health:SetShown(shown)
-		health.bu:SetShown(shown)
-		spell:SetShown(shown)
-		easyFocus:SetShown(shown)
-		easyMark:SetShown(shown)
-		pvp:SetShown(shown)
-		pvp.line:SetShown(shown)
-		autoTab:SetShown(shown)
-		PVPSound:SetShown(shown)
-	end
+	local announcementSide = GUI:CreateSidePanel(parent, 'announcementSide')
 
-	enable:HookScript('OnClick', toggleCombatOptions)
-	parent:HookScript('OnShow', toggleCombatOptions)
+	local annouceInterrupt = GUI:CreateCheckBox(announcementSide, 'announcement', 'interrupt')
+	annouceInterrupt:SetPoint('TOPLEFT', announcementSide.child, 'TOPLEFT', 10, -16)
+
+	local annouceDispel = GUI:CreateCheckBox(announcementSide, 'announcement', 'dispel')
+	annouceDispel:SetPoint('TOP', annouceInterrupt, 'BOTTOM', 0, -8)
+
+	local annouceStolen = GUI:CreateCheckBox(announcementSide, 'announcement', 'stolen')
+	annouceStolen:SetPoint('TOP', annouceDispel, 'BOTTOM', 0, -8)
+
+	local annouceFeast = GUI:CreateCheckBox(announcementSide, 'announcement', 'feast')
+	annouceFeast:SetPoint('TOP', annouceStolen, 'BOTTOM', 0, -8)
+
+	local annouceCauldron = GUI:CreateCheckBox(announcementSide, 'announcement', 'cauldron')
+	annouceCauldron:SetPoint('TOP', annouceFeast, 'BOTTOM', 0, -8)
+
+	local annouceCodex = GUI:CreateCheckBox(announcementSide, 'announcement', 'codex')
+	annouceCodex:SetPoint('TOP', annouceCauldron, 'BOTTOM', 0, -8)
+
+	local annouceRefreshment = GUI:CreateCheckBox(announcementSide, 'announcement', 'refreshment')
+	annouceRefreshment:SetPoint('TOP', annouceCodex, 'BOTTOM', 0, -8)
+
+	local annouceSoulwell = GUI:CreateCheckBox(announcementSide, 'announcement', 'soulwell')
+	annouceSoulwell:SetPoint('TOP', annouceRefreshment, 'BOTTOM', 0, -8)
+
+	local annouceRepair = GUI:CreateCheckBox(announcementSide, 'announcement', 'repair')
+	annouceRepair:SetPoint('TOP', annouceSoulwell, 'BOTTOM', 0, -8)
+
+	local annouceMail = GUI:CreateCheckBox(announcementSide, 'announcement', 'mail')
+	annouceMail:SetPoint('TOP', annouceRepair, 'BOTTOM', 0, -8)
+
+	local annouceBattleRez = GUI:CreateCheckBox(announcementSide, 'announcement', 'battle_resurrection')
+	annouceBattleRez:SetPoint('TOP', annouceMail, 'BOTTOM', 0, -8)
+
+	local annoucePortal = GUI:CreateCheckBox(announcementSide, 'announcement', 'portal')
+	annoucePortal:SetPoint('TOP', annouceBattleRez, 'BOTTOM', 0, -8)
+
+	local annouceToy = GUI:CreateCheckBox(announcementSide, 'announcement', 'toy')
+	annouceToy:SetPoint('TOP', annoucePortal, 'BOTTOM', 0, -8)
+
+
+	-- local function toggleCombatOptions()
+	-- 	local shown = enable:GetChecked()
+	-- 	combat:SetShown(shown)
+	-- 	health:SetShown(shown)
+	-- 	health.bu:SetShown(shown)
+	-- 	spell:SetShown(shown)
+	-- 	easyFocus:SetShown(shown)
+	-- 	easyMark:SetShown(shown)
+	-- 	announcement:SetShown(shown)
+	-- 	announcement.bu:SetShown(shown)
+	-- 	fct:SetShown(shown)
+	-- 	fct.bu:SetShown(shown)
+	-- 	autoTab:SetShown(shown)
+	-- 	PVPSound:SetShown(shown)
+	-- end
+
+	-- enable:HookScript('OnClick', toggleCombatOptions)
+	-- parent:HookScript('OnShow', toggleCombatOptions)
 end
 
 local function InventoryOptions()
@@ -1115,7 +1148,7 @@ local function InventoryOptions()
 	local itemFilterFavourite = GUI:CreateCheckBox(parent, 'inventory', 'item_filter_favourite', UpdateBagStatus)
 	itemFilterFavourite:SetPoint('LEFT', itemFilterMountPet, 'RIGHT', 160, 0)
 
-	useCategory.children = {itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
+	useCategory.sub = {itemFilterSet, itemFilterLegendary, itemFilterMountPet, itemFilterFavourite, itemFilterTrade, itemFilterQuest, itemFilterJunk, itemFilterAzerite, itemFilterConsumable}
 
 
 	-- bag size side panel
@@ -1140,7 +1173,7 @@ local function InventoryOptions()
 	local iLvltoShow = GUI:CreateSlider(itemLevelSide, 'inventory', 'item_level_to_show', nil, {1, 500, 1})
 	iLvltoShow:SetPoint('TOP', itemLevelSide.child, 'TOP', 0, -24)
 
-	itemLevel.children = {iLvltoShow}
+	itemLevel.sub = {iLvltoShow}
 
 
 	local function toggleInventoryOptions()
@@ -1380,15 +1413,12 @@ end
 
 local function UnitframeOptions()
 	local parent = FreeUI_GUI[12]
-	parent:HookScript('OnShow', ToggleOptions)
 
 	local basic = GUI:AddSubCategory(parent, L['UNITFRAME_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'unitframe', 'enable_unitframe', nil, SetupUnitSize, nil, true)
+	local enable = GUI:CreateCheckBox(parent, 'unitframe', 'enable_unitframe', nil, SetupUnitSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
-	GUI.EnableUnitframe = enable
-	enable:HookScript('OnClick', ToggleOptions)
 
 	local transMode = GUI:CreateCheckBox(parent, 'unitframe', 'transparent_mode')
 	transMode:SetPoint('TOPLEFT', enable, 'BOTTOMLEFT', 0, -8)
@@ -1801,7 +1831,7 @@ local function NamePlateOptions()
 	local basic = GUI:AddSubCategory(parent, L['NAMEPLATE_SUB_BASIC'])
 	basic:SetPoint('TOPLEFT', parent.desc, 'BOTTOMLEFT', 0, -8)
 
-	local enable = GUI:CreateCheckBox(parent, 'nameplate', 'enable_nameplate', nil, SetupPlateSize)
+	local enable = GUI:CreateCheckBox(parent, 'nameplate', 'enable', nil, SetupPlateSize)
 	enable:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 0, -8)
 
 	local targetIndicator = GUI:CreateCheckBox(parent, 'nameplate', 'target_indicator', RefreshNameplates)
@@ -1838,7 +1868,7 @@ local function NamePlateOptions()
 	local reverThreat = GUI:CreateCheckBox(parent, 'nameplate', 'dps_revert_threat')
 	reverThreat:SetPoint('LEFT', tankMode, 'RIGHT', 160, 0)
 
-	tankMode.children = {reverThreat}
+	tankMode.sub = {reverThreat}
 
 	local customPlate = GUI:CreateCheckBox(parent, 'nameplate', 'custom_unit_color', UpdateNameplateCustomUnitList, SetupCustomPlate)
 	customPlate:SetPoint('TOPLEFT', tankMode, 'BOTTOMLEFT', 0, -8)
@@ -1936,7 +1966,7 @@ local function MiscOptions()
 	--[[ local keyword = GUI:CreateEditBox(parent, 'misc', 'invite_keyword', nil, {60, 20, 5, false})
 	keyword:SetPoint('TOPLEFT', basic, 'BOTTOMLEFT', 20, -40)
 
-	local numberFormat = GUI:CreateDropDown(parent, 'ACCOUNT', 'number_format', nil, {L['GUI_NUMBER_FORMAT_EN'], L['GUI_NUMBER_FORMAT_CN']}, L['GUI_NUMBER_FORMAT'])
+	local numberFormat = GUI:CreateDropDown(parent, 'misc', 'number_format', nil, {L['GUI_NUMBER_FORMAT_EN'], L['GUI_NUMBER_FORMAT_CN']}, L['GUI_NUMBER_FORMAT'])
 	numberFormat:SetPoint('LEFT', keyword, 'RIGHT', 80, 0) ]]
 end
 
@@ -1962,7 +1992,7 @@ local function DataOptions()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(btnExport, 'ANCHOR_NONE')
 		GameTooltip:SetPoint('BOTTOM', btnExport, 'TOP', 0, 10)
-		GameTooltip:AddLine(L['GUI_TIPS'])
+		GameTooltip:AddLine(L.GUI.HINT)
 		GameTooltip:AddLine(L['GUI_DATA_EXPORT_TIP'], .6, .8, 1, 1)
 		GameTooltip:Show()
 	end)
@@ -1983,7 +2013,7 @@ local function DataOptions()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(btnImport, 'ANCHOR_NONE')
 		GameTooltip:SetPoint('BOTTOM', btnImport, 'TOP', 0, 10)
-		GameTooltip:AddLine(L['GUI_TIPS'])
+		GameTooltip:AddLine(L.GUI.HINT)
 		GameTooltip:AddLine(L['GUI_DATA_IMPORT_TIP'], .6, .8, 1, 1)
 		GameTooltip:Show()
 	end)
@@ -1994,14 +2024,14 @@ local function DataOptions()
 	btnReset:SetScript('OnClick', function()
 		if FreeUI_GUI then FreeUI_GUI:Hide() end
 
-		StaticPopup_Show('FREEUI_RESET_ALL')
+		StaticPopup_Show('FREEUI_RESET_OPTIONS')
 	end)
 
 	btnReset:SetScript('OnEnter', function()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(btnReset, 'ANCHOR_NONE')
 		GameTooltip:SetPoint('BOTTOM', btnReset, 'TOP', 0, 10)
-		GameTooltip:AddLine(L['GUI_TIPS'])
+		GameTooltip:AddLine(L.GUI.HINT)
 		GameTooltip:AddLine(L['GUI_DATA_RESET_TIP'], .6, .8, 1, 1)
 		GameTooltip:Show()
 	end)
@@ -2043,4 +2073,10 @@ function GUI:AddOptions()
 	DataOptions()
 	CreditsOptions()
 end
+
+
+
+
+
+
 

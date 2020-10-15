@@ -1,6 +1,9 @@
 local F, C = unpack(select(2, ...))
 
 
+C.Fonts = { -- #TODO
+	['infobar'] = {},
+}
 
 C['ReminderBuffsList'] = {
 	MAGE = {
@@ -157,6 +160,39 @@ C['ClassBuffsList'] = {
 
 C['RaidDebuffsList'] = {
 
+}
+
+
+-- Raidbuff Checklist
+C.BuffList = {
+	[1] = {		-- 合剂
+		298836,	-- 敏捷360
+		298837,	-- 智力360
+		298839,	-- 耐力360
+		298841,	-- 力量360
+
+		307166,	-- 大锅
+		307185,	-- 通用合剂
+		307187,	-- 耐力合剂
+	},
+	[2] = {     -- 进食充分
+		104273, -- 250敏捷，BUFF名一致
+	},
+	[3] = {     -- 10%智力
+		1459,
+		264760,
+	},
+	[4] = {     -- 10%耐力
+		21562,
+		264764,
+	},
+	[5] = {     -- 10%攻强
+		6673,
+		264761,
+	},
+	[6] = {     -- 符文
+		270058,
+	},
 }
 
 
@@ -444,23 +480,7 @@ C.CharacterSettings = {
 	['faster_camera'] = true,
 
 	['block_stranger_invite'] = false,
-	['instant_loot'] = true,
 
-
-	['announcement'] = {
-		['enable_announcement'] = true,
-			['my_interrupt'] = true,
-			['my_dispel'] = true,
-			['get_sapped'] = true,
-			['combat_rez'] = true,
-			['feast_cauldron'] = true,
-			['bot_codex'] = true,
-			['mage_portal'] = true,
-			['create_soulwell'] = true,
-			['mail_service'] = true,
-			['conjure_refreshment'] = true,
-			['special_toy'] = true,
-	},
 
 	['blizzard'] = {
 		['hide_talkinghead'] = true,
@@ -472,11 +492,12 @@ C.CharacterSettings = {
 		['tradeskill_tabs'] = true,
 		['undress_button'] = true,
 		['trade_target_info'] = true,
-		['tidy_errors'] = true,
+		['concise_errors'] = true,
 		['naked_button'] = true,
 		['queue_timer'] = true,
 		['easy_delete'] = true,
 		['pet_filter'] = true,
+		['instant_loot'] = false,
 	},
 
 	['combat'] = {
@@ -488,7 +509,6 @@ C.CharacterSettings = {
 			['pvp_sound'] = true,
 			['easy_tab'] = true,
 			['easy_focus'] = true,
-				['easy_focus_on_unitframes'] = false,
 			['easy_mark'] = true,
 			['fct'] = true,
 				['fct_pet'] = true,
@@ -496,6 +516,23 @@ C.CharacterSettings = {
 				['fct_merge'] = true,
 				['fct_in'] = true,
 				['fct_out'] = true,
+	},
+
+	['announcement'] = {
+		['enable'] = true,
+			['interrupt'] = true,
+			['dispel'] = true,
+			['stolen'] = true,
+			['feast'] = true,
+			['cauldron'] = true,
+			['codex'] = true,
+			['refreshment'] = true,
+			['soulwell'] = true,
+			['repair'] = true,
+			['mail'] = true,
+			['battle_resurrection'] = true,
+			['portal'] = true,
+			['toy'] = true,
 	},
 
 	['quest'] = {
@@ -534,6 +571,7 @@ C.CharacterSettings = {
 			['item_level'] = true,
 				['item_level_to_show'] = 1,
 			['new_item_flash'] = true,
+			['bind_type'] = true,
 			['combine_free_slots'] = true,
 			['split_count'] = 1,
 			['special_color'] = true,
@@ -688,7 +726,7 @@ C.CharacterSettings = {
 	},
 
 	['nameplate'] = {
-		['enable_nameplate'] = true,
+		['enable'] = true,
 			['plate_width'] = 76,
 			['plate_height'] = 8,
 			['friendly_class_color'] = false,
@@ -760,7 +798,6 @@ C.CharacterSettings = {
 			['calendar'] = true,
 			['instance_type'] = true,
 			['who_pings'] = true,
-			['world_marker'] = true,
 			['micro_menu'] = true,
 			['progress_bar'] = true,
 	},
@@ -793,12 +830,16 @@ C.CharacterSettings = {
 		['invite_whisper'] = true,
 		['invite_only_guild'] = true,
 
-
+		['group_tool'] = true,
+			['rune_check'] = false,
+			['countdown'] = '10',
 		['auto_screenshot'] = true,
 			['screenshot_achievement'] = true,
 			['screenshot_challenge'] = true,
 			['screenshot_levelup'] = false,
 			['screenshot_dead'] = false,
+
+		['number_format'] = 1,
 	},
 
 	['chat'] = {
@@ -842,7 +883,7 @@ C.CharacterSettings = {
 			['button_size_small'] = 22,
 			['button_size_normal'] = 26,
 			['button_size_big'] = 30,
-
+			['glow'] = true,
 			['button_hotkey'] = false,
 			['button_macro_name'] = false,
 			['button_count'] = true,
@@ -871,7 +912,7 @@ C.CharacterSettings = {
 					['bar2_fade_hover'] = true,
 					['bar2_fade_combat'] = true,
 					['bar2_fade_target'] = true,
-			['bar3'] = true,
+			['bar3'] = false,
 				['bar3_divide'] = true,
 				['bar3_fade'] = true,
 					['bar3_fade_in_alpha'] = 1,
@@ -931,41 +972,26 @@ C.CharacterSettings = {
 
 
 C.AccountSettings = {
-	['ui_scale'] = 1,
-	['ui_gap'] = 33,
 	['detect_version'] = C.Version,
-
-
 	['custom_junk_list'] = {},
-	['number_format'] = 1,
-
-	['texture_style'] = 1,
-
-
 	['group_invite_keywords'] = {'inv', '+++', '111'},
-
 	['guild_invite_keywords'] = {'ginv', 'g++'},
-
 	['nameplate_aura_filter'] = {[1]={}, [2]={}},
 
 	['appearance'] = {
+		['ui_scale'] = 1,
+		['texture_style'] = 1,
 		['cursor_trail'] = true,
 		['vignetting'] = true,
 			['vignetting_alpha'] = .8,
-		['adjust_font'] = true,
-
-		['backdrop_alpha'] = .7,
-
 		['reskin_blizz'] = true,
+		['backdrop_alpha'] = .7,
 		['shadow_border'] = true,
-
 		['reskin_dbm'] = true,
-		['reskin_weakauras'] = true,
+		['reskin_bigwigs'] = true,
 		['reskin_pgf'] = true,
-		['reskin_skada'] = true,
 		['reskin_wowlua'] = true,
-		['reskin_toasts'] = true,
-		['reskin_meetingstone'] = true,
+
 	},
 
 	['colors'] = {
@@ -1183,7 +1209,7 @@ f:SetScript('OnEvent', function(self, _, addon)
 
 	F:SetupUIScale(true)
 
-	C.Assets.statusbar_tex = textureList[FreeADB.texture_style]
+	C.Assets.statusbar_tex = textureList[FreeADB.appearance.texture_style]
 
 
 	local colors = FreeADB.colors.class
@@ -1207,6 +1233,8 @@ f:SetScript('OnEvent', function(self, _, addon)
 
 	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
 	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
+
+	F:UpdateColors()
 
 	self:UnregisterAllEvents()
 end)

@@ -22,7 +22,6 @@ function BLIZZARD:OnLogin()
 	self:ToggleBossEmote()
 	self:UndressButton()
 	self:TradeTargetInfo()
-	self:TidyErrors()
 	self:QueueTimer()
 	self:EasyDelete()
 	self:TicketStatusMover()
@@ -92,7 +91,7 @@ end
 function BLIZZARD:TradeTargetInfo()
 	if not FreeDB.blizzard.trade_target_info then return end
 
-	local infoText = F.CreateFS(TradeFrame, C.Assets.Fonts.Normal, 14, true)
+	local infoText = F.CreateFS(TradeFrame, C.Assets.Fonts.Regular, 14, true)
 	infoText:ClearAllPoints()
 	infoText:SetPoint('TOP', TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
 
@@ -113,54 +112,7 @@ function BLIZZARD:TradeTargetInfo()
 	hooksecurefunc('TradeFrame_Update', updateColor)
 end
 
-function BLIZZARD:TidyErrors()
-	if not FreeDB.blizzard.tidy_errors then return end
 
-	local holdtime = .52
-	local fadeintime = .08
-	local fadeouttime = .16
-
-	UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
-
-	local firstErrorFrame = CreateFrame('Frame', 'FreeUI_Errors1', UIParent)
-	firstErrorFrame:SetScript('OnUpdate', FadingFrame_OnUpdate)
-	firstErrorFrame.fadeInTime = fadeintime
-	firstErrorFrame.fadeOutTime = fadeouttime
-	firstErrorFrame.holdTime = holdtime
-	firstErrorFrame:Hide()
-	firstErrorFrame:SetFrameStrata('TOOLTIP')
-	firstErrorFrame:SetFrameLevel(30)
-
-	local secondErrorFrame = CreateFrame('Frame', 'FreeUI_Errors2', UIParent)
-	secondErrorFrame:SetScript('OnUpdate', FadingFrame_OnUpdate)
-	secondErrorFrame.fadeInTime = fadeintime
-	secondErrorFrame.fadeOutTime = fadeouttime
-	secondErrorFrame.holdTime = holdtime
-	secondErrorFrame:Hide()
-	secondErrorFrame:SetFrameStrata('TOOLTIP')
-	secondErrorFrame:SetFrameLevel(30)
-
-	firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Normal, 14, nil, '', nil, 'THICK')
-	firstErrorFrame.text:SetPoint('TOP', UIParent, 0, -80)
-	secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Normal, 14, nil, '', nil, 'THICK')
-	secondErrorFrame.text:SetPoint('TOP', UIParent, 0, -96)
-
-	local state = 0
-	firstErrorFrame:SetScript('OnHide', function() state = 0 end)
-	local Error = CreateFrame('Frame')
-	Error:RegisterEvent('UI_ERROR_MESSAGE')
-	Error:SetScript('OnEvent', function(_, _, code, msg)
-		if state == 0 then
-			firstErrorFrame.text:SetText(msg)
-			FadingFrame_Show(firstErrorFrame)
-			state = 1
-		else
-			secondErrorFrame.text:SetText(msg)
-			FadingFrame_Show(secondErrorFrame)
-			state = 0
-		end
-	end)
-end
 
 function BLIZZARD:EasyDelete()
 	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
@@ -194,9 +146,9 @@ function BLIZZARD:TicketStatusMover()
 end
 
 function BLIZZARD:UIWidgetMover()
-	local frame = CreateFrame('Frame', 'NDuiUIWidgetMover', UIParent)
+	local frame = CreateFrame('Frame', 'FreeUI_UIWidgetMover', UIParent)
 	frame:SetSize(200, 50)
-	F.Mover(frame, L['BLIZZARD_MOVER_UIWIDGET'], 'UIWidgetFrame', {'TOP', 0, -30})
+	F.Mover(frame, L['BLIZZARD_MOVER_UIWIDGET'], 'UIWidgetFrame', {'TOP', 0, -80})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then
