@@ -305,6 +305,46 @@ local function WhoPings()
 	end)
 end
 
+function MAP:Minimap_OnMouseWheel(zoom)
+	if zoom > 0 then
+		Minimap_ZoomIn()
+	else
+		Minimap_ZoomOut()
+	end
+end
+
+local FreeUIMiniMapTrackingDropDown = CreateFrame('Frame', 'FreeUIMiniMapTrackingDropDown', _G.UIParent, 'UIDropDownMenuTemplate')
+FreeUIMiniMapTrackingDropDown:SetID(1)
+FreeUIMiniMapTrackingDropDown:SetClampedToScreen(true)
+FreeUIMiniMapTrackingDropDown:Hide()
+FreeUIMiniMapTrackingDropDown.noResize = true
+_G.UIDropDownMenu_Initialize(FreeUIMiniMapTrackingDropDown, _G.MiniMapTrackingDropDown_Initialize, 'MENU')
+
+function MAP:Minimap_OnMouseUp(btn)
+	if btn == 'MiddleButton' then
+		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
+		ToggleCalendar()
+	elseif btn == 'RightButton' then
+		ToggleDropDownMenu(1, nil, FreeUIMiniMapTrackingDropDown, 'cursor')
+	elseif self.mover then
+		Minimap_OnClick(self)
+	end
+end
+
+function MAP:SetupHybridMinimap()
+	local mapCanvas = HybridMinimap.MapCanvas
+	mapCanvas:SetMaskTexture('Interface\\Buttons\\WHITE8X8')
+	mapCanvas:SetScript('OnMouseWheel', MAP.Minimap_OnMouseWheel)
+	mapCanvas:SetScript('OnMouseUp', MAP.Minimap_OnMouseUp)
+end
+
+function MAP:HybridMinimapOnLoad(addon)
+	if addon == 'Blizzard_HybridMinimap' then
+		MAP:SetupHybridMinimap()
+		F:UnregisterEvent(self, MAP.HybridMinimapOnLoad)
+	end
+end
+
 function MAP:UpdateMinimapScale()
 	local width = Minimap:GetWidth()
 	local height = Minimap:GetHeight()*(190/256)
@@ -364,13 +404,8 @@ function MAP:Minimap()
 
 	-- Mousewheel Zoom
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript('OnMouseWheel', function(_, zoom)
-		if zoom > 0 then
-			Minimap_ZoomIn()
-		else
-			Minimap_ZoomOut()
-		end
-	end)
+	Minimap:SetScript('OnMouseWheel', MAP.Minimap_OnMouseWheel)
+	Minimap:SetScript('OnMouseUp', MAP.Minimap_OnMouseUp)
 
 	-- Hide Blizz
 	local frames = {
@@ -405,4 +440,7 @@ function MAP:Minimap()
 	WhoPings()
 	self:MicroMenu()
 	self:ExpBar()
+
+	-- HybridMinimap
+	F:RegisterEvent('ADDON_LOADED', MAP.HybridMinimapOnLoad)
 end
