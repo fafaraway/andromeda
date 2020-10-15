@@ -40,29 +40,51 @@ C['ReminderBuffsList'] = {
 		},
 	},
 	SHAMAN = {
-		{	spells = {	-- 闪电之盾
-				[192106] = true,
+		{	spells = {
+				[192106] = true,	-- 闪电之盾
+				[974] = true,		-- 大地之盾
+				[52127] = true,		-- 水之护盾
 			},
 			depend = 192106,
 			combat = true,
 			instance = true,
 			pvp = true,
 		},
+		{	spells = {
+				[33757] = true,		-- 风怒武器
+			},
+			depend = 33757,
+			combat = true,
+			instance = true,
+			pvp = true,
+			weaponIndex = 1,
+			spec = 2,
+		},
+		{	spells = {
+				[318038] = true,	-- 火舌武器
+			},
+			depend = 318038,
+			combat = true,
+			instance = true,
+			pvp = true,
+			weaponIndex = 2,
+			spec = 2,
+		},
 	},
 	ROGUE = {
 		{	spells = {	-- 伤害类毒药
 				[2823] = true,		-- 致命药膏
 				[8679] = true,		-- 致伤药膏
+				[315584] = true,	-- 速效药膏
 			},
-			spec = 1,
 			combat = true,
 			instance = true,
 			pvp = true,
 		},
 		{	spells = {	-- 效果类毒药
 				[3408] = true,		-- 减速药膏
+				[5761] = true,		-- 迟钝药膏
 			},
-			spec = 1,
 			pvp = true,
 		},
 	},

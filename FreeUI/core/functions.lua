@@ -328,7 +328,7 @@ do
 	end
 
 	function F.isItemBOA(link, arg1, arg2)
-		tip:SetOwner(UIParent, "ANCHOR_NONE")
+		tip:SetOwner(UIParent, 'ANCHOR_NONE')
 		if arg1 and type(arg1) == 'string' then
 			tip:SetInventoryItem(arg1, arg2)
 		elseif arg1 and type(arg1) == 'number' then
@@ -388,6 +388,7 @@ do
 		'BG',
 		'border',
 		'Border',
+		'Background',
 		'BorderFrame',
 		'bottomInset',
 		'BottomInset',
@@ -572,13 +573,22 @@ do
 	end
 
 	-- Gradient Frame
-	function F:CreateGF(w, h, o, r, g, b, a1, a2)
-		self:SetSize(w, h)
-		self:SetFrameStrata('BACKGROUND')
-		local gf = self:CreateTexture(nil, 'BACKGROUND')
-		gf:SetAllPoints()
-		gf:SetTexture(assets.norm_tex)
-		gf:SetGradientAlpha(o, r, g, b, a1, r, g, b, a2)
+	local orientationAbbr = {
+		['V'] = 'Vertical',
+		['H'] = 'Horizontal',
+	}
+
+	function F:SetGradient(orientation, r, g, b, a1, a2, width, height)
+		orientation = orientationAbbr[orientation]
+		if not orientation then return end
+
+		local tex = self:CreateTexture(nil, 'BACKGROUND')
+		tex:SetTexture(C.Assets.bd_tex)
+		tex:SetGradientAlpha(orientation, r, g, b, a1, r, g, b, a2)
+		if width then tex:SetWidth(width) end
+		if height then tex:SetHeight(height) end
+
+		return tex
 	end
 
 	-- Background texture
@@ -596,22 +606,23 @@ do
 		self.Tex:SetBlendMode('ADD')
 	end
 
+	local shadowBackdrop = {edgeFile = assets.shadow_tex}
 	function F:CreateSD(a, m, s, override)
 		if not override and not FreeADB.appearance.shadow_border then return end
-		if self.Shadow then return end
+		if self.__shadow then return end
 
 		local frame = self
 		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
 
 		if not m then m, s = 4, 4 end
+		shadowBackdrop.edgeSize = s or 4
+		self.__shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
+		self.__shadow:SetOutside(self, m, m)
+		self.__shadow:SetBackdrop(shadowBackdrop)
+		self.__shadow:SetBackdropBorderColor(0, 0, 0, a or .35)
+		self.__shadow:SetFrameLevel(1)
 
-		self.Shadow = CreateFrame('Frame', nil, frame)
-		self.Shadow:SetOutside(self, m, m)
-		self.Shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = F:Scale(s)})
-		self.Shadow:SetBackdropBorderColor(0, 0, 0, a or .35)
-		self.Shadow:SetFrameLevel(1)
-
-		return self.Shadow
+		return self.__shadow
 	end
 end
 
@@ -619,85 +630,13 @@ end
 --[[ UI skins ]]
 
 do
-	-- ls, Azil, and Simpy made this to replace Blizzard's SetBackdrop API while the textures can't snap
-	local PIXEL_BORDERS = {'TOP', 'BOTTOM', 'LEFT', 'RIGHT'}
-
-	function F:SetBackdrop(frame, a)
-		local borders = frame.pixelBorders
-		if not borders then return end
-
-		local size = C.Mult
-
-		borders.CENTER:SetPoint('TOPLEFT', frame)
-		borders.CENTER:SetPoint('BOTTOMRIGHT', frame)
-
-		borders.TOP:SetHeight(size)
-		borders.BOTTOM:SetHeight(size)
-		borders.LEFT:SetWidth(size)
-		borders.RIGHT:SetWidth(size)
-
-		F:SetBackdropColor(frame, backdropColor[1], backdropColor[2], backdropColor[3], a)
-		F:SetBackdropBorderColor(frame, 0, 0, 0)
-	end
-
-	function F:SetBackdropColor(frame, r, g, b, a)
-		if frame.pixelBorders then
-			frame.pixelBorders.CENTER:SetVertexColor(r, g, b, a)
-		end
-	end
-
-	function F:SetBackdropBorderColor(frame, r, g, b, a)
-		if frame.pixelBorders then
-			for _, v in pairs(PIXEL_BORDERS) do
-				frame.pixelBorders[v]:SetVertexColor(r or 0, g or 0, b or 0, a)
-			end
-		end
-	end
-
-	function F:SetBackdropColor_Hook(r, g, b, a)
-		F:SetBackdropColor(self, r, g, b, a)
-	end
-
-	function F:SetBackdropBorderColor_Hook(r, g, b, a)
-		F:SetBackdropBorderColor(self, r, g, b, a)
-	end
-
-	function F:PixelBorders(frame)
-		if frame and not frame.pixelBorders then
-			local borders = {}
-			for _, v in pairs(PIXEL_BORDERS) do
-				borders[v] = frame:CreateTexture(nil, 'BORDER', nil, 1)
-				borders[v]:SetTexture(assets.bd_tex)
-			end
-
-			borders.CENTER = frame:CreateTexture(nil, 'BACKGROUND', nil, -1)
-			borders.CENTER:SetTexture(assets.bd_tex)
-
-			borders.TOP:Point('BOTTOMLEFT', borders.CENTER, 'TOPLEFT', C.Mult, -C.Mult)
-			borders.TOP:Point('BOTTOMRIGHT', borders.CENTER, 'TOPRIGHT', -C.Mult, -C.Mult)
-
-			borders.BOTTOM:Point('TOPLEFT', borders.CENTER, 'BOTTOMLEFT', C.Mult, C.Mult)
-			borders.BOTTOM:Point('TOPRIGHT', borders.CENTER, 'BOTTOMRIGHT', -C.Mult, C.Mult)
-
-			borders.LEFT:Point('TOPRIGHT', borders.TOP, 'TOPLEFT', 0, 0)
-			borders.LEFT:Point('BOTTOMRIGHT', borders.BOTTOM, 'BOTTOMLEFT', 0, 0)
-
-			borders.RIGHT:Point('TOPLEFT', borders.TOP, 'TOPRIGHT', 0, 0)
-			borders.RIGHT:Point('BOTTOMLEFT', borders.BOTTOM, 'BOTTOMRIGHT', 0, 0)
-
-			hooksecurefunc(frame, 'SetBackdropColor', F.SetBackdropColor_Hook)
-			hooksecurefunc(frame, 'SetBackdropBorderColor', F.SetBackdropBorderColor_Hook)
-
-			frame.pixelBorders = borders
-		end
-	end
-
 	-- Setup backdrop
 	C.Frames = {}
 	function F:CreateBD(a)
-		self:SetBackdrop(nil)
-		F:PixelBorders(self)
-		F:SetBackdrop(self, a or FreeADB.appearance.backdrop_alpha)
+		defaultBackdrop.edgeSize = C.Mult
+		self:SetBackdrop(defaultBackdrop)
+		self:SetBackdropColor(0, 0, 0, a or FreeADB.appearance.backdrop_alpha)
+		self:SetBackdropBorderColor(0, 0, 0)
 
 		if not a then tinsert(C.Frames, self) end
 	end
@@ -711,26 +650,29 @@ do
 		return tex
 	end
 
-	function F:CreateBDFrame(a, shadow)
+	function F:CreateBDFrame(a, gradient)
 		local frame = self
 		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
 
-		local bg = CreateFrame('Frame', nil, frame)
+		local bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 		F.CreateBD(bg, a)
-		if shadow then F.CreateSD(bg) end
+		if gradient then
+			self.__gradient = F.CreateGradient(bg)
+		end
 
 		return bg
 	end
 
-	function F:SetBD(x, y, x2, y2)
-		local bg = F.CreateBDFrame(self, nil, true)
+	function F:SetBD(a, x, y, x2, y2)
+		local bg = F.CreateBDFrame(self, a)
 		if x then
 			bg:SetPoint('TOPLEFT', self, x, y)
 			bg:SetPoint('BOTTOMRIGHT', self, x2, y2)
 		end
+		F.CreateSD(bg)
 		F.CreateTex(bg)
 
 		return bg
@@ -739,11 +681,14 @@ do
 	-- Handle icons
 	function F:ReskinIcon(shadow)
 		self:SetTexCoord(unpack(C.TexCoord))
-		return F.CreateBDFrame(self, nil, shadow)
+		local bg = F.CreateBDFrame(self)
+		if shadow then F.CreateSD(bg) end
+		return bg
 	end
 
 	function F:PixelIcon(texture, highlight)
-		F.CreateBD(self)
+		self.bg = F.CreateBDFrame(self)
+		self.bg:SetAllPoints()
 		self.Icon = self:CreateTexture(nil, 'ARTWORK')
 		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(C.TexCoord))
@@ -769,6 +714,30 @@ do
 		self.CD:SetReverse(true)
 		F.PixelIcon(self, nil, highlight)
 		F.CreateSD(self)
+	end
+
+	function F:CreateHelpInfo(tooltip)
+		local bu = CreateFrame('Button', nil, self)
+		bu:SetSize(40, 40)
+		bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+		bu.Icon:SetAllPoints()
+		bu.Icon:SetTexture(616343)
+		bu:SetHighlightTexture(616343)
+		if tooltip then
+			bu.title = L.GUI.HINT
+			F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
+		end
+
+		return bu
+	end
+
+	function F:CreateWatermark()
+		local logo = self:CreateTexture(nil, 'BACKGROUND')
+		logo:SetPoint('BOTTOMRIGHT', 10, 0)
+		logo:SetTexture(C.Assets.logo)
+		logo:SetTexCoord(0, 1, 0, .75)
+		logo:SetSize(200, 75)
+		logo:SetAlpha(.3)
 	end
 
 	local AtlasToQuality = {
@@ -797,11 +766,11 @@ do
 		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 
-	function F:HookIconBorderColor()
+	function F:ReskinIconBorder()
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
 		if not self.__owner.bg then return end
-		if self.__owner.useCircularIconBorder then
+		if self.__owner.useCircularIconBorder then -- for auction item display
 			hooksecurefunc(self, 'SetAtlas', updateIconBorderColorByAtlas)
 		else
 			hooksecurefunc(self, 'SetVertexColor', updateIconBorderColor)
@@ -819,7 +788,7 @@ do
 		end
 
 		local bg = F.SetBD(self)
-		self.Shadow = bg.Shadow
+		self.__shadow = bg.__shadow
 
 		if spark then
 			self.Spark = self:CreateTexture(nil, 'OVERLAY')
@@ -918,9 +887,9 @@ do
 			end
 		end
 
-		F.CreateBD(self, 0)
-
-		self.bgTex = F.CreateGradient(self)
+		self.__bg = F.CreateBDFrame(self, 0, true)
+		self.__bg:SetFrameLevel(self:GetFrameLevel())
+		self.__bg:SetAllPoints()
 
 		if not noGlow then
 			self.glow = CreateFrame('Frame', nil, self)
@@ -970,6 +939,7 @@ do
 		local bg = F.CreateBDFrame(self)
 		bg:SetPoint('TOPLEFT', 8, -3)
 		bg:SetPoint('BOTTOMRIGHT', -8, 0)
+		self.bg = bg
 
 		self:SetHighlightTexture(assets.bd_tex)
 		local hl = self:GetHighlightTexture()
@@ -1017,10 +987,9 @@ do
 			thumb:SetWidth(16)
 			self.thumb = thumb
 
-			local bg = F.CreateBDFrame(self, 0)
+			local bg = F.CreateBDFrame(self, 0, true)
 			bg:SetPoint('TOPLEFT', thumb, 0, -2)
 			bg:SetPoint('BOTTOMRIGHT', thumb, 0, 4)
-			F.CreateGradient(bg)
 			thumb.bg = bg
 		end
 
@@ -1039,10 +1008,9 @@ do
 		local frameName = self.GetName and self:GetName()
 		local down = self.Button or frameName and (_G[frameName..'Button'] or _G[frameName..'_Button'])
 
-		local bg = F.CreateBDFrame(self, 0)
+		local bg = F.CreateBDFrame(self, 0, true)
 		bg:SetPoint('TOPLEFT', 16, -4)
 		bg:SetPoint('BOTTOMRIGHT', -18, 8)
-		F.CreateGradient(bg)
 
 		down:ClearAllPoints()
 		down:SetPoint('RIGHT', bg, -2, 0)
@@ -1055,7 +1023,7 @@ do
 			if self.bg then
 				self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
 			else
-				self.bgTex:SetVertexColor(C.r, C.g, C.b)
+				self.__texture:SetVertexColor(C.r, C.g, C.b)
 			end
 		end
 	end
@@ -1064,23 +1032,22 @@ do
 		if self.bg then
 			self.bg:SetBackdropColor(0, 0, 0, .25)
 		else
-			self.bgTex:SetVertexColor(1, 1, 1)
+			self.__texture:SetVertexColor(1, 1, 1)
 		end
 	end
 
-	function F:ReskinClose(a1, p, a2, x, y)
-		self:SetSize(16, 16)
+	function F:ReskinClose(parent, xOffset, yOffset)
+		parent = parent or self:GetParent()
+		xOffset = xOffset or -6
+		yOffset = yOffset or -6
 
-		if not a1 then
-			self:SetPoint('TOPRIGHT', -6, -6)
-		else
-			self:ClearAllPoints()
-			self:SetPoint(a1, p, a2, x, y)
-		end
+		self:SetSize(16, 16)
+		self:ClearAllPoints()
+		self:SetPoint('TOPRIGHT', parent, 'TOPRIGHT', xOffset, yOffset)
 
 		F.StripTextures(self)
-		F.CreateBD(self, 0)
-		F.CreateGradient(self)
+		local bg = F.CreateBDFrame(self, 0, true)
+		bg:SetAllPoints()
 
 		self:SetDisabledTexture(assets.bd_tex)
 		local dis = self:GetDisabledTexture()
@@ -1092,7 +1059,8 @@ do
 		tex:SetTexture(assets.close_tex)
 		tex:SetVertexColor(1, 1, 1)
 		tex:SetAllPoints()
-		self.bgTex = tex
+
+		self.__texture = tex
 
 		self:HookScript('OnEnter', F.Texture_OnEnter)
 		self:HookScript('OnLeave', F.Texture_OnLeave)
@@ -1108,10 +1076,9 @@ do
 			end
 		end
 
-		local bg = F.CreateBDFrame(self, 0)
+		local bg = F.CreateBDFrame(self, 0, true)
 		bg:SetPoint('TOPLEFT', -2, 0)
 		bg:SetPoint('BOTTOMRIGHT')
-		F.CreateGradient(bg)
 		self.bg = bg
 
 		if height then self:SetHeight(height) end
@@ -1146,7 +1113,7 @@ do
 		tex:SetVertexColor(1, 1, 1)
 		tex:SetAllPoints()
 		F.SetupArrow(tex, direction)
-		self.bgTex = tex
+		self.__texture = tex
 
 		self:HookScript('OnEnter', F.Texture_OnEnter)
 		self:HookScript('OnLeave', F.Texture_OnLeave)
@@ -1178,7 +1145,7 @@ do
 		tex:SetTexture(assets.arrow_reft)
 		tex:SetSize(8, 8)
 		tex:SetPoint('CENTER')
-		overflowButton.bgTex = tex
+		overflowButton.__texture = tex
 
 		overflowButton:HookScript('OnEnter', F.Texture_OnEnter)
 		overflowButton:HookScript('OnLeave', F.Texture_OnLeave)
@@ -1190,6 +1157,11 @@ do
 	function F:ReskinCheck(flat, forceSaturation)
 		self:SetNormalTexture('')
 		self:SetPushedTexture('')
+
+		local bg = F.CreateBDFrame(self, 0, true)
+		bg:SetInside(self, 4, 4)
+		self.bg = bg
+
 		self:SetHighlightTexture(assets.flat_tex)
 
 		if flat then
@@ -1254,48 +1226,50 @@ do
 	-- Color swatch
 	function F:ReskinColorSwatch()
 		local frameName = self.GetName and self:GetName()
+		local swatchBg = frameName and _G[frameName..'SwatchBg']
+		if swatchBg then
+			swatchBg:SetColorTexture(0, 0, 0)
+			swatchBg:SetInside(nil, 2, 2)
+		end
 
 		self:SetNormalTexture(assets.bd_tex)
-		local nt = self:GetNormalTexture()
-		nt:SetPoint('TOPLEFT', 3, -3)
-		nt:SetPoint('BOTTOMRIGHT', -3, 3)
-
-		local bg = _G[frameName..'SwatchBg']
-		bg:SetColorTexture(0, 0, 0)
-		bg:SetPoint('TOPLEFT', 2, -2)
-		bg:SetPoint('BOTTOMRIGHT', -2, 2)
+		self:GetNormalTexture():SetInside(self, 3, 3)
 	end
 
 	-- Handle slider
-	function F:ReskinSlider(verticle)
+	function F:ReskinSlider(vertical)
 		self:SetBackdrop(nil)
 		F.StripTextures(self)
 
-		local bd = F.CreateBDFrame(self, .5)
+		local bd = F.CreateBDFrame(self, 0, true)
 		bd:SetPoint('TOPLEFT', 14, -2)
 		bd:SetPoint('BOTTOMRIGHT', -15, 3)
 		bd:SetFrameStrata('BACKGROUND')
-		F.CreateGradient(bd)
 
 		local thumb = self:GetThumbTexture()
 		thumb:SetHeight(self:GetHeight() + 12)
 		thumb:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])
 		thumb:SetVertexColor(1, 1, 1, .5)
 		thumb:SetBlendMode('ADD')
-		if verticle then thumb:SetRotation(math.rad(90)) end
+		if vertical then thumb:SetRotation(rad(90)) end
 	end
 
 	-- Handle collapse
-	local function UpdateExpandOrCollapse(self, texture)
+	local function updateCollapseTexture(texture, collapsed)
+		local atlas = collapsed and 'Soulbinds_Collection_CategoryHeader_Expand' or 'Soulbinds_Collection_CategoryHeader_Collapse'
+		texture:SetAtlas(atlas, true)
+	end
+
+	local function resetCollapseTexture(self, texture)
 		if self.settingTexture then return end
 		self.settingTexture = true
 		self:SetNormalTexture('')
 
 		if texture and texture ~= '' then
-			if strfind(texture, 'Plus') then
-				self.expTex:SetTexCoord(0, .4375, 0, .4375)
-			elseif strfind(texture, 'Minus') then
-				self.expTex:SetTexCoord(.5625, 1, 0, .4375)
+			if strfind(texture, 'Plus') or strfind(texture, 'Closed') then
+				self.__texture:DoCollapse(true)
+			elseif strfind(texture, 'Minus') or strfind(texture, 'Open') then
+				self.__texture:DoCollapse(false)
 			end
 			self.bg:Show()
 		else
@@ -1304,25 +1278,27 @@ do
 		self.settingTexture = nil
 	end
 
-	function F:ReskinExpandOrCollapse()
+	function F:ReskinCollapse(isAtlas)
 		self:SetHighlightTexture('')
 		self:SetPushedTexture('')
 
-		local bg = F.CreateBDFrame(self, .25)
+		local bg = F.CreateBDFrame(self, .25, true)
 		bg:ClearAllPoints()
 		bg:SetSize(13, 13)
 		bg:SetPoint('TOPLEFT', self:GetNormalTexture())
-		F.CreateGradient(bg)
 		self.bg = bg
 
-		self.expTex = bg:CreateTexture(nil, 'OVERLAY')
-		self.expTex:SetSize(7, 7)
-		self.expTex:SetPoint('CENTER')
-		self.expTex:SetTexture('Interface\\Buttons\\UI-PlusMinus-Buttons')
+		self.__texture = bg:CreateTexture(nil, 'OVERLAY')
+		self.__texture:SetPoint('CENTER')
+		self.__texture.DoCollapse = updateCollapseTexture
 
 		self:HookScript('OnEnter', F.Texture_OnEnter)
 		self:HookScript('OnLeave', F.Texture_OnLeave)
-		hooksecurefunc(self, 'SetNormalTexture', UpdateExpandOrCollapse)
+		if isAtlas then
+			hooksecurefunc(self, 'SetNormalAtlas', resetCollapseTexture)
+		else
+			hooksecurefunc(self, 'SetNormalTexture', resetCollapseTexture)
+		end
 	end
 
 	local buttonNames = {'MaximizeButton', 'MinimizeButton'}
@@ -1336,15 +1312,13 @@ do
 				F.Reskin(button)
 
 				local tex = button:CreateTexture()
-				tex:SetSize(16, 16)
-				tex:SetPoint('CENTER')
-				button.bgTex = tex
-
+				tex:SetAllPoints()
 				if name == 'MaximizeButton' then
 					F.SetupArrow(tex, 'up')
 				else
 					F.SetupArrow(tex, 'down')
 				end
+				button.__texture = tex
 
 				button:SetScript('OnEnter', F.Texture_OnEnter)
 				button:SetScript('OnLeave', F.Texture_OnLeave)
@@ -1357,27 +1331,45 @@ do
 		F.StripTextures(self)
 		local bg = F.SetBD(self)
 		local frameName = self.GetName and self:GetName()
-		local portrait = self.portrait or _G[frameName..'Portrait']
-		if portrait then portrait:SetAlpha(0) end
-		local closeButton = self.CloseButton or _G[frameName..'CloseButton']
-		if closeButton then F.ReskinClose(closeButton) end
+		local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName..'Portrait'])
+		if portrait then
+			portrait:SetAlpha(0)
+		end
+		local closeButton = self.CloseButton or (frameName and _G[frameName..'CloseButton'])
+		if closeButton then
+			F.ReskinClose(closeButton)
+		end
 		return bg
 	end
 
-	function F:ReskinGarrisonPortrait()
-		self.Portrait:ClearAllPoints()
-		self.Portrait:SetPoint('TOPLEFT', 4, -4)
-		self.PortraitRing:Hide()
-		self.PortraitRingQuality:SetTexture('')
-		if self.Highlight then self.Highlight:Hide() end
+	local ReplacedRoleTex = {
+		['Adventures-Tank'] = 'Soulbinds_Tree_Conduit_Icon_Protect',
+		['Adventures-Healer'] = 'ui_adv_health',
+		['Adventures-DPS'] = 'ui_adv_atk',
+		['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility',
+	}
 
-		self.LevelBorder:SetScale(.0001)
-		self.Level:ClearAllPoints()
-		self.Level:SetPoint('BOTTOM', self, 0, 12)
+	local function replaceFollowerRole(roleIcon, atlas)
+		local newAtlas = ReplacedRoleTex[atlas]
+		if newAtlas then
+			roleIcon:SetAtlas(newAtlas)
+		end
+	end
+
+	function F:ReskinGarrisonPortrait()
+		local level = self.Level or self.LevelText
+		if level then
+			level:ClearAllPoints()
+			level:SetPoint('BOTTOM', self, 0, 12)
+			if self.LevelCircle then self.LevelCircle:Hide() end
+			if self.LevelBorder then self.LevelBorder:SetScale(.0001) end
+		end
 
 		self.squareBG = F.CreateBDFrame(self.Portrait, 1)
 
-		if self.PortraitRingCover then
+		if self.PortraitRing then
+			self.PortraitRing:Hide()
+			self.PortraitRingQuality:SetTexture('')
 			self.PortraitRingCover:SetColorTexture(0, 0, 0)
 			self.PortraitRingCover:SetAllPoints(self.squareBG)
 		end
@@ -1386,6 +1378,24 @@ do
 			self.Empty:SetColorTexture(0, 0, 0)
 			self.Empty:SetAllPoints(self.Portrait)
 		end
+		if self.Highlight then self.Highlight:Hide() end
+		if self.PuckBorder then self.PuckBorder:SetAlpha(0) end
+
+		if self.HealthBar then
+			self.HealthBar.Border:Hide()
+
+			local roleIcon = self.HealthBar.RoleIcon
+			roleIcon:ClearAllPoints()
+			roleIcon:SetPoint('CENTER', self.squareBG, 'TOPRIGHT')
+			hooksecurefunc(roleIcon, 'SetAtlas', replaceFollowerRole)
+
+			local background = self.HealthBar.Background
+			background:SetAlpha(0)
+			background:ClearAllPoints()
+			background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', C.mult, 6)
+			background:SetPoint('BOTTOMRIGHT', self.squareBG, 'BOTTOMRIGHT', -C.mult, C.mult)
+			self.HealthBar.Health:SetTexture(C.Assets.norm_tex)
+		end
 	end
 
 	function F:StyleSearchButton()
@@ -1393,7 +1403,7 @@ do
 		if self.icon then
 			F.ReskinIcon(self.icon)
 		end
-		F.CreateBD(self, .25)
+		F.CreateBDFrame(self, .25)
 
 		self:SetHighlightTexture(assets.bd_tex)
 		local hl = self:GetHighlightTexture()
@@ -1733,7 +1743,7 @@ end
 
 do
 	function F:CreateButton(width, height, text, fontSize)
-		local bu = CreateFrame('Button', nil, self)
+		local bu = CreateFrame('Button', nil, self, 'BackdropTemplate')
 		bu:SetSize(width, height)
 		if type(text) == 'boolean' then
 			F.PixelIcon(bu, fontSize, true)
@@ -1763,8 +1773,7 @@ do
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 5, 5)
 		eb:SetFont(C.Assets.Fonts.Regular, 11)
-		F.CreateBD(eb, .3)
-		F.CreateGradient(eb)
+		eb.bg = F.CreateBDFrame(eb, .25, true)
 		eb:SetScript('OnEscapePressed', editBoxClearFocus)
 		eb:SetScript('OnEnterPressed', editBoxClearFocus)
 
@@ -1808,7 +1817,7 @@ do
 	end
 
 	function F:CreateDropDown(width, height, data)
-		local dd = CreateFrame('Frame', nil, self)
+		local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
 		dd:SetSize(width, height)
 		F.CreateBD(dd)
 		dd:SetBackdropBorderColor(1, 1, 1, .2)
@@ -1821,7 +1830,7 @@ do
 		F.ReskinArrow(bu, 'down')
 		bu:SetSize(18, 18)
 
-		local list = CreateFrame('Frame', nil, dd)
+		local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
 		list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
 		F.CreateBD(list, 1)
 		list:SetBackdropBorderColor(1, 1, 1, .2)
@@ -1833,7 +1842,7 @@ do
 
 		local opt, index = {}, 0
 		for i, j in pairs(data) do
-			opt[i] = CreateFrame('Button', nil, list)
+			opt[i] = CreateFrame('Button', nil, list, 'BackdropTemplate')
 			opt[i]:SetPoint('TOPLEFT', 4, -4 - (i-1)*(height+2))
 			opt[i]:SetSize(width - 8, height)
 			F.CreateBD(opt[i])
@@ -1885,7 +1894,7 @@ do
 	function F:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1, colorStr=ffffffff}
 
-		local swatch = CreateFrame('Button', nil, self)
+		local swatch = CreateFrame('Button', nil, 'BackdropTemplate')
 		swatch:SetSize(20, 12)
 		F.CreateBD(swatch, 1)
 		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'LEFT', 24, 0)

@@ -21,7 +21,7 @@ C.Client = GetLocale()
 C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
-C.isNewPatch = GetBuildInfo() == '8.3.0'
+C.isNewPatch = select(4, GetBuildInfo()) > 90000
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
@@ -64,7 +64,7 @@ C['Assets'] = {
 	['logo'] = C.AssetsPath..'textures\\logo',
 
 	['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
-	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:411|t ',
+	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',
 	['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
 
 	['Sounds'] = {
