@@ -9,11 +9,11 @@ local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
-local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID, C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID, C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
+local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
-local IsCorruptedItem = IsCorruptedItem
-local Ambiguate = Ambiguate
 
 local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
@@ -315,12 +315,19 @@ function INVENTORY:CreateSortButton(name)
 	local bu = F.CreateButton(self, 16, 16, true, icons.sort)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function()
+		if FreeDB.inventory.sort_mode == 3 then
+			UIErrorsFrame:AddMessage(C.InfoColor..L['INVENTORY_SORT_DISABLED'])
+			return
+		end
+
 		if name == 'Bank' then
 			SortBankBags()
 		elseif name == 'Reagent' then
 			SortReagentBankBags()
 		else
-			if FreeDB['inventory']['reverse_sort'] then
+			if FreeDB.inventory.sort_mode == 1 then
+				SortBags()
+			elseif FreeDB.inventory.sort_mode == 2 then
 				if InCombatLockdown() then
 					UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
 				else
@@ -329,8 +336,6 @@ function INVENTORY:CreateSortButton(name)
 					INVENTORY.Bags.isSorting = true
 					C_Timer_After(.5, INVENTORY.ReverseSort)
 				end
-			else
-				SortBags()
 			end
 		end
 	end)
@@ -417,10 +422,9 @@ function INVENTORY:CreateSearchButton()
 	searchBar:DisableDrawLayer('BACKGROUND')
 	F.AddTooltip(searchBar, 'ANCHOR_TOP', L['INVENTORY_SEARCH_ENABLED'], 'info')
 
-	local bg = F.CreateBDFrame(searchBar, 0)
+	local bg = F.CreateBDFrame(searchBar, 0, true)
 	bg:SetPoint('TOPLEFT', -5, -5)
 	bg:SetPoint('BOTTOMRIGHT', 5, 5)
-	F.CreateGradient(bg)
 
 	searchBar:SetScript('OnShow', function(self)
 		bu:SetSize(80, 26)
@@ -485,7 +489,7 @@ function INVENTORY:CreateFreeSlots()
 	local name = self.name
 	if not freeSlotContainer[name] then return end
 
-	local slot = CreateFrame('Button', name..'FreeSlot', self)
+	local slot = CreateFrame('Button', name..'FreeSlot', self, 'BackdropTemplate')
 	slot:SetSize(self.iconSize, self.iconSize)
 	slot:SetHighlightTexture(C.Assets.bd_tex)
 	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
@@ -870,6 +874,7 @@ function INVENTORY:OnLogin()
 		F.SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, false, 'BOTTOMRIGHT', -2, 2)
 		self.Cooldown:SetInside()
 		self.IconOverlay:SetInside()
+		self.IconOverlay2:SetInside()
 
 		F.CreateBD(self, .25)
 		self:SetBackdropColor(.3, .3, .3, .25)
@@ -945,8 +950,8 @@ function INVENTORY:OnLogin()
 		if not item.link then return end
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return 'AzeriteIconFrame'
-		elseif IsCorruptedItem(item.link) then
-			return 'Nzoth-inventory-icon'
+		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
+			return 'ConduitIconFrame', 'ConduitIconFrame-Corners'
 		end
 	end
 
@@ -967,12 +972,20 @@ function INVENTORY:OnLogin()
 			end
 		end
 
-		local atlas = GetIconOverlayAtlas(item)
+		self.IconOverlay:SetVertexColor(1, 1, 1)
+		self.IconOverlay:Hide()
+		self.IconOverlay2:Hide()
+		local atlas, secondAtlas = GetIconOverlayAtlas(item)
 		if atlas then
 			self.IconOverlay:SetAtlas(atlas)
 			self.IconOverlay:Show()
-		else
-			self.IconOverlay:Hide()
+
+			if secondAtlas then
+				local color = C.QualityColors[item.rarity or 1]
+				self.IconOverlay:SetVertexColor(color.r, color.g, color.b)
+				self.IconOverlay2:SetAtlas(secondAtlas)
+				self.IconOverlay2:Show()
+			end
 		end
 
 		if FreeDB['inventory']['favourite_items'][item.id] then
@@ -1165,11 +1178,13 @@ function INVENTORY:OnLogin()
 
 		self:SetSize(iconSize, iconSize)
 		F.CreateBD(self, .25)
-		self.Icon:SetAllPoints()
+		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(C.TexCoord))
 	end
 
 	function BagButton:OnUpdate()
+		self:SetBackdropBorderColor(0, 0, 0)
+
 		local id = GetInventoryItemID('player', (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
 		if not id then return end
 		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
@@ -1178,8 +1193,6 @@ function INVENTORY:OnLogin()
 		local color = C.QualityColors[quality]
 		if not self.hidden and not self.notBought then
 			self:SetBackdropBorderColor(color.r, color.g, color.b)
-		else
-			self:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		if classID == LE_ITEM_CLASS_CONTAINER then
@@ -1190,7 +1203,7 @@ function INVENTORY:OnLogin()
 	end
 
 	-- Sort order
-	SetSortBagsRightToLeft(not FreeDB['inventory']['reverse_sort'])
+	SetSortBagsRightToLeft(FreeDB.inventory.sort_mode == 1)
 	SetInsertItemsLeftToRight(false)
 
 	-- Init
@@ -1200,8 +1213,6 @@ function INVENTORY:OnLogin()
 
 	F:RegisterEvent('TRADE_SHOW', INVENTORY.OpenBags)
 	F:RegisterEvent('TRADE_CLOSED', INVENTORY.CloseBags)
-	F:RegisterEvent('AUCTION_HOUSE_SHOW', INVENTORY.OpenBags)
-	F:RegisterEvent('AUCTION_HOUSE_CLOSED', INVENTORY.CloseBags)
 
 	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end

@@ -55,7 +55,7 @@ function BagButton:Create(bagID)
 	buttonNum = buttonNum+1
 	local name = addon.."BagButton"..buttonNum
 	local isBankBag = (bagID>=5 and bagID<=11)
-	local button = setmetatable(CreateFrame("ItemButton", name), self.__index)
+	local button = setmetatable(CreateFrame("ItemButton", name, nil, "BackdropTemplate"), self.__index)
 
 	local invID = (isBankBag and bagID-4) or ContainerIDToInventoryID(bagID)
 	button.invID = invID
@@ -70,7 +70,6 @@ function BagButton:Create(bagID)
 
 	button:RegisterForDrag("LeftButton", "RightButton")
 	button:RegisterForClicks("anyUp")
-
 	button:SetSize(37, 37)
 	button.Icon = _G[name.."IconTexture"]
 
@@ -89,7 +88,7 @@ function BagButton:Update()
 	if(self.bagID > NUM_BAG_SLOTS) then
 		if(self.bagID-NUM_BAG_SLOTS <= GetNumBankSlots()) then
 			self.Icon:SetVertexColor(1, 1, 1)
-			self.notBought = false
+			self.notBought = nil
 		else
 			self.notBought = true
 			self.Icon:SetVertexColor(1, 0, 0)
@@ -141,7 +140,7 @@ function BagButton:OnLeave()
 	GameTooltip:Hide()
 end
 
-function BagButton:OnClick()
+function BagButton:OnClick(btn)
 	if(self.notBought) then
 		BankFrame.nextSlotCost = GetBankSlotCost(GetNumBankSlots())
 		return StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
@@ -149,6 +148,7 @@ function BagButton:OnClick()
 
 	if(PutItemInBag((self.GetInventorySlot and self:GetInventorySlot()) or self.invID)) then return end
 
+	if btn ~= "RightButton" then return end
 	-- Somehow we need to disconnect this from the filter-sieve
 	local container = self.bar.container
 	if(container and container.SetFilter) then
@@ -186,7 +186,7 @@ local function onLock(self, _, bagID, slotID)
 	if(bagID == -1 and slotID > NUM_BANKGENERIC_SLOTS) then
 		bagID, slotID = ContainerIDToInventoryID(slotID-NUM_BANKGENERIC_SLOTS+NUM_BAG_SLOTS)
 	end
-	
+
 	if(slotID) then return end
 
 	for _, button in pairs(self.buttons) do

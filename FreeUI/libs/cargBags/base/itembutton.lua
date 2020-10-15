@@ -21,6 +21,8 @@ local _, ns = ...
 local cargBags = ns.cargBags
 
 local _G = _G
+local ReagentButtonInventorySlot = _G.ReagentButtonInventorySlot
+local ButtonInventorySlot = _G.ButtonInventorySlot
 
 --[[!
 	@class ItemButton
@@ -37,7 +39,7 @@ function ItemButton:GetTemplate(bagID)
 	bagID = bagID or self.bagID
 	return (bagID == -3 and "ReagentBankItemButtonGenericTemplate") or (bagID == -1 and "BankItemButtonGenericTemplate") or (bagID and "ContainerFrameItemButtonTemplate") or "",
       (bagID == -3 and ReagentBankFrame) or (bagID == -1 and BankFrame) or (bagID and _G["ContainerFrame"..bagID + 1]) or "";
-end 
+end
 
 local mt_gen_key = {__index = function(self,k) self[k] = {}; return self[k]; end}
 
@@ -59,6 +61,15 @@ function ItemButton:New(bagID, slotID)
 	button:Show()
 	button:HookScript("OnEnter", button.OnEnter)
 	button:HookScript("OnLeave", button.OnLeave)
+	if bagID == -3 then
+		button.GetInventorySlot = ReagentButtonInventorySlot
+		button.UpdateTooltip = BankFrameItemButton_OnEnter
+	elseif bagID == -1 then
+		button.GetInventorySlot = ButtonInventorySlot
+		button.UpdateTooltip = BankFrameItemButton_OnEnter
+	else
+		button.UpdateTooltip = ContainerFrameItemButton_OnUpdate
+	end
 
 	return button
 end
@@ -69,21 +80,17 @@ end
 	@return button <ItemButton>
 	@callback button:OnCreate(tpl)
 ]]
-local function updateContextMatch(button)
-	local item = button:GetItemInfo()
-	local isItemSet = ScrappingMachineFrame and ScrappingMachineFrame:IsShown() and item and item.isInSet
-	button:SetAlpha((button.ItemContextOverlay:IsShown() or isItemSet) and .3 or 1)
-end
 
 function ItemButton:Create(tpl, parent)
 	local impl = self.implementation
 	impl.numSlots = (impl.numSlots or 0) + 1
 	local name = ("%sSlot%d"):format(impl.name, impl.numSlots)
 
-	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl), self.__index)
+	local button = setmetatable(CreateFrame("ItemButton", name, parent, tpl..", BackdropTemplate"), self.__index)
 
 	if(button.Scaffold) then button:Scaffold(tpl) end
 	if(button.OnCreate) then button:OnCreate(tpl) end
+
 	local btnNT = _G[button:GetName().."NormalTexture"]
 	local btnNIT = button.NewItemTexture
 	local btnBIT = button.BattlepayItemTexture
@@ -93,7 +100,7 @@ function ItemButton:Create(tpl, parent)
 	if btnBIT then btnBIT:SetTexture("") end
 	if btnICO then btnICO:SetTexture("") end
 
-	hooksecurefunc(button, "UpdateItemContextOverlay", updateContextMatch)
+	button:RegisterForDrag("LeftButton") -- fix button drag in 9.0
 
 	return button
 end
@@ -111,6 +118,6 @@ end
 	@param item <table> [optional]
 	@return item <table>
 ]]
-function ItemButton:GetItemInfo(item)
+function ItemButton:GetInfo(item)
 	return self.implementation:GetItemInfo(self.bagID, self.slotID, item)
 end

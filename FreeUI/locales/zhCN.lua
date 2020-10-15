@@ -254,6 +254,7 @@ do
 	L['INVENTORY_ANCHOR_RESET'] = '重置窗口位置'
 	L['INVENTORY_BAGS'] = '打开背包栏位'
 	L['INVENTORY_FREE_SLOTS'] = '剩余背包空间'
+	L["INVENTORY_SORT_DISABLED"] = "背包整理已被禁用"
 	L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
 	L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
 	L['INVENTORY_QUICK_DELETE_ENABLED'] = '\n快速摧毁功能已启用。\n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
