@@ -57,7 +57,9 @@ C.Themes["Blizzard_PVPUI"] = function()
 	F.Reskin(popup.Leave)
 	popup.Leave.__bg:SetFrameLevel(popup:GetFrameLevel() + 1)
 	popup.NewSeason:SetTextColor(1, .8, 0)
-	popup.SeasonRewardText:SetTextColor(1, .8, 0)
+	if popup.SeasonRewardText then -- not in prepatch
+		popup.SeasonRewardText:SetTextColor(1, .8, 0)
+	end
 	popup.SeasonDescription:SetTextColor(1, 1, 1)
 	popup.SeasonDescription2:SetTextColor(1, 1, 1)
 

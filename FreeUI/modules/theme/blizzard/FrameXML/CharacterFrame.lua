@@ -76,7 +76,6 @@ tinsert(C.BlizzThemes, function()
 		cooldown:SetInside()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
-		slot.CorruptedHighlightTexture:SetAtlas("Nzoth-charactersheet-item-glow")
 		slot.IconOverlay:SetInside()
 		F.ReskinIconBorder(slot.IconBorder)
 
