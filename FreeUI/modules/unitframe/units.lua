@@ -344,6 +344,8 @@ function UNITFRAME:SpawnParty()
 	mover = F.Mover(party, L['UNITFRAME_MOVER_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, FreeDB.unitframe.party_width, ((FreeDB.unitframe.party_height * 5) + (FreeDB.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
 	party:SetPoint('BOTTOMRIGHT', mover)
+
+	UNITFRAME:UpdateRaidHealthMethod()
 end
 
 local function CreateRaidStyle(self)
@@ -412,4 +414,6 @@ function UNITFRAME:SpawnRaid()
 			groups[i]:SetPoint((FreeDB.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (FreeDB.unitframe.group_reverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -FreeDB.unitframe.raid_gap)
 		end
 	end
+
+	UNITFRAME:UpdateRaidHealthMethod()
 end

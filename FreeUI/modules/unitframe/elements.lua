@@ -143,6 +143,16 @@ local function PostUpdateHealth(self, unit, min, max)
 	end
 end
 
+function UNITFRAME:UpdateRaidHealthMethod()
+	for _, frame in pairs(oUF.objects) do
+		if frame.unitStyle == 'raid' then
+			frame:SetHealthUpdateMethod(FreeDB.unitframe.group_health_requent)
+			frame:SetHealthUpdateSpeed(FreeDB.unitframe.group_health_frequency)
+			frame.Health:ForceUpdate()
+		end
+	end
+end
+
 function UNITFRAME:AddHealthBar(self)
 	local style = self.unitStyle
 	local isGroup = (style == 'raid' or style == 'party')

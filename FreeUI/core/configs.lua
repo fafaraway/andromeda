@@ -708,6 +708,9 @@ C.CharacterSettings = {
 				['group_by_role'] = true,
 				['group_reverse'] = false,
 
+				['group_health_requent'] = false,
+				['group_health_frequency'] = .2,
+
 				['group_click_cast'] = true,
 				['group_debuff_highlight'] = true,
 				['group_corner_buffs'] = true,
@@ -1256,10 +1259,6 @@ f:SetScript('OnEvent', function(self, _, addon)
 		C.ClassColors[class].b = value.b
 		C.ClassColors[class].colorStr = value.colorStr
 
-		-- _G.RAID_CLASS_COLORS[class].r = value.r
-		-- _G.RAID_CLASS_COLORS[class].g = value.g
-		-- _G.RAID_CLASS_COLORS[class].b = value.b
-		-- _G.RAID_CLASS_COLORS[class].colorStr = value.colorStr
 	end
 
 	C.r = C.ClassColors[C.MyClass].r
