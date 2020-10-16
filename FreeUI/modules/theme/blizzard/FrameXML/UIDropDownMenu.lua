@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local r, g, b = C.r, C.g, C.b
 
 local function toggleBackdrop(bu, show)
 	if show then
@@ -50,7 +49,7 @@ tinsert(C.BlizzThemes, function()
 					bu.bg:ClearAllPoints()
 					bu.bg:SetPoint("CENTER", check)
 					bu.bg:SetSize(12, 12)
-					hl:SetColorTexture(r, g, b, .25)
+					hl:SetColorTexture(C.r, C.g, C.b, .25)
 
 					local arrow = _G["DropDownList"..level.."Button"..i.."ExpandArrow"]
 					F.SetupArrow(arrow:GetNormalTexture(), "right")
@@ -68,12 +67,12 @@ tinsert(C.BlizzThemes, function()
 						local _, co = check:GetTexCoord()
 						if co == 0 then
 							check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
-							check:SetVertexColor(r, g, b, 1)
+							check:SetVertexColor(C.r, C.g, C.b, 1)
 							check:SetSize(20, 20)
 							check:SetDesaturated(true)
 						else
 							check:SetTexture(C.Assets.bd_tex)
-							check:SetVertexColor(r, g, b, .6)
+							check:SetVertexColor(C.r, C.g, C.b, .6)
 							check:SetSize(10, 10)
 							check:SetDesaturated(false)
 						end

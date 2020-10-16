@@ -22,12 +22,12 @@ local function reskinQuestIcons(_, block)
 end
 
 local function reskinHeader(header)
-	header.Text:SetTextColor(r, g, b)
+	header.Text:SetTextColor(C.r, C.g, C.b)
 	header.Background:SetTexture(nil)
 	local bg = header:CreateTexture(nil, "ARTWORK")
 	bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
 	bg:SetTexCoord(0, .66, 0, .31)
-	bg:SetVertexColor(r, g, b)
+	bg:SetVertexColor(C.r, C.g, C.b)
 	bg:SetPoint("BOTTOMLEFT", 0, -4)
 	bg:SetSize(250, 30)
 end
@@ -37,7 +37,7 @@ local function reskinBarTemplate(bar)
 
 	F.StripTextures(bar)
 	bar:SetStatusBarTexture(C.Assets.norm_tex)
-	bar:SetStatusBarColor(r, g, b)
+	bar:SetStatusBarColor(C.r, C.g, C.b)
 	bar.bg = F.SetBD(bar)
 	F:SmoothBar(bar)
 end

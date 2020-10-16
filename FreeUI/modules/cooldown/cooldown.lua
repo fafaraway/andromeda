@@ -187,7 +187,7 @@ function COOLDOWN:OnLogin()
 			COOLDOWN.RegisterActionButton(frame)
 		end
 	end
-	hooksecurefunc('ActionBarButtonEventsFrame_RegisterFrame', COOLDOWN.RegisterActionButton)
+	hooksecurefunc(ActionBarButtonEventsFrameMixin, 'RegisterFrame', COOLDOWN.RegisterActionButton)
 
 	-- Hide Default Cooldown
 	SetCVar('countdownForCooldowns', 0)
