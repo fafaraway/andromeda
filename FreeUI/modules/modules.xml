@@ -1,7 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file="actionbar\actionbar.xml"/>
-	<!-- <Include file="announcement\announcement.xml"/> -->
+	<Include file="announcement\announcement.xml"/>
 	<Include file="aura\aura.xml"/>
+	<Include file="cooldown\cooldown.xml"/>
 	<!-- <Include file="blizzard\blizzard.xml"/>
 	<Include file="chat\chat.xml"/>
 	<Include file="combat\combat.xml"/>

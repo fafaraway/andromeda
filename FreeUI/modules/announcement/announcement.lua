@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local COMBAT = F.COMBAT
+local ANNOUNCEMENT = F.ANNOUNCEMENT
 
 
 local battleRez = {
@@ -131,7 +131,7 @@ local function SendMsg(text)
 	SendChatMessage(text, 'SAY')
 end
 
-function COMBAT:UpdateEvents(...)
+function ANNOUNCEMENT:UpdateEvents(...)
 	local _, event, _, sourceGUID, sourceName, _, _, _, destName, _, _, sourceSpellId, _, _, targetSpellId = ...
 	local isMine = (sourceGUID == UnitGUID('player') or sourceGUID == UnitGUID('pet'))
 
@@ -211,8 +211,7 @@ function COMBAT:UpdateEvents(...)
 	end
 end
 
-
-function COMBAT:Announcement()
+function ANNOUNCEMENT:OnLogin()
 	if not (IsInInstance() and IsInGroup()) then return end
 
 	if FreeDB.announcement.enable then
