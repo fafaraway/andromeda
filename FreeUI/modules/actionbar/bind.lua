@@ -2,26 +2,20 @@ local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 
-local _G = _G
-local tonumber, print, strfind, strupper = tonumber, print, strfind, strupper
-local EnumerateFrames = EnumerateFrames
+local pairs, tonumber, print, strfind, strupper = pairs, tonumber, print, strfind, strupper
 local InCombatLockdown = InCombatLockdown
 local GetSpellBookItemName, GetMacroInfo = GetSpellBookItemName, GetMacroInfo
 local IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown = IsAltKeyDown, IsControlKeyDown, IsShiftKeyDown
-local GetBindingKey, SetBinding, SaveBindings, LoadBindings = GetBindingKey, SetBinding, SaveBindings, LoadBindings
+local GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings = GetBindingKey, GetBindingName, SetBinding, SaveBindings, LoadBindings
+local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
+local NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION = NOT_BOUND, PRESS_KEY_TO_BIND, QUICK_KEYBIND_DESCRIPTION
 
 
 -- Button types
 local function hookActionButton(self)
-	ACTIONBAR:Bind_Update(self)
-end
-
-local function hookStanceButton(self)
-	ACTIONBAR:Bind_Update(self, 'STANCE')
-end
-
-local function hookPetButton(self)
-	ACTIONBAR:Bind_Update(self, 'PET')
+	local pet = self.commandName and strfind(self.commandName, '^BONUSACTION') and 'PET'
+	local stance = self.commandName and strfind(self.commandName, '^SHAPESHIFT') and 'STANCE'
+	ACTIONBAR:Bind_Update(self, pet or stance or nil)
 end
 
 local function hookMacroButton(self)
@@ -33,19 +27,8 @@ local function hookSpellButton(self)
 end
 
 function ACTIONBAR:Bind_RegisterButton(button)
-	local action = ActionButton1:GetScript('OnClick')
-	local stance = StanceButton1:GetScript('OnClick')
-	local pet = PetActionButton1:GetScript('OnClick')
-
-	if button.IsProtected and button.IsObjectType and button.GetScript and button:IsObjectType('CheckButton') and button:IsProtected() then
-		local script = button:GetScript('OnClick')
-		if script == action then
-			button:HookScript('OnEnter', hookActionButton)
-		elseif script == stance then
-			button:HookScript('OnEnter', hookStanceButton)
-		elseif script == pet then
-			button:HookScript('OnEnter', hookPetButton)
-		end
+	if button.IsProtected and button.IsObjectType and button:IsObjectType('CheckButton') and button:IsProtected() then
+		button:HookScript('OnEnter', hookActionButton)
 	end
 end
 
@@ -61,26 +44,30 @@ end
 function ACTIONBAR:Bind_Create()
 	if ACTIONBAR.keybindFrame then return end
 
-	local frame = CreateFrame('Frame', nil, UIParent)
+	local frame = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 	frame:SetFrameStrata('DIALOG')
 	frame:EnableMouse(true)
 	frame:EnableKeyboard(true)
 	frame:EnableMouseWheel(true)
-	F.CreateBD(frame, .5)
+	F.CreateBD(frame, 1)
+	frame:SetBackdropColor(1, .8, 0, .25)
+	frame:SetBackdropBorderColor(1, .8, 0)
 	frame:Hide()
 
 	frame:SetScript('OnEnter', function()
 		GameTooltip:SetOwner(frame, 'ANCHOR_NONE')
 		GameTooltip:SetPoint('BOTTOM', frame, 'TOP', 0, 2)
-		GameTooltip:AddLine(frame.name, 1,1,1)
+		GameTooltip:AddLine(frame.tipName or frame.name, .6,.8,1)
 
 		if #frame.bindings == 0 then
-			GameTooltip:AddLine(L['ACTIONBAR_KEY_UNBOUND'], .6,.6,.6)
+			GameTooltip:AddLine(NOT_BOUND, 1,0,0)
+			GameTooltip:AddLine(PRESS_KEY_TO_BIND)
 		else
 			GameTooltip:AddDoubleLine(L['ACTIONBAR_KEY_INDEX'], L['ACTIONBAR_KEY_BINDING'], .6,.6,.6, .6,.6,.6)
 			for i = 1, #frame.bindings do
-				GameTooltip:AddDoubleLine(i, frame.bindings[i])
+				GameTooltip:AddDoubleLine(i, frame.bindings[i], 1,1,1, 0,1,0)
 			end
+			GameTooltip:AddLine(L['ACTIONBAR_UNBIND_TIP'], 1,.8,0, 1)
 		end
 		GameTooltip:Show()
 	end)
@@ -95,10 +82,8 @@ function ACTIONBAR:Bind_Create()
 		end
 	end)
 
-	local button = EnumerateFrames()
-	while button do
+	for _, button in pairs(ACTIONBAR.buttons) do
 		ACTIONBAR:Bind_RegisterButton(button)
-		button = EnumerateFrames(button)
 	end
 
 	for i = 1, 12 do
@@ -132,12 +117,13 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
 	elseif spellmacro == 'MACRO' then
 		frame.id = frame.button:GetID()
 		local colorIndex = F:Round(select(2, MacroFrameTab1Text:GetTextColor()), 1)
-		if colorIndex == .8 then frame.id = frame.id + 36 end
+		if colorIndex == .8 then frame.id = frame.id + MAX_ACCOUNT_MACROS end
 		frame.name = GetMacroInfo(frame.id)
 		frame.bindings = {GetBindingKey(spellmacro..' '..frame.name)}
 	elseif spellmacro == 'STANCE' or spellmacro == 'PET' then
 		frame.name = button:GetName()
 		if not frame.name then return end
+		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.id = tonumber(button:GetID())
 		if not frame.id or frame.id < 1 or frame.id > (spellmacro == 'STANCE' and 10 or 12) then
@@ -149,9 +135,10 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
 	else
 		frame.name = button:GetName()
 		if not frame.name then return end
+		frame.tipName = button.commandName and GetBindingName(button.commandName)
 
 		frame.action = tonumber(button.action)
-		if not frame.action or frame.action < 1 or frame.action > 132 then
+		if button.isCustomButton or not frame.action or frame.action < 1 or frame.action > 168 then
 			frame.bindstring = 'CLICK '..frame.name..':LeftButton'
 		else
 			local modact = 1+(frame.action-1)%12
@@ -171,6 +158,9 @@ function ACTIONBAR:Bind_Update(button, spellmacro)
 		end
 		frame.bindings = {GetBindingKey(frame.bindstring)}
 	end
+
+	-- Refresh tooltip
+	frame:GetScript("OnEnter")(self)
 end
 
 local ignoreKeys = {
@@ -193,10 +183,9 @@ function ACTIONBAR:Bind_Listener(key)
 				SetBinding(frame.bindings[i])
 			end
 		end
-		F.Print(format(L['ACTIONBAR_CLEAR_BINDS'], frame.name))
+		F.Print(format(L["ACTIONBAR_CLEAR_BINDS"], frame.tipName or frame.name))
 
 		ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
-		if frame.spellmacro ~= 'MACRO' and not GameTooltip:IsForbidden() then GameTooltip:Hide() end
 
 		return
 	end
@@ -216,10 +205,9 @@ function ACTIONBAR:Bind_Listener(key)
 	else
 		SetBinding(alt..ctrl..shift..key, frame.spellmacro..' '..frame.name)
 	end
-	F.Print(frame.name..C.GreenColor..L['ACTIONBAR_KEY_BOUND_TO']..'|r '..alt..ctrl..shift..key)
+	F.Print((frame.tipName or frame.name).." |cff00ff00"..L["ACTIONBAR_KEY_BOUND_TO"].."|r "..alt..ctrl..shift..key)
 
 	ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
-	frame:GetScript('OnEnter')(self)
 end
 
 function ACTIONBAR:Bind_HideFrame()
@@ -257,9 +245,18 @@ function ACTIONBAR:Bind_CreateDialog()
 	frame:SetSize(320, 100)
 	frame:SetPoint('TOP', 0, -135)
 	F.SetBD(frame)
-	F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, KEY_BINDING, false, true, 'TOP', 0, -10)
+	F.CreateFS(frame, C.Assets.Fonts.Regular, 14, nil, QUICK_KEYBIND_MODE, false, true, 'TOP', 0, -10)
+
+	local helpInfo = F.CreateHelpInfo(frame, "|n"..QUICK_KEYBIND_DESCRIPTION)
+	helpInfo:SetPoint("TOPRIGHT", 2, -2)
 
 	local text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
+	local box = F.CreateCheckBox(frame)
+	box:SetChecked(FreeDB.actionbar.bind_type == 2)
+	box:SetPoint("RIGHT", text, "LEFT", -5, -0)
+	box:SetScript("OnClick", function(self)
+		FreeDB.actionbar.bind_type = self:GetChecked() and 2 or 1
+	end)
 
 	local button1 = F.CreateButton(frame, 120, 26, APPLY, 12)
 	button1:SetPoint('BOTTOMLEFT', 25, 10)
@@ -270,12 +267,6 @@ function ACTIONBAR:Bind_CreateDialog()
 	button2:SetPoint('BOTTOMRIGHT', -25, 10)
 	button2:SetScript('OnClick', function()
 		ACTIONBAR:Bind_Deactivate()
-	end)
-	local box = F.CreateCheckBox(frame)
-	box:SetChecked(FreeDB.actionbar.bind_type == 2)
-	box:SetPoint('RIGHT', text, 'LEFT', -5, -0)
-	box:SetScript('OnClick', function(self)
-		FreeDB.actionbar.bind_type = self:GetChecked() and 2 or 1
 	end)
 
 	ACTIONBAR.keybindDialog = frame

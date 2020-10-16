@@ -1,10 +1,9 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('ACTIONBAR')
+local ACTIONBAR = F.ACTIONBAR
 
 
 local next, pairs, unpack = next, pairs, unpack
 local HasAction, IsUsableAction, IsActionInRange = HasAction, IsUsableAction, IsActionInRange
-
 
 local UPDATE_DELAY = .2
 local buttonColors, buttonsToUpdate = {}, {}
@@ -95,10 +94,10 @@ local function button_UpdateUsable(button)
 	ACTIONBAR.UpdateButtonUsable(button, true)
 end
 
-function ACTIONBAR:ButtonRange()
-	if not FreeDB.actionbar.button_range then return end
-
-	hooksecurefunc('ActionButton_OnUpdate', self.Register)
-	hooksecurefunc('ActionButton_Update', self.UpdateButtonStatus)
-	hooksecurefunc('ActionButton_UpdateUsable', button_UpdateUsable)
+function ACTIONBAR:RegisterButtonRange(button)
+	if button.Update then
+		ACTIONBAR.Register(button)
+		hooksecurefunc(button, 'Update', ACTIONBAR.UpdateButtonStatus)
+		hooksecurefunc(button, 'UpdateUsable', button_UpdateUsable)
+	end
 end

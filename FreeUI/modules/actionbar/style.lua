@@ -112,16 +112,14 @@ local function SetupCooldown(cooldown, cfg)
 	ApplyPoints(cooldown, cfg.points)
 end
 
-local function SetupBackdrop(button)
-	F.CreateBD(button)
-	F.CreateTex(button)
-	F.CreateSD(button)
+local function SetupBackdrop(icon)
+	local bg = F.SetBD(icon, .25)
 	if FreeDB.actionbar.button_class_color then
-		button:SetBackdropColor(C.r, C.g, C.b, .5)
-		button:SetBackdropBorderColor(C.r, C.g, C.b)
+		bg:SetBackdropColor(C.r, C.g, C.b, .25)
+		bg:SetBackdropBorderColor(C.r, C.g, C.b)
 	else
-		button:SetBackdropColor(.1, .1, .1, .5)
-		button:SetBackdropBorderColor(0, 0, 0)
+		bg:SetBackdropColor(.1, .1, .1, .25)
+		bg:SetBackdropBorderColor(0, 0, 0)
 	end
 end
 
@@ -170,6 +168,13 @@ function ACTIONBAR:UpdateHotKey()
 	end
 end
 
+function ACTIONBAR:HookHotKey(button)
+	ACTIONBAR.UpdateHotKey(button)
+	if button.UpdateHotkeys then
+		hooksecurefunc(button, 'UpdateHotkeys', ACTIONBAR.UpdateHotKey)
+	end
+end
+
 function ACTIONBAR:StyleActionButton(button, cfg)
 	if not button then return end
 	if button.__styled then return end
@@ -200,7 +205,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	if NewActionTexture then NewActionTexture:SetTexture(nil) end
 
 	--backdrop
-	SetupBackdrop(button)
+	SetupBackdrop(icon)
 
 	--textures
 	SetupTexture(icon, cfg.icon, 'SetTexture', icon)
@@ -233,7 +238,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	if hotkey then
 		if FreeDB.actionbar.button_hotkey then
 			hotkey:SetParent(overlay)
-			ACTIONBAR.UpdateHotKey(button)
+			ACTIONBAR.HookHotKey(button)
 			SetupFontString(hotkey, cfg.hotkey)
 		else
 			hotkey:Hide()
@@ -252,6 +257,8 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 		autoCastable:SetTexCoord(.217, .765, .217, .765)
 		autoCastable:SetInside()
 	end
+
+	ACTIONBAR:RegisterButtonRange(button)
 
 	button.__styled = true
 end
@@ -275,7 +282,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 	local checkedTexture = button:GetCheckedTexture()
 
 	--backdrop
-	SetupBackdrop(button)
+	SetupBackdrop(icon)
 
 	--textures
 	SetupTexture(icon, cfg.icon, 'SetTexture', icon)
@@ -294,7 +301,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 	overlay:SetAllPoints()
 	if FreeDB.actionbar.button_hotkey then
 		hotkey:SetParent(overlay)
-		ACTIONBAR.UpdateHotKey(button)
+		ACTIONBAR.HookHotKey(button)
 		SetupFontString(hotkey, cfg.hotkey)
 	else
 		hotkey:Hide()
@@ -306,13 +313,15 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 		count:Hide()
 	end
 
+	ACTIONBAR:RegisterButtonRange(button)
+
 	button.__styled = true
 end
 
 function ACTIONBAR:UpdateStanceHotKey()
 	for i = 1, _G.NUM_STANCE_SLOTS do
 		_G['StanceButton'..i..'HotKey']:SetText(GetBindingKey('SHAPESHIFTBUTTON'..i))
-		ACTIONBAR.UpdateHotKey(_G['StanceButton'..i])
+		ACTIONBAR:HookHotKey(_G['StanceButton'..i])
 	end
 end
 
@@ -323,6 +332,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
 		ACTIONBAR:StyleActionButton(_G['MultiBarBottomRightButton'..i], cfg)
 		ACTIONBAR:StyleActionButton(_G['MultiBarRightButton'..i], cfg)
 		ACTIONBAR:StyleActionButton(_G['MultiBarLeftButton'..i], cfg)
+		ACTIONBAR:StyleActionButton(_G['FreeUI_CustomBarButton'..i], cfg)
 	end
 
 	for i = 1, 6 do
@@ -442,7 +452,6 @@ function ACTIONBAR:RestyleButtons()
 	ACTIONBAR:StyleAllActionButtons(cfg)
 
 	-- Update hotkeys
-	hooksecurefunc('ActionButton_UpdateHotkeys', ACTIONBAR.UpdateHotKey)
 	hooksecurefunc('PetActionButton_SetHotkeys', ACTIONBAR.UpdateHotKey)
 	if FreeDB.actionbar.button_hotkey then
 		ACTIONBAR:UpdateStanceHotKey()

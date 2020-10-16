@@ -195,6 +195,10 @@ do
 	L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
 	L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
 	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
+
+	L['ACTIONBAR_CUSTOM_BAR'] = '附加动作条'
+	L["ACTIONBAR_UNBIND_TIP"] = "按ESC或右键撤销按键设置"
+
 end
 
 
@@ -254,7 +258,7 @@ do
 	L['INVENTORY_ANCHOR_RESET'] = '重置窗口位置'
 	L['INVENTORY_BAGS'] = '打开背包栏位'
 	L['INVENTORY_FREE_SLOTS'] = '剩余背包空间'
-	L["INVENTORY_SORT_DISABLED"] = "背包整理已被禁用"
+	L['INVENTORY_SORT_DISABLED'] = '背包整理已被禁用'
 	L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
 	L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
 	L['INVENTORY_QUICK_DELETE_ENABLED'] = '\n快速摧毁功能已启用。\n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
@@ -496,6 +500,13 @@ L.GUI = {
 		['RESET'] = '是否重置所有界面元素为默认位置？',
 
 		['GROUP_TOOL'] = '团队工具',
+
+		['ZONE_ABILITY'] = 'zone ability',
+		['EXTRA_BAR'] = 'extra bar',
+		['MAIN_BAR'] = 'main bar',
+		['PET_BAR'] = 'pet bar',
+		['STANCE_BAR'] = 'stance bar',
+		['LEAVE_VEHICLE_BAR'] = 'leave vehicle bar',
 	},
 
 	['DATA'] = {
