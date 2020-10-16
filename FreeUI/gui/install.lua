@@ -207,7 +207,7 @@ local function SetupAddons()
 end
 
 function INSTALL:HelloWorld()
-	local f = CreateFrame('Frame', 'FreeUI_InstallFrame', UIParent)
+	local f = CreateFrame('Frame', 'FreeUI_InstallFrame', UIParent, 'BackdropTemplate')
 	f:SetSize(400, 400)
 	f:SetPoint('CENTER')
 	f:SetFrameStrata('HIGH')
@@ -219,15 +219,15 @@ function INSTALL:HelloWorld()
 
 	f.lineLeft = CreateFrame('Frame', nil, f)
 	f.lineLeft:SetPoint('TOP', -60, -26)
-	F.CreateGF(f.lineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
+	F.SetGradient(f.lineLeft, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
 	f.lineLeft:SetFrameStrata('HIGH')
 
 	f.lineRight = CreateFrame('Frame', nil, f)
 	f.lineRight:SetPoint('TOP', 60, -26)
-	F.CreateGF(f.lineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
+	F.SetGradient(f.lineRight, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
 	f.lineRight:SetFrameStrata('HIGH')
 
-	f.body = CreateFrame('Frame', nil, f)
+	f.body = CreateFrame('Frame', nil, f, 'BackdropTemplate')
 	f.body:SetSize(380, 304)
 	f.body:SetPoint('TOPLEFT', 10, -50)
 	F.CreateBD(f.body, .3)

@@ -262,7 +262,7 @@ end
 local function CreateConsole()
 	if f then return end
 
-	f = CreateFrame('Frame', nil, UIParent)
+	f = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 	f:SetPoint('TOP', 0, -150)
 	f:SetSize(260, 70)
 	F.CreateBD(f)
@@ -311,12 +311,10 @@ local function CreateConsole()
 	header.title = L.GUI.HINT
 	F.AddTooltip(header, 'ANCHOR_TOP', tips)
 
-	local frame = CreateFrame('Frame', nil, f)
+	local frame = CreateFrame('Frame', nil, f, 'BackdropTemplate')
 	frame:SetSize(260, 100)
 	frame:SetPoint('TOP', f, 'BOTTOM', 0, -2)
-	F.CreateBD(frame)
-	F.CreateSD(frame)
-	F.CreateTex(frame)
+	F.SetBD(frame)
 	f.__trimText = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, true, '', 'YELLOW', nil, 'BOTTOM', 0, 5)
 
 	local xBox = F.CreateEditBox(frame, 60, 22)

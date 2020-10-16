@@ -121,7 +121,7 @@ tagPool["item"] = function(self, item)
 end
 
 tagPool["currency"] = function(self, id)
-	local _, count, icon = GetBackpackCurrencyInfo(id)
+	local _, count, icon = C_CurrencyInfo.GetBackpackCurrencyInfo(id)
 
 	if(count) then
 		return count .. createIcon(icon, self.iconValues)

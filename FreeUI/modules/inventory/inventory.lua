@@ -169,7 +169,7 @@ function INVENTORY:CreateCurrencyFrame()
 		GameTooltip:AddDoubleLine(L['INVENTORY_GOLD_TOTAL'], GetMoneyString(totalGold), .6,.8,1, 1, 1, 1)
 
 		for i = 1, GetNumWatchedTokens() do
-			local name, count, icon, currencyID = GetBackpackCurrencyInfo(i)
+			local name, count, icon, currencyID = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
 			if name and i == 1 then
 				GameTooltip:AddLine(' ')
 				GameTooltip:AddLine(CURRENCY, .6,.8,1)
