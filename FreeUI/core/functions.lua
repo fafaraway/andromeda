@@ -400,6 +400,8 @@ do
 		'Portrait',
 		'portrait',
 		'ScrollFrameBorder',
+		'ScrollUpBorder',
+		'ScrollDownBorder',
 	}
 
 	function F:StripTextures(kill)
@@ -593,17 +595,19 @@ do
 
 	-- Background texture
 	function F:CreateTex()
-		if self.Tex then return end
+		if self.__bgTex then return end
 
 		local frame = self
 		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
 
-		self.Tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
-		self.Tex:SetAllPoints(self)
-		self.Tex:SetTexture(assets.bg_tex, true, true)
-		self.Tex:SetHorizTile(true)
-		self.Tex:SetVertTile(true)
-		self.Tex:SetBlendMode('ADD')
+		local tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
+		tex:SetAllPoints(self)
+		tex:SetTexture(assets.bg_tex, true, true)
+		tex:SetHorizTile(true)
+		tex:SetVertTile(true)
+		tex:SetBlendMode('ADD')
+
+		self.__bgTex = tex
 	end
 
 	local shadowBackdrop = {edgeFile = assets.shadow_tex}

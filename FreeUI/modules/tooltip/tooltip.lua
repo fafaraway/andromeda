@@ -302,6 +302,12 @@ end
 
 
 -- Tooltip skin
+local fakeBg = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
+fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
+local function __GetBackdrop() return fakeBg:GetBackdrop() end
+local function __GetBackdropColor() return 0, 0, 0, .7 end
+local function __GetBackdropBorderColor() return 0, 0, 0 end
+
 function TOOLTIP:ReskinTooltip()
 	if not self then
 		if C.isDeveloper then F.Print('Unknown tooltip spotted.') end
@@ -322,9 +328,9 @@ function TOOLTIP:ReskinTooltip()
 		end
 
 		if self.GetBackdrop then
-			self.GetBackdrop = self.bg.GetBackdrop
-			self.GetBackdropColor = self.bg.GetBackdropColor
-			self.GetBackdropBorderColor = self.bg.GetBackdropBorderColor
+			self.GetBackdrop = __GetBackdrop
+			self.GetBackdropColor = __GetBackdropColor
+			self.GetBackdropBorderColor = __GetBackdropBorderColor
 		end
 
 		self.tipStyled = true
