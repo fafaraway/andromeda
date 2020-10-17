@@ -83,7 +83,7 @@ function INFOBAR:Guild()
 			return
 		end
 
-		GuildRoster()
+		--GuildRoster()
 
 		totalOnline = select(3, GetNumGuildMembers())
 		self.Text:SetText(L['INFOBAR_GUILD']..": "..C.InfoColor..totalOnline)
@@ -106,7 +106,7 @@ function INFOBAR:Guild()
 	FreeUIGuildButton:HookScript('OnEnter', function(self)
 		if InCombatLockdown() or not IsInGuild() then return end
 
-		GuildRoster()
+		--GuildRoster()
 		UpdateGuildMessage()
 		BuildGuildTable()
 

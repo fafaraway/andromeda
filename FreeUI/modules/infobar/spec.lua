@@ -4,15 +4,15 @@ local INFOBAR = F:GetModule('INFOBAR')
 
 local format, wipe, select, next = string.format, table.wipe, select, next
 local SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS = SPECIALIZATION, TALENTS_BUTTON, MAX_TALENT_TIERS
-local SHOW_PVP_TALENT_LEVEL, PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = SHOW_PVP_TALENT_LEVEL, PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
+local PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT = PVP_TALENTS, LOOT_SPECIALIZATION_DEFAULT
 local GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID = GetSpecialization, GetSpecializationInfo, GetLootSpecialization, GetSpecializationInfoByID
-local GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, UnitLevel, GetCurrencyInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
+local GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization = GetTalentInfo, GetPvpTalentInfoByID, SetLootSpecialization, SetSpecialization
 local C_SpecializationInfo_GetAllSelectedPvpTalentIDs = C_SpecializationInfo.GetAllSelectedPvpTalentIDs
+local C_SpecializationInfo_CanPlayerUsePVPTalentUI = C_SpecializationInfo.CanPlayerUsePVPTalentUI
+local FreeUISpecButton = INFOBAR.FreeUISpecButton
 
 local pvpTalents
-local FreeUISpecButton = INFOBAR.FreeUISpecButton
-local currentSpec = GetSpecialization()
-local numSpec = GetNumSpecializations()
+local pvpIconTexture = C_CurrencyInfo.GetCurrencyInfo(104).iconFileID
 
 local function addIcon(texture)
 	texture = texture and '|T'..texture..':12:16:0:0:50:50:4:46:4:46|t' or ''
@@ -41,7 +41,7 @@ function INFOBAR:SpecTalent()
 
 	FreeUISpecButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 220, function(self, button)
 		local specIndex = GetSpecialization()
-		if not specIndex then return end
+		if not specIndex or specIndex == 5 then return end
 
 		if button == 'LeftButton' then
 			if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
@@ -122,13 +122,11 @@ function INFOBAR:SpecTalent()
 			end
 		end
 
-		if UnitLevel('player') >= SHOW_PVP_TALENT_LEVEL then
+		if C_SpecializationInfo_CanPlayerUsePVPTalentUI() then
 			pvpTalents = C_SpecializationInfo.GetAllSelectedPvpTalentIDs()
-
 			if #pvpTalents > 0 then
-				local texture = select(3, GetCurrencyInfo(104))
 				GameTooltip:AddLine(' ')
-				GameTooltip:AddLine(addIcon(texture)..' '..PVP_TALENTS, .6,.8,1)
+				GameTooltip:AddLine(addIcon(pvpIconTexture)..' '..PVP_TALENTS, .6,.8,1)
 				for _, talentID in next, pvpTalents do
 					local _, name, icon, _, _, _, unlocked = GetPvpTalentInfoByID(talentID)
 					if name and unlocked then

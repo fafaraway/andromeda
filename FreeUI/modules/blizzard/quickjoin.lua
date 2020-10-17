@@ -29,10 +29,6 @@ function BLIZZARD:HookDialogOnShow()
 end
 
 function BLIZZARD:QuickJoin()
-	if C.Client == 'zhCN' then
-		StaticPopupDialogs['LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS'].text = '针对此项活动，你的队伍人数已满，将被移出列表。'
-	end
-
 	for i = 1, 10 do
 		local bu = _G['LFGListSearchPanelScrollFrameButton'..i]
 		if bu then

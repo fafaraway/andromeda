@@ -11,6 +11,7 @@ local function reskinQuestIcon(button)
 	local icon = button.icon or button.Icon
 	if icon then
 		F.ReskinIcon(icon, true)
+		icon:SetInside()
 	end
 
 	button.styled = true

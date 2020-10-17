@@ -47,9 +47,9 @@ local function UpdateTooltip(bar)
 		GameTooltip:AddLine(LEVEL..' '..UnitLevel('player'), C.r, C.g, C.b)
 
 		local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-		GameTooltip:AddDoubleLine(XP, xp..' / '..mxp..' ('..floor(xp/mxp*100)..'%)', 1, 1, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(XP..':', BreakUpLargeNumbers(xp)..' / '..BreakUpLargeNumbers(mxp)..' ('..format('%.1f%%)', xp/mxp*100), .6,.8,1, 1,1,1)
 		if rxp then
-			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26, '+'..rxp..' ('..floor(rxp/mxp*100)..'%)', 1, 1, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine(TUTORIAL_TITLE26..':', '+'..BreakUpLargeNumbers(rxp)..' ('..format('%.1f%%)', rxp/mxp*100), .6,.8,1, 1,1,1)
 		end
 		if IsXPUserDisabled() then GameTooltip:AddLine('|cffff0000'..XP..LOCKED) end
 	end

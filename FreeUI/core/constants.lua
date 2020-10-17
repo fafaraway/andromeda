@@ -193,8 +193,7 @@ C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REA
 
 
 C.DevsList = {
-	['Dontbeshy-死亡之翼'] = true,
-	['Kangrinboqe-死亡之翼'] = true,
+	['Farfaraway-神圣之歌'] = true,
 }
 
 local function isDeveloper()

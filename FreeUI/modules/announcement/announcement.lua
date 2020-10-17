@@ -215,8 +215,8 @@ function ANNOUNCEMENT:OnLogin()
 	if not (IsInInstance() and IsInGroup()) then return end
 
 	if FreeDB.announcement.enable then
-		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', COMBAT.UpdateEvents)
+		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
 	else
-		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', COMBAT.UpdateEvents)
+		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
 	end
 end

@@ -4,7 +4,7 @@ local INFOBAR = F:GetModule('INFOBAR')
 
 local barAlpha, buttonAlpha
 
-local bar = CreateFrame('Frame', 'FreeUI_Infobar', UIParent)
+local bar = CreateFrame('Frame', 'FreeUI_Infobar', UIParent, 'BackdropTemplate')
 bar.buttons = {}
 
 INFOBAR.POSITION_LEFT, INFOBAR.POSITION_MIDDLE, INFOBAR.POSITION_RIGHT = 1, 2, 3
@@ -116,7 +116,7 @@ function INFOBAR:hideButton(button)
 end
 
 function INFOBAR:addButton(text, position, width, clickFunc)
-	local bu = CreateFrame('Button', nil, bar)
+	local bu = CreateFrame('Button', nil, bar, 'BackdropTemplate')
 	bu:SetPoint('TOP', bar, 'TOP')
 	bu:SetPoint('BOTTOM', bar, 'BOTTOM')
 	bu:SetWidth(width)

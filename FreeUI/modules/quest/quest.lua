@@ -106,7 +106,7 @@ end
 function QUEST:OnLogin()
 	self:ObjectiveTrackerMover()
 	self:UpdateTrackerScale()
-	self:QuestLevel()
-	self:QuestNotifier()
+	--self:QuestLevel()
+	--self:QuestNotifier()
 	self:QuestRewardHighlight()
 end

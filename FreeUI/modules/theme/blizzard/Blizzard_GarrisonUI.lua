@@ -51,7 +51,7 @@ local function ReskinMissionTabs(self)
 			F.StripTextures(tab)
 			tab.bg = F.CreateBDFrame(tab, .25)
 			if i == 1 then
-				tab.bg:SetBackdropColor(r, g, b, .2)
+				tab.bg:SetBackdropColor(C.r, C.g, C.b, .2)
 			end
 		end
 	end
@@ -183,7 +183,7 @@ local function UpdateFollowerList(self)
 			button.bg = F.CreateBDFrame(button, .25)
 
 			local hl = button:GetHighlightTexture()
-			hl:SetColorTexture(r, g, b, .1)
+			hl:SetColorTexture(C.r, C.g, C.b, .1)
 			hl:ClearAllPoints()
 			hl:SetInside(button.bg)
 
@@ -211,7 +211,7 @@ local function UpdateFollowerList(self)
 		end
 
 		if button.Selection:IsShown() then
-			button.bg:SetBackdropColor(r, g, b, .2)
+			button.bg:SetBackdropColor(C.r, C.g, C.b, .2)
 		else
 			button.bg:SetBackdropColor(0, 0, 0, .25)
 		end

@@ -9,10 +9,10 @@ local cooldowns, animating, watching = {}, {}, {}
 local bg
 
 
-local anchor = CreateFrame('Frame', 'FreeUI_CooldownPulse', UIParent)
+local anchor = CreateFrame('Frame', 'FreeUI_CooldownPulse', UIParent, 'BackdropTemplate')
 anchor:SetSize(iconSize, iconSize)
 
-local frame = CreateFrame('Frame', 'CDPulseFrame', anchor)
+local frame = CreateFrame('Frame', 'CDPulseFrame', anchor, 'BackdropTemplate')
 frame:SetPoint('CENTER', anchor, 'CENTER')
 
 local icon = frame:CreateTexture(nil, 'ARTWORK')
@@ -213,7 +213,7 @@ end
 function COOLDOWN:CooldownPulse()
 	if not FreeDB.cooldown.pulse then return end
 
-	bg = F.CreateBDFrame(frame, nil, true)
+	bg = F.SetBD(frame)
 	icon:SetTexCoord(unpack(C.TexCoord))
 	F.Mover(anchor, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, FreeDB.cooldown.icon_size, FreeDB.cooldown.icon_size)
 

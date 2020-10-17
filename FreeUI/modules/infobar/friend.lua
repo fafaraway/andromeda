@@ -170,7 +170,7 @@ function INFOBAR:Friends()
 		end
 
 		local BNTotal = BNGetNumFriends()
-		local Total = GetNumFriends()
+		local Total = C_FriendList.GetNumFriends()
 
 		if BNTotal == #BNTable then
 			UpdateBNTable(BNTotal)

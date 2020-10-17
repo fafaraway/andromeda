@@ -8,7 +8,7 @@ local iconsize = 32
 local width = 140
 local sq, ss, sn, st
 
-local LootFrameADV = CreateFrame('Button', 'FreeUI_Loot', UIParent)
+local LootFrameADV = CreateFrame('Button', 'FreeUI_Loot', UIParent, 'BackdropTemplate')
 LootFrameADV:SetFrameStrata('HIGH')
 LootFrameADV:SetClampedToScreen(true)
 LootFrameADV:SetWidth(width)
@@ -60,7 +60,7 @@ local OnUpdate = function(self)
 end
 
 local createSlot = function(id)
-	local frame = CreateFrame('Button', 'FreeUI_Loot_Slot'..id, LootFrameADV)
+	local frame = CreateFrame('Button', 'FreeUI_Loot_Slot'..id, LootFrameADV, 'BackdropTemplate')
 	frame:SetPoint('TOP', LootFrameADV, 0, -((id - 1) * (iconsize + 1)))
 	frame:SetPoint('RIGHT')
 	frame:SetPoint('LEFT')
@@ -76,8 +76,7 @@ local createSlot = function(id)
 	frame:SetScript('OnClick', OnClick)
 	frame:SetScript('OnUpdate', OnUpdate)
 
-	frame.bg = F.CreateBDFrame(frame, nil, true)
-	F.CreateTex(frame.bg)
+	frame.bg = F.SetBD(frame)
 
 	local iconFrame = CreateFrame('Frame', nil, frame)
 	iconFrame:SetHeight(iconsize)
@@ -91,7 +90,7 @@ local createSlot = function(id)
 	icon:SetTexCoord(unpack(C.TexCoord))
 	icon:SetPoint('TOPLEFT', C.Mult, -C.Mult)
 	icon:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
-	F.CreateBDFrame(icon, nil, true)
+	F.SetBD(icon)
 	frame.icon = icon
 
 	local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'TOP', 1, -2)
@@ -168,13 +167,13 @@ LootFrameADV.LOOT_OPENED = function(self, event, autoloot)
 				end
 
 				if questID and not isActive then
-					slot.bg:SetBackdropColor(.5, .5, 0)
+					slot.bg:SetBackdropColor(.5, .5, 0, .5)
 					slot.name:SetTextColor(1, 1, 0)
 				elseif questID or isQuestItem then
-					slot.bg:SetBackdropColor(.5, .5, 0)
+					slot.bg:SetBackdropColor(.5, .5, 0, .5)
 					slot.name:SetTextColor(r, g, b)
 				else
-					slot.bg:SetBackdropColor(0, 0, 0)
+					slot.bg:SetBackdropColor(0, 0, 0, .5)
 					slot.name:SetTextColor(r, g, b)
 				end
 

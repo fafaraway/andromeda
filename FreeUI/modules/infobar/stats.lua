@@ -114,7 +114,7 @@ function INFOBAR:Stats()
 
 		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
-		local today = C_Calendar.GetDate()
+		local today = C_DateAndTime.GetCurrentCalendarTime()
 		local w, m, d, y = today.weekday, today.month, today.monthDay, today.year
 		GameTooltip:AddLine(format(FULLDATE, CALENDAR_WEEKDAY_NAMES[w], CALENDAR_FULLDATE_MONTH_NAMES[m], d, y), .9, .82, .62)
 		GameTooltip:AddLine(' ')

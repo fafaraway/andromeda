@@ -69,6 +69,12 @@ local function updateTokenVisibility()
 	BackpackTokenFrame_Update()
 end
 
+-- Remove new talent alert
+function MainMenuMicroButton_AreAlertsEnabled()
+	return false
+end
+
+
 function ACTIONBAR:RemoveBlizzArt()
 	MainMenuBar:SetMovable(true)
 	MainMenuBar:SetUserPlaced(true)

@@ -3,11 +3,13 @@ local BLIZZARD = F:GetModule('BLIZZARD')
 
 
 local ipairs, format = ipairs, format
-local GetCurrencyInfo, IsShiftKeyDown = GetCurrencyInfo, IsShiftKeyDown
+local IsShiftKeyDown = IsShiftKeyDown
+local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 local C_Garrison_GetCurrencyTypes = C_Garrison.GetCurrencyTypes
 local C_Garrison_GetClassSpecCategoryInfo = C_Garrison.GetClassSpecCategoryInfo
 local C_Garrison_RequestClassSpecCategoryInfo = C_Garrison.RequestClassSpecCategoryInfo
-local LE_GARRISON_TYPE_7_0, LE_FOLLOWER_TYPE_GARRISON_7_0 = LE_GARRISON_TYPE_7_0, LE_FOLLOWER_TYPE_GARRISON_7_0
+local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
+local LE_FOLLOWER_TYPE_GARRISON_7_0 = Enum.GarrisonFollowerType.FollowerType_7_0
 
 function BLIZZARD:OrderHall_CreateIcon()
 	local hall = CreateFrame('Frame', 'FreeUI_OrderHallIcon', UIParent)
@@ -34,13 +36,15 @@ function BLIZZARD:OrderHall_CreateIcon()
 	-- Default objects
 	F.HideOption(OrderHallCommandBar)
 	F.HideObject(OrderHallCommandBar.CurrencyHitTest)
-	GarrisonLandingPageTutorialBox:SetClampedToScreen(true)
 end
 
 function BLIZZARD:OrderHall_Refresh()
 	C_Garrison_RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	local currency = C_Garrison_GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
-	self.name, self.amount, self.texture = GetCurrencyInfo(currency)
+	local info = C_CurrencyInfo_GetCurrencyInfo(currency)
+	self.name = info.name
+	self.amount = info.quantity
+	self.texture = info.iconFileID
 
 	local categoryInfo = C_Garrison_GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
 	for index, info in ipairs(categoryInfo) do

@@ -45,11 +45,11 @@ local bonus = {
 	52835, 52839,	-- Honor
 	52837, 52840,	-- Resources
 }
-local bonusName = GetCurrencyInfo(1580)
+local bonusName = C_CurrencyInfo.GetCurrencyInfo(1580).name
 
 local isTimeWalker, walkerTexture
 local function checkTimeWalker(event)
-	local date = C_Calendar.GetDate()
+	local date = C_DateAndTime.GetCurrentCalendarTime()
 	C_Calendar.SetAbsMonth(date.month, date.year)
 	C_Calendar.OpenCalendar()
 

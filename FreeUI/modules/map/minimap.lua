@@ -294,6 +294,8 @@ local function WhoPings()
 	anim.fader:SetStartDelay(3)
 
 	F:RegisterEvent('MINIMAP_PING', function(_, unit)
+		if unit == 'player' then return end -- ignore player ping
+
 		local class = select(2, UnitClass(unit))
 		local r, g, b = F.ClassColor(class)
 		local name = GetUnitName(unit)

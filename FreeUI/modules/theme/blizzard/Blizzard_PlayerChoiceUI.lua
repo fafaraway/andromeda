@@ -42,13 +42,13 @@ C.Themes["Blizzard_PlayerChoiceUI"] = function()
 
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
-			option.Header.Text:SetTextColor(1, .8, 0)
-			option.OptionText:SetTextColor(1, 1, 1)
+			option.Header.Text:SetTextColor(0, 0, 0)
+			option.OptionText:SetTextColor(0, 0, 0)
 
 			for i = 1, option.WidgetContainer:GetNumChildren() do
 				local child = select(i, option.WidgetContainer:GetChildren())
 				if child.Text then
-					child.Text:SetTextColor(1, 1, 1)
+					child.Text:SetTextColor(0, 0, 0)
 				end
 
 				if child.Spell then
@@ -58,7 +58,7 @@ C.Themes["Blizzard_PlayerChoiceUI"] = function()
 						child.Spell.bg = F.ReskinIcon(child.Spell.Icon)
 					end
 
-					child.Spell.Text:SetTextColor(1, 1, 1)
+					child.Spell.Text:SetTextColor(0, 0, 0)
 				end
 
 				for j = 1, child:GetNumChildren() do
@@ -88,7 +88,7 @@ C.Themes["Blizzard_PlayerChoiceUI"] = function()
 			local optionFrameRewards = self.Options[i].RewardsFrame.Rewards
 			for button in optionFrameRewards.ItemRewardsPool:EnumerateActive() do
 				if not button.styled then
-					button.Name:SetTextColor(.9, .8, .5)
+					button.Name:SetTextColor(0, 0, 0)
 					button.IconBorder:SetAlpha(0)
 					F.ReskinIcon(button.Icon)
 

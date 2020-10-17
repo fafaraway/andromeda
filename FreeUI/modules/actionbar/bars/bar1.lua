@@ -169,38 +169,4 @@ function ACTIONBAR:OnLogin()
 	ACTIONBAR:RemoveBlizzArt()
 	ACTIONBAR:RestyleButtons()
 	ACTIONBAR:UpdateAllScale()
-
-
-	--[[ F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomLeft)
-	F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomRight)
-	F.HideOption(_G.InterfaceOptionsActionBarsPanelRight)
-	F.HideOption(_G.InterfaceOptionsActionBarsPanelRightTwo)
-	F.HideOption(_G.InterfaceOptionsActionBarsPanelStackRightBars)
-	F.HideOption(_G.InterfaceOptionsActionBarsPanelAlwaysShowActionBars) ]]
-
-	--[[ if _G.PlayerTalentFrame then
-		_G.PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
-	else
-		hooksecurefunc('TalentFrame_LoadUI', function()
-			_G.PlayerTalentFrame:UnregisterEvent('ACTIVE_TALENT_GROUP_CHANGED')
-		end)
-	end ]]
-
-	--vehicle fix
-	--[[ local function getActionTexture(button)
-		return GetActionTexture(button.action)
-	end
-
-	F:RegisterEvent('UPDATE_VEHICLE_ACTIONBAR', function()
-		for _, button in next, buttonList do
-			local icon = button.icon
-			local texture = getActionTexture(button)
-			if texture then
-				icon:SetTexture(texture)
-				icon:Show()
-			else
-				icon:Hide()
-			end
-		end
-	end) ]]
 end

@@ -135,7 +135,7 @@ function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 		level = info
 	end
 
-	if level and level > 1 and quality then
+	if level and level > 1 and quality and quality > 1 then
 		local color = C.QualityColors[quality]
 		slotFrame.iLvlText:SetText(level)
 		slotFrame.iLvlText:SetTextColor(color.r, color.g, color.b)
@@ -238,6 +238,8 @@ function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
 		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -1, 1)
 	end
 
+	if quality and quality <= 1 then return end
+
 	local link, level
 	if bag then
 		link = GetContainerItemLink(bag, slot)
@@ -247,15 +249,16 @@ function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
 		level = F.GetItemLevel(link, 'player', slot)
 	end
 
-	local color = C.QualityColors[quality or 1]
+	local color = C.QualityColors[quality or 0]
 	self.iLvl:SetText(level)
 	self.iLvl:SetTextColor(color.r, color.g, color.b)
 end
 
 function MISC:ItemLevel_FlyoutSetup()
+	if self.iLvl then self.iLvl:SetText('') end
+
 	local location = self.location
 	if not location or location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION then
-		if self.iLvl then self.iLvl:SetText('') end
 		return
 	end
 

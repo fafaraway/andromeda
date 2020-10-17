@@ -507,6 +507,7 @@ L.GUI = {
 		['PET_BAR'] = 'pet bar',
 		['STANCE_BAR'] = 'stance bar',
 		['LEAVE_VEHICLE_BAR'] = 'leave vehicle bar',
+		['QUEST_BUTTON'] = 'quest button',
 	},
 
 	['DATA'] = {

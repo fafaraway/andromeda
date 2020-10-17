@@ -13,7 +13,7 @@ local ConvertToParty = C_PartyInfo.ConvertToParty
 function MISC:GroupTool()
 	if not FreeDB.misc.group_tool then return end
 
-	local header = CreateFrame('Button', nil, UIParent)
+	local header = CreateFrame('Button', nil, UIParent, 'BackdropTemplate')
 	header:SetSize(120, 28)
 	header:SetFrameLevel(2)
 	F.ReskinMenuButton(header)
