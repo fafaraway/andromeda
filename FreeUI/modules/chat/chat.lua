@@ -101,7 +101,7 @@ function CHAT:RestyleChatFrame()
 	eb:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 4, 26)
 	eb:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -17, 50)
 
-	eb.bd = F.CreateBDFrame(eb, .6, true)
+	eb.bd = F.SetBD(eb)
 
 	for i = 3, 8 do
 		select(i, eb:GetRegions()):SetAlpha(0)
@@ -111,7 +111,7 @@ function CHAT:RestyleChatFrame()
 	lang:GetRegions():SetAlpha(0)
 	lang:SetPoint('TOPLEFT', eb, 'TOPRIGHT', 5, 0)
 	lang:SetPoint('BOTTOMRIGHT', eb, 'BOTTOMRIGHT', 29, 0)
-	lang.bd = F.CreateBDFrame(lang, .6, true)
+	lang.bd = F.SetBD(lang)
 
 	local tab = _G[name..'Tab']
 	tab:SetAlpha(1)

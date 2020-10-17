@@ -242,7 +242,7 @@ local function tabOnLeave(self)
 end
 
 local function CreateTab(parent, i, name)
-	local tab = CreateFrame('Button', nil, parent)
+	local tab = CreateFrame('Button', nil, parent, 'BackdropTemplate')
 	tab:SetSize(160, 28)
 	F.Reskin(tab)
 
@@ -335,13 +335,13 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 	},
 
 	[13] = {
-		{1, "nameplate", "enable", L.GUI.NAMEPLATE.ENABLE},
+		{1, 'nameplate', 'enable', L.GUI.NAMEPLATE.ENABLE},
 
-		{1, "nameplate", "target_indicator", L.GUI.NAMEPLATE.TARGET_INDICATOR},
-		{1, "nameplate", "threat_indicator", L.GUI.NAMEPLATE.THREAT_INDICATOR, true},
+		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR},
+		{1, 'nameplate', 'threat_indicator', L.GUI.NAMEPLATE.THREAT_INDICATOR, true},
 		{},--blank
-		{1, "nameplate", "target_indicator", L.GUI.NAMEPLATE.TARGET_INDICATOR},
-		{1, "nameplate", "threat_indicator", L.GUI.NAMEPLATE.THREAT_INDICATOR, true},
+		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR},
+		{1, 'nameplate', 'threat_indicator', L.GUI.NAMEPLATE.THREAT_INDICATOR, true},
 	},
 	[14] = {
 
@@ -371,47 +371,47 @@ local function CreateOption(i)
 			cb:SetSize(20, 20)
 			cb:SetHitRectInsets(-5, -5, -5, -5)
 			if horizon then
-				cb:SetPoint("TOPLEFT", 190, -offset + 35)
+				cb:SetPoint('TOPLEFT', 190, -offset + 35)
 			else
-				cb:SetPoint("TOPLEFT", 20, -offset)
+				cb:SetPoint('TOPLEFT', 20, -offset)
 				offset = offset + 35
 			end
-			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, 'THICK', "LEFT", 24, 0)
+			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, 'THICK', 'LEFT', 24, 0)
 			cb:SetChecked(SaveValue(key, value))
-			cb:SetScript("OnClick", function()
+			cb:SetScript('OnClick', function()
 				SaveValue(key, value, cb:GetChecked())
 				if callback then callback() end
 			end)
-			if data and type(data) == "function" then
+			if data and type(data) == 'function' then
 				local bu = CreateGearButton(parent)
-				bu:SetPoint("LEFT", cb.name, "RIGHT", -2, 1)
-				bu:SetScript("OnClick", data)
+				bu:SetPoint('LEFT', cb.name, 'RIGHT', -2, 1)
+				bu:SetScript('OnClick', data)
 			end
 			if tooltip then
 				cb.title = L.GUI.HINT
-				F.AddTooltip(cb, "ANCHOR_RIGHT", tooltip, "BLUE")
+				F.AddTooltip(cb, 'ANCHOR_RIGHT', tooltip, 'BLUE')
 			end
 		-- Blank, no optType
 		else
 			if not key then
-				local l = CreateFrame("Frame", nil, parent)
-				l:SetPoint("TOPLEFT", 25, -offset - 12)
-				F.CreateGF(l, 330, C.Mult, "Horizontal", .6, .6, .6, .25, .25)
+				local l = CreateFrame('Frame', nil, parent)
+				l:SetPoint('TOPLEFT', 25, -offset - 12)
+				F.SetGradient(l, 'H', .6, .6, .6, .25, .25, 330, C.Mult)
 			end
 			offset = offset + 35
 		end
 
 	end
 
-	local footer = CreateFrame("Frame", nil, parent)
+	local footer = CreateFrame('Frame', nil, parent)
 	footer:SetSize(20, 20)
-	footer:SetPoint("TOPLEFT", 25, -offset)
+	footer:SetPoint('TOPLEFT', 25, -offset)
 end
 
 local function CreateGUI()
 	if FreeUI_GUI then FreeUI_GUI:Show() return end
 
-	local guiFrame = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
+	local guiFrame = CreateFrame('Frame', 'FreeUI_GUI', UIParent, 'BackdropTemplate')
 	tinsert(_G.UISpecialFrames, 'FreeUI_GUI')
 	guiFrame:SetSize(600, 640)
 	guiFrame:SetPoint('CENTER')
@@ -429,15 +429,11 @@ local function CreateGUI()
 	local logo = F.CreateFS(guiFrame, C.AssetsPath..'fonts\\bold.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
 	local desc = F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: '..C.Version, {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
-	local horizontalLineLeft  = CreateFrame('Frame', nil, guiFrame)
-	horizontalLineLeft:SetPoint('TOP', -60, -26)
-	horizontalLineLeft:SetFrameStrata('HIGH')
-	F.CreateGF(horizontalLineLeft, 120, 1, 'Horizontal', .7, .7, .7, 0, .7)
+	local lineLeft = F.SetGradient(guiFrame, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
+	lineLeft:SetPoint('TOP', -60, -26)
 
-	local horizontalLineRight = CreateFrame('Frame', nil, guiFrame)
-	horizontalLineRight:SetPoint('TOP', 60, -26)
-	horizontalLineRight:SetFrameStrata('HIGH')
-	F.CreateGF(horizontalLineRight, 120, 1, 'Horizontal', .7, .7, .7, .7, 0)
+	local lineRight = F.SetGradient(guiFrame, 'H', .7, .7, .7, .7, 0, 120, C.Mult)
+	lineRight:SetPoint('TOP', 60, -26)
 
 	local btnClose = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
 	btnClose:SetPoint('BOTTOMRIGHT', -6, 6)

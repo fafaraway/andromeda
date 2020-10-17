@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 
 
-C.isDeveloper = true
 
 
 
