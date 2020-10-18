@@ -6,7 +6,7 @@ local function onEnable(self)
 end
 
 local function onDisable(self)
-	self.__bg:SetBackdropColor(r, g, b, .25)
+	self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
 end
 
 local function onClick(self)
@@ -21,7 +21,7 @@ local function reskinBossButtons()
 
 		F.Reskin(button, true)
 		local hl = button:GetHighlightTexture()
-		hl:SetColorTexture(r, g, b, .25)
+		hl:SetColorTexture(C.r, C.g, C.b, .25)
 		hl:SetInside(button.__bg)
 
 		button.text:SetTextColor(1, 1, 1)
