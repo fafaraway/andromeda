@@ -40,10 +40,6 @@ function NAMEPLATE:UpdatePlateOccludedAlpha()
 	_G.SetCVar('nameplateOccludedAlphaMult', FreeDB.nameplate.occluded_alpha)
 end
 
-function NAMEPLATE:UpdatePlateDistance()
-	_G.SetCVar('nameplateMaxDistance', FreeDB.nameplate.max_distance)
-end
-
 function NAMEPLATE:UpdatePlateVerticalSpacing()
 	_G.SetCVar('nameplateOverlapV', FreeDB.nameplate.vertical_spacing)
 end
@@ -60,8 +56,6 @@ end
 
 function NAMEPLATE:SetupCVars()
 	NAMEPLATE:PlateInsideView()
-
-	NAMEPLATE:UpdatePlateDistance()
 
 	NAMEPLATE:UpdatePlateVerticalSpacing()
 	NAMEPLATE:UpdatePlateHorizontalSpacing()
@@ -491,7 +485,7 @@ local function CreateNameplateStyle(self)
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(C.Assets.statusbar_tex)
-	health.backdrop = F.CreateBDFrame(health, nil, true)
+	health.backdrop = F.SetBD(health)
 	F:SmoothBar(health)
 
 	self.Health = health

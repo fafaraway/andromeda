@@ -785,7 +785,6 @@ C.CharacterSettings = {
 			['target_scale'] = 1,
 			['min_alpha'] = 0.6,
 			['occluded_alpha'] = 0.2,
-			['max_distance'] = 45,
 			['vertical_spacing'] = 0.7,
 			['horizontal_spacing'] = 0.3,
 	},
