@@ -187,16 +187,16 @@ function INFOBAR:Report()
 	FreeUIReportButton = INFOBAR:addButton(L['INFOBAR_REPORT'], INFOBAR.POSITION_RIGHT, 100, function(self, button)
 		if button == 'LeftButton' then
 			HideUIPanel(GarrisonLandingPage)
-			if not C_Garrison.HasGarrison(LE_GARRISON_TYPE_8_0) then return end
-			ShowGarrisonLandingPage(LE_GARRISON_TYPE_8_0)
+			if not C_Garrison.HasGarrison(Enum.GarrisonType.Type_8_0) then return end
+			ShowGarrisonLandingPage(Enum.GarrisonType.Type_8_0)
 		elseif button == 'RightButton' then
 			HideUIPanel(GarrisonLandingPage)
-			if not C_Garrison.HasGarrison(LE_GARRISON_TYPE_7_0) then return end
-			ShowGarrisonLandingPage(LE_GARRISON_TYPE_7_0)
+			if not C_Garrison.HasGarrison(Enum.GarrisonType.Type_7_0) then return end
+			ShowGarrisonLandingPage(Enum.GarrisonType.Type_7_0)
 		elseif button == 'MiddleButton' then
 			HideUIPanel(GarrisonLandingPage)
-			if not C_Garrison.HasGarrison(LE_GARRISON_TYPE_6_0) then return end
-			ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+			if not C_Garrison.HasGarrison(Enum.GarrisonType.Type_6_0) then return end
+			ShowGarrisonLandingPage(Enum.GarrisonType.Type_6_0)
 		end
 	end)
 
