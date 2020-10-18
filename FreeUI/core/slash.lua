@@ -332,7 +332,7 @@ end
 SLASH_ROLECHECK1 = '/rpc'
 
 SlashCmdList['LEAVEGROUP'] = function()
-	LeaveParty()
+	C_PartyInfo.LeaveParty()
 end
 SLASH_LEAVEGROUP1 = '/lg'
 
