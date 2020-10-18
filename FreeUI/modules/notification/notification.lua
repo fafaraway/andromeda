@@ -8,7 +8,7 @@ local duration = 3
 local bannerWidth = 300
 local interval = 0.1
 
-local f = CreateFrame('Frame', 'FreeUI_Notification', UIParent)
+local f = CreateFrame('Frame', 'FreeUI_Notification', UIParent, 'BackdropTemplate')
 f:SetFrameStrata('FULLSCREEN_DIALOG')
 f:SetSize(bannerWidth, 50)
 f:SetPoint('TOP', UIParent, 'TOP', 0, -60)
@@ -171,8 +171,7 @@ end
 
 
 function NOTIFICATION:OnLogin()
-	F.CreateBDFrame(f, nil, true)
-	F.CreateTex(f)
+	F.SetBD(f)
 	F.ReskinIcon(icon)
 
 	f:SetScript('OnEnter', function(self)

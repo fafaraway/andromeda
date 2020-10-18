@@ -3,18 +3,25 @@ local F, C = unpack(select(2, ...))
 local select, pairs = select, pairs
 
 local function reskinQuestIcon(button)
-	if not button or button.styled then return end
+	if not button then return end
 
-	button:SetNormalTexture("")
-	button:SetPushedTexture("")
-	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	local icon = button.icon or button.Icon
-	if icon then
-		F.ReskinIcon(icon, true)
-		icon:SetInside()
+	if not button.styled then
+		button:SetSize(24, 24)
+		button:SetNormalTexture("")
+		button:SetPushedTexture("")
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		local icon = button.icon or button.Icon
+		if icon then
+			button.bg = F.ReskinIcon(icon, true)
+			icon:SetInside()
+		end
+
+		button.styled = true
 	end
 
-	button.styled = true
+	if button.bg then
+		button.bg:SetFrameLevel(0)
+	end
 end
 
 local function reskinQuestIcons(_, block)
@@ -249,21 +256,21 @@ tinsert(C.BlizzThemes, function()
 	local ot = ObjectiveTrackerFrame
 	local BlocksFrame = ot.BlocksFrame
 
-	F.SetFS(ot.HeaderMenu.Title, C.Assets.Fonts.Bold, 13, nil, nil, nil, 'THICK')
+	F.SetFS(ot.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
 
 	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader'}) do
 		local header = BlocksFrame[headerName]
-		F.SetFS(header.Text, C.Assets.Fonts.Bold, 13, nil, nil, nil, 'THICK')
+		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
 	end
 
 	do
 		local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
-		F.SetFS(header.Text, C.Assets.Fonts.Bold, 13, nil, nil, nil, 'THICK')
+		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
 	end
 
 	do
 		local header = WORLD_QUEST_TRACKER_MODULE.Header
-		F.SetFS(header.Text, C.Assets.Fonts.Bold, 13, nil, nil, nil, 'THICK')
+		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
 	end
 
 	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
