@@ -336,6 +336,7 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
+	self.bg:SetBackdropColor(0, 0, 0, .75)
 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	if self.bg.__shadow then
 		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
@@ -433,7 +434,7 @@ function TOOLTIP:OnLogin()
 		self:Hide()
 	end
 
-	GameTooltip_OnTooltipAddMoney = F.Dummy
+	SetTooltipMoney = F.Dummy
 
 	TOOLTIP:SetTooltipFonts()
 	TOOLTIP:ReskinTooltipIcons()
