@@ -493,9 +493,9 @@ do
 		return fs
 	end
 
-	function F.SetFS(object, font, size, flag, text, colour, shadow, anchor, x, y)
+	function F.SetFS(object, font, size, flag, text, colour, shadow)
 		if type(font) == 'table' then
-			object:SetFont(font[1], font[2], font[3])
+			object:SetFont(font[1], font[2], font[3] or nil)
 		else
 			object:SetFont(font, size, flag and 'OUTLINE')
 		end
@@ -532,11 +532,7 @@ do
 			object:SetShadowColor(0, 0, 0, 0)
 		end
 
-		if anchor and x and y then
-			object:SetPoint(anchor, x, y)
-		else
-			object:SetPoint('CENTER', 1, 0)
-		end
+
 	end
 
 	-- GameTooltip
@@ -922,11 +918,11 @@ do
 	end
 
 	local function Menu_OnMouseUp(self)
-		self.bg:SetBackdropColor(0, 0, 0)
+		self.bg:SetBackdropColor(0, 0, 0, .6)
 	end
 
 	local function Menu_OnMouseDown(self)
-		self.bg:SetBackdropColor(C.r, C.g, C.b)
+		self.bg:SetBackdropColor(C.r, C.g, C.b, .2)
 	end
 
 	function F:ReskinMenuButton()
@@ -1877,7 +1873,7 @@ do
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
 
-		F.UpdateColors()
+		--F.UpdateColors()
 	end
 
 	local function cancelPicker()

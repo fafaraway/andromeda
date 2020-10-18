@@ -13,7 +13,7 @@ local function reskinChatBubble(chatbubble)
 
 		frame:SetBackdrop(nil)
 		frame.Tail:SetAlpha(0)
-		frame.String:SetFont(C.Assets.Fonts.Chat, 16)
+		--frame.String:SetFont(C.Assets.Fonts.Chat, 16)
 	end
 
 	chatbubble.styled = true
