@@ -112,7 +112,7 @@ function CHAT:ChatCopy_Create()
 	frame.close = CreateFrame('Button', nil, frame, 'UIPanelCloseButton')
 	frame.close:SetPoint('TOPRIGHT', frame)
 
-	local scrollArea = CreateFrame('ScrollFrame', 'ChatCopyScrollFrame', frame, 'UIPanelScrollFrameTemplate')
+	local scrollArea = CreateFrame('ScrollFrame', 'ChatCopyScrollFrame', frame, 'UIPanelScrollFrameTemplate', 'BackdropTemplate')
 	scrollArea:SetPoint('TOPLEFT', 10, -30)
 	scrollArea:SetPoint('BOTTOMRIGHT', -28, 10)
 

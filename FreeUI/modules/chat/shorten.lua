@@ -64,7 +64,7 @@ function CHAT:UpdateChannelNames(text, ...)
 
 	-- Remove brackets from player name
 	text = gsub(text, '|Hplayer:(.-)|h%[(.-)%]|h', FormatPlayerName)
-	text = gsub(text, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayerName)
+	--text = gsub(text, '(|HBNplayer:%S-|k:)(%d-)(:%S-|h)%[(%S-)%](|?h?)(:?)', FormatBNPlayerName)
 
 	-- Remove brackets from item and spell links
 	-- text = gsub(text, '|r|h:(.+)|cff(.+)|H(.+)|h%[(.+)%]|h|r', '|r|h:%1%4')
