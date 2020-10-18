@@ -53,10 +53,7 @@ secondErrorFrame:Hide()
 secondErrorFrame:SetFrameStrata('TOOLTIP')
 secondErrorFrame:SetFrameLevel(30)
 
-firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Regular, 14, nil, '', 'BLUE', 'THICK')
-firstErrorFrame.text:SetPoint('TOP', UIParent, 0, -80)
-secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Regular, 14, nil, '', 'BLUE', 'THICK')
-secondErrorFrame.text:SetPoint('TOP', UIParent, 0, -96)
+
 
 local function OnEvent(_, _, msg)
 	if ignoredList[msg] and InCombatLockdown() then return end
@@ -74,6 +71,11 @@ end
 
 
 function BLIZZARD:ErrorsFrame()
+	firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Regular, 14, nil, '', 'BLUE', 'THICK')
+	firstErrorFrame.text:SetPoint('TOP', UIParent, 0, -80)
+	secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Regular, 14, nil, '', 'BLUE', 'THICK')
+	secondErrorFrame.text:SetPoint('TOP', UIParent, 0, -96)
+
 	if FreeDB.blizzard.concise_errors then
 		UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
 		F:RegisterEvent('UI_ERROR_MESSAGE', OnEvent)
