@@ -560,12 +560,12 @@ C.CharacterSettings = {
 	['quest'] = {
 		['enable_quest'] = true,
 			['tracker_scale'] = 1,
-			['quest_level'] = true,
 			['reward_highlight'] = true,
 			['extra_button'] = true,
-			['quest_progress'] = false,
-			['complete_ring'] = true,
 			['quick_quest'] = false,
+			['quest_notification'] = true,
+				['quest_progress'] = true,
+				['only_complete_ring'] = true,
 	},
 
 	['aura'] = {
@@ -1268,7 +1268,7 @@ f:SetScript('OnEvent', function(self, _, addon)
 	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
 	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
-	F:UpdateColors()
+	--F:UpdateColors()
 
 	self:UnregisterAllEvents()
 end)

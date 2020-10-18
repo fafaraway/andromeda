@@ -1,35 +1,45 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F:GetModule('QUEST')
+local QUEST = F.QUEST
 
 
-local completedQuest, initComplete = {}
 local strmatch, strfind, gsub, format = string.match, string.find, string.gsub, string.format
-local mod, tonumber, pairs, floor = mod, tonumber, pairs, math.floor
+local wipe, mod, tonumber, pairs, floor = wipe, mod, tonumber, pairs, math.floor
+local IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage = IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage
+local C_QuestLog_GetInfo = C_QuestLog.GetInfo
+local C_QuestLog_IsComplete = C_QuestLog.IsComplete
+local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
+local C_QuestLog_GetQuestTagInfo = C_QuestLog.GetQuestTagInfo
+local C_QuestLog_GetTitleForQuestID = C_QuestLog.GetTitleForQuestID
+local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
+local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
+local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
-local QUEST_COMPLETE, LE_QUEST_TAG_TYPE_PROFESSION, LE_QUEST_FREQUENCY_DAILY = QUEST_COMPLETE, LE_QUEST_TAG_TYPE_PROFESSION, LE_QUEST_FREQUENCY_DAILY
+local QUEST_COMPLETE = QUEST_COMPLETE
+local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
+local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
-local function acceptText(link, daily)
+local debugMode = false
+local completedQuest, initComplete = {}
+
+local function acceptText(title, daily)
 	if daily then
-		return format('%s [%s]%s', L['QUEST_ACCEPT'], DAILY, link)
+		return format('%s: [%s]%s', L['QUEST_ACCEPT'], DAILY, title)
 	else
-		return format('%s %s', L['QUEST_ACCEPT'], link)
+		return format('%s: %s', L['QUEST_ACCEPT'], title)
 	end
 end
 
-local function completeText(link)
-	if FreeDB.quest.complete_ring then
-		PlaySound(soundKitID, 'Master')
-	end
-
-	return format('%s %s', link, QUEST_COMPLETE)
+local function completeText(title)
+	PlaySound(soundKitID, 'Master')
+	return format('%s %s', title, QUEST_COMPLETE)
 end
 
 local function sendQuestMsg(msg)
-	if C.isDeveloper then F.Print(msg) end
+	if FreeDB.quest.only_complete_ring then return end
 
-	if not FreeDB.quest.quest_progress then return end
-
-	if IsPartyLFG() then
+	if debugMode and C.isDeveloper then
+		print(msg)
+	elseif IsPartyLFG() then
 		SendChatMessage(msg, 'INSTANCE_CHAT')
 	elseif IsInRaid() then
 		SendChatMessage(msg, 'RAID')
@@ -57,6 +67,7 @@ local questMatches = {
 
 function QUEST:FindQuestProgress(_, msg)
 	if not FreeDB.quest.quest_progress then return end
+	if FreeDB.quest.only_complete_ring then return end
 
 	for _, pattern in pairs(questMatches) do
 		if strmatch(msg, pattern) then
@@ -74,54 +85,56 @@ function QUEST:FindQuestProgress(_, msg)
 	end
 end
 
-function QUEST:FindQuestAccept(questLogIndex, questID)
-	local link = GetQuestLink(questID)
-	local frequency = select(7, GetQuestLogTitle(questLogIndex))
-	if link then
-		local tagID, _, worldQuestType = GetQuestTagInfo(questID)
-		if tagID == 109 or worldQuestType == LE_QUEST_TAG_TYPE_PROFESSION then return end
-		sendQuestMsg(acceptText(link, frequency == LE_QUEST_FREQUENCY_DAILY))
+function QUEST:FindQuestAccept(questID)
+	local tagInfo = C_QuestLog_GetQuestTagInfo(questID)
+	if tagInfo and tagInfo.worldQuestType == LE_QUEST_TAG_TYPE_PROFESSION then return end
+
+	local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
+	if questLogIndex then
+		local info = C_QuestLog_GetInfo(questLogIndex)
+		if info then
+			sendQuestMsg(acceptText(info.title, info.frequency == LE_QUEST_FREQUENCY_DAILY))
+		end
 	end
 end
 
 function QUEST:FindQuestComplete()
-	for i = 1, GetNumQuestLogEntries() do
-		local _, _, _, _, _, isComplete, _, questID = GetQuestLogTitle(i)
-		local link = GetQuestLink(questID)
-		local worldQuest = select(3, GetQuestTagInfo(questID))
-		if link and isComplete and not completedQuest[questID] and not worldQuest then
+	for i = 1, C_QuestLog_GetNumQuestLogEntries() do
+		local questID = C_QuestLog_GetQuestIDForLogIndex(i)
+		local title = C_QuestLog_GetTitleForQuestID(questID)
+		local isComplete = C_QuestLog_IsComplete(questID)
+		local isWorldQuest = C_QuestLog_IsWorldQuest(questID)
+		if title and isComplete and not completedQuest[questID] and not isWorldQuest then
 			if initComplete then
-				sendQuestMsg(completeText(link))
-			else
-				initComplete = true
+				sendQuestMsg(completeText(title))
 			end
 			completedQuest[questID] = true
 		end
 	end
+	initComplete = true
 end
 
 function QUEST:FindWorldQuestComplete(questID)
-	if QuestUtils_IsQuestWorldQuest(questID) then
-		local link = GetQuestLink(questID)
-		if link and not completedQuest[questID] then
-			sendQuestMsg(completeText(link))
+	if C_QuestLog_IsWorldQuest(questID) then
+		local title = C_QuestLog_GetTitleForQuestID(questID)
+		if title and not completedQuest[questID] then
+			sendQuestMsg(completeText(title))
 			completedQuest[questID] = true
 		end
 	end
 end
 
-function QUEST:QuestNotifier()
-	--if FreeDB.quest.quest_progress then
-		self:FindQuestComplete()
-		F:RegisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
-		F:RegisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)
-		F:RegisterEvent('QUEST_TURNED_IN', self.FindWorldQuestComplete)
-		F:RegisterEvent('UI_INFO_MESSAGE', self.FindQuestProgress)
-	-- else
-	-- 	wipe(completedQuest)
-	-- 	F:UnregisterEvent('QUEST_ACCEPTED', self.FindQuestAccept)
-	-- 	F:UnregisterEvent('QUEST_LOG_UPDATE', self.FindQuestComplete)
-	-- 	F:UnregisterEvent('QUEST_TURNED_IN', self.FindWorldQuestComplete)
-	-- 	F:UnregisterEvent('UI_INFO_MESSAGE', self.FindQuestProgress)
-	-- end
+function QUEST:QuestNotification()
+	if FreeDB.quest.quest_notification then
+		F:RegisterEvent('QUEST_ACCEPTED', QUEST.FindQuestAccept)
+		F:RegisterEvent('QUEST_LOG_UPDATE', QUEST.FindQuestComplete)
+		F:RegisterEvent('QUEST_TURNED_IN', QUEST.FindWorldQuestComplete)
+		F:RegisterEvent('UI_INFO_MESSAGE', QUEST.FindQuestProgress)
+	else
+		wipe(completedQuest)
+		F:UnregisterEvent('QUEST_ACCEPTED', QUEST.FindQuestAccept)
+		F:UnregisterEvent('QUEST_LOG_UPDATE', QUEST.FindQuestComplete)
+		F:UnregisterEvent('QUEST_TURNED_IN', QUEST.FindWorldQuestComplete)
+		F:UnregisterEvent('UI_INFO_MESSAGE', QUEST.FindQuestProgress)
+	end
 end
