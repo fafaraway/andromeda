@@ -317,30 +317,40 @@ end
 
 --[[ Alternative power ]]
 
-local function altPowerOnEnter(altPower)
-	if (not altPower:IsVisible()) then return end
+local function AltPowerOnEnter(self)
+	if (not self:IsVisible()) then return end
 
-	GameTooltip:SetOwner(altPower, 'ANCHOR_BOTTOMRIGHT')
-	altPower:UpdateTooltip()
+	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
+	self:UpdateTooltip()
 end
 
-local function UpdateTooltip(altPower)
-	local value = altPower:GetValue()
-	local min, max = altPower:GetMinMaxValues()
-	GameTooltip:SetText(altPower.powerName, 1, 1, 1)
-	GameTooltip:AddLine(altPower.powerTooltip, nil, nil, nil, true)
-	GameTooltip:AddLine(format('\n%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
+local function AltPowerUpdateTooltip(self)
+	local value = self:GetValue()
+	local min, max = self:GetMinMaxValues()
+	local name, tooltip = GetUnitPowerBarStringsByID(self.__barID)
+	GameTooltip:SetText(name or '', 1, 1, 1)
+	GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
+	GameTooltip:AddLine(format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
 	GameTooltip:Show()
 end
 
-local function PostUpdateAltPower(element, _, cur, _, max)
+local function PostUpdateAltPower(self, unit, cur, min, max)
+	local parent = self.__owner
+
 	if cur and max then
-		local self = element.__owner
-		local value = self.AlternativePowerValue
+		local value = parent.AlternativePowerValue
 		local r, g, b = F.ColorGradient(cur / max, unpack(oUF.colors.smooth))
 
-		element:SetStatusBarColor(r, g, b)
+		self:SetStatusBarColor(r, g, b)
 		value:SetTextColor(r, g, b)
+	end
+
+	if self:IsShown() then
+		parent.classPowerBarHolder:ClearAllPoints()
+		parent.classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+	else
+		parent.classPowerBarHolder:ClearAllPoints()
+		parent.classPowerBarHolder:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 0, -3)
 	end
 end
 
@@ -355,18 +365,8 @@ function UNITFRAME:AddAlternativePowerBar(self)
 	F:SmoothBar(altPower)
 	altPower.bg = F.CreateBDFrame(altPower)
 
-	altPower.UpdateTooltip = UpdateTooltip
-	altPower:SetScript('OnEnter', altPowerOnEnter)
-
-	altPower:HookScript('OnShow', function()
-		self.classPowerBarHolder:ClearAllPoints()
-		self.classPowerBarHolder:SetPoint('TOPLEFT', altPower, 'BOTTOMLEFT', 0, -3)
-	end)
-
-	altPower:HookScript('OnHide', function()
-		self.classPowerBarHolder:ClearAllPoints()
-		self.classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
-	end)
+	altPower.UpdateTooltip = AltPowerUpdateTooltip
+	altPower:SetScript('OnEnter', AltPowerOnEnter)
 
 	self.AlternativePower = altPower
 	self.AlternativePower.PostUpdate = PostUpdateAltPower
@@ -407,11 +407,11 @@ function UNITFRAME.PostCreateIcon(element, button)
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	button.count = F.CreateFS(button, C.Assets.Fonts.Cooldown, 12, nil, nil, nil, true)
+	button.count = F.CreateFS(button, C.Assets.Fonts.Cooldown, 13, nil, nil, nil, true)
 	button.count:ClearAllPoints()
 	button.count:SetPoint('TOPRIGHT', button, 2, 4)
 
-	button.timer = F.CreateFS(button, C.Assets.Fonts.Cooldown, 12, nil, nil, nil, true)
+	button.timer = F.CreateFS(button, C.Assets.Fonts.Cooldown, 13, nil, nil, nil, true)
 	button.timer:ClearAllPoints()
 	button.timer:SetPoint('BOTTOMLEFT', button, 2, -4)
 
@@ -1095,56 +1095,55 @@ end
 
 --[[ Class power ]]
 
-function UNITFRAME.PostUpdateClassPower(element, cur, max, diff, powerType)
-	local maxWidth, gap = FreeDB.unitframe.player_width, 3
+local lastBarColor = {
+	DRUID = {161 / 255, 92 / 255, 255 / 255},
+	MAGE = {5 / 255, 96 / 255, 250 / 255},
+	MONK = {0 / 255, 143 / 255, 247 / 255},
+	PALADIN = {255 / 255, 26 / 255, 48 / 255},
+	ROGUE = {161 / 255, 92 / 255, 255 / 255},
+	WARLOCK = {255 / 255, 26 / 255, 48 / 255}
+  }
 
-	if not cur or cur == 0 then
-		for i = 1, 6 do
-			element[i].bg:Hide()
-		end
-	else
-		for i = 1, max do
-			element[i].bg:Show()
-		end
-	end
+local function PostUpdateClassPower(element, cur, max, diff, powerType)
+	local maxWidth, gap = FreeDB.unitframe.player_width, 3
 
 	if diff then
 		for i = 1, max do
 			element[i]:SetWidth((maxWidth - (max-1)*gap)/max)
 		end
-
-		for i = max + 1, 6 do
-			element[i].bg:Hide()
-		end
 	end
 
+	if max then
+		local LastBar = element[max]
+		local r, g, b = unpack(lastBarColor[C.MyClass])
+		LastBar:SetStatusBarColor(r, g, b)
+	end
+end
 
-end -- #TODO need a better way to update classpowerbar anchor
-
-function UNITFRAME.UpdateClassPowerColor(element)
-	if UnitHasVehicleUI('player') then return end
-
-	local colors = FreeADB.colors.class_power
+local function UpdateClassPowerColor(element)
 	local r, g, b
 
-	if C.MyClass == 'MONK' then -- Chi Orbs
-		r, g, b = colors.chi_orbs.r, colors.chi_orbs.g, colors.chi_orbs.b
-	elseif C.MyClass == 'WARLOCK' then -- Soul Shards
-		r, g, b = colors.soul_shards.r, colors.soul_shards.g, colors.soul_shards.b
-	elseif C.MyClass == 'PALADIN' then -- Holy Power
-		r, g, b = colors.holy_power.r, colors.holy_power.g, colors.holy_power.b
-	elseif C.MyClass == 'MAGE' then -- Arcane Charges
-		r, g, b = colors.arcane_charges.r, colors.arcane_charges.g, colors.arcane_charges.b
-	elseif C.MyClass == 'ROGUE' or C.MyClass == 'DRUID' then -- Combo Points
-		r, g, b = colors.combo_points.r, colors.combo_points.g, colors.combo_points.b
-	else
-		r, g, b = 1, 1, 1
+	if not UnitHasVehicleUI("player") then
+		if C.MyClass == 'MONK' then -- Chi Orbs
+			r, g, b = 0, 204 / 255, 153 / 255
+		elseif C.MyClass == 'WARLOCK' then -- Soul Shards
+			r, g, b = 161 / 255, 92 / 255, 255 / 255
+		elseif C.MyClass == 'PALADIN' then -- Holy Power
+			r, g, b = 255 / 255, 255 / 255, 125 / 255
+		elseif C.MyClass == 'MAGE' then -- Arcane Charges
+			r, g, b = 25 / 255, 182 / 255, 255 / 255
+		elseif C.MyClass == 'ROGUE' then -- Combo Points
+			r, g, b = 198 / 255, 178 / 255, 95 / 255
+		elseif C.MyClass == 'DRUID' then -- Combo Points
+			r, g, b = 255 / 255, 26 / 255, 48 / 255
+		else
+			r, g, b = 1, 1, 1
+		end
 	end
 
 	for index = 1, #element do
 		local Bar = element[index]
 		Bar:SetStatusBarColor(r, g, b)
-		Bar.bg:SetVertexColor(r * 1/3, g * 1/3, b * 1/3, 0)
 	end
 end
 
@@ -1163,7 +1162,7 @@ function UNITFRAME:OnUpdateRunes(elapsed)
 	end
 end
 
-function UNITFRAME.PostUpdateRunes(element, runemap)
+local function PostUpdateRunes(element, runemap)
 	for index, runeID in next, runemap do
 		local rune = element[index]
 		local start, duration, runeReady = GetRuneCooldown(runeID)
@@ -1173,10 +1172,26 @@ function UNITFRAME.PostUpdateRunes(element, runemap)
 				rune:SetScript('OnUpdate', nil)
 				if rune.timer then rune.timer:SetText(nil) end
 			elseif start then
-				rune:SetAlpha(.6)
+				rune:SetAlpha(.3)
 				rune.runeDuration = duration
 				rune:SetScript('OnUpdate', UNITFRAME.OnUpdateRunes)
 			end
+		end
+	end
+end
+
+local function UpdateRunesColor(element)
+	local spec = GetSpecialization() or 0
+
+	for index = 1, #element do
+		if spec == 1 then -- blood
+			element[index]:SetStatusBarColor(177/255, 40/255, 45/255)
+		elseif spec == 2 then -- frost
+			element[index]:SetStatusBarColor(42/255, 138/255, 186/255)
+		elseif spec == 3 then
+			element[index]:SetStatusBarColor(101/255, 186/255, 112/255)
+		else
+			element[index]:SetStatusBarColor(1, 1, 1)
 		end
 	end
 end
@@ -1194,18 +1209,13 @@ function UNITFRAME:AddClassPowerBar(self)
 		bars[i]:SetStatusBarTexture(C.Assets.statusbar_tex)
 		bars[i]:SetFrameLevel(self:GetFrameLevel() + 5)
 
-		F.CreateBDFrame(bars[i], 0, true)
+		F.SetBD(bars[i])
 
 		if i == 1 then
 			bars[i]:SetPoint('BOTTOMLEFT')
 		else
 			bars[i]:SetPoint('LEFT', bars[i-1], 'RIGHT', gap, 0)
 		end
-
-		bars[i].bg = self.classPowerBarHolder:CreateTexture(nil, 'BACKGROUND')
-		bars[i].bg:SetAllPoints(bars[i])
-		bars[i].bg:SetTexture(C.Assets.bd_tex)
-		bars[i].bg.multiplier = .25
 
 		if C.MyClass == 'DEATHKNIGHT' and FreeDB.unitframe.runes_timer then
 			bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, nil, '')
@@ -1215,11 +1225,12 @@ function UNITFRAME:AddClassPowerBar(self)
 	if C.MyClass == 'DEATHKNIGHT' then
 		bars.colorSpec = true
 		bars.sortOrder = 'asc'
-		bars.PostUpdate = UNITFRAME.PostUpdateRunes
+		bars.PostUpdate = PostUpdateRunes
+		bars.PostUpdateColor = UpdateRunesColor
 		self.Runes = bars
 	else
-		bars.PostUpdate = UNITFRAME.PostUpdateClassPower
-		bars.UpdateColor = UNITFRAME.UpdateClassPowerColor
+		bars.PostUpdate = PostUpdateClassPower
+		bars.UpdateColor = UpdateClassPowerColor
 		self.ClassPower = bars
 	end
 end
