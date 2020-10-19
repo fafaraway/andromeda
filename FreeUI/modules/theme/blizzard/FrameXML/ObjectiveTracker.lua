@@ -258,18 +258,8 @@ tinsert(C.BlizzThemes, function()
 
 	F.SetFS(ot.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
 
-	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader'}) do
+	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader', 'CampaignQuestHeader'}) do
 		local header = BlocksFrame[headerName]
-		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
-	end
-
-	do
-		local header = BONUS_OBJECTIVE_TRACKER_MODULE.Header
-		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
-	end
-
-	do
-		local header = WORLD_QUEST_TRACKER_MODULE.Header
 		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
 	end
 
@@ -281,6 +271,13 @@ tinsert(C.BlizzThemes, function()
 	end)
 
 	hooksecurefunc(QUEST_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
+		if not block.headerStyled then
+			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
+			block.headerStyled = true
+		end
+	end)
+
+	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
 		if not block.headerStyled then
 			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
 			block.headerStyled = true
