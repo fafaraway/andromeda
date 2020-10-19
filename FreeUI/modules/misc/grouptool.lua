@@ -479,7 +479,7 @@ function MISC:GroupTool()
 		end
 	end)
 	header:HookScript('OnShow', function(self)
-		self:SetBackdropColor(0, 0, 0, .5)
+		self:SetBackdropColor(0, 0, 0, .6)
 		self:SetBackdropBorderColor(0, 0, 0, 1)
 	end)
 

@@ -1,9 +1,8 @@
 local F, C = unpack(select(2, ...))
-local MISC = F:GetModule('MISC')
+local TOOLTIP = F.TOOLTIP
 
--- #TODO
-local select, mod = select, mod
-local strmatch, strfind, strsplit, format = string.match, string.find, string.split, string.format
+
+local mod, strmatch, strfind, format = mod, strmatch, strfind, format
 local GetItemInfo, SetItemButtonTextureVertexColor = GetItemInfo, SetItemButtonTextureVertexColor
 local GetCurrentGuildBankTab, GetGuildBankItemInfo, GetGuildBankItemLink = GetCurrentGuildBankTab, GetGuildBankItemInfo, GetGuildBankItemLink
 local GetMerchantNumItems, GetMerchantItemInfo, GetMerchantItemLink = GetMerchantNumItems, GetMerchantItemInfo, GetMerchantItemLink
@@ -29,16 +28,20 @@ end
 local function IsAlreadyKnown(link, index)
 	if not link then return end
 
-	if strmatch(link, 'battlepet:') then
-		local speciesID = select(2, strsplit(':', link))
-		return isPetCollected(speciesID)
-	elseif strmatch(link, 'item:') then
-		local name, _, _, _, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
+	local linkType, linkID = strmatch(link, '|H(%a+):(%d+)')
+	linkID = tonumber(linkID)
+
+	if linkType == 'battlepet' then
+		return isPetCollected(linkID)
+	elseif linkType == 'item' then
+		local name, _, _, level, _, _, _, _, _, _, _, itemClassID = GetItemInfo(link)
 		if not name then return end
 
 		if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
 			local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
 			return isPetCollected(speciesID)
+		elseif TOOLTIP.ConduitData[linkID] and TOOLTIP.ConduitData[linkID] >= level then
+			return true
 		else
 			if knowns[link] then return true end
 			if not knowables[itemClassID] then return end

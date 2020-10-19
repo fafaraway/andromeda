@@ -4,11 +4,12 @@
 	<Script file="challenges.lua"/>
 	<Script file="character.lua"/>
 	<Script file="collections.lua"/>
-	<Script file="color.lua"/>
+	<Script file="colors.lua"/>
 	<Script file="colorpicker.lua"/>
 	<Script file="errors.lua"/>
 	<Script file="fixes.lua"/>
 	<Script file="friends.lua"/>
+	<Script file="fonts.lua"/>
 	<Script file="loot.lua"/>
 	<Script file="mail.lua"/>
 	<Script file="orderhall.lua"/>

@@ -48,26 +48,31 @@ end
 
 function CHAT:UpdateTabColors(selected)
 	if self.glow:IsShown() then
-		if isBattleNet then
+		if self.whisperIndex == 1 then
+			self.Text:SetTextColor(1, .5, 1)
+		elseif self.whisperIndex == 2 then
 			self.Text:SetTextColor(0, 1, .96)
 		else
-			self.Text:SetTextColor(1, .5, 1)
+			self.Text:SetTextColor(1, .8, 0)
 		end
 	elseif selected then
 		self.Text:SetTextColor(1, .8, 0)
+		self.whisperIndex = 0
 	else
 		self.Text:SetTextColor(.5, .5, .5)
+		self.whisperIndex = 0
 	end
 end
 
 function CHAT:UpdateTabEventColors(event)
 	local tab = _G[self:GetName()..'Tab']
+	local selected = GeneralDockManager.selected:GetID() == tab:GetID()
 	if event == 'CHAT_MSG_WHISPER' then
-		isBattleNet = nil
-		FCFTab_UpdateColors(tab)
+		tab.whisperIndex = 1
+		CHAT.UpdateTabColors(tab, selected)
 	elseif event == 'CHAT_MSG_BN_WHISPER' then
-		isBattleNet = true
-		FCFTab_UpdateColors(tab)
+		tab.whisperIndex = 2
+		CHAT.UpdateTabColors(tab, selected)
 	end
 end
 

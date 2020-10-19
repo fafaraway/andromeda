@@ -34,7 +34,7 @@ function ACTIONBAR:CreateExtrabar()
 	local zoneFrame = CreateFrame('Frame', 'FreeUI_ActionBarZone', UIParent)
 	zoneFrame:SetWidth(size + 2*padding)
 	zoneFrame:SetHeight(size + 2*padding)
-	zoneFrame.Pos = {'CENTER', UIParent, 'CENTER', 0, 240}
+	zoneFrame.Pos = {'CENTER', UIParent, 'CENTER', 0, 250}
 	zoneFrame.mover = F.Mover(zoneFrame, L.GUI.MOVER.ZONE_ABILITY, 'ZoneAbility', zoneFrame.Pos)
 
 	ZoneAbilityFrame:SetParent(zoneFrame)

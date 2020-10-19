@@ -118,13 +118,13 @@ function AURA:UpdateAuras(button, index)
 		if filter == 'HARMFUL' then
 			local color = DebuffTypeColor[debuffType or 'none']
 			button:SetBackdropBorderColor(color.r, color.g, color.b)
-			if button.Shadow then
-				button.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
+			if button.__shadow then
+				button.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
 			end
 		else
 			button:SetBackdropBorderColor(0, 0, 0)
-			if button.Shadow then
-				button.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
+			if button.__shadow then
+				button.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
 			end
 		end
 

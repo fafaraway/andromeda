@@ -4,8 +4,19 @@ local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
 
-local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
+local strmatch, tonumber, pairs, unpack, rad = string.match, tonumber, pairs, unpack, math.rad
+local UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit = UnitThreatSituation, UnitIsTapDenied, UnitPlayerControlled, UnitIsUnit
+local UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor = UnitReaction, UnitIsConnected, UnitIsPlayer, UnitSelectionColor
+local GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown = GetInstanceInfo, UnitClassification, UnitExists, InCombatLockdown
+local C_Scenario_GetInfo, C_Scenario_GetStepInfo, C_MythicPlus_GetCurrentAffixes = C_Scenario.GetInfo, C_Scenario.GetStepInfo, C_MythicPlus.GetCurrentAffixes
+local UnitGUID, GetPlayerInfoByGUID, Ambiguate = UnitGUID, GetPlayerInfoByGUID, Ambiguate
+local SetCVar, UIFrameFadeIn, UIFrameFadeOut = SetCVar, UIFrameFadeIn, UIFrameFadeOut
+local IsInRaid, IsInGroup, UnitName = IsInRaid, IsInGroup, UnitName
+local GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned = GetNumGroupMembers, GetNumSubgroupMembers, UnitGroupRolesAssigned
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
+local GetSpellCooldown, GetTime = GetSpellCooldown, GetTime
+local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
+local INTERRUPTED = INTERRUPTED
 
 
 --[[ CVars ]]
@@ -40,10 +51,6 @@ function NAMEPLATE:UpdatePlateOccludedAlpha()
 	_G.SetCVar('nameplateOccludedAlphaMult', FreeDB.nameplate.occluded_alpha)
 end
 
-function NAMEPLATE:UpdatePlateDistance()
-	_G.SetCVar('nameplateMaxDistance', FreeDB.nameplate.max_distance)
-end
-
 function NAMEPLATE:UpdatePlateVerticalSpacing()
 	_G.SetCVar('nameplateOverlapV', FreeDB.nameplate.vertical_spacing)
 end
@@ -60,8 +67,6 @@ end
 
 function NAMEPLATE:SetupCVars()
 	NAMEPLATE:PlateInsideView()
-
-	NAMEPLATE:UpdatePlateDistance()
 
 	NAMEPLATE:UpdatePlateVerticalSpacing()
 	NAMEPLATE:UpdatePlateHorizontalSpacing()
@@ -471,6 +476,17 @@ function NAMEPLATE:AddInterruptInfo()
 end
 
 
+-- WidgetContainer
+function NAMEPLATE:AddWidgetContainer(self)
+	local widgetContainer = CreateFrame('Frame', nil, self, 'UIWidgetContainerTemplate')
+	widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
+	--widgetContainer:SetScale(1/FreeADB.appearance.ui_scale) -- need reviewed
+	widgetContainer:Hide()
+
+	self.WidgetContainer = widgetContainer
+end
+
+
 --[[ Create plate ]]
 
 local platesList = {}
@@ -491,7 +507,7 @@ local function CreateNameplateStyle(self)
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetAllPoints()
 	health:SetStatusBarTexture(C.Assets.statusbar_tex)
-	health.backdrop = F.CreateBDFrame(health, nil, true)
+	health.backdrop = F.SetBD(health)
 	F:SmoothBar(health)
 
 	self.Health = health
@@ -507,6 +523,7 @@ local function CreateNameplateStyle(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddAuras(self)
+	NAMEPLATE:AddWidgetContainer(self)
 
 	platesList[self] = self:GetName()
 end
@@ -602,17 +619,19 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = self
 		end
-		self.npcID = F.GetNPCID(self.unitGUID)
 		self.isPlayer = UnitIsPlayer(unit)
 
-		local blizzPlate = self:GetParent().UnitFrame
-		self.widget = blizzPlate.WidgetContainer
+		self.npcID = F.GetNPCID(self.unitGUID)
+		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
+		self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), NAMEPLATE.Widget_DefaultLayout, nil, unit)
 
 		NAMEPLATE.RefreshPlateType(self, unit)
 	elseif event == 'NAME_PLATE_UNIT_REMOVED' then
 		if self.unitGUID then
 			guidToPlate[self.unitGUID] = nil
 		end
+		self.npcID = nil
+		self.WidgetContainer:UnregisterForWidgetSet()
 	end
 
 	if event ~= 'NAME_PLATE_UNIT_REMOVED' then

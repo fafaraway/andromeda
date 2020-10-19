@@ -3,18 +3,25 @@ local F, C = unpack(select(2, ...))
 local select, pairs = select, pairs
 
 local function reskinQuestIcon(button)
-	if not button or button.styled then return end
+	if not button then return end
 
-	button:SetNormalTexture("")
-	button:SetPushedTexture("")
-	button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-	local icon = button.icon or button.Icon
-	if icon then
-		F.ReskinIcon(icon, true)
-		icon:SetInside()
+	if not button.styled then
+		button:SetSize(24, 24)
+		button:SetNormalTexture("")
+		button:SetPushedTexture("")
+		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+		local icon = button.icon or button.Icon
+		if icon then
+			button.bg = F.ReskinIcon(icon, true)
+			icon:SetInside()
+		end
+
+		button.styled = true
 	end
 
-	button.styled = true
+	if button.bg then
+		button.bg:SetFrameLevel(0)
+	end
 end
 
 local function reskinQuestIcons(_, block)
@@ -244,4 +251,96 @@ tinsert(C.BlizzThemes, function()
 			reskinMinimizeButton(minimize)
 		end
 	end
+
+	-- Fonts
+	local ot = ObjectiveTrackerFrame
+	local BlocksFrame = ot.BlocksFrame
+
+	F.SetFS(ot.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
+
+	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader', 'CampaignQuestHeader'}) do
+		local header = BlocksFrame[headerName]
+		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
+	end
+
+	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
+		if not block.headerStyled then
+			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
+			block.headerStyled = true
+		end
+	end)
+
+	hooksecurefunc(QUEST_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
+		if not block.headerStyled then
+			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
+			block.headerStyled = true
+		end
+	end)
+
+	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
+		if not block.headerStyled then
+			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
+			block.headerStyled = true
+		end
+	end)
+
+
+	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, 'AddObjective', function(_, block)
+		local line = block.currentLine
+
+		local p1, a, p2, x, y = line:GetPoint()
+		line:SetPoint(p1, a, p2, x, y - 4)
+	end)
+
+	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'AddObjective', function(self, block)
+		if block.module == QUEST_TRACKER_MODULE or block.module == ACHIEVEMENT_TRACKER_MODULE then
+			local line = block.currentLine
+
+			local p1, a, p2, x, y = line:GetPoint()
+			line:SetPoint(p1, a, p2, x, y - 4)
+		end
+	end)
+
+	local function fixBlockHeight(block)
+		if block.shouldFix then
+			local height = block:GetHeight()
+
+			if block.lines then
+				for _, line in pairs(block.lines) do
+					if line:IsShown() then
+						height = height + 4
+					end
+				end
+			end
+
+			block.shouldFix = false
+			block:SetHeight(height + 4)
+			block.shouldFix = true
+		end
+	end
+
+	hooksecurefunc('ObjectiveTracker_AddBlock', function(block)
+		if block.lines then
+			for _, line in pairs(block.lines) do
+				if not line.styled then
+					F.SetFS(line.Text, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
+					line.Text:SetSpacing(2)
+
+					if line.Dash then
+						F.SetFS(line.Dash, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
+					end
+
+					line:SetHeight(line.Text:GetHeight())
+
+					line.styled = true
+				end
+			end
+		end
+
+		if not block.styled then
+			block.shouldFix = true
+			hooksecurefunc(block, 'SetHeight', fixBlockHeight)
+			block.styled = true
+		end
+	end)
 end)

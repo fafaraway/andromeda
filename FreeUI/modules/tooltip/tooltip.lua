@@ -336,9 +336,10 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
+	self.bg:SetBackdropColor(0, 0, 0, .75)
 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
-	if self.bg.Shadow then
-		self.bg.Shadow:SetBackdropBorderColor(0, 0, 0, .35)
+	if self.bg.__shadow then
+		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
 	end
 
 	if FreeDB.tooltip.border_color and self.GetItem then
@@ -348,8 +349,8 @@ function TOOLTIP:ReskinTooltip()
 			local color = C.QualityColors[quality or 1]
 			if color then
 				self.bg:SetBackdropBorderColor(color.r, color.g, color.b, .6)
-				if self.bg.Shadow then
-					self.bg.Shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
+				if self.bg.__shadow then
+					self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
 				end
 			end
 		end
@@ -433,7 +434,7 @@ function TOOLTIP:OnLogin()
 		self:Hide()
 	end
 
-	GameTooltip_OnTooltipAddMoney = F.Dummy
+	SetTooltipMoney = F.Dummy
 
 	TOOLTIP:SetTooltipFonts()
 	TOOLTIP:ReskinTooltipIcons()

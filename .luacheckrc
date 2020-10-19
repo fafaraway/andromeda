@@ -4,11 +4,10 @@ unused_args = false
 self = false
 exclude_files = {'libs/'}
 ignore = {
-	'211/F', -- Unused local variable 'F'
-	'211/C',
-	'211/L',
-	'432',	-- Shadowing an upvalue argument
-	'433',	-- Shadowing an upvalue loop variable
+	'2/self', -- unused argument self
+	'2/event', -- unused argument event
+	'3/event', -- unused value event
+	'4', -- shadowing
 	'542', -- An empty if branch
 }
 globals = {

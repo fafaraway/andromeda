@@ -161,7 +161,7 @@ function ACTIONBAR:UpdateHotKey()
 		text = gsub(text, value[1], value[2])
 	end
 
-	if text == _G.RANGE_INDICATOR then
+	if text == RANGE_INDICATOR then
 		hotkey:SetText('')
 	else
 		hotkey:SetText(text)
@@ -218,8 +218,8 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	SetupTexture(highlightTexture, cfg.highlightTexture, 'SetHighlightTexture', button)
 	SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
 
+	-- checkedTexture:SetColorTexture(1, .8, 0, .35)
 	-- highlightTexture:SetColorTexture(1, 1, 1, .25)
-	-- checkedTexture:SetColorTexture(1, .8, 0, .25)
 
 	--cooldown
 	SetupCooldown(cooldown, cfg.cooldown)
@@ -238,7 +238,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	if hotkey then
 		if FreeDB.actionbar.button_hotkey then
 			hotkey:SetParent(overlay)
-			ACTIONBAR.HookHotKey(button)
+			ACTIONBAR:HookHotKey(button)
 			SetupFontString(hotkey, cfg.hotkey)
 		else
 			hotkey:Hide()
@@ -301,7 +301,7 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 	overlay:SetAllPoints()
 	if FreeDB.actionbar.button_hotkey then
 		hotkey:SetParent(overlay)
-		ACTIONBAR.HookHotKey(button)
+		ACTIONBAR:HookHotKey(button)
 		SetupFontString(hotkey, cfg.hotkey)
 	else
 		hotkey:Hide()

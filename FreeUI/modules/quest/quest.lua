@@ -26,33 +26,109 @@ function QUEST:ObjectiveTrackerMover()
 	if tracker:IsMovable() then tracker:SetUserPlaced(true) end
 end
 
-function QUEST:QuestLevel()
-	if not FreeDB.quest.quest_level then return end
 
-	local function Showlevel(_, _, _, title, level, _, isHeader, _, isComplete, frequency, questID)
-		if ENABLE_COLORBLIND_MODE == '1' then return end
+-- Show quest level
+local function QuestLogQuests_GetTitle(displayState, info)
+	local title = info.title;
 
-		for button in pairs(QuestScrollFrame.titleFramePool.activeObjects) do
-			if title and not isHeader and button.questID == questID then
-				local title = '['..level..'] '..title
-				if isComplete then
-					title = '|cffff78ff'..title
-				elseif C_QuestLog_IsQuestReplayable(questID) then
-					title = '|cff00ff00'..title
-				elseif frequency == LE_QUEST_FREQUENCY_DAILY then
-					title = '|cff3399ff'..title
-				end
-				button.Text:SetText(title)
-				button.Text:SetPoint('TOPLEFT', 24, -5)
-				button.Text:SetWidth(205)
-				button.Text:SetWordWrap(false)
-				button.Check:SetPoint('LEFT', button.Text, button.Text:GetWrappedWidth(), 0)
+	if displayState.displayQuestID then
+		title = info.questID..' - '..title;
+	end
+
+	if displayState.showReadyToRecord then
+		if info.readyForTranslation ~= nil then
+			if info.readyForTranslation == false then
+				title = '<Not Ready for Translation> ' .. title;
 			end
 		end
 	end
-	hooksecurefunc('QuestLogQuests_AddQuestButton', Showlevel)
+
+	title = '['..info.difficultyLevel..'] '..title;
+
+	-- If not a header see if any nearby group mates are on this quest
+	local partyMembersOnQuest = QuestUtils_GetNumPartyMembersOnQuest(info.questID);
+
+	if partyMembersOnQuest > 0 then
+		title = '['..partyMembersOnQuest..'] '..title;
+	end
+
+	return title;
 end
 
+local function QuestLogQuests_ShouldShowQuestButton(info)
+	-- If it's not a quest, then it shouldn't show as a quest button
+	if info.isHeader then
+		return false;
+	end
+
+	-- If it is a quest, but its header is collapsed, then it shouldn't show
+	if info.header and info.header.isCollapsed then
+		return false;
+	end
+
+	-- Normal rules about quest visibility.
+	-- NOTE: IsComplete checks should be cached if possible...coming soon...
+	return not info.isTask and not info.isHidden and (not info.isBounty or C_QuestLog.IsComplete(info.questID));
+end
+
+local function QuestLogQuests_BuildSingleQuestInfo(questLogIndex, questInfoContainer, lastHeader)
+	local info = C_QuestLog.GetInfo(questLogIndex);
+	if not info then return end
+
+	questInfoContainer[questLogIndex] = info;
+
+	-- Precompute whether or not the headers should display so that it's easier to add them later.
+	-- We don't care about collapsed states, we only care about the fact that there are any quests
+	-- to display under the header.
+	-- Caveat: Campaign headers will always display, otherwise they wouldn't be added to the quest log!
+	if info.isHeader then
+		lastHeader = info;
+
+		local isCampaign = info.campaignID ~= nil;
+		info.shouldDisplay = isCampaign; -- Always display campaign headers, the rest start as hidden
+	else
+		info.isCalling = C_QuestLog.IsQuestCalling(info.questID);  -- TOOD: Do this in QuestLog? Either way, cached for later use
+
+		if lastHeader and not lastHeader.shouldDisplay then
+			lastHeader.shouldDisplay = info.isCalling or QuestLogQuests_ShouldShowQuestButton(info);
+		end
+
+		-- Make it easy for a quest to look up its header
+		info.header = lastHeader;
+
+		-- Might as well just keep this in Lua
+		if info.isCalling and info.header then
+			info.header.isCalling = true;
+		end
+	end
+
+	return lastHeader;
+end
+
+local function QuestLogQuests_BuildQuestInfoContainer()
+	local questInfoContainer = {};
+	local numEntries = C_QuestLog.GetNumQuestLogEntries();
+	local lastHeader;
+
+	for questLogIndex = 1, numEntries do
+		lastHeader = QuestLogQuests_BuildSingleQuestInfo(questLogIndex, questInfoContainer, lastHeader);
+	end
+
+	return questInfoContainer;
+end
+
+local function QuestLogQuests_BuildInitialDisplayState(poiTable, questInfoContainer)
+	return {
+		questInfoContainer = questInfoContainer,
+		poiTable = poiTable,
+		displayQuestID = GetCVarBool('displayQuestID'),
+		showReadyToRecord = GetCVarBool('showReadyToRecord'),
+		questPOI = GetCVarBool('questPOI'),
+	};
+end
+
+
+-- Highlight high value reward
 local function CreateHighlight(reward)
 	if not QUEST.rewardHighlightFrame then
 		QUEST.rewardHighlightFrame = CreateFrame('Frame', 'QuesterRewardHighlight', QuestInfoRewardsFrame, 'AutoCastShineTemplate')
@@ -106,7 +182,16 @@ end
 function QUEST:OnLogin()
 	self:ObjectiveTrackerMover()
 	self:UpdateTrackerScale()
-	--self:QuestLevel()
-	--self:QuestNotifier()
 	self:QuestRewardHighlight()
+	self:QuestNotification()
+
+	hooksecurefunc('QuestLogQuests_Update', function(poiTable)
+		local questInfoContainer = QuestLogQuests_BuildQuestInfoContainer()
+		local displayState = QuestLogQuests_BuildInitialDisplayState(poiTable, questInfoContainer)
+
+		for button in QuestScrollFrame.titleFramePool:EnumerateActive() do
+			local t = QuestLogQuests_GetTitle(displayState, button.info)
+			button.Text:SetText(QuestUtils_DecorateQuestText(button.questID, t, false, false, true))
+		end
+	end)
 end
