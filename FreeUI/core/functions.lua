@@ -873,6 +873,7 @@ do
 		'BottomRightTex',
 		'RightTex',
 		'MiddleTex',
+		'Center',
 	}
 
 	function F:Reskin(noGlow)
