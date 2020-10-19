@@ -252,20 +252,26 @@ end
 
 --[[ Power ]]
 
-local function PostUpdatePower(power, unit, cur, max, min)
-	local self = power:GetParent()
-	local style = self.unitStyle
-
+local function PostUpdatePower(power, unit, cur, min, max)
 	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
 		power:SetValue(0)
 	end
+end
 
-	if C.MyClass == 'DEMONHUNTER' and style == 'player' and C.isDeveloper then
+local function UpdatePowerColor(power, unit)
+	local style = power.__owner.unitStyle
+	if style ~= 'player' then return end
+
+	local cur = UnitPower(unit)
+	if C.MyClass == 'DEMONHUNTER' and unit == 'player' then
 		local spec = GetSpecialization() or 0
-		if spec == 1 and cur < 15 then
+		if spec ~= 1 then return end
+		if cur < 15 then
 			power:SetStatusBarColor(.5, .5, .5)
-		elseif spec == 1 and cur < 40 then
+		elseif cur < 40 then
 			power:SetStatusBarColor(1, .8, 0)
+		else
+			power:SetStatusBarColor(197/255, 56/255, 48/255)
 		end
 	end
 end
@@ -312,6 +318,7 @@ function UNITFRAME:AddPowerBar(self)
 	end
 
 	self.Power.PostUpdate = PostUpdatePower
+	self.Power.PostUpdateColor = UpdatePowerColor
 end
 
 
@@ -363,7 +370,7 @@ function UNITFRAME:AddAlternativePowerBar(self)
 	altPower:Size(self:GetWidth(), FreeDB.unitframe.alt_power_height)
 	altPower:EnableMouse(true)
 	F:SmoothBar(altPower)
-	altPower.bg = F.CreateBDFrame(altPower)
+	altPower.bg = F.SetBD(altPower)
 
 	altPower.UpdateTooltip = AltPowerUpdateTooltip
 	altPower:SetScript('OnEnter', AltPowerOnEnter)
@@ -1083,13 +1090,9 @@ function UNITFRAME:AddCastBar(self)
 
 	castbar.OnUpdate = OnCastbarUpdate
 	castbar.PostCastStart = PostCastStart
-	castbar.PostChannelStart = PostCastStart
 	castbar.PostCastStop = PostCastStop
-	castbar.PostChannelStop = PostChannelStop
-	castbar.PostCastFailed = PostCastFailed
-	castbar.PostCastInterrupted = PostCastFailed
+	castbar.PostCastFail = PostCastFailed
 	castbar.PostCastInterruptible = PostUpdateInterruptible
-	castbar.PostCastNotInterruptible = PostUpdateInterruptible
 end
 
 
@@ -1099,10 +1102,10 @@ local lastBarColor = {
 	DRUID = {161 / 255, 92 / 255, 255 / 255},
 	MAGE = {5 / 255, 96 / 255, 250 / 255},
 	MONK = {0 / 255, 143 / 255, 247 / 255},
-	PALADIN = {255 / 255, 26 / 255, 48 / 255},
+	PALADIN = {221 / 255, 36 / 255, 62 / 255},
 	ROGUE = {161 / 255, 92 / 255, 255 / 255},
-	WARLOCK = {255 / 255, 26 / 255, 48 / 255}
-  }
+	WARLOCK = {221 / 255, 36 / 255, 62 / 255}
+}
 
 local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	local maxWidth, gap = FreeDB.unitframe.player_width, 3
@@ -1120,7 +1123,7 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	end
 end
 
-local function UpdateClassPowerColor(element)
+local function UpdateClassPowerColor(element) -- this is unnecessary
 	local r, g, b
 
 	if not UnitHasVehicleUI("player") then
@@ -1230,7 +1233,7 @@ function UNITFRAME:AddClassPowerBar(self)
 		self.Runes = bars
 	else
 		bars.PostUpdate = PostUpdateClassPower
-		bars.UpdateColor = UpdateClassPowerColor
+		--bars.UpdateColor = UpdateClassPowerColor
 		self.ClassPower = bars
 	end
 end
@@ -1246,7 +1249,7 @@ function UNITFRAME:AddStagger(self)
 	stagger:SetAllPoints(self.classPowerBarHolder)
 	stagger:SetStatusBarTexture(C.Assets.statusbar_tex)
 
-	F.CreateBDFrame(stagger)
+	F.SetBD(stagger)
 
 	local text = F.CreateFS(stagger, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
 	text:SetPoint('TOP', stagger, 'BOTTOM', 0, -4)
@@ -1285,7 +1288,7 @@ function UNITFRAME:AddTotems(self)
 		totem:SetStatusBarTexture(C.Assets.statusbar_tex)
 		totem:SetStatusBarColor(r, g, b)
 		totem:SetSize(width, FreeDB.unitframe.class_power_bar_height)
-		F.CreateBDFrame(totem)
+		F.SetBD(totem)
 
 		totem:SetPoint('TOPLEFT', self.classPowerBarHolder, 'TOPLEFT', (slot - 1) * spacing + 1, 0)
 
