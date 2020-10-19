@@ -130,7 +130,8 @@ function INVENTORY:CreateCurrencyFrame()
 	end)
 
 	local tag = self:SpawnPlugin('TagDisplay', '[money]  [currencies]', currencyFrame)
-	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'TOPLEFT', 0, -3)
+	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
+	tag:SetPoint('TOPLEFT', 0, -3)
 
 
 	currencyFrame:SetScript('OnEnter', function(self)
