@@ -2,6 +2,23 @@ local F, C = unpack(select(2, ...))
 
 local select, pairs = select, pairs
 
+-- Generating WOWHead-Link
+local lST = 'Wowhead'
+local lQ = 'http://www.wowhead.com/quest=%d'
+local lA = 'http://www.wowhead.com/achievement=%d'
+
+_G.StaticPopupDialogs['WATCHFRAME_URL'] = {
+	text = lST .. ' link',
+	button1 = OKAY,
+	timeout = 0,
+	whileDead = true,
+	hasEditBox = true,
+	editBoxWidth = 325,
+	OnShow = function(self, ...) self.editBox:SetFocus() end,
+	EditBoxOnEnterPressed = function(self) self:GetParent():Hide() end,
+	EditBoxOnEscapePressed = function(self) self:GetParent():Hide() end,
+}
+
 local function reskinQuestIcon(button)
 	if not button then return end
 
@@ -29,15 +46,41 @@ local function reskinQuestIcons(_, block)
 	reskinQuestIcon(block.rightButton)
 end
 
-local function reskinHeader(header)
-	header.Text:SetTextColor(C.r, C.g, C.b)
-	header.Background:SetTexture(nil)
-	local bg = header:CreateTexture(nil, "ARTWORK")
-	bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
-	bg:SetTexCoord(0, .66, 0, .31)
-	bg:SetVertexColor(C.r, C.g, C.b)
-	bg:SetPoint("BOTTOMLEFT", 0, -4)
-	bg:SetSize(250, 30)
+local function reskinHeader()
+	local frame = ObjectiveTrackerFrame.MODULES
+
+	if frame then
+		for i = 1, #frame do
+			local modules = frame[i]
+			if modules then
+				local header = modules.Header
+
+				local background = modules.Header.Background
+				background:SetAtlas(nil)
+
+				local text = modules.Header.Text
+				F.SetFS(text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
+				text:SetParent(header)
+
+				if not modules.IsSkinned then
+					local headerPanel = _G.CreateFrame('Frame', nil, header)
+					headerPanel:SetFrameLevel(header:GetFrameLevel() - 1)
+					headerPanel:SetFrameStrata('BACKGROUND')
+					headerPanel:SetPoint('TOPLEFT', 1, 1)
+					headerPanel:SetPoint('BOTTOMRIGHT', 1, 1)
+
+					local headerBar = headerPanel:CreateTexture(nil, 'ARTWORK')
+					headerBar:SetTexture('Interface\\LFGFrame\\UI-LFG-SEPARATOR')
+					headerBar:SetTexCoord(0, 0.6640625, 0, 0.3125)
+					headerBar:SetVertexColor(C.r, C.g, C.b)
+					headerBar:SetPoint('CENTER', headerPanel, -20, -4)
+					headerBar:SetSize(232, 30)
+
+					modules.IsSkinned = true
+				end
+			end
+		end
+	end
 end
 
 local function reskinBarTemplate(bar)
@@ -65,6 +108,7 @@ local function reskinProgressbarWithIcon(_, _, line)
 	local progressBar = line.ProgressBar
 	local bar = progressBar.Bar
 	local icon = bar.Icon
+	local label = bar.Label
 
 	if not bar.bg then
 		bar:SetPoint("LEFT", 22, 0)
@@ -74,8 +118,14 @@ local function reskinProgressbarWithIcon(_, _, line)
 		icon:SetMask(nil)
 		icon.bg = F.ReskinIcon(icon, true)
 		icon:ClearAllPoints()
-		icon:SetPoint("TOPLEFT", bar, "TOPRIGHT", 5, 0)
-		icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 25, 0)
+		-- icon:SetPoint("TOPLEFT", bar, "TOPRIGHT", 5, 0)
+		-- icon:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", 25, 0)
+		icon:SetSize(20, 20)
+		icon:SetPoint('LEFT', bar, 'RIGHT', 5, 0)
+
+		label:ClearAllPoints()
+		label:SetPoint('CENTER', bar)
+		label:SetFont(C.Assets.Fonts.Regular, 12)
 	end
 
 	if icon.bg then
@@ -125,6 +175,7 @@ end
 local function updateMawBuffInfo(button, buffInfo)
 	updateMawBuffQuality(button, buffInfo.spellID)
 end
+
 
 tinsert(C.BlizzThemes, function()
 	local r, g, b = C.r, C.g, C.b
@@ -236,9 +287,9 @@ tinsert(C.BlizzThemes, function()
 		WORLD_QUEST_TRACKER_MODULE.Header,
 		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
 	}
-	for _, header in pairs(headers) do
-		reskinHeader(header)
-	end
+	-- for _, header in pairs(headers) do
+	-- 	reskinHeader(header)
+	-- end
 
 	-- Minimize Button
 	local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
@@ -252,71 +303,64 @@ tinsert(C.BlizzThemes, function()
 		end
 	end
 
-	-- Fonts
-	local ot = ObjectiveTrackerFrame
-	local BlocksFrame = ot.BlocksFrame
-
-	F.SetFS(ot.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
-
-	for _, headerName in pairs({'QuestHeader', 'AchievementHeader', 'ScenarioHeader', 'CampaignQuestHeader'}) do
-		local header = BlocksFrame[headerName]
-		F.SetFS(header.Text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
-	end
-
-	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
-		if not block.headerStyled then
-			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
-			block.headerStyled = true
+	-- Generating WOWHead-Link for quest and achievement
+	hooksecurefunc('QuestObjectiveTracker_OnOpenDropDown', function(self)
+		local _, b, i, info, questID
+		b = self.activeFrame
+		questID = b.id
+		info = UIDropDownMenu_CreateInfo()
+		info.text = lST .. '-Link'
+		info.func = function(id)
+			local inputBox = StaticPopup_Show('WATCHFRAME_URL')
+			inputBox.editBox:SetText(lQ:format(questID))
+			inputBox.editBox:HighlightText()
 		end
+		info.arg1 = questID
+		info.notCheckable = true
+		UIDropDownMenu_AddButton(info, UIDROPDOWN_MENU_LEVEL)
 	end)
 
-	hooksecurefunc(QUEST_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
-		if not block.headerStyled then
-			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
-			block.headerStyled = true
+	hooksecurefunc('AchievementObjectiveTracker_OnOpenDropDown', function(self)
+		local _, b, i, info
+		b = self.activeFrame
+		i = b.id
+		info = UIDropDownMenu_CreateInfo()
+		info.text = lST .. '-Link'
+		info.func = function(_, i)
+			local inputBox = StaticPopup_Show('WATCHFRAME_URL')
+			inputBox.editBox:SetText(lA:format(i))
+			inputBox.editBox:HighlightText()
 		end
+		info.arg1 = i
+		info.noClickSound = 1
+		info.isNotRadio = true
+		info.notCheckable = 1
+		UIDropDownMenu_AddButton(info, UIDROPDOWN_MENU_LEVEL)
 	end)
 
-	hooksecurefunc(ACHIEVEMENT_TRACKER_MODULE, 'SetBlockHeader', function(_, block)
-		if not block.headerStyled then
-			F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
-			block.headerStyled = true
-		end
-	end)
+
+	F.SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
+
+	hooksecurefunc('ObjectiveTracker_Update', reskinHeader)
 
 
-	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, 'AddObjective', function(_, block)
-		local line = block.currentLine
+	local modules = {
+		SCENARIO_CONTENT_TRACKER_MODULE,
+		UI_WIDGET_TRACKER_MODULE,
+		BONUS_OBJECTIVE_TRACKER_MODULE,
+		WORLD_QUEST_TRACKER_MODULE,
+		CAMPAIGN_QUEST_TRACKER_MODULE,
+		QUEST_TRACKER_MODULE,
+		ACHIEVEMENT_TRACKER_MODULE,
+	}
 
-		local p1, a, p2, x, y = line:GetPoint()
-		line:SetPoint(p1, a, p2, x, y - 4)
-	end)
-
-	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, 'AddObjective', function(self, block)
-		if block.module == QUEST_TRACKER_MODULE or block.module == ACHIEVEMENT_TRACKER_MODULE then
-			local line = block.currentLine
-
-			local p1, a, p2, x, y = line:GetPoint()
-			line:SetPoint(p1, a, p2, x, y - 4)
-		end
-	end)
-
-	local function fixBlockHeight(block)
-		if block.shouldFix then
-			local height = block:GetHeight()
-
-			if block.lines then
-				for _, line in pairs(block.lines) do
-					if line:IsShown() then
-						height = height + 4
-					end
-				end
+	for _, module in pairs(modules) do
+		hooksecurefunc(module, 'SetBlockHeader', function(_, block)
+			if not block.headerStyled then
+				F.SetFS(block.HeaderText, C.Assets.Fonts.Regular, 14, nil, nil, nil, 'THICK')
+				block.headerStyled = true
 			end
-
-			block.shouldFix = false
-			block:SetHeight(height + 4)
-			block.shouldFix = true
-		end
+		end)
 	end
 
 	hooksecurefunc('ObjectiveTracker_AddBlock', function(block)
@@ -330,17 +374,11 @@ tinsert(C.BlizzThemes, function()
 						F.SetFS(line.Dash, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
 					end
 
-					line:SetHeight(line.Text:GetHeight())
-
 					line.styled = true
 				end
 			end
 		end
-
-		if not block.styled then
-			block.shouldFix = true
-			hooksecurefunc(block, 'SetHeight', fixBlockHeight)
-			block.styled = true
-		end
 	end)
 end)
+
+

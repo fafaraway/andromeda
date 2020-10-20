@@ -1,8 +1,4 @@
-<h1 align="center"><img src="https://i.imgur.com/GRLVXDx.png" alt="FreeUI Logo" /></h1>
-<div align="center">
-  <h1>Minimalist, Aesthetic, Practical</h1>
-</div>
-<br />
+<p align="center"><img src="https://i.imgur.com/GRLVXDx.png" alt="FreeUI Logo" /></p>
 <div align="center">
   <a href="https://discord.gg/Uu28KQq">
     <img src="https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat-square" alt="Discord" />
@@ -18,17 +14,19 @@
 *  https://www.youtube.com/watch?v=nD-rWROl0YU
 
 ## Commands
-*  `/free` list all available commands
-*  `/free install` open install panel
-*  `/free config` open config panel
-*  `/free unlock` unlock UI elements
-*  `/free reset` reset all saved options data
+*  `/free` <em>list all available commands</em>
+*  `/free install` <em>open install panel</em>
+*  `/free config` <em>open config panel</em>
+*  `/free unlock` <em>unlock UI elements</em>
+*  `/free reset` <em>reset all saved options data</em>
 
 ## Additional
-*  [Simpy's icon pack](https://git.tukui.org/Simpy/interface/tree/master)
-*  [Chinese font pack](https://1drv.ms/u/s!AocaDk73Gt7sgrZmwW0iTELqw2uQvQ?e=OQVeHe)
+*  [Clean Icons - Mechagnome Edition](https://www.wowinterface.com/downloads/info25064-CleanIcons-MechagnomeEdition.html#info) <em>Icons replacement with high resolution</em>
+*  [Chinese font pack](https://1drv.ms/u/s!AocaDk73Gt7sgrZmwW0iTELqw2uQvQ?e=OQVeHe) <em>Fonts replacement for Chinese game client</em>
+*  [CurseBreaker](https://github.com/AcidWeb/CurseBreaker) <em>WOW addons manager</em>
 
 ## Credits
-*  [Haleth](https://github.com/Haleth), [siweia](https://github.com/siweia)
+*  [Haleth](https://github.com/Haleth) <em>Original author of [FreeUI](https://github.com/Haleth/FreeUI)</em>
+*  [siweia](https://github.com/siweia) <em>Author of [NDui](https://github.com/siweia/NDui)</em>
 *  Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE
 
