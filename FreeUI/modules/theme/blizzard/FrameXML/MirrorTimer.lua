@@ -61,7 +61,7 @@ tinsert(C.BlizzThemes, function()
 			bar:SetScript('OnUpdate', OnUpdate)
 
 			bar.text = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, '', nil, 'THICK', 'CENTER', 0, 0)
-			bar.bg = F.CreateBDFrame(bar, nil, true)
+			bar.bg = F.SetBD(bar)
 			bar.type = type
 			bar.Start = Start
 			bar.Stop = Stop

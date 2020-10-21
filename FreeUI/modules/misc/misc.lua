@@ -26,7 +26,7 @@ function MISC:OnLogin()
 
 	self:ForceWarning()
 	self:FasterCamera()
-	self:CombatCamera()
+
 	self:Screenshot()
 
 
@@ -165,13 +165,7 @@ function MISC:FasterCamera()
 	end
 end
 
-UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
-local function SetCam(cmd)
-	ConsoleExec('ActionCam ' .. cmd)
-end
-function MISC:CombatCamera()
-	SetCam(FreeDB['action_camera'] and 'basic' or 'off')
-end
+
 
 
 

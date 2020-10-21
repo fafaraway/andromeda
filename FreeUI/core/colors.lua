@@ -62,11 +62,22 @@ local function SetReactionColors()
 end
 
 function F:UpdateColors()
-	SetDebuffTypeColors()
-	SetClassColors()
-	SetPowerColors()
-	SetClassPowerColors()
-	SetRuneColors()
-	SetReactionColors()
+	-- SetDebuffTypeColors()
+	-- SetClassColors()
+	-- SetPowerColors()
+	-- SetClassPowerColors()
+	-- SetRuneColors()
+	-- SetReactionColors()
 end
+
+local function ReplacePowerColor(name, index, color)
+	oUF.colors.power[name] = color
+	oUF.colors.power[index] = oUF.colors.power[name]
+end
+ReplacePowerColor("MANA", 0, {87/255, 165/255, 208/255})
+ReplacePowerColor("ENERGY", 3, {174/255, 34/255, 45/255})
+ReplacePowerColor("COMBO_POINTS", 4, {199/255, 171/255, 90/255})
+ReplacePowerColor("RUNIC_POWER", 6, {135/255, 214/255, 194/255})
+ReplacePowerColor("SOUL_SHARDS", 7, {151/255, 101/255, 221/255})
+ReplacePowerColor("HOLY_POWER", 9, {208/255, 178/255, 107/255})
 

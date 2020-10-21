@@ -128,7 +128,7 @@ local function SendMsg(text)
 	end
 
 	--SendChatMessage(text, CheckChannel())
-	SendChatMessage(text, 'SAY')
+	SendChatMessage(text, 'SAY') -- SendChatMessage is unreliable, fuck blizz
 end
 
 function ANNOUNCEMENT:UpdateEvents(...)
@@ -211,12 +211,34 @@ function ANNOUNCEMENT:UpdateEvents(...)
 	end
 end
 
-function ANNOUNCEMENT:OnLogin()
-	if not (IsInInstance() and IsInGroup()) then return end
+local function CheckStatus()
+	if IsInInstance() and IsInGroup() then
+		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
+	else
+		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
+	end
+end
 
+
+
+function ANNOUNCEMENT:OnLogin()
 	if FreeDB.announcement.enable then
 		F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
 	else
+		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
+	end
+
+	if FreeDB.announcement.enable then
+		CheckStatus()
+		F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckStatus)
+		F:RegisterEvent('ZONE_CHANGED_NEW_AREA', CheckStatus)
+		F:RegisterEvent('GROUP_LEFT', CheckStatus)
+		F:RegisterEvent('GROUP_JOINED', CheckStatus)
+	else
+		F:UnregisterEvent('PLAYER_ENTERING_WORLD', CheckStatus)
+		F:UnregisterEvent('ZONE_CHANGED_NEW_AREA', CheckStatus)
+		F:UnregisterEvent('GROUP_LEFT', CheckStatus)
+		F:UnregisterEvent('GROUP_JOINED', CheckStatus)
 		F:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.UpdateEvents)
 	end
 end

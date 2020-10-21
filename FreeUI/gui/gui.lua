@@ -367,7 +367,7 @@ local function CreateOption(i)
 		local optType, key, value, name, horizon, data, callback, tooltip = unpack(option)
 		-- Checkboxes
 		if optType == 1 then
-			local cb = F.CreateCheckBox(parent)
+			local cb = F.CreateCheckBox(parent, true)
 			cb:SetSize(20, 20)
 			cb:SetHitRectInsets(-5, -5, -5, -5)
 			if horizon then

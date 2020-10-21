@@ -28,7 +28,7 @@ local function ReskinActivityFrame(frame, isObject)
 		if isObject then
 			frame.Border:SetAlpha(0)
 			frame.SelectedTexture:SetAlpha(0)
-			frame.LockIcon:SetVertexColor(r, g, b)
+			frame.LockIcon:SetVertexColor(C.r, C.g, C.b)
 			hooksecurefunc(frame, "SetSelectionState", updateSelection)
 			hooksecurefunc(frame.ItemFrame, "SetDisplayedItem", reskinRewardIcon)
 		else
@@ -41,6 +41,21 @@ local function ReskinActivityFrame(frame, isObject)
 	if frame.Background then
 		frame.bg = F.CreateBDFrame(frame.Background, 1)
 	end
+end
+
+local function replaceIconString(self, text)
+	if not text then text = self:GetText() end
+	if not text or text == "" then return end
+
+	local newText, count = gsub(text, "24:24:0:%-2", "14:14:0:0:64:64:5:59:5:59")
+	if count > 0 then self:SetFormattedText("%s", newText) end
+end
+
+local function reskinConfirmIcon(frame)
+	if frame.bg then return end
+	frame.bg = F.ReskinIcon(frame.Icon)
+	F.ReskinIconBorder(frame.IconBorder)
+	frame.IconBorder:SetVertexColor(frame.IconBorder:GetVertexColor()) -- reset color on init
 end
 
 C.Themes["Blizzard_WeeklyRewards"] = function()
@@ -68,18 +83,22 @@ C.Themes["Blizzard_WeeklyRewards"] = function()
 	end
 
 	hooksecurefunc(WeeklyRewardsFrame, "SelectReward", function(self)
-		local confirmSelectionFrame = self.confirmSelectionFrame
-		if confirmSelectionFrame and not confirmSelectionFrame.styled then
-			local itemFrame = confirmSelectionFrame.ItemFrame
-			itemFrame.bg = F.ReskinIcon(itemFrame.Icon)
-			F.ReskinIconBorder(itemFrame.IconBorder)
-
-			local nameframe = _G[confirmSelectionFrame:GetName().."NameFrame"]
-			if nameframe then
-				nameframe:Hide() -- not sure about the name, need reviewed
+		local confirmFrame = self.confirmSelectionFrame
+		if confirmFrame then
+			if not confirmFrame.styled then
+				reskinConfirmIcon(confirmFrame.ItemFrame)
+				WeeklyRewardsFrameNameFrame:Hide()
+				confirmFrame.styled = true
 			end
 
-			confirmSelectionFrame.styled = true
+			local alsoItemsFrame = confirmFrame.AlsoItemsFrame
+			for frame in alsoItemsFrame.pool:EnumerateActive() do
+				reskinConfirmIcon(frame)
+			end
 		end
 	end)
+
+	local rewardText = WeeklyRewardsFrame.ConcessionFrame.RewardsFrame.Text
+	replaceIconString(rewardText)
+	hooksecurefunc(rewardText, "SetText", replaceIconString)
 end

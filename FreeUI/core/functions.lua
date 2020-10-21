@@ -1759,9 +1759,9 @@ do
 		return bu
 	end
 
-	function F:CreateCheckBox()
+	function F:CreateCheckBox(flat)
 		local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
-		F.ReskinCheck(cb, true)
+		F.ReskinCheck(cb, flat, true)
 
 		cb.Type = 'CheckBox'
 		return cb

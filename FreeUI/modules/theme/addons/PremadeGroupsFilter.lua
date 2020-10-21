@@ -23,7 +23,7 @@ function THEME:ReskinPGF()
 	hooksecurefunc(_G.PremadeGroupsFilterDialog, 'SetPoint', function(self, _, parent)
 		if parent ~= _G.LFGListFrame then
 			self:ClearAllPoints()
-			self:SetPoint('TOPLEFT', _G.LFGListFrame, 'TOPRIGHT', 5, C.Mult)
+			self:SetPoint('TOPLEFT', _G.LFGListFrame, 'TOPRIGHT', 5, 0)
 		end
 	end)
 

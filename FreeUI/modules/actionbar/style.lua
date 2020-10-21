@@ -236,13 +236,9 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 		end
 	end
 	if hotkey then
-		if FreeDB.actionbar.button_hotkey then
-			hotkey:SetParent(overlay)
-			ACTIONBAR:HookHotKey(button)
-			SetupFontString(hotkey, cfg.hotkey)
-		else
-			hotkey:Hide()
-		end
+		hotkey:SetParent(overlay)
+		ACTIONBAR:HookHotKey(button)
+		SetupFontString(hotkey, cfg.hotkey)
 	end
 	if name then
 		if FreeDB.actionbar.button_macro_name then
@@ -299,13 +295,12 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 	--hotkey, count
 	local overlay = CreateFrame('Frame', nil, button)
 	overlay:SetAllPoints()
-	if FreeDB.actionbar.button_hotkey then
-		hotkey:SetParent(overlay)
-		ACTIONBAR:HookHotKey(button)
-		SetupFontString(hotkey, cfg.hotkey)
-	else
-		hotkey:Hide()
-	end
+
+	hotkey:SetParent(overlay)
+	ACTIONBAR:HookHotKey(button)
+	cfg.hotkey.font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'}
+	SetupFontString(hotkey, cfg.hotkey)
+
 	if FreeDB.actionbar.button_count then
 		count:SetParent(overlay)
 		SetupFontString(count, cfg.count)
@@ -453,8 +448,6 @@ function ACTIONBAR:RestyleButtons()
 
 	-- Update hotkeys
 	hooksecurefunc('PetActionButton_SetHotkeys', ACTIONBAR.UpdateHotKey)
-	if FreeDB.actionbar.button_hotkey then
-		ACTIONBAR:UpdateStanceHotKey()
-		F:RegisterEvent('UPDATE_BINDINGS', ACTIONBAR.UpdateStanceHotKey)
-	end
+	ACTIONBAR:UpdateStanceHotKey()
+	F:RegisterEvent('UPDATE_BINDINGS', ACTIONBAR.UpdateStanceHotKey)
 end

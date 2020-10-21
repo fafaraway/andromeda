@@ -504,7 +504,8 @@ function INVENTORY:CreateFreeSlots()
 	slot.__name = name
 
 	local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', 'CLASS', 'THICK', 'BOTTOMRIGHT', -2, 2)
+	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', 'CLASS', 'THICK')
+	tag:SetPoint('BOTTOMRIGHT', -2, 2)
 	tag.__name = name
 
 	self.freeSlot = slot
@@ -957,14 +958,6 @@ function INVENTORY:OnLogin()
 	end
 
 	function MyButton:OnUpdate(item)
-		if MerchantFrame:IsShown() then
-			if item.isInSet then
-				self:SetAlpha(.5)
-			else
-				self:SetAlpha(1)
-			end
-		end
-
 		if self.JunkIcon then
 			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FreeADB['custom_junk_list'][item.id]) and item.sellPrice > 0 then
 				self.JunkIcon:Show()
