@@ -498,7 +498,6 @@ C.CharacterSettings = {
 	['blow_my_whistle'] = true,
 
 	['group_tool'] = true,
-	['action_camera'] = true,
 	['faster_camera'] = true,
 
 	['block_stranger_invite'] = false,

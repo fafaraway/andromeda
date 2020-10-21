@@ -217,7 +217,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.FriendsFont_Large, NORMAL, 15)
 	SetFont(_G.FriendsFont_UserText, NORMAL, 11)
 
-	SetFont(_G.ChatBubbleFont, CHAT, 15, nil, 'THICK')
+	SetFont(_G.ChatBubbleFont, CHAT, 16, nil, 'THICK')
 	--ChatFontNormal
 	--ChatFontSmall
 
