@@ -11,7 +11,7 @@ local function setHighlight(self)
 
 	local _, point = self:GetPoint()
 	if point then
-		point.textBg:SetBackdropColor(r, g, b, .25)
+		point.textBg:SetBackdropColor(C.r, C.g, C.b, .25)
 	end
 end
 

@@ -20,8 +20,7 @@ tinsert(C.BlizzThemes, function()
 		bar:SetStatusBarTexture(C.Assets.norm_tex)
 		bar:SetStatusBarColor(0.7, 0, 0)
 
-		bar.bg = F.CreateBDFrame(bar)
-		bar.glow = F.CreateSD(bar.bg)
+		bar.bg = F.SetBD(bar)
 	end
 
 	local function SkinBlizzTimer()
