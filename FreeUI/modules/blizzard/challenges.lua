@@ -2,12 +2,15 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('BLIZZARD')
 
 
+local format, strsplit, tonumber, pairs, wipe = format, strsplit, tonumber, pairs, wipe
+local Ambiguate = Ambiguate
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
+local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
+local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
-local Ambiguate, GetContainerNumSlots, GetContainerItemInfo = Ambiguate, GetContainerNumSlots, GetContainerItemInfo
-local C_ChallengeMode_GetMapUIInfo, C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetMapUIInfo, C_ChallengeMode.GetGuildLeaders
-local format, strsplit, strmatch, tonumber, pairs, wipe, select = string.format, string.split, string.match, tonumber, pairs, wipe, select
 
 local hasAngryKeystones
 local frame
@@ -117,7 +120,7 @@ function BLIZZARD.GuildBest_OnLoad(event, addon)
 	end
 end
 
-local myFaction = UnitFactionGroup('player')
+-- Keystone Info
 local myFullName = C.MyName..'-'..C.MyRealm
 local iconColor = C.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 
@@ -153,23 +156,16 @@ function BLIZZARD:KeystoneInfo_Create()
 end
 
 function BLIZZARD:KeystoneInfo_UpdateBag()
-	for bag = 0, 4 do
-		local numSlots = GetContainerNumSlots(bag)
-		for slot = 1, numSlots do
-			local slotLink = select(7, GetContainerItemInfo(bag, slot))
-			local itemString = slotLink and strmatch(slotLink, '|Hkeystone:([0-9:]+)|h(%b[])|h')
-			if itemString then
-				return slotLink, itemString
-			end
-		end
+	local keystoneMapID = C_MythicPlus_GetOwnedKeystoneChallengeMapID()
+	if keystoneMapID then
+		return keystoneMapID, C_MythicPlus_GetOwnedKeystoneLevel()
 	end
 end
 
 function BLIZZARD:KeystoneInfo_Update()
-	local link, itemString = BLIZZARD:KeystoneInfo_UpdateBag()
-	if link then
-		local _, mapID, level = strsplit(':', itemString)
-		FreeKeyStone[myFullName] = mapID..':'..level..':'..C.MyClass..':'..myFaction
+	local mapID, keystoneLevel = BLIZZARD:KeystoneInfo_UpdateBag()
+	if mapID then
+		FreeKeyStone[myFullName] = mapID..':'..keystoneLevel..':'..C.MyClass..':'..C.MyFaction
 	else
 		FreeKeyStone[myFullName] = nil
 	end

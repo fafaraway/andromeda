@@ -1117,9 +1117,9 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	end
 
 	if max then
-		local LastBar = element[max]
+		local lastBar = element[max]
 		local r, g, b = unpack(lastBarColor[C.MyClass])
-		LastBar:SetStatusBarColor(r, g, b)
+		lastBar:SetStatusBarColor(r, g, b)
 	end
 end
 
