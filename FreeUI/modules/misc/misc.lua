@@ -34,32 +34,7 @@ function MISC:OnLogin()
 
 
 
-	-- Registering fonts in LibSharedMedia
-	local LSM = LibStub and LibStub:GetLibrary('LibSharedMedia-3.0', true)
-	if not LSM then return end
 
-	local LOCALE_MASK = 0
-	if C.Client == 'koKR' then
-		LOCALE_MASK = 1
-	elseif C.Client == 'ruRU' then
-		LOCALE_MASK = 2
-	elseif C.Client == 'zhCN' then
-		LOCALE_MASK = 4
-	elseif C.Client == 'zhTW' then
-		LOCALE_MASK = 8
-	else
-		LOCALE_MASK = 128
-	end
-
-	LSM:Register(LSM.MediaType.FONT, '!Free_normal', C.Assets.Fonts.Regular, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_number', C.Assets.Fonts.Regular, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_chat', C.Assets.Fonts.Chat, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_header', C.Assets.Fonts.Bold, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_combat', C.Assets.Fonts.Combat, LOCALE_MASK)
-
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_norm', C.AssetsPath..'textures\\norm_tex')
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_grad', C.Assets.grad_tex)
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_flat', C.Assets.flat_tex)
 end
 
 
