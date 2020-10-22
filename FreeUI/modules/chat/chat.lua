@@ -243,6 +243,7 @@ function CHAT:QuickMouseScroll(dir)
 		end
 	end
 end
+hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
 
 function CHAT:ResizeChatFrame()
 	ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
@@ -280,8 +281,6 @@ end
 -- alt + left click for group invite
 -- ctrl + left click for guild invite
 function CHAT:ClickToInvite(link, _, button)
-	if not FreeDB.chat.click_to_invite then return end
-
 	local type, value = link:match('(%a+):(.+)')
 	local hide
 
@@ -371,7 +370,6 @@ function CHAT:OnLogin()
 
 	hooksecurefunc('ChatFrame_OnHyperlinkShow', CHAT.ClickToInvite)
 	hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
-	hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
 
 
 	self:UpdateEditBoxBorderColor()
