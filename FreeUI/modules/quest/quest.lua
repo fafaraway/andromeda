@@ -4,6 +4,7 @@ local QUEST = F.QUEST
 
 local LE_QUEST_FREQUENCY_DAILY = LE_QUEST_FREQUENCY_DAILY or 2
 local C_QuestLog_IsQuestReplayable = C_QuestLog.IsQuestReplayable
+local C_QuestLog_IsPushableQuest = C_QuestLog.IsPushableQuest
 
 
 function QUEST:UpdateTrackerScale()
@@ -126,6 +127,29 @@ local function QuestLogQuests_BuildInitialDisplayState(poiTable, questInfoContai
 		questPOI = GetCVarBool('questPOI'),
 	};
 end
+
+
+-- Ctrl+Click to abandon
+hooksecurefunc("QuestMapLogTitleButton_OnClick", function(self)
+	if IsControlKeyDown() then
+		CloseDropDownMenus()
+		QuestMapQuestOptions_AbandonQuest(self.questID)
+	elseif IsAltKeyDown() and C_QuestLog_IsPushableQuest(self.questID) then
+		CloseDropDownMenus()
+		QuestMapQuestOptions_ShareQuest(self.questID)
+	end
+end)
+
+-- Alt+Click to share
+hooksecurefunc(QUEST_TRACKER_MODULE, "OnBlockHeaderClick", function(_, block)
+	if IsControlKeyDown() then
+		CloseDropDownMenus()
+		QuestMapQuestOptions_AbandonQuest(block.id)
+	elseif IsAltKeyDown() and C_QuestLog_IsPushableQuest(block.id) then
+		CloseDropDownMenus()
+		QuestMapQuestOptions_ShareQuest(block.id)
+	end
+end)
 
 
 -- Highlight high value reward
