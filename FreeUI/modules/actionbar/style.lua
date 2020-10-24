@@ -59,6 +59,11 @@ local function ApplyFont(fontString, font)
 	fontString:SetFont(unpack(font))
 end
 
+local function ApplyFontColor(fontString, color)
+	if not color then return  end
+	fontString:SetTextColor(color[1], color[2], color[3])
+end
+
 local function ApplyHorizontalAlign(fontString, align)
 	if not align then return end
 	fontString:SetJustifyH(align)
@@ -102,6 +107,7 @@ local function SetupFontString(fontString, cfg)
 	if not fontString or not cfg then return end
 	ApplyPoints(fontString, cfg.points)
 	ApplyFont(fontString, cfg.font)
+	ApplyFontColor(fontString, cfg.color)
 	ApplyAlpha(fontString, cfg.alpha)
 	ApplyHorizontalAlign(fontString, cfg.halign)
 	ApplyVerticalAlign(fontString, cfg.valign)
@@ -434,12 +440,14 @@ function ACTIONBAR:RestyleButtons()
 			points = {
 				{'TOPRIGHT', -2, -2},
 			},
+			color = {1, 1, 1}
 		},
 		count = {
 			font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'},
 			points = {
 				{'BOTTOMLEFT', 2, 2},
 			},
+			color = {81/255, 179/255, 221/255}
 		},
 		buttonstyle = {file = ''},
 	}
