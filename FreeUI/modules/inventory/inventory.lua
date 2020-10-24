@@ -12,6 +12,7 @@ local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetConta
 local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
+local IsCosmeticItem = IsCosmeticItem
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 
@@ -282,13 +283,35 @@ function INVENTORY:CreateBankButton(f)
 	return bu
 end
 
-function INVENTORY:CreateDepositButton()
-	local bu = F.CreateButton(self, 16, 16, true, icons.reagen)
-	bu.Icon:SetVertexColor(.5, .5, .5, 1)
-	bu:SetScript('OnClick', DepositReagentBank)
-	bu.title = REAGENTBANK_DEPOSIT
-	F.AddTooltip(bu, 'ANCHOR_TOP')
+local function updateDepositButtonStatus(bu)
+	if FreeDB.inventory.auto_deposit then
+		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+	else
+		bu.Icon:SetVertexColor(.5, .5, .5, 1)
+	end
+end
 
+function INVENTORY:AutoDeposit()
+	if FreeDB.inventory.auto_deposit then
+		DepositReagentBank()
+	end
+end
+
+function INVENTORY:CreateDepositButton()
+	local bu = F.CreateButton(self, 16, 16, true, icons.deposit)
+	bu.Icon:SetVertexColor(.5, .5, .5, 1)
+	bu:RegisterForClicks('AnyUp')
+	bu:SetScript('OnClick', function(_, btn)
+		if btn == 'RightButton' then
+			FreeDB.inventory.auto_deposit = not FreeDB.inventory.auto_deposit
+			updateDepositButtonStatus(bu)
+		else
+			DepositReagentBank()
+		end
+	end)
+	bu.title = REAGENTBANK_DEPOSIT
+	F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_AUTO_DEPOSIT'], 'BLUE')
+	updateDepositButtonStatus(bu)
 	return bu
 end
 
@@ -346,65 +369,57 @@ function INVENTORY:CreateSortButton(name)
 	return bu
 end
 
-function INVENTORY:CreateRepairButton()
-	local enabledText = C.BlueColor..L['INVENTORY_AUTO_REPAIR_ENABLED']
-	local bu = F.CreateButton(self, 16, 16, true, icons.repair)
-
-	if FreeDB['inventory']['auto_repair'] then
+local function updateRepairButtonStatus(bu)
+	if FreeDB.inventory.auto_repair then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+		bu.text = L['INVENTORY_AUTO_REPAIR_TIP']
+		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..C.GreenColor..VIDEO_OPTIONS_ENABLED
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
+		bu.text = nil
+		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..C.GreenColor..VIDEO_OPTIONS_DISABLED
 	end
+end
 
-	bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeDB['inventory']['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
-	F.AddTooltip(bu, 'ANCHOR_TOP')
-
+function INVENTORY:CreateRepairButton()
+	local bu = F.CreateButton(self, 16, 16, true, icons.repair)
+	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function(self)
-		FreeDB['inventory']['auto_repair'] = not FreeDB['inventory']['auto_repair']
-
-		if FreeDB['inventory']['auto_repair'] then
-			self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-			self.text = enabledText
-		else
-			self.Icon:SetVertexColor(.5, .5, .5, 1)
-			self.text = nil
-		end
-
-		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..(FreeDB['inventory']['auto_repair'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+		FreeDB.inventory.auto_repair = not FreeDB.inventory.auto_repair
+		updateRepairButtonStatus(bu)
 		self:GetScript('OnEnter')(self)
 	end)
 
+	bu.title = L['INVENTORY_AUTO_REPAIR']
+	F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_AUTO_REPAIR_TIP'], 'BLUE')
+	updateRepairButtonStatus(bu)
 	return bu
 end
 
-function INVENTORY:CreateSellButton()
-	local enabledText = C.BlueColor..L['INVENTORY_SELL_JUNK_ENABLED']
-	local bu = F.CreateButton(self, 16, 16, true, icons.sell)
-
-	if FreeDB['inventory']['auto_sell_junk'] then
+local function updateSellButtonStatus(bu)
+	if FreeDB.inventory.auto_sell_junk then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+		bu.text = L['INVENTORY_SELL_JUNK_TIP']
+		bu.title = L['INVENTORY_SELL_JUNK']..': '..C.GreenColor..VIDEO_OPTIONS_ENABLED
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
+		bu.text = nil
+		bu.title = L['INVENTORY_SELL_JUNK']..': '..C.GreenColor..VIDEO_OPTIONS_DISABLED
 	end
+end
 
-	bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeDB['inventory']['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
-	F.AddTooltip(bu, 'ANCHOR_TOP')
-
+function INVENTORY:CreateSellButton()
+	local bu = F.CreateButton(self, 16, 16, true, icons.sell)
+	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function(self)
-		FreeDB['inventory']['auto_sell_junk'] = not FreeDB['inventory']['auto_sell_junk']
-
-		if FreeDB['inventory']['auto_sell_junk'] then
-			self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-			self.text = enabledText
-		else
-			self.Icon:SetVertexColor(.5, .5, .5, 1)
-			self.text = nil
-		end
-
-		bu.title = L['INVENTORY_SELL_JUNK']..': '..(FreeDB['inventory']['auto_sell_junk'] and C.GreenColor..VIDEO_OPTIONS_ENABLED or C.RedColor..VIDEO_OPTIONS_DISABLED)
+		FreeDB.inventory.auto_sell_junk = not FreeDB.inventory.auto_sell_junk
+		updateSellButtonStatus(bu)
 		self:GetScript('OnEnter')(self)
 	end)
 
+	bu.title = L['INVENTORY_SELL_JUNK']
+	F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_SELL_JUNK_TIP'], 'BLUE')
+	updateSellButtonStatus(bu)
 	return bu
 end
 
@@ -635,7 +650,7 @@ end
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
-	local enabledText = C.InfoColor..L['INVENTORY_MARK_JUNK_ENABLED']
+	local enabledText = C.RedColor..L['INVENTORY_MARK_JUNK_ENABLED']
 
 	local bu = F.CreateButton(self, 16, 16, true, icons.junk)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -684,7 +699,7 @@ end
 
 local deleteEnable
 function INVENTORY:CreateDeleteButton()
-	local enabledText = C.BlueColor..L['INVENTORY_QUICK_DELETE_ENABLED']
+	local enabledText = C.RedColor..L['INVENTORY_QUICK_DELETE_ENABLED']
 
 	local bu = F.CreateButton(self, 16, 16, true, icons.delete)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -950,8 +965,11 @@ function INVENTORY:OnLogin()
 
 	local function GetIconOverlayAtlas(item)
 		if not item.link then return end
+
 		if C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) then
 			return 'AzeriteIconFrame'
+		elseif IsCosmeticItem and IsCosmeticItem(item.link) then
+			return 'CosmeticIconFrame'
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return 'ConduitIconFrame', 'ConduitIconFrame-Corners'
 		end
@@ -998,7 +1016,7 @@ function INVENTORY:OnLogin()
 
 		if FreeDB['inventory']['item_level'] and isItemNeedsLevel(item) then
 			local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level < FreeDB['inventory']['item_level_to_show'] then level = '' end
+			if level <= FreeDB['inventory']['item_level_to_show'] then level = '' end
 			local color = C.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -1140,10 +1158,10 @@ function INVENTORY:OnLogin()
 		elseif name == 'Bank' then
 			INVENTORY.CreateBagBar(self, settings, 7)
 			buttons[2] = INVENTORY.CreateReagentButton(self, f)
-			buttons[3] = INVENTORY.CreateBagToggle(self)
+			buttons[4] = INVENTORY.CreateBagToggle(self)
 		elseif name == 'Reagent' then
 			buttons[2] = INVENTORY.CreateBankButton(self, f)
-			buttons[3] = INVENTORY.CreateDepositButton(self)
+			buttons[4] = INVENTORY.CreateDepositButton(self)
 		end
 		buttons[3] = INVENTORY.CreateSortButton(self, name)
 
@@ -1207,6 +1225,7 @@ function INVENTORY:OnLogin()
 
 	F:RegisterEvent('TRADE_SHOW', INVENTORY.OpenBags)
 	F:RegisterEvent('TRADE_CLOSED', INVENTORY.CloseBags)
+	F:RegisterEvent('BANKFRAME_OPENED', INVENTORY.AutoDeposit)
 
 	-- Fixes
 	BankFrame.GetRight = function() return f.bank:GetRight() end

@@ -266,11 +266,11 @@ do
 	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '\n偏好选择功能已启用。\n你现在可以点击标记物品。\n若启用了物品分类存放，还可以将其添加到偏好选择分类中。\n此操作对垃圾物品无效。'
 	L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
 	L['INVENTORY_AUTO_REPAIR'] = '自动修理'
-	L['INVENTORY_AUTO_REPAIR_ENABLED'] = '\n自动修理功能已启用。\n每次与商人对话都会自动修理你的装备。'
+	L['INVENTORY_AUTO_REPAIR_TIP'] = '\n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
 	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
 	L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 	L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
-	L['INVENTORY_SELL_JUNK_ENABLED'] = '\n自动出售垃圾功能已启用。\n每次与商人对话都会自动出售垃圾物品。'
+	L['INVENTORY_SELL_JUNK_TIP'] = '\n当按钮高亮时表示自动出售垃圾已启用，每次与商人对话都会自动出售垃圾物品。'
 	L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
 	L['INVENTORY_SEARCH'] = '搜索'
 	L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
@@ -287,6 +287,7 @@ do
 	L['INVENTORY_SESSION'] = '本次登录'
 	L['INVENTORY_CHARACTER'] = '服务器角色'
 	L['INVENTORY_GOLD_TOTAL'] = '总计'
+	L['INVENTORY_AUTO_DEPOSIT'] = '|n左键点击存放材料，右键点击切换存放模式。|n当按钮高亮时，每当打开银行，将自动存放背包中的材料。'
 end
 
 

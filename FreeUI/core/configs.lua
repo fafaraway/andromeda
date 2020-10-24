@@ -77,6 +77,8 @@ C['ReminderBuffsList'] = {
 				[8679] = true,		-- 致伤药膏
 				[315584] = true,	-- 速效药膏
 			},
+			texture = 132273,
+			depend = 315584,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -85,6 +87,7 @@ C['ReminderBuffsList'] = {
 				[3408] = true,		-- 减速药膏
 				[5761] = true,		-- 迟钝药膏
 			},
+			depend = 3408,
 			pvp = true,
 		},
 	},
@@ -536,7 +539,7 @@ C.CharacterSettings = {
 				['fct_periodic'] = true,
 				['fct_merge'] = true,
 				['fct_in'] = true,
-				['fct_out'] = true,
+				['fct_out'] = false,
 	},
 
 	['announcement'] = {
@@ -595,6 +598,7 @@ C.CharacterSettings = {
 			['bind_type'] = true,
 			['combine_free_slots'] = true,
 			['split_count'] = 1,
+			['auto_deposit'] = false,
 			['special_color'] = true,
 			['favourite_items'] = {},
 			['item_filter'] = true,
@@ -883,7 +887,6 @@ C.CharacterSettings = {
 			['whisper_sticky'] = true,
 			['whisper_sound'] = true,
 				['sound_timer'] = 30,
-			['click_to_invite'] = true,
 			['item_links'] = true,
 			['spamage_meter'] = true,
 			['filters'] = true,
