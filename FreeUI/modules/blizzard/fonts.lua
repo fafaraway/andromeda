@@ -256,7 +256,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	local LSM = LibStub and LibStub:GetLibrary('LibSharedMedia-3.0', true)
 	if not LSM then return end
 
-	local LOCALE_MASK = 0
+	local LOCALE_MASK
 	if C.Client == 'koKR' then
 		LOCALE_MASK = 1
 	elseif C.Client == 'ruRU' then

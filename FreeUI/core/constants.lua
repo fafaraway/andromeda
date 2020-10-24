@@ -197,6 +197,8 @@ C.DevsList = {
 	['Dontbeshy-死亡之翼'] = true,
 	['瑪格漢之光-死亡之翼'] = true,
 	['贰拾年老騎士-死亡之翼'] = true,
+	['贰拾年老法師-死亡之翼'] = true,
+	['雨色入青山-白银之手'] = true,
 }
 
 local function isDeveloper()
@@ -204,3 +206,5 @@ local function isDeveloper()
 end
 
 C.isDeveloper = isDeveloper()
+
+

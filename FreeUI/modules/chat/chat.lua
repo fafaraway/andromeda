@@ -362,9 +362,9 @@ function CHAT:OnLogin()
 
 	-- Lock chatframe
 	if FreeDB.chat.lock_position then
-		self:UpdateChatSize()
 		hooksecurefunc('FCF_SavePositionAndDimensions', self.UpdateChatSize)
 		F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
+		self:UpdateChatSize()
 	end
 
 

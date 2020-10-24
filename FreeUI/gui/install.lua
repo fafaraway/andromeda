@@ -19,9 +19,6 @@ local function SetupCVars()
 	-- display
 	SetCVar('Outline', 3)
 	SetCVar('findYourselfMode', 2)
-	SetCVar('showTutorials', 0)
-	SetCVar('hideAdventureJournalAlerts', 0)
-	SetCVar('showNPETutorials', 0)
 
 	-- control
 	SetCVar('autoDismountFlying', 0)
@@ -123,7 +120,10 @@ local function SetupCVars()
 
 	-- mouse
 	SetCVar('rawMouseEnable', 1)
-	SetCVar('cursorsizepreferred', 1)
+
+	if C.isDeveloper then
+		SetCVar('cursorsizepreferred', 2)
+	end
 end
 
 local function SetupUIScale()
@@ -163,18 +163,6 @@ local function SetupChatFrame()
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
 	FreeDB.chat.lock_position = true
-end
-
-local function SetupSkada()
-	if not SkadaDB then return end
-
-	SkadaDB['profiles']['Default'].showtotals = true
-	SkadaDB['profiles']['Default'].showself = true
-	SkadaDB['profiles']['Default']['icon'].hide = true
-	SkadaDB['profiles']['Default'].showtotals = true
-	SkadaDB['profiles']['Default']['windows'].barfont = '!Free_normal'
-	SkadaDB['profiles']['Default']['windows'].smoothing = true
-	SkadaDB['profiles']['Default']['windows'].bartexture = '!Free_norm'
 end
 
 local function SetupDBM()
@@ -296,7 +284,6 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step6)
 		rightButton:SetScript('OnClick', function()
-			SetupSkada()
 			SetupDBM()
 			SetupAddons()
 			step6()
@@ -385,3 +372,39 @@ function INSTALL:OnLogin()
 	self:HelloWorld()
 end
 
+
+-- Hide tutorial
+-- Credit ketho
+-- https://github.com/ketho-wow/HideTutorial
+local function OnEvent(self, event, addon)
+	if event == 'ADDON_LOADED' and addon == 'HideTutorial' then
+		local tocVersion = select(4, GetBuildInfo())
+		if not FreeDB.toc_version or FreeDB.toc_version < tocVersion then
+			-- only do this once per character
+			FreeDB.toc_version = tocVersion
+		end
+	elseif event == 'VARIABLES_LOADED' then
+		local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', NUM_LE_FRAME_TUTORIALS)
+		if FreeDB.installation_complete or not lastInfoFrame then
+			C_CVar.SetCVar('showTutorials', 0)
+			C_CVar.SetCVar('showNPETutorials', 0)
+			C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
+			-- help plates
+			for i = 1, NUM_LE_FRAME_TUTORIALS do
+				C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
+			end
+			for i = 1, NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
+				C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
+			end
+		end
+
+		function MainMenuMicroButton_AreAlertsEnabled()
+			return false
+		end
+	end
+end
+
+local f = CreateFrame('Frame')
+f:RegisterEvent('ADDON_LOADED')
+f:RegisterEvent('VARIABLES_LOADED')
+f:SetScript('OnEvent', OnEvent)
