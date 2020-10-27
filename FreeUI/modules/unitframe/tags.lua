@@ -61,13 +61,9 @@ end
 tagEvents['free:healthpercentage'] = 'UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH'
 
 tags['free:power'] = function(unit)
-	local _, powerToken = UnitPowerType(unit)
-	local color = FreeADB['colors']['power'][powerToken] or {1, 1, 1}
-	local r, g, b = color.r, color.g, color.b
 	local cur, max = UnitPower(unit), UnitPowerMax(unit)
 	if(cur == 0 or max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit)) then return end
 
-	--return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F.Numb(cur))
 	return F.Numb(cur)
 end
 tagEvents['free:power'] = 'UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER'
