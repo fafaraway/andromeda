@@ -660,6 +660,11 @@ function INVENTORY:CreateCustomJunkButton()
 		customJunkEnable = nil
 	end
 	bu:SetScript('OnClick', function(self)
+		if IsAltKeyDown() and IsControlKeyDown() then
+			StaticPopup_Show('FREEUI_RESET_JUNK_LIST')
+			return
+		end
+
 		INVENTORY:SelectToggleButton(3)
 		customJunkEnable = not customJunkEnable
 		if customJunkEnable then
