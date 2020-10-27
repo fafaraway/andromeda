@@ -122,7 +122,7 @@ function COMBAT:CombatAlert()
 	f.bottom:SetSize(418, 7)
 	f.bottom:SetTexCoord(0.00195313, 0.81835938, 0.01953125, 0.03320313)
 
-	f.text = F.CreateFS(f, C.Assets.Fonts.Bold, 36, nil, '', nil, 'THICK', 'CENTER', 0, 0)
+	f.text = F.CreateFS(f, C.Assets.Fonts.Header, 36, nil, '', nil, 'THICK', 'CENTER', 0, 0)
 	f.text:SetJustifyH('CENTER')
 
 	f:SetScript('OnShow', OnShow)
