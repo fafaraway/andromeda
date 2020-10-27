@@ -10,7 +10,7 @@ local C_Map_GetWorldPosFromMapPos = C_Map.GetWorldPosFromMapPos
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local mapRects = {}
 local tempVec2D = CreateVector2D(0, 0)
-local currentMapID, playerCoords, cursorCoords, mapScale
+local currentMapID, playerCoords, cursorCoords
 
 function MAP:GetPlayerMapPos(mapID)
 	tempVec2D.x, tempVec2D.y = UnitPosition('player')
@@ -93,27 +93,23 @@ function MAP:AddCoords()
 end
 
 function MAP:UpdateMapScale()
-	if self.isMaximized and self:GetScale() ~= 1 then
-		self:SetScale(1)
-	elseif not self.isMaximized and self:GetScale() ~= mapScale then
-		self:SetScale(mapScale)
+	if self.isMaximized and self:GetScale() ~= FreeDB.map.max_worldmap_scale then
+		self:SetScale(FreeDB.map.max_worldmap_scale)
+	elseif not self.isMaximized and self:GetScale() ~= FreeDB.map.worldmap_scale then
+		self:SetScale(FreeDB.map.worldmap_scale)
 	end
 end
 
 function MAP:UpdateMapAnchor()
 	MAP.UpdateMapScale(self)
-	if not self.isMaximized then F.RestoreMF(self) end
+	F.RestoreMF(self)
 end
 
 function MAP:WorldMapScale()
-	mapScale = FreeDB.map.map_scale
-
-	if mapScale > 1 then
-		WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
-			local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
-			local scale = WorldMapFrame:GetScale()
-			return x / scale, y / scale
-		end
+	WorldMapFrame.ScrollContainer.GetCursorPosition = function(f)
+		local x, y = MapCanvasScrollControllerMixin.GetCursorPosition(f)
+		local scale = WorldMapFrame:GetScale()
+		return x / scale, y / scale
 	end
 
 	F.CreateMF(WorldMapFrame, nil, true)
@@ -122,7 +118,7 @@ end
 
 
 function MAP:OnLogin()
-	if not FreeDB.map.enable_map then return end
+	if not FreeDB.map.enable then return end
 
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()
@@ -131,6 +127,10 @@ function MAP:OnLogin()
 	WorldMapFrame:SetAttribute('UIPanelLayout-enabled', false)
 	WorldMapFrame:SetAttribute('UIPanelLayout-allowOtherPanels', true)
 	tinsert(_G.UISpecialFrames, 'WorldMapFrame')
+
+	-- Hide stuff
+	WorldMapFrame.BlackoutFrame:SetAlpha(0)
+	WorldMapFrame.BlackoutFrame:EnableMouse(false)
 
 	self:WorldMapScale()
 	self:AddCoords()
