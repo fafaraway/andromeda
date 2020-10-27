@@ -13,6 +13,7 @@
 	<Script file="fonts.lua"/>
 	<Script file="loot.lua"/>
 	<Script file="mail.lua"/>
+	<Script file="objectivetracker.lua"/>
 	<Script file="orderhall.lua"/>
 	<Script file="quickjoin.lua"/>
 	<Script file="tradeskill.lua"/>
