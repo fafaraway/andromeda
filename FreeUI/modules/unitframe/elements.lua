@@ -1,15 +1,42 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
-local COLORS = F.COLORS
 local oUF = F.oUF
 
 
 local format, wipe, tinsert = string.format, table.wipe, table.insert
 local pairs, next, tonumber, unpack = pairs, next, tonumber, unpack
-local UnitAura, GetSpellInfo = UnitAura, GetSpellInfo
+local UnitAura = UnitAura
 local InCombatLockdown = InCombatLockdown
 local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+
+
+--[[ Colors ]]
+
+local function ReplacePowerColors(name, index, color)
+	oUF.colors.power[name] = color
+	oUF.colors.power[index] = oUF.colors.power[name]
+end
+ReplacePowerColors('MANA', 0, {87/255, 165/255, 208/255})
+ReplacePowerColors('ENERGY', 3, {174/255, 34/255, 45/255})
+ReplacePowerColors('COMBO_POINTS', 4, {199/255, 171/255, 90/255})
+ReplacePowerColors('RUNIC_POWER', 6, {135/255, 214/255, 194/255})
+ReplacePowerColors('SOUL_SHARDS', 7, {151/255, 101/255, 221/255})
+ReplacePowerColors('HOLY_POWER', 9, {208/255, 178/255, 107/255})
+
+local classColors = C.ClassColors
+for class, value in pairs(classColors) do
+	oUF.colors.class[class] = {value.r, value.g, value.b}
+end
+
+local lastBarColors = {
+	DRUID = {161 / 255, 92 / 255, 255 / 255},
+	MAGE = {5 / 255, 96 / 255, 250 / 255},
+	MONK = {0 / 255, 143 / 255, 247 / 255},
+	PALADIN = {221 / 255, 36 / 255, 62 / 255},
+	ROGUE = {161 / 255, 92 / 255, 255 / 255},
+	WARLOCK = {221 / 255, 36 / 255, 62 / 255}
+}
 
 
 --[[ Backdrop ]]
@@ -381,6 +408,14 @@ end
 
 
 --[[ Auras ]]
+
+oUF.colors.debuff = {
+	['Curse']   = {.8, 0, 1},
+	['Disease'] = {.8, .6, 0},
+	['Magic']   = {0, .8, 1},
+	['Poison']  = {0, .8, 0},
+	['none']    = {0, 0, 0}
+}
 
 local function AuraOnEnter(self)
 	if not self:IsVisible() then return end
@@ -783,36 +818,36 @@ end
 
 --[[ Castbar ]]
 
-local function GetSpellName(spellID)
-	local name = GetSpellInfo(spellID)
-	if not name then
-		print('oUF-Plugins-Castbar: '.. spellID..' not found.')
-		return 0
-	end
-	return name
-end
-
 local channelingTicks = {
-	[GetSpellName(740)] = 4,		-- 宁静
-	[GetSpellName(755)] = 3,		-- 生命通道
-	[GetSpellName(5143)] = 5, 		-- 奥术飞弹
-	[GetSpellName(12051)] = 3, 		-- 唤醒
-	[GetSpellName(15407)] = 4,		-- 精神鞭笞
-	[GetSpellName(47540)] = 3,		-- 苦修
-	[GetSpellName(64843)] = 4,		-- 神圣赞美诗
-	[GetSpellName(198590)] = 5,		-- 吸取灵魂
-	[GetSpellName(205021)] = 5,		-- 冰霜射线
-	[GetSpellName(205065)] = 6,		-- 虚空洪流
-	[GetSpellName(234153)] = 5,		-- 吸取生命
-	[GetSpellName(291944)] = 6,		-- 再生
+	[740] = 4,		-- 宁静
+	[755] = 5,		-- 生命通道
+	[5143] = 4, 	-- 奥术飞弹
+	[12051] = 6, 	-- 唤醒
+	[15407] = 6,	-- 精神鞭笞
+	[47757] = 3,	-- 苦修
+	[47758] = 3,	-- 苦修
+	[48045] = 6,	-- 精神灼烧
+	[64843] = 4,	-- 神圣赞美诗
+	[120360] = 15,	-- 弹幕射击
+	[198013] = 10,	-- 眼棱
+	[198590] = 5,	-- 吸取灵魂
+	[205021] = 5,	-- 冰霜射线
+	[205065] = 6,	-- 虚空洪流
+	[206931] = 3,	-- 饮血者
+	[212084] = 10,	-- 邪能毁灭
+	[234153] = 5,	-- 吸取生命
+	[257044] = 7,	-- 急速射击
+	[291944] = 6,	-- 再生，赞达拉巨魔
+	[314791] = 4,	-- 变易幻能
+	[324631] = 8,	-- 血肉铸造，盟约
 }
 
 if C.MyClass == 'PRIEST' then
-	local penance = GetSpellName(47540)
 	local function updateTicks()
 		local numTicks = 3
-		if IsPlayerSpell(193134) then numTicks = 4 end	-- Enhanced Mind Flay
-		channelingTicks[penance] = numTicks
+		if IsPlayerSpell(193134) then numTicks = 4 end
+		channelingTicks[47757] = numTicks
+		channelingTicks[47758] = numTicks
 	end
 	F:RegisterEvent('PLAYER_LOGIN', updateTicks)
 	F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', updateTicks)
@@ -995,12 +1030,6 @@ local function PostCastStop(self)
 	self:Show()
 end
 
-local function PostChannelStop(self)
-	self.fadeOut = true
-	self:SetValue(0)
-	self:Show()
-end
-
 local function PostCastFailed(self)
 	local failColor = FreeDB.unitframe.casting_fail_color
 
@@ -1098,15 +1127,6 @@ end
 
 --[[ Class power ]]
 
-local lastBarColor = {
-	DRUID = {161 / 255, 92 / 255, 255 / 255},
-	MAGE = {5 / 255, 96 / 255, 250 / 255},
-	MONK = {0 / 255, 143 / 255, 247 / 255},
-	PALADIN = {221 / 255, 36 / 255, 62 / 255},
-	ROGUE = {161 / 255, 92 / 255, 255 / 255},
-	WARLOCK = {221 / 255, 36 / 255, 62 / 255}
-}
-
 local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	local maxWidth, gap = FreeDB.unitframe.player_width, 3
 
@@ -1118,35 +1138,8 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
 
 	if max then
 		local lastBar = element[max]
-		local r, g, b = unpack(lastBarColor[C.MyClass])
+		local r, g, b = unpack(lastBarColors[C.MyClass])
 		lastBar:SetStatusBarColor(r, g, b)
-	end
-end
-
-local function UpdateClassPowerColor(element) -- this is unnecessary
-	local r, g, b
-
-	if not UnitHasVehicleUI("player") then
-		if C.MyClass == 'MONK' then -- Chi Orbs
-			r, g, b = 0, 204 / 255, 153 / 255
-		elseif C.MyClass == 'WARLOCK' then -- Soul Shards
-			r, g, b = 161 / 255, 92 / 255, 255 / 255
-		elseif C.MyClass == 'PALADIN' then -- Holy Power
-			r, g, b = 255 / 255, 255 / 255, 125 / 255
-		elseif C.MyClass == 'MAGE' then -- Arcane Charges
-			r, g, b = 25 / 255, 182 / 255, 255 / 255
-		elseif C.MyClass == 'ROGUE' then -- Combo Points
-			r, g, b = 198 / 255, 178 / 255, 95 / 255
-		elseif C.MyClass == 'DRUID' then -- Combo Points
-			r, g, b = 255 / 255, 26 / 255, 48 / 255
-		else
-			r, g, b = 1, 1, 1
-		end
-	end
-
-	for index = 1, #element do
-		local Bar = element[index]
-		Bar:SetStatusBarColor(r, g, b)
 	end
 end
 
@@ -1233,7 +1226,6 @@ function UNITFRAME:AddClassPowerBar(self)
 		self.Runes = bars
 	else
 		bars.PostUpdate = PostUpdateClassPower
-		--bars.UpdateColor = UpdateClassPowerColor
 		self.ClassPower = bars
 	end
 end
