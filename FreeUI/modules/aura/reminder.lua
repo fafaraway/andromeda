@@ -7,9 +7,10 @@ local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, Ge
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
 local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+
+local groups = C.ReminderBuffsList[C.MyClass]
 local iconSize = 36
 local frames, parentFrame = {}
-local groups = C.ReminderBuffsList[C.MyClass]
 
 function AURA:Reminder_Update(cfg)
 	local frame = cfg.frame
@@ -43,14 +44,14 @@ function AURA:Reminder_Update(cfg)
 				frame:Hide()
 				return
 			end
-		end
-	else
-		for i = 1, 32 do
-			local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
-			if not name then break end
-			if name and cfg.spells[spellID] then
-				frame:Hide()
-				return
+		else
+			for i = 1, 32 do
+				local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
+				if not name then break end
+				if name and cfg.spells[spellID] then
+					frame:Hide()
+					return
+				end
 			end
 		end
 		frame:Show()
@@ -61,11 +62,11 @@ function AURA:Reminder_Create(cfg)
 	local frame = CreateFrame('Frame', nil, parentFrame)
 	frame:SetSize(iconSize, iconSize)
 	F.PixelIcon(frame)
-	frame.glow = F.CreateSD(frame)
-	if frame.glow then
-		frame.glow:SetBackdropBorderColor(1, 0, 0, .35)
-	end
+	F.CreateSD(frame)
 	local texture = cfg.texture
+	if frame.__shadow then
+		frame.__shadow:SetBackdropBorderColor(1, 0, 0, .35)
+	end
 	if not texture then
 		for spellID in pairs(cfg.spells) do
 			texture = GetSpellTexture(spellID)
@@ -73,7 +74,7 @@ function AURA:Reminder_Create(cfg)
 		end
 	end
 	frame.Icon:SetTexture(texture)
-
+	frame.text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, L['AURA_LACK'], 'RED', 'THICK', 'TOP', 1, 15)
 	frame:Hide()
 	cfg.frame = frame
 
@@ -115,10 +116,10 @@ function AURA:Reminder_AddRune()
 end
 
 function AURA:InitReminder()
-	AURA:Reminder_AddRune()
+	--AURA:Reminder_AddRune()
 	if not groups then return end
 
-	if FreeDB['aura']['buff_reminder'] then
+	if FreeDB.aura.reminder then
 		if not parentFrame then
 			parentFrame = CreateFrame('Frame', nil, UIParent)
 			parentFrame:SetPoint('TOP', 0, -100)
