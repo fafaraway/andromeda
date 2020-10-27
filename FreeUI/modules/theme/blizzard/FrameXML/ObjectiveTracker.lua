@@ -1,23 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local select, pairs = select, pairs
-
--- Generating WOWHead-Link
-local lST = 'Wowhead'
-local lQ = 'http://www.wowhead.com/quest=%d'
-local lA = 'http://www.wowhead.com/achievement=%d'
-
-_G.StaticPopupDialogs['WATCHFRAME_URL'] = {
-	text = lST .. ' link',
-	button1 = OKAY,
-	timeout = 0,
-	whileDead = true,
-	hasEditBox = true,
-	editBoxWidth = 325,
-	OnShow = function(self, ...) self.editBox:SetFocus() end,
-	EditBoxOnEnterPressed = function(self) self:GetParent():Hide() end,
-	EditBoxOnEscapePressed = function(self) self:GetParent():Hide() end,
-}
 
 local function reskinQuestIcon(button)
 	if not button then return end
@@ -58,9 +40,9 @@ local function reskinHeader()
 				local background = modules.Header.Background
 				background:SetAtlas(nil)
 
-				local text = modules.Header.Text
-				F.SetFS(text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
-				text:SetParent(header)
+				-- local text = modules.Header.Text
+				-- F.SetFS(text, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
+				-- text:SetParent(header)
 
 				if not modules.IsSkinned then
 					local headerPanel = _G.CreateFrame('Frame', nil, header)
@@ -303,40 +285,7 @@ tinsert(C.BlizzThemes, function()
 		end
 	end
 
-	-- Generating WOWHead-Link for quest and achievement
-	hooksecurefunc('QuestObjectiveTracker_OnOpenDropDown', function(self)
-		local _, b, i, info, questID
-		b = self.activeFrame
-		questID = b.id
-		info = UIDropDownMenu_CreateInfo()
-		info.text = lST .. '-Link'
-		info.func = function(id)
-			local inputBox = StaticPopup_Show('WATCHFRAME_URL')
-			inputBox.editBox:SetText(lQ:format(questID))
-			inputBox.editBox:HighlightText()
-		end
-		info.arg1 = questID
-		info.notCheckable = true
-		UIDropDownMenu_AddButton(info, UIDROPDOWN_MENU_LEVEL)
-	end)
 
-	hooksecurefunc('AchievementObjectiveTracker_OnOpenDropDown', function(self)
-		local _, b, i, info
-		b = self.activeFrame
-		i = b.id
-		info = UIDropDownMenu_CreateInfo()
-		info.text = lST .. '-Link'
-		info.func = function(_, i)
-			local inputBox = StaticPopup_Show('WATCHFRAME_URL')
-			inputBox.editBox:SetText(lA:format(i))
-			inputBox.editBox:HighlightText()
-		end
-		info.arg1 = i
-		info.noClickSound = 1
-		info.isNotRadio = true
-		info.notCheckable = 1
-		UIDropDownMenu_AddButton(info, UIDROPDOWN_MENU_LEVEL)
-	end)
 
 
 	F.SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
@@ -344,7 +293,7 @@ tinsert(C.BlizzThemes, function()
 	hooksecurefunc('ObjectiveTracker_Update', reskinHeader)
 
 
-	local modules = {
+	--[[ local modules = {
 		SCENARIO_CONTENT_TRACKER_MODULE,
 		UI_WIDGET_TRACKER_MODULE,
 		BONUS_OBJECTIVE_TRACKER_MODULE,
@@ -378,7 +327,7 @@ tinsert(C.BlizzThemes, function()
 				end
 			end
 		end
-	end)
+	end) ]]
 end)
 
 

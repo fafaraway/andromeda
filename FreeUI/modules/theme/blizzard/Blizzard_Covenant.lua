@@ -104,32 +104,32 @@ C.Themes["Blizzard_CovenantSanctum"] = function()
 			self.LevelFrame.Background:SetAlpha(0)
 			F.ReskinClose(self.CloseButton)
 			self.CloseButton.Border:SetAlpha(0)
-
-			local upgradesTab = self.UpgradesTab
-			upgradesTab.Background:SetAlpha(0)
-			F.CreateBDFrame(upgradesTab.Background, .25)
-			F.Reskin(upgradesTab.DepositButton)
-			for _, frame in ipairs(upgradesTab.Upgrades) do
-				if frame.TierBorder then
-					frame.TierBorder:SetAlpha(0)
-				end
-			end
-			upgradesTab.CurrencyBackground:SetAlpha(0)
-			replaceCurrencies(upgradesTab.CurrencyDisplayGroup)
-
-			local talentsList = upgradesTab.TalentsList
-			talentsList.Divider:SetAlpha(0)
-			F.CreateBDFrame(talentsList, .25)
-			talentsList.BackgroundTile:SetAlpha(0)
-			talentsList.IntroBox.Background:Hide()
-			F.Reskin(talentsList.UpgradeButton)
-			hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
-
-			if not C.isNewPatch then
-				hooksecurefunc(self.RenownTab, "Refresh", hideRenownLevelBorder)
-			end
 		end
 	end)
+
+	local upgradesTab = CovenantSanctumFrame.UpgradesTab
+	upgradesTab.Background:SetAlpha(0)
+	F.CreateBDFrame(upgradesTab.Background, .25)
+	F.Reskin(upgradesTab.DepositButton)
+	for _, frame in ipairs(upgradesTab.Upgrades) do
+		if frame.TierBorder then
+			frame.TierBorder:SetAlpha(0)
+		end
+	end
+	upgradesTab.CurrencyBackground:SetAlpha(0)
+	replaceCurrencies(upgradesTab.CurrencyDisplayGroup)
+
+	local talentsList = upgradesTab.TalentsList
+	talentsList.Divider:SetAlpha(0)
+	F.CreateBDFrame(talentsList, .25)
+	talentsList.BackgroundTile:SetAlpha(0)
+	talentsList.IntroBox.Background:Hide()
+	F.Reskin(talentsList.UpgradeButton)
+	hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
+
+	if not C.isNewPatch then
+		hooksecurefunc(self.RenownTab, "Refresh", hideRenownLevelBorder)
+	end
 end
 
 -- Covenant renown
