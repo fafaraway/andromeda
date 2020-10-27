@@ -557,17 +557,15 @@ C.CharacterSettings = {
 			['battle_resurrection'] = true,
 			['portal'] = true,
 			['toy'] = true,
+			['quest'] = true,
 	},
 
 	['quest'] = {
-		['enable_quest'] = true,
-			['tracker_scale'] = 1,
+		['enable'] = true,
 			['reward_highlight'] = true,
 			['extra_button'] = true,
 			['quick_quest'] = false,
-			['quest_notification'] = true,
-				['quest_progress'] = true,
-				['only_complete_ring'] = true,
+
 	},
 
 	['aura'] = {
@@ -580,7 +578,7 @@ C.CharacterSettings = {
 			['debuff_size'] = 50,
 			['debuffs_per_row'] = 12,
 			['reverse_debuffs'] = true,
-			['buff_reminder'] = true,
+			['reminder'] = true,
 	},
 
 	['inventory'] = {
@@ -807,17 +805,17 @@ C.CharacterSettings = {
 			['link_hover'] = true,
 			['tip_icon'] = true,
 			['target_by'] = true,
-			['pvp_rating'] = false,
 			['various_ids'] = true,
 			['item_count'] = true,
 			['item_price'] = true,
 			['aura_source'] = true,
-			['mount_source'] = false,
+			['conduit_info'] = true,
 	},
 
 	['map'] = {
-		['enable_map'] = true,
-			['map_scale'] = 1,
+		['enable'] = true,
+			['worldmap_scale'] = 1,
+			['max_worldmap_scale'] = 1,
 			['map_reveal'] = false,
 			['coords'] = true,
 			['minimap_scale'] = 1,
@@ -942,6 +940,7 @@ C.CharacterSettings = {
 					['bar1_fade_hover'] = true,
 					['bar1_fade_combat'] = true,
 					['bar1_fade_target'] = true,
+					['bar1_fade_vehicle'] = true,
 			['bar2'] = true,
 				['bar2_fade'] = true,
 					['bar2_fade_in_alpha'] = 1,
@@ -1033,7 +1032,7 @@ C.AccountSettings = {
 
 	},
 
-	['colors'] = {
+	--[[ ['colors'] = {
 		['class'] = {
 			['HUNTER'] = {
 				['b'] = 0.2549019607843137,
@@ -1196,7 +1195,7 @@ C.AccountSettings = {
 				['r'] = 0.4431372549019608,
 			},
 		},
-	}
+	} ]]
 }
 
 
@@ -1251,25 +1250,8 @@ f:SetScript('OnEvent', function(self, _, addon)
 	C.Assets.statusbar_tex = textureList[FreeADB.appearance.texture_style]
 
 
-	local colors = FreeADB.colors.class
 
-	for class, value in pairs(colors) do
-		C.ClassColors[class] = {}
-		C.ClassColors[class].r = value.r
-		C.ClassColors[class].g = value.g
-		C.ClassColors[class].b = value.b
-		C.ClassColors[class].colorStr = value.colorStr
 
-	end
-
-	C.r = C.ClassColors[C.MyClass].r
-	C.g = C.ClassColors[C.MyClass].g
-	C.b = C.ClassColors[C.MyClass].b
-
-	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
-	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
-
-	--F:UpdateColors()
 
 	self:UnregisterAllEvents()
 end)

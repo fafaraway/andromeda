@@ -78,6 +78,18 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	hideOnEscape = true,
 }
 
+StaticPopupDialogs['FREEUI_RESET_JUNK_LIST'] = {
+	text = L.GUI.RESET_JUNK_LIST,
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		wipe(FreeADB.custom_junk_list)
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = true,
+}
+
 StaticPopupDialogs['FREEUI_GUILD_INVITE'] = {
 	-- 'Do you want to invite %s to your guild?'
 	text = format(ERR_GUILD_INVITE_S, '%s'),

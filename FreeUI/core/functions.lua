@@ -535,6 +535,35 @@ do
 
 	end
 
+	function F.CreateColorString(text, color)
+		if not text or not type(text) == 'string' then
+			return
+		end
+
+		if not color or type(color) ~= 'table' then
+			return
+		end
+
+		local hex = color.r and color.g and color.b and F.RGBToHex(color.r, color.g, color.b) or '|cffffffff'
+
+		return hex .. text .. '|r'
+	end
+
+	function F.CreateClassColorString(text, class)
+		if not text or not type(text) == 'string' then
+			return
+		end
+
+		if not class or type(class) ~= 'string' then
+			return
+		end
+
+		local r, g, b = F.ClassColor(class)
+		local hex = r and g and b and F.RGBToHex(r, g, b) or '|cffffffff'
+
+		return hex .. text .. '|r'
+	end
+
 	-- GameTooltip
 	function F:HideTooltip()
 		GameTooltip:Hide()
@@ -760,7 +789,9 @@ do
 	end
 
 	local function updateIconBorderColor(self, r, g, b)
-		if r == .65882 then r, g, b = 0, 0, 0 end
+		if (r==.65882 and g==.65882 and b==.65882) or (r==1 and g==1 and b==1) then
+			r, g, b = 0, 0, 0
+		end
 		self.__owner.bg:SetBackdropBorderColor(r, g, b)
 	end
 
@@ -768,7 +799,7 @@ do
 		self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
 	end
 
-	function F:ReskinIconBorder()
+	function F:ReskinIconBorder(needInit)
 		self:SetAlpha(0)
 		self.__owner = self:GetParent()
 		if not self.__owner.bg then return end
@@ -776,6 +807,9 @@ do
 			hooksecurefunc(self, 'SetAtlas', updateIconBorderColorByAtlas)
 		else
 			hooksecurefunc(self, 'SetVertexColor', updateIconBorderColor)
+			if needInit then
+				self:SetVertexColor(self:GetVertexColor()) -- for border with color before hook
+			end
 		end
 		hooksecurefunc(self, 'Hide', resetIconBorderColor)
 	end
@@ -1873,8 +1907,6 @@ do
 		local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
-
-		--F.UpdateColors()
 	end
 
 	local function cancelPicker()

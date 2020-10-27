@@ -76,14 +76,14 @@ do
 	L['APPEARANCE_VIGNETTING'] = '暗角效果'
 	L['APPEARANCE_VIGNETTING_ALPHA'] = '暗角透明度'
 	L['APPEARANCE_RESKIN_BLIZZ'] = '美化默认界面'
-	L['APPEARANCE_RESKIN_BLIZZ_TIP'] = '\n美化游戏内的所有默认界面，统一为黑色透明风格。'
+	L['APPEARANCE_RESKIN_BLIZZ_TIP'] = '|n美化游戏内的所有默认界面，统一为黑色透明风格。'
 	L['APPEARANCE_BACKDROP_ALPHA'] = '背景透明度'
-	L['APPEARANCE_BACKDROP_ALPHA_TIP'] = '\n调整窗口面板的背景透明度。'
+	L['APPEARANCE_BACKDROP_ALPHA_TIP'] = '|n调整窗口面板的背景透明度。'
 	L['APPEARANCE_SHADOW_BORDER'] = '阴影边框'
-	L['APPEARANCE_SHADOW_BORDER_TIP'] = '\n界面元素外围添加一圈阴影'
+	L['APPEARANCE_SHADOW_BORDER_TIP'] = '|n界面元素外围添加一圈阴影'
 
 	L['APPEARANCE_UI_SCALE'] = '界面缩放'
-	L['APPEARANCE_UI_SCALE_TIP'] = '\n调整界面的整体缩放\n推荐设置\n1080P = 1\n1440P = 1.4\n2160P = 2'
+	L['APPEARANCE_UI_SCALE_TIP'] = '|n调整界面的整体缩放|n推荐设置|n1080P = 1|n1440P = 1.4|n2160P = 2'
 end
 
 
@@ -100,6 +100,8 @@ do
 	L['NOTIFICATION_RARE'] = '发现稀有'
 	L['NOTIFICATION_VERSION'] = '版本检查'
 	L['NOTIFICATION_VERSION_OUTDATE'] = '你的 FreeUI 已经过期，最新版为 %s'
+
+	L['NOTIFICATION_INSTANCE'] = '副本'
 end
 
 
@@ -169,6 +171,7 @@ do
 
 	L['AURA_MOVER_BUFFS'] = '增益光环'
 	L['AURA_MOVER_DEBUFFS'] = '减益光环'
+	L['AURA_LACK'] = '缺少'
 end
 
 
@@ -238,12 +241,20 @@ end
 --[[ Announcement ]]
 
 do
-	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %s %s'
-	L['ANNOUNCEMENT_DISPEL'] = '驱散 %s %s'
-	L['ANNOUNCEMENT_STOLEN'] = '偷取 %s %s'
+	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %target% %spell%'
+	L['ANNOUNCEMENT_DISPEL'] = '驱散 %target% %spell%'
+	L['ANNOUNCEMENT_STOLEN'] = '偷取 %target% %spell%'
 	L['ANNOUNCEMENT_CASTED'] = '%s 使用了 %s'
-	L['ANNOUNCEMENT_BATTLE_RESURRECTION'] = '%s 使用 %s 战复了自己'
-	L['ANNOUNCEMENT_BATTLE_RESURRECTION_TARGET'] = '%s 使用 %s 战复了 %s'
+	L['ANNOUNCEMENT_COMBAT_RESURRECTION_SELF'] = '%player% 使用 %spell% 战复了自己'
+	L['ANNOUNCEMENT_COMBAT_RESURRECTION_TARGET'] = '%player% 使用 %spell% 战复了 %target%'
+	L['ANNOUNCEMENT_QUEST'] = '接受任务: '
+
+	L['ANNOUNCEMENT_INSTANCE_RESET_SUCCESS'] = '%s has been reset'
+	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED'] = 'Cannot reset %s (There are players still inside the instance.)'
+	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_ZONING'] = 'Cannot reset %s (There are players in your party attempting to zone into an instance.)'
+	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_OFFLINE'] = 'Cannot reset %s (There are players offline in your party.)'
+
+
 end
 
 
@@ -261,21 +272,21 @@ do
 	L['INVENTORY_SORT_DISABLED'] = '背包整理已被禁用'
 	L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
 	L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
-	L['INVENTORY_QUICK_DELETE_ENABLED'] = '\n快速摧毁功能已启用。\n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
+	L['INVENTORY_QUICK_DELETE_ENABLED'] = '|n快速摧毁功能已启用。|n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
 	L['INVENTORY_QUICK_DELETE'] = '快速摧毁'
-	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '\n偏好选择功能已启用。\n你现在可以点击标记物品。\n若启用了物品分类存放，还可以将其添加到偏好选择分类中。\n此操作对垃圾物品无效。'
+	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|n偏好选择功能已启用。|n你现在可以点击标记物品。|n若启用了物品分类存放，还可以将其添加到偏好选择分类中。|n此操作对垃圾物品无效。'
 	L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
 	L['INVENTORY_AUTO_REPAIR'] = '自动修理'
-	L['INVENTORY_AUTO_REPAIR_TIP'] = '\n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
+	L['INVENTORY_AUTO_REPAIR_TIP'] = '|n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
 	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
 	L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 	L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
-	L['INVENTORY_SELL_JUNK_TIP'] = '\n当按钮高亮时表示自动出售垃圾已启用，每次与商人对话都会自动出售垃圾物品。'
+	L['INVENTORY_SELL_JUNK_TIP'] = '|n当按钮高亮时表示自动出售垃圾已启用，每次与商人对话都会自动出售垃圾物品。'
 	L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
 	L['INVENTORY_SEARCH'] = '搜索'
 	L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
 	L['INVENTORY_MARK_JUNK'] = '垃圾分类'
-	L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
+	L['INVENTORY_MARK_JUNK_ENABLED'] = '|n点击将可售出的物品归类为垃圾。|n当你开启自动出售垃圾时，这些物品也将被一同售出。|n这个列表是账号共享的，同时也不会跟随你的设置导出。|n按住CTRL+ALT并点击此按钮，可以清空这个列表。'
 	L['INVENTORY_QUICK_SPLIT'] = '快速拆分'
 	L['INVENTORY_SPLIT_COUNT'] = '拆分个数'
 	L['INVENTORY_SPLIT_MODE_ENABLED'] = '|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。'
@@ -311,8 +322,6 @@ do
 	L['QUEST_NAME'] = '任务'
 	L['QUEST_DESC'] = '交接任务以及任务追踪相关的选项'
 
-	L['QUEST_MOVER_TRACKER'] = '任务追踪'
-	L['QUEST_ACCEPT'] = '接受任务：'
 	L['QUEST_AUTOMATION'] = '自动交接任务'
 end
 
@@ -367,7 +376,7 @@ do
 	L['UNITFRAME_MOVER_RAID'] = '团队框体'
 	L['UNITFRAME_CLICK_CAST_BINDING'] = '点击施法绑定'
 	L['UNITFRAME_CLICK_CAST_TIP'] = '提示'
-	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + 任意鼠标按键点击想绑定的技能\n对小队或团队框体使用绑定的快捷键就能直接施放技能'
+	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + 任意鼠标按键点击想绑定的技能|n对小队或团队框体使用绑定的快捷键就能直接施放技能'
 	L['UNITFRAME_GHOST'] = '灵魂'
 	L['UNITFRAME_OFFLINE'] = '离线'
 end
@@ -442,9 +451,9 @@ end
 
 do
 	L['INSTALL_HEADER_HELLO'] = '你好'
-	L['INSTALL_BODY_WELCOME'] = '欢迎使用 |cffe9c55dFreeUI|r ！\n\n在开始使用前需要调整一些设定来更好的搭配 |cffe9c55dFreeUI|r 工作。\n\n点击安装按钮将进入安装步骤。'
+	L['INSTALL_BODY_WELCOME'] = '欢迎使用 |cffe9c55dFreeUI|r ！|n|n在开始使用前需要调整一些设定来更好的搭配 |cffe9c55dFreeUI|r 工作。|n|n点击安装按钮将进入安装步骤。'
 	L['INSTALL_HEADER_BASIC'] = '基础设置'
-	L['INSTALL_BODY_BASIC'] = '这些安装步骤将为 |cffe9c55dFreeUI|r 调整各类合适的设定。\n\n第一步将会调整一些 |cffe9c55dCVars|r 设定。\n\n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
+	L['INSTALL_BODY_BASIC'] = '这些安装步骤将为 |cffe9c55dFreeUI|r 调整各类合适的设定。|n|n第一步将会调整一些 |cffe9c55dCVars|r 设定。|n|n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
 	L['INSTALL_HEADER_UISCALE'] = '界面缩放'
 	L['INSTALL_BODY_UISCALE'] = '这个步骤将会为游戏界面设定合适的缩放值。'
 	L['INSTALL_HEADER_CHAT'] = '聊天设置'
@@ -454,7 +463,7 @@ do
 	L['INSTALL_HEADER_ADDON'] = '插件设置'
 	L['INSTALL_BODY_ADDON'] = '这个步骤将会调整 |cffe9c55dDBM|r 和 |cffe9c55dSkada|r 的设定以使其配合 |cffe9c55dFreeUI|r 的界面风格与布局。'
 	L['INSTALL_HEADER_COMPLETE'] = '安装成功！'
-	L['INSTALL_BODY_COMPLETE'] = '安装已经成功完成。\n\n请点击下方完成按钮重载界面。\n\n记住在游戏中你可以通过输入 |cffe9c55d/free|r 来获取详细的帮助或是直接输入 |cffe9c55d/free config|r 来打开控制面板更改各类设定。'
+	L['INSTALL_BODY_COMPLETE'] = '安装已经成功完成。|n|n请点击下方完成按钮重载界面。|n|n记住在游戏中你可以通过输入 |cffe9c55d/free|r 来获取详细的帮助或是直接输入 |cffe9c55d/free config|r 来打开控制面板更改各类设定。'
 	L['INSTALL_BUTTON_INSTALL'] = '安装'
 	L['INSTALL_BUTTON_SKIP'] = '跳过'
 	L['INSTALL_BUTTON_CONTINUE'] = '继续'
@@ -489,9 +498,10 @@ end
 
 L.GUI = {
 	['HINT'] = '提示',
-	['RELOAD'] = '|cffff2020是否重载界面来完成设置？|r',
-	['RESET_OPTIONS'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r',
-	['RESET_GOLD'] = '|cffff2020是否重置金币统计数据？|r',
+	['RELOAD'] = '|cffff2020是否重载界面来应用设置？|r',
+	['RESET_OPTIONS'] = '|cffff2020是否清空所有已保存的选项并重置为默认值？|r',
+	['RESET_GOLD'] = '|cffff2020是否清空金币统计数据？|r',
+	['RESET_JUNK_LIST'] = '|cffff2020是否清空自定义垃圾物品列表？|r',
 
 	['MOVER'] = {
 		['TITLE'] = '界面元素位置调整',
@@ -509,6 +519,8 @@ L.GUI = {
 		['STANCE_BAR'] = 'stance bar',
 		['LEAVE_VEHICLE_BAR'] = 'leave vehicle bar',
 		['QUEST_BUTTON'] = 'quest button',
+
+		['OBJECTIVE_TRACKER'] = 'objective tracker'
 	},
 
 	['DATA'] = {

@@ -2,7 +2,6 @@
 	<Script file="core.lua"/>
 	<Script file="constants.lua"/>
 	<Script file="configs.lua"/>
-	<Script file="colors.lua"/>
 	<Script file="profiles.lua"/>
 	<Script file="functions.lua"/>
 	<Script file="logo.lua"/>
