@@ -30,7 +30,7 @@ title:SetPoint('TOPLEFT', sep, 'TOPRIGHT', 9, -9)
 title:SetPoint('RIGHT', f, -9, 0)
 title:SetJustifyH('LEFT')
 
-local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', 'YELLOW', 'THICK')
+local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', nil, 'THICK')
 text:SetPoint('BOTTOMLEFT', sep, 'BOTTOMRIGHT', 9, 9)
 text:SetPoint('RIGHT', f, -9, 0)
 text:SetJustifyH('LEFT')
