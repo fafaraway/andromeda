@@ -1,9 +1,10 @@
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('BLIZZARD')
+local ANNOUNCEMENT = F.ANNOUNCEMENT
 
 
 function BLIZZARD:ObjectiveTrackerMover()
-	local frame = CreateFrame('Frame', 'FreeUIQuestMover', UIParent)
+	local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', UIParent)
 	frame:SetSize(240, 50)
 	F.Mover(frame, L.GUI.MOVER.OBJECTIVE_TRACKER, 'QuestTracker', {'TOPRIGHT', UIParent, 'TOPRIGHT', -C.UIGap, -60})
 
@@ -244,6 +245,49 @@ function BLIZZARD:RestyleObjectiveTrackerText()
 end
 
 
+--[[  ]]
+
+local function UpdateButtonVisibility()
+	if _G.ObjectiveTrackerFrame.collapsed or not _G.ObjectiveTrackerFrame.HeaderMenu:IsShown() then
+		QuickQuestButton:Hide()
+		QuestAnnounceButton:Hide()
+		return
+	end
+
+	QuickQuestButton:Show()
+	QuestAnnounceButton:Show()
+end
+
+function BLIZZARD:AddQuickQuestButton()
+	local bu = CreateFrame('CheckButton', 'QuickQuestButton', _G.ObjectiveTrackerMover, 'UICheckButtonTemplate')
+	bu:SetPoint('TOPLEFT', 40, -4)
+	bu:SetSize(20, 20)
+	bu:SetHitRectInsets(-5, -5, -5, -5)
+	F.ReskinCheck(bu, true)
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUICK_QUEST'], 'BLUE', 'THICK', 'LEFT', 20, 0)
+	bu:SetChecked(FreeDB.misc.quick_quest)
+	bu:SetScript('OnClick', function(self)
+		FreeDB.misc.quick_quest = self:GetChecked()
+	end)
+	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUICK_QUEST_TIP'], 'BLUE')
+end
+
+function BLIZZARD:AddQuestAnnounceButton()
+	local bu = CreateFrame('CheckButton', 'QuestAnnounceButton', _G.ObjectiveTrackerMover, 'UICheckButtonTemplate')
+	bu:SetPoint('TOPLEFT', QuickQuestButton, 'TOPRIGHT', 30, 0)
+	bu:SetSize(20, 20)
+	bu:SetHitRectInsets(-5, -5, -5, -5)
+	F.ReskinCheck(bu, true)
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUEST_ANNOUNCE'], 'BLUE', 'THICK', 'LEFT', 20, 0)
+	bu:SetChecked(FreeDB.announcement.quest)
+	bu:SetScript('OnClick', function(self)
+		FreeDB.announcement.quest = self:GetChecked()
+		ANNOUNCEMENT:Quest()
+	end)
+	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUEST_ANNOUNCE_TIP'], 'BLUE')
+end
+
+
 
 
 function BLIZZARD:ObjectiveTracker()
@@ -251,5 +295,13 @@ function BLIZZARD:ObjectiveTracker()
 	BLIZZARD:GenerateWowHeadLink()
 	BLIZZARD:RestyleObjectiveTrackerText()
 
+	BLIZZARD:AddQuickQuestButton()
+	BLIZZARD:AddQuestAnnounceButton()
+	UpdateButtonVisibility()
+
+	hooksecurefunc('ObjectiveTracker_Collapse', UpdateButtonVisibility)
+    hooksecurefunc('ObjectiveTracker_Expand', UpdateButtonVisibility)
+    hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Show', UpdateButtonVisibility)
+    hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Hide', UpdateButtonVisibility)
 end
 BLIZZARD:RegisterBlizz('ObjectiveTracker', BLIZZARD.ObjectiveTracker)
