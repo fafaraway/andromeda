@@ -48,6 +48,11 @@ do
 	L['MISC_ADDON_REQUIRED'] = '你没有安装DBM或者BigWigs'
 	L['MISC_DISBAND_CHECK'] = '是否|cffff0000解散|r当前队伍或者团队?'
 	L['MISC_DISBAND_PROCESS'] = '团队解散中'
+
+	L['MISC_QUICK_QUEST'] = '交接'
+	L['MISC_QUEST_ANNOUNCE'] = '通报'
+	L['MISC_QUEST_ANNOUNCE_TIP'] = '组队时自动通报任务进度'
+	L['MISC_QUICK_QUEST_TIP'] = '自动交接任务'
 end
 
 
@@ -247,7 +252,7 @@ do
 	L['ANNOUNCEMENT_CASTED'] = '%s 使用了 %s'
 	L['ANNOUNCEMENT_COMBAT_RESURRECTION_SELF'] = '%player% 使用 %spell% 战复了自己'
 	L['ANNOUNCEMENT_COMBAT_RESURRECTION_TARGET'] = '%player% 使用 %spell% 战复了 %target%'
-	L['ANNOUNCEMENT_QUEST'] = '接受任务: '
+	L['ANNOUNCEMENT_QUEST'] = '接受任务'
 
 	L['ANNOUNCEMENT_INSTANCE_RESET_SUCCESS'] = '%s has been reset'
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED'] = 'Cannot reset %s (There are players still inside the instance.)'
@@ -313,16 +318,6 @@ do
 	L['MAP_REVEAL'] = '清除地图迷雾'
 	L['MAP_PARAGON'] = '巅峰'
 	L['MAP_NEW_MAIL'] = '<新邮件>'
-end
-
-
---[[ Quest ]]
-
-do
-	L['QUEST_NAME'] = '任务'
-	L['QUEST_DESC'] = '交接任务以及任务追踪相关的选项'
-
-	L['QUEST_AUTOMATION'] = '自动交接任务'
 end
 
 

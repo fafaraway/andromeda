@@ -288,7 +288,7 @@ tinsert(C.BlizzThemes, function()
 
 
 
-	F.SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Bold, 15, nil, nil, nil, 'THICK')
+	F.SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
 
 	hooksecurefunc('ObjectiveTracker_Update', reskinHeader)
 

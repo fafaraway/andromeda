@@ -6,21 +6,6 @@ local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0
 local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
 
-C.DevsList = {
-	['Kangrinboqe-死亡之翼'] = true,
-	['Dontbeshy-死亡之翼'] = true,
-	['瑪格漢之光-死亡之翼'] = true,
-	['贰拾年老騎士-死亡之翼'] = true,
-	['贰拾年老法師-死亡之翼'] = true,
-	['雨色入青山-白银之手'] = true,
-}
-local function isDeveloper()
-	return C.DevsList[C.MyName..'-'..C.MyRealm]
-end
-C.isDeveloper = isDeveloper()
-
-
-
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
 C.MyLevel = UnitLevel('player')
@@ -37,7 +22,21 @@ C.isNewPatch = select(4, GetBuildInfo()) > 90001
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
-C.isDeveloper = false
+
+
+
+C.DevsList = {
+	['Kangrinboqe-死亡之翼'] = true,
+	['Dontbeshy-死亡之翼'] = true,
+	['瑪格漢之光-死亡之翼'] = true,
+	['贰拾年老騎士-死亡之翼'] = true,
+	['贰拾年老法師-死亡之翼'] = true,
+	['雨色入青山-白银之手'] = true,
+}
+local function isDeveloper()
+	return C.DevsList[C.MyName..'-'..C.MyRealm]
+end
+C.isDeveloper = isDeveloper()
 
 
 C['Assets'] = {

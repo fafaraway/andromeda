@@ -816,7 +816,7 @@ C.CharacterSettings = {
 		['enable'] = true,
 			['worldmap_scale'] = 1,
 			['max_worldmap_scale'] = 1,
-			['map_reveal'] = false,
+			['remove_fog'] = true,
 			['coords'] = true,
 			['minimap_scale'] = 1,
 			['new_mail'] = true,
@@ -865,6 +865,8 @@ C.CharacterSettings = {
 			['screenshot_dead'] = false,
 
 		['number_format'] = 1,
+		['reward_highlight'] = true,
+		['quick_quest'] = false,
 	},
 
 	['chat'] = {
