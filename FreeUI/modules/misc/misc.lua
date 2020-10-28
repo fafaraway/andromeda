@@ -29,7 +29,7 @@ function MISC:OnLogin()
 
 	self:Screenshot()
 
-
+	self:QuestRewardHighlight()
 
 
 
@@ -141,7 +141,55 @@ function MISC:FasterCamera()
 end
 
 
+-- Highlight high value reward
+local function CreateHighlight(reward)
+	if not MISC.rewardHighlightFrame then
+		MISC.rewardHighlightFrame = CreateFrame('Frame', 'QuesterRewardHighlight', QuestInfoRewardsFrame, 'AutoCastShineTemplate')
+		MISC.rewardHighlightFrame:SetScript('OnHide', function(frame) AutoCastShine_AutoCastStop(frame) end)
+	end
 
+	MISC.rewardHighlightFrame:ClearAllPoints()
+	MISC.rewardHighlightFrame:SetAllPoints(reward)
+	MISC.rewardHighlightFrame:Show()
+
+	AutoCastShine_AutoCastStart(MISC.rewardHighlightFrame)
+end
+
+local function UpdateHighlight()
+	if MISC.rewardHighlightFrame then
+		MISC.rewardHighlightFrame:Hide()
+	end
+
+	local bestprice, bestitem = 0, 0
+	for i = 1, GetNumQuestChoices() do
+		local link, _, _, qty = GetQuestItemLink('choice', i), GetQuestItemInfo('choice', i)
+		local price = link and select(11, GetItemInfo(link))
+		if not price then return end
+
+		price = price * (qty or 1)
+
+		if price > bestprice then
+			bestprice = price
+			bestitem = i
+		end
+	end
+
+	local rewardButton = _G['QuestInfoRewardsFrameQuestInfoItem'..bestitem]
+
+	if bestitem > 0 then
+		CreateHighlight(_G[('QuestInfoRewardsFrameQuestInfoItem%dIconTexture'):format(bestitem)])
+
+		_G.QuestInfoFrame.itemChoice = rewardButton:GetID()
+	end
+end
+
+function MISC:QuestRewardHighlight()
+	if FreeDB.misc.reward_highlight then
+		F:RegisterEvent('QUEST_COMPLETE', UpdateHighlight)
+	else
+		F:UnregisterEvent('QUEST_COMPLETE', UpdateHighlight)
+	end
+end
 
 
 
