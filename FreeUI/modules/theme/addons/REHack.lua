@@ -4,6 +4,7 @@ local THEME = F.THEME
 
 function THEME:ReskinREHack()
 	local RE = _G.REHack
+	if not _G.REHack then return end
 	F.StripTextures(_G.HackListFrame, true)
 	F.SetBD(_G.HackListFrame)
 
