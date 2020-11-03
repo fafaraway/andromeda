@@ -7,7 +7,7 @@ local margin, padding = 4, 4
 function ACTIONBAR:CreateExtrabar()
 	local num = 1
 	local buttonList = {}
-	local size = FreeDB.actionbar.button_size_big
+	local size = C.DB.actionbar.button_size_big
 
 	-- ExtraActionButton
 	local frame = CreateFrame('Frame', 'FreeUI_ActionBarExtra', UIParent, 'SecureHandlerStateTemplate')

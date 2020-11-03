@@ -1,9 +1,10 @@
-name: Package and release
+name: Package and build release versions
 
 on:
   push:
     tags:
-      - '*'
+      - "*.*.*"
+
 
 jobs:
 

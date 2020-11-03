@@ -1,115 +1,109 @@
-local F, C = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local F, C, L = unpack(select(2, ...))
+local ACTIONBAR = F:GetModule('ACTIONBAR')
 
 
-local buttonsList = {}
-local SpellFlyout = SpellFlyout
+local barsList = {
+	'FreeUI_ActionBar1',
+	'FreeUI_ActionBar2',
+	'FreeUI_ActionBar3',
+	'FreeUI_ActionBar4',
+	'FreeUI_ActionBar5',
+	'FreeUI_CustomBar',
+	'FreeUI_ActionBarPet',
+	'FreeUI_ActionBarStance',
+}
 
-
-local function CheckCondition(frame)
-	if (frame.faderConfig.arena and (GetZonePVPInfo() == 'arena')) then return true end
-	if (frame.faderConfig.instance and (IsInInstance() == true)) then return true end
-
-	if (frame.faderConfig.combat and UnitAffectingCombat('player')) then return true end
-	if (frame.faderConfig.target and UnitExists('target')) then return true end
-	if (frame.faderConfig.hover and MouseIsOver(frame)) then return true end
-
-	if not SpellFlyout:IsShown() then return false end
-	if not SpellFlyout.__faderParent then return false end
-	if SpellFlyout.__faderParent == frame and MouseIsOver(SpellFlyout) then return true end
-
-	return false
+function ACTIONBAR:FadeBlingTexture(cooldown, alpha)
+	if not cooldown then return end
+	cooldown:SetBlingTexture(alpha > 0.5 and 131010 or C.Assets.blank_tex)
 end
 
-local function FrameHandler(frame)
-	if not frame.faderConfig.enable then return end
+function ACTIONBAR:FadeBlings(alpha)
+	for _, button in pairs(ACTIONBAR.buttons) do
+		ACTIONBAR:FadeBlingTexture(button.cooldown, alpha)
+	end
+end
 
-	if CheckCondition(frame) then
-		if FreeDB.actionbar.fade_smooth then
-			F:UIFrameFadeIn(frame, FreeDB.actionbar.fade_in_duration, frame:GetAlpha(), frame.faderConfig.fadeInAlpha or 1)
-		else
-			frame:SetAlpha(frame.faderConfig.fadeInAlpha or 1)
-		end
+function ACTIONBAR:Bar_OnEnter()
+	if not ACTIONBAR.fadeParent.mouseLock then
+		F:UIFrameFadeIn(ACTIONBAR.fadeParent, ACTIONBAR.fadeInDuration, ACTIONBAR.fadeParent:GetAlpha(), ACTIONBAR.fadeInAlpha)
+		ACTIONBAR:FadeBlings(ACTIONBAR.fadeInAlpha)
+	end
+end
 
+function ACTIONBAR:Bar_OnLeave()
+	if not ACTIONBAR.fadeParent.mouseLock then
+		F:UIFrameFadeOut(ACTIONBAR.fadeParent, ACTIONBAR.fadeOutDuration, ACTIONBAR.fadeParent:GetAlpha(), ACTIONBAR.fadeOutAlpha)
+		ACTIONBAR:FadeBlings(ACTIONBAR.fadeOutAlpha)
+	end
+end
 
+function ACTIONBAR:FadeParent_OnEvent()
+	local inInstance, instanceType = IsInInstance()
+
+	if (UnitAffectingCombat('player') and C.DB.actionbar.fade_in_combating)
+	or ((UnitExists('target') or UnitExists('focus')) and C.DB.actionbar.fade_in_targeting)
+	or ((instanceType == 'pvp' or instanceType == 'arena') and C.DB.actionbar.fade_in_pvp)
+	or ((instanceType == 'party' or instanceType == 'raid') and C.DB.actionbar.fade_in_dungeon)
+	or (UnitHasVehicleUI('player') and C.DB.actionbar.fade_in_vehicle) then
+		self.mouseLock = true
+		F:UIFrameFadeIn(self, ACTIONBAR.fadeInDuration, self:GetAlpha(), ACTIONBAR.fadeInAlpha)
+		ACTIONBAR:FadeBlings(ACTIONBAR.fadeInAlpha)
 	else
-		if FreeDB.actionbar.fade_smooth then
-			F:UIFrameFadeOut(frame, FreeDB.actionbar.fade_out_duration, frame:GetAlpha(), frame.faderConfig.fadeOutAlpha or 0)
-		else
-			frame:SetAlpha(frame.faderConfig.fadeOutAlpha or 1)
+		self.mouseLock = false
+		F:UIFrameFadeOut(self, ACTIONBAR.fadeOutDuration, self:GetAlpha(), ACTIONBAR.fadeOutAlpha)
+		ACTIONBAR:FadeBlings(ACTIONBAR.fadeOutAlpha)
+	end
+end
+
+function ACTIONBAR:HookActionBar()
+	for _, v in pairs(barsList) do
+		local bar = _G[v]
+		if bar then
+			bar:SetParent(ACTIONBAR.fadeParent)
+			bar:HookScript('OnEnter', ACTIONBAR.Bar_OnEnter)
+			bar:HookScript('OnLeave', ACTIONBAR.Bar_OnLeave)
 		end
 	end
-end
 
-local function OffFrameHandler(self)
-	if not self.__faderParent then return end
-	FrameHandler(self.__faderParent)
-end
-
-local function SpellFlyoutOnShow(self)
-	local frame = self:GetParent():GetParent():GetParent()
-	if not frame.fader then return end
-
-	self.__faderParent = frame
-	if not self.__faderHook then
-		SpellFlyout:HookScript('OnEnter', OffFrameHandler)
-		SpellFlyout:HookScript('OnLeave', OffFrameHandler)
-		self.__faderHook = true
-	end
-
-	for i = 1, 13 do
-		local button = _G['SpellFlyoutButton'..i]
-		if not button then break end
-		button.__faderParent = frame
-		if not button.__faderHook then
-			button:HookScript('OnEnter', OffFrameHandler)
-			button:HookScript('OnLeave', OffFrameHandler)
-			button.__faderHook = true
-		end
-	end
-end
-SpellFlyout:HookScript('OnShow', SpellFlyoutOnShow)
-
-
-
-local function CreateFrameFader(frame, faderConfig)
-	if frame.faderConfig then return end
-
-	frame.faderConfig = faderConfig
-
-	frame:EnableMouse(true)
-
-	frame:HookScript('OnEnter', FrameHandler)
-	frame:HookScript('OnLeave', FrameHandler)
-
-	FrameHandler(frame)
-end
-
-
-
-function ACTIONBAR:CreateButtonFrameFader(buttonList, faderConfig)
-	CreateFrameFader(self, faderConfig)
-
-	for _, button in next, buttonList do
-		if not button.__faderParent then
-			button.__faderParent = self
-
-			button:HookScript('OnEnter', OffFrameHandler)
-			button:HookScript('OnLeave', OffFrameHandler)
-
-			tinsert(buttonsList, button)
-		end
+	for _, button in pairs(ACTIONBAR.buttons) do
+		button:HookScript('OnEnter', ACTIONBAR.Bar_OnEnter)
+		button:HookScript('OnLeave', ACTIONBAR.Bar_OnLeave)
 	end
 end
 
-local function UpdateFader()
-	for _, button in pairs(buttonsList) do
-		OffFrameHandler(button)
-	end
-end
+function ACTIONBAR:CreateFader()
+	if not C.DB.actionbar.fade then return end
 
-F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateFader)
-F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateFader)
-F:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateFader)
-F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateFader)
-F:RegisterEvent('ZONE_CHANGED_NEW_AREA', UpdateFader)
+	ACTIONBAR.fadeOutAlpha = C.DB.actionbar.fade_out_alpha or 0
+	ACTIONBAR.fadeInAlpha = C.DB.actionbar.fade_in_alpha or 1
+	ACTIONBAR.fadeInDuration = C.DB.actionbar.fade_in_duration or .3
+	ACTIONBAR.fadeOutDuration = C.DB.actionbar.fade_out_duration or .3
+
+	ACTIONBAR.fadeParent = CreateFrame('Frame', nil, _G.UIParent)
+	ACTIONBAR.fadeParent:SetAlpha(ACTIONBAR.fadeOutAlpha)
+	ACTIONBAR.fadeParent:SetScript('OnEvent', ACTIONBAR.FadeParent_OnEvent)
+
+	if C.DB.actionbar.fade_in_combating then
+		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_REGEN_DISABLED')
+		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_REGEN_ENABLED')
+	end
+
+	if C.DB.actionbar.fade_in_targeting then
+		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_TARGET_CHANGED')
+		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_FOCUS_CHANGED')
+	end
+
+	if C.DB.actionbar.fade_in_dungeon or C.DB.actionbar.fade_in_pvp then
+		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_ENTERING_WORLD')
+		ACTIONBAR.fadeParent:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+	end
+
+	if C.DB.actionbar.fade_in_vehicle then
+		ACTIONBAR.fadeParent:RegisterEvent('UNIT_ENTERED_VEHICLE')
+		ACTIONBAR.fadeParent:RegisterEvent('UNIT_EXITED_VEHICLE')
+		ACTIONBAR.fadeParent:RegisterEvent('VEHICLE_UPDATE')
+	end
+
+	ACTIONBAR.HookActionBar()
+end

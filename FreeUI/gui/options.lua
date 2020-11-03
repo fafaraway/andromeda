@@ -257,7 +257,7 @@ local function CreateNamePlateAuraFilter(parent)
 		F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
 		close:SetScript('OnClick', function()
 			bar:Hide()
-			FreeADB['nameplate_aura_filter'][index][spellID] = nil
+			FREE_ADB['nameplate_aura_filter'][index][spellID] = nil
 			frameData[index].barList[spellID] = nil
 			sortBars(frameData[index].barList)
 		end)
@@ -273,9 +273,9 @@ local function CreateNamePlateAuraFilter(parent)
 	local function addClick(parent, index)
 		local spellID = tonumber(parent.box:GetText())
 		if not spellID or not GetSpellInfo(spellID) then UIErrorsFrame:AddMessage(C.RedColor..'Incorrect SpellID') return end
-		if FreeADB['nameplate_aura_filter'][index][spellID] then UIErrorsFrame:AddMessage(C.RedColor..'Existing ID') return end
+		if FREE_ADB['nameplate_aura_filter'][index][spellID] then UIErrorsFrame:AddMessage(C.RedColor..'Existing ID') return end
 
-		FreeADB['nameplate_aura_filter'][index][spellID] = true
+		FREE_ADB['nameplate_aura_filter'][index][spellID] = true
 		createBar(parent.child, index, spellID)
 		parent.box:SetText('')
 	end
@@ -298,7 +298,7 @@ local function CreateNamePlateAuraFilter(parent)
 			addClick(scroll, index)
 		end)
 
-		for spellID in pairs(FreeADB['nameplate_aura_filter'][index]) do
+		for spellID in pairs(FREE_ADB['nameplate_aura_filter'][index]) do
 			createBar(scroll.child, index, spellID)
 		end
 	end

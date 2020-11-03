@@ -15,7 +15,7 @@ end
 
 local function CreatePlayerStyle(self)
 	self.unitStyle = 'player'
-	self:SetSize(FreeDB.unitframe.player_width, FreeDB.unitframe.player_height)
+	self:SetSize(C.DB.unitframe.player_width, C.DB.unitframe.player_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -43,7 +43,7 @@ function UNITFRAME:SpawnPlayer()
 
 	local player = oUF:Spawn('player', 'oUF_Player')
 
-	if FreeDB.unitframe.player_hide_tags then
+	if C.DB.unitframe.player_hide_tags then
 		player.HealthValue:Hide()
 		player.PowerValue:Hide()
 
@@ -53,8 +53,8 @@ function UNITFRAME:SpawnPlayer()
 
 	F.Mover(player, L['UNITFRAME_MOVER_PLAYER'], 'PlayerFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
-	if FreeDB.actionbar.enable_actionbar then
-		if FreeDB.unitframe.combat_fader then return end
+	if C.DB.actionbar.enable_actionbar then
+		if C.DB.unitframe.combat_fader then return end
 		FreeUI_LeaveVehicleBar:SetParent(player)
 		FreeUI_LeaveVehicleButton:ClearAllPoints()
 		FreeUI_LeaveVehicleButton:SetPoint('LEFT', player, 'RIGHT', 4, 0 )
@@ -66,7 +66,7 @@ end
 
 local function CreatePetStyle(self)
 	self.unitStyle = 'pet'
-	self:SetSize(FreeDB.unitframe.pet_width, FreeDB.unitframe.pet_height)
+	self:SetSize(C.DB.unitframe.pet_width, C.DB.unitframe.pet_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -105,7 +105,7 @@ end
 
 local function CreateTargetStyle(self)
 	self.unitStyle = 'target'
-	self:SetSize(FreeDB.unitframe.target_width, FreeDB.unitframe.target_height)
+	self:SetSize(C.DB.unitframe.target_width, C.DB.unitframe.target_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -136,7 +136,7 @@ end
 
 local function CreateTargetTargetStyle(self)
 	self.unitStyle = 'targettarget'
-	self:SetSize(FreeDB.unitframe.target_target_width, FreeDB.unitframe.target_target_height)
+	self:SetSize(C.DB.unitframe.target_target_width, C.DB.unitframe.target_target_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -173,7 +173,7 @@ end
 
 local function CreateFocusStyle(self)
 	self.unitStyle = 'focus'
-	self:SetSize(FreeDB.unitframe.focus_width, FreeDB.unitframe.focus_height)
+	self:SetSize(C.DB.unitframe.focus_width, C.DB.unitframe.focus_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -202,7 +202,7 @@ end
 
 local function CreateFocusTargetStyle(self)
 	self.unitStyle = 'focustarget'
-	self:SetSize(FreeDB.unitframe.focus_target_width, FreeDB.unitframe.focus_target_height)
+	self:SetSize(C.DB.unitframe.focus_target_width, C.DB.unitframe.focus_target_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -223,7 +223,7 @@ end
 
 local function CreateBossStyle(self)
 	self.unitStyle = 'boss'
-	self:SetSize(FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)
+	self:SetSize(C.DB.unitframe.boss_width, C.DB.unitframe.boss_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -249,16 +249,16 @@ function UNITFRAME:SpawnBoss()
 	for i = 1,  _G.MAX_BOSS_FRAMES do
 		boss[i] = oUF:Spawn('boss'..i, 'oUF_Boss'..i)
 		if i == 1 then
-			boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 150, 120}, FreeDB.unitframe.boss_width, FreeDB.unitframe.boss_height)
+			boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame', {'LEFT', 'oUF_Target', 'RIGHT', 150, 120}, C.DB.unitframe.boss_width, C.DB.unitframe.boss_height)
 		else
-			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, FreeDB.unitframe.boss_gap)
+			boss[i]:SetPoint('BOTTOM', boss[i-1], 'TOP', 0, C.DB.unitframe.boss_gap)
 		end
 	end
 end
 
 local function CreateArenaStyle(self)
 	self.unitStyle = 'arena'
-	self:SetSize(FreeDB.unitframe.arena_width, FreeDB.unitframe.arena_height)
+	self:SetSize(C.DB.unitframe.arena_width, C.DB.unitframe.arena_height)
 
 	UNITFRAME:AddBackDrop(self)
 	UNITFRAME:AddHealthBar(self)
@@ -280,9 +280,9 @@ function UNITFRAME:SpawnArena()
 	for i = 1, 5 do
 		arena[i] = oUF:Spawn('arena'..i, 'oUF_Arena'..i)
 		if i == 1 then
-			arena[i].mover = F.Mover(arena[i], L['UNITFRAME_MOVER_ARENA'], 'ArenaFrame', {'RIGHT', 'oUF_Player', 'LEFT', -300, 300}, FreeDB.unitframe.arena_width, FreeDB.unitframe.arena_height)
+			arena[i].mover = F.Mover(arena[i], L['UNITFRAME_MOVER_ARENA'], 'ArenaFrame', {'RIGHT', 'oUF_Player', 'LEFT', -300, 300}, C.DB.unitframe.arena_width, C.DB.unitframe.arena_height)
 		else
-			arena[i]:SetPoint('BOTTOM', arena[i-1], 'TOP', 0, FreeDB.unitframe.arena_gap)
+			arena[i]:SetPoint('BOTTOM', arena[i-1], 'TOP', 0, C.DB.unitframe.arena_gap)
 		end
 	end
 end
@@ -325,27 +325,25 @@ function UNITFRAME:SpawnParty()
 			self:SetHeight(header:GetAttribute('initial-height'))
 		]],
 
-		'initial-width', FreeDB.unitframe.party_width,
-		'initial-height', FreeDB.unitframe.party_height,
+		'initial-width', C.DB.unitframe.party_width,
+		'initial-height', C.DB.unitframe.party_height,
 
 		'showParty', true,
 		'showRaid', false,
 		'showPlayer', true,
 		'showSolo', false,
 
-		'xoffset', FreeDB.unitframe.party_gap,
-		'yoffset', FreeDB.unitframe.party_gap,
+		'xoffset', C.DB.unitframe.party_gap,
+		'yoffset', C.DB.unitframe.party_gap,
 
 		'point', 'BOTTOM',
 
-		'groupBy', FreeDB.unitframe.group_by_role and 'ASSIGNEDROLE',
-		'groupingOrder', FreeDB.unitframe.group_by_role and 'TANK,HEALER,DAMAGER,NONE')
+		'groupBy', C.DB.unitframe.group_by_role and 'ASSIGNEDROLE',
+		'groupingOrder', C.DB.unitframe.group_by_role and 'TANK,HEALER,DAMAGER,NONE')
 
-	mover = F.Mover(party, L['UNITFRAME_MOVER_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, FreeDB.unitframe.party_width, ((FreeDB.unitframe.party_height * 5) + (FreeDB.unitframe.party_gap * 4)))
+	mover = F.Mover(party, L['UNITFRAME_MOVER_PARTY'], 'PartyFrame', {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}, C.DB.unitframe.party_width, ((C.DB.unitframe.party_height * 5) + (C.DB.unitframe.party_gap * 4)))
 	party:ClearAllPoints()
 	party:SetPoint('BOTTOMRIGHT', mover)
-
-	UNITFRAME:UpdateRaidHealthMethod()
 end
 
 local function CreateRaidStyle(self)
@@ -383,37 +381,37 @@ function UNITFRAME:SpawnRaid()
 			self:SetWidth(header:GetAttribute('initial-width'))
 			self:SetHeight(header:GetAttribute('initial-height'))
 		]],
-		'initial-width', FreeDB.unitframe.raid_width,
-		'initial-height', FreeDB.unitframe.raid_height,
+		'initial-width', C.DB.unitframe.raid_width,
+		'initial-height', C.DB.unitframe.raid_height,
 
 		'showParty', true,
 		'showRaid', true,
 
-		'xoffset', (FreeDB.unitframe.group_reverse and -FreeDB.unitframe.raid_gap) or FreeDB.unitframe.raid_gap,
-		'yOffset', -FreeDB.unitframe.raid_gap,
+		'xoffset', (C.DB.unitframe.group_reverse and -C.DB.unitframe.raid_gap) or C.DB.unitframe.raid_gap,
+		'yOffset', -C.DB.unitframe.raid_gap,
 
 		'groupFilter', tostring(i),
 		'groupingOrder', '1,2,3,4,5,6,7,8',
 		'groupBy', 'GROUP',
 		'sortMethod', 'INDEX',
 
-		'columnAnchorPoint', FreeDB.unitframe.group_reverse and 'RIGHT' or 'LEFT',
-		'point', FreeDB.unitframe.group_reverse and 'RIGHT' or 'LEFT')
+		'columnAnchorPoint', C.DB.unitframe.group_reverse and 'RIGHT' or 'LEFT',
+		'point', C.DB.unitframe.group_reverse and 'RIGHT' or 'LEFT')
 
 		return raid
 	end
 
 	local groups = {}
-	for i = 1, FreeDB.unitframe.group_filter do
+	for i = 1, C.DB.unitframe.group_filter do
 		groups[i] = CreateRaid('oUF_Raid'..i, i)
 		if i == 1 then
-			mover = F.Mover(groups[i], L['UNITFRAME_MOVER_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (FreeDB.unitframe.raid_width * 5) + (FreeDB.unitframe.raid_gap * 4), (FreeDB.unitframe.raid_height * FreeDB.unitframe.group_filter) + FreeDB.unitframe.raid_gap * (FreeDB.unitframe.group_filter - 1))
+			mover = F.Mover(groups[i], L['UNITFRAME_MOVER_RAID'], 'RaidFrame', {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}, (C.DB.unitframe.raid_width * 5) + (C.DB.unitframe.raid_gap * 4), (C.DB.unitframe.raid_height * C.DB.unitframe.group_filter) + C.DB.unitframe.raid_gap * (C.DB.unitframe.group_filter - 1))
 			groups[i]:ClearAllPoints()
-			groups[i]:SetPoint((FreeDB.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', mover)
+			groups[i]:SetPoint((C.DB.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', mover)
 		else
-			groups[i]:SetPoint((FreeDB.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (FreeDB.unitframe.group_reverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -FreeDB.unitframe.raid_gap)
+			groups[i]:SetPoint((C.DB.unitframe.group_reverse and 'TOPRIGHT') or 'TOPLEFT', groups[i-1], (C.DB.unitframe.group_reverse and 'BOTTOMRIGHT') or 'BOTTOMLEFT', 0, -C.DB.unitframe.raid_gap)
 		end
 	end
 
-	UNITFRAME:UpdateRaidHealthMethod()
+	-- UNITFRAME:UpdateRaidHealthMethod()
 end

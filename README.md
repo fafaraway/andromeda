@@ -28,5 +28,5 @@
 ## Credits
 *  [Haleth](https://github.com/Haleth) <em>Original author of [FreeUI](https://github.com/Haleth/FreeUI)</em>
 *  [siweia](https://github.com/siweia) <em>Author of [NDui](https://github.com/siweia/NDui)</em>
-*  Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE
+*  Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou
 

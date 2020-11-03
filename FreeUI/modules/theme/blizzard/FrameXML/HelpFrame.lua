@@ -121,7 +121,7 @@ local function LoadPrepatchHelpFrame()
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	if not C.isNewPatch then
 		LoadPrepatchHelpFrame()

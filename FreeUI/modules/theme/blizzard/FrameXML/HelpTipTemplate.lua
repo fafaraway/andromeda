@@ -12,7 +12,7 @@ local function reskinHelpTips(self)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	reskinHelpTips(HelpTip)
 	hooksecurefunc(HelpTip, "Show", reskinHelpTips)

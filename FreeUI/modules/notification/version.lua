@@ -32,12 +32,12 @@ end
 
 function NOTIFICATION:VersionCheck_Init()
 	if not isVCInit then
-		local status = NOTIFICATION:VersionCheck_Compare(FreeADB['detect_version'], C.Version)
+		local status = NOTIFICATION:VersionCheck_Compare(FREE_ADB['detect_version'], C.AddonVersion)
 		if status == 'IsNew' then
-			local release = gsub(FreeADB['detect_version'], '(%d+)$', '0')
+			local release = gsub(FREE_ADB['detect_version'], '(%d+)$', '0')
 			NOTIFICATION:VersionCheck_Create(release)
 		elseif status == 'IsOld' then
-			FreeADB['detect_version'] = C.Version
+			FREE_ADB['detect_version'] = C.AddonVersion
 		end
 
 		isVCInit = true
@@ -46,7 +46,7 @@ end
 
 function NOTIFICATION:VersionCheck_Send(channel)
 	if GetTime() - lastVCTime >= 10 then
-		C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', FreeADB['detect_version'], channel)
+		C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', FREE_ADB['detect_version'], channel)
 		lastVCTime = GetTime()
 	end
 end
@@ -56,9 +56,9 @@ function NOTIFICATION:VersionCheck_Update(...)
 	if prefix ~= 'FreeUIVersionCheck' then return end
 	if Ambiguate(author, 'none') == C.MyName then return end
 
-	local status = NOTIFICATION:VersionCheck_Compare(msg, FreeADB['detect_version'])
+	local status = NOTIFICATION:VersionCheck_Compare(msg, FREE_ADB['detect_version'])
 	if status == 'IsNew' then
-		FreeADB['detect_version'] = msg
+		FREE_ADB['detect_version'] = msg
 	elseif status == 'IsOld' then
 		NOTIFICATION:VersionCheck_Send(distType)
 	end
@@ -72,7 +72,7 @@ function NOTIFICATION:VersionCheck_UpdateGroup()
 end
 
 function NOTIFICATION:VersionCheck()
-	if not FreeDB.notification.version_check then return end
+	if not C.DB.notification.version_check then return end
 	if C.isDeveloper then return end
 
 	NOTIFICATION:VersionCheck_Init()
@@ -80,7 +80,7 @@ function NOTIFICATION:VersionCheck()
 	F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
 
 	if IsInGuild() then
-		C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', C.Version, 'GUILD')
+		C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', C.AddonVersion, 'GUILD')
 		lastVCTime = GetTime()
 	end
 	NOTIFICATION:VersionCheck_UpdateGroup()

@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	local r, g, b = C.r, C.g, C.b
 
@@ -61,11 +61,10 @@ tinsert(C.BlizzThemes, function()
 			frame.NameBorderLeft:Hide()
 			frame.NameBorderRight:Hide()
 			frame.NameBorderMid:Hide()
-			frame.IconBorder:Hide()
-
 			frame.WinnerRoll:SetTextColor(.9, .9, .9)
 
 			frame.bg = F.ReskinIcon(frame.Icon)
+			F.ReskinIconBorder(frame.IconBorder)
 
 			F.ReskinCollapse(frame.ToggleButton)
 			frame.ToggleButton:GetNormalTexture():SetAlpha(0)
@@ -82,8 +81,6 @@ tinsert(C.BlizzThemes, function()
 				frame.WinnerName:SetVertexColor(color.r, color.g, color.b)
 			end
 		end
-
-		frame.bg:SetBackdropBorderColor(frame.IconBorder:GetVertexColor())
 	end)
 
 	-- [[ Player frame ]]

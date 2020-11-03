@@ -10,20 +10,20 @@ local settings
 
 
 function AURA:OnLogin()
-	if not FreeDB['aura']['enable_aura'] then return end
+	if not C.DB['aura']['enable_aura'] then return end
 
 	settings = {
 		Buffs = {
-			size = FreeDB['aura']['buff_size'],
-			wrapAfter = FreeDB['aura']['buffs_per_row'],
+			size = C.DB['aura']['buff_size'],
+			wrapAfter = C.DB['aura']['buffs_per_row'],
 			maxWraps = 3,
-			reverseGrow = FreeDB['aura']['reverse_buffs'],
+			reverseGrow = C.DB['aura']['reverse_buffs'],
 		},
 		Debuffs = {
-			size = FreeDB['aura']['debuff_size'],
-			wrapAfter = FreeDB['aura']['debuffs_per_row'],
+			size = C.DB['aura']['debuff_size'],
+			wrapAfter = C.DB['aura']['debuffs_per_row'],
 			maxWraps = 1,
-			reverseGrow = FreeDB['aura']['reverse_debuffs'],
+			reverseGrow = C.DB['aura']['reverse_debuffs'],
 		},
 	}
 
@@ -170,12 +170,12 @@ function AURA:OnAttributeChanged(attribute, value)
 end
 
 function AURA:UpdateOptions()
-	AURA.settings.Buffs.size = FreeDB['aura']['buff_size']
-	AURA.settings.Buffs.wrapAfter = FreeDB['aura']['buffs_per_row']
-	AURA.settings.Buffs.reverseGrow = FreeDB['aura']['reverse_buffs']
-	AURA.settings.Debuffs.size = FreeDB['aura']['debuff_size']
-	AURA.settings.Debuffs.wrapAfter = FreeDB['aura']['debuffs_per_row']
-	AURA.settings.Debuffs.reverseGrow = FreeDB['aura']['reverse_debuffs']
+	AURA.settings.Buffs.size = C.DB['aura']['buff_size']
+	AURA.settings.Buffs.wrapAfter = C.DB['aura']['buffs_per_row']
+	AURA.settings.Buffs.reverseGrow = C.DB['aura']['reverse_buffs']
+	AURA.settings.Debuffs.size = C.DB['aura']['debuff_size']
+	AURA.settings.Debuffs.wrapAfter = C.DB['aura']['debuffs_per_row']
+	AURA.settings.Debuffs.reverseGrow = C.DB['aura']['reverse_debuffs']
 end
 
 function AURA:UpdateHeader(header)
@@ -192,12 +192,12 @@ function AURA:UpdateHeader(header)
 	header:SetAttribute('wrapAfter', cfg.wrapAfter)
 	header:SetAttribute('maxWraps', cfg.maxWraps)
 	header:SetAttribute('point', cfg.reverseGrow and 'TOPLEFT' or 'TOPRIGHT')
-	header:SetAttribute('minWidth', (cfg.size + FreeDB['aura']['margin'])*cfg.wrapAfter)
-	header:SetAttribute('minHeight', (cfg.size + FreeDB['aura']['offset'])*cfg.maxWraps)
-	header:SetAttribute('xOffset', (cfg.reverseGrow and 1 or -1) * (cfg.size + FreeDB['aura']['margin']))
+	header:SetAttribute('minWidth', (cfg.size + C.DB['aura']['margin'])*cfg.wrapAfter)
+	header:SetAttribute('minHeight', (cfg.size + C.DB['aura']['offset'])*cfg.maxWraps)
+	header:SetAttribute('xOffset', (cfg.reverseGrow and 1 or -1) * (cfg.size + C.DB['aura']['margin']))
 	header:SetAttribute('yOffset', 0)
 	header:SetAttribute('wrapXOffset', 0)
-	header:SetAttribute('wrapYOffset', -(cfg.size + FreeDB['aura']['offset']))
+	header:SetAttribute('wrapYOffset', -(cfg.size + C.DB['aura']['offset']))
 	header:SetAttribute('template', format('FreeUIAuraTemplate%d', cfg.size))
 
 	--local fontSize = floor(cfg.size/30*12 + .5)
@@ -254,9 +254,9 @@ function AURA:CreateAuraIcon(button)
 	button.icon:SetInside()
 	button.icon:SetTexCoord(unpack(C.TexCoord))
 
-	button.count = F.CreateFS(button, C.Assets.Fonts.Regular, 11, 'OUTLINE', text, nil, true, 'TOP', 1, 4)
+	button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', text, nil, true, 'TOP', 1, 4)
 
-	button.timer = F.CreateFS(button, C.Assets.Fonts.Regular, 11, 'OUTLINE', text, nil, true, 'BOTTOM', 1, -4)
+	button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', text, nil, true, 'BOTTOM', 1, -4)
 
 	button.highlight = button:CreateTexture(nil, 'HIGHLIGHT')
 	button.highlight:SetColorTexture(1, 1, 1, .25)

@@ -26,7 +26,7 @@ local menuList = {
 }
 
 function COMBAT:Marker()
-	if not FreeDB.combat.easy_mark then return end
+	if not C.DB.combat.easy_mark then return end
 
 	WorldFrame:HookScript('OnMouseDown', function(_, button)
 		if button == 'LeftButton' and IsAltKeyDown() and UnitExists('mouseover') then

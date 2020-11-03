@@ -6,26 +6,39 @@ local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0
 local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
 
-
-
-
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
 C.MyLevel = UnitLevel('player')
 C.MyFaction = select(2, UnitFactionGroup('player'))
 C.MyRace = select(2, UnitRace('player'))
 C.MyRealm = GetRealmName()
-C.Version = GetAddOnMetadata('FreeUI', 'Version')
+C.MyFullName = C.MyName..'-'..C.MyRealm
+C.AddonVersion = GetAddOnMetadata('FreeUI', 'Version')
 C.Support = GetAddOnMetadata('FreeUI', 'X-Support')
 C.Client = GetLocale()
 C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
-C.isNewPatch = select(4, GetBuildInfo()) > 90000
+C.isNewPatch = select(4, GetBuildInfo()) > 90001
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
-C.isDeveloper = false
+C.MaxLevel = GetMaxLevelForPlayerExpansion()
+
+
+
+C.DevsList = {
+	['Kangrinboqe-死亡之翼'] = true,
+	['Dontbeshy-死亡之翼'] = true,
+	['瑪格漢之光-死亡之翼'] = true,
+	['贰拾年老騎士-死亡之翼'] = true,
+	['贰拾年老法師-死亡之翼'] = true,
+	['雨色入青山-白银之手'] = true,
+}
+local function isDeveloper()
+	return C.DevsList[C.MyFullName]
+end
+C.isDeveloper = isDeveloper()
 
 
 C['Assets'] = {
@@ -40,12 +53,15 @@ C['Assets'] = {
 	['bg_tex'] = C.AssetsPath..'textures\\bg_tex',
 	['shadow_tex'] = C.AssetsPath..'textures\\shadow_tex',
 	['glow_tex'] = C.AssetsPath..'textures\\glow_tex',
-
+	['blank_tex'] = C.AssetsPath..'textures\\blank_tex',
 	['tick_tex'] = C.AssetsPath..'textures\\tick_tex',
 	['stripe_tex'] = C.AssetsPath..'textures\\stripe_tex',
 
 	['close_tex'] = C.AssetsPath..'textures\\close_tex',
 	['arrow_tex'] = C.AssetsPath..'textures\\arrow_tex',
+
+	['shield_tex'] = C.AssetsPath..'textures\\shield_tex',
+	['sword_tex'] = C.AssetsPath..'textures\\sword_tex',
 
 	['button_normal']  = C.AssetsPath..'button\\normal',
 	['button_flash']   = C.AssetsPath..'button\\flash',
@@ -82,46 +98,118 @@ C['Assets'] = {
 		['Regular'] = C.AssetsPath..'fonts\\regular.ttf',
 		['Condensed'] = C.AssetsPath..'fonts\\condensed.ttf',
 		['Bold'] = C.AssetsPath..'fonts\\bold.ttf',
-		['Chat'] = C.AssetsPath..'fonts\\chat.ttf',
+		['Header'] = C.AssetsPath..'fonts\\bold.ttf',
 		['Combat'] = C.AssetsPath..'fonts\\combat.ttf',
 		['Pixel'] = C.AssetsPath..'fonts\\pixel.ttf',
 		['Cooldown'] = C.AssetsPath..'fonts\\cooldown.ttf',
-		['Symbol'] = C.AssetsPath..'fonts\\symbol.ttf',
+		['Roadway'] = C.AssetsPath..'fonts\\roadway.ttf',
+	},
+}
+
+C['Colors'] = {
+	['Class'] = {
+		['HUNTER'] = {
+			['r'] = 0.2,
+			['g'] = 0.71,
+			['b'] = 0.25,
+			['colorStr'] = 'ff33b541',
+		},
+		['WARRIOR'] = {
+			['r'] = 0.78,
+			['g'] = 0.61,
+			['b'] = 0.39,
+			['colorStr'] = 'ffc79b64',
+		},
+		['PALADIN'] = {
+			['r'] = 0.93,
+			['g'] = 0.33,
+			['b'] = 0.42,
+			['colorStr'] = 'ffee556c',
+		},
+		['MAGE'] = {
+			['r'] = 0.49,
+			['g'] = 0.66,
+			['b'] = 0.89,
+			['colorStr'] = 'ff7ea8e3',
+		},
+		['PRIEST'] = {
+			['r'] = 0.83,
+			['g'] = 0.83,
+			['b'] = 0.83,
+			['colorStr'] = 'ffd3d3d3',
+		},
+		['DEATHKNIGHT'] = {
+			['r'] = 0.77,
+			['g'] = 0.16,
+			['b'] = 0.22,
+			['colorStr'] = 'ffc32838',
+		},
+		['WARLOCK'] = {
+			['r'] = 0.65,
+			['g'] = 0.64,
+			['b'] = 0.88,
+			['colorStr'] = 'ffa5a3e0',
+		},
+		['DEMONHUNTER'] = {
+			['r'] = 0.82,
+			['g'] = 0.35,
+			['b'] = 0.89,
+			['colorStr'] = 'ffd259e3',
+		},
+		['ROGUE'] = {
+			['r'] = 0.91,
+			['g'] = 0.81,
+			['b'] = 0.51,
+			['colorStr'] = 'ffe9cb7f',
+		},
+		['DRUID'] = {
+			['r'] = 0.95,
+			['g'] = 0.48,
+			['b'] = 0.27,
+			['colorStr'] = 'fff27944',
+		},
+		['MONK'] = {
+			['r'] = 0.28,
+			['g'] = 0.84,
+			['b'] = 0.6,
+			['colorStr'] = 'ff48d599',
+		},
+		['SHAMAN'] = {
+			['r'] = 0.29,
+			['g'] = 0.29,
+			['b'] = 0.82,
+			['colorStr'] = 'ff4949d0',
+		},
 	},
 }
 
 
--- C.ClassList = {}
--- for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
--- 	C.ClassList[v] = k
--- end
-
--- C.ClassColors = {}
--- local colors = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
--- for class, value in pairs(colors) do
--- 	C.ClassColors[class] = {}
--- 	C.ClassColors[class].r = value.r
--- 	C.ClassColors[class].g = value.g
--- 	C.ClassColors[class].b = value.b
--- 	C.ClassColors[class].colorStr = value.colorStr
--- end
-
--- C.r = C.ClassColors[C.MyClass].r
--- C.g = C.ClassColors[C.MyClass].g
--- C.b = C.ClassColors[C.MyClass].b
-
--- C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
--- C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
-
 C.ClassList = {}
-for k, v in pairs(_G.LOCALIZED_CLASS_NAMES_MALE) do
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 	C.ClassList[v] = k
 end
+
 C.ClassColors = {}
+local colors = C.isDeveloper and C.Colors.Class or RAID_CLASS_COLORS
+for class, value in pairs(colors) do
+	C.ClassColors[class] = {}
+	C.ClassColors[class].r = value.r
+	C.ClassColors[class].g = value.g
+	C.ClassColors[class].b = value.b
+	C.ClassColors[class].colorStr = value.colorStr
+end
+
+C.r = C.ClassColors[C.MyClass].r
+C.g = C.ClassColors[C.MyClass].g
+C.b = C.ClassColors[C.MyClass].b
+
+C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
+C.AddonName = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 C.InfoColor = '|cffe9c55d'
 C.YellowColor = '|cffffff00'
 C.GreyColor = '|cff7f7f7f'
+C.WhiteColor = '|cffffffff'
 C.RedColor = '|cffff2020'
 C.GreenColor = '|cff20ff20'
 C.BlueColor = '|cff82c5ff'
@@ -192,15 +280,6 @@ C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_R
 C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 
 
-C.DevsList = {
-	['Kangrinboqe-死亡之翼'] = true,
-	['Dontbeshy-死亡之翼'] = true,
-	['瑪格漢之光-死亡之翼'] = true,
-	['贰拾年老騎士-死亡之翼'] = true,
-}
 
-local function isDeveloper()
-	return C.DevsList[C.MyName..'-'..C.MyRealm]
-end
 
-C.isDeveloper = isDeveloper()
+

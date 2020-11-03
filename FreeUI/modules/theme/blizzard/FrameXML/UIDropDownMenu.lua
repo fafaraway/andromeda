@@ -15,7 +15,7 @@ local function isCheckTexture(check)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	hooksecurefunc("UIDropDownMenu_CreateFrames", function()
 		for _, name in next, {"DropDownList", "L_DropDownList", "Lib_DropDownList"} do

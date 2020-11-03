@@ -31,7 +31,7 @@ end
 
 
 function BLIZZARD:ToggleBossBanner()
-	if FreeDB.blizzard.hide_boss_banner then
+	if C.DB.blizzard.hide_boss_banner then
 		BossBanner:UnregisterAllEvents()
 	else
 		BossBanner:RegisterEvent('BOSS_KILL')
@@ -40,7 +40,7 @@ function BLIZZARD:ToggleBossBanner()
 end
 
 function BLIZZARD:ToggleBossEmote()
-	if FreeDB.blizzard.hide_boss_emote then
+	if C.DB.blizzard.hide_boss_emote then
 		RaidBossEmoteFrame:UnregisterAllEvents()
 	else
 		RaidBossEmoteFrame:RegisterEvent('RAID_BOSS_EMOTE')
@@ -50,7 +50,7 @@ function BLIZZARD:ToggleBossEmote()
 end
 
 function BLIZZARD:UndressButton()
-	if not FreeDB.blizzard.undress_button then return end
+	if not C.DB.blizzard.undress_button then return end
 
 	local undressButton = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
 	undressButton:SetSize(80, 22)
@@ -89,7 +89,7 @@ function BLIZZARD:UndressButton()
 end
 
 function BLIZZARD:TradeTargetInfo()
-	if not FreeDB.blizzard.trade_target_info then return end
+	if not C.DB.blizzard.trade_target_info then return end
 
 	local infoText = F.CreateFS(TradeFrame, C.Assets.Fonts.Regular, 14, true)
 	infoText:ClearAllPoints()
@@ -116,7 +116,7 @@ end
 
 function BLIZZARD:EasyDelete()
 	hooksecurefunc(StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
-		if not FreeDB.blizzard.easy_delete then return end
+		if not C.DB.blizzard.easy_delete then return end
 
 		self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
 	end)
@@ -244,7 +244,7 @@ do
 	end
 
 	function BLIZZARD:QueueTimer()
-		if not FreeDB.blizzard.queue_timer then return end
+		if not C.DB.blizzard.queue_timer then return end
 
 		LFGTimer:RegisterEvent('LFG_PROPOSAL_SHOW')
 		LFGTimer:SetScript('OnEvent', function(self)

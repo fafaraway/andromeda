@@ -26,7 +26,7 @@ end
 function ACTIONBAR:CreateLeaveVehicleBar()
 	local num = 1
 	local buttonList = {}
-	local size = FreeDB.actionbar.button_size_big
+	local size = C.DB.actionbar.button_size_big
 
 	local frame = CreateFrame('Frame', 'FreeUI_ActionBarExit', UIParent, 'SecureHandlerStateTemplate')
 	frame.Pos = {'CENTER', UIParent, 'CENTER', 0, 200}

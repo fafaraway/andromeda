@@ -243,9 +243,9 @@ end
 
 
 function UNITFRAME:ClickCast()
-	if not FreeDB.unitframe.enable_unitframe then return end
-	if not FreeDB.unitframe.enable_group then return end
-	if not FreeDB.unitframe.group_click_cast then return end
+	if not C.DB.unitframe.enable_unitframe then return end
+	if not C.DB.unitframe.enable_group then return end
+	if not C.DB.unitframe.group_click_cast then return end
 
 
 	SpellBinder.OpenButton = CreateFrame('CheckButton', 'SpellBinderOpenButton', _G['SpellBookSkillLineTab1'], 'SpellBookSkillLineTabTemplate')
@@ -308,7 +308,7 @@ function UNITFRAME:ClickCast()
 	end)
 
 
-	DB = FreeSpellBinding
+	DB = FREE_SPELLBINDING
 	DB.spells = DB.spells or {}
 	DB.keys = DB.keys or {}
 	SpellBinder.frames = SpellBinder.frames or {}

@@ -210,7 +210,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					texture:SetPoint('TOPLEFT', offsetX + (TILE_SIZE_WIDTH * (k-1)), -(offsetY + (TILE_SIZE_HEIGHT * (j - 1))))
 					texture:SetTexture(tonumber(fileDataIDs[((j - 1) * numTexturesWide) + k]), nil, nil, 'TRILINEAR')
 					texture:SetDrawLayer('ARTWORK', -1)
-					if FreeDB.map.map_reveal then
+					if C.DB.map.remove_fog then
 						texture:Show()
 						if fullUpdate then
 							pin.textureLoadGroup:AddTexture(texture)
@@ -218,7 +218,7 @@ local function MapExplorationPin_RefreshOverlays(pin, fullUpdate)
 					else
 						texture:Hide()
 					end
-					texture:SetVertexColor(.6, .6, .6)
+					texture:SetVertexColor(.4, .4, .4)
 
 					tinsert(overlayTextures, texture)
 				end
@@ -237,23 +237,23 @@ end
 function MAP:MapReveal()
 	if IsAddOnLoaded('Leatrix_Maps') then return end
 
-	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'OptionsCheckButtonTemplate')
+	--[[ local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'OptionsCheckButtonTemplate')
 	bu:SetPoint('TOPRIGHT', -140, -4)
 	bu:Size(22)
 	F.ReskinCheck(bu)
-	bu:SetChecked(FreeDB.map.map_reveal)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 22, 0)
+	bu:SetChecked(C.DB.map.map_reveal)
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 12, 'OUTLINE', L['MAP_REVEAL'], 'YELLOW', false, 'LEFT', 22, 0) ]]
 
 	for pin in WorldMapFrame:EnumeratePinsByTemplate('MapExplorationPinTemplate') do
 		hooksecurefunc(pin, 'RefreshOverlays', MapExplorationPin_RefreshOverlays)
 		pin.overlayTexturePool.resetterFunc = TexturePool_ResetVertexColor
 	end
 
-	bu:SetScript('OnClick', function(self)
-		FreeDB.map.map_reveal = self:GetChecked()
+	--[[ bu:SetScript('OnClick', function(self)
+		C.DB.map.map_reveal = self:GetChecked()
 
 		for i = 1, #overlayTextures do
-			overlayTextures[i]:SetShown(FreeDB.map.map_reveal)
+			overlayTextures[i]:SetShown(C.DB.map.map_reveal)
 		end
-	end)
+	end) ]]
 end

@@ -19,9 +19,6 @@ local function SetupCVars()
 	-- display
 	SetCVar('Outline', 3)
 	SetCVar('findYourselfMode', 2)
-	SetCVar('showTutorials', 0)
-	SetCVar('hideAdventureJournalAlerts', 0)
-	SetCVar('showNPETutorials', 0)
 
 	-- control
 	SetCVar('autoDismountFlying', 0)
@@ -123,16 +120,19 @@ local function SetupCVars()
 
 	-- mouse
 	SetCVar('rawMouseEnable', 1)
-	SetCVar('cursorsizepreferred', 1)
+
+	if C.isDeveloper then
+		SetCVar('cursorsizepreferred', 2)
+	end
 end
 
 local function SetupUIScale()
 	if C.ScreenHeight >= 2000 then
-		FreeADB.appearance.ui_scale = 2
+		FREE_ADB.ui_scale = 2
 	elseif C.ScreenHeight >= 1500 then
-		FreeADB.appearance.ui_scale = 1.4
+		FREE_ADB.ui_scale = 1.4
 	else
-		FreeADB.appearance.ui_scale = 1
+		FREE_ADB.ui_scale = 1
 	end
 end
 
@@ -143,14 +143,14 @@ local function SetupActionbars()
 	SetCVar('lockActionBars', 1)
 	SetCVar('alwaysShowActionBars', 1)
 
-	SetActionBarToggles(1, 1, 1, 1, 1)
+	-- SetActionBarToggles(1, 1, 1, 1, 1)
 
-	MultiActionBar_Update()
+	-- MultiActionBar_Update()
 
-	_G.MultiBarBottomLeft:SetShown(true)
-	_G.MultiBarRight:SetShown(true)
-	_G.MultiBarLeft:SetShown(true)
-	_G.MultiBarBottomRight:SetShown(true)
+	-- _G.MultiBarBottomLeft:SetShown(true)
+	-- _G.MultiBarRight:SetShown(true)
+	-- _G.MultiBarLeft:SetShown(true)
+	-- _G.MultiBarBottomRight:SetShown(true)
 end
 
 local function SetupChatFrame()
@@ -162,19 +162,7 @@ local function SetupChatFrame()
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
-	FreeDB.chat.lock_position = true
-end
-
-local function SetupSkada()
-	if not SkadaDB then return end
-
-	SkadaDB['profiles']['Default'].showtotals = true
-	SkadaDB['profiles']['Default'].showself = true
-	SkadaDB['profiles']['Default']['icon'].hide = true
-	SkadaDB['profiles']['Default'].showtotals = true
-	SkadaDB['profiles']['Default']['windows'].barfont = '!Free_normal'
-	SkadaDB['profiles']['Default']['windows'].smoothing = true
-	SkadaDB['profiles']['Default']['windows'].bartexture = '!Free_norm'
+	C.DB.chat.lock_position = true
 end
 
 local function SetupDBM()
@@ -214,7 +202,7 @@ function INSTALL:HelloWorld()
 	F.CreateBD(f, nil, true)
 	F.CreateTex(f)
 
-	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
+	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
 	f.desc = F.CreateFS(f, C.Assets.Fonts.Regular, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	f.lineLeft = CreateFrame('Frame', nil, f)
@@ -283,7 +271,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
 		rightButton:SetScript('OnClick', function()
-			FreeDB['installation_complete'] = true
+			C.DB['installation_complete'] = true
 			ReloadUI()
 		end)
 	end
@@ -296,7 +284,6 @@ function INSTALL:HelloWorld()
 
 		leftButton:SetScript('OnClick', step6)
 		rightButton:SetScript('OnClick', function()
-			SetupSkada()
 			SetupDBM()
 			SetupAddons()
 			step6()
@@ -380,8 +367,44 @@ end
 
 
 function INSTALL:OnLogin()
-	if FreeDB['installation_complete'] then return end
+	if C.DB['installation_complete'] then return end
 
 	self:HelloWorld()
 end
 
+
+-- Hide tutorial
+-- Credit ketho
+-- https://github.com/ketho-wow/HideTutorial
+local function OnEvent(self, event, addon)
+	if event == 'ADDON_LOADED' and addon == 'HideTutorial' then
+		local tocVersion = select(4, GetBuildInfo())
+		if not C.DB.toc_version or C.DB.toc_version < tocVersion then
+			-- only do this once per character
+			C.DB.toc_version = tocVersion
+		end
+	elseif event == 'VARIABLES_LOADED' then
+		local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', NUM_LE_FRAME_TUTORIALS)
+		if C.DB.installation_complete or not lastInfoFrame then
+			C_CVar.SetCVar('showTutorials', 0)
+			C_CVar.SetCVar('showNPETutorials', 0)
+			C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
+			-- help plates
+			for i = 1, NUM_LE_FRAME_TUTORIALS do
+				C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
+			end
+			for i = 1, NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
+				C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
+			end
+		end
+
+		function MainMenuMicroButton_AreAlertsEnabled()
+			return false
+		end
+	end
+end
+
+local f = CreateFrame('Frame')
+f:RegisterEvent('ADDON_LOADED')
+f:RegisterEvent('VARIABLES_LOADED')
+f:SetScript('OnEvent', OnEvent)

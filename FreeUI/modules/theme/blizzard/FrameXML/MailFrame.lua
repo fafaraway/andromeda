@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	local texL, texR, texT, texB = unpack(C.TexCoord)
 
@@ -41,6 +41,7 @@ tinsert(C.BlizzThemes, function()
 	F.ReskinArrow(InboxPrevPageButton, "left")
 	F.ReskinArrow(InboxNextPageButton, "right")
 
+	F.CreateBDFrame(OpenMailScrollFrame, .25)
 	local bg = F.CreateBDFrame(SendMailScrollFrame, .25)
 	bg:SetPoint("TOPLEFT", 6, 0)
 

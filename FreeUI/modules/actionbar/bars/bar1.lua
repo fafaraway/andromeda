@@ -14,7 +14,7 @@ local function UpdateActionbarScale(bar)
 	local frame = _G["FreeUI_Action"..bar]
 	if not frame then return end
 
-	local size = frame.buttonSize * FreeDB.actionbar.scale
+	local size = frame.buttonSize * C.DB.actionbar.scale
 	frame:SetFrameSize(size)
 	for _, button in pairs(frame.buttonList) do
 		button:SetSize(size, size)
@@ -22,7 +22,7 @@ local function UpdateActionbarScale(bar)
 end
 
 function ACTIONBAR:UpdateAllScale()
-	if not FreeDB.actionbar.enable then return end
+	if not C.DB.actionbar.enable then return end
 
 	UpdateActionbarScale("Bar1")
 	UpdateActionbarScale("Bar2")
@@ -56,7 +56,7 @@ end
 
 function ACTIONBAR:CreateBar1()
 	local num = NUM_ACTIONBAR_BUTTONS
-	local size = FreeDB.actionbar.button_size_normal
+	local size = C.DB.actionbar.button_size_normal
 	local buttonList = {}
 
 	local frame = CreateFrame('Frame', 'FreeUI_ActionBar1', UIParent, 'SecureHandlerStateTemplate')
@@ -92,16 +92,17 @@ function ACTIONBAR:CreateBar1()
 	--frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	if FreeDB.actionbar.bar1_fade then
+	if C.DB.actionbar.bar1_fade then
 		frame.fader = {
-			enable = FreeDB.actionbar.bar1_fade,
-			fadeInAlpha = FreeDB.actionbar.bar1_fade_in_alpha,
-			fadeOutAlpha = FreeDB.actionbar.bar1_fade_out_alpha,
-			arena = FreeDB.actionbar.bar1_fade_arena,
-			instance = FreeDB.actionbar.bar1_fade_instance,
-			combat = FreeDB.actionbar.bar1_fade_combat,
-			target = FreeDB.actionbar.bar1_fade_target,
-			hover = FreeDB.actionbar.bar1_fade_hover,
+			enable = C.DB.actionbar.bar1_fade,
+			fadeInAlpha = C.DB.actionbar.bar1_fade_in_alpha,
+			fadeOutAlpha = C.DB.actionbar.bar1_fade_out_alpha,
+			arena = C.DB.actionbar.bar1_fade_arena,
+			instance = C.DB.actionbar.bar1_fade_instance,
+			combat = C.DB.actionbar.bar1_fade_combat,
+			target = C.DB.actionbar.bar1_fade_target,
+			hover = C.DB.actionbar.bar1_fade_hover,
+			vehicle = C.DB.actionbar.bar1_fade_vehicle,
 		}
 
 		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
@@ -153,7 +154,7 @@ end
 
 
 function ACTIONBAR:OnLogin()
-	if not FreeDB.actionbar.enable then return end
+	if not C.DB.actionbar.enable then return end
 
 	ACTIONBAR.buttons = {}
 
@@ -169,4 +170,5 @@ function ACTIONBAR:OnLogin()
 	ACTIONBAR:RemoveBlizzArt()
 	ACTIONBAR:RestyleButtons()
 	ACTIONBAR:UpdateAllScale()
+	ACTIONBAR:CreateFader()
 end

@@ -70,7 +70,7 @@ end
 local FreeUIFriendsButton = INFOBAR.FreeUIGuildButton
 
 function INFOBAR:Guild()
-	if not FreeDB.infobar.guild then return end
+	if not C.DB.infobar.guild then return end
 
 	FreeUIGuildButton = INFOBAR:addButton('', INFOBAR.POSITION_RIGHT, 100)
 
@@ -115,7 +115,7 @@ function INFOBAR:Guild()
 		local online = totalOnline
 		local GuildInfo, GuildRank, GuildLevel = GetGuildInfo("player")
 
-		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
+		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 
 		if GuildInfo and GuildLevel then

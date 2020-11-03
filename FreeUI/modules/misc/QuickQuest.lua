@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-local QUEST = F.QUEST
 
 
 -- QuickQuest, by p3lim
@@ -28,7 +27,7 @@ local MINIMAP_TRACKING_TRIVIAL_QUESTS = MINIMAP_TRACKING_TRIVIAL_QUESTS
 
 local choiceQueue
 
-local created
+--[[ local created
 local function setupCheckButton()
 	if created then return end
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
@@ -37,14 +36,14 @@ local function setupCheckButton()
 	bu:SetHitRectInsets(-5, -5, -5, -5)
 	F.ReskinCheck(bu)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 22, 0)
-	bu:SetChecked(FreeDB.quest.quick_quest)
+	bu:SetChecked(C.DB.quest.quick_quest)
 	bu:SetScript('OnClick', function(self)
-		FreeDB.quest.quick_quest = self:GetChecked()
+		C.DB.quest.quick_quest = self:GetChecked()
 	end)
 
 	created = true
 end
-WorldMapFrame:HookScript('OnShow', setupCheckButton)
+WorldMapFrame:HookScript('OnShow', setupCheckButton) ]]
 
 
 -- Main
@@ -56,7 +55,7 @@ end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if FreeDB.quest.quick_quest and not IsShiftKeyDown() then
+		if C.DB.misc.quick_quest and not IsShiftKeyDown() then
 			func(...)
 		end
 	end

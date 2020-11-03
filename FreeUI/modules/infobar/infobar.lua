@@ -72,14 +72,14 @@ local function buttonOnLeaveNoFade(self)
 end
 
 local function buttonOnEnter(self)
-	if FreeDB.infobar.mouseover then
+	if C.DB.infobar.mouseover then
 		showBar()
 	end
 	self:SetBackdropColor(C.r, C.g, C.b, .4)
 end
 
 local function buttonOnLeave(self)
-	if FreeDB.infobar.mouseover then
+	if C.DB.infobar.mouseover then
 		hideBar()
 	end
 	self:SetBackdropColor(0, 0, 0, .1)
@@ -122,7 +122,7 @@ function INFOBAR:addButton(text, position, width, clickFunc)
 	bu:SetWidth(width)
 	F.CreateBD(bu, .1)
 
-	if FreeDB.infobar.mouseover then
+	if C.DB.infobar.mouseover then
 		bu:SetAlpha(0)
 	end
 
@@ -145,9 +145,9 @@ bar.addButton = addButton
 
 
 function INFOBAR:OnLogin()
-	if not FreeDB.infobar.enable_infobar then return end
+	if not C.DB.infobar.enable_infobar then return end
 
-	if FreeDB.infobar.mouseover then
+	if C.DB.infobar.mouseover then
 		barAlpha = 0.25
 		buttonAlpha = 0
 	else
@@ -155,7 +155,7 @@ function INFOBAR:OnLogin()
 		buttonAlpha = 1
 	end
 
-	if FreeDB.infobar.anchor_top then
+	if C.DB.infobar.anchor_top then
 		bar:SetPoint('TOPLEFT', 0, 0)
 		bar:SetPoint('TOPRIGHT', 0, 0)
 	else
@@ -164,7 +164,7 @@ function INFOBAR:OnLogin()
 	end
 
 	bar:SetFrameStrata('BACKGROUND')
-	bar:SetHeight(FreeDB.infobar.bar_height)
+	bar:SetHeight(C.DB.infobar.bar_height)
 	bar.bg = F.CreateBDFrame(bar, barAlpha)
 
 	RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
@@ -172,7 +172,7 @@ function INFOBAR:OnLogin()
 	F:RegisterEvent('PLAYER_REGEN_DISABLED', onEvent)
 	F:RegisterEvent('PLAYER_REGEN_ENABLED', onEvent)
 
-	if FreeDB.infobar.mouseover then
+	if C.DB.infobar.mouseover then
 		bar:SetScript('OnEnter', showBar)
 		bar:SetScript('OnLeave', hideBar)
 	end

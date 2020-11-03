@@ -6,93 +6,68 @@ local checkboxes, sidePanels = {}, {}
 local guiTab, guiPage = {}, {}
 
 local tabsList = {
-	L.GUI.APPEARANCE.TITLE,
-	L.GUI.NOTIFICATION.TITLE,
-	L.GUI.INFOBAR.TITLE,
-	L.GUI.CHAT.TITLE,
-	L.GUI.AURA.TITLE,
-	L.GUI.ACTIONBAR.TITLE,
-	L.GUI.COMBAT.TITLE,
-	L.GUI.INVENTORY.TITLE,
-	L.GUI.MAP.TITLE,
-	L.GUI.QUEST.TITLE,
-	L.GUI.TOOLTIP.TITLE,
-	L.GUI.UNITFRAME.TITLE,
-	L.GUI.NAMEPLATE.TITLE,
-	L.GUI.MISC.TITLE,
-	L.GUI.DATA.TITLE,
-	L.GUI.CREDITS.TITLE,
+	L.GUI.APPEARANCE.NAME,
+	L.GUI.NOTIFICATION.NAME,
+	L.GUI.INFOBAR.NAME,
+	L.GUI.CHAT.NAME,
+	L.GUI.AURA.NAME,
+	L.GUI.ACTIONBAR.NAME,
+	L.GUI.COMBAT.NAME,
+	L.GUI.ANNOUNCEMENT.NAME,
+	L.GUI.INVENTORY.NAME,
+	L.GUI.MAP.NAME,
+	L.GUI.TOOLTIP.NAME,
+	L.GUI.UNITFRAME.NAME,
+	L.GUI.NAMEPLATE.NAME,
+	L.GUI.MISC.NAME,
+	L.GUI.PROFILE.NAME,
+	L.GUI.CREDITS.NAME,
 }
 
 local iconsList = {
 	'Interface\\ICONS\\Ability_Hunter_BeastWithin',
 	'Interface\\ICONS\\Ability_Mage_ColdAsIce',
-	'Interface\\ICONS\\INV_Misc_Horn_04',
+	'Interface\\ICONS\\Ability_Racial_EmbraceoftheLoa_Bwonsomdi',
 	'Interface\\ICONS\\Spell_Shadow_Seduction',
 	'Interface\\ICONS\\Spell_Shadow_Shadesofdarkness',
-	'Interface\\ICONS\\Spell_Holy_SearingLightPriest',
-	'Interface\\ICONS\\Ability_Parry',
+	'Interface\\ICONS\\Ability_Warrior_BloodFrenzy',
+	'Interface\\ICONS\\Ability_Warrior_Challange',
+	'Interface\\ICONS\\Ability_Warrior_RallyingCry',
 	'Interface\\ICONS\\INV_Misc_Bag_30',
 	'Interface\\ICONS\\Achievement_Ashran_Tourofduty',
-	'Interface\\ICONS\\ABILITY_Rogue_RollTheBones04',
-	'Interface\\ICONS\\INV_Misc_ScrollUnrolled03d',
+	'Interface\\ICONS\\Ability_Priest_BindingPrayers',
 	'Interface\\ICONS\\Ability_Mage_MassInvisibility',
-	'Interface\\ICONS\\Ability_Racial_WardoftheLoaNature',
-	'Interface\\ICONS\\misc_rune_pvp_Random',
+	'Interface\\ICONS\\Ability_Paladin_BeaconsOfLight',
+	'Interface\\ICONS\\ABILITY_MONK_SERENITY',
 	'Interface\\ICONS\\INV_Misc_Blingtron',
 	'Interface\\ICONS\\Raf-Icon',
 }
 
+GUI.TextureList = {
+	[1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L.GUI.APPEARANCE.TEXTURE_NORM},
+	[2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L.GUI.APPEARANCE.TEXTURE_GRAD},
+	[3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.APPEARANCE.TEXTURE_FLAT},
+}
+
+local function AddTextureToOption(parent, index)
+	local tex = parent[index]:CreateTexture()
+	tex:SetInside(nil, 4, 4)
+	tex:SetTexture(GUI.TextureList[index].texture)
+	tex:SetVertexColor(.6, .6, .6)
+end
 
 local function SaveValue(key, value, newValue)
-	if key == 'CLASS_COLORS' then
+	if key == 'ACCOUNT' then
 		if newValue ~= nil then
-			FreeADB['colors']['class'][value] = newValue
+			FREE_ADB[value] = newValue
 		else
-			return FreeADB['colors']['class'][value]
-		end
-	elseif key == 'POWER_COLORS' then
-		if newValue ~= nil then
-			FreeADB['colors']['power'][value] = newValue
-		else
-			return FreeADB['colors']['power'][value]
-		end
-	elseif key == 'CLASS_POWER_COLORS' then
-		if newValue ~= nil then
-			FreeADB['colors']['class_power'][value] = newValue
-		else
-			return FreeADB['colors']['class_power'][value]
-		end
-	elseif key == 'RUNE_COLORS' then
-		if newValue ~= nil then
-			FreeADB['colors']['dk_rune'][value] = newValue
-		else
-			return FreeADB['colors']['dk_rune'][value]
-		end
-	elseif key == 'REACTION_COLORS' then
-		if newValue ~= nil then
-			FreeADB['colors']['reaction'][value] = newValue
-		else
-			return FreeADB['colors']['reaction'][value]
-		end
-	elseif key == 'APPEARANCE' then
-		if newValue ~= nil then
-			FreeADB['appearance'][value] = newValue
-		else
-			return FreeADB['appearance'][value]
-		end
-
-	elseif key == 'ACCOUNT' then
-		if newValue ~= nil then
-			FreeADB[value] = newValue
-		else
-			return FreeADB[value]
+			return FREE_ADB[value]
 		end
 	else
 		if newValue ~= nil then
-			FreeDB[key][value] = newValue
+			C.DB[key][value] = newValue
 		else
-			return FreeDB[key][value]
+			return C.DB[key][value]
 		end
 	end
 end
@@ -215,11 +190,11 @@ end
 local function SelectTab(i)
 	for num = 1, #tabsList do
 		if num == i then
-			guiTab[num]:SetBackdropColor(C.r, C.g, C.b, .25)
+			guiTab[num].__bg:SetBackdropColor(C.r, C.g, C.b, .25)
 			guiTab[num].checked = true
 			guiPage[num]:Show()
 		else
-			guiTab[num]:SetBackdropColor(0, 0, 0, 0)
+			guiTab[num].__bg:SetBackdropColor(0, 0, 0, 0)
 			guiTab[num].checked = false
 			guiPage[num]:Hide()
 		end
@@ -233,17 +208,17 @@ end
 
 local function tabOnEnter(self)
 	if self.checked then return end
-	self:SetBackdropColor(C.r, C.g, C.b, .3)
+	self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
 end
 
 local function tabOnLeave(self)
 	if self.checked then return end
-	self:SetBackdropColor(0, 0, 0, .3)
+	self.__bg:SetBackdropColor(0, 0, 0, 0)
 end
 
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame('Button', nil, parent, 'BackdropTemplate')
-	tab:SetSize(160, 28)
+	tab:SetSize(140, 28)
 	F.Reskin(tab)
 
 	tab.index = i
@@ -273,14 +248,22 @@ local function CreateTab(parent, i, name)
 end
 
 GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
-	[1] = {
-
-		{},--blank
-
+	[1] = { -- appearance
+		{1, 'ACCOUNT', 'cursor_trail', L.GUI.APPEARANCE.CURSOR_TRAIL},
+		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER, true},
+		{1, 'ACCOUNT', 'reskin_blizz', L.GUI.APPEARANCE.RESKIN_BLIZZ, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_BLIZZ_TIP},
+		{1, 'ACCOUNT', 'vignetting', L.GUI.APPEARANCE.VIGNETTING, true},
+		{3, 'ACCOUNT', 'backdrop_alpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, nil, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
+		{3, 'ACCOUNT', 'vignetting_alpha', L.GUI.APPEARANCE.VIGNETTING_ALPHA, true, {0, 1, .01}},
+		{},
+		{1, 'ACCOUNT', 'reskin_dbm', L.GUI.APPEARANCE.RESKIN_DBM},
+		{1, 'ACCOUNT', 'reskin_pgf', L.GUI.APPEARANCE.RESKIN_PGF, true},
+		{},
+		{3, 'ACCOUNT', 'ui_scale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP},
 	},
-	[2] = {
+	[2] = { -- notification
 
-		{},--blank
+		{},
 
 	},
 	[3] = {
@@ -308,9 +291,12 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 
 	},
-	[8] = {
-
-		{},--blank
+	[8] = { -- announcement
+		{1, 'announcement', 'enable', L.GUI.ANNOUNCEMENT.ENABLE, nil, nil, nil, L.GUI.ANNOUNCEMENT.ENABLE_TIP},
+		{1, 'announcement', 'interrupt', L.GUI.ANNOUNCEMENT.INTERRUPT, nil, nil, nil, L.GUI.ANNOUNCEMENT.INTERRUPT_TIP},
+		{1, 'announcement', 'dispel', L.GUI.ANNOUNCEMENT.DISPEL, true, nil, nil, L.GUI.ANNOUNCEMENT.DISPEL_TIP},
+		{1, 'announcement', 'combat_resurrection', L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION, nil, nil, nil, L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION_TIP},
+		{1, 'announcement', 'utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP},
 
 	},
 	[9] = {
@@ -334,7 +320,7 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 
 	},
 
-	[13] = {
+	[13] = { -- nameplate
 		{1, 'nameplate', 'enable', L.GUI.NAMEPLATE.ENABLE},
 
 		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR},
@@ -343,17 +329,14 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR},
 		{1, 'nameplate', 'threat_indicator', L.GUI.NAMEPLATE.THREAT_INDICATOR, true},
 	},
-	[14] = {
-
-		{},--blank
+	[14] = { -- misc
+		{4, 'ACCOUNT', 'texture_style', L.GUI.APPEARANCE.TEXTURE_STYLE, false, {}},
+		{4, 'ACCOUNT', 'number_format', L.GUI.APPEARANCE.NUMBER_FORMAT, true, {L.GUI.APPEARANCE.NUMBER_TYPE1, L.GUI.APPEARANCE.NUMBER_TYPE2, L.GUI.APPEARANCE.NUMBER_TYPE3}},
+	},
+	[15] = { -- profile
 
 	},
-	[15] = {
-
-		{},--blank
-
-	},
-	[16] = {
+	[16] = { -- credits
 
 		{},--blank
 
@@ -364,14 +347,14 @@ local function CreateOption(i)
 	local parent, offset = guiPage[i].child, 20
 
 	for _, option in pairs(GUI.OptionsList[i]) do
-		local optType, key, value, name, horizon, data, callback, tooltip = unpack(option)
+		local optType, key, value, name, horizon, data, callback, tip = unpack(option)
 		-- Checkboxes
 		if optType == 1 then
 			local cb = F.CreateCheckBox(parent, true)
 			cb:SetSize(20, 20)
 			cb:SetHitRectInsets(-5, -5, -5, -5)
 			if horizon then
-				cb:SetPoint('TOPLEFT', 190, -offset + 35)
+				cb:SetPoint('TOPLEFT', 200, -offset + 35)
 			else
 				cb:SetPoint('TOPLEFT', 20, -offset)
 				offset = offset + 35
@@ -387,16 +370,77 @@ local function CreateOption(i)
 				bu:SetPoint('LEFT', cb.name, 'RIGHT', -2, 1)
 				bu:SetScript('OnClick', data)
 			end
-			if tooltip then
-				cb.title = L.GUI.HINT
-				F.AddTooltip(cb, 'ANCHOR_RIGHT', tooltip, 'BLUE')
+			if tip then
+				F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
+		-- Slider
+		elseif optType == 3 then
+			local min, max, step = unpack(data)
+			local x, y
+			if horizon then
+				x, y = 200, -offset + 60
+			else
+				x, y = 20, -offset - 20
+				offset = offset + 80
+			end
+			local s = F.CreateSlider(parent, name, min, max, step, x, y, 140, tip)
+			s.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
+			s:SetValue(SaveValue(key, value))
+			s:SetScript('OnValueChanged', function(_, v)
+				local current = F:Round(tonumber(v), 2)
+				SaveValue(key, value, current)
+				s.value:SetText(current)
+				if callback then callback() end
+			end)
+			s.value:SetText(F:Round(SaveValue(key, value), 2))
+			if tip then
+				F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE')
+			end
+		-- Dropdown
+		elseif optType == 4 then
+			if value == 'texture_style' then
+				for _, v in ipairs(GUI.TextureList) do
+					tinsert(data, v.name)
+				end
+			end
+
+			local dd = F.CreateDropDown(parent, 140, 20, data)
+			if horizon then
+				dd:SetPoint('TOPLEFT', 200, -offset + 45)
+			else
+				dd:SetPoint('TOPLEFT', 20, -offset - 25)
+				offset = offset + 70
+			end
+			dd.Text:SetText(data[SaveValue(key, value)])
+
+			local opt = dd.options
+			dd.button:HookScript('OnClick', function()
+				for num = 1, #data do
+					if num == SaveValue(key, value) then
+						opt[num]:SetBackdropColor(1, .8, 0, .3)
+						opt[num].selected = true
+					else
+						opt[num]:SetBackdropColor(0, 0, 0, .3)
+						opt[num].selected = false
+					end
+				end
+			end)
+			for i in pairs(data) do
+				opt[i]:HookScript('OnClick', function()
+					SaveValue(key, value, i)
+					if callback then callback() end
+				end)
+				if value == 'texture_style' then
+					AddTextureToOption(opt, i) -- texture preview
+				end
+			end
+
+			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, 'INFO', 'THICK', 'CENTER', 0, 25)
 		-- Blank, no optType
 		else
 			if not key then
-				local l = CreateFrame('Frame', nil, parent)
-				l:SetPoint('TOPLEFT', 25, -offset - 12)
-				F.SetGradient(l, 'H', .6, .6, .6, .25, .25, 330, C.Mult)
+				local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 340, C.Mult)
+				line:SetPoint('TOPLEFT', 20, -offset - 12)
 			end
 			offset = offset + 35
 		end
@@ -406,6 +450,11 @@ local function CreateOption(i)
 	local footer = CreateFrame('Frame', nil, parent)
 	footer:SetSize(20, 20)
 	footer:SetPoint('TOPLEFT', 25, -offset)
+end
+
+local function ScrollBarHook(self, delta)
+	local scrollBar = self.ScrollBar
+	scrollBar:SetValue(scrollBar:GetValue() - delta*35)
 end
 
 local function CreateGUI()
@@ -420,14 +469,11 @@ local function CreateGUI()
 	F.CreateMF(guiFrame)
 	F.SetBD(guiFrame)
 
+	local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.Mult, 540)
+	verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-	local verticalLine = guiFrame:CreateTexture()
-	verticalLine:SetSize(1, 540)
-	verticalLine:SetPoint('TOPLEFT', 180, -50)
-	verticalLine:SetColorTexture(.5, .5, .5, .1)
-
-	local logo = F.CreateFS(guiFrame, C.AssetsPath..'fonts\\bold.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
-	local desc = F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: '..C.Version, {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
+	local logo = F.CreateFS(guiFrame, C.AssetsPath..'fonts\\bold.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
+	local desc = F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: '..C.AddonVersion, {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	local lineLeft = F.SetGradient(guiFrame, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
 	lineLeft:SetPoint('TOP', -60, -26)
@@ -461,15 +507,16 @@ local function CreateGUI()
 		guiTab[i] = CreateTab(guiFrame, i, name)
 
 		guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
-		guiPage[i]:SetPoint('TOPLEFT', 190, -50)
-		guiPage[i]:SetSize(380, 540)
+		guiPage[i]:SetPoint('TOPLEFT', 170, -50)
+		guiPage[i]:SetSize(400, 540)
 		F.CreateBDFrame(guiPage[i], .25)
 		guiPage[i]:Hide()
 
 		guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])
-		guiPage[i].child:SetSize(380, 1)
+		guiPage[i].child:SetSize(400, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
 		F.ReskinScroll(guiPage[i].ScrollBar)
+		guiPage[i]:SetScript("OnMouseWheel", ScrollBarHook)
 
 		-- local header = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Bold, 14, nil, L[strupper(name)..'_NAME'] or nil, 'CLASS', 'THICK', 'TOPLEFT', 14, -16)
 		-- guiPage[i].header = header
@@ -489,14 +536,16 @@ local function CreateGUI()
 		CreateOption(i)
 	end
 
+	GUI:CreateProfileGUI(guiPage[15]) -- profile GUI
+
 	SelectTab(1)
 end
 
 local function CreateGameMenuButton()
 	local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', GameMenuFrame, 'GameMenuButtonTemplate')
-	bu:SetText(C.Title)
+	bu:SetText(C.AddonName)
 	bu:SetPoint('TOP', GameMenuButtonAddons, 'BOTTOM', 0, -14)
-	if FreeADB.appearance.reskin_blizz then F.Reskin(bu) end
+	if FREE_ADB.reskin_blizz then F.Reskin(bu) end
 
 	GameMenuFrame:HookScript('OnShow', function(self)
 		GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)
@@ -558,7 +607,7 @@ function GUI:CreateBarWidgets(parent, texture)
 	return icon, close
 end
 
--- Subcategory
+--[[ -- Subcategory
 function GUI:AddSubCategory(parent, name)
 	local header = F.CreateFS(parent, C.Assets.Fonts.Regular, 12, nil, name or 'Sub category', 'YELLOW', 'THICK')
 
@@ -608,7 +657,7 @@ function GUI:CreateSidePanel(parent, name, header)
 end
 
 -- Checkbox
-function GUI:CreateCheckBox(parent, key, value, callback, extra, caution, label, tip, position)
+function GUI:CreateCheckBox(parent, key, value, label, tip, callback, extra, caution, position)
 	local checkbox = F.CreateCheckBox(parent)
 	checkbox:SetSize(20, 20)
 	checkbox:SetHitRectInsets(-5, -5, -5, -5)
@@ -744,7 +793,7 @@ function GUI:CreateColorSwatch(parent, key, value)
 	end
 
 	return swatch
-end
+end ]]
 
 
 function GUI:OnLogin()

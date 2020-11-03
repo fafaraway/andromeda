@@ -19,7 +19,7 @@ local function GetColor(className, isLocal)
 			end
 		end
 	end
-	local tbl = FreeADB.class_colors[className]
+	local tbl = FREE_ADB.class_colors[className]
 	local color = ('%02x%02x%02x'):format(tbl.r*255, tbl.g*255, tbl.b*255)
 	return color
 end
@@ -53,7 +53,7 @@ function CHAT:UpdateChannelNames(text, ...)
 		r, g, b = r*.7, g*.7, b*.7
 	end
 
-	if FreeDB.chat.abbr_channel_names then
+	if C.DB.chat.abbr_channel_names then
 		-- Shorten world channel name
 		text = gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[世界%]|h')
 		text = gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[世界%]|h')

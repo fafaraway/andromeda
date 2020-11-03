@@ -182,7 +182,7 @@ end
 
 
 function INFOBAR:Report()
-	if not FreeDB.infobar.report then return end
+	if not C.DB.infobar.report then return end
 
 	FreeUIReportButton = INFOBAR:addButton(L['INFOBAR_REPORT'], INFOBAR.POSITION_RIGHT, 100, function(self, button)
 		if button == 'LeftButton' then
@@ -204,7 +204,7 @@ function INFOBAR:Report()
 		RequestRaidInfo()
 
 		local r, g, b
-		GameTooltip:SetOwner(self, (FreeDB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (FreeDB.infobar.anchor_top and -15) or 15)
+		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -15) or 15)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(L['INFOBAR_DAILY_WEEKLY_INFO'], .9, .8, .6)
 

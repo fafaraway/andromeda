@@ -29,7 +29,7 @@ end
 
 function ACTIONBAR:CreateBar3()
 	local num = NUM_ACTIONBAR_BUTTONS
-	local size = FreeDB.actionbar.button_size_normal
+	local size = C.DB.actionbar.button_size_normal
 	local buttonList = {}
 
 	local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', UIParent, 'SecureHandlerStateTemplate')
@@ -47,13 +47,13 @@ function ACTIONBAR:CreateBar3()
 
 		if i == 1 then
 			button:SetPoint('TOPLEFT', frame, padding, -padding)
-		elseif (i == 4 and FreeDB.actionbar.bar3_divide) then
+		elseif (i == 4 and C.DB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton1']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
-		elseif (i == 7 and FreeDB.actionbar.bar3_divide) then
+		elseif (i == 7 and C.DB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton3']
 			button:SetPoint('TOPLEFT', previous, 'TOPRIGHT', 12*size+13*margin, 0)
-		elseif (i == 10 and FreeDB.actionbar.bar3_divide) then
+		elseif (i == 10 and C.DB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton7']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		else
@@ -68,16 +68,16 @@ function ACTIONBAR:CreateBar3()
 	frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
-	if FreeDB.actionbar.bar3_fade then
+	if C.DB.actionbar.bar3_fade then
 		frame.fader = {
-			enable = FreeDB.actionbar.bar3_fade,
-			fadeInAlpha = FreeDB.actionbar.bar3_fade_in_alpha,
-			fadeOutAlpha = FreeDB.actionbar.bar3_fade_out_alpha,
-			arena = FreeDB.actionbar.bar3_fade_arena,
-			instance = FreeDB.actionbar.bar3_fade_instance,
-			combat = FreeDB.actionbar.bar3_fade_combat,
-			target = FreeDB.actionbar.bar3_fade_target,
-			hover = FreeDB.actionbar.bar3_fade_hover,
+			enable = C.DB.actionbar.bar3_fade,
+			fadeInAlpha = C.DB.actionbar.bar3_fade_in_alpha,
+			fadeOutAlpha = C.DB.actionbar.bar3_fade_out_alpha,
+			arena = C.DB.actionbar.bar3_fade_arena,
+			instance = C.DB.actionbar.bar3_fade_instance,
+			combat = C.DB.actionbar.bar3_fade_combat,
+			target = C.DB.actionbar.bar3_fade_target,
+			hover = C.DB.actionbar.bar3_fade_hover,
 		}
 
 		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)

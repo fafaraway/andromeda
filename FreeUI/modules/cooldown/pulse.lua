@@ -100,7 +100,7 @@ local function OnUpdate(_, update)
                     end)
 				end
 				local cooldown = getCooldownDetails()
-				if FreeDB.cooldown.ignored_spells[cooldown.name] then
+				if C.DB.cooldown.ignored_spells[cooldown.name] then
 					watching[i] = nil
 				else
 					if cooldown.enabled ~= 0 then
@@ -141,8 +141,8 @@ local function OnUpdate(_, update)
 			if not icon:GetTexture() then
 				icon:SetTexture(animating[1][1])
 
-				if FreeDB.cooldown.sound then
-					PlaySoundFile(FreeDB.cooldown.sound_file, 'Master')
+				if C.DB.cooldown.sound then
+					PlaySoundFile(C.DB.cooldown.sound_file, 'Master')
 				end
 			end
 			local alpha = maxAlpha
@@ -152,7 +152,7 @@ local function OnUpdate(_, update)
 				alpha = maxAlpha - (maxAlpha * ((runtimer - holdTime - fadeInTime) / fadeOutTime))
 			end
 			frame:SetAlpha(alpha)
-			local scale = FreeDB.cooldown.icon_size + (FreeDB.cooldown.icon_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
+			local scale = C.DB.cooldown.icon_size + (C.DB.cooldown.icon_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
 			bg:Show()
@@ -161,8 +161,8 @@ local function OnUpdate(_, update)
 end
 
 function frame:ADDON_LOADED(addon)
-	for _, v in pairs(FreeDB.cooldown.ignored_spells) do
-		FreeDB.cooldown.ignored_spells[v] = true
+	for _, v in pairs(C.DB.cooldown.ignored_spells) do
+		C.DB.cooldown.ignored_spells[v] = true
 	end
 
 	self:UnregisterEvent('ADDON_LOADED')
@@ -211,11 +211,11 @@ end
 
 
 function COOLDOWN:CooldownPulse()
-	if not FreeDB.cooldown.pulse then return end
+	if not C.DB.cooldown.pulse then return end
 
 	bg = F.SetBD(frame)
 	icon:SetTexCoord(unpack(C.TexCoord))
-	F.Mover(anchor, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, FreeDB.cooldown.icon_size, FreeDB.cooldown.icon_size)
+	F.Mover(anchor, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, C.DB.cooldown.icon_size, C.DB.cooldown.icon_size)
 
 	frame:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 	frame:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
@@ -250,8 +250,8 @@ end
 
 _G.SlashCmdList.PULSECD = function()
 	tinsert(animating, {GetSpellTexture(87214)})
-	if FreeDB.cooldown.sound == true then
-		PlaySoundFile(FreeDB.cooldown.sound_file, 'Master')
+	if C.DB.cooldown.sound == true then
+		PlaySoundFile(C.DB.cooldown.sound_file, 'Master')
 	end
 	frame:SetScript('OnUpdate', OnUpdate)
 end

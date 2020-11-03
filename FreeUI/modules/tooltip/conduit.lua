@@ -39,8 +39,13 @@ function TOOLTIP:Conduit_CheckStatus()
 end
 
 function TOOLTIP:ConduitCollectionData()
-	C_Timer.After(10, TOOLTIP.Conduit_UpdateCollection) -- might be empty on fist load
+	TOOLTIP.Conduit_UpdateCollection()
+	if not next(TOOLTIP.ConduitData) then
+		C_Timer.After(10, TOOLTIP.Conduit_UpdateCollection) -- might be empty on fist load
+	end
 	F:RegisterEvent('SOULBIND_CONDUIT_COLLECTION_UPDATED', TOOLTIP.Conduit_UpdateCollection)
+
+	if not C.DB.tooltip.conduit_info then return end
 
 	GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
 	ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)

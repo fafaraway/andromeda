@@ -169,7 +169,7 @@ function CHAT:ChatCopy_Create()
 end
 
 function CHAT:ChatCopy()
-	if not FreeDB.chat.copy_button then return end
+	if not C.DB.chat.copy_button then return end
 
 	self:ChatCopy_Create()
 end

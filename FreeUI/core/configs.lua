@@ -1,4 +1,5 @@
 local F, C = unpack(select(2, ...))
+local GUI = F.GUI
 
 
 C.Fonts = { -- #TODO
@@ -77,6 +78,8 @@ C['ReminderBuffsList'] = {
 				[8679] = true,		-- 致伤药膏
 				[315584] = true,	-- 速效药膏
 			},
+			texture = 132273,
+			depend = 315584,
 			combat = true,
 			instance = true,
 			pvp = true,
@@ -85,6 +88,7 @@ C['ReminderBuffsList'] = {
 				[3408] = true,		-- 减速药膏
 				[5761] = true,		-- 迟钝药膏
 			},
+			depend = 3408,
 			pvp = true,
 		},
 	},
@@ -522,11 +526,9 @@ C.CharacterSettings = {
 	},
 
 	['combat'] = {
-		['enable_combat'] = true,
+		['enable'] = true,
 			['combat_alert'] = true,
-			['health_alert'] = true,
-				['health_alert_threshold'] = 0.3,
-			['spell_alert'] = true,
+			['spell_sound'] = true,
 			['pvp_sound'] = true,
 			['easy_tab'] = true,
 			['easy_focus'] = true,
@@ -536,7 +538,7 @@ C.CharacterSettings = {
 				['fct_periodic'] = true,
 				['fct_merge'] = true,
 				['fct_in'] = true,
-				['fct_out'] = true,
+				['fct_out'] = false,
 	},
 
 	['announcement'] = {
@@ -544,27 +546,9 @@ C.CharacterSettings = {
 			['interrupt'] = true,
 			['dispel'] = true,
 			['stolen'] = true,
-			['feast'] = true,
-			['cauldron'] = true,
-			['codex'] = true,
-			['refreshment'] = true,
-			['soulwell'] = true,
-			['repair'] = true,
-			['mail'] = true,
-			['battle_resurrection'] = true,
-			['portal'] = true,
-			['toy'] = true,
-	},
-
-	['quest'] = {
-		['enable_quest'] = true,
-			['tracker_scale'] = 1,
-			['reward_highlight'] = true,
-			['extra_button'] = true,
-			['quick_quest'] = false,
-			['quest_notification'] = true,
-				['quest_progress'] = true,
-				['only_complete_ring'] = true,
+			['combat_resurrection'] = true,
+			['utility'] = true,
+			['quest'] = false,
 	},
 
 	['aura'] = {
@@ -577,7 +561,7 @@ C.CharacterSettings = {
 			['debuff_size'] = 50,
 			['debuffs_per_row'] = 12,
 			['reverse_debuffs'] = true,
-			['buff_reminder'] = true,
+			['reminder'] = true,
 	},
 
 	['inventory'] = {
@@ -595,6 +579,7 @@ C.CharacterSettings = {
 			['bind_type'] = true,
 			['combine_free_slots'] = true,
 			['split_count'] = 1,
+			['auto_deposit'] = false,
 			['special_color'] = true,
 			['favourite_items'] = {},
 			['item_filter'] = true,
@@ -707,7 +692,7 @@ C.CharacterSettings = {
 				['group_by_role'] = true,
 				['group_reverse'] = false,
 
-				['group_health_requent'] = false,
+				['group_health_frequen'] = false,
 				['group_health_frequency'] = .2,
 
 				['group_click_cast'] = true,
@@ -725,12 +710,12 @@ C.CharacterSettings = {
 				['group_ready_check_indicator'] = true,
 				['group_resurrect_indicator'] = true,
 
-				['party_width'] = 54,
-				['party_height'] = 34,
+				['party_width'] = 62,
+				['party_height'] = 28,
 				['party_gap'] = 6,
 
-				['raid_width'] = 44,
-				['raid_height'] = 30,
+				['raid_width'] = 28,
+				['raid_height'] = 20,
 				['raid_gap'] = 5,
 
 			['enable_boss'] = true,
@@ -803,18 +788,18 @@ C.CharacterSettings = {
 			['link_hover'] = true,
 			['tip_icon'] = true,
 			['target_by'] = true,
-			['pvp_rating'] = false,
 			['various_ids'] = true,
 			['item_count'] = true,
 			['item_price'] = true,
 			['aura_source'] = true,
-			['mount_source'] = false,
+			['conduit_info'] = true,
 	},
 
 	['map'] = {
-		['enable_map'] = true,
-			['map_scale'] = 1,
-			['map_reveal'] = false,
+		['enable'] = true,
+			['worldmap_scale'] = 1,
+			['max_worldmap_scale'] = 1,
+			['remove_fog'] = true,
 			['coords'] = true,
 			['minimap_scale'] = 1,
 			['new_mail'] = true,
@@ -862,7 +847,11 @@ C.CharacterSettings = {
 			['screenshot_levelup'] = false,
 			['screenshot_dead'] = false,
 
-		['number_format'] = 1,
+
+		['reward_highlight'] = true,
+		['quick_quest'] = false,
+		['quest_completed_sound'] = true,
+		['ot_buttons'] = true,
 	},
 
 	['chat'] = {
@@ -883,7 +872,6 @@ C.CharacterSettings = {
 			['whisper_sticky'] = true,
 			['whisper_sound'] = true,
 				['sound_timer'] = 30,
-			['click_to_invite'] = true,
 			['item_links'] = true,
 			['spamage_meter'] = true,
 			['filters'] = true,
@@ -911,6 +899,17 @@ C.CharacterSettings = {
 			['button_class_color'] = false,
 			['button_range'] = true,
 
+			['fade'] = true,
+			['fade_out_alpha'] = 0,
+			['fade_in_alpha'] = 1,
+			['fade_out_duration'] = .3,
+			['fade_in_duration'] = .3,
+			['fade_in_combating'] = true,
+			['fade_in_targeting'] = false,
+			['fade_in_dungeon'] = true,
+			['fade_in_pvp'] = true,
+			['fade_in_vehicle'] = true,
+
 			['fade_smooth'] = true,
 			['fade_in_duration'] = 0.3,
 			['fade_out_duration'] = 0.3,
@@ -931,7 +930,7 @@ C.CharacterSettings = {
 					['custom_bar_fade_target'] = true,
 
 			['bar1'] = true,
-				['bar1_fade'] = true,
+				['bar1_fade'] = false,
 					['bar1_fade_in_alpha'] = 1,
 					['bar1_fade_out_alpha'] = 0,
 					['bar1_fade_arena'] = true,
@@ -939,8 +938,9 @@ C.CharacterSettings = {
 					['bar1_fade_hover'] = true,
 					['bar1_fade_combat'] = true,
 					['bar1_fade_target'] = true,
+					['bar1_fade_vehicle'] = true,
 			['bar2'] = true,
-				['bar2_fade'] = true,
+				['bar2_fade'] = false,
 					['bar2_fade_in_alpha'] = 1,
 					['bar2_fade_out_alpha'] = 0,
 					['bar2_fade_arena'] = true,
@@ -950,7 +950,7 @@ C.CharacterSettings = {
 					['bar2_fade_target'] = true,
 			['bar3'] = false,
 				['bar3_divide'] = true,
-				['bar3_fade'] = true,
+				['bar3_fade'] = false,
 					['bar3_fade_in_alpha'] = 1,
 					['bar3_fade_out_alpha'] = 0,
 					['bar3_fade_arena'] = true,
@@ -959,7 +959,7 @@ C.CharacterSettings = {
 					['bar3_fade_combat'] = true,
 					['bar3_fade_target'] = true,
 			['bar4'] = true,
-				['bar4_fade'] = true,
+				['bar4_fade'] = false,
 					['bar4_fade_in_alpha'] = 1,
 					['bar4_fade_out_alpha'] = 0,
 					['bar4_fade_arena'] = false,
@@ -968,7 +968,7 @@ C.CharacterSettings = {
 					['bar4_fade_combat'] = false,
 					['bar4_fade_target'] = false,
 			['bar5'] = true,
-				['bar5_fade'] = true,
+				['bar5_fade'] = false,
 					['bar5_fade_in_alpha'] = 1,
 					['bar5_fade_out_alpha'] = 0,
 					['bar5_fade_arena'] = false,
@@ -977,7 +977,7 @@ C.CharacterSettings = {
 					['bar5_fade_combat'] = false,
 					['bar5_fade_target'] = false,
 			['pet_bar'] = true,
-				['pet_bar_fade'] = true,
+				['pet_bar_fade'] = false,
 					['pet_bar_fade_in_alpha'] = 1,
 					['pet_bar_fade_out_alpha'] = 0,
 					['pet_bar_fade_arena'] = false,
@@ -1008,200 +1008,30 @@ C.CharacterSettings = {
 
 
 C.AccountSettings = {
-	['detect_version'] = C.Version,
+	['detect_version'] = C.AddonVersion,
+	['ui_scale'] = 1,
+	['texture_style'] = 1,
+	['number_format'] = 1,
+	['cursor_trail'] = true,
+	['vignetting'] = true,
+	['vignetting_alpha'] = .8,
+	['reskin_blizz'] = true,
+	['backdrop_alpha'] = .6,
+	['shadow_border'] = true,
+	['reskin_dbm'] = true,
+	['reskin_pgf'] = true,
 	['custom_junk_list'] = {},
-	['group_invite_keywords'] = {'inv', '+++', '111'},
-	['guild_invite_keywords'] = {'ginv', 'g++'},
 	['nameplate_aura_filter'] = {[1]={}, [2]={}},
-
-	['appearance'] = {
-		['ui_scale'] = 1,
-		['texture_style'] = 1,
-		['cursor_trail'] = true,
-		['vignetting'] = true,
-			['vignetting_alpha'] = .8,
-		['reskin_blizz'] = true,
-		['backdrop_alpha'] = .6,
-		['shadow_border'] = true,
-		['reskin_dbm'] = true,
-		['reskin_bigwigs'] = true,
-		['reskin_pgf'] = true,
-		['reskin_wowlua'] = true,
-
-	},
-
-	['colors'] = {
-		['class'] = {
-			['HUNTER'] = {
-				['b'] = 0.2549019607843137,
-				['colorStr'] = 'ff33b541',
-				['g'] = 0.7098039215686275,
-				['r'] = 0.2,
-			},
-			['WARRIOR'] = {
-				['b'] = 0.392156862745098,
-				['colorStr'] = 'ffc79b64',
-				['g'] = 0.6078431372549019,
-				['r'] = 0.7803921568627451,
-			},
-			['PALADIN'] = {
-				['b'] = 0.4235294117647059,
-				['colorStr'] = 'ffee556c',
-				['g'] = 0.3333333333333333,
-				['r'] = 0.9333333333333333,
-			},
-			['MAGE'] = {
-				['b'] = 0.8901960784313725,
-				['colorStr'] = 'ff7ea8e3',
-				['g'] = 0.6588235294117647,
-				['r'] = 0.4941176470588236,
-			},
-			['PRIEST'] = {
-				['b'] = 0.8313725490196078,
-				['colorStr'] = 'ffd3d3d3',
-				['g'] = 0.8313725490196078,
-				['r'] = 0.8313725490196078,
-			},
-			['DEATHKNIGHT'] = {
-				['b'] = 0.2235294117647059,
-				['colorStr'] = 'ffc32838',
-				['g'] = 0.1568627450980392,
-				['r'] = 0.7686274509803921,
-			},
-			['WARLOCK'] = {
-				['b'] = 0.8784313725490196,
-				['colorStr'] = 'ffa5a3e0',
-				['g'] = 0.6392156862745098,
-				['r'] = 0.6470588235294118,
-			},
-			['DEMONHUNTER'] = {
-				['b'] = 0.8901960784313725,
-				['colorStr'] = 'ffd259e3',
-				['g'] = 0.3490196078431372,
-				['r'] = 0.8235294117647058,
-			},
-			['ROGUE'] = {
-				['b'] = 0.4980392156862745,
-				['colorStr'] = 'ffe9cb7f',
-				['g'] = 0.796078431372549,
-				['r'] = 0.9137254901960784,
-			},
-			['DRUID'] = {
-				['b'] = 0.2666666666666667,
-				['colorStr'] = 'fff27944',
-				['g'] = 0.4784313725490196,
-				['r'] = 0.9490196078431372,
-			},
-			['MONK'] = {
-				['b'] = 0.6,
-				['colorStr'] = 'ff48d599',
-				['g'] = 0.8352941176470589,
-				['r'] = 0.2823529411764706,
-			},
-			['SHAMAN'] = {
-				['b'] = 0.8156862745098039,
-				['colorStr'] = 'ff4949d0',
-				['g'] = 0.2901960784313725,
-				['r'] = 0.2901960784313725,
-			},
-		},
-
-		['power'] = {
-			['PAIN']        = {b = 0.00, g = 0.61, r = 1.00},
-			['FURY']        = {b = 0.99, g = 0.26, r = 0.79},
-			['FOCUS']       = {b = 0.15, g = 0.39, r = 0.94},
-			['LUNAR_POWER'] = {b = 0.90, g = 0.52, r = 0.30},
-			['RAGE']        = {b = 0.21, g = 0.24, r = 0.86},
-			['MAELSTROM']   = {b = 1.00, g = 0.50, r = 0.00},
-			['MANA']        = {b = 0.93, g = 0.82, r = 0.46},
-			['RUNIC_POWER'] = {b = 1.00, g = 0.82, r = 0.00},
-			['INSANITY']    = {b = 0.80, g = 0.00, r = 0.40},
-			['ENERGY']      = {b = 0.45, g = 0.76, r = 0.91},
-		},
-
-		['class_power'] = {
-			['soul_shards'] = {
-				['b'] = 0.8705882352941177,
-				['colorStr'] = 'ff8e47de',
-				['g'] = 0.2784313725490196,
-				['r'] = 0.5568627450980392,
-			},
-			['chi_orbs'] = {
-				['b'] = 0.6980392156862745,
-				['colorStr'] = 'ff6cd8b2',
-				['g'] = 0.8470588235294118,
-				['r'] = 0.4235294117647059,
-			},
-			['arcane_charges'] = {
-				['b'] = 0.8627450980392157,
-				['colorStr'] = 'ff4e75dc',
-				['g'] = 0.4588235294117647,
-				['r'] = 0.3058823529411765,
-			},
-			['holy_power'] = {
-				['b'] = 0.5372549019607843,
-				['colorStr'] = 'ffe8c989',
-				['g'] = 0.788235294117647,
-				['r'] = 0.9098039215686274,
-			},
-			['combo_points'] = {
-				['b'] = 0.2274509803921569,
-				['colorStr'] = 'ffed3c3a',
-				['g'] = 0.2392156862745098,
-				['r'] = 0.9294117647058824,
-			},
-		},
-
-		['dk_rune'] = {
-			['unholy'] = {
-				['b'] = 0.3686274509803922,
-				['colorStr'] = 'ff77c95e',
-				['g'] = 0.788235294117647,
-				['r'] = 0.4666666666666667,
-			},
-			['frost'] = {
-				['b'] = 0.788235294117647,
-				['colorStr'] = 'ff5573c9',
-				['g'] = 0.4509803921568628,
-				['r'] = 0.3333333333333333,
-			},
-			['blood'] = {
-				['b'] = 0.1568627450980392,
-				['colorStr'] = 'ffbb2828',
-				['g'] = 0.1568627450980392,
-				['r'] = 0.7333333333333333,
-			},
-		},
-
-		['reaction'] = {
-			['neutral'] = {
-				['b'] = 0.4549019607843137,
-				['colorStr'] = 'ffffdb74',
-				['g'] = 0.8588235294117647,
-				['r'] = 1,
-			},
-			['hostile'] = {
-				['b'] = 0.2078431372549019,
-				['colorStr'] = 'ffd33734',
-				['g'] = 0.2156862745098039,
-				['r'] = 0.8313725490196078,
-			},
-			['friendly'] = {
-				['b'] = 0.4745098039215686,
-				['colorStr'] = 'ff71e079',
-				['g'] = 0.8784313725490196,
-				['r'] = 0.4431372549019608,
-			},
-		},
-	}
+	['raid_debuffs'] = {},
+	['raid_aura_watch'] = {},
+	['corner_buffs'] = {},
+	['party_spells'] = {},
+	['profile_index'] = {},
+	['profile_names'] = {}
 }
 
 
-local textureList = {
-	[1] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex',
-	[2] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex',
-	[3] = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex',
-}
+
 
 local function initSettings(source, target, fullClean)
 	for i, j in pairs(source) do
@@ -1235,38 +1065,43 @@ f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(self, _, addon)
 	if addon ~= 'FreeUI' then return end
 
-	if not FreeDB['BfA'] then
-		FreeDB = {}
-		FreeDB['BfA'] = true
+
+
+
+
+	initSettings(C.AccountSettings, FREE_ADB)
+	if not next(FREE_PDB) then
+		for i = 1, 5 do FREE_PDB[i] = {} end
 	end
 
-	initSettings(C.CharacterSettings, FreeDB, true)
-	initSettings(C.AccountSettings, FreeADB)
+	if not FREE_ADB['profile_index'][C.MyFullName] then
+		FREE_ADB['profile_index'][C.MyFullName] = 1
+	end
+
+	if FREE_ADB['profile_index'][C.MyFullName] == 1 then
+		C.DB = FREE_DB
+		if not C.DB['BfA'] then
+			wipe(C.DB)
+			C.DB['BfA'] = true
+		end
+	else
+		C.DB = FREE_PDB[FREE_ADB['profile_index'][C.MyFullName] - 1]
+	end
+	initSettings(C.CharacterSettings, C.DB, true)
+
+
+
 
 	F:SetupUIScale(true)
 
-	C.Assets.statusbar_tex = textureList[FreeADB.appearance.texture_style]
 
 
-	local colors = FreeADB.colors.class
-
-	for class, value in pairs(colors) do
-		C.ClassColors[class] = {}
-		C.ClassColors[class].r = value.r
-		C.ClassColors[class].g = value.g
-		C.ClassColors[class].b = value.b
-		C.ClassColors[class].colorStr = value.colorStr
-
+	if not GUI.TextureList[FREE_ADB.texture_style] then
+		FREE_ADB.texture_style = 1 -- reset value if not exists
 	end
+	C.Assets.statusbar_tex = GUI.TextureList[FREE_ADB.texture_style].texture
 
-	C.r = C.ClassColors[C.MyClass].r
-	C.g = C.ClassColors[C.MyClass].g
-	C.b = C.ClassColors[C.MyClass].b
 
-	C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
-	C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
-
-	--F:UpdateColors()
 
 	self:UnregisterAllEvents()
 end)

@@ -21,7 +21,7 @@ function THEME:ReskinDBM()
 	end
 
 	if not IsAddOnLoaded('DBM-Core') then return end
-	if not FreeADB.appearance.reskin_dbm then return end
+	if not FREE_ADB.reskin_dbm then return end
 
 	local buttonsize = 24
 

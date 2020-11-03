@@ -121,7 +121,7 @@ function BLIZZARD.GuildBest_OnLoad(event, addon)
 end
 
 -- Keystone Info
-local myFullName = C.MyName..'-'..C.MyRealm
+local myFullName = C.MyFullName
 local iconColor = C.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 
 function BLIZZARD:KeystoneInfo_Create()
@@ -135,7 +135,7 @@ function BLIZZARD:KeystoneInfo_Create()
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 		GameTooltip:AddLine(L['BLIZZARD_KEYSTONES'])
-		for name, info in pairs(FreeKeyStone) do
+		for name, info in pairs(FREE_KEYSTONE) do
 			local name = Ambiguate(name, 'none')
 			local mapID, level, class, faction = strsplit(':', info)
 			local color = F.RGBToHex(F.ClassColor(class))
@@ -150,7 +150,7 @@ function BLIZZARD:KeystoneInfo_Create()
 	button:SetScript('OnLeave', F.HideTooltip)
 	button:SetScript('OnMouseUp', function(_, btn)
 		if btn == 'MiddleButton' then
-			wipe(FreeKeyStone)
+			wipe(FREE_KEYSTONE)
 		end
 	end)
 end
@@ -165,9 +165,9 @@ end
 function BLIZZARD:KeystoneInfo_Update()
 	local mapID, keystoneLevel = BLIZZARD:KeystoneInfo_UpdateBag()
 	if mapID then
-		FreeKeyStone[myFullName] = mapID..':'..keystoneLevel..':'..C.MyClass..':'..C.MyFaction
+		FREE_KEYSTONE[myFullName] = mapID..':'..keystoneLevel..':'..C.MyClass..':'..C.MyFaction
 	else
-		FreeKeyStone[myFullName] = nil
+		FREE_KEYSTONE[myFullName] = nil
 	end
 end
 

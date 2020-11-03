@@ -77,7 +77,7 @@ function BLIZZARD:PetTabs_Load(addon)
 end
 
 function BLIZZARD:PetTabs_Init()
-	if not FreeDB.blizzard.pet_filter then return end
+	if not C.DB.blizzard.pet_filter then return end
 
 	if IsAddOnLoaded('Blizzard_Collections') then
 		BLIZZARD:PetTabs_Create()

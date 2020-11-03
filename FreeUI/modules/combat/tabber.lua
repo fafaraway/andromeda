@@ -84,7 +84,7 @@ local function OnEvent(self, event, ...)
 end
 
 function COMBAT:Tabber()
-	if not FreeDB.combat.easy_tab then return end
+	if not C.DB.combat.easy_tab then return end
 
 	F:RegisterEvent('PLAYER_ENTERING_WORLD', OnEvent)
 	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', OnEvent)

@@ -6,8 +6,8 @@ engine[3] = {} -- L, Localisation
 
 _G[addonName] = engine
 
-FreeADB, FreeGoldCount, FreeKeyStone = {}, {}, {}
-FreeDB, FreeSpellBinding = {}, {}
+FREE_ADB, FREE_PDB, FREE_GOLDCOUNT, FREE_KEYSTONE = {}, {}, {}, {}
+FREE_DB, FREE_SPELLBINDING = {}, {}
 
 local F, C = unpack(engine)
 
@@ -79,7 +79,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-	local scale = GetBestScale() * FreeADB.appearance.ui_scale
+	local scale = GetBestScale() * FREE_ADB.ui_scale
 
 	if init then
 		local pixel = 1
@@ -108,7 +108,7 @@ end
 -- Init
 F:RegisterEvent('PLAYER_LOGIN', function()
 
-	if FreeDB['installation_complete'] then
+	if C.DB['installation_complete'] then
 
 		F:SetupUIScale()
 		F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)

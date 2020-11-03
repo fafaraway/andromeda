@@ -48,6 +48,11 @@ do
 	L['MISC_ADDON_REQUIRED'] = '你没有安装DBM或者BigWigs'
 	L['MISC_DISBAND_CHECK'] = '是否|cffff0000解散|r当前队伍或者团队?'
 	L['MISC_DISBAND_PROCESS'] = '团队解散中'
+
+	L['MISC_QUICK_QUEST'] = '交接'
+	L['MISC_QUEST_ANNOUNCE'] = '通报'
+	L['MISC_QUEST_ANNOUNCE_TIP'] = '组队时自动通报任务进度'
+	L['MISC_QUICK_QUEST_TIP'] = '自动交接任务'
 end
 
 
@@ -76,14 +81,14 @@ do
 	L['APPEARANCE_VIGNETTING'] = '暗角效果'
 	L['APPEARANCE_VIGNETTING_ALPHA'] = '暗角透明度'
 	L['APPEARANCE_RESKIN_BLIZZ'] = '美化默认界面'
-	L['APPEARANCE_RESKIN_BLIZZ_TIP'] = '\n美化游戏内的所有默认界面，统一为黑色透明风格。'
+	L['APPEARANCE_RESKIN_BLIZZ_TIP'] = '|n美化游戏内的所有默认界面，统一为黑色透明风格。'
 	L['APPEARANCE_BACKDROP_ALPHA'] = '背景透明度'
-	L['APPEARANCE_BACKDROP_ALPHA_TIP'] = '\n调整窗口面板的背景透明度。'
+	L['APPEARANCE_BACKDROP_ALPHA_TIP'] = '|n调整窗口面板的背景透明度。'
 	L['APPEARANCE_SHADOW_BORDER'] = '阴影边框'
-	L['APPEARANCE_SHADOW_BORDER_TIP'] = '\n界面元素外围添加一圈阴影'
+	L['APPEARANCE_SHADOW_BORDER_TIP'] = '|n界面元素外围添加一圈阴影'
 
 	L['APPEARANCE_UI_SCALE'] = '界面缩放'
-	L['APPEARANCE_UI_SCALE_TIP'] = '\n调整界面的整体缩放\n推荐设置\n1080P = 1\n1440P = 1.4\n2160P = 2'
+	L['APPEARANCE_UI_SCALE_TIP'] = '|n调整界面的整体缩放|n推荐设置|n1080P = 1|n1440P = 1.4|n2160P = 2'
 end
 
 
@@ -100,6 +105,8 @@ do
 	L['NOTIFICATION_RARE'] = '发现稀有'
 	L['NOTIFICATION_VERSION'] = '版本检查'
 	L['NOTIFICATION_VERSION_OUTDATE'] = '你的 FreeUI 已经过期，最新版为 %s'
+
+	L['NOTIFICATION_INSTANCE'] = '副本'
 end
 
 
@@ -169,6 +176,7 @@ do
 
 	L['AURA_MOVER_BUFFS'] = '增益光环'
 	L['AURA_MOVER_DEBUFFS'] = '减益光环'
+	L['AURA_LACK'] = '缺少'
 end
 
 
@@ -197,7 +205,7 @@ do
 	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
 
 	L['ACTIONBAR_CUSTOM_BAR'] = '附加动作条'
-	L["ACTIONBAR_UNBIND_TIP"] = "按ESC或右键撤销按键设置"
+	L['ACTIONBAR_UNBIND_TIP'] = '按ESC或右键撤销按键设置'
 
 end
 
@@ -238,12 +246,21 @@ end
 --[[ Announcement ]]
 
 do
-	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %s %s'
-	L['ANNOUNCEMENT_DISPEL'] = '驱散 %s %s'
-	L['ANNOUNCEMENT_STOLEN'] = '偷取 %s %s'
-	L['ANNOUNCEMENT_CASTED'] = '%s 使用了 %s'
-	L['ANNOUNCEMENT_BATTLE_RESURRECTION'] = '%s 使用 %s 战复了自己'
-	L['ANNOUNCEMENT_BATTLE_RESURRECTION_TARGET'] = '%s 使用 %s 战复了 %s'
+	L['ANNOUNCEMENT_INTERRUPT'] = '打断 %target% %spell%'
+	L['ANNOUNCEMENT_DISPEL'] = '驱散 %target% %spell%'
+	L['ANNOUNCEMENT_STOLEN'] = '偷取 %target% %spell%'
+	L['ANNOUNCEMENT_CASTED'] = '%player% 施放了 %spell%'
+	L['ANNOUNCEMENT_COMBAT_RESURRECTION_SELF'] = '%player% 使用 %spell% 战复了自己'
+	L['ANNOUNCEMENT_COMBAT_RESURRECTION_TARGET'] = '%player% 使用 %spell% 战复了 %target%'
+	L['ANNOUNCEMENT_QUEST'] = '接受任务'
+
+	L['ANNOUNCEMENT_INSTANCE_RESET_SUCCESS'] = '%s has been reset'
+	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED'] = 'Cannot reset %s (There are players still inside the instance.)'
+	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_ZONING'] = 'Cannot reset %s (There are players in your party attempting to zone into an instance.)'
+	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_OFFLINE'] = 'Cannot reset %s (There are players offline in your party.)'
+
+	L['ANNOUNCEMENT_QUEST_COMPLETED'] = '已完成'
+	L['ANNOUNCEMENT_QUEST_ACCEPTED'] = '已接受'
 end
 
 
@@ -261,21 +278,21 @@ do
 	L['INVENTORY_SORT_DISABLED'] = '背包整理已被禁用'
 	L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
 	L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
-	L['INVENTORY_QUICK_DELETE_ENABLED'] = '\n快速摧毁功能已启用。\n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
+	L['INVENTORY_QUICK_DELETE_ENABLED'] = '|n快速摧毁功能已启用。|n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
 	L['INVENTORY_QUICK_DELETE'] = '快速摧毁'
-	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '\n偏好选择功能已启用。\n你现在可以点击标记物品。\n若启用了物品分类存放，还可以将其添加到偏好选择分类中。\n此操作对垃圾物品无效。'
+	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|n偏好选择功能已启用。|n你现在可以点击标记物品。|n若启用了物品分类存放，还可以将其添加到偏好选择分类中。|n此操作对垃圾物品无效。'
 	L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
 	L['INVENTORY_AUTO_REPAIR'] = '自动修理'
-	L['INVENTORY_AUTO_REPAIR_ENABLED'] = '\n自动修理功能已启用。\n每次与商人对话都会自动修理你的装备。'
+	L['INVENTORY_AUTO_REPAIR_TIP'] = '|n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
 	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
 	L['INVENTORY_REPAIR_COST'] = '自动修理花费'
 	L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
-	L['INVENTORY_SELL_JUNK_ENABLED'] = '\n自动出售垃圾功能已启用。\n每次与商人对话都会自动出售垃圾物品。'
+	L['INVENTORY_SELL_JUNK_TIP'] = '|n当按钮高亮时表示自动出售垃圾已启用，每次与商人对话都会自动出售垃圾物品。'
 	L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
 	L['INVENTORY_SEARCH'] = '搜索'
 	L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
 	L['INVENTORY_MARK_JUNK'] = '垃圾分类'
-	L['INVENTORY_MARK_JUNK_ENABLED'] = '\n点击将可售出的物品归类为垃圾。\n当你开启自动出售垃圾时，这些物品也将被一同售出。\n这个列表是账号共享的。'
+	L['INVENTORY_MARK_JUNK_ENABLED'] = '|n点击将可售出的物品归类为垃圾。|n当你开启自动出售垃圾时，这些物品也将被一同售出。|n这个列表是账号共享的，同时也不会跟随你的设置导出。|n按住CTRL+ALT并点击此按钮，可以清空这个列表。'
 	L['INVENTORY_QUICK_SPLIT'] = '快速拆分'
 	L['INVENTORY_SPLIT_COUNT'] = '拆分个数'
 	L['INVENTORY_SPLIT_MODE_ENABLED'] = '|n点击拆分背包的堆叠物品，可在左侧输入框调整每次点击的拆分个数。'
@@ -287,6 +304,7 @@ do
 	L['INVENTORY_SESSION'] = '本次登录'
 	L['INVENTORY_CHARACTER'] = '服务器角色'
 	L['INVENTORY_GOLD_TOTAL'] = '总计'
+	L['INVENTORY_AUTO_DEPOSIT'] = '|n左键点击存放材料，右键点击切换存放模式。|n当按钮高亮时，每当打开银行，将自动存放背包中的材料。'
 end
 
 
@@ -301,18 +319,6 @@ do
 	L['MAP_REVEAL'] = '清除地图迷雾'
 	L['MAP_PARAGON'] = '巅峰'
 	L['MAP_NEW_MAIL'] = '<新邮件>'
-end
-
-
---[[ Quest ]]
-
-do
-	L['QUEST_NAME'] = '任务'
-	L['QUEST_DESC'] = '交接任务以及任务追踪相关的选项'
-
-	L['QUEST_MOVER_TRACKER'] = '任务追踪'
-	L['QUEST_ACCEPT'] = '接受任务：'
-	L['QUEST_AUTOMATION'] = '自动交接任务'
 end
 
 
@@ -366,7 +372,7 @@ do
 	L['UNITFRAME_MOVER_RAID'] = '团队框体'
 	L['UNITFRAME_CLICK_CAST_BINDING'] = '点击施法绑定'
 	L['UNITFRAME_CLICK_CAST_TIP'] = '提示'
-	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + 任意鼠标按键点击想绑定的技能\n对小队或团队框体使用绑定的快捷键就能直接施放技能'
+	L['UNITFRAME_CLICK_CAST_DESC'] = 'Ctrl/Alt/Shift + 任意鼠标按键点击想绑定的技能|n对小队或团队框体使用绑定的快捷键就能直接施放技能'
 	L['UNITFRAME_GHOST'] = '灵魂'
 	L['UNITFRAME_OFFLINE'] = '离线'
 end
@@ -441,9 +447,9 @@ end
 
 do
 	L['INSTALL_HEADER_HELLO'] = '你好'
-	L['INSTALL_BODY_WELCOME'] = '欢迎使用 |cffe9c55dFreeUI|r ！\n\n在开始使用前需要调整一些设定来更好的搭配 |cffe9c55dFreeUI|r 工作。\n\n点击安装按钮将进入安装步骤。'
+	L['INSTALL_BODY_WELCOME'] = '欢迎使用 |cffe9c55dFreeUI|r ！|n|n在开始使用前需要调整一些设定来更好的搭配 |cffe9c55dFreeUI|r 工作。|n|n点击安装按钮将进入安装步骤。'
 	L['INSTALL_HEADER_BASIC'] = '基础设置'
-	L['INSTALL_BODY_BASIC'] = '这些安装步骤将为 |cffe9c55dFreeUI|r 调整各类合适的设定。\n\n第一步将会调整一些 |cffe9c55dCVars|r 设定。\n\n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
+	L['INSTALL_BODY_BASIC'] = '这些安装步骤将为 |cffe9c55dFreeUI|r 调整各类合适的设定。|n|n第一步将会调整一些 |cffe9c55dCVars|r 设定。|n|n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
 	L['INSTALL_HEADER_UISCALE'] = '界面缩放'
 	L['INSTALL_BODY_UISCALE'] = '这个步骤将会为游戏界面设定合适的缩放值。'
 	L['INSTALL_HEADER_CHAT'] = '聊天设置'
@@ -453,7 +459,7 @@ do
 	L['INSTALL_HEADER_ADDON'] = '插件设置'
 	L['INSTALL_BODY_ADDON'] = '这个步骤将会调整 |cffe9c55dDBM|r 和 |cffe9c55dSkada|r 的设定以使其配合 |cffe9c55dFreeUI|r 的界面风格与布局。'
 	L['INSTALL_HEADER_COMPLETE'] = '安装成功！'
-	L['INSTALL_BODY_COMPLETE'] = '安装已经成功完成。\n\n请点击下方完成按钮重载界面。\n\n记住在游戏中你可以通过输入 |cffe9c55d/free|r 来获取详细的帮助或是直接输入 |cffe9c55d/free config|r 来打开控制面板更改各类设定。'
+	L['INSTALL_BODY_COMPLETE'] = '安装已经成功完成。|n|n请点击下方完成按钮重载界面。|n|n记住在游戏中你可以通过输入 |cffe9c55d/free|r 来获取详细的帮助或是直接输入 |cffe9c55d/free config|r 来打开控制面板更改各类设定。'
 	L['INSTALL_BUTTON_INSTALL'] = '安装'
 	L['INSTALL_BUTTON_SKIP'] = '跳过'
 	L['INSTALL_BUTTON_CONTINUE'] = '继续'
@@ -488,12 +494,17 @@ end
 
 L.GUI = {
 	['HINT'] = '提示',
-	['RELOAD'] = '|cffff2020是否重载界面来完成设置？|r',
-	['RESET_OPTIONS'] = '|cffff2020是否移除所有已保存的选项并重置为默认值？|r',
-	['RESET_GOLD'] = '|cffff2020是否重置金币统计数据？|r',
+	['RELOAD'] = '|cffff2020是否重载界面来应用设置？|r',
+	['RESET_WARNING'] = '是否初始化|cffff2020所有|r的设置？',
+	['RESET_PROFILE_WARNING'] = '是否重置|cffff2020当前配置|r？',
+	['APPLY_SELECTED_PROFILE'] = '是否载入|cffff2020所选配置|r？',
+	['DOWNLOAD_SELECTED_PROFILE'] = '是否将|cffff2020所选配置替换当前使用的配置|r？',
+	['UPLOAD_CURRENT_PROFILE'] = '是否将|cffff2020当前使用的配置覆盖所选的配置|r？',
+	['RESET_GOLD'] = '|cffff2020是否清空金币统计数据？|r',
+	['RESET_JUNK_LIST'] = '|cffff2020是否清空自定义垃圾物品列表？|r',
 
 	['MOVER'] = {
-		['TITLE'] = '界面元素位置调整',
+		['NAME'] = '界面元素位置调整',
 		['GRID'] = '网格',
 		['RESET_ELEMENT'] = '重置该界面元素的默认位置',
 		['HIDE_ELEMENT'] = '隐藏该界面元素',
@@ -508,97 +519,134 @@ L.GUI = {
 		['STANCE_BAR'] = 'stance bar',
 		['LEAVE_VEHICLE_BAR'] = 'leave vehicle bar',
 		['QUEST_BUTTON'] = 'quest button',
+
+		['OBJECTIVE_TRACKER'] = 'objective tracker'
 	},
 
-	['DATA'] = {
-		['TITLE'] = '',
+	['PROFILE'] = {
+		['NAME'] = '配置管理',
 		['IMPORT_ERROR'] = '数据异常，导入失败！',
 		['IMPORT_WARNING'] = '|cffff2020是否导入数据？|r',
 		['INFO'] = '数据信息',
 		['VERSION'] = '版本',
 		['CHARACTER'] = '角色',
 		['EXCEPTION'] = '数据异常',
+
+
+
+		['RESET_TIP'] = '清除 %AddonName% 所有已保存的设置，将所有选项重置为默认值。',
+		['IMPORT_TIP'] = '导入配置字符串。',
+		['EXPORT_TIP'] = '将当前的配置导出为字符串。',
+
+		['RESET'] = '初始化设置',
 		['IMPORT'] = '导入',
 		['EXPORT'] = '导出',
-		['IMPORT_TITLE'] = '导入字符串',
-		['EXPORT_TITLE'] = '导出字符串',
-		['RESET'] = '重置',
-		['RESET_TIP'] = '清除 |cffe9c55dFreeUI|r 已保存的数据，将所有选项重置为 |cffe9c55dFreeUI|r 默认值。',
-		['IMPORT_TIP'] = '导入 |cffe9c55dFreeUI|r 的配置字符串。',
-		['EXPORT_TIP'] = '将当前的 |cffe9c55dFreeUI|r 配置导出为字符串。',
+		['IMPORT_HEADER'] = '导入字符串',
+		['EXPORT_HEADER'] = '导出字符串',
+
+		['DEFAULT_CHARACTER_PROFILE'] = '角色配置',
+		['DEFAULT_SHARED_PROFILE'] = '共享配置',
+		['PROFILE_NAME'] = '配置名称',
+		['PROFILE_NAME_TIP'] = '|n自定义你的配置名称。若清空了输入框，则自动载入默认的名字。|n|n输入完毕后，按一下Enter键。',
+		['RESET_PROFILE'] = '重置当前配置',
+		['RESET_PROFILE_TIP'] = '|n重置当前配置，并载入默认设置，需要重载插件后生效。',
+		['SELECT_PROFILE'] = '选择所选配置',
+		['SELECT_PROFILE_TIP'] = '|n切换至所选配置，需要重载插件后生效。',
+		['DOWNLOAD_PROFILE'] = '替换当前配置',
+		['DOWNLOAD_PROFILE_TIP'] = '|n读取所选配置，并覆盖你当前使用的配置，需要重载插件后生效。',
+		['UPLOAD_PROFILE'] = '覆盖所选配置',
+		['UPLOAD_PROFILE_TIP'] = '|n将你当前使用的配置，覆盖到所选的配置位。',
+		['PROFILE_MANAGEMENT'] = '配置管理（测试中）',
+		['PROFILE_DESCRIPTION'] = '你可以在这里管理你的插件配置，使用前请先备份一次你的数据。默认是基于你的角色进行存储，不进行同账号下各角色的共享。你也可以切换到共享配置，这样多个角色就可以使用同一个设置，无需进行重复的导入和导出。|n数据的导入和导出，只支持当前使用的存档配置。',
+		['SHARED_CHARACTERS'] = '同配置角色',
 	},
 
 	['MISC'] = {
-		['TITLE'] = '',
+		['NAME'] = '杂项',
 	},
 
 	['APPEARANCE'] = {
-		['TITLE'] = '',
+		['NAME'] = '外观',
+		['RESKIN_BLIZZ'] = '美化游戏原始界面',
+		['RESKIN_BLIZZ_TIP'] = '使用统一的黑色外观风格替换游戏原始的美术风格',
+		['VIGNETTING'] = '暗角效果',
+		['BACKDROP_ALPHA'] = '背景透明度',
+		['BACKDROP_ALPHA_TIP'] = '调整黑色背景透明度',
+		['VIGNETTING_ALPHA'] = '暗角透明度',
+		['CURSOR_TRAIL'] = '鼠标闪光',
+		['SHADOW_BORDER'] = '阴影边框',
+		['UI_SCALE'] = '界面缩放',
+		['UI_SCALE_TIP'] = '设定界面整体缩放|n推荐1080P设为1|n1440P设为1.2-1.4|n2160P设为2',
+		['TEXTURE_STYLE'] = '材质风格',
+		['TEXTURE_NORM'] = '默认',
+		['TEXTURE_GRAD'] = '渐变',
+		['TEXTURE_FLAT'] = '扁平',
+		['NUMBER_FORMAT'] = '数字显示方式',
+		['NUMBER_TYPE1'] = '标准模式: b/m/k',
+		['NUMBER_TYPE2'] = '中式: 亿/万',
+		['NUMBER_TYPE3'] = '显示具体数值',
+
+		['RESKIN_DBM'] = 'Reskin DBM',
+		['RESKIN_PGF'] = 'Reskin PGF',
+
 	},
 
 	['NOTIFICATION'] = {
-		['TITLE'] = '',
+		['NAME'] = '提醒',
 	},
 
 	['INFOBAR'] = {
-		['TITLE'] = '',
+		['NAME'] = '信息条',
 	},
 
 	['CHAT'] = {
-		['TITLE'] = '',
+		['NAME'] = '聊天',
 	},
 
 	['AURA'] = {
-		['TITLE'] = '',
+		['NAME'] = '光环',
 	},
 
 	['ACTIONBAR'] = {
-		['TITLE'] = '',
+		['NAME'] = '动作条',
 	},
 
 	['COMBAT'] = {
-		['TITLE'] = '',
+		['NAME'] = '战斗',
 	},
 
 	['ANNOUNCEMENT'] = {
-		['ENABLE'] = '副本通告',
-		['INTERRUPT'] = '成功打断施法',
-		['DISPEL'] = '成功驱散增益',
-		['STOLEN'] = '成功偷取增益',
-		['FEAST'] = '大餐',
-		['CAULDRON'] = '药锅',
-		['CODEX'] = '圣典',
-		['REFRESHMENT'] = '法师餐桌',
-		['SOULWELL'] = '术士灵魂井',
-		['REPAIR'] = '修理',
-		['MAIL'] = '邮件',
-		['BATTLE_RESURRECTION'] = '战斗复活',
-		['PORTAL'] = '法师传送门',
-		['TOY'] = '特殊玩具',
+		['NAME'] = '通告',
+		['ENABLE'] = '启用通告模块',
+		['ENABLE_TIP'] = '在副本中通告自己或是队友的一些特定行为',
+		['INTERRUPT'] = '成功打断',
+		['INTERRUPT_TIP'] = '通告自己的成功打断',
+		['DISPEL'] = '成功驱散',
+		['DISPEL_TIP'] = '通告自己的成功驱散',
+		['COMBAT_RESURRECTION'] = '战斗复活',
+		['COMBAT_RESURRECTION_TIP'] = '通告自己或是队友使用的战复',
+		['UTILITY'] = '辅助技能及物品',
+		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等',
 	},
 
 	['INVENTORY'] = {
-		['TITLE'] = '',
+		['NAME'] = '背包',
 	},
 
 	['MAP'] = {
-		['TITLE'] = '',
-	},
-
-	['QUEST'] = {
-		['TITLE'] = '',
+		['NAME'] = '地图',
 	},
 
 	['TOOLTIP'] = {
-		['TITLE'] = '',
+		['NAME'] = '鼠标提示',
 	},
 
 	['UNITFRAME'] = {
-		['TITLE'] = '',
+		['NAME'] = '单位框体',
 	},
 
 	['NAMEPLATE'] = {
-		['TITLE'] = '姓名板',
+		['NAME'] = '姓名板',
 		['DESC'] = '设置姓名板的外观和功能',
 
 		['SUB_BASIC'] = '基础',
@@ -660,7 +708,7 @@ L.GUI = {
 	},
 
 	['CREDITS'] = {
-		['TITLE'] = '',
+		['NAME'] = '致谢',
 	},
 }
 

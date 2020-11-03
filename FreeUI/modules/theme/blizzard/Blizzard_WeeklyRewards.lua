@@ -54,8 +54,7 @@ end
 local function reskinConfirmIcon(frame)
 	if frame.bg then return end
 	frame.bg = F.ReskinIcon(frame.Icon)
-	F.ReskinIconBorder(frame.IconBorder)
-	frame.IconBorder:SetVertexColor(frame.IconBorder:GetVertexColor()) -- reset color on init
+	F.ReskinIconBorder(frame.IconBorder, true)
 end
 
 C.Themes["Blizzard_WeeklyRewards"] = function()
