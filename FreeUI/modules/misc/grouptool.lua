@@ -11,7 +11,7 @@ local ConvertToParty = C_PartyInfo.ConvertToParty
 
 
 function MISC:GroupTool()
-	if not FreeDB.misc.group_tool then return end
+	if not C.DB.misc.group_tool then return end
 
 	local header = CreateFrame('Button', nil, UIParent, 'BackdropTemplate')
 	header:SetSize(120, 28)
@@ -219,7 +219,7 @@ function MISC:GroupTool()
 		marker:GetNormalTexture():SetVertexColor(0, 1, 0)
 		marker:HookScript('OnMouseUp', function()
 			if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then return end
-			UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
+			UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)
 		end)
 	end
 
@@ -297,14 +297,14 @@ function MISC:GroupTool()
 				end
 			end
 		end
-		if not FreeDB.misc.rune_check then NoBuff[numGroups] = {} end
+		if not C.DB.misc.rune_check then NoBuff[numGroups] = {} end
 
 		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
 			sendMsg(L['MISC_BUFFS_READY'])
 		else
 			sendMsg(L['MISC_RAID_BUFF_CHECK'])
 			for i = 1, 5 do sendResult(i) end
-			if FreeDB.misc.rune_check then sendResult(numGroups) end
+			if C.DB.misc.rune_check then sendResult(numGroups) end
 		end
 	end
 
@@ -335,17 +335,17 @@ function MISC:GroupTool()
 				scanBuff()
 			end
 		elseif btn == 'LeftButton' then
-			if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT) return end
 			if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
 				DoReadyCheck()
 			else
-				UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
+				UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)
 			end
 		else
 			if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
 				if IsAddOnLoaded('DBM-Core') then
 					if reset then
-						SlashCmdList['DEADLYBOSSMODS']('pull '..FreeDB.misc.countdown)
+						SlashCmdList['DEADLYBOSSMODS']('pull '..C.DB.misc.countdown)
 					else
 						SlashCmdList['DEADLYBOSSMODS']('pull 0')
 					end
@@ -353,16 +353,16 @@ function MISC:GroupTool()
 				elseif IsAddOnLoaded('BigWigs') then
 					if not SlashCmdList['BIGWIGSPULL'] then LoadAddOn('BigWigs_Plugins') end
 					if reset then
-						SlashCmdList['BIGWIGSPULL'](FreeDB.misc.countdown)
+						SlashCmdList['BIGWIGSPULL'](C.DB.misc.countdown)
 					else
 						SlashCmdList['BIGWIGSPULL']('0')
 					end
 					reset = not reset
 				else
-					UIErrorsFrame:AddMessage(C.InfoColor..L['MISC_ADDON_REQUIRED'])
+					UIErrorsFrame:AddMessage(C.RedColor..L['MISC_ADDON_REQUIRED'])
 				end
 			else
-				UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
+				UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)
 			end
 		end
 	end)
@@ -394,7 +394,7 @@ function MISC:GroupTool()
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
+			if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT) return end
 			if IsInRaid() then
 				SendChatMessage(L['MISC_DISBAND_PROCESS'], 'RAID')
 				for i = 1, GetNumGroupMembers() do
@@ -421,7 +421,7 @@ function MISC:GroupTool()
 			if UnitIsGroupLeader('player') then
 				StaticPopup_Show('Group_Disband')
 			else
-				UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
+				UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)
 			end
 		end},
 		{CONVERT_TO_RAID, function()
@@ -430,14 +430,14 @@ function MISC:GroupTool()
 				menu:Hide()
 				menu:SetScript('OnUpdate', nil)
 			else
-				UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
+				UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)
 			end
 		end},
 		{ROLE_POLL, function()
 			if IsInGroup() and not HasLFGRestrictions() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
 				InitiateRolePoll()
 			else
-				UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_LEADER)
+				UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)
 			end
 		end},
 		{RAID_CONTROL, function() ToggleFriendsFrame(3) end},

@@ -54,7 +54,7 @@ local function updateRoleBonus(roleButton)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	-- LFDFrame
 	hooksecurefunc("LFGDungeonListButton_SetDungeon", function(button)

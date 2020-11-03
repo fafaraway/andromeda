@@ -18,14 +18,14 @@ local function reskinChatBubble(chatbubble)
 			frame:SetBackdrop(nil)
 		end
 		frame.Tail:SetAlpha(0)
-		--frame.String:SetFont(C.Assets.Fonts.Chat, 16)
+		--frame.String:SetFont(C.Assets.Fonts.Bold, 16)
 	end
 
 	chatbubble.styled = true
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	local events = {
 		CHAT_MSG_SAY = "chatBubbles",

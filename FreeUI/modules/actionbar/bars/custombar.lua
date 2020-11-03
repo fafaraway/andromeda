@@ -3,9 +3,9 @@ local ACTIONBAR = F.ACTIONBAR
 
 
 function ACTIONBAR:CreateCustomBar(anchor)
-	local padding = FreeDB.actionbar.custom_bar_padding
-	local margin = FreeDB.actionbar.custom_bar_margin
-	local size = FreeDB.actionbar.custom_bar_button_size
+	local padding = C.DB.actionbar.custom_bar_padding
+	local margin = C.DB.actionbar.custom_bar_margin
+	local size = C.DB.actionbar.custom_bar_button_size
 	local num = 12
 	local name = 'FreeUI_CustomBar'
 	local page = 8
@@ -33,16 +33,16 @@ function ACTIONBAR:CreateCustomBar(anchor)
 		tinsert(ACTIONBAR.buttons, button)
 	end
 
-	if FreeDB.actionbar.custom_bar and FreeDB.actionbar.custom_bar_fade then
+	if C.DB.actionbar.custom_bar and C.DB.actionbar.custom_bar_fade then
 		frame.fader = {
-			enable = FreeDB.actionbar.custom_bar_fade,
-			fadeInAlpha = FreeDB.actionbar.custom_bar_fade_in_alpha,
-			fadeOutAlpha = FreeDB.actionbar.custom_bar_fade_out_alpha,
-			arena = FreeDB.actionbar.custom_bar_fade_arena,
-			instance = FreeDB.actionbar.custom_bar_fade_instance,
-			combat = FreeDB.actionbar.custom_bar_fade_combat,
-			target = FreeDB.actionbar.custom_bar_fade_target,
-			hover = FreeDB.actionbar.custom_bar_fade_hover,
+			enable = C.DB.actionbar.custom_bar_fade,
+			fadeInAlpha = C.DB.actionbar.custom_bar_fade_in_alpha,
+			fadeOutAlpha = C.DB.actionbar.custom_bar_fade_out_alpha,
+			arena = C.DB.actionbar.custom_bar_fade_arena,
+			instance = C.DB.actionbar.custom_bar_fade_instance,
+			combat = C.DB.actionbar.custom_bar_fade_combat,
+			target = C.DB.actionbar.custom_bar_fade_target,
+			hover = C.DB.actionbar.custom_bar_fade_hover,
 		}
 
 		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
@@ -55,11 +55,11 @@ function ACTIONBAR:UpdateCustomBar()
 	local frame = _G.FreeUI_CustomBar
 	if not frame then return end
 
-	local padding = FreeDB.actionbar.custom_bar_padding
-	local margin = FreeDB.actionbar.custom_bar_margin
-	local size = FreeDB.actionbar.custom_bar_button_size
-	local num = FreeDB.actionbar.custom_bar_button_number
-	local perRow = FreeDB.actionbar.custom_bar_button_per_row
+	local padding = C.DB.actionbar.custom_bar_padding
+	local margin = C.DB.actionbar.custom_bar_margin
+	local size = C.DB.actionbar.custom_bar_button_size
+	local num = C.DB.actionbar.custom_bar_button_number
+	local perRow = C.DB.actionbar.custom_bar_button_per_row
 	for i = 1, num do
 		local button = frame.buttons[i]
 		button:SetSize(size, size)
@@ -89,7 +89,7 @@ function ACTIONBAR:UpdateCustomBar()
 end
 
 function ACTIONBAR:CustomBar()
-	if FreeDB.inventory.custom_bar then
+	if C.DB.inventory.custom_bar then
 		ACTIONBAR:CreateCustomBar({'BOTTOM', UIParent, 'BOTTOM', 0, 140})
 	end
 end

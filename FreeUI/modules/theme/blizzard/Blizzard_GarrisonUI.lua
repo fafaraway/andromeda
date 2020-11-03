@@ -934,6 +934,9 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	-- Covenant Mission UI
 	local CovenantMissionFrame = CovenantMissionFrame
 	ReskinMissionFrame(CovenantMissionFrame)
+	if CovenantMissionFrame.RaisedBorder then
+		CovenantMissionFrame.RaisedBorder:SetAlpha(0) -- not in prepatch
+	end
 	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 
 	CombatLog:DisableDrawLayer("BACKGROUND")
@@ -950,7 +953,7 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
 	if CovenantMissionFrameFollowers.HealAllButton then
-		F.Reskin(CovenantMissionFrameFollowers.HealAllButton) -- not in ptr
+		F.Reskin(CovenantMissionFrameFollowers.HealAllButton) -- not in prepatch
 	end
 	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	F.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)

@@ -25,7 +25,7 @@ end
 
 function ACTIONBAR:CreateBar2()
 	local num = NUM_ACTIONBAR_BUTTONS
-	local size = FreeDB.actionbar.button_size_normal
+	local size = C.DB.actionbar.button_size_normal
 	local buttonList = {}
 
 	local frame = CreateFrame("Frame", "FreeUI_ActionBar2", UIParent, "SecureHandlerStateTemplate")
@@ -61,16 +61,16 @@ function ACTIONBAR:CreateBar2()
 	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
 	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	if FreeDB.actionbar.bar2_fade then
+	if C.DB.actionbar.bar2_fade then
 		frame.fader = {
-			enable = FreeDB.actionbar.bar2_fade,
-			fadeInAlpha = FreeDB.actionbar.bar2_fade_in_alpha,
-			fadeOutAlpha = FreeDB.actionbar.bar2_fade_out_alpha,
-			arena = FreeDB.actionbar.bar2_fade_arena,
-			instance = FreeDB.actionbar.bar2_fade_instance,
-			combat = FreeDB.actionbar.bar2_fade_combat,
-			target = FreeDB.actionbar.bar2_fade_target,
-			hover = FreeDB.actionbar.bar2_fade_hover,
+			enable = C.DB.actionbar.bar2_fade,
+			fadeInAlpha = C.DB.actionbar.bar2_fade_in_alpha,
+			fadeOutAlpha = C.DB.actionbar.bar2_fade_out_alpha,
+			arena = C.DB.actionbar.bar2_fade_arena,
+			instance = C.DB.actionbar.bar2_fade_instance,
+			combat = C.DB.actionbar.bar2_fade_combat,
+			target = C.DB.actionbar.bar2_fade_target,
+			hover = C.DB.actionbar.bar2_fade_hover,
 		}
 
 		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)

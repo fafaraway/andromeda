@@ -229,7 +229,7 @@ f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 
 function MAP:MicroMenu()
-	if not FreeDB.map.micro_menu then return end
+	if not C.DB.map.micro_menu then return end
 
 	Minimap:SetScript('OnMouseUp', function(self, button)
 		if (button == 'MiddleButton') then

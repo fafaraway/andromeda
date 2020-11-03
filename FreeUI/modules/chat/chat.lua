@@ -16,7 +16,7 @@ local isBattleNet
 
 local isScaling = false
 function CHAT:UpdateChatSize()
-	if not FreeDB.chat.lock_position then return end
+	if not C.DB.chat.lock_position then return end
 	if isScaling then return end
 	isScaling = true
 
@@ -35,7 +35,7 @@ function CHAT:UpdateChatSize()
 
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', C.UIGap, C.UIGap)
-	ChatFrame1:SetSize(FreeDB.chat.window_width, FreeDB.chat.window_height)
+	ChatFrame1:SetSize(C.DB.chat.window_width, C.DB.chat.window_height)
 
 	isScaling = false
 end
@@ -80,19 +80,18 @@ function CHAT:RestyleChatFrame()
 
 	local name = self:GetName()
 
-	if FreeDB.chat.fade_out then
+	if C.DB.chat.fade_out then
 		self:SetFading(true)
-		self:SetTimeVisible(FreeDB.chat.fading_visible)
-		self:SetFadeDuration(FreeDB.chat.fading_duration)
+		self:SetTimeVisible(C.DB.chat.fading_visible)
+		self:SetFadeDuration(C.DB.chat.fading_duration)
 	end
 
 	local fontSize = select(2, self:GetFont())
-	self:SetFont(C.Assets.Fonts.Chat, fontSize, FreeDB.chat.font_outline and 'OUTLINE')
-	self:SetShadowColor(0, 0, 0, FreeDB.chat.font_outline and 0 or 1)
+	self:SetFont(C.Assets.Fonts.Bold, fontSize, C.DB.chat.font_outline and 'OUTLINE')
+	self:SetShadowColor(0, 0, 0, C.DB.chat.font_outline and 0 or 1)
 	self:SetShadowOffset(2, -2)
 
 	self:SetClampedToScreen(false)
-	self:SetClampRectInsets(0, 0, 0, 0)
 	self:SetMaxResize(C.ScreenWidth, C.ScreenHeight)
 	self:SetMinResize(100, 50)
 	if self:GetMaxLines() < maxLines then
@@ -119,8 +118,8 @@ function CHAT:RestyleChatFrame()
 
 	local tab = _G[name..'Tab']
 	tab:SetAlpha(1)
-	tab.Text:SetFont(C.Assets.Fonts.Chat, 12, FreeDB.chat.outline and 'OUTLINE')
-	tab.Text:SetShadowColor(0, 0, 0, FreeDB.chat.outline and 0 or 1)
+	tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.chat.outline and 'OUTLINE')
+	tab.Text:SetShadowColor(0, 0, 0, C.DB.chat.outline and 0 or 1)
 	tab.Text:SetShadowOffset(2, -2)
 	F.StripTextures(tab, 7)
 	hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
@@ -134,7 +133,7 @@ function CHAT:RestyleChatFrame()
 	F.HideObject(_G.ChatFrameMenuButton)
 	F.HideObject(_G.QuickJoinToastButton)
 
-	if FreeDB.chat.voice_button then
+	if C.DB.chat.voice_button then
 		_G.ChatFrameChannelButton:ClearAllPoints()
 		_G.ChatFrameChannelButton:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, -26)
 		_G.ChatFrameChannelButton:SetParent(UIParent)
@@ -207,7 +206,7 @@ local cycles = {
 }
 
 function CHAT:UpdateTabChannelSwitch()
-	if not FreeDB.chat.tab_cycle then return end
+	if not C.DB.chat.tab_cycle then return end
 	if strsub(tostring(self:GetText()), 1, 1) == '/' then return end
 	local currChatType = self:GetAttribute('chatType')
 	for i, curr in ipairs(cycles) do
@@ -270,7 +269,7 @@ local function UpdateChatBubble()
 end
 
 function CHAT:AutoToggleChatBubble()
-	if FreeDB.chat.smart_bubble then
+	if C.DB.chat.smart_bubble then
 		F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
 	else
 		F:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
@@ -329,9 +328,20 @@ function CHAT:ClickToInvite(link, _, button)
 	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 end
 
+function CHAT:PauseToSlash()
+	hooksecurefunc('ChatEdit_OnTextChanged', function(self, userInput)
+		local text = self:GetText()
+		if userInput then
+			if text == '、' then
+				self:SetText('/')
+			end
+		end
+	end)
+end
+
 
 function CHAT:OnLogin()
-	if not FreeDB.chat.enable_chat then return end
+	if not C.DB.chat.enable_chat then return end
 
 	for i = 1, _G.NUM_CHAT_WINDOWS do
 		self.RestyleChatFrame(_G['ChatFrame'..i])
@@ -362,7 +372,7 @@ function CHAT:OnLogin()
 	_G.CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
 	-- Lock chatframe
-	if FreeDB.chat.lock_position then
+	if C.DB.chat.lock_position then
 		hooksecurefunc('FCF_SavePositionAndDimensions', self.UpdateChatSize)
 		F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
 		self:UpdateChatSize()
@@ -383,6 +393,7 @@ function CHAT:OnLogin()
 	self:WhisperSticky()
 	self:WhisperAlert()
 	self:AutoToggleChatBubble()
+	self:PauseToSlash()
 
 
 	-- ProfanityFilter

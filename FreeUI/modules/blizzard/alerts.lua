@@ -107,7 +107,7 @@ local function MoveTalkingHead()
 end
 
 local function NoTalkingHeads()
-	if not FreeDB.blizzard.hide_talkinghead then return end
+	if not C.DB.blizzard.hide_talkinghead then return end
 
 	hooksecurefunc(TalkingHeadFrame, 'Show', function(self)
 		self:Hide()

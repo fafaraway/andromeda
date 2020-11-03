@@ -54,7 +54,7 @@ end
 
 
 function BLIZZARD:MailButton()
-	if not FreeDB.blizzard.mail_button then return end
+	if not C.DB.blizzard.mail_button then return end
 
 	_G.OpenAllMail:Hide()
 	_G.OpenAllMail:UnregisterAllEvents()

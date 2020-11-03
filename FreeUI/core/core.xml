@@ -2,8 +2,8 @@
 	<Script file="core.lua"/>
 	<Script file="constants.lua"/>
 	<Script file="configs.lua"/>
-	<Script file="profiles.lua"/>
 	<Script file="functions.lua"/>
+	<Script file="animation.lua"/>
 	<Script file="logo.lua"/>
 	<Script file="mover.lua"/>
 	<Script file="slash.lua"/>

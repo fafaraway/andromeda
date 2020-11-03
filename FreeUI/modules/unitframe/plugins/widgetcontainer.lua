@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-local NAMEPLATE = F.NAMEPLATE
 
 
 -- Credit: ElvUI
@@ -22,7 +21,7 @@ local function reskinWidgetBar(bar)
 	end
 end
 
-function NAMEPLATE:Widget_DefaultLayout(sortedWidgets)
+function F:Widget_DefaultLayout(sortedWidgets)
 	local widgetContainerFrame = self
 	local horizontalRowContainer = nil
 	local horizontalRowHeight = 0

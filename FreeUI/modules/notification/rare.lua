@@ -63,7 +63,7 @@ function NOTIFICATION:RareAlert_CheckInstance()
 end
 
 function NOTIFICATION:RareAlert()
-	if FreeDB.notification.rare_found then
+	if C.DB.notification.rare_found then
 		self:RareAlert_CheckInstance()
 		F:RegisterEvent('PLAYER_ENTERING_WORLD', self.RareAlert_CheckInstance)
 	else

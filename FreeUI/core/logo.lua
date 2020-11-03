@@ -38,7 +38,7 @@ function LOGO:Logo_Create()
 	tex:SetAllPoints()
 	tex:SetTexture(C.Assets.logo)
 	tex:SetBlendMode('ADD')
-	--tex:SetGradientAlpha('Vertical',  C.r, C.g, C.b, 1, 1, 1, 1, 1)
+	tex:SetGradientAlpha('Vertical', 1, 1, 1, .75, 1, 1, 1, .75)
 
 	local delayTime = 0
 	local timer1 = .5
@@ -114,7 +114,7 @@ end
 
 
 function LOGO:OnLogin()
-	if not FreeDB['installation_complete'] then return end
+	if not C.DB['installation_complete'] then return end
 
 	self:LoginAnimation()
 end

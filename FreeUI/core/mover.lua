@@ -76,15 +76,15 @@ function F:CreateMF(parent, saved)
 		frame:StopMovingOrSizing()
 		if not saved then return end
 		local orig, _, tar, x, y = frame:GetPoint()
-		FreeDB['ui_anchor_temp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
+		C.DB['ui_anchor_temp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
 	end)
 end
 
 function F:RestoreMF()
 	local name = self:GetName()
-	if name and FreeDB['ui_anchor_temp'][name] then
+	if name and C.DB['ui_anchor_temp'][name] then
 		self:ClearAllPoints()
-		self:SetPoint(unpack(FreeDB['ui_anchor_temp'][name]))
+		self:SetPoint(unpack(C.DB['ui_anchor_temp'][name]))
 	end
 end
 
@@ -104,10 +104,10 @@ function F:Mover(text, value, anchor, width, height)
 	mover.text = F.CreateFS(mover, C.Assets.Fonts.Regular, 12, 'OUTLINE', text)
 	mover.text:SetWordWrap(true)
 
-	if not FreeDB[key][value] then
+	if not C.DB[key][value] then
 		mover:SetPoint(unpack(anchor))
 	else
-		mover:SetPoint(unpack(FreeDB[key][value]))
+		mover:SetPoint(unpack(C.DB[key][value]))
 	end
 	mover:EnableMouse(true)
 	mover:SetMovable(true)
@@ -187,7 +187,7 @@ function MOVER:DoTrim(trimX, trimY)
 		f.__y.__current = y
 		mover:ClearAllPoints()
 		mover:SetPoint(point, UIParent, point, x, y)
-		FreeDB[mover.__key][mover.__value] = {point, 'UIParent', point, x, y}
+		C.DB[mover.__key][mover.__value] = {point, 'UIParent', point, x, y}
 	end
 end
 
@@ -197,7 +197,7 @@ function MOVER:Mover_OnClick(btn)
 	elseif IsControlKeyDown() and btn == 'RightButton' then
 		self:ClearAllPoints()
 		self:SetPoint(unpack(self.__anchor))
-		FreeDB[self.__key][self.__value] = nil
+		C.DB[self.__key][self.__value] = nil
 	end
 	updater.__owner = self
 	MOVER.UpdateTrimFrame(self)
@@ -228,7 +228,7 @@ function MOVER:Mover_OnDragStop()
 
 	self:ClearAllPoints()
 	self:SetPoint(orig, 'UIParent', tar, x, y)
-	FreeDB[self.__key][self.__value] = {orig, 'UIParent', tar, x, y}
+	C.DB[self.__key][self.__value] = {orig, 'UIParent', tar, x, y}
 	MOVER.UpdateTrimFrame(self)
 	updater:Hide()
 end
@@ -267,7 +267,7 @@ local function CreateConsole()
 	f:SetSize(260, 70)
 	F.CreateBD(f)
 	F.CreateSD(f)
-	F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L.GUI.MOVER.TITLE, 'YELLOW', nil, 'TOP', 0, -10)
+	F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L.GUI.MOVER.NAME, 'YELLOW', nil, 'TOP', 0, -10)
 
 	local bu, text = {}, {LOCK, L.GUI.MOVER.GRID, RESET}
 

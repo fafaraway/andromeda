@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	F.StripTextures(VideoOptionsFrameCategoryFrame)
 	F.StripTextures(VideoOptionsFramePanelContainer)
@@ -79,7 +79,7 @@ tinsert(C.BlizzThemes, function()
 			"Advanced_BufferingDropDown",
 			"Advanced_FilteringDropDown",
 			"Advanced_RTShadowQualityDropDown",
-			"Advanced_SSAOTypeDropDown", -- not in ptr
+			"Advanced_SSAOTypeDropDown", -- not in prepatch
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",

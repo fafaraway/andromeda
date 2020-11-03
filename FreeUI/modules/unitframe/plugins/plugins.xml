@@ -1,6 +1,6 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='debuffhighlight.lua'/>
-	<Script file='combatfader.lua'/>
+	<Script file='fader.lua'/>
 	<Script file='gloablcooldown.lua'/>
 	<Script file='partywatcher.lua'/>
 	<Script file='raiddebuffs.lua'/>

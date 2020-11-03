@@ -63,7 +63,7 @@ function TOOLTIP:ReskinRewardIcon()
 end
 
 function TOOLTIP:ReskinTooltipIcons()
-	if not FreeDB.tooltip.tip_icon then return end
+	if not C.DB.tooltip.tip_icon then return end
 
 	TOOLTIP.HookTooltipMethod(GameTooltip)
 	TOOLTIP.HookTooltipMethod(ItemRefTooltip)

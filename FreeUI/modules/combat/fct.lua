@@ -2,7 +2,8 @@ local F, C, L = unpack(select(2, ...))
 local COMBAT = F.COMBAT
 
 
--- Based on RgsCT by Rubgrsch
+-- Floating combat text
+-- Credits: RgsCT by Rubgrsch
 -- https://github.com/Rubgrsch/RgsCT
 
 
@@ -150,7 +151,7 @@ local function roleCheck()
 end
 
 local function setMerge()
-	dmgFunc = FreeDB.combat.fct_merge and dmgMerge or dmgString
+	dmgFunc = C.DB.combat.fct_merge and dmgMerge or dmgString
 end
 
 
@@ -164,13 +165,13 @@ end
 
 
 function COMBAT:FloatingCombatText()
-	if not FreeDB.combat.fct then return end
+	if not C.DB.combat.fct then return end
 
-	if FreeDB.combat.fct_in then
+	if C.DB.combat.fct_in then
 		F.Mover(inFrame, L['COMBAT_MOVER_IN'], 'FCTInFrame', {'RIGHT', UIParent, 'CENTER', -300, 0}, inFrame:GetWidth(), inFrame:GetHeight())
 	end
 
-	if FreeDB.combat.fct_out then
+	if C.DB.combat.fct_out then
 		F.Mover(outFrame, L['COMBAT_MOVER_OUT'], 'FCTOutFrame', {'LEFT', UIParent, 'CENTER', 300, 140}, outFrame:GetWidth(), outFrame:GetHeight())
 	end
 
@@ -181,14 +182,14 @@ function COMBAT:FloatingCombatText()
 		local _, Event, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _, arg1, arg2, arg3, arg4, arg5, arg6, arg7, _, _, arg10 = CombatLogGetCurrentEventInfo()
 		local vehicleGUID, playerGUID = self.vehicleGUID, self.playerGUID
 		local fromMe = sourceGUID == playerGUID
-		local fromMine = fromMe or (FreeDB.combat.fct_pet and band(sourceFlags, mask_mine_friendly_player) == flag_mine_friendly_player and band(sourceFlags, flag_pet_guardian) > 0) or sourceGUID == vehicleGUID
+		local fromMine = fromMe or (C.DB.combat.fct_pet and band(sourceFlags, mask_mine_friendly_player) == flag_mine_friendly_player and band(sourceFlags, flag_pet_guardian) > 0) or sourceGUID == vehicleGUID
 		local toMe = destGUID == playerGUID or destGUID == vehicleGUID
 
 		if Event == 'SWING_DAMAGE' then
 			if fromMine then dmgFunc(false,false,5586,arg1,arg3,arg7) end
 			if toMe then dmgFunc(true,false,5586,arg1,arg3,arg7) end
 
-		elseif (Event == 'SPELL_DAMAGE' or Event == 'RANGE_DAMAGE') or (FreeDB.combat.fct_periodic and Event == 'SPELL_PERIODIC_DAMAGE') then
+		elseif (Event == 'SPELL_DAMAGE' or Event == 'RANGE_DAMAGE') or (C.DB.combat.fct_periodic and Event == 'SPELL_PERIODIC_DAMAGE') then
 			if blacklist[arg1] then return end
 			if toMe then dmgFunc(true,false,arg1,arg4,arg6,arg10)
 			elseif fromMine then dmgFunc(false,false,arg1,arg4,arg6,arg10) end
@@ -202,7 +203,7 @@ function COMBAT:FloatingCombatText()
 			if toMe then missString(true,arg1,arg4,arg6)
 			elseif fromMine then missString(false,arg1,arg4,arg6) end
 
-		elseif Event == 'SPELL_HEAL' or (FreeDB.combat.fct_periodic and Event == 'SPELL_PERIODIC_HEAL') then
+		elseif Event == 'SPELL_HEAL' or (C.DB.combat.fct_periodic and Event == 'SPELL_PERIODIC_HEAL') then
 			-- block full-overhealing
 			if blacklist[arg1] or arg4 == arg5 then return end
 			-- Show healing in outFrame for healers, inFrame for tank/dps

@@ -78,7 +78,7 @@ function MAP:UpdateMapID()
 end
 
 function MAP:AddCoords()
-	if not FreeDB.map.coords then return end
+	if not C.DB.map.coords then return end
 
 	playerCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 10, 10)
 	cursorCoords = F.CreateFS(WorldMapFrame.BorderFrame, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'BOTTOMLEFT', 130, 10)
@@ -93,10 +93,10 @@ function MAP:AddCoords()
 end
 
 function MAP:UpdateMapScale()
-	if self.isMaximized and self:GetScale() ~= FreeDB.map.max_worldmap_scale then
-		self:SetScale(FreeDB.map.max_worldmap_scale)
-	elseif not self.isMaximized and self:GetScale() ~= FreeDB.map.worldmap_scale then
-		self:SetScale(FreeDB.map.worldmap_scale)
+	if self.isMaximized and self:GetScale() ~= C.DB.map.max_worldmap_scale then
+		self:SetScale(C.DB.map.max_worldmap_scale)
+	elseif not self.isMaximized and self:GetScale() ~= C.DB.map.worldmap_scale then
+		self:SetScale(C.DB.map.worldmap_scale)
 	end
 end
 
@@ -118,7 +118,7 @@ end
 
 
 function MAP:OnLogin()
-	if not FreeDB.map.enable then return end
+	if not C.DB.map.enable then return end
 
 	-- Remove from frame manager
 	WorldMapFrame:ClearAllPoints()

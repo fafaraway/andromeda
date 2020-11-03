@@ -208,7 +208,7 @@ function NOTIFICATION:OnLogin()
 		end
 	end)
 
-	if not FreeDB.notification.enable_notification then return end
+	if not C.DB.notification.enable_notification then return end
 	self:NewMail()
 	self:BagFull()
 	--self:VersionCheck()

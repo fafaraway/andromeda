@@ -128,11 +128,11 @@ end
 
 local function SetupUIScale()
 	if C.ScreenHeight >= 2000 then
-		FreeADB.appearance.ui_scale = 2
+		FREE_ADB.ui_scale = 2
 	elseif C.ScreenHeight >= 1500 then
-		FreeADB.appearance.ui_scale = 1.4
+		FREE_ADB.ui_scale = 1.4
 	else
-		FreeADB.appearance.ui_scale = 1
+		FREE_ADB.ui_scale = 1
 	end
 end
 
@@ -143,14 +143,14 @@ local function SetupActionbars()
 	SetCVar('lockActionBars', 1)
 	SetCVar('alwaysShowActionBars', 1)
 
-	SetActionBarToggles(1, 1, 1, 1, 1)
+	-- SetActionBarToggles(1, 1, 1, 1, 1)
 
-	MultiActionBar_Update()
+	-- MultiActionBar_Update()
 
-	_G.MultiBarBottomLeft:SetShown(true)
-	_G.MultiBarRight:SetShown(true)
-	_G.MultiBarLeft:SetShown(true)
-	_G.MultiBarBottomRight:SetShown(true)
+	-- _G.MultiBarBottomLeft:SetShown(true)
+	-- _G.MultiBarRight:SetShown(true)
+	-- _G.MultiBarLeft:SetShown(true)
+	-- _G.MultiBarBottomRight:SetShown(true)
 end
 
 local function SetupChatFrame()
@@ -162,7 +162,7 @@ local function SetupChatFrame()
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
-	FreeDB.chat.lock_position = true
+	C.DB.chat.lock_position = true
 end
 
 local function SetupDBM()
@@ -202,7 +202,7 @@ function INSTALL:HelloWorld()
 	F.CreateBD(f, nil, true)
 	F.CreateTex(f)
 
-	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.Title, nil, 'THICK', 'TOP', 0, -4)
+	f.logo = F.CreateFS(f, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
 	f.desc = F.CreateFS(f, C.Assets.Fonts.Regular, 10, nil, 'installation', {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	f.lineLeft = CreateFrame('Frame', nil, f)
@@ -271,7 +271,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
 		rightButton:SetScript('OnClick', function()
-			FreeDB['installation_complete'] = true
+			C.DB['installation_complete'] = true
 			ReloadUI()
 		end)
 	end
@@ -367,7 +367,7 @@ end
 
 
 function INSTALL:OnLogin()
-	if FreeDB['installation_complete'] then return end
+	if C.DB['installation_complete'] then return end
 
 	self:HelloWorld()
 end
@@ -379,13 +379,13 @@ end
 local function OnEvent(self, event, addon)
 	if event == 'ADDON_LOADED' and addon == 'HideTutorial' then
 		local tocVersion = select(4, GetBuildInfo())
-		if not FreeDB.toc_version or FreeDB.toc_version < tocVersion then
+		if not C.DB.toc_version or C.DB.toc_version < tocVersion then
 			-- only do this once per character
-			FreeDB.toc_version = tocVersion
+			C.DB.toc_version = tocVersion
 		end
 	elseif event == 'VARIABLES_LOADED' then
 		local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', NUM_LE_FRAME_TUTORIALS)
-		if FreeDB.installation_complete or not lastInfoFrame then
+		if C.DB.installation_complete or not lastInfoFrame then
 			C_CVar.SetCVar('showTutorials', 0)
 			C_CVar.SetCVar('showNPETutorials', 0)
 			C_CVar.SetCVar('hideAdventureJournalAlerts', 1)

@@ -6,42 +6,36 @@ if C.isDeveloper then
 	C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.otf'
 	C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-	C.Assets.Fonts.Chat   = 'Fonts\\FreeUI\\bold.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
 elseif C.Client == 'zhCN' then
 	C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
-	C.Assets.Fonts.Chat   = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
 elseif C.Client == 'zhTW' then
 	C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
-	C.Assets.Fonts.Chat   = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\bKAI00M.ttf'
 elseif C.Client == 'koKR' then
 	C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
-	C.Assets.Fonts.Chat   = 'Fonts\\2002.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\K_Damage.ttf'
 elseif C.Client == 'ruRU' then
 	C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\FRIZQT___CYR.ttf'
-	C.Assets.Fonts.Chat   = 'Fonts\\FRIZQT___CYR.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\FRIZQT___CYR.ttf'
 end
 
 local NORMAL = C.Assets.Fonts.Regular
 local BOLD = C.Assets.Fonts.Bold
 local HEADER = C.Assets.Fonts.Header
-local CHAT = C.Assets.Fonts.Chat
 local COMBAT = C.Assets.Fonts.Combat
 
 local function SetFont(obj, font, size, flag, shadow)
@@ -178,8 +172,8 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.Number15Font, NORMAL, 14, 'OUTLINE')
 	SetFont(_G.Number16Font, NORMAL, 15, 'OUTLINE')
 	SetFont(_G.Number18Font, NORMAL, 17, 'OUTLINE')
-	SetFont(_G.NumberFont_Normal_Med, NORMAL, 12, 'OUTLINE')
-	SetFont(_G.NumberFont_Outline_Med, NORMAL, 12, 'OUTLINE')
+	SetFont(_G.NumberFont_Normal_Med, NORMAL, 13, 'OUTLINE')
+	SetFont(_G.NumberFont_Outline_Med, NORMAL, 13, 'OUTLINE')
 	SetFont(_G.NumberFont_Outline_Large, NORMAL, 16, 'OUTLINE')
 	SetFont(_G.NumberFont_Outline_Huge, NORMAL, 20, 'OUTLINE')
 	SetFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10, 'OUTLINE')
@@ -187,7 +181,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.NumberFont_Shadow_Med, NORMAL, 14, 'OUTLINE')
 	SetFont(_G.NumberFont_Shadow_Large, NORMAL, 20, 'OUTLINE')
 	SetFont(_G.PriceFont, NORMAL, 14)
-
+	SetFont(_G.NumberFontNormalLargeRight, NORMAL, 14)
 
 	SetFont(_G.SplashHeaderFont, HEADER, 24)
 
@@ -228,7 +222,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.FriendsFont_Large, NORMAL, 15)
 	SetFont(_G.FriendsFont_UserText, NORMAL, 11)
 
-	SetFont(_G.ChatBubbleFont, CHAT, 16, nil, 'THICK')
+	SetFont(_G.ChatBubbleFont, BOLD, 16, nil, 'THICK')
 	--ChatFontNormal
 	--ChatFontSmall
 
@@ -236,7 +230,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	SetFont(_G.Tooltip_Med, NORMAL, 13)
 	SetFont(_G.Tooltip_Small, NORMAL, 12)
 
-	SetFont(_G.System_IME, CHAT, 16)
+	SetFont(_G.System_IME, BOLD, 16)
 
 	SetFont(_G.SystemFont_NamePlateFixed, NORMAL, 14)
 	SetFont(_G.SystemFont_LargeNamePlateFixed, NORMAL, 20)
@@ -260,6 +254,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 
 
 	SetFont(_G.GameFontNormal, NORMAL, 13)
+	SetFont(_G.QuestFont, NORMAL, 15)
 
 
 
@@ -280,15 +275,14 @@ loader:SetScript('OnEvent', function(self, _, addon)
 		LOCALE_MASK = 128
 	end
 
-	LSM:Register(LSM.MediaType.FONT, '!Free_normal', C.Assets.Fonts.Regular, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_number', C.Assets.Fonts.Regular, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_chat', C.Assets.Fonts.Chat, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_header', C.Assets.Fonts.Bold, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_combat', C.Assets.Fonts.Combat, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_Regular', C.Assets.Fonts.Regular, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_Condensed', C.Assets.Fonts.Condensed, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_Bold', C.Assets.Fonts.Bold, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_header', C.Assets.Fonts.Header, LOCALE_MASK)
 
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_norm', C.AssetsPath..'textures\\norm_tex')
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_grad', C.Assets.grad_tex)
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_flat', C.Assets.flat_tex)
+	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Normal', C.AssetsPath..'textures\\norm_tex')
+	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Gradient', C.Assets.grad_tex)
+	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Flat', C.Assets.flat_tex)
 
 
 

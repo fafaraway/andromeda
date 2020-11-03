@@ -5,8 +5,8 @@ local LibBase64 = F.Libs.Base64
 local dataFrame
 
 function GUI:ExportData()
-	local text = 'FreeUISettings:'..C.Version..':'..C.MyName..':'..C.MyClass
-	for KEY, VALUE in pairs(FreeDB) do
+	local text = 'FreeUISettings:'..C.AddonVersion..':'..C.MyName..':'..C.MyClass
+	for KEY, VALUE in pairs(C.DB) do
 		if type(VALUE) == 'table' then
 			for key, value in pairs(VALUE) do
 				if type(value) == 'table' then
@@ -14,7 +14,8 @@ function GUI:ExportData()
 						for k, v in pairs(value) do
 							text = text..';'..KEY..':'..key..':'..k..':'..v
 						end
-					elseif KEY == 'ui_anchor' or KEY == 'click_cast' then
+
+					elseif KEY == 'ui_anchor' then
 						text = text..';'..KEY..':'..key
 						for _, v in ipairs(value) do
 							text = text..':'..tostring(v)
@@ -26,7 +27,7 @@ function GUI:ExportData()
 						end
 					end
 				else
-					if FreeDB[KEY][key] ~= C.CharacterSettings[KEY][key] then
+					if C.DB[KEY][key] ~= C.CharacterSettings[KEY][key] then -- don't export default settings
 						text = text..';'..KEY..':'..key..':'..tostring(value)
 					end
 				end
@@ -34,11 +35,45 @@ function GUI:ExportData()
 		end
 	end
 
-	for KEY, VALUE in pairs(FreeADB) do
+	for KEY, VALUE in pairs(FREE_ADB) do
 		if KEY == 'custom_junk_list' then
 			text = text..';ACCOUNT:'..KEY
 			for spellID in pairs(VALUE) do
 				text = text..':'..spellID
+			end
+		elseif KEY == 'raid_debuffs' then
+			for instName, value in pairs(VALUE) do
+				for spellID, prio in pairs(value) do
+					text = text..';ACCOUNT:'..KEY..':'..instName..':'..spellID..':'..prio
+				end
+			end
+		elseif KEY == 'nameplate_aura_filter' then
+			for index, value in pairs(VALUE) do
+				text = text..';ACCOUNT:'..KEY..':'..index
+				for spellID in pairs(value) do
+					text = text..':'..spellID
+				end
+			end
+		elseif KEY == 'corner_buffs' then
+			for class, value in pairs(VALUE) do
+				for spellID, data in pairs(value) do
+					if not bloodlustFilter[spellID] and class == C.MyClass then
+						local anchor, color, filter = unpack(data)
+						text = text..';ACCOUNT:'..KEY..':'..class..':'..spellID..':'..anchor..':'..color[1]..':'..color[2]..':'..color[3]..':'..tostring(filter or false)
+					end
+				end
+			end
+		elseif KEY == 'party_spells' then
+			text = text..';ACCOUNT:'..KEY
+			for spellID, duration in pairs(VALUE) do
+				local name = GetSpellInfo(spellID)
+				if name then
+					text = text..':'..spellID..':'..duration
+				end
+			end
+		elseif KEY == 'profile_index' or KEY == 'profile_names' then
+			for k, v in pairs(VALUE) do
+				text = text..';ACCOUNT:'..KEY..':'..k..':'..v
 			end
 		end
 	end
@@ -55,52 +90,105 @@ local function toBoolean(value)
 	end
 end
 
+local function ReloadDefaultSettings()
+	for i, j in pairs(C.CharacterSettings) do
+		if type(j) == 'table' then
+			if not C.DB[i] then C.DB[i] = {} end
+			for k, v in pairs(j) do
+				C.DB[i][k] = v
+			end
+		else
+			C.DB[i] = j
+		end
+	end
+	C.DB['BFA'] = true -- don't empty data on next loading
+end
+
 function GUI:ImportData()
 	local profile = dataFrame.editBox:GetText()
 	if LibBase64:IsBase64(profile) then profile = LibBase64:Decode(profile) end
 	local options = {strsplit(';', profile)}
-	local title, _, _, _ = strsplit(':', options[1])
-
+	local title, _, _, class = strsplit(':', options[1])
 	if title ~= 'FreeUISettings' then
-		UIErrorsFrame:AddMessage(C.RedColor..L.GUI.DATA.IMPORT_ERROR)
+		UIErrorsFrame:AddMessage(C.RedColor..L.GUI.PROFILE.IMPORT_ERROR)
 		return
 	end
+
+	-- we don't export default settings, so need to reload it
+	ReloadDefaultSettings()
 
 	for i = 2, #options do
 		local option = options[i]
 		local key, value, arg1 = strsplit(':', option)
 		if arg1 == 'true' or arg1 == 'false' then
-			FreeDB[key][value] = toBoolean(arg1)
+			C.DB[key][value] = toBoolean(arg1)
 		elseif arg1 == 'EMPTYTABLE' then
-			FreeDB[key][value] = {}
+			C.DB[key][value] = {}
 		elseif strfind(value, 'Color') and (arg1 == 'r' or arg1 == 'g' or arg1 == 'b') then
 			local color = select(4, strsplit(':', option))
-			if FreeDB[key][value] then
-				FreeDB[key][value][arg1] = tonumber(color)
+			if C.DB[key][value] then
+				C.DB[key][value][arg1] = tonumber(color)
 			end
 		elseif value == 'favourite_items' then
 			local items = {select(3, strsplit(':', option))}
 			for _, itemID in next, items do
-				FreeDB[key][value][tonumber(itemID)] = true
+				C.DB[key][value][tonumber(itemID)] = true
 			end
 		elseif key == 'ui_anchor' then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(':', option))
 			value = tonumber(value) or value
 			x = tonumber(x)
 			y = tonumber(y)
-			FreeDB[key][value] = {relFrom, parent, relTo, x, y}
-
+			C.DB[key][value] = {relFrom, parent, relTo, x, y}
 		elseif key == 'ACCOUNT' then
-			if value == 'custom_junk_list' then
+			if value == 'raid_aura_watch' or value == 'custom_junk_list' then
 				local spells = {select(3, strsplit(':', option))}
 				for _, spellID in next, spells do
-					FreeADB[value][tonumber(spellID)] = true
+					NDuiADB[value][tonumber(spellID)] = true
 				end
+			elseif value == 'raid_debuffs' then
+				local instName, spellID, priority = select(3, strsplit(':', option))
+				if not NDuiADB[value][instName] then NDuiADB[value][instName] = {} end
+				NDuiADB[value][instName][tonumber(spellID)] = tonumber(priority)
+			elseif value == 'nameplate_aura_filter' then
+				local spells = {select(4, strsplit(':', option))}
+				for _, spellID in next, spells do
+					NDuiADB[value][tonumber(arg1)][tonumber(spellID)] = true
+				end
+			elseif value == 'corner_buffs' then
+				local class, spellID, anchor, r, g, b, filter = select(3, strsplit(':', option))
+				spellID = tonumber(spellID)
+				r = tonumber(r)
+				g = tonumber(g)
+				b = tonumber(b)
+				filter = toBoolean(filter)
+				if not NDuiADB[value][class] then NDuiADB[value][class] = {} end
+				NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
+			elseif value == 'party_spells' then
+				local options = {strsplit(':', option)}
+				local index = 3
+				local spellID = options[index]
+				while spellID do
+					local duration = options[index+1]
+					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
+					index = index + 2
+					spellID = options[index]
+				end
+			elseif value == 'profile_index' then
+				local name, index = select(3, strsplit(':', option))
+				NDuiADB[value][name] = tonumber(index)
+			elseif value == 'profile_names' then
+				local index, name = select(3, strsplit(':', option))
+				NDuiADB[value][tonumber(index)] = name
+			end
+		elseif tonumber(arg1) then
+			if value == 'countdown' then
+				C.DB[key][value] = arg1
+			else
+				C.DB[key][value] = tonumber(arg1)
 			end
 		end
 	end
-
-	ReloadUI()
 end
 
 local function UpdateTooltip()
@@ -117,6 +205,19 @@ local function UpdateTooltip()
 	end
 end
 
+StaticPopupDialogs['FREEUI_IMPORT'] = {
+	text = L.GUI.PROFILE.IMPORT_WARNING,
+	button1 = YES,
+	button2 = NO,
+	OnAccept = function()
+		GUI:ImportData()
+		ReloadUI()
+	end,
+	timeout = 0,
+	whileDead = 1,
+	hideOnEscape = false,
+}
+
 function GUI:CreateDataFrame()
 	if dataFrame then dataFrame:Show() return end
 
@@ -126,12 +227,12 @@ function GUI:CreateDataFrame()
 	dataFrame:SetFrameStrata('DIALOG')
 	F.CreateMF(dataFrame)
 	F.SetBD(dataFrame)
-	dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Regular, 14, nil, L.GUI.DATA.EXPORT_TITLE, 'YELLOW', true, 'TOP', 0, -5)
+	dataFrame.Header = F.CreateFS(dataFrame, C.Assets.Fonts.Regular, 14, nil, L.GUI.PROFILE.EXPORT_HEADER, 'YELLOW', true, 'TOP', 0, -5)
 
 	local scrollArea = CreateFrame('ScrollFrame', nil, dataFrame, 'UIPanelScrollFrameTemplate')
 	scrollArea:SetPoint('TOPLEFT', 10, -30)
 	scrollArea:SetPoint('BOTTOMRIGHT', -28, 40)
-	F.CreateBDFrame(scrollArea, .3)
+	F.CreateBDFrame(scrollArea, .25)
 	F.ReskinScroll(scrollArea.ScrollBar)
 
 	local editBox = CreateFrame('EditBox', nil, dataFrame)
@@ -151,7 +252,7 @@ function GUI:CreateDataFrame()
 	accept:SetPoint('BOTTOM', 0, 10)
 	accept:SetScript('OnClick', function(self)
 		if self.text:GetText() ~= OKAY and dataFrame.editBox:GetText() ~= '' then
-			StaticPopup_Show('FREEUI_IMPORT_DATA')
+			StaticPopup_Show('FREEUI_IMPORT')
 		end
 		dataFrame:Hide()
 	end)
@@ -164,11 +265,11 @@ function GUI:CreateDataFrame()
 		GameTooltip:ClearLines()
 
 		if dataFrame.version then
-			GameTooltip:AddLine(L.GUI.DATA.INFO)
-			GameTooltip:AddDoubleLine(L.GUI.DATA.VERSION, dataFrame.version, .6,.8,1, 1,1,1)
-			GameTooltip:AddDoubleLine(L.GUI.DATA.CHARACTER, dataFrame.name, .6,.8,1, F.ClassColor(dataFrame.class))
+			GameTooltip:AddLine(L.GUI.PROFILE.INFO)
+			GameTooltip:AddDoubleLine(L.GUI.PROFILE.VERSION, dataFrame.version, .6,.8,1, 1,1,1)
+			GameTooltip:AddDoubleLine(L.GUI.PROFILE.CHARACTER, dataFrame.name, .6,.8,1, F.ClassColor(dataFrame.class))
 		else
-			GameTooltip:AddLine(L.GUI.DATA.EXCEPTION, 1,0,0)
+			GameTooltip:AddLine(L.GUI.PROFILE.EXCEPTION, 1,0,0)
 		end
 
 		GameTooltip:Show()
@@ -176,4 +277,6 @@ function GUI:CreateDataFrame()
 
 	accept:HookScript('OnLeave', F.HideTooltip)
 	dataFrame.text = accept.text
+
+	GUI.ProfileDataFrame = dataFrame
 end

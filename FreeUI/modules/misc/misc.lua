@@ -1,8 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F:GetModule('MISC')
-
-
-local _G = getfenv(0)
+local MISC = F.MISC
 
 
 local MISC_LIST = {}
@@ -20,31 +17,18 @@ function MISC:OnLogin()
 		end
 	end
 
-
-
-	self:BlowMyWhistle()
-
-	self:ForceWarning()
-	self:FasterCamera()
-
-	self:Screenshot()
-
-	self:QuestRewardHighlight()
-
-
-
-
-
+	MISC:BlowMyWhistle()
+	MISC:ForceWarning()
+	MISC:FasterCamera()
+	MISC:UpdateScreenShot()
+	MISC:QuestRewardHighlight()
+	MISC:UpdateQuestCompletedSound()
 end
-
-
-
-
 
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
 function MISC:BlowMyWhistle()
-	if not FreeDB['blow_my_whistle'] then return end
+	if not C.DB['blow_my_whistle'] then return end
 
 	local whistleSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whistle.ogg'
 	local whistle_SpellID1 = 227334;
@@ -115,7 +99,7 @@ hooksecurefunc('ShowReadyCheck', ShowReadyCheckHook)
 
 
 function MISC:FasterCamera()
-	if not FreeDB['faster_camera'] then return end
+	if not C.DB['faster_camera'] then return end
 
 	local oldZoomIn = CameraZoomIn
 	local oldZoomOut = CameraZoomOut
@@ -141,104 +125,163 @@ function MISC:FasterCamera()
 end
 
 
--- Highlight high value reward
-local function CreateHighlight(reward)
-	if not MISC.rewardHighlightFrame then
-		MISC.rewardHighlightFrame = CreateFrame('Frame', 'QuesterRewardHighlight', QuestInfoRewardsFrame, 'AutoCastShineTemplate')
-		MISC.rewardHighlightFrame:SetScript('OnHide', function(frame) AutoCastShine_AutoCastStop(frame) end)
-	end
-
-	MISC.rewardHighlightFrame:ClearAllPoints()
-	MISC.rewardHighlightFrame:SetAllPoints(reward)
-	MISC.rewardHighlightFrame:Show()
-
-	AutoCastShine_AutoCastStart(MISC.rewardHighlightFrame)
-end
-
-local function UpdateHighlight()
-	if MISC.rewardHighlightFrame then
-		MISC.rewardHighlightFrame:Hide()
-	end
-
-	local bestprice, bestitem = 0, 0
-	for i = 1, GetNumQuestChoices() do
-		local link, _, _, qty = GetQuestItemLink('choice', i), GetQuestItemInfo('choice', i)
-		local price = link and select(11, GetItemInfo(link))
-		if not price then return end
-
-		price = price * (qty or 1)
-
-		if price > bestprice then
-			bestprice = price
-			bestitem = i
-		end
-	end
-
-	local rewardButton = _G['QuestInfoRewardsFrameQuestInfoItem'..bestitem]
-
-	if bestitem > 0 then
-		CreateHighlight(_G[('QuestInfoRewardsFrameQuestInfoItem%dIconTexture'):format(bestitem)])
-
-		_G.QuestInfoFrame.itemChoice = rewardButton:GetID()
-	end
-end
-
-function MISC:QuestRewardHighlight()
-	if FreeDB.misc.reward_highlight then
-		F:RegisterEvent('QUEST_COMPLETE', UpdateHighlight)
-	else
-		F:UnregisterEvent('QUEST_COMPLETE', UpdateHighlight)
-	end
-end
-
-
-
-
-
+--[[ Highlight high value reward ]]
 
 do
-	local delay, time = 1, 0
-	local function OnUpdate(self, elapsed)
-		time = time + elapsed
+	local function CreateHighlight(reward)
+		if not MISC.rewardHighlightFrame then
+			MISC.rewardHighlightFrame = CreateFrame('Frame', 'QuesterRewardHighlight', QuestInfoRewardsFrame, 'AutoCastShineTemplate')
+			MISC.rewardHighlightFrame:SetScript('OnHide', function(frame) AutoCastShine_AutoCastStop(frame) end)
+		end
 
-		if time >= delay then
-			Screenshot()
-			time = 0
-			self:SetScript('OnUpdate', nil)
+		MISC.rewardHighlightFrame:ClearAllPoints()
+		MISC.rewardHighlightFrame:SetAllPoints(reward)
+		MISC.rewardHighlightFrame:Show()
+
+		AutoCastShine_AutoCastStart(MISC.rewardHighlightFrame)
+	end
+
+	local function UpdateHighlight()
+		if MISC.rewardHighlightFrame then
+			MISC.rewardHighlightFrame:Hide()
+		end
+
+		local bestprice, bestitem = 0, 0
+		for i = 1, GetNumQuestChoices() do
+			local link, _, _, qty = GetQuestItemLink('choice', i), GetQuestItemInfo('choice', i)
+			local price = link and select(11, GetItemInfo(link))
+			if not price then return end
+
+			price = price * (qty or 1)
+
+			if price > bestprice then
+				bestprice = price
+				bestitem = i
+			end
+		end
+
+		local rewardButton = _G['QuestInfoRewardsFrameQuestInfoItem'..bestitem]
+
+		if bestitem > 0 then
+			CreateHighlight(_G[('QuestInfoRewardsFrameQuestInfoItem%dIconTexture'):format(bestitem)])
+
+			_G.QuestInfoFrame.itemChoice = rewardButton:GetID()
 		end
 	end
 
-	local function OnEvent(self)
-		self:SetScript('OnUpdate', OnUpdate)
-	end
-
-	function MISC:Screenshot()
-		if not FreeDB.misc.auto_screenshot then return end
-
-		local f = CreateFrame('Frame')
-
-		if FreeDB.misc.screenshot_achievement then
-			f:RegisterEvent('ACHIEVEMENT_EARNED')
+	function MISC:QuestRewardHighlight()
+		if C.DB.misc.reward_highlight then
+			F:RegisterEvent('QUEST_COMPLETE', UpdateHighlight)
+		else
+			F:UnregisterEvent('QUEST_COMPLETE', UpdateHighlight)
 		end
-
-		if FreeDB.misc.screenshot_dead then
-			f:RegisterEvent('PLAYER_DEAD')
-		end
-
-		if FreeDB.misc.screenshot_levelup then
-			f:RegisterEvent('PLAYER_LEVEL_UP')
-		end
-
-		if FreeDB.misc.screenshot_challenge then
-			f:RegisterEvent('CHALLENGE_MODE_COMPLETED')
-		end
-
-		f:SetScript('OnEvent', OnEvent)
 	end
 end
 
 
--- auto select current event boss from LFD tool
+--[[ Sound alert for quest complete ]]
+
+do
+	local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
+	local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
+	local C_QuestLog_GetTitleForQuestID = C_QuestLog.GetTitleForQuestID
+	local C_QuestLog_IsComplete = C_QuestLog.IsComplete
+	local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
+	local completedQuest, initComplete = {}
+
+	function MISC:FindQuestComplete()
+		for i = 1, C_QuestLog_GetNumQuestLogEntries() do
+			local questID = C_QuestLog_GetQuestIDForLogIndex(i)
+			local title = C_QuestLog_GetTitleForQuestID(questID)
+			local isComplete = C_QuestLog_IsComplete(questID)
+			local isWorldQuest = C_QuestLog_IsWorldQuest(questID)
+			if title and isComplete and not completedQuest[questID] and not isWorldQuest then
+				if initComplete then
+					PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
+				end
+				completedQuest[questID] = true
+			end
+		end
+		initComplete = true
+	end
+
+	function MISC:FindWorldQuestComplete(questID)
+		if C_QuestLog_IsWorldQuest(questID) then
+			local title = C_QuestLog_GetTitleForQuestID(questID)
+			if title and not completedQuest[questID] then
+				PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
+				completedQuest[questID] = true
+			end
+		end
+	end
+
+	function MISC:UpdateQuestCompletedSound()
+		if C.DB.misc.quest_completed_sound then
+			F:RegisterEvent('QUEST_LOG_UPDATE', MISC.FindQuestComplete)
+			F:RegisterEvent('QUEST_TURNED_IN', MISC.FindWorldQuestComplete)
+		else
+			wipe(completedQuest)
+			F:UnregisterEvent('QUEST_LOG_UPDATE', MISC.FindQuestComplete)
+			F:UnregisterEvent('QUEST_TURNED_IN', MISC.FindWorldQuestComplete)
+		end
+	end
+end
+
+
+--[[ Set action camera ]]
+
+do
+	local function SetCam(cmd)
+		ConsoleExec('ActionCam ' .. cmd)
+	end
+
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+		if not C.isDeveloper then return end
+		UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
+		SetCam('basic')
+	end)
+end
+
+
+--[[ Auto take screenshot ]]
+
+do
+	function MISC:ScreenShotOnEvent()
+		MISC.ScreenShotFrame.delay = 1
+		MISC.ScreenShotFrame:Show()
+	end
+
+	function MISC:UpdateScreenShot()
+		if not MISC.ScreenShotFrame then
+			MISC.ScreenShotFrame = CreateFrame('Frame')
+			MISC.ScreenShotFrame:Hide()
+			MISC.ScreenShotFrame:SetScript('OnUpdate', function(self, elapsed)
+				self.delay = self.delay - elapsed
+				if self.delay < 0 then
+					Screenshot()
+					self:Hide()
+				end
+			end)
+		end
+
+		if C.DB.misc.screenshot then
+			F:RegisterEvent('ACHIEVEMENT_EARNED', MISC.ScreenShotOnEvent)
+			F:RegisterEvent('PLAYER_LEVEL_UP', MISC.ScreenShotOnEvent)
+			F:RegisterEvent('PLAYER_DEAD', MISC.ScreenShotOnEvent)
+			F:RegisterEvent('CHALLENGE_MODE_COMPLETED', MISC.ScreenShotOnEvent)
+		else
+			MISC.ScreenShotFrame:Hide()
+			F:UnregisterEvent('ACHIEVEMENT_EARNED', MISC.ScreenShotOnEvent)
+			F:UnregisterEvent('PLAYER_LEVEL_UP', MISC.ScreenShotOnEvent)
+			F:UnregisterEvent('PLAYER_DEAD', MISC.ScreenShotOnEvent)
+			F:UnregisterEvent('CHALLENGE_MODE_COMPLETED', MISC.ScreenShotOnEvent)
+		end
+	end
+end
+
+
+--[[ Auto select current event boss from LFD tool ]]
+
 do
 	local firstLFD
 	LFDParentFrame:HookScript('OnShow', function()
@@ -254,3 +297,8 @@ do
 		end
 	end)
 end
+
+
+
+
+

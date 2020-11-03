@@ -6,7 +6,7 @@ local function fixBg(frame)
 		frame = frame:GetParent()
 	end
 	if frame.bg then
-		frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
+		frame.bg:SetBackdropColor(0, 0, 0, FREE_ADB.backdrop_alpha)
 		if frame.bg.__shadow then
 			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
 		end
@@ -16,7 +16,7 @@ end
 local function fixParentbg(frame)
 	frame = frame:GetParent():GetParent()
 	if frame.bg then
-		frame.bg:SetBackdropColor(0, 0, 0, FreeADB.appearance.backdrop_alpha)
+		frame.bg:SetBackdropColor(0, 0, 0, FREE_ADB.backdrop_alpha)
 		if frame.bg.__shadow then
 			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
 		end
@@ -42,7 +42,7 @@ local function fixAnim(frame)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 

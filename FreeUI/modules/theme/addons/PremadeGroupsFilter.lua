@@ -4,7 +4,7 @@ local TOOLTIP = F.TOOLTIP
 
 
 function THEME:ReskinPGF()
-    if not FreeADB.appearance.reskin_pgf then return end
+    if not FREE_ADB.reskin_pgf then return end
 	if not IsAddOnLoaded('PremadeGroupsFilter') then return end
 
 	local tipStyled

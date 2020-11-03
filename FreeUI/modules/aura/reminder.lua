@@ -119,7 +119,7 @@ function AURA:InitReminder()
 	--AURA:Reminder_AddRune()
 	if not groups then return end
 
-	if FreeDB.aura.reminder then
+	if C.DB.aura.reminder then
 		if not parentFrame then
 			parentFrame = CreateFrame('Frame', nil, UIParent)
 			parentFrame:SetPoint('TOP', 0, -100)

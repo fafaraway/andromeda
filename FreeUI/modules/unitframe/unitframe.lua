@@ -4,38 +4,38 @@ local COLORS = F.COLORS
 
 
 function UNITFRAME:OnLogin()
-	if not FreeDB.unitframe.enable_unitframe then return end
+	if not C.DB.unitframe.enable_unitframe then return end
 
 	F:SetSmoothingAmount(.3)
 
-	if FreeDB.unitframe.enable_player then
+	if C.DB.unitframe.enable_player then
 		self:SpawnPlayer()
 	end
 
-	if FreeDB.unitframe.enable_pet then
+	if C.DB.unitframe.enable_pet then
 		self:SpawnPet()
 	end
 
-	if FreeDB.unitframe.enable_target then
+	if C.DB.unitframe.enable_target then
 		self:SpawnTarget()
 		self:SpawnTargetTarget()
 	end
 
-	if FreeDB.unitframe.enable_focus then
+	if C.DB.unitframe.enable_focus then
 		self:SpawnFocus()
 		self:SpawnFocusTarget()
 	end
 
-	if FreeDB.unitframe.enable_boss then
+	if C.DB.unitframe.enable_boss then
 		self:SpawnBoss()
 	end
 
-	if FreeDB.unitframe.enable_arena then
+	if C.DB.unitframe.enable_arena then
 		self:SpawnArena()
 	end
 
 
-	if not FreeDB.unitframe.enable_group then return end
+	if not C.DB.unitframe.enable_group then return end
 
 	if CompactRaidFrameManager_SetSetting then -- get rid of blizz raid frame
 		CompactRaidFrameManager_SetSetting('IsShown', '0')

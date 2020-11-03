@@ -110,7 +110,7 @@ end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'
 
 tags['free:groupname'] = function(unit)
-	if FreeDB.unitframe.group_names then
+	if C.DB.unitframe.group_names then
 		if UnitInRaid('player') then
 			return shortenName(unit, 2)
 		else

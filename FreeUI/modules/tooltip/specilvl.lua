@@ -241,7 +241,7 @@ function TOOLTIP:InspectUnit(unit, forced)
 end
 
 function TOOLTIP:InspectUnitSpecAndLevel()
-	if not FreeDB.tooltip.spec_ilvl or not IsAltKeyDown() then return end
+	if not C.DB.tooltip.spec_ilvl or not IsAltKeyDown() then return end
 
 	local _, unit = self:GetUnit()
 	if not unit or not CanInspect(unit) then return end

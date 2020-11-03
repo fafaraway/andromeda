@@ -39,7 +39,7 @@ end
 
 
 function NOTIFICATION:BagFull()
-	if not FreeDB.notification.bag_full then return end
+	if not C.DB.notification.bag_full then return end
 
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('BAG_UPDATE')

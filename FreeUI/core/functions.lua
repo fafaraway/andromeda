@@ -1,5 +1,4 @@
 local F, C, L = unpack(select(2, ...))
-local COLORS = F.COLORS
 
 
 local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber, table.wipe, next, select, unpack
@@ -15,7 +14,7 @@ local gradientColor = {.02, .02, .02, .5, .08, .08, .08, .5}
 do
 	-- Numberize
 	function F.Numb(n)
-		if FreeDB.misc.number_format == 1 then
+		if FREE_ADB.number_format == 1 then
 			if n >= 1e12 then
 				return ('%.2ft'):format(n / 1e12)
 			elseif n >= 1e9 then
@@ -27,7 +26,7 @@ do
 			else
 				return ('%.0f'):format(n)
 			end
-		elseif FreeDB.misc.number_format == 2 then
+		elseif FREE_ADB.number_format == 2 then
 			if n >= 1e12 then
 				return format('%.2f'..L['MISC_NUMBER_CAP'][3], n / 1e12)
 			elseif n >= 1e8 then
@@ -62,10 +61,10 @@ do
 			return format('|cffffffff%d|r', s/hour), s % hour -- white
 		elseif s >= minute then
 			return format('|cff1e84d0%d|r', s/minute), s % minute -- blue
-		elseif s > FreeDB.cooldown.decimal_countdown then
+		elseif s > C.DB.cooldown.decimal_countdown then
 			return format('|cffffe700%d|r', s), s - floor(s) -- yellow
 		else
-			if FreeDB.cooldown.decimal then
+			if C.DB.cooldown.decimal then
 				return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
 			else
 				return format('|cfffd3612%d|r', s + .5), s - floor(s)
@@ -129,6 +128,47 @@ do
 	function F.GetNPCID(guid)
 		local id = tonumber(strmatch((guid or ''), '%-(%d-)%-%x-$'))
 		return id
+	end
+
+
+	function F:WaitFunc(elapse)
+		local i = 1
+		while i <= #F.WaitTable do
+			local data = F.WaitTable[i]
+			if data[1] > elapse then
+				data[1], i = data[1] - elapse, i + 1
+			else
+				tremove(F.WaitTable, i)
+				data[2](unpack(data[3]))
+
+				if #F.WaitTable == 0 then
+					F.WaitFrame:Hide()
+				end
+			end
+		end
+	end
+
+	F.WaitTable = {}
+	F.WaitFrame = CreateFrame('Frame', 'FreeUI_WaitFrame', _G.UIParent)
+	F.WaitFrame:SetScript('OnUpdate', F.WaitFunc)
+
+	--Add time before calling a function
+	function F:Delay(delay, func, ...)
+		if type(delay) ~= 'number' or type(func) ~= 'function' then
+			return false
+		end
+
+		-- Restrict to the lowest time that the C_Timer API allows us
+		if delay < 0.01 then delay = 0.01 end
+
+		if select('#', ...) <= 0 then
+			C_Timer.After(delay, func)
+		else
+			tinsert(F.WaitTable,{delay,func,{...}})
+			F.WaitFrame:Show()
+		end
+
+		return true
 	end
 end
 
@@ -535,6 +575,11 @@ do
 
 	end
 
+	function F.StyleAddonName(msg)
+		msg = gsub(msg, '%%AddonName%%', C.AddonName)
+		return msg
+	end
+
 	function F.CreateColorString(text, color)
 		if not text or not type(text) == 'string' then
 			return
@@ -585,6 +630,8 @@ do
 				r, g, b = 1, .8, 0
 			elseif self.color == 'BLUE' then
 				r, g, b = .6, .8, 1
+			elseif self.color == 'RED' then
+				r, g, b = .9, .3, .3
 			end
 			GameTooltip:AddLine(self.text, r, g, b, 1)
 		end
@@ -595,8 +642,8 @@ do
 		self.anchor = anchor
 		self.text = text
 		self.color = color
-		self:SetScript('OnEnter', Tooltip_OnEnter)
-		self:SetScript('OnLeave', F.HideTooltip)
+		self:HookScript('OnEnter', Tooltip_OnEnter)
+		self:HookScript('OnLeave', F.HideTooltip)
 	end
 
 	-- Gradient Frame
@@ -637,7 +684,7 @@ do
 
 	local shadowBackdrop = {edgeFile = assets.shadow_tex}
 	function F:CreateSD(a, m, s, override)
-		if not override and not FreeADB.appearance.shadow_border then return end
+		if not override and not FREE_ADB.shadow_border then return end
 		if self.__shadow then return end
 
 		local frame = self
@@ -666,7 +713,7 @@ do
 	function F:CreateBD(a)
 		defaultBackdrop.edgeSize = C.Mult
 		self:SetBackdrop(defaultBackdrop)
-		self:SetBackdropColor(0, 0, 0, a or FreeADB.appearance.backdrop_alpha)
+		self:SetBackdropColor(0, 0, 0, a or FREE_ADB.backdrop_alpha)
 		self:SetBackdropBorderColor(0, 0, 0)
 
 		if not a then tinsert(C.Frames, self) end
@@ -789,7 +836,7 @@ do
 	end
 
 	local function updateIconBorderColor(self, r, g, b)
-		if (r==.65882 and g==.65882 and b==.65882) or (r==1 and g==1 and b==1) then
+		if (r==.65882 and g==.65882 and b==.65882) or (r>.99 and g>.99 and b>.99) then
 			r, g, b = 0, 0, 0
 		end
 		self.__owner.bg:SetBackdropBorderColor(r, g, b)
@@ -976,6 +1023,7 @@ do
 		local bg = F.CreateBDFrame(self)
 		bg:SetPoint('TOPLEFT', 8, -3)
 		bg:SetPoint('BOTTOMRIGHT', -8, 0)
+		F.CreateSD(bg)
 		self.bg = bg
 
 		self:SetHighlightTexture(assets.bd_tex)
@@ -1191,13 +1239,17 @@ do
 	end
 
 	-- Handle checkbox and radio
-	function F:ReskinCheck(flat, forceSaturation)
+	function F:ReskinCheck(flat, forceSaturation, shadow)
 		self:SetNormalTexture('')
 		self:SetPushedTexture('')
 
-		local bg = F.CreateBDFrame(self, 0, true)
+		local bg = F.CreateBDFrame(self)
 		bg:SetInside(self, 4, 4)
 		self.bg = bg
+
+		if shadow then
+			F.CreateSD(bg)
+		end
 
 		self:SetHighlightTexture(assets.flat_tex)
 
@@ -1517,145 +1569,6 @@ do
 end
 
 
---[[ Animation ]]
-
-do
-	local FADEFRAMES, FADEMANAGER = {}, CreateFrame('FRAME')
-	FADEMANAGER.delay = 0.025
-
-	function F:UIFrameFade_OnUpdate(elapsed)
-		FADEMANAGER.timer = (FADEMANAGER.timer or 0) + elapsed
-
-		if FADEMANAGER.timer > FADEMANAGER.delay then
-			FADEMANAGER.timer = 0
-
-			for frame, info in next, FADEFRAMES do
-				-- Reset the timer if there isn't one, this is just an internal counter
-				if frame:IsVisible() then
-					info.fadeTimer = (info.fadeTimer or 0) + (elapsed + FADEMANAGER.delay)
-				else
-					info.fadeTimer = info.timeToFade + 1
-				end
-
-				-- If the fadeTimer is less then the desired fade time then set the alpha otherwise hold the fade state, call the finished function, or just finish the fade
-				if info.fadeTimer < info.timeToFade then
-					if info.mode == 'IN' then
-						frame:SetAlpha((info.fadeTimer / info.timeToFade) * info.diffAlpha + info.startAlpha)
-					else
-						frame:SetAlpha(((info.timeToFade - info.fadeTimer) / info.timeToFade) * info.diffAlpha + info.endAlpha)
-					end
-				else
-					frame:SetAlpha(info.endAlpha)
-
-					-- If there is a fadeHoldTime then wait until its passed to continue on
-					if info.fadeHoldTime and info.fadeHoldTime > 0  then
-						info.fadeHoldTime = info.fadeHoldTime - elapsed
-					else
-						-- Complete the fade and call the finished function if there is one
-						F:UIFrameFadeRemoveFrame(frame)
-
-						if info.finishedFunc then
-							if info.finishedArgs then
-								info.finishedFunc(unpack(info.finishedArgs))
-							else -- optional method
-								info.finishedFunc(info.finishedArg1, info.finishedArg2, info.finishedArg3, info.finishedArg4, info.finishedArg5)
-							end
-
-							if not info.finishedFuncKeep then
-								info.finishedFunc = nil
-							end
-						end
-					end
-				end
-			end
-
-			if not next(FADEFRAMES) then
-				FADEMANAGER:SetScript('OnUpdate', nil)
-			end
-		end
-	end
-
-	function F:UIFrameFade(frame, info)
-		if not frame or frame:IsForbidden() then return end
-
-		frame.fadeInfo = info
-
-		if not info.mode then
-			info.mode = 'IN'
-		end
-
-		if info.mode == 'IN' then
-			if not info.startAlpha then info.startAlpha = 0 end
-			if not info.endAlpha then info.endAlpha = 1 end
-			if not info.diffAlpha then info.diffAlpha = info.endAlpha - info.startAlpha end
-		else
-			if not info.startAlpha then info.startAlpha = 1 end
-			if not info.endAlpha then info.endAlpha = 0 end
-			if not info.diffAlpha then info.diffAlpha = info.startAlpha - info.endAlpha end
-		end
-
-		frame:SetAlpha(info.startAlpha)
-
-		if not frame:IsProtected() then
-			frame:Show()
-		end
-
-		if not FADEFRAMES[frame] then
-			FADEFRAMES[frame] = info -- read below comment
-			FADEMANAGER:SetScript('OnUpdate', F.UIFrameFade_OnUpdate)
-		else
-			FADEFRAMES[frame] = info -- keep these both, we need this updated in the event its changed to another ref from a plugin or sth, don't move it up!
-		end
-	end
-
-	function F:UIFrameFadeIn(frame, timeToFade, startAlpha, endAlpha)
-		if not frame or frame:IsForbidden() then return end
-
-		if frame.FadeObject then
-			frame.FadeObject.fadeTimer = nil
-		else
-			frame.FadeObject = {}
-		end
-
-		frame.FadeObject.mode = 'IN'
-		frame.FadeObject.timeToFade = timeToFade
-		frame.FadeObject.startAlpha = startAlpha
-		frame.FadeObject.endAlpha = endAlpha
-		frame.FadeObject.diffAlpha = endAlpha - startAlpha
-
-		F:UIFrameFade(frame, frame.FadeObject)
-	end
-
-	function F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
-		if not frame or frame:IsForbidden() then return end
-
-		if frame.FadeObject then
-			frame.FadeObject.fadeTimer = nil
-		else
-			frame.FadeObject = {}
-		end
-
-		frame.FadeObject.mode = 'OUT'
-		frame.FadeObject.timeToFade = timeToFade
-		frame.FadeObject.startAlpha = startAlpha
-		frame.FadeObject.endAlpha = endAlpha
-		frame.FadeObject.diffAlpha = startAlpha - endAlpha
-
-		F:UIFrameFade(frame, frame.FadeObject)
-	end
-
-	function F:UIFrameFadeRemoveFrame(frame)
-		if frame and FADEFRAMES[frame] then
-			if frame.FadeObject then
-				frame.FadeObject.fadeTimer = nil
-			end
-
-			FADEFRAMES[frame] = nil
-		end
-	end
-end
-
-
 --[[ Smooth ]]
 
 do
@@ -1812,6 +1725,7 @@ do
 		eb:SetTextInsets(5, 5, 5, 5)
 		eb:SetFont(C.Assets.Fonts.Regular, 11)
 		eb.bg = F.CreateBDFrame(eb, .25, true)
+		eb.bg:SetAllPoints()
 		eb:SetScript('OnEscapePressed', editBoxClearFocus)
 		eb:SetScript('OnEnterPressed', editBoxClearFocus)
 
@@ -1927,6 +1841,15 @@ do
 		ColorPickerFrame:Show()
 	end
 
+	local function GetSwatchTexColor(tex)
+		local r, g, b = tex:GetVertexColor()
+		r = B:Round(r, 2)
+		g = B:Round(g, 2)
+		b = B:Round(b, 2)
+		print(r,g,b)
+		return r, g, b
+	end
+
 	function F:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1, colorStr=ffffffff}
 
@@ -1938,6 +1861,7 @@ do
 		tex:SetInside()
 		tex:SetTexture(C.Assets.bd_tex)
 		tex:SetVertexColor(color.r, color.g, color.b)
+		tex.GetColor = GetSwatchTexColor
 
 		swatch.tex = tex
 		swatch.color = color
@@ -1965,10 +1889,10 @@ do
 		end
 	end
 
-	function F:CreateSlider(name, minValue, maxValue, step, width)
+	function F:CreateSlider(name, minValue, maxValue, step, x, y, width)
 		local slider = CreateFrame('Slider', nil, self, 'OptionsSliderTemplate')
-		--slider:SetPoint('TOPLEFT', x, y)
-		slider:SetWidth(width or 200)
+		slider:SetPoint('TOPLEFT', x, y)
+		slider:SetWidth(width or 140)
 		slider:SetMinMaxValues(minValue, maxValue)
 		slider:SetValueStep(step)
 		slider:SetObeyStepOnDrag(true)
@@ -2136,8 +2060,17 @@ end
 
 
 do
-	function F.Print(...)
-		print(C.Title..C.GreyColor..':|r', ...)
+	-- function F.Print(...)
+	-- 	print(C.AddonName..C.GreyColor..':|r', ...)
+	-- end
+
+	function F.Print(text)
+		if not text then
+			return
+		end
+
+		local message = format("%s: %s", C.AddonName, text)
+		print(message)
 	end
 
 
@@ -2148,6 +2081,111 @@ do
 			end
 		end
 		return false
+	end
+
+	--[[
+		分割 CJK 字符串
+		@param {string} delimiter 分割符
+		@param {string} subject 待分割字符串
+		@return {table/string} 分割结果
+	]]
+	function F.SplitCJKString(delimiter, subject)
+		if not subject or subject == "" then
+			return {}
+		end
+
+		local length = strlen(delimiter)
+		local results = {}
+
+		local i = 0
+		local j = 0
+
+		while true do
+			j = strfind(subject, delimiter, i + length)
+			if strlen(subject) == i then
+				break
+			end
+
+			if j == nil then
+				tinsert(results, strsub(subject, i))
+				break
+			end
+
+			tinsert(results, strsub(subject, i, j - 1))
+			i = j + length
+		end
+
+		return unpack(results)
+	end
+
+
+	--[[
+		高级打印函数
+		-- 参考自 https://www.cnblogs.com/leezj/p/4230271.html
+		@param {Any} object 随意变量或常量
+	]]
+	function F.TablePrint(object)
+		if type(object) == "table" then
+			local cache = {}
+			local function printLoop(subject, indent)
+				if (cache[tostring(subject)]) then
+					print(indent .. "*" .. tostring(subject))
+				else
+					cache[tostring(subject)] = true
+					if (type(subject) == "table") then
+						for pos, val in pairs(subject) do
+							if (type(val) == "table") then
+								print(indent .. "[" .. pos .. "] => " .. tostring(subject) .. " {")
+								printLoop(val, indent .. strrep(" ", strlen(pos) + 8))
+								print(indent .. strrep(" ", strlen(pos) + 6) .. "}")
+							elseif (type(val) == "string") then
+								print(indent .. "[" .. pos .. '] => "' .. val .. '"')
+							else
+								print(indent .. "[" .. pos .. "] => " .. tostring(val))
+							end
+						end
+					else
+						print(indent .. tostring(subject))
+					end
+				end
+			end
+			if (type(object) == "table") then
+				print(tostring(object) .. " {")
+				printLoop(object, "  ")
+				print("}")
+			else
+				printLoop(object, "  ")
+			end
+			print()
+		elseif type(object) == "string" then
+			print('(string) "' .. object .. '"')
+		else
+			print("(" .. type(object) .. ") " .. tostring(object))
+		end
+	end
+
+
+	--[[
+		输出 Debug 信息
+		@param {table/string} module Ace3 模块或自定义字符串
+		@param {string} text 错误讯息
+	]]
+	function F.DebugMessage(module, text)
+		if not C.isDeveloper then return end
+
+		if not text then
+			return
+		end
+
+		if not module then
+			module = "函数"
+			text = "无模块名>" .. text
+		end
+		if type(module) ~= "string" and module.GetName then
+			module = module:GetName()
+		end
+		local message = format("[FreeUI - %s] %s", module, text)
+		print(message)
 	end
 end
 

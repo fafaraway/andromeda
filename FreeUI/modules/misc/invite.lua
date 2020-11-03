@@ -33,7 +33,7 @@ local function SkipInvitePopup()
 end
 
 function MISC:AutoAcceptInvite()
-	if not FreeDB.misc.accept_invite then return end
+	if not C.DB.misc.accept_invite then return end
 	if QueueStatusMinimapButton:IsShown() or GetNumGroupMembers() > 0 then return end
 
 	F:RegisterEvent('PARTY_INVITE_REQUEST', function(name, _, _, _, _, _, _, GUID)
@@ -47,7 +47,7 @@ function MISC:AutoAcceptInvite()
 end
 
 function MISC:AutoDeclineInvite()
-	if not FreeDB.misc.block_stranger_invite then return end
+	if not C.DB.misc.block_stranger_invite then return end
 
 	F:RegisterEvent('PARTY_INVITE_REQUEST', function(name, _, _, _, _, _, _, GUID)
 		DeclineGroup()
@@ -60,7 +60,7 @@ end
 
 local whisperList = {}
 function MISC:UpdateWhisperList()
-	F.SplitList(whisperList, FreeDB.misc.invite_keyword, true)
+	F.SplitList(whisperList, C.DB.misc.invite_keyword, true)
 end
 
 function MISC:IsUnitInGuild(unitName)
@@ -87,13 +87,13 @@ function MISC.OnChatWhisper(event, ...)
 					if gameID then
 						local charName = gameAccountInfo.characterName
 						local realmName = gameAccountInfo.realmName
-						if CanCooperateWithGameAccount(accountInfo) and (not FreeDB.misc.invite_only_guild or MISC:IsUnitInGuild(charName..'-'..realmName)) then
+						if CanCooperateWithGameAccount(accountInfo) and (not C.DB.misc.invite_only_guild or MISC:IsUnitInGuild(charName..'-'..realmName)) then
 							BNInviteFriend(gameID)
 						end
 					end
 				end
 			else
-				if not FreeDB.misc.invite_only_guild or IsGuildMember(guid) then
+				if not C.DB.misc.invite_only_guild or IsGuildMember(guid) then
 					InviteToGroup(author)
 				end
 			end
@@ -102,7 +102,7 @@ function MISC.OnChatWhisper(event, ...)
 end
 
 function MISC:WhisperInvite()
-	if not FreeDB.misc.invite_whisper then return end
+	if not C.DB.misc.invite_whisper then return end
 
 	self:UpdateWhisperList()
 	F:RegisterEvent('CHAT_MSG_WHISPER', MISC.OnChatWhisper)
@@ -123,7 +123,7 @@ f:RegisterEvent('CHAT_MSG_BN_WHISPER')
 
 -- EVENT 返回值 1密語 2角色id 12guid 13戰網好友的角色id
 f:SetScript('OnEvent',function(self, event, msg, name, _, _, _, _, _, _, _, _, _, _, presenceID)
-	for _, word in pairs(FreeADB.group_invite_keywords) do
+	for _, word in pairs(FREE_ADB.group_invite_keywords) do
 		if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(word) then
 			if event == 'CHAT_MSG_BN_WHISPER' then
 				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
@@ -147,7 +147,7 @@ f:SetScript('OnEvent',function(self, event, msg, name, _, _, _, _, _, _, _, _, _
 		end
 	end
 
-	for _, Gword in pairs(FreeADB.guild_invite_keywords) do
+	for _, Gword in pairs(FREE_ADB.guild_invite_keywords) do
 		if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(Gword) then
 			if event == 'CHAT_MSG_BN_WHISPER' then
 				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)

@@ -13,7 +13,7 @@ local function ReskinRegions()
 end
 
 local function NewMail()
-	if not FreeDB.map.new_mail then return end
+	if not C.DB.map.new_mail then return end
 
 	local mail = CreateFrame('Frame', 'FreeUIMailFrame', Minimap)
 	mail:Hide()
@@ -41,7 +41,7 @@ local function NewMail()
 end
 
 local function Calendar()
-	if not FreeDB.map.calendar then return end
+	if not C.DB.map.calendar then return end
 
 	if not GameTimeFrame.styled then
 		GameTimeFrame:SetNormalTexture(nil)
@@ -96,7 +96,7 @@ local function CalendarInvites()
 end
 
 local function InstanceType()
-	if not FreeDB.map.instance_type then return end
+	if not C.DB.map.instance_type then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetSize(24, 12)
@@ -277,7 +277,7 @@ local function QueueStatus()
 end
 
 local function WhoPings()
-	if not FreeDB.map.who_pings then return end
+	if not C.DB.map.who_pings then return end
 
 	local f = CreateFrame('Frame', nil, Minimap)
 	f:SetAllPoints()
@@ -350,7 +350,7 @@ end
 function MAP:UpdateMinimapScale()
 	local width = Minimap:GetWidth()
 	local height = Minimap:GetHeight()*(190/256)
-	local scale = FreeDB.map.minimap_scale
+	local scale = C.DB.map.minimap_scale
 	Minimap:SetScale(scale)
 	Minimap.mover:SetSize(width*scale, height*scale)
 	Minimap.bg:SetSize(width*scale, height*scale)
@@ -361,12 +361,12 @@ function MAP:Minimap()
 	DropDownList1:SetClampedToScreen(true)
 
 	local bg = CreateFrame('Frame', nil, UIParent)
-	bg:SetSize(256*FreeDB.map.minimap_scale, 190*FreeDB.map.minimap_scale)
+	bg:SetSize(256*C.DB.map.minimap_scale, 190*C.DB.map.minimap_scale)
 	F.SetBD(bg)
 
 	Minimap:SetFrameStrata('BACKGROUND')
 	Minimap:Size(256, 256)
-	Minimap:SetScale(FreeDB.map.minimap_scale)
+	Minimap:SetScale(C.DB.map.minimap_scale)
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
 
 	Minimap:EnableMouse(true)

@@ -12,7 +12,8 @@ C.MyLevel = UnitLevel('player')
 C.MyFaction = select(2, UnitFactionGroup('player'))
 C.MyRace = select(2, UnitRace('player'))
 C.MyRealm = GetRealmName()
-C.Version = GetAddOnMetadata('FreeUI', 'Version')
+C.MyFullName = C.MyName..'-'..C.MyRealm
+C.AddonVersion = GetAddOnMetadata('FreeUI', 'Version')
 C.Support = GetAddOnMetadata('FreeUI', 'X-Support')
 C.Client = GetLocale()
 C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
@@ -22,6 +23,7 @@ C.isNewPatch = select(4, GetBuildInfo()) > 90001
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
+C.MaxLevel = GetMaxLevelForPlayerExpansion()
 
 
 
@@ -34,7 +36,7 @@ C.DevsList = {
 	['雨色入青山-白银之手'] = true,
 }
 local function isDeveloper()
-	return C.DevsList[C.MyName..'-'..C.MyRealm]
+	return C.DevsList[C.MyFullName]
 end
 C.isDeveloper = isDeveloper()
 
@@ -51,12 +53,15 @@ C['Assets'] = {
 	['bg_tex'] = C.AssetsPath..'textures\\bg_tex',
 	['shadow_tex'] = C.AssetsPath..'textures\\shadow_tex',
 	['glow_tex'] = C.AssetsPath..'textures\\glow_tex',
-
+	['blank_tex'] = C.AssetsPath..'textures\\blank_tex',
 	['tick_tex'] = C.AssetsPath..'textures\\tick_tex',
 	['stripe_tex'] = C.AssetsPath..'textures\\stripe_tex',
 
 	['close_tex'] = C.AssetsPath..'textures\\close_tex',
 	['arrow_tex'] = C.AssetsPath..'textures\\arrow_tex',
+
+	['shield_tex'] = C.AssetsPath..'textures\\shield_tex',
+	['sword_tex'] = C.AssetsPath..'textures\\sword_tex',
 
 	['button_normal']  = C.AssetsPath..'button\\normal',
 	['button_flash']   = C.AssetsPath..'button\\flash',
@@ -94,10 +99,10 @@ C['Assets'] = {
 		['Condensed'] = C.AssetsPath..'fonts\\condensed.ttf',
 		['Bold'] = C.AssetsPath..'fonts\\bold.ttf',
 		['Header'] = C.AssetsPath..'fonts\\bold.ttf',
-		['Chat'] = C.AssetsPath..'fonts\\chat.ttf',
 		['Combat'] = C.AssetsPath..'fonts\\combat.ttf',
 		['Pixel'] = C.AssetsPath..'fonts\\pixel.ttf',
 		['Cooldown'] = C.AssetsPath..'fonts\\cooldown.ttf',
+		['Roadway'] = C.AssetsPath..'fonts\\roadway.ttf',
 	},
 }
 
@@ -199,11 +204,12 @@ C.g = C.ClassColors[C.MyClass].g
 C.b = C.ClassColors[C.MyClass].b
 
 C.MyColor = format('|cff%02x%02x%02x', C.r*255, C.g*255, C.b*255)
-C.Title = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
+C.AddonName = '|cffe6e6e6Free|r'..C.MyColor..'UI|r'
 
 C.InfoColor = '|cffe9c55d'
 C.YellowColor = '|cffffff00'
 C.GreyColor = '|cff7f7f7f'
+C.WhiteColor = '|cffffffff'
 C.RedColor = '|cffff2020'
 C.GreenColor = '|cff20ff20'
 C.BlueColor = '|cff82c5ff'

@@ -122,10 +122,10 @@ function INVENTORY:CreateCurrencyFrame()
 			profit = profit + change
 		end
 
-		if not FreeGoldCount[C.MyRealm] then FreeGoldCount[C.MyRealm] = {} end
-		if not FreeGoldCount[C.MyRealm][C.MyName] then FreeGoldCount[C.MyRealm][C.MyName] = {} end
-		FreeGoldCount[C.MyRealm][C.MyName][1] = GetMoney()
-		FreeGoldCount[C.MyRealm][C.MyName][2] = C.MyClass
+		if not FREE_GOLDCOUNT[C.MyRealm] then FREE_GOLDCOUNT[C.MyRealm] = {} end
+		if not FREE_GOLDCOUNT[C.MyRealm][C.MyName] then FREE_GOLDCOUNT[C.MyRealm][C.MyName] = {} end
+		FREE_GOLDCOUNT[C.MyRealm][C.MyName][1] = GetMoney()
+		FREE_GOLDCOUNT[C.MyRealm][C.MyName][2] = C.MyClass
 
 		oldMoney = newMoney
 	end)
@@ -155,7 +155,7 @@ function INVENTORY:CreateCurrencyFrame()
 		GameTooltip:AddLine(L['INVENTORY_CHARACTER'], .6,.8,1)
 
 		for _, realm in pairs(crossRealms) do
-			local thisRealmList = FreeGoldCount[realm]
+			local thisRealmList = FREE_GOLDCOUNT[realm]
 			if thisRealmList then
 				for k, v in pairs(thisRealmList) do
 					local name = Ambiguate(k..'-'..realm, 'none')
@@ -228,9 +228,9 @@ function INVENTORY:CreateRestoreButton(f)
 	local bu = F.CreateButton(self, 16, 16, true, icons.restore)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function()
-		FreeDB['ui_anchor_temp'][f.main:GetName()] = nil
-		FreeDB['ui_anchor_temp'][f.bank:GetName()] = nil
-		FreeDB['ui_anchor_temp'][f.reagent:GetName()] = nil
+		C.DB['ui_anchor_temp'][f.main:GetName()] = nil
+		C.DB['ui_anchor_temp'][f.bank:GetName()] = nil
+		C.DB['ui_anchor_temp'][f.reagent:GetName()] = nil
 		f.main:ClearAllPoints()
 		f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
 		f.bank:ClearAllPoints()
@@ -284,7 +284,7 @@ function INVENTORY:CreateBankButton(f)
 end
 
 local function updateDepositButtonStatus(bu)
-	if FreeDB.inventory.auto_deposit then
+	if C.DB.inventory.auto_deposit then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 	else
 		bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -292,7 +292,7 @@ local function updateDepositButtonStatus(bu)
 end
 
 function INVENTORY:AutoDeposit()
-	if FreeDB.inventory.auto_deposit then
+	if C.DB.inventory.auto_deposit then
 		DepositReagentBank()
 	end
 end
@@ -303,7 +303,7 @@ function INVENTORY:CreateDepositButton()
 	bu:RegisterForClicks('AnyUp')
 	bu:SetScript('OnClick', function(_, btn)
 		if btn == 'RightButton' then
-			FreeDB.inventory.auto_deposit = not FreeDB.inventory.auto_deposit
+			C.DB.inventory.auto_deposit = not C.DB.inventory.auto_deposit
 			updateDepositButtonStatus(bu)
 		else
 			DepositReagentBank()
@@ -339,7 +339,7 @@ function INVENTORY:CreateSortButton(name)
 	local bu = F.CreateButton(self, 16, 16, true, icons.sort)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function()
-		if FreeDB.inventory.sort_mode == 3 then
+		if C.DB.inventory.sort_mode == 3 then
 			UIErrorsFrame:AddMessage(C.InfoColor..L['INVENTORY_SORT_DISABLED'])
 			return
 		end
@@ -349,9 +349,9 @@ function INVENTORY:CreateSortButton(name)
 		elseif name == 'Reagent' then
 			SortReagentBankBags()
 		else
-			if FreeDB.inventory.sort_mode == 1 then
+			if C.DB.inventory.sort_mode == 1 then
 				SortBags()
-			elseif FreeDB.inventory.sort_mode == 2 then
+			elseif C.DB.inventory.sort_mode == 2 then
 				if InCombatLockdown() then
 					UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT)
 				else
@@ -370,7 +370,7 @@ function INVENTORY:CreateSortButton(name)
 end
 
 local function updateRepairButtonStatus(bu)
-	if FreeDB.inventory.auto_repair then
+	if C.DB.inventory.auto_repair then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 		bu.text = L['INVENTORY_AUTO_REPAIR_TIP']
 		bu.title = L['INVENTORY_AUTO_REPAIR']..': '..C.GreenColor..VIDEO_OPTIONS_ENABLED
@@ -385,7 +385,7 @@ function INVENTORY:CreateRepairButton()
 	local bu = F.CreateButton(self, 16, 16, true, icons.repair)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function(self)
-		FreeDB.inventory.auto_repair = not FreeDB.inventory.auto_repair
+		C.DB.inventory.auto_repair = not C.DB.inventory.auto_repair
 		updateRepairButtonStatus(bu)
 		self:GetScript('OnEnter')(self)
 	end)
@@ -397,7 +397,7 @@ function INVENTORY:CreateRepairButton()
 end
 
 local function updateSellButtonStatus(bu)
-	if FreeDB.inventory.auto_sell_junk then
+	if C.DB.inventory.auto_sell_junk then
 		bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 		bu.text = L['INVENTORY_SELL_JUNK_TIP']
 		bu.title = L['INVENTORY_SELL_JUNK']..': '..C.GreenColor..VIDEO_OPTIONS_ENABLED
@@ -412,7 +412,7 @@ function INVENTORY:CreateSellButton()
 	local bu = F.CreateButton(self, 16, 16, true, icons.sell)
 	bu.Icon:SetVertexColor(.5, .5, .5, 1)
 	bu:SetScript('OnClick', function(self)
-		FreeDB.inventory.auto_sell_junk = not FreeDB.inventory.auto_sell_junk
+		C.DB.inventory.auto_sell_junk = not C.DB.inventory.auto_sell_junk
 		updateSellButtonStatus(bu)
 		self:GetScript('OnEnter')(self)
 	end)
@@ -538,7 +538,7 @@ end
 local splitEnable
 local function saveSplitCount(self)
 	local count = self:GetText() or ''
-	FreeDB['inventory']['split_count'] = tonumber(count) or 1
+	C.DB['inventory']['split_count'] = tonumber(count) or 1
 end
 
 function INVENTORY:CreateSplitButton()
@@ -570,7 +570,7 @@ function INVENTORY:CreateSplitButton()
 			bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 			splitFrame:Show()
-			editbox:SetText(FreeDB['inventory']['split_count'])
+			editbox:SetText(C.DB['inventory']['split_count'])
 		else
 			self.__turnOff()
 		end
@@ -591,8 +591,8 @@ local function splitOnClick(self)
 	PickupContainerItem(self.bagID, self.slotID)
 
 	local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
-	if texture and not locked and itemCount and itemCount > FreeDB['inventory']['split_count'] then
-		SplitContainerItem(self.bagID, self.slotID, FreeDB['inventory']['split_count'])
+	if texture and not locked and itemCount and itemCount > C.DB['inventory']['split_count'] then
+		SplitContainerItem(self.bagID, self.slotID, C.DB['inventory']['split_count'])
 
 		local bagID, slotID = INVENTORY:GetEmptySlot('Main')
 		if slotID then
@@ -638,10 +638,10 @@ local function favouriteOnClick(self)
 
 	local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
-		if FreeDB['inventory']['favourite_items'][itemID] then
-			FreeDB['inventory']['favourite_items'][itemID] = nil
+		if C.DB['inventory']['favourite_items'][itemID] then
+			C.DB['inventory']['favourite_items'][itemID] = nil
 		else
-			FreeDB['inventory']['favourite_items'][itemID] = true
+			C.DB['inventory']['favourite_items'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -692,10 +692,10 @@ local function customJunkOnClick(self)
 	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
-		if FreeADB['custom_junk_list'][itemID] then
-			FreeADB['custom_junk_list'][itemID] = nil
+		if FREE_ADB['custom_junk_list'][itemID] then
+			FREE_ADB['custom_junk_list'][itemID] = nil
 		else
-			FreeADB['custom_junk_list'][itemID] = true
+			FREE_ADB['custom_junk_list'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -768,17 +768,17 @@ function INVENTORY:CloseBags()
 end
 
 function INVENTORY:OnLogin()
-	if not FreeDB['inventory']['enable_inventory'] then return end
+	if not C.DB['inventory']['enable_inventory'] then return end
 
 	INVENTORY:AutoSellJunk()
 	INVENTORY:AutoRepair()
 
-	local bagsScale = FreeDB['inventory']['scale']
-	local bagsWidth = FreeDB['inventory']['bag_columns']
-	local bankWidth = FreeDB['inventory']['bank_columns']
-	local iconSize = FreeDB['inventory']['slot_size']
-	local itemSetFilter = FreeDB['inventory']['item_filter_gear_set']
-	local showNewItem = FreeDB['inventory']['new_item_flash']
+	local bagsScale = C.DB['inventory']['scale']
+	local bagsWidth = C.DB['inventory']['bag_columns']
+	local bankWidth = C.DB['inventory']['bank_columns']
+	local iconSize = C.DB['inventory']['slot_size']
+	local itemSetFilter = C.DB['inventory']['item_filter_gear_set']
+	local showNewItem = C.DB['inventory']['new_item_flash']
 
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -982,7 +982,7 @@ function INVENTORY:OnLogin()
 
 	function MyButton:OnUpdate(item)
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FreeADB['custom_junk_list'][item.id]) and item.sellPrice > 0 then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FREE_ADB['custom_junk_list'][item.id]) and item.sellPrice > 0 then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -1005,7 +1005,7 @@ function INVENTORY:OnLogin()
 			end
 		end
 
-		if FreeDB['inventory']['favourite_items'][item.id] then
+		if C.DB['inventory']['favourite_items'][item.id] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()
@@ -1019,9 +1019,9 @@ function INVENTORY:OnLogin()
 			end
 		end
 
-		if FreeDB['inventory']['item_level'] and isItemNeedsLevel(item) then
+		if C.DB['inventory']['item_level'] and isItemNeedsLevel(item) then
 			local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level <= FreeDB['inventory']['item_level_to_show'] then level = '' end
+			if level <= C.DB['inventory']['item_level_to_show'] then level = '' end
 			local color = C.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -1029,7 +1029,7 @@ function INVENTORY:OnLogin()
 			self.iLvl:SetText('')
 		end
 
-		if FreeDB['inventory']['special_color'] then
+		if C.DB['inventory']['special_color'] then
 			local bagType = INVENTORY.BagsType[item.bagID]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
@@ -1037,7 +1037,7 @@ function INVENTORY:OnLogin()
 			self:SetBackdropColor(.3, .3, .3, .25)
 		end
 
-		if FreeDB.inventory.bind_type then
+		if C.DB.inventory.bind_type then
 			local itemLink = GetContainerItemLink(item.bagID, item.slotID)
 			if not itemLink then return end
 			local _, _, _, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
@@ -1074,14 +1074,14 @@ function INVENTORY:OnLogin()
 		self:SortButtons('bagSlot')
 
 		local columns = self.Settings.Columns
-		local offset = FreeDB['inventory']['offset']
-		local spacing = FreeDB['inventory']['spacing']
+		local offset = C.DB['inventory']['offset']
+		local spacing = C.DB['inventory']['spacing']
 		local xOffset = 5
 		local yOffset = -offset + xOffset
 		local _, height = self:LayoutButtons('grid', columns, spacing, xOffset, yOffset)
 		local width = columns * (iconSize+spacing)-spacing
 		if self.freeSlot then
-			if FreeDB['inventory']['combine_free_slots'] then
+			if C.DB['inventory']['combine_free_slots'] then
 				local numSlots = #self.buttons + 1
 				local row = ceil(numSlots / columns)
 				local col = numSlots % columns
@@ -1220,7 +1220,7 @@ function INVENTORY:OnLogin()
 	end
 
 	-- Sort order
-	SetSortBagsRightToLeft(FreeDB.inventory.sort_mode == 1)
+	SetSortBagsRightToLeft(C.DB.inventory.sort_mode == 1)
 	SetInsertItemsLeftToRight(false)
 
 	-- Init

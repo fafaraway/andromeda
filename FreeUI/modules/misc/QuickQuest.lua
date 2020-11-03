@@ -36,9 +36,9 @@ local function setupCheckButton()
 	bu:SetHitRectInsets(-5, -5, -5, -5)
 	F.ReskinCheck(bu)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 22, 0)
-	bu:SetChecked(FreeDB.quest.quick_quest)
+	bu:SetChecked(C.DB.quest.quick_quest)
 	bu:SetScript('OnClick', function(self)
-		FreeDB.quest.quick_quest = self:GetChecked()
+		C.DB.quest.quick_quest = self:GetChecked()
 	end)
 
 	created = true
@@ -55,7 +55,7 @@ end)
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
 	self[event] = function(...)
-		if FreeDB.misc.quick_quest and not IsShiftKeyDown() then
+		if C.DB.misc.quick_quest and not IsShiftKeyDown() then
 			func(...)
 		end
 	end

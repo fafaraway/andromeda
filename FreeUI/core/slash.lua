@@ -20,8 +20,8 @@ StaticPopupDialogs['FREEUI_RESET_OPTIONS'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		FreeADB = {}
-		FreeDB = {}
+		FREE_ADB = {}
+		C.DB = {}
 
 		ReloadUI()
 	end,
@@ -30,24 +30,14 @@ StaticPopupDialogs['FREEUI_RESET_OPTIONS'] = {
 	hideOnEscape = false,
 }
 
-StaticPopupDialogs['FREEUI_IMPORT_DATA'] = {
-	text = L.GUI.DATA.IMPORT_WARNING,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		GUI:ImportData()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false,
-}
+
 
 StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
 	text = L.GUI.MOVER.RESET,
 	button1 = OKAY,
 	button2 = CANCEL,
 	OnAccept = function()
-		wipe(FreeDB.ui_anchor)
+		wipe(C.DB.ui_anchor)
 		ReloadUI()
 	end,
 	timeout = 0,
@@ -66,12 +56,12 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	button2 = NO,
 	OnAccept = function()
 		for _, realm in pairs(crossRealms) do
-			if FreeGoldCount[realm] then
-				wipe(FreeGoldCount[realm])
+			if FREE_GOLDCOUNT[realm] then
+				wipe(FREE_GOLDCOUNT[realm])
 			end
 		end
 
-		FreeGoldCount[C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		FREE_GOLDCOUNT[C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -83,7 +73,7 @@ StaticPopupDialogs['FREEUI_RESET_JUNK_LIST'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(FreeADB.custom_junk_list)
+		wipe(FREE_ADB.custom_junk_list)
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -117,7 +107,7 @@ end
 SlashCmdList.FREEUI = function(str)
 	local cmd, _ = strsplit(' ', str:lower(), 2)
 	if cmd == 'reset' then
-		StaticPopup_Show('FREEUI_RESET_OPTIONS')
+		StaticPopup_Show('FREEUI_RESET')
 	elseif cmd == 'install' then
 		INSTALL:HelloWorld()
 	elseif cmd == 'unlock' then
@@ -127,7 +117,7 @@ SlashCmdList.FREEUI = function(str)
 	elseif cmd == 'help' then
 		printCommandsList()
 	elseif cmd == 'ver' or cmd == 'version' then
-		F.Print(C.Version)
+		F.Print(C.AddonVersion)
 	else
 		printCommandsList()
 	end
@@ -204,7 +194,7 @@ SlashCmdList['UISCALECHECK'] = function()
 	F.Print('C.ScreenWidth '..C.ScreenWidth)
 	F.Print('C.ScreenHeight '..C.ScreenHeight)
 	F.Print('C.Mult '..C.Mult)
-	F.Print('uiScale '..FreeADB.appearance.ui_scale)
+	F.Print('uiScale '..FREE_ADB.ui_scale)
 	F.Print('UIParentScale '..UIParent:GetScale())
 	print(C.LineString)
 end

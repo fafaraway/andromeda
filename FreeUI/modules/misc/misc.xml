@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="misc.lua"/>
-	<Script file="AlreadyKnown.lua"/>
-	<Script file="DragEmAll.lua"/>
-	<Script file="ExtraQuestButton.lua"/>
+	<Script file="alreadyknown.lua"/>
+	<Script file="dragemall.lua"/>
+	<Script file="extraquestbutton.lua"/>
 	<Script file="grouptool.lua"/>
 	<Script file="itemlevel.lua"/>
-	<Script file="QuickQuest.lua"/>
+	<Script file="quickquest.lua"/>
 </Ui>

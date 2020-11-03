@@ -248,7 +248,7 @@ local function instantLoot()
 end
 
 function BLIZZARD:InstantLoot()
-	if FreeDB.blizzard.instant_loot then
+	if C.DB.blizzard.instant_loot then
 		F:RegisterEvent('LOOT_READY', instantLoot)
 	else
 		F:UnregisterEvent('LOOT_READY', instantLoot)

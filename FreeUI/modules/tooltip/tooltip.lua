@@ -75,22 +75,15 @@ function TOOLTIP:GetTarget(unit)
 	end
 end
 
-function TOOLTIP:OnTooltipCleared()
-	self.ttUpdate = 1
-	self.ttNumLines = 0
-	self.ttUnit = nil
-end
-
 function TOOLTIP:OnTooltipSetUnit()
 	if self:IsForbidden() then return end
-	if FreeDB.tooltip.hide_in_combat and InCombatLockdown() then self:Hide() return end
+	if C.DB.tooltip.hide_in_combat and InCombatLockdown() then self:Hide() return end
 
 	TOOLTIP.HideLines(self)
 
 	local unit = TOOLTIP.GetUnit(self)
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
-		self.ttUnit = unit
 		local hexColor = F.RGBToHex(F.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
 		local text = GameTooltipTextLeft1:GetText()
@@ -104,11 +97,11 @@ function TOOLTIP:OnTooltipSetUnit()
 			local name, realm = UnitName(unit)
 			local pvpName = UnitPVPName(unit)
 			local relationship = UnitRealmRelationship(unit)
-			if not FreeDB.tooltip.hide_title and pvpName then
+			if not C.DB.tooltip.hide_title and pvpName then
 				name = pvpName
 			end
 			if realm and realm ~= '' then
-				if isShiftKeyDown or not FreeDB.tooltip.hide_realm then
+				if isShiftKeyDown or not C.DB.tooltip.hide_realm then
 					name = name..'-'..realm
 				elseif relationship == LE_REALM_RELATION_COALESCED then
 					name = name..FOREIGN_SERVER_LABEL
@@ -134,7 +127,7 @@ function TOOLTIP:OnTooltipSetUnit()
 				end
 
 				rankIndex = rankIndex + 1
-				if FreeDB.tooltip.hide_rank then rank = '' end
+				if C.DB.tooltip.hide_rank then rank = '' end
 				if guildRealm and isShiftKeyDown then
 					guildName = guildName..'-'..guildRealm
 				end
@@ -228,7 +221,7 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 end
 
 function TOOLTIP:ScanTargets()
-	if not FreeDB.tooltip.target_by then return end
+	if not C.DB.tooltip.target_by then return end
 	if not IsInGroup() then return end
 
 	local _, unit = self:GetUnit()
@@ -251,7 +244,7 @@ function TOOLTIP:ScanTargets()
 end
 
 function TOOLTIP:TargetedInfo()
-	if not FreeDB.tooltip.target_by then return end
+	if not C.DB.tooltip.target_by then return end
 
 	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end
@@ -262,7 +255,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 	if self:IsForbidden() then return end
 	if not parent then return end
 
-	if FreeDB.tooltip.follow_cursor then
+	if C.DB.tooltip.follow_cursor then
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
@@ -342,7 +335,7 @@ function TOOLTIP:ReskinTooltip()
 		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
 	end
 
-	if FreeDB.tooltip.border_color and self.GetItem then
+	if C.DB.tooltip.border_color and self.GetItem then
 		local _, item = self:GetItem()
 		if item then
 			local quality = select(3, GetItemInfo(item))
@@ -369,8 +362,8 @@ local function TooltipSetFont(font, size)
 end
 
 function TOOLTIP:SetTooltipFonts()
-	local textSize = FreeDB.tooltip.normal_font_size
-	local headerSize = FreeDB.tooltip.header_font_size
+	local textSize = C.DB.tooltip.normal_font_size
+	local headerSize = C.DB.tooltip.header_font_size
 
 	TooltipSetFont(GameTooltipHeaderText, headerSize)
 	TooltipSetFont(GameTooltipText, textSize)
@@ -395,8 +388,9 @@ function TOOLTIP:SetTooltipFonts()
 	end
 end
 
+
 function TOOLTIP:OnLogin()
-	if not FreeDB.tooltip.enable_tooltip then return end
+	if not C.DB.tooltip.enable_tooltip then return end
 
 	GameTooltip.StatusBar = GameTooltipStatusBar
 
@@ -409,32 +403,12 @@ function TOOLTIP:OnLogin()
 		end
 	end
 
-	GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
 	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
 	hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
 	hooksecurefunc('GameTooltip_ShowProgressBar', TOOLTIP.GameTooltip_ShowProgressBar)
 	hooksecurefunc('GameTooltip_SetDefaultAnchor', TOOLTIP.GameTooltip_SetDefaultAnchor)
 	hooksecurefunc('SharedTooltip_SetBackdropStyle', TOOLTIP.SharedTooltip_SetBackdropStyle)
 	hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
-
-	GameTooltip:HookScript('OnTooltipCleared', function(self)
-		self.ttUpdate = 1
-		self.ttNumLines = 0
-		self.ttUnit = nil
-	end)
-
-	GameTooltip:HookScript('OnUpdate', function(self, elapsed)
-		self.ttUpdate = (self.ttUpdate or 0) + elapsed
-		if(self.ttUpdate < .1) then return end
-		if(self.ttUnit and not UnitExists(self.ttUnit)) then self:Hide() return end
-		self.ttUpdate = 0
-	end)
-
-	GameTooltip.FadeOut = function(self)
-		self:Hide()
-	end
-
-	SetTooltipMoney = F.Dummy
 
 	TOOLTIP:SetTooltipFonts()
 	TOOLTIP:ReskinTooltipIcons()

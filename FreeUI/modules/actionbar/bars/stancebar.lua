@@ -25,7 +25,7 @@ end
 
 function ACTIONBAR:CreateStancebar()
 	local num = _G.NUM_STANCE_SLOTS
-	local size = FreeDB.actionbar.button_size_big
+	local size = C.DB.actionbar.button_size_big
 	local NUM_POSSESS_SLOTS = _G.NUM_POSSESS_SLOTS
 	local buttonList = {}
 
@@ -34,7 +34,7 @@ function ACTIONBAR:CreateStancebar()
 	frame.Pos = {'BOTTOMLEFT', anchor, 'TOPLEFT', 0, margin}
 
 	-- StanceBar
-	if FreeDB.actionbar.stance_bar then
+	if C.DB.actionbar.stance_bar then
 		_G.StanceBarFrame:SetParent(frame)
 		_G.StanceBarFrame:EnableMouse(false)
 		_G.StanceBarLeft:SetTexture(nil)

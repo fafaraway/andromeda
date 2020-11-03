@@ -223,10 +223,10 @@ end
 
 function ACTIONBAR:Bind_Deactivate(save)
 	if save == true then
-		SaveBindings(FreeDB.actionbar.bind_type)
+		SaveBindings(C.DB.actionbar.bind_type)
 		F.Print(C.GreenColor..L['ACTIONBAR_SAVE_KEYBINDS'])
 	else
-		LoadBindings(FreeDB.actionbar.bind_type)
+		LoadBindings(C.DB.actionbar.bind_type)
 		F.Print(C.GreenColor..L['ACTIONBAR_DISCARD_KEYBINDS'])
 	end
 
@@ -251,10 +251,10 @@ function ACTIONBAR:Bind_CreateDialog()
 
 	local text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, CHARACTER_SPECIFIC_KEYBINDINGS, 'YELLOW', true, 'TOP', 0, -40)
 	local box = F.CreateCheckBox(frame)
-	box:SetChecked(FreeDB.actionbar.bind_type == 2)
+	box:SetChecked(C.DB.actionbar.bind_type == 2)
 	box:SetPoint("RIGHT", text, "LEFT", -5, -0)
 	box:SetScript("OnClick", function(self)
-		FreeDB.actionbar.bind_type = self:GetChecked() and 2 or 1
+		C.DB.actionbar.bind_type = self:GetChecked() and 2 or 1
 	end)
 
 	local button1 = F.CreateButton(frame, 120, 26, APPLY, 12)

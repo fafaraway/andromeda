@@ -21,12 +21,12 @@ end
 
 --[[ Generate wowhead link ]]
 
-local lST = 'Wowhead'
-local lQ = 'http://www.wowhead.com/quest=%d'
-local lA = 'http://www.wowhead.com/achievement=%d'
+local LINK_START = 'Wowhead'
+local LINK_QUEST = 'http://www.wowhead.com/quest=%d'
+local LINK_ACHIEVEMENT = 'http://www.wowhead.com/achievement=%d'
 
 _G.StaticPopupDialogs['WATCHFRAME_URL'] = {
-	text = lST .. ' link',
+	text = LINK_START .. ' link',
 	button1 = OKAY,
 	timeout = 0,
 	whileDead = true,
@@ -42,10 +42,10 @@ local function CreateQuestLink(self)
 	b = self.activeFrame
 	questID = b.id
 	info = UIDropDownMenu_CreateInfo()
-	info.text = lST .. '-Link'
+	info.text = LINK_START .. '-Link'
 	info.func = function(id)
 		local inputBox = StaticPopup_Show('WATCHFRAME_URL')
-		inputBox.editBox:SetText(lQ:format(questID))
+		inputBox.editBox:SetText(LINK_QUEST:format(questID))
 		inputBox.editBox:HighlightText()
 	end
 	info.arg1 = questID
@@ -58,10 +58,10 @@ local function CreateAchievementLink(self)
 	b = self.activeFrame
 	i = b.id
 	info = UIDropDownMenu_CreateInfo()
-	info.text = lST .. '-Link'
+	info.text = LINK_START .. '-Link'
 	info.func = function(_, i)
 		local inputBox = StaticPopup_Show('WATCHFRAME_URL')
-		inputBox.editBox:SetText(lA:format(i))
+		inputBox.editBox:SetText(LINK_ACHIEVEMENT:format(i))
 		inputBox.editBox:HighlightText()
 	end
 	info.arg1 = i
@@ -75,8 +75,6 @@ function BLIZZARD:GenerateWowHeadLink()
 	hooksecurefunc('QuestObjectiveTracker_OnOpenDropDown', CreateQuestLink)
 	hooksecurefunc('AchievementObjectiveTracker_OnOpenDropDown', CreateAchievementLink)
 end
-
-
 
 
 --[[ Restyle objective tracker text ]]
@@ -93,6 +91,38 @@ local color = {
 		b = 0.451
 	}
 }
+
+local function SetTextColorHook(text)
+	if not text.Hooked then
+		local SetTextColorOld = text.SetTextColor
+		text.SetTextColor = function(self, r, g, b, a)
+			if
+				r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g and
+					b == _G.OBJECTIVE_TRACKER_COLOR['Header'].b
+			 then
+				r = 216/255
+				g = 197/255
+				b = 136/255
+			elseif
+				r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r and
+					g == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g and
+					b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b
+			 then
+				r = 216/255
+				g = 181/255
+				b = 136/255
+			end
+			SetTextColorOld(self, r, g, b, a)
+		end
+		text:SetTextColor(
+			_G.OBJECTIVE_TRACKER_COLOR['Header'].r,
+			_G.OBJECTIVE_TRACKER_COLOR['Header'].g,
+			_G.OBJECTIVE_TRACKER_COLOR['Header'].b,
+			1
+		)
+		text.Hooked = true
+	end
+end
 
 local function GetProgressColor(progress)
 	local r = (color.complete.r - color.start.r) * progress + color.start.r
@@ -127,6 +157,7 @@ function BLIZZARD:HandleTitleText(text)
 	if height ~= text:GetHeight() then
 		text:SetHeight(height)
 	end
+	SetTextColorHook(text)
 end
 
 function BLIZZARD:HandleInfoText(text)
@@ -181,28 +212,11 @@ function BLIZZARD:ColorfulProgression(text)
 	text:SetText(info)
 end
 
-function BLIZZARD:ChangeQuestTitleColor()
-	if not IsAddOnLoaded('Blizzard_ObjectiveTracker') then
-		return
+do
+	local dash = _G.OBJECTIVE_TRACKER_DASH_WIDTH
+	function BLIZZARD:UpdateTextWidth()
+		_G.OBJECTIVE_TRACKER_DASH_WIDTH = dash
 	end
-
-	_G.OBJECTIVE_TRACKER_COLOR['Header'] = {
-		r = 216/255,
-		g = 197/255,
-		b = 136/255
-	}
-
-	_G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'] = {
-		r = 216/255,
-		g = 181/255,
-		b = 136/255
-	}
-
-	ObjectiveTracker_Update()
-end
-
-function BLIZZARD:UpdateTextWidth()
-	_G.OBJECTIVE_TRACKER_TEXT_WIDTH = _G.OBJECTIVE_TRACKER_LINE_WIDTH - _G.OBJECTIVE_TRACKER_DASH_WIDTH - 12
 end
 
 function BLIZZARD:RestyleObjectiveTrackerText()
@@ -241,7 +255,18 @@ function BLIZZARD:RestyleObjectiveTrackerText()
 	hooksecurefunc('ObjectiveTracker_Update', BLIZZARD.HandleHeaderText)
 	hooksecurefunc(_G.SCENARIO_CONTENT_TRACKER_MODULE, 'UpdateCriteria', BLIZZARD.ScenarioObjectiveBlock_UpdateCriteria)
 
-	self:ChangeQuestTitleColor()
+	F:Delay(
+		1,
+		function()
+			for _, child in pairs {_G.ObjectiveTrackerBlocksFrame:GetChildren()} do
+				if child and child.HeaderText then
+					SetTextColorHook(child.HeaderText)
+				end
+			end
+		end
+	)
+
+	ObjectiveTracker_Update()
 end
 
 
@@ -249,59 +274,62 @@ end
 
 local function UpdateButtonVisibility()
 	if _G.ObjectiveTrackerFrame.collapsed or not _G.ObjectiveTrackerFrame.HeaderMenu:IsShown() then
-		QuickQuestButton:Hide()
-		QuestAnnounceButton:Hide()
+		_G.QuickQuestButton:Hide()
+		_G.QuestAnnounceButton:Hide()
 		return
 	end
 
-	QuickQuestButton:Show()
-	QuestAnnounceButton:Show()
+	_G.QuickQuestButton:Show()
+	_G.QuestAnnounceButton:Show()
 end
 
-function BLIZZARD:AddQuickQuestButton()
+function BLIZZARD:CreateQuickQuestButton()
 	local bu = CreateFrame('CheckButton', 'QuickQuestButton', _G.ObjectiveTrackerMover, 'UICheckButtonTemplate')
-	bu:SetPoint('TOPLEFT', 40, -4)
+	bu:SetPoint('TOPRIGHT', -90, -4)
 	bu:SetSize(20, 20)
 	bu:SetHitRectInsets(-5, -5, -5, -5)
-	F.ReskinCheck(bu, true)
+	F.ReskinCheck(bu, true, nil, true)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUICK_QUEST'], 'BLUE', 'THICK', 'LEFT', 20, 0)
-	bu:SetChecked(FreeDB.misc.quick_quest)
+	bu:SetChecked(C.DB.misc.quick_quest)
 	bu:SetScript('OnClick', function(self)
-		FreeDB.misc.quick_quest = self:GetChecked()
+		C.DB.misc.quick_quest = self:GetChecked()
 	end)
 	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUICK_QUEST_TIP'], 'BLUE')
 end
 
-function BLIZZARD:AddQuestAnnounceButton()
+function BLIZZARD:CreateQuestAnnounceButton()
 	local bu = CreateFrame('CheckButton', 'QuestAnnounceButton', _G.ObjectiveTrackerMover, 'UICheckButtonTemplate')
-	bu:SetPoint('TOPLEFT', QuickQuestButton, 'TOPRIGHT', 30, 0)
+	bu:SetPoint('TOPRIGHT', QuickQuestButton, 'TOPLEFT', -30, 0)
 	bu:SetSize(20, 20)
 	bu:SetHitRectInsets(-5, -5, -5, -5)
-	F.ReskinCheck(bu, true)
+	F.ReskinCheck(bu, true, nil, true)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUEST_ANNOUNCE'], 'BLUE', 'THICK', 'LEFT', 20, 0)
-	bu:SetChecked(FreeDB.announcement.quest)
+	bu:SetChecked(C.DB.announcement.quest)
 	bu:SetScript('OnClick', function(self)
-		FreeDB.announcement.quest = self:GetChecked()
-		ANNOUNCEMENT:Quest()
+		C.DB.announcement.quest = self:GetChecked()
+		ANNOUNCEMENT:UpdateQuestAnnounce()
 	end)
 	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUEST_ANNOUNCE_TIP'], 'BLUE')
 end
 
+function BLIZZARD:AddToggleButtons()
+	if not C.DB.misc.ot_buttons then return end
 
+	BLIZZARD:CreateQuickQuestButton()
+	BLIZZARD:CreateQuestAnnounceButton()
+	UpdateButtonVisibility()
+
+	hooksecurefunc('ObjectiveTracker_Collapse', UpdateButtonVisibility)
+	hooksecurefunc('ObjectiveTracker_Expand', UpdateButtonVisibility)
+	hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Show', UpdateButtonVisibility)
+	hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Hide', UpdateButtonVisibility)
+end
 
 
 function BLIZZARD:ObjectiveTracker()
 	BLIZZARD:ObjectiveTrackerMover()
 	BLIZZARD:GenerateWowHeadLink()
 	BLIZZARD:RestyleObjectiveTrackerText()
-
-	BLIZZARD:AddQuickQuestButton()
-	BLIZZARD:AddQuestAnnounceButton()
-	UpdateButtonVisibility()
-
-	hooksecurefunc('ObjectiveTracker_Collapse', UpdateButtonVisibility)
-    hooksecurefunc('ObjectiveTracker_Expand', UpdateButtonVisibility)
-    hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Show', UpdateButtonVisibility)
-    hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Hide', UpdateButtonVisibility)
+	BLIZZARD:AddToggleButtons()
 end
 BLIZZARD:RegisterBlizz('ObjectiveTracker', BLIZZARD.ObjectiveTracker)

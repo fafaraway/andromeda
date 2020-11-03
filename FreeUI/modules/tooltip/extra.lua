@@ -39,20 +39,20 @@ function TOOLTIP:AddLineForID(id, linkType, noadd)
 		local itemSellPrice = select(11, GetItemInfo(id))
 
 		if bankCount > 0 then
-			self:AddDoubleLine(BAGSLOT..'/'..BANK..':', C.InfoColor..bagCount..'/'..bankCount)
-		elseif bagCount > 0 then
-			self:AddDoubleLine(BAGSLOT..':', C.InfoColor..bagCount)
+			self:AddDoubleLine(BAGSLOT..'/'..BANK..':', C.WhiteColor..bagCount..'/'..bankCount)
+		elseif bagCount > 1 then
+			self:AddDoubleLine(BAGSLOT..':', C.WhiteColor..bagCount)
 		end
 		if itemStackCount and itemStackCount > 1 then
-			self:AddDoubleLine(L['TOOLTIP_STACK_CAP']..':', C.InfoColor..itemStackCount)
+			self:AddDoubleLine(L['TOOLTIP_STACK_CAP']..':', C.WhiteColor..itemStackCount)
 		end
 
 		if itemSellPrice and itemSellPrice~= 0 then
-			self:AddDoubleLine(L['TOOLTIP_SELL_PRICE']..':', GetMoneyString(itemSellPrice))
+			self:AddDoubleLine(L['TOOLTIP_SELL_PRICE']..':', C.WhiteColor..GetMoneyString(itemSellPrice))
 		end
 	end
 
-	self:AddDoubleLine(linkType, format(C.InfoColor..'%s|r', id))
+	self:AddDoubleLine(linkType, format('%s', C.WhiteColor..id))
 	self:Show()
 end
 
@@ -78,6 +78,7 @@ end
 function TOOLTIP:SetItemID()
 	local link = select(2, self:GetItem())
 	if link then
+		--SetTooltipMoney = F.Dummy
 		local id = GetItemInfoFromHyperlink(link)
 		local keystone = strmatch(link, '|Hkeystone:([0-9]+):')
 		if keystone then id = tonumber(keystone) end
@@ -94,6 +95,14 @@ function TOOLTIP:UpdateSpellCaster(...)
 		self:Show()
 	end
 end
+
+
+function TOOLTIP:RemoveMoneyLine() -- #TODO
+	if not self.shownMoneyFrames then return end
+
+	GameTooltip_ClearMoney(self)
+end
+
 
 
 function TOOLTIP:ExtraInfo()
@@ -124,6 +133,8 @@ function TOOLTIP:ExtraInfo()
 	ShoppingTooltip2:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
 	ItemRefShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
 	ItemRefShoppingTooltip2:HookScript('OnTooltipSetItem', TOOLTIP.SetItemID)
+
+	--GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.RemoveMoneyLine)
 
 	hooksecurefunc(GameTooltip, 'SetToyByItemID', function(self, id)
 		if id then TOOLTIP.AddLineForID(self, id, types.item) end
@@ -164,4 +175,7 @@ function TOOLTIP:ExtraInfo()
 	-- Spell caster
 	hooksecurefunc(GameTooltip, 'SetUnitAura', TOOLTIP.UpdateSpellCaster)
 end
+
+
+
 

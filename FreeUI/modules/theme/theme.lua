@@ -14,7 +14,7 @@ function THEME:LoadDefaultSkins()
 	end
 	wipe(C.BlizzThemes)
 
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	for addonName, func in pairs(C.Themes) do
 		local isLoaded, isFinished = IsAddOnLoaded(addonName)
@@ -34,7 +34,7 @@ function THEME:LoadDefaultSkins()
 end
 
 function THEME:CursorTrail()
-	if not FreeADB.appearance.cursor_trail then return end
+	if not FREE_ADB.cursor_trail then return end
 
 	local f = CreateFrame('Frame', nil, UIParent);
 	f:SetFrameStrata('TOOLTIP');
@@ -70,8 +70,8 @@ function THEME:CursorTrail()
 end
 
 function THEME:Vignetting()
-	if not FreeADB.appearance.vignetting then return end
-	if FreeADB.appearance.vignetting_alpha == 0 then return end
+	if not FREE_ADB.vignetting then return end
+	if FREE_ADB.vignetting_alpha == 0 then return end
 
 	local f = CreateFrame('Frame')
 	f:SetPoint('TOPLEFT')
@@ -82,7 +82,7 @@ function THEME:Vignetting()
 	f.tex:SetTexture(C.Assets.vig_tex)
 	f.tex:SetAllPoints(f)
 
-	f:SetAlpha(FreeADB.appearance.vignetting_alpha)
+	f:SetAlpha(FREE_ADB.vignetting_alpha)
 end
 
 function THEME:OnLogin()
@@ -93,13 +93,13 @@ function THEME:OnLogin()
 
 	self:ReskinDBM()
 	self:ReskinPGF()
-	self:ReskinWowLua()
+	self:ReskinREHack()
 end
 
 
 function THEME:LoadWithAddOn(addonName, value, func)
 	local function loadFunc(event, addon)
-		if not FreeADB['appearance'][value] then return end
+		if not FREE_ADB[value] then return end
 
 		if event == 'PLAYER_ENTERING_WORLD' then
 			F:UnregisterEvent(event, loadFunc)

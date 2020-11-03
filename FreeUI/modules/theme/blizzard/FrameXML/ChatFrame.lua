@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FreeADB.appearance.reskin_blizz then return end
+	if not FREE_ADB.reskin_blizz then return end
 
 	local r, g, b = C.r, C.g, C.b
 
@@ -128,7 +128,7 @@ tinsert(C.BlizzThemes, function()
 	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)
 		local class = select(2, GetPlayerInfoByGUID(guid))
 		if class then
-			local color = FreeADB.class_colors[class]
+			local color = FREE_ADB.class_colors[class]
 			if notification.Name then
 				notification.Name:SetTextColor(color.r, color.g, color.b)
 			end
