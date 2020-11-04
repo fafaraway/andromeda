@@ -250,7 +250,7 @@ end
 GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 	[1] = { -- appearance
 		{1, 'ACCOUNT', 'cursor_trail', L.GUI.APPEARANCE.CURSOR_TRAIL},
-		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER, true},
+		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER, true, nil, nil, L.GUI.APPEARANCE.SHADOW_BORDER_TIP},
 		{1, 'ACCOUNT', 'reskin_blizz', L.GUI.APPEARANCE.RESKIN_BLIZZ, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_BLIZZ_TIP},
 		{1, 'ACCOUNT', 'vignetting', L.GUI.APPEARANCE.VIGNETTING, true},
 		{3, 'ACCOUNT', 'backdrop_alpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, nil, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
@@ -276,20 +276,40 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{},--blank
 
 	},
-	[5] = {
-
-		{},--blank
-
+	[5] = { -- aura
+		{1, 'aura', 'enable', L.GUI.AURA.ENABLE, nil, nil, nil, L.GUI.AURA.ENABLE_TIP},
+		{1, 'aura', 'reverse_buffs', L.GUI.AURA.REVERSE_BUFFS},
+		{1, 'aura', 'reverse_debuffs', L.GUI.AURA.REVERSE_DEBUFFS, true},
+		{},
+		{3, 'aura', 'margin', L.GUI.AURA.MARGIN, nil, {3, 10, 1}},
+		{3, 'aura', 'offset', L.GUI.AURA.OFFSET, true, {3, 10, 1}},
+		{3, 'aura', 'buff_size', L.GUI.AURA.BUFF_SIZE, nil, {20, 60, 1}},
+		{3, 'aura', 'debuff_size', L.GUI.AURA.DEBUFF_SIZE, true, {20, 60, 1}},
+		{3, 'aura', 'buffs_per_row', L.GUI.AURA.BUFFS_PER_ROW, nil, {6, 12, 1}},
+		{3, 'aura', 'debuffs_per_row', L.GUI.AURA.DEBUFFS_PER_ROW, true, {6, 12, 1}},
+		{},
+		{1, 'aura', 'reminder', L.GUI.AURA.REMINDER, nil, nil, nil, L.GUI.AURA.REMINDER_TIP},
 	},
 	[6] = {
 
 		{},--blank
 
 	},
-	[7] = {
-
-		{},--blank
-
+	[7] = { -- combat
+		{1, 'combat', 'enable', L.GUI.COMBAT.ENABLE, nil, nil, nil, L.GUI.COMBAT.ENABLE_TIP},
+		{1, 'combat', 'combat_alert', L.GUI.COMBAT.COMBAT_ALERT, nil, nil, nil, L.GUI.COMBAT.COMBAT_ALERT_TIP},
+		{1, 'combat', 'spell_sound', L.GUI.COMBAT.SPELL_SOUND, true, nil, nil, L.GUI.COMBAT.SPELL_SOUND_TIP},
+		{1, 'combat', 'easy_mark', L.GUI.COMBAT.EASY_MARK, nil, nil, nil, L.GUI.COMBAT.EASY_MARK_TIP},
+		{1, 'combat', 'easy_focus', L.GUI.COMBAT.EASY_FOCUS, true, nil, nil, L.GUI.COMBAT.EASY_FOCUS_TIP},
+		{1, 'combat', 'easy_tab', L.GUI.COMBAT.EASY_TAB, nil, nil, nil, L.GUI.COMBAT.EASY_TAB_TIP},
+		{1, 'combat', 'pvp_sound', L.GUI.COMBAT.PVP_SOUND, true, nil, nil, L.GUI.COMBAT.PVP_SOUND_TIP},
+		{},
+		{1, 'combat', 'fct', L.GUI.COMBAT.FCT},
+		{1, 'combat', 'fct_in', L.GUI.COMBAT.FCT_IN},
+		{1, 'combat', 'fct_out', L.GUI.COMBAT.FCT_OUT, true},
+		{1, 'combat', 'fct_pet', L.GUI.COMBAT.FCT_PET},
+		{1, 'combat', 'fct_periodic', L.GUI.COMBAT.FCT_PERIODIC, true},
+		{1, 'combat', 'fct_merge', L.GUI.COMBAT.FCT_MERGE},
 	},
 	[8] = { -- announcement
 		{1, 'announcement', 'enable', L.GUI.ANNOUNCEMENT.ENABLE, nil, nil, nil, L.GUI.ANNOUNCEMENT.ENABLE_TIP},
@@ -297,7 +317,6 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{1, 'announcement', 'dispel', L.GUI.ANNOUNCEMENT.DISPEL, true, nil, nil, L.GUI.ANNOUNCEMENT.DISPEL_TIP},
 		{1, 'announcement', 'combat_resurrection', L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION, nil, nil, nil, L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION_TIP},
 		{1, 'announcement', 'utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP},
-
 	},
 	[9] = {
 

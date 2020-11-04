@@ -10,7 +10,7 @@ local settings
 
 
 function AURA:OnLogin()
-	if not C.DB['aura']['enable_aura'] then return end
+	if not C.DB.aura.enable then return end
 
 	settings = {
 		Buffs = {
