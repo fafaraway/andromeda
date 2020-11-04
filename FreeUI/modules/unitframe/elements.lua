@@ -1603,7 +1603,7 @@ function UNITFRAME:AddPartySpells(self)
 	local relT = horizon and 'TOPLEFT' or 'LEFT'
 	local xOffset = horizon and 0 or -5
 	local yOffset = horizon and 5 or 0
-	local margin = horizon and 2 or -2
+	local margin = horizon and 4 or -4
 	if otherSide then
 		relF = horizon and 'TOPLEFT' or 'LEFT'
 		relT = horizon and 'BOTTOMLEFT' or 'RIGHT'
@@ -1615,7 +1615,7 @@ function UNITFRAME:AddPartySpells(self)
 	local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
 	local buttons = {}
 	local maxIcons = 6
-	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()*.7)
+	local iconSize = horizon and (self:GetWidth()-2*abs(margin))/3 or (self:GetHeight()*.8)
 	if iconSize > 34 then iconSize = 34 end
 
 	for i = 1, maxIcons do
