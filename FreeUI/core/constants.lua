@@ -28,12 +28,13 @@ C.MaxLevel = GetMaxLevelForPlayerExpansion()
 
 
 C.DevsList = {
+	['Farfaraway-死亡之翼'] = true,
+	['Fionorolah-死亡之翼'] = true,
 	['Kangrinboqe-死亡之翼'] = true,
 	['Dontbeshy-死亡之翼'] = true,
 	['瑪格漢之光-死亡之翼'] = true,
 	['贰拾年老騎士-死亡之翼'] = true,
 	['贰拾年老法師-死亡之翼'] = true,
-	['雨色入青山-白银之手'] = true,
 }
 local function isDeveloper()
 	return C.DevsList[C.MyFullName]

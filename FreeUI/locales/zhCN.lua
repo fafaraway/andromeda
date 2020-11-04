@@ -568,15 +568,16 @@ L.GUI = {
 	['APPEARANCE'] = {
 		['NAME'] = '外观',
 		['RESKIN_BLIZZ'] = '美化游戏原始界面',
-		['RESKIN_BLIZZ_TIP'] = '使用统一的黑色外观风格替换游戏原始的美术风格',
-		['VIGNETTING'] = '暗角效果',
+		['RESKIN_BLIZZ_TIP'] = '使用统一的黑色外观风格替换游戏原始的美术风格。',
+		['VIGNETTING'] = '屏幕边缘暗角效果',
 		['BACKDROP_ALPHA'] = '背景透明度',
-		['BACKDROP_ALPHA_TIP'] = '调整黑色背景透明度',
+		['BACKDROP_ALPHA_TIP'] = '调整黑色背景透明度。',
 		['VIGNETTING_ALPHA'] = '暗角透明度',
 		['CURSOR_TRAIL'] = '鼠标闪光',
 		['SHADOW_BORDER'] = '阴影边框',
+		['SHADOW_BORDER_TIP'] = '界面元素周围添加一圈阴影',
 		['UI_SCALE'] = '界面缩放',
-		['UI_SCALE_TIP'] = '设定界面整体缩放|n推荐1080P设为1|n1440P设为1.2-1.4|n2160P设为2',
+		['UI_SCALE_TIP'] = '设定界面整体缩放|n推荐1080P设为1|n1440P设为1.2-1.4|n2160P设为2。',
 		['TEXTURE_STYLE'] = '材质风格',
 		['TEXTURE_NORM'] = '默认',
 		['TEXTURE_GRAD'] = '渐变',
@@ -586,8 +587,8 @@ L.GUI = {
 		['NUMBER_TYPE2'] = '中式: 亿/万',
 		['NUMBER_TYPE3'] = '显示具体数值',
 
-		['RESKIN_DBM'] = 'Reskin DBM',
-		['RESKIN_PGF'] = 'Reskin PGF',
+		['RESKIN_DBM'] = '美化 DBM 计时条',
+		['RESKIN_PGF'] = '美化 PGF 面板',
 
 	},
 
@@ -605,6 +606,18 @@ L.GUI = {
 
 	['AURA'] = {
 		['NAME'] = '光环',
+		['ENABLE'] = '启用光环模块',
+		['ENABLE_TIP'] = '光环栏的相关调整以及额外功能。',
+		['REVERSE_BUFFS'] = '增益栏反向排列',
+		['REVERSE_DEBUFFS'] = '减益栏反向排列',
+		['MARGIN'] = '图标左右间隔',
+		['OFFSET'] = '栏位上下间隔',
+		['BUFF_SIZE'] = '增益图标大小',
+		['DEBUFF_SIZE'] = '减益图标大小',
+		['BUFFS_PER_ROW'] = '增益栏每行数量',
+		['DEBUFFS_PER_ROW'] = '减益栏每行数量',
+		['REMINDER'] = '自身缺失增益提醒',
+		['REMINDER_TIP'] = '提醒自身缺失的增益，比如牧师耐力法师智力盗贼毒药等等。',
 	},
 
 	['ACTIONBAR'] = {
@@ -613,20 +626,41 @@ L.GUI = {
 
 	['COMBAT'] = {
 		['NAME'] = '战斗',
+		['ENABLE'] = '启用战斗模块',
+		['ENABLE_TIP'] = '提供战斗相关的功能。',
+		['COMBAT_ALERT'] = '进出战斗提示',
+		['COMBAT_ALERT_TIP'] = '进入或离开战斗时在屏幕中间显示一个提示动画。',
+		['SPELL_SOUND'] = '打断/驱散音效',
+		['SPELL_SOUND_TIP'] = '当自己成功打断或驱散时播放一个提示音效。',
+		['EASY_TAB'] = '智能切换 Tab 逻辑',
+		['EASY_TAB_TIP'] = '进入战场或竞技场时Tab键会忽略宠物类单位优先选择敌对玩家，退出战场或竞技场后恢复默认。',
+		['EASY_FOCUS'] = '快速设定焦点',
+		['EASY_FOCUS_TIP'] = 'Shift+鼠标左键点击单位模型快速设为焦点，有焦点时Shift+鼠标左键点击任意空白处取消当前焦点。',
+		['EASY_MARK'] = '快速设定标记',
+		['EASY_MARK_TIP'] = 'Alt+鼠标左键点击单位模型快速设定标记。',
+		['PVP_SOUND'] = 'PVP 击杀音效',
+		['PVP_SOUND_TIP'] = '为PVP击杀添加类似DotA的音效系统。',
+
+		['FCT'] = '启用滚动战斗信息',
+		['FCT_IN'] = '显示受到的伤害和治疗',
+		['FCT_OUT'] = '显示输出的伤害和治疗',
+		['FCT_PET'] = '显示宠物的伤害和治疗',
+		['FCT_PERIODIC'] = '显示周期性效果',
+		['FCT_MERGE'] = '合并精简',
 	},
 
 	['ANNOUNCEMENT'] = {
 		['NAME'] = '通告',
 		['ENABLE'] = '启用通告模块',
-		['ENABLE_TIP'] = '在副本中通告自己或是队友的一些特定行为',
+		['ENABLE_TIP'] = '在副本中通告自己或是队友的一些特定行为。',
 		['INTERRUPT'] = '成功打断',
-		['INTERRUPT_TIP'] = '通告自己的成功打断',
+		['INTERRUPT_TIP'] = '通告自己的成功打断。',
 		['DISPEL'] = '成功驱散',
-		['DISPEL_TIP'] = '通告自己的成功驱散',
+		['DISPEL_TIP'] = '通告自己的成功驱散。',
 		['COMBAT_RESURRECTION'] = '战斗复活',
-		['COMBAT_RESURRECTION_TIP'] = '通告自己或是队友使用的战复',
+		['COMBAT_RESURRECTION_TIP'] = '通告自己或是队友使用的战复。',
 		['UTILITY'] = '辅助技能及物品',
-		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等',
+		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。',
 	},
 
 	['INVENTORY'] = {

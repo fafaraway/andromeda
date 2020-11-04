@@ -528,6 +528,9 @@ C.CharacterSettings = {
 	['combat'] = {
 		['enable'] = true,
 			['combat_alert'] = true,
+				['alert_animation'] = true,
+				['alert_scale'] = .6,
+				['alert_speed'] = 1,
 			['spell_sound'] = true,
 			['pvp_sound'] = true,
 			['easy_tab'] = true,
@@ -552,7 +555,7 @@ C.CharacterSettings = {
 	},
 
 	['aura'] = {
-		['enable_aura'] = true,
+		['enable'] = true,
 			['margin'] = 6,
 			['offset'] = 12,
 			['buff_size'] = 40,
