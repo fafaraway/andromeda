@@ -279,13 +279,12 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	LSM:Register(LSM.MediaType.FONT, '!Free_Condensed', C.Assets.Fonts.Condensed, LOCALE_MASK)
 	LSM:Register(LSM.MediaType.FONT, '!Free_Bold', C.Assets.Fonts.Bold, LOCALE_MASK)
 	LSM:Register(LSM.MediaType.FONT, '!Free_Header', C.Assets.Fonts.Header, LOCALE_MASK)
-
 	LSM:Register(LSM.MediaType.FONT, '!Free_Combat', C.Assets.Fonts.Combat, LOCALE_MASK)
 	LSM:Register(LSM.MediaType.FONT, '!Free_Pixel', C.Assets.Fonts.Pixel, LOCALE_MASK)
-	LSM:Register(LSM.MediaType.FONT, '!Free_Cooldown', C.Assets.Fonts.Cooldown, LOCALE_MASK)
+	LSM:Register(LSM.MediaType.FONT, '!Free_Cooldown', C.Assets.Fonts.Square, LOCALE_MASK)
 	LSM:Register(LSM.MediaType.FONT, '!Free_Roadway', C.Assets.Fonts.Roadway, LOCALE_MASK)
 
-	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Normal', C.AssetsPath..'textures\\norm_tex')
+	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Normal', C.Assets.norm_tex)
 	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Gradient', C.Assets.grad_tex)
 	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Flat', C.Assets.flat_tex)
 

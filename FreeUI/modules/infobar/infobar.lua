@@ -145,7 +145,7 @@ bar.addButton = addButton
 
 
 function INFOBAR:OnLogin()
-	if not C.DB.infobar.enable_infobar then return end
+	if not C.DB.infobar.enable then return end
 
 	if C.DB.infobar.mouseover then
 		barAlpha = 0.25

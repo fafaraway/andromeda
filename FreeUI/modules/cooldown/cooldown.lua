@@ -28,7 +28,7 @@ function COOLDOWN:OnSizeChanged(width, height)
 	if fontScale < MIN_SCALE then
 		self:Hide()
 	else
-		self.text:SetFont(C.Assets.Fonts.Cooldown, fontScale * FONT_SIZE, 'OUTLINE')
+		self.text:SetFont(C.Assets.Fonts.Square, fontScale * FONT_SIZE, 'OUTLINE')
 		self.text:SetShadowColor(0, 0, 0, 0)
 
 		if self.enabled then

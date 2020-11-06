@@ -102,7 +102,7 @@ C['Assets'] = {
 		['Header'] = C.AssetsPath..'fonts\\bold.ttf',
 		['Combat'] = C.AssetsPath..'fonts\\combat.ttf',
 		['Pixel'] = C.AssetsPath..'fonts\\pixel.ttf',
-		['Cooldown'] = C.AssetsPath..'fonts\\cooldown.ttf',
+		['Square'] = C.AssetsPath..'fonts\\square.ttf',
 		['Roadway'] = C.AssetsPath..'fonts\\roadway.ttf',
 	},
 }

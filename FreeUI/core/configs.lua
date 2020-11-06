@@ -190,7 +190,7 @@ C['RaidDebuffsList'] = {
 
 
 -- Raidbuff Checklist
-C.BuffList = {
+C.RaidBuffsList = {
 	[1] = {		-- 合剂
 		298836,	-- 敏捷360
 		298837,	-- 智力360
@@ -814,7 +814,7 @@ C.CharacterSettings = {
 	},
 
 	['infobar'] = {
-		['enable_infobar'] = true,
+		['enable'] = true,
 			['anchor_top'] = true,
 			['bar_height'] = 14,
 			['mouseover'] = true,
@@ -827,10 +827,10 @@ C.CharacterSettings = {
 	},
 
 	['notification'] = {
-		['enable_notification'] = true,
+		['enable'] = true,
 			['bag_full'] = true,
 			['new_mail'] = true,
-			['version_check'] = true,
+			['version_check'] = false,
 			['rare_found'] = true,
 	},
 
@@ -844,6 +844,8 @@ C.CharacterSettings = {
 		['group_tool'] = true,
 			['rune_check'] = false,
 			['countdown'] = '10',
+
+			['marker_bar'] = true,
 		['auto_screenshot'] = true,
 			['screenshot_achievement'] = true,
 			['screenshot_challenge'] = true,

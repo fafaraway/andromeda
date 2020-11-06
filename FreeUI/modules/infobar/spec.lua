@@ -19,7 +19,6 @@ local function addIcon(texture)
 	return texture
 end
 
-local menuFrame = CreateFrame('Frame', 'SpecInfobarMenu', FreeUISpecButton, 'UIDropDownMenuTemplate')
 local menuList = {
 	{text = CHOOSE_SPECIALIZATION, isTitle = true, notCheckable = true},
 	{text = SPECIALIZATION, hasArrow = true, notCheckable = true},
@@ -72,7 +71,7 @@ function INFOBAR:SpecTalent()
 				end
 			end
 
-			EasyMenu(menuList, menuFrame, self, -80, 100, 'MENU', 1)
+			EasyMenu(menuList, F.EasyMenu, self, -80, 100, 'MENU', 1)
 			GameTooltip:Hide()
 		end
 	end)

@@ -478,6 +478,9 @@ end
 --[[ UI widgets ]]
 
 do
+	-- Dropdown menu
+	F.EasyMenu = CreateFrame('Frame', 'FreeUI_EasyMenu', UIParent, 'UIDropDownMenuTemplate')
+
 	-- Fontstring
 	function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
 		local fs = self:CreateFontString(nil, 'OVERLAY')
@@ -2069,7 +2072,7 @@ do
 			return
 		end
 
-		local message = format("%s: %s", C.AddonName, text)
+		local message = format('%s: %s', C.AddonName, text)
 		print(message)
 	end
 
@@ -2090,7 +2093,7 @@ do
 		@return {table/string} 分割结果
 	]]
 	function F.SplitCJKString(delimiter, subject)
-		if not subject or subject == "" then
+		if not subject or subject == '' then
 			return {}
 		end
 
@@ -2129,7 +2132,7 @@ do
 			local cache = {}
 			local function printLoop(subject, indent)
 				if (cache[tostring(subject)]) then
-					print(indent .. "*" .. tostring(subject))
+					print(indent .. '*' .. tostring(subject))
 				else
 					cache[tostring(subject)] = true
 					if (type(subject) == "table") then
@@ -2141,7 +2144,7 @@ do
 							elseif (type(val) == "string") then
 								print(indent .. "[" .. pos .. '] => "' .. val .. '"')
 							else
-								print(indent .. "[" .. pos .. "] => " .. tostring(val))
+								print(indent .. '[' .. pos .. '] => ' .. tostring(val))
 							end
 						end
 					else
@@ -2154,13 +2157,13 @@ do
 				printLoop(object, "  ")
 				print("}")
 			else
-				printLoop(object, "  ")
+				printLoop(object, '  ')
 			end
 			print()
 		elseif type(object) == "string" then
 			print('(string) "' .. object .. '"')
 		else
-			print("(" .. type(object) .. ") " .. tostring(object))
+			print('(' .. type(object) .. ') ' .. tostring(object))
 		end
 	end
 
@@ -2178,13 +2181,13 @@ do
 		end
 
 		if not module then
-			module = "函数"
-			text = "无模块名>" .. text
+			module = '函数'
+			text = '无模块名>' .. text
 		end
-		if type(module) ~= "string" and module.GetName then
+		if type(module) ~= 'string' and module.GetName then
 			module = module:GetName()
 		end
-		local message = format("[FreeUI - %s] %s", module, text)
+		local message = format('[FreeUI - %s] %s', module, text)
 		print(message)
 	end
 end
