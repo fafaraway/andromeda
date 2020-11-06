@@ -45,6 +45,31 @@ local function getMoneyString(number, full)
 	end
 end
 
+local function CheckBOA(link, arg1, arg2)
+	local tip = F.ScanTip
+	tip:SetOwner(UIParent, 'ANCHOR_NONE')
+	if arg1 and type(arg1) == 'string' then
+		tip:SetInventoryItem(arg1, arg2)
+	elseif arg1 and type(arg1) == 'number' then
+		tip:SetBagItem(arg1, arg2)
+	else
+		tip:SetHyperlink(link)
+	end
+
+	for i = 2, 5 do
+		local line = _G[tip:GetName()..'TextLeft'..i]
+		if line then
+			local text = line:GetText() or ''
+			local found = strfind(text, _G.ITEM_BNETACCOUNTBOUND) or strfind(text, ITEM_ACCOUNTBOUND) or strfind(text, ITEM_BIND_TO_BNETACCOUNT)
+			if found then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
 local sortCache = {}
 
 function INVENTORY:ReverseSort()
@@ -1040,9 +1065,9 @@ function INVENTORY:OnLogin()
 		if C.DB.inventory.bind_type then
 			local itemLink = GetContainerItemLink(item.bagID, item.slotID)
 			if not itemLink then return end
-			local _, _, _, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
+			local _, _, itemRarity, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
 
-			if F.isItemBOA(item.link, item.bagID, item.slotID) then
+			if CheckBOA(item.link, item.bagID, item.slotID) or itemRarity == 7 or itemRarity == 8 then
 				self.BindType:SetText('|cff00ccffBOA|r')
 			elseif bindType == 2 then
 				self.BindType:SetText('|cff1eff00BOE|r')

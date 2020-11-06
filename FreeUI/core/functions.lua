@@ -366,30 +366,6 @@ do
 			return iLvlDB[link]
 		end
 	end
-
-	function F.isItemBOA(link, arg1, arg2)
-		tip:SetOwner(UIParent, 'ANCHOR_NONE')
-		if arg1 and type(arg1) == 'string' then
-			tip:SetInventoryItem(arg1, arg2)
-		elseif arg1 and type(arg1) == 'number' then
-			tip:SetBagItem(arg1, arg2)
-		else
-			tip:SetHyperlink(link)
-		end
-
-		for i = 2, 5 do
-			local line = _G[tip:GetName()..'TextLeft'..i]
-			if line then
-				local text = line:GetText() or ''
-				local found = strfind(text, _G.ITEM_BNETACCOUNTBOUND) or strfind(text, ITEM_ACCOUNTBOUND) or strfind(text, ITEM_BIND_TO_BNETACCOUNT)
-				if found then
-					return true
-				end
-			end
-		end
-
-		return false
-	end
 end
 
 
