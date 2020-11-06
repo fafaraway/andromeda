@@ -262,14 +262,24 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{3, 'ACCOUNT', 'ui_scale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP},
 	},
 	[2] = { -- notification
-
-		{},
-
+		{1, 'notification', 'enable', L.GUI.NOTIFICATION.ENABLE},
+		{1, 'notification', 'bag_full', L.GUI.NOTIFICATION.BAG_FULL},
+		{1, 'notification', 'new_mail', L.GUI.NOTIFICATION.NEW_MAIL, true},
+		{1, 'notification', 'rare_found', L.GUI.NOTIFICATION.RARE_FOUND, nil, nil, nil, L.GUI.NOTIFICATION.RARE_FOUND_TIP},
+		{1, 'notification', 'version_check', L.GUI.NOTIFICATION.VERSION_CHECK, true},
 	},
-	[3] = {
-
-		{},--blank
-
+	[3] = { -- infobar
+		{1, 'infobar', 'enable', L.GUI.INFOBAR.ENABLE},
+		{1, 'infobar', 'anchor_top', L.GUI.INFOBAR.ANCHOR_TOP},
+		{1, 'infobar', 'mouseover', L.GUI.INFOBAR.MOUSEOVER, true},
+		{1, 'infobar', 'stats', L.GUI.INFOBAR.STATS},
+		{1, 'infobar', 'spec', L.GUI.INFOBAR.SPEC, true},
+		{1, 'infobar', 'durability', L.GUI.INFOBAR.DURABILITY},
+		{1, 'infobar', 'guild', L.GUI.INFOBAR.GUILD, true},
+		{1, 'infobar', 'friends', L.GUI.INFOBAR.FRIENDS},
+		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true},
+		{},
+		{3, 'infobar', 'bar_height', L.GUI.INFOBAR.BAR_HEIGHT, nil, {10, 30, 1}},
 	},
 	[4] = {
 

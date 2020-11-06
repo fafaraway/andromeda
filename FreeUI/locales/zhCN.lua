@@ -40,7 +40,7 @@ do
 	L['MISC_FLASK'] = '合剂'
 	L['MISC_LACK'] = '缺少'
 	L['MISC_PLAYER_COUNT'] = '%s名玩家'
-	L['MISC_COUNT_DOWN'] = '开始/取消倒计时'
+	L['MISC_COUNTDOWN'] = '开始/取消倒计时'
 	L['MISC_CHECK_STATUS'] = '食物合剂检查'
 	L['MISC_BUFFS_READY'] = '食物合剂检查: 已齐全'
 	L['MISC_RAID_BUFF_CHECK'] = '食物合剂检查:'
@@ -594,10 +594,26 @@ L.GUI = {
 
 	['NOTIFICATION'] = {
 		['NAME'] = '提醒',
+		['ENABLE'] = '启用提醒模块',
+		['BAG_FULL'] = '背包满了',
+		['NEW_MAIL'] = '收到新邮件',
+		['RARE_FOUND'] = '发现稀有事件或怪物',
+		['RARE_FOUND_TIP'] = '周围出现稀有事件或怪物，注意小地图来确定位置。',
+		['VERSION_CHECK'] = '插件过期',
 	},
 
 	['INFOBAR'] = {
 		['NAME'] = '信息条',
+		['ENABLE'] = '启用信息条模块',
+		['ANCHOR_TOP'] = '定位在屏幕顶部',
+		['MOUSEOVER'] = '鼠标悬停显示信息',
+		['STATS'] = '系统信息',
+		['SPEC'] = '专精和拾取',
+		['DURABILITY'] = '当前装备耐久度',
+		['GUILD'] = '公会在线信息',
+		['FRIENDS'] = '好友在线信息',
+		['REPORT'] = '日常周常信息',
+		['BAR_HEIGHT'] = '调整高度',
 	},
 
 	['CHAT'] = {
