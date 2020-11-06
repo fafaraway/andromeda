@@ -328,9 +328,20 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{1, 'announcement', 'combat_resurrection', L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION, nil, nil, nil, L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION_TIP},
 		{1, 'announcement', 'utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP},
 	},
-	[9] = {
-
-		{},--blank
+	[9] = { -- inventory
+		{1, 'inventory', 'enable', L.GUI.INVENTORY.ENABLE, nil, nil, nil, L.GUI.INVENTORY.ENABLE_TIP},
+		{1, 'inventory', 'new_item_flash', L.GUI.INVENTORY.NEW_ITEM_FLASH, nil, nil, nil, L.GUI.INVENTORY.NEW_ITEM_FLASH_TIP},
+		{1, 'inventory', 'combine_free_slots', L.GUI.INVENTORY.COMBINE_FREE_SLOTS, true, nil, nil, L.GUI.INVENTORY.COMBINE_FREE_SLOTS_TIP},
+		{1, 'inventory', 'bind_type', L.GUI.INVENTORY.BIND_TYPE, nil, nil, nil, L.GUI.INVENTORY.BIND_TYPE_TIP},
+		{1, 'inventory', 'item_level', L.GUI.INVENTORY.ITEM_LEVEL, true},
+		{1, 'inventory', 'special_color', L.GUI.INVENTORY.SPECIAL_COLOR, nil, nil, nil, L.GUI.INVENTORY.SPECIAL_COLOR_TIP},
+		{1, 'inventory', 'item_filter', L.GUI.INVENTORY.ITEM_FILTER, true, nil, nil, L.GUI.INVENTORY.ITEM_FILTER_TIP},
+		{},
+		{3, 'inventory', 'slot_size', L.GUI.INVENTORY.SLOT_SIZE, nil, {20, 60, 1}},
+		{3, 'inventory', 'spacing', L.GUI.INVENTORY.SPACING, true, {3, 10, 1}},
+		{3, 'inventory', 'bag_columns', L.GUI.INVENTORY.BAG_COLUMNS, nil, {8, 20, 1}},
+		{3, 'inventory', 'bank_columns', L.GUI.INVENTORY.BANK_COLUMNS, true, {8, 20, 1}},
+		{3, 'inventory', 'item_level_to_show', L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW, nil, {1, 200, 1}, nil, L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW_TIP},
 
 	},
 	[10] = {

@@ -681,6 +681,25 @@ L.GUI = {
 
 	['INVENTORY'] = {
 		['NAME'] = '背包',
+		['ENABLE'] = '启用背包模块',
+		['ENABLE_TIP'] = '调整背包和银行相关的功能。',
+		['NEW_ITEM_FLASH'] = '新物品闪光',
+		['NEW_ITEM_FLASH_TIP'] = '新入包的物品会有闪光效果，鼠标悬停后结束闪光。',
+		['COMBINE_FREE_SLOTS'] = '合并空余格子',
+		['COMBINE_FREE_SLOTS_TIP'] = '把空余的背包格子合并为一个来节约显示空间。',
+		['BIND_TYPE'] = '显示特殊绑定物品',
+		['BIND_TYPE_TIP'] = '账号绑定(BOA)和装备绑定(BOE)的物品会显示绑定类型。',
+		['ITEM_LEVEL'] = '显示物品装等',
+		['SPECIAL_COLOR'] = '背包颜色区分',
+		['SPECIAL_COLOR_TIP'] = '制造业专业背包显示相应的颜色方便区分。',
+		['ITEM_FILTER'] = '使用物品分类',
+		['ITEM_FILTER_TIP'] = '背包内的物品按照相应分类来分开显示。',
+		['SLOT_SIZE'] = '背包格子大小',
+		['SPACING'] = '背包格子间隔',
+		['BAG_COLUMNS'] = '背包每行格子数量',
+		['BANK_COLUMNS'] = '银行每行格子数量',
+		['ITEM_LEVEL_TO_SHOW'] = '装等显示阈值',
+		['ITEM_LEVEL_TO_SHOW_TIP'] = '低于这个阈值的装备将不显示装等。',
 	},
 
 	['MAP'] = {

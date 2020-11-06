@@ -536,7 +536,7 @@ function INVENTORY:CreateFreeSlots()
 	slot:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
 	slot:GetHighlightTexture():SetInside()
 	F.CreateBD(slot, .25)
-	slot:SetBackdropColor(.3, .3, .3, .25)
+	slot:SetBackdropColor(0, 0, 0, .25)
 
 	slot:SetScript('OnMouseUp', INVENTORY.FreeSlotOnDrop)
 	slot:SetScript('OnReceiveDrag', INVENTORY.FreeSlotOnDrop)
@@ -563,7 +563,7 @@ end
 local splitEnable
 local function saveSplitCount(self)
 	local count = self:GetText() or ''
-	C.DB['inventory']['split_count'] = tonumber(count) or 1
+	C.DB.inventory.split_count = tonumber(count) or 1
 end
 
 function INVENTORY:CreateSplitButton()
@@ -595,7 +595,7 @@ function INVENTORY:CreateSplitButton()
 			bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
 			self.text = enabledText
 			splitFrame:Show()
-			editbox:SetText(C.DB['inventory']['split_count'])
+			editbox:SetText(C.DB.inventory.split_count)
 		else
 			self.__turnOff()
 		end
@@ -616,8 +616,8 @@ local function splitOnClick(self)
 	PickupContainerItem(self.bagID, self.slotID)
 
 	local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
-	if texture and not locked and itemCount and itemCount > C.DB['inventory']['split_count'] then
-		SplitContainerItem(self.bagID, self.slotID, C.DB['inventory']['split_count'])
+	if texture and not locked and itemCount and itemCount > C.DB.inventory.split_count then
+		SplitContainerItem(self.bagID, self.slotID, C.DB.inventory.split_count)
 
 		local bagID, slotID = INVENTORY:GetEmptySlot('Main')
 		if slotID then
@@ -663,10 +663,10 @@ local function favouriteOnClick(self)
 
 	local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	if texture and quality > LE_ITEM_QUALITY_POOR then
-		if C.DB['inventory']['favourite_items'][itemID] then
-			C.DB['inventory']['favourite_items'][itemID] = nil
+		if C.DB.inventory.favourite_items[itemID] then
+			C.DB.inventory.favourite_items[itemID] = nil
 		else
-			C.DB['inventory']['favourite_items'][itemID] = true
+			C.DB.inventory.favourite_items[itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -793,17 +793,17 @@ function INVENTORY:CloseBags()
 end
 
 function INVENTORY:OnLogin()
-	if not C.DB['inventory']['enable_inventory'] then return end
+	if not C.DB.inventory.enable then return end
 
 	INVENTORY:AutoSellJunk()
 	INVENTORY:AutoRepair()
 
-	local bagsScale = C.DB['inventory']['scale']
-	local bagsWidth = C.DB['inventory']['bag_columns']
-	local bankWidth = C.DB['inventory']['bank_columns']
-	local iconSize = C.DB['inventory']['slot_size']
-	local itemSetFilter = C.DB['inventory']['item_filter_gear_set']
-	local showNewItem = C.DB['inventory']['new_item_flash']
+	local bagsScale = C.DB.inventory.scale
+	local bagsWidth = C.DB.inventory.bag_columns
+	local bankWidth = C.DB.inventory.bank_columns
+	local iconSize = C.DB.inventory.slot_size
+	local itemSetFilter = C.DB.inventory.item_filter_gear_set
+	local showNewItem = C.DB.inventory.new_item_flash
 
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -918,13 +918,13 @@ function INVENTORY:OnLogin()
 
 		self.Icon:SetInside()
 		self.Icon:SetTexCoord(unpack(C.TexCoord))
-		F.SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, false, 'BOTTOMRIGHT', -2, 2)
+		F.SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
 		self.Cooldown:SetInside()
 		self.IconOverlay:SetInside()
 		self.IconOverlay2:SetInside()
 
 		F.CreateBD(self, .25)
-		self:SetBackdropColor(.3, .3, .3, .25)
+		self:SetBackdropColor(0, 0, 0, .25)
 
 		local parentFrame = CreateFrame('Frame', nil, self)
 		parentFrame:SetAllPoints()
@@ -935,9 +935,9 @@ function INVENTORY:OnLogin()
 		self.Favourite:SetSize(30, 30)
 		self.Favourite:SetPoint('TOPLEFT', -12, 9)
 
-		self.Quest = F.CreateFS(self, C.Assets.Fonts.Regular, 11, nil, '!', nil, 'THICK', 'TOPLEFT', 2, -2)
-		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'BOTTOMRIGHT', -2, 2)
-		self.BindType = F.CreateFS(self, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK', 'TOPLEFT', 2, -2)
+		self.Quest = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '!', nil, true, 'TOPLEFT', 2, -2)
+		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
+		self.BindType = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'TOPLEFT', 2, -2)
 
 		local flash = self:CreateTexture(nil, 'ARTWORK')
 		flash:SetTexture('Interface\\Cooldown\\star4')
@@ -976,7 +976,7 @@ function INVENTORY:OnLogin()
 	end
 
 	local bagTypeColor = {
-		[0] = {.3, .3, .3, .25},	-- 容器
+		[0] = {0, 0, 0, .25},	-- 容器
 		[1] = false,				-- 弹药袋
 		[2] = {0, .5, 0, .25},		-- 草药袋
 		[3] = {.8, 0, .8, .25},		-- 附魔袋
@@ -1030,7 +1030,7 @@ function INVENTORY:OnLogin()
 			end
 		end
 
-		if C.DB['inventory']['favourite_items'][item.id] then
+		if C.DB.inventory.favourite_items[item.id] then
 			self.Favourite:Show()
 		else
 			self.Favourite:Hide()
@@ -1044,9 +1044,9 @@ function INVENTORY:OnLogin()
 			end
 		end
 
-		if C.DB['inventory']['item_level'] and isItemNeedsLevel(item) then
+		if C.DB.inventory.item_level and isItemNeedsLevel(item) then
 			local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
-			if level <= C.DB['inventory']['item_level_to_show'] then level = '' end
+			if level <= C.DB.inventory.item_level_to_show then level = '' end
 			local color = C.QualityColors[item.rarity]
 			self.iLvl:SetText(level)
 			self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -1054,12 +1054,12 @@ function INVENTORY:OnLogin()
 			self.iLvl:SetText('')
 		end
 
-		if C.DB['inventory']['special_color'] then
+		if C.DB.inventory.special_color then
 			local bagType = INVENTORY.BagsType[item.bagID]
 			local color = bagTypeColor[bagType] or bagTypeColor[0]
 			self:SetBackdropColor(unpack(color))
 		else
-			self:SetBackdropColor(.3, .3, .3, .25)
+			self:SetBackdropColor(0, 0, 0, .25)
 		end
 
 		if C.DB.inventory.bind_type then
@@ -1099,14 +1099,14 @@ function INVENTORY:OnLogin()
 		self:SortButtons('bagSlot')
 
 		local columns = self.Settings.Columns
-		local offset = C.DB['inventory']['offset']
-		local spacing = C.DB['inventory']['spacing']
+		local offset = C.DB.inventory.offset
+		local spacing = C.DB.inventory.spacing
 		local xOffset = 5
 		local yOffset = -offset + xOffset
 		local _, height = self:LayoutButtons('grid', columns, spacing, xOffset, yOffset)
 		local width = columns * (iconSize+spacing)-spacing
 		if self.freeSlot then
-			if C.DB['inventory']['combine_free_slots'] then
+			if C.DB.inventory.combine_free_slots then
 				local numSlots = #self.buttons + 1
 				local row = ceil(numSlots / columns)
 				local col = numSlots % columns

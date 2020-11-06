@@ -568,7 +568,7 @@ C.CharacterSettings = {
 	},
 
 	['inventory'] = {
-		['enable_inventory'] = true,
+		['enable'] = true,
 			['scale'] = 1,
 			['offset'] = 26,
 			['spacing'] = 3,
