@@ -190,7 +190,7 @@ C['RaidDebuffsList'] = {
 
 
 -- Raidbuff Checklist
-C.BuffList = {
+C.RaidBuffsList = {
 	[1] = {		-- 合剂
 		298836,	-- 敏捷360
 		298837,	-- 智力360
@@ -568,7 +568,7 @@ C.CharacterSettings = {
 	},
 
 	['inventory'] = {
-		['enable_inventory'] = true,
+		['enable'] = true,
 			['scale'] = 1,
 			['offset'] = 26,
 			['spacing'] = 3,
@@ -814,7 +814,7 @@ C.CharacterSettings = {
 	},
 
 	['infobar'] = {
-		['enable_infobar'] = true,
+		['enable'] = true,
 			['anchor_top'] = true,
 			['bar_height'] = 14,
 			['mouseover'] = true,
@@ -827,10 +827,10 @@ C.CharacterSettings = {
 	},
 
 	['notification'] = {
-		['enable_notification'] = true,
+		['enable'] = true,
 			['bag_full'] = true,
 			['new_mail'] = true,
-			['version_check'] = true,
+			['version_check'] = false,
 			['rare_found'] = true,
 	},
 
@@ -844,6 +844,8 @@ C.CharacterSettings = {
 		['group_tool'] = true,
 			['rune_check'] = false,
 			['countdown'] = '10',
+
+			['marker_bar'] = true,
 		['auto_screenshot'] = true,
 			['screenshot_achievement'] = true,
 			['screenshot_challenge'] = true,
@@ -907,15 +909,11 @@ C.CharacterSettings = {
 			['fade_in_alpha'] = 1,
 			['fade_out_duration'] = .3,
 			['fade_in_duration'] = .3,
-			['fade_in_combating'] = true,
-			['fade_in_targeting'] = false,
-			['fade_in_dungeon'] = true,
-			['fade_in_pvp'] = true,
-			['fade_in_vehicle'] = true,
-
-			['fade_smooth'] = true,
-			['fade_in_duration'] = 0.3,
-			['fade_out_duration'] = 0.3,
+			['condition_combating'] = true,
+			['condition_targeting'] = false,
+			['condition_dungeon'] = true,
+			['condition_pvp'] = true,
+			['condition_vehicle'] = true,
 
 			['custom_bar'] = true,
 				['custom_bar_margin'] = 3,
@@ -933,62 +931,14 @@ C.CharacterSettings = {
 					['custom_bar_fade_target'] = true,
 
 			['bar1'] = true,
-				['bar1_fade'] = false,
-					['bar1_fade_in_alpha'] = 1,
-					['bar1_fade_out_alpha'] = 0,
-					['bar1_fade_arena'] = true,
-					['bar1_fade_instance'] = true,
-					['bar1_fade_hover'] = true,
-					['bar1_fade_combat'] = true,
-					['bar1_fade_target'] = true,
-					['bar1_fade_vehicle'] = true,
 			['bar2'] = true,
-				['bar2_fade'] = false,
-					['bar2_fade_in_alpha'] = 1,
-					['bar2_fade_out_alpha'] = 0,
-					['bar2_fade_arena'] = true,
-					['bar2_fade_instance'] = true,
-					['bar2_fade_hover'] = true,
-					['bar2_fade_combat'] = true,
-					['bar2_fade_target'] = true,
-			['bar3'] = false,
+			['bar3'] = true,
 				['bar3_divide'] = true,
-				['bar3_fade'] = false,
-					['bar3_fade_in_alpha'] = 1,
-					['bar3_fade_out_alpha'] = 0,
-					['bar3_fade_arena'] = true,
-					['bar3_fade_instance'] = true,
-					['bar3_fade_hover'] = true,
-					['bar3_fade_combat'] = true,
-					['bar3_fade_target'] = true,
-			['bar4'] = true,
-				['bar4_fade'] = false,
-					['bar4_fade_in_alpha'] = 1,
-					['bar4_fade_out_alpha'] = 0,
-					['bar4_fade_arena'] = false,
-					['bar4_fade_instance'] = false,
-					['bar4_fade_hover'] = true,
-					['bar4_fade_combat'] = false,
-					['bar4_fade_target'] = false,
-			['bar5'] = true,
-				['bar5_fade'] = false,
-					['bar5_fade_in_alpha'] = 1,
-					['bar5_fade_out_alpha'] = 0,
-					['bar5_fade_arena'] = false,
-					['bar5_fade_instance'] = false,
-					['bar5_fade_hover'] = true,
-					['bar5_fade_combat'] = false,
-					['bar5_fade_target'] = false,
+			['bar4'] = false,
+			['bar5'] = false,
 			['pet_bar'] = true,
-				['pet_bar_fade'] = false,
-					['pet_bar_fade_in_alpha'] = 1,
-					['pet_bar_fade_out_alpha'] = 0,
-					['pet_bar_fade_arena'] = false,
-					['pet_bar_fade_instance'] = false,
-					['pet_bar_fade_hover'] = true,
-					['pet_bar_fade_combat'] = false,
-					['pet_bar_fade_target'] = false,
-			['stance_bar'] = true,
+			['stance_bar'] = false,
+			['leave_vehicle_bar'] = true,
 
 			['bind_type'] = 1,
 	},

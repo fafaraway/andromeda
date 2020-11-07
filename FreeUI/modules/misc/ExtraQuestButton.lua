@@ -13,6 +13,7 @@ local GetBindingKey, GetBindingText, GetQuestLogSpecialItemInfo, QuestHasPOIInfo
 local C_Timer_NewTicker = C_Timer.NewTicker
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_QuestLog_GetInfo = C_QuestLog.GetInfo
+local C_QuestLog_IsOnMap = C_QuestLog.IsOnMap
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local C_QuestLog_GetNumQuestWatches = C_QuestLog.GetNumQuestWatches
@@ -23,6 +24,7 @@ local C_QuestLog_GetNumWorldQuestWatches = C_QuestLog.GetNumWorldQuestWatches
 local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
 local C_QuestLog_GetQuestIDForWorldQuestWatchIndex = C_QuestLog.GetQuestIDForWorldQuestWatchIndex
 local MAX_DISTANCE_YARDS = 1e5
+local onlyCurrentZone = true
 
 -- Warlords of Draenor intro quest items which inspired this addon
 local blacklist = {
@@ -124,6 +126,7 @@ local onAttributeChanged = [[
 		end
 	elseif name == 'state-visible' then
 		if value == 'show' then
+			self:Show()
 			self:CallMethod('Update')
 		else
 			self:Hide()
@@ -402,6 +405,10 @@ local function GetQuestDistanceWithItem(questID)
 	end
 end
 
+local function IsQuestOnMap(questID)
+	return not onlyCurrentZone or C_QuestLog_IsOnMap(questID)
+end
+
 local function GetClosestQuestItem()
 	local closestQuestItemLink
 	local closestDistance = MAX_DISTANCE_YARDS
@@ -410,7 +417,7 @@ local function GetClosestQuestItem()
 		-- this only tracks supertracked worldquests,
 		-- e.g. stuff the player has shift-clicked on the map
 		local questID = C_QuestLog_GetQuestIDForWorldQuestWatchIndex(index)
-		if questID then
+		if questID and IsQuestOnMap(questID) then
 			local distance, itemLink = GetQuestDistanceWithItem(questID)
 			if distance and distance <= closestDistance then
 				closestDistance = distance
@@ -422,7 +429,7 @@ local function GetClosestQuestItem()
 	if not closestQuestItemLink then
 		for index = 1, C_QuestLog_GetNumQuestWatches() do
 			local questID = C_QuestLog_GetQuestIDForQuestWatchIndex(index)
-			if questID and QuestHasPOIInfo(questID) then
+			if questID and QuestHasPOIInfo(questID) and IsQuestOnMap(questID) then
 				local distance, itemLink = GetQuestDistanceWithItem(questID)
 				if distance and distance <= closestDistance then
 					closestDistance = distance
@@ -436,7 +443,7 @@ local function GetClosestQuestItem()
 		for index = 1, C_QuestLog_GetNumQuestLogEntries() do
 			local info = C_QuestLog_GetInfo(index)
 			local questID = info.questID
-			if info and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
+			if info and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) and IsQuestOnMap(questID) then
 				local distance, itemLink = GetQuestDistanceWithItem(questID)
 				if distance and distance <= closestDistance then
 					closestDistance = distance
@@ -449,16 +456,12 @@ local function GetClosestQuestItem()
 	return closestQuestItemLink
 end
 
-function ExtraQuestButton:GetItemLink()
-	return self.itemLink
-end
-
 function ExtraQuestButton:Update()
 	if HasExtraActionBar() or self.locked then return end
 
 	local itemLink = GetClosestQuestItem()
 	if itemLink then
-		if itemLink ~= self:GetItemLink() then
+		if itemLink ~= self.itemLink then
 			self:SetItem(itemLink)
 		end
 	elseif self:IsShown() then

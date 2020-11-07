@@ -94,6 +94,18 @@ local function CreateGearButton(self)
 	return bu
 end
 
+function GUI:CreateGear(name)
+	local bu = CreateFrame("Button", name, self)
+	bu:SetSize(20, 20)
+	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
+	bu.Icon:SetAllPoints()
+	bu.Icon:SetTexture(C.Assets.gear_tex)
+	bu.Icon:SetVertexColor(.6, .6, .6)
+	bu:SetHighlightTexture(C.Assets.gear_tex)
+
+	return bu
+end
+
 local function UpdateSubOptions(self, checked)
 	local tR, tG, tB
 	local bR, bG, bB, bA
@@ -237,7 +249,7 @@ local function CreateTab(parent, i, name)
 	tab.icon:SetTexture(iconsList[i])
 	F.ReskinIcon(tab.icon)
 
-	tab.text = F.CreateFS(tab, C.Assets.Fonts.Regular, 13, nil, name, nil, 'THICK')
+	tab.text = F.CreateFS(tab, C.Assets.Fonts.Regular, 13, 'OUTLINE', name, nil, true)
 	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 8, 0)
 
 	tab:HookScript('OnClick', tabOnClick)
@@ -247,7 +259,19 @@ local function CreateTab(parent, i, name)
 	return tab
 end
 
-GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
+
+
+local function ItemFilter()
+	GUI:ItemFilter(guiPage[9])
+end
+
+local function ActionBarFader()
+	GUI:ActionBarFader(guiPage[6])
+end
+
+
+
+GUI.OptionsList = { -- type, key, value, name, horizon
 	[1] = { -- appearance
 		{1, 'ACCOUNT', 'cursor_trail', L.GUI.APPEARANCE.CURSOR_TRAIL},
 		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER, true, nil, nil, L.GUI.APPEARANCE.SHADOW_BORDER_TIP},
@@ -262,14 +286,24 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{3, 'ACCOUNT', 'ui_scale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP},
 	},
 	[2] = { -- notification
-
-		{},
-
+		{1, 'notification', 'enable', L.GUI.NOTIFICATION.ENABLE},
+		{1, 'notification', 'bag_full', L.GUI.NOTIFICATION.BAG_FULL},
+		{1, 'notification', 'new_mail', L.GUI.NOTIFICATION.NEW_MAIL, true},
+		{1, 'notification', 'rare_found', L.GUI.NOTIFICATION.RARE_FOUND, nil, nil, nil, L.GUI.NOTIFICATION.RARE_FOUND_TIP},
+		{1, 'notification', 'version_check', L.GUI.NOTIFICATION.VERSION_CHECK, true},
 	},
-	[3] = {
-
-		{},--blank
-
+	[3] = { -- infobar
+		{1, 'infobar', 'enable', L.GUI.INFOBAR.ENABLE},
+		{1, 'infobar', 'anchor_top', L.GUI.INFOBAR.ANCHOR_TOP},
+		{1, 'infobar', 'mouseover', L.GUI.INFOBAR.MOUSEOVER, true},
+		{1, 'infobar', 'stats', L.GUI.INFOBAR.STATS},
+		{1, 'infobar', 'spec', L.GUI.INFOBAR.SPEC, true},
+		{1, 'infobar', 'durability', L.GUI.INFOBAR.DURABILITY},
+		{1, 'infobar', 'guild', L.GUI.INFOBAR.GUILD, true},
+		{1, 'infobar', 'friends', L.GUI.INFOBAR.FRIENDS},
+		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true},
+		{},
+		{3, 'infobar', 'bar_height', L.GUI.INFOBAR.BAR_HEIGHT, nil, {10, 30, 1}},
 	},
 	[4] = {
 
@@ -290,10 +324,27 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{},
 		{1, 'aura', 'reminder', L.GUI.AURA.REMINDER, nil, nil, nil, L.GUI.AURA.REMINDER_TIP},
 	},
-	[6] = {
-
-		{},--blank
-
+	[6] = { -- actionbar
+		{1, 'actionbar', 'enable', L.GUI.ACTIONBAR.ENABLE, nil, nil, nil, L.GUI.ACTIONBAR.ENABLE_TIP},
+		{1, 'actionbar', 'button_hotkey', L.GUI.ACTIONBAR.BUTTON_HOTKEY},
+		{1, 'actionbar', 'button_macro_name', L.GUI.ACTIONBAR.BUTTON_MACRO_NAME, true},
+		{1, 'actionbar', 'button_count', L.GUI.ACTIONBAR.BUTTON_COUNT},
+		{1, 'actionbar', 'button_class_color', L.GUI.ACTIONBAR.BUTTON_CLASS_COLOR, true},
+		{1, 'actionbar', 'fade', L.GUI.ACTIONBAR.FADE, nil, ActionBarFader, nil, L.GUI.ACTIONBAR.FADE_TIP},
+		{},
+		{1, 'actionbar', 'bar1', L.GUI.ACTIONBAR.BAR1},
+		{1, 'actionbar', 'bar2', L.GUI.ACTIONBAR.BAR2, true},
+		{1, 'actionbar', 'bar3', L.GUI.ACTIONBAR.BAR3},
+		{1, 'actionbar', 'bar3_divide', L.GUI.ACTIONBAR.BAR3_DIVIDE, true},
+		{1, 'actionbar', 'bar4', L.GUI.ACTIONBAR.BAR4},
+		{1, 'actionbar', 'bar5', L.GUI.ACTIONBAR.BAR5, true},
+		{1, 'actionbar', 'pet_bar', L.GUI.ACTIONBAR.PET_BAR},
+		{1, 'actionbar', 'stance_bar', L.GUI.ACTIONBAR.STANCE_BAR, true},
+		{1, 'actionbar', 'leave_vehicle_bar', L.GUI.ACTIONBAR.LEAVE_VEHICLE_BAR},
+		{},
+		{3, 'actionbar', 'button_size_small', L.GUI.ACTIONBAR.BUTTON_SIZE_SMALL, nil, {10, 40, 1}},
+		{3, 'actionbar', 'button_size_normal', L.GUI.ACTIONBAR.BUTTON_SIZE_NORMAL, true, {10, 40, 1}},
+		{3, 'actionbar', 'button_size_big', L.GUI.ACTIONBAR.BUTTON_SIZE_BIG, nil, {10, 40, 1}},
 	},
 	[7] = { -- combat
 		{1, 'combat', 'enable', L.GUI.COMBAT.ENABLE, nil, nil, nil, L.GUI.COMBAT.ENABLE_TIP},
@@ -318,10 +369,22 @@ GUI.OptionsList = { -- type, key, value, name, horizon, doubleline
 		{1, 'announcement', 'combat_resurrection', L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION, nil, nil, nil, L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION_TIP},
 		{1, 'announcement', 'utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP},
 	},
-	[9] = {
+	[9] = { -- inventory
+		{1, 'inventory', 'enable', L.GUI.INVENTORY.ENABLE, nil, nil, nil, L.GUI.INVENTORY.ENABLE_TIP},
+		{1, 'inventory', 'new_item_flash', L.GUI.INVENTORY.NEW_ITEM_FLASH, nil, nil, nil, L.GUI.INVENTORY.NEW_ITEM_FLASH_TIP},
+		{1, 'inventory', 'combine_free_slots', L.GUI.INVENTORY.COMBINE_FREE_SLOTS, true, nil, GUI.UpdateItemFilterStatus, L.GUI.INVENTORY.COMBINE_FREE_SLOTS_TIP},
+		{1, 'inventory', 'bind_type', L.GUI.INVENTORY.BIND_TYPE, nil, nil, GUI.UpdateItemFilterStatus, L.GUI.INVENTORY.BIND_TYPE_TIP},
+		{1, 'inventory', 'item_level', L.GUI.INVENTORY.ITEM_LEVEL, true, nil, GUI.UpdateItemFilterStatus},
 
-		{},--blank
-
+		{1, 'inventory', 'item_filter', L.GUI.INVENTORY.ITEM_FILTER, nil, ItemFilter, GUI.UpdateItemFilterStatus, L.GUI.INVENTORY.ITEM_FILTER_TIP},
+		{1, 'inventory', 'special_color', L.GUI.INVENTORY.SPECIAL_COLOR, true, nil, GUI.UpdateItemFilterStatus, L.GUI.INVENTORY.SPECIAL_COLOR_TIP},
+		{},
+		{3, 'inventory', 'slot_size', L.GUI.INVENTORY.SLOT_SIZE, nil, {20, 60, 1}},
+		{3, 'inventory', 'spacing', L.GUI.INVENTORY.SPACING, true, {3, 10, 1}},
+		{3, 'inventory', 'bag_columns', L.GUI.INVENTORY.BAG_COLUMNS, nil, {8, 20, 1}},
+		{3, 'inventory', 'bank_columns', L.GUI.INVENTORY.BANK_COLUMNS, true, {8, 20, 1}},
+		{3, 'inventory', 'item_level_to_show', L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW, nil, {1, 200, 1}, nil, L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW_TIP},
+		{4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, true, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}},
 	},
 	[10] = {
 
@@ -378,14 +441,14 @@ local function CreateOption(i)
 				cb:SetPoint('TOPLEFT', 20, -offset)
 				offset = offset + 35
 			end
-			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, 'THICK', 'LEFT', 24, 0)
+			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, 'OUTLINE', name, nil, true, 'LEFT', 22, 0)
 			cb:SetChecked(SaveValue(key, value))
 			cb:SetScript('OnClick', function()
 				SaveValue(key, value, cb:GetChecked())
 				if callback then callback() end
 			end)
 			if data and type(data) == 'function' then
-				local bu = CreateGearButton(parent)
+				local bu = GUI.CreateGear(parent)
 				bu:SetPoint('LEFT', cb.name, 'RIGHT', -2, 1)
 				bu:SetScript('OnClick', data)
 			end
@@ -479,7 +542,7 @@ end
 local function CreateGUI()
 	if FreeUI_GUI then FreeUI_GUI:Show() return end
 
-	local guiFrame = CreateFrame('Frame', 'FreeUI_GUI', UIParent, 'BackdropTemplate')
+	local guiFrame = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
 	tinsert(_G.UISpecialFrames, 'FreeUI_GUI')
 	guiFrame:SetSize(600, 640)
 	guiFrame:SetPoint('CENTER')
@@ -592,39 +655,7 @@ function F.ToggleGUI()
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
 end
 
-function GUI:CreateScroll(parent, width, height, text)
-	local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
-	scroll:SetSize(width, height)
-	scroll:SetPoint('BOTTOMLEFT', 10, 10)
-	F.CreateBDFrame(scroll, .35)
-	if text then
-		F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, nil, text, nil, false, 'TOPLEFT', 5, 20)
-	end
-	scroll.child = CreateFrame('Frame', nil, scroll)
-	scroll.child:SetSize(width, 1)
-	scroll:SetScrollChild(scroll.child)
-	F.ReskinScroll(scroll.ScrollBar)
 
-	return scroll
-end
-
-function GUI:CreateBarWidgets(parent, texture)
-	local icon = CreateFrame('Frame', nil, parent)
-	icon:SetSize(16, 16)
-	icon:SetPoint('LEFT', 5, 0)
-	F.PixelIcon(icon, texture, true)
-
-	local close = CreateFrame('Button', nil, parent)
-	close:SetSize(16, 16)
-	close:SetPoint('RIGHT', -5, 0)
-	close.Icon = close:CreateTexture(nil, 'ARTWORK')
-	close.Icon:SetAllPoints()
-	close.Icon:SetTexture(C.Assets.close_tex)
-	close.Icon:SetVertexColor(1, 0, 0)
-	close:SetHighlightTexture(close.Icon:GetTexture())
-
-	return icon, close
-end
 
 --[[ -- Subcategory
 function GUI:AddSubCategory(parent, name)

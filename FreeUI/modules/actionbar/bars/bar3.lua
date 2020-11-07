@@ -8,11 +8,18 @@ local function SetFrameSize(frame, size, num)
 	size = size or frame.buttonSize
 	num = num or frame.numButtons
 
-	frame:SetWidth(18*size + 17*margin + 2*padding)
-	frame:SetHeight(2*size + margin + 2*padding)
+	local divide = C.DB.actionbar.bar3_divide
 
-	local button = _G['MultiBarBottomRightButton7']
-	button:SetPoint('TOPRIGHT', frame, -2*(size+margin) - padding, -padding)
+	if divide then
+		frame:SetWidth(18*size + 17*margin + 2*padding)
+		frame:SetHeight(2*size + margin + 2*padding)
+
+		local button = _G["MultiBarBottomRightButton7"]
+		button:SetPoint("TOPRIGHT", frame, -2*(size+margin) - padding, -padding)
+	else
+		frame:SetWidth(num*size + (num-1)*margin + 2*padding)
+		frame:SetHeight(size + 2*padding)
+	end
 
 	if not frame.mover then
 		frame.mover = F.Mover(frame, SHOW_MULTIBAR2_TEXT, 'Bar3', frame.Pos)
@@ -33,7 +40,11 @@ function ACTIONBAR:CreateBar3()
 	local buttonList = {}
 
 	local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', UIParent, 'SecureHandlerStateTemplate')
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
+	if C.DB.actionbar.bar3_divide then
+		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
+	else
+		frame.Pos = {"BOTTOM", _G.FreeUI_ActionBar2, "TOP", 0, -margin}
+	end
 
 	MultiBarBottomRight:SetParent(frame)
 	MultiBarBottomRight:EnableMouse(false)
@@ -65,21 +76,10 @@ function ACTIONBAR:CreateBar3()
 	frame.buttonList = buttonList
 	SetFrameSize(frame, size, num)
 
-	frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
-	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
-
-	if C.DB.actionbar.bar3_fade then
-		frame.fader = {
-			enable = C.DB.actionbar.bar3_fade,
-			fadeInAlpha = C.DB.actionbar.bar3_fade_in_alpha,
-			fadeOutAlpha = C.DB.actionbar.bar3_fade_out_alpha,
-			arena = C.DB.actionbar.bar3_fade_arena,
-			instance = C.DB.actionbar.bar3_fade_instance,
-			combat = C.DB.actionbar.bar3_fade_combat,
-			target = C.DB.actionbar.bar3_fade_target,
-			hover = C.DB.actionbar.bar3_fade_hover,
-		}
-
-		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
+	if C.DB.actionbar.bar3 then
+		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
+	else
+		frame.frameVisibility = 'hide'
 	end
+	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end

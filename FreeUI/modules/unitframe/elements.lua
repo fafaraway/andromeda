@@ -803,8 +803,8 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu.icon:SetAllPoints()
 	bu.icon:SetTexCoord(unpack(C.TexCoord))
 
-	bu.count = F.CreateFS(bu, C.Assets.Fonts.Cooldown, 11, nil, '', nil, true, 'TOPRIGHT', 2, 4)
-	bu.timer = F.CreateFS(bu, C.Assets.Fonts.Cooldown, 11, nil, '', nil, true, 'BOTTOMLEFT', 2, -4)
+	bu.count = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true, 'TOPRIGHT', 2, 4)
+	bu.timer = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true, 'BOTTOMLEFT', 2, -4)
 
 	bu.ShowDispellableDebuff = true
 	bu.ShowDebuffBorder = true

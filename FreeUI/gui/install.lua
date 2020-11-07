@@ -143,14 +143,14 @@ local function SetupActionbars()
 	SetCVar('lockActionBars', 1)
 	SetCVar('alwaysShowActionBars', 1)
 
-	-- SetActionBarToggles(1, 1, 1, 1, 1)
+	SetActionBarToggles(1, 1, 1, 1, 1)
 
-	-- MultiActionBar_Update()
+	MultiActionBar_Update()
 
-	-- _G.MultiBarBottomLeft:SetShown(true)
-	-- _G.MultiBarRight:SetShown(true)
-	-- _G.MultiBarLeft:SetShown(true)
-	-- _G.MultiBarBottomRight:SetShown(true)
+	_G.MultiBarBottomLeft:SetShown(true)
+	_G.MultiBarRight:SetShown(true)
+	_G.MultiBarLeft:SetShown(true)
+	_G.MultiBarBottomRight:SetShown(true)
 end
 
 local function SetupChatFrame()

@@ -30,6 +30,7 @@ function ACTIONBAR:CreateExtrabar()
 	frame.frameVisibility = '[extrabar] show; hide'
 	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
+
 	-- ZoneAbility
 	local zoneFrame = CreateFrame('Frame', 'FreeUI_ActionBarZone', UIParent)
 	zoneFrame:SetWidth(size + 2*padding)

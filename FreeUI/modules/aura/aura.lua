@@ -200,7 +200,7 @@ function AURA:UpdateHeader(header)
 	header:SetAttribute('wrapYOffset', -(cfg.size + C.DB['aura']['offset']))
 	header:SetAttribute('template', format('FreeUIAuraTemplate%d', cfg.size))
 
-	--local fontSize = floor(cfg.size/30*12 + .5)
+	local fontSize = floor(cfg.size/30*10 + .5)
 	local index = 1
 	local child = select(index, header:GetChildren())
 	while child do
@@ -208,8 +208,8 @@ function AURA:UpdateHeader(header)
 			child:SetSize(cfg.size, cfg.size)
 		end
 
-		-- child.count:SetFont(C.Assets.Fonts.Cooldown, fontSize, 'OUTLINE')
-		-- child.timer:SetFont(C.Assets.Fonts.Cooldown, fontSize, 'OUTLINE')
+		child.count:SetFont(C.Assets.Fonts.Roadway, fontSize, 'OUTLINE')
+		child.timer:SetFont(C.Assets.Fonts.Roadway, fontSize, 'OUTLINE')
 
 		--Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
 		if index > (cfg.maxWraps * cfg.wrapAfter) and child:IsShown() then
