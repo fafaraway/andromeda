@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
 
-function ACTIONBAR:CreateCustomBar(anchor)
+function ACTIONBAR:CustomBar(anchor)
 	local padding = C.DB.actionbar.custom_bar_padding
 	local margin = C.DB.actionbar.custom_bar_margin
 	local size = C.DB.actionbar.custom_bar_button_size
@@ -14,7 +14,7 @@ function ACTIONBAR:CreateCustomBar(anchor)
 	frame:SetWidth(num*size + (num-1)*margin + 2*padding)
 	frame:SetHeight(size + 2*padding)
 	frame:SetPoint(unpack(anchor))
-	frame.mover = F.Mover(frame, L['ACTIONBAR_CUSTOM_BAR'], 'CustomBar', anchor)
+	frame.mover = F.Mover(frame, L.GUI.MOVER.CUSTOM_BAR, 'CustomBar', anchor)
 	frame.buttons = {}
 
 	RegisterStateDriver(frame, 'visibility', '[petbattle] hide; show')
@@ -31,21 +31,6 @@ function ACTIONBAR:CreateCustomBar(anchor)
 		frame.buttons[i] = button
 		tinsert(buttonList, button)
 		tinsert(ACTIONBAR.buttons, button)
-	end
-
-	if C.DB.actionbar.custom_bar and C.DB.actionbar.custom_bar_fade then
-		frame.fader = {
-			enable = C.DB.actionbar.custom_bar_fade,
-			fadeInAlpha = C.DB.actionbar.custom_bar_fade_in_alpha,
-			fadeOutAlpha = C.DB.actionbar.custom_bar_fade_out_alpha,
-			arena = C.DB.actionbar.custom_bar_fade_arena,
-			instance = C.DB.actionbar.custom_bar_fade_instance,
-			combat = C.DB.actionbar.custom_bar_fade_combat,
-			target = C.DB.actionbar.custom_bar_fade_target,
-			hover = C.DB.actionbar.custom_bar_fade_hover,
-		}
-
-		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
 	end
 
 	ACTIONBAR:UpdateCustomBar()
@@ -88,8 +73,8 @@ function ACTIONBAR:UpdateCustomBar()
 	frame.mover:SetSize(frame:GetSize())
 end
 
-function ACTIONBAR:CustomBar()
-	if C.DB.inventory.custom_bar then
-		ACTIONBAR:CreateCustomBar({'BOTTOM', UIParent, 'BOTTOM', 0, 140})
+function ACTIONBAR:CreateCustomBar()
+	if C.DB.actionbar.custom_bar then
+		ACTIONBAR:CustomBar({'BOTTOM', UIParent, 'BOTTOM', 0, 140})
 	end
 end

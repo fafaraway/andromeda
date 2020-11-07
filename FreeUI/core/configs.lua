@@ -915,20 +915,12 @@ C.CharacterSettings = {
 			['condition_pvp'] = true,
 			['condition_vehicle'] = true,
 
-			['custom_bar'] = true,
+			['custom_bar'] = false,
 				['custom_bar_margin'] = 3,
 				['custom_bar_padding'] = 3,
 				['custom_bar_button_size'] = 30,
 				['custom_bar_button_number'] = 12,
-				['custom_bar_button_per_row'] = 12,
-				['custom_bar_fade'] = true,
-					['custom_bar_fade_in_alpha'] = 1,
-					['custom_bar_fade_out_alpha'] = 0,
-					['custom_bar_fade_arena'] = true,
-					['custom_bar_fade_instance'] = true,
-					['custom_bar_fade_hover'] = true,
-					['custom_bar_fade_combat'] = true,
-					['custom_bar_fade_target'] = true,
+				['custom_bar_button_per_row'] = 6,
 
 			['bar1'] = true,
 			['bar2'] = true,
@@ -939,8 +931,6 @@ C.CharacterSettings = {
 			['pet_bar'] = true,
 			['stance_bar'] = false,
 			['leave_vehicle_bar'] = true,
-
-			['bind_type'] = 1,
 	},
 
 	['cooldown'] = {
