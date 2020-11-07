@@ -41,11 +41,11 @@ end
 function ACTIONBAR:FadeParent_OnEvent()
 	local inInstance, instanceType = IsInInstance()
 
-	if (UnitAffectingCombat('player') and C.DB.actionbar.fade_in_combating)
-	or ((UnitExists('target') or UnitExists('focus')) and C.DB.actionbar.fade_in_targeting)
-	or ((instanceType == 'pvp' or instanceType == 'arena') and C.DB.actionbar.fade_in_pvp)
-	or ((instanceType == 'party' or instanceType == 'raid') and C.DB.actionbar.fade_in_dungeon)
-	or (UnitHasVehicleUI('player') and C.DB.actionbar.fade_in_vehicle) then
+	if (UnitAffectingCombat('player') and C.DB.actionbar.condition_combating)
+	or ((UnitExists('target') or UnitExists('focus')) and C.DB.actionbar.condition_targeting)
+	or ((instanceType == 'pvp' or instanceType == 'arena') and C.DB.actionbar.condition_pvp)
+	or ((instanceType == 'party' or instanceType == 'raid') and C.DB.actionbar.condition_dungeon)
+	or (UnitHasVehicleUI('player') and C.DB.actionbar.condition_vehicle) then
 		self.mouseLock = true
 		F:UIFrameFadeIn(self, ACTIONBAR.fadeInDuration, self:GetAlpha(), ACTIONBAR.fadeInAlpha)
 		ACTIONBAR:FadeBlings(ACTIONBAR.fadeInAlpha)
@@ -72,7 +72,7 @@ function ACTIONBAR:HookActionBar()
 	end
 end
 
-function ACTIONBAR:CreateFader()
+function ACTIONBAR:UpdateActionBarFade()
 	if not C.DB.actionbar.fade then return end
 
 	ACTIONBAR.fadeOutAlpha = C.DB.actionbar.fade_out_alpha or 0
@@ -84,22 +84,22 @@ function ACTIONBAR:CreateFader()
 	ACTIONBAR.fadeParent:SetAlpha(ACTIONBAR.fadeOutAlpha)
 	ACTIONBAR.fadeParent:SetScript('OnEvent', ACTIONBAR.FadeParent_OnEvent)
 
-	if C.DB.actionbar.fade_in_combating then
+	if C.DB.actionbar.condition_combating then
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_REGEN_DISABLED')
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_REGEN_ENABLED')
 	end
 
-	if C.DB.actionbar.fade_in_targeting then
+	if C.DB.actionbar.condition_targeting then
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_TARGET_CHANGED')
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_FOCUS_CHANGED')
 	end
 
-	if C.DB.actionbar.fade_in_dungeon or C.DB.actionbar.fade_in_pvp then
+	if C.DB.actionbar.condition_dungeon or C.DB.actionbar.condition_pvp then
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_ENTERING_WORLD')
 		ACTIONBAR.fadeParent:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 	end
 
-	if C.DB.actionbar.fade_in_vehicle then
+	if C.DB.actionbar.condition_vehicle then
 		ACTIONBAR.fadeParent:RegisterEvent('UNIT_ENTERED_VEHICLE')
 		ACTIONBAR.fadeParent:RegisterEvent('UNIT_EXITED_VEHICLE')
 		ACTIONBAR.fadeParent:RegisterEvent('VEHICLE_UPDATE')

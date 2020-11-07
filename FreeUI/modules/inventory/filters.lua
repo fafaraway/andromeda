@@ -44,13 +44,17 @@ local function isAzeriteArmor(item)
 	return C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID(item.link) and not (C.DB['inventory']['item_filter_gear_set'] and item.isInSet)
 end
 
+function INVENTORY:IsArtifactRelic(item)
+	return item.classID == LE_ITEM_CLASS_GEM and item.subClassID == LE_ITEM_GEM_ARTIFACTRELIC
+end
+
 local function isItemEquipment(item)
 	if not C.DB['inventory']['item_filter'] then return end
 	if not C.DB['inventory']['item_filter_equipment'] then return end
 	if C.DB['inventory']['item_filter_gear_set'] then
 		return item.isInSet
 	else
-		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
+		return item.level and item.rarity > LE_ITEM_QUALITY_COMMON and (INVENTORY:IsArtifactRelic(item) or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
 	end
 end
 

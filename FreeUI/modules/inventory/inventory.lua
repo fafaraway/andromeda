@@ -932,8 +932,8 @@ function INVENTORY:OnLogin()
 
 		self.Favourite = parentFrame:CreateTexture(nil, 'ARTWORK')
 		self.Favourite:SetAtlas('collections-icon-favorites')
-		self.Favourite:SetSize(30, 30)
-		self.Favourite:SetPoint('TOPLEFT', -12, 9)
+		self.Favourite:SetSize(24, 24)
+		self.Favourite:SetPoint('TOPLEFT', -4, 2)
 
 		self.Quest = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '!', nil, true, 'TOPLEFT', 2, -2)
 		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
@@ -1146,7 +1146,7 @@ function INVENTORY:OnLogin()
 			label = L['INVENTORY_AZERITEARMOR']
 		elseif strmatch(name, 'Equipment$') then
 			if itemSetFilter then
-				label = L['INVENTORY_EQUIPEMENTSET']
+				label = L['INVENTORY_EQUIPEMENT_SET']
 			else
 				label = BAG_FILTER_EQUIPMENT
 			end
@@ -1166,7 +1166,7 @@ function INVENTORY:OnLogin()
 			label = AUCTION_CATEGORY_TRADE_GOODS
 		end
 		if label then
-			self.cat = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
+			self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
 			return
 		end
 

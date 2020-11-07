@@ -91,4 +91,10 @@ function ACTIONBAR:RemoveBlizzArt()
 	F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', updateTokenVisibility)
 	-- Fake ExtraActionButton
 	F:RegisterEvent('ADDON_LOADED', hideFakeExtraBar)
+
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomLeft)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomRight)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelRight)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelRightTwo)
+	F.HideOption(_G.InterfaceOptionsActionBarsPanelStackRightBars)
 end

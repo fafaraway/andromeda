@@ -267,9 +267,6 @@ end
 --[[ Inventory ]]
 
 do
-	L['INVENTORY_NAME'] = '背包'
-	L['INVENTORY_DESC'] = '设置背包的外观和功能'
-
 	L['INVENTORY_NOTIFICATION_HEADER'] = '背包'
 	L['INVENTORY_SORT'] = '整理背包'
 	L['INVENTORY_ANCHOR_RESET'] = '重置窗口位置'
@@ -277,11 +274,10 @@ do
 	L['INVENTORY_FREE_SLOTS'] = '剩余背包空间'
 	L['INVENTORY_SORT_DISABLED'] = '背包整理已被禁用'
 	L['INVENTORY_AZERITEARMOR'] = '艾泽里特护甲'
-	L['INVENTORY_EQUIPEMENTSET'] = '装备配置方案'
 	L['INVENTORY_QUICK_DELETE_ENABLED'] = '|n快速摧毁功能已启用。|n你可以按住 CTRL+ALT 键，直接点击摧毁背包中低于蓝色精良品质的物品。'
 	L['INVENTORY_QUICK_DELETE'] = '快速摧毁'
-	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|n偏好选择功能已启用。|n你现在可以点击标记物品。|n若启用了物品分类存放，还可以将其添加到偏好选择分类中。|n此操作对垃圾物品无效。'
-	L['INVENTORY_PICK_FAVOURITE'] = '偏好选择'
+	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|n收藏功能已启用。|n你现在可以点击收藏物品。|n若启用了物品分类存放，还可以将其添加到收藏分类中。|n此操作对垃圾物品无效。'
+	L['INVENTORY_PICK_FAVOURITE'] = '收藏'
 	L['INVENTORY_AUTO_REPAIR'] = '自动修理'
 	L['INVENTORY_AUTO_REPAIR_TIP'] = '|n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
 	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
@@ -305,6 +301,7 @@ do
 	L['INVENTORY_CHARACTER'] = '服务器角色'
 	L['INVENTORY_GOLD_TOTAL'] = '总计'
 	L['INVENTORY_AUTO_DEPOSIT'] = '|n左键点击存放材料，右键点击切换存放模式。|n当按钮高亮时，每当打开银行，将自动存放背包中的材料。'
+	L["INVENTORY_EQUIPEMENT_SET"] = "装备配置方案"
 end
 
 
@@ -638,6 +635,36 @@ L.GUI = {
 
 	['ACTIONBAR'] = {
 		['NAME'] = '动作条',
+		['ENABLE'] = '启用动作条模块',
+		['ENABLE_TIP'] = '调整动作条相关的功能和样式。',
+		['BUTTON_HOTKEY'] = '显示绑定快捷键',
+		['BUTTON_MACRO_NAME'] = '显示宏名称',
+		['BUTTON_COUNT'] = '物品计数',
+		['BUTTON_CLASS_COLOR'] = '按键边框按照职业染色',
+		['FADE'] = '使用动态显隐',
+		['FADE_TIP'] = '动作条根据相应条件渐隐渐显。',
+		['BAR1'] = '启用第一条动作条',
+		['BAR2'] = '启用第二条动作条',
+		['BAR3'] = '启用第三条动作条',
+		['BAR3_DIVIDE'] = '拆分第三条动作条',
+		['BAR4'] = '启用第四条动作条',
+		['BAR5'] = '启用第五条动作条',
+		['PET_BAR'] = '启用宠物动作条',
+		['STANCE_BAR'] = '启用姿态动作条',
+		['LEAVE_VEHICLE_BAR'] = '启用离开载具按钮',
+		['FADER_SETUP'] = '动作条显示设置',
+		['CONDITION_COMBATING'] = '战斗中显示',
+		['CONDITION_TARGETING'] = '有目标或焦点时显示',
+		['CONDITION_DUNGEON'] = '在副本中显示',
+		['CONDITION_PVP'] = '在战场或竞技场中显示',
+		['CONDITION_VEHICLE'] = '在载具中显示',
+		['FADE_OUT_ALPHA'] = '渐隐透明度',
+		['FADE_IN_ALPHA'] = '渐显透明度',
+		['FADE_OUT_DURATION'] = '渐隐动画速度',
+		['FADE_IN_DURATION'] = '渐显动画速度',
+		['BUTTON_SIZE_SMALL'] = '宠物动作条大小',
+		['BUTTON_SIZE_NORMAL'] = '动作条大小',
+		['BUTTON_SIZE_BIG'] = '姿态动作条动作条',
 	},
 
 	['COMBAT'] = {
@@ -700,6 +727,20 @@ L.GUI = {
 		['BANK_COLUMNS'] = '银行每行格子数量',
 		['ITEM_LEVEL_TO_SHOW'] = '装等显示阈值',
 		['ITEM_LEVEL_TO_SHOW_TIP'] = '低于这个阈值的装备将不显示装等。',
+		['SORT_MODE'] = '整理模式',
+		['SORT_TO_TOP'] = '正向',
+		['SORT_TO_BOTTOM'] = '反向',
+		['FILTER_SETUP'] = '背包物品分类设置',
+		['ITEM_FILTER_JUNK'] = '垃圾物品',
+		['ITEM_FILTER_CONSUMABLE'] = '消耗品',
+		['ITEM_FILTER_AZERITE'] = '艾泽里特护甲',
+		['ITEM_FILTER_EQUIPMENT'] = '装备',
+		['ITEM_FILTER_LEGENDARY'] = '传奇品质物品',
+		['ITEM_FILTER_MOUNT_PET'] = '坐骑与小宠物',
+		['ITEM_FILTER_FAVOURITE'] = '偏好物品',
+		['ITEM_FILTER_TRADE'] = '材料等杂货',
+		['ITEM_FILTER_QUEST'] = '任务相关物品',
+		['ITEM_FILTER_GEAR_SET'] = '装备配置方案代替装备',
 	},
 
 	['MAP'] = {

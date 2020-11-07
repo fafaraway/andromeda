@@ -76,6 +76,10 @@ function ACTIONBAR:CreateStancebar()
 	frame.buttonList = buttonList
 	SetFrameSize(frame, size, num)
 
-	frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
+	if C.DB.actionbar.stance_bar then
+		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
+	else
+		frame.frameVisibility = 'hide'
+	end
 	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end

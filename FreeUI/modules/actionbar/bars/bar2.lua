@@ -58,21 +58,10 @@ function ACTIONBAR:CreateBar2()
 	frame.buttonList = buttonList
 	SetFrameSize(frame, size, num)
 
-	frame.frameVisibility = "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show"
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
-
-	if C.DB.actionbar.bar2_fade then
-		frame.fader = {
-			enable = C.DB.actionbar.bar2_fade,
-			fadeInAlpha = C.DB.actionbar.bar2_fade_in_alpha,
-			fadeOutAlpha = C.DB.actionbar.bar2_fade_out_alpha,
-			arena = C.DB.actionbar.bar2_fade_arena,
-			instance = C.DB.actionbar.bar2_fade_instance,
-			combat = C.DB.actionbar.bar2_fade_combat,
-			target = C.DB.actionbar.bar2_fade_target,
-			hover = C.DB.actionbar.bar2_fade_hover,
-		}
-
-		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
+	if C.DB.actionbar.bar2 then
+		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
+	else
+		frame.frameVisibility = 'hide'
 	end
+	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 end

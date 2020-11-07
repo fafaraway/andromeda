@@ -88,25 +88,14 @@ function ACTIONBAR:CreateBar1()
 	frame.buttonList = buttonList
 	SetFrameSize(frame, size, num)
 
-	frame.frameVisibility = "[petbattle] hide; show"
 	--frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
-	RegisterStateDriver(frame, "visibility", frame.frameVisibility)
 
-	if C.DB.actionbar.bar1_fade then
-		frame.fader = {
-			enable = C.DB.actionbar.bar1_fade,
-			fadeInAlpha = C.DB.actionbar.bar1_fade_in_alpha,
-			fadeOutAlpha = C.DB.actionbar.bar1_fade_out_alpha,
-			arena = C.DB.actionbar.bar1_fade_arena,
-			instance = C.DB.actionbar.bar1_fade_instance,
-			combat = C.DB.actionbar.bar1_fade_combat,
-			target = C.DB.actionbar.bar1_fade_target,
-			hover = C.DB.actionbar.bar1_fade_hover,
-			vehicle = C.DB.actionbar.bar1_fade_vehicle,
-		}
-
-		ACTIONBAR.CreateButtonFrameFader(frame, buttonList, frame.fader)
+	if C.DB.actionbar.bar1 then
+		frame.frameVisibility = '[petbattle] hide; show'
+	else
+		frame.frameVisibility = 'hide'
 	end
+	RegisterStateDriver(frame, 'visibility', frame.frameVisibility)
 
 	local actionPage = "[bar:6]6;[bar:5]5;[bar:4]4;[bar:3]3;[bar:2]2;[overridebar]14;[shapeshift]13;[vehicleui]12;[possessbar]12;[bonusbar:5]11;[bonusbar:4]10;[bonusbar:3]9;[bonusbar:2]8;[bonusbar:1]7;1"
 	local buttonName = "ActionButton"
@@ -170,5 +159,5 @@ function ACTIONBAR:OnLogin()
 	ACTIONBAR:RemoveBlizzArt()
 	ACTIONBAR:RestyleButtons()
 	ACTIONBAR:UpdateAllScale()
-	ACTIONBAR:CreateFader()
+	ACTIONBAR:UpdateActionBarFade()
 end
