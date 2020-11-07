@@ -15,7 +15,7 @@ local errorText = _G.ERR_VENDOR_DOESNT_BUY
 local function stopSelling(tell)
 	stop = true
 	if sellCount > 0 and tell then
-		F.Print(C.BlueColor..L['INVENTORY_SELL_JUNK_EARN']..'|r ', GetMoneyString(sellCount))
+		F.Print(format(C.BlueColor..'%s|r %s', L['INVENTORY_SELL_JUNK_EARN'], GetMoneyString(sellCount)))
 		F:CreateNotification(L['INVENTORY_NOTIFICATION_HEADER'], C.BlueColor..L['INVENTORY_SELL_JUNK_EARN']..'|r: '..(GetMoneyString(sellCount)), nil, 'Interface\\ICONS\\INV_Misc_Coin_01')
 	end
 	sellCount = 0
@@ -76,7 +76,7 @@ function autoRepair(override)
 		else
 			if myMoney > repairAllCost then
 				RepairAllItems()
-				F.Print(format(C.BlueColor..'%s|r%s', L['INVENTORY_REPAIR_COST']..'|r ', GetMoneyString(repairAllCost)))
+				F.Print(format(C.BlueColor..'%s|r %s', L['INVENTORY_REPAIR_COST'], GetMoneyString(repairAllCost)))
 				F:CreateNotification(L['INVENTORY_NOTIFICATION_HEADER'], C.BlueColor..L['INVENTORY_REPAIR_COST']..'|r: '..(GetMoneyString(repairAllCost)), nil, 'Interface\\ICONS\\Ability_Repair')
 				return
 			else
