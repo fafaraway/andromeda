@@ -215,7 +215,7 @@ function COOLDOWN:CooldownPulse()
 
 	bg = F.SetBD(frame)
 	icon:SetTexCoord(unpack(C.TexCoord))
-	F.Mover(anchor, L['ACTIONBAR_MOVER_COOLDOWN'], 'CooldownPulse', {'CENTER', UIParent, 0, 100}, C.DB.cooldown.icon_size, C.DB.cooldown.icon_size)
+	F.Mover(anchor, L.GUI.MOVER.COOLDOWN_PULSE, 'CooldownPulse', {'CENTER', UIParent, 0, 100}, C.DB.cooldown.icon_size, C.DB.cooldown.icon_size)
 
 	frame:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
 	frame:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')

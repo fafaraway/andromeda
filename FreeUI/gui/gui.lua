@@ -269,6 +269,13 @@ local function ActionBarFader()
 	GUI:ActionBarFader(guiPage[6])
 end
 
+local function UpdateActionBarScale()
+	F.ACTIONBAR:UpdateAllScale()
+end
+
+local function UpdateCustomBar()
+	F.ACTIONBAR:UpdateCustomBar()
+end
 
 
 GUI.OptionsList = { -- type, key, value, name, horizon
@@ -331,6 +338,7 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{1, 'actionbar', 'button_count', L.GUI.ACTIONBAR.BUTTON_COUNT},
 		{1, 'actionbar', 'button_class_color', L.GUI.ACTIONBAR.BUTTON_CLASS_COLOR, true},
 		{1, 'actionbar', 'fade', L.GUI.ACTIONBAR.FADE, nil, ActionBarFader, nil, L.GUI.ACTIONBAR.FADE_TIP},
+		{3, 'actionbar', 'scale', L.GUI.ACTIONBAR.SCALE, nil, {.5, 2, .1}, UpdateActionBarScale},
 		{},
 		{1, 'actionbar', 'bar1', L.GUI.ACTIONBAR.BAR1},
 		{1, 'actionbar', 'bar2', L.GUI.ACTIONBAR.BAR2, true},
@@ -342,9 +350,11 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{1, 'actionbar', 'stance_bar', L.GUI.ACTIONBAR.STANCE_BAR, true},
 		{1, 'actionbar', 'leave_vehicle_bar', L.GUI.ACTIONBAR.LEAVE_VEHICLE_BAR},
 		{},
-		{3, 'actionbar', 'button_size_small', L.GUI.ACTIONBAR.BUTTON_SIZE_SMALL, nil, {10, 40, 1}},
-		{3, 'actionbar', 'button_size_normal', L.GUI.ACTIONBAR.BUTTON_SIZE_NORMAL, true, {10, 40, 1}},
-		{3, 'actionbar', 'button_size_big', L.GUI.ACTIONBAR.BUTTON_SIZE_BIG, nil, {10, 40, 1}},
+		{1, 'actionbar', 'custom_bar', L.GUI.ACTIONBAR.CUSTOM_BAR},
+		{3, 'actionbar', 'custom_bar_button_size', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_SIZE, nil, {10, 40, 1}, UpdateCustomBar},
+		{3, 'actionbar', 'custom_bar_button_number', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_NUMBER, true, {1, 12, 1}, UpdateCustomBar},
+		{3, 'actionbar', 'custom_bar_button_per_row', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_PER_ROW, nil, {1, 12, 1}, UpdateCustomBar},
+
 	},
 	[7] = { -- combat
 		{1, 'combat', 'enable', L.GUI.COMBAT.ENABLE, nil, nil, nil, L.GUI.COMBAT.ENABLE_TIP},

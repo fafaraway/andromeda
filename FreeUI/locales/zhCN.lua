@@ -183,30 +183,8 @@ end
 --[[ Actionbar ]]
 
 do
-	L['ACTIONBAR_NAME'] = '动作条'
-	L['ACTIONBAR_DESC'] = '设置动作条的外观和功能'
-
-	L['ACTIONBAR_MOVER_BAR1'] = 'Actionbar 1'
-	L['ACTIONBAR_MOVER_BAR2'] = 'Actionbar 2'
-	L['ACTIONBAR_MOVER_BAR3'] = 'Actionbar 3'
-	L['ACTIONBAR_MOVER_BAR4'] = 'Actionbar 4'
-	L['ACTIONBAR_MOVER_BAR5'] = 'Actionbar 5'
-	L['ACTIONBAR_MOVER_PET'] = 'Actionbar pet'
-	L['ACTIONBAR_MOVER_STANCE'] = 'Actionbar stance'
-	L['ACTIONBAR_MOVER_EXTRA'] = 'Actionbar extra'
-	L['ACTIONBAR_MOVER_VEHICLE'] = 'Actionbar vehicle'
-	L['ACTIONBAR_MOVER_COOLDOWN'] = '冷却图标'
-	L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
-	L['ACTIONBAR_KEY_INDEX'] = '序号'
-	L['ACTIONBAR_KEY_BINDING'] = '按键'
-	L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
-	L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
-	L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
-	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
 
 	L['ACTIONBAR_CUSTOM_BAR'] = '附加动作条'
-	L['ACTIONBAR_UNBIND_TIP'] = '按ESC或右键撤销按键设置'
-
 end
 
 
@@ -515,6 +493,8 @@ L.GUI = {
 		['PET_BAR'] = 'pet bar',
 		['STANCE_BAR'] = 'stance bar',
 		['LEAVE_VEHICLE_BAR'] = 'leave vehicle bar',
+		['CUSTOM_BAR'] = 'custom bar',
+		['COOLDOWN_PULSE'] = 'cooldown pulse',
 		['QUEST_BUTTON'] = 'quest button',
 
 		['OBJECTIVE_TRACKER'] = 'objective tracker'
@@ -637,6 +617,7 @@ L.GUI = {
 		['NAME'] = '动作条',
 		['ENABLE'] = '启用动作条模块',
 		['ENABLE_TIP'] = '调整动作条相关的功能和样式。',
+		['SCALE'] = '动作条缩放',
 		['BUTTON_HOTKEY'] = '显示绑定快捷键',
 		['BUTTON_MACRO_NAME'] = '显示宏名称',
 		['BUTTON_COUNT'] = '物品计数',
@@ -662,9 +643,10 @@ L.GUI = {
 		['FADE_IN_ALPHA'] = '渐显透明度',
 		['FADE_OUT_DURATION'] = '渐隐动画速度',
 		['FADE_IN_DURATION'] = '渐显动画速度',
-		['BUTTON_SIZE_SMALL'] = '宠物动作条大小',
-		['BUTTON_SIZE_NORMAL'] = '动作条大小',
-		['BUTTON_SIZE_BIG'] = '姿态动作条动作条',
+		['CUSTOM_BAR'] = '启用附加动作条',
+		['CUSTOM_BAR_BUTTON_SIZE'] = '附加动作条大小',
+		['CUSTOM_BAR_BUTTON_NUMBER'] = '最大显示数量',
+		['CUSTOM_BAR_BUTTON_PER_ROW'] = '每行显示数量',
 	},
 
 	['COMBAT'] = {
