@@ -288,7 +288,11 @@ loader:SetScript('OnEvent', function(self, _, addon)
 	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Gradient', C.Assets.grad_tex)
 	LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Flat', C.Assets.flat_tex)
 
-
+	LSM:Register(LSM.MediaType.SOUND, '!Free_1', C.AssetsPath..'sounds\\ding.ogg')
+	LSM:Register(LSM.MediaType.SOUND, '!Free_2', C.AssetsPath..'sounds\\proc.ogg')
+	LSM:Register(LSM.MediaType.SOUND, '!Free_3', C.AssetsPath..'sounds\\warning.ogg')
+	LSM:Register(LSM.MediaType.SOUND, '!Free_4', C.AssetsPath..'sounds\\execute.ogg')
+	LSM:Register(LSM.MediaType.SOUND, '!Free_5', C.AssetsPath..'sounds\\health.ogg')
 
 	self:SetScript('OnEvent', nil)
 	self:UnregisterAllEvents()

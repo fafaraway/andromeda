@@ -45,22 +45,22 @@ local function getMoneyString(number, full)
 	end
 end
 
-local function CheckBOA(link, arg1, arg2)
+local function CheckBoundStatus(itemLink, bagID, slotID, string)
 	local tip = F.ScanTip
 	tip:SetOwner(UIParent, 'ANCHOR_NONE')
-	if arg1 and type(arg1) == 'string' then
-		tip:SetInventoryItem(arg1, arg2)
-	elseif arg1 and type(arg1) == 'number' then
-		tip:SetBagItem(arg1, arg2)
+	if bagID and type(bagID) == 'string' then
+		tip:SetInventoryItem(bagID, slotID)
+	elseif bagID and type(bagID) == 'number' then
+		tip:SetBagItem(bagID, slotID)
 	else
-		tip:SetHyperlink(link)
+		tip:SetHyperlink(itemLink)
 	end
 
 	for i = 2, 5 do
 		local line = _G[tip:GetName()..'TextLeft'..i]
 		if line then
 			local text = line:GetText() or ''
-			local found = strfind(text, _G.ITEM_BNETACCOUNTBOUND) or strfind(text, ITEM_ACCOUNTBOUND) or strfind(text, ITEM_BIND_TO_BNETACCOUNT)
+			local found = strfind(text, string)
 			if found then
 				return true
 			end
@@ -1065,11 +1065,14 @@ function INVENTORY:OnLogin()
 		if C.DB.inventory.bind_type then
 			local itemLink = GetContainerItemLink(item.bagID, item.slotID)
 			if not itemLink then return end
+
+			local isBOA = CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BNETACCOUNTBOUND) or CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BIND_TO_BNETACCOUNT) or CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_ACCOUNTBOUND)
+			local isSoulBound = CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_SOULBOUND)
 			local _, _, itemRarity, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
 
-			if CheckBOA(item.link, item.bagID, item.slotID) or itemRarity == 7 or itemRarity == 8 then
+			if isBOA or itemRarity == 7 or itemRarity == 8 then
 				self.BindType:SetText('|cff00ccffBOA|r')
-			elseif bindType == 2 then
+			elseif bindType == 2 and not isSoulBound then
 				self.BindType:SetText('|cff1eff00BOE|r')
 			else
 				self.BindType:SetText('')

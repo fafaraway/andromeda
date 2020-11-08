@@ -4,5 +4,4 @@
 	<Script file="filter.lua"/>
 	<Script file="copy.lua"/>
 	<Script file="spamagemeter.lua"/>
-	<Script file="whisper.lua"/>
 </Ui>

@@ -11,8 +11,8 @@ local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 
 -- Colors
 local function classColor(class, showRGB)
-	local color = FREE_ADB['colors']['class'][C.ClassList[class] or class]
-	if not color then color = FREE_ADB['colors']['class']['PRIEST'] end
+	local color = C.ClassColors[C.ClassList[class] or class]
+	if not color then color = C.ClassColors['PRIEST'] end
 
 	if showRGB then
 		return color.r, color.g, color.b
@@ -187,3 +187,74 @@ end
 hooksecurefunc('WhoList_Update', updateWhoList)
 hooksecurefunc(WhoListScrollFrame, 'update', updateWhoList)
 
+
+
+
+local blizzHexColors = {}
+for class, color in pairs(RAID_CLASS_COLORS) do
+	blizzHexColors[color.colorStr] = class
+end
+
+-- FrameXML/ChatFrame.lua
+do
+	local AddMessage = {}
+
+	local function FixClassColors(frame, message, ...)
+		if type(message) == 'string' and strfind(message, '|cff') then
+			for hex, class in pairs(blizzHexColors) do
+				local color = C.Colors.Class[class]
+				message = color and gsub(message, hex, color.colorStr) or message
+			end
+		end
+		return AddMessage[frame](frame, message, ...)
+	end
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local frame = _G['ChatFrame'..i]
+		AddMessage[frame] = frame.AddMessage
+		frame.AddMessage = FixClassColors
+	end
+end
+
+-- FrameXML/LevelUpDisplay.lua
+hooksecurefunc('BossBanner_ConfigureLootFrame', function(lootFrame, data)
+		local color = C.Colors.Class[data.className]
+		lootFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
+end)
+
+-- FrameXML/PaperDollFrame.lua
+hooksecurefunc('PaperDollFrame_SetLevel', function()
+	local className, class = UnitClass('player')
+	local color = C.Colors.Class[class].colorStr
+
+	local primaryTalentTree, specName = GetSpecialization()
+	if primaryTalentTree then
+		primaryTalentTree, specName = GetSpecializationInfo(primaryTalentTree)
+	end
+
+	local level = UnitLevel('player')
+	local effectiveLevel = UnitEffectiveLevel('player')
+	if effectiveLevel ~= level then
+		level = EFFECTIVE_LEVEL_FORMAT:format(effectiveLevel, level)
+	end
+
+	if specName and specName ~= '' then
+		CharacterLevelText:SetFormattedText(PLAYER_LEVEL, level, color, specName, className)
+	else
+		CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, level, color, className)
+	end
+end)
+
+-- FrameXML/RaidWarning.lua
+do
+	local AddMessage = RaidNotice_AddMessage
+	RaidNotice_AddMessage = function(frame, message, ...)
+		if strfind(message, '|cff') then
+			for hex, class in pairs(blizzHexColors) do
+				local color = C.Colors.Class[class]
+				message = gsub(message, hex, color.colorStr)
+			end
+		end
+		return AddMessage(frame, message, ...)
+	end
+end

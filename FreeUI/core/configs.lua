@@ -494,10 +494,7 @@ C.CharacterSettings = {
 	['ui_anchor_temp'] = {},
 
 
-	['item_level'] = true,
-		['merchant_ilvl'] = true,
-		['gem_enchant'] = true,
-		['azerite_traits'] = true,
+
 
 	['blow_my_whistle'] = true,
 
@@ -857,39 +854,41 @@ C.CharacterSettings = {
 		['quick_quest'] = false,
 		['quest_completed_sound'] = true,
 		['ot_buttons'] = true,
+
+		['item_level'] = true,
+			['gem_enchant'] = true,
+			['azerite_traits'] = true,
+
+		['screen_saver'] = true,
 	},
 
 	['chat'] = {
-		['enable_chat'] = true,
+		['enable'] = true,
 			['lock_position'] = true,
 				['window_width'] = 300,
 				['window_height'] = 100,
 			['font_outline'] = false,
 			['fade_out'] = true,
-				['fading_visible'] = 60,
+				['fading_visible'] = 120,
 				['fading_duration'] = 6,
-
 			['abbr_channel_names'] = true,
 			['copy_button'] = true,
 			['voice_button'] = true,
 			['tab_cycle'] = true,
 			['smart_bubble'] = false,
+			['whisper_invite'] = false,
+				['invite_keyword'] = 'inv',
+				['guild_only'] = true,
 			['whisper_sticky'] = true,
 			['whisper_sound'] = true,
 				['sound_timer'] = 30,
 			['item_links'] = true,
 			['spamage_meter'] = true,
-			['filters'] = true,
+			['use_filter'] = true,
 			['matche_number'] = 1,
-			['keywords_list'] = '%*',
-			['allow_friends_spam'] = false,
+			['allow_friends_spam'] = true,
 			['block_stranger_whisper'] = false,
 			['block_addon_spam'] = true,
-			['addon_keywords_list'] = {
-				'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', string.rep('%-', 20),
-				'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', '汐寒', 'wow.+兑换码', 'wow.+验证码', '【有爱插件】', '：.+>', '|Hspell.+=>'
-			},
-			['trash_clubs'] = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩'}
 	},
 
 	['actionbar'] = {
@@ -931,6 +930,8 @@ C.CharacterSettings = {
 			['pet_bar'] = true,
 			['stance_bar'] = false,
 			['leave_vehicle_bar'] = true,
+
+			['bind_type'] = 1,
 	},
 
 	['cooldown'] = {
@@ -963,6 +964,8 @@ C.AccountSettings = {
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,
 	['reskin_pgf'] = true,
+	['chat_filter_black_list'] = '%*',
+	['chat_filter_white_list'] = '',
 	['custom_junk_list'] = {},
 	['nameplate_aura_filter'] = {[1]={}, [2]={}},
 	['raid_debuffs'] = {},

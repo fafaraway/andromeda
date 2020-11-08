@@ -18,6 +18,7 @@ local tabsList = {
 	L.GUI.MAP.NAME,
 	L.GUI.TOOLTIP.NAME,
 	L.GUI.UNITFRAME.NAME,
+	L.GUI.RAIDFRAME.NAME,
 	L.GUI.NAMEPLATE.NAME,
 	L.GUI.MISC.NAME,
 	L.GUI.PROFILE.NAME,
@@ -37,6 +38,7 @@ local iconsList = {
 	'Interface\\ICONS\\Achievement_Ashran_Tourofduty',
 	'Interface\\ICONS\\Ability_Priest_BindingPrayers',
 	'Interface\\ICONS\\Ability_Mage_MassInvisibility',
+	'Interface\\ICONS\\Spell_Priest_Pontifex',
 	'Interface\\ICONS\\Ability_Paladin_BeaconsOfLight',
 	'Interface\\ICONS\\ABILITY_MONK_SERENITY',
 	'Interface\\ICONS\\INV_Misc_Blingtron',
@@ -95,9 +97,9 @@ local function CreateGearButton(self)
 end
 
 function GUI:CreateGear(name)
-	local bu = CreateFrame("Button", name, self)
+	local bu = CreateFrame('Button', name, self)
 	bu:SetSize(20, 20)
-	bu.Icon = bu:CreateTexture(nil, "ARTWORK")
+	bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
 	bu.Icon:SetAllPoints()
 	bu.Icon:SetTexture(C.Assets.gear_tex)
 	bu.Icon:SetVertexColor(.6, .6, .6)
@@ -277,6 +279,26 @@ local function UpdateCustomBar()
 	F.ACTIONBAR:UpdateCustomBar()
 end
 
+local function UpdateWhisperSticky()
+	F.CHAT:ChatWhisperSticky()
+end
+
+local function UpdateWhisperList()
+	F.CHAT:UpdateWhisperList()
+end
+
+local function UpdateFilterList()
+	F.CHAT:UpdateFilterList()
+end
+
+local function UpdateFilterWhiteList()
+	F.CHAT:UpdateFilterWhiteList()
+end
+
+local function UpdateChatSize()
+	F.CHAT:UpdateChatSize()
+end
+
 
 GUI.OptionsList = { -- type, key, value, name, horizon
 	[1] = { -- appearance
@@ -309,12 +331,33 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{1, 'infobar', 'guild', L.GUI.INFOBAR.GUILD, true},
 		{1, 'infobar', 'friends', L.GUI.INFOBAR.FRIENDS},
 		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true},
-		{},
-		{3, 'infobar', 'bar_height', L.GUI.INFOBAR.BAR_HEIGHT, nil, {10, 30, 1}},
 	},
-	[4] = {
+	[4] = { -- chat
+		{1, 'chat', 'enable', L.GUI.CHAT.ENABLE},
+		{1, 'chat', 'lock_position', L.GUI.CHAT.LOCK_POSITION, nil, nil, nil, L.GUI.CHAT.LOCK_POSITION_TIP},
+		{1, 'chat', 'font_outline', L.GUI.CHAT.FONT_OUTLINE, true},
+		{1, 'chat', 'fade_out', L.GUI.CHAT.FADE_OUT, nil, nil, nil, L.GUI.CHAT.FADE_OUT_TIP},
+		{1, 'chat', 'abbr_channel_names', L.GUI.CHAT.ABBR_CHANNEL_NAMES, true},
 
-		{},--blank
+		{1, 'chat', 'voice_button', L.GUI.CHAT.VOICE_BUTTON},
+		{1, 'chat', 'tab_cycle', L.GUI.CHAT.TAB_CYCLE, true, nil, nil, L.GUI.CHAT.TAB_CYCLE_TIP},
+		{1, 'chat', 'smart_bubble', L.GUI.CHAT.SMART_BUBBLE, nil, nil, nil, L.GUI.CHAT.SMART_BUBBLE_TIP},
+		{1, 'chat', 'whisper_sticky', L.GUI.CHAT.WHISPER_STICKY, true, nil, UpdateWhisperSticky},
+		{1, 'chat', 'whisper_sound', L.GUI.CHAT.WHISPER_SOUND},
+		{1, 'chat', 'item_links', L.GUI.CHAT.ITEM_LINKS, true},
+		{1, 'chat', 'spamage_meter', L.GUI.CHAT.SPAMAGE_METER},
+		{},
+		{1, 'chat', 'use_filter', L.GUI.CHAT.USE_FILTER},
+		{1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM, true},
+		{1, 'chat', 'allow_friends_spam', L.GUI.CHAT.ALLOW_FRIENDS_SPAM, nil, nil, nil, L.GUI.CHAT.ALLOW_FRIENDS_SPAM_TIP},
+		{1, 'chat', 'block_stranger_whisper', L.GUI.CHAT.BLOCK_STRANGER_WHISPER},
+		{2, 'ACCOUNT', 'chat_filter_white_list', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
+		{3, 'chat', 'matche_number', L.GUI.CHAT.MATCHE_NUMBER, nil, {1, 3, 1}},
+		{2, 'ACCOUNT', 'chat_filter_black_list', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
+		{},
+		{1, 'chat', 'whisper_invite', L.GUI.CHAT.WHISPER_INVITE},
+		{1, 'chat', 'guild_only', L.GUI.CHAT.GUILD_ONLY},
+		{2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList},
 
 	},
 	[5] = { -- aura
@@ -394,12 +437,11 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{3, 'inventory', 'bag_columns', L.GUI.INVENTORY.BAG_COLUMNS, nil, {8, 20, 1}},
 		{3, 'inventory', 'bank_columns', L.GUI.INVENTORY.BANK_COLUMNS, true, {8, 20, 1}},
 		{3, 'inventory', 'item_level_to_show', L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW, nil, {1, 200, 1}, nil, L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW_TIP},
-		{4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, true, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}},
+		{},
+		{4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, nil, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}},
 	},
 	[10] = {
-
-		{},--blank
-
+		{},
 	},
 	[11] = {
 
@@ -411,8 +453,13 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{},--blank
 
 	},
+	[13] = {
 
-	[13] = { -- nameplate
+		{},--blank
+
+	},
+
+	[14] = { -- nameplate
 		{1, 'nameplate', 'enable', L.GUI.NAMEPLATE.ENABLE},
 
 		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR},
@@ -421,14 +468,14 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR},
 		{1, 'nameplate', 'threat_indicator', L.GUI.NAMEPLATE.THREAT_INDICATOR, true},
 	},
-	[14] = { -- misc
+	[15] = { -- misc
 		{4, 'ACCOUNT', 'texture_style', L.GUI.APPEARANCE.TEXTURE_STYLE, false, {}},
 		{4, 'ACCOUNT', 'number_format', L.GUI.APPEARANCE.NUMBER_FORMAT, true, {L.GUI.APPEARANCE.NUMBER_TYPE1, L.GUI.APPEARANCE.NUMBER_TYPE2, L.GUI.APPEARANCE.NUMBER_TYPE3}},
 	},
-	[15] = { -- profile
+	[16] = { -- profile
 
 	},
-	[16] = { -- credits
+	[17] = { -- credits
 
 		{},--blank
 
@@ -440,56 +487,92 @@ local function CreateOption(i)
 
 	for _, option in pairs(GUI.OptionsList[i]) do
 		local optType, key, value, name, horizon, data, callback, tip = unpack(option)
-		-- Checkboxes
-		if optType == 1 then
+		if optType == 1 then -- checkbox
 			local cb = F.CreateCheckBox(parent, true)
 			cb:SetSize(20, 20)
 			cb:SetHitRectInsets(-5, -5, -5, -5)
+
+			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
+
 			if horizon then
 				cb:SetPoint('TOPLEFT', 200, -offset + 35)
 			else
 				cb:SetPoint('TOPLEFT', 20, -offset)
 				offset = offset + 35
 			end
-			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, 'OUTLINE', name, nil, true, 'LEFT', 22, 0)
+
 			cb:SetChecked(SaveValue(key, value))
+
 			cb:SetScript('OnClick', function()
 				SaveValue(key, value, cb:GetChecked())
 				if callback then callback() end
 			end)
+
 			if data and type(data) == 'function' then
 				local bu = GUI.CreateGear(parent)
 				bu:SetPoint('LEFT', cb.name, 'RIGHT', -2, 1)
 				bu:SetScript('OnClick', data)
 			end
+
 			if tip then
 				F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
-		-- Slider
-		elseif optType == 3 then
+		elseif optType == 2 then  -- editbox
+			local eb = F.CreateEditBox(parent, 140, 24)
+			eb:SetMaxLetters(999)
+
+			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
+
+			if horizon then
+				eb:SetPoint('TOPLEFT', 200, -offset + 45)
+			else
+				eb:SetPoint('TOPLEFT', 20, -offset - 25)
+				offset = offset + 70
+			end
+
+			eb:SetText(SaveValue(key, value))
+
+			eb:HookScript('OnEscapePressed', function()
+				eb:SetText(SaveValue(key, value))
+			end)
+
+			eb:HookScript('OnEnterPressed', function()
+				SaveValue(key, value, eb:GetText())
+				if callback then callback() end
+			end)
+
+			if tip then
+				F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
+			end
+		elseif optType == 3 then -- slider
 			local min, max, step = unpack(data)
+
 			local x, y
 			if horizon then
-				x, y = 200, -offset + 60
+				x, y = 200, -offset + 40
 			else
-				x, y = 20, -offset - 20
-				offset = offset + 80
+				x, y = 20, -offset - 30
+				offset = offset + 70
 			end
+
 			local s = F.CreateSlider(parent, name, min, max, step, x, y, 140, tip)
 			s.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
+
 			s:SetValue(SaveValue(key, value))
+
 			s:SetScript('OnValueChanged', function(_, v)
 				local current = F:Round(tonumber(v), 2)
 				SaveValue(key, value, current)
 				s.value:SetText(current)
 				if callback then callback() end
 			end)
+
 			s.value:SetText(F:Round(SaveValue(key, value), 2))
+
 			if tip then
 				F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
-		-- Dropdown
-		elseif optType == 4 then
+		elseif optType == 4 then -- dropdown
 			if value == 'texture_style' then
 				for _, v in ipairs(GUI.TextureList) do
 					tinsert(data, v.name)
@@ -503,6 +586,7 @@ local function CreateOption(i)
 				dd:SetPoint('TOPLEFT', 20, -offset - 25)
 				offset = offset + 70
 			end
+
 			dd.Text:SetText(data[SaveValue(key, value)])
 
 			local opt = dd.options
@@ -608,7 +692,7 @@ local function CreateGUI()
 		guiPage[i].child:SetSize(400, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
 		F.ReskinScroll(guiPage[i].ScrollBar)
-		guiPage[i]:SetScript("OnMouseWheel", ScrollBarHook)
+		guiPage[i]:SetScript('OnMouseWheel', ScrollBarHook)
 
 		-- local header = F.CreateFS(guiPage[i].child, C.Assets.Fonts.Bold, 14, nil, L[strupper(name)..'_NAME'] or nil, 'CLASS', 'THICK', 'TOPLEFT', 14, -16)
 		-- guiPage[i].header = header
@@ -628,7 +712,7 @@ local function CreateGUI()
 		CreateOption(i)
 	end
 
-	GUI:CreateProfileGUI(guiPage[15]) -- profile GUI
+	GUI:CreateProfileGUI(guiPage[16]) -- profile GUI
 
 	SelectTab(1)
 end

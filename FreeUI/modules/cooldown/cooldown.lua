@@ -29,7 +29,7 @@ function COOLDOWN:OnSizeChanged(width, height)
 		self:Hide()
 	else
 		self.text:SetFont(C.Assets.Fonts.Square, fontScale * FONT_SIZE, 'OUTLINE')
-		self.text:SetShadowColor(0, 0, 0, 0)
+		self.text:SetShadowColor(0, 0, 0, 1)
 
 		if self.enabled then
 			COOLDOWN.ForceUpdate(self)

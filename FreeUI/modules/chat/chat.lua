@@ -88,8 +88,8 @@ function CHAT:RestyleChatFrame()
 
 	local fontSize = select(2, self:GetFont())
 	self:SetFont(C.Assets.Fonts.Bold, fontSize, C.DB.chat.font_outline and 'OUTLINE')
-	self:SetShadowColor(0, 0, 0, C.DB.chat.font_outline and 0 or 1)
-	self:SetShadowOffset(2, -2)
+	self:SetShadowColor(0, 0, 0, 1)
+	self:SetShadowOffset(C.DB.chat.font_outline and 1 or 2, C.DB.chat.font_outline and -1 or -2)
 
 	self:SetClampedToScreen(false)
 	self:SetMaxResize(C.ScreenWidth, C.ScreenHeight)
@@ -328,6 +328,90 @@ function CHAT:ClickToInvite(link, _, button)
 	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
 end
 
+-- Autoinvite by whisper
+local whisperList = {}
+function CHAT:UpdateWhisperList()
+	F.SplitList(whisperList, C.DB.chat.invite_keyword, true)
+end
+
+function CHAT:IsUnitInGuild(unitName)
+	if not unitName then return end
+	for i = 1, GetNumGuildMembers() do
+		local name = GetGuildRosterInfo(i)
+		if name and Ambiguate(name, 'none') == Ambiguate(unitName, 'none') then
+			return true
+		end
+	end
+
+	return false
+end
+
+function CHAT.OnChatWhisper(event, ...)
+	local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
+	for word in pairs(whisperList) do
+		if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(word) then
+			if event == 'CHAT_MSG_BN_WHISPER' then
+				local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
+				if accountInfo then
+					local gameAccountInfo = accountInfo.gameAccountInfo
+					local gameID = gameAccountInfo.gameAccountID
+					if gameID then
+						local charName = gameAccountInfo.characterName
+						local realmName = gameAccountInfo.realmName
+						if CanCooperateWithGameAccount(accountInfo) and (not C.DB.chat.guild_only or CHAT:IsUnitInGuild(charName..'-'..realmName)) then
+							BNInviteFriend(gameID)
+						end
+					end
+				end
+			else
+				if not C.DB.chat.guild_only or IsGuildMember(guid) then
+					InviteToGroup(author)
+				end
+			end
+		end
+	end
+end
+
+function CHAT:WhisperInvite()
+	if not C.DB.chat.whisper_invite then return end
+	self:UpdateWhisperList()
+	F:RegisterEvent('CHAT_MSG_WHISPER', CHAT.OnChatWhisper)
+	F:RegisterEvent('CHAT_MSG_BN_WHISPER', CHAT.OnChatWhisper)
+end
+
+-- Whisper sound
+local lastSoundTimer = 0
+function CHAT:WhisperAlert()
+	if not C.DB.chat.whisper_sound then return end
+
+	local f = CreateFrame('Frame')
+	f:RegisterEvent('CHAT_MSG_WHISPER')
+	f:RegisterEvent('CHAT_MSG_BN_WHISPER')
+	f:HookScript('OnEvent', function(self, event, msg, ...)
+		local currentTime = GetServerTime()
+		if currentTime and currentTime - lastSoundTimer > C.DB.chat.sound_timer then
+			lastSoundTimer = currentTime
+			if event == 'CHAT_MSG_WHISPER' then
+				PlaySoundFile(C.Assets.Sounds.whisper, 'Master')
+			elseif event == 'CHAT_MSG_BN_WHISPER' then
+				PlaySoundFile(C.Assets.Sounds.whisperBN, 'Master')
+			end
+		end
+	end)
+end
+
+-- Whisper sticky
+function CHAT:WhisperSticky()
+	if C.DB.chat.whisper_sticky then
+		ChatTypeInfo['WHISPER'].sticky = 1
+		ChatTypeInfo['BN_WHISPER'].sticky = 1
+	else
+		ChatTypeInfo['WHISPER'].sticky = 0
+		ChatTypeInfo['BN_WHISPER'].sticky = 0
+	end
+end
+
+-- (、) -> (/)
 function CHAT:PauseToSlash()
 	hooksecurefunc('ChatEdit_OnTextChanged', function(self, userInput)
 		local text = self:GetText()
@@ -341,7 +425,7 @@ end
 
 
 function CHAT:OnLogin()
-	if not C.DB.chat.enable_chat then return end
+	if not C.DB.chat.enable then return end
 
 	for i = 1, _G.NUM_CHAT_WINDOWS do
 		self.RestyleChatFrame(_G['ChatFrame'..i])
@@ -394,6 +478,7 @@ function CHAT:OnLogin()
 	self:WhisperAlert()
 	self:AutoToggleChatBubble()
 	self:PauseToSlash()
+	self:WhisperInvite()
 
 
 	-- ProfanityFilter

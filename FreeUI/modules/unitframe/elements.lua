@@ -449,11 +449,11 @@ function UNITFRAME.PostCreateIcon(element, button)
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, 'THICK', true)
+	button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, nil, true)
 	button.count:ClearAllPoints()
 	button.count:SetPoint('TOPRIGHT', button, 2, 4)
 
-	button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, 'THICK', true)
+	button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, nil, true)
 	button.timer:ClearAllPoints()
 	button.timer:SetPoint('BOTTOMLEFT', button, 2, -4)
 
