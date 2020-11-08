@@ -279,6 +279,26 @@ local function UpdateCustomBar()
 	F.ACTIONBAR:UpdateCustomBar()
 end
 
+local function UpdateWhisperSticky()
+	F.CHAT:ChatWhisperSticky()
+end
+
+local function UpdateWhisperList()
+	F.CHAT:UpdateWhisperList()
+end
+
+local function UpdateFilterList()
+	F.CHAT:UpdateFilterList()
+end
+
+local function UpdateFilterWhiteList()
+	F.CHAT:UpdateFilterWhiteList()
+end
+
+local function UpdateChatSize()
+	F.CHAT:UpdateChatSize()
+end
+
 
 GUI.OptionsList = { -- type, key, value, name, horizon
 	[1] = { -- appearance
@@ -322,7 +342,7 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{1, 'chat', 'voice_button', L.GUI.CHAT.VOICE_BUTTON},
 		{1, 'chat', 'tab_cycle', L.GUI.CHAT.TAB_CYCLE, true, nil, nil, L.GUI.CHAT.TAB_CYCLE_TIP},
 		{1, 'chat', 'smart_bubble', L.GUI.CHAT.SMART_BUBBLE, nil, nil, nil, L.GUI.CHAT.SMART_BUBBLE_TIP},
-		{1, 'chat', 'whisper_sticky', L.GUI.CHAT.WHISPER_STICKY, true},
+		{1, 'chat', 'whisper_sticky', L.GUI.CHAT.WHISPER_STICKY, true, nil, UpdateWhisperSticky},
 		{1, 'chat', 'whisper_sound', L.GUI.CHAT.WHISPER_SOUND},
 		{1, 'chat', 'item_links', L.GUI.CHAT.ITEM_LINKS, true},
 		{1, 'chat', 'spamage_meter', L.GUI.CHAT.SPAMAGE_METER},
@@ -331,13 +351,13 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM, true},
 		{1, 'chat', 'allow_friends_spam', L.GUI.CHAT.ALLOW_FRIENDS_SPAM, nil, nil, nil, L.GUI.CHAT.ALLOW_FRIENDS_SPAM_TIP},
 		{1, 'chat', 'block_stranger_whisper', L.GUI.CHAT.BLOCK_STRANGER_WHISPER},
-		{2, 'ACCOUNT', 'chat_filter_white_list', L.GUI.CHAT.WHITE_LIST, true, nil, nil, L.GUI.CHAT.WHITE_LIST_TIP},
+		{2, 'ACCOUNT', 'chat_filter_white_list', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
 		{3, 'chat', 'matche_number', L.GUI.CHAT.MATCHE_NUMBER, nil, {1, 3, 1}},
-		{2, 'ACCOUNT', 'chat_filter_black_list', L.GUI.CHAT.BLACK_LIST, true, nil, nil, L.GUI.CHAT.BLACK_LIST_TIP},
+		{2, 'ACCOUNT', 'chat_filter_black_list', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
 		{},
 		{1, 'chat', 'whisper_invite', L.GUI.CHAT.WHISPER_INVITE},
 		{1, 'chat', 'guild_only', L.GUI.CHAT.GUILD_ONLY},
-		{2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true},
+		{2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList},
 
 	},
 	[5] = { -- aura
