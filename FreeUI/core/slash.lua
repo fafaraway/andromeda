@@ -114,10 +114,6 @@ SlashCmdList.FREEUI = function(str)
 		F:MoverConsole()
 	elseif cmd == 'config' then
 		F.ToggleGUI()
-	elseif cmd == 'bind' then
-		LoadAddOn("Blizzard_BindingUI")
-		KeyBindingFrame.keyID = 1
-		KeyBindingFrame:EnterQuickKeybind()
 	elseif cmd == 'help' then
 		printCommandsList()
 	elseif cmd == 'ver' or cmd == 'version' then
