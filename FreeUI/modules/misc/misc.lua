@@ -20,7 +20,7 @@ function MISC:OnLogin()
 	MISC:BlowMyWhistle()
 	MISC:ForceWarning()
 	MISC:FasterCamera()
-	MISC:UpdateScreenShot()
+	--MISC:UpdateScreenShot()
 	MISC:QuestRewardHighlight()
 	MISC:UpdateQuestCompletedSound()
 end
@@ -264,7 +264,7 @@ do
 			end)
 		end
 
-		if C.DB.misc.screenshot then
+		if C.DB.misc.auto_screenshot then
 			F:RegisterEvent('ACHIEVEMENT_EARNED', MISC.ScreenShotOnEvent)
 			F:RegisterEvent('PLAYER_LEVEL_UP', MISC.ScreenShotOnEvent)
 			F:RegisterEvent('PLAYER_DEAD', MISC.ScreenShotOnEvent)
@@ -277,6 +277,21 @@ do
 			F:UnregisterEvent('CHALLENGE_MODE_COMPLETED', MISC.ScreenShotOnEvent)
 		end
 	end
+
+
+
+	F:RegisterEvent('ACHIEVEMENT_EARNED', function(achievementID, alreadyEarned)
+		F.Print('achievementID', achievementID)
+		F.Print('alreadyEarned', alreadyEarned)
+		if alreadyEarned then return end
+		F.Print('alreadyEarned', alreadyEarned)
+
+		_G.C_Timer.After(1, function()
+			F.Print('taking screenshot')
+			_G.Screenshot()
+			F.Print('screenshot taken')
+		end)
+	end)
 end
 
 
@@ -297,6 +312,11 @@ do
 		end
 	end)
 end
+
+
+
+
+
 
 
 

@@ -99,7 +99,7 @@ local function GetSlotItemLocation(id)
 end
 
 function MISC:ItemLevel_UpdateTraits(button, id, link)
-	if not C.DB['azerite_traits'] then return end
+	if not C.DB.misc.azerite_traits then return end
 
 	local empoweredItemLocation = GetSlotItemLocation(id)
 	if not empoweredItemLocation then return end
@@ -182,7 +182,7 @@ end
 function MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 	C_Timer.After(.1, function()
 		local quality = select(3, GetItemInfo(link))
-		local info = F.GetItemLevel(link, unit, index, C.DB['gem_enchant'])
+		local info = F.GetItemLevel(link, unit, index, C.DB.misc.gem_enchant)
 		if info == 'tooSoon' then return end
 		MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
 	end)
@@ -207,7 +207,7 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
 			local link = GetInventoryItemLink(unit, index)
 			if link then
 				local quality = select(3, GetItemInfo(link))
-				local info = F.GetItemLevel(link, unit, index, C.DB['gem_enchant'])
+				local info = F.GetItemLevel(link, unit, index, C.DB.misc.gem_enchant)
 				if info == 'tooSoon' then
 					MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
 				else
@@ -298,39 +298,9 @@ function MISC.ItemLevel_ScrappingShow(event, addon)
 	end
 end
 
-local function MerchantItemlevel()
-	if not C.DB['merchant_ilvl'] then return end
-
-	local numItems = GetMerchantNumItems()
-
-	for i = 1, MERCHANT_ITEMS_PER_PAGE do
-		local index = (MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
-		if index > numItems then return end
-
-		local button = _G['MerchantItem'..i..'ItemButton']
-		if button and button:IsShown() then
-			if not button.text then
-				button.text = F.CreateFS(button, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', 'YELLOW', true, 'BOTTOMRIGHT', -1, 1)
-			else
-				button.text:SetText('')
-			end
-
-			local itemLink = GetMerchantItemLink(index)
-			if itemLink then
-				local _, _, quality, itemlevel, _, _, _, _, _, _, _, itemClassID = GetItemInfo(itemLink)
-				local color = C.QualityColors[quality]
-				if (itemlevel and itemlevel > 1) and (quality and quality > 1) and (itemClassID == LE_ITEM_CLASS_WEAPON or itemClassID == LE_ITEM_CLASS_ARMOR) then
-					button.text:SetText(itemlevel)
-					button.text:SetTextColor(color.r, color.g, color.b)
-				end
-			end
-		end
-	end
-end
-
 
 function MISC:ItemLevel()
-	if not C.DB['item_level'] then return end
+	if not C.DB.misc.item_level then return end
 
 	-- iLvl on CharacterFrame
 	CharacterFrame:HookScript('OnShow', MISC.ItemLevel_UpdatePlayer)
@@ -344,8 +314,5 @@ function MISC:ItemLevel()
 
 	-- iLvl on ScrappingMachineFrame
 	F:RegisterEvent('ADDON_LOADED', MISC.ItemLevel_ScrappingShow)
-
-	-- iLvl on MerchantFrame
-	hooksecurefunc('MerchantFrame_UpdateMerchantInfo', MerchantItemlevel)
 end
 MISC:RegisterMisc('GearInfo', MISC.ItemLevel)

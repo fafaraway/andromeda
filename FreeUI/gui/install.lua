@@ -23,7 +23,7 @@ local function SetupCVars()
 	-- control
 	SetCVar('autoDismountFlying', 0)
 	SetCVar('autoDismount', 1)
-	SetCVar('autoClearAFK', 0)
+	SetCVar('autoClearAFK', 1)
 	SetCVar('autoLootDefault', 1)
 	SetCVar('lootUnderMouse', 1)
 	SetCVar('interactOnLeftClick', 1)
@@ -97,7 +97,7 @@ local function SetupCVars()
 	-- quest
 	SetCVar('autoQuestWatch', 1)
 	SetCVar('autoQuestProgress', 1)
-	SetCVar('showQuestTrackingTooltips', 1)
+	SetCVar('showQuestTrackingTooltips', 0) -- this is annoying
 
 	-- hardcore
 	SetCVar('overrideArchive', 0)

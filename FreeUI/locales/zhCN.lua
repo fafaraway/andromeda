@@ -183,8 +183,15 @@ end
 --[[ Actionbar ]]
 
 do
-
 	L['ACTIONBAR_CUSTOM_BAR'] = '附加动作条'
+	L['ACTIONBAR_UNBIND_TIP'] = '按ESC或右键撤销按键设置'
+	L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
+	L['ACTIONBAR_KEY_INDEX'] = '序号'
+	L['ACTIONBAR_KEY_BINDING'] = '按键'
+	L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
+	L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
+	L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
+	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
 end
 
 
@@ -259,10 +266,10 @@ do
 	L['INVENTORY_AUTO_REPAIR'] = '自动修理'
 	L['INVENTORY_AUTO_REPAIR_TIP'] = '|n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
 	L['INVENTORY_REPAIR_ERROR'] = '没有足够的钱完成修理！'
-	L['INVENTORY_REPAIR_COST'] = '自动修理花费'
+	L['INVENTORY_REPAIR_COST'] = '自动修理花费 (%s)'
 	L['INVENTORY_SELL_JUNK'] = '自动出售垃圾'
 	L['INVENTORY_SELL_JUNK_TIP'] = '|n当按钮高亮时表示自动出售垃圾已启用，每次与商人对话都会自动出售垃圾物品。'
-	L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得'
+	L['INVENTORY_SELL_JUNK_EARN'] = '自动出售垃圾获得 (%s)'
 	L['INVENTORY_SEARCH'] = '搜索'
 	L['INVENTORY_SEARCH_ENABLED'] = '输入物品名进行搜索'
 	L['INVENTORY_MARK_JUNK'] = '垃圾分类'
@@ -544,13 +551,13 @@ L.GUI = {
 
 	['APPEARANCE'] = {
 		['NAME'] = '外观',
+		['CURSOR_TRAIL'] = '鼠标轨迹',
 		['RESKIN_BLIZZ'] = '美化游戏原始界面',
 		['RESKIN_BLIZZ_TIP'] = '使用统一的黑色外观风格替换游戏原始的美术风格。',
 		['VIGNETTING'] = '屏幕边缘暗角效果',
 		['BACKDROP_ALPHA'] = '背景透明度',
 		['BACKDROP_ALPHA_TIP'] = '调整黑色背景透明度。',
 		['VIGNETTING_ALPHA'] = '暗角透明度',
-		['CURSOR_TRAIL'] = '鼠标闪光',
 		['SHADOW_BORDER'] = '阴影边框',
 		['SHADOW_BORDER_TIP'] = '界面元素周围添加一圈阴影',
 		['UI_SCALE'] = '界面缩放',
@@ -563,10 +570,8 @@ L.GUI = {
 		['NUMBER_TYPE1'] = '标准模式: b/m/k',
 		['NUMBER_TYPE2'] = '中式: 亿/万',
 		['NUMBER_TYPE3'] = '显示具体数值',
-
 		['RESKIN_DBM'] = '美化 DBM 计时条',
 		['RESKIN_PGF'] = '美化 PGF 面板',
-
 	},
 
 	['NOTIFICATION'] = {
@@ -590,11 +595,39 @@ L.GUI = {
 		['GUILD'] = '公会在线信息',
 		['FRIENDS'] = '好友在线信息',
 		['REPORT'] = '日常周常信息',
-		['BAR_HEIGHT'] = '调整高度',
 	},
 
 	['CHAT'] = {
 		['NAME'] = '聊天',
+		['ENABLE'] = '启用聊天模块',
+		['LOCK_POSITION'] = '锁定聊天窗口',
+		['LOCK_POSITION_TIP'] = '聊天窗口的位置和大小固定不变。',
+		['FONT_OUTLINE'] = '字体描边',
+		['FADE_OUT'] = '文字淡出',
+		['FADE_OUT_TIP'] = '聊天窗口一段时间没有任何新信息时会逐渐淡出。',
+		['ABBR_CHANNEL_NAMES'] = '频道名称缩写',
+		['VOICE_BUTTON'] = '语音按钮',
+		['TAB_CYCLE'] = '快速切换发言频道',
+		['TAB_CYCLE_TIP'] = '输入栏激活时按Tab可以快速切换发言频道。',
+		['SMART_BUBBLE'] = '智能聊天气泡',
+		['SMART_BUBBLE_TIP'] = '进入副本启用聊天气泡，离开副本关闭聊天气泡。',
+		['WHISPER_STICKY'] = '密语时锁定频道',
+		['WHISPER_SOUND'] = '密语声音提醒',
+		['ITEM_LINKS'] = '显示装备部位和等级',
+		['SPAMAGE_METER'] = '精简伤害统计类信息',
+		['USE_FILTER'] = '启用聊天过滤',
+		['BLOCK_ADDON_SPAM'] = '过滤一些插件的扰频信息',
+		['ALLOW_FRIENDS_SPAM'] = '不过滤来自好友的信息',
+		['ALLOW_FRIENDS_SPAM_TIP'] = '不过滤来自好友、队友以及公会成员的信息。',
+		['BLOCK_STRANGER_WHISPER'] = '|cffff2020屏蔽陌生人的密语|r',
+		['WHITE_LIST'] = '白名单模式',
+		['WHITE_LIST_TIP'] = '只有包含白名单关键字的聊天信息才会被显示，留空则关闭。|n|n当存在多个关键词时，以空格隔开。|n|n输入完毕后，按一下回车键保存。',
+		['MATCHE_NUMBER'] = '过滤关键字匹配数量',
+		['BLACK_LIST'] = '过滤关键字列表',
+		['BLACK_LIST_TIP'] = '包含过滤关键字的聊天内容，达到匹配数量则进行过滤屏蔽。|n|n当存在多个关键词时，以空格隔开。|n|n输入完毕后，按一下回车键保存。',
+		['WHISPER_INVITE'] = '启用密语邀请',
+		['GUILD_ONLY'] = '只邀请公会成员',
+		['INVITE_KEYWORD'] = '密语邀请关键字',
 	},
 
 	['AURA'] = {
@@ -734,8 +767,13 @@ L.GUI = {
 	},
 
 	['UNITFRAME'] = {
-		['NAME'] = '单位框体',
+		['NAME'] = '单位头像',
 	},
+
+	['RAIDFRAME'] = {
+		['NAME'] = '团队框架',
+	},
+
 
 	['NAMEPLATE'] = {
 		['NAME'] = '姓名板',

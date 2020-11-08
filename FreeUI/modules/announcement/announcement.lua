@@ -3,7 +3,9 @@ local ANNOUNCEMENT = F.ANNOUNCEMENT
 
 
 function ANNOUNCEMENT:GetChannel()
-	if IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
+	local inInstance, instanceType = IsInInstance()
+	inInstance = inInstance and (instanceType == 'party' or instanceType == 'raid')
+	if inInstance or IsInGroup(LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(LE_PARTY_CATEGORY_INSTANCE) then
 		return 'INSTANCE_CHAT'
 	elseif IsInRaid(LE_PARTY_CATEGORY_HOME) then
 		return 'RAID'

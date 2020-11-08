@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local CHAT = F:GetModule('CHAT')
+local CHAT = F.CHAT
 
 
 local strfind, strmatch, gsub, strrep = string.find, string.match, string.gsub, string.rep
@@ -9,6 +9,7 @@ local IsGuildMember, C_FriendList_IsFriend, IsGUIDInGroup, C_Timer_After = IsGui
 local Ambiguate, UnitIsUnit, GetTime, SetCVar = Ambiguate, UnitIsUnit, GetTime, SetCVar
 local GetItemInfo, GetItemStats = GetItemInfo, GetItemStats
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
+
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR
 local BN_TOAST_TYPE_CLUB_INVITATION = BN_TOAST_TYPE_CLUB_INVITATION or 6
 
@@ -18,7 +19,12 @@ local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
-	F.SplitList(FilterList, C.DB.chat.keywords_list, true)
+	F.SplitList(FilterList, FREE_ADB.chat_filter_black_list, true)
+end
+
+local WhiteFilterList = {}
+function CHAT:UpdateFilterWhiteList()
+	F.SplitList(WhiteFilterList, FREE_ADB.chat_filter_white_list, true)
 end
 
 -- ECF strings compare
@@ -61,6 +67,23 @@ function CHAT:GetFilterResult(event, msg, name, flag, guid)
 	-- Trash Filter
 	for _, symbol in ipairs(msgSymbols) do
 		filterMsg = gsub(filterMsg, symbol, '')
+	end
+
+	if event == 'CHAT_MSG_CHANNEL' then
+		local matches = 0
+		local found
+		for keyword in pairs(WhiteFilterList) do
+			if keyword ~= '' then
+				found = true
+				local _, count = gsub(filterMsg, keyword, '')
+				if count > 0 then
+					matches = matches + 1
+				end
+			end
+		end
+		if matches == 0 and found then
+			return 0
+		end
 	end
 
 	local matches = 0
@@ -108,6 +131,10 @@ function CHAT:UpdateChatFilter(event, msg, author, _, _, _, flag, _, _, _, _, li
 end
 
 -- Block addon msg
+local addonBlockList = {
+	'任务进度提示', '%[接受任务%]', '%(任务完成%)', '<大脚', '【爱不易】', 'EUI[:_]', '打断:.+|Hspell', 'PS 死亡: .+>', '%*%*.+%*%*', '<iLvl>', strrep('%-', 20),
+	'<小队物品等级:.+>', '<LFG>', '进度:', '属性通报', '汐寒', 'wow.+兑换码', 'wow.+验证码', '【有爱插件】', '：.+>', '|Hspell.+=>'
+}
 
 local cvar
 local function toggleCVar(value)
@@ -126,7 +153,7 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 	local name = Ambiguate(author, 'none')
 	if UnitIsUnit(name, 'player') then return end
 
-	for _, word in ipairs(C.DB.chat.addon_keywords_list) do
+	for _, word in ipairs(addonBlockList) do
 		if strfind(msg, word) then
 			if event == 'CHAT_MSG_SAY' or event == 'CHAT_MSG_YELL' then
 				CHAT:ToggleChatBubble()
@@ -139,10 +166,11 @@ function CHAT:UpdateAddOnBlocker(event, msg, author)
 end
 
 -- Block trash clubs
+local trashClubs = {'站桩', '致敬我们', '我们一起玩游戏', '部落大杂烩', '小号提升'}
 function CHAT:BlockTrashClub()
 	if self.toastType == BN_TOAST_TYPE_CLUB_INVITATION then
 		local text = self.DoubleLine:GetText() or ''
-		for _, name in pairs(C.DB.chat.trash_clubs) do
+		for _, name in pairs(trashClubs) do
 			if strfind(text, name) then
 				self:Hide()
 				return
@@ -190,15 +218,53 @@ local function isItemHasGem(link)
 	return text
 end
 
+local armorType = {
+	INVTYPE_HEAD = true,
+	INVTYPE_SHOULDER = true,
+	INVTYPE_CHEST = true,
+	INVTYPE_WRIST = true,
+	INVTYPE_HAND = true,
+	INVTYPE_WAIST = true,
+	INVTYPE_LEGS = true,
+	INVTYPE_FEET = true
+}
+
+
+local function GetSlotType(link)
+	local slotType
+	local type = select(6, GetItemInfo(link))
+
+	if type == _G.WEAPON then
+		local equipLoc = select(9, GetItemInfo(link))
+		if equipLoc ~= '' then
+			local weaponType = select(7, GetItemInfo(link))
+			slotType = weaponType or _G[equipLoc]
+		end
+	elseif type == _G.ARMOR then
+		local equipLoc = select(9, GetItemInfo(link))
+		if equipLoc ~= '' then
+			if armorType[equipLoc] then
+				local armorType = select(7, GetItemInfo(link))
+				slotType = armorType .. ' ' .. (_G[equipLoc])
+			else
+				slotType = _G[equipLoc]
+			end
+		end
+	end
+
+	return slotType
+end
+
 local itemCache = {}
 local function convertItemLevel(link)
 	if itemCache[link] then return itemCache[link] end
 
 	local itemLink = strmatch(link, '|Hitem:.-|h')
 	if itemLink then
+		local slotType = GetSlotType(itemLink)
 		local name, itemLevel = isItemHasLevel(itemLink)
 		if name and itemLevel then
-			link = gsub(link, '|h%[(.-)%]|h', '|h['..name..'('..itemLevel..')]|h'..isItemHasGem(itemLink))
+			link = gsub(link, '|h%[(.-)%]|h', '|h['..name..' ('..slotType..' '..itemLevel..')]|h'..isItemHasGem(itemLink))
 			itemCache[link] = link
 		end
 	end
@@ -212,8 +278,29 @@ end
 
 
 function CHAT:ChatFilter()
-	if C.DB.chat.filters then
+	if C.DB.chat.item_links then
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER_INFORM', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_GUILD', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_BATTLEGROUND', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.UpdateChatItemLevel)
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.UpdateChatItemLevel)
+	end
+
+	hooksecurefunc(BNToastFrame, 'ShowToast', self.BlockTrashClub)
+
+	if C.DB.chat.use_filter then
 		self:UpdateFilterList()
+		self:UpdateFilterWhiteList()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatFilter)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatFilter)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatFilter)
@@ -233,25 +320,5 @@ function CHAT:ChatFilter()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.UpdateAddOnBlocker)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.UpdateAddOnBlocker)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateAddOnBlocker)
-	end
-
-	hooksecurefunc(BNToastFrame, 'ShowToast', self.BlockTrashClub)
-
-	if C.DB.chat.item_links then
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_SAY', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER_INFORM', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_BN_WHISPER', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_RAID_LEADER', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_PARTY_LEADER', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_GUILD', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_BATTLEGROUND', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.UpdateChatItemLevel)
-		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.UpdateChatItemLevel)
 	end
 end

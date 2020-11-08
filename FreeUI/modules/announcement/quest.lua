@@ -131,7 +131,7 @@ function ANNOUNCEMENT:QuestLogUpdate()
 									isDetailInfo = true
 								end
 
-								mainInfo = '[' .. questCache.title .. ']' .. ' ' .. questCache[queryIndex].item .. ' '
+								mainInfo = questCache.link .. ' ' .. questCache[queryIndex].item .. ' '
 								mainInfoColored = questCache.link .. ' ' .. questCache[queryIndex].item .. ' '
 
 								mainInfo = mainInfo .. progressInfo
@@ -144,7 +144,7 @@ function ANNOUNCEMENT:QuestLogUpdate()
 			end
 		else -- 新的任务
 			if not questCache.worldQuestType then -- 屏蔽世界任务的接收, 路过不报告
-				mainInfo = '[' .. questCache.title .. ']' .. ' ' .. L['ANNOUNCEMENT_QUEST_ACCEPTED']
+				mainInfo = questCache.link .. ' ' .. L['ANNOUNCEMENT_QUEST_ACCEPTED']
 				mainInfoColored = questCache.link .. ' ' .. F.CreateColorString(L['ANNOUNCEMENT_QUEST_ACCEPTED'], {r = 1.000, g = 0.980, b = 0.396})
 				needAnnounce = true
 			end
@@ -152,8 +152,6 @@ function ANNOUNCEMENT:QuestLogUpdate()
 
 		if needAnnounce then
 			local message = extraInfo .. mainInfo
-			-- TODO: 疑似PTR无法发出带有链接的信息
-			-- print(gsub(message, '\124', '\124\124'))
 			ANNOUNCEMENT:SendMessage(message, ANNOUNCEMENT:GetChannel())
 
 			if not isDetailInfo then -- 具体进度系统会提示

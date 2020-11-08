@@ -584,10 +584,10 @@ function MISC:GetRaidMaxGroup()
 end
 
 function MISC:RaidTool_RoleCount(parent)
-	local roleTexCoord = {
-		{.5, .75, 0, 1},
-		{.75, 1, 0, 1},
-		{.25, .5, 0, 1},
+	local roleIcons = {
+		C.AssetsPath..'textures\\roles_tank',
+		C.AssetsPath..'textures\\roles_healer',
+		C.AssetsPath..'textures\\roles_dps',
 	}
 
 	local frame = CreateFrame('Frame', nil, parent)
@@ -597,11 +597,10 @@ function MISC:RaidTool_RoleCount(parent)
 		role[i] = frame:CreateTexture(nil, 'OVERLAY')
 		role[i]:SetPoint('LEFT', 36*i-30, 0)
 		role[i]:SetSize(15, 15)
-		role[i]:SetTexture('Interface\\LFGFrame\\LFGROLE')
-		role[i]:SetTexCoord(unpack(roleTexCoord[i]))
-		role[i].text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, 'OUTLINE', '0', nil, true)
+		role[i]:SetTexture(roleIcons[i])
+		role[i].text = F.CreateFS(frame, C.Assets.Fonts.Regular, 11, 'OUTLINE', '0', 'YELLOW', true)
 		role[i].text:ClearAllPoints()
-		role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 12, 0)
+		role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 10, 0)
 	end
 
 	local raidCounts = {
@@ -768,7 +767,7 @@ function MISC:RaidTool_Marker(parent)
 		markerButton.__bg:Hide()
 		F.ReskinMenuButton(markerButton)
 		markerButton:SetNormalTexture('Interface\\RaidFrame\\Raid-WorldPing')
-		markerButton:GetNormalTexture():SetVertexColor(C.r, C.g, C.b)
+		markerButton:GetNormalTexture():SetVertexColor(.2, 1, .2)
 		markerButton:HookScript('OnMouseUp', function()
 			if (IsInGroup() and not IsInRaid()) or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then return end
 			UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_LEADER)

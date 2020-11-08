@@ -25,9 +25,8 @@ StaticPopupDialogs['FREEUI_RESET_PROFILE'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		-- wipe(C.DB)
-		-- ReloadUI()
-		print('reset profile')
+		wipe(C.DB)
+		ReloadUI()
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -39,9 +38,8 @@ StaticPopupDialogs['FREEUI_APPLY_PROFILE'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		-- FREE_ADB['profile_index'][myFullName] = GUI.currentProfile
-		-- ReloadUI()
-		print('apply profile')
+		FREE_ADB['profile_index'][myFullName] = GUI.currentProfile
+		ReloadUI()
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -53,16 +51,15 @@ StaticPopupDialogs['FREEUI_DOWNLOAD_PROFILE'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		-- local profileIndex = FREE_ADB['profile_index'][myFullName]
-		-- if GUI.currentProfile == 1 then
-		-- 	FREE_PDB[profileIndex-1] = FREE_DB
-		-- elseif profileIndex == 1 then
-		-- 	FREE_DB = FREE_PDB[GUI.currentProfile-1]
-		-- else
-		-- 	FREE_PDB[profileIndex-1] = FREE_PDB[GUI.currentProfile-1]
-		-- end
-		-- ReloadUI()
-		print('download profile')
+		local profileIndex = FREE_ADB['profile_index'][myFullName]
+		if GUI.currentProfile == 1 then
+			FREE_PDB[profileIndex-1] = FREE_DB
+		elseif profileIndex == 1 then
+			FREE_DB = FREE_PDB[GUI.currentProfile-1]
+		else
+			FREE_PDB[profileIndex-1] = FREE_PDB[GUI.currentProfile-1]
+		end
+		ReloadUI()
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -74,13 +71,12 @@ StaticPopupDialogs['FREEUI_UPLOAD_PROFILE'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		-- local profileIndex = FREE_ADB['profile_index'][myFullName]
-		-- if GUI.currentProfile == 1 then
-		-- 	FREE_DB = C.DB
-		-- else
-		-- 	FREE_PDB[GUI.currentProfile-1] = C.DB
-		-- end
-		print('upload profile')
+		local profileIndex = FREE_ADB['profile_index'][myFullName]
+		if GUI.currentProfile == 1 then
+			FREE_DB = C.DB
+		else
+			FREE_PDB[GUI.currentProfile-1] = C.DB
+		end
 	end,
 	timeout = 0,
 	whileDead = 1,

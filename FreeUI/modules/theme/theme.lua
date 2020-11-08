@@ -33,41 +33,57 @@ function THEME:LoadDefaultSkins()
 	end)
 end
 
+
+local pollingRate, numLines = 0.05, 15
+local lines = {}
+for i = 1, numLines do
+	local line = _G.UIParent:CreateLine()
+	line:SetThickness(_G.Lerp(5, 1, (i - 1)/numLines))
+	line:SetColorTexture(1, 1, 1)
+
+	local startA, endA = _G.Lerp(1, 0, (i - 1)/numLines), _G.Lerp(1, 0, i/numLines)
+	line:SetGradientAlpha("HORIZONTAL", 1, 1, 1, startA, 1, 1, 1, endA)
+
+	lines[i] = {line = line, x = 0, y = 0}
+end
+
+local function GetLength(startX, startY, endX, endY)
+	local dx, dy = endX - startX, endY - startY
+
+	if dx < 0 then
+		dx, dy = -dx, -dy
+	end
+
+	return sqrt((dx * dx) + (dy * dy))
+end
+
+local function UpdateTrail()
+	local startX, startY = _G.GetScaledCursorPosition()
+
+	for i = 1, numLines do
+		local info = lines[i]
+
+		local endX, endY = info.x, info.y
+		if GetLength(startX, startY, endX, endY) < 0.1 then
+			info.line:Hide()
+		else
+			info.line:Show()
+			info.line:SetStartPoint("BOTTOMLEFT", _G.UIParent, startX, startY)
+			info.line:SetEndPoint("BOTTOMLEFT", _G.UIParent, endX, endY)
+		end
+
+		info.x, info.y = startX, startY
+		startX, startY = endX, endY
+	end
+end
+
+
 function THEME:CursorTrail()
 	if not FREE_ADB.cursor_trail then return end
 
-	local f = CreateFrame('Frame', nil, UIParent);
-	f:SetFrameStrata('TOOLTIP');
-
-	local tex = f:CreateTexture();
-	tex:SetTexture([[Interface\Cooldown\star4]]);
-	tex:SetBlendMode('ADD');
-	tex:SetAlpha(0.5);
-
-	local x = 0;
-	local y = 0;
-	local speed = 0;
-	local function OnUpdate(_, elapsed)
-		local dX = x;
-		local dY = y;
-		x, y = GetCursorPosition();
-		dX = x - dX;
-		dY = y - dY;
-		local weight = 2048 ^ -elapsed;
-		speed = math.min(weight * speed + (1 - weight) * math.sqrt(dX * dX + dY * dY) / elapsed, 1024);
-		local size = speed / 6 - 16;
-		if (size > 0) then
-			local scale = UIParent:GetEffectiveScale();
-			tex:SetHeight(size);
-			tex:SetWidth(size);
-			tex:SetPoint('CENTER', UIParent, 'BOTTOMLEFT', (x + 0.5 * dX) / scale, (y + 0.5 * dY) / scale);
-			tex:Show();
-		else
-			tex:Hide();
-		end
-	end
-	f:SetScript('OnUpdate', OnUpdate);
+	_G.C_Timer.NewTicker(pollingRate, UpdateTrail)
 end
+
 
 function THEME:Vignetting()
 	if not FREE_ADB.vignetting then return end
@@ -116,4 +132,7 @@ function THEME:LoadWithAddOn(addonName, value, func)
 	F:RegisterEvent('PLAYER_ENTERING_WORLD', loadFunc)
 	F:RegisterEvent('ADDON_LOADED', loadFunc)
 end
+
+
+
 
