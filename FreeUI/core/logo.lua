@@ -114,7 +114,7 @@ end
 
 
 function LOGO:OnLogin()
-	if not C.DB['installation_complete'] then return end
+	if not C.DB.installation.complete then return end
 
 	self:LoginAnimation()
 end

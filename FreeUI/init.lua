@@ -108,7 +108,7 @@ end
 -- Init
 F:RegisterEvent('PLAYER_LOGIN', function()
 
-	if C.DB['installation_complete'] then
+	if C.DB.installation.complete then
 
 		F:SetupUIScale()
 		F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)

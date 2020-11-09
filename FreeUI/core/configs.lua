@@ -487,22 +487,13 @@ C['NPShowPowerUnitsList'] = {
 
 
 C.CharacterSettings = {
-	['BfA'] = false,
+	['BFA'] = false,
 	['classic'] = false,
-	['installation_complete'] = false,
+	['installation'] = {
+		['complete'] = false,
+	},
 	['ui_anchor'] = {},
 	['ui_anchor_temp'] = {},
-
-
-
-
-	['blow_my_whistle'] = true,
-
-	['group_tool'] = true,
-	['faster_camera'] = true,
-
-	['block_stranger_invite'] = false,
-
 
 	['blizzard'] = {
 		['hide_talkinghead'] = true,
@@ -1011,10 +1002,6 @@ f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(self, _, addon)
 	if addon ~= 'FreeUI' then return end
 
-
-
-
-
 	initSettings(C.AccountSettings, FREE_ADB)
 	if not next(FREE_PDB) then
 		for i = 1, 5 do FREE_PDB[i] = {} end
@@ -1026,9 +1013,9 @@ f:SetScript('OnEvent', function(self, _, addon)
 
 	if FREE_ADB['profile_index'][C.MyFullName] == 1 then
 		C.DB = FREE_DB
-		if not C.DB['BfA'] then
+		if not C.DB['BFA'] then
 			wipe(C.DB)
-			C.DB['BfA'] = true
+			C.DB['BFA'] = true
 		end
 	else
 		C.DB = FREE_PDB[FREE_ADB['profile_index'][C.MyFullName] - 1]
@@ -1036,17 +1023,13 @@ f:SetScript('OnEvent', function(self, _, addon)
 	initSettings(C.CharacterSettings, C.DB, true)
 
 
-
-
 	F:SetupUIScale(true)
-
 
 
 	if not GUI.TextureList[FREE_ADB.texture_style] then
 		FREE_ADB.texture_style = 1 -- reset value if not exists
 	end
 	C.Assets.statusbar_tex = GUI.TextureList[FREE_ADB.texture_style].texture
-
 
 
 	self:UnregisterAllEvents()
