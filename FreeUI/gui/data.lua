@@ -144,16 +144,16 @@ function GUI:ImportData()
 			if value == 'raid_aura_watch' or value == 'custom_junk_list' then
 				local spells = {select(3, strsplit(':', option))}
 				for _, spellID in next, spells do
-					NDuiADB[value][tonumber(spellID)] = true
+					FREE_ADB[value][tonumber(spellID)] = true
 				end
 			elseif value == 'raid_debuffs' then
 				local instName, spellID, priority = select(3, strsplit(':', option))
-				if not NDuiADB[value][instName] then NDuiADB[value][instName] = {} end
-				NDuiADB[value][instName][tonumber(spellID)] = tonumber(priority)
+				if not FREE_ADB[value][instName] then FREE_ADB[value][instName] = {} end
+				FREE_ADB[value][instName][tonumber(spellID)] = tonumber(priority)
 			elseif value == 'nameplate_aura_filter' then
 				local spells = {select(4, strsplit(':', option))}
 				for _, spellID in next, spells do
-					NDuiADB[value][tonumber(arg1)][tonumber(spellID)] = true
+					FREE_ADB[value][tonumber(arg1)][tonumber(spellID)] = true
 				end
 			elseif value == 'corner_buffs' then
 				local class, spellID, anchor, r, g, b, filter = select(3, strsplit(':', option))
@@ -162,24 +162,24 @@ function GUI:ImportData()
 				g = tonumber(g)
 				b = tonumber(b)
 				filter = toBoolean(filter)
-				if not NDuiADB[value][class] then NDuiADB[value][class] = {} end
-				NDuiADB[value][class][spellID] = {anchor, {r, g, b}, filter}
+				if not FREE_ADB[value][class] then FREE_ADB[value][class] = {} end
+				FREE_ADB[value][class][spellID] = {anchor, {r, g, b}, filter}
 			elseif value == 'party_spells' then
 				local options = {strsplit(':', option)}
 				local index = 3
 				local spellID = options[index]
 				while spellID do
 					local duration = options[index+1]
-					NDuiADB[value][tonumber(spellID)] = tonumber(duration) or 0
+					FREE_ADB[value][tonumber(spellID)] = tonumber(duration) or 0
 					index = index + 2
 					spellID = options[index]
 				end
 			elseif value == 'profile_index' then
 				local name, index = select(3, strsplit(':', option))
-				NDuiADB[value][name] = tonumber(index)
+				FREE_ADB[value][name] = tonumber(index)
 			elseif value == 'profile_names' then
 				local index, name = select(3, strsplit(':', option))
-				NDuiADB[value][tonumber(index)] = name
+				FREE_ADB[value][tonumber(index)] = name
 			end
 		elseif tonumber(arg1) then
 			if value == 'countdown' then

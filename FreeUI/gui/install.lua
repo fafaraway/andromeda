@@ -271,7 +271,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L['INSTALL_BUTTON_FINISH'])
 
 		rightButton:SetScript('OnClick', function()
-			C.DB['installation_complete'] = true
+			C.DB.installation.complete = true
 			ReloadUI()
 		end)
 	end
@@ -367,44 +367,11 @@ end
 
 
 function INSTALL:OnLogin()
-	if C.DB['installation_complete'] then return end
-
-	self:HelloWorld()
-end
-
-
--- Hide tutorial
--- Credit ketho
--- https://github.com/ketho-wow/HideTutorial
-local function OnEvent(self, event, addon)
-	if event == 'ADDON_LOADED' and addon == 'HideTutorial' then
-		local tocVersion = select(4, GetBuildInfo())
-		if not C.DB.toc_version or C.DB.toc_version < tocVersion then
-			-- only do this once per character
-			C.DB.toc_version = tocVersion
-		end
-	elseif event == 'VARIABLES_LOADED' then
-		local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', NUM_LE_FRAME_TUTORIALS)
-		if C.DB.installation_complete or not lastInfoFrame then
-			C_CVar.SetCVar('showTutorials', 0)
-			C_CVar.SetCVar('showNPETutorials', 0)
-			C_CVar.SetCVar('hideAdventureJournalAlerts', 1)
-			-- help plates
-			for i = 1, NUM_LE_FRAME_TUTORIALS do
-				C_CVar.SetCVarBitfield('closedInfoFrames', i, true)
-			end
-			for i = 1, NUM_LE_FRAME_TUTORIAL_ACCCOUNTS do
-				C_CVar.SetCVarBitfield('closedInfoFramesAccountWide', i, true)
-			end
-		end
-
-		function MainMenuMicroButton_AreAlertsEnabled()
-			return false
-		end
+	if not C.DB.installation.complete then
+		print('??????????????????')
+		self:HelloWorld()
 	end
 end
 
-local f = CreateFrame('Frame')
-f:RegisterEvent('ADDON_LOADED')
-f:RegisterEvent('VARIABLES_LOADED')
-f:SetScript('OnEvent', OnEvent)
+
+

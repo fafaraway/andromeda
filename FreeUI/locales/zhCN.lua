@@ -392,7 +392,7 @@ do
 	L['NAMEPLATE_CUSTOM_UNIT_COLOR_TIP'] = '|n为特定的单位使用自定义染色。'
 	L['NAMEPLATE_CUSTOM_COLOR'] = '自定义颜色'
 	L['NAMEPLATE_CUSTOM_UNIT_LIST'] = '单位列表'
-	L['NAMEPLATE_CUSTOM_UNIT_LIST_TIP'] = '|n输入名字，以空格隔开，输入完毕按下回车。'
+	L['NAMEPLATE_CUSTOM_UNIT_LIST_TIP'] = '|n输入名字，以空格隔开，输入完毕按下回车键保存。'
 
 	L['NAMEPLATE_TARGET_INDICATOR'] = '目标指示器'
 	L['NAMEPLATE_TARGET_COLOR'] = '目标指示器颜色'
@@ -531,7 +531,7 @@ L.GUI = {
 		['DEFAULT_CHARACTER_PROFILE'] = '角色配置',
 		['DEFAULT_SHARED_PROFILE'] = '共享配置',
 		['PROFILE_NAME'] = '配置名称',
-		['PROFILE_NAME_TIP'] = '|n自定义你的配置名称。若清空了输入框，则自动载入默认的名字。|n|n输入完毕后，按一下Enter键。',
+		['PROFILE_NAME_TIP'] = '|n自定义你的配置名称。若清空了输入框，则自动载入默认的名字。|n|n输入完毕后，按一下回车键保存。',
 		['RESET_PROFILE'] = '重置当前配置',
 		['RESET_PROFILE_TIP'] = '|n重置当前配置，并载入默认设置，需要重载插件后生效。',
 		['SELECT_PROFILE'] = '选择所选配置',
@@ -540,7 +540,7 @@ L.GUI = {
 		['DOWNLOAD_PROFILE_TIP'] = '|n读取所选配置，并覆盖你当前使用的配置，需要重载插件后生效。',
 		['UPLOAD_PROFILE'] = '覆盖所选配置',
 		['UPLOAD_PROFILE_TIP'] = '|n将你当前使用的配置，覆盖到所选的配置位。',
-		['PROFILE_MANAGEMENT'] = '配置管理（测试中）',
+		['PROFILE_MANAGEMENT'] = '配置管理',
 		['PROFILE_DESCRIPTION'] = '你可以在这里管理你的插件配置，使用前请先备份一次你的数据。默认是基于你的角色进行存储，不进行同账号下各角色的共享。你也可以切换到共享配置，这样多个角色就可以使用同一个设置，无需进行重复的导入和导出。|n数据的导入和导出，只支持当前使用的存档配置。',
 		['SHARED_CHARACTERS'] = '同配置角色',
 	},
@@ -806,7 +806,7 @@ L.GUI = {
 		['CUSTOM_UNIT_COLOR_TIP'] = '|n为特定的单位使用自定义染色。',
 		['CUSTOM_COLOR'] = '自定义颜色',
 		['CUSTOM_UNIT_LIST'] = '单位列表',
-		['CUSTOM_UNIT_LIST_TIP'] = '|n输入名字，以空格隔开，输入完毕按下回车。',
+		['CUSTOM_UNIT_LIST_TIP'] = '|n输入名字，以空格隔开，输入完毕按下回车键保存。',
 
 		['TARGET_INDICATOR'] = '目标指示器',
 		['TARGET_COLOR'] = '目标指示器颜色',
