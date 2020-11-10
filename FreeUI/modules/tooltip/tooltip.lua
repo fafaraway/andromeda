@@ -298,7 +298,7 @@ end
 local fakeBg = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
 local function __GetBackdrop() return fakeBg:GetBackdrop() end
-local function __GetBackdropColor() return 0, 0, 0, .7 end
+local function __GetBackdropColor() return 0, 0, 0, FREE_ADB.backdrop_alpha end
 local function __GetBackdropBorderColor() return 0, 0, 0 end
 
 function TOOLTIP:ReskinTooltip()
@@ -329,7 +329,7 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg:SetBackdropColor(0, 0, 0, .75)
+	self.bg:SetBackdropColor(0, 0, 0, FREE_ADB.backdrop_alpha)
 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	if self.bg.__shadow then
 		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
@@ -362,8 +362,8 @@ local function TooltipSetFont(font, size)
 end
 
 function TOOLTIP:SetTooltipFonts()
-	local textSize = C.DB.tooltip.normal_font_size
-	local headerSize = C.DB.tooltip.header_font_size
+	local textSize = 14
+	local headerSize = 16
 
 	TooltipSetFont(GameTooltipHeaderText, headerSize)
 	TooltipSetFont(GameTooltipText, textSize)
@@ -390,7 +390,7 @@ end
 
 
 function TOOLTIP:OnLogin()
-	if not C.DB.tooltip.enable_tooltip then return end
+	if not C.DB.tooltip.enable then return end
 
 	GameTooltip.StatusBar = GameTooltipStatusBar
 
