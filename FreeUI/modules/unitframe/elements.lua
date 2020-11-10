@@ -23,6 +23,7 @@ ReplacePowerColors('COMBO_POINTS', 4, {199/255, 171/255, 90/255})
 ReplacePowerColors('RUNIC_POWER', 6, {135/255, 214/255, 194/255})
 ReplacePowerColors('SOUL_SHARDS', 7, {151/255, 101/255, 221/255})
 ReplacePowerColors('HOLY_POWER', 9, {208/255, 178/255, 107/255})
+ReplacePowerColors('INSANITY', 13, {179/255, 96/255, 244/255})
 
 local classColors = C.ClassColors
 for class, value in pairs(classColors) do
@@ -164,9 +165,9 @@ local function PostUpdateHealth(self, unit, min, max)
 	if isDead or isGhost then
 		parent.Bg:SetBackdropColor(0, 0, 0, .8)
 	elseif isOffline or isTapped then
-		parent.Bg:SetBackdropColor(.4, .4, .4, .5)
+		parent.Bg:SetBackdropColor(.4, .4, .4, .4)
 	else
-		parent.Bg:SetBackdropColor(.02, .02, .02, .5)
+		parent.Bg:SetBackdropColor(.02, .02, .02, .4)
 	end
 end
 
@@ -434,7 +435,7 @@ end
 
 function UNITFRAME.PostCreateIcon(element, button)
 	button.bg = F.CreateBDFrame(button)
-	button.glow = F.CreateSD(button.bg, .35, 2, 2)
+	button.glow = F.CreateSD(button.bg)
 
 	element.disableCooldown = true
 	button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -499,7 +500,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 	end
 
 	if canStealOrPurge and element.showStealableBuffs then
-		button.bg:SetBackdropColor(1, 1, 1)
+		button.bg:SetBackdropBorderColor(1, 1, 1)
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(1, 1, 1, .5)
@@ -507,13 +508,13 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 	elseif button.isDebuff and element.showDebuffType then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 
-		button.bg:SetBackdropColor(color[1], color[2], color[3])
+		button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(color[1], color[2], color[3], .5)
 		end
 	else
-		button.bg:SetBackdropColor(0, 0, 0)
+		button.bg:SetBackdropBorderColor(0, 0, 0)
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(0, 0, 0, .35)
@@ -606,7 +607,7 @@ function UNITFRAME:AddAuras(self)
 	local style = self.unitStyle
 	local auras = CreateFrame('Frame', nil, self)
 	auras.gap = true
-	auras.spacing = 5
+	auras.spacing = 6
 	auras.numTotal = 32
 
 	if style == 'target' then
