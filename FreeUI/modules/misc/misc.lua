@@ -99,7 +99,7 @@ hooksecurefunc('ShowReadyCheck', ShowReadyCheckHook)
 
 
 function MISC:FasterCamera()
-	if not C.DB['faster_camera'] then return end
+	if not C.DB.misc.faster_camera then return end
 
 	local oldZoomIn = CameraZoomIn
 	local oldZoomOut = CameraZoomOut

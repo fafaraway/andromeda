@@ -286,7 +286,7 @@ do
 	L['INVENTORY_CHARACTER'] = '服务器角色'
 	L['INVENTORY_GOLD_TOTAL'] = '总计'
 	L['INVENTORY_AUTO_DEPOSIT'] = '|n左键点击存放材料，右键点击切换存放模式。|n当按钮高亮时，每当打开银行，将自动存放背包中的材料。'
-	L["INVENTORY_EQUIPEMENT_SET"] = "装备配置方案"
+	L['INVENTORY_EQUIPEMENT_SET'] = '装备配置方案'
 end
 
 
@@ -760,10 +760,39 @@ L.GUI = {
 
 	['MAP'] = {
 		['NAME'] = '地图',
+		['ENABLE'] = '启用地图模块',
+		['ENABLE_TIP'] = '调整世界地图和小地图的相关功能',
+		['REMOVE_FOG'] = '显示地图未探索区域',
+		['COORDS'] = '玩家位置和鼠标位置的坐标',
+		['WORLDMAP_SCALE'] = '地图缩放',
+		['MAX_WORLDMAP_SCALE'] = '最大化地图缩放',
+		['WHO_PINGS'] = '显示谁在点击小地图',
+		['MICRO_MENU'] = '系统菜单',
+		['MICRO_MENU_TIP'] = '鼠标中键点击小地图会弹出系统菜单。',
+		['PROGRESS_BAR'] = '经验进度条',
+		['PROGRESS_BAR_TIP'] = '在小地图上方显示一个进度条，可以追踪玩家的经验声望荣誉等相关进度信息。',
+		['MINIMAP_SCALE'] = '小地图缩放',
 	},
 
 	['TOOLTIP'] = {
 		['NAME'] = '鼠标提示',
+		['ENABLE'] = '启用鼠标提示模块',
+		['ENABLE_TIP'] = '调整鼠标提示相关的功能。',
+		['FOLLOW_CURSOR'] = '跟随鼠标',
+		['FOLLOW_CURSOR_TIP'] = '鼠标提示的位置跟随鼠标，禁用则位置固定在右下角。',
+		['HIDE_IN_COMBAT'] = '战斗中隐藏',
+		['BORDER_COLOR'] = '边框根据物品品质染色',
+		['TIP_ICON'] = '显示物品图标',
+		['EXTRA_INFO'] = '显示额外信息',
+		['EXTRA_INFO_TIP'] = '按住Alt键显示物品ID，背包银行存量，堆叠数量，技能ID，光环来源等额外信息。',
+		['SPEC_ILVL'] = '显示专精和装等',
+		['SPEC_ILVL_TIP'] = '按住Alt键显示玩家的专精和装等。',
+		['AZERITE_ARMOR'] = '简化艾泽里特护甲信息',
+		['CONDUIT_INFO'] = '显示导灵器收集信息',
+		['TARGET_BY'] = '显示队友的关注目标,',
+		['HIDE_REALM'] = '隐藏玩家服务器',
+		['HIDE_TITLE'] = '隐藏玩家头衔',
+		['HIDE_RANK'] = '隐藏玩家公会等级',
 	},
 
 	['UNITFRAME'] = {

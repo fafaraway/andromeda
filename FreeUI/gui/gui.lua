@@ -367,8 +367,8 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{},
 		{3, 'aura', 'margin', L.GUI.AURA.MARGIN, nil, {3, 10, 1}},
 		{3, 'aura', 'offset', L.GUI.AURA.OFFSET, true, {3, 10, 1}},
-		{3, 'aura', 'buff_size', L.GUI.AURA.BUFF_SIZE, nil, {20, 60, 1}},
-		{3, 'aura', 'debuff_size', L.GUI.AURA.DEBUFF_SIZE, true, {20, 60, 1}},
+		{3, 'aura', 'buff_size', L.GUI.AURA.BUFF_SIZE, nil, {20, 50, 1}},
+		{3, 'aura', 'debuff_size', L.GUI.AURA.DEBUFF_SIZE, true, {20, 50, 1}},
 		{3, 'aura', 'buffs_per_row', L.GUI.AURA.BUFFS_PER_ROW, nil, {6, 12, 1}},
 		{3, 'aura', 'debuffs_per_row', L.GUI.AURA.DEBUFFS_PER_ROW, true, {6, 12, 1}},
 		{},
@@ -440,12 +440,32 @@ GUI.OptionsList = { -- type, key, value, name, horizon
 		{},
 		{4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, nil, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}},
 	},
-	[10] = {
+	[10] = { -- map
+		{1, 'map', 'enable', L.GUI.MAP.ENABLE, nil, nil, nil, L.GUI.MAP.ENABLE_TIP},
+		{1, 'map', 'remove_fog', L.GUI.MAP.REMOVE_FOG},
+		{1, 'map', 'coords', L.GUI.MAP.COORDS, true},
+		{3, 'map', 'worldmap_scale', L.GUI.MAP.WORLDMAP_SCALE, nil, {.5, 2, .1}},
+		{3, 'map', 'max_worldmap_scale', L.GUI.MAP.MAX_WORLDMAP_SCALE, true, {.5, 1, .1}},
 		{},
+		{1, 'map', 'who_pings', L.GUI.MAP.WHO_PINGS},
+		{1, 'map', 'micro_menu', L.GUI.MAP.MICRO_MENU, true, nil, nil, L.GUI.MAP.MICRO_MENU_TIP},
+		{1, 'map', 'progress_bar', L.GUI.MAP.PROGRESS_BAR, nil, nil, nil, L.GUI.MAP.PROGRESS_BAR_TIP},
+		{3, 'map', 'minimap_scale', L.GUI.MAP.MINIMAP_SCALE, nil, {.5, 1, .1}},
 	},
-	[11] = {
-
-		{},--blank
+	[11] = { -- tooltip
+		{1, 'tooltip', 'enable', L.GUI.TOOLTIP.ENABLE, nil, nil, nil, L.GUI.TOOLTIP.ENABLE_TIP},
+		{1, 'tooltip', 'follow_cursor', L.GUI.TOOLTIP.FOLLOW_CURSOR, nil, nil, nil, L.GUI.TOOLTIP.FOLLOW_CURSOR_TIP},
+		{1, 'tooltip', 'hide_in_combat', L.GUI.TOOLTIP.HIDE_IN_COMBAT, true},
+		{1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR},
+		{1, 'tooltip', 'tip_icon', L.GUI.TOOLTIP.TIP_ICON, true},
+		{1, 'tooltip', 'target_by', L.GUI.TOOLTIP.TARGET_BY},
+		{1, 'tooltip', 'extra_info', L.GUI.TOOLTIP.EXTRA_INFO, true, nil, nil, L.GUI.TOOLTIP.EXTRA_INFO_TIP},
+		{1, 'tooltip', 'azerite_armor', L.GUI.TOOLTIP.AZERITE_ARMOR},
+		{1, 'tooltip', 'conduit_info', L.GUI.TOOLTIP.CONDUIT_INFO, true},
+		{1, 'tooltip', 'spec_ilvl', L.GUI.TOOLTIP.SPEC_ILVL, nil, nil, nil, L.GUI.TOOLTIP.SPEC_ILVL_TIP},
+		{1, 'tooltip', 'hide_realm', L.GUI.TOOLTIP.HIDE_REALM, true},
+		{1, 'tooltip', 'hide_title', L.GUI.TOOLTIP.HIDE_TITLE},
+		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true},
 
 	},
 	[12] = {

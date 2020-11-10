@@ -239,11 +239,11 @@ C['PartySpellsList'] = {
 	[78675]  = 60,	-- 日光术
 
 	[8143]	 = 60,	-- 战栗图腾
-	[102342] = 60,	-- 铁木树皮
 	[102793] = 60,	-- 乌索尔旋风
 	[119381] = 60,	-- 扫堂腿
 	[179057] = 60,	-- 混乱新星
 	[205636] = 60,	-- 树人
+	[102342] = 90,	-- 铁木树皮
 	[31224]  = 120,	-- 暗影斗篷
 	[190319] = 120,	-- 燃烧
 	[25046]  = 120,	-- 奥术洪流
@@ -765,9 +765,7 @@ C.CharacterSettings = {
 	},
 
 	['tooltip'] = {
-		['enable_tooltip'] = true,
-			['header_font_size'] = 16,
-			['normal_font_size'] = 14,
+		['enable'] = true,
 			['follow_cursor'] = false,
 			['hide_title'] = true,
 			['hide_realm'] = true,
@@ -779,9 +777,7 @@ C.CharacterSettings = {
 			['link_hover'] = true,
 			['tip_icon'] = true,
 			['target_by'] = true,
-			['various_ids'] = true,
-			['item_count'] = true,
-			['item_price'] = true,
+			['extra_info'] = true,
 			['aura_source'] = true,
 			['conduit_info'] = true,
 	},
@@ -845,6 +841,7 @@ C.CharacterSettings = {
 		['quick_quest'] = false,
 		['quest_completed_sound'] = true,
 		['ot_buttons'] = true,
+		['faster_camera'] = true,
 
 		['item_level'] = true,
 			['gem_enchant'] = true,
@@ -949,9 +946,9 @@ C.AccountSettings = {
 	['number_format'] = 1,
 	['cursor_trail'] = true,
 	['vignetting'] = true,
-	['vignetting_alpha'] = .8,
+	['vignetting_alpha'] = .6,
 	['reskin_blizz'] = true,
-	['backdrop_alpha'] = .6,
+	['backdrop_alpha'] = .45,
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,
 	['reskin_pgf'] = true,
