@@ -18,7 +18,7 @@ local isIgnoredZone = {
 local function isUsefulAtlas(info)
 	local atlas = info.atlasName
 	if atlas then
-		return strfind(atlas, "[Vv]ignette")
+		return strfind(atlas, '[Vv]ignette') or (atlas == 'nazjatar-nagaevent')
 	end
 end
 
@@ -35,14 +35,14 @@ function NOTIFICATION:RareAlert_Update(id)
 
 		local atlasWidth = width/(txRight-txLeft)
 		local atlasHeight = height/(txBottom-txTop)
-		local tex = format("|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t", file, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
+		local tex = format('|T%s:%d:%d:0:0:%d:%d:%d:%d:%d:%d|t', file, 0, 0, atlasWidth, atlasHeight, atlasWidth*txLeft, atlasWidth*txRight, atlasHeight*txTop, atlasHeight*txBottom)
 
 		--UIErrorsFrame:AddMessage(C.InfoColor..L['NOTIFICATION_RARE']..C.RedColor..' ('..tex..(info.name or '')..')')
 		F.Print(C.InfoColor..L['NOTIFICATION_RARE']..C.BlueColor..' ('..tex..(info.name or '')..')')
 
 		F:CreateNotification(L['NOTIFICATION_RARE'], C.BlueColor..tex..(info.name or ''), nil, 'Interface\\ICONS\\INV_Letter_20')
 
-		--[[ if NOTIFICATION.RareInstType == "none" then
+		--[[ if NOTIFICATION.RareInstType == 'none' then
 			PlaySound(23404, 'master')
 		end ]]
 
@@ -54,7 +54,7 @@ end
 
 function NOTIFICATION:RareAlert_CheckInstance()
 	local _, instanceType, _, _, maxPlayers, _, _, instID = GetInstanceInfo()
-	if (instID and isIgnoredZone[instID]) or (instanceType == "scenario" and (maxPlayers == 3 or maxPlayers == 6)) then
+	if (instID and isIgnoredZone[instID]) or (instanceType == 'scenario' and (maxPlayers == 3 or maxPlayers == 6)) then
 		F:UnregisterEvent('VIGNETTE_MINIMAP_UPDATED', NOTIFICATION.RareAlert_Update)
 	else
 		F:RegisterEvent('VIGNETTE_MINIMAP_UPDATED', NOTIFICATION.RareAlert_Update)

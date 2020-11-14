@@ -113,6 +113,7 @@ local function SetupCVars()
 	SetCVar('cameraSmoothTrackingStyle', 0)
 	SetCVar('cameraYawMoveSpeed', 120)
 	SetCVar('cameraDistanceMaxZoomFactor', 2.6)
+	SetCVar('cameraPivot', 0)
 
 	-- screenshot
 	SetCVar('screenshotQuality', 10)

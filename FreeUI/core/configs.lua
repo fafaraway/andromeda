@@ -497,7 +497,7 @@ C.CharacterSettings = {
 
 	['blizzard'] = {
 		['hide_talkinghead'] = true,
-		['hide_boss_banner'] = true,
+		['hide_boss_banner'] = false,
 		['hide_boss_emote'] = true,
 		['missing_stats'] = true,
 		['mail_button'] = true,
@@ -574,7 +574,7 @@ C.CharacterSettings = {
 			['special_color'] = true,
 			['favourite_items'] = {},
 			['item_filter'] = true,
-				['item_filter_gear_set'] = false,
+				['item_filter_gear_set'] = true,
 				['item_filter_trade'] = true,
 				['item_filter_quest'] = true,
 				['item_filter_junk'] = true,
@@ -589,25 +589,28 @@ C.CharacterSettings = {
 	},
 
 	['unitframe'] = {
-		['enable_unitframe'] = true,
+		['enable'] = true,
 			['transparent_mode'] = true,
-			['combat_fader'] = true,
-				['fader_alpha'] = 0,
-				['fader_smooth'] = true,
-				['fader_arena'] = true,
-				['fader_instance'] = true,
-				['fader_hover'] = false,
-				['fader_combat'] = true,
-				['fader_target'] = true,
-				['fader_casting'] = true,
-				['fader_injured'] = true,
-				['fader_mana'] = false,
-				['fader_power'] = false,
+			['fade'] = true,
+				['fade_out_alpha'] = 0,
+				['fade_in_alpha'] = 1,
+				['fade_out_duration'] = .3,
+				['fade_in_duration'] = .3,
+
+				['condition_arena'] = true,
+				['condition_instance'] = true,
+				['condition_hover'] = false,
+				['condition_combat'] = true,
+				['condition_target'] = true,
+				['condition_casting'] = true,
+				['condition_injured'] = true,
+				['condition_mana'] = false,
+				['condition_power'] = false,
+
 			['range_check'] = true,
 				['range_check_alpha'] = 0.4,
 			['color_smooth'] = false,
 			['portrait'] = true,
-			['class_color'] = true,
 
 			['heal_prediction'] = true,
 			['over_absorb'] = true,
@@ -819,17 +822,11 @@ C.CharacterSettings = {
 	},
 
 	['misc'] = {
-		['accept_acquaintance_invite'] = false,
-		['block_stranger_invite'] = false,
-		['invite_keyword'] = 'inv',
-		['invite_whisper'] = true,
-		['invite_only_guild'] = true,
-
+		['blow_my_whistle'] = true,
 		['group_tool'] = true,
 			['rune_check'] = false,
 			['countdown'] = '10',
-
-			['marker_bar'] = true,
+		['buy_stack'] = true,
 		['auto_screenshot'] = true,
 			['screenshot_achievement'] = true,
 			['screenshot_challenge'] = true,
@@ -840,7 +837,7 @@ C.CharacterSettings = {
 		['reward_highlight'] = true,
 		['quick_quest'] = false,
 		['quest_completed_sound'] = true,
-		['ot_buttons'] = true,
+		['quest_tracker_buttons'] = true,
 		['faster_camera'] = true,
 
 		['item_level'] = true,
@@ -952,10 +949,11 @@ C.AccountSettings = {
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,
 	['reskin_pgf'] = true,
-	['chat_filter_black_list'] = '%*',
+	['custom_class_color'] = true,
+	['chat_filter_black_list'] = '',
 	['chat_filter_white_list'] = '',
 	['custom_junk_list'] = {},
-	['nameplate_aura_filter'] = {[1]={}, [2]={}},
+	['nameplate_aura_filter_list'] = {[1]={}, [2]={}},
 	['raid_debuffs'] = {},
 	['raid_aura_watch'] = {},
 	['corner_buffs'] = {},
@@ -1023,10 +1021,10 @@ f:SetScript('OnEvent', function(self, _, addon)
 	F:SetupUIScale(true)
 
 
-	if not GUI.TextureList[FREE_ADB.texture_style] then
+	if not GUI.TexturesList[FREE_ADB.texture_style] then
 		FREE_ADB.texture_style = 1 -- reset value if not exists
 	end
-	C.Assets.statusbar_tex = GUI.TextureList[FREE_ADB.texture_style].texture
+	C.Assets.statusbar_tex = GUI.TexturesList[FREE_ADB.texture_style].texture
 
 
 	self:UnregisterAllEvents()

@@ -2,6 +2,18 @@ local F, C = unpack(select(2, ...))
 
 if not C.isDeveloper then return end
 
+
+do
+	local function SetCam(cmd)
+		ConsoleExec('ActionCam ' .. cmd)
+	end
+
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', function()
+		UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
+		SetCam('basic')
+	end)
+end
+
 do -- Prevents spells from being automatically added to your action bar
 	IconIntroTracker.RegisterEvent = function() end
 	IconIntroTracker:UnregisterEvent('SPELL_PUSHED_TO_ACTIONBAR')

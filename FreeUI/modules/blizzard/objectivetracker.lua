@@ -255,7 +255,7 @@ function BLIZZARD:RestyleObjectiveTrackerText()
 	hooksecurefunc('ObjectiveTracker_Update', BLIZZARD.HandleHeaderText)
 	hooksecurefunc(_G.SCENARIO_CONTENT_TRACKER_MODULE, 'UpdateCriteria', BLIZZARD.ScenarioObjectiveBlock_UpdateCriteria)
 
-	F:Delay(
+	F.Delay(
 		1,
 		function()
 			for _, child in pairs {_G.ObjectiveTrackerBlocksFrame:GetChildren()} do
@@ -313,7 +313,7 @@ function BLIZZARD:CreateQuestAnnounceButton()
 end
 
 function BLIZZARD:AddToggleButtons()
-	if not C.DB.misc.ot_buttons then return end
+	if not C.DB.misc.quest_tracker_buttons then return end
 
 	BLIZZARD:CreateQuickQuestButton()
 	BLIZZARD:CreateQuestAnnounceButton()

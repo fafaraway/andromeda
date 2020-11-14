@@ -202,7 +202,7 @@ do
 	local function FixClassColors(frame, message, ...)
 		if type(message) == 'string' and strfind(message, '|cff') then
 			for hex, class in pairs(blizzHexColors) do
-				local color = C.Colors.Class[class]
+				local color = C.ClassColors[class]
 				message = color and gsub(message, hex, color.colorStr) or message
 			end
 		end
@@ -218,14 +218,14 @@ end
 
 -- FrameXML/LevelUpDisplay.lua
 hooksecurefunc('BossBanner_ConfigureLootFrame', function(lootFrame, data)
-		local color = C.Colors.Class[data.className]
+		local color = C.ClassColors[data.className]
 		lootFrame.PlayerName:SetTextColor(color.r, color.g, color.b)
 end)
 
 -- FrameXML/PaperDollFrame.lua
 hooksecurefunc('PaperDollFrame_SetLevel', function()
 	local className, class = UnitClass('player')
-	local color = C.Colors.Class[class].colorStr
+	local color = C.ClassColors[class].colorStr
 
 	local primaryTalentTree, specName = GetSpecialization()
 	if primaryTalentTree then
@@ -251,7 +251,7 @@ do
 	RaidNotice_AddMessage = function(frame, message, ...)
 		if strfind(message, '|cff') then
 			for hex, class in pairs(blizzHexColors) do
-				local color = C.Colors.Class[class]
+				local color = C.ClassColors[class]
 				message = gsub(message, hex, color.colorStr)
 			end
 		end

@@ -8,7 +8,6 @@
 ## X-Support: BfA
 ## X-Website: https://github.com/Solor/FreeUI
 ## X-WoWI-ID: 23258
-## OptionalDeps: WeakAuras, DBM-Core, DBM-GUI
 ## SavedVariables: FREE_ADB, FREE_PDB, FREE_GOLDCOUNT, FREE_KEYSTONE
 ## SavedVariablesPerCharacter: FREE_DB, FREE_SPELLBINDING
 

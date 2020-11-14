@@ -4,7 +4,7 @@ local COLORS = F.COLORS
 
 
 function UNITFRAME:OnLogin()
-	if not C.DB.unitframe.enable_unitframe then return end
+	if not C.DB.unitframe.enable then return end
 
 	F:SetSmoothingAmount(.3)
 

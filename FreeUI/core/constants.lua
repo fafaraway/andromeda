@@ -37,6 +37,7 @@ C.DevsList = {
 	['贰拾年老法師-死亡之翼'] = true,
 	['贰拾年老戰士-死亡之翼'] = true,
 	['贰拾年老牧師-死亡之翼'] = true,
+	['Rhonesaia-白银之手'] = true,
 }
 local function isDeveloper()
 	return C.DevsList[C.MyFullName]

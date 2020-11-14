@@ -47,7 +47,7 @@ function GUI:ExportData()
 					text = text..';ACCOUNT:'..KEY..':'..instName..':'..spellID..':'..prio
 				end
 			end
-		elseif KEY == 'nameplate_aura_filter' then
+		elseif KEY == 'nameplate_aura_filter_list' then
 			for index, value in pairs(VALUE) do
 				text = text..';ACCOUNT:'..KEY..':'..index
 				for spellID in pairs(value) do
@@ -150,7 +150,7 @@ function GUI:ImportData()
 				local instName, spellID, priority = select(3, strsplit(':', option))
 				if not FREE_ADB[value][instName] then FREE_ADB[value][instName] = {} end
 				FREE_ADB[value][instName][tonumber(spellID)] = tonumber(priority)
-			elseif value == 'nameplate_aura_filter' then
+			elseif value == 'nameplate_aura_filter_list' then
 				local spells = {select(4, strsplit(':', option))}
 				for _, spellID in next, spells do
 					FREE_ADB[value][tonumber(arg1)][tonumber(spellID)] = true

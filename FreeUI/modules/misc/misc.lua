@@ -23,12 +23,14 @@ function MISC:OnLogin()
 	--MISC:UpdateScreenShot()
 	MISC:QuestRewardHighlight()
 	MISC:UpdateQuestCompletedSound()
+	MISC:BuyStack()
+	MISC:SetRole()
 end
 
 
 -- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
 function MISC:BlowMyWhistle()
-	if not C.DB['blow_my_whistle'] then return end
+	if not C.DB.misc.blow_my_whistle then return end
 
 	local whistleSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whistle.ogg'
 	local whistle_SpellID1 = 227334;
@@ -228,20 +230,6 @@ do
 end
 
 
---[[ Set action camera ]]
-
-do
-	local function SetCam(cmd)
-		ConsoleExec('ActionCam ' .. cmd)
-	end
-
-	F:RegisterEvent('PLAYER_ENTERING_WORLD', function()
-		if not C.isDeveloper then return end
-		UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
-		SetCam('basic')
-	end)
-end
-
 
 --[[ Auto take screenshot ]]
 
@@ -281,12 +269,12 @@ do
 
 
 	F:RegisterEvent('ACHIEVEMENT_EARNED', function(achievementID, alreadyEarned)
-		F.Print('achievementID', achievementID)
-		F.Print('alreadyEarned', alreadyEarned)
+		F.Print(achievementID)
+		F.Print(alreadyEarned)
 		if alreadyEarned then return end
-		F.Print('alreadyEarned', alreadyEarned)
+		F.Print(alreadyEarned)
 
-		_G.C_Timer.After(1, function()
+		F.Delay(1, function()
 			F.Print('taking screenshot')
 			_G.Screenshot()
 			F.Print('screenshot taken')
@@ -316,9 +304,75 @@ end
 
 
 
+function MISC:BuyStack()
+	if not C.DB.misc.buy_stack then return end
+
+	local cache = {}
+	local itemLink, id
+
+	StaticPopupDialogs['FREEUI_BUY_STACK'] = {
+		text = L.GUI.MISC.BUY_STACK,
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			if not itemLink then return end
+			BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+			cache[itemLink] = true
+			itemLink = nil
+		end,
+		hideOnEscape = 1,
+		hasItemFrame = 1,
+	}
+
+	local _MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
+	function MerchantItemButton_OnModifiedClick(self, ...)
+		if IsAltKeyDown() then
+			id = self:GetID()
+			itemLink = GetMerchantItemLink(id)
+			if not itemLink then return end
+			local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
+			if maxStack and maxStack > 1 then
+				if not cache[itemLink] then
+					local r, g, b = GetItemQualityColor(quality or 1)
+					StaticPopup_Show('FREEUI_BUY_STACK', ' ', ' ', {['texture'] = texture, ['name'] = name, ['color'] = {r, g, b, 1}, ['link'] = itemLink, ['index'] = id, ['count'] = maxStack})
+				else
+					BuyMerchantItem(id, GetMerchantItemMaxStack(id))
+				end
+			end
+		end
+
+		_MerchantItemButton_OnModifiedClick(self, ...)
+	end
+end
 
 
+do
+	local prev = 0
+	local function SetRole()
+		if C.MyLevel >= 10 and not InCombatLockdown() and IsInGroup() and not IsPartyLFG() then
+			local spec = GetSpecialization()
+			if spec then
+				local role = GetSpecializationRole(spec)
+				if UnitGroupRolesAssigned("player") ~= role then
+					local t = GetTime()
+					if t - prev > 2 then
+						prev = t
+						UnitSetRole("player", role)
+					end
+				end
+			else
+				UnitSetRole("player", "No Role")
+			end
+		end
+	end
 
+	function MISC:SetRole()
+		F:RegisterEvent('PLAYER_TALENT_UPDATE', SetRole)
+		F:RegisterEvent('GROUP_ROSTER_UPDATE', SetRole)
+
+		RolePollPopup:UnregisterEvent("ROLE_POLL_BEGIN")
+	end
+end
 
 
 

@@ -33,13 +33,9 @@ tinsert(C.BlizzThemes, function()
 	end)
 
 	for i = 1, MAX_REQUIRED_ITEMS do
-		local ic = _G["QuestProgressItem"..i.."IconTexture"]
-		local na = _G["QuestProgressItem"..i.."NameFrame"]
-		local co = _G["QuestProgressItem"..i.."Count"]
-		ic:SetSize(40, 40)
-		F.ReskinIcon(ic)
-		na:Hide()
-		co:SetDrawLayer("OVERLAY")
+		local button = _G["QuestProgressItem"..i]
+		F.ReskinIcon(button.Icon)
+		button.NameFrame:Hide()
 	end
 
 	QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
@@ -62,9 +58,9 @@ tinsert(C.BlizzThemes, function()
 
 	-- Text colour stuff
 
-	QuestProgressRequiredItemsText:SetTextColor(1, 1, 1)
+	QuestProgressRequiredItemsText:SetTextColor(1, .8, 0)
 	QuestProgressRequiredItemsText:SetShadowColor(0, 0, 0)
-	QuestProgressTitleText:SetTextColor(1, 1, 1)
+	QuestProgressTitleText:SetTextColor(1, .8, 0)
 	QuestProgressTitleText:SetShadowColor(0, 0, 0)
 	QuestProgressTitleText.SetTextColor = F.Dummy
 	QuestProgressText:SetTextColor(1, 1, 1)

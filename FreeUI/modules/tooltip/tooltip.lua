@@ -527,9 +527,12 @@ TOOLTIP:RegisterTooltips('FreeUI', function()
 		if BSYC_EventAlertTooltip then
 			TOOLTIP.ReskinTooltip(BSYC_EventAlertTooltip)
 		end
-		-- Lib minimap icon
+		-- Lib
 		if LibDBIconTooltip then
 			TOOLTIP.ReskinTooltip(LibDBIconTooltip)
+		end
+		if AceConfigDialogTooltip then
+			TOOLTIP.ReskinTooltip(AceConfigDialogTooltip)
 		end
 		-- TomTom
 		if TomTomTooltip then

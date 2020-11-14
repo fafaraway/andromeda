@@ -582,11 +582,11 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 		return true
 	elseif style == 'nameplate' and C.DB.nameplate.plate_auras then
 
-		if FREE_ADB['nameplate_aura_filter'][2][spellID] or C.AuraBlackList[spellID] then
+		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.AuraBlackList[spellID] then
 			return false
 		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
-		elseif FREE_ADB['nameplate_aura_filter'][1][spellID] or C.AuraWhiteList[spellID] then
+		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or C.AuraWhiteList[spellID] then
 			return true
 		else
 			return nameplateShowAll or isMine
@@ -1295,24 +1295,25 @@ end
 --[[ Combat fader ]]
 
 function UNITFRAME:AddCombatFader(self)
-	if not C.DB.unitframe.combat_fader then return end
+	if not C.DB.unitframe.fade then return end
 
 	if not self.Fader then
 		self.Fader = {}
 	end
 
-	self.Fader.maxAlhpa = 1
-	self.Fader.minAlpha = C.DB.unitframe.fader_alpha
-	self.Fader.smooth = C.DB.unitframe.fader_smooth
-	self.Fader.hover = C.DB.unitframe.fader_hover
-	self.Fader.arena = C.DB.unitframe.fader_arena
-	self.Fader.instance = C.DB.unitframe.fader_instance
-	self.Fader.combat = C.DB.unitframe.fader_combat
-	self.Fader.target = C.DB.unitframe.fader_target
-	self.Fader.casting = C.DB.unitframe.fader_casting
-	self.Fader.injured = C.DB.unitframe.fader_injured
-	self.Fader.mana = C.DB.unitframe.fader_mana
-	self.Fader.power = C.DB.unitframe.fader_power
+	self.Fader.maxAlhpa = C.DB.unitframe.fade_in_alpha
+	self.Fader.minAlpha = C.DB.unitframe.fade_out_alpha
+	self.Fader.outDuration = C.DB.unitframe.fade_out_duration
+	self.Fader.inDuration = C.DB.unitframe.fade_in_duration
+	self.Fader.hover = C.DB.unitframe.condition_hover
+	self.Fader.arena = C.DB.unitframe.condition_arena
+	self.Fader.instance = C.DB.unitframe.condition_instance
+	self.Fader.combat = C.DB.unitframe.condition_combat
+	self.Fader.target = C.DB.unitframe.condition_target
+	self.Fader.casting = C.DB.unitframe.condition_casting
+	self.Fader.injured = C.DB.unitframe.condition_injured
+	self.Fader.mana = C.DB.unitframe.condition_mana
+	self.Fader.power = C.DB.unitframe.condition_power
 end
 
 

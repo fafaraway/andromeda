@@ -60,6 +60,7 @@ local inaccurateQuestAreas = {
 	[25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[34461] = 590, -- Horde Garrison
+	[60004] = 118, -- 前夕任务：英勇之举
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -365,6 +366,10 @@ function ExtraQuestButton:RemoveItem()
 	end
 end
 
+local function IsQuestOnMap(questID)
+	return not onlyCurrentZone or C_QuestLog_IsOnMap(questID)
+end
+
 local function GetQuestDistanceWithItem(questID)
 	local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
 	if not questLogIndex then return end
@@ -379,10 +384,11 @@ local function GetQuestDistanceWithItem(questID)
 	if not itemLink then return end
 	if GetItemCount(itemLink) == 0 then return end
 
-	local shouldShowItem = not C_QuestLog_IsComplete(questID) or showWhenComplete
+	if C_QuestLog_IsComplete(questID) and not showWhenComplete then return end
+
 	local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
 	local distanceYd = distanceSq and sqrt(distanceSq)
-	if shouldShowItem and distanceYd and distanceYd <= MAX_DISTANCE_YARDS then
+	if IsQuestOnMap(questID) and distanceYd and distanceYd <= MAX_DISTANCE_YARDS then
 		return distanceYd, itemLink
 	end
 
@@ -405,10 +411,6 @@ local function GetQuestDistanceWithItem(questID)
 	end
 end
 
-local function IsQuestOnMap(questID)
-	return not onlyCurrentZone or C_QuestLog_IsOnMap(questID)
-end
-
 local function GetClosestQuestItem()
 	local closestQuestItemLink
 	local closestDistance = MAX_DISTANCE_YARDS
@@ -417,7 +419,7 @@ local function GetClosestQuestItem()
 		-- this only tracks supertracked worldquests,
 		-- e.g. stuff the player has shift-clicked on the map
 		local questID = C_QuestLog_GetQuestIDForWorldQuestWatchIndex(index)
-		if questID and IsQuestOnMap(questID) then
+		if questID then
 			local distance, itemLink = GetQuestDistanceWithItem(questID)
 			if distance and distance <= closestDistance then
 				closestDistance = distance
@@ -429,7 +431,7 @@ local function GetClosestQuestItem()
 	if not closestQuestItemLink then
 		for index = 1, C_QuestLog_GetNumQuestWatches() do
 			local questID = C_QuestLog_GetQuestIDForQuestWatchIndex(index)
-			if questID and QuestHasPOIInfo(questID) and IsQuestOnMap(questID) then
+			if questID and QuestHasPOIInfo(questID) then
 				local distance, itemLink = GetQuestDistanceWithItem(questID)
 				if distance and distance <= closestDistance then
 					closestDistance = distance
@@ -443,7 +445,7 @@ local function GetClosestQuestItem()
 		for index = 1, C_QuestLog_GetNumQuestLogEntries() do
 			local info = C_QuestLog_GetInfo(index)
 			local questID = info.questID
-			if info and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) and IsQuestOnMap(questID) then
+			if info and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
 				local distance, itemLink = GetQuestDistanceWithItem(questID)
 				if distance and distance <= closestDistance then
 					closestDistance = distance

@@ -802,8 +802,8 @@ function INVENTORY:OnLogin()
 	local bagsWidth = C.DB.inventory.bag_columns
 	local bankWidth = C.DB.inventory.bank_columns
 	local iconSize = C.DB.inventory.slot_size
-	local itemSetFilter = C.DB.inventory.item_filter_gear_set
 	local showNewItem = C.DB.inventory.new_item_flash
+	local hasCanIMogIt = IsAddOnLoaded('CanIMogIt')
 
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -830,11 +830,17 @@ function INVENTORY:OnLogin()
 		f.junk = MyContainer:New('Junk', {Columns = bagsWidth, Parent = f.main})
 		f.junk:SetFilter(filters.bagsJunk, true)
 
+		f.bagFavourite = MyContainer:New('BagFavourite', {Columns = bagsWidth, Parent = f.main})
+		f.bagFavourite:SetFilter(filters.bagFavourite, true)
+
 		f.azeriteItem = MyContainer:New('AzeriteItem', {Columns = bagsWidth, Parent = f.main})
 		f.azeriteItem:SetFilter(filters.bagAzeriteItem, true)
 
 		f.equipment = MyContainer:New('Equipment', {Columns = bagsWidth, Parent = f.main})
 		f.equipment:SetFilter(filters.bagEquipment, true)
+
+		f.equipSet = MyContainer:New('EquipSet', {Columns = bagsWidth, Parent = f.main})
+		f.equipSet:SetFilter(filters.bagEquipSet, true)
 
 		f.consumable = MyContainer:New('Consumable', {Columns = bagsWidth, Parent = f.main})
 		f.consumable:SetFilter(filters.bagConsumable, true)
@@ -845,16 +851,16 @@ function INVENTORY:OnLogin()
 		f.bagGoods = MyContainer:New('BagGoods', {Columns = bagsWidth, Parent = f.main})
 		f.bagGoods:SetFilter(filters.bagGoods, true)
 
-		f.questitem = MyContainer:New('QuestItem', {Columns = bagsWidth, Parent = f.main})
-		f.questitem:SetFilter(filters.bagQuestItem, true)
-
-		f.bagFavourite = MyContainer:New('BagFavourite', {Columns = bagsWidth, Parent = f.main})
-		f.bagFavourite:SetFilter(filters.bagFavourite, true)
+		f.bagQuest = MyContainer:New('BagQuest', {Columns = bagsWidth, Parent = f.main})
+		f.bagQuest:SetFilter(filters.bagQuest, true)
 
 		f.bank = MyContainer:New('Bank', {Columns = bankWidth, Bags = 'bank'})
 		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
 		f.bank:Hide()
+
+		f.bankFavourite = MyContainer:New('BankFavourite', {Columns = bankWidth, Parent = f.bank})
+		f.bankFavourite:SetFilter(filters.bankFavourite, true)
 
 		f.bankAzeriteItem = MyContainer:New('BankAzeriteItem', {Columns = bankWidth, Parent = f.bank})
 		f.bankAzeriteItem:SetFilter(filters.bankAzeriteItem, true)
@@ -865,6 +871,9 @@ function INVENTORY:OnLogin()
 		f.bankEquipment = MyContainer:New('BankEquipment', {Columns = bankWidth, Parent = f.bank})
 		f.bankEquipment:SetFilter(filters.bankEquipment, true)
 
+		f.bankEquipSet = MyContainer:New('BankEquipSet', {Columns = bankWidth, Parent = f.bank})
+		f.bankEquipSet:SetFilter(filters.bankEquipSet, true)
+
 		f.bankConsumable = MyContainer:New('BankConsumable', {Columns = bankWidth, Parent = f.bank})
 		f.bankConsumable:SetFilter(filters.bankConsumable, true)
 
@@ -874,16 +883,16 @@ function INVENTORY:OnLogin()
 		f.bankGoods = MyContainer:New('BankGoods', {Columns = bankWidth, Parent = f.bank})
 		f.bankGoods:SetFilter(filters.bankGoods, true)
 
-		f.bankFavourite = MyContainer:New('BankFavourite', {Columns = bankWidth, Parent = f.bank})
-		f.bankFavourite:SetFilter(filters.bankFavourite, true)
+		f.bankQuest = MyContainer:New('BankQuest', {Columns = bankWidth, Parent = f.bank})
+		f.bankQuest:SetFilter(filters.bankQuest, true)
 
 		f.reagent = MyContainer:New('Reagent', {Columns = bankWidth})
 		f.reagent:SetFilter(filters.onlyReagent, true)
 		f.reagent:SetPoint('BOTTOMLEFT', f.bank)
 		f.reagent:Hide()
 
-		INVENTORY.BagGroup = {f.azeriteItem, f.equipment, f.bagCompanion, f.bagGoods, f.consumable, f.bagFavourite, f.junk, f.questitem}
-		INVENTORY.BankGroup = {f.bankAzeriteItem, f.bankEquipment, f.bankLegendary, f.bankCompanion, f.bankGoods, f.bankConsumable, f.bankFavourite}
+		INVENTORY.BagGroup = {f.azeriteItem, f.equipment, f.equipSet, f.bagCompanion, f.bagGoods, f.consumable, f.bagQuest, f.bagFavourite, f.junk}
+		INVENTORY.BankGroup = {f.bankAzeriteItem, f.bankEquipment, f.bankEquipSet, f.bankLegendary, f.bankCompanion, f.bankGoods, f.bankConsumable, f.bankQuest, f.bankFavourite}
 	end
 
 	local initBagType
@@ -967,6 +976,12 @@ function INVENTORY:OnLogin()
 		self.ShowNewItems = showNewItem
 
 		self:HookScript('OnClick', INVENTORY.ButtonOnClick)
+
+		if hasCanIMogIt then
+			self.canIMogIt = parentFrame:CreateTexture(nil, 'OVERLAY')
+			self.canIMogIt:SetSize(13, 13)
+			self.canIMogIt:SetPoint(unpack(CanIMogIt.ICON_LOCATIONS[CanIMogItOptions['iconLocation']]))
+		end
 	end
 
 	function MyButton:ItemOnEnter()
@@ -1002,6 +1017,19 @@ function INVENTORY:OnLogin()
 			return 'CosmeticIconFrame'
 		elseif C_Soulbinds_IsItemConduitByItemInfo(item.link) then
 			return 'ConduitIconFrame', 'ConduitIconFrame-Corners'
+		end
+	end
+
+	local function UpdateCanIMogIt(self, item)
+		if not self.canIMogIt then return end
+
+		local text, unmodifiedText = CanIMogIt:GetTooltipText(nil, item.bagID, item.slotID)
+		if text and text ~= '' then
+			local icon = CanIMogIt.tooltipOverlayIcons[unmodifiedText]
+			self.canIMogIt:SetTexture(icon)
+			self.canIMogIt:Show()
+		else
+			self.canIMogIt:Hide()
 		end
 	end
 
@@ -1078,6 +1106,14 @@ function INVENTORY:OnLogin()
 				self.BindType:SetText('')
 			end
 		end
+
+		-- Hide empty tooltip
+		if not GetContainerItemInfo(item.bagID, item.slotID) then
+			GameTooltip:Hide()
+		end
+
+		-- Support CanIMogIt
+		UpdateCanIMogIt(self, item)
 	end
 
 	function MyButton:OnUpdateQuest(item)
@@ -1148,17 +1184,13 @@ function INVENTORY:OnLogin()
 		if strmatch(name, 'AzeriteItem$') then
 			label = L['INVENTORY_AZERITEARMOR']
 		elseif strmatch(name, 'Equipment$') then
-			if itemSetFilter then
-				label = L['INVENTORY_EQUIPEMENT_SET']
-			else
-				label = BAG_FILTER_EQUIPMENT
-			end
+			label = BAG_FILTER_EQUIPMENT
+		elseif strmatch(name, 'EquipSet$') then
+			label = L.GUI.INVENTORY.ITEM_FILTER_GEAR_SET
 		elseif name == 'BankLegendary' then
 			label = LOOT_JOURNAL_LEGENDARIES
 		elseif strmatch(name, 'Consumable$') then
 			label = BAG_FILTER_CONSUMABLES
-		elseif strmatch(name, 'QuestItem$') then
-			label = AUCTION_CATEGORY_QUEST_ITEMS
 		elseif name == 'Junk' then
 			label = BAG_FILTER_JUNK
 		elseif strmatch(name, 'Companion') then
@@ -1167,7 +1199,10 @@ function INVENTORY:OnLogin()
 			label = PREFERENCES
 		elseif strmatch(name, 'Goods') then
 			label = AUCTION_CATEGORY_TRADE_GOODS
+		elseif strmatch(name, 'Quest') then
+			label = QUESTS_LABEL
 		end
+
 		if label then
 			self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
 			return
