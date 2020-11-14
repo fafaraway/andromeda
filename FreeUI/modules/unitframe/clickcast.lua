@@ -243,7 +243,7 @@ end
 
 
 function UNITFRAME:ClickCast()
-	if not C.DB.unitframe.enable_unitframe then return end
+	if not C.DB.unitframe.enable then return end
 	if not C.DB.unitframe.enable_group then return end
 	if not C.DB.unitframe.group_click_cast then return end
 

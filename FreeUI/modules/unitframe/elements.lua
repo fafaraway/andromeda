@@ -23,6 +23,7 @@ ReplacePowerColors('COMBO_POINTS', 4, {199/255, 171/255, 90/255})
 ReplacePowerColors('RUNIC_POWER', 6, {135/255, 214/255, 194/255})
 ReplacePowerColors('SOUL_SHARDS', 7, {151/255, 101/255, 221/255})
 ReplacePowerColors('HOLY_POWER', 9, {208/255, 178/255, 107/255})
+ReplacePowerColors('INSANITY', 13, {179/255, 96/255, 244/255})
 
 local classColors = C.ClassColors
 for class, value in pairs(classColors) do
@@ -164,9 +165,9 @@ local function PostUpdateHealth(self, unit, min, max)
 	if isDead or isGhost then
 		parent.Bg:SetBackdropColor(0, 0, 0, .8)
 	elseif isOffline or isTapped then
-		parent.Bg:SetBackdropColor(.4, .4, .4, .5)
+		parent.Bg:SetBackdropColor(.4, .4, .4, .4)
 	else
-		parent.Bg:SetBackdropColor(.02, .02, .02, .5)
+		parent.Bg:SetBackdropColor(.02, .02, .02, .4)
 	end
 end
 
@@ -434,7 +435,7 @@ end
 
 function UNITFRAME.PostCreateIcon(element, button)
 	button.bg = F.CreateBDFrame(button)
-	button.glow = F.CreateSD(button.bg, .35, 2, 2)
+	button.glow = F.CreateSD(button.bg)
 
 	element.disableCooldown = true
 	button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -499,7 +500,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 	end
 
 	if canStealOrPurge and element.showStealableBuffs then
-		button.bg:SetBackdropColor(1, 1, 1)
+		button.bg:SetBackdropBorderColor(1, 1, 1)
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(1, 1, 1, .5)
@@ -507,13 +508,13 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 	elseif button.isDebuff and element.showDebuffType then
 		local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
 
-		button.bg:SetBackdropColor(color[1], color[2], color[3])
+		button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(color[1], color[2], color[3], .5)
 		end
 	else
-		button.bg:SetBackdropColor(0, 0, 0)
+		button.bg:SetBackdropBorderColor(0, 0, 0)
 
 		if button.glow then
 			button.glow:SetBackdropBorderColor(0, 0, 0, .35)
@@ -581,11 +582,11 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 		return true
 	elseif style == 'nameplate' and C.DB.nameplate.plate_auras then
 
-		if FREE_ADB['nameplate_aura_filter'][2][spellID] or C.AuraBlackList[spellID] then
+		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.AuraBlackList[spellID] then
 			return false
 		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
-		elseif FREE_ADB['nameplate_aura_filter'][1][spellID] or C.AuraWhiteList[spellID] then
+		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or C.AuraWhiteList[spellID] then
 			return true
 		else
 			return nameplateShowAll or isMine
@@ -606,7 +607,7 @@ function UNITFRAME:AddAuras(self)
 	local style = self.unitStyle
 	local auras = CreateFrame('Frame', nil, self)
 	auras.gap = true
-	auras.spacing = 5
+	auras.spacing = 6
 	auras.numTotal = 32
 
 	if style == 'target' then
@@ -1294,24 +1295,25 @@ end
 --[[ Combat fader ]]
 
 function UNITFRAME:AddCombatFader(self)
-	if not C.DB.unitframe.combat_fader then return end
+	if not C.DB.unitframe.fade then return end
 
 	if not self.Fader then
 		self.Fader = {}
 	end
 
-	self.Fader.maxAlhpa = 1
-	self.Fader.minAlpha = C.DB.unitframe.fader_alpha
-	self.Fader.smooth = C.DB.unitframe.fader_smooth
-	self.Fader.hover = C.DB.unitframe.fader_hover
-	self.Fader.arena = C.DB.unitframe.fader_arena
-	self.Fader.instance = C.DB.unitframe.fader_instance
-	self.Fader.combat = C.DB.unitframe.fader_combat
-	self.Fader.target = C.DB.unitframe.fader_target
-	self.Fader.casting = C.DB.unitframe.fader_casting
-	self.Fader.injured = C.DB.unitframe.fader_injured
-	self.Fader.mana = C.DB.unitframe.fader_mana
-	self.Fader.power = C.DB.unitframe.fader_power
+	self.Fader.maxAlhpa = C.DB.unitframe.fade_in_alpha
+	self.Fader.minAlpha = C.DB.unitframe.fade_out_alpha
+	self.Fader.outDuration = C.DB.unitframe.fade_out_duration
+	self.Fader.inDuration = C.DB.unitframe.fade_in_duration
+	self.Fader.hover = C.DB.unitframe.condition_hover
+	self.Fader.arena = C.DB.unitframe.condition_arena
+	self.Fader.instance = C.DB.unitframe.condition_instance
+	self.Fader.combat = C.DB.unitframe.condition_combat
+	self.Fader.target = C.DB.unitframe.condition_target
+	self.Fader.casting = C.DB.unitframe.condition_casting
+	self.Fader.injured = C.DB.unitframe.condition_injured
+	self.Fader.mana = C.DB.unitframe.condition_mana
+	self.Fader.power = C.DB.unitframe.condition_power
 end
 
 

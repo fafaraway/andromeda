@@ -106,6 +106,8 @@ end
 
 
 function TOOLTIP:ExtraInfo()
+	if not C.DB.tooltip.extra_info then return end
+
 	-- Update all
 	hooksecurefunc(GameTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)
 	hooksecurefunc(ItemRefTooltip, 'SetHyperlink', TOOLTIP.SetHyperLinkID)

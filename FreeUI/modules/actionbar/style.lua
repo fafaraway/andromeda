@@ -356,7 +356,7 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
 	end
 
 	--leave vehicle
-	if C.DB.unitframe.enable_unitframe and C.DB.unitframe.combat_fader then
+	if C.DB.unitframe.enable and C.DB.unitframe.fade then
 		ACTIONBAR:StyleActionButton(_G['FreeUI_LeaveVehicleButton'], cfg)
 	end
 

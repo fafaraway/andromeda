@@ -51,32 +51,16 @@ local function Update(self)
 		(element.power and (not isPowerRested(powerToken))) or
 		(element.hover and GetMouseFocus() == self)
 	then
-		if element.smooth then
-			F:UIFrameFadeIn(self, 0.3, self:GetAlpha(), element.maxAlpha or 1)
+		F:UIFrameFadeIn(self, element.inDuration, self:GetAlpha(), element.maxAlpha or 1)
 
-			if _G.oUF_Pet then
-				F:UIFrameFadeIn(_G.oUF_Pet, 0.3, self:GetAlpha(), element.maxAlpha or 1)
-			end
-		else
-			self:SetAlpha(element.maxAlpha or 1)
-
-			if _G.oUF_Pet then
-				_G.oUF_Pet:SetAlpha(element.maxAlpha or 1)
-			end
+		if _G.oUF_Pet then
+			F:UIFrameFadeIn(_G.oUF_Pet, element.inDuration, self:GetAlpha(), element.maxAlpha or 1)
 		end
 	else
-		if element.smooth then
-			F:UIFrameFadeOut(self, 0.3, self:GetAlpha(), element.minAlpha or 0)
+		F:UIFrameFadeOut(self, element.outDuration, self:GetAlpha(), element.minAlpha or 0)
 
-			if _G.oUF_Pet then
-				F:UIFrameFadeOut(_G.oUF_Pet, 0.3, self:GetAlpha(), element.minAlpha or 0)
-			end
-		else
-			self:SetAlpha(element.minAlpha or 0.3)
-
-			if _G.oUF_Pet then
-				_G.oUF_Pet:SetAlpha(element.minAlpha or 0.3)
-			end
+		if _G.oUF_Pet then
+			F:UIFrameFadeOut(_G.oUF_Pet, element.outDuration, self:GetAlpha(), element.minAlpha or 0)
 		end
 	end
 end

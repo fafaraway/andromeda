@@ -75,12 +75,14 @@ end
 
 function TOOLTIP:HyperLink_OnEnter(link, ...)
 	local linkType = strmatch(link, '^([^:]+)')
-	if linkType and linkType == 'battlepet' then
-		TOOLTIP.HyperLink_SetPet(self, link)
-	elseif linkType and linkType == 'journal' then
-		TOOLTIP.HyperLink_SetJournal(self, link)
-	elseif linkType and linkTypes[linkType] then
-		TOOLTIP.HyperLink_SetTypes(self, link)
+	if linkType then
+		if linkType == 'battlepet' then
+			TOOLTIP.HyperLink_SetPet(self, link)
+		elseif linkType == 'journal' then
+			TOOLTIP.HyperLink_SetJournal(self, link)
+		elseif linkTypes[linkType] then
+			TOOLTIP.HyperLink_SetTypes(self, link)
+		end
 	end
 
 	if orig1[self] then return orig1[self](self, link, ...) end

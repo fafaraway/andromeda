@@ -61,8 +61,8 @@ end
 
 function NAMEPLATE:UpdateClickableSize()
 	if InCombatLockdown() then return end
-	C_NamePlate.SetNamePlateEnemySize(C.DB.nameplate.plate_width * FREE_ADB.ui_scale, C.DB.nameplate.plate_height * FREE_ADB.ui_scale + 40)
-	C_NamePlate.SetNamePlateFriendlySize(C.DB.nameplate.plate_width * FREE_ADB.ui_scale, C.DB.nameplate.plate_height * FREE_ADB.ui_scale + 40)
+	C_NamePlate.SetNamePlateEnemySize(C.DB.nameplate.plate_width * FREE_ADB.ui_scale, C.DB.nameplate.plate_height * FREE_ADB.ui_scale + 10)
+	C_NamePlate.SetNamePlateFriendlySize(C.DB.nameplate.plate_width * FREE_ADB.ui_scale, C.DB.nameplate.plate_height * FREE_ADB.ui_scale + 10)
 end
 
 function NAMEPLATE:SetupCVars()
@@ -540,6 +540,7 @@ end
 
 function NAMEPLATE:RefreshNameplats()
 	for nameplate in pairs(platesList) do
+		nameplate:SetSize(C.DB.nameplate.plate_width, C.DB.nameplate.plate_height)
 		NAMEPLATE.UpdateNameplateAuras(nameplate)
 		NAMEPLATE.UpdateTargetIndicator(nameplate)
 		NAMEPLATE.UpdateTargetChange(nameplate)

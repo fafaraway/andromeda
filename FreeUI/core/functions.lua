@@ -594,7 +594,7 @@ do
 	end
 
 	local function Tooltip_OnEnter(self)
-		GameTooltip:SetOwner(self, self.anchor)
+		GameTooltip:SetOwner(self, self.anchor, 0, 4)
 		GameTooltip:ClearLines()
 		if self.title then
 			GameTooltip:AddLine(self.title)
@@ -1822,17 +1822,16 @@ do
 
 	local function GetSwatchTexColor(tex)
 		local r, g, b = tex:GetVertexColor()
-		r = B:Round(r, 2)
-		g = B:Round(g, 2)
-		b = B:Round(b, 2)
-		print(r,g,b)
+		r = F:Round(r, 2)
+		g = F:Round(g, 2)
+		b = F:Round(b, 2)
 		return r, g, b
 	end
 
 	function F:CreateColorSwatch(name, color)
 		color = color or {r=1, g=1, b=1, colorStr=ffffffff}
 
-		local swatch = CreateFrame('Button', nil, 'BackdropTemplate')
+		local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
 		swatch:SetSize(20, 12)
 		F.CreateBD(swatch, 1)
 		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'LEFT', 24, 0)

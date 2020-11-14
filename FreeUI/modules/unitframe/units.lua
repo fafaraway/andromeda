@@ -53,8 +53,8 @@ function UNITFRAME:SpawnPlayer()
 
 	F.Mover(player, L['UNITFRAME_MOVER_PLAYER'], 'PlayerFrame', {'BOTTOM',  _G.UIParent, 'BOTTOM', 0, 220}, player:GetWidth(), player:GetHeight())
 
-	if C.DB.actionbar.enable_actionbar then
-		if C.DB.unitframe.combat_fader then return end
+	if C.DB.actionbar.actionbar then
+		if C.DB.unitframe.fade then return end
 		FreeUI_LeaveVehicleBar:SetParent(player)
 		FreeUI_LeaveVehicleButton:ClearAllPoints()
 		FreeUI_LeaveVehicleButton:SetPoint('LEFT', player, 'RIGHT', 4, 0 )

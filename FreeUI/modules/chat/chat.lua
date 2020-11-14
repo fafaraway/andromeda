@@ -4,11 +4,12 @@ local CHAT = F.CHAT
 
 local tostring, pairs, ipairs, strsub, strlower = tostring, pairs, ipairs, string.sub, string.lower
 local IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown = IsInGroup, IsInRaid, IsPartyLFG, IsInGuild, IsShiftKeyDown, IsControlKeyDown
-local ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate = ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate
+local ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate, GetTime = ChatEdit_UpdateHeader, GetChannelList, GetCVar, SetCVar, Ambiguate, GetTime
 local GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant = GetNumGuildMembers, GetGuildRosterInfo, IsGuildMember, UnitIsGroupLeader, UnitIsGroupAssistant
-local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected
+local CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected, PlaySound = CanCooperateWithGameAccount, BNInviteFriend, BNFeaturesEnabledAndConnected, PlaySound
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local InviteToGroup = C_PartyInfo.InviteUnit
+local GeneralDockManager = GeneralDockManager
 
 local maxLines = 1024
 local isBattleNet
@@ -380,24 +381,21 @@ function CHAT:WhisperInvite()
 end
 
 -- Whisper sound
-local lastSoundTimer = 0
-function CHAT:WhisperAlert()
+function CHAT:PlayWhisperSound(event)
 	if not C.DB.chat.whisper_sound then return end
 
-	local f = CreateFrame('Frame')
-	f:RegisterEvent('CHAT_MSG_WHISPER')
-	f:RegisterEvent('CHAT_MSG_BN_WHISPER')
-	f:HookScript('OnEvent', function(self, event, msg, ...)
-		local currentTime = GetServerTime()
-		if currentTime and currentTime - lastSoundTimer > C.DB.chat.sound_timer then
-			lastSoundTimer = currentTime
-			if event == 'CHAT_MSG_WHISPER' then
-				PlaySoundFile(C.Assets.Sounds.whisper, 'Master')
-			elseif event == 'CHAT_MSG_BN_WHISPER' then
-				PlaySoundFile(C.Assets.Sounds.whisperBN, 'Master')
-			end
+	local currentTime = GetTime()
+	if event == 'CHAT_MSG_WHISPER' then
+		if not self.soundTimer or currentTime > self.soundTimer then
+			PlaySoundFile(C.Assets.Sounds.whisper, 'Master')
 		end
-	end)
+		self.soundTimer = currentTime + C.DB.chat.sound_timer
+	elseif event == 'CHAT_MSG_BN_WHISPER' then
+		if not self.soundTimer or currentTime > self.soundTimer then
+			PlaySoundFile(C.Assets.Sounds.whisperBN, 'Master')
+		end
+		self.soundTimer = currentTime + C.DB.chat.sound_timer
+	end
 end
 
 -- Whisper sticky
@@ -440,9 +438,9 @@ function CHAT:OnLogin()
 		end
 	end)
 
-	-- update tabs
-	hooksecurefunc('FCFTab_UpdateColors', self.UpdateTabColors)
-	hooksecurefunc('FloatingChatFrame_OnEvent', self.UpdateTabEventColors)
+	hooksecurefunc('FCFTab_UpdateColors', CHAT.UpdateTabColors)
+	hooksecurefunc('FloatingChatFrame_OnEvent', CHAT.UpdateTabEventColors)
+	hooksecurefunc('ChatFrame_ConfigEventHandler', CHAT.PlayWhisperSound)
 
 	-- Font size
 	for i = 1, 15 do
@@ -467,18 +465,17 @@ function CHAT:OnLogin()
 	hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
 
 
-	self:UpdateEditBoxBorderColor()
-	self:ResizeChatFrame()
-	self:ChatFilter()
-	self:Abbreviate()
-	self:ChatCopy()
-	self:UrlCopy()
-	self:Spamagemeter()
-	self:WhisperSticky()
-	self:WhisperAlert()
-	self:AutoToggleChatBubble()
-	self:PauseToSlash()
-	self:WhisperInvite()
+	CHAT:UpdateEditBoxBorderColor()
+	CHAT:ResizeChatFrame()
+	CHAT:ChatFilter()
+	CHAT:Abbreviate()
+	CHAT:ChatCopy()
+	CHAT:UrlCopy()
+	CHAT:Spamagemeter()
+	CHAT:WhisperSticky()
+	CHAT:AutoToggleChatBubble()
+	CHAT:PauseToSlash()
+	CHAT:WhisperInvite()
 
 
 	-- ProfanityFilter
