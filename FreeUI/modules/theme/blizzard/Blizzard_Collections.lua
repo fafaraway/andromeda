@@ -111,7 +111,7 @@ C.Themes["Blizzard_Collections"] = function()
 					bu.bg:SetBackdropColor(0, 0, 0, .25)
 				end
 
-				if bu.dragButton.ActiveTexture:IsShown() then
+				if bu.DragButton.ActiveTexture:IsShown() then
 					bu.icon.bg:SetBackdropBorderColor(1, .8, 0)
 				else
 					bu.icon.bg:SetBackdropBorderColor(0, 0, 0)
