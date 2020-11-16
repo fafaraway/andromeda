@@ -124,6 +124,7 @@ end
 --[[ Health ]]
 
 local function OverrideHealth(self, event, unit)
+	if not C.DB.unitframe.transparent_mode then return end
 	if (not unit or self.unit ~= unit) then return end
 
 	local health = self.Health
@@ -152,6 +153,7 @@ local function PostUpdateHealth(self, unit, min, max)
 	local isGhost = UnitIsGhost(unit)
 	local isTapped = UnitIsTapDenied(unit)
 
+	if not C.DB.unitframe.transparent_mode then return end
 	if isDead or isGhost or isOffline then
 		self:SetValue(0)
 	else
@@ -190,7 +192,7 @@ function UNITFRAME:AddHealthBar(self)
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetFrameStrata('LOW')
 	health:SetStatusBarTexture(C.Assets.statusbar_tex)
-	health:SetReverseFill(true)
+	health:SetReverseFill(C.DB.unitframe.transparent_mode)
 	health:SetStatusBarColor(0, 0, 0, 0)
 	health:SetPoint('TOP')
 	health:SetPoint('LEFT')
@@ -202,7 +204,7 @@ function UNITFRAME:AddHealthBar(self)
 		local bg = health:CreateTexture(nil, 'BACKGROUND')
 		bg:SetAllPoints(health)
 		bg:SetTexture(C.Assets.bd_tex)
-		bg.multiplier = .25
+		bg.multiplier = .1
 		health.bg = bg
 	end
 
@@ -217,7 +219,11 @@ function UNITFRAME:AddHealthBar(self)
 		health.colorClass = true
 		health.colorReaction = true
 		health.colorClassPet = true
+
 	end
+
+	health.colorTapping = true
+	health.colorDisconnected = true
 
 	self.Health = health
 	self.Health.frequentUpdates = true
@@ -233,7 +239,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local myBar = CreateFrame('StatusBar', nil, self.Health)
 		myBar:SetPoint('TOP')
 		myBar:SetPoint('BOTTOM')
-		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), 'LEFT')
+		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and'LEFT' or 'RIGHT')
 		myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		myBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		myBar:SetStatusBarColor(0, .8, .8, .6)
@@ -242,7 +248,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local otherBar = CreateFrame('StatusBar', nil, self.Health)
 		otherBar:SetPoint('TOP')
 		otherBar:SetPoint('BOTTOM')
-		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), 'LEFT')
+		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and'LEFT' or 'RIGHT')
 		otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		otherBar:SetStatusBarColor(0, .6, .6, .6)
@@ -251,7 +257,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local absorbBar = CreateFrame('StatusBar', nil, self.Health)
 		absorbBar:SetPoint('TOP')
 		absorbBar:SetPoint('BOTTOM')
-		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), 'LEFT')
+		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and'LEFT' or 'RIGHT')
 		absorbBar:SetStatusBarTexture(C.Assets.stripe_tex)
 		absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		absorbBar:SetStatusBarColor(.8, .8, .8, .8)
@@ -269,7 +275,7 @@ function UNITFRAME:AddHealthPrediction(self)
 	if C.DB.unitframe.over_absorb then
 		local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
 		overAbsorb:SetPoint('TOP', self.Health, 'TOPRIGHT', -1, 4)
-        overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
+		overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
 		overAbsorb:SetWidth(12)
 		overAbsorb:SetTexture(C.Assets.spark_tex)
 
@@ -329,7 +335,7 @@ function UNITFRAME:AddPowerBar(self)
 	local bg = power:CreateTexture(nil, 'BACKGROUND')
 	bg:SetAllPoints()
 	bg:SetTexture(C.Assets.bd_tex)
-	bg.multiplier = .25
+	bg.multiplier = .1
 	power.bg = bg
 
 	power.colorTapping = true
@@ -339,8 +345,8 @@ function UNITFRAME:AddPowerBar(self)
 
 	if style == 'pet' or style == 'player' then
 		power.colorPower = true
-	-- elseif style == 'party' or style == 'raid' then
-	-- 	power.altPowerColor = true
+	elseif style == 'party' or style == 'raid' then
+		power.colorPower = C.DB.unitframe.power_bar_height
 	else
 		power.colorClass = true
 	end
