@@ -175,7 +175,7 @@ local function CreateOption(i)
 			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
 
 			if horizon then
-				cb:SetPoint('TOPLEFT', 200, -offset + 35)
+				cb:SetPoint('TOPLEFT', 250, -offset + 35)
 			else
 				cb:SetPoint('TOPLEFT', 20, -offset)
 				offset = offset + 35
@@ -204,7 +204,7 @@ local function CreateOption(i)
 			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
 
 			if horizon then
-				eb:SetPoint('TOPLEFT', 200, -offset + 45)
+				eb:SetPoint('TOPLEFT', 250, -offset + 45)
 			else
 				eb:SetPoint('TOPLEFT', 20, -offset - 25)
 				offset = offset + 70
@@ -229,7 +229,7 @@ local function CreateOption(i)
 
 			local x, y
 			if horizon then
-				x, y = 200, -offset + 40
+				x, y = 250, -offset + 40
 			else
 				x, y = 20, -offset - 30
 				offset = offset + 70
@@ -261,7 +261,7 @@ local function CreateOption(i)
 
 			local dd = F.CreateDropDown(parent, 140, 20, data)
 			if horizon then
-				dd:SetPoint('TOPLEFT', 200, -offset + 45)
+				dd:SetPoint('TOPLEFT', 250, -offset + 45)
 			else
 				dd:SetPoint('TOPLEFT', 20, -offset - 25)
 				offset = offset + 70
@@ -294,7 +294,7 @@ local function CreateOption(i)
 			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, 'INFO', 'THICK', 'CENTER', 0, 25)
 		elseif optType == 5 then -- colorswatch
 			local f = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
-			local width = 25 + (horizon or 0)*90
+			local width = 25 + (horizon or 0)*120
 			if horizon then
 				f:SetPoint('TOPLEFT', width, -offset + 30)
 			else
@@ -303,7 +303,7 @@ local function CreateOption(i)
 			end
 		else -- blank, no optType
 			if not key then
-				local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 340, C.Mult)
+				local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 440, C.Mult)
 				line:SetPoint('TOPLEFT', 20, -offset - 12)
 			end
 			offset = offset + 35
@@ -326,7 +326,7 @@ local function CreateGUI()
 
 	local guiFrame = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
 	tinsert(_G.UISpecialFrames, 'FreeUI_GUI')
-	guiFrame:SetSize(600, 640)
+	guiFrame:SetSize(700, 640)
 	guiFrame:SetPoint('CENTER')
 	guiFrame:SetFrameStrata('HIGH')
 	guiFrame:EnableMouse(true)
@@ -372,12 +372,12 @@ local function CreateGUI()
 
 		guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
 		guiPage[i]:SetPoint('TOPLEFT', 170, -50)
-		guiPage[i]:SetSize(400, 540)
+		guiPage[i]:SetSize(500, 540)
 		F.CreateBDFrame(guiPage[i], .2)
 		guiPage[i]:Hide()
 
 		guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])
-		guiPage[i].child:SetSize(400, 1)
+		guiPage[i].child:SetSize(500, 1)
 		guiPage[i]:SetScrollChild(guiPage[i].child)
 		F.ReskinScroll(guiPage[i].ScrollBar)
 		guiPage[i]:SetScript('OnMouseWheel', ScrollBarHook)
