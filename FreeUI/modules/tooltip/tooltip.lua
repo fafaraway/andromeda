@@ -298,7 +298,7 @@ end
 local fakeBg = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
 local function __GetBackdrop() return fakeBg:GetBackdrop() end
-local function __GetBackdropColor() return 0, 0, 0, FREE_ADB.backdrop_alpha end
+local function __GetBackdropColor() return 0, 0, 0, .75 end
 local function __GetBackdropBorderColor() return 0, 0, 0 end
 
 function TOOLTIP:ReskinTooltip()
@@ -329,7 +329,7 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg:SetBackdropColor(0, 0, 0, FREE_ADB.backdrop_alpha)
+	self.bg:SetBackdropColor(0, 0, 0, .75)
 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	if self.bg.__shadow then
 		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
