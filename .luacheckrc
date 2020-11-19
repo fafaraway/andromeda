@@ -1,11 +1,15 @@
 std = 'lua51'
+max_line_length = false
 exclude_files = {'libs/'}
+only = {
+	'011', -- syntax
+	'1' -- globals
+}
 ignore = {
-	'2/self', -- unused argument self
-	'2/event', -- unused argument event
-	'3/event', -- unused value event
-	'4', -- shadowing
-	'542', -- empty if branch
-	'631', -- line is too long
+	'11/SLASH_.*', -- slash handlers
+	'1/[A-Z][A-Z][A-Z0-9_]+' -- three letter+ constants
 }
 
+globals = {
+
+}

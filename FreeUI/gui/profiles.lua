@@ -201,7 +201,7 @@ function GUI:CreateProfileBar(parent, index)
 	local bar = F.CreateBDFrame(parent, .25)
 	bar:ClearAllPoints()
 	bar:SetPoint('TOPLEFT', 10, -10 - 45*(index-1))
-	bar:SetSize(340, 40)
+	bar:SetSize(440, 40)
 	bar.index = index
 
 	local icon = CreateFrame('Frame', nil, bar)
@@ -219,7 +219,7 @@ function GUI:CreateProfileBar(parent, index)
 		icon:SetScript('OnLeave', F.HideTooltip)
 	end
 
-	local note = F.CreateEditBox(bar, 110, 30)
+	local note = F.CreateEditBox(bar, 180, 30)
 	note:SetPoint('LEFT', icon, 'RIGHT', 5, 0)
 	note:SetMaxLetters(20)
 	if index == 1 then
@@ -294,9 +294,9 @@ function GUI:Delete_OnEnter()
 	end
 
 	if FREE_ADB['ProfileIndex'][text] or (FREE_GOLDCOUNT[realm] and FREE_GOLDCOUNT[realm][name]) then
-		StaticPopup_Show('NDUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
+		StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
 	else
-		UIErrorsFrame:AddMessage(C.RedColor..L['Incorrect unit name'])
+		UIErrorsFrame:AddMessage(C.RedColor..L.GUI.PROFILE.INCORRECT_UNIT_NAME)
 	end
 end
 

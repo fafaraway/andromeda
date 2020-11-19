@@ -133,7 +133,7 @@ end
 
 local function CreateTab(parent, i, name)
 	local tab = CreateFrame('Button', nil, parent, 'BackdropTemplate')
-	tab:SetSize(140, 28)
+	tab:SetSize(140, 26)
 	F.Reskin(tab)
 
 	tab.index = i
@@ -148,12 +148,12 @@ local function CreateTab(parent, i, name)
 
 	tab.icon = tab:CreateTexture(nil, 'OVERLAY')
 	tab.icon:SetSize(20, 20)
-	tab.icon:SetPoint('LEFT', tab, 6, 0)
+	tab.icon:SetPoint('LEFT', tab, 3, 0)
 	tab.icon:SetTexture(iconsList[i])
 	F.ReskinIcon(tab.icon)
 
 	tab.text = F.CreateFS(tab, C.Assets.Fonts.Regular, 13, 'OUTLINE', name, nil, true)
-	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 8, 0)
+	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
 	tab:HookScript('OnClick', tabOnClick)
 	tab:HookScript('OnEnter', tabOnEnter)
@@ -168,7 +168,7 @@ local function CreateOption(i)
 	for _, option in pairs(GUI.OptionsList[i]) do
 		local optType, key, value, name, horizon, data, callback, tip = unpack(option)
 		if optType == 1 then -- checkbox
-			local cb = F.CreateCheckBox(parent, true)
+			local cb = F.CreateCheckBox(parent, true, nil, true)
 			cb:SetSize(20, 20)
 			cb:SetHitRectInsets(-5, -5, -5, -5)
 
@@ -198,7 +198,7 @@ local function CreateOption(i)
 				F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
 		elseif optType == 2 then  -- editbox
-			local eb = F.CreateEditBox(parent, 140, 24)
+			local eb = F.CreateEditBox(parent, 140, 24, true)
 			eb:SetMaxLetters(999)
 
 			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
@@ -235,7 +235,7 @@ local function CreateOption(i)
 				offset = offset + 70
 			end
 
-			local s = F.CreateSlider(parent, name, min, max, step, x, y, 140, tip)
+			local s = F.CreateSlider(parent, name, min, max, step, x, y, 180, tip)
 			s.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 
 			s:SetValue(UpdateValue(key, value))
@@ -261,9 +261,9 @@ local function CreateOption(i)
 
 			local dd = F.CreateDropDown(parent, 140, 20, data)
 			if horizon then
-				dd:SetPoint('TOPLEFT', 250, -offset + 45)
+				dd:SetPoint('TOPLEFT', 256, -offset + 45)
 			else
-				dd:SetPoint('TOPLEFT', 20, -offset - 25)
+				dd:SetPoint('TOPLEFT', 26, -offset - 25)
 				offset = offset + 70
 			end
 
@@ -336,7 +336,7 @@ local function CreateGUI()
 	local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.Mult, 540)
 	verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-	local logo = F.CreateFS(guiFrame, C.AssetsPath..'fonts\\bold.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
+	local logo = F.CreateFS(guiFrame, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
 	local desc = F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: '..C.AddonVersion, {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
 
 	local lineLeft = F.SetGradient(guiFrame, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
@@ -373,7 +373,7 @@ local function CreateGUI()
 		guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
 		guiPage[i]:SetPoint('TOPLEFT', 170, -50)
 		guiPage[i]:SetSize(500, 540)
-		F.CreateBDFrame(guiPage[i], .2)
+		F.CreateBDFrame(guiPage[i], .25, false, .04, .04, .04)
 		guiPage[i]:Hide()
 
 		guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])

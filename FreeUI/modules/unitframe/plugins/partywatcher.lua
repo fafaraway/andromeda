@@ -42,7 +42,7 @@ local function Update(self, event, unit, _, spellID)
 		local thisTime = GetTime()
 		local button = element.spellToButton[spellID]
 		if not button then
-			if index == maxButtons then print("full limit") return end
+			if index == maxButtons then return end
 			index = index + 1
 			button = element[index]
 			button.lastTime = thisTime

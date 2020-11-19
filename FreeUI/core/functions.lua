@@ -5,8 +5,7 @@ local type, pairs, tonumber, wipe, next, select, unpack = type, pairs, tonumber,
 local strmatch, gmatch, strfind, format, gsub, sub = string.match, string.gmatch, string.find, string.format, string.gsub, string.sub
 local min, max, floor, rad, modf = math.min, math.max, math.floor, math.rad, math.modf
 local assets = C.Assets
-local backdropColor = {.03, .03, .03}
-local gradientColor = {.02, .02, .02, .5, .08, .08, .08, .5}
+--local gradientColor = {.06, .06, .06, .4, .1, .1, .1, .4}
 
 
 --[[ Math ]]
@@ -674,7 +673,7 @@ do
 		self.__shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		self.__shadow:SetOutside(self, m, m)
 		self.__shadow:SetBackdrop(shadowBackdrop)
-		self.__shadow:SetBackdropBorderColor(0, 0, 0, a or .35)
+		self.__shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
 		self.__shadow:SetFrameLevel(1)
 
 		return self.__shadow
@@ -689,16 +688,23 @@ do
 	C.Frames = {}
 
 	local defaultBackdrop = {bgFile = assets.bd_tex, edgeFile = assets.bd_tex}
-	function F:CreateBD(a)
+	function F:CreateBD(a, r, g, b)
 		defaultBackdrop.edgeSize = C.Mult
 		self:SetBackdrop(defaultBackdrop)
-		self:SetBackdropColor(0, 0, 0, a or FREE_ADB.backdrop_alpha)
-		self:SetBackdropBorderColor(0, 0, 0)
+		if r then
+			self:SetBackdropColor(r, g, b, a or FREE_ADB.backdrop_alpha)
+		else
+			self:SetBackdropColor(FREE_ADB.backdrop_color.r, FREE_ADB.backdrop_color.g, FREE_ADB.backdrop_color.b, a or FREE_ADB.backdrop_alpha)
+		end
+		self:SetBackdropBorderColor(FREE_ADB.border_color.r, FREE_ADB.border_color.g, FREE_ADB.border_color.b)
 
 		if not a then tinsert(C.Frames, self) end
 	end
 
 	function F:CreateGradient()
+		local color = FREE_ADB.backdrop_color
+		local gradientColor = {color.r-.03, color.g-.03, color.b-.03, .4, color.r, color.g, color.b, .4}
+
 		local tex = self:CreateTexture(nil, 'BORDER')
 		tex:SetInside()
 		tex:SetTexture(assets.bd_tex)
@@ -707,7 +713,7 @@ do
 		return tex
 	end
 
-	function F:CreateBDFrame(a, gradient)
+	function F:CreateBDFrame(a, gradient, r, g, b)
 		local frame = self
 		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
@@ -715,7 +721,11 @@ do
 		local bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
-		F.CreateBD(bg, a)
+		if r then
+			F.CreateBD(bg, a, r, g, b)
+		else
+			F.CreateBD(bg, a)
+		end
 		if gradient then
 			self.__gradient = F.CreateGradient(bg)
 		end
@@ -815,7 +825,7 @@ do
 	end
 
 	local function updateIconBorderColor(self, r, g, b)
-		if (r==.65882 and g==.65882 and b==.65882) or (r>.99 and g>.99 and b>.99) then
+		if not r or (r==.65882 and g==.65882 and b==.65882) or (r>.99 and g>.99 and b>.99) then
 			r, g, b = 0, 0, 0
 		end
 		self.__owner.bg:SetBackdropBorderColor(r, g, b)
@@ -887,16 +897,18 @@ do
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
 
-		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, 1)
-		self.glow:SetAlpha(1)
+		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
+		self.__shadow:SetBackdropBorderColor(C.r, C.g, C.b)
+		self.__shadow:SetAlpha(1)
 
-		CreatePulse(self.glow)
+		CreatePulse(self.__shadow)
 	end
 
 	local function Button_OnLeave(self)
-		self.__bg:SetBackdropBorderColor(0, 0, 0, 1)
-		self.glow:SetScript('OnUpdate', nil)
-		self.glow:SetAlpha(0)
+		self.__bg:SetBackdropBorderColor(FREE_ADB.border_color.r or 0, FREE_ADB.border_color.g or 0, FREE_ADB.border_color.b or 0)
+		self.__shadow:SetBackdropBorderColor(0, 0, 0)
+		self.__shadow:SetScript('OnUpdate', nil)
+		self.__shadow:SetAlpha(.25)
 	end
 
 	local blizzRegions = {
@@ -936,7 +948,7 @@ do
 		'Center',
 	}
 
-	function F:Reskin(noGlow)
+	function F:Reskin(shadow, noGlow)
 		if self.SetNormalTexture then self:SetNormalTexture('') end
 		if self.SetHighlightTexture then self:SetHighlightTexture('') end
 		if self.SetPushedTexture then self:SetPushedTexture('') end
@@ -954,20 +966,26 @@ do
 		self.__bg:SetFrameLevel(self:GetFrameLevel())
 		self.__bg:SetAllPoints()
 
-		if not noGlow then
-			self.glow = CreateFrame('Frame', nil, self, 'BackdropTemplate')
-			self.glow:SetBackdrop({
-				edgeFile = assets.shadow_tex,
-				edgeSize = 6,
-			})
-			self.glow:SetPoint('TOPLEFT', -6, 6)
-			self.glow:SetPoint('BOTTOMRIGHT', 6, -6)
-			self.glow:SetBackdropBorderColor(C.r, C.g, C.b)
-			self.glow:SetAlpha(0)
+		self.__shadow = F.CreateSD(self, .25, 6, 6)
+		--self.__shadow:SetAlpha(shadow and .25 or 0)
 
-			self:HookScript('OnEnter', Button_OnEnter)
-			self:HookScript('OnLeave', Button_OnLeave)
-		end
+		self:HookScript('OnEnter', Button_OnEnter)
+		self:HookScript('OnLeave', Button_OnLeave)
+
+		--if not noGlow then
+			-- self.glow = CreateFrame('Frame', nil, self, 'BackdropTemplate')
+			-- self.glow:SetBackdrop({
+			-- 	edgeFile = assets.shadow_tex,
+			-- 	edgeSize = 6,
+			-- })
+			-- self.glow:SetPoint('TOPLEFT', -6, 6)
+			-- self.glow:SetPoint('BOTTOMRIGHT', 6, -6)
+			-- self.glow:SetBackdropBorderColor(0, 0, 0)
+			-- self.glow:SetAlpha(shadow and .25 or 0)
+
+			-- self:HookScript('OnEnter', Button_OnEnter)
+			-- self:HookScript('OnLeave', Button_OnLeave)
+		--end
 	end
 
 	local function Menu_OnEnter(self)
@@ -1140,7 +1158,7 @@ do
 			end
 		end
 
-		local bg = F.CreateBDFrame(self, 0, true)
+		local bg = F.CreateBDFrame(self, .45, false, .04, .04, .04)
 		bg:SetPoint('TOPLEFT', -2, 0)
 		bg:SetPoint('BOTTOMRIGHT')
 		self.bg = bg
@@ -1305,14 +1323,17 @@ do
 	end
 
 	-- Handle slider
-	function F:ReskinSlider(vertical)
+	function F:ReskinSlider(vertical, shadow)
 		self:SetBackdrop(nil)
 		F.StripTextures(self)
 
-		local bd = F.CreateBDFrame(self, 0, true)
+		local bd = F.CreateBDFrame(self, .45, false, .04, .04, .04)
 		bd:SetPoint('TOPLEFT', 14, -2)
 		bd:SetPoint('BOTTOMRIGHT', -15, 3)
 		bd:SetFrameStrata('BACKGROUND')
+		if shadow then
+			F.CreateSD(bd)
+		end
 
 		local thumb = self:GetThumbTexture()
 		thumb:SetHeight(self:GetHeight() + 12)
@@ -1687,7 +1708,7 @@ do
 
 	function F:CreateCheckBox(flat)
 		local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
-		F.ReskinCheck(cb, flat, true)
+		F.ReskinCheck(cb, flat, true, true)
 
 		cb.Type = 'CheckBox'
 		return cb
@@ -1697,14 +1718,17 @@ do
 		self:ClearFocus()
 	end
 
-	function F:CreateEditBox(width, height)
+	function F:CreateEditBox(width, height, shadow)
 		local eb = CreateFrame('EditBox', nil, self)
 		eb:SetSize(width, height)
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 5, 5)
 		eb:SetFont(C.Assets.Fonts.Regular, 11)
-		eb.bg = F.CreateBDFrame(eb, .25, true)
+		eb.bg = F.CreateBDFrame(eb, .45, false, .04, .04, .04)
 		eb.bg:SetAllPoints()
+		if shadow then
+			F.CreateSD(eb.bg)
+		end
 		eb:SetScript('OnEscapePressed', editBoxClearFocus)
 		eb:SetScript('OnEnterPressed', editBoxClearFocus)
 
@@ -1800,6 +1824,8 @@ do
 		local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
 		swatch.tex:SetVertexColor(r, g, b)
 		swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
+		F.UpdateCustomClassColors()
+		F.UNITFRAME:UpdateColors()
 	end
 
 	local function cancelPicker()
@@ -1875,7 +1901,7 @@ do
 		slider:SetValueStep(step)
 		slider:SetObeyStepOnDrag(true)
 		slider:SetHitRectInsets(0, 0, 0, 0)
-		F.ReskinSlider(slider)
+		F.ReskinSlider(slider, nil, true)
 
 		slider.Low:SetText(minValue)
 		slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
@@ -1884,11 +1910,11 @@ do
 		slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
 		slider.High:SetFont(C.Assets.Fonts.Regular, 11)
 		slider.Text:ClearAllPoints()
-		slider.Text:SetPoint('BOTTOM', slider, 'TOP', 0, 4)
+		slider.Text:SetPoint('CENTER', 0, 25)
 		slider.Text:SetText(name)
 		slider.Text:SetTextColor(1, 1, 1)
 		slider.Text:SetFont(C.Assets.Fonts.Regular, 11)
-		slider.value = F.CreateEditBox(slider, 50, 20)
+		slider.value = F.CreateEditBox(slider, 50, 20, true)
 		slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -6)
 		slider.value:SetJustifyH('CENTER')
 		slider.value:SetFont(C.Assets.Fonts.Regular, 11)
@@ -2038,19 +2064,9 @@ end
 
 
 do
-	-- function F.Print(...)
-	-- 	print(C.AddonName..C.GreyColor..':|r', ...)
-	-- end
-
-	function F.Print(text)
-		if not text then
-			return
-		end
-
-		local message = format('%s: %s', C.AddonName, text)
-		print(message)
+	function F.Print(...)
+		print(C.AddonName..C.GreyColor..':|r', ...)
 	end
-
 
 	function F.MultiCheck(check, ...)
 		for i = 1, select('#', ...) do
@@ -2096,12 +2112,6 @@ do
 		return unpack(results)
 	end
 
-
-	--[[
-		高级打印函数
-		-- 参考自 https://www.cnblogs.com/leezj/p/4230271.html
-		@param {Any} object 随意变量或常量
-	]]
 	function F.TablePrint(object)
 		if type(object) == "table" then
 			local cache = {}
@@ -2142,28 +2152,10 @@ do
 		end
 	end
 
-
-	--[[
-		输出 Debug 信息
-		@param {table/string} module Ace3 模块或自定义字符串
-		@param {string} text 错误讯息
-	]]
-	function F.DebugMessage(module, text)
+	function F.Debug(...)
 		if not C.isDeveloper then return end
 
-		if not text then
-			return
-		end
-
-		if not module then
-			module = '函数'
-			text = '无模块名>' .. text
-		end
-		if type(module) ~= 'string' and module.GetName then
-			module = module:GetName()
-		end
-		local message = format('[FreeUI - %s] %s', module, text)
-		print(message)
+		print('Debug: ', ...)
 	end
 end
 

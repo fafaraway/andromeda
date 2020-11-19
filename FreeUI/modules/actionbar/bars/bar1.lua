@@ -128,7 +128,7 @@ function ACTIONBAR:CreateBar1()
 			else
 				icon:Hide()
 			end
-			ACTIONBAR.UpdateButtonUsable(button)
+			button:UpdateUsable()
 		end
 	end
 

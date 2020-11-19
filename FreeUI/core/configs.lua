@@ -184,9 +184,6 @@ C['ClassBuffsList'] = {
 }
 
 
-C['RaidDebuffsList'] = {
-
-}
 
 
 -- Raidbuff Checklist
@@ -517,7 +514,7 @@ C.CharacterSettings = {
 		['enable'] = true,
 			['combat_alert'] = true,
 				['alert_animation'] = true,
-				['alert_scale'] = .6,
+				['alert_scale'] = .4,
 				['alert_speed'] = 1,
 			['spell_sound'] = true,
 			['pvp_sound'] = true,
@@ -590,6 +587,11 @@ C.CharacterSettings = {
 
 	['unitframe'] = {
 		['enable'] = true,
+
+			['color_style'] = 2,
+
+
+
 			['transparent_mode'] = true,
 			['fade'] = true,
 				['fade_out_alpha'] = 0,
@@ -609,11 +611,11 @@ C.CharacterSettings = {
 
 			['range_check'] = true,
 				['range_check_alpha'] = 0.4,
-			['color_smooth'] = false,
+
 			['portrait'] = true,
+			['portrait_saturation'] = true,
 
 			['heal_prediction'] = true,
-			['over_absorb'] = true,
 			['gcd_spark'] = true,
 
 			['target_icon_indicator'] = true,
@@ -634,8 +636,8 @@ C.CharacterSettings = {
 			['debuffs_by_player'] = true,
 
 			['enable_castbar'] = true,
-				['casting_color'] = {r=.43, g=.69, b=.85},
-				['casting_not_interruptible_color'] = {r=.75, g=.04, b=.07},
+				['casting_color'] = {r=.31, g=.48, b=.85},
+				['casting_uninterruptible_color'] = {r=.66, g=.65, b=.65},
 				['casting_complete_color'] = {r=.25, g=.63, b=.49},
 				['casting_fail_color'] = {r=.73, g=.39, b=.43},
 
@@ -680,8 +682,10 @@ C.CharacterSettings = {
 
 			['enable_group'] = true,
 				['group_names'] = false,
-				['group_color_smooth'] = false,
+				['group_color_style'] = 2,
 				['group_filter'] = 6,
+				['show_solo'] = false,
+				['spec_position'] = false,
 
 				['group_by_role'] = true,
 				['group_reverse'] = false,
@@ -692,28 +696,30 @@ C.CharacterSettings = {
 				['group_click_cast'] = true,
 				['group_debuff_highlight'] = true,
 				['group_corner_buffs'] = true,
-				['group_debuffs'] = true,
+				['raid_debuffs'] = true,
+				['auras_click_through'] = false,
 				['party_spell_watcher'] = true,
-				['party_spell_sync'] = true,
+				['party_spell_sync'] = false,
 
 				['group_threat_indicator'] = true,
 				['group_leader_indicator'] = true,
-				['group_role_indicator'] = true,
-				['group_summon_indicator'] = true,
-				['group_phase_indicator'] = true,
-				['group_ready_check_indicator'] = true,
-				['group_resurrect_indicator'] = true,
+
+
 
 				['party_width'] = 62,
 				['party_height'] = 28,
 				['party_gap'] = 6,
+				['party_horizon'] = false,
+				['party_reverse'] = false,
 
 				['raid_width'] = 28,
 				['raid_height'] = 20,
 				['raid_gap'] = 5,
+				['raid_horizon'] = true,
+				['raid_reverse'] = false,
 
 			['enable_boss'] = true,
-				['boss_color_smooth'] = true,
+				['boss_color_style'] = 3,
 				['boss_width'] = 120,
 				['boss_height'] = 20,
 				['boss_gap'] = 60,
@@ -774,7 +780,7 @@ C.CharacterSettings = {
 			['hide_realm'] = true,
 			['hide_rank'] = true,
 			['hide_in_combat'] = false,
-			['border_color'] = true,
+			['border_color'] = false,
 			['spec_ilvl'] = true,
 			['azerite_armor'] = true,
 			['link_hover'] = true,
@@ -943,24 +949,106 @@ C.AccountSettings = {
 	['number_format'] = 1,
 	['cursor_trail'] = true,
 	['vignetting'] = true,
-	['vignetting_alpha'] = .6,
+	['vignetting_alpha'] = .5,
 	['reskin_blizz'] = true,
-	['backdrop_alpha'] = .45,
+	['border_color'] = {r=.05, g=.05, b=.05},
+	['backdrop_color'] = {r=.1, g=.1, b=.1},
+	['backdrop_alpha'] = .75,
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,
 	['reskin_pgf'] = true,
-	['custom_class_color'] = true,
 	['chat_filter_black_list'] = '',
 	['chat_filter_white_list'] = '',
 	['custom_junk_list'] = {},
 	['nameplate_aura_filter_list'] = {[1]={}, [2]={}},
-	['raid_debuffs'] = {},
+	['raid_debuffs_list'] = {},
 	['raid_aura_watch'] = {},
 	['corner_buffs'] = {},
-	['party_spells'] = {},
+	['party_spells_list'] = {},
 	['profile_index'] = {},
-	['profile_names'] = {}
+	['profile_names'] = {},
+
+	['health_color'] = {r=.81, g=.81, b=.81},
+	['custom_class_color'] = false,
+	['class_colors_list'] = {
+		['HUNTER'] = {
+			['r'] = 0.2,
+			['g'] = 0.71,
+			['b'] = 0.25,
+			['colorStr'] = 'ff33b541',
+		},
+		['WARRIOR'] = {
+			['r'] = 0.78,
+			['g'] = 0.61,
+			['b'] = 0.39,
+			['colorStr'] = 'ffc79b64',
+		},
+		['PALADIN'] = {
+			['r'] = 0.93,
+			['g'] = 0.33,
+			['b'] = 0.42,
+			['colorStr'] = 'ffee556c',
+		},
+		['MAGE'] = {
+			['r'] = 0.49,
+			['g'] = 0.66,
+			['b'] = 0.89,
+			['colorStr'] = 'ff7ea8e3',
+		},
+		['PRIEST'] = {
+			['r'] = 0.83,
+			['g'] = 0.83,
+			['b'] = 0.83,
+			['colorStr'] = 'ffd3d3d3',
+		},
+		['DEATHKNIGHT'] = {
+			['r'] = 0.77,
+			['g'] = 0.16,
+			['b'] = 0.22,
+			['colorStr'] = 'ffc32838',
+		},
+		['WARLOCK'] = {
+			['r'] = 0.65,
+			['g'] = 0.64,
+			['b'] = 0.88,
+			['colorStr'] = 'ffa5a3e0',
+		},
+		['DEMONHUNTER'] = {
+			['r'] = 0.82,
+			['g'] = 0.35,
+			['b'] = 0.89,
+			['colorStr'] = 'ffd259e3',
+		},
+		['ROGUE'] = {
+			['r'] = 0.91,
+			['g'] = 0.81,
+			['b'] = 0.51,
+			['colorStr'] = 'ffe9cb7f',
+		},
+		['DRUID'] = {
+			['r'] = 0.95,
+			['g'] = 0.48,
+			['b'] = 0.27,
+			['colorStr'] = 'fff27944',
+		},
+		['MONK'] = {
+			['r'] = 0.28,
+			['g'] = 0.84,
+			['b'] = 0.6,
+			['colorStr'] = 'ff48d599',
+		},
+		['SHAMAN'] = {
+			['r'] = 0.29,
+			['g'] = 0.29,
+			['b'] = 0.82,
+			['colorStr'] = 'ff4949d0',
+		},
+
+	},
+
 }
+
+
 
 
 
@@ -1025,7 +1113,6 @@ f:SetScript('OnEvent', function(self, _, addon)
 		FREE_ADB.texture_style = 1 -- reset value if not exists
 	end
 	C.Assets.statusbar_tex = GUI.TexturesList[FREE_ADB.texture_style].texture
-
 
 	self:UnregisterAllEvents()
 end)

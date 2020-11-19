@@ -902,6 +902,7 @@ function INVENTORY:OnLogin()
 	local iconSize = C.DB.inventory.slot_size
 	local showNewItem = C.DB.inventory.new_item_flash
 	local hasCanIMogIt = IsAddOnLoaded('CanIMogIt')
+	local hasPawn = IsAddOnLoaded("Pawn")
 
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -1076,7 +1077,7 @@ function INVENTORY:OnLogin()
 		self.Quest = parentFrame:CreateTexture(nil, 'ARTWORK')
 		self.Quest:SetTexture(C.Assets.classify_tex)
 		self.Quest:SetTexCoord(.5, 1, 0, .5)
-		self.Quest:SetSize(16, 16)
+		self.Quest:SetSize(24, 24)
 		self.Quest:SetPoint('TOPLEFT', -2, -2)
 
 		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
@@ -1182,6 +1183,14 @@ function INVENTORY:OnLogin()
 		end
 	end
 
+	local function UpdatePawnArrow(self, item)
+		if not hasPawn then return end
+		if not PawnIsContainerItemAnUpgrade then return end
+		if self.UpgradeIcon then
+			self.UpgradeIcon:SetShown(PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
+		end
+	end
+
 	function MyButton:OnUpdate(item)
 		if self.JunkIcon then
 			if
@@ -1276,6 +1285,9 @@ function INVENTORY:OnLogin()
 
 		-- Support CanIMogIt
 		UpdateCanIMogIt(self, item)
+
+		-- Support Pawn
+		UpdatePawnArrow(self, item)
 	end
 
 	function MyButton:OnUpdateQuest(item)
