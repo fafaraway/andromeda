@@ -9,12 +9,12 @@ function GUI:UpdateInventoryStatus()
 	F.INVENTORY:UpdateAllBags()
 end
 
-local function ItemFilter()
-	GUI:ItemFilter(GUI.Page[9])
+local function SetupInventoryFilter()
+	GUI:SetupInventoryFilter(GUI.Page[9])
 end
 
-local function ActionBarFader()
-	GUI:ActionBarFader(GUI.Page[6])
+local function SetupActionBarFader()
+	GUI:SetupActionBarFader(GUI.Page[6])
 end
 
 local function UpdateActionBarScale()
@@ -72,23 +72,49 @@ local function UpdatePlateScale()
 	F.NAMEPLATE:UpdatePlateTargetScale()
 end
 
-local function UnitFrameSetup()
-	GUI:UnitFrameSetup(GUI.Page[12])
+local function SetupUnitFrameSize()
+	GUI:SetupUnitFrameSize(GUI.Page[12])
 end
 
-local function UnitFrameFader()
-	GUI:UnitFrameFader(GUI.Page[12])
+local function SetupGroupFrameSize()
+	GUI:SetupGroupFrameSize(GUI.Page[13])
+end
+
+local function SetupUnitFrameFader()
+	GUI:SetupUnitFrameFader(GUI.Page[12])
+end
+
+local function SetupCastbar()
+	GUI:SetupCastbar(GUI.Page[12])
+end
+
+local function SetupCustomClassColor()
+	GUI:SetupCustomClassColor(GUI.Page[15])
+end
+
+local function SetupPartySpellCooldown()
+	GUI:SetupPartySpellCooldown(GUI.Page[13])
+end
+
+local function SetupGroupDebuffs()
+	GUI:SetupGroupDebuffs(GUI.Page[13])
 end
 
 
 GUI.OptionsList = {
 	[1] = { -- appearance
 		{1, 'ACCOUNT', 'cursor_trail', L.GUI.APPEARANCE.CURSOR_TRAIL},
-		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER, true, nil, nil, L.GUI.APPEARANCE.SHADOW_BORDER_TIP},
-		{1, 'ACCOUNT', 'reskin_blizz', L.GUI.APPEARANCE.RESKIN_BLIZZ, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_BLIZZ_TIP},
-		{1, 'ACCOUNT', 'vignetting', L.GUI.APPEARANCE.VIGNETTING, true},
-		{3, 'ACCOUNT', 'backdrop_alpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, nil, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
+
+		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER},
+		{3, 'ACCOUNT', 'backdrop_alpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, true, {0, 1, .01}},
+		{1, 'ACCOUNT', 'reskin_blizz', L.GUI.APPEARANCE.RESKIN_BLIZZ},
+		{1, 'ACCOUNT', 'vignetting', L.GUI.APPEARANCE.VIGNETTING, nil},
+
+
 		{3, 'ACCOUNT', 'vignetting_alpha', L.GUI.APPEARANCE.VIGNETTING_ALPHA, true, {0, 1, .01}},
+
+		-- {5, 'ACCOUNT', 'backdrop_color', L.GUI.APPEARANCE.BACKDROP_COLOR},
+		-- {5, 'ACCOUNT', 'border_color', L.GUI.APPEARANCE.BORDER_COLOR, 1},
 		{},
 		{1, 'ACCOUNT', 'reskin_dbm', L.GUI.APPEARANCE.RESKIN_DBM},
 		{1, 'ACCOUNT', 'reskin_pgf', L.GUI.APPEARANCE.RESKIN_PGF, true},
@@ -161,7 +187,7 @@ GUI.OptionsList = {
 		{1, 'actionbar', 'button_macro_name', L.GUI.ACTIONBAR.BUTTON_MACRO_NAME, true},
 		{1, 'actionbar', 'button_count', L.GUI.ACTIONBAR.BUTTON_COUNT},
 		{1, 'actionbar', 'button_class_color', L.GUI.ACTIONBAR.BUTTON_CLASS_COLOR, true},
-		{1, 'actionbar', 'fade', L.GUI.ACTIONBAR.FADE, nil, ActionBarFader, nil, L.GUI.ACTIONBAR.FADE_TIP},
+		{1, 'actionbar', 'fade', L.GUI.ACTIONBAR.FADE, nil, SetupActionBarFader, nil, L.GUI.ACTIONBAR.FADE_TIP},
 		{3, 'actionbar', 'scale', L.GUI.ACTIONBAR.SCALE, nil, {.5, 2, .1}, UpdateActionBarScale},
 		{},
 		{1, 'actionbar', 'bar1', L.GUI.ACTIONBAR.BAR1},
@@ -209,7 +235,7 @@ GUI.OptionsList = {
 		{1, 'inventory', 'combine_free_slots', L.GUI.INVENTORY.COMBINE_FREE_SLOTS, true, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.COMBINE_FREE_SLOTS_TIP},
 		{1, 'inventory', 'bind_type', L.GUI.INVENTORY.BIND_TYPE, nil, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.BIND_TYPE_TIP},
 		{1, 'inventory', 'item_level', L.GUI.INVENTORY.ITEM_LEVEL, true, nil, GUI.UpdateInventoryStatus},
-		{1, 'inventory', 'item_filter', L.GUI.INVENTORY.ITEM_FILTER, nil, ItemFilter, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.ITEM_FILTER_TIP},
+		{1, 'inventory', 'item_filter', L.GUI.INVENTORY.ITEM_FILTER, nil, SetupInventoryFilter, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.ITEM_FILTER_TIP},
 		{1, 'inventory', 'special_color', L.GUI.INVENTORY.SPECIAL_COLOR, true, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.SPECIAL_COLOR_TIP},
 		{},
 		{3, 'inventory', 'slot_size', L.GUI.INVENTORY.SLOT_SIZE, nil, {20, 60, 1}},
@@ -248,52 +274,68 @@ GUI.OptionsList = {
 		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true},
 
 	},
-	[12] = { -- unit frames
-		{1, 'unitframe', 'enable', L.GUI.UNITFRAME.ENABLE, nil, UnitFrameSetup},
+	[12] = { -- unitframes
+		{1, 'unitframe', 'enable', L.GUI.UNITFRAME.ENABLE, nil, SetupUnitFrameSize},
 		{1, 'unitframe', 'transparent_mode', L.GUI.UNITFRAME.TRANSPARENT_MODE},
-		{1, 'unitframe', 'fade', L.GUI.UNITFRAME.FADE, true, UnitFrameFader},
-		{1, 'unitframe', 'range_check', L.GUI.UNITFRAME.RANGE_CHECK},
-		{1, 'unitframe', 'color_smooth', L.GUI.UNITFRAME.COLOR_SMOOTH, true},
-		{1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT},
+		{1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT, true},
+		{1, 'unitframe', 'fade', L.GUI.UNITFRAME.FADE, nil, SetupUnitFrameFader},
+		{1, 'unitframe', 'range_check', L.GUI.UNITFRAME.RANGE_CHECK, true},
+		{1, 'unitframe', 'player_combat_indicator', L.GUI.UNITFRAME.PLAYER_COMBAT_INDICATOR},
+		{1, 'unitframe', 'player_resting_indicator', L.GUI.UNITFRAME.PLAYER_RESTING_INDICATOR, true},
+		{1, 'unitframe', 'player_hide_tags', L.GUI.UNITFRAME.PLAYER_HIDE_TAGS},
 		{1, 'unitframe', 'heal_prediction', L.GUI.UNITFRAME.HEAL_PREDICTION, true},
-		{1, 'unitframe', 'over_absorb', L.GUI.UNITFRAME.OVER_ABSORB},
-		{1, 'unitframe', 'gcd_spark', L.GUI.UNITFRAME.GCD_SPARK, true},
-		{1, 'unitframe', 'class_power_bar', L.GUI.UNITFRAME.CLASS_POWER_BAR},
-		{1, 'unitframe', 'stagger_bar', L.GUI.UNITFRAME.STAGGER_BAR, true},
-		{1, 'unitframe', 'totems_bar', L.GUI.UNITFRAME.TOTEMS_BAR},
-		{1, 'unitframe', 'debuffs_by_player', L.GUI.UNITFRAME.DEBUFFS_BY_PLAYER, true},
-		{1, 'unitframe', 'debuff_type', L.GUI.UNITFRAME.DEBUFF_TYPE},
+		{1, 'unitframe', 'gcd_spark', L.GUI.UNITFRAME.GCD_SPARK},
+		{1, 'unitframe', 'class_power_bar', L.GUI.UNITFRAME.CLASS_POWER_BAR, true},
+		{1, 'unitframe', 'stagger_bar', L.GUI.UNITFRAME.STAGGER_BAR},
+		{1, 'unitframe', 'totems_bar', L.GUI.UNITFRAME.TOTEMS_BAR, true},
+
+
+
+		{4, "unitframe", "color_style", L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+
+
 		{},
-		{1, 'unitframe', 'enable_castbar', L.GUI.UNITFRAME.ENABLE_CASTBAR},
+		{1, 'unitframe', 'debuffs_by_player', L.GUI.UNITFRAME.DEBUFFS_BY_PLAYER},
+		{1, 'unitframe', 'debuff_type', L.GUI.UNITFRAME.DEBUFF_TYPE, true},
+		{1, 'unitframe', 'stealable_buffs', L.GUI.UNITFRAME.STEALABLE_BUFFS},
+		{},
+		{1, 'unitframe', 'enable_castbar', L.GUI.UNITFRAME.ENABLE_CASTBAR, nil, SetupCastbar},
 		{1, 'unitframe', 'castbar_timer', L.GUI.UNITFRAME.CASTBAR_TIMER},
 		{1, 'unitframe', 'castbar_focus_separate', L.GUI.UNITFRAME.CASTBAR_FOCUS_SEPARATE, true},
-		{5, 'unitframe', 'casting_color', L.GUI.UNITFRAME.CASTING_COLOR},
-		{5, 'unitframe', 'casting_not_interruptible_color', L.GUI.UNITFRAME.CASTING_NOT_INTERRUPTIBLE_COLOR, 1},
-		{5, 'unitframe', 'casting_complete_color', L.GUI.UNITFRAME.CASTING_COMPLETE_COLOR, 2},
-		{5, 'unitframe', 'casting_fail_color', L.GUI.UNITFRAME.CASTING_FAIL_COLOR, 3},
-		{3, 'unitframe', 'castbar_focus_width', L.GUI.UNITFRAME.CASTBAR_FOCUS_WIDTH, nil, {80, 300, 1}},
-		{3, 'unitframe', 'castbar_focus_height', L.GUI.UNITFRAME.CASTBAR_FOCUS_HEIGHT, true, {8, 30, 1}},
-	},
-	[13] = { -- group frames
-		{1, 'unitframe', 'enable_group', L.GUI.GROUPFRAME.ENABLE_GROUP},
-		{1, 'unitframe', 'group_names', L.GUI.GROUPFRAME.GROUP_NAMES},
-		{1, 'unitframe', 'group_color_smooth', L.GUI.GROUPFRAME.GROUP_COLOR_SMOOTH, true, nil, nil, L.GUI.GROUPFRAME.GROUP_COLOR_SMOOTH_TIP},
-		{1, 'unitframe', 'group_threat_indicator', L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR, nil, nil, nil, L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR_TIP},
-		{1, 'unitframe', 'group_debuff_highlight', L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT, true, nil, nil, L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT_TIP},
-		{1, 'unitframe', 'group_corner_buffs', L.GUI.GROUPFRAME.GROUP_CORNER_BUFFS, nil, nil, nil, L.GUI.GROUPFRAME.GROUP_CORNER_BUFFS_TIP},
-		{1, 'unitframe', 'group_debuffs', L.GUI.GROUPFRAME.GROUP_DEBUFFS, true},
-		{1, 'unitframe', 'party_spell_watcher', L.GUI.GROUPFRAME.PARTY_SPELL_WATCHER, nil, nil, nil, L.GUI.GROUPFRAME.PARTY_SPELL_WATCHER_TIP},
-		{1, 'unitframe', 'group_click_cast', L.GUI.GROUPFRAME.GROUP_CLICK_CAST, true},
-		{1, 'unitframe', 'group_by_role', L.GUI.GROUPFRAME.GROUP_BY_ROLE},
-		{1, 'unitframe', 'group_reverse', L.GUI.GROUPFRAME.GROUP_REVERSE, true},
 		{},
-		{3, 'unitframe', 'party_width', L.GUI.GROUPFRAME.PARTY_WIDTH, nil, {20, 200, 1}},
-		{3, 'unitframe', 'party_height', L.GUI.GROUPFRAME.PARTY_HEIGHT, true, {20, 200, 1}},
-		{3, 'unitframe', 'party_gap', L.GUI.GROUPFRAME.PARTY_GAP, nil, {3, 20, 1}},
-		{3, 'unitframe', 'raid_width', L.GUI.GROUPFRAME.RAID_WIDTH, true, {20, 200, 1}},
-		{3, 'unitframe', 'raid_height', L.GUI.GROUPFRAME.RAID_HEIGHT, nil, {20, 200, 1}},
-		{3, 'unitframe', 'raid_gap', L.GUI.GROUPFRAME.RAID_GAP, true, {3, 20, 1}},
-		{3, 'unitframe', 'group_filter', L.GUI.GROUPFRAME.GROUP_FILTER, nil, {1, 8, 1}},
+		{1, 'unitframe', 'enable_boss', L.GUI.UNITFRAME.ENABLE_BOSS},
+		{4, "unitframe", "boss_color_style", L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+		{1, 'unitframe', 'enable_arena', L.GUI.UNITFRAME.ENABLE_ARENA},
+	},
+	[13] = { -- groupframes
+		{1, 'unitframe', 'enable_group', L.GUI.GROUPFRAME.ENABLE_GROUP, nil, SetupGroupFrameSize},
+		{1, 'unitframe', 'group_names', L.GUI.GROUPFRAME.GROUP_NAMES},
+		{1, 'unitframe', 'group_click_cast', L.GUI.GROUPFRAME.GROUP_CLICK_CAST, true, nil, nil, L.GUI.GROUPFRAME.GROUP_CLICK_CAST_TIP},
+
+		{1, 'unitframe', 'spec_position', L.GUI.GROUPFRAME.SPEC_POSITION},
+		{1, 'unitframe', 'group_threat_indicator', L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR, true},
+		{1, 'unitframe', 'raid_debuffs', L.GUI.GROUPFRAME.RAID_DEBUFFS, nil, SetupGroupDebuffs},
+		{1, 'unitframe', 'auras_click_through', L.GUI.GROUPFRAME.AURAS_CLICK_THROUGH, true},
+		{1, 'unitframe', 'group_debuff_highlight', L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT, nil, nil, nil, L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT_TIP},
+		{1, 'unitframe', 'group_corner_buffs', L.GUI.GROUPFRAME.GROUP_CORNER_BUFFS, true},
+
+
+
+
+		{},
+		{1, 'unitframe', 'party_horizon', L.GUI.GROUPFRAME.PARTY_HORIZON},
+		{1, 'unitframe', 'party_reverse', L.GUI.GROUPFRAME.PARTY_REVERSE, true},
+
+		{1, 'unitframe', 'party_spell_watcher', L.GUI.GROUPFRAME.PARTY_SPELL_WATCHER, nil, SetupPartySpellCooldown},
+		{1, 'unitframe', 'party_spell_sync', L.GUI.GROUPFRAME.PARTY_SPELL_SYNC, true, nil, nil, L.GUI.GROUPFRAME.PARTY_SPELL_SYNC_TIP},
+
+		{},
+		{1, 'unitframe', 'raid_horizon', L.GUI.GROUPFRAME.RAID_HORIZON},
+		{1, 'unitframe', 'raid_reverse', L.GUI.GROUPFRAME.RAID_REVERSE, true},
+		{},
+		{4, "unitframe", "group_color_style", L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+
+		{3, 'unitframe', 'group_filter', L.GUI.GROUPFRAME.GROUP_FILTER, true, {1, 8, 1}},
 	},
 
 	[14] = { -- nameplate
@@ -331,6 +373,8 @@ GUI.OptionsList = {
 		{3, 'nameplate', 'horizontal_spacing', L.GUI.NAMEPLATE.HORIZONTAL_SPACING, true, {.5, 2, .1}, UpdatePlateSpacing},
 	},
 	[15] = { -- misc
+		{1, 'ACCOUNT', 'custom_class_color', L.GUI.MISC.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor},
+		{},
 		{4, 'ACCOUNT', 'texture_style', L.GUI.MISC.TEXTURE_STYLE, false, {}},
 		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
 	},

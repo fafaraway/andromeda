@@ -71,9 +71,9 @@ end
 
 
 function BLIZZARD:ErrorsFrame()
-	firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Regular, 14, nil, '', 'RED', 'THICK')
+	firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
 	firstErrorFrame.text:SetPoint('TOP', UIParent, 0, -80)
-	secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Regular, 14, nil, '', 'RED', 'THICK')
+	secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
 	secondErrorFrame.text:SetPoint('TOP', UIParent, 0, -96)
 
 	if C.DB.blizzard.concise_errors then

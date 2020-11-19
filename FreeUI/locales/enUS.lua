@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-if (GetLocale() == 'zhCN' or GetLocale() == 'zhTW') then return end
+
 
 --[[ Binding ]]
 
@@ -316,29 +316,7 @@ end
 
 
 
---[[ Install ]]
 
-do
-	L['INSTALL_HEADER_HELLO'] = 'Hello'
-	L['INSTALL_BODY_WELCOME'] = '欢迎使用 |cffe9c55dFreeUI|r ！|n|n在开始使用前需要调整一些设定来更好的搭配 |cffe9c55dFreeUI|r 工作。|n|n点击安装按钮将进入安装步骤。'
-	L['INSTALL_HEADER_BASIC'] = '基础设置'
-	L['INSTALL_BODY_BASIC'] = '这些安装步骤将为 |cffe9c55dFreeUI|r 调整各类合适的设定。|n|n第一步将会调整一些 |cffe9c55dCVars|r 设定。|n|n点击下方的继续按钮将应用设定，或者点击跳过按钮如果你想跳过这些设定。'
-	L['INSTALL_HEADER_UISCALE'] = '界面缩放'
-	L['INSTALL_BODY_UISCALE'] = '这个步骤将会为游戏界面设定合适的缩放值。'
-	L['INSTALL_HEADER_CHAT'] = '聊天设置'
-	L['INSTALL_BODY_CHAT'] = '这个步骤将会调整聊天栏相关的设定。'
-	L['INSTALL_HEADER_ACTIONBAR'] = '动作条设置'
-	L['INSTALL_BODY_ACTIONBAR'] = '这个步骤将会调整动作条相关的设定。'
-	L['INSTALL_HEADER_ADDON'] = '插件设置'
-	L['INSTALL_BODY_ADDON'] = '这个步骤将会调整 |cffe9c55dDBM|r 和 |cffe9c55dSkada|r 的设定以使其配合 |cffe9c55dFreeUI|r 的界面风格与布局。'
-	L['INSTALL_HEADER_COMPLETE'] = '安装成功！'
-	L['INSTALL_BODY_COMPLETE'] = '安装已经成功完成。|n|n请点击下方完成按钮重载界面。|n|n记住在游戏中你可以通过输入 |cffe9c55d/free|r 来获取详细的帮助或是直接输入 |cffe9c55d/free config|r 来打开控制面板更改各类设定。'
-	L['INSTALL_BUTTON_INSTALL'] = 'Install'
-	L['INSTALL_BUTTON_SKIP'] = 'Skip'
-	L['INSTALL_BUTTON_CONTINUE'] = 'Continue'
-	L['INSTALL_BUTTON_FINISH'] = 'Finish'
-	L['INSTALL_BUTTON_CANCEL'] = 'Cancel'
-end
 
 
 
@@ -380,7 +358,7 @@ L.GUI = {
 		['NAME'] = 'Profles',
 
 		['RESET_WARNING'] = 'Are you sure to reset |cffff2020ALL|r the settings?',
-		['RESET_PROFILE_WARNING'] = '"Are you sure to reset your current profile?',
+		['RESET_PROFILE_WARNING'] = 'Are you sure to reset your current profile?',
 		['APPLY_SELECTED_PROFILE'] = 'Are you sure to switch to the selected profile?',
 		['DOWNLOAD_SELECTED_PROFILE'] = 'Are you sure to replace your current profile with the selected one?',
 		['UPLOAD_CURRENT_PROFILE'] = 'Are you sure to replace the selected profile with your current one?',
@@ -392,7 +370,7 @@ L.GUI = {
 		['CHARACTER'] = 'Character',
 		['EXCEPTION'] = 'Data exception',
 
-		['RESET_TIP'] = 'Delete %AddonName% all settings，reset to the default.',
+		['RESET_TIP'] = 'Delete %AddonName% all settings, reset to the default.',
 		['IMPORT_TIP'] = 'Import settings.',
 		['EXPORT_TIP'] = 'Export settings.',
 
@@ -436,23 +414,24 @@ L.GUI = {
 		['NUMBER_TYPE3'] = 'Full digitals',
 		['BUY_STACK'] = '快速购买整组物品',
 		['BUY_STACK_TIP'] = '按住ALT键购买物品会直接购买整组。',
+		['CUSTOM_CLASS_COLOR'] = 'Customized class colors',
+		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting',
 	},
 
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',
 		['CURSOR_TRAIL'] = 'Cursor trail',
-		['RESKIN_BLIZZ'] = 'Restyle blizzard panels',
-		['RESKIN_BLIZZ_TIP'] = '使用统一的黑色外观风格替换游戏原始的美术风格。',
+		['RESKIN_BLIZZ'] = 'Restyle blizzard frames',
 		['VIGNETTING'] = 'Vignetting',
 		['BACKDROP_ALPHA'] = 'Backdrop alpha',
-		['BACKDROP_ALPHA_TIP'] = '调整黑色背景透明度。',
 		['VIGNETTING_ALPHA'] = 'Vignetting alpha',
 		['SHADOW_BORDER'] = 'Shadow border',
-		['SHADOW_BORDER_TIP'] = '界面元素周围添加一圈阴影',
 		['UI_SCALE'] = 'UI Scale',
-		['UI_SCALE_TIP'] = '设定界面整体缩放|n推荐1080P设为1|n1440P设为1.2-1.4|n2160P设为2。',
+		['UI_SCALE_TIP'] = 'Adjust global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.',
 		['RESKIN_DBM'] = 'Restyle DBM bars',
 		['RESKIN_PGF'] = 'Restyle PGF panel',
+		['BACKDROP_COLOR'] = 'Backdrop color',
+		['BORDER_COLOR'] = 'Border color',
 	},
 
 	['NOTIFICATION'] = {
@@ -677,44 +656,54 @@ L.GUI = {
 	},
 
 	['UNITFRAME'] = {
-		['NAME'] = 'Unit frames',
+		['NAME'] = 'Unitframe',
 		['ENABLE'] = 'Enable unit frames',
-		['TRANSPARENT_MODE'] = 'Use transparent mode',
-		['FADE'] = 'Use dynamic fade',
-		['FADER_SETUP'] = '头像框体显示设置',
-		['CONDITION_COMBAT'] = '战斗中显示',
-		['CONDITION_TARGET'] = '有目标或焦点时显示',
-		['CONDITION_INSTANCE'] = '在副本中显示',
-		['CONDITION_ARENA'] = '在战场或竞技场中显示',
-		['CONDITION_CASTING'] = '施法时显示',
-		['CONDITION_INJURED'] = '血量不满时显示',
-		['CONDITION_MANA'] = '法力不满时显示',
-		['CONDITION_POWER'] = '有资源时显示',
-		['FADE_OUT_ALPHA'] = 'Fade out alpha',
-		['FADE_IN_ALPHA'] = 'Fade in alpha',
-		['FADE_OUT_DURATION'] = 'Fade out duration',
-		['FADE_IN_DURATION'] = 'Fade in duration',
-		['RANGE_CHECK'] = 'Out range fade',
-		['COLOR_SMOOTH'] = 'Colored by current health value',
-		['PORTRAIT'] = 'Show portrait',
-		['HEAL_PREDICTION'] = 'Show heal prediction',
-		['OVER_ABSORB'] = 'Absorb indicator',
+		['UNITFRAME_SIZE_SETTING_HEADER'] = 'Unitframe size setting',
+		['TRANSPARENT_MODE'] = 'Transparent style',
+		['FADE'] = 'Dynamic fade',
+		['FADER_SETTING_HEADER'] = 'Dynamic fade setting',
+		['CONDITION_COMBAT'] = 'Combating',
+		['CONDITION_TARGET'] = 'Targeting',
+		['CONDITION_INSTANCE'] = 'Inside dungeon',
+		['CONDITION_ARENA'] = 'Inside arena',
+		['CONDITION_CASTING'] = 'Casting',
+		['CONDITION_INJURED'] = 'Injured',
+		['CONDITION_MANA'] = 'Mana not full',
+		['CONDITION_POWER'] = 'Have power',
+		['FADE_OUT_ALPHA'] = 'fade out alpha',
+		['FADE_IN_ALPHA'] = 'fade in alpha',
+		['FADE_OUT_DURATION'] = 'fade out duration',
+		['FADE_IN_DURATION'] = 'fade in duration',
+		['RANGE_CHECK'] = 'Range check',
+		['PORTRAIT'] = 'Portrait',
+		['HEAL_PREDICTION'] = 'Heal prediction',
 		['GCD_SPARK'] = 'GCD indicator',
-		['CLASS_POWER_BAR'] = 'Show class power bar',
-		['STAGGER_BAR'] = 'Show stagger bar',
-		['TOTEMS_BAR'] = 'Show totems bar',
-		['DEBUFFS_BY_PLAYER'] = 'Only show debuffs casted by player',
-		['DEBUFF_TYPE'] = 'Show debuff type',
+		['CLASS_POWER_BAR'] = 'Class power bar',
+		['STAGGER_BAR'] = 'Stagger bar',
+		['TOTEMS_BAR'] = 'Totems bar',
+		['DEBUFFS_BY_PLAYER'] = 'Debuff filter',
+		['DEBUFF_TYPE'] = 'Debuff type',
+		['STEALABLE_BUFFS'] = 'Stealable buffs',
+		['PLAYER_COMBAT_INDICATOR'] = 'Combat indicator',
+		['PLAYER_RESTING_INDICATOR'] = 'Resting indicator',
+		['PLAYER_HIDE_TAGS'] = 'Hide player tags',
 		['ENABLE_CASTBAR'] = 'Enable castbar',
+		['CASTBAR_SETTING_HEADER'] = 'Castbar setting',
 		['CASTBAR_TIMER'] = 'Show castbar timer',
 		['CASTBAR_FOCUS_SEPARATE'] = 'Separate focus castbar',
-		['CASTING_COLOR'] = 'normal',
-		['CASTING_NOT_INTERRUPTIBLE_COLOR'] = 'Not interruptible',
+		['CASTBAR_COLORS'] = 'Colors',
+		['CASTBAR_WIDTH'] = 'width',
+		['CASTBAR_HEIGHT'] = 'height',
+		['CASTING_COLOR'] = 'Normal',
+		['CASTING_UNINTERRUPTIBLE_COLOR'] = 'Uninterrupted',
 		['CASTING_COMPLETE_COLOR'] = 'Complete',
 		['CASTING_FAIL_COLOR'] = 'Fail',
+		['CASTBAR_FOCUS'] = 'Focus castbar',
 		['CASTBAR_FOCUS_WIDTH'] = 'focus castbar width',
 		['CASTBAR_FOCUS_HEIGHT'] = 'focus castbar height',
-
+		['ENABLE_BOSS'] = 'Enable boss frames',
+		['BOSS_COLOR_SMOOTH'] = 'Boss frames color smooth',
+		['ENABLE_ARENA'] = 'Enable arena frames',
 		['CAT_PLAYER'] = 'Player',
 		['CAT_TARGET'] = 'Target',
 		['CAT_FOCUS'] = 'Focus',
@@ -724,35 +713,71 @@ L.GUI = {
 		['CAT_POWER'] = 'Power',
 		['SET_WIDTH'] = 'width',
 		['SET_HEIGHT'] = 'height',
-		['SET_POWER_HEIGHT'] = 'Power height',
-		['SET_ALT_POWER_HEIGHT'] = 'Alt power height',
+		['SET_GAP'] = 'gap',
+		['SET_POWER_HEIGHT'] = 'power height',
+		['SET_ALT_POWER_HEIGHT'] = 'alternative power height',
+		['COLOR_STYLE'] = 'Health color',
+		['COLOR_STYLE_DEFAULT'] = 'Default white',
+		['COLOR_STYLE_CLASS'] = 'Class colored',
+		['COLOR_STYLE_GRADIENT'] = 'Percentage gradient',
 	},
 
 	['GROUPFRAME'] = {
-		['NAME'] = 'Group frames',
+		['NAME'] = 'Groupframe',
 		['ENABLE_GROUP'] = 'Enable group frames',
+		['GROUPFRAME_SIZE_SETTING_HEADER'] = 'Groupframe size setting',
 		['GROUP_NAMES'] = 'Show names',
-		['GROUP_COLOR_SMOOTH'] = 'Colored by current health value',
-		['GROUP_COLOR_SMOOTH_TIP'] = '高血量为绿色，低血量为红色，禁用此项则使用职业染色。',
+
 		['GROUP_THREAT_INDICATOR'] = 'Threat indicator',
-		['GROUP_THREAT_INDICATOR_TIP'] = '框体四周的光晕代表该单位的仇恨状态。',
-		['GROUP_DEBUFF_HIGHLIGHT'] = 'Dispellable debuff highlight',
-		['GROUP_DEBUFF_HIGHLIGHT_TIP'] = '当队友身上有某种你可以驱散解除的减益光环时，他的框体会根据减益光环的类型高亮。',
-		['GROUP_CORNER_BUFFS'] = 'Corner indicator',
-		['GROUP_CORNER_BUFFS_TIP'] = '在框体边角显示你所施放的各种增益光环，比如牧师的盾，德鲁伊的回春等。',
-		['GROUP_DEBUFFS'] = 'Show debuffs',
+		['GROUP_DEBUFF_HIGHLIGHT'] = 'Dispellable debuffs highlight',
+		['GROUP_DEBUFF_HIGHLIGHT_TIP'] = 'Whenever a group member has a dispellable debuff it will highlight the frame in the debuff color.',
+		['GROUP_CORNER_BUFFS'] = 'Corner buffs indicator',
+		['RAID_DEBUFFS'] = 'Raid debuffs',
+		['AURAS_CLICK_THROUGH'] = 'Hide tooltip from auras',
 		['PARTY_SPELL_WATCHER'] = 'Party spell cooldown',
-		['PARTY_SPELL_WATCHER_TIP'] = '在小队框架显示队友的打断控制减伤类技能冷却。',
-		['GROUP_BY_ROLE'] = 'Arrange by role',
-		['GROUP_REVERSE'] = 'Reverse grow',
-		['GROUP_CLICK_CAST'] = 'Use click to cast',
+		['PARTY_SPELL_SYNC'] = 'Sync party spell cooldown',
+		['PARTY_SPELL_SYNC_TIP'] = 'If enabled, the cooldown status would sync with group members who using FreeUI or ZenTracker(WA).|nThis might decrease your performance.',
+
+		['PARTY_SPELL_SETTING_HEADER'] = 'Party spells cooldown setting',
+		["PARTY_SPELL_RESET_WARNING"] = "Are you sure to restore default list?",
+		["INCOMPLETE_INPUT"] = "You need to complete all * optinos.",
+		["INCORRECT_SPELLID"] = "Incorrect SpellID.",
+		["EXISTING_ID"] = "The SpellID is existed.",
+		['SPELL_ID'] = 'Spell ID',
+		["SPELL_ID_TIP"] = "|nSpell ID, must be a number.|nSpell name is not supported.",
+		["SPELL_COOLDOWN"] = "Spell cooldown*",
+		["SPELL_COOLDOWN_TIP"] = "|nEnter the spell's cooldown duration.|nOnly support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members.",
+
+		['GROUP_CLICK_CAST'] = 'Click casting on group frames',
+		['GROUP_CLICK_CAST_TIP'] = 'You can bind click casting spells on Blizzard Spell Book.',
+
+		['GROUP_DEBUFF_SETTING_HEADER'] = 'Group debuff setting',
+		['TYPE'] = 'Type',
+		["TYPE_TIP"] = "|nSelect the instance type where the ID belongs to.",
+		["DUNGEON_TIP"] = "|nSelect the dungeons where the ID belongs to.",
+		["RAID_TIP"] = "|nSelect the raids where the ID belongs to.",
+		["PRIORITY"] = "Priority",
+		["PRIORITY_TIP"] = "|nSpell's priority when visible.|n|nWhen multiple spells exist, it only remain the one that owns highest priority.|n|nDefault priority is 2, if you leave it blank.|n|nThe maximun priority is 6, and the icon would flash if you set so.",
+		['GROUP_DEBUFF_RESET_WARNING'] = "Are you sure to restore default list?",
+		["PRIORITY_EDITBOX_TIP"] = "|nPriority limit in 1-6.|n|nPress KEY ENTER when you finish typing.",
+
+		['RAID_HORIZON'] = 'Raid horizontal arrangement',
+		['RAID_REVERSE'] = 'Raid reverse growth',
+		['PARTY_HORIZON'] = 'Party horizontal arrangement',
+		['PARTY_REVERSE'] = 'Party reverse growth',
+		['SPEC_POSITION'] = 'Save position by specs',
+
 		['PARTY_WIDTH'] = 'Party frame width',
 		['PARTY_HEIGHT'] = 'Party frame height',
 		['PARTY_GAP'] = 'Parth frame spacing',
+
 		['RAID_WIDTH'] = 'Raid frame width',
 		['RAID_HEIGHT'] = 'Raid frame height',
 		['RAID_GAP'] = 'Raid frame spacing',
-		['GROUP_FILTER'] = 'Max groups to show',
+		['GROUP_FILTER'] = 'Maximum groups to show',
+
+		['CAT_PARTY'] = 'Party',
+		['CAT_RAID'] = 'Raid',
 	},
 
 
@@ -814,6 +839,28 @@ L.GUI = {
 		['FEEDBACK'] = 'Feedback',
 		['PRIMARY'] = 'Haleth, siweia',
 		['SECONDARY'] = 'Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95',
+	},
+
+	['INSTALLATION'] = {
+		['INSTALL'] = 'Install',
+		['SKIP'] = 'Skip',
+		['CONTINUE'] = 'Continue',
+		['FINISH'] = 'Finish',
+		['CANCEL'] = 'Cancel',
+		['HELLO'] = 'Hello',
+		['WELCOME'] = 'Welcome to %AddonName%!|n|nYou need to adjust some settings before you start using it.|n|nClick the install button to enter the installation step.',
+		['BASIC_HEADER'] = 'Basic Settings',
+		['BASIC_DESCRIPTION'] = 'These installation steps will adjust various suitable settings for %AddonName%.|n|nThe first step will adjust some |cffe9c55dCVars|r settings.|n|nClick the continue button below to apply the settings, or click the skip button to skip these settings.',
+		['UISCALE_HEADER'] = 'UIScale',
+		['UISCALE_DESCRIPTION'] = 'This step will set the appropriate scale for the interface.',
+		['CHAT_HEADER'] = 'Chat',
+		['CHAT_DESCRIPTION'] = 'This step will adjust settings related to the chat.',
+		['ACTIONBAR_HEADER'] = 'Actionbars',
+		['ACTIONBAR_DESCRIPTION'] = 'This step will adjust settings related to actionbars.',
+		['ADDON_HEADER'] = 'Addons',
+		['ADDON_DESCRIPTION'] = 'This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.',
+		['COMPLETE_HEADER'] = 'Success!',
+		['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.',
 	},
 }
 

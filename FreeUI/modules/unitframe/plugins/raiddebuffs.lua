@@ -2,7 +2,7 @@ local _, ns = ...
 local oUF = ns.oUF
 local F, C = unpack(ns)
 
-
+local class = C.MyClass
 local RaidDebuffsIgnore, invalidPrio = {}, -1
 
 local DispellPriority = {

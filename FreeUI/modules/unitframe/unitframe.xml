@@ -6,4 +6,5 @@
 	<Script file="units.lua"/>
 	<Script file="nameplate.lua"/>
 	<Script file="clickcast.lua"/>
+	<Include file="auras\auras.xml"/>
 </Ui>

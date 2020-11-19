@@ -11,7 +11,7 @@
 *  https://imgur.com/a/uUz7CuL
 
 ## Videos
-*  https://www.youtube.com/watch?v=nD-rWROl0YU
+*  https://www.youtube.com/watch?v=cFwR5r3v10U
 
 ## Commands
 *  `/free` <em>list all available commands</em>

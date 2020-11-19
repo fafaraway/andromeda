@@ -30,7 +30,7 @@ tinsert(C.BlizzThemes, function()
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateRolePoll,
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsCountdown,
 		CompactRaidFrameManagerDisplayFrameLeaderOptionsInitiateReadyCheck,
-		CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
+		--CompactRaidFrameManagerDisplayFrameLeaderOptionsRaidWorldMarkerButton,
 		CompactRaidFrameManagerDisplayFrameLockedModeToggle,
 		CompactRaidFrameManagerDisplayFrameHiddenModeToggle,
 		CompactRaidFrameManagerDisplayFrameConvertToRaid

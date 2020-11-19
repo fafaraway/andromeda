@@ -10,7 +10,6 @@ local isPlaying = false
 local alertQueue = {}
 
 
--- 动画
 function COMBAT:CreateAnimationFrame()
 	if self.animationFrame then
 		return
@@ -120,7 +119,6 @@ function COMBAT:UpdateAnimationFrame()
 
 	local f = self.animationFrame
 
-	-- 动画尺寸
 	f:SetSize(unpack(animationFrameSize))
 
 	f.shield:Hide()
@@ -137,7 +135,6 @@ function COMBAT:UpdateAnimationFrame()
 	f.swordRightToLeft.enter.moveToCenter:SetOffset(-swordAnimationRange, swordAnimationRange)
 	f.swordRightToLeft.leave.moveToCorner:SetOffset(-swordAnimationRange, swordAnimationRange)
 
-	-- 动画时间更新
 	F.SpeedAnimationGroup(f.shield.enter, C.DB.combat.alert_speed)
 	F.SpeedAnimationGroup(f.swordLeftToRight.enter, C.DB.combat.alert_speed)
 	F.SpeedAnimationGroup(f.swordRightToLeft.enter, C.DB.combat.alert_speed)
@@ -146,7 +143,6 @@ function COMBAT:UpdateAnimationFrame()
 	F.SpeedAnimationGroup(f.swordRightToLeft.leave, C.DB.combat.alert_speed)
 end
 
--- 文字
 function COMBAT:CreateTextFrame()
 	if self.textFrame then
 		return
@@ -200,12 +196,10 @@ function COMBAT:UpdateTextFrame()
 	f.text:SetText(L['COMBAT_ENTER'])
 	f:SetSize(f.text:GetStringWidth(), f.text:GetStringHeight())
 
-	-- 动画尺寸更新
 	f.enter.moveUp:SetOffset(0, moveUpOffset)
 	f.enter.moveDown:SetOffset(0, moveDownOffset)
 	f.leave.moveUp:SetOffset(0, -moveDownOffset)
 
-	-- 动画时间更新
 	F.SpeedAnimationGroup(f.enter, C.DB.combat.alert_speed)
 	F.SpeedAnimationGroup(f.leave, C.DB.combat.alert_speed)
 
@@ -219,7 +213,6 @@ function COMBAT:UpdateTextFrame()
 	-- end
 end
 
--- 通知控制
 function COMBAT:ShowAlert(alertType)
 	-- if not self.animationFrame then
 	-- 	F.DebugMessage(MISC, '找不到动画框架')
@@ -319,7 +312,6 @@ function COMBAT.LoadNextAlert()
 	end
 end
 
--- 事件绑定
 function COMBAT:PLAYER_REGEN_DISABLED()
 	COMBAT:ShowAlert('ENTER')
 end

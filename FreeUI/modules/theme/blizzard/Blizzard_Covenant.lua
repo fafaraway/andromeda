@@ -59,24 +59,6 @@ local function reskinTalentsList(self)
 	end
 end
 
-local function hideRenownLevelBorder(frame)
-	if not frame.styled then
-		frame.Divider:SetAlpha(0)
-		frame.BackgroundTile:SetAlpha(0)
-		F.CreateBDFrame(frame.Background, .25)
-
-		frame.styled = true
-	end
-
-	for button in frame.milestonesPool:EnumerateActive() do
-		if not button.styled then
-			button.LevelBorder:SetAlpha(0)
-
-			button.styled = true
-		end
-	end
-end
-
 local function replaceCurrencies(displayGroup)
 	for frame in displayGroup.currencyFramePool:EnumerateActive() do
 		if not frame.styled then
@@ -90,12 +72,6 @@ end
 
 C.Themes["Blizzard_CovenantSanctum"] = function()
 	local CovenantSanctumFrame = CovenantSanctumFrame
-
-	if not C.isNewPatch then
-		F.ReskinTab(CovenantSanctumFrameTab1)
-		F.ReskinTab(CovenantSanctumFrameTab2)
-		CovenantSanctumFrameTab1:SetPoint("TOPLEFT", CovenantSanctumFrame, "BOTTOMLEFT", 23, 1)
-	end
 
 	CovenantSanctumFrame:HookScript("OnShow", function(self)
 		if not self.bg then
@@ -126,10 +102,6 @@ C.Themes["Blizzard_CovenantSanctum"] = function()
 	talentsList.IntroBox.Background:Hide()
 	F.Reskin(talentsList.UpgradeButton)
 	hooksecurefunc(talentsList, "Refresh", reskinTalentsList)
-
-	if not C.isNewPatch then
-		hooksecurefunc(self.RenownTab, "Refresh", hideRenownLevelBorder)
-	end
 end
 
 -- Covenant renown

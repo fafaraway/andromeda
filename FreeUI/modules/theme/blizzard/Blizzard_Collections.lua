@@ -80,15 +80,15 @@ C.Themes["Blizzard_Collections"] = function()
 			bu.bg = bg
 
 			icon:SetSize(42, 42)
-			F.ReskinIcon(icon)
+			icon.bg = F.ReskinIcon(icon)
 			bu.name:SetParent(bg)
 
 			if bu.DragButton then
-				bu.DragButton.ActiveTexture:SetTexture(C.Assets.button_checked)
+				bu.DragButton.ActiveTexture:SetTexture('')
 				bu.DragButton:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
 				bu.DragButton:GetHighlightTexture():SetAllPoints(icon)
 			else
-				bu.dragButton.ActiveTexture:SetTexture(C.Assets.button_checked)
+				bu.dragButton.ActiveTexture:SetTexture('')
 				bu.dragButton.levelBG:SetAlpha(0)
 				bu.dragButton.level:SetFontObject(GameFontNormal)
 				bu.dragButton.level:SetTextColor(1, 1, 1)
@@ -109,6 +109,12 @@ C.Themes["Blizzard_Collections"] = function()
 					bu.bg:SetBackdropColor(r, g, b, .25)
 				else
 					bu.bg:SetBackdropColor(0, 0, 0, .25)
+				end
+
+				if bu.DragButton.ActiveTexture:IsShown() then
+					bu.icon.bg:SetBackdropBorderColor(1, .8, 0)
+				else
+					bu.icon.bg:SetBackdropBorderColor(0, 0, 0)
 				end
 			end
 		end
@@ -142,6 +148,12 @@ C.Themes["Blizzard_Collections"] = function()
 						bu.bg:SetBackdropColor(r, g, b, .25)
 					else
 						bu.bg:SetBackdropColor(0, 0, 0, .25)
+					end
+
+					if bu.dragButton.ActiveTexture:IsShown() then
+						bu.icon.bg:SetBackdropBorderColor(1, .8, 0)
+					else
+						bu.icon.bg:SetBackdropBorderColor(0, 0, 0)
 					end
 				end
 			end

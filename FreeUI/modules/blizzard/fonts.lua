@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 
-if C.isDeveloper then
+if C.isDeveloper and C.Client == 'zhCN' then
 	C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.otf'
 	C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
@@ -10,7 +10,7 @@ if C.isDeveloper then
 elseif C.Client == 'zhCN' then
 	C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
-	C.Assets.Fonts.Bold = 'Fonts\\ARKai_T.ttf'
+	C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
 elseif C.Client == 'zhTW' then
