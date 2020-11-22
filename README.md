@@ -1,6 +1,6 @@
 <p align="center"><img src="https://i.imgur.com/GRLVXDx.png" alt="FreeUI Logo" /></p>
 <div align="center">
-  <a href="https://discord.gg/Uu28KQq">
+  <a href="https://discord.gg/86wbfZXxn7">
     <img src="https://img.shields.io/badge/Discord-FreeUI-blueviolet?style=flat-square" alt="Discord" />
   </a> <img src="https://img.shields.io/badge/WOW-Shadowlands-orange?style=flat-square" alt="Shadowlands"> <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/Solor/FreeUI/Release?style=flat-square"> <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Solor/FreeUI?style=flat-square"> <img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Solor/FreeUI?style=flat-square">
 </div>

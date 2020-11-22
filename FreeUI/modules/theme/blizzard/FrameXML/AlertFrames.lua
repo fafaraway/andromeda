@@ -2,13 +2,13 @@ local F, C = unpack(select(2, ...))
 
 -- Fix Alertframe bg
 local function fixBg(frame)
-	if frame:GetObjectType() == "AnimationGroup" then
+	if frame:IsObjectType("AnimationGroup") then
 		frame = frame:GetParent()
 	end
 	if frame.bg then
-		frame.bg:SetBackdropColor(0, 0, 0, FREE_ADB.backdrop_alpha)
+		frame.bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], FREE_ADB.backdrop_alpha)
 		if frame.bg.__shadow then
-			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
+			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
 		end
 	end
 end
@@ -16,9 +16,9 @@ end
 local function fixParentbg(frame)
 	frame = frame:GetParent():GetParent()
 	if frame.bg then
-		frame.bg:SetBackdropColor(0, 0, 0, FREE_ADB.backdrop_alpha)
+		frame.bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], FREE_ADB.backdrop_alpha)
 		if frame.bg.__shadow then
-			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .4)
+			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
 		end
 	end
 end

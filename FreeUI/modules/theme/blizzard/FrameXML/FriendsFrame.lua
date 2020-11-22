@@ -4,7 +4,11 @@ tinsert(C.BlizzThemes, function()
 	if not FREE_ADB.reskin_blizz then return end
 
 	for i = 1, 4 do
-		F.ReskinTab(_G["FriendsFrameTab"..i])
+		local tab = _G["FriendsFrameTab"..i]
+		F.ReskinTab(tab)
+		if i > 1 then
+			tab:SetPoint("LEFT", _G["FriendsFrameTab"..(i-1)], "RIGHT", -10, 0)
+		end
 	end
 	FriendsFrameIcon:Hide()
 	F.StripTextures(IgnoreListFrame)

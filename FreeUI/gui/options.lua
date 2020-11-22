@@ -1,9 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
-
-
-
-
+local oUF = F.oUF
 
 function GUI:UpdateInventoryStatus()
 	F.INVENTORY:UpdateAllBags()
@@ -100,35 +97,33 @@ local function SetupGroupDebuffs()
 	GUI:SetupGroupDebuffs(GUI.Page[13])
 end
 
-
 GUI.OptionsList = {
-	[1] = { -- appearance
+	[1] = {
+		-- appearance
 		{1, 'ACCOUNT', 'cursor_trail', L.GUI.APPEARANCE.CURSOR_TRAIL},
-
 		{1, 'ACCOUNT', 'shadow_border', L.GUI.APPEARANCE.SHADOW_BORDER},
 		{3, 'ACCOUNT', 'backdrop_alpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, true, {0, 1, .01}},
 		{1, 'ACCOUNT', 'reskin_blizz', L.GUI.APPEARANCE.RESKIN_BLIZZ},
 		{1, 'ACCOUNT', 'vignetting', L.GUI.APPEARANCE.VIGNETTING, nil},
-
-
 		{3, 'ACCOUNT', 'vignetting_alpha', L.GUI.APPEARANCE.VIGNETTING_ALPHA, true, {0, 1, .01}},
-
 		-- {5, 'ACCOUNT', 'backdrop_color', L.GUI.APPEARANCE.BACKDROP_COLOR},
 		-- {5, 'ACCOUNT', 'border_color', L.GUI.APPEARANCE.BORDER_COLOR, 1},
 		{},
 		{1, 'ACCOUNT', 'reskin_dbm', L.GUI.APPEARANCE.RESKIN_DBM},
 		{1, 'ACCOUNT', 'reskin_pgf', L.GUI.APPEARANCE.RESKIN_PGF, true},
 		{},
-		{3, 'ACCOUNT', 'ui_scale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP},
+		{3, 'ACCOUNT', 'ui_scale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP}
 	},
-	[2] = { -- notification
+	[2] = {
+		-- notification
 		{1, 'notification', 'enable', L.GUI.NOTIFICATION.ENABLE},
 		{1, 'notification', 'bag_full', L.GUI.NOTIFICATION.BAG_FULL},
 		{1, 'notification', 'new_mail', L.GUI.NOTIFICATION.NEW_MAIL, true},
 		{1, 'notification', 'rare_found', L.GUI.NOTIFICATION.RARE_FOUND, nil, nil, nil, L.GUI.NOTIFICATION.RARE_FOUND_TIP},
-		{1, 'notification', 'version_check', L.GUI.NOTIFICATION.VERSION_CHECK, true},
+		{1, 'notification', 'version_check', L.GUI.NOTIFICATION.VERSION_CHECK, true}
 	},
-	[3] = { -- infobar
+	[3] = {
+		-- infobar
 		{1, 'infobar', 'enable', L.GUI.INFOBAR.ENABLE},
 		{1, 'infobar', 'anchor_top', L.GUI.INFOBAR.ANCHOR_TOP},
 		{1, 'infobar', 'mouseover', L.GUI.INFOBAR.MOUSEOVER, true},
@@ -137,15 +132,15 @@ GUI.OptionsList = {
 		{1, 'infobar', 'durability', L.GUI.INFOBAR.DURABILITY},
 		{1, 'infobar', 'guild', L.GUI.INFOBAR.GUILD, true},
 		{1, 'infobar', 'friends', L.GUI.INFOBAR.FRIENDS},
-		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true},
+		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true}
 	},
-	[4] = { -- chat
+	[4] = {
+		-- chat
 		{1, 'chat', 'enable', L.GUI.CHAT.ENABLE},
 		{1, 'chat', 'lock_position', L.GUI.CHAT.LOCK_POSITION, nil, nil, nil, L.GUI.CHAT.LOCK_POSITION_TIP},
 		{1, 'chat', 'font_outline', L.GUI.CHAT.FONT_OUTLINE, true},
 		{1, 'chat', 'fade_out', L.GUI.CHAT.FADE_OUT, nil, nil, nil, L.GUI.CHAT.FADE_OUT_TIP},
 		{1, 'chat', 'abbr_channel_names', L.GUI.CHAT.ABBR_CHANNEL_NAMES, true},
-
 		{1, 'chat', 'voice_button', L.GUI.CHAT.VOICE_BUTTON},
 		{1, 'chat', 'tab_cycle', L.GUI.CHAT.TAB_CYCLE, true, nil, nil, L.GUI.CHAT.TAB_CYCLE_TIP},
 		{1, 'chat', 'smart_bubble', L.GUI.CHAT.SMART_BUBBLE, nil, nil, nil, L.GUI.CHAT.SMART_BUBBLE_TIP},
@@ -164,10 +159,10 @@ GUI.OptionsList = {
 		{},
 		{1, 'chat', 'whisper_invite', L.GUI.CHAT.WHISPER_INVITE},
 		{1, 'chat', 'guild_only', L.GUI.CHAT.GUILD_ONLY},
-		{2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList},
-
+		{2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList}
 	},
-	[5] = { -- aura
+	[5] = {
+		-- aura
 		{1, 'aura', 'enable', L.GUI.AURA.ENABLE, nil, nil, nil, L.GUI.AURA.ENABLE_TIP},
 		{1, 'aura', 'reverse_buffs', L.GUI.AURA.REVERSE_BUFFS},
 		{1, 'aura', 'reverse_debuffs', L.GUI.AURA.REVERSE_DEBUFFS, true},
@@ -179,9 +174,10 @@ GUI.OptionsList = {
 		{3, 'aura', 'buffs_per_row', L.GUI.AURA.BUFFS_PER_ROW, nil, {6, 12, 1}},
 		{3, 'aura', 'debuffs_per_row', L.GUI.AURA.DEBUFFS_PER_ROW, true, {6, 12, 1}},
 		{},
-		{1, 'aura', 'reminder', L.GUI.AURA.REMINDER, nil, nil, nil, L.GUI.AURA.REMINDER_TIP},
+		{1, 'aura', 'reminder', L.GUI.AURA.REMINDER, nil, nil, nil, L.GUI.AURA.REMINDER_TIP}
 	},
-	[6] = { -- actionbar
+	[6] = {
+		-- actionbar
 		{1, 'actionbar', 'enable', L.GUI.ACTIONBAR.ENABLE, nil, nil, nil, L.GUI.ACTIONBAR.ENABLE_TIP},
 		{1, 'actionbar', 'button_hotkey', L.GUI.ACTIONBAR.BUTTON_HOTKEY},
 		{1, 'actionbar', 'button_macro_name', L.GUI.ACTIONBAR.BUTTON_MACRO_NAME, true},
@@ -203,10 +199,10 @@ GUI.OptionsList = {
 		{1, 'actionbar', 'custom_bar', L.GUI.ACTIONBAR.CUSTOM_BAR},
 		{3, 'actionbar', 'custom_bar_button_size', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_SIZE, nil, {10, 40, 1}, UpdateCustomBar},
 		{3, 'actionbar', 'custom_bar_button_number', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_NUMBER, true, {1, 12, 1}, UpdateCustomBar},
-		{3, 'actionbar', 'custom_bar_button_per_row', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_PER_ROW, nil, {1, 12, 1}, UpdateCustomBar},
-
+		{3, 'actionbar', 'custom_bar_button_per_row', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_PER_ROW, nil, {1, 12, 1}, UpdateCustomBar}
 	},
-	[7] = { -- combat
+	[7] = {
+		-- combat
 		{1, 'combat', 'enable', L.GUI.COMBAT.ENABLE, nil, nil, nil, L.GUI.COMBAT.ENABLE_TIP},
 		{1, 'combat', 'combat_alert', L.GUI.COMBAT.COMBAT_ALERT, nil, nil, nil, L.GUI.COMBAT.COMBAT_ALERT_TIP},
 		{1, 'combat', 'spell_sound', L.GUI.COMBAT.SPELL_SOUND, true, nil, nil, L.GUI.COMBAT.SPELL_SOUND_TIP},
@@ -220,16 +216,18 @@ GUI.OptionsList = {
 		{1, 'combat', 'fct_out', L.GUI.COMBAT.FCT_OUT, true},
 		{1, 'combat', 'fct_pet', L.GUI.COMBAT.FCT_PET},
 		{1, 'combat', 'fct_periodic', L.GUI.COMBAT.FCT_PERIODIC, true},
-		{1, 'combat', 'fct_merge', L.GUI.COMBAT.FCT_MERGE},
+		{1, 'combat', 'fct_merge', L.GUI.COMBAT.FCT_MERGE}
 	},
-	[8] = { -- announcement
+	[8] = {
+		-- announcement
 		{1, 'announcement', 'enable', L.GUI.ANNOUNCEMENT.ENABLE, nil, nil, nil, L.GUI.ANNOUNCEMENT.ENABLE_TIP},
 		{1, 'announcement', 'interrupt', L.GUI.ANNOUNCEMENT.INTERRUPT, nil, nil, nil, L.GUI.ANNOUNCEMENT.INTERRUPT_TIP},
 		{1, 'announcement', 'dispel', L.GUI.ANNOUNCEMENT.DISPEL, true, nil, nil, L.GUI.ANNOUNCEMENT.DISPEL_TIP},
 		{1, 'announcement', 'combat_resurrection', L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION, nil, nil, nil, L.GUI.ANNOUNCEMENT.COMBAT_RESURRECTION_TIP},
-		{1, 'announcement', 'utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP},
+		{1, 'announcement', 'utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP}
 	},
-	[9] = { -- inventory
+	[9] = {
+		-- inventory
 		{1, 'inventory', 'enable', L.GUI.INVENTORY.ENABLE, nil, nil, nil, L.GUI.INVENTORY.ENABLE_TIP},
 		{1, 'inventory', 'new_item_flash', L.GUI.INVENTORY.NEW_ITEM_FLASH, nil, nil, nil, L.GUI.INVENTORY.NEW_ITEM_FLASH_TIP},
 		{1, 'inventory', 'combine_free_slots', L.GUI.INVENTORY.COMBINE_FREE_SLOTS, true, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.COMBINE_FREE_SLOTS_TIP},
@@ -244,9 +242,10 @@ GUI.OptionsList = {
 		{3, 'inventory', 'bank_columns', L.GUI.INVENTORY.BANK_COLUMNS, true, {8, 20, 1}},
 		{3, 'inventory', 'item_level_to_show', L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW, nil, {1, 200, 1}, nil, L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW_TIP},
 		{},
-		{4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, nil, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}},
+		{4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, nil, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}, nil, L.GUI.INVENTORY.SORT_TIP}
 	},
-	[10] = { -- map
+	[10] = {
+		-- map
 		{1, 'map', 'enable', L.GUI.MAP.ENABLE, nil, nil, nil, L.GUI.MAP.ENABLE_TIP},
 		{1, 'map', 'remove_fog', L.GUI.MAP.REMOVE_FOG},
 		{1, 'map', 'coords', L.GUI.MAP.COORDS, true},
@@ -256,9 +255,10 @@ GUI.OptionsList = {
 		{1, 'map', 'who_pings', L.GUI.MAP.WHO_PINGS},
 		{1, 'map', 'micro_menu', L.GUI.MAP.MICRO_MENU, true, nil, nil, L.GUI.MAP.MICRO_MENU_TIP},
 		{1, 'map', 'progress_bar', L.GUI.MAP.PROGRESS_BAR, nil, nil, nil, L.GUI.MAP.PROGRESS_BAR_TIP},
-		{3, 'map', 'minimap_scale', L.GUI.MAP.MINIMAP_SCALE, nil, {.5, 1, .1}},
+		{3, 'map', 'minimap_scale', L.GUI.MAP.MINIMAP_SCALE, nil, {.5, 1, .1}}
 	},
-	[11] = { -- tooltip
+	[11] = {
+		-- tooltip
 		{1, 'tooltip', 'enable', L.GUI.TOOLTIP.ENABLE, nil, nil, nil, L.GUI.TOOLTIP.ENABLE_TIP},
 		{1, 'tooltip', 'follow_cursor', L.GUI.TOOLTIP.FOLLOW_CURSOR, nil, nil, nil, L.GUI.TOOLTIP.FOLLOW_CURSOR_TIP},
 		{1, 'tooltip', 'hide_in_combat', L.GUI.TOOLTIP.HIDE_IN_COMBAT, true},
@@ -271,10 +271,10 @@ GUI.OptionsList = {
 		{1, 'tooltip', 'spec_ilvl', L.GUI.TOOLTIP.SPEC_ILVL, nil, nil, nil, L.GUI.TOOLTIP.SPEC_ILVL_TIP},
 		{1, 'tooltip', 'hide_realm', L.GUI.TOOLTIP.HIDE_REALM, true},
 		{1, 'tooltip', 'hide_title', L.GUI.TOOLTIP.HIDE_TITLE},
-		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true},
-
+		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true}
 	},
-	[12] = { -- unitframes
+	[12] = {
+		-- unitframes
 		{1, 'unitframe', 'enable', L.GUI.UNITFRAME.ENABLE, nil, SetupUnitFrameSize},
 		{1, 'unitframe', 'transparent_mode', L.GUI.UNITFRAME.TRANSPARENT_MODE},
 		{1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT, true},
@@ -288,12 +288,7 @@ GUI.OptionsList = {
 		{1, 'unitframe', 'class_power_bar', L.GUI.UNITFRAME.CLASS_POWER_BAR, true},
 		{1, 'unitframe', 'stagger_bar', L.GUI.UNITFRAME.STAGGER_BAR},
 		{1, 'unitframe', 'totems_bar', L.GUI.UNITFRAME.TOTEMS_BAR, true},
-
-
-
-		{4, "unitframe", "color_style", L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-
-
+		{4, 'unitframe', 'color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
 		{},
 		{1, 'unitframe', 'debuffs_by_player', L.GUI.UNITFRAME.DEBUFFS_BY_PLAYER},
 		{1, 'unitframe', 'debuff_type', L.GUI.UNITFRAME.DEBUFF_TYPE, true},
@@ -304,41 +299,34 @@ GUI.OptionsList = {
 		{1, 'unitframe', 'castbar_focus_separate', L.GUI.UNITFRAME.CASTBAR_FOCUS_SEPARATE, true},
 		{},
 		{1, 'unitframe', 'enable_boss', L.GUI.UNITFRAME.ENABLE_BOSS},
-		{4, "unitframe", "boss_color_style", L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-		{1, 'unitframe', 'enable_arena', L.GUI.UNITFRAME.ENABLE_ARENA},
+		{4, 'unitframe', 'boss_color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+		{1, 'unitframe', 'enable_arena', L.GUI.UNITFRAME.ENABLE_ARENA}
 	},
-	[13] = { -- groupframes
+	[13] = {
+		-- groupframes
 		{1, 'unitframe', 'enable_group', L.GUI.GROUPFRAME.ENABLE_GROUP, nil, SetupGroupFrameSize},
 		{1, 'unitframe', 'group_names', L.GUI.GROUPFRAME.GROUP_NAMES},
 		{1, 'unitframe', 'group_click_cast', L.GUI.GROUPFRAME.GROUP_CLICK_CAST, true, nil, nil, L.GUI.GROUPFRAME.GROUP_CLICK_CAST_TIP},
-
 		{1, 'unitframe', 'spec_position', L.GUI.GROUPFRAME.SPEC_POSITION},
 		{1, 'unitframe', 'group_threat_indicator', L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR, true},
 		{1, 'unitframe', 'raid_debuffs', L.GUI.GROUPFRAME.RAID_DEBUFFS, nil, SetupGroupDebuffs},
 		{1, 'unitframe', 'auras_click_through', L.GUI.GROUPFRAME.AURAS_CLICK_THROUGH, true},
 		{1, 'unitframe', 'group_debuff_highlight', L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT, nil, nil, nil, L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT_TIP},
 		{1, 'unitframe', 'group_corner_buffs', L.GUI.GROUPFRAME.GROUP_CORNER_BUFFS, true},
-
-
-
-
 		{},
 		{1, 'unitframe', 'party_horizon', L.GUI.GROUPFRAME.PARTY_HORIZON},
 		{1, 'unitframe', 'party_reverse', L.GUI.GROUPFRAME.PARTY_REVERSE, true},
-
 		{1, 'unitframe', 'party_spell_watcher', L.GUI.GROUPFRAME.PARTY_SPELL_WATCHER, nil, SetupPartySpellCooldown},
 		{1, 'unitframe', 'party_spell_sync', L.GUI.GROUPFRAME.PARTY_SPELL_SYNC, true, nil, nil, L.GUI.GROUPFRAME.PARTY_SPELL_SYNC_TIP},
-
 		{},
 		{1, 'unitframe', 'raid_horizon', L.GUI.GROUPFRAME.RAID_HORIZON},
 		{1, 'unitframe', 'raid_reverse', L.GUI.GROUPFRAME.RAID_REVERSE, true},
 		{},
-		{4, "unitframe", "group_color_style", L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-
-		{3, 'unitframe', 'group_filter', L.GUI.GROUPFRAME.GROUP_FILTER, true, {1, 8, 1}},
+		{4, 'unitframe', 'group_color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+		{3, 'unitframe', 'group_filter', L.GUI.GROUPFRAME.GROUP_FILTER, true, {1, 8, 1}}
 	},
-
-	[14] = { -- nameplate
+	[14] = {
+		-- nameplate
 		{1, 'nameplate', 'enable', L.GUI.NAMEPLATE.ENABLE},
 		{1, 'nameplate', 'target_indicator', L.GUI.NAMEPLATE.TARGET_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.TARGET_INDICATOR_TIP},
 		{1, 'nameplate', 'threat_indicator', L.GUI.NAMEPLATE.THREAT_INDICATOR, true, nil, nil, L.GUI.NAMEPLATE.THREAT_INDICATOR_TIP},
@@ -364,24 +352,20 @@ GUI.OptionsList = {
 		{3, 'nameplate', 'plate_height', L.GUI.NAMEPLATE.PLATE_HEIGHT, true, {5, 30, 1}, RefreshNameplates},
 		{3, 'nameplate', 'aura_size', L.GUI.NAMEPLATE.AURA_SIZE, nil, {20, 40, 1}, RefreshNameplates},
 		{3, 'nameplate', 'aura_number', L.GUI.NAMEPLATE.AURA_NUMBER, true, {3, 12, 1}, RefreshNameplates},
-
 		{3, 'nameplate', 'min_scale', L.GUI.NAMEPLATE.MIN_SCALE, nil, {.5, 1, .1}, UpdatePlateScale},
 		{3, 'nameplate', 'target_scale', L.GUI.NAMEPLATE.TARGET_SCALE, true, {.5, 2, .1}, UpdatePlateScale},
 		{3, 'nameplate', 'min_alpha', L.GUI.NAMEPLATE.MIN_ALPHA, nil, {.2, 1, .1}, UpdatePlateAlpha},
 		{3, 'nameplate', 'occluded_alpha', L.GUI.NAMEPLATE.OCCLUDED_ALPHA, true, {.2, 1, .1}, UpdatePlateAlpha},
 		{3, 'nameplate', 'vertical_spacing', L.GUI.NAMEPLATE.VERTICAL_SPACING, nil, {.5, 2, .1}, UpdatePlateSpacing},
-		{3, 'nameplate', 'horizontal_spacing', L.GUI.NAMEPLATE.HORIZONTAL_SPACING, true, {.5, 2, .1}, UpdatePlateSpacing},
+		{3, 'nameplate', 'horizontal_spacing', L.GUI.NAMEPLATE.HORIZONTAL_SPACING, true, {.5, 2, .1}, UpdatePlateSpacing}
 	},
-	[15] = { -- misc
+	[15] = {
+		-- misc
 		{1, 'ACCOUNT', 'custom_class_color', L.GUI.MISC.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor},
 		{},
 		{4, 'ACCOUNT', 'texture_style', L.GUI.MISC.TEXTURE_STYLE, false, {}},
-		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
+		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}}
 	},
-	[16] = { -- profile
-
-	},
-	[17] = { -- credits
-
-	},
+	[16] = {},
+	[17] = {}
 }

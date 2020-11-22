@@ -298,7 +298,7 @@ end
 local fakeBg = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 fakeBg:SetBackdrop({ bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1 })
 local function __GetBackdrop() return fakeBg:GetBackdrop() end
-local function __GetBackdropColor() return FREE_ADB.backdrop_color.r, FREE_ADB.backdrop_color.g, FREE_ADB.backdrop_color.b, FREE_ADB.backdrop_alpha end
+local function __GetBackdropColor() return C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65 end
 local function __GetBackdropBorderColor() return 0, 0, 0 end
 
 function TOOLTIP:ReskinTooltip()
@@ -329,10 +329,10 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg:SetBackdropColor(FREE_ADB.backdrop_color.r or 0, FREE_ADB.backdrop_color.g or 0, FREE_ADB.backdrop_color.b or 0, FREE_ADB.backdrop_alpha or 1)
+	self.bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65)
 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	if self.bg.__shadow then
-		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .35)
+		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
 	end
 
 	if C.DB.tooltip.border_color and self.GetItem then
@@ -343,7 +343,7 @@ function TOOLTIP:ReskinTooltip()
 			if color then
 				self.bg:SetBackdropBorderColor(color.r, color.g, color.b, .6)
 				if self.bg.__shadow then
-					self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, .35)
+					self.bg.__shadow:SetBackdropBorderColor(color.r, color.g, color.b, .25)
 				end
 			end
 		end
@@ -355,26 +355,26 @@ function TOOLTIP:SharedTooltip_SetBackdropStyle()
 	self:SetBackdrop(nil)
 end
 
-local function TooltipSetFont(font, size)
-	font:SetFont(C.Assets.Fonts.Regular, size)
-	font:SetShadowColor(0, 0, 0, 1)
-	font:SetShadowOffset(2, -2)
+local function TooltipSetFont(obj, font, size)
+	obj:SetFont(font, size)
+	obj:SetShadowColor(0, 0, 0, 1)
+	obj:SetShadowOffset(1, -1)
 end
 
 function TOOLTIP:SetTooltipFonts()
 	local textSize = 14
 	local headerSize = 16
 
-	TooltipSetFont(GameTooltipHeaderText, headerSize)
-	TooltipSetFont(GameTooltipText, textSize)
-	TooltipSetFont(GameTooltipTextSmall, textSize)
+	TooltipSetFont(GameTooltipHeaderText, C.Assets.Fonts.Bold, headerSize)
+	TooltipSetFont(GameTooltipText, C.Assets.Fonts.Regular, textSize)
+	TooltipSetFont(GameTooltipTextSmall, C.Assets.Fonts.Regular, textSize)
 	if GameTooltip.hasMoney then
 		for i = 1, GameTooltip.numMoneyFrames do
-			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'PrefixText'], textSize)
-			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'SuffixText'], textSize)
-			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'GoldButtonText'], textSize)
-			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'SilverButtonText'], textSize)
-			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'CopperButtonText'], textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'PrefixText'], C.Assets.Fonts.Regular, textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'SuffixText'], C.Assets.Fonts.Regular, textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'GoldButtonText'], C.Assets.Fonts.Regular, textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'SilverButtonText'], C.Assets.Fonts.Regular, textSize)
+			TooltipSetFont(_G['GameTooltipMoneyFrame'..i..'CopperButtonText'], C.Assets.Fonts.Regular, textSize)
 		end
 	end
 
@@ -382,7 +382,7 @@ function TOOLTIP:SetTooltipFonts()
 		for i = 1, tt:GetNumRegions() do
 			local region = select(i, tt:GetRegions())
 			if region:IsObjectType('FontString') then
-				TooltipSetFont(region, textSize)
+				TooltipSetFont(region, C.Assets.Fonts.Regular, textSize)
 			end
 		end
 	end
@@ -544,6 +544,11 @@ TOOLTIP:RegisterTooltips('FreeUI', function()
 		end
 		if LootBarToolTip then
 			TOOLTIP.ReskinTooltip(LootBarToolTip)
+		end
+
+		-- Narcissus
+		if NarciGameTooltip then
+			TOOLTIP.ReskinTooltip(NarciGameTooltip)
 		end
 	end)
 

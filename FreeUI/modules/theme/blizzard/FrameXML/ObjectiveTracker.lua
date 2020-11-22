@@ -74,10 +74,18 @@ end
 local function reskinProgressbar(_, _, line)
 	local progressBar = line.ProgressBar
 	local bar = progressBar.Bar
+	local label = bar.Label
 
 	if not bar.bg then
 		bar:ClearAllPoints()
 		bar:SetPoint("LEFT")
+
+		label:ClearAllPoints()
+		label:SetPoint('CENTER', bar)
+		label:SetFont(C.Assets.Fonts.Regular, 11, true)
+		label:SetShadowColor(0, 0, 0, 1)
+		label:SetShadowOffset(1, -1)
+
 		reskinBarTemplate(bar)
 	end
 end
@@ -101,7 +109,9 @@ local function reskinProgressbarWithIcon(_, _, line)
 
 		label:ClearAllPoints()
 		label:SetPoint('CENTER', bar)
-		label:SetFont(C.Assets.Fonts.Regular, 12)
+		label:SetFont(C.Assets.Fonts.Regular, 11, true)
+		label:SetShadowColor(0, 0, 0, 1)
+		label:SetShadowOffset(1, -1)
 	end
 
 	if icon.bg then

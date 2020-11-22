@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
 
-
 local guiTab = {}
 local guiPage = {}
 GUI.Tab = guiTab
@@ -24,7 +23,7 @@ local tabsList = {
 	L.GUI.NAMEPLATE.NAME,
 	L.GUI.MISC.NAME,
 	L.GUI.PROFILE.NAME,
-	L.GUI.CREDITS.NAME,
+	L.GUI.CREDITS.NAME
 }
 
 local iconsList = {
@@ -44,13 +43,13 @@ local iconsList = {
 	'Interface\\ICONS\\Ability_Paladin_BeaconsOfLight',
 	'Interface\\ICONS\\ABILITY_MONK_SERENITY',
 	'Interface\\ICONS\\INV_Misc_Blingtron',
-	'Interface\\ICONS\\Raf-Icon',
+	'Interface\\ICONS\\Raf-Icon'
 }
 
 GUI.TexturesList = {
 	[1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L.GUI.MISC.TEXTURE_NORM},
 	[2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L.GUI.MISC.TEXTURE_GRAD},
-	[3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.MISC.TEXTURE_FLAT},
+	[3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.MISC.TEXTURE_FLAT}
 }
 
 local function AddTextureToOption(parent, index)
@@ -89,7 +88,9 @@ local function CreateGearButton(self, name)
 end
 
 local function CombatLockdown(event)
-	if not FreeUI_GUI then return end
+	if not FreeUI_GUI then
+		return
+	end
 
 	if event == 'PLAYER_REGEN_DISABLED' then
 		if FreeUI_GUI:IsShown() then
@@ -122,12 +123,16 @@ local function tabOnClick(self)
 end
 
 local function tabOnEnter(self)
-	if self.checked then return end
+	if self.checked then
+		return
+	end
 	self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
 end
 
 local function tabOnLeave(self)
-	if self.checked then return end
+	if self.checked then
+		return
+	end
 	self.__bg:SetBackdropColor(0, 0, 0, 0)
 end
 
@@ -141,7 +146,7 @@ local function CreateTab(parent, i, name)
 	-- if tab.index >= 15 then
 	-- 	tab:SetPoint('TOPLEFT', 10, -31*i - 30)
 	-- else
-	tab:SetPoint('TOPLEFT', 10, -31*i - 20)
+	tab:SetPoint('TOPLEFT', 10, -31 * i - 20)
 	-- end
 
 	--parent[name] = tab
@@ -183,10 +188,15 @@ local function CreateOption(i)
 
 			cb:SetChecked(UpdateValue(key, value))
 
-			cb:SetScript('OnClick', function()
-				UpdateValue(key, value, cb:GetChecked())
-				if callback then callback() end
-			end)
+			cb:SetScript(
+				'OnClick',
+				function()
+					UpdateValue(key, value, cb:GetChecked())
+					if callback then
+						callback()
+					end
+				end
+			)
 
 			if data and type(data) == 'function' then
 				local bu = CreateGearButton(parent)
@@ -197,8 +207,8 @@ local function CreateOption(i)
 			if tip then
 				F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
-		elseif optType == 2 then  -- editbox
-			local eb = F.CreateEditBox(parent, 140, 24, true)
+		elseif optType == 2 then -- editbox
+			local eb = F.CreateEditBox(parent, 140, 24)
 			eb:SetMaxLetters(999)
 
 			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
@@ -212,14 +222,22 @@ local function CreateOption(i)
 
 			eb:SetText(UpdateValue(key, value))
 
-			eb:HookScript('OnEscapePressed', function()
-				eb:SetText(UpdateValue(key, value))
-			end)
+			eb:HookScript(
+				'OnEscapePressed',
+				function()
+					eb:SetText(UpdateValue(key, value))
+				end
+			)
 
-			eb:HookScript('OnEnterPressed', function()
-				UpdateValue(key, value, eb:GetText())
-				if callback then callback() end
-			end)
+			eb:HookScript(
+				'OnEnterPressed',
+				function()
+					UpdateValue(key, value, eb:GetText())
+					if callback then
+						callback()
+					end
+				end
+			)
 
 			if tip then
 				F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
@@ -240,12 +258,17 @@ local function CreateOption(i)
 
 			s:SetValue(UpdateValue(key, value))
 
-			s:SetScript('OnValueChanged', function(_, v)
-				local current = F:Round(tonumber(v), 2)
-				UpdateValue(key, value, current)
-				s.value:SetText(current)
-				if callback then callback() end
-			end)
+			s:SetScript(
+				'OnValueChanged',
+				function(_, v)
+					local current = F:Round(tonumber(v), 2)
+					UpdateValue(key, value, current)
+					s.value:SetText(current)
+					if callback then
+						callback()
+					end
+				end
+			)
 
 			s.value:SetText(F:Round(UpdateValue(key, value), 2))
 
@@ -270,31 +293,42 @@ local function CreateOption(i)
 			dd.Text:SetText(data[UpdateValue(key, value)])
 
 			local opt = dd.options
-			dd.button:HookScript('OnClick', function()
-				for num = 1, #data do
-					if num == UpdateValue(key, value) then
-						opt[num]:SetBackdropColor(1, .8, 0, .3)
-						opt[num].selected = true
-					else
-						opt[num]:SetBackdropColor(0, 0, 0, .3)
-						opt[num].selected = false
+			dd.button:HookScript(
+				'OnClick',
+				function()
+					for num = 1, #data do
+						if num == UpdateValue(key, value) then
+							opt[num]:SetBackdropColor(C.r, C.g, C.b, .3)
+							opt[num].selected = true
+						else
+							opt[num]:SetBackdropColor(0, 0, 0, .3)
+							opt[num].selected = false
+						end
 					end
 				end
-			end)
+			)
 			for i in pairs(data) do
-				opt[i]:HookScript('OnClick', function()
-					UpdateValue(key, value, i)
-					if callback then callback() end
-				end)
+				opt[i]:HookScript(
+					'OnClick',
+					function()
+						UpdateValue(key, value, i)
+						if callback then
+							callback()
+						end
+					end
+				)
 				if value == 'texture_style' then
 					AddTextureToOption(opt, i) -- texture preview
 				end
 			end
 
-			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, 'INFO', 'THICK', 'CENTER', 0, 25)
+			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
+			if tip then
+				F.AddTooltip(dd, "ANCHOR_RIGHT", tip, "BLUE")
+			end
 		elseif optType == 5 then -- colorswatch
 			local f = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
-			local width = 25 + (horizon or 0)*120
+			local width = 25 + (horizon or 0) * 120
 			if horizon then
 				f:SetPoint('TOPLEFT', width, -offset + 30)
 			else
@@ -308,7 +342,6 @@ local function CreateOption(i)
 			end
 			offset = offset + 35
 		end
-
 	end
 
 	local footer = CreateFrame('Frame', nil, parent)
@@ -318,11 +351,14 @@ end
 
 local function ScrollBarHook(self, delta)
 	local scrollBar = self.ScrollBar
-	scrollBar:SetValue(scrollBar:GetValue() - delta*35)
+	scrollBar:SetValue(scrollBar:GetValue() - delta * 35)
 end
 
 local function CreateGUI()
-	if _G.FreeUI_GUI then _G.FreeUI_GUI:Show() return end
+	if _G.FreeUI_GUI then
+		_G.FreeUI_GUI:Show()
+		return
+	end
 
 	local guiFrame = CreateFrame('Frame', 'FreeUI_GUI', UIParent)
 	tinsert(_G.UISpecialFrames, 'FreeUI_GUI')
@@ -336,8 +372,21 @@ local function CreateGUI()
 	local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.Mult, 540)
 	verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-	local logo = F.CreateFS(guiFrame, C.AssetsPath..'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
-	local desc = F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: '..C.AddonVersion, {.7,.7,.7}, 'THICK', 'TOP', 0, -30)
+	local logo =
+		F.CreateFS(guiFrame, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
+	local desc =
+		F.CreateFS(
+		guiFrame,
+		C.Assets.Fonts.Regular,
+		10,
+		nil,
+		'Version: ' .. C.AddonVersion,
+		{.7, .7, .7},
+		'THICK',
+		'TOP',
+		0,
+		-30
+	)
 
 	local lineLeft = F.SetGradient(guiFrame, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
 	lineLeft:SetPoint('TOP', -60, -26)
@@ -349,10 +398,13 @@ local function CreateGUI()
 	btnClose:SetPoint('BOTTOMRIGHT', -6, 6)
 	btnClose:SetSize(80, 24)
 	btnClose:SetText(CLOSE)
-	btnClose:SetScript('OnClick', function()
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-		guiFrame:Hide()
-	end)
+	btnClose:SetScript(
+		'OnClick',
+		function()
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+			guiFrame:Hide()
+		end
+	)
 	F.Reskin(btnClose)
 
 	local btnApply = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
@@ -360,12 +412,14 @@ local function CreateGUI()
 	btnApply:SetSize(80, 24)
 	btnApply:SetText(APPLY)
 	--btnApply:Disable()
-	btnApply:SetScript('OnClick', function()
-		StaticPopup_Show('FREEUI_RELOAD')
-		guiFrame:Hide()
-	end)
+	btnApply:SetScript(
+		'OnClick',
+		function()
+			StaticPopup_Show('FREEUI_RELOAD')
+			guiFrame:Hide()
+		end
+	)
 	F.Reskin(btnApply)
-
 
 	for i, name in pairs(tabsList) do
 		guiTab[i] = CreateTab(guiFrame, i, name)
@@ -404,25 +458,55 @@ function F.ToggleGUI()
 	_G.PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
 end
 
-
 function GUI:OnLogin()
 	local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', GameMenuFrame, 'GameMenuButtonTemplate')
 	bu:SetText(C.AddonName)
 	bu:SetPoint('TOP', GameMenuButtonAddons, 'BOTTOM', 0, -14)
-	if FREE_ADB.reskin_blizz then F.Reskin(bu) end
+	if FREE_ADB.reskin_blizz then
+		F.Reskin(bu)
+	end
 
-	GameMenuFrame:HookScript('OnShow', function(self)
-		GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)
-		self:SetHeight(self:GetHeight() + bu:GetHeight() + 15)
-	end)
+	GameMenuFrame:HookScript(
+		'OnShow',
+		function(self)
+			GameMenuButtonLogout:SetPoint('TOP', bu, 'BOTTOM', 0, -14)
+			self:SetHeight(self:GetHeight() + bu:GetHeight() + 15 + 20)
 
-	bu:SetScript('OnClick', function()
-		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.RedColor..ERR_NOT_IN_COMBAT) return end
-		CreateGUI()
-		HideUIPanel(GameMenuFrame)
-		PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
-	end)
+			GameMenuButtonStore:ClearAllPoints()
+			GameMenuButtonStore:SetPoint('TOP', GameMenuButtonHelp, 'BOTTOM', 0, -4)
+
+			GameMenuButtonWhatsNew:ClearAllPoints()
+			GameMenuButtonWhatsNew:SetPoint('TOP', GameMenuButtonStore, 'BOTTOM', 0, -4)
+
+			GameMenuButtonUIOptions:ClearAllPoints()
+			GameMenuButtonUIOptions:SetPoint('TOP', GameMenuButtonOptions, 'BOTTOM', 0, -4)
+
+			GameMenuButtonKeybindings:ClearAllPoints()
+			GameMenuButtonKeybindings:SetPoint('TOP', GameMenuButtonUIOptions, 'BOTTOM', 0, -4)
+
+			GameMenuButtonMacros:ClearAllPoints()
+			GameMenuButtonMacros:SetPoint('TOP', GameMenuButtonKeybindings, 'BOTTOM', 0, -4)
+
+			GameMenuButtonAddons:ClearAllPoints()
+			GameMenuButtonAddons:SetPoint('TOP', GameMenuButtonMacros, 'BOTTOM', 0, -4)
+
+			GameMenuButtonQuit:ClearAllPoints()
+			GameMenuButtonQuit:SetPoint('TOP', GameMenuButtonLogout, 'BOTTOM', 0, -4)
+		end
+	)
+
+	bu:SetScript(
+		'OnClick',
+		function()
+			if InCombatLockdown() then
+				UIErrorsFrame:AddMessage(C.RedColor .. ERR_NOT_IN_COMBAT)
+				return
+			end
+			CreateGUI()
+			HideUIPanel(GameMenuFrame)
+			PlaySound(SOUNDKIT.IG_MAINMENU_OPTION)
+		end
+	)
 
 	F:RegisterEvent('PLAYER_REGEN_DISABLED', CombatLockdown)
 end
-

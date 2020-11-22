@@ -648,7 +648,7 @@ do
 		if self.__bgTex then return end
 
 		local frame = self
-		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
+		if self:IsObjectType('Texture') then frame = self:GetParent() end
 
 		local tex = frame:CreateTexture(nil, 'BACKGROUND', nil, 1)
 		tex:SetAllPoints(self)
@@ -666,14 +666,14 @@ do
 		if self.__shadow then return end
 
 		local frame = self
-		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
+		if self:IsObjectType('Texture') then frame = self:GetParent() end
 
 		if not m then m, s = 4, 4 end
 		shadowBackdrop.edgeSize = s or 4
 		self.__shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		self.__shadow:SetOutside(self, m, m)
 		self.__shadow:SetBackdrop(shadowBackdrop)
-		self.__shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
+		self.__shadow:SetBackdropBorderColor(.04, .04, .04, a or .25)
 		self.__shadow:SetFrameLevel(1)
 
 		return self.__shadow
@@ -694,28 +694,25 @@ do
 		if r then
 			self:SetBackdropColor(r, g, b, a or FREE_ADB.backdrop_alpha)
 		else
-			self:SetBackdropColor(FREE_ADB.backdrop_color.r, FREE_ADB.backdrop_color.g, FREE_ADB.backdrop_color.b, a or FREE_ADB.backdrop_alpha)
+			self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], a or FREE_ADB.backdrop_alpha)
 		end
-		self:SetBackdropBorderColor(FREE_ADB.border_color.r, FREE_ADB.border_color.g, FREE_ADB.border_color.b)
+		self:SetBackdropBorderColor(C.BorderColor[1], C.BorderColor[2], C.BorderColor[3])
 
 		if not a then tinsert(C.Frames, self) end
 	end
 
 	function F:CreateGradient()
-		local color = FREE_ADB.backdrop_color
-		local gradientColor = {color.r-.03, color.g-.03, color.b-.03, .4, color.r, color.g, color.b, .4}
-
 		local tex = self:CreateTexture(nil, 'BORDER')
 		tex:SetInside()
 		tex:SetTexture(assets.bd_tex)
-		tex:SetGradientAlpha('Vertical', unpack(gradientColor))
+		tex:SetGradientAlpha('Vertical', unpack(C.GradientColor))
 
 		return tex
 	end
 
 	function F:CreateBDFrame(a, gradient, r, g, b)
 		local frame = self
-		if self:GetObjectType() == 'Texture' then frame = self:GetParent() end
+		if self:IsObjectType('Texture') then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
 
 		local bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
@@ -897,7 +894,7 @@ do
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
 
-		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
+		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, 1)
 		self.__shadow:SetBackdropBorderColor(C.r, C.g, C.b)
 		self.__shadow:SetAlpha(1)
 
@@ -905,7 +902,7 @@ do
 	end
 
 	local function Button_OnLeave(self)
-		self.__bg:SetBackdropBorderColor(FREE_ADB.border_color.r or 0, FREE_ADB.border_color.g or 0, FREE_ADB.border_color.b or 0)
+		self.__bg:SetBackdropBorderColor(.4, .4, .4, .2)
 		self.__shadow:SetBackdropBorderColor(0, 0, 0)
 		self.__shadow:SetScript('OnUpdate', nil)
 		self.__shadow:SetAlpha(.25)
@@ -963,6 +960,7 @@ do
 		end
 
 		self.__bg = F.CreateBDFrame(self, 0, true)
+		self.__bg:SetBackdropBorderColor(.4, .4, .4, .2)
 		self.__bg:SetFrameLevel(self:GetFrameLevel())
 		self.__bg:SetAllPoints()
 
@@ -1161,6 +1159,7 @@ do
 		local bg = F.CreateBDFrame(self, .45, false, .04, .04, .04)
 		bg:SetPoint('TOPLEFT', -2, 0)
 		bg:SetPoint('BOTTOMRIGHT')
+		bg:SetBackdropBorderColor(1, 1, 1, .2)
 		self.bg = bg
 
 		if height then self:SetHeight(height) end
@@ -1236,54 +1235,58 @@ do
 	end
 
 	-- Handle checkbox and radio
-	function F:ReskinCheck(flat, forceSaturation, shadow)
+	function F:ReskinCheck(flat, forceSaturation)
 		self:SetNormalTexture('')
 		self:SetPushedTexture('')
 
-		local bg = F.CreateBDFrame(self)
+		local bg = F.CreateBDFrame(self, .45, false, .04, .04, .04)
 		bg:SetInside(self, 4, 4)
+		bg:SetBackdropBorderColor(1, 1, 1, .2)
+		F.CreateSD(bg, .25)
 		self.bg = bg
 
-		if shadow then
-			F.CreateSD(bg)
+		if self.SetHighlightTexture then
+			local highligh = self:CreateTexture()
+			highligh:SetColorTexture(1, 1, 1, 0.3)
+			highligh:SetPoint('TOPLEFT', self, 6, -6)
+			highligh:SetPoint('BOTTOMRIGHT', self, -6, 6)
+			self:SetHighlightTexture(highligh)
 		end
 
-		self:SetHighlightTexture(assets.flat_tex)
-
 		if flat then
-			self:SetCheckedTexture(assets.flat_tex)
-			self:SetDisabledCheckedTexture(assets.flat_tex)
+			if self.SetCheckedTexture then
+				local checked = self:CreateTexture()
+				checked:SetColorTexture(C.r, C.g, C.b)
+				checked:SetPoint('TOPLEFT', self, 6, -6)
+				checked:SetPoint('BOTTOMRIGHT', self, -6, 6)
+				self:SetCheckedTexture(checked)
+			end
+
+			if self.SetDisabledCheckedTexture then
+				local disabled = self:CreateTexture()
+				disabled:SetColorTexture(.3, .3, .3)
+				disabled:SetPoint('TOPLEFT', self, 6, -6)
+				disabled:SetPoint('BOTTOMRIGHT', self, -6, 6)
+				self:SetDisabledCheckedTexture(disabled)
+			end
 		else
 			self:SetCheckedTexture(assets.tick_tex)
 			self:SetDisabledCheckedTexture(assets.tick_tex)
-		end
 
-		local hl = self:GetHighlightTexture()
-		hl:SetPoint('TOPLEFT', 5, -5)
-		hl:SetPoint('BOTTOMRIGHT', -5, 5)
-		hl:SetVertexColor(C.r, C.g, C.b, .25)
+			if self.SetCheckedTexture then
+				local checked = self:GetCheckedTexture()
+				checked:SetVertexColor(C.r, C.g, C.b)
+				checked:SetPoint('TOPLEFT', self, 5, -5)
+				checked:SetPoint('BOTTOMRIGHT', self, -5, 5)
+				checked:SetDesaturated(true)
+			end
 
-		local bd = F.CreateBDFrame(self, 0)
-		bd:SetPoint('TOPLEFT', 4, -4)
-		bd:SetPoint('BOTTOMRIGHT', -4, 4)
-		F.CreateGradient(bd)
-
-		if flat then
-			local ch = self:GetCheckedTexture()
-			ch:SetPoint('TOPLEFT', 5, -5)
-			ch:SetPoint('BOTTOMRIGHT', -5, 5)
-			ch:SetDesaturated(true)
-			ch:SetVertexColor(C.r, C.g, C.b)
-
-			local dis = self:GetDisabledCheckedTexture()
-			dis:SetPoint('TOPLEFT', 5, -5)
-			dis:SetPoint('BOTTOMRIGHT', -5, 5)
-			dis:SetVertexColor(.3, .3, .3)
-		else
-			local ch = self:GetCheckedTexture()
-			ch:SetTexture(assets.tick_tex)
-			ch:SetDesaturated(true)
-			ch:SetVertexColor(C.r, C.g, C.b)
+			if self.SetDisabledCheckedTexture then
+				local disabled = self:GetDisabledCheckedTexture()
+				disabled:SetVertexColor(.3, .3, .3)
+				disabled:SetPoint('TOPLEFT', self, 5, -5)
+				disabled:SetPoint('BOTTOMRIGHT', self, -5, 5)
+			end
 		end
 
 		self.forceSaturation = forceSaturation
@@ -1323,17 +1326,16 @@ do
 	end
 
 	-- Handle slider
-	function F:ReskinSlider(vertical, shadow)
+	function F:ReskinSlider(vertical)
 		self:SetBackdrop(nil)
 		F.StripTextures(self)
 
 		local bd = F.CreateBDFrame(self, .45, false, .04, .04, .04)
 		bd:SetPoint('TOPLEFT', 14, -2)
 		bd:SetPoint('BOTTOMRIGHT', -15, 3)
+		bd:SetBackdropBorderColor(1, 1, 1, .2)
 		bd:SetFrameStrata('BACKGROUND')
-		if shadow then
-			F.CreateSD(bd)
-		end
+		F.CreateSD(bd)
 
 		local thumb = self:GetThumbTexture()
 		thumb:SetHeight(self:GetHeight() + 12)
@@ -1718,17 +1720,17 @@ do
 		self:ClearFocus()
 	end
 
-	function F:CreateEditBox(width, height, shadow)
+	function F:CreateEditBox(width, height)
 		local eb = CreateFrame('EditBox', nil, self)
 		eb:SetSize(width, height)
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 5, 5)
 		eb:SetFont(C.Assets.Fonts.Regular, 11)
 		eb.bg = F.CreateBDFrame(eb, .45, false, .04, .04, .04)
+		eb.bg:SetBackdropBorderColor(1, 1, 1, .2)
 		eb.bg:SetAllPoints()
-		if shadow then
-			F.CreateSD(eb.bg)
-		end
+		F.CreateSD(eb.bg)
+
 		eb:SetScript('OnEscapePressed', editBoxClearFocus)
 		eb:SetScript('OnEnterPressed', editBoxClearFocus)
 
@@ -1741,7 +1743,7 @@ do
 		local opt = self.__owner.options
 		for i = 1, #opt do
 			if self == opt[i] then
-				opt[i]:SetBackdropColor(1, .8, 0, .3)
+				opt[i]:SetBackdropColor(C.r, C.g, C.b, .3)
 				opt[i].selected = true
 			else
 				opt[i]:SetBackdropColor(0, 0, 0, .3)
@@ -1759,7 +1761,7 @@ do
 
 	local function optOnLeave(self)
 		if self.selected then return end
-		self:SetBackdropColor(0, 0, 0)
+		self:SetBackdropColor(.1, .1, .1, .25)
 	end
 
 	local function buttonOnShow(self)
@@ -1859,10 +1861,11 @@ do
 
 		local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
 		swatch:SetSize(20, 12)
-		F.CreateBD(swatch, 1)
-		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'LEFT', 24, 0)
+		swatch.bg = F.CreateBDFrame(swatch, 1)
+		swatch.bg:SetBackdropBorderColor(1, 1, 1, .2)
+		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
 		local tex = swatch:CreateTexture()
-		tex:SetInside()
+		tex:SetInside(swatch, 2, 2)
 		tex:SetTexture(C.Assets.bd_tex)
 		tex:SetVertexColor(color.r, color.g, color.b)
 		tex.GetColor = GetSwatchTexColor
@@ -1901,7 +1904,7 @@ do
 		slider:SetValueStep(step)
 		slider:SetObeyStepOnDrag(true)
 		slider:SetHitRectInsets(0, 0, 0, 0)
-		F.ReskinSlider(slider, nil, true)
+		F.ReskinSlider(slider)
 
 		slider.Low:SetText(minValue)
 		slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
@@ -1910,11 +1913,11 @@ do
 		slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
 		slider.High:SetFont(C.Assets.Fonts.Regular, 11)
 		slider.Text:ClearAllPoints()
-		slider.Text:SetPoint('CENTER', 0, 25)
+		slider.Text:SetPoint('CENTER', 0, 20)
 		slider.Text:SetText(name)
 		slider.Text:SetTextColor(1, 1, 1)
 		slider.Text:SetFont(C.Assets.Fonts.Regular, 11)
-		slider.value = F.CreateEditBox(slider, 50, 20, true)
+		slider.value = F.CreateEditBox(slider, 50, 20)
 		slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -6)
 		slider.value:SetJustifyH('CENTER')
 		slider.value:SetFont(C.Assets.Fonts.Regular, 11)
@@ -2113,21 +2116,21 @@ do
 	end
 
 	function F.TablePrint(object)
-		if type(object) == "table" then
+		if type(object) == 'table' then
 			local cache = {}
 			local function printLoop(subject, indent)
 				if (cache[tostring(subject)]) then
 					print(indent .. '*' .. tostring(subject))
 				else
 					cache[tostring(subject)] = true
-					if (type(subject) == "table") then
+					if (type(subject) == 'table') then
 						for pos, val in pairs(subject) do
-							if (type(val) == "table") then
-								print(indent .. "[" .. pos .. "] => " .. tostring(subject) .. " {")
-								printLoop(val, indent .. strrep(" ", strlen(pos) + 8))
-								print(indent .. strrep(" ", strlen(pos) + 6) .. "}")
-							elseif (type(val) == "string") then
-								print(indent .. "[" .. pos .. '] => "' .. val .. '"')
+							if (type(val) == 'table') then
+								print(indent .. '[' .. pos .. '] => ' .. tostring(subject) .. ' {')
+								printLoop(val, indent .. strrep(' ', strlen(pos) + 8))
+								print(indent .. strrep(' ', strlen(pos) + 6) .. '}')
+							elseif (type(val) == 'string') then
+								print(indent .. "[' .. pos .. '] => '' .. val .. ''")
 							else
 								print(indent .. '[' .. pos .. '] => ' .. tostring(val))
 							end
@@ -2137,16 +2140,16 @@ do
 					end
 				end
 			end
-			if (type(object) == "table") then
-				print(tostring(object) .. " {")
-				printLoop(object, "  ")
-				print("}")
+			if (type(object) == 'table') then
+				print(tostring(object) .. ' {')
+				printLoop(object, '  ')
+				print('}')
 			else
 				printLoop(object, '  ')
 			end
 			print()
-		elseif type(object) == "string" then
-			print('(string) "' .. object .. '"')
+		elseif type(object) == 'string' then
+			print("(string) '' .. object .. ''")
 		else
 			print('(' .. type(object) .. ') ' .. tostring(object))
 		end

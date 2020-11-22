@@ -79,7 +79,7 @@ tinsert(C.BlizzThemes, function()
 			"Advanced_BufferingDropDown",
 			"Advanced_FilteringDropDown",
 			"Advanced_RTShadowQualityDropDown",
-			"Advanced_SSAOTypeDropDown", -- not in prepatch
+			"Advanced_SSAOTypeDropDown",
 			"Advanced_MultisampleAntiAliasingDropDown",
 			"Advanced_MultisampleAlphaTest",
 			"Advanced_PostProcessAntiAliasingDropDown",

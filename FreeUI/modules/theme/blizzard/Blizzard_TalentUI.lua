@@ -41,7 +41,11 @@ C.Themes["Blizzard_TalentUI"] = function()
 			local a1, p, a2, x = tab:GetPoint()
 
 			tab:ClearAllPoints()
-			tab:SetPoint(a1, p, a2, x, 2)
+			if i == 1 then
+				tab:SetPoint(a1, p, a2, x, 2)
+			else
+				tab:SetPoint('LEFT', PlayerTalentFrameTab1, 'RIGHT', -10, 0)
+			end
 		end
 	end)
 
