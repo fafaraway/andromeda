@@ -1,20 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 
-
 --[[ Binding ]]
-
 do
 	_G.BINDING_HEADER_FREEUI = 'FreeUI'
 	_G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Toggle FreeUI Config Panel'
 	_G.BINDING_NAME_TOGGLE_QUEST_TRACKER = 'Toggle Quest Tracker'
 end
 
-
 --[[ Misc ]]
-
 do
 	L['MISC_NUMBER_CAP'] = {'万', '亿', '兆'}
-
 
 	L['MISC_REPUTATION'] = '声望'
 	L['MISC_PARAGON'] = '巅峰'
@@ -22,18 +17,14 @@ do
 	L['MISC_PARAGON_NOTIFY'] = '巅峰声望已满注意兑换'
 	L['MISC_ORDERHALL_TIP'] = '按住Shift显示详细信息'
 
-
 	L['MISC_DISBAND_GROUP'] = '解散队伍'
 	L['MISC_DISBAND_GROUP_CHECK'] = '你确定要解散队伍?'
-
-
 
 	L['MISC_DECLINE_INVITE'] = '自动拒绝了 %s 的组队邀请'
 	L['MISC_ACCEPT_INVITE'] = '自动接受了 %s 的组队邀请'
 
 	L['AUTOMATION_GET_NAKED'] = '双击脱光装备'
 	L['AUTOMATION_BUY_STACK'] = '是否购买|cffff0000一组|r下列物品？'
-
 
 	L['MISC_GROUP_TOOL'] = 'Group tool'
 	L['MISC_FOOD'] = 'Food'
@@ -55,7 +46,6 @@ do
 	L['MISC_QUICK_QUEST_TIP'] = 'Auto accept and trun in quests.'
 end
 
-
 --[[ Blizzard ]]
 do
 	L['BLIZZARD_MOVER_ALERT'] = 'Alert frame'
@@ -70,12 +60,7 @@ do
 	L['BLIZZARD_GOLD'] = 'Gold'
 end
 
-
-
-
-
 --[[ Notification ]]
-
 do
 	L['NOTIFICATION_NEW_MAIL'] = 'New mail!'
 	L['NOTIFICATION_BAG_FULL'] = 'Bag full!'
@@ -88,9 +73,7 @@ do
 	L['NOTIFICATION_INSTANCE'] = 'Instance'
 end
 
-
 --[[ Infobar ]]
-
 do
 	L['INFOBAR_DURABILITY'] = 'Durability'
 	L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
@@ -129,9 +112,7 @@ do
 	L['INFOBAR_OPEN_TIMER_TRACKER'] = '打开计时器'
 end
 
-
 --[[ Chat ]]
-
 do
 	L['CHAT_TOGGLE_PANEL'] = 'Hide/show chat frame'
 	L['CHAT_TOGGLE_WC'] = 'Join/leave world channel'
@@ -140,18 +121,14 @@ do
 	L['CHAT_WHISPER_FROM'] = 'From'
 end
 
-
 --[[ Aura ]]
-
 do
 	L['AURA_MOVER_BUFFS'] = 'Buffs'
 	L['AURA_MOVER_DEBUFFS'] = 'Debuffs'
 	L['AURA_LACK'] = 'Lack'
 end
 
-
 --[[ Actionbar ]]
-
 do
 	L['ACTIONBAR_CUSTOM_BAR'] = '附加动作条'
 	L['ACTIONBAR_UNBIND_TIP'] = '按ESC或右键撤销按键设置'
@@ -164,12 +141,8 @@ do
 	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
 end
 
-
 --[[ Combat ]]
-
 do
-
-
 	L['COMBAT_ENTER'] = 'Enter Combat'
 	L['COMBAT_LEAVE'] = 'Leave Combat'
 	L['COMBAT_MOVER_IN'] = 'FCT Incoming'
@@ -192,9 +165,7 @@ do
 	L['COMBAT_FCT_MERGE'] = '合并数据'
 end
 
-
 --[[ Announcement ]]
-
 do
 	L['ANNOUNCEMENT_INTERRUPT'] = 'Interrupt %target% %spell%'
 	L['ANNOUNCEMENT_DISPEL'] = 'Dispel %target% %spell%'
@@ -213,9 +184,7 @@ do
 	L['ANNOUNCEMENT_QUEST_ACCEPTED'] = 'accepted'
 end
 
-
 --[[ Inventory ]]
-
 do
 	L['INVENTORY_NOTIFICATION_HEADER'] = 'Bag'
 	L['INVENTORY_SORT'] = 'Sort'
@@ -226,7 +195,7 @@ do
 	L['INVENTORY_AZERITEARMOR'] = 'Azerite armor'
 	L['INVENTORY_QUICK_DELETE_ENABLED'] = '|nYou can destroy container item by holding CTRL+ALT. The item can be heirlooms or its quality lower then rare (blue).'
 	L['INVENTORY_QUICK_DELETE'] = 'Quick delete'
-	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to trash.'
+	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = "|nYou can now star items.|nIf 'Item Filter' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to trash."
 	L['INVENTORY_PICK_FAVOURITE'] = 'Favourite'
 	L['INVENTORY_AUTO_REPAIR'] = 'Auto repair'
 	L['INVENTORY_AUTO_REPAIR_TIP'] = '|n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
@@ -238,10 +207,10 @@ do
 	L['INVENTORY_SEARCH'] = 'Search'
 	L['INVENTORY_SEARCH_ENABLED'] = 'Type item name to search'
 	L['INVENTORY_MARK_JUNK'] = 'Mark junk'
-	L['INVENTORY_MARK_JUNK_ENABLED'] = '|nClick to tag item as junk.|nIf \'Autosell Junk\' enabled, these items would be sold as well.|nThe list is saved account-wide, and won\'t be in the export data.|nYou can hold CTRL+ALT and click to wipe the custom junk list.'
+	L['INVENTORY_MARK_JUNK_ENABLED'] = "|nClick to tag item as junk.|nIf 'Autosell Junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL+ALT and click to wipe the custom junk list."
 	L['INVENTORY_QUICK_SPLIT'] = 'Quick split'
 	L['INVENTORY_SPLIT_COUNT'] = 'Split count'
-	L['INVENTORY_SPLIT_MODE_ENABLED'] = 'nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.'
+	L['INVENTORY_SPLIT_MODE_ENABLED'] = "nClick to split stacked items in your bags.|nYou can change 'split count' for each click thru the editbox."
 	L['INVENTORY_GOLD_COUNT'] = 'Gold count'
 	L['INVENTORY_EARNED'] = 'Earned'
 	L['INVENTORY_SPENT'] = 'Spent'
@@ -254,9 +223,7 @@ do
 	L['INVENTORY_EQUIPEMENT_SET'] = 'Equipement set'
 end
 
-
 --[[ Map ]]
-
 do
 	L['MAP_MOVER_MINIMAP'] = 'Minimap'
 	L['MAP_CURSOR'] = 'Cursor'
@@ -264,7 +231,6 @@ do
 	L['MAP_PARAGON'] = '巅峰'
 	L['MAP_NEW_MAIL'] = '<New Mail>'
 end
-
 
 -- Tooltip
 do
@@ -289,9 +255,7 @@ do
 	L['TOOLTIP_ILVL'] = 'iLvl'
 end
 
-
 --[[ Unitframe ]]
-
 do
 	L['UNITFRAME_MOVER_CASTBAR'] = 'Focus castbar'
 	L['UNITFRAME_MOVER_PLAYER'] = 'Player'
@@ -311,36 +275,19 @@ do
 	L['UNITFRAME_OFFLINE'] = 'Offline'
 end
 
-
-
-
-
-
-
-
-
-
-
 --[[ GUI ]]
-
-
-
 L.GUI = {
 	['HINT'] = 'Hint',
 	['RELOAD'] = '|cffff2020是否重载界面来应用设置？|r',
-
 	['RESET_GOLD'] = '|cffff2020是否清空金币统计数据？|r',
 	['RESET_JUNK_LIST'] = '|cffff2020是否清空自定义垃圾物品列表？|r',
-
 	['MOVER'] = {
 		['NAME'] = '界面元素位置调整',
 		['GRID'] = '网格',
 		['RESET_ELEMENT'] = '重置该界面元素的默认位置',
 		['HIDE_ELEMENT'] = '隐藏该界面元素',
 		['RESET'] = '是否重置所有界面元素为默认位置？',
-
 		['GROUP_TOOL'] = 'Group tool',
-
 		['ZONE_ABILITY'] = 'zone ability',
 		['EXTRA_BAR'] = 'extra bar',
 		['MAIN_BAR'] = 'main bar',
@@ -350,36 +297,29 @@ L.GUI = {
 		['CUSTOM_BAR'] = 'custom bar',
 		['COOLDOWN_PULSE'] = 'cooldown pulse',
 		['QUEST_BUTTON'] = 'quest button',
-
 		['OBJECTIVE_TRACKER'] = 'objective tracker'
 	},
-
 	['PROFILE'] = {
 		['NAME'] = 'Profles',
-
 		['RESET_WARNING'] = 'Are you sure to reset |cffff2020ALL|r the settings?',
 		['RESET_PROFILE_WARNING'] = 'Are you sure to reset your current profile?',
 		['APPLY_SELECTED_PROFILE'] = 'Are you sure to switch to the selected profile?',
 		['DOWNLOAD_SELECTED_PROFILE'] = 'Are you sure to replace your current profile with the selected one?',
 		['UPLOAD_CURRENT_PROFILE'] = 'Are you sure to replace the selected profile with your current one?',
-
 		['IMPORT_ERROR'] = 'Import failed, due to data exception.',
 		['IMPORT_WARNING'] = 'Are you sure to import the settings?',
 		['INFO'] = 'Data info',
 		['VERSION'] = 'Version',
 		['CHARACTER'] = 'Character',
 		['EXCEPTION'] = 'Data exception',
-
 		['RESET_TIP'] = 'Delete %AddonName% all settings, reset to the default.',
 		['IMPORT_TIP'] = 'Import settings.',
 		['EXPORT_TIP'] = 'Export settings.',
-
 		['RESET'] = 'Reset',
 		['IMPORT'] = 'Import',
 		['EXPORT'] = 'Export',
 		['IMPORT_HEADER'] = 'Import settings',
 		['EXPORT_HEADER'] = 'Export settings',
-
 		['DEFAULT_CHARACTER_PROFILE'] = 'Character profile',
 		['DEFAULT_SHARED_PROFILE'] = 'Shared profile',
 		['PROFILE_NAME'] = 'Profile name',
@@ -393,17 +333,15 @@ L.GUI = {
 		['UPLOAD_PROFILE'] = 'Replace selected profile',
 		['UPLOAD_PROFILE_TIP'] = '|nReplace the selected profile with the current using one.',
 		['PROFILE_MANAGEMENT'] = 'Profile Management',
-		['PROFILE_DESCRIPTION'] = 'You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won\'t share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile.',
+		['PROFILE_DESCRIPTION'] = "You can manage your addon profile, please backup your settings before start. The default settings is based on your character, won't share within the same account. You can switch to the shared profile to share between your characters, and get rid of data transfer.|nData export and import only support the current profile.",
 		['SHARED_CHARACTERS'] = 'Shared characters',
 		['DELETE_UNIT_PROFILE_WARNING'] = 'Are you sure to delete %s%s|r profile info?',
 		['INCORRECT_UNIT_NAME'] = 'Invalid character name.',
 		['DELETE_UNIT_PROFILE'] = 'Delete unit profile',
-		['DELETE_UNIT_PROFILE_TIP'] = '|nEnter the character name that you intend to delete its profile, the input format is \'UnitName-RealmName\'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm.',
+		['DELETE_UNIT_PROFILE_TIP'] = "|nEnter the character name that you intend to delete its profile, the input format is 'UnitName-RealmName'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm."
 	},
-
 	['MISC'] = {
 		['NAME'] = 'Misc',
-
 		['TEXTURE_STYLE'] = 'Texture style',
 		['TEXTURE_NORM'] = 'default',
 		['TEXTURE_GRAD'] = 'gradient',
@@ -415,9 +353,8 @@ L.GUI = {
 		['BUY_STACK'] = '快速购买整组物品',
 		['BUY_STACK_TIP'] = '按住ALT键购买物品会直接购买整组。',
 		['CUSTOM_CLASS_COLOR'] = 'Customized class colors',
-		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting',
+		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting'
 	},
-
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',
 		['CURSOR_TRAIL'] = 'Cursor trail',
@@ -431,9 +368,8 @@ L.GUI = {
 		['RESKIN_DBM'] = 'Restyle DBM bars',
 		['RESKIN_PGF'] = 'Restyle PGF panel',
 		['BACKDROP_COLOR'] = 'Backdrop color',
-		['BORDER_COLOR'] = 'Border color',
+		['BORDER_COLOR'] = 'Border color'
 	},
-
 	['NOTIFICATION'] = {
 		['NAME'] = 'Notification',
 		['ENABLE'] = 'Enable notification',
@@ -441,9 +377,8 @@ L.GUI = {
 		['NEW_MAIL'] = 'New mail',
 		['RARE_FOUND'] = 'Rare found',
 		['RARE_FOUND_TIP'] = '周围出现稀有事件或怪物，注意小地图来确定位置。',
-		['VERSION_CHECK'] = 'Addon outdate',
+		['VERSION_CHECK'] = 'Addon outdate'
 	},
-
 	['INFOBAR'] = {
 		['NAME'] = 'Infobar',
 		['ENABLE'] = 'Enable infobar',
@@ -454,9 +389,8 @@ L.GUI = {
 		['DURABILITY'] = 'Durability',
 		['GUILD'] = 'Guild',
 		['FRIENDS'] = 'Friends',
-		['REPORT'] = 'Daily/weekly',
+		['REPORT'] = 'Daily/weekly'
 	},
-
 	['CHAT'] = {
 		['NAME'] = 'Chat',
 		['ENABLE'] = 'Enable chat',
@@ -487,9 +421,8 @@ L.GUI = {
 		['BLACK_LIST_TIP'] = '包含过滤关键字的聊天内容，达到匹配数量则进行过滤屏蔽。|n|n当存在多个关键词时，以空格隔开。|n|n输入完毕后，按一下回车键保存。',
 		['WHISPER_INVITE'] = 'Enable whisper invite',
 		['GUILD_ONLY'] = 'Guildy only',
-		['INVITE_KEYWORD'] = 'keyword',
+		['INVITE_KEYWORD'] = 'keyword'
 	},
-
 	['AURA'] = {
 		['NAME'] = 'Aura',
 		['ENABLE'] = 'Enable aura',
@@ -503,9 +436,8 @@ L.GUI = {
 		['BUFFS_PER_ROW'] = 'buffs per row',
 		['DEBUFFS_PER_ROW'] = 'debuffs per row',
 		['REMINDER'] = 'Buff reminder',
-		['REMINDER_TIP'] = '提醒自身缺失的增益，比如牧师耐力法师智力盗贼毒药等等。',
+		['REMINDER_TIP'] = '提醒自身缺失的增益，比如牧师耐力法师智力盗贼毒药等等。'
 	},
-
 	['ACTIONBAR'] = {
 		['NAME'] = 'Actionbar',
 		['ENABLE'] = 'Enable actionbar',
@@ -539,9 +471,8 @@ L.GUI = {
 		['CUSTOM_BAR'] = 'Enable custom bar',
 		['CUSTOM_BAR_BUTTON_SIZE'] = 'button size',
 		['CUSTOM_BAR_BUTTON_NUMBER'] = 'button number',
-		['CUSTOM_BAR_BUTTON_PER_ROW'] = 'button per row',
+		['CUSTOM_BAR_BUTTON_PER_ROW'] = 'button per row'
 	},
-
 	['COMBAT'] = {
 		['NAME'] = 'Combat',
 		['ENABLE'] = 'Enable combat',
@@ -558,15 +489,13 @@ L.GUI = {
 		['EASY_MARK_TIP'] = 'Alt+鼠标左键点击单位模型快速设定标记。',
 		['PVP_SOUND'] = 'PVP sound',
 		['PVP_SOUND_TIP'] = '为PVP击杀添加类似DotA的音效系统。',
-
 		['FCT'] = 'Enable floating combat text',
 		['FCT_IN'] = 'Show incoming',
 		['FCT_OUT'] = 'Show outgoing',
 		['FCT_PET'] = 'Show pet',
 		['FCT_PERIODIC'] = 'Show periodic',
-		['FCT_MERGE'] = 'Merge',
+		['FCT_MERGE'] = 'Merge'
 	},
-
 	['ANNOUNCEMENT'] = {
 		['NAME'] = 'Announcement',
 		['ENABLE'] = 'Enable announcement',
@@ -578,9 +507,8 @@ L.GUI = {
 		['COMBAT_RESURRECTION'] = 'Battle resurrection',
 		['COMBAT_RESURRECTION_TIP'] = '通告自己或是队友使用的战复。',
 		['UTILITY'] = 'Utility',
-		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。',
+		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。'
 	},
-
 	['INVENTORY'] = {
 		['NAME'] = 'Inventory',
 		['ENABLE'] = 'Enable inventory',
@@ -605,6 +533,7 @@ L.GUI = {
 		['SORT_MODE'] = 'Sort mode',
 		['SORT_TO_TOP'] = 'Forward',
 		['SORT_TO_BOTTOM'] = 'Backward',
+		['SORT_TIP'] = 'If you have empty slots after bag sort, please disable inventory module, and turn off all bags filter in default ui containers.',
 		['FILTER_SETUP'] = 'Filter setup',
 		['ITEM_FILTER_JUNK'] = 'Junk',
 		['ITEM_FILTER_CONSUMABLE'] = 'Consumable',
@@ -615,9 +544,8 @@ L.GUI = {
 		['ITEM_FILTER_FAVOURITE'] = 'Favourite',
 		['ITEM_FILTER_TRADE'] = 'Trade good',
 		['ITEM_FILTER_QUEST'] = 'Quest',
-		['ITEM_FILTER_GEAR_SET'] = 'Equip set',
+		['ITEM_FILTER_GEAR_SET'] = 'Equip set'
 	},
-
 	['MAP'] = {
 		['NAME'] = 'Map',
 		['ENABLE'] = 'Enable map',
@@ -631,9 +559,8 @@ L.GUI = {
 		['MICRO_MENU_TIP'] = '鼠标中键点击小地图会弹出系统菜单。',
 		['PROGRESS_BAR'] = 'Progress bar',
 		['PROGRESS_BAR_TIP'] = '在小地图上方显示一个进度条，可以追踪玩家的经验声望荣誉等相关进度信息。',
-		['MINIMAP_SCALE'] = 'Minimap scale',
+		['MINIMAP_SCALE'] = 'Minimap scale'
 	},
-
 	['TOOLTIP'] = {
 		['NAME'] = 'Tooltip',
 		['ENABLE'] = 'Enable tooltip',
@@ -652,9 +579,8 @@ L.GUI = {
 		['TARGET_BY'] = 'Show targetby,',
 		['HIDE_REALM'] = 'Hide realm',
 		['HIDE_TITLE'] = 'Hide title',
-		['HIDE_RANK'] = 'Hide guild rank',
+		['HIDE_RANK'] = 'Hide guild rank'
 	},
-
 	['UNITFRAME'] = {
 		['NAME'] = 'Unitframe',
 		['ENABLE'] = 'Enable unit frames',
@@ -719,15 +645,13 @@ L.GUI = {
 		['COLOR_STYLE'] = 'Health color',
 		['COLOR_STYLE_DEFAULT'] = 'Default white',
 		['COLOR_STYLE_CLASS'] = 'Class colored',
-		['COLOR_STYLE_GRADIENT'] = 'Percentage gradient',
+		['COLOR_STYLE_GRADIENT'] = 'Percentage gradient'
 	},
-
 	['GROUPFRAME'] = {
 		['NAME'] = 'Groupframe',
 		['ENABLE_GROUP'] = 'Enable group frames',
 		['GROUPFRAME_SIZE_SETTING_HEADER'] = 'Groupframe size setting',
 		['GROUP_NAMES'] = 'Show names',
-
 		['GROUP_THREAT_INDICATOR'] = 'Threat indicator',
 		['GROUP_DEBUFF_HIGHLIGHT'] = 'Dispellable debuffs highlight',
 		['GROUP_DEBUFF_HIGHLIGHT_TIP'] = 'Whenever a group member has a dispellable debuff it will highlight the frame in the debuff color.',
@@ -737,50 +661,41 @@ L.GUI = {
 		['PARTY_SPELL_WATCHER'] = 'Party spell cooldown',
 		['PARTY_SPELL_SYNC'] = 'Sync party spell cooldown',
 		['PARTY_SPELL_SYNC_TIP'] = 'If enabled, the cooldown status would sync with group members who using FreeUI or ZenTracker(WA).|nThis might decrease your performance.',
-
 		['PARTY_SPELL_SETTING_HEADER'] = 'Party spells cooldown setting',
-		["PARTY_SPELL_RESET_WARNING"] = "Are you sure to restore default list?",
-		["INCOMPLETE_INPUT"] = "You need to complete all * optinos.",
-		["INCORRECT_SPELLID"] = "Incorrect SpellID.",
-		["EXISTING_ID"] = "The SpellID is existed.",
+		['PARTY_SPELL_RESET_WARNING'] = 'Are you sure to restore default list?',
+		['INCOMPLETE_INPUT'] = 'You need to complete all * optinos.',
+		['INCORRECT_SPELLID'] = 'Incorrect SpellID.',
+		['EXISTING_ID'] = 'The SpellID is existed.',
 		['SPELL_ID'] = 'Spell ID',
-		["SPELL_ID_TIP"] = "|nSpell ID, must be a number.|nSpell name is not supported.",
-		["SPELL_COOLDOWN"] = "Spell cooldown*",
-		["SPELL_COOLDOWN_TIP"] = "|nEnter the spell's cooldown duration.|nOnly support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members.",
-
+		['SPELL_ID_TIP'] = '|nSpell ID, must be a number.|nSpell name is not supported.',
+		['SPELL_COOLDOWN'] = 'Spell cooldown*',
+		['SPELL_COOLDOWN_TIP'] = "|nEnter the spell's cooldown duration.|nOnly support regular spells and abilities.|nFor spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members.",
 		['GROUP_CLICK_CAST'] = 'Click casting on group frames',
 		['GROUP_CLICK_CAST_TIP'] = 'You can bind click casting spells on Blizzard Spell Book.',
-
 		['GROUP_DEBUFF_SETTING_HEADER'] = 'Group debuff setting',
 		['TYPE'] = 'Type',
-		["TYPE_TIP"] = "|nSelect the instance type where the ID belongs to.",
-		["DUNGEON_TIP"] = "|nSelect the dungeons where the ID belongs to.",
-		["RAID_TIP"] = "|nSelect the raids where the ID belongs to.",
-		["PRIORITY"] = "Priority",
-		["PRIORITY_TIP"] = "|nSpell's priority when visible.|n|nWhen multiple spells exist, it only remain the one that owns highest priority.|n|nDefault priority is 2, if you leave it blank.|n|nThe maximun priority is 6, and the icon would flash if you set so.",
-		['GROUP_DEBUFF_RESET_WARNING'] = "Are you sure to restore default list?",
-		["PRIORITY_EDITBOX_TIP"] = "|nPriority limit in 1-6.|n|nPress KEY ENTER when you finish typing.",
-
+		['TYPE_TIP'] = '|nSelect the instance type where the ID belongs to.',
+		['DUNGEON_TIP'] = '|nSelect the dungeons where the ID belongs to.',
+		['RAID_TIP'] = '|nSelect the raids where the ID belongs to.',
+		['PRIORITY'] = 'Priority',
+		['PRIORITY_TIP'] = "|nSpell's priority when visible.|n|nWhen multiple spells exist, it only remain the one that owns highest priority.|n|nDefault priority is 2, if you leave it blank.|n|nThe maximun priority is 6, and the icon would flash if you set so.",
+		['GROUP_DEBUFF_RESET_WARNING'] = 'Are you sure to restore default list?',
+		['PRIORITY_EDITBOX_TIP'] = '|nPriority limit in 1-6.|n|nPress KEY ENTER when you finish typing.',
 		['RAID_HORIZON'] = 'Raid horizontal arrangement',
 		['RAID_REVERSE'] = 'Raid reverse growth',
 		['PARTY_HORIZON'] = 'Party horizontal arrangement',
 		['PARTY_REVERSE'] = 'Party reverse growth',
 		['SPEC_POSITION'] = 'Save position by specs',
-
 		['PARTY_WIDTH'] = 'Party frame width',
 		['PARTY_HEIGHT'] = 'Party frame height',
 		['PARTY_GAP'] = 'Parth frame spacing',
-
 		['RAID_WIDTH'] = 'Raid frame width',
 		['RAID_HEIGHT'] = 'Raid frame height',
 		['RAID_GAP'] = 'Raid frame spacing',
 		['GROUP_FILTER'] = 'Maximum groups to show',
-
 		['CAT_PARTY'] = 'Party',
-		['CAT_RAID'] = 'Raid',
+		['CAT_RAID'] = 'Raid'
 	},
-
-
 	['NAMEPLATE'] = {
 		['NAME'] = 'Nameplate',
 		['ENABLE'] = 'Enable nameplate',
@@ -800,7 +715,7 @@ L.GUI = {
 		['INSECURE_COLOR'] = 'Insecure color',
 		['OFF_TANK_COLOR'] = 'Off-Tank',
 		['CUSTOM_UNIT_COLOR'] = 'Colored custom unit',
-		['CUSTOM_UNIT_COLOR_TIP'] = 'If enabled, some units\' nameplate health would color by custom color.|nYou can customize the color and the units list to match your requirement.',
+		['CUSTOM_UNIT_COLOR_TIP'] = "If enabled, some units' nameplate health would color by custom color.|nYou can customize the color and the units list to match your requirement.",
 		['CUSTOM_COLOR'] = 'Change custom color',
 		['CUSTOM_UNIT_LIST'] = 'Custom unit list',
 		['CUSTOM_UNIT_LIST_TIP'] = 'Use KEY SPACE between keywords.|nPress KEY ENTER when you finish typing.',
@@ -830,17 +745,15 @@ L.GUI = {
 		['MIN_ALPHA'] = 'None target alpha',
 		['OCCLUDED_ALPHA'] = 'Occluded alpha',
 		['VERTICAL_SPACING'] = 'Vertical spacing',
-		['HORIZONTAL_SPACING'] = 'Horizontal spacing',
+		['HORIZONTAL_SPACING'] = 'Horizontal spacing'
 	},
-
 	['CREDITS'] = {
 		['NAME'] = 'Credits',
 		['CREDITS'] = 'Credits',
 		['FEEDBACK'] = 'Feedback',
 		['PRIMARY'] = 'Haleth, siweia',
-		['SECONDARY'] = 'Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95',
+		['SECONDARY'] = 'Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95'
 	},
-
 	['INSTALLATION'] = {
 		['INSTALL'] = 'Install',
 		['SKIP'] = 'Skip',
@@ -860,11 +773,9 @@ L.GUI = {
 		['ADDON_HEADER'] = 'Addons',
 		['ADDON_DESCRIPTION'] = 'This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.',
 		['COMPLETE_HEADER'] = 'Success!',
-		['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.',
-	},
+		['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.'
+	}
 }
-
-
 
 -- Slash commands
 L['COMMANDS_LIST_HINT'] = '可用命令：'
@@ -873,7 +784,6 @@ L['COMMANDS_LIST'] = {
 	'/free config - 打开控制台。',
 	'/free unlock - 解锁界面元素，解锁后可以自由移动界面元素。',
 	'/free reset - 重置所有保存的选项恢复到默认值。',
-
 	'/rl - 重载界面',
 	'/ss - 屏幕截图',
 	'/clear - 清空聊天窗口',
@@ -885,34 +795,5 @@ L['COMMANDS_LIST'] = {
 	'/tt - 密语当前目标',
 	'/spec - 切换天赋',
 	'/bind - 绑定快捷键',
-	'/gm - 打开帮助面板',
+	'/gm - 打开帮助面板'
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

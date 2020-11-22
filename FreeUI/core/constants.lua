@@ -1,10 +1,8 @@
 local F, C = unpack(select(2, ...))
 
 local bit_band, bit_bor = bit.band, bit.bor
-local COMBATLOG_OBJECT_AFFILIATION_MINE =
-	COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
-local GetSpecialization, GetSpecializationInfo = GetSpecialization,
-												 GetSpecializationInfo
+local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
+local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
 
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
@@ -24,6 +22,9 @@ C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
+C.BackdropColor = {.1, .1, .1}
+C.BorderColor = {.04, .04, .04}
+C.GradientColor = {.04, .04, .04, .4, .08, .08, .08, .4}
 
 C.DevsList = {
 	['Farfaraway-死亡之翼'] = true,
@@ -37,17 +38,16 @@ C.DevsList = {
 	['贰拾年老牧師-死亡之翼'] = true,
 	['Rhonesaia-白银之手'] = true
 }
-local function isDeveloper() return C.DevsList[C.MyFullName] end
+local function isDeveloper()
+	return C.DevsList[C.MyFullName]
+end
 C.isDeveloper = isDeveloper()
 
 C['Assets'] = {
-
 	['norm_tex'] = C.AssetsPath .. 'textures\\norm_tex',
 	['grad_tex'] = C.AssetsPath .. 'textures\\grad_tex',
 	['flat_tex'] = C.AssetsPath .. 'textures\\flat_tex',
-
 	['statusbar_tex'] = C.AssetsPath .. 'textures\\norm_tex',
-
 	['bd_tex'] = 'Interface\\ChatFrame\\ChatFrameBackground',
 	['bg_tex'] = C.AssetsPath .. 'textures\\bg_tex',
 	['shadow_tex'] = C.AssetsPath .. 'textures\\shadow_tex',
@@ -55,33 +55,25 @@ C['Assets'] = {
 	['blank_tex'] = C.AssetsPath .. 'textures\\blank_tex',
 	['tick_tex'] = C.AssetsPath .. 'textures\\tick_tex',
 	['stripe_tex'] = C.AssetsPath .. 'textures\\stripe_tex',
-
 	['close_tex'] = C.AssetsPath .. 'textures\\close_tex',
 	['arrow_tex'] = C.AssetsPath .. 'textures\\arrow_tex',
-
 	['shield_tex'] = C.AssetsPath .. 'textures\\shield_tex',
 	['sword_tex'] = C.AssetsPath .. 'textures\\sword_tex',
-
 	['button_normal'] = C.AssetsPath .. 'button\\normal',
 	['button_flash'] = C.AssetsPath .. 'button\\flash',
 	['button_pushed'] = C.AssetsPath .. 'button\\pushed',
 	['button_checked'] = C.AssetsPath .. 'button\\checked',
-
 	['mask_tex'] = C.AssetsPath .. 'textures\\rectangle',
-
 	['roles_icon'] = C.AssetsPath .. 'textures\\roles_icon',
 	['target_icon'] = C.AssetsPath .. 'textures\\UI-RaidTargetingIcons',
 	['vig_tex'] = C.AssetsPath .. 'textures\\vignetting',
 	['spark_tex'] = C.AssetsPath .. 'textures\\spark_tex',
 	['gear_tex'] = C.AssetsPath .. 'textures\\gear_tex',
 	['classify_tex'] = C.AssetsPath .. 'textures\\state_icons',
-
 	['logo'] = C.AssetsPath .. 'textures\\logo',
-
 	['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
 	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',
 	['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
-
 	['Sounds'] = {
 		['whisper'] = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
 		['whisperBN'] = C.AssetsPath .. 'sounds\\whisper_bn.ogg',
@@ -92,7 +84,6 @@ C['Assets'] = {
 		['interrupt'] = C.AssetsPath .. 'sounds\\interrupt.ogg',
 		['dispel'] = C.AssetsPath .. 'sounds\\dispel.ogg'
 	},
-
 	['Fonts'] = {
 		['Regular'] = C.AssetsPath .. 'fonts\\regular.ttf',
 		['Condensed'] = C.AssetsPath .. 'fonts\\condensed.ttf',
@@ -106,12 +97,13 @@ C['Assets'] = {
 }
 
 C.ClassList = {}
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do C.ClassList[v] = k end
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+	C.ClassList[v] = k
+end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
-	local colors = FREE_ADB.custom_class_color and FREE_ADB.class_colors_list or
-					   RAID_CLASS_COLORS
+	local colors = FREE_ADB.custom_class_color and FREE_ADB.class_colors_list or RAID_CLASS_COLORS
 	for class, value in pairs(colors) do
 		C.ClassColors[class] = {}
 		C.ClassColors[class].r = value.r
@@ -169,7 +161,9 @@ _G.GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'
 -- RoleUpdater
 local function CheckRole()
 	local tree = GetSpecialization()
-	if not tree then return end
+	if not tree then
+		return
+	end
 	local _, _, _, _, role, stat = GetSpecializationInfo(tree)
 	if role == 'TANK' then
 		C.Role = 'Tank'
@@ -190,12 +184,5 @@ F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckRole)
 function C:IsMyPet(flags)
 	return bit_band(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
 end
-C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY,
-						  COMBATLOG_OBJECT_REACTION_FRIENDLY,
-						  COMBATLOG_OBJECT_CONTROL_PLAYER,
-						  COMBATLOG_OBJECT_TYPE_PET)
-C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID,
-						 COMBATLOG_OBJECT_REACTION_FRIENDLY,
-						 COMBATLOG_OBJECT_CONTROL_PLAYER,
-						 COMBATLOG_OBJECT_TYPE_PET)
-
+C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
+C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)

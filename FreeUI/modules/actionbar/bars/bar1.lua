@@ -124,11 +124,11 @@ function ACTIONBAR:CreateBar1()
 			local texture = GetActionTexture(button.action)
 			if texture then
 				icon:SetTexture(texture)
+				icon:SetVertexColor(1, 1, 1) -- force it turn bright, needs review
 				icon:Show()
 			else
 				icon:Hide()
 			end
-			button:UpdateUsable()
 		end
 	end
 

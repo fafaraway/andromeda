@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
 
-
 local pairs, strsplit, Ambiguate = pairs, strsplit, Ambiguate
 local strfind, tostring, select = strfind, tostring, select
 local SetPortraitTexture, StaticPopup_Show = SetPortraitTexture, StaticPopup_Show
@@ -20,7 +19,7 @@ StaticPopupDialogs['FREEUI_RESET'] = {
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false,
+	hideOnEscape = false
 }
 
 StaticPopupDialogs['FREEUI_RESET_PROFILE'] = {
@@ -33,7 +32,7 @@ StaticPopupDialogs['FREEUI_RESET_PROFILE'] = {
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false,
+	hideOnEscape = false
 }
 
 StaticPopupDialogs['FREEUI_APPLY_PROFILE'] = {
@@ -46,7 +45,7 @@ StaticPopupDialogs['FREEUI_APPLY_PROFILE'] = {
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false,
+	hideOnEscape = false
 }
 
 StaticPopupDialogs['FREEUI_DOWNLOAD_PROFILE'] = {
@@ -56,17 +55,17 @@ StaticPopupDialogs['FREEUI_DOWNLOAD_PROFILE'] = {
 	OnAccept = function()
 		local profileIndex = FREE_ADB['profile_index'][myFullName]
 		if GUI.currentProfile == 1 then
-			FREE_PDB[profileIndex-1] = FREE_DB
+			FREE_PDB[profileIndex - 1] = FREE_DB
 		elseif profileIndex == 1 then
-			FREE_DB = FREE_PDB[GUI.currentProfile-1]
+			FREE_DB = FREE_PDB[GUI.currentProfile - 1]
 		else
-			FREE_PDB[profileIndex-1] = FREE_PDB[GUI.currentProfile-1]
+			FREE_PDB[profileIndex - 1] = FREE_PDB[GUI.currentProfile - 1]
 		end
 		ReloadUI()
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false,
+	hideOnEscape = false
 }
 
 StaticPopupDialogs['FREEUI_UPLOAD_PROFILE'] = {
@@ -77,12 +76,12 @@ StaticPopupDialogs['FREEUI_UPLOAD_PROFILE'] = {
 		if GUI.currentProfile == 1 then
 			FREE_DB = C.DB
 		else
-			FREE_PDB[GUI.currentProfile-1] = C.DB
+			FREE_PDB[GUI.currentProfile - 1] = C.DB
 		end
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false,
+	hideOnEscape = false
 }
 
 StaticPopupDialogs['FREEUI_DELETE_UNIT_PROFILE'] = {
@@ -108,14 +107,13 @@ StaticPopupDialogs['FREEUI_DELETE_UNIT_PROFILE'] = {
 	end,
 	timeout = 0,
 	whileDead = 1,
-	hideOnEscape = false,
+	hideOnEscape = false
 }
-
 
 function GUI:CreateProfileIcon(bar, index, texture, title, description)
 	local button = CreateFrame('Button', nil, bar)
 	button:SetSize(32, 32)
-	button:SetPoint('RIGHT', -5 - (index-1)*37, 0)
+	button:SetPoint('RIGHT', -5 - (index - 1) * 37, 0)
 	F.PixelIcon(button, texture, true)
 	button.title = title
 	F.AddTooltip(button, 'ANCHOR_RIGHT', description, 'BLUE')
@@ -156,14 +154,18 @@ function GUI:FindProfleUser(icon)
 	for fullName, index in pairs(FREE_ADB['profile_index']) do
 		if index == icon.index then
 			local name, realm = strsplit('-', fullName)
-			if not icon.list[realm] then icon.list[realm] = {} end
+			if not icon.list[realm] then
+				icon.list[realm] = {}
+			end
 			icon.list[realm][Ambiguate(fullName, 'none')] = GUI:GetClassFromGoldInfo(name, realm)
 		end
 	end
 end
 
 function GUI:Icon_OnEnter()
-	if not next(self.list) then return end
+	if not next(self.list) then
+		return
+	end
 
 	GameTooltip:SetOwner(self, 'ANCHOR_TOP')
 	GameTooltip:ClearLines()
@@ -200,7 +202,7 @@ end
 function GUI:CreateProfileBar(parent, index)
 	local bar = F.CreateBDFrame(parent, .25)
 	bar:ClearAllPoints()
-	bar:SetPoint('TOPLEFT', 10, -10 - 45*(index-1))
+	bar:SetPoint('TOPLEFT', 10, -10 - 45 * (index - 1))
 	bar:SetSize(440, 40)
 	bar.index = index
 
@@ -225,7 +227,7 @@ function GUI:CreateProfileBar(parent, index)
 	if index == 1 then
 		note.__defaultText = L.GUI.PROFILE.DEFAULT_CHARACTER_PROFILE
 	else
-		note.__defaultText = L.GUI.PROFILE.DEFAULT_SHARED_PROFILE..(index - 1)
+		note.__defaultText = L.GUI.PROFILE.DEFAULT_SHARED_PROFILE .. (index - 1)
 	end
 	if not FREE_ADB['profile_names'][index] then
 		FREE_ADB['profile_names'][index] = note.__defaultText
@@ -285,18 +287,20 @@ end
 
 function GUI:Delete_OnEnter()
 	local text = self:GetText()
-	if not text or text == '' then return end
+	if not text or text == '' then
+		return
+	end
 	local name, realm = strsplit('-', text)
 	if not realm then
 		realm = C.MyRealm
-		text = name..'-'..realm
+		text = name .. '-' .. realm
 		self:SetText(text)
 	end
 
 	if FREE_ADB['ProfileIndex'][text] or (FREE_GOLDCOUNT[realm] and FREE_GOLDCOUNT[realm][name]) then
 		StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
 	else
-		UIErrorsFrame:AddMessage(C.RedColor..L.GUI.PROFILE.INCORRECT_UNIT_NAME)
+		UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.PROFILE.INCORRECT_UNIT_NAME)
 	end
 end
 
@@ -307,31 +311,40 @@ end
 function GUI:CreateProfileGUI(parent)
 	local reset = F.CreateButton(parent, 100, 24, L.GUI.PROFILE.RESET)
 	reset:SetPoint('BOTTOMRIGHT', -20, 20)
-	reset:SetScript('OnClick', function()
-		StaticPopup_Show('FREEUI_RESET')
-	end)
+	reset:SetScript(
+		'OnClick',
+		function()
+			StaticPopup_Show('FREEUI_RESET')
+		end
+	)
 	F.AddTooltip(reset, 'ANCHOR_TOP', F.StyleAddonName(L.GUI.PROFILE.RESET_TIP), 'RED')
 
 	local import = F.CreateButton(parent, 100, 24, L.GUI.PROFILE.IMPORT)
 	import:SetPoint('BOTTOMLEFT', 20, 20)
-	import:SetScript('OnClick', function()
-		parent:GetParent():Hide()
-		GUI:CreateDataFrame()
-		GUI.ProfileDataFrame.Header:SetText(L.GUI.PROFILE.IMPORT_HEADER)
-		GUI.ProfileDataFrame.text:SetText(L.GUI.PROFILE.IMPORT)
-		GUI.ProfileDataFrame.editBox:SetText('')
-	end)
+	import:SetScript(
+		'OnClick',
+		function()
+			parent:GetParent():Hide()
+			GUI:CreateDataFrame()
+			GUI.ProfileDataFrame.Header:SetText(L.GUI.PROFILE.IMPORT_HEADER)
+			GUI.ProfileDataFrame.text:SetText(L.GUI.PROFILE.IMPORT)
+			GUI.ProfileDataFrame.editBox:SetText('')
+		end
+	)
 	F.AddTooltip(import, 'ANCHOR_TOP', L.GUI.PROFILE.IMPORT_TIP, 'BLUE')
 
 	local export = F.CreateButton(parent, 100, 24, L.GUI.PROFILE.EXPORT)
 	export:SetPoint('LEFT', import, 'RIGHT', 5, 0)
-	export:SetScript('OnClick', function()
-		parent:GetParent():Hide()
-		GUI:CreateDataFrame()
-		GUI.ProfileDataFrame.Header:SetText(L.GUI.PROFILE.EXPORT_HEADER)
-		GUI.ProfileDataFrame.text:SetText(OKAY)
-		GUI:ExportData()
-	end)
+	export:SetScript(
+		'OnClick',
+		function()
+			parent:GetParent():Hide()
+			GUI:CreateDataFrame()
+			GUI.ProfileDataFrame.Header:SetText(L.GUI.PROFILE.EXPORT_HEADER)
+			GUI.ProfileDataFrame.text:SetText(OKAY)
+			GUI:ExportData()
+		end
+	)
 	F.AddTooltip(export, 'ANCHOR_TOP', L.GUI.PROFILE.EXPORT_TIP, 'BLUE')
 
 	local delete = F.CreateEditBox(parent, 205, 24)
@@ -354,7 +367,7 @@ function GUI:CreateProfileGUI(parent)
 	panel:ClearAllPoints()
 	panel:SetPoint('TOPRIGHT', -20, -120)
 	panel:SetWidth(parent:GetWidth() - 40)
-	panel:SetHeight(15 + numBars*45)
+	panel:SetHeight(15 + numBars * 45)
 	panel:SetFrameLevel(11)
 
 	GUI.bars = {}
@@ -363,6 +376,4 @@ function GUI:CreateProfileGUI(parent)
 	end
 
 	GUI:UpdateCurrentProfile()
-
-
 end

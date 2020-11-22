@@ -115,7 +115,7 @@ function MISC:RaidTool_RoleCount(parent)
 		role[i]:SetTexture(roleIcons[i])
 		role[i].text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, 'OUTLINE', '0', 'YELLOW', true)
 		role[i].text:ClearAllPoints()
-		role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 10, -2)
+		role[i].text:SetPoint('CENTER', role[i], 'RIGHT', 10, 0)
 	end
 
 	local raidCounts = {

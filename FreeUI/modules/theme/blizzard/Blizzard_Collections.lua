@@ -10,7 +10,7 @@ C.Themes["Blizzard_Collections"] = function()
 		local tab = _G["CollectionsJournalTab"..i]
 		F.ReskinTab(tab)
 		if i > 1 then
-			tab:SetPoint("LEFT", _G["CollectionsJournalTab"..(i-1)], "RIGHT", -15, 0)
+			tab:SetPoint("LEFT", _G["CollectionsJournalTab"..(i-1)], "RIGHT", -10, 0)
 		end
 	end
 

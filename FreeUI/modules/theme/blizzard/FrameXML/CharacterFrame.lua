@@ -12,6 +12,11 @@ tinsert(C.BlizzThemes, function()
 		F.ReskinTab(_G["CharacterFrameTab"..i])
 	end
 
+	CharacterFrameTab2:ClearAllPoints()
+	CharacterFrameTab2:SetPoint('LEFT', CharacterFrameTab1, 'RIGHT', -10, 0)
+	CharacterFrameTab3:ClearAllPoints()
+	CharacterFrameTab3:SetPoint('LEFT', CharacterFrameTab2, 'RIGHT', -10, 0)
+
 	CharacterModelFrame:DisableDrawLayer("BACKGROUND")
 	CharacterModelFrame:DisableDrawLayer("BORDER")
 	CharacterModelFrame:DisableDrawLayer("OVERLAY")
@@ -60,8 +65,6 @@ tinsert(C.BlizzThemes, function()
 	end
 
 	local function UpdateCosmetic(self)
-		if not IsCosmeticItem then return end
-
 		local itemLink = GetInventoryItemLink("player", self:GetID())
 		self.IconOverlay:SetShown(itemLink and IsCosmeticItem(itemLink))
 	end
@@ -83,9 +86,6 @@ tinsert(C.BlizzThemes, function()
 		cooldown:SetInside()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
-		if IsCosmeticItem then
-			slot.IconOverlay:SetAtlas("CosmeticIconFrame")
-		end
 		slot.IconOverlay:SetInside()
 		F.ReskinIconBorder(slot.IconBorder)
 

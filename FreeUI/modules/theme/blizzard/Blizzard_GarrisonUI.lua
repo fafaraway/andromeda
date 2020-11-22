@@ -934,9 +934,7 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	-- Covenant Mission UI
 	local CovenantMissionFrame = CovenantMissionFrame
 	ReskinMissionFrame(CovenantMissionFrame)
-	if CovenantMissionFrame.RaisedBorder then
-		CovenantMissionFrame.RaisedBorder:SetAlpha(0) -- not in prepatch
-	end
+	CovenantMissionFrame.RaisedBorder:SetAlpha(0)
 	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 
 	CombatLog:DisableDrawLayer("BACKGROUND")
@@ -952,9 +950,7 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.FollowerTab.RaisedFrameEdges:SetAlpha(0)
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
-	if CovenantMissionFrameFollowers.HealAllButton then
-		F.Reskin(CovenantMissionFrameFollowers.HealAllButton) -- not in prepatch
-	end
+	F.Reskin(CovenantMissionFrameFollowers.HealAllButton)
 	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	F.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
@@ -967,7 +963,7 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 		local buttons = MissionList.listScroll.buttons
 		for i = 1, #buttons do
 			local bu = select(3, buttons[i]:GetChildren())
-			if bu and bu:GetObjectType() == "Button" and not bu.styled then
+			if bu and bu:IsObjectType("Button") and not bu.styled then
 				F.Reskin(bu)
 				bu:SetSize(60, 45)
 				bu.styled = true
@@ -976,9 +972,9 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	end
 
 	local function buttonOnShow(MissionPage)
-		for i = 18, 26 do
+		for i = 18, 27 do
 			local bu = select(i, MissionPage:GetChildren())
-			if bu and bu:GetObjectType() == "Button" and not bu.styled then
+			if bu and bu:IsObjectType("Button") and not bu.styled then
 				F.Reskin(bu)
 				bu:SetSize(50, 45)
 				bu.styled = true

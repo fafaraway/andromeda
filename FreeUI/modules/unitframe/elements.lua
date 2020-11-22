@@ -6,18 +6,17 @@ local format, wipe, tinsert = string.format, table.wipe, table.insert
 local pairs, next, tonumber, unpack = pairs, next, tonumber, unpack
 local UnitAura = UnitAura
 local InCombatLockdown = InCombatLockdown
-local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime,
-																   GetSpellCooldown,
-																   IsInRaid,
-																   IsInGroup,
-																   IsPartyLFG
+local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 
 --[[ Colors ]]
-
 local function ReplaceHealthColor()
 	local colors = FREE_ADB.health_color
-	oUF.colors.health = {colors.r, colors.g, colors.b}
+	oUF.colors.health = {
+		colors.r,
+		colors.g,
+		colors.b
+	}
 end
 
 local function ReplacePowerColors(name, index, color)
@@ -25,42 +24,131 @@ local function ReplacePowerColors(name, index, color)
 	oUF.colors.power[index] = oUF.colors.power[name]
 end
 
-
-ReplacePowerColors('MANA', 0, {87 / 255, 165 / 255, 208 / 255})
-ReplacePowerColors('ENERGY', 3, {174 / 255, 34 / 255, 45 / 255})
-ReplacePowerColors('COMBO_POINTS', 4, {199 / 255, 171 / 255, 90 / 255})
-ReplacePowerColors('RUNIC_POWER', 6, {135 / 255, 214 / 255, 194 / 255})
-ReplacePowerColors('SOUL_SHARDS', 7, {151 / 255, 101 / 255, 221 / 255})
-ReplacePowerColors('HOLY_POWER', 9, {208 / 255, 178 / 255, 107 / 255})
-ReplacePowerColors('INSANITY', 13, {179 / 255, 96 / 255, 244 / 255})
-
+ReplacePowerColors(
+	'MANA',
+	0,
+	{
+		87 / 255,
+		165 / 255,
+		208 / 255
+	}
+)
+ReplacePowerColors(
+	'ENERGY',
+	3,
+	{
+		174 / 255,
+		34 / 255,
+		45 / 255
+	}
+)
+ReplacePowerColors(
+	'COMBO_POINTS',
+	4,
+	{
+		199 / 255,
+		171 / 255,
+		90 / 255
+	}
+)
+ReplacePowerColors(
+	'RUNIC_POWER',
+	6,
+	{
+		135 / 255,
+		214 / 255,
+		194 / 255
+	}
+)
+ReplacePowerColors(
+	'SOUL_SHARDS',
+	7,
+	{
+		151 / 255,
+		101 / 255,
+		221 / 255
+	}
+)
+ReplacePowerColors(
+	'HOLY_POWER',
+	9,
+	{
+		208 / 255,
+		178 / 255,
+		107 / 255
+	}
+)
+ReplacePowerColors(
+	'INSANITY',
+	13,
+	{
+		179 / 255,
+		96 / 255,
+		244 / 255
+	}
+)
 function UNITFRAME:UpdateColors()
 	ReplaceHealthColor()
 
 	local classColors = C.ClassColors
 	for class, value in pairs(classColors) do
-		oUF.colors.class[class] = {value.r, value.g, value.b}
+		oUF.colors.class[class] = {
+			value.r,
+			value.g,
+			value.b
+		}
 	end
 end
 
 local lastBarColors = {
-	DRUID = {161 / 255, 92 / 255, 255 / 255},
-	MAGE = {5 / 255, 96 / 255, 250 / 255},
-	MONK = {0 / 255, 143 / 255, 247 / 255},
-	PALADIN = {221 / 255, 36 / 255, 62 / 255},
-	ROGUE = {161 / 255, 92 / 255, 255 / 255},
-	WARLOCK = {221 / 255, 36 / 255, 62 / 255}
+	DRUID = {
+		161 / 255,
+		92 / 255,
+		255 / 255
+	},
+	MAGE = {
+		5 / 255,
+		96 / 255,
+		250 / 255
+	},
+	MONK = {
+		0 / 255,
+		143 / 255,
+		247 / 255
+	},
+	PALADIN = {
+		221 / 255,
+		36 / 255,
+		62 / 255
+	},
+	ROGUE = {
+		161 / 255,
+		92 / 255,
+		255 / 255
+	},
+	WARLOCK = {
+		221 / 255,
+		36 / 255,
+		62 / 255
+	}
 }
 
 --[[ Backdrop ]]
-
 function UNITFRAME:AddBackDrop(self)
 	self:RegisterForClicks('AnyUp')
 
-	self:HookScript('OnEnter', function() UnitFrame_OnEnter(self) end)
-
-	self:HookScript('OnLeave', function() UnitFrame_OnLeave(self) end)
-
+	self:HookScript(
+		'OnEnter',
+		function()
+			UnitFrame_OnEnter(self)
+		end
+	)
+	self:HookScript(
+		'OnLeave',
+		function()
+			UnitFrame_OnLeave(self)
+		end
+	)
 	F.CreateTex(self)
 
 	local bg = F.CreateBDFrame(self)
@@ -71,7 +159,9 @@ function UNITFRAME:AddBackDrop(self)
 	local glow = F.CreateSD(self.Bg)
 	self.Glow = glow
 
-	if not self.unitStyle == 'player' then return end
+	if not self.unitStyle == 'player' then
+		return
+	end
 
 	local width = C.DB.unitframe.player_width
 	local height = C.DB.unitframe.class_power_bar_height
@@ -83,7 +173,6 @@ function UNITFRAME:AddBackDrop(self)
 end
 
 --[[ Mouseover highlight ]]
-
 function UNITFRAME:AddHighlight(self)
 	local highlight = self:CreateTexture(nil, 'OVERLAY')
 	highlight:SetAllPoints()
@@ -95,13 +184,21 @@ function UNITFRAME:AddHighlight(self)
 
 	self.Highlight = highlight
 
-	self:HookScript('OnEnter', function() highlight:Show() end)
-
-	self:HookScript('OnLeave', function() highlight:Hide() end)
+	self:HookScript(
+		'OnEnter',
+		function()
+			highlight:Show()
+		end
+	)
+	self:HookScript(
+		'OnLeave',
+		function()
+			highlight:Hide()
+		end
+	)
 end
 
 --[[ Selected border ]]
-
 local function UpdateSelectedBorder(self)
 	if UnitIsUnit('target', self.unit) then
 		self.Border:Show()
@@ -123,10 +220,13 @@ function UNITFRAME:AddSelectedBorder(self)
 end
 
 --[[ Health ]]
-
 local function OverrideHealth(self, event, unit)
-	if not C.DB.unitframe.transparent_mode then return end
-	if (not unit or self.unit ~= unit) then return end
+	if not C.DB.unitframe.transparent_mode then
+		return
+	end
+	if (not unit or self.unit ~= unit) then
+		return
+	end
 
 	local health = self.Health
 	local cur, max = UnitHealth(unit), UnitHealthMax(unit)
@@ -154,7 +254,9 @@ local function PostUpdateHealth(self, unit, min, max)
 	local isGhost = UnitIsGhost(unit)
 	local isTapped = UnitIsTapDenied(unit)
 
-	if not C.DB.unitframe.transparent_mode then return end
+	if not C.DB.unitframe.transparent_mode then
+		return
+	end
 	if isDead or isGhost or isOffline then
 		self:SetValue(0)
 	else
@@ -189,8 +291,7 @@ function UNITFRAME:AddHealthBar(self)
 	local isParty = (style == 'party')
 	local isRaid = (style == 'raid')
 	local isBoss = (style == 'boss')
-	local isBaseUnits = F.MultiCheck(style, 'player', 'pet', 'target',
-									 'targettarget', 'focus', 'focustarget')
+	local isBaseUnits = F.MultiCheck(style, 'player', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
 
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetFrameStrata('LOW')
@@ -208,6 +309,7 @@ function UNITFRAME:AddHealthBar(self)
 		local bg = health:CreateTexture(nil, 'BACKGROUND')
 		bg:SetAllPoints(health)
 		bg:SetTexture(C.Assets.bd_tex)
+		bg:SetVertexColor(.6, .6, .6)
 		bg.multiplier = .1
 		health.bg = bg
 	end
@@ -231,14 +333,12 @@ function UNITFRAME:AddHealthBar(self)
 end
 
 --[[ Health prediction ]]
-
 function UNITFRAME:AddHealthPrediction(self)
 	if C.DB.unitframe.heal_prediction then
 		local myBar = CreateFrame('StatusBar', nil, self.Health)
 		myBar:SetPoint('TOP')
 		myBar:SetPoint('BOTTOM')
-		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(),
-					   C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
 		myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		myBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		myBar:SetStatusBarColor(0, .8, .8, .6)
@@ -247,8 +347,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local otherBar = CreateFrame('StatusBar', nil, self.Health)
 		otherBar:SetPoint('TOP')
 		otherBar:SetPoint('BOTTOM')
-		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(),
-						  C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
 		otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		otherBar:SetStatusBarColor(0, .6, .6, .6)
@@ -257,8 +356,7 @@ function UNITFRAME:AddHealthPrediction(self)
 		local absorbBar = CreateFrame('StatusBar', nil, self.Health)
 		absorbBar:SetPoint('TOP')
 		absorbBar:SetPoint('BOTTOM')
-		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), C.DB
-							   .unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
 		absorbBar:SetStatusBarTexture(C.Assets.stripe_tex)
 		absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
 		absorbBar:SetStatusBarColor(.8, .8, .8, .8)
@@ -282,20 +380,24 @@ function UNITFRAME:AddHealthPrediction(self)
 end
 
 --[[ Power ]]
-
 local function PostUpdatePower(power, unit, cur, min, max)
-	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or
-		UnitIsGhost(unit) then power:SetValue(0) end
+	if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
+		power:SetValue(0)
+	end
 end
 
 local function UpdatePowerColor(power, unit)
 	local style = power.__owner.unitStyle
-	if style ~= 'player' then return end
+	if style ~= 'player' then
+		return
+	end
 
 	local cur = UnitPower(unit)
 	if C.MyClass == 'DEMONHUNTER' and unit == 'player' then
 		local spec = GetSpecialization() or 0
-		if spec ~= 1 then return end
+		if spec ~= 1 then
+			return
+		end
 		if cur < 15 then
 			power:SetStatusBarColor(.5, .5, .5)
 		elseif cur < 40 then
@@ -338,7 +440,6 @@ function UNITFRAME:AddPowerBar(self)
 	power.colorDisconnected = true
 	power.colorReaction = true
 	-- power.colorSelection = true
-
 	if style == 'pet' or style == 'player' then
 		power.colorPower = true
 	elseif style == 'party' or style == 'raid' then
@@ -353,9 +454,10 @@ function UNITFRAME:AddPowerBar(self)
 end
 
 --[[ Alternative power ]]
-
 local function AltPowerOnEnter(self)
-	if (not self:IsVisible()) then return end
+	if (not self:IsVisible()) then
+		return
+	end
 
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
 	self:UpdateTooltip()
@@ -367,8 +469,7 @@ local function AltPowerUpdateTooltip(self)
 	local name, tooltip = GetUnitPowerBarStringsByID(self.__barID)
 	GameTooltip:SetText(name or '', 1, 1, 1)
 	GameTooltip:AddLine(tooltip or '', nil, nil, nil, true)
-	GameTooltip:AddLine(format('%d (%d%%)', value,
-							   (value - min) / (max - min) * 100), 1, 1, 1)
+	GameTooltip:AddLine(format('%d (%d%%)', value, (value - min) / (max - min) * 100), 1, 1, 1)
 	GameTooltip:Show()
 end
 
@@ -388,13 +489,14 @@ local function PostUpdateAltPower(self, unit, cur, min, max)
 		parent.ClassPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
 	else
 		parent.ClassPowerBarHolder:ClearAllPoints()
-		parent.ClassPowerBarHolder:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 0,
-											-3)
+		parent.ClassPowerBarHolder:SetPoint('TOPLEFT', parent, 'BOTTOMLEFT', 0, -3)
 	end
 end
 
 function UNITFRAME:AddAlternativePowerBar(self)
-	if not C.DB.unitframe.alt_power then return end
+	if not C.DB.unitframe.alt_power then
+		return
+	end
 
 	local altPower = CreateFrame('StatusBar', nil, self)
 	altPower:SetStatusBarTexture(C.Assets.statusbar_tex)
@@ -412,32 +514,54 @@ function UNITFRAME:AddAlternativePowerBar(self)
 end
 
 --[[ Auras ]]
-
 oUF.colors.debuff = {
-	['Curse'] = {.8, 0, 1},
-	['Disease'] = {.8, .6, 0},
-	['Magic'] = {0, .8, 1},
-	['Poison'] = {0, .8, 0},
-	['none'] = {0, 0, 0}
+	['Curse'] = {
+		.8,
+		0,
+		1
+	},
+	['Disease'] = {
+		.8,
+		.6,
+		0
+	},
+	['Magic'] = {
+		0,
+		.8,
+		1
+	},
+	['Poison'] = {
+		0,
+		.8,
+		0
+	},
+	['none'] = {
+		0,
+		0,
+		0
+	}
 }
 
 local function AuraOnEnter(self)
-	if not self:IsVisible() then return end
+	if not self:IsVisible() then
+		return
+	end
 
 	GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
 	self:UpdateTooltip()
 end
 
-local function AuraOnLeave() GameTooltip:Hide() end
+local function AuraOnLeave()
+	GameTooltip:Hide()
+end
 
 local function UpdateAuraTooltip(aura)
-	GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(),
-							aura.filter)
+	GameTooltip:SetUnitAura(aura:GetParent().__owner.unit, aura:GetID(), aura.filter)
 end
 
 function UNITFRAME.PostCreateIcon(element, button)
 	button.bg = F.CreateBDFrame(button)
-	button.glow = F.CreateSD(button.bg)
+	button.glow = F.CreateSD(button.bg, .25, 3, 3)
 
 	element.disableCooldown = true
 	button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -452,42 +576,42 @@ function UNITFRAME.PostCreateIcon(element, button)
 	button.HL:SetColorTexture(1, 1, 1, .25)
 	button.HL:SetAllPoints()
 
-	button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE',
-							  nil, nil, true)
+	button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, nil, true)
 	button.count:ClearAllPoints()
 	button.count:SetPoint('TOPRIGHT', button, 2, 4)
 
-	button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE',
-							  nil, nil, true)
+	button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, nil, true)
 	button.timer:ClearAllPoints()
 	button.timer:SetPoint('BOTTOMLEFT', button, 2, -4)
 
 	button.UpdateTooltip = UpdateAuraTooltip
 	button:SetScript('OnEnter', AuraOnEnter)
 	button:SetScript('OnLeave', AuraOnLeave)
-	button:SetScript('OnClick', function(self, button)
-		if not InCombatLockdown() and button == 'RightButton' then
-			CancelUnitBuff('player', self:GetID(), self.filter)
+	button:SetScript(
+		'OnClick',
+		function(self, button)
+			if not InCombatLockdown() and button == 'RightButton' then
+				CancelUnitBuff('player', self:GetID(), self.filter)
+			end
 		end
-	end)
+	)
 end
 
-function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration,
-								  expiration, debuffType)
+function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
 	if duration then
 		button.bg:Show()
 
-		if button.glow then button.glow:Show() end
+		if button.glow then
+			button.glow:Show()
+		end
 	end
 
 	local style = element.__owner.unitStyle
-	local _, _, _, _, _, _, _, canStealOrPurge =
-		UnitAura(unit, index, button.filter)
+	local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
 	button:SetSize(element.size, element.size * .75)
 
-	if button.isDebuff and F.MultiCheck(style, 'target', 'boss', 'arena') and
-		not button.isPlayer then
+	if button.isDebuff and F.MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
 		button.icon:SetDesaturated(true)
 	else
 		button.icon:SetDesaturated(false)
@@ -533,7 +657,9 @@ local function BolsterPreUpdate(element)
 end
 
 local function BolsterPostUpdate(element)
-	if not element.bolsterIndex then return end
+	if not element.bolsterIndex then
+		return
+	end
 
 	for _, button in pairs(element) do
 		if button == element.bolsterIndex then
@@ -544,9 +670,7 @@ local function BolsterPostUpdate(element)
 	end
 end
 
-function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _,
-								caster, isStealable, _, spellID, _, _, _,
-								nameplateShowAll)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
 	local style = element.__owner.unitStyle
 	local isMine = F.MultiCheck(caster, 'player', 'pet', 'vehicle')
 
@@ -556,9 +680,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _,
 			element.bolsterIndex = button
 			return true
 		end
-
 	elseif style == 'party' or style == 'raid' then
-
 	elseif style == 'target' and C.DB.unitframe.target_auras then
 		if element.onlyShowPlayer and button.isDebuff then
 			return isMine
@@ -586,32 +708,31 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _,
 	elseif style == 'pet' and C.DB.unitframe.pet_auras then
 		return true
 	elseif style == 'nameplate' and C.DB.nameplate.plate_auras then
-
-		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or
-			C.AuraBlackList[spellID] then
+		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.AuraBlackList[spellID] then
 			return false
-		elseif element.showStealableBuffs and isStealable and
-			not UnitIsPlayer(unit) then
+		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
-		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or
-			C.AuraWhiteList[spellID] then
+		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or C.AuraWhiteList[spellID] then
 			return true
 		else
 			return nameplateShowAll or isMine
 		end
-
 	end
 end
 
-function UNITFRAME.PostUpdateGapIcon(_, _, icon) icon:Hide() end
+function UNITFRAME.PostUpdateGapIcon(_, _, icon)
+	icon:Hide()
+end
 
-local function getIconSize(w, n, s) return (w - (n - 1) * s) / n end
+local function getIconSize(w, n, s)
+	return (w - (n - 1) * s) / n
+end
 
 function UNITFRAME:AddAuras(self)
 	local style = self.unitStyle
 	local auras = CreateFrame('Frame', nil, self)
 	auras.gap = true
-	auras.spacing = 6
+	auras.spacing = 4
 	auras.numTotal = 32
 
 	if style == 'target' then
@@ -619,8 +740,7 @@ function UNITFRAME:AddAuras(self)
 		auras:SetPoint('BOTTOM', self, 'TOP', 0, 24)
 		auras['growth-y'] = 'UP'
 		auras.iconsPerRow = C.DB.unitframe.target_auras_per_row
-	elseif style == 'pet' or style == 'focus' or style == 'boss' or style ==
-		'arena' then
+	elseif style == 'pet' or style == 'focus' or style == 'boss' or style == 'arena' then
 		auras.initialAnchor = 'TOPLEFT'
 		auras:SetPoint('TOP', self, 'BOTTOM', 0, -6)
 		auras['growth-y'] = 'DOWN'
@@ -646,12 +766,9 @@ function UNITFRAME:AddAuras(self)
 
 	local width = self:GetWidth()
 	local maxAuras = auras.numTotal or auras.numBuffs + auras.numDebuffs
-	local maxLines = auras.iconsPerRow and
-						 floor(maxAuras / auras.iconsPerRow + .5) or 2
+	local maxLines = auras.iconsPerRow and floor(maxAuras / auras.iconsPerRow + .5) or 2
 
-	auras.size = auras.iconsPerRow and
-					 getIconSize(width, auras.iconsPerRow, auras.spacing) or
-					 auras.size
+	auras.size = auras.iconsPerRow and getIconSize(width, auras.iconsPerRow, auras.spacing) or auras.size
 	auras:SetWidth(width)
 	auras:SetHeight((auras.size + auras.spacing) * maxLines)
 
@@ -669,12 +786,16 @@ function UNITFRAME:AddAuras(self)
 end
 
 --[[ Corner aura indicator ]]
-
 local found = {}
-local auraFilter = {'HELPFUL', 'HARMFUL'}
+local auraFilter = {
+	'HELPFUL',
+	'HARMFUL'
+}
 
 function UNITFRAME:UpdateCornerBuffs(event, unit)
-	if event == 'UNIT_AURA' and self.unit ~= unit then return end
+	if event == 'UNIT_AURA' and self.unit ~= unit then
+		return
+	end
 
 	local spellList = C.CornerBuffsList[C.MyClass]
 	local buttons = self.BuffIndicator
@@ -683,14 +804,14 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 	wipe(found)
 	for _, filter in next, auraFilter do
 		for i = 1, 32 do
-			local name, _, _, _, duration, expiration, caster, _, _, spellID =
-				UnitAura(unit, i, filter)
-			if not name then break end
+			local name, _, _, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
+			if not name then
+				break
+			end
 			local value = spellList[spellID]
 			if value and (value[3] or caster == 'player' or caster == 'pet') then
 				for _, bu in pairs(buttons) do
 					if bu.anchor == value[1] then
-
 						if duration and duration > 0 then
 							bu.cd:SetCooldown(expiration - duration, duration)
 							bu.cd:Show()
@@ -710,7 +831,11 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 		end
 	end
 
-	for _, bu in pairs(buttons) do if not found[bu.anchor] then bu:Hide() end end
+	for _, bu in pairs(buttons) do
+		if not found[bu.anchor] then
+			bu:Hide()
+		end
+	end
 end
 
 function UNITFRAME:RefreshCornerBuffs(bu)
@@ -723,14 +848,22 @@ function UNITFRAME:RefreshCornerBuffs(bu)
 end
 
 function UNITFRAME:AddCornerBuffs(self)
-	if not C.DB.unitframe.group_corner_buffs then return end
+	if not C.DB.unitframe.group_corner_buffs then
+		return
+	end
 
 	local parent = CreateFrame('Frame', nil, self.Health)
 	parent:SetPoint('TOPLEFT', 4, -4)
 	parent:SetPoint('BOTTOMRIGHT', -4, 4)
 
 	local anchors = {
-		'TOPLEFT', 'TOP', 'TOPRIGHT', 'LEFT', 'RIGHT', 'BOTTOMLEFT', 'BOTTOM',
+		'TOPLEFT',
+		'TOP',
+		'TOPRIGHT',
+		'LEFT',
+		'RIGHT',
+		'BOTTOMLEFT',
+		'BOTTOM',
 		'BOTTOMRIGHT'
 	}
 	local buttons = {}
@@ -764,14 +897,14 @@ function UNITFRAME:AddCornerBuffs(self)
 end
 
 --[[ Debuff highlight ]]
-
 function UNITFRAME:AddDebuffHighlight(self)
-	if not C.DB.unitframe.group_debuff_highlight then return end
+	if not C.DB.unitframe.group_debuff_highlight then
+		return
+	end
 
 	self.DebuffHighlight = self:CreateTexture(nil, 'OVERLAY')
 	self.DebuffHighlight:SetAllPoints(self)
-	self.DebuffHighlight:SetTexture(
-		'Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+	self.DebuffHighlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
 	self.DebuffHighlight:SetTexCoord(0, 1, .5, 1)
 	self.DebuffHighlight:SetVertexColor(.6, .6, .6, 0)
 	self.DebuffHighlight:SetBlendMode('ADD')
@@ -780,14 +913,15 @@ function UNITFRAME:AddDebuffHighlight(self)
 end
 
 --[[ Group debuffs ]]
-
 local debuffList = {}
 function UNITFRAME:UpdateGroupDebuffs()
 	wipe(debuffList)
 	for instName, value in pairs(C.RaidDebuffsList) do
 		for spell, priority in pairs(value) do
 			if not (FREE_ADB['raid_debuffs_list'][instName] and FREE_ADB['raid_debuffs_list'][instName][spell]) then
-				if not debuffList[instName] then debuffList[instName] = {} end
+				if not debuffList[instName] then
+					debuffList[instName] = {}
+				end
 				debuffList[instName][spell] = priority
 			end
 		end
@@ -795,7 +929,9 @@ function UNITFRAME:UpdateGroupDebuffs()
 	for instName, value in pairs(FREE_ADB['raid_debuffs_list']) do
 		for spell, priority in pairs(value) do
 			if priority > 0 then
-				if not debuffList[instName] then debuffList[instName] = {} end
+				if not debuffList[instName] then
+					debuffList[instName] = {}
+				end
 				debuffList[instName][spell] = priority
 			end
 		end
@@ -803,7 +939,9 @@ function UNITFRAME:UpdateGroupDebuffs()
 end
 
 local function buttonOnEnter(self)
-	if not self.index then return end
+	if not self.index then
+		return
+	end
 	GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT')
 	GameTooltip:ClearLines()
 	GameTooltip:SetUnitAura(self.__owner.unit, self.index, self.filter)
@@ -817,17 +955,17 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
 	bu.bg = F.CreateBDFrame(bu)
 	bu.glow = F.CreateSD(bu.bg)
-	if bu.glow then bu.glow:SetFrameLevel(bu:GetFrameLevel() - 1) end
+	if bu.glow then
+		bu.glow:SetFrameLevel(bu:GetFrameLevel() - 1)
+	end
 	bu:Hide()
 
 	bu.icon = bu:CreateTexture(nil, 'ARTWORK')
 	bu.icon:SetAllPoints()
 	bu.icon:SetTexCoord(unpack(C.TexCoord))
 
-	bu.count = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true,
-						  'TOPRIGHT', 2, 4)
-	bu.timer = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true,
-						  'BOTTOMLEFT', 2, -4)
+	bu.count = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true, 'TOPRIGHT', 2, 4)
+	bu.timer = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true, 'BOTTOMLEFT', 2, -4)
 
 	if not C.DB.unitframe.auras_click_through then
 		bu:SetScript('OnEnter', buttonOnEnter)
@@ -838,7 +976,6 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu.ShowDebuffBorder = true
 	bu.FilterDispellableDebuff = true
 
-
 	if C.DB.unitframe.raid_debuffs then
 		if not next(debuffList) then
 			UNITFRAME:UpdateGroupDebuffs()
@@ -847,13 +984,10 @@ function UNITFRAME:AddRaidDebuffs(self)
 		bu.Debuffs = debuffList
 	end
 
-
-
 	self.RaidDebuffs = bu
 end
 
 --[[ Castbar ]]
-
 local channelingTicks = {
 	[740] = 4, -- 宁静
 	[755] = 5, -- 生命通道
@@ -881,7 +1015,9 @@ local channelingTicks = {
 if C.MyClass == 'PRIEST' then
 	local function updateTicks()
 		local numTicks = 3
-		if IsPlayerSpell(193134) then numTicks = 4 end
+		if IsPlayerSpell(193134) then
+			numTicks = 4
+		end
 		channelingTicks[47757] = numTicks
 		channelingTicks[47758] = numTicks
 	end
@@ -906,7 +1042,9 @@ local function updateCastBarTicks(bar, numTicks)
 			ticks[i]:Show()
 		end
 	else
-		for _, tick in pairs(ticks) do tick:Hide() end
+		for _, tick in pairs(ticks) do
+			tick:Hide()
+		end
 	end
 end
 
@@ -914,10 +1052,8 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
 	if self.casting or self.channeling then
 		local decimal = self.decimal
 
-		local duration = self.casting and self.duration + elapsed or
-							 self.duration - elapsed
-		if (self.casting and duration >= self.max) or
-			(self.channeling and duration <= 0) then
+		local duration = self.casting and self.duration + elapsed or self.duration - elapsed
+		if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
 			self.casting = nil
 			self.channeling = nil
 			return
@@ -925,33 +1061,26 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
 
 		if self.__owner.unit == 'player' and self.Time then
 			if self.delay ~= 0 then
-				self.Time:SetFormattedText(decimal, (self.casting and self.max +
-											   self.delay or self.max -
-											   self.delay) - duration)
+				self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
 			else
 				self.Time:SetFormattedText(decimal, self.max - duration)
-				if self.Lag and self.SafeZone and self.SafeZone.timeDiff and
-					self.SafeZone.timeDiff ~= 0 then
-					self.Lag:SetFormattedText('%d ms',
-											  self.SafeZone.timeDiff * 1000)
+				if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
+					self.Lag:SetFormattedText('%d ms', self.SafeZone.timeDiff * 1000)
 				end
 			end
-			-- else
-			-- 	if duration > 1e4 then
-			-- 		self.Time:SetText('∞')
-			-- 	else
-			-- 		self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
-			-- 	end
+		-- else
+		-- 	if duration > 1e4 then
+		-- 		self.Time:SetText('∞')
+		-- 	else
+		-- 		self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
+		-- 	end
 		end
 		self.duration = duration
 		self:SetValue(duration)
-		if (not C.DB.unitframe.castbar_focus_separate and self.__owner.unit ==
-			'focus') then
-			self.Spark:SetPoint('CENTER', self, 'RIGHT',
-								-((duration / self.max) * self:GetWidth()), 0)
+		if (not C.DB.unitframe.castbar_focus_separate and self.__owner.unit == 'focus') then
+			self.Spark:SetPoint('CENTER', self, 'RIGHT', -((duration / self.max) * self:GetWidth()), 0)
 		else
-			self.Spark:SetPoint('CENTER', self, 'LEFT',
-								(duration / self.max) * self:GetWidth(), 0)
+			self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
 		end
 	else
 		self.Spark:Hide()
@@ -975,19 +1104,23 @@ function UNITFRAME:PostCastStart(unit)
 	self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b)
 
 	if unit == 'vehicle' or UnitInVehicle('player') then
-		if self.SafeZone then self.SafeZone:Hide() end
-		if self.Lag then self.Lag:Hide() end
+		if self.SafeZone then
+			self.SafeZone:Hide()
+		end
+		if self.Lag then
+			self.Lag:Hide()
+		end
 	elseif unit == 'player' then
 		local safeZone = self.SafeZone
-		if not safeZone then return end
+		if not safeZone then
+			return
+		end
 
 		safeZone.timeDiff = 0
 		if safeZone.castSent then
 			safeZone.timeDiff = GetTime() - safeZone.sendTime
-			safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or
-									safeZone.timeDiff
-			safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + .001) /
-								  self.max)
+			safeZone.timeDiff = safeZone.timeDiff > self.max and self.max or safeZone.timeDiff
+			safeZone:SetWidth(self:GetWidth() * (safeZone.timeDiff + .001) / self.max)
 			safeZone:Show()
 			safeZone.castSent = false
 		end
@@ -998,73 +1131,55 @@ function UNITFRAME:PostCastStart(unit)
 		end
 		updateCastBarTicks(self, numTicks)
 	elseif not UnitIsUnit(unit, 'player') and self.notInterruptible then
-		self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g,
-							   notInterruptibleColor.b)
+		self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
 	end
-
 
 	if self.iconBg then
 		if self.notInterruptible then
-			self.iconBg:SetBackdropColor(notInterruptibleColor.r,
-										 notInterruptibleColor.g,
-										 notInterruptibleColor.b)
+			self.iconBg:SetBackdropColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
 		else
-			self.iconBg:SetBackdropColor(castingColor.r, castingColor.g,
-										 castingColor.b)
+			self.iconBg:SetBackdropColor(castingColor.r, castingColor.g, castingColor.b)
 		end
 	end
 
 	if self.iconGlow then
 		if self.notInterruptible then
-			self.iconGlow:SetBackdropBorderColor(notInterruptibleColor.r,
-												 notInterruptibleColor.g,
-												 notInterruptibleColor.b, .5)
+			self.iconGlow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .5)
 		else
-			self.iconGlow:SetBackdropBorderColor(castingColor.r, castingColor.g,
-												 castingColor.b, .35)
+			self.iconGlow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
 		end
 	end
 
-	if self.Glow and
-		not (C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
+	if self.Glow and not (C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
 		if self.notInterruptible then
-			self.Glow:SetBackdropBorderColor(notInterruptibleColor.r,
-											 notInterruptibleColor.g,
-											 notInterruptibleColor.b, .35)
+			self.Glow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .35)
 		else
-			self.Glow:SetBackdropBorderColor(castingColor.r, castingColor.g,
-											 castingColor.b, .35)
+			self.Glow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
 		end
 	end
 
 	if C.DB.unitframe.castbar_focus_separate and self.__owner.unit == 'focus' then
 		if self.notInterruptible then
-			self:SetStatusBarColor(notInterruptibleColor.r,
-								   notInterruptibleColor.g,
-								   notInterruptibleColor.b, 1)
+			self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, 1)
 		else
-			self:SetStatusBarColor(castingColor.r, castingColor.g,
-								   castingColor.b, 1)
+			self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b, 1)
 		end
 
 		self.Bg:SetBackdropColor(0, 0, 0, .6)
 		self.Bg:SetBackdropBorderColor(0, 0, 0, 1)
 	else
 		if self.notInterruptible then
-			self:SetStatusBarColor(notInterruptibleColor.r,
-								   notInterruptibleColor.g,
-								   notInterruptibleColor.b, .5)
+			self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .5)
 		else
-			self:SetStatusBarColor(castingColor.r, castingColor.g,
-								   castingColor.b, .5)
+			self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b, .5)
 		end
 
 		self.Bg:SetBackdropColor(0, 0, 0, .2)
 		self.Bg:SetBackdropBorderColor(0, 0, 0, 0)
 	end
 
-
-	self.Text:SetText('') -- disable casting spell name, we only need interrupt info
+	self.Text:SetText('')
+ -- disable casting spell name, we only need interrupt info
 end
 
 function UNITFRAME:PostUpdateInterruptible(unit)
@@ -1072,15 +1187,10 @@ function UNITFRAME:PostUpdateInterruptible(unit)
 	local notInterruptibleColor = C.DB.unitframe.casting_uninterruptible_color
 
 	if not UnitIsUnit(unit, 'player') and self.notInterruptible then
-		self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g,
-							   notInterruptibleColor.b)
+		self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
 	else
 		self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b)
 	end
-
-
-
-
 end
 
 function UNITFRAME:PostCastStop()
@@ -1104,10 +1214,11 @@ function UNITFRAME:PostCastFailed()
 end
 
 function UNITFRAME:AddCastBar(self)
-	if not C.DB.unitframe.enable_castbar then return end
+	if not C.DB.unitframe.enable_castbar then
+		return
+	end
 
-	local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. self.unitStyle,
-								self)
+	local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. self.unitStyle, self)
 	castbar:SetStatusBarTexture(C.Assets.statusbar_tex)
 	castbar:SetStatusBarColor(0, 0, 0, 0)
 	castbar.Bg = F.CreateBDFrame(castbar)
@@ -1118,14 +1229,23 @@ function UNITFRAME:AddCastBar(self)
 	end
 
 	if self.unitStyle == 'focus' and C.DB.unitframe.castbar_focus_separate then
-		castbar:SetSize(C.DB.unitframe.castbar_focus_width,
-						C.DB.unitframe.castbar_focus_height)
+		castbar:SetSize(C.DB.unitframe.castbar_focus_width, C.DB.unitframe.castbar_focus_height)
 		castbar:ClearAllPoints()
 
-		F.Mover(castbar, L['UNITFRAME_MOVER_CASTBAR'], 'FocusCastbar',
-				{'CENTER', UIParent, 'CENTER', 0, 200},
-				C.DB.unitframe.castbar_focus_width,
-				C.DB.unitframe.castbar_focus_height)
+		F.Mover(
+			castbar,
+			L['UNITFRAME_MOVER_CASTBAR'],
+			'FocusCastbar',
+			{
+				'CENTER',
+				UIParent,
+				'CENTER',
+				0,
+				200
+			},
+			C.DB.unitframe.castbar_focus_width,
+			C.DB.unitframe.castbar_focus_height
+		)
 	else
 		castbar:SetAllPoints(self)
 		castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
@@ -1193,7 +1313,6 @@ function UNITFRAME:AddCastBar(self)
 end
 
 --[[ Class power ]]
-
 local function PostUpdateClassPower(element, cur, max, diff, powerType)
 	local maxWidth, gap = C.DB.unitframe.player_width, 3
 
@@ -1233,7 +1352,9 @@ local function PostUpdateRunes(element, runemap)
 			if runeReady then
 				rune:SetAlpha(1)
 				rune:SetScript('OnUpdate', nil)
-				if rune.timer then rune.timer:SetText(nil) end
+				if rune.timer then
+					rune.timer:SetText(nil)
+				end
 			elseif start then
 				rune:SetAlpha(.3)
 				rune.runeDuration = duration
@@ -1281,8 +1402,7 @@ function UNITFRAME:AddClassPowerBar(self)
 		end
 
 		if C.MyClass == 'DEATHKNIGHT' and C.DB.unitframe.runes_timer then
-			bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, nil,
-									   '')
+			bars[i].timer = F.CreateFS(bars[i], C.Assets.Fonts.Regular, 11, nil, '')
 		end
 	end
 
@@ -1299,10 +1419,13 @@ function UNITFRAME:AddClassPowerBar(self)
 end
 
 --[[ Stagger ]]
-
 function UNITFRAME:AddStagger(self)
-	if C.MyClass ~= 'MONK' then return end
-	if not C.DB.unitframe.stagger_bar then return end
+	if C.MyClass ~= 'MONK' then
+		return
+	end
+	if not C.DB.unitframe.stagger_bar then
+		return
+	end
 
 	local stagger = CreateFrame('StatusBar', nil, self.ClassPowerBarHolder)
 	stagger:SetAllPoints(self.ClassPowerBarHolder)
@@ -1310,8 +1433,7 @@ function UNITFRAME:AddStagger(self)
 
 	F.SetBD(stagger)
 
-	local text = F.CreateFS(stagger, C.Assets.Fonts.Regular, 11, nil, '', nil,
-							'THICK')
+	local text = F.CreateFS(stagger, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
 	text:SetPoint('TOP', stagger, 'BOTTOM', 0, -4)
 	self:Tag(text, '[free:stagger]')
 
@@ -1319,18 +1441,42 @@ function UNITFRAME:AddStagger(self)
 end
 
 --[[ Totems ]]
-
 local totemsColor = {
-	{0.71, 0.29, 0.13}, -- red    181 /  73 /  33
-	{0.26, 0.71, 0.13}, -- green   67 / 181 /  33
-	{0.13, 0.55, 0.71}, -- blue    33 / 141 / 181
-	{0.58, 0.13, 0.71}, -- violet 147 /  33 / 181
-	{0.71, 0.58, 0.13} -- yellow 181 / 147 /  33
+	{
+		0.71,
+		0.29,
+		0.13
+	}, -- red    181 /  73 /  33
+	{
+		0.26,
+		0.71,
+		0.13
+	}, -- green   67 / 181 /  33
+	{
+		0.13,
+		0.55,
+		0.71
+	}, -- blue    33 / 141 / 181
+	{
+		0.58,
+		0.13,
+		0.71
+	}, -- violet 147 /  33 / 181
+	{
+		0.71,
+		0.58,
+		0.13
+	}
+ -- yellow 181 / 147 /  33
 }
 
 function UNITFRAME:AddTotems(self)
-	if C.MyClass ~= 'SHAMAN' then return end
-	if not C.DB.unitframe.totems_bar then return end
+	if C.MyClass ~= 'SHAMAN' then
+		return
+	end
+	if not C.DB.unitframe.totems_bar then
+		return
+	end
 
 	local totems = {}
 	local maxTotems = 5
@@ -1349,8 +1495,7 @@ function UNITFRAME:AddTotems(self)
 		totem:SetSize(width, C.DB.unitframe.class_power_bar_height)
 		F.SetBD(totem)
 
-		totem:SetPoint('TOPLEFT', self.ClassPowerBarHolder, 'TOPLEFT',
-					   (slot - 1) * spacing + 1, 0)
+		totem:SetPoint('TOPLEFT', self.ClassPowerBarHolder, 'TOPLEFT', (slot - 1) * spacing + 1, 0)
 
 		totems[slot] = totem
 	end
@@ -1359,11 +1504,14 @@ function UNITFRAME:AddTotems(self)
 end
 
 --[[ Combat fader ]]
-
 function UNITFRAME:AddCombatFader(self)
-	if not C.DB.unitframe.fade then return end
+	if not C.DB.unitframe.fade then
+		return
+	end
 
-	if not self.Fader then self.Fader = {} end
+	if not self.Fader then
+		self.Fader = {}
+	end
 
 	self.Fader.maxAlhpa = C.DB.unitframe.fade_in_alpha
 	self.Fader.minAlpha = C.DB.unitframe.fade_out_alpha
@@ -1381,11 +1529,14 @@ function UNITFRAME:AddCombatFader(self)
 end
 
 --[[ Range check ]]
-
 function UNITFRAME:AddRangeCheck(self)
-	if not C.DB.unitframe.range_check then return end
+	if not C.DB.unitframe.range_check then
+		return
+	end
 
-	if not self.RangeCheck then self.RangeCheck = {} end
+	if not self.RangeCheck then
+		self.RangeCheck = {}
+	end
 
 	self.RangeCheck.enabled = true
 	self.RangeCheck.insideAlpha = 1
@@ -1394,7 +1545,9 @@ end
 
 --[[ GCD ]]
 function UNITFRAME:AddGCDSpark(self)
-	if not C.DB.unitframe.gcd_spark then return end
+	if not C.DB.unitframe.gcd_spark then
+		return
+	end
 
 	self.GCD = CreateFrame('Frame', nil, self)
 	self.GCD:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 0)
@@ -1402,18 +1555,35 @@ function UNITFRAME:AddGCDSpark(self)
 	self.GCD:SetWidth(self:GetWidth())
 	self.GCD:SetHeight(6)
 
-	self.GCD.Color = {1, 1, 1}
+	self.GCD.Color = {
+		1,
+		1,
+		1
+	}
 	self.GCD.Height = 6
 	self.GCD.Width = 6
 end
 
 --[[ Indicatiors ]]
-
 function UNITFRAME:AddPvPIndicator(self)
-	if not C.DB.unitframe.player_pvp_indicator then return end
+	if not C.DB.unitframe.player_pvp_indicator then
+		return
+	end
 
-	local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Regular, 11, nil},
-									nil, nil, 'P', 'RED', 'THICK')
+	local pvpIndicator =
+		F.CreateFS(
+		self,
+		{
+			C.Assets.Fonts.Regular,
+			11,
+			nil
+		},
+		nil,
+		nil,
+		'P',
+		'RED',
+		'THICK'
+	)
 	pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
 	pvpIndicator.SetTexture = F.Dummy
@@ -1432,7 +1602,9 @@ local function CombatIndicatorPostUpdate(self, inCombat)
 end
 
 function UNITFRAME:AddCombatIndicator(self)
-	if not C.DB.unitframe.player_combat_indicator then return end
+	if not C.DB.unitframe.player_combat_indicator then
+		return
+	end
 
 	local combatIndicator = self:CreateTexture(nil, 'OVERLAY')
 	combatIndicator:SetPoint('BOTTOMLEFT', self, 'TOPLEFT')
@@ -1446,7 +1618,9 @@ function UNITFRAME:AddCombatIndicator(self)
 end
 
 function UNITFRAME:AddRestingIndicator(self)
-	if not C.DB.unitframe.player_resting_indicator then return end
+	if not C.DB.unitframe.player_resting_indicator then
+		return
+	end
 
 	local restingIndicator = self:CreateTexture(nil, 'OVERLAY')
 	restingIndicator:SetPoint('BOTTOMLEFT', self, 'TOPLEFT')
@@ -1459,7 +1633,9 @@ function UNITFRAME:AddRestingIndicator(self)
 end
 
 function UNITFRAME:AddRaidTargetIndicator(self)
-	if not C.DB.unitframe.target_icon_indicator then return end
+	if not C.DB.unitframe.target_icon_indicator then
+		return
+	end
 
 	local raidTargetIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	raidTargetIndicator:SetTexture(C.Assets.target_icon)
@@ -1496,17 +1672,13 @@ function UNITFRAME:AddGroupRoleIndicator(self)
 		end
 	end
 
-	local groupRoleIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8,
-										  'OUTLINE, MONOCHROME', '', nil, false,
-										  'BOTTOM', 1, 1)
+	local groupRoleIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '', nil, false, 'BOTTOM', 1, 1)
 	groupRoleIndicator.Override = UpdateLFD
 	self.GroupRoleIndicator = groupRoleIndicator
 end
 
 function UNITFRAME:AddLeaderIndicator(self)
-	local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8,
-									   'OUTLINE, MONOCHROME', '!', nil, false,
-									   'TOPLEFT', 2, -2)
+	local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '!', nil, false, 'TOPLEFT', 2, -2)
 
 	self.LeaderIndicator = leaderIndicator
 end
@@ -1525,7 +1697,7 @@ end
 
 function UNITFRAME:AddSummonIndicator(self)
 	local summonIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
-	summonIndicator:SetSize(16, 16)
+	summonIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
 	summonIndicator:SetPoint('CENTER')
 
 	self.SummonIndicator = summonIndicator
@@ -1533,16 +1705,17 @@ end
 
 function UNITFRAME:AddResurrectIndicator(self)
 	local resurrectIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
-	resurrectIndicator:SetSize(16, 16)
+	resurrectIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
 	resurrectIndicator:SetPoint('CENTER')
 
 	self.ResurrectIndicator = resurrectIndicator
 end
 
 --[[ Threat ]]
-
 local function UpdateThreat(self, event, unit)
-	if not self.Glow or self.unit ~= unit then return end
+	if not self.Glow or self.unit ~= unit then
+		return
+	end
 
 	local status = UnitThreatSituation(unit)
 	if status and status > 0 then
@@ -1554,23 +1727,29 @@ local function UpdateThreat(self, event, unit)
 end
 
 function UNITFRAME:AddThreatIndicator(self)
-	if not C.DB.unitframe.group_threat_indicator then return end
+	if not C.DB.unitframe.group_threat_indicator then
+		return
+	end
 
 	self.ThreatIndicator = {
-		IsObjectType = function() end,
+		IsObjectType = function()
+		end,
 		Override = UpdateThreat
 	}
 end
 
 --[[ Portrait ]]
-
 local function PostUpdatePortrait(element, unit)
-	if C.DB.unitframe.portrait_saturation then return end
+	if C.DB.unitframe.portrait_saturation then
+		return
+	end
 	element:SetDesaturation(1)
 end
 
 function UNITFRAME:AddPortrait(self)
-	if not C.DB.unitframe.portrait then return end
+	if not C.DB.unitframe.portrait then
+		return
+	end
 
 	local portrait = CreateFrame('PlayerModel', nil, self)
 	portrait:SetAllPoints(self)
@@ -1581,13 +1760,12 @@ function UNITFRAME:AddPortrait(self)
 end
 
 --[[ Party spells ]]
-
 function UNITFRAME:UpdatePartySpells()
-	if not next(FREE_ADB["party_spells_list"]) then
+	if not next(FREE_ADB['party_spells_list']) then
 		for spellID, duration in pairs(C.PartySpells) do
 			local name = GetSpellInfo(spellID)
 			if name then
-				FREE_ADB["party_spells_list"][spellID] = duration
+				FREE_ADB['party_spells_list'][spellID] = duration
 			end
 		end
 	end
@@ -1596,13 +1774,17 @@ end
 local watchingList = {}
 function UNITFRAME:PartyWatcherPostUpdate(button, unit, spellID)
 	local guid = UnitGUID(unit)
-	if not watchingList[guid] then watchingList[guid] = {} end
+	if not watchingList[guid] then
+		watchingList[guid] = {}
+	end
 	watchingList[guid][spellID] = button
 end
 
 function UNITFRAME:HandleCDMessage(...)
 	local prefix, msg = ...
-	if prefix ~= 'ZenTracker' then return end
+	if prefix ~= 'ZenTracker' then
+		return
+	end
 
 	local _, msgType, guid, spellID, duration, remaining = strsplit(':', msg)
 	if msgType == 'U' then
@@ -1629,14 +1811,11 @@ function UNITFRAME:SendCDMessage()
 				local start, duration, enabled = GetSpellCooldown(spellID)
 				if enabled ~= 0 and start ~= 0 then
 					local remaining = start + duration - thisTime
-					if remaining < 0 then remaining = 0 end
-					C_ChatInfo_SendAddonMessage('ZenTracker',
-												format('3:U:%s:%d:%.2f:%.2f:%s',
-													   UNITFRAME.myGUID,
-													   spellID, duration,
-													   remaining, '-'),
-												IsPartyLFG() and 'INSTANCE_CHAT' or
-													'PARTY') -- sync to others
+					if remaining < 0 then
+						remaining = 0
+					end
+					C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+				 -- sync to others
 				end
 			end
 		end
@@ -1649,10 +1828,8 @@ function UNITFRAME:UpdateSyncStatus()
 	if IsInGroup() and not IsInRaid() and C.DB.unitframe.party_spell_sync then
 		local thisTime = GetTime()
 		if thisTime - lastSyncTime > 5 then
-			C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1',
-															 UNITFRAME.myGUID),
-										IsPartyLFG() and 'INSTANCE_CHAT' or
-											'PARTY') -- handshake to ZenTracker
+			C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+			 -- handshake to ZenTracker
 			lastSyncTime = thisTime
 		end
 		F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
@@ -1662,7 +1839,9 @@ function UNITFRAME:UpdateSyncStatus()
 end
 
 function UNITFRAME:SyncWithZenTracker()
-	if not C.DB.unitframe.party_spell_sync then return end
+	if not C.DB.unitframe.party_spell_sync then
+		return
+	end
 
 	UNITFRAME.myGUID = UnitGUID('player')
 	C_ChatInfo.RegisterAddonMessagePrefix('ZenTracker')
@@ -1673,7 +1852,9 @@ function UNITFRAME:SyncWithZenTracker()
 end
 
 function UNITFRAME:AddPartySpells(self)
-	if not C.DB.unitframe.party_spell_watcher then return end
+	if not C.DB.unitframe.party_spell_watcher then
+		return
+	end
 
 	local horizon = false
 	local otherSide = false
@@ -1693,9 +1874,10 @@ function UNITFRAME:AddPartySpells(self)
 	local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
 	local buttons = {}
 	local maxIcons = 6
-	local iconSize = horizon and (self:GetWidth() - 2 * abs(margin)) / 3 or
-						 (self:GetHeight() * .8)
-	if iconSize > 34 then iconSize = 34 end
+	local iconSize = horizon and (self:GetWidth() - 2 * abs(margin)) / 3 or (self:GetHeight() * .8)
+	if iconSize > 34 then
+		iconSize = 34
+	end
 
 	for i = 1, maxIcons do
 		local bu = CreateFrame('Frame', nil, self)
@@ -1724,18 +1906,15 @@ function UNITFRAME:AddPartySpells(self)
 end
 
 --[[ Tags ]]
-
 function UNITFRAME:AddGroupNameText(self)
-	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil,
-								 nil, nil, 'THICK')
+	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil, nil, nil, 'THICK')
 
 	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
 	self.GroupName = groupName
 end
 
 function UNITFRAME:AddNameText(self)
-	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil,
-							nil, 'THICK')
+	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
 
 	if self.unitStyle == 'target' then
 		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1752,15 +1931,13 @@ function UNITFRAME:AddNameText(self)
 end
 
 function UNITFRAME:AddHealthValueText(self)
-	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11,
-								   nil, nil, nil, 'THICK')
+	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
 	if self.unitStyle == 'player' then
 		self:Tag(healthValue, '[free:health]')
 	elseif self.unitStyle == 'target' then
-		self:Tag(healthValue,
-				 '[free:dead][free:offline][free:health] [free:healthpercentage]')
+		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
 	elseif self.unitStyle == 'boss' then
 		healthValue:ClearAllPoints()
 		healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1777,9 +1954,20 @@ function UNITFRAME:AddHealthValueText(self)
 end
 
 function UNITFRAME:AddPowerValueText(self)
-	local powerValue = F.CreateFS(self.Health,
-								  {C.Assets.Fonts.Regular, 11, nil}, nil, nil,
-								  nil, nil, 'THICK')
+	local powerValue =
+		F.CreateFS(
+		self.Health,
+		{
+			C.Assets.Fonts.Regular,
+			11,
+			nil
+		},
+		nil,
+		nil,
+		nil,
+		nil,
+		'THICK'
+	)
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
 	if self.unitStyle == 'target' then
@@ -1797,10 +1985,20 @@ function UNITFRAME:AddPowerValueText(self)
 end
 
 function UNITFRAME:AddAlternativePowerValueText(self)
-	local altPowerValue = F.CreateFS(self.Health,
-									 {C.Assets.Fonts.Regular, 11, nil}, nil,
-									 nil, nil, nil, 'THICK')
-
+	local altPowerValue =
+		F.CreateFS(
+		self.Health,
+		{
+			C.Assets.Fonts.Regular,
+			11,
+			nil
+		},
+		nil,
+		nil,
+		nil,
+		nil,
+		'THICK'
+	)
 	if self.unitStyle == 'boss' then
 		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
 	else
@@ -1811,4 +2009,3 @@ function UNITFRAME:AddAlternativePowerValueText(self)
 
 	self.AlternativePowerValue = altPowerValue
 end
-
