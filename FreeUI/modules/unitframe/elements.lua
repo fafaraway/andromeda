@@ -1639,8 +1639,8 @@ function UNITFRAME:AddRaidTargetIndicator(self)
 
 	local raidTargetIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
 	raidTargetIndicator:SetTexture(C.Assets.target_icon)
-	raidTargetIndicator:SetAlpha(.5)
-	raidTargetIndicator:SetSize(16, 16)
+	raidTargetIndicator:SetAlpha(C.DB.unitframe.target_icon_indicator_alpha)
+	raidTargetIndicator:SetSize(C.DB.unitframe.target_icon_indicator_size, C.DB.unitframe.target_icon_indicator_size)
 	raidTargetIndicator:SetPoint('CENTER', self)
 
 	self.RaidTargetIndicator = raidTargetIndicator

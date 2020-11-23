@@ -619,6 +619,8 @@ C.CharacterSettings = {
 			['gcd_spark'] = true,
 
 			['target_icon_indicator'] = true,
+			['target_icon_indicator_alpha'] = 0.5,
+			['target_icon_indicator_size'] = 16,
 
 			['power_bar'] = true,
 			['power_bar_height'] = 1,
