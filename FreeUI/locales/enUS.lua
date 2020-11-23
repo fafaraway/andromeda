@@ -645,7 +645,9 @@ L.GUI = {
 		['COLOR_STYLE'] = 'Health color',
 		['COLOR_STYLE_DEFAULT'] = 'Default white',
 		['COLOR_STYLE_CLASS'] = 'Class colored',
-		['COLOR_STYLE_GRADIENT'] = 'Percentage gradient'
+		['COLOR_STYLE_GRADIENT'] = 'Percentage gradient',
+		['TARGET_ICON_INDICATOR_ALPHA'] = 'Icon Indicator opacity',
+		['TARGET_ICON_INDICATOR_SIZE'] = 'Icon Indicator size'
 	},
 	['GROUPFRAME'] = {
 		['NAME'] = 'Groupframe',

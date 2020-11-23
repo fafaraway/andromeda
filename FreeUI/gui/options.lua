@@ -300,7 +300,10 @@ GUI.OptionsList = {
 		{},
 		{1, 'unitframe', 'enable_boss', L.GUI.UNITFRAME.ENABLE_BOSS},
 		{4, 'unitframe', 'boss_color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-		{1, 'unitframe', 'enable_arena', L.GUI.UNITFRAME.ENABLE_ARENA}
+		{1, 'unitframe', 'enable_arena', L.GUI.UNITFRAME.ENABLE_ARENA},
+		{},
+		{3, 'unitframe', 'target_icon_indicator_alpha', L.GUI.UNITFRAME.TARGET_ICON_INDICATOR_ALPHA, nil, {.5, 1, .1}},
+		{3, 'unitframe', 'target_icon_indicator_size', L.GUI.UNITFRAME.TARGET_ICON_INDICATOR_SIZE, true, {16, 32, 8}}
 	},
 	[13] = {
 		-- groupframes
