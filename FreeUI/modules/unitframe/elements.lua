@@ -134,21 +134,30 @@ local lastBarColors = {
 }
 
 --[[ Backdrop ]]
-function UNITFRAME:AddBackDrop(self)
-	self:RegisterForClicks('AnyUp')
+local function UNITFRAME_OnEnter(self)
+	UnitFrame_OnEnter(self)
+	self.Highlight:Show()
+end
 
-	self:HookScript(
-		'OnEnter',
-		function()
-			UnitFrame_OnEnter(self)
-		end
-	)
-	self:HookScript(
-		'OnLeave',
-		function()
-			UnitFrame_OnLeave(self)
-		end
-	)
+local function UNITFRAME_OnLeave(self)
+	UnitFrame_OnLeave(self)
+	self.Highlight:Hide()
+end
+
+function UNITFRAME:AddBackDrop(self)
+	local highlight = self:CreateTexture(nil, 'OVERLAY')
+	highlight:SetAllPoints()
+	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+	highlight:SetTexCoord(0, 1, .5, 1)
+	highlight:SetVertexColor(.6, .6, .6)
+	highlight:SetBlendMode('BLEND')
+	highlight:Hide()
+	self.Highlight = highlight
+
+	self:RegisterForClicks('AnyUp')
+	self:HookScript('OnEnter', UNITFRAME_OnEnter)
+	self:HookScript('OnLeave', UNITFRAME_OnLeave)
+
 	F.CreateTex(self)
 
 	local bg = F.CreateBDFrame(self)
@@ -170,32 +179,6 @@ function UNITFRAME:AddBackDrop(self)
 	classPowerBarHolder:SetSize(width, height)
 	classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
 	self.ClassPowerBarHolder = classPowerBarHolder
-end
-
---[[ Mouseover highlight ]]
-function UNITFRAME:AddHighlight(self)
-	local highlight = self:CreateTexture(nil, 'OVERLAY')
-	highlight:SetAllPoints()
-	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-	highlight:SetTexCoord(0, 1, .5, 1)
-	highlight:SetVertexColor(.6, .6, .6)
-	highlight:SetBlendMode('BLEND')
-	highlight:Hide()
-
-	self.Highlight = highlight
-
-	self:HookScript(
-		'OnEnter',
-		function()
-			highlight:Show()
-		end
-	)
-	self:HookScript(
-		'OnLeave',
-		function()
-			highlight:Hide()
-		end
-	)
 end
 
 --[[ Selected border ]]
@@ -1179,7 +1162,7 @@ function UNITFRAME:PostCastStart(unit)
 	end
 
 	self.Text:SetText('')
- -- disable casting spell name, we only need interrupt info
+	-- disable casting spell name, we only need interrupt info
 end
 
 function UNITFRAME:PostUpdateInterruptible(unit)
@@ -1381,6 +1364,10 @@ local function UpdateRunesColor(element)
 end
 
 function UNITFRAME:AddClassPowerBar(self)
+	if not C.DB.unitframe.class_power_bar then
+		return
+	end
+
 	local gap = 3
 	local barWidth = C.DB.unitframe.player_width
 	local barHeight = C.DB.unitframe.class_power_bar_height
@@ -1467,7 +1454,7 @@ local totemsColor = {
 		0.58,
 		0.13
 	}
- -- yellow 181 / 147 /  33
+	-- yellow 181 / 147 /  33
 }
 
 function UNITFRAME:AddTotems(self)
@@ -1815,7 +1802,7 @@ function UNITFRAME:SendCDMessage()
 						remaining = 0
 					end
 					C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-				 -- sync to others
+				-- sync to others
 				end
 			end
 		end
@@ -1829,7 +1816,7 @@ function UNITFRAME:UpdateSyncStatus()
 		local thisTime = GetTime()
 		if thisTime - lastSyncTime > 5 then
 			C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-			 -- handshake to ZenTracker
+			-- handshake to ZenTracker
 			lastSyncTime = thisTime
 		end
 		F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)

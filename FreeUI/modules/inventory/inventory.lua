@@ -781,8 +781,8 @@ function INVENTORY:CreateCustomJunkButton()
 			else
 				bu.__turnOff()
 			end
-			self:GetScript('OnEnter')(self)
 			INVENTORY:UpdateAllBags()
+			self:GetScript('OnEnter')(self)
 		end
 	)
 

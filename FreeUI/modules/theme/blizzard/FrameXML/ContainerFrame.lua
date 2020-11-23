@@ -103,7 +103,7 @@ tinsert(C.BlizzThemes, function()
 		end
 
 		if frame.bagIcon then
-			local invID = bagIDToInvID[frame:GetID()]
+			local invID = bagIDToInvID[id]
 			if invID then
 				local icon = GetInventoryItemTexture("player", invID)
 				frame.bagIcon:SetTexture(icon or backpackTexture)
