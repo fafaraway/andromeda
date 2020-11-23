@@ -1381,6 +1381,7 @@ local function UpdateRunesColor(element)
 end
 
 function UNITFRAME:AddClassPowerBar(self)
+	if not C.DB.unitframe.class_power_bar then return end
 	local gap = 3
 	local barWidth = C.DB.unitframe.player_width
 	local barHeight = C.DB.unitframe.class_power_bar_height
