@@ -30,13 +30,13 @@ do
 	L['MISC_FOOD'] = 'Food'
 	L['MISC_FLASK'] = 'Flask'
 	L['MISC_LACK'] = 'Lack'
-	L['MISC_PLAYER_COUNT'] = '%s名玩家'
-	L['MISC_COUNTDOWN'] = '开始/取消倒计时'
+	L['MISC_PLAYER_COUNT'] = '%s players'
+	L['MISC_COUNTDOWN'] = 'Start/Cancel Countdown'
 	L['MISC_CHECK_STATUS'] = '食物合剂检查'
 	L['MISC_BUFFS_READY'] = '食物合剂检查: 已齐全'
 	L['MISC_RAID_BUFF_CHECK'] = '食物合剂检查:'
 	L['MISC_EXRT_POTION_CHECK'] = 'ExRT药水使用报告'
-	L['MISC_ADDON_REQUIRED'] = '你没有安装DBM或者BigWigs'
+	L['MISC_ADDON_REQUIRED'] = 'You do not have DBM or BigWigs installed'
 	L['MISC_DISBAND_CHECK'] = '是否|cffff0000解散|r当前队伍或者团队?'
 	L['MISC_DISBAND_PROCESS'] = '团队解散中'
 
@@ -76,26 +76,26 @@ end
 --[[ Infobar ]]
 do
 	L['INFOBAR_DURABILITY'] = 'Durability'
-	L['INFOBAR_OPEN_CHARACTER_PANEL'] = '打开角色面板'
+	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle Character Pane'
 
 	L['INFOBAR_FRIENDS'] = 'Friends'
-	L['INFOBAR_OPEN_FRIENDS_PANEL'] = '打开好友面板'
-	L['INFOBAR_ADD_FRIEND'] = '添加好友'
+	L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle Friends Pane'
+	L['INFOBAR_ADD_FRIEND'] = 'Add Friend'
 
 	L['INFOBAR_GUILD'] = 'Guild'
 	L['INFOBAR_GUILD_NONE'] = 'None'
-	L['INFOBAR_OPEN_GUILD_PANEL'] = '打开公会面板'
+	L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle Guild & Communities Pane'
 
 	L['INFOBAR_REPORT'] = 'Report'
 	L['INFOBAR_DAILY_WEEKLY_INFO'] = 'Daily/weekly'
-	L['INFOBAR_BLINGTRON'] = '布林顿每日礼包'
-	L['INFOBAR_MEAN_ONE'] = '冬幕节日常'
-	L['INFOBAR_TIMEWARPED'] = '时光漫游徽章奖励'
-	L['INFOBAR_INVASION_LEG'] = '军团突袭'
-	L['INFOBAR_INVASION_BFA'] = '阵营突袭'
+	L['INFOBAR_BLINGTRON'] = 'Blingtron Daily Pack'
+	L['INFOBAR_MEAN_ONE'] = 'Winter Veil Daily'
+	L['INFOBAR_TIMEWARPED'] = 'Timewarped Badge Reward'
+	L['INFOBAR_INVASION_LEG'] = 'Legion Invasion'
+	L['INFOBAR_INVASION_BFA'] = 'Faction Assaults'
 	L['INFOBAR_INVASION_CURRENT'] = 'Current: '
 	L['INFOBAR_INVASION_NEXT'] = 'Next: '
-	L['INFOBAR_LESSER_VISION'] = '恩佐斯的小幻象'
+	L['INFOBAR_LESSER_VISION'] = 'N\'Zoth Assaults'
 	L['INFOBAR_ISLAND'] = 'Island'
 	L['INFOBAR_OPEN_BFA_REPORT'] = 'Open mission report(BFA)'
 	L['INFOBAR_OPEN_LEG_REPORT'] = 'Open mission report(LEG)'
@@ -103,13 +103,13 @@ do
 
 	L['INFOBAR_SPEC'] = 'Spec'
 	L['INFOBAR_LOOT'] = 'Loot'
-	L['INFOBAR_OPEN_SPEC_PANEL'] = '打开天赋面板'
-	L['INFOBAR_CHANGE_SPEC'] = '切换专精和拾取'
+	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle Talent Pane'
+	L['INFOBAR_CHANGE_SPEC'] = 'Switch Specialization & Loot'
 
 	L['INFOBAR_LOCAL_TIME'] = 'Local time'
 	L['INFOBAR_REALM_TIME'] = 'Realm time'
-	L['INFOBAR_OPEN_ADDON_PANEL'] = '打开插件列表'
-	L['INFOBAR_OPEN_TIMER_TRACKER'] = '打开计时器'
+	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open the AddOns List'
+	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open the Timer'
 end
 
 --[[ Chat ]]
@@ -130,7 +130,7 @@ end
 
 --[[ Actionbar ]]
 do
-	L['ACTIONBAR_CUSTOM_BAR'] = '附加动作条'
+	L['ACTIONBAR_CUSTOM_BAR'] = 'Additional ActionBar'
 	L['ACTIONBAR_UNBIND_TIP'] = '按ESC或右键撤销按键设置'
 	L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
 	L['ACTIONBAR_KEY_INDEX'] = '序号'
@@ -278,7 +278,7 @@ end
 --[[ GUI ]]
 L.GUI = {
 	['HINT'] = 'Hint',
-	['RELOAD'] = '|cffff2020是否重载界面来应用设置？|r',
+	['RELOAD'] = '|cffff2020Do you want to reload the Interface to apply settings ?|r',
 	['RESET_GOLD'] = '|cffff2020是否清空金币统计数据？|r',
 	['RESET_JUNK_LIST'] = '|cffff2020是否清空自定义垃圾物品列表？|r',
 	['MOVER'] = {
@@ -408,7 +408,7 @@ L.GUI = {
 		['WHISPER_STICKY'] = 'Whisper sticky',
 		['WHISPER_SOUND'] = 'Whisper sound',
 		['ITEM_LINKS'] = 'Extend item link',
-		['SPAMAGE_METER'] = '精简伤害统计类信息',
+		['SPAMAGE_METER'] = 'Inline Stats Reports',
 		['USE_FILTER'] = 'Use chat filter',
 		['BLOCK_ADDON_SPAM'] = 'Block addons spam',
 		['ALLOW_FRIENDS_SPAM'] = 'Allow friends spam',
@@ -441,14 +441,14 @@ L.GUI = {
 	['ACTIONBAR'] = {
 		['NAME'] = 'Actionbar',
 		['ENABLE'] = 'Enable actionbar',
-		['ENABLE_TIP'] = '调整动作条相关的功能和样式。',
+		['ENABLE_TIP'] = 'Adjust the functions and styles related to the action bar',
 		['SCALE'] = 'Scale',
 		['BUTTON_HOTKEY'] = 'Show hotkey',
 		['BUTTON_MACRO_NAME'] = 'Show macro name',
 		['BUTTON_COUNT'] = 'Show count',
 		['BUTTON_CLASS_COLOR'] = 'Border colored by class color',
 		['FADE'] = 'Use dynamic fade',
-		['FADE_TIP'] = '动作条根据相应条件渐隐渐显。',
+		['FADE_TIP'] = 'The action bar fades out according to the corresponding conditions',
 		['BAR1'] = 'Enable bar1',
 		['BAR2'] = 'Enable bar2',
 		['BAR3'] = 'Enable bar3',
@@ -780,22 +780,22 @@ L.GUI = {
 }
 
 -- Slash commands
-L['COMMANDS_LIST_HINT'] = '可用命令：'
+L['COMMANDS_LIST_HINT'] = 'Available Commands：'
 L['COMMANDS_LIST'] = {
-	'/free install - 打开安装面板。',
-	'/free config - 打开控制台。',
-	'/free unlock - 解锁界面元素，解锁后可以自由移动界面元素。',
-	'/free reset - 重置所有保存的选项恢复到默认值。',
-	'/rl - 重载界面',
-	'/ss - 屏幕截图',
-	'/clear - 清空聊天窗口',
+	'/free install - Launch Installation Wizard',
+	'/free config - Open the Config Panel',
+	'/free unlock - Unlock the Interface to let you easily move elements',
+	'/free reset - Reset all saved options to their default values.',
+	'/rl - Reload Interface',
+	'/ss - Take a Screenshot',
+	'/clear - Clear the chat',
 	'/rc - 就位确认',
 	'/rp - 职责确认',
-	'/gc - 小队/团队转换',
-	'/lg - 退出队伍',
+	'/gc - Convert your Group to Raid',
+	'/lg - Leave group',
 	'/rs - 重置副本',
-	'/tt - 密语当前目标',
-	'/spec - 切换天赋',
-	'/bind - 绑定快捷键',
-	'/gm - 打开帮助面板'
+	'/tt - Whisper to your current target',
+	'/spec - Switch Talent',
+	'/bind - Launch Quick Keybind Mode',
+	'/gm - Open the Help Panel'
 }
