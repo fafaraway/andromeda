@@ -374,7 +374,6 @@ end
 local function CreatePartyStyle(self)
 	self.unitStyle = 'party'
 	UNITFRAME:AddBackDrop(self)
-	UNITFRAME:AddHighlight(self)
 	UNITFRAME:AddHealthBar(self)
 	UNITFRAME:AddHealthPrediction(self)
 	UNITFRAME:AddPowerBar(self)
@@ -462,7 +461,6 @@ end
 local function CreateRaidStyle(self)
 	self.unitStyle = 'raid'
 	UNITFRAME:AddBackDrop(self)
-	UNITFRAME:AddHighlight(self)
 	UNITFRAME:AddHealthBar(self)
 	UNITFRAME:AddHealthPrediction(self)
 	UNITFRAME:AddPowerBar(self)

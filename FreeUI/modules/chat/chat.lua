@@ -29,11 +29,6 @@ function CHAT:UpdateChatSize()
 		ChatFrame1.FontStringContainer:SetOutside(ChatFrame1)
 	end
 
-	if ChatFrame1:IsShown() then
-		ChatFrame1:Hide()
-		ChatFrame1:Show()
-	end
-
 	ChatFrame1:ClearAllPoints()
 	ChatFrame1:SetPoint('BOTTOMLEFT', UIParent, 'BOTTOMLEFT', C.UIGap, C.UIGap)
 	ChatFrame1:SetSize(C.DB.chat.window_width, C.DB.chat.window_height)
@@ -448,6 +443,7 @@ function CHAT:OnLogin()
 	end
 
 	-- Default
+	if CHAT_OPTIONS then CHAT_OPTIONS.HIDE_FRAME_ALERTS = true end -- only flash whisper
 	SetCVar('chatStyle', 'classic')
 	SetCVar('whisperMode', 'inline') -- blizz reset this on NPE
 	F.HideOption(_G.InterfaceOptionsSocialPanelChatStyle)
