@@ -951,7 +951,6 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
 	F.Reskin(CovenantMissionFrameFollowers.HealAllButton)
-	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	F.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
 	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)
