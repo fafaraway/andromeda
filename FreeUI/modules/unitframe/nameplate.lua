@@ -480,7 +480,7 @@ end
 function NAMEPLATE:AddWidgetContainer(self)
 	local widgetContainer = CreateFrame('Frame', nil, self, 'UIWidgetContainerTemplate')
 	widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
-	widgetContainer:SetScale(1/FREE_ADB.ui_scale) -- need reviewed
+	widgetContainer:SetScale(F:Round(1/FREE_ADB.ui_scale, 2))
 	widgetContainer:Hide()
 
 	self.WidgetContainer = widgetContainer
