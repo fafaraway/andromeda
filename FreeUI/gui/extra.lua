@@ -208,7 +208,7 @@ function GUI:SetupInventoryFilter(parent)
 		[4] = 'item_filter_equipment',
 		[5] = 'item_filter_gear_set',
 		[6] = 'item_filter_legendary',
-		[7] = 'item_filter_mount_pet',
+		[7] = 'item_filter_collection',
 		[8] = 'item_filter_favourite',
 		[9] = 'item_filter_trade',
 		[10] = 'item_filter_quest'

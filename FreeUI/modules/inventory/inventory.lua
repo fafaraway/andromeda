@@ -930,8 +930,8 @@ function INVENTORY:OnLogin()
 		f.consumable = MyContainer:New('Consumable', {Columns = bagsWidth, Parent = f.main})
 		f.consumable:SetFilter(filters.bagConsumable, true)
 
-		f.bagCompanion = MyContainer:New('BagCompanion', {Columns = bagsWidth, Parent = f.main})
-		f.bagCompanion:SetFilter(filters.bagMountPet, true)
+		f.bagCollection = MyContainer:New('BagCollection', {Columns = bagsWidth, Parent = f.main})
+		f.bagCollection:SetFilter(filters.bagCollection, true)
 
 		f.bagGoods = MyContainer:New('BagGoods', {Columns = bagsWidth, Parent = f.main})
 		f.bagGoods:SetFilter(filters.bagGoods, true)
@@ -962,8 +962,8 @@ function INVENTORY:OnLogin()
 		f.bankConsumable = MyContainer:New('BankConsumable', {Columns = bankWidth, Parent = f.bank})
 		f.bankConsumable:SetFilter(filters.bankConsumable, true)
 
-		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = bankWidth, Parent = f.bank})
-		f.bankCompanion:SetFilter(filters.bankMountPet, true)
+		f.bankCollection = MyContainer:New('BankCollection', {Columns = bankWidth, Parent = f.bank})
+		f.bankCollection:SetFilter(filters.bankCollection, true)
 
 		f.bankGoods = MyContainer:New('BankGoods', {Columns = bankWidth, Parent = f.bank})
 		f.bankGoods:SetFilter(filters.bankGoods, true)
@@ -980,7 +980,7 @@ function INVENTORY:OnLogin()
 			f.azeriteItem,
 			f.equipment,
 			f.equipSet,
-			f.bagCompanion,
+			f.bagCollection,
 			f.bagGoods,
 			f.consumable,
 			f.bagQuest,
@@ -992,7 +992,7 @@ function INVENTORY:OnLogin()
 			f.bankEquipment,
 			f.bankEquipSet,
 			f.bankLegendary,
-			f.bankCompanion,
+			f.bankCollection,
 			f.bankGoods,
 			f.bankConsumable,
 			f.bankQuest,
@@ -1346,8 +1346,8 @@ function INVENTORY:OnLogin()
 			label = BAG_FILTER_CONSUMABLES
 		elseif name == 'Junk' then
 			label = BAG_FILTER_JUNK
-		elseif strmatch(name, 'Companion') then
-			label = MOUNTS_AND_PETS
+		elseif strmatch(name, 'Collection') then
+			label = COLLECTIONS
 		elseif strmatch(name, 'Favourite') then
 			label = PREFERENCES
 		elseif strmatch(name, 'Goods') then
