@@ -478,6 +478,8 @@ end
 
 -- WidgetContainer
 function NAMEPLATE:AddWidgetContainer(self)
+	if not C.DB.nameplate.widget_container then return end
+
 	local widgetContainer = CreateFrame('Frame', nil, self, 'UIWidgetContainerTemplate')
 	widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
 	widgetContainer:SetScale(F:Round(1/FREE_ADB.ui_scale, 2))
@@ -624,7 +626,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 
 		self.npcID = F.GetNPCID(self.unitGUID)
 		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
-		self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), F.Widget_DefaultLayout, nil, unit)
+		--self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), F.Widget_DefaultLayout, nil, unit)
 
 		NAMEPLATE.RefreshPlateType(self, unit)
 	elseif event == 'NAME_PLATE_UNIT_REMOVED' then
@@ -632,7 +634,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 			guidToPlate[self.unitGUID] = nil
 		end
 		self.npcID = nil
-		self.WidgetContainer:UnregisterForWidgetSet()
+		--self.WidgetContainer:UnregisterForWidgetSet()
 	end
 
 	if event ~= 'NAME_PLATE_UNIT_REMOVED' then
