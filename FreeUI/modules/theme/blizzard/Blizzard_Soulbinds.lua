@@ -40,5 +40,4 @@ C.Themes["Blizzard_Soulbinds"] = function()
 	for i = 1, 3 do
 		hooksecurefunc(scrollBox.ScrollTarget.Lists[i], "UpdateLayout", ReskinConduitList)
 	end
-	select(2, scrollBox:GetChildren()):Hide()
 end
