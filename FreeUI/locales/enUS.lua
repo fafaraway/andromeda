@@ -40,10 +40,10 @@ do
 	L['MISC_DISBAND_CHECK'] = '是否|cffff0000解散|r当前队伍或者团队?'
 	L['MISC_DISBAND_PROCESS'] = '团队解散中'
 
-	L['MISC_QUICK_QUEST'] = 'TurnIn'
-	L['MISC_QUEST_ANNOUNCE'] = 'Ann'
-	L['MISC_QUEST_ANNOUNCE_TIP'] = 'Announce quest progress while in group.'
-	L['MISC_QUICK_QUEST_TIP'] = 'Auto accept and trun in quests.'
+	L['MISC_QUICK_QUEST'] = 'Quest automation'
+
+
+	L['MISC_QUICK_QUEST_TIP'] = 'Automatically accept and deliver quests.'
 end
 
 --[[ Blizzard ]]
@@ -167,21 +167,21 @@ end
 
 --[[ Announcement ]]
 do
-	L['ANNOUNCEMENT_INTERRUPT'] = 'Interrupt %target% %spell%'
-	L['ANNOUNCEMENT_DISPEL'] = 'Dispel %target% %spell%'
-	L['ANNOUNCEMENT_STOLEN'] = 'Stolen %target% %spell%'
+	L['ANNOUNCEMENT_INTERRUPT'] = 'Interrupted %target%\'s %spell%'
+	L['ANNOUNCEMENT_DISPEL'] = 'Dispelled %target%\'s %spell%'
+	L['ANNOUNCEMENT_STOLEN'] = 'Stolen %target%\'s %spell%'
 	L['ANNOUNCEMENT_CASTED'] = '%player% casted %spell%'
 	L['ANNOUNCEMENT_COMBAT_RESURRECTION_SELF'] = '%player% casted %spell%'
 	L['ANNOUNCEMENT_COMBAT_RESURRECTION_TARGET'] = '%player% casted %spell% on %target%'
-	L['ANNOUNCEMENT_QUEST'] = '接受任务'
+	L['ANNOUNCEMENT_QUEST_ACCEPT'] = 'Accept quest'
+	L['ANNOUNCEMENT_QUEST_ANNOUNCE'] = 'Quest announce'
+	L['ANNOUNCEMENT_QUEST_ANNOUNCE_TIP'] = 'Announce quest progress while in group.'
 
 	L['ANNOUNCEMENT_INSTANCE_RESET_SUCCESS'] = '%s has been reset'
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED'] = 'Cannot reset %s (There are players still inside the instance.)'
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_ZONING'] = 'Cannot reset %s (There are players in your party attempting to zone into an instance.)'
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_OFFLINE'] = 'Cannot reset %s (There are players offline in your party.)'
 
-	L['ANNOUNCEMENT_QUEST_COMPLETED'] = 'completed'
-	L['ANNOUNCEMENT_QUEST_ACCEPTED'] = 'accepted'
 end
 
 --[[ Inventory ]]
@@ -353,7 +353,9 @@ L.GUI = {
 		['BUY_STACK'] = '快速购买整组物品',
 		['BUY_STACK_TIP'] = '按住ALT键购买物品会直接购买整组。',
 		['CUSTOM_CLASS_COLOR'] = 'Customized class colors',
-		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting'
+		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting',
+		['HIDE_TALKINGHEAD'] = 'Hide talking head',
+		['HIDE_BOSS_BANNER'] = 'Hide boss banner',
 	},
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',
