@@ -157,7 +157,7 @@ local function CreateTab(parent, i, name)
 	tab.icon:SetTexture(iconsList[i])
 	F.ReskinIcon(tab.icon)
 
-	tab.text = F.CreateFS(tab, C.Assets.Fonts.Regular, 13, 'OUTLINE', name, nil, true)
+	tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, 'OUTLINE', name, nil, true)
 	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
 	tab:HookScript('OnClick', tabOnClick)
