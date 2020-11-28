@@ -56,5 +56,5 @@ function ANNOUNCEMENT:OnLogin()
 	F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.OnEvent)
 
 	ANNOUNCEMENT:InstanceReset()
-	ANNOUNCEMENT:UpdateQuestAnnounce()
+	ANNOUNCEMENT:QuestNotification()
 end
