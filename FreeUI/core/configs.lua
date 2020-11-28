@@ -7,6 +7,24 @@ C.Fonts = { -- #TODO
 }
 
 C['ReminderBuffsList'] = {
+	ITEMS = {
+		{	itemID = 178742, -- 瓶装毒素饰品
+			spells = {
+				[345545] = true,
+			},
+			instance = true,
+			combat = true,
+		},
+		{	itemID = 174906, -- 属性符文
+			spells = {
+				[317065] = true,
+				[270058] = true,
+			},
+			equip = true,
+			instance = true,
+			disable = true,
+		},
+	},
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -761,6 +779,7 @@ C.CharacterSettings = {
 			['classify_indicator'] = true,
 			['interrupt_name'] = true,
 			['explosive_scale'] = false,
+			['widget_container'] = true,
 
 			['plate_auras'] = true,
 				['aura_size'] = 22,
