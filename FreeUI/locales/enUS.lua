@@ -228,7 +228,8 @@ do
 	L['MAP_MOVER_MINIMAP'] = 'Minimap'
 	L['MAP_CURSOR'] = 'Cursor'
 	L['MAP_REVEAL'] = '清除地图迷雾'
-	L['MAP_PARAGON'] = '巅峰'
+	L['MAP_PARAGON'] = 'Paragon'
+	L["MAP_NEXT_TRAIT"] = "Next Trait"
 	L['MAP_NEW_MAIL'] = '<New Mail>'
 end
 
