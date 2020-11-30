@@ -673,7 +673,7 @@ do
 		self.__shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		self.__shadow:SetOutside(self, m, m)
 		self.__shadow:SetBackdrop(shadowBackdrop)
-		self.__shadow:SetBackdropBorderColor(.04, .04, .04, a or .25)
+		self.__shadow:SetBackdropBorderColor(.02, .02, .02, a or .25)
 		self.__shadow:SetFrameLevel(1)
 
 		return self.__shadow
@@ -688,14 +688,12 @@ do
 	C.Frames = {}
 
 	local defaultBackdrop = {bgFile = assets.bd_tex, edgeFile = assets.bd_tex}
-	function F:CreateBD(a, r, g, b)
+	function F:CreateBD(a)
 		defaultBackdrop.edgeSize = C.Mult
 		self:SetBackdrop(defaultBackdrop)
-		if r then
-			self:SetBackdropColor(r, g, b, a or FREE_ADB.backdrop_alpha)
-		else
-			self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], a or FREE_ADB.backdrop_alpha)
-		end
+
+		self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], a or FREE_ADB.backdrop_alpha)
+
 		self:SetBackdropBorderColor(C.BorderColor[1], C.BorderColor[2], C.BorderColor[3])
 
 		if not a then tinsert(C.Frames, self) end
@@ -710,7 +708,7 @@ do
 		return tex
 	end
 
-	function F:CreateBDFrame(a, gradient, r, g, b)
+	function F:CreateBDFrame(a, gradient)
 		local frame = self
 		if self:IsObjectType('Texture') then frame = self:GetParent() end
 		local lvl = frame:GetFrameLevel()
@@ -718,11 +716,9 @@ do
 		local bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		bg:SetOutside(self)
 		bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
-		if r then
-			F.CreateBD(bg, a, r, g, b)
-		else
-			F.CreateBD(bg, a)
-		end
+
+		F.CreateBD(bg, a)
+
 		if gradient then
 			self.__gradient = F.CreateGradient(bg)
 		end
@@ -894,7 +890,8 @@ do
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then return end
 
-		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, 1)
+		self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
+		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
 		self.__shadow:SetBackdropBorderColor(C.r, C.g, C.b)
 		self.__shadow:SetAlpha(1)
 
@@ -902,8 +899,9 @@ do
 	end
 
 	local function Button_OnLeave(self)
-		self.__bg:SetBackdropBorderColor(.4, .4, .4, .2)
-		self.__shadow:SetBackdropBorderColor(0, 0, 0)
+		self.__bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .25)
+		self.__bg:SetBackdropBorderColor(.2, .2, .2)
+		self.__shadow:SetBackdropBorderColor(.02, .02, .02)
 		self.__shadow:SetScript('OnUpdate', nil)
 		self.__shadow:SetAlpha(.25)
 	end
@@ -959,8 +957,8 @@ do
 			end
 		end
 
-		self.__bg = F.CreateBDFrame(self, 0, true)
-		self.__bg:SetBackdropBorderColor(.4, .4, .4, .2)
+		self.__bg = F.CreateBDFrame(self, .25, true)
+		self.__bg:SetBackdropBorderColor(.2, .2, .2)
 		self.__bg:SetFrameLevel(self:GetFrameLevel())
 		self.__bg:SetAllPoints()
 
@@ -1156,10 +1154,10 @@ do
 			end
 		end
 
-		local bg = F.CreateBDFrame(self, .45, false, .04, .04, .04)
+		local bg = F.CreateBDFrame(self, .45, true)
 		bg:SetPoint('TOPLEFT', -2, 0)
 		bg:SetPoint('BOTTOMRIGHT')
-		bg:SetBackdropBorderColor(1, 1, 1, .2)
+		bg:SetBackdropBorderColor(.2, .2, .2)
 		self.bg = bg
 
 		if height then self:SetHeight(height) end
@@ -1239,9 +1237,9 @@ do
 		self:SetNormalTexture('')
 		self:SetPushedTexture('')
 
-		local bg = F.CreateBDFrame(self, .45, false, .04, .04, .04)
+		local bg = F.CreateBDFrame(self, .45, true)
 		bg:SetInside(self, 4, 4)
-		bg:SetBackdropBorderColor(1, 1, 1, .2)
+		bg:SetBackdropBorderColor(.2, .2, .2)
 		F.CreateSD(bg, .25)
 		self.bg = bg
 
@@ -1330,10 +1328,10 @@ do
 		self:SetBackdrop(nil)
 		F.StripTextures(self)
 
-		local bd = F.CreateBDFrame(self, .45, false, .04, .04, .04)
+		local bd = F.CreateBDFrame(self, .45, true)
 		bd:SetPoint('TOPLEFT', 14, -2)
 		bd:SetPoint('BOTTOMRIGHT', -15, 3)
-		bd:SetBackdropBorderColor(1, 1, 1, .2)
+		bd:SetBackdropBorderColor(.2, .2, .2)
 		bd:SetFrameStrata('BACKGROUND')
 		F.CreateSD(bd)
 
@@ -1726,8 +1724,8 @@ do
 		eb:SetAutoFocus(false)
 		eb:SetTextInsets(5, 5, 5, 5)
 		eb:SetFont(C.Assets.Fonts.Regular, 11)
-		eb.bg = F.CreateBDFrame(eb, .45, false, .04, .04, .04)
-		eb.bg:SetBackdropBorderColor(1, 1, 1, .2)
+		eb.bg = F.CreateBDFrame(eb, .45, true)
+		eb.bg:SetBackdropBorderColor(.2, .2, .2)
 		eb.bg:SetAllPoints()
 		F.CreateSD(eb.bg)
 
@@ -1743,10 +1741,10 @@ do
 		local opt = self.__owner.options
 		for i = 1, #opt do
 			if self == opt[i] then
-				opt[i]:SetBackdropColor(C.r, C.g, C.b, .3)
+				opt[i]:SetBackdropColor(C.r, C.g, C.b, .25)
 				opt[i].selected = true
 			else
-				opt[i]:SetBackdropColor(0, 0, 0, .3)
+				opt[i]:SetBackdropColor(0, 0, 0, .25)
 				opt[i].selected = false
 			end
 		end
@@ -1776,8 +1774,9 @@ do
 	function F:CreateDropDown(width, height, data)
 		local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
 		dd:SetSize(width, height)
-		F.CreateBD(dd)
-		dd:SetBackdropBorderColor(1, 1, 1, .2)
+		dd.bg = F.CreateBDFrame(dd, .45, true)
+
+		dd.bg:SetBackdropBorderColor(.2, .2, .2)
 		dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
 		dd.Text:SetPoint('RIGHT', -5, 0)
 		dd.options = {}
@@ -1790,7 +1789,7 @@ do
 		local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
 		list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
 		F.CreateBD(list, 1)
-		list:SetBackdropBorderColor(1, 1, 1, .2)
+		list:SetBackdropBorderColor(.2, .2, .2)
 		list:Hide()
 		bu.__list = list
 		bu:SetScript('OnShow', buttonOnShow)
@@ -1862,7 +1861,7 @@ do
 		local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
 		swatch:SetSize(20, 12)
 		swatch.bg = F.CreateBDFrame(swatch, 1)
-		swatch.bg:SetBackdropBorderColor(1, 1, 1, .2)
+		swatch.bg:SetBackdropBorderColor(.2, .2, .2)
 		swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
 		local tex = swatch:CreateTexture()
 		tex:SetInside(swatch, 2, 2)

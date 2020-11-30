@@ -32,7 +32,8 @@ local function createExtraGUI(parent, name, title, bgFrame)
 		frame.bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
 		frame.bg:SetSize(240, 540)
 		frame.bg:SetPoint('TOPLEFT', 10, -50)
-		F.CreateBDFrame(frame.bg, .25, false, .04, .04, .04)
+		frame.bg.bg = F.CreateBDFrame(frame.bg, .25)
+		frame.bg.bg:SetBackdropColor(.04, .04, .04, .25)
 	end
 
 	if not parent.extraGUIHook then
@@ -123,7 +124,9 @@ function GUI:CreateScroll(parent, width, height, text)
 	local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
 	scroll:SetSize(width, height)
 	scroll:SetPoint('TOPLEFT', 10, -50)
-	F.CreateBDFrame(scroll, .25, false, .04, .04, .04)
+	-- scroll.bg = F.CreateBDFrame(scroll, .25)
+	-- scroll.bg:SetBackdropColor(.04, .04, .04, .25)
+
 	if text then
 		F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
 	end
@@ -370,11 +373,14 @@ function GUI:NamePlateAuraFilter(parent)
 		local frame = CreateFrame('Frame', nil, panel, 'BackdropTemplate')
 		frame:SetSize(240, 250)
 		frame:SetPoint('TOPLEFT', 10, value.offset - 25)
-		F.CreateBD(frame, .3)
+		frame.bg = F.CreateBDFrame(frame, .25)
+		frame.bg:SetBackdropColor(.04, .04, .04, .25)
 
 		local scroll = GUI:CreateScroll(frame, 200, 200)
 		scroll:ClearAllPoints()
 		scroll:SetPoint('BOTTOMLEFT', 10, 10)
+		-- scroll.bg = F.CreateBDFrame(scroll)
+		-- scroll.bg:SetBackdropColor(.04, .04, .04, .25)
 		scroll.box = F.CreateEditBox(frame, 145, 25)
 		scroll.box:SetPoint('TOPLEFT', 10, -10)
 		F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')

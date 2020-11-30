@@ -106,11 +106,11 @@ end
 local function SelectTab(i)
 	for num = 1, #tabsList do
 		if num == i then
-			guiTab[num].__bg:SetBackdropColor(C.r, C.g, C.b, .25)
+			guiTab[num].__gradient:SetGradientAlpha('Vertical', C.r/2, C.g/2, C.b/2, .4, C.r/4, C.g/4, C.b/4, .4)
 			guiTab[num].checked = true
 			guiPage[num]:Show()
 		else
-			guiTab[num].__bg:SetBackdropColor(0, 0, 0, 0)
+			guiTab[num].__gradient:SetGradientAlpha('Vertical', unpack(C.GradientColor))
 			guiTab[num].checked = false
 			guiPage[num]:Hide()
 		end
@@ -133,7 +133,7 @@ local function tabOnLeave(self)
 	if self.checked then
 		return
 	end
-	self.__bg:SetBackdropColor(0, 0, 0, 0)
+	self.__bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .25)
 end
 
 local function CreateTab(parent, i, name)
@@ -160,9 +160,10 @@ local function CreateTab(parent, i, name)
 	tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, 'OUTLINE', name, nil, true)
 	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
-	tab:HookScript('OnClick', tabOnClick)
+
 	tab:HookScript('OnEnter', tabOnEnter)
 	tab:HookScript('OnLeave', tabOnLeave)
+	tab:HookScript('OnClick', tabOnClick)
 
 	return tab
 end
@@ -298,10 +299,10 @@ local function CreateOption(i)
 				function()
 					for num = 1, #data do
 						if num == UpdateValue(key, value) then
-							opt[num]:SetBackdropColor(C.r, C.g, C.b, .3)
+							opt[num]:SetBackdropColor(C.r, C.g, C.b, .25)
 							opt[num].selected = true
 						else
-							opt[num]:SetBackdropColor(0, 0, 0, .3)
+							opt[num]:SetBackdropColor(0, 0, 0, .25)
 							opt[num].selected = false
 						end
 					end
@@ -324,7 +325,7 @@ local function CreateOption(i)
 
 			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
 			if tip then
-				F.AddTooltip(dd, "ANCHOR_RIGHT", tip, "BLUE")
+				F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE')
 			end
 		elseif optType == 5 then -- colorswatch
 			local f = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
@@ -372,21 +373,8 @@ local function CreateGUI()
 	local verticalLine = F.SetGradient(guiFrame, 'V', .5, .5, .5, .25, .25, C.Mult, 540)
 	verticalLine:SetPoint('TOPLEFT', 160, -50)
 
-	local logo =
-		F.CreateFS(guiFrame, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
-	local desc =
-		F.CreateFS(
-		guiFrame,
-		C.Assets.Fonts.Regular,
-		10,
-		nil,
-		'Version: ' .. C.AddonVersion,
-		{.7, .7, .7},
-		'THICK',
-		'TOP',
-		0,
-		-30
-	)
+	local logo = F.CreateFS(guiFrame, C.AssetsPath .. 'fonts\\header.ttf', 22, nil, C.AddonName, nil, 'THICK', 'TOP', 0, -4)
+	local desc = F.CreateFS(guiFrame, C.Assets.Fonts.Regular, 10, nil, 'Version: ' .. C.AddonVersion, {.7, .7, .7}, 'THICK', 'TOP', 0, -30)
 
 	local lineLeft = F.SetGradient(guiFrame, 'H', .7, .7, .7, 0, .7, 120, C.Mult)
 	lineLeft:SetPoint('TOP', -60, -26)
@@ -427,7 +415,8 @@ local function CreateGUI()
 		guiPage[i] = CreateFrame('ScrollFrame', nil, guiFrame, 'UIPanelScrollFrameTemplate')
 		guiPage[i]:SetPoint('TOPLEFT', 170, -50)
 		guiPage[i]:SetSize(500, 540)
-		F.CreateBDFrame(guiPage[i], .25, false, .04, .04, .04)
+		guiPage[i].__bg = F.CreateBDFrame(guiPage[i])
+		guiPage[i].__bg:SetBackdropColor(.04, .04, .04, .25)
 		guiPage[i]:Hide()
 
 		guiPage[i].child = CreateFrame('Frame', nil, guiPage[i])
