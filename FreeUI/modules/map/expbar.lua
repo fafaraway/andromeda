@@ -38,7 +38,7 @@ function MAP:ExpBar_Update()
 
 	if not IsPlayerAtEffectiveMaxLevel() then
 		local xp, mxp, rxp = UnitXP('player'), UnitXPMax('player'), GetXPExhaustion()
-		self:SetStatusBarColor(.37, .68, .14)
+		self:SetStatusBarColor(.29, .59, .82)
 		self:SetMinMaxValues(0, mxp)
 		self:SetValue(xp)
 		self:Show()
@@ -257,7 +257,7 @@ function MAP:ProgressBar()
 	local rest = CreateFrame('StatusBar', nil, bar)
 	rest:SetAllPoints()
 	rest:SetStatusBarTexture(C.Assets.norm_tex)
-	rest:SetStatusBarColor(0, .4, 1, .6)
+	rest:SetStatusBarColor(.34, .45, .86, .8)
 	rest:SetFrameLevel(bar:GetFrameLevel() - 1)
 	bar.restBar = rest
 
