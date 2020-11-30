@@ -787,13 +787,13 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 	wipe(found)
 	for _, filter in next, auraFilter do
 		for i = 1, 32 do
-			local name, _, _, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
+			local name, texture, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
 			if not name then
 				break
 			end
 			local value = spellList[spellID]
 			if value and (value[3] or caster == 'player' or caster == 'pet') then
-				for _, bu in pairs(buttons) do
+				--[[ for _, bu in pairs(buttons) do
 					if bu.anchor == value[1] then
 						if duration and duration > 0 then
 							bu.cd:SetCooldown(expiration - duration, duration)
@@ -809,6 +809,23 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 
 						break
 					end
+				end ]]
+				local bu = buttons[value[1]]
+				if bu then
+					if duration and duration > 0 then
+						bu.cd:SetCooldown(expiration - duration, duration)
+						bu.cd:Show()
+					else
+						bu.cd:Hide()
+					end
+
+					bu.icon:SetVertexColor(unpack(value[2]))
+
+					if count > 1 then
+						bu.count:SetText(count)
+					end
+					bu:Show()
+					found[bu.anchor] = true
 				end
 			end
 		end
@@ -1894,14 +1911,14 @@ end
 
 --[[ Tags ]]
 function UNITFRAME:AddGroupNameText(self)
-	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil, nil, nil, 'THICK')
+	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 
 	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
 	self.GroupName = groupName
 end
 
 function UNITFRAME:AddNameText(self)
-	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 
 	if self.unitStyle == 'target' then
 		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1918,7 +1935,7 @@ function UNITFRAME:AddNameText(self)
 end
 
 function UNITFRAME:AddHealthValueText(self)
-	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
 	if self.unitStyle == 'player' then
@@ -1941,20 +1958,7 @@ function UNITFRAME:AddHealthValueText(self)
 end
 
 function UNITFRAME:AddPowerValueText(self)
-	local powerValue =
-		F.CreateFS(
-		self.Health,
-		{
-			C.Assets.Fonts.Regular,
-			11,
-			nil
-		},
-		nil,
-		nil,
-		nil,
-		nil,
-		'THICK'
-	)
+	local powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
 	if self.unitStyle == 'target' then
@@ -1972,20 +1976,7 @@ function UNITFRAME:AddPowerValueText(self)
 end
 
 function UNITFRAME:AddAlternativePowerValueText(self)
-	local altPowerValue =
-		F.CreateFS(
-		self.Health,
-		{
-			C.Assets.Fonts.Regular,
-			11,
-			nil
-		},
-		nil,
-		nil,
-		nil,
-		nil,
-		'THICK'
-	)
+	local altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Regular, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 	if self.unitStyle == 'boss' then
 		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
 	else

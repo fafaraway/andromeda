@@ -17,6 +17,7 @@ C.Client = GetLocale()
 C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
+C.isLowRes = C.ScreenHeight < 1500
 C.isNewPatch = select(4, GetBuildInfo()) > 90001
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
@@ -27,15 +28,14 @@ C.BorderColor = {.04, .04, .04}
 C.GradientColor = {.04, .04, .04, .4, .08, .08, .08, .4}
 
 C.DevsList = {
-	['Farfaraway-死亡之翼'] = true,
-	['Fionorolah-死亡之翼'] = true,
-	['Kangrinboqe-死亡之翼'] = true,
-	['Dontbeshy-死亡之翼'] = true,
-	['瑪格漢之光-死亡之翼'] = true,
-	['贰拾年老騎士-死亡之翼'] = true,
-	['贰拾年老法師-死亡之翼'] = true,
-	['贰拾年老戰士-死亡之翼'] = true,
-	['贰拾年老牧師-死亡之翼'] = true,
+	['Farfaraway-霜之哀伤'] = true,
+	['Fionorolah-霜之哀伤'] = true,
+	['Kangrinboqe-霜之哀伤'] = true,
+	['Dontbeshy-霜之哀伤'] = true,
+	['瑪格漢之光-霜之哀伤'] = true,
+	['贰拾年老騎士-霜之哀伤'] = true,
+	['贰拾年老法師-霜之哀伤'] = true,
+	['贰拾年老戰士-霜之哀伤'] = true,
 	['Rhonesaia-白银之手'] = true
 }
 local function isDeveloper()

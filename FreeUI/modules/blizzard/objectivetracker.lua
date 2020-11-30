@@ -152,7 +152,7 @@ function BLIZZARD:HandleHeaderText()
 end
 
 function BLIZZARD:HandleTitleText(text)
-	F.SetFS(text, C.Assets.Fonts.Bold, 14, nil, nil, nil, 'THICK')
+	F.SetFS(text, C.Assets.Fonts.Bold, 14, C.isLowRes or nil, nil, nil, C.isLowRes and nil or 'THICK')
 	local height = text:GetStringHeight() + 2
 	if height ~= text:GetHeight() then
 		text:SetHeight(height)
@@ -162,7 +162,7 @@ end
 
 function BLIZZARD:HandleInfoText(text)
 	self:ColorfulProgression(text)
-	F.SetFS(text, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
+	F.SetFS(text, C.Assets.Fonts.Regular, 13, C.isLowRes or nil, nil, nil, C.isLowRes and nil or 'THICK')
 	text:SetHeight(text:GetStringHeight())
 
 	local line = text:GetParent()
