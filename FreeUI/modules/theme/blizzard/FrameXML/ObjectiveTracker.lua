@@ -5,7 +5,7 @@ local function reskinQuestIcon(button)
 	if not button then return end
 
 	if not button.styled then
-		button:SetSize(24, 24)
+		button:SetSize(20, 20)
 		button:SetNormalTexture("")
 		button:SetPushedTexture("")
 		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
@@ -25,7 +25,7 @@ end
 
 local function reskinQuestIcons(_, block)
 	reskinQuestIcon(block.itemButton)
-	reskinQuestIcon(block.rightButton)
+	reskinQuestIcon(block.groupFinderButton)
 end
 
 local function reskinHeader()

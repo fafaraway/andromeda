@@ -42,8 +42,8 @@ C.Themes["Blizzard_PlayerChoiceUI"] = function()
 
 		for i = 1, self:GetNumOptions() do
 			local option = self.Options[i]
-			option.Header.Text:SetTextColor(0, 0, 0)
-			option.OptionText:SetTextColor(0, 0, 0)
+			-- option.Header.Text:SetTextColor(0, 0, 0)
+			-- option.OptionText:SetTextColor(0, 0, 0)
 
 			for i = 1, option.WidgetContainer:GetNumChildren() do
 				local child = select(i, option.WidgetContainer:GetChildren())
