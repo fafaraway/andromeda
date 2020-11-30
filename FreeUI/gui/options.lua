@@ -370,7 +370,7 @@ GUI.OptionsList = {
 		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
 		{},
 		{1, 'blizzard', 'hide_talkinghead', L.GUI.MISC.HIDE_TALKINGHEAD},
-		{1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true},
+		{1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true}
 	},
 	[16] = {},
 	[17] = {}
