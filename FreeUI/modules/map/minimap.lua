@@ -3,6 +3,7 @@ local MAP = F:GetModule('MAP')
 
 local strmatch, strfind, strupper = string.match, string.find, string.upper
 local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
+local offset = 256 / 8
 
 local function ReskinRegions()
 	GarrisonLandingPageMinimapButton:SetSize(1, 1)
@@ -220,86 +221,39 @@ local function AddZoneText()
 	Minimap.zoneText = zoneText
 end
 
-local function QueueStatus()
-	QueueStatusMinimapButtonBorder:SetAlpha(0)
+function MAP:CreateQueueStatusButton()
 	QueueStatusMinimapButton:ClearAllPoints()
-	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, 256 / 8 + 6)
-	QueueStatusMinimapButton:SetHighlightTexture('')
-	QueueStatusMinimapButton.Eye.texture:SetTexture('')
-
+	QueueStatusMinimapButton:SetPoint('BOTTOMRIGHT', Minimap, 0, offset)
+	QueueStatusMinimapButtonBorder:Hide()
+	QueueStatusMinimapButtonIconTexture:SetTexture(nil)
 	QueueStatusFrame:ClearAllPoints()
-	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, 256 / 8 + 6)
+	QueueStatusFrame:SetPoint('BOTTOMRIGHT', Minimap, 'BOTTOMLEFT', -4, offset)
 
-	local dots = {}
-	for i = 1, 8 do
-		dots[i] = F.CreateFS(QueueStatusMinimapButton, C.Assets.Fonts.Pixel, 16, 'OUTLINE, MONOCHROME', '.', nil, true)
-	end
-	dots[1]:SetPoint('TOP', 2, 2)
-	dots[2]:SetPoint('TOPRIGHT', -6, -1)
-	dots[3]:SetPoint('RIGHT', -3, 2)
-	dots[4]:SetPoint('BOTTOMRIGHT', -6, 5)
-	dots[5]:SetPoint('BOTTOM', 2, 2)
-	dots[6]:SetPoint('BOTTOMLEFT', 9, 5)
-	dots[7]:SetPoint('LEFT', 6, 2)
-	dots[8]:SetPoint('TOPLEFT', 9, -1)
-
-	local counter = 0
-	local last = 0
-	local interval = .06
-	local diff = .014
-
-	local function onUpdate(self, elapsed)
-		last = last + elapsed
-		if last >= interval then
-			counter = counter + 1
-
-			dots[counter]:SetShown(not dots[counter]:IsShown())
-
-			if counter == 8 then
-				counter = 0
-				diff = diff * -1
-			end
-
-			interval = interval + diff
-			last = 0
+	local queueIcon = Minimap:CreateTexture(nil, 'ARTWORK')
+	queueIcon:SetPoint('CENTER', QueueStatusMinimapButton)
+	queueIcon:SetSize(50, 50)
+	queueIcon:SetTexture('Interface\\Minimap\\Raid_Icon')
+	local anim = queueIcon:CreateAnimationGroup()
+	anim:SetLooping('REPEAT')
+	anim.rota = anim:CreateAnimation('Rotation')
+	anim.rota:SetDuration(2)
+	anim.rota:SetDegrees(360)
+	hooksecurefunc(
+		'QueueStatusFrame_Update',
+		function()
+			queueIcon:SetShown(QueueStatusMinimapButton:IsShown())
 		end
-	end
-
+	)
 	hooksecurefunc(
 		'EyeTemplate_StartAnimating',
-		function(eye)
-			eye:SetScript('OnUpdate', onUpdate)
+		function()
+			anim:Play()
 		end
 	)
-
 	hooksecurefunc(
 		'EyeTemplate_StopAnimating',
-		function(eye)
-			for i = 1, 8 do
-				dots[i]:Show()
-			end
-			counter = 0
-			last = 0
-			interval = .06
-			diff = .014
-		end
-	)
-
-	QueueStatusMinimapButton:HookScript(
-		'OnEnter',
 		function()
-			for i = 1, 8 do
-				dots[i]:SetTextColor(C.r, C.g, C.b)
-			end
-		end
-	)
-
-	QueueStatusMinimapButton:HookScript(
-		'OnLeave',
-		function()
-			for i = 1, 8 do
-				dots[i]:SetTextColor(1, 1, 1)
-			end
+			anim:Stop()
 		end
 	)
 end
@@ -407,24 +361,16 @@ function MAP:UpdateMinimapScale()
 end
 
 function MAP:SetupMinamapShape()
-
 end
-
-
-
-
-
 
 function MAP:Minimap()
 	DropDownList1:SetClampedToScreen(true)
-
-
 
 	local bg = CreateFrame('Frame', nil, UIParent)
 	bg:SetSize(256 * C.DB.map.minimap_scale, 190 * C.DB.map.minimap_scale)
 	F.SetBD(bg)
 
-	Minimap:SetFrameStrata("LOW")
+	Minimap:SetFrameStrata('LOW')
 	Minimap:SetFrameLevel(2)
 
 	Minimap:SetSize(256, 256)
@@ -447,8 +393,6 @@ function MAP:Minimap()
 	bg:SetPoint('CENTER', mover)
 	Minimap.mover = mover
 	Minimap.bg = bg
-
-
 
 	self:UpdateMinimapScale()
 
@@ -516,7 +460,7 @@ function MAP:Minimap()
 	CalendarInvites()
 	NewMail()
 	InstanceType()
-	QueueStatus()
+	MAP:CreateQueueStatusButton()
 	WhoPings()
 	MAP:MicroMenu()
 	MAP:ProgressBar()
