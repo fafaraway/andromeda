@@ -972,8 +972,6 @@ C.AccountSettings = {
 	['vignetting'] = true,
 	['vignetting_alpha'] = .5,
 	['reskin_blizz'] = true,
-	['border_color'] = {r=.05, g=.05, b=.05},
-	['backdrop_color'] = {r=.1, g=.1, b=.1},
 	['backdrop_alpha'] = .75,
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,
