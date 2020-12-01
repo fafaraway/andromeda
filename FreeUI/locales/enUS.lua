@@ -231,6 +231,7 @@ do
 	L['MAP_PARAGON'] = 'Paragon'
 	L["MAP_NEXT_TRAIT"] = "Next Trait"
 	L['MAP_NEW_MAIL'] = '<New Mail>'
+	L['MAP_CALENDAR'] = 'Calendar'
 end
 
 -- Tooltip

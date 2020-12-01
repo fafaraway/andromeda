@@ -243,16 +243,15 @@ function MAP:ProgressBar()
 	end
 
 	local bar = CreateFrame('StatusBar', 'FreeUI_MinimapExpBar', Minimap)
-	bar:SetPoint('TOPLEFT', 1, -(Minimap:GetHeight() / 8) - 1)
-	bar:SetPoint('TOPRIGHT', -1, -(Minimap:GetHeight() / 8) - 1)
-	bar:SetHeight(2)
+	bar:SetPoint('TOPLEFT', 0, -(Minimap:GetHeight() / 8) - 1)
+	bar:SetPoint('TOPRIGHT', 0, -(Minimap:GetHeight() / 8) - 1)
+	bar:SetHeight(4)
 	bar:SetStatusBarTexture(C.Assets.norm_tex)
-	bar.bg = F.CreateBDFrame(bar)
-	bar.bg:SetBackdropColor(0, 0, 0, .4)
+	bar.bg = F.CreateBDFrame(bar, .4)
+
+	bar:SetFrameLevel(Minimap:GetFrameLevel() + 2)
 
 	bar:SetHitRectInsets(0, 0, 0, -10)
-
-	--F.CreateBDFrame(bar)
 
 	local rest = CreateFrame('StatusBar', nil, bar)
 	rest:SetAllPoints()

@@ -70,6 +70,7 @@ C['Assets'] = {
 	['spark_tex'] = C.AssetsPath .. 'textures\\spark_tex',
 	['gear_tex'] = C.AssetsPath .. 'textures\\gear_tex',
 	['classify_tex'] = C.AssetsPath .. 'textures\\state_icons',
+	['mail_tex'] = C.AssetsPath .. 'textures\\mail_tex',
 	['logo'] = C.AssetsPath .. 'textures\\logo',
 	['mouse_left'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:230:307|t ',
 	['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',

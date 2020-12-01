@@ -819,11 +819,11 @@ C.CharacterSettings = {
 			['remove_fog'] = true,
 			['coords'] = true,
 			['minimap_scale'] = 1,
-			['new_mail'] = true,
-			['calendar'] = true,
-			['instance_type'] = true,
+
+
+
 			['who_pings'] = true,
-			['micro_menu'] = true,
+
 			['progress_bar'] = true,
 	},
 
