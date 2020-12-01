@@ -28,23 +28,24 @@ local MINIMAP_TRACKING_TRIVIAL_QUESTS = MINIMAP_TRACKING_TRIVIAL_QUESTS
 
 local choiceQueue
 
---[[ local created
-local function setupCheckButton()
+local created
+local function CreateCheckBox()
 	if created then return end
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
-	bu:SetPoint('TOPRIGHT', -250, -4)
-	bu:SetSize(22, 22)
+	bu:SetPoint('TOPRIGHT', -150, -4)
+	bu:SetSize(20, 20)
 	bu:SetHitRectInsets(-5, -5, -5, -5)
-	F.ReskinCheck(bu)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 12, nil, L['QUEST_AUTOMATION'], 'YELLOW', true, 'LEFT', 22, 0)
-	bu:SetChecked(C.DB.quest.quick_quest)
+	F.ReskinCheck(bu, true)
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUICK_QUEST'], 'YELLOW', true, 'LEFT', 22, 0)
+	bu:SetChecked(C.DB.misc.quick_quest)
 	bu:SetScript('OnClick', function(self)
-		C.DB.quest.quick_quest = self:GetChecked()
+		C.DB.misc.quick_quest = self:GetChecked()
 	end)
+	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUICK_QUEST_TIP'], 'BLUE')
 
 	created = true
 end
-WorldMapFrame:HookScript('OnShow', setupCheckButton) ]]
+WorldMapFrame:HookScript('OnShow', CreateCheckBox)
 
 
 -- Main

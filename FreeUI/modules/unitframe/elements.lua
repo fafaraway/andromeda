@@ -134,21 +134,30 @@ local lastBarColors = {
 }
 
 --[[ Backdrop ]]
-function UNITFRAME:AddBackDrop(self)
-	self:RegisterForClicks('AnyUp')
+local function UNITFRAME_OnEnter(self)
+	UnitFrame_OnEnter(self)
+	self.Highlight:Show()
+end
 
-	self:HookScript(
-		'OnEnter',
-		function()
-			UnitFrame_OnEnter(self)
-		end
-	)
-	self:HookScript(
-		'OnLeave',
-		function()
-			UnitFrame_OnLeave(self)
-		end
-	)
+local function UNITFRAME_OnLeave(self)
+	UnitFrame_OnLeave(self)
+	self.Highlight:Hide()
+end
+
+function UNITFRAME:AddBackDrop(self)
+	local highlight = self:CreateTexture(nil, 'OVERLAY')
+	highlight:SetAllPoints()
+	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+	highlight:SetTexCoord(0, 1, .5, 1)
+	highlight:SetVertexColor(.6, .6, .6)
+	highlight:SetBlendMode('BLEND')
+	highlight:Hide()
+	self.Highlight = highlight
+
+	self:RegisterForClicks('AnyUp')
+	self:HookScript('OnEnter', UNITFRAME_OnEnter)
+	self:HookScript('OnLeave', UNITFRAME_OnLeave)
+
 	F.CreateTex(self)
 
 	local bg = F.CreateBDFrame(self)
@@ -170,32 +179,6 @@ function UNITFRAME:AddBackDrop(self)
 	classPowerBarHolder:SetSize(width, height)
 	classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
 	self.ClassPowerBarHolder = classPowerBarHolder
-end
-
---[[ Mouseover highlight ]]
-function UNITFRAME:AddHighlight(self)
-	local highlight = self:CreateTexture(nil, 'OVERLAY')
-	highlight:SetAllPoints()
-	highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
-	highlight:SetTexCoord(0, 1, .5, 1)
-	highlight:SetVertexColor(.6, .6, .6)
-	highlight:SetBlendMode('BLEND')
-	highlight:Hide()
-
-	self.Highlight = highlight
-
-	self:HookScript(
-		'OnEnter',
-		function()
-			highlight:Show()
-		end
-	)
-	self:HookScript(
-		'OnLeave',
-		function()
-			highlight:Hide()
-		end
-	)
 end
 
 --[[ Selected border ]]
@@ -804,13 +787,13 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 	wipe(found)
 	for _, filter in next, auraFilter do
 		for i = 1, 32 do
-			local name, _, _, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
+			local name, texture, count, _, duration, expiration, caster, _, _, spellID = UnitAura(unit, i, filter)
 			if not name then
 				break
 			end
 			local value = spellList[spellID]
 			if value and (value[3] or caster == 'player' or caster == 'pet') then
-				for _, bu in pairs(buttons) do
+				--[[ for _, bu in pairs(buttons) do
 					if bu.anchor == value[1] then
 						if duration and duration > 0 then
 							bu.cd:SetCooldown(expiration - duration, duration)
@@ -826,6 +809,23 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 
 						break
 					end
+				end ]]
+				local bu = buttons[value[1]]
+				if bu then
+					if duration and duration > 0 then
+						bu.cd:SetCooldown(expiration - duration, duration)
+						bu.cd:Show()
+					else
+						bu.cd:Hide()
+					end
+
+					bu.icon:SetVertexColor(unpack(value[2]))
+
+					if count > 1 then
+						bu.count:SetText(count)
+					end
+					bu:Show()
+					found[bu.anchor] = true
 				end
 			end
 		end
@@ -1179,7 +1179,7 @@ function UNITFRAME:PostCastStart(unit)
 	end
 
 	self.Text:SetText('')
- -- disable casting spell name, we only need interrupt info
+	-- disable casting spell name, we only need interrupt info
 end
 
 function UNITFRAME:PostUpdateInterruptible(unit)
@@ -1381,6 +1381,10 @@ local function UpdateRunesColor(element)
 end
 
 function UNITFRAME:AddClassPowerBar(self)
+	if not C.DB.unitframe.class_power_bar then
+		return
+	end
+
 	local gap = 3
 	local barWidth = C.DB.unitframe.player_width
 	local barHeight = C.DB.unitframe.class_power_bar_height
@@ -1467,7 +1471,7 @@ local totemsColor = {
 		0.58,
 		0.13
 	}
- -- yellow 181 / 147 /  33
+	-- yellow 181 / 147 /  33
 }
 
 function UNITFRAME:AddTotems(self)
@@ -1815,7 +1819,7 @@ function UNITFRAME:SendCDMessage()
 						remaining = 0
 					end
 					C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-				 -- sync to others
+				-- sync to others
 				end
 			end
 		end
@@ -1829,7 +1833,7 @@ function UNITFRAME:UpdateSyncStatus()
 		local thisTime = GetTime()
 		if thisTime - lastSyncTime > 5 then
 			C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
-			 -- handshake to ZenTracker
+			-- handshake to ZenTracker
 			lastSyncTime = thisTime
 		end
 		F:RegisterEvent('SPELL_UPDATE_COOLDOWN', UNITFRAME.SendCDMessage)
@@ -1907,14 +1911,14 @@ end
 
 --[[ Tags ]]
 function UNITFRAME:AddGroupNameText(self)
-	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil, nil, nil, 'THICK')
+	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 
 	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
 	self.GroupName = groupName
 end
 
 function UNITFRAME:AddNameText(self)
-	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 
 	if self.unitStyle == 'target' then
 		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1931,7 +1935,7 @@ function UNITFRAME:AddNameText(self)
 end
 
 function UNITFRAME:AddHealthValueText(self)
-	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
 	if self.unitStyle == 'player' then
@@ -1954,20 +1958,7 @@ function UNITFRAME:AddHealthValueText(self)
 end
 
 function UNITFRAME:AddPowerValueText(self)
-	local powerValue =
-		F.CreateFS(
-		self.Health,
-		{
-			C.Assets.Fonts.Regular,
-			11,
-			nil
-		},
-		nil,
-		nil,
-		nil,
-		nil,
-		'THICK'
-	)
+	local powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
 	if self.unitStyle == 'target' then
@@ -1985,20 +1976,7 @@ function UNITFRAME:AddPowerValueText(self)
 end
 
 function UNITFRAME:AddAlternativePowerValueText(self)
-	local altPowerValue =
-		F.CreateFS(
-		self.Health,
-		{
-			C.Assets.Fonts.Regular,
-			11,
-			nil
-		},
-		nil,
-		nil,
-		nil,
-		nil,
-		'THICK'
-	)
+	local altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Regular, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
 	if self.unitStyle == 'boss' then
 		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
 	else

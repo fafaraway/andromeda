@@ -273,7 +273,6 @@ local function CreateConsole()
 
 	for i = 1, 3 do
 		bu[i] = F.CreateButton(f, 80, 24, text[i])
-		F.Reskin(bu[i])
 		if i == 1 then
 			bu[i]:SetPoint('BOTTOMLEFT', 6, 6)
 		else

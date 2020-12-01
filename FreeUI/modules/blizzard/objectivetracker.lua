@@ -152,7 +152,7 @@ function BLIZZARD:HandleHeaderText()
 end
 
 function BLIZZARD:HandleTitleText(text)
-	F.SetFS(text, C.Assets.Fonts.Bold, 14, nil, nil, nil, 'THICK')
+	F.SetFS(text, C.Assets.Fonts.Bold, 14, C.isLowRes or nil, nil, nil, C.isLowRes and nil or 'THICK')
 	local height = text:GetStringHeight() + 2
 	if height ~= text:GetHeight() then
 		text:SetHeight(height)
@@ -162,7 +162,7 @@ end
 
 function BLIZZARD:HandleInfoText(text)
 	self:ColorfulProgression(text)
-	F.SetFS(text, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
+	F.SetFS(text, C.Assets.Fonts.Regular, 13, C.isLowRes or nil, nil, nil, C.isLowRes and nil or 'THICK')
 	text:SetHeight(text:GetStringHeight())
 
 	local line = text:GetParent()
@@ -270,66 +270,12 @@ function BLIZZARD:RestyleObjectiveTrackerText()
 end
 
 
---[[  ]]
 
-local function UpdateButtonVisibility()
-	if _G.ObjectiveTrackerFrame.collapsed or not _G.ObjectiveTrackerFrame.HeaderMenu:IsShown() then
-		_G.QuickQuestButton:Hide()
-		_G.QuestAnnounceButton:Hide()
-		return
-	end
-
-	_G.QuickQuestButton:Show()
-	_G.QuestAnnounceButton:Show()
-end
-
-function BLIZZARD:CreateQuickQuestButton()
-	local bu = CreateFrame('CheckButton', 'QuickQuestButton', _G.ObjectiveTrackerMover, 'UICheckButtonTemplate')
-	bu:SetPoint('TOPRIGHT', -90, -4)
-	bu:SetSize(20, 20)
-	bu:SetHitRectInsets(-5, -5, -5, -5)
-	F.ReskinCheck(bu, true, nil, true)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUICK_QUEST'], 'BLUE', 'THICK', 'LEFT', 20, 0)
-	bu:SetChecked(C.DB.misc.quick_quest)
-	bu:SetScript('OnClick', function(self)
-		C.DB.misc.quick_quest = self:GetChecked()
-	end)
-	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUICK_QUEST_TIP'], 'BLUE')
-end
-
-function BLIZZARD:CreateQuestAnnounceButton()
-	local bu = CreateFrame('CheckButton', 'QuestAnnounceButton', _G.ObjectiveTrackerMover, 'UICheckButtonTemplate')
-	bu:SetPoint('TOPRIGHT', QuickQuestButton, 'TOPLEFT', -30, 0)
-	bu:SetSize(20, 20)
-	bu:SetHitRectInsets(-5, -5, -5, -5)
-	F.ReskinCheck(bu, true, nil, true)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUEST_ANNOUNCE'], 'BLUE', 'THICK', 'LEFT', 20, 0)
-	bu:SetChecked(C.DB.announcement.quest)
-	bu:SetScript('OnClick', function(self)
-		C.DB.announcement.quest = self:GetChecked()
-		ANNOUNCEMENT:UpdateQuestAnnounce()
-	end)
-	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUEST_ANNOUNCE_TIP'], 'BLUE')
-end
-
-function BLIZZARD:AddToggleButtons()
-	if not C.DB.misc.quest_tracker_buttons then return end
-
-	BLIZZARD:CreateQuickQuestButton()
-	BLIZZARD:CreateQuestAnnounceButton()
-	UpdateButtonVisibility()
-
-	hooksecurefunc('ObjectiveTracker_Collapse', UpdateButtonVisibility)
-	hooksecurefunc('ObjectiveTracker_Expand', UpdateButtonVisibility)
-	hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Show', UpdateButtonVisibility)
-	hooksecurefunc(_G.ObjectiveTrackerFrame.HeaderMenu, 'Hide', UpdateButtonVisibility)
-end
 
 
 function BLIZZARD:ObjectiveTracker()
 	BLIZZARD:ObjectiveTrackerMover()
 	BLIZZARD:GenerateWowHeadLink()
 	BLIZZARD:RestyleObjectiveTrackerText()
-	BLIZZARD:AddToggleButtons()
 end
 BLIZZARD:RegisterBlizz('ObjectiveTracker', BLIZZARD.ObjectiveTracker)

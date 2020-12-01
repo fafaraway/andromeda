@@ -1,15 +1,14 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
-
 local margin, padding = 4, 4
 
 local function SetFrameSize(frame, size, num)
 	size = size or frame.buttonSize
 	num = num or frame.numButtons
 
-	frame:SetWidth(num*size + (num-1)*margin + 2*padding)
-	frame:SetHeight(size + 2*padding)
+	frame:SetWidth(num * size + (num - 1) * margin + 2 * padding)
+	frame:SetHeight(size + 2 * padding)
 	if not frame.mover then
 		frame.mover = F.Mover(frame, L.GUI.MOVER.LEAVE_VEHICLE_BAR, 'LeaveVehicle', frame.Pos)
 	else
@@ -24,6 +23,10 @@ local function SetFrameSize(frame, size, num)
 end
 
 function ACTIONBAR:CreateLeaveVehicleBar()
+	if not C.DB.actionbar.leave_vehicle_bar then
+		return
+	end
+
 	local num = 1
 	local buttonList = {}
 	local size = C.DB.actionbar.button_size_big
@@ -42,13 +45,23 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 
 	button:SetScript('OnEnter', MainMenuBarVehicleLeaveButton_OnEnter)
 	button:SetScript('OnLeave', F.HideTooltip)
-	button:SetScript('OnClick', function(self)
-		if UnitOnTaxi('player') then TaxiRequestEarlyLanding() else VehicleExit() end
-		self:SetChecked(true)
-	end)
-	button:SetScript('OnShow', function(self)
-		self:SetChecked(false)
-	end)
+	button:SetScript(
+		'OnClick',
+		function(self)
+			if UnitOnTaxi('player') then
+				TaxiRequestEarlyLanding()
+			else
+				VehicleExit()
+			end
+			self:SetChecked(true)
+		end
+	)
+	button:SetScript(
+		'OnShow',
+		function(self)
+			self:SetChecked(false)
+		end
+	)
 
 	frame.buttonList = buttonList
 	SetFrameSize(frame, size, num)
@@ -57,5 +70,7 @@ function ACTIONBAR:CreateLeaveVehicleBar()
 	RegisterStateDriver(frame, 'exit', frame.frameVisibility)
 
 	frame:SetAttribute('_onstate-exit', [[ if CanExitVehicle() then self:Show() else self:Hide() end ]])
-	if not CanExitVehicle() then frame:Hide() end
+	if not CanExitVehicle() then
+		frame:Hide()
+	end
 end

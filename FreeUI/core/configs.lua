@@ -7,6 +7,24 @@ C.Fonts = { -- #TODO
 }
 
 C['ReminderBuffsList'] = {
+	ITEMS = {
+		{	itemID = 178742, -- 瓶装毒素饰品
+			spells = {
+				[345545] = true,
+			},
+			instance = true,
+			combat = true,
+		},
+		{	itemID = 174906, -- 属性符文
+			spells = {
+				[317065] = true,
+				[270058] = true,
+			},
+			equip = true,
+			instance = true,
+			disable = true,
+		},
+	},
 	MAGE = {
 		{	spells = {	-- 奥术魔宠
 				[210126] = true,
@@ -579,7 +597,7 @@ C.CharacterSettings = {
 				['item_filter_equipment'] = true,
 				['item_filter_consumable'] = true,
 				['item_filter_legendary'] = true,
-				['item_filter_mount_pet'] = true,
+				['item_filter_collection'] = true,
 				['item_filter_favourite'] = true,
 			['auto_sell_junk'] = false,
 			['auto_repair'] = false,
@@ -761,6 +779,7 @@ C.CharacterSettings = {
 			['classify_indicator'] = true,
 			['interrupt_name'] = true,
 			['explosive_scale'] = false,
+			['widget_container'] = true,
 
 			['plate_auras'] = true,
 				['aura_size'] = 22,
@@ -800,11 +819,11 @@ C.CharacterSettings = {
 			['remove_fog'] = true,
 			['coords'] = true,
 			['minimap_scale'] = 1,
-			['new_mail'] = true,
-			['calendar'] = true,
-			['instance_type'] = true,
+
+
+
 			['who_pings'] = true,
-			['micro_menu'] = true,
+
 			['progress_bar'] = true,
 	},
 
@@ -953,8 +972,6 @@ C.AccountSettings = {
 	['vignetting'] = true,
 	['vignetting_alpha'] = .5,
 	['reskin_blizz'] = true,
-	['border_color'] = {r=.05, g=.05, b=.05},
-	['backdrop_color'] = {r=.1, g=.1, b=.1},
 	['backdrop_alpha'] = .75,
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,

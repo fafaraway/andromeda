@@ -937,6 +937,10 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.RaisedBorder:SetAlpha(0)
 	CovenantMissionFrameMissions.RaisedFrameEdges:SetAlpha(0)
 
+	hooksecurefunc(CovenantMissionFrame, "SetupTabs", function(self)
+		self.MapTab:SetShown(not self.Tab2:IsShown())
+	end)
+
 	CombatLog:DisableDrawLayer("BACKGROUND")
 	CombatLog.ElevatedFrame:SetAlpha(0)
 	F.StripTextures(CombatLog.CombatLogMessageFrame)
@@ -951,7 +955,6 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 	CovenantMissionFrame.FollowerTab.HealFollowerFrame.ButtonFrame:SetAlpha(0)
 	CovenantMissionFrameFollowers.ElevatedFrame:SetAlpha(0)
 	F.Reskin(CovenantMissionFrameFollowers.HealAllButton)
-	CovenantMissionFrame.MapTab:SetAlpha(0) -- not sure what does this for, need reviewed
 	F.ReskinIcon(CovenantMissionFrame.FollowerTab.HealFollowerFrame.CostFrame.CostIcon)
 
 	CovenantMissionFrame.MissionTab.MissionPage.Board:HookScript("OnShow", ReskinMissionBoards)

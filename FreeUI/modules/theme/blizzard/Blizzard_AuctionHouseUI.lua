@@ -37,14 +37,6 @@ local function reskinSellPanel(frame)
 	end
 end
 
-local function MoveMoneyDisplay(frame, relF, parent, relT, x, y, reset)
-	if reset then return end
-	if not relF then
-		relF, parent, relT, x, y = frame:GetPoint()
-	end
-	frame:SetPoint(relF, parent, relT, 18, 0, true)
-end
-
 local function reskinListIcon(frame)
 	if not frame.tableBuilder then return end
 
@@ -60,13 +52,6 @@ local function reskinListIcon(frame)
 						cell.styled = true
 					end
 					cell.Icon.bg:SetShown(cell.Icon:IsShown())
-				end
-
-				local moneyDisplay = cell.MoneyDisplay
-				if moneyDisplay and not moneyDisplay.hooked then
-					MoveMoneyDisplay(cell.MoneyDisplay)
-					hooksecurefunc(cell.MoneyDisplay, "SetPoint", MoveMoneyDisplay)
-					moneyDisplay.hooked = true
 				end
 			end
 		end

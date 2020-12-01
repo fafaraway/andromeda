@@ -361,8 +361,5 @@ function INFOBAR:Report()
 		GameTooltip:Hide()
 	end)
 
-	GarrisonLandingPageMinimapButton:SetSize(1, 1)
-	GarrisonLandingPageMinimapButton:SetAlpha(0)
-	GarrisonLandingPageMinimapButton:EnableMouse(false)
 end
 

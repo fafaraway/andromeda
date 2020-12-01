@@ -42,6 +42,10 @@ local function UpdateChatSize()
 	F.CHAT:UpdateChatSize()
 end
 
+local function UpdateMinimapScale()
+	F.MAP:UpdateMinimapScale()
+end
+
 local function NamePlateAuraFilter()
 	GUI:NamePlateAuraFilter(GUI.Page[14])
 end
@@ -249,13 +253,12 @@ GUI.OptionsList = {
 		{1, 'map', 'enable', L.GUI.MAP.ENABLE, nil, nil, nil, L.GUI.MAP.ENABLE_TIP},
 		{1, 'map', 'remove_fog', L.GUI.MAP.REMOVE_FOG},
 		{1, 'map', 'coords', L.GUI.MAP.COORDS, true},
+		{1, 'map', 'who_pings', L.GUI.MAP.WHO_PINGS},
+		{1, 'map', 'progress_bar', L.GUI.MAP.PROGRESS_BAR, true, nil, nil, L.GUI.MAP.PROGRESS_BAR_TIP},
+		{},
 		{3, 'map', 'worldmap_scale', L.GUI.MAP.WORLDMAP_SCALE, nil, {.5, 2, .1}},
 		{3, 'map', 'max_worldmap_scale', L.GUI.MAP.MAX_WORLDMAP_SCALE, true, {.5, 1, .1}},
-		{},
-		{1, 'map', 'who_pings', L.GUI.MAP.WHO_PINGS},
-		{1, 'map', 'micro_menu', L.GUI.MAP.MICRO_MENU, true, nil, nil, L.GUI.MAP.MICRO_MENU_TIP},
-		{1, 'map', 'progress_bar', L.GUI.MAP.PROGRESS_BAR, nil, nil, nil, L.GUI.MAP.PROGRESS_BAR_TIP},
-		{3, 'map', 'minimap_scale', L.GUI.MAP.MINIMAP_SCALE, nil, {.5, 1, .1}}
+		{3, 'map', 'minimap_scale', L.GUI.MAP.MINIMAP_SCALE, nil, {.5, 1, .1}, UpdateMinimapScale}
 	},
 	[11] = {
 		-- tooltip
@@ -367,7 +370,10 @@ GUI.OptionsList = {
 		{1, 'ACCOUNT', 'custom_class_color', L.GUI.MISC.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor},
 		{},
 		{4, 'ACCOUNT', 'texture_style', L.GUI.MISC.TEXTURE_STYLE, false, {}},
-		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}}
+		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
+		{},
+		{1, 'blizzard', 'hide_talkinghead', L.GUI.MISC.HIDE_TALKINGHEAD},
+		{1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true}
 	},
 	[16] = {},
 	[17] = {}

@@ -1,5 +1,29 @@
 local F, C = unpack(select(2, ...))
 
+local function ReskinPvPFrame(frame)
+	frame:DisableDrawLayer("BACKGROUND")
+	frame:DisableDrawLayer("BORDER")
+	F.ReskinRole(frame.TankIcon, "TANK")
+	F.ReskinRole(frame.HealerIcon, "HEALER")
+	F.ReskinRole(frame.DPSIcon, "DPS")
+
+	local bar = frame.ConquestBar
+	F.StripTextures(bar)
+	F.CreateBDFrame(bar, .25)
+	bar:SetStatusBarTexture(C.Assets.bd_tex)
+	bar:GetStatusBarTexture():SetGradient("VERTICAL", 1, .8, 0, 6, .4, 0)
+
+	local reward = bar.Reward
+	reward.Ring:Hide()
+	reward.CircleMask:Hide()
+	F.ReskinIcon(reward.Icon)
+end
+
+local function ConquestFrameButton_OnEnter(self)
+	ConquestTooltip:ClearAllPoints()
+	ConquestTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT", 1, 0)
+end
+
 C.Themes["Blizzard_PVPUI"] = function()
 	local r, g, b = C.r, C.g, C.b
 
@@ -74,13 +98,18 @@ C.Themes["Blizzard_PVPUI"] = function()
 
 	-- Honor frame
 
-	local BonusFrame = HonorFrame.BonusFrame
 	HonorFrame.Inset:Hide()
-	BonusFrame.WorldBattlesTexture:Hide()
-	BonusFrame.ShadowOverlay:Hide()
+	ReskinPvPFrame(HonorFrame)
+	F.Reskin(HonorFrame.QueueButton)
+	F.ReskinDropDown(HonorFrameTypeDropDown)
+	F.ReskinScroll(HonorFrameSpecificFrameScrollBar)
+
+	local bonusFrame = HonorFrame.BonusFrame
+	bonusFrame.WorldBattlesTexture:Hide()
+	bonusFrame.ShadowOverlay:Hide()
 
 	for _, bonusButton in pairs({"RandomBGButton", "RandomEpicBGButton", "Arena1Button", "BrawlButton", "SpecialEventButton"}) do
-		local bu = BonusFrame[bonusButton]
+		local bu = bonusFrame[bonusButton]
 		F.Reskin(bu, true)
 		bu.SelectedTexture:SetDrawLayer("BACKGROUND")
 		bu.SelectedTexture:SetColorTexture(r, g, b, .25)
@@ -93,26 +122,6 @@ C.Themes["Blizzard_PVPUI"] = function()
 			reward.Icon.bg = F.ReskinIcon(reward.Icon)
 		end
 	end
-
-	local function reskinConquestBar(bar)
-		F.StripTextures(bar.ConquestBar)
-		F.CreateBDFrame(bar.ConquestBar, .25)
-		bar.ConquestBar:SetStatusBarTexture(C.Assets.bd_tex)
-		bar.ConquestBar:GetStatusBarTexture():SetGradient("VERTICAL", 1, .8, 0, 6, .4, 0)
-	end
-	reskinConquestBar(HonorFrame)
-
-	-- Role buttons
-
-	local function styleRole(self)
-		self:DisableDrawLayer("BACKGROUND")
-		self:DisableDrawLayer("BORDER")
-		F.ReskinRole(self.TankIcon, "TANK")
-		F.ReskinRole(self.HealerIcon, "HEALER")
-		F.ReskinRole(self.DPSIcon, "DPS")
-	end
-	styleRole(HonorFrame)
-	styleRole(ConquestFrame)
 
 	-- Honor frame specific
 
@@ -137,17 +146,15 @@ C.Themes["Blizzard_PVPUI"] = function()
 
 	-- Conquest Frame
 
+	ReskinPvPFrame(ConquestFrame)
 	ConquestFrame.Inset:Hide()
 	ConquestFrame.RatedBGTexture:Hide()
 	ConquestFrame.ShadowOverlay:Hide()
 
-	local function ConquestFrameButton_OnEnter(self)
-		ConquestTooltip:ClearAllPoints()
-		ConquestTooltip:SetPoint("TOPLEFT", self, "TOPRIGHT", 1, 0)
-	end
 	ConquestFrame.Arena2v2:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 	ConquestFrame.Arena3v3:HookScript("OnEnter", ConquestFrameButton_OnEnter)
 	ConquestFrame.RatedBG:HookScript("OnEnter", ConquestFrameButton_OnEnter)
+	F.Reskin(ConquestFrame.JoinButton)
 
 	for _, bu in pairs({ConquestFrame.Arena2v2, ConquestFrame.Arena3v3, ConquestFrame.RatedBG}) do
 		F.Reskin(bu, true)
@@ -163,10 +170,8 @@ C.Themes["Blizzard_PVPUI"] = function()
 		bu.SelectedTexture:SetInside(bu.__bg)
 	end
 
-	ConquestFrame.Arena3v3:SetPoint("TOP", ConquestFrame.Arena2v2, "BOTTOM", 0, -1)
-	reskinConquestBar(ConquestFrame)
-
 	-- Item Borders for HonorFrame & ConquestFrame
+
 	hooksecurefunc("PVPUIFrame_ConfigureRewardFrame", function(rewardFrame, _, _, itemRewards, currencyRewards)
 		local rewardTexture, rewardQuaility = nil, 1
 
@@ -193,11 +198,4 @@ C.Themes["Blizzard_PVPUI"] = function()
 			rewardFrame.Icon.bg:SetBackdropBorderColor(color.r, color.g, color.b)
 		end
 	end)
-
-	-- Main style
-
-	F.Reskin(HonorFrame.QueueButton)
-	F.Reskin(ConquestFrame.JoinButton)
-	F.ReskinDropDown(HonorFrameTypeDropDown)
-	F.ReskinScroll(HonorFrameSpecificFrameScrollBar)
 end

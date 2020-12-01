@@ -2,7 +2,7 @@ local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 
 local TIER = 9
-local INSTANCE -- 5人本
+local INSTANCE  -- 5人本
 
 local SEASON_SPELLS = {
 	[209858] = 2, -- 死疽
@@ -64,6 +64,8 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322818) -- 失去信心
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322817) -- 疑云密布
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 324154) -- 暗影迅步
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 335805) -- 执政官的壁垒
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328331) -- 严刑逼供
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323195) -- 净化冲击波
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)

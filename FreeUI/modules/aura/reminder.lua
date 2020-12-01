@@ -1,12 +1,11 @@
 local F, C, L = unpack(select(2, ...))
 local AURA = F:GetModule('AURA')
 
-
 local pairs, tinsert, next = pairs, table.insert, next
 local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
 local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
 local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
-local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
 
 local groups = C.ReminderBuffsList[C.MyClass]
 local iconSize = 36
@@ -19,22 +18,38 @@ function AURA:Reminder_Update(cfg)
 	local combat = cfg.combat
 	local instance = cfg.instance
 	local pvp = cfg.pvp
-	local cooldown = cfg.cooldown
-	local isPlayerSpell, isRightSpec, isInCombat, isInInst, isInPVP = true, true
+	local itemID = cfg.itemID
+	local equip = cfg.equip
+	local isPlayerSpell, isRightSpec, isEquipped, isInCombat, isInInst, isInPVP = true, true, true
 	local inInst, instType = IsInInstance()
 	local weaponIndex = cfg.weaponIndex
 
-	if cooldown and GetItemCooldown(cooldown) > 0 then -- check rune cooldown
-		frame:Hide()
-		return
+	if itemID then
+		if equip and not IsEquippedItem(itemID) then isEquipped = false end
+		if GetItemCount(itemID) == 0 or (not isEquipped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+			frame:Hide()
+			return
+		end
 	end
 
-	if depend and not IsPlayerSpell(depend) then isPlayerSpell = false end
-	if spec and spec ~= GetSpecialization() then isRightSpec = false end
-	if combat and InCombatLockdown() then isInCombat = true end
-	if instance and inInst and (instType == 'scenario' or instType == 'party' or instType == 'raid') then isInInst = true end
-	if pvp and (instType == 'arena' or instType == 'pvp' or GetZonePVPInfo() == 'combat') then isInPVP = true end
-	if not combat and not instance and not pvp then isInCombat, isInInst, isInPVP = true, true, true end
+	if depend and not IsPlayerSpell(depend) then
+		isPlayerSpell = false
+	end
+	if spec and spec ~= GetSpecialization() then
+		isRightSpec = false
+	end
+	if combat and InCombatLockdown() then
+		isInCombat = true
+	end
+	if instance and inInst and (instType == 'scenario' or instType == 'party' or instType == 'raid') then
+		isInInst = true
+	end
+	if pvp and (instType == 'arena' or instType == 'pvp' or GetZonePVPInfo() == 'combat') then
+		isInPVP = true
+	end
+	if not combat and not instance and not pvp then
+		isInCombat, isInInst, isInPVP = true, true, true
+	end
 
 	frame:Hide()
 	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') and not UnitIsDeadOrGhost('player') then
@@ -47,7 +62,9 @@ function AURA:Reminder_Update(cfg)
 		else
 			for i = 1, 32 do
 				local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
-				if not name then break end
+				if not name then
+					break
+				end
 				if name and cfg.spells[spellID] then
 					frame:Hide()
 					return
@@ -95,29 +112,32 @@ end
 
 function AURA:Reminder_OnEvent()
 	for _, cfg in pairs(groups) do
-		if not cfg.frame then AURA:Reminder_Create(cfg) end
+		if not cfg.frame then
+			AURA:Reminder_Create(cfg)
+		end
 		AURA:Reminder_Update(cfg)
 	end
 	AURA:Reminder_UpdateAnchor()
 end
 
-function AURA:Reminder_AddRune()
-	if GetItemCount(174906) == 0 then return end
-	if not groups then groups = {} end
-	tinsert(groups, {
-		spells = {
-			[317065] = true,
-			[270058] = true,
-		},
-		texture = 839983,
-		cooldown = 174906,
-		instance = true,
-	})
+function AURA:Reminder_AddItemGroup()
+	for _, value in pairs(C.ReminderBuffsList['ITEMS']) do
+		if not value.disable and GetItemCount(value.itemID) > 0 then
+			if not value.texture then
+				value.texture = GetItemIcon(value.itemID)
+			end
+			if not groups then groups = {} end
+			tinsert(groups, value)
+		end
+	end
 end
 
 function AURA:InitReminder()
-	--AURA:Reminder_AddRune()
-	if not groups then return end
+	AURA:Reminder_AddItemGroup()
+
+	if not groups or not next(groups) then
+		return
+	end
 
 	if C.DB.aura.reminder then
 		if not parentFrame then

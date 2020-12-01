@@ -42,5 +42,5 @@ function GUI:CreateCreditsFrame(parent)
 	flr:SetPoint('TOP', 80, -32)
 
 	CreateUrlBox(feedback, 'GitHub', 'https://github.com/Solor/FreeUI', 1)
-	CreateUrlBox(feedback, 'Discord', 'https://discord.gg/Uu28KQq', 2)
+	CreateUrlBox(feedback, 'Discord', 'https://discord.gg/86wbfZXxn7', 2)
 end

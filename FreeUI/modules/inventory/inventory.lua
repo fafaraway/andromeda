@@ -2,32 +2,13 @@ local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:GetModule('INVENTORY')
 local cargBags = F.cargBags
 
-local format, pairs, wipe, ipairs, strmatch, unpack, ceil =
-	string.format,
-	pairs,
-	table.wipe,
-	ipairs,
-	string.match,
-	unpack,
-	math.ceil
+local format, pairs, wipe, ipairs, strmatch, unpack, ceil = string.format, pairs, table.wipe, ipairs, string.match, unpack, math.ceil
 local EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
-local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM =
-	LE_ITEM_QUALITY_POOR,
-	LE_ITEM_QUALITY_RARE,
-	LE_ITEM_QUALITY_HEIRLOOM
-local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER =
-	LE_ITEM_CLASS_WEAPON,
-	LE_ITEM_CLASS_ARMOR,
-	LE_ITEM_CLASS_CONTAINER
+local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
+local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
-local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem =
-	GetContainerNumSlots,
-	GetContainerItemInfo,
-	PickupContainerItem
-local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After =
-	C_NewItems.IsNewItem,
-	C_NewItems.RemoveNewItem,
-	C_Timer.After
+local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
+local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsCosmeticItem = IsCosmeticItem
@@ -131,9 +112,7 @@ local profit, spent, oldMoney = 0, 0, 0
 local function getClassIcon(class)
 	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
 	c1, c2, c3, c4 = (c1 + .03) * 50, (c2 - .03) * 50, (c3 + .03) * 50, (c4 - .03) * 50
-	local classStr =
-		'|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:' ..
-		c1 .. ':' .. c2 .. ':' .. c3 .. ':' .. c4 .. '|t '
+	local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:' .. c1 .. ':' .. c2 .. ':' .. c3 .. ':' .. c4 .. '|t '
 	return classStr or ''
 end
 
@@ -781,8 +760,8 @@ function INVENTORY:CreateCustomJunkButton()
 			else
 				bu.__turnOff()
 			end
-			self:GetScript('OnEnter')(self)
 			INVENTORY:UpdateAllBags()
+			self:GetScript('OnEnter')(self)
 		end
 	)
 
@@ -855,10 +834,7 @@ local function deleteButtonOnClick(self)
 	end
 
 	local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
-	if
-		IsControlKeyDown() and IsAltKeyDown() and texture and
-			(quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM)
-	 then
+	if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
 		PickupContainerItem(self.bagID, self.slotID)
 		DeleteCursorItem()
 	end
@@ -902,7 +878,7 @@ function INVENTORY:OnLogin()
 	local iconSize = C.DB.inventory.slot_size
 	local showNewItem = C.DB.inventory.new_item_flash
 	local hasCanIMogIt = IsAddOnLoaded('CanIMogIt')
-	local hasPawn = IsAddOnLoaded("Pawn")
+	local hasPawn = IsAddOnLoaded('Pawn')
 
 	local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
 	Backpack:RegisterBlizzard()
@@ -954,8 +930,8 @@ function INVENTORY:OnLogin()
 		f.consumable = MyContainer:New('Consumable', {Columns = bagsWidth, Parent = f.main})
 		f.consumable:SetFilter(filters.bagConsumable, true)
 
-		f.bagCompanion = MyContainer:New('BagCompanion', {Columns = bagsWidth, Parent = f.main})
-		f.bagCompanion:SetFilter(filters.bagMountPet, true)
+		f.bagCollection = MyContainer:New('BagCollection', {Columns = bagsWidth, Parent = f.main})
+		f.bagCollection:SetFilter(filters.bagCollection, true)
 
 		f.bagGoods = MyContainer:New('BagGoods', {Columns = bagsWidth, Parent = f.main})
 		f.bagGoods:SetFilter(filters.bagGoods, true)
@@ -986,8 +962,8 @@ function INVENTORY:OnLogin()
 		f.bankConsumable = MyContainer:New('BankConsumable', {Columns = bankWidth, Parent = f.bank})
 		f.bankConsumable:SetFilter(filters.bankConsumable, true)
 
-		f.bankCompanion = MyContainer:New('BankCompanion', {Columns = bankWidth, Parent = f.bank})
-		f.bankCompanion:SetFilter(filters.bankMountPet, true)
+		f.bankCollection = MyContainer:New('BankCollection', {Columns = bankWidth, Parent = f.bank})
+		f.bankCollection:SetFilter(filters.bankCollection, true)
 
 		f.bankGoods = MyContainer:New('BankGoods', {Columns = bankWidth, Parent = f.bank})
 		f.bankGoods:SetFilter(filters.bankGoods, true)
@@ -1004,7 +980,7 @@ function INVENTORY:OnLogin()
 			f.azeriteItem,
 			f.equipment,
 			f.equipSet,
-			f.bagCompanion,
+			f.bagCollection,
 			f.bagGoods,
 			f.consumable,
 			f.bagQuest,
@@ -1016,7 +992,7 @@ function INVENTORY:OnLogin()
 			f.bankEquipment,
 			f.bankEquipSet,
 			f.bankLegendary,
-			f.bankCompanion,
+			f.bankCollection,
 			f.bankGoods,
 			f.bankConsumable,
 			f.bankQuest,
@@ -1149,9 +1125,11 @@ function INVENTORY:OnLogin()
 	}
 
 	local function isItemNeedsLevel(item)
-		return item.link and item.level and item.rarity > 1 and
-			(item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or
-				item.classID == LE_ITEM_CLASS_ARMOR)
+		return item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
+	end
+
+	local function isItemExist(item)
+		return item.link
 	end
 
 	local function GetIconOverlayAtlas(item)
@@ -1184,8 +1162,12 @@ function INVENTORY:OnLogin()
 	end
 
 	local function UpdatePawnArrow(self, item)
-		if not hasPawn then return end
-		if not PawnIsContainerItemAnUpgrade then return end
+		if not hasPawn then
+			return
+		end
+		if not PawnIsContainerItemAnUpgrade then
+			return
+		end
 		if self.UpgradeIcon then
 			self.UpgradeIcon:SetShown(PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
 		end
@@ -1193,11 +1175,7 @@ function INVENTORY:OnLogin()
 
 	function MyButton:OnUpdate(item)
 		if self.JunkIcon then
-			if
-				(MerchantFrame:IsShown() or customJunkEnable) and
-					(item.rarity == LE_ITEM_QUALITY_POOR or FREE_ADB['custom_junk_list'][item.id]) and
-					item.sellPrice > 0
-			 then
+			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FREE_ADB['custom_junk_list'][item.id]) and item.sellPrice > 0 then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -1256,16 +1234,13 @@ function INVENTORY:OnLogin()
 			self:SetBackdropColor(0, 0, 0, .25)
 		end
 
-		if C.DB.inventory.bind_type then
+		if C.DB.inventory.bind_type and isItemExist(item) then
 			local itemLink = GetContainerItemLink(item.bagID, item.slotID)
 			if not itemLink then
 				return
 			end
 
-			local isBOA =
-				CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BNETACCOUNTBOUND) or
-				CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BIND_TO_BNETACCOUNT) or
-				CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_ACCOUNTBOUND)
+			local isBOA = CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BNETACCOUNTBOUND) or CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BIND_TO_BNETACCOUNT) or CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_ACCOUNTBOUND)
 			local isSoulBound = CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_SOULBOUND)
 			local _, _, itemRarity, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
 
@@ -1276,6 +1251,8 @@ function INVENTORY:OnLogin()
 			else
 				self.BindType:SetText('')
 			end
+		else
+			self.BindType:SetText('')
 		end
 
 		-- Hide empty tooltip
@@ -1369,8 +1346,8 @@ function INVENTORY:OnLogin()
 			label = BAG_FILTER_CONSUMABLES
 		elseif name == 'Junk' then
 			label = BAG_FILTER_JUNK
-		elseif strmatch(name, 'Companion') then
-			label = MOUNTS_AND_PETS
+		elseif strmatch(name, 'Collection') then
+			label = COLLECTIONS
 		elseif strmatch(name, 'Favourite') then
 			label = PREFERENCES
 		elseif strmatch(name, 'Goods') then
@@ -1446,6 +1423,7 @@ function INVENTORY:OnLogin()
 		if not id then
 			return
 		end
+
 		local _, _, quality, _, _, _, _, _, _, _, _, classID, subClassID = GetItemInfo(id)
 		if not quality or quality == 1 then
 			quality = 0
