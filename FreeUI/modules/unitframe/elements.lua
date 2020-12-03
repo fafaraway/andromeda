@@ -1911,14 +1911,24 @@ end
 
 --[[ Tags ]]
 function UNITFRAME:AddGroupNameText(self)
-	local groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
+	local groupName
+	if FREE_ADB.font_outline then
+		groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, true, nil, nil, true)
+	else
+		groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil, nil, nil, 'THICK')
+	end
 
 	self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
 	self.GroupName = groupName
 end
 
 function UNITFRAME:AddNameText(self)
-	local name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
+	local name
+	if FREE_ADB.font_outline then
+		name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
+	else
+		name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	end
 
 	if self.unitStyle == 'target' then
 		name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1935,7 +1945,12 @@ function UNITFRAME:AddNameText(self)
 end
 
 function UNITFRAME:AddHealthValueText(self)
-	local healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
+	local healthValue
+	if FREE_ADB.font_outline then
+		healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
+	else
+		healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	end
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
 	if self.unitStyle == 'player' then
@@ -1958,7 +1973,12 @@ function UNITFRAME:AddHealthValueText(self)
 end
 
 function UNITFRAME:AddPowerValueText(self)
-	local powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
+	local powerValue
+	if FREE_ADB.font_outline then
+		powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
+	else
+		powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	end
 	powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
 	if self.unitStyle == 'target' then
@@ -1976,7 +1996,12 @@ function UNITFRAME:AddPowerValueText(self)
 end
 
 function UNITFRAME:AddAlternativePowerValueText(self)
-	local altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Regular, 11, C.isLowRes, nil, nil, C.isLowRes and nil or 'THICK')
+	local altPowerValue
+	if FREE_ADB.font_outline then
+		altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
+	else
+		altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	end
 	if self.unitStyle == 'boss' then
 		altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
 	else

@@ -879,7 +879,7 @@ C.CharacterSettings = {
 			['lock_position'] = true,
 				['window_width'] = 300,
 				['window_height'] = 100,
-			['font_outline'] = false,
+
 			['fade_out'] = true,
 				['fading_visible'] = 120,
 				['fading_duration'] = 6,
@@ -971,6 +971,7 @@ C.AccountSettings = {
 	['cursor_trail'] = true,
 	['vignetting'] = true,
 	['vignetting_alpha'] = .5,
+	['font_outline'] = false,
 	['reskin_blizz'] = true,
 	['backdrop_alpha'] = .75,
 	['shadow_border'] = true,

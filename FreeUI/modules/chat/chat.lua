@@ -83,9 +83,15 @@ function CHAT:RestyleChatFrame()
 	end
 
 	local fontSize = select(2, self:GetFont())
-	self:SetFont(C.Assets.Fonts.Bold, fontSize, C.DB.chat.font_outline and 'OUTLINE')
-	self:SetShadowColor(0, 0, 0, 1)
-	self:SetShadowOffset(C.DB.chat.font_outline and 1 or 2, C.DB.chat.font_outline and -1 or -2)
+	if FREE_ADB.font_outline then
+		self:SetFont(C.Assets.Fonts.Bold, fontSize, 'OUTLINE')
+		self:SetShadowColor(0, 0, 0, 1)
+		self:SetShadowOffset(1, -1)
+	else
+		self:SetFont(C.Assets.Fonts.Bold, fontSize, nil)
+		self:SetShadowColor(0, 0, 0, 1)
+		self:SetShadowOffset(2, -2)
+	end
 
 	self:SetClampedToScreen(false)
 	self:SetMaxResize(C.ScreenWidth, C.ScreenHeight)

@@ -358,6 +358,7 @@ L.GUI = {
 		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting',
 		['HIDE_TALKINGHEAD'] = 'Hide talking head',
 		['HIDE_BOSS_BANNER'] = 'Hide boss banner',
+		['FONT_OUTLINE'] = 'Use font outline',
 	},
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',

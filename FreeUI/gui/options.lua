@@ -142,7 +142,7 @@ GUI.OptionsList = {
 		-- chat
 		{1, 'chat', 'enable', L.GUI.CHAT.ENABLE},
 		{1, 'chat', 'lock_position', L.GUI.CHAT.LOCK_POSITION, nil, nil, nil, L.GUI.CHAT.LOCK_POSITION_TIP},
-		{1, 'chat', 'font_outline', L.GUI.CHAT.FONT_OUTLINE, true},
+
 		{1, 'chat', 'fade_out', L.GUI.CHAT.FADE_OUT, nil, nil, nil, L.GUI.CHAT.FADE_OUT_TIP},
 		{1, 'chat', 'abbr_channel_names', L.GUI.CHAT.ABBR_CHANNEL_NAMES, true},
 		{1, 'chat', 'voice_button', L.GUI.CHAT.VOICE_BUTTON},
@@ -372,6 +372,7 @@ GUI.OptionsList = {
 		{4, 'ACCOUNT', 'texture_style', L.GUI.MISC.TEXTURE_STYLE, false, {}},
 		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
 		{},
+		{1, 'ACCOUNT', 'font_outline', L.GUI.MISC.FONT_OUTLINE},
 		{1, 'blizzard', 'hide_talkinghead', L.GUI.MISC.HIDE_TALKINGHEAD},
 		{1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true}
 	},
