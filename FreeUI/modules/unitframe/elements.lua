@@ -381,12 +381,19 @@ local function UpdatePowerColor(power, unit)
 		if spec ~= 1 then
 			return
 		end
-		if cur < 15 then
-			power:SetStatusBarColor(.5, .5, .5)
-		elseif cur < 40 then
-			power:SetStatusBarColor(1, .8, 0)
+
+		-- EyeBeam needs 30 power, ChaosStrike needs 40 power
+		-- BladeDance needs 35 power or 15 power with FirstBlood
+		local eyeBeam, _ = IsUsableSpell(198013)
+		local chaosStrike, _ = IsUsableSpell(162794)
+		local bladeDance, _ = IsUsableSpell(188499)
+
+		if chaosStrike then
+			power:SetStatusBarColor(.85, .16, .23)
+		elseif eyeBeam then
+			power:SetStatusBarColor(.93, .74, .13)
 		else
-			power:SetStatusBarColor(197 / 255, 56 / 255, 48 / 255)
+			power:SetStatusBarColor(.5, .5, .5)
 		end
 	end
 end
