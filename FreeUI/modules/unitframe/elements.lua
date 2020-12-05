@@ -787,7 +787,7 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 		return
 	end
 
-	local spellList = C.CornerBuffsList[C.MyClass]
+	local spellList = FREE_ADB['corner_buffs'][C.MyClass]
 	local buttons = self.BuffIndicator
 	unit = self.unit
 
@@ -800,7 +800,7 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 			end
 			local value = spellList[spellID]
 			if value and (value[3] or caster == 'player' or caster == 'pet') then
-				--[[ for _, bu in pairs(buttons) do
+				for _, bu in pairs(buttons) do
 					if bu.anchor == value[1] then
 						if duration and duration > 0 then
 							bu.cd:SetCooldown(expiration - duration, duration)
@@ -816,24 +816,24 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 
 						break
 					end
-				end ]]
-				local bu = buttons[value[1]]
-				if bu then
-					if duration and duration > 0 then
-						bu.cd:SetCooldown(expiration - duration, duration)
-						bu.cd:Show()
-					else
-						bu.cd:Hide()
-					end
-
-					bu.icon:SetVertexColor(unpack(value[2]))
-
-					if count > 1 then
-						bu.count:SetText(count)
-					end
-					bu:Show()
-					found[bu.anchor] = true
 				end
+			-- local bu = buttons[value[1]]
+			-- if bu then
+			-- 	if duration and duration > 0 then
+			-- 		bu.cd:SetCooldown(expiration - duration, duration)
+			-- 		bu.cd:Show()
+			-- 	else
+			-- 		bu.cd:Hide()
+			-- 	end
+
+			-- 	bu.icon:SetVertexColor(unpack(value[2]))
+
+			-- 	if count > 1 then
+			-- 		bu.count:SetText(count)
+			-- 	end
+			-- 	bu:Show()
+			-- 	found[bu.anchor] = true
+			-- end
 			end
 		end
 	end

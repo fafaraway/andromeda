@@ -1,28 +1,51 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
-local COLORS = F.COLORS
 
 
 local RaidDebuffs = {}
 function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 	local instName = EJ_GetInstanceInfo(instID)
 	if not instName then
-		if C.isDeveloper then print("Invalid instance ID: "..instID) end
+		if C.isDeveloper then
+			print('Invalid instance ID: ' .. instID)
+		end
 		return
 	end
 
-	if not RaidDebuffs[instName] then RaidDebuffs[instName] = {} end
-	if not level then level = 2 end
-	if level > 6 then level = 6 end
+	if not RaidDebuffs[instName] then
+		RaidDebuffs[instName] = {}
+	end
+	if not level then
+		level = 2
+	end
+	if level > 6 then
+		level = 6
+	end
 
 	RaidDebuffs[instName][spellID] = level
 end
+
 
 
 function UNITFRAME:OnLogin()
 	F:SetSmoothingAmount(.3)
 
 	UNITFRAME:UpdateColors()
+
+	if not FREE_ADB['corner_buffs'][C.MyClass] then FREE_ADB['corner_buffs'][C.MyClass] = {} end
+	if not next(FREE_ADB['corner_buffs'][C.MyClass]) then
+		F.CopyTable(C.CornerBuffsList[C.MyClass], FREE_ADB['corner_buffs'][C.MyClass])
+	end
+
+	-- Filter bloodlust for healers
+	local bloodlustList = {57723, 57724, 80354, 264689}
+	local function filterBloodlust()
+		for _, spellID in pairs(bloodlustList) do
+			FREE_ADB['corner_buffs'][C.MyClass][spellID] = C.Role ~= 'Healer' and {'BOTTOMLEFT', {1, .8, 0}, true} or nil
+		end
+	end
+	filterBloodlust()
+	F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', filterBloodlust)
 
 	if not C.DB.unitframe.enable then
 		return
@@ -54,6 +77,8 @@ function UNITFRAME:OnLogin()
 		self:SpawnArena()
 	end
 
+
+
 	if not C.DB.unitframe.enable_group then
 		return
 	end
@@ -80,9 +105,7 @@ function UNITFRAME:OnLogin()
 
 		local function UpdateSpecPos(event, ...)
 			local unit, _, spellID = ...
-			if
-				(event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'PLAYER_ENTERING_WORLD'
-			 then
+			if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'PLAYER_ENTERING_WORLD' then
 				if not GetSpecialization() then
 					return
 				end
