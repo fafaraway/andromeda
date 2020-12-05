@@ -71,9 +71,14 @@ end
 
 
 function BLIZZARD:ErrorsFrame()
-	firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
+	if FREE_ADB.font_outline then
+		firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Bold, 14, true, '', 'RED', true)
+		secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Bold, 14, true, '', 'RED', true)
+	else
+		firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
+		secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
+	end
 	firstErrorFrame.text:SetPoint('TOP', UIParent, 0, -80)
-	secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
 	secondErrorFrame.text:SetPoint('TOP', UIParent, 0, -96)
 
 	if C.DB.blizzard.concise_errors then

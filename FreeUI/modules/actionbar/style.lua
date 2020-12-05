@@ -64,6 +64,12 @@ local function ApplyFontColor(fontString, color)
 	fontString:SetTextColor(color[1], color[2], color[3])
 end
 
+local function ApplyFontShadow(fontString, shadow)
+	if not shadow then return  end
+	fontString:SetShadowColor(shadow[1], shadow[2], shadow[3], shadow[4])
+	fontString:SetShadowOffset(shadow[5], shadow[6])
+end
+
 local function ApplyHorizontalAlign(fontString, align)
 	if not align then return end
 	fontString:SetJustifyH(align)
@@ -108,6 +114,7 @@ local function SetupFontString(fontString, cfg)
 	ApplyPoints(fontString, cfg.points)
 	ApplyFont(fontString, cfg.font)
 	ApplyFontColor(fontString, cfg.color)
+	ApplyFontShadow(fontString, cfg.shadow)
 	ApplyAlpha(fontString, cfg.alpha)
 	ApplyHorizontalAlign(fontString, cfg.halign)
 	ApplyVerticalAlign(fontString, cfg.valign)
@@ -430,24 +437,28 @@ function ACTIONBAR:RestyleButtons()
 			},
 		},
 		name = {
-			font = {C.Assets.Fonts.Regular, 11, 'OUTLINE'},
+			font = {C.Assets.Fonts.Bold, 10, 'OUTLINE'},
 			points = {
 				{'BOTTOMLEFT', 0, 2},
 			},
+			color = {1, .82, .06},
+			shadow = {0, 0, 0, 1, 1, -1}
 		},
 		hotkey = {
-			font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'},
+			font = {C.Assets.Fonts.Bold, 10, 'OUTLINE'},
 			points = {
 				{'TOPRIGHT', -2, -2},
 			},
-			color = {1, 1, 1}
+			color = {1, 1, 1},
+			shadow = {0, 0, 0, 1, 1, -1}
 		},
 		count = {
-			font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'},
+			font = {C.Assets.Fonts.Bold, 10, 'OUTLINE'},
 			points = {
 				{'BOTTOMLEFT', 2, 2},
 			},
-			color = {81/255, 179/255, 221/255}
+			color = {.19, .75, 1},
+			shadow = {0, 0, 0, 1, 1, -1}
 		},
 		buttonstyle = {file = ''},
 	}

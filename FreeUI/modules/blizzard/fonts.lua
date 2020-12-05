@@ -221,7 +221,7 @@ loader:SetScript(
 		SetFont(_G.FriendsFont_Large, NORMAL, 15)
 		SetFont(_G.FriendsFont_UserText, NORMAL, 11)
 
-		SetFont(_G.ChatBubbleFont, BOLD, 16, nil, 'THICK')
+		SetFont(_G.ChatBubbleFont, BOLD, 16, true)
 		--ChatFontNormal
 		--ChatFontSmall
 
@@ -229,7 +229,7 @@ loader:SetScript(
 		SetFont(_G.Tooltip_Med, NORMAL, 14)
 		SetFont(_G.Tooltip_Small, NORMAL, 12)
 
-		SetFont(_G.System_IME, BOLD, 16)
+		SetFont(_G.System_IME, BOLD, 16, true)
 
 		SetFont(_G.SystemFont_NamePlateFixed, NORMAL, 14)
 		SetFont(_G.SystemFont_LargeNamePlateFixed, NORMAL, 20)
@@ -242,13 +242,13 @@ loader:SetScript(
 		SetFont(_G.WorldMapTextFont, HEADER, 40, nil, 'THICK')
 		SetFont(_G.PVPInfoTextFont, HEADER, 40, nil, 'THICK')
 
-		SetFont(_G.ErrorFont, BOLD, 14, nil, 'THICK')
+		SetFont(_G.ErrorFont, BOLD, 14, FREE_ADB.font_outline, not FREE_ADB.font_outline and 'THICK')
 		SetFont(_G.CombatTextFont, COMBAT, 200, 'THINOUTLINE')
 
-		SetFont(_G.RaidWarningFrame.slot1, BOLD, 20, nil, 'THICK')
-		SetFont(_G.RaidWarningFrame.slot2, BOLD, 20, nil, 'THICK')
-		SetFont(_G.RaidBossEmoteFrame.slot1, BOLD, 20, nil, 'THICK')
-		SetFont(_G.RaidBossEmoteFrame.slot2, BOLD, 20, nil, 'THICK')
+		SetFont(_G.RaidWarningFrame.slot1, BOLD, 20, FREE_ADB.font_outline, not FREE_ADB.font_outline and 'THICK')
+		SetFont(_G.RaidWarningFrame.slot2, BOLD, 20, FREE_ADB.font_outline, not FREE_ADB.font_outline and 'THICK')
+		SetFont(_G.RaidBossEmoteFrame.slot1, BOLD, 20, FREE_ADB.font_outline, not FREE_ADB.font_outline and 'THICK')
+		SetFont(_G.RaidBossEmoteFrame.slot2, BOLD, 20, FREE_ADB.font_outline, not FREE_ADB.font_outline and 'THICK')
 
 		SetFont(_G.GameFontNormal, NORMAL, 13)
 		SetFont(_G.QuestFont, NORMAL, 15)
