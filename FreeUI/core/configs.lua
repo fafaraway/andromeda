@@ -529,6 +529,7 @@ C.CharacterSettings = {
 		['easy_delete'] = true,
 		['pet_filter'] = true,
 		['instant_loot'] = false,
+		['friends_list'] = true,
 	},
 
 	['combat'] = {

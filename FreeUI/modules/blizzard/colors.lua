@@ -98,7 +98,7 @@ end
 F:RegisterEvent('ADDON_LOADED', updateGuildUI)
 
 -- Friends
-local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%%d', '%%s')
+--[[ local FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%%d', '%%s')
 FRIENDS_LEVEL_TEMPLATE = FRIENDS_LEVEL_TEMPLATE:gsub('%$d', '%$s')
 
 local function friendsFrame()
@@ -144,7 +144,7 @@ local function friendsFrame()
 	end
 end
 hooksecurefunc(FriendsListFrameScrollFrame, 'update', friendsFrame)
-hooksecurefunc('FriendsFrame_UpdateFriends', friendsFrame)
+hooksecurefunc('FriendsFrame_UpdateFriends', friendsFrame) ]]
 
 -- Whoframe
 local columnTable = {}
