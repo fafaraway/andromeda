@@ -1,8 +1,6 @@
 local F, C, L = unpack(select(2, ...))
-local CHAT = F:GetModule('CHAT')
+local CHAT = F.CHAT
 
-
-local _G = getfenv(0)
 local strfind, strmatch, strsub, gsub = string.find, string.match, string.sub, string.gsub
 local strsplit, strlen = string.split, string.len
 local format, tconcat, tostring = string.format, table.concat, tostring
@@ -18,7 +16,9 @@ local chatHide = false
 local lines, menu, frame, editBox = {}
 
 local function canChangeMessage(arg1, id)
-	if id and arg1 == '' then return id end
+	if id and arg1 == '' then
+		return id
+	end
 end
 
 local function isMessageProtected(msg)
@@ -54,35 +54,15 @@ function CHAT:ChatCopy_OnClick(btn)
 		if chatHide == false then
 			ChatFrame1:Hide()
 			GeneralDockManager:Hide()
+			CHAT.ChannelBar:Hide()
 
 			chatHide = true
 		elseif chatHide == true then
-
 			ChatFrame1:Show()
 			GeneralDockManager:Show()
+			CHAT.ChannelBar:Show()
 
 			chatHide = false
-		end
-	elseif btn == 'RightButton' then
-		if not C.isCNPortal then return end
-		if chatHide == true then return end
-
-		local inchannel = false
-		local channels = {GetChannelList()}
-		for i = 1, #channels do
-			if channels[i] == '大脚世界频道' then
-				inchannel = true
-				break
-			end
-		end
-		if inchannel then
-			LeaveChannelByName('大脚世界频道')
-			F.Print(C.RedColor..'离开|r '..'世界频道')
-		else
-			JoinPermanentChannel('大脚世界频道' ,nil ,1)
-			ChatFrame_AddChannel(ChatFrame1, '大脚世界频道')
-			ChatFrame_RemoveMessageGroup(ChatFrame1, 'CHANNEL')
-			F.Print(C.GreenColor..'加入|r '..'世界频道')
 		end
 	else
 		if not frame:IsShown() then
@@ -124,19 +104,32 @@ function CHAT:ChatCopy_Create()
 	editBox:SetFont(C.Assets.Fonts.Regular, 12)
 	editBox:SetWidth(scrollArea:GetWidth())
 	editBox:SetHeight(scrollArea:GetHeight())
-	editBox:SetScript('OnEscapePressed', function() frame:Hide() end)
-	editBox:SetScript('OnTextChanged', function(_, userInput)
-		if userInput then return end
-		local _, max = scrollArea.ScrollBar:GetMinMaxValues()
-		for i = 1, max do
-			ScrollFrameTemplate_OnMouseWheel(scrollArea, -1)
+	editBox:SetScript(
+		'OnEscapePressed',
+		function()
+			frame:Hide()
 		end
-	end)
+	)
+	editBox:SetScript(
+		'OnTextChanged',
+		function(_, userInput)
+			if userInput then
+				return
+			end
+			local _, max = scrollArea.ScrollBar:GetMinMaxValues()
+			for i = 1, max do
+				ScrollFrameTemplate_OnMouseWheel(scrollArea, -1)
+			end
+		end
+	)
 
 	scrollArea:SetScrollChild(editBox)
-	scrollArea:HookScript('OnVerticalScroll', function(self, offset)
-		editBox:SetHitRectInsets(0, 0, offset, (editBox:GetHeight() - offset - self:GetHeight()))
-	end)
+	scrollArea:HookScript(
+		'OnVerticalScroll',
+		function(self, offset)
+			editBox:SetHitRectInsets(0, 0, offset, (editBox:GetHeight() - offset - self:GetHeight()))
+		end
+	)
 
 	local copy = CreateFrame('Button', nil, UIParent)
 	copy:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, 0)
@@ -149,42 +142,47 @@ function CHAT:ChatCopy_Create()
 	copy:RegisterForClicks('AnyUp')
 	copy:SetScript('OnClick', self.ChatCopy_OnClick)
 
-	copy:HookScript('OnEnter', function(self)
-		GameTooltip:SetOwner(copy, 'ANCHOR_TOPRIGHT')
-		GameTooltip:AddLine(' ')
-		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['CHAT_TOGGLE_PANEL']..' ', 1,1,1, .9, .8, .6)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['CHAT_TOGGLE_WC']..' ', 1,1,1, .9, .8, .6)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle..L['CHAT_COPY']..' ', 1,1,1, .9, .8, .6)
-		GameTooltip:Show()
-	end)
+	copy:HookScript(
+		'OnEnter',
+		function(self)
+			GameTooltip:SetOwner(copy, 'ANCHOR_TOPRIGHT')
+			GameTooltip:AddLine(' ')
+			GameTooltip:AddDoubleLine(' ', C.LineString)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['CHAT_TOGGLE_PANEL'] .. ' ', 1, 1, 1, .9, .8, .6)
+			-- GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['CHAT_TOGGLE_WC']..' ', 1,1,1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['CHAT_COPY'] .. ' ', 1, 1, 1, .9, .8, .6)
+			GameTooltip:Show()
+		end
+	)
 
-	copy:HookScript('OnLeave', function(self)
-		GameTooltip:Hide()
-	end)
-
+	copy:HookScript(
+		'OnLeave',
+		function(self)
+			GameTooltip:Hide()
+		end
+	)
 
 	F.ReskinClose(frame.close)
 	F.ReskinScroll(ChatCopyScrollFrameScrollBar)
 end
 
 function CHAT:ChatCopy()
-	if not C.DB.chat.copy_button then return end
+	if not C.DB.chat.copy_button then
+		return
+	end
 
 	self:ChatCopy_Create()
 end
 
-
-
 local foundurl = false
 
 local function convertLink(text, value)
-	return '|Hurl:'..tostring(value)..'|h'..C.InfoColor..text..'|r|h'
+	return '|Hurl:' .. tostring(value) .. '|h' .. C.InfoColor .. text .. '|r|h'
 end
 
 local function highlightURL(_, url)
 	foundurl = true
-	return ' '..convertLink('['..url..']', url)..' '
+	return ' ' .. convertLink('[' .. url .. ']', url) .. ' '
 end
 
 function CHAT:SearchForURL(text, ...)
@@ -237,9 +235,13 @@ function CHAT:HyperlinkShowHook(link, _, button)
 			end
 		elseif type == 'BNplayer' then
 			local _, bnID = strmatch(value, '([^:]*):([^:]*):')
-			if not bnID then return end
+			if not bnID then
+				return
+			end
 			local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
-			if not accountInfo then return end
+			if not accountInfo then
+				return
+			end
 			local gameAccountInfo = accountInfo.gameAccountInfo
 			local gameID = gameAccountInfo.gameAccountID
 			if gameID and CanCooperateWithGameAccount(accountInfo) then
@@ -249,13 +251,13 @@ function CHAT:HyperlinkShowHook(link, _, button)
 				elseif IsControlKeyDown() then
 					local charName = gameAccountInfo.characterName
 					local realmName = gameAccountInfo.realmName
-					GuildInvite(charName..'-'..realmName)
+					GuildInvite(charName .. '-' .. realmName)
 					hide = true
 				end
 			end
 		end
 	elseif type == 'url' then
-		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName()..'EditBox']
+		local eb = LAST_ACTIVE_CHAT_EDIT_BOX or _G[self:GetName() .. 'EditBox']
 		if eb then
 			eb:Show()
 			eb:SetText(value)
@@ -264,7 +266,9 @@ function CHAT:HyperlinkShowHook(link, _, button)
 		end
 	end
 
-	if hide then ChatEdit_ClearChat(ChatFrame1.editBox) end
+	if hide then
+		ChatEdit_ClearChat(ChatFrame1.editBox)
+	end
 end
 
 function CHAT.SetItemRefHook(link, _, button)
@@ -278,11 +282,15 @@ function CHAT.SetItemRefHook(link, _, button)
 			else
 				namelink = strsub(link, 8)
 			end
-			if namelink then fullname = strsplit(':', namelink) end
+			if namelink then
+				fullname = strsplit(':', namelink)
+			end
 
 			if fullname and strlen(fullname) > 0 then
 				local name, server = strsplit('-', fullname)
-				if server and server ~= C.MyRealm then name = fullname end
+				if server and server ~= C.MyRealm then
+					name = fullname
+				end
 
 				if MailFrame and MailFrame:IsShown() then
 					MailFrameTab_OnClick(nil, 2)
@@ -293,18 +301,19 @@ function CHAT.SetItemRefHook(link, _, button)
 					local hasText = (editBox:GetText() ~= '')
 					ChatEdit_ActivateChat(editBox)
 					editBox:Insert(name)
-					if not hasText then editBox:HighlightText() end
+					if not hasText then
+						editBox:HighlightText()
+					end
 				end
 			end
 		end
 	end
 end
 
-
 function CHAT:UrlCopy()
 	for i = 1, NUM_CHAT_WINDOWS do
 		if i ~= 2 then
-			local chatFrame = _G['ChatFrame'..i]
+			local chatFrame = _G['ChatFrame' .. i]
 			chatFrame.am = chatFrame.AddMessage
 			chatFrame.AddMessage = self.SearchForURL
 		end
@@ -312,7 +321,9 @@ function CHAT:UrlCopy()
 
 	local orig = ItemRefTooltip.SetHyperlink
 	function ItemRefTooltip:SetHyperlink(link, ...)
-		if link and strsub(link, 0, 3) == 'url' then return end
+		if link and strsub(link, 0, 3) == 'url' then
+			return
+		end
 
 		return orig(self, link, ...)
 	end
@@ -320,7 +331,3 @@ function CHAT:UrlCopy()
 	hooksecurefunc('ChatFrame_OnHyperlinkShow', self.HyperlinkShowHook)
 	hooksecurefunc('SetItemRef', self.SetItemRefHook)
 end
-
-
-
-

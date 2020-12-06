@@ -167,7 +167,8 @@ function CHAT:CreateChannelBar()
 				if wc.inChannel then
 					if btn == 'RightButton' then
 						LeaveChannelByName(channelName)
-						print('|cffFF7F50' .. QUIT .. '|r ' .. C.InfoColor .. L['CHAT_WORLD_CHANNEL'])
+						--print('|cffFF7F50' .. QUIT .. '|r ' .. C.InfoColor .. L['CHAT_WORLD_CHANNEL'])
+						F.Print(C.RedColor..'离开|r '..'世界频道')
 						wc.inChannel = false
 					elseif channelID then
 						ChatFrame_OpenChat('/' .. channelID, chatFrame)
@@ -175,7 +176,8 @@ function CHAT:CreateChannelBar()
 				else
 					JoinPermanentChannel(channelName, nil, 1)
 					ChatFrame_AddChannel(ChatFrame1, channelName)
-					print('|cff00C957' .. JOIN .. '|r ' .. C.InfoColor .. L['CHAT_WORLD_CHANNEL'])
+					--print('|cff00C957' .. JOIN .. '|r ' .. C.InfoColor .. L['CHAT_WORLD_CHANNEL'])
+					F.Print(C.GreenColor..'加入|r '..'世界频道')
 					wc.inChannel = true
 				end
 			end
