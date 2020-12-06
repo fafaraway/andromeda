@@ -3,7 +3,7 @@
 
 	<Script file="misc.lua"/>
 	<Script file="alreadyknown.lua"/>
-	<Script file="BetterWorldQuests.lua"/>
+	<Script file="betterworldquests.lua"/>
 	<Script file="dragemall.lua"/>
 	<Script file="extraquestbutton.lua"/>
 	<Script file="grouptool.lua"/>

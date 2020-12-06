@@ -1,6 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="DBM.lua"/>
-	<Script file="PremadeGroupsFilter.lua"/>
-	<Script file="REHack.lua"/>
-	<Script file="WeakAuras.lua"/>
-</Ui>
