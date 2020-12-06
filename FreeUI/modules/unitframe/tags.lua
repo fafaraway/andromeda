@@ -115,7 +115,7 @@ tagEvents['free:name'] =
 tags['free:groupname'] = function(unit)
 	if C.DB.unitframe.group_names then
 		if UnitInRaid('player') then
-			return shortenName(unit, 4)
+			return shortenName(unit, C.isCNPortal and 2 or 4)
 		else
 			return shortenName(unit, 4)
 		end
