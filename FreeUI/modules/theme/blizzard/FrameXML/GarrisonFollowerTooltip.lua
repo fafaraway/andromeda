@@ -10,9 +10,6 @@ tinsert(C.BlizzThemes, function()
 
 	-- Tooltips
 	function F:ReskinGarrisonTooltip()
-		for i = 1, 9 do
-			select(i, self:GetRegions()):Hide()
-		end
 		if self.Icon then F.ReskinIcon(self.Icon) end
 		if self.CloseButton then F.ReskinClose(self.CloseButton) end
 	end
