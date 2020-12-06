@@ -454,10 +454,10 @@ function MAP:SetupHybridMinimap()
 	mapCanvas:SetScript('OnMouseWheel', MAP.Minimap_OnMouseWheel)
 	mapCanvas:SetScript('OnMouseUp', MAP.Minimap_OnMouseUp)
 
-	local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
+	local rectangleMask = HybridMinimap:CreateMaskTexture()
 	rectangleMask:SetTexture(C.Assets.mask_tex)
-	rectangleMask:SetAllPoints(_G.HybridMinimap)
-	_G.HybridMinimap.RectangleMask = rectangleMask
+	rectangleMask:SetAllPoints(HybridMinimap)
+	HybridMinimap.RectangleMask = rectangleMask
 	mapCanvas:SetMaskTexture(rectangleMask)
 	mapCanvas:SetUseMaskTexture(true)
 
