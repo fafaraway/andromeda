@@ -892,6 +892,7 @@ C.CharacterSettings = {
 			['voice_button'] = true,
 			['tab_cycle'] = true,
 			['smart_bubble'] = false,
+			['channel_bar'] = true,
 			['whisper_invite'] = false,
 				['invite_keyword'] = 'inv',
 				['guild_only'] = true,

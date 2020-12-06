@@ -119,6 +119,7 @@ do
 	L['CHAT_COPY'] = 'Copy chat contents'
 	L['CHAT_WHISPER_TELL'] = 'Tell'
 	L['CHAT_WHISPER_FROM'] = 'From'
+	L['CHAT_WORLD_CHANNEL'] = 'World Channel'
 end
 
 --[[ Aura ]]

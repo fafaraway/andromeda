@@ -478,6 +478,7 @@ function CHAT:OnLogin()
 	CHAT:AutoToggleChatBubble()
 	CHAT:PauseToSlash()
 	CHAT:WhisperInvite()
+	CHAT:CreateChannelBar()
 
 
 	-- ProfanityFilter
