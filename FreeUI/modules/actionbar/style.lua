@@ -437,15 +437,15 @@ function ACTIONBAR:RestyleButtons()
 			},
 		},
 		name = {
-			font = {C.Assets.Fonts.Bold, 10, 'OUTLINE'},
+			font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
 			points = {
 				{'BOTTOMLEFT', 0, 2},
 			},
-			color = {1, .82, .06},
+			color = {.5, .5, .5},
 			shadow = {0, 0, 0, 1, 1, -1}
 		},
 		hotkey = {
-			font = {C.Assets.Fonts.Bold, 10, 'OUTLINE'},
+			font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
 			points = {
 				{'TOPRIGHT', -2, -2},
 			},
@@ -453,7 +453,7 @@ function ACTIONBAR:RestyleButtons()
 			shadow = {0, 0, 0, 1, 1, -1}
 		},
 		count = {
-			font = {C.Assets.Fonts.Bold, 10, 'OUTLINE'},
+			font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
 			points = {
 				{'BOTTOMLEFT', 2, 2},
 			},
