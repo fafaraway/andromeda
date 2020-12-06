@@ -116,9 +116,12 @@ local menuList = {
 
 tinsert(
 	menuList,
-	{text = _G.BLIZZARD_STORE, func = function()
+	{
+		text = _G.BLIZZARD_STORE,
+		func = function()
 			_G.StoreMicroButton:Click()
-		end}
+		end
+	}
 )
 tinsert(menuList, {text = _G.HELP_BUTTON, func = ToggleHelpFrame})
 
@@ -138,7 +141,7 @@ function MAP:CreateCalendar()
 		GameTimeFrame:SetSize(24, 12)
 		GameTimeFrame:SetParent(Minimap)
 		GameTimeFrame:ClearAllPoints()
-		GameTimeFrame:SetPoint('TOPRIGHT', Minimap, -4, -offset - 6)
+		GameTimeFrame:SetPoint('TOPRIGHT', Minimap, -4, -offset - 10)
 		GameTimeFrame:SetHitRectInsets(0, 0, 0, 0)
 
 		for i = 1, GameTimeFrame:GetNumRegions() do
@@ -191,7 +194,7 @@ function MAP:CreateDifficultyFlag()
 	for _, v in pairs(flags) do
 		local flag = _G[v]
 		flag:ClearAllPoints()
-		flag:SetPoint('TOPLEFT', Minimap, 4, -offset - 10)
+		flag:SetPoint('TOPLEFT', Minimap, 0, -offset - 10)
 		flag:SetScale(.9)
 	end
 
@@ -301,17 +304,15 @@ local function UpdateZoneText()
 end
 
 function MAP:CreateZoneText()
-	ZoneTextFrame:SetFrameStrata('TOOLTIP')
-	SubZoneTextFrame:SetFrameStrata('TOOLTIP')
 	ZoneTextString:ClearAllPoints()
-	ZoneTextString:SetPoint('TOP', Minimap.bg, 0, -10)
+	ZoneTextString:SetPoint('TOP', Minimap, 0, -offset - 10)
 	ZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
 	SubZoneTextString:SetFont(C.Assets.Fonts.Header, 22)
 	PVPInfoTextString:SetFont(C.Assets.Fonts.Header, 22)
 	PVPArenaTextString:SetFont(C.Assets.Fonts.Header, 22)
 
 	local zoneText = F.CreateFS(Minimap, C.Assets.Fonts.Header, 16, nil, '', nil, 'THICK')
-	zoneText:SetPoint('TOP', Minimap, 0, -offset)
+	zoneText:SetPoint('TOP', Minimap, 0, -offset - 10)
 	zoneText:SetSize(Minimap:GetWidth(), 30)
 	zoneText:SetJustifyH('CENTER')
 	zoneText:Hide()
@@ -449,89 +450,61 @@ end
 
 function MAP:SetupHybridMinimap()
 	local mapCanvas = HybridMinimap.MapCanvas
-	mapCanvas:SetMaskTexture(C.Assets.mask_tex)
-	mapCanvas:SetUseMaskTexture(true)
+
 	mapCanvas:SetScript('OnMouseWheel', MAP.Minimap_OnMouseWheel)
 	mapCanvas:SetScript('OnMouseUp', MAP.Minimap_OnMouseUp)
+
+	local rectangleMask = _G.HybridMinimap:CreateMaskTexture()
+	rectangleMask:SetTexture(C.Assets.mask_tex)
+	rectangleMask:SetAllPoints(_G.HybridMinimap)
+	_G.HybridMinimap.RectangleMask = rectangleMask
+	mapCanvas:SetMaskTexture(rectangleMask)
+	mapCanvas:SetUseMaskTexture(true)
 
 	HybridMinimap.CircleMask:SetTexture('')
 end
 
 function MAP:HybridMinimapOnLoad(addon)
 	if addon == 'Blizzard_HybridMinimap' then
-		F.Debug('Blizzard_HybridMinimap loaded')
 		MAP:SetupHybridMinimap()
 		F:UnregisterEvent(self, MAP.HybridMinimapOnLoad)
 	end
 end
 
 function MAP:UpdateMinimapScale()
-	local width = Minimap:GetWidth()
-	local height = Minimap:GetHeight() * (190 / 256)
+	local size = Minimap:GetWidth()
 	local scale = C.DB.map.minimap_scale
 	Minimap:SetScale(scale)
-	Minimap.mover:SetScale(scale)
+	Minimap.mover:SetSize(size * scale, size * scale)
 end
 
-function MAP:CreateRectangleMinimap()
-	MinimapCluster:EnableMouse(false)
-	Minimap:SetFrameStrata('LOW')
-	Minimap:SetFrameLevel(2)
-	Minimap:SetClampedToScreen(true)
+function MAP:Minimap()
+	-- Shape and Position
+	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
 	Minimap:SetSize(256, 256)
-	Minimap:SetScale(C.DB.map.minimap_scale)
 	Minimap:SetHitRectInsets(0, 0, Minimap:GetHeight() / 8, Minimap:GetHeight() / 8)
 	Minimap:SetClampRectInsets(0, 0, 0, 0)
-	Minimap:SetArchBlobRingAlpha(0)
-	Minimap:SetQuestBlobRingAlpha(0)
-	Minimap.bg = CreateFrame('Frame', nil, Minimap)
-	Minimap.bg:SetSize(256, 190)
-	Minimap.bg:SetPoint('CENTER')
-	F.SetBD(Minimap.bg, .45)
+	Minimap:SetFrameLevel(Minimap:GetFrameLevel() + 2)
+	MinimapBackdrop:ClearAllPoints()
+	MinimapBackdrop:SetAllPoints(Minimap)
+
+	DropDownList1:SetClampedToScreen(true)
+
+	local mover = F.Mover(Minimap, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, 0})
+	Minimap:ClearAllPoints()
+	Minimap:SetPoint('CENTER', mover)
+	Minimap.mover = mover
+
+	Minimap.backdrop = F.SetBD(Minimap, 1, 0, -(Minimap:GetHeight() / 8), 0, Minimap:GetHeight() / 8)
+	Minimap.backdrop:SetBackdropColor(0, 0, 0, 1)
+	Minimap.backdrop:SetFrameLevel(99)
+	Minimap.backdrop:SetFrameStrata('BACKGROUND')
 
 	function GetMinimapShape()
 		return 'SQUARE'
 	end
 
-	Minimap.mover = F.Mover(Minimap, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, 0})
-	Minimap:ClearAllPoints()
-	Minimap:SetPoint('BOTTOMRIGHT', Minimap.mover)
-
-	MAP:UpdateMinimapScale()
-end
-
-function MAP:Minimap()
-	DropDownList1:SetClampedToScreen(true)
-
-	-- GarrisonLandingPageMinimapButton:SetSize(1, 1)
-	-- GarrisonLandingPageMinimapButton:SetAlpha(0)
-	-- GarrisonLandingPageMinimapButton:EnableMouse(false)
-
-	--[[ local bg = CreateFrame('Frame', nil, UIParent)
-	bg:SetSize(256 * C.DB.map.minimap_scale, 190 * C.DB.map.minimap_scale)
-	F.SetBD(bg)
-
-	Minimap:SetFrameStrata('LOW')
-	Minimap:SetFrameLevel(2)
-	Minimap:SetClampedToScreen(true)
-	Minimap:SetMaskTexture(C.Assets.mask_tex)
-	Minimap:SetSize(256, 256)
-	Minimap:SetScale(C.DB.map.minimap_scale)
-	Minimap:SetHitRectInsets(0, 0, Minimap:GetHeight() / 8, Minimap:GetHeight() / 8)
-	Minimap:SetClampRectInsets(0, 0, 0, 0)
-
-	Minimap:SetParent(bg)
-	Minimap:ClearAllPoints()
-	Minimap:SetPoint('CENTER', bg)
-
-	local mover = F.Mover(bg, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap})
-	bg:ClearAllPoints()
-	bg:SetPoint('CENTER', mover)
-	Minimap.mover = mover
-	Minimap.bg = bg
-
-	 ]]
 	-- ClockFrame
 	LoadAddOn('Blizzard_TimeManager')
 	local region = TimeManagerClockButton:GetRegions()
@@ -548,19 +521,22 @@ function MAP:Minimap()
 		'MinimapBorderTop',
 		'MinimapNorthTag',
 		'MinimapBorder',
+		'MinimapZoneTextButton',
 		'MinimapZoomOut',
 		'MinimapZoomIn',
 		'MiniMapWorldMapButton',
 		'MiniMapMailBorder',
-		'MiniMapTracking',
-		'MinimapZoneTextButton'
+		'MiniMapTracking'
 	}
 
 	for _, v in pairs(frames) do
 		F.HideObject(_G[v])
 	end
+	MinimapCluster:EnableMouse(false)
+	Minimap:SetArchBlobRingScalar(0)
+	Minimap:SetQuestBlobRingScalar(0)
 
-	MAP:CreateRectangleMinimap()
+	MAP:UpdateMinimapScale()
 	MAP:CreateGarrisonButton()
 	MAP:CreateCalendar()
 	MAP:CreateZoneText()
