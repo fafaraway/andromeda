@@ -317,7 +317,7 @@ C.Themes["Blizzard_Communities"] = function()
 
 	do
 		local dialog = CommunitiesSettingsDialog
-		F.StripTextures(dialog)
+		dialog.BG:Hide()
 		F.SetBD(dialog)
 		F.Reskin(dialog.ChangeAvatarButton)
 		F.Reskin(dialog.Accept)
@@ -343,10 +343,6 @@ C.Themes["Blizzard_Communities"] = function()
 		local dialog = CommunitiesAvatarPickerDialog
 		F.StripTextures(dialog)
 		F.SetBD(dialog)
-		select(9, dialog:GetRegions()):Hide()
-		CommunitiesAvatarPickerDialogTop:Hide()
-		CommunitiesAvatarPickerDialogMiddle:Hide()
-		CommunitiesAvatarPickerDialogBottom:Hide()
 		F.ReskinScroll(CommunitiesAvatarPickerDialogScrollBar)
 		F.Reskin(dialog.OkayButton)
 		F.Reskin(dialog.CancelButton)
