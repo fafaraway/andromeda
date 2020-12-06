@@ -487,6 +487,9 @@ C['NPSpecialUnitsList'] = {
 	[GetSectionInfo(21209)] = true,	-- 亚基掠夺者
 	[GetSectionInfo(20561)] = true,	-- 惊魂淤血
 	[GetSectionInfo(21329)] = true,	-- 聚合增生
+
+	[GetSectionInfo(22161)] = true,	-- 魔药炸弹，通灵
+	[165556] = true,	-- 瞬息具象，赤红
 }
 
 -- 显示能量值的单位
