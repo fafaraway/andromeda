@@ -1516,7 +1516,7 @@ do
 		local level = self.Level or self.LevelText
 		if level then
 			level:ClearAllPoints()
-			level:SetPoint('BOTTOM', self, 0, 12)
+			level:SetPoint('BOTTOM', self, 0, 15)
 			if self.LevelCircle then
 				self.LevelCircle:Hide()
 			end
