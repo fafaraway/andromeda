@@ -901,6 +901,8 @@ C.CharacterSettings = {
 			['allow_friends_spam'] = true,
 			['block_stranger_whisper'] = false,
 			['block_addon_spam'] = true,
+			['group_loot_filter'] = true,
+				['group_loot_threshold'] = 2,
 	},
 
 	['actionbar'] = {

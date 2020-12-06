@@ -181,10 +181,10 @@ local function CreateOption(i)
 			cb.name = F.CreateFS(cb, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 22, 0)
 
 			if horizon then
-				cb:SetPoint('TOPLEFT', 250, -offset + 35)
+				cb:SetPoint('TOPLEFT', 250, -offset + 30)
 			else
 				cb:SetPoint('TOPLEFT', 20, -offset)
-				offset = offset + 35
+				offset = offset + 30
 			end
 
 			cb:SetChecked(UpdateValue(key, value))
@@ -212,12 +212,12 @@ local function CreateOption(i)
 			local eb = F.CreateEditBox(parent, 140, 24)
 			eb:SetMaxLetters(999)
 
-			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
+			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
 
 			if horizon then
-				eb:SetPoint('TOPLEFT', 250, -offset + 45)
+				eb:SetPoint('TOPLEFT', 250, -offset + 46)
 			else
-				eb:SetPoint('TOPLEFT', 20, -offset - 25)
+				eb:SetPoint('TOPLEFT', 20, -offset - 24)
 				offset = offset + 70
 			end
 
@@ -285,9 +285,9 @@ local function CreateOption(i)
 
 			local dd = F.CreateDropDown(parent, 140, 20, data)
 			if horizon then
-				dd:SetPoint('TOPLEFT', 256, -offset + 45)
+				dd:SetPoint('TOPLEFT', 250, -offset + 35)
 			else
-				dd:SetPoint('TOPLEFT', 26, -offset - 25)
+				dd:SetPoint('TOPLEFT', 26, -offset - 35)
 				offset = offset + 70
 			end
 
@@ -323,7 +323,7 @@ local function CreateOption(i)
 				end
 			end
 
-			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 25)
+			F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 18)
 			if tip then
 				F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE')
 			end

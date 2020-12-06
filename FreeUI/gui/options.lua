@@ -22,6 +22,7 @@ local function UpdateCustomBar()
 	F.ACTIONBAR:UpdateCustomBar()
 end
 
+-- Chat
 local function UpdateWhisperSticky()
 	F.CHAT:ChatWhisperSticky()
 end
@@ -154,12 +155,16 @@ GUI.OptionsList = {
 		{1, 'chat', 'spamage_meter', L.GUI.CHAT.SPAMAGE_METER},
 		{},
 		{1, 'chat', 'use_filter', L.GUI.CHAT.USE_FILTER},
-		{1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM, true},
+		{1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM},
+		{2, 'ACCOUNT', 'chat_filter_white_list', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
 		{1, 'chat', 'allow_friends_spam', L.GUI.CHAT.ALLOW_FRIENDS_SPAM, nil, nil, nil, L.GUI.CHAT.ALLOW_FRIENDS_SPAM_TIP},
 		{1, 'chat', 'block_stranger_whisper', L.GUI.CHAT.BLOCK_STRANGER_WHISPER},
-		{2, 'ACCOUNT', 'chat_filter_white_list', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
-		{3, 'chat', 'matche_number', L.GUI.CHAT.MATCHE_NUMBER, nil, {1, 3, 1}},
 		{2, 'ACCOUNT', 'chat_filter_black_list', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
+
+
+		{1, 'chat', 'group_loot_filter', L.GUI.CHAT.GROUP_LOOT_FILTER},
+		{4, 'chat', 'group_loot_threshold', L.GUI.CHAT.GROUP_LOOT_THRESHOLD, true, {L.GUI.CHAT.GROUP_LOOT_COMMON, L.GUI.CHAT.GROUP_LOOT_UNCOMMON, L.GUI.CHAT.GROUP_LOOT_RARE, L.GUI.CHAT.GROUP_LOOT_EPIC, L.GUI.CHAT.GROUP_LOOT_LEGENDARY, L.GUI.CHAT.GROUP_LOOT_ARTIFACT, L.GUI.CHAT.GROUP_LOOT_HEIRLOOM, L.GUI.CHAT.GROUP_LOOT_ALL}},
+		{3, 'chat', 'matche_number', L.GUI.CHAT.MATCHE_NUMBER, nil, {1, 3, 1}},
 		{},
 		{1, 'chat', 'whisper_invite', L.GUI.CHAT.WHISPER_INVITE},
 		{1, 'chat', 'guild_only', L.GUI.CHAT.GUILD_ONLY},

@@ -277,6 +277,26 @@ function CHAT:UpdateChatItemLevel(_, msg, ...)
 end
 
 
+local raritylist = {'0', 'None', '1', 'Common', '2', 'Uncommon', '3', 'Rare', '4', 'Epic', '5', 'Legendary', '6', 'Artifact', '7', 'Heirloom', '8', 'All'}
+local activeplayer = (tostring(UnitName('player')) .. '-' .. tostring(GetRealmName()))
+
+function CHAT:GroupLootFilter(event, msg, looter)
+	local itemID, itemRarity
+	itemID = msg:match('item:(%d+):')
+
+	if itemID and GetItemInfo(itemID) then
+		itemRarity = select(3, GetItemInfo(itemID))
+		if itemRarity and (itemRarity < C.DB.chat.group_loot_threshold) and (looter ~= activeplayer) then
+			return true
+		else
+			return false
+		end
+	else
+		return false
+	end
+end
+
+
 function CHAT:ChatFilter()
 	if C.DB.chat.item_links then
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.UpdateChatItemLevel)
@@ -320,5 +340,9 @@ function CHAT:ChatFilter()
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT', self.UpdateAddOnBlocker)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_INSTANCE_CHAT_LEADER', self.UpdateAddOnBlocker)
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_CHANNEL', self.UpdateAddOnBlocker)
+	end
+
+	if C.DB.chat.group_loot_filter then
+		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.GroupLootFilter)
 	end
 end
