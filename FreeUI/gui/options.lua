@@ -116,6 +116,7 @@ GUI.OptionsList = {
 		{},
 		{1, 'ACCOUNT', 'reskin_dbm', L.GUI.APPEARANCE.RESKIN_DBM},
 		{1, 'ACCOUNT', 'reskin_pgf', L.GUI.APPEARANCE.RESKIN_PGF, true},
+		{1, 'ACCOUNT', 'reskin_wa', L.GUI.APPEARANCE.RESKIN_WA},
 		{},
 		{3, 'ACCOUNT', 'ui_scale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP}
 	},

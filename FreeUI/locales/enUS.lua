@@ -373,7 +373,8 @@ L.GUI = {
 		['RESKIN_DBM'] = 'Restyle DBM bars',
 		['RESKIN_PGF'] = 'Restyle PGF panel',
 		['BACKDROP_COLOR'] = 'Backdrop color',
-		['BORDER_COLOR'] = 'Border color'
+		['BORDER_COLOR'] = 'Border color',
+		['RESKIN_WA'] = 'Restyle WeakAuras icons'
 	},
 	['NOTIFICATION'] = {
 		['NAME'] = 'Notification',

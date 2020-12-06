@@ -979,6 +979,7 @@ C.AccountSettings = {
 	['shadow_border'] = true,
 	['reskin_dbm'] = true,
 	['reskin_pgf'] = true,
+	['reskin_wa'] = true,
 	['chat_filter_black_list'] = '',
 	['chat_filter_white_list'] = '',
 	['custom_junk_list'] = {},
