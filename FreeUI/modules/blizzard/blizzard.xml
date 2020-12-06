@@ -16,5 +16,6 @@
 	<Script file="objectivetracker.lua"/>
 	<Script file="orderhall.lua"/>
 	<Script file="quickjoin.lua"/>
+	<Script file="talent.lua"/>
 	<Script file="tradeskill.lua"/>
 </Ui>
