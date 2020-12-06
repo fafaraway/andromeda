@@ -43,6 +43,16 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322557) -- 灵魂分裂
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331172) -- 心灵连接
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322563) -- 被标记的猎物
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 341198) -- 易燃爆炸
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 325418) -- 不稳定的酸液
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 326092) -- 衰弱毒药
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 325021) -- 纱雾撕裂
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 325224) -- 心能注入
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322486) -- 过度生长
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322487) -- 过度生长
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323137) -- 迷乱花粉
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328756) -- 憎恨之容
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 321828) -- 肉饼蛋糕
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 340191) -- 再生辐光
 
 INSTANCE = 1188 -- 彼界
 RegisterSeasonSpells(INSTANCE)
@@ -64,8 +74,11 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322818) -- 失去信心
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322817) -- 疑云密布
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 324154) -- 暗影迅步
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 335805) -- 执政官的壁垒
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 317661) -- 险恶毒液
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328331) -- 严刑逼供
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323195) -- 净化冲击波
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328453) -- 压迫
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331997) -- 心能澎湃
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)
@@ -87,6 +100,11 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322554) -- 严惩
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 321038) -- 烦扰之魂
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328593) -- 苦痛刑罚
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 325254) -- 钢铁尖刺
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 335306) -- 尖刺镣铐
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 327814) -- 邪恶创口
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331415) -- 邪恶创口
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328737) -- 光辉残片
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 324092) -- 闪耀光辉
 
 INSTANCE = 1182 -- 通灵战潮
 RegisterSeasonSpells(INSTANCE)
@@ -102,3 +120,10 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323198) -- 黑暗放逐
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 327401) -- 共受苦难
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 327397) -- 严酷命运
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322681) -- 肉钩
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 333492) -- 通灵粘液
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 321807) -- 白骨剥离
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323347) -- 黑暗纠缠
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 320788) -- 冻结之缚
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 320839) -- 衰弱
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 343556) -- 病态凝视
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 338606) -- 病态凝视
