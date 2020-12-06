@@ -1,6 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Frame name='BetterWorldQuestPinTemplate' inherits='WorldMap_WorldQuestPinTemplate' mixin='BetterWorldQuestPinMixin' virtual='true'/>
+
 	<Script file="misc.lua"/>
 	<Script file="alreadyknown.lua"/>
+	<Script file="BetterWorldQuests.lua"/>
 	<Script file="dragemall.lua"/>
 	<Script file="extraquestbutton.lua"/>
 	<Script file="grouptool.lua"/>
