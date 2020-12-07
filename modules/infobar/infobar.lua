@@ -183,6 +183,7 @@ function INFOBAR:OnLogin()
 	self:Guild()
 	self:Friends()
 	self:Report()
+	self:Currency()
 end
 
 

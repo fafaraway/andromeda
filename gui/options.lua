@@ -138,7 +138,8 @@ GUI.OptionsList = {
 		{1, 'infobar', 'durability', L.GUI.INFOBAR.DURABILITY},
 		{1, 'infobar', 'guild', L.GUI.INFOBAR.GUILD, true},
 		{1, 'infobar', 'friends', L.GUI.INFOBAR.FRIENDS},
-		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true}
+		{1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true},
+		{1, 'infobar', 'currency', L.GUI.INFOBAR.CURRENCY},
 	},
 	[4] = {
 		-- chat

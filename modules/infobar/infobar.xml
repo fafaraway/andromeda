@@ -6,4 +6,5 @@
 	<Script file="guild.lua"/>
 	<Script file="friend.lua"/>
 	<Script file="report.lua"/>
+	<Script file="currency.lua"/>
 </Ui>

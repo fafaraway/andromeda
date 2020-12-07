@@ -104,7 +104,7 @@ function INFOBAR:SpecTalent()
 
 	FreeUISpecButton:HookScript('OnEnter', function(self)
 		if not GetSpecialization() then return end
-		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -15) or 15)
+		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(TALENTS_BUTTON, .9, .8, .6)
 		GameTooltip:AddLine(' ')

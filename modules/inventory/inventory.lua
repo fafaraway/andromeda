@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INVENTORY = F:GetModule('INVENTORY')
+local INVENTORY = F.INVENTORY
 local cargBags = F.cargBags
 
 local format, pairs, wipe, ipairs, strmatch, unpack, ceil = string.format, pairs, table.wipe, ipairs, string.match, unpack, math.ceil
@@ -15,11 +15,6 @@ local IsCosmeticItem = IsCosmeticItem
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
 
-local crossRealms = GetAutoCompleteRealms()
-if not crossRealms or #crossRealms == 0 then
-	crossRealms = {[1] = C.MyRealm}
-end
-
 local icons = {
 	['restore'] = C.AssetsPath .. 'inventory\\restore',
 	['toggle'] = C.AssetsPath .. 'inventory\\toggle',
@@ -34,15 +29,6 @@ local icons = {
 	['search'] = C.AssetsPath .. 'inventory\\search',
 	['junk'] = C.AssetsPath .. 'inventory\\junk'
 }
-
-local function getMoneyString(number, full)
-	if not full then
-		local money = format('%.0f', number / 1e4)
-		return GetMoneyString(money * 1e4)
-	else
-		return GetMoneyString(number)
-	end
-end
 
 local function CheckBoundStatus(itemLink, bagID, slotID, string)
 	local tip = F.ScanTip
@@ -107,149 +93,14 @@ local function highlightFunction(button, match)
 	button:SetAlpha(match and 1 or .3)
 end
 
-local profit, spent, oldMoney = 0, 0, 0
-
-local function getClassIcon(class)
-	local c1, c2, c3, c4 = unpack(CLASS_ICON_TCOORDS[class])
-	c1, c2, c3, c4 = (c1 + .03) * 50, (c2 - .03) * 50, (c3 + .03) * 50, (c4 - .03) * 50
-	local classStr = '|TInterface\\Glues\\CharacterCreate\\UI-CharacterCreate-Classes:13:15:0:-1:50:50:' .. c1 .. ':' .. c2 .. ':' .. c3 .. ':' .. c4 .. '|t '
-	return classStr or ''
-end
-
 function INVENTORY:CreateCurrencyFrame()
 	local currencyFrame = CreateFrame('Button', nil, self)
 	currencyFrame:SetPoint('TOPLEFT', 6, 0)
 	currencyFrame:SetSize(140, 26)
 
-	currencyFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-	currencyFrame:RegisterEvent('PLAYER_MONEY')
-	currencyFrame:RegisterEvent('SEND_MAIL_MONEY_CHANGED')
-	currencyFrame:RegisterEvent('SEND_MAIL_COD_CHANGED')
-	currencyFrame:RegisterEvent('PLAYER_TRADE_MONEY')
-	currencyFrame:RegisterEvent('TRADE_MONEY_CHANGED')
-	currencyFrame:RegisterEvent('TOKEN_MARKET_PRICE_UPDATED')
-	currencyFrame:SetScript(
-		'OnEvent',
-		function(self, event)
-			if event == 'PLAYER_ENTERING_WORLD' then
-				oldMoney = GetMoney()
-				C_WowTokenPublic.UpdateMarketPrice()
-				self:UnregisterEvent(event)
-			end
-			if event == 'TOKEN_MARKET_PRICE_UPDATED' then
-				C_WowTokenPublic.UpdateMarketPrice()
-				return
-			end
-			local newMoney = GetMoney()
-			local change = newMoney - oldMoney
-			if oldMoney > newMoney then
-				spent = spent - change
-			else
-				profit = profit + change
-			end
-
-			if not FREE_GOLDCOUNT[C.MyRealm] then
-				FREE_GOLDCOUNT[C.MyRealm] = {}
-			end
-			if not FREE_GOLDCOUNT[C.MyRealm][C.MyName] then
-				FREE_GOLDCOUNT[C.MyRealm][C.MyName] = {}
-			end
-			FREE_GOLDCOUNT[C.MyRealm][C.MyName][1] = GetMoney()
-			FREE_GOLDCOUNT[C.MyRealm][C.MyName][2] = C.MyClass
-
-			oldMoney = newMoney
-		end
-	)
-
 	local tag = self:SpawnPlugin('TagDisplay', '[money]  [currencies]', currencyFrame)
-	F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
+	F.SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
 	tag:SetPoint('TOPLEFT', 0, -3)
-
-	currencyFrame:SetScript(
-		'OnEnter',
-		function(self)
-			GameTooltip:SetOwner(self, 'ANCHOR_TOPLEFT')
-			GameTooltip:ClearLines()
-			GameTooltip:AddLine(L['INVENTORY_GOLD_COUNT'], .9, .8, .6)
-			GameTooltip:AddLine(' ')
-
-			GameTooltip:AddLine(L['INVENTORY_SESSION'], .6, .8, 1)
-			GameTooltip:AddDoubleLine(L['INVENTORY_EARNED'], GetMoneyString(profit), 1, 1, 1, 1, 1, 1)
-			GameTooltip:AddDoubleLine(L['INVENTORY_SPENT'], GetMoneyString(spent), 1, 1, 1, 1, 1, 1)
-			if profit < spent then
-				GameTooltip:AddDoubleLine(L['INVENTORY_DEFICIT'], GetMoneyString(spent - profit), 1, 0, 0, 1, 1, 1)
-			elseif profit > spent then
-				GameTooltip:AddDoubleLine(L['INVENTORY_PROFIT'], GetMoneyString(profit - spent), 0, 1, 0, 1, 1, 1)
-			end
-			GameTooltip:AddLine(' ')
-
-			local totalGold = 0
-			GameTooltip:AddLine(L['INVENTORY_CHARACTER'], .6, .8, 1)
-
-			for _, realm in pairs(crossRealms) do
-				local thisRealmList = FREE_GOLDCOUNT[realm]
-				if thisRealmList then
-					for k, v in pairs(thisRealmList) do
-						local name = Ambiguate(k .. '-' .. realm, 'none')
-						local gold, class = unpack(v)
-						local r, g, b = F.ClassColor(class)
-						GameTooltip:AddDoubleLine(getClassIcon(class) .. name, GetMoneyString(gold), r, g, b, 1, 1, 1)
-						totalGold = totalGold + gold
-					end
-				end
-			end
-
-			GameTooltip:AddLine(' ')
-			GameTooltip:AddDoubleLine(L['INVENTORY_GOLD_TOTAL'], GetMoneyString(totalGold), .6, .8, 1, 1, 1, 1)
-
-			for i = 1, GetNumWatchedTokens() do
-				local name, count, icon, currencyID = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
-				if name and i == 1 then
-					GameTooltip:AddLine(' ')
-					GameTooltip:AddLine(CURRENCY, .6, .8, 1)
-				end
-				if name and count then
-					local _, _, _, _, _, total = GetCurrencyInfo(currencyID)
-					local iconTexture = ' |T' .. icon .. ':13:15:0:0:50:50:4:46:4:46|t'
-					if total > 0 then
-						GameTooltip:AddDoubleLine(name, count .. '/' .. total .. iconTexture, 1, 1, 1, 1, 1, 1)
-					else
-						GameTooltip:AddDoubleLine(name, count .. iconTexture, 1, 1, 1, 1, 1, 1)
-					end
-				end
-			end
-
-			GameTooltip:Show()
-		end
-	)
-
-	currencyFrame:HookScript(
-		'OnLeave',
-		function()
-			GameTooltip:Hide()
-		end
-	)
-
-	currencyFrame:HookScript(
-		'OnMouseUp',
-		function(self, btn)
-			if InCombatLockdown() then
-				UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
-				return
-			end
-
-			if btn == 'LeftButton' then
-				securecall(ToggleCharacter, 'TokenFrame')
-			elseif btn == 'RightButton' then
-				if (not StoreFrame) then
-					LoadAddOn('Blizzard_StoreUI')
-				end
-				securecall(ToggleStoreUI)
-			elseif btn == 'MiddleButton' then
-				StaticPopup_Show('FREEUI_RESET_GOLD')
-			end
-		end
-	)
 end
 
 function INVENTORY:CreateBagBar(settings, columns)

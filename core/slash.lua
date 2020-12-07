@@ -46,7 +46,7 @@ StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
 	hideOnEscape = false,
 }
 
-local crossRealms = GetAutoCompleteRealms()
+--[[ local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then
 	crossRealms = {[1]=C.MyRealm}
 end
@@ -67,7 +67,7 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = true,
-}
+} ]]
 
 StaticPopupDialogs['FREEUI_RESET_JUNK_LIST'] = {
 	text = L.GUI.RESET_JUNK_LIST,

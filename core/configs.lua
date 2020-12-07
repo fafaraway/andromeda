@@ -842,6 +842,7 @@ C.CharacterSettings = {
 			['guild'] = true,
 			['friends'] = true,
 			['report'] = true,
+			['currency'] = true,
 	},
 
 	['notification'] = {

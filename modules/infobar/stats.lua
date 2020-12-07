@@ -112,7 +112,7 @@ function INFOBAR:Stats()
 		end
 		sort(addons, order)
 
-		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -15) or 15)
+		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
 		GameTooltip:ClearLines()
 		local today = C_DateAndTime.GetCurrentCalendarTime()
 		local w, m, d, y = today.weekday, today.month, today.monthDay, today.year

@@ -76,10 +76,10 @@ end
 --[[ Infobar ]]
 do
 	L['INFOBAR_DURABILITY'] = 'Durability'
-	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle Character Pane'
+	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle Character Panel'
 
 	L['INFOBAR_FRIENDS'] = 'Friends'
-	L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle Friends Pane'
+	L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle Friends Panel'
 	L['INFOBAR_ADD_FRIEND'] = 'Add Friend'
 
 	L['INFOBAR_GUILD'] = 'Guild'
@@ -103,13 +103,24 @@ do
 
 	L['INFOBAR_SPEC'] = 'Spec'
 	L['INFOBAR_LOOT'] = 'Loot'
-	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle Talent Pane'
+	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle Talent Panel'
 	L['INFOBAR_CHANGE_SPEC'] = 'Switch Specialization & Loot'
 
 	L['INFOBAR_LOCAL_TIME'] = 'Local time'
 	L['INFOBAR_REALM_TIME'] = 'Realm time'
-	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Open the AddOns List'
-	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Open the Timer'
+	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list panel'
+	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer'
+
+
+	L['INFOBAR_EARNED'] = 'Earned'
+	L['INFOBAR_SPENT'] = 'Spent'
+	L['INFOBAR_DEFICIT'] = 'Deficit'
+	L['INFOBAR_PROFIT'] = 'Profit'
+	L['INFOBAR_SESSION'] = 'Session'
+	L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency panel'
+	L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store panel'
+	L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
+
 end
 
 --[[ Chat ]]
@@ -212,14 +223,7 @@ do
 	L['INVENTORY_QUICK_SPLIT'] = 'Quick split'
 	L['INVENTORY_SPLIT_COUNT'] = 'Split count'
 	L['INVENTORY_SPLIT_MODE_ENABLED'] = "nClick to split stacked items in your bags.|nYou can change 'split count' for each click thru the editbox."
-	L['INVENTORY_GOLD_COUNT'] = 'Gold count'
-	L['INVENTORY_EARNED'] = 'Earned'
-	L['INVENTORY_SPENT'] = 'Spent'
-	L['INVENTORY_DEFICIT'] = 'Deficit'
-	L['INVENTORY_PROFIT'] = 'Profit'
-	L['INVENTORY_SESSION'] = 'Session'
-	L['INVENTORY_CHARACTER'] = 'Characters'
-	L['INVENTORY_GOLD_TOTAL'] = 'Total'
+
 	L['INVENTORY_AUTO_DEPOSIT'] = '|nLeft click to deposit reagents, right click to switch auto deposit.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'
 	L['INVENTORY_EQUIPEMENT_SET'] = 'Equipement set'
 end
@@ -396,7 +400,8 @@ L.GUI = {
 		['DURABILITY'] = 'Durability',
 		['GUILD'] = 'Guild',
 		['FRIENDS'] = 'Friends',
-		['REPORT'] = 'Daily/weekly'
+		['REPORT'] = 'Daily/weekly',
+		['CURRENCY'] = 'Currencies'
 	},
 	['CHAT'] = {
 		['NAME'] = 'Chat',

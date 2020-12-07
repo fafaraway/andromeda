@@ -190,7 +190,7 @@ function INFOBAR:Friends()
 		end
 
 		if not BNConnected() then
-			GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -15) or 15)
+			GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(BN_CHAT_DISCONNECTED)
 			GameTooltip:Show()
@@ -202,7 +202,7 @@ function INFOBAR:Friends()
 		local zonec, classc, levelc, realmc, grouped
 
 		if (totalonline > 0) then
-			GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -15) or 15)
+			GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
 			GameTooltip:ClearLines()
 			GameTooltip:AddDoubleLine(FRIENDS_LIST, format('%s: %s/%s', GUILD_ONLINE_LABEL, totalonline, #BNTable), .9, .8, .6, 1, 1, 1)
 			GameTooltip:AddLine(" ")
