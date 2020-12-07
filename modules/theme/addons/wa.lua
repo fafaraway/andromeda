@@ -41,6 +41,7 @@ local function Skin_WeakAuras(f, fType)
 			UpdateIconTexCoord(f.icon)
 			hooksecurefunc(f.icon, 'SetTexCoord', UpdateIconTexCoord)
 			f.bg = F.SetBD(f)
+			f.bg:SetFrameStrata('BACKGROUND')
 			f.bg:SetFrameLevel(0)
 			f.bg.__icon = f.icon
 			f.bg:HookScript('OnUpdate', IconBgOnUpdate)
