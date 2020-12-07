@@ -54,13 +54,17 @@ function CHAT:ChatCopy_OnClick(btn)
 		if chatHide == false then
 			ChatFrame1:Hide()
 			GeneralDockManager:Hide()
-			CHAT.ChannelBar:Hide()
+			if CHAT.ChannelBar then
+				CHAT.ChannelBar:Hide()
+			end
 
 			chatHide = true
 		elseif chatHide == true then
 			ChatFrame1:Show()
 			GeneralDockManager:Show()
-			CHAT.ChannelBar:Show()
+			if CHAT.ChannelBar then
+				CHAT.ChannelBar:Show()
+			end
 
 			chatHide = false
 		end

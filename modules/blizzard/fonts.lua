@@ -1,8 +1,8 @@
 local F, C = unpack(select(2, ...))
 
-if C.isDeveloper and C.Client == 'zhCN' then
+if C.isDeveloper then
 	C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
-	C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.otf'
+	C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
@@ -288,6 +288,7 @@ loader:SetScript(
 			LSM:Register(LSM.MediaType.SOUND, '!Free_3', C.AssetsPath .. 'sounds\\warning.ogg')
 			LSM:Register(LSM.MediaType.SOUND, '!Free_4', C.AssetsPath .. 'sounds\\execute.ogg')
 			LSM:Register(LSM.MediaType.SOUND, '!Free_5', C.AssetsPath .. 'sounds\\health.ogg')
+			LSM:Register(LSM.MediaType.SOUND, '!Free_6', C.AssetsPath .. 'sounds\\forthehorde.mp3')
 		end
 
 		self:SetScript('OnEvent', nil)

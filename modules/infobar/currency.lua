@@ -156,8 +156,8 @@ function INFOBAR:Currency()
 			GameTooltip:AddDoubleLine(HONOR_LIFETIME, GetMoneyString(totalGold), .6, .8, 1, 1, 1, 1)
 
 			GameTooltip:AddLine(' ')
-			local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice()
 			GameTooltip:AddLine(ITEM_QUALITY8_DESC, .6, .8, 1)
+			local tokenPrice = C_WowTokenPublic.GetCurrentMarketPrice()
 			GameTooltip:AddDoubleLine(AUCTION_HOUSE_BROWSE_HEADER_PRICE, GetMoneyString(tokenPrice), 1, 1, 1, 1, 1, 1)
 
 			for i = 1, GetNumWatchedTokens() do

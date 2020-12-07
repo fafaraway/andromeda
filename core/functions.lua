@@ -120,6 +120,7 @@ do
 		end
 
 		for word in variable:gmatch('%S+') do
+			word = tonumber(word) or word -- use number if exists, needs review
 			list[word] = true
 		end
 	end

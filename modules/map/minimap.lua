@@ -197,90 +197,6 @@ function MAP:CreateDifficultyFlag()
 		flag:SetPoint('TOPLEFT', Minimap, 0, -offset - 10)
 		flag:SetScale(.9)
 	end
-
-	--[[ if not C.DB.map.instance_type then
-		return
-	end
-
-	local f = CreateFrame('Frame', nil, Minimap)
-	f:SetSize(24, 12)
-	f:SetPoint('TOPLEFT', Minimap, 4, -(256 / 8) - 6)
-	f.text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, 'OUTLINE', '', nil, false, 'TOPLEFT', 0, 0)
-
-	f:RegisterEvent('PLAYER_ENTERING_WORLD')
-	f:RegisterEvent('CHALLENGE_MODE_START')
-	f:RegisterEvent('CHALLENGE_MODE_COMPLETED')
-	f:RegisterEvent('CHALLENGE_MODE_RESET')
-	f:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
-	f:RegisterEvent('GUILD_PARTY_STATE_UPDATED')
-	f:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-	f:SetScript(
-		'OnEvent',
-		function()
-			local _, instanceType = IsInInstance()
-			local difficulty = select(3, GetInstanceInfo())
-			local numplayers = select(9, GetInstanceInfo())
-			local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
-
-			if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
-				if (difficulty == 1) then
-					f.text:SetText('5N')
-				elseif difficulty == 2 then
-					f.text:SetText('5H')
-				elseif difficulty == 3 then
-					f.text:SetText('10N')
-				elseif difficulty == 4 then
-					f.text:SetText('25N')
-				elseif difficulty == 5 then
-					f.text:SetText('10H')
-				elseif difficulty == 6 then
-					f.text:SetText('25H')
-				elseif difficulty == 7 then
-					f.text:SetText('LFR')
-				elseif difficulty == 8 then
-					f.text:SetText('M+' .. mplusdiff)
-				elseif difficulty == 9 then
-					f.text:SetText('40R')
-				elseif difficulty == 11 or difficulty == 39 then
-					f.text:SetText('HScen')
-				elseif difficulty == 12 or difficulty == 38 then
-					f.text:SetText('Scen')
-				elseif difficulty == 40 then
-					f.text:SetText('MScen')
-				elseif difficulty == 14 then
-					f.text:SetText('N:' .. numplayers)
-				elseif difficulty == 15 then
-					f.text:SetText('H:' .. numplayers)
-				elseif difficulty == 16 then
-					f.text:SetText('M')
-				elseif difficulty == 17 then
-					f.text:SetText('LFR:' .. numplayers)
-				elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
-					f.text:SetText('EScen')
-				elseif difficulty == 23 then
-					f.text:SetText('5M')
-				elseif difficulty == 24 or difficulty == 33 then
-					f.text:SetText('TW')
-				elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
-					f.text:SetText('PVP')
-				elseif difficulty == 29 then
-					f.text:SetText('PvEvP')
-				elseif difficulty == 147 then
-					f.text:SetText('WF')
-				end
-			elseif instanceType == 'pvp' or instanceType == 'arena' then
-				f.text:SetText('PVP')
-			else
-				f.text:SetText('')
-			end
-
-			if not IsInInstance() then
-				f.text:Hide()
-			else
-				f.text:Show()
-			end
-		end
-	) ]]
 end
 
 function MAP:CreateGarrisonButton()
@@ -443,17 +359,14 @@ function MAP:Minimap_OnMouseUp(btn)
 		EasyMenu(menuList, F.EasyMenu, self, 0, 0, 'MENU', 3)
 	elseif btn == 'RightButton' then
 		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self)
-	elseif self.mover then
+	else
 		Minimap_OnClick(self)
 	end
 end
 
 function MAP:SetupHybridMinimap()
+	HybridMinimap:SetFrameStrata('LOW')
 	local mapCanvas = HybridMinimap.MapCanvas
-
-	mapCanvas:SetScript('OnMouseWheel', MAP.Minimap_OnMouseWheel)
-	mapCanvas:SetScript('OnMouseUp', MAP.Minimap_OnMouseUp)
-
 	local rectangleMask = HybridMinimap:CreateMaskTexture()
 	rectangleMask:SetTexture(C.Assets.mask_tex)
 	rectangleMask:SetAllPoints(HybridMinimap)
