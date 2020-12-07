@@ -440,6 +440,7 @@ L.GUI = {
 		['GROUP_LOOT_HEIRLOOM'] = 'Heirloom',
 		['GROUP_LOOT_ALL'] = 'All',
 		['FILTER_SETTING_HEADER'] = 'Chat filter Setting',
+		['CHANNEL_BAR'] = 'Channel bar'
 	},
 	['AURA'] = {
 		['NAME'] = 'Aura',
