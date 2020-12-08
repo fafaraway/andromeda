@@ -167,28 +167,28 @@ local function SetupChatFrame()
 end
 
 local function SetupDBM()
-	if not DBM_AllSavedOptions then return end
+	-- if not DBM_AllSavedOptions then return end
 
-	_G.DBM_AllSavedOptions['Default']['BlockVersionUpdateNotice'] = true
-	_G.DBM_AllSavedOptions['Default']['EventSoundVictory'] = 'None'
+	-- _G.DBM_AllSavedOptions['Default']['BlockVersionUpdateNotice'] = true
+	-- _G.DBM_AllSavedOptions['Default']['EventSoundVictory'] = 'None'
 
-	if not _G.DBT_AllPersistentOptions then return end
+	-- if not _G.DBT_AllPersistentOptions then return end
 
-	_G.DBT_AllPersistentOptions['HugeBarsEnabled'] = false
+	-- _G.DBT_AllPersistentOptions['HugeBarsEnabled'] = false
 
-	_G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 20
-	_G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 20
-	_G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwards = true
-	_G.DBT_AllPersistentOptions['Default']['DBM'].InlineIcons = false
-	_G.DBT_AllPersistentOptions['Default']['DBM'].Width = 160
-	_G.DBT_AllPersistentOptions['Default']['DBM'].FlashBar = true
+	-- _G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 20
+	-- _G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 20
+	-- _G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwards = true
+	-- _G.DBT_AllPersistentOptions['Default']['DBM'].InlineIcons = false
+	-- _G.DBT_AllPersistentOptions['Default']['DBM'].Width = 160
+	-- _G.DBT_AllPersistentOptions['Default']['DBM'].FlashBar = true
 
-	_G.DBM_MinimapIcon['hide'] = true
+	-- _G.DBM_MinimapIcon['hide'] = true
 
-	if IsAddOnLoaded('DBM-VPYike') then
-		_G.DBM_AllSavedOptions['Default']['CountdownVoice'] = 'VP:Yike'
-		_G.DBM_AllSavedOptions['Default']['ChosenVoicePack'] = 'Yike'
-	end
+	-- if IsAddOnLoaded('DBM-VPYike') then
+	-- 	_G.DBM_AllSavedOptions['Default']['CountdownVoice'] = 'VP:Yike'
+	-- 	_G.DBM_AllSavedOptions['Default']['ChosenVoicePack'] = 'Yike'
+	-- end
 end
 
 local function SetupAddons()
