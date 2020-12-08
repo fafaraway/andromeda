@@ -159,9 +159,7 @@ local function OnUpdate(_, update)
 				alpha = maxAlpha - (maxAlpha * ((runtimer - holdTime - fadeInTime) / fadeOutTime))
 			end
 			frame:SetAlpha(alpha)
-			local scale =
-				C.DB.cooldown.icon_size +
-				(C.DB.cooldown.icon_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
+			local scale = C.DB.cooldown.icon_size + (C.DB.cooldown.icon_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
 			bg:Show()
@@ -186,7 +184,8 @@ end
 
 function frame:UNIT_SPELLCAST_SUCCEEDED(unit, _, spellID)
 	if unit == 'player' then
-		watching[spellID] = {GetTime(), 'spell', spellID}
+		local name = GetSpellInfo(spellID) -- Fix wrong double cd for trinket
+		watching[spellID] = {GetTime(), 'spell', name}
 		self:SetScript('OnUpdate', OnUpdate)
 	end
 end
@@ -194,10 +193,7 @@ end
 function frame:COMBAT_LOG_EVENT_UNFILTERED()
 	local _, eventType, _, _, _, sourceFlags, _, _, _, _, _, spellID = CombatLogGetCurrentEventInfo()
 	if eventType == 'SPELL_CAST_SUCCESS' then
-		if
-			(bit.band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET and
-				bit.band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE)
-		 then
+		if (bit.band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
 			local name = GetSpellInfo(spellID)
 			local index = GetPetActionIndexByName(name)
 			if index and not select(7, GetPetActionInfo(index)) then
@@ -229,15 +225,7 @@ function COOLDOWN:CooldownPulse()
 	bg = F.SetBD(frame)
 	icon:SetTexCoord(unpack(C.TexCoord))
 
-	local mover =
-		F.Mover(
-		anchor,
-		L.GUI.MOVER.COOLDOWN_PULSE,
-		'CooldownPulse',
-		{'CENTER', UIParent, 0, 100},
-		C.DB.cooldown.icon_size,
-		C.DB.cooldown.icon_size
-	)
+	local mover = F.Mover(anchor, L.GUI.MOVER.COOLDOWN_PULSE, 'CooldownPulse', {'CENTER', UIParent, 0, 100}, C.DB.cooldown.icon_size, C.DB.cooldown.icon_size)
 	anchor:ClearAllPoints()
 	anchor:SetPoint('CENTER', mover)
 

@@ -104,7 +104,7 @@ function THEME:ReskinDBM()
 					name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
 					name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth()*.85, 8)
 					name.SetPoint = F.Dummy
-					name:SetFont(C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
+					name:SetFont(C.Assets.Fonts.Bold, 11, nil, '', nil, true)
 					name.SetFont = F.Dummy
 					name:SetJustifyH('LEFT')
 					name:SetWordWrap(false)
@@ -117,7 +117,7 @@ function THEME:ReskinDBM()
 					timer:ClearAllPoints()
 					timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 8)
 					timer.SetPoint = F.Dummy
-					timer:SetFont(C.Assets.Fonts.Regular, 11, nil, '', nil, 'THICK')
+					timer:SetFont(C.Assets.Fonts.Bold, 11, nil, '', nil, true)
 					timer.SetFont = F.Dummy
 					timer:SetJustifyH('RIGHT')
 					timer:SetShadowColor(0, 0, 0, 0)
