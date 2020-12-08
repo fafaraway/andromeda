@@ -131,7 +131,7 @@ function CHAT:CreateChannelBar()
 
 	-- WORLD CHANNEL
 	if GetCVar('portal') == 'CN' then
-		local channelName, channelID, channels = '大脚世界频道'
+		local channelName, channelID, channels = C.isChinses and '大脚世界频道' or 'BigfootWorldChannel'
 		local wc = AddButton(0, .8, 1, L['CHAT_WORLD_CHANNEL'])
 
 		local function isInChannel(event)
@@ -167,8 +167,8 @@ function CHAT:CreateChannelBar()
 				if wc.inChannel then
 					if btn == 'RightButton' then
 						LeaveChannelByName(channelName)
-						--print('|cffFF7F50' .. QUIT .. '|r ' .. C.InfoColor .. L['CHAT_WORLD_CHANNEL'])
-						F.Print(C.RedColor..'离开|r '..'世界频道')
+
+						F.Print(C.RedColor..'Leave|r '..channelName)
 						wc.inChannel = false
 					elseif channelID then
 						ChatFrame_OpenChat('/' .. channelID, chatFrame)
@@ -176,8 +176,8 @@ function CHAT:CreateChannelBar()
 				else
 					JoinPermanentChannel(channelName, nil, 1)
 					ChatFrame_AddChannel(ChatFrame1, channelName)
-					--print('|cff00C957' .. JOIN .. '|r ' .. C.InfoColor .. L['CHAT_WORLD_CHANNEL'])
-					F.Print(C.GreenColor..'加入|r '..'世界频道')
+
+					F.Print(C.GreenColor..'Join|r '..channelName)
 					wc.inChannel = true
 				end
 			end

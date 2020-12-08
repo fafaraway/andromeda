@@ -57,6 +57,7 @@ function CHAT:UpdateChannelNames(text, ...)
 		-- Shorten world channel name
 		text = gsub(text, '|h%[(%d+)%. 大脚世界频道%]|h', '|h%[世界%]|h')
 		text = gsub(text, '|h%[(%d+)%. 大腳世界頻道%]|h', '|h%[世界%]|h')
+		text = gsub(text, '|h%[(%d+)%. BigfootWorldChannel%]|h', '|h%[WC%]|h')
 
 		-- Shorten other channel name
 		text = gsub(text, '|h%[(%d+)%. .-%]|h', '|h[%1]|h')

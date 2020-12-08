@@ -154,7 +154,7 @@ GUI.OptionsList = {
 		{1, 'chat', 'whisper_sticky', L.GUI.CHAT.WHISPER_STICKY, true, nil, UpdateWhisperSticky},
 		{1, 'chat', 'whisper_sound', L.GUI.CHAT.WHISPER_SOUND},
 		{1, 'chat', 'item_links', L.GUI.CHAT.ITEM_LINKS, true},
-		{1, 'chat', 'spamage_meter', L.GUI.CHAT.SPAMAGE_METER},
+
 		{},
 		{1, 'chat', 'use_filter', L.GUI.CHAT.USE_FILTER},
 		{1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM},
@@ -162,6 +162,8 @@ GUI.OptionsList = {
 		{1, 'chat', 'allow_friends_spam', L.GUI.CHAT.ALLOW_FRIENDS_SPAM, nil, nil, nil, L.GUI.CHAT.ALLOW_FRIENDS_SPAM_TIP},
 		{1, 'chat', 'block_stranger_whisper', L.GUI.CHAT.BLOCK_STRANGER_WHISPER},
 		{2, 'ACCOUNT', 'chat_filter_black_list', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
+		{1, 'chat', 'damage_meter_filter', L.GUI.CHAT.DAMAGE_METER_FILTER},
+
 
 
 		{1, 'chat', 'group_loot_filter', L.GUI.CHAT.GROUP_LOOT_FILTER},
@@ -376,13 +378,13 @@ GUI.OptionsList = {
 	[15] = {
 		-- misc
 		{1, 'ACCOUNT', 'custom_class_color', L.GUI.MISC.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor},
+		{1, 'ACCOUNT', 'font_outline', L.GUI.MISC.FONT_OUTLINE, true},
+		{1, 'blizzard', 'hide_talkinghead', L.GUI.MISC.HIDE_TALKINGHEAD},
+		{1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true},
+		{1, 'misc', 'screen_saver', L.GUI.MISC.SCREEN_SAVER},
 		{},
 		{4, 'ACCOUNT', 'texture_style', L.GUI.MISC.TEXTURE_STYLE, false, {}},
 		{4, 'ACCOUNT', 'number_format', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
-		{},
-		{1, 'ACCOUNT', 'font_outline', L.GUI.MISC.FONT_OUTLINE},
-		{1, 'blizzard', 'hide_talkinghead', L.GUI.MISC.HIDE_TALKINGHEAD},
-		{1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true}
 	},
 	[16] = {},
 	[17] = {}

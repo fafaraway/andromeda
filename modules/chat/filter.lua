@@ -345,4 +345,8 @@ function CHAT:ChatFilter()
 	if C.DB.chat.group_loot_filter then
 		ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', self.GroupLootFilter)
 	end
+
+	if C.DB.chat.damage_meter_filter then
+		CHAT:DamageMeterFilter()
+	end
 end
