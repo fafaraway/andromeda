@@ -57,4 +57,5 @@ function ANNOUNCEMENT:OnLogin()
 
 	ANNOUNCEMENT:InstanceReset()
 	ANNOUNCEMENT:QuestNotification()
+	ANNOUNCEMENT:SendCDStatus()
 end

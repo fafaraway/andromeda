@@ -559,6 +559,7 @@ C.CharacterSettings = {
 			['combat_resurrection'] = true,
 			['utility'] = true,
 			['quest'] = false,
+			['cooldown'] = true,
 	},
 
 	['aura'] = {

@@ -194,6 +194,8 @@ do
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_ZONING'] = 'Cannot reset %s (There are players in your party attempting to zone into an instance.)'
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_OFFLINE'] = 'Cannot reset %s (There are players offline in your party.)'
 
+	L["ANNOUNCEMENT_COOLDOWN_REMAINING"] = '%s cooldown remaining %s.'
+	L["ANNOUNCEMENT_COOLDOWN_COMPLETED"] = '%s is now available.'
 end
 
 --[[ Inventory ]]
@@ -531,7 +533,9 @@ L.GUI = {
 		['COMBAT_RESURRECTION'] = 'Battle resurrection',
 		['COMBAT_RESURRECTION_TIP'] = '通告自己或是队友使用的战复。',
 		['UTILITY'] = 'Utility',
-		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。'
+		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。',
+		['COOLDOWN'] = 'Cooldown status',
+		['COOLDOWN_TIP'] = 'You can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.',
 	},
 	['INVENTORY'] = {
 		['NAME'] = 'Inventory',
