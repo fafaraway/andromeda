@@ -6,5 +6,4 @@
 	<Script file='raiddebuffs.lua'/>
 	<Script file='totems.lua'/>
 	<Script file='rangecheck.lua'/>
-	<Script file='widgetcontainer.lua'/>
 </Ui>

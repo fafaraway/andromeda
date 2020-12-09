@@ -395,9 +395,9 @@ end
 
 -- Unit classification
 local classify = {
-	rare = {.5, 1, .5, 1},
-	rareelite = {.5, 1, .5, 1},
-	worldboss = {0, .5, 0, .5}
+	rare = 'VignetteKill',
+	rareelite = 'VignetteKill',
+	worldboss = 'VignetteKillElite'
 }
 
 function NAMEPLATE:AddRareIndicator(self)
@@ -408,6 +408,7 @@ function NAMEPLATE:AddRareIndicator(self)
 	local icon = self:CreateTexture(nil, 'ARTWORK')
 	icon:SetPoint('LEFT', self, 'RIGHT')
 	icon:SetSize(16, 16)
+	icon:SetAtlas('')
 	icon:Hide()
 
 	self.ClassifyIndicator = icon
@@ -417,11 +418,10 @@ function NAMEPLATE:UpdateUnitClassify(unit)
 	if self.ClassifyIndicator then
 		local class = UnitClassification(unit)
 		if class and classify[class] then
-			local texCoord = classify[class]
-			self.ClassifyIndicator:SetTexture(C.Assets.classify_tex)
-			self.ClassifyIndicator:SetTexCoord(unpack(texCoord))
+			self.ClassifyIndicator:SetAtlas(classify[class])
 			self.ClassifyIndicator:Show()
 		else
+			self.ClassifyIndicator:SetAtlas('')
 			self.ClassifyIndicator:Hide()
 		end
 	end
@@ -498,21 +498,6 @@ function NAMEPLATE:AddInterruptInfo()
 	F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', self.UpdateCastbarInterrupt)
 end
 
--- WidgetContainer
-function NAMEPLATE:AddWidgetContainer(self)
-	if not C.DB.nameplate.widget_container then
-		return
-	end
-
-	local widgetContainer = CreateFrame('Frame', nil, self, 'UIWidgetContainerTemplate')
-	widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -10)
-	widgetContainer:SetScale(F:Round(1 / FREE_ADB.ui_scale, 2))
-	widgetContainer:Hide()
-	widgetContainer.showAndHideOnWidgetSetRegistration = false
-
-	self.WidgetContainer = widgetContainer
-end
-
 --[[ Create plate ]]
 local platesList = {}
 local function CreateNameplateStyle(self)
@@ -547,7 +532,6 @@ local function CreateNameplateStyle(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
 	UNITFRAME:AddAuras(self)
-	--NAMEPLATE:AddWidgetContainer(self)
 
 	platesList[self] = self:GetName()
 end
@@ -609,6 +593,11 @@ function NAMEPLATE:UpdatePlateByType()
 	classify:Show()
 
 	NAMEPLATE.UpdateTargetIndicator(self)
+
+	if self.widgetContainer then
+		self.widgetContainer:ClearAllPoints()
+		self.widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
+	end
 end
 
 function NAMEPLATE:RefreshPlateType(unit)
@@ -647,7 +636,13 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 
 		self.npcID = F.GetNPCID(self.unitGUID)
 		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
-		--self.WidgetContainer:RegisterForWidgetSet(UnitWidgetSet(unit), F.Widget_DefaultLayout, nil, unit)
+
+		local blizzPlate = self:GetParent().UnitFrame
+		self.widgetContainer = blizzPlate.WidgetContainer
+		if self.widgetContainer then
+			self.widgetContainer:SetParent(self)
+			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
+		end
 
 		NAMEPLATE.RefreshPlateType(self, unit)
 	elseif event == 'NAME_PLATE_UNIT_REMOVED' then
@@ -655,7 +650,6 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 			guidToPlate[self.unitGUID] = nil
 		end
 		self.npcID = nil
-		--self.WidgetContainer:UnregisterForWidgetSet()
 	end
 
 	if event ~= 'NAME_PLATE_UNIT_REMOVED' then
