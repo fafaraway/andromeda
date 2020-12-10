@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
-
 local margin, padding = 3, 3
 
 local function SetFrameSize(frame, size, num)
@@ -11,14 +10,14 @@ local function SetFrameSize(frame, size, num)
 	local divide = C.DB.actionbar.bar3_divide
 
 	if divide then
-		frame:SetWidth(18*size + 17*margin + 2*padding)
-		frame:SetHeight(2*size + margin + 2*padding)
+		frame:SetWidth(18 * size + 17 * margin + 2 * padding)
+		frame:SetHeight(2 * size + margin + 2 * padding)
 
-		local button = _G["MultiBarBottomRightButton7"]
-		button:SetPoint("TOPRIGHT", frame, -2*(size+margin) - padding, -padding)
+		local button = _G['MultiBarBottomRightButton7']
+		button:SetPoint('TOPRIGHT', frame, -2 * (size + margin) - padding, -padding)
 	else
-		frame:SetWidth(num*size + (num-1)*margin + 2*padding)
-		frame:SetHeight(size + 2*padding)
+		frame:SetWidth(num * size + (num - 1) * margin + 2 * padding)
+		frame:SetHeight(size + 2 * padding)
 	end
 
 	if not frame.mover then
@@ -43,7 +42,7 @@ function ACTIONBAR:CreateBar3()
 	if C.DB.actionbar.bar3_divide then
 		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
 	else
-		frame.Pos = {"BOTTOM", _G.FreeUI_ActionBar2, "TOP", 0, -margin}
+		frame.Pos = {'BOTTOM', _G.FreeUI_ActionBar2, 'TOP', 0, -margin}
 	end
 
 	MultiBarBottomRight:SetParent(frame)
@@ -51,7 +50,7 @@ function ACTIONBAR:CreateBar3()
 	MultiBarBottomRight.QuickKeybindGlow:SetTexture('')
 
 	for i = 1, num do
-		local button = _G['MultiBarBottomRightButton'..i]
+		local button = _G['MultiBarBottomRightButton' .. i]
 		tinsert(buttonList, button)
 		tinsert(ACTIONBAR.buttons, button)
 		button:ClearAllPoints()
@@ -62,13 +61,12 @@ function ACTIONBAR:CreateBar3()
 			local previous = _G['MultiBarBottomRightButton1']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		elseif (i == 7 and C.DB.actionbar.bar3_divide) then
-			local previous = _G['MultiBarBottomRightButton3']
-			button:SetPoint('TOPLEFT', previous, 'TOPRIGHT', 12*size+13*margin, 0)
+			button:SetPoint('TOPRIGHT', frame, -2 * (size + margin) - padding, -padding)
 		elseif (i == 10 and C.DB.actionbar.bar3_divide) then
 			local previous = _G['MultiBarBottomRightButton7']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		else
-			local previous = _G['MultiBarBottomRightButton'..i-1]
+			local previous = _G['MultiBarBottomRightButton' .. i - 1]
 			button:SetPoint('LEFT', previous, 'RIGHT', margin, 0)
 		end
 	end
