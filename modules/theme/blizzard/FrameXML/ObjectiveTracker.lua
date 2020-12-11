@@ -142,7 +142,7 @@ end
 
 local function GetMawBuffsAnchor(frame)
 	local center = frame:GetCenter()
-	if center and center < C.ScreenWidth/2 * C.Mult then
+	if center and center < GetScreenWidth()/2 then
 		return "LEFT"
 	else
 		return "RIGHT"
