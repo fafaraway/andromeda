@@ -1,7 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F.ANNOUNCEMENT
 
-
 local botsList = {
 	[157066] = true, -- 沃特
 	[22700] = true, -- 修理機器人74A型
@@ -29,7 +28,11 @@ local botsList = {
 	[200225] = true, -- 热砧模式(里弗斯)
 	[199109] = true, -- 自動鐵錘
 	[226241] = true, -- 宁神圣典
-	[256230] = true -- 静心圣典
+	[256230] = true, -- 静心圣典
+	[265116] = true, -- 8.0工程战复
+	[345130] = true, -- 9.0工程战复
+	[307157] = true, -- 永恒药锅
+	[324029] = true -- 宁心圣典
 }
 
 local feastsList = {
@@ -59,7 +62,7 @@ local feastsList = {
 	[297048] = true, -- 超澎湃饗宴
 	[298861] = true, -- 強效神秘大鍋
 	[308458] = true, -- 意外可口盛宴
-	[308462] = true, -- 暴食享樂盛宴
+	[308462] = true -- 暴食享樂盛宴
 }
 
 local portalsList = {
@@ -106,12 +109,7 @@ local function TryAnnounce(spellId, sourceName, id, list, type)
 	sourceName = sourceName:gsub('%-[^|]+', '')
 
 	if (id and spellId == id) or (type and list[spellId]) then
-
-			ANNOUNCEMENT:SendMessage(
-				FormatMessage(L['ANNOUNCEMENT_CASTED'], sourceName, spellId),
-				ANNOUNCEMENT:GetChannel()
-
-			)
+		ANNOUNCEMENT:SendMessage(FormatMessage(L['ANNOUNCEMENT_CASTED'], sourceName, spellId), ANNOUNCEMENT:GetChannel())
 
 		return true
 	end
@@ -120,7 +118,9 @@ local function TryAnnounce(spellId, sourceName, id, list, type)
 end
 
 function ANNOUNCEMENT:Utility(event, sourceName, spellId)
-	if not C.DB.announcement.utility then return end
+	if not C.DB.announcement.utility then
+		return
+	end
 
 	if not (IsInInstance() and IsInGroup()) or not event or not spellId or not sourceName then
 		return
@@ -134,7 +134,6 @@ function ANNOUNCEMENT:Utility(event, sourceName, spellId)
 		if TryAnnounce(spellId, sourceName, nil, feastsList, 'feasts') then
 			return
 		end -- 大餐大鍋
-
 	elseif event == 'SPELL_SUMMON' then
 		if TryAnnounce(spellId, sourceName, nil, botsList, 'bots') then
 			return
@@ -147,7 +146,6 @@ function ANNOUNCEMENT:Utility(event, sourceName, spellId)
 		if TryAnnounce(spellId, sourceName, 195782) then
 			return
 		end -- 召喚月羽雕像
-
 	elseif event == 'SPELL_CREATE' then
 		if TryAnnounce(spellId, sourceName, 698) then
 			return
@@ -170,4 +168,3 @@ function ANNOUNCEMENT:Utility(event, sourceName, spellId)
 		end --傳送門
 	end
 end
-

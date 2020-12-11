@@ -99,8 +99,8 @@ function NAMEPLATE:BlockAddons()
 		if not tonumber(spellID) then
 			return
 		end
-		if not C.AuraWhiteList[spellID] then
-			C.AuraWhiteList[spellID] = true
+		if not C.NPAuraWhiteList[spellID] then
+			C.NPAuraWhiteList[spellID] = true
 		end
 	end
 	hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)

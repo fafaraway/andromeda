@@ -698,11 +698,11 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 	elseif style == 'pet' and C.DB.unitframe.pet_auras then
 		return true
 	elseif style == 'nameplate' and C.DB.nameplate.plate_auras then
-		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.AuraBlackList[spellID] then
+		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.NPAuraBlackList[spellID] then
 			return false
 		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
-		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or C.AuraWhiteList[spellID] then
+		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or C.NPAuraWhiteList[spellID] then
 			return true
 		else
 			return nameplateShowAll or isMine
