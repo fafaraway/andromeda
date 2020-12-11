@@ -134,25 +134,21 @@ function CHAT:CreateChannelBar()
 		local channelName, channelID, channels = C.isChinses and '大脚世界频道' or 'BigfootWorldChannel'
 		local wc = AddButton(0, .8, 1, L['CHAT_WORLD_CHANNEL'])
 
+		local function updateChannelInfo()
+			local id = GetChannelName(channelName)
+			if not id or id == 0 then
+				wc.inChannel = false
+				channelID = nil
+				wc.Icon:SetVertexColor(1, .1, .1)
+			else
+				wc.inChannel = true
+				channelID = id
+				wc.Icon:SetVertexColor(0, .8, 1)
+			end
+		end
+
 		local function isInChannel(event)
-			C_Timer.After(
-				.1,
-				function()
-					channels = {GetChannelList()}
-					for i = 1, #channels do
-						if channels[i] == channelName then
-							wc.inChannel = true
-							channelID = channels[i - 1]
-							break
-						end
-					end
-					if wc.inChannel then
-						wc.Icon:SetVertexColor(0, .8, 1)
-					else
-						wc.Icon:SetVertexColor(1, .1, .1)
-					end
-				end
-			)
+			C_Timer.After(.2, updateChannelInfo)
 
 			if event == 'PLAYER_ENTERING_WORLD' then
 				F:UnregisterEvent(event, isInChannel)
@@ -160,6 +156,7 @@ function CHAT:CreateChannelBar()
 		end
 		F:RegisterEvent('PLAYER_ENTERING_WORLD', isInChannel)
 		F:RegisterEvent('CHANNEL_UI_UPDATE', isInChannel)
+		hooksecurefunc('ChatConfigChannelSettings_UpdateCheckboxes', isInChannel) -- toggle in chatconfig
 
 		wc:SetScript(
 			'OnClick',
@@ -168,7 +165,7 @@ function CHAT:CreateChannelBar()
 					if btn == 'RightButton' then
 						LeaveChannelByName(channelName)
 
-						F.Print(C.RedColor..'Leave|r '..channelName)
+						F.Print(C.RedColor .. 'Leave|r ' .. channelName)
 						wc.inChannel = false
 					elseif channelID then
 						ChatFrame_OpenChat('/' .. channelID, chatFrame)
@@ -177,7 +174,7 @@ function CHAT:CreateChannelBar()
 					JoinPermanentChannel(channelName, nil, 1)
 					ChatFrame_AddChannel(ChatFrame1, channelName)
 
-					F.Print(C.GreenColor..'Join|r '..channelName)
+					F.Print(C.GreenColor .. 'Join|r ' .. channelName)
 					wc.inChannel = true
 				end
 			end

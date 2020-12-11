@@ -281,6 +281,9 @@ do
 		function(event, ...)
 			local achievementID, alreadyEarned = ...
 
+			F.Debug('achievementID', achievementID)
+			F.Debug('alreadyEarned', alreadyEarned)
+
 			if alreadyEarned then
 				return
 			end

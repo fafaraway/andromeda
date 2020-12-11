@@ -596,7 +596,7 @@ function NAMEPLATE:UpdatePlateByType()
 
 	if self.widgetContainer then
 		self.widgetContainer:ClearAllPoints()
-		self.widgetContainer:SetPoint("TOP", self.Castbar, "BOTTOM", 0, -5)
+		self.widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
 	end
 end
 
@@ -641,7 +641,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 		self.widgetContainer = blizzPlate.WidgetContainer
 		if self.widgetContainer then
 			self.widgetContainer:SetParent(self)
-			self.widgetContainer:SetScale(1/NDuiADB["UIScale"])
+			self.widgetContainer:SetScale(1 / FREE_ADB.ui_scale)
 		end
 
 		NAMEPLATE.RefreshPlateType(self, unit)

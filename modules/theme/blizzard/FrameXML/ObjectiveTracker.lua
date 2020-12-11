@@ -142,7 +142,7 @@ end
 
 local function GetMawBuffsAnchor(frame)
 	local center = frame:GetCenter()
-	if center and center < C.ScreenWidth/2 then
+	if center and center < C.ScreenWidth/2 * C.Mult then
 		return "LEFT"
 	else
 		return "RIGHT"
@@ -246,18 +246,18 @@ tinsert(C.BlizzThemes, function()
 	F.SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
 
 	-- Maw buffs block
-	-- ScenarioBlocksFrame.MawBuffsBlock.Container:HookScript("OnClick", function(container)
-	-- 	local direc = GetMawBuffsAnchor(container)
-	-- 	if not container.lastDirec or container.lastDirec ~= direc then
-	-- 		container.List:ClearAllPoints()
-	-- 		if direc == "LEFT" then
-	-- 			container.List:SetPoint("TOPLEFT", container, "TOPRIGHT", 15, 1)
-	-- 		else
-	-- 			container.List:SetPoint("TOPRIGHT", container, "TOPLEFT", 15, 1)
-	-- 		end
-	-- 		container.lastDirec = direc
-	-- 	end
-	-- end)
+	ScenarioBlocksFrame.MawBuffsBlock.Container:HookScript("OnClick", function(container)
+		local direc = GetMawBuffsAnchor(container)
+		if not container.lastDirec or container.lastDirec ~= direc then
+			container.List:ClearAllPoints()
+			if direc == "LEFT" then
+				container.List:SetPoint("TOPLEFT", container, "TOPRIGHT", 15, 1)
+			else
+				container.List:SetPoint("TOPRIGHT", container, "TOPLEFT", 15, 1)
+			end
+			container.lastDirec = direc
+		end
+	end)
 end)
 
 

@@ -126,6 +126,7 @@ function MAP:ExpBar_UpdateTooltip()
 		local name, standing, barMin, barMax, value, factionID = GetWatchedFactionInfo()
 		local friendID, _, _, _, _, _, friendTextLevel, _, nextFriendThreshold = GetFriendshipReputation(factionID)
 		local currentRank, maxRank = GetFriendshipReputationRanks(friendID)
+		local colors = FACTION_BAR_COLORS[standing]
 		local standingtext
 		if friendID then
 			if maxRank > 0 then
@@ -144,7 +145,7 @@ function MAP:ExpBar_UpdateTooltip()
 		end
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddLine(name, 0, .6, 1)
-		GameTooltip:AddDoubleLine(standingtext, value - barMin .. ' / ' .. barMax - barMin .. ' (' .. floor((value - barMin) / (barMax - barMin) * 100) .. '%)', .6, .8, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(standingtext, value - barMin .. ' / ' .. barMax - barMin .. ' (' .. floor((value - barMin) / (barMax - barMin) * 100) .. '%)', colors.r, colors.g, colors.b, 1, 1, 1)
 
 		if C_Reputation_IsFactionParagon(factionID) then
 			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
@@ -158,7 +159,7 @@ function MAP:ExpBar_UpdateTooltip()
 		local current, barMax, level = UnitHonor('player'), UnitHonorMax('player'), UnitHonorLevel('player')
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddLine(HONOR, 0, .6, 1)
-		GameTooltip:AddDoubleLine(LEVEL .. ' ' .. level, current .. ' / ' .. barMax, .6, .8, 1, 1, 1, 1)
+		GameTooltip:AddDoubleLine(LEVEL .. ' ' .. level, current .. ' / ' .. barMax, .8, .2, 0, 1, 1, 1)
 	end
 
 	if IsAzeriteAvailable() then

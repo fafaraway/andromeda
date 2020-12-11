@@ -1,25 +1,29 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('TOOLTIP')
-
+local TOOLTIP = F.TOOLTIP
 
 local gsub, unpack = gsub, unpack
 local GetItemIcon, GetSpellTexture = GetItemIcon, GetSpellTexture
 local newString = '0:0:64:64:5:59:5:59'
 
 function TOOLTIP:SetupTooltipIcon(icon)
-	local title = icon and _G[self:GetName()..'TextLeft1']
-	if title then
-		title:SetFormattedText('|T%s:20:20:'..newString..':%d|t %s', icon, 20, title:GetText())
+	local title = icon and _G[self:GetName() .. 'TextLeft1']
+	local titleText = title and title:GetText()
+	if titleText then
+		title:SetFormattedText('|T%s:20:20:' .. newString .. ':%d|t %s', icon, 20, titleText)
 	end
 
 	for i = 2, self:NumLines() do
-		local line = _G[self:GetName()..'TextLeft'..i]
-		if not line then break end
+		local line = _G[self:GetName() .. 'TextLeft' .. i]
+		if not line then
+			break
+		end
 
 		local text = line:GetText()
-		if text and text ~= "" then
-			local newText, count = gsub(text, "|T([^:]-):[%d+:]+|t", "|T%1:14:14:"..newString.."|t")
-			if count > 0 then line:SetText(newText) end
+		if text and text ~= '' then
+			local newText, count = gsub(text, '|T([^:]-):[%d+:]+|t', '|T%1:14:14:' .. newString .. '|t')
+			if count > 0 then
+				line:SetText(newText)
+			end
 		end
 	end
 end
@@ -63,21 +67,35 @@ function TOOLTIP:ReskinRewardIcon()
 end
 
 function TOOLTIP:ReskinTooltipIcons()
-	if not C.DB.tooltip.tip_icon then return end
+	if not C.DB.tooltip.tip_icon then
+		return
+	end
 
 	TOOLTIP.HookTooltipMethod(GameTooltip)
 	TOOLTIP.HookTooltipMethod(ItemRefTooltip)
 
-	hooksecurefunc(GameTooltip, 'SetUnitAura', function(self)
-		TOOLTIP.SetupTooltipIcon(self)
-	end)
+	hooksecurefunc(
+		GameTooltip,
+		'SetUnitAura',
+		function(self)
+			TOOLTIP.SetupTooltipIcon(self)
+		end
+	)
 
-	hooksecurefunc(GameTooltip, 'SetAzeriteEssence', function(self)
-		TOOLTIP.SetupTooltipIcon(self)
-	end)
-	hooksecurefunc(GameTooltip, 'SetAzeriteEssenceSlot', function(self)
-		TOOLTIP.SetupTooltipIcon(self)
-	end)
+	hooksecurefunc(
+		GameTooltip,
+		'SetAzeriteEssence',
+		function(self)
+			TOOLTIP.SetupTooltipIcon(self)
+		end
+	)
+	hooksecurefunc(
+		GameTooltip,
+		'SetAzeriteEssenceSlot',
+		function(self)
+			TOOLTIP.SetupTooltipIcon(self)
+		end
+	)
 
 	-- Tooltip rewards icon
 	TOOLTIP.ReskinRewardIcon(GameTooltip.ItemTooltip)

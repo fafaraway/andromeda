@@ -123,9 +123,9 @@ function BLIZZARD:MissingStats()
 		end
 		PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
 
-		CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Fonts.Regular, 14)
+		CharacterStatsPane.ItemLevelFrame.Value:SetFont(C.Assets.Fonts.Header, 18)
 		CharacterStatsPane.ItemLevelFrame.Value:SetShadowColor(0, 0, 0, 1)
-		CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(2, -2)
+		CharacterStatsPane.ItemLevelFrame.Value:SetShadowOffset(1, -1)
 	end)
 end
 

@@ -60,11 +60,11 @@ function MISC:CreateItemString(frame, strType)
 	for index, slot in pairs(inspectSlots) do
 		if index ~= 4 then
 			local slotFrame = _G[strType..slot..'Slot']
-			slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Regular, 11, 'OUTLINE')
+			slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, true, '', nil, true)
 			slotFrame.iLvlText:ClearAllPoints()
 			slotFrame.iLvlText:SetPoint('BOTTOMRIGHT', slotFrame, -1, 1)
 			local relF, x, y = MISC:GetSlotAnchor(index)
-			slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Fonts.Regular, 11, 'OUTLINE')
+			slotFrame.enchantText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, nil, '', nil, true)
 			slotFrame.enchantText:ClearAllPoints()
 			slotFrame.enchantText:SetPoint(relF, slotFrame, x, y)
 			slotFrame.enchantText:SetTextColor(0, 1, 0)
@@ -235,7 +235,7 @@ end
 
 function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
 	if not self.iLvl then
-		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -1, 1)
+		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
 	end
 
 	if quality and quality <= 1 then return end
@@ -274,7 +274,7 @@ end
 
 function MISC:ItemLevel_ScrappingUpdate()
 	if not self.iLvl then
-		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -1, 1)
+		self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
 	end
 	if not self.itemLink then self.iLvl:SetText('') return end
 

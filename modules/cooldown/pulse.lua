@@ -184,8 +184,7 @@ end
 
 function frame:UNIT_SPELLCAST_SUCCEEDED(unit, _, spellID)
 	if unit == 'player' then
-		local name = GetSpellInfo(spellID) -- Fix wrong double cd for trinket
-		watching[spellID] = {GetTime(), 'spell', name}
+		watching[spellID] = {GetTime(), 'spell', spellID}
 		self:SetScript('OnUpdate', OnUpdate)
 	end
 end

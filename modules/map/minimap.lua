@@ -365,7 +365,6 @@ function MAP:Minimap_OnMouseUp(btn)
 end
 
 function MAP:SetupHybridMinimap()
-	HybridMinimap:SetFrameStrata('LOW')
 	local mapCanvas = HybridMinimap.MapCanvas
 	local rectangleMask = HybridMinimap:CreateMaskTexture()
 	rectangleMask:SetTexture(C.Assets.mask_tex)
@@ -393,7 +392,6 @@ end
 
 function MAP:Minimap()
 	-- Shape and Position
-	Minimap:SetFrameLevel(10)
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
 	Minimap:SetSize(256, 256)
 	Minimap:SetHitRectInsets(0, 0, Minimap:GetHeight() / 8, Minimap:GetHeight() / 8)

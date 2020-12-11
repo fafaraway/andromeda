@@ -101,27 +101,23 @@ function THEME:ReskinDBM()
 
 				if not name.styled then
 					name:ClearAllPoints()
-					name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
+					name:SetPoint('LEFT', frame, 'LEFT', 2, 10)
 					name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth()*.85, 8)
 					name.SetPoint = F.Dummy
 					name:SetFont(C.Assets.Fonts.Bold, 11, nil, '', nil, true)
 					name.SetFont = F.Dummy
 					name:SetJustifyH('LEFT')
 					name:SetWordWrap(false)
-					name:SetShadowColor(0, 0, 0, 0)
-					name:SetShadowOffset(2, -2)
 					name.styled = true
 				end
 
 				if not timer.styled then
 					timer:ClearAllPoints()
-					timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 8)
+					timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 10)
 					timer.SetPoint = F.Dummy
 					timer:SetFont(C.Assets.Fonts.Bold, 11, nil, '', nil, true)
 					timer.SetFont = F.Dummy
 					timer:SetJustifyH('RIGHT')
-					timer:SetShadowColor(0, 0, 0, 0)
-					name:SetShadowOffset(2, -2)
 					timer.styled = true
 				end
 

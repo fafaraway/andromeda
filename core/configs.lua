@@ -722,7 +722,7 @@ C.CharacterSettings = {
 				['group_debuff_highlight'] = true,
 				['group_corner_buffs'] = true,
 				['raid_debuffs'] = true,
-				['auras_click_through'] = false,
+				['auras_click_through'] = true,
 				['party_spell_watcher'] = true,
 				['party_spell_sync'] = false,
 
