@@ -1,129 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 local MAP = F:GetModule('MAP')
 
-local strmatch, strfind, strupper = string.match, string.find, string.upper
-local select, pairs, ipairs, unpack = select, pairs, ipairs, unpack
+
 local offset = 256 / 8
 
-local menuList = {
-	{
-		text = _G.CHARACTER_BUTTON,
-		func = function()
-			ToggleCharacter('PaperDollFrame')
-		end
-	},
-	{
-		text = _G.SPELLBOOK_ABILITIES_BUTTON,
-		func = function()
-			if not _G.SpellBookFrame:IsShown() then
-				ShowUIPanel(_G.SpellBookFrame)
-			else
-				HideUIPanel(_G.SpellBookFrame)
-			end
-		end
-	},
-	{
-		text = _G.TALENTS_BUTTON,
-		func = function()
-			if not _G.PlayerTalentFrame then
-				_G.TalentFrame_LoadUI()
-			end
-
-			local PlayerTalentFrame = _G.PlayerTalentFrame
-			if not PlayerTalentFrame:IsShown() then
-				ShowUIPanel(PlayerTalentFrame)
-			else
-				HideUIPanel(PlayerTalentFrame)
-			end
-		end
-	},
-	{
-		text = _G.COLLECTIONS,
-		func = ToggleCollectionsJournal
-	},
-	{
-		text = _G.CHAT_CHANNELS,
-		func = _G.ToggleChannelFrame
-	},
-	{
-		text = _G.TIMEMANAGER_TITLE,
-		func = function()
-			ToggleFrame(_G.TimeManagerFrame)
-		end
-	},
-	{
-		text = _G.ACHIEVEMENT_BUTTON,
-		func = ToggleAchievementFrame
-	},
-	{
-		text = _G.SOCIAL_BUTTON,
-		func = ToggleFriendsFrame
-	},
-	{
-		text = L['MAP_CALENDAR'],
-		func = function()
-			_G.GameTimeFrame:Click()
-		end
-	},
-	{
-		text = _G.GARRISON_TYPE_8_0_LANDING_PAGE_TITLE,
-		func = function()
-			GarrisonLandingPageMinimapButton_OnClick(_G.GarrisonLandingPageMinimapButton)
-		end
-	},
-	{
-		text = _G.ACHIEVEMENTS_GUILD_TAB,
-		func = ToggleGuildFrame
-	},
-	{
-		text = _G.LFG_TITLE,
-		func = ToggleLFDParentFrame
-	},
-	{
-		text = _G.ENCOUNTER_JOURNAL,
-		func = function()
-			if not IsAddOnLoaded('Blizzard_EncounterJournal') then
-				_G.EncounterJournal_LoadUI()
-			end
-
-			ToggleFrame(_G.EncounterJournal)
-		end
-	},
-	{
-		text = _G.MAINMENU_BUTTON,
-		func = function()
-			if not _G.GameMenuFrame:IsShown() then
-				if _G.VideoOptionsFrame:IsShown() then
-					_G.VideoOptionsFrameCancel:Click()
-				elseif _G.AudioOptionsFrame:IsShown() then
-					_G.AudioOptionsFrameCancel:Click()
-				elseif _G.InterfaceOptionsFrame:IsShown() then
-					_G.InterfaceOptionsFrameCancel:Click()
-				end
-
-				CloseMenus()
-				CloseAllWindows()
-				PlaySound(850) --IG_MAINMENU_OPEN
-				ShowUIPanel(_G.GameMenuFrame)
-			else
-				PlaySound(854) --IG_MAINMENU_QUIT
-				HideUIPanel(_G.GameMenuFrame)
-				MainMenuMicroButton_SetNormal()
-			end
-		end
-	}
-}
-
-tinsert(
-	menuList,
-	{
-		text = _G.BLIZZARD_STORE,
-		func = function()
-			_G.StoreMicroButton:Click()
-		end
-	}
-)
-tinsert(menuList, {text = _G.HELP_BUTTON, func = ToggleHelpFrame})
 
 function MAP:CreateMailButton()
 	MiniMapMailFrame:ClearAllPoints()
@@ -190,12 +70,108 @@ function MAP:CreateCalendar()
 end
 
 function MAP:CreateDifficultyFlag()
-	local flags = {'MiniMapInstanceDifficulty', 'GuildInstanceDifficulty', 'MiniMapChallengeMode'}
+	--[[ local flags = {'MiniMapInstanceDifficulty', 'GuildInstanceDifficulty', 'MiniMapChallengeMode'}
 	for _, v in pairs(flags) do
 		local flag = _G[v]
 		flag:ClearAllPoints()
 		flag:SetPoint('TOPLEFT', Minimap, 0, -offset - 10)
 		flag:SetScale(.9)
+	end ]]
+	local diffFlag = CreateFrame('Frame', nil, Minimap)
+	diffFlag:SetSize(40, 40)
+	diffFlag:SetPoint('TOPLEFT', Minimap, 0, -offset)
+	diffFlag:SetFrameLevel(Minimap:GetFrameLevel() + 2)
+	diffFlag.texture = diffFlag:CreateTexture(nil, 'OVERLAY')
+	diffFlag.texture:SetAllPoints(diffFlag)
+	diffFlag.texture:SetTexture(C.Assets.diff_tex)
+	diffFlag.texture:SetVertexColor(C.r, C.g, C.b)
+	diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 12, nil, '', nil, true, 'CENTER', 0, 0)
+	Minimap.DiffFlag = diffFlag
+	Minimap.DiffText = diffFlag.text
+end
+
+function MAP:UpdateDifficultyFlag()
+	local diffText = Minimap.DiffText
+	local inInstance, instanceType = IsInInstance()
+	local difficulty = select(3, GetInstanceInfo())
+	local num = select(9, GetInstanceInfo())
+	local mplus = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
+
+	if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
+		if difficulty == 1 then
+			diffText:SetText('5N')
+		elseif difficulty == 2 then
+			diffText:SetText('5H')
+		elseif difficulty == 3 then
+			diffText:SetText('10N')
+		elseif difficulty == 4 then
+			-- 5 普通十人 153 十人海島
+			diffText:SetText('25N')
+		elseif difficulty == 5 then
+			diffText:SetText('10H')
+		elseif difficulty == 6 then
+			-- Old LFR (before SOO)
+			diffText:SetText('25H')
+		elseif difficulty == 7 then
+			-- Challenge Mode and Mythic+
+			diffText:SetText('LFR')
+		elseif difficulty == 8 then
+			diffText:SetText('M' .. mplus)
+		elseif difficulty == 9 then
+			-- 11 MOP英雄事件 39 BFA英雄海嶼
+			diffText:SetText('40R')
+		elseif difficulty == 11 or difficulty == 39 then
+			-- 12 MOP普通事件 38 BFA普通海嶼
+			diffText:SetText('3H')
+		elseif difficulty == 12 and difficulty == 38 then
+			-- 40 BFA傳奇海嶼
+			diffText:SetText('3N')
+		elseif difficulty == 40 then
+			-- Flex normal raid
+			diffText:SetText('3M')
+		elseif difficulty == 14 then
+			-- Flex heroic raid
+			diffText:SetText(num .. 'N')
+		elseif difficulty == 15 then
+			-- Mythic raid since WOD
+			diffText:SetText(num .. 'H')
+		elseif difficulty == 16 then
+			-- LFR
+			diffText:SetText('M')
+		elseif difficulty == 17 then
+			-- 18 Event 19 Event 20 Event Scenario(劇情事件) 30 Event 152 幻象
+			diffText:SetText(num .. 'L')
+		elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
+			diffText:SetText('E')
+		elseif difficulty == 23 then
+			-- 24 Timewalking(地城時光) 33 Timewalking(團隊時光) 151 隨機團隊時光
+			diffText:SetText('5M')
+		elseif difficulty == 24 or difficulty == 33 then
+			-- 25 World PvP Scenario 32 World PvP Scenario 34 PVP 45 PVP
+			diffText:SetText('T')
+		elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
+			-- 29 pvevp事件(這什麼玩意?)
+			diffText:SetText('PVP')
+		elseif difficulty == 29 then
+			-- 147 普通戰爭前線
+			diffText:SetText('PvEvP')
+		elseif difficulty == 147 then
+			-- 147 英雄戰爭前線
+			diffText:SetText('WF')
+		elseif difficulty == 149 then
+			diffText:SetText('HWF')
+		end
+	elseif instanceType == 'pvp' or instanceType == 'arena' then
+		diffText:SetText('PVP')
+	else
+		-- just notice you are in dungeon
+		diffText:SetText('D')
+	end
+
+	if not inInstance then
+		Minimap.DiffFlag:SetAlpha(0)
+	else
+		Minimap.DiffFlag:SetAlpha(1)
 	end
 end
 
@@ -356,7 +332,7 @@ function MAP:Minimap_OnMouseUp(btn)
 			UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
 			return
 		end
-		EasyMenu(menuList, F.EasyMenu, self, 0, 0, 'MENU', 3)
+		EasyMenu(MAP.MenuList, F.EasyMenu, self, 0, 0, 'MENU', 3)
 	elseif btn == 'RightButton' then
 		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self)
 	else
@@ -384,33 +360,31 @@ function MAP:HybridMinimapOnLoad(addon)
 end
 
 function MAP:UpdateMinimapScale()
-	local size = Minimap:GetWidth()
 	local scale = C.DB.map.minimap_scale
 	Minimap:SetScale(scale)
-	Minimap.mover:SetSize(size * scale, size * scale)
+	Minimap.backdrop:SetSize(256 * scale, 190 * scale)
+	Minimap.mover:SetSize(256 * scale, 190 * scale)
 end
 
 function MAP:Minimap()
-	-- Shape and Position
+	DropDownList1:SetClampedToScreen(true)
+
+	local backdrop = CreateFrame('Frame', nil, UIParent)
+	backdrop:SetSize(256, 190)
+	backdrop:SetFrameStrata('BACKGROUND')
+	F.SetBD(backdrop)
+	Minimap.backdrop = backdrop
+
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
 	Minimap:SetSize(256, 256)
 	Minimap:SetHitRectInsets(0, 0, Minimap:GetHeight() / 8, Minimap:GetHeight() / 8)
 	Minimap:SetClampRectInsets(0, 0, 0, 0)
 	Minimap:SetFrameLevel(Minimap:GetFrameLevel() + 2)
-	MinimapBackdrop:ClearAllPoints()
-	MinimapBackdrop:SetAllPoints(Minimap)
-
-	DropDownList1:SetClampedToScreen(true)
-
-	local mover = F.Mover(Minimap, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, 0})
 	Minimap:ClearAllPoints()
-	Minimap:SetPoint('CENTER', mover)
-	Minimap.mover = mover
+	Minimap:SetPoint('CENTER', backdrop)
 
-	Minimap.backdrop = F.SetBD(Minimap, 1, 0, -(Minimap:GetHeight() / 8), 0, Minimap:GetHeight() / 8)
-	Minimap.backdrop:SetBackdropColor(0, 0, 0, 1)
-	Minimap.backdrop:SetFrameLevel(99)
-	Minimap.backdrop:SetFrameStrata('BACKGROUND')
+	local mover = F.Mover(backdrop, L['MAP_MOVER_MINIMAP'], 'Minimap', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, C.UIGap})
+	Minimap.mover = mover
 
 	function GetMinimapShape()
 		return 'SQUARE'
@@ -456,6 +430,16 @@ function MAP:Minimap()
 	MAP:CreateQueueStatusButton()
 	MAP:WhoPings()
 	MAP:ProgressBar()
+
+	-- Update difficulty flag
+	Minimap.DiffFlag:RegisterEvent('PLAYER_ENTERING_WORLD')
+	Minimap.DiffFlag:RegisterEvent('PLAYER_DIFFICULTY_CHANGED')
+	Minimap.DiffFlag:RegisterEvent('INSTANCE_GROUP_SIZE_CHANGED')
+	Minimap.DiffFlag:RegisterEvent('ZONE_CHANGED_NEW_AREA')
+	Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_START')
+	Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+	Minimap.DiffFlag:RegisterEvent('CHALLENGE_MODE_RESET')
+	Minimap.DiffFlag:SetScript('OnEvent', MAP.UpdateDifficultyFlag)
 
 	F:RegisterEvent('ADDON_LOADED', MAP.HybridMinimapOnLoad)
 end
