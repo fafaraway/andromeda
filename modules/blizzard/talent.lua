@@ -15,9 +15,16 @@ local Dropdown = LibStub('LibDropDown'):NewMenu(Talentless)
 Dropdown:SetStyle('MENU')
 
 function Talentless:PLAYER_LEVEL_UP(level)
-	if (level == 101) then
+	if (level == 51) then
 		table.remove(self.Items[1].items, 1)
-	elseif (level == 110) then
+		table.remove(self.Items[1].items, 1)
+		table.insert(self.Items[1].items, 173048)
+		table.remove(self.Items[2].items, 1)
+		table.remove(self.Items[2].items, 1)
+		table.remove(self.Items[2].items, 1)
+		table.insert(self.Items[2].items, 173049)
+	elseif (level == 60) then
+		table.remove(self.Items[1].items, 1)
 		table.remove(self.Items[2].items, 1)
 		self:UnregisterEvent('PLAYER_LEVEL_UP')
 	end
@@ -207,23 +214,32 @@ function Talentless:CreateItemButtons()
 
 	local items = {
 		{
-			141641, -- Codex of the Clear Mind (Pre-Legion)
-			141333, -- Codex of the Tranquil Mind (Legion)
-			153646 -- Codex of the Quiet Mind (BfA)
+			141641, -- Codex of the Clear Mind (Pre-Legion, 10-50)
+			141333, -- Codex of the Tranquil Mind (Legion, 10-50)
+			153646 -- Codex of the Quiet Mind (BfA, 10-59)
+			--173048, -- Codex of the Still Mind (Shadowlands, 51-60)
 		},
 		{
-			141640, -- Tome of the Clear Mind (Pre-Legion)
-			143785, -- Tome of the Tranquil Mind (BoP version)
-			141446, -- Tome of the Tranquil Mind (Legion)
-			153647 -- Tome of the Quiet Mind (BfA)
+			141640, -- Tome of the Clear Mind (Pre-Legion, 10-50)
+			143785, -- Tome of the Tranquil Mind (BoP version, 10-50)
+			141446, -- Tome of the Tranquil Mind (Legion, 10-50)
+			153647 -- Tome of the Quiet Mind (BfA, 10-59)
+			--173049, -- Tome of the Still Mind (Shadowlands, 51-60)
 		}
 	}
 
 	local playerLevel = UnitLevel('player')
-	if (playerLevel > 100) then
+	if (playerLevel > 50) then
 		table.remove(items[1], 1)
+		table.remove(items[1], 1)
+		table.insert(items[1], 173048)
+		table.remove(items[2], 1)
+		table.remove(items[2], 1)
+		table.remove(items[2], 1)
+		table.insert(items[2], 173049)
 
-		if (playerLevel > 109) then
+		if (playerLevel > 59) then
+			table.remove(items[1], 1)
 			table.remove(items[2], 1)
 		end
 	end
@@ -367,7 +383,7 @@ function Talentless:ADDON_LOADED(addon)
 		hooksecurefunc(C_EquipmentSet, 'AssignSpecToEquipmentSet', UpdateAssignedEquipmentSets)
 		hooksecurefunc(C_EquipmentSet, 'UnassignEquipmentSetSpec', UpdateAssignedEquipmentSets)
 
-		if (UnitLevel('player') < 110 and not (IsTrialAccount() or IsVeteranTrialAccount())) then
+		if (UnitLevel('player') < 60 and not (IsTrialAccount() or IsVeteranTrialAccount())) then
 			self:RegisterEvent('PLAYER_LEVEL_UP')
 		end
 
