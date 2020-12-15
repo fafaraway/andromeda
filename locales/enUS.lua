@@ -76,40 +76,39 @@ end
 --[[ Infobar ]]
 do
 	L['INFOBAR_DURABILITY'] = 'Durability'
-	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle Character Panel'
+	L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle character pane'
 
 	L['INFOBAR_FRIENDS'] = 'Friends'
-	L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle Friends Panel'
-	L['INFOBAR_ADD_FRIEND'] = 'Add Friend'
+	L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle friends pane'
+	L['INFOBAR_ADD_FRIEND'] = 'Add friend'
 
 	L['INFOBAR_GUILD'] = 'Guild'
 	L['INFOBAR_GUILD_NONE'] = 'None'
-	L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle Guild & Communities Pane'
+	L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle guild & communities pane'
 
 	L['INFOBAR_REPORT'] = 'Report'
 	L['INFOBAR_DAILY_WEEKLY_INFO'] = 'Daily/weekly'
-	L['INFOBAR_BLINGTRON'] = 'Blingtron Daily Pack'
-	L['INFOBAR_MEAN_ONE'] = 'Winter Veil Daily'
-	L['INFOBAR_TIMEWARPED'] = 'Timewarped Badge Reward'
-	L['INFOBAR_INVASION_LEG'] = 'Legion Invasion'
-	L['INFOBAR_INVASION_BFA'] = 'Faction Assaults'
+	L['INFOBAR_BLINGTRON'] = 'Blingtron daily pack'
+	L['INFOBAR_MEAN_ONE'] = 'Winter veil daily'
+	L['INFOBAR_TIMEWARPED'] = 'Timewarped badge reward'
+	L['INFOBAR_INVASION_LEG'] = 'Legion invasion'
+	L['INFOBAR_INVASION_BFA'] = 'Faction assaults'
 	L['INFOBAR_INVASION_CURRENT'] = 'Current: '
 	L['INFOBAR_INVASION_NEXT'] = 'Next: '
-	L['INFOBAR_LESSER_VISION'] = 'N\'Zoth Assaults'
+	L['INFOBAR_LESSER_VISION'] = 'N\'Zoth assaults'
 	L['INFOBAR_ISLAND'] = 'Island'
-	L['INFOBAR_OPEN_BFA_REPORT'] = 'Open mission report(BFA)'
-	L['INFOBAR_OPEN_LEG_REPORT'] = 'Open mission report(LEG)'
-	L['INFOBAR_OPEN_WOD_REPORT'] = 'Open mission report(WOD)'
+
+	L['INFOBAR_TOGGLE_WEEKLY_REWARDS'] = 'Toggle weekly rewards pane'
 
 	L['INFOBAR_SPEC'] = 'Spec'
 	L['INFOBAR_LOOT'] = 'Loot'
-	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle Talent Panel'
-	L['INFOBAR_CHANGE_SPEC'] = 'Switch Specialization & Loot'
+	L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle talent pane'
+	L['INFOBAR_CHANGE_SPEC'] = 'Switch specialization & loot'
 
 	L['INFOBAR_LOCAL_TIME'] = 'Local time'
 	L['INFOBAR_REALM_TIME'] = 'Realm time'
-	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list panel'
-	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer'
+	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list pane'
+	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer pane'
 
 
 	L['INFOBAR_EARNED'] = 'Earned'
@@ -117,8 +116,8 @@ do
 	L['INFOBAR_DEFICIT'] = 'Deficit'
 	L['INFOBAR_PROFIT'] = 'Profit'
 	L['INFOBAR_SESSION'] = 'Session'
-	L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency panel'
-	L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store panel'
+	L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency pane'
+	L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store pane'
 	L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
 
 end
@@ -212,19 +211,19 @@ do
 	L['INVENTORY_PICK_FAVOURITE_ENABLED'] = "|nYou can now star items.|nIf 'Item Filter' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to trash."
 	L['INVENTORY_PICK_FAVOURITE'] = 'Favourite'
 	L['INVENTORY_AUTO_REPAIR'] = 'Auto repair'
-	L['INVENTORY_AUTO_REPAIR_TIP'] = '|n当按钮高亮时表示自动修理已启用，每次与商人对话都会自动修理你的装备。'
+	L['INVENTORY_AUTO_REPAIR_TIP'] = '|nIf the button is highlight, you will sell junk items automtically when you visit an able vendor.'
 	L['INVENTORY_REPAIR_ERROR'] = 'Oh my goodness, you are running out of gold!'
 	L['INVENTORY_REPAIR_COST'] = 'Auto repair cost (%s)'
 	L['INVENTORY_SELL_JUNK'] = 'Auto sell junk'
-	L['INVENTORY_SELL_JUNK_TIP'] = '|n当按钮高亮时表示自动出售垃圾已启用，每次与商人对话都会自动出售垃圾物品。'
+	L['INVENTORY_SELL_JUNK_TIP'] = '|nIf the button is highlight, you will repair your equipment automatically when you visit an able vendor.'
 	L['INVENTORY_SELL_JUNK_EARN'] = 'Auto sell junk earned (%s)'
 	L['INVENTORY_SEARCH'] = 'Search'
 	L['INVENTORY_SEARCH_ENABLED'] = 'Type item name to search'
 	L['INVENTORY_MARK_JUNK'] = 'Mark junk'
-	L['INVENTORY_MARK_JUNK_ENABLED'] = "|nClick to tag item as junk.|nIf 'Autosell Junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL+ALT and click to wipe the custom junk list."
+	L['INVENTORY_MARK_JUNK_ENABLED'] = "|nClick to tag item as junk.|nIf 'Auto sell junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL+ALT and click to wipe the custom junk list."
 	L['INVENTORY_QUICK_SPLIT'] = 'Quick split'
 	L['INVENTORY_SPLIT_COUNT'] = 'Split count'
-	L['INVENTORY_SPLIT_MODE_ENABLED'] = "nClick to split stacked items in your bags.|nYou can change 'split count' for each click thru the editbox."
+	L['INVENTORY_SPLIT_MODE_ENABLED'] = "|nClick to split stacked items in your bags.|nYou can change 'split count' for each click thru the editbox."
 
 	L['INVENTORY_AUTO_DEPOSIT'] = '|nLeft click to deposit reagents, right click to switch auto deposit.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'
 	L['INVENTORY_EQUIPEMENT_SET'] = 'Equipement set'
@@ -259,8 +258,8 @@ do
 	L['TOOLTIP_ID_CURRENCY'] = 'CurrencyID'
 	L['TOOLTIP_ID_VISUAL'] = 'Visual'
 	L['TOOLTIP_ID_SOURCE'] = 'Source'
-	L['TOOLTIP_SECTION'] = '段落'
-	L['TOOLTIP_TARGETED'] = '关注'
+	L['TOOLTIP_SECTION'] = 'Section'
+	L['TOOLTIP_TARGETED'] = 'Targeted by'
 	L['TOOLTIP_ILVL'] = 'iLvl'
 end
 
@@ -811,20 +810,15 @@ L.GUI = {
 -- Slash commands
 L['COMMANDS_LIST_HINT'] = 'Available Commands：'
 L['COMMANDS_LIST'] = {
-	'/free install - Launch Installation Wizard',
-	'/free config - Open the Config Panel',
-	'/free unlock - Unlock the Interface to let you easily move elements',
+	'/free install - Open installation pane',
+	'/free config - Open config pane',
+	'/free unlock - Unlock the interface to let you easily move elements',
 	'/free reset - Reset all saved options to their default values.',
-	'/rl - Reload Interface',
+	'/rl - Reload interface',
 	'/ss - Take a Screenshot',
-	'/clear - Clear the chat',
-	'/rc - 就位确认',
-	'/rp - 职责确认',
-	'/gc - Convert your Group to Raid',
+	'/rc - Ready check',
+	'/rp - Role poll',
 	'/lg - Leave group',
-	'/rs - 重置副本',
-	'/tt - Whisper to your current target',
-	'/spec - Switch Talent',
-	'/bind - Launch Quick Keybind Mode',
-	'/gm - Open the Help Panel'
+	'/rs - Reset instance',
+	'/bind - Launch quick keybind mode',
 }
