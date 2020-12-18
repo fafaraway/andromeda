@@ -184,6 +184,10 @@ do
 	end
 
 	function MISC:QuestRewardHighlight()
+		if IsAddOnLoaded('Immersion') then
+			return
+		end
+
 		if C.DB.misc.reward_highlight then
 			F:RegisterEvent('QUEST_COMPLETE', UpdateHighlight)
 		else
