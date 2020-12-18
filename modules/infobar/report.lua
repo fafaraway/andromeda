@@ -2,21 +2,23 @@ local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('INFOBAR')
 
 local time, date = time, date
-local strfind, format, floor = string.find, string.format, math.floor
+local strfind, format, floor, strmatch = strfind, format, floor, strmatch
 local mod, tonumber, pairs, ipairs, select = mod, tonumber, pairs, ipairs, select
 local C_Map_GetMapInfo = C_Map.GetMapInfo
-local C_Calendar_GetDate = C_Calendar.GetDate
+local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
 local C_Calendar_SetAbsMonth = C_Calendar.SetAbsMonth
 local C_Calendar_OpenCalendar = C_Calendar.OpenCalendar
 local C_Calendar_GetNumDayEvents = C_Calendar.GetNumDayEvents
 local C_Calendar_GetNumPendingInvites = C_Calendar.GetNumPendingInvites
+local C_AreaPoiInfo_GetAreaPOIInfo = C_AreaPoiInfo.GetAreaPOIInfo
 local C_AreaPoiInfo_GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
 local C_IslandsQueue_GetIslandsWeeklyQuestID = C_IslandsQueue.GetIslandsWeeklyQuestID
+local C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo = C_UIWidgetManager.GetTextWithStateWidgetVisualizationInfo
 local TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR = TIMEMANAGER_TICKER_24HOUR, TIMEMANAGER_TICKER_12HOUR
 local FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES = FULLDATE, CALENDAR_WEEKDAY_NAMES, CALENDAR_FULLDATE_MONTH_NAMES
 local PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3 = PLAYER_DIFFICULTY_TIMEWALKER, RAID_INFO_WORLD_BOSS, DUNGEON_DIFFICULTY3
 local DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE = DUNGEONS, RAID_INFO, QUESTS_LABEL, ISLANDS_HEADER, QUEST_COMPLETE
-local PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE = PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE
+local PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT, AVAILABLE = PVP_CONQUEST, LFG_LIST_LOADING, QUEUE_TIME_UNAVAILABLE, RATED_PVP_WEEKLY_VAULT, AVAILABLE
 local HORRIFIC_VISION = SPLASH_BATTLEFORAZEROTH_8_3_0_FEATURE1_TITLE
 local RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo = RequestRaidInfo, UnitLevel, GetNumSavedWorldBosses, GetSavedWorldBossInfo
 local GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime = GetCVarBool, GetGameTime, GameTime_GetLocalTime, GameTime_GetGameTime, SecondsToTime
@@ -25,7 +27,6 @@ local IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local C_TaskQuest_GetThreatQuests = C_TaskQuest.GetThreatQuests
 local C_TaskQuest_GetQuestInfoByQuestID = C_TaskQuest.GetQuestInfoByQuestID
 local PVPGetConquestLevelInfo, IsPlayerAtEffectiveMaxLevel = PVPGetConquestLevelInfo, IsPlayerAtEffectiveMaxLevel
-
 local FreeUIReportButton = INFOBAR.FreeUIReportButton
 
 local function updateTimerFormat(color, hour, minute)
@@ -183,6 +184,20 @@ local function GetNzothThreatName(questID)
 	return name
 end
 
+-- Torghast
+local TorghastWidgets, TorghastInfo = {
+	{nameID = 2925, levelID = 2930}, -- Fracture Chambers
+	{nameID = 2926, levelID = 2932}, -- Skoldus Hall
+	{nameID = 2924, levelID = 2934}, -- Soulforges
+	{nameID = 2927, levelID = 2936}, -- Coldheart Interstitia
+	{nameID = 2928, levelID = 2938}, -- Mort'regar
+	{nameID = 2929, levelID = 2940} -- The Upper Reaches
+}
+
+local function CleanupLevelName(text)
+	return gsub(text, '|n', '')
+end
+
 local title
 local function addTitle(text)
 	if not title then
@@ -203,13 +218,13 @@ function INFOBAR:Report()
 		INFOBAR.POSITION_RIGHT,
 		100,
 		function(self, button)
-			if WeeklyRewardsFrame and WeeklyRewardsFrame:IsShown() then
-				WeeklyRewardsFrame:Hide()
+			if not WeeklyRewardsFrame then
+				LoadAddOn('Blizzard_WeeklyRewards')
+			end
+			if InCombatLockdown() then
+				F:TogglePanel(WeeklyRewardsFrame)
 			else
-				if not IsAddOnLoaded('Blizzard_WeeklyRewards') then
-					LoadAddOn('Blizzard_WeeklyRewards')
-				end
-				WeeklyRewardsFrame:Show()
+				ToggleFrame(WeeklyRewardsFrame)
 			end
 		end
 	)
@@ -261,6 +276,27 @@ function INFOBAR:Report()
 						r, g, b = 1, 1, 1
 					end
 					GameTooltip:AddDoubleLine(name .. ' - ' .. diffName, SecondsToTime(reset, true, nil, 3), 1, 1, 1, r, g, b)
+				end
+			end
+
+			-- Torghast
+			if not TorghastInfo then
+				TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
+			end
+			if TorghastInfo and IsQuestFlaggedCompleted(60136) then
+				title = false
+				for _, value in pairs(TorghastWidgets) do
+					local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
+					if nameInfo and nameInfo.shownState == 1 then
+						addTitle(TorghastInfo.name)
+						local nameText = CleanupLevelName(nameInfo.text)
+						local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
+						local levelText = AVAILABLE
+						if levelInfo and levelInfo.shownState == 1 then
+							levelText = CleanupLevelName(levelInfo.text)
+						end
+						GameTooltip:AddDoubleLine(nameText, levelText)
+					end
 				end
 			end
 
@@ -363,23 +399,6 @@ function INFOBAR:Report()
 				end
 				local nextLocation = GetNextLocation(nextTime, index)
 				GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_NEXT'] .. nextLocation, date('%m/%d %H:%M', nextTime), 1, 1, 1, 1, 1, 1)
-			end
-
-			local iwqID = C_IslandsQueue.GetIslandsWeeklyQuestID()
-			if iwqID and UnitLevel('player') == 120 then
-				title = false
-				addTitle(ISLANDS_HEADER)
-
-				if IsQuestFlaggedCompleted(iwqID) then
-					GameTooltip:AddDoubleLine(L['INFOBAR_ISLAND'], QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
-				else
-					local cur, max = select(4, GetQuestObjectiveInfo(iwqID, 1, false))
-					local stautsText = cur .. '/' .. max
-					if not cur or not max then
-						stautsText = LFG_LIST_LOADING
-					end
-					GameTooltip:AddDoubleLine(L['INFOBAR_ISLAND'], stautsText, 1, 1, 1, 1, 0, 0)
-				end
 			end
 
 			GameTooltip:AddLine(' ')
