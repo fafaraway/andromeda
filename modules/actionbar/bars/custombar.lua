@@ -51,6 +51,7 @@ function ACTIONBAR:UpdateCustomBar()
 		local button = frame.buttons[i]
 		button:SetSize(size, size)
 		button.Name:SetScale(scale)
+		button.Count:SetScale(scale)
 		button.HotKey:SetScale(scale)
 		button:ClearAllPoints()
 		if i == 1 then
