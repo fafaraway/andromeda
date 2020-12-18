@@ -239,4 +239,20 @@ tinsert(C.BlizzThemes, function()
 	hooksecurefunc("LFGDungeonReadyStatusGrouped_UpdateIcon", function(button, role)
 		button.texture:SetTexCoord(F.GetRoleTexCoord(role))
 	end)
+
+	-- RaidFinder
+	RaidFinderFrameBottomInset:Hide()
+	RaidFinderFrameRoleBackground:Hide()
+	RaidFinderFrameRoleInset:Hide()
+	RaidFinderQueueFrameBackground:Hide()
+	-- this fixes right border of second reward being cut off
+	RaidFinderQueueFrameScrollFrame:SetWidth(RaidFinderQueueFrameScrollFrame:GetWidth()+1)
+
+	F.ReskinScroll(RaidFinderQueueFrameScrollFrameScrollBar)
+	F.ReskinDropDown(RaidFinderQueueFrameSelectionDropDown)
+	F.Reskin(RaidFinderFrameFindRaidButton)
+	F.Reskin(RaidFinderQueueFrameIneligibleFrameLeaveQueueButton)
+	F.Reskin(RaidFinderQueueFramePartyBackfillBackfillButton)
+	F.Reskin(RaidFinderQueueFramePartyBackfillNoBackfillButton)
+	styleRewardButton(RaidFinderQueueFrameScrollFrameChildFrameMoneyReward)
 end)
