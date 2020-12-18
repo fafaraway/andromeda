@@ -1,9 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local MAP = F:GetModule('MAP')
 
-
 local offset = 256 / 8
-
 
 function MAP:CreateMailButton()
 	MiniMapMailFrame:ClearAllPoints()
@@ -372,7 +370,8 @@ function MAP:Minimap()
 	local backdrop = CreateFrame('Frame', nil, UIParent)
 	backdrop:SetSize(256, 190)
 	backdrop:SetFrameStrata('BACKGROUND')
-	F.SetBD(backdrop)
+	backdrop.bg = F.SetBD(backdrop)
+	backdrop.bg:SetBackdropColor(0, 0, 0, 1)
 	Minimap.backdrop = backdrop
 
 	Minimap:SetMaskTexture(C.Assets.mask_tex)
@@ -411,7 +410,10 @@ function MAP:Minimap()
 		'MinimapZoomIn',
 		'MiniMapWorldMapButton',
 		'MiniMapMailBorder',
-		'MiniMapTracking'
+		'MiniMapTracking',
+		'MiniMapInstanceDifficulty',
+		'GuildInstanceDifficulty',
+		'MiniMapChallengeMode',
 	}
 
 	for _, v in pairs(frames) do
