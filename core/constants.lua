@@ -36,6 +36,7 @@ C.DevsList = {
 	['贰拾年老騎士-霜之哀伤'] = true,
 	['贰拾年老法師-霜之哀伤'] = true,
 	['贰拾年老戰士-霜之哀伤'] = true,
+	['哞夫人-霜之哀伤'] = true,
 	['Rhonesaia-白银之手'] = true
 }
 local function isDeveloper()
@@ -68,7 +69,7 @@ C['Assets'] = {
 	['roles_icon'] = C.AssetsPath .. 'textures\\roles_icon',
 	['target_icon'] = C.AssetsPath .. 'textures\\UI-RaidTargetingIcons',
 	['vig_tex'] = C.AssetsPath .. 'textures\\vignetting',
-	['spark_tex'] = C.AssetsPath .. 'textures\\spark_tex',
+	['spark_tex'] = 'Interface\\CastingBar\\UI-CastingBar-Spark',
 	['gear_tex'] = C.AssetsPath .. 'textures\\gear_tex',
 	['classify_tex'] = C.AssetsPath .. 'textures\\state_icons',
 	['mail_tex'] = C.AssetsPath .. 'textures\\mail_tex',
