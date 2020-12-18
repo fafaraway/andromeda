@@ -1,9 +1,9 @@
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('BLIZZARD')
 
-
 local format, strsplit, tonumber, pairs, wipe = format, strsplit, tonumber, pairs, wipe
 local Ambiguate = Ambiguate
+local C_MythicPlus_GetRunHistory = C_MythicPlus.GetRunHistory
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
@@ -11,14 +11,17 @@ local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeyston
 local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
 local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
 local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
+local WEEKLY_REWARDS_MYTHIC_TOP_RUNS = WEEKLY_REWARDS_MYTHIC_TOP_RUNS
 
 local hasAngryKeystones
 local frame
-
+local WeeklyRunsThreshold = 10
 
 function BLIZZARD:GuildBest_UpdateTooltip()
 	local leaderInfo = self.leaderInfo
-	if not leaderInfo then return end
+	if not leaderInfo then
+		return
+	end
 
 	GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 	local name = C_ChallengeMode_GetMapUIInfo(leaderInfo.mapChallengeModeID)
@@ -26,7 +29,7 @@ function BLIZZARD:GuildBest_UpdateTooltip()
 	GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
 	for i = 1, #leaderInfo.members do
 		local classColorStr = string.sub(F.RGBToHex(F.ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
-		GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr,leaderInfo.members[i].name));
+		GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
 	end
 	GameTooltip:Show()
 end
@@ -56,7 +59,7 @@ function BLIZZARD:GuildBest_Create()
 		if i == 1 then
 			entry:SetPoint('TOP', frame, 0, -26)
 		else
-			entry:SetPoint('TOP', frame.entries[i-1], 'BOTTOM')
+			entry:SetPoint('TOP', frame.entries[i - 1], 'BOTTOM')
 		end
 
 		frame.entries[i] = entry
@@ -81,7 +84,9 @@ end
 
 local resize
 function BLIZZARD:GuildBest_Update()
-	if not frame then BLIZZARD:GuildBest_Create() end
+	if not frame then
+		BLIZZARD:GuildBest_Create()
+	end
 	if self.leadersAvailable then
 		local leaders = C_ChallengeMode_GetGuildLeaders()
 		if leaders and #leaders > 0 then
@@ -115,44 +120,86 @@ function BLIZZARD.GuildBest_OnLoad(event, addon)
 	if addon == 'Blizzard_ChallengesUI' then
 		hooksecurefunc('ChallengesFrame_Update', BLIZZARD.GuildBest_Update)
 		BLIZZARD:KeystoneInfo_Create()
+		ChallengesFrame.WeeklyInfo.Child.WeeklyChest:HookScript('OnEnter', BLIZZARD.KeystoneInfo_WeeklyRuns)
 
 		F:UnregisterEvent(event, BLIZZARD.GuildBest_OnLoad)
 	end
 end
 
--- Keystone Info
-local myFullName = C.MyFullName
-local iconColor = C.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
+local function sortHistory(entry1, entry2)
+	if entry1.level == entry2.level then
+		return entry1.mapChallengeModeID < entry2.mapChallengeModeID
+	else
+		return entry1.level > entry2.level
+	end
+end
+
+function BLIZZARD:KeystoneInfo_WeeklyRuns()
+	local runHistory = C_MythicPlus_GetRunHistory(false, true)
+	if #runHistory > 0 then
+		GameTooltip:AddLine(' ')
+		GameTooltip:AddLine(format(WEEKLY_REWARDS_MYTHIC_TOP_RUNS, WeeklyRunsThreshold), .6, .8, 1)
+		sort(runHistory, sortHistory)
+
+		for i = 1, WeeklyRunsThreshold do
+			local runInfo = runHistory[i]
+			if not runInfo then
+				break
+			end
+
+			local name = C_ChallengeMode_GetMapUIInfo(runInfo.mapChallengeModeID)
+			local r, g, b = 0, 1, 0
+			if not runInfo.completed then
+				r, g, b = 1, 0, 0
+			end
+			GameTooltip:AddDoubleLine(name, 'Lv.' .. runInfo.level, 1, 1, 1, r, g, b)
+		end
+		GameTooltip:Show()
+	end
+end
 
 function BLIZZARD:KeystoneInfo_Create()
 	local texture = select(10, GetItemInfo(158923)) or 525134
+	local iconColor = C.QualityColors[LE_ITEM_QUALITY_EPIC or 4]
 	local button = CreateFrame('Frame', nil, ChallengesFrame.WeeklyInfo, 'BackdropTemplate')
 	button:SetPoint('BOTTOMLEFT', 10, 67)
 	button:SetSize(35, 35)
 	F.PixelIcon(button, texture, true)
 	button.bg:SetBackdropBorderColor(iconColor.r, iconColor.g, iconColor.b)
-	button:SetScript('OnEnter', function(self)
-		GameTooltip:ClearLines()
-		GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-		GameTooltip:AddLine(L['BLIZZARD_KEYSTONES'])
-		for name, info in pairs(FREE_KEYSTONE) do
-			local name = Ambiguate(name, 'none')
-			local mapID, level, class, faction = strsplit(':', info)
-			local color = F.RGBToHex(F.ClassColor(class))
-			local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
-			local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
-			GameTooltip:AddDoubleLine(format(color..'%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
+	button:SetScript(
+		'OnEnter',
+		function(self)
+			GameTooltip:ClearLines()
+			GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+			GameTooltip:AddLine(L['BLIZZARD_KEYSTONES'])
+			for name, info in pairs(FREE_KEYSTONE) do
+				local name = Ambiguate(name, 'none')
+				local mapID, level, class, faction = strsplit(':', info)
+				local color = F.RGBToHex(F.ClassColor(class))
+				local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
+				local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
+				GameTooltip:AddDoubleLine(format(color .. '%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))
+			end
+			GameTooltip:AddDoubleLine(' ', C.LineString)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. GREAT_VAULT_REWARDS .. ' ', 1, 1, 1, .6, .8, 1)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle .. L['BLIZZARD_KEYSTONES_RESET'] .. ' ', 1, 1, 1, .6, .8, 1)
+			GameTooltip:Show()
 		end
-		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle..L['BLIZZARD_KEYSTONES_RESET']..' ', 1,1,1, .6,.8,1)
-		GameTooltip:Show()
-	end)
+	)
 	button:SetScript('OnLeave', F.HideTooltip)
-	button:SetScript('OnMouseUp', function(_, btn)
-		if btn == 'MiddleButton' then
-			wipe(FREE_KEYSTONE)
+	button:SetScript(
+		'OnMouseUp',
+		function(_, btn)
+			if btn == 'LeftButton' then
+				if not WeeklyRewardsFrame then
+					WeeklyRewards_LoadUI()
+				end
+				F:TogglePanel(WeeklyRewardsFrame)
+			elseif btn == 'MiddleButton' then
+				wipe(FREE_KEYSTONE)
+			end
 		end
-	end)
+	)
 end
 
 function BLIZZARD:KeystoneInfo_UpdateBag()
@@ -165,9 +212,9 @@ end
 function BLIZZARD:KeystoneInfo_Update()
 	local mapID, keystoneLevel = BLIZZARD:KeystoneInfo_UpdateBag()
 	if mapID then
-		FREE_KEYSTONE[myFullName] = mapID..':'..keystoneLevel..':'..C.MyClass..':'..C.MyFaction
+		FREE_KEYSTONE[C.MyFullName] = mapID .. ':' .. keystoneLevel .. ':' .. C.MyClass .. ':' .. C.MyFaction
 	else
-		FREE_KEYSTONE[myFullName] = nil
+		FREE_KEYSTONE[C.MyFullName] = nil
 	end
 end
 
