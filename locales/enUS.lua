@@ -259,7 +259,7 @@ do
 	L['TOOLTIP_ID_VISUAL'] = 'Visual'
 	L['TOOLTIP_ID_SOURCE'] = 'Source'
 	L['TOOLTIP_SECTION'] = 'Section'
-	L['TOOLTIP_TARGETED'] = 'Targeted by'
+	L['TOOLTIP_TARGETED'] = 'TargetBy'
 	L['TOOLTIP_ILVL'] = 'iLvl'
 end
 
