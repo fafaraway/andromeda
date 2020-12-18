@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 
-
 -- QuickQuest, by p3lim
 
 local next, ipairs, select = next, ipairs, select
@@ -30,7 +29,9 @@ local choiceQueue
 
 local created
 local function CreateCheckBox()
-	if created then return end
+	if created then
+		return
+	end
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
 	bu:SetPoint('TOPRIGHT', -150, -4)
 	bu:SetSize(20, 20)
@@ -38,21 +39,26 @@ local function CreateCheckBox()
 	F.ReskinCheck(bu, true)
 	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['MISC_QUICK_QUEST'], 'YELLOW', true, 'LEFT', 22, 0)
 	bu:SetChecked(C.DB.misc.quick_quest)
-	bu:SetScript('OnClick', function(self)
-		C.DB.misc.quick_quest = self:GetChecked()
-	end)
+	bu:SetScript(
+		'OnClick',
+		function(self)
+			C.DB.misc.quick_quest = self:GetChecked()
+		end
+	)
 	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['MISC_QUICK_QUEST_TIP'], 'BLUE')
 
 	created = true
 end
 WorldMapFrame:HookScript('OnShow', CreateCheckBox)
 
-
 -- Main
 local QuickQuest = CreateFrame('Frame')
-QuickQuest:SetScript('OnEvent', function(self, event, ...)
-	self[event](...)
-end)
+QuickQuest:SetScript(
+	'OnEvent',
+	function(self, event, ...)
+		self[event](...)
+	end
+)
 
 function QuickQuest:Register(event, func)
 	self:RegisterEvent(event)
@@ -77,58 +83,63 @@ local function IsTrackingHidden()
 end
 
 local ignoreQuestNPC = {
-	[88570] = true,		-- Fate-Twister Tiklal
-	[87391] = true,		-- Fate-Twister Seress
-	[111243] = true,	-- Archmage Lan'dalock
-	[108868] = true,	-- Hunter's order hall
-	[101462] = true,	-- Reaves
-	[43929] = true,		-- 4000
-	[14847] = true,		-- DarkMoon
-	[119388] = true,	-- 酋长哈顿
-	[114719] = true,	-- 商人塞林
-	[121263] = true,	-- 大技师罗姆尔
-	[126954] = true,	-- 图拉扬
-	[124312] = true,	-- 图拉扬
-	[103792] = true,	-- 格里伏塔
-	[101880] = true,	-- 泰克泰克
-	[141584] = true,	-- 祖尔温
-	[142063] = true,	-- 特兹兰
-	[143388] = true,	-- 德鲁扎
-	[98489] = true,		-- 海难俘虏
-	[135690] = true,	-- 亡灵舰长
-	[105387] = true,	-- 安杜斯
-	[93538] = true,		-- 达瑞妮斯
-	[154534] = true,	-- 大杂院阿畅
-	[150987] = true,	-- 肖恩·维克斯，斯坦索姆
-	[150563] = true,	-- 斯卡基特，麦卡贡订单日常
-	[143555] = true,	-- 山德·希尔伯曼，祖达萨PVP军需官
+	[88570] = true, -- Fate-Twister Tiklal
+	[87391] = true, -- Fate-Twister Seress
+	[111243] = true, -- Archmage Lan'dalock
+	[108868] = true, -- Hunter's order hall
+	[101462] = true, -- Reaves
+	[43929] = true, -- 4000
+	[14847] = true, -- DarkMoon
+	[119388] = true, -- 酋长哈顿
+	[114719] = true, -- 商人塞林
+	[121263] = true, -- 大技师罗姆尔
+	[126954] = true, -- 图拉扬
+	[124312] = true, -- 图拉扬
+	[103792] = true, -- 格里伏塔
+	[101880] = true, -- 泰克泰克
+	[141584] = true, -- 祖尔温
+	[142063] = true, -- 特兹兰
+	[143388] = true, -- 德鲁扎
+	[98489] = true, -- 海难俘虏
+	[135690] = true, -- 亡灵舰长
+	[105387] = true, -- 安杜斯
+	[93538] = true, -- 达瑞妮斯
+	[154534] = true, -- 大杂院阿畅
+	[150987] = true, -- 肖恩·维克斯，斯坦索姆
+	[150563] = true, -- 斯卡基特，麦卡贡订单日常
+	[143555] = true -- 山德·希尔伯曼，祖达萨PVP军需官
 }
 
-QuickQuest:Register('QUEST_GREETING', function()
-	local npcID = GetNPCID()
-	if ignoreQuestNPC[npcID] then return end
+QuickQuest:Register(
+	'QUEST_GREETING',
+	function()
+		local npcID = GetNPCID()
+		if ignoreQuestNPC[npcID] then
+			return
+		end
 
-	local active = GetNumActiveQuests()
-	if active > 0 then
-		for index = 1, active do
-			local _, isComplete = GetActiveTitle(index)
-			local questID = GetActiveQuestID(index)
-			if isComplete and not C_QuestLog_IsWorldQuest(questID) then
-				SelectActiveQuest(index)
+		local active = GetNumActiveQuests()
+		if active > 0 then
+			for index = 1, active do
+				local _, isComplete = GetActiveTitle(index)
+				local questID = GetActiveQuestID(index)
+				if isComplete and not C_QuestLog_IsWorldQuest(questID) then
+					SelectActiveQuest(index)
+				end
+			end
+		end
+
+		local available = GetNumAvailableQuests()
+		if available > 0 then
+			for index = 1, available do
+				local isTrivial = GetAvailableQuestInfo(index)
+				if not isTrivial or IsTrackingHidden() then
+					SelectAvailableQuest(index)
+				end
 			end
 		end
 	end
-
-	local available = GetNumAvailableQuests()
-	if available > 0 then
-		for index = 1, available do
-			local isTrivial = GetAvailableQuestInfo(index)
-			if not isTrivial or IsTrackingHidden() then
-				SelectAvailableQuest(index)
-			end
-		end
-	end
-end)
+)
 
 local ignoreGossipNPC = {
 	-- Bodyguards
@@ -139,7 +150,6 @@ local ignoreGossipNPC = {
 	[86682] = true, -- Tormmok
 	[86964] = true, -- Leorajh
 	[86946] = true, -- Talonpriest Ishaal
-
 	-- Sassy Imps
 	[95139] = true,
 	[95141] = true,
@@ -150,7 +160,6 @@ local ignoreGossipNPC = {
 	[95146] = true,
 	[95200] = true,
 	[95201] = true,
-
 	-- Misc NPCs
 	[79740] = true, -- Warmaster Zog (Horde)
 	[79953] = true, -- Lieutenant Thorn (Alliance)
@@ -162,7 +171,6 @@ local ignoreGossipNPC = {
 	[155261] = true, -- 肖恩·维克斯，斯坦索姆
 	[150122] = true, -- 荣耀堡法师
 	[150131] = true, -- 萨尔玛法师
-
 	[173021] = true, -- 刻符牛头人
 	[171589] = true, -- 德莱文将军
 	[171787] = true, -- 文官阿得赖斯提斯
@@ -170,113 +178,130 @@ local ignoreGossipNPC = {
 	[171821] = true, -- 德拉卡女男爵
 	[172558] = true, -- 艾拉·引路者（导师）
 	[172572] = true, -- 瑟蕾丝特·贝利文科（导师）
+	[175513] = true -- 纳斯利亚审判官
 }
 
 local rogueClassHallInsignia = {
 	[97004] = true, -- 'Red' Jack Findle
 	[96782] = true, -- Lucian Trias
-	[93188] = true, -- Mongar
+	[93188] = true -- Mongar
 }
 
 local followerAssignees = {
 	[138708] = true, -- 半兽人迦罗娜
-	[135614] = true, -- 马迪亚斯·肖尔大师
+	[135614] = true -- 马迪亚斯·肖尔大师
 }
 
-QuickQuest:Register('GOSSIP_SHOW', function()
-	local npcID = GetNPCID()
-	if ignoreQuestNPC[npcID] then return end
-
-	local active = C_GossipInfo_GetNumActiveQuests()
-	if active > 0 then
-		for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
-			local questID = questInfo.questID
-			local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
-			if questInfo.isComplete and (not questID or not isWorldQuest) then
-				C_GossipInfo_SelectActiveQuest(index)
-			end
+QuickQuest:Register(
+	'GOSSIP_SHOW',
+	function()
+		local npcID = GetNPCID()
+		if ignoreQuestNPC[npcID] then
+			return
 		end
-	end
 
-	local available = C_GossipInfo_GetNumAvailableQuests()
-	if available > 0 then
-		for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
-			local trivial = questInfo.isTrivial
-			if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
-				C_GossipInfo_SelectAvailableQuest(index)
-			end
-		end
-	end
-
-	if rogueClassHallInsignia[npcID] then
-		return C_GossipInfo_SelectOption(1)
-	end
-
-	if available == 0 and active == 0 then
-		local numOptions = C_GossipInfo_GetNumOptions()
-		if numOptions == 1 then
-			if npcID == 57850 then
-				return C_GossipInfo_SelectOption(1)
-			end
-
-			local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
-			if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not (instance == 'scenario' and mapID == 1626) then
-				local gossipInfoTable = C_GossipInfo_GetOptions()
-				if gossipInfoTable[1].type == 'gossip' then
-					C_GossipInfo_SelectOption(1)
-					return
+		local active = C_GossipInfo_GetNumActiveQuests()
+		if active > 0 then
+			for index, questInfo in ipairs(C_GossipInfo_GetActiveQuests()) do
+				local questID = questInfo.questID
+				local isWorldQuest = questID and C_QuestLog_IsWorldQuest(questID)
+				if questInfo.isComplete and (not questID or not isWorldQuest) then
+					C_GossipInfo_SelectActiveQuest(index)
 				end
 			end
-		elseif followerAssignees[npcID] and numOptions > 1 then
+		end
+
+		local available = C_GossipInfo_GetNumAvailableQuests()
+		if available > 0 then
+			for index, questInfo in ipairs(C_GossipInfo_GetAvailableQuests()) do
+				local trivial = questInfo.isTrivial
+				if not trivial or IsTrackingHidden() or (trivial and npcID == 64337) then
+					C_GossipInfo_SelectAvailableQuest(index)
+				end
+			end
+		end
+
+		if rogueClassHallInsignia[npcID] then
 			return C_GossipInfo_SelectOption(1)
 		end
+
+		if available == 0 and active == 0 then
+			local numOptions = C_GossipInfo_GetNumOptions()
+			if numOptions == 1 then
+				if npcID == 57850 then
+					return C_GossipInfo_SelectOption(1)
+				end
+
+				local _, instance, _, _, _, _, _, mapID = GetInstanceInfo()
+				if instance ~= 'raid' and not ignoreGossipNPC[npcID] and not (instance == 'scenario' and mapID == 1626) then
+					local gossipInfoTable = C_GossipInfo_GetOptions()
+					if gossipInfoTable[1].type == 'gossip' then
+						C_GossipInfo_SelectOption(1)
+						return
+					end
+				end
+			elseif followerAssignees[npcID] and numOptions > 1 then
+				return C_GossipInfo_SelectOption(1)
+			end
+		end
 	end
-end)
+)
 
 local darkmoonNPC = {
 	[57850] = true, -- Teleportologist Fozlebub
 	[55382] = true, -- Darkmoon Faire Mystic Mage (Horde)
-	[54334] = true, -- Darkmoon Faire Mystic Mage (Alliance)
+	[54334] = true -- Darkmoon Faire Mystic Mage (Alliance)
 }
 
-QuickQuest:Register('GOSSIP_CONFIRM', function(index)
-	local npcID = GetNPCID()
-	if npcID and darkmoonNPC[npcID] then
-		C_GossipInfo_SelectOption(index, '', true)
-		StaticPopup_Hide('GOSSIP_CONFIRM')
+QuickQuest:Register(
+	'GOSSIP_CONFIRM',
+	function(index)
+		local npcID = GetNPCID()
+		if npcID and darkmoonNPC[npcID] then
+			C_GossipInfo_SelectOption(index, '', true)
+			StaticPopup_Hide('GOSSIP_CONFIRM')
+		end
 	end
-end)
+)
 
-QuickQuest:Register('QUEST_DETAIL', function()
-	if QuestIsFromAreaTrigger() then
-		AcceptQuest()
-	elseif QuestGetAutoAccept() then
-		AcknowledgeAutoAcceptQuest()
-	elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
-		AcceptQuest()
+QuickQuest:Register(
+	'QUEST_DETAIL',
+	function()
+		if QuestIsFromAreaTrigger() then
+			AcceptQuest()
+		elseif QuestGetAutoAccept() then
+			AcknowledgeAutoAcceptQuest()
+		elseif not C_QuestLog_IsQuestTrivial(GetQuestID()) or IsTrackingHidden() then
+			AcceptQuest()
+		end
 	end
-end)
+)
 
 QuickQuest:Register('QUEST_ACCEPT_CONFIRM', AcceptQuest)
 
-QuickQuest:Register('QUEST_ACCEPTED', function()
-	if QuestFrame:IsShown() and QuestGetAutoAccept() then
-		CloseQuest()
+QuickQuest:Register(
+	'QUEST_ACCEPTED',
+	function()
+		if QuestFrame:IsShown() and QuestGetAutoAccept() then
+			CloseQuest()
+		end
 	end
-end)
+)
 
-QuickQuest:Register('QUEST_ITEM_UPDATE', function()
-	if choiceQueue and QuickQuest[choiceQueue] then
-		QuickQuest[choiceQueue]()
+QuickQuest:Register(
+	'QUEST_ITEM_UPDATE',
+	function()
+		if choiceQueue and QuickQuest[choiceQueue] then
+			QuickQuest[choiceQueue]()
+		end
 	end
-end)
+)
 
 local itemBlacklist = {
 	-- Inscription weapons
 	[31690] = 79343, -- Inscribed Tiger Staff
 	[31691] = 79340, -- Inscribed Crane Staff
 	[31692] = 79341, -- Inscribed Serpent Staff
-
 	-- Darkmoon Faire artifacts
 	[29443] = 71635, -- Imbued Crystal
 	[29444] = 71636, -- Monstrous Egg
@@ -287,14 +312,12 @@ local itemBlacklist = {
 	[29457] = 71952, -- Captured Insignia
 	[29458] = 71953, -- Fallen Adventurer's Journal
 	[29464] = 71716, -- Soothsayer's Runes
-
 	-- Tiller Gifts
 	['progress_79264'] = 79264, -- Ruby Shard
 	['progress_79265'] = 79265, -- Blue Feather
 	['progress_79266'] = 79266, -- Jade Cat
 	['progress_79267'] = 79267, -- Lovely Apple
 	['progress_79268'] = 79268, -- Marsh Lily
-
 	-- Garrison scouting missives
 	['38180'] = 122424, -- Scouting Missive: Broken Precipice
 	['38193'] = 122423, -- Scouting Missive: Broken Precipice
@@ -322,9 +345,8 @@ local itemBlacklist = {
 	['38197'] = 122415, -- Scouting Missive: Socrethar's Rise
 	['38176'] = 122405, -- Scouting Missive: Stonefury Cliffs
 	['38189'] = 122401, -- Scouting Missive: Stonefury Cliffs
-
 	-- Misc
-	[31664] = 88604, -- Nat's Fishing Journal
+	[31664] = 88604 -- Nat's Fishing Journal
 }
 
 local ignoreProgressNPC = {
@@ -334,87 +356,98 @@ local ignoreProgressNPC = {
 	[124312] = true,
 	[141584] = true,
 	[326027] = true, -- 运输站回收生成器DX-82
-	[150563] = true, -- 斯卡基特，麦卡贡订单日常
+	[150563] = true -- 斯卡基特，麦卡贡订单日常
 }
 
-QuickQuest:Register('QUEST_PROGRESS', function()
-	if IsQuestCompletable() then
-		local info = C_QuestLog_GetQuestTagInfo(GetQuestID())
-		if info and (info.tagID == 153 or info.worldQuestType) then return end
+QuickQuest:Register(
+	'QUEST_PROGRESS',
+	function()
+		if IsQuestCompletable() then
+			local info = C_QuestLog_GetQuestTagInfo(GetQuestID())
+			if info and (info.tagID == 153 or info.worldQuestType) then
+				return
+			end
 
-		local npcID = GetNPCID()
-		if ignoreProgressNPC[npcID] then return end
+			local npcID = GetNPCID()
+			if ignoreProgressNPC[npcID] then
+				return
+			end
 
-		local requiredItems = GetNumQuestItems()
-		if requiredItems > 0 then
-			for index = 1, requiredItems do
-				local link = GetQuestItemLink('required', index)
-				if link then
-					local id = GetItemInfoFromHyperlink(link)
-					for _, itemID in next, itemBlacklist do
-						if itemID == id then
-							CloseQuest()
-							return
+			local requiredItems = GetNumQuestItems()
+			if requiredItems > 0 then
+				for index = 1, requiredItems do
+					local link = GetQuestItemLink('required', index)
+					if link then
+						local id = GetItemInfoFromHyperlink(link)
+						for _, itemID in next, itemBlacklist do
+							if itemID == id then
+								CloseQuest()
+								return
+							end
 						end
+					else
+						choiceQueue = 'QUEST_PROGRESS'
+						GetQuestItemInfo('required', index)
+						return
 					end
-				else
-					choiceQueue = 'QUEST_PROGRESS'
-					GetQuestItemInfo('required', index)
-					return
 				end
 			end
-		end
 
-		CompleteQuest()
+			CompleteQuest()
+		end
 	end
-end)
+)
 
 local cashRewards = {
 	[45724] = 1e5, -- Champion's Purse
 	[64491] = 2e6, -- Royal Reward
-
 	-- Items from the Sixtrigger brothers quest chain in Stormheim
 	[138127] = 15, -- Mysterious Coin, 15 copper
 	[138129] = 11, -- Swatch of Priceless Silk, 11 copper
 	[138131] = 24, -- Magical Sprouting Beans, 24 copper
 	[138123] = 15, -- Shiny Gold Nugget, 15 copper
 	[138125] = 16, -- Crystal Clear Gemstone, 16 copper
-	[138133] = 27, -- Elixir of Endless Wonder, 27 copper
+	[138133] = 27 -- Elixir of Endless Wonder, 27 copper
 }
 
-QuickQuest:Register('QUEST_COMPLETE', function()
-	-- Blingtron 6000 only!
-	local npcID = GetNPCID()
-	if npcID == 43929 or npcID == 77789 then return end
+QuickQuest:Register(
+	'QUEST_COMPLETE',
+	function()
+		-- Blingtron 6000 only!
+		local npcID = GetNPCID()
+		if npcID == 43929 or npcID == 77789 then
+			return
+		end
 
-	local choices = GetNumQuestChoices()
-	if choices <= 1 then
-		GetQuestReward(1)
-	elseif choices > 1 then
-		local bestValue, bestIndex = 0
+		local choices = GetNumQuestChoices()
+		if choices <= 1 then
+			GetQuestReward(1)
+		elseif choices > 1 then
+			local bestValue, bestIndex = 0
 
-		for index = 1, choices do
-			local link = GetQuestItemLink('choice', index)
-			if link then
-				local value = select(11, GetItemInfo(link))
-				local itemID = GetItemInfoFromHyperlink(link)
-				value = cashRewards[itemID] or value
+			for index = 1, choices do
+				local link = GetQuestItemLink('choice', index)
+				if link then
+					local value = select(11, GetItemInfo(link))
+					local itemID = GetItemInfoFromHyperlink(link)
+					value = cashRewards[itemID] or value
 
-				if value > bestValue then
-					bestValue, bestIndex = value, index
+					if value > bestValue then
+						bestValue, bestIndex = value, index
+					end
+				else
+					choiceQueue = 'QUEST_COMPLETE'
+					return GetQuestItemInfo('choice', index)
 				end
-			else
-				choiceQueue = 'QUEST_COMPLETE'
-				return GetQuestItemInfo('choice', index)
+			end
+
+			local button = bestIndex and QuestInfoRewardsFrame.RewardButtons[bestIndex]
+			if button then
+				QuestInfoItem_OnClick(button)
 			end
 		end
-
-		local button = bestIndex and QuestInfoRewardsFrame.RewardButtons[bestIndex]
-		if button then
-			QuestInfoItem_OnClick(button)
-		end
 	end
-end)
+)
 
 local function AttemptAutoComplete(event)
 	if GetNumAutoQuestPopUps() > 0 then
@@ -427,7 +460,7 @@ local function AttemptAutoComplete(event)
 		if not C_QuestLog_IsWorldQuest(questID) then
 			if popUpType == 'OFFER' then
 				ShowQuestOffer(questID)
-			elseif popUpType == "COMPLETE" then
+			elseif popUpType == 'COMPLETE' then
 				ShowQuestComplete(questID)
 			end
 		end

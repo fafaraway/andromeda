@@ -221,7 +221,7 @@ loader:SetScript(
 		SetFont(_G.FriendsFont_Large, NORMAL, 15)
 		SetFont(_G.FriendsFont_UserText, NORMAL, 11)
 
-		SetFont(_G.ChatBubbleFont, BOLD, 16, true)
+		SetFont(_G.ChatBubbleFont, BOLD, 16)
 		--ChatFontNormal
 		--ChatFontSmall
 
