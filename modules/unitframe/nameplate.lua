@@ -395,12 +395,13 @@ end
 
 -- Unit classification
 local classify = {
-	rare = 'VignetteKill',
-	rareelite = 'VignetteKill',
-	worldboss = 'VignetteKillElite'
+	elite = {'VignetteKill'},
+	rare = {'VignetteKill', true},
+	rareelite = {'VignetteKill', true},
+	worldboss = {'VignetteKillElite'}
 }
 
-function NAMEPLATE:AddRareIndicator(self)
+function NAMEPLATE:AddClassifyIndicator(self)
 	if not C.DB.nameplate.classify_indicator then
 		return
 	end
@@ -418,7 +419,9 @@ function NAMEPLATE:UpdateUnitClassify(unit)
 	if self.ClassifyIndicator then
 		local class = UnitClassification(unit)
 		if class and classify[class] then
-			self.ClassifyIndicator:SetAtlas(classify[class])
+			local atlas, desature = unpack(classify[class])
+			self.ClassifyIndicator:SetAtlas(atlas)
+			self.ClassifyIndicator:SetDesaturated(desature)
 			self.ClassifyIndicator:Show()
 		else
 			self.ClassifyIndicator:SetAtlas('')
@@ -500,7 +503,7 @@ end
 
 --[[ Create plate ]]
 local platesList = {}
-local function CreateNameplateStyle(self)
+function NAMEPLATE:CreateNameplateStyle()
 	self.unitStyle = 'nameplate'
 	self:SetSize(C.DB.nameplate.plate_width, C.DB.nameplate.plate_height)
 	self:SetPoint('CENTER', 0, -10)
@@ -527,7 +530,7 @@ local function CreateNameplateStyle(self)
 	UNITFRAME:AddHealthPrediction(self)
 	NAMEPLATE:AddTargetIndicator(self)
 	NAMEPLATE:AddHighlight(self)
-	NAMEPLATE:AddRareIndicator(self)
+	NAMEPLATE:AddClassifyIndicator(self)
 	NAMEPLATE:AddThreatIndicator(self)
 	UNITFRAME:AddCastBar(self)
 	UNITFRAME:AddRaidTargetIndicator(self)
@@ -603,9 +606,11 @@ end
 function NAMEPLATE:RefreshPlateType(unit)
 	self.reaction = UnitReaction(unit, 'player')
 	self.isFriendly = self.reaction and self.reaction >= 5
+	self.isNameOnly = C.DB.nameplate.name_only and self.isFriendly or self.widgetsOnly or false
 
-	if self.previousType == nil then
+	if self.previousType == nil or self.previousType ~= self.isNameOnly then
 		NAMEPLATE.UpdatePlateByType(self)
+		self.previousType = self.isNameOnly
 	end
 end
 
@@ -674,7 +679,7 @@ function NAMEPLATE:OnLogin()
 	self:UpdateGroupRoles()
 	self:RefreshPlateOnFactionChanged()
 
-	oUF:RegisterStyle('Nameplate', CreateNameplateStyle)
+	oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
 	oUF:SetActiveStyle('Nameplate')
 	oUF:SpawnNamePlates('oUF_Nameplate', NAMEPLATE.PostUpdatePlates)
 end
