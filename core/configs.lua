@@ -610,7 +610,8 @@ C.CharacterSettings = {
 		['min_alpha'] = 0.6,
 		['occluded_alpha'] = 0.2,
 		['vertical_spacing'] = 0.7,
-		['horizontal_spacing'] = 0.3
+		['horizontal_spacing'] = 0.3,
+		['name_only'] = false,
 	},
 	['tooltip'] = {
 		['enable'] = true,

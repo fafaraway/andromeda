@@ -349,7 +349,8 @@ function UNITFRAME:AddHealthPrediction(self)
 		overAbsorb:SetPoint('TOP', self.Health, 'TOPRIGHT', -1, 4)
 		overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
 		overAbsorb:SetWidth(12)
-		overAbsorb:SetTexture(C.Assets.spark_tex)
+		overAbsorb:SetTexture(C.AssetsPath .. 'textures\\spark_tex')
+		overAbsorb:SetBlendMode('ADD')
 
 		self.HealthPrediction = {
 			myBar = myBar,
