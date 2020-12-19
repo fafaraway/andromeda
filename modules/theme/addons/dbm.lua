@@ -94,7 +94,7 @@ function THEME:ReskinDBM()
 				end
 
 				if not texture.styled then
-					texture:SetTexture(C.Assets.norm_tex)
+					texture:SetTexture(C.Assets.statusbar_tex)
 					texture.SetTexture = F.Dummy
 					texture.styled = true
 				end

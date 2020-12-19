@@ -66,7 +66,7 @@ tinsert(C.BlizzThemes, function()
 		end)
 
 		F.ReskinIcon(frame.PromptFrame.Icon)
-		frame.PromptFrame.Timer.Bar:SetTexture(C.Assets.norm_tex)
+		frame.PromptFrame.Timer.Bar:SetTexture(C.Assets.statusbar_tex)
 		F.SetBD(frame)
 		F.CreateBDFrame(frame.PromptFrame.Timer, .25)
 

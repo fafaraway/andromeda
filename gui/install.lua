@@ -227,7 +227,7 @@ function INSTALL:HelloWorld()
 	local progressBar = CreateFrame('StatusBar', nil, f.body)
 	progressBar:SetPoint('BOTTOM', f.body, 'BOTTOM', 0, 10)
 	progressBar:SetSize(320, 20)
-	progressBar:SetStatusBarTexture(C.Assets.norm_tex)
+	progressBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 	progressBar:Hide()
 	F:SmoothBar(progressBar)
 

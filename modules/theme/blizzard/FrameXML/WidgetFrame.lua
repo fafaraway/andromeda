@@ -14,7 +14,7 @@ tinsert(C.BlizzThemes, function()
 
 	local function updateBarTexture(self, atlas)
 		if atlasColors[atlas] then
-			self:SetStatusBarTexture(C.Assets.norm_tex)
+			self:SetStatusBarTexture(C.Assets.statusbar_tex)
 			self:SetStatusBarColor(unpack(atlasColors[atlas]))
 		end
 	end
@@ -64,9 +64,9 @@ tinsert(C.BlizzThemes, function()
 		self.Glow2:SetAlpha(0)
 		self.Glow3:SetAlpha(0)
 
-		self.LeftBar:SetTexture(C.Assets.norm_tex)
-		self.NeutralBar:SetTexture(C.Assets.norm_tex)
-		self.RightBar:SetTexture(C.Assets.norm_tex)
+		self.LeftBar:SetTexture(C.Assets.statusbar_tex)
+		self.NeutralBar:SetTexture(C.Assets.statusbar_tex)
+		self.RightBar:SetTexture(C.Assets.statusbar_tex)
 
 		self.LeftBar:SetVertexColor(.2, .6, 1)
 		self.NeutralBar:SetVertexColor(.8, .8, .8)

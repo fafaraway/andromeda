@@ -56,7 +56,7 @@ tinsert(C.BlizzThemes, function()
 			local r, g, b = unpack(colors[type])
 			local bar = CreateFrame('StatusBar', nil, UIParent)
 			bar:SetSize(200, 20)
-			bar:SetStatusBarTexture(C.Assets.norm_tex)
+			bar:SetStatusBarTexture(C.Assets.statusbar_tex)
 			bar:SetStatusBarColor(r, g, b)
 			bar:SetScript('OnUpdate', OnUpdate)
 

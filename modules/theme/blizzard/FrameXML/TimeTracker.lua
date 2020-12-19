@@ -17,7 +17,7 @@ tinsert(C.BlizzThemes, function()
 
 		bar:SetSize(200, 20)
 
-		bar:SetStatusBarTexture(C.Assets.norm_tex)
+		bar:SetStatusBarTexture(C.Assets.statusbar_tex)
 		bar:SetStatusBarColor(0.7, 0, 0)
 
 		bar.bg = F.SetBD(bar)

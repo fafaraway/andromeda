@@ -878,7 +878,7 @@ do
 
 	-- Handle statusbar
 	function F:CreateSB(spark, r, g, b)
-		self:SetStatusBarTexture(assets.norm_tex)
+		self:SetStatusBarTexture(assets.statusbar_tex)
 		if r and g and b then
 			self:SetStatusBarColor(r, g, b)
 		else
@@ -1560,7 +1560,7 @@ do
 			background:ClearAllPoints()
 			background:SetPoint('TOPLEFT', self.squareBG, 'BOTTOMLEFT', C.Mult, 6)
 			background:SetPoint('BOTTOMRIGHT', self.squareBG, 'BOTTOMRIGHT', -C.Mult, C.Mult)
-			self.HealthBar.Health:SetTexture(C.Assets.norm_tex)
+			self.HealthBar.Health:SetTexture(C.Assets.statusbar_tex)
 		end
 	end
 
