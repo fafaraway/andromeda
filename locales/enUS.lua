@@ -378,10 +378,11 @@ L.GUI = {
 		['UI_SCALE'] = 'UI Scale',
 		['UI_SCALE_TIP'] = 'Adjust global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.',
 		['RESKIN_DBM'] = 'Restyle DBM bars',
-		['RESKIN_PGF'] = 'Restyle PGF panel',
+		['RESKIN_PGF'] = 'Restyle PGF pane',
 		['BACKDROP_COLOR'] = 'Backdrop color',
 		['BORDER_COLOR'] = 'Border color',
-		['RESKIN_WA'] = 'Restyle WeakAuras icons'
+		['RESKIN_WA'] = 'Restyle WeakAuras icons',
+		['RESKIN_BW'] = 'Restyle BigWigs bars'
 	},
 	['NOTIFICATION'] = {
 		['NAME'] = 'Notification',

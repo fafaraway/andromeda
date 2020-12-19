@@ -107,6 +107,7 @@ function THEME:OnLogin()
 	self:CursorTrail()
 	self:Vignetting()
 
+	self:ReskinBigWigs()
 	self:ReskinDBM()
 	self:ReskinPGF()
 	self:ReskinREHack()
