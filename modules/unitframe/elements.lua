@@ -429,15 +429,12 @@ function UNITFRAME:AddPowerBar(self)
 
 	power.colorTapping = true
 	power.colorDisconnected = true
-	power.colorReaction = true
-	-- power.colorSelection = true
-	if style == 'pet' or style == 'player' then
-		power.colorPower = true
-	elseif style == 'party' or style == 'raid' then
-		power.colorPower = not C.DB.unitframe.transparent_mode
-		power.colorClass = C.DB.unitframe.transparent_mode
-	else
+
+	if C.DB.unitframe.transparent_mode and style ~= 'player' then
 		power.colorClass = true
+		power.colorReaction = true
+	else
+		power.colorPower = true
 	end
 
 	self.Power.PostUpdate = PostUpdatePower
