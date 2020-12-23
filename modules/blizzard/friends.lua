@@ -80,7 +80,7 @@ local BNColor = {
 local function GetClassColor(className)
 	for class, localizedName in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 		if className == localizedName then
-			return C_ClassColor_GetClassColor(class)
+			return C.ClassColors[class]
 		end
 	end
 
@@ -88,7 +88,7 @@ local function GetClassColor(className)
 	if C.Client == 'deDE' or C.Client == 'frFR' then
 		for class, localizedName in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
 			if className == localizedName then
-				return C_ClassColor_GetClassColor(class)
+				return C.ClassColors[class]
 			end
 		end
 	end
