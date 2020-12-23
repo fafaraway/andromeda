@@ -3,7 +3,9 @@ local QUEST = F.QUEST
 local ACTIONBAR = F.ACTIONBAR
 
 
--- ExtraQuestButton, by p3lim
+-- Extra Quest Button
+-- Credits: ExtraQuestButton by p3lim
+-- https://github.com/p3lim-wow/ExtraQuestButton
 
 local next, type, sqrt, GetTime, format = next, type, sqrt, GetTime, format
 local RegisterStateDriver, InCombatLockdown = RegisterStateDriver, InCombatLockdown
@@ -30,7 +32,7 @@ local onlyCurrentZone = true
 local blacklist = {
 	[113191] = true,
 	[110799] = true,
-	[109164] = true,
+	[109164] = true
 }
 
 -- quests that doesn't have a defined area on the map (questID = bool/mapID/{mapID,...})
@@ -60,7 +62,7 @@ local inaccurateQuestAreas = {
 	[25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
 	[34461] = 590, -- Horde Garrison
-	[60004] = 118, -- 前夕任务：英勇之举
+	[60004] = 118 -- 前夕任务：英勇之举
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -102,22 +104,26 @@ local questItems = {
 	[43827] = 129161, -- Stormheim
 	[49402] = 154878, -- Tiragarde Sound
 	[50164] = 154878, -- Tiragarde Sound
-	[51646] = 154878, -- Tiragarde Sound
+	[51646] = 154878 -- Tiragarde Sound
 }
 
 local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
-ExtraQuestButton:SetScript('OnEvent', function(self, event, ...)
-	if self[event] then
-		self[event](self, event, ...)
-	else
-		self:Update()
+ExtraQuestButton:SetScript(
+	'OnEvent',
+	function(self, event, ...)
+		if self[event] then
+			self[event](self, event, ...)
+		else
+			self:Update()
+		end
 	end
-end)
+)
 
 local visibilityState = '[extrabar][petbattle] hide; show'
-local onAttributeChanged = [[
+local onAttributeChanged =
+	[[
 	if name == 'item' then
 		if value and not self:IsShown() and not HasExtraActionBar() then
 			self:Show()
@@ -134,7 +140,7 @@ local onAttributeChanged = [[
 			self:ClearBindings()
 		end
 	end
-	if self:IsShown() and (name == 'item' or name == 'binding') then
+	if self:IsShown() then
 		self:ClearBindings()
 		local key1, key2 = GetBindingKey('EXTRAACTIONBUTTON1')
 		if key1 then
@@ -172,17 +178,17 @@ function ExtraQuestButton:UpdateAttributes()
 		if not self.itemID and self:IsShown() then
 			self:SetAlpha(0)
 		end
-		self:RegisterEvent("PLAYER_REGEN_ENABLED")
+		self:RegisterEvent('PLAYER_REGEN_ENABLED')
 		return
 	else
 		self:SetAlpha(1)
 	end
 
 	if self.itemID then
-		self:SetAttribute("item", "item:"..self.itemID)
+		self:SetAttribute('item', 'item:' .. self.itemID)
 		self:BAG_UPDATE_COOLDOWN()
 	else
-		self:SetAttribute("item", nil)
+		self:SetAttribute('item', nil)
 	end
 end
 
@@ -265,76 +271,92 @@ function ExtraQuestButton:PLAYER_LOGIN()
 	self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 end
 
-ExtraQuestButton:SetScript('OnEnter', function(self)
-	if not self.itemLink then return end
-	GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
-	GameTooltip:SetHyperlink(self.itemLink)
-end)
+ExtraQuestButton:SetScript(
+	'OnEnter',
+	function(self)
+		if not self.itemLink then
+			return
+		end
+		GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+		GameTooltip:SetHyperlink(self.itemLink)
+	end
+)
 
-ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
-	if self.updateRange then
-		if (self.rangeTimer or 0) > TOOLTIP_UPDATE_TIME then
-			local HotKey = self.HotKey
-			local Icon = self.Icon
+ExtraQuestButton:SetScript(
+	'OnUpdate',
+	function(self, elapsed)
+		if self.updateRange then
+			if (self.rangeTimer or 0) > TOOLTIP_UPDATE_TIME then
+				local HotKey = self.HotKey
+				local Icon = self.Icon
 
-			-- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
-			local inRange = IsItemInRange(self.itemLink, 'target')
-			if HotKey:GetText() == RANGE_INDICATOR then
-				if inRange == false then
-					HotKey:SetTextColor(1, .1, .1)
-					HotKey:Show()
-					Icon:SetVertexColor(1, .1, .1)
-				elseif inRange then
-					HotKey:SetTextColor(.6, .6, .6)
-					HotKey:Show()
-					Icon:SetVertexColor(1, 1, 1)
+				-- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
+				local inRange = IsItemInRange(self.itemLink, 'target')
+				if HotKey:GetText() == RANGE_INDICATOR then
+					if inRange == false then
+						HotKey:SetTextColor(1, .1, .1)
+						HotKey:Show()
+						Icon:SetVertexColor(1, .1, .1)
+					elseif inRange then
+						HotKey:SetTextColor(.6, .6, .6)
+						HotKey:Show()
+						Icon:SetVertexColor(1, 1, 1)
+					else
+						HotKey:Hide()
+					end
 				else
-					HotKey:Hide()
+					if inRange == false then
+						HotKey:SetTextColor(1, .1, .1)
+						Icon:SetVertexColor(1, .1, .1)
+					else
+						HotKey:SetTextColor(.6, .6, .6)
+						Icon:SetVertexColor(1, 1, 1)
+					end
 				end
+
+				self.rangeTimer = 0
 			else
-				if inRange == false then
-					HotKey:SetTextColor(1, .1, .1)
-					Icon:SetVertexColor(1, .1, .1)
-				else
-					HotKey:SetTextColor(.6, .6, .6)
-					Icon:SetVertexColor(1, 1, 1)
-				end
+				self.rangeTimer = (self.rangeTimer or 0) + elapsed
 			end
+		end
 
-			self.rangeTimer = 0
+		if (self.updateTimer or 0) > 5 then
+			self:Update()
+			self.updateTimer = 0
 		else
-			self.rangeTimer = (self.rangeTimer or 0) + elapsed
+			self.updateTimer = (self.updateTimer or 0) + elapsed
 		end
 	end
+)
 
-	if (self.updateTimer or 0) > 5 then
+ExtraQuestButton:SetScript(
+	'OnEnable',
+	function(self)
+		RegisterStateDriver(self, 'visible', visibilityState)
+		self:SetAttribute('_onattributechanged', onAttributeChanged)
 		self:Update()
-		self.updateTimer = 0
-	else
-		self.updateTimer = (self.updateTimer or 0) + elapsed
+		self:SetItem()
 	end
-end)
+)
 
-ExtraQuestButton:SetScript('OnEnable', function(self)
-	RegisterStateDriver(self, 'visible', visibilityState)
-	self:SetAttribute('_onattributechanged', onAttributeChanged)
-	self:Update()
-	self:SetItem()
-end)
+ExtraQuestButton:SetScript(
+	'OnDisable',
+	function(self)
+		if not self:IsMovable() then
+			self:SetMovable(true)
+		end
 
-ExtraQuestButton:SetScript('OnDisable', function(self)
-	if not self:IsMovable() then
-		self:SetMovable(true)
+		RegisterStateDriver(self, 'visible', 'show')
+		self:SetAttribute('_onattributechanged', nil)
+		self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
+		self.HotKey:Hide()
 	end
-
-	RegisterStateDriver(self, 'visible', 'show')
-	self:SetAttribute('_onattributechanged', nil)
-	self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
-	self.HotKey:Hide()
-end)
+)
 
 function ExtraQuestButton:SetItem(itemLink)
-	if HasExtraActionBar() then return end
+	if HasExtraActionBar() then
+		return
+	end
 
 	if itemLink then
 		self.Icon:SetTexture(GetItemIcon(itemLink))
@@ -342,7 +364,9 @@ function ExtraQuestButton:SetItem(itemLink)
 		self.itemID = itemID
 		self.itemLink = itemLink
 
-		if blacklist[itemID] then return end
+		if blacklist[itemID] then
+			return
+		end
 	end
 
 	if self.itemID then
@@ -377,7 +401,9 @@ end
 
 local function GetQuestDistanceWithItem(questID)
 	local questLogIndex = C_QuestLog_GetLogIndexForQuestID(questID)
-	if not questLogIndex then return end
+	if not questLogIndex then
+		return
+	end
 
 	local itemLink, _, _, showWhenComplete = GetQuestLogSpecialItemInfo(questLogIndex)
 	if not itemLink then
@@ -386,10 +412,16 @@ local function GetQuestDistanceWithItem(questID)
 			itemLink = format('|Hitem:%d|h', fallbackItemID)
 		end
 	end
-	if not itemLink then return end
-	if GetItemCount(itemLink) == 0 then return end
+	if not itemLink then
+		return
+	end
+	if GetItemCount(itemLink) == 0 then
+		return
+	end
 
-	if C_QuestLog_IsComplete(questID) and not showWhenComplete then return end
+	if C_QuestLog_IsComplete(questID) and not showWhenComplete then
+		return
+	end
 
 	local distanceSq = C_QuestLog_GetDistanceSqToQuest(questID)
 	local distanceYd = distanceSq and sqrt(distanceSq)
@@ -401,15 +433,15 @@ local function GetQuestDistanceWithItem(questID)
 	if questMapID then
 		local currentMapID = C_Map_GetBestMapForUnit('player')
 		if type(questMapID) == 'boolean' then
-			return MAX_DISTANCE_YARDS-1, itemLink
+			return MAX_DISTANCE_YARDS - 1, itemLink
 		elseif type(questMapID) == 'number' then
 			if questMapID == currentMapID then
-				return MAX_DISTANCE_YARDS-2, itemLink
+				return MAX_DISTANCE_YARDS - 2, itemLink
 			end
 		elseif type(questMapID) == 'table' then
 			for _, mapID in next, questMapID do
 				if mapID == currentMapID then
-					return MAX_DISTANCE_YARDS-2, itemLink
+					return MAX_DISTANCE_YARDS - 2, itemLink
 				end
 			end
 		end
@@ -464,7 +496,9 @@ local function GetClosestQuestItem()
 end
 
 function ExtraQuestButton:Update()
-	if HasExtraActionBar() or self.locked then return end
+	if HasExtraActionBar() or self.locked then
+		return
+	end
 
 	local itemLink = GetClosestQuestItem()
 	if itemLink then

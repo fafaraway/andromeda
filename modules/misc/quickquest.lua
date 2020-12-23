@@ -1,6 +1,8 @@
 local F, C, L = unpack(select(2, ...))
 
--- QuickQuest, by p3lim
+-- QuickQuest
+-- Credits: QuickQuest by p3lim
+-- https://github.com/p3lim-wow/QuickQuest
 
 local next, ipairs, select = next, ipairs, select
 local UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink = UnitGUID, IsShiftKeyDown, GetItemInfoFromHyperlink
@@ -107,7 +109,11 @@ local ignoreQuestNPC = {
 	[154534] = true, -- 大杂院阿畅
 	[150987] = true, -- 肖恩·维克斯，斯坦索姆
 	[150563] = true, -- 斯卡基特，麦卡贡订单日常
-	[143555] = true -- 山德·希尔伯曼，祖达萨PVP军需官
+	[143555] = true, -- 山德·希尔伯曼，祖达萨PVP军需官
+	[168430] = true, -- 戴克泰丽丝，格里恩挑战
+	[160248] = true, -- 档案员费安，罪魂碎片
+	[127037] = true,	-- 纳毕鲁
+	[326027] = true,	-- 运输站回收生成器DX-82
 }
 
 QuickQuest:Register(
@@ -349,16 +355,6 @@ local itemBlacklist = {
 	[31664] = 88604 -- Nat's Fishing Journal
 }
 
-local ignoreProgressNPC = {
-	[119388] = true,
-	[127037] = true,
-	[126954] = true,
-	[124312] = true,
-	[141584] = true,
-	[326027] = true, -- 运输站回收生成器DX-82
-	[150563] = true -- 斯卡基特，麦卡贡订单日常
-}
-
 QuickQuest:Register(
 	'QUEST_PROGRESS',
 	function()
@@ -369,7 +365,7 @@ QuickQuest:Register(
 			end
 
 			local npcID = GetNPCID()
-			if ignoreProgressNPC[npcID] then
+			if ignoreQuestNPC[npcID] then
 				return
 			end
 
