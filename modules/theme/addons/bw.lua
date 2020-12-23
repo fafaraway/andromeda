@@ -59,32 +59,35 @@ local function ReskinBar(bar)
 	bar.candyBarLabel:ClearAllPoints()
 	bar.candyBarLabel:SetPoint('LEFT', bar.candyBarBar, 'LEFT', 2, 8)
 	bar.candyBarLabel:SetPoint('RIGHT', bar.candyBarBar, 'RIGHT', -2, 8)
-	bar.candyBarLabel:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
-	bar.candyBarLabel.SetFont = F.Dummy
 	bar.candyBarDuration:ClearAllPoints()
 	bar.candyBarDuration:SetPoint('RIGHT', bar.candyBarBar, 'RIGHT', -2, 8)
 	bar.candyBarDuration:SetPoint('LEFT', bar.candyBarBar, 'LEFT', 2, 8)
-	bar.candyBarDuration:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
-	bar.candyBarDuration.SetFont = F.Dummy
 end
 
-local function registerStyle()
-	local bars = BigWigs:GetPlugin('Bars', true)
-	bars:RegisterBarStyle(
+local function RegisterStyle()
+	if not BigWigsAPI then
+		return
+	end
+	BigWigsAPI:RegisterBarStyle(
 		'FreeUI',
 		{
 			apiVersion = 1,
-			version = 2,
+			version = 3,
 			GetSpacing = function(bar)
 				return bar:GetHeight() + 10
 			end,
 			ApplyStyle = ReskinBar,
 			BarStopped = RemoveStyle,
+			fontSizeNormal = 12,
+			fontSizeEmphasized = 14,
+			fontOutline = 'OUTLINE',
 			GetStyleName = function()
 				return 'FreeUI'
 			end
 		}
 	)
+
+	local bars = BigWigs:GetPlugin('Bars', true)
 	hooksecurefunc(
 		bars,
 		'SetBarStyle',
@@ -105,11 +108,11 @@ function THEME:ReskinBigWigs()
 	end
 
 	if IsAddOnLoaded('BigWigs_Plugins') then
-		registerStyle()
+		RegisterStyle()
 	else
 		local function loadStyle(event, addon)
 			if addon == 'BigWigs_Plugins' then
-				registerStyle()
+				RegisterStyle()
 				F:UnregisterEvent(event, loadStyle)
 			end
 		end
