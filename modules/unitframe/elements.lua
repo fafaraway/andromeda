@@ -548,6 +548,9 @@ local function UpdateAuraTooltip(aura)
 end
 
 function UNITFRAME.PostCreateIcon(element, button)
+	local style = element.__owner.unitStyle
+	local isParty = style == 'party'
+
 	button.bg = F.CreateBDFrame(button)
 	button.glow = F.CreateSD(button.bg, .25, 3, 3)
 
@@ -558,7 +561,7 @@ function UNITFRAME.PostCreateIcon(element, button)
 	button.stealable:SetTexture(nil)
 	button.cd:SetReverse(true)
 	button.icon:SetDrawLayer('ARTWORK')
-	button.icon:SetTexCoord(.08, .92, .25, .85)
+	button.icon:SetTexCoord(.08, .92, isParty and .08 or .25, isParty and .92 or .85)
 
 	button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
 	button.HL:SetColorTexture(1, 1, 1, .25)
@@ -595,9 +598,10 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 	end
 
 	local style = element.__owner.unitStyle
+	local isParty = style == 'party'
 	local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-	button:SetSize(element.size, element.size * .75)
+	button:SetSize(element.size, isParty and element.size or element.size * .75)
 
 	if button.isDebuff and F.MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
 		button.icon:SetDesaturated(true)
@@ -668,7 +672,12 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 			element.bolsterIndex = button
 			return true
 		end
-	elseif style == 'party' or style == 'raid' then
+	elseif style == 'party' then
+		if C.PartyBuffsList[spellID] then
+			return true
+		else
+			return false
+		end
 	elseif style == 'target' and C.DB.unitframe.target_auras then
 		if element.onlyShowPlayer and button.isDebuff then
 			return isMine
@@ -742,6 +751,13 @@ function UNITFRAME:AddAuras(self)
 		elseif style == 'arena' then
 			auras.iconsPerRow = C.DB.unitframe.arena_auras_per_row
 		end
+	elseif style == 'party' then
+		auras.initialAnchor = 'LEFT'
+		auras:SetPoint('LEFT', self, 'RIGHT', 5, 0)
+		auras['growth-y'] = 'RIGHT'
+		auras.size = C.DB.unitframe.party_height * .7
+		auras.numTotal = 3
+		auras.gap = false
 	elseif style == 'nameplate' then
 		auras.initialAnchor = 'BOTTOMLEFT'
 		auras:SetPoint('BOTTOM', self, 'TOP', 0, 8)
@@ -1865,28 +1881,9 @@ function UNITFRAME:AddPartySpells(self)
 		return
 	end
 
-	local horizon = false
-	local otherSide = false
-	local relF = horizon and 'BOTTOMLEFT' or 'RIGHT'
-	local relT = horizon and 'TOPLEFT' or 'LEFT'
-	local xOffset = horizon and 0 or -5
-	local yOffset = horizon and 5 or 0
-	local margin = horizon and 4 or -4
-	if otherSide then
-		relF = horizon and 'TOPLEFT' or 'LEFT'
-		relT = horizon and 'BOTTOMLEFT' or 'RIGHT'
-		xOffset = horizon and 0 or 5
-		yOffset = horizon and -(self.Power:GetHeight() + 8) or 0
-		margin = 2
-	end
-	local rel1 = not horizon and not otherSide and 'RIGHT' or 'LEFT'
-	local rel2 = not horizon and not otherSide and 'LEFT' or 'RIGHT'
 	local buttons = {}
-	local maxIcons = 6
-	local iconSize = horizon and (self:GetWidth() - 2 * abs(margin)) / 3 or (self:GetHeight() * .8)
-	if iconSize > 34 then
-		iconSize = 34
-	end
+	local maxIcons = 4
+	local iconSize = C.DB.unitframe.party_height * .7
 
 	for i = 1, maxIcons do
 		local bu = CreateFrame('Frame', nil, self)
@@ -1894,11 +1891,9 @@ function UNITFRAME:AddPartySpells(self)
 		F.AuraIcon(bu)
 		bu.CD:SetReverse(false)
 		if i == 1 then
-			bu:SetPoint(relF, self, relT, xOffset, yOffset)
-		elseif i == 4 and horizon then
-			bu:SetPoint(relF, buttons[i - 3], relT, 0, margin)
+			bu:SetPoint('RIGHT', self, 'LEFT', -5, 0)
 		else
-			bu:SetPoint(rel1, buttons[i - 1], rel2, margin, 0)
+			bu:SetPoint('RIGHT', buttons[i - 1], 'LEFT', -4, 0)
 		end
 		bu:Hide()
 
