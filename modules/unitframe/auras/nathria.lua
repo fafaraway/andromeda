@@ -6,6 +6,7 @@ local INSTANCE = 1190 -- 纳斯利亚堡
 local BOSS
 
 -- Credit: Luckyone, ElvUI
+
 BOSS = 2393 -- 啸翼
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 328897) -- 抽干
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 330713) -- 耳鸣之痛
@@ -49,9 +50,7 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 324982) -- 共受苦难
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 324983) -- 共受苦难
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 332664) -- 浓缩心能
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 325382) -- 扭曲欲望
-UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 342419) -- 锁起来
-UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 342420) -- 锁起来
-UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 332572) -- 碎石飞落
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 325117) -- 心能释放
 
 BOSS = 2426 -- 猩红议会
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 327773) -- 吸取精华
@@ -69,6 +68,9 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 339181) -- 锁链猛击
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 331209) -- 怨恨凝视
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 335293) -- 锁链联结
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 335295) -- 粉碎锁链
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 342419) -- 锁起来
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 342420) -- 锁起来
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 332572) -- 碎石飞落
 
 BOSS = 2425 -- 石裔干将
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 334498) -- 地震岩层
@@ -91,5 +93,6 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 326699) -- 罪孽烦扰
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 329181) -- 毁灭痛苦
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 335873) -- 积恨
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 329951) -- 穿刺
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 327039) -- 喂食时间
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 327089) -- 喂食时间
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 332794) -- 致命灵巧

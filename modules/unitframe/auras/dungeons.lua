@@ -84,7 +84,6 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 325725) -- 寰宇操控
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328987) -- 狂热
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 334496) -- 催眠光粉
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 339978) -- 安抚迷雾
-UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323692) -- 奥术易伤
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 333250) -- 放血之击
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 322746) -- 堕落之血
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 330434) -- 电锯
@@ -93,7 +92,8 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331847) -- W-00F
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 327649) -- 粉碎灵魂
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331379) -- 润滑剂
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 332678) -- 龟裂创伤
-UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥数闪电
+--UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥数闪电
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323692) -- 奥术易伤
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 334535) -- 啄裂
 
 INSTANCE = 1186 -- 晋升高塔
@@ -115,6 +115,7 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 341215) -- 动荡心能
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323792) -- 心能力场
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 330683) -- 原始心能
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 328434) -- 胁迫
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 27638) -- 斜掠
 
 INSTANCE = 1185 -- 赎罪大厅
 RegisterSeasonSpells(INSTANCE)

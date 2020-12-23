@@ -1,4 +1,4 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
 	<Script file='dungeons.lua'/>
-	<Script file='castle_nathria.lua'/>
+	<Script file='nathria.lua'/>
 </Ui>
