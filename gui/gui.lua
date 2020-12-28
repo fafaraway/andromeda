@@ -106,7 +106,7 @@ end
 local function SelectTab(i)
 	for num = 1, #tabsList do
 		if num == i then
-			guiTab[num].__gradient:SetGradientAlpha('Vertical', C.r/2, C.g/2, C.b/2, .4, C.r/4, C.g/4, C.b/4, .4)
+			guiTab[num].__gradient:SetGradientAlpha('Vertical', C.r / 2, C.g / 2, C.b / 2, .4, C.r / 4, C.g / 4, C.b / 4, .4)
 			guiTab[num].checked = true
 			guiPage[num]:Show()
 		else
@@ -159,7 +159,6 @@ local function CreateTab(parent, i, name)
 
 	tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, 'OUTLINE', name, nil, true)
 	tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
-
 
 	tab:HookScript('OnEnter', tabOnEnter)
 	tab:HookScript('OnLeave', tabOnLeave)
@@ -328,14 +327,15 @@ local function CreateOption(i)
 				F.AddTooltip(dd, 'ANCHOR_RIGHT', tip, 'BLUE')
 			end
 		elseif optType == 5 then -- colorswatch
-			local f = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
+			local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
 			local width = 25 + (horizon or 0) * 120
 			if horizon then
-				f:SetPoint('TOPLEFT', width, -offset + 30)
+				swatch:SetPoint('TOPLEFT', width, -offset + 30)
 			else
-				f:SetPoint('TOPLEFT', width, -offset - 5)
+				swatch:SetPoint('TOPLEFT', width, -offset - 5)
 				offset = offset + 35
 			end
+			swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 		else -- blank, no optType
 			if not key then
 				local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 440, C.Mult)
