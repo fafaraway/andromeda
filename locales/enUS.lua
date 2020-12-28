@@ -24,7 +24,7 @@ do
 	L['MISC_ACCEPT_INVITE'] = '自动接受了 %s 的组队邀请'
 
 	L['AUTOMATION_GET_NAKED'] = '双击脱光装备'
-	L['AUTOMATION_BUY_STACK'] = '是否购买|cffff0000一组|r下列物品？'
+	L['MISC_BUY_STACK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
 
 	L['MISC_GROUP_TOOL'] = 'Group tool'
 	L['MISC_FOOD'] = 'Food'
@@ -32,16 +32,15 @@ do
 	L['MISC_LACK'] = 'Lack'
 	L['MISC_PLAYER_COUNT'] = '%s players'
 	L['MISC_COUNTDOWN'] = 'Start/Cancel Countdown'
-	L['MISC_CHECK_STATUS'] = '食物合剂检查'
-	L['MISC_BUFFS_READY'] = '食物合剂检查: 已齐全'
-	L['MISC_RAID_BUFF_CHECK'] = '食物合剂检查:'
-	L['MISC_EXRT_POTION_CHECK'] = 'ExRT药水使用报告'
+	L['MISC_CHECK_STATUS'] = 'Check Flask & Food'
+	L['MISC_BUFFS_READY'] = 'All Buffs Ready!'
+	L['MISC_RAID_BUFF_CHECK'] = 'Raid Buff Checking:'
+	L['MISC_EXRT_POTION_CHECK'] = 'ExRT Potion Check'
 	L['MISC_ADDON_REQUIRED'] = 'You do not have DBM or BigWigs installed'
-	L['MISC_DISBAND_CHECK'] = '是否|cffff0000解散|r当前队伍或者团队?'
-	L['MISC_DISBAND_PROCESS'] = '团队解散中'
+	L['MISC_DISBAND_CHECK'] = 'Are you sure to |cffff0000disband|r your group?'
+	L['MISC_DISBAND_PROCESS'] = 'Raid Disbanding'
 
 	L['MISC_QUICK_QUEST'] = 'Quest automation'
-
 
 	L['MISC_QUICK_QUEST_TIP'] = 'Automatically accept and deliver quests.'
 end
@@ -95,10 +94,12 @@ do
 	L['INFOBAR_INVASION_BFA'] = 'Faction assaults'
 	L['INFOBAR_INVASION_CURRENT'] = 'Current: '
 	L['INFOBAR_INVASION_NEXT'] = 'Next: '
-	L['INFOBAR_LESSER_VISION'] = 'N\'Zoth assaults'
+	L['INFOBAR_LESSER_VISION'] = "N'Zoth assaults"
 	L['INFOBAR_ISLAND'] = 'Island'
 
-	L['INFOBAR_TOGGLE_WEEKLY_REWARDS'] = 'Toggle weekly rewards pane'
+	L['INFOBAR_TOGGLE_WEEKLY_REWARDS'] = 'Toggle great vault pane'
+	L['INFOBAR_TOGGLE_CALENDAR'] = 'Toggle calendar pane'
+	L['INFOBAR_HOLD_SHIFT'] = 'Hold shift for more info'
 
 	L['INFOBAR_SPEC'] = 'Spec'
 	L['INFOBAR_LOOT'] = 'Loot'
@@ -110,7 +111,6 @@ do
 	L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list pane'
 	L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer pane'
 
-
 	L['INFOBAR_EARNED'] = 'Earned'
 	L['INFOBAR_SPENT'] = 'Spent'
 	L['INFOBAR_DEFICIT'] = 'Deficit'
@@ -119,7 +119,6 @@ do
 	L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency pane'
 	L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store pane'
 	L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
-
 end
 
 --[[ Chat ]]
@@ -178,9 +177,9 @@ end
 
 --[[ Announcement ]]
 do
-	L['ANNOUNCEMENT_INTERRUPT'] = 'Interrupted %target%\'s %spell%'
-	L['ANNOUNCEMENT_DISPEL'] = 'Dispelled %target%\'s %spell%'
-	L['ANNOUNCEMENT_STOLEN'] = 'Stolen %target%\'s %spell%'
+	L['ANNOUNCEMENT_INTERRUPT'] = "Interrupted %target%'s %spell%"
+	L['ANNOUNCEMENT_DISPEL'] = "Dispelled %target%'s %spell%"
+	L['ANNOUNCEMENT_STOLEN'] = "Stolen %target%'s %spell%"
 	L['ANNOUNCEMENT_CASTED'] = '%player% casted %spell%'
 	L['ANNOUNCEMENT_COMBAT_RESURRECTION_SELF'] = '%player% casted %spell%'
 	L['ANNOUNCEMENT_COMBAT_RESURRECTION_TARGET'] = '%player% casted %spell% on %target%'
@@ -193,8 +192,8 @@ do
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_ZONING'] = 'Cannot reset %s (There are players in your party attempting to zone into an instance.)'
 	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_OFFLINE'] = 'Cannot reset %s (There are players offline in your party.)'
 
-	L["ANNOUNCEMENT_COOLDOWN_REMAINING"] = '%s cooldown remaining %s.'
-	L["ANNOUNCEMENT_COOLDOWN_COMPLETED"] = '%s is now available.'
+	L['ANNOUNCEMENT_COOLDOWN_REMAINING'] = '%s cooldown remaining %s.'
+	L['ANNOUNCEMENT_COOLDOWN_COMPLETED'] = '%s is now available.'
 end
 
 --[[ Inventory ]]
@@ -235,7 +234,7 @@ do
 	L['MAP_CURSOR'] = 'Cursor'
 	L['MAP_REVEAL'] = '清除地图迷雾'
 	L['MAP_PARAGON'] = 'Paragon'
-	L["MAP_NEXT_TRAIT"] = "Next Trait"
+	L['MAP_NEXT_TRAIT'] = 'Next Trait'
 	L['MAP_NEW_MAIL'] = '<New Mail>'
 	L['MAP_CALENDAR'] = 'Calendar'
 end
@@ -305,7 +304,8 @@ L.GUI = {
 		['CUSTOM_BAR'] = 'custom bar',
 		['COOLDOWN_PULSE'] = 'cooldown pulse',
 		['QUEST_BUTTON'] = 'quest button',
-		['OBJECTIVE_TRACKER'] = 'objective tracker'
+		['OBJECTIVE_TRACKER'] = 'objective tracker',
+		['MAW_THREAT_BAR'] = 'Maw threat bar'
 	},
 	['PROFILE'] = {
 		['NAME'] = 'Profles',
@@ -358,14 +358,15 @@ L.GUI = {
 		['NUMBER_TYPE1'] = 'Standard: b/m/k',
 		['NUMBER_TYPE2'] = 'Asian: y/w',
 		['NUMBER_TYPE3'] = 'Full digitals',
-		['BUY_STACK'] = '快速购买整组物品',
-		['BUY_STACK_TIP'] = '按住ALT键购买物品会直接购买整组。',
-		['CUSTOM_CLASS_COLOR'] = 'Customized class colors',
+		['CUSTOM_CLASS_COLOR'] = 'Customize class colors',
 		['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting',
 		['HIDE_TALKINGHEAD'] = 'Hide talking head',
 		['HIDE_BOSS_BANNER'] = 'Hide boss banner',
 		['FONT_OUTLINE'] = 'Use font outline',
-		['SCREEN_SAVER'] = 'Screen saver'
+		['SCREEN_SAVER'] = 'Screen saver',
+		['CONCISE_ERRORS'] = 'Concise errors',
+		['MAW_THREAT_BAR'] = 'Maw threat bar',
+		['AUTO_SCREENSHOT'] = 'Achievement screenshot'
 	},
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',
@@ -437,7 +438,7 @@ L.GUI = {
 		['WHISPER_INVITE'] = 'Enable whisper invite',
 		['GUILD_ONLY'] = 'Guildy only',
 		['INVITE_KEYWORD'] = 'keyword',
-		['GROUP_LOOT_FILTER'] = 'Filter group member\'s loot',
+		['GROUP_LOOT_FILTER'] = "Filter group member's loot",
 		['GROUP_LOOT_THRESHOLD'] = 'Group loot threshold',
 		['GROUP_LOOT_COMMON'] = 'Common',
 		['GROUP_LOOT_UNCOMMON'] = 'Uncommon',
@@ -463,7 +464,7 @@ L.GUI = {
 		['BUFFS_PER_ROW'] = 'buffs per row',
 		['DEBUFFS_PER_ROW'] = 'debuffs per row',
 		['REMINDER'] = 'Buff reminder',
-		['REMINDER_TIP'] = '提醒自身缺失的增益，比如牧师耐力法师智力盗贼毒药等等。'
+		['REMINDER_TIP'] = 'Remind you when lack of your own class spell.|nSupport: Stamina, Poisons, Arcane Intellect, Battle Shout.'
 	},
 	['ACTIONBAR'] = {
 		['NAME'] = 'Actionbar',
@@ -499,6 +500,12 @@ L.GUI = {
 		['CUSTOM_BAR_BUTTON_SIZE'] = 'button size',
 		['CUSTOM_BAR_BUTTON_NUMBER'] = 'button number',
 		['CUSTOM_BAR_BUTTON_PER_ROW'] = 'button per row'
+	},
+	['COOLDOWN'] = {
+		['ENABLE'] = 'Cooldowns timer',
+		['USE_DECIMAL'] = 'Decimal for cooldowns in 3s',
+		['OVERRIDE_WEAKAURAS'] = 'Override WeakAuras cooldowns',
+		['PULSE'] = 'Pulse cooldowns'
 	},
 	['COMBAT'] = {
 		['NAME'] = 'Combat',
@@ -536,7 +543,7 @@ L.GUI = {
 		['UTILITY'] = 'Utility',
 		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。',
 		['COOLDOWN'] = 'Cooldown status',
-		['COOLDOWN_TIP'] = 'You can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.',
+		['COOLDOWN_TIP'] = 'You can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.'
 	},
 	['INVENTORY'] = {
 		['NAME'] = 'Inventory',
@@ -734,19 +741,17 @@ L.GUI = {
 		['PLATE_WIDTH'] = 'nameplate width',
 		['PLATE_HEIGHT'] = 'nameplate height',
 		['FRIENDLY_CLASS_COLOR'] = 'Friendly unit colored by class',
-		['FRIENDLY_CLASS_COLOR_TIP'] = '友方玩家的姓名板根据职业染色。',
 		['HOSTILE_CLASS_COLOR'] = 'Hostile unit colored by class',
-		['HOSTILE_CLASS_COLOR_TIP'] = '敌方玩家的姓名板根据职业染色。',
 		['TANK_MODE'] = 'Force colored by threat',
-		['TANK_MODE_TIP'] = '非坦克专精强制使用坦克模式的染色逻辑。',
+		['TANK_MODE_TIP'] = 'If enabled, nameplate health color would present its threat status to you, instead of threat indicator.|nFor custom color units, the threat status remains on threat indicator.',
 		['DPS_REVERT_THREAT'] = 'Revert threat color if not tank',
-		['DPS_REVERT_THREAT_TIP'] = '非坦克专精使用反转的坦克模式染色逻辑。',
+		['DPS_REVERT_THREAT_TIP'] = 'If \'Force colored by threat\' enabled, swap their threat status color for non-tank classes.',
 		['SECURE_COLOR'] = 'Secure color',
 		['TRANS_COLOR'] = 'Transition color',
 		['INSECURE_COLOR'] = 'Insecure color',
 		['OFF_TANK_COLOR'] = 'Off-Tank',
-		['CUSTOM_UNIT_COLOR'] = 'Colored custom unit',
-		['CUSTOM_UNIT_COLOR_TIP'] = "If enabled, some units' nameplate health would color by custom color.|nYou can customize the color and the units list to match your requirement.",
+		['COLORED_CUSTOM_UNIT'] = 'Colored custom unit',
+		['COLORED_CUSTOM_UNIT_TIP'] = "If enabled, some units' nameplate health would color by custom color.|nYou can customize the color and the units list to match your requirement.",
 		['CUSTOM_COLOR'] = 'Change custom color',
 		['CUSTOM_UNIT_LIST'] = 'Custom unit list',
 		['CUSTOM_UNIT_LIST_TIP'] = 'Enter unit name or npc ID.|nYou can see unit npc ID in tooltip by holding KEY ALT.|nUse KEY SPACE between keywords.|nPress KEY ENTER when you finish typing.',
@@ -757,11 +762,11 @@ L.GUI = {
 		['CLASSIFY_INDICATOR'] = 'Rare indicator',
 		['CLASSIFY_INDICATOR_TIP'] = '稀有怪的姓名板右侧会显示一个星标。',
 		['EXPLOSIVE_SCALE'] = 'Explosive scale',
-		['EXPLOSIVE_SCALE_TIP'] = '大秘境中爆炸物的姓名板放大。',
+		['EXPLOSIVE_SCALE_TIP'] = 'Scale nameplates for mythic+ explosives.',
 		['INTERRUPT_NAME'] = 'Interrupt infomation',
 		['INTERRUPT_NAME_TIP'] = '在姓名板下方显示成功打断此次读条的队友名字。',
 		['AURAS_SETUP'] = 'Setup nameplate auras',
-		['PLATE_AURAS'] = 'Show aura',
+		['PLATE_AURAS'] = 'Show auras',
 		['PLATE_AURAS_TIP'] = '默认显示所有你施放的减益光环，可以通过黑/白名单来调整你想要显示或忽略的光环。',
 		['AURA_SIZE'] = 'Aura size',
 		['AURA_NUMBER'] = 'Max auras to show',
@@ -776,7 +781,10 @@ L.GUI = {
 		['MIN_ALPHA'] = 'None target alpha',
 		['OCCLUDED_ALPHA'] = 'Occluded alpha',
 		['VERTICAL_SPACING'] = 'Vertical spacing',
-		['HORIZONTAL_SPACING'] = 'Horizontal spacing'
+		['HORIZONTAL_SPACING'] = 'Horizontal spacing',
+		['COLORED_TARGET'] = 'Colored target',
+		['COLORED_TARGET_TIP'] = 'If enabled, colored your target nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
+		['TARGET_COLOR'] = 'Change target color'
 	},
 	['CREDITS'] = {
 		['NAME'] = 'Credits',
@@ -821,5 +829,5 @@ L['COMMANDS_LIST'] = {
 	'/rp - Role poll',
 	'/lg - Leave group',
 	'/rs - Reset instance',
-	'/bind - Launch quick keybind mode',
+	'/bind - Launch quick keybind mode'
 }
