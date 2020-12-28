@@ -41,16 +41,6 @@ local function updateTimerFormat(color, hour, minute)
 end
 
 -- Data
-local bonus = {
-	52834,
-	52838, -- Gold
-	52835,
-	52839, -- Honor
-	52837,
-	52840 -- Resources
-}
-local bonusName = C_CurrencyInfo.GetCurrencyInfo(1580).name
-
 local isTimeWalker, walkerTexture
 local function checkTimeWalker(event)
 	local date = C_DateAndTime.GetCurrentCalendarTime()
@@ -217,120 +207,130 @@ function INFOBAR:Report()
 		INFOBAR.POSITION_RIGHT,
 		100,
 		function(self, button)
-			if not WeeklyRewardsFrame then
-				LoadAddOn('Blizzard_WeeklyRewards')
-			end
-			if InCombatLockdown() then
-				F:TogglePanel(WeeklyRewardsFrame)
+			if button == 'RightButton' then
+				if not WeeklyRewardsFrame then
+					LoadAddOn('Blizzard_WeeklyRewards')
+				end
+				if InCombatLockdown() then
+					F:TogglePanel(WeeklyRewardsFrame)
+				else
+					ToggleFrame(WeeklyRewardsFrame)
+				end
 			else
-				ToggleFrame(WeeklyRewardsFrame)
+				if InCombatLockdown() then
+					UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
+					return
+				end
+				ToggleCalendar()
 			end
 		end
 	)
 
-	FreeUIReportButton:HookScript(
-		'OnEnter',
-		function(self)
-			RequestRaidInfo()
+	FreeUIReportButton.OnShiftDown = function()
+		if FreeUIReportButton.entered then
+			FreeUIReportButton:OnEnter()
+		end
+	end
 
-			local r, g, b
-			GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
-			GameTooltip:ClearLines()
-			GameTooltip:AddLine(L['INFOBAR_DAILY_WEEKLY_INFO'], .9, .8, .6)
+	FreeUIReportButton.OnEnter = function(self)
+		self.entered = true
 
-			-- World bosses
-			title = false
-			for i = 1, GetNumSavedWorldBosses() do
-				local name, id, reset = GetSavedWorldBossInfo(i)
-				if not (id == 11 or id == 12 or id == 13) then
-					addTitle(RAID_INFO_WORLD_BOSS)
-					GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1, 1, 1, 1, 1, 1)
-				end
-			end
+		RequestRaidInfo()
 
-			-- Mythic Dungeons
-			title = false
-			for i = 1, GetNumSavedInstances() do
-				local name, _, reset, diff, locked, extended = GetSavedInstanceInfo(i)
-				if diff == 23 and (locked or extended) then
-					addTitle(DUNGEON_DIFFICULTY3 .. DUNGEONS)
-					if extended then
-						r, g, b = .3, 1, .3
-					else
-						r, g, b = 1, 1, 1
-					end
-					GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1, 1, 1, r, g, b)
-				end
-			end
+		local r, g, b
+		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(L['INFOBAR_DAILY_WEEKLY_INFO'], .9, .8, .6)
 
-			-- Raids
-			title = false
-			for i = 1, GetNumSavedInstances() do
-				local name, _, reset, _, locked, extended, _, isRaid, _, diffName = GetSavedInstanceInfo(i)
-				if isRaid and (locked or extended) then
-					addTitle(RAID_INFO)
-					if extended then
-						r, g, b = .3, 1, .3
-					else
-						r, g, b = 1, 1, 1
-					end
-					GameTooltip:AddDoubleLine(name .. ' - ' .. diffName, SecondsToTime(reset, true, nil, 3), 1, 1, 1, r, g, b)
-				end
+		-- World bosses
+		title = false
+		for i = 1, GetNumSavedWorldBosses() do
+			local name, id, reset = GetSavedWorldBossInfo(i)
+			if not (id == 11 or id == 12 or id == 13) then
+				addTitle(RAID_INFO_WORLD_BOSS)
+				GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1, 1, 1, 1, 1, 1)
 			end
+		end
 
-			-- Torghast
-			if not TorghastInfo then
-				TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
-			end
-			if TorghastInfo and IsQuestFlaggedCompleted(60136) then
-				title = false
-				for _, value in pairs(TorghastWidgets) do
-					local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
-					if nameInfo and nameInfo.shownState == 1 then
-						addTitle(TorghastInfo.name)
-						local nameText = CleanupLevelName(nameInfo.text)
-						local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
-						local levelText = AVAILABLE
-						if levelInfo and levelInfo.shownState == 1 then
-							levelText = CleanupLevelName(levelInfo.text)
-						end
-						GameTooltip:AddDoubleLine(nameText, levelText)
-					end
-				end
-			end
-
-			-- Quests
-			title = false
-			local count, maxCoins = 0, 2
-			for _, id in pairs(bonus) do
-				if IsQuestFlaggedCompleted(id) then
-					count = count + 1
-				end
-			end
-			if count > 0 then
-				addTitle(QUESTS_LABEL)
-				if count == maxCoins then
-					r, g, b = 1, 0, 0
+		-- Mythic Dungeons
+		title = false
+		for i = 1, GetNumSavedInstances() do
+			local name, _, reset, diff, locked, extended = GetSavedInstanceInfo(i)
+			if diff == 23 and (locked or extended) then
+				addTitle(DUNGEON_DIFFICULTY3 .. DUNGEONS)
+				if extended then
+					r, g, b = .3, 1, .3
 				else
-					r, g, b = 0, 1, 0
+					r, g, b = 1, 1, 1
 				end
-				GameTooltip:AddDoubleLine(bonusName, count .. '/' .. maxCoins, 1, 1, 1, r, g, b)
+				GameTooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1, 1, 1, r, g, b)
 			end
+		end
 
-			do
-				local currentValue, maxValue, questID = PVPGetConquestLevelInfo()
-				local questDone = questID and questID == 0
-				if IsPlayerAtEffectiveMaxLevel() then
-					if questDone then
-						addTitle(QUESTS_LABEL)
-						GameTooltip:AddDoubleLine(PVP_CONQUEST, QUEST_COMPLETE, 1, 1, 1, 1, 0, 0)
-					elseif currentValue > 0 then
-						addTitle(QUESTS_LABEL)
-						GameTooltip:AddDoubleLine(PVP_CONQUEST, currentValue .. '/' .. maxValue, 1, 1, 1, 0, 1, 0)
+		-- Raids
+		title = false
+		for i = 1, GetNumSavedInstances() do
+			local name, _, reset, _, locked, extended, _, isRaid, _, diffName = GetSavedInstanceInfo(i)
+			if isRaid and (locked or extended) then
+				addTitle(RAID_INFO)
+				if extended then
+					r, g, b = .3, 1, .3
+				else
+					r, g, b = 1, 1, 1
+				end
+				GameTooltip:AddDoubleLine(name .. ' - ' .. diffName, SecondsToTime(reset, true, nil, 3), 1, 1, 1, r, g, b)
+			end
+		end
+
+		-- Torghast
+		if not TorghastInfo then
+			TorghastInfo = C_AreaPoiInfo_GetAreaPOIInfo(1543, 6640)
+		end
+		if TorghastInfo and IsQuestFlaggedCompleted(60136) then
+			title = false
+			for _, value in pairs(TorghastWidgets) do
+				local nameInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.nameID)
+				if nameInfo and nameInfo.shownState == 1 then
+					addTitle(TorghastInfo.name)
+					local nameText = CleanupLevelName(nameInfo.text)
+					local levelInfo = C_UIWidgetManager_GetTextWithStateWidgetVisualizationInfo(value.levelID)
+					local levelText = AVAILABLE
+					if levelInfo and levelInfo.shownState == 1 then
+						levelText = CleanupLevelName(levelInfo.text)
 					end
+					GameTooltip:AddDoubleLine(nameText, levelText)
 				end
 			end
+		end
 
+		-- Quests
+		title = false
+
+		do
+			local currentValue, maxValue, questID = PVPGetConquestLevelInfo()
+			local questDone = questID and questID == 0
+			if IsPlayerAtEffectiveMaxLevel() then
+				if questDone then
+					addTitle(QUESTS_LABEL)
+					GameTooltip:AddDoubleLine(PVP_CONQUEST, QUEST_COMPLETE, 1, 1, 1, 1, 0, 0)
+				elseif currentValue > 0 then
+					addTitle(QUESTS_LABEL)
+					GameTooltip:AddDoubleLine(PVP_CONQUEST, currentValue .. '/' .. maxValue, 1, 1, 1, 0, 1, 0)
+				end
+			end
+		end
+
+		for _, v in pairs(questlist) do
+			if v.name and IsQuestFlaggedCompleted(v.id) then
+				if v.name == L['INFOBAR_TIMEWARPED'] and isTimeWalker and checkTexture(v.texture) or v.name ~= L['Timewarped'] then
+					addTitle(QUESTS_LABEL)
+					GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1, 1, 1, 1, 0, 0)
+				end
+			end
+		end
+
+		if IsShiftKeyDown() then
+			-- Nzoth relavants
 			for _, v in ipairs(horrificVisions) do
 				if IsQuestFlaggedCompleted(v.id) then
 					addTitle(QUESTS_LABEL)
@@ -357,15 +357,6 @@ function INFOBAR:Report()
 				end
 			end
 
-			for _, v in pairs(questlist) do
-				if v.name and IsQuestFlaggedCompleted(v.id) then
-					if v.name == L['INFOBAR_TIMEWARPED'] and isTimeWalker and checkTexture(v.texture) or v.name ~= L['INFOBAR_TIMEWARPED'] then
-						addTitle(QUESTS_LABEL)
-						GameTooltip:AddDoubleLine(v.name, QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
-					end
-				end
-			end
-
 			-- Invasions
 			for index, value in ipairs(invIndex) do
 				title = false
@@ -384,19 +375,29 @@ function INFOBAR:Report()
 				local nextLocation = GetNextLocation(nextTime, index)
 				GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_NEXT'] .. nextLocation, date('%m/%d %H:%M', nextTime), 1, 1, 1, 1, 1, 1)
 			end
-
+		else
 			GameTooltip:AddLine(' ')
-			GameTooltip:AddDoubleLine(' ', C.LineString)
-			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['INFOBAR_TOGGLE_WEEKLY_REWARDS'], 1, 1, 1, .9, .8, .6)
-
-			GameTooltip:Show()
+			GameTooltip:AddLine(L['INFOBAR_HOLD_SHIFT'], .6, .8, 1)
 		end
-	)
+
+		GameTooltip:AddLine(' ')
+		GameTooltip:AddDoubleLine(' ', C.LineString)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['INFOBAR_TOGGLE_CALENDAR'], 1, 1, 1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['INFOBAR_TOGGLE_WEEKLY_REWARDS'], 1, 1, 1, .9, .8, .6)
+
+		GameTooltip:Show()
+
+		F:RegisterEvent('MODIFIER_STATE_CHANGED', FreeUIReportButton.OnShiftDown)
+	end
+
+	FreeUIReportButton:HookScript('OnEnter', FreeUIReportButton.OnEnter)
 
 	FreeUIReportButton:HookScript(
 		'OnLeave',
 		function(self)
-			GameTooltip:Hide()
+			self.entered = true
+			F.HideTooltip()
+			F:UnregisterEvent('MODIFIER_STATE_CHANGED', FreeUIReportButton.OnShiftDown)
 		end
 	)
 end
