@@ -117,7 +117,7 @@ local function SetupCVars()
 
 	-- screenshot
 	SetCVar('screenshotQuality', 10)
-	SetCVar('screenshotFormat', 'png')
+	SetCVar('screenshotFormat', 'jpg')
 
 	-- mouse
 	SetCVar('rawMouseEnable', 1)

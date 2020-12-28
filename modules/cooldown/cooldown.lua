@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local COOLDOWN = F:GetModule('COOLDOWN')
+local COOLDOWN = F.COOLDOWN
 
 
 local FONT_SIZE = 24
@@ -173,7 +173,7 @@ function COOLDOWN:RegisterActionButton()
 end
 
 function COOLDOWN:OnLogin()
-	if not C.DB.cooldown.enable_cooldown then return end
+	if not C.DB.cooldown.enable then return end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, 'SetCooldown', COOLDOWN.StartTimer)
