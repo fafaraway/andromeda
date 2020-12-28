@@ -2,13 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
-local format, wipe, tinsert = string.format, table.wipe, table.insert
-local pairs, next, tonumber, unpack = pairs, next, tonumber, unpack
-local UnitAura = UnitAura
-local InCombatLockdown = InCombatLockdown
-local GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG = GetTime, GetSpellCooldown, IsInRaid, IsInGroup, IsPartyLFG
-local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
-
 --[[ Colors ]]
 local function ReplaceHealthColor()
 	local colors = FREE_ADB.health_color
@@ -178,6 +171,7 @@ function UNITFRAME:AddBackDrop(self)
 	local classPowerBarHolder = CreateFrame('Frame', nil, self)
 	classPowerBarHolder:SetSize(width, height)
 	classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+
 	self.ClassPowerBarHolder = classPowerBarHolder
 end
 
@@ -230,8 +224,18 @@ local function OverrideHealth(self, event, unit)
 	end
 end
 
-local function PostUpdateHealth(self, unit, min, max)
+local function PostUpdateHealth(self, unit, cur, max)
 	local parent = self:GetParent()
+	local style = self.__owner.unitStyle
+	local perhp = floor(UnitHealth('player') / max * 100 + .5)
+	if style == 'player' then
+		if perhp < 35 then
+			parent.EmergencyIndicator:Show()
+		else
+			parent.EmergencyIndicator:Hide()
+		end
+	end
+
 	local isOffline = not UnitIsConnected(unit)
 	local isDead = UnitIsDead(unit)
 	local isGhost = UnitIsGhost(unit)
@@ -243,10 +247,10 @@ local function PostUpdateHealth(self, unit, min, max)
 	if isDead or isGhost or isOffline then
 		self:SetValue(0)
 	else
-		if max == min then
+		if max == cur then
 			self:SetValue(0)
 		else
-			self:SetValue(max - min)
+			self:SetValue(max - cur)
 		end
 	end
 
@@ -756,7 +760,7 @@ function UNITFRAME:AddAuras(self)
 		auras:SetPoint('LEFT', self, 'RIGHT', 5, 0)
 		auras['growth-y'] = 'RIGHT'
 		auras.size = C.DB.unitframe.party_height * .7
-		auras.numTotal = 3
+		auras.numTotal = 4
 		auras.gap = false
 	elseif style == 'nameplate' then
 		auras.initialAnchor = 'BOTTOMLEFT'
@@ -1657,6 +1661,19 @@ function UNITFRAME:AddRestingIndicator(self)
 	self.RestingIndicator = restingIndicator
 end
 
+function UNITFRAME:AddEmergencyIndicator(self)
+	local emergencyIndicator = self:CreateTexture(nil, 'OVERLAY')
+	emergencyIndicator:SetPoint('TOPLEFT', self, 'BOTTOMLEFT')
+	emergencyIndicator:SetPoint('TOPRIGHT', self, 'BOTTOMRIGHT')
+	emergencyIndicator:SetHeight(10)
+	emergencyIndicator:SetTexture(C.Assets.glow_tex)
+	emergencyIndicator:SetRotation(rad(180))
+	emergencyIndicator:SetVertexColor(1, 0, 0, .45)
+	emergencyIndicator:Hide()
+
+	self.EmergencyIndicator = emergencyIndicator
+end
+
 function UNITFRAME:AddRaidTargetIndicator(self)
 	if not C.DB.unitframe.target_icon_indicator then
 		return
@@ -1839,7 +1856,7 @@ function UNITFRAME:SendCDMessage()
 					if remaining < 0 then
 						remaining = 0
 					end
-					C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+					C_ChatInfo.SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
 				-- sync to others
 				end
 			end
@@ -1853,7 +1870,7 @@ function UNITFRAME:UpdateSyncStatus()
 	if IsInGroup() and not IsInRaid() and C.DB.unitframe.party_spell_sync then
 		local thisTime = GetTime()
 		if thisTime - lastSyncTime > 5 then
-			C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+			C_ChatInfo.SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
 			-- handshake to ZenTracker
 			lastSyncTime = thisTime
 		end
