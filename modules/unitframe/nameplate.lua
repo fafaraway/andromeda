@@ -110,7 +110,7 @@ end
 local customUnits = {}
 function NAMEPLATE:CreateUnitTable()
 	wipe(customUnits)
-	if not C.DB.nameplate.custom_unit_color then
+	if not C.DB.nameplate.colored_custom_unit then
 		return
 	end
 	F.CopyTable(C.NPSpecialUnitsList, customUnits)
@@ -197,12 +197,15 @@ function NAMEPLATE:UpdateColor(_, unit)
 	local revertThreat = C.DB.nameplate.dps_revert_threat
 	local offTankColor = C.DB.nameplate.off_tank_color
 	local friendlyColor = C.DB.nameplate.friendly_color
+	local targetColor = C.DB.nameplate.target_color
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
 		r, g, b = unpack(oUF.colors.disconnected)
 	else
-		if isCustomUnit then
+		if C.DB.nameplate.colored_target and UnitIsUnit(unit, "target") then
+			r, g, b = targetColor.r, targetColor.g, targetColor.b
+		elseif isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
 		elseif isPlayer and isFriendly then
 			if C.DB.nameplate.friendly_class_color then
@@ -291,11 +294,16 @@ end
 -- Target indicator
 function NAMEPLATE:UpdateTargetChange()
 	local element = self.TargetIndicator
+	local unit = self.unit
 
 	if UnitIsUnit(self.unit, 'target') and not UnitIsUnit(self.unit, 'player') then
 		element:Show()
 	else
 		element:Hide()
+	end
+
+	if C.DB.nameplate.colored_target then
+		NAMEPLATE.UpdateColor(self, _, unit)
 	end
 end
 
@@ -314,7 +322,7 @@ function NAMEPLATE:AddTargetIndicator(self)
 		return
 	end
 
-	local color = C.DB.nameplate.target_color
+	local color = C.DB.nameplate.target_indicator_color
 	local r, g, b = color.r, color.g, color.b
 
 	local frame = CreateFrame('Frame', nil, self)
@@ -331,6 +339,7 @@ function NAMEPLATE:AddTargetIndicator(self)
 	texBot:SetVertexColor(r, g, b, .85)
 
 	self.TargetIndicator = frame
+	self.TargetIndicator.__owner = self
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
 end
 
