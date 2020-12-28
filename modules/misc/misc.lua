@@ -16,57 +16,14 @@ function MISC:OnLogin()
 		end
 	end
 
-	MISC:BlowMyWhistle()
 	MISC:ForceWarning()
 	MISC:FasterCamera()
-	--MISC:UpdateScreenShot()
+	MISC:AchievementScreenshot()
 	MISC:QuestRewardHighlight()
 	MISC:UpdateQuestCompletedSound()
 	MISC:BuyStack()
 	MISC:SetRole()
-end
-
--- Plays a soundbite from Whistle - Flo Rida after Flight Master's Whistle
-function MISC:BlowMyWhistle()
-	if not C.DB.misc.blow_my_whistle then
-		return
-	end
-
-	local whistleSound = 'Interface\\AddOns\\FreeUI\\assets\\sound\\whistle.ogg'
-	local whistle_SpellID1 = 227334
-	-- for some reason the whistle is two spells which results in dirty events being called
-	-- where spellID2 fires SUCCEEDED on spell cast start and spellID1 comes in later as the real SUCCEEDED
-	local whistle_SpellID2 = 253937
-
-	local casting = false
-
-	local f = CreateFrame('frame')
-	f:SetScript(
-		'OnEvent',
-		function(self, event, ...)
-			self[event](self, ...)
-		end
-	)
-
-	function f:UNIT_SPELLCAST_SUCCEEDED(unit, lineID, spellID)
-		if (unit == 'player' and (spellID == whistle_SpellID1 or spellID == whistle_SpellID2)) then
-			if casting then
-				casting = false
-				return
-			end
-
-			PlaySoundFile(whistleSound)
-			casting = false
-		end
-	end
-
-	function f:UNIT_SPELLCAST_START(event, castGUID, spellID)
-		if spellID == whistle_SpellID1 then
-			casting = true
-		end
-	end
-	f:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
-	f:RegisterEvent('UNIT_SPELLCAST_START')
+	MISC:MawWidgetFrame()
 end
 
 function MISC:ForceWarning()
@@ -243,95 +200,51 @@ do
 	end
 end
 
---[[ Auto take screenshot ]]
+--[[
+	Achievement screenshot
+]]
 do
-	function MISC:ScreenShotOnEvent()
-		MISC.ScreenShotFrame.delay = 1
-		MISC.ScreenShotFrame:Show()
+	local function AchievementEarned(...)
+		if not C.DB.misc.auto_screenshot_achievement then
+			return
+		end
+
+		local achievementID, alreadyEarned = ...
+
+		F.Debug('achievementID', achievementID)
+		F.Debug('alreadyEarned', alreadyEarned)
+
+		if alreadyEarned then
+			return
+		end
+
+		C_Timer.After(
+			1,
+			function()
+				Screenshot()
+			end
+		)
 	end
 
-	function MISC:UpdateScreenShot()
-		if not MISC.ScreenShotFrame then
-			MISC.ScreenShotFrame = CreateFrame('Frame')
-			MISC.ScreenShotFrame:Hide()
-			MISC.ScreenShotFrame:SetScript(
-				'OnUpdate',
-				function(self, elapsed)
-					self.delay = self.delay - elapsed
-					if self.delay < 0 then
-						Screenshot()
-						self:Hide()
-					end
-				end
-			)
+	function MISC:AchievementScreenshot()
+		if not C.DB.misc.auto_screenshot then
+			return
 		end
 
-		if C.DB.misc.auto_screenshot then
-			F:RegisterEvent('ACHIEVEMENT_EARNED', MISC.ScreenShotOnEvent)
-			F:RegisterEvent('PLAYER_LEVEL_UP', MISC.ScreenShotOnEvent)
-			F:RegisterEvent('PLAYER_DEAD', MISC.ScreenShotOnEvent)
-			F:RegisterEvent('CHALLENGE_MODE_COMPLETED', MISC.ScreenShotOnEvent)
-		else
-			MISC.ScreenShotFrame:Hide()
-			F:UnregisterEvent('ACHIEVEMENT_EARNED', MISC.ScreenShotOnEvent)
-			F:UnregisterEvent('PLAYER_LEVEL_UP', MISC.ScreenShotOnEvent)
-			F:UnregisterEvent('PLAYER_DEAD', MISC.ScreenShotOnEvent)
-			F:UnregisterEvent('CHALLENGE_MODE_COMPLETED', MISC.ScreenShotOnEvent)
-		end
+		F:RegisterEvent('ACHIEVEMENT_EARNED', AchievementEarned)
 	end
-
-	F:RegisterEvent(
-		'ACHIEVEMENT_EARNED',
-		function(event, ...)
-			local achievementID, alreadyEarned = ...
-
-			F.Debug('achievementID', achievementID)
-			F.Debug('alreadyEarned', alreadyEarned)
-
-			if alreadyEarned then
-				return
-			end
-
-			C_Timer.After(
-				1,
-				function()
-					Screenshot()
-				end
-			)
-		end
-	)
 end
 
---[[ Auto select current event boss from LFD tool ]]
-do
-	local firstLFD
-	LFDParentFrame:HookScript(
-		'OnShow',
-		function()
-			if not firstLFD then
-				firstLFD = 1
-				for i = 1, GetNumRandomDungeons() do
-					local id = GetLFGRandomDungeonInfo(i)
-					local isHoliday = select(15, GetLFGDungeonInfo(id))
-					if isHoliday and not GetLFGDungeonRewards(id) then
-						LFDQueueFrame_SetType(id)
-					end
-				end
-			end
-		end
-	)
-end
+--[[
+	Buy stack
+]]
 
 function MISC:BuyStack()
-	if not C.DB.misc.buy_stack then
-		return
-	end
-
 	local cache = {}
 	local itemLink, id
 
 	StaticPopupDialogs['FREEUI_BUY_STACK'] = {
-		text = L.GUI.MISC.BUY_STACK,
+		text = L['MISC_BUY_STACK'],
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
@@ -381,6 +294,10 @@ function MISC:BuyStack()
 	end
 end
 
+--[[
+	Set role
+]]
+
 do
 	local prev = 0
 	local function SetRole()
@@ -407,4 +324,110 @@ do
 
 		RolePollPopup:UnregisterEvent('ROLE_POLL_BEGIN')
 	end
+end
+
+--[[
+	Maw threat bar
+]]
+do
+	local maxValue = 1000
+	local function GetMawBarValue()
+		local widgetInfo = C_UIWidgetManager.GetDiscreteProgressStepsVisualizationInfo(2885)
+		if widgetInfo and widgetInfo.shownState == 1 then
+			local value = widgetInfo.progressVal
+			return floor(value / maxValue), value % maxValue
+		end
+	end
+
+	local MawRankColor = {
+		[0] = {.6, .8, 1},
+		[1] = {0, 1, 0},
+		[2] = {0, .7, .3},
+		[3] = {1, .8, 0},
+		[4] = {1, .5, 0},
+		[5] = {1, 0, 0}
+	}
+	function MISC:UpdateMawBarLayout()
+		local bar = MISC.MawBar
+		local rank, value = GetMawBarValue()
+		if rank then
+			bar:SetStatusBarColor(unpack(MawRankColor[rank]))
+			if rank == 5 then
+				bar.text:SetText('Lv' .. rank)
+				bar:SetValue(maxValue)
+			else
+				bar.text:SetText('Lv' .. rank .. ' - ' .. value .. '/' .. maxValue)
+				bar:SetValue(value)
+			end
+			bar:Show()
+			UIWidgetTopCenterContainerFrame:Hide()
+		else
+			bar:Hide()
+			UIWidgetTopCenterContainerFrame:Show()
+		end
+	end
+
+	function MISC:MawWidgetFrame()
+		if not C.DB.blizzard.maw_threat_bar then
+			return
+		end
+
+		if MISC.MawBar then
+			return
+		end
+
+		local bar = CreateFrame('StatusBar', nil, UIParent)
+		bar:SetSize(200, 16)
+		bar:SetMinMaxValues(0, 1000)
+		bar.text = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, nil, nil, true)
+		F.CreateSB(bar)
+		F:SmoothBar(bar)
+		MISC.MawBar = bar
+
+		F.Mover(bar, L.GUI.MOVER.MAW_THREAT_BAR, 'MawThreatBar', {'TOP', UIParent, 0, -80})
+
+		bar:SetScript(
+			'OnEnter',
+			function(self)
+				local rank = GetMawBarValue()
+				local widgetInfo = rank and C_UIWidgetManager.GetTextureWithAnimationVisualizationInfo(2873 + rank)
+				if widgetInfo and widgetInfo.shownState == 1 then
+					GameTooltip:SetOwner(self, 'ANCHOR_BOTTOM', 0, -10)
+					local header, nonHeader = SplitTextIntoHeaderAndNonHeader(widgetInfo.tooltip)
+					if header then
+						GameTooltip:AddLine(header, nil, nil, nil, 1)
+					end
+					if nonHeader then
+						GameTooltip:AddLine(nonHeader, nil, nil, nil, 1)
+					end
+					GameTooltip:Show()
+				end
+			end
+		)
+		bar:SetScript('OnLeave', F.HideTooltip)
+
+		MISC:UpdateMawBarLayout()
+		F:RegisterEvent('PLAYER_ENTERING_WORLD', MISC.UpdateMawBarLayout)
+		F:RegisterEvent('UPDATE_UI_WIDGET', MISC.UpdateMawBarLayout)
+	end
+end
+
+--[[ Auto select current event boss from LFD tool ]]
+do
+	local firstLFD
+	LFDParentFrame:HookScript(
+		'OnShow',
+		function()
+			if not firstLFD then
+				firstLFD = 1
+				for i = 1, GetNumRandomDungeons() do
+					local id = GetLFGRandomDungeonInfo(i)
+					local isHoliday = select(15, GetLFGDungeonInfo(id))
+					if isHoliday and not GetLFGDungeonRewards(id) then
+						LFDQueueFrame_SetType(id)
+					end
+				end
+			end
+		end
+	)
 end
