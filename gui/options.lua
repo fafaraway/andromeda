@@ -280,7 +280,7 @@ GUI.OptionsList = {
 		{1, 'tooltip', 'enable', L.GUI.TOOLTIP.ENABLE, nil, nil, nil, L.GUI.TOOLTIP.ENABLE_TIP},
 		{1, 'tooltip', 'follow_cursor', L.GUI.TOOLTIP.FOLLOW_CURSOR, nil, nil, nil, L.GUI.TOOLTIP.FOLLOW_CURSOR_TIP},
 		{1, 'tooltip', 'hide_in_combat', L.GUI.TOOLTIP.HIDE_IN_COMBAT, true},
-		{1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR},
+		{1, 'tooltip', 'disable_fading', L.GUI.TOOLTIP.DISABLE_FADING},
 		{1, 'tooltip', 'tip_icon', L.GUI.TOOLTIP.TIP_ICON, true},
 		{1, 'tooltip', 'target_by', L.GUI.TOOLTIP.TARGET_BY},
 		{1, 'tooltip', 'extra_info', L.GUI.TOOLTIP.EXTRA_INFO, true, nil, nil, L.GUI.TOOLTIP.EXTRA_INFO_TIP},
@@ -289,7 +289,8 @@ GUI.OptionsList = {
 		{1, 'tooltip', 'spec_ilvl', L.GUI.TOOLTIP.SPEC_ILVL, nil, nil, nil, L.GUI.TOOLTIP.SPEC_ILVL_TIP},
 		{1, 'tooltip', 'hide_realm', L.GUI.TOOLTIP.HIDE_REALM, true},
 		{1, 'tooltip', 'hide_title', L.GUI.TOOLTIP.HIDE_TITLE},
-		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true}
+		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true},
+		{1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR}
 	},
 	[12] = {
 		-- unitframes

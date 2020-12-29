@@ -615,7 +615,8 @@ L.GUI = {
 		['TARGET_BY'] = 'Show targetby,',
 		['HIDE_REALM'] = 'Hide realm',
 		['HIDE_TITLE'] = 'Hide title',
-		['HIDE_RANK'] = 'Hide guild rank'
+		['HIDE_RANK'] = 'Hide guild rank',
+		['DISABLE_FADING'] = 'Disable fading'
 	},
 	['UNITFRAME'] = {
 		['NAME'] = 'Unitframe',

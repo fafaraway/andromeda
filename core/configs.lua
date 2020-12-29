@@ -848,6 +848,7 @@ C.CharacterSettings = {
 	['tooltip'] = {
 		['enable'] = true,
 		['follow_cursor'] = false,
+		['disable_fading'] = true,
 		['hide_title'] = true,
 		['hide_realm'] = true,
 		['hide_rank'] = true,
