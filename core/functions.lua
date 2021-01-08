@@ -899,7 +899,7 @@ do
 	end
 
 	-- Handle button
-	local function CreatePulse(frame)
+	local function UpdateGlow(frame)
 		local speed = .05
 		local mult = 1
 		local alpha = 1
@@ -923,6 +923,30 @@ do
 		)
 	end
 
+	local function StartGlow(self)
+		if not self:IsEnabled() then
+			return
+		end
+
+		if not self.__glow then
+			return
+		end
+		self.__glow:SetBackdropBorderColor(C.r, C.g, C.b)
+		self.__glow:SetAlpha(1)
+
+		UpdateGlow(self.__glow)
+	end
+
+	local function StopGlow(self)
+		if not self.__glow then
+			return
+		end
+
+		self.__glow:SetBackdropBorderColor(.02, .02, .02)
+		self.__glow:SetScript('OnUpdate', nil)
+		self.__glow:SetAlpha(.25)
+	end
+
 	local function Button_OnEnter(self)
 		if not self:IsEnabled() then
 			return
@@ -930,26 +954,11 @@ do
 
 		self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
 		self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
-
-		if not self.__shadow then
-			return
-		end
-		self.__shadow:SetBackdropBorderColor(C.r, C.g, C.b)
-		self.__shadow:SetAlpha(1)
-
-		CreatePulse(self.__shadow)
 	end
 
 	local function Button_OnLeave(self)
 		self.__bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .25)
 		self.__bg:SetBackdropBorderColor(.2, .2, .2)
-
-		if not self.__shadow then
-			return
-		end
-		self.__shadow:SetBackdropBorderColor(.02, .02, .02)
-		self.__shadow:SetScript('OnUpdate', nil)
-		self.__shadow:SetAlpha(.25)
 	end
 
 	local blizzRegions = {
@@ -989,7 +998,7 @@ do
 		'Center'
 	}
 
-	function F:Reskin(shadow, noGlow)
+	function F:Reskin(glow)
 		if self.SetNormalTexture then
 			self:SetNormalTexture('')
 		end
@@ -1011,30 +1020,21 @@ do
 			end
 		end
 
+		self.__bgTex = F.CreateTex(self)
+
 		self.__bg = F.CreateBDFrame(self, .25, true)
 		self.__bg:SetBackdropBorderColor(.2, .2, .2)
 		self.__bg:SetFrameLevel(self:GetFrameLevel())
 		self.__bg:SetAllPoints()
 
-		self.__shadow = F.CreateSD(self, .25, 6, 6)
-		--self.__shadow:SetAlpha(shadow and .25 or 0)
-
 		self:HookScript('OnEnter', Button_OnEnter)
 		self:HookScript('OnLeave', Button_OnLeave)
 
-		--if not noGlow then
-		-- self.glow = CreateFrame('Frame', nil, self, 'BackdropTemplate')
-		-- self.glow:SetBackdrop({
-		-- 	edgeFile = assets.shadow_tex,
-		-- 	edgeSize = 6,
-		-- })
-		-- self.glow:SetPoint('TOPLEFT', -6, 6)
-		-- self.glow:SetPoint('BOTTOMRIGHT', 6, -6)
-		-- self.glow:SetBackdropBorderColor(0, 0, 0)
-		-- self.glow:SetAlpha(shadow and .25 or 0)
+		--if glow then
+		self.__glow = F.CreateSD(self, .25, 4, 4)
 
-		-- self:HookScript('OnEnter', Button_OnEnter)
-		-- self:HookScript('OnLeave', Button_OnLeave)
+		self:HookScript('OnEnter', StartGlow)
+		self:HookScript('OnLeave', StopGlow)
 		--end
 	end
 
@@ -1069,7 +1069,7 @@ do
 
 		local bg = F.CreateBDFrame(self)
 		bg:SetPoint('TOPLEFT', 8, -3)
-		bg:SetPoint('BOTTOMRIGHT', -8, 0)
+		bg:SetPoint('BOTTOMRIGHT', -10, 0)
 		F.CreateSD(bg)
 		self.bg = bg
 
@@ -1080,14 +1080,14 @@ do
 		hl:SetVertexColor(C.r, C.g, C.b, .25)
 	end
 
-	local function resetTabAnchor(tab)
-		local text = tab.Text or _G[tab:GetName() .. 'Text']
+	function F:ResetTabAnchor()
+		local text = self.Text or (self.GetName and _G[self:GetName() .. 'Text'])
 		if text then
-			text:SetPoint('CENTER', tab)
+			text:SetPoint('CENTER', self)
 		end
 	end
-	hooksecurefunc('PanelTemplates_DeselectTab', resetTabAnchor)
-	hooksecurefunc('PanelTemplates_SelectTab', resetTabAnchor)
+	hooksecurefunc('PanelTemplates_SelectTab', F.ResetTabAnchor)
+	hooksecurefunc('PanelTemplates_DeselectTab', F.ResetTabAnchor)
 
 	-- Handle scrollframe
 	local function Scroll_OnEnter(self)
