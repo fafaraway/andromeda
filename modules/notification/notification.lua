@@ -4,7 +4,7 @@ local NOTIFICATION = F:GetModule('NOTIFICATION')
 
 local playSounds = true
 local animations = true
-local duration = 3
+local duration = 5
 local bannerWidth = 300
 local interval = 0.1
 
@@ -213,4 +213,5 @@ function NOTIFICATION:OnLogin()
 	self:BagFull()
 	--self:VersionCheck()
 	self:RareAlert()
+	self:ParagonReputation()
 end
