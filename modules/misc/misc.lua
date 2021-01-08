@@ -18,8 +18,8 @@ function MISC:OnLogin()
 
 	MISC:ForceWarning()
 	MISC:FasterCamera()
-	MISC:AchievementScreenshot()
-	MISC:QuestRewardHighlight()
+	MISC:AutoScreenshot()
+	--MISC:QuestRewardHighlight()
 	MISC:UpdateQuestCompletedSound()
 	MISC:BuyStack()
 	MISC:SetRole()
@@ -209,36 +209,36 @@ do
 			return
 		end
 
-		local achievementID, alreadyEarned = ...
-
-		F.Debug('achievementID', achievementID)
-		F.Debug('alreadyEarned', alreadyEarned)
+		local _, _, alreadyEarned = ...
 
 		if alreadyEarned then
 			return
 		end
 
-		C_Timer.After(
-			1,
-			function()
-				Screenshot()
-			end
-		)
+		F:Delay(1, _G.Screenshot)
 	end
 
-	function MISC:AchievementScreenshot()
+	local function ChallengeModeCompleted(...)
+		if not C.DB.misc.auto_screenshot_challenge then
+			return
+		end
+
+		F:Delay(1, _G.Screenshot)
+	end
+
+	function MISC:AutoScreenshot()
 		if not C.DB.misc.auto_screenshot then
 			return
 		end
 
 		F:RegisterEvent('ACHIEVEMENT_EARNED', AchievementEarned)
+		F:RegisterEvent('CHALLENGE_MODE_COMPLETED', ChallengeModeCompleted)
 	end
 end
 
 --[[
 	Buy stack
 ]]
-
 function MISC:BuyStack()
 	local cache = {}
 	local itemLink, id
@@ -297,7 +297,6 @@ end
 --[[
 	Set role
 ]]
-
 do
 	local prev = 0
 	local function SetRole()
@@ -378,7 +377,7 @@ do
 
 		local bar = CreateFrame('StatusBar', nil, UIParent)
 		bar:SetSize(200, 16)
-		bar:SetMinMaxValues(0, 1000)
+		bar:SetMinMaxValues(0, maxValue)
 		bar.text = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, nil, nil, true)
 		F.CreateSB(bar)
 		F:SmoothBar(bar)
