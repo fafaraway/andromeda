@@ -653,7 +653,8 @@ TOOLTIP:RegisterTooltips(
 			)
 		end
 
-		if IsAddOnLoaded('MythicDungeonTools') then
+		-- MDT and DT
+		if MDT and MDT.ShowInterface then
 			local styledMDT
 			hooksecurefunc(
 				MDT,
