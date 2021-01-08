@@ -111,6 +111,7 @@ function THEME:OnLogin()
 	self:ReskinDBM()
 	self:ReskinPGF()
 	self:ReskinREHack()
+	self:ReskinABP()
 end
 
 
