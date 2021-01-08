@@ -1,9 +1,28 @@
 local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F.BLIZZARD
 
+local BNConnected = BNConnected
+local BNet_GetClientTexture = BNet_GetClientTexture
+local FriendsFrame_Update = FriendsFrame_Update
+local GetQuestDifficultyColor = GetQuestDifficultyColor
+
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 local C_ClassColor_GetClassColor = C_ClassColor.GetClassColor
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
+
+local BNET_CLIENT_APP, BNET_CLIENT_CLNT, BNET_CLIENT_COD = BNET_CLIENT_APP, BNET_CLIENT_CLNT, BNET_CLIENT_COD
+local BNET_CLIENT_COD_MW, BNET_CLIENT_D3, BNET_CLIENT_HEROES = BNET_CLIENT_COD_MW, BNET_CLIENT_D3, BNET_CLIENT_HEROES
+local BNET_CLIENT_OVERWATCH, BNET_CLIENT_SC, BNET_CLIENT_SC2 = BNET_CLIENT_OVERWATCH, BNET_CLIENT_SC, BNET_CLIENT_SC2
+local BNET_CLIENT_WC3, BNET_CLIENT_WOW, BNET_CLIENT_WTCG = BNET_CLIENT_WC3, BNET_CLIENT_WOW, BNET_CLIENT_WTCG
+local FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND = FRIENDS_TEXTURE_AFK, FRIENDS_TEXTURE_DND
+local FRIENDS_TEXTURE_OFFLINE, FRIENDS_TEXTURE_ONLINE = FRIENDS_TEXTURE_OFFLINE, FRIENDS_TEXTURE_ONLINE
+local LOCALIZED_CLASS_NAMES_FEMALE = LOCALIZED_CLASS_NAMES_FEMALE
+local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
+
+local FRIENDS_BUTTON_TYPE_DIVIDER = FRIENDS_BUTTON_TYPE_DIVIDER
+local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
+local FRIENDS_BUTTON_TYPE_BNET = FRIENDS_BUTTON_TYPE_BNET
+local BNET_FRIEND_TOOLTIP_WOW_CLASSIC = BNET_FRIEND_TOOLTIP_WOW_CLASSIC
 
 local mediaPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
 
@@ -104,25 +123,25 @@ local function UpdateFriendButton(button)
 	-- 获取好友游戏情况
 	if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
 		-- 角色游戏好友
-		game = BNET_CLIENT_WOW
-		local friendInfo = C_FriendList_GetFriendInfoByIndex(button.id)
-		name, server = strsplit('-', friendInfo.name) -- 如果是同一个服务器，server 为 nil
-		level = friendInfo.level
-		class = friendInfo.className
-		area = friendInfo.area
-		faction = C.MyFaction -- 同一阵营才能加好友的吧？
+		-- game = BNET_CLIENT_WOW
+		-- local friendInfo = C_FriendList_GetFriendInfoByIndex(button.id)
+		-- name, server = strsplit('-', friendInfo.name) -- 如果是同一个服务器，server 为 nil
+		-- level = friendInfo.level
+		-- class = friendInfo.className
+		-- area = friendInfo.area
+		-- faction = C.MyFaction -- 同一阵营才能加好友的吧？
 
-		if friendInfo.connected then
-			if friendInfo.afk then
-				status = 'AFK'
-			elseif friendInfo.dnd then
-				status = 'DND'
-			else
-				status = 'Online'
-			end
-		else
-			status = 'Offline'
-		end
+		-- if friendInfo.connected then
+		-- 	if friendInfo.afk then
+		-- 		status = 'AFK'
+		-- 	elseif friendInfo.dnd then
+		-- 		status = 'DND'
+		-- 	else
+		-- 		status = 'Online'
+		-- 	end
+		-- else
+		-- 	status = 'Offline'
+		-- end
 	elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET and BNConnected() then
 		-- 战网好友
 		local friendAccountInfo = C_BattleNet_GetFriendAccountInfo(button.id)
