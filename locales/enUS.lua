@@ -50,6 +50,7 @@ do
 	L['BLIZZARD_MOVER_ALERT'] = 'Alert frame'
 	L['BLIZZARD_MOVER_VEHICLE'] = 'Vehicle indicator'
 	L['BLIZZARD_MOVER_UIWIDGET'] = 'UIWidget frame'
+	L['BLIZZARD_MOVER_DURABILITY'] = 'Durability indicator'
 	L['BLIZZARD_UNDRESS'] = 'Undress'
 	L['BLIZZARD_STRANGER'] = 'Stranger'
 	L['BLIZZARD_KEYSTONES'] = 'Keystones'
@@ -68,7 +69,7 @@ do
 	L['NOTIFICATION_RARE'] = 'Rare found'
 	L['NOTIFICATION_VERSION'] = 'Version check'
 	L['NOTIFICATION_VERSION_OUTDATE'] = 'Your FreeUI is outdated, latest version is %s'
-
+	L['NOTIFICATION_DURABILITY'] = 'Durability is low, needs to repair!'
 	L['NOTIFICATION_INSTANCE'] = 'Instance'
 end
 
@@ -85,8 +86,7 @@ do
 	L['INFOBAR_GUILD_NONE'] = 'None'
 	L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle guild & communities pane'
 
-	L['INFOBAR_REPORT'] = 'Report'
-	L['INFOBAR_DAILY_WEEKLY_INFO'] = 'Daily/weekly'
+	L['INFOBAR_REPORT'] = 'Daily/weekly'
 	L['INFOBAR_BLINGTRON'] = 'Blingtron daily pack'
 	L['INFOBAR_MEAN_ONE'] = 'Winter veil daily'
 	L['INFOBAR_TIMEWARPED'] = 'Timewarped badge reward'
@@ -363,10 +363,20 @@ L.GUI = {
 		['HIDE_TALKINGHEAD'] = 'Hide talking head',
 		['HIDE_BOSS_BANNER'] = 'Hide boss banner',
 		['FONT_OUTLINE'] = 'Use font outline',
-		['SCREEN_SAVER'] = 'Screen saver',
-		['CONCISE_ERRORS'] = 'Concise errors',
+		['SCREEN_SAVER'] = 'AFK screen saver',
+		['CONCISE_ERRORS'] = 'Simplified errors',
 		['MAW_THREAT_BAR'] = 'Maw threat bar',
-		['AUTO_SCREENSHOT'] = 'Achievement screenshot'
+		['AUTO_SCREENSHOT'] = 'Enable auto screenshot',
+		['AUTO_SCREENSHOT_ACHIEVEMENT'] = 'New achievement earned',
+		['AUTO_SCREENSHOT_CHALLENGE'] = 'Mythic+ dungeon completed',
+		['ITEM_LEVEL'] = 'Item level',
+		['ITEM_LEVEL_TIP'] = 'Show item level on character frame.',
+		['GEM_ENCHANT'] = 'Gem and enchant',
+		['GEM_ENCHANT_TIP'] = 'Show gem and enchant on character frame.',
+		['NAKED_BUTTON'] = 'Naked button',
+		['NAKED_BUTTON_TIP'] = 'Show naked button on character frame, double click it to unequip all gears.',
+		['MISSING_STATS'] = 'Missing stats',
+		['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.',
 	},
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',
@@ -684,7 +694,8 @@ L.GUI = {
 		['COLOR_STYLE_CLASS'] = 'Class colored',
 		['COLOR_STYLE_GRADIENT'] = 'Percentage gradient',
 		['TARGET_ICON_INDICATOR_ALPHA'] = 'Icon Indicator opacity',
-		['TARGET_ICON_INDICATOR_SIZE'] = 'Icon Indicator size'
+		['TARGET_ICON_INDICATOR_SIZE'] = 'Icon Indicator size',
+		['ABBR_NAME'] = 'Abbreviat name'
 	},
 	['GROUPFRAME'] = {
 		['NAME'] = 'Groupframe',
