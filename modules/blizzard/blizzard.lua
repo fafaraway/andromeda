@@ -26,6 +26,7 @@ function BLIZZARD:OnLogin()
 	self:EasyDelete()
 	self:TicketStatusMover()
 	self:VehicleIndicatorMover()
+	self:DurabilityFrameMover()
 	self:UIWidgetMover()
 end
 
@@ -129,6 +130,20 @@ function BLIZZARD:VehicleIndicatorMover()
 
 	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then
+			self:ClearAllPoints()
+			self:SetPoint('TOPLEFT', frame)
+			self:SetScale(.7)
+		end
+	end)
+end
+
+function BLIZZARD:DurabilityFrameMover()
+	local frame = CreateFrame('Frame', 'FreeUIDurabilityFrameMover', UIParent)
+	frame:SetSize(100, 100)
+	F.Mover(frame, L['BLIZZARD_MOVER_DURABILITY'], 'DurabilityFrame', {'TOPRIGHT', ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
+
+	hooksecurefunc(DurabilityFrame, "SetPoint", function(self, _, parent)
+		if parent == "MinimapCluster" or parent == MinimapCluster then
 			self:ClearAllPoints()
 			self:SetPoint('TOPLEFT', frame)
 			self:SetScale(.7)
