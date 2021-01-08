@@ -1,28 +1,22 @@
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION = F:GetModule('NOTIFICATION')
-
+local NOTIFICATION = F.NOTIFICATION
 
 local hasMail = false
-local function alertMail()
+local function MailNotification()
 	local newMail = HasNewMail()
 	if hasMail ~= newMail then
 		hasMail = newMail
 		if hasMail then
-			F:CreateNotification(L['NOTIFICATION_MAIL'], C.BlueColor..L['NOTIFICATION_NEW_MAIL'], nil, 'Interface\\ICONS\\INV_Letter_20')
+			F:CreateNotification(MAIL_LABEL, C.BlueColor .. HAVE_MAIL, nil, 'Interface\\ICONS\\INV_Letter_20')
 		end
 	end
 end
 
-
 function NOTIFICATION:NewMail()
-	if not C.DB.notification.new_mail then return end
+	if not C.DB.notification.new_mail then
+		return
+	end
 
-	local f = CreateFrame('Frame')
-	f:RegisterEvent('UPDATE_PENDING_MAIL')
-	f:RegisterEvent('PLAYER_ENTERING_WORLD')
-	f:SetScript('OnEvent', function(self, event)
-		if event == 'UPDATE_PENDING_MAIL' then
-			alertMail()
-		end
-	end)
+	--F:RegisterEvent('PLAYER_ENTERING_WORLD', MailNotification)
+	F:RegisterEvent('UPDATE_PENDING_MAIL', MailNotification)
 end
