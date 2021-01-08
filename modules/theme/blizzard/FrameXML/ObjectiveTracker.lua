@@ -64,11 +64,15 @@ end
 local function reskinBarTemplate(bar)
 	if bar.bg then return end
 
-	F.StripTextures(bar)
-	bar:SetStatusBarTexture(C.Assets.statusbar_tex)
-	bar:SetStatusBarColor(C.r, C.g, C.b)
-	bar.bg = F.SetBD(bar)
-	F:SmoothBar(bar)
+	if not bar.styled then
+		F.StripTextures(bar)
+		bar:SetStatusBarTexture(C.Assets.statusbar_tex)
+		bar:SetStatusBarColor(C.r, C.g, C.b)
+		bar.bg = F.SetBD(bar)
+		F:SmoothBar(bar)
+
+		bar.styled = true
+	end
 end
 
 local function reskinProgressbar(_, _, line)
@@ -158,6 +162,7 @@ tinsert(C.BlizzThemes, function()
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)
 	hooksecurefunc(WORLD_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
 	hooksecurefunc(CAMPAIGN_QUEST_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
+	hooksecurefunc(BONUS_OBJECTIVE_TRACKER_MODULE, "AddObjective", reskinQuestIcons)
 
 	-- Reskin Progressbars
 	hooksecurefunc(QUEST_TRACKER_MODULE, "AddProgressBar", reskinProgressbar)

@@ -3,13 +3,19 @@ local F, C = unpack(select(2, ...))
 tinsert(C.BlizzThemes, function()
 	if not FREE_ADB.reskin_blizz then return end
 
-	for i = 1, 4 do
-		local tab = _G["FriendsFrameTab"..i]
-		F.ReskinTab(tab)
-		if i > 1 then
-			tab:SetPoint("LEFT", _G["FriendsFrameTab"..(i-1)], "RIGHT", -10, 0)
+	local loadInit
+	FriendsFrame:HookScript("OnShow", function()
+		if loadInit then return end
+		for i = 1, 4 do
+			local tab = _G["FriendsFrameTab"..i]
+			if tab then
+				F.ReskinTab(tab)
+				F.ResetTabAnchor(tab)
+			end
 		end
-	end
+		loadInit = true
+	end)
+
 	FriendsFrameIcon:Hide()
 	F.StripTextures(IgnoreListFrame)
 

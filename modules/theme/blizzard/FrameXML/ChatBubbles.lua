@@ -3,19 +3,33 @@ local F, C = unpack(select(2, ...))
 local pairs, GetCVarBool = pairs, GetCVarBool
 local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
 
+local function updateBorderColor(frame)
+	local r, g, b = frame.String:GetTextColor()
+	frame.__shadow:SetBackdropBorderColor(r, g, b, .75)
+end
+
 local function reskinChatBubble(chatbubble)
 	if chatbubble.styled then return end
 
 	local frame = chatbubble:GetChildren()
 	if frame and not frame:IsForbidden() then
-		local bg = F.SetBD(frame)
-		bg:SetScale(UIParent:GetEffectiveScale())
-		bg:SetInside(frame, 6, 6)
+		frame.__bg = F.CreateBDFrame(frame)
+		frame.__bg:SetScale(UIParent:GetEffectiveScale())
+		frame.__bg:SetInside(frame, 6, 6)
+		frame.__shadow = F.CreateSD(frame.__bg)
+		frame.__shadow:SetBackdropBorderColor(.02, .02, .02, .25)
+		F.CreateTex(frame.__bg)
+
+
+		frame:HookScript('OnShow', updateBorderColor)
 
 		frame:DisableDrawLayer("BORDER")
 		frame.Tail:SetAlpha(0)
 		--frame.String:SetFont(C.Assets.Fonts.Bold, 16)
+
+		updateBorderColor(frame)
 	end
+
 
 	chatbubble.styled = true
 end
@@ -50,6 +64,7 @@ tinsert(C.BlizzThemes, function()
 			for _, chatbubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
 				reskinChatBubble(chatbubble)
 			end
+
 			self:Hide()
 		end
 	end)

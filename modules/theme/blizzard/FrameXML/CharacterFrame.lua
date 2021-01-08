@@ -83,6 +83,7 @@ tinsert(C.BlizzThemes, function()
 		slot.icon:SetTexCoord(unpack(C.TexCoord))
 		slot.icon:SetInside()
 		slot.bg = F.CreateBDFrame(slot.icon, .25)
+		slot.bg:SetFrameLevel(3)
 		cooldown:SetInside()
 
 		slot.ignoreTexture:SetTexture("Interface\\PaperDollInfoFrame\\UI-GearManager-LeaveItem-Transparent")
