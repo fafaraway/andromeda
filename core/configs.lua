@@ -200,11 +200,187 @@ C.CornerBuffsList = {
 	小队重要增益
  ]]
 C.PartyBuffsList = {
-	-- Racial
-	[26297] = true, -- 狂暴 巨魔
-	[20572] = true, -- 血性狂怒 兽人
-	[33697] = true, -- 血性狂怒 兽人
-	[292463] = true, -- 帕库之拥 赞达拉
+	-- Paladin
+	[642] = true, -- 圣盾术
+	[204018] = true, -- 破咒祝福
+	[1022] = true, -- 保护祝福
+	[1044] = true, -- 自由祝福
+	[6940] = true, -- Blessing of Sacrifice
+	[31884] = true, -- 复仇之怒
+	[231895] = true, -- 征伐
+	[105809] = true, -- 神圣复仇者
+	[31850] = true, -- 炽热防御者
+	[205191] = true, -- 以眼还眼
+	[184662] = true, -- 复仇之盾
+	[86659] = true, -- 远古列王守卫
+	[212641] = true, -- Guardian of Ancient Kings (Glyph)
+	[228049] = true, -- 被遗忘的女王护卫
+	[216331] = true, -- 复仇十字军
+	[210294] = true, -- 神恩术
+	[498] = true, -- 圣佑术
+	[215652] = true, -- 美德之盾
+	-- Warrior
+	[871] = true, -- 盾墙
+	[118038] = true, -- 剑在人在
+	[184364] = true, -- 狂怒回复
+	[18499] = true, -- 狂暴之怒
+	[1719] = true, -- Recklessness (Fury)
+	[262228] = true, -- Deadly Calm (Arms)
+	[107574] = true, -- Avatar
+	[197690] = true, -- 防御姿态
+	[23920] = true, -- SpellReflection
+	[330279] = true, -- Overwatch PvP talent
+	[236273] = true, -- 决斗
+	[260708] = true, -- Sweeping Strikes
+	[202147] = true, -- Second Wind
+	[12975] = true, -- 破釜沉舟
+	[223658] = true, -- 捍卫
+	-- Priest
+	[27827] = true, -- 救赎之魂
+	[33206] = true, -- 痛苦压制
+	[47585] = true, -- 消散
+	[47788] = true, -- 守护之魂
+	[10060] = true, -- 能量灌注
+	[197862] = true, -- 天使长
+	[197871] = true, -- 黑暗天使长
+	[200183] = true, -- 神圣化身
+	[213610] = true, -- 神圣守卫
+	[197268] = true, -- 希望之光
+	[193223] = true, -- 疯入膏肓
+	[319952] = true, -- 疯入膏肓
+	[47536] = true, -- 全神贯注
+	[109964] = true, -- 灵魂护壳
+	[194249] = true, -- 虚空形态
+	[218413] = true, -- 虚空形态
+	[15286] = true, -- 吸血鬼的拥抱
+	[213602] = true, -- 强化渐隐术
+	-- Druid
+	[102342] = true, -- 铁木树皮
+	[102560] = true, -- 化身：艾露恩之眷
+	[102543] = true, -- 化身：丛林之王
+	[102558] = true, -- 化身：乌索克的守护者
+	[33891] = true, -- 化身：生命之树
+	[61336] = true, -- 生存本能
+	[22812] = true, -- 树皮术
+	[106951] = true, -- 狂暴
+	[69369] = true, -- 掠食者的迅捷
+	[194223] = true, -- 超凡之盟
+	[102351] = true, -- 塞纳里奥结界
+	[155835] = true, -- 鬃毛倒竖
+	[29166] = true, -- 激活
+	[236696] = true, -- 荆棘术
+	[305497] = true, -- 荆棘术
+	[108291] = true, -- 野性之心
+	[108292] = true, -- 野性之心
+	[108293] = true, -- 野性之心
+	[108294] = true, -- 野性之心
+	[323546] = true, -- 饕餮狂乱
+	-- Warlock
+	[104773] = true, -- 不灭决心
+	[108416] = true, -- DarkPact
+	[196098] = true, -- Soul Harvest (Legion's Version)
+	[113860] = true, -- Dark Soul: Misery (Affliction)
+	[113858] = true, -- Dark Soul: Instability (Destruction)
+	[212295] = true, -- NetherWard
+	-- Shaman
+	[108271] = true, -- 星界转移
+	[204288] = true, -- 大地之盾
+	[79206] = true, -- 灵魂行者的恩赐
+	[114050] = true, -- 升腾
+	[114051] = true, -- 升腾
+	[114052] = true, -- 升腾
+	[210918] = true, -- 灵体形态
+	[204293] = true, -- 灵魂链接
+	[20608] = true, -- Reincarnation
+	[207654] = true, -- Servant of the Queen
+	-- Monk
+	[122278] = true, -- 躯不坏
+	[122783] = true, -- 散魔功
+	[115203] = true, -- 壮胆酒
+	[201318] = true, -- 壮胆酒
+	[243435] = true, -- 壮胆酒
+	[115176] = true, -- 禅悟冥想
+	[116849] = true, -- 作茧缚命
+	[152173] = true, -- 屏气凝神
+	[197908] = true, -- 法力茶
+	[209584] = true, -- 禅意聚神茶
+	[202335] = true, -- 醉上加醉
+	[310454] = true, -- 精序兵戈
+	-- Hunter
+	[186265] = true, -- 灵龟守护
+	[19263] = true, -- 威慑
+	[53271] = true, -- 主人的召唤
+	[53480] = true, -- 牺牲咆哮
+	[186257] = true, -- 猎豹守护
+	[212640] = true, -- 治疗绷带
+	[193530] = true, -- 野性守护
+	[266779] = true, -- 协同进攻
+	[186289] = true, -- 雄鹰守护
+	[202748] = true, -- 生存战术
+	[212704] = true, -- 野兽之心
+	[264735] = true, -- 优胜劣汰
+	-- Mage
+	[45438] = true, -- 冰箱
+	[113862] = true, -- Greater Invisibility
+	[87023] = true, -- 灸灼
+	[86949] = true, -- Cauterize
+	[87024] = true, -- Cauterize
+	[12042] = true, -- ArcanePower
+	[12472] = true, -- IcyVeins
+	[198111] = true, -- TemporalShield
+	[198144] = true, -- IceForm
+	[190319] = true, -- Combustion
+	[110909] = true, -- AlterTime
+	[342246] = true, -- AlterTime
+	[108978] = true, -- AlterTime
+	[324220] = true, -- Necrolord
+	-- Rogue
+	[2983] = true, -- Sprint
+	[31224] = true, -- Cloak
+	[5277] = true, -- Evasion
+	[121471] = true, -- 暗影之刃
+	[199754] = true, -- 还击
+	[31230] = true, --CheatDeath
+	[45182] = true, --CheatDeath
+	[343142] = true, -- 恐惧之刃
+	[207736] = true, -- 暗影决斗
+	[1966] = true, -- Feint
+	[114018] = true, -- Shroud of Concealment
+	[115834] = true, -- Shroud of Concealment
+	-- DK
+	[123981] = true, -- 永劫不复
+	[48792] = true, -- 冰封之韧
+	[55233] = true, -- 吸血鬼之血
+	[51271] = true, -- 冰霜之柱
+	[48707] = true, -- 反魔法护罩
+	[145629] = true, -- Anti-Magic Zone
+	[219809] = true, -- 墓石
+	[194679] = true, -- 符文分流
+	[194844] = true, -- 白骨风暴
+	[207319] = true, -- 血肉之盾
+	[116888] = true, -- 炼狱蔽体
+	[49039] = true, -- 巫妖之躯
+	[288977] = true, -- 鲜血灌注
+	[315443] = true, -- 憎恶附肢
+	[311648] = true, -- 云集之雾
+	-- DH
+	[209261] = true, -- 未被污染的邪能
+	[196555] = true, -- 虚空行走
+	[198589] = true, -- Blur
+	[212800] = true, -- Blur
+	[162264] = true, -- Metamorphosis
+	[187827] = true, -- Metamorphosis (Vengeance)
+	[207811] = true, -- Nether Bond (DH)
+	[207810] = true, -- Nether Bond (Target)
+	[263648] = true, -- Soul Barrier
+	[209426] = true, -- Darkness
+	[196718] = true, -- Darkness
+	[203819] = true, -- Demon Spikes
+	-- Covenant
+	[319217] = true, -- 灵茧守护者
+	[320224] = true, -- 灵茧守护者
+	-- MISC
+	[160029] = true, -- 正在复活
 	-- Potion
 	[307159] = true, -- 幽魂敏捷药水
 	[307162] = true, -- 幽魂智力药水
@@ -225,147 +401,7 @@ C.PartyBuffsList = {
 	[256740] = true, -- 漩涡战鼓
 	[309658] = true, -- 死亡凶蛮战鼓
 	[102364] = true, -- 青铜龙的祝福
-	[292686] = true, -- 制皮鼓
-	-- Death Knight
-	[48707] = true, -- Anti-Magic Shell
-	[81256] = true, -- Dancing Rune Weapon
-	[55233] = true, -- Vampiric Blood
-	[193320] = true, -- Umbilicus Eternus
-	[219809] = true, -- Tombstone
-	[48792] = true, -- Icebound Fortitude
-	[207319] = true, -- Corpse Shield
-	[194844] = true, -- BoneStorm
-	[145629] = true, -- Anti-Magic Zone
-	[194679] = true, -- Rune Tap
-	-- Demon Hunter
-	[207811] = true, -- Nether Bond (DH)
-	[207810] = true, -- Nether Bond (Target)
-	[187827] = true, -- Metamorphosis
-	[263648] = true, -- Soul Barrier
-	[209426] = true, -- Darkness
-	[196555] = true, -- Netherwalk
-	[212800] = true, -- Blur
-	[188499] = true, -- Blade Dance
-	[203819] = true, -- Demon Spikes
-	[196718] = true, -- Darkness
-	-- Druid
-	[102342] = true, -- Ironbark
-	[61336] = true, -- Survival Instincts
-	[210655] = true, -- Protection of Ashamane
-	[22812] = true, -- Barkskin
-	[200851] = true, -- Rage of the Sleeper
-	[234081] = true, -- Celestial Guardian
-	[202043] = true, -- Protector of the Pack (it's this one or the other)
-	[201940] = true, -- Protector of the Pack
-	[201939] = true, -- Protector of the Pack (Allies)
-	[192081] = true, -- Ironfur
-	[77761] = true, -- Stampeding Roar
-	[77764] = true, -- Stampeding Roar
-	[29166] = true, -- Innervate
-	-- Hunter
-	[186265] = true, -- Aspect of the Turtle
-	[53480] = true, -- Roar of Sacrifice
-	[202748] = true, -- Survival Tactics
-	-- Mage
-	[45438] = true, -- Ice Block
-	[113862] = true, -- Greater Invisibility
-	[198111] = true, -- Temporal Shield
-	[198065] = true, -- Prismatic Cloak
-	[11426] = true, -- Ice Barrier
-	[235313] = true, -- Blazing Barrier
-	-- Monk
-	[122783] = true, -- Diffuse Magic
-	[122278] = true, -- Dampen Harm
-	[125174] = true, -- Touch of Karma
-	[201318] = true, -- Fortifying Elixir
-	[201325] = true, -- Zen Moment
-	[202248] = true, -- Guided Meditation
-	[120954] = true, -- Fortifying Brew
-	[116849] = true, -- Life Cocoon
-	[202162] = true, -- Guard
-	[215479] = true, -- Ironskin Brew
-	-- Paladin
-	[642] = true, -- Divine Shield
-	[498] = true, -- Divine Protection
-	[205191] = true, -- Eye for an Eye
-	[184662] = true, -- Shield of Vengeance
-	[1022] = true, -- Blessing of Protection
-	[6940] = true, -- Blessing of Sacrifice
-	[204018] = true, -- Blessing of Spellwarding
-	[1044] = true, -- Blessing of Freedom
-	[199507] = true, -- Spreading The Word: Protection
-	[216857] = true, -- Guarded by the Light
-	[228049] = true, -- Guardian of the Forgotten Queen
-	[31850] = true, -- Ardent Defender
-	[86659] = true, -- Guardian of Ancien Kings
-	[212641] = true, -- Guardian of Ancien Kings (Glyph of the Queen)
-	[209388] = true, -- Bulwark of Order
-	[204335] = true, -- Aegis of Light
-	[152262] = true, -- Seraphim
-	[132403] = true, -- Shield of the Righteous
-	[31821] = true, -- Aura Mastery
-	[53563] = true, -- Beacon of Light
-	[156910] = true, -- Beacon of Faith
-	-- Priest
-	[81782] = true, -- Power Word: Barrier
-	[47585] = true, -- Dispersion
-	[19236] = true, -- Desperate Prayer
-	[213602] = true, -- Greater Fade
-	[27827] = true, -- Spirit of Redemption
-	[197268] = true, -- Ray of Hope
-	[47788] = true, -- Guardian Spirit
-	[33206] = true, -- Pain Suppression
-	[62618] = true, -- Power Word: Barrier
-	[64843] = true, -- Divine Hymn
-	[64901] = true, -- Symbol of Hope
-	[10060] = true, -- Power Infusion
-	-- Rogue
-	[5277] = true, -- Evasion
-	[31224] = true, -- Cloak of Shadows
-	[1966] = true, -- Feint
-	[199754] = true, -- Riposte
-	[45182] = true, -- Cheating Death
-	[199027] = true, -- Veil of Midnight
-	[114018] = true, -- Shroud of Concealment
-	[115834] = true, -- Shroud of Concealment
-	-- Shaman
-	[204293] = true, -- Spirit Link
-	[204288] = true, -- Earth Shield
-	[210918] = true, -- Ethereal Form
-	[207654] = true, -- Servant of the Queen
-	[108271] = true, -- Astral Shift
-	[98007] = true, -- Spirit Link Totem
-	[207498] = true, -- Ancestral Protection
-	[98008] = true, -- Spirit Link Totem
-	[20608] = true, -- Reincarnation
-	[192082] = true, -- Wind Rush
-	[201633] = true, -- Earthen Wall
-	-- Warlock
-	[108416] = true, -- Dark Pact
-	[104773] = true, -- Unending Resolve
-	[221715] = true, -- Essence Drain
-	[212295] = true, -- Nether Ward
-	-- Warrior
-	[118038] = true, -- Die by the Sword
-	[184364] = true, -- Enraged Regeneration
-	[209484] = true, -- Tactical Advance
-	[97463] = true, -- Commanding Shout
-	[213915] = true, -- Mass Spell Reflection
-	[199038] = true, -- Leave No Man Behind
-	[223658] = true, -- Safeguard
-	[147833] = true, -- Intervene
-	[198760] = true, -- Intercept
-	[12975] = true, -- Last Stand
-	[871] = true, -- Shield Wall
-	[23920] = true, -- Spell Reflection
-	[216890] = true, -- Spell Reflection (PvPT)
-	[227744] = true, -- Ravager
-	[203524] = true, -- Neltharion's Fury
-	[190456] = true, -- Ignore Pain
-	[132404] = true, -- Shield Block
-	[97462] = true, -- Rallying Cry
-	-- Racial
-	[65116] = true -- Stoneform
+	[292686] = true -- 制皮鼓
 }
 
 --[[
@@ -374,10 +410,6 @@ C.PartyBuffsList = {
 C.RaidBuffsList = {
 	[1] = {
 		-- 合剂
-		298836, -- 敏捷360
-		298837, -- 智力360
-		298839, -- 耐力360
-		298841, -- 力量360
 		307166, -- 大锅
 		307185, -- 通用合剂
 		307187 -- 耐力合剂
@@ -471,6 +503,7 @@ C.NPAuraWhiteList = {
 	[228318] = true, -- 激怒
 	[226510] = true, -- 血池
 	[343553] = true, -- 万噬之怨
+	[343502] = true, -- 鼓舞光环
 	-- Dungeons
 	[320293] = true, -- 伤逝剧场，融入死亡
 	[331510] = true, -- 伤逝剧场，死亡之愿
@@ -479,16 +512,20 @@ C.NPAuraWhiteList = {
 	[336451] = true, -- 凋魂之殇，玛卓克萨斯之壁
 	[333737] = true, -- 凋魂之殇，凝结之疾
 	[328175] = true, -- 凋魂之殇，凝结之疾
+	[340357] = true, -- 凋魂之殇，急速感染
 	[228626] = true, -- 彼界，怨灵之瓮
 	[344739] = true, -- 彼界，幽灵
 	[333227] = true, -- 彼界，不死之怒
 	[326450] = true, -- 赎罪大厅，忠心的野兽
 	[343558] = true, -- 通灵战潮，病态凝视
+	[343470] = true, -- 通灵战潮，碎骨之盾
 	[322433] = true, -- 赤红深渊，石肤术
 	[321402] = true, -- 赤红深渊，饱餐
 	[327416] = true, -- 晋升高塔，心能回灌
 	[317936] = true, -- 晋升高塔，弃誓信条
-	[327808] = true, -- 晋升高塔，振奋英气
+	[327812] = true, -- 晋升高塔，振奋英气
+	[339917] = true, -- 晋升高塔，命运之矛
+	[323149] = true, -- 仙林，黑暗之拥
 	-- Raids
 	[345902] = true, -- 破裂的联结，猎手
 	[334695] = true, -- 动荡的能量，猎手
@@ -577,6 +614,7 @@ C.NPSpecialUnitsList = {
 	[165556] = true, -- 赤红深渊，瞬息具象
 	[170234] = true, -- 伤逝剧场，压制战旗
 	[164464] = true, -- 伤逝剧场，卑劣的席拉
+	[165251] = true, -- 仙林，幻影仙狐
 	-- Raids
 	[GetSectionInfo(21953)] = true, -- 凯子，灵能灌注者
 	[175992] = true -- 猩红议会，忠实的侍从
@@ -729,6 +767,7 @@ C.CharacterSettings = {
 		['debuff_type'] = true,
 		['stealable_buffs'] = true,
 		['debuffs_by_player'] = true,
+		['abbr_name'] = false,
 		['enable_castbar'] = true,
 		['casting_color'] = {r = .31, g = .48, b = .85},
 		['casting_uninterruptible_color'] = {r = .66, g = .65, b = .65},
@@ -891,7 +930,8 @@ C.CharacterSettings = {
 		['bag_full'] = true,
 		['new_mail'] = true,
 		['version_check'] = false,
-		['rare_found'] = true
+		['rare_found'] = true,
+		['paragon_reputation'] = true
 	},
 	['misc'] = {
 		['group_tool'] = true,
@@ -1009,6 +1049,7 @@ C.AccountSettings = {
 	['reskin_bw'] = true,
 	['reskin_pgf'] = true,
 	['reskin_wa'] = true,
+	['reskin_abp'] = true,
 	['chat_filter_black_list'] = '',
 	['chat_filter_white_list'] = '',
 	['custom_junk_list'] = {},
