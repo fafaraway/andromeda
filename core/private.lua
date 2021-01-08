@@ -66,6 +66,19 @@ do
 		end
 	end
 
+	-- if you're in Exile's Reach and level 1 this cvar gets automatically enabled
+	hooksecurefunc(
+		'NPE_CheckTutorials',
+		function()
+			if C_PlayerInfo.IsPlayerNPERestricted() and UnitLevel('player') == 1 then
+				SetCVar('showTutorials', 0)
+				NewPlayerExperience:Shutdown()
+				-- for some reason this window still shows up
+				NPE_TutorialKeyboardMouseFrame_Frame:Hide()
+			end
+		end
+	)
+
 	local f = CreateFrame('Frame')
 	f:RegisterEvent('ADDON_LOADED')
 	f:RegisterEvent('VARIABLES_LOADED')
@@ -119,7 +132,6 @@ do
 			left = NORMAL_FONT_COLOR_CODE .. kind .. ':' .. FONT_COLOR_CODE_CLOSE
 			right = HIGHLIGHT_FONT_COLOR_CODE .. id .. FONT_COLOR_CODE_CLOSE
 		end
-
 
 		tooltip:AddDoubleLine(left, right)
 		tooltip:Show()
