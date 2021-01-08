@@ -7,7 +7,7 @@ local function SetupCVars()
 
 	SetCVar('deselectOnClick', 1)
 	SetCVar('useUiScale', 0)
-	SetCVar('WorldTextScale', 2)
+	SetCVar('WorldTextScale', 1)
 	SetCVar('missingTransmogSourceInItemTooltips', 1)
 	SetCVar('movieSubtitle', 1)
 	SetCVar('scriptErrors', 0)
