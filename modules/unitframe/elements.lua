@@ -306,7 +306,7 @@ function UNITFRAME:AddHealthBar(self)
 
 	if ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 2) or (isBaseUnits and C.DB.unitframe.color_style == 2) then
 		health.colorClass = true
-		health.colorReaction = true
+		health.colorSelection = true
 	elseif ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 3) or (isBaseUnits and C.DB.unitframe.color_style == 3) then
 		health.colorSmooth = true
 	else
@@ -321,50 +321,56 @@ end
 
 --[[ Health prediction ]]
 function UNITFRAME:AddHealthPrediction(self)
-	if C.DB.unitframe.heal_prediction then
-		local myBar = CreateFrame('StatusBar', nil, self.Health)
-		myBar:SetPoint('TOP')
-		myBar:SetPoint('BOTTOM')
-		myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
-		myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-		myBar:GetStatusBarTexture():SetBlendMode('BLEND')
-		myBar:SetStatusBarColor(0, .8, .8, .6)
-		myBar:SetWidth(self:GetWidth())
-
-		local otherBar = CreateFrame('StatusBar', nil, self.Health)
-		otherBar:SetPoint('TOP')
-		otherBar:SetPoint('BOTTOM')
-		otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
-		otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
-		otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
-		otherBar:SetStatusBarColor(0, .6, .6, .6)
-		otherBar:SetWidth(self:GetWidth())
-
-		local absorbBar = CreateFrame('StatusBar', nil, self.Health)
-		absorbBar:SetPoint('TOP')
-		absorbBar:SetPoint('BOTTOM')
-		absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
-		absorbBar:SetStatusBarTexture(C.Assets.stripe_tex)
-		absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
-		absorbBar:SetStatusBarColor(.8, .8, .8, .8)
-		absorbBar:SetWidth(self:GetWidth())
-
-		local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
-		overAbsorb:SetPoint('TOP', self.Health, 'TOPRIGHT', -1, 4)
-		overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
-		overAbsorb:SetWidth(12)
-		overAbsorb:SetTexture(C.AssetsPath .. 'textures\\spark_tex')
-		overAbsorb:SetBlendMode('ADD')
-
-		self.HealthPrediction = {
-			myBar = myBar,
-			otherBar = otherBar,
-			absorbBar = absorbBar,
-			overAbsorb = overAbsorb,
-			maxOverflow = 1,
-			frequentUpdates = true
-		}
+	if not C.DB.unitframe.heal_prediction then
+		return
 	end
+
+	local colors = C.ClassColors[C.MyClass] or C.ClassColors['PRIEST']
+
+	local myBar = CreateFrame('StatusBar', nil, self.Health)
+	myBar:SetPoint('TOP')
+	myBar:SetPoint('BOTTOM')
+	myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+	myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
+	myBar:GetStatusBarTexture():SetBlendMode('BLEND')
+	--myBar:SetStatusBarColor(0, .8, .8, .6)
+	myBar:SetStatusBarColor(colors.r/2, colors.g/2, colors.b/2, .85)
+	myBar:SetWidth(self:GetWidth())
+
+	local otherBar = CreateFrame('StatusBar', nil, self.Health)
+	otherBar:SetPoint('TOP')
+	otherBar:SetPoint('BOTTOM')
+	otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+	otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
+	otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
+	--otherBar:SetStatusBarColor(0, .6, .6, .6)
+	otherBar:SetStatusBarColor(colors.r/2, colors.g/2, colors.b/2, .85)
+	otherBar:SetWidth(self:GetWidth())
+
+	local absorbBar = CreateFrame('StatusBar', nil, self.Health)
+	absorbBar:SetPoint('TOP')
+	absorbBar:SetPoint('BOTTOM')
+	absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+	absorbBar:SetStatusBarTexture(C.Assets.stripe_tex)
+	absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
+	absorbBar:SetStatusBarColor(.8, .8, .8, .8)
+	absorbBar:SetWidth(self:GetWidth())
+
+	local overAbsorb = self.Health:CreateTexture(nil, 'OVERLAY')
+	overAbsorb:SetPoint('TOP', self.Health, 'TOPRIGHT', -1, 4)
+	overAbsorb:SetPoint('BOTTOM', self.Health, 'BOTTOMRIGHT', -1, -4)
+	overAbsorb:SetWidth(12)
+	overAbsorb:SetTexture(C.AssetsPath .. 'textures\\spark_tex')
+	overAbsorb:SetBlendMode('ADD')
+
+	self.HealthPrediction = {
+		myBar = myBar,
+		otherBar = otherBar,
+		absorbBar = absorbBar,
+		overAbsorb = overAbsorb,
+		maxOverflow = 1,
+		frequentUpdates = true
+	}
 end
 
 --[[ Power ]]

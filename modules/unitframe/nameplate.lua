@@ -20,7 +20,7 @@ local INTERRUPTED = INTERRUPTED
 --[[ CVars ]]
 function NAMEPLATE:PlateInsideView()
 	if C.DB.nameplate.inside_view then
-		_G.SetCVar('nameplateOtherTopInset', .05)
+		_G.SetCVar('nameplateOtherTopInset', .08)
 		_G.SetCVar('nameplateOtherBottomInset', .08)
 	else
 		_G.SetCVar('nameplateOtherTopInset', -1)
@@ -218,7 +218,8 @@ function NAMEPLATE:UpdateColor(_, unit)
 		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
 			r, g, b = unpack(oUF.colors.tapped)
 		else
-			r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
+			--r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
+			r, g, b = UnitSelectionColor(unit, true)
 			if status and (C.DB.nameplate.tank_mode or C.Role == 'Tank') then
 				if status == 3 then
 					if C.Role ~= 'Tank' and revertThreat then
@@ -303,7 +304,7 @@ function NAMEPLATE:UpdateTargetChange()
 	end
 
 	if C.DB.nameplate.colored_target then
-		NAMEPLATE.UpdateColor(self, _, unit)
+		NAMEPLATE.UpdateThreatColor(self, _, unit)
 	end
 end
 
@@ -339,7 +340,6 @@ function NAMEPLATE:AddTargetIndicator(self)
 	texBot:SetVertexColor(r, g, b, .85)
 
 	self.TargetIndicator = frame
-	self.TargetIndicator.__owner = self
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
 end
 
@@ -425,9 +425,14 @@ function NAMEPLATE:AddClassifyIndicator(self)
 end
 
 function NAMEPLATE:UpdateUnitClassify(unit)
+	local isBoss = UnitLevel(unit) == -1
+	local class = UnitClassification(unit)
+
 	if self.ClassifyIndicator then
-		local class = UnitClassification(unit)
-		if class and classify[class] then
+		if isBoss then
+			self.ClassifyIndicator:SetAtlas('VignetteKillElite')
+			self.ClassifyIndicator:Show()
+		elseif class and classify[class] then
 			local atlas, desature = unpack(classify[class])
 			self.ClassifyIndicator:SetAtlas(atlas)
 			self.ClassifyIndicator:SetDesaturated(desature)

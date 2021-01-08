@@ -405,7 +405,7 @@ function UNITFRAME:SpawnParty()
 	local partyReverse = C.DB.unitframe.party_reverse
 	local partyGap = C.DB.unitframe.party_gap
 	local showSolo = C.DB.unitframe.show_solo
-	local groupingOrder = partyHorizon and 'TANK,HEALER,DAMAGER,NONE' or 'NONE,DAMAGER,HEALER,TANK'
+	local groupingOrder = partyHorizon and 'TANK,HEALER,DAMAGER,NONE' or 'TANK,HEALER,DAMAGER,NONE'
 	local moverWidth = partyHorizon and partyWidth * 5 + partyGap * 4 or partyWidth
 	local moverHeight = partyHorizon and partyHeight or partyHeight * 5 + partyGap * 4
 	local partyMover
