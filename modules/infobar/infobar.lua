@@ -141,7 +141,7 @@ function INFOBAR:addButton(text, position, width, clickFunc)
 
 	return bu
 end
-bar.addButton = addButton
+
 
 
 function INFOBAR:OnLogin()
@@ -179,7 +179,7 @@ function INFOBAR:OnLogin()
 
 	self:Stats()
 	self:SpecTalent()
-	self:Durability()
+	self:CreateDurabilityButton()
 	self:Guild()
 	self:Friends()
 	self:Report()
