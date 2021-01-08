@@ -68,22 +68,15 @@ function MAP:CreateCalendar()
 end
 
 function MAP:CreateDifficultyFlag()
-	--[[ local flags = {'MiniMapInstanceDifficulty', 'GuildInstanceDifficulty', 'MiniMapChallengeMode'}
-	for _, v in pairs(flags) do
-		local flag = _G[v]
-		flag:ClearAllPoints()
-		flag:SetPoint('TOPLEFT', Minimap, 0, -offset - 10)
-		flag:SetScale(.9)
-	end ]]
 	local diffFlag = CreateFrame('Frame', nil, Minimap)
 	diffFlag:SetSize(40, 40)
 	diffFlag:SetPoint('TOPLEFT', Minimap, 0, -offset)
 	diffFlag:SetFrameLevel(Minimap:GetFrameLevel() + 2)
-	diffFlag.texture = diffFlag:CreateTexture(nil, 'OVERLAY')
-	diffFlag.texture:SetAllPoints(diffFlag)
-	diffFlag.texture:SetTexture(C.Assets.diff_tex)
-	diffFlag.texture:SetVertexColor(C.r, C.g, C.b)
-	diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 12, nil, '', nil, true, 'CENTER', 0, 0)
+	-- diffFlag.texture = diffFlag:CreateTexture(nil, 'OVERLAY')
+	-- diffFlag.texture:SetAllPoints(diffFlag)
+	-- diffFlag.texture:SetTexture(C.Assets.diff_tex)
+	-- diffFlag.texture:SetVertexColor(C.r, C.g, C.b)
+	diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 11, nil, '', nil, true, 'CENTER', 0, 0)
 	Minimap.DiffFlag = diffFlag
 	Minimap.DiffText = diffFlag.text
 end
@@ -92,78 +85,66 @@ function MAP:UpdateDifficultyFlag()
 	local diffText = Minimap.DiffText
 	local inInstance, instanceType = IsInInstance()
 	local difficulty = select(3, GetInstanceInfo())
-	local num = select(9, GetInstanceInfo())
-	local mplus = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
+	local numplayers = select(9, GetInstanceInfo())
+	local mplusdiff = select(1, C_ChallengeMode.GetActiveKeystoneInfo()) or ''
+
+	local norm = format('|cff1eff00%s|r', 'N')
+	local hero = format('|cff0070dd%s|r', 'H')
+	local myth = format('|cffa335ee%s|r', 'M')
+	local lfr = format('|cffff8000s|r', 'LFR')
 
 	if instanceType == 'party' or instanceType == 'raid' or instanceType == 'scenario' then
-		if difficulty == 1 then
-			diffText:SetText('5N')
-		elseif difficulty == 2 then
-			diffText:SetText('5H')
-		elseif difficulty == 3 then
-			diffText:SetText('10N')
-		elseif difficulty == 4 then
-			-- 5 普通十人 153 十人海島
-			diffText:SetText('25N')
-		elseif difficulty == 5 then
-			diffText:SetText('10H')
-		elseif difficulty == 6 then
-			-- Old LFR (before SOO)
-			diffText:SetText('25H')
-		elseif difficulty == 7 then
-			-- Challenge Mode and Mythic+
-			diffText:SetText('LFR')
-		elseif difficulty == 8 then
-			diffText:SetText('M' .. mplus)
-		elseif difficulty == 9 then
-			-- 11 MOP英雄事件 39 BFA英雄海嶼
-			diffText:SetText('40R')
-		elseif difficulty == 11 or difficulty == 39 then
-			-- 12 MOP普通事件 38 BFA普通海嶼
-			diffText:SetText('3H')
-		elseif difficulty == 12 and difficulty == 38 then
-			-- 40 BFA傳奇海嶼
-			diffText:SetText('3N')
-		elseif difficulty == 40 then
-			-- Flex normal raid
-			diffText:SetText('3M')
-		elseif difficulty == 14 then
-			-- Flex heroic raid
-			diffText:SetText(num .. 'N')
-		elseif difficulty == 15 then
-			-- Mythic raid since WOD
-			diffText:SetText(num .. 'H')
-		elseif difficulty == 16 then
-			-- LFR
-			diffText:SetText('M')
-		elseif difficulty == 17 then
-			-- 18 Event 19 Event 20 Event Scenario(劇情事件) 30 Event 152 幻象
-			diffText:SetText(num .. 'L')
-		elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then
-			diffText:SetText('E')
-		elseif difficulty == 23 then
-			-- 24 Timewalking(地城時光) 33 Timewalking(團隊時光) 151 隨機團隊時光
-			diffText:SetText('5M')
-		elseif difficulty == 24 or difficulty == 33 then
-			-- 25 World PvP Scenario 32 World PvP Scenario 34 PVP 45 PVP
-			diffText:SetText('T')
-		elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then
-			-- 29 pvevp事件(這什麼玩意?)
-			diffText:SetText('PVP')
-		elseif difficulty == 29 then
-			-- 147 普通戰爭前線
+		if (difficulty == 1) then -- Normal
+			diffText:SetText('5' .. norm)
+		elseif difficulty == 2 then -- Heroic
+			diffText:SetText('5' .. hero)
+		elseif difficulty == 3 then -- 10 Player
+			diffText:SetText('10' .. norm)
+		elseif difficulty == 4 then -- 25 Player
+			diffText:SetText('25' .. norm)
+		elseif difficulty == 5 then -- 10 Player (Heroic)
+			diffText:SetText('10' .. hero)
+		elseif difficulty == 6 then -- 25 Player (Heroic)
+			diffText:SetText('25' .. hero)
+		elseif difficulty == 7 then -- LFR (Legacy)
+			diffText:SetText(lfr)
+		elseif difficulty == 8 then -- Mythic Keystone
+			diffText:SetText(format('|cffff0000%s|r', 'M+') .. mplusdiff)
+		elseif difficulty == 9 then -- 40 Player
+			diffText:SetText('40')
+		elseif difficulty == 11 or difficulty == 39 then -- Heroic Scenario / Heroic
+			diffText:SetText(format('%s %s', hero, 'Scen'))
+		elseif difficulty == 12 or difficulty == 38 then -- Normal Scenario / Normal
+			diffText:SetText(format('%s %s', norm, 'Scen'))
+		elseif difficulty == 40 then -- Mythic Scenario
+			diffText:SetText(format('%s %s', myth, 'Scen'))
+		elseif difficulty == 14 then -- Normal Raid
+			diffText:SetText(numplayers .. norm)
+		elseif difficulty == 15 then -- Heroic Raid
+			diffText:SetText(numplayers .. hero)
+		elseif difficulty == 16 then -- Mythic Raid
+			diffText:SetText(numplayers .. myth)
+		elseif difficulty == 17 then -- LFR
+			diffText:SetText(numplayers .. lfr)
+		elseif difficulty == 18 or difficulty == 19 or difficulty == 20 or difficulty == 30 then -- Event / Event Scenario
+			diffText:SetText('EScen')
+		elseif difficulty == 23 then -- Mythic Party
+			diffText:SetText('5' .. myth)
+		elseif difficulty == 24 or difficulty == 33 then -- Timewalking /Timewalking Raid
+			diffText:SetText('TW')
+		elseif difficulty == 25 or difficulty == 32 or difficulty == 34 or difficulty == 45 then -- World PvP Scenario / PvP / PvP Heroic
+			diffText:SetText(format('|cffFFFF00%s |r', 'PvP'))
+		elseif difficulty == 29 then -- PvEvP Scenario
 			diffText:SetText('PvEvP')
-		elseif difficulty == 147 then
-			-- 147 英雄戰爭前線
+		elseif difficulty == 147 then -- Normal Scenario (Warfronts)
 			diffText:SetText('WF')
-		elseif difficulty == 149 then
-			diffText:SetText('HWF')
+		elseif difficulty == 149 then -- Heroic Scenario (Warfronts)
+			diffText:SetText(format('|cffff7d0aH|r%s', 'WF'))
 		end
 	elseif instanceType == 'pvp' or instanceType == 'arena' then
-		diffText:SetText('PVP')
+		diffText:SetText(format('|cffFFFF00%s|r', 'PvP'))
 	else
-		-- just notice you are in dungeon
-		diffText:SetText('D')
+		diffText:SetText('')
 	end
 
 	if not inInstance then
@@ -330,7 +311,7 @@ function MAP:Minimap_OnMouseUp(btn)
 			UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
 			return
 		end
-		EasyMenu(MAP.MenuList, F.EasyMenu, self, 0, 0, 'MENU', 3)
+		EasyMenu(MAP.MenuList, F.EasyMenu, 'cursor', 0, 0, 'MENU', 3)
 	elseif btn == 'RightButton' then
 		ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self)
 	else
@@ -413,7 +394,7 @@ function MAP:Minimap()
 		'MiniMapTracking',
 		'MiniMapInstanceDifficulty',
 		'GuildInstanceDifficulty',
-		'MiniMapChallengeMode',
+		'MiniMapChallengeMode'
 	}
 
 	for _, v in pairs(frames) do
