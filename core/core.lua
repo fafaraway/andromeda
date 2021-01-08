@@ -70,4 +70,5 @@ do
 
 	F:AddLib('RangeCheck', 'LibRangeCheck-2.0')
 	F:AddLib('Base64', 'LibBase64-1.0')
+	F:AddLib('LibDropDown', 'LibDropDown')
 end
