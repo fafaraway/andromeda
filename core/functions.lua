@@ -60,7 +60,7 @@ do
 		elseif s > C.DB.cooldown.decimal_countdown then
 			return format('|cffffe700%d|r', s), s - floor(s) -- yellow
 		else
-			if C.DB.cooldown.decimal then
+			if C.DB.cooldown.decimal_countdown then
 				return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
 			else
 				return format('|cfffd3612%d|r', s + .5), s - floor(s)
@@ -1392,18 +1392,16 @@ do
 		self:SetBackdrop(nil)
 		F.StripTextures(self)
 
-		local bd = F.CreateBDFrame(self, .45, true)
-		bd:SetPoint('TOPLEFT', 14, -2)
-		bd:SetPoint('BOTTOMRIGHT', -15, 3)
-		bd:SetBackdropBorderColor(.2, .2, .2)
-		bd:SetFrameStrata('BACKGROUND')
-		F.CreateSD(bd)
+		local bg = F.CreateBDFrame(self, .45, true)
+		bg:SetPoint('TOPLEFT', 14, -2)
+		bg:SetPoint('BOTTOMRIGHT', -15, 3)
+		bg:SetBackdropBorderColor(.2, .2, .2)
+		F.CreateSD(bg)
 
 		local thumb = self:GetThumbTexture()
-		thumb:SetHeight(self:GetHeight() + 12)
-		thumb:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]])
-		thumb:SetVertexColor(1, 1, 1, .5)
+		thumb:SetTexture(C.Assets.spark_tex)
 		thumb:SetBlendMode('ADD')
+
 		if vertical then
 			thumb:SetRotation(rad(90))
 		end
