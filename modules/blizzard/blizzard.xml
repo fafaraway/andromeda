@@ -6,7 +6,7 @@
 	<Script file="character.lua"/>
 	<Script file="collections.lua"/>
 	<Script file="colors.lua"/>
-	<!-- <Script file="colorpicker.lua"/> -->
+	<Script file="colorpicker.lua"/>
 	<Script file="errors.lua"/>
 	<Script file="fixes.lua"/>
 	<Script file="friends.lua"/>
