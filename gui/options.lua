@@ -200,7 +200,7 @@ GUI.OptionsList = {
 		{3, 'actionbar', 'scale', L.GUI.ACTIONBAR.SCALE, nil, {.5, 2, .1}, UpdateActionBarScale},
 		{},
 		{1, 'cooldown', 'enable', L.GUI.COOLDOWN.ENABLE},
-		{1, 'cooldown', 'use_decimal', L.GUI.COOLDOWN.USE_DECIMAL, true},
+		{1, 'cooldown', 'decimal_countdown', L.GUI.COOLDOWN.DECIMAL_COUNTDOWN, true},
 		{1, 'cooldown', 'override_weakauras', L.GUI.COOLDOWN.OVERRIDE_WEAKAURAS},
 		{1, 'cooldown', 'pulse', L.GUI.COOLDOWN.PULSE, true},
 		{},
@@ -360,17 +360,14 @@ GUI.OptionsList = {
 		{},
 		{1, 'nameplate', 'friendly_class_color', L.GUI.NAMEPLATE.FRIENDLY_CLASS_COLOR},
 		{1, 'nameplate', 'hostile_class_color', L.GUI.NAMEPLATE.HOSTILE_CLASS_COLOR, true},
-
 		{1, 'nameplate', 'colored_target', L.GUI.NAMEPLATE.COLORED_TARGET, nil, nil, nil, L.GUI.NAMEPLATE.COLORED_TARGET_TIP},
 		{5, 'nameplate', 'target_color', L.GUI.NAMEPLATE.TARGET_COLOR},
-
 		{1, 'nameplate', 'tank_mode', L.GUI.NAMEPLATE.TANK_MODE, nil, nil, nil, L.GUI.NAMEPLATE.TANK_MODE_TIP},
 		{1, 'nameplate', 'dps_revert_threat', L.GUI.NAMEPLATE.DPS_REVERT_THREAT, true, nil, nil, L.GUI.NAMEPLATE.DPS_REVERT_THREAT_TIP},
 		{5, 'nameplate', 'secure_color', L.GUI.NAMEPLATE.SECURE_COLOR},
 		{5, 'nameplate', 'trans_color', L.GUI.NAMEPLATE.TRANS_COLOR, 1},
 		{5, 'nameplate', 'insecure_color', L.GUI.NAMEPLATE.INSECURE_COLOR, 2},
 		{5, 'nameplate', 'off_tank_color', L.GUI.NAMEPLATE.OFF_TANK_COLOR, 3},
-
 		{1, 'nameplate', 'colored_custom_unit', L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT, nil, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT_TIP},
 		{5, 'nameplate', 'custom_color', L.GUI.NAMEPLATE.CUSTOM_COLOR},
 		{2, 'nameplate', 'custom_unit_list', L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST, true, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST_TIP},

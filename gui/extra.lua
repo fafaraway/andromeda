@@ -585,6 +585,10 @@ function GUI:SetupCustomClassColor(parent)
 	end
 end
 
+local function updatePartyWatcherSpells()
+	F.UNITFRAME:UpdatePartyWatcherSpells()
+end
+
 function GUI:SetupPartySpellCooldown(parent)
 	local guiName = 'FreeUI_GUI_PartySpell_Setup'
 	toggleExtraGUI(guiName)
@@ -593,6 +597,7 @@ function GUI:SetupPartySpellCooldown(parent)
 	end
 
 	local panel = createExtraGUI(parent, guiName, L.GUI.GROUPFRAME.PARTY_SPELL_SETTING_HEADER, true)
+	panel:SetScript('OnHide', updatePartyWatcherSpells)
 
 	local barTable = {}
 	local ARCANE_TORRENT = GetSpellInfo(25046)
@@ -615,7 +620,11 @@ function GUI:SetupPartySpellCooldown(parent)
 			'OnClick',
 			function()
 				bar:Hide()
-				FREE_ADB['party_spells_list'][spellID] = nil
+				if C.PartySpellsList[spellID] then
+					FREE_ADB['party_spells_list'][spellID] = 0
+				else
+					FREE_ADB['party_spells_list'][spellID] = nil
+				end
 				barTable[spellID] = nil
 				sortBars(barTable)
 			end
@@ -642,8 +651,9 @@ function GUI:SetupPartySpellCooldown(parent)
 	local scroll = GUI:CreateScroll(frame, 200, 430)
 	scroll:ClearAllPoints()
 	scroll:SetPoint('TOPLEFT', 10, -90)
-	scroll.reset = F.CreateButton(frame, 60, 24, RESET)
+	scroll.reset = F.CreateButton(frame, 46, 24, RESET)
 	scroll.reset:SetPoint('TOPLEFT', 10, -60)
+	scroll.reset.text:SetTextColor(1, 0, 0)
 	StaticPopupDialogs['PARTY_SPELL_COOLDOWN_RESET'] = {
 		text = L.GUI.GROUPFRAME.PARTY_SPELL_RESET_WARNING,
 		button1 = YES,
@@ -671,7 +681,8 @@ function GUI:SetupPartySpellCooldown(parent)
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
 			return
 		end
-		if FREE_ADB['party_spells_list'][spellID] then
+
+		if FREE_ADB['party_spells_list'][spellID] and FREE_ADB['party_spells_list'][spellID] ~= 0 then
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
 			return
 		end
@@ -681,7 +692,7 @@ function GUI:SetupPartySpellCooldown(parent)
 		clearEdit(options)
 	end
 
-	scroll.add = F.CreateButton(frame, 60, 24, ADD)
+	scroll.add = F.CreateButton(frame, 46, 24, ADD)
 	scroll.add:SetPoint('TOPRIGHT', -30, -60)
 	scroll.add:SetScript(
 		'OnClick',
@@ -690,8 +701,8 @@ function GUI:SetupPartySpellCooldown(parent)
 		end
 	)
 
-	scroll.clear = F.CreateButton(frame, 60, 24, KEY_NUMLOCK_MAC)
-	scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -10, 0)
+	scroll.clear = F.CreateButton(frame, 46, 24, KEY_NUMLOCK_MAC)
+	scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
 	scroll.clear:SetScript(
 		'OnClick',
 		function()
@@ -699,8 +710,68 @@ function GUI:SetupPartySpellCooldown(parent)
 		end
 	)
 
+	local menuList = {}
+	local function addIcon(texture)
+		texture = texture and '|T' .. texture .. ':12:12:0:0:50:50:4:46:4:46|t ' or ''
+		return texture
+	end
+	local function AddSpellFromPreset(_, spellID, duration)
+		options[1]:SetText(spellID)
+		options[2]:SetText(duration)
+		DropDownList1:Hide()
+	end
+
+	local index = 1
+	for class, value in pairs(C.PartySpellsDB) do
+		local color = F.RGBToHex(F.ClassColor(class))
+		local localClassName = LOCALIZED_CLASS_NAMES_MALE[class]
+		menuList[index] = {text = color .. localClassName, notCheckable = true, hasArrow = true, menuList = {}}
+
+		for spellID, duration in pairs(value) do
+			local spellName, _, texture = GetSpellInfo(spellID)
+			if spellName then
+				tinsert(
+					menuList[index].menuList,
+					{
+						text = spellName,
+						icon = texture,
+						tCoordLeft = .08,
+						tCoordRight = .92,
+						tCoordTop = .08,
+						tCoordBottom = .92,
+						arg1 = spellID,
+						arg2 = duration,
+						func = AddSpellFromPreset,
+						notCheckable = true
+					}
+				)
+			end
+		end
+		index = index + 1
+	end
+	scroll.preset = F.CreateButton(frame, 46, 24, L.GUI.GROUPFRAME.PARTY_SPELL_PRESET)
+	scroll.preset:SetPoint('RIGHT', scroll.clear, 'LEFT', -5, 0)
+	scroll.preset.text:SetTextColor(1, .8, 0)
+	scroll.preset:SetScript(
+		'OnClick',
+		function(self)
+			EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
+		end
+	)
+
+	for spellID, duration in pairs(C.PartySpellsList) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modDuration = FREE_ADB['party_spells_list'][spellID]
+			if not modDuration or modDuration > 0 then
+				createBar(scroll.child, spellID, duration)
+			end
+		end
+	end
 	for spellID, duration in pairs(FREE_ADB['party_spells_list']) do
-		createBar(scroll.child, spellID, duration)
+		if duration > 0 then
+			createBar(scroll.child, spellID, duration)
+		end
 	end
 end
 
