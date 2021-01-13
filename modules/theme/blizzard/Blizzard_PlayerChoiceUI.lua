@@ -89,7 +89,7 @@ C.Themes["Blizzard_PlayerChoiceUI"] = function()
 			for button in optionFrameRewards.ItemRewardsPool:EnumerateActive() do
 				if not button.styled then
 					button.Name:SetTextColor(0, 0, 0)
-					button.IconBorder:SetAlpha(0)
+					F.HideObject(button.IconBorder)
 					F.ReskinIcon(button.Icon)
 
 					button.styled = true
