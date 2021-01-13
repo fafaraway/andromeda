@@ -305,7 +305,8 @@ L.GUI = {
 		['COOLDOWN_PULSE'] = 'cooldown pulse',
 		['QUEST_BUTTON'] = 'quest button',
 		['OBJECTIVE_TRACKER'] = 'objective tracker',
-		['MAW_THREAT_BAR'] = 'Maw threat bar'
+		['MAW_THREAT_BAR'] = 'Maw threat bar',
+		['PLAYER_PLATE'] = 'Player plate'
 	},
 	['PROFILE'] = {
 		['NAME'] = 'Profles',
@@ -513,7 +514,7 @@ L.GUI = {
 	},
 	['COOLDOWN'] = {
 		['ENABLE'] = 'Cooldowns timer',
-		['USE_DECIMAL'] = 'Decimal for cooldowns in 3s',
+		['DECIMAL_COUNTDOWN'] = 'Decimal for cooldowns in 3s',
 		['OVERRIDE_WEAKAURAS'] = 'Override WeakAuras cooldowns',
 		['PULSE'] = 'Pulse cooldowns'
 	},
@@ -713,6 +714,7 @@ L.GUI = {
 		['PARTY_SPELL_SYNC_TIP'] = 'If enabled, the cooldown status would sync with group members who using FreeUI or ZenTracker(WA).|nThis might decrease your performance.',
 		['PARTY_SPELL_SETTING_HEADER'] = 'Party spells cooldown setting',
 		['PARTY_SPELL_RESET_WARNING'] = 'Are you sure to restore default list?',
+		['PARTY_SPELL_PRESET'] = 'Preset',
 		['INCOMPLETE_INPUT'] = 'You need to complete all * optinos.',
 		['INCORRECT_SPELLID'] = 'Incorrect SpellID.',
 		['EXISTING_ID'] = 'The SpellID is existed.',
