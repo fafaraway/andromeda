@@ -223,7 +223,7 @@ do
 			return
 		end
 
-		F:Delay(1, _G.Screenshot)
+		F:Delay(2, _G.Screenshot)
 	end
 
 	function MISC:AutoScreenshot()
