@@ -8,6 +8,7 @@
 	<Script file="extraquestbutton.lua"/>
 	<Script file="grouptool.lua"/>
 	<Script file="itemlevel.lua"/>
+	<Script file="proposaltimer.lua"/>
 	<Script file="quickquest.lua"/>
 	<Script file="screensaver.lua"/>
 </Ui>
