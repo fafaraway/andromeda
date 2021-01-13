@@ -398,6 +398,9 @@ local function CreatePartyStyle(self)
 end
 
 function UNITFRAME:SpawnParty()
+	UNITFRAME:SyncWithZenTracker()
+	UNITFRAME:UpdatePartyWatcherSpells()
+
 	oUF:RegisterStyle('Party', CreatePartyStyle)
 	oUF:SetActiveStyle 'Party'
 	local partyWidth, partyHeight = C.DB.unitframe.party_width, C.DB.unitframe.party_height
@@ -458,6 +461,7 @@ function UNITFRAME:SpawnParty()
 	)
 	party:ClearAllPoints()
 	party:SetPoint('BOTTOMLEFT', partyMover)
+	UNITFRAME.PartyMover = partyMover
 end
 
 local function CreateRaidStyle(self)

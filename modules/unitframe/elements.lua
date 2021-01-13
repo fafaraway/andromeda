@@ -263,22 +263,12 @@ local function PostUpdateHealth(self, unit, cur, max)
 	end
 end
 
-function UNITFRAME:UpdateRaidHealthMethod()
-	for _, frame in pairs(oUF.objects) do
-		if frame.unitStyle == 'raid' then
-			frame:SetHealthUpdateMethod(C.DB.unitframe.group_health_frequen)
-			frame:SetHealthUpdateSpeed(C.DB.unitframe.group_health_frequency)
-			frame.Health:ForceUpdate()
-		end
-	end
-end
-
 function UNITFRAME:AddHealthBar(self)
 	local style = self.unitStyle
 	local isParty = (style == 'party')
 	local isRaid = (style == 'raid')
 	local isBoss = (style == 'boss')
-	local isBaseUnits = F.MultiCheck(style, 'player', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
+	local isBaseUnits = F.MultiCheck(style, 'player', 'playerplate', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
 
 	local health = CreateFrame('StatusBar', nil, self)
 	health:SetFrameStrata('LOW')
@@ -334,7 +324,7 @@ function UNITFRAME:AddHealthPrediction(self)
 	myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 	myBar:GetStatusBarTexture():SetBlendMode('BLEND')
 	--myBar:SetStatusBarColor(0, .8, .8, .6)
-	myBar:SetStatusBarColor(colors.r/2, colors.g/2, colors.b/2, .85)
+	myBar:SetStatusBarColor(colors.r / 2, colors.g / 2, colors.b / 2, .85)
 	myBar:SetWidth(self:GetWidth())
 
 	local otherBar = CreateFrame('StatusBar', nil, self.Health)
@@ -344,7 +334,7 @@ function UNITFRAME:AddHealthPrediction(self)
 	otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 	otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
 	--otherBar:SetStatusBarColor(0, .6, .6, .6)
-	otherBar:SetStatusBarColor(colors.r/2, colors.g/2, colors.b/2, .85)
+	otherBar:SetStatusBarColor(colors.r / 2, colors.g / 2, colors.b / 2, .85)
 	otherBar:SetWidth(self:GetWidth())
 
 	local absorbBar = CreateFrame('StatusBar', nil, self.Health)
@@ -381,10 +371,10 @@ local function PostUpdatePower(power, unit, cur, min, max)
 end
 
 local function UpdatePowerColor(power, unit)
-	local style = power.__owner.unitStyle
-	if style ~= 'player' then
-		return
-	end
+	-- local style = power.__owner.unitStyle
+	-- if style ~= 'player' or style ~= 'playerplate' then
+	-- 	return
+	-- end
 
 	local cur = UnitPower(unit)
 	if C.MyClass == 'DEMONHUNTER' and unit == 'player' then
@@ -434,6 +424,7 @@ function UNITFRAME:AddPowerBar(self)
 	local bg = power:CreateTexture(nil, 'BACKGROUND')
 	bg:SetAllPoints()
 	bg:SetTexture(C.Assets.bd_tex)
+	bg:SetAlpha(.2)
 	bg.multiplier = .1
 	power.bg = bg
 
@@ -448,7 +439,10 @@ function UNITFRAME:AddPowerBar(self)
 	end
 
 	self.Power.PostUpdate = PostUpdatePower
-	self.Power.PostUpdateColor = UpdatePowerColor
+
+	if style == 'player' or style == 'playerplate' then
+		self.Power.PostUpdateColor = UpdatePowerColor
+	end
 end
 
 --[[ Alternative power ]]
@@ -1344,19 +1338,35 @@ function UNITFRAME:AddCastBar(self)
 end
 
 --[[ Class power ]]
-local function PostUpdateClassPower(element, cur, max, diff, powerType)
-	local maxWidth, gap = C.DB.unitframe.player_width, 3
+local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
+	local style = element.__owner.unitStyle
+	local gap = 3
+	local maxWidth
 
-	if diff then
+	if style == 'player' then
+		maxWidth = C.DB.unitframe.player_width
+	else
+		maxWidth = C.DB.nameplate.pp_width
+	end
+
+	if hasMaxChanged then
 		for i = 1, max do
 			element[i]:SetWidth((maxWidth - (max - 1) * gap) / max)
 		end
 	end
 
-	if max then
-		local lastBar = element[max]
+	element.thisColor = cur == max and 1 or 2
+	if not element.prevColor or element.prevColor ~= element.thisColor then
 		local r, g, b = unpack(lastBarColors[C.MyClass])
-		lastBar:SetStatusBarColor(r, g, b)
+		if element.thisColor == 2 then
+			local color = element.__owner.colors.power[powerType]
+			r, g, b = color[1], color[2], color[3]
+		end
+		for i = 1, #element do
+			element[i]:SetStatusBarColor(r, g, b)
+		end
+
+		element.prevColor = element.thisColor
 	end
 end
 
@@ -1808,13 +1818,39 @@ function UNITFRAME:AddPortrait(self)
 end
 
 --[[ Party spells ]]
-function UNITFRAME:UpdatePartySpells()
-	if not next(FREE_ADB['party_spells_list']) then
-		for spellID, duration in pairs(C.PartySpells) do
-			local name = GetSpellInfo(spellID)
-			if name then
-				FREE_ADB['party_spells_list'][spellID] = duration
+function UNITFRAME:CheckPartySpells()
+	for spellID, duration in pairs(C.PartySpellsList) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modDuration = FREE_ADB['party_spells_list'][spellID]
+			if modDuration and modDuration == duration then
+				FREE_ADB['party_spells_list'][spellID] = nil
 			end
+		else
+			if C.isDeveloper then
+				print('Invalid partyspell ID: ' .. spellID)
+			end
+		end
+	end
+end
+
+local partySpells = {}
+function UNITFRAME:UpdatePartyWatcherSpells()
+	wipe(partySpells)
+
+	for spellID, duration in pairs(C.PartySpellsList) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modDuration = FREE_ADB['party_spells_list'][spellID]
+			if not modDuration or modDuration > 0 then
+				partySpells[spellID] = duration
+			end
+		end
+	end
+
+	for spellID, duration in pairs(FREE_ADB['party_spells_list']) do
+		if duration > 0 then
+			partySpells[spellID] = duration
 		end
 	end
 end
@@ -1924,7 +1960,7 @@ function UNITFRAME:AddPartySpells(self)
 	end
 
 	buttons.__max = maxIcons
-	buttons.PartySpells = C.PartySpellsList
+	buttons.PartySpells = partySpells
 	buttons.TalentCDFix = C.TalentCDFixList
 	self.PartyWatcher = buttons
 	if C.DB.unitframe.party_spell_sync then
@@ -1976,7 +2012,7 @@ function UNITFRAME:AddHealthValueText(self)
 	end
 	healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
-	if self.unitStyle == 'player' then
+	if self.unitStyle == 'player' or self.unitStyle == 'playerplate' then
 		self:Tag(healthValue, '[free:health]')
 	elseif self.unitStyle == 'target' then
 		self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')

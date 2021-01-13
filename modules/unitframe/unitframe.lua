@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 
-
 local RaidDebuffs = {}
 function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 	local instName = EJ_GetInstanceInfo(instID)
@@ -25,17 +24,19 @@ function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 	RaidDebuffs[instName][spellID] = level
 end
 
-
-
 function UNITFRAME:OnLogin()
 	F:SetSmoothingAmount(.3)
 
 	UNITFRAME:UpdateColors()
 
-	if not FREE_ADB['corner_buffs'][C.MyClass] then FREE_ADB['corner_buffs'][C.MyClass] = {} end
+	if not FREE_ADB['corner_buffs'][C.MyClass] then
+		FREE_ADB['corner_buffs'][C.MyClass] = {}
+	end
 	if not next(FREE_ADB['corner_buffs'][C.MyClass]) then
 		F.CopyTable(C.CornerBuffsList[C.MyClass], FREE_ADB['corner_buffs'][C.MyClass])
 	end
+
+	self:CheckPartySpells()
 
 	-- Filter bloodlust for healers
 	local bloodlustList = {57723, 57724, 80354, 264689}
@@ -77,8 +78,6 @@ function UNITFRAME:OnLogin()
 		self:SpawnArena()
 	end
 
-
-
 	if not C.DB.unitframe.enable_group then
 		return
 	end
@@ -96,39 +95,63 @@ function UNITFRAME:OnLogin()
 	self:SpawnRaid()
 	self:ClickCast()
 
-	--UNITFRAME:UpdateRaidHealthMethod()
-
-	if UNITFRAME.RaidMover then
-		if not C.DB.unitframe.spec_position then
-			return
-		end
-
+	if C.DB.unitframe.spec_position then
 		local function UpdateSpecPos(event, ...)
 			local unit, _, spellID = ...
-			if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'PLAYER_ENTERING_WORLD' then
-				if not GetSpecialization() then
+			if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'ON_LOGIN' then
+				local specIndex = GetSpecialization()
+				if not specIndex then
 					return
 				end
-				local specIndex = GetSpecialization()
+
 				if not C.DB['ui_anchor']['raid_position' .. specIndex] then
 					C.DB['ui_anchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
 				end
+
 				UNITFRAME.RaidMover:ClearAllPoints()
 				UNITFRAME.RaidMover:SetPoint(unpack(C.DB['ui_anchor']['raid_position' .. specIndex]))
+
+				if UNITFRAME.RaidMover then
+					UNITFRAME.RaidMover:ClearAllPoints()
+					UNITFRAME.RaidMover:SetPoint(unpack(C.DB['ui_anchor']['raid_position' .. specIndex]))
+				end
+
+				if not C.DB['ui_anchor']['party_position' .. specIndex] then
+					C.DB['ui_anchor']['party_position' .. specIndex] = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
+				end
+				if UNITFRAME.PartyMover then
+					UNITFRAME.PartyMover:ClearAllPoints()
+					UNITFRAME.PartyMover:SetPoint(unpack(C.DB['ui_anchor']['party_position' .. specIndex]))
+				end
 			end
 		end
-		F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateSpecPos)
+		UpdateSpecPos('ON_LOGIN')
 		F:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED', UpdateSpecPos)
 
-		UNITFRAME.RaidMover:HookScript(
-			'OnDragStop',
-			function()
-				if not GetSpecialization() then
-					return
+		if UNITFRAME.RaidMover then
+			UNITFRAME.RaidMover:HookScript(
+				'OnDragStop',
+				function()
+					local specIndex = GetSpecialization()
+					if not specIndex then
+						return
+					end
+					C.DB['ui_anchor']['raid_position' .. specIndex] = C.DB['ui_anchor']['RaidFrame']
 				end
-				local specIndex = GetSpecialization()
-				C.DB['ui_anchor']['raid_position' .. specIndex] = C.DB['ui_anchor']['RaidFrame']
-			end
-		)
+			)
+		end
+
+		if UNITFRAME.PartyMover then
+			UNITFRAME.PartyMover:HookScript(
+				'OnDragStop',
+				function()
+					local specIndex = GetSpecialization()
+					if not specIndex then
+						return
+					end
+					C.DB['ui_anchor']['party_position' .. specIndex] = C.DB['ui_anchor']['PartyFrame']
+				end
+			)
+		end
 	end
 end

@@ -1,7 +1,6 @@
 local F, C = unpack(select(2, ...))
 local oUF = F.oUF
 
-
 local _, powerToken = _G.UnitPowerType('player')
 local reversePowers = {
 	['RAGE'] = true,
@@ -11,7 +10,7 @@ local reversePowers = {
 	['INSANITY'] = true,
 	['MAELSTROM'] = true,
 	['FURY'] = true,
-	['PAIN'] = true,
+	['PAIN'] = true
 }
 
 local function isPowerRested(token)
@@ -28,29 +27,24 @@ local unitList = {
 	['target'] = true,
 	['targettarget'] = true,
 	['focus'] = true,
-	['focustarget'] = true,
+	['focustarget'] = true
 }
 
 local function flush(self)
 	wipe(self.Fader)
 end
 
-
 local function Update(self)
 	local unit = self.unit
 	local element = self.Fader
 
 	if
-		(element.arena and (GetZonePVPInfo() == 'arena')) or
-		(element.instance and (IsInInstance() == true)) or
-		(element.combat and UnitAffectingCombat(unit)) or
-		(element.target and UnitExists('target')) or
-		(element.casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
-		(element.injured and (UnitHealth(unit) < UnitHealthMax(unit)) and not UnitIsDead(unit) and not UnitIsGhost(unit)) or
-		(element.mana and (powerToken == 'MANA' and (UnitPower('player') ~= UnitPowerMax('player')))) or
-		(element.power and (not isPowerRested(powerToken))) or
-		(element.hover and GetMouseFocus() == self)
-	then
+		(element.arena and (GetZonePVPInfo() == 'arena')) or (element.instance and (IsInInstance() == true)) or (element.combat and UnitAffectingCombat(unit)) or (element.target and UnitExists('target')) or (element.casting and (UnitCastingInfo(unit) or UnitChannelInfo(unit))) or
+			(element.injured and (UnitHealth(unit) < UnitHealthMax(unit)) and not UnitIsDead(unit) and not UnitIsGhost(unit)) or
+			(element.mana and (powerToken == 'MANA' and (UnitPower('player') ~= UnitPowerMax('player')))) or
+			(element.power and (not isPowerRested(powerToken))) or
+			(element.hover and GetMouseFocus() == self)
+	 then
 		F:UIFrameFadeIn(self, element.inDuration, self:GetAlpha(), element.maxAlpha or 1)
 
 		if _G.oUF_Pet then
@@ -66,7 +60,7 @@ local function Update(self)
 end
 
 local function Path(self, ...)
-	return (self.Fader.Override or Update) (self, ...)
+	return (self.Fader.Override or Update)(self, ...)
 end
 
 local function ForceUpdate(element)
@@ -75,7 +69,9 @@ end
 
 local function Enable(self, unit)
 	local element = self.Fader
-	if not element then return end
+	if not element then
+		return
+	end
 
 	element.__owner = self
 	element.ForceUpdate = ForceUpdate
@@ -132,7 +128,9 @@ local function Disable(self, unit)
 	if element then
 		flush(element)
 
-		if not unitList[unit] then return end
+		if not unitList[unit] then
+			return
+		end
 
 		if element.arena or element.instance then
 			self:UnregisterEvent('PLAYER_ENTERING_WORLD', Path, true)

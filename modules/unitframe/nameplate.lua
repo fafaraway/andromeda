@@ -196,14 +196,14 @@ function NAMEPLATE:UpdateColor(_, unit)
 	local insecureColor = C.DB.nameplate.insecure_color
 	local revertThreat = C.DB.nameplate.dps_revert_threat
 	local offTankColor = C.DB.nameplate.off_tank_color
-	local friendlyColor = C.DB.nameplate.friendly_color
 	local targetColor = C.DB.nameplate.target_color
+	local coloredTarget = C.DB.nameplate.colored_target
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
 		r, g, b = unpack(oUF.colors.disconnected)
 	else
-		if C.DB.nameplate.colored_target and UnitIsUnit(unit, "target") then
+		if coloredTarget and UnitIsUnit(unit, 'target') then
 			r, g, b = targetColor.r, targetColor.g, targetColor.b
 		elseif isCustomUnit then
 			r, g, b = customColor.r, customColor.g, customColor.b
@@ -211,7 +211,7 @@ function NAMEPLATE:UpdateColor(_, unit)
 			if C.DB.nameplate.friendly_class_color then
 				r, g, b = F.UnitColor(unit)
 			else
-				r, g, b = friendlyColor.r, friendlyColor.g, friendlyColor.b
+				r, g, b = .3, .3, 1
 			end
 		elseif isPlayer and (not isFriendly) and C.DB.nameplate.hostile_class_color then
 			r, g, b = F.UnitColor(unit)
@@ -696,4 +696,73 @@ function NAMEPLATE:OnLogin()
 	oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
 	oUF:SetActiveStyle('Nameplate')
 	oUF:SpawnNamePlates('oUF_Nameplate', NAMEPLATE.PostUpdatePlates)
+
+	if not C.DB.nameplate.player_plate then
+		return
+	end
+
+	oUF:RegisterStyle('PlayerPlate', NAMEPLATE.CreatePlayerPlate)
+	oUF:SetActiveStyle('PlayerPlate')
+
+	local plate = oUF:Spawn('player', 'oUF_PlayerPlate', true)
+	plate.mover = F.Mover(plate, L.GUI.MOVER.PLAYER_PLATE, 'PlayerPlate', {'CENTER', UIParent, 'CENTER', 0, -260})
+end
+
+--[[
+	Player plate
+ ]]
+function NAMEPLATE:PlateVisibility(event)
+	local alpha = C.DB.nameplate.pp_fadeout_alpha
+	if (event == 'PLAYER_REGEN_DISABLED' or InCombatLockdown()) and UnitIsUnit('player', self.unit) then
+		UIFrameFadeIn(self, .3, self:GetAlpha(), 1)
+	else
+		UIFrameFadeOut(self, 2, self:GetAlpha(), alpha)
+	end
+end
+
+function NAMEPLATE:CreatePlayerPlate()
+	self.unitStyle = 'playerplate'
+	self:EnableMouse(false)
+	local ppWidth, ppHeight = C.DB.nameplate.pp_width, C.DB.nameplate.pp_height
+	self:SetSize(ppWidth, ppHeight)
+
+	UNITFRAME:AddBackDrop(self)
+	UNITFRAME:AddHealthBar(self)
+	UNITFRAME:AddHealthPrediction(self)
+	UNITFRAME:AddHealthValueText(self)
+	UNITFRAME:AddPowerBar(self)
+	UNITFRAME:AddPowerValueText(self)
+	UNITFRAME:AddAlternativePowerBar(self)
+	UNITFRAME:AddAlternativePowerValueText(self)
+	UNITFRAME:AddCastBar(self)
+	UNITFRAME:AddGCDSpark(self)
+	UNITFRAME:AddClassPowerBar(self)
+	UNITFRAME:AddStagger(self)
+	UNITFRAME:AddTotems(self)
+	UNITFRAME:AddCombatFader(self)
+
+	--NAMEPLATE:TogglePlateVisibility()
+end
+
+function NAMEPLATE:TogglePlateVisibility()
+	local plate = _G.oUF_PlayerPlate
+	if not plate then
+		return
+	end
+
+	if C.DB.nameplate.pp_fadeout then
+		plate:RegisterEvent('UNIT_EXITED_VEHICLE', NAMEPLATE.PlateVisibility)
+		plate:RegisterEvent('UNIT_ENTERED_VEHICLE', NAMEPLATE.PlateVisibility)
+		plate:RegisterEvent('PLAYER_REGEN_ENABLED', NAMEPLATE.PlateVisibility, true)
+		plate:RegisterEvent('PLAYER_REGEN_DISABLED', NAMEPLATE.PlateVisibility, true)
+		plate:RegisterEvent('PLAYER_ENTERING_WORLD', NAMEPLATE.PlateVisibility, true)
+		NAMEPLATE.PlateVisibility(plate)
+	else
+		plate:UnregisterEvent('UNIT_EXITED_VEHICLE', NAMEPLATE.PlateVisibility)
+		plate:UnregisterEvent('UNIT_ENTERED_VEHICLE', NAMEPLATE.PlateVisibility)
+		plate:UnregisterEvent('PLAYER_REGEN_ENABLED', NAMEPLATE.PlateVisibility)
+		plate:UnregisterEvent('PLAYER_REGEN_DISABLED', NAMEPLATE.PlateVisibility)
+		plate:UnregisterEvent('PLAYER_ENTERING_WORLD', NAMEPLATE.PlateVisibility)
+		NAMEPLATE.PlateVisibility(plate, 'PLAYER_REGEN_DISABLED')
+	end
 end
