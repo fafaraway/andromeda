@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
+local UNITFRAME = F.UNITFRAME
 
 local extraGUIs = {}
 local function toggleExtraGUI(guiName)
@@ -586,7 +587,7 @@ function GUI:SetupCustomClassColor(parent)
 end
 
 local function updatePartyWatcherSpells()
-	F.UNITFRAME:UpdatePartyWatcherSpells()
+	UNITFRAME:UpdatePartyWatcherSpells()
 end
 
 function GUI:SetupPartySpellCooldown(parent)
@@ -759,24 +760,13 @@ function GUI:SetupPartySpellCooldown(parent)
 		end
 	)
 
-	for spellID, duration in pairs(C.PartySpellsList) do
-		local name = GetSpellInfo(spellID)
-		if name then
-			local modDuration = FREE_ADB['party_spells_list'][spellID]
-			if not modDuration or modDuration > 0 then
-				createBar(scroll.child, spellID, duration)
-			end
-		end
-	end
-	for spellID, duration in pairs(FREE_ADB['party_spells_list']) do
-		if duration > 0 then
-			createBar(scroll.child, spellID, duration)
-		end
+	for spellID, duration in pairs(UNITFRAME.PartySpells) do
+		createBar(scroll.child, spellID, duration)
 	end
 end
 
 local function UpdateGroupDebuffs()
-	F.UNITFRAME:UpdateGroupDebuffs()
+	UNITFRAME:UpdateGroupDebuffs()
 end
 
 function GUI:SetupGroupDebuffs(parent)

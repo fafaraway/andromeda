@@ -9,13 +9,17 @@ do
 		ConsoleExec('ActionCam ' .. cmd)
 	end
 
-	F:RegisterEvent(
-		'PLAYER_ENTERING_WORLD',
-		function()
+	local function ToggleActionCamera()
+		if C.DB.misc.action_cam then
 			UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
 			SetCam('basic')
+		else
+			UIParent:RegisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
+			SetCam('off')
 		end
-	)
+	end
+
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', ToggleActionCamera)
 end
 
 do -- Prevents spells from being automatically added to your action bar

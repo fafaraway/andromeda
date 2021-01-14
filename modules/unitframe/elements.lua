@@ -695,7 +695,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 			return true
 		end
 	elseif style == 'focus' and C.DB.unitframe.focus_auras then
-		if button.isDebuff and button.isPlayer then
+		if button.isDebuff then
 			return true
 		else
 			return false
@@ -1357,7 +1357,7 @@ local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
 
 	element.thisColor = cur == max and 1 or 2
 	if not element.prevColor or element.prevColor ~= element.thisColor then
-		local r, g, b = unpack(lastBarColors[C.MyClass])
+		local r, g, b = lastBarColors[C.MyClass] and unpack(lastBarColors[C.MyClass]) or 1, 0, 0
 		if element.thisColor == 2 then
 			local color = element.__owner.colors.power[powerType]
 			r, g, b = color[1], color[2], color[3]
@@ -1834,23 +1834,23 @@ function UNITFRAME:CheckPartySpells()
 	end
 end
 
-local partySpells = {}
+UNITFRAME.PartySpells = {}
 function UNITFRAME:UpdatePartyWatcherSpells()
-	wipe(partySpells)
+	wipe(UNITFRAME.PartySpells)
 
 	for spellID, duration in pairs(C.PartySpellsList) do
 		local name = GetSpellInfo(spellID)
 		if name then
 			local modDuration = FREE_ADB['party_spells_list'][spellID]
 			if not modDuration or modDuration > 0 then
-				partySpells[spellID] = duration
+				UNITFRAME.PartySpells[spellID] = duration
 			end
 		end
 	end
 
 	for spellID, duration in pairs(FREE_ADB['party_spells_list']) do
 		if duration > 0 then
-			partySpells[spellID] = duration
+			UNITFRAME.PartySpells[spellID] = duration
 		end
 	end
 end
@@ -1960,7 +1960,7 @@ function UNITFRAME:AddPartySpells(self)
 	end
 
 	buttons.__max = maxIcons
-	buttons.PartySpells = partySpells
+	buttons.PartySpells = UNITFRAME.PartySpells
 	buttons.TalentCDFix = C.TalentCDFixList
 	self.PartyWatcher = buttons
 	if C.DB.unitframe.party_spell_sync then

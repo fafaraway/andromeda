@@ -708,6 +708,7 @@ L.GUI = {
 		['GROUP_DEBUFF_HIGHLIGHT_TIP'] = 'Whenever a group member has a dispellable debuff it will highlight the frame in the debuff color.',
 		['GROUP_CORNER_BUFFS'] = 'Corner buffs indicator',
 		['RAID_DEBUFFS'] = 'Raid debuffs',
+		['RAID_DEBUFFS_TIP'] = 'Show major debuffs in raid and dungeon.|nOnly show dispellable debuffs if disabled.',
 		['AURAS_CLICK_THROUGH'] = 'Hide tooltip from auras',
 		['PARTY_SPELL_WATCHER'] = 'Party spell cooldown',
 		['PARTY_SPELL_SYNC'] = 'Sync party spell cooldown',
