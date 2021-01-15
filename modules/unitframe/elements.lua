@@ -682,33 +682,33 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 		else
 			return false
 		end
-	elseif style == 'target' and C.DB.unitframe.target_auras then
+	elseif style == 'target' then
 		if element.onlyShowPlayer and button.isDebuff then
 			return isMine
 		else
 			return true
 		end
-	elseif style == 'boss' and C.DB.unitframe.boss_auras then
+	elseif style == 'boss' then
 		if element.onlyShowPlayer and button.isDebuff then
 			return isMine
 		else
 			return true
 		end
-	elseif style == 'focus' and C.DB.unitframe.focus_auras then
+	elseif style == 'focus' then
 		if button.isDebuff then
 			return true
 		else
 			return false
 		end
-	elseif style == 'arena' and C.DB.unitframe.arena_auras then
+	elseif style == 'arena' then
 		if element.onlyShowPlayer and button.isDebuff then
 			return isMine
 		else
 			return true
 		end
-	elseif style == 'pet' and C.DB.unitframe.pet_auras then
+	elseif style == 'pet' then
 		return true
-	elseif style == 'nameplate' and C.DB.nameplate.plate_auras then
+	elseif style == 'nameplate' then
 		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.NPAuraBlackList[spellID] then
 			return false
 		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
