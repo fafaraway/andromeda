@@ -268,6 +268,7 @@ function UNITFRAME:AddHealthBar(self)
 	local isParty = (style == 'party')
 	local isRaid = (style == 'raid')
 	local isBoss = (style == 'boss')
+	local isArena = (style == 'arena')
 	local isBaseUnits = F.MultiCheck(style, 'player', 'playerplate', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
 
 	local health = CreateFrame('StatusBar', nil, self)
@@ -294,7 +295,7 @@ function UNITFRAME:AddHealthBar(self)
 	health.colorTapping = true
 	health.colorDisconnected = true
 
-	if ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 2) or (isBaseUnits and C.DB.unitframe.color_style == 2) then
+	if ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 2) or (isBaseUnits and C.DB.unitframe.color_style == 2) or isArena then
 		health.colorClass = true
 		health.colorSelection = true
 	elseif ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 3) or (isBaseUnits and C.DB.unitframe.color_style == 3) then
