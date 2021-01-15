@@ -1382,7 +1382,7 @@ C.AccountSettings = {
 	['nameplate_aura_filter_list'] = {[1] = {}, [2] = {}},
 	['raid_debuffs_list'] = {},
 	['raid_aura_watch'] = {},
-	['corner_buffs'] = {},
+	['corner_spells_list'] = {},
 	['party_spells_list'] = {},
 	['profile_index'] = {},
 	['profile_names'] = {},

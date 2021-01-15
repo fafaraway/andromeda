@@ -795,18 +795,63 @@ function UNITFRAME:AddAuras(self)
 end
 
 --[[ Corner aura indicator ]]
+UNITFRAME.CornerSpells = {}
+function UNITFRAME:UpdateCornerSpells()
+	wipe(UNITFRAME.CornerSpells)
+
+	for spellID, value in pairs(C.CornerBuffsList[C.MyClass]) do
+		local modData = FREE_ADB['corner_spells_list'][C.MyClass]
+		if not (modData and modData[spellID]) then
+			local r, g, b = unpack(value[2])
+			UNITFRAME.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+		end
+	end
+
+	for spellID, value in pairs(FREE_ADB['corner_spells_list'][C.MyClass]) do
+		if next(value) then
+			local r, g, b = unpack(value[2])
+			UNITFRAME.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+		end
+	end
+end
+
 local found = {}
 local auraFilter = {
 	'HELPFUL',
 	'HARMFUL'
 }
 
+function UNITFRAME:CheckCornerSpells()
+	if not FREE_ADB['corner_spells_list'][C.MyClass] then
+		FREE_ADB['corner_spells_list'][C.MyClass] = {}
+	end
+	local data = C.CornerBuffsList[C.MyClass]
+	if not data then
+		return
+	end
+
+	for spellID, value in pairs(data) do
+		local name = GetSpellInfo(spellID)
+		if not name then
+			if C.isDeveloper then
+				print('Invalid cornerspell ID: ' .. spellID)
+			end
+		end
+	end
+
+	for spellID, value in pairs(FREE_ADB['corner_spells_list'][C.MyClass]) do
+		if not next(value) and C.CornerBuffsList[C.MyClass][spellID] == nil then
+			FREE_ADB['corner_spells_list'][C.MyClass][spellID] = nil
+		end
+	end
+end
+
 function UNITFRAME:UpdateCornerBuffs(event, unit)
 	if event == 'UNIT_AURA' and self.unit ~= unit then
 		return
 	end
 
-	local spellList = FREE_ADB['corner_buffs'][C.MyClass]
+	local spellList = UNITFRAME.CornerSpells
 	local buttons = self.BuffIndicator
 	unit = self.unit
 
@@ -874,7 +919,7 @@ function UNITFRAME:RefreshCornerBuffs(bu)
 end
 
 function UNITFRAME:AddCornerBuffs(self)
-	if not C.DB.unitframe.group_corner_buffs then
+	if not C.DB.unitframe.group_corner_spells_list then
 		return
 	end
 

@@ -678,12 +678,14 @@ function GUI:SetupPartySpellCooldown(parent)
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
 			return
 		end
+
 		if not GetSpellInfo(spellID) then
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
 			return
 		end
 
-		if FREE_ADB['party_spells_list'][spellID] and FREE_ADB['party_spells_list'][spellID] ~= 0 then
+		local modDuration = FREE_ADB['party_spells_list'][spellID]
+		if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] then
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
 			return
 		end

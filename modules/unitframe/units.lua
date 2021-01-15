@@ -400,6 +400,7 @@ end
 function UNITFRAME:SpawnParty()
 	UNITFRAME:SyncWithZenTracker()
 	UNITFRAME:UpdatePartyWatcherSpells()
+	UNITFRAME:UpdateCornerSpells()
 
 	oUF:RegisterStyle('Party', CreatePartyStyle)
 	oUF:SetActiveStyle 'Party'

@@ -29,20 +29,14 @@ function UNITFRAME:OnLogin()
 
 	UNITFRAME:UpdateColors()
 
-	if not FREE_ADB['corner_buffs'][C.MyClass] then
-		FREE_ADB['corner_buffs'][C.MyClass] = {}
-	end
-	if not next(FREE_ADB['corner_buffs'][C.MyClass]) then
-		F.CopyTable(C.CornerBuffsList[C.MyClass], FREE_ADB['corner_buffs'][C.MyClass])
-	end
-
-	self:CheckPartySpells()
+	UNITFRAME:CheckPartySpells()
+	UNITFRAME:CheckCornerSpells()
 
 	-- Filter bloodlust for healers
 	local bloodlustList = {57723, 57724, 80354, 264689}
 	local function filterBloodlust()
 		for _, spellID in pairs(bloodlustList) do
-			FREE_ADB['corner_buffs'][C.MyClass][spellID] = C.Role ~= 'Healer' and {'BOTTOMLEFT', {1, .8, 0}, true} or nil
+			FREE_ADB['corner_spells_list'][C.MyClass][spellID] = C.Role ~= 'Healer' and {'BOTTOMLEFT', {1, .8, 0}, true} or nil
 		end
 	end
 	filterBloodlust()
