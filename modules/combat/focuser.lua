@@ -12,7 +12,7 @@ local pending = {}
 
 function COMBAT:Focuser_Setup()
 	if not self or self.focuser then return end
-	if self:GetName() and (not C.DB.combat.easy_focus_on_unitframes and strmatch(self:GetName(), 'oUF_')) then return end
+	if self:GetName() and (not C.DB.combat.easy_focus_on_unitframe and strmatch(self:GetName(), 'oUF_')) then return end
 
 	if not InCombatLockdown() then
 		self:SetAttribute(modifier..'-type'..mouseButton, 'focus')

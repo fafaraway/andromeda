@@ -530,6 +530,8 @@ L.GUI = {
 		['EASY_TAB_TIP'] = '进入战场或竞技场时Tab键会忽略宠物类单位优先选择敌对玩家，退出战场或竞技场后恢复默认。',
 		['EASY_FOCUS'] = 'Easy focus',
 		['EASY_FOCUS_TIP'] = 'Shift+鼠标左键点击单位模型快速设为焦点，有焦点时Shift+鼠标左键点击任意空白处取消当前焦点。',
+		['EASY_FOCUS_ON_UNITFRAME'] = 'Easy focus on unitframes',
+		['EASY_FOCUS_ON_UNITFRAME_TIP'] = 'Easy focus also works on unitframes.',
 		['EASY_MARK'] = 'Easy mark',
 		['EASY_MARK_TIP'] = 'Alt+鼠标左键点击单位模型快速设定标记。',
 		['PVP_SOUND'] = 'PVP sound',
@@ -799,7 +801,7 @@ L.GUI = {
 		['HORIZONTAL_SPACING'] = 'Horizontal spacing',
 		['COLORED_TARGET'] = 'Colored target',
 		['COLORED_TARGET_TIP'] = 'If enabled, colored your target nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
-		['TARGET_COLOR'] = 'Change target color'
+		['TARGET_COLOR'] = 'Target color'
 	},
 	['CREDITS'] = {
 		['NAME'] = 'Credits',

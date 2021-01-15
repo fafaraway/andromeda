@@ -224,10 +224,13 @@ GUI.OptionsList = {
 		{1, 'combat', 'enable', L.GUI.COMBAT.ENABLE, nil, nil, nil, L.GUI.COMBAT.ENABLE_TIP},
 		{1, 'combat', 'combat_alert', L.GUI.COMBAT.COMBAT_ALERT, nil, nil, nil, L.GUI.COMBAT.COMBAT_ALERT_TIP},
 		{1, 'combat', 'spell_sound', L.GUI.COMBAT.SPELL_SOUND, true, nil, nil, L.GUI.COMBAT.SPELL_SOUND_TIP},
+
+		{1, 'combat', 'easy_focus', L.GUI.COMBAT.EASY_FOCUS, nil, nil, nil, L.GUI.COMBAT.EASY_FOCUS_TIP},
+		{1, 'combat', 'easy_focus_on_unitframe', L.GUI.COMBAT.EASY_FOCUS_ON_UNITFRAME, true, nil, nil, L.GUI.COMBAT.EASY_FOCUS_ON_UNITFRAME_TIP},
+
 		{1, 'combat', 'easy_mark', L.GUI.COMBAT.EASY_MARK, nil, nil, nil, L.GUI.COMBAT.EASY_MARK_TIP},
-		{1, 'combat', 'easy_focus', L.GUI.COMBAT.EASY_FOCUS, true, nil, nil, L.GUI.COMBAT.EASY_FOCUS_TIP},
-		{1, 'combat', 'easy_tab', L.GUI.COMBAT.EASY_TAB, nil, nil, nil, L.GUI.COMBAT.EASY_TAB_TIP},
-		{1, 'combat', 'pvp_sound', L.GUI.COMBAT.PVP_SOUND, true, nil, nil, L.GUI.COMBAT.PVP_SOUND_TIP},
+		{1, 'combat', 'easy_tab', L.GUI.COMBAT.EASY_TAB, true, nil, nil, L.GUI.COMBAT.EASY_TAB_TIP},
+		{1, 'combat', 'pvp_sound', L.GUI.COMBAT.PVP_SOUND, nil, nil, nil, L.GUI.COMBAT.PVP_SOUND_TIP},
 		{},
 		{1, 'combat', 'fct', L.GUI.COMBAT.FCT},
 		{1, 'combat', 'fct_in', L.GUI.COMBAT.FCT_IN},
