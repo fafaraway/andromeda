@@ -5,7 +5,9 @@ local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
 
 local function updateBorderColor(frame)
 	local r, g, b = frame.String:GetTextColor()
-	frame.__shadow:SetBackdropBorderColor(r, g, b, .75)
+	if frame.__shadow then
+		frame.__shadow:SetBackdropBorderColor(r, g, b, .75)
+	end
 end
 
 local function reskinChatBubble(chatbubble)
