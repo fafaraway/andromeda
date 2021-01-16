@@ -5,8 +5,6 @@ local TIER = 9
 local INSTANCE = 1190 -- 纳斯利亚堡
 local BOSS
 
--- Credit: Luckyone, ElvUI
-
 BOSS = 2393 -- 啸翼
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 328897) -- 抽干
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 330713) -- 耳鸣之痛
@@ -98,3 +96,5 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 329951) -- 穿刺
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 327039) -- 喂食时间
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 327089) -- 喂食时间
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 332794) -- 致命灵巧
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 329906) -- 屠戮
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, BOSS, 334016, 6) -- 落选者

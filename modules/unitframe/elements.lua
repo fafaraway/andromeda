@@ -2,129 +2,6 @@ local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
---[[ Colors ]]
-local function ReplaceHealthColor()
-	local colors = FREE_ADB.health_color
-	oUF.colors.health = {
-		colors.r,
-		colors.g,
-		colors.b
-	}
-end
-
-local function ReplacePowerColors(name, index, color)
-	oUF.colors.power[name] = color
-	oUF.colors.power[index] = oUF.colors.power[name]
-end
-
-ReplacePowerColors(
-	'MANA',
-	0,
-	{
-		87 / 255,
-		165 / 255,
-		208 / 255
-	}
-)
-ReplacePowerColors(
-	'ENERGY',
-	3,
-	{
-		174 / 255,
-		34 / 255,
-		45 / 255
-	}
-)
-ReplacePowerColors(
-	'COMBO_POINTS',
-	4,
-	{
-		199 / 255,
-		171 / 255,
-		90 / 255
-	}
-)
-ReplacePowerColors(
-	'RUNIC_POWER',
-	6,
-	{
-		135 / 255,
-		214 / 255,
-		194 / 255
-	}
-)
-ReplacePowerColors(
-	'SOUL_SHARDS',
-	7,
-	{
-		151 / 255,
-		101 / 255,
-		221 / 255
-	}
-)
-ReplacePowerColors(
-	'HOLY_POWER',
-	9,
-	{
-		208 / 255,
-		178 / 255,
-		107 / 255
-	}
-)
-ReplacePowerColors(
-	'INSANITY',
-	13,
-	{
-		179 / 255,
-		96 / 255,
-		244 / 255
-	}
-)
-function UNITFRAME:UpdateColors()
-	ReplaceHealthColor()
-
-	local classColors = C.ClassColors
-	for class, value in pairs(classColors) do
-		oUF.colors.class[class] = {
-			value.r,
-			value.g,
-			value.b
-		}
-	end
-end
-
-local lastBarColors = {
-	DRUID = {
-		161 / 255,
-		92 / 255,
-		255 / 255
-	},
-	MAGE = {
-		5 / 255,
-		96 / 255,
-		250 / 255
-	},
-	MONK = {
-		0 / 255,
-		143 / 255,
-		247 / 255
-	},
-	PALADIN = {
-		221 / 255,
-		36 / 255,
-		62 / 255
-	},
-	ROGUE = {
-		161 / 255,
-		92 / 255,
-		255 / 255
-	},
-	WARLOCK = {
-		221 / 255,
-		36 / 255,
-		62 / 255
-	}
-}
 
 --[[ Backdrop ]]
 local function UNITFRAME_OnEnter(self)
@@ -678,18 +555,18 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 			return true
 		end
 	elseif style == 'party' then
-		if C.PartyBuffsList[spellID] then
+		if C.RaidBuffsList[spellID] then
 			return true
 		else
 			return false
 		end
-	elseif style == 'target' then
-		if element.onlyShowPlayer and button.isDebuff then
-			return isMine
+	elseif style == 'raid' then
+		if C.DB.unitframe.corner_indicator then
+			return C.RaidBuffsList['ALL'][spellID] or FREE_ADB['RaidAuraWatch'][spellID]
 		else
-			return true
+			return (button.isPlayer or caster == 'pet') and UNITFRAME.CornerSpellsList[spellID] or C.RaidBuffsList['ALL'][spellID] or C.RaidBuffsList['WARNING'][spellID]
 		end
-	elseif style == 'boss' then
+	elseif style == 'target' then
 		if element.onlyShowPlayer and button.isDebuff then
 			return isMine
 		else
@@ -701,24 +578,21 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
 		else
 			return false
 		end
-	elseif style == 'arena' then
-		if element.onlyShowPlayer and button.isDebuff then
-			return isMine
-		else
-			return true
-		end
 	elseif style == 'pet' then
 		return true
-	elseif style == 'nameplate' then
-		if FREE_ADB['nameplate_aura_filter_list'][2][spellID] or C.NPAuraBlackList[spellID] then
+	elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
+		if FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
 			return false
 		elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
 			return true
-		elseif FREE_ADB['nameplate_aura_filter_list'][1][spellID] or C.NPAuraWhiteList[spellID] then
+		elseif FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID] then
 			return true
 		else
-			return nameplateShowAll or isMine
+			local auraFilter = C.DB['nameplate']['aura_filter_mode']
+			return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and isMine)
 		end
+	elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
+		return true
 	end
 end
 
@@ -795,63 +669,44 @@ function UNITFRAME:AddAuras(self)
 end
 
 --[[ Corner aura indicator ]]
-UNITFRAME.CornerSpells = {}
+UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
-	wipe(UNITFRAME.CornerSpells)
+	wipe(UNITFRAME.CornerSpellsList)
 
-	for spellID, value in pairs(C.CornerBuffsList[C.MyClass]) do
-		local modData = FREE_ADB['corner_spells_list'][C.MyClass]
+	for spellID, value in pairs(C.CornerSpellsList[C.MyClass]) do
+		local modData = FREE_ADB['CornerSpellsList'][C.MyClass]
 		if not (modData and modData[spellID]) then
 			local r, g, b = unpack(value[2])
-			UNITFRAME.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+			UNITFRAME.CornerSpellsList[spellID] = {value[1], {r, g, b}, value[3]}
 		end
 	end
 
-	for spellID, value in pairs(FREE_ADB['corner_spells_list'][C.MyClass]) do
+	for spellID, value in pairs(FREE_ADB['CornerSpellsList'][C.MyClass]) do
 		if next(value) then
 			local r, g, b = unpack(value[2])
-			UNITFRAME.CornerSpells[spellID] = {value[1], {r, g, b}, value[3]}
+			UNITFRAME.CornerSpellsList[spellID] = {value[1], {r, g, b}, value[3]}
 		end
 	end
+end
+
+UNITFRAME.BloodlustList = {}
+for _, spellID in pairs(C.BloodlustList) do
+	UNITFRAME.BloodlustList[spellID] = {'BOTTOMLEFT', {1, .8, 0}, true}
+end
+
+local function filterBloodLust()
+
 end
 
 local found = {}
-local auraFilter = {
-	'HELPFUL',
-	'HARMFUL'
-}
+local auraFilter = {'HELPFUL', 'HARMFUL'}
 
-function UNITFRAME:CheckCornerSpells()
-	if not FREE_ADB['corner_spells_list'][C.MyClass] then
-		FREE_ADB['corner_spells_list'][C.MyClass] = {}
-	end
-	local data = C.CornerBuffsList[C.MyClass]
-	if not data then
-		return
-	end
-
-	for spellID, value in pairs(data) do
-		local name = GetSpellInfo(spellID)
-		if not name then
-			if C.isDeveloper then
-				print('Invalid cornerspell ID: ' .. spellID)
-			end
-		end
-	end
-
-	for spellID, value in pairs(FREE_ADB['corner_spells_list'][C.MyClass]) do
-		if not next(value) and C.CornerBuffsList[C.MyClass][spellID] == nil then
-			FREE_ADB['corner_spells_list'][C.MyClass][spellID] = nil
-		end
-	end
-end
-
-function UNITFRAME:UpdateCornerBuffs(event, unit)
+function UNITFRAME:UpdateCornerIndicator(event, unit)
 	if event == 'UNIT_AURA' and self.unit ~= unit then
 		return
 	end
 
-	local spellList = UNITFRAME.CornerSpells
+	local spellList = UNITFRAME.CornerSpellsList
 	local buttons = self.BuffIndicator
 	unit = self.unit
 
@@ -862,42 +717,25 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 			if not name then
 				break
 			end
-			local value = spellList[spellID]
+			local value = spellList[spellID] or (C.Role ~= 'Healer' and UNITFRAME.BloodlustList[spellID])
 			if value and (value[3] or caster == 'player' or caster == 'pet') then
-				for _, bu in pairs(buttons) do
-					if bu.anchor == value[1] then
-						if duration and duration > 0 then
-							bu.cd:SetCooldown(expiration - duration, duration)
-							bu.cd:Show()
-						else
-							bu.cd:Hide()
-						end
-
-						bu.icon:SetVertexColor(unpack(value[2]))
-
-						bu:Show()
-						found[bu.anchor] = true
-
-						break
+				local bu = buttons[value[1]]
+				if bu then
+					if duration and duration > 0 then
+						bu.cd:SetCooldown(expiration - duration, duration)
+						bu.cd:Show()
+					else
+						bu.cd:Hide()
 					end
+
+					bu.icon:SetVertexColor(unpack(value[2]))
+
+					-- if count > 1 then
+					-- 	bu.count:SetText(count)
+					-- end
+					bu:Show()
+					found[bu.anchor] = true
 				end
-			-- local bu = buttons[value[1]]
-			-- if bu then
-			-- 	if duration and duration > 0 then
-			-- 		bu.cd:SetCooldown(expiration - duration, duration)
-			-- 		bu.cd:Show()
-			-- 	else
-			-- 		bu.cd:Hide()
-			-- 	end
-
-			-- 	bu.icon:SetVertexColor(unpack(value[2]))
-
-			-- 	if count > 1 then
-			-- 		bu.count:SetText(count)
-			-- 	end
-			-- 	bu:Show()
-			-- 	found[bu.anchor] = true
-			-- end
 			end
 		end
 	end
@@ -909,17 +747,16 @@ function UNITFRAME:UpdateCornerBuffs(event, unit)
 	end
 end
 
-function UNITFRAME:RefreshCornerBuffs(bu)
+function UNITFRAME:RefreshCornerIndicator(bu)
 	bu:SetScript('OnUpdate', nil)
 	bu.icon:SetTexture(C.Assets.bd_tex)
-
 	bu.icon:Show()
 	bu.cd:Show()
 	bu.bg:Show()
 end
 
-function UNITFRAME:AddCornerBuffs(self)
-	if not C.DB.unitframe.group_corner_spells_list then
+function UNITFRAME:AddCornerIndicator(self)
+	if not C.DB.unitframe.corner_indicator then
 		return
 	end
 
@@ -927,22 +764,13 @@ function UNITFRAME:AddCornerBuffs(self)
 	parent:SetPoint('TOPLEFT', 4, -4)
 	parent:SetPoint('BOTTOMRIGHT', -4, 4)
 
-	local anchors = {
-		'TOPLEFT',
-		'TOP',
-		'TOPRIGHT',
-		'LEFT',
-		'RIGHT',
-		'BOTTOMLEFT',
-		'BOTTOM',
-		'BOTTOMRIGHT'
-	}
+	local anchors = {'TOPLEFT', 'TOP', 'TOPRIGHT', 'LEFT', 'RIGHT', 'BOTTOMLEFT', 'BOTTOM', 'BOTTOMRIGHT'}
 	local buttons = {}
 	for _, anchor in pairs(anchors) do
 		local bu = CreateFrame('Frame', nil, parent)
-		bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
+		bu:SetFrameLevel(self:GetFrameLevel() + 10)
 		bu:SetSize(5, 5)
-		bu:SetScale(1)
+		bu:SetScale(C.DB.unitframe.corner_indicator_scale)
 		bu:SetPoint(anchor)
 		bu:Hide()
 
@@ -950,21 +778,36 @@ function UNITFRAME:AddCornerBuffs(self)
 		bu.icon = bu:CreateTexture(nil, 'BORDER')
 		bu.icon:SetInside(bu.bg)
 		bu.icon:SetTexCoord(unpack(C.TexCoord))
-
 		bu.cd = CreateFrame('Cooldown', nil, bu, 'CooldownFrameTemplate')
-		bu.cd:SetInside(bu.bg)
+		bu.cd:SetAllPoints(bu.bg)
 		bu.cd:SetReverse(true)
 		bu.cd:SetHideCountdownNumbers(true)
 
 		bu.anchor = anchor
-		tinsert(buttons, bu)
+		buttons[anchor] = bu
 
-		UNITFRAME:RefreshCornerBuffs(bu)
+		UNITFRAME:RefreshCornerIndicator(bu)
 	end
 
 	self.BuffIndicator = buttons
-	self:RegisterEvent('UNIT_AURA', UNITFRAME.UpdateCornerBuffs)
-	self:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateCornerBuffs, true)
+	self:RegisterEvent('UNIT_AURA', UNITFRAME.UpdateCornerIndicator)
+	self:RegisterEvent('GROUP_ROSTER_UPDATE', UNITFRAME.UpdateCornerIndicator, true)
+end
+
+function UNITFRAME:RefreshRaidFrameIcons()
+	for _, frame in pairs(oUF.objects) do
+		if frame.mystyle == 'raid' then
+			if frame.RaidDebuffs then
+				frame.RaidDebuffs:SetScale(C.DB.unitframe.raid_debuffs_scale)
+			end
+			if frame.BuffIndicator then
+				for _, bu in pairs(frame.BuffIndicator) do
+					bu:SetScale(C.DB.unitframe.corner_indicator_scale)
+					UNITFRAME:RefreshCornerIndicator(bu)
+				end
+			end
+		end
+	end
 end
 
 --[[ Debuff highlight ]]
@@ -985,11 +828,11 @@ end
 
 --[[ Group debuffs ]]
 local debuffList = {}
-function UNITFRAME:UpdateGroupDebuffs()
+function UNITFRAME:UpdateRaidDebuffs()
 	wipe(debuffList)
 	for instName, value in pairs(C.RaidDebuffsList) do
 		for spell, priority in pairs(value) do
-			if not (FREE_ADB['raid_debuffs_list'][instName] and FREE_ADB['raid_debuffs_list'][instName][spell]) then
+			if not (FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spell]) then
 				if not debuffList[instName] then
 					debuffList[instName] = {}
 				end
@@ -997,7 +840,7 @@ function UNITFRAME:UpdateGroupDebuffs()
 			end
 		end
 	end
-	for instName, value in pairs(FREE_ADB['raid_debuffs_list']) do
+	for instName, value in pairs(FREE_ADB['RaidDebuffsList']) do
 		for spell, priority in pairs(value) do
 			if priority > 0 then
 				if not debuffList[instName] then
@@ -1047,9 +890,9 @@ function UNITFRAME:AddRaidDebuffs(self)
 	bu.ShowDebuffBorder = true
 	bu.FilterDispellableDebuff = true
 
-	if C.DB.unitframe.raid_debuffs then
+	if C.DB.unitframe.instance_auras then
 		if not next(debuffList) then
-			UNITFRAME:UpdateGroupDebuffs()
+			UNITFRAME:UpdateRaidDebuffs()
 		end
 
 		bu.Debuffs = debuffList
@@ -1384,6 +1227,39 @@ function UNITFRAME:AddCastBar(self)
 end
 
 --[[ Class power ]]
+local lastBarColors = {
+	DRUID = {
+		161 / 255,
+		92 / 255,
+		255 / 255
+	},
+	MAGE = {
+		5 / 255,
+		96 / 255,
+		250 / 255
+	},
+	MONK = {
+		0 / 255,
+		143 / 255,
+		247 / 255
+	},
+	PALADIN = {
+		221 / 255,
+		36 / 255,
+		62 / 255
+	},
+	ROGUE = {
+		161 / 255,
+		92 / 255,
+		255 / 255
+	},
+	WARLOCK = {
+		221 / 255,
+		36 / 255,
+		62 / 255
+	}
+}
+
 local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
 	local style = element.__owner.unitStyle
 	local gap = 3
@@ -1864,39 +1740,23 @@ function UNITFRAME:AddPortrait(self)
 end
 
 --[[ Party spells ]]
-function UNITFRAME:CheckPartySpells()
-	for spellID, duration in pairs(C.PartySpellsList) do
-		local name = GetSpellInfo(spellID)
-		if name then
-			local modDuration = FREE_ADB['party_spells_list'][spellID]
-			if modDuration and modDuration == duration then
-				FREE_ADB['party_spells_list'][spellID] = nil
-			end
-		else
-			if C.isDeveloper then
-				print('Invalid partyspell ID: ' .. spellID)
-			end
-		end
-	end
-end
-
-UNITFRAME.PartySpells = {}
+UNITFRAME.PartySpellsList = {}
 function UNITFRAME:UpdatePartyWatcherSpells()
-	wipe(UNITFRAME.PartySpells)
+	wipe(UNITFRAME.PartySpellsList)
 
 	for spellID, duration in pairs(C.PartySpellsList) do
 		local name = GetSpellInfo(spellID)
 		if name then
-			local modDuration = FREE_ADB['party_spells_list'][spellID]
+			local modDuration = FREE_ADB['PartySpellsList'][spellID]
 			if not modDuration or modDuration > 0 then
-				UNITFRAME.PartySpells[spellID] = duration
+				UNITFRAME.PartySpellsList[spellID] = duration
 			end
 		end
 	end
 
-	for spellID, duration in pairs(FREE_ADB['party_spells_list']) do
+	for spellID, duration in pairs(FREE_ADB['PartySpellsList']) do
 		if duration > 0 then
-			UNITFRAME.PartySpells[spellID] = duration
+			UNITFRAME.PartySpellsList[spellID] = duration
 		end
 	end
 end
@@ -2006,7 +1866,7 @@ function UNITFRAME:AddPartySpells(self)
 	end
 
 	buttons.__max = maxIcons
-	buttons.PartySpells = UNITFRAME.PartySpells
+	buttons.PartySpells = UNITFRAME.PartySpellsList
 	buttons.TalentCDFix = C.TalentCDFixList
 	self.PartyWatcher = buttons
 	if C.DB.unitframe.party_spell_sync then

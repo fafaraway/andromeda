@@ -1,7 +1,108 @@
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
+local oUF = F.oUF
 
-local RaidDebuffs = {}
+
+local function ReplaceHealthColor()
+	local colors = FREE_ADB.health_color
+	oUF.colors.health = {
+		colors.r,
+		colors.g,
+		colors.b
+	}
+end
+
+local function ReplacePowerColors(name, index, color)
+	oUF.colors.power[name] = color
+	oUF.colors.power[index] = oUF.colors.power[name]
+end
+
+ReplacePowerColors(
+	'MANA',
+	0,
+	{
+		87 / 255,
+		165 / 255,
+		208 / 255
+	}
+)
+ReplacePowerColors(
+	'ENERGY',
+	3,
+	{
+		174 / 255,
+		34 / 255,
+		45 / 255
+	}
+)
+ReplacePowerColors(
+	'COMBO_POINTS',
+	4,
+	{
+		199 / 255,
+		171 / 255,
+		90 / 255
+	}
+)
+ReplacePowerColors(
+	'RUNIC_POWER',
+	6,
+	{
+		135 / 255,
+		214 / 255,
+		194 / 255
+	}
+)
+ReplacePowerColors(
+	'SOUL_SHARDS',
+	7,
+	{
+		151 / 255,
+		101 / 255,
+		221 / 255
+	}
+)
+ReplacePowerColors(
+	'HOLY_POWER',
+	9,
+	{
+		208 / 255,
+		178 / 255,
+		107 / 255
+	}
+)
+ReplacePowerColors(
+	'INSANITY',
+	13,
+	{
+		179 / 255,
+		96 / 255,
+		244 / 255
+	}
+)
+function UNITFRAME:InitializeColors()
+	ReplaceHealthColor()
+
+	local classColors = C.ClassColors
+	for class, value in pairs(classColors) do
+		oUF.colors.class[class] = {
+			value.r,
+			value.g,
+			value.b
+		}
+	end
+end
+
+
+
+local raidBuffsList = {}
+function UNITFRAME:AddClassSpells(list)
+	for class, value in pairs(list) do
+		raidBuffsList[class] = value
+	end
+end
+
+local raidDebuffsList = {}
 function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 	local instName = EJ_GetInstanceInfo(instID)
 	if not instName then
@@ -11,8 +112,8 @@ function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 		return
 	end
 
-	if not RaidDebuffs[instName] then
-		RaidDebuffs[instName] = {}
+	if not raidDebuffsList[instName] then
+		raidDebuffsList[instName] = {}
 	end
 	if not level then
 		level = 2
@@ -21,26 +122,88 @@ function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
 		level = 6
 	end
 
-	RaidDebuffs[instName][spellID] = level
+	raidDebuffsList[instName][spellID] = level
 end
 
-function UNITFRAME:OnLogin()
-	F:SetSmoothingAmount(.3)
+function UNITFRAME:CheckPartySpells()
+	for spellID, duration in pairs(C.PartySpellsList) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modDuration = FREE_ADB['PartySpellsList'][spellID]
+			if modDuration and modDuration == duration then
+				FREE_ADB['PartySpellsList'][spellID] = nil
+			end
+		else
+			if C.isDeveloper then
+				print('Invalid partyspell ID: ' .. spellID)
+			end
+		end
+	end
+end
 
-	UNITFRAME:UpdateColors()
+function UNITFRAME:CheckCornerSpells()
+	if not FREE_ADB['CornerSpellsList'][C.MyClass] then
+		FREE_ADB['CornerSpellsList'][C.MyClass] = {}
+	end
+	local data = C.CornerSpellsList[C.MyClass]
+	if not data then
+		return
+	end
+
+	for spellID, value in pairs(data) do
+		local name = GetSpellInfo(spellID)
+		if not name then
+			if C.isDeveloper then
+				print('Invalid cornerspell ID: ' .. spellID)
+			end
+		end
+	end
+
+	for spellID, value in pairs(FREE_ADB['CornerSpellsList'][C.MyClass]) do
+		if not next(value) and C.CornerSpellsList[C.MyClass][spellID] == nil or C.BloodlustList[spellID] then
+			FREE_ADB['CornerSpellsList'][C.MyClass][spellID] = nil
+		end
+	end
+end
+
+function UNITFRAME:InitializeAuras()
+
+	for instName, value in pairs(raidDebuffsList) do
+		for spell, priority in pairs(value) do
+			if FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spell] and FREE_ADB['RaidDebuffs'][instName][spell] == priority then
+				FREE_ADB['RaidDebuffsList'][instName][spell] = nil
+			end
+		end
+	end
+	for instName, value in pairs(FREE_ADB['RaidDebuffsList']) do
+		if not next(value) then
+			FREE_ADB['RaidDebuffsList'][instName] = nil
+		end
+	end
+
+
+	C.RaidDebuffsList = raidDebuffsList
 
 	UNITFRAME:CheckPartySpells()
 	UNITFRAME:CheckCornerSpells()
 
+
 	-- Filter bloodlust for healers
-	local bloodlustList = {57723, 57724, 80354, 264689}
-	local function filterBloodlust()
-		for _, spellID in pairs(bloodlustList) do
-			FREE_ADB['corner_spells_list'][C.MyClass][spellID] = C.Role ~= 'Healer' and {'BOTTOMLEFT', {1, .8, 0}, true} or nil
+	--[[ local function filterBloodlust()
+		for _, spellID in pairs(C.BloodlustList) do
+			UNITFRAME.BloodlustList = (C.Role ~= 'Healer')
 		end
 	end
 	filterBloodlust()
-	F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', filterBloodlust)
+	F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', filterBloodlust) ]]
+end
+
+
+function UNITFRAME:OnLogin()
+	F:SetSmoothingAmount(.3)
+
+	UNITFRAME:InitializeColors()
+	UNITFRAME:InitializeAuras()
 
 	if not C.DB.unitframe.enable then
 		return
@@ -83,7 +246,7 @@ function UNITFRAME:OnLogin()
 		CompactRaidFrameManager:SetParent(F.HiddenFrame)
 	end
 
-	C.RaidDebuffsList = RaidDebuffs
+
 
 	self:SpawnParty()
 	self:SpawnRaid()

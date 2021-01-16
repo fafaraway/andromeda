@@ -391,7 +391,7 @@ local function CreatePartyStyle(self)
 	UNITFRAME:AddSelectedBorder(self)
 	UNITFRAME:AddRangeCheck(self)
 	UNITFRAME:AddAuras(self)
-	UNITFRAME:AddCornerBuffs(self)
+	UNITFRAME:AddCornerIndicator(self)
 	UNITFRAME:AddRaidDebuffs(self)
 	UNITFRAME:AddDebuffHighlight(self)
 	UNITFRAME:AddPartySpells(self)
@@ -421,7 +421,7 @@ function UNITFRAME:SpawnParty()
 		'showPlayer',
 		true,
 		'showSolo',
-		showSolo,
+		true,
 		'showParty',
 		true,
 		'showRaid',
@@ -481,12 +481,13 @@ local function CreateRaidStyle(self)
 	UNITFRAME:AddSummonIndicator(self)
 	UNITFRAME:AddSelectedBorder(self)
 	UNITFRAME:AddRangeCheck(self)
-	UNITFRAME:AddCornerBuffs(self)
+	UNITFRAME:AddCornerIndicator(self)
 	UNITFRAME:AddRaidDebuffs(self)
 	UNITFRAME:AddDebuffHighlight(self)
 end
 
 function UNITFRAME:SpawnRaid()
+	UNITFRAME:UpdateCornerSpells()
 	oUF:RegisterStyle('Raid', CreateRaidStyle)
 	oUF:SetActiveStyle 'Raid'
 	local raidWidth, raidHeight = C.DB.unitframe.raid_width, C.DB.unitframe.raid_height

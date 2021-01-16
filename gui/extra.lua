@@ -337,7 +337,7 @@ function GUI:NamePlateAuraFilter(parent)
 			'OnClick',
 			function()
 				bar:Hide()
-				FREE_ADB['nameplate_aura_filter_list'][index][spellID] = nil
+				FREE_ADB['NPAuraFilter'][index][spellID] = nil
 				frameData[index].barList[spellID] = nil
 				sortBars(frameData[index].barList)
 			end
@@ -359,12 +359,12 @@ function GUI:NamePlateAuraFilter(parent)
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_INCORRECT_ID)
 			return
 		end
-		if FREE_ADB['nameplate_aura_filter_list'][index][spellID] then
+		if FREE_ADB['NPAuraFilter'][index][spellID] then
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_EXISTING_ID)
 			return
 		end
 
-		FREE_ADB['nameplate_aura_filter_list'][index][spellID] = true
+		FREE_ADB['NPAuraFilter'][index][spellID] = true
 		createBar(parent.child, index, spellID)
 		parent.box:SetText('')
 	end
@@ -394,7 +394,7 @@ function GUI:NamePlateAuraFilter(parent)
 			end
 		)
 
-		for spellID in pairs(FREE_ADB['nameplate_aura_filter_list'][index]) do
+		for spellID in pairs(FREE_ADB['NPAuraFilter'][index]) do
 			createBar(scroll.child, index, spellID)
 		end
 	end
@@ -685,7 +685,8 @@ function GUI:SetupPartySpellCooldown(parent)
 		end
 
 		local modDuration = FREE_ADB['party_spells_list'][spellID]
-		if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] then
+
+		if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
 			return
 		end
@@ -762,7 +763,7 @@ function GUI:SetupPartySpellCooldown(parent)
 		end
 	)
 
-	for spellID, duration in pairs(UNITFRAME.PartySpells) do
+	for spellID, duration in pairs(UNITFRAME.PartySpellsList) do
 		createBar(scroll.child, spellID, duration)
 	end
 end
@@ -838,7 +839,7 @@ function GUI:SetupGroupDebuffs(parent)
 		print(spellID)
 		print(C.RaidDebuffsList[instName][spellID])
 		local localPrio = C.RaidDebuffsList[instName][spellID]
-		local savedPrio = FREE_ADB['raid_debuffs_list'][instName] and FREE_ADB['raid_debuffs_list'][instName][spellID]
+		local savedPrio = FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spellID]
 		if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
 			return false
 		end
@@ -862,10 +863,10 @@ function GUI:SetupGroupDebuffs(parent)
 		end
 
 		priority = analyzePrio(priority)
-		if not FREE_ADB['raid_debuffs_list'][instName] then
-			FREE_ADB['raid_debuffs_list'][instName] = {}
+		if not FREE_ADB['RaidDebuffsList'][instName] then
+			FREE_ADB['RaidDebuffsList'][instName] = {}
 		end
-		FREE_ADB['raid_debuffs_list'][instName][spellID] = priority
+		FREE_ADB['RaidDebuffsList'][instName][spellID] = priority
 		setupBars(instName)
 		GUI:ClearEdit(options[3])
 		GUI:ClearEdit(options[4])
@@ -881,7 +882,7 @@ function GUI:SetupGroupDebuffs(parent)
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			FREE_ADB['raid_debuffs_list'] = {}
+			FREE_ADB['RaidDebuffsList'] = {}
 			ReloadUI()
 		end,
 		whileDead = 1
@@ -936,12 +937,12 @@ function GUI:SetupGroupDebuffs(parent)
 			function()
 				bar:Hide()
 				if C.RaidDebuffsList[bar.instName][bar.spellID] then
-					if not FREE_ADB['raid_debuffs_list'][bar.instName] then
-						FREE_ADB['raid_debuffs_list'][bar.instName] = {}
+					if not FREE_ADB['RaidDebuffsList'][bar.instName] then
+						FREE_ADB['RaidDebuffsList'][bar.instName] = {}
 					end
-					FREE_ADB['raid_debuffs_list'][bar.instName][bar.spellID] = 0
+					FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = 0
 				else
-					FREE_ADB['raid_debuffs_list'][bar.instName][bar.spellID] = nil
+					FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = nil
 				end
 				setupBars(bar.instName)
 			end
@@ -968,10 +969,10 @@ function GUI:SetupGroupDebuffs(parent)
 			'OnEnterPressed',
 			function(self)
 				local prio = analyzePrio(tonumber(self:GetText()))
-				if not FREE_ADB['raid_debuffs_list'][bar.instName] then
-					FREE_ADB['raid_debuffs_list'][bar.instName] = {}
+				if not FREE_ADB['RaidDebuffsList'][bar.instName] then
+					FREE_ADB['RaidDebuffsList'][bar.instName] = {}
 				end
-				FREE_ADB['raid_debuffs_list'][bar.instName][bar.spellID] = prio
+				FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
 				self:SetText(prio)
 			end
 		)
@@ -1001,15 +1002,15 @@ function GUI:SetupGroupDebuffs(parent)
 
 		if C.RaidDebuffsList[instName] then
 			for spellID, priority in pairs(C.RaidDebuffsList[instName]) do
-				if not (FREE_ADB['raid_debuffs_list'][instName] and FREE_ADB['raid_debuffs_list'][instName][spellID]) then
+				if not (FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spellID]) then
 					index = index + 1
 					applyData(index, instName, spellID, priority)
 				end
 			end
 		end
 
-		if FREE_ADB['raid_debuffs_list'][instName] then
-			for spellID, priority in pairs(FREE_ADB['raid_debuffs_list'][instName]) do
+		if FREE_ADB['RaidDebuffsList'][instName] then
+			for spellID, priority in pairs(FREE_ADB['RaidDebuffsList'][instName]) do
 				if priority > 0 then
 					index = index + 1
 					applyData(index, instName, spellID, priority)

@@ -128,9 +128,14 @@ C.ReminderBuffsList = {
 }
 
 --[[
+	嗜血类增益
+]]
+C.BloodlustList = {57723,57724, 80354, 264689}
+
+--[[
 	边角增益指示器
  ]]
-C.CornerBuffsList = {
+C.CornerSpellsList = {
 	['PRIEST'] = {
 		[194384] = {'TOPRIGHT', {1, 1, .66}}, -- 救赎
 		[214206] = {'TOPRIGHT', {1, 1, .66}}, -- 救赎(PvP)
@@ -199,7 +204,7 @@ C.CornerBuffsList = {
 --[[
 	小队重要增益
  ]]
-C.PartyBuffsList = {
+C.RaidBuffsList = {
 	-- Paladin
 	[642] = true, -- 圣盾术
 	[204018] = true, -- 破咒祝福
@@ -407,7 +412,7 @@ C.PartyBuffsList = {
 --[[
 	团队增益检查
  ]]
-C.RaidBuffsList = {
+C.GroupBuffsCheckList = {
 	[1] = {
 		-- 合剂
 		307166, -- 大锅
@@ -859,9 +864,9 @@ C.PartySpellsDB = {
 }
 
 --[[
-	姓名板过滤列表
+	姓名板光环过滤
 ]]
-C.NPAuraWhiteList = {
+C.AuraWhiteList = {
 	-- Buffs
 	[642] = true, -- 圣盾术
 	[1022] = true, -- 保护之手
@@ -909,7 +914,7 @@ C.NPAuraWhiteList = {
 	[346792] = true -- 罪触之刃，猩红议会
 }
 
-C.NPAuraBlackList = {
+C.AuraBlackList = {
 	[15407] = true, -- 精神鞭笞
 	[51714] = true, -- 锋锐之霜
 	[199721] = true, -- 腐烂光环
@@ -1138,8 +1143,10 @@ C.CharacterSettings = {
 		['group_health_frequency'] = .2,
 		['group_click_cast'] = true,
 		['group_debuff_highlight'] = true,
-		['group_corner_buffs'] = true,
-		['raid_debuffs'] = true,
+		['corner_indicator'] = true,
+		['corner_indicator_scale'] = 1,
+		['instance_auras'] = true,
+		['raid_debuffs_scale'] = 1,
 		['auras_click_through'] = true,
 		['party_spell_watcher'] = true,
 		['party_spell_sync'] = false,
@@ -1193,6 +1200,7 @@ C.CharacterSettings = {
 		['interrupt_name'] = true,
 		['explosive_scale'] = false,
 		['widget_container'] = true,
+		['aura_filter_mode'] = 3,
 		['aura_size'] = 22,
 		['aura_number'] = 6,
 		['inside_view'] = true,
@@ -1380,11 +1388,11 @@ C.AccountSettings = {
 	['chat_filter_black_list'] = '',
 	['chat_filter_white_list'] = '',
 	['custom_junk_list'] = {},
-	['nameplate_aura_filter_list'] = {[1] = {}, [2] = {}},
-	['raid_debuffs_list'] = {},
-	['raid_aura_watch'] = {},
-	['corner_spells_list'] = {},
-	['party_spells_list'] = {},
+	['NPAuraFilter'] = {[1] = {}, [2] = {}},
+	['RaidDebuffsList'] = {},
+	['RaidAuraWatch'] = {},
+	['CornerSpellsList'] = {},
+	['PartySpellsList'] = {},
 	['profile_index'] = {},
 	['profile_names'] = {},
 	['health_color'] = {r = .81, g = .81, b = .81},

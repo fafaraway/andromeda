@@ -336,7 +336,7 @@ GUI.OptionsList = {
 		{1, 'unitframe', 'group_click_cast', L.GUI.GROUPFRAME.GROUP_CLICK_CAST, true, nil, nil, L.GUI.GROUPFRAME.GROUP_CLICK_CAST_TIP},
 		{1, 'unitframe', 'spec_position', L.GUI.GROUPFRAME.SPEC_POSITION},
 		{1, 'unitframe', 'group_threat_indicator', L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR, true},
-		{1, 'unitframe', 'raid_debuffs', L.GUI.GROUPFRAME.RAID_DEBUFFS, nil, SetupGroupDebuffs, nil, L.GUI.GROUPFRAME.RAID_DEBUFFS_TIP},
+		{1, 'unitframe', 'instance_auras', L.GUI.GROUPFRAME.INSTANCE_AURAS, nil, SetupGroupDebuffs, nil, L.GUI.GROUPFRAME.INSTANCE_AURAS_TIP},
 		{1, 'unitframe', 'auras_click_through', L.GUI.GROUPFRAME.AURAS_CLICK_THROUGH, true},
 		{1, 'unitframe', 'group_debuff_highlight', L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT, nil, nil, nil, L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT_TIP},
 		{1, 'unitframe', 'group_corner_buffs', L.GUI.GROUPFRAME.GROUP_CORNER_BUFFS, true},
