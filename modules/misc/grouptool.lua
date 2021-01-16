@@ -352,7 +352,7 @@ function MISC:RaidTool_BuffChecker(parent)
 				numPlayer = numPlayer + 1
 				for j = 1, numGroups do
 					local HasBuff
-					local buffTable = C.RaidBuffsList[j]
+					local buffTable = C.GroupBuffsCheckList[j]
 					for k = 1, #buffTable do
 						local buffName = GetSpellInfo(buffTable[k])
 						for index = 1, 32 do
