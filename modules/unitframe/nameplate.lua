@@ -99,8 +99,8 @@ function NAMEPLATE:BlockAddons()
 		if not tonumber(spellID) then
 			return
 		end
-		if not C.NPAuraWhiteList[spellID] then
-			C.NPAuraWhiteList[spellID] = true
+		if not C.AuraWhiteList[spellID] then
+			C.AuraWhiteList[spellID] = true
 		end
 	end
 	hooksecurefunc(DBM.Nameplate, 'Show', showAurasForDBM)
@@ -198,6 +198,8 @@ function NAMEPLATE:UpdateColor(_, unit)
 	local offTankColor = C.DB.nameplate.off_tank_color
 	local targetColor = C.DB.nameplate.target_color
 	local coloredTarget = C.DB.nameplate.colored_target
+	local hostileClassColor = C.DB.nameplate.hostile_class_color
+	local tankMode = C.DB.nameplate.tank_mode
 	local r, g, b
 
 	if not UnitIsConnected(unit) then
@@ -213,23 +215,23 @@ function NAMEPLATE:UpdateColor(_, unit)
 			else
 				r, g, b = .3, .3, 1
 			end
-		elseif isPlayer and (not isFriendly) and C.DB.nameplate.hostile_class_color then
+		elseif isPlayer and (not isFriendly) and hostileClassColor then
 			r, g, b = F.UnitColor(unit)
 		elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
 			r, g, b = unpack(oUF.colors.tapped)
 		else
 			--r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 			r, g, b = UnitSelectionColor(unit, true)
-			if status and (C.DB.nameplate.tank_mode or C.Role == 'Tank') then
+			if status and (tankMode or C.Role == 'Tank') then
 				if status == 3 then
 					if C.Role ~= 'Tank' and revertThreat then
 						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
 					else
-						if self.isOffTank then
+						-- if self.isOffTank then
 							r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
-						else
-							r, g, b = secureColor.r, secureColor.g, secureColor.b
-						end
+						-- else
+						-- 	r, g, b = secureColor.r, secureColor.g, secureColor.b
+						-- end
 					end
 				elseif status == 2 or status == 1 then
 					r, g, b = transColor.r, transColor.g, transColor.b
@@ -248,7 +250,7 @@ function NAMEPLATE:UpdateColor(_, unit)
 		element:SetStatusBarColor(r, g, b)
 	end
 
-	if isCustomUnit or (not C.DB.nameplate.tank_mode and C.Role ~= 'Tank') then
+	if isCustomUnit or (not tankMode and C.Role ~= 'Tank') then
 		if status and status == 3 then
 			self.ThreatIndicator:SetVertexColor(1, 0, 0)
 			self.ThreatIndicator:Show()
@@ -268,7 +270,7 @@ function NAMEPLATE:UpdateThreatColor(_, unit)
 		return
 	end
 
-	NAMEPLATE.CheckTankStatus(self, unit)
+	--NAMEPLATE.CheckTankStatus(self, unit)
 	NAMEPLATE.UpdateColor(self, _, unit)
 end
 
@@ -341,6 +343,7 @@ function NAMEPLATE:AddTargetIndicator(self)
 
 	self.TargetIndicator = frame
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
+	NAMEPLATE.UpdateTargetIndicator(self)
 end
 
 -- Mouseover indicator
