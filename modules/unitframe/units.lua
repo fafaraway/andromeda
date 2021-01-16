@@ -421,7 +421,7 @@ function UNITFRAME:SpawnParty()
 		'showPlayer',
 		true,
 		'showSolo',
-		true,
+		showSolo,
 		'showParty',
 		true,
 		'showRaid',
