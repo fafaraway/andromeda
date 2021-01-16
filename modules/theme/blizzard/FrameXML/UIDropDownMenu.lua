@@ -1,11 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 local function toggleBackdrop(bu, show)
-	if show then
-		bu.bg:Show()
-	else
-		bu.bg:Hide()
-	end
+	bu.bg:SetShown(show)
 end
 
 local function isCheckTexture(check)
@@ -55,6 +51,7 @@ tinsert(C.BlizzThemes, function()
 					F.SetupArrow(arrow:GetNormalTexture(), "right")
 					arrow:SetSize(14, 14)
 				end
+				toggleBackdrop(bu, false)
 
 				local uncheck = _G["DropDownList"..level.."Button"..i.."UnCheck"]
 				if isCheckTexture(uncheck) then uncheck:SetTexture("") end
@@ -78,8 +75,6 @@ tinsert(C.BlizzThemes, function()
 						end
 
 						check:SetTexCoord(0, 1, 0, 1)
-					else
-						toggleBackdrop(bu, false)
 					end
 				else
 					check:SetSize(16, 16)
