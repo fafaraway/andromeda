@@ -629,7 +629,8 @@ L.GUI = {
 		['HIDE_REALM'] = 'Hide realm',
 		['HIDE_TITLE'] = 'Hide title',
 		['HIDE_RANK'] = 'Hide guild rank',
-		['DISABLE_FADING'] = 'Disable fading'
+		['DISABLE_FADING'] = 'Disable fading',
+		['HEALTH_VALUE'] = 'Show health value'
 	},
 	['UNITFRAME'] = {
 		['NAME'] = 'Unitframe',

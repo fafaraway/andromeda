@@ -293,7 +293,8 @@ GUI.OptionsList = {
 		{1, 'tooltip', 'hide_realm', L.GUI.TOOLTIP.HIDE_REALM, true},
 		{1, 'tooltip', 'hide_title', L.GUI.TOOLTIP.HIDE_TITLE},
 		{1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true},
-		{1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR}
+		{1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR},
+		{1, 'tooltip', 'health_value', L.GUI.TOOLTIP.HEALTH_VALUE, true}
 	},
 	[12] = {
 		-- unitframes

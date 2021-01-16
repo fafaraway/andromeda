@@ -20,7 +20,6 @@ local GetRaidTargetIndex, UnitGroupRolesAssigned, GetGuildInfo, IsInGuild = GetR
 local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAuras, C_PetBattles.GetAuraInfo
 
 local targetTable = {}
-
 local classification = {
 	elite = ' |cffcc8800' .. ELITE .. '|r',
 	rare = ' |cffff99cc' .. L['TOOLTIP_RARE'] .. '|r',
@@ -196,13 +195,56 @@ function TOOLTIP:OnTooltipSetUnit()
 	TOOLTIP.InspectUnitSpecAndLevel(self)
 end
 
+function TOOLTIP:OnTooltipCleared()
+	self.tipUpdate = 1
+	self.tipUnit = nil
+end
+
+function TOOLTIP:GameTooltip_OnUpdate(elapsed)
+	self.tipUpdate = (self.tipUpdate or 0) + elapsed
+	if (self.tipUpdate < .1) then
+		return
+	end
+	if (self.tipUnit and not UnitExists(self.tipUnit)) then
+		self:Hide()
+		return
+	end
+	self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65)
+	self.tipUpdate = 0
+end
+
+function TOOLTIP:StatusBar_OnValueChanged(value)
+	if not C.DB.tooltip.health_value then
+		return
+	end
+
+	if self:IsForbidden() or not value then
+		return
+	end
+
+	local min, max = self:GetMinMaxValues()
+	if (value < min) or (value > max) then
+		return
+	end
+
+	if not self.text then
+		self.text = F.CreateFS(self, C.Assets.Fonts.Bold, 11, nil, '')
+	end
+
+	if value > 0 and max == 1 then
+		self.text:SetFormattedText('%d%%', value * 100)
+	else
+		self.text:SetText(F.Numb(value) .. ' | ' .. F.Numb(max))
+	end
+end
+
 function TOOLTIP:ReskinStatusBar()
 	self.StatusBar:ClearAllPoints()
 	self.StatusBar:SetPoint('BOTTOMLEFT', GameTooltip, 'TOPLEFT', 1, -4)
 	self.StatusBar:SetPoint('BOTTOMRIGHT', GameTooltip, 'TOPRIGHT', -1, -4)
 	self.StatusBar:SetStatusBarTexture(C.Assets.statusbar_tex)
 	self.StatusBar:SetHeight(3)
-	F.SetBD(self.StatusBar)
+	F.CreateBDFrame(self.StatusBar)
 end
 
 function TOOLTIP:GameTooltip_ShowStatusBar()
@@ -440,16 +482,8 @@ function TOOLTIP:OnLogin()
 
 	GameTooltip.StatusBar = GameTooltipStatusBar
 
-	local ssbc = CreateFrame('StatusBar').SetStatusBarColor
-	GameTooltipStatusBar._SetStatusBarColor = ssbc
-	function GameTooltipStatusBar:SetStatusBarColor(...)
-		local unit = TOOLTIP.GetUnit(GameTooltip)
-		if (UnitExists(unit)) then
-			return self:_SetStatusBarColor(F.UnitColor(unit))
-		end
-	end
-
 	GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.OnTooltipSetUnit)
+	GameTooltip.StatusBar:SetScript('OnValueChanged', TOOLTIP.StatusBar_OnValueChanged)
 	hooksecurefunc('GameTooltip_ShowStatusBar', TOOLTIP.GameTooltip_ShowStatusBar)
 	hooksecurefunc('GameTooltip_ShowProgressBar', TOOLTIP.GameTooltip_ShowProgressBar)
 	hooksecurefunc('GameTooltip_SetDefaultAnchor', TOOLTIP.GameTooltip_SetDefaultAnchor)
@@ -457,30 +491,8 @@ function TOOLTIP:OnLogin()
 	hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
 
 	if C.DB.tooltip.disable_fading then
-		GameTooltip:HookScript(
-			'OnTooltipCleared',
-			function(self)
-				self.tipUpdate = 1
-				self.tipUnit = nil
-			end
-		)
-
-		GameTooltip:HookScript(
-			'OnUpdate',
-			function(self, elapsed)
-				self.tipUpdate = (self.tipUpdate or 0) + elapsed
-				if (self.tipUpdate < .1) then
-					return
-				end
-				if (self.tipUnit and not UnitExists(self.tipUnit)) then
-					self:Hide()
-					return
-				end
-				self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65)
-				self.tipUpdate = 0
-			end
-		)
-
+		GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
+		GameTooltip:HookScript('OnUpdate', TOOLTIP.GameTooltip_OnUpdate)
 		GameTooltip.FadeOut = function(self)
 			self:Hide()
 		end

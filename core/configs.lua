@@ -1225,7 +1225,8 @@ C.CharacterSettings = {
 		['target_by'] = true,
 		['extra_info'] = true,
 		['aura_source'] = true,
-		['conduit_info'] = true
+		['conduit_info'] = true,
+		['health_value'] = false
 	},
 	['map'] = {
 		['enable'] = true,
