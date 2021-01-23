@@ -112,8 +112,8 @@ local ignoreQuestNPC = {
 	[143555] = true, -- 山德·希尔伯曼，祖达萨PVP军需官
 	[168430] = true, -- 戴克泰丽丝，格里恩挑战
 	[160248] = true, -- 档案员费安，罪魂碎片
-	[127037] = true,	-- 纳毕鲁
-	[326027] = true,	-- 运输站回收生成器DX-82
+	[127037] = true, -- 纳毕鲁
+	[326027] = true -- 运输站回收生成器DX-82
 }
 
 QuickQuest:Register(
@@ -184,11 +184,11 @@ local ignoreGossipNPC = {
 	[171821] = true, -- 德拉卡女男爵
 	[172558] = true, -- 艾拉·引路者（导师）
 	[172572] = true, -- 瑟蕾丝特·贝利文科（导师）
-	[175513] = true -- 纳斯利亚审判官
+	[175513] = true -- 纳斯利亚审判官，傲慢
 }
 
 local rogueClassHallInsignia = {
-	[97004] = true, -- 'Red' Jack Findle
+	[97004] = true, -- "Red" Jack Findle
 	[96782] = true, -- Lucian Trias
 	[93188] = true -- Mongar
 }

@@ -19,8 +19,7 @@ function MISC:OnLogin()
 	MISC:ForceWarning()
 	MISC:FasterCamera()
 	MISC:AutoScreenshot()
-	--MISC:QuestRewardHighlight()
-	MISC:UpdateQuestCompletedSound()
+	MISC:QuestCompletedSound()
 	MISC:BuyStack()
 	MISC:SetRole()
 	MISC:MawWidgetFrame()
@@ -90,68 +89,6 @@ function MISC:FasterCamera()
 	end
 end
 
---[[ Highlight high value reward ]]
-do
-	local function CreateHighlight(reward)
-		if not MISC.rewardHighlightFrame then
-			MISC.rewardHighlightFrame = CreateFrame('Frame', 'QuesterRewardHighlight', QuestInfoRewardsFrame, 'AutoCastShineTemplate')
-			MISC.rewardHighlightFrame:SetScript(
-				'OnHide',
-				function(frame)
-					AutoCastShine_AutoCastStop(frame)
-				end
-			)
-		end
-
-		MISC.rewardHighlightFrame:ClearAllPoints()
-		MISC.rewardHighlightFrame:SetAllPoints(reward)
-		MISC.rewardHighlightFrame:Show()
-
-		AutoCastShine_AutoCastStart(MISC.rewardHighlightFrame)
-	end
-
-	local function UpdateHighlight()
-		if MISC.rewardHighlightFrame then
-			MISC.rewardHighlightFrame:Hide()
-		end
-
-		local bestprice, bestitem = 0, 0
-		for i = 1, GetNumQuestChoices() do
-			local link, _, _, qty = GetQuestItemLink('choice', i), GetQuestItemInfo('choice', i)
-			local price = link and select(11, GetItemInfo(link))
-			if not price then
-				return
-			end
-
-			price = price * (qty or 1)
-
-			if price > bestprice then
-				bestprice = price
-				bestitem = i
-			end
-		end
-
-		local rewardButton = _G['QuestInfoRewardsFrameQuestInfoItem' .. bestitem]
-
-		if bestitem > 0 then
-			CreateHighlight(_G[('QuestInfoRewardsFrameQuestInfoItem%dIconTexture'):format(bestitem)])
-
-			_G.QuestInfoFrame.itemChoice = rewardButton:GetID()
-		end
-	end
-
-	function MISC:QuestRewardHighlight()
-		if IsAddOnLoaded('Immersion') then
-			return
-		end
-
-		if C.DB.misc.reward_highlight then
-			F:RegisterEvent('QUEST_COMPLETE', UpdateHighlight)
-		else
-			F:UnregisterEvent('QUEST_COMPLETE', UpdateHighlight)
-		end
-	end
-end
 
 --[[ Sound alert for quest complete ]]
 do
@@ -188,7 +125,7 @@ do
 		end
 	end
 
-	function MISC:UpdateQuestCompletedSound()
+	function MISC:QuestCompletedSound()
 		if C.DB.misc.quest_completed_sound then
 			F:RegisterEvent('QUEST_LOG_UPDATE', MISC.FindQuestComplete)
 			F:RegisterEvent('QUEST_TURNED_IN', MISC.FindWorldQuestComplete)

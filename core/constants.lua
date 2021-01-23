@@ -39,7 +39,8 @@ C.DevsList = {
 	['哞夫人-霜之哀伤'] = true,
 	['Rhonesaia-白银之手'] = true,
 	['天地之悠悠-白银之手'] = true,
-	['貳拾年老戰士-白银之手'] = true
+	['貳拾年老戰士-白银之手'] = true,
+	['池魚故淵-白银之手'] = true
 }
 local function isDeveloper()
 	return C.DevsList[C.MyFullName]
