@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F:GetModule('ACTIONBAR')
-
+local ACTIONBAR = F.ACTIONBAR
 
 local barsList = {
 	'FreeUI_ActionBar1',
@@ -10,11 +9,13 @@ local barsList = {
 	'FreeUI_ActionBar5',
 	'FreeUI_CustomBar',
 	'FreeUI_ActionBarPet',
-	'FreeUI_ActionBarStance',
+	'FreeUI_ActionBarStance'
 }
 
 function ACTIONBAR:FadeBlingTexture(cooldown, alpha)
-	if not cooldown then return end
+	if not cooldown then
+		return
+	end
 	cooldown:SetBlingTexture(alpha > 0.5 and 131010 or C.Assets.blank_tex)
 end
 
@@ -41,11 +42,11 @@ end
 function ACTIONBAR:FadeParent_OnEvent()
 	local inInstance, instanceType = IsInInstance()
 
-	if (UnitAffectingCombat('player') and C.DB.actionbar.condition_combating)
-	or ((UnitExists('target') or UnitExists('focus')) and C.DB.actionbar.condition_targeting)
-	or ((instanceType == 'pvp' or instanceType == 'arena') and C.DB.actionbar.condition_pvp)
-	or ((instanceType == 'party' or instanceType == 'raid') and C.DB.actionbar.condition_dungeon)
-	or (UnitHasVehicleUI('player') and C.DB.actionbar.condition_vehicle) then
+	if
+		(UnitAffectingCombat('player') and C.DB.actionbar.condition_combating) or ((UnitExists('target') or UnitExists('focus')) and C.DB.actionbar.condition_targeting) or ((instanceType == 'pvp' or instanceType == 'arena') and C.DB.actionbar.condition_pvp) or
+			((instanceType == 'party' or instanceType == 'raid') and C.DB.actionbar.condition_dungeon) or
+			(UnitHasVehicleUI('player') and C.DB.actionbar.condition_vehicle)
+	 then
 		self.mouseLock = true
 		F:UIFrameFadeIn(self, ACTIONBAR.fadeInDuration, self:GetAlpha(), ACTIONBAR.fadeInAlpha)
 		ACTIONBAR:FadeBlings(ACTIONBAR.fadeInAlpha)
@@ -72,8 +73,18 @@ function ACTIONBAR:HookActionBar()
 	end
 end
 
+function ACTIONBAR:RemoveCooldownBling()
+	for k, v in pairs(_G) do
+		if type(v) == 'table' and type(v.SetDrawBling) == 'function' then
+			v:SetDrawBling(false)
+		end
+	end
+end
+
 function ACTIONBAR:UpdateActionBarFade()
-	if not C.DB.actionbar.fade then return end
+	if not C.DB.actionbar.fade then
+		return
+	end
 
 	ACTIONBAR.fadeOutAlpha = C.DB.actionbar.fade_out_alpha or 0
 	ACTIONBAR.fadeInAlpha = C.DB.actionbar.fade_in_alpha or 1
@@ -106,4 +117,15 @@ function ACTIONBAR:UpdateActionBarFade()
 	end
 
 	ACTIONBAR.HookActionBar()
+
+	-- Completely remove cooldown bling
+	-- Credit: CooldownReadyFlashDisabler by AlexFolland
+	ACTIONBAR:RemoveCooldownBling()
+	hooksecurefunc(
+		getmetatable(ActionButton1Cooldown).__index,
+		'SetCooldown',
+		function(self)
+			self:SetDrawBling(false)
+		end
+	)
 end
