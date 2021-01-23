@@ -178,3 +178,12 @@ tags['free:altpower'] = function(unit)
 	end
 end
 tagEvents['free:altpower'] = 'UNIT_POWER_UPDATE'
+
+tags['free:tarname'] = function(unit)
+	local tarUnit = unit .. 'target'
+	if UnitExists(tarUnit) then
+		local tarClass = select(2, UnitClass(tarUnit))
+		return F.RGBToHex(oUF.colors.class[tarClass]) .. UnitName(tarUnit)
+	end
+end
+tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH'

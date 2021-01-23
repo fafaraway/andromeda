@@ -20,7 +20,7 @@ local INTERRUPTED = INTERRUPTED
 --[[ CVars ]]
 function NAMEPLATE:PlateInsideView()
 	if C.DB.nameplate.inside_view then
-		_G.SetCVar('nameplateOtherTopInset', .08)
+		_G.SetCVar('nameplateOtherTopInset', .05)
 		_G.SetCVar('nameplateOtherBottomInset', .08)
 	else
 		_G.SetCVar('nameplateOtherTopInset', -1)
@@ -166,10 +166,15 @@ function NAMEPLATE:UpdateGroupRoles()
 end
 
 function NAMEPLATE:CheckTankStatus(unit)
-	local index = unit .. 'target'
-	local unitRole = isInGroup and UnitExists(index) and not UnitIsUnit(index, 'player') and groupRoles[UnitName(index)] or 'NONE'
+	if not UnitExists(unit) then
+		return
+	end
+
+	local unitTarget = unit .. 'target'
+	local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and groupRoles[UnitName(unitTarget)] or 'NONE'
+
 	if unitRole == 'TANK' and C.Role == 'Tank' then
-		self.feedbackUnit = index
+		self.feedbackUnit = unitTarget
 		self.isOffTank = true
 	else
 		self.feedbackUnit = 'player'
@@ -227,11 +232,11 @@ function NAMEPLATE:UpdateColor(_, unit)
 					if C.Role ~= 'Tank' and revertThreat then
 						r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
 					else
-						-- if self.isOffTank then
+						if self.isOffTank then
 							r, g, b = offTankColor.r, offTankColor.g, offTankColor.b
-						-- else
-						-- 	r, g, b = secureColor.r, secureColor.g, secureColor.b
-						-- end
+						else
+							r, g, b = secureColor.r, secureColor.g, secureColor.b
+						end
 					end
 				elseif status == 2 or status == 1 then
 					r, g, b = transColor.r, transColor.g, transColor.b
@@ -270,7 +275,7 @@ function NAMEPLATE:UpdateThreatColor(_, unit)
 		return
 	end
 
-	--NAMEPLATE.CheckTankStatus(self, unit)
+	NAMEPLATE.CheckTankStatus(self, unit)
 	NAMEPLATE.UpdateColor(self, _, unit)
 end
 
@@ -286,7 +291,7 @@ function NAMEPLATE:AddThreatIndicator(self)
 	local threat = frame:CreateTexture(nil, 'OVERLAY')
 	threat:SetPoint('BOTTOMLEFT', frame, 'TOPLEFT', 0, 0)
 	threat:SetPoint('BOTTOMRIGHT', frame, 'TOPRIGHT', 0, 0)
-	threat:SetHeight(4)
+	threat:SetHeight(8)
 	threat:SetTexture(C.Assets.glow_tex)
 	threat:Hide()
 
@@ -336,10 +341,10 @@ function NAMEPLATE:AddTargetIndicator(self)
 	local texBot = frame:CreateTexture(nil, 'OVERLAY')
 	texBot:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, 0)
 	texBot:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
-	texBot:SetHeight(4)
+	texBot:SetHeight(8)
 	texBot:SetTexture(C.Assets.glow_tex)
 	texBot:SetRotation(rad(180))
-	texBot:SetVertexColor(r, g, b, .85)
+	texBot:SetVertexColor(r, g, b)
 
 	self.TargetIndicator = frame
 	self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
@@ -543,6 +548,18 @@ function NAMEPLATE:CreateNameplateStyle()
 	self.Health.frequentUpdates = true
 	self.Health.UpdateColor = NAMEPLATE.UpdateColor
 
+	local tarName
+	if FREE_ADB.font_outline then
+		tarName = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
+	else
+		tarName = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+	end
+	tarName:ClearAllPoints()
+	tarName:SetPoint('TOP', self, 'BOTTOM', 0, -10)
+	tarName:Hide()
+	self:Tag(tarName, '[free:tarname]')
+	self.tarName = tarName
+
 	UNITFRAME:AddNameText(self)
 	UNITFRAME:AddHealthPrediction(self)
 	NAMEPLATE:AddTargetIndicator(self)
@@ -677,6 +694,8 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 	if event ~= 'NAME_PLATE_UNIT_REMOVED' then
 		NAMEPLATE.UpdateTargetChange(self)
 		NAMEPLATE.UpdateUnitClassify(self, unit)
+
+		self.tarName:SetShown(self.npcID == 174773)
 	end
 
 	NAMEPLATE.UpdateExplosives(self, event, unit)
