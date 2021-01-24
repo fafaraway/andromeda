@@ -104,7 +104,7 @@ local function GetClassColor(className)
 	end
 
 	-- 德语及法语有分性别的职业名
-	if C.Client == 'deDE' or C.Client == 'frFR' then
+	if C.GameLocale == 'deDE' or C.GameLocale == 'frFR' then
 		for class, localizedName in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
 			if className == localizedName then
 				return C.ClassColors[class]

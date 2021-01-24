@@ -6,25 +6,25 @@ if C.isDeveloper then
 	C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
-elseif C.Client == 'zhCN' then
+elseif C.GameLocale == 'zhCN' then
 	C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
-elseif C.Client == 'zhTW' then
+elseif C.GameLocale == 'zhTW' then
 	C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\bKAI00M.ttf'
-elseif C.Client == 'koKR' then
+elseif C.GameLocale == 'koKR' then
 	C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
 	C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
 	C.Assets.Fonts.Combat = 'Fonts\\K_Damage.ttf'
-elseif C.Client == 'ruRU' then
+elseif C.GameLocale == 'ruRU' then
 	C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
 	C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
 	C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
@@ -257,13 +257,13 @@ loader:SetScript(
 		local LSM = LibStub and LibStub:GetLibrary('LibSharedMedia-3.0', true)
 
 		local LOCALE_MASK = 0
-		if C.Client == 'koKR' then
+		if C.GameLocale == 'koKR' then
 			LOCALE_MASK = 1
-		elseif C.Client == 'ruRU' then
+		elseif C.GameLocale == 'ruRU' then
 			LOCALE_MASK = 2
-		elseif C.Client == 'zhCN' then
+		elseif C.GameLocale == 'zhCN' then
 			LOCALE_MASK = 4
-		elseif C.Client == 'zhTW' then
+		elseif C.GameLocale == 'zhTW' then
 			LOCALE_MASK = 8
 		else
 			LOCALE_MASK = 128

@@ -1,9 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local bit_band, bit_bor = bit.band, bit.bor
-local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
-local GetSpecialization, GetSpecializationInfo = GetSpecialization, GetSpecializationInfo
-
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
 C.MyLevel = UnitLevel('player')
@@ -11,10 +7,21 @@ C.MyFaction = select(2, UnitFactionGroup('player'))
 C.MyRace = select(2, UnitRace('player'))
 C.MyRealm = GetRealmName()
 C.MyFullName = C.MyName .. '-' .. C.MyRealm
-C.AddonVersion = GetAddOnMetadata('FreeUI', 'Version')
-C.Support = GetAddOnMetadata('FreeUI', 'X-Support')
-C.Client = GetLocale()
-C.isChinses = C.Client == 'zhCN' or C.Client == 'zhTW'
+
+local playerGUID = UnitGUID('player')
+local _, serverID = strsplit('-', playerGUID)
+C.ServerID = tonumber(serverID)
+C.MyGuid = playerGUID
+
+local addonVersion = '@project-version@'
+if (addonVersion:find('project%-version')) then
+	addonVersion = 'Development'
+end
+C.AddonVersion = addonVersion
+C.isDeveloper = C.AddonVersion == 'Development'
+
+C.GameLocale = GetLocale()
+C.isChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 C.isLowRes = C.ScreenHeight < 1500
@@ -26,26 +33,6 @@ C.MaxLevel = GetMaxLevelForPlayerExpansion()
 C.BackdropColor = {.1, .1, .1}
 C.BorderColor = {.04, .04, .04}
 C.GradientColor = {.04, .04, .04, .4, .08, .08, .08, .4}
-
-C.DevsList = {
-	['Farfaraway-霜之哀伤'] = true,
-	['Fionorolah-霜之哀伤'] = true,
-	['Kangrinboqe-霜之哀伤'] = true,
-	['Dontbeshy-霜之哀伤'] = true,
-	['瑪格漢之光-霜之哀伤'] = true,
-	['贰拾年老騎士-霜之哀伤'] = true,
-	['贰拾年老法師-霜之哀伤'] = true,
-	['贰拾年老戰士-霜之哀伤'] = true,
-	['哞夫人-霜之哀伤'] = true,
-	['Rhonesaia-白银之手'] = true,
-	['天地之悠悠-白银之手'] = true,
-	['貳拾年老戰士-白银之手'] = true,
-	['池魚故淵-白银之手'] = true
-}
-local function isDeveloper()
-	return C.DevsList[C.MyFullName]
-end
-C.isDeveloper = isDeveloper()
 
 C['Assets'] = {
 	['norm_tex'] = C.AssetsPath .. 'textures\\norm_tex',
@@ -187,6 +174,8 @@ F:RegisterEvent('ADDON_LOADED', CheckRole)
 F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckRole)
 
 -- Flags
+local bit_band, bit_bor = bit.band, bit.bor
+local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
 function C:IsMyPet(flags)
 	return bit_band(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
 end
