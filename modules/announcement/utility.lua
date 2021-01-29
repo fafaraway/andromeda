@@ -109,7 +109,7 @@ local function TryAnnounce(spellId, sourceName, id, list, type)
 	sourceName = sourceName:gsub('%-[^|]+', '')
 
 	if (id and spellId == id) or (type and list[spellId]) then
-		ANNOUNCEMENT:SendMessage(FormatMessage(L['ANNOUNCEMENT_CASTED'], sourceName, spellId), ANNOUNCEMENT:GetChannel())
+		ANNOUNCEMENT:SendMessage(FormatMessage(L.ANNOUNCEMENT.CAST, sourceName, spellId), ANNOUNCEMENT:GetChannel())
 
 		return true
 	end
@@ -118,11 +118,11 @@ local function TryAnnounce(spellId, sourceName, id, list, type)
 end
 
 function ANNOUNCEMENT:Utility(event, sourceName, spellId)
-	if not C.DB.announcement.utility then
+	if not C.DB.Announcement.Utility then
 		return
 	end
 
-	if not (IsInInstance() and IsInGroup()) or not event or not spellId or not sourceName then
+	if not event or not spellId or not sourceName then
 		return
 	end
 

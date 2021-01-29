@@ -1005,15 +1005,15 @@ C.CharacterSettings = {
 		['fct_in'] = true,
 		['fct_out'] = false
 	},
-	['announcement'] = {
-		['enable'] = true,
-		['interrupt'] = true,
-		['dispel'] = true,
-		['stolen'] = true,
-		['combat_resurrection'] = true,
-		['utility'] = true,
-		['quest'] = false,
-		['cooldown'] = true
+	['Announcement'] = {
+		['Enable'] = true,
+		['Interrupt'] = true,
+		['Dispel'] = true,
+		['BattleRez'] = true,
+		['Utility'] = true,
+		['Quest'] = false,
+		['Reset'] = true,
+		['Solo'] = false,
 	},
 	['aura'] = {
 		['enable'] = true,

@@ -177,23 +177,28 @@ end
 
 --[[ Announcement ]]
 do
-	L['ANNOUNCEMENT_INTERRUPT'] = "Interrupted %target%'s %spell%"
-	L['ANNOUNCEMENT_DISPEL'] = "Dispelled %target%'s %spell%"
-	L['ANNOUNCEMENT_STOLEN'] = "Stolen %target%'s %spell%"
-	L['ANNOUNCEMENT_CASTED'] = '%player% casted %spell%'
-	L['ANNOUNCEMENT_COMBAT_RESURRECTION_SELF'] = '%player% casted %spell%'
-	L['ANNOUNCEMENT_COMBAT_RESURRECTION_TARGET'] = '%player% casted %spell% on %target%'
-	L['ANNOUNCEMENT_QUEST_ACCEPT'] = 'Accept quest'
-	L['ANNOUNCEMENT_QUEST_ANNOUNCE'] = 'Quest announce'
-	L['ANNOUNCEMENT_QUEST_ANNOUNCE_TIP'] = 'Announce quest progress while in group.'
+	L.ANNOUNCEMENT = {
+		['INTERRUPT'] = "Interrupted %target%'s %target_spell%!",
+		['DISPEL'] = "Dispelled %target%'s %target_spell%!",
+		['STOLEN'] = "Stolen %target%'s %target_spell%!",
+		['BATTLE_REZ'] = '%player% casted %spell% on %target%!',
+		['CAST'] = '%player% casted %spell%!',
+		['CAST_TARGET'] = '%player% casted %spell% on %target%!',
+		['QUEST_ACCEPT'] = 'Quest accept:',
+		['QUEST_ANNOUNCE'] = 'Quest announce',
+		['QUEST_ANNOUNCE_TIP'] = 'Let your teammates know the progress of quests.',
 
-	L['ANNOUNCEMENT_INSTANCE_RESET_SUCCESS'] = '%s has been reset'
-	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED'] = 'Cannot reset %s (There are players still inside the instance.)'
-	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_ZONING'] = 'Cannot reset %s (There are players in your party attempting to zone into an instance.)'
-	L['ANNOUNCEMENT_INSTANCE_RESET_FAILED_OFFLINE'] = 'Cannot reset %s (There are players offline in your party.)'
+		['RESET_SUCCESS'] = '%s has been reset.',
+		['RESET_FAILED'] = 'Cannot reset %s, there are players still inside the instance.',
+		['RESET_FAILED_ZONING'] = 'Cannot reset %s, there are players in your party attempting to zone into an instance.',
+		['RESET_FAILED_OFFLINE'] = 'Cannot reset %s, there are players offline in your party.',
+	}
 
-	L['ANNOUNCEMENT_COOLDOWN_REMAINING'] = '%s cooldown remaining %s.'
-	L['ANNOUNCEMENT_COOLDOWN_COMPLETED'] = '%s is now available.'
+
+
+
+	L['%s cooldown remaining %s.'] = true
+	L['%s is now available.'] = true
 end
 
 --[[ Inventory ]]
@@ -377,7 +382,7 @@ L.GUI = {
 		['NAKED_BUTTON'] = 'Naked button',
 		['NAKED_BUTTON_TIP'] = 'Show naked button on character frame, double click it to unequip all gears.',
 		['MISSING_STATS'] = 'Missing stats',
-		['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.',
+		['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.'
 	},
 	['APPEARANCE'] = {
 		['NAME'] = 'Appearance',
@@ -546,15 +551,17 @@ L.GUI = {
 	['ANNOUNCEMENT'] = {
 		['NAME'] = 'Announcement',
 		['ENABLE'] = 'Enable announcement',
-		['ENABLE_TIP'] = '在副本中通告自己或是队友的一些特定行为。',
+		['ENABLE_TIP'] = 'Announcement module is a tool to help you send messages.',
 		['INTERRUPT'] = 'Interrupt',
-		['INTERRUPT_TIP'] = '通告自己的成功打断。',
+		['INTERRUPT_TIP'] = 'Send message when you successfully interrupted enemy\'s casting.',
 		['DISPEL'] = 'Dispel',
-		['DISPEL_TIP'] = '通告自己的成功驱散。',
-		['COMBAT_RESURRECTION'] = 'Battle resurrection',
-		['COMBAT_RESURRECTION_TIP'] = '通告自己或是队友使用的战复。',
+		['DISPEL_TIP'] = 'Send message when you successfully dispelled enemy\'s aura.',
+		['BATTLEREZ'] = 'Battle resurrection',
+		['BATTLEREZ_TIP'] = 'Send message about battle resurrection use.',
 		['UTILITY'] = 'Utility',
-		['UTILITY_TIP'] = '通告自己或是队友使用的辅助技能及物品，比如大餐/药锅/传送门/糖/修理机器人/邮箱等等。',
+		['UTILITY_TIP'] = 'Send message about the use of portals, feasts, repair bot, etc.',
+		['RESET'] = 'Instance reset',
+		['RESET_TIP'] = 'Send message after instance reset.',
 		['COOLDOWN'] = 'Cooldown status',
 		['COOLDOWN_TIP'] = 'You can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.'
 	},
@@ -763,7 +770,7 @@ L.GUI = {
 		['TANK_MODE'] = 'Force colored by threat',
 		['TANK_MODE_TIP'] = 'If enabled, nameplate health color would present its threat status to you, instead of threat indicator.|nFor custom color units, the threat status remains on threat indicator.',
 		['DPS_REVERT_THREAT'] = 'Revert threat color if not tank',
-		['DPS_REVERT_THREAT_TIP'] = 'If \'Force colored by threat\' enabled, swap their threat status color for non-tank classes.',
+		['DPS_REVERT_THREAT_TIP'] = "If 'Force colored by threat' enabled, swap their threat status color for non-tank classes.",
 		['SECURE_COLOR'] = 'Secure color',
 		['TRANS_COLOR'] = 'Transition color',
 		['INSECURE_COLOR'] = 'Insecure color',

@@ -1,10 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F.ANNOUNCEMENT
 
-local strmatch, strfind, gsub, format, floor = strmatch, strfind, gsub, format, floor
-local wipe, mod, tonumber, pairs, print = wipe, mod, tonumber, pairs, print
-local IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage = IsPartyLFG, IsInRaid, IsInGroup, PlaySound, SendChatMessage
-local GetQuestLink = GetQuestLink
+
 local C_QuestLog_GetInfo = C_QuestLog.GetInfo
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
@@ -14,7 +11,6 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
-local DAILY, QUEST_COMPLETE = DAILY, QUEST_COMPLETE
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 
@@ -23,19 +19,24 @@ local completedQuest, initComplete = {}
 
 local created
 local function CreateCheckBox()
-	if created then return end
+	if created then
+		return
+	end
 	local bu = CreateFrame('CheckButton', nil, WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
 	bu:SetPoint('TOPRIGHT', -270, -4)
 	bu:SetSize(20, 20)
 	bu:SetHitRectInsets(-5, -5, -5, -5)
 	F.ReskinCheck(bu, true)
-	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['ANNOUNCEMENT_QUEST_ANNOUNCE'], 'YELLOW', true, 'LEFT', 22, 0)
-	bu:SetChecked(C.DB.announcement.quest)
-	bu:SetScript('OnClick', function(self)
-		C.DB.announcement.quest = self:GetChecked()
-		ANNOUNCEMENT:QuestNotification()
-	end)
-	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['ANNOUNCEMENT_QUEST_ANNOUNCE_TIP'], 'BLUE')
+	bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L.ANNOUNCEMENT.QUEST_ANNOUNCE, 'YELLOW', true, 'LEFT', 22, 0)
+	bu:SetChecked(C.DB.Announcement.Quest)
+	bu:SetScript(
+		'OnClick',
+		function(self)
+			C.DB.Announcement.Quest = self:GetChecked()
+			ANNOUNCEMENT:QuestNotification()
+		end
+	)
+	F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L.ANNOUNCEMENT.QUEST_ANNOUNCE_TIP, 'BLUE')
 
 	created = true
 end
@@ -48,9 +49,9 @@ end
 local function acceptText(questID, daily)
 	local title = GetQuestLinkOrName(questID)
 	if daily then
-		return format('%s [%s]%s', L['ANNOUNCEMENT_QUEST_ACCEPT'], DAILY, title)
+		return format('%s [%s]%s', L.ANNOUNCEMENT.QUEST_ACCEPT, DAILY, title)
 	else
-		return format('%s %s', L['ANNOUNCEMENT_QUEST_ACCEPT'], title)
+		return format('%s %s', L.ANNOUNCEMENT.QUEST_ACCEPT, title)
 	end
 end
 
@@ -142,11 +143,8 @@ function ANNOUNCEMENT:FindWorldQuestComplete(questID)
 	end
 end
 
-
-
-
 function ANNOUNCEMENT:QuestNotification()
-	if C.DB.announcement.quest then
+	if C.DB.Announcement.Quest then
 		F:RegisterEvent('QUEST_ACCEPTED', ANNOUNCEMENT.FindQuestAccept)
 		F:RegisterEvent('QUEST_LOG_UPDATE', ANNOUNCEMENT.FindQuestComplete)
 		F:RegisterEvent('QUEST_TURNED_IN', ANNOUNCEMENT.FindWorldQuestComplete)

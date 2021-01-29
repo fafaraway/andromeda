@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="announcement.lua"/>
-	<Script file="combat_resurrection.lua"/>
-	<Script file="cooldown.lua"/>
+	<Script file="battle_resurrection.lua"/>
 	<Script file="instance_reset.lua"/>
 	<Script file="interrupt.lua"/>
 	<Script file="quest.lua"/>
