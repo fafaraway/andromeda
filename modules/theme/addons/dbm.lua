@@ -1,39 +1,21 @@
 local F, C = unpack(select(2, ...))
 local THEME, TOOLTIP = F.THEME, F.TOOLTIP
 
+local _G = _G
+local strfind = string.find
+local strmatch = string.match
+local gsub = string.gsub
+local IsAddOnLoaded = IsAddOnLoaded
+local hooksecurefunc = hooksecurefunc
 
-function THEME:ReskinDBM()
-	local RaidNotice_AddMessage_ = _G.RaidNotice_AddMessage
-	_G.RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
-		if strfind(textString, '|T') then
-			if strmatch(textString, ':(%d+):(%d+)') then
-				local size1, size2 = strmatch(textString, ':(%d+):(%d+)')
-				size1, size2 = size1 + 3, size2 + 3
-				textString = gsub(textString,':(%d+):(%d+)',':'..size1..':'..size2..':0:0:64:64:5:59:5:59')
-			elseif strmatch(textString, ':(%d+)|t') then
-				local size = strmatch(textString, ':(%d+)|t')
-				size = size + 3
-				textString = gsub(textString,':(%d+)|t',':'..size..':'..size..':0:0:64:64:5:59:5:59|t')
-			end
-		end
+local buttonSize = 24
 
-		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
-	end
-
-	if not IsAddOnLoaded('DBM-Core') then return end
-	if not FREE_ADB.reskin_dbm then return end
-
-	local buttonsize = 24
-
-	local function reskinBarIcon(icon, bar)
-		if icon.styled then return end
-
-		icon:SetSize(buttonsize, buttonsize)
+local function reskinIcon(icon, frame)
+	if not icon.styled then
+		icon:SetSize(buttonSize, buttonSize)
 		icon.SetSize = F.Dummy
-		icon:ClearAllPoints()
-		icon:SetPoint('BOTTOMRIGHT', bar, 'BOTTOMLEFT', -5, -4)
-		local bg = F.ReskinIcon(icon)
-		F.CreateSD(bg)
+
+		local bg = F.ReskinIcon(icon, true)
 		bg.icon = bg:CreateTexture(nil, 'BACKGROUND')
 		bg.icon:SetInside()
 		bg.icon:SetTexture('Interface\\Icons\\Spell_Nature_WispSplode')
@@ -41,114 +23,152 @@ function THEME:ReskinDBM()
 
 		icon.styled = true
 	end
-
-	local function SkinBars(self)
-		for bar in self:GetBarIterator() do
-			if not bar.styeld then
-				local frame		= bar.frame
-				local tbar		= _G[frame:GetName()..'Bar']
-				local spark		= _G[frame:GetName()..'BarSpark']
-				local texture	= _G[frame:GetName()..'BarTexture']
-				local icon1		= _G[frame:GetName()..'BarIcon1']
-				local icon2		= _G[frame:GetName()..'BarIcon2']
-				local name		= _G[frame:GetName()..'BarName']
-				local timer		= _G[frame:GetName()..'BarTimer']
-
-				if bar.color then
-					tbar:SetStatusBarColor(bar.color.r, bar.color.g, bar.color.b)
-				else
-					tbar:SetStatusBarColor(bar.owner.options.StartColorR, bar.owner.options.StartColorG, bar.owner.options.StartColorB)
-				end
-
-				if bar.enlarged then
-					frame:SetWidth(bar.owner.options.HugeWidth)
-					tbar:SetWidth(bar.owner.options.HugeWidth)
-				else
-					frame:SetWidth(bar.owner.options.Width)
-					tbar:SetWidth(bar.owner.options.Width)
-				end
-
-				if not frame.styled then
-					frame:SetScale(1)
-					frame.SetScale = F.Dummy
-					frame:SetHeight(buttonsize/2)
-					frame.SetHeight = F.Dummy
-					frame.styled = true
-				end
-
-				if not spark.killed then
-					spark:SetAlpha(0)
-					spark:SetTexture(nil)
-					spark.killed = true
-				end
-
-				reskinBarIcon(icon1, tbar)
-				reskinBarIcon(icon2, tbar)
-
-				if not tbar.styled then
-					F.StripTextures(tbar)
-					F.CreateSB(tbar, true)
-					tbar:SetInside(frame, 2, 2)
-					tbar.SetPoint = F.Dummy
-					tbar.styled = true
-				end
-
-				if not texture.styled then
-					texture:SetTexture(C.Assets.statusbar_tex)
-					texture.SetTexture = F.Dummy
-					texture.styled = true
-				end
-
-				if not name.styled then
-					name:ClearAllPoints()
-					name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
-					--name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth()*.85, 8)
-					name.SetPoint = F.Dummy
-					name:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
-					name.SetFont = F.Dummy
-					name:SetJustifyH('LEFT')
-					name:SetWordWrap(false)
-					name.styled = true
-				end
-
-				if not timer.styled then
-					timer:ClearAllPoints()
-					timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 8)
-					timer.SetPoint = F.Dummy
-					timer:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
-					timer.SetFont = F.Dummy
-					timer:SetJustifyH('RIGHT')
-					timer.styled = true
-				end
-
-				tbar:SetAlpha(1)
-				frame:SetAlpha(1)
-				frame:Show()
-				bar:Update(0)
-
-				bar.styeld = true
-			end
-		end
-	end
-	hooksecurefunc(_G.DBT, 'CreateBar', SkinBars)
-
-	local function SkinRange()
-		if _G.DBMRangeCheckRadar and not _G.DBMRangeCheckRadar.styled then
-			TOOLTIP.ReskinTooltip(_G.DBMRangeCheckRadar)
-			_G.DBMRangeCheckRadar.styled = true
-		end
-
-		if _G.DBMRangeCheck and not _G.DBMRangeCheck.styled then
-			TOOLTIP.ReskinTooltip(_G.DBMRangeCheck)
-			_G.DBMRangeCheck.styled = true
-		end
-	end
-	hooksecurefunc(DBM.RangeCheck, 'Show', SkinRange)
-
-	if DBM.InfoFrame then
-		DBM.InfoFrame:Show(5, 'test')
-		DBM.InfoFrame:Hide()
-		_G.DBMInfoFrame:HookScript('OnShow', TOOLTIP.ReskinTooltip)
-	end
+	icon:ClearAllPoints()
+	icon:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -2, 0)
 end
 
+local function reskinBar(bar, frame)
+	if not bar.styled then
+		F.StripTextures(bar)
+		F.CreateSB(bar, true)
+
+		bar.styled = true
+	end
+	bar:SetInside(frame, 2, 2)
+end
+
+local function removeSpark(self)
+	local spark = _G[self.frame:GetName() .. 'BarSpark']
+	spark:SetAlpha(0)
+	spark:SetTexture(nil)
+end
+
+local function applyStyle(self)
+	local frame = self.frame
+	local frame_name = frame:GetName()
+	local tbar = _G[frame_name .. 'Bar']
+	local texture = _G[frame_name .. 'BarTexture']
+	local icon1 = _G[frame_name .. 'BarIcon1']
+	local icon2 = _G[frame_name .. 'BarIcon2']
+	local name = _G[frame_name .. 'BarName']
+	local timer = _G[frame_name .. 'BarTimer']
+
+	if self.enlarged then
+		frame:SetWidth(self.owner.options.HugeWidth)
+		tbar:SetWidth(self.owner.options.HugeWidth)
+	else
+		frame:SetWidth(self.owner.options.Width)
+		tbar:SetWidth(self.owner.options.Width)
+	end
+
+	frame:SetScale(1)
+	frame:SetHeight(buttonSize / 2)
+
+	reskinIcon(icon1, frame)
+	reskinIcon(icon2, frame)
+	reskinBar(tbar, frame)
+	texture:SetTexture(C.Assets.statusbar_tex)
+
+	name:ClearAllPoints()
+	name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
+	name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * .85, 8)
+	name:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
+	name:SetJustifyH('LEFT')
+	name:SetWordWrap(false)
+	name:SetShadowColor(0, 0, 0, 0)
+
+	timer:ClearAllPoints()
+	timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 8)
+	timer:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
+	timer:SetJustifyH('RIGHT')
+	timer:SetShadowColor(0, 0, 0, 0)
+end
+
+local function forceSetting()
+	if not _G.DBM_AllSavedOptions['Default'] then
+		_G.DBM_AllSavedOptions['Default'] = {}
+	end
+
+	_G.DBM_AllSavedOptions['Default']['BlockVersionUpdateNotice'] = true
+	_G.DBM_AllSavedOptions['Default']['EventSoundVictory'] = 'None'
+
+	if IsAddOnLoaded('DBM-VPYike') then
+		_G.DBM_AllSavedOptions['Default']['CountdownVoice'] = 'VP:Yike'
+		_G.DBM_AllSavedOptions['Default']['ChosenVoicePack'] = 'Yike'
+	end
+
+	if not _G.DBT_AllPersistentOptions['Default'] then
+		_G.DBT_AllPersistentOptions['Default'] = {}
+	end
+
+	_G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 20
+	_G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 20
+	_G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwards = true
+	_G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwardsLarge = true
+end
+
+function THEME:ReskinDBM()
+	-- Default notice message
+	local RaidNotice_AddMessage_ = _G.RaidNotice_AddMessage
+	_G.RaidNotice_AddMessage = function(noticeFrame, textString, colorInfo)
+		if strfind(textString, '|T') then
+			if strmatch(textString, ':(%d+):(%d+)') then
+				local size1, size2 = strmatch(textString, ':(%d+):(%d+)')
+				size1, size2 = size1 + 3, size2 + 3
+				textString = gsub(textString, ':(%d+):(%d+)', ':' .. size1 .. ':' .. size2 .. ':0:0:64:64:5:59:5:59')
+			elseif strmatch(textString, ':(%d+)|t') then
+				local size = strmatch(textString, ':(%d+)|t')
+				size = size + 3
+				textString = gsub(textString, ':(%d+)|t', ':' .. size .. ':' .. size .. ':0:0:64:64:5:59:5:59|t')
+			end
+		end
+		return RaidNotice_AddMessage_(noticeFrame, textString, colorInfo)
+	end
+
+	if not IsAddOnLoaded('DBM-Core') then
+		return
+	end
+	if not _G.FREE_ADB.reskin_dbm then
+		return
+	end
+
+	hooksecurefunc(
+		_G.DBT,
+		'CreateBar',
+		function(self)
+			for bar in self:GetBarIterator() do
+				if not bar.injected then
+					hooksecurefunc(bar, 'Update', removeSpark)
+					hooksecurefunc(bar, 'ApplyStyle', applyStyle)
+					bar:ApplyStyle()
+
+					bar.injected = true
+				end
+			end
+		end
+	)
+
+	hooksecurefunc(
+		_G.DBM.RangeCheck,
+		'Show',
+		function()
+			if _G.DBMRangeCheckRadar and not _G.DBMRangeCheckRadar.styled then
+				TOOLTIP.ReskinTooltip(_G.DBMRangeCheckRadar)
+				_G.DBMRangeCheckRadar.styled = true
+			end
+
+			if _G.DBMRangeCheck and not _G.DBMRangeCheck.styled then
+				TOOLTIP.ReskinTooltip(_G.DBMRangeCheck)
+				_G.DBMRangeCheck.styled = true
+			end
+		end
+	)
+
+	if _G.DBM.InfoFrame then
+		_G.DBM.InfoFrame:Show(5, 'test')
+		_G.DBM.InfoFrame:Hide()
+		_G.DBMInfoFrame:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+	end
+
+	forceSetting()
+end
