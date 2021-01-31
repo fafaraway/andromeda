@@ -57,10 +57,10 @@ do
 			return format('|cffffffff%d|r', s / hour), s % hour -- white
 		elseif s >= minute then
 			return format('|cff1e84d0%d|r', s / minute), s % minute -- blue
-		elseif s > C.DB.cooldown.decimal_countdown then
+		elseif s > 3 then
 			return format('|cffffe700%d|r', s), s - floor(s) -- yellow
 		else
-			if C.DB.cooldown.decimal_countdown then
+			if C.DB.Actionbar.DecimalCD then
 				return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
 			else
 				return format('|cfffd3612%d|r', s + .5), s - floor(s)
@@ -75,7 +75,7 @@ do
 			return format('%dh', s / hour)
 		elseif s >= minute then
 			return format('%dm', s / minute)
-		elseif s >= C.Actionbar.decimal_countdown then
+		elseif s >= 3 then
 			return floor(s)
 		else
 			return format('%d', s)

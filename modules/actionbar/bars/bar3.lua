@@ -1,13 +1,21 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
+local _G = _G
+local tinsert = tinsert
+local CreateFrame = CreateFrame
+local RegisterStateDriver = RegisterStateDriver
+local SHOW_MULTIBAR2_TEXT = SHOW_MULTIBAR2_TEXT
+local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
+local MultiBarBottomRight = MultiBarBottomRight
+
 local margin, padding = 3, 3
 
 local function SetFrameSize(frame, size, num)
 	size = size or frame.buttonSize
 	num = num or frame.numButtons
 
-	local divide = C.DB.actionbar.bar3_divide
+	local divide = C.DB.Actionbar.Bar3Divide
 
 	if divide then
 		frame:SetWidth(18 * size + 17 * margin + 2 * padding)
@@ -21,7 +29,9 @@ local function SetFrameSize(frame, size, num)
 	end
 
 	if not frame.mover then
-		frame.mover = F.Mover(frame, SHOW_MULTIBAR2_TEXT, 'Bar3', frame.Pos)
+		if C.DB.Actionbar.Bar3 then
+			frame.mover = F.Mover(frame, SHOW_MULTIBAR2_TEXT, 'Bar3', frame.Pos)
+		end
 	else
 		frame.mover:SetSize(frame:GetSize())
 	end
@@ -35,12 +45,12 @@ end
 
 function ACTIONBAR:CreateBar3()
 	local num = NUM_ACTIONBAR_BUTTONS
-	local size = C.DB.actionbar.button_size_normal
+	local size = C.DB.Actionbar.ButtonSize
 	local buttonList = {}
 
-	local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', UIParent, 'SecureHandlerStateTemplate')
-	if C.DB.actionbar.bar3_divide then
-		frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
+	local frame = CreateFrame('Frame', 'FreeUI_ActionBar3', _G.UIParent, 'SecureHandlerStateTemplate')
+	if C.DB.Actionbar.Bar3Divide then
+		frame.Pos = {'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UIGap}
 	else
 		frame.Pos = {'BOTTOM', _G.FreeUI_ActionBar2, 'TOP', 0, -margin}
 	end
@@ -57,12 +67,12 @@ function ACTIONBAR:CreateBar3()
 
 		if i == 1 then
 			button:SetPoint('TOPLEFT', frame, padding, -padding)
-		elseif (i == 4 and C.DB.actionbar.bar3_divide) then
+		elseif (i == 4 and C.DB.Actionbar.Bar3Divide) then
 			local previous = _G['MultiBarBottomRightButton1']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
-		elseif (i == 7 and C.DB.actionbar.bar3_divide) then
+		elseif (i == 7 and C.DB.Actionbar.Bar3Divide) then
 			button:SetPoint('TOPRIGHT', frame, -2 * (size + margin) - padding, -padding)
-		elseif (i == 10 and C.DB.actionbar.bar3_divide) then
+		elseif (i == 10 and C.DB.Actionbar.Bar3Divide) then
 			local previous = _G['MultiBarBottomRightButton7']
 			button:SetPoint('TOP', previous, 'BOTTOM', 0, -padding)
 		else
@@ -74,7 +84,7 @@ function ACTIONBAR:CreateBar3()
 	frame.buttonList = buttonList
 	SetFrameSize(frame, size, num)
 
-	if C.DB.actionbar.bar3 then
+	if C.DB.Actionbar.Bar3 then
 		frame.frameVisibility = '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
 	else
 		frame.frameVisibility = 'hide'

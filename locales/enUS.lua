@@ -7,6 +7,18 @@ do
 	_G.BINDING_NAME_TOGGLE_QUEST_TRACKER = 'Toggle Quest Tracker'
 end
 
+L.MOVER = {
+	MAIN_BAR = 'Main bar',
+	PET_BAR = 'Pet bar',
+	STANCE_BAR = 'Stance bar',
+	VEHICLE_BAR = 'Leave vehicle button',
+	EXTRA_BAR = 'Extra button',
+	ZONE_ABILITY = 'Zone ability button',
+	CUSTOM_BAR = 'Additional actionbar',
+	COOLDOWN_FLASH = 'Cooldown flash'
+
+}
+
 --[[ Misc ]]
 do
 	L['MISC_NUMBER_CAP'] = {'万', '亿', '兆'}
@@ -140,15 +152,24 @@ end
 
 --[[ Actionbar ]]
 do
-	L['ACTIONBAR_CUSTOM_BAR'] = 'Additional ActionBar'
-	L['ACTIONBAR_UNBIND_TIP'] = '按ESC或右键撤销按键设置'
-	L['ACTIONBAR_KEY_UNBOUND'] = '未绑定按键'
-	L['ACTIONBAR_KEY_INDEX'] = '序号'
-	L['ACTIONBAR_KEY_BINDING'] = '按键'
-	L['ACTIONBAR_KEY_BOUND_TO'] = ' 绑定按键'
-	L['ACTIONBAR_SAVE_KEYBINDS'] = '按键设置已保存'
-	L['ACTIONBAR_DISCARD_KEYBINDS'] = '按键设置已撤销'
-	L['ACTIONBAR_CLEAR_BINDS'] = '%s |cff20ff20清除已绑定按键|r'
+
+
+
+	L.ACTIONBAR = {
+		['CD_REMAINING'] = '%s cooldown remaining %s.',
+		['CD_FINISHED'] = '%s is now available.',
+
+		['CUSTOM_BAR'] = 'CustomBar',
+
+		['UNBIND_TIP'] = 'Press the escape key or right click to unbind this action.',
+		['KEY_INDEX'] = 'Index',
+		['KEY_BINDING'] = 'Key',
+		['KEY_BOUND_TO'] = ' bound to',
+		['SAVE_KEYBINDS'] = 'Keybinds saved.',
+		['DISCARD_KEYBINDS'] = 'Keybinds discarded.',
+		['CLEAR_BINDS'] = '|cff20ff20All keybinds cleared for|r %s.',
+
+	}
 end
 
 --[[ Combat ]]
@@ -197,8 +218,7 @@ do
 
 
 
-	L['%s cooldown remaining %s.'] = true
-	L['%s is now available.'] = true
+
 end
 
 --[[ Inventory ]]
@@ -300,14 +320,7 @@ L.GUI = {
 		['HIDE_ELEMENT'] = 'Hide this frame',
 		['RESET'] = 'Are you sure to reset all frames position?',
 		['GROUP_TOOL'] = 'Group tool',
-		['ZONE_ABILITY'] = 'zone ability',
-		['EXTRA_BAR'] = 'extra bar',
-		['MAIN_BAR'] = 'main bar',
-		['PET_BAR'] = 'pet bar',
-		['STANCE_BAR'] = 'stance bar',
-		['LEAVE_VEHICLE_BAR'] = 'leave vehicle bar',
-		['CUSTOM_BAR'] = 'custom bar',
-		['COOLDOWN_PULSE'] = 'cooldown pulse',
+
 		['QUEST_BUTTON'] = 'quest button',
 		['OBJECTIVE_TRACKER'] = 'objective tracker',
 		['MAW_THREAT_BAR'] = 'Maw threat bar',
@@ -485,24 +498,27 @@ L.GUI = {
 	['ACTIONBAR'] = {
 		['NAME'] = 'Actionbar',
 		['ENABLE'] = 'Enable actionbar',
-		['ENABLE_TIP'] = 'Adjust the functions and styles related to the action bar',
-		['SCALE'] = 'Scale',
-		['BUTTON_HOTKEY'] = 'Show hotkey',
-		['BUTTON_MACRO_NAME'] = 'Show macro name',
-		['BUTTON_COUNT'] = 'Show count',
-		['BUTTON_CLASS_COLOR'] = 'Border colored by class color',
-		['FADE'] = 'Use dynamic fade',
-		['FADE_TIP'] = 'The action bar fades out according to the corresponding conditions',
-		['BAR1'] = 'Enable bar1',
-		['BAR2'] = 'Enable bar2',
-		['BAR3'] = 'Enable bar3',
+		['ENABLE_TIP'] = '|nAdjust the functions and styles related to the action bar.',
+		['BAR_SCALE'] = 'Bar scale',
+		['HOTKEY'] = 'Show hotkey',
+		['MACRO_NAME'] = 'Show macro name',
+		['COUNT_NUMBER'] = 'Show count and charge',
+		['CLASS_COLOR'] = 'Bar colored by class color',
+		['FADER'] = 'Actionbar fading',
+		['FADER_TIP'] = '|nThe action bar fades in and out according to specific conditions.',
+		['BAR1'] = 'Bar1',
+		['BAR2'] = 'Bar2',
+		['BAR3'] = 'Bar3',
 		['BAR3_DIVIDE'] = 'Divede bar3',
-		['BAR4'] = 'Enable bar4',
-		['BAR5'] = 'Enable bar5',
-		['PET_BAR'] = 'Enable pet bar',
-		['STANCE_BAR'] = 'Enable stance bar',
-		['LEAVE_VEHICLE_BAR'] = 'Enable leave vehicle bar',
-		['FADER_SETUP'] = 'Fader setup',
+		['BAR4'] = 'Bar4',
+		['BAR5'] = 'Bar5',
+		['PET_BAR'] = 'Pet bar',
+		['STANCE_BAR'] = 'Stance bar',
+		['LEAVE_VEHICLE_BAR'] = 'Leave vehicle bar',
+
+		['SCALE_SETTING'] = 'Actionbar scale setting',
+
+		['FADER_SETTING'] = 'Actionbar fade setting',
 		['CONDITION_COMBATING'] = 'In combat',
 		['CONDITION_TARGETING'] = 'Have target/focus',
 		['CONDITION_DUNGEON'] = 'In dungeon',
@@ -512,17 +528,25 @@ L.GUI = {
 		['FADE_IN_ALPHA'] = 'fade in alpha',
 		['FADE_OUT_DURATION'] = 'fade out duration',
 		['FADE_IN_DURATION'] = 'fade in duration',
-		['CUSTOM_BAR'] = 'Enable custom bar',
-		['CUSTOM_BAR_BUTTON_SIZE'] = 'button size',
-		['CUSTOM_BAR_BUTTON_NUMBER'] = 'button number',
-		['CUSTOM_BAR_BUTTON_PER_ROW'] = 'button per row'
+
+		['CUSTOM_BAR_SETTING'] = 'Additional actionbar setting',
+		['CUSTOM_BAR'] = 'Additional bar',
+		['CUSTOM_BAR_TIP'] = '|nEnable an additional actionbar for you to customize.',
+		['CB_MARGIN'] = 'button margin',
+		['CB_PADDING'] = 'bar padding',
+		['CB_BUTTON_SIZE'] = 'button size',
+		['CB_BUTTON_NUMBER'] = 'button number',
+		['CB_BUTTON_PER_ROW'] = 'button per row',
+
+		['COOLDOWN_COUNT'] = 'Cooldowns count',
+		['DECIMAL_CD'] = 'Decimal for cooldowns in 3s',
+		['OVERRIDE_WA'] = 'Hide Cooldowns on WeakAuras',
+		['CD_FLASH'] = 'Flash cooldowns',
+		['CD_FLASH_TIP'] = '|nTrack your cooldown using a flash icon in the center of the screen.',
+		['CD_NOTIFY'] = 'Cooldowns notify',
+		['CD_NOTIFY_TIP'] = '|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|n|nOnly available for FreeUI default actionbar.'
 	},
-	['COOLDOWN'] = {
-		['ENABLE'] = 'Cooldowns timer',
-		['DECIMAL_COUNTDOWN'] = 'Decimal for cooldowns in 3s',
-		['OVERRIDE_WEAKAURAS'] = 'Override WeakAuras cooldowns',
-		['PULSE'] = 'Pulse cooldowns'
-	},
+
 	['COMBAT'] = {
 		['NAME'] = 'Combat',
 		['ENABLE'] = 'Enable combat',

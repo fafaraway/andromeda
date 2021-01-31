@@ -1,16 +1,39 @@
 local F, C, L = unpack(select(2, ...))
-local COOLDOWN = F:GetModule('COOLDOWN')
+local ACTIONBAR = F.ACTIONBAR
 
+local _G = _G
+local tinsert = tinsert
+local tremove = tremove
+local wipe = wipe
+local bit_band = bit.band
+local CreateFrame = CreateFrame
 local GetTime = GetTime
-local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
-local animScale, iconSize, holdTime, threshold = 1.5, 50, 0, 3
-local cooldowns, animating, watching = {}, {}, {}
-local bg
+local GetActionInfo = GetActionInfo
+local GetActionTexture = GetActionTexture
+local GetPetActionInfo = GetPetActionInfo
+local GetSpellInfo = GetSpellInfo
+local GetSpellTexture = GetSpellTexture
+local GetSpellCooldown = GetSpellCooldown
+local GetItemCooldown = GetItemCooldown
+local GetItemInfo = GetItemInfo
+local GetPetActionCooldown = GetPetActionCooldown
+local GetInventoryItemID = GetInventoryItemID
+local GetInventoryItemTexture = GetInventoryItemTexture
+local GetContainerItemID = GetContainerItemID
+local IsInInstance = IsInInstance
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE
+local hooksecurefunc = hooksecurefunc
 
-local anchor = CreateFrame('Frame', 'FreeUI_CooldownPulse', UIParent, 'BackdropTemplate')
+local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
+local animScale, iconSize, holdTime, threshold = 1.5, 32, 0, 3
+local cooldowns, animating, watching = {}, {}, {}
+local ignoredList = {}
+
+local anchor = CreateFrame('Frame', 'FreeUI_CDFlashAnchor', _G.UIParent, 'BackdropTemplate')
 anchor:SetSize(iconSize, iconSize)
 
-local frame = CreateFrame('Frame', 'CDPulseFrame', anchor, 'BackdropTemplate')
+local frame = CreateFrame('Frame', 'CDFlashFrame', anchor, 'BackdropTemplate')
 frame:SetPoint('CENTER', anchor, 'CENTER')
 
 local icon = frame:CreateTexture(nil, 'ARTWORK')
@@ -107,7 +130,7 @@ local function OnUpdate(_, update)
 					)
 				end
 				local cooldown = getCooldownDetails()
-				if C.DB.cooldown.ignored_spells[cooldown.name] then
+				if ignoredList[cooldown.name] then
 					watching[i] = nil
 				else
 					if cooldown.enabled ~= 0 then
@@ -143,14 +166,10 @@ local function OnUpdate(_, update)
 			tremove(animating, 1)
 			runtimer = 0
 			icon:SetTexture(nil)
-			bg:Hide()
+			frame.bg:Hide()
 		else
 			if not icon:GetTexture() then
 				icon:SetTexture(animating[1][1])
-
-				if C.DB.cooldown.sound then
-					PlaySoundFile(C.DB.cooldown.sound_file, 'Master')
-				end
 			end
 			local alpha = maxAlpha
 			if runtimer < fadeInTime then
@@ -159,17 +178,17 @@ local function OnUpdate(_, update)
 				alpha = maxAlpha - (maxAlpha * ((runtimer - holdTime - fadeInTime) / fadeOutTime))
 			end
 			frame:SetAlpha(alpha)
-			local scale = C.DB.cooldown.icon_size + (C.DB.cooldown.icon_size * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
+			local scale = iconSize + (iconSize * ((animScale - 1) * (runtimer / (fadeInTime + holdTime + fadeOutTime))))
 			frame:SetWidth(scale)
 			frame:SetHeight(scale)
-			bg:Show()
+			frame.bg:Show()
 		end
 	end
 end
 
-function frame:ADDON_LOADED(addon)
-	for _, v in pairs(C.DB.cooldown.ignored_spells) do
-		C.DB.cooldown.ignored_spells[v] = true
+function frame:ADDON_LOADED()
+	for _, v in pairs(ignoredList) do
+		ignoredList[v] = true
 	end
 
 	self:UnregisterEvent('ADDON_LOADED')
@@ -192,7 +211,7 @@ end
 function frame:COMBAT_LOG_EVENT_UNFILTERED()
 	local _, eventType, _, _, _, sourceFlags, _, _, _, _, _, spellID = CombatLogGetCurrentEventInfo()
 	if eventType == 'SPELL_CAST_SUCCESS' then
-		if (bit.band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET and bit.band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
+		if (bit_band(sourceFlags, _G.COMBATLOG_OBJECT_TYPE_PET) == _G.COMBATLOG_OBJECT_TYPE_PET and bit_band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_MINE) == COMBATLOG_OBJECT_AFFILIATION_MINE) then
 			local name = GetSpellInfo(spellID)
 			local index = GetPetActionIndexByName(name)
 			if index and not select(7, GetPetActionInfo(index)) then
@@ -216,15 +235,15 @@ function frame:PLAYER_ENTERING_WORLD()
 	end
 end
 
-function COOLDOWN:CooldownPulse()
-	if not C.DB.cooldown.pulse then
+function ACTIONBAR:CooldownFlash()
+	if not C.DB.Actionbar.CDFlash then
 		return
 	end
 
-	bg = F.SetBD(frame)
+	frame.bg = F.SetBD(frame)
 	icon:SetTexCoord(unpack(C.TexCoord))
 
-	local mover = F.Mover(anchor, L.GUI.MOVER.COOLDOWN_PULSE, 'CooldownPulse', {'CENTER', UIParent, 0, 100}, C.DB.cooldown.icon_size, C.DB.cooldown.icon_size)
+	local mover = F.Mover(anchor, L.MOVER.COOLDOWN_FLASH, 'CooldownFlash', {'CENTER', _G.UIParent, 0, 100}, iconSize, iconSize)
 	anchor:ClearAllPoints()
 	anchor:SetPoint('CENTER', mover)
 
@@ -275,9 +294,6 @@ end
 
 _G.SlashCmdList.PULSECD = function()
 	tinsert(animating, {GetSpellTexture(87214)})
-	if C.DB.cooldown.sound == true then
-		PlaySoundFile(C.DB.cooldown.sound_file, 'Master')
-	end
 	frame:SetScript('OnUpdate', OnUpdate)
 end
-SLASH_PULSECD1 = '/pulse'
+_G.SLASH_PULSECD1 = '/cdflash'

@@ -10,16 +10,26 @@ local function SetupInventoryFilter()
 	GUI:SetupInventoryFilter(GUI.Page[9])
 end
 
-local function SetupActionBarFader()
-	GUI:SetupActionBarFader(GUI.Page[6])
+-- Actionbar
+local function SetupActionbarScale()
+	GUI:SetupActionbarScale(GUI.Page[6])
 end
 
-local function UpdateActionBarScale()
-	F.ACTIONBAR:UpdateAllScale()
+local function SetupActionbarFade()
+	GUI:SetupActionbarFade(GUI.Page[6])
 end
 
-local function UpdateCustomBar()
-	F.ACTIONBAR:UpdateCustomBar()
+local function SetupAdditionalbar()
+	GUI:SetupAdditionalbar(GUI.Page[6])
+end
+
+local function UpdateHotkeys()
+	local Bar = F.ACTIONBAR
+	for _, button in pairs(Bar.buttons) do
+		if button.UpdateHotkeys then
+			button:UpdateHotkeys(button.buttonType)
+		end
+	end
 end
 
 -- Chat
@@ -191,33 +201,29 @@ GUI.OptionsList = {
 	},
 	[6] = {
 		-- actionbar
-		{1, 'actionbar', 'enable', L.GUI.ACTIONBAR.ENABLE, nil, nil, nil, L.GUI.ACTIONBAR.ENABLE_TIP},
-		{1, 'actionbar', 'button_hotkey', L.GUI.ACTIONBAR.BUTTON_HOTKEY},
-		{1, 'actionbar', 'button_macro_name', L.GUI.ACTIONBAR.BUTTON_MACRO_NAME, true},
-		{1, 'actionbar', 'button_count', L.GUI.ACTIONBAR.BUTTON_COUNT},
-		{1, 'actionbar', 'button_class_color', L.GUI.ACTIONBAR.BUTTON_CLASS_COLOR, true},
-		{1, 'actionbar', 'fade', L.GUI.ACTIONBAR.FADE, nil, SetupActionBarFader, nil, L.GUI.ACTIONBAR.FADE_TIP},
-		{3, 'actionbar', 'scale', L.GUI.ACTIONBAR.SCALE, nil, {.5, 2, .1}, UpdateActionBarScale},
+		{1, 'Actionbar', 'Enable', L.GUI.ACTIONBAR.ENABLE, nil, SetupActionbarScale, nil, L.GUI.ACTIONBAR.ENABLE_TIP},
+		{1, 'Actionbar', 'Hotkey', L.GUI.ACTIONBAR.HOTKEY, nil, nil, UpdateHotkeys},
+		{1, 'Actionbar', 'MacroName', L.GUI.ACTIONBAR.MACRO_NAME, true},
+		{1, 'Actionbar', 'CountNumber', L.GUI.ACTIONBAR.COUNT_NUMBER},
+		{1, 'Actionbar', 'ClassColor', L.GUI.ACTIONBAR.CLASS_COLOR, true},
+		{1, 'Actionbar', 'Fader', L.GUI.ACTIONBAR.FADER, nil, SetupActionbarFade, nil, L.GUI.ACTIONBAR.FADER_TIP},
 		{},
-		{1, 'cooldown', 'enable', L.GUI.COOLDOWN.ENABLE},
-		{1, 'cooldown', 'decimal_countdown', L.GUI.COOLDOWN.DECIMAL_COUNTDOWN, true},
-		{1, 'cooldown', 'override_weakauras', L.GUI.COOLDOWN.OVERRIDE_WEAKAURAS},
-		{1, 'cooldown', 'pulse', L.GUI.COOLDOWN.PULSE, true},
+		{1, 'Actionbar', 'Bar1', L.GUI.ACTIONBAR.BAR1},
+		{1, 'Actionbar', 'Bar2', L.GUI.ACTIONBAR.BAR2, true},
+		{1, 'Actionbar', 'Bar3', L.GUI.ACTIONBAR.BAR3},
+		{1, 'Actionbar', 'Bar3Divide', L.GUI.ACTIONBAR.BAR3_DIVIDE, true},
+		{1, 'Actionbar', 'Bar4', L.GUI.ACTIONBAR.BAR4},
+		{1, 'Actionbar', 'Bar5', L.GUI.ACTIONBAR.BAR5, true},
+		{1, 'Actionbar', 'PetBar', L.GUI.ACTIONBAR.PET_BAR},
+		{1, 'Actionbar', 'StanceBar', L.GUI.ACTIONBAR.STANCE_BAR, true},
+		{1, 'Actionbar', 'VehicleBar', L.GUI.ACTIONBAR.LEAVE_VEHICLE_BAR},
+		{1, 'Actionbar', 'CustomBar', L.GUI.ACTIONBAR.CUSTOM_BAR, true, SetupAdditionalbar, nil, L.GUI.ACTIONBAR.CUSTOM_BAR_TIP},
 		{},
-		{1, 'actionbar', 'bar1', L.GUI.ACTIONBAR.BAR1},
-		{1, 'actionbar', 'bar2', L.GUI.ACTIONBAR.BAR2, true},
-		{1, 'actionbar', 'bar3', L.GUI.ACTIONBAR.BAR3},
-		{1, 'actionbar', 'bar3_divide', L.GUI.ACTIONBAR.BAR3_DIVIDE, true},
-		{1, 'actionbar', 'bar4', L.GUI.ACTIONBAR.BAR4},
-		{1, 'actionbar', 'bar5', L.GUI.ACTIONBAR.BAR5, true},
-		{1, 'actionbar', 'pet_bar', L.GUI.ACTIONBAR.PET_BAR},
-		{1, 'actionbar', 'stance_bar', L.GUI.ACTIONBAR.STANCE_BAR, true},
-		{1, 'actionbar', 'leave_vehicle_bar', L.GUI.ACTIONBAR.LEAVE_VEHICLE_BAR},
-		{},
-		{1, 'actionbar', 'custom_bar', L.GUI.ACTIONBAR.CUSTOM_BAR},
-		{3, 'actionbar', 'custom_bar_button_size', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_SIZE, nil, {10, 40, 1}, UpdateCustomBar},
-		{3, 'actionbar', 'custom_bar_button_number', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_NUMBER, true, {1, 12, 1}, UpdateCustomBar},
-		{3, 'actionbar', 'custom_bar_button_per_row', L.GUI.ACTIONBAR.CUSTOM_BAR_BUTTON_PER_ROW, nil, {1, 12, 1}, UpdateCustomBar}
+		{1, 'Actionbar', 'CooldownCount', L.GUI.ACTIONBAR.COOLDOWN_COUNT},
+		{1, 'Actionbar', 'DecimalCD', L.GUI.ACTIONBAR.DECIMAL_CD},
+		{1, 'Actionbar', 'OverrideWA', L.GUI.ACTIONBAR.OVERRIDE_WA, true},
+		{1, 'Actionbar', 'CDNotify', L.GUI.ACTIONBAR.CD_NOTIFY, nil, nil, nil, L.GUI.ACTIONBAR.CD_NOTIFY_TIP},
+		{1, 'Actionbar', 'CDFlash', L.GUI.ACTIONBAR.CD_FLASH, true, nil, nil, L.GUI.ACTIONBAR.CD_FLASH_TIP},
 	},
 	[7] = {
 		-- combat

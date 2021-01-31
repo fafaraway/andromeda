@@ -60,7 +60,7 @@ function UNITFRAME:SpawnPlayer()
 		player:GetWidth(),
 		player:GetHeight()
 	)
-	if C.DB.actionbar.actionbar then
+	if C.DB.Actionbar.Enable then
 		if C.DB.unitframe.fade then
 			return
 		end

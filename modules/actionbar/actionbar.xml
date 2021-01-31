@@ -11,6 +11,9 @@
 	<Script file="bars\leavevehiclebar.lua"/>
 	<Script file="bars\removeblizzart.lua"/>
 	<Script file="bind.lua"/>
+	<Script file="cdflash.lua"/>
+	<Script file="cdnotify.lua"/>
+	<Script file="cooldown.lua"/>
 	<Script file="fader.lua"/>
 	<Script file="range.lua"/>
 	<Script file="style.lua"/>

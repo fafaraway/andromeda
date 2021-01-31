@@ -1,6 +1,19 @@
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
+local _G = _G
+local gsub = gsub
+local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
+local GetBindingKey = GetBindingKey
+local KEY_BUTTON4 = KEY_BUTTON4
+local KEY_NUMPAD1 = KEY_NUMPAD1
+local KEY_BUTTON3 = KEY_BUTTON3
+local KEY_MOUSEWHEELUP = KEY_MOUSEWHEELUP
+local KEY_MOUSEWHEELDOWN = KEY_MOUSEWHEELDOWN
+local KEY_SPACE = KEY_SPACE
+local CAPSLOCK_KEY_TEXT = CAPSLOCK_KEY_TEXT
+local RANGE_INDICATOR = RANGE_INDICATOR
 
 local function CallButtonFunctionByName(button, func, ...)
 	if button and func and button[func] then
@@ -127,7 +140,7 @@ end
 
 local function SetupBackdrop(icon)
 	local bg = F.SetBD(icon, .25)
-	if C.DB.actionbar.button_class_color then
+	if C.DB.Actionbar.ClassColor then
 		bg:SetBackdropColor(C.r, C.g, C.b, .25)
 		bg:SetBackdropBorderColor(C.r, C.g, C.b)
 	else
@@ -162,7 +175,7 @@ local replaces = {
 
 function ACTIONBAR:UpdateHotKey()
 	local hotkey = _G[self:GetName()..'HotKey']
-	if hotkey and hotkey:IsShown() and not C.DB.actionbar.button_hotkey then
+	if hotkey and hotkey:IsShown() and not C.DB.Actionbar.Hotkey then
 		hotkey:Hide()
 		return
 	end
@@ -241,7 +254,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 	local overlay = CreateFrame('Frame', nil, button)
 	overlay:SetAllPoints()
 	if count then
-		if C.DB.actionbar.button_count then
+		if C.DB.Actionbar.CountNumber then
 			count:SetParent(overlay)
 			SetupFontString(count, cfg.count)
 		else
@@ -254,7 +267,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 		SetupFontString(hotkey, cfg.hotkey)
 	end
 	if name then
-		if C.DB.actionbar.button_macro_name then
+		if C.DB.Actionbar.MacroName then
 			name:SetParent(overlay)
 			SetupFontString(name, cfg.name)
 		else
@@ -311,10 +324,10 @@ function ACTIONBAR:StyleExtraActionButton(cfg)
 
 	hotkey:SetParent(overlay)
 	ACTIONBAR:HookHotKey(button)
-	cfg.hotkey.font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'}
+	--cfg.hotkey.font = {C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME'}
 	SetupFontString(hotkey, cfg.hotkey)
 
-	if C.DB.actionbar.button_count then
+	if C.DB.Actionbar.CountNumber then
 		count:SetParent(overlay)
 		SetupFontString(count, cfg.count)
 	else

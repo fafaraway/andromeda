@@ -1,14 +1,23 @@
 local F, C = unpack(select(2, ...))
 local COOLDOWN = F.COOLDOWN
 
+local _G = _G
+local CreateFrame = CreateFrame
+local pairs = pairs
+local strfind = string.find
+local hooksecurefunc = hooksecurefunc
+local SetCVar = SetCVar
+local GetTime = GetTime
+local GetActionCooldown = GetActionCooldown
+local ActionButton1Cooldown = ActionButton1Cooldown
+local ActionBarButtonEventsFrameMixin = ActionBarButtonEventsFrameMixin
+local InterfaceOptionsActionBarsPanelCountdownCooldowns = InterfaceOptionsActionBarsPanelCountdownCooldowns
 
 local FONT_SIZE = 20
 local MIN_DURATION = 2.5
 local MIN_SCALE = 0.5
 local ICON_SIZE = 36
 local hideNumbers, active, hooked = {}, {}, {}
-local pairs, strfind = pairs, string.find
-local GetTime, GetActionCooldown = GetTime, GetActionCooldown
 
 function COOLDOWN:StopTimer()
 	self.enabled = nil
@@ -21,8 +30,10 @@ function COOLDOWN:ForceUpdate()
 end
 
 function COOLDOWN:OnSizeChanged(width, height)
-	local fontScale = F:Round((width+height)/2) / ICON_SIZE
-	if fontScale == self.fontScale then return end
+	local fontScale = F:Round((width + height) / 2) / ICON_SIZE
+	if fontScale == self.fontScale then
+		return
+	end
 	self.fontScale = fontScale
 
 	if fontScale < MIN_SCALE then
@@ -73,7 +84,7 @@ function COOLDOWN:OnCreate()
 	text:SetJustifyH('CENTER')
 	timer.text = text
 
-	if C.DB.cooldown.override_weakauras and strfind(frameName, 'WeakAurasCooldown') then
+	if not C.DB.Actionbar.OverrideWA and C.isDeveloper and strfind(frameName, 'WeakAurasCooldown') then
 		text:SetPoint('BOTTOM', 1, -6)
 	end
 
@@ -85,11 +96,15 @@ function COOLDOWN:OnCreate()
 end
 
 function COOLDOWN:StartTimer(start, duration)
-	if self:IsForbidden() then return end
-	if self.noCooldownCount or hideNumbers[self] then return end
+	if self:IsForbidden() then
+		return
+	end
+	if self.noCooldownCount or hideNumbers[self] then
+		return
+	end
 
 	local frameName = self.GetName and self:GetName()
-	if not C.DB.cooldown.override_weakauras and frameName and strfind(frameName, 'WeakAuras') then
+	if C.DB.Actionbar.OverrideWA and frameName and strfind(frameName, 'WeakAuras') then
 		self.noCooldownCount = true
 		return
 	end
@@ -128,7 +143,9 @@ end
 
 function COOLDOWN:HideCooldownNumbers()
 	hideNumbers[self] = true
-	if self.timer then COOLDOWN.StopTimer(self.timer) end
+	if self.timer then
+		COOLDOWN.StopTimer(self.timer)
+	end
 end
 
 function COOLDOWN:CooldownOnShow()
@@ -173,7 +190,9 @@ function COOLDOWN:RegisterActionButton()
 end
 
 function COOLDOWN:OnLogin()
-	if not C.DB.cooldown.enable then return end
+	if not C.DB.Actionbar.CooldownCount then
+		return
+	end
 
 	local cooldownIndex = getmetatable(ActionButton1Cooldown).__index
 	hooksecurefunc(cooldownIndex, 'SetCooldown', COOLDOWN.StartTimer)
@@ -192,6 +211,4 @@ function COOLDOWN:OnLogin()
 	-- Hide Default Cooldown
 	SetCVar('countdownForCooldowns', 0)
 	F.HideOption(InterfaceOptionsActionBarsPanelCountdownCooldowns)
-
-	self:CooldownPulse()
 end

@@ -1,6 +1,14 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
+local _G = _G
+local tinsert = tinsert
+local rad = rad
+local CreateFrame = CreateFrame
+local RegisterStateDriver = RegisterStateDriver
+local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
+local GetActionTexture = GetActionTexture
+
 local margin, padding = 3, 3
 
 local function UpdateActionbarScale(bar)
@@ -9,18 +17,18 @@ local function UpdateActionbarScale(bar)
 		return
 	end
 
-	local size = frame.buttonSize * C.DB.actionbar.scale
+	local size = frame.buttonSize * C.DB.Actionbar.BarScale
 	frame:SetFrameSize(size)
 	for _, button in pairs(frame.buttonList) do
 		button:SetSize(size, size)
-		button.Name:SetScale(C.DB.actionbar.scale)
-		button.Count:SetScale(C.DB.actionbar.scale)
-		button.HotKey:SetScale(C.DB.actionbar.scale)
+		button.Name:SetScale(C.DB.Actionbar.BarScale)
+		button.Count:SetScale(C.DB.Actionbar.BarScale)
+		button.HotKey:SetScale(C.DB.Actionbar.BarScale)
 	end
 end
 
 function ACTIONBAR:UpdateAllScale()
-	if not C.DB.actionbar.enable then
+	if not C.DB.Actionbar.Enable then
 		return
 	end
 
@@ -41,8 +49,11 @@ local function SetFrameSize(frame, size, num)
 
 	frame:SetWidth(num * size + (num - 1) * margin + 2 * padding)
 	frame:SetHeight(size + 2 * padding)
+
 	if not frame.mover then
-		frame.mover = F.Mover(frame, L.GUI.MOVER.MAIN_BAR, 'Bar1', frame.Pos)
+		if C.DB.Actionbar.Bar1 then
+			frame.mover = F.Mover(frame, L.MOVER.MAIN_BAR, 'Bar1', frame.Pos)
+		end
 	else
 		frame.mover:SetSize(frame:GetSize())
 	end
@@ -56,11 +67,11 @@ end
 
 function ACTIONBAR:CreateBar1()
 	local num = NUM_ACTIONBAR_BUTTONS
-	local size = C.DB.actionbar.button_size_normal
+	local size = C.DB.Actionbar.ButtonSize
 	local buttonList = {}
 
-	local frame = CreateFrame('Frame', 'FreeUI_ActionBar1', UIParent, 'SecureHandlerStateTemplate')
-	frame.Pos = {'BOTTOM', UIParent, 'BOTTOM', 0, C.UIGap}
+	local frame = CreateFrame('Frame', 'FreeUI_ActionBar1', _G.UIParent, 'SecureHandlerStateTemplate')
+	frame.Pos = {'BOTTOM', _G.UIParent, 'BOTTOM', 0, C.UIGap}
 
 	local tex = frame:CreateTexture(nil, 'OVERLAY')
 	tex:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, padding)
@@ -90,7 +101,7 @@ function ACTIONBAR:CreateBar1()
 
 	--frame.frameVisibility = '[mod:shift][@vehicle,exists][overridebar][shapeshift][vehicleui][possessbar,@vehicle,exists] show; hide'
 
-	if C.DB.actionbar.bar1 then
+	if C.DB.Actionbar.Bar1 then
 		frame.frameVisibility = '[petbattle] hide; show'
 	else
 		frame.frameVisibility = 'hide'
@@ -143,7 +154,7 @@ function ACTIONBAR:CreateBar1()
 end
 
 function ACTIONBAR:OnLogin()
-	if not C.DB.actionbar.enable then
+	if not C.DB.Actionbar.Enable then
 		return
 	end
 
@@ -158,9 +169,11 @@ function ACTIONBAR:OnLogin()
 	ACTIONBAR:CreateStancebar()
 	ACTIONBAR:CreateExtrabar()
 	ACTIONBAR:CreateLeaveVehicleBar()
-	ACTIONBAR:CreateCustomBar()
+	--ACTIONBAR:CreateCustomBar()
 	ACTIONBAR:RemoveBlizzArt()
 	ACTIONBAR:RestyleButtons()
 	ACTIONBAR:UpdateAllScale()
 	ACTIONBAR:UpdateActionBarFade()
+	ACTIONBAR:CooldownNotify()
+	ACTIONBAR:CooldownFlash()
 end

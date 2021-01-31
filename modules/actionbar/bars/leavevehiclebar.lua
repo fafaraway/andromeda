@@ -1,6 +1,16 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
+local _G = _G
+local tinsert = tinsert
+local CreateFrame = CreateFrame
+local RegisterStateDriver = RegisterStateDriver
+local MainMenuBarVehicleLeaveButton_OnEnter = MainMenuBarVehicleLeaveButton_OnEnter
+local UnitOnTaxi = UnitOnTaxi
+local VehicleExit = VehicleExit
+local TaxiRequestEarlyLanding = TaxiRequestEarlyLanding
+local CanExitVehicle = CanExitVehicle
+
 local margin, padding = 4, 4
 
 local function SetFrameSize(frame, size, num)
@@ -9,8 +19,11 @@ local function SetFrameSize(frame, size, num)
 
 	frame:SetWidth(num * size + (num - 1) * margin + 2 * padding)
 	frame:SetHeight(size + 2 * padding)
+
 	if not frame.mover then
-		frame.mover = F.Mover(frame, L.GUI.MOVER.LEAVE_VEHICLE_BAR, 'LeaveVehicle', frame.Pos)
+		if C.DB.Actionbar.VehicleBar then
+			frame.mover = F.Mover(frame, L.MOVER.VEHICLE_BAR, 'LeaveVehicle', frame.Pos)
+		end
 	else
 		frame.mover:SetSize(frame:GetSize())
 	end
@@ -23,16 +36,16 @@ local function SetFrameSize(frame, size, num)
 end
 
 function ACTIONBAR:CreateLeaveVehicleBar()
-	if not C.DB.actionbar.leave_vehicle_bar then
+	if not C.DB.Actionbar.VehicleBar then
 		return
 	end
 
 	local num = 1
 	local buttonList = {}
-	local size = C.DB.actionbar.button_size_big
+	local size = C.DB.Actionbar.ButtonSize + 2
 
-	local frame = CreateFrame('Frame', 'FreeUI_ActionBarExit', UIParent, 'SecureHandlerStateTemplate')
-	frame.Pos = {'CENTER', UIParent, 'CENTER', 0, 200}
+	local frame = CreateFrame('Frame', 'FreeUI_ActionBarExit', _G.UIParent, 'SecureHandlerStateTemplate')
+	frame.Pos = {'CENTER', _G.UIParent, 'CENTER', 0, 200}
 
 	local button = CreateFrame('CheckButton', 'FreeUI_LeaveVehicleButton', frame, 'ActionButtonTemplate, SecureHandlerClickTemplate')
 	tinsert(buttonList, button)

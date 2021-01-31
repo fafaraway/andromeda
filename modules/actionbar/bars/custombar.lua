@@ -1,22 +1,38 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
+local _G = _G
+local tinsert = tinsert
+local mod = mod
+local min = min
+local ceil = ceil
+local CreateFrame = CreateFrame
+local RegisterStateDriver = RegisterStateDriver
+
 function ACTIONBAR:CustomBar(anchor)
-	local padding = C.DB.actionbar.custom_bar_padding
-	local margin = C.DB.actionbar.custom_bar_margin
-	local size = C.DB.actionbar.custom_bar_button_size
+	local padding = C.DB.Actionbar.CBPadding
+	local margin = C.DB.Actionbar.CBMargin
+	local size = C.DB.Actionbar.CBButtonSize
 	local num = 12
 	local name = 'FreeUI_CustomBar'
 	local page = 8
 
-	local frame = CreateFrame('Frame', name, UIParent, 'SecureHandlerStateTemplate')
+	local frame = CreateFrame('Frame', name, _G.UIParent, 'SecureHandlerStateTemplate')
 	frame:SetWidth(num * size + (num - 1) * margin + 2 * padding)
 	frame:SetHeight(size + 2 * padding)
 	frame:SetPoint(unpack(anchor))
-	frame.mover = F.Mover(frame, L.GUI.MOVER.CUSTOM_BAR, 'CustomBar', anchor)
+
+	if C.DB.Actionbar.CustomBar then
+		frame.mover = F.Mover(frame, L.MOVER.CUSTOM_BAR, 'CustomBar', anchor)
+	end
+
 	frame.buttons = {}
 
-	RegisterStateDriver(frame, 'visibility', '[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show')
+	RegisterStateDriver(
+		frame,
+		'visibility',
+		'[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists][shapeshift] hide; show'
+	)
 	RegisterStateDriver(frame, 'page', page)
 
 	local buttonList = {}
@@ -25,7 +41,7 @@ function ACTIONBAR:CustomBar(anchor)
 		button:SetSize(size, size)
 		button.id = (page - 1) * 12 + i
 		button.isCustomButton = true
-		button.commandName = L['ACTIONBAR_CUSTOM_BAR'] .. i
+		button.commandName = L.ACTIONBAR.CUSTOM_BAR .. i
 		button:SetAttribute('action', button.id)
 		frame.buttons[i] = button
 		tinsert(buttonList, button)
@@ -41,12 +57,12 @@ function ACTIONBAR:UpdateCustomBar()
 		return
 	end
 
-	local padding = C.DB.actionbar.custom_bar_padding
-	local margin = C.DB.actionbar.custom_bar_margin
-	local size = C.DB.actionbar.custom_bar_button_size
-	local scale = size / 34
-	local num = C.DB.actionbar.custom_bar_button_number
-	local perRow = C.DB.actionbar.custom_bar_button_per_row
+	local padding = C.DB.Actionbar.CBPadding
+	local margin = C.DB.Actionbar.CBMargin
+	local size = C.DB.Actionbar.CBButtonSize
+	local scale = 1
+	local num = C.DB.Actionbar.CBButtonNumber
+	local perRow = C.DB.Actionbar.CBButtonPerRow
 	for i = 1, num do
 		local button = frame.buttons[i]
 		button:SetSize(size, size)
@@ -79,7 +95,7 @@ function ACTIONBAR:UpdateCustomBar()
 end
 
 function ACTIONBAR:CreateCustomBar()
-	if C.DB.actionbar.custom_bar then
-		ACTIONBAR:CustomBar({'BOTTOM', UIParent, 'BOTTOM', 0, 140})
+	if C.DB.Actionbar.CustomBar then
+		ACTIONBAR:CustomBar({'BOTTOM', _G.UIParent, 'BOTTOM', 0, 140})
 	end
 end

@@ -193,6 +193,31 @@ local function createOptionSlider(parent, title, minV, maxV, step, defaultV, x, 
 	slider:SetScript('OnValueChanged', sliderValueChanged)
 end
 
+local function slidersValueChanged(self, v)
+	local current
+	if self.__step < 1 then
+		current = tonumber(format('%.1f', v))
+	else
+		current = tonumber(format('%.0f', v))
+	end
+
+	self.value:SetText(current)
+	C.DB[self.__module][self.__value] = current
+	self.__update()
+end
+
+local function createOptionsSlider(parent, title, minV, maxV, step, defaultV, x, y, module, value, func)
+	local slider = F.CreateSlider(parent, title, minV, maxV, step, x, y, 180)
+	slider:SetValue(C.DB[module][value])
+	slider.value:SetText(C.DB[module][value])
+	slider.__module = module
+	slider.__value = value
+	slider.__update = func
+	slider.__default = defaultV
+	slider.__step = step
+	slider:SetScript('OnValueChanged', slidersValueChanged)
+end
+
 function GUI:SetupInventoryFilter(parent)
 	local guiName = 'FreeUI_GUI_Inventory_Filter'
 	toggleExtraGUI(guiName)
@@ -236,68 +261,205 @@ function GUI:SetupInventoryFilter(parent)
 	end
 end
 
-function GUI:SetupActionBarFader(parent)
-	local guiName = 'FreeUI_GUI_Actionbar_Fader'
+function GUI:SetupActionbarScale(parent)
+	local guiName = 'FreeUI_GUI_Actionbar_Scale'
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then
 		return
 	end
 
-	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER_SETUP)
+	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.SCALE_SETTING)
 	local scroll = GUI:CreateScroll(panel, 220, 540)
+	scroll.__bg = F.CreateBDFrame(scroll)
+	scroll.__bg:SetBackdropColor(.04, .04, .04, .25)
 
-	local faderValues = {0, 1, .3, .3}
+	local offset = 30
+	local defaultValues = {
+		1
+	}
 
-	local function Update()
+	local function OnUpdate()
+		F.ACTIONBAR:UpdateAllScale()
+	end
+
+	createOptionsSlider(
+		scroll.child,
+		L.GUI.ACTIONBAR.BAR_SCALE,
+		.5,
+		2,
+		.1,
+		defaultValues[1],
+		20,
+		-offset,
+		'Actionbar',
+		'BarScale',
+		OnUpdate
+	)
+end
+
+function GUI:SetupActionbarFade(parent)
+	local guiName = 'FreeUI_GUI_Actionbar_Fade'
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then
+		return
+	end
+
+	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER_SETTING)
+	local scroll = GUI:CreateScroll(panel, 220, 540)
+	scroll.__bg = F.CreateBDFrame(scroll)
+	scroll.__bg:SetBackdropColor(.04, .04, .04, .25)
+
+	local function OnUpdate()
 		F.ACTIONBAR:UpdateActionBarFade()
 	end
 
-	local function sliderValuesChanged(self, v)
-		local current = tonumber(format('%.1f', v))
-		self.value:SetText(current)
-		C.DB['actionbar'][self.__value] = current
-		self.__update()
-	end
-
-	local function createOptionSliders(parent, title, minV, maxV, step, defaultV, x, y, value, func)
-		local slider = F.CreateSlider(parent, title, minV, maxV, step, x, y, 180)
-		slider:SetValue(C.DB['actionbar'][value])
-		slider.value:SetText(C.DB['actionbar'][value])
-		slider.__value = value
-		slider.__update = func
-		slider.__default = defaultV
-		slider:SetScript('OnValueChanged', sliderValuesChanged)
-	end
-
-	local filterOptions = {
-		[1] = 'condition_combating',
-		[2] = 'condition_targeting',
-		[3] = 'condition_dungeon',
-		[4] = 'condition_pvp',
-		[5] = 'condition_vehicle'
+	local checkKeysList = {
+		[1] = 'ConditionCombat',
+		[2] = 'ConditionTarget',
+		[3] = 'ConditionDungeon',
+		[4] = 'ConditionPvP',
+		[5] = 'ConditionVehicle'
 	}
 
-	local function filterOnClick(self)
+	local sliderKeysList = {
+		[1] = 'FadeOutAlpha',
+		[2] = 'FadeInAlpha',
+		[3] = 'FadeOutDuration',
+		[4] = 'FadeInDuration'
+	}
+
+	local sliderValuesList = {
+		[1] = 0,
+		[2] = 1,
+		[3] = 1,
+		[4] = .3
+	}
+
+	local sliderRangesList = {
+		[1] = {0, 1, .1},
+		[2] = {0, 1, .1},
+		[3] = {0, 1, .1},
+		[4] = {0, 1, .1}
+	}
+
+	local checkNamesList = {
+		[1] = L.GUI.ACTIONBAR.CONDITION_COMBATING,
+		[2] = L.GUI.ACTIONBAR.CONDITION_TARGETING,
+		[3] = L.GUI.ACTIONBAR.CONDITION_DUNGEON,
+		[4] = L.GUI.ACTIONBAR.CONDITION_PVP,
+		[5] = L.GUI.ACTIONBAR.CONDITION_VEHICLE
+	}
+
+	local sliderNamesList = {
+		[1] = L.GUI.ACTIONBAR.FADE_OUT_ALPHA,
+		[2] = L.GUI.ACTIONBAR.FADE_IN_ALPHA,
+		[3] = L.GUI.ACTIONBAR.FADE_OUT_DURATION,
+		[4] = L.GUI.ACTIONBAR.FADE_IN_DURATION
+	}
+
+	local function OnClick(self)
 		local value = self.__value
-		C.DB['actionbar'][value] = not C.DB['actionbar'][value]
-		self:SetChecked(C.DB['actionbar'][value])
-		GUI.UpdateInventoryStatus()
+		C.DB['Actionbar'][value] = not C.DB['Actionbar'][value]
+		self:SetChecked(C.DB['Actionbar'][value])
 	end
 
 	local offset = 20
-	for _, value in ipairs(filterOptions) do
-		local box = createOptionCheck(scroll.child, offset, L.GUI.ACTIONBAR[strupper(value)])
-		box:SetChecked(C.DB['actionbar'][value])
+	for index, value in ipairs(checkKeysList) do
+		local box = createOptionCheck(scroll.child, offset, checkNamesList[index])
+		box:SetChecked(C.DB['Actionbar'][value])
 		box.__value = value
-		box:SetScript('OnClick', filterOnClick)
+		box:SetScript('OnClick', OnClick)
 
 		offset = offset + 35
 	end
 
-	createOptionSliders(scroll.child, L.GUI.ACTIONBAR.FADE_OUT_ALPHA, 0, 1, .1, faderValues[1], 20, -offset - 20, 'fade_out_alpha', Update)
-	createOptionSliders(scroll.child, L.GUI.ACTIONBAR.FADE_IN_ALPHA, 0, 1, .1, faderValues[2], 20, -offset - 100, 'fade_in_alpha', Update)
-	createOptionSliders(scroll.child, L.GUI.ACTIONBAR.FADE_OUT_DURATION, 0, 1, .1, faderValues[3], 20, -offset - 180, 'fade_out_duration', Update)
-	createOptionSliders(scroll.child, L.GUI.ACTIONBAR.FADE_IN_DURATION, 0, 1, .1, faderValues[4], 20, -offset - 260, 'fade_in_duration', Update)
+	for index, key in ipairs(sliderKeysList) do
+		local slider =
+			createOptionsSlider(
+			scroll.child,
+			sliderNamesList[index],
+			sliderRangesList[index][1],
+			sliderRangesList[index][2],
+			sliderRangesList[index][3],
+			sliderValuesList[index],
+			20,
+			-offset - 20,
+			'Actionbar',
+			sliderKeysList[index],
+			OnUpdate
+		)
+
+		offset = offset + 65
+	end
+end
+
+function GUI:SetupAdditionalbar(parent)
+	local guiName = 'FreeUI_GUI_Additionalbar'
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then
+		return
+	end
+
+	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.CUSTOM_BAR_SETTING)
+	local scroll = GUI:CreateScroll(panel, 220, 540)
+	scroll.__bg = F.CreateBDFrame(scroll)
+	scroll.__bg:SetBackdropColor(.04, .04, .04, .25)
+
+	local function OnUpdate()
+		F.ACTIONBAR:UpdateCustomBar()
+	end
+
+	local sliderKeysList = {
+		[1] = 'CBMargin',
+		[2] = 'CBPadding',
+		[3] = 'CBButtonSize',
+		[4] = 'CBButtonNumber',
+		[5] = 'CBButtonPerRow'
+	}
+
+	local sliderValuesList = {
+		[1] = 3,
+		[2] = 3,
+		[3] = 34,
+		[4] = 12,
+		[5] = 6
+	}
+
+	local sliderRangesList = {
+		[1] = {0, 6, 1},
+		[2] = {0, 6, 1},
+		[3] = {20, 50, 1},
+		[4] = {6, 12, 1},
+		[5] = {1, 12, 1}
+	}
+
+	local sliderNamesList = {
+		[1] = L.GUI.ACTIONBAR.CB_MARGIN,
+		[2] = L.GUI.ACTIONBAR.CB_PADDING,
+		[3] = L.GUI.ACTIONBAR.CB_BUTTON_SIZE,
+		[4] = L.GUI.ACTIONBAR.CB_BUTTON_NUMBER,
+		[5] = L.GUI.ACTIONBAR.CB_BUTTON_PER_ROW,
+	}
+
+	local offset = 30
+	for index, key in ipairs(sliderKeysList) do
+		local slider =
+			createOptionsSlider(
+			scroll.child,
+			sliderNamesList[index],
+			sliderRangesList[index][1],
+			sliderRangesList[index][2],
+			sliderRangesList[index][3],
+			sliderValuesList[index],
+			20,
+			-offset,
+			'Actionbar',
+			sliderKeysList[index],
+			OnUpdate
+		)
+
+		offset = offset + 65
+	end
 end
 
 function GUI:NamePlateAuraFilter(parent)
@@ -433,14 +595,47 @@ function GUI:SetupUnitFrameSize(parent)
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(parent, L.GUI.UNITFRAME.SET_WIDTH, sliderRange[value][1], sliderRange[value][2], 1, defaultValue[value][1], 20, offset - 60, value .. '_width', func)
-		createOptionSlider(parent, L.GUI.UNITFRAME.SET_HEIGHT, 4, 20, 1, defaultValue[value][2], 20, offset - 130, value .. '_height', func)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.SET_WIDTH,
+			sliderRange[value][1],
+			sliderRange[value][2],
+			1,
+			defaultValue[value][1],
+			20,
+			offset - 60,
+			value .. '_width',
+			func
+		)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.SET_HEIGHT,
+			4,
+			20,
+			1,
+			defaultValue[value][2],
+			20,
+			offset - 130,
+			value .. '_height',
+			func
+		)
 	end
 
 	local function createPowerOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionSlider(parent, L.GUI.UNITFRAME.SET_POWER_HEIGHT, 1, 10, 1, 1, 20, offset - 60, 'power_bar_height', func)
-		createOptionSlider(parent, L.GUI.UNITFRAME.SET_ALT_POWER_HEIGHT, 1, 10, 1, 2, 20, offset - 130, 'alt_power_height', func)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.SET_ALT_POWER_HEIGHT,
+			1,
+			10,
+			1,
+			2,
+			20,
+			offset - 130,
+			'alt_power_height',
+			func
+		)
 	end
 
 	createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_PLAYER, -10, 'player', UpdateSize)
@@ -471,9 +666,42 @@ function GUI:SetupGroupFrameSize(parent)
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(parent, L.GUI.UNITFRAME.SET_WIDTH, sliderRange[value][1], sliderRange[value][2], 1, defaultValue[value][1], 20, offset - 60, value .. '_width', func)
-		createOptionSlider(parent, L.GUI.UNITFRAME.SET_HEIGHT, sliderRange[value][1], sliderRange[value][2], 1, defaultValue[value][2], 20, offset - 130, value .. '_height', func)
-		createOptionSlider(parent, L.GUI.UNITFRAME.SET_GAP, 5, 10, 1, defaultValue[value][3], 20, offset - 200, value .. '_gap', func)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.SET_WIDTH,
+			sliderRange[value][1],
+			sliderRange[value][2],
+			1,
+			defaultValue[value][1],
+			20,
+			offset - 60,
+			value .. '_width',
+			func
+		)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.SET_HEIGHT,
+			sliderRange[value][1],
+			sliderRange[value][2],
+			1,
+			defaultValue[value][2],
+			20,
+			offset - 130,
+			value .. '_height',
+			func
+		)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.SET_GAP,
+			5,
+			10,
+			1,
+			defaultValue[value][3],
+			20,
+			offset - 200,
+			value .. '_gap',
+			func
+		)
 	end
 
 	createOptionGroup(scroll.child, L.GUI.GROUPFRAME.CAT_PARTY, -10, 'party', UpdateSize)
@@ -523,10 +751,54 @@ function GUI:SetupUnitFrameFader(parent)
 		offset = offset + 35
 	end
 
-	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_OUT_ALPHA, 0, 1, .1, faderValues[1], 20, -offset - 20, 'fade_out_alpha', Update)
-	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_IN_ALPHA, 0, 1, .1, faderValues[2], 20, -offset - 100, 'fade_in_alpha', Update)
-	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_OUT_DURATION, 0, 1, .1, faderValues[3], 20, -offset - 180, 'fade_out_duration', Update)
-	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_IN_DURATION, 0, 1, .1, faderValues[4], 20, -offset - 260, 'fade_in_duration', Update)
+	createOptionSlider(
+		scroll.child,
+		L.GUI.UNITFRAME.FADE_OUT_ALPHA,
+		0,
+		1,
+		.1,
+		faderValues[1],
+		20,
+		-offset - 20,
+		'fade_out_alpha',
+		Update
+	)
+	createOptionSlider(
+		scroll.child,
+		L.GUI.UNITFRAME.FADE_IN_ALPHA,
+		0,
+		1,
+		.1,
+		faderValues[2],
+		20,
+		-offset - 100,
+		'fade_in_alpha',
+		Update
+	)
+	createOptionSlider(
+		scroll.child,
+		L.GUI.UNITFRAME.FADE_OUT_DURATION,
+		0,
+		1,
+		.1,
+		faderValues[3],
+		20,
+		-offset - 180,
+		'fade_out_duration',
+		Update
+	)
+	createOptionSlider(
+		scroll.child,
+		L.GUI.UNITFRAME.FADE_IN_DURATION,
+		0,
+		1,
+		.1,
+		faderValues[4],
+		20,
+		-offset - 260,
+		'fade_in_duration',
+		Update
+	)
 end
 
 function GUI:SetupCastbar(parent)
@@ -541,16 +813,50 @@ function GUI:SetupCastbar(parent)
 
 	createOptionTitle(scroll.child, L.GUI.UNITFRAME.CASTBAR_COLORS, -10)
 	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_COLOR, C.DB.unitframe.casting_color, 40, -40)
-	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_UNINTERRUPTIBLE_COLOR, C.DB.unitframe.casting_uninterruptible_color, 40, -70)
-	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_COMPLETE_COLOR, C.DB.unitframe.casting_complete_color, 40, -100)
+	createOptionSwatch(
+		scroll.child,
+		L.GUI.UNITFRAME.CASTING_UNINTERRUPTIBLE_COLOR,
+		C.DB.unitframe.casting_uninterruptible_color,
+		40,
+		-70
+	)
+	createOptionSwatch(
+		scroll.child,
+		L.GUI.UNITFRAME.CASTING_COMPLETE_COLOR,
+		C.DB.unitframe.casting_complete_color,
+		40,
+		-100
+	)
 	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_FAIL_COLOR, C.DB.unitframe.casting_fail_color, 40, -130)
 
 	local defaultValue = {['focus'] = {200, 16}}
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(parent, L.GUI.UNITFRAME.CASTBAR_WIDTH, 100, 400, 1, defaultValue[value][1], 20, offset - 60, 'castbar_' .. value .. '_width', func)
-		createOptionSlider(parent, L.GUI.UNITFRAME.CASTBAR_HEIGHT, 6, 30, 1, defaultValue[value][2], 20, offset - 130, 'castbar_' .. value .. '_height', func)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.CASTBAR_WIDTH,
+			100,
+			400,
+			1,
+			defaultValue[value][1],
+			20,
+			offset - 60,
+			'castbar_' .. value .. '_width',
+			func
+		)
+		createOptionSlider(
+			parent,
+			L.GUI.UNITFRAME.CASTBAR_HEIGHT,
+			6,
+			30,
+			1,
+			defaultValue[value][2],
+			20,
+			offset - 130,
+			'castbar_' .. value .. '_height',
+			func
+		)
 	end
 
 	local function updateFocusCastbar()
@@ -574,9 +880,21 @@ function GUI:SetupCustomClassColor(parent)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PALADIN, FREE_ADB.class_colors_list.PALADIN, 40, -80)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MAGE, FREE_ADB.class_colors_list.MAGE, 40, -110)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PRIEST, FREE_ADB.class_colors_list.PRIEST, 40, -140)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEATHKNIGHT, FREE_ADB.class_colors_list.DEATHKNIGHT, 40, -170)
+	createOptionSwatch(
+		scroll.child,
+		LOCALIZED_CLASS_NAMES_MALE.DEATHKNIGHT,
+		FREE_ADB.class_colors_list.DEATHKNIGHT,
+		40,
+		-170
+	)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARLOCK, FREE_ADB.class_colors_list.WARLOCK, 40, -200)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEMONHUNTER, FREE_ADB.class_colors_list.DEMONHUNTER, 40, -230)
+	createOptionSwatch(
+		scroll.child,
+		LOCALIZED_CLASS_NAMES_MALE.DEMONHUNTER,
+		FREE_ADB.class_colors_list.DEMONHUNTER,
+		40,
+		-230
+	)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.ROGUE, FREE_ADB.class_colors_list.ROGUE, 40, -260)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DRUID, FREE_ADB.class_colors_list.DRUID, 40, -290)
 	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MONK, FREE_ADB.class_colors_list.MONK, 40, -320)
@@ -647,7 +965,8 @@ function GUI:SetupPartySpellCooldown(parent)
 	local options = {}
 
 	options[1] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_ID, 10, -30, L.GUI.GROUPFRAME.SPELL_ID_TIP, 90, 24)
-	options[2] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_COOLDOWN, 120, -30, L.GUI.GROUPFRAME.SPELL_COOLDOWN_TIP, 90, 24)
+	options[2] =
+		GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_COOLDOWN, 120, -30, L.GUI.GROUPFRAME.SPELL_COOLDOWN_TIP, 90, 24)
 
 	local scroll = GUI:CreateScroll(frame, 200, 430)
 	scroll:ClearAllPoints()
@@ -786,7 +1105,8 @@ function GUI:SetupGroupDebuffs(parent)
 	local frame = panel.bg
 	local bars, options = {}, {}
 
-	local iType = GUI:CreateDropdown(frame, L.GUI.GROUPFRAME.TYPE, 10, -30, {DUNGEONS, RAID}, L.GUI.GROUPFRAME.TYPE_TIP, 90, 24)
+	local iType =
+		GUI:CreateDropdown(frame, L.GUI.GROUPFRAME.TYPE, 10, -30, {DUNGEONS, RAID}, L.GUI.GROUPFRAME.TYPE_TIP, 90, 24)
 	for i = 1, 2 do
 		iType.options[i]:HookScript(
 			'OnClick',
@@ -847,7 +1167,11 @@ function GUI:SetupGroupDebuffs(parent)
 	end
 
 	local function addClick(options)
-		local dungeonName, raidName, spellID, priority = options[1].Text:GetText(), options[2].Text:GetText(), tonumber(options[3]:GetText()), tonumber(options[4]:GetText())
+		local dungeonName, raidName, spellID, priority =
+			options[1].Text:GetText(),
+			options[2].Text:GetText(),
+			tonumber(options[3]:GetText()),
+			tonumber(options[4]:GetText())
 		local instName = dungeonName or raidName
 		if not instName or not spellID then
 			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)

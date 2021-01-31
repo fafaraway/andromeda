@@ -1,24 +1,60 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
-
-local next, tonumber = next, tonumber
+local _G = _G
+local next = next
+local tonumber = tonumber
+local TokenFrame_LoadUI= TokenFrame_LoadUI
+local TokenFrame_Update = TokenFrame_Update
+local BackpackTokenFrame_Update = BackpackTokenFrame_Update
+local InCombatLockdown = InCombatLockdown
+local GetCVar = GetCVar
+local hooksecurefunc = hooksecurefunc
 local ACTION_BUTTON_SHOW_GRID_REASON_CVAR = ACTION_BUTTON_SHOW_GRID_REASON_CVAR
+local MainMenuBar = MainMenuBar
+local OverrideActionBar = OverrideActionBar
+local MicroButtonAndBagsBar = MicroButtonAndBagsBar
+local MainMenuBarArtFrame = MainMenuBarArtFrame
+local StatusTrackingBarManager = StatusTrackingBarManager
+local ActionBarDownButton = ActionBarDownButton
+local ActionBarUpButton = ActionBarUpButton
+local MainMenuBarVehicleLeaveButton = MainMenuBarVehicleLeaveButton
+local OverrideActionBarExpBar = OverrideActionBarExpBar
+local OverrideActionBarHealthBar = OverrideActionBarHealthBar
+local OverrideActionBarPowerBar = OverrideActionBarPowerBar
+local OverrideActionBarPitchFrame = OverrideActionBarPitchFrame
 
 local scripts = {
-	'OnShow', 'OnHide', 'OnEvent', 'OnEnter', 'OnLeave', 'OnUpdate', 'OnValueChanged', 'OnClick', 'OnMouseDown', 'OnMouseUp',
+	'OnShow',
+	'OnHide',
+	'OnEvent',
+	'OnEnter',
+	'OnLeave',
+	'OnUpdate',
+	'OnValueChanged',
+	'OnClick',
+	'OnMouseDown',
+	'OnMouseUp'
 }
 
 local framesToHide = {
-	MainMenuBar, OverrideActionBar,
+	MainMenuBar,
+	OverrideActionBar
 }
 
 local framesToDisable = {
 	MainMenuBar,
-	MicroButtonAndBagsBar, MainMenuBarArtFrame, StatusTrackingBarManager,
-	ActionBarDownButton, ActionBarUpButton, MainMenuBarVehicleLeaveButton,
+	MicroButtonAndBagsBar,
+	MainMenuBarArtFrame,
+	StatusTrackingBarManager,
+	ActionBarDownButton,
+	ActionBarUpButton,
+	MainMenuBarVehicleLeaveButton,
 	OverrideActionBar,
-	OverrideActionBarExpBar, OverrideActionBarHealthBar, OverrideActionBarPowerBar, OverrideActionBarPitchFrame,
+	OverrideActionBarExpBar,
+	OverrideActionBarHealthBar,
+	OverrideActionBarPowerBar,
+	OverrideActionBarPitchFrame
 }
 
 local function DisableAllScripts(frame)
@@ -31,7 +67,7 @@ end
 
 local function buttonShowGrid(name, showgrid)
 	for i = 1, 12 do
-		local button = _G[name..i]
+		local button = _G[name .. i]
 		if button then
 			button:SetAttribute('showgrid', showgrid)
 			button:ShowGrid(ACTION_BUTTON_SHOW_GRID_REASON_CVAR)
@@ -58,7 +94,7 @@ end
 
 local function hideFakeExtraBar(event, addon)
 	if addon == 'Blizzard_BindingUI' then
-		F.HideObject(QuickKeybindFrame.phantomExtraActionButton)
+		F.HideObject(_G.QuickKeybindFrame.phantomExtraActionButton)
 		F:UnregisterEvent(event, hideFakeExtraBar)
 	end
 end
@@ -68,7 +104,6 @@ local function updateTokenVisibility()
 	TokenFrame_Update()
 	BackpackTokenFrame_Update()
 end
-
 
 function ACTIONBAR:RemoveBlizzArt()
 	MainMenuBar:SetMovable(true)

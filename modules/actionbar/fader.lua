@@ -1,5 +1,14 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
+
+local _G = _G
+local CreateFrame = CreateFrame
+local IsInInstance = IsInInstance
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitExists = UnitExists
+local hooksecurefunc = hooksecurefunc
+local ActionButton1Cooldown = ActionButton1Cooldown
 
 local barsList = {
 	'FreeUI_ActionBar1',
@@ -12,48 +21,32 @@ local barsList = {
 	'FreeUI_ActionBarStance'
 }
 
-function ACTIONBAR:FadeBlingTexture(cooldown, alpha)
-	if not cooldown then
-		return
-	end
-	cooldown:SetBlingTexture(alpha > 0.5 and 131010 or C.Assets.blank_tex)
-end
-
-function ACTIONBAR:FadeBlings(alpha)
-	for _, button in pairs(ACTIONBAR.buttons) do
-		ACTIONBAR:FadeBlingTexture(button.cooldown, alpha)
-	end
-end
-
 function ACTIONBAR:Bar_OnEnter()
 	if not ACTIONBAR.fadeParent.mouseLock then
 		F:UIFrameFadeIn(ACTIONBAR.fadeParent, ACTIONBAR.fadeInDuration, ACTIONBAR.fadeParent:GetAlpha(), ACTIONBAR.fadeInAlpha)
-		ACTIONBAR:FadeBlings(ACTIONBAR.fadeInAlpha)
 	end
 end
 
 function ACTIONBAR:Bar_OnLeave()
 	if not ACTIONBAR.fadeParent.mouseLock then
 		F:UIFrameFadeOut(ACTIONBAR.fadeParent, ACTIONBAR.fadeOutDuration, ACTIONBAR.fadeParent:GetAlpha(), ACTIONBAR.fadeOutAlpha)
-		ACTIONBAR:FadeBlings(ACTIONBAR.fadeOutAlpha)
 	end
 end
 
 function ACTIONBAR:FadeParent_OnEvent()
-	local inInstance, instanceType = IsInInstance()
+	local _, instanceType = IsInInstance()
+	local isCombating = UnitAffectingCombat('player') and C.DB.Actionbar.ConditionCombat
+	local isTargeting = (UnitExists('target') or UnitExists('focus')) and C.DB.Actionbar.ConditionTarget
+	local isInPvPArea = (instanceType == 'pvp' or instanceType == 'arena') and C.DB.Actionbar.ConditionPvP
+	local isInDungeon = (instanceType == 'party' or instanceType == 'raid') and C.DB.Actionbar.ConditionDungeon
+	local isInVehicle = UnitHasVehicleUI('player') and C.DB.Actionbar.ConditionVehicle
 
-	if
-		(UnitAffectingCombat('player') and C.DB.actionbar.condition_combating) or ((UnitExists('target') or UnitExists('focus')) and C.DB.actionbar.condition_targeting) or ((instanceType == 'pvp' or instanceType == 'arena') and C.DB.actionbar.condition_pvp) or
-			((instanceType == 'party' or instanceType == 'raid') and C.DB.actionbar.condition_dungeon) or
-			(UnitHasVehicleUI('player') and C.DB.actionbar.condition_vehicle)
-	 then
+	if isCombating or isTargeting or isInPvPArea or isInDungeon or isInVehicle then
 		self.mouseLock = true
 		F:UIFrameFadeIn(self, ACTIONBAR.fadeInDuration, self:GetAlpha(), ACTIONBAR.fadeInAlpha)
-		ACTIONBAR:FadeBlings(ACTIONBAR.fadeInAlpha)
 	else
 		self.mouseLock = false
 		F:UIFrameFadeOut(self, ACTIONBAR.fadeOutDuration, self:GetAlpha(), ACTIONBAR.fadeOutAlpha)
-		ACTIONBAR:FadeBlings(ACTIONBAR.fadeOutAlpha)
 	end
 end
 
@@ -73,8 +66,8 @@ function ACTIONBAR:HookActionBar()
 	end
 end
 
-function ACTIONBAR:RemoveCooldownBling()
-	for k, v in pairs(_G) do
+local function disableCooldownBling()
+	for _, v in pairs(_G) do
 		if type(v) == 'table' and type(v.SetDrawBling) == 'function' then
 			v:SetDrawBling(false)
 		end
@@ -82,35 +75,35 @@ function ACTIONBAR:RemoveCooldownBling()
 end
 
 function ACTIONBAR:UpdateActionBarFade()
-	if not C.DB.actionbar.fade then
+	if not C.DB.Actionbar.Fader then
 		return
 	end
 
-	ACTIONBAR.fadeOutAlpha = C.DB.actionbar.fade_out_alpha or 0
-	ACTIONBAR.fadeInAlpha = C.DB.actionbar.fade_in_alpha or 1
-	ACTIONBAR.fadeInDuration = C.DB.actionbar.fade_in_duration or .3
-	ACTIONBAR.fadeOutDuration = C.DB.actionbar.fade_out_duration or .3
+	ACTIONBAR.fadeOutAlpha = C.DB.Actionbar.FadeOutAlpha or 0
+	ACTIONBAR.fadeInAlpha = C.DB.Actionbar.FadeInAlpha or 1
+	ACTIONBAR.fadeInDuration = C.DB.Actionbar.FadeInDuration or .3
+	ACTIONBAR.fadeOutDuration = C.DB.Actionbar.FadeOutDuration or 1
 
 	ACTIONBAR.fadeParent = CreateFrame('Frame', nil, _G.UIParent)
 	ACTIONBAR.fadeParent:SetAlpha(ACTIONBAR.fadeOutAlpha)
 	ACTIONBAR.fadeParent:SetScript('OnEvent', ACTIONBAR.FadeParent_OnEvent)
 
-	if C.DB.actionbar.condition_combating then
+	if C.DB.Actionbar.ConditionCombat then
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_REGEN_DISABLED')
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_REGEN_ENABLED')
 	end
 
-	if C.DB.actionbar.condition_targeting then
+	if C.DB.Actionbar.ConditionTarget then
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_TARGET_CHANGED')
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_FOCUS_CHANGED')
 	end
 
-	if C.DB.actionbar.condition_dungeon or C.DB.actionbar.condition_pvp then
+	if C.DB.Actionbar.ConditionPvP or C.DB.Actionbar.ConditionDungeon then
 		ACTIONBAR.fadeParent:RegisterEvent('PLAYER_ENTERING_WORLD')
 		ACTIONBAR.fadeParent:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 	end
 
-	if C.DB.actionbar.condition_vehicle then
+	if C.DB.Actionbar.ConditionVehicle then
 		ACTIONBAR.fadeParent:RegisterEvent('UNIT_ENTERED_VEHICLE')
 		ACTIONBAR.fadeParent:RegisterEvent('UNIT_EXITED_VEHICLE')
 		ACTIONBAR.fadeParent:RegisterEvent('VEHICLE_UPDATE')
@@ -119,8 +112,7 @@ function ACTIONBAR:UpdateActionBarFade()
 	ACTIONBAR.HookActionBar()
 
 	-- Completely remove cooldown bling
-	-- Credit: CooldownReadyFlashDisabler by AlexFolland
-	ACTIONBAR:RemoveCooldownBling()
+	disableCooldownBling()
 	hooksecurefunc(
 		getmetatable(ActionButton1Cooldown).__index,
 		'SetCooldown',

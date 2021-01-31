@@ -1,9 +1,15 @@
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
-
-local next, pairs, unpack = next, pairs, unpack
-local HasAction, IsUsableAction, IsActionInRange = HasAction, IsUsableAction, IsActionInRange
+local _G = _G
+local next = next
+local pairs = pairs
+local unpack = unpack
+local CreateFrame = CreateFrame
+local HasAction = HasAction
+local IsUsableAction = IsUsableAction
+local IsActionInRange = IsActionInRange
+local hooksecurefunc = hooksecurefunc
 
 local UPDATE_DELAY = .2
 local buttonColors, buttonsToUpdate = {}, {}
@@ -76,7 +82,9 @@ function ACTIONBAR:UpdateButtonUsable(force)
 end
 
 function ACTIONBAR:SetButtonColor(colorIndex)
-	if buttonColors[self] == colorIndex then return end
+	if buttonColors[self] == colorIndex then
+		return
+	end
 	buttonColors[self] = colorIndex
 
 	local r, g, b = unpack(colors[colorIndex])

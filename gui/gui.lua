@@ -205,6 +205,7 @@ local function CreateOption(i)
 			end
 
 			if tip then
+				cb.title = name
 				F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
 		elseif optType == 2 then -- editbox
