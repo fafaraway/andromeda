@@ -12,9 +12,8 @@
 ## SavedVariables: FREE_ADB, FREE_PDB, FREE_GOLDCOUNT, FREE_KEYSTONE
 ## SavedVariablesPerCharacter: FREE_DB, FREE_SPELLBINDING
 
-
-libs\libs.xml
 init.lua
+libs\libs.xml
 locales\locales.xml
 core\core.xml
 gui\gui.xml
