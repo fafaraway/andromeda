@@ -1364,6 +1364,9 @@ C.CharacterSettings = {
 
 			['BindType'] = 1,
 	},
+	['Quest'] = {
+		['Enable'] = true,
+	}
 }
 
 C.AccountSettings = {

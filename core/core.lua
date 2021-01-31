@@ -100,6 +100,7 @@ do
 	F:RegisterModule('TOOLTIP')
 	F:RegisterModule('UNITFRAME')
 	F:RegisterModule('NAMEPLATE')
+	F:RegisterModule('QUEST')
 end
 
 do
@@ -123,6 +124,7 @@ do
 	F.TOOLTIP = F:GetModule('TOOLTIP')
 	F.UNITFRAME = F:GetModule('UNITFRAME')
 	F.NAMEPLATE = F:GetModule('NAMEPLATE')
+	F.QUEST = F:GetModule('QUEST')
 end
 
 do
