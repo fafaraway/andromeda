@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
+local NAMEPLATE = F.NAMEPLATE
 local oUF = F.oUF
-
 
 --[[ Backdrop ]]
 local function UNITFRAME_OnEnter(self)
@@ -610,6 +610,7 @@ function UNITFRAME:AddAuras(self)
 	auras.gap = true
 	auras.spacing = 4
 	auras.numTotal = 32
+	auras.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
 	if style == 'target' then
 		auras.initialAnchor = 'BOTTOMLEFT'
@@ -692,10 +693,6 @@ end
 UNITFRAME.BloodlustList = {}
 for _, spellID in pairs(C.BloodlustList) do
 	UNITFRAME.BloodlustList[spellID] = {'BOTTOMLEFT', {1, .8, 0}, true}
-end
-
-local function filterBloodLust()
-
 end
 
 local found = {}
@@ -1012,6 +1009,9 @@ function UNITFRAME:PostCastStart(unit)
 	local castingColor = C.DB.unitframe.casting_color
 	local notInterruptibleColor = C.DB.unitframe.casting_uninterruptible_color
 
+	F.Debug(self.name)
+	F.Debug(self.spellID)
+
 	self:SetAlpha(1)
 	self.Spark:Show()
 
@@ -1092,8 +1092,15 @@ function UNITFRAME:PostCastStart(unit)
 		self.Bg:SetBackdropBorderColor(0, 0, 0, 0)
 	end
 
-	self.Text:SetText('')
-	-- disable casting spell name, we only need interrupt info
+	self.Text:SetText('') -- disable casting spell name, we only need interrupt info
+
+	if self.__owner.unitStyle == 'nameplate' then
+		if C.DB.nameplate.CastbarGlow and NAMEPLATE.MajorSpellsList[self.spellID] then
+			F.ShowOverlayGlow(self.glowFrame)
+		else
+			F.HideOverlayGlow(self.glowFrame)
+		end
+	end
 end
 
 function UNITFRAME:PostUpdateInterruptible(unit)
@@ -1215,6 +1222,11 @@ function UNITFRAME:AddCastBar(self)
 		safeZone:SetPoint('TOPRIGHT')
 		safeZone:SetPoint('BOTTOMRIGHT')
 		castbar.SafeZone = safeZone
+	end
+
+	if self.unitStyle == 'nameplate' then
+		castbar.glowFrame = F.CreateGlowFrame(castbar, iconFrame:GetHeight())
+		castbar.glowFrame:SetPoint("CENTER", castbar.Icon)
 	end
 
 	castbar.decimal = '%.1f'

@@ -55,6 +55,7 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 320512) -- 侵蚀爪击
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 333406) -- 伏击
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 332397) -- 覆体缠网
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 330069) -- 凝结魔药
+UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331399) -- 感染毒雨
 
 INSTANCE = 1184 -- 塞兹仙林的迷雾
 RegisterSeasonSpells(INSTANCE)

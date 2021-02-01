@@ -524,6 +524,28 @@ function NAMEPLATE:AddInterruptInfo()
 	F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', self.UpdateCastbarInterrupt)
 end
 
+-- Major spells glow
+NAMEPLATE.MajorSpellsList = {}
+function NAMEPLATE:RefreshMajorSpells()
+	wipe(NAMEPLATE.MajorSpellsList)
+
+	for spellID in pairs(C.NPMajorSpellsList) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			local modValue = FREE_ADB['NPMajorSpells'][spellID]
+			if modValue == nil then
+				NAMEPLATE.MajorSpellsList[spellID] = true
+			end
+		end
+	end
+
+	for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
+		if value then
+			NAMEPLATE.MajorSpellsList[spellID] = true
+		end
+	end
+end
+
 --[[ Create plate ]]
 local platesList = {}
 function NAMEPLATE:CreateNameplateStyle()
@@ -678,7 +700,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 		self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 
 		local blizzPlate = self:GetParent().UnitFrame
-		self.widgetContainer = blizzPlate.WidgetContainer
+		self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
 		if self.widgetContainer then
 			self.widgetContainer:SetParent(self)
 			self.widgetContainer:SetScale(1 / FREE_ADB.ui_scale)
@@ -715,6 +737,7 @@ function NAMEPLATE:OnLogin()
 	self:AddInterruptInfo()
 	self:UpdateGroupRoles()
 	self:RefreshPlateOnFactionChanged()
+	self:RefreshMajorSpells()
 
 	oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
 	oUF:SetActiveStyle('Nameplate')

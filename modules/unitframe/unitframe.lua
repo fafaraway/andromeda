@@ -2,7 +2,6 @@ local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 local oUF = F.oUF
 
-
 local function ReplaceHealthColor()
 	local colors = FREE_ADB.health_color
 	oUF.colors.health = {
@@ -93,8 +92,6 @@ function UNITFRAME:InitializeColors()
 	end
 end
 
-
-
 local raidBuffsList = {}
 function UNITFRAME:AddClassSpells(list)
 	for class, value in pairs(list) do
@@ -166,8 +163,28 @@ function UNITFRAME:CheckCornerSpells()
 	end
 end
 
-function UNITFRAME:InitializeAuras()
+function UNITFRAME:CheckMajorSpells()
+	for spellID in pairs(C.NPMajorSpellsList) do
+		local name = GetSpellInfo(spellID)
+		if name then
+			if FREE_ADB['NPMajorSpells'][spellID] then
+				FREE_ADB['NPMajorSpells'][spellID] = nil
+			end
+		else
+			if C.isDeveloper then
+				print('Invalid nameplate major spell ID: ' .. spellID)
+			end
+		end
+	end
 
+	for spellID, value in pairs(FREE_ADB['NPMajorSpells']) do
+		if value == false and C.NPMajorSpellsList[spellID] == nil then
+			FREE_ADB['NPMajorSpells'][spellID] = nil
+		end
+	end
+end
+
+function UNITFRAME:InitializeAuras()
 	for instName, value in pairs(raidDebuffsList) do
 		for spell, priority in pairs(value) do
 			if FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spell] and FREE_ADB['RaidDebuffs'][instName][spell] == priority then
@@ -181,12 +198,11 @@ function UNITFRAME:InitializeAuras()
 		end
 	end
 
-
 	C.RaidDebuffsList = raidDebuffsList
 
 	UNITFRAME:CheckPartySpells()
 	UNITFRAME:CheckCornerSpells()
-
+	UNITFRAME:CheckMajorSpells()
 
 	-- Filter bloodlust for healers
 	--[[ local function filterBloodlust()
@@ -197,7 +213,6 @@ function UNITFRAME:InitializeAuras()
 	filterBloodlust()
 	F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', filterBloodlust) ]]
 end
-
 
 function UNITFRAME:OnLogin()
 	F:SetSmoothingAmount(.3)
@@ -245,8 +260,6 @@ function UNITFRAME:OnLogin()
 		CompactRaidFrameManager:UnregisterAllEvents()
 		CompactRaidFrameManager:SetParent(F.HiddenFrame)
 	end
-
-
 
 	self:SpawnParty()
 	self:SpawnRaid()

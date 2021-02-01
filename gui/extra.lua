@@ -1,6 +1,14 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
 local UNITFRAME = F.UNITFRAME
+local NAMEPLATE = F.NAMEPLATE
+
+local _G = _G
+local CreateFrame = CreateFrame
+local GetSpellInfo = GetSpellInfo
+local GetSpellTexture = GetSpellTexture
+local ADD = ADD
+local RESET = RESET
 
 local extraGUIs = {}
 local function toggleExtraGUI(guiName)
@@ -58,9 +66,58 @@ end
 local function sortBars(barTable)
 	local num = 1
 	for _, bar in pairs(barTable) do
-		bar:SetPoint('TOPLEFT', 10, -10 - 35 * (num - 1))
+		bar:SetPoint('TOPLEFT', 0, - 36 * (num - 1))
 		num = num + 1
 	end
+end
+
+local function createBarTest(parent, spellID, barTable, key)
+	local spellName = GetSpellInfo(spellID)
+	local texture = GetSpellTexture(spellID)
+
+	local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+	bar:SetSize(200, 30)
+	F.CreateBD(bar, .5)
+	barTable[spellID] = bar
+
+	local icon, close = GUI:CreateBarWidgets(bar, texture)
+	F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID, 'BLUE')
+	close:SetScript(
+		'OnClick',
+		function()
+			bar:Hide()
+			barTable[spellID] = nil
+			if C.NPMajorSpellsList[spellID] then
+				_G.FREE_ADB[key][spellID] = false
+			else
+				_G.FREE_ADB[key][spellID] = nil
+			end
+			sortBars(barTable)
+		end
+	)
+
+	local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
+	name:SetWidth(120)
+	name:SetJustifyH('LEFT')
+
+	sortBars(barTable)
+end
+
+local function addClickTest(button)
+	local parent = button.__owner
+	local spellID = tonumber(parent.box:GetText())
+	if not spellID or not GetSpellInfo(spellID) then
+		_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.INCORRECT_ID)
+		return
+	end
+	local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
+	if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
+		_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.EXISTING_ID)
+		return
+	end
+	_G.FREE_ADB['NPMajorSpells'][spellID] = true
+	createBarTest(parent.child, spellID, barTable, 'NPMajorSpells')
+	parent.box:SetText('')
 end
 
 local function labelOnEnter(self)
@@ -72,7 +129,7 @@ local function labelOnEnter(self)
 end
 
 local function createLabel(parent, text, tip)
-	local label = F.CreateFS(parent, C.Assets.Fonts.Regular, 12, nil, text, 'YELLOW', true, 'CENTER', 0, 25)
+	local label = F.CreateFS(parent, C.Assets.Fonts.Regular, 12, nil, text, 'YELLOW', true, 'CENTER', 0, 22)
 	if not tip then
 		return
 	end
@@ -113,7 +170,7 @@ function GUI:ClearEdit(element)
 end
 
 function GUI:CreateEditbox(parent, text, x, y, tip, width, height)
-	local eb = F.CreateEditBox(parent, width or 90, height or 30)
+	local eb = F.CreateEditBox(parent, width or 90, height or 24)
 	eb:SetPoint('TOPLEFT', x, y)
 	eb:SetMaxLetters(255)
 	createLabel(eb, text, tip)
@@ -125,12 +182,15 @@ function GUI:CreateScroll(parent, width, height, text)
 	local scroll = CreateFrame('ScrollFrame', nil, parent, 'UIPanelScrollFrameTemplate')
 	scroll:SetSize(width, height)
 	scroll:SetPoint('TOPLEFT', 10, -50)
-	-- scroll.bg = F.CreateBDFrame(scroll, .25)
-	-- scroll.bg:SetBackdropColor(.04, .04, .04, .25)
+
 
 	if text then
 		F.CreateFS(scroll, C.Assets.Fonts.Regular, 12, 'OUTLINE', text, nil, true, 'TOPLEFT', 5, 20)
 	end
+
+	scroll.bg = F.CreateBDFrame(scroll)
+	scroll.bg:SetBackdropColor(.04, .04, .04, .25)
+
 	scroll.child = CreateFrame('Frame', nil, scroll)
 	scroll.child:SetSize(width, 1)
 	scroll:SetScrollChild(scroll.child)
@@ -218,6 +278,7 @@ local function createOptionsSlider(parent, title, minV, maxV, step, defaultV, x,
 	slider:SetScript('OnValueChanged', slidersValueChanged)
 end
 
+-- Inventory
 function GUI:SetupInventoryFilter(parent)
 	local guiName = 'FreeUI_GUI_Inventory_Filter'
 	toggleExtraGUI(guiName)
@@ -261,6 +322,7 @@ function GUI:SetupInventoryFilter(parent)
 	end
 end
 
+-- Actionbar
 function GUI:SetupActionbarScale(parent)
 	local guiName = 'FreeUI_GUI_Actionbar_Scale'
 	toggleExtraGUI(guiName)
@@ -270,8 +332,7 @@ function GUI:SetupActionbarScale(parent)
 
 	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.SCALE_SETTING)
 	local scroll = GUI:CreateScroll(panel, 220, 540)
-	scroll.__bg = F.CreateBDFrame(scroll)
-	scroll.__bg:SetBackdropColor(.04, .04, .04, .25)
+
 
 	local offset = 30
 	local defaultValues = {
@@ -282,19 +343,7 @@ function GUI:SetupActionbarScale(parent)
 		F.ACTIONBAR:UpdateAllScale()
 	end
 
-	createOptionsSlider(
-		scroll.child,
-		L.GUI.ACTIONBAR.BAR_SCALE,
-		.5,
-		2,
-		.1,
-		defaultValues[1],
-		20,
-		-offset,
-		'Actionbar',
-		'BarScale',
-		OnUpdate
-	)
+	createOptionsSlider(scroll.child, L.GUI.ACTIONBAR.BAR_SCALE, .5, 2, .1, defaultValues[1], 20, -offset, 'Actionbar', 'BarScale', OnUpdate)
 end
 
 function GUI:SetupActionbarFade(parent)
@@ -306,8 +355,7 @@ function GUI:SetupActionbarFade(parent)
 
 	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER_SETTING)
 	local scroll = GUI:CreateScroll(panel, 220, 540)
-	scroll.__bg = F.CreateBDFrame(scroll)
-	scroll.__bg:SetBackdropColor(.04, .04, .04, .25)
+
 
 	local function OnUpdate()
 		F.ACTIONBAR:UpdateActionBarFade()
@@ -402,8 +450,7 @@ function GUI:SetupAdditionalbar(parent)
 
 	local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.CUSTOM_BAR_SETTING)
 	local scroll = GUI:CreateScroll(panel, 220, 540)
-	scroll.__bg = F.CreateBDFrame(scroll)
-	scroll.__bg:SetBackdropColor(.04, .04, .04, .25)
+
 
 	local function OnUpdate()
 		F.ACTIONBAR:UpdateCustomBar()
@@ -438,7 +485,7 @@ function GUI:SetupAdditionalbar(parent)
 		[2] = L.GUI.ACTIONBAR.CB_PADDING,
 		[3] = L.GUI.ACTIONBAR.CB_BUTTON_SIZE,
 		[4] = L.GUI.ACTIONBAR.CB_BUTTON_NUMBER,
-		[5] = L.GUI.ACTIONBAR.CB_BUTTON_PER_ROW,
+		[5] = L.GUI.ACTIONBAR.CB_BUTTON_PER_ROW
 	}
 
 	local offset = 30
@@ -462,6 +509,7 @@ function GUI:SetupAdditionalbar(parent)
 	end
 end
 
+-- Nameplate
 function GUI:NamePlateAuraFilter(parent)
 	local guiName = 'FreeUI_GUI_NamePlate_Aura_Filter'
 	toggleExtraGUI(guiName)
@@ -499,7 +547,7 @@ function GUI:NamePlateAuraFilter(parent)
 			'OnClick',
 			function()
 				bar:Hide()
-				FREE_ADB['NPAuraFilter'][index][spellID] = nil
+				_G.FREE_ADB['NPAuraFilter'][index][spellID] = nil
 				frameData[index].barList[spellID] = nil
 				sortBars(frameData[index].barList)
 			end
@@ -518,15 +566,15 @@ function GUI:NamePlateAuraFilter(parent)
 	local function addClick(parent, index)
 		local spellID = tonumber(parent.box:GetText())
 		if not spellID or not GetSpellInfo(spellID) then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_INCORRECT_ID)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_INCORRECT_ID)
 			return
 		end
-		if FREE_ADB['NPAuraFilter'][index][spellID] then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_EXISTING_ID)
+		if _G.FREE_ADB['NPAuraFilter'][index][spellID] then
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_EXISTING_ID)
 			return
 		end
 
-		FREE_ADB['NPAuraFilter'][index][spellID] = true
+		_G.FREE_ADB['NPAuraFilter'][index][spellID] = true
 		createBar(parent.child, index, spellID)
 		parent.box:SetText('')
 	end
@@ -556,12 +604,100 @@ function GUI:NamePlateAuraFilter(parent)
 			end
 		)
 
-		for spellID in pairs(FREE_ADB['NPAuraFilter'][index]) do
+		for spellID in pairs(_G.FREE_ADB['NPAuraFilter'][index]) do
 			createBar(scroll.child, index, spellID)
 		end
 	end
 end
 
+function GUI:NamePlateCastbarGlow(parent)
+	local guiName = 'FreeUI_GUI_NamePlate_Castbar_Glow'
+	toggleExtraGUI(guiName)
+	if extraGUIs[guiName] then
+		return
+	end
+
+	local function refreshMajorSpells()
+		F.NAMEPLATE:RefreshMajorSpells()
+	end
+
+	local panel = createExtraGUI(parent, guiName, L.GUI.NAMEPLATE.CASTBAR_GLOW_SETTING, true)
+	panel:SetScript('OnHide', refreshMajorSpells)
+	parent.panel = panel
+
+	local frame = panel.bg
+	local scroll = GUI:CreateScroll(frame, 200, 480)
+	scroll.box = GUI:CreateEditbox(frame, L.GUI.SPELL_ID, 10, -20, L.GUI.ID_INTRO)
+
+	local barTable = {}
+
+	--[[ local function addClick(button)
+		local parent = button.__owner
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID or not GetSpellInfo(spellID) then
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.INCORRECT_ID)
+			return
+		end
+		local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
+		if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.EXISTING_ID)
+			return
+		end
+		_G.FREE_ADB['NPMajorSpells'][spellID] = true
+		createBarTest(parent.child, spellID, barTable, 'NPMajorSpells')
+		parent.box:SetText('')
+	end ]]
+
+	scroll.add = F.CreateButton(frame, 46, 24, ADD)
+	scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 10, 0)
+	scroll.add.__owner = scroll
+	--scroll.add:SetScript('OnClick', addClick)
+	scroll.add:SetScript('OnClick', function(button)
+		local parent = button.__owner
+		local spellID = tonumber(parent.box:GetText())
+		if not spellID or not GetSpellInfo(spellID) then
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.INCORRECT_ID)
+			return
+		end
+		local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
+		if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.EXISTING_ID)
+			return
+		end
+		_G.FREE_ADB['NPMajorSpells'][spellID] = true
+		createBarTest(parent.child, spellID, barTable, 'NPMajorSpells')
+		parent.box:SetText('')
+	end)
+
+	scroll.reset = F.CreateButton(frame, 46, 24, RESET)
+	scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 10, 0)
+
+	_G.StaticPopupDialogs['FREEUI_RESET_MAJORSPELLS'] = {
+		text = L.GUI.RESET_LIST,
+		button1 = YES,
+		button2 = NO,
+		OnAccept = function()
+			_G.FREE_ADB['NPMajorSpells'] = {}
+			ReloadUI()
+		end,
+		whileDead = 1
+	}
+
+	scroll.reset:SetScript(
+		'OnClick',
+		function()
+			StaticPopup_Show('FREEUI_RESET_MAJORSPELLS')
+		end
+	)
+
+	for spellID, value in pairs(NAMEPLATE.MajorSpellsList) do
+		if value then
+			createBarTest(scroll.child, spellID, barTable, 'NPMajorSpells')
+		end
+	end
+end
+
+-- Unitframe
 function GUI:SetupUnitFrameSize(parent)
 	local guiName = 'FreeUI_GUI_Unitframe_Setup'
 	toggleExtraGUI(guiName)
@@ -595,47 +731,14 @@ function GUI:SetupUnitFrameSize(parent)
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.SET_WIDTH,
-			sliderRange[value][1],
-			sliderRange[value][2],
-			1,
-			defaultValue[value][1],
-			20,
-			offset - 60,
-			value .. '_width',
-			func
-		)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.SET_HEIGHT,
-			4,
-			20,
-			1,
-			defaultValue[value][2],
-			20,
-			offset - 130,
-			value .. '_height',
-			func
-		)
+		createOptionSlider(parent, L.GUI.UNITFRAME.SET_WIDTH, sliderRange[value][1], sliderRange[value][2], 1, defaultValue[value][1], 20, offset - 60, value .. '_width', func)
+		createOptionSlider(parent, L.GUI.UNITFRAME.SET_HEIGHT, 4, 20, 1, defaultValue[value][2], 20, offset - 130, value .. '_height', func)
 	end
 
 	local function createPowerOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
 		createOptionSlider(parent, L.GUI.UNITFRAME.SET_POWER_HEIGHT, 1, 10, 1, 1, 20, offset - 60, 'power_bar_height', func)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.SET_ALT_POWER_HEIGHT,
-			1,
-			10,
-			1,
-			2,
-			20,
-			offset - 130,
-			'alt_power_height',
-			func
-		)
+		createOptionSlider(parent, L.GUI.UNITFRAME.SET_ALT_POWER_HEIGHT, 1, 10, 1, 2, 20, offset - 130, 'alt_power_height', func)
 	end
 
 	createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_PLAYER, -10, 'player', UpdateSize)
@@ -666,42 +769,9 @@ function GUI:SetupGroupFrameSize(parent)
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.SET_WIDTH,
-			sliderRange[value][1],
-			sliderRange[value][2],
-			1,
-			defaultValue[value][1],
-			20,
-			offset - 60,
-			value .. '_width',
-			func
-		)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.SET_HEIGHT,
-			sliderRange[value][1],
-			sliderRange[value][2],
-			1,
-			defaultValue[value][2],
-			20,
-			offset - 130,
-			value .. '_height',
-			func
-		)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.SET_GAP,
-			5,
-			10,
-			1,
-			defaultValue[value][3],
-			20,
-			offset - 200,
-			value .. '_gap',
-			func
-		)
+		createOptionSlider(parent, L.GUI.UNITFRAME.SET_WIDTH, sliderRange[value][1], sliderRange[value][2], 1, defaultValue[value][1], 20, offset - 60, value .. '_width', func)
+		createOptionSlider(parent, L.GUI.UNITFRAME.SET_HEIGHT, sliderRange[value][1], sliderRange[value][2], 1, defaultValue[value][2], 20, offset - 130, value .. '_height', func)
+		createOptionSlider(parent, L.GUI.UNITFRAME.SET_GAP, 5, 10, 1, defaultValue[value][3], 20, offset - 200, value .. '_gap', func)
 	end
 
 	createOptionGroup(scroll.child, L.GUI.GROUPFRAME.CAT_PARTY, -10, 'party', UpdateSize)
@@ -751,54 +821,10 @@ function GUI:SetupUnitFrameFader(parent)
 		offset = offset + 35
 	end
 
-	createOptionSlider(
-		scroll.child,
-		L.GUI.UNITFRAME.FADE_OUT_ALPHA,
-		0,
-		1,
-		.1,
-		faderValues[1],
-		20,
-		-offset - 20,
-		'fade_out_alpha',
-		Update
-	)
-	createOptionSlider(
-		scroll.child,
-		L.GUI.UNITFRAME.FADE_IN_ALPHA,
-		0,
-		1,
-		.1,
-		faderValues[2],
-		20,
-		-offset - 100,
-		'fade_in_alpha',
-		Update
-	)
-	createOptionSlider(
-		scroll.child,
-		L.GUI.UNITFRAME.FADE_OUT_DURATION,
-		0,
-		1,
-		.1,
-		faderValues[3],
-		20,
-		-offset - 180,
-		'fade_out_duration',
-		Update
-	)
-	createOptionSlider(
-		scroll.child,
-		L.GUI.UNITFRAME.FADE_IN_DURATION,
-		0,
-		1,
-		.1,
-		faderValues[4],
-		20,
-		-offset - 260,
-		'fade_in_duration',
-		Update
-	)
+	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_OUT_ALPHA, 0, 1, .1, faderValues[1], 20, -offset - 20, 'fade_out_alpha', Update)
+	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_IN_ALPHA, 0, 1, .1, faderValues[2], 20, -offset - 100, 'fade_in_alpha', Update)
+	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_OUT_DURATION, 0, 1, .1, faderValues[3], 20, -offset - 180, 'fade_out_duration', Update)
+	createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_IN_DURATION, 0, 1, .1, faderValues[4], 20, -offset - 260, 'fade_in_duration', Update)
 end
 
 function GUI:SetupCastbar(parent)
@@ -813,50 +839,16 @@ function GUI:SetupCastbar(parent)
 
 	createOptionTitle(scroll.child, L.GUI.UNITFRAME.CASTBAR_COLORS, -10)
 	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_COLOR, C.DB.unitframe.casting_color, 40, -40)
-	createOptionSwatch(
-		scroll.child,
-		L.GUI.UNITFRAME.CASTING_UNINTERRUPTIBLE_COLOR,
-		C.DB.unitframe.casting_uninterruptible_color,
-		40,
-		-70
-	)
-	createOptionSwatch(
-		scroll.child,
-		L.GUI.UNITFRAME.CASTING_COMPLETE_COLOR,
-		C.DB.unitframe.casting_complete_color,
-		40,
-		-100
-	)
+	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_UNINTERRUPTIBLE_COLOR, C.DB.unitframe.casting_uninterruptible_color, 40, -70)
+	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_COMPLETE_COLOR, C.DB.unitframe.casting_complete_color, 40, -100)
 	createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_FAIL_COLOR, C.DB.unitframe.casting_fail_color, 40, -130)
 
 	local defaultValue = {['focus'] = {200, 16}}
 
 	local function createOptionGroup(parent, title, offset, value, func)
 		createOptionTitle(parent, title, offset)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.CASTBAR_WIDTH,
-			100,
-			400,
-			1,
-			defaultValue[value][1],
-			20,
-			offset - 60,
-			'castbar_' .. value .. '_width',
-			func
-		)
-		createOptionSlider(
-			parent,
-			L.GUI.UNITFRAME.CASTBAR_HEIGHT,
-			6,
-			30,
-			1,
-			defaultValue[value][2],
-			20,
-			offset - 130,
-			'castbar_' .. value .. '_height',
-			func
-		)
+		createOptionSlider(parent, L.GUI.UNITFRAME.CASTBAR_WIDTH, 100, 400, 1, defaultValue[value][1], 20, offset - 60, 'castbar_' .. value .. '_width', func)
+		createOptionSlider(parent, L.GUI.UNITFRAME.CASTBAR_HEIGHT, 6, 30, 1, defaultValue[value][2], 20, offset - 130, 'castbar_' .. value .. '_height', func)
 	end
 
 	local function updateFocusCastbar()
@@ -875,37 +867,21 @@ function GUI:SetupCustomClassColor(parent)
 	local panel = createExtraGUI(parent, guiName, L.GUI.MISC.CUSTOM_CLASS_COLOR_SETTING_HEADER)
 	local scroll = GUI:CreateScroll(panel, 220, 540)
 
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.HUNTER, FREE_ADB.class_colors_list.HUNTER, 40, -20)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARRIOR, FREE_ADB.class_colors_list.WARRIOR, 40, -50)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PALADIN, FREE_ADB.class_colors_list.PALADIN, 40, -80)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MAGE, FREE_ADB.class_colors_list.MAGE, 40, -110)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PRIEST, FREE_ADB.class_colors_list.PRIEST, 40, -140)
-	createOptionSwatch(
-		scroll.child,
-		LOCALIZED_CLASS_NAMES_MALE.DEATHKNIGHT,
-		FREE_ADB.class_colors_list.DEATHKNIGHT,
-		40,
-		-170
-	)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARLOCK, FREE_ADB.class_colors_list.WARLOCK, 40, -200)
-	createOptionSwatch(
-		scroll.child,
-		LOCALIZED_CLASS_NAMES_MALE.DEMONHUNTER,
-		FREE_ADB.class_colors_list.DEMONHUNTER,
-		40,
-		-230
-	)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.ROGUE, FREE_ADB.class_colors_list.ROGUE, 40, -260)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DRUID, FREE_ADB.class_colors_list.DRUID, 40, -290)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MONK, FREE_ADB.class_colors_list.MONK, 40, -320)
-	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.SHAMAN, FREE_ADB.class_colors_list.SHAMAN, 40, -350)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.HUNTER, _G.FREE_ADB.class_colors_list.HUNTER, 40, -20)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARRIOR, _G.FREE_ADB.class_colors_list.WARRIOR, 40, -50)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PALADIN, _G.FREE_ADB.class_colors_list.PALADIN, 40, -80)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MAGE, _G.FREE_ADB.class_colors_list.MAGE, 40, -110)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PRIEST, _G.FREE_ADB.class_colors_list.PRIEST, 40, -140)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEATHKNIGHT, _G.FREE_ADB.class_colors_list.DEATHKNIGHT, 40, -170)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARLOCK, _G.FREE_ADB.class_colors_list.WARLOCK, 40, -200)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEMONHUNTER, _G.FREE_ADB.class_colors_list.DEMONHUNTER, 40, -230)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.ROGUE, _G.FREE_ADB.class_colors_list.ROGUE, 40, -260)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DRUID, _G.FREE_ADB.class_colors_list.DRUID, 40, -290)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MONK, _G.FREE_ADB.class_colors_list.MONK, 40, -320)
+	createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.SHAMAN, _G.FREE_ADB.class_colors_list.SHAMAN, 40, -350)
 
 	local function updateClassColor()
 	end
-end
-
-local function updatePartyWatcherSpells()
-	UNITFRAME:UpdatePartyWatcherSpells()
 end
 
 function GUI:SetupPartySpellCooldown(parent)
@@ -913,6 +889,10 @@ function GUI:SetupPartySpellCooldown(parent)
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then
 		return
+	end
+
+	local function updatePartyWatcherSpells()
+		UNITFRAME:UpdatePartyWatcherSpells()
 	end
 
 	local panel = createExtraGUI(parent, guiName, L.GUI.GROUPFRAME.PARTY_SPELL_SETTING_HEADER, true)
@@ -940,9 +920,9 @@ function GUI:SetupPartySpellCooldown(parent)
 			function()
 				bar:Hide()
 				if C.PartySpellsList[spellID] then
-					FREE_ADB['party_spells_list'][spellID] = 0
+					_G.FREE_ADB['party_spells_list'][spellID] = 0
 				else
-					FREE_ADB['party_spells_list'][spellID] = nil
+					_G.FREE_ADB['party_spells_list'][spellID] = nil
 				end
 				barTable[spellID] = nil
 				sortBars(barTable)
@@ -965,8 +945,7 @@ function GUI:SetupPartySpellCooldown(parent)
 	local options = {}
 
 	options[1] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_ID, 10, -30, L.GUI.GROUPFRAME.SPELL_ID_TIP, 90, 24)
-	options[2] =
-		GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_COOLDOWN, 120, -30, L.GUI.GROUPFRAME.SPELL_COOLDOWN_TIP, 90, 24)
+	options[2] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_COOLDOWN, 120, -30, L.GUI.GROUPFRAME.SPELL_COOLDOWN_TIP, 90, 24)
 
 	local scroll = GUI:CreateScroll(frame, 200, 430)
 	scroll:ClearAllPoints()
@@ -974,12 +953,12 @@ function GUI:SetupPartySpellCooldown(parent)
 	scroll.reset = F.CreateButton(frame, 46, 24, RESET)
 	scroll.reset:SetPoint('TOPLEFT', 10, -60)
 	scroll.reset.text:SetTextColor(1, 0, 0)
-	StaticPopupDialogs['PARTY_SPELL_COOLDOWN_RESET'] = {
+	_G.StaticPopupDialogs['FREEUI_RESET_PARTYSPELLS'] = {
 		text = L.GUI.GROUPFRAME.PARTY_SPELL_RESET_WARNING,
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			wipe(FREE_ADB['party_spells_list'])
+			wipe(_G.FREE_ADB['party_spells_list'])
 			ReloadUI()
 		end,
 		whileDead = 1
@@ -987,30 +966,30 @@ function GUI:SetupPartySpellCooldown(parent)
 	scroll.reset:SetScript(
 		'OnClick',
 		function()
-			StaticPopup_Show('PARTY_SPELL_COOLDOWN_RESET')
+			StaticPopup_Show('FREEUI_RESET_PARTYSPELLS')
 		end
 	)
 
 	local function addClick(scroll, options)
 		local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
 		if not spellID or not duration then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
 			return
 		end
 
 		if not GetSpellInfo(spellID) then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
 			return
 		end
 
-		local modDuration = FREE_ADB['party_spells_list'][spellID]
+		local modDuration = _G.FREE_ADB['party_spells_list'][spellID]
 
 		if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
 			return
 		end
 
-		FREE_ADB['party_spells_list'][spellID] = duration
+		_G.FREE_ADB['party_spells_list'][spellID] = duration
 		createBar(scroll.child, spellID, duration)
 		clearEdit(options)
 	end
@@ -1087,10 +1066,6 @@ function GUI:SetupPartySpellCooldown(parent)
 	end
 end
 
-local function UpdateGroupDebuffs()
-	UNITFRAME:UpdateGroupDebuffs()
-end
-
 function GUI:SetupGroupDebuffs(parent)
 	local guiName = 'NDuiGUI_RaidDebuffs'
 	toggleExtraGUI(guiName)
@@ -1098,15 +1073,18 @@ function GUI:SetupGroupDebuffs(parent)
 		return
 	end
 
+	local function UpdateRaidDebuffs()
+		UNITFRAME:UpdateRaidDebuffs()
+	end
+
 	local panel = createExtraGUI(parent, guiName, L.GUI.GROUPFRAME.GROUP_DEBUFF_SETTING_HEADER, true)
-	panel:SetScript('OnHide', UpdateGroupDebuffs)
+	panel:SetScript('OnHide', UpdateRaidDebuffs)
 
 	local setupBars
 	local frame = panel.bg
 	local bars, options = {}, {}
 
-	local iType =
-		GUI:CreateDropdown(frame, L.GUI.GROUPFRAME.TYPE, 10, -30, {DUNGEONS, RAID}, L.GUI.GROUPFRAME.TYPE_TIP, 90, 24)
+	local iType = GUI:CreateDropdown(frame, L.GUI.GROUPFRAME.TYPE, 10, -30, {DUNGEONS, RAID}, L.GUI.GROUPFRAME.TYPE_TIP, 90, 24)
 	for i = 1, 2 do
 		iType.options[i]:HookScript(
 			'OnClick',
@@ -1159,7 +1137,7 @@ function GUI:SetupGroupDebuffs(parent)
 		print(spellID)
 		print(C.RaidDebuffsList[instName][spellID])
 		local localPrio = C.RaidDebuffsList[instName][spellID]
-		local savedPrio = FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spellID]
+		local savedPrio = _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spellID]
 		if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
 			return false
 		end
@@ -1167,30 +1145,26 @@ function GUI:SetupGroupDebuffs(parent)
 	end
 
 	local function addClick(options)
-		local dungeonName, raidName, spellID, priority =
-			options[1].Text:GetText(),
-			options[2].Text:GetText(),
-			tonumber(options[3]:GetText()),
-			tonumber(options[4]:GetText())
+		local dungeonName, raidName, spellID, priority = options[1].Text:GetText(), options[2].Text:GetText(), tonumber(options[3]:GetText()), tonumber(options[4]:GetText())
 		local instName = dungeonName or raidName
 		if not instName or not spellID then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
 			return
 		end
 		if spellID and not GetSpellInfo(spellID) then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
 			return
 		end
 		if isAuraExisted(instName, spellID) then
-			UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
+			_G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
 			return
 		end
 
 		priority = analyzePrio(priority)
-		if not FREE_ADB['RaidDebuffsList'][instName] then
-			FREE_ADB['RaidDebuffsList'][instName] = {}
+		if not _G.FREE_ADB['RaidDebuffsList'][instName] then
+			_G.FREE_ADB['RaidDebuffsList'][instName] = {}
 		end
-		FREE_ADB['RaidDebuffsList'][instName][spellID] = priority
+		_G.FREE_ADB['RaidDebuffsList'][instName][spellID] = priority
 		setupBars(instName)
 		GUI:ClearEdit(options[3])
 		GUI:ClearEdit(options[4])
@@ -1201,12 +1175,12 @@ function GUI:SetupGroupDebuffs(parent)
 	scroll:SetPoint('TOPLEFT', 10, -150)
 	scroll.reset = F.CreateButton(frame, 60, 24, RESET)
 	scroll.reset:SetPoint('TOPLEFT', 10, -120)
-	StaticPopupDialogs['GROUP_DEBUFF_RESET'] = {
+	_G.StaticPopupDialogs['GROUP_DEBUFF_RESET'] = {
 		text = L.GUI.GROUPFRAME.GROUP_DEBUFF_RESET_WARNING,
 		button1 = YES,
 		button2 = NO,
 		OnAccept = function()
-			FREE_ADB['RaidDebuffsList'] = {}
+			_G.FREE_ADB['RaidDebuffsList'] = {}
 			ReloadUI()
 		end,
 		whileDead = 1
@@ -1261,12 +1235,12 @@ function GUI:SetupGroupDebuffs(parent)
 			function()
 				bar:Hide()
 				if C.RaidDebuffsList[bar.instName][bar.spellID] then
-					if not FREE_ADB['RaidDebuffsList'][bar.instName] then
-						FREE_ADB['RaidDebuffsList'][bar.instName] = {}
+					if not _G.FREE_ADB['RaidDebuffsList'][bar.instName] then
+						_G.FREE_ADB['RaidDebuffsList'][bar.instName] = {}
 					end
-					FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = 0
+					_G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = 0
 				else
-					FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = nil
+					_G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = nil
 				end
 				setupBars(bar.instName)
 			end
@@ -1293,10 +1267,10 @@ function GUI:SetupGroupDebuffs(parent)
 			'OnEnterPressed',
 			function(self)
 				local prio = analyzePrio(tonumber(self:GetText()))
-				if not FREE_ADB['RaidDebuffsList'][bar.instName] then
-					FREE_ADB['RaidDebuffsList'][bar.instName] = {}
+				if not _G.FREE_ADB['RaidDebuffsList'][bar.instName] then
+					_G.FREE_ADB['RaidDebuffsList'][bar.instName] = {}
 				end
-				FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
+				_G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
 				self:SetText(prio)
 			end
 		)
@@ -1326,15 +1300,15 @@ function GUI:SetupGroupDebuffs(parent)
 
 		if C.RaidDebuffsList[instName] then
 			for spellID, priority in pairs(C.RaidDebuffsList[instName]) do
-				if not (FREE_ADB['RaidDebuffsList'][instName] and FREE_ADB['RaidDebuffsList'][instName][spellID]) then
+				if not (_G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spellID]) then
 					index = index + 1
 					applyData(index, instName, spellID, priority)
 				end
 			end
 		end
 
-		if FREE_ADB['RaidDebuffsList'][instName] then
-			for spellID, priority in pairs(FREE_ADB['RaidDebuffsList'][instName]) do
+		if _G.FREE_ADB['RaidDebuffsList'][instName] then
+			for spellID, priority in pairs(_G.FREE_ADB['RaidDebuffsList'][instName]) do
 				if priority > 0 then
 					index = index + 1
 					applyData(index, instName, spellID, priority)

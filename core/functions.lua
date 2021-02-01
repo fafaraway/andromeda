@@ -633,6 +633,15 @@ do
 		self:HookScript('OnLeave', F.HideTooltip)
 	end
 
+	-- Glow parent
+	function F:CreateGlowFrame(size)
+		local frame = CreateFrame("Frame", nil, self)
+		frame:SetPoint("CENTER")
+		frame:SetSize(size+8, size+8)
+
+		return frame
+	end
+
 	-- Gradient Frame
 	local orientationAbbr = {
 		['V'] = 'Vertical',

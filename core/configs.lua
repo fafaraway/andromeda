@@ -957,6 +957,26 @@ C.NPShowPowerUnitsList = {
 	[GetSectionInfo(22339)] = true -- 猎手阿尔迪莫，巴加斯特之影
 }
 
+C.NPMajorSpellsList = {
+	[334664] = true,	-- 彼界，惊恐嚎哭
+	[332612] = true,	-- 彼界，治疗波
+	[332706] = true,	-- 彼界，治疗
+	[332084] = true,	-- 彼界，自清洁循环
+	[321828] = true,	-- 仙林，肉饼蛋糕
+	[326450] = true,	-- 赎罪大厅，忠心的野兽
+	[325700] = true,	-- 赎罪大厅，收集罪恶
+	[341969] = true,	-- 伤势剧场，凋零释放
+	[330586] = true,	-- 伤势剧场，吞噬血肉
+	[333294] = true,	-- 伤势剧场，死亡之风
+	[330868] = true,	-- 伤势剧场，通灵箭雨
+	[327413] = true,	-- 晋升高塔，反抗之拳
+	[324293] = true,	-- 通灵战潮，刺耳尖啸
+	[334748] = true,	-- 通灵战潮，排干体液
+	[334749] = true,	-- 通灵战潮，排干体液
+	[326827] = true,	-- 赤红深渊，恐惧之缚
+	[326831] = true,	-- 赤红深渊，恐惧之缚
+}
+
 --[[
 	默认设置
 ]]
@@ -1211,6 +1231,7 @@ C.CharacterSettings = {
 		['vertical_spacing'] = 0.7,
 		['horizontal_spacing'] = 0.3,
 		['name_only'] = false,
+		['CastbarGlow'] = true,
 		['player_plate'] = false,
 		['pp_width'] = 160,
 		['pp_height'] = 6,
@@ -1388,10 +1409,11 @@ C.AccountSettings = {
 	['reskin_abp'] = true,
 	['chat_filter_black_list'] = '',
 	['chat_filter_white_list'] = '',
-	['custom_junk_list'] = {},
+	['CustomJunkList'] = {},
 	['NPAuraFilter'] = {[1] = {}, [2] = {}},
 	['RaidDebuffsList'] = {},
 	['RaidAuraWatch'] = {},
+	['NPMajorSpells'] = {},
 	['CornerSpellsList'] = {},
 	['PartySpellsList'] = {},
 	['profile_index'] = {},

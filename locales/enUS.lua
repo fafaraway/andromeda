@@ -313,6 +313,13 @@ L.GUI = {
 	['RELOAD'] = '|cffff2020Do you want to reload the Interface to apply settings ?|r',
 	['RESET_GOLD'] = '|cffff2020是否清空金币统计数据？|r',
 	['RESET_JUNK_LIST'] = '|cffff2020是否清空自定义垃圾物品列表？|r',
+
+	['SPELL_ID'] = 'Spell ID',
+	["ID_INTRO"] = "|nSpell ID, must be a number.|n|nYou can get ID on spell's GameTooltip.|n|nSpell name is not supported.",
+	["INCORRECT_ID"] = "Incorrect SpellID.",
+	["EXISTING_ID"] = "The SpellID is existed.",
+	["RESET_LIST"] = "Are you sure to restore default list?",
+
 	['MOVER'] = {
 		['NAME'] = 'UI Mover',
 		['GRID'] = 'Grid',
@@ -833,7 +840,12 @@ L.GUI = {
 		['HORIZONTAL_SPACING'] = 'Horizontal spacing',
 		['COLORED_TARGET'] = 'Colored target',
 		['COLORED_TARGET_TIP'] = 'If enabled, colored your target nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
-		['TARGET_COLOR'] = 'Target color'
+		['TARGET_COLOR'] = 'Target color',
+
+		['CASTBAR_GLOW'] = 'Marjor spells glow',
+		['CASTBAR_GLOW_TIP'] = '|nIf unit is casting a major spell, highlight its castbar icon.',
+
+		['CASTBAR_GLOW_SETTING'] = '',
 	},
 	['CREDITS'] = {
 		['NAME'] = 'Credits',

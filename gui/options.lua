@@ -57,6 +57,7 @@ local function UpdateMinimapScale()
 	F.MAP:UpdateMinimapScale()
 end
 
+-- Nameplate
 local function NamePlateAuraFilter()
 	GUI:NamePlateAuraFilter(GUI.Page[14])
 end
@@ -84,6 +85,11 @@ local function UpdatePlateScale()
 	F.NAMEPLATE:UpdatePlateTargetScale()
 end
 
+local function SetupNamePlateCastbarGlow()
+	GUI:NamePlateCastbarGlow(GUI.Page[14])
+end
+
+-- Unitframe
 local function SetupUnitFrameSize()
 	GUI:SetupUnitFrameSize(GUI.Page[12])
 end
@@ -367,6 +373,7 @@ GUI.OptionsList = {
 		{1, 'nameplate', 'interrupt_name', L.GUI.NAMEPLATE.INTERRUPT_NAME, true},
 		{1, 'nameplate', 'explosive_scale', L.GUI.NAMEPLATE.EXPLOSIVE_SCALE, nil, nil, nil, L.GUI.NAMEPLATE.EXPLOSIVE_SCALE_TIP},
 		{1, 'nameplate', 'plate_auras', L.GUI.NAMEPLATE.PLATE_AURAS, true, NamePlateAuraFilter},
+		{1, 'nameplate', 'CastbarGlow', L.GUI.NAMEPLATE.CASTBAR_GLOW, nil, SetupNamePlateCastbarGlow, nil, L.GUI.NAMEPLATE.CASTBAR_GLOW_TIP},
 		{},
 		{1, 'nameplate', 'friendly_class_color', L.GUI.NAMEPLATE.FRIENDLY_CLASS_COLOR},
 		{1, 'nameplate', 'hostile_class_color', L.GUI.NAMEPLATE.HOSTILE_CLASS_COLOR, true},

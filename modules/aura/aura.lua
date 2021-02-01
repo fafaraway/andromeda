@@ -47,8 +47,13 @@ local day, hour, minute = 86400, 3600, 60
 function AURA:FormatAuraTime(s)
 	if s >= day then
 		return format('%d'..C.InfoColor..'d', s/day), s%day
+
 	elseif s >= hour then
 		return format('%d'..C.InfoColor..'h', F:Round(s/hour, 1)), s%hour
+
+	elseif s >= 2*hour then
+		return format("%d"..C.InfoColor.."h", s/hour), s%hour
+
 	elseif s >= 10*minute then
 		return format('%d'..C.InfoColor..'m', s/minute), s%minute
 	elseif s >= minute then
