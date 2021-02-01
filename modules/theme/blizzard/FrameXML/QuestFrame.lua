@@ -77,10 +77,9 @@ tinsert(C.BlizzThemes, function()
 	-- Quest NPC model
 
 	F.StripTextures(QuestModelScene)
+	F.SetBD(QuestModelScene)
 	F.StripTextures(QuestNPCModelTextFrame)
-	local bg = F.SetBD(QuestNPCModelTextFrame)
-	bg:SetPoint("TOPLEFT", QuestModelScene)
-	bg:SetFrameLevel(0)
+	F.SetBD(QuestNPCModelTextFrame)
 
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, _, _, _, _, x, y)
 		x = x + 6
