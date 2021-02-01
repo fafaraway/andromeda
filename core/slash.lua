@@ -74,7 +74,7 @@ StaticPopupDialogs['FREEUI_RESET_JUNK_LIST'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		wipe(FREE_ADB.custom_junk_list)
+		wipe(FREE_ADB.CustomJunkList)
 	end,
 	timeout = 0,
 	whileDead = 1,

@@ -36,7 +36,7 @@ function GUI:ExportData()
 	end
 
 	for KEY, VALUE in pairs(FREE_ADB) do
-		if KEY == 'custom_junk_list' then
+		if KEY == 'CustomJunkList' then
 			text = text..';ACCOUNT:'..KEY
 			for spellID in pairs(VALUE) do
 				text = text..':'..spellID
@@ -141,7 +141,7 @@ function GUI:ImportData()
 			y = tonumber(y)
 			C.DB[key][value] = {relFrom, parent, relTo, x, y}
 		elseif key == 'ACCOUNT' then
-			if value == 'raid_aura_watch' or value == 'custom_junk_list' then
+			if value == 'raid_aura_watch' or value == 'CustomJunkList' then
 				local spells = {select(3, strsplit(':', option))}
 				for _, spellID in next, spells do
 					FREE_ADB[value][tonumber(spellID)] = true

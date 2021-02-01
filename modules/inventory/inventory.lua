@@ -2,18 +2,62 @@ local F, C, L = unpack(select(2, ...))
 local INVENTORY = F.INVENTORY
 local cargBags = F.cargBags
 
-local format, pairs, wipe, ipairs, strmatch, unpack, ceil = string.format, pairs, table.wipe, ipairs, string.match, unpack, math.ceil
+local pairs = pairs
+local wipe = wipe
+local ipairs = ipairs
+local strmatch = string.match
+local unpack = unpack
+local ceil = math.ceil
+local strfind = strfind
+local CreateFrame = CreateFrame
+local ToggleFrame = ToggleFrame
 local EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC = EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC
 local LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_POOR, LE_ITEM_QUALITY_RARE, LE_ITEM_QUALITY_HEIRLOOM
 local LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER = LE_ITEM_CLASS_WEAPON, LE_ITEM_CLASS_ARMOR, LE_ITEM_CLASS_CONTAINER
 local SortBankBags, SortReagentBankBags, SortBags = SortBankBags, SortReagentBankBags, SortBags
 local GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem = GetContainerNumSlots, GetContainerItemInfo, PickupContainerItem
-local C_NewItems_IsNewItem, C_NewItems_RemoveNewItem, C_Timer_After = C_NewItems.IsNewItem, C_NewItems.RemoveNewItem, C_Timer.After
+local C_NewItems_IsNewItem, C_Timer_After = C_NewItems.IsNewItem, C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsCosmeticItem = IsCosmeticItem
 local IsControlKeyDown, IsAltKeyDown, DeleteCursorItem = IsControlKeyDown, IsAltKeyDown, DeleteCursorItem
 local GetItemInfo, GetContainerItemID, SplitContainerItem = GetItemInfo, GetContainerItemID, SplitContainerItem
+local GetInventoryItemID = GetInventoryItemID
+local GetContainerItemLink = GetContainerItemLink
+local ClearCursor = ClearCursor
+local InCombatLockdown = InCombatLockdown
+local PlaySound = PlaySound
+local OpenAllBags = OpenAllBags
+local CloseAllBags = CloseAllBags
+local SetSortBagsRightToLeft = SetSortBagsRightToLeft
+local SetInsertItemsLeftToRight = SetInsertItemsLeftToRight
+local ToggleAllBags = ToggleAllBags
+local IsAddOnLoaded = IsAddOnLoaded
+local SOUNDKIT_IG_BACKPACK_OPEN = SOUNDKIT.IG_BACKPACK_OPEN
+local SOUNDKIT_IG_BACKPACK_CLOSE = SOUNDKIT.IG_BACKPACK_CLOSE
+local SOUNDKIT_IG_MINIMAP_OPEN = SOUNDKIT.IG_MINIMAP_OPEN
+local SOUNDKIT_IG_CHARACTER_INFO_TAB = SOUNDKIT.IG_CHARACTER_INFO_TAB
+local IsReagentBankUnlocked = IsReagentBankUnlocked
+local StaticPopup_Show = StaticPopup_Show
+local DepositReagentBank = DepositReagentBank
+local REAGENT_BANK = REAGENT_BANK
+local BANK = BANK
+local REAGENTBANK_DEPOSIT = REAGENTBANK_DEPOSIT
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
+local VIDEO_OPTIONS_ENABLED = VIDEO_OPTIONS_ENABLED
+local VIDEO_OPTIONS_DISABLED = VIDEO_OPTIONS_DISABLED
+local ITEM_BNETACCOUNTBOUND = ITEM_BNETACCOUNTBOUND
+local ITEM_SOULBOUND = ITEM_SOULBOUND
+local ITEM_BIND_TO_BNETACCOUNT = ITEM_BIND_TO_BNETACCOUNT
+local ITEM_ACCOUNTBOUND = ITEM_ACCOUNTBOUND
+local BAG_FILTER_EQUIPMENT = BAG_FILTER_EQUIPMENT
+local LOOT_JOURNAL_LEGENDARIES = LOOT_JOURNAL_LEGENDARIES
+local BAG_FILTER_CONSUMABLES = BAG_FILTER_CONSUMABLES
+local BAG_FILTER_JUNK = BAG_FILTER_JUNK
+local COLLECTIONS = COLLECTIONS
+local PREFERENCES = PREFERENCES
+local AUCTION_CATEGORY_TRADE_GOODS = AUCTION_CATEGORY_TRADE_GOODS
+local QUESTS_LABEL = QUESTS_LABEL
 
 local icons = {
 	['restore'] = C.AssetsPath .. 'inventory\\restore',
@@ -32,7 +76,7 @@ local icons = {
 
 local function CheckBoundStatus(itemLink, bagID, slotID, string)
 	local tip = F.ScanTip
-	tip:SetOwner(UIParent, 'ANCHOR_NONE')
+	tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
 	if bagID and type(bagID) == 'string' then
 		tip:SetInventoryItem(bagID, slotID)
 	elseif bagID and type(bagID) == 'number' then
@@ -75,6 +119,8 @@ function INVENTORY:ReverseSort()
 end
 
 function INVENTORY:UpdateAnchors(parent, bags)
+	if not parent:IsShown() then return end
+
 	local anchor = parent
 	for _, bag in ipairs(bags) do
 		if bag:GetHeight() > 45 then
@@ -131,7 +177,7 @@ function INVENTORY:CreateRestoreButton(f)
 			f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
 			f.reagent:ClearAllPoints()
 			f.reagent:SetPoint('BOTTOMLEFT', f.bank)
-			PlaySound(SOUNDKIT.IG_MINIMAP_OPEN)
+			PlaySound(SOUNDKIT_IG_MINIMAP_OPEN)
 		end
 	)
 	bu.title = L['INVENTORY_ANCHOR_RESET']
@@ -150,9 +196,9 @@ function INVENTORY:CreateReagentButton(f)
 			if not IsReagentBankUnlocked() then
 				StaticPopup_Show('CONFIRM_BUY_REAGENTBANK_TAB')
 			else
-				PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-				ReagentBankFrame:Show()
-				BankFrame.selectedTab = 2
+				PlaySound(SOUNDKIT_IG_CHARACTER_INFO_TAB)
+				_G.ReagentBankFrame:Show()
+				_G.BankFrame.selectedTab = 2
 				f.reagent:Show()
 				f.bank:Hide()
 				if btn == 'RightButton' then
@@ -173,9 +219,9 @@ function INVENTORY:CreateBankButton(f)
 	bu:SetScript(
 		'OnClick',
 		function()
-			PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-			ReagentBankFrame:Hide()
-			BankFrame.selectedTab = 1
+			PlaySound(SOUNDKIT_IG_CHARACTER_INFO_TAB)
+			_G.ReagentBankFrame:Hide()
+			_G.BankFrame.selectedTab = 1
 			f.reagent:Hide()
 			f.bank:Show()
 		end
@@ -230,10 +276,10 @@ function INVENTORY:CreateBagToggle()
 			ToggleFrame(self.BagBar)
 			if self.BagBar:IsShown() then
 				bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-				PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
+				PlaySound(SOUNDKIT_IG_BACKPACK_OPEN)
 			else
 				bu.Icon:SetVertexColor(.5, .5, .5, 1)
-				PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
+				PlaySound(SOUNDKIT_IG_BACKPACK_CLOSE)
 			end
 		end
 	)
@@ -251,7 +297,7 @@ function INVENTORY:CreateSortButton(name)
 		'OnClick',
 		function()
 			if C.DB.inventory.sort_mode == 3 then
-				UIErrorsFrame:AddMessage(C.InfoColor .. L['INVENTORY_SORT_DISABLED'])
+				_G.UIErrorsFrame:AddMessage(C.InfoColor .. L['INVENTORY_SORT_DISABLED'])
 				return
 			end
 
@@ -264,7 +310,7 @@ function INVENTORY:CreateSortButton(name)
 					SortBags()
 				elseif C.DB.inventory.sort_mode == 2 then
 					if InCombatLockdown() then
-						UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
+						_G.UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
 					else
 						SortBags()
 						wipe(sortCache)
@@ -362,14 +408,14 @@ function INVENTORY:CreateSearchButton()
 
 	searchBar:SetScript(
 		'OnShow',
-		function(self)
+		function()
 			bu:SetSize(80, 26)
 		end
 	)
 
 	searchBar:SetScript(
 		'OnHide',
-		function(self)
+		function()
 			bu:SetSize(16, 16)
 		end
 	)
@@ -386,7 +432,7 @@ function INVENTORY:GetContainerEmptySlot(bagID)
 end
 
 function INVENTORY:GetEmptySlot(name)
-	if name == 'Main' then
+	if name == 'Bag' then
 		for bagID = 0, 4 do
 			local slotID = INVENTORY:GetContainerEmptySlot(bagID)
 			if slotID then
@@ -420,7 +466,7 @@ function INVENTORY:FreeSlotOnDrop()
 end
 
 local freeSlotContainer = {
-	['Main'] = true,
+	['Bag'] = true,
 	['Bank'] = true,
 	['Reagent'] = true
 }
@@ -525,7 +571,7 @@ local function splitOnClick(self)
 	if texture and not locked and itemCount and itemCount > C.DB.inventory.split_count then
 		SplitContainerItem(self.bagID, self.slotID, C.DB.inventory.split_count)
 
-		local bagID, slotID = INVENTORY:GetEmptySlot('Main')
+		local bagID, slotID = INVENTORY:GetEmptySlot('Bag')
 		if slotID then
 			PickupContainerItem(bagID, slotID)
 		end
@@ -633,10 +679,10 @@ local function customJunkOnClick(self)
 	local texture, _, _, _, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
 	local price = select(11, GetItemInfo(itemID))
 	if texture and price > 0 then
-		if FREE_ADB['custom_junk_list'][itemID] then
-			FREE_ADB['custom_junk_list'][itemID] = nil
+		if _G.FREE_ADB['CustomJunkList'][itemID] then
+			_G.FREE_ADB['CustomJunkList'][itemID] = nil
 		else
-			FREE_ADB['custom_junk_list'][itemID] = true
+			_G.FREE_ADB['CustomJunkList'][itemID] = true
 		end
 		ClearCursor()
 		INVENTORY:UpdateAllBags()
@@ -737,13 +783,13 @@ function INVENTORY:OnLogin()
 	Backpack:HookScript(
 		'OnShow',
 		function()
-			PlaySound(SOUNDKIT.IG_BACKPACK_OPEN)
+			PlaySound(SOUNDKIT_IG_BACKPACK_OPEN)
 		end
 	)
 	Backpack:HookScript(
 		'OnHide',
 		function()
-			PlaySound(SOUNDKIT.IG_BACKPACK_CLOSE)
+			PlaySound(SOUNDKIT_IG_BACKPACK_CLOSE)
 		end
 	)
 
@@ -754,106 +800,68 @@ function INVENTORY:OnLogin()
 	INVENTORY.BagsType[-3] = 0 -- reagent
 
 	local f = {}
-	local filters = self:GetFilters()
+	local filters = INVENTORY:GetFilters()
+	local MyContainer = Backpack:GetContainerClass()
+	local ContainerGroups = {["Bag"] = {}, ["Bank"] = {}}
+
+	local function AddNewContainer(bagType, index, name, filter)
+		local width = bagsWidth
+		if bagType == "Bank" then width = bankWidth end
+
+		local newContainer = MyContainer:New(name, {Columns = width, BagType = bagType})
+		newContainer:SetFilter(filter, true)
+		ContainerGroups[bagType][index] = newContainer
+	end
 
 	function Backpack:OnInit()
 		local MyContainer = self:GetContainerClass()
 
-		f.main = MyContainer:New('Main', {Columns = bagsWidth, Bags = 'bags'})
-		f.main:SetFilter(filters.onlyBags, true)
+		AddNewContainer("Bag", 9, "Junk", filters.bagsJunk)
+		AddNewContainer("Bag", 8, "BagFavourite", filters.bagFavourite)
+		AddNewContainer("Bag", 3, "EquipSet", filters.bagEquipSet)
+		AddNewContainer("Bag", 1, "AzeriteItem", filters.bagAzeriteItem)
+		AddNewContainer("Bag", 2, "Equipment", filters.bagEquipment)
+		AddNewContainer("Bag", 4, "BagCollection", filters.bagCollection)
+		AddNewContainer("Bag", 6, "Consumable", filters.bagConsumable)
+		AddNewContainer("Bag", 5, "BagGoods", filters.bagGoods)
+		AddNewContainer("Bag", 7, "BagQuest", filters.bagQuest)
+
+		f.main = MyContainer:New("Bag", {Columns = bagsWidth, Bags = "bags"})
 		f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
+		f.main:SetFilter(filters.onlyBags, true)
 
-		f.junk = MyContainer:New('Junk', {Columns = bagsWidth, Parent = f.main})
-		f.junk:SetFilter(filters.bagsJunk, true)
-
-		f.bagFavourite = MyContainer:New('BagFavourite', {Columns = bagsWidth, Parent = f.main})
-		f.bagFavourite:SetFilter(filters.bagFavourite, true)
-
-		f.azeriteItem = MyContainer:New('AzeriteItem', {Columns = bagsWidth, Parent = f.main})
-		f.azeriteItem:SetFilter(filters.bagAzeriteItem, true)
-
-		f.equipment = MyContainer:New('Equipment', {Columns = bagsWidth, Parent = f.main})
-		f.equipment:SetFilter(filters.bagEquipment, true)
-
-		f.equipSet = MyContainer:New('EquipSet', {Columns = bagsWidth, Parent = f.main})
-		f.equipSet:SetFilter(filters.bagEquipSet, true)
-
-		f.consumable = MyContainer:New('Consumable', {Columns = bagsWidth, Parent = f.main})
-		f.consumable:SetFilter(filters.bagConsumable, true)
-
-		f.bagCollection = MyContainer:New('BagCollection', {Columns = bagsWidth, Parent = f.main})
-		f.bagCollection:SetFilter(filters.bagCollection, true)
-
-		f.bagGoods = MyContainer:New('BagGoods', {Columns = bagsWidth, Parent = f.main})
-		f.bagGoods:SetFilter(filters.bagGoods, true)
-
-		f.bagQuest = MyContainer:New('BagQuest', {Columns = bagsWidth, Parent = f.main})
-		f.bagQuest:SetFilter(filters.bagQuest, true)
+		AddNewContainer("Bank", 9, "BankFavourite", filters.bankFavourite)
+		AddNewContainer("Bank", 3, "BankEquipSet", filters.bankEquipSet)
+		AddNewContainer("Bank", 1, "BankAzeriteItem", filters.bankAzeriteItem)
+		AddNewContainer("Bank", 4, "BankLegendary", filters.bankLegendary)
+		AddNewContainer("Bank", 2, "BankEquipment", filters.bankEquipment)
+		AddNewContainer("Bank", 5, "BankCollection", filters.bankCollection)
+		AddNewContainer("Bank", 7, "BankConsumable", filters.bankConsumable)
+		AddNewContainer("Bank", 6, "BankGoods", filters.bankGoods)
+		AddNewContainer("Bank", 8, "BankQuest", filters.bankQuest)
 
 		f.bank = MyContainer:New('Bank', {Columns = bankWidth, Bags = 'bank'})
-		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
+		f.bank:SetFilter(filters.onlyBank, true)
 		f.bank:Hide()
 
-		f.bankFavourite = MyContainer:New('BankFavourite', {Columns = bankWidth, Parent = f.bank})
-		f.bankFavourite:SetFilter(filters.bankFavourite, true)
-
-		f.bankAzeriteItem = MyContainer:New('BankAzeriteItem', {Columns = bankWidth, Parent = f.bank})
-		f.bankAzeriteItem:SetFilter(filters.bankAzeriteItem, true)
-
-		f.bankLegendary = MyContainer:New('BankLegendary', {Columns = bankWidth, Parent = f.bank})
-		f.bankLegendary:SetFilter(filters.bankLegendary, true)
-
-		f.bankEquipment = MyContainer:New('BankEquipment', {Columns = bankWidth, Parent = f.bank})
-		f.bankEquipment:SetFilter(filters.bankEquipment, true)
-
-		f.bankEquipSet = MyContainer:New('BankEquipSet', {Columns = bankWidth, Parent = f.bank})
-		f.bankEquipSet:SetFilter(filters.bankEquipSet, true)
-
-		f.bankConsumable = MyContainer:New('BankConsumable', {Columns = bankWidth, Parent = f.bank})
-		f.bankConsumable:SetFilter(filters.bankConsumable, true)
-
-		f.bankCollection = MyContainer:New('BankCollection', {Columns = bankWidth, Parent = f.bank})
-		f.bankCollection:SetFilter(filters.bankCollection, true)
-
-		f.bankGoods = MyContainer:New('BankGoods', {Columns = bankWidth, Parent = f.bank})
-		f.bankGoods:SetFilter(filters.bankGoods, true)
-
-		f.bankQuest = MyContainer:New('BankQuest', {Columns = bankWidth, Parent = f.bank})
-		f.bankQuest:SetFilter(filters.bankQuest, true)
-
-		f.reagent = MyContainer:New('Reagent', {Columns = bankWidth})
+		f.reagent = MyContainer:New("Reagent", {Columns = bankWidth, Bags = "bankreagent"})
 		f.reagent:SetFilter(filters.onlyReagent, true)
 		f.reagent:SetPoint('BOTTOMLEFT', f.bank)
 		f.reagent:Hide()
 
-		INVENTORY.BagGroup = {
-			f.azeriteItem,
-			f.equipment,
-			f.equipSet,
-			f.bagCollection,
-			f.bagGoods,
-			f.consumable,
-			f.bagQuest,
-			f.bagFavourite,
-			f.junk
-		}
-		INVENTORY.BankGroup = {
-			f.bankAzeriteItem,
-			f.bankEquipment,
-			f.bankEquipSet,
-			f.bankLegendary,
-			f.bankCollection,
-			f.bankGoods,
-			f.bankConsumable,
-			f.bankQuest,
-			f.bankFavourite
-		}
+		for bagType, groups in pairs(ContainerGroups) do
+			for _, container in ipairs(groups) do
+				local parent = Backpack.contByName[bagType]
+				container:SetParent(parent)
+				F.CreateMF(container, parent, true)
+			end
+		end
 	end
 
 	local initBagType
 	function Backpack:OnBankOpened()
-		BankFrame:Show()
+		_G.BankFrame:Show()
 		self:GetContainer('Bank'):Show()
 
 		if not initBagType then
@@ -863,11 +871,11 @@ function INVENTORY:OnLogin()
 	end
 
 	function Backpack:OnBankClosed()
-		BankFrame.selectedTab = 1
-		BankFrame:Hide()
+		_G.BankFrame.selectedTab = 1
+		_G.BankFrame:Hide()
 		self:GetContainer('Bank'):Hide()
 		self:GetContainer('Reagent'):Hide()
-		ReagentBankFrame:Hide()
+		_G.ReagentBankFrame:Hide()
 	end
 
 	local MyButton = Backpack:GetItemButtonClass()
@@ -949,7 +957,7 @@ function INVENTORY:OnLogin()
 		if hasCanIMogIt then
 			self.canIMogIt = parentFrame:CreateTexture(nil, 'OVERLAY')
 			self.canIMogIt:SetSize(13, 13)
-			self.canIMogIt:SetPoint(unpack(CanIMogIt.ICON_LOCATIONS[CanIMogItOptions['iconLocation']]))
+			self.canIMogIt:SetPoint(unpack(_G.CanIMogIt.ICON_LOCATIONS[_G.CanIMogItOptions['iconLocation']]))
 		end
 	end
 
@@ -1002,9 +1010,9 @@ function INVENTORY:OnLogin()
 			return
 		end
 
-		local text, unmodifiedText = CanIMogIt:GetTooltipText(nil, item.bagID, item.slotID)
+		local text, unmodifiedText = _G.CanIMogIt:GetTooltipText(nil, item.bagID, item.slotID)
 		if text and text ~= '' then
-			local icon = CanIMogIt.tooltipOverlayIcons[unmodifiedText]
+			local icon = _G.CanIMogIt.tooltipOverlayIcons[unmodifiedText]
 			self.canIMogIt:SetTexture(icon)
 			self.canIMogIt:Show()
 		else
@@ -1016,17 +1024,17 @@ function INVENTORY:OnLogin()
 		if not hasPawn then
 			return
 		end
-		if not PawnIsContainerItemAnUpgrade then
+		if not _G.PawnIsContainerItemAnUpgrade then
 			return
 		end
 		if self.UpgradeIcon then
-			self.UpgradeIcon:SetShown(PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
+			self.UpgradeIcon:SetShown(_G.PawnIsContainerItemAnUpgrade(item.bagID, item.slotID))
 		end
 	end
 
 	function MyButton:OnUpdate(item)
 		if self.JunkIcon then
-			if (MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or FREE_ADB['custom_junk_list'][item.id]) and item.sellPrice > 0 then
+			if (_G.MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.sellPrice > 0 then
 				self.JunkIcon:Show()
 			else
 				self.JunkIcon:Hide()
@@ -1108,7 +1116,7 @@ function INVENTORY:OnLogin()
 
 		-- Hide empty tooltip
 		if not GetContainerItemInfo(item.bagID, item.slotID) then
-			GameTooltip:Hide()
+			_G.GameTooltip:Hide()
 		end
 
 		-- Support CanIMogIt
@@ -1135,7 +1143,6 @@ function INVENTORY:OnLogin()
 		end
 	end
 
-	local MyContainer = Backpack:GetContainerClass()
 	function MyContainer:OnContentsChanged()
 		self:SortButtons('bagSlot')
 
@@ -1172,17 +1179,18 @@ function INVENTORY:OnLogin()
 		end
 		self:SetSize(width + xOffset * 2, height + offset)
 
-		INVENTORY:UpdateAnchors(f.main, INVENTORY.BagGroup)
-		INVENTORY:UpdateAnchors(f.bank, INVENTORY.BankGroup)
+		INVENTORY:UpdateAnchors(f.main, ContainerGroups["Bag"])
+		INVENTORY:UpdateAnchors(f.bank, ContainerGroups["Bank"])
 	end
 
 	function MyContainer:OnCreate(name, settings)
 		self.Settings = settings
-		self:SetParent(settings.Parent or Backpack)
 		self:SetFrameStrata('HIGH')
 		self:SetClampedToScreen(true)
 		F.SetBD(self)
-		F.CreateMF(self, settings.Parent, true)
+		if settings.Bags then
+			F.CreateMF(self, nil, true)
+		end
 
 		local label
 		if strmatch(name, 'AzeriteItem$') then
@@ -1216,7 +1224,7 @@ function INVENTORY:OnLogin()
 
 		local buttons = {}
 		buttons[1] = INVENTORY.CreateRestoreButton(self, f)
-		if name == 'Main' then
+		if name == 'Bag' then
 			INVENTORY.CreateBagBar(self, settings, 4)
 			buttons[2] = INVENTORY.CreateBagToggle(self)
 			buttons[4] = INVENTORY.CreateRepairButton(self)
@@ -1306,8 +1314,8 @@ function INVENTORY:OnLogin()
 	F:RegisterEvent('BANKFRAME_OPENED', INVENTORY.AutoDeposit)
 
 	-- Fixes
-	BankFrame.GetRight = function()
+	_G.BankFrame.GetRight = function()
 		return f.bank:GetRight()
 	end
-	BankFrameItemButton_Update = F.Dummy
+	_G.BankFrameItemButton_Update = F.Dummy
 end
