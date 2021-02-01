@@ -91,8 +91,10 @@ C.Themes["Blizzard_WeeklyRewards"] = function()
 			end
 
 			local alsoItemsFrame = confirmFrame.AlsoItemsFrame
-			for frame in alsoItemsFrame.pool:EnumerateActive() do
-				reskinConfirmIcon(frame)
+			if alsoItemsFrame.pool then
+				for frame in alsoItemsFrame.pool:EnumerateActive() do
+					reskinConfirmIcon(frame)
+				end
 			end
 		end
 	end)
