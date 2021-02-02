@@ -1354,9 +1354,9 @@ C.CharacterSettings = {
 			['Bar3Divide'] = true,
 			['Bar4'] = false,
 			['Bar5'] = false,
-			['Pet_Bar'] = true,
-			['Stance_Bar'] = false,
-			['Vehicle_Bar'] = true,
+			['PetBar'] = true,
+			['StanceBar'] = false,
+			['VehicleBar'] = true,
 
 			['Fader'] = true,
 				['FadeOutAlpha'] = 0,
