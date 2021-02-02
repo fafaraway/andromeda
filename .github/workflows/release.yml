@@ -3,7 +3,7 @@ name: Package and build release versions
 on:
   push:
     tags:
-      - "*.*.*"
+      - '[0-9]+.[0-9]+.[0-9]'
 
 
 jobs:
@@ -27,4 +27,11 @@ jobs:
         uses: BigWigsMods/packager@master
         with:
           args: release.sh -w 23258
+
+      - name: Send status to Discord
+        uses: nebularg/actions-discord-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+        if: always()
 
