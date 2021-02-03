@@ -60,17 +60,6 @@ function UNITFRAME:SpawnPlayer()
 		player:GetWidth(),
 		player:GetHeight()
 	)
-	if C.DB.Actionbar.Enable then
-		if C.DB.unitframe.fade then
-			return
-		end
-		FreeUI_LeaveVehicleBar:SetParent(player)
-		FreeUI_LeaveVehicleButton:ClearAllPoints()
-		FreeUI_LeaveVehicleButton:SetPoint('LEFT', player, 'RIGHT', 4, 0)
-		F.ReskinClose(FreeUI_LeaveVehicleButton)
-		F.CreateSD(FreeUI_LeaveVehicleButton)
-		FreeUI_LeaveVehicleButton:SetSize(player:GetHeight() + 4, player:GetHeight() + 4)
-	end
 end
 
 local function CreatePetStyle(self)
