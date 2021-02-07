@@ -1,13 +1,13 @@
 std = 'lua51'
 max_line_length = false
-self = false
+quiet = 1 -- suppress report output for files without warnings
 exclude_files = {'libs/'}
 
 ignore = {
-	"412", -- Redefining an argument
-	"42.", -- Shadowing a local variable, an argument, a loop variable.
-	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
-	"542", -- An empty if branch
+	'2/self', -- unused argument self
+	'2/event', -- unused argument event
+	'3/event', -- unused value event
+	'4', -- shadowing
 }
 
 globals = {
