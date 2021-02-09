@@ -46,9 +46,6 @@ local hooksecurefunc = hooksecurefunc
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local ConsoleExec = ConsoleExec
 
-local maxLines = 1024
-local isBattleNet
-
 local isScaling = false
 function CHAT:UpdateChatSize()
     if not C.DB.chat.lock_position then
@@ -115,6 +112,7 @@ function CHAT:RestyleChatFrame()
     end
 
     local name = self:GetName()
+    local maxLines = 1024
 
     if C.DB.chat.fade_out then
         self:SetFading(true)
