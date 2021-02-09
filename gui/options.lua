@@ -1,6 +1,6 @@
-local F, C, L = unpack(select(2, ...))
+local F, _, L = unpack(select(2, ...))
+local UNITFRAME = F.UNITFRAME
 local GUI = F.GUI
-local oUF = F.oUF
 
 function GUI:UpdateInventoryStatus()
 	F.INVENTORY:UpdateAllBags()
@@ -116,6 +116,10 @@ end
 
 local function SetupGroupDebuffs()
 	GUI:SetupGroupDebuffs(GUI.Page[13])
+end
+
+local function toggleGCDIndicator()
+	UNITFRAME:ToggleGCDIndicator()
 end
 
 GUI.OptionsList = {
@@ -319,7 +323,7 @@ GUI.OptionsList = {
 		{1, 'unitframe', 'player_resting_indicator', L.GUI.UNITFRAME.PLAYER_RESTING_INDICATOR, true},
 		{1, 'unitframe', 'player_hide_tags', L.GUI.UNITFRAME.PLAYER_HIDE_TAGS},
 		{1, 'unitframe', 'heal_prediction', L.GUI.UNITFRAME.HEAL_PREDICTION, true},
-		{1, 'unitframe', 'gcd_spark', L.GUI.UNITFRAME.GCD_SPARK},
+		{1, 'unitframe', 'GCDIndicator', L.GUI.UNITFRAME.GCD_INDICATOR, nil, nil, toggleGCDIndicator},
 		{1, 'unitframe', 'class_power_bar', L.GUI.UNITFRAME.CLASS_POWER_BAR, true},
 		{1, 'unitframe', 'stagger_bar', L.GUI.UNITFRAME.STAGGER_BAR},
 		{1, 'unitframe', 'totems_bar', L.GUI.UNITFRAME.TOTEMS_BAR, true},

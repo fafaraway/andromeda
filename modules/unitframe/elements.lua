@@ -331,9 +331,9 @@ local function UpdatePowerColor(power, unit)
         local rampage, _ = IsUsableSpell(184367)
 
         if rampage then
-            power:SetStatusBarColor(184/255, 92/255, 214/255)
+            power:SetStatusBarColor(184 / 255, 92 / 255, 214 / 255)
         else
-            power:SetStatusBarColor(215/255, 22/255, 55/255)
+            power:SetStatusBarColor(215 / 255, 22 / 255, 55 / 255)
         end
     end
 end
@@ -1530,24 +1530,54 @@ function UNITFRAME:AddRangeCheck(self)
     self.RangeCheck.outsideAlpha = 0.4
 end
 
---[[ GCD ]]
-function UNITFRAME:AddGCDSpark(self)
-    if not C.DB.unitframe.gcd_spark then
+--[[ Indicatiors ]]
+function UNITFRAME:UpdateGCDIndicator()
+    local start, duration = GetSpellCooldown(61304)
+    if start > 0 and duration > 0 then
+        if self.duration ~= duration then
+            self:SetMinMaxValues(0, duration)
+            self.duration = duration
+        end
+        self:SetValue(GetTime() - start)
+        self.spark:Show()
+    else
+        self.spark:Hide()
+    end
+end
+
+function UNITFRAME:ToggleGCDIndicator()
+    local frame = _G.oUF_Player
+    local ticker = frame and frame.GCDIndicator
+    if not ticker then
         return
     end
 
-    self.GCD = CreateFrame('Frame', nil, self)
-    self.GCD:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 0)
-    self.GCD:SetFrameLevel(self.Health:GetFrameLevel() + 4)
-    self.GCD:SetWidth(self:GetWidth())
-    self.GCD:SetHeight(6)
-
-    self.GCD.Color = {1, 1, 1}
-    self.GCD.Height = 6
-    self.GCD.Width = 6
+    ticker:SetShown(C.DB.unitframe.GCDIndicator)
 end
 
---[[ Indicatiors ]]
+function UNITFRAME:AddGCDIndicator(self)
+    local ticker = CreateFrame('StatusBar', nil, self)
+    ticker:SetFrameLevel(self.Health:GetFrameLevel() + 4)
+    ticker:SetStatusBarTexture(C.Assets.norm_tex)
+    ticker:GetStatusBarTexture():SetAlpha(0)
+    ticker:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 0)
+    ticker:SetWidth(self:GetWidth())
+    ticker:SetHeight(6)
+
+    local spark = ticker:CreateTexture(nil, 'OVERLAY')
+    spark:SetTexture(C.Assets.spark_tex)
+    spark:SetBlendMode('ADD')
+    spark:SetPoint('TOPLEFT', ticker:GetStatusBarTexture(), 'TOPRIGHT', -3, 3)
+    spark:SetPoint('BOTTOMRIGHT', ticker:GetStatusBarTexture(), 'BOTTOMRIGHT', 3, -3)
+
+    ticker.spark = spark
+
+    ticker:SetScript('OnUpdate', UNITFRAME.UpdateGCDIndicator)
+    self.GCDIndicator = ticker
+
+    UNITFRAME:ToggleGCDIndicator()
+end
+
 function UNITFRAME:AddPvPIndicator(self)
     if not C.DB.unitframe.player_pvp_indicator then
         return

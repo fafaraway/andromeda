@@ -758,6 +758,7 @@ C.PartySpellsDB = {
         [16191] = 180, -- 法力之潮
         [51514] = 20, -- 妖术
         [51533] = 120, -- 野性狼魂
+        [57994] = 12, -- 风剪
         [58875] = 60, -- 幽魂步
         [79206] = 120, -- 灵魂行者恩赐
         [98008] = 180, -- 灵魂链接
@@ -1072,7 +1073,9 @@ C.CharacterSettings = {
         ['portrait'] = true,
         ['portrait_saturation'] = true,
         ['heal_prediction'] = true,
-        ['gcd_spark'] = true,
+
+        GCDIndicator = true,
+
         ['target_icon_indicator'] = true,
         ['target_icon_indicator_alpha'] = 0.5,
         ['target_icon_indicator_size'] = 16,
