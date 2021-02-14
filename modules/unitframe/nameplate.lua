@@ -650,7 +650,9 @@ function NAMEPLATE:UpdatePlateByType()
 	raidtarget:SetPoint('CENTER', self)
 	raidtarget:SetParent(self.Health)
 
-	classify:Show()
+	if classify then
+		classify:Show()
+	end
 
 	NAMEPLATE.UpdateTargetIndicator(self)
 
