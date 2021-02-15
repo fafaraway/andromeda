@@ -18,20 +18,17 @@ local function reskinChatBubble(chatbubble)
 		frame.__bg = F.CreateBDFrame(frame)
 		frame.__bg:SetScale(UIParent:GetEffectiveScale())
 		frame.__bg:SetInside(frame, 6, 6)
-		frame.__shadow = F.CreateSD(frame.__bg)
-		frame.__shadow:SetBackdropBorderColor(.02, .02, .02, .25)
+		if frame.__shadow then
+			frame.__shadow = F.CreateSD(frame.__bg)
+			frame.__shadow:SetBackdropBorderColor(.02, .02, .02, .25)
+		end
 		F.CreateTex(frame.__bg)
-
-
 		frame:HookScript('OnShow', updateBorderColor)
-
 		frame:DisableDrawLayer("BORDER")
 		frame.Tail:SetAlpha(0)
-		--frame.String:SetFont(C.Assets.Fonts.Bold, 16)
 
 		updateBorderColor(frame)
 	end
-
 
 	chatbubble.styled = true
 end
