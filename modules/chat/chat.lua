@@ -547,7 +547,7 @@ local function getColoredName(event, arg1, arg2, ...)
             role = UnitGroupRolesAssigned(arg2:gsub(' *-[^-]+$', ''))
         end
         if role and role ~= 'NONE' then
-            ret = roleIcons[role] .. '' .. ret
+            ret = roleIcons[role] .. ' ' .. ret
         end
     end
 
