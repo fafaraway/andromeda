@@ -1,4 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="quest.lua"/>
-	<Script file="tool.lua"/>
+    <Frame name='BetterWorldQuestPinTemplate' inherits='WorldMap_WorldQuestPinTemplate' mixin='BetterWorldQuestPinMixin' virtual='true'/>
+
+    <Script file="quest.lua"/>
+    <Script file="betterworldquests.lua"/>
+    <Script file="extraquestbutton.lua"/>
+    <Script file="quickquest.lua"/>
+    <Script file="tool.lua"/>
 </Ui>

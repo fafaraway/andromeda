@@ -19,7 +19,7 @@ function MISC:OnLogin()
 	MISC:ForceWarning()
 	MISC:FasterCamera()
 	MISC:AutoScreenshot()
-	MISC:QuestCompletedSound()
+
 	MISC:BuyStack()
 	MISC:SetRole()
 	MISC:MawWidgetFrame()
@@ -90,52 +90,7 @@ function MISC:FasterCamera()
 end
 
 
---[[ Sound alert for quest complete ]]
-do
-	local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
-	local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
-	local C_QuestLog_GetTitleForQuestID = C_QuestLog.GetTitleForQuestID
-	local C_QuestLog_IsComplete = C_QuestLog.IsComplete
-	local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
-	local completedQuest, initComplete = {}
 
-	function MISC:FindQuestComplete()
-		for i = 1, C_QuestLog_GetNumQuestLogEntries() do
-			local questID = C_QuestLog_GetQuestIDForLogIndex(i)
-			local title = C_QuestLog_GetTitleForQuestID(questID)
-			local isComplete = C_QuestLog_IsComplete(questID)
-			local isWorldQuest = C_QuestLog_IsWorldQuest(questID)
-			if title and isComplete and not completedQuest[questID] and not isWorldQuest then
-				if initComplete then
-					PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
-				end
-				completedQuest[questID] = true
-			end
-		end
-		initComplete = true
-	end
-
-	function MISC:FindWorldQuestComplete(questID)
-		if C_QuestLog_IsWorldQuest(questID) then
-			local title = C_QuestLog_GetTitleForQuestID(questID)
-			if title and not completedQuest[questID] then
-				PlaySound(SOUNDKIT.ALARM_CLOCK_WARNING_3, 'Master')
-				completedQuest[questID] = true
-			end
-		end
-	end
-
-	function MISC:QuestCompletedSound()
-		if C.DB.misc.quest_completed_sound then
-			F:RegisterEvent('QUEST_LOG_UPDATE', MISC.FindQuestComplete)
-			F:RegisterEvent('QUEST_TURNED_IN', MISC.FindWorldQuestComplete)
-		else
-			wipe(completedQuest)
-			F:UnregisterEvent('QUEST_LOG_UPDATE', MISC.FindQuestComplete)
-			F:UnregisterEvent('QUEST_TURNED_IN', MISC.FindWorldQuestComplete)
-		end
-	end
-end
 
 --[[
 	Achievement screenshot
