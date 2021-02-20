@@ -18,8 +18,8 @@ local function reskinChatBubble(chatbubble)
 		frame.__bg = F.CreateBDFrame(frame)
 		frame.__bg:SetScale(UIParent:GetEffectiveScale())
 		frame.__bg:SetInside(frame, 6, 6)
+		frame.__shadow = F.CreateSD(frame.__bg)
 		if frame.__shadow then
-			frame.__shadow = F.CreateSD(frame.__bg)
 			frame.__shadow:SetBackdropBorderColor(.02, .02, .02, .25)
 		end
 		F.CreateTex(frame.__bg)
