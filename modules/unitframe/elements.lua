@@ -1,13 +1,10 @@
-local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
-local NAMEPLATE = F.NAMEPLATE
-local oUF = F.oUF
-
 local _G = _G
 local format = format
 local floor = floor
-local rad = math.rad
-local wipe = table.wipe
+local rad = rad
+local wipe = wipe
+local unpack = unpack
+local select = select
 local split = strsplit
 local CreateFrame = CreateFrame
 local UnitFrame_OnEnter = UnitFrame_OnEnter
@@ -43,7 +40,13 @@ local IsPartyLFG = IsPartyLFG
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 
+local F, C, L = unpack(select(2, ...))
+local UNITFRAME = F.UNITFRAME
+local NAMEPLATE = F.NAMEPLATE
+local OUF = F.OUF
+
 --[[ Backdrop ]]
+
 local function UNITFRAME_OnEnter(self)
     UnitFrame_OnEnter(self)
     self.Highlight:Show()
@@ -93,6 +96,7 @@ function UNITFRAME:AddBackDrop(self)
 end
 
 --[[ Selected border ]]
+
 local function UpdateSelectedBorder(self)
     if UnitIsUnit('target', self.unit) then
         self.Border:Show()
@@ -114,6 +118,7 @@ function UNITFRAME:AddSelectedBorder(self)
 end
 
 --[[ Health ]]
+
 local function OverrideHealth(self, event, unit)
     if not C.DB.unitframe.transparent_mode then
         return
@@ -231,6 +236,7 @@ function UNITFRAME:AddHealthBar(self)
 end
 
 --[[ Health prediction ]]
+
 function UNITFRAME:AddHealthPrediction(self)
     if not C.DB.unitframe.heal_prediction then
         return
@@ -288,6 +294,7 @@ function UNITFRAME:AddHealthPrediction(self)
 end
 
 --[[ Power ]]
+
 local function PostUpdatePower(power, unit, _, _, max)
     if max == 0 or not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
         power:SetValue(0)
@@ -385,6 +392,7 @@ function UNITFRAME:AddPowerBar(self)
 end
 
 --[[ Alternative power ]]
+
 local function AltPowerOnEnter(self)
     if (not self:IsVisible()) then
         return
@@ -409,7 +417,7 @@ local function PostUpdateAltPower(self, _, cur, _, max)
 
     if cur and max then
         local value = parent.AlternativePowerValue
-        local r, g, b = F.ColorGradient(cur / max, unpack(oUF.colors.smooth))
+        local r, g, b = F.ColorGradient(cur / max, unpack(OUF.colors.smooth))
 
         self:SetStatusBarColor(r, g, b)
         value:SetTextColor(r, g, b)
@@ -445,7 +453,8 @@ function UNITFRAME:AddAlternativePowerBar(self)
 end
 
 --[[ Auras ]]
-oUF.colors.debuff = {
+
+OUF.colors.debuff = {
     ['Curse'] = {.8, 0, 1},
     ['Disease'] = {.8, .6, 0},
     ['Magic'] = {0, .8, 1},
@@ -547,7 +556,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
             button.glow:SetBackdropBorderColor(1, 1, 1, .25)
         end
     elseif button.isDebuff and element.showDebuffType then
-        local color = oUF.colors.debuff[debuffType] or oUF.colors.debuff.none
+        local color = OUF.colors.debuff[debuffType] or OUF.colors.debuff.none
 
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
@@ -628,7 +637,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         elseif _G.FREE_ADB['NPAuraFilter'][1][spellID] or C.AuraWhiteList[spellID] then
             return true
         else
-            local auraFilter = C.DB['nameplate']['aura_filter_mode']
+            local auraFilter = C.DB.Nameplate.AuraFilterMode
             return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and isMine)
         end
     elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
@@ -678,12 +687,12 @@ function UNITFRAME:AddAuras(self)
         auras.size = C.DB.unitframe.party_height * .7
         auras.numTotal = 4
         auras.gap = false
-    elseif style == 'nameplate' then
+    elseif style == 'nameplate' and C.DB.Nameplate.ShowAura then
         auras.initialAnchor = 'BOTTOMLEFT'
         auras:SetPoint('BOTTOM', self, 'TOP', 0, 8)
         auras['growth-y'] = 'UP'
-        auras.size = C.DB.nameplate.aura_size
-        auras.numTotal = C.DB.nameplate.aura_number
+        auras.size = C.DB.Nameplate.AuraSize
+        auras.numTotal = C.DB.Nameplate.AuraNumTotal
         auras.gap = false
         auras.disableMouse = true
     end
@@ -711,6 +720,7 @@ function UNITFRAME:AddAuras(self)
 end
 
 --[[ Corner aura indicator ]]
+
 UNITFRAME.CornerSpellsList = {}
 function UNITFRAME:UpdateCornerSpells()
     wipe(UNITFRAME.CornerSpellsList)
@@ -805,7 +815,14 @@ function UNITFRAME:AddCornerIndicator(self)
     parent:SetPoint('BOTTOMRIGHT', -4, 4)
 
     local anchors = {
-        'TOPLEFT', 'TOP', 'TOPRIGHT', 'LEFT', 'RIGHT', 'BOTTOMLEFT', 'BOTTOM', 'BOTTOMRIGHT'
+        'TOPLEFT',
+        'TOP',
+        'TOPRIGHT',
+        'LEFT',
+        'RIGHT',
+        'BOTTOMLEFT',
+        'BOTTOM',
+        'BOTTOMRIGHT'
     }
     local buttons = {}
     for _, anchor in pairs(anchors) do
@@ -837,7 +854,7 @@ function UNITFRAME:AddCornerIndicator(self)
 end
 
 function UNITFRAME:RefreshRaidFrameIcons()
-    for _, frame in pairs(oUF.objects) do
+    for _, frame in pairs(OUF.objects) do
         if frame.mystyle == 'raid' then
             if frame.RaidDebuffs then
                 frame.RaidDebuffs:SetScale(C.DB.unitframe.raid_debuffs_scale)
@@ -853,6 +870,7 @@ function UNITFRAME:RefreshRaidFrameIcons()
 end
 
 --[[ Debuff highlight ]]
+
 function UNITFRAME:AddDebuffHighlight(self)
     if not C.DB.unitframe.group_debuff_highlight then
         return
@@ -869,6 +887,7 @@ function UNITFRAME:AddDebuffHighlight(self)
 end
 
 --[[ Group debuffs ]]
+
 local debuffList = {}
 function UNITFRAME:UpdateRaidDebuffs()
     wipe(debuffList)
@@ -952,6 +971,7 @@ function UNITFRAME:AddRaidDebuffs(self)
 end
 
 --[[ Castbar ]]
+
 local channelingTicks = {
     [740] = 4, -- 宁静
     [755] = 5, -- 生命通道
@@ -1157,7 +1177,7 @@ function UNITFRAME:PostCastStart(unit)
     self.Text:SetText('') -- disable casting spell name, we only need interrupt info
 
     if self.__owner.unitStyle == 'nameplate' then
-        if C.DB.nameplate.CastbarGlow and NAMEPLATE.MajorSpellsList[self.spellID] then
+        if C.DB.Nameplate.MajorSpellsGlow and NAMEPLATE.MajorSpellsList[self.spellID] then
             F.ShowOverlayGlow(self.glowFrame)
         else
             F.HideOverlayGlow(self.glowFrame)
@@ -1291,6 +1311,7 @@ function UNITFRAME:AddCastBar(self)
 end
 
 --[[ Class power ]]
+
 local lastBarColors = {
     DRUID = {161 / 255, 92 / 255, 255 / 255},
     MAGE = {5 / 255, 96 / 255, 250 / 255},
@@ -1301,15 +1322,9 @@ local lastBarColors = {
 }
 
 local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
-    local style = element.__owner.unitStyle
+    -- local style = element.__owner.unitStyle
     local gap = 3
-    local maxWidth
-
-    if style == 'player' then
-        maxWidth = C.DB.unitframe.player_width
-    else
-        maxWidth = C.DB.nameplate.pp_width
-    end
+    local maxWidth = C.DB.unitframe.player_width
 
     if hasMaxChanged then
         for i = 1, max do
@@ -1426,6 +1441,7 @@ function UNITFRAME:AddClassPowerBar(self)
 end
 
 --[[ Stagger ]]
+
 function UNITFRAME:AddStagger(self)
     if C.MyClass ~= 'MONK' then
         return
@@ -1448,6 +1464,7 @@ function UNITFRAME:AddStagger(self)
 end
 
 --[[ Totems ]]
+
 local totemsColor = {
     {0.71, 0.29, 0.13}, -- red    181 /  73 /  33
     {0.26, 0.71, 0.13}, -- green   67 / 181 /  33
@@ -1491,6 +1508,7 @@ function UNITFRAME:AddTotems(self)
 end
 
 --[[ Combat fader ]]
+
 function UNITFRAME:AddCombatFader(self)
     if not C.DB.unitframe.fade then
         return
@@ -1516,6 +1534,7 @@ function UNITFRAME:AddCombatFader(self)
 end
 
 --[[ Range check ]]
+
 function UNITFRAME:AddRangeCheck(self)
     if not C.DB.unitframe.range_check then
         return
@@ -1531,6 +1550,7 @@ function UNITFRAME:AddRangeCheck(self)
 end
 
 --[[ Indicatiors ]]
+
 function UNITFRAME:UpdateGCDIndicator()
     local start, duration = GetSpellCooldown(61304)
     if start > 0 and duration > 0 then
@@ -1578,19 +1598,24 @@ function UNITFRAME:AddGCDIndicator(self)
     UNITFRAME:ToggleGCDIndicator()
 end
 
-function UNITFRAME:AddPvPIndicator(self)
+function UNITFRAME:AddPvPIndicator(self) -- Deprecated
     if not C.DB.unitframe.player_pvp_indicator then
         return
     end
 
-    local pvpIndicator = F.CreateFS(self, {C.Assets.Fonts.Regular, 11, nil}, nil, nil, 'P', 'RED',
-                                    'THICK')
-    pvpIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
+    local PvPIndicator
+    if _G.FREE_ADB.font_outline then
+        PvPIndicator = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
+    else
+        PvPIndicator = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
+    end
 
-    pvpIndicator.SetTexture = F.Dummy
-    pvpIndicator.SetTexCoord = F.Dummy
+    PvPIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
-    self.PvPIndicator = pvpIndicator
+    PvPIndicator.SetTexture = F.Dummy
+    PvPIndicator.SetTexCoord = F.Dummy
+
+    self.PvPIndicator = PvPIndicator
 end
 
 local function CombatIndicatorPostUpdate(self, inCombat)
@@ -1651,14 +1676,26 @@ function UNITFRAME:AddRaidTargetIndicator(self)
         return
     end
 
-    local raidTargetIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
-    raidTargetIndicator:SetTexture(C.Assets.target_icon)
-    raidTargetIndicator:SetAlpha(C.DB.unitframe.target_icon_indicator_alpha)
-    raidTargetIndicator:SetSize(C.DB.unitframe.target_icon_indicator_size,
-                                C.DB.unitframe.target_icon_indicator_size)
-    raidTargetIndicator:SetPoint('CENTER', self)
+    local style = self.unitStyle
+    local size = C.DB.unitframe.target_icon_indicator_size
+    local alpha = C.DB.unitframe.target_icon_indicator_alpha
+    local icon
 
-    self.RaidTargetIndicator = raidTargetIndicator
+    if style == 'nameplate' then
+        icon = self:CreateTexture(nil, 'OVERLAY')
+        icon:SetPoint('TOP', self, 'BOTTOM')
+        icon:SetAlpha(1)
+        icon:SetSize(24, 24)
+    else
+        icon = self.Health:CreateTexture(nil, 'OVERLAY')
+        icon:SetPoint('CENTER')
+        icon:SetAlpha(alpha)
+        icon:SetSize(size, size)
+    end
+
+    icon:SetTexture(C.Assets.target_icon)
+
+    self.RaidTargetIndicator = icon
 end
 
 function UNITFRAME:AddReadyCheckIndicator(self)
@@ -1729,6 +1766,7 @@ function UNITFRAME:AddResurrectIndicator(self)
 end
 
 --[[ Threat ]]
+
 local function UpdateThreat(self, event, unit)
     if not self.Glow or self.unit ~= unit then
         return
@@ -1756,6 +1794,7 @@ function UNITFRAME:AddThreatIndicator(self)
 end
 
 --[[ Portrait ]]
+
 local function PostUpdatePortrait(element)
     if C.DB.unitframe.portrait_saturation then
         return
@@ -1777,6 +1816,7 @@ function UNITFRAME:AddPortrait(self)
 end
 
 --[[ Party spells ]]
+
 UNITFRAME.PartySpellsList = {}
 function UNITFRAME:UpdatePartyWatcherSpells()
     wipe(UNITFRAME.PartySpellsList)
@@ -1916,6 +1956,7 @@ function UNITFRAME:AddPartySpells(self)
 end
 
 --[[ Tags ]]
+
 function UNITFRAME:AddGroupNameText(self)
     local groupName
     if _G.FREE_ADB.font_outline then
@@ -1929,18 +1970,21 @@ function UNITFRAME:AddGroupNameText(self)
 end
 
 function UNITFRAME:AddNameText(self)
+    local style = self.unitStyle
     local name
+
     if _G.FREE_ADB.font_outline then
         name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
     else
         name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
     end
 
-    if self.unitStyle == 'target' then
+    if style == 'target' then
         name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
-    elseif self.unitStyle == 'arena' or self.unitStyle == 'boss' then
+    elseif style == 'arena' or style == 'boss' then
         name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
-    elseif self.unitStyle == 'nameplate' then
+    elseif style == 'nameplate' then
+        name:SetJustifyH('CENTER')
         name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
     else
         name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
@@ -1960,7 +2004,7 @@ function UNITFRAME:AddHealthValueText(self)
     healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
     if self.unitStyle == 'player' or self.unitStyle == 'playerplate' then
-        self:Tag(healthValue, '[free:health]')
+        self:Tag(healthValue, '[free:health] [free:pvp]')
     elseif self.unitStyle == 'target' then
         self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
     elseif self.unitStyle == 'boss' then

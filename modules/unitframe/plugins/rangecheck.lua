@@ -1,7 +1,6 @@
-local F, C = unpack(select(2, ...))
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local CreateFrame = CreateFrame
 local UnitCanAttack = UnitCanAttack
 local UnitCanAssist = UnitCanAssist
@@ -12,7 +11,10 @@ local IsSpellKnown = IsSpellKnown
 local IsSpellInRange = IsSpellInRange
 local GetSpellInfo = GetSpellInfo
 
+local F, C = unpack(select(2, ...))
+local OUF = F.OUF
 local LibRangeCheck = F.Libs.RangeCheck
+
 local updateFrequency = 0.25
 local _FRAMES = {}
 local OnRangeFrame
@@ -275,4 +277,4 @@ local function Disable(self)
     end
 end
 
-oUF:AddElement('RangeCheck', Path, Enable, Disable)
+OUF:AddElement('RangeCheck', Path, Enable, Disable)

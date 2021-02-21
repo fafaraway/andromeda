@@ -1,13 +1,15 @@
-local F, C = unpack(select(2, ...))
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local GetSpecialization = GetSpecialization
 local IsInInstance = IsInInstance
 local GetInstanceInfo = GetInstanceInfo
 local UnitIsCharmed = UnitIsCharmed
 local UnitCanAttack = UnitCanAttack
 local UnitAura = UnitAura
+
+local F, C = unpack(select(2, ...))
+local OUF = F.OUF
 
 local RaidDebuffsIgnore = {}
 local invalidPrio = -1
@@ -104,9 +106,13 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
 
         local color = DispellColor[debuffType] or DispellColor.none
         if rd.ShowDebuffBorder then
-            if rd.bg then rd.bg:SetBackdropBorderColor(color[1], color[2], color[3]) end
+            if rd.bg then
+                rd.bg:SetBackdropBorderColor(color[1], color[2], color[3])
+            end
 
-            if rd.shadow then rd.shadow:SetBackdropBorderColor(color[1], color[2], color[3], .35) end
+            if rd.shadow then
+                rd.shadow:SetBackdropBorderColor(color[1], color[2], color[3], .35)
+            end
 
             if rd.glowFrame then
                 if rd.priority == 6 then
@@ -133,7 +139,9 @@ local function checkInstance()
 end
 
 local function Update(self, _, unit)
-    if unit ~= self.unit then return end
+    if unit ~= self.unit then
+        return
+    end
 
     local rd = self.RaidDebuffs
     rd.priority = invalidPrio
@@ -148,13 +156,17 @@ local function Update(self, _, unit)
     for i = 1, 32 do
         local name, icon, count, debuffType, duration, expiration, _, _, _, spellId =
             UnitAura(unit, i, rd.filter)
-        if not name then break end
+        if not name then
+            break
+        end
 
         if rd.ShowDispellableDebuff and debuffType and (not isCharmed) and (not canAttack) then
             if rd.FilterDispellableDebuff then
                 prio = DispellFilter[debuffType] and (DispellPriority[debuffType] + 6) or
                            invalidPrio
-                if prio == invalidPrio then debuffType = nil end
+                if prio == invalidPrio then
+                    debuffType = nil
+                end
             else
                 prio = DispellPriority[debuffType]
             end
@@ -168,7 +180,9 @@ local function Update(self, _, unit)
         end
 
         local instPrio
-        if instName and debuffs[instName] then instPrio = debuffs[instName][spellId] end
+        if instName and debuffs[instName] then
+            instPrio = debuffs[instName][spellId]
+        end
 
         if not RaidDebuffsIgnore[spellId] and instPrio and (instPrio == 6 or instPrio > rd.priority) then
             rd.priority, rd.index = instPrio, i
@@ -178,15 +192,20 @@ local function Update(self, _, unit)
         end
     end
 
-    if rd.priority == invalidPrio then rd.index, _name = nil, nil end
+    if rd.priority == invalidPrio then
+        rd.index, _name = nil, nil
+    end
 
     UpdateDebuffFrame(self, _name, _icon, _count, _debuffType, _duration, _expiration)
 end
 
-local function Path(self, ...) return (self.RaidDebuffs.Override or Update)(self, ...) end
+local function Path(self, ...)
+    return (self.RaidDebuffs.Override or Update)(self, ...)
+end
 
-local function ForceUpdate(element) return
-    Path(element.__owner, 'ForceUpdate', element.__owner.unit) end
+local function ForceUpdate(element)
+    return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+end
 
 local function Enable(self)
     local rd = self.RaidDebuffs
@@ -214,4 +233,4 @@ local function Disable(self)
     self:UnregisterEvent('PLAYER_ENTERING_WORLD', checkInstance)
 end
 
-oUF:AddElement('RaidDebuffs', Update, Enable, Disable)
+OUF:AddElement('RaidDebuffs', Update, Enable, Disable)

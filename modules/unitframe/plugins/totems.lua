@@ -1,9 +1,11 @@
-local F = unpack(select(2, ...))
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local GetTime = GetTime
 local GetTotemInfo = GetTotemInfo
+
+local F = unpack(select(2, ...))
+local OUF = F.OUF
 
 local function UpdateTooltip(totem)
     _G.GameTooltip:SetTotem(totem:GetID())
@@ -111,4 +113,4 @@ local function Disable(self)
     _G.TotemFrame:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
 end
 
-oUF:AddElement('CustomTotems', Update, Enable, Disable)
+OUF:AddElement('CustomTotems', Update, Enable, Disable)

@@ -1,7 +1,6 @@
-local F = unpack(select(2, ...))
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local wipe = wipe
 local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
@@ -17,6 +16,9 @@ local UnitChannelInfo = UnitChannelInfo
 local GetZonePVPInfo = GetZonePVPInfo
 local GetMouseFocus = GetMouseFocus
 local IsInInstance = IsInInstance
+
+local F = unpack(select(2, ...))
+local OUF = F.OUF
 
 local _, powerToken = UnitPowerType('player')
 local reversePowers = {
@@ -186,4 +188,4 @@ local function Disable(self, unit)
     end
 end
 
-oUF:AddElement('Fader', Path, Enable, Disable)
+OUF:AddElement('Fader', Path, Enable, Disable)

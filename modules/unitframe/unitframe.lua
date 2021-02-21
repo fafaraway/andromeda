@@ -1,22 +1,24 @@
-local F, C = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local GetSpellInfo = GetSpellInfo
 local GetSpecialization = GetSpecialization
 local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CompactRaidFrameManager = CompactRaidFrameManager
 
+local F, C = unpack(select(2, ...))
+local UNITFRAME = F.UNITFRAME
+local OUF = F.OUF
+
 local function ReplaceHealthColor()
     local colors = _G.FREE_ADB.health_color
-    oUF.colors.health = {colors.r, colors.g, colors.b}
+    OUF.colors.health = {colors.r, colors.g, colors.b}
 end
 
 local function ReplacePowerColors(name, index, color)
-    oUF.colors.power[name] = color
-    oUF.colors.power[index] = oUF.colors.power[name]
+    OUF.colors.power[name] = color
+    OUF.colors.power[index] = OUF.colors.power[name]
 end
 
 function UNITFRAME:InitializeColors()
@@ -32,7 +34,7 @@ function UNITFRAME:InitializeColors()
 
     local classColors = C.ClassColors
     for class, value in pairs(classColors) do
-        oUF.colors.class[class] = {value.r, value.g, value.b}
+        OUF.colors.class[class] = {value.r, value.g, value.b}
     end
 end
 

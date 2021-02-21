@@ -1,8 +1,6 @@
-local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local UnitExists = UnitExists
 local UnitIsFriend = UnitIsFriend
 local UnitIsEnemy = UnitIsEnemy
@@ -12,6 +10,10 @@ local SOUNDKIT_IG_CHARACTER_NPC_SELECT = SOUNDKIT.IG_CHARACTER_NPC_SELECT
 local SOUNDKIT_IG_CREATURE_NEUTRAL_SELECT = SOUNDKIT.IG_CREATURE_NEUTRAL_SELECT
 local SOUNDKIT_INTERFACE_SOUND_LOST_TARGET_UNIT = SOUNDKIT.INTERFACE_SOUND_LOST_TARGET_UNIT
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
+
+local F, C, L = unpack(select(2, ...))
+local UNITFRAME = F.UNITFRAME
+local OUF = F.OUF
 
 local function tagsOnEnter(self)
     self.HealthValue:Show()
@@ -49,10 +51,10 @@ local function CreatePlayerStyle(self)
 end
 
 function UNITFRAME:SpawnPlayer()
-    oUF:RegisterStyle('Player', CreatePlayerStyle)
-    oUF:SetActiveStyle 'Player'
+    OUF:RegisterStyle('Player', CreatePlayerStyle)
+    OUF:SetActiveStyle 'Player'
 
-    local player = oUF:Spawn('player', 'oUF_Player')
+    local player = OUF:Spawn('player', 'oUF_Player')
     if C.DB.unitframe.player_hide_tags then
         player.HealthValue:Hide()
         player.PowerValue:Hide()
@@ -78,10 +80,10 @@ local function CreatePetStyle(self)
 end
 
 function UNITFRAME:SpawnPet()
-    oUF:RegisterStyle('Pet', CreatePetStyle)
-    oUF:SetActiveStyle 'Pet'
+    OUF:RegisterStyle('Pet', CreatePetStyle)
+    OUF:SetActiveStyle 'Pet'
 
-    local pet = oUF:Spawn('pet', 'oUF_Pet')
+    local pet = OUF:Spawn('pet', 'oUF_Pet')
     F.Mover(pet, L['UNITFRAME_MOVER_PET'], 'PetFrame', {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},
             pet:GetWidth(), pet:GetHeight())
 end
@@ -125,10 +127,10 @@ local function CreateTargetStyle(self)
 end
 
 function UNITFRAME:SpawnTarget()
-    oUF:RegisterStyle('Target', CreateTargetStyle)
-    oUF:SetActiveStyle 'Target'
+    OUF:RegisterStyle('Target', CreateTargetStyle)
+    OUF:SetActiveStyle 'Target'
 
-    local target = oUF:Spawn('target', 'oUF_Target')
+    local target = OUF:Spawn('target', 'oUF_Target')
     F.Mover(target, L['UNITFRAME_MOVER_TARGET'], 'TargetFrame',
             {'LEFT', _G.UIParent, 'CENTER', 120, -140}, target:GetWidth(), target:GetHeight())
 end
@@ -146,10 +148,10 @@ local function CreateTargetTargetStyle(self)
 end
 
 function UNITFRAME:SpawnTargetTarget()
-    oUF:RegisterStyle('TargetTarget', CreateTargetTargetStyle)
-    oUF:SetActiveStyle 'TargetTarget'
+    OUF:RegisterStyle('TargetTarget', CreateTargetTargetStyle)
+    OUF:SetActiveStyle 'TargetTarget'
 
-    local targettarget = oUF:Spawn('targettarget', 'oUF_TargetTarget')
+    local targettarget = OUF:Spawn('targettarget', 'oUF_TargetTarget')
     F.Mover(targettarget, L['UNITFRAME_MOVER_TARGETTARGET'], 'TargetTargetFrame',
             {'LEFT', 'oUF_Target', 'RIGHT', 6, 0}, targettarget:GetWidth(), targettarget:GetHeight())
 end
@@ -191,10 +193,10 @@ local function CreateFocusStyle(self)
 end
 
 function UNITFRAME:SpawnFocus()
-    oUF:RegisterStyle('Focus', CreateFocusStyle)
-    oUF:SetActiveStyle 'Focus'
+    OUF:RegisterStyle('Focus', CreateFocusStyle)
+    OUF:SetActiveStyle 'Focus'
 
-    local focus = oUF:Spawn('focus', 'oUF_Focus')
+    local focus = OUF:Spawn('focus', 'oUF_Focus')
     F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame',
             {'BOTTOM', _G.UIParent, 'BOTTOM', -200, 220}, focus:GetWidth(), focus:GetHeight())
 end
@@ -212,10 +214,10 @@ local function CreateFocusTargetStyle(self)
 end
 
 function UNITFRAME:SpawnFocusTarget()
-    oUF:RegisterStyle('FocusTarget', CreateFocusTargetStyle)
-    oUF:SetActiveStyle 'FocusTarget'
+    OUF:RegisterStyle('FocusTarget', CreateFocusTargetStyle)
+    OUF:SetActiveStyle 'FocusTarget'
 
-    local focustarget = oUF:Spawn('focustarget', 'oUF_FocusTarget')
+    local focustarget = OUF:Spawn('focustarget', 'oUF_FocusTarget')
     F.Mover(focustarget, L['UNITFRAME_MOVER_FOCUSTARGET'], 'FocusTargetFrame',
             {'TOPRIGHT', 'oUF_Focus', 'TOPLEFT', -6, 0}, focustarget:GetWidth(),
             focustarget:GetHeight())
@@ -241,12 +243,12 @@ local function CreateBossStyle(self)
 end
 
 function UNITFRAME:SpawnBoss()
-    oUF:RegisterStyle('Boss', CreateBossStyle)
-    oUF:SetActiveStyle 'Boss'
+    OUF:RegisterStyle('Boss', CreateBossStyle)
+    OUF:SetActiveStyle 'Boss'
 
     local boss = {}
     for i = 1, MAX_BOSS_FRAMES do
-        boss[i] = oUF:Spawn('boss' .. i, 'oUF_Boss' .. i)
+        boss[i] = OUF:Spawn('boss' .. i, 'oUF_Boss' .. i)
         if i == 1 then
             boss[i].mover = F.Mover(boss[i], L['UNITFRAME_MOVER_BOSS'], 'BossFrame',
                                     {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
@@ -273,12 +275,12 @@ local function CreateArenaStyle(self)
 end
 
 function UNITFRAME:SpawnArena()
-    oUF:RegisterStyle('Arena', CreateArenaStyle)
-    oUF:SetActiveStyle 'Arena'
+    OUF:RegisterStyle('Arena', CreateArenaStyle)
+    OUF:SetActiveStyle 'Arena'
 
     local arena = {}
     for i = 1, 5 do
-        arena[i] = oUF:Spawn('arena' .. i, 'oUF_Arena' .. i)
+        arena[i] = OUF:Spawn('arena' .. i, 'oUF_Arena' .. i)
         if i == 1 then
             arena[i].mover = F.Mover(arena[i], L['UNITFRAME_MOVER_ARENA'], 'ArenaFrame',
                                      {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
@@ -320,8 +322,8 @@ function UNITFRAME:SpawnParty()
     UNITFRAME:UpdatePartyWatcherSpells()
     UNITFRAME:UpdateCornerSpells()
 
-    oUF:RegisterStyle('Party', CreatePartyStyle)
-    oUF:SetActiveStyle 'Party'
+    OUF:RegisterStyle('Party', CreatePartyStyle)
+    OUF:SetActiveStyle 'Party'
 
     local partyWidth, partyHeight = C.DB.unitframe.party_width, C.DB.unitframe.party_height
     local partyHorizon = C.DB.unitframe.party_horizon
@@ -332,7 +334,7 @@ function UNITFRAME:SpawnParty()
     local moverWidth = partyHorizon and partyWidth * 5 + partyGap * 4 or partyWidth
     local moverHeight = partyHorizon and partyHeight or partyHeight * 5 + partyGap * 4
     local partyMover
-    local party = oUF:SpawnHeader('oUF_Party', nil, 'solo,party', 'showPlayer', true, 'showSolo',
+    local party = OUF:SpawnHeader('oUF_Party', nil, 'solo,party', 'showPlayer', true, 'showSolo',
                                   showSolo, 'showParty', true, 'showRaid', false, 'xoffset',
                                   partyGap, 'yoffset', partyGap, 'point',
                                   partyHorizon and 'LEFT' or 'BOTTOM', 'groupingOrder',
@@ -374,8 +376,8 @@ end
 function UNITFRAME:SpawnRaid()
     UNITFRAME:UpdateCornerSpells()
 
-    oUF:RegisterStyle('Raid', CreateRaidStyle)
-    oUF:SetActiveStyle 'Raid'
+    OUF:RegisterStyle('Raid', CreateRaidStyle)
+    OUF:SetActiveStyle 'Raid'
 
     local raidWidth, raidHeight = C.DB.unitframe.raid_width, C.DB.unitframe.raid_height
     local raidHorizon = C.DB.unitframe.raid_horizon
@@ -386,7 +388,7 @@ function UNITFRAME:SpawnRaid()
     local raidMover
 
     local function CreateRaid(name, i)
-        local raid = oUF:SpawnHeader(name, nil, 'solo,raid', 'showPlayer', true, 'showSolo',
+        local raid = OUF:SpawnHeader(name, nil, 'solo,raid', 'showPlayer', true, 'showSolo',
                                      showSolo, 'showParty', true, 'showRaid', true, 'xoffset',
                                      raidGap, 'yOffset', -raidGap, 'groupFilter', tostring(i),
                                      'groupingOrder', '1,2,3,4,5,6,7,8', 'groupBy', 'GROUP',

@@ -1,11 +1,13 @@
-local F, C = unpack(select(2, ...))
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local UnitCanAssist = UnitCanAssist
 local UnitAura = UnitAura
 local GetSpecialization = GetSpecialization
 local DebuffTypeColor = DebuffTypeColor
+
+local F, C = unpack(select(2, ...))
+local OUF = F.OUF
 
 local canDispel = {
     DRUID = {Magic = false, Curse = true, Poison = true},
@@ -151,8 +153,8 @@ local function Disable(object)
     end
 end
 
-oUF:AddElement('DebuffHighlight', Update, Enable, Disable)
+OUF:AddElement('DebuffHighlight', Update, Enable, Disable)
 
-for _, frame in ipairs(oUF.objects) do
+for _, frame in ipairs(OUF.objects) do
     Enable(frame)
 end

@@ -1,14 +1,11 @@
-local F, C, L = unpack(select(2, ...))
-local NAMEPLATE = F.NAMEPLATE
-local UNITFRAME = F.UNITFRAME
-local oUF = F.oUF
-
 local _G = _G
-local wipe = table.wipe
+local wipe = wipe
 local tonumber = tonumber
 local pairs = pairs
 local unpack = unpack
-local rad = math.rad
+local select = select
+local rad = rad
+local strmatch = strmatch
 local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
 local SetCVar = SetCVar
@@ -31,11 +28,10 @@ local InCombatLockdown = InCombatLockdown
 local UnitGUID = UnitGUID
 local GetPlayerInfoByGUID = GetPlayerInfoByGUID
 local Ambiguate = Ambiguate
-local UIFrameFadeIn = UIFrameFadeIn
-local UIFrameFadeOut = UIFrameFadeOut
 local issecure = issecure
 local IsInRaid = IsInRaid
 local IsInGroup = IsInGroup
+local IsInInstance = IsInInstance
 local UnitName = UnitName
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
@@ -45,12 +41,19 @@ local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 local GetSpellInfo = GetSpellInfo
+local GetSpellTexture = GetSpellTexture
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
 local INTERRUPTED = INTERRUPTED
 
+local F, C = unpack(select(2, ...))
+local NAMEPLATE = F.NAMEPLATE
+local UNITFRAME = F.UNITFRAME
+local OUF = F.OUF
+
 --[[ CVars ]]
+
 function NAMEPLATE:PlateInsideView()
-    if C.DB.nameplate.inside_view then
+    if C.DB.Nameplate.InsideView then
         SetCVar('nameplateOtherTopInset', .05)
         SetCVar('nameplateOtherBottomInset', .08)
     else
@@ -60,41 +63,31 @@ function NAMEPLATE:PlateInsideView()
 end
 
 function NAMEPLATE:UpdatePlateScale()
-    SetCVar('namePlateMinScale', C.DB.nameplate.min_scale)
-    SetCVar('namePlateMaxScale', C.DB.nameplate.min_scale)
+    SetCVar('namePlateMinScale', C.DB.Nameplate.MinScale)
+    SetCVar('namePlateMaxScale', C.DB.Nameplate.MinScale)
 end
 
 function NAMEPLATE:UpdatePlateTargetScale()
-    SetCVar('nameplateLargerScale', C.DB.nameplate.target_scale)
-    SetCVar('nameplateSelectedScale', C.DB.nameplate.target_scale)
+    SetCVar('nameplateLargerScale', C.DB.Nameplate.TargetScale)
+    SetCVar('nameplateSelectedScale', C.DB.Nameplate.TargetScale)
 end
 
 function NAMEPLATE:UpdatePlateAlpha()
-    SetCVar('nameplateMinAlpha', C.DB.nameplate.min_alpha)
-    SetCVar('nameplateMaxAlpha', C.DB.nameplate.min_alpha)
+    SetCVar('nameplateMinAlpha', C.DB.Nameplate.MinAlpha)
+    SetCVar('nameplateMaxAlpha', C.DB.Nameplate.MinAlpha)
     SetCVar('nameplateSelectedAlpha', 1)
 end
 
 function NAMEPLATE:UpdatePlateOccludedAlpha()
-    SetCVar('nameplateOccludedAlphaMult', C.DB.nameplate.occluded_alpha)
+    SetCVar('nameplateOccludedAlphaMult', C.DB.Nameplate.OccludedAlpha)
 end
 
 function NAMEPLATE:UpdatePlateVerticalSpacing()
-    SetCVar('nameplateOverlapV', C.DB.nameplate.vertical_spacing)
+    SetCVar('nameplateOverlapV', C.DB.Nameplate.VerticalSpacing)
 end
 
 function NAMEPLATE:UpdatePlateHorizontalSpacing()
-    SetCVar('nameplateOverlapH', C.DB.nameplate.horizontal_spacing)
-end
-
-function NAMEPLATE:UpdateClickableSize()
-    if InCombatLockdown() then
-        return
-    end
-    C_NamePlate_SetNamePlateEnemySize(C.DB.nameplate.plate_width * _G.FREE_ADB.ui_scale,
-                                      C.DB.nameplate.plate_height * _G.FREE_ADB.ui_scale + 10)
-    C_NamePlate_SetNamePlateFriendlySize(C.DB.nameplate.plate_width * _G.FREE_ADB.ui_scale,
-                                         C.DB.nameplate.plate_height * _G.FREE_ADB.ui_scale + 10)
+    SetCVar('nameplateOverlapH', C.DB.Nameplate.HorizontalSpacing)
 end
 
 function NAMEPLATE:SetupCVars()
@@ -113,12 +106,10 @@ function NAMEPLATE:SetupCVars()
     SetCVar('nameplateResourceOnTarget', 0)
     F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResource)
     F.HideOption(_G.InterfaceOptionsNamesPanelUnitNameplatesPersonalResourceOnEnemy)
-
-    NAMEPLATE:UpdateClickableSize()
-    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 end
 
--- DBM
+--[[ AddOn ]]
+
 function NAMEPLATE:BlockAddons()
     if not _G.DBM or not _G.DBM.Nameplate then
         return
@@ -140,21 +131,22 @@ function NAMEPLATE:BlockAddons()
 end
 
 --[[ Elements ]]
+
 local customUnits = {}
 function NAMEPLATE:CreateUnitTable()
     wipe(customUnits)
-    if not C.DB.nameplate.colored_custom_unit then
+    if not C.DB.Nameplate.CustomUnitColor then
         return
     end
     F.CopyTable(C.NPSpecialUnitsList, customUnits)
-    F.SplitList(customUnits, C.DB.nameplate.custom_unit_list)
+    F.SplitList(customUnits, C.DB.Nameplate.CustomUnitList)
 end
 
 local showPowerList = {}
 function NAMEPLATE:CreatePowerUnitTable()
     wipe(showPowerList)
     F.CopyTable(C.NPShowPowerUnitsList, showPowerList)
-    F.SplitList(showPowerList, C.DB.nameplate.show_power_list)
+    F.SplitList(showPowerList, C.DB.Nameplate.ShowPowerList)
 end
 
 function NAMEPLATE:UpdateUnitPower()
@@ -228,29 +220,32 @@ function NAMEPLATE:UpdateColor(_, unit)
     local isPlayer = self.isPlayer
     local isFriendly = self.isFriendly
     local isOffTank, status = NAMEPLATE:CheckThreatStatus(unit)
-    local customColor = C.DB.nameplate.custom_color
-    local secureColor = C.DB.nameplate.secure_color
-    local transColor = C.DB.nameplate.trans_color
-    local insecureColor = C.DB.nameplate.insecure_color
-    local revertThreat = C.DB.nameplate.dps_revert_threat
-    local offTankColor = C.DB.nameplate.off_tank_color
-    local targetColor = C.DB.nameplate.target_color
-    local coloredTarget = C.DB.nameplate.colored_target
-    local hostileClassColor = C.DB.nameplate.hostile_class_color
-    local tankMode = C.DB.nameplate.tank_mode
-    local executeRatio = C.DB.nameplate.ExecuteRatio
+
+    local customColor = C.DB.Nameplate.CustomColor
+    local secureColor = C.DB.Nameplate.SecureColor
+    local transColor = C.DB.Nameplate.TransColor
+    local insecureColor = C.DB.Nameplate.InsecureColor
+    local revertThreat = C.DB.Nameplate.RevertThreat
+    local offTankColor = C.DB.Nameplate.OffTankColor
+    local targetColor = C.DB.Nameplate.TargetColor
+    local coloredTarget = C.DB.Nameplate.ColoredTarget
+    local hostileClassColor = C.DB.Nameplate.HostileClassColor
+    local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
+    local tankMode = C.DB.Nameplate.TankMode
+    local executeIndicator = C.DB.Nameplate.ExecuteIndicator
+    local executeRatio = C.DB.Nameplate.ExecuteRatio
     local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
     local r, g, b
 
     if not UnitIsConnected(unit) then
-        r, g, b = unpack(oUF.colors.disconnected)
+        r, g, b = unpack(OUF.colors.disconnected)
     else
         if coloredTarget and UnitIsUnit(unit, 'target') then
             r, g, b = targetColor.r, targetColor.g, targetColor.b
         elseif isCustomUnit then
             r, g, b = customColor.r, customColor.g, customColor.b
         elseif isPlayer and isFriendly then
-            if C.DB.nameplate.friendly_class_color then
+            if friendlyClassColor then
                 r, g, b = F.UnitColor(unit)
             else
                 r, g, b = .3, .3, 1
@@ -258,9 +253,9 @@ function NAMEPLATE:UpdateColor(_, unit)
         elseif isPlayer and (not isFriendly) and hostileClassColor then
             r, g, b = F.UnitColor(unit)
         elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
-            r, g, b = unpack(oUF.colors.tapped)
+            r, g, b = unpack(OUF.colors.tapped)
         else
-            -- r, g, b = unpack(oUF.colors.reaction[UnitReaction(unit, 'player') or 5])
+            -- r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
             r, g, b = UnitSelectionColor(unit, true)
             if status and (tankMode or C.Role == 'Tank') then
                 if status == 3 then
@@ -301,7 +296,7 @@ function NAMEPLATE:UpdateColor(_, unit)
         end
     end
 
-    if executeRatio > 0 and healthPerc <= executeRatio then
+    if executeIndicator and executeRatio > 0 and healthPerc <= executeRatio then
         self.Name:SetTextColor(1, 0, 0)
     else
         self.Name:SetTextColor(1, 1, 1)
@@ -317,7 +312,7 @@ function NAMEPLATE:UpdateThreatColor(_, unit)
 end
 
 function NAMEPLATE:AddThreatIndicator(self)
-    if not C.DB.nameplate.threat_indicator then
+    if not C.DB.Nameplate.ThreatIndicator then
         return
     end
 
@@ -347,15 +342,23 @@ function NAMEPLATE:UpdateTargetChange()
         element:Hide()
     end
 
-    if C.DB.nameplate.colored_target then
+    if C.DB.Nameplate.ColoredTarget then
         NAMEPLATE.UpdateThreatColor(self, _, unit)
     end
 end
 
 function NAMEPLATE:UpdateTargetIndicator()
     local element = self.TargetIndicator
+    local isNameOnly = self.isNameOnly
 
-    if C.DB.nameplate.selected_indicator then
+    if C.DB.Nameplate.TargetIndicator then
+        if isNameOnly then
+            element.Glow:Hide()
+            element.nameGlow:Show()
+        else
+            element.Glow:Show()
+            element.nameGlow:Hide()
+        end
         element:Show()
     else
         element:Hide()
@@ -363,11 +366,11 @@ function NAMEPLATE:UpdateTargetIndicator()
 end
 
 function NAMEPLATE:AddTargetIndicator(self)
-    if not C.DB.nameplate.target_indicator then
+    if not C.DB.Nameplate.TargetIndicator then
         return
     end
 
-    local color = C.DB.nameplate.target_indicator_color
+    local color = C.DB.Nameplate.TargetIndicatorColor
     local r, g, b = color.r, color.g, color.b
 
     local frame = CreateFrame('Frame', nil, self)
@@ -375,13 +378,20 @@ function NAMEPLATE:AddTargetIndicator(self)
     frame:SetFrameLevel(self:GetFrameLevel() - 1)
     frame:Hide()
 
-    local texBot = frame:CreateTexture(nil, 'OVERLAY')
-    texBot:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, 0)
-    texBot:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
-    texBot:SetHeight(8)
-    texBot:SetTexture(C.Assets.glow_tex)
-    texBot:SetRotation(rad(180))
-    texBot:SetVertexColor(r, g, b)
+    frame.Glow = frame:CreateTexture(nil, 'OVERLAY')
+    frame.Glow:SetPoint('TOPLEFT', frame, 'BOTTOMLEFT', 0, 0)
+    frame.Glow:SetPoint('TOPRIGHT', frame, 'BOTTOMRIGHT', 0, 0)
+    frame.Glow:SetHeight(8)
+    frame.Glow:SetTexture(C.Assets.glow_tex)
+    frame.Glow:SetRotation(rad(180))
+    frame.Glow:SetVertexColor(r, g, b)
+
+    frame.nameGlow = frame:CreateTexture(nil, 'BACKGROUND', nil, -5)
+    frame.nameGlow:SetSize(150, 80)
+    frame.nameGlow:SetTexture('Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64')
+    frame.nameGlow:SetVertexColor(0, .6, 1)
+    frame.nameGlow:SetBlendMode('ADD')
+    frame.nameGlow:SetPoint('CENTER', self, 'BOTTOM')
 
     self.TargetIndicator = frame
     self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
@@ -450,7 +460,7 @@ local classify = {
 }
 
 function NAMEPLATE:AddClassifyIndicator(self)
-    if not C.DB.nameplate.classify_indicator then
+    if not C.DB.Nameplate.ClassifyIndicator then
         return
     end
 
@@ -466,12 +476,13 @@ end
 function NAMEPLATE:UpdateUnitClassify(unit)
     local isBoss = UnitLevel(unit) == -1
     local class = UnitClassification(unit)
+    local isNameOnly = self.isNameOnly
 
     if self.ClassifyIndicator then
-        if isBoss then
+        if not isNameOnly and isBoss then
             self.ClassifyIndicator:SetAtlas('VignetteKillElite')
             self.ClassifyIndicator:Show()
-        elseif class and classify[class] then
+        elseif not isNameOnly and class and classify[class] then
             local atlas, desature = unpack(classify[class])
             self.ClassifyIndicator:SetAtlas(atlas)
             self.ClassifyIndicator:SetDesaturated(desature)
@@ -481,6 +492,109 @@ function NAMEPLATE:UpdateUnitClassify(unit)
             self.ClassifyIndicator:Hide()
         end
     end
+end
+
+-- Quest progress
+local isInInstance
+local function CheckInstanceStatus()
+    isInInstance = IsInInstance()
+end
+
+function NAMEPLATE:QuestIconCheck()
+    if not C.DB.Nameplate.QuestIndicator then
+        return
+    end
+
+    CheckInstanceStatus()
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', CheckInstanceStatus)
+end
+
+function NAMEPLATE:UpdateQuestUnit(_, unit)
+    if not C.DB.Nameplate.QuestIndicator then
+        return
+    end
+    if isInInstance then
+        self.questIcon:Hide()
+        self.questCount:SetText('')
+        return
+    end
+
+    unit = unit or self.unit
+
+    local isLootQuest, questProgress
+    F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+    F.ScanTip:SetUnit(unit)
+
+    for i = 2, F.ScanTip:NumLines() do
+        local textLine = _G['FreeUI_ScanTooltipTextLeft' .. i]
+        local text = textLine:GetText()
+        if textLine and text then
+            local r, g, b = textLine:GetTextColor()
+            if r > .99 and g > .82 and b == 0 then
+                if isInGroup and text == C.MyName or not isInGroup then
+                    isLootQuest = true
+
+                    local questLine = _G['FreeUI_ScanTooltipTextLeft' .. (i + 1)]
+                    local questText = questLine:GetText()
+                    if questLine and questText then
+                        local current, goal = strmatch(questText, '(%d+)/(%d+)')
+                        local progress = strmatch(questText, '(%d+)%%')
+                        if current and goal then
+                            current = tonumber(current)
+                            goal = tonumber(goal)
+                            if current == goal then
+                                isLootQuest = nil
+                            elseif current < goal then
+                                questProgress = goal - current
+                                break
+                            end
+                        elseif progress then
+                            progress = tonumber(progress)
+                            if progress == 100 then
+                                isLootQuest = nil
+                            elseif progress < 100 then
+                                questProgress = progress .. '%'
+                                -- break -- lower priority on progress
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    if questProgress then
+        self.questCount:SetText(questProgress)
+        self.questIcon:SetAtlas('Warfronts-BaseMapIcons-Horde-Barracks-Minimap')
+        self.questIcon:Show()
+    else
+        self.questCount:SetText('')
+        if isLootQuest then
+            self.questIcon:SetAtlas('adventureguide-microbutton-alert')
+            self.questIcon:Show()
+        else
+            self.questIcon:Hide()
+        end
+    end
+end
+
+function NAMEPLATE:AddQuestIndicator(self)
+    if not C.DB.Nameplate.QuestIndicator then
+        return
+    end
+
+    local qicon = self:CreateTexture(nil, 'OVERLAY', nil, 2)
+    qicon:SetPoint('TOP', self, 'BOTTOM', 0, -3)
+    qicon:SetSize(20, 20)
+    qicon:SetAtlas('adventureguide-microbutton-alert')
+    qicon:Hide()
+    local count = F.CreateFS(self, C.Assets.Fonts.Condensed, 12, nil, '', nil, true)
+    count:SetPoint('LEFT', qicon, 'RIGHT', -3, 0)
+    count:SetTextColor(.6, .8, 1)
+
+    self.questIcon = qicon
+    self.questCount = count
+    self:RegisterEvent('QUEST_LOG_UPDATE', NAMEPLATE.UpdateQuestUnit, true)
 end
 
 -- Scale plates for explosives
@@ -493,7 +607,7 @@ function NAMEPLATE:UpdateExplosives(event, unit)
 
     local npcID = self.npcID
     if event == 'NAME_PLATE_UNIT_ADDED' and npcID == id then
-        self:SetScale(_G.FREE_ADB.ui_scale * 1.25)
+        self:SetScale(_G.FREE_ADB.ui_scale * C.DB.Nameplate.ExplosiveScale)
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
         self:SetScale(_G.FREE_ADB.ui_scale)
     end
@@ -522,7 +636,7 @@ local function checkAffixes(event)
 end
 
 function NAMEPLATE:CheckExplosives()
-    if not C.DB.nameplate.explosive_scale then
+    if not C.DB.Nameplate.ExplosiveEnlarge then
         return
     end
 
@@ -547,7 +661,7 @@ function NAMEPLATE:UpdateCastbarInterrupt(...)
 end
 
 function NAMEPLATE:AddInterruptInfo()
-    if not C.DB.nameplate.interrupt_name then
+    if not C.DB.Nameplate.InterruptIndicator then
         return
     end
 
@@ -576,24 +690,8 @@ function NAMEPLATE:RefreshMajorSpells()
     end
 end
 
---[[ Create plate ]]
-local platesList = {}
-function NAMEPLATE:CreateNameplateStyle()
-    self.unitStyle = 'nameplate'
-    self:SetSize(C.DB.nameplate.plate_width, C.DB.nameplate.plate_height)
-    self:SetPoint('CENTER', 0, -10)
-    self:SetScale(_G.UIParent:GetScale())
-
-    local health = CreateFrame('StatusBar', nil, self)
-    health:SetAllPoints()
-    health:SetStatusBarTexture(C.Assets.statusbar_tex)
-    health.backdrop = F.SetBD(health)
-    F:SmoothBar(health)
-
-    self.Health = health
-    -- self.Health.frequentUpdates = true
-    self.Health.UpdateColor = NAMEPLATE.UpdateColor
-
+-- Spiteful indicator
+function NAMEPLATE:AddSpitefulIndicator(self)
     local tarName
     if _G.FREE_ADB.font_outline then
         tarName = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
@@ -605,6 +703,84 @@ function NAMEPLATE:CreateNameplateStyle()
     tarName:Hide()
     self:Tag(tarName, '[free:tarname]')
     self.tarName = tarName
+end
+
+function NAMEPLATE:UpdateSpitefulIndicator(self)
+    if not C.DB.Nameplate.SpitefulIndicator then
+        return
+    end
+
+    self.tarName:SetShown(self.npcID == 174773)
+end
+
+-- Totem icon
+local totemsList = {
+    -- npcID spellID duration
+    [2630] = {2484, 20}, -- Earthbind
+    [3527] = {5394, 15}, -- Healing Stream
+    [6112] = {8512, 120}, -- Windfury
+    [97369] = {192222, 15}, -- Liquid Magma
+    [5913] = {8143, 10}, -- Tremor
+    [5925] = {204336, 3}, -- Grounding
+    [78001] = {157153, 15}, -- Cloudburst
+    [53006] = {98008, 6}, -- Spirit Link
+    [59764] = {108280, 12}, -- Healing Tide
+    [61245] = {192058, 2}, -- Static Charge
+    [100943] = {198838, 15}, -- Earthen Wall
+    [97285] = {192077, 15}, -- Wind Rush
+    [105451] = {204331, 15}, -- Counterstrike
+    [104818] = {207399, 30}, -- Ancestral
+    [105427] = {204330, 15}, -- Skyfury
+    [119052] = {236320, 15} -- Warrior War Banner
+}
+
+local function CreateTotemIcon(self)
+    local icon = CreateFrame('Frame', nil, self)
+    icon:SetSize(36, 36)
+    icon:SetPoint('BOTTOM', self, 'TOP', 0, self.isNameOnly and 12 or 6)
+
+    icon.texure = icon:CreateTexture(nil, 'ARTWORK')
+    icon.texure:SetTexCoord(unpack(C.TexCoord))
+    icon.texure:SetAllPoints()
+
+    F.SetBD(icon)
+
+    return icon
+end
+
+--[[ Create plate ]]
+
+local platesList = {}
+function NAMEPLATE:CreateNameplateStyle()
+    self.unitStyle = 'nameplate'
+    self:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
+    self:SetPoint('CENTER', 0, -10)
+    self:SetScale(_G.UIParent:GetScale())
+
+    local health = CreateFrame('StatusBar', nil, self)
+    health:SetAllPoints()
+    health:SetStatusBarTexture(C.Assets.statusbar_tex)
+    health.backdrop = F.SetBD(health)
+    F:SmoothBar(health)
+
+    self.Health = health
+    self.Health.UpdateColor = NAMEPLATE.UpdateColor
+
+    local name = F.CreateFS(self, C.Assets.Fonts.Header, 16, true, nil, nil, true)
+    name:SetJustifyH('CENTER')
+    name:ClearAllPoints()
+    name:SetPoint('CENTER')
+    name:Hide()
+    self:Tag(name, '[free:color][name]')
+    self.nameOnlyName = name
+
+    local title = F.CreateFS(self, C.Assets.Fonts.Bold, 12, true, nil, nil, true)
+    title:SetJustifyH('CENTER')
+    title:ClearAllPoints()
+    title:SetPoint('TOP', self, 'BOTTOM', 0, -10)
+    title:Hide()
+    self:Tag(title, '[free:title]')
+    self.npcTitle = title
 
     UNITFRAME:AddNameText(self)
     UNITFRAME:AddHealthPrediction(self)
@@ -612,18 +788,32 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:AddHighlight(self)
     NAMEPLATE:AddClassifyIndicator(self)
     NAMEPLATE:AddThreatIndicator(self)
+    NAMEPLATE:AddQuestIndicator(self)
     UNITFRAME:AddCastBar(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddAuras(self)
+    NAMEPLATE:AddSpitefulIndicator(self)
 
     platesList[self] = self:GetName()
+end
+
+function NAMEPLATE:UpdateClickableSize()
+    if InCombatLockdown() then
+        return
+    end
+
+    local width = C.DB.Nameplate.Width
+    local height = C.DB.Nameplate.Height
+    local scale = _G.FREE_ADB.ui_scale
+    C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 10)
+    C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 10)
 end
 
 function NAMEPLATE:UpdateNameplateAuras()
     local element = self.Auras
     element:SetPoint('BOTTOM', self, 'TOP', 0, 8)
-    element.numTotal = C.DB.nameplate.aura_number
-    element.size = C.DB.nameplate.aura_size
+    element.numTotal = C.DB.Nameplate.AuraNumTotal
+    element.size = C.DB.Nameplate.AuraSize
     element:SetWidth(self:GetWidth())
     element:SetHeight((element.size + element.spacing) * 2)
     element:ForceUpdate()
@@ -631,7 +821,7 @@ end
 
 function NAMEPLATE:RefreshNameplats()
     for nameplate in pairs(platesList) do
-        nameplate:SetSize(C.DB.nameplate.plate_width, C.DB.nameplate.plate_height)
+        nameplate:SetSize(C.DB.Nameplate.Width, C.DB.Nameplate.Height)
         NAMEPLATE.UpdateNameplateAuras(nameplate)
         NAMEPLATE.UpdateTargetIndicator(nameplate)
         NAMEPLATE.UpdateTargetChange(nameplate)
@@ -643,46 +833,94 @@ function NAMEPLATE:RefreshAllPlates()
     NAMEPLATE:RefreshNameplats()
 end
 
-local DisabledElements = {
-    'Health', 'Castbar', 'HealPredictionAndAbsorb', 'PvPClassificationIndicator', 'ThreatIndicator'
+local disabledElements = {
+    'Health',
+    'Castbar',
+    'HealPredictionAndAbsorb',
+    'PvPClassificationIndicator',
+    'ThreatIndicator'
 }
 
 function NAMEPLATE:UpdatePlateByType()
-    local name = self.Name
-    local raidtarget = self.RaidTargetIndicator
+    local nameOnlyName = self.nameOnlyName
+    local normalName = self.Name
+    local title = self.npcTitle
+    local raidTarget = self.RaidTargetIndicator
+    local raidTargetSize = C.DB.Nameplate.RaidTargetSize
+    local raidTargetAlpha = C.DB.Nameplate.RaidTargetAlpha
     local classify = self.ClassifyIndicator
+    local isNameOnly = self.isNameOnly
+    local questIcon = self.questIcon
 
-    name:ClearAllPoints()
-    raidtarget:ClearAllPoints()
+    normalName:SetShown(not self.widgetsOnly)
 
-    for _, element in pairs(DisabledElements) do
-        if not self:IsElementEnabled(element) then
-            self:EnableElement(element)
+    if isNameOnly then
+        for _, element in pairs(disabledElements) do
+            if self:IsElementEnabled(element) then
+                self:DisableElement(element)
+            end
+        end
+
+        nameOnlyName:Show()
+        normalName:Hide()
+        title:Show()
+        classify:Hide()
+
+        raidTarget:ClearAllPoints()
+        -- if title then
+        raidTarget:SetPoint('TOP', title or nameOnlyName, 'BOTTOM')
+        -- else
+        --     raidTarget:SetPoint('TOP', nameOnlyName, 'BOTTOM')
+        -- end
+        raidTarget:SetSize(24, 24)
+        raidTarget:SetAlpha(1)
+        raidTarget:SetParent(self)
+
+        if questIcon then
+            questIcon:ClearAllPoints()
+            questIcon:SetPoint('LEFT', nameOnlyName, 'RIGHT', 0, 0)
+        end
+
+        if self.widgetContainer then
+            self.widgetContainer:ClearAllPoints()
+            self.widgetContainer:SetPoint('TOP', title, 'BOTTOM', 0, -5)
+        end
+    else
+        for _, element in pairs(disabledElements) do
+            if not self:IsElementEnabled(element) then
+                self:EnableElement(element)
+            end
+        end
+
+        nameOnlyName:Hide()
+        normalName:Show()
+        title:Hide()
+        classify:Show()
+
+        raidTarget:ClearAllPoints()
+        raidTarget:SetPoint('CENTER')
+        raidTarget:SetSize(raidTargetSize, raidTargetSize)
+        raidTarget:SetAlpha(raidTargetAlpha)
+        raidTarget:SetParent(self.Health)
+
+        if questIcon then
+            questIcon:ClearAllPoints()
+            questIcon:SetPoint('TOP', self, 'BOTTOM', 0, -3)
+        end
+
+        if self.widgetContainer then
+            self.widgetContainer:ClearAllPoints()
+            self.widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
         end
     end
 
-    name:SetJustifyH('CENTER')
-    self:Tag(name, '[free:name]')
-    name:UpdateTag()
-    name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
-
-    raidtarget:SetPoint('CENTER', self)
-    raidtarget:SetParent(self.Health)
-
-    classify:Show()
-
     NAMEPLATE.UpdateTargetIndicator(self)
-
-    if self.widgetContainer then
-        self.widgetContainer:ClearAllPoints()
-        self.widgetContainer:SetPoint('TOP', self.Castbar, 'BOTTOM', 0, -5)
-    end
 end
 
 function NAMEPLATE:RefreshPlateType(unit)
     self.reaction = UnitReaction(unit, 'player')
     self.isFriendly = self.reaction and self.reaction >= 5
-    self.isNameOnly = C.DB.nameplate.name_only and self.isFriendly or self.widgetsOnly or false
+    self.isNameOnly = C.DB.Nameplate.NameOnly and self.isFriendly or self.widgetsOnly or false
 
     if self.previousType == nil or self.previousType ~= self.isNameOnly then
         NAMEPLATE.UpdatePlateByType(self)
@@ -714,7 +952,6 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
             guidToPlate[self.unitGUID] = self
         end
         self.isPlayer = UnitIsPlayer(unit)
-
         self.npcID = F.GetNPCID(self.unitGUID)
         self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 
@@ -726,109 +963,65 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)
+
+        if C.DB.Nameplate.TotemIcon and self.npcID and totemsList[self.npcID] then
+            if not self.TotemIcon then
+                self.TotemIcon = CreateTotemIcon(self)
+            end
+
+            self.TotemIcon:Show()
+
+            local totemData = totemsList[self.npcID]
+            local spellID, duration = unpack(totemData)
+            local texure = GetSpellTexture(spellID)
+
+            self.TotemIcon.texure:SetTexture(texure)
+
+            if self.Name then
+                self.Name:Hide()
+            end
+        end
+
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
         if self.unitGUID then
             guidToPlate[self.unitGUID] = nil
         end
         self.npcID = nil
+
+        if self.TotemIcon then
+            self.TotemIcon:Hide()
+        end
     end
 
     if event ~= 'NAME_PLATE_UNIT_REMOVED' then
         NAMEPLATE.UpdateTargetChange(self)
         NAMEPLATE.UpdateUnitClassify(self, unit)
-
-        self.tarName:SetShown(self.npcID == 174773)
+        NAMEPLATE.UpdateQuestUnit(self, event, unit)
+        NAMEPLATE:UpdateSpitefulIndicator(self)
     end
 
     NAMEPLATE.UpdateExplosives(self, event, unit)
 end
 
 function NAMEPLATE:OnLogin()
-    if not C.DB.nameplate.enable then
+    if not C.DB.Nameplate.Enable then
         return
     end
 
-    self:SetupCVars()
-    self:BlockAddons()
-    self:CreateUnitTable()
-    self:CreatePowerUnitTable()
-    self:CheckExplosives()
-    self:AddInterruptInfo()
-    self:UpdateGroupRoles()
-    self:RefreshPlateOnFactionChanged()
-    self:RefreshMajorSpells()
+    NAMEPLATE:UpdateClickableSize()
+    hooksecurefunc(NamePlateDriverFrame, 'UpdateNamePlateOptions', NAMEPLATE.UpdateClickableSize)
 
-    oUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
-    oUF:SetActiveStyle('Nameplate')
-    oUF:SpawnNamePlates('oUF_Nameplate', NAMEPLATE.PostUpdatePlates)
+    NAMEPLATE:SetupCVars()
+    NAMEPLATE:BlockAddons()
+    NAMEPLATE:CreateUnitTable()
+    NAMEPLATE:CreatePowerUnitTable()
+    NAMEPLATE:CheckExplosives()
+    NAMEPLATE:AddInterruptInfo()
+    NAMEPLATE:UpdateGroupRoles()
+    NAMEPLATE:RefreshPlateOnFactionChanged()
+    NAMEPLATE:RefreshMajorSpells()
 
-    if not C.DB.nameplate.player_plate then
-        return
-    end
-
-    oUF:RegisterStyle('PlayerPlate', NAMEPLATE.CreatePlayerPlate)
-    oUF:SetActiveStyle('PlayerPlate')
-
-    local plate = oUF:Spawn('player', 'oUF_PlayerPlate', true)
-    plate.mover = F.Mover(plate, L.GUI.MOVER.PLAYER_PLATE, 'PlayerPlate',
-                          {'CENTER', _G.UIParent, 'CENTER', 0, -260})
-end
-
---[[
-	Player plate
- ]]
-function NAMEPLATE:PlateVisibility(event)
-    local alpha = C.DB.nameplate.pp_fadeout_alpha
-    if (event == 'PLAYER_REGEN_DISABLED' or InCombatLockdown()) and UnitIsUnit('player', self.unit) then
-        UIFrameFadeIn(self, .3, self:GetAlpha(), 1)
-    else
-        UIFrameFadeOut(self, 2, self:GetAlpha(), alpha)
-    end
-end
-
-function NAMEPLATE:CreatePlayerPlate()
-    self.unitStyle = 'playerplate'
-    self:EnableMouse(false)
-    local ppWidth, ppHeight = C.DB.nameplate.pp_width, C.DB.nameplate.pp_height
-    self:SetSize(ppWidth, ppHeight)
-
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
-    UNITFRAME:AddHealthValueText(self)
-    UNITFRAME:AddPowerBar(self)
-    UNITFRAME:AddPowerValueText(self)
-    UNITFRAME:AddAlternativePowerBar(self)
-    UNITFRAME:AddAlternativePowerValueText(self)
-    UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddGCDSpark(self)
-    UNITFRAME:AddClassPowerBar(self)
-    UNITFRAME:AddStagger(self)
-    UNITFRAME:AddTotems(self)
-    UNITFRAME:AddCombatFader(self)
-
-    -- NAMEPLATE:TogglePlateVisibility()
-end
-
-function NAMEPLATE:TogglePlateVisibility()
-    local plate = _G.oUF_PlayerPlate
-    if not plate then
-        return
-    end
-
-    if C.DB.nameplate.pp_fadeout then
-        plate:RegisterEvent('UNIT_EXITED_VEHICLE', NAMEPLATE.PlateVisibility)
-        plate:RegisterEvent('UNIT_ENTERED_VEHICLE', NAMEPLATE.PlateVisibility)
-        plate:RegisterEvent('PLAYER_REGEN_ENABLED', NAMEPLATE.PlateVisibility, true)
-        plate:RegisterEvent('PLAYER_REGEN_DISABLED', NAMEPLATE.PlateVisibility, true)
-        plate:RegisterEvent('PLAYER_ENTERING_WORLD', NAMEPLATE.PlateVisibility, true)
-        NAMEPLATE.PlateVisibility(plate)
-    else
-        plate:UnregisterEvent('UNIT_EXITED_VEHICLE', NAMEPLATE.PlateVisibility)
-        plate:UnregisterEvent('UNIT_ENTERED_VEHICLE', NAMEPLATE.PlateVisibility)
-        plate:UnregisterEvent('PLAYER_REGEN_ENABLED', NAMEPLATE.PlateVisibility)
-        plate:UnregisterEvent('PLAYER_REGEN_DISABLED', NAMEPLATE.PlateVisibility)
-        plate:UnregisterEvent('PLAYER_ENTERING_WORLD', NAMEPLATE.PlateVisibility)
-        NAMEPLATE.PlateVisibility(plate, 'PLAYER_REGEN_DISABLED')
-    end
+    OUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)
+    OUF:SetActiveStyle('Nameplate')
+    OUF:SpawnNamePlates('oUF_Nameplate', NAMEPLATE.PostUpdatePlates)
 end

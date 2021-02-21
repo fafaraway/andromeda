@@ -1,38 +1,13 @@
---[[
-	## Element: PartyWatcher, by Siweia
-	Spell watcher in party for Mythic+.
-	## Optional:
-	element.PartySpells		- spell list
-	element.TalentCDFix		- spell list for talent cd
-	element.__max			- max icons for tracking
-	element.PostUpdate		- post update when event fired
-	## Example:
-	local buttons = {}
-	buttons.__max = 3
-	for i = 1, buttons.__max do
-		local bu = CreateFrame("Frame", nil, self)
-		bu:SetSize(50, 50)
-		bu.CD = CreateFrame("Cooldown", nil, bu, "CooldownFrameTemplate")
-		bu.CD:SetAllPoints()
-		bu.CD:SetReverse(false)
-		bu.Icon = bu:CreateTexture(nil, "ARTWORK")
-		bu.Icon:SetAllPoints()
-		bu.Icon:SetTexCoord(.08, .92, .08, .92)
-		bu:SetPoint("TOPRIGHT", self, "TOPLEFT", -(2+50)*(i-1)-5, 0)
-		bu:Hide()
-		buttons[i] = bu
-	end
-	self.PartyWatcher = buttons
-]]
-
-local F = unpack(select(2, ...))
-local oUF = F.oUF
-
 local _G = _G
+local unpack = unpack
+local select = select
 local wipe = wipe
 local GetTime = GetTime
 local GetNumGroupMembers = GetNumGroupMembers
 local GetSpellTexture = GetSpellTexture
+
+local F = unpack(select(2, ...))
+local OUF = F.OUF
 
 local function Update(self, event, unit, _, spellID)
     if unit ~= self.unit then
@@ -121,4 +96,4 @@ local function Disable(self)
     end
 end
 
-oUF:AddElement('PartyWatcher', nil, Enable, Disable)
+OUF:AddElement('PartyWatcher', nil, Enable, Disable)
