@@ -509,8 +509,9 @@ function GUI:SetupAdditionalbar(parent)
 	end
 end
 
--- Nameplate
-function GUI:NamePlateAuraFilter(parent)
+--[[ Nameplate ]]
+
+function GUI:SetupNPAuraFilter(parent)
 	local guiName = 'FreeUI_GUI_NamePlate_Aura_Filter'
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then
@@ -610,7 +611,7 @@ function GUI:NamePlateAuraFilter(parent)
 	end
 end
 
-function GUI:NamePlateCastbarGlow(parent)
+function GUI:SetupMajorSpellsGlow(parent)
 	local guiName = 'FreeUI_GUI_NamePlate_Castbar_Glow'
 	toggleExtraGUI(guiName)
 	if extraGUIs[guiName] then
@@ -695,6 +696,18 @@ function GUI:NamePlateCastbarGlow(parent)
 			createBarTest(scroll.child, spellID, barTable, 'NPMajorSpells')
 		end
 	end
+end
+
+function GUI:SetupNP(parent)
+
+end
+
+function GUI:SetupNPAura(parent)
+
+end
+
+function GUI:SetupNPExecuteRatio(parent)
+
 end
 
 -- Unitframe
