@@ -77,7 +77,7 @@ function F:GetModule(name)
 end
 
 do
-	F.oUF = engine.oUF
+	F.OUF = engine.oUF
 	F.cargBags = engine.cargBags
 
 	F:RegisterModule('INSTALL')

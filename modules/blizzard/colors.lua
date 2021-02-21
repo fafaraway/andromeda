@@ -1,6 +1,6 @@
 local F, C = unpack(select(2, ...))
 local BLIZZARD = F:GetModule('BLIZZARD')
-local oUF = F.oUF
+local OUF = F.OUF
 
 
 local format, ipairs, tinsert = string.format, ipairs, table.insert
@@ -40,7 +40,7 @@ local repColor = {
 }
 
 local function smoothColor(cur, max, color)
-	local r, g, b = oUF:RGBColorGradient(cur, max, unpack(color))
+	local r, g, b = OUF:RGBColorGradient(cur, max, unpack(color))
 	return F.RGBToHex(r, g, b)
 end
 

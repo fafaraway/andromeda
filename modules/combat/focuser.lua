@@ -1,6 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local COMBAT = F:GetModule('COMBAT')
-
+local OUF = F.OUF
 
 local _G = getfenv(0)
 local next, strmatch = next, string.match
@@ -37,7 +37,7 @@ function COMBAT.Focuser_OnEvent(event)
 			end
 		end
 	else
-		for _, object in next, F.oUF.objects do
+		for _, object in next, OUF.objects do
 			if not object.focuser then
 				COMBAT.Focuser_Setup(object)
 			end
