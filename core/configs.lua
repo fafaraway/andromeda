@@ -1,10 +1,12 @@
-local F, C = unpack(select(2, ...))
-local GUI = F.GUI
-
 local _G = _G
+local unpack = unpack
+local select = select
 local wipe = wipe
 local CreateFrame = CreateFrame
 local C_EncounterJournal_GetSectionInfo = C_EncounterJournal.GetSectionInfo
+
+local F, C = unpack(select(2, ...))
+local GUI = F.GUI
 
 C.ReminderBuffsList = {
     ITEMS = {
@@ -13,7 +15,8 @@ C.ReminderBuffsList = {
             spells = {[345545] = true},
             instance = true,
             combat = true
-        }, {
+        },
+        {
             itemID = 174906, -- 属性符文
             spells = {[317065] = true, [270058] = true},
             equip = true,
@@ -32,7 +35,8 @@ C.ReminderBuffsList = {
             combat = true,
             instance = true,
             pvp = true
-        }, {
+        },
+        {
             spells = {
                 -- 奥术智慧
                 [1459] = true
@@ -72,7 +76,8 @@ C.ReminderBuffsList = {
             combat = true,
             instance = true,
             pvp = true
-        }, {
+        },
+        {
             spells = {
                 [33757] = true -- 风怒武器
             },
@@ -82,7 +87,8 @@ C.ReminderBuffsList = {
             pvp = true,
             weaponIndex = 1,
             spec = 2
-        }, {
+        },
+        {
             spells = {
                 [318038] = true -- 火舌武器
             },
@@ -107,7 +113,8 @@ C.ReminderBuffsList = {
             combat = true,
             instance = true,
             pvp = true
-        }, {
+        },
+        {
             spells = {
                 -- 效果类毒药
                 [3408] = true, -- 减速药膏
@@ -132,15 +139,18 @@ C.GroupBuffsCheckList = {
     },
     [3] = {
         -- 10%智力
-        1459, 264760
+        1459,
+        264760
     },
     [4] = {
         -- 10%耐力
-        21562, 264764
+        21562,
+        264764
     },
     [5] = {
         -- 10%攻强
-        6673, 264761
+        6673,
+        264761
     },
     [6] = {
         -- 符文
@@ -872,8 +882,8 @@ C.AuraWhiteList = {
     [333227] = true, -- 彼界，不死之怒
     [326450] = true, -- 赎罪大厅，忠心的野兽
     [343558] = true, -- 通灵战潮，病态凝视
-	[343470] = true, -- 通灵战潮，碎骨之盾
-	[328351] = true, -- 通灵战潮，染血长枪
+    [343470] = true, -- 通灵战潮，碎骨之盾
+    [328351] = true, -- 通灵战潮，染血长枪
     [322433] = true, -- 赤红深渊，石肤术
     [321402] = true, -- 赤红深渊，饱餐
     [327416] = true, -- 晋升高塔，心能回灌
@@ -899,7 +909,7 @@ C.AuraBlackList = {
 }
 
 local function GetSectionInfo(id)
-	return C_EncounterJournal_GetSectionInfo(id).title
+    return C_EncounterJournal_GetSectionInfo(id).title
 end
 
 C.NPSpecialUnitsList = {
@@ -1171,54 +1181,54 @@ C.CharacterSettings = {
 
     Nameplate = {
         Enable = true,
-            Width = 100,
-            Height = 8,
+        Width = 100,
+        Height = 8,
 
-            NameOnly = true,
-            MajorSpellsGlow = true,
-            TargetIndicator = true,
-                TargetIndicatorColor = {r = .73, g = .92, b = .99},
-            ThreatIndicator = true,
-            ClassifyIndicator = true,
-            RaidTargetIndicator = true,
-                RaidTargetSize = 20,
-                RaidTargetAlpha = .6,
-            QuestIndicator = true,
-            InterruptIndicator = true,
-            ExecuteIndicator = false,
-                ExecuteRatio = 0,
-            SpitefulIndicator = true,
-            ExplosiveIndicator = true,
-                ExplosiveScale = 1.5,
+        NameOnly = true,
+        MajorSpellsGlow = true,
+        TargetIndicator = true,
+        TargetIndicatorColor = {r = .73, g = .92, b = .99},
+        ThreatIndicator = true,
+        ClassifyIndicator = true,
+        RaidTargetIndicator = true,
+        RaidTargetSize = 20,
+        RaidTargetAlpha = .6,
+        QuestIndicator = true,
+        InterruptIndicator = true,
+        ExecuteIndicator = false,
+        ExecuteRatio = 0,
+        SpitefulIndicator = true,
+        ExplosiveIndicator = true,
+        ExplosiveScale = 1.5,
 
-            FriendlyClassColor = false,
-            HostileClassColor = true,
-            TankMode = false,
-            RevertThreat = false,
-            SecureColor = {r = 1, g = 0, b = 1},
-            TransColor = {r = 1, g = .8, b = 0},
-            InsecureColor = {r = 1, g = 0, b = 0},
-            OffTankColor = {r = .2, g = .7, b = .5},
-            ColoredTarget = false,
-                TargetColor = {r = 0, g = .6, b = 1},
-            CustomUnitColor = true,
-                CustomColor = {r = .8, g = .42, b = .31},
-            CustomUnitList = '',
-            ShowPowerList = '',
+        FriendlyClassColor = false,
+        HostileClassColor = true,
+        TankMode = false,
+        RevertThreat = false,
+        SecureColor = {r = 1, g = 0, b = 1},
+        TransColor = {r = 1, g = .8, b = 0},
+        InsecureColor = {r = 1, g = 0, b = 0},
+        OffTankColor = {r = .2, g = .7, b = .5},
+        ColoredTarget = false,
+        TargetColor = {r = 0, g = .6, b = 1},
+        CustomUnitColor = true,
+        CustomColor = {r = .8, g = .42, b = .31},
+        CustomUnitList = '',
+        ShowPowerList = '',
 
-            ShowAura = true,
-                AuraFilterMode = 3,
-                AuraSize = 22,
-                AuraNumTotal = 6,
-            TotemIcon = true,
+        ShowAura = true,
+        AuraFilterMode = 3,
+        AuraSize = 22,
+        AuraNumTotal = 6,
+        TotemIcon = true,
 
-            InsideView = true,
-            MinScale = .7,
-            TargetScale = 1,
-            MinAlpha = .6,
-            OccludedAlpha = .2,
-            VerticalSpacing = .7,
-            HorizontalSpacing = .3,
+        InsideView = true,
+        MinScale = .7,
+        TargetScale = 1,
+        MinAlpha = .6,
+        OccludedAlpha = .2,
+        VerticalSpacing = .7,
+        HorizontalSpacing = .3
 
     },
     ['tooltip'] = {
@@ -1319,7 +1329,7 @@ C.CharacterSettings = {
         ['group_loot_filter'] = true,
         ['group_loot_threshold'] = 2,
 
-        RoleIcon = true,
+        RoleIcon = true
     },
     ['Actionbar'] = {
         ['Enable'] = true,
@@ -1372,7 +1382,7 @@ C.CharacterSettings = {
     Quest = {
         Enable = true,
         Automation = false,
-        CompleteSound = true,
+        CompleteSound = true
     }
 }
 
@@ -1425,15 +1435,25 @@ C.AccountSettings = {
 local function initSettings(source, target, fullClean)
     for i, j in pairs(source) do
         if type(j) == 'table' then
-            if target[i] == nil then target[i] = {} end
-            for k, v in pairs(j) do if target[i][k] == nil then target[i][k] = v end end
+            if target[i] == nil then
+                target[i] = {}
+            end
+            for k, v in pairs(j) do
+                if target[i][k] == nil then
+                    target[i][k] = v
+                end
+            end
         else
-            if target[i] == nil then target[i] = j end
+            if target[i] == nil then
+                target[i] = j
+            end
         end
     end
 
     for i, j in pairs(target) do
-        if source[i] == nil then target[i] = nil end
+        if source[i] == nil then
+            target[i] = nil
+        end
         if fullClean and type(j) == 'table' then
             for k, v in pairs(j) do
                 if type(v) ~= 'table' and source[i] and source[i][k] == nil then
@@ -1447,10 +1467,16 @@ end
 local f = CreateFrame('Frame')
 f:RegisterEvent('ADDON_LOADED')
 f:SetScript('OnEvent', function(self, _, addon)
-    if addon ~= 'FreeUI' then return end
+    if addon ~= 'FreeUI' then
+        return
+    end
 
     initSettings(C.AccountSettings, _G.FREE_ADB)
-    if not next(_G.FREE_PDB) then for i = 1, 5 do _G.FREE_PDB[i] = {} end end
+    if not next(_G.FREE_PDB) then
+        for i = 1, 5 do
+            _G.FREE_PDB[i] = {}
+        end
+    end
 
     if not _G.FREE_ADB['profile_index'][C.MyFullName] then
         _G.FREE_ADB['profile_index'][C.MyFullName] = 1
