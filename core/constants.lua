@@ -1,6 +1,5 @@
-local F, C = unpack(select(2, ...))
-
 local _G = _G
+local unpack = unpack
 local select = select
 local format = format
 local tonumber = tonumber
@@ -31,6 +30,7 @@ local COMBATLOG_OBJECT_TYPE_PET = COMBATLOG_OBJECT_TYPE_PET
 local COMBATLOG_OBJECT_AFFILIATION_RAID = COMBATLOG_OBJECT_AFFILIATION_RAID
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 
+local F, C = unpack(select(2, ...))
 
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
@@ -100,31 +100,29 @@ C.Assets = {
     ['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',
     ['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
 
-    Textures = {
+    Textures = {},
 
-    },
-
-	Sounds = {
-        whisper      = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
-        whisperBN    = C.AssetsPath .. 'sounds\\whisper_bn.ogg',
+    Sounds = {
+        whisper = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
+        whisperBN = C.AssetsPath .. 'sounds\\whisper_bn.ogg',
         notification = C.AssetsPath .. 'sounds\\notification.ogg',
-        feast        = C.AssetsPath .. 'sounds\\feast.ogg',
-        health       = C.AssetsPath .. 'sounds\\health.ogg',
-        mana         = C.AssetsPath .. 'sounds\\mana.ogg',
-        interrupt    = C.AssetsPath .. 'sounds\\interrupt.ogg',
-        dispel       = C.AssetsPath .. 'sounds\\dispel.ogg'
+        feast = C.AssetsPath .. 'sounds\\feast.ogg',
+        health = C.AssetsPath .. 'sounds\\health.ogg',
+        mana = C.AssetsPath .. 'sounds\\mana.ogg',
+        interrupt = C.AssetsPath .. 'sounds\\interrupt.ogg',
+        dispel = C.AssetsPath .. 'sounds\\dispel.ogg',
     },
 
-	Fonts = {
-        Regular   = C.AssetsPath .. 'fonts\\regular.ttf',
+    Fonts = {
+        Regular = C.AssetsPath .. 'fonts\\regular.ttf',
         Condensed = C.AssetsPath .. 'fonts\\condensed.ttf',
-        Bold      = C.AssetsPath .. 'fonts\\bold.ttf',
-        Header    = C.AssetsPath .. 'fonts\\header.ttf',
-        Combat    = C.AssetsPath .. 'fonts\\combat.ttf',
-        Pixel     = C.AssetsPath .. 'fonts\\pixel.ttf',
-        Square    = C.AssetsPath .. 'fonts\\square.ttf',
-        Roadway   = C.AssetsPath .. 'fonts\\roadway.ttf'
-    }
+        Bold = C.AssetsPath .. 'fonts\\bold.ttf',
+        Header = C.AssetsPath .. 'fonts\\header.ttf',
+        Combat = C.AssetsPath .. 'fonts\\combat.ttf',
+        Pixel = C.AssetsPath .. 'fonts\\pixel.ttf',
+        Square = C.AssetsPath .. 'fonts\\square.ttf',
+        Roadway = C.AssetsPath .. 'fonts\\roadway.ttf',
+    },
 }
 
 C.ClassList = {}
@@ -134,8 +132,7 @@ end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
-    local colors = _G.FREE_ADB.custom_class_color and _G.FREE_ADB.class_colors_list or
-                       RAID_CLASS_COLORS
+    local colors = _G.FREE_ADB.custom_class_color and _G.FREE_ADB.class_colors_list or RAID_CLASS_COLORS
     for class, value in pairs(colors) do
         C.ClassColors[class] = {}
         C.ClassColors[class].r = value.r
@@ -217,6 +214,6 @@ function C:IsMyPet(flags)
     return bit_band(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
 end
 C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_REACTION_FRIENDLY,
-                          COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
+    COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
 C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY,
-                         COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
+    COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
