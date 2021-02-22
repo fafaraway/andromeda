@@ -196,9 +196,8 @@ function NAMEPLATE:CheckThreatStatus(unit)
     end
 
     local unitTarget = unit .. 'target'
-    local unitRole =
-        isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and
-            groupRoles[UnitName(unitTarget)] or 'NONE'
+    local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and
+                         groupRoles[UnitName(unitTarget)] or 'NONE'
 
     if C.Role == 'Tank' and unitRole == 'TANK' then
         return true, UnitThreatSituation(unitTarget, unit)
@@ -456,7 +455,7 @@ local classify = {
     elite = {'VignetteKill'},
     rare = {'VignetteKill', true},
     rareelite = {'VignetteKill', true},
-    worldboss = {'VignetteKillElite'}
+    worldboss = {'VignetteKillElite'},
 }
 
 function NAMEPLATE:AddClassifyIndicator(self)
@@ -705,7 +704,7 @@ function NAMEPLATE:AddSpitefulIndicator(self)
     self.tarName = tarName
 end
 
-function NAMEPLATE:UpdateSpitefulIndicator(self)
+function NAMEPLATE:UpdateSpitefulIndicator()
     if not C.DB.Nameplate.SpitefulIndicator then
         return
     end
@@ -731,7 +730,7 @@ local totemsList = {
     [105451] = {204331, 15}, -- Counterstrike
     [104818] = {207399, 30}, -- Ancestral
     [105427] = {204330, 15}, -- Skyfury
-    [119052] = {236320, 15} -- Warrior War Banner
+    [119052] = {236320, 15}, -- Warrior War Banner
 }
 
 local function CreateTotemIcon(self)
@@ -838,7 +837,7 @@ local disabledElements = {
     'Castbar',
     'HealPredictionAndAbsorb',
     'PvPClassificationIndicator',
-    'ThreatIndicator'
+    'ThreatIndicator',
 }
 
 function NAMEPLATE:UpdatePlateByType()
@@ -997,7 +996,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         NAMEPLATE.UpdateTargetChange(self)
         NAMEPLATE.UpdateUnitClassify(self, unit)
         NAMEPLATE.UpdateQuestUnit(self, event, unit)
-        NAMEPLATE:UpdateSpitefulIndicator(self)
+        NAMEPLATE.UpdateSpitefulIndicator(self)
     end
 
     NAMEPLATE.UpdateExplosives(self, event, unit)
