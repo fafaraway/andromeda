@@ -119,7 +119,7 @@ local function reskinProgress(self)
     reskinItemButton(self.TalkBox.Elements.Progress.Buttons)
 end
 
-local function ReskinImmersion()
+local function reskinImmersion()
     if not _G.FREE_ADB.reskin_immersion then
         return
     end
@@ -179,4 +179,4 @@ local function ReskinImmersion()
     hooksecurefunc(_G.ImmersionFrame, 'QUEST_PROGRESS', reskinProgress)
 end
 
-THEME:LoadWithAddOn('Immersion', 'reskin_immersion', ReskinImmersion)
+THEME:LoadWithAddOn('Immersion', 'reskin_immersion', reskinImmersion)
