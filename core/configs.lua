@@ -1403,6 +1403,7 @@ C.AccountSettings = {
     ['reskin_pgf'] = true,
     ['reskin_wa'] = true,
     ['reskin_abp'] = true,
+    ['reskin_immersion'] = true,
     ['chat_filter_black_list'] = '',
     ['chat_filter_white_list'] = '',
     ['CustomJunkList'] = {},

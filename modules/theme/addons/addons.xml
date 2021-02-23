@@ -1,8 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="abp.lua"/>
-	<Script file="bw.lua"/>
-	<Script file="dbm.lua"/>
-	<Script file="pgf.lua"/>
-	<Script file="rehack.lua"/>
-	<Script file="wa.lua"/>
+    <Script file="abp.lua"/>
+    <Script file="bw.lua"/>
+    <Script file="dbm.lua"/>
+    <Script file="immersion.lua"/>
+    <Script file="pgf.lua"/>
+    <Script file="rehack.lua"/>
+    <Script file="wa.lua"/>
 </Ui>
