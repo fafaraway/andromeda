@@ -1200,6 +1200,7 @@ C.CharacterSettings = {
         SpitefulIndicator = true,
         ExplosiveIndicator = true,
         ExplosiveScale = 1.5,
+        AKProgress = false,
 
         FriendlyClassColor = false,
         HostileClassColor = true,

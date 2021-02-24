@@ -5,6 +5,7 @@ local pairs = pairs
 local unpack = unpack
 local select = select
 local rad = rad
+local format = format
 local strmatch = strmatch
 local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
@@ -40,9 +41,13 @@ local C_NamePlate_SetNamePlateFriendlySize = C_NamePlate.SetNamePlateFriendlySiz
 local C_NamePlate_SetNamePlateEnemySize = C_NamePlate.SetNamePlateEnemySize
 local C_NamePlate_GetNamePlateForUnit = C_NamePlate.GetNamePlateForUnit
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
+local C_Scenario_GetInfo = C_Scenario.GetInfo
+local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
+local C_Scenario_GetCriteriaInfo = C_Scenario.GetCriteriaInfo
 local GetSpellInfo = GetSpellInfo
 local GetSpellTexture = GetSpellTexture
 local UnitNameplateShowsWidgetsOnly = UnitNameplateShowsWidgetsOnly
+local LE_SCENARIO_TYPE_CHALLENGE_MODE = LE_SCENARIO_TYPE_CHALLENGE_MODE
 local INTERRUPTED = INTERRUPTED
 
 local F, C = unpack(select(2, ...))
@@ -335,7 +340,7 @@ function NAMEPLATE:UpdateTargetChange()
     local element = self.TargetIndicator
     local unit = self.unit
 
-    if UnitIsUnit(self.unit, 'target') and not UnitIsUnit(self.unit, 'player') then
+    if UnitIsUnit(unit, 'target') and not UnitIsUnit(unit, 'player') then
         element:Show()
     else
         element:Hide()
@@ -712,6 +717,63 @@ function NAMEPLATE:UpdateSpitefulIndicator()
     self.tarName:SetShown(self.npcID == 174773)
 end
 
+-- M+ progress
+-- AngryKeystones REQUIRED
+function NAMEPLATE:AddDungeonProgress(self)
+    if not C.DB.Nameplate.AKProgress then
+        return
+    end
+
+    self.progressText = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true)
+    self.progressText:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+end
+
+local cache = {}
+function NAMEPLATE:UpdateDungeonProgress(unit)
+    if not self.progressText or not _G.AngryKeystones_Data then
+        return
+    end
+
+    if unit ~= self.unit then
+        return
+    end
+
+    self.progressText:SetText('')
+
+    local name, _, _, _, _, _, _, _, _, scenarioType = C_Scenario_GetInfo()
+    if scenarioType == LE_SCENARIO_TYPE_CHALLENGE_MODE then
+        local npcID = self.npcID
+        local info = _G.AngryKeystones_Data.progress[npcID]
+        if info then
+            local numCriteria = select(3, C_Scenario_GetStepInfo())
+            local total = cache[name]
+            if not total then
+                for criteriaIndex = 1, numCriteria do
+                    local _, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress =
+                        C_Scenario_GetCriteriaInfo(criteriaIndex)
+                    if isWeightedProgress then
+                        cache[name] = totalQuantity
+                        total = cache[name]
+                        break
+                    end
+                end
+            end
+
+            local value, valueCount
+            for amount, count in pairs(info) do
+                if not valueCount or count > valueCount or (count == valueCount and amount < value) then
+                    value = amount
+                    valueCount = count
+                end
+            end
+
+            if value and total then
+                self.progressText:SetText(format('+%.2f', value / total * 100))
+            end
+        end
+    end
+end
+
 -- Totem icon
 local totemsList = {
     -- npcID spellID duration
@@ -792,6 +854,7 @@ function NAMEPLATE:CreateNameplateStyle()
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddAuras(self)
     NAMEPLATE:AddSpitefulIndicator(self)
+    NAMEPLATE:AddDungeonProgress(self)
 
     platesList[self] = self:GetName()
 end
@@ -866,11 +929,7 @@ function NAMEPLATE:UpdatePlateByType()
         classify:Hide()
 
         raidTarget:ClearAllPoints()
-        -- if title then
         raidTarget:SetPoint('TOP', title or nameOnlyName, 'BOTTOM')
-        -- else
-        --     raidTarget:SetPoint('TOP', nameOnlyName, 'BOTTOM')
-        -- end
         raidTarget:SetSize(24, 24)
         raidTarget:SetAlpha(1)
         raidTarget:SetParent(self)
@@ -997,6 +1056,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         NAMEPLATE.UpdateUnitClassify(self, unit)
         NAMEPLATE.UpdateQuestUnit(self, event, unit)
         NAMEPLATE.UpdateSpitefulIndicator(self)
+        NAMEPLATE.UpdateDungeonProgress(self, unit)
     end
 
     NAMEPLATE.UpdateExplosives(self, event, unit)

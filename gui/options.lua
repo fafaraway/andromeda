@@ -65,7 +65,7 @@ local function setupNamePlate()
 end
 
 local function setupAuraFilter()
-    GUI:NamePlateAuraFilter(GUI.Page[14])
+    GUI:SetupNPAuraFilter(GUI.Page[14])
 end
 
 local function setupMajorSpellsGlow()
@@ -84,18 +84,7 @@ local function UpdateCustomUnitList()
     NAMEPLATE:CreateUnitTable()
 end
 
-local function updateNameplates()
-    NAMEPLATE:RefreshAllPlates()
-end
 
-local function updateCVars()
-    NAMEPLATE:UpdatePlateVerticalSpacing()
-    NAMEPLATE:UpdatePlateHorizontalSpacing()
-    NAMEPLATE:UpdatePlateAlpha()
-    NAMEPLATE:UpdatePlateOccludedAlpha()
-    NAMEPLATE:UpdatePlateScale()
-    NAMEPLATE:UpdatePlateTargetScale()
-end
 
 
 
@@ -500,11 +489,9 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'ExplosiveIndicator', L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR, true, setupExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
         {1, 'Nameplate', 'SpitefulIndicator', L.GUI.NAMEPLATE.SPITEFUL_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
         {1, 'Nameplate', 'MajorSpellsGlow', L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW, true, setupMajorSpellsGlow, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
-        {},
-        {1, 'Nameplate', 'ShowAura', L.GUI.NAMEPLATE.SHOW_AURA, nil, setupAuraFilter, nil, L.GUI.NAMEPLATE.SHOW_AURA_TIP},
+        {1, 'Nameplate', 'AKProgress', L.GUI.NAMEPLATE.AK_PROGRESS, nil, nil, nil, L.GUI.NAMEPLATE.AK_PROGRESS_TIP},
         {1, 'Nameplate', 'TotemIcon', L.GUI.NAMEPLATE.TOTEM_ICON, true, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
-        {3, 'Nameplate', 'AuraSize', L.GUI.NAMEPLATE.AURA_SIZE, nil, {20, 40, 1}, updateNameplates},
-        {3, 'Nameplate', 'AuraNumTotal', L.GUI.NAMEPLATE.AURA_NUMBER, true, {3, 12, 1}, updateNameplates},
+        {1, 'Nameplate', 'ShowAura', L.GUI.NAMEPLATE.SHOW_AURA, nil, setupAuraFilter, nil, L.GUI.NAMEPLATE.SHOW_AURA_TIP},
         {},
         {1, 'Nameplate', 'FriendlyClassColor', L.GUI.NAMEPLATE.FRIENDLY_CLASS_COLOR},
         {1, 'Nameplate', 'HostileClassColor', L.GUI.NAMEPLATE.HOSTILE_CLASS_COLOR, true},
@@ -519,16 +506,7 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'CustomUnitColor', L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT, nil, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT_TIP},
         {5, 'Nameplate', 'CustomColor', L.GUI.NAMEPLATE.CUSTOM_COLOR},
         {2, 'Nameplate', 'CustomUnitList', L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST, true, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST_TIP},
-        {},
-        {3, 'Nameplate', 'Width', L.GUI.NAMEPLATE.PLATE_WIDTH, nil, {50, 200, 1}, updateNameplates},
-        {3, 'Nameplate', 'Height', L.GUI.NAMEPLATE.PLATE_HEIGHT, true, {5, 30, 1}, updateNameplates},
 
-        {3, 'Nameplate', 'MinScale', L.GUI.NAMEPLATE.MIN_SCALE, nil, {.5, 1, .1}, updateCVars},
-        {3, 'Nameplate', 'TargetScale', L.GUI.NAMEPLATE.TARGET_SCALE, true, {.5, 2, .1}, updateCVars},
-        {3, 'Nameplate', 'MinAlpha', L.GUI.NAMEPLATE.MIN_ALPHA, nil, {.2, 1, .1}, updateCVars},
-        {3, 'Nameplate', 'OccludedAlpha', L.GUI.NAMEPLATE.OCCLUDED_ALPHA, true, {.2, 1, .1}, updateCVars},
-        {3, 'Nameplate', 'VerticalSpacing', L.GUI.NAMEPLATE.VERTICAL_SPACING, nil, {.5, 2, .1}, updateCVars},
-        {3, 'Nameplate', 'HorizontalSpacing', L.GUI.NAMEPLATE.HORIZONTAL_SPACING, true, {.5, 2, .1}, updateCVars}
     },
     [15] = {
         -- misc

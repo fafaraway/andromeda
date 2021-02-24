@@ -209,13 +209,13 @@ local function CreateOption(i)
 				F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
 			end
 		elseif optType == 2 then -- editbox
-			local eb = F.CreateEditBox(parent, 140, 24)
+			local eb = F.CreateEditBox(parent, 150, 24)
 			eb:SetMaxLetters(999)
 
 			eb.name = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
 
 			if horizon then
-				eb:SetPoint('TOPLEFT', 250, -offset + 46)
+				eb:SetPoint('TOPLEFT', 260, -offset + 46)
 			else
 				eb:SetPoint('TOPLEFT', 20, -offset - 24)
 				offset = offset + 70
@@ -339,7 +339,7 @@ local function CreateOption(i)
 			swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 		else -- blank, no optType
 			if not key then
-				local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 440, C.Mult)
+				local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 460, C.Mult)
 				line:SetPoint('TOPLEFT', 20, -offset - 12)
 			end
 			offset = offset + 35

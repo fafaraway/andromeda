@@ -315,6 +315,8 @@ L.GUI = {
     ['EXISTING_ID'] = 'The SpellID is existed.',
     ['RESET_LIST'] = 'Are you sure to restore default list?',
 
+
+
     ['MOVER'] = {
         ['NAME'] = 'UI Mover',
         ['GRID'] = 'Grid',
@@ -830,8 +832,10 @@ L.GUI = {
         MAJOR_SPELLS_GLOW_TIP = '|nIf unit is casting a major spell, highlight its castbar icon.',
         SHOW_AURA = 'Show auras',
         SHOW_AURA_TIP = '',
-        TOTEM_ICON = 'Show totems icon',
-        TOTEM_ICON_TIP = '',
+        TOTEM_ICON = 'Totems icon',
+        TOTEM_ICON_TIP = '|nShow totems icon on their nameplates.',
+        AK_PROGRESS = 'Mythic+ Progress',
+        AK_PROGRESS_TIP = '|nShow M+ progress information.|nAngryKeystones REQUIRED.',
 
         BlackWhite = "White/Black list",
         PlayerOnly = "List and player",
@@ -839,6 +843,18 @@ L.GUI = {
 
         AURA_SIZE = 'aura size',
         AURA_NUMBER = 'max auras to show',
+
+        BASIC_SETTING_HEADER = 'Nameplate Setting',
+        SIZE = 'Size',
+        CVAR = 'CVars',
+        WIDTH = 'Width',
+        HEIGHT = 'Height',
+        MIN_SCALE = 'None target scale',
+        TARGET_SCALE = 'Target scale',
+        MIN_ALPHA = 'None target alpha',
+        OCCLUDED_ALPHA = 'Occluded alpha',
+        VERTICAL_SPACING = 'Vertical spacing',
+        HORIZONTAL_SPACING = 'Horizontal spacing',
 
         ['FRIENDLY_CLASS_COLOR'] = 'Dyeing friendly unit by class',
         ['HOSTILE_CLASS_COLOR'] = 'Dyeing hostile unit by class',
@@ -867,14 +883,9 @@ L.GUI = {
         ['AURA_BLACK_LIST_TIP'] = 'Input SpellID.',
         ['AURA_INCORRECT_ID'] = 'Incorrect SpellID.',
         ['AURA_EXISTING_ID'] = 'The SpellID is existed.',
-        ['MIN_SCALE'] = 'None target scale',
-        ['TARGET_SCALE'] = 'Target scale',
-        ['MIN_ALPHA'] = 'None target alpha',
-        ['OCCLUDED_ALPHA'] = 'Occluded alpha',
-        ['VERTICAL_SPACING'] = 'Vertical spacing',
-        ['HORIZONTAL_SPACING'] = 'Horizontal spacing',
+
         ['COLORED_TARGET'] = 'Dyeing target unit',
-        ['COLORED_TARGET_TIP'] = 'If enabled, dyeing your target\' nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
+        ['COLORED_TARGET_TIP'] = '|nIf enabled, dyeing your target\' nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
         ['TARGET_COLOR'] = 'Target color',
 
 

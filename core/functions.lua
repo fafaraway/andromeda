@@ -45,7 +45,6 @@ local LE_ITEM_QUALITY_EPIC = LE_ITEM_QUALITY_EPIC
 local LE_ITEM_QUALITY_LEGENDARY = LE_ITEM_QUALITY_LEGENDARY
 local LE_ITEM_QUALITY_ARTIFACT = LE_ITEM_QUALITY_ARTIFACT
 local LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_HEIRLOOM
-local CHALLENGE_MODE_EXTRA_AFFIX_INFO = CHALLENGE_MODE_EXTRA_AFFIX_INFO
 local ColorPicker_GetPreviousValues = ColorPicker_GetPreviousValues
 local EnumerateFrames = EnumerateFrames
 
@@ -1640,7 +1639,7 @@ do
             end
 
             if frame.info then
-                frame.Portrait:SetTexture(CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
+                frame.Portrait:SetTexture(_G.CHALLENGE_MODE_EXTRA_AFFIX_INFO[frame.info.key].texture)
             elseif frame.affixID then
                 local _, _, filedataid = C_ChallengeMode_GetAffixInfo(frame.affixID)
                 frame.Portrait:SetTexture(filedataid)
