@@ -113,6 +113,7 @@ function CHAT:RestyleChatFrame()
 
     local name = self:GetName()
     local maxLines = 1024
+    local font = C.isDeveloper and 'Fonts\\FreeUI\\chat.ttf' or C.Assets.Fonts.Bold
 
     if C.DB.chat.fade_out then
         self:SetFading(true)
@@ -122,11 +123,11 @@ function CHAT:RestyleChatFrame()
 
     local fontSize = select(2, self:GetFont())
     if _G.FREE_ADB.font_outline then
-        self:SetFont(C.Assets.Fonts.Bold, fontSize, 'OUTLINE')
+        self:SetFont(font, fontSize, 'OUTLINE')
         self:SetShadowColor(0, 0, 0, 1)
         self:SetShadowOffset(1, -1)
     else
-        self:SetFont(C.Assets.Fonts.Bold, fontSize, nil)
+        self:SetFont(font, fontSize, nil)
         self:SetShadowColor(0, 0, 0, 1)
         self:SetShadowOffset(2, -2)
     end
@@ -209,15 +210,13 @@ function CHAT:UpdateEditBoxBorderColor()
             if id == 0 then
                 editBox.bd:SetBackdropBorderColor(0, 0, 0)
             else
-                editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType .. id].r,
-                                                  ChatTypeInfo[mType .. id].g,
-                                                  ChatTypeInfo[mType .. id].b)
+                editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType .. id].r, ChatTypeInfo[mType .. id].g,
+                    ChatTypeInfo[mType .. id].b)
             end
         elseif mType == 'SAY' then
             editBox.bd:SetBackdropBorderColor(0, 0, 0)
         else
-            editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r, ChatTypeInfo[mType].g,
-                                              ChatTypeInfo[mType].b)
+            editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r, ChatTypeInfo[mType].g, ChatTypeInfo[mType].b)
         end
     end)
 end
@@ -227,28 +226,33 @@ local cycles = {
         chatType = 'SAY',
         use = function()
             return 1
-        end
-    }, {
+        end,
+    },
+    {
         chatType = 'PARTY',
         use = function()
             return IsInGroup()
-        end
-    }, {
+        end,
+    },
+    {
         chatType = 'RAID',
         use = function()
             return IsInRaid()
-        end
-    }, {
+        end,
+    },
+    {
         chatType = 'INSTANCE_CHAT',
         use = function()
             return IsPartyLFG()
-        end
-    }, {
+        end,
+    },
+    {
         chatType = 'GUILD',
         use = function()
             return IsInGuild()
-        end
-    }, {
+        end,
+    },
+    {
         chatType = 'CHANNEL',
         use = function(_, editbox)
             if GetCVar('portal') ~= 'CN' then
@@ -268,13 +272,14 @@ local cycles = {
             else
                 return false
             end
-        end
-    }, {
+        end,
+    },
+    {
         chatType = 'SAY',
         use = function()
             return 1
-        end
-    }
+        end,
+    },
 }
 
 function CHAT:UpdateTabChannelSwitch()
@@ -340,8 +345,7 @@ end
 local function UpdateChatBubble()
     local name, instType = GetInstanceInfo()
     if name and
-        (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or
-            instType == 'arena') then
+        (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
         SetCVar('chatBubbles', 1)
     else
         SetCVar('chatBubbles', 0)
@@ -437,8 +441,8 @@ end
 function CHAT.OnChatWhisper(event, ...)
     local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
     for word in pairs(whisperList) do
-        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and
-            strlower(msg) == strlower(word) then
+        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) ==
+            strlower(word) then
             if event == 'CHAT_MSG_BN_WHISPER' then
                 local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
                 if accountInfo then
@@ -448,8 +452,7 @@ function CHAT.OnChatWhisper(event, ...)
                         local charName = gameAccountInfo.characterName
                         local realmName = gameAccountInfo.realmName
                         if CanCooperateWithGameAccount(accountInfo) and
-                            (not C.DB.chat.guild_only or
-                                CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
+                            (not C.DB.chat.guild_only or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
                             BNInviteFriend(gameID)
                         end
                     end
@@ -527,14 +530,14 @@ local msgEvents = {
     CHAT_MSG_INSTANCE_CHAT_LEADER = 1,
     CHAT_MSG_RAID = 1,
     CHAT_MSG_RAID_LEADER = 1,
-    CHAT_MSG_RAID_WARNING = 1
+    CHAT_MSG_RAID_WARNING = 1,
 }
 
 local texPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
 local roleIcons = {
     TANK = '\124T' .. texPath .. 'roles_tank.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
     HEALER = '\124T' .. texPath .. 'roles_healer.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
-    DAMAGER = '\124T' .. texPath .. 'roles_dps.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t'
+    DAMAGER = '\124T' .. texPath .. 'roles_dps.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
 }
 
 local GetColoredName_orig = _G.GetColoredName
