@@ -907,9 +907,6 @@ function NAMEPLATE:UpdatePlateByType()
     local nameOnlyName = self.nameOnlyName
     local normalName = self.Name
     local title = self.npcTitle
-    local raidTarget = self.RaidTargetIndicator
-    local raidTargetSize = C.DB.Nameplate.RaidTargetSize
-    local raidTargetAlpha = C.DB.Nameplate.RaidTargetAlpha
     local classify = self.ClassifyIndicator
     local isNameOnly = self.isNameOnly
     local questIcon = self.questIcon
@@ -927,12 +924,6 @@ function NAMEPLATE:UpdatePlateByType()
         normalName:Hide()
         title:Show()
         classify:Hide()
-
-        raidTarget:ClearAllPoints()
-        raidTarget:SetPoint('TOP', title or nameOnlyName, 'BOTTOM')
-        raidTarget:SetSize(24, 24)
-        raidTarget:SetAlpha(1)
-        raidTarget:SetParent(self)
 
         if questIcon then
             questIcon:ClearAllPoints()
@@ -955,12 +946,6 @@ function NAMEPLATE:UpdatePlateByType()
         title:Hide()
         classify:Show()
 
-        raidTarget:ClearAllPoints()
-        raidTarget:SetPoint('CENTER')
-        raidTarget:SetSize(raidTargetSize, raidTargetSize)
-        raidTarget:SetAlpha(raidTargetAlpha)
-        raidTarget:SetParent(self.Health)
-
         if questIcon then
             questIcon:ClearAllPoints()
             questIcon:SetPoint('TOP', self, 'BOTTOM', 0, -3)
@@ -973,6 +958,7 @@ function NAMEPLATE:UpdatePlateByType()
     end
 
     NAMEPLATE.UpdateTargetIndicator(self)
+    UNITFRAME.UpdateRaidTargetIndicator(self)
 end
 
 function NAMEPLATE:RefreshPlateType(unit)

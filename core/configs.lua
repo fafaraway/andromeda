@@ -1190,7 +1190,6 @@ C.CharacterSettings = {
         TargetIndicatorColor = {r = .73, g = .92, b = .99},
         ThreatIndicator = true,
         ClassifyIndicator = true,
-        RaidTargetIndicator = true,
         RaidTargetSize = 20,
         RaidTargetAlpha = .6,
         QuestIndicator = true,
@@ -1201,6 +1200,9 @@ C.CharacterSettings = {
         ExplosiveIndicator = true,
         ExplosiveScale = 1.5,
         AKProgress = false,
+        RaidTargetIndicator = true,
+        RaidTargetIndicatorSize = 24,
+        RaidTargetIndicatorAlpha = 1,
 
         FriendlyClassColor = false,
         HostileClassColor = true,

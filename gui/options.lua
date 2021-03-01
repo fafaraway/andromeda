@@ -72,12 +72,16 @@ local function setupMajorSpellsGlow()
     GUI:SetupMajorSpellsGlow(GUI.Page[14])
 end
 
-local function setupExecuteRatio()
-    GUI:SetupExecuteRatio(GUI.Page[14])
+local function setupNPExecuteRatio()
+    GUI:SetupNPExecuteRatio(GUI.Page[14])
 end
 
-local function setupExplosiveScale()
-    GUI:SetupExplosiveScale(GUI.Page[14])
+local function setupNPExplosiveScale()
+    GUI:SetupNPExplosiveScale(GUI.Page[14])
+end
+
+local function setupNPRaidTargetIndicator()
+    GUI:SetupNPRaidTargetIndicator(GUI.Page[14])
 end
 
 local function UpdateCustomUnitList()
@@ -121,6 +125,10 @@ end
 
 local function toggleGCDIndicator()
     UNITFRAME:ToggleGCDIndicator()
+end
+
+local function updateRaidTargetIndicator()
+    UNITFRAME:UpdateRaidTargetIndicator()
 end
 
 GUI.OptionsList = {
@@ -484,14 +492,15 @@ GUI.OptionsList = {
         {1, 'Nameplate', 'TargetIndicator', L.GUI.NAMEPLATE.TARGET_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.TARGET_INDICATOR_TIP},
         {1, 'Nameplate', 'QuestIndicator', L.GUI.NAMEPLATE.QUEST_INDICATOR, true, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
         {1, 'Nameplate', 'ClassifyIndicator', L.GUI.NAMEPLATE.CLASSIFY_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.CLASSIFY_INDICATOR_TIP},
-        {1, 'Nameplate', 'ExecuteIndicator', L.GUI.NAMEPLATE.EXECUTE_INDICATOR, true, setupExecuteRatio, nil, L.GUI.NAMEPLATE.EXECUTE_INDICATOR_TIP},
+        {1, 'Nameplate', 'ExecuteIndicator', L.GUI.NAMEPLATE.EXECUTE_INDICATOR, true, setupNPExecuteRatio, nil, L.GUI.NAMEPLATE.EXECUTE_INDICATOR_TIP},
+        {1, 'Nameplate', 'RaidTargetIndicator', L.GUI.NAMEPLATE.RAID_TARGET_INDICATOR, nil, setupNPRaidTargetIndicator},
         {1, 'Nameplate', 'InterruptIndicator', L.GUI.NAMEPLATE.INTERRUPT_INDICATOR, nil},
-        {1, 'Nameplate', 'ExplosiveIndicator', L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR, true, setupExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
+        {1, 'Nameplate', 'ExplosiveIndicator', L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR, true, setupNPExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
         {1, 'Nameplate', 'SpitefulIndicator', L.GUI.NAMEPLATE.SPITEFUL_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
         {1, 'Nameplate', 'MajorSpellsGlow', L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW, true, setupMajorSpellsGlow, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
         {1, 'Nameplate', 'AKProgress', L.GUI.NAMEPLATE.AK_PROGRESS, nil, nil, nil, L.GUI.NAMEPLATE.AK_PROGRESS_TIP},
-        {1, 'Nameplate', 'TotemIcon', L.GUI.NAMEPLATE.TOTEM_ICON, true, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
         {1, 'Nameplate', 'ShowAura', L.GUI.NAMEPLATE.SHOW_AURA, nil, setupAuraFilter, nil, L.GUI.NAMEPLATE.SHOW_AURA_TIP},
+        {1, 'Nameplate', 'TotemIcon', L.GUI.NAMEPLATE.TOTEM_ICON, true, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
         {},
         {1, 'Nameplate', 'FriendlyClassColor', L.GUI.NAMEPLATE.FRIENDLY_CLASS_COLOR},
         {1, 'Nameplate', 'HostileClassColor', L.GUI.NAMEPLATE.HOSTILE_CLASS_COLOR, true},
