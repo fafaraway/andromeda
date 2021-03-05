@@ -29,9 +29,24 @@ local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER
 local COMBATLOG_OBJECT_TYPE_PET = COMBATLOG_OBJECT_TYPE_PET
 local COMBATLOG_OBJECT_AFFILIATION_RAID = COMBATLOG_OBJECT_AFFILIATION_RAID
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
+local WOW_PROJECT_ID = WOW_PROJECT_ID
+local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
 local F, C = unpack(select(2, ...))
 
+local addonVersion = '@project-version@'
+if (addonVersion:find('project%-version')) then
+    addonVersion = 'Development'
+end
+C.AddonVersion = addonVersion
+C.isDeveloper = C.AddonVersion == 'Development'
+
+C.isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+C.isPatch = C.isRetail and select(4, GetBuildInfo()) >= 90001
+C.GameLocale = GetLocale()
+C.isChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
+C.isCNPortal = GetCVar('portal') == 'CN'
+C.MaxLevel = GetMaxLevelForPlayerExpansion()
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
 C.MyLevel = UnitLevel('player')
@@ -45,23 +60,13 @@ local _, serverID = split('-', playerGUID)
 C.ServerID = tonumber(serverID)
 C.MyGuid = playerGUID
 
-local addonVersion = '@project-version@'
-if (addonVersion:find('project%-version')) then
-    addonVersion = 'Development'
-end
-C.AddonVersion = addonVersion
-C.isDeveloper = C.AddonVersion == 'Development'
-
-C.GameLocale = GetLocale()
-C.isChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
-C.isCNPortal = GetCVar('portal') == 'CN'
 C.ScreenWidth, C.ScreenHeight = GetPhysicalScreenSize()
 C.isLowRes = C.ScreenHeight < 1500
-C.isNewPatch = select(4, GetBuildInfo()) > 90001
+
 C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
-C.MaxLevel = GetMaxLevelForPlayerExpansion()
+
 C.BackdropColor = {.1, .1, .1}
 C.BorderColor = {.04, .04, .04}
 C.GradientColor = {.04, .04, .04, .4, .08, .08, .08, .4}
