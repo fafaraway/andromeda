@@ -1,3 +1,7 @@
+local _G = _G
+local unpack = unpack
+local select = select
+
 local _, _, L = unpack(select(2, ...))
 
 --[[ Binding ]]
@@ -15,7 +19,7 @@ L.MOVER = {
     EXTRA_BAR = 'Extra button',
     ZONE_ABILITY = 'Zone ability button',
     CUSTOM_BAR = 'Additional actionbar',
-    COOLDOWN_FLASH = 'Cooldown flash'
+    COOLDOWN_FLASH = 'Cooldown flash',
 }
 
 L.ACTIONBAR = {
@@ -28,7 +32,7 @@ L.ACTIONBAR = {
     KEY_BOUND_TO = ' bound to',
     SAVE_KEYBINDS = 'Keybinds saved.',
     DISCARD_KEYBINDS = 'Keybinds discarded.',
-    CLEAR_BINDS = '|cff20ff20All keybinds cleared for|r %s.'
+    CLEAR_BINDS = '|cff20ff20All keybinds cleared for|r %s.',
 }
 
 L.ANNOUNCEMENT = {
@@ -44,18 +48,18 @@ L.ANNOUNCEMENT = {
     RESET_SUCCESS = '%s has been reset.',
     RESET_FAILED = 'Cannot reset %s, there are players still inside the instance.',
     RESET_FAILED_ZONING = 'Cannot reset %s, there are players in your party attempting to zone into an instance.',
-    RESET_FAILED_OFFLINE = 'Cannot reset %s, there are players offline in your party.'
+    RESET_FAILED_OFFLINE = 'Cannot reset %s, there are players offline in your party.',
 }
 
 L.QUEST = {
     AUTOMATION = 'Quest automation',
-    AUTOMATION_TIP = 'Automatically accept and deliver quests.'
+    AUTOMATION_TIP = 'Automatically accept and deliver quests.',
 }
 
 L.UNITFRAME = {
     BINDER_OPEN = 'Open spell binding',
     BINDER_TITLE = 'Spell Binding',
-    BINDER_TIP = 'Ctrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.'
+    BINDER_TIP = 'Ctrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.',
 }
 
 --[[ Misc ]]
@@ -90,7 +94,6 @@ do
     L['MISC_ADDON_REQUIRED'] = 'You do not have DBM or BigWigs installed'
     L['MISC_DISBAND_CHECK'] = 'Are you sure to |cffff0000disband|r your group?'
     L['MISC_DISBAND_PROCESS'] = 'Raid Disbanding'
-
 
 end
 
@@ -220,20 +223,16 @@ do
     L['INVENTORY_FREE_SLOTS'] = 'Free slots'
     L['INVENTORY_SORT_DISABLED'] = '背包整理已被禁用'
     L['INVENTORY_AZERITEARMOR'] = 'Azerite armor'
-    L['INVENTORY_QUICK_DELETE_ENABLED'] =
-        '|nYou can destroy container item by holding CTRL+ALT. The item can be heirlooms or its quality lower then rare (blue).'
+    L['INVENTORY_QUICK_DELETE_ENABLED'] = '|nYou can destroy container item by holding CTRL+ALT. The item can be heirlooms or its quality lower then rare (blue).'
     L['INVENTORY_QUICK_DELETE'] = 'Quick delete'
-    L['INVENTORY_PICK_FAVOURITE_ENABLED'] =
-        '|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to trash.'
+    L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to trash.'
     L['INVENTORY_PICK_FAVOURITE'] = 'Favourite'
     L['INVENTORY_AUTO_REPAIR'] = 'Auto repair'
-    L['INVENTORY_AUTO_REPAIR_TIP'] =
-        '|nIf the button is highlight, you will sell junk items automtically when you visit an able vendor.'
+    L['INVENTORY_AUTO_REPAIR_TIP'] = '|nIf the button is highlight, you will sell junk items automtically when you visit an able vendor.'
     L['INVENTORY_REPAIR_ERROR'] = 'Oh my goodness, you are running out of gold!'
     L['INVENTORY_REPAIR_COST'] = 'Auto repair cost (%s)'
     L['INVENTORY_SELL_JUNK'] = 'Auto sell junk'
-    L['INVENTORY_SELL_JUNK_TIP'] =
-        '|nIf the button is highlight, you will repair your equipment automatically when you visit an able vendor.'
+    L['INVENTORY_SELL_JUNK_TIP'] = '|nIf the button is highlight, you will repair your equipment automatically when you visit an able vendor.'
     L['INVENTORY_SELL_JUNK_EARN'] = 'Auto sell junk earned (%s)'
     L['INVENTORY_SEARCH'] = 'Search'
     L['INVENTORY_SEARCH_ENABLED'] = 'Type item name to search'
@@ -242,8 +241,7 @@ do
         '|nClick to tag item as junk.|nIf \'Auto sell junk\' enabled, these items would be sold as well.|nThe list is saved account-wide, and won\'t be in the export data.|nYou can hold CTRL+ALT and click to wipe the custom junk list.'
     L['INVENTORY_QUICK_SPLIT'] = 'Quick split'
     L['INVENTORY_SPLIT_COUNT'] = 'Split count'
-    L['INVENTORY_SPLIT_MODE_ENABLED'] =
-        '|nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.'
+    L['INVENTORY_SPLIT_MODE_ENABLED'] = '|nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.'
 
     L['INVENTORY_AUTO_DEPOSIT'] =
         '|nLeft click to deposit reagents, right click to switch auto deposit.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'
@@ -320,8 +318,6 @@ L.GUI = {
     SIZE = 'size',
     ALPHA = 'alpha',
 
-
-
     ['MOVER'] = {
         ['NAME'] = 'UI Mover',
         ['GRID'] = 'Grid',
@@ -333,7 +329,7 @@ L.GUI = {
         ['QUEST_BUTTON'] = 'quest button',
         ['OBJECTIVE_TRACKER'] = 'objective tracker',
         ['MAW_THREAT_BAR'] = 'Maw threat bar',
-        ['PLAYER_PLATE'] = 'Player plate'
+        ['PLAYER_PLATE'] = 'Player plate',
     },
 
     ['PROFILE'] = {
@@ -375,7 +371,7 @@ L.GUI = {
         ['DELETE_UNIT_PROFILE_WARNING'] = 'Are you sure to delete %s%s|r profile info?',
         ['INCORRECT_UNIT_NAME'] = 'Invalid character name.',
         ['DELETE_UNIT_PROFILE'] = 'Delete unit profile',
-        ['DELETE_UNIT_PROFILE_TIP'] = '|nEnter the character name that you intend to delete its profile, the input format is \'UnitName-RealmName\'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm.'
+        ['DELETE_UNIT_PROFILE_TIP'] = '|nEnter the character name that you intend to delete its profile, the input format is \'UnitName-RealmName\'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm.',
     },
 
     ['MISC'] = {
@@ -406,7 +402,7 @@ L.GUI = {
         ['NAKED_BUTTON'] = 'Naked button',
         ['NAKED_BUTTON_TIP'] = 'Show naked button on character frame, double click it to unequip all gears.',
         ['MISSING_STATS'] = 'Missing stats',
-        ['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.'
+        ['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.',
     },
 
     ['APPEARANCE'] = {
@@ -424,7 +420,7 @@ L.GUI = {
         ['BACKDROP_COLOR'] = 'Backdrop color',
         ['BORDER_COLOR'] = 'Border color',
         ['RESKIN_WA'] = 'Restyle WeakAuras icons',
-        ['RESKIN_BW'] = 'Restyle BigWigs bars'
+        ['RESKIN_BW'] = 'Restyle BigWigs bars',
     },
 
     ['NOTIFICATION'] = {
@@ -434,7 +430,7 @@ L.GUI = {
         ['NEW_MAIL'] = 'New mail',
         ['RARE_FOUND'] = 'Rare found',
         ['RARE_FOUND_TIP'] = '周围出现稀有事件或怪物，注意小地图来确定位置。',
-        ['VERSION_CHECK'] = 'Addon outdate'
+        ['VERSION_CHECK'] = 'Addon outdate',
     },
 
     ['INFOBAR'] = {
@@ -448,7 +444,7 @@ L.GUI = {
         ['GUILD'] = 'Guild',
         ['FRIENDS'] = 'Friends',
         ['REPORT'] = 'Daily/weekly',
-        ['CURRENCY'] = 'Currencies'
+        ['CURRENCY'] = 'Currencies',
     },
 
     ['CHAT'] = {
@@ -493,7 +489,7 @@ L.GUI = {
         ['GROUP_LOOT_HEIRLOOM'] = 'Heirloom',
         ['GROUP_LOOT_ALL'] = 'All',
         ['FILTER_SETTING_HEADER'] = 'Chat filter Setting',
-        ['CHANNEL_BAR'] = 'Channel bar'
+        ['CHANNEL_BAR'] = 'Channel bar',
     },
 
     ['AURA'] = {
@@ -509,7 +505,7 @@ L.GUI = {
         ['BUFFS_PER_ROW'] = 'buffs per row',
         ['DEBUFFS_PER_ROW'] = 'debuffs per row',
         ['REMINDER'] = 'Buff reminder',
-        ['REMINDER_TIP'] = 'Remind you when lack of your own class spell.|nSupport: Stamina, Poisons, Arcane Intellect, Battle Shout.'
+        ['REMINDER_TIP'] = 'Remind you when lack of your own class spell.|nSupport: Stamina, Poisons, Arcane Intellect, Battle Shout.',
     },
 
     ['ACTIONBAR'] = {
@@ -561,7 +557,7 @@ L.GUI = {
         ['CD_FLASH'] = 'Flash cooldowns',
         ['CD_FLASH_TIP'] = '|nTrack your cooldown using a flash icon in the center of the screen.',
         ['CD_NOTIFY'] = 'Cooldowns notify',
-        ['CD_NOTIFY_TIP'] = '|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|n|nOnly available for FreeUI default actionbar.'
+        ['CD_NOTIFY_TIP'] = '|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|n|nOnly available for FreeUI default actionbar.',
     },
 
     ['COMBAT'] = {
@@ -587,7 +583,7 @@ L.GUI = {
         ['FCT_OUT'] = 'Show outgoing',
         ['FCT_PET'] = 'Show pet',
         ['FCT_PERIODIC'] = 'Show periodic',
-        ['FCT_MERGE'] = 'Merge'
+        ['FCT_MERGE'] = 'Merge',
     },
 
     ['ANNOUNCEMENT'] = {
@@ -605,7 +601,7 @@ L.GUI = {
         ['RESET'] = 'Instance reset',
         ['RESET_TIP'] = 'Send message after instance reset.',
         ['COOLDOWN'] = 'Cooldown status',
-        ['COOLDOWN_TIP'] = 'You can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.'
+        ['COOLDOWN_TIP'] = 'You can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.',
     },
 
     ['INVENTORY'] = {
@@ -643,7 +639,7 @@ L.GUI = {
         ['ITEM_FILTER_FAVOURITE'] = 'Favourite',
         ['ITEM_FILTER_TRADE'] = 'Trade good',
         ['ITEM_FILTER_QUEST'] = 'Quest',
-        ['ITEM_FILTER_GEAR_SET'] = 'Equip set'
+        ['ITEM_FILTER_GEAR_SET'] = 'Equip set',
     },
 
     ['MAP'] = {
@@ -659,7 +655,7 @@ L.GUI = {
         ['MICRO_MENU_TIP'] = '鼠标中键点击小地图会弹出系统菜单。',
         ['PROGRESS_BAR'] = 'Progress bar',
         ['PROGRESS_BAR_TIP'] = '在小地图上方显示一个进度条，可以追踪玩家的经验声望荣誉等相关进度信息。',
-        ['MINIMAP_SCALE'] = 'Minimap scale'
+        ['MINIMAP_SCALE'] = 'Minimap scale',
     },
 
     ['TOOLTIP'] = {
@@ -682,7 +678,7 @@ L.GUI = {
         ['HIDE_TITLE'] = 'Hide title',
         ['HIDE_RANK'] = 'Hide guild rank',
         ['DISABLE_FADING'] = 'Disable fading',
-        ['HEALTH_VALUE'] = 'Show health value'
+        ['HEALTH_VALUE'] = 'Show health value',
     },
 
     ['UNITFRAME'] = {
@@ -752,7 +748,8 @@ L.GUI = {
         ['COLOR_STYLE_GRADIENT'] = 'Percentage gradient',
         ['TARGET_ICON_INDICATOR_ALPHA'] = 'Icon Indicator opacity',
         ['TARGET_ICON_INDICATOR_SIZE'] = 'Icon Indicator size',
-        ['ABBR_NAME'] = 'Abbreviat name'
+        ['ABBR_NAME'] = 'Abbreviat name',
+        ['ABBR_NAME_TIP'] = 'Name abbreviation only works with english game client.',
     },
 
     ['GROUPFRAME'] = {
@@ -804,7 +801,7 @@ L.GUI = {
         ['RAID_GAP'] = 'Raid frame spacing',
         ['GROUP_FILTER'] = 'Maximum groups to show',
         ['CAT_PARTY'] = 'Party',
-        ['CAT_RAID'] = 'Raid'
+        ['CAT_RAID'] = 'Raid',
     },
 
     ['NAMEPLATE'] = {
@@ -844,9 +841,9 @@ L.GUI = {
         EXECUT_RATIO_SETTING = 'Execut Ratio',
         EXECUTE_RATIO = 'execute ratio',
 
-        BLACK_WHITE = "White/Black list",
-        PLAYER_ONLY = "List and player",
-        INCLUDE_CROWD_CONTROL = "List and player and CCs",
+        BLACK_WHITE = 'White/Black list',
+        PLAYER_ONLY = 'List and player',
+        INCLUDE_CROWD_CONTROL = 'List and player and CCs',
 
         BASIC_SETTING = 'Nameplate',
         SIZE = 'Size',
@@ -892,7 +889,7 @@ L.GUI = {
         ['CREDITS'] = 'Credits',
         ['FEEDBACK'] = 'Feedback',
         ['PRIMARY'] = 'Haleth, siweia',
-        ['SECONDARY'] = 'Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95'
+        ['SECONDARY'] = 'Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95',
     },
 
     ['INSTALLATION'] = {
@@ -914,16 +911,22 @@ L.GUI = {
         ['ADDON_HEADER'] = 'Addons',
         ['ADDON_DESCRIPTION'] = 'This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.',
         ['COMPLETE_HEADER'] = 'Success!',
-        ['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.'
-    }
+        ['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.',
+    },
 }
 
 -- Slash commands
 L['COMMANDS_LIST_HINT'] = 'Available Commands：'
 L['COMMANDS_LIST'] = {
-    '/free install - Open installation pane', '/free config - Open config pane',
+    '/free install - Open installation pane',
+    '/free config - Open config pane',
     '/free unlock - Unlock the interface to let you easily move elements',
-    '/free reset - Reset all saved options to their default values.', '/rl - Reload interface',
-    '/ss - Take a Screenshot', '/rc - Ready check', '/rp - Role poll', '/lg - Leave group',
-    '/rs - Reset instance', '/bind - Launch quick keybind mode'
+    '/free reset - Reset all saved options to their default values.',
+    '/rl - Reload interface',
+    '/ss - Take a Screenshot',
+    '/rc - Ready check',
+    '/rp - Role poll',
+    '/lg - Leave group',
+    '/rs - Reset instance',
+    '/bind - Launch quick keybind mode',
 }
