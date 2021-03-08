@@ -76,7 +76,7 @@ local inaccurateQuestAreas = {
     [25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
     [25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
     [34461] = 590, -- Horde Garrison
-    [60004] = 118 -- 前夕任务：英勇之举
+    [60004] = 118, -- 前夕任务：英勇之举
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -484,9 +484,8 @@ local function GetClosestQuestItem()
     if not closestQuestItemLink then
         for index = 1, C_QuestLog_GetNumQuestLogEntries() do
             local info = C_QuestLog_GetInfo(index)
-            local questID = info.questID
-            if info and not info.isHeader and questID and
-                (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
+            local questID = info and info.questID
+            if questID and not info.isHeader and (not info.isHidden or C_QuestLog_IsWorldQuest(questID)) and QuestHasPOIInfo(questID) then
                 local distance, itemLink = GetQuestDistanceWithItem(questID)
                 if distance and distance <= closestDistance then
                     closestDistance = distance
