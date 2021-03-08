@@ -42,7 +42,7 @@ C.AddonVersion = addonVersion
 C.isDeveloper = C.AddonVersion == 'Development'
 
 C.isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-C.isPatch = C.isRetail and select(4, GetBuildInfo()) >= 90001
+C.isNewPatch = C.isRetail and select(4, GetBuildInfo()) >= 90005
 C.GameLocale = GetLocale()
 C.isChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
 C.isCNPortal = GetCVar('portal') == 'CN'

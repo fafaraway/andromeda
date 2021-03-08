@@ -43,7 +43,11 @@ tinsert(C.BlizzThemes, function()
 	F.Reskin(SearchPanel.RefreshButton)
 	F.Reskin(SearchPanel.BackButton)
 	F.Reskin(SearchPanel.SignUpButton)
-	F.Reskin(SearchPanel.ScrollFrame.StartGroupButton)
+	if C.isNewPatch then
+		F.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
+	else
+		F.Reskin(SearchPanel.ScrollFrame.StartGroupButton)
+	end
 	F.ReskinInput(SearchPanel.SearchBox)
 	F.ReskinScroll(SearchPanel.ScrollFrame.scrollBar)
 
