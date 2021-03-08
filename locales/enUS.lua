@@ -749,14 +749,14 @@ L.GUI = {
         ['TARGET_ICON_INDICATOR_ALPHA'] = 'Icon Indicator opacity',
         ['TARGET_ICON_INDICATOR_SIZE'] = 'Icon Indicator size',
         ['ABBR_NAME'] = 'Abbreviat name',
-        ['ABBR_NAME_TIP'] = 'Name abbreviation only works with english game client.',
+        ['ABBR_NAME_TIP'] = 'Abbreviate and shorten names.',
     },
 
     ['GROUPFRAME'] = {
         ['NAME'] = 'Groupframe',
         ['ENABLE_GROUP'] = 'Enable group frames',
         ['GROUPFRAME_SIZE_SETTING_HEADER'] = 'Groupframe size setting',
-        ['GROUP_NAMES'] = 'Show names',
+        ['GROUP_NAME'] = 'Show names',
         ['GROUP_THREAT_INDICATOR'] = 'Threat indicator',
         ['GROUP_DEBUFF_HIGHLIGHT'] = 'Dispellable debuffs highlight',
         ['GROUP_DEBUFF_HIGHLIGHT_TIP'] = 'Whenever a group member has a dispellable debuff it will highlight the frame in the debuff color.',

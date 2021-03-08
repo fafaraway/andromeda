@@ -12,9 +12,12 @@ local pairs = pairs
 local tonumber = tonumber
 local strmatch = strmatch
 local strfind = strfind
+local strupper = strupper
 local format = format
 local gsub = gsub
 local strsub = strsub
+local gmatch = gmatch
+local utf8sub = string.utf8sub
 local min = min
 local max = max
 local floor = floor
@@ -176,6 +179,50 @@ do
         return id
     end
 
+    function F.ShortenString(str, numChars, dots)
+        local bytes = #str
+        if bytes <= numChars then
+            return str
+        else
+            local len, pos = 0, 1
+            while pos <= bytes do
+                len = len + 1
+                local c = str:byte(pos)
+                if c > 0 and c <= 127 then
+                    pos = pos + 1
+                elseif c >= 192 and c <= 223 then
+                    pos = pos + 2
+                elseif c >= 224 and c <= 239 then
+                    pos = pos + 3
+                elseif c >= 240 and c <= 247 then
+                    pos = pos + 4
+                end
+                if len == numChars then
+                    break
+                end
+            end
+
+            if len == numChars and pos <= bytes then
+                return strsub(str, 1, pos - 1) .. (dots and '...' or '')
+            else
+                return str
+            end
+        end
+    end
+
+    function F.AbbreviateString(str, allUpper)
+        local newString = ''
+        for word in gmatch(str, '[^%s]+') do
+            word = utf8sub(word, 1, 1) -- get only first letter of each word
+            if allUpper then
+                word = strupper(word)
+            end
+            newString = newString .. word
+        end
+
+        return newString
+    end
+
     function F:WaitFunc(elapse)
         local i = 1
         while i <= #F.WaitTable do
@@ -235,8 +282,7 @@ do
     end
 
     function F.HexToRGB(hex)
-        return tonumber('0x' .. strsub(hex, 1, 2)) / 255, tonumber('0x' .. strsub(hex, 3, 4)) / 255,
-               tonumber('0x' .. strsub(hex, 5, 6)) / 255
+        return tonumber('0x' .. strsub(hex, 1, 2)) / 255, tonumber('0x' .. strsub(hex, 3, 4)) / 255, tonumber('0x' .. strsub(hex, 5, 6)) / 255
     end
 
     function F.ClassColor(class)
@@ -312,8 +358,7 @@ do
             local texture = tex and tex:IsShown() and tex:GetTexture()
             if texture then
                 if texture == essenceTextureID then
-                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or
-                                         nil
+                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or nil
                     if not tip.essences[step] then
                         tip.essences[step] = {}
                     end
@@ -349,9 +394,7 @@ do
     function F:CollectEssenceInfo(index, lineText, slotInfo)
         local step = 1
         local essence = slotInfo.essences[step]
-        if essence and next(essence) and
-            (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and
-                strfind(lineText, essenceDescription, nil, true)) then
+        if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
             for i = 4, 2, -1 do
                 local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
                 local text = line and line:GetText()
@@ -477,7 +520,7 @@ do
         'portrait',
         'ScrollFrameBorder',
         'ScrollUpBorder',
-        'ScrollDownBorder'
+        'ScrollDownBorder',
     }
 
     function F:StripTextures(kill)
@@ -624,8 +667,7 @@ do
             return
         end
 
-        local hex = color.r and color.g and color.b and F.RGBToHex(color.r, color.g, color.b) or
-                        '|cffffffff'
+        local hex = color.r and color.g and color.b and F.RGBToHex(color.r, color.g, color.b) or '|cffffffff'
 
         return hex .. text .. '|r'
     end
@@ -772,8 +814,7 @@ do
         defaultBackdrop.edgeSize = C.Mult
         self:SetBackdrop(defaultBackdrop)
 
-        self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3],
-                              a or _G.FREE_ADB.backdrop_alpha)
+        self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], a or _G.FREE_ADB.backdrop_alpha)
 
         self:SetBackdropBorderColor(C.BorderColor[1], C.BorderColor[2], C.BorderColor[3])
 
@@ -895,7 +936,7 @@ do
         ['auctionhouse-itemicon-border-purple'] = LE_ITEM_QUALITY_EPIC,
         ['auctionhouse-itemicon-border-orange'] = LE_ITEM_QUALITY_LEGENDARY,
         ['auctionhouse-itemicon-border-artifact'] = LE_ITEM_QUALITY_ARTIFACT,
-        ['auctionhouse-itemicon-border-account'] = LE_ITEM_QUALITY_HEIRLOOM
+        ['auctionhouse-itemicon-border-account'] = LE_ITEM_QUALITY_HEIRLOOM,
     }
 
     local function updateIconBorderColorByAtlas(self, atlas)
@@ -905,8 +946,7 @@ do
     end
 
     local function updateIconBorderColor(self, r, g, b)
-        if not r or (r == .65882 and g == .65882 and b == .65882) or
-            (r > .99 and g > .99 and b > .99) then
+        if not r or (r == .65882 and g == .65882 and b == .65882) or (r > .99 and g > .99 and b > .99) then
             r, g, b = 0, 0, 0
         end
         self.__owner.bg:SetBackdropBorderColor(r, g, b)
@@ -1049,7 +1089,7 @@ do
         'BottomRightTex',
         'RightTex',
         'MiddleTex',
-        'Center'
+        'Center',
     }
 
     function F:Reskin(glow)
@@ -1164,17 +1204,14 @@ do
 
     local function GrabScrollBarElement(frame, element)
         local frameName = frame:GetDebugName()
-        return frame[element] or frameName and
-                   (_G[frameName .. element] or strfind(frameName, element)) or nil
+        return frame[element] or frameName and (_G[frameName .. element] or strfind(frameName, element)) or nil
     end
 
     function F:ReskinScroll()
         F.StripTextures(self:GetParent())
         F.StripTextures(self)
 
-        local thumb = GrabScrollBarElement(self, 'ThumbTexture') or
-                          GrabScrollBarElement(self, 'thumbTexture') or self.GetThumbTexture and
-                          self:GetThumbTexture()
+        local thumb = GrabScrollBarElement(self, 'ThumbTexture') or GrabScrollBarElement(self, 'thumbTexture') or self.GetThumbTexture and self:GetThumbTexture()
         if thumb then
             thumb:SetAlpha(0)
             thumb:SetWidth(16)
@@ -1199,8 +1236,7 @@ do
         F.StripTextures(self)
 
         local frameName = self.GetName and self:GetName()
-        local down = self.Button or frameName and
-                         (_G[frameName .. 'Button'] or _G[frameName .. '_Button'])
+        local down = self.Button or frameName and (_G[frameName .. 'Button'] or _G[frameName .. '_Button'])
 
         local bg = F.CreateBDFrame(self, 0, true)
         bg:SetPoint('TOPLEFT', 16, -4)
@@ -1462,8 +1498,7 @@ do
 
     -- Handle collapse
     local function updateCollapseTexture(texture, collapsed)
-        local atlas = collapsed and 'Soulbinds_Collection_CategoryHeader_Expand' or
-                          'Soulbinds_Collection_CategoryHeader_Collapse'
+        local atlas = collapsed and 'Soulbinds_Collection_CategoryHeader_Expand' or 'Soulbinds_Collection_CategoryHeader_Collapse'
         texture:SetAtlas(atlas, true)
     end
 
@@ -1540,8 +1575,7 @@ do
         F.StripTextures(self)
         local bg = F.SetBD(self)
         local frameName = self.GetName and self:GetName()
-        local portrait = self.PortraitTexture or self.portrait or
-                             (frameName and _G[frameName .. 'Portrait'])
+        local portrait = self.PortraitTexture or self.portrait or (frameName and _G[frameName .. 'Portrait'])
         if portrait then
             portrait:SetAlpha(0)
         end
@@ -1556,7 +1590,7 @@ do
         ['Adventures-Tank'] = 'Soulbinds_Tree_Conduit_Icon_Protect',
         ['Adventures-Healer'] = 'ui_adv_health',
         ['Adventures-DPS'] = 'ui_adv_atk',
-        ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility'
+        ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility',
     }
 
     local function replaceFollowerRole(roleIcon, atlas)
@@ -1674,8 +1708,7 @@ do
         if cover then
             cover:SetTexture('')
         end
-        local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or
-                            self.Texture or (self.SetTexture and self) or self.Icon
+        local texture = self.GetNormalTexture and self:GetNormalTexture() or self.texture or self.Texture or (self.SetTexture and self) or self.Icon
         if texture then
             texture:SetTexture(assets.roles_icon)
             texture:SetTexCoord(F.GetRoleTexCoord(role))
@@ -1933,8 +1966,7 @@ do
             opt[i]:SetPoint('TOPLEFT', 4, -4 - (i - 1) * (height + 2))
             opt[i]:SetSize(width - 8, height)
             F.CreateBD(opt[i])
-            local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT',
-                                    5, 0)
+            local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
             text:SetPoint('RIGHT', -5, 0)
             opt[i].text = j
             opt[i].__owner = dd
@@ -2001,8 +2033,7 @@ do
         swatch:SetSize(20, 12)
         swatch.bg = F.CreateBDFrame(swatch, 1)
         swatch.bg:SetBackdropBorderColor(.2, .2, .2)
-        swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT',
-                                 24, 0)
+        swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
         tex:SetTexture(C.Assets.bd_tex)

@@ -759,14 +759,14 @@ L.GUI = {
         ['TARGET_ICON_INDICATOR_ALPHA'] = 'Непрозрачность Значка Индикатора',
         ['TARGET_ICON_INDICATOR_SIZE'] = 'Размер значка индикатора',
         ['ABBR_NAME'] = 'Сокращенные имена',
-        ['ABBR_NAME_TIP'] = 'Name abbreviation only works with english game client.', -- Need translate
+        ['ABBR_NAME_TIP'] = 'Abbreviate and shorten names.', -- Need translate
     },
 
     ['GROUPFRAME'] = {
         ['NAME'] = 'Груп-фреймы',
         ['ENABLE_GROUP'] = 'Включить груп-фреймы',
         ['GROUPFRAME_SIZE_SETTING_HEADER'] = 'Настройки размеров груп-фреймов',
-        ['GROUP_NAMES'] = 'Показать имена',
+        ['GROUP_NAME'] = 'Показать имена',
         ['GROUP_THREAT_INDICATOR'] = 'Индикатор угрозы',
         ['GROUP_DEBUFF_HIGHLIGHT'] = 'Подсветить диспел',
         ['GROUP_DEBUFF_HIGHLIGHT_TIP'] = 'Всякий раз, когда член группы имеет рассеиваемый дебафф, выделяет рамку цветом дебаффа.',

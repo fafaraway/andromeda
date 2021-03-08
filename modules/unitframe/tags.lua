@@ -5,6 +5,8 @@ local floor = floor
 local unpack = unpack
 local select = select
 local strfind = strfind
+local strlen = strlen
+local gsub = gsub
 local UnitName = UnitName
 local UnitLevel = UnitLevel
 local UnitClass = UnitClass
@@ -42,42 +44,8 @@ local OUF = F.OUF
 local tags = OUF.Tags.Methods
 local tagEvents = OUF.Tags.Events
 
-local function usub(str, len)
-    local i = 1
-    local n = 0
-    while true do
-        local b, e = string.find(str, '([%z\1-\127\194-\244][\128-\191]*)', i)
-        if (b == nil) then
-            return str
-        end
-        i = e + 1
-        n = n + 1
-        if (n > len) then
-            local r = string.sub(str, 1, b - 1)
-            return r
-        end
-    end
-end
-
-local function shortenName(unit, len)
-    if not UnitIsConnected(unit) then
-        return
-    end
-
-    local name = UnitName(unit)
-    if name and name:len() > len then
-        name = usub(name, len)
-    end
-
-    return name
-end
-
-local function AbbrName(str)
-    if not C.DB.unitframe.abbr_name then
-        return
-    end
-
-    return str:sub(1, 1) .. '.'
+local function abbrName(str)
+    return gsub(str, '%s?(.[\128-\191]*)%S+%s', '%1. ')
 end
 
 tags['free:health'] = function(unit)
@@ -157,8 +125,7 @@ tags['free:title'] = function(unit)
     F.ScanTip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     F.ScanTip:SetUnit(unit)
 
-    local title =
-        _G[format('FreeUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
+    local title = _G[format('FreeUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
     if title and not strfind(title, '^' .. LEVEL) then
         return title
     end
@@ -179,29 +146,34 @@ tags['free:color'] = function(unit)
         return F.RGBToHex(1, 1, 1)
     end
 end
-tagEvents['free:color'] =
-    'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
+tagEvents['free:color'] = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 
 tags['free:name'] = function(unit)
-    local name = UnitName(unit)
+    local abbr = C.DB.unitframe.abbr_name
+    local len = C.isChinses and C.DB.unitframe.ShortenLengthCN or C.DB.unitframe.ShortenLength
+    local str = UnitName(unit)
+    local abbrName = abbrName(str)
+    local shortenName = F.ShortenString(abbrName, len, true)
 
-    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or
-        (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
         return C.RedColor .. '<' .. YOU .. '>'
     else
-        if name then -- 名字里有中文字符但没有对应中文字体的情况下会返回nil
-            return (name:gsub('(%S+) ', AbbrName))
-        end
+
+        return abbr and shortenName or str
     end
 end
-tagEvents['free:name'] = 'UNIT_NAME_UPDATE UNIT_TARGET PLAYER_TARGET_CHANGED PLAYER_FOCUS_CHANGED'
+tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
-    if C.DB.unitframe.group_names then
+    local groupName = C.DB.unitframe.GroupName
+    local len = C.isChinses and C.DB.unitframe.GroupNameShortenLengthCN or C.DB.unitframe.GroupNameShortenLength
+    local str = UnitName(unit)
+
+    if groupName then
         if UnitInRaid('player') then
-            return shortenName(unit, C.isCNPortal and 2 or 4)
+            return F.ShortenString(str, len)
         else
-            return shortenName(unit, 4)
+            return F.ShortenString(str, 4)
         end
     else
         return ''

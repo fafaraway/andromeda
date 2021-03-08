@@ -365,7 +365,7 @@ GUI.OptionsList = {
     [13] = {
         -- groupframes
         {1, 'unitframe', 'enable_group', L.GUI.GROUPFRAME.ENABLE_GROUP, nil, SetupGroupFrameSize},
-        {1, 'unitframe', 'group_names', L.GUI.GROUPFRAME.GROUP_NAMES},
+        {1, 'unitframe', 'GroupName', L.GUI.GROUPFRAME.GROUP_NAME},
         {1, 'unitframe', 'group_click_cast', L.GUI.GROUPFRAME.GROUP_CLICK_CAST, true, nil, nil, L.GUI.GROUPFRAME.GROUP_CLICK_CAST_TIP},
         {1, 'unitframe', 'spec_position', L.GUI.GROUPFRAME.SPEC_POSITION},
         {1, 'unitframe', 'group_threat_indicator', L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR, true},
