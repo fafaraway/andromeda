@@ -14,91 +14,91 @@ C.ReminderBuffsList = {
             itemID = 178742, -- 瓶装毒素饰品
             spells = {[345545] = true},
             instance = true,
-            combat = true
+            combat = true,
         },
         {
             itemID = 174906, -- 属性符文
             spells = {[317065] = true, [270058] = true},
             equip = true,
             instance = true,
-            disable = true
-        }
+            disable = true,
+        },
     },
     MAGE = {
         {
             spells = {
                 -- 奥术魔宠
-                [210126] = true
+                [210126] = true,
             },
             depend = 205022,
             spec = 1,
             combat = true,
             instance = true,
-            pvp = true
+            pvp = true,
         },
         {
             spells = {
                 -- 奥术智慧
-                [1459] = true
+                [1459] = true,
             },
             depend = 1459,
-            instance = true
-        }
+            instance = true,
+        },
     },
     PRIEST = {
         {
             spells = {
                 -- 真言术耐
-                [21562] = true
+                [21562] = true,
             },
             depend = 21562,
-            instance = true
-        }
+            instance = true,
+        },
     },
     WARRIOR = {
         {
             spells = {
                 -- 战斗怒吼
-                [6673] = true
+                [6673] = true,
             },
             depend = 6673,
-            instance = true
-        }
+            instance = true,
+        },
     },
     SHAMAN = {
         {
             spells = {
                 [192106] = true, -- 闪电之盾
                 [974] = true, -- 大地之盾
-                [52127] = true -- 水之护盾
+                [52127] = true, -- 水之护盾
             },
             depend = 192106,
             combat = true,
             instance = true,
-            pvp = true
+            pvp = true,
         },
         {
             spells = {
-                [33757] = true -- 风怒武器
+                [33757] = true, -- 风怒武器
             },
             depend = 33757,
             combat = true,
             instance = true,
             pvp = true,
             weaponIndex = 1,
-            spec = 2
+            spec = 2,
         },
         {
             spells = {
-                [318038] = true -- 火舌武器
+                [318038] = true, -- 火舌武器
             },
             depend = 318038,
             combat = true,
             instance = true,
             pvp = true,
             weaponIndex = 2,
-            spec = 2
-        }
+            spec = 2,
+        },
     },
     ROGUE = {
         {
@@ -106,24 +106,24 @@ C.ReminderBuffsList = {
                 -- 伤害类毒药
                 [2823] = true, -- 致命药膏
                 [8679] = true, -- 致伤药膏
-                [315584] = true -- 速效药膏
+                [315584] = true, -- 速效药膏
             },
             texture = 132273,
             depend = 315584,
             combat = true,
             instance = true,
-            pvp = true
+            pvp = true,
         },
         {
             spells = {
                 -- 效果类毒药
                 [3408] = true, -- 减速药膏
-                [5761] = true -- 迟钝药膏
+                [5761] = true, -- 迟钝药膏
             },
             depend = 3408,
-            pvp = true
-        }
-    }
+            pvp = true,
+        },
+    },
 }
 
 C.GroupBuffsCheckList = {
@@ -131,31 +131,31 @@ C.GroupBuffsCheckList = {
         -- 合剂
         307166, -- 大锅
         307185, -- 通用合剂
-        307187 -- 耐力合剂
+        307187, -- 耐力合剂
     },
     [2] = {
         -- 进食充分
-        104273 -- 250敏捷，BUFF名一致
+        104273, -- 250敏捷，BUFF名一致
     },
     [3] = {
         -- 10%智力
         1459,
-        264760
+        264760,
     },
     [4] = {
         -- 10%耐力
         21562,
-        264764
+        264764,
     },
     [5] = {
         -- 10%攻强
         6673,
-        264761
+        264761,
     },
     [6] = {
         -- 符文
-        270058
-    }
+        270058,
+    },
 }
 
 C.BloodlustList = {57723, 57724, 80354, 264689}
@@ -170,7 +170,7 @@ C.CornerSpellsList = {
         [17] = {'TOPLEFT', {.7, .7, .7}}, -- 真言术盾
         [47788] = {'LEFT', {.86, .45, 0}, true}, -- 守护之魂
         [33206] = {'LEFT', {.47, .35, .74}, true}, -- 痛苦压制
-        [6788] = {'TOP', {.86, .11, .11}, true} -- 虚弱灵魂
+        [6788] = {'TOP', {.86, .11, .11}, true}, -- 虚弱灵魂
     },
     ['DRUID'] = {
         [774] = {'TOPRIGHT', {.8, .4, .8}}, -- 回春
@@ -182,7 +182,7 @@ C.CornerSpellsList = {
         [207386] = {'TOP', {.4, .2, .8}}, -- 春暖花开
         [102351] = {'LEFT', {.2, .8, .8}}, -- 结界
         [102352] = {'LEFT', {.2, .8, .8}}, -- 结界(HoT)
-        [200389] = {'BOTTOM', {1, 1, .4}} -- 栽培
+        [200389] = {'BOTTOM', {1, 1, .4}}, -- 栽培
     },
     ['PALADIN'] = {
         [287280] = {'TOPLEFT', {1, .8, 0}}, -- 圣光闪烁
@@ -195,35 +195,35 @@ C.CornerSpellsList = {
         [6940] = {'BOTTOMRIGHT', {.89, .1, .1}, true},
         -- 牺牲
         [223306] = {'BOTTOMLEFT', {.7, .7, .3}}, -- 赋予信仰
-        [25771] = {'TOP', {.86, .11, .11}, true} -- 自律
+        [25771] = {'TOP', {.86, .11, .11}, true}, -- 自律
     },
     ['SHAMAN'] = {
         [61295] = {'TOPRIGHT', {.2, .8, .8}}, -- 激流
         [974] = {'BOTTOMRIGHT', {1, .8, 0}}, -- 大地之盾
-        [207400] = {'BOTTOMLEFT', {.6, .8, 1}} -- 先祖活力
+        [207400] = {'BOTTOMLEFT', {.6, .8, 1}}, -- 先祖活力
     },
     ['MONK'] = {
         [119611] = {'TOPLEFT', {.3, .8, .6}}, -- 复苏之雾
         [116849] = {'TOPRIGHT', {.2, .8, .2}, true}, -- 作茧缚命
         [124682] = {'BOTTOMLEFT', {.8, .8, .25}}, -- 氤氲之雾
-        [191840] = {'BOTTOMRIGHT', {.27, .62, .7}} -- 精华之泉
+        [191840] = {'BOTTOMRIGHT', {.27, .62, .7}}, -- 精华之泉
     },
     ['ROGUE'] = {
-        [57934] = {'BOTTOMRIGHT', {.9, .1, .1}} -- 嫁祸
+        [57934] = {'BOTTOMRIGHT', {.9, .1, .1}}, -- 嫁祸
     },
     ['WARRIOR'] = {
-        [114030] = {'TOPLEFT', {.2, .2, 1}} -- 警戒
+        [114030] = {'TOPLEFT', {.2, .2, 1}}, -- 警戒
     },
     ['HUNTER'] = {
         [34477] = {'BOTTOMRIGHT', {.9, .1, .1}}, -- 误导
-        [90361] = {'TOPLEFT', {.4, .8, .2}} -- 灵魂治愈
+        [90361] = {'TOPLEFT', {.4, .8, .2}}, -- 灵魂治愈
     },
     ['WARLOCK'] = {
-        [20707] = {'BOTTOMRIGHT', {.8, .4, .8}, true} -- 灵魂石
+        [20707] = {'BOTTOMRIGHT', {.8, .4, .8}, true}, -- 灵魂石
     },
     ['DEMONHUNTER'] = {},
     ['MAGE'] = {},
-    ['DEATHKNIGHT'] = {}
+    ['DEATHKNIGHT'] = {},
 }
 
 C.RaidBuffsList = {
@@ -428,7 +428,7 @@ C.RaidBuffsList = {
     [256740] = true, -- 漩涡战鼓
     [309658] = true, -- 死亡凶蛮战鼓
     [102364] = true, -- 青铜龙的祝福
-    [292686] = true -- 制皮鼓
+    [292686] = true, -- 制皮鼓
 }
 
 C.PartySpellsList = {
@@ -472,7 +472,7 @@ C.PartySpellsList = {
     [129597] = 120,
     [155145] = 120,
     [202719] = 120,
-    [232633] = 120
+    [232633] = 120,
 }
 
 C.TalentCDFixList = {
@@ -489,7 +489,7 @@ C.TalentCDFixList = {
     [109304] = 105, -- 意气风发
     [116849] = 100, -- 作茧缚命
     [119381] = 40, -- 扫堂腿
-    [179057] = 40 -- 混乱新星
+    [179057] = 40, -- 混乱新星
 }
 
 C.PartySpellsDB = {
@@ -512,7 +512,7 @@ C.PartySpellsDB = {
         [315443] = 120, -- 憎恶附肢，通灵
         [324631] = 120, -- 血肉铸造，通灵
         [312202] = 60, -- 失格者之梏，格里恩
-        [311648] = 60 -- 云集之雾，温西尔
+        [311648] = 60, -- 云集之雾，温西尔
     },
     ['DEMONHUNTER'] = {
         [179057] = 60, -- 混乱新星
@@ -528,7 +528,7 @@ C.PartySpellsDB = {
         [306830] = 60, -- 极乐赦令，格里恩
         [329554] = 120, -- 燃焰饲魂，通灵
         [317009] = 60, -- 罪孽烙印，温西尔
-        [323639] = 90 -- 恶魔追击，法夜
+        [323639] = 90, -- 恶魔追击，法夜
     },
     ['DRUID'] = {
         [99] = 30, -- 夺魂咆哮
@@ -558,7 +558,7 @@ C.PartySpellsDB = {
         [325727] = 25, -- 畸变蜂群，通灵
         [323764] = 120, -- 万灵之召，法夜
         [338142] = 60, -- 自省强化，格里恩
-        [323546] = 180 -- 饕餮狂乱，温西尔
+        [323546] = 180, -- 饕餮狂乱，温西尔
     },
     ['HUNTER'] = {
         [5384] = 30, -- 假死
@@ -586,7 +586,7 @@ C.PartySpellsDB = {
         [325028] = 45, -- 死亡飞轮，通灵
         [324149] = 30, -- 劫掠射击，温西尔
         [308491] = 60, -- 共鸣箭，格里恩
-        [328231] = 120 -- 野性之魂，法夜
+        [328231] = 120, -- 野性之魂，法夜
     },
     ['MAGE'] = {
         [66] = 300, -- 隐形术
@@ -609,7 +609,7 @@ C.PartySpellsDB = {
         [324220] = 180, -- 死亡飞轮，通灵
         [314793] = 90, -- 劫掠射击，温西尔
         [307443] = 30, -- 共鸣箭，格里恩
-        [314791] = 60 -- 野性之魂，法夜
+        [314791] = 60, -- 野性之魂，法夜
     },
     ['MONK'] = {
         [116705] = 15, -- 切喉手
@@ -647,7 +647,7 @@ C.PartySpellsDB = {
         [325216] = 60, -- 骨尘酒，通灵
         [327104] = 30, -- 妖魂踏，法夜
         [326860] = 180, -- 陨落僧众，温西尔
-        [310454] = 120 -- 精序兵戈，格里恩
+        [310454] = 120, -- 精序兵戈，格里恩
     },
     ['PALADIN'] = {
         [498] = 60, -- 圣佑术
@@ -690,7 +690,7 @@ C.PartySpellsDB = {
         [316958] = 240, -- 红烬圣土，温西尔
         [328278] = 45, -- 四级祝福，法夜
         [304971] = 60, -- 圣洁鸣钟，格里恩
-        [328204] = 30 -- 征服者之锤，通灵
+        [328204] = 30, -- 征服者之锤，通灵
     },
     ['PRIEST'] = {
         [527] = 8, -- 纯净术
@@ -733,7 +733,7 @@ C.PartySpellsDB = {
         [327661] = 90, -- 法夜守护者，法夜
         [323673] = 45, -- 控心术，温西尔
         [324724] = 60, -- 邪恶新星，通灵
-        [325013] = 180 -- 晋升者之赐，格里恩
+        [325013] = 180, -- 晋升者之赐，格里恩
     },
     ['ROGUE'] = {
         [408] = 20, -- 肾击
@@ -762,7 +762,7 @@ C.PartySpellsDB = {
         [323547] = 45, -- 申斥回响，格里恩
         [323654] = 25, -- 狂热鞭笞，温西尔
         [328305] = 90, -- 败血刃伤，法夜
-        [328547] = 30 -- 锯齿骨刺，通灵
+        [328547] = 30, -- 锯齿骨刺，通灵
     },
     ['SHAMAN'] = {
         [16191] = 180, -- 法力之潮
@@ -781,7 +781,7 @@ C.PartySpellsDB = {
         [320674] = 90, -- 收割链，温西尔
         [328923] = 120, -- 法夜输灵，法夜
         [326059] = 45, -- 始源之潮，通灵
-        [324386] = 60 -- 暮钟图腾，格里恩
+        [324386] = 60, -- 暮钟图腾，格里恩
     },
     ['WARLOCK'] = {
         [1122] = 180, -- 召唤地狱火
@@ -810,7 +810,7 @@ C.PartySpellsDB = {
         [325289] = 45, -- 屠戮箭，通灵
         [321792] = 60, -- 灾祸降临，温西尔
         [312321] = 40, -- 碎魂奉纳，格里恩
-        [325640] = 60 -- 灵魂腐化，法夜
+        [325640] = 60, -- 灵魂腐化，法夜
     },
     ['WARRIOR'] = {
         [355] = 8, -- 嘲讽
@@ -844,8 +844,8 @@ C.PartySpellsDB = {
         [317320] = 6, -- 判罪，温西尔
         [325886] = 90, -- 上古余震，法夜
         [307865] = 60, -- 晋升堡垒之矛，格里恩
-        [324143] = 180 -- 征服者战旗，通灵
-    }
+        [324143] = 180, -- 征服者战旗，通灵
+    },
 }
 
 C.AuraWhiteList = {
@@ -894,7 +894,7 @@ C.AuraWhiteList = {
     -- Raids
     [334695] = true, -- 动荡能量，猎手
     [345902] = true, -- 破裂的联结，猎手
-    [346792] = true -- 罪触之刃，猩红议会
+    [346792] = true, -- 罪触之刃，猩红议会
 }
 
 C.AuraBlackList = {
@@ -905,7 +905,7 @@ C.AuraBlackList = {
     [214975] = true, -- 抑心光环
     [273977] = true, -- 亡者之握
     [276919] = true, -- 承受压力
-    [206930] = true -- 心脏打击
+    [206930] = true, -- 心脏打击
 }
 
 local function GetSectionInfo(id)
@@ -929,12 +929,12 @@ C.NPSpecialUnitsList = {
     [171341] = true, -- 彼界，幼鹤
     -- Raids
     [GetSectionInfo(21953)] = true, -- 凯子，灵能灌注者
-    [175992] = true -- 猩红议会，忠实的侍从
+    [175992] = true, -- 猩红议会，忠实的侍从
 }
 
 C.NPShowPowerUnitsList = {
     [165556] = true, -- 赤红深渊，瞬息具象
-    [GetSectionInfo(22339)] = true -- 猎手阿尔迪莫，巴加斯特之影
+    [GetSectionInfo(22339)] = true, -- 猎手阿尔迪莫，巴加斯特之影
 }
 
 C.NPMajorSpellsList = {
@@ -957,10 +957,11 @@ C.NPMajorSpellsList = {
     [334748] = true, -- 通灵战潮，排干体液
     [334749] = true, -- 通灵战潮，排干体液
     [338357] = true, -- 通灵战潮，暴捶
+    [320596] = true, -- 通灵战潮，深重呕吐
     [326827] = true, -- 赤红深渊，恐惧之缚
     [326831] = true, -- 赤红深渊，恐惧之缚
     [324667] = true, -- 凋魂，潜行幼蛛
-    [328400] = true -- 凋魂，软泥浪潮
+    [328400] = true, -- 凋魂，软泥浪潮
 }
 
 C.CharacterSettings = {
@@ -985,7 +986,7 @@ C.CharacterSettings = {
         ['pet_filter'] = true,
         ['instant_loot'] = false,
         ['friends_list'] = true,
-        ['maw_threat_bar'] = true
+        ['maw_threat_bar'] = true,
     },
     ['combat'] = {
         ['enable'] = true,
@@ -1004,7 +1005,7 @@ C.CharacterSettings = {
         ['fct_periodic'] = true,
         ['fct_merge'] = true,
         ['fct_in'] = true,
-        ['fct_out'] = false
+        ['fct_out'] = false,
     },
     ['Announcement'] = {
         ['Enable'] = true,
@@ -1014,7 +1015,7 @@ C.CharacterSettings = {
         ['Utility'] = true,
         ['Quest'] = false,
         ['Reset'] = true,
-        ['Solo'] = false
+        ['Solo'] = false,
     },
     ['aura'] = {
         ['enable'] = true,
@@ -1026,7 +1027,7 @@ C.CharacterSettings = {
         ['debuff_size'] = 50,
         ['debuffs_per_row'] = 12,
         ['reverse_debuffs'] = true,
-        ['reminder'] = true
+        ['reminder'] = true,
     },
     ['inventory'] = {
         ['enable'] = true,
@@ -1058,7 +1059,7 @@ C.CharacterSettings = {
         ['item_filter_collection'] = true,
         ['item_filter_favourite'] = true,
         ['auto_sell_junk'] = false,
-        ['auto_repair'] = false
+        ['auto_repair'] = false,
     },
     ['unitframe'] = {
         ['enable'] = true,
@@ -1180,7 +1181,7 @@ C.CharacterSettings = {
         ['arena_width'] = 120,
         ['arena_height'] = 18,
         ['arena_gap'] = 80,
-        ['arena_auras_per_row'] = 6
+        ['arena_auras_per_row'] = 6,
     },
 
     Nameplate = {
@@ -1235,7 +1236,7 @@ C.CharacterSettings = {
         MinAlpha = .6,
         OccludedAlpha = .2,
         VerticalSpacing = .7,
-        HorizontalSpacing = .3
+        HorizontalSpacing = .3,
 
     },
     ['tooltip'] = {
@@ -1255,7 +1256,7 @@ C.CharacterSettings = {
         ['extra_info'] = true,
         ['aura_source'] = true,
         ['conduit_info'] = true,
-        ['health_value'] = false
+        ['health_value'] = false,
     },
     ['map'] = {
         ['enable'] = true,
@@ -1265,7 +1266,7 @@ C.CharacterSettings = {
         ['coords'] = true,
         ['minimap_scale'] = 1,
         ['who_pings'] = true,
-        ['progress_bar'] = true
+        ['progress_bar'] = true,
     },
     ['infobar'] = {
         ['enable'] = true,
@@ -1278,7 +1279,7 @@ C.CharacterSettings = {
         ['guild'] = true,
         ['friends'] = true,
         ['report'] = true,
-        ['currency'] = true
+        ['currency'] = true,
     },
     ['notification'] = {
         ['enable'] = true,
@@ -1286,7 +1287,7 @@ C.CharacterSettings = {
         ['new_mail'] = true,
         ['version_check'] = false,
         ['rare_found'] = true,
-        ['paragon_reputation'] = true
+        ['paragon_reputation'] = true,
     },
     ['misc'] = {
         ['group_tool'] = true,
@@ -1304,7 +1305,7 @@ C.CharacterSettings = {
         ['gem_enchant'] = true,
         ['azerite_traits'] = true,
         ['screen_saver'] = true,
-        ['proposal_timer'] = true
+        ['proposal_timer'] = true,
     },
     ['chat'] = {
         ['enable'] = true,
@@ -1336,7 +1337,7 @@ C.CharacterSettings = {
         ['group_loot_filter'] = true,
         ['group_loot_threshold'] = 2,
 
-        RoleIcon = true
+        RoleIcon = true,
     },
     ['Actionbar'] = {
         ['Enable'] = true,
@@ -1383,14 +1384,10 @@ C.CharacterSettings = {
         ['DecimalCD'] = true,
         ['OverrideWA'] = true,
 
-        ['BindType'] = 1
+        ['BindType'] = 1,
     },
 
-    Quest = {
-        Enable = true,
-        Automation = false,
-        CompleteSound = true
-    }
+    Quest = {Enable = true, Automation = false, CompleteSound = true},
 }
 
 C.AccountSettings = {
@@ -1436,8 +1433,8 @@ C.AccountSettings = {
         ['ROGUE'] = {['r'] = 0.91, ['g'] = 0.81, ['b'] = 0.51, ['colorStr'] = 'ffe9cb7f'},
         ['DRUID'] = {['r'] = 0.95, ['g'] = 0.48, ['b'] = 0.27, ['colorStr'] = 'fff27944'},
         ['MONK'] = {['r'] = 0.28, ['g'] = 0.84, ['b'] = 0.6, ['colorStr'] = 'ff48d599'},
-        ['SHAMAN'] = {['r'] = 0.29, ['g'] = 0.29, ['b'] = 0.82, ['colorStr'] = 'ff4949d0'}
-    }
+        ['SHAMAN'] = {['r'] = 0.29, ['g'] = 0.29, ['b'] = 0.82, ['colorStr'] = 'ff4949d0'},
+    },
 }
 
 local function initSettings(source, target, fullClean)
