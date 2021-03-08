@@ -1586,12 +1586,14 @@ do
         return bg
     end
 
+    -- LuaFormatter off
     local ReplacedRoleTex = {
         ['Adventures-Tank'] = 'Soulbinds_Tree_Conduit_Icon_Protect',
         ['Adventures-Healer'] = 'ui_adv_health',
         ['Adventures-DPS'] = 'ui_adv_atk',
         ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility',
     }
+    -- LuaFormatter on
 
     local function replaceFollowerRole(roleIcon, atlas)
         local newAtlas = ReplacedRoleTex[atlas]

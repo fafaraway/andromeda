@@ -840,6 +840,8 @@ L.GUI = {
         SCALE = 'scale',
         EXECUT_RATIO_SETTING = 'Execut Ratio',
         EXECUTE_RATIO = 'execute ratio',
+        SPELL_TARGET = 'Spell target',
+        SPELL_TARGET_TIP = '|nShow target name of casting spell.',
 
         BLACK_WHITE = 'White/Black list',
         PLAYER_ONLY = 'List and player',

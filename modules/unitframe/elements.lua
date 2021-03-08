@@ -6,10 +6,12 @@ local wipe = wipe
 local unpack = unpack
 local select = select
 local split = strsplit
+local strupper = strupper
 local CreateFrame = CreateFrame
 local UnitFrame_OnEnter = UnitFrame_OnEnter
 local UnitFrame_OnLeave = UnitFrame_OnLeave
 local UnitGUID = UnitGUID
+local UnitName = UnitName
 local UnitIsUnit = UnitIsUnit
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
@@ -23,6 +25,7 @@ local UnitInVehicle = UnitInVehicle
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local UnitThreatSituation = UnitThreatSituation
 local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitExists = UnitExists
 local GetThreatStatusColor = GetThreatStatusColor
 local GetSpecialization = GetSpecialization
 local IsUsableSpell = IsUsableSpell
@@ -40,6 +43,7 @@ local IsInRaid = IsInRaid
 local IsPartyLFG = IsPartyLFG
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+local YOU = YOU
 
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
@@ -192,8 +196,7 @@ function UNITFRAME:AddHealthBar(self)
     local isRaid = (style == 'raid')
     local isBoss = (style == 'boss')
     local isArena = (style == 'arena')
-    local isBaseUnits = F.MultiCheck(style, 'player', 'playerplate', 'pet', 'target', 'targettarget', 'focus',
-        'focustarget')
+    local isBaseUnits = F.MultiCheck(style, 'player', 'playerplate', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
 
     local health = CreateFrame('StatusBar', nil, self)
     health:SetFrameStrata('LOW')
@@ -219,12 +222,10 @@ function UNITFRAME:AddHealthBar(self)
     health.colorTapping = true
     health.colorDisconnected = true
 
-    if ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 2) or
-        (isBaseUnits and C.DB.unitframe.color_style == 2) or isArena then
+    if ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 2) or (isBaseUnits and C.DB.unitframe.color_style == 2) or isArena then
         health.colorClass = true
         health.colorSelection = true
-    elseif ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 3) or
-        (isBaseUnits and C.DB.unitframe.color_style == 3) then
+    elseif ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 3) or (isBaseUnits and C.DB.unitframe.color_style == 3) then
         health.colorSmooth = true
     else
         health.colorHealth = true
@@ -281,6 +282,7 @@ function UNITFRAME:AddHealthPrediction(self)
     overAbsorb:SetTexture(C.AssetsPath .. 'textures\\spark_tex')
     overAbsorb:SetBlendMode('ADD')
 
+    -- LuaFormatter off
     self.HealthPrediction = {
         myBar = myBar,
         otherBar = otherBar,
@@ -289,6 +291,7 @@ function UNITFRAME:AddHealthPrediction(self)
         maxOverflow = 1,
         frequentUpdates = true,
     }
+    -- LuaFormatter on
 end
 
 --[[ Power ]]
@@ -447,6 +450,7 @@ end
 
 --[[ Auras ]]
 
+-- LuaFormatter off
 OUF.colors.debuff = {
     ['Curse'] = {.8, 0, 1},
     ['Disease'] = {.8, .6, 0},
@@ -454,6 +458,7 @@ OUF.colors.debuff = {
     ['Poison'] = {0, .8, 0},
     ['none'] = {0, 0, 0},
 }
+-- LuaFormatter on
 
 local function AuraOnEnter(self)
     if not self:IsVisible() then
@@ -584,8 +589,7 @@ local function BolsterPostUpdate(element)
     end
 end
 
-function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _,
-    nameplateShowAll)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
     local style = element.__owner.unitStyle
     local isMine = F.MultiCheck(caster, 'player', 'pet', 'vehicle')
 
@@ -605,8 +609,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         if C.DB.unitframe.corner_indicator then
             return C.RaidBuffsList['ALL'][spellID] or _G.FREE_ADB['RaidAuraWatch'][spellID]
         else
-            return (button.isPlayer or caster == 'pet') and UNITFRAME.CornerSpellsList[spellID] or
-                       C.RaidBuffsList['ALL'][spellID] or C.RaidBuffsList['WARNING'][spellID]
+            return (button.isPlayer or caster == 'pet') and UNITFRAME.CornerSpellsList[spellID] or C.RaidBuffsList['ALL'][spellID] or C.RaidBuffsList['WARNING'][spellID]
         end
     elseif style == 'target' then
         if element.onlyShowPlayer and button.isDebuff then
@@ -1024,8 +1027,7 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
 
         if self.__owner.unit == 'player' and self.Time then
             if self.delay ~= 0 then
-                self.Time:SetFormattedText(decimal,
-                    (self.casting and self.max + self.delay or self.max - self.delay) - duration)
+                self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
             else
                 self.Time:SetFormattedText(decimal, self.max - duration)
                 if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
@@ -1055,6 +1057,33 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
             self.fadeOut = nil
             self:Hide()
         end
+    end
+end
+
+local function updateSpellTarget(self, unit)
+    if not C.DB.Nameplate.SpellTarget then
+        return
+    end
+
+    if not self.spellTarget or not unit then
+        return
+    end
+
+    local unitTarget = unit .. 'target'
+    if UnitExists(unitTarget) then
+        local nameString
+        if UnitIsUnit(unitTarget, 'player') then
+            nameString = format('|cffff0000%s|r', '>' .. strupper(YOU) .. '<')
+        else
+            nameString = F.RGBToHex(F.UnitColor(unitTarget)) .. UnitName(unitTarget)
+        end
+        self.spellTarget:SetText(nameString)
+    end
+end
+
+local function resetSpellTarget(self)
+    if self.spellTarget then
+        self.spellTarget:SetText('')
     end
 end
 
@@ -1111,8 +1140,7 @@ function UNITFRAME:PostCastStart(unit)
 
     if self.iconGlow then
         if self.notInterruptible then
-            self.iconGlow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g,
-                notInterruptibleColor.b, .5)
+            self.iconGlow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .5)
         else
             self.iconGlow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
         end
@@ -1120,8 +1148,7 @@ function UNITFRAME:PostCastStart(unit)
 
     if self.Glow and not (C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
         if self.notInterruptible then
-            self.Glow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b,
-                .35)
+            self.Glow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .35)
         else
             self.Glow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
         end
@@ -1150,12 +1177,20 @@ function UNITFRAME:PostCastStart(unit)
     self.Text:SetText('') -- disable casting spell name, we only need interrupt info
 
     if self.__owner.unitStyle == 'nameplate' then
+        -- Major spells
         if C.DB.Nameplate.MajorSpellsGlow and NAMEPLATE.MajorSpellsList[self.spellID] then
             F.ShowOverlayGlow(self.glowFrame)
         else
             F.HideOverlayGlow(self.glowFrame)
         end
+
+        -- Spell target
+        updateSpellTarget(self, unit)
     end
+end
+
+function UNITFRAME:PostCastUpdate(unit)
+    updateSpellTarget(self, unit)
 end
 
 function UNITFRAME:PostUpdateInterruptible(unit)
@@ -1178,6 +1213,8 @@ function UNITFRAME:PostCastStop()
     end
     self:SetValue(self.max)
     self:Show()
+
+    resetSpellTarget(self)
 end
 
 function UNITFRAME:PostCastFailed()
@@ -1187,6 +1224,8 @@ function UNITFRAME:PostCastFailed()
     self:SetValue(self.max)
     self.fadeOut = true
     self:Show()
+
+    resetSpellTarget(self)
 end
 
 function UNITFRAME:AddCastBar(self)
@@ -1208,8 +1247,7 @@ function UNITFRAME:AddCastBar(self)
         castbar:SetSize(C.DB.unitframe.castbar_focus_width, C.DB.unitframe.castbar_focus_height)
         castbar:ClearAllPoints()
 
-        F.Mover(castbar, L['UNITFRAME_MOVER_CASTBAR'], 'FocusCastbar', {'CENTER', _G.UIParent, 'CENTER', 0, 200},
-            C.DB.unitframe.castbar_focus_width, C.DB.unitframe.castbar_focus_height)
+        F.Mover(castbar, L['UNITFRAME_MOVER_CASTBAR'], 'FocusCastbar', {'CENTER', _G.UIParent, 'CENTER', 0, 200}, C.DB.unitframe.castbar_focus_width, C.DB.unitframe.castbar_focus_height)
     else
         castbar:SetAllPoints(self)
         castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
@@ -1226,13 +1264,13 @@ function UNITFRAME:AddCastBar(self)
     castbar.Spark = spark
 
     if C.DB.unitframe.castbar_timer then
-        local timer = F.CreateFS(castbar, C.Assets.Fonts.Regular, 11, 'OUTLINE')
+        local timer = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 11, 'OUTLINE')
         timer:SetPoint('CENTER', castbar)
         castbar.Time = timer
     end
 
-    local text = F.CreateFS(castbar, C.Assets.Fonts.Regular, 9, 'OUTLINE')
-    text:SetPoint('TOP', castbar, 'BOTTOM', 0, -2)
+    local text = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 10, 'OUTLINE')
+    text:SetPoint('TOP', castbar, 'BOTTOM', 0, -3)
     text:Hide()
     castbar.Text = text
 
@@ -1270,12 +1308,19 @@ function UNITFRAME:AddCastBar(self)
     if self.unitStyle == 'nameplate' then
         castbar.glowFrame = F.CreateGlowFrame(castbar, iconFrame:GetHeight())
         castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
+
+        local spellTarget = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 10, true)
+        spellTarget:ClearAllPoints()
+        spellTarget:SetJustifyH('CENTER')
+        spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
+        castbar.spellTarget = spellTarget
     end
 
     castbar.decimal = '%.1f'
 
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
+    castbar.PostCastUpdate = UNITFRAME.PostCastUpdate
     castbar.PostCastStop = UNITFRAME.PostCastStop
     castbar.PostCastFail = UNITFRAME.PostCastFailed
     castbar.PostCastInterruptible = UNITFRAME.PostUpdateInterruptible
@@ -1283,6 +1328,7 @@ end
 
 --[[ Class power ]]
 
+-- LuaFormatter off
 local lastBarColors = {
     DRUID = {161 / 255, 92 / 255, 255 / 255},
     MAGE = {5 / 255, 96 / 255, 250 / 255},
@@ -1291,6 +1337,7 @@ local lastBarColors = {
     ROGUE = {161 / 255, 92 / 255, 255 / 255},
     WARLOCK = {221 / 255, 36 / 255, 62 / 255},
 }
+-- LuaFormatter on
 
 local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
     -- local style = element.__owner.unitStyle
@@ -1718,15 +1765,13 @@ function UNITFRAME:AddGroupRoleIndicator(self)
         end
     end
 
-    local groupRoleIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '', nil, false,
-        'BOTTOM', 1, 1)
+    local groupRoleIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '', nil, false, 'BOTTOM', 1, 1)
     groupRoleIndicator.Override = UpdateLFD
     self.GroupRoleIndicator = groupRoleIndicator
 end
 
 function UNITFRAME:AddLeaderIndicator(self)
-    local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '!', nil, false,
-        'TOPLEFT', 2, -2)
+    local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '!', nil, false, 'TOPLEFT', 2, -2)
 
     self.LeaderIndicator = leaderIndicator
 end
@@ -1875,8 +1920,7 @@ function UNITFRAME:SendCDMessage()
                     if remaining < 0 then
                         remaining = 0
                     end
-                    C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID,
-                        spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+                    C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
                     -- sync to others
                 end
             end
@@ -1890,8 +1934,7 @@ function UNITFRAME:UpdateSyncStatus()
     if IsInGroup() and not IsInRaid() and C.DB.unitframe.party_spell_sync then
         local thisTime = GetTime()
         if thisTime - lastSyncTime > 5 then
-            C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID),
-                IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+            C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
             -- handshake to ZenTracker
             lastSyncTime = thisTime
         end

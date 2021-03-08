@@ -1191,6 +1191,7 @@ C.CharacterSettings = {
 
         NameOnly = true,
         MajorSpellsGlow = true,
+        SpellTarget = false,
         TargetIndicator = true,
         TargetIndicatorColor = {r = .73, g = .92, b = .99},
         ThreatIndicator = true,

@@ -850,6 +850,8 @@ L.GUI = {
         SCALE = 'Масштаб',
         EXECUT_RATIO_SETTING = 'Коэффициент исполнения',
         EXECUTE_RATIO = 'Коэффициент исполнения',
+        SPELL_TARGET = 'Spell target', -- Need translate
+        SPELL_TARGET_TIP = '|nShow target name of casting spell.', -- Need translate
 
         BLACK_WHITE = 'Белый/черный лист',
         PLAYER_ONLY = 'Список и игрок',
