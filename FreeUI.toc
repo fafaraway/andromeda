@@ -1,11 +1,11 @@
 #@retail@
-## Interface: 90002
+## Interface: 90005
 #@end-retail@
 ## Version: @project-version@
 ## Title: |cffffffffFree|r|cffb2b2b2UI|r
 ## Notes: A user interface replacement for World of Warcraft, minimalistic aesthetic and practical.
 ## Author: Haleth, Solor
-## X-Support: BfA
+## X-Support: ShadowLands
 ## X-Website: https://github.com/Solor/FreeUI
 ## X-WoWI-ID: 23258
 ## OptionalDeps: WeakAuras
