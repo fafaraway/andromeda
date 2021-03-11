@@ -1220,6 +1220,8 @@ C.CharacterSettings = {
         OffTankColor = {r = .2, g = .7, b = .5},
         ColoredTarget = false,
         TargetColor = {r = 0, g = .6, b = 1},
+        ColoredFocus = true,
+        FocusColor = {r = 1, g = 1, b = 1},
         CustomUnitColor = true,
         CustomColor = {r = .8, g = .42, b = .31},
         CustomUnitList = '',

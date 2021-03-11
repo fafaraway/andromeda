@@ -201,8 +201,7 @@ function NAMEPLATE:CheckThreatStatus(unit)
     end
 
     local unitTarget = unit .. 'target'
-    local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and
-                         groupRoles[UnitName(unitTarget)] or 'NONE'
+    local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and groupRoles[UnitName(unitTarget)] or 'NONE'
 
     if C.Role == 'Tank' and unitRole == 'TANK' then
         return true, UnitThreatSituation(unitTarget, unit)
@@ -233,6 +232,8 @@ function NAMEPLATE:UpdateColor(_, unit)
     local offTankColor = C.DB.Nameplate.OffTankColor
     local targetColor = C.DB.Nameplate.TargetColor
     local coloredTarget = C.DB.Nameplate.ColoredTarget
+    local focusColor = C.DB.Nameplate.FocusColor
+    local coloredFocus = C.DB.Nameplate.ColoredFocus
     local hostileClassColor = C.DB.Nameplate.HostileClassColor
     local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
     local tankMode = C.DB.Nameplate.TankMode
@@ -246,6 +247,8 @@ function NAMEPLATE:UpdateColor(_, unit)
     else
         if coloredTarget and UnitIsUnit(unit, 'target') then
             r, g, b = targetColor.r, targetColor.g, targetColor.b
+        elseif coloredFocus and UnitIsUnit(unit, 'focus') then
+            r, g, b = focusColor.r, focusColor.g, focusColor.b
         elseif isCustomUnit then
             r, g, b = customColor.r, customColor.g, customColor.b
         elseif isPlayer and isFriendly then
@@ -336,6 +339,13 @@ function NAMEPLATE:AddThreatIndicator(self)
 end
 
 -- Target indicator
+function NAMEPLATE:UpdateFocusColor()
+    local unit = self.unit
+    if C.DB.Nameplate.ColoredFocus then
+        NAMEPLATE.UpdateThreatColor(self, _, unit)
+    end
+end
+
 function NAMEPLATE:UpdateTargetChange()
     local element = self.TargetIndicator
     local unit = self.unit
@@ -456,12 +466,14 @@ function NAMEPLATE:AddHighlight(self)
 end
 
 -- Unit classification
+-- LuaFormatter off
 local classify = {
     elite = {'VignetteKill'},
     rare = {'VignetteKill', true},
     rareelite = {'VignetteKill', true},
     worldboss = {'VignetteKillElite'},
 }
+-- LuaFormatter on
 
 function NAMEPLATE:AddClassifyIndicator(self)
     if not C.DB.Nameplate.ClassifyIndicator then
@@ -749,8 +761,7 @@ function NAMEPLATE:UpdateDungeonProgress(unit)
             local total = cache[name]
             if not total then
                 for criteriaIndex = 1, numCriteria do
-                    local _, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress =
-                        C_Scenario_GetCriteriaInfo(criteriaIndex)
+                    local _, _, _, _, totalQuantity, _, _, _, _, _, _, _, isWeightedProgress = C_Scenario_GetCriteriaInfo(criteriaIndex)
                     if isWeightedProgress then
                         cache[name] = totalQuantity
                         total = cache[name]
@@ -856,6 +867,8 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:AddSpitefulIndicator(self)
     NAMEPLATE:AddDungeonProgress(self)
 
+    self:RegisterEvent('PLAYER_FOCUS_CHANGED', NAMEPLATE.UpdateFocusColor, true)
+
     platesList[self] = self:GetName()
 end
 
@@ -895,6 +908,7 @@ function NAMEPLATE:RefreshAllPlates()
     NAMEPLATE:RefreshNameplats()
 end
 
+-- LuaFormatter off
 local disabledElements = {
     'Health',
     'Castbar',
@@ -902,6 +916,7 @@ local disabledElements = {
     'PvPClassificationIndicator',
     'ThreatIndicator',
 }
+-- LuaFormatter on
 
 function NAMEPLATE:UpdatePlateByType()
     local nameOnlyName = self.nameOnlyName

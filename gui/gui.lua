@@ -331,10 +331,10 @@ local function CreateOption(i)
 			local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
 			local width = 25 + (horizon or 0) * 120
 			if horizon then
-				swatch:SetPoint('TOPLEFT', width, -offset + 30)
+				swatch:SetPoint('TOPLEFT', width, -offset + 27)
 			else
 				swatch:SetPoint('TOPLEFT', width, -offset - 5)
-				offset = offset + 35
+				offset = offset + 32
 			end
 			swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 		else -- blank, no optType
