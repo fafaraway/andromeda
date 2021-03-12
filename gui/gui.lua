@@ -15,6 +15,7 @@ local APPLY = APPLY
 
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
+local cr, cg, cb = C.r, C.g, C.b
 
 local guiTab = {}
 local guiPage = {}
@@ -119,7 +120,7 @@ end
 local function SelectTab(i)
     for num = 1, #tabsList do
         if num == i then
-            guiTab[num].__gradient:SetGradientAlpha('Vertical', C.r / 2, C.g / 2, C.b / 2, .4, C.r / 4, C.g / 4, C.b / 4, .4)
+            guiTab[num].__gradient:SetGradientAlpha('Vertical', cr / 2, cg / 2, cb / 2, .4, cr / 4, cg / 4, cb / 4, .4)
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
@@ -139,7 +140,7 @@ local function tabOnEnter(self)
     if self.checked then
         return
     end
-    self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
+    self.__bg:SetBackdropColor(cr, cg, cb, .25)
 end
 
 local function tabOnLeave(self)
@@ -298,7 +299,7 @@ local function CreateOption(i)
             dd.button:HookScript('OnClick', function()
                 for num = 1, #data do
                     if num == UpdateValue(key, value) then
-                        opt[num]:SetBackdropColor(C.r, C.g, C.b, .25)
+                        opt[num]:SetBackdropColor(cr, cg, cb, .25)
                         opt[num].selected = true
                     else
                         opt[num]:SetBackdropColor(0, 0, 0, .25)
