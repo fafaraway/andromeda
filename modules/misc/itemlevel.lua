@@ -22,6 +22,7 @@ local F, C = unpack(select(2, ...))
 local MISC = F.MISC
 local TOOLTIP = F.TOOLTIP
 
+-- LuaFormatter off
 local inspectSlots = {
     'Head',
     'Neck',
@@ -41,6 +42,7 @@ local inspectSlots = {
     'MainHand',
     'SecondaryHand',
 }
+-- LuaFormatter on
 
 function MISC:GetSlotAnchor(index)
     if not index then
@@ -78,7 +80,7 @@ function MISC:CreateItemString(frame, strType)
     for index, slot in pairs(inspectSlots) do
         if index ~= 4 then
             local slotFrame = _G[strType .. slot .. 'Slot']
-            slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Bold, 11, true, '', nil, true)
+            slotFrame.iLvlText = F.CreateFS(slotFrame, C.Assets.Fonts.Condensed, 11, true, '', nil, true)
             slotFrame.iLvlText:ClearAllPoints()
             slotFrame.iLvlText:SetPoint('BOTTOMRIGHT', slotFrame, -1, 1)
             local relF, x, y = MISC:GetSlotAnchor(index)
@@ -263,7 +265,7 @@ end
 
 function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
 
     if quality and quality <= 1 then
@@ -308,7 +310,7 @@ end
 
 function MISC:ItemLevel_ScrappingUpdate()
     if not self.iLvl then
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
     end
     if not self.itemLink then
         self.iLvl:SetText('')
@@ -335,6 +337,19 @@ function MISC.ItemLevel_ScrappingShow(event, addon)
     end
 end
 
+function MISC:ItemLevel_UpdateMerchant(link)
+    local quality = link and select(3, GetItemInfo(link)) or nil
+    if quality then
+        if not self.iLvl then
+            self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
+        end
+        local level = F.GetItemLevel(link)
+        local color = C.QualityColors[quality]
+        self.iLvl:SetText(level)
+        self.iLvl:SetTextColor(color.r, color.g, color.b)
+    end
+end
+
 function MISC:ItemLevel()
     if not C.DB.misc.item_level then
         return
@@ -352,5 +367,8 @@ function MISC:ItemLevel()
 
     -- iLvl on ScrappingMachineFrame
     F:RegisterEvent('ADDON_LOADED', MISC.ItemLevel_ScrappingShow)
+
+    -- iLvl on MerchantFrame
+    hooksecurefunc('MerchantFrameItem_UpdateQuality', MISC.ItemLevel_UpdateMerchant)
 end
 MISC:RegisterMisc('GearInfo', MISC.ItemLevel)
