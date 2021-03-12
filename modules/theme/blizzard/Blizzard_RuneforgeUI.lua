@@ -13,16 +13,6 @@ end
 C.Themes["Blizzard_RuneforgeUI"] = function()
 	local frame = RuneforgeFrame
 
-	hooksecurefunc(frame, "RefreshCurrencyDisplay", function(self)
-		for currencyFrame in self.CurrencyDisplay.currencyFramePool:EnumerateActive() do
-			if not currencyFrame.hooked then
-				F.ReplaceIconString(currencyFrame.Text)
-				hooksecurefunc(currencyFrame.Text, "SetText", F.ReplaceIconString)
-				currencyFrame.hooked = true
-			end
-		end
-	end)
-
 	F.ReskinClose(frame.CloseButton, nil, -70, -70)
 
 	local createFrame = frame.CreateFrame

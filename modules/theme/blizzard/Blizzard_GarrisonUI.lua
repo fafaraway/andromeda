@@ -13,6 +13,8 @@ local function ReskinMissionPage(self)
 	F.ReskinClose(self.CloseButton)
 	self.CloseButton:ClearAllPoints()
 	self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
+    if self.EnemyBackground then self.EnemyBackground:Hide() end
+	if self.FollowerBackground then self.FollowerBackground:Hide() end
 
 	if self.Followers then
 		for i = 1, 3 do

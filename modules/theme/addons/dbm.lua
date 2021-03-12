@@ -14,6 +14,10 @@ local TOOLTIP = F.TOOLTIP
 local buttonSize = 24
 
 local function reskinIcon(icon, frame)
+    if not icon then
+        return
+    end
+
     if not icon.styled then
         icon:SetSize(buttonSize, buttonSize)
         icon.SetSize = F.Dummy
@@ -26,17 +30,23 @@ local function reskinIcon(icon, frame)
 
         icon.styled = true
     end
+
     icon:ClearAllPoints()
     icon:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -2, 0)
 end
 
 local function reskinBar(bar, frame)
+    if not bar then
+        return
+    end
+
     if not bar.styled then
         F.StripTextures(bar)
         F.CreateSB(bar, true)
 
         bar.styled = true
     end
+
     bar:SetInside(frame, 2, 2)
 end
 
@@ -70,7 +80,10 @@ local function applyStyle(self)
     reskinIcon(icon1, frame)
     reskinIcon(icon2, frame)
     reskinBar(tbar, frame)
-    texture:SetTexture(C.Assets.statusbar_tex)
+
+    if texture then
+        texture:SetTexture(C.Assets.statusbar_tex)
+    end
 
     name:ClearAllPoints()
     name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
