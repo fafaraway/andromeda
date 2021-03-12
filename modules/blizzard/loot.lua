@@ -234,27 +234,4 @@ end
 BLIZZARD:RegisterBlizz('LootFrame', BLIZZARD.LootFrame)
 
 
-local tDelay = 0
-local LOOT_DELAY = .3
-local function instantLoot()
-	if GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE') then
-		if (GetTime() - tDelay) >= LOOT_DELAY then
-			for i = GetNumLootItems(), 1, -1 do
-				LootSlot(i)
-			end
-			tDelay = GetTime()
-		end
-	end
-end
-
-function BLIZZARD:InstantLoot()
-	if C.DB.blizzard.instant_loot then
-		F:RegisterEvent('LOOT_READY', instantLoot)
-	else
-		F:UnregisterEvent('LOOT_READY', instantLoot)
-	end
-end
-BLIZZARD:RegisterBlizz('InstantLoot', BLIZZARD.InstantLoot)
-
-
 
