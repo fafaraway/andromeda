@@ -20,7 +20,7 @@ function BLIZZARD:OnLogin()
 
 	self:ToggleBossBanner()
 	self:ToggleBossEmote()
-	self:UndressButton()
+
 	self:TradeTargetInfo()
 	self:EasyDelete()
 	self:TicketStatusMover()
@@ -49,44 +49,7 @@ function BLIZZARD:ToggleBossEmote()
 	end
 end
 
-function BLIZZARD:UndressButton()
-	if not C.DB.blizzard.undress_button then return end
 
-	local undressButton = CreateFrame('Button', 'DressUpFrameUndressButton', DressUpFrame, 'UIPanelButtonTemplate')
-	undressButton:SetSize(80, 22)
-	undressButton:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -1, 0)
-	undressButton:SetText(L['BLIZZARD_UNDRESS'])
-	undressButton:RegisterForClicks('AnyUp')
-	undressButton:SetScript('OnClick', function(_, button)
-		local actor = DressUpFrame.ModelScene:GetPlayerActor()
-		if not actor then return end
-		if button == 'RightButton' then
-			actor:UndressSlot(19)
-		else
-			actor:Undress()
-		end
-		PlaySound(SOUNDKIT.GS_TITLE_OPTION_OK)
-	end)
-	--[[ undressButton.model = DressUpFrame.ModelScene
-
-	undressButton:RegisterEvent('AUCTION_HOUSE_SHOW')
-	undressButton:RegisterEvent('AUCTION_HOUSE_CLOSED')
-	undressButton:SetScript('OnEvent', function(self)
-		if AuctionFrame:IsVisible() and self.model ~= SideDressUpFrame.ModelScene then
-			self:SetParent(SideDressUpFrame.ModelScene)
-			self:ClearAllPoints()
-			self:SetPoint('BOTTOM', SideDressUpFrame.ResetButton, 'TOP', 0, 3)
-			self.model = SideDressUpFrame.ModelScene
-		elseif self.model ~= DressUpFrame.ModelScene then
-			self:SetParent(DressUpFrame.ModelScene)
-			self:ClearAllPoints()
-			self:SetPoint('RIGHT', DressUpFrameResetButton, 'LEFT', -2, 0)
-			self.model = DressUpFrame.ModelScene
-		end
-	end) ]]
-
-	F.Reskin(undressButton)
-end
 
 function BLIZZARD:TradeTargetInfo()
 	if not C.DB.blizzard.trade_target_info then return end
