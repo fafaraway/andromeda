@@ -1,17 +1,17 @@
-<div align="center">
+<center>
 <h1>FreeUI</h1>
 <img src="https://img.shields.io/badge/WOW-Shadowlands-orange" />
 <img src="https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord" />
 <img src="https://img.shields.io/github/workflow/status/Solor/FreeUI/Release" />
 <img src="https://img.shields.io/github/v/release/Solor/FreeUI?include_prereleases" />
 <img src="https://img.shields.io/github/release-date/Solor/FreeUI" />
-</div>
+</center>
 <br />
 <br />
 
 ## Introduction
 FreeUI is an user interface replacement for World of Warcraft.  
-Minimalistic, elegant, yet also efficient and functional.
+**Minimalistic**, **elegant**, yet also **efficient** and **practical**.
 
 ## Feedback
 About anything you want to ask or share, you can [report issues on GitHub](https://github.com/Solor/FreeUI/issues)
