@@ -1,11 +1,11 @@
-<center>
+<div align="center">
 <h1>FreeUI</h1>
 <img src="https://img.shields.io/badge/WOW-Shadowlands-orange" />
 <img src="https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord" />
 <img src="https://img.shields.io/github/workflow/status/Solor/FreeUI/Release" />
 <img src="https://img.shields.io/github/v/release/Solor/FreeUI?include_prereleases" />
 <img src="https://img.shields.io/github/release-date/Solor/FreeUI" />
-</center>
+</div>
 <br />
 <br />
 
