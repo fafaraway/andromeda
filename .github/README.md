@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://i.imgur.com/TiWvbWn.png" width="160" height="160" />
+<img src="https://i.imgur.com/PswQwEW.png" />
 <br />
 <br />
 <img src="https://img.shields.io/badge/WOW-Shadowlands-orange" />
