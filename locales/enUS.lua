@@ -5,22 +5,11 @@ local select = select
 local _, _, L = unpack(select(2, ...))
 
 --[[ Binding ]]
-do
-    _G.BINDING_HEADER_FREEUI = 'FreeUI'
-    _G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Toggle FreeUI Config Panel'
-    _G.BINDING_NAME_TOGGLE_QUEST_TRACKER = 'Toggle Quest Tracker'
-end
 
-L.MOVER = {
-    MAIN_BAR = 'Main bar',
-    PET_BAR = 'Pet bar',
-    STANCE_BAR = 'Stance bar',
-    VEHICLE_BAR = 'Leave vehicle button',
-    EXTRA_BAR = 'Extra button',
-    ZONE_ABILITY = 'Zone ability button',
-    CUSTOM_BAR = 'Additional actionbar',
-    COOLDOWN_FLASH = 'Cooldown flash',
-}
+_G.BINDING_HEADER_FREEUI = 'FreeUI'
+_G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Toggle FreeUI Config Panel'
+
+--[[ Actionbar ]]
 
 L.ACTIONBAR = {
     CD_REMAINING = '%s cooldown remaining %s.',
@@ -34,6 +23,8 @@ L.ACTIONBAR = {
     DISCARD_KEYBINDS = 'Keybinds discarded.',
     CLEAR_BINDS = '|cff20ff20All keybinds cleared for|r %s.',
 }
+
+--[[ Announcement ]]
 
 L.ANNOUNCEMENT = {
     INTERRUPT = 'Interrupted %target%\'s %target_spell%!',
@@ -51,15 +42,27 @@ L.ANNOUNCEMENT = {
     RESET_FAILED_OFFLINE = 'Cannot reset %s, there are players offline in your party.',
 }
 
+--[[ Quest ]]
+
 L.QUEST = {
     AUTOMATION = 'Quest automation',
     AUTOMATION_TIP = 'Automatically accept and deliver quests.',
 }
 
+--[[ Unitframe ]]
+
 L.UNITFRAME = {
     BINDER_OPEN = 'Open spell binding',
     BINDER_TITLE = 'Spell Binding',
     BINDER_TIP = 'Ctrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.',
+}
+
+--[[ Blizzard ]]
+
+L.BLIZZARD = {
+    UNDRESS = 'Undress',
+    UNDRESS_TIP = '%sUndress all|n%sUndress tabard',
+    USE_VELLUM = 'Right click to use vellum',
 }
 
 --[[ Misc ]]
@@ -103,7 +106,7 @@ do
     L['BLIZZARD_MOVER_VEHICLE'] = 'Vehicle indicator'
     L['BLIZZARD_MOVER_UIWIDGET'] = 'UIWidget frame'
     L['BLIZZARD_MOVER_DURABILITY'] = 'Durability indicator'
-    L['BLIZZARD_UNDRESS'] = 'Undress'
+
     L['BLIZZARD_STRANGER'] = 'Stranger'
     L['BLIZZARD_KEYSTONES'] = 'Keystones'
     L['BLIZZARD_KEYSTONES_RESET'] = 'Delete keystones info'
@@ -300,7 +303,24 @@ do
     L['UNITFRAME_OFFLINE'] = 'Offline'
 end
 
+--[[ Mover ]]
+
+L.MOVER = {
+    MAIN_BAR = 'Main bar',
+    PET_BAR = 'Pet bar',
+    STANCE_BAR = 'Stance bar',
+    VEHICLE_BAR = 'Leave vehicle button',
+    EXTRA_BAR = 'Extra button',
+    ZONE_ABILITY = 'Zone ability button',
+    CUSTOM_BAR = 'Additional actionbar',
+    COOLDOWN_FLASH = 'Cooldown flash',
+    PLAYER_CASTBAR = 'Player castbar',
+    TARGET_CASTBAR = 'Target castbar',
+    FOCUS_CASTBAR = 'Focus castbar',
+}
+
 --[[ GUI ]]
+
 L.GUI = {
     ['HINT'] = 'Hint',
     ['RELOAD'] = '|cffff2020Do you want to reload the Interface to apply settings ?|r',
@@ -396,13 +416,22 @@ L.GUI = {
         ['AUTO_SCREENSHOT_ACHIEVEMENT'] = 'New achievement earned',
         ['AUTO_SCREENSHOT_CHALLENGE'] = 'Mythic+ dungeon completed',
         ['ITEM_LEVEL'] = 'Item level',
-        ['ITEM_LEVEL_TIP'] = 'Show item level on character frame.',
+        ['ITEM_LEVEL_TIP'] = '|nIf enabled, show item level on CharacterFrame, InspectFrame, MerchantFrame and some other frames.',
         ['GEM_ENCHANT'] = 'Gem and enchant',
         ['GEM_ENCHANT_TIP'] = 'Show gem and enchant on character frame.',
         ['NAKED_BUTTON'] = 'Naked button',
         ['NAKED_BUTTON_TIP'] = 'Show naked button on character frame, double click it to unequip all gears.',
         ['MISSING_STATS'] = 'Missing stats',
         ['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.',
+        FASTER_LOOT = 'Faster auto looting',
+        FASTER_MOVIE_SKIP = 'Faster movie skip',
+        FASTER_MOVIE_SKIP_TIP = '|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.',
+        ENHANCE_DRESSUP = 'Enhanced dressup',
+        ENHANCE_DRESSUP_TIP = '|nIf enabled, add a button to undress items on DressUpFrame.',
+        SMOOTH_ZOOMING = 'Camera smooth zooming',
+        SMOOTH_ZOOMING_TIP = '|nFaster and smooth camera zooming.',
+        ACTION_CAM = 'Camera action mode',
+        ACTION_CAM_TIP = '|nEnable blizzard action camera.',
     },
 
     ['APPEARANCE'] = {
@@ -557,28 +586,30 @@ L.GUI = {
         ['CD_FLASH'] = 'Flash cooldowns',
         ['CD_FLASH_TIP'] = '|nTrack your cooldown using a flash icon in the center of the screen.',
         ['CD_NOTIFY'] = 'Cooldowns notify',
-        ['CD_NOTIFY_TIP'] = '|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|n|nOnly available for FreeUI default actionbar.',
+        ['CD_NOTIFY_TIP'] = '|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.',
+        DESATURATED_ICON = 'Desaturated icon',
+        DESATURATED_ICON_TIP = '|nShow the action bar icons desaturated when they are on cooldown.',
     },
 
     ['COMBAT'] = {
-        ['NAME'] = 'Combat',
-        ['ENABLE'] = 'Enable combat',
-        ['ENABLE_TIP'] = '提供战斗相关的功能。',
-        ['COMBAT_ALERT'] = 'Combat alert',
-        ['COMBAT_ALERT_TIP'] = '进入或离开战斗时在屏幕中间显示一个提示动画。',
-        ['SPELL_SOUND'] = 'Spell sound',
-        ['SPELL_SOUND_TIP'] = '当自己成功打断或驱散时播放一个提示音效。',
-        ['EASY_TAB'] = 'Auto tab',
-        ['EASY_TAB_TIP'] = '进入战场或竞技场时Tab键会忽略宠物类单位优先选择敌对玩家，退出战场或竞技场后恢复默认。',
-        ['EASY_FOCUS'] = 'Easy focus',
-        ['EASY_FOCUS_TIP'] = 'Shift+鼠标左键点击单位模型快速设为焦点，有焦点时Shift+鼠标左键点击任意空白处取消当前焦点。',
-        ['EASY_FOCUS_ON_UNITFRAME'] = 'Easy focus on unitframes',
-        ['EASY_FOCUS_ON_UNITFRAME_TIP'] = 'Easy focus also works on unitframes.',
-        ['EASY_MARK'] = 'Easy mark',
-        ['EASY_MARK_TIP'] = 'Alt+鼠标左键点击单位模型快速设定标记。',
-        ['PVP_SOUND'] = 'PVP sound',
-        ['PVP_SOUND_TIP'] = '为PVP击杀添加类似DotA的音效系统。',
-        ['FCT'] = 'Enable floating combat text',
+        NAME = 'Combat',
+        ENABLE = 'Enable combat',
+        COMBAT_ALERT = 'Combat alert',
+        COMBAT_ALERT_TIP = '|nShow an animated alert when you in or out combat.',
+        SPELL_SOUND = 'Spell sound',
+        SPELL_SOUND_TIP = '|nPlay a sound when you successfully interrup or dispel.',
+        EASY_TAB = 'Smart tab',
+        EASY_TAB_TIP = '|nTab key target only enemy players when in PvP zones, ignores pets and mobs.',
+        EASY_MARK = 'Easy mark',
+        EASY_MARK_TIP = '|nHold your prefer modified key, and left click unit to select raid target mark.',
+        EASY_FOCUS = 'Easy focus',
+        EASY_FOCUS_TIP = '|nHold your prefer modified key, and left click unit to set focus.',
+        EASY_FOCUS_ON_UNITFRAME = 'Easy focus on unitframes',
+        EASY_FOCUS_ON_UNITFRAME_TIP = '|nEasy focus also works on unitframes.|nMay interfere with click casting function, be careful with your key bindings.',
+        PVP_SOUND = 'PVP sound',
+        PVP_SOUND_TIP = '|nPlay various DotA like sound effects on killing blows.',
+        FCT = 'Floating combat text',
+        FCT_TIP = '|nShow compact damage/healing output.',
         ['FCT_IN'] = 'Show incoming',
         ['FCT_OUT'] = 'Show outgoing',
         ['FCT_PET'] = 'Show pet',
@@ -702,7 +733,7 @@ L.GUI = {
         ['FADE_IN_DURATION'] = 'fade in duration',
         ['RANGE_CHECK'] = 'Range check',
         ['PORTRAIT'] = 'Portrait',
-        ['HEAL_PREDICTION'] = 'Heal prediction',
+        ['HEAL_PREDICTION'] = 'Heal prediction indicator',
         ['GCD_INDICATOR'] = 'GCD indicator',
         ['CLASS_POWER_BAR'] = 'Class power bar',
         ['STAGGER_BAR'] = 'Stagger bar',
@@ -710,23 +741,26 @@ L.GUI = {
         ['DEBUFFS_BY_PLAYER'] = 'Debuff filter',
         ['DEBUFF_TYPE'] = 'Debuff types',
         ['STEALABLE_BUFFS'] = 'Stealable buffs',
-        ['PLAYER_COMBAT_INDICATOR'] = 'Combat indicator',
-        ['PLAYER_RESTING_INDICATOR'] = 'Resting indicator',
+        ['PLAYER_COMBAT_INDICATOR'] = 'Player combat indicator',
+        ['PLAYER_RESTING_INDICATOR'] = 'Player resting indicator',
         ['PLAYER_HIDE_TAGS'] = 'Hide player tags',
-        ['ENABLE_CASTBAR'] = 'Enable castbar',
-        ['CASTBAR_SETTING_HEADER'] = 'Castbar setting',
-        ['CASTBAR_TIMER'] = 'Show castbar timer',
-        ['CASTBAR_FOCUS_SEPARATE'] = 'Separate focus castbar',
-        ['CASTBAR_COLORS'] = 'Colors',
-        ['CASTBAR_WIDTH'] = 'width',
-        ['CASTBAR_HEIGHT'] = 'height',
-        ['CASTING_COLOR'] = 'Normal',
-        ['CASTING_UNINTERRUPTIBLE_COLOR'] = 'Uninterrupted',
-        ['CASTING_COMPLETE_COLOR'] = 'Complete',
-        ['CASTING_FAIL_COLOR'] = 'Fail',
-        ['CASTBAR_FOCUS'] = 'Focus castbar',
-        ['CASTBAR_FOCUS_WIDTH'] = 'focus castbar width',
-        ['CASTBAR_FOCUS_HEIGHT'] = 'focus castbar height',
+
+        FONT_OUTLINE = 'Font outline',
+        RAID_TARGET_INDICATOR = 'Raid target indicator',
+
+        ENABLE_CASTBAR = 'Enable castbar',
+        CASTBAR_COMPACT = 'Compact style',
+        CASTBAR_SPELL_NAME = 'Spell name',
+        CASTBAR_SPELL_TIME = 'Spell time',
+        CASTING_COLOR = 'Normal',
+        UNINTERRUPTIBLE_COLOR = 'Uninterruptible',
+        COMPLETE_COLOR = 'Complete',
+        FAIL_COLOR = 'Fail',
+
+        CASTBAR_SIZE_SETTING = 'Castbar size setting',
+
+
+
         ['ENABLE_BOSS'] = 'Enable boss frames',
         ['BOSS_COLOR_SMOOTH'] = 'Boss frames color smooth',
         ['ENABLE_ARENA'] = 'Enable arena frames',
@@ -863,9 +897,9 @@ L.GUI = {
         TANK_MODE_TIP = '|nIf enabled, nameplate health color would present its threat status to you, instead of threat indicator.|nFor custom color units, the threat status remains on threat indicator.',
         REVERT_THREAT = 'Revert threat color',
         REVERT_THREAT_TIP = '|nIf \'Tank Mode\' enabled, swap their threat status color for non-tank classes.',
-        SECURE_COLOR = 'Secure color',
-        TRANS_COLOR = 'Transition color',
-        INSECURE_COLOR = 'Insecure color',
+        SECURE_COLOR = 'Secure',
+        TRANS_COLOR = 'Transition',
+        INSECURE_COLOR = 'Insecure',
         OFF_TANK_COLOR = 'Off-Tank',
         COLORED_TARGET = 'Dyeing target unit',
         COLORED_TARGET_TIP = '|nIf enabled, dyeing your target\'s nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
