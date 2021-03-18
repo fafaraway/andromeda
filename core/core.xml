@@ -8,6 +8,5 @@
 	<Script file="logo.lua"/>
 	<Script file="mover.lua"/>
 	<Script file="slash.lua"/>
-	<Script file="private.lua"/>
 	<Script file="dev.lua"/>
 </Ui>

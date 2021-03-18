@@ -101,7 +101,7 @@ local function ReloadDefaultSettings()
 			C.DB[i] = j
 		end
 	end
-	C.DB['BFA'] = true -- don't empty data on next loading
+	C.DB['ShadowLands'] = true -- don't empty data on next loading
 end
 
 function GUI:ImportData()

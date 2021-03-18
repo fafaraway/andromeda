@@ -947,34 +947,90 @@ function GUI:SetupCastbar(parent)
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.UNITFRAME.CASTBAR_SETTING_HEADER)
+    local panel = createExtraGUI(parent, guiName, L.GUI.UNITFRAME.CASTBAR_SIZE_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    createOptionTitle(scroll.child, L.GUI.UNITFRAME.CASTBAR_COLORS, -10)
-    createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_COLOR, C.DB.unitframe.casting_color,
-                       40, -40)
-    createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_UNINTERRUPTIBLE_COLOR,
-                       C.DB.unitframe.casting_uninterruptible_color, 40, -70)
-    createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_COMPLETE_COLOR,
-                       C.DB.unitframe.casting_complete_color, 40, -100)
-    createOptionSwatch(scroll.child, L.GUI.UNITFRAME.CASTING_FAIL_COLOR,
-                       C.DB.unitframe.casting_fail_color, 40, -130)
+    local data = {
+        [1] = {
+            label = L.GUI.WIDTH,
+            minV = 100,
+            maxV = 300,
+            step = 1,
+            defaultV = 160,
+            x = 20,
+            y = -20,
+            key = 'unitframe',
+            value = 'CastbarPlayerWidth',
+            func = '',
+        },
+        [2] = {
+            label = L.GUI.HEIGHT,
+            minV = 8,
+            maxV = 30,
+            step = 1,
+            defaultV = 16,
+            x = 20,
+            y = -90,
+            key = 'unitframe',
+            value = 'CastbarPlayerHeight',
+            func = '',
+        },
 
-    local defaultValue = {['focus'] = {200, 16}}
+        [3] = {
+            label = L.GUI.WIDTH,
+            minV = 100,
+            maxV = 300,
+            step = 1,
+            defaultV = 160,
+            x = 20,
+            y = -160,
+            key = 'unitframe',
+            value = 'CastbarTargetWidth',
+            func = '',
+        },
+        [4] = {
+            label = L.GUI.HEIGHT,
+            minV = 8,
+            maxV = 30,
+            step = 1,
+            defaultV = 16,
+            x = 20,
+            y = -230,
+            key = 'unitframe',
+            value = 'CastbarTargetHeight',
+            func = '',
+        },
 
-    local function createOptionGroup(parent, title, offset, value, func)
-        createOptionTitle(parent, title, offset)
-        createOptionSlider(parent, L.GUI.UNITFRAME.CASTBAR_WIDTH, 100, 400, 1,
-                           defaultValue[value][1], 20, offset - 60, 'castbar_' .. value .. '_width',
-                           func)
-        createOptionSlider(parent, L.GUI.UNITFRAME.CASTBAR_HEIGHT, 6, 30, 1, defaultValue[value][2],
-                           20, offset - 130, 'castbar_' .. value .. '_height', func)
+        [5] = {
+            label = L.GUI.WIDTH,
+            minV = 100,
+            maxV = 300,
+            step = 1,
+            defaultV = 160,
+            x = 20,
+            y = -300,
+            key = 'unitframe',
+            value = 'CastbarFocusWidth',
+            func = '',
+        },
+        [6] = {
+            label = L.GUI.HEIGHT,
+            minV = 8,
+            maxV = 30,
+            step = 1,
+            defaultV = 16,
+            x = 20,
+            y = -370,
+            key = 'unitframe',
+            value = 'CastbarFocusHeight',
+            func = '',
+        },
+    }
+
+    for k, v in ipairs(data) do
+        --createOptionTitle(parent, title, offset)
+        createOptionsSlider(scroll.child, v.label, v.minV, v.maxV, v.step, v.defaultV, v.x, v.y, v.key, v.value, v.func)
     end
-
-    local function updateFocusCastbar()
-    end
-
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CASTBAR_FOCUS, -180, 'focus', updateFocusCastbar)
 end
 
 function GUI:SetupCustomClassColor(parent)

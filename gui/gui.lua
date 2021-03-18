@@ -15,10 +15,11 @@ local APPLY = APPLY
 
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
-local cr, cg, cb = C.r, C.g, C.b
 
 local guiTab = {}
 local guiPage = {}
+GUI.Tab = guiTab
+GUI.Page = guiPage
 
 local tabsList = {
     L.GUI.APPEARANCE.NAME,
@@ -118,9 +119,11 @@ local function CombatLockdown(event)
 end
 
 local function SelectTab(i)
+    local r, g, b = C.r, C.g, C.b
+
     for num = 1, #tabsList do
         if num == i then
-            guiTab[num].__gradient:SetGradientAlpha('Vertical', cr / 2, cg / 2, cb / 2, .4, cr / 4, cg / 4, cb / 4, .4)
+            guiTab[num].__gradient:SetGradientAlpha('Vertical', r / 2, g / 2, b / 2, .4, r / 4, g / 4, b / 4, .4)
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
@@ -182,6 +185,7 @@ local function CreateTab(parent, i, name)
 end
 
 local function CreateOption(i)
+    local r, g, b = C.r, C.g, C.b
     local parent, offset = guiPage[i].child, 20
 
     for _, option in pairs(GUI.OptionsList[i]) do
@@ -211,7 +215,7 @@ local function CreateOption(i)
 
             if data and type(data) == 'function' then
                 local bu = CreateGearButton(parent)
-                bu:SetPoint('LEFT', cb.name, 'RIGHT', -2, 1)
+                bu:SetPoint('LEFT', cb.label, 'RIGHT', -2, 1)
                 bu:SetScript('OnClick', data)
             end
 
@@ -299,7 +303,7 @@ local function CreateOption(i)
             dd.button:HookScript('OnClick', function()
                 for num = 1, #data do
                     if num == UpdateValue(key, value) then
-                        opt[num]:SetBackdropColor(cr, cg, cb, .25)
+                        opt[num]:SetBackdropColor(r, g, b, .25)
                         opt[num].selected = true
                     else
                         opt[num]:SetBackdropColor(0, 0, 0, .25)
@@ -326,7 +330,7 @@ local function CreateOption(i)
             end
         elseif optType == 5 then -- colorswatch
             local swatch = F.CreateColorSwatch(parent, name, UpdateValue(key, value))
-            local width = 25 + (horizon or 0) * 120
+            local width = 25 + (horizon or 0) * 115
             if horizon then
                 swatch:SetPoint('TOPLEFT', width, -offset + 27)
             else
