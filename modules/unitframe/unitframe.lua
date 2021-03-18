@@ -96,8 +96,7 @@ function UNITFRAME:CheckCornerSpells()
     end
 
     for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MyClass]) do
-        if not next(value) and C.CornerSpellsList[C.MyClass][spellID] == nil or
-            C.BloodlustList[spellID] then
+        if not next(value) and C.CornerSpellsList[C.MyClass][spellID] == nil or C.BloodlustList[spellID] then
             _G.FREE_ADB['CornerSpellsList'][C.MyClass][spellID] = nil
         end
     end
@@ -127,8 +126,7 @@ end
 function UNITFRAME:InitializeAuras()
     for instName, value in pairs(raidDebuffsList) do
         for spell, priority in pairs(value) do
-            if _G.FREE_ADB['RaidDebuffsList'][instName] and
-                _G.FREE_ADB['RaidDebuffsList'][instName][spell] and
+            if _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] and
                 _G.FREE_ADB['RaidDebuffs'][instName][spell] == priority then
                 _G.FREE_ADB['RaidDebuffsList'][instName][spell] = nil
             end
@@ -201,16 +199,14 @@ function UNITFRAME:OnLogin()
     if C.DB.unitframe.spec_position then
         local function UpdateSpecPos(event, ...)
             local unit, _, spellID = ...
-            if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or
-                event == 'ON_LOGIN' then
+            if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'ON_LOGIN' then
                 local specIndex = GetSpecialization()
                 if not specIndex then
                     return
                 end
 
                 if not C.DB['ui_anchor']['raid_position' .. specIndex] then
-                    C.DB['ui_anchor']['raid_position' .. specIndex] =
-                        {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
+                    C.DB['ui_anchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
                 end
 
                 UNITFRAME.RaidMover:ClearAllPoints()
@@ -218,8 +214,7 @@ function UNITFRAME:OnLogin()
 
                 if UNITFRAME.RaidMover then
                     UNITFRAME.RaidMover:ClearAllPoints()
-                    UNITFRAME.RaidMover:SetPoint(unpack(
-                                                     C.DB['ui_anchor']['raid_position' .. specIndex]))
+                    UNITFRAME.RaidMover:SetPoint(unpack(C.DB['ui_anchor']['raid_position' .. specIndex]))
                 end
 
                 if not C.DB['ui_anchor']['party_position' .. specIndex] then
@@ -228,9 +223,7 @@ function UNITFRAME:OnLogin()
                 end
                 if UNITFRAME.PartyMover then
                     UNITFRAME.PartyMover:ClearAllPoints()
-                    UNITFRAME.PartyMover:SetPoint(unpack(
-                                                      C.DB['ui_anchor']['party_position' ..
-                                                          specIndex]))
+                    UNITFRAME.PartyMover:SetPoint(unpack(C.DB['ui_anchor']['party_position' .. specIndex]))
                 end
             end
         end

@@ -192,11 +192,14 @@ end
 
 function UNITFRAME:AddHealthBar(self)
     local style = self.unitStyle
+    local transMode = C.DB.unitframe.transparent_mode
+    local groupColorStyle = C.DB.unitframe.group_color_style
+    local colorStyle = C.DB.unitframe.color_style
     local isParty = (style == 'party')
     local isRaid = (style == 'raid')
     local isBoss = (style == 'boss')
     local isArena = (style == 'arena')
-    local isBaseUnits = F.MultiCheck(style, 'player', 'playerplate', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
+    local isBaseUnits = F.MultiCheck(style, 'player', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
 
     local health = CreateFrame('StatusBar', nil, self)
     health:SetFrameStrata('LOW')
@@ -210,7 +213,7 @@ function UNITFRAME:AddHealthBar(self)
     health:SetHeight(self:GetHeight() - C.DB.unitframe.power_bar_height - C.Mult)
     F:SmoothBar(health)
 
-    if not C.DB.unitframe.transparent_mode then
+    if not transMode then
         local bg = health:CreateTexture(nil, 'BACKGROUND')
         bg:SetAllPoints(health)
         bg:SetTexture(C.Assets.bd_tex)
@@ -222,10 +225,10 @@ function UNITFRAME:AddHealthBar(self)
     health.colorTapping = true
     health.colorDisconnected = true
 
-    if ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 2) or (isBaseUnits and C.DB.unitframe.color_style == 2) or isArena then
+    if ((isParty or isRaid or isBoss) and groupColorStyle == 2) or (isBaseUnits and colorStyle == 2) or isArena then
         health.colorClass = true
         health.colorSelection = true
-    elseif ((isParty or isRaid or isBoss) and C.DB.unitframe.group_color_style == 3) or (isBaseUnits and C.DB.unitframe.color_style == 3) then
+    elseif ((isParty or isRaid or isBoss) and groupColorStyle == 3) or (isBaseUnits and colorStyle == 3) then
         health.colorSmooth = true
     else
         health.colorHealth = true
@@ -589,7 +592,8 @@ local function BolsterPostUpdate(element)
     end
 end
 
-function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _,
+    nameplateShowAll)
     local style = element.__owner.unitStyle
     local isMine = F.MultiCheck(caster, 'player', 'pet', 'vehicle')
 
@@ -609,7 +613,8 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         if C.DB.unitframe.corner_indicator then
             return C.RaidBuffsList['ALL'][spellID] or _G.FREE_ADB['RaidAuraWatch'][spellID]
         else
-            return (button.isPlayer or caster == 'pet') and UNITFRAME.CornerSpellsList[spellID] or C.RaidBuffsList['ALL'][spellID] or C.RaidBuffsList['WARNING'][spellID]
+            return (button.isPlayer or caster == 'pet') and UNITFRAME.CornerSpellsList[spellID] or
+                       C.RaidBuffsList['ALL'][spellID] or C.RaidBuffsList['WARNING'][spellID]
         end
     elseif style == 'target' then
         if element.onlyShowPlayer and button.isDebuff then
@@ -988,7 +993,7 @@ if C.MyClass == 'PRIEST' then
         channelingTicks[47758] = numTicks
     end
     F:RegisterEvent('PLAYER_LOGIN', updateTicks)
-    F:RegisterEvent('ACTIVE_TALENT_GROUP_CHANGED', updateTicks)
+    F:RegisterEvent('PLAYER_TALENT_UPDATE', updateTicks)
 end
 
 local ticks = {}
@@ -1016,7 +1021,7 @@ end
 
 function UNITFRAME:OnCastbarUpdate(elapsed)
     if self.casting or self.channeling then
-        local decimal = self.decimal
+        local decimal = self.Decimal
 
         local duration = self.casting and self.duration + elapsed or self.duration - elapsed
         if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
@@ -1025,29 +1030,29 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
             return
         end
 
-        if self.__owner.unit == 'player' and self.Time then
+        if self.__owner.unit == 'player' then
             if self.delay ~= 0 then
-                self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
+                self.Time:SetFormattedText(decimal .. ' | |cffff0000' .. decimal, duration,
+                                           self.casting and self.max + self.delay or self.max - self.delay)
             else
-                self.Time:SetFormattedText(decimal, self.max - duration)
+                self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.max)
                 if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
                     self.Lag:SetFormattedText('%d ms', self.SafeZone.timeDiff * 1000)
                 end
             end
-            -- else
-            -- 	if duration > 1e4 then
-            -- 		self.Time:SetText('∞')
-            -- 	else
-            -- 		self.Time:SetFormattedText(decimal, (self.casting and self.max + self.delay or self.max - self.delay) - duration)
-            -- 	end
+        else
+            if duration > 1e4 then
+                self.Time:SetText('∞ | ∞')
+            else
+                self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration,
+                                           self.casting and self.max + self.delay or self.max - self.delay)
+            end
         end
         self.duration = duration
         self:SetValue(duration)
-        if (not C.DB.unitframe.castbar_focus_separate and self.__owner.unit == 'focus') then
-            self.Spark:SetPoint('CENTER', self, 'RIGHT', -((duration / self.max) * self:GetWidth()), 0)
-        else
-            self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
-        end
+        self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
+    elseif self.holdTime > 0 then
+        self.holdTime = self.holdTime - elapsed
     else
         self.Spark:Hide()
         local alpha = self:GetAlpha() - .02
@@ -1058,6 +1063,15 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
             self:Hide()
         end
     end
+end
+
+function UNITFRAME:OnCastSent()
+    local element = self.Castbar
+    if not element.SafeZone then
+        return
+    end
+    element.SafeZone.sendTime = GetTime()
+    element.SafeZone.castSent = true
 end
 
 local function updateSpellTarget(self, unit)
@@ -1087,17 +1101,20 @@ local function resetSpellTarget(self)
     end
 end
 
+
+
 function UNITFRAME:PostCastStart(unit)
-    local castingColor = C.DB.unitframe.casting_color
-    local notInterruptibleColor = C.DB.unitframe.casting_uninterruptible_color
+    local compact = C.DB.unitframe.CastbarCompact
+    local normalColor = C.DB.unitframe.CastbarCastingColor
+    local uninterruptibleColor = C.DB.unitframe.CastbarUninterruptibleColor
+    local color = self.notInterruptible and uninterruptibleColor or normalColor
+    local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
 
     -- F.Debug(self.name)
     -- F.Debug(self.spellID)
 
     self:SetAlpha(1)
     self.Spark:Show()
-
-    self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b)
 
     if unit == 'vehicle' or UnitInVehicle('player') then
         if self.SafeZone then
@@ -1126,55 +1143,22 @@ function UNITFRAME:PostCastStart(unit)
             numTicks = channelingTicks[self.spellID] or 0
         end
         updateCastBarTicks(self, numTicks)
-    elseif not UnitIsUnit(unit, 'player') and self.notInterruptible then
-        self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
+
     end
 
-    if self.iconBg then
-        if self.notInterruptible then
-            self.iconBg:SetBackdropColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
-        else
-            self.iconBg:SetBackdropColor(castingColor.r, castingColor.g, castingColor.b)
-        end
-    end
-
-    if self.iconGlow then
-        if self.notInterruptible then
-            self.iconGlow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .5)
-        else
-            self.iconGlow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
-        end
-    end
-
-    if self.Glow and not (C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
-        if self.notInterruptible then
-            self.Glow:SetBackdropBorderColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .35)
-        else
-            self.Glow:SetBackdropBorderColor(castingColor.r, castingColor.g, castingColor.b, .35)
-        end
-    end
-
-    if C.DB.unitframe.castbar_focus_separate and self.__owner.unit == 'focus' then
-        if self.notInterruptible then
-            self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, 1)
-        else
-            self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b, 1)
-        end
-
-        self.Bg:SetBackdropColor(0, 0, 0, .6)
-        self.Bg:SetBackdropBorderColor(0, 0, 0, 1)
+    if compact then
+        self:SetStatusBarColor(color.r, color.g, color.b, .6)
+        self.Backdrop:SetBackdropColor(0, 0, 0, .2)
+        self.Backdrop:SetBackdropBorderColor(0, 0, 0, 0)
+        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .6)
     else
-        if self.notInterruptible then
-            self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b, .5)
-        else
-            self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b, .5)
-        end
-
-        self.Bg:SetBackdropColor(0, 0, 0, .2)
-        self.Bg:SetBackdropBorderColor(0, 0, 0, 0)
+        self:SetStatusBarColor(color.r, color.g, color.b, 1)
+        self.Backdrop:SetBackdropColor(0, 0, 0, .6)
+        self.Backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .35)
     end
 
-    self.Text:SetText('') -- disable casting spell name, we only need interrupt info
+    self.Text:SetTextColor(unpack(textColor))
 
     if self.__owner.unitStyle == 'nameplate' then
         -- Major spells
@@ -1187,6 +1171,8 @@ function UNITFRAME:PostCastStart(unit)
         -- Spell target
         updateSpellTarget(self, unit)
     end
+
+
 end
 
 function UNITFRAME:PostCastUpdate(unit)
@@ -1194,33 +1180,44 @@ function UNITFRAME:PostCastUpdate(unit)
 end
 
 function UNITFRAME:PostUpdateInterruptible(unit)
-    local castingColor = C.DB.unitframe.casting_color
-    local notInterruptibleColor = C.DB.unitframe.casting_uninterruptible_color
+    local compact = C.DB.unitframe.CastbarCompact
+    local normalColor = C.DB.unitframe.CastbarCastingColor
+    local uninterruptibleColor = C.DB.unitframe.CastbarUninterruptibleColor
+    local color = self.notInterruptible and uninterruptibleColor or normalColor
+    local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
 
-    if not UnitIsUnit(unit, 'player') and self.notInterruptible then
-        self:SetStatusBarColor(notInterruptibleColor.r, notInterruptibleColor.g, notInterruptibleColor.b)
+    if compact then
+        self:SetStatusBarColor(color.r, color.g, color.b, .6)
+        self.Backdrop:SetBackdropColor(0, 0, 0, .2)
+        self.Backdrop:SetBackdropBorderColor(0, 0, 0, 0)
+        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .6)
     else
-        self:SetStatusBarColor(castingColor.r, castingColor.g, castingColor.b)
+        self:SetStatusBarColor(color.r, color.g, color.b, 1)
+        self.Backdrop:SetBackdropColor(0, 0, 0, .6)
+        self.Backdrop:SetBackdropBorderColor(0, 0, 0, 1)
+        self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .35)
     end
+
+    self.Text:SetTextColor(unpack(textColor))
 end
 
 function UNITFRAME:PostCastStop()
-    local completeColor = C.DB.unitframe.casting_complete_color
+    local color = C.DB.unitframe.CastbarCompleteColor
 
     if not self.fadeOut then
-        self:SetStatusBarColor(completeColor.r, completeColor.g, completeColor.b)
+        self:SetStatusBarColor(color.r, color.g, color.b)
         self.fadeOut = true
     end
-    self:SetValue(self.max)
+
     self:Show()
 
     resetSpellTarget(self)
 end
 
 function UNITFRAME:PostCastFailed()
-    local failColor = C.DB.unitframe.casting_fail_color
+    local color = C.DB.unitframe.CastbarFailColor
 
-    self:SetStatusBarColor(failColor.r, failColor.g, failColor.b)
+    self:SetStatusBarColor(color.r, color.g, color.b)
     self:SetValue(self.max)
     self.fadeOut = true
     self:Show()
@@ -1228,33 +1225,43 @@ function UNITFRAME:PostCastFailed()
     resetSpellTarget(self)
 end
 
+local function createBarMover(bar, text, value, anchor)
+    local mover = F.Mover(bar, text, value, anchor, bar:GetHeight() + bar:GetWidth() + 3, bar:GetHeight() + 3)
+    bar:ClearAllPoints()
+    bar:SetPoint('CENTER', mover)
+    bar.mover = mover
+end
+
+local cbPosition = {
+    player = {'CENTER', _G.UIParent, 'CENTER', 0, -280},
+    target = {'LEFT', _G.UIParent, 'CENTER', 113, -152},
+    focus = {'CENTER', _G.UIParent, 'CENTER', 0, 120},
+}
+
+
+
 function UNITFRAME:AddCastBar(self)
-    if not C.DB.unitframe.enable_castbar then
+    if not C.DB.unitframe.EnableCastbar then
         return
     end
 
-    local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. self.unitStyle, self)
+    local style = self.unitStyle
+    local compact = C.DB.unitframe.CastbarCompact
+    local playerWidth = C.DB.unitframe.CastbarPlayerWidth
+    local playerHeight = C.DB.unitframe.CastbarPlayerHeight
+    local targetWidth = C.DB.unitframe.CastbarTargetWidth
+    local targetHeight = C.DB.unitframe.CastbarTargetHeight
+    local focusWidth = C.DB.unitframe.CastbarFocusWidth
+    local focusHeight = C.DB.unitframe.CastbarFocusHeight
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
+    local color = C.DB.unitframe.CastbarCastingColor
+
+    local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
     castbar:SetStatusBarTexture(C.Assets.statusbar_tex)
-    castbar:SetStatusBarColor(0, 0, 0, 0)
-    castbar.Bg = F.CreateBDFrame(castbar)
-    castbar.Glow = F.CreateSD(castbar.Bg, .35, 4, 4)
 
-    if (not C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
-        castbar:SetFillStyle('REVERSE')
-    end
-
-    if self.unitStyle == 'focus' and C.DB.unitframe.castbar_focus_separate then
-        castbar:SetSize(C.DB.unitframe.castbar_focus_width, C.DB.unitframe.castbar_focus_height)
-        castbar:ClearAllPoints()
-
-        F.Mover(castbar, L['UNITFRAME_MOVER_CASTBAR'], 'FocusCastbar', {'CENTER', _G.UIParent, 'CENTER', 0, 200}, C.DB.unitframe.castbar_focus_width, C.DB.unitframe.castbar_focus_height)
-    else
-        castbar:SetAllPoints(self)
-        castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
-        castbar:SetSize(self:GetWidth(), self:GetHeight())
-    end
-
-    self.Castbar = castbar
+    castbar.Backdrop = F.CreateBDFrame(castbar)
+    castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.spark_tex)
@@ -1263,60 +1270,83 @@ function UNITFRAME:AddCastBar(self)
     spark:SetSize(12, castbar:GetHeight() * 2)
     castbar.Spark = spark
 
-    if C.DB.unitframe.castbar_timer then
-        local timer = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 11, 'OUTLINE')
-        timer:SetPoint('CENTER', castbar)
-        castbar.Time = timer
-    end
-
-    local text = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 10, 'OUTLINE')
+    local text = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
     text:SetPoint('TOP', castbar, 'BOTTOM', 0, -3)
-    text:Hide()
+    text:SetShown(C.DB.unitframe.CastbarSpellName)
+    text:SetTextColor(1, 1, 1)
     castbar.Text = text
 
-    local iconFrame = CreateFrame('Frame', nil, castbar)
-    if C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus' then
-        iconFrame:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
-    else
-        iconFrame:SetSize(castbar:GetHeight() + 6, castbar:GetHeight() + 6)
-    end
+    local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+    time:SetPoint('CENTER', castbar)
+    time:SetShown(C.DB.unitframe.CastbarSpellTime)
+    castbar.Time = time
+    castbar.Decimal = '%.1f'
 
-    if (not C.DB.unitframe.castbar_focus_separate and self.unitStyle == 'focus') then
-        iconFrame:ClearAllPoints()
-        iconFrame:SetPoint('LEFT', castbar, 'RIGHT', 4, 0)
-    else
-        iconFrame:ClearAllPoints()
-        iconFrame:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
-    end
-
-    local icon = iconFrame:CreateTexture(nil, 'OVERLAY')
-    icon:SetAllPoints(iconFrame)
+    local icon = castbar:CreateTexture(nil, 'ARTWORK')
     icon:SetTexCoord(unpack(C.TexCoord))
+    F.SetBD(icon)
     castbar.Icon = icon
-    castbar.iconBg = F.CreateBDFrame(iconFrame)
-    castbar.iconGlow = F.CreateSD(iconFrame, .35, 4, 4)
 
-    if self.unitStyle == 'player' then
+    if compact then
+        castbar:SetStatusBarColor(0, 0, 0, 0)
+        castbar:SetAllPoints(self)
+        castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
+        castbar:SetStatusBarColor(color.r, color.g, color.b, .6)
+        castbar.Backdrop:SetBackdropColor(0, 0, 0, 0)
+        castbar.Border:SetBackdropBorderColor(color.r, color.g, color.b, .45)
+
+        icon:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
+        icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+    else
+        if style == 'player' then
+            castbar:SetSize(playerWidth, playerHeight)
+            createBarMover(castbar, L.MOVER.PLAYER_CASTBAR, 'PlayerCastbar', cbPosition.player)
+
+            icon:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
+            icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+        elseif style == 'target' then
+            castbar:SetSize(targetWidth, targetHeight)
+            createBarMover(castbar, L.MOVER.TARGET_CASTBAR, 'TargetCastbar', cbPosition.target)
+
+            icon:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
+            icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+        elseif style == 'focus' then
+            castbar:SetSize(focusWidth, focusHeight)
+            createBarMover(castbar, L.MOVER.FOCUS_CASTBAR, 'FocusCastbar', cbPosition.focus)
+
+            icon:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
+            icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+        elseif style == 'nameplate' then
+            castbar:SetSize(self:GetWidth(), 4)
+            castbar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -2)
+
+            icon:SetSize(castbar:GetHeight() + self:GetHeight() + 2, castbar:GetHeight() + self:GetHeight() + 2)
+            icon:ClearAllPoints()
+            icon:SetPoint('TOPRIGHT', self, 'TOPLEFT', -2, 0)
+        end
+
+        castbar:SetStatusBarColor(color.r, color.g, color.b)
+    end
+
+    if style == 'player' then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.bd_tex)
-        safeZone:SetVertexColor(223 / 255, 63 / 255, 107 / 255, .6)
+        safeZone:SetTexture(C.Assets.statusbar_tex)
+        safeZone:SetVertexColor(.87, .25, .42, .6)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
         castbar.SafeZone = safeZone
-    end
-
-    if self.unitStyle == 'nameplate' then
-        castbar.glowFrame = F.CreateGlowFrame(castbar, iconFrame:GetHeight())
+    elseif style == 'nameplate' then
+        castbar.glowFrame = F.CreateGlowFrame(castbar, icon:GetHeight())
         castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
-        local spellTarget = F.CreateFS(castbar, C.Assets.Fonts.Condensed, 10, true)
+        local spellTarget = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
         spellTarget:ClearAllPoints()
         spellTarget:SetJustifyH('CENTER')
         spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
         castbar.spellTarget = spellTarget
     end
 
-    castbar.decimal = '%.1f'
+    self.Castbar = castbar
 
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
@@ -1329,22 +1359,22 @@ end
 --[[ Class power ]]
 
 -- LuaFormatter off
-local lastBarColors = {
-    DRUID = {161 / 255, 92 / 255, 255 / 255},
-    MAGE = {5 / 255, 96 / 255, 250 / 255},
-    MONK = {0 / 255, 143 / 255, 247 / 255},
-    PALADIN = {221 / 255, 36 / 255, 62 / 255},
-    ROGUE = {161 / 255, 92 / 255, 255 / 255},
-    WARLOCK = {221 / 255, 36 / 255, 62 / 255},
+local fullyChargedColors = {
+    DRUID = {.78, .48, .96},
+    MAGE = {.87, .14, .24},
+    MONK = {.87, .14, .24},
+    PALADIN = {.87, .14, .24},
+    ROGUE = {.78, .48, .96},
+    WARLOCK = {.87, .14, .24},
 }
 -- LuaFormatter on
 
-local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
+local function PostUpdateClassPower(element, cur, max, diff, powerType, chargedIndex)
     -- local style = element.__owner.unitStyle
     local gap = 3
     local maxWidth = C.DB.unitframe.player_width
 
-    if hasMaxChanged then
+    if diff then
         for i = 1, max do
             element[i]:SetWidth((maxWidth - (max - 1) * gap) / max)
         end
@@ -1352,7 +1382,7 @@ local function PostUpdateClassPower(element, cur, max, hasMaxChanged, powerType)
 
     element.thisColor = cur == max and 1 or 2
     if not element.prevColor or element.prevColor ~= element.thisColor then
-        local r, g, b = lastBarColors[C.MyClass] and unpack(lastBarColors[C.MyClass]) or 1, 0, 0
+        local r, g, b = fullyChargedColors[C.MyClass] and unpack(fullyChargedColors[C.MyClass]) or 1, 0, 0
         if element.thisColor == 2 then
             local color = element.__owner.colors.power[powerType]
             r, g, b = color[1], color[2], color[3]
@@ -1621,13 +1651,10 @@ function UNITFRAME:AddPvPIndicator(self) -- Deprecated
         return
     end
 
-    local PvPIndicator
-    if _G.FREE_ADB.font_outline then
-        PvPIndicator = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
-    else
-        PvPIndicator = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    end
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
 
+    local PvPIndicator = F.CreateFS(self, font, 11, outline, '', nil, outline or 'THICK')
     PvPIndicator:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 5, 0)
 
     PvPIndicator.SetTexture = F.Dummy
@@ -1695,14 +1722,12 @@ function UNITFRAME:UpdateRaidTargetIndicator()
     local nameOnlyName = self.nameOnlyName
     local title = self.npcTitle
     local isNameOnly = self.isNameOnly
-    local enable = C.DB.unitframe.target_icon_indicator
-    local npEnable = C.DB.Nameplate.RaidTargetIndicator
-    local size = C.DB.unitframe.target_icon_indicator_size
-    local alpha = C.DB.unitframe.target_icon_indicator_alpha
+    local size = C.DB.unitframe.RaidTargetIndicatorSize
+    local alpha = C.DB.unitframe.RaidTargetIndicatorAlpha
     local npSize = C.DB.Nameplate.RaidTargetIndicatorSize
     local npAlpha = C.DB.Nameplate.RaidTargetIndicatorAlpha
 
-    if style == 'nameplate' and npEnable then
+    if style == 'nameplate' then
         if isNameOnly then
             raidTarget:SetParent(self)
             raidTarget:ClearAllPoints()
@@ -1715,14 +1740,10 @@ function UNITFRAME:UpdateRaidTargetIndicator()
 
         raidTarget:SetAlpha(npAlpha)
         raidTarget:SetSize(npSize, npSize)
-        raidTarget:Show()
-    elseif enable then
+    else
         raidTarget:SetPoint('CENTER')
         raidTarget:SetAlpha(alpha)
         raidTarget:SetSize(size, size)
-        raidTarget:Show()
-    else
-        raidTarget:Hide()
     end
 end
 
@@ -1732,7 +1753,6 @@ function UNITFRAME:AddRaidTargetIndicator(self)
     icon:SetAlpha(1)
     icon:SetSize(24, 24)
     icon:SetTexture(C.Assets.target_icon)
-    icon:Hide()
 
     self.RaidTargetIndicator = icon
 
@@ -1746,33 +1766,38 @@ function UNITFRAME:AddReadyCheckIndicator(self)
     self.ReadyCheckIndicator = readyCheckIndicator
 end
 
-function UNITFRAME:AddGroupRoleIndicator(self)
-    local UpdateLFD = function(self, event)
-        local lfdrole = self.GroupRoleIndicator
-        local role = UnitGroupRolesAssigned(self.unit)
+local function updateGroupRoleIndicator(self, event)
+    local lfdrole = self.GroupRoleIndicator
+    local role = UnitGroupRolesAssigned(self.unit)
 
-        if role == 'DAMAGER' then
-            lfdrole:SetTextColor(.8, .2, .1, 1)
-            lfdrole:SetText('*')
-        elseif role == 'TANK' then
-            lfdrole:SetTextColor(.9, .8, .2, 1)
-            lfdrole:SetText('#')
-        elseif role == 'HEALER' then
-            lfdrole:SetTextColor(0, 1, 0, 1)
-            lfdrole:SetText('+')
-        else
-            lfdrole:SetTextColor(0, 0, 0, 0)
-        end
+    if role == 'DAMAGER' then
+        lfdrole:SetTextColor(.8, .2, .1, 1)
+        lfdrole:SetText('*')
+    elseif role == 'TANK' then
+        lfdrole:SetTextColor(.9, .8, .2, 1)
+        lfdrole:SetText('#')
+    elseif role == 'HEALER' then
+        lfdrole:SetTextColor(0, 1, 0, 1)
+        lfdrole:SetText('+')
+    else
+        lfdrole:SetTextColor(0, 0, 0, 0)
     end
+end
 
-    local groupRoleIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '', nil, false, 'BOTTOM', 1, 1)
-    groupRoleIndicator.Override = UpdateLFD
+function UNITFRAME:AddGroupRoleIndicator(self)
+    local font = C.Assets.Fonts.Pixel
+
+    local groupRoleIndicator = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
+    groupRoleIndicator:SetPoint('BOTTOM', 1, 1)
+    groupRoleIndicator.Override = updateGroupRoleIndicator
     self.GroupRoleIndicator = groupRoleIndicator
 end
 
 function UNITFRAME:AddLeaderIndicator(self)
-    local leaderIndicator = F.CreateFS(self.Health, C.Assets.Fonts.Pixel, 8, 'OUTLINE, MONOCHROME', '!', nil, false, 'TOPLEFT', 2, -2)
+    local font = C.Assets.Fonts.Pixel
 
+    local leaderIndicator = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME', '!')
+    leaderIndicator:SetPoint('TOPLEFT', 2, -2)
     self.LeaderIndicator = leaderIndicator
 end
 
@@ -1920,7 +1945,9 @@ function UNITFRAME:SendCDMessage()
                     if remaining < 0 then
                         remaining = 0
                     end
-                    C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID, spellID, duration, remaining, '-'), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+                    C_ChatInfo_SendAddonMessage('ZenTracker', format('3:U:%s:%d:%.2f:%.2f:%s', UNITFRAME.myGUID,
+                                                                     spellID, duration, remaining, '-'),
+                                                IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
                     -- sync to others
                 end
             end
@@ -1934,7 +1961,8 @@ function UNITFRAME:UpdateSyncStatus()
     if IsInGroup() and not IsInRaid() and C.DB.unitframe.party_spell_sync then
         local thisTime = GetTime()
         if thisTime - lastSyncTime > 5 then
-            C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID), IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
+            C_ChatInfo_SendAddonMessage('ZenTracker', format('3:H:%s:0::0:1', UNITFRAME.myGUID),
+                                        IsPartyLFG() and 'INSTANCE_CHAT' or 'PARTY')
             -- handshake to ZenTracker
             lastSyncTime = thisTime
         end
@@ -1993,12 +2021,10 @@ end
 --[[ Tags ]]
 
 function UNITFRAME:AddGroupNameText(self)
-    local groupName
-    if _G.FREE_ADB.font_outline then
-        groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, true, nil, nil, true)
-    else
-        groupName = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 10, nil, nil, nil, 'THICK')
-    end
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
+
+    local groupName = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     self:Tag(groupName, '[free:groupname][free:offline][free:dead]')
     self.GroupName = groupName
@@ -2006,22 +2032,22 @@ end
 
 function UNITFRAME:AddNameText(self)
     local style = self.unitStyle
-    local name
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
 
-    if _G.FREE_ADB.font_outline then
-        name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
-    else
-        name = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    end
+    local name = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
     if style == 'target' then
+        name:SetJustifyH('RIGHT')
         name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
     elseif style == 'arena' or style == 'boss' then
+        name:SetJustifyH('LEFT')
         name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
     elseif style == 'nameplate' then
         name:SetJustifyH('CENTER')
-        name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+        name:SetPoint('BOTTOM', self, 'TOP', 0, -3)
     else
+        name:SetJustifyH('CENTER')
         name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
     end
 
@@ -2030,24 +2056,23 @@ function UNITFRAME:AddNameText(self)
 end
 
 function UNITFRAME:AddHealthValueText(self)
-    local healthValue
-    if _G.FREE_ADB.font_outline then
-        healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
-    else
-        healthValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    end
+    local style = self.unitStyle
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
+
+    local healthValue = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
     healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
 
-    if self.unitStyle == 'player' or self.unitStyle == 'playerplate' then
+    if style == 'player' or style == 'playerplate' then
         self:Tag(healthValue, '[free:health] [free:pvp]')
-    elseif self.unitStyle == 'target' then
+    elseif style == 'target' then
         self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
-    elseif self.unitStyle == 'boss' then
+    elseif style == 'boss' then
         healthValue:ClearAllPoints()
         healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
         healthValue:SetJustifyH('RIGHT')
         self:Tag(healthValue, '[free:dead][free:health] [free:healthpercentage]')
-    elseif self.unitStyle == 'arena' then
+    elseif style == 'arena' then
         healthValue:ClearAllPoints()
         healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
         healthValue:SetJustifyH('RIGHT')
@@ -2058,18 +2083,17 @@ function UNITFRAME:AddHealthValueText(self)
 end
 
 function UNITFRAME:AddPowerValueText(self)
-    local powerValue
-    if _G.FREE_ADB.font_outline then
-        powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
-    else
-        powerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    end
+    local style = self.unitStyle
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
+
+    local powerValue = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
     powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
 
-    if self.unitStyle == 'target' then
+    if style == 'target' then
         powerValue:ClearAllPoints()
         powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
-    elseif self.unitStyle == 'boss' then
+    elseif style == 'boss' then
         powerValue:ClearAllPoints()
         powerValue:SetPoint('BOTTOMRIGHT', self.HealthValue, 'BOTTOMLEFT', -4, 0)
     end
@@ -2081,13 +2105,13 @@ function UNITFRAME:AddPowerValueText(self)
 end
 
 function UNITFRAME:AddAlternativePowerValueText(self)
-    local altPowerValue
-    if _G.FREE_ADB.font_outline then
-        altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
-    else
-        altPowerValue = F.CreateFS(self.Health, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    end
-    if self.unitStyle == 'boss' then
+    local style = self.unitStyle
+    local outline = C.DB.unitframe.FontOutline
+    local font = C.Assets.Fonts.Condensed
+
+    local altPowerValue = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+
+    if style == 'boss' then
         altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
     else
         altPowerValue:SetPoint('BOTTOM', self.Health, 'TOP', 0, 3)
