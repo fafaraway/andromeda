@@ -45,7 +45,8 @@ function LOGO:Logo_Create()
     tex:SetAllPoints()
     tex:SetTexture(C.Assets.logo)
     tex:SetBlendMode('ADD')
-    tex:SetGradientAlpha('Vertical', 1, 1, 1, .75, 1, 1, 1, .75)
+    tex:SetDesaturated(true)
+    -- tex:SetGradientAlpha('Vertical', 1, 1, 1, .75, 1, 1, 1, .75)
 
     local delayTime = 0
     local timer1 = .5
