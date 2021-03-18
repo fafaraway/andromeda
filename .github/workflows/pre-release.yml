@@ -3,7 +3,8 @@ name: Package and build alpha/beta versions
 on:
   push:
     tags:
-      - '*.*.*-*'
+      - "**-alpha-**"
+      - "**-beta-**"
 
 
 jobs:

@@ -2,8 +2,9 @@ name: Package and build release versions
 
 on:
   push:
-    tags:
-      - '*.*.*'
+    tags-ignore:
+      - "**-alpha-**"
+      - "**-beta-**"
 
 
 jobs:
