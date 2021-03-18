@@ -370,14 +370,14 @@ function MISC:RaidTool_BuffChecker(parent)
 				end
 			end
 		end
-		if not C.DB.misc.rune_check then NoBuff[numGroups] = {} end
+		if not C.DB.Misc.rune_check then NoBuff[numGroups] = {} end
 
 		if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and #NoBuff[6] == 0 then
 			sendMsg(L['MISC_BUFFS_READY'])
 		else
 			sendMsg(L['MISC_RAID_BUFF_CHECK'])
 			for i = 1, 5 do sendResult(i) end
-			if C.DB.misc.rune_check then sendResult(numGroups) end
+			if C.DB.Misc.rune_check then sendResult(numGroups) end
 		end
 	end
 
@@ -419,7 +419,7 @@ function MISC:RaidTool_BuffChecker(parent)
 			if IsInGroup() and (UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and IsInRaid())) then
 				if IsAddOnLoaded('DBM-Core') then
 					if reset then
-						SlashCmdList['DEADLYBOSSMODS']('pull '..C.DB.misc.countdown)
+						SlashCmdList['DEADLYBOSSMODS']('pull '..C.DB.Misc.countdown)
 					else
 						SlashCmdList['DEADLYBOSSMODS']('pull 0')
 					end
@@ -427,7 +427,7 @@ function MISC:RaidTool_BuffChecker(parent)
 				elseif IsAddOnLoaded('BigWigs') then
 					if not SlashCmdList['BIGWIGSPULL'] then LoadAddOn('BigWigs_Plugins') end
 					if reset then
-						SlashCmdList['BIGWIGSPULL'](C.DB.misc.countdown)
+						SlashCmdList['BIGWIGSPULL'](C.DB.Misc.countdown)
 					else
 						SlashCmdList['BIGWIGSPULL']('0')
 					end
@@ -539,7 +539,7 @@ function MISC:RaidTool_Misc()
 end
 
 function MISC:RaidTool_Init()
-	if not C.DB.misc.group_tool then return end
+	if not C.DB.Misc.group_tool then return end
 
 	local frame = MISC:RaidTool_Header()
 	MISC:RaidTool_RoleCount(frame)

@@ -92,7 +92,7 @@ function MISC:ScreenSaver()
 	MISC:CreateScreenSaver()
 	MISC:RefreshMod()
 
-	if C.DB.misc.screen_saver then
+	if C.DB.Misc.ScreenSaver then
 		F:RegisterEvent('PLAYER_FLAGS_CHANGED', MISC.UpdateTimer)
 		F:RegisterEvent('PLAYER_REGEN_ENABLED', MISC.UpdateTimer)
 		F:RegisterEvent('PLAYER_REGEN_DISABLED', MISC.UpdateTimer)

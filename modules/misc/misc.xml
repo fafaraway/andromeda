@@ -1,14 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-
-
-	<Script file="misc.lua"/>
-	<Script file="alreadyknown.lua"/>
-
-	<Script file="dragemall.lua"/>
-
-	<Script file="grouptool.lua"/>
-	<Script file="itemlevel.lua"/>
-	<Script file="proposaltimer.lua"/>
-
-	<Script file="screensaver.lua"/>
+    <Script file="misc.lua"/>
+    <Script file="afk.lua"/>
+    <Script file="alreadyknown.lua"/>
+    <Script file="dragemall.lua"/>
+    <Script file="grouptool.lua"/>
+    <Script file="itemlevel.lua"/>
+    <Script file="proposaltimer.lua"/>
 </Ui>

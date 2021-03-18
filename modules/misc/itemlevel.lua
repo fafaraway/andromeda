@@ -117,7 +117,7 @@ local function GetSlotItemLocation(id)
 end
 
 function MISC:ItemLevel_UpdateTraits(button, id, link)
-    if not C.DB.misc.azerite_traits then
+    if not C.DB.Misc.AzeriteTrait then
         return
     end
 
@@ -208,7 +208,7 @@ end
 function MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
     C_Timer_After(.1, function()
         local quality = select(3, GetItemInfo(link))
-        local info = F.GetItemLevel(link, unit, index, C.DB.misc.gem_enchant)
+        local info = F.GetItemLevel(link, unit, index, C.DB.Misc.GemEnchant)
         if info == 'tooSoon' then
             return
         end
@@ -237,7 +237,7 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
             local link = GetInventoryItemLink(unit, index)
             if link then
                 local quality = select(3, GetItemInfo(link))
-                local info = F.GetItemLevel(link, unit, index, C.DB.misc.gem_enchant)
+                local info = F.GetItemLevel(link, unit, index, C.DB.Misc.GemEnchant)
                 if info == 'tooSoon' then
                     MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
                 else
@@ -351,7 +351,7 @@ function MISC:ItemLevel_UpdateMerchant(link)
 end
 
 function MISC:ItemLevel()
-    if not C.DB.misc.item_level then
+    if not C.DB.Misc.ItemLevel then
         return
     end
 
