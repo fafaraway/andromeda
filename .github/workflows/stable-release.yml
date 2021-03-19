@@ -3,8 +3,8 @@ name: Package and build release versions
 on:
   push:
     tags-ignore:
-      - "**-alpha-**"
-      - "**-beta-**"
+      - '**alpha**'
+      - '**beta**'
 
 
 jobs:
