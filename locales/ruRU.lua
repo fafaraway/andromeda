@@ -11,63 +11,59 @@ if GetLocale() ~= 'ruRU' then
     return
 end
 
+
 --[[ Binding ]]
-do
-    _G.BINDING_HEADER_FREEUI = 'FreeUI'
-    _G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Переключить панель конфигурации FreeUI'
-    _G.BINDING_NAME_TOGGLE_QUEST_TRACKER = 'Переключение отслеживания заданий'
-end
 
-L.MOVER = {
-    MAIN_BAR = 'Главная панель',
-    PET_BAR = 'Панель питомца',
-    STANCE_BAR = 'Панель стоек',
-    VEHICLE_BAR = 'Кнопка спешивания',
-    EXTRA_BAR = 'Extra кнопка',
-    ZONE_ABILITY = 'Кнопка абилки зоны',
-    CUSTOM_BAR = 'Дополнительная панель действий',
-    COOLDOWN_FLASH = 'Вспышка перезарядки',
-}
+_G.BINDING_HEADER_FREEUI = 'FreeUI'
+_G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Переключить панель конфигурации FreeUI'
 
-L.ACTIONBAR = {
-    CD_REMAINING = '%s оставшееся время перезарядки %s.',
-    CD_FINISHED = '%s теперь доступна.',
-    CUSTOM_BAR = 'Кастомная панель',
-    UNBIND_TIP = 'Нажмите клавишу ESC или щелкните правой кнопкой мыши, чтобы отменить это действие.',
-    KEY_INDEX = 'Индекс',
-    KEY_BINDING = 'Клавиша',
-    KEY_BOUND_TO = ' bound to',
-    SAVE_KEYBINDS = 'Привязка клавиши сохранена.',
-    DISCARD_KEYBINDS = 'Отмена привязки клавиши.',
-    CLEAR_BINDS = '|cff20ff20Все привязки клавишь очищены для|r %s.',
-}
 
-L.ANNOUNCEMENT = {
-    INTERRUPT = 'Прерванно %target% %target_spell%!',
-    DISPEL = 'Диспел %target% %target_spell%!',
-    STOLEN = 'Украл %target% %target_spell%!',
-    BATTLE_REZ = '%player% кастует %spell% на %target%!',
-    CAST = '%player% кастует %spell%!',
-    CAST_TARGET = '%player% кастует %spell% на %target%!',
-    QUEST_ACCEPT = 'Принятый квет:',
-    QUEST_ANNOUNCE = 'Анонс квеста',
-    QUEST_ANNOUNCE_TIP = 'Пусть ваши тим-мэйты знают о ходе выполнения заданий.',
-    RESET_SUCCESS = '%s был сброшен.',
-    RESET_FAILED = 'Невозможно сбросить %s, внутри подземелья все еще есть игроки.',
-    RESET_FAILED_ZONING = 'Невозможно сбросить %s, есть игроки в вашей группе, пытающиеся войти в подземелье.',
-    RESET_FAILED_OFFLINE = 'Невозможно сбросить %s, в вашей гуппе есть игроки, находящиеся в офлайне.',
-}
+--[[ Actionbar ]]
 
-L.QUEST = {
-    AUTOMATION = 'Авто-квесты',
-    AUTOMATION_TIP = 'Автоматически принимать и сдавать квесты'
-}
+L.ACTIONBAR.CD_REMAINING = '%s оставшееся время перезарядки %s.'
+L.ACTIONBAR.CD_FINISHED = '%s теперь доступна.'
+L.ACTIONBAR.CUSTOM_BAR = 'Кастомная панель'
+L.ACTIONBAR.UNBIND_TIP = 'Нажмите клавишу ESC или щелкните правой кнопкой мыши, чтобы отменить это действие.'
+L.ACTIONBAR.KEY_INDEX = 'Индекс'
+L.ACTIONBAR.KEY_BINDING = 'Клавиша'
+L.ACTIONBAR.KEY_BOUND_TO = ' bound to'
+L.ACTIONBAR.SAVE_KEYBINDS = 'Привязка клавиши сохранена.'
+L.ACTIONBAR.DISCARD_KEYBINDS = 'Отмена привязки клавиши.'
+L.ACTIONBAR.CLEAR_BINDS = '|cff20ff20Все привязки клавишь очищены для|r %s.'
 
-L.UNITFRAME = {
-    BINDER_OPEN = 'Открыть бинды спелов',
-    BINDER_TITLE = 'Бинды спелов',
-    BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши для привязки заклинаний.',
-}
+
+--[[ Announcement ]]
+
+L.ANNOUNCEMENT.INTERRUPT = 'Прерванно %target% %target_spell%!'
+L.ANNOUNCEMENT.DISPEL = 'Диспел %target% %target_spell%!'
+L.ANNOUNCEMENT.STOLEN = 'Украл %target% %target_spell%!'
+L.ANNOUNCEMENT.BATTLE_REZ = '%player% кастует %spell% на %target%!'
+L.ANNOUNCEMENT.CAST = '%player% кастует %spell%!'
+L.ANNOUNCEMENT.CAST_TARGET = '%player% кастует %spell% на %target%!'
+L.ANNOUNCEMENT.QUEST_ACCEPT = 'Принятый квет:'
+L.ANNOUNCEMENT.QUEST_ANNOUNCE = 'Анонс квеста'
+L.ANNOUNCEMENT.QUEST_ANNOUNCE_TIP = 'Пусть ваши тим-мэйты знают о ходе выполнения заданий.'
+L.ANNOUNCEMENT.RESET_SUCCESS = '%s был сброшен.'
+L.ANNOUNCEMENT.RESET_FAILED = 'Невозможно сбросить %s, внутри подземелья все еще есть игроки.'
+L.ANNOUNCEMENT.RESET_FAILED_ZONING = 'Невозможно сбросить %s, есть игроки в вашей группе, пытающиеся войти в подземелье.'
+L.ANNOUNCEMENT.RESET_FAILED_OFFLINE = 'Невозможно сбросить %s, в вашей гуппе есть игроки, находящиеся в офлайне.'
+
+
+--[[ Quest ]]
+
+L.QUEST.AUTOMATION = 'Авто-квесты'
+L.QUEST.AUTOMATION_TIP = 'Автоматически принимать и сдавать квесты'
+
+
+--[[ Unitframe ]]
+
+L.UNITFRAME.BINDER_OPEN = 'Открыть бинды спелов'
+L.UNITFRAME.BINDER_TITLE = 'Бинды спелов'
+L.UNITFRAME.BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши для привязки заклинаний.'
+
+
+-- Deprecated
+-- Will be gradually updated
 
 --[[ Misc ]]
 do
@@ -307,7 +303,23 @@ do
     L['UNITFRAME_OFFLINE'] = 'Offline'
 end
 
+--[[ Mover ]]
+
+L.MOVER.MAIN_BAR = 'Главная панель'
+L.MOVER.PET_BAR = 'Панель питомца'
+L.MOVER.STANCE_BAR = 'Панель стоек'
+L.MOVER.VEHICLE_BAR = 'Кнопка спешивания'
+L.MOVER.EXTRA_BAR = 'Extra кнопка'
+L.MOVER.ZONE_ABILITY = 'Кнопка абилки зоны'
+L.MOVER.CUSTOM_BAR = 'Дополнительная панель действий'
+L.MOVER.COOLDOWN_FLASH = 'Вспышка перезарядки'
+L.MOVER.PLAYER_CASTBAR = 'Player Castbar' -- Need translate
+L.MOVER.TARGET_CASTBAR = 'Target Castbar' -- Need translate
+L.MOVER.FOCUS_CASTBAR = 'Focus Castbar' -- Need translate
+
+
 --[[ GUI ]]
+
 L.GUI = {
     ['HINT'] = 'Подсказка',
     ['RELOAD'] = '|cffff2020Вы хотите перезагрузить интерфейс, чтобы применить настройки ?|r',

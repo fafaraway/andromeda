@@ -66,6 +66,7 @@ L.BLIZZARD = {
 }
 
 --[[ Misc ]]
+
 do
     L['MISC_NUMBER_CAP'] = {'万', '亿', '兆'}
 
@@ -101,6 +102,7 @@ do
 end
 
 --[[ Blizzard ]]
+
 do
     L['BLIZZARD_MOVER_ALERT'] = 'Alert frame'
     L['BLIZZARD_MOVER_VEHICLE'] = 'Vehicle indicator'
@@ -116,6 +118,7 @@ do
 end
 
 --[[ Notification ]]
+
 do
     L['NOTIFICATION_NEW_MAIL'] = 'New mail!'
     L['NOTIFICATION_BAG_FULL'] = 'Bag full!'
@@ -129,6 +132,7 @@ do
 end
 
 --[[ Infobar ]]
+
 do
     L['INFOBAR_DURABILITY'] = 'Durability'
     L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle character pane'
@@ -177,6 +181,7 @@ do
 end
 
 --[[ Chat ]]
+
 do
     L['CHAT_TOGGLE_PANEL'] = 'Hide/show chat frame'
     L['CHAT_TOGGLE_WC'] = 'Join/leave world channel'
@@ -187,6 +192,7 @@ do
 end
 
 --[[ Aura ]]
+
 do
     L['AURA_MOVER_BUFFS'] = 'Buffs'
     L['AURA_MOVER_DEBUFFS'] = 'Debuffs'
@@ -194,6 +200,7 @@ do
 end
 
 --[[ Combat ]]
+
 do
     L['COMBAT_ENTER'] = 'Enter Combat'
     L['COMBAT_LEAVE'] = 'Leave Combat'
@@ -218,6 +225,8 @@ do
 end
 
 --[[ Inventory ]]
+
+
 do
     L['INVENTORY_NOTIFICATION_HEADER'] = 'Bag'
     L['INVENTORY_SORT'] = 'Sort'
@@ -252,6 +261,7 @@ do
 end
 
 --[[ Map ]]
+
 do
     L['MAP_MOVER_MINIMAP'] = 'Minimap'
     L['MAP_CURSOR'] = 'Cursor'
@@ -263,6 +273,7 @@ do
 end
 
 -- Tooltip
+
 do
     L['TOOLTIP_MOVER'] = 'Tooltip'
     L['TOOLTIP_RARE'] = 'Rare'
@@ -286,6 +297,7 @@ do
 end
 
 --[[ Unitframe ]]
+
 do
     L['UNITFRAME_MOVER_CASTBAR'] = 'Focus castbar'
     L['UNITFRAME_MOVER_PLAYER'] = 'Player'
@@ -306,17 +318,17 @@ end
 --[[ Mover ]]
 
 L.MOVER = {
-    MAIN_BAR = 'Main bar',
-    PET_BAR = 'Pet bar',
-    STANCE_BAR = 'Stance bar',
-    VEHICLE_BAR = 'Leave vehicle button',
-    EXTRA_BAR = 'Extra button',
-    ZONE_ABILITY = 'Zone ability button',
-    CUSTOM_BAR = 'Additional actionbar',
-    COOLDOWN_FLASH = 'Cooldown flash',
-    PLAYER_CASTBAR = 'Player castbar',
-    TARGET_CASTBAR = 'Target castbar',
-    FOCUS_CASTBAR = 'Focus castbar',
+    MAIN_BAR = 'Main Bar',
+    PET_BAR = 'Pet Bar',
+    STANCE_BAR = 'Stance Bar',
+    VEHICLE_BAR = 'Leave Vehicle Button',
+    EXTRA_BAR = 'Extra Button',
+    ZONE_ABILITY = 'Zone Ability Button',
+    CUSTOM_BAR = 'Additional Actionbar',
+    COOLDOWN_FLASH = 'Cooldown Flash',
+    PLAYER_CASTBAR = 'Player Castbar',
+    TARGET_CASTBAR = 'Target Castbar',
+    FOCUS_CASTBAR = 'Focus Castbar',
 }
 
 --[[ GUI ]]
