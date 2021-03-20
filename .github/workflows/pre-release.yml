@@ -1,10 +1,10 @@
-name: Package and build alpha/beta versions
+name: Pre-release
 
 on:
   push:
     tags:
-      - '**alpha**'
-      - '**beta**'
+      - "**-alpha**"
+      - "**-beta**"
 
 
 jobs:
@@ -25,8 +25,11 @@ jobs:
 
       - name: Package and release
         uses: BigWigsMods/packager@master
+
+      - uses: actions/upload-artifact@v2
         with:
-          args: release.sh -w 0
+          name: FreeUI
+          path: .release/
 
       - name: Send status to Discord
         uses: nebularg/actions-discord-webhook@v1
