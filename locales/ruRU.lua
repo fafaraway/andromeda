@@ -1,4 +1,4 @@
--- Translated by Hacktivist (Хактивист-Ясеневый лес)
+-- Translated by Hacktivist & TaeTae
 
 local _G = _G
 local unpack = unpack
@@ -17,55 +17,64 @@ end
 _G.BINDING_HEADER_FREEUI = 'FreeUI'
 _G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Переключить панель конфигурации FreeUI'
 
-
 --[[ Actionbar ]]
 
-L.ACTIONBAR.CD_REMAINING = '%s оставшееся время перезарядки %s.'
-L.ACTIONBAR.CD_FINISHED = '%s теперь доступна.'
-L.ACTIONBAR.CUSTOM_BAR = 'Кастомная панель'
-L.ACTIONBAR.UNBIND_TIP = 'Нажмите клавишу ESC или щелкните правой кнопкой мыши, чтобы отменить это действие.'
-L.ACTIONBAR.KEY_INDEX = 'Индекс'
-L.ACTIONBAR.KEY_BINDING = 'Клавиша'
-L.ACTIONBAR.KEY_BOUND_TO = ' bound to'
-L.ACTIONBAR.SAVE_KEYBINDS = 'Привязка клавиши сохранена.'
-L.ACTIONBAR.DISCARD_KEYBINDS = 'Отмена привязки клавиши.'
-L.ACTIONBAR.CLEAR_BINDS = '|cff20ff20Все привязки клавишь очищены для|r %s.'
-
+L.ACTIONBAR = {
+	CD_REMAINING = '%s оставшееся время перезарядки %s.',
+	CD_FINISHED = '%s теперь доступна.',
+	CUSTOM_BAR = 'Кастомная панель',
+	UNBIND_TIP = 'Нажмите клавишу ESC или щелкните правой кнопкой мыши, чтобы отменить это действие.',
+	KEY_INDEX = 'Индекс',
+	KEY_BINDING = 'Клавиша',
+	KEY_BOUND_TO = ' bound to',
+	SAVE_KEYBINDS = 'Привязка клавиши сохранена.',
+	DISCARD_KEYBINDS = 'Отмена привязки клавиши.',
+	CLEAR_BINDS = '|cff20ff20Все привязки клавишь очищены для|r %s.',
+}
 
 --[[ Announcement ]]
 
-L.ANNOUNCEMENT.INTERRUPT = 'Прерванно %target% %target_spell%!'
-L.ANNOUNCEMENT.DISPEL = 'Диспел %target% %target_spell%!'
-L.ANNOUNCEMENT.STOLEN = 'Украл %target% %target_spell%!'
-L.ANNOUNCEMENT.BATTLE_REZ = '%player% кастует %spell% на %target%!'
-L.ANNOUNCEMENT.CAST = '%player% кастует %spell%!'
-L.ANNOUNCEMENT.CAST_TARGET = '%player% кастует %spell% на %target%!'
-L.ANNOUNCEMENT.QUEST_ACCEPT = 'Принятый квет:'
-L.ANNOUNCEMENT.QUEST_ANNOUNCE = 'Анонс квеста'
-L.ANNOUNCEMENT.QUEST_ANNOUNCE_TIP = 'Пусть ваши тим-мэйты знают о ходе выполнения заданий.'
-L.ANNOUNCEMENT.RESET_SUCCESS = '%s был сброшен.'
-L.ANNOUNCEMENT.RESET_FAILED = 'Невозможно сбросить %s, внутри подземелья все еще есть игроки.'
-L.ANNOUNCEMENT.RESET_FAILED_ZONING = 'Невозможно сбросить %s, есть игроки в вашей группе, пытающиеся войти в подземелье.'
-L.ANNOUNCEMENT.RESET_FAILED_OFFLINE = 'Невозможно сбросить %s, в вашей гуппе есть игроки, находящиеся в офлайне.'
-
+L.ANNOUNCEMENT = {
+	INTERRUPT = 'Прерванно %target% %target_spell%!',
+	DISPEL = 'Диспел %target% %target_spell%!',
+	STOLEN = 'Украл %target% %target_spell%!',
+	BATTLE_REZ = '%player% кастует %spell% на %target%!',
+	CAST = '%player% кастует %spell%!',
+	CAST_TARGET = '%player% кастует %spell% на %target%!',
+	QUEST_ACCEPT = 'Принятый квет:',
+	QUEST_ANNOUNCE = 'Анонс квеста',
+	QUEST_ANNOUNCE_TIP = 'Пусть ваши тим-мэйты знают о ходе выполнения заданий.',
+	RESET_SUCCESS = '%s был сброшен.',
+	RESET_FAILED = 'Невозможно сбросить %s, внутри подземелья все еще есть игроки.',
+	RESET_FAILED_ZONING = 'Невозможно сбросить %s, есть игроки в вашей группе, пытающиеся войти в подземелье.',
+	RESET_FAILED_OFFLINE = 'Невозможно сбросить %s, в вашей гуппе есть игроки, находящиеся в офлайне.',
+}
 
 --[[ Quest ]]
 
-L.QUEST.AUTOMATION = 'Авто-квесты'
-L.QUEST.AUTOMATION_TIP = 'Автоматически принимать и сдавать квесты'
-
+L.QUEST = {
+	AUTOMATION = 'Авто-квесты',
+	AUTOMATION_TIP = 'Автоматически принимать и сдавать квесты',
+}
 
 --[[ Unitframe ]]
 
-L.UNITFRAME.BINDER_OPEN = 'Открыть бинды спелов'
-L.UNITFRAME.BINDER_TITLE = 'Бинды спелов'
-L.UNITFRAME.BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши для привязки заклинаний.'
+L.UNITFRAME = {
+	BINDER_OPEN = 'Открыть бинды спелов',
+	BINDER_TITLE = 'Бинды спелов',
+	BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши для привязки умений.',
+}
 
+--[[ Blizzard ]]
 
--- Deprecated
--- Will be gradually updated
+L.BLIZZARD = {
+    UNDRESS = 'Undress',
+    UNDRESS_TIP = '%sUndress all|n%sUndress tabard',
+    USE_VELLUM = 'Right click to use vellum',
+}
 
 --[[ Misc ]]
+
 do
     L['MISC_NUMBER_CAP'] = {'Миллион', 'миллиард', 'триллион'}
 
@@ -101,12 +110,13 @@ do
 end
 
 --[[ Blizzard ]]
+
 do
     L['BLIZZARD_MOVER_ALERT'] = 'Рамка оповещения'
     L['BLIZZARD_MOVER_VEHICLE'] = 'Индикатор транспортного средства'
     L['BLIZZARD_MOVER_UIWIDGET'] = 'Рамка UIWidget'
     L['BLIZZARD_MOVER_DURABILITY'] = 'Индикатор прочности'
-    L['BLIZZARD_UNDRESS'] = 'Раздеть'
+
     L['BLIZZARD_STRANGER'] = 'Незнакомец'
     L['BLIZZARD_KEYSTONES'] = 'Ключи'
     L['BLIZZARD_KEYSTONES_RESET'] = 'Удалить информацию о ключах'
@@ -116,6 +126,7 @@ do
 end
 
 --[[ Notification ]]
+
 do
     L['NOTIFICATION_NEW_MAIL'] = 'Новое письмо!'
     L['NOTIFICATION_BAG_FULL'] = 'Нет места в сумке!'
@@ -129,6 +140,7 @@ do
 end
 
 --[[ Infobar ]]
+
 do
     L['INFOBAR_DURABILITY'] = 'Прочность'
     L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Открыть окно символов'
@@ -141,7 +153,7 @@ do
     L['INFOBAR_GUILD_NONE'] = 'Нет'
     L['INFOBAR_OPEN_GUILD_PANEL'] = 'Открыть окно гильдии и сообщества'
 
-    L['INFOBAR_REPORT'] = 'Ежедневки/Виклики'
+    L['INFOBAR_REPORT'] = 'Дейли/Викли'
     L['INFOBAR_BLINGTRON'] = 'Blingtron daily pack' -- Need translete
     L['INFOBAR_MEAN_ONE'] = 'Дейлики зимнего покрова'
     L['INFOBAR_TIMEWARPED'] = 'Награды за путишествие во времени'
@@ -177,6 +189,7 @@ do
 end
 
 --[[ Chat ]]
+
 do
     L['CHAT_TOGGLE_PANEL'] = 'Спрятать/показать чат'
     L['CHAT_TOGGLE_WC'] = 'Войти/выйти мировые каналы'
@@ -187,6 +200,7 @@ do
 end
 
 --[[ Aura ]]
+
 do
     L['AURA_MOVER_BUFFS'] = 'Баффы'
     L['AURA_MOVER_DEBUFFS'] = 'Дебаффы'
@@ -194,6 +208,7 @@ do
 end
 
 --[[ Combat ]]
+
 do
     L['COMBAT_ENTER'] = 'Вступил в бой'
     L['COMBAT_LEAVE'] = 'Вышел из боя'
@@ -218,6 +233,8 @@ do
 end
 
 --[[ Inventory ]]
+
+
 do
     L['INVENTORY_NOTIFICATION_HEADER'] = 'Сумка'
     L['INVENTORY_SORT'] = 'Сортировать'
@@ -252,6 +269,7 @@ do
 end
 
 --[[ Map ]]
+
 do
     L['MAP_MOVER_MINIMAP'] = 'Миникарта'
     L['MAP_CURSOR'] = 'курсор'
@@ -263,6 +281,7 @@ do
 end
 
 -- Tooltip
+
 do
     L['TOOLTIP_MOVER'] = 'Подсказки'
     L['TOOLTIP_RARE'] = 'Редкий'
@@ -286,6 +305,7 @@ do
 end
 
 --[[ Unitframe ]]
+
 do
     L['UNITFRAME_MOVER_CASTBAR'] = 'Кастбар фокуса'
     L['UNITFRAME_MOVER_PLAYER'] = 'Игрок'
@@ -305,18 +325,19 @@ end
 
 --[[ Mover ]]
 
-L.MOVER.MAIN_BAR = 'Главная панель'
-L.MOVER.PET_BAR = 'Панель питомца'
-L.MOVER.STANCE_BAR = 'Панель стоек'
-L.MOVER.VEHICLE_BAR = 'Кнопка спешивания'
-L.MOVER.EXTRA_BAR = 'Extra кнопка'
-L.MOVER.ZONE_ABILITY = 'Кнопка абилки зоны'
-L.MOVER.CUSTOM_BAR = 'Дополнительная панель действий'
-L.MOVER.COOLDOWN_FLASH = 'Вспышка перезарядки'
-L.MOVER.PLAYER_CASTBAR = 'Player Castbar' -- Need translate
-L.MOVER.TARGET_CASTBAR = 'Target Castbar' -- Need translate
-L.MOVER.FOCUS_CASTBAR = 'Focus Castbar' -- Need translate
-
+L.MOVER = {
+	MAIN_BAR = 'Главная панель',
+	PET_BAR = 'Панель питомца',
+	STANCE_BAR = 'Панель стоек',
+	VEHICLE_BAR = 'Кнопка спешивания',
+	EXTRA_BAR = 'Extra кнопка',
+	ZONE_ABILITY = 'Кнопка абилки зоны',
+	CUSTOM_BAR = 'Дополнительная панель умений',
+	COOLDOWN_FLASH = 'Вспышка перезарядки',
+	PLAYER_CASTBAR = 'Кастбар игрока',
+	TARGET_CASTBAR = 'Кастбар цели',
+	FOCUS_CASTBAR = 'Кастбар фокуса',
+}
 
 --[[ GUI ]]
 
@@ -327,7 +348,7 @@ L.GUI = {
     ['RESET_JUNK_LIST'] = '|cffff2020Следует ли очистить пользовательский список нежелательных элементов?|r',
 
     SPELL_ID = 'ID заклинания',
-    SPELL_ID_TIP = '|nID заклинания, должно быть число.|n|nВы можете узнать ID на подсказке заклинания.|n|nИмя заклинаний не поддерживается.',
+    SPELL_ID_TIP = '|nID заклинания, должно быть число.|n|nВы можете узнать ID на подсказке заклинания.|n|nИмя умений не поддерживается.',
     INCORRECT_ID = 'Неправильное ID заклинания.',
     EXISTING_ID = 'Этот ID заклинания уже существует.',
     RESET_LIST = 'Вы уверены, что хотите восстановить список по умолчанию?',
@@ -385,7 +406,7 @@ L.GUI = {
         ['UPLOAD_PROFILE'] = 'Заменить выбранный профиль',
         ['UPLOAD_PROFILE_TIP'] = '|nЗаменить выбранный профиль на текущий.',
         ['PROFILE_MANAGEMENT'] = 'Управление профилем',
-        ['PROFILE_DESCRIPTION'] = 'Вы можете управлять своим профилем аддона, пожалуйста, сделайте резервную копию своих настроек перед запуском. Настройки по умолчанию основаны на вашем персонаже, не будут шарится в рамках одной учетной записи. Вы можете переключиться на общий профиль, чтобы расшарить его между вашими персонажами, и избавиться от передачи данных.',
+        ['PROFILE_DESCRIPTION'] = 'Вы можете управлять своим профилем аддона, пожалуйста, сделайте резервную копию своих настроек перед запуском. Настройки по умолчанию основаны на вашем персонаже, не будут шариться в рамках одной учетной записи. Вы можете переключиться на общий профиль, чтобы расшарить его между вашими персонажами, и избавиться от передачи данных.',
         ['SHARED_CHARACTERS'] = 'Общие персонажи',
         ['DELETE_UNIT_PROFILE_WARNING'] = 'Вы уверены что хотите удалить %s%s|r информацию о профиле?',
         ['INCORRECT_UNIT_NAME'] = 'Неправильное имя персонажа.',
@@ -412,16 +433,25 @@ L.GUI = {
         ['CONCISE_ERRORS'] = 'Упрощенные ошибки',
         ['MAW_THREAT_BAR'] = 'Панель Ока тюремщика',
         ['AUTO_SCREENSHOT'] = 'Включить (АС)Авто-скриншоты',
-        ['AUTO_SCREENSHOT_ACHIEVEMENT'] = '(АС) Новое достижение заработано',
-        ['AUTO_SCREENSHOT_CHALLENGE'] = '(АС) Мифик+ завершен',
+        ['AUTO_SCREENSHOT_ACHIEVEMENT'] = '(АС)Новое достижение',
+        ['AUTO_SCREENSHOT_CHALLENGE'] = '(АС)Мифик+ завершен',
         ['ITEM_LEVEL'] = 'Item lvl',
         ['ITEM_LEVEL_TIP'] = 'Показать Item lvl в рамке персонажа.',
         ['GEM_ENCHANT'] = 'Зачарования и камни',
         ['GEM_ENCHANT_TIP'] = 'Показывать зачаровиня и камни в рамке персонажа.',
-        ['NAKED_BUTTON'] = 'Кнопка раздется',
+        ['NAKED_BUTTON'] = 'Кнопка "раздеться"',
         ['NAKED_BUTTON_TIP'] = 'Показать кнопку раздется в рамке персонажа, двойной клик что бы снять всю броню.',
         ['MISSING_STATS'] = 'Потерянные статы',
         ['MISSING_STATS_TIP'] = 'Показывать все статы в окне персонажа.',
+		FASTER_LOOT = 'Быстрый автосбор',
+        FASTER_MOVIE_SKIP = 'Быстрый пропуск роликов',
+        FASTER_MOVIE_SKIP_TIP = '|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.',
+        ENHANCE_DRESSUP = 'Быстрое раздевание',
+        ENHANCE_DRESSUP_TIP = '|nЕсли этот параметр включен, то он добавит кнопку для раздевания предметов.',
+        SMOOTH_ZOOMING = 'Быстрая и плавная камера',
+        SMOOTH_ZOOMING_TIP = '|nБыстрая и плавная камера на прокрутку колесика мыши.',
+        ACTION_CAM = 'Экшен камера',
+        ACTION_CAM_TIP = '|nВключает экшен камеру Blizzard.',
     },
 
     ['APPEARANCE'] = {
@@ -528,16 +558,16 @@ L.GUI = {
     },
 
     ['ACTIONBAR'] = {
-        ['NAME'] = 'Панель действий',
-        ['ENABLE'] = 'Включить панель действий',
-        ['ENABLE_TIP'] = '|nФункции и стили, связанные с панелью действий.',
+        ['NAME'] = 'Панель умений',
+        ['ENABLE'] = 'Включить панель умений',
+        ['ENABLE_TIP'] = '|nФункции и стили, связанные с панелью умений.',
         ['BAR_SCALE'] = 'Размер панелей',
         ['HOTKEY'] = 'Показывать горячие клавиши',
         ['MACRO_NAME'] = 'Показывать имя макроса',
         ['COUNT_NUMBER'] = 'Количество и заряды',
         ['CLASS_COLOR'] = 'Панель под цвет класса',
-        ['FADER'] = 'Затухание панели действий',
-        ['FADER_TIP'] = '|nПанель действий плавно появляется и исчезает в зависимости от настраиваемых условий.',
+        ['FADER'] = 'Затухание панели умений',
+        ['FADER_TIP'] = '|nПанель умений плавно появляется и исчезает в зависимости от настраиваемых условий.',
         ['BAR1'] = 'Панель 1',
         ['BAR2'] = 'Панель 2',
         ['BAR3'] = 'Панель 3',
@@ -548,9 +578,9 @@ L.GUI = {
         ['STANCE_BAR'] = 'Панель стоек',
         ['LEAVE_VEHICLE_BAR'] = 'Кнопка "Покинуть транспорт"',
 
-        ['SCALE_SETTING'] = 'Размер панели действий',
+        ['SCALE_SETTING'] = 'Размер панели умений',
 
-        ['FADER_SETTING'] = 'Настройка затухания панели действий',
+        ['FADER_SETTING'] = 'Настройка затухания панели умений',
         ['CONDITION_COMBATING'] = 'В бою',
         ['CONDITION_TARGETING'] = 'Взята цель/фокус',
         ['CONDITION_DUNGEON'] = 'В подземелье',
@@ -561,43 +591,45 @@ L.GUI = {
         ['FADE_OUT_DURATION'] = 'длительность затухания',
         ['FADE_IN_DURATION'] = 'длительность появления',
 
-        ['CUSTOM_BAR_SETTING'] = 'Дополнительная настройка панели действий',
+        ['CUSTOM_BAR_SETTING'] = 'Дополнительная настройка панели умений',
         ['CUSTOM_BAR'] = 'Дополнительная панель',
-        ['CUSTOM_BAR_TIP'] = '|nВключите дополнительную панель действий для настройки.',
+        ['CUSTOM_BAR_TIP'] = '|nВключите дополнительную панель умений для настройки.',
         ['CB_MARGIN'] = 'Край кнопок',
         ['CB_PADDING'] = 'Заполнение кнопок',
         ['CB_BUTTON_SIZE'] = 'размер кнопок',
         ['CB_BUTTON_NUMBER'] = 'номер кнопки',
         ['CB_BUTTON_PER_ROW'] = 'кнопок в строке',
 
-        ['COOLDOWN_COUNT'] = 'Время восстановления заклинаний',
+        ['COOLDOWN_COUNT'] = 'Время восстановления умений',
         ['DECIMAL_CD'] = 'Дин. для перезарядок в 3с',
         ['OVERRIDE_WA'] = 'Скрыть время на WeakAuras',
         ['CD_FLASH'] = 'Вспышка готовности',
         ['CD_FLASH_TIP'] = '|nОтслеживайте время перезарядки с помощью значка вспышки в центре экрана.',
         ['CD_NOTIFY'] = 'Уведом. времени восстановления',
-        ['CD_NOTIFY_TIP'] = '|nЕсли эта функция включена, вы можете нажать колесико мыши на кнопку панели действий и отправить ее состояние перезарядки в группу.|n|nДоступно только для FreeUI пенели действий.',
+        ['CD_NOTIFY_TIP'] = '|nЕсли эта функция включена, вы можете нажать колесико мыши на кнопку панели умений и отправить ее состояние перезарядки в группу.|n|nДоступно только для FreeUI пенели умений.',
+		DESATURATED_ICON = 'Desaturated icon',
+        DESATURATED_ICON_TIP = '|nShow the action bar icons desaturated when they are on cooldown.',
     },
 
     ['COMBAT'] = {
-        ['NAME'] = 'Бой',
-        ['ENABLE'] = 'Включить бой',
-        ['ENABLE_TIP'] = 'Предоставляет функции, связанные с боем',
-        ['COMBAT_ALERT'] = 'Предупреждения о бое',
-        ['COMBAT_ALERT_TIP'] = 'Анимационная подсказка отображается в середине экрана при входе или выходе из боя.',
-        ['SPELL_SOUND'] = 'Звуки прерываний',
-        ['SPELL_SOUND_TIP'] = 'Воспроизвести звук, когда вы успешно прерываете заклинание.',
-        ['EASY_TAB'] = 'Легкий ТАБ',
-        ['EASY_TAB_TIP'] = 'При входе на поле боя или арену клавиша Tab будет игнорировать питомцев, после выхода с поля боя или арены значение становится по умолчанию.',
-        ['EASY_FOCUS'] = 'Быстрый фокус',
-        ['EASY_FOCUS_TIP'] = 'Shift+щелчок левой кнопкой мыши по игроку, быстро устанавливает в фокус.',
-        ['EASY_FOCUS_ON_UNITFRAME'] = 'Быстрой фокус по юнитфреймам',
-        ['EASY_FOCUS_ON_UNITFRAME_TIP'] = 'Быстрый фокус по юнитфреймам если они включенны.',
-        ['EASY_MARK'] = 'Быстрые метки',
-        ['EASY_MARK_TIP'] = 'Alt+Щелкните левой кнопкой мыши на фрейм, чтобы быстро установить метку.',
-        ['PVP_SOUND'] = 'PVP звкуи',
-        ['PVP_SOUND_TIP'] = 'Добавить звуковую тему, похожую на DotA, к PVP-убийствам',
-        ['FCT'] = 'Включить "плавающий" текст боя',
+        NAME = 'Бой',
+        ENABLE = 'Включить бой',
+        COMBAT_ALERT = 'Предупреждения о бое',
+        COMBAT_ALERT_TIP = 'Анимационная подсказка отображается в середине экрана при входе или выходе из боя.',
+        SPELL_SOUND = 'Звуки прерываний',
+        SPELL_SOUND_TIP = 'Воспроизвести звук, когда вы успешно прерываете заклинание.',
+        EASY_TAB = 'Легкий ТАБ',
+        EASY_TAB_TIP = 'При входе на поле боя или арену клавиша Tab будет игнорировать питомцев, после выхода с поля боя или арены значение становится по умолчанию.',
+		EASY_MARK = 'Быстрые метки',
+        EASY_MARK_TIP = 'Alt+Щелкните левой кнопкой мыши на фрейм, чтобы быстро установить метку.',
+        EASY_FOCUS = 'Быстрый фокус',
+        EASY_FOCUS_TIP = 'Shift+щелчок левой кнопкой мыши по игроку, быстро устанавливает в фокус.',
+        EASY_FOCUS_ON_UNITFRAME = 'Быстрый фокус по юнитфреймам',
+        EASY_FOCUS_ON_UNITFRAME_TIP = 'Быстрый фокус по юнитфреймам если они включенны.',
+        PVP_SOUND = 'PVP звуки',
+        PVP_SOUND_TIP = 'Добавить звуковую тему, похожую на DotA, к PVP-убийствам',
+        FCT = 'Включить "плавающий" текст боя',
+		FCT_TIP = '|nShow compact damage/healing output.',
         ['FCT_IN'] = 'Показывать входящий урон',
         ['FCT_OUT'] = 'Показывать исходящий урон',
         ['FCT_PET'] = 'Показывать урон питомца',
@@ -609,7 +641,7 @@ L.GUI = {
         ['NAME'] = 'Уведомления',
         ['ENABLE'] = 'Включить уведомления',
         ['ENABLE_TIP'] = 'Модуль уведомления-это инструмент, который будет вам показывать сообщения в чате.',
-        ['INTERRUPT'] = 'Сбитие',
+        ['INTERRUPT'] = 'Прерывание заклинания',
         ['INTERRUPT_TIP'] = 'Отправлять сообщение при успешном прирывании.',
         ['DISPEL'] = 'Диспел',
         ['DISPEL_TIP'] = 'Отправлять сообщение при успешном диспеле.',
@@ -617,10 +649,10 @@ L.GUI = {
         ['BATTLEREZ_TIP'] = 'Отправлять сообщение при успешном воскрешение в бою.',
         ['UTILITY'] = 'Полезности',
         ['UTILITY_TIP'] = 'Отправлять сообщение при использовании порталов, еды, рембота и и т.п.',
-        ['RESET'] = 'Подземелье обновленно',
+        ['RESET'] = 'Подземелье обновлено',
         ['RESET_TIP'] = 'Отправить сообщение при обновлении подземелья.',
         ['COOLDOWN'] = 'Состояние перезарядки',
-        ['COOLDOWN_TIP'] = 'Вы можете нажать колесиком мыши на кнопку панели действий и отправить ее статус перезарядки в группу.|nДоступно только для FreeUI панели действий.',
+        ['COOLDOWN_TIP'] = 'Вы можете нажать колесиком мыши на кнопку панели умений и отправить ее статус перезарядки в группу.|nДоступно только для FreeUI панели умений.',
     },
 
     ['INVENTORY'] = {
@@ -629,11 +661,11 @@ L.GUI = {
         ['ENABLE_TIP'] = 'Отрегулируйте инвентарь и функции, связанные с банком.',
         ['NEW_ITEM_FLASH'] = 'Подсвечивать новые предметы',
         ['NEW_ITEM_FLASH_TIP'] = 'Новые предметы будут иметь эффект свечения, наведите курсор мыши что бы убрать свечение.',
-        ['COMBINE_FREE_SLOTS'] = 'Объеденить пустые слоты',
+        ['COMBINE_FREE_SLOTS'] = 'Объединить пустые слоты',
         ['COMBINE_FREE_SLOTS_TIP'] = 'Объединить все пустые слоты в один, чтобы сэкономить место на экране.',
         ['BIND_TYPE'] = 'Показывать тип предмета',
         ['BIND_TYPE_TIP'] = '(BOA)и(BOE)предметы будут подписанны в инвентаре',
-        ['ITEM_LEVEL'] = 'Показать iLvL вещей',
+        ['ITEM_LEVEL'] = 'Показывать ilvl вещей',
         ['SPECIAL_COLOR'] = 'Специальный цвет',
         ['SPECIAL_COLOR_TIP'] = 'Специальный цвет предметов для быстрого отличия друг от друга.',
         ['ITEM_FILTER'] = 'Включить фильтр предметов',
@@ -652,13 +684,13 @@ L.GUI = {
         ['ITEM_FILTER_JUNK'] = 'Хлам',
         ['ITEM_FILTER_CONSUMABLE'] = 'Расходники',
         ['ITEM_FILTER_AZERITE'] = 'Азеритовая броня',
-        ['ITEM_FILTER_EQUIPMENT'] = 'Экиперовка',
+        ['ITEM_FILTER_EQUIPMENT'] = 'Экипировка',
         ['ITEM_FILTER_LEGENDARY'] = 'Легендарки',
         ['ITEM_FILTER_COLLECTION'] = 'Коллекции',
         ['ITEM_FILTER_FAVOURITE'] = 'Избранные',
         ['ITEM_FILTER_TRADE'] = 'Трейд',
         ['ITEM_FILTER_QUEST'] = 'Квест',
-        ['ITEM_FILTER_GEAR_SET'] = 'Экипировки сэтов',
+        ['ITEM_FILTER_GEAR_SET'] = 'Экипировки сетов',
     },
 
     ['MAP'] = {
@@ -681,7 +713,7 @@ L.GUI = {
         ['NAME'] = 'Подсказки',
         ['ENABLE'] = 'Включить подсказки',
         ['ENABLE_TIP'] = 'Функции, связанные с подсказками.',
-        ['FOLLOW_CURSOR'] = 'Следловать за курсором',
+        ['FOLLOW_CURSOR'] = 'Следовать за курсором',
         ['FOLLOW_CURSOR_TIP'] = 'Подсказки следуют за мышью, при отключении фиксируется в правом нижнем углу.',
         ['HIDE_IN_COMBAT'] = 'Скрывать в бою',
         ['BORDER_COLOR'] = 'Граница по цвету класса',
@@ -692,7 +724,7 @@ L.GUI = {
         ['SPEC_ILVL_TIP'] = 'Зажать ALT для отображения спциализации и уровня предметов.',
         ['AZERITE_ARMOR'] = 'Упр. инф. по азеритовой броне',
         ['CONDUIT_INFO'] = 'Показать информацию кондуитов',
-        ['TARGET_BY'] = 'Показать цель,',
+        ['TARGET_BY'] = 'Показать цель',
         ['HIDE_REALM'] = 'Скрыть сервер',
         ['HIDE_TITLE'] = 'Скрыть титул',
         ['HIDE_RANK'] = 'Скрыть ранг в гильдии',
@@ -713,7 +745,7 @@ L.GUI = {
         ['CONDITION_ARENA'] = 'На арене',
         ['CONDITION_CASTING'] = 'Каст',
         ['CONDITION_INJURED'] = 'Раненый',
-        ['CONDITION_MANA'] = 'Не полная мана',
+        ['CONDITION_MANA'] = 'Неполная мана',
         ['CONDITION_POWER'] = 'Есть ресурс',
         ['FADE_OUT_ALPHA'] = 'прозрачность затухания',
         ['FADE_IN_ALPHA'] = 'прозрачность появления',
@@ -728,24 +760,27 @@ L.GUI = {
         ['TOTEMS_BAR'] = 'Панель тотемов',
         ['DEBUFFS_BY_PLAYER'] = 'Фильтр дебаффов',
         ['DEBUFF_TYPE'] = 'Тип дебаффа',
-        ['STEALABLE_BUFFS'] = 'Стил баффы',
+        ['STEALABLE_BUFFS'] = 'Чарокрад',
         ['PLAYER_COMBAT_INDICATOR'] = 'Индикатор боя',
         ['PLAYER_RESTING_INDICATOR'] = 'Индикатор покоя',
         ['PLAYER_HIDE_TAGS'] = 'Скрыть звания игроков',
-        ['ENABLE_CASTBAR'] = 'Включить кастбары',
-        ['CASTBAR_SETTING_HEADER'] = 'Настройка кастбаров',
-        ['CASTBAR_TIMER'] = 'Показать таймер кастбара',
-        ['CASTBAR_FOCUS_SEPARATE'] = 'Отдельный каст бар фокуса',
-        ['CASTBAR_COLORS'] = 'Цвета',
-        ['CASTBAR_WIDTH'] = 'Ширина',
-        ['CASTBAR_HEIGHT'] = 'Высота',
-        ['CASTING_COLOR'] = 'Обычный',
-        ['CASTING_UNINTERRUPTIBLE_COLOR'] = 'Непрерываемый',
-        ['CASTING_COMPLETE_COLOR'] = 'Полный',
-        ['CASTING_FAIL_COLOR'] = 'Неудачный',
-        ['CASTBAR_FOCUS'] = 'Кастбар фокуса',
-        ['CASTBAR_FOCUS_WIDTH'] = 'Ширина кастбара фокуса',
-        ['CASTBAR_FOCUS_HEIGHT'] = 'Высота кастбара фокуса',
+		
+        FONT_OUTLINE = 'Контур шрифта',
+		RAID_TARGET_INDICATOR = 'Индикатор цели рейда',
+
+        ENABLE_CASTBAR = 'Включить кастбары',
+        CASTBAR_COMPACT = 'Компактный стиль',
+        CASTBAR_SPELL_NAME = 'Имя заклинания',
+        CASTBAR_SPELL_TIME = 'Время заклинания',
+        CASTING_COLOR = 'Обычный',
+        UNINTERRUPTIBLE_COLOR = 'Непрерываемый',
+        COMPLETE_COLOR = 'Сбитый',
+        FAIL_COLOR = 'Не сбитый',
+		
+		CASTBAR_SIZE_SETTING = 'Настройки размера кастбара',
+		
+
+
         ['ENABLE_BOSS'] = 'Включить босс фреймы',
         ['BOSS_COLOR_SMOOTH'] = 'Гладкий цвет фреймов босса',
         ['ENABLE_ARENA'] = 'Включить арена фреймы',
@@ -757,7 +792,7 @@ L.GUI = {
         ['CAT_ARENA'] = 'Арена',
         ['CAT_POWER'] = 'Энергия',
         ['SET_WIDTH'] = 'ширина',
-        ['SET_HEIGHT'] = 'выстота',
+        ['SET_HEIGHT'] = 'высота',
         ['SET_GAP'] = 'отступ',
         ['SET_POWER_HEIGHT'] = 'Высота ресурса',
         ['SET_ALT_POWER_HEIGHT'] = 'Высота альтернативного ресурса',
@@ -772,9 +807,9 @@ L.GUI = {
     },
 
     ['GROUPFRAME'] = {
-        ['NAME'] = 'Груп-фреймы',
-        ['ENABLE_GROUP'] = 'Включить груп-фреймы',
-        ['GROUPFRAME_SIZE_SETTING_HEADER'] = 'Настройки размеров груп-фреймов',
+        ['NAME'] = 'Групп-фреймы',
+        ['ENABLE_GROUP'] = 'Включить групп-фреймы',
+        ['GROUPFRAME_SIZE_SETTING_HEADER'] = 'Настройки размеров групп-фреймов',
         ['GROUP_NAME'] = 'Показать имена',
         ['GROUP_THREAT_INDICATOR'] = 'Индикатор угрозы',
         ['GROUP_DEBUFF_HIGHLIGHT'] = 'Подсветить диспел',
@@ -786,7 +821,7 @@ L.GUI = {
         ['PARTY_SPELL_WATCHER'] = 'Показать групповые закл.',
         ['PARTY_SPELL_SYNC'] = 'Синхронизировать групповые закл.',
         ['PARTY_SPELL_SYNC_TIP'] = 'Если этот параметр включен, то состояние перезарядки будет синхронизироваться с членами группы, которые используют FreeUI или ZenTracker(WA).|nЭто может снизить производительность.',
-        ['PARTY_SPELL_SETTING_HEADER'] = 'Настройка груповых перезарядок',
+        ['PARTY_SPELL_SETTING_HEADER'] = 'Настройка групповых перезарядок',
         ['PARTY_SPELL_RESET_WARNING'] = 'Вы уверены, что хотите сбросить список по умолчанию?',
         ['PARTY_SPELL_PRESET'] = 'Пресет',
         ['INCOMPLETE_INPUT'] = 'Вам нужно заполнить все * опции.',
@@ -796,15 +831,15 @@ L.GUI = {
         ['SPELL_ID_TIP'] = '|nID заклинания, должно быть число.|nSpell имена не поддерживаются.',
         ['SPELL_COOLDOWN'] = 'Перезарядка заклинания*',
         ['SPELL_COOLDOWN_TIP'] = '|nEnter the spell\'s cooldown duration.|nOnly support regular spells and abilities.|nFor spells like \'Aspect of the Wild\' (BM Hunter), you need to sync cooldown with your party members.', -- Need translete
-        ['GROUP_CLICK_CAST'] = 'Клик каст на груп-фреймах',
-        ['GROUP_CLICK_CAST_TIP'] = 'Вы можете привязать быстрые заклинания в книге заклинаний Blizzard.',
+        ['GROUP_CLICK_CAST'] = 'Клик каст на групп-фреймах',
+        ['GROUP_CLICK_CAST_TIP'] = 'Вы можете привязать быстрые заклинания в книге умений Blizzard.',
         ['GROUP_DEBUFF_SETTING_HEADER'] = 'Настройка групповых дебаффов',
         ['TYPE'] = 'Тип',
         ['TYPE_TIP'] = '|nВыберите тип, к которому принадлежит ID.',
         ['DUNGEON_TIP'] = '|nВыберите подземелья, к которым принадлежит ID.',
         ['RAID_TIP'] = '|nВыберите рейд, к которым принадлежит ID.',
         ['PRIORITY'] = 'Приоритеты',
-        ['PRIORITY_TIP'] = '|nПриоритет заклинания, когда он виден.|n|nКогда несколько заклинаний, остается только то которое имеет высший приоритет.|n|nПриоритет по умолчанию равен 2, если оставить его пустым.|n|nМаксимальный приоритет равен 6, и значок будет мигать.',
+        ['PRIORITY_TIP'] = '|nПриоритет заклинания, когда он виден.|n|nКогда несколько умений, остается только то которое имеет высший приоритет.|n|nПриоритет по умолчанию равен 2, если оставить его пустым.|n|nМаксимальный приоритет равен 6, и значок будет мигать.',
         ['GROUP_DEBUFF_RESET_WARNING'] = 'Вы уверены, что хотите восстановить список по умолчанию?',
         ['PRIORITY_EDITBOX_TIP'] = '|nОграничение приоритета в 1-6.|n|nКогда вы закончите печатать, нажмите клавишу ENTER.',
         ['RAID_HORIZON'] = 'Гориз. расположение рейда',
@@ -812,9 +847,9 @@ L.GUI = {
         ['PARTY_HORIZON'] = 'Гориз. расположение группы',
         ['PARTY_REVERSE'] = 'Реверс группы',
         ['SPEC_POSITION'] = 'Сохранение позиции по спекам',
-        ['PARTY_WIDTH'] = 'Ширина групфреймов',
-        ['PARTY_HEIGHT'] = 'Высота групфреймов',
-        ['PARTY_GAP'] = 'Отступ груп-фреймов',
+        ['PARTY_WIDTH'] = 'Ширина групп-фреймов',
+        ['PARTY_HEIGHT'] = 'Высота групп-фреймов',
+        ['PARTY_GAP'] = 'Отступ групп-фреймов',
         ['RAID_WIDTH'] = 'Ширина рейд-фреймов',
         ['RAID_HEIGHT'] = 'Высота рейд-фреймов',
         ['RAID_GAP'] = 'Отступ рейд-фреймов',
@@ -846,8 +881,8 @@ L.GUI = {
         SPITEFUL_INDICATOR = '"Зловредный" таргет',
         SPITEFUL_INDICATOR_TIP = 'Показать неймплейт M+ аффикса "Зловредный".',
         MAJOR_SPELLS_GLOW = 'Свечение особых закл.',
-        MAJOR_SPELLS_GLOW_TIP = '|nЕсли враг произносит опасное заклинание, выделите его значок панели заклинаний.', -- ??
-        SHOW_AURA = 'Показать ауры',
+        MAJOR_SPELLS_GLOW_TIP = '|nЕсли враг произносит опасное заклинание, выделите его значок панели умений.', -- ??
+        SHOW_AURA = 'Показать баффы',
         SHOW_AURA_TIP = '',
         TOTEM_ICON = 'Иконки тотемов',
         TOTEM_ICON_TIP = '|nПоказать значки тотемов на неймплейтах.',
@@ -859,8 +894,8 @@ L.GUI = {
         SCALE = 'Масштаб',
         EXECUT_RATIO_SETTING = 'Коэффициент исполнения',
         EXECUTE_RATIO = 'Коэффициент исполнения',
-        SPELL_TARGET = 'Показывать в кого идет каст',
-        SPELL_TARGET_TIP = '|nПоказывать имя игрока в которого идет каст.',
+        SPELL_TARGET = 'Показывать на кого направлен каст',
+        SPELL_TARGET_TIP = '|nПоказывать имя игрока, на которого направлен каст.',
 
         BLACK_WHITE = 'Белый/черный лист',
         PLAYER_ONLY = 'Список и игрок',
@@ -889,11 +924,14 @@ L.GUI = {
         COLORED_TARGET = 'Цвет цели',
         COLORED_TARGET_TIP = '|nЕсли эта функция включена, примените цвет к вашей цели, ее приоритет выше, чем пользовательский цвет и цвет угрозы.|nВы можете настроить этот цвет ниже.',
         TARGET_COLOR = 'Цвет цели',
-        COLORED_CUSTOM_UNIT = 'Окрашивание особых нпц',
-        COLORED_CUSTOM_UNIT_TIP = '|nЕсли эта функция включена, то здоровье некоторых нпц будет окрашиваться в пользовательский цвет.|nВы можете настроить цвет и список единиц измерения в соответствии с вашими требованиями.',
+		COLORED_FOCUS = 'Dyeing focus unit',
+        COLORED_FOCUS_TIP = '|nIf enabled, dyeing your focus\'s nameplate, its priority is higher than custom color and threat color.|nYou can customize the color below.',
+        FOCUS_COLOR = 'Цвет фокуса',
+        COLORED_CUSTOM_UNIT = 'Окрашивание особых NPC',
+        COLORED_CUSTOM_UNIT_TIP = '|nЕсли эта функция включена, то здоровье некоторых NPC будет окрашиваться в пользовательский цвет.|nВы можете настроить цвет и список единиц измерения в соответствии с вашими требованиями.',
         CUSTOM_COLOR = 'Особый цвет',
-        CUSTOM_UNIT_LIST = 'Лист особых нпц',
-        CUSTOM_UNIT_LIST_TIP = '|nВведите имя или ID нпц.|nВы можете увидеть ID нпц в подсказке нажав кнопку ALT.|nИспользуйте кнопку "ПРОБЕЛ" между именами или ID.|nНажмите кнопку "ENTER" после того как закончили вводить имена или ID.',
+        CUSTOM_UNIT_LIST = 'Лист особых NPC',
+        CUSTOM_UNIT_LIST_TIP = '|nВведите имя или ID NPC.|nВы можете увидеть ID NPC в подсказке нажав кнопку ALT.|nИспользуйте кнопку "ПРОБЕЛ" между именами или ID.|nНажмите кнопку "ENTER" после того как закончили вводить имена или ID.',
 
         AURA_WHITE_LIST = 'Белый лист',
         AURA_BLACK_LIST = 'Черный лист',
@@ -902,7 +940,7 @@ L.GUI = {
         AURA_INCORRECT_ID = 'Некорректное ID заклинания.',
         AURA_EXISTING_ID = 'Это ID заклинаия уже присутствует.',
 
-        CASTBAR_GLOW_SETTING = 'Свечение особых заклинаний',
+        CASTBAR_GLOW_SETTING = 'Свечение особых умений',
     },
 
     ['CREDITS'] = {
@@ -927,8 +965,8 @@ L.GUI = {
         ['UISCALE_DESCRIPTION'] = 'Этот шаг установит соответствующий масштаб для интерфейса.',
         ['CHAT_HEADER'] = 'Чат',
         ['CHAT_DESCRIPTION'] = 'Этот шаг позволит настроить параметры, связанные с чатом.',
-        ['ACTIONBAR_HEADER'] = 'Панель заклинаний',
-        ['ACTIONBAR_DESCRIPTION'] = 'Этот шаг позволит настроить параметры, связанные с панелью заклинаний.',
+        ['ACTIONBAR_HEADER'] = 'Панель умений',
+        ['ACTIONBAR_DESCRIPTION'] = 'Этот шаг позволит настроить параметры, связанные с панелью умений.',
         ['ADDON_HEADER'] = 'Аддоны',
         ['ADDON_DESCRIPTION'] = 'Этот шаг позволит настроить некоторые аддоны в соответствии со стилем интерфейса и %AddonName%.',
         ['COMPLETE_HEADER'] = 'Готово!',
