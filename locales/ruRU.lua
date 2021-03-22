@@ -68,8 +68,8 @@ L.UNITFRAME = {
 --[[ Blizzard ]]
 
 L.BLIZZARD = {
-    UNDRESS = 'Undress',
-    UNDRESS_TIP = '%sUndress all|n%sUndress tabard',
+    UNDRESS = 'Раздеть',
+    UNDRESS_TIP = '%sСнять все вещи|n%sСнять накидку',
     USE_VELLUM = 'Right click to use vellum',
 }
 
@@ -607,8 +607,8 @@ L.GUI = {
         ['CD_FLASH_TIP'] = '|nОтслеживайте время перезарядки с помощью значка вспышки в центре экрана.',
         ['CD_NOTIFY'] = 'Уведом. времени восстановления',
         ['CD_NOTIFY_TIP'] = '|nЕсли эта функция включена, вы можете нажать колесико мыши на кнопку панели умений и отправить ее состояние перезарядки в группу.|n|nДоступно только для FreeUI пенели умений.',
-		DESATURATED_ICON = 'Desaturated icon',
-        DESATURATED_ICON_TIP = '|nShow the action bar icons desaturated when they are on cooldown.',
+		DESATURATED_ICON = 'Серые иконки при перезарядки',
+        DESATURATED_ICON_TIP = '|nИконка становится серой, когда умение перезаряжается.',
     },
 
     ['COMBAT'] = {
@@ -762,7 +762,7 @@ L.GUI = {
         ['DEBUFF_TYPE'] = 'Тип дебаффа',
         ['STEALABLE_BUFFS'] = 'Чарокрад',
         ['PLAYER_COMBAT_INDICATOR'] = 'Индикатор боя',
-        ['PLAYER_RESTING_INDICATOR'] = 'Индикатор покоя',
+        ['PLAYER_RESTING_INDICATOR'] = 'Индикатор отдыха',
         ['PLAYER_HIDE_TAGS'] = 'Скрыть звания игроков',
 		
         FONT_OUTLINE = 'Контур шрифта',
@@ -774,8 +774,8 @@ L.GUI = {
         CASTBAR_SPELL_TIME = 'Время заклинания',
         CASTING_COLOR = 'Обычный',
         UNINTERRUPTIBLE_COLOR = 'Непрерываемый',
-        COMPLETE_COLOR = 'Сбитый',
-        FAIL_COLOR = 'Не сбитый',
+        COMPLETE_COLOR = 'Завершенный',
+        FAIL_COLOR = 'Прерванный',
 		
 		CASTBAR_SIZE_SETTING = 'Настройки размера кастбара',
 		
