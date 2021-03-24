@@ -63,6 +63,12 @@ L.BLIZZARD = {
     UNDRESS = 'Undress',
     UNDRESS_TIP = '%sUndress all|n%sUndress tabard',
     USE_VELLUM = 'Right click to use vellum',
+    STRANGER = 'Stranger',
+    KEYSTONES = 'Keystones',
+    KEYSTONES_RESET = 'Delete keystones info',
+    GET_NAKED = 'Double click to unequip all gears',
+    ORDERHALL_TIP = 'Hold SHIFT for details',
+    GOLD = 'Gold'
 }
 
 --[[ Misc ]]
@@ -99,22 +105,6 @@ do
     L['MISC_DISBAND_CHECK'] = 'Are you sure to |cffff0000disband|r your group?'
     L['MISC_DISBAND_PROCESS'] = 'Raid Disbanding'
 
-end
-
---[[ Blizzard ]]
-
-do
-    L['BLIZZARD_MOVER_ALERT'] = 'Alert frame'
-    L['BLIZZARD_MOVER_VEHICLE'] = 'Vehicle indicator'
-    L['BLIZZARD_MOVER_UIWIDGET'] = 'UIWidget frame'
-    L['BLIZZARD_MOVER_DURABILITY'] = 'Durability indicator'
-
-    L['BLIZZARD_STRANGER'] = 'Stranger'
-    L['BLIZZARD_KEYSTONES'] = 'Keystones'
-    L['BLIZZARD_KEYSTONES_RESET'] = 'Delete keystones info'
-    L['BLIZZARD_GET_NAKED'] = 'Double click to unequip all gears'
-    L['BLIZZARD_ORDERHALL_TIP'] = 'Hold SHIFT for details'
-    L['BLIZZARD_GOLD'] = 'Gold'
 end
 
 --[[ Notification ]]
@@ -329,6 +319,10 @@ L.MOVER = {
     PLAYER_CASTBAR = 'Player Castbar',
     TARGET_CASTBAR = 'Target Castbar',
     FOCUS_CASTBAR = 'Focus Castbar',
+    ALERT_FRAME = 'Alert Frame',
+    VEHICLE_INDICATOR = 'Vehicle Indicator',
+    UI_WIDGET = 'UI Widget',
+    DURABILITY_FRAME = 'Durability Frame'
 }
 
 --[[ GUI ]]

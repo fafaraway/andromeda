@@ -17,7 +17,7 @@ local function OnEvent()
 		if(item and COD<1) then items = items + item end
 		cash = cash + money
 	end
-	text:SetText(C.InfoColor..format('%d '..L['BLIZZARD_GOLD']..' %d '..ITEMS, floor(cash * 0.0001), items))
+	text:SetText(C.InfoColor..format('%d '..L.BLIZZARD.GOLD..' %d '..ITEMS, floor(cash * 0.0001), items))
 
 	if(processing) then
 		if(num==0) then

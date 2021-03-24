@@ -17,61 +17,63 @@ end
 _G.BINDING_HEADER_FREEUI = 'FreeUI'
 _G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Переключить панель конфигурации FreeUI'
 
+
 --[[ Actionbar ]]
 
-L.ACTIONBAR = {
-	CD_REMAINING = '%s оставшееся время перезарядки %s.',
-	CD_FINISHED = '%s теперь доступна.',
-	CUSTOM_BAR = 'Кастомная панель',
-	UNBIND_TIP = 'Нажмите клавишу ESC или щелкните правой кнопкой мыши, чтобы отменить это действие.',
-	KEY_INDEX = 'Индекс',
-	KEY_BINDING = 'Клавиша',
-	KEY_BOUND_TO = ' bound to',
-	SAVE_KEYBINDS = 'Привязка клавиши сохранена.',
-	DISCARD_KEYBINDS = 'Отмена привязки клавиши.',
-	CLEAR_BINDS = '|cff20ff20Все привязки клавишь очищены для|r %s.',
-}
+L.ACTIONBAR.CD_REMAINING = '%s оставшееся время перезарядки %s.'
+L.ACTIONBAR.CD_FINISHED = '%s теперь доступна.'
+L.ACTIONBAR.CUSTOM_BAR = 'Кастомная панель'
+L.ACTIONBAR.UNBIND_TIP = 'Нажмите клавишу ESC или щелкните правой кнопкой мыши, чтобы отменить это действие.'
+L.ACTIONBAR.KEY_INDEX = 'Индекс'
+L.ACTIONBAR.KEY_BINDING = 'Клавиша'
+L.ACTIONBAR.KEY_BOUND_TO = ' bound to'
+L.ACTIONBAR.SAVE_KEYBINDS = 'Привязка клавиши сохранена.'
+L.ACTIONBAR.DISCARD_KEYBINDS = 'Отмена привязки клавиши.'
+L.ACTIONBAR.CLEAR_BINDS = '|cff20ff20Все привязки клавишь очищены для|r %s.'
+
 
 --[[ Announcement ]]
 
-L.ANNOUNCEMENT = {
-	INTERRUPT = 'Прерванно %target% %target_spell%!',
-	DISPEL = 'Диспел %target% %target_spell%!',
-	STOLEN = 'Украл %target% %target_spell%!',
-	BATTLE_REZ = '%player% кастует %spell% на %target%!',
-	CAST = '%player% кастует %spell%!',
-	CAST_TARGET = '%player% кастует %spell% на %target%!',
-	QUEST_ACCEPT = 'Принятый квет:',
-	QUEST_ANNOUNCE = 'Анонс квеста',
-	QUEST_ANNOUNCE_TIP = 'Пусть ваши тим-мэйты знают о ходе выполнения заданий.',
-	RESET_SUCCESS = '%s был сброшен.',
-	RESET_FAILED = 'Невозможно сбросить %s, внутри подземелья все еще есть игроки.',
-	RESET_FAILED_ZONING = 'Невозможно сбросить %s, есть игроки в вашей группе, пытающиеся войти в подземелье.',
-	RESET_FAILED_OFFLINE = 'Невозможно сбросить %s, в вашей гуппе есть игроки, находящиеся в офлайне.',
-}
+L.ANNOUNCEMENT.INTERRUPT = 'Прерванно %target% %target_spell%!'
+L.ANNOUNCEMENT.DISPEL = 'Диспел %target% %target_spell%!'
+L.ANNOUNCEMENT.STOLEN = 'Украл %target% %target_spell%!'
+L.ANNOUNCEMENT.BATTLE_REZ = '%player% кастует %spell% на %target%!'
+L.ANNOUNCEMENT.CAST = '%player% кастует %spell%!'
+L.ANNOUNCEMENT.CAST_TARGET = '%player% кастует %spell% на %target%!'
+L.ANNOUNCEMENT.QUEST_ACCEPT = 'Принятый квет:'
+L.ANNOUNCEMENT.QUEST_ANNOUNCE = 'Анонс квеста'
+L.ANNOUNCEMENT.QUEST_ANNOUNCE_TIP = 'Пусть ваши тим-мэйты знают о ходе выполнения заданий.'
+L.ANNOUNCEMENT.RESET_SUCCESS = '%s был сброшен.'
+L.ANNOUNCEMENT.RESET_FAILED = 'Невозможно сбросить %s, внутри подземелья все еще есть игроки.'
+L.ANNOUNCEMENT.RESET_FAILED_ZONING = 'Невозможно сбросить %s, есть игроки в вашей группе, пытающиеся войти в подземелье.'
+L.ANNOUNCEMENT.RESET_FAILED_OFFLINE = 'Невозможно сбросить %s, в вашей гуппе есть игроки, находящиеся в офлайне.'
+
 
 --[[ Quest ]]
 
-L.QUEST = {
-	AUTOMATION = 'Авто-квесты',
-	AUTOMATION_TIP = 'Автоматически принимать и сдавать квесты',
-}
+L.QUEST.AUTOMATION = 'Авто-квесты'
+L.QUEST.AUTOMATION_TIP = 'Автоматически принимать и сдавать квесты'
+
 
 --[[ Unitframe ]]
 
-L.UNITFRAME = {
-	BINDER_OPEN = 'Открыть бинды спелов',
-	BINDER_TITLE = 'Бинды спелов',
-	BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши для привязки умений.',
-}
+L.UNITFRAME.BINDER_OPEN = 'Открыть бинды спелов'
+L.UNITFRAME.BINDER_TITLE = 'Бинды спелов'
+L.UNITFRAME.BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши для привязки умений.'
+
 
 --[[ Blizzard ]]
 
-L.BLIZZARD = {
-    UNDRESS = 'Раздеть',
-    UNDRESS_TIP = '%sСнять все вещи|n%sСнять накидку',
-    USE_VELLUM = 'Right click to use vellum',
-}
+L.BLIZZARD.UNDRESS = 'Раздеть'
+L.BLIZZARD.UNDRESS_TIP = '%sСнять все вещи|n%sСнять накидку'
+L.BLIZZARD.USE_VELLUM = 'Right click to use vellum'
+L.BLIZZARD.STRANGER = 'Незнакомец'
+L.BLIZZARD.KEYSTONES = 'Ключи'
+L.BLIZZARD.KEYSTONES_RESET = 'Удалить информацию о ключах'
+L.BLIZZARD.GET_NAKED = 'Двойной клик что бы снять всю броню'
+L.BLIZZARD.ORDERHALL_TIP = 'Зажать SHIFT для доп.информации'
+L.BLIZZARD.GOLD = 'Золото'
+
 
 --[[ Misc ]]
 
@@ -109,21 +111,7 @@ do
 
 end
 
---[[ Blizzard ]]
 
-do
-    L['BLIZZARD_MOVER_ALERT'] = 'Рамка оповещения'
-    L['BLIZZARD_MOVER_VEHICLE'] = 'Индикатор транспортного средства'
-    L['BLIZZARD_MOVER_UIWIDGET'] = 'Рамка UIWidget'
-    L['BLIZZARD_MOVER_DURABILITY'] = 'Индикатор прочности'
-
-    L['BLIZZARD_STRANGER'] = 'Незнакомец'
-    L['BLIZZARD_KEYSTONES'] = 'Ключи'
-    L['BLIZZARD_KEYSTONES_RESET'] = 'Удалить информацию о ключах'
-    L['BLIZZARD_GET_NAKED'] = 'Двойной клик что бы снять всю броню'
-    L['BLIZZARD_ORDERHALL_TIP'] = 'Зажать SHIFT для доп.информации'
-    L['BLIZZARD_GOLD'] = 'Золото'
-end
 
 --[[ Notification ]]
 
@@ -325,19 +313,22 @@ end
 
 --[[ Mover ]]
 
-L.MOVER = {
-	MAIN_BAR = 'Главная панель',
-	PET_BAR = 'Панель питомца',
-	STANCE_BAR = 'Панель стоек',
-	VEHICLE_BAR = 'Кнопка спешивания',
-	EXTRA_BAR = 'Extra кнопка',
-	ZONE_ABILITY = 'Кнопка абилки зоны',
-	CUSTOM_BAR = 'Дополнительная панель умений',
-	COOLDOWN_FLASH = 'Вспышка перезарядки',
-	PLAYER_CASTBAR = 'Кастбар игрока',
-	TARGET_CASTBAR = 'Кастбар цели',
-	FOCUS_CASTBAR = 'Кастбар фокуса',
-}
+L.MOVER.MAIN_BAR = 'Главная панель'
+L.MOVER.PET_BAR = 'Панель питомца'
+L.MOVER.STANCE_BAR = 'Панель стоек'
+L.MOVER.VEHICLE_BAR = 'Кнопка спешивания'
+L.MOVER.EXTRA_BAR = 'Extra кнопка'
+L.MOVER.ZONE_ABILITY = 'Кнопка абилки зоны'
+L.MOVER.CUSTOM_BAR = 'Дополнительная панель умений'
+L.MOVER.COOLDOWN_FLASH = 'Вспышка перезарядки'
+L.MOVER.PLAYER_CASTBAR = 'Кастбар игрока'
+L.MOVER.TARGET_CASTBAR = 'Кастбар цели'
+L.MOVER.FOCUS_CASTBAR = 'Кастбар фокуса'
+L.MOVER.ALERT_FRAME = 'Рамка оповещения'
+L.MOVER.VEHICLE_INDICATOR = 'Индикатор транспортного средства'
+L.MOVER.UI_WIDGET = 'Рамка UIWidget'
+L.MOVER.DURABILITY_FRAME = 'Индикатор прочности'
+
 
 --[[ GUI ]]
 
@@ -764,7 +755,7 @@ L.GUI = {
         ['PLAYER_COMBAT_INDICATOR'] = 'Индикатор боя',
         ['PLAYER_RESTING_INDICATOR'] = 'Индикатор отдыха',
         ['PLAYER_HIDE_TAGS'] = 'Скрыть звания игроков',
-		
+
         FONT_OUTLINE = 'Контур шрифта',
 		RAID_TARGET_INDICATOR = 'Индикатор цели рейда',
 
@@ -776,9 +767,9 @@ L.GUI = {
         UNINTERRUPTIBLE_COLOR = 'Непрерываемый',
         COMPLETE_COLOR = 'Завершенный',
         FAIL_COLOR = 'Прерванный',
-		
+
 		CASTBAR_SIZE_SETTING = 'Настройки размера кастбара',
-		
+
 
 
         ['ENABLE_BOSS'] = 'Включить босс фреймы',
@@ -903,7 +894,7 @@ L.GUI = {
 
         BASIC_SETTING = 'Неймплейты',
         SIZE = 'Размер',
-        CVAR = 'CVars', 
+        CVAR = 'CVars',
         MIN_SCALE = 'None target scale', -- Need translete
         TARGET_SCALE = 'Target scale', -- Need translete
         MIN_ALPHA = 'None target alpha', -- Need translete

@@ -64,7 +64,7 @@ function BLIZZARD:TradeTargetInfo()
 
 		local guid = UnitGUID('NPC')
 		if not guid then return end
-		local text = C.RedColor..L['BLIZZARD_STRANGER']
+		local text = C.RedColor..L.BLIZZARD.STRANGER
 		if C_BattleNet.GetGameAccountInfoByGUID(guid) or C_FriendList.IsFriend(guid) then
 			text = C.GreenColor..FRIEND
 		elseif IsGuildMember(guid) then
@@ -88,7 +88,7 @@ end
 function BLIZZARD:VehicleIndicatorMover()
 	local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', UIParent)
 	frame:SetSize(100, 100)
-	F.Mover(frame, L['BLIZZARD_MOVER_VEHICLE'], 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
+	F.Mover(frame, L.MOVER.VEHICLE_INDICATOR, 'VehicleIndicator', {'BOTTOMRIGHT', Minimap, 'TOPRIGHT', 0, 0})
 
 	hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then
@@ -102,7 +102,7 @@ end
 function BLIZZARD:DurabilityFrameMover()
 	local frame = CreateFrame('Frame', 'FreeUIDurabilityFrameMover', UIParent)
 	frame:SetSize(100, 100)
-	F.Mover(frame, L['BLIZZARD_MOVER_DURABILITY'], 'DurabilityFrame', {'TOPRIGHT', ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
+	F.Mover(frame, L.MOVER.DURABILITY_FRAME, 'DurabilityFrame', {'TOPRIGHT', ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
 
 	hooksecurefunc(DurabilityFrame, "SetPoint", function(self, _, parent)
 		if parent == "MinimapCluster" or parent == MinimapCluster then
@@ -125,7 +125,7 @@ end
 function BLIZZARD:UIWidgetMover()
 	local frame = CreateFrame('Frame', 'FreeUI_UIWidgetMover', UIParent)
 	frame:SetSize(200, 50)
-	F.Mover(frame, L['BLIZZARD_MOVER_UIWIDGET'], 'UIWidgetFrame', {'TOP', 0, -80})
+	F.Mover(frame, L.MOVER.UI_WIDGET, 'UIWidgetFrame', {'TOP', 0, -80})
 
 	hooksecurefunc(UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
 		if parent == 'MinimapCluster' or parent == MinimapCluster then

@@ -94,7 +94,7 @@ function BLIZZARD:OrderHall_OnEnter()
 	end
 
 	GameTooltip:AddDoubleLine(' ', C.LineString)
-	GameTooltip:AddDoubleLine(' ', L['BLIZZARD_ORDERHALL_TIP'], 1,1,1, .6,.8,1)
+	GameTooltip:AddDoubleLine(' ', L.BLIZZARD.ORDERHALL_TIP, 1,1,1, .6,.8,1)
 	GameTooltip:Show()
 
 	F:RegisterEvent('MODIFIER_STATE_CHANGED', BLIZZARD.OrderHall_OnShiftDown)
