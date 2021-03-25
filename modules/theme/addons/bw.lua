@@ -99,7 +99,7 @@ local function RegisterStyle()
 end
 
 function THEME:ReskinBigWigs()
-    if not _G.FREE_ADB.reskin_bw then
+    if not _G.FREE_ADB.ReskinBigWigs then
         return
     end
 

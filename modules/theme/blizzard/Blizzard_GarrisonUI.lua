@@ -13,7 +13,7 @@ local function ReskinMissionPage(self)
 	F.ReskinClose(self.CloseButton)
 	self.CloseButton:ClearAllPoints()
 	self.CloseButton:SetPoint("TOPRIGHT", -10, -5)
-    if self.EnemyBackground then self.EnemyBackground:Hide() end
+	if self.EnemyBackground then self.EnemyBackground:Hide() end
 	if self.FollowerBackground then self.FollowerBackground:Hide() end
 
 	if self.Followers then
@@ -92,6 +92,7 @@ local function ReskinMissionList(self)
 			local rareText = button.RareText
 
 			button.LocBG:SetDrawLayer("BACKGROUND")
+			if button.ButtonBG then button.ButtonBG:Hide() end
 			F.StripTextures(button)
 			F.CreateBDFrame(button, .25, true)
 			button.Highlight:SetColorTexture(.6, .8, 1, .15)
@@ -147,6 +148,8 @@ local function ReskinMissionComplete(self)
 	if missionComplete.MissionInfo then
 		F.StripTextures(missionComplete.MissionInfo)
 	end
+	if missionComplete.EnemyBackground then missionComplete.EnemyBackground:Hide() end
+	if missionComplete.FollowerBackground then missionComplete.FollowerBackground:Hide() end
 end
 
 local function ReskinFollowerTab(self)

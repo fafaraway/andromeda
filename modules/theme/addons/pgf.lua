@@ -10,7 +10,7 @@ local THEME = F.THEME
 local TOOLTIP = F.TOOLTIP
 
 function THEME:ReskinPGF()
-    if not _G.FREE_ADB.reskin_pgf then
+    if not _G.FREE_ADB.ReskinPremadeGroupsFilter then
         return
     end
 

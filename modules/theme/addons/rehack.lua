@@ -7,6 +7,10 @@ local F = unpack(select(2, ...))
 local THEME = F.THEME
 
 function THEME:ReskinREHack()
+    if not _G.FREE_ADB.ReskinREHack then
+        return
+    end
+
     if not _G.REHack then
         return
     end

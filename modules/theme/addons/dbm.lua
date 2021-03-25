@@ -13,7 +13,7 @@ local TOOLTIP = F.TOOLTIP
 
 local buttonSize = 24
 
-local function reskinIcon(icon, frame)
+local function ReskinIcon(icon, frame)
     if not icon then
         return
     end
@@ -35,7 +35,7 @@ local function reskinIcon(icon, frame)
     icon:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -2, 0)
 end
 
-local function reskinBar(bar, frame)
+local function ReskinBar(bar, frame)
     if not bar then
         return
     end
@@ -50,13 +50,13 @@ local function reskinBar(bar, frame)
     bar:SetInside(frame, 2, 2)
 end
 
-local function removeSpark(self)
+local function RemoveSpark(self)
     local spark = _G[self.frame:GetName() .. 'BarSpark']
     spark:SetAlpha(0)
     spark:SetTexture(nil)
 end
 
-local function applyStyle(self)
+local function ApplyStyle(self)
     local frame = self.frame
     local frame_name = frame:GetName()
     local tbar = _G[frame_name .. 'Bar']
@@ -77,9 +77,9 @@ local function applyStyle(self)
     frame:SetScale(1)
     frame:SetHeight(buttonSize / 2)
 
-    reskinIcon(icon1, frame)
-    reskinIcon(icon2, frame)
-    reskinBar(tbar, frame)
+    ReskinIcon(icon1, frame)
+    ReskinIcon(icon2, frame)
+    ReskinBar(tbar, frame)
 
     if texture then
         texture:SetTexture(C.Assets.statusbar_tex)
@@ -100,7 +100,7 @@ local function applyStyle(self)
     timer:SetShadowColor(0, 0, 0, 0)
 end
 
-local function forceSetting()
+local function ForceSetting()
     if not _G.DBM_AllSavedOptions['Default'] then
         _G.DBM_AllSavedOptions['Default'] = {}
     end
@@ -145,15 +145,15 @@ function THEME:ReskinDBM()
         return
     end
 
-    if not _G.FREE_ADB.reskin_dbm then
+    if not _G.FREE_ADB.ReskinDBM then
         return
     end
 
     hooksecurefunc(_G.DBT, 'CreateBar', function(self)
         for bar in self:GetBarIterator() do
             if not bar.injected then
-                hooksecurefunc(bar, 'Update', removeSpark)
-                hooksecurefunc(bar, 'ApplyStyle', applyStyle)
+                hooksecurefunc(bar, 'Update', RemoveSpark)
+                hooksecurefunc(bar, 'ApplyStyle', ApplyStyle)
                 bar:ApplyStyle()
 
                 bar.injected = true
@@ -179,5 +179,5 @@ function THEME:ReskinDBM()
         _G.DBMInfoFrame:HookScript('OnShow', TOOLTIP.ReskinTooltip)
     end
 
-    forceSetting()
+    ForceSetting()
 end

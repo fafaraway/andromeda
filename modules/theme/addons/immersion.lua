@@ -12,7 +12,7 @@ local CurrencyContainerUtil = CurrencyContainerUtil
 local F, C = unpack(select(2, ...))
 local THEME = F.THEME
 
-local function updateItemBorder(self)
+local function UpdateItemBorder(self)
     if not self.bg then
         return
     end
@@ -25,8 +25,7 @@ local function updateItemBorder(self)
         local name, texture, numItems, quality = GetQuestCurrencyInfo(self.type, self:GetID())
         local currencyID = GetQuestCurrencyID(self.type, self:GetID())
         if name and texture and numItems and quality and currencyID then
-            local currencyQuality = select(4, CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name,
-                texture, quality))
+            local currencyQuality = select(4, CurrencyContainerUtil.GetCurrencyContainerInfo(currencyID, numItems, name, texture, quality))
             local color = C.QualityColors[currencyQuality or 1]
             self.bg:SetBackdropBorderColor(color.r, color.g, color.b)
         end
@@ -35,7 +34,7 @@ local function updateItemBorder(self)
     end
 end
 
-local function reskinItemButton(buttons)
+local function ReskinItemButton(buttons)
     for i = 1, #buttons do
         local button = buttons[i]
         if button and not button.styled then
@@ -49,11 +48,11 @@ local function reskinItemButton(buttons)
 
             button.styled = true
         end
-        updateItemBorder(button)
+        UpdateItemBorder(button)
     end
 end
 
-local function reskinTitleButton(self, index)
+local function ReskinTitleButton(self, index)
     local button = self.Buttons[index]
     if button and not button.styled then
         F.StripTextures(button)
@@ -70,9 +69,9 @@ local function reskinTitleButton(self, index)
     end
 end
 
-local function reskinReward(self)
+local function ReskinReward(self)
     local rewardsFrame = self.TalkBox.Elements.Content.RewardsFrame
-    reskinItemButton(rewardsFrame.Buttons)
+    ReskinItemButton(rewardsFrame.Buttons)
 
     if GetNumRewardSpells() > 0 then
         -- follower
@@ -115,12 +114,12 @@ local function reskinReward(self)
     end
 end
 
-local function reskinProgress(self)
-    reskinItemButton(self.TalkBox.Elements.Progress.Buttons)
+local function ReskinProgress(self)
+    ReskinItemButton(self.TalkBox.Elements.Progress.Buttons)
 end
 
-local function reskinImmersion()
-    if not _G.FREE_ADB.reskin_immersion then
+local function ReskinImmersion()
+    if not _G.FREE_ADB.ReskinImmersion then
         return
     end
 
@@ -173,10 +172,10 @@ local function reskinImmersion()
     indicator:SetPoint('RIGHT', mainFrame.CloseButton, 'LEFT', -3, 0)
 
     local titleButtons = _G.ImmersionFrame.TitleButtons
-    hooksecurefunc(titleButtons, 'GetButton', reskinTitleButton)
+    hooksecurefunc(titleButtons, 'GetButton', ReskinTitleButton)
 
-    hooksecurefunc(_G.ImmersionFrame, 'AddQuestInfo', reskinReward)
-    hooksecurefunc(_G.ImmersionFrame, 'QUEST_PROGRESS', reskinProgress)
+    hooksecurefunc(_G.ImmersionFrame, 'AddQuestInfo', ReskinReward)
+    hooksecurefunc(_G.ImmersionFrame, 'QUEST_PROGRESS', ReskinProgress)
 end
 
-THEME:LoadWithAddOn('Immersion', 'reskin_immersion', reskinImmersion)
+THEME:LoadWithAddOn('Immersion', 'ReskinImmersion', ReskinImmersion)
