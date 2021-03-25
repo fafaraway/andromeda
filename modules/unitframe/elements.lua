@@ -454,12 +454,12 @@ end
 --[[ Auras ]]
 
 -- LuaFormatter off
-OUF.colors.debuff = {
-    ['Curse'] = {.8, 0, 1},
-    ['Disease'] = {.8, .6, 0},
-    ['Magic'] = {0, .8, 1},
-    ['Poison'] = {0, .8, 0},
-    ['none'] = {0, 0, 0},
+local debuffColors = {
+    Curse = {.8, 0, 1},
+    Disease = {.8, .6, 0},
+    Magic = {0, .8, 1},
+    Poison = {0, .8, 0},
+    none = {0, 0, 0},
 }
 -- LuaFormatter on
 
@@ -557,7 +557,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
             button.glow:SetBackdropBorderColor(1, 1, 1, .25)
         end
     elseif button.isDebuff and element.showDebuffType then
-        local color = OUF.colors.debuff[debuffType] or OUF.colors.debuff.none
+        local color = debuffColors[debuffType] or debuffColors.none
 
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
@@ -660,7 +660,6 @@ function UNITFRAME:AddAuras(self)
     auras.gap = true
     auras.spacing = 4
     auras.numTotal = 32
-    auras.tooltipAnchor = 'ANCHOR_BOTTOMLEFT'
 
     if style == 'target' then
         auras.initialAnchor = 'BOTTOMLEFT'
@@ -1179,7 +1178,7 @@ function UNITFRAME:PostCastUpdate(unit)
     updateSpellTarget(self, unit)
 end
 
-function UNITFRAME:PostUpdateInterruptible(unit)
+function UNITFRAME:PostUpdateInterruptible()
     local compact = C.DB.unitframe.CastbarCompact
     local normalColor = C.DB.unitframe.CastbarCastingColor
     local uninterruptibleColor = C.DB.unitframe.CastbarUninterruptibleColor
@@ -1369,7 +1368,7 @@ local fullyChargedColors = {
 }
 -- LuaFormatter on
 
-local function PostUpdateClassPower(element, cur, max, diff, powerType, chargedIndex)
+local function PostUpdateClassPower(element, cur, max, diff, powerType)
     -- local style = element.__owner.unitStyle
     local gap = 3
     local maxWidth = C.DB.unitframe.player_width
