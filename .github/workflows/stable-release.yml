@@ -3,15 +3,12 @@ name: Release
 on:
   push:
     tags:
-      - "*"
-      - "!**-alpha**"
-      - "!**-beta**"
-
+      - '*'
+      - '!**-alpha**'
+      - '!**-beta**'
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     env:
@@ -20,7 +17,6 @@ jobs:
       CF_API_KEY: ${{ secrets.CF_API_KEY }}
 
     steps:
-
       - name: Clone project
         uses: actions/checkout@v1
         with:

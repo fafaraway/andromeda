@@ -3,21 +3,17 @@ name: Pre-release
 on:
   push:
     tags:
-      - "**-alpha**"
-      - "**-beta**"
-
+      - '**-alpha**'
+      - '**-beta**'
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     env:
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-
       - name: Clone project
         uses: actions/checkout@v1
         with:
