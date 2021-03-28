@@ -15,13 +15,12 @@ jobs:
 
     steps:
       - name: Clone project
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 50
+        uses: actions/checkout@v2
 
       - name: Package and release
         uses: BigWigsMods/packager@master
 
+      - name: Upload artifact
       - uses: actions/upload-artifact@v2
         with:
           name: FreeUI
