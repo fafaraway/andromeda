@@ -160,16 +160,16 @@ local function UpdateFriendButton(button)
         local buttonTitle, buttonText
 
         -- 名字
-        local realIDString = realID and F.CreateColorString(realID, BNColor[game]) or realID
+        local realIDString = realID and F:CreateColorString(realID, BNColor[game]) or realID
 
         local nameString = name
         local classColor = GetClassColor(class)
         if classColor then
-            nameString = F.CreateColorString(name, classColor)
+            nameString = F:CreateColorString(name, classColor)
         end
 
         if level and level ~= 0 and MaxLevel[game] and (level ~= MaxLevel[game]) then
-            nameString = nameString .. F.CreateColorString(' ' .. level, GetQuestDifficultyColor(level))
+            nameString = nameString .. F:CreateColorString(' ' .. level, GetQuestDifficultyColor(level))
         end
 
         if nameString and realIDString then
@@ -185,9 +185,9 @@ local function UpdateFriendButton(button)
         -- 地区
         if area then
             if server and server ~= C.MyRealm then
-                buttonText = F.CreateColorString(area .. ' - ' .. server, {r = .8, g = .8, b = .8})
+                buttonText = F:CreateColorString(area .. ' - ' .. server, {r = .8, g = .8, b = .8})
             else
-                buttonText = F.CreateColorString(area, {r = .8, g = .8, b = .8})
+                buttonText = F:CreateColorString(area, {r = .8, g = .8, b = .8})
             end
 
             button.info:SetText(buttonText)
@@ -207,8 +207,8 @@ local function UpdateFriendButton(button)
         end
     end
 
-    F.SetFS(button.name, C.Assets.Fonts.Bold, 13, nil, nil, nil, true)
-    F.SetFS(button.info, C.Assets.Fonts.Regular, 12, nil, nil, nil, true)
+    F:SetFS(button.name, C.Assets.Fonts.Bold, 13, nil, nil, nil, true)
+    F:SetFS(button.info, C.Assets.Fonts.Regular, 12, nil, nil, nil, true)
 
     if button.Favorite:IsShown() then
         button.Favorite:ClearAllPoints()

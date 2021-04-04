@@ -162,7 +162,7 @@ function INVENTORY:CreateCurrencyFrame()
     currencyFrame:SetSize(140, 26)
 
     local tag = self:SpawnPlugin('TagDisplay', '[money]  [currencies]', currencyFrame)
-    F.SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
+    F:SetFS(tag, C.Assets.Fonts.Bold, 11, nil, '', nil, 'THICK')
     tag:SetPoint('TOPLEFT', 0, -3)
 end
 
@@ -474,7 +474,7 @@ function INVENTORY:CreateFreeSlots()
     slot.__name = name
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
-    F.SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', 'CLASS', 'THICK')
+    F:SetFS(tag, C.Assets.Fonts.Regular, 11, nil, '', 'CLASS', 'THICK')
     tag:SetPoint('BOTTOMRIGHT', -2, 2)
     tag.__name = name
 
@@ -861,7 +861,7 @@ function INVENTORY:OnLogin()
 
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TexCoord))
-        F.SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2,
+        F:SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2,
                 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
@@ -1050,7 +1050,7 @@ function INVENTORY:OnLogin()
 
         self.iLvl:SetText('')
         if C.DB.inventory.item_level and isItemNeedsLevel(item) then
-            local level = F.GetItemLevel(item.link, item.bagID, item.slotID) or item.level
+            local level = F:GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 
             if level > C.DB.inventory.item_level_to_show then
                 local color = C.QualityColors[item.rarity]

@@ -43,6 +43,17 @@ local function UpdatePixelScale(event)
     isScaling = false
 end
 
+local Trunc = function(s)
+    return s >= 0 and s - s % 01 or s - s % -1
+end
+local Round = function(s)
+    return s >= 0 and s - s % -1 or s - s % 01
+end
+function F:Scale(n)
+    local m = C.Mult
+    return (m == 1 or n == 0) and n or ((m < 1 and Trunc(n / m) or Round(n / m)) * m)
+end
+
 F:RegisterEvent('PLAYER_LOGIN', function()
     if C.DB.installation.complete then
         F:SetupUIScale()

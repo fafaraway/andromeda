@@ -137,7 +137,7 @@ function INFOBAR:Guild()
 			barValue = barValue - barMin
 			barMin = 0
 			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(string.format("%s:|r |cFFFFFFFF%s/%s (%s%%)",col..COMBAT_FACTION_CHANGE, F.Numb(barValue), F.Numb(barMax), math.ceil((barValue / barMax) * 100)))
+			GameTooltip:AddLine(string.format("%s:|r |cFFFFFFFF%s/%s (%s%%)",col..COMBAT_FACTION_CHANGE, F:Numb(barValue), F:Numb(barMax), math.ceil((barValue / barMax) * 100)))
 		end
 
 		if online > 1 then

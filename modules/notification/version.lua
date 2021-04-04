@@ -38,7 +38,7 @@ end
 
 function NOTIFICATION:VersionCheck_Create(text)
     F:CreateNotification(L['NOTIFICATION_VERSION'], C.BlueColor .. L['NOTIFICATION_VERSION_OUTDATE'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
-    F.Print(format(L['NOTIFICATION_VERSION_OUTDATE'], text))
+    F:Print(format(L['NOTIFICATION_VERSION_OUTDATE'], text))
 end
 
 function NOTIFICATION:VersionCheck_Init()

@@ -124,7 +124,7 @@ function TOOLTIP:GetUnitItemLevel(unit)
 						end
 
 						if unit ~= 'player' then
-							level = F.GetItemLevel(itemLink) or level
+							level = F:GetItemLevel(itemLink) or level
 							if i < 16 then
 								total = total + level
 							elseif i > 15 and quality == LE_ITEM_QUALITY_ARTIFACT then

@@ -250,7 +250,7 @@ tinsert(C.BlizzThemes, function()
 		end
 	end
 
-	F.SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
+	F:SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
 
 	-- Maw buffs block
 	ScenarioBlocksFrame.MawBuffsBlock.Container:HookScript("OnClick", function(container)

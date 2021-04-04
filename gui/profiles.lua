@@ -101,7 +101,7 @@ StaticPopupDialogs['FREEUI_DELETE_UNIT_PROFILE'] = {
 		if class == 'NONE' then
 			r, g, b = .5, .5, .5
 		else
-			r, g, b = F.ClassColor(class)
+			r, g, b = F:ClassColor(class)
 		end
 		self.text:SetText(format(L.GUI.PROFILE.DELETE_UNIT_PROFILE_WARNING, F.HexRGB(r, g, b), self.text.text_arg1))
 	end,
@@ -177,7 +177,7 @@ function GUI:Icon_OnEnter()
 			if class == 'NONE' then
 				r, g, b = .5, .5, .5
 			else
-				r, g, b = F.ClassColor(class)
+				r, g, b = F:ClassColor(class)
 			end
 			GameTooltip:AddLine(name, r, g, b)
 		end
@@ -317,7 +317,7 @@ function GUI:CreateProfileGUI(parent)
 			StaticPopup_Show('FREEUI_RESET')
 		end
 	)
-	F.AddTooltip(reset, 'ANCHOR_TOP', F.StyleAddonName(L.GUI.PROFILE.RESET_TIP), 'RED')
+	F.AddTooltip(reset, 'ANCHOR_TOP', F:StyleAddonName(L.GUI.PROFILE.RESET_TIP), 'RED')
 
 	local import = F.CreateButton(parent, 100, 24, L.GUI.PROFILE.IMPORT)
 	import:SetPoint('BOTTOMLEFT', 20, 20)

@@ -142,16 +142,16 @@ function BLIZZARD:HandleHeaderText()
     for i = 1, #frame do
         local modules = frame[i]
         if modules and modules.Header and modules.Header.Text then
-            F.SetFS(modules.Header.Text, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
+            F:SetFS(modules.Header.Text, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
         end
     end
 end
 
 function BLIZZARD:HandleTitleText(text)
     if _G.FREE_ADB.font_outline then
-        F.SetFS(text, C.Assets.Fonts.Bold, 14, true, nil, nil, true)
+        F:SetFS(text, C.Assets.Fonts.Bold, 14, true, nil, nil, true)
     else
-        F.SetFS(text, C.Assets.Fonts.Bold, 14, nil, nil, nil, 'THICK')
+        F:SetFS(text, C.Assets.Fonts.Bold, 14, nil, nil, nil, 'THICK')
     end
     local height = text:GetStringHeight() + 2
     if height ~= text:GetHeight() then
@@ -163,9 +163,9 @@ end
 function BLIZZARD:HandleInfoText(text)
     self:ColorfulProgression(text)
     if _G.FREE_ADB.font_outline then
-        F.SetFS(text, C.Assets.Fonts.Regular, 13, true, nil, nil, true)
+        F:SetFS(text, C.Assets.Fonts.Regular, 13, true, nil, nil, true)
     else
-        F.SetFS(text, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
+        F:SetFS(text, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
     end
     text:SetHeight(text:GetStringHeight())
 
@@ -210,7 +210,7 @@ function BLIZZARD:ColorfulProgression(text)
 
     local progress = tonumber(current) / tonumber(required)
 
-    info = F.CreateColorString(current .. '/' .. required, GetProgressColor(progress))
+    info = F:CreateColorString(current .. '/' .. required, GetProgressColor(progress))
     info = info .. ' ' .. details
 
     text:SetText(info)

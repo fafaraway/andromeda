@@ -28,6 +28,8 @@ local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
 local PlaySound = PlaySound
 local GetTime = GetTime
+local GetScreenWidth = GetScreenWidth
+local GetScreenHeight = GetScreenHeight
 local C_Timer_After = C_Timer.After
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local SOUNDKIT_GS_TITLE_OPTION_OK = SOUNDKIT.GS_TITLE_OPTION_OK
@@ -60,7 +62,7 @@ do
     local numCap = {CHINESE = {'兆', '亿', '万'}}
 
     -- Numberize
-    function F.Numb(n)
+    function F:Numb(n)
         if _G.FREE_ADB.NumberFormat == 1 then
             if n >= 1e12 then
                 return ('%.2ft'):format(n / 1e12)
@@ -244,58 +246,9 @@ do
         return point
     end
 
-    function F:ShortenString(str, numChars, dots)
-        local bytes = #str
-        if bytes <= numChars then
-            return str
-        else
-            local len, pos = 0, 1
-            while pos <= bytes do
-                len = len + 1
-                local c = str:byte(pos)
-                if c > 0 and c <= 127 then
-                    pos = pos + 1
-                elseif c >= 192 and c <= 223 then
-                    pos = pos + 2
-                elseif c >= 224 and c <= 239 then
-                    pos = pos + 3
-                elseif c >= 240 and c <= 247 then
-                    pos = pos + 4
-                end
-                if len == numChars then
-                    break
-                end
-            end
-
-            if len == numChars and pos <= bytes then
-                return strsub(str, 1, pos - 1) .. (dots and '...' or '')
-            else
-                return str
-            end
-        end
-    end
-
-    function F:AbbreviateString(str, allUpper)
-        local newString = ''
-        for word in gmatch(str, '[^%s]+') do
-            word = utf8sub(word, 1, 1) -- get only first letter of each word
-            if allUpper then
-                word = strupper(word)
-            end
-            newString = newString .. word
-        end
-
-        return newString
-    end
-
-    function F:Scale(x)
-        local mult = C.Mult
-        return mult * floor(x / mult + .5)
-    end
-
     -- Cooldown calculation
     local day, hour, minute = 86400, 3600, 60
-    function F.FormatTime(s)
+    function F:FormatTime(s)
         if s >= day then
             return format('|cffbebfb3%d|r', s / day), s % day -- grey
         elseif s >= hour then
@@ -313,7 +266,7 @@ do
         end
     end
 
-    function F.FormatTimeRaw(s)
+    function F:FormatTimeRaw(s)
         if s >= day then
             return format('%dd', s / day)
         elseif s >= hour then
@@ -344,7 +297,7 @@ do
     end
 
     -- Table
-    function F.CopyTable(source, target)
+    function F:CopyTable(source, target)
         for key, value in pairs(source) do
             if type(value) == 'table' then
                 if not target[key] then
@@ -359,7 +312,7 @@ do
         end
     end
 
-    function F.SplitList(list, variable, cleanup)
+    function F:SplitList(list, variable, cleanup)
         if cleanup then
             wipe(list)
         end
@@ -371,7 +324,7 @@ do
     end
 
     -- GUID to npcID
-    function F.GetNPCID(guid)
+    function F:GetNPCID(guid)
         local id = tonumber(strmatch((guid or ''), '%-(%d-)%-%x-$'))
         return id
     end
@@ -422,7 +375,7 @@ end
 --[[ Color ]]
 do
 
-    function F.ClassColor(class)
+    function F:ClassColor(class)
         local color = C.ClassColors[class]
         if not color then
             return 1, 1, 1
@@ -430,12 +383,12 @@ do
         return color.r, color.g, color.b
     end
 
-    function F.UnitColor(unit)
+    function F:UnitColor(unit)
         local r, g, b = 1, 1, 1
         if UnitIsPlayer(unit) then
             local class = select(2, UnitClass(unit))
             if class then
-                r, g, b = F.ClassColor(class)
+                r, g, b = F:ClassColor(class)
             end
         elseif UnitIsTapDenied(unit) then
             r, g, b = .6, .6, .6
@@ -536,7 +489,7 @@ do
         end
     end
 
-    function F.GetItemLevel(link, arg1, arg2, fullScan)
+    function F:GetItemLevel(link, arg1, arg2, fullScan)
         if fullScan then
             tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
             tip:SetInventoryItem(arg1, arg2)
@@ -737,7 +690,7 @@ do
         return fs
     end
 
-    function F.SetFS(object, font, size, flag, text, colour, shadow)
+    function F:SetFS(object, font, size, flag, text, colour, shadow)
         if type(font) == 'table' then
             object:SetFont(font[1], font[2], font[3] or nil)
         else
@@ -777,12 +730,12 @@ do
         end
     end
 
-    function F.StyleAddonName(msg)
+    function F:StyleAddonName(msg)
         msg = gsub(msg, '%%AddonName%%', C.AddonName)
         return msg
     end
 
-    function F.CreateColorString(text, color)
+    function F:CreateColorString(text, color)
         if not text or not type(text) == 'string' then
             return
         end
@@ -796,7 +749,7 @@ do
         return hex .. text .. '|r'
     end
 
-    function F.CreateClassColorString(text, class)
+    function F:CreateClassColorString(text, class)
         if not text or not type(text) == 'string' then
             return
         end
@@ -805,10 +758,54 @@ do
             return
         end
 
-        local r, g, b = F.ClassColor(class)
+        local r, g, b = F:ClassColor(class)
         local hex = r and g and b and F:RGBToHex(r, g, b) or '|cffffffff'
 
         return hex .. text .. '|r'
+    end
+
+    function F:ShortenString(str, numChars, dots)
+        local bytes = #str
+        if bytes <= numChars then
+            return str
+        else
+            local len, pos = 0, 1
+            while pos <= bytes do
+                len = len + 1
+                local c = str:byte(pos)
+                if c > 0 and c <= 127 then
+                    pos = pos + 1
+                elseif c >= 192 and c <= 223 then
+                    pos = pos + 2
+                elseif c >= 224 and c <= 239 then
+                    pos = pos + 3
+                elseif c >= 240 and c <= 247 then
+                    pos = pos + 4
+                end
+                if len == numChars then
+                    break
+                end
+            end
+
+            if len == numChars and pos <= bytes then
+                return strsub(str, 1, pos - 1) .. (dots and '...' or '')
+            else
+                return str
+            end
+        end
+    end
+
+    function F:AbbreviateString(str, allUpper)
+        local newString = ''
+        for word in gmatch(str, '[^%s]+') do
+            word = utf8sub(word, 1, 1) -- get only first letter of each word
+            if allUpper then
+                word = strupper(word)
+            end
+            newString = newString .. word
+        end
+
+        return newString
     end
 
     -- GameTooltip
@@ -819,13 +816,24 @@ do
     local function Tooltip_OnEnter(self)
         _G.GameTooltip:SetOwner(self, self.anchor, 0, 4)
         _G.GameTooltip:ClearLines()
+
+        local r, g, b = 1, 1, 1
         if self.title then
-            _G.GameTooltip:AddLine(self.title)
+            if self.color == 'CLASS' then
+                r, g, b = C.r, C.g, C.b
+            elseif self.color == 'SYSTEM' then
+                r, g, b = 1, .8, 0
+            elseif self.color == 'BLUE' then
+                r, g, b = .6, .8, 1
+            elseif self.color == 'RED' then
+                r, g, b = .9, .3, .3
+            end
+            _G.GameTooltip:AddLine(self.title, r, g, b, 1)
         end
+
         if tonumber(self.text) then
             _G.GameTooltip:SetSpellByID(self.text)
         elseif self.text then
-            local r, g, b = 1, 1, 1
             if self.color == 'CLASS' then
                 r, g, b = C.r, C.g, C.b
             elseif self.color == 'SYSTEM' then
@@ -837,13 +845,15 @@ do
             end
             _G.GameTooltip:AddLine(self.text, r, g, b, 1)
         end
+
         _G.GameTooltip:Show()
     end
 
-    function F:AddTooltip(anchor, text, color)
+    function F:AddTooltip(anchor, text, color, titleColor)
         self.anchor = anchor
         self.text = text
         self.color = color
+        self.titleColor = titleColor
         self:HookScript('OnEnter', Tooltip_OnEnter)
         self:HookScript('OnLeave', F.HideTooltip)
     end
@@ -900,11 +910,11 @@ do
         self.__bgTex = tex
     end
 
-    local shadowBackdrop = {edgeFile = assets.shadow_tex}
     function F:CreateSD(a, m, s, override)
         if not override and not _G.FREE_ADB.ShadowOutline then
             return
         end
+
         if self.__shadow then
             return
         end
@@ -914,22 +924,32 @@ do
             frame = self:GetParent()
         end
 
-        if not m then
-            m, s = 4, 4
-        end
-        shadowBackdrop.edgeSize = s or 4
-        self.__shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
-        self.__shadow:SetOutside(self, m, m)
-        self.__shadow:SetBackdrop(shadowBackdrop)
-        self.__shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
-        self.__shadow:SetFrameLevel(1)
+        local shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
+        shadow:SetOutside(self, m or 4, m or 4)
+        shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = s or 4})
+        shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
+        shadow:SetFrameLevel(1)
+        shadow:SetFrameStrata(frame:GetFrameStrata())
+        self.__shadow = shadow
 
         return self.__shadow
     end
-end
 
---[[ UI skins ]]
-do
+    function F:CreateGradient()
+        local gradStyle = _G.FREE_ADB.GradientStyle
+        local gradTex = C.AssetsPath .. 'textures\\gradient'
+        local normTex = C.Assets.bd_tex
+        local color = _G.FREE_ADB.ButtonBackdropColor
+
+        local tex = self:CreateTexture(nil, 'BORDER')
+        tex:SetPoint('TOPLEFT', 1, -1)
+        tex:SetPoint('BOTTOMRIGHT', -1, 1)
+        tex:SetTexture(gradStyle and gradTex or normTex)
+        tex:SetVertexColor(color.r, color.g, color.b, .45)
+
+        return tex
+    end
+
     -- Setup backdrop
     C.Frames = {}
 
@@ -948,21 +968,6 @@ do
         if not a then
             tinsert(C.Frames, self)
         end
-    end
-
-    function F:CreateGradient()
-        local gradStyle = _G.FREE_ADB.GradientStyle
-        local gradTex = C.AssetsPath .. 'textures\\gradient'
-        local normTex = C.Assets.bd_tex
-        local color = _G.FREE_ADB.ButtonBackdropColor
-
-        local tex = self:CreateTexture(nil, 'BORDER')
-        tex:SetPoint('TOPLEFT', 1, -1)
-        tex:SetPoint('BOTTOMRIGHT', -1, 1)
-        tex:SetTexture(gradStyle and gradTex or normTex)
-        tex:SetVertexColor(color.r, color.g, color.b, .45)
-
-        return tex
     end
 
     function F:CreateBDFrame(a, gradient)
@@ -996,7 +1001,10 @@ do
 
         return bg
     end
+end
 
+--[[ UI skins ]]
+do
     -- Handle icons
     function F:ReskinIcon(shadow)
         self:SetTexCoord(unpack(C.TexCoord))
@@ -1035,30 +1043,6 @@ do
         self.CD:SetReverse(true)
         F.PixelIcon(self, nil, highlight)
         F.CreateSD(self)
-    end
-
-    function F:CreateHelpInfo(tooltip)
-        local bu = CreateFrame('Button', nil, self)
-        bu:SetSize(40, 40)
-        bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
-        bu.Icon:SetAllPoints()
-        bu.Icon:SetTexture(616343)
-        bu:SetHighlightTexture(616343)
-        if tooltip then
-            bu.title = L.GUI.HINT
-            F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
-        end
-
-        return bu
-    end
-
-    function F:CreateWatermark()
-        local logo = self:CreateTexture(nil, 'BACKGROUND')
-        logo:SetPoint('BOTTOMRIGHT', 10, 0)
-        logo:SetTexture(C.Assets.logo)
-        logo:SetTexCoord(0, 1, 0, .75)
-        logo:SetSize(200, 75)
-        logo:SetAlpha(.3)
     end
 
     local atlasToQuality = {
@@ -1104,28 +1088,6 @@ do
             end
         end
         hooksecurefunc(self, 'Hide', ResetIconBorderColor)
-    end
-
-    -- Handle statusbar
-    function F:CreateSB(spark, r, g, b)
-        self:SetStatusBarTexture(assets.statusbar_tex)
-        if r and g and b then
-            self:SetStatusBarColor(r, g, b)
-        else
-            self:SetStatusBarColor(C.r, C.g, C.b)
-        end
-
-        local bg = F.SetBD(self)
-        self.__shadow = bg.__shadow
-
-        if spark then
-            self.Spark = self:CreateTexture(nil, 'OVERLAY')
-            self.Spark:SetTexture(assets.spark_tex)
-            self.Spark:SetBlendMode('ADD')
-            self.Spark:SetAlpha(.8)
-            self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
-            self.Spark:SetPoint('BOTTOMRIGHT', self:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
-        end
     end
 
     -- Handle button
@@ -1401,20 +1363,12 @@ do
     -- Handle close button
     function F:Texture_OnEnter()
         if self:IsEnabled() then
-            -- if self.bg then
-            --     self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
-            -- else
-                 self.__texture:SetVertexColor(C.r, C.g, C.b)
-            -- end
+            self.__texture:SetVertexColor(C.r, C.g, C.b)
         end
     end
 
     function F:Texture_OnLeave()
-        -- if self.bg then
-        --     self.bg:SetBackdropColor(0, 0, 0, .25)
-        -- else
-             self.__texture:SetVertexColor(1, 1, 1)
-        -- end
+        self.__texture:SetVertexColor(1, 1, 1)
     end
 
     function F:ReskinClose(parent, xOffset, yOffset)
@@ -1480,12 +1434,10 @@ do
         self:SetRotation(rad(arrowDegree[direction]))
     end
 
-    function F:ReskinArrow(direction, flat)
+    function F:ReskinArrow(direction)
         self:SetSize(16, 16)
 
-        --if not flat then
-            F.Reskin(self, true)
-        --end
+        F.Reskin(self, true)
 
         self:SetDisabledTexture(assets.bd_tex)
         local dis = self:GetDisabledTexture()
@@ -1739,17 +1691,15 @@ do
         return bg
     end
 
-    -- LuaFormatter off
-    local ReplacedRoleTex = {
+    local replacedRoleTex = {
         ['Adventures-Tank'] = 'Soulbinds_Tree_Conduit_Icon_Protect',
         ['Adventures-Healer'] = 'ui_adv_health',
         ['Adventures-DPS'] = 'ui_adv_atk',
         ['Adventures-DPS-Ranged'] = 'Soulbinds_Tree_Conduit_Icon_Utility',
     }
-    -- LuaFormatter on
 
     local function ReplaceFollowerRole(roleIcon, atlas)
-        local newAtlas = ReplacedRoleTex[atlas]
+        local newAtlas = replacedRoleTex[atlas]
         if newAtlas then
             roleIcon:SetAtlas(newAtlas)
         end
@@ -1899,9 +1849,9 @@ end
 --[[ Smooth ]]
 do
     local activeObjects, handledObjects = {}, {}
-    local TARGET_FPS, AMOUNT = 60, .33
+    local targetFPS, amount = 60, .33
 
-    local function clamp(v, min, max)
+    local function Clamp(v, min, max)
         min = min or 0
         max = max or 1
         v = tonumber(v)
@@ -1915,7 +1865,7 @@ do
         return v
     end
 
-    local function isCloseEnough(new, target, range)
+    local function IsCloseEnough(new, target, range)
         if range > 0 then
             return abs((new - target) / range) <= .001
         end
@@ -1925,10 +1875,10 @@ do
 
     local smoothframe = CreateFrame('Frame')
 
-    local function onUpdate(_, elapsed)
+    local function Bar_OnUpdate(_, elapsed)
         for object, target in next, activeObjects do
-            local new = Lerp(object._value, target, clamp(AMOUNT * elapsed * TARGET_FPS))
-            if isCloseEnough(new, target, object._max - object._min) then
+            local new = Lerp(object._value, target, Clamp(amount * elapsed * targetFPS))
+            if IsCloseEnough(new, target, object._max - object._min) then
                 new = target
                 activeObjects[object] = nil
             end
@@ -1938,12 +1888,12 @@ do
         end
     end
 
-    local function bar_SetSmoothedValue(self, value)
+    local function Bar_SetSmoothedValue(self, value)
         self._value = self:GetValue()
-        activeObjects[self] = clamp(value, self._min, self._max)
+        activeObjects[self] = Clamp(value, self._min, self._max)
     end
 
-    local function bar_SetSmoothedMinMaxValues(self, min, max)
+    local function Bar_SetSmoothedMinMaxValues(self, min, max)
         self:SetMinMaxValues_(min, max)
 
         if self._max and self._max ~= max then
@@ -1974,13 +1924,13 @@ do
 
         bar.SetValue_ = bar.SetValue
         bar.SetMinMaxValues_ = bar.SetMinMaxValues
-        bar.SetValue = bar_SetSmoothedValue
-        bar.SetMinMaxValues = bar_SetSmoothedMinMaxValues
+        bar.SetValue = Bar_SetSmoothedValue
+        bar.SetMinMaxValues = Bar_SetSmoothedMinMaxValues
 
         handledObjects[bar] = true
 
         if not smoothframe:GetScript('OnUpdate') then
-            smoothframe:SetScript('OnUpdate', onUpdate)
+            smoothframe:SetScript('OnUpdate', Bar_OnUpdate)
         end
     end
 
@@ -2007,13 +1957,58 @@ do
         end
     end
 
-    function F:SetSmoothingAmount(amount)
-        AMOUNT = clamp(amount, .15, .6)
+    function F:SetSmoothingAmount(sum)
+        amount = Clamp(sum, .15, .6)
     end
 end
 
 --[[ GUI elements ]]
 do
+    function F:CreateHelpInfo(tooltip)
+        local bu = CreateFrame('Button', nil, self)
+        bu:SetSize(40, 40)
+        bu.Icon = bu:CreateTexture(nil, 'ARTWORK')
+        bu.Icon:SetAllPoints()
+        bu.Icon:SetTexture(616343)
+        bu:SetHighlightTexture(616343)
+        if tooltip then
+            bu.title = L.GUI.HINT
+            F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
+        end
+
+        return bu
+    end
+
+    function F:CreateWatermark()
+        local logo = self:CreateTexture(nil, 'BACKGROUND')
+        logo:SetPoint('BOTTOMRIGHT', 10, 0)
+        logo:SetTexture(C.Assets.logo)
+        logo:SetTexCoord(0, 1, 0, .75)
+        logo:SetSize(200, 75)
+        logo:SetAlpha(.3)
+    end
+
+    function F:CreateSB(spark, r, g, b)
+        self:SetStatusBarTexture(assets.statusbar_tex)
+        if r and g and b then
+            self:SetStatusBarColor(r, g, b)
+        else
+            self:SetStatusBarColor(C.r, C.g, C.b)
+        end
+
+        local bg = F.SetBD(self)
+        self.__shadow = bg.__shadow
+
+        if spark then
+            self.Spark = self:CreateTexture(nil, 'OVERLAY')
+            self.Spark:SetTexture(assets.spark_tex)
+            self.Spark:SetBlendMode('ADD')
+            self.Spark:SetAlpha(.8)
+            self.Spark:SetPoint('TOPLEFT', self:GetStatusBarTexture(), 'TOPRIGHT', -10, 10)
+            self.Spark:SetPoint('BOTTOMRIGHT', self:GetStatusBarTexture(), 'BOTTOMRIGHT', 10, -10)
+        end
+    end
+
     function F:CreateButton(width, height, text, fontSize)
         local bu = CreateFrame('Button', nil, self, 'BackdropTemplate')
         bu:SetSize(width, height)
@@ -2291,6 +2286,18 @@ end
 
 --[[ Add APIs ]]
 do
+    function F:SetPointsRestricted(frame)
+        if frame and not pcall(frame.GetPoint, frame) then
+            return true
+        end
+    end
+
+    function F:SafeGetPoint(frame)
+        if frame and frame.GetPoint and not F:SetPointsRestricted(frame) then
+            return frame:GetPoint()
+        end
+    end
+
     local function WatchPixelSnap(frame, snap)
         if (frame and not frame:IsForbidden()) and frame.PixelSnapDisabled and snap then
             frame.PixelSnapDisabled = nil
@@ -2314,35 +2321,22 @@ do
         end
     end
 
-    local function Kill(object)
-        if object.UnregisterAllEvents then
-            object:UnregisterAllEvents()
-            object:SetParent(F.HiddenFrame)
-        else
-            object.Show = object.Hide
-        end
-
-        object:Hide()
-    end
-
     local function Size(frame, width, height, ...)
-        assert(width)
-        frame:SetSize(F:Scale(width), F:Scale(height or width), ...)
+        local w = F:Scale(width)
+        frame:SetSize(w, (height and F:Scale(height)) or w, ...)
     end
 
     local function Width(frame, width, ...)
-        assert(width)
         frame:SetWidth(F:Scale(width), ...)
     end
 
     local function Height(frame, height, ...)
-        assert(height)
         frame:SetHeight(F:Scale(height), ...)
     end
 
-    local function Point(frame, arg1, arg2, arg3, arg4, arg5, ...)
-        if arg2 == nil then
-            arg2 = frame:GetParent()
+    local function Point(obj, arg1, arg2, arg3, arg4, arg5, ...)
+        if not arg2 then
+            arg2 = obj:GetParent()
         end
 
         if type(arg2) == 'number' then
@@ -2358,32 +2352,150 @@ do
             arg5 = F:Scale(arg5)
         end
 
-        frame:SetPoint(arg1, arg2, arg3, arg4, arg5, ...)
+        obj:SetPoint(arg1, arg2, arg3, arg4, arg5, ...)
     end
 
-    local function SetInside(frame, anchor, xOffset, yOffset, anchor2)
-        xOffset = xOffset or C.Mult
-        yOffset = yOffset or C.Mult
-        anchor = anchor or frame:GetParent()
+    local function SetOutside(obj, anchor, xOffset, yOffset, anchor2, noScale)
+        if not anchor then
+            anchor = obj:GetParent()
+        end
 
-        DisablePixelSnap(frame)
-        frame:ClearAllPoints()
-        frame:Point('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
-        frame:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
+        if not xOffset then
+            xOffset = C.Mult
+        end
+        if not yOffset then
+            yOffset = C.Mult
+        end
+        local x = (noScale and xOffset) or F:Scale(xOffset)
+        local y = (noScale and yOffset) or F:Scale(yOffset)
+
+        if F:SetPointsRestricted(obj) or obj:GetPoint() then
+            obj:ClearAllPoints()
+        end
+
+        DisablePixelSnap(obj)
+        obj:SetPoint('TOPLEFT', anchor, 'TOPLEFT', -x, y)
+        obj:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', x, -y)
     end
 
-    local function SetOutside(frame, anchor, xOffset, yOffset, anchor2)
-        xOffset = xOffset or C.Mult
-        yOffset = yOffset or C.Mult
-        anchor = anchor or frame:GetParent()
+    local function SetInside(obj, anchor, xOffset, yOffset, anchor2, noScale)
+        if not anchor then
+            anchor = obj:GetParent()
+        end
 
-        DisablePixelSnap(frame)
-        frame:ClearAllPoints()
-        frame:Point('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
-        frame:Point('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
+        if not xOffset then
+            xOffset = C.Mult
+        end
+        if not yOffset then
+            yOffset = C.Mult
+        end
+        local x = (noScale and xOffset) or F:Scale(xOffset)
+        local y = (noScale and yOffset) or F:Scale(yOffset)
+
+        if F:SetPointsRestricted(obj) or obj:GetPoint() then
+            obj:ClearAllPoints()
+        end
+
+        DisablePixelSnap(obj)
+        obj:SetPoint('TOPLEFT', anchor, 'TOPLEFT', x, -y)
+        obj:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -x, y)
     end
 
-    local function addapi(object)
+    local function Kill(object)
+        if object.UnregisterAllEvents then
+            object:UnregisterAllEvents()
+            object:SetParent(F.HiddenFrame)
+        else
+            object.Show = object.Hide
+        end
+
+        object:Hide()
+    end
+
+    local StripTexturesBlizzFrames = {
+        'Inset',
+        'inset',
+        'InsetFrame',
+        'LeftInset',
+        'RightInset',
+        'NineSlice',
+        'BG',
+        'border',
+        'Border',
+        'BorderFrame',
+        'bottomInset',
+        'BottomInset',
+        'bgLeft',
+        'bgRight',
+        'FilligreeOverlay',
+        'PortraitOverlay',
+        'ArtOverlayFrame',
+        'Portrait',
+        'portrait',
+        'ScrollFrameBorder',
+        'ScrollUpBorder',
+        'ScrollDownBorder',
+    }
+
+    local STRIP_TEX = 'Texture'
+    local STRIP_FONT = 'FontString'
+    local function StripRegion(which, object, kill, alpha)
+        if kill then
+            object:Kill()
+        elseif which == STRIP_TEX then
+            object:SetTexture('')
+            object:SetAtlas('')
+        elseif which == STRIP_FONT then
+            object:SetText('')
+        end
+
+        if alpha then
+            object:SetAlpha(0)
+        end
+    end
+
+    local function StripType(which, object, kill, alpha)
+        if object:IsObjectType(which) then
+            StripRegion(which, object, kill, alpha)
+        else
+            if which == STRIP_TEX then
+                local FrameName = object.GetName and object:GetName()
+                for _, Blizzard in pairs(StripTexturesBlizzFrames) do
+                    local BlizzFrame = object[Blizzard] or (FrameName and _G[FrameName .. Blizzard])
+                    if BlizzFrame and BlizzFrame.StripTextures then
+                        BlizzFrame:StripTextures(kill, alpha)
+                    end
+                end
+            end
+
+            if object.GetNumRegions then
+                for i = 1, object:GetNumRegions() do
+                    local region = select(i, object:GetRegions())
+                    if region and region.IsObjectType and region:IsObjectType(which) then
+                        StripRegion(which, region, kill, alpha)
+                    end
+                end
+            end
+        end
+    end
+
+    local function StripTextures(object, kill, alpha)
+        StripType(STRIP_TEX, object, kill, alpha)
+    end
+
+    local function StripTexts(object, kill, alpha)
+        StripType(STRIP_FONT, object, kill, alpha)
+    end
+
+    local function GetNamedChild(frame, childName, index)
+        local name = frame and frame.GetName and frame:GetName()
+        if not name or not childName then
+            return nil
+        end
+        return _G[name .. childName .. (index or '')]
+    end
+
+    local function AddAPI(object)
         local mt = getmetatable(object).__index
         if not object.Kill then
             mt.Kill = Kill
@@ -2406,6 +2518,18 @@ do
         if not object.SetOutside then
             mt.SetOutside = SetOutside
         end
+
+        if not object.StripTextures then
+            mt.StripTextures = StripTextures
+        end
+        if not object.StripTexts then
+            mt.StripTexts = StripTexts
+        end
+
+        if not object.GetNamedChild then
+            mt.GetNamedChild = GetNamedChild
+        end
+
         if not object.DisabledPixelSnap then
             if mt.SetTexture then
                 hooksecurefunc(mt, 'SetTexture', DisablePixelSnap)
@@ -2434,14 +2558,14 @@ do
 
     local handled = {['Frame'] = true}
     local object = CreateFrame('Frame')
-    addapi(object)
-    addapi(object:CreateTexture())
-    addapi(object:CreateMaskTexture())
+    AddAPI(object)
+    AddAPI(object:CreateTexture())
+    AddAPI(object:CreateMaskTexture())
 
     object = EnumerateFrames()
     while object do
         if not object:IsForbidden() and not handled[object:GetObjectType()] then
-            addapi(object)
+            AddAPI(object)
             handled[object:GetObjectType()] = true
         end
 
@@ -2450,11 +2574,7 @@ do
 end
 
 do
-    function F.Print(...)
-        print(C.AddonName .. C.GreyColor .. ':|r', ...)
-    end
-
-    function F.MultiCheck(check, ...)
+    function F:MultiCheck(check, ...)
         for i = 1, select('#', ...) do
             if check == select(i, ...) then
                 return true
@@ -2463,7 +2583,11 @@ do
         return false
     end
 
-    function F.Debug(...)
+    function F:Print(...)
+        print(C.AddonName .. C.GreyColor .. ':|r', ...)
+    end
+
+    function F:Debug(...)
         if not C.isDeveloper then
             return
         end

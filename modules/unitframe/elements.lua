@@ -199,7 +199,7 @@ function UNITFRAME:AddHealthBar(self)
     local isRaid = (style == 'raid')
     local isBoss = (style == 'boss')
     local isArena = (style == 'arena')
-    local isBaseUnits = F.MultiCheck(style, 'player', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
+    local isBaseUnits = F:MultiCheck(style, 'player', 'pet', 'target', 'targettarget', 'focus', 'focustarget')
 
     local health = CreateFrame('StatusBar', nil, self)
     health:SetFrameStrata('LOW')
@@ -533,7 +533,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
 
     button:SetSize(element.size, isParty and element.size or element.size * .75)
 
-    if button.isDebuff and F.MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
+    if button.isDebuff and F:MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
         button.icon:SetDesaturated(true)
     else
         button.icon:SetDesaturated(false)
@@ -595,7 +595,7 @@ end
 function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _,
     nameplateShowAll)
     local style = element.__owner.unitStyle
-    local isMine = F.MultiCheck(caster, 'player', 'pet', 'vehicle')
+    local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
 
     if name and spellID == 209859 then
         element.bolster = element.bolster + 1
@@ -1088,7 +1088,7 @@ local function updateSpellTarget(self, unit)
         if UnitIsUnit(unitTarget, 'player') then
             nameString = format('|cffff0000%s|r', '>' .. strupper(YOU) .. '<')
         else
-            nameString = F:RGBToHex(F.UnitColor(unitTarget)) .. UnitName(unitTarget)
+            nameString = F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget)
         end
         self.spellTarget:SetText(nameString)
     end
@@ -1107,8 +1107,8 @@ function UNITFRAME:PostCastStart(unit)
     local color = self.notInterruptible and uninterruptibleColor or normalColor
     local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
 
-    -- F.Debug(self.name)
-    -- F.Debug(self.spellID)
+    -- F:Debug(self.name)
+    -- F:Debug(self.spellID)
 
     self:SetAlpha(1)
     self.Spark:Show()
@@ -1398,7 +1398,7 @@ function UNITFRAME:OnUpdateRunes(elapsed)
     if self.timer then
         local remain = self.runeDuration - duration
         if remain > 0 then
-            self.timer:SetText(F.FormatTime(remain))
+            self.timer:SetText(F:FormatTime(remain))
         else
             self.timer:SetText(nil)
         end

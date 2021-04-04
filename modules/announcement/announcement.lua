@@ -43,7 +43,7 @@ function ANNOUNCEMENT:SendMessage(text, channel, raidWarning, whisperTarget)
 	end
 
 	if channel == 'SELF' then
-		F.Print(text)
+		F:Print(text)
 		return
 	end
 

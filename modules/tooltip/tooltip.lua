@@ -69,7 +69,7 @@ function TOOLTIP:GetTarget(unit)
 	if UnitIsUnit(unit, 'player') then
 		return format('|cffff0000%s|r', '>' .. strupper(YOU) .. '<')
 	else
-		return F:RGBToHex(F.UnitColor(unit)) .. UnitName(unit) .. '|r'
+		return F:RGBToHex(F:UnitColor(unit)) .. UnitName(unit) .. '|r'
 	end
 end
 
@@ -88,7 +88,7 @@ function TOOLTIP:OnTooltipSetUnit()
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
 		self.tipUnit = unit
-		local hexColor = F:RGBToHex(F.UnitColor(unit))
+		local hexColor = F:RGBToHex(F:UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
 		local text = GameTooltipTextLeft1:GetText()
 		if ricon and ricon > 8 then
@@ -184,7 +184,7 @@ function TOOLTIP:OnTooltipSetUnit()
 		end
 
 		if alive then
-			self.StatusBar:SetStatusBarColor(F.UnitColor(unit))
+			self.StatusBar:SetStatusBarColor(F:UnitColor(unit))
 		else
 			self.StatusBar:Hide()
 		end
@@ -236,7 +236,7 @@ function TOOLTIP:StatusBar_OnValueChanged(value)
 	if value > 0 and max == 1 then
 		self.text:SetFormattedText('%d%%', value * 100)
 	else
-		self.text:SetText(F.Numb(value) .. ' | ' .. F.Numb(max))
+		self.text:SetText(F:Numb(value) .. ' | ' .. F:Numb(max))
 	end
 end
 
@@ -303,7 +303,7 @@ function TOOLTIP:ScanTargets()
 	for i = 1, GetNumGroupMembers() do
 		local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
 		if UnitIsUnit(unit, member .. 'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
-			local color = F:RGBToHex(F.UnitColor(member))
+			local color = F:RGBToHex(F:UnitColor(member))
 			local name = color .. UnitName(member) .. '|r'
 			tinsert(targetTable, name)
 		end
@@ -387,7 +387,7 @@ end
 function TOOLTIP:ReskinTooltip()
 	if not self then
 		if C.isDeveloper then
-			F.Print('Unknown tooltip spotted.')
+			F:Print('Unknown tooltip spotted.')
 		end
 		return
 	end

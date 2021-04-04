@@ -38,7 +38,7 @@ end
 local function printMessage(str)
 	if not debugMode then return end
 
-	F.Print(str)
+	F:Print(str)
 end
 
 local function OnEvent(self, event)

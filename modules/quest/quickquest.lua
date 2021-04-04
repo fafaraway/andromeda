@@ -99,7 +99,7 @@ function QuickQuest:Register(event, func)
 end
 
 local function GetNPCID()
-    return F.GetNPCID(UnitGUID('npc'))
+    return F:GetNPCID(UnitGUID('npc'))
 end
 
 local function IsTrackingHidden()

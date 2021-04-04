@@ -70,7 +70,7 @@ function BLIZZARD:TradeTargetInfo()
     infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
 
     local function updateColor()
-        local r, g, b = F.UnitColor('NPC')
+        local r, g, b = F:UnitColor('NPC')
         _G.TradeFrameRecipientNameText:SetTextColor(r, g, b)
 
         local guid = UnitGUID('NPC')

@@ -215,11 +215,11 @@ end
 
 function COMBAT:ShowAlert(alertType)
 	-- if not self.animationFrame then
-	-- 	F.DebugMessage(MISC, '找不到动画框架')
+	-- 	F:DebugMessage(MISC, '找不到动画框架')
 	-- end
 
 	-- if not self.textFrame then
-	-- 	F.DebugMessage(MISC, '找不到文字框架')
+	-- 	F:DebugMessage(MISC, '找不到文字框架')
 	-- end
 
 	if isPlaying then
@@ -268,7 +268,7 @@ function COMBAT:ShowAlert(alertType)
 			-- t.text:SetText(L['COMBAT_ENTER'])
 			--F.SetFontColorWithDB(t.text, self.db.enterColor)
 			-- t.text:SetTextColor(1, 0, 0)
-			F.SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['COMBAT_ENTER'], 'RED', 'THICK')
+			F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['COMBAT_ENTER'], 'RED', 'THICK')
 			t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
 			t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetEnter)
 			t:Show()
@@ -290,7 +290,7 @@ function COMBAT:ShowAlert(alertType)
 		--if self.db.text then
 			--t.text:SetText(L['COMBAT_LEAVE'])
 			--F.SetFontColorWithDB(t.text, self.db.leaveColor)
-			F.SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['COMBAT_LEAVE'], 'GREEN', 'THICK')
+			F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['COMBAT_LEAVE'], 'GREEN', 'THICK')
 			t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
 			t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetLeave)
 			t:Show()

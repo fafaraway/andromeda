@@ -208,7 +208,7 @@ end
 function MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
     C_Timer_After(.1, function()
         local quality = select(3, GetItemInfo(link))
-        local info = F.GetItemLevel(link, unit, index, C.DB.Misc.GemEnchant)
+        local info = F:GetItemLevel(link, unit, index, C.DB.Misc.GemEnchant)
         if info == 'tooSoon' then
             return
         end
@@ -237,7 +237,7 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
             local link = GetInventoryItemLink(unit, index)
             if link then
                 local quality = select(3, GetItemInfo(link))
-                local info = F.GetItemLevel(link, unit, index, C.DB.Misc.GemEnchant)
+                local info = F:GetItemLevel(link, unit, index, C.DB.Misc.GemEnchant)
                 if info == 'tooSoon' then
                     MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
                 else
@@ -275,10 +275,10 @@ function MISC:ItemLevel_FlyoutUpdate(bag, slot, quality)
     local link, level
     if bag then
         link = GetContainerItemLink(bag, slot)
-        level = F.GetItemLevel(link, bag, slot)
+        level = F:GetItemLevel(link, bag, slot)
     else
         link = GetInventoryItemLink('player', slot)
-        level = F.GetItemLevel(link, 'player', slot)
+        level = F:GetItemLevel(link, 'player', slot)
     end
 
     local color = C.QualityColors[quality or 0]
@@ -321,7 +321,7 @@ function MISC:ItemLevel_ScrappingUpdate()
     if self.itemLocation and not self.item:IsItemEmpty() and self.item:GetItemName() then
         quality = self.item:GetItemQuality()
     end
-    local level = F.GetItemLevel(self.itemLink)
+    local level = F:GetItemLevel(self.itemLink)
     local color = C.QualityColors[quality]
     self.iLvl:SetText(level)
     self.iLvl:SetTextColor(color.r, color.g, color.b)
@@ -343,7 +343,7 @@ function MISC:ItemLevel_UpdateMerchant(link)
         if not self.iLvl then
             self.iLvl = F.CreateFS(self.ItemButton, C.Assets.Fonts.Condensed, 11, true, '', nil, true, 'BOTTOMRIGHT', -1, 1)
         end
-        local level = F.GetItemLevel(link)
+        local level = F:GetItemLevel(link)
         local color = C.QualityColors[quality]
         self.iLvl:SetText(level)
         self.iLvl:SetTextColor(color.r, color.g, color.b)

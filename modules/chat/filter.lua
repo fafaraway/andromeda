@@ -19,12 +19,12 @@ local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
-	F.SplitList(FilterList, FREE_ADB.chat_filter_black_list, true)
+	F:SplitList(FilterList, FREE_ADB.chat_filter_black_list, true)
 end
 
 local WhiteFilterList = {}
 function CHAT:UpdateFilterWhiteList()
-	F.SplitList(WhiteFilterList, FREE_ADB.chat_filter_white_list, true)
+	F:SplitList(WhiteFilterList, FREE_ADB.chat_filter_white_list, true)
 end
 
 -- ECF strings compare
@@ -184,7 +184,7 @@ end
 local function isItemHasLevel(link)
 	local name, _, rarity, level, _, _, _, _, _, _, _, classID = GetItemInfo(link)
 	if name and level and rarity > 1 and (classID == LE_ITEM_CLASS_WEAPON or classID == LE_ITEM_CLASS_ARMOR) then
-		local itemLevel = F.GetItemLevel(link)
+		local itemLevel = F:GetItemLevel(link)
 		return name, itemLevel
 	end
 end

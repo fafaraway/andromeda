@@ -421,7 +421,7 @@ end
 -- Autoinvite by whisper
 local whisperList = {}
 function CHAT:UpdateWhisperList()
-    F.SplitList(whisperList, C.DB.chat.invite_keyword, true)
+    F:SplitList(whisperList, C.DB.chat.invite_keyword, true)
 end
 
 function CHAT:IsUnitInGuild(unitName)

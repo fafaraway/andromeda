@@ -27,7 +27,7 @@ function MAP:CreateCalendar()
 			if region.SetTextColor then
 				region:SetTextColor(147 / 255, 211 / 255, 231 / 255)
 				region:SetJustifyH('RIGHT')
-				F.SetFS(region, C.Assets.Fonts.Bold, 12, 'OUTLINE')
+				F:SetFS(region, C.Assets.Fonts.Bold, 12, 'OUTLINE')
 				break
 			end
 		end
@@ -286,7 +286,7 @@ function MAP:WhoPings()
 			end -- ignore player ping
 
 			local class = select(2, UnitClass(unit))
-			local r, g, b = F.ClassColor(class)
+			local r, g, b = F:ClassColor(class)
 			local name = GetUnitName(unit)
 
 			anim:Stop()

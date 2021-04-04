@@ -126,7 +126,7 @@ SlashCmdList.FREEUI = function(str)
 	elseif cmd == 'help' then
 		printCommandsList()
 	elseif cmd == 'ver' or cmd == 'version' then
-		F.Print(C.AddonVersion)
+		F:Print(C.AddonVersion)
 	else
 		printCommandsList()
 	end

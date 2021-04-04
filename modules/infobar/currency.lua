@@ -145,7 +145,7 @@ function INFOBAR:Currency()
 					for k, v in pairs(thisRealmList) do
 						local name = Ambiguate(k .. '-' .. realm, 'none')
 						local gold, class = unpack(v)
-						local r, g, b = F.ClassColor(class)
+						local r, g, b = F:ClassColor(class)
 						GameTooltip:AddDoubleLine(getClassIcon(class) .. name, GetMoneyString(gold), r, g, b, 1, 1, 1)
 						totalGold = totalGold + gold
 					end

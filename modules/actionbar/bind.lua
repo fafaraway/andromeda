@@ -233,7 +233,7 @@ function ACTIONBAR:Bind_Listener(key)
 				SetBinding(frame.bindings[i])
 			end
 		end
-		F.Print(format(L.ACTIONBAR.CLEAR_BINDS, frame.tipName or frame.name))
+		F:Print(format(L.ACTIONBAR.CLEAR_BINDS, frame.tipName or frame.name))
 
 		ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 
@@ -261,7 +261,7 @@ function ACTIONBAR:Bind_Listener(key)
 	else
 		SetBinding(alt .. ctrl .. shift .. key, frame.spellmacro .. ' ' .. frame.name)
 	end
-	F.Print((frame.tipName or frame.name) .. ' |cff00ff00' .. L.ACTIONBAR.KEY_BOUND_TO .. '|r ' .. alt .. ctrl .. shift .. key)
+	F:Print((frame.tipName or frame.name) .. ' |cff00ff00' .. L.ACTIONBAR.KEY_BOUND_TO .. '|r ' .. alt .. ctrl .. shift .. key)
 
 	ACTIONBAR:Bind_Update(frame.button, frame.spellmacro)
 end
@@ -283,10 +283,10 @@ end
 function ACTIONBAR:Bind_Deactivate(save)
 	if save == true then
 		SaveBindings(C.DB.Actionbar.BindType)
-		F.Print(C.GreenColor .. L.ACTIONBAR.SAVE_KEYBINDS)
+		F:Print(C.GreenColor .. L.ACTIONBAR.SAVE_KEYBINDS)
 	else
 		LoadBindings(C.DB.Actionbar.BindType)
-		F.Print(C.GreenColor .. L.ACTIONBAR.DISCARD_KEYBINDS)
+		F:Print(C.GreenColor .. L.ACTIONBAR.DISCARD_KEYBINDS)
 	end
 
 	ACTIONBAR:Bind_HideFrame()

@@ -267,7 +267,7 @@ function GUI:CreateDataFrame()
 		if dataFrame.version then
 			GameTooltip:AddLine(L.GUI.PROFILE.INFO)
 			GameTooltip:AddDoubleLine(L.GUI.PROFILE.VERSION, dataFrame.version, .6,.8,1, 1,1,1)
-			GameTooltip:AddDoubleLine(L.GUI.PROFILE.CHARACTER, dataFrame.name, .6,.8,1, F.ClassColor(dataFrame.class))
+			GameTooltip:AddDoubleLine(L.GUI.PROFILE.CHARACTER, dataFrame.name, .6,.8,1, F:ClassColor(dataFrame.class))
 		else
 			GameTooltip:AddLine(L.GUI.PROFILE.EXCEPTION, 1,0,0)
 		end

@@ -165,7 +165,7 @@ function CHAT:CreateChannelBar()
 					if btn == 'RightButton' then
 						LeaveChannelByName(channelName)
 
-						F.Print(C.RedColor .. 'Leave|r ' .. channelName)
+						F:Print(C.RedColor .. 'Leave|r ' .. channelName)
 						wc.inChannel = false
 					elseif channelID then
 						ChatFrame_OpenChat('/' .. channelID, chatFrame)
@@ -174,7 +174,7 @@ function CHAT:CreateChannelBar()
 					JoinPermanentChannel(channelName, nil, 1)
 					ChatFrame_AddChannel(ChatFrame1, channelName)
 
-					F.Print(C.GreenColor .. 'Join|r ' .. channelName)
+					F:Print(C.GreenColor .. 'Join|r ' .. channelName)
 					wc.inChannel = true
 				end
 			end

@@ -56,7 +56,7 @@ tags['free:health'] = function(unit)
     local cur = UnitHealth(unit)
     local r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
 
-    return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F.Numb(cur))
+    return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:Numb(cur))
 end
 tagEvents['free:health'] = 'UNIT_CONNECTION UNIT_HEALTH UNIT_MAXHEALTH'
 
@@ -81,7 +81,7 @@ tags['free:power'] = function(unit)
         return
     end
 
-    return F.Numb(cur)
+    return F:Numb(cur)
 end
 tagEvents['free:power'] = 'UNIT_POWER_FREQUENT UNIT_MAXPOWER UNIT_DISPLAYPOWER'
 
@@ -97,7 +97,7 @@ tags['free:stagger'] = function(unit)
         return
     end
 
-    return F.Numb(cur) .. ' / ' .. C.MyColor .. floor(perc * 100 + .5) .. '%'
+    return F:Numb(cur) .. ' / ' .. C.MyColor .. floor(perc * 100 + .5) .. '%'
 end
 tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
 

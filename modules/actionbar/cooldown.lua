@@ -55,7 +55,7 @@ function COOLDOWN:TimerOnUpdate(elapsed)
     else
         local remain = self.duration - (GetTime() - self.start)
         if remain > 0 then
-            local getTime, nextUpdate = F.FormatTime(remain)
+            local getTime, nextUpdate = F:FormatTime(remain)
             self.text:SetText(getTime)
             self.nextUpdate = nextUpdate
         else

@@ -143,15 +143,15 @@ function NAMEPLATE:CreateUnitTable()
     if not C.DB.Nameplate.CustomUnitColor then
         return
     end
-    F.CopyTable(C.NPSpecialUnitsList, customUnits)
-    F.SplitList(customUnits, C.DB.Nameplate.CustomUnitList)
+    F:CopyTable(C.NPSpecialUnitsList, customUnits)
+    F:SplitList(customUnits, C.DB.Nameplate.CustomUnitList)
 end
 
 local showPowerList = {}
 function NAMEPLATE:CreatePowerUnitTable()
     wipe(showPowerList)
-    F.CopyTable(C.NPShowPowerUnitsList, showPowerList)
-    F.SplitList(showPowerList, C.DB.Nameplate.ShowPowerList)
+    F:CopyTable(C.NPShowPowerUnitsList, showPowerList)
+    F:SplitList(showPowerList, C.DB.Nameplate.ShowPowerList)
 end
 
 function NAMEPLATE:UpdateUnitPower()
@@ -253,12 +253,12 @@ function NAMEPLATE:UpdateColor(_, unit)
             r, g, b = customColor.r, customColor.g, customColor.b
         elseif isPlayer and isFriendly then
             if friendlyClassColor then
-                r, g, b = F.UnitColor(unit)
+                r, g, b = F:UnitColor(unit)
             else
                 r, g, b = .3, .3, 1
             end
         elseif isPlayer and (not isFriendly) and hostileClassColor then
-            r, g, b = F.UnitColor(unit)
+            r, g, b = F:UnitColor(unit)
         elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
             r, g, b = unpack(OUF.colors.tapped)
         else
@@ -668,7 +668,7 @@ function NAMEPLATE:UpdateCastbarInterrupt(...)
         local nameplate = guidToPlate[destGUID]
         if nameplate and nameplate.Castbar then
             local _, class = GetPlayerInfoByGUID(sourceGUID)
-            local r, g, b = F.ClassColor(class)
+            local r, g, b = F:ClassColor(class)
             local color = F:RGBToHex(r, g, b)
             sourceName = Ambiguate(sourceName, 'short')
             nameplate.Castbar.Text:Show()
@@ -1012,7 +1012,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
             guidToPlate[self.unitGUID] = self
         end
         self.isPlayer = UnitIsPlayer(unit)
-        self.npcID = F.GetNPCID(self.unitGUID)
+        self.npcID = F:GetNPCID(self.unitGUID)
         self.widgetsOnly = UnitNameplateShowsWidgetsOnly(unit)
 
         local blizzPlate = self:GetParent().UnitFrame
