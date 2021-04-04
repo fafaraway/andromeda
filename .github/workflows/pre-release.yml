@@ -21,7 +21,14 @@ jobs:
         uses: BigWigsMods/packager@master
 
       - name: Upload artifact
-      - uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2
         with:
           name: FreeUI
           path: .release/
+
+      - name: Send status to Discord
+        uses: nebularg/actions-discord-webhook@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+        if: failure()
