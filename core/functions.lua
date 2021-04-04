@@ -817,15 +817,15 @@ do
         _G.GameTooltip:SetOwner(self, self.anchor, 0, 4)
         _G.GameTooltip:ClearLines()
 
-        local r, g, b = 1, 1, 1
+        local r, g, b = 1, .8, 0
         if self.title then
-            if self.color == 'CLASS' then
+            if self.titleColor == 'CLASS' then
                 r, g, b = C.r, C.g, C.b
-            elseif self.color == 'SYSTEM' then
+            elseif self.titleColor == 'SYSTEM' then
                 r, g, b = 1, .8, 0
-            elseif self.color == 'BLUE' then
+            elseif self.titleColor == 'BLUE' then
                 r, g, b = .6, .8, 1
-            elseif self.color == 'RED' then
+            elseif self.titleColor == 'RED' then
                 r, g, b = .9, .3, .3
             end
             _G.GameTooltip:AddLine(self.title, r, g, b, 1)
@@ -945,7 +945,7 @@ do
         tex:SetPoint('TOPLEFT', 1, -1)
         tex:SetPoint('BOTTOMRIGHT', -1, 1)
         tex:SetTexture(gradStyle and gradTex or normTex)
-        tex:SetVertexColor(color.r, color.g, color.b, .45)
+        tex:SetVertexColor(color.r, color.g, color.b, .35)
 
         return tex
     end
@@ -1145,7 +1145,7 @@ do
         local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
 
         self.__bg:SetBackdropColor(C.r, C.g, C.b, alpha)
-        self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, 1)
     end
 
     local function Button_OnLeave(self)
@@ -1154,7 +1154,7 @@ do
         local borderColor = _G.FREE_ADB.BorderColor
 
         self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
+        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b, 1)
     end
 
     local blizzRegions = {

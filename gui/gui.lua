@@ -121,15 +121,14 @@ end
 local function SelectTab(i)
     local r, g, b = C.r, C.g, C.b
     local color = _G.FREE_ADB.ButtonBackdropColor
-    local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
 
     for num = 1, #tabsList do
         if num == i then
-            guiTab[num].__gradient:SetVertexColor(r / 2, g / 2, b / 2, .6)
+            guiTab[num].__gradient:SetVertexColor(r / 2, g / 2, b / 2)
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
-            guiTab[num].__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
+            guiTab[num].__gradient:SetVertexColor(color.r, color.g, color.b)
             guiTab[num].checked = false
             guiPage[num]:Hide()
         end
