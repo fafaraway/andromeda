@@ -129,11 +129,11 @@ end
 
 local function SetupUIScale()
 	if C.ScreenHeight >= 2000 then
-		FREE_ADB.ui_scale = 2
+		FREE_ADB.UIScale = 2
 	elseif C.ScreenHeight >= 1500 then
-		FREE_ADB.ui_scale = 1.4
+		FREE_ADB.UIScale = 1.4
 	else
-		FREE_ADB.ui_scale = 1
+		FREE_ADB.UIScale = 1
 	end
 end
 

@@ -33,7 +33,7 @@ local function ReskinSessionDialog(_, dialog)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	-- Quest frame
 

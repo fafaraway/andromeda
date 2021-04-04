@@ -35,7 +35,7 @@ local function createBagIcon(frame, index)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	BackpackTokenFrame:GetRegions():Hide()
 

@@ -466,23 +466,22 @@ function NAMEPLATE:AddHighlight(self)
 end
 
 -- Unit classification
--- LuaFormatter off
 local classify = {
     elite = {'VignetteKill'},
     rare = {'VignetteKill', true},
     rareelite = {'VignetteKill', true},
-    worldboss = {'VignetteKillElite'},
+    worldboss = {'VignetteKillElite'}
 }
--- LuaFormatter on
 
 function NAMEPLATE:AddClassifyIndicator(self)
     if not C.DB.Nameplate.ClassifyIndicator then
         return
     end
 
+    local height = C.DB.Nameplate.Height
     local icon = self:CreateTexture(nil, 'ARTWORK')
-    icon:SetPoint('LEFT', self, 'RIGHT')
-    icon:SetSize(16, 16)
+    icon:SetPoint('RIGHT', self, 'LEFT')
+    icon:SetSize(height + 10, height + 10)
     icon:SetAtlas('')
     icon:Hide()
 
@@ -599,11 +598,13 @@ function NAMEPLATE:AddQuestIndicator(self)
         return
     end
 
+    local height = C.DB.Nameplate.Height
     local qicon = self:CreateTexture(nil, 'OVERLAY', nil, 2)
-    qicon:SetPoint('TOP', self, 'BOTTOM', 0, -3)
-    qicon:SetSize(20, 20)
+    qicon:SetPoint('LEFT', self, 'RIGHT', 3, 0)
+    qicon:SetSize(height + 10, height + 10)
     qicon:SetAtlas('adventureguide-microbutton-alert')
     qicon:Hide()
+
     local count = F.CreateFS(self, C.Assets.Fonts.Condensed, 12, nil, '', nil, true)
     count:SetPoint('LEFT', qicon, 'RIGHT', -3, 0)
     count:SetTextColor(.6, .8, 1)
@@ -623,9 +624,9 @@ function NAMEPLATE:UpdateExplosives(event, unit)
 
     local npcID = self.npcID
     if event == 'NAME_PLATE_UNIT_ADDED' and npcID == id then
-        self:SetScale(_G.FREE_ADB.ui_scale * C.DB.Nameplate.ExplosiveScale)
+        self:SetScale(_G.FREE_ADB.UIScale * C.DB.Nameplate.ExplosiveScale)
     elseif event == 'NAME_PLATE_UNIT_REMOVED' then
-        self:SetScale(_G.FREE_ADB.ui_scale)
+        self:SetScale(_G.FREE_ADB.UIScale)
     end
 end
 
@@ -668,7 +669,7 @@ function NAMEPLATE:UpdateCastbarInterrupt(...)
         if nameplate and nameplate.Castbar then
             local _, class = GetPlayerInfoByGUID(sourceGUID)
             local r, g, b = F.ClassColor(class)
-            local color = F.RGBToHex(r, g, b)
+            local color = F:RGBToHex(r, g, b)
             sourceName = Ambiguate(sourceName, 'short')
             nameplate.Castbar.Text:Show()
             nameplate.Castbar.Text:SetText(color .. sourceName .. '|r ' .. INTERRUPTED)
@@ -879,7 +880,7 @@ function NAMEPLATE:UpdateClickableSize()
 
     local width = C.DB.Nameplate.Width
     local height = C.DB.Nameplate.Height
-    local scale = _G.FREE_ADB.ui_scale
+    local scale = _G.FREE_ADB.UIScale
     C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 10)
     C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 10)
 end
@@ -963,7 +964,7 @@ function NAMEPLATE:UpdatePlateByType()
 
         if questIcon then
             questIcon:ClearAllPoints()
-            questIcon:SetPoint('TOP', self, 'BOTTOM', 0, -3)
+            questIcon:SetPoint('LEFT', self, 'RIGHT', 1, 0)
         end
 
         if self.widgetContainer then
@@ -1018,7 +1019,7 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
         self.widgetContainer = blizzPlate and blizzPlate.WidgetContainer
         if self.widgetContainer then
             self.widgetContainer:SetParent(self)
-            self.widgetContainer:SetScale(1 / _G.FREE_ADB.ui_scale)
+            self.widgetContainer:SetScale(1 / _G.FREE_ADB.UIScale)
         end
 
         NAMEPLATE.RefreshPlateType(self, unit)

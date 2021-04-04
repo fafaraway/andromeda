@@ -6,7 +6,7 @@ local sqrt = sqrt
 local GetScaledCursorPosition = GetScaledCursorPosition
 local C_Timer_NewTicker = C_Timer.NewTicker
 
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local MISC = F.MISC
 
 local pollingRate, numLines = 0.05, 15
@@ -53,7 +53,7 @@ local function UpdateTrail()
 end
 
 function MISC:CursorTrail()
-    if not _G.FREE_ADB.CursorTrail then
+    if not C.DB.Misc.CursorTrail then
         return
     end
 

@@ -25,49 +25,49 @@ local menuList = {
         end,
     },
     {
-        text = F.RGBToHex(1, .92, 0) .. _G.RAID_TARGET_1 .. ' ' .. _G.ICON_LIST[1] .. '12|t',
+        text = F:RGBToHex(1, .92, 0) .. _G.RAID_TARGET_1 .. ' ' .. _G.ICON_LIST[1] .. '12|t',
         func = function()
             SetRaidTarget('target', 1)
         end,
     },
     {
-        text = F.RGBToHex(.98, .57, 0) .. _G.RAID_TARGET_2 .. ' ' .. _G.ICON_LIST[2] .. '12|t',
+        text = F:RGBToHex(.98, .57, 0) .. _G.RAID_TARGET_2 .. ' ' .. _G.ICON_LIST[2] .. '12|t',
         func = function()
             SetRaidTarget('target', 2)
         end,
     },
     {
-        text = F.RGBToHex(.83, .22, .9) .. _G.RAID_TARGET_3 .. ' ' .. _G.ICON_LIST[3] .. '12|t',
+        text = F:RGBToHex(.83, .22, .9) .. _G.RAID_TARGET_3 .. ' ' .. _G.ICON_LIST[3] .. '12|t',
         func = function()
             SetRaidTarget('target', 3)
         end,
     },
     {
-        text = F.RGBToHex(.04, .95, 0) .. _G.RAID_TARGET_4 .. ' ' .. _G.ICON_LIST[4] .. '12|t',
+        text = F:RGBToHex(.04, .95, 0) .. _G.RAID_TARGET_4 .. ' ' .. _G.ICON_LIST[4] .. '12|t',
         func = function()
             SetRaidTarget('target', 4)
         end,
     },
     {
-        text = F.RGBToHex(.7, .82, .875) .. _G.RAID_TARGET_5 .. ' ' .. _G.ICON_LIST[5] .. '12|t',
+        text = F:RGBToHex(.7, .82, .875) .. _G.RAID_TARGET_5 .. ' ' .. _G.ICON_LIST[5] .. '12|t',
         func = function()
             SetRaidTarget('target', 5)
         end,
     },
     {
-        text = F.RGBToHex(0, .71, 1) .. _G.RAID_TARGET_6 .. ' ' .. _G.ICON_LIST[6] .. '12|t',
+        text = F:RGBToHex(0, .71, 1) .. _G.RAID_TARGET_6 .. ' ' .. _G.ICON_LIST[6] .. '12|t',
         func = function()
             SetRaidTarget('target', 6)
         end,
     },
     {
-        text = F.RGBToHex(1, .24, .168) .. _G.RAID_TARGET_7 .. ' ' .. _G.ICON_LIST[7] .. '12|t',
+        text = F:RGBToHex(1, .24, .168) .. _G.RAID_TARGET_7 .. ' ' .. _G.ICON_LIST[7] .. '12|t',
         func = function()
             SetRaidTarget('target', 7)
         end,
     },
     {
-        text = F.RGBToHex(.98, .98, .98) .. _G.RAID_TARGET_8 .. ' ' .. _G.ICON_LIST[8] .. '12|t',
+        text = F:RGBToHex(.98, .98, .98) .. _G.RAID_TARGET_8 .. ' ' .. _G.ICON_LIST[8] .. '12|t',
         func = function()
             SetRaidTarget('target', 8)
         end,

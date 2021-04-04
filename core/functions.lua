@@ -18,6 +18,7 @@ local gsub = gsub
 local strsub = strsub
 local gmatch = gmatch
 local utf8sub = string.utf8sub
+local utf8len = string.utf8len
 local min = min
 local max = max
 local floor = floor
@@ -56,9 +57,11 @@ local assets = C.Assets
 
 --[[ Math ]]
 do
+    local numCap = {CHINESE = {'兆', '亿', '万'}}
+
     -- Numberize
     function F.Numb(n)
-        if _G.FREE_ADB.number_format == 1 then
+        if _G.FREE_ADB.NumberFormat == 1 then
             if n >= 1e12 then
                 return ('%.2ft'):format(n / 1e12)
             elseif n >= 1e9 then
@@ -70,13 +73,13 @@ do
             else
                 return ('%.0f'):format(n)
             end
-        elseif _G.FREE_ADB.number_format == 2 then
+        elseif _G.FREE_ADB.NumberFormat == 2 then
             if n >= 1e12 then
-                return format('%.2f' .. L['MISC_NUMBER_CAP'][3], n / 1e12)
+                return format('%.2f' .. numCap['CHINESE'][1], n / 1e12)
             elseif n >= 1e8 then
-                return format('%.2f' .. L['MISC_NUMBER_CAP'][2], n / 1e8)
+                return format('%.2f' .. numCap['CHINESE'][2], n / 1e8)
             elseif n >= 1e4 then
-                return format('%.2f' .. L['MISC_NUMBER_CAP'][1], n / 1e4)
+                return format('%.2f' .. numCap['CHINESE'][3], n / 1e4)
             else
                 return format('%.0f', n)
             end
@@ -85,10 +88,204 @@ do
         end
     end
 
-    function F:Round(number, idp)
-        idp = idp or 0
-        local mult = 10 ^ idp
-        return floor(number * mult + .5) / mult
+    -- Quick convert function: (nil or table to populate, 'ff0000', '00ff00', '0000ff', ...) to get (1,0,0, 0,1,0, 0,0,1, ...)
+    function F:HexsToRGBs(rgb, ...)
+        if not rgb then
+            rgb = {}
+        end
+        for i = 1, select('#', ...) do
+            local x, r, g, b = #rgb, F:HexToRGB(select(i, ...))
+            rgb[x + 1], rgb[x + 2], rgb[x + 3] = r / 255, g / 255, b / 255
+        end
+
+        return unpack(rgb)
+    end
+
+    -- RGB to Hex
+    function F:RGBToHex(r, g, b, header, ending)
+        if r then
+            if type(r) == 'table' then
+                if r.r then
+                    r, g, b = r.r, r.g, r.b
+                else
+                    r, g, b = unpack(r)
+                end
+            end
+            return format('%s%02x%02x%02x%s', header or '|cff', r * 255, g * 255, b * 255, ending or '')
+        end
+    end
+
+    -- Hex to RGB
+    function F:HexToRGB(hex)
+        local a, r, g, b = strmatch(hex, '^|?c?(%x%x)(%x%x)(%x%x)(%x?%x?)|?r?$')
+        if not a then
+            return 0, 0, 0, 0
+        end
+        if b == '' then
+            r, g, b, a = a, r, g, 'ff'
+        end
+
+        return tonumber(r, 16), tonumber(g, 16), tonumber(b, 16), tonumber(a, 16)
+    end
+
+    -- http://www.wowwiki.com/ColorGradient
+    function F:ColorGradient(perc, ...)
+        if perc >= 1 then
+            return select(select('#', ...) - 2, ...)
+        elseif perc <= 0 then
+            return ...
+        end
+
+        local num = select('#', ...) / 3
+        local segment, relperc = modf(perc * (num - 1))
+        local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
+
+        return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
+    end
+
+    -- Text Gradient by Simpy
+    function F:TextGradient(text, ...)
+        local msg, len, idx = '', utf8len(text), 0
+
+        for i = 1, len do
+            local x = utf8sub(text, i, i)
+            if strmatch(x, '%s') then
+                msg = msg .. x
+                idx = idx + 1
+            else
+                local num = select('#', ...) / 3
+                local segment, relperc = modf((idx / len) * num)
+                local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
+
+                if not r2 then
+                    msg = msg .. F:RGBToHex(r1, g1, b1, nil, x .. '|r')
+                else
+                    msg = msg .. F:RGBToHex(r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc, nil, x .. '|r')
+                    idx = idx + 1
+                end
+            end
+        end
+
+        return msg
+    end
+
+    -- Return rounded number
+    function F:Round(num, idp)
+        if type(num) ~= 'number' then
+            return num, idp
+        end
+
+        if idp and idp > 0 then
+            local mult = 10 ^ idp
+            return floor(num * mult + 0.5) / mult
+        end
+
+        return floor(num + 0.5)
+    end
+
+    -- Truncate a number off to n places
+    function F:Truncate(v, decimals)
+        return v - (v % (0.1 ^ (decimals or 0)))
+    end
+
+    -- From http://wow.gamepedia.com/UI_coordinates
+    function F:FramesOverlap(frameA, frameB)
+        if not frameA or not frameB then
+            return
+        end
+
+        local sA, sB = frameA:GetEffectiveScale(), frameB:GetEffectiveScale()
+        if not sA or not sB then
+            return
+        end
+
+        local frameALeft, frameARight, frameABottom, frameATop = frameA:GetLeft(), frameA:GetRight(), frameA:GetBottom(), frameA:GetTop()
+        local frameBLeft, frameBRight, frameBBottom, frameBTop = frameB:GetLeft(), frameB:GetRight(), frameB:GetBottom(), frameB:GetTop()
+        if not (frameALeft and frameARight and frameABottom and frameATop) then
+            return
+        end
+        if not (frameBLeft and frameBRight and frameBBottom and frameBTop) then
+            return
+        end
+
+        return ((frameALeft * sA) < (frameBRight * sB)) and ((frameBLeft * sB) < (frameARight * sA)) and ((frameABottom * sA) < (frameBTop * sB)) and ((frameBBottom * sB) < (frameATop * sA))
+    end
+
+    function F:GetScreenQuadrant(frame)
+        local x, y = frame:GetCenter()
+        local screenWidth = GetScreenWidth()
+        local screenHeight = GetScreenHeight()
+
+        if not (x and y) then
+            return 'UNKNOWN', frame:GetName()
+        end
+
+        local point
+        if (x > (screenWidth / 3) and x < (screenWidth / 3) * 2) and y > (screenHeight / 3) * 2 then
+            point = 'TOP'
+        elseif x < (screenWidth / 3) and y > (screenHeight / 3) * 2 then
+            point = 'TOPLEFT'
+        elseif x > (screenWidth / 3) * 2 and y > (screenHeight / 3) * 2 then
+            point = 'TOPRIGHT'
+        elseif (x > (screenWidth / 3) and x < (screenWidth / 3) * 2) and y < (screenHeight / 3) then
+            point = 'BOTTOM'
+        elseif x < (screenWidth / 3) and y < (screenHeight / 3) then
+            point = 'BOTTOMLEFT'
+        elseif x > (screenWidth / 3) * 2 and y < (screenHeight / 3) then
+            point = 'BOTTOMRIGHT'
+        elseif x < (screenWidth / 3) and (y > (screenHeight / 3) and y < (screenHeight / 3) * 2) then
+            point = 'LEFT'
+        elseif x > (screenWidth / 3) * 2 and y < (screenHeight / 3) * 2 and y > (screenHeight / 3) then
+            point = 'RIGHT'
+        else
+            point = 'CENTER'
+        end
+
+        return point
+    end
+
+    function F:ShortenString(str, numChars, dots)
+        local bytes = #str
+        if bytes <= numChars then
+            return str
+        else
+            local len, pos = 0, 1
+            while pos <= bytes do
+                len = len + 1
+                local c = str:byte(pos)
+                if c > 0 and c <= 127 then
+                    pos = pos + 1
+                elseif c >= 192 and c <= 223 then
+                    pos = pos + 2
+                elseif c >= 224 and c <= 239 then
+                    pos = pos + 3
+                elseif c >= 240 and c <= 247 then
+                    pos = pos + 4
+                end
+                if len == numChars then
+                    break
+                end
+            end
+
+            if len == numChars and pos <= bytes then
+                return strsub(str, 1, pos - 1) .. (dots and '...' or '')
+            else
+                return str
+            end
+        end
+    end
+
+    function F:AbbreviateString(str, allUpper)
+        local newString = ''
+        for word in gmatch(str, '[^%s]+') do
+            word = utf8sub(word, 1, 1) -- get only first letter of each word
+            if allUpper then
+                word = strupper(word)
+            end
+            newString = newString .. word
+        end
+
+        return newString
     end
 
     function F:Scale(x)
@@ -179,50 +376,6 @@ do
         return id
     end
 
-    function F.ShortenString(str, numChars, dots)
-        local bytes = #str
-        if bytes <= numChars then
-            return str
-        else
-            local len, pos = 0, 1
-            while pos <= bytes do
-                len = len + 1
-                local c = str:byte(pos)
-                if c > 0 and c <= 127 then
-                    pos = pos + 1
-                elseif c >= 192 and c <= 223 then
-                    pos = pos + 2
-                elseif c >= 224 and c <= 239 then
-                    pos = pos + 3
-                elseif c >= 240 and c <= 247 then
-                    pos = pos + 4
-                end
-                if len == numChars then
-                    break
-                end
-            end
-
-            if len == numChars and pos <= bytes then
-                return strsub(str, 1, pos - 1) .. (dots and '...' or '')
-            else
-                return str
-            end
-        end
-    end
-
-    function F.AbbreviateString(str, allUpper)
-        local newString = ''
-        for word in gmatch(str, '[^%s]+') do
-            word = utf8sub(word, 1, 1) -- get only first letter of each word
-            if allUpper then
-                word = strupper(word)
-            end
-            newString = newString .. word
-        end
-
-        return newString
-    end
-
     function F:WaitFunc(elapse)
         local i = 1
         while i <= #F.WaitTable do
@@ -268,22 +421,6 @@ end
 
 --[[ Color ]]
 do
-    function F.RGBToHex(r, g, b)
-        if r then
-            if type(r) == 'table' then
-                if r.r then
-                    r, g, b = r.r, r.g, r.b
-                else
-                    r, g, b = unpack(r)
-                end
-            end
-            return format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
-        end
-    end
-
-    function F.HexToRGB(hex)
-        return tonumber('0x' .. strsub(hex, 1, 2)) / 255, tonumber('0x' .. strsub(hex, 3, 4)) / 255, tonumber('0x' .. strsub(hex, 5, 6)) / 255
-    end
 
     function F.ClassColor(class)
         local color = C.ClassColors[class]
@@ -312,19 +449,6 @@ do
         return r, g, b
     end
 
-    function F.ColorGradient(perc, ...)
-        if perc >= 1 then
-            return select(select('#', ...) - 2, ...)
-        elseif perc <= 0 then
-            return ...
-        end
-
-        local num = select('#', ...) / 3
-        local segment, relperc = modf(perc * (num - 1))
-        local r1, g1, b1, r2, g2, b2 = select((segment * 3) + 1, ...)
-
-        return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
-    end
 end
 
 --[[ Itemlevel ]]
@@ -497,7 +621,7 @@ do
         self:SetScale(.0001)
     end
 
-    local BlizzTextures = {
+    local blizzTextures = {
         'Inset',
         'inset',
         'InsetFrame',
@@ -525,7 +649,7 @@ do
 
     function F:StripTextures(kill)
         local frameName = self.GetName and self:GetName()
-        for _, texture in pairs(BlizzTextures) do
+        for _, texture in pairs(blizzTextures) do
             local blizzFrame = self[texture] or (frameName and _G[frameName .. texture])
             if blizzFrame then
                 F.StripTextures(blizzFrame, kill)
@@ -667,7 +791,7 @@ do
             return
         end
 
-        local hex = color.r and color.g and color.b and F.RGBToHex(color.r, color.g, color.b) or '|cffffffff'
+        local hex = color.r and color.g and color.b and F:RGBToHex(color.r, color.g, color.b) or '|cffffffff'
 
         return hex .. text .. '|r'
     end
@@ -682,7 +806,7 @@ do
         end
 
         local r, g, b = F.ClassColor(class)
-        local hex = r and g and b and F.RGBToHex(r, g, b) or '|cffffffff'
+        local hex = r and g and b and F:RGBToHex(r, g, b) or '|cffffffff'
 
         return hex .. text .. '|r'
     end
@@ -778,7 +902,7 @@ do
 
     local shadowBackdrop = {edgeFile = assets.shadow_tex}
     function F:CreateSD(a, m, s, override)
-        if not override and not _G.FREE_ADB.shadow_border then
+        if not override and not _G.FREE_ADB.ShadowOutline then
             return
         end
         if self.__shadow then
@@ -797,7 +921,7 @@ do
         self.__shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
         self.__shadow:SetOutside(self, m, m)
         self.__shadow:SetBackdrop(shadowBackdrop)
-        self.__shadow:SetBackdropBorderColor(.02, .02, .02, a or .25)
+        self.__shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
         self.__shadow:SetFrameLevel(1)
 
         return self.__shadow
@@ -811,12 +935,15 @@ do
 
     local defaultBackdrop = {bgFile = assets.bd_tex, edgeFile = assets.bd_tex}
     function F:CreateBD(a)
+        local color = _G.FREE_ADB.BackdropColor
+        local alpha = _G.FREE_ADB.BackdropAlpha
+        local borderColor = _G.FREE_ADB.BorderColor
+
         defaultBackdrop.edgeSize = C.Mult
+
         self:SetBackdrop(defaultBackdrop)
-
-        self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], a or _G.FREE_ADB.backdrop_alpha)
-
-        self:SetBackdropBorderColor(C.BorderColor[1], C.BorderColor[2], C.BorderColor[3])
+        self:SetBackdropColor(color.r, color.g, color.b, a or alpha)
+        self:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
 
         if not a then
             tinsert(C.Frames, self)
@@ -824,10 +951,16 @@ do
     end
 
     function F:CreateGradient()
+        local gradStyle = _G.FREE_ADB.GradientStyle
+        local gradTex = C.AssetsPath .. 'textures\\gradient'
+        local normTex = C.Assets.bd_tex
+        local color = _G.FREE_ADB.ButtonBackdropColor
+
         local tex = self:CreateTexture(nil, 'BORDER')
-        tex:SetInside()
-        tex:SetTexture(assets.bd_tex)
-        tex:SetGradientAlpha('Vertical', unpack(C.GradientColor))
+        tex:SetPoint('TOPLEFT', 1, -1)
+        tex:SetPoint('BOTTOMRIGHT', -1, 1)
+        tex:SetTexture(gradStyle and gradTex or normTex)
+        tex:SetVertexColor(color.r, color.g, color.b, .45)
 
         return tex
     end
@@ -839,17 +972,17 @@ do
         end
         local lvl = frame:GetFrameLevel()
 
-        local bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
-        bg:SetOutside(self)
-        bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
+        self.__bg = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
+        self.__bg:SetOutside(self)
+        self.__bg:SetFrameLevel(lvl == 0 and 0 or lvl - 1)
 
-        F.CreateBD(bg, a)
+        F.CreateBD(self.__bg, a)
 
         if gradient then
-            self.__gradient = F.CreateGradient(bg)
+            self.__gradient = F.CreateGradient(self.__bg)
         end
 
-        return bg
+        return self.__bg
     end
 
     function F:SetBD(a, x, y, x2, y2)
@@ -928,7 +1061,7 @@ do
         logo:SetAlpha(.3)
     end
 
-    local AtlasToQuality = {
+    local atlasToQuality = {
         ['auctionhouse-itemicon-border-gray'] = LE_ITEM_QUALITY_POOR,
         ['auctionhouse-itemicon-border-white'] = LE_ITEM_QUALITY_COMMON,
         ['auctionhouse-itemicon-border-green'] = LE_ITEM_QUALITY_UNCOMMON,
@@ -939,20 +1072,20 @@ do
         ['auctionhouse-itemicon-border-account'] = LE_ITEM_QUALITY_HEIRLOOM,
     }
 
-    local function updateIconBorderColorByAtlas(self, atlas)
-        local quality = AtlasToQuality[atlas]
+    local function UpdateIconBorderColorByAtlas(self, atlas)
+        local quality = atlasToQuality[atlas]
         local color = C.QualityColors[quality or 1]
         self.__owner.bg:SetBackdropBorderColor(color.r, color.g, color.b)
     end
 
-    local function updateIconBorderColor(self, r, g, b)
+    local function UpdateIconBorderColor(self, r, g, b)
         if not r or (r == .65882 and g == .65882 and b == .65882) or (r > .99 and g > .99 and b > .99) then
             r, g, b = 0, 0, 0
         end
         self.__owner.bg:SetBackdropBorderColor(r, g, b)
     end
 
-    local function resetIconBorderColor(self)
+    local function ResetIconBorderColor(self)
         self.__owner.bg:SetBackdropBorderColor(0, 0, 0)
     end
 
@@ -963,14 +1096,14 @@ do
             return
         end
         if self.__owner.useCircularIconBorder then -- for auction item display
-            hooksecurefunc(self, 'SetAtlas', updateIconBorderColorByAtlas)
+            hooksecurefunc(self, 'SetAtlas', UpdateIconBorderColorByAtlas)
         else
-            hooksecurefunc(self, 'SetVertexColor', updateIconBorderColor)
+            hooksecurefunc(self, 'SetVertexColor', UpdateIconBorderColor)
             if needInit then
                 self:SetVertexColor(self:GetVertexColor()) -- for border with color before hook
             end
         end
-        hooksecurefunc(self, 'Hide', resetIconBorderColor)
+        hooksecurefunc(self, 'Hide', ResetIconBorderColor)
     end
 
     -- Handle statusbar
@@ -1001,12 +1134,14 @@ do
         local mult = 1
         local alpha = 1
         local last = 0
+
         frame:SetScript('OnUpdate', function(self, elapsed)
             last = last + elapsed
             if last > speed then
                 last = 0
                 self:SetAlpha(alpha)
             end
+
             alpha = alpha - elapsed * mult
             if alpha < 0 and mult > 0 then
                 mult = mult * -1
@@ -1022,23 +1157,22 @@ do
             return
         end
 
-        if not self.__glow then
+        if not self.__shadow then
             return
         end
-        self.__glow:SetBackdropBorderColor(C.r, C.g, C.b)
-        self.__glow:SetAlpha(1)
 
-        UpdateGlow(self.__glow)
+        self.__shadow:SetBackdropBorderColor(C.r, C.g, C.b, 1)
+
+        UpdateGlow(self.__shadow)
     end
 
     local function StopGlow(self)
-        if not self.__glow then
+        if not self.__shadow then
             return
         end
 
-        self.__glow:SetBackdropBorderColor(.02, .02, .02)
-        self.__glow:SetScript('OnUpdate', nil)
-        self.__glow:SetAlpha(.25)
+        self.__shadow:SetBackdropBorderColor(.02, .02, .02, .25)
+        self.__shadow:SetScript('OnUpdate', nil)
     end
 
     local function Button_OnEnter(self)
@@ -1046,13 +1180,19 @@ do
             return
         end
 
-        self.__bg:SetBackdropColor(C.r, C.g, C.b, .25)
+        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+
+        self.__bg:SetBackdropColor(C.r, C.g, C.b, alpha)
         self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
     local function Button_OnLeave(self)
-        self.__bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .25)
-        self.__bg:SetBackdropBorderColor(.2, .2, .2)
+        local color = _G.FREE_ADB.ButtonBackdropColor
+        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local borderColor = _G.FREE_ADB.BorderColor
+
+        self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
+        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
     end
 
     local blizzRegions = {
@@ -1092,7 +1232,7 @@ do
         'Center',
     }
 
-    function F:Reskin(glow)
+    function F:Reskin(noGlow)
         if self.SetNormalTexture then
             self:SetNormalTexture('')
         end
@@ -1114,22 +1254,24 @@ do
             end
         end
 
-        self.__bgTex = F.CreateTex(self)
+        F.CreateTex(self)
+        F.CreateBDFrame(self, .25, true)
 
-        self.__bg = F.CreateBDFrame(self, .25, true)
-        self.__bg:SetBackdropBorderColor(.2, .2, .2)
-        self.__bg:SetFrameLevel(self:GetFrameLevel())
-        self.__bg:SetAllPoints()
+        local color = _G.FREE_ADB.ButtonBackdropColor
+        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local borderColor = _G.FREE_ADB.BorderColor
+        self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
+        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
 
         self:HookScript('OnEnter', Button_OnEnter)
         self:HookScript('OnLeave', Button_OnLeave)
 
-        -- if glow then
-        self.__glow = F.CreateSD(self, .25, 4, 4)
+        if not noGlow then
+            F.CreateSD(self, .25, 4, 4)
 
-        self:HookScript('OnEnter', StartGlow)
-        self:HookScript('OnLeave', StopGlow)
-        -- end
+            self:HookScript('OnEnter', StartGlow)
+            self:HookScript('OnLeave', StopGlow)
+        end
     end
 
     local function Menu_OnEnter(self)
@@ -1189,8 +1331,11 @@ do
         if not thumb then
             return
         end
-        thumb.bg:SetBackdropColor(C.r, C.g, C.b, .25)
-        thumb.bg:SetBackdropBorderColor(0, 0, 0)
+
+        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+
+        thumb.bg:SetBackdropColor(C.r, C.g, C.b, alpha)
+        thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
     local function Scroll_OnLeave(self)
@@ -1198,8 +1343,13 @@ do
         if not thumb then
             return
         end
-        thumb.bg:SetBackdropColor(0, 0, 0, 0)
-        thumb.bg:SetBackdropBorderColor(0, 0, 0)
+
+        local color = _G.FREE_ADB.ButtonBackdropColor
+        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local borderColor = _G.FREE_ADB.BorderColor
+
+        thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
+        thumb.bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
     end
 
     local function GrabScrollBarElement(frame, element)
@@ -1238,9 +1388,10 @@ do
         local frameName = self.GetName and self:GetName()
         local down = self.Button or frameName and (_G[frameName .. 'Button'] or _G[frameName .. '_Button'])
 
-        local bg = F.CreateBDFrame(self, 0, true)
+        local bg = F.CreateBDFrame(self)
         bg:SetPoint('TOPLEFT', 16, -4)
         bg:SetPoint('BOTTOMRIGHT', -18, 8)
+        F.CreateSD(bg, .25)
 
         down:ClearAllPoints()
         down:SetPoint('RIGHT', bg, -2, 0)
@@ -1250,20 +1401,20 @@ do
     -- Handle close button
     function F:Texture_OnEnter()
         if self:IsEnabled() then
-            if self.bg then
-                self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
-            else
-                self.__texture:SetVertexColor(C.r, C.g, C.b)
-            end
+            -- if self.bg then
+            --     self.bg:SetBackdropColor(C.r, C.g, C.b, .25)
+            -- else
+                 self.__texture:SetVertexColor(C.r, C.g, C.b)
+            -- end
         end
     end
 
     function F:Texture_OnLeave()
-        if self.bg then
-            self.bg:SetBackdropColor(0, 0, 0, .25)
-        else
-            self.__texture:SetVertexColor(1, 1, 1)
-        end
+        -- if self.bg then
+        --     self.bg:SetBackdropColor(0, 0, 0, .25)
+        -- else
+             self.__texture:SetVertexColor(1, 1, 1)
+        -- end
     end
 
     function F:ReskinClose(parent, xOffset, yOffset)
@@ -1306,10 +1457,10 @@ do
             end
         end
 
-        local bg = F.CreateBDFrame(self, .45, true)
+        local bg = F.CreateBDFrame(self)
         bg:SetPoint('TOPLEFT', -2, 0)
         bg:SetPoint('BOTTOMRIGHT')
-        bg:SetBackdropBorderColor(.2, .2, .2)
+        F.CreateSD(bg, .25)
         self.bg = bg
 
         if height then
@@ -1329,9 +1480,12 @@ do
         self:SetRotation(rad(arrowDegree[direction]))
     end
 
-    function F:ReskinArrow(direction)
+    function F:ReskinArrow(direction, flat)
         self:SetSize(16, 16)
-        F.Reskin(self, true)
+
+        --if not flat then
+            F.Reskin(self, true)
+        --end
 
         self:SetDisabledTexture(assets.bd_tex)
         local dis = self:GetDisabledTexture()
@@ -1390,9 +1544,8 @@ do
         self:SetNormalTexture('')
         self:SetPushedTexture('')
 
-        local bg = F.CreateBDFrame(self, .45, true)
+        local bg = F.CreateBDFrame(self)
         bg:SetInside(self, 4, 4)
-        bg:SetBackdropBorderColor(.2, .2, .2)
         F.CreateSD(bg, .25)
         self.bg = bg
 
@@ -1481,11 +1634,10 @@ do
         self:SetBackdrop(nil)
         F.StripTextures(self)
 
-        local bg = F.CreateBDFrame(self, .45, true)
+        local bg = F.CreateBDFrame(self)
         bg:SetPoint('TOPLEFT', 14, -2)
         bg:SetPoint('BOTTOMRIGHT', -15, 3)
-        bg:SetBackdropBorderColor(.2, .2, .2)
-        F.CreateSD(bg)
+        F.CreateSD(bg, .25)
 
         local thumb = self:GetThumbTexture()
         thumb:SetTexture(C.Assets.spark_tex)
@@ -1497,12 +1649,12 @@ do
     end
 
     -- Handle collapse
-    local function updateCollapseTexture(texture, collapsed)
+    local function UpdateCollapseTexture(texture, collapsed)
         local atlas = collapsed and 'Soulbinds_Collection_CategoryHeader_Expand' or 'Soulbinds_Collection_CategoryHeader_Collapse'
         texture:SetAtlas(atlas, true)
     end
 
-    local function resetCollapseTexture(self, texture)
+    local function ResetCollapseTexture(self, texture)
         if self.settingTexture then
             return
         end
@@ -1526,22 +1678,23 @@ do
         self:SetHighlightTexture('')
         self:SetPushedTexture('')
 
-        local bg = F.CreateBDFrame(self, .25, true)
+        local bg = F.CreateBDFrame(self)
         bg:ClearAllPoints()
         bg:SetSize(13, 13)
         bg:SetPoint('TOPLEFT', self:GetNormalTexture())
+        F.CreateSD(bg, .25)
         self.bg = bg
 
         self.__texture = bg:CreateTexture(nil, 'OVERLAY')
         self.__texture:SetPoint('CENTER')
-        self.__texture.DoCollapse = updateCollapseTexture
+        self.__texture.DoCollapse = UpdateCollapseTexture
 
         self:HookScript('OnEnter', F.Texture_OnEnter)
         self:HookScript('OnLeave', F.Texture_OnLeave)
         if isAtlas then
-            hooksecurefunc(self, 'SetNormalAtlas', resetCollapseTexture)
+            hooksecurefunc(self, 'SetNormalAtlas', ResetCollapseTexture)
         else
-            hooksecurefunc(self, 'SetNormalTexture', resetCollapseTexture)
+            hooksecurefunc(self, 'SetNormalTexture', ResetCollapseTexture)
         end
     end
 
@@ -1595,7 +1748,7 @@ do
     }
     -- LuaFormatter on
 
-    local function replaceFollowerRole(roleIcon, atlas)
+    local function ReplaceFollowerRole(roleIcon, atlas)
         local newAtlas = ReplacedRoleTex[atlas]
         if newAtlas then
             roleIcon:SetAtlas(newAtlas)
@@ -1647,8 +1800,8 @@ do
             local roleIcon = self.HealthBar.RoleIcon
             roleIcon:ClearAllPoints()
             roleIcon:SetPoint('CENTER', self.squareBG, 'TOPRIGHT')
-            replaceFollowerRole(roleIcon, roleIcon:GetAtlas())
-            hooksecurefunc(roleIcon, 'SetAtlas', replaceFollowerRole)
+            ReplaceFollowerRole(roleIcon, roleIcon:GetAtlas())
+            hooksecurefunc(roleIcon, 'SetAtlas', ReplaceFollowerRole)
 
             local background = self.HealthBar.Background
             background:SetAlpha(0)
@@ -1882,7 +2035,7 @@ do
         return cb
     end
 
-    local function editBoxClearFocus(self)
+    local function EditBoxClearFocus(self)
         self:ClearFocus()
     end
 
@@ -1892,19 +2045,18 @@ do
         eb:SetAutoFocus(false)
         eb:SetTextInsets(5, 5, 5, 5)
         eb:SetFont(C.Assets.Fonts.Regular, 11)
-        eb.bg = F.CreateBDFrame(eb, .45, true)
-        eb.bg:SetBackdropBorderColor(.2, .2, .2)
+        eb.bg = F.CreateBDFrame(eb)
         eb.bg:SetAllPoints()
-        F.CreateSD(eb.bg)
+        F.CreateSD(eb.bg, .25)
 
-        eb:SetScript('OnEscapePressed', editBoxClearFocus)
-        eb:SetScript('OnEnterPressed', editBoxClearFocus)
+        eb:SetScript('OnEscapePressed', EditBoxClearFocus)
+        eb:SetScript('OnEnterPressed', EditBoxClearFocus)
 
         eb.Type = 'EditBox'
         return eb
     end
 
-    local function optOnClick(self)
+    local function Option_OnClick(self)
         PlaySound(SOUNDKIT_GS_TITLE_OPTION_OK)
         local opt = self.__owner.options
         for i = 1, #opt do
@@ -1920,53 +2072,69 @@ do
         self:GetParent():Hide()
     end
 
-    local function optOnEnter(self)
+    local function Option_OnEnter(self)
         if self.selected then
             return
         end
         self:SetBackdropColor(1, 1, 1, .25)
     end
 
-    local function optOnLeave(self)
+    local function Option_OnLeave(self)
         if self.selected then
             return
         end
         self:SetBackdropColor(.1, .1, .1, .25)
     end
 
-    local function buttonOnShow(self)
+    local function DD_OnShow(self)
         self.__list:Hide()
     end
 
-    local function buttonOnClick(self)
+    local function DD_OnClick(self)
         PlaySound(SOUNDKIT_GS_TITLE_OPTION_OK)
         F:TogglePanel(self.__list)
+    end
+
+    local function DD_OnEnter(self)
+        self.arrow:SetVertexColor(C.r, C.g, C.b)
+    end
+
+    local function DD_OnLeave(self)
+        self.arrow:SetVertexColor(1, 1, 1)
     end
 
     function F:CreateDropDown(width, height, data)
         local dd = CreateFrame('Frame', nil, self, 'BackdropTemplate')
         dd:SetSize(width, height)
-        dd.bg = F.CreateBDFrame(dd, .45, true)
+        dd.bg = F.CreateBDFrame(dd)
+        F.CreateSD(dd.bg, .25)
 
-        dd.bg:SetBackdropBorderColor(.2, .2, .2)
         dd.Text = F.CreateFS(dd, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 5, 0)
         dd.Text:SetPoint('RIGHT', -5, 0)
         dd.options = {}
 
         local bu = CreateFrame('Button', nil, dd)
         bu:SetPoint('RIGHT', -5, 0)
-        F.ReskinArrow(bu, 'down')
         bu:SetSize(18, 18)
+        dd.button = bu
+
+        local tex = bu:CreateTexture(nil, 'ARTWORK')
+        tex:SetVertexColor(1, 1, 1)
+        tex:SetAllPoints()
+        F.SetupArrow(tex, 'down')
+        bu.arrow = tex
 
         local list = CreateFrame('Frame', nil, dd, 'BackdropTemplate')
         list:SetPoint('TOP', dd, 'BOTTOM', 0, -2)
         F.CreateBD(list, 1)
-        list:SetBackdropBorderColor(.2, .2, .2)
         list:Hide()
         bu.__list = list
-        bu:SetScript('OnShow', buttonOnShow)
-        bu:SetScript('OnClick', buttonOnClick)
-        dd.button = bu
+
+        bu:SetScript('OnShow', DD_OnShow)
+        bu:SetScript('OnClick', DD_OnClick)
+
+        bu:HookScript('OnEnter', DD_OnEnter)
+        bu:HookScript('OnLeave', DD_OnLeave)
 
         local opt, index = {}, 0
         for i, j in pairs(data) do
@@ -1978,9 +2146,9 @@ do
             text:SetPoint('RIGHT', -5, 0)
             opt[i].text = j
             opt[i].__owner = dd
-            opt[i]:SetScript('OnClick', optOnClick)
-            opt[i]:SetScript('OnEnter', optOnEnter)
-            opt[i]:SetScript('OnLeave', optOnLeave)
+            opt[i]:SetScript('OnClick', Option_OnClick)
+            opt[i]:SetScript('OnEnter', Option_OnEnter)
+            opt[i]:SetScript('OnLeave', Option_OnLeave)
 
             dd.options[i] = opt[i]
             index = index + 1
@@ -1991,17 +2159,16 @@ do
         return dd
     end
 
-    local function updatePicker()
+    local function UpdatePicker()
         local swatch = _G.ColorPickerFrame.__swatch
         local r, g, b = _G.ColorPickerFrame:GetColorRGB()
         local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
         swatch.tex:SetVertexColor(r, g, b)
         swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
         F.UpdateCustomClassColors()
-        F.UNITFRAME:UpdateColors()
     end
 
-    local function cancelPicker()
+    local function CancelPicker()
         local swatch = _G.ColorPickerFrame.__swatch
         local r, g, b = ColorPicker_GetPreviousValues()
         local colorStr = format('ff%02x%02x%02x', r * 255, g * 255, b * 255)
@@ -2009,12 +2176,12 @@ do
         swatch.color.r, swatch.color.g, swatch.color.b, swatch.color.colorStr = r, g, b, colorStr
     end
 
-    local function openColorPicker(self)
+    local function OpenColorPicker(self)
         local r, g, b, colorStr = self.color.r, self.color.g, self.color.b, self.color.colorStr
         _G.ColorPickerFrame.__swatch = self
-        _G.ColorPickerFrame.func = updatePicker
+        _G.ColorPickerFrame.func = UpdatePicker
         _G.ColorPickerFrame.previousValues = {r = r, g = g, b = b, colorStr = colorStr}
-        _G.ColorPickerFrame.cancelFunc = cancelPicker
+        _G.ColorPickerFrame.cancelFunc = CancelPicker
         _G.ColorPickerFrame:SetColorRGB(r, g, b)
         _G.ColorPickerFrame:Show()
     end
@@ -2027,7 +2194,7 @@ do
         return r, g, b
     end
 
-    local function resetColorPicker(swatch)
+    local function ResetColorPicker(swatch)
         local defaultColor = swatch.__default
         if defaultColor then
             _G.ColorPickerFrame:SetColorRGB(defaultColor.r, defaultColor.g, defaultColor.b)
@@ -2040,7 +2207,7 @@ do
         local swatch = CreateFrame('Button', nil, self, 'BackdropTemplate')
         swatch:SetSize(20, 12)
         swatch.bg = F.CreateBDFrame(swatch, 1)
-        swatch.bg:SetBackdropBorderColor(.2, .2, .2)
+        F.CreateSD(swatch.bg, .25)
         swatch.text = F.CreateFS(swatch, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT', 24, 0)
         local tex = swatch:CreateTexture()
         tex:SetInside(swatch, 2, 2)
@@ -2050,13 +2217,13 @@ do
 
         swatch.tex = tex
         swatch.color = color
-        swatch:SetScript('OnClick', openColorPicker)
-        swatch:SetScript('OnDoubleClick', resetColorPicker)
+        swatch:SetScript('OnClick', OpenColorPicker)
+        swatch:SetScript('OnDoubleClick', ResetColorPicker)
 
         return swatch
     end
 
-    local function updateSliderEditBox(self)
+    local function UpdateSliderEditBox(self)
         local slider = self.__owner
         local minValue, maxValue = slider:GetMinMaxValues()
         local text = tonumber(self:GetText())
@@ -2070,7 +2237,7 @@ do
         self:ClearFocus()
     end
 
-    local function resetSliderValue(self)
+    local function ResetSliderValue(self)
         local slider = self.__owner
         if slider.__default then
             slider:SetValue(slider.__default)
@@ -2103,12 +2270,12 @@ do
         slider.value:SetJustifyH('CENTER')
         slider.value:SetFont(C.Assets.Fonts.Regular, 11)
         slider.value.__owner = slider
-        slider.value:SetScript('OnEnterPressed', updateSliderEditBox)
+        slider.value:SetScript('OnEnterPressed', UpdateSliderEditBox)
 
         slider.clicker = CreateFrame('Button', nil, slider)
         slider.clicker:SetAllPoints(slider.Text)
         slider.clicker.__owner = slider
-        slider.clicker:SetScript('OnDoubleClick', resetSliderValue)
+        slider.clicker:SetScript('OnDoubleClick', ResetSliderValue)
 
         return slider
     end

@@ -3,7 +3,7 @@ local select = select
 local unpack = unpack
 local IsAddOnLoaded = IsAddOnLoaded
 
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local THEME = F.THEME
 
 function THEME:ReskinABP()

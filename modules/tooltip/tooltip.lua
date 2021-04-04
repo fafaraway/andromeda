@@ -69,7 +69,7 @@ function TOOLTIP:GetTarget(unit)
 	if UnitIsUnit(unit, 'player') then
 		return format('|cffff0000%s|r', '>' .. strupper(YOU) .. '<')
 	else
-		return F.RGBToHex(F.UnitColor(unit)) .. UnitName(unit) .. '|r'
+		return F:RGBToHex(F.UnitColor(unit)) .. UnitName(unit) .. '|r'
 	end
 end
 
@@ -88,7 +88,7 @@ function TOOLTIP:OnTooltipSetUnit()
 	local isShiftKeyDown = IsShiftKeyDown()
 	if UnitExists(unit) then
 		self.tipUnit = unit
-		local hexColor = F.RGBToHex(F.UnitColor(unit))
+		local hexColor = F:RGBToHex(F.UnitColor(unit))
 		local ricon = GetRaidTargetIndex(unit)
 		local text = GameTooltipTextLeft1:GetText()
 		if ricon and ricon > 8 then
@@ -165,7 +165,7 @@ function TOOLTIP:OnTooltipSetUnit()
 
 			local diff = GetCreatureDifficultyColor(level)
 			local classify = UnitClassification(unit)
-			local textLevel = format('%s%s%s|r', F.RGBToHex(diff), boss or format('%d', level), classification[classify] or '')
+			local textLevel = format('%s%s%s|r', F:RGBToHex(diff), boss or format('%d', level), classification[classify] or '')
 			local tiptextLevel = TOOLTIP.GetLevelLine(self)
 			if tiptextLevel then
 				local pvpFlag = isPlayer and UnitIsPVP(unit) and format(' |cffff0000%s|r', PVP) or ''
@@ -209,7 +209,9 @@ function TOOLTIP:GameTooltip_OnUpdate(elapsed)
 		self:Hide()
 		return
 	end
-	self:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65)
+    local color = _G.FREE_ADB.BackdropColor
+    local alpha = _G.FREE_ADB.BackdropAlpha
+	self:SetBackdropColor(color.r, color.g, color.b, alpha)
 	self.tipUpdate = 0
 end
 
@@ -301,7 +303,7 @@ function TOOLTIP:ScanTargets()
 	for i = 1, GetNumGroupMembers() do
 		local member = (IsInRaid() and 'raid' .. i or 'party' .. i)
 		if UnitIsUnit(unit, member .. 'target') and not UnitIsUnit('player', member) and not UnitIsDeadOrGhost(member) then
-			local color = F.RGBToHex(F.UnitColor(member))
+			local color = F:RGBToHex(F.UnitColor(member))
 			local name = color .. UnitName(member) .. '|r'
 			tinsert(targetTable, name)
 		end
@@ -374,7 +376,9 @@ local function __GetBackdrop()
 	return fakeBg:GetBackdrop()
 end
 local function __GetBackdropColor()
-	return C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65
+    local color = _G.FREE_ADB.BackdropColor
+    local alpha = _G.FREE_ADB.BackdropAlpha
+	return color.r, color.g, color.b, alpha
 end
 local function __GetBackdropBorderColor()
 	return 0, 0, 0
@@ -414,7 +418,9 @@ function TOOLTIP:ReskinTooltip()
 		self.tipStyled = true
 	end
 
-	self.bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .65)
+    local color = _G.FREE_ADB.BackdropColor
+    local alpha = _G.FREE_ADB.BackdropAlpha
+	self.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
 	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	if self.bg.__shadow then
 		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)

@@ -14,7 +14,7 @@ local function GetBestScale()
 end
 
 function F:SetupUIScale(init)
-    local scale = GetBestScale() * _G.FREE_ADB.ui_scale
+    local scale = GetBestScale() * _G.FREE_ADB.UIScale
 
     if init then
         local pixel = 1
@@ -47,6 +47,9 @@ F:RegisterEvent('PLAYER_LOGIN', function()
     if C.DB.installation.complete then
         F:SetupUIScale()
         F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
+
+        _G.Display_UseUIScale:Kill()
+        _G.Display_UIScaleSlider:Kill()
     else
         F:SetupUIScale(true)
     end

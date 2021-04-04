@@ -66,7 +66,7 @@ tags['free:healthpercentage'] = function(unit)
     end
 
     local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-    local r, g, b = F.ColorGradient(cur / max, unpack(OUF.colors.smooth))
+    local r, g, b = F:ColorGradient(cur / max, unpack(OUF.colors.smooth))
     r, g, b = r * 255, g * 255, b * 255
 
     if cur ~= max then
@@ -137,13 +137,13 @@ tags['free:color'] = function(unit)
     local r, g, b = UnitSelectionColor(unit, true)
 
     if UnitIsTapDenied(unit) then
-        return F.RGBToHex(OUF.colors.tapped)
+        return F:RGBToHex(OUF.colors.tapped)
     elseif UnitIsPlayer(unit) then
-        return F.RGBToHex(OUF.colors.class[class])
+        return F:RGBToHex(OUF.colors.class[class])
     elseif r then
-        return F.RGBToHex(r, g, b)
+        return F:RGBToHex(r, g, b)
     else
-        return F.RGBToHex(1, 1, 1)
+        return F:RGBToHex(1, 1, 1)
     end
 end
 tagEvents['free:color'] = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
@@ -153,7 +153,7 @@ tags['free:name'] = function(unit)
     local len = C.isChinses and C.DB.unitframe.ShortenLengthCN or C.DB.unitframe.ShortenLength
     local str = UnitName(unit)
     local abbrName = abbrName(str)
-    local shortenName = F.ShortenString(abbrName, len, true)
+    local shortenName = F:ShortenString(abbrName, len, true)
 
     if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
         return C.RedColor .. '<' .. YOU .. '>'
@@ -171,9 +171,9 @@ tags['free:groupname'] = function(unit)
 
     if groupName then
         if UnitInRaid('player') then
-            return F.ShortenString(str, len)
+            return F:ShortenString(str, len)
         else
-            return F.ShortenString(str, 4)
+            return F:ShortenString(str, 4)
         end
     else
         return ''
@@ -224,7 +224,7 @@ tags['free:tarname'] = function(unit)
     local tarUnit = unit .. 'target'
     if UnitExists(tarUnit) then
         local tarClass = select(2, UnitClass(tarUnit))
-        return F.RGBToHex(OUF.colors.class[tarClass]) .. UnitName(tarUnit)
+        return F:RGBToHex(OUF.colors.class[tarClass]) .. UnitName(tarUnit)
     end
 end
 tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH'

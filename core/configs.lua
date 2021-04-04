@@ -1137,8 +1137,8 @@ C.CharacterSettings = {
         CastbarCompleteColor = {r = .25, g = .63, b = .49},
         CastbarFailColor = {r = .73, g = .39, b = .43},
 
-        CastbarSpellName = true,
-        CastbarSpellTime = true,
+        CastbarSpellName = false,
+        CastbarSpellTime = false,
 
         CastbarPlayerWidth = 200,
         CastbarPlayerHeight = 16,
@@ -1273,6 +1273,7 @@ C.CharacterSettings = {
         HorizontalSpacing = .3,
 
     },
+
     ['tooltip'] = {
         ['enable'] = true,
         ['follow_cursor'] = false,
@@ -1344,6 +1345,9 @@ C.CharacterSettings = {
         ForceWarning = true,
         SmoothZooming = true,
         ActionCam = false,
+        CursorTrail = true,
+        Vignetting = true,
+        VignettingAlpha = .5,
     },
 
     ['chat'] = {
@@ -1427,24 +1431,27 @@ C.CharacterSettings = {
         ['BindType'] = 1,
     },
 
-    Quest = {Enable = true, Automation = false, CompleteSound = true},
+    Quest = {
+        Enable = true,
+        Automation = false,
+        CompleteSound = true
+    },
+
+
 }
 
 C.AccountSettings = {
-    ['detect_version'] = C.AddonVersion,
-    ['ui_scale'] = 1,
-    ['texture_style'] = 1,
-    ['number_format'] = 1,
+    DetectVersion = C.AddonVersion,
+    UIScale = 1,
 
-    CursorTrail = true,
-    Vignetting = true,
-    VignettingAlpha = .5,
-
-    ['font_outline'] = false,
-    ['reskin_blizz'] = true,
-    ['backdrop_alpha'] = .75,
-    ['shadow_border'] = true,
-
+    ShadowOutline = true,
+    BackdropColor = {r = .1, g = .1, b = .1},
+    BackdropAlpha = .75,
+    BorderColor = {r = .24, g = .24, b = .24},
+    ButtonBackdropColor = {r = .12, g = .12, b = .12},
+    ButtonBackdropAlhpa = .25,
+    GradientStyle = true,
+    ReskinBlizz = true,
     ReskinDBM = true,
     ReskinBigWigs = true,
     ReskinPremadeGroupsFilter = true,
@@ -1452,6 +1459,18 @@ C.AccountSettings = {
     ReskinActionBarProfiles = true,
     ReskinImmersion = true,
     ReskinREHack = true,
+
+    TextureStyle = 1,
+    NumberFormat = 1,
+
+
+
+    ['font_outline'] = false,
+
+
+
+
+
 
     ['chat_filter_black_list'] = '',
     ['chat_filter_white_list'] = '',
@@ -1545,10 +1564,10 @@ f:SetScript('OnEvent', function(self, _, addon)
 
     F:SetupUIScale(true)
 
-    if not GUI.TexturesList[_G.FREE_ADB.texture_style] then
-        _G.FREE_ADB.texture_style = 1 -- reset value if not exists
+    if not GUI.TexturesList[_G.FREE_ADB.TextureStyle] then
+        _G.FREE_ADB.TextureStyle = 1 -- reset value if not exists
     end
-    C.Assets.statusbar_tex = GUI.TexturesList[_G.FREE_ADB.texture_style].texture
+    C.Assets.statusbar_tex = GUI.TexturesList[_G.FREE_ADB.TextureStyle].texture
 
     self:UnregisterAllEvents()
 end)

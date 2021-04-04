@@ -1,8 +1,8 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
-	<Script file='debuffhighlight.lua'/>
-	<Script file='fader.lua'/>
-	<Script file='partywatcher.lua'/>
-	<Script file='raiddebuffs.lua'/>
-	<Script file='rangecheck.lua'/>
+    <Script file='debuffhighlight.lua'/>
+    <Script file='fader.lua'/>
+    <Script file='partywatcher.lua'/>
+    <Script file='raiddebuffs.lua'/>
+    <Script file='rangecheck.lua'/>
     <Script file='totems.lua'/>
 </Ui>

@@ -11,7 +11,7 @@ local function clearMinimize(f)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	local r, g, b = C.r, C.g, C.b
 

@@ -1196,7 +1196,7 @@ function GUI:SetupPartySpellCooldown(parent)
 
     local index = 1
     for class, value in pairs(C.PartySpellsDB) do
-        local color = F.RGBToHex(F.ClassColor(class))
+        local color = F:RGBToHex(F.ClassColor(class))
         local localClassName = LOCALIZED_CLASS_NAMES_MALE[class]
         menuList[index] = {
             text = color .. localClassName,

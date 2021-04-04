@@ -353,6 +353,7 @@ function MAP:Minimap()
 	backdrop:SetFrameStrata('BACKGROUND')
 	backdrop.bg = F.SetBD(backdrop)
 	backdrop.bg:SetBackdropColor(0, 0, 0, 1)
+    backdrop.bg:SetBackdropBorderColor(0, 0, 0, 1)
 	Minimap.backdrop = backdrop
 
 	Minimap:SetMaskTexture(C.Assets.mask_tex)

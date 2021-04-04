@@ -67,9 +67,6 @@ C.AssetsPath = 'Interface\\AddOns\\FreeUI\\assets\\'
 C.TexCoord = {.08, .92, .08, .92}
 C.UIGap = 33
 
-C.BackdropColor = {.1, .1, .1}
-C.BorderColor = {.04, .04, .04}
-C.GradientColor = {.04, .04, .04, .4, .08, .08, .08, .4}
 
 C.Assets = {
     ['norm_tex'] = C.AssetsPath .. 'textures\\norm_tex',

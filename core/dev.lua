@@ -84,7 +84,7 @@ SlashCmdList['UISCALECHECK'] = function()
 	F.Print('C.ScreenWidth '..C.ScreenWidth)
 	F.Print('C.ScreenHeight '..C.ScreenHeight)
 	F.Print('C.Mult '..C.Mult)
-	F.Print('uiScale '..FREE_ADB.ui_scale)
+	F.Print('uiScale '..FREE_ADB.UIScale)
 	F.Print('UIParentScale '..UIParent:GetScale())
 	print(C.LineString)
 end

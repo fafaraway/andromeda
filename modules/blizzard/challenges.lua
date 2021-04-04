@@ -44,7 +44,7 @@ function BLIZZARD:GuildBest_UpdateTooltip()
     _G.GameTooltip:SetText(name, 1, 1, 1)
     _G.GameTooltip:AddLine(format(CHALLENGE_MODE_POWER_LEVEL, leaderInfo.keystoneLevel))
     for i = 1, #leaderInfo.members do
-        local classColorStr = string.sub(F.RGBToHex(F.ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
+        local classColorStr = string.sub(F:RGBToHex(F.ClassColor(leaderInfo.members[i].classFileName)), 3, 10)
         _G.GameTooltip:AddLine(format(CHALLENGE_MODE_GUILD_BEST_LINE, classColorStr, leaderInfo.members[i].name))
     end
     _G.GameTooltip:Show()
@@ -93,7 +93,7 @@ function BLIZZARD:GuildBest_SetUp(leaderInfo)
         str = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
     end
 
-    local classColorStr = string.sub(F.RGBToHex(F.ClassColor(leaderInfo.classFileName)), 3, 10)
+    local classColorStr = string.sub(F:RGBToHex(F.ClassColor(leaderInfo.classFileName)), 3, 10)
     self.CharacterName:SetText(format(str, classColorStr, leaderInfo.name))
     self.Level:SetText(leaderInfo.keystoneLevel)
 end
@@ -190,7 +190,7 @@ function BLIZZARD:KeystoneInfo_Create()
         for name, info in pairs(_G.FREE_KEYSTONE) do
             local name = Ambiguate(name, 'none')
             local mapID, level, class, faction = strsplit(':', info)
-            local color = F.RGBToHex(F.ClassColor(class))
+            local color = F:RGBToHex(F.ClassColor(class))
             local factionColor = faction == 'Horde' and '|cffff5040' or '|cff00adf0'
             local dungeon = C_ChallengeMode_GetMapUIInfo(tonumber(mapID))
             _G.GameTooltip:AddDoubleLine(format(color .. '%s:|r', name), format('%s%s(%s)|r', factionColor, dungeon, level))

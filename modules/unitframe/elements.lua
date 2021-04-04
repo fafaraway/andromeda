@@ -416,7 +416,7 @@ local function PostUpdateAltPower(self, _, cur, _, max)
 
     if cur and max then
         local value = parent.AlternativePowerValue
-        local r, g, b = F.ColorGradient(cur / max, unpack(OUF.colors.smooth))
+        local r, g, b = F:ColorGradient(cur / max, unpack(OUF.colors.smooth))
 
         self:SetStatusBarColor(r, g, b)
         value:SetTextColor(r, g, b)
@@ -1088,7 +1088,7 @@ local function updateSpellTarget(self, unit)
         if UnitIsUnit(unitTarget, 'player') then
             nameString = format('|cffff0000%s|r', '>' .. strupper(YOU) .. '<')
         else
-            nameString = F.RGBToHex(F.UnitColor(unitTarget)) .. UnitName(unitTarget)
+            nameString = F:RGBToHex(F.UnitColor(unitTarget)) .. UnitName(unitTarget)
         end
         self.spellTarget:SetText(nameString)
     end
@@ -1099,8 +1099,6 @@ local function resetSpellTarget(self)
         self.spellTarget:SetText('')
     end
 end
-
-
 
 function UNITFRAME:PostCastStart(unit)
     local compact = C.DB.unitframe.CastbarCompact
@@ -1224,7 +1222,7 @@ function UNITFRAME:PostCastFailed()
     resetSpellTarget(self)
 end
 
-local function createBarMover(bar, text, value, anchor)
+local function CreateBarMover(bar, text, value, anchor)
     local mover = F.Mover(bar, text, value, anchor, bar:GetHeight() + bar:GetWidth() + 3, bar:GetHeight() + 3)
     bar:ClearAllPoints()
     bar:SetPoint('CENTER', mover)
@@ -1236,8 +1234,6 @@ local cbPosition = {
     target = {'LEFT', _G.UIParent, 'CENTER', 113, -152},
     focus = {'CENTER', _G.UIParent, 'CENTER', 0, 120},
 }
-
-
 
 function UNITFRAME:AddCastBar(self)
     if not C.DB.unitframe.EnableCastbar then
@@ -1299,21 +1295,21 @@ function UNITFRAME:AddCastBar(self)
     else
         if style == 'player' then
             castbar:SetSize(playerWidth, playerHeight)
-            createBarMover(castbar, L.MOVER.PLAYER_CASTBAR, 'PlayerCastbar', cbPosition.player)
+            CreateBarMover(castbar, L.MOVER.PLAYER_CASTBAR, 'PlayerCastbar', cbPosition.player)
 
-            icon:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
+            icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'target' then
             castbar:SetSize(targetWidth, targetHeight)
-            createBarMover(castbar, L.MOVER.TARGET_CASTBAR, 'TargetCastbar', cbPosition.target)
+            CreateBarMover(castbar, L.MOVER.TARGET_CASTBAR, 'TargetCastbar', cbPosition.target)
 
-            icon:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
+            icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'focus' then
             castbar:SetSize(focusWidth, focusHeight)
-            createBarMover(castbar, L.MOVER.FOCUS_CASTBAR, 'FocusCastbar', cbPosition.focus)
+            CreateBarMover(castbar, L.MOVER.FOCUS_CASTBAR, 'FocusCastbar', cbPosition.focus)
 
-            icon:SetSize(castbar:GetHeight() + 4, castbar:GetHeight() + 4)
+            icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         elseif style == 'nameplate' then
             castbar:SetSize(self:GetWidth(), 4)

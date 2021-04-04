@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	F.SetBD(TutorialFrame)
 
@@ -28,6 +28,6 @@ tinsert(C.BlizzThemes, function()
 	TutorialFramePrevButton:SetScript("OnEnter", nil)
 	TutorialFrameNextButton:SetScript("OnEnter", nil)
 	TutorialFrameOkayButton.__bg:SetBackdropColor(0, 0, 0, .25)
-	TutorialFramePrevButton.__bg:SetBackdropColor(0, 0, 0, .25)
-	TutorialFrameNextButton.__bg:SetBackdropColor(0, 0, 0, .25)
+	--TutorialFramePrevButton.__bg:SetBackdropColor(0, 0, 0, .25)
+	--TutorialFrameNextButton.__bg:SetBackdropColor(0, 0, 0, .25)
 end)

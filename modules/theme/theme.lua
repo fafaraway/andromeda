@@ -16,7 +16,7 @@ function THEME:LoadDefaultSkins()
     end
     wipe(C.BlizzThemes)
 
-    if not _G.FREE_ADB.reskin_blizz then
+    if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
@@ -48,9 +48,9 @@ end
 
 function THEME:LoadWithAddOn(addonName, value, func)
     local function loadFunc(event, addon)
-        if not _G.FREE_ADB[value] then
-            return
-        end
+        -- if not _G.FREE_ADB[value] then
+        --     return
+        -- end
 
         if event == 'PLAYER_ENTERING_WORLD' then
             F:UnregisterEvent(event, loadFunc)

@@ -119,14 +119,6 @@ local function ReskinProgress(self)
 end
 
 local function ReskinImmersion()
-    if not _G.FREE_ADB.ReskinImmersion then
-        return
-    end
-
-    if not IsAddOnLoaded('Immersion') then
-        return
-    end
-
     local cr, cg, cb = C.r, C.g, C.b
 
     local talkBox = _G.ImmersionFrame.TalkBox

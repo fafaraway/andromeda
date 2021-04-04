@@ -30,7 +30,7 @@ local function replaceGossipText(button, text)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	QuestFont:SetTextColor(1, 1, 1)
 	GossipGreetingText:SetTextColor(1, 1, 1)

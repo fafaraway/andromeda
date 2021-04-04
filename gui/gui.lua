@@ -120,53 +120,45 @@ end
 
 local function SelectTab(i)
     local r, g, b = C.r, C.g, C.b
+    local color = _G.FREE_ADB.ButtonBackdropColor
+    local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
 
     for num = 1, #tabsList do
         if num == i then
-            guiTab[num].__gradient:SetGradientAlpha('Vertical', r / 2, g / 2, b / 2, .4, r / 4, g / 4, b / 4, .4)
+            guiTab[num].__gradient:SetVertexColor(r / 2, g / 2, b / 2, .6)
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
-            guiTab[num].__gradient:SetGradientAlpha('Vertical', unpack(C.GradientColor))
+            guiTab[num].__gradient:SetVertexColor(color.r, color.g, color.b, alpha)
             guiTab[num].checked = false
             guiPage[num]:Hide()
         end
     end
 end
 
-local function tabOnClick(self)
+local function Tab_OnClick(self)
     PlaySound(SOUNDKIT_GS_TITLE_OPTION_OK)
     SelectTab(self.index)
 end
 
-local function tabOnEnter(self)
+local function Tab_OnEnter(self)
     if self.checked then
         return
     end
-    self.__bg:SetBackdropColor(cr, cg, cb, .25)
 end
 
-local function tabOnLeave(self)
+local function Tab_OnLeave(self)
     if self.checked then
         return
     end
-    self.__bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], .25)
 end
 
 local function CreateTab(parent, i, name)
     local tab = CreateFrame('Button', nil, parent, 'BackdropTemplate')
     tab:SetSize(140, 26)
     F.Reskin(tab)
-
     tab.index = i
-
-    -- if tab.index >= 15 then
-    -- 	tab:SetPoint('TOPLEFT', 10, -31*i - 30)
-    -- else
     tab:SetPoint('TOPLEFT', 10, -31 * i - 20)
-    -- end
-
-    -- parent[name] = tab
 
     tab.icon = tab:CreateTexture(nil, 'OVERLAY')
     tab.icon:SetSize(20, 20)
@@ -177,9 +169,9 @@ local function CreateTab(parent, i, name)
     tab.text = F.CreateFS(tab, C.Assets.Fonts.Bold, 13, 'OUTLINE', name, nil, true)
     tab.text:SetPoint('LEFT', tab.icon, 'RIGHT', 6, 0)
 
-    tab:HookScript('OnEnter', tabOnEnter)
-    tab:HookScript('OnLeave', tabOnLeave)
-    tab:HookScript('OnClick', tabOnClick)
+    tab:HookScript('OnEnter', Tab_OnEnter)
+    tab:HookScript('OnLeave', Tab_OnLeave)
+    tab:HookScript('OnClick', Tab_OnClick)
 
     return tab
 end
@@ -280,10 +272,11 @@ local function CreateOption(i)
             s.value:SetText(F:Round(UpdateValue(key, value), 2))
 
             if tip then
+                s.title = name
                 F.AddTooltip(s, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 4 then -- dropdown
-            if value == 'texture_style' then
+            if value == 'TextureStyle' then
                 for _, v in ipairs(GUI.TexturesList) do
                     tinsert(data, v.name)
                 end
@@ -318,7 +311,7 @@ local function CreateOption(i)
                         callback()
                     end
                 end)
-                if value == 'texture_style' then
+                if value == 'TextureStyle' then
                     AddTextureToOption(opt, i) -- texture preview
                 end
             end
@@ -447,7 +440,7 @@ function GUI:OnLogin()
     local bu = CreateFrame('Button', 'GameMenuFrameFreeUI', _G.GameMenuFrame, 'GameMenuButtonTemplate')
     bu:SetText(C.AddonName)
     bu:SetPoint('TOP', _G.GameMenuButtonAddons, 'BOTTOM', 0, -14)
-    if _G.FREE_ADB.reskin_blizz then
+    if _G.FREE_ADB.ReskinBlizz then
         F.Reskin(bu)
     end
 

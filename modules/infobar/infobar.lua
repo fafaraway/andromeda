@@ -120,7 +120,9 @@ function INFOBAR:addButton(text, position, width, clickFunc)
 	bu:SetPoint('TOP', bar, 'TOP')
 	bu:SetPoint('BOTTOM', bar, 'BOTTOM')
 	bu:SetWidth(width)
-	F.CreateBD(bu, .1)
+	F.CreateBD(bu)
+    bu:SetBackdropColor(0, 0, 0, .1)
+    bu:SetBackdropBorderColor(0, 0, 0, 0)
 
 	if C.DB.infobar.mouseover then
 		bu:SetAlpha(0)
@@ -166,6 +168,8 @@ function INFOBAR:OnLogin()
 	bar:SetFrameStrata('BACKGROUND')
 	bar:SetHeight(C.DB.infobar.bar_height)
 	bar.bg = F.CreateBDFrame(bar, barAlpha)
+    bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    bar.bg:SetBackdropBorderColor(0, 0, 0, 0)
 
 	RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 

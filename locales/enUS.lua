@@ -74,7 +74,6 @@ L.BLIZZARD = {
 --[[ Misc ]]
 
 do
-    L['MISC_NUMBER_CAP'] = {'万', '亿', '兆'}
 
     L['MISC_REPUTATION'] = '声望'
     L['MISC_PARAGON'] = '巅峰'
@@ -440,22 +439,37 @@ L.GUI = {
         ACTION_CAM_TIP = '|nEnable blizzard action camera.',
     },
 
-    ['APPEARANCE'] = {
-        ['NAME'] = 'Appearance',
-        ['CURSOR_TRAIL'] = 'Cursor trail',
-        ['RESKIN_BLIZZ'] = 'Restyle blizzard frames',
-        ['VIGNETTING'] = 'Vignetting',
-        ['BACKDROP_ALPHA'] = 'Backdrop alpha',
-        ['VIGNETTING_ALPHA'] = 'Vignetting alpha',
-        ['SHADOW_BORDER'] = 'Shadow border',
-        ['UI_SCALE'] = 'UI Scale',
-        ['UI_SCALE_TIP'] = 'Adjust global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.',
-        ['RESKIN_DBM'] = 'Restyle DBM bars',
-        ['RESKIN_PGF'] = 'Restyle PGF pane',
-        ['BACKDROP_COLOR'] = 'Backdrop color',
-        ['BORDER_COLOR'] = 'Border color',
-        ['RESKIN_WA'] = 'Restyle WeakAuras icons',
-        ['RESKIN_BW'] = 'Restyle BigWigs bars',
+    APPEARANCE = {
+        NAME = 'Appearance',
+        SHADOW_OUTLINE = 'Shadow outline',
+        SHADOW_OUTLINE_TIP = '|nEnable shadow outline around UI elements.',
+        GRADIENT_STYLE = 'Gradient style',
+        GRADIENT_STYLE_TIP = '|nUI widget like buttons use gradient style.',
+        RESKIN_BLIZZ = 'Restyle blizzard frames',
+        RESKIN_BLIZZ_TIP = '|nEnable styling blizzard frames.',
+        BACKDROP_COLOR = 'Backdrop color',
+        BORDER_COLOR = 'Border color',
+        BUTTON_BACKDROP_COLOR = 'Button backdrop color',
+        BUTTON_BACKDROP_ALHPA = 'Button Backdrop Alpha',
+        BUTTON_BACKDROP_ALHPA_TIP = '|nAdjust buttons backdrop alpha.',
+        BACKDROP_ALPHA = 'Backdrop Alpha',
+        BACKDROP_ALPHA_TIP = '|nAdjust UI elements backdrop alpha.',
+        RESKIN_DBM = 'Restyle DBM',
+        RESKIN_DBM_TIP = '|nEnable styling DBM timer bars.',
+        RESKIN_PGF = 'Restyle PremadeGroupsFilter',
+        RESKIN_PGF_TIP = '|nEnable styling PremadeGroupsFilter pane.',
+        RESKIN_WA = 'Restyle WeakAuras',
+        RESKIN_WA_TIP = '|nEnable styling WeakAuras icons.',
+        RESKIN_BW = 'Restyle BigWigs',
+        RESKIN_BW_TIP = '|nEnable styling BigWigs timer bars.',
+        RESKIN_IMMERSION = 'Restyle Immersion',
+        RESKIN_IMMERSION_TIP = '|nEnable styling Immersion pane.',
+        RESKIN_ABP = 'Restyle ActionBarProfiles',
+        RESKIN_ABP_TIP = '|nEnable styling ActionBarProfiles pane.',
+        RESKIN_REHACK = 'Restyle REHack',
+        RESKIN_REHACK_TIP = '|nEnable styling REHack pane.',
+        UI_SCALE = 'UI Scale',
+        UI_SCALE_TIP = '|nAdjust global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.',
     },
 
     ['NOTIFICATION'] = {

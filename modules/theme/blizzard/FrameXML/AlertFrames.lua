@@ -2,11 +2,13 @@ local F, C = unpack(select(2, ...))
 
 -- Fix Alertframe bg
 local function fixBg(frame)
+    local color = _G.FREE_ADB.BackdropColor
+    local alpha = _G.FREE_ADB.BackdropAlpha
 	if frame:IsObjectType("AnimationGroup") then
 		frame = frame:GetParent()
 	end
 	if frame.bg then
-		frame.bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], FREE_ADB.backdrop_alpha)
+		frame.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
 		if frame.bg.__shadow then
 			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
 		end
@@ -14,9 +16,11 @@ local function fixBg(frame)
 end
 
 local function fixParentbg(frame)
+    local color = _G.FREE_ADB.BackdropColor
+    local alpha = _G.FREE_ADB.BackdropAlpha
 	frame = frame:GetParent():GetParent()
 	if frame.bg then
-		frame.bg:SetBackdropColor(C.BackdropColor[1], C.BackdropColor[2], C.BackdropColor[3], FREE_ADB.backdrop_alpha)
+		frame.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
 		if frame.bg.__shadow then
 			frame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
 		end
@@ -42,7 +46,7 @@ local function fixAnim(frame)
 end
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	hooksecurefunc("AlertFrame_PauseOutAnimation", fixBg)
 

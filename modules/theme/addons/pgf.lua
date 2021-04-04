@@ -5,7 +5,7 @@ local pairs = pairs
 local IsAddOnLoaded = IsAddOnLoaded
 local hooksecurefunc = hooksecurefunc
 
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local THEME = F.THEME
 local TOOLTIP = F.TOOLTIP
 

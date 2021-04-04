@@ -118,7 +118,7 @@ function TOOLTIP:UpdateSpellCaster(...)
 	local unitCaster = select(7, UnitAura(...))
 	if unitCaster then
 		local name = GetUnitName(unitCaster, true)
-		local hexColor = F.RGBToHex(F.UnitColor(unitCaster))
+		local hexColor = F:RGBToHex(F.UnitColor(unitCaster))
 		self:AddDoubleLine(L['TOOLTIP_AURA_FROM'] .. ':', hexColor .. name)
 		self:Show()
 	end

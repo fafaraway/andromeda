@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
 tinsert(C.BlizzThemes, function()
-	if not FREE_ADB.reskin_blizz then return end
+	if not _G.FREE_ADB.ReskinBlizz then return end
 
 	GuildRegistrarFrameEditBox:SetHeight(20)
 	AvailableServicesText:SetTextColor(1, 1, 1)
