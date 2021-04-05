@@ -57,7 +57,37 @@ local EnumerateFrames = EnumerateFrames
 local F, C, L = unpack(select(2, ...))
 local assets = C.Assets
 
+--[[ Functions ]]
+
+do
+    function F:Dummy()
+        return
+    end
+
+    function F:MultiCheck(check, ...)
+        for i = 1, select('#', ...) do
+            if check == select(i, ...) then
+                return true
+            end
+        end
+        return false
+    end
+
+    function F:Print(...)
+        print(C.AddonName .. C.GreyColor .. ':|r', ...)
+    end
+
+    function F:Debug(...)
+        if not C.isDeveloper then
+            return
+        end
+
+        print('Debug: ', ...)
+    end
+end
+
 --[[ Math ]]
+
 do
     local numCap = {CHINESE = {'兆', '亿', '万'}}
 
@@ -281,12 +311,16 @@ do
     end
 
     function F:CooldownOnUpdate(elapsed, raw)
-        local formatTime = raw and F.FormatTimeRaw or F.FormatTime
         self.elapsed = (self.elapsed or 0) + elapsed
         if self.elapsed >= 0.1 then
             local timeLeft = self.expiration - GetTime()
             if timeLeft > 0 then
-                local text = formatTime(timeLeft)
+                local text
+                if raw then
+                    text = F:FormatTimeRaw(timeLeft)
+                else
+                    text = F:FormatTime(timeLeft)
+                end
                 self.timer:SetText(text)
             else
                 self:SetScript('OnUpdate', nil)
@@ -372,9 +406,13 @@ do
     end
 end
 
---[[ Color ]]
-do
+--[[ UI widgets ]]
 
+do
+    -- Dropdown menu
+    F.EasyMenu = CreateFrame('Frame', 'FreeUI_EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
+
+    -- Color
     function F:ClassColor(class)
         local color = C.ClassColors[class]
         if not color then
@@ -401,239 +439,6 @@ do
         end
         return r, g, b
     end
-
-end
-
---[[ Itemlevel ]]
-do
-    local iLvlDB = {}
-    local itemLevelString = gsub(ITEM_LEVEL, '%%d', '')
-    local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
-    local essenceTextureID = 2975691
-    local essenceDescription = GetSpellDescription(277253)
-    local tip = CreateFrame('GameTooltip', 'FreeUI_ScanTooltip', nil, 'GameTooltipTemplate')
-    F.ScanTip = tip
-
-    function F:InspectItemTextures()
-        if not tip.gems then
-            tip.gems = {}
-        else
-            wipe(tip.gems)
-        end
-
-        if not tip.essences then
-            tip.essences = {}
-        else
-            for _, essences in pairs(tip.essences) do
-                wipe(essences)
-            end
-        end
-
-        local step = 1
-        for i = 1, 10 do
-            local tex = _G[tip:GetName() .. 'Texture' .. i]
-            local texture = tex and tex:IsShown() and tex:GetTexture()
-            if texture then
-                if texture == essenceTextureID then
-                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or nil
-                    if not tip.essences[step] then
-                        tip.essences[step] = {}
-                    end
-                    tip.essences[step][1] = selected -- essence texture if selected or nil
-                    tip.essences[step][2] = tex:GetAtlas() -- atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
-                    tip.essences[step][3] = texture -- border texture placed by the atlas
-
-                    step = step + 1
-                    if selected then
-                        tip.gems[i - 1] = nil
-                    end
-                else
-                    tip.gems[i] = texture
-                end
-            end
-        end
-
-        return tip.gems, tip.essences
-    end
-
-    function F:InspectItemInfo(text, slotInfo)
-        local itemLevel = strfind(text, itemLevelString) and strmatch(text, '(%d+)%)?$')
-        if itemLevel then
-            slotInfo.iLvl = tonumber(itemLevel)
-        end
-
-        local enchant = strmatch(text, enchantString)
-        if enchant then
-            slotInfo.enchantText = enchant
-        end
-    end
-
-    function F:CollectEssenceInfo(index, lineText, slotInfo)
-        local step = 1
-        local essence = slotInfo.essences[step]
-        if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
-            for i = 4, 2, -1 do
-                local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
-                local text = line and line:GetText()
-
-                if text and (not strmatch(text, '^[ +]')) and essence and next(essence) then
-                    local r, g, b = line:GetTextColor()
-                    essence[4] = r
-                    essence[5] = g
-                    essence[6] = b
-
-                    step = step + 1
-                    essence = slotInfo.essences[step]
-                end
-            end
-        end
-    end
-
-    function F:GetItemLevel(link, arg1, arg2, fullScan)
-        if fullScan then
-            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            tip:SetInventoryItem(arg1, arg2)
-
-            if not tip.slotInfo then
-                tip.slotInfo = {}
-            else
-                wipe(tip.slotInfo)
-            end
-
-            local slotInfo = tip.slotInfo
-            slotInfo.gems, slotInfo.essences = F:InspectItemTextures()
-
-            for i = 1, tip:NumLines() do
-                local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if line then
-                    local text = line:GetText() or ''
-                    F:InspectItemInfo(text, slotInfo)
-                    F:CollectEssenceInfo(i, text, slotInfo)
-                end
-            end
-
-            return slotInfo
-        else
-            if iLvlDB[link] then
-                return iLvlDB[link]
-            end
-
-            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            if arg1 and type(arg1) == 'string' then
-                tip:SetInventoryItem(arg1, arg2)
-            elseif arg1 and type(arg1) == 'number' then
-                tip:SetBagItem(arg1, arg2)
-            else
-                tip:SetHyperlink(link)
-            end
-
-            local firstLine = _G.FreeUI_ScanTooltipTextLeft1:GetText()
-            if firstLine == RETRIEVING_ITEM_INFO then
-                return 'tooSoon'
-            end
-
-            for i = 2, 5 do
-                local line = _G[tip:GetName() .. 'TextLeft' .. i]
-                if line then
-                    local text = line:GetText() or ''
-                    local found = strfind(text, itemLevelString)
-                    if found then
-                        local level = strmatch(text, '(%d+)%)?$')
-                        iLvlDB[link] = tonumber(level)
-                        break
-                    end
-                end
-            end
-
-            return iLvlDB[link]
-        end
-    end
-end
-
---[[ Kill regions ]]
-do
-    function F:Dummy()
-        return
-    end
-
-    F.HiddenFrame = CreateFrame('Frame')
-    F.HiddenFrame:Hide()
-
-    function F:HideObject()
-        if self.UnregisterAllEvents then
-            self:UnregisterAllEvents()
-            self:SetParent(F.HiddenFrame)
-        else
-            self.Show = self.Hide
-        end
-        self:Hide()
-    end
-
-    function F:HideOption()
-        self:SetAlpha(0)
-        self:SetScale(.0001)
-    end
-
-    local blizzTextures = {
-        'Inset',
-        'inset',
-        'InsetFrame',
-        'LeftInset',
-        'RightInset',
-        'NineSlice',
-        'BG',
-        'border',
-        'Border',
-        'Background',
-        'BorderFrame',
-        'bottomInset',
-        'BottomInset',
-        'bgLeft',
-        'bgRight',
-        'FilligreeOverlay',
-        'PortraitOverlay',
-        'ArtOverlayFrame',
-        'Portrait',
-        'portrait',
-        'ScrollFrameBorder',
-        'ScrollUpBorder',
-        'ScrollDownBorder',
-    }
-
-    function F:StripTextures(kill)
-        local frameName = self.GetName and self:GetName()
-        for _, texture in pairs(blizzTextures) do
-            local blizzFrame = self[texture] or (frameName and _G[frameName .. texture])
-            if blizzFrame then
-                F.StripTextures(blizzFrame, kill)
-            end
-        end
-
-        if self.GetNumRegions then
-            for i = 1, self:GetNumRegions() do
-                local region = select(i, self:GetRegions())
-                if region and region.IsObjectType and region:IsObjectType('Texture') then
-                    if kill and type(kill) == 'boolean' then
-                        F.HideObject(region)
-                    elseif tonumber(kill) then
-                        if kill == 0 then
-                            region:SetAlpha(0)
-                        elseif i ~= kill then
-                            region:SetTexture('')
-                        end
-                    else
-                        region:SetTexture('')
-                    end
-                end
-            end
-        end
-    end
-end
-
---[[ UI widgets ]]
-do
-    -- Dropdown menu
-    F.EasyMenu = CreateFrame('Frame', 'FreeUI_EasyMenu', _G.UIParent, 'UIDropDownMenuTemplate')
 
     -- Fontstring
     function F:CreateFS(font, size, flag, text, colour, shadow, anchor, x, y)
@@ -1004,7 +809,82 @@ do
 end
 
 --[[ UI skins ]]
+
 do
+    -- Kill regions
+    F.HiddenFrame = CreateFrame('Frame')
+    F.HiddenFrame:Hide()
+
+    function F:HideObject()
+        if self.UnregisterAllEvents then
+            self:UnregisterAllEvents()
+            self:SetParent(F.HiddenFrame)
+        else
+            self.Show = self.Hide
+        end
+        self:Hide()
+    end
+
+    function F:HideOption()
+        self:SetAlpha(0)
+        self:SetScale(.0001)
+    end
+
+    local blizzTextures = {
+        'Inset',
+        'inset',
+        'InsetFrame',
+        'LeftInset',
+        'RightInset',
+        'NineSlice',
+        'BG',
+        'border',
+        'Border',
+        'Background',
+        'BorderFrame',
+        'bottomInset',
+        'BottomInset',
+        'bgLeft',
+        'bgRight',
+        'FilligreeOverlay',
+        'PortraitOverlay',
+        'ArtOverlayFrame',
+        'Portrait',
+        'portrait',
+        'ScrollFrameBorder',
+        'ScrollUpBorder',
+        'ScrollDownBorder',
+    }
+
+    function F:StripTextures(kill)
+        local frameName = self.GetName and self:GetName()
+        for _, texture in pairs(blizzTextures) do
+            local blizzFrame = self[texture] or (frameName and _G[frameName .. texture])
+            if blizzFrame then
+                F.StripTextures(blizzFrame, kill)
+            end
+        end
+
+        if self.GetNumRegions then
+            for i = 1, self:GetNumRegions() do
+                local region = select(i, self:GetRegions())
+                if region and region.IsObjectType and region:IsObjectType('Texture') then
+                    if kill and type(kill) == 'boolean' then
+                        F.HideObject(region)
+                    elseif tonumber(kill) then
+                        if kill == 0 then
+                            region:SetAlpha(0)
+                        elseif i ~= kill then
+                            region:SetTexture('')
+                        end
+                    else
+                        region:SetTexture('')
+                    end
+                end
+            end
+        end
+    end
+
     -- Handle icons
     function F:ReskinIcon(shadow)
         self:SetTexCoord(unpack(C.TexCoord))
@@ -1145,7 +1025,7 @@ do
         local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
 
         self.__bg:SetBackdropColor(C.r, C.g, C.b, alpha)
-        self.__bg:SetBackdropBorderColor(C.r, C.g, C.b, 1)
+        self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
     local function Button_OnLeave(self)
@@ -1154,7 +1034,7 @@ do
         local borderColor = _G.FREE_ADB.BorderColor
 
         self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b, 1)
+        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
     end
 
     local blizzRegions = {
@@ -1363,12 +1243,16 @@ do
     -- Handle close button
     function F:Texture_OnEnter()
         if self:IsEnabled() then
-            self.__texture:SetVertexColor(C.r, C.g, C.b)
+            if self.__texture then
+                self.__texture:SetVertexColor(C.r, C.g, C.b)
+            end
         end
     end
 
     function F:Texture_OnLeave()
-        self.__texture:SetVertexColor(1, 1, 1)
+        if self.__texture then
+            self.__texture:SetVertexColor(1, 1, 1)
+        end
     end
 
     function F:ReskinClose(parent, xOffset, yOffset)
@@ -1846,123 +1730,8 @@ do
     end
 end
 
---[[ Smooth ]]
-do
-    local activeObjects, handledObjects = {}, {}
-    local targetFPS, amount = 60, .33
-
-    local function Clamp(v, min, max)
-        min = min or 0
-        max = max or 1
-        v = tonumber(v)
-
-        if v > max then
-            return max
-        elseif v < min then
-            return min
-        end
-
-        return v
-    end
-
-    local function IsCloseEnough(new, target, range)
-        if range > 0 then
-            return abs((new - target) / range) <= .001
-        end
-
-        return true
-    end
-
-    local smoothframe = CreateFrame('Frame')
-
-    local function Bar_OnUpdate(_, elapsed)
-        for object, target in next, activeObjects do
-            local new = Lerp(object._value, target, Clamp(amount * elapsed * targetFPS))
-            if IsCloseEnough(new, target, object._max - object._min) then
-                new = target
-                activeObjects[object] = nil
-            end
-
-            object:SetValue_(new)
-            object._value = new
-        end
-    end
-
-    local function Bar_SetSmoothedValue(self, value)
-        self._value = self:GetValue()
-        activeObjects[self] = Clamp(value, self._min, self._max)
-    end
-
-    local function Bar_SetSmoothedMinMaxValues(self, min, max)
-        self:SetMinMaxValues_(min, max)
-
-        if self._max and self._max ~= max then
-            local ratio = 1
-            if max ~= 0 and self._max and self._max ~= 0 then
-                ratio = max / (self._max or max)
-            end
-
-            local target = activeObjects[self]
-            if target then
-                activeObjects[self] = target * ratio
-            end
-
-            local cur = self._value
-            if cur then
-                self:SetValue_(cur * ratio)
-                self._value = cur * ratio
-            end
-        end
-
-        self._min = min
-        self._max = max
-    end
-
-    function F:SmoothBar(bar)
-        bar._min, bar._max = bar:GetMinMaxValues()
-        bar._value = bar:GetValue()
-
-        bar.SetValue_ = bar.SetValue
-        bar.SetMinMaxValues_ = bar.SetMinMaxValues
-        bar.SetValue = Bar_SetSmoothedValue
-        bar.SetMinMaxValues = Bar_SetSmoothedMinMaxValues
-
-        handledObjects[bar] = true
-
-        if not smoothframe:GetScript('OnUpdate') then
-            smoothframe:SetScript('OnUpdate', Bar_OnUpdate)
-        end
-    end
-
-    function F:DesmoothBar(bar)
-        if activeObjects[bar] then
-            bar:SetValue_(activeObjects[bar])
-            activeObjects[bar] = nil
-        end
-
-        if bar.SetValue_ then
-            bar.SetValue = bar.SetValue_
-            bar.SetValue_ = nil
-        end
-
-        if bar.SetMinMaxValues_ then
-            bar.SetMinMaxValues = bar.SetMinMaxValues_
-            bar.SetMinMaxValues_ = nil
-        end
-
-        handledObjects[bar] = nil
-
-        if not next(handledObjects) then
-            smoothframe:SetScript('OnUpdate', nil)
-        end
-    end
-
-    function F:SetSmoothingAmount(sum)
-        amount = Clamp(sum, .15, .6)
-    end
-end
-
 --[[ GUI elements ]]
+
 do
     function F:CreateHelpInfo(tooltip)
         local bu = CreateFrame('Button', nil, self)
@@ -2285,6 +2054,7 @@ do
 end
 
 --[[ Add APIs ]]
+
 do
     function F:SetPointsRestricted(frame)
         if frame and not pcall(frame.GetPoint, frame) then
@@ -2573,25 +2343,266 @@ do
     end
 end
 
+--[[ Itemlevel ]]
+
 do
-    function F:MultiCheck(check, ...)
-        for i = 1, select('#', ...) do
-            if check == select(i, ...) then
-                return true
+    local iLvlDB = {}
+    local itemLevelString = gsub(ITEM_LEVEL, '%%d', '')
+    local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
+    local essenceTextureID = 2975691
+    local essenceDescription = GetSpellDescription(277253)
+    local tip = CreateFrame('GameTooltip', 'FreeUI_ScanTooltip', nil, 'GameTooltipTemplate')
+    F.ScanTip = tip
+
+    function F:InspectItemTextures()
+        if not tip.gems then
+            tip.gems = {}
+        else
+            wipe(tip.gems)
+        end
+
+        if not tip.essences then
+            tip.essences = {}
+        else
+            for _, essences in pairs(tip.essences) do
+                wipe(essences)
             end
         end
-        return false
-    end
 
-    function F:Print(...)
-        print(C.AddonName .. C.GreyColor .. ':|r', ...)
-    end
+        local step = 1
+        for i = 1, 10 do
+            local tex = _G[tip:GetName() .. 'Texture' .. i]
+            local texture = tex and tex:IsShown() and tex:GetTexture()
+            if texture then
+                if texture == essenceTextureID then
+                    local selected = (tip.gems[i - 1] ~= essenceTextureID and tip.gems[i - 1]) or nil
+                    if not tip.essences[step] then
+                        tip.essences[step] = {}
+                    end
+                    tip.essences[step][1] = selected -- essence texture if selected or nil
+                    tip.essences[step][2] = tex:GetAtlas() -- atlas place 'tooltip-heartofazerothessence-major' or 'tooltip-heartofazerothessence-minor'
+                    tip.essences[step][3] = texture -- border texture placed by the atlas
 
-    function F:Debug(...)
-        if not C.isDeveloper then
-            return
+                    step = step + 1
+                    if selected then
+                        tip.gems[i - 1] = nil
+                    end
+                else
+                    tip.gems[i] = texture
+                end
+            end
         end
 
-        print('Debug: ', ...)
+        return tip.gems, tip.essences
+    end
+
+    function F:InspectItemInfo(text, slotInfo)
+        local itemLevel = strfind(text, itemLevelString) and strmatch(text, '(%d+)%)?$')
+        if itemLevel then
+            slotInfo.iLvl = tonumber(itemLevel)
+        end
+
+        local enchant = strmatch(text, enchantString)
+        if enchant then
+            slotInfo.enchantText = enchant
+        end
+    end
+
+    function F:CollectEssenceInfo(index, lineText, slotInfo)
+        local step = 1
+        local essence = slotInfo.essences[step]
+        if essence and next(essence) and (strfind(lineText, ITEM_SPELL_TRIGGER_ONEQUIP, nil, true) and strfind(lineText, essenceDescription, nil, true)) then
+            for i = 4, 2, -1 do
+                local line = _G[tip:GetName() .. 'TextLeft' .. index - i]
+                local text = line and line:GetText()
+
+                if text and (not strmatch(text, '^[ +]')) and essence and next(essence) then
+                    local r, g, b = line:GetTextColor()
+                    essence[4] = r
+                    essence[5] = g
+                    essence[6] = b
+
+                    step = step + 1
+                    essence = slotInfo.essences[step]
+                end
+            end
+        end
+    end
+
+    function F:GetItemLevel(link, arg1, arg2, fullScan)
+        if fullScan then
+            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+            tip:SetInventoryItem(arg1, arg2)
+
+            if not tip.slotInfo then
+                tip.slotInfo = {}
+            else
+                wipe(tip.slotInfo)
+            end
+
+            local slotInfo = tip.slotInfo
+            slotInfo.gems, slotInfo.essences = F:InspectItemTextures()
+
+            for i = 1, tip:NumLines() do
+                local line = _G[tip:GetName() .. 'TextLeft' .. i]
+                if line then
+                    local text = line:GetText() or ''
+                    F:InspectItemInfo(text, slotInfo)
+                    F:CollectEssenceInfo(i, text, slotInfo)
+                end
+            end
+
+            return slotInfo
+        else
+            if iLvlDB[link] then
+                return iLvlDB[link]
+            end
+
+            tip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
+            if arg1 and type(arg1) == 'string' then
+                tip:SetInventoryItem(arg1, arg2)
+            elseif arg1 and type(arg1) == 'number' then
+                tip:SetBagItem(arg1, arg2)
+            else
+                tip:SetHyperlink(link)
+            end
+
+            local firstLine = _G.FreeUI_ScanTooltipTextLeft1:GetText()
+            if firstLine == RETRIEVING_ITEM_INFO then
+                return 'tooSoon'
+            end
+
+            for i = 2, 5 do
+                local line = _G[tip:GetName() .. 'TextLeft' .. i]
+                if line then
+                    local text = line:GetText() or ''
+                    local found = strfind(text, itemLevelString)
+                    if found then
+                        local level = strmatch(text, '(%d+)%)?$')
+                        iLvlDB[link] = tonumber(level)
+                        break
+                    end
+                end
+            end
+
+            return iLvlDB[link]
+        end
+    end
+end
+
+--[[ Smooth ]]
+
+do
+    local activeObjects, handledObjects = {}, {}
+    local targetFPS, amount = 60, .33
+
+    local function Clamp(v, min, max)
+        min = min or 0
+        max = max or 1
+        v = tonumber(v)
+
+        if v > max then
+            return max
+        elseif v < min then
+            return min
+        end
+
+        return v
+    end
+
+    local function IsCloseEnough(new, target, range)
+        if range > 0 then
+            return abs((new - target) / range) <= .001
+        end
+
+        return true
+    end
+
+    local smoothframe = CreateFrame('Frame')
+
+    local function Bar_OnUpdate(_, elapsed)
+        for object, target in next, activeObjects do
+            local new = Lerp(object._value, target, Clamp(amount * elapsed * targetFPS))
+            if IsCloseEnough(new, target, object._max - object._min) then
+                new = target
+                activeObjects[object] = nil
+            end
+
+            object:SetValue_(new)
+            object._value = new
+        end
+    end
+
+    local function Bar_SetSmoothedValue(self, value)
+        self._value = self:GetValue()
+        activeObjects[self] = Clamp(value, self._min, self._max)
+    end
+
+    local function Bar_SetSmoothedMinMaxValues(self, min, max)
+        self:SetMinMaxValues_(min, max)
+
+        if self._max and self._max ~= max then
+            local ratio = 1
+            if max ~= 0 and self._max and self._max ~= 0 then
+                ratio = max / (self._max or max)
+            end
+
+            local target = activeObjects[self]
+            if target then
+                activeObjects[self] = target * ratio
+            end
+
+            local cur = self._value
+            if cur then
+                self:SetValue_(cur * ratio)
+                self._value = cur * ratio
+            end
+        end
+
+        self._min = min
+        self._max = max
+    end
+
+    function F:SmoothBar(bar)
+        bar._min, bar._max = bar:GetMinMaxValues()
+        bar._value = bar:GetValue()
+
+        bar.SetValue_ = bar.SetValue
+        bar.SetMinMaxValues_ = bar.SetMinMaxValues
+        bar.SetValue = Bar_SetSmoothedValue
+        bar.SetMinMaxValues = Bar_SetSmoothedMinMaxValues
+
+        handledObjects[bar] = true
+
+        if not smoothframe:GetScript('OnUpdate') then
+            smoothframe:SetScript('OnUpdate', Bar_OnUpdate)
+        end
+    end
+
+    function F:DesmoothBar(bar)
+        if activeObjects[bar] then
+            bar:SetValue_(activeObjects[bar])
+            activeObjects[bar] = nil
+        end
+
+        if bar.SetValue_ then
+            bar.SetValue = bar.SetValue_
+            bar.SetValue_ = nil
+        end
+
+        if bar.SetMinMaxValues_ then
+            bar.SetMinMaxValues = bar.SetMinMaxValues_
+            bar.SetMinMaxValues_ = nil
+        end
+
+        handledObjects[bar] = nil
+
+        if not next(handledObjects) then
+            smoothframe:SetScript('OnUpdate', nil)
+        end
+    end
+
+    function F:SetSmoothingAmount(sum)
+        amount = Clamp(sum, .15, .6)
     end
 end

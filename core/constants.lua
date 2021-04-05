@@ -20,14 +20,11 @@ local GetBuildInfo = GetBuildInfo
 local GetMaxLevelForPlayerExpansion = GetMaxLevelForPlayerExpansion
 local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
+local IsInInstance = IsInInstance
+local IsInGroup = IsInGroup
+local GetNumGroupMembers = GetNumGroupMembers
 local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE or 0x00000001
-local COMBATLOG_OBJECT_AFFILIATION_PARTY = COMBATLOG_OBJECT_AFFILIATION_PARTY
-local COMBATLOG_OBJECT_REACTION_FRIENDLY = COMBATLOG_OBJECT_REACTION_FRIENDLY
-local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER
-local COMBATLOG_OBJECT_TYPE_PET = COMBATLOG_OBJECT_TYPE_PET
-local COMBATLOG_OBJECT_AFFILIATION_RAID = COMBATLOG_OBJECT_AFFILIATION_RAID
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 local WOW_PROJECT_ID = WOW_PROJECT_ID
 local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
@@ -134,7 +131,7 @@ end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
-    local colors = _G.FREE_ADB.custom_class_color and _G.FREE_ADB.class_colors_list or RAID_CLASS_COLORS
+    local colors = _G.FREE_ADB.CustomClassColor and _G.FREE_ADB.ClassColorsList or RAID_CLASS_COLORS
     for class, value in pairs(colors) do
         C.ClassColors[class] = {}
         C.ClassColors[class].r = value.r
@@ -189,33 +186,36 @@ COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
 SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
 GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'
 
--- RoleUpdater
-local function checkMyRole()
+-- Update my role
+local function CheckMyRole()
     local tree = GetSpecialization()
     if not tree then
         return
     end
     local _, _, _, _, role, primaryStat = GetSpecializationInfo(tree)
     if role == 'TANK' then
-        C.Role = 'Tank'
+        C.MyRole = 'Tank'
     elseif role == 'HEALER' then
-        C.Role = 'Healer'
+        C.MyRole = 'Healer'
     elseif role == 'DAMAGER' then
         if primaryStat == 4 then -- 1 - Strength, 2 - Agility, 4 - Intellect
-            C.Role = 'Caster'
+            C.MyRole = 'Caster'
         else
-            C.Role = 'Melee'
+            C.MyRole = 'Melee'
         end
     end
 end
-F:RegisterEvent('ADDON_LOADED', checkMyRole)
-F:RegisterEvent('PLAYER_TALENT_UPDATE', checkMyRole)
+F:RegisterEvent('ADDON_LOADED', CheckMyRole)
+F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckMyRole)
 
--- Flags
-function C:IsMyPet(flags)
-    return bit_band(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) > 0
+-- Update my status
+local function CheckMyStatus()
+    if IsInInstance() and IsInGroup() and GetNumGroupMembers() > 1 then
+        C.MyStatus = 'Busy'
+    else
+        C.MyStatus = 'Idle'
+    end
 end
-C.PartyPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_REACTION_FRIENDLY,
-    COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
-C.RaidPetFlags = bit_bor(COMBATLOG_OBJECT_AFFILIATION_RAID, COMBATLOG_OBJECT_REACTION_FRIENDLY,
-    COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_PET)
+F:RegisterEvent('ADDON_LOADED', CheckMyStatus)
+F:RegisterEvent('ZONE_CHANGED_NEW_AREA', CheckMyStatus)
+F:RegisterEvent('GROUP_ROSTER_UPDATE', CheckMyStatus)

@@ -281,9 +281,9 @@ local function CreateOption(i)
                 end
             end
 
-            local dd = F.CreateDropDown(parent, 140, 20, data)
+            local dd = F.CreateDropDown(parent, 160, 20, data)
             if horizon then
-                dd:SetPoint('TOPLEFT', 250, -offset + 35)
+                dd:SetPoint('TOPLEFT', 254, -offset + 35)
             else
                 dd:SetPoint('TOPLEFT', 26, -offset - 35)
                 offset = offset + 70

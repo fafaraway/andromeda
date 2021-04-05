@@ -249,7 +249,7 @@ function COMBAT:FloatingCombatText()
             -- block full-overhealing
             if blacklist[arg1] or arg4 == arg5 then return end
             -- Show healing in outFrame for healers, inFrame for tank/dps
-            if fromMine and C.Role == 'Healer' then
+            if fromMine and C.MyRole == 'Healer' then
                 dmgFunc(false, true, arg1, arg4, arg3, arg7)
             elseif toMe then
                 dmgFunc(true, true, arg1, arg4, arg3, arg7)

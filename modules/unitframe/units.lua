@@ -198,7 +198,7 @@ function UNITFRAME:SpawnFocus()
 
     local focus = OUF:Spawn('focus', 'oUF_Focus')
     F.Mover(focus, L['UNITFRAME_MOVER_FOCUS'], 'FocusFrame',
-            {'BOTTOM', _G.UIParent, 'BOTTOM', -200, 220}, focus:GetWidth(), focus:GetHeight())
+            {'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220}, focus:GetWidth(), focus:GetHeight())
 end
 
 local function CreateFocusTargetStyle(self)
@@ -209,6 +209,7 @@ local function CreateFocusTargetStyle(self)
     UNITFRAME:AddHealthBar(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddNameText(self)
+    UNITFRAME:AddAuras(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddRangeCheck(self)
 end
@@ -219,7 +220,7 @@ function UNITFRAME:SpawnFocusTarget()
 
     local focustarget = OUF:Spawn('focustarget', 'oUF_FocusTarget')
     F.Mover(focustarget, L['UNITFRAME_MOVER_FOCUSTARGET'], 'FocusTargetFrame',
-            {'TOPRIGHT', 'oUF_Focus', 'TOPLEFT', -6, 0}, focustarget:GetWidth(),
+            {'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0}, focustarget:GetWidth(),
             focustarget:GetHeight())
 end
 
@@ -379,7 +380,8 @@ function UNITFRAME:SpawnRaid()
     OUF:RegisterStyle('Raid', CreateRaidStyle)
     OUF:SetActiveStyle 'Raid'
 
-    local raidWidth, raidHeight = C.DB.unitframe.raid_width, C.DB.unitframe.raid_height
+    local raidWidth = C.DB.unitframe.raid_width
+    local raidHeight = C.DB.unitframe.raid_height
     local raidHorizon = C.DB.unitframe.raid_horizon
     local raidReverse = C.DB.unitframe.raid_reverse
     local raidGap = C.DB.unitframe.raid_gap

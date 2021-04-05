@@ -203,7 +203,7 @@ function NAMEPLATE:CheckThreatStatus(unit)
     local unitTarget = unit .. 'target'
     local unitRole = isInGroup and UnitExists(unitTarget) and not UnitIsUnit(unitTarget, 'player') and groupRoles[UnitName(unitTarget)] or 'NONE'
 
-    if C.Role == 'Tank' and unitRole == 'TANK' then
+    if C.MyRole == 'Tank' and unitRole == 'TANK' then
         return true, UnitThreatSituation(unitTarget, unit)
     else
         return false, UnitThreatSituation('player', unit)
@@ -264,9 +264,9 @@ function NAMEPLATE:UpdateColor(_, unit)
         else
             -- r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
             r, g, b = UnitSelectionColor(unit, true)
-            if status and (tankMode or C.Role == 'Tank') then
+            if status and (tankMode or C.MyRole == 'Tank') then
                 if status == 3 then
-                    if C.Role ~= 'Tank' and revertThreat then
+                    if C.MyRole ~= 'Tank' and revertThreat then
                         r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
                     else
                         if isOffTank then
@@ -278,7 +278,7 @@ function NAMEPLATE:UpdateColor(_, unit)
                 elseif status == 2 or status == 1 then
                     r, g, b = transColor.r, transColor.g, transColor.b
                 elseif status == 0 then
-                    if C.Role ~= 'Tank' and revertThreat then
+                    if C.MyRole ~= 'Tank' and revertThreat then
                         r, g, b = secureColor.r, secureColor.g, secureColor.b
                     else
                         r, g, b = insecureColor.r, insecureColor.g, insecureColor.b
@@ -293,7 +293,7 @@ function NAMEPLATE:UpdateColor(_, unit)
     end
 
     self.ThreatIndicator:Hide()
-    if status and (isCustomUnit or (not tankMode and C.Role ~= 'Tank')) then
+    if status and (isCustomUnit or (not tankMode and C.MyRole ~= 'Tank')) then
         if status == 3 then
             self.ThreatIndicator:SetVertexColor(1, 0, 0)
             self.ThreatIndicator:Show()

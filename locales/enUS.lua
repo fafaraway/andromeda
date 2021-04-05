@@ -882,8 +882,7 @@ L.GUI = {
         SPITEFUL_INDICATOR_TIP = 'Show name of the M+ Spiteful Shade\'s target.',
         MAJOR_SPELLS_GLOW = 'Major spells glow',
         MAJOR_SPELLS_GLOW_TIP = '|nIf unit is casting a major spell, highlight its castbar icon.',
-        SHOW_AURA = 'Show auras',
-        SHOW_AURA_TIP = '',
+
         TOTEM_ICON = 'Totems icon',
         TOTEM_ICON_TIP = '|nShow totems icon on their nameplates.',
         AK_PROGRESS = 'Mythic+ Progress',
@@ -897,9 +896,15 @@ L.GUI = {
         SPELL_TARGET = 'Spell target',
         SPELL_TARGET_TIP = '|nShow target name of casting spell.',
 
+        CASTBAR_COMPACT = 'Castbar compact style',
+        CASTBAR_SPELL_NAME = 'Castbar spell name',
+        CASTBAR_SPELL_TIME = 'Castbar spell time',
+
+        AURA_FILTER_MODE = 'Aura filter mode',
+        AURA_FILTER_MODE_TIP = '|nChoose nameplate aura filter mode.',
         BLACK_WHITE = 'White/Black list',
-        PLAYER_ONLY = 'List and player',
-        INCLUDE_CROWD_CONTROL = 'List and player and CCs',
+        PLAYER_ONLY = 'List & player',
+        INCLUDE_CROWD_CONTROL = 'List & player & CCs',
 
         BASIC_SETTING = 'Nameplate',
         SIZE = 'Size',

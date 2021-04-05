@@ -1,10 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="plugins\plugins.xml"/>
-	<Script file="unitframe.lua"/>
-	<Script file="tags.lua"/>
-	<Script file="elements.lua"/>
-	<Script file="units.lua"/>
-	<Script file="nameplate.lua"/>
-	<Script file="clickcast.lua"/>
-	<Include file="auras\auras.xml"/>
+    <Include file="plugins\plugins.xml"/>
+    <Script file="unitframe.lua"/>
+    <Script file="colors.lua"/>
+    <Script file="tags.lua"/>
+    <Script file="elements.lua"/>
+    <Script file="units.lua"/>
+    <Script file="nameplate.lua"/>
+    <Script file="clickcast.lua"/>
+    <Include file="auras\auras.xml"/>
 </Ui>

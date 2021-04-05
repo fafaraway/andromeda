@@ -1043,30 +1043,32 @@ function GUI:SetupCustomClassColor(parent)
     local panel = createExtraGUI(parent, guiName, L.GUI.MISC.CUSTOM_CLASS_COLOR_SETTING_HEADER)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
+    local colors = _G.FREE_ADB.ClassColorsList
+
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.HUNTER,
-                       _G.FREE_ADB.class_colors_list.HUNTER, 40, -20)
+                       colors.HUNTER, 40, -20)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARRIOR,
-                       _G.FREE_ADB.class_colors_list.WARRIOR, 40, -50)
+                       colors.WARRIOR, 40, -50)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PALADIN,
-                       _G.FREE_ADB.class_colors_list.PALADIN, 40, -80)
+                       colors.PALADIN, 40, -80)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MAGE,
-                       _G.FREE_ADB.class_colors_list.MAGE, 40, -110)
+                       colors.MAGE, 40, -110)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PRIEST,
-                       _G.FREE_ADB.class_colors_list.PRIEST, 40, -140)
+                       colors.PRIEST, 40, -140)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEATHKNIGHT,
-                       _G.FREE_ADB.class_colors_list.DEATHKNIGHT, 40, -170)
+                       colors.DEATHKNIGHT, 40, -170)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARLOCK,
-                       _G.FREE_ADB.class_colors_list.WARLOCK, 40, -200)
+                       colors.WARLOCK, 40, -200)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEMONHUNTER,
-                       _G.FREE_ADB.class_colors_list.DEMONHUNTER, 40, -230)
+                       colors.DEMONHUNTER, 40, -230)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.ROGUE,
-                       _G.FREE_ADB.class_colors_list.ROGUE, 40, -260)
+                       colors.ROGUE, 40, -260)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DRUID,
-                       _G.FREE_ADB.class_colors_list.DRUID, 40, -290)
+                       colors.DRUID, 40, -290)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MONK,
-                       _G.FREE_ADB.class_colors_list.MONK, 40, -320)
+                       colors.MONK, 40, -320)
     createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.SHAMAN,
-                       _G.FREE_ADB.class_colors_list.SHAMAN, 40, -350)
+                       colors.SHAMAN, 40, -350)
 
     local function updateClassColor()
     end

@@ -9,34 +9,6 @@ local CompactRaidFrameManager = CompactRaidFrameManager
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
-local OUF = F.OUF
-
-local function ReplaceHealthColor()
-    local colors = _G.FREE_ADB.health_color
-    OUF.colors.health = {colors.r, colors.g, colors.b}
-end
-
-local function ReplacePowerColors(name, index, color)
-    OUF.colors.power[name] = color
-    OUF.colors.power[index] = OUF.colors.power[name]
-end
-
-function UNITFRAME:InitializeColors()
-    ReplaceHealthColor()
-
-    ReplacePowerColors('MANA', 0, {87 / 255, 165 / 255, 208 / 255})
-    ReplacePowerColors('ENERGY', 3, {174 / 255, 34 / 255, 45 / 255})
-    ReplacePowerColors('COMBO_POINTS', 4, {199 / 255, 171 / 255, 90 / 255})
-    ReplacePowerColors('RUNIC_POWER', 6, {135 / 255, 214 / 255, 194 / 255})
-    ReplacePowerColors('SOUL_SHARDS', 7, {151 / 255, 101 / 255, 221 / 255})
-    ReplacePowerColors('HOLY_POWER', 9, {208 / 255, 178 / 255, 107 / 255})
-    ReplacePowerColors('INSANITY', 13, {179 / 255, 96 / 255, 244 / 255})
-
-    local classColors = C.ClassColors
-    for class, value in pairs(classColors) do
-        OUF.colors.class[class] = {value.r, value.g, value.b}
-    end
-end
 
 local raidDebuffsList = {}
 function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
@@ -123,7 +95,7 @@ function UNITFRAME:CheckMajorSpells()
     end
 end
 
-function UNITFRAME:InitializeAuras()
+function UNITFRAME:UpdateAuras()
     for instName, value in pairs(raidDebuffsList) do
         for spell, priority in pairs(value) do
             if _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] and
@@ -148,8 +120,9 @@ end
 function UNITFRAME:OnLogin()
     F:SetSmoothingAmount(.3)
 
-    UNITFRAME:InitializeColors()
-    UNITFRAME:InitializeAuras()
+    UNITFRAME:UpdateHealthColor()
+    UNITFRAME:UpdateClassColor()
+    UNITFRAME:UpdateAuras()
 
     if not C.DB.unitframe.enable then
         return

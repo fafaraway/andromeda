@@ -155,6 +155,7 @@ local function PostUpdateHealth(self, unit, cur, max)
     local parent = self:GetParent()
     local style = self.__owner.unitStyle
     local perhp = floor(UnitHealth('player') / max * 100 + .5)
+
     if style == 'player' then
         if perhp < 35 then
             parent.EmergencyIndicator:Show()
@@ -171,6 +172,7 @@ local function PostUpdateHealth(self, unit, cur, max)
     if not C.DB.unitframe.transparent_mode then
         return
     end
+
     if isDead or isGhost or isOffline then
         self:SetValue(0)
     else
@@ -247,12 +249,13 @@ function UNITFRAME:AddHealthPrediction(self)
         return
     end
 
+    local trans = C.DB.unitframe.transparent_mode
     local colors = C.ClassColors[C.MyClass] or C.ClassColors['PRIEST']
 
     local myBar = CreateFrame('StatusBar', nil, self.Health)
     myBar:SetPoint('TOP')
     myBar:SetPoint('BOTTOM')
-    myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+    myBar:SetPoint('LEFT', self.Health:GetStatusBarTexture(), trans and 'LEFT' or 'RIGHT')
     myBar:SetStatusBarTexture(C.Assets.statusbar_tex)
     myBar:GetStatusBarTexture():SetBlendMode('BLEND')
     -- myBar:SetStatusBarColor(0, .8, .8, .6)
@@ -262,7 +265,7 @@ function UNITFRAME:AddHealthPrediction(self)
     local otherBar = CreateFrame('StatusBar', nil, self.Health)
     otherBar:SetPoint('TOP')
     otherBar:SetPoint('BOTTOM')
-    otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+    otherBar:SetPoint('LEFT', myBar:GetStatusBarTexture(), trans and 'LEFT' or 'RIGHT')
     otherBar:SetStatusBarTexture(C.Assets.statusbar_tex)
     otherBar:GetStatusBarTexture():SetBlendMode('BLEND')
     -- otherBar:SetStatusBarColor(0, .6, .6, .6)
@@ -272,7 +275,7 @@ function UNITFRAME:AddHealthPrediction(self)
     local absorbBar = CreateFrame('StatusBar', nil, self.Health)
     absorbBar:SetPoint('TOP')
     absorbBar:SetPoint('BOTTOM')
-    absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), C.DB.unitframe.transparent_mode and 'LEFT' or 'RIGHT')
+    absorbBar:SetPoint('LEFT', otherBar:GetStatusBarTexture(), trans and 'LEFT' or 'RIGHT')
     absorbBar:SetStatusBarTexture(C.Assets.stripe_tex)
     absorbBar:GetStatusBarTexture():SetBlendMode('BLEND')
     absorbBar:SetStatusBarColor(.8, .8, .8, .8)
@@ -285,7 +288,6 @@ function UNITFRAME:AddHealthPrediction(self)
     overAbsorb:SetTexture(C.AssetsPath .. 'textures\\spark_tex')
     overAbsorb:SetBlendMode('ADD')
 
-    -- LuaFormatter off
     self.HealthPrediction = {
         myBar = myBar,
         otherBar = otherBar,
@@ -294,7 +296,6 @@ function UNITFRAME:AddHealthPrediction(self)
         maxOverflow = 1,
         frequentUpdates = true,
     }
-    -- LuaFormatter on
 end
 
 --[[ Power ]]
@@ -453,16 +454,6 @@ end
 
 --[[ Auras ]]
 
--- LuaFormatter off
-local debuffColors = {
-    Curse = {.8, 0, 1},
-    Disease = {.8, .6, 0},
-    Magic = {0, .8, 1},
-    Poison = {0, .8, 0},
-    none = {0, 0, 0},
-}
--- LuaFormatter on
-
 local function AuraOnEnter(self)
     if not self:IsVisible() then
         return
@@ -557,7 +548,7 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
             button.glow:SetBackdropBorderColor(1, 1, 1, .25)
         end
     elseif button.isDebuff and element.showDebuffType then
-        local color = debuffColors[debuffType] or debuffColors.none
+        local color = OUF.colors.debuff[debuffType] or OUF.colors.debuff.none
 
         button.bg:SetBackdropBorderColor(color[1], color[2], color[3])
 
@@ -592,8 +583,7 @@ local function BolsterPostUpdate(element)
     end
 end
 
-function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _,
-    nameplateShowAll)
+function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, caster, isStealable, _, spellID, _, _, _, nameplateShowAll)
     local style = element.__owner.unitStyle
     local isMine = F:MultiCheck(caster, 'player', 'pet', 'vehicle')
 
@@ -622,7 +612,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         else
             return true
         end
-    elseif style == 'focus' then
+    elseif style == 'focus' or style == 'focustarget' then
         if button.isDebuff then
             return true
         else
@@ -650,7 +640,7 @@ function UNITFRAME.PostUpdateGapIcon(_, _, icon)
     icon:Hide()
 end
 
-local function getIconSize(w, n, s)
+local function GetIconSize(w, n, s)
     return (w - (n - 1) * s) / n
 end
 
@@ -680,6 +670,12 @@ function UNITFRAME:AddAuras(self)
         elseif style == 'arena' then
             auras.iconsPerRow = C.DB.unitframe.arena_auras_per_row
         end
+    elseif style == 'focustarget' then
+        auras.initialAnchor = 'TOPRIGHT'
+        auras:SetPoint('TOP', self, 'BOTTOM', 0, -6)
+        auras['growth-x'] = 'LEFT'
+        auras['growth-y'] = 'DOWN'
+        auras.iconsPerRow = C.DB.unitframe.focus_auras_per_row
     elseif style == 'party' then
         auras.initialAnchor = 'LEFT'
         auras:SetPoint('LEFT', self, 'RIGHT', 5, 0)
@@ -687,13 +683,14 @@ function UNITFRAME:AddAuras(self)
         auras.size = C.DB.unitframe.party_height * .7
         auras.numTotal = 4
         auras.gap = false
-    elseif style == 'nameplate' and C.DB.Nameplate.ShowAura then
+    elseif style == 'nameplate' then
         auras.initialAnchor = 'BOTTOMLEFT'
         auras:SetPoint('BOTTOM', self, 'TOP', 0, 8)
         auras['growth-y'] = 'UP'
-        auras.size = C.DB.Nameplate.AuraSize
-        auras.numTotal = C.DB.Nameplate.AuraNumTotal
-        auras.gap = false
+        auras.iconsPerRow = 4
+        -- auras.size = C.DB.Nameplate.AuraSize
+        -- auras.numTotal = C.DB.Nameplate.AuraNumTotal
+
         auras.disableMouse = true
     end
 
@@ -701,7 +698,7 @@ function UNITFRAME:AddAuras(self)
     local maxAuras = auras.numTotal or auras.numBuffs + auras.numDebuffs
     local maxLines = auras.iconsPerRow and floor(maxAuras / auras.iconsPerRow + .5) or 2
 
-    auras.size = auras.iconsPerRow and getIconSize(width, auras.iconsPerRow, auras.spacing) or auras.size
+    auras.size = auras.iconsPerRow and GetIconSize(width, auras.iconsPerRow, auras.spacing) or auras.size
     auras:SetWidth(width)
     auras:SetHeight((auras.size + auras.spacing) * maxLines)
 
@@ -764,7 +761,7 @@ function UNITFRAME:UpdateCornerIndicator(event, unit)
             if not name then
                 break
             end
-            local value = spellList[spellID] or (C.Role ~= 'Healer' and UNITFRAME.BloodlustList[spellID])
+            local value = spellList[spellID] or (C.MyRole ~= 'Healer' and UNITFRAME.BloodlustList[spellID])
             if value and (value[3] or caster == 'player' or caster == 'pet') then
                 local bu = buttons[value[1]]
                 if bu then
@@ -996,7 +993,7 @@ if C.MyClass == 'PRIEST' then
 end
 
 local ticks = {}
-local function updateCastBarTicks(bar, numTicks)
+local function UpdateCastBarTicks(bar, numTicks)
     if numTicks and numTicks > 0 then
         local delta = bar:GetWidth() / numTicks
         for i = 1, numTicks do
@@ -1021,8 +1018,8 @@ end
 function UNITFRAME:OnCastbarUpdate(elapsed)
     if self.casting or self.channeling then
         local decimal = self.Decimal
-
         local duration = self.casting and self.duration + elapsed or self.duration - elapsed
+
         if (self.casting and duration >= self.max) or (self.channeling and duration <= 0) then
             self.casting = nil
             self.channeling = nil
@@ -1047,6 +1044,7 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
                                            self.casting and self.max + self.delay or self.max - self.delay)
             end
         end
+
         self.duration = duration
         self:SetValue(duration)
         self.Spark:SetPoint('CENTER', self, 'LEFT', (duration / self.max) * self:GetWidth(), 0)
@@ -1054,6 +1052,7 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
         self.holdTime = self.holdTime - elapsed
     else
         self.Spark:Hide()
+
         local alpha = self:GetAlpha() - .02
         if alpha > 0 then
             self:SetAlpha(alpha)
@@ -1073,12 +1072,14 @@ function UNITFRAME:OnCastSent()
     element.SafeZone.castSent = true
 end
 
-local function updateSpellTarget(self, unit)
+local function UpdateSpellTarget(self, unit)
     if not C.DB.Nameplate.SpellTarget then
         return
     end
 
-    if not self.spellTarget or not unit then
+    if C.MyStatus ~= 'Busy' then return end
+
+    if not self.SpellTarget or not unit then
         return
     end
 
@@ -1090,18 +1091,20 @@ local function updateSpellTarget(self, unit)
         else
             nameString = F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget)
         end
-        self.spellTarget:SetText(nameString)
+        self.SpellTarget:SetText(nameString)
     end
 end
 
-local function resetSpellTarget(self)
-    if self.spellTarget then
-        self.spellTarget:SetText('')
+local function ResetSpellTarget(self)
+    if self.SpellTarget then
+        self.SpellTarget:SetText('')
     end
 end
 
 function UNITFRAME:PostCastStart(unit)
+    local style = self.__owner.unitStyle
     local compact = C.DB.unitframe.CastbarCompact
+    local npCompact = C.DB.Nameplate.CastbarCompact
     local normalColor = C.DB.unitframe.CastbarCastingColor
     local uninterruptibleColor = C.DB.unitframe.CastbarUninterruptibleColor
     local color = self.notInterruptible and uninterruptibleColor or normalColor
@@ -1112,6 +1115,7 @@ function UNITFRAME:PostCastStart(unit)
 
     self:SetAlpha(1)
     self.Spark:Show()
+    self.Text:SetTextColor(unpack(textColor))
 
     if unit == 'vehicle' or UnitInVehicle('player') then
         if self.SafeZone then
@@ -1139,11 +1143,10 @@ function UNITFRAME:PostCastStart(unit)
         if self.channeling then
             numTicks = channelingTicks[self.spellID] or 0
         end
-        updateCastBarTicks(self, numTicks)
-
+        UpdateCastBarTicks(self, numTicks)
     end
 
-    if compact then
+    if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
         self:SetStatusBarColor(color.r, color.g, color.b, .6)
         self.Backdrop:SetBackdropColor(0, 0, 0, .2)
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 0)
@@ -1155,9 +1158,7 @@ function UNITFRAME:PostCastStart(unit)
         self.Border:SetBackdropBorderColor(color.r, color.g, color.b, .35)
     end
 
-    self.Text:SetTextColor(unpack(textColor))
-
-    if self.__owner.unitStyle == 'nameplate' then
+    if style == 'nameplate' then
         -- Major spells
         if C.DB.Nameplate.MajorSpellsGlow and NAMEPLATE.MajorSpellsList[self.spellID] then
             F.ShowOverlayGlow(self.glowFrame)
@@ -1166,24 +1167,25 @@ function UNITFRAME:PostCastStart(unit)
         end
 
         -- Spell target
-        updateSpellTarget(self, unit)
+        UpdateSpellTarget(self, unit)
     end
-
 
 end
 
 function UNITFRAME:PostCastUpdate(unit)
-    updateSpellTarget(self, unit)
+    UpdateSpellTarget(self, unit)
 end
 
 function UNITFRAME:PostUpdateInterruptible()
+    local style = self.__owner.unitStyle
+    local npCompact = C.DB.Nameplate.CastbarCompact
     local compact = C.DB.unitframe.CastbarCompact
     local normalColor = C.DB.unitframe.CastbarCastingColor
     local uninterruptibleColor = C.DB.unitframe.CastbarUninterruptibleColor
     local color = self.notInterruptible and uninterruptibleColor or normalColor
     local textColor = self.notInterruptible and {1, 0, 0} or {1, 1, 1}
 
-    if compact then
+    if (style == 'nameplate' and npCompact) or (style ~= 'nameplate' and compact) then
         self:SetStatusBarColor(color.r, color.g, color.b, .6)
         self.Backdrop:SetBackdropColor(0, 0, 0, .2)
         self.Backdrop:SetBackdropBorderColor(0, 0, 0, 0)
@@ -1208,7 +1210,7 @@ function UNITFRAME:PostCastStop()
 
     self:Show()
 
-    resetSpellTarget(self)
+    ResetSpellTarget(self)
 end
 
 function UNITFRAME:PostCastFailed()
@@ -1219,7 +1221,7 @@ function UNITFRAME:PostCastFailed()
     self.fadeOut = true
     self:Show()
 
-    resetSpellTarget(self)
+    ResetSpellTarget(self)
 end
 
 local function CreateBarMover(bar, text, value, anchor)
@@ -1242,6 +1244,7 @@ function UNITFRAME:AddCastBar(self)
 
     local style = self.unitStyle
     local compact = C.DB.unitframe.CastbarCompact
+    local npCompact = C.DB.Nameplate.CastbarCompact
     local playerWidth = C.DB.unitframe.CastbarPlayerWidth
     local playerHeight = C.DB.unitframe.CastbarPlayerHeight
     local targetWidth = C.DB.unitframe.CastbarTargetWidth
@@ -1254,9 +1257,9 @@ function UNITFRAME:AddCastBar(self)
 
     local castbar = CreateFrame('StatusBar', 'oUF_Castbar' .. style, self)
     castbar:SetStatusBarTexture(C.Assets.statusbar_tex)
-
     castbar.Backdrop = F.CreateBDFrame(castbar)
     castbar.Border = F.CreateSD(castbar.Backdrop, .35, 6, 6, true)
+    self.Castbar = castbar
 
     local spark = castbar:CreateTexture(nil, 'OVERLAY')
     spark:SetTexture(C.Assets.spark_tex)
@@ -1267,13 +1270,13 @@ function UNITFRAME:AddCastBar(self)
 
     local text = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
     text:SetPoint('TOP', castbar, 'BOTTOM', 0, -3)
-    text:SetShown(C.DB.unitframe.CastbarSpellName)
     text:SetTextColor(1, 1, 1)
+    text:SetShown(false)
     castbar.Text = text
 
     local time = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
     time:SetPoint('CENTER', castbar)
-    time:SetShown(C.DB.unitframe.CastbarSpellTime)
+    time:SetShown(false)
     castbar.Time = time
     castbar.Decimal = '%.1f'
 
@@ -1282,55 +1285,31 @@ function UNITFRAME:AddCastBar(self)
     F.SetBD(icon)
     castbar.Icon = icon
 
-    if compact then
-        castbar:SetStatusBarColor(0, 0, 0, 0)
-        castbar:SetAllPoints(self)
-        castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
-        castbar:SetStatusBarColor(color.r, color.g, color.b, .6)
-        castbar.Backdrop:SetBackdropColor(0, 0, 0, 0)
-        castbar.Border:SetBackdropBorderColor(color.r, color.g, color.b, .45)
+    if style == 'nameplate' then
+        text:SetShown(C.DB.Nameplate.CastbarSpellName)
+        time:SetShown(C.DB.Nameplate.CastbarSpellTime)
 
-        icon:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
-        icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
-    else
-        if style == 'player' then
-            castbar:SetSize(playerWidth, playerHeight)
-            CreateBarMover(castbar, L.MOVER.PLAYER_CASTBAR, 'PlayerCastbar', cbPosition.player)
+        if npCompact then
+            castbar:SetStatusBarColor(0, 0, 0, 0)
+            castbar:SetAllPoints(self)
+            castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
+            castbar:SetStatusBarColor(color.r, color.g, color.b, .6)
+            castbar.Backdrop:SetBackdropColor(0, 0, 0, 0)
+            castbar.Border:SetBackdropBorderColor(color.r, color.g, color.b, .45)
 
-            icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
+            icon:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
-        elseif style == 'target' then
-            castbar:SetSize(targetWidth, targetHeight)
-            CreateBarMover(castbar, L.MOVER.TARGET_CASTBAR, 'TargetCastbar', cbPosition.target)
-
-            icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
-            icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
-        elseif style == 'focus' then
-            castbar:SetSize(focusWidth, focusHeight)
-            CreateBarMover(castbar, L.MOVER.FOCUS_CASTBAR, 'FocusCastbar', cbPosition.focus)
-
-            icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
-            icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
-        elseif style == 'nameplate' then
+        else
             castbar:SetSize(self:GetWidth(), 4)
             castbar:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -2)
+            castbar:SetStatusBarColor(color.r, color.g, color.b)
 
             icon:SetSize(castbar:GetHeight() + self:GetHeight() + 2, castbar:GetHeight() + self:GetHeight() + 2)
             icon:ClearAllPoints()
             icon:SetPoint('TOPRIGHT', self, 'TOPLEFT', -2, 0)
         end
 
-        castbar:SetStatusBarColor(color.r, color.g, color.b)
-    end
-
-    if style == 'player' then
-        local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
-        safeZone:SetTexture(C.Assets.statusbar_tex)
-        safeZone:SetVertexColor(.87, .25, .42, .6)
-        safeZone:SetPoint('TOPRIGHT')
-        safeZone:SetPoint('BOTTOMRIGHT')
-        castbar.SafeZone = safeZone
-    elseif style == 'nameplate' then
+        -- Major spells glow
         castbar.glowFrame = F.CreateGlowFrame(castbar, icon:GetHeight())
         castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
@@ -1338,10 +1317,61 @@ function UNITFRAME:AddCastBar(self)
         spellTarget:ClearAllPoints()
         spellTarget:SetJustifyH('CENTER')
         spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
-        castbar.spellTarget = spellTarget
+
+        if C.DB.Nameplate.CastbarSpellName then
+            spellTarget:SetPoint('LEFT', text, 'RIGHT', 3, 0)
+        else
+            spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
+        end
+
+        castbar.SpellTarget = spellTarget
+    else
+        text:SetShown(C.DB.unitframe.CastbarSpellName)
+        time:SetShown(C.DB.unitframe.CastbarSpellTime)
+
+        if compact then
+            castbar:SetStatusBarColor(0, 0, 0, 0)
+            castbar:SetAllPoints(self)
+            castbar:SetFrameLevel(self.Health:GetFrameLevel() + 3)
+            castbar:SetStatusBarColor(color.r, color.g, color.b, .6)
+            castbar.Backdrop:SetBackdropColor(0, 0, 0, 0)
+            castbar.Border:SetBackdropBorderColor(color.r, color.g, color.b, .45)
+
+            icon:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
+            icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+        else
+            if style == 'player' then
+                castbar:SetSize(playerWidth, playerHeight)
+                CreateBarMover(castbar, L.MOVER.PLAYER_CASTBAR, 'PlayerCastbar', cbPosition.player)
+
+                icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
+                icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+            elseif style == 'target' then
+                castbar:SetSize(targetWidth, targetHeight)
+                CreateBarMover(castbar, L.MOVER.TARGET_CASTBAR, 'TargetCastbar', cbPosition.target)
+
+                icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
+                icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+            elseif style == 'focus' then
+                castbar:SetSize(focusWidth, focusHeight)
+                CreateBarMover(castbar, L.MOVER.FOCUS_CASTBAR, 'FocusCastbar', cbPosition.focus)
+
+                icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
+                icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
+            end
+
+            castbar:SetStatusBarColor(color.r, color.g, color.b)
+        end
     end
 
-    self.Castbar = castbar
+    --if style == 'player' then
+        local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
+        safeZone:SetTexture(C.Assets.statusbar_tex)
+        safeZone:SetVertexColor(.87, .25, .42, .6)
+        safeZone:SetPoint('TOPRIGHT')
+        safeZone:SetPoint('BOTTOMRIGHT')
+        castbar.SafeZone = safeZone
+    --end
 
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart
@@ -1353,16 +1383,17 @@ end
 
 --[[ Class power ]]
 
--- LuaFormatter off
-local fullyChargedColors = {
-    DRUID = {.78, .48, .96},
-    MAGE = {.87, .14, .24},
-    MONK = {.87, .14, .24},
-    PALADIN = {.87, .14, .24},
-    ROGUE = {.78, .48, .96},
-    WARLOCK = {.87, .14, .24},
-}
--- LuaFormatter on
+local function SetLastBarColor(element, max, powerType)
+    if not element or not max then return end
+
+    local color = element.__owner.colors.power.max[powerType]
+
+    if element[max] and color then
+        local r, g, b = color[1], color[2], color[3]
+        local lastBar = element[max]
+        lastBar:SetStatusBarColor(r, g, b)
+    end
+end
 
 local function PostUpdateClassPower(element, cur, max, diff, powerType)
     -- local style = element.__owner.unitStyle
@@ -1375,19 +1406,21 @@ local function PostUpdateClassPower(element, cur, max, diff, powerType)
         end
     end
 
-    element.thisColor = cur == max and 1 or 2
-    if not element.prevColor or element.prevColor ~= element.thisColor then
-        local r, g, b = fullyChargedColors[C.MyClass] and unpack(fullyChargedColors[C.MyClass]) or 1, 0, 0
-        if element.thisColor == 2 then
-            local color = element.__owner.colors.power[powerType]
-            r, g, b = color[1], color[2], color[3]
-        end
-        for i = 1, #element do
-            element[i]:SetStatusBarColor(r, g, b)
-        end
+    SetLastBarColor(element, max, powerType)
 
-        element.prevColor = element.thisColor
-    end
+    -- element.thisColor = cur == max and 1 or 2
+    -- if not element.prevColor or element.prevColor ~= element.thisColor then
+    --     local r, g, b = fullyChargedColors[C.MyClass] and unpack(fullyChargedColors[C.MyClass]) or 1, 0, 0
+    --     if element.thisColor == 2 then
+    --         local color = element.__owner.colors.power[powerType]
+    --         r, g, b = color[1], color[2], color[3]
+    --     end
+    --     for i = 1, #element do
+    --         element[i]:SetStatusBarColor(r, g, b)
+    --     end
+
+    --     element.prevColor = element.thisColor
+    -- end
 end
 
 function UNITFRAME:OnUpdateRunes(elapsed)
@@ -1421,22 +1454,6 @@ local function PostUpdateRunes(element, runemap)
                 rune.runeDuration = duration
                 rune:SetScript('OnUpdate', UNITFRAME.OnUpdateRunes)
             end
-        end
-    end
-end
-
-local function UpdateRunesColor(element)
-    local spec = GetSpecialization() or 0
-
-    for index = 1, #element do
-        if spec == 1 then -- blood
-            element[index]:SetStatusBarColor(177 / 255, 40 / 255, 45 / 255)
-        elseif spec == 2 then -- frost
-            element[index]:SetStatusBarColor(42 / 255, 138 / 255, 186 / 255)
-        elseif spec == 3 then
-            element[index]:SetStatusBarColor(101 / 255, 186 / 255, 112 / 255)
-        else
-            element[index]:SetStatusBarColor(1, 1, 1)
         end
     end
 end
@@ -1475,7 +1492,6 @@ function UNITFRAME:AddClassPowerBar(self)
         bars.colorSpec = true
         bars.sortOrder = 'asc'
         bars.PostUpdate = PostUpdateRunes
-        bars.PostUpdateColor = UpdateRunesColor
         self.Runes = bars
     else
         bars.PostUpdate = PostUpdateClassPower

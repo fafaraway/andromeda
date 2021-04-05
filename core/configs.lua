@@ -1125,7 +1125,7 @@ C.CharacterSettings = {
         ['debuff_type'] = true,
         ['stealable_buffs'] = true,
         ['debuffs_by_player'] = true,
-        ['abbr_name'] = false,
+        ['abbr_name'] = true,
         ShortenLengthCN = 6,
         ShortenLength = 10,
 
@@ -1223,8 +1223,7 @@ C.CharacterSettings = {
         Height = 8,
 
         NameOnly = true,
-        MajorSpellsGlow = true,
-        SpellTarget = false,
+
         TargetIndicator = true,
         TargetIndicatorColor = {r = .73, g = .92, b = .99},
         ThreatIndicator = true,
@@ -1258,11 +1257,17 @@ C.CharacterSettings = {
         CustomUnitList = '',
         ShowPowerList = '',
 
-        ShowAura = true,
         AuraFilterMode = 3,
+        AuraPerRow = 6,
         AuraSize = 22,
         AuraNumTotal = 6,
         TotemIcon = true,
+
+        CastbarCompact = true,
+        CastbarSpellName = false,
+        CastbarSpellTime = false,
+        MajorSpellsGlow = true,
+        SpellTarget = true,
 
         InsideView = true,
         MinScale = .7,
@@ -1425,7 +1430,7 @@ C.CharacterSettings = {
 
         ['CooldownCount'] = true,
         ['DecimalCD'] = true,
-        ['OverrideWA'] = true,
+        ['OverrideWA'] = false,
         DesaturatedIcon = true,
 
         ['BindType'] = 1,
@@ -1483,21 +1488,21 @@ C.AccountSettings = {
     ['PartySpellsList'] = {},
     ['profile_index'] = {},
     ['profile_names'] = {},
-    ['health_color'] = {r = .81, g = .81, b = .81},
-    ['custom_class_color'] = false,
-    ['class_colors_list'] = {
-        ['HUNTER'] = {r = 0.2, g = 0.71, b = 0.25, colorStr = 'ff33b541'},
-        ['WARRIOR'] = {r = 0.78, g = 0.61, b = 0.39, colorStr = 'ffc79b64'},
-        ['PALADIN'] = {r = 0.93, g = 0.33, b = 0.42, colorStr = 'ffee556c'},
-        ['MAGE'] = {r = 0.49, g = 0.66, b = 0.89, colorStr = 'ff7ea8e3'},
-        ['PRIEST'] = {r = 0.83, g = 0.83, b = 0.83, colorStr = 'ffd3d3d3'},
-        ['DEATHKNIGHT'] = {r = 0.77, g = 0.16, b = 0.22, colorStr = 'ffc32838'},
-        ['WARLOCK'] = {r = 0.65, g = 0.64, b = 0.88, colorStr = 'ffa5a3e0'},
-        ['DEMONHUNTER'] = {r = 0.82, g = 0.35, b = 0.89, colorStr = 'ffd259e3'},
-        ['ROGUE'] = {r = 0.91, g = 0.81, b = 0.51, colorStr = 'ffe9cb7f'},
-        ['DRUID'] = {r = 0.95, g = 0.48, b = 0.27, colorStr = 'fff27944'},
-        ['MONK'] = {r = 0.28, g = 0.84, b = 0.6, colorStr = 'ff48d599'},
-        ['SHAMAN'] = {r = 0.29, g = 0.29, b = 0.82, colorStr = 'ff4949d0'},
+    HealthColor = {r = .81, g = .81, b = .81},
+    CustomClassColor = false,
+    ClassColorsList = {
+        HUNTER = {r = 0.2, g = 0.71, b = 0.25, colorStr = 'ff33b541'},
+        WARRIOR = {r = 0.78, g = 0.61, b = 0.39, colorStr = 'ffc79b64'},
+        PALADIN = {r = 0.93, g = 0.33, b = 0.42, colorStr = 'ffee556c'},
+        MAGE = {r = 0.49, g = 0.66, b = 0.89, colorStr = 'ff7ea8e3'},
+        PRIEST = {r = 0.83, g = 0.83, b = 0.83, colorStr = 'ffd3d3d3'},
+        DEATHKNIGHT = {r = 0.77, g = 0.16, b = 0.22, colorStr = 'ffc32838'},
+        WARLOCK = {r = 0.65, g = 0.64, b = 0.88, colorStr = 'ffa5a3e0'},
+        DEMONHUNTER = {r = 0.82, g = 0.35, b = 0.89, colorStr = 'ffd259e3'},
+        ROGUE = {r = 0.91, g = 0.81, b = 0.51, colorStr = 'ffe9cb7f'},
+        DRUID = {r = 0.95, g = 0.48, b = 0.27, colorStr = 'fff27944'},
+        MONK = {r = 0.28, g = 0.84, b = 0.6, colorStr = 'ff48d599'},
+        SHAMAN = {r = 0.12, g = 0.47, b = 0.42, colorStr = 'ff1f786b'},
     },
 }
 
