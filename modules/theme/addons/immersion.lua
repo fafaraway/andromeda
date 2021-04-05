@@ -131,14 +131,15 @@ local function ReskinImmersion()
     hilite:SetBackdropColor(cr, cg, cb, .25)
     hilite:SetBackdropBorderColor(cr, cg, cb, 1)
 
-    local elements = talkBox.Elements
-    F.StripTextures(elements)
-    F.SetBD(elements, nil, 0, -10, 0, 0)
-    elements.Content.RewardsFrame.ItemHighlight.Icon:SetAlpha(0)
-
     local mainFrame = talkBox.MainFrame
     F.StripTextures(mainFrame)
-    F.SetBD(mainFrame)
+    F.SetBD(mainFrame, .45)
+
+    local elements = talkBox.Elements
+    F.StripTextures(elements)
+    F.SetBD(elements, .45, 0, -12, 0, 0)
+    elements.Content.RewardsFrame.ItemHighlight.Icon:SetAlpha(0)
+
     F.ReskinClose(mainFrame.CloseButton)
     F.StripTextures(mainFrame.Model)
     local bg = F.CreateBDFrame(mainFrame.Model, 0)
