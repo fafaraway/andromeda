@@ -280,7 +280,7 @@ function GUI:UpdateCurrentProfile()
 			UpdateButtonStatus(bar.apply, true)
 			UpdateButtonStatus(bar.reset, false)
 			bar:SetBackdropColor(0, 0, 0, .25)
-			bar.apply.bg:SetBackdropBorderColor(0, 0, 0)
+			F.SetBorderColor(bar.apply.bg)
 		end
 	end
 end

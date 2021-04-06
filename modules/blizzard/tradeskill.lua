@@ -175,7 +175,7 @@ function BLIZZARD:TradeTabs_FilterIcons()
         local value = self.__value
         if value[3]() then
             value[4](false)
-            self.bg:SetBackdropBorderColor(0, 0, 0)
+            F.SetBorderColor(self.bg)
         else
             value[4](true)
             self.bg:SetBackdropBorderColor(1, .8, 0)
@@ -200,7 +200,7 @@ function BLIZZARD:TradeTabs_FilterIcons()
             if value[3]() then
                 buttons[index].bg:SetBackdropBorderColor(1, .8, 0)
             else
-                buttons[index].bg:SetBackdropBorderColor(0, 0, 0)
+                F.SetBorderColor(buttons[index].bg)
             end
         end
     end

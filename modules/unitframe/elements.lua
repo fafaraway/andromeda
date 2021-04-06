@@ -1883,7 +1883,7 @@ function UNITFRAME:AddPortrait(self)
     end
 
     local portrait = CreateFrame('PlayerModel', nil, self)
-    portrait:SetAllPoints(self)
+    portrait:SetInside()
     portrait:SetFrameLevel(self.Health:GetFrameLevel() + 2)
     portrait:SetAlpha(.1)
     portrait.PostUpdate = PostUpdatePortrait

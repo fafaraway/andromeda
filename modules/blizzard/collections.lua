@@ -31,7 +31,7 @@ function BLIZZARD:PetTabs_Click(button)
             btn.bg:SetBackdropBorderColor(1, 1, 1)
             activeCount = activeCount + 1
         else
-            btn.bg:SetBackdropBorderColor(0, 0, 0)
+            F.SetBorderColor(btn.bg)
         end
         C_PetJournal_SetPetTypeFilter(btn.petType, btn.isActive)
     end
@@ -68,7 +68,7 @@ function BLIZZARD:PetTabs_Create()
         for petIndex in ipairs(PET_TYPE_SUFFIX) do
             local btn = _G['PetJournalQuickFilterButton' .. petIndex]
             btn.isActive = false
-            btn.bg:SetBackdropBorderColor(0, 0, 0)
+            F.SetBorderColor(btn.bg)
         end
     end
 end

@@ -421,7 +421,7 @@ function TOOLTIP:ReskinTooltip()
     local color = _G.FREE_ADB.BackdropColor
     local alpha = _G.FREE_ADB.BackdropAlpha
 	self.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-	self.bg:SetBackdropBorderColor(0, 0, 0, 1)
+	F.SetBorderColor(self.bg)
 	if self.bg.__shadow then
 		self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
 	end

@@ -756,19 +756,20 @@ do
     end
 
     -- Setup backdrop
-    C.Frames = {}
+    function F:SetBorderColor()
+        local borderColor = _G.FREE_ADB.BorderColor
+        self:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b, 1)
+    end
 
-    local defaultBackdrop = {bgFile = assets.bd_tex, edgeFile = assets.bd_tex}
+    C.Frames = {}
     function F:CreateBD(a)
         local color = _G.FREE_ADB.BackdropColor
         local alpha = _G.FREE_ADB.BackdropAlpha
-        local borderColor = _G.FREE_ADB.BorderColor
 
-        defaultBackdrop.edgeSize = C.Mult
-
-        self:SetBackdrop(defaultBackdrop)
+        self:SetBackdrop({bgFile = assets.bd_tex, edgeFile = assets.bd_tex, edgeSize = C.Mult})
         self:SetBackdropColor(color.r, color.g, color.b, a or alpha)
-        self:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
+
+        F.SetBorderColor(self)
 
         if not a then
             tinsert(C.Frames, self)
@@ -1031,10 +1032,9 @@ do
     local function Button_OnLeave(self)
         local color = _G.FREE_ADB.ButtonBackdropColor
         local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
-        local borderColor = _G.FREE_ADB.BorderColor
 
         self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
+        F.SetBorderColor(self.__bg)
     end
 
     local blizzRegions = {
@@ -1101,9 +1101,8 @@ do
 
         local color = _G.FREE_ADB.ButtonBackdropColor
         local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
-        local borderColor = _G.FREE_ADB.BorderColor
         self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-        self.__bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
+        F.SetBorderColor(self.__bg)
 
         self:HookScript('OnEnter', Button_OnEnter)
         self:HookScript('OnLeave', Button_OnLeave)
@@ -1114,31 +1113,6 @@ do
             self:HookScript('OnEnter', StartGlow)
             self:HookScript('OnLeave', StopGlow)
         end
-    end
-
-    local function Menu_OnEnter(self)
-        self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-    end
-
-    local function Menu_OnLeave(self)
-        self.bg:SetBackdropBorderColor(0, 0, 0)
-    end
-
-    local function Menu_OnMouseUp(self)
-        self.bg:SetBackdropColor(0, 0, 0, .6)
-    end
-
-    local function Menu_OnMouseDown(self)
-        self.bg:SetBackdropColor(C.r, C.g, C.b, .2)
-    end
-
-    function F:ReskinMenuButton()
-        -- F.StripTextures(self)
-        self.bg = F.SetBD(self)
-        self:SetScript('OnEnter', Menu_OnEnter)
-        self:SetScript('OnLeave', Menu_OnLeave)
-        self:HookScript('OnMouseUp', Menu_OnMouseUp)
-        self:HookScript('OnMouseDown', Menu_OnMouseDown)
     end
 
     -- Handle tabs
@@ -1188,10 +1162,8 @@ do
 
         local color = _G.FREE_ADB.ButtonBackdropColor
         local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
-        local borderColor = _G.FREE_ADB.BorderColor
-
         thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
-        thumb.bg:SetBackdropBorderColor(borderColor.r, borderColor.g, borderColor.b)
+        F.SetBorderColor(thumb.bg)
     end
 
     local function GrabScrollBarElement(frame, element)
