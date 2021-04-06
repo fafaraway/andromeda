@@ -33,8 +33,9 @@ or **[join FreeUI Discord channel](https://discord.gg/86wbfZXxn7)**.
 *  `/free reset` *reset all saved options data*
 
 ## Additional
+*  [WeakAuras Collection](https://wago.io/ByU12CBbm) *Several WA snippets that I personally use*
 *  [Clean Icons - Mechagnome Edition](https://www.wowinterface.com/downloads/info25064-CleanIcons-MechagnomeEdition.html#info) *Icons replacement with high resolution*
-*  [Chinese font pack](https://1drv.ms/u/s!AocaDk73Gt7sgrZmwW0iTELqw2uQvQ?e=OQVeHe) *Fonts replacement for Chinese game client*
+*  [Chinese Font Pack](https://1drv.ms/u/s!AocaDk73Gt7sgrZmwW0iTELqw2uQvQ?e=OQVeHe) *Fonts replacement for Chinese game client*
 
 ## Credits
 *  Haleth, siweia, Alza, Tukz, Gethe, Elv, Haste, Lightspark, Zork, Allez, AlleyKat, Caellian, p3lim, Shantalya, tekkub, Tuller, Wildbreath, aduth, silverwind, Nibelheim, humfras, aliluya555, Paojy, Rubgrsch, EKE, fang2hou, lilbitz95, Djamy, Hacktivist
