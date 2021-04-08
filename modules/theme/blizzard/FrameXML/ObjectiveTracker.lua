@@ -1,6 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-
 local function reskinQuestIcon(button)
 	if not button then return end
 
@@ -28,37 +27,16 @@ local function reskinQuestIcons(_, block)
 	reskinQuestIcon(block.groupFinderButton)
 end
 
-local function reskinHeader()
-	local frame = ObjectiveTrackerFrame.MODULES
-
-	if frame then
-		for i = 1, #frame do
-			local modules = frame[i]
-			if modules then
-				local header = modules.Header
-
-				local background = modules.Header.Background
-				background:SetAtlas(nil)
-
-				if not modules.IsSkinned then
-					local headerPanel = _G.CreateFrame('Frame', nil, header)
-					headerPanel:SetFrameLevel(header:GetFrameLevel() - 1)
-					headerPanel:SetFrameStrata('BACKGROUND')
-					headerPanel:SetPoint('TOPLEFT', 1, 1)
-					headerPanel:SetPoint('BOTTOMRIGHT', 1, 1)
-
-					local headerBar = headerPanel:CreateTexture(nil, 'ARTWORK')
-					headerBar:SetTexture('Interface\\LFGFrame\\UI-LFG-SEPARATOR')
-					headerBar:SetTexCoord(0, 0.6640625, 0, 0.3125)
-					headerBar:SetVertexColor(C.r, C.g, C.b, .6)
-					headerBar:SetPoint('CENTER', headerPanel, -20, -4)
-					headerBar:SetSize(232, 30)
-
-					modules.IsSkinned = true
-				end
-			end
-		end
-	end
+local function reskinHeader(header)
+    header.Text:SetTextColor(C.r, C.g, C.b)
+	header.Background:SetTexture(nil)
+	local bg = header:CreateTexture(nil, "ARTWORK")
+	bg:SetTexture("Interface\\LFGFrame\\UI-LFG-SEPARATOR")
+	bg:SetTexCoord(0, .66, 0, .31)
+	bg:SetVertexColor(C.r, C.g, C.b, .8)
+	bg:SetPoint("BOTTOMLEFT", 0, -4)
+	bg:SetSize(250, 30)
+	header.bg = bg -- accessable for other addons
 end
 
 local function reskinBarTemplate(bar)
@@ -103,7 +81,6 @@ local function reskinProgressbarWithIcon(_, _, line)
 	if not bar.bg then
 		bar:SetPoint("LEFT", 22, 0)
 		reskinBarTemplate(bar)
-		BonusObjectiveTrackerProgressBar_PlayFlareAnim = F.Dummy
 
 		icon:SetMask(nil)
 		icon.bg = F.ReskinIcon(icon, true)
@@ -144,6 +121,28 @@ local function reskinMinimizeButton(button)
 	hooksecurefunc(button, "SetCollapsed", updateMinimizeButton)
 end
 
+local atlasToQuality = {
+	["jailerstower-animapowerlist-powerborder-white"] = LE_ITEM_QUALITY_COMMON,
+	["jailerstower-animapowerlist-powerborder-green"] = LE_ITEM_QUALITY_UNCOMMON,
+	["jailerstower-animapowerlist-powerborder-blue"] = LE_ITEM_QUALITY_RARE,
+	["jailerstower-animapowerlist-powerborder-purple"] = LE_ITEM_QUALITY_EPIC,
+}
+
+local function updateMawBuffQuality(button, spellID)
+	if not spellID then return end
+
+	local atlas = C_Spell.GetMawPowerBorderAtlasBySpellID(spellID)
+	local quality = atlasToQuality[atlas]
+	local color = C.QualityColors[quality or 1]
+	if button.bg then
+		button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+	end
+end
+
+local function updateMawBuffInfo(button, buffInfo)
+	updateMawBuffQuality(button, buffInfo.spellID)
+end
+
 local function GetMawBuffsAnchor(frame)
 	local center = frame:GetCenter()
 	if center and center < GetScreenWidth()/2 then
@@ -155,8 +154,6 @@ end
 
 tinsert(C.BlizzThemes, function()
 	local r, g, b = C.r, C.g, C.b
-
-	hooksecurefunc('ObjectiveTracker_Update', reskinHeader)
 
 	-- QuestIcons
 	hooksecurefunc(QUEST_TRACKER_MODULE, "SetBlockHeader", reskinQuestIcons)
@@ -226,7 +223,41 @@ tinsert(C.BlizzThemes, function()
 
 	hooksecurefunc("Scenario_ChallengeMode_SetUpAffixes", F.AffixesSetup)
 
+    -- Block in jail tower
+	local mawBuffsBlock = ScenarioBlocksFrame.MawBuffsBlock
+	local bg = F.SetBD(mawBuffsBlock, nil, 20, -10, -20, 10)
+	--bg:SetBackdropColor(0, .5, .5, .25)
 
+	local blockContainer = mawBuffsBlock.Container
+	F.StripTextures(blockContainer)
+	blockContainer:GetPushedTexture():SetAlpha(0)
+	blockContainer:GetHighlightTexture():SetAlpha(0)
+
+	local blockList = blockContainer.List
+	blockList.__bg = bg
+	blockList:HookScript("OnShow", function(self)
+		--self.__bg:SetBackdropBorderColor(1, .8, 0, .5)
+
+		for mawBuff in self.buffPool:EnumerateActive() do
+			if mawBuff:IsShown() and not mawBuff.bg then
+				mawBuff.Border:SetAlpha(0)
+				mawBuff.CircleMask:Hide()
+				mawBuff.CountRing:SetAlpha(0)
+				mawBuff.HighlightBorder:SetColorTexture(1, 1, 1, .25)
+				mawBuff.bg = F.ReskinIcon(mawBuff.Icon)
+
+				updateMawBuffQuality(mawBuff, mawBuff.spellID)
+				hooksecurefunc(mawBuff, "SetBuffInfo", updateMawBuffInfo)
+			end
+		end
+	end)
+	blockList:HookScript("OnHide", function(self)
+		self.__bg:SetBackdropBorderColor(0, 0, 0, 1)
+	end)
+	F.StripTextures(blockList)
+	F.SetBD(blockList)
+
+    -- Reskin Headers
 	local headers = {
 		ObjectiveTrackerBlocksFrame.QuestHeader,
 		ObjectiveTrackerBlocksFrame.AchievementHeader,
@@ -237,6 +268,9 @@ tinsert(C.BlizzThemes, function()
 		ObjectiveTrackerFrame.BlocksFrame.UIWidgetsHeader
 	}
 
+    for _, header in pairs(headers) do
+		reskinHeader(header)
+	end
 
 	-- Minimize Button
 	local mainMinimize = ObjectiveTrackerFrame.HeaderMenu.MinimizeButton
@@ -249,8 +283,6 @@ tinsert(C.BlizzThemes, function()
 			reskinMinimizeButton(minimize)
 		end
 	end
-
-	F:SetFS(ObjectiveTrackerFrame.HeaderMenu.Title, C.Assets.Fonts.Header, 15, nil, nil, nil, 'THICK')
 
 	-- Maw buffs block
 	ScenarioBlocksFrame.MawBuffsBlock.Container:HookScript("OnClick", function(container)
