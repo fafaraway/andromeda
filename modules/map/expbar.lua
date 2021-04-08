@@ -108,7 +108,8 @@ end
 function MAP:ExpBar_UpdateTooltip()
 	GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
 	GameTooltip:ClearLines()
-	GameTooltip:AddLine(LEVEL .. ' ' .. UnitLevel('player'), C.r, C.g, C.b)
+	--GameTooltip:AddLine(LEVEL .. ' ' .. UnitLevel('player'), C.r, C.g, C.b)
+    GameTooltip:AddDoubleLine(C.MyName, LEVEL .. ': ' .. UnitLevel('player'), C.r, C.g, C.b, 1, 1, 1)
 
 	if not IsPlayerAtEffectiveMaxLevel() then
 		GameTooltip:AddLine(' ')

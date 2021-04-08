@@ -64,15 +64,15 @@ L.UNITFRAME.BINDER_TIP = 'Ctrl/Alt/Shift + любая кнопка мыши дл
 
 --[[ Blizzard ]]
 
-L.BLIZZARD.UNDRESS = 'Раздеть'
-L.BLIZZARD.UNDRESS_TIP = '%sСнять все вещи|n%sСнять накидку'
-L.BLIZZARD.USE_VELLUM = 'Right click to use vellum'
-L.BLIZZARD.STRANGER = 'Незнакомец'
-L.BLIZZARD.KEYSTONES = 'Ключи'
-L.BLIZZARD.KEYSTONES_RESET = 'Удалить информацию о ключах'
-L.BLIZZARD.GET_NAKED = 'Двойной клик что бы снять всю броню'
-L.BLIZZARD.ORDERHALL_TIP = 'Зажать SHIFT для доп.информации'
-L.BLIZZARD.GOLD = 'Золото'
+L.GENERAL.UNDRESS = 'Раздеть'
+L.GENERAL.UNDRESS_TIP = '%sСнять все вещи|n%sСнять накидку'
+L.GENERAL.USE_VELLUM = 'Right click to use vellum'
+L.GENERAL.STRANGER = 'Незнакомец'
+L.GENERAL.KEYSTONES = 'Ключи'
+L.GENERAL.KEYSTONES_RESET = 'Удалить информацию о ключах'
+L.GENERAL.GET_NAKED = 'Двойной клик что бы снять всю броню'
+L.GENERAL.ORDERHALL_TIP = 'Зажать SHIFT для доп.информации'
+L.GENERAL.GOLD = 'Золото'
 
 
 --[[ Misc ]]

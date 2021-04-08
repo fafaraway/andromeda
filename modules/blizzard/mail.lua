@@ -32,7 +32,7 @@ local function OnEvent()
         end
         cash = cash + money
     end
-    text:SetText(C.InfoColor .. format('%d ' .. L.BLIZZARD.GOLD .. ' %d ' .. ITEMS, floor(cash * 0.0001), items))
+    text:SetText(C.InfoColor .. format('%d ' .. L.GENERAL.GOLD .. ' %d ' .. ITEMS, floor(cash * 0.0001), items))
 
     if (processing) then
         if (num == 0) then
@@ -67,8 +67,8 @@ local function OnHide()
     processing = false
 end
 
-function BLIZZARD:MailButton()
-    if not C.DB.blizzard.mail_button then
+function BLIZZARD:EnhancedMailButton()
+    if not C.DB.General.EnhancedMailButton then
         return
     end
 
@@ -88,4 +88,4 @@ function BLIZZARD:MailButton()
     b:SetScript('OnClick', OnClick)
     b:SetScript('OnHide', OnHide)
 end
-BLIZZARD:RegisterBlizz('MailButton', BLIZZARD.MailButton)
+BLIZZARD:RegisterBlizz('EnhancedMailButton', BLIZZARD.EnhancedMailButton)

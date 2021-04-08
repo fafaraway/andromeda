@@ -268,7 +268,7 @@ function INSTALL:HelloWorld()
 		rightButton:SetText(L.GUI.INSTALLATION.FINISH)
 
 		rightButton:SetScript('OnClick', function()
-			C.DB.installation.complete = true
+			C.DB.InstallationComplete = true
 			ReloadUI()
 		end)
 	end
@@ -364,7 +364,7 @@ end
 
 
 function INSTALL:OnLogin()
-	if not C.DB.installation.complete then
+	if not C.DB.InstallationComplete then
 		self:HelloWorld()
 	end
 end

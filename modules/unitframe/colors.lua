@@ -8,7 +8,7 @@ local UNITFRAME = F.UNITFRAME
 local colors = F.OUF.colors
 
 function UNITFRAME:UpdateHealthColor()
-    local color = _G.FREE_ADB.HealthColor
+    local color = C.DB.unitframe.HealthColor
     colors.health = {color.r, color.g, color.b}
 end
 

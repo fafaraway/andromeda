@@ -18,7 +18,7 @@ end
 local function ReskinSecondOptionButton(self)
 	if not self or self.__bg then return end
 
-	F.Reskin(self, nil, true)
+	F.Reskin(self)
 end
 
 C.Themes["Blizzard_PlayerChoiceUI"] = function()

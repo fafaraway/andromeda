@@ -42,7 +42,7 @@ function BLIZZARD:OnLogin()
 end
 
 function BLIZZARD:ToggleBossBanner()
-    if C.DB.blizzard.hide_boss_banner then
+    if C.DB.General.HideBossBanner then
         _G.BossBanner:UnregisterAllEvents()
     else
         _G.BossBanner:RegisterEvent('BOSS_KILL')
@@ -51,7 +51,7 @@ function BLIZZARD:ToggleBossBanner()
 end
 
 function BLIZZARD:ToggleBossEmote()
-    if C.DB.blizzard.hide_boss_emote then
+    if C.DB.General.HideBossEmote then
         _G.RaidBossEmoteFrame:UnregisterAllEvents()
     else
         _G.RaidBossEmoteFrame:RegisterEvent('RAID_BOSS_EMOTE')
@@ -61,10 +61,6 @@ function BLIZZARD:ToggleBossEmote()
 end
 
 function BLIZZARD:TradeTargetInfo()
-    if not C.DB.blizzard.trade_target_info then
-        return
-    end
-
     local infoText = F.CreateFS(_G.TradeFrame, C.Assets.Fonts.Regular, 14, true)
     infoText:ClearAllPoints()
     infoText:SetPoint('TOP', _G.TradeFrameRecipientNameText, 'BOTTOM', 0, -5)
@@ -77,7 +73,7 @@ function BLIZZARD:TradeTargetInfo()
         if not guid then
             return
         end
-        local text = C.RedColor .. L.BLIZZARD.STRANGER
+        local text = C.RedColor .. L.GENERAL.STRANGER
         if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
             text = C.GreenColor .. FRIEND
         elseif IsGuildMember(guid) then
@@ -90,10 +86,6 @@ end
 
 function BLIZZARD:EasyDelete()
     hooksecurefunc(_G.StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
-        if not C.DB.blizzard.easy_delete then
-            return
-        end
-
         self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
     end)
 end

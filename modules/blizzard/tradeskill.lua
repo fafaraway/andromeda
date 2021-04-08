@@ -246,7 +246,7 @@ local function IsRecipeEnchanting(self)
         local parentSkillLineID = select(6, C_TradeSkillUI_GetTradeSkillLine())
         if parentSkillLineID == 333 then
             isEnchanting = true
-            self.CreateButton.tooltip = format(tooltipString, L.BLIZZARD.USE_VELLUM, GetItemCount(ENCHANTING_VELLUM))
+            self.CreateButton.tooltip = format(tooltipString, L.GENERAL.USE_VELLUM, GetItemCount(ENCHANTING_VELLUM))
         end
     end
 end
@@ -269,7 +269,7 @@ function BLIZZARD:TradeTabs_QuickEnchanting()
 end
 
 function BLIZZARD:TradeTabs()
-    if not C.DB.blizzard.tradeskill_tabs then
+    if not C.DB.General.TradeTabs then
         return
     end
 

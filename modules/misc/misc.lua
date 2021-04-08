@@ -72,7 +72,6 @@ function MISC:OnLogin()
     MISC:FasterMovieSkip()
     MISC:LFDFix()
     MISC:BuyStack()
-    MISC:SetRole()
     MISC:MawWidgetFrame()
 
     MISC:GetVisualId()
@@ -105,7 +104,7 @@ local function readyCheckHook(_, initiator)
 end
 
 function MISC:ForceWarning()
-    if C.DB.Misc.ForceWarning then
+    if C.DB.General.ForceWarning then
         F:RegisterEvent('UPDATE_BATTLEFIELD_STATUS', forceWarningOnEvent)
         F:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH', forceWarningOnEvent)
         F:RegisterEvent('LFG_PROPOSAL_SHOW', forceWarningOnEvent)
@@ -122,7 +121,7 @@ end
 
 -- Camera smooth zooming
 function MISC:SmoothZooming()
-    if not C.DB.Misc.SmoothZooming then
+    if not C.DB.General.SmoothZooming then
         return
     end
 
@@ -155,7 +154,7 @@ local function setActionCam(cmd)
 end
 
 local function updateActionCamera()
-    if C.DB.Misc.ActionCam then
+    if C.DB.General.ActionMode then
         setActionCam('basic')
     else
         setActionCam('off')
@@ -183,7 +182,7 @@ local function fasterLootOnEvent()
 end
 
 function MISC:FasterLoot()
-    if C.DB.Misc.FasterLoot then
+    if C.DB.General.FasterLoot then
         F:RegisterEvent('LOOT_READY', fasterLootOnEvent)
     else
         F:UnregisterEvent('LOOT_READY', fasterLootOnEvent)
@@ -192,7 +191,7 @@ end
 
 -- Faster movie skip
 function MISC:FasterMovieSkip()
-    if not C.DB.Misc.FasterMovieSkip then
+    if not C.DB.General.FasterMovieSkip then
         return
     end
 
@@ -229,7 +228,7 @@ end
 
 -- Auto screenshot
 local function achievementEarned(...)
-    if not C.DB.Misc.ScreenshotAchievement then
+    if not C.DB.General.EarnedNewAchievement then
         return
     end
 
@@ -243,7 +242,7 @@ local function achievementEarned(...)
 end
 
 local function challengeModeCompleted()
-    if not C.DB.Misc.ScreenshotChallenge then
+    if not C.DB.General.ChallengeModeCompleted then
         return
     end
 
@@ -251,7 +250,7 @@ local function challengeModeCompleted()
 end
 
 local function playerLevelUp()
-    if not C.DB.Misc.ScreenshotLevelup then
+    if not C.DB.General.PlayerLevelUp then
         return
     end
 
@@ -259,7 +258,7 @@ local function playerLevelUp()
 end
 
 local function playerDead()
-    if not C.DB.Misc.ScreenshotDead then
+    if not C.DB.General.PlayerDead then
         return
     end
 
@@ -267,7 +266,7 @@ local function playerDead()
 end
 
 function MISC:AutoScreenshot()
-    if not C.DB.Misc.Screenshot then
+    if not C.DB.General.AutoTakeScreenshot then
         return
     end
 
@@ -283,7 +282,7 @@ function MISC:BuyStack()
     local itemLink, id
 
     _G.StaticPopupDialogs['FREEUI_BUY_STACK'] = {
-        text = L['MISC_BUY_STACK'],
+        text = L.GENERAL.BUY_STACK_WARNING,
         button1 = YES,
         button2 = NO,
         OnAccept = function()
@@ -330,34 +329,6 @@ function MISC:BuyStack()
     end
 end
 
--- Set role
-local prev = 0
-local function setMyRole()
-    if C.MyLevel >= 10 and not InCombatLockdown() and IsInGroup() and not IsPartyLFG() then
-        local spec = GetSpecialization()
-        if spec then
-            local role = GetSpecializationRole(spec)
-            if UnitGroupRolesAssigned('player') ~= role then
-                local t = GetTime()
-                if t - prev > 2 then
-                    prev = t
-                    UnitSetRole('player', role)
-                end
-            end
-        else
-            UnitSetRole('player', 'No Role')
-        end
-    end
-end
-
-function MISC:SetRole()
-    F:RegisterEvent('PLAYER_TALENT_UPDATE', setMyRole)
-    F:RegisterEvent('GROUP_ROSTER_UPDATE', setMyRole)
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', setMyRole)
-
-    _G.RolePollPopup:UnregisterEvent('ROLE_POLL_BEGIN')
-end
-
 -- Maw threat bar
 local maxValue = 1000
 local function GetMawBarValue()
@@ -398,7 +369,7 @@ function MISC:UpdateMawBarLayout()
 end
 
 function MISC:MawWidgetFrame()
-    if not C.DB.blizzard.maw_threat_bar then
+    if not C.DB.General.MawThreatBar then
         return
     end
 
@@ -414,7 +385,7 @@ function MISC:MawWidgetFrame()
     F:SmoothBar(bar)
     MISC.MawBar = bar
 
-    F.Mover(bar, L.GUI.MOVER.MAW_THREAT_BAR, 'MawThreatBar', {'TOP', _G.UIParent, 0, -80})
+    F.Mover(bar, L.MOVER.MAW_THREAT_BAR, 'MawThreatBar', {'TOP', _G.UIParent, 0, -80})
 
     bar:SetScript('OnEnter', function(self)
         local rank = GetMawBarValue()

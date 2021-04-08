@@ -121,7 +121,7 @@ function LOGO:LoginAnimation()
 end
 
 function LOGO:OnLogin()
-    if not C.DB.installation.complete then
+    if not C.DB.InstallationComplete then
         return
     end
 

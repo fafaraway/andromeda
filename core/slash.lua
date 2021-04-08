@@ -33,18 +33,7 @@ StaticPopupDialogs['FREEUI_RESET_OPTIONS'] = {
 
 
 
-StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
-	text = L.GUI.MOVER.RESET,
-	button1 = OKAY,
-	button2 = CANCEL,
-	OnAccept = function()
-		wipe(C.DB.ui_anchor)
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false,
-}
+
 
 --[[ local crossRealms = GetAutoCompleteRealms()
 if not crossRealms or #crossRealms == 0 then

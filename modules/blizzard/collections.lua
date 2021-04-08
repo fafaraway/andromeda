@@ -81,7 +81,7 @@ function BLIZZARD:PetTabs_Load(addon)
 end
 
 function BLIZZARD:PetTabs_Init()
-    if not C.DB.blizzard.pet_filter then
+    if not C.DB.General.PetFilter then
         return
     end
 

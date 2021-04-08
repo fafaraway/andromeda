@@ -39,14 +39,10 @@ local ELITE = ELITE
 local LEVEL = LEVEL
 
 local F, C = unpack(select(2, ...))
-local OUF = F.OUF
 
-local tags = OUF.Tags.Methods
-local tagEvents = OUF.Tags.Events
-
-local function abbrName(str)
-    return gsub(str, '%s?(.[\128-\191]*)%S+%s', '%1. ')
-end
+local colors = F.OUF.colors
+local tags = F.OUF.Tags.Methods
+local tagEvents = F.OUF.Tags.Events
 
 tags['free:health'] = function(unit)
     if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then
@@ -54,7 +50,7 @@ tags['free:health'] = function(unit)
     end
 
     local cur = UnitHealth(unit)
-    local r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
+    local r, g, b = unpack(colors.reaction[UnitReaction(unit, 'player') or 5])
 
     return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:Numb(cur))
 end
@@ -66,7 +62,7 @@ tags['free:healthpercentage'] = function(unit)
     end
 
     local cur, max = UnitHealth(unit), UnitHealthMax(unit)
-    local r, g, b = F:ColorGradient(cur / max, unpack(OUF.colors.smooth))
+    local r, g, b = F:ColorGradient(cur / max, unpack(colors.smooth))
     r, g, b = r * 255, g * 255, b * 255
 
     if cur ~= max then
@@ -101,22 +97,6 @@ tags['free:stagger'] = function(unit)
 end
 tagEvents['free:stagger'] = 'UNIT_MAXHEALTH UNIT_AURA'
 
-tags['free:dead'] = function(unit)
-    if UnitIsDead(unit) then
-        return '|cffd84343' .. 'Dead'
-    elseif UnitIsGhost(unit) then
-        return '|cffbd69be' .. 'Ghost'
-    end
-end
-tagEvents['free:dead'] = 'UNIT_HEALTH'
-
-tags['free:offline'] = function(unit)
-    if not UnitIsConnected(unit) then
-        return '|cffcccccc' .. 'Off'
-    end
-end
-tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
-
 tags['free:title'] = function(unit)
     if UnitIsPlayer(unit) then
         return
@@ -137,9 +117,9 @@ tags['free:color'] = function(unit)
     local r, g, b = UnitSelectionColor(unit, true)
 
     if UnitIsTapDenied(unit) then
-        return F:RGBToHex(OUF.colors.tapped)
+        return F:RGBToHex(colors.tapped)
     elseif UnitIsPlayer(unit) then
-        return F:RGBToHex(OUF.colors.class[class])
+        return F:RGBToHex(colors.class[class])
     elseif r then
         return F:RGBToHex(r, g, b)
     else
@@ -148,33 +128,48 @@ tags['free:color'] = function(unit)
 end
 tagEvents['free:color'] = 'UNIT_HEALTH UNIT_MAXHEALTH UNIT_NAME_UPDATE UNIT_FACTION UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 
-tags['free:name'] = function(unit)
-    local abbr = C.DB.unitframe.abbr_name
-    local len = C.isChinses and C.DB.unitframe.ShortenLengthCN or C.DB.unitframe.ShortenLength
-    local str = UnitName(unit)
-    local abbrName = abbrName(str)
-    local shortenName = F:ShortenString(abbrName, len, true)
+tags['free:dead'] = function(unit)
+    if UnitIsDead(unit) then
+        return '|cffd84343' .. 'Dead'
+    elseif UnitIsGhost(unit) then
+        return '|cffbd69be' .. 'Ghost'
+    end
+end
+tagEvents['free:dead'] = 'UNIT_HEALTH'
 
-    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+tags['free:offline'] = function(unit)
+    if not UnitIsConnected(unit) then
+        return '|cffcccccc' .. 'Off'
+    end
+end
+tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
+
+tags['free:name'] = function(unit)
+    local useAbbr = C.DB.unitframe.abbr_name
+    local str = UnitName(unit)
+    local abbrName = F:AbbreviateString(str)
+
+    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or
+        (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
         return C.RedColor .. '<' .. YOU .. '>'
     else
-
-        return abbr and shortenName or str
+        return F:ShortenString(useAbbr and abbrName or str, C.isChinses and 6 or 8, true)
     end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
     local groupName = C.DB.unitframe.GroupName
-    local len = C.isChinses and C.DB.unitframe.GroupNameShortenLengthCN or C.DB.unitframe.GroupNameShortenLength
     local str = UnitName(unit)
 
-    if groupName then
-        if UnitInRaid('player') then
-            return F:ShortenString(str, len)
-        else
-            return F:ShortenString(str, 4)
-        end
+    if not UnitIsConnected(unit) then
+        return '|cffcccccc' .. 'Off'
+    elseif UnitIsDead(unit) then
+        return '|cffd84343' .. 'Dead'
+    elseif UnitIsGhost(unit) then
+        return '|cffbd69be' .. 'Ghost'
+    elseif groupName then
+        return F:ShortenString(str, C.isChinses and 2 or 4)
     else
         return ''
     end
@@ -224,7 +219,7 @@ tags['free:tarname'] = function(unit)
     local tarUnit = unit .. 'target'
     if UnitExists(tarUnit) then
         local tarClass = select(2, UnitClass(tarUnit))
-        return F:RGBToHex(OUF.colors.class[tarClass]) .. UnitName(tarUnit)
+        return F:RGBToHex(colors.class[tarClass]) .. UnitName(tarUnit)
     end
 end
 tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH'

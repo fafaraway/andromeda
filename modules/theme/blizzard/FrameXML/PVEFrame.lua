@@ -21,13 +21,13 @@ tinsert(C.BlizzThemes, function()
 		local bu = GroupFinderFrame["groupButton"..i]
 
 		bu.ring:Hide()
-		F.Reskin(bu, true)
+		F.Reskin(bu)
 		bu.bg:SetTexture(C.Assets.bd_tex)
 		bu.bg:SetVertexColor(r, g, b, .2)
 		bu.bg:SetInside(bu.__bg)
 
-		bu.icon:SetPoint("LEFT", bu, "LEFT")
-		bu.icon:SetSize(iconSize, iconSize)
+		bu.icon:SetPoint("LEFT", bu, "LEFT", 2, 0)
+		bu.icon:SetSize(bu:GetHeight()-4, bu:GetHeight()-4)
 		F.ReskinIcon(bu.icon)
 	end
 
@@ -47,9 +47,4 @@ tinsert(C.BlizzThemes, function()
 	F.ReskinTab(PVEFrameTab1)
 	F.ReskinTab(PVEFrameTab2)
 	F.ReskinTab(PVEFrameTab3)
-
-	PVEFrameTab2:ClearAllPoints()
-	PVEFrameTab2:SetPoint('LEFT', PVEFrameTab1, 'RIGHT', -10, 0)
-	PVEFrameTab3:ClearAllPoints()
-	PVEFrameTab3:SetPoint('LEFT', PVEFrameTab2, 'RIGHT', -10, 0)
 end)

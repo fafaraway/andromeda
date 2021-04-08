@@ -43,31 +43,46 @@ local HEADER = C.Assets.Fonts.Header
 local COMBAT = C.Assets.Fonts.Combat
 
 local function SetFont(obj, font, size, flag, shadow)
+    if not font then
+        if C.isDeveloper then
+            print('UNKNOWN FONT.')
+        end
+        return
+    end
+
+    local outline = _G.FREE_ADB.FontOutline
+
     local oldFont, oldSize, _ = obj:GetFont()
 
     font = font or oldFont
     size = size or oldSize
-    flag = flag and 'OUTLINE' or nil
+    -- flag = flag and 'OUTLINE' or nil
 
-    obj:SetFont(font, size, flag)
+    obj:SetFont(font, size, outline and 'OUTLINE')
 
-    if type(shadow) == 'string' and shadow == 'THICK' then
-        obj:SetShadowColor(0, 0, 0, 1)
-        obj:SetShadowOffset(2, -2)
-    elseif type(shadow) == 'table' then
-        obj:SetShadowColor(shadow[1], shadow[2], shadow[3], shadow[4])
-        obj:SetShadowOffset(shadow[5], shadow[6])
-    elseif flag == 'OUTLINE' or flag == 'THINOUTLINE' then
-        obj:SetShadowColor(0, 0, 0, 0)
-    else
-        obj:SetShadowColor(0, 0, 0, 1)
-    end
+    obj:SetShadowColor(0, 0, 0, outline and 0 or 1)
+
+    -- if type(shadow) == 'string' and shadow == 'THICK' then
+    --     obj:SetShadowColor(0, 0, 0, 1)
+    --     obj:SetShadowOffset(2, -2)
+    -- elseif type(shadow) == 'table' then
+    --     obj:SetShadowColor(shadow[1], shadow[2], shadow[3], shadow[4])
+    --     obj:SetShadowOffset(shadow[5], shadow[6])
+    -- elseif flag == 'OUTLINE' or flag == 'THINOUTLINE' then
+    --     obj:SetShadowColor(0, 0, 0, 0)
+    -- else
+    --     obj:SetShadowColor(0, 0, 0, 1)
+    -- end
 end
 
 local loader = CreateFrame('Frame')
 loader:RegisterEvent('ADDON_LOADED')
 loader:SetScript('OnEvent', function(self, _, addon)
     if addon ~= 'FreeUI' then
+        return
+    end
+
+    if not _G.FREE_ADB.ReskinBlizz then
         return
     end
 
@@ -164,24 +179,24 @@ loader:SetScript('OnEvent', function(self, _, addon)
     SetFont(_G.Fancy32Font, HEADER, 32)
     SetFont(_G.Fancy48Font, HEADER, 48)
 
-    SetFont(_G.NumberFont_GameNormal, NORMAL, 12, 'OUTLINE')
-    SetFont(_G.NumberFont_OutlineThick_Mono_Small, NORMAL, 11, 'OUTLINE')
-    SetFont(_G.Number12Font_o1, NORMAL, 11, 'OUTLINE')
-    SetFont(_G.NumberFont_Small, NORMAL, 11, 'OUTLINE')
-    SetFont(_G.Number11Font, NORMAL, 10, 'OUTLINE')
-    SetFont(_G.Number12Font, NORMAL, 11, 'OUTLINE')
-    SetFont(_G.Number13Font, NORMAL, 12, 'OUTLINE')
-    SetFont(_G.Number15Font, NORMAL, 14, 'OUTLINE')
-    SetFont(_G.Number16Font, NORMAL, 15, 'OUTLINE')
-    SetFont(_G.Number18Font, NORMAL, 17, 'OUTLINE')
-    SetFont(_G.NumberFont_Normal_Med, NORMAL, 13, 'OUTLINE')
-    SetFont(_G.NumberFont_Outline_Med, NORMAL, 13, 'OUTLINE')
-    SetFont(_G.NumberFont_Outline_Large, NORMAL, 16, 'OUTLINE')
-    SetFont(_G.NumberFont_Outline_Huge, HEADER, 20, 'OUTLINE')
-    SetFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10, 'OUTLINE')
-    SetFont(_G.NumberFont_Shadow_Small, NORMAL, 12, 'OUTLINE')
-    SetFont(_G.NumberFont_Shadow_Med, NORMAL, 14, 'OUTLINE')
-    SetFont(_G.NumberFont_Shadow_Large, HEADER, 20, 'OUTLINE')
+    SetFont(_G.NumberFont_GameNormal, NORMAL, 12)
+    SetFont(_G.NumberFont_OutlineThick_Mono_Small, NORMAL, 11)
+    SetFont(_G.Number12Font_o1, NORMAL, 11)
+    SetFont(_G.NumberFont_Small, NORMAL, 11)
+    SetFont(_G.Number11Font, NORMAL, 10)
+    SetFont(_G.Number12Font, NORMAL, 11)
+    SetFont(_G.Number13Font, NORMAL, 12)
+    SetFont(_G.Number15Font, NORMAL, 14)
+    SetFont(_G.Number16Font, NORMAL, 15)
+    SetFont(_G.Number18Font, NORMAL, 17)
+    SetFont(_G.NumberFont_Normal_Med, NORMAL, 13)
+    SetFont(_G.NumberFont_Outline_Med, NORMAL, 13)
+    SetFont(_G.NumberFont_Outline_Large, NORMAL, 16)
+    SetFont(_G.NumberFont_Outline_Huge, HEADER, 20)
+    SetFont(_G.NumberFont_Shadow_Tiny, NORMAL, 10)
+    SetFont(_G.NumberFont_Shadow_Small, NORMAL, 12)
+    SetFont(_G.NumberFont_Shadow_Med, NORMAL, 14)
+    SetFont(_G.NumberFont_Shadow_Large, HEADER, 20)
     SetFont(_G.PriceFont, NORMAL, 14)
     SetFont(_G.NumberFontNormalLargeRight, NORMAL, 14)
 
@@ -240,18 +255,18 @@ loader:SetScript('OnEvent', function(self, _, addon)
     SetFont(_G.SystemFont_LargeNamePlate, NORMAL, 12)
     SetFont(_G.SystemFont_NamePlateCastBar, NORMAL, 10)
 
-    SetFont(_G.ZoneTextFont, HEADER, 40, nil, 'THICK')
-    SetFont(_G.SubZoneTextFont, HEADER, 40, nil, 'THICK')
-    SetFont(_G.WorldMapTextFont, HEADER, 40, nil, 'THICK')
-    SetFont(_G.PVPInfoTextFont, HEADER, 40, nil, 'THICK')
+    -- SetFont(_G.ZoneTextFont, HEADER, 40, nil, 'THICK')
+    -- SetFont(_G.SubZoneTextFont, HEADER, 40, nil, 'THICK')
+    -- SetFont(_G.WorldMapTextFont, HEADER, 40, nil, 'THICK')
+    -- SetFont(_G.PVPInfoTextFont, HEADER, 40, nil, 'THICK')
 
-    SetFont(_G.ErrorFont, BOLD, 14, _G.FREE_ADB.font_outline, not _G.FREE_ADB.font_outline and 'THICK')
-    SetFont(_G.CombatTextFont, COMBAT, 200, 'THINOUTLINE')
+    SetFont(_G.ErrorFont, BOLD, 14)
+    SetFont(_G.CombatTextFont, COMBAT, 200)
 
-    SetFont(_G.RaidWarningFrame.slot1, BOLD, 20, _G.FREE_ADB.font_outline, not _G.FREE_ADB.font_outline and 'THICK')
-    SetFont(_G.RaidWarningFrame.slot2, BOLD, 20, _G.FREE_ADB.font_outline, not _G.FREE_ADB.font_outline and 'THICK')
-    SetFont(_G.RaidBossEmoteFrame.slot1, BOLD, 20, _G.FREE_ADB.font_outline, not _G.FREE_ADB.font_outline and 'THICK')
-    SetFont(_G.RaidBossEmoteFrame.slot2, BOLD, 20, _G.FREE_ADB.font_outline, not _G.FREE_ADB.font_outline and 'THICK')
+    -- SetFont(_G.RaidWarningFrame.slot1, BOLD, 20, _G.FREE_ADB.FontOutline, not _G.FREE_ADB.FontOutline and 'THICK')
+    -- SetFont(_G.RaidWarningFrame.slot2, BOLD, 20, _G.FREE_ADB.FontOutline, not _G.FREE_ADB.FontOutline and 'THICK')
+    -- SetFont(_G.RaidBossEmoteFrame.slot1, BOLD, 20, _G.FREE_ADB.FontOutline, not _G.FREE_ADB.FontOutline and 'THICK')
+    -- SetFont(_G.RaidBossEmoteFrame.slot2, BOLD, 20, _G.FREE_ADB.FontOutline, not _G.FREE_ADB.FontOutline and 'THICK')
 
     SetFont(_G.GameFontNormal, NORMAL, 13)
     SetFont(_G.QuestFont, NORMAL, 15)

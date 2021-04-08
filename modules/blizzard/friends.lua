@@ -216,11 +216,11 @@ local function UpdateFriendButton(button)
     end
 end
 
-function BLIZZARD:FriendsList()
-    if not C.DB.blizzard.friends_list then
+function BLIZZARD:EnhancedFriendsList()
+    if not C.DB.General.EnhancedFriendsList then
         return
     end
 
     hooksecurefunc('FriendsFrame_UpdateFriendButton', UpdateFriendButton)
 end
-BLIZZARD:RegisterBlizz('FriendsList', BLIZZARD.FriendsList)
+BLIZZARD:RegisterBlizz('EnhancedFriendsList', BLIZZARD.EnhancedFriendsList)

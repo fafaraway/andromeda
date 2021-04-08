@@ -178,25 +178,25 @@ function UNITFRAME:OnLogin()
                     return
                 end
 
-                if not C.DB['ui_anchor']['raid_position' .. specIndex] then
-                    C.DB['ui_anchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
+                if not C.DB['UIAnchor']['raid_position' .. specIndex] then
+                    C.DB['UIAnchor']['raid_position' .. specIndex] = {'TOPLEFT', 'oUF_Target', 'BOTTOMLEFT', 0, -10}
                 end
 
                 UNITFRAME.RaidMover:ClearAllPoints()
-                UNITFRAME.RaidMover:SetPoint(unpack(C.DB['ui_anchor']['raid_position' .. specIndex]))
+                UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
 
                 if UNITFRAME.RaidMover then
                     UNITFRAME.RaidMover:ClearAllPoints()
-                    UNITFRAME.RaidMover:SetPoint(unpack(C.DB['ui_anchor']['raid_position' .. specIndex]))
+                    UNITFRAME.RaidMover:SetPoint(unpack(C.DB['UIAnchor']['raid_position' .. specIndex]))
                 end
 
-                if not C.DB['ui_anchor']['party_position' .. specIndex] then
-                    C.DB['ui_anchor']['party_position' .. specIndex] =
+                if not C.DB['UIAnchor']['party_position' .. specIndex] then
+                    C.DB['UIAnchor']['party_position' .. specIndex] =
                         {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60}
                 end
                 if UNITFRAME.PartyMover then
                     UNITFRAME.PartyMover:ClearAllPoints()
-                    UNITFRAME.PartyMover:SetPoint(unpack(C.DB['ui_anchor']['party_position' .. specIndex]))
+                    UNITFRAME.PartyMover:SetPoint(unpack(C.DB['UIAnchor']['party_position' .. specIndex]))
                 end
             end
         end
@@ -209,7 +209,7 @@ function UNITFRAME:OnLogin()
                 if not specIndex then
                     return
                 end
-                C.DB['ui_anchor']['raid_position' .. specIndex] = C.DB['ui_anchor']['RaidFrame']
+                C.DB['UIAnchor']['raid_position' .. specIndex] = C.DB['UIAnchor']['RaidFrame']
             end)
         end
 
@@ -219,7 +219,7 @@ function UNITFRAME:OnLogin()
                 if not specIndex then
                     return
                 end
-                C.DB['ui_anchor']['party_position' .. specIndex] = C.DB['ui_anchor']['PartyFrame']
+                C.DB['UIAnchor']['party_position' .. specIndex] = C.DB['UIAnchor']['PartyFrame']
             end)
         end
     end

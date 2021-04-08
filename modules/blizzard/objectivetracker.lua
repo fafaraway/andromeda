@@ -19,7 +19,7 @@ local BLIZZARD = F.BLIZZARD
 function BLIZZARD:ObjectiveTrackerMover()
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
     frame:SetSize(240, 50)
-    F.Mover(frame, L.GUI.MOVER.OBJECTIVE_TRACKER, 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UIGap, -60})
+    F.Mover(frame, L.MOVER.OBJECTIVE_TRACKER, 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UIGap, -60})
 
     local tracker = _G.ObjectiveTrackerFrame
     tracker:ClearAllPoints()
@@ -104,18 +104,21 @@ local function SetTextColorHook(text)
     if not text.Hooked then
         local SetTextColorOld = text.SetTextColor
         text.SetTextColor = function(self, r, g, b, a)
-            if r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g and b == _G.OBJECTIVE_TRACKER_COLOR['Header'].b then
+            if r == _G.OBJECTIVE_TRACKER_COLOR['Header'].r and g == _G.OBJECTIVE_TRACKER_COLOR['Header'].g and b ==
+                _G.OBJECTIVE_TRACKER_COLOR['Header'].b then
                 r = 216 / 255
                 g = 197 / 255
                 b = 136 / 255
-            elseif r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r and g == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g and b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b then
+            elseif r == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].r and g ==
+                _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].g and b == _G.OBJECTIVE_TRACKER_COLOR['HeaderHighlight'].b then
                 r = 216 / 255
                 g = 181 / 255
                 b = 136 / 255
             end
             SetTextColorOld(self, r, g, b, a)
         end
-        text:SetTextColor(_G.OBJECTIVE_TRACKER_COLOR['Header'].r, _G.OBJECTIVE_TRACKER_COLOR['Header'].g, _G.OBJECTIVE_TRACKER_COLOR['Header'].b, 1)
+        text:SetTextColor(_G.OBJECTIVE_TRACKER_COLOR['Header'].r, _G.OBJECTIVE_TRACKER_COLOR['Header'].g,
+                          _G.OBJECTIVE_TRACKER_COLOR['Header'].b, 1)
         text.Hooked = true
     end
 end
@@ -148,25 +151,24 @@ function BLIZZARD:HandleHeaderText()
 end
 
 function BLIZZARD:HandleTitleText(text)
-    if _G.FREE_ADB.font_outline then
-        F:SetFS(text, C.Assets.Fonts.Bold, 14, true, nil, nil, true)
-    else
-        F:SetFS(text, C.Assets.Fonts.Bold, 14, nil, nil, nil, 'THICK')
-    end
+    local font = C.Assets.Fonts.Bold
+    local outline = _G.FREE_ADB.FontOutline
+    F:SetFS(text, font, 14, outline, nil, nil, outline or 'THICK')
+
     local height = text:GetStringHeight() + 2
     if height ~= text:GetHeight() then
         text:SetHeight(height)
     end
+
     SetTextColorHook(text)
 end
 
 function BLIZZARD:HandleInfoText(text)
     self:ColorfulProgression(text)
-    if _G.FREE_ADB.font_outline then
-        F:SetFS(text, C.Assets.Fonts.Regular, 13, true, nil, nil, true)
-    else
-        F:SetFS(text, C.Assets.Fonts.Regular, 13, nil, nil, nil, 'THICK')
-    end
+
+    local font = C.Assets.Fonts.Regular
+    local outline = _G.FREE_ADB.FontOutline
+    F:SetFS(text, font, 13, outline, nil, nil, outline or 'THICK')
     text:SetHeight(text:GetStringHeight())
 
     local line = text:GetParent()
@@ -270,9 +272,58 @@ function BLIZZARD:RestyleObjectiveTrackerText()
     ObjectiveTracker_Update()
 end
 
-function BLIZZARD:ObjectiveTracker()
+local headers = {
+    _G.SCENARIO_CONTENT_TRACKER_MODULE,
+    _G.BONUS_OBJECTIVE_TRACKER_MODULE,
+    _G.UI_WIDGET_TRACKER_MODULE,
+    _G.CAMPAIGN_QUEST_TRACKER_MODULE,
+    _G.QUEST_TRACKER_MODULE,
+    _G.ACHIEVEMENT_TRACKER_MODULE,
+    _G.WORLD_QUEST_TRACKER_MODULE,
+}
+
+local function OnEvent()
+    local inInstance, instanceType = IsInInstance()
+    if inInstance then
+        if instanceType == 'party' or instanceType == 'scenario' then
+            for i = 3, #headers do
+                local button = headers[i].Header.MinimizeButton
+                if button and not headers[i].collapsed then
+                    button:Click()
+                end
+            end
+        else
+            ObjectiveTracker_Collapse()
+        end
+    else
+        if not InCombatLockdown() then
+            for i = 3, #headers do
+                local button = headers[i].Header.MinimizeButton
+                if button and headers[i].collapsed then
+                    button:Click()
+                end
+            end
+            if ObjectiveTrackerFrame.collapsed then
+                ObjectiveTracker_Expand()
+            end
+        end
+    end
+end
+
+function BLIZZARD:EnhancedObjectiveTracker()
     BLIZZARD:ObjectiveTrackerMover()
     BLIZZARD:GenerateWowHeadLink()
     BLIZZARD:RestyleObjectiveTrackerText()
+
+    -- Kill reward animation when finished dungeon or bonus objectives
+    ObjectiveTrackerScenarioRewardsFrame.Show = F.Dummy
+
+    hooksecurefunc('BonusObjectiveTracker_AnimateReward', function()
+        ObjectiveTrackerBonusRewardsFrame:ClearAllPoints()
+        ObjectiveTrackerBonusRewardsFrame:SetPoint('BOTTOM', UIParent, 'TOP', 0, 90)
+    end)
+
+    -- Auto collapse Objective Tracker
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', OnEvent)
 end
-BLIZZARD:RegisterBlizz('ObjectiveTracker', BLIZZARD.ObjectiveTracker)
+BLIZZARD:RegisterBlizz('EnhancedObjectiveTracker', BLIZZARD.EnhancedObjectiveTracker)

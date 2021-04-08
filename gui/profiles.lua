@@ -40,7 +40,7 @@ StaticPopupDialogs['FREEUI_APPLY_PROFILE'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		FREE_ADB['profile_index'][myFullName] = GUI.currentProfile
+		FREE_ADB['ProfileIndex'][myFullName] = GUI.currentProfile
 		ReloadUI()
 	end,
 	timeout = 0,
@@ -53,7 +53,7 @@ StaticPopupDialogs['FREEUI_DOWNLOAD_PROFILE'] = {
 	button1 = YES,
 	button2 = NO,
 	OnAccept = function()
-		local profileIndex = FREE_ADB['profile_index'][myFullName]
+		local profileIndex = FREE_ADB['ProfileIndex'][myFullName]
 		if GUI.currentProfile == 1 then
 			FREE_PDB[profileIndex - 1] = FREE_DB
 		elseif profileIndex == 1 then
@@ -151,7 +151,7 @@ end
 
 function GUI:FindProfleUser(icon)
 	icon.list = {}
-	for fullName, index in pairs(FREE_ADB['profile_index']) do
+	for fullName, index in pairs(FREE_ADB['ProfileIndex']) do
 		if index == icon.index then
 			local name, realm = strsplit('-', fullName)
 			if not icon.list[realm] then
@@ -186,16 +186,16 @@ function GUI:Icon_OnEnter()
 end
 
 function GUI:Note_OnEscape()
-	self:SetText(FREE_ADB['profile_names'][self.index])
+	self:SetText(FREE_ADB['ProfileNames'][self.index])
 end
 
 function GUI:Note_OnEnter()
 	local text = self:GetText()
 	if text == '' then
-		FREE_ADB['profile_names'][self.index] = self.__defaultText
+		FREE_ADB['ProfileNames'][self.index] = self.__defaultText
 		self:SetText(self.__defaultText)
 	else
-		FREE_ADB['profile_names'][self.index] = text
+		FREE_ADB['ProfileNames'][self.index] = text
 	end
 end
 
@@ -229,10 +229,10 @@ function GUI:CreateProfileBar(parent, index)
 	else
 		note.__defaultText = L.GUI.PROFILE.DEFAULT_SHARED_PROFILE .. (index - 1)
 	end
-	if not FREE_ADB['profile_names'][index] then
-		FREE_ADB['profile_names'][index] = note.__defaultText
+	if not FREE_ADB['ProfileNames'][index] then
+		FREE_ADB['ProfileNames'][index] = note.__defaultText
 	end
-	note:SetText(FREE_ADB['profile_names'][index])
+	note:SetText(FREE_ADB['ProfileNames'][index])
 	note.index = index
 	note:HookScript('OnEnterPressed', GUI.Note_OnEnter)
 	note:HookScript('OnEscapePressed', GUI.Note_OnEscape)
@@ -360,7 +360,7 @@ function GUI:CreateProfileGUI(parent)
 	description:SetWordWrap(true)
 	description:SetJustifyH('LEFT')
 
-	GUI.currentProfile = FREE_ADB['profile_index'][myFullName]
+	GUI.currentProfile = FREE_ADB['ProfileIndex'][myFullName]
 
 	local numBars = 6
 	local panel = F.CreateBDFrame(parent, .25)

@@ -109,7 +109,7 @@ local function MoveTalkingHead()
 end
 
 local function NoTalkingHeads()
-    if not C.DB.blizzard.hide_talkinghead then
+    if not C.DB.General.HideTalkingHead then
         return
     end
 

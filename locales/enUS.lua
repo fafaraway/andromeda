@@ -46,7 +46,7 @@ L.ANNOUNCEMENT = {
 
 L.QUEST = {
     AUTOMATION = 'Quest automation',
-    AUTOMATION_TIP = 'Automatically accept and deliver quests.',
+    AUTOMATION_TIP = '|nAutomatically accept and deliver quests.|nHold SHIFT key to STOP automation.',
 }
 
 --[[ Unitframe ]]
@@ -57,9 +57,9 @@ L.UNITFRAME = {
     BINDER_TIP = 'Ctrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.',
 }
 
---[[ Blizzard ]]
+--[[ General ]]
 
-L.BLIZZARD = {
+L.GENERAL = {
     UNDRESS = 'Undress',
     UNDRESS_TIP = '%sUndress all|n%sUndress tabard',
     USE_VELLUM = 'Right click to use vellum',
@@ -68,43 +68,32 @@ L.BLIZZARD = {
     KEYSTONES_RESET = 'Delete keystones info',
     GET_NAKED = 'Double click to unequip all gears',
     ORDERHALL_TIP = 'Hold SHIFT for details',
-    GOLD = 'Gold'
+    GOLD = 'Gold',
+
+    BUY_STACK_WARNING = 'Are you sure to buy |cffff0000a stack|r of these?',
+
+    GROUP_TOOL = 'Group tool',
+    FOOD = 'Food',
+    FLASK = 'Flask',
+    LACK = 'Lack ',
+    PLAYER_COUNT = '%s players',
+    COUNTDOWN = 'Start/Cancel Countdown',
+    CHECK_STATUS = 'Check Flask & Food',
+    BUFFS_READY = 'All Buffs Ready!',
+    RAID_BUFF_CHECK = 'Raid Buff Checking:',
+    EXRT_POTION_CHECK = 'ExRT Potion Check',
+    ADDON_REQUIRED = 'You do not have DBM or BigWigs installed',
+    DISBAND_CHECK = 'Are you sure to |cffff0000disband|r your group?',
+    DISBAND_PROCESS = 'Raid Disbanding',
 }
 
---[[ Misc ]]
+L.NOTIFICATION = {
+    LOW_DURABILITY = 'Durability is low, needs to repair!',
+    BAG_FULL = 'Your bags are full.',
+    VERSION_EXPIRED = 'Version expired',
+}
 
-do
 
-    L['MISC_REPUTATION'] = '声望'
-    L['MISC_PARAGON'] = '巅峰'
-    L['MISC_PARAGON_REPUTATION'] = '巅峰声望'
-    L['MISC_PARAGON_NOTIFY'] = '巅峰声望已满注意兑换'
-    L['MISC_ORDERHALL_TIP'] = '按住Shift显示详细信息'
-
-    L['MISC_DISBAND_GROUP'] = '解散队伍'
-    L['MISC_DISBAND_GROUP_CHECK'] = '你确定要解散队伍?'
-
-    L['MISC_DECLINE_INVITE'] = '自动拒绝了 %s 的组队邀请'
-    L['MISC_ACCEPT_INVITE'] = '自动接受了 %s 的组队邀请'
-
-    L['AUTOMATION_GET_NAKED'] = '双击脱光装备'
-    L['MISC_BUY_STACK'] = 'Are you sure to buy |cffff0000a stack|r of these?'
-
-    L['MISC_GROUP_TOOL'] = 'Group tool'
-    L['MISC_FOOD'] = 'Food'
-    L['MISC_FLASK'] = 'Flask'
-    L['MISC_LACK'] = 'Lack'
-    L['MISC_PLAYER_COUNT'] = '%s players'
-    L['MISC_COUNTDOWN'] = 'Start/Cancel Countdown'
-    L['MISC_CHECK_STATUS'] = 'Check Flask & Food'
-    L['MISC_BUFFS_READY'] = 'All Buffs Ready!'
-    L['MISC_RAID_BUFF_CHECK'] = 'Raid Buff Checking:'
-    L['MISC_EXRT_POTION_CHECK'] = 'ExRT Potion Check'
-    L['MISC_ADDON_REQUIRED'] = 'You do not have DBM or BigWigs installed'
-    L['MISC_DISBAND_CHECK'] = 'Are you sure to |cffff0000disband|r your group?'
-    L['MISC_DISBAND_PROCESS'] = 'Raid Disbanding'
-
-end
 
 --[[ Notification ]]
 
@@ -124,15 +113,15 @@ end
 
 do
     L['INFOBAR_DURABILITY'] = 'Durability'
-    L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle character pane'
+    L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle character panel'
 
     L['INFOBAR_FRIENDS'] = 'Friends'
-    L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle friends pane'
+    L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle friends panel'
     L['INFOBAR_ADD_FRIEND'] = 'Add friend'
 
     L['INFOBAR_GUILD'] = 'Guild'
     L['INFOBAR_GUILD_NONE'] = 'None'
-    L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle guild & communities pane'
+    L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle guild & communities panel'
 
     L['INFOBAR_REPORT'] = 'Daily/weekly'
     L['INFOBAR_BLINGTRON'] = 'Blingtron daily pack'
@@ -145,27 +134,27 @@ do
     L['INFOBAR_LESSER_VISION'] = 'N\'Zoth assaults'
     L['INFOBAR_ISLAND'] = 'Island'
 
-    L['INFOBAR_TOGGLE_WEEKLY_REWARDS'] = 'Toggle great vault pane'
-    L['INFOBAR_TOGGLE_CALENDAR'] = 'Toggle calendar pane'
+    L['INFOBAR_TOGGLE_WEEKLY_REWARDS'] = 'Toggle great vault panel'
+    L['INFOBAR_TOGGLE_CALENDAR'] = 'Toggle calendar panel'
     L['INFOBAR_HOLD_SHIFT'] = 'Hold shift for more info'
 
     L['INFOBAR_SPEC'] = 'Spec'
     L['INFOBAR_LOOT'] = 'Loot'
-    L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle talent pane'
+    L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle talent panel'
     L['INFOBAR_CHANGE_SPEC'] = 'Switch specialization & loot'
 
     L['INFOBAR_LOCAL_TIME'] = 'Local time'
     L['INFOBAR_REALM_TIME'] = 'Realm time'
-    L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list pane'
-    L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer pane'
+    L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list panel'
+    L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer panel'
 
     L['INFOBAR_EARNED'] = 'Earned'
     L['INFOBAR_SPENT'] = 'Spent'
     L['INFOBAR_DEFICIT'] = 'Deficit'
     L['INFOBAR_PROFIT'] = 'Profit'
     L['INFOBAR_SESSION'] = 'Session'
-    L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency pane'
-    L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store pane'
+    L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency panel'
+    L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store panel'
     L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
 end
 
@@ -285,28 +274,16 @@ do
     L['TOOLTIP_ILVL'] = 'iLvl'
 end
 
---[[ Unitframe ]]
 
-do
-    L['UNITFRAME_MOVER_CASTBAR'] = 'Focus castbar'
-    L['UNITFRAME_MOVER_PLAYER'] = 'Player'
-    L['UNITFRAME_MOVER_PET'] = 'Pet'
-    L['UNITFRAME_MOVER_TARGET'] = 'Target'
-    L['UNITFRAME_MOVER_TARGETTARGET'] = 'Target target'
-    L['UNITFRAME_MOVER_FOCUS'] = 'Focus'
-    L['UNITFRAME_MOVER_FOCUSTARGET'] = 'Focus target'
-    L['UNITFRAME_MOVER_BOSS'] = 'Boss'
-    L['UNITFRAME_MOVER_ARENA'] = 'Arena'
-    L['UNITFRAME_MOVER_PARTY'] = 'Party'
-    L['UNITFRAME_MOVER_RAID'] = 'Raid'
-
-    L['UNITFRAME_GHOST'] = 'Ghost'
-    L['UNITFRAME_OFFLINE'] = 'Offline'
-end
 
 --[[ Mover ]]
 
 L.MOVER = {
+    TITLE = 'UI Mover',
+    GRID = 'Grid',
+    RESET_ELEMENT = 'Reset this frame\'s position',
+    HIDE_ELEMENT = 'Hide this frame',
+    RESET_WARNING = 'Are you sure to reset all frame\'s position?',
     MAIN_BAR = 'Main Bar',
     PET_BAR = 'Pet Bar',
     STANCE_BAR = 'Stance Bar',
@@ -321,7 +298,22 @@ L.MOVER = {
     ALERT_FRAME = 'Alert Frame',
     VEHICLE_INDICATOR = 'Vehicle Indicator',
     UI_WIDGET = 'UI Widget',
-    DURABILITY_FRAME = 'Durability Frame'
+    DURABILITY_FRAME = 'Durability Indicator',
+    QUEST_ITEM_BUTTON = 'Quest Item Button',
+    MAW_THREAT_BAR = 'Maw Threat Bar',
+    GROUP_TOOL = 'Group Tool',
+    OBJECTIVE_TRACKER = 'Quest Tracker',
+
+    PLAYER = 'Player Frame',
+    PET = 'Pet Frame',
+    TARGET = 'Target Frame',
+    TARGETTARGET = 'Target Target Frame',
+    FOCUS = 'Focus',
+    FOCUSTARGET = 'Focus Target Frame',
+    BOSS = 'Boss Frame',
+    ARENA = 'Arena Frame',
+    PARTY = 'Party Frame',
+    RAID = 'Raid Frame',
 }
 
 --[[ GUI ]]
@@ -343,19 +335,7 @@ L.GUI = {
     SIZE = 'size',
     ALPHA = 'alpha',
 
-    ['MOVER'] = {
-        ['NAME'] = 'UI Mover',
-        ['GRID'] = 'Grid',
-        ['RESET_ELEMENT'] = 'Reset this frame position',
-        ['HIDE_ELEMENT'] = 'Hide this frame',
-        ['RESET'] = 'Are you sure to reset all frames position?',
-        ['GROUP_TOOL'] = 'Group tool',
 
-        ['QUEST_BUTTON'] = 'quest button',
-        ['OBJECTIVE_TRACKER'] = 'objective tracker',
-        ['MAW_THREAT_BAR'] = 'Maw threat bar',
-        ['PLAYER_PLATE'] = 'Player plate',
-    },
 
     ['PROFILE'] = {
         ['NAME'] = 'Profles',
@@ -399,48 +379,70 @@ L.GUI = {
         ['DELETE_UNIT_PROFILE_TIP'] = '|nEnter the character name that you intend to delete its profile, the input format is \'UnitName-RealmName\'. You only need to enter name if unit is in the same realm with you.|n|nThis will delete unit gold info as well.|n|nPress key ESC to clear editbox, press key Enter to confirm.',
     },
 
-    ['MISC'] = {
-        ['NAME'] = 'Misc',
-        ['TEXTURE_STYLE'] = 'Texture style',
-        ['TEXTURE_NORM'] = 'default',
-        ['TEXTURE_GRAD'] = 'gradient',
-        ['TEXTURE_FLAT'] = 'flat',
-        ['NUMBER_FORMAT'] = 'Numberize',
-        ['NUMBER_TYPE1'] = 'Standard: b/m/k',
-        ['NUMBER_TYPE2'] = 'Asian: y/w',
-        ['NUMBER_TYPE3'] = 'Full digitals',
-        ['CUSTOM_CLASS_COLOR'] = 'Customize class colors',
-        ['CUSTOM_CLASS_COLOR_SETTING_HEADER'] = 'Custom class colors setting',
-        ['HIDE_TALKINGHEAD'] = 'Hide talking head',
-        ['HIDE_BOSS_BANNER'] = 'Hide boss banner',
-        ['FONT_OUTLINE'] = 'Use font outline',
-        ['SCREEN_SAVER'] = 'AFK screen saver',
-        ['CONCISE_ERRORS'] = 'Simplified errors',
-        ['MAW_THREAT_BAR'] = 'Maw threat bar',
-        ['AUTO_SCREENSHOT'] = 'Enable auto screenshot',
-        ['AUTO_SCREENSHOT_ACHIEVEMENT'] = 'New achievement earned',
-        ['AUTO_SCREENSHOT_CHALLENGE'] = 'Mythic+ dungeon completed',
-        ['ITEM_LEVEL'] = 'Item level',
-        ['ITEM_LEVEL_TIP'] = '|nIf enabled, show item level on CharacterFrame, InspectFrame, MerchantFrame and some other frames.',
-        ['GEM_ENCHANT'] = 'Gem and enchant',
-        ['GEM_ENCHANT_TIP'] = 'Show gem and enchant on character frame.',
-        ['NAKED_BUTTON'] = 'Naked button',
-        ['NAKED_BUTTON_TIP'] = 'Show naked button on character frame, double click it to unequip all gears.',
-        ['MISSING_STATS'] = 'Missing stats',
-        ['MISSING_STATS_TIP'] = 'Show all missing stats on character frame.',
+    GENERAL = {
+        NAME = 'General',
+        CURSOR_TRAIL = 'Cursor trail',
+        CURSOR_TRAIL_TIP = '|nAdd dynamic trail to mouse cursor, improves the visibility of the mouse cursor, making it easier to find in a chaotic environment with lots of spell effects.',
+        VIGNETTING = 'Vignetting',
+        VIGNETTING_TIP = '|nAdd shadowed overlay to screen corner.',
+        VIGNETTING_ALPHA = 'Vignetting Alpha',
+        CUSTOM_CLASS_COLOR = 'Customize class colors',
+        CUSTOM_CLASS_COLOR_TIP = '|nEnable custom class colors to override default colors.',
+        HIDE_TALKINGHEAD = 'Hide talking head',
+        HIDE_BOSS_BANNER = 'Hide boss banner',
+        HIDE_BOSS_EMOTE = 'Hide boss emote',
+        SIMPLIFY_ERRORS = 'Simplify error messages',
+        SIMPLIFY_ERRORS_TIP = '|nSimplify standard error messages when you in combat. It\'s the red text in the middle of your screen that constantly annoys you with things like, \'Your too far away!\', \'Not enough mana.\', etc.',
+        ENHANCED_FRIENDS_LIST = 'Enhanced friends list',
+        ENHANCED_MAIL_BUTTON = 'Enhanced mail button',
+        ENHANCED_DRESSUP = 'Enhanced dressup',
+        ENHANCED_DRESSUP_TIP = '|nAdd a button to undress all gears or tabard on DressUpFrame.',
+        TRADE_TABS = 'Trade tabs',
+        TRADE_TABS_TIP = '|nAdd spellbook-like tabs to the TradeSkillFrame. It will add one for each of your professions and one for each of the profession "suppliment" abilities (cookfire, disenchant, milling, etc).',
+        PET_FILTER = 'Pet filter',
+        ORDERHALL_ICON = 'Orderhall icon',
+        MAW_THREAT_BAR = 'Maw threat bar',
         FASTER_LOOT = 'Faster auto looting',
         FASTER_MOVIE_SKIP = 'Faster movie skip',
         FASTER_MOVIE_SKIP_TIP = '|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.',
-        ENHANCE_DRESSUP = 'Enhanced dressup',
-        ENHANCE_DRESSUP_TIP = '|nIf enabled, add a button to undress items on DressUpFrame.',
         SMOOTH_ZOOMING = 'Camera smooth zooming',
         SMOOTH_ZOOMING_TIP = '|nFaster and smooth camera zooming.',
-        ACTION_CAM = 'Camera action mode',
-        ACTION_CAM_TIP = '|nEnable blizzard action camera.',
+        ACTION_MODE = 'Camera action mode',
+        ACTION_MODE_TIP = '|nEnable blizzard action camera.',
+        FONT_OUTLINE = 'Use font outline',
+        FONT_OUTLINE_TIP = '|nAdd font outline globally, enable this if you run game on low resolution.',
+        SCREEN_SAVER = 'AFK screen saver',
+        AUTO_TAKE_SCREENSHOT = 'Auto screenshot',
+        EARNED_NEW_ACHIEVEMENT = 'New achievement earned',
+        CHALLENGE_MODE_COMPLETED = 'Mythic+ dungeon completed',
+        PLAYER_LEVELUP = 'Player levelup',
+        PLAYER_DEAD = 'Player dead',
+        NAKED_BUTTON = 'Naked button',
+        NAKED_BUTTON_TIP = '|nShow naked button on character frame, double click it to unequip all gears.',
+        MISSING_STATS = 'Missing stats',
+        MISSING_STATS_TIP = '|nShow all missing stats on character frame.',
+        ITEM_LEVEL = 'Item level',
+        ITEM_LEVEL_TIP = '|nShow item level on CharacterFrame, InspectFrame, MerchantFrame and some other frames.',
+        GEM_ENCHANT = 'Gem and enchant',
+        GEM_ENCHANT_TIP = '|nShow gem and enchant on character frame.',
+        AZERITE_TRAIT = 'Azerite trait',
+        AZERITE_TRAIT_TIP = '|nShow azerite trait on character frame.',
+        GROUP_TOOL = 'Group tool',
+        GROUP_TOOL_TIP = '',
+        TEXTURE_STYLE = 'Texture style',
+        TEXTURE_NORM = 'default',
+        TEXTURE_GRAD = 'gradient',
+        TEXTURE_FLAT = 'flat',
+        NUMBER_FORMAT = 'Numberize',
+        NUMBER_TYPE1 = 'Standard: b/m/k',
+        NUMBER_TYPE2 = 'Asian: y/w',
+        NUMBER_TYPE3 = 'Full digitals',
+        UI_SCALE = 'UI Scale',
+        UI_SCALE_TIP = '|nAdjust global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.',
     },
 
     APPEARANCE = {
-        NAME = 'Appearance',
+        NAME = 'Theme',
         SHADOW_OUTLINE = 'Shadow outline',
         SHADOW_OUTLINE_TIP = '|nEnable shadow outline around UI elements.',
         GRADIENT_STYLE = 'Gradient style',
@@ -457,29 +459,29 @@ L.GUI = {
         RESKIN_DBM = 'Restyle DBM',
         RESKIN_DBM_TIP = '|nEnable styling DBM timer bars.',
         RESKIN_PGF = 'Restyle PremadeGroupsFilter',
-        RESKIN_PGF_TIP = '|nEnable styling PremadeGroupsFilter pane.',
+        RESKIN_PGF_TIP = '|nEnable styling PremadeGroupsFilter panel.',
         RESKIN_WA = 'Restyle WeakAuras',
         RESKIN_WA_TIP = '|nEnable styling WeakAuras icons.',
         RESKIN_BW = 'Restyle BigWigs',
         RESKIN_BW_TIP = '|nEnable styling BigWigs timer bars.',
         RESKIN_IMMERSION = 'Restyle Immersion',
-        RESKIN_IMMERSION_TIP = '|nEnable styling Immersion pane.',
+        RESKIN_IMMERSION_TIP = '|nEnable styling Immersion panel.',
         RESKIN_ABP = 'Restyle ActionBarProfiles',
-        RESKIN_ABP_TIP = '|nEnable styling ActionBarProfiles pane.',
+        RESKIN_ABP_TIP = '|nEnable styling ActionBarProfiles panel.',
         RESKIN_REHACK = 'Restyle REHack',
-        RESKIN_REHACK_TIP = '|nEnable styling REHack pane.',
-        UI_SCALE = 'UI Scale',
-        UI_SCALE_TIP = '|nAdjust global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.',
+        RESKIN_REHACK_TIP = '|nEnable styling REHack panel.',
+
     },
 
-    ['NOTIFICATION'] = {
-        ['NAME'] = 'Notification',
-        ['ENABLE'] = 'Enable notification',
-        ['BAG_FULL'] = 'Bag full',
-        ['NEW_MAIL'] = 'New mail',
-        ['RARE_FOUND'] = 'Rare found',
-        ['RARE_FOUND_TIP'] = '周围出现稀有事件或怪物，注意小地图来确定位置。',
-        ['VERSION_CHECK'] = 'Addon outdate',
+    NOTIFICATION = {
+        NAME = 'Notification',
+        ENABLE = 'Enable notification',
+        BAG_FULL = 'Bag full',
+        NEW_MAIL = 'New mail',
+        RARE_FOUND = 'Rare found',
+        VERSION_EXPIRED = 'Addon expired',
+        LOW_DURABILITY = 'Low durability',
+        PARAGON = 'Paragon chest'
     },
 
     ['INFOBAR'] = {
@@ -501,7 +503,7 @@ L.GUI = {
         ['ENABLE'] = 'Enable chat',
         ['LOCK_POSITION'] = 'Lock position',
         ['LOCK_POSITION_TIP'] = '聊天窗口的位置和大小固定不变。',
-        ['FONT_OUTLINE'] = 'Font outline',
+
         ['FADE_OUT'] = 'Message fade out',
         ['FADE_OUT_TIP'] = '聊天窗口一段时间没有任何新信息时会逐渐淡出。',
         ['ABBR_CHANNEL_NAMES'] = 'Shorten channel names',
@@ -765,7 +767,7 @@ L.GUI = {
         ['PLAYER_RESTING_INDICATOR'] = 'Player resting indicator',
         ['PLAYER_HIDE_TAGS'] = 'Hide player tags',
 
-        FONT_OUTLINE = 'Font outline',
+
         RAID_TARGET_INDICATOR = 'Raid target indicator',
 
         ENABLE_CASTBAR = 'Enable castbar',
@@ -975,15 +977,15 @@ L.GUI = {
         ['ADDON_HEADER'] = 'Addons',
         ['ADDON_DESCRIPTION'] = 'This step will adjust the settings of some addons to match the interface style and layout of %AddonName%.',
         ['COMPLETE_HEADER'] = 'Success!',
-        ['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panel and change various settings.',
+        ['COMPLETE_DESCRIPTION'] = 'The installation has completed successfully.|n|nPlease click the Finish button below to reload the interface.|n|nKeep in mind, you can enter |cffe9c55d/free|r to get detailed help or directly enter |cffe9c55d/free config|r to open the config panell and change various settings.',
     },
 }
 
 -- Slash commands
 L['COMMANDS_LIST_HINT'] = 'Available Commands：'
 L['COMMANDS_LIST'] = {
-    '/free install - Open installation pane',
-    '/free config - Open config pane',
+    '/free install - Open installation panel',
+    '/free config - Open config panel',
     '/free unlock - Unlock the interface to let you easily move elements',
     '/free reset - Reset all saved options to their default values.',
     '/rl - Reload interface',

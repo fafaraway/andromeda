@@ -106,9 +106,7 @@ local function SetupCastbar()
     GUI:SetupCastbar(GUI.Page[12])
 end
 
-local function SetupCustomClassColor()
-    GUI:SetupCustomClassColor(GUI.Page[15])
-end
+
 
 local function SetupPartySpellCooldown()
     GUI:SetupPartySpellCooldown(GUI.Page[13])
@@ -126,36 +124,68 @@ local function updateRaidTargetIndicator()
     UNITFRAME:UpdateRaidTargetIndicator()
 end
 
+-- General
+local function SetupAutoTakeScreenshot()
+    GUI:SetupAutoTakeScreenshot(GUI.Page[1])
+end
+
+local function SetupCustomClassColor()
+    GUI:SetupCustomClassColor(GUI.Page[1])
+end
+
+local function SetupVignettingAlpha()
+    GUI:SetupVignettingAlpha(GUI.Page[1])
+end
+
+local function SetupGroupTool()
+    GUI:SetupGroupTool(GUI.Page[1])
+end
+
+-- Options
 GUI.OptionsList = {
-    -- type key value name horizon data callback tip
     [1] = {
-        -- appearance
-        {1, 'ACCOUNT', 'ShadowOutline', L.GUI.APPEARANCE.SHADOW_OUTLINE, nil, nil, nil, L.GUI.APPEARANCE.SHADOW_OUTLINE_TIP},
-        {1, 'ACCOUNT', 'GradientStyle', L.GUI.APPEARANCE.GRADIENT_STYLE, true, nil, nil, L.GUI.APPEARANCE.GRADIENT_STYLE_TIP},
-        {1, 'ACCOUNT', 'ReskinBlizz', L.GUI.APPEARANCE.RESKIN_BLIZZ, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_BLIZZ_TIP},
-        {5, 'ACCOUNT', 'BackdropColor', L.GUI.APPEARANCE.BACKDROP_COLOR},
-        {5, 'ACCOUNT', 'BorderColor', L.GUI.APPEARANCE.BORDER_COLOR, 1},
-        {5, 'ACCOUNT', 'ButtonBackdropColor', L.GUI.APPEARANCE.BUTTON_BACKDROP_COLOR, 2},
-        {3, 'ACCOUNT', 'BackdropAlpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, nil, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
-        {3, 'ACCOUNT', 'ButtonBackdropAlhpa', L.GUI.APPEARANCE.BUTTON_BACKDROP_ALHPA, true, {0, 1, .01}, nil, L.GUI.APPEARANCE.BUTTON_BACKDROP_ALHPA_TIP},
+        {1, 'General', 'CursorTrail', L.GUI.GENERAL.CURSOR_TRAIL, nil, nil, nil, L.GUI.GENERAL.CURSOR_TRAIL_TIP},
+        {1, 'General', 'Vignetting', L.GUI.GENERAL.VIGNETTING, true, SetupVignettingAlpha, nil, L.GUI.GENERAL.VIGNETTING_TIP},
+        {1, 'ACCOUNT', 'CustomClassColor', L.GUI.GENERAL.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor, nil, L.GUI.GENERAL.CUSTOM_CLASS_COLOR_TIP},
+        {1, 'ACCOUNT', 'FontOutline', L.GUI.GENERAL.FONT_OUTLINE, true, nil, nil, L.GUI.GENERAL.FONT_OUTLINE_TIP},
+        {1, 'General', 'HideTalkingHead', L.GUI.GENERAL.HIDE_TALKINGHEAD},
+        {1, 'General', 'HideBossBanner', L.GUI.GENERAL.HIDE_BOSS_BANNER, true},
+        {1, 'General', 'HideBossEmote', L.GUI.GENERAL.HIDE_BOSS_EMOTE},
+        {1, 'General', 'SimplifyErrors', L.GUI.GENERAL.SIMPLIFY_ERRORS, true, nil, nil, L.GUI.GENERAL.SIMPLIFY_ERRORS_TIP},
+        {1, 'General', 'EnhancedFriendsList', L.GUI.GENERAL.ENHANCED_FRIENDS_LIST},
+        {1, 'General', 'EnhancedMailButton', L.GUI.GENERAL.ENHANCED_MAIL_BUTTON, true},
+        {1, 'General', 'EnhancedDressup', L.GUI.GENERAL.ENHANCED_DRESSUP},
+        {1, 'General', 'TradeTabs', L.GUI.GENERAL.TRADE_TABS, true, nil, nil, L.GUI.GENERAL.TRADE_TABS_TIP},
+        {1, 'General', 'PetFilter', L.GUI.GENERAL.PET_FILTER},
+        {1, 'General', 'OrderHallIcon', L.GUI.GENERAL.ORDERHALL_ICON, true},
+        {1, 'General', 'FasterLoot', L.GUI.GENERAL.FASTER_LOOT},
+        {1, 'General', 'FasterMovieSkip', L.GUI.GENERAL.FASTER_MOVIE_SKIP, true, nil, nil, L.GUI.GENERAL.FASTER_MOVIE_SKIP_TIP},
+        {1, 'General', 'SmoothZooming', L.GUI.GENERAL.SMOOTH_ZOOMING, nil, nil, nil, L.GUI.GENERAL.SMOOTH_ZOOMING_TIP},
+        {1, 'General', 'ActionMode', L.GUI.GENERAL.ACTION_MODE, true, nil, nil, L.GUI.GENERAL.ACTION_MODE_TIP},
+        {1, 'General', 'MawThreatBar', L.GUI.GENERAL.MAW_THREAT_BAR},
+        {1, 'General', 'ScreenSaver', L.GUI.GENERAL.SCREEN_SAVER, true},
+        {1, 'General', 'AutoTakeScreenshot', L.GUI.GENERAL.AUTO_TAKE_SCREENSHOT, nil, SetupAutoTakeScreenshot},
+
+        {1, 'General', 'GroupTool', L.GUI.GENERAL.GROUP_TOOL, true, SetupGroupTool, nil, L.GUI.GENERAL.GROUP_TOOL_TIP},
+
+        {1, 'General', 'NakedButton', L.GUI.GENERAL.NAKED_BUTTON, nil, nil, nil, L.GUI.GENERAL.NAKED_BUTTON_TIP},
+        {1, 'General', 'MissingStats', L.GUI.GENERAL.MISSING_STATS, true, nil, nil, L.GUI.GENERAL.MISSING_STATS_TIP},
+        {1, 'General', 'ItemLevel', L.GUI.GENERAL.ITEM_LEVEL, nil, nil, nil, L.GUI.GENERAL.ITEM_LEVEL_TIP},
+        {1, 'General', 'GemEnchant', L.GUI.GENERAL.GEM_ENCHANT, true, nil, nil, L.GUI.GENERAL.GEM_ENCHANT_TIP},
+        {1, 'General', 'AzeriteTrait', L.GUI.GENERAL.AZERITE_TRAIT, nil, nil, nil, L.GUI.GENERAL.AZERITE_TRAIT_TIP},
         {},
-        {1, 'ACCOUNT', 'ReskinDBM', L.GUI.APPEARANCE.RESKIN_DBM, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_DBM_TIP},
-        {1, 'ACCOUNT', 'ReskinBigWigs', L.GUI.APPEARANCE.RESKIN_BW, true, nil, nil, L.GUI.APPEARANCE.RESKIN_BW_TIP},
-        {1, 'ACCOUNT', 'ReskinWeakAura', L.GUI.APPEARANCE.RESKIN_WA, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_WA_TIP},
-        {1, 'ACCOUNT', 'ReskinPremadeGroupsFilter', L.GUI.APPEARANCE.RESKIN_PGF, true, nil, nil, L.GUI.APPEARANCE.RESKIN_PGF_TIP},
-        {1, 'ACCOUNT', 'ReskinImmersion', L.GUI.APPEARANCE.RESKIN_IMMERSION, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_IMMERSION_TIP},
-        {1, 'ACCOUNT', 'ReskinActionBarProfiles', L.GUI.APPEARANCE.RESKIN_ABP, true, nil, nil, L.GUI.APPEARANCE.RESKIN_ABP_TIP},
-        {1, 'ACCOUNT', 'ReskinREHack', L.GUI.APPEARANCE.RESKIN_REHACK, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_REHACK_TIP},
-        {},
-        {3, 'ACCOUNT', 'UIScale', L.GUI.APPEARANCE.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.APPEARANCE.UI_SCALE_TIP},
+        {4, 'ACCOUNT', 'TextureStyle', L.GUI.GENERAL.TEXTURE_STYLE, false, {}},
+        {4, 'ACCOUNT', 'NumberFormat', L.GUI.GENERAL.NUMBER_FORMAT, true, {L.GUI.GENERAL.NUMBER_TYPE1, L.GUI.GENERAL.NUMBER_TYPE2, L.GUI.GENERAL.NUMBER_TYPE3}},
+        {3, 'ACCOUNT', 'UIScale', L.GUI.GENERAL.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.GENERAL.UI_SCALE_TIP},
     },
     [2] = {
-        -- notification
-        {1, 'notification', 'enable', L.GUI.NOTIFICATION.ENABLE},
-        {1, 'notification', 'bag_full', L.GUI.NOTIFICATION.BAG_FULL},
-        {1, 'notification', 'new_mail', L.GUI.NOTIFICATION.NEW_MAIL, true},
-        {1, 'notification', 'rare_found', L.GUI.NOTIFICATION.RARE_FOUND, nil, nil, nil, L.GUI.NOTIFICATION.RARE_FOUND_TIP},
-        {1, 'notification', 'version_check', L.GUI.NOTIFICATION.VERSION_CHECK, true},
+        {1, 'Notification', 'Enable', L.GUI.NOTIFICATION.ENABLE},
+        {1, 'Notification', 'BagFull', L.GUI.NOTIFICATION.BAG_FULL},
+        {1, 'Notification', 'NewMail', L.GUI.NOTIFICATION.NEW_MAIL, true},
+        {1, 'Notification', 'RareFound', L.GUI.NOTIFICATION.RARE_FOUND},
+        {1, 'Notification', 'LowDurability', L.GUI.NOTIFICATION.LOW_DURABILITY, true},
+        {1, 'Notification', 'Paragon', L.GUI.NOTIFICATION.PARAGON},
+        {1, 'Notification', 'VersionExpired', L.GUI.NOTIFICATION.VERSION_EXPIRED, true},
     },
     [3] = {
         -- infobar
@@ -186,10 +216,10 @@ GUI.OptionsList = {
         {},
         {1, 'chat', 'use_filter', L.GUI.CHAT.USE_FILTER},
         {1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM},
-        {2, 'ACCOUNT', 'chat_filter_white_list', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
+        {2, 'ACCOUNT', 'ChatFilterWhiteList', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
         {1, 'chat', 'allow_friends_spam', L.GUI.CHAT.ALLOW_FRIENDS_SPAM, nil, nil, nil, L.GUI.CHAT.ALLOW_FRIENDS_SPAM_TIP},
         {1, 'chat', 'block_stranger_whisper', L.GUI.CHAT.BLOCK_STRANGER_WHISPER},
-        {2, 'ACCOUNT', 'chat_filter_black_list', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
+        {2, 'ACCOUNT', 'ChatFilterBlackList', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
         {1, 'chat', 'damage_meter_filter', L.GUI.CHAT.DAMAGE_METER_FILTER},
 
         {1, 'chat', 'group_loot_filter', L.GUI.CHAT.GROUP_LOOT_FILTER},
@@ -334,9 +364,8 @@ GUI.OptionsList = {
         {1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT, true},
         {1, 'unitframe', 'fade', L.GUI.UNITFRAME.FADE, nil, SetupUnitFrameFader},
         {1, 'unitframe', 'range_check', L.GUI.UNITFRAME.RANGE_CHECK, true},
-        {1, 'unitframe', 'FontOutline', L.GUI.UNITFRAME.FONT_OUTLINE},
-        {1, 'unitframe', 'abbr_name', L.GUI.UNITFRAME.ABBR_NAME, true, nil, nil, L.GUI.NAMEPLATE.ABBR_NAME_TIP},
-        --{4, 'unitframe', 'color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+        {1, 'unitframe', 'abbr_name', L.GUI.UNITFRAME.ABBR_NAME, nil, nil, nil, L.GUI.NAMEPLATE.ABBR_NAME_TIP},
+        {4, 'unitframe', 'color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
         {},
         {1, 'unitframe', 'player_combat_indicator', L.GUI.UNITFRAME.PLAYER_COMBAT_INDICATOR},
         {1, 'unitframe', 'player_resting_indicator', L.GUI.UNITFRAME.PLAYER_RESTING_INDICATOR, true},
@@ -432,33 +461,23 @@ GUI.OptionsList = {
 
     },
     [15] = {
-        -- misc
-        {1, 'blizzard', 'hide_talkinghead', L.GUI.MISC.HIDE_TALKINGHEAD},
-        {1, 'blizzard', 'hide_boss_banner', L.GUI.MISC.HIDE_BOSS_BANNER, true},
-        {1, 'blizzard', 'concise_errors', L.GUI.MISC.CONCISE_ERRORS},
-        {1, 'blizzard', 'maw_threat_bar', L.GUI.MISC.MAW_THREAT_BAR, true},
-        {1, 'blizzard', 'EnhanceDressup', L.GUI.MISC.ENHANCE_DRESSUP},
-        {1, 'blizzard', 'naked_button', L.GUI.MISC.NAKED_BUTTON},
-        {1, 'blizzard', 'missing_stats', L.GUI.MISC.MISSING_STATS, true},
-
-        {1, 'Misc', 'SmoothZooming', L.GUI.MISC.SMOOTH_ZOOMING, nil, nil, nil, L.GUI.NAMEPLATE.SMOOTH_ZOOMING_TIP},
-        {1, 'Misc', 'ActionCam', L.GUI.MISC.ACTION_CAM, true, nil, nil, L.GUI.NAMEPLATE.ACTION_CAM_TIP},
-
-        {1, 'Misc', 'item_level', L.GUI.MISC.ITEM_LEVEL, nil, nil, nil, L.GUI.NAMEPLATE.ITEM_LEVEL_TIP},
-        {1, 'Misc', 'gem_enchant', L.GUI.MISC.GEM_ENCHANT, true},
-        {1, 'Misc', 'FasterLoot', L.GUI.MISC.FASTER_LOOT},
-        {1, 'Misc', 'FasterMovieSkip', L.GUI.MISC.FASTER_MOVIE_SKIP, true, nil, nil, L.GUI.MISC.FASTER_MOVIE_SKIP_TIP},
+        -- appearance
+        {1, 'ACCOUNT', 'ShadowOutline', L.GUI.APPEARANCE.SHADOW_OUTLINE, nil, nil, nil, L.GUI.APPEARANCE.SHADOW_OUTLINE_TIP},
+        {1, 'ACCOUNT', 'GradientStyle', L.GUI.APPEARANCE.GRADIENT_STYLE, true, nil, nil, L.GUI.APPEARANCE.GRADIENT_STYLE_TIP},
+        {1, 'ACCOUNT', 'ReskinBlizz', L.GUI.APPEARANCE.RESKIN_BLIZZ, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_BLIZZ_TIP},
+        {5, 'ACCOUNT', 'BackdropColor', L.GUI.APPEARANCE.BACKDROP_COLOR},
+        {5, 'ACCOUNT', 'BorderColor', L.GUI.APPEARANCE.BORDER_COLOR, 1},
+        {5, 'ACCOUNT', 'ButtonBackdropColor', L.GUI.APPEARANCE.BUTTON_BACKDROP_COLOR, 2},
+        {3, 'ACCOUNT', 'BackdropAlpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, nil, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
+        {3, 'ACCOUNT', 'ButtonBackdropAlhpa', L.GUI.APPEARANCE.BUTTON_BACKDROP_ALHPA, true, {0, 1, .01}, nil, L.GUI.APPEARANCE.BUTTON_BACKDROP_ALHPA_TIP},
         {},
-        {1, 'ACCOUNT', 'CustomClassColor', L.GUI.MISC.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor},
-        {1, 'ACCOUNT', 'font_outline', L.GUI.MISC.FONT_OUTLINE, true},
-        {1, 'Misc', 'screen_saver', L.GUI.MISC.SCREEN_SAVER},
-
-        {1, 'Misc', 'auto_screenshot', L.GUI.MISC.AUTO_SCREENSHOT},
-        {1, 'Misc', 'auto_screenshot_achievement', L.GUI.MISC.AUTO_SCREENSHOT_ACHIEVEMENT},
-        {1, 'Misc', 'auto_screenshot_challenge', L.GUI.MISC.AUTO_SCREENSHOT_CHALLENGE, true},
-        {},
-        {4, 'ACCOUNT', 'TextureStyle', L.GUI.MISC.TEXTURE_STYLE, false, {}},
-        {4, 'ACCOUNT', 'NumberFormat', L.GUI.MISC.NUMBER_FORMAT, true, {L.GUI.MISC.NUMBER_TYPE1, L.GUI.MISC.NUMBER_TYPE2, L.GUI.MISC.NUMBER_TYPE3}},
+        {1, 'ACCOUNT', 'ReskinDBM', L.GUI.APPEARANCE.RESKIN_DBM, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_DBM_TIP},
+        {1, 'ACCOUNT', 'ReskinBigWigs', L.GUI.APPEARANCE.RESKIN_BW, true, nil, nil, L.GUI.APPEARANCE.RESKIN_BW_TIP},
+        {1, 'ACCOUNT', 'ReskinWeakAura', L.GUI.APPEARANCE.RESKIN_WA, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_WA_TIP},
+        {1, 'ACCOUNT', 'ReskinPremadeGroupsFilter', L.GUI.APPEARANCE.RESKIN_PGF, true, nil, nil, L.GUI.APPEARANCE.RESKIN_PGF_TIP},
+        {1, 'ACCOUNT', 'ReskinImmersion', L.GUI.APPEARANCE.RESKIN_IMMERSION, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_IMMERSION_TIP},
+        {1, 'ACCOUNT', 'ReskinActionBarProfiles', L.GUI.APPEARANCE.RESKIN_ABP, true, nil, nil, L.GUI.APPEARANCE.RESKIN_ABP_TIP},
+        {1, 'ACCOUNT', 'ReskinREHack', L.GUI.APPEARANCE.RESKIN_REHACK, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_REHACK_TIP},
     },
     [16] = {},
     [17] = {},

@@ -15,7 +15,7 @@ function GUI:ExportData()
 							text = text..';'..KEY..':'..key..':'..k..':'..v
 						end
 
-					elseif KEY == 'ui_anchor' then
+					elseif KEY == 'UIAnchor' then
 						text = text..';'..KEY..':'..key
 						for _, v in ipairs(value) do
 							text = text..':'..tostring(v)
@@ -71,7 +71,7 @@ function GUI:ExportData()
 					text = text..':'..spellID..':'..duration
 				end
 			end
-		elseif KEY == 'profile_index' or KEY == 'profile_names' then
+		elseif KEY == 'ProfileIndex' or KEY == 'ProfileNames' then
 			for k, v in pairs(VALUE) do
 				text = text..';ACCOUNT:'..KEY..':'..k..':'..v
 			end
@@ -134,7 +134,7 @@ function GUI:ImportData()
 			for _, itemID in next, items do
 				C.DB[key][value][tonumber(itemID)] = true
 			end
-		elseif key == 'ui_anchor' then
+		elseif key == 'UIAnchor' then
 			local relFrom, parent, relTo, x, y = select(3, strsplit(':', option))
 			value = tonumber(value) or value
 			x = tonumber(x)
@@ -174,10 +174,10 @@ function GUI:ImportData()
 					index = index + 2
 					spellID = options[index]
 				end
-			elseif value == 'profile_index' then
+			elseif value == 'ProfileIndex' then
 				local name, index = select(3, strsplit(':', option))
 				FREE_ADB[value][name] = tonumber(index)
-			elseif value == 'profile_names' then
+			elseif value == 'ProfileNames' then
 				local index, name = select(3, strsplit(':', option))
 				FREE_ADB[value][tonumber(index)] = name
 			end

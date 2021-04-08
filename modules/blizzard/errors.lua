@@ -41,23 +41,35 @@ local ignoredList = {
     [_G.ERR_NO_ATTACK_TARGET] = true,
 }
 
-local firstErrorFrame = CreateFrame('Frame', 'FreeUI_Errors1', _G.UIParent)
-firstErrorFrame:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)
-firstErrorFrame.fadeInTime = fadeintime
-firstErrorFrame.fadeOutTime = fadeouttime
-firstErrorFrame.holdTime = holdtime
-firstErrorFrame:Hide()
-firstErrorFrame:SetFrameStrata('TOOLTIP')
-firstErrorFrame:SetFrameLevel(30)
+local function CreateErrorFrames()
+    local font = C.Assets.Fonts.Bold
+    local outline = _G.FREE_ADB.FontOutline
 
-local secondErrorFrame = CreateFrame('Frame', 'FreeUI_Errors2', _G.UIParent)
-secondErrorFrame:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)
-secondErrorFrame.fadeInTime = fadeintime
-secondErrorFrame.fadeOutTime = fadeouttime
-secondErrorFrame.holdTime = holdtime
-secondErrorFrame:Hide()
-secondErrorFrame:SetFrameStrata('TOOLTIP')
-secondErrorFrame:SetFrameLevel(30)
+    local frame1 = CreateFrame('Frame', 'FreeUI_ErrorFrame1', _G.UIParent)
+    frame1:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)
+    frame1.fadeInTime = fadeintime
+    frame1.fadeOutTime = fadeouttime
+    frame1.holdTime = holdtime
+    frame1:Hide()
+    frame1:SetFrameStrata('TOOLTIP')
+    frame1:SetFrameLevel(30)
+    frame1.text = F.CreateFS(frame1, font, 14, outline, '', 'RED', outline or 'THICK')
+    frame1.text:SetPoint('TOP', _G.UIParent, 0, -80)
+
+    local frame2 = CreateFrame('Frame', 'FreeUI_ErrorFrame2', _G.UIParent)
+    frame2:SetScript('OnUpdate', _G.FadingFrame_OnUpdate)
+    frame2.fadeInTime = fadeintime
+    frame2.fadeOutTime = fadeouttime
+    frame2.holdTime = holdtime
+    frame2:Hide()
+    frame2:SetFrameStrata('TOOLTIP')
+    frame2:SetFrameLevel(30)
+    frame2.text = F.CreateFS(frame2, font, 14, outline, '', 'RED', outline or 'THICK')
+    frame2.text:SetPoint('TOP', _G.UIParent, 0, -96)
+
+    BLIZZARD.ErrorFrame1 = frame1
+    BLIZZARD.ErrorFrame2 = frame2
+end
 
 local function OnEvent(_, _, msg)
     if ignoredList[msg] and InCombatLockdown() then
@@ -65,28 +77,20 @@ local function OnEvent(_, _, msg)
     end
 
     if state == 0 then
-        firstErrorFrame.text:SetText(msg)
-        FadingFrame_Show(firstErrorFrame)
+        BLIZZARD.ErrorFrame1.text:SetText(msg)
+        FadingFrame_Show(BLIZZARD.ErrorFrame1)
         state = 1
     else
-        secondErrorFrame.text:SetText(msg)
-        FadingFrame_Show(secondErrorFrame)
+        BLIZZARD.ErrorFrame2.text:SetText(msg)
+        FadingFrame_Show(BLIZZARD.ErrorFrame2)
         state = 0
     end
 end
 
-function BLIZZARD:ErrorsFrame()
-    if _G.FREE_ADB.font_outline then
-        firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Bold, 14, true, '', 'RED', true)
-        secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Bold, 14, true, '', 'RED', true)
-    else
-        firstErrorFrame.text = F.CreateFS(firstErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
-        secondErrorFrame.text = F.CreateFS(secondErrorFrame, C.Assets.Fonts.Bold, 14, nil, '', 'RED', 'THICK')
-    end
-    firstErrorFrame.text:SetPoint('TOP', _G.UIParent, 0, -80)
-    secondErrorFrame.text:SetPoint('TOP', _G.UIParent, 0, -96)
+function BLIZZARD:SimplifyErrors()
+    CreateErrorFrames()
 
-    if C.DB.blizzard.concise_errors then
+    if C.DB.General.SimplifyErrors then
         _G.UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
         F:RegisterEvent('UI_ERROR_MESSAGE', OnEvent)
     else
@@ -94,4 +98,4 @@ function BLIZZARD:ErrorsFrame()
         F:UnregisterEvent('UI_ERROR_MESSAGE', OnEvent)
     end
 end
-BLIZZARD:RegisterBlizz('ErrorsFrame', BLIZZARD.ErrorsFrame)
+BLIZZARD:RegisterBlizz('SimplifyErrors', BLIZZARD.SimplifyErrors)

@@ -84,7 +84,7 @@ local function UpdatePVPTimer()
 end
 
 function MISC:ProposalTimer()
-	if not C.DB.Misc.ProposalTimer then return end
+	if not C.DB.General.ProposalTimer then return end
 
 	LFGTimer:RegisterEvent('LFG_PROPOSAL_SHOW')
 	LFGTimer:SetScript('OnEvent', function(self)

@@ -85,7 +85,7 @@ local function Refresh()
 end
 
 function MISC:ScreenSaver()
-    if not C.DB.Misc.ScreenSaver then
+    if not C.DB.General.ScreenSaver then
         return
     end
 

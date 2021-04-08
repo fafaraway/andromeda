@@ -22,7 +22,7 @@ GUI.Tab = guiTab
 GUI.Page = guiPage
 
 local tabsList = {
-    L.GUI.APPEARANCE.NAME,
+    L.GUI.GENERAL.NAME,
     L.GUI.NOTIFICATION.NAME,
     L.GUI.INFOBAR.NAME,
     L.GUI.CHAT.NAME,
@@ -36,15 +36,15 @@ local tabsList = {
     L.GUI.UNITFRAME.NAME,
     L.GUI.GROUPFRAME.NAME,
     L.GUI.NAMEPLATE.NAME,
-    L.GUI.MISC.NAME,
+    L.GUI.APPEARANCE.NAME,
     L.GUI.PROFILE.NAME,
     L.GUI.CREDITS.NAME,
 }
 
 local iconsList = {
-    'Interface\\ICONS\\Ability_Hunter_BeastWithin',
+    'Interface\\ICONS\\Ability_BossDarkVindicator_AuraofContempt',
     'Interface\\ICONS\\Ability_Mage_ColdAsIce',
-    'Interface\\ICONS\\Ability_Racial_EmbraceoftheLoa_Bwonsomdi',
+    'Interface\\ICONS\\Ability_Paladin_LightoftheMartyr',
     'Interface\\ICONS\\Spell_Shadow_Seduction',
     'Interface\\ICONS\\Spell_Shadow_Shadesofdarkness',
     'Interface\\ICONS\\Ability_Warrior_BloodFrenzy',
@@ -53,18 +53,18 @@ local iconsList = {
     'Interface\\ICONS\\INV_Misc_Bag_30',
     'Interface\\ICONS\\Achievement_Ashran_Tourofduty',
     'Interface\\ICONS\\Ability_Priest_BindingPrayers',
-    'Interface\\ICONS\\Ability_Mage_MassInvisibility',
     'Interface\\ICONS\\Spell_Priest_Pontifex',
+    'Interface\\ICONS\\Ability_Mage_MassInvisibility',
     'Interface\\ICONS\\Ability_Paladin_BeaconsOfLight',
-    'Interface\\ICONS\\ABILITY_MONK_SERENITY',
+    'Interface\\ICONS\\Ability_Hunter_BeastWithin',
     'Interface\\ICONS\\INV_Misc_Blingtron',
     'Interface\\ICONS\\Raf-Icon',
 }
 
 GUI.TexturesList = {
-    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L.GUI.MISC.TEXTURE_NORM},
-    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L.GUI.MISC.TEXTURE_GRAD},
-    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.MISC.TEXTURE_FLAT},
+    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L.GUI.GENERAL.TEXTURE_NORM},
+    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L.GUI.GENERAL.TEXTURE_GRAD},
+    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.GENERAL.TEXTURE_FLAT},
 }
 
 local function AddTextureToOption(parent, index)
@@ -248,9 +248,9 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 250, -offset + 40
+                x, y = 244, -offset + 40
             else
-                x, y = 20, -offset - 30
+                x, y = 14, -offset - 30
                 offset = offset + 70
             end
 

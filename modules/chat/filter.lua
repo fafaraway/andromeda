@@ -19,12 +19,12 @@ local msgSymbols = {'`', '～', '＠', '＃', '^', '＊', '！', '？', '。', '
 
 local FilterList = {}
 function CHAT:UpdateFilterList()
-	F:SplitList(FilterList, FREE_ADB.chat_filter_black_list, true)
+	F:SplitList(FilterList, FREE_ADB.ChatFilterBlackList, true)
 end
 
 local WhiteFilterList = {}
 function CHAT:UpdateFilterWhiteList()
-	F:SplitList(WhiteFilterList, FREE_ADB.chat_filter_white_list, true)
+	F:SplitList(WhiteFilterList, FREE_ADB.ChatFilterWhiteList, true)
 end
 
 -- ECF strings compare

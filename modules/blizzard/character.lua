@@ -31,7 +31,7 @@ local F, C, L = unpack(select(2, ...))
 local BLIZZARD = F.BLIZZARD
 
 function BLIZZARD:MissingStats()
-    if not C.DB.blizzard.missing_stats then
+    if not C.DB.General.MissingStats then
         return
     end
     if IsAddOnLoaded('DejaCharacterStats') then
@@ -158,7 +158,7 @@ function BLIZZARD:MissingStats()
 end
 
 function BLIZZARD:NakedButton()
-    if not C.DB.blizzard.naked_button then
+    if not C.DB.General.NakedButton then
         return
     end
 
@@ -166,7 +166,7 @@ function BLIZZARD:NakedButton()
     bu:SetSize(31, 33)
     bu:SetPoint('RIGHT', _G.PaperDollSidebarTab1, 'LEFT', -4, -3)
     F.PixelIcon(bu, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
-    F.AddTooltip(bu, 'ANCHOR_RIGHT', L.BLIZZARD.GET_NAKED)
+    F.AddTooltip(bu, 'ANCHOR_RIGHT', L.GENERAL.GET_NAKED)
 
     local function UnequipItemInSlot(i)
         local action = EquipmentManager_UnequipItemInSlot(i)

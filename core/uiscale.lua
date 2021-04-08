@@ -55,7 +55,7 @@ function F:Scale(n)
 end
 
 F:RegisterEvent('PLAYER_LOGIN', function()
-    if C.DB.installation.complete then
+    if C.DB.InstallationComplete then
         F:SetupUIScale()
         F:RegisterEvent('UI_SCALE_CHANGED', UpdatePixelScale)
 

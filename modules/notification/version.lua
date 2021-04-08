@@ -89,7 +89,7 @@ function NOTIFICATION:VersionCheck_UpdateGroup()
 end
 
 function NOTIFICATION:VersionCheck()
-    if not C.DB.notification.version_check then
+    if not C.DB.Notification.VersionExpired then
         return
     end
     if C.isDeveloper then

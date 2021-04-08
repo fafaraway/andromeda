@@ -1,5 +1,6 @@
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F.INFOBAR
+local NOTIFICATION = F.NOTIFICATION
 
 local showRepair = true
 local localSlots = {
@@ -55,16 +56,23 @@ local function gradientColor(perc)
 	return format('|cff%02x%02x%02x', r * 255, g * 255, b * 255), r, g, b
 end
 
-local function ResetRepairNotification()
+local function ResetRepairNotify()
 	showRepair = true
 end
 
-local function RepairAlert()
+local function RepairNotify()
 	if showRepair and isLowDurability() then
 		showRepair = false
-		F:Delay(180, ResetRepairNotification)
-		F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, C.RedColor .. L['NOTIFICATION_DURABILITY'], nil, 'Interface\\ICONS\\Ability_Repair')
+		F:Delay(180, ResetRepairNotify)
+		F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L.NOTIFICATION.LOW_DURABILITY, nil, 'Interface\\ICONS\\Ability_Repair')
 	end
+end
+
+function NOTIFICATION:RepairNotify()
+    if C.DB.Notification.LowDurability then
+	    F:RegisterEvent('PLAYER_ENTERING_WORLD', RepairNotify)
+	    F:RegisterEvent('PLAYER_REGEN_ENABLED', RepairNotify)
+    end
 end
 
 local function onEvent(self)
@@ -130,6 +138,5 @@ function INFOBAR:CreateDurabilityButton()
 	INFOBAR.DurabilityButton:HookScript('OnEnter', onEnter)
 	INFOBAR.DurabilityButton:HookScript('OnLeave', onLeave)
 
-	F:RegisterEvent('PLAYER_ENTERING_WORLD', RepairAlert)
-	F:RegisterEvent('PLAYER_REGEN_ENABLED', RepairAlert)
+
 end

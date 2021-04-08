@@ -102,7 +102,7 @@ function BLIZZARD:OrderHall_OnEnter()
     end
 
     _G.GameTooltip:AddDoubleLine(' ', C.LineString)
-    _G.GameTooltip:AddDoubleLine(' ', L.BLIZZARD.ORDERHALL_TIP, 1, 1, 1, .6, .8, 1)
+    _G.GameTooltip:AddDoubleLine(' ', L.GENERAL.ORDERHALL_TIP, 1, 1, 1, .6, .8, 1)
     _G.GameTooltip:Show()
 
     F:RegisterEvent('MODIFIER_STATE_CHANGED', BLIZZARD.OrderHall_OnShiftDown)
@@ -121,7 +121,7 @@ function BLIZZARD:OrderHall_OnLoad(addon)
 end
 
 function BLIZZARD:OrderHall_OnInit()
-    if not C.DB.blizzard.orderhall_icon then
+    if not C.DB.General.OrderHallIcon then
         return
     end
 

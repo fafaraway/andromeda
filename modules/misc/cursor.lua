@@ -53,7 +53,7 @@ local function UpdateTrail()
 end
 
 function MISC:CursorTrail()
-    if not C.DB.Misc.CursorTrail then
+    if not C.DB.General.CursorTrail then
         return
     end
 

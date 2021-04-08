@@ -2,7 +2,9 @@ local _G = _G
 local unpack = unpack
 local select = select
 local tinsert = tinsert
+local wipe = wipe
 local CreateFrame = CreateFrame
+local ReloadUI = ReloadUI
 local GetScreenWidth = GetScreenWidth
 local GetScreenHeight = GetScreenHeight
 local GetCursorPosition = GetCursorPosition
@@ -15,6 +17,8 @@ local StaticPopup_Show = StaticPopup_Show
 local SOUNDKIT_IG_MAINMENU_OPTION_CHECKBOX_ON = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 local LOCK = LOCK
 local RESET = RESET
+local OKAY = OKAY
+local CANCEL = CANCEL
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
 local F, C, L = unpack(select(2, ...))
@@ -97,15 +101,15 @@ function F:CreateMF(parent, saved)
             return
         end
         local orig, _, tar, x, y = frame:GetPoint()
-        C.DB['ui_anchor_temp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
+        C.DB['UIAnchorTemp'][frame:GetName()] = {orig, 'UIParent', tar, x, y}
     end)
 end
 
 function F:RestoreMF()
     local name = self:GetName()
-    if name and C.DB['ui_anchor_temp'][name] then
+    if name and C.DB['UIAnchorTemp'][name] then
         self:ClearAllPoints()
-        self:SetPoint(unpack(C.DB['ui_anchor_temp'][name]))
+        self:SetPoint(unpack(C.DB['UIAnchorTemp'][name]))
     end
 end
 
@@ -114,7 +118,7 @@ local MoverList, f = {}
 local updater
 
 function F:Mover(text, value, anchor, width, height)
-    local key = 'ui_anchor'
+    local key = 'UIAnchor'
 
     local mover = CreateFrame('Frame', nil, _G.UIParent)
     mover:SetWidth(width or self:GetWidth())
@@ -275,6 +279,19 @@ function MOVER:LockElements()
     clear()
 end
 
+_G.StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
+    text = L.MOVER.RESET_WARNING,
+    button1 = OKAY,
+    button2 = CANCEL,
+    OnAccept = function()
+        wipe(C.DB.UIAnchor)
+        ReloadUI()
+    end,
+    timeout = 0,
+    whileDead = 1,
+    hideOnEscape = false,
+}
+
 -- Mover Console
 local function CreateConsole()
     if f then
@@ -286,9 +303,9 @@ local function CreateConsole()
     f:SetSize(260, 70)
     F.CreateBD(f)
     F.CreateSD(f)
-    F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L.GUI.MOVER.NAME, 'YELLOW', nil, 'TOP', 0, -10)
+    F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L.MOVER.TITLE, 'YELLOW', nil, 'TOP', 0, -10)
 
-    local bu, text = {}, {LOCK, L.GUI.MOVER.GRID, RESET}
+    local bu, text = {}, {LOCK, L.MOVER.GRID, RESET}
 
     for i = 1, 3 do
         bu[i] = F.CreateButton(f, 80, 24, text[i])
@@ -325,9 +342,9 @@ local function CreateConsole()
     header:SetSize(260, 30)
     header:SetPoint('TOP')
     F.CreateMF(header, f)
-    local tips = C.InfoColor .. '|nCTRL +' .. C.Assets.mouse_right .. L.GUI.MOVER.RESET_ELEMENT .. '|nSHIFT +' .. C.Assets.mouse_right .. L.GUI.MOVER.HIDE_ELEMENT
-    header.title = L.GUI.HINT
-    F.AddTooltip(header, 'ANCHOR_TOP', tips)
+    local tips = '|nCTRL +' .. C.Assets.mouse_right .. L.MOVER.RESET_ELEMENT .. '|nSHIFT +' .. C.Assets.mouse_right .. L.MOVER.HIDE_ELEMENT
+    header.title = L.MOVER.TITLE
+    F.AddTooltip(header, 'ANCHOR_TOP', tips, 'BLUE')
 
     local frame = CreateFrame('Frame', nil, f, 'BackdropTemplate')
     frame:SetSize(260, 100)

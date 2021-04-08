@@ -26,7 +26,7 @@ local function OnEvent(self, event, addon)
         end
     elseif event == 'VARIABLES_LOADED' then
         local lastInfoFrame = C_CVar.GetCVarBitfield('closedInfoFrames', NUM_LE_FRAME_TUTORIALS)
-        if C.DB.installation.complete or not lastInfoFrame then
+        if C.DB.InstallationComplete or not lastInfoFrame then
             C_CVar.SetCVar('showTutorials', 0)
             C_CVar.SetCVar('showNPETutorials', 0)
             C_CVar.SetCVar('hideAdventureJournalAlerts', 1)

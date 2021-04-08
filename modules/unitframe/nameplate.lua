@@ -709,15 +709,14 @@ end
 
 -- Spiteful indicator
 function NAMEPLATE:AddSpitefulIndicator(self)
-    local tarName
-    if _G.FREE_ADB.font_outline then
-        tarName = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, true, nil, nil, true)
-    else
-        tarName = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
-    end
+    local font = C.Assets.Fonts.Condensed
+    local outline = _G.FREE_ADB.FontOutline
+
+    local tarName = F.CreateFS(self, font, 11, outline, nil, nil, outline or 'THICK')
     tarName:ClearAllPoints()
     tarName:SetPoint('TOP', self, 'BOTTOM', 0, -10)
     tarName:Hide()
+
     self:Tag(tarName, '[free:tarname]')
     self.tarName = tarName
 end
@@ -909,7 +908,6 @@ function NAMEPLATE:RefreshAllPlates()
     NAMEPLATE:RefreshNameplats()
 end
 
--- LuaFormatter off
 local disabledElements = {
     'Health',
     'Castbar',
@@ -917,7 +915,6 @@ local disabledElements = {
     'PvPClassificationIndicator',
     'ThreatIndicator',
 }
--- LuaFormatter on
 
 function NAMEPLATE:UpdatePlateByType()
     local nameOnlyName = self.nameOnlyName

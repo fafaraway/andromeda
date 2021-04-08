@@ -455,10 +455,10 @@ C.PartySpellsList = {
     [119381] = 60, -- 扫堂腿
     [179057] = 60, -- 混乱新星
     [205636] = 60, -- 树人
-    [307865] = 60,  -- 晋升堡垒之矛，格里恩
-    [1719]   = 90,  -- 鲁莽
-    [102342] = 90,	-- 铁木树皮
-    [325886] = 90,  -- 上古余震，法夜
+    [307865] = 60, -- 晋升堡垒之矛，格里恩
+    [1719] = 90, -- 鲁莽
+    [102342] = 90, -- 铁木树皮
+    [325886] = 90, -- 上古余震，法夜
     [288613] = 120, -- 百发百中
     [31224] = 120, -- 暗影斗篷
     [190319] = 120, -- 燃烧
@@ -979,29 +979,54 @@ C.NPMajorSpellsList = {
 
 C.CharacterSettings = {
     ShadowLands = false,
-    ['classic'] = false,
-    ['installation'] = {['complete'] = false},
-    ['ui_anchor'] = {},
-    ['ui_anchor_temp'] = {},
-    ['blizzard'] = {
-        ['hide_talkinghead'] = true,
-        ['hide_boss_banner'] = false,
-        ['hide_boss_emote'] = true,
-        ['missing_stats'] = true,
-        ['mail_button'] = true,
-        ['orderhall_icon'] = true,
-        ['tradeskill_tabs'] = true,
+    InstallationComplete = false,
+    UIAnchor = {},
+    UIAnchorTemp = {},
 
-        ['trade_target_info'] = true,
-        ['concise_errors'] = true,
-        ['naked_button'] = true,
-        ['easy_delete'] = true,
-        ['pet_filter'] = true,
-        ['friends_list'] = true,
-        ['maw_threat_bar'] = true,
+    General = {
+        HideTalkingHead = true,
+        HideBossBanner = false,
+        HideBossEmote = true,
+        SimplifyErrors = true,
 
-        EnhanceDressup = true,
+        EnhancedFriendsList = true,
+        EnhancedMailButton = true,
+        EnhancedDressup = true,
+        OrderHallIcon = true,
+        TradeTabs = true,
+        PetFilter = true,
+        MawThreatBar = true,
+
+        NakedButton = true,
+        MissingStats = true,
+        ItemLevel = true,
+        GemEnchant = true,
+        AzeriteTrait = true,
+
+        AutoTakeScreenshot = true,
+        EarnedNewAchievement = true,
+        ChallengeModeCompleted = true,
+        PlayerLevelUp = false,
+        PlayerDead = false,
+
+        SmoothZooming = true,
+        ActionMode = false,
+
+        CursorTrail = true,
+        Vignetting = true,
+        VignettingAlpha = .85,
+
+        ForceWarning = true,
+        FasterLoot = false,
+        FasterMovieSkip = true,
+        ScreenSaver = true,
+        ProposalTimer = true,
+
+        GroupTool = true,
+        RuneCheck = false,
+        Countdown = '10',
     },
+
     ['combat'] = {
         ['enable'] = true,
         ['combat_alert'] = true,
@@ -1053,14 +1078,14 @@ C.CharacterSettings = {
         ['offset'] = 26,
         ['spacing'] = 3,
         ['slot_size'] = 44,
-        ['bag_columns'] = 10,
-        ['bank_columns'] = 10,
-        ['sort_mode'] = 1,
+        ['bag_columns'] = 14,
+        ['bank_columns'] = 14,
+        ['sort_mode'] = 2,
         ['item_level'] = true,
         ['item_level_to_show'] = 1,
         ['new_item_flash'] = true,
         ['bind_type'] = true,
-        ['combine_free_slots'] = true,
+        ['combine_free_slots'] = false,
         ['split_count'] = 1,
         ['auto_deposit'] = false,
         ['special_color'] = true,
@@ -1076,17 +1101,14 @@ C.CharacterSettings = {
         ['item_filter_legendary'] = true,
         ['item_filter_collection'] = true,
         ['item_filter_favourite'] = true,
-        ['auto_sell_junk'] = false,
-        ['auto_repair'] = false,
+        ['auto_sell_junk'] = true,
+        ['auto_repair'] = true,
     },
     ['unitframe'] = {
         ['enable'] = true,
         ['color_style'] = 2,
+        HealthColor = {r = .81, g = .81, b = .81},
         ['transparent_mode'] = true,
-
-        FontOutline = false,
-        FontPixel = false,
-
         ['fade'] = true,
         ['fade_out_alpha'] = 0,
         ['fade_in_alpha'] = 1,
@@ -1125,9 +1147,8 @@ C.CharacterSettings = {
         ['debuff_type'] = true,
         ['stealable_buffs'] = true,
         ['debuffs_by_player'] = true,
-        ['abbr_name'] = true,
-        ShortenLengthCN = 6,
-        ShortenLength = 10,
+        ['abbr_name'] = false,
+
 
         EnableCastbar = true,
         CastbarCompact = true,
@@ -1172,8 +1193,7 @@ C.CharacterSettings = {
         ['focus_target_height'] = 6,
         ['enable_group'] = true,
         GroupName = false,
-        GroupNameShortenLength = 4,
-        GroupNameShortenLengthCN = 2,
+
         ['group_color_style'] = 2,
         ['group_filter'] = 6,
         ['show_solo'] = false,
@@ -1198,11 +1218,11 @@ C.CharacterSettings = {
         ['party_gap'] = 6,
         ['party_horizon'] = false,
         ['party_reverse'] = false,
-        ['raid_width'] = 28,
-        ['raid_height'] = 20,
+        ['raid_width'] = 38,
+        ['raid_height'] = 30,
         ['raid_gap'] = 5,
-        ['raid_horizon'] = true,
-        ['raid_reverse'] = false,
+        ['raid_horizon'] = false,
+        ['raid_reverse'] = true,
         ['enable_boss'] = true,
         ['boss_color_style'] = 3,
         ['boss_width'] = 120,
@@ -1321,38 +1341,15 @@ C.CharacterSettings = {
         ['report'] = true,
         ['currency'] = true,
     },
-    ['notification'] = {
-        ['enable'] = true,
-        ['bag_full'] = true,
-        ['new_mail'] = true,
-        ['version_check'] = false,
-        ['rare_found'] = true,
-        ['paragon_reputation'] = true,
-    },
 
-    Misc = {
-        ['group_tool'] = true,
-        ['rune_check'] = false,
-        ['countdown'] = '10',
-
-        Screenshot = true,
-        ScreenshotAchievement = true,
-        ScreenshotChallenge = true,
-        ScreenshotLevelup = false,
-        ScreenshotDead = false,
-        ItemLevel = true,
-        GemEnchant = true,
-        AzeriteTrait = true,
-        ScreenSaver = true,
-        ProposalTimer = true,
-        FasterLoot = false,
-        FasterMovieSkip = true,
-        ForceWarning = true,
-        SmoothZooming = true,
-        ActionCam = false,
-        CursorTrail = true,
-        Vignetting = true,
-        VignettingAlpha = .5,
+    Notification = {
+        Enable = true,
+        BagFull = true,
+        NewMail = true,
+        LowDurability = true,
+        VersionExpired = true,
+        RareFound = true,
+        Paragon = true,
     },
 
     ['chat'] = {
@@ -1439,16 +1436,14 @@ C.CharacterSettings = {
     Quest = {
         Enable = true,
         Automation = false,
-        CompleteSound = true
+        CompleteSound = true,
     },
-
 
 }
 
 C.AccountSettings = {
     DetectVersion = C.AddonVersion,
     UIScale = 1,
-
     ShadowOutline = true,
     BackdropColor = {r = .1, g = .1, b = .1},
     BackdropAlpha = .75,
@@ -1464,45 +1459,34 @@ C.AccountSettings = {
     ReskinActionBarProfiles = true,
     ReskinImmersion = true,
     ReskinREHack = true,
-
     TextureStyle = 1,
     NumberFormat = 1,
-
-
-
-    ['font_outline'] = false,
-
-
-
-
-
-
-    ['chat_filter_black_list'] = '',
-    ['chat_filter_white_list'] = '',
-    ['CustomJunkList'] = {},
-    ['NPAuraFilter'] = {[1] = {}, [2] = {}},
-    ['RaidDebuffsList'] = {},
-    ['RaidAuraWatch'] = {},
-    ['NPMajorSpells'] = {},
-    ['CornerSpellsList'] = {},
-    ['PartySpellsList'] = {},
-    ['profile_index'] = {},
-    ['profile_names'] = {},
-    HealthColor = {r = .81, g = .81, b = .81},
-    CustomClassColor = false,
+    FontOutline = false,
+    ChatFilterBlackList = '',
+    ChatFilterWhiteList = '',
+    CustomJunkList = {},
+    NPAuraFilter = {[1] = {}, [2] = {}},
+    RaidDebuffsList = {},
+    RaidAuraWatch = {},
+    NPMajorSpells = {},
+    CornerSpellsList = {},
+    PartySpellsList = {},
+    ProfileIndex = {},
+    ProfileNames = {},
+    CustomClassColor = true,
     ClassColorsList = {
-        HUNTER = {r = 0.2, g = 0.71, b = 0.25, colorStr = 'ff33b541'},
-        WARRIOR = {r = 0.78, g = 0.61, b = 0.39, colorStr = 'ffc79b64'},
-        PALADIN = {r = 0.93, g = 0.33, b = 0.42, colorStr = 'ffee556c'},
-        MAGE = {r = 0.49, g = 0.66, b = 0.89, colorStr = 'ff7ea8e3'},
-        PRIEST = {r = 0.83, g = 0.83, b = 0.83, colorStr = 'ffd3d3d3'},
-        DEATHKNIGHT = {r = 0.77, g = 0.16, b = 0.22, colorStr = 'ffc32838'},
-        WARLOCK = {r = 0.65, g = 0.64, b = 0.88, colorStr = 'ffa5a3e0'},
-        DEMONHUNTER = {r = 0.82, g = 0.35, b = 0.89, colorStr = 'ffd259e3'},
-        ROGUE = {r = 0.91, g = 0.81, b = 0.51, colorStr = 'ffe9cb7f'},
-        DRUID = {r = 0.95, g = 0.48, b = 0.27, colorStr = 'fff27944'},
-        MONK = {r = 0.28, g = 0.84, b = 0.6, colorStr = 'ff48d599'},
-        SHAMAN = {r = 0.12, g = 0.47, b = 0.42, colorStr = 'ff1f786b'},
+        HUNTER = {b = 0.196078431372549, colorStr = 'ff009332', g = 0.580392156862745, r = 0},
+        WARRIOR = {b = 0.4588235294117647, colorStr = 'ff9a8675', g = 0.5254901960784314, r = 0.6039215686274509},
+        SHAMAN = {b = 0.4, colorStr = 'ff006166', g = 0.3843137254901961, r = 0},
+        MAGE = {b = 0.8588235294117647, colorStr = 'ff3498db', g = 0.596078431372549, r = 0.203921568627451},
+        PRIEST = {b = 0.8862745098039215, colorStr = 'ffd2dae2', g = 0.8549019607843137, r = 0.8235294117647058},
+        DEATHKNIGHT = {b = 0.2509803921568627, colorStr = 'ffb71540', g = 0.08235294117647059, r = 0.7176470588235294},
+        WARLOCK = {b = 1, colorStr = 'ff9c88ff', g = 0.5333333333333333, r = 0.611764705882353},
+        DEMONHUNTER = {b = 0.8784313725490196, colorStr = 'fff368e0', g = 0.407843137254902, r = 0.9529411764705882},
+        ROGUE = {b = 0.192156862745098, colorStr = 'fffbc530', g = 0.7725490196078432, r = 0.984313725490196},
+        DRUID = {b = 0.1333333333333333, colorStr = 'ffe67e22', g = 0.4941176470588236, r = 0.9019607843137255},
+        MONK = {b = 0.6980392156862745, colorStr = 'ff33d9b2', g = 0.8509803921568627, r = 0.2},
+        PALADIN = {b = 0.4588235294117647, colorStr = 'ffff7675', g = 0.4627450980392157, r = 1},
     },
 }
 
@@ -1552,18 +1536,18 @@ f:SetScript('OnEvent', function(self, _, addon)
         end
     end
 
-    if not _G.FREE_ADB['profile_index'][C.MyFullName] then
-        _G.FREE_ADB['profile_index'][C.MyFullName] = 1
+    if not _G.FREE_ADB['ProfileIndex'][C.MyFullName] then
+        _G.FREE_ADB['ProfileIndex'][C.MyFullName] = 1
     end
 
-    if _G.FREE_ADB['profile_index'][C.MyFullName] == 1 then
+    if _G.FREE_ADB['ProfileIndex'][C.MyFullName] == 1 then
         C.DB = _G.FREE_DB
         if not C.DB['ShadowLands'] then
             wipe(C.DB)
             C.DB['ShadowLands'] = true
         end
     else
-        C.DB = _G.FREE_PDB[_G.FREE_ADB['profile_index'][C.MyFullName] - 1]
+        C.DB = _G.FREE_PDB[_G.FREE_ADB['ProfileIndex'][C.MyFullName] - 1]
     end
     initSettings(C.CharacterSettings, C.DB, true)
 

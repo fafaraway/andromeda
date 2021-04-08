@@ -113,7 +113,6 @@ function CHAT:RestyleChatFrame()
 
     local name = self:GetName()
     local maxLines = 1024
-    local font = C.isDeveloper and 'Fonts\\FreeUI\\chat.ttf' or C.Assets.Fonts.Bold
 
     if C.DB.chat.fade_out then
         self:SetFading(true)
@@ -121,16 +120,10 @@ function CHAT:RestyleChatFrame()
         self:SetFadeDuration(C.DB.chat.fading_duration)
     end
 
+    local font = C.isDeveloper and 'Fonts\\FreeUI\\chat.ttf' or C.Assets.Fonts.Bold
+    local outline = _G.FREE_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
-    if _G.FREE_ADB.font_outline then
-        self:SetFont(font, fontSize, 'OUTLINE')
-        self:SetShadowColor(0, 0, 0, 1)
-        self:SetShadowOffset(1, -1)
-    else
-        self:SetFont(font, fontSize, nil)
-        self:SetShadowColor(0, 0, 0, 1)
-        self:SetShadowOffset(2, -2)
-    end
+    F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
 
     self:SetClampedToScreen(false)
     self:SetMaxResize(C.ScreenWidth, C.ScreenHeight)

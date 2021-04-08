@@ -20,13 +20,13 @@ function BLIZZARD:CreatButton(parent, width, height, text, anchor)
     return button
 end
 
-function BLIZZARD:EnhanceDressup()
-    if not C.DB.blizzard.EnhanceDressup then
+function BLIZZARD:EnhancedDressup()
+    if not C.DB.General.EnhancedDressup then
         return
     end
 
     local parent = _G.DressUpFrameResetButton
-    local button = BLIZZARD:CreatButton(parent, 80, 22, L.BLIZZARD.UNDRESS, {'RIGHT', parent, 'LEFT', -1, 0})
+    local button = BLIZZARD:CreatButton(parent, 80, 22, L.GENERAL.UNDRESS, {'RIGHT', parent, 'LEFT', -1, 0})
     button:RegisterForClicks('AnyUp')
     button:SetScript('OnClick', function(_, btn)
         local actor = _G.DressUpFrame.ModelScene:GetPlayerActor()
@@ -41,6 +41,6 @@ function BLIZZARD:EnhanceDressup()
         end
     end)
 
-    F.AddTooltip(button, 'ANCHOR_TOP', format(L.BLIZZARD.UNDRESS_TIP, C.Assets.mouse_left, C.Assets.mouse_right))
+    F.AddTooltip(button, 'ANCHOR_TOP', format(L.GENERAL.UNDRESS_TIP, C.Assets.mouse_left, C.Assets.mouse_right))
 end
-BLIZZARD:RegisterBlizz('EnhanceDressup', BLIZZARD.EnhanceDressup)
+BLIZZARD:RegisterBlizz('EnhancedDressup', BLIZZARD.EnhancedDressup)

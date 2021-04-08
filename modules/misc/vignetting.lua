@@ -7,10 +7,10 @@ local F, C = unpack(select(2, ...))
 local MISC = F.MISC
 
 function MISC:Vignetting()
-    if not C.DB.Misc.Vignetting then
+    if not C.DB.General.Vignetting then
         return
     end
-    if C.DB.Misc.VignettingAlpha == 0 then
+    if C.DB.General.VignettingAlpha == 0 then
         return
     end
 
@@ -23,7 +23,7 @@ function MISC:Vignetting()
     f.tex:SetTexture(C.Assets.vig_tex)
     f.tex:SetAllPoints(f)
 
-    f:SetAlpha(C.DB.Misc.VignettingAlpha)
+    f:SetAlpha(C.DB.General.VignettingAlpha)
 end
 
 MISC:RegisterMisc('Vignetting', MISC.Vignetting)

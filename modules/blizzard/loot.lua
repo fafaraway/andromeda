@@ -1,6 +1,7 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local tinsert = tinsert
 local CreateFrame = CreateFrame
 local GetLootSlotType = GetLootSlotType
 local CursorUpdate = CursorUpdate
@@ -25,14 +26,14 @@ local iconsize = 32
 local width = 140
 local sq, ss, sn, st
 
-local LootFrameADV = CreateFrame('Button', 'FreeUI_Loot', _G.UIParent, 'BackdropTemplate')
-LootFrameADV:SetFrameStrata('HIGH')
-LootFrameADV:SetClampedToScreen(true)
-LootFrameADV:SetWidth(width)
-LootFrameADV:SetHeight(64)
-LootFrameADV:Hide()
+local lootFrame = CreateFrame('Button', 'FreeUI_LootFrame', _G.UIParent, 'BackdropTemplate')
+lootFrame:SetFrameStrata('HIGH')
+lootFrame:SetClampedToScreen(true)
+lootFrame:SetWidth(width)
+lootFrame:SetHeight(64)
+lootFrame:Hide()
 
-LootFrameADV.slots = {}
+lootFrame.slots = {}
 
 local OnEnter = function(self)
     local slot = self:GetID()
@@ -76,16 +77,16 @@ local OnUpdate = function(self)
     end
 end
 
-local createSlot = function(id)
-    local frame = CreateFrame('Button', 'FreeUI_Loot_Slot' .. id, LootFrameADV, 'BackdropTemplate')
-    frame:SetPoint('TOP', LootFrameADV, 0, -((id - 1) * (iconsize + 1)))
+local CreateLootSlot = function(id)
+    local frame = CreateFrame('Button', 'FreeUI_Loot_Slot' .. id, lootFrame, 'BackdropTemplate')
+    frame:SetPoint('TOP', lootFrame, 0, -((id - 1) * (iconsize + 1)))
     frame:SetPoint('RIGHT')
     frame:SetPoint('LEFT')
     frame:SetHeight(24)
     frame:SetFrameStrata('HIGH')
     frame:SetFrameLevel(20)
     frame:SetID(id)
-    LootFrameADV.slots[id] = frame
+    lootFrame.slots[id] = frame
 
     frame:RegisterForClicks('LeftButtonUp', 'RightButtonUp')
     frame:SetScript('OnEnter', OnEnter)
@@ -101,19 +102,21 @@ local createSlot = function(id)
     iconFrame:SetFrameStrata('HIGH')
     iconFrame:SetFrameLevel(20)
     iconFrame:ClearAllPoints()
-    iconFrame:SetPoint('RIGHT', frame, 'LEFT', -2, 0)
+    iconFrame:SetPoint('RIGHT', frame, 'LEFT', -4, 0)
+    iconFrame.bg = F.SetBD(iconFrame)
+    frame.iconFrame = iconFrame
 
     local icon = iconFrame:CreateTexture(nil, 'ARTWORK')
     icon:SetTexCoord(unpack(C.TexCoord))
-    icon:SetPoint('TOPLEFT', C.Mult, -C.Mult)
-    icon:SetPoint('BOTTOMRIGHT', -C.Mult, C.Mult)
-    F.SetBD(icon)
+    icon:SetInside(iconFrame)
     frame.icon = icon
 
-    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'TOP', 1, -2)
+    local outline = _G.FREE_ADB.FontOutline
+
+    local count = F.CreateFS(iconFrame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK', 'TOP', 1, -2)
     frame.count = count
 
-    local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, true)
+    local name = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, outline, nil, nil, outline or 'THICK')
     name:SetPoint('RIGHT', frame)
     name:SetPoint('LEFT', icon, 'RIGHT', 8, 0)
     name:SetJustifyH('LEFT')
@@ -123,21 +126,21 @@ local createSlot = function(id)
     return frame
 end
 
-local anchorSlots = function(self)
+local AnchorLootSlots = function(self)
     local shownSlots = 0
     for i = 1, #self.slots do
         local frame = self.slots[i]
         if (frame:IsShown()) then
             shownSlots = shownSlots + 1
 
-            frame:SetPoint('TOP', LootFrameADV, 4, (-8 + iconsize) - (shownSlots * (iconsize + 4)))
+            frame:SetPoint('TOP', lootFrame, 4, (-8 + iconsize) - (shownSlots * (iconsize + 4)))
         end
     end
 
     self:SetHeight(math.max(shownSlots * iconsize + 16, 20))
 end
 
-LootFrameADV.LOOT_CLOSED = function(self)
+lootFrame.LOOT_CLOSED = function(self)
     StaticPopup_Hide 'LOOT_BIND'
     self:Hide()
 
@@ -146,7 +149,7 @@ LootFrameADV.LOOT_CLOSED = function(self)
     end
 end
 
-LootFrameADV.LOOT_OPENED = function(self, event, autoloot)
+lootFrame.LOOT_OPENED = function(self, event, autoloot)
     self:Show()
 
     if (not self:IsShown()) then
@@ -166,7 +169,7 @@ LootFrameADV.LOOT_OPENED = function(self, event, autoloot)
 
     if (items > 0) then
         for i = 1, items do
-            local slot = LootFrameADV.slots[i] or createSlot(i)
+            local slot = lootFrame.slots[i] or CreateLootSlot(i)
             local lootIcon, lootName, lootQuantity, _, lootQuality, _, isQuestItem, questID, isActive = GetLootSlotInfo(i)
             if lootIcon then
                 local color = _G.ITEM_QUALITY_COLORS[lootQuality]
@@ -182,6 +185,9 @@ LootFrameADV.LOOT_OPENED = function(self, event, autoloot)
                 else
                     slot.count:Hide()
                 end
+
+                slot.iconFrame.bg:SetBackdropBorderColor(r, g, b)
+                slot.iconFrame.bg.__shadow:SetBackdropBorderColor(r, g, b, .25)
 
                 if questID and not isActive then
                     slot.bg:SetBackdropColor(.5, .5, 0, .5)
@@ -210,43 +216,43 @@ LootFrameADV.LOOT_OPENED = function(self, event, autoloot)
         self:Hide()
     end
 
-    anchorSlots(self)
+    AnchorLootSlots(self)
 end
 
-LootFrameADV.LOOT_SLOT_CLEARED = function(self, event, slot)
+lootFrame.LOOT_SLOT_CLEARED = function(self, event, slot)
     if (not self:IsShown()) then
         return
     end
-    LootFrameADV.slots[slot]:Hide()
-    anchorSlots(self)
+    lootFrame.slots[slot]:Hide()
+    AnchorLootSlots(self)
 end
 
-LootFrameADV.OPEN_MASTER_LOOT_LIST = function(self)
-    ToggleDropDownMenu(1, nil, _G.GroupLootDropDown, LootFrameADV.slots[ss], 0, 0)
+lootFrame.OPEN_MASTER_LOOT_LIST = function(self)
+    ToggleDropDownMenu(1, nil, _G.GroupLootDropDown, lootFrame.slots[ss], 0, 0)
 end
 
-LootFrameADV.UPDATE_MASTER_LOOT_LIST = function(self)
+lootFrame.UPDATE_MASTER_LOOT_LIST = function(self)
     MasterLooterFrame_UpdatePlayers()
 end
 
-function BLIZZARD:LootFrame()
-    LootFrameADV:SetScript('OnHide', function(self)
+function BLIZZARD:EnhancedLootFrame()
+    lootFrame:SetScript('OnHide', function(self)
         StaticPopup_Hide 'CONFIRM_LOOT_DISTRIBUTION'
         CloseLoot()
     end)
 
-    LootFrameADV:SetScript('OnEvent', function(self, event, ...)
+    lootFrame:SetScript('OnEvent', function(self, event, ...)
         self[event](self, event, ...)
     end)
 
-    LootFrameADV:RegisterEvent 'LOOT_OPENED'
-    LootFrameADV:RegisterEvent 'LOOT_SLOT_CLEARED'
-    LootFrameADV:RegisterEvent 'LOOT_CLOSED'
-    LootFrameADV:RegisterEvent 'OPEN_MASTER_LOOT_LIST'
-    LootFrameADV:RegisterEvent 'UPDATE_MASTER_LOOT_LIST'
+    lootFrame:RegisterEvent 'LOOT_OPENED'
+    lootFrame:RegisterEvent 'LOOT_SLOT_CLEARED'
+    lootFrame:RegisterEvent 'LOOT_CLOSED'
+    lootFrame:RegisterEvent 'OPEN_MASTER_LOOT_LIST'
+    lootFrame:RegisterEvent 'UPDATE_MASTER_LOOT_LIST'
 
     _G.LootFrame:UnregisterAllEvents()
-    table.insert(_G.UISpecialFrames, 'FreeUI_Loot')
+    tinsert(_G.UISpecialFrames, 'FreeUI_Loot')
 end
-BLIZZARD:RegisterBlizz('LootFrame', BLIZZARD.LootFrame)
+BLIZZARD:RegisterBlizz('EnhancedLootFrame', BLIZZARD.EnhancedLootFrame)
 

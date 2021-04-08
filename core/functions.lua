@@ -730,8 +730,8 @@ do
         end
 
         local shadow = CreateFrame('Frame', nil, frame, 'BackdropTemplate')
-        shadow:SetOutside(self, m or 4, m or 4)
-        shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = s or 4})
+        shadow:SetOutside(self, m or 5, m or 5)
+        shadow:SetBackdrop({edgeFile = assets.shadow_tex, edgeSize = s or 5})
         shadow:SetBackdropBorderColor(0, 0, 0, a or .25)
         shadow:SetFrameLevel(1)
         shadow:SetFrameStrata(frame:GetFrameStrata())
@@ -1014,7 +1014,7 @@ do
             return
         end
 
-        self.__shadow:SetBackdropBorderColor(.02, .02, .02, .25)
+        self.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
         self.__shadow:SetScript('OnUpdate', nil)
     end
 
@@ -1023,9 +1023,7 @@ do
             return
         end
 
-        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
-
-        self.__bg:SetBackdropColor(C.r, C.g, C.b, alpha)
+        self.__bg:SetBackdropColor(C.r, C.g, C.b, .65)
         self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
@@ -1108,7 +1106,7 @@ do
         self:HookScript('OnLeave', Button_OnLeave)
 
         if not noGlow then
-            F.CreateSD(self, .25, 4, 4)
+            F.CreateSD(self, .25, 6, 6)
 
             self:HookScript('OnEnter', StartGlow)
             self:HookScript('OnLeave', StopGlow)

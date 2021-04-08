@@ -30,7 +30,7 @@ local UNITFRAME = F.UNITFRAME
 local NAMEPLATE = F.NAMEPLATE
 
 local extraGUIs = {}
-local function toggleExtraGUI(guiName)
+local function TogglePanel(guiName)
     for name, frame in pairs(extraGUIs) do
         if name == guiName then
             F:TogglePanel(frame)
@@ -40,13 +40,13 @@ local function toggleExtraGUI(guiName)
     end
 end
 
-local function hideExtraGUIs()
+local function HidePanels()
     for _, frame in pairs(extraGUIs) do
         frame:Hide()
     end
 end
 
-local function createExtraGUI(parent, name, title, bgFrame)
+local function CreateExtraGUI(parent, name, title, bgFrame)
     local frame = CreateFrame('Frame', name, parent)
     frame:SetSize(260, 640)
     frame:SetPoint('TOPLEFT', parent:GetParent(), 'TOPRIGHT', 3, 0)
@@ -65,7 +65,7 @@ local function createExtraGUI(parent, name, title, bgFrame)
     end
 
     if not parent.extraGUIHook then
-        parent:HookScript('OnHide', hideExtraGUIs)
+        parent:HookScript('OnHide', HidePanels)
         parent.extraGUIHook = true
     end
     extraGUIs[name] = frame
@@ -73,16 +73,34 @@ local function createExtraGUI(parent, name, title, bgFrame)
     return frame
 end
 
+-- deprecated
 local function createOptionCheck(parent, offset, text)
     local box = F.CreateCheckBox(parent, true)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
-    box:SetPoint('TOPLEFT', 20, -offset)
+    box:SetPoint('TOPLEFT', 10, -offset)
     F.CreateFS(box, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 22, 0)
     return box
 end
 
-local function sortBars(barTable)
+-- new
+local function CheckBoxOnClick(self)
+    local key = self.__key
+    local value = self.__value
+    C.DB[key][value] = not C.DB[key][value]
+    self:SetChecked(C.DB[key][value])
+end
+
+local function CreateCheckBox(parent, offset, text)
+    local box = F.CreateCheckBox(parent, true)
+    box:SetSize(20, 20)
+    box:SetHitRectInsets(-5, -5, -5, -5)
+    box:SetPoint('TOPLEFT', 10, -offset)
+    F.CreateFS(box, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 22, 0)
+    return box
+end
+
+local function SortBars(barTable)
     local num = 1
     for _, bar in pairs(barTable) do
         bar:SetPoint('TOPLEFT', 0, -32 * (num - 1))
@@ -109,7 +127,7 @@ local function createBarTest(parent, spellID, barTable, key)
         else
             _G.FREE_ADB[key][spellID] = nil
         end
-        sortBars(barTable)
+        SortBars(barTable)
     end)
 
     local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT', 30,
@@ -117,10 +135,10 @@ local function createBarTest(parent, spellID, barTable, key)
     name:SetWidth(120)
     name:SetJustifyH('LEFT')
 
-    sortBars(barTable)
+    SortBars(barTable)
 end
 
-local function labelOnEnter(self)
+local function LabelOnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
     _G.GameTooltip:AddLine(self.text)
@@ -128,7 +146,7 @@ local function labelOnEnter(self)
     _G.GameTooltip:Show()
 end
 
-local function createLabel(parent, text, tip)
+local function CreateLabel(parent, text, tip)
     local label = F.CreateFS(parent, C.Assets.Fonts.Regular, 12, nil, text, 'YELLOW', true,
                              'CENTER', 0, 22)
     if not tip then
@@ -138,11 +156,11 @@ local function createLabel(parent, text, tip)
     frame:SetAllPoints(label)
     frame.text = text
     frame.tip = tip
-    frame:SetScript('OnEnter', labelOnEnter)
+    frame:SetScript('OnEnter', LabelOnEnter)
     frame:SetScript('OnLeave', F.HideTooltip)
 end
 
-local function clearEdit(options)
+local function ClearEdit(options)
     for i = 1, #options do
         GUI:ClearEdit(options[i])
     end
@@ -151,7 +169,7 @@ end
 function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
     local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
     dd:SetPoint('TOPLEFT', x, y)
-    createLabel(dd, text, tip)
+    CreateLabel(dd, text, tip)
 
     return dd
 end
@@ -174,7 +192,7 @@ function GUI:CreateEditbox(parent, text, x, y, tip, width, height)
     local eb = F.CreateEditBox(parent, width or 90, height or 24)
     eb:SetPoint('TOPLEFT', x, y)
     eb:SetMaxLetters(255)
-    createLabel(eb, text, tip)
+    CreateLabel(eb, text, tip)
 
     return eb
 end
@@ -223,10 +241,22 @@ local function createOptionTitle(parent, title, offset)
     line:SetPoint('TOPLEFT', 30, offset - 20)
 end
 
+-- deprecated
 local function createOptionSwatch(parent, name, value, x, y)
     local swatch = F.CreateColorSwatch(parent, name, value)
     swatch:SetPoint('TOPLEFT', x, y)
     -- swatch.text:SetTextColor(1, .8, 0)
+end
+
+-- new
+local function CreateColorSwatch(parent, offset, text, value, x, y)
+    local swatch = F.CreateColorSwatch(parent, text, value)
+
+    if x and y then
+        swatch:SetPoint('TOPLEFT', x, y)
+    else
+        swatch:SetPoint('TOPLEFT', 10, -offset)
+    end
 end
 
 -- Deprecated
@@ -268,8 +298,34 @@ local function slidersValueChanged(self, v)
     self.__update()
 end
 
-local function createOptionsSlider(parent, title, minV, maxV, step, defaultV, x, y, key, value, func)
+local function createOptionsSlider(parent, title, minV, maxV, step, defaultV, x, y, module, key, func)
     local slider = F.CreateSlider(parent, title, minV, maxV, step, x, y, 180)
+    slider:SetValue(C.DB[module][key])
+    slider.value:SetText(C.DB[module][key])
+    slider.__key = module
+    slider.__value = key
+    slider.__update = func
+    slider.__default = defaultV
+    slider.__step = step
+    slider:SetScript('OnValueChanged', slidersValueChanged)
+end
+
+-- new
+local function SliderOnValueChanged(self, v)
+    local current
+    if self.__step < 1 then
+        current = tonumber(format('%.1f', v))
+    else
+        current = tonumber(format('%.0f', v))
+    end
+
+    self.value:SetText(current)
+    C.DB[self.__key][self.__value] = current
+    self.__update()
+end
+
+local function CreateSlider(parent, lable, minV, maxV, step, defaultV, x, y, key, value, func)
+    local slider = F.CreateSlider(parent, lable, minV, maxV, step, x, y, 180)
     slider:SetValue(C.DB[key][value])
     slider.value:SetText(C.DB[key][value])
     slider.__key = key
@@ -277,7 +333,7 @@ local function createOptionsSlider(parent, title, minV, maxV, step, defaultV, x,
     slider.__update = func
     slider.__default = defaultV
     slider.__step = step
-    slider:SetScript('OnValueChanged', slidersValueChanged)
+    slider:SetScript('OnValueChanged', SliderOnValueChanged)
 end
 
 --[[ Static Popup ]]
@@ -319,12 +375,12 @@ StaticPopupDialogs['FREEUI_RESET_GROUP_DEBUFFS'] = {
 
 function GUI:SetupInventoryFilter(parent)
     local guiName = 'FreeUI_GUI_Inventory_Filter'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.INVENTORY.FILTER_SETUP)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.INVENTORY.FILTER_SETUP)
     local scroll = GUI:CreateScroll(panel, 220, 540)
     scroll:ClearAllPoints()
     scroll:SetPoint('TOPLEFT', 10, -50)
@@ -364,12 +420,12 @@ end
 
 function GUI:SetupActionbarScale(parent)
     local guiName = 'FreeUI_GUI_Actionbar_Scale'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.SCALE_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.SCALE_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local offset = 30
@@ -385,12 +441,12 @@ end
 
 function GUI:SetupActionbarFade(parent)
     local guiName = 'FreeUI_GUI_Actionbar_Fade'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local function OnUpdate()
@@ -465,12 +521,12 @@ end
 
 function GUI:SetupAdditionalbar(parent)
     local guiName = 'FreeUI_GUI_Additionalbar'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.ACTIONBAR.CUSTOM_BAR_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.CUSTOM_BAR_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local function OnUpdate()
@@ -518,12 +574,12 @@ end
 
 function GUI:SetupNPAuraFilter(parent)
     local guiName = 'FreeUI_GUI_NamePlate_Aura_Filter'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName)
+    local panel = CreateExtraGUI(parent, guiName)
 
     local frameData = {
         [1] = {
@@ -553,7 +609,7 @@ function GUI:SetupNPAuraFilter(parent)
             bar:Hide()
             _G.FREE_ADB['NPAuraFilter'][index][spellID] = nil
             frameData[index].barList[spellID] = nil
-            sortBars(frameData[index].barList)
+            SortBars(frameData[index].barList)
         end)
 
         local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, name, nil, true, 'LEFT',
@@ -564,7 +620,7 @@ function GUI:SetupNPAuraFilter(parent)
             spellName:SetTextColor(1, 0, 0)
         end
 
-        sortBars(frameData[index].barList)
+        SortBars(frameData[index].barList)
     end
 
     local function addClick(parent, index)
@@ -614,7 +670,7 @@ end
 
 function GUI:SetupMajorSpellsGlow(parent)
     local guiName = 'FreeUI_GUI_NamePlate_Castbar_Glow'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
@@ -623,7 +679,7 @@ function GUI:SetupMajorSpellsGlow(parent)
         F.NAMEPLATE:RefreshMajorSpells()
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.NAMEPLATE.CASTBAR_GLOW_SETTING, true)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.CASTBAR_GLOW_SETTING, true)
     panel:SetScript('OnHide', refreshMajorSpells)
     parent.panel = panel
 
@@ -683,12 +739,12 @@ end
 
 function GUI:SetupNamePlate(parent)
     local guiName = 'FreeUI_GUI_NamePlate_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.NAMEPLATE.BASIC_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.BASIC_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local data = {
@@ -733,12 +789,12 @@ end
 
 function GUI:SetupNPRaidTargetIndicator(parent)
     local guiName = 'FreeUI_GUI_NamePlate_RaidTargetIndicator_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.NAMEPLATE.RAID_TARGET_INDICATOR_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.RAID_TARGET_INDICATOR_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     -- LuaFormatter off
@@ -757,12 +813,12 @@ end
 
 function GUI:SetupNPExecuteRatio(parent)
     local guiName = 'FreeUI_GUI_NamePlate_ExecutRatio_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.NAMEPLATE.EXECUT_RATIO_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.EXECUT_RATIO_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     -- LuaFormatter off
@@ -777,12 +833,12 @@ end
 
 function GUI:SetupNPExplosiveScale(parent)
     local guiName = 'FreeUI_GUI_NamePlate_ExplosiveScale_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     -- LuaFormatter off
@@ -799,12 +855,12 @@ end
 
 function GUI:SetupUnitFrameSize(parent)
     local guiName = 'FreeUI_GUI_Unitframe_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.UNITFRAME.UNITFRAME_SIZE_SETTING_HEADER)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.UNITFRAME_SIZE_SETTING_HEADER)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local sliderRange = {
@@ -856,12 +912,12 @@ end
 
 function GUI:SetupGroupFrameSize(parent)
     local guiName = 'FreeUI_GUI_Groupframe_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.UNITFRAME.GROUPFRAME_SIZE_SETTING_HEADER)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.GROUPFRAME_SIZE_SETTING_HEADER)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local sliderRange = {['party'] = {20, 100}, ['raid'] = {20, 100}}
@@ -889,12 +945,12 @@ end
 
 function GUI:SetupUnitFrameFader(parent)
     local guiName = 'FreeUI_GUI_Unitframe_Fader'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.UNITFRAME.FADER_SETTING_HEADER)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.FADER_SETTING_HEADER)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local faderValues = {0, 1, .3, .3}
@@ -942,12 +998,12 @@ end
 
 function GUI:SetupCastbar(parent)
     local guiName = 'FreeUI_GUI_Castbar_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.UNITFRAME.CASTBAR_SIZE_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.CASTBAR_SIZE_SETTING)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local data = {
@@ -1033,50 +1089,9 @@ function GUI:SetupCastbar(parent)
     end
 end
 
-function GUI:SetupCustomClassColor(parent)
-    local guiName = 'FreeUI_GUI_ClassColor_Setup'
-    toggleExtraGUI(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = createExtraGUI(parent, guiName, L.GUI.MISC.CUSTOM_CLASS_COLOR_SETTING_HEADER)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local colors = _G.FREE_ADB.ClassColorsList
-
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.HUNTER,
-                       colors.HUNTER, 40, -20)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARRIOR,
-                       colors.WARRIOR, 40, -50)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PALADIN,
-                       colors.PALADIN, 40, -80)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MAGE,
-                       colors.MAGE, 40, -110)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.PRIEST,
-                       colors.PRIEST, 40, -140)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEATHKNIGHT,
-                       colors.DEATHKNIGHT, 40, -170)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.WARLOCK,
-                       colors.WARLOCK, 40, -200)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DEMONHUNTER,
-                       colors.DEMONHUNTER, 40, -230)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.ROGUE,
-                       colors.ROGUE, 40, -260)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.DRUID,
-                       colors.DRUID, 40, -290)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.MONK,
-                       colors.MONK, 40, -320)
-    createOptionSwatch(scroll.child, LOCALIZED_CLASS_NAMES_MALE.SHAMAN,
-                       colors.SHAMAN, 40, -350)
-
-    local function updateClassColor()
-    end
-end
-
 function GUI:SetupPartySpellCooldown(parent)
     local guiName = 'FreeUI_GUI_PartySpell_Setup'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
@@ -1085,7 +1100,7 @@ function GUI:SetupPartySpellCooldown(parent)
         UNITFRAME:UpdatePartyWatcherSpells()
     end
 
-    local panel = createExtraGUI(parent, guiName, L.GUI.GROUPFRAME.PARTY_SPELL_SETTING_HEADER, true)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.GROUPFRAME.PARTY_SPELL_SETTING_HEADER, true)
     panel:SetScript('OnHide', updatePartyWatcherSpells)
 
     local barTable = {}
@@ -1113,7 +1128,7 @@ function GUI:SetupPartySpellCooldown(parent)
                 _G.FREE_ADB['party_spells_list'][spellID] = nil
             end
             barTable[spellID] = nil
-            sortBars(barTable)
+            SortBars(barTable)
         end)
 
         local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT',
@@ -1127,7 +1142,7 @@ function GUI:SetupPartySpellCooldown(parent)
         timer:SetJustifyH('RIGHT')
         timer:SetTextColor(0, 1, 0)
 
-        sortBars(barTable)
+        SortBars(barTable)
     end
 
     local frame = panel.bg
@@ -1170,7 +1185,7 @@ function GUI:SetupPartySpellCooldown(parent)
 
         _G.FREE_ADB['party_spells_list'][spellID] = duration
         createBar(scroll.child, spellID, duration)
-        clearEdit(options)
+        ClearEdit(options)
     end
 
     scroll.add = F.CreateButton(frame, 46, 24, ADD)
@@ -1182,7 +1197,7 @@ function GUI:SetupPartySpellCooldown(parent)
     scroll.clear = F.CreateButton(frame, 46, 24, KEY_NUMLOCK_MAC)
     scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.clear:SetScript('OnClick', function()
-        clearEdit(options)
+        ClearEdit(options)
     end)
 
     local menuList = {}
@@ -1240,7 +1255,7 @@ end
 
 function GUI:SetupGroupDebuffs(parent)
     local guiName = 'NDuiGUI_RaidDebuffs'
-    toggleExtraGUI(guiName)
+    TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
@@ -1250,7 +1265,7 @@ function GUI:SetupGroupDebuffs(parent)
     end
 
     local panel =
-        createExtraGUI(parent, guiName, L.GUI.GROUPFRAME.GROUP_DEBUFF_SETTING_HEADER, true)
+        CreateExtraGUI(parent, guiName, L.GUI.GROUPFRAME.GROUP_DEBUFF_SETTING_HEADER, true)
     panel:SetScript('OnHide', UpdateRaidDebuffs)
 
     local setupBars
@@ -1363,7 +1378,7 @@ function GUI:SetupGroupDebuffs(parent)
     scroll.clear = F.CreateButton(frame, 60, 24, KEY_NUMLOCK_MAC)
     scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -10, 0)
     scroll.clear:SetScript('OnClick', function()
-        clearEdit(options)
+        ClearEdit(options)
     end)
 
     local function iconOnEnter(self)
@@ -1502,4 +1517,109 @@ function GUI:SetupGroupDebuffs(parent)
     end
     autoSelectInstance()
     panel:HookScript('OnShow', autoSelectInstance)
+end
+
+
+--[[ General ]]
+
+function GUI:SetupAutoTakeScreenshot(parent)
+    local guiName = 'FreeUI_GUI_Auto_Screenshot'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.GENERAL.AUTO_TAKE_SCREENSHOT)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local datas = {
+        [1] = {
+            key = 'General',
+            value = 'EarnedNewAchievement',
+            text = L.GUI.GENERAL.EARNED_NEW_ACHIEVEMENT,
+        },
+        [2] = {
+            key = 'General',
+            value = 'ChallengeModeCompleted',
+            text = L.GUI.GENERAL.CHALLENGE_MODE_COMPLETED,
+        },
+        [3] = {
+            key = 'General',
+            value = 'PlayerLevelUp',
+            text = L.GUI.GENERAL.PLAYER_LEVELUP,
+        },
+        [4] = {
+            key = 'General',
+            value = 'PlayerDead',
+            text = L.GUI.GENERAL.PLAYER_DEAD,
+        },
+    }
+
+    local offset = 10
+    for _, v in ipairs(datas) do
+        local box = CreateCheckBox(scroll, offset, v.text)
+        box:SetChecked(C.DB[v.key][v.value])
+        box.__value = v.value
+        box.__key = v.key
+        box:SetScript('OnClick', CheckBoxOnClick)
+
+        offset = offset + 35
+    end
+end
+
+function GUI:SetupCustomClassColor(parent)
+    local guiName = 'FreeUI_GUI_CustomClassColor'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.GENERAL.CUSTOM_CLASS_COLOR)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local class = LOCALIZED_CLASS_NAMES_MALE
+    local colors = _G.FREE_ADB.ClassColorsList
+
+    local datas = {
+        [1] = {text = class.HUNTER, value = colors.HUNTER},
+        [2] = {text = class.WARRIOR, value = colors.WARRIOR},
+        [3] = {text = class.SHAMAN, value = colors.SHAMAN},
+        [4] = {text = class.MAGE, value = colors.MAGE},
+        [5] = {text = class.PRIEST, value = colors.PRIEST},
+        [6] = {text = class.DEATHKNIGHT, value = colors.DEATHKNIGHT},
+        [7] = {text = class.WARLOCK, value = colors.WARLOCK},
+        [8] = {text = class.DEMONHUNTER, value = colors.DEMONHUNTER},
+        [9] = {text = class.ROGUE, value = colors.ROGUE},
+        [10] = {text = class.DRUID, value = colors.DRUID},
+        [11] = {text = class.MONK, value = colors.MONK},
+        [12] = {text = class.PALADIN, value = colors.PALADIN},
+    }
+
+    local offset = 10
+    for _, v in ipairs(datas) do
+        CreateColorSwatch(scroll, offset, v.text, v.value)
+
+        offset = offset + 30
+    end
+end
+
+function GUI:SetupVignettingAlpha(parent)
+    local guiName = 'FreeUI_GUI_VignettingAlpha'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.GENERAL.CUSTOM_CLASS_COLOR)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local datas = {
+        module = 'General',
+        key = 'VignettingAlpha',
+        value = C.CharacterSettings.General.VignettingAlpha,
+        text = L.GUI.GENERAL.VIGNETTING_ALPHA,
+    }
+
+
+    CreateSlider(scroll, datas.text, 0, 1, .1, datas.value, 20, -30, datas.module, datas.key)
 end

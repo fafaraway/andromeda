@@ -183,9 +183,9 @@ function INVENTORY:CreateRestoreButton(f)
     local bu = F.CreateButton(self, 16, 16, true, icons.restore)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
     bu:SetScript('OnClick', function()
-        C.DB['ui_anchor_temp'][f.main:GetName()] = nil
-        C.DB['ui_anchor_temp'][f.bank:GetName()] = nil
-        C.DB['ui_anchor_temp'][f.reagent:GetName()] = nil
+        C.DB['UIAnchorTemp'][f.main:GetName()] = nil
+        C.DB['UIAnchorTemp'][f.bank:GetName()] = nil
+        C.DB['UIAnchorTemp'][f.reagent:GetName()] = nil
         f.main:ClearAllPoints()
         f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
         f.bank:ClearAllPoints()
