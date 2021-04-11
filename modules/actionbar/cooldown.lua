@@ -194,7 +194,7 @@ end
 local minDuration = 1.51
 local updateFuncCache = {}
 local desaturateHooked = false
-local function desaturateUpdateCooldown(self, expectedUpdate)
+local function DesaturateUpdateCooldown(self, expectedUpdate)
     local icon = self.icon
     local action = self.action
 
@@ -220,7 +220,7 @@ local function desaturateUpdateCooldown(self, expectedUpdate)
 
                     if not func then
                         func = function()
-                            desaturateUpdateCooldown(self, true)
+                            DesaturateUpdateCooldown(self, true)
                         end
                         updateFuncCache[self] = func
                     end
@@ -245,7 +245,7 @@ local function desaturateUpdateCooldown(self, expectedUpdate)
                     local func = updateFuncCache[self]
                     if not func then
                         func = function()
-                            desaturateUpdateCooldown(self, true)
+                            DesaturateUpdateCooldown(self, true)
                         end
                         updateFuncCache[self] = func
                     end
@@ -280,7 +280,7 @@ function COOLDOWN:DesaturateOnCooldownIcons()
         -- hook to 'ActionButton_UpdateCooldown' instead of 'ActionButton_OnUpdate'
         -- because 'ActionButton_OnUpdate' is much more expensive.
         -- so, we need use C_Timer.After to trigger the function when cooldown ends.
-        hooksecurefunc('ActionButton_UpdateCooldown', desaturateUpdateCooldown)
+        hooksecurefunc('ActionButton_UpdateCooldown', DesaturateUpdateCooldown)
         desaturateHooked = true
     end
 end
