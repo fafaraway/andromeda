@@ -19,12 +19,13 @@ jobs:
 
       - name: Update TOC Interface version
         uses: p3lim/toc-interface-updater@v1
+        with:
+          base: retail
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v3
         with:
           title: Update Interface version
-          body:
           commit-message: Update Interface version
           branch: interface-version
           delete-branch: true
