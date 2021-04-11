@@ -64,7 +64,7 @@ local function RepairNotify()
 	if showRepair and isLowDurability() then
 		showRepair = false
 		F:Delay(180, ResetRepairNotify)
-		F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L.NOTIFICATION.LOW_DURABILITY, nil, 'Interface\\ICONS\\Ability_Repair')
+		F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, REPAIR_ARMOR_TOOLTIP_BREAKING, nil, 'Interface\\ICONS\\Ability_Repair')
 	end
 end
 

@@ -1,5 +1,19 @@
 local F, C = unpack(select(2, ...))
 
+local function Highlight_OnEnter(self)
+	self.hl:Show()
+end
+
+local function Highlight_OnLeave(self)
+	self.hl:Hide()
+end
+
+local function HandleRoleAnchor(self, role)
+	self[role.."Count"]:SetWidth(24)
+	self[role.."Count"]:SetFontObject(Game13Font)
+	self[role.."Count"]:SetPoint("RIGHT", self[role.."Icon"], "LEFT", 1, 0)
+end
+
 tinsert(C.BlizzThemes, function()
 	if not _G.FREE_ADB.ReskinBlizz then return end
 
@@ -36,6 +50,14 @@ tinsert(C.BlizzThemes, function()
 		end
 	end)
 
+    hooksecurefunc("LFGListSearchEntry_UpdateExpiration", function(self)
+		local expirationTime = self.ExpirationTime
+		if not expirationTime.fontStyled then
+			expirationTime:SetWidth(42)
+			expirationTime.fontStyled = true
+		end
+	end)
+
 	-- [[ Search panel ]]
 
 	local SearchPanel = LFGListFrame.SearchPanel
@@ -43,11 +65,7 @@ tinsert(C.BlizzThemes, function()
 	F.Reskin(SearchPanel.RefreshButton)
 	F.Reskin(SearchPanel.BackButton)
 	F.Reskin(SearchPanel.SignUpButton)
-	if C.isNewPatch then
-		F.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
-	else
-		F.Reskin(SearchPanel.ScrollFrame.StartGroupButton)
-	end
+	F.Reskin(SearchPanel.ScrollFrame.ScrollChild.StartGroupButton)
 	F.ReskinInput(SearchPanel.SearchBox)
 	F.ReskinScroll(SearchPanel.ScrollFrame.scrollBar)
 
@@ -55,14 +73,6 @@ tinsert(C.BlizzThemes, function()
 	SearchPanel.RefreshButton.Icon:SetPoint("CENTER")
 	SearchPanel.ResultsInset:Hide()
 	F.StripTextures(SearchPanel.AutoCompleteFrame)
-
-	local function resultOnEnter(self)
-		self.hl:Show()
-	end
-
-	local function resultOnLeave(self)
-		self.hl:Hide()
-	end
 
 	local numResults = 1
 	hooksecurefunc("LFGListSearchPanel_UpdateAutoComplete", function(self)
@@ -91,8 +101,8 @@ tinsert(C.BlizzThemes, function()
 			hl:Hide()
 			result.hl = hl
 
-			result:HookScript("OnEnter", resultOnEnter)
-			result:HookScript("OnLeave", resultOnLeave)
+            result:HookScript("OnEnter", Highlight_OnEnter)
+			result:HookScript("OnLeave", Highlight_OnLeave)
 
 			numResults = numResults + 1
 		end
@@ -103,14 +113,6 @@ tinsert(C.BlizzThemes, function()
 	local ApplicationViewer = LFGListFrame.ApplicationViewer
 	ApplicationViewer.InfoBackground:Hide()
 	ApplicationViewer.Inset:Hide()
-
-	local function headerOnEnter(self)
-		self.hl:Show()
-	end
-
-	local function headerOnLeave(self)
-		self.hl:Hide()
-	end
 
 	for _, headerName in pairs({"NameColumnHeader", "RoleColumnHeader", "ItemLevelColumnHeader"}) do
 		local header = ApplicationViewer[headerName]
@@ -127,8 +129,8 @@ tinsert(C.BlizzThemes, function()
 		hl:Hide()
 		header.hl = hl
 
-		header:HookScript("OnEnter", headerOnEnter)
-		header:HookScript("OnLeave", headerOnLeave)
+		header:HookScript("OnEnter", Highlight_OnEnter)
+		header:HookScript("OnLeave", Highlight_OnLeave)
 	end
 
 	ApplicationViewer.RoleColumnHeader:SetPoint("LEFT", ApplicationViewer.NameColumnHeader, "RIGHT", 1, 0)
@@ -177,6 +179,13 @@ tinsert(C.BlizzThemes, function()
 			F.ReskinRole(self.TankIcon, "TANK")
 			F.ReskinRole(self.HealerIcon, "HEALER")
 			F.ReskinRole(self.DamagerIcon, "DPS")
+
+            self.HealerIcon:SetPoint("RIGHT", self.DamagerIcon, "LEFT", -22, 0)
+			self.TankIcon:SetPoint("RIGHT", self.HealerIcon, "LEFT", -22, 0)
+
+			HandleRoleAnchor(self, "Tank")
+			HandleRoleAnchor(self, "Healer")
+			HandleRoleAnchor(self, "Damager")
 
 			self.styled = true
 		end
