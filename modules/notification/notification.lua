@@ -15,12 +15,14 @@ local playSounds = true
 local animations = true
 local duration = 5
 local bannerWidth = 300
+local bannerHeight = 60
+local padding = 10
 local interval = .1
 
 local function ConstructFrame()
     local f = CreateFrame('Frame', 'FreeUI_Notification', _G.UIParent, 'BackdropTemplate')
     f:SetFrameStrata('FULLSCREEN_DIALOG')
-    f:SetSize(bannerWidth, 50)
+    f:SetSize(bannerWidth, bannerHeight)
     f:SetPoint('TOP', _G.UIParent, 'TOP', 0, -60)
     f:Hide()
     f:SetAlpha(0.1)
@@ -29,26 +31,26 @@ local function ConstructFrame()
     NOTIFICATION.Frame = f
 
     local icon = f:CreateTexture(nil, 'OVERLAY')
-    icon:SetSize(32, 32)
-    icon:SetPoint('LEFT', f, 'LEFT', 9, 0)
+    icon:SetSize(bannerHeight - padding * 2, bannerHeight - padding * 2)
+    icon:SetPoint('TOPLEFT', f, padding, -padding)
     icon.bg = F.ReskinIcon(icon, true)
     icon.bg:SetBackdropBorderColor(0, 0, 0)
     NOTIFICATION.Icon = icon
 
     local sep = f:CreateTexture(nil, 'BACKGROUND')
-    sep:SetSize(C.Mult, 50)
-    sep:SetPoint('LEFT', icon, 'RIGHT', 9, 0)
+    sep:SetSize(C.Mult, bannerHeight)
+    sep:SetPoint('LEFT', icon, 'RIGHT', padding, 0)
     sep:SetColorTexture(0, 0, 0)
 
     local title = F.CreateFS(f, C.Assets.Fonts.Bold, 14, nil, '', 'YELLOW', true)
-    title:SetPoint('TOPLEFT', sep, 'TOPRIGHT', 9, -9)
-    title:SetPoint('RIGHT', f, -9, 0)
+    title:SetPoint('TOPLEFT', sep, padding, -padding)
+    title:SetPoint('TOPRIGHT', f, -padding, 0)
     title:SetJustifyH('LEFT')
     NOTIFICATION.Title = title
 
     local text = F.CreateFS(f, C.Assets.Fonts.Regular, 12, nil, '', nil, true)
-    text:SetPoint('BOTTOMLEFT', sep, 'BOTTOMRIGHT', 9, 9)
-    text:SetPoint('RIGHT', f, -9, 0)
+    text:SetPoint('BOTTOMLEFT', sep, padding, padding)
+    text:SetPoint('BOTTOMRIGHT', f, -padding, 0)
     text:SetJustifyH('LEFT')
     NOTIFICATION.Text = text
 end
@@ -128,8 +130,8 @@ local function Display(name, message, clickFunc, texture)
         NOTIFICATION.Icon:SetTexture('Interface\\ICONS\\WoW_Store')
     end
 
-    NOTIFICATION.Title:SetText(C.BlueColor .. name)
-    NOTIFICATION.Text:SetText(C.YellowColor .. message)
+    NOTIFICATION.Title:SetText(C.YellowColor .. name)
+    NOTIFICATION.Text:SetText(C.BlueColor .. message)
 
     ShowBanner()
 
@@ -236,4 +238,5 @@ function NOTIFICATION:OnLogin()
     self:RareNotify()
     self:RepairNotify()
     self:ParagonNotify()
+    self:CheckIncompatible()
 end

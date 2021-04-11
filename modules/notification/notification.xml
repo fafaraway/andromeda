@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="notification.lua"/>
 	<Script file="bag.lua"/>
+    <Script file="incompatible.lua"/>
 	<Script file="mail.lua"/>
 	<Script file="paragon.lua"/>
 	<Script file="rare.lua"/>

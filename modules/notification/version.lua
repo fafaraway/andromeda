@@ -16,18 +16,19 @@ local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePre
 local F, C, L = unpack(select(2, ...))
 local NOTIFICATION = F.NOTIFICATION
 
-local lastVCTime, isVCInit = 0
-
-local function msgChannel()
+local function CheckChannel()
     return IsPartyLFG() and 'INSTANCE_CHAT' or IsInRaid() and 'RAID' or 'PARTY'
 end
 
+local lastVCTime, isVCInit = 0
 function NOTIFICATION:VersionCheck_Compare(new, old)
     local new1, new2 = strsplit('.', new)
     new1, new2 = tonumber(new1), tonumber(new2)
 
     local old1, old2 = strsplit('.', old)
     old1, old2 = tonumber(old1), tonumber(old2)
+
+    if not old1 then return end
 
     if new1 > old1 or (new1 == old1 and new2 > old2) then
         return 'IsNew'
@@ -37,8 +38,12 @@ function NOTIFICATION:VersionCheck_Compare(new, old)
 end
 
 function NOTIFICATION:VersionCheck_Create(text)
-    F:CreateNotification(L['NOTIFICATION_VERSION'], C.BlueColor .. L['NOTIFICATION_VERSION_OUTDATE'], nil, 'Interface\\ICONS\\ability_warlock_soulswap')
-    F:Print(format(L['NOTIFICATION_VERSION_OUTDATE'], text))
+    if not _G.FREE_ADB.VersionCheck then
+        return
+    end
+
+    F:CreateNotification(C.AddonName, text, nil, 'Interface\\ICONS\\ability_warlock_soulswap')
+    F:Print(text)
 end
 
 function NOTIFICATION:VersionCheck_Init()
@@ -46,7 +51,7 @@ function NOTIFICATION:VersionCheck_Init()
         local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.AddonVersion)
         if status == 'IsNew' then
             local release = gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
-            NOTIFICATION:VersionCheck_Create(release)
+            NOTIFICATION:VersionCheck_Create(format(L.NOTIFICATION.VERSION_EXPIRED, release))
         elseif status == 'IsOld' then
             _G.FREE_ADB.DetectVersion = C.AddonVersion
         end
@@ -85,17 +90,10 @@ function NOTIFICATION:VersionCheck_UpdateGroup()
     if not IsInGroup() then
         return
     end
-    NOTIFICATION:VersionCheck_Send(msgChannel())
+    NOTIFICATION:VersionCheck_Send(CheckChannel())
 end
 
 function NOTIFICATION:VersionCheck()
-    if not C.DB.Notification.VersionExpired then
-        return
-    end
-    if C.isDeveloper then
-        return
-    end
-
     NOTIFICATION:VersionCheck_Init()
     C_ChatInfo_RegisterAddonMessagePrefix('FreeUIVersionCheck')
     F:RegisterEvent('CHAT_MSG_ADDON', NOTIFICATION.VersionCheck_Update)
@@ -104,6 +102,7 @@ function NOTIFICATION:VersionCheck()
         C_ChatInfo_SendAddonMessage('FreeUIVersionCheck', C.AddonVersion, 'GUILD')
         lastVCTime = GetTime()
     end
+
     NOTIFICATION:VersionCheck_UpdateGroup()
     F:RegisterEvent('GROUP_ROSTER_UPDATE', NOTIFICATION.VersionCheck_UpdateGroup)
 end

@@ -4,6 +4,7 @@ local select = select
 local CreateFrame = CreateFrame
 local GetContainerNumFreeSlots = GetContainerNumFreeSlots
 local INVTYPE_BAG = INVTYPE_BAG
+local TUTORIAL_TITLE58 = TUTORIAL_TITLE58
 
 local F, C, L = unpack(select(2, ...))
 local NOTIFICATION = F.NOTIFICATION
@@ -33,7 +34,7 @@ alertBagsFull = function(self)
 
     if totalFree == 0 then
         if shouldAlertBags then
-            F:CreateNotification(INVTYPE_BAG, L.NOTIFICATION.BAG_FULL, nil, 'Interface\\ICONS\\INV_Misc_Bag_08')
+            F:CreateNotification(INVTYPE_BAG, TUTORIAL_TITLE58, nil, 'Interface\\ICONS\\INV_Misc_Bag_08')
             shouldAlertBags = false
         else
             self:SetScript('OnUpdate', OnUpdate)

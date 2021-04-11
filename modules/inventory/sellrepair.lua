@@ -76,8 +76,8 @@ function autoRepair(override)
 
 				return
 			else
-				F:Print(C.RedColor..L['INVENTORY_REPAIR_ERROR'])
-				F:CreateNotification(L['INVENTORY_NOTIFICATION_HEADER'], C.RedColor..L['INVENTORY_REPAIR_ERROR'], nil, 'Interface\\ICONS\\Ability_Repair')
+				F:Print(C.RedColor..GUILDBANK_REPAIR_INSUFFICIENT_FUNDS)
+				F:CreateNotification(MINIMAP_TRACKING_REPAIR, GUILDBANK_REPAIR_INSUFFICIENT_FUNDS, nil, 'Interface\\ICONS\\Ability_Repair')
 				return
 			end
 		end
