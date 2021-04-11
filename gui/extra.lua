@@ -74,6 +74,24 @@ local function CreateExtraGUI(parent, name, title, bgFrame)
 end
 
 -- deprecated
+local function createOptionTitle(parent, title, offset)
+    F.CreateFS(parent, C.Assets.Fonts.Regular, 14, nil, title, 'YELLOW', true, 'TOP', 0, offset)
+    local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 160, C.Mult)
+    line:SetPoint('TOPLEFT', 30, offset - 20)
+end
+
+-- new
+local function CreateGroupTitle(parent, text, offset)
+    if parent.groupTitle then return end
+
+    F.CreateFS(parent, C.Assets.Fonts.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
+    local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 200, C.Mult)
+    line:SetPoint('TOPLEFT', 10, offset-20)
+
+    parent.groupTitle = true
+end
+
+-- deprecated
 local function createOptionCheck(parent, offset, text)
     local box = F.CreateCheckBox(parent, true)
     box:SetSize(20, 20)
@@ -91,12 +109,18 @@ local function CheckBoxOnClick(self)
     self:SetChecked(C.DB[key][value])
 end
 
-local function CreateCheckBox(parent, offset, text)
+local function CreateCheckBox(parent, offset, key, value, text)
     local box = F.CreateCheckBox(parent, true)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
-    box:SetPoint('TOPLEFT', 10, -offset)
+    box:SetPoint('TOPLEFT', 10, offset)
     F.CreateFS(box, C.Assets.Fonts.Regular, 12, nil, text, nil, true, 'LEFT', 22, 0)
+
+    box:SetChecked(C.DB[key][value])
+    box.__value = value
+    box.__key = key
+    box:SetScript('OnClick', CheckBoxOnClick)
+
     return box
 end
 
@@ -235,11 +259,7 @@ function GUI:CreateBarWidgets(parent, texture)
     return icon, close
 end
 
-local function createOptionTitle(parent, title, offset)
-    F.CreateFS(parent, C.Assets.Fonts.Regular, 14, nil, title, 'YELLOW', true, 'TOP', 0, offset)
-    local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 160, C.Mult)
-    line:SetPoint('TOPLEFT', 30, offset - 20)
-end
+
 
 -- deprecated
 local function createOptionSwatch(parent, name, value, x, y)
@@ -249,8 +269,9 @@ local function createOptionSwatch(parent, name, value, x, y)
 end
 
 -- new
-local function CreateColorSwatch(parent, offset, text, value, x, y)
+local function CreateColorSwatch(parent, value, text, defaultV, offset, x, y)
     local swatch = F.CreateColorSwatch(parent, text, value)
+    swatch.__default = defaultV
 
     if x and y then
         swatch:SetPoint('TOPLEFT', x, y)
@@ -324,8 +345,8 @@ local function SliderOnValueChanged(self, v)
     self.__update()
 end
 
-local function CreateSlider(parent, lable, minV, maxV, step, defaultV, x, y, key, value, func)
-    local slider = F.CreateSlider(parent, lable, minV, maxV, step, x, y, 180)
+local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func)
+    local slider = F.CreateSlider(parent, text, minV, maxV, step, x, y, 180)
     slider:SetValue(C.DB[key][value])
     slider.value:SetText(C.DB[key][value])
     slider.__key = key
@@ -418,35 +439,14 @@ end
 
 --[[ Actionbar ]]
 
-function GUI:SetupActionbarScale(parent)
-    local guiName = 'FreeUI_GUI_Actionbar_Scale'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.SCALE_SETTING)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local offset = 30
-    local defaultValues = {1}
-
-    local function OnUpdate()
-        F.ACTIONBAR:UpdateAllScale()
-    end
-
-    createOptionsSlider(scroll.child, L.GUI.ACTIONBAR.BAR_SCALE, .5, 2, .1, defaultValues[1], 20,
-                        -offset, 'Actionbar', 'BarScale', OnUpdate)
-end
-
-function GUI:SetupActionbarFade(parent)
+--[[ function GUI:SetupActionbarFade(parent)
     local guiName = 'FreeUI_GUI_Actionbar_Fade'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER_SETTING)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local function OnUpdate()
@@ -516,6 +516,82 @@ function GUI:SetupActionbarFade(parent)
                                            OnUpdate)
 
         offset = offset + 65
+    end
+end ]]
+
+function GUI:SetupActionbarFade(parent)
+    local guiName = 'FreeUI_GUI_Actionbar_Fade'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.DYNAMIC_FADE)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local function OnUpdate()
+        F.ACTIONBAR:UpdateActionBarFade()
+    end
+
+    local conditions = {
+        [1] = {
+            value = 'ConditionCombat',
+            text = L.GUI.ACTIONBAR.CONDITION_COMBATING,
+        },
+        [2] = {
+            value = 'ConditionTarget',
+            text = L.GUI.ACTIONBAR.CONDITION_TARGETING,
+        },
+        [3] = {
+            value = 'ConditionDungeon',
+            text = L.GUI.ACTIONBAR.CONDITION_DUNGEON,
+        },
+        [4] = {
+            value = 'ConditionPvP',
+            text = L.GUI.ACTIONBAR.CONDITION_PVP,
+        },
+        [5] = {
+            value = 'ConditionVehicle',
+            text = L.GUI.ACTIONBAR.CONDITION_VEHICLE,
+        },
+    }
+
+    local sliders = {
+        [1] = {
+            text = L.GUI.ACTIONBAR.FADE_OUT_ALPHA,
+            key = 'FadeOutAlpha',
+            value = C.CharacterSettings.Actionbar.FadeOutAlpha,
+        },
+        [2] = {
+            text = L.GUI.ACTIONBAR.FADE_OUT_DURATION,
+            key = 'FadeOutDuration',
+            value = C.CharacterSettings.Actionbar.FadeOutDuration,
+        },
+        [3] = {
+            text = L.GUI.ACTIONBAR.FADE_IN_ALPHA,
+            key = 'FadeInAlpha',
+            value = C.CharacterSettings.Actionbar.FadeInAlpha,
+        },
+        [4] = {
+            text = L.GUI.ACTIONBAR.FADE_IN_DURATION,
+            key = 'FadeInDuration',
+            value = C.CharacterSettings.Actionbar.FadeInDuration,
+        }
+    }
+
+    local offset = - 10
+    for _, v in ipairs(conditions) do
+        CreateGroupTitle(scroll, L.GUI.ACTIONBAR.CONDITION, offset)
+        CreateCheckBox(scroll, offset - 30, 'Actionbar', v.value, v.text)
+        offset = offset - 35
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(sliders) do
+        CreateGroupTitle(scroll, L.GUI.ACTIONBAR.FADE, offset - 30)
+        CreateSlider(scroll, 'Actionbar', v.key, v.text,  0, 1, .1, v.value, 20, offset - 80)
+        offset = offset - 65
     end
 end
 
@@ -1534,36 +1610,27 @@ function GUI:SetupAutoTakeScreenshot(parent)
 
     local datas = {
         [1] = {
-            key = 'General',
             value = 'EarnedNewAchievement',
             text = L.GUI.GENERAL.EARNED_NEW_ACHIEVEMENT,
         },
         [2] = {
-            key = 'General',
             value = 'ChallengeModeCompleted',
             text = L.GUI.GENERAL.CHALLENGE_MODE_COMPLETED,
         },
         [3] = {
-            key = 'General',
             value = 'PlayerLevelUp',
             text = L.GUI.GENERAL.PLAYER_LEVELUP,
         },
         [4] = {
-            key = 'General',
             value = 'PlayerDead',
             text = L.GUI.GENERAL.PLAYER_DEAD,
         },
     }
 
-    local offset = 10
-    for _, v in ipairs(datas) do
-        local box = CreateCheckBox(scroll, offset, v.text)
-        box:SetChecked(C.DB[v.key][v.value])
-        box.__value = v.value
-        box.__key = v.key
-        box:SetScript('OnClick', CheckBoxOnClick)
-
-        offset = offset + 35
+    local offset = -10
+    for _, data in ipairs(datas) do
+        CreateCheckBox(scroll, offset, 'General', data.value, data.text)
+        offset = offset - 35
     end
 end
 
@@ -1574,30 +1641,29 @@ function GUI:SetupCustomClassColor(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.GENERAL.CUSTOM_CLASS_COLOR)
+    local panel = CreateExtraGUI(parent, guiName, L.GUI.GENERAL.CUSTOM_CLASS_COLORS)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local class = LOCALIZED_CLASS_NAMES_MALE
-    local colors = _G.FREE_ADB.ClassColorsList
+    local colors = _G.FREE_ADB.CustomClassColors
 
     local datas = {
-        [1] = {text = class.HUNTER, value = colors.HUNTER},
-        [2] = {text = class.WARRIOR, value = colors.WARRIOR},
-        [3] = {text = class.SHAMAN, value = colors.SHAMAN},
-        [4] = {text = class.MAGE, value = colors.MAGE},
-        [5] = {text = class.PRIEST, value = colors.PRIEST},
-        [6] = {text = class.DEATHKNIGHT, value = colors.DEATHKNIGHT},
-        [7] = {text = class.WARLOCK, value = colors.WARLOCK},
-        [8] = {text = class.DEMONHUNTER, value = colors.DEMONHUNTER},
-        [9] = {text = class.ROGUE, value = colors.ROGUE},
-        [10] = {text = class.DRUID, value = colors.DRUID},
-        [11] = {text = class.MONK, value = colors.MONK},
-        [12] = {text = class.PALADIN, value = colors.PALADIN},
+        [1] = {text = 'HUNTER', value = colors.HUNTER},
+        [2] = {text = 'WARRIOR', value = colors.WARRIOR},
+        [3] = {text = 'SHAMAN', value = colors.SHAMAN},
+        [4] = {text = 'MAGE', value = colors.MAGE},
+        [5] = {text = 'PRIEST', value = colors.PRIEST},
+        [6] = {text = 'DEATHKNIGHT', value = colors.DEATHKNIGHT},
+        [7] = {text = 'WARLOCK', value = colors.WARLOCK},
+        [8] = {text = 'DEMONHUNTER', value = colors.DEMONHUNTER},
+        [9] = {text = 'ROGUE', value = colors.ROGUE},
+        [10] = {text = 'DRUID', value = colors.DRUID},
+        [11] = {text = 'MONK', value = colors.MONK},
+        [12] = {text = 'PALADIN', value = colors.PALADIN},
     }
 
     local offset = 10
     for _, v in ipairs(datas) do
-        CreateColorSwatch(scroll, offset, v.text, v.value)
+        CreateColorSwatch(scroll, v.value, v.text, C.AccountSettings.CustomClassColors[v.text], offset)
 
         offset = offset + 30
     end
@@ -1614,12 +1680,13 @@ function GUI:SetupVignettingAlpha(parent)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
     local datas = {
-        module = 'General',
+        text = L.GUI.GENERAL.VIGNETTING_ALPHA,
         key = 'VignettingAlpha',
         value = C.CharacterSettings.General.VignettingAlpha,
-        text = L.GUI.GENERAL.VIGNETTING_ALPHA,
     }
 
 
-    CreateSlider(scroll, datas.text, 0, 1, .1, datas.value, 20, -30, datas.module, datas.key)
+    CreateSlider(scroll, 'General', datas.key, datas.text, 0, 1, .1, datas.value, 20, -30)
 end
+
+

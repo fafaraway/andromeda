@@ -4,6 +4,8 @@ local UNITFRAME = F.UNITFRAME
 local NAMEPLATE = F.NAMEPLATE
 local DISABLE = DISABLE
 
+
+-- Inventory
 function GUI:UpdateInventoryStatus()
     F.INVENTORY:UpdateAllBags()
 end
@@ -13,10 +15,6 @@ local function SetupInventoryFilter()
 end
 
 -- Actionbar
-local function SetupActionbarScale()
-    GUI:SetupActionbarScale(GUI.Page[6])
-end
-
 local function SetupActionbarFade()
     GUI:SetupActionbarFade(GUI.Page[6])
 end
@@ -137,16 +135,14 @@ local function SetupVignettingAlpha()
     GUI:SetupVignettingAlpha(GUI.Page[1])
 end
 
-local function SetupGroupTool()
-    GUI:SetupGroupTool(GUI.Page[1])
-end
+
 
 -- Options
 GUI.OptionsList = {
     [1] = {
         {1, 'General', 'CursorTrail', L.GUI.GENERAL.CURSOR_TRAIL, nil, nil, nil, L.GUI.GENERAL.CURSOR_TRAIL_TIP},
         {1, 'General', 'Vignetting', L.GUI.GENERAL.VIGNETTING, true, SetupVignettingAlpha, nil, L.GUI.GENERAL.VIGNETTING_TIP},
-        {1, 'ACCOUNT', 'CustomClassColor', L.GUI.GENERAL.CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor, nil, L.GUI.GENERAL.CUSTOM_CLASS_COLOR_TIP},
+        {1, 'ACCOUNT', 'UseCustomClassColor', L.GUI.GENERAL.USE_CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor, nil, L.GUI.GENERAL.USE_CUSTOM_CLASS_COLOR_TIP},
         {1, 'ACCOUNT', 'FontOutline', L.GUI.GENERAL.FONT_OUTLINE, true, nil, nil, L.GUI.GENERAL.FONT_OUTLINE_TIP},
         {1, 'General', 'HideTalkingHead', L.GUI.GENERAL.HIDE_TALKINGHEAD},
         {1, 'General', 'HideBossBanner', L.GUI.GENERAL.HIDE_BOSS_BANNER, true},
@@ -166,13 +162,17 @@ GUI.OptionsList = {
         {1, 'General', 'ScreenSaver', L.GUI.GENERAL.SCREEN_SAVER, true},
         {1, 'General', 'AutoTakeScreenshot', L.GUI.GENERAL.AUTO_TAKE_SCREENSHOT, nil, SetupAutoTakeScreenshot},
 
-        {1, 'General', 'GroupTool', L.GUI.GENERAL.GROUP_TOOL, true, SetupGroupTool, nil, L.GUI.GENERAL.GROUP_TOOL_TIP},
+
 
         {1, 'General', 'NakedButton', L.GUI.GENERAL.NAKED_BUTTON, nil, nil, nil, L.GUI.GENERAL.NAKED_BUTTON_TIP},
         {1, 'General', 'MissingStats', L.GUI.GENERAL.MISSING_STATS, true, nil, nil, L.GUI.GENERAL.MISSING_STATS_TIP},
         {1, 'General', 'ItemLevel', L.GUI.GENERAL.ITEM_LEVEL, nil, nil, nil, L.GUI.GENERAL.ITEM_LEVEL_TIP},
         {1, 'General', 'GemEnchant', L.GUI.GENERAL.GEM_ENCHANT, true, nil, nil, L.GUI.GENERAL.GEM_ENCHANT_TIP},
         {1, 'General', 'AzeriteTrait', L.GUI.GENERAL.AZERITE_TRAIT, nil, nil, nil, L.GUI.GENERAL.AZERITE_TRAIT_TIP},
+        {},
+        {1, 'General', 'GroupTool', L.GUI.GENERAL.GROUP_TOOL, nil, nil, nil, L.GUI.GENERAL.GROUP_TOOL_TIP},
+        {1, 'General', 'RuneCheck', L.GUI.GENERAL.RUNE_CHECK, nil, nil, nil, L.GUI.GENERAL.RUNE_CHECK_TIP},
+        --{3, 'General', 'Countdown', L.GUI.GENERAL.COUNTDOWN, true, {5, 20, 1}, nil, L.GUI.GENERAL.COUNTDOWN_TIP},
         {},
         {4, 'ACCOUNT', 'TextureStyle', L.GUI.GENERAL.TEXTURE_STYLE, false, {}},
         {4, 'ACCOUNT', 'NumberFormat', L.GUI.GENERAL.NUMBER_FORMAT, true, {L.GUI.GENERAL.NUMBER_TYPE1, L.GUI.GENERAL.NUMBER_TYPE2, L.GUI.GENERAL.NUMBER_TYPE3}},
@@ -185,7 +185,7 @@ GUI.OptionsList = {
         {1, 'Notification', 'RareFound', L.GUI.NOTIFICATION.RARE_FOUND},
         {1, 'Notification', 'LowDurability', L.GUI.NOTIFICATION.LOW_DURABILITY, true},
         {1, 'Notification', 'Paragon', L.GUI.NOTIFICATION.PARAGON},
-        {1, 'Notification', 'VersionExpired', L.GUI.NOTIFICATION.VERSION_EXPIRED, true},
+        {1, 'ACCOUNT', 'VersionCheck', L.GUI.NOTIFICATION.VERSION_CHECK, true},
     },
     [3] = {
         -- infobar
@@ -252,18 +252,15 @@ GUI.OptionsList = {
         {3, 'aura', 'debuffs_per_row', L.GUI.AURA.DEBUFFS_PER_ROW, true, {6, 12, 1}},
     },
     [6] = {
-        -- actionbar
-        {1, 'Actionbar', 'Enable', L.GUI.ACTIONBAR.ENABLE, nil, SetupActionbarScale, nil, L.GUI.ACTIONBAR.ENABLE_TIP},
+        {1, 'Actionbar', 'Enable', L.GUI.ACTIONBAR.ENABLE},
         {1, 'Actionbar', 'Hotkey', L.GUI.ACTIONBAR.HOTKEY, nil, nil, UpdateHotkeys},
-        {1, 'Actionbar', 'MacroName', L.GUI.ACTIONBAR.MACRO_NAME, true},
+        {4, 'Actionbar', 'Layout', L.GUI.ACTIONBAR.LAYOUT, true, {L.GUI.ACTIONBAR.LAYOUT_1, L.GUI.ACTIONBAR.LAYOUT_2, L.GUI.ACTIONBAR.LAYOUT_3, L.GUI.ACTIONBAR.LAYOUT_4}},
+        {1, 'Actionbar', 'MacroName', L.GUI.ACTIONBAR.MACRO_NAME},
         {1, 'Actionbar', 'CountNumber', L.GUI.ACTIONBAR.COUNT_NUMBER},
-        {1, 'Actionbar', 'ClassColor', L.GUI.ACTIONBAR.CLASS_COLOR, true},
-        {1, 'Actionbar', 'Fader', L.GUI.ACTIONBAR.FADER, nil, SetupActionbarFade, nil, L.GUI.ACTIONBAR.FADER_TIP},
+        {3, 'Actionbar', 'Scale', L.GUI.ACTIONBAR.SCALE, true, {.5, 2, .1}},
+        {1, 'Actionbar', 'ClassColor', L.GUI.ACTIONBAR.CLASS_COLOR},
+        {1, 'Actionbar', 'DynamicFade', L.GUI.ACTIONBAR.DYNAMIC_FADE, nil, SetupActionbarFade, nil, L.GUI.ACTIONBAR.DYNAMIC_FADE_TIP},
         {},
-        {1, 'Actionbar', 'Bar1', L.GUI.ACTIONBAR.BAR1},
-        {1, 'Actionbar', 'Bar2', L.GUI.ACTIONBAR.BAR2, true},
-        {1, 'Actionbar', 'Bar3', L.GUI.ACTIONBAR.BAR3},
-        {1, 'Actionbar', 'Bar3Divide', L.GUI.ACTIONBAR.BAR3_DIVIDE, true},
         {1, 'Actionbar', 'Bar4', L.GUI.ACTIONBAR.BAR4},
         {1, 'Actionbar', 'Bar5', L.GUI.ACTIONBAR.BAR5, true},
         {1, 'Actionbar', 'PetBar', L.GUI.ACTIONBAR.PET_BAR},
@@ -361,22 +358,19 @@ GUI.OptionsList = {
         -- unitframes
         {1, 'unitframe', 'enable', L.GUI.UNITFRAME.ENABLE, nil, SetupUnitFrameSize},
         {1, 'unitframe', 'transparent_mode', L.GUI.UNITFRAME.TRANSPARENT_MODE},
-        {1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT, true},
-        {1, 'unitframe', 'fade', L.GUI.UNITFRAME.FADE, nil, SetupUnitFrameFader},
-        {1, 'unitframe', 'range_check', L.GUI.UNITFRAME.RANGE_CHECK, true},
-        {1, 'unitframe', 'abbr_name', L.GUI.UNITFRAME.ABBR_NAME, nil, nil, nil, L.GUI.NAMEPLATE.ABBR_NAME_TIP},
-        {4, 'unitframe', 'color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-        {},
+        {4, 'unitframe', 'color_style', L.GUI.UNITFRAME.COLOR_STYLE, true, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
+        {1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT},
+        {1, 'unitframe', 'fade', L.GUI.UNITFRAME.FADE, true, SetupUnitFrameFader},
+        {1, 'unitframe', 'range_check', L.GUI.UNITFRAME.RANGE_CHECK},
+        {1, 'unitframe', 'abbr_name', L.GUI.UNITFRAME.ABBR_NAME, true, nil, nil, L.GUI.NAMEPLATE.ABBR_NAME_TIP},
         {1, 'unitframe', 'player_combat_indicator', L.GUI.UNITFRAME.PLAYER_COMBAT_INDICATOR},
         {1, 'unitframe', 'player_resting_indicator', L.GUI.UNITFRAME.PLAYER_RESTING_INDICATOR, true},
         {1, 'unitframe', 'RaidTargetIndicator', L.GUI.UNITFRAME.RAID_TARGET_INDICATOR},
         {1, 'unitframe', 'heal_prediction', L.GUI.UNITFRAME.HEAL_PREDICTION, true},
         {1, 'unitframe', 'GCDIndicator', L.GUI.UNITFRAME.GCD_INDICATOR, nil, nil, toggleGCDIndicator},
-        {},
         {1, 'unitframe', 'class_power_bar', L.GUI.UNITFRAME.CLASS_POWER_BAR},
         {1, 'unitframe', 'stagger_bar', L.GUI.UNITFRAME.STAGGER_BAR, true},
         {1, 'unitframe', 'totems_bar', L.GUI.UNITFRAME.TOTEMS_BAR},
-        {},
         {1, 'unitframe', 'debuffs_by_player', L.GUI.UNITFRAME.DEBUFFS_BY_PLAYER},
         {1, 'unitframe', 'debuff_type', L.GUI.UNITFRAME.DEBUFF_TYPE, true},
         {1, 'unitframe', 'stealable_buffs', L.GUI.UNITFRAME.STEALABLE_BUFFS},
@@ -385,12 +379,10 @@ GUI.OptionsList = {
         {1, 'unitframe', 'CastbarCompact', L.GUI.UNITFRAME.CASTBAR_COMPACT, true},
         {1, 'unitframe', 'CastbarSpellName', L.GUI.UNITFRAME.CASTBAR_SPELL_NAME},
         {1, 'unitframe', 'CastbarSpellTime', L.GUI.UNITFRAME.CASTBAR_SPELL_TIME, true},
-
         {5, 'unitframe', 'CastbarCastingColor', L.GUI.UNITFRAME.CASTING_COLOR},
         {5, 'unitframe', 'CastbarCompleteColor', L.GUI.UNITFRAME.COMPLETE_COLOR, 1},
         {5, 'unitframe', 'CastbarFailColor', L.GUI.UNITFRAME.FAIL_COLOR, 2},
         {5, 'unitframe', 'CastbarUninterruptibleColor', L.GUI.UNITFRAME.UNINTERRUPTIBLE_COLOR, 3},
-
         {},
         {1, 'unitframe', 'enable_boss', L.GUI.UNITFRAME.ENABLE_BOSS},
         --{4, 'unitframe', 'boss_color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},

@@ -1347,7 +1347,6 @@ C.CharacterSettings = {
         BagFull = true,
         NewMail = true,
         LowDurability = true,
-        VersionExpired = true,
         RareFound = true,
         Paragon = true,
     },
@@ -1384,9 +1383,10 @@ C.CharacterSettings = {
 
         RoleIcon = true,
     },
-    ['Actionbar'] = {
+
+    Actionbar = {
         ['Enable'] = true,
-        ['BarScale'] = 1,
+        Scale = 1,
         ['ButtonSize'] = 26,
 
         ['Hotkey'] = true,
@@ -1394,17 +1394,16 @@ C.CharacterSettings = {
         ['CountNumber'] = true,
         ['ClassColor'] = false,
 
-        ['Bar1'] = true,
-        ['Bar2'] = true,
-        ['Bar3'] = true,
-        ['Bar3Divide'] = true,
+        Layout = 4, -- 1*12 2*12 3*12 2*18
+
+
         ['Bar4'] = false,
         ['Bar5'] = false,
         ['PetBar'] = true,
         ['StanceBar'] = false,
         ['VehicleBar'] = true,
 
-        ['Fader'] = true,
+        ['DynamicFade'] = true,
         ['FadeOutAlpha'] = 0,
         ['FadeInAlpha'] = 1,
         ['FadeOutDuration'] = 1,
@@ -1443,6 +1442,7 @@ C.CharacterSettings = {
 
 C.AccountSettings = {
     DetectVersion = C.AddonVersion,
+    VersionCheck = true,
     UIScale = 1,
     ShadowOutline = true,
     BackdropColor = {r = .1, g = .1, b = .1},
@@ -1473,8 +1473,8 @@ C.AccountSettings = {
     PartySpellsList = {},
     ProfileIndex = {},
     ProfileNames = {},
-    CustomClassColor = true,
-    ClassColorsList = {
+    UseCustomClassColor = true,
+    CustomClassColors = {
         HUNTER = {b = 0.196078431372549, colorStr = 'ff009332', g = 0.580392156862745, r = 0},
         WARRIOR = {b = 0.4588235294117647, colorStr = 'ff9a8675', g = 0.5254901960784314, r = 0.6039215686274509},
         SHAMAN = {b = 0.4, colorStr = 'ff006166', g = 0.3843137254901961, r = 0},
@@ -1490,7 +1490,7 @@ C.AccountSettings = {
     },
 }
 
-local function initSettings(source, target, fullClean)
+local function InitializeSettings(source, target, fullClean)
     for i, j in pairs(source) do
         if type(j) == 'table' then
             if target[i] == nil then
@@ -1529,7 +1529,7 @@ f:SetScript('OnEvent', function(self, _, addon)
         return
     end
 
-    initSettings(C.AccountSettings, _G.FREE_ADB)
+    InitializeSettings(C.AccountSettings, _G.FREE_ADB)
     if not next(_G.FREE_PDB) then
         for i = 1, 5 do
             _G.FREE_PDB[i] = {}
@@ -1549,7 +1549,7 @@ f:SetScript('OnEvent', function(self, _, addon)
     else
         C.DB = _G.FREE_PDB[_G.FREE_ADB['ProfileIndex'][C.MyFullName] - 1]
     end
-    initSettings(C.CharacterSettings, C.DB, true)
+    InitializeSettings(C.CharacterSettings, C.DB, true)
 
     F:SetupUIScale(true)
 

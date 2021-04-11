@@ -248,13 +248,13 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 244, -offset + 40
+                x, y = 240, -offset + 40
             else
-                x, y = 14, -offset - 30
+                x, y = 10, -offset - 30
                 offset = offset + 70
             end
 
-            local s = F.CreateSlider(parent, name, min, max, step, x, y, 180, tip)
+            local s = F.CreateSlider(parent, name, min, max, step, x, y, 190, tip)
             s.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
 
             s:SetValue(UpdateValue(key, value))
@@ -298,7 +298,7 @@ local function CreateOption(i)
                         opt[num]:SetBackdropColor(r, g, b, .25)
                         opt[num].selected = true
                     else
-                        opt[num]:SetBackdropColor(0, 0, 0, .25)
+                        opt[num]:SetBackdropColor(.1, .1, .1, .25)
                         opt[num].selected = false
                     end
                 end
@@ -329,6 +329,7 @@ local function CreateOption(i)
                 swatch:SetPoint('TOPLEFT', width, -offset - 5)
                 offset = offset + 32
             end
+
             swatch.__default = (key == 'ACCOUNT' and C.AccountSettings[value]) or C.CharacterSettings[key][value]
         else -- blank, no optType
             if not key then

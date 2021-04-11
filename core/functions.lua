@@ -1346,14 +1346,26 @@ do
     end
 
     -- Handle checkbox and radio
+    local function CheckBox_OnEnter(self)
+        --self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        self.shadow:SetBackdropBorderColor(C.r, C.g, C.b, .25)
+    end
+
+    local function CheckBox_OnLeave(self)
+        --F.SetBorderColor(self.bg)
+        self.shadow:SetBackdropBorderColor(0, 0, 0, .25)
+    end
+
     function F:ReskinCheck(flat, forceSaturation)
         self:SetNormalTexture('')
         self:SetPushedTexture('')
 
         local bg = F.CreateBDFrame(self)
         bg:SetInside(self, 4, 4)
-        F.CreateSD(bg, .25)
+        local shadow = F.CreateSD(bg, .25)
+
         self.bg = bg
+        self.shadow = shadow
 
         if self.SetHighlightTexture then
             local highligh = self:CreateTexture()
@@ -1398,6 +1410,9 @@ do
                 disabled:SetPoint('BOTTOMRIGHT', self, -5, 5)
             end
         end
+
+        self:HookScript('OnEnter', CheckBox_OnEnter)
+        self:HookScript('OnLeave', CheckBox_OnLeave)
 
         self.forceSaturation = forceSaturation
     end
@@ -1720,11 +1735,13 @@ do
 
     function F:CreateWatermark()
         local logo = self:CreateTexture(nil, 'BACKGROUND')
-        logo:SetPoint('BOTTOMRIGHT', 10, 0)
+        logo:SetPoint('CENTER')
         logo:SetTexture(C.Assets.logo)
         logo:SetTexCoord(0, 1, 0, .75)
-        logo:SetSize(200, 75)
-        logo:SetAlpha(.3)
+        logo:SetSize(256, 256)
+        logo:SetAlpha(.1)
+        logo:SetBlendMode('ADD')
+        logo:SetDesaturated(true)
     end
 
     function F:CreateSB(spark, r, g, b)
@@ -1798,7 +1815,7 @@ do
                 opt[i]:SetBackdropColor(C.r, C.g, C.b, .25)
                 opt[i].selected = true
             else
-                opt[i]:SetBackdropColor(0, 0, 0, .25)
+                opt[i]:SetBackdropColor(.1, .1, .1, .25)
                 opt[i].selected = false
             end
         end
@@ -1876,6 +1893,7 @@ do
             opt[i]:SetPoint('TOPLEFT', 4, -4 - (i - 1) * (height + 2))
             opt[i]:SetSize(width - 8, height)
             F.CreateBD(opt[i])
+
             local text = F.CreateFS(opt[i], C.Assets.Fonts.Regular, 11, nil, j, nil, true, 'LEFT', 5, 0)
             text:SetPoint('RIGHT', -5, 0)
             opt[i].text = j
@@ -1988,17 +2006,16 @@ do
         slider:SetHitRectInsets(0, 0, 0, 0)
         F.ReskinSlider(slider)
 
-        slider.Low:SetText(minValue)
+        F:SetFS(slider.Low, C.Assets.Fonts.Regular, 11, nil, minValue, nil, true)
         slider.Low:SetPoint('TOPLEFT', slider, 'BOTTOMLEFT', 10, -2)
-        slider.Low:SetFont(C.Assets.Fonts.Regular, 11)
-        slider.High:SetText(maxValue)
+
+        F:SetFS(slider.High, C.Assets.Fonts.Regular, 11, nil, maxValue, nil, true)
         slider.High:SetPoint('TOPRIGHT', slider, 'BOTTOMRIGHT', -10, -2)
-        slider.High:SetFont(C.Assets.Fonts.Regular, 11)
+
+        F:SetFS(slider.Text, C.Assets.Fonts.Regular, 11, nil, name, nil, true)
         slider.Text:ClearAllPoints()
         slider.Text:SetPoint('CENTER', 0, 16)
-        slider.Text:SetText(name)
-        slider.Text:SetTextColor(1, 1, 1)
-        slider.Text:SetFont(C.Assets.Fonts.Regular, 11)
+
         slider.value = F.CreateEditBox(slider, 50, 20)
         slider.value:SetPoint('TOP', slider, 'BOTTOM', 0, -2)
         slider.value:SetJustifyH('CENTER')

@@ -88,26 +88,10 @@ L.GENERAL = {
 }
 
 L.NOTIFICATION = {
-    LOW_DURABILITY = 'Durability is low, needs to repair!',
-    BAG_FULL = 'Your bags are full.',
-    VERSION_EXPIRED = 'Version expired',
+    VERSION_EXPIRED = 'Addon has been out of date, the latest release is |cffff0000%s|r.',
+    INCOMPATIBLE_ADDON = 'Incompatible AddOns:',
+    DISABLE_ALL = 'Disable All!',
 }
-
-
-
---[[ Notification ]]
-
-do
-    L['NOTIFICATION_NEW_MAIL'] = 'New mail!'
-    L['NOTIFICATION_BAG_FULL'] = 'Bag full!'
-    L['NOTIFICATION_MAIL'] = 'Mail'
-    L['NOTIFICATION_BAG'] = 'Bag'
-    L['NOTIFICATION_RARE'] = 'Rare found'
-    L['NOTIFICATION_VERSION'] = 'Version check'
-    L['NOTIFICATION_VERSION_OUTDATE'] = 'Your FreeUI is outdated, latest version is %s'
-    L['NOTIFICATION_DURABILITY'] = 'Durability is low, needs to repair!'
-    L['NOTIFICATION_INSTANCE'] = 'Instance'
-end
 
 --[[ Infobar ]]
 
@@ -386,8 +370,8 @@ L.GUI = {
         VIGNETTING = 'Vignetting',
         VIGNETTING_TIP = '|nAdd shadowed overlay to screen corner.',
         VIGNETTING_ALPHA = 'Vignetting Alpha',
-        CUSTOM_CLASS_COLOR = 'Customize class colors',
-        CUSTOM_CLASS_COLOR_TIP = '|nEnable custom class colors to override default colors.',
+        USE_CUSTOM_CLASS_COLOR = 'Customize class colors',
+        USE_CUSTOM_CLASS_COLOR_TIP = '|nEnable custom class colors to override default colors.',
         HIDE_TALKINGHEAD = 'Hide talking head',
         HIDE_BOSS_BANNER = 'Hide boss banner',
         HIDE_BOSS_EMOTE = 'Hide boss emote',
@@ -479,7 +463,7 @@ L.GUI = {
         BAG_FULL = 'Bag full',
         NEW_MAIL = 'New mail',
         RARE_FOUND = 'Rare found',
-        VERSION_EXPIRED = 'Addon expired',
+        VERSION_CHECK = 'Addon expired',
         LOW_DURABILITY = 'Low durability',
         PARAGON = 'Paragon chest'
     },
@@ -563,31 +547,27 @@ L.GUI = {
         ['NAME'] = 'Actionbar',
         ['ENABLE'] = 'Enable actionbar',
         ['ENABLE_TIP'] = '|nAdjust the functions and styles related to the action bar.',
-        ['BAR_SCALE'] = 'Bar scale',
+        SCALE = 'Bar Scale',
         ['HOTKEY'] = 'Show hotkey',
         ['MACRO_NAME'] = 'Show macro name',
         ['COUNT_NUMBER'] = 'Show count and charge',
         ['CLASS_COLOR'] = 'Bar colored by class color',
-        ['FADER'] = 'Actionbar fading',
-        ['FADER_TIP'] = '|nThe action bar fades in and out according to specific conditions.',
-        ['BAR1'] = 'Bar1',
-        ['BAR2'] = 'Bar2',
-        ['BAR3'] = 'Bar3',
-        ['BAR3_DIVIDE'] = 'Divede bar3',
-        ['BAR4'] = 'Bar4',
-        ['BAR5'] = 'Bar5',
+        DYNAMIC_FADE = 'Dynamic fade',
+        DYNAMIC_FADETIP = '|nThe action bar fades in and out according to specific conditions.',
+
+        ['BAR4'] = 'SideBar1',
+        ['BAR5'] = 'SideBar2',
         ['PET_BAR'] = 'Pet bar',
         ['STANCE_BAR'] = 'Stance bar',
-        ['LEAVE_VEHICLE_BAR'] = 'Leave vehicle bar',
+        ['LEAVE_VEHICLE_BAR'] = 'Leave vehicle button',
 
-        ['SCALE_SETTING'] = 'Actionbar scale setting',
-
-        ['FADER_SETTING'] = 'Actionbar fade setting',
+        CONDITION = 'Condition',
         ['CONDITION_COMBATING'] = 'In combat',
         ['CONDITION_TARGETING'] = 'Have target/focus',
         ['CONDITION_DUNGEON'] = 'In dungeon',
         ['CONDITION_PVP'] = 'In battlefield/arena',
         ['CONDITION_VEHICLE'] = 'In vehicle',
+        FADE = 'Fade',
         ['FADE_OUT_ALPHA'] = 'fade out alpha',
         ['FADE_IN_ALPHA'] = 'fade in alpha',
         ['FADE_OUT_DURATION'] = 'fade out duration',
@@ -611,6 +591,12 @@ L.GUI = {
         ['CD_NOTIFY_TIP'] = '|nIf enabled, you can mouse wheel on actionbar button, and send its cooldown status to your group.|nOnly available for FreeUI default actionbar.',
         DESATURATED_ICON = 'Desaturated icon',
         DESATURATED_ICON_TIP = '|nShow the action bar icons desaturated when they are on cooldown.',
+
+        LAYOUT = 'Bar Layout',
+        LAYOUT_1 = '1 * 12',
+        LAYOUT_2 = '2 * 12',
+        LAYOUT_3 = '3 * 12',
+        LAYOUT_4 = '2 * 18',
     },
 
     ['COMBAT'] = {

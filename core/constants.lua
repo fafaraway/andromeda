@@ -102,6 +102,8 @@ C.Assets = {
     Textures = {},
 
     Sounds = {
+        Intro = C.AssetsPath .. 'sounds\\intro.mp3',
+
         whisper = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
         whisperBN = C.AssetsPath .. 'sounds\\whisper_bn.ogg',
         notification = C.AssetsPath .. 'sounds\\notification.ogg',
@@ -131,7 +133,7 @@ end
 
 C.ClassColors = {}
 function F.UpdateCustomClassColors()
-    local colors = _G.FREE_ADB.CustomClassColor and _G.FREE_ADB.ClassColorsList or RAID_CLASS_COLORS
+    local colors = _G.FREE_ADB.UseCustomClassColor and _G.FREE_ADB.CustomClassColors or RAID_CLASS_COLORS
     for class, value in pairs(colors) do
         C.ClassColors[class] = {}
         C.ClassColors[class].r = value.r
@@ -207,15 +209,3 @@ local function CheckMyRole()
 end
 F:RegisterEvent('ADDON_LOADED', CheckMyRole)
 F:RegisterEvent('PLAYER_TALENT_UPDATE', CheckMyRole)
-
--- Update my status
-local function CheckMyStatus()
-    if IsInInstance() and IsInGroup() and GetNumGroupMembers() > 1 then
-        C.MyStatus = 'Busy'
-    else
-        C.MyStatus = 'Idle'
-    end
-end
-F:RegisterEvent('ADDON_LOADED', CheckMyStatus)
-F:RegisterEvent('ZONE_CHANGED_NEW_AREA', CheckMyStatus)
-F:RegisterEvent('GROUP_ROSTER_UPDATE', CheckMyStatus)
