@@ -2,12 +2,10 @@ local _G = _G
 local unpack = unpack
 local select = select
 local CreateFrame = CreateFrame
-local PlaySound = PlaySound
+local PlaySoundFile = PlaySound
 local IsInInstance = IsInInstance
 local InCombatLockdown = InCombatLockdown
-local GetAddOnMetadata = GetAddOnMetadata
 local GetScreenHeight = GetScreenHeight
-local SOUNDKIT_UI_LEGENDARY_LOOT_TOAST = SOUNDKIT.UI_LEGENDARY_LOOT_TOAST
 
 local F, C = unpack(select(2, ...))
 local LOGO = F.LOGO
@@ -102,7 +100,7 @@ function LOGO:Logo_Create()
         frame:Hide()
     end)
     anim.fadeIn:SetScript('OnFinished', function()
-        PlaySound(SOUNDKIT_UI_LEGENDARY_LOOT_TOAST, 'master')
+        PlaySoundFile(C.Assets.Sounds.Intro, 'master')
     end)
 
     LOGO.logoFrame = frame
