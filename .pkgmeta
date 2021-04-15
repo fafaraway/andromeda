@@ -1,1 +1,3 @@
 package-as: FreeUI
+wowi-archive-previous : no
+wowi-create-changelog : yes
