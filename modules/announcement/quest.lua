@@ -1,4 +1,6 @@
 local _G = _G
+local unpack = unpack
+local select = select
 local format = format
 local floor = floor
 local mod = mod
@@ -15,7 +17,6 @@ local C_QuestLog_GetTitleForQuestID = C_QuestLog.GetTitleForQuestID
 local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
-local soundKitID = SOUNDKIT.ALARM_CLOCK_WARNING_3
 local LE_QUEST_TAG_TYPE_PROFESSION = Enum.QuestTagType.Profession
 local LE_QUEST_FREQUENCY_DAILY = Enum.QuestFrequency.Daily
 local GetQuestLink = GetQuestLink
@@ -45,14 +46,12 @@ local function CreateCheckBox()
     if created then
         return
     end
-    local bu = CreateFrame('CheckButton', nil, _G.WorldMapFrame.BorderFrame,
-                           'InterfaceOptionsCheckButtonTemplate')
+    local bu = CreateFrame('CheckButton', nil, _G.WorldMapFrame.BorderFrame, 'InterfaceOptionsCheckButtonTemplate')
     bu:SetPoint('TOPRIGHT', -270, -4)
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(-5, -5, -5, -5)
     F.ReskinCheck(bu, true)
-    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L.ANNOUNCEMENT.QUEST_ANNOUNCE,
-                         'YELLOW', true, 'LEFT', 22, 0)
+    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L.ANNOUNCEMENT.QUEST_ANNOUNCE, 'YELLOW', true, 'LEFT', 22, 0)
     bu:SetChecked(C.DB.Announcement.Quest)
     bu:SetScript('OnClick', function(self)
         C.DB.Announcement.Quest = self:GetChecked()
@@ -107,7 +106,7 @@ local questMatches = {
     ['PKill'] = getPattern(ERR_QUEST_ADD_PLAYER_KILL_SII),
     ['ObjectiveComplete'] = getPattern(ERR_QUEST_OBJECTIVE_COMPLETE_S),
     ['QuestComplete'] = getPattern(ERR_QUEST_COMPLETE_S),
-    ['QuestFailed'] = getPattern(ERR_QUEST_FAILED_S)
+    ['QuestFailed'] = getPattern(ERR_QUEST_FAILED_S),
 }
 
 function ANNOUNCEMENT:FindQuestProgress(_, msg)
