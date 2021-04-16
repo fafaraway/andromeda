@@ -1,7 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local ANNOUNCEMENT = F.ANNOUNCEMENT
 
-local function checkGroupStatus()
+function ANNOUNCEMENT:CheckGroupAndInstance()
 	if IsInInstance() and IsInGroup() and GetNumGroupMembers() > 1 and not IsInRaid() then
 		return true
 	end
@@ -87,11 +87,11 @@ function ANNOUNCEMENT:OnLogin()
 		return
 	end
 
-	F:RegisterEvent('PLAYER_ENTERING_WORLD', checkGroupStatus)
-	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', checkGroupStatus)
-	F:RegisterEvent('GROUP_JOINED', checkGroupStatus)
-	F:RegisterEvent('GROUP_LEFT', checkGroupStatus)
-	F:RegisterEvent('GROUP_ROSTER_UPDATE', checkGroupStatus)
+	F:RegisterEvent('PLAYER_ENTERING_WORLD', ANNOUNCEMENT.CheckGroupAndInstance)
+	F:RegisterEvent('ZONE_CHANGED_NEW_AREA', ANNOUNCEMENT.CheckGroupAndInstance)
+	F:RegisterEvent('GROUP_JOINED', ANNOUNCEMENT.CheckGroupAndInstance)
+	F:RegisterEvent('GROUP_LEFT', ANNOUNCEMENT.CheckGroupAndInstance)
+	F:RegisterEvent('GROUP_ROSTER_UPDATE', ANNOUNCEMENT.CheckGroupAndInstance)
 
 	F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', ANNOUNCEMENT.OnEvent)
 

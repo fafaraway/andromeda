@@ -122,9 +122,19 @@ function ANNOUNCEMENT:Utility(event, sourceName, spellId)
 		return
 	end
 
+    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
+    if not checkGroupAndInstance then
+        return
+    end
+
 	if not event or not spellId or not sourceName then
 		return
 	end
+
+    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
+    if not isGroupMember then
+        return
+    end
 
 	if event == 'SPELL_CAST_SUCCESS' then
 		if TryAnnounce(spellId, sourceName, 190336) then

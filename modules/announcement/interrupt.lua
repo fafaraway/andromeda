@@ -16,6 +16,16 @@ function ANNOUNCEMENT:Interrupt(sourceGUID, sourceName, destName, spellId, extra
 		return
 	end
 
+    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
+    if not checkGroupAndInstance then
+        return
+    end
+
+    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
+    if not isGroupMember then
+        return
+    end
+
 	if not (spellId and extraSpellId) then
 		return
 	end
@@ -32,6 +42,16 @@ function ANNOUNCEMENT:Dispel(sourceGUID, sourceName, destName, spellId, extraSpe
 		return
 	end
 
+    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
+    if not checkGroupAndInstance then
+        return
+    end
+
+    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
+    if not isGroupMember then
+        return
+    end
+
 	if not (spellId and extraSpellId) then
 		return
 	end
@@ -47,6 +67,16 @@ function ANNOUNCEMENT:Stolen(sourceGUID, sourceName, destName, spellId, extraSpe
 	if not C.DB.Announcement.Dispel then
 		return
 	end
+
+    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
+    if not checkGroupAndInstance then
+        return
+    end
+
+    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
+    if not isGroupMember then
+        return
+    end
 
 	if not (spellId and extraSpellId) then
 		return
