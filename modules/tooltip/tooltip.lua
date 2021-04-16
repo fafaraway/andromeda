@@ -386,7 +386,7 @@ end
 
 function TOOLTIP:ReskinTooltip()
 	if not self then
-		if C.isDeveloper then
+		if C.IsDeveloper then
 			F:Print('Unknown tooltip spotted.')
 		end
 		return
@@ -693,12 +693,18 @@ TOOLTIP:RegisterTooltips(
 	'Blizzard_DebugTools',
 	function()
 		TOOLTIP.ReskinTooltip(FrameStackTooltip)
-		TOOLTIP.ReskinTooltip(EventTraceTooltip)
 		FrameStackTooltip:SetScale(UIParent:GetScale())
-		EventTraceTooltip:SetParent(UIParent)
-		EventTraceTooltip:SetFrameStrata('TOOLTIP')
+		if not C.IsNewPatch then
+            TOOLTIP.ReskinTooltip(EventTraceTooltip)
+            EventTraceTooltip:SetParent(UIParent)
+            EventTraceTooltip:SetFrameStrata("TOOLTIP")
+        end
 	end
 )
+
+TOOLTIP:RegisterTooltips("Blizzard_EventTrace", function()
+	TOOLTIP.ReskinTooltip(EventTraceTooltip)
+end)
 
 TOOLTIP:RegisterTooltips(
 	'Blizzard_Collections',

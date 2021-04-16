@@ -31,17 +31,19 @@ local function reskinTableAttribute(frame)
 end
 
 C.Themes["Blizzard_DebugTools"] = function()
-	-- EventTraceFrame
-	F.StripTextures(EventTraceFrame)
-	F.SetBD(EventTraceFrame)
-	F.ReskinClose(EventTraceFrameCloseButton, EventTraceFrame, -7, -7)
+	if not C.IsNewPatch then
+		-- EventTraceFrame
+		F.StripTextures(EventTraceFrame)
+		F.SetBD(EventTraceFrame)
+		F.ReskinClose(EventTraceFrameCloseButton, EventTraceFrame, -7, -7)
 
-	local bg, bu = EventTraceFrameScroll:GetRegions()
-	bg:Hide()
-	bu:SetAlpha(0)
-	bu:SetWidth(16)
-	bu.bg = F.CreateBDFrame(EventTraceFrame, 0, true)
-	bu.bg:SetAllPoints(bu)
+		local bg, bu = EventTraceFrameScroll:GetRegions()
+		bg:Hide()
+		bu:SetAlpha(0)
+		bu:SetWidth(16)
+		bu.bg = F.CreateBDFrame(EventTraceFrame, 0, true)
+		bu.bg:SetAllPoints(bu)
+	end
 
 	-- Table Attribute Display
 

@@ -101,6 +101,11 @@ tinsert(C.BlizzThemes, function()
 			InterfaceOptionsAccessibilityPanelOverrideFadeOut,
 			InterfaceOptionsAccessibilityPanelColorblindMode
 		}
+        if C.IsNewPatch then
+			tinsert(checkboxes, InterfaceOptionsAccessibilityPanelSpeechToText)
+			tinsert(checkboxes, InterfaceOptionsAccessibilityPanelTextToSpeech)
+			tinsert(checkboxes, InterfaceOptionsAccessibilityPanelRemoteTextToSpeech)
+		end
 		for _, checkbox in next, checkboxes do
 			F.ReskinCheck(checkbox)
 		end

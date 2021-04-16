@@ -23,7 +23,7 @@ local OverrideActionBarHealthBar = OverrideActionBarHealthBar
 local OverrideActionBarPowerBar = OverrideActionBarPowerBar
 local OverrideActionBarPitchFrame = OverrideActionBarPitchFrame
 
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
 
 local scripts = {
@@ -41,7 +41,7 @@ local scripts = {
 
 local framesToHide = {
     MainMenuBar,
-    OverrideActionBar,
+    OverrideActionBar
 }
 
 local framesToDisable = {
@@ -124,10 +124,14 @@ function ACTIONBAR:RemoveBlizzArt()
 
     -- Update button grid
     hooksecurefunc('MultiActionBar_UpdateGridVisibility', ToggleButtonGrid)
+
     -- Update token panel
     F:RegisterEvent('CURRENCY_DISPLAY_UPDATE', UpdateTokenVisibility)
+
     -- Fake ExtraActionButton
-    F:RegisterEvent('ADDON_LOADED', HideFakeExtraBar)
+    if not C.IsNewPatch then
+        F:RegisterEvent('ADDON_LOADED', HideFakeExtraBar)
+    end
 
     F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomLeft)
     F.HideOption(_G.InterfaceOptionsActionBarsPanelBottomRight)

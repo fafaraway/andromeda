@@ -1377,6 +1377,12 @@ function GUI:SetupGroupDebuffs(parent)
 
     local raids = {[1] = EJ_GetInstanceInfo(1190)}
 
+    if C.IsNewPatch then
+        raids[2] = EJ_GetInstanceInfo(1193)
+        local newInst = EJ_GetInstanceInfo(1194)
+        tinsert(dungeons, newInst)
+    end
+
     options[1] = GUI:CreateDropdown(frame, DUNGEONS, 120, -30, dungeons,
                                     L.GUI.GROUPFRAME.DUNGEON_TIP, 90, 24)
     options[1]:Hide()

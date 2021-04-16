@@ -22,7 +22,7 @@ local ACTIONBAR = F.ACTIONBAR
 local debugMode = false
 
 local function SendNotifyMessage(msg)
-    if debugMode and C.isDeveloper then
+    if debugMode and C.IsDeveloper then
         print(msg)
     elseif IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')

@@ -82,7 +82,7 @@ local function completeText(questID)
 end
 
 local function sendQuestMsg(msg)
-    if debugMode and C.isDeveloper then
+    if debugMode and C.IsDeveloper then
         print(msg)
     elseif IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')

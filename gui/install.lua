@@ -122,7 +122,7 @@ local function SetupCVars()
 	-- mouse
 	SetCVar('rawMouseEnable', 1)
 
-	if C.isDeveloper then
+	if C.IsDeveloper then
 		SetCVar('cursorsizepreferred', 2)
 	end
 end

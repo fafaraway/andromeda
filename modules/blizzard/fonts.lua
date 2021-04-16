@@ -5,7 +5,7 @@ local CreateFrame = CreateFrame
 
 local F, C = unpack(select(2, ...))
 
-if C.isDeveloper then
+if C.IsDeveloper then
     C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
     C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
     C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
@@ -44,7 +44,7 @@ local COMBAT = C.Assets.Fonts.Combat
 
 local function SetFont(obj, font, size, flag, shadow)
     if not font then
-        if C.isDeveloper then
+        if C.IsDeveloper then
             print('UNKNOWN FONT.')
         end
         return

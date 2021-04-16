@@ -153,7 +153,7 @@ tags['free:name'] = function(unit)
         (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
         return C.RedColor .. '<' .. YOU .. '>'
     else
-        return F:ShortenString(useAbbr and abbrName or str, C.isChinses and 6 or 8, true)
+        return F:ShortenString(useAbbr and abbrName or str, C.IsChinses and 6 or 8, true)
     end
 end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
@@ -169,7 +169,7 @@ tags['free:groupname'] = function(unit)
     elseif UnitIsGhost(unit) then
         return '|cffbd69be' .. 'Ghost'
     elseif groupName then
-        return F:ShortenString(str, C.isChinses and 2 or 4)
+        return F:ShortenString(str, C.IsChinses and 2 or 4)
     else
         return ''
     end

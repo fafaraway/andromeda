@@ -1,7 +1,7 @@
 local F, C = unpack(select(2, ...))
 
-local function HideIconBG(anim)
-	anim.__owner.IconHitBox.bg:SetAlpha(0)
+local function HideIconBG(frame)
+	frame.IconHitBox.bg:SetAlpha(0)
 end
 
 local function ShowIconBG(anim)
@@ -118,8 +118,8 @@ tinsert(C.BlizzThemes, function()
 			F.ReskinIconBorder(iconHitBox.IconBorder, true)
 
 			lootFrame.Anim.__owner = lootFrame
-			lootFrame.Anim:HookScript("OnPlay", HideIconBG)
 			lootFrame.Anim:HookScript("OnFinished", ShowIconBG)
+            lootFrame:HookScript("OnHide", HideIconBG)
 		end
 	end)
 end)

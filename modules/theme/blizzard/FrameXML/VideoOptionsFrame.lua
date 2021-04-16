@@ -99,7 +99,7 @@ tinsert(C.BlizzThemes, function()
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
 			if not dropdown then
-				if C.isDeveloper then print(dropdowns[i], "not found.") end
+				if C.IsDeveloper then print(dropdowns[i], "not found.") end
 			else
 				F.ReskinDropDown(dropdown)
 			end
@@ -135,7 +135,7 @@ tinsert(C.BlizzThemes, function()
 		for i = 1, #sliders do
 			local slider = _G[sliders[i]]
 			if not slider then
-				if C.isDeveloper then print(sliders[i], "not found.") end
+				if C.IsDeveloper then print(sliders[i], "not found.") end
 			else
 				F.ReskinSlider(slider)
 			end
@@ -167,7 +167,7 @@ tinsert(C.BlizzThemes, function()
 		for i = 1, #checkboxes do
 			local checkbox = _G[checkboxes[i]]
 			if not checkbox then
-				if C.isDeveloper then print(checkbox[i], "not found.") end
+				if C.IsDeveloper then print(checkbox[i], "not found.") end
 			else
 				F.ReskinCheck(checkbox)
 			end

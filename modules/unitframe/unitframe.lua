@@ -14,7 +14,7 @@ local raidDebuffsList = {}
 function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
     local instName = EJ_GetInstanceInfo(instID)
     if not instName then
-        if C.isDeveloper then
+        if C.IsDeveloper then
             print('Invalid instance ID: ' .. instID)
         end
         return
@@ -42,7 +42,7 @@ function UNITFRAME:CheckPartySpells()
                 _G.FREE_ADB['PartySpellsList'][spellID] = nil
             end
         else
-            if C.isDeveloper then
+            if C.IsDeveloper then
                 print('Invalid partyspell ID: ' .. spellID)
             end
         end
@@ -61,7 +61,7 @@ function UNITFRAME:CheckCornerSpells()
     for spellID, _ in pairs(data) do
         local name = GetSpellInfo(spellID)
         if not name then
-            if C.isDeveloper then
+            if C.IsDeveloper then
                 print('Invalid cornerspell ID: ' .. spellID)
             end
         end
@@ -82,7 +82,7 @@ function UNITFRAME:CheckMajorSpells()
                 _G.FREE_ADB['NPMajorSpells'][spellID] = nil
             end
         else
-            if C.isDeveloper then
+            if C.IsDeveloper then
                 print('Invalid nameplate major spell ID: ' .. spellID)
             end
         end

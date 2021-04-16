@@ -1,21 +1,24 @@
-local F, C, L = unpack(select(2, ...))
+local F = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 
 local TIER = 9
-local INSTANCE  -- 5人本
+local INSTANCE -- 5人本
 
 local SEASON_SPELLS = {
-	[209858] = 2, -- 死疽
-	[240443] = 2, -- 爆裂
-	[240559] = 2, -- 重伤
-	[342494] = 2 -- 狂妄吹嘘
+    [209858] = 2, -- 死疽
+    [240443] = 2, -- 爆裂
+    [240559] = 2, -- 重伤
+    [342494] = 2, -- 狂妄吹嘘
 }
 
 local function RegisterSeasonSpells(INSTANCE)
-	for spellID, priority in pairs(SEASON_SPELLS) do
-		UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, spellID, priority)
-	end
+    for spellID, priority in pairs(SEASON_SPELLS) do
+        UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, spellID, priority)
+    end
 end
+
+INSTANCE = 1194 -- 塔扎维什，帷纱集市
+RegisterSeasonSpells(INSTANCE)
 
 INSTANCE = 1187 -- 伤逝剧场
 RegisterSeasonSpells(INSTANCE)
@@ -93,7 +96,7 @@ UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331847) -- W-00F
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 327649) -- 粉碎灵魂
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 331379) -- 润滑剂
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 332678) -- 龟裂创伤
---UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥数闪电
+-- UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323687) -- 奥数闪电
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 323692) -- 奥术易伤
 UNITFRAME:RegisterDebuff(TIER, INSTANCE, 0, 334535) -- 啄裂
 

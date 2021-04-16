@@ -78,7 +78,7 @@ do
     end
 
     function F:Debug(...)
-        if not C.isDeveloper then
+        if not C.IsDeveloper then
             return
         end
 

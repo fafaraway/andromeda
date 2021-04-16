@@ -2,7 +2,7 @@ local _G = _G
 local unpack = unpack
 local select = select
 local CreateFrame = CreateFrame
-local PlaySoundFile = PlaySound
+local PlaySoundFile = PlaySoundFile
 local IsInInstance = IsInInstance
 local InCombatLockdown = InCombatLockdown
 local GetScreenHeight = GetScreenHeight
@@ -100,7 +100,7 @@ function LOGO:Logo_Create()
         frame:Hide()
     end)
     anim.fadeIn:SetScript('OnFinished', function()
-        PlaySoundFile(C.Assets.Sounds.Intro, 'master')
+        PlaySoundFile(C.Assets.Sounds.Intro, 'Master')
     end)
 
     LOGO.logoFrame = frame

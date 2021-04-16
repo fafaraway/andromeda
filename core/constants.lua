@@ -20,14 +20,19 @@ local GetBuildInfo = GetBuildInfo
 local GetMaxLevelForPlayerExpansion = GetMaxLevelForPlayerExpansion
 local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
-local IsInInstance = IsInInstance
-local IsInGroup = IsInGroup
-local GetNumGroupMembers = GetNumGroupMembers
 local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 local BAG_ITEM_QUALITY_COLORS = BAG_ITEM_QUALITY_COLORS
 local WOW_PROJECT_ID = WOW_PROJECT_ID
 local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
+local Enum_ItemQuality_Poor = Enum.ItemQuality.Poor
+local Enum_ItemQuality_Common = Enum.ItemQuality.Common
+local Enum_ItemQuality_Uncommon = Enum.ItemQuality.Uncommon
+local Enum_ItemQuality_Rare = Enum.ItemQuality.Rare
+local Enum_ItemQuality_Epic = Enum.ItemQuality.Epic
+local Enum_ItemQuality_Legendary = Enum.ItemQuality.Legendary
+local Enum_ItemQuality_Artifact = Enum.ItemQuality.Artifact
+local Enum_ItemQuality_Heirloom = Enum.ItemQuality.Heirloom
 
 local F, C = unpack(select(2, ...))
 
@@ -36,13 +41,13 @@ if (addonVersion:find('project%-version')) then
     addonVersion = 'Development'
 end
 C.AddonVersion = addonVersion
-C.isDeveloper = C.AddonVersion == 'Development'
+C.IsDeveloper = C.AddonVersion == 'Development'
 
-C.isRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-C.isNewPatch = C.isRetail and select(4, GetBuildInfo()) >= 90005
+C.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+C.IsNewPatch = C.IsRetail and select(4, GetBuildInfo()) >= 90100 -- 9.1.0
 C.GameLocale = GetLocale()
-C.isChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
-C.isCNPortal = GetCVar('portal') == 'CN'
+C.IsChinses = C.GameLocale == 'zhCN' or C.GameLocale == 'zhTW'
+C.IsCNPortal = GetCVar('portal') == 'CN'
 C.MaxLevel = GetMaxLevelForPlayerExpansion()
 C.MyClass = select(2, UnitClass('player'))
 C.MyName = UnitName('player')
@@ -163,14 +168,14 @@ C.PurpleColor = '|cffa571df'
 C.LineString = C.GreyColor .. '---------------'
 
 -- Deprecated
-LE_ITEM_QUALITY_POOR = Enum.ItemQuality.Poor
-LE_ITEM_QUALITY_COMMON = Enum.ItemQuality.Common
-LE_ITEM_QUALITY_UNCOMMON = Enum.ItemQuality.Uncommon
-LE_ITEM_QUALITY_RARE = Enum.ItemQuality.Rare
-LE_ITEM_QUALITY_EPIC = Enum.ItemQuality.Epic
-LE_ITEM_QUALITY_LEGENDARY = Enum.ItemQuality.Legendary
-LE_ITEM_QUALITY_ARTIFACT = Enum.ItemQuality.Artifact
-LE_ITEM_QUALITY_HEIRLOOM = Enum.ItemQuality.Heirloom
+_G.LE_ITEM_QUALITY_POOR = Enum_ItemQuality_Poor
+_G.LE_ITEM_QUALITY_COMMON = Enum_ItemQuality_Common
+_G.LE_ITEM_QUALITY_UNCOMMON = Enum_ItemQuality_Uncommon
+_G.LE_ITEM_QUALITY_RARE = Enum_ItemQuality_Rare
+_G.LE_ITEM_QUALITY_EPIC = Enum_ItemQuality_Epic
+_G.LE_ITEM_QUALITY_LEGENDARY = Enum_ItemQuality_Legendary
+_G.LE_ITEM_QUALITY_ARTIFACT = Enum_ItemQuality_Artifact
+_G.LE_ITEM_QUALITY_HEIRLOOM = Enum_ItemQuality_Heirloom
 
 C.QualityColors = {}
 local qualityColors = BAG_ITEM_QUALITY_COLORS
@@ -178,15 +183,15 @@ for index, value in pairs(qualityColors) do
     C.QualityColors[index] = {r = value.r, g = value.g, b = value.b}
 end
 C.QualityColors[-1] = {r = 0, g = 0, b = 0}
-C.QualityColors[LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
-C.QualityColors[LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
+C.QualityColors[_G.LE_ITEM_QUALITY_POOR] = {r = .61, g = .61, b = .61}
+C.QualityColors[_G.LE_ITEM_QUALITY_COMMON] = {r = 0, g = 0, b = 0}
 
-GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', GOLD_AMOUNT_SYMBOL)
-SILVER_AMOUNT_SYMBOL = format('|cffd0d0d0%s|r', SILVER_AMOUNT_SYMBOL)
-COPPER_AMOUNT_SYMBOL = format('|cffc77050%s|r', COPPER_AMOUNT_SYMBOL)
-COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
-SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
-GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'
+_G.GOLD_AMOUNT_SYMBOL = format('|cffffd700%s|r', _G.GOLD_AMOUNT_SYMBOL)
+_G.SILVER_AMOUNT_SYMBOL = format('|cffd0d0d0%s|r', _G.SILVER_AMOUNT_SYMBOL)
+_G.COPPER_AMOUNT_SYMBOL = format('|cffc77050%s|r', _G.COPPER_AMOUNT_SYMBOL)
+_G.COPPER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-CopperIcon:0:0:2:0\124t'
+_G.SILVER_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-SilverIcon:0:0:2:0\124t'
+_G.GOLD_AMOUNT = '%d\124TInterface\\MoneyFrame\\UI-GoldIcon:0:0:2:0\124t'
 
 -- Update my role
 local function CheckMyRole()

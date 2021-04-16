@@ -4,6 +4,7 @@ local select = select
 local wipe = wipe
 local sort = sort
 local hooksecurefunc = hooksecurefunc
+local HideUIPanel = HideUIPanel
 local StaticPopup_Hide = StaticPopup_Hide
 local StaticPopupSpecial_Hide = StaticPopupSpecial_Hide
 local C_Timer_After = C_Timer.After
@@ -63,11 +64,19 @@ local function SortRoleOrder(a, b)
 end
 
 local function UpdateGroupRoles(self)
+    if not self.__owner then
+        self.__owner = self:GetParent():GetParent()
+    end
+    local resultID = self.__owner.resultID
+    if not resultID then
+        return
+    end
+
     wipe(roleCache)
 
     local count = 0
     for i = 1, 5 do
-        local role, class = C_LFGList_GetSearchResultMemberInfo(self.resultID, i)
+        local role, class = C_LFGList_GetSearchResultMemberInfo(resultID, i)
         local roleIndex = role and roleOrder[role]
         if roleIndex then
             count = count + 1
@@ -83,7 +92,7 @@ local function UpdateGroupRoles(self)
 end
 
 function BLIZZARD:ReplaceGroupRoles(numPlayers, _, disabled)
-    UpdateGroupRoles(self:GetParent():GetParent())
+    UpdateGroupRoles(self)
 
     for i = 1, 5 do
         local icon = self.Icons[i]
@@ -136,7 +145,7 @@ function BLIZZARD:EnhancedQuickJoin()
 
     hooksecurefunc('LFGListInviteDialog_Accept', function()
         if _G.PVEFrame:IsShown() then
-            _G.PVEFrame:Hide()
+            HideUIPanel(_G.PVEFrame)
         end
     end)
 

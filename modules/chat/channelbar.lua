@@ -131,7 +131,7 @@ function CHAT:CreateChannelBar()
 
 	-- WORLD CHANNEL
 	if GetCVar('portal') == 'CN' then
-		local channelName, channelID, channels = C.isChinses and '大脚世界频道' or 'BigfootWorldChannel'
+		local channelName, channelID, channels = C.IsChinses and '大脚世界频道' or 'BigfootWorldChannel'
 		local wc = AddButton(0, .8, 1, L['CHAT_WORLD_CHANNEL'])
 
 		local function updateChannelInfo()

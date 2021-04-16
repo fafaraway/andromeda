@@ -120,7 +120,7 @@ function CHAT:RestyleChatFrame()
         self:SetFadeDuration(C.DB.chat.fading_duration)
     end
 
-    local font = C.isDeveloper and 'Fonts\\FreeUI\\chat.ttf' or C.Assets.Fonts.Bold
+    local font = C.IsDeveloper and 'Fonts\\FreeUI\\chat.ttf' or C.Assets.Fonts.Bold
     local outline = _G.FREE_ADB.FontOutline
     local fontSize = select(2, self:GetFont())
     F:SetFS(self, font, fontSize, outline, nil, nil, outline or 'THICK')
@@ -617,7 +617,7 @@ function CHAT:OnLogin()
         return
     end
 
-    if C.isCNPortal then
+    if C.IsCNPortal then
         ConsoleExec('portal TW')
     end
     SetCVar('profanityFilter', 0)

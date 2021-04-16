@@ -51,7 +51,7 @@ local frames = {
 local function IsFrameExists()
 	for k in pairs(frames) do
 		local name = _G[k]
-		if not name and DB.isDeveloper then print('Frame not found:', k) end
+		if not name and DB.IsDeveloper then print('Frame not found:', k) end
 	end
 end
 
