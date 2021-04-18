@@ -1,18 +1,21 @@
 ## Interface: 90005
+## Author: Solor
+## Version: @project-version@
 ## Title: |cffffffffFree|r|cffb2b2b2UI|r
 ## Notes: A user interface replacement for World of Warcraft. Minimalistic, elegant, yet also efficient and practical.
-## Author: Haleth, Solor
-## Version: @project-version@
-
-## X-Website: https://github.com/Solor/FreeUI
-## X-Curse-Project-ID: 459524
-## X-WoWI-ID: 23258
-
 ## SavedVariables: FREE_ADB, FREE_PDB, FREE_GOLDCOUNT, FREE_KEYSTONE
 ## SavedVariablesPerCharacter: FREE_DB, FREE_SPELLBINDING
 
-init.lua
+## X-oUF: oUFembed
+## X-Website: https://github.com/Solor/FreeUI
+## X-License: Limited BSD
+## X-Curse-Project-ID: 459524
+## X-WoWI-ID: 23258
+
+
+taintless.xml
 libs\libs.xml
+init.lua
 locales\locales.xml
 core\core.xml
 gui\gui.xml

@@ -1,9 +1,13 @@
 <Ui><Script><![CDATA[--[[
+
 TaintLess [20-10-19]
 https://www.townlong-yak.com/addons/taintless
+
 All rights reserved.
+
 Permission is hereby granted to distribute unmodified copies of this file.
 ]]
+
 local function purgeKey(t, k)
 	t[k] = nil
 	local c = 42
@@ -14,6 +18,7 @@ local function purgeKey(t, k)
 		c = c + 1
 	until issecurevariable(t, k)
 end
+
 -- https://www.townlong-yak.com/bugs/Mx7CWN-RefreshOverread
 if (tonumber(UIDD_REFRESH_OVERREAD_PATCH_VERSION) or 0) < 3 then
 	UIDD_REFRESH_OVERREAD_PATCH_VERSION = 3
@@ -30,6 +35,7 @@ if (tonumber(UIDD_REFRESH_OVERREAD_PATCH_VERSION) or 0) < 3 then
 		end
 	end)
 end
+
 -- https://www.townlong-yak.com/bugs/Kjq4hm-DisplayModeTaint
 if (tonumber(UIDROPDOWNMENU_OPEN_PATCH_VERSION) or 0) < 1 then
 	UIDROPDOWNMENU_OPEN_PATCH_VERSION = 1
@@ -43,6 +49,7 @@ if (tonumber(UIDROPDOWNMENU_OPEN_PATCH_VERSION) or 0) < 1 then
 		end
 	end)
 end
+
 -- https://www.townlong-yak.com/bugs/gXwH4P-IOFrameSelection
 if (tonumber(IOFRAME_SELECTION_PATCH_VERSION) or 0) < 1 then
 	IOFRAME_SELECTION_PATCH_VERSION = 1
@@ -52,4 +59,5 @@ if (tonumber(IOFRAME_SELECTION_PATCH_VERSION) or 0) < 1 then
 		end
 	end)
 end
+
 ]]></Script></Ui>

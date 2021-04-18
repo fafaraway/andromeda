@@ -1,5 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Include file="taintless.xml"/>
     <Script file="blizzard.lua"/>
     <Script file="alerts.lua"/>
     <Script file="challenges.lua"/>
