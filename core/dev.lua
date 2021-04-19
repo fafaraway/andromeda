@@ -1,117 +1,148 @@
-local F, C, L = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 
-
-
-
-SlashCmdList.FREE_ONLY = function()
-	for i = 1, GetNumAddOns() do
-		local name = GetAddOnInfo(i)
-		if name ~= 'FreeUI' and name ~= '!BaudErrorFrame' and GetAddOnEnableState(C.MyName, name) == 2 then
-			DisableAddOn(name, C.MyName)
-		end
-	end
-	ReloadUI()
-end
-SLASH_FREE_ONLY1 = '/freeonly'
-
-
-
-
-
-SlashCmdList.RELOADUI = ReloadUI
-SLASH_RELOADUI1 = '/rl'
-
-SlashCmdList['FSTACK'] = function()
-	UIParentLoadAddOn('Blizzard_DebugTools')
-	FrameStackTooltip_Toggle()
-end
-SLASH_FSTACK1 = '/fs'
-
-SlashCmdList['FRAMENAME'] = function()
-	local frame = EnumerateFrames()
-	while frame do
-		if (frame:IsVisible() and MouseIsOver(frame)) then
-			F:Print(frame:GetName() or string.format(UNKNOWN..': [%s]', tostring(frame)))
-		end
-		frame = EnumerateFrames(frame)
+--	Get target NPC name and ID
+_G.SlashCmdList.NPCID = function()
+	local name = UnitName("target")
+	local unitGUID = UnitGUID("target")
+	local id = unitGUID and select(6, strsplit('-', unitGUID))
+	if id then
+		print(name..": "..id)
 	end
 end
-SLASH_FRAMENAME1 = '/fsn'
+_G.SLASH_NPCID1 = "/getid"
 
-SlashCmdList['EVENTTRACE'] = function(msg)
-	UIParentLoadAddOn('Blizzard_DebugTools')
-	EventTraceFrame_HandleSlashCmd(msg)
+--	Show frame you currently have mouseovered
+_G.SlashCmdList.FRAME = function(arg)
+    if arg ~= '' then
+        arg = _G[arg]
+    else
+        arg = GetMouseFocus()
+    end
+    if arg ~= nil then
+        _G.FRAME = arg
+    end
+    if arg ~= nil and not arg:IsForbidden() and arg:GetName() ~= nil then
+        local point, relativeTo, relativePoint, xOfs, yOfs = arg:GetPoint()
+        print(C.LineString)
+        print('Name: |cffFFD100' .. arg:GetName() .. '|r')
+        if arg:GetParent() and arg:GetParent():GetName() then
+            print('Parent: |cffFFD100' .. arg:GetParent():GetName() .. '|r')
+        end
+
+        print('Width: |cffFFD100' .. format('%.2f', arg:GetWidth()) .. '|r')
+        print('Height: |cffFFD100' .. format('%.2f', arg:GetHeight()) .. '|r')
+        print('Strata: |cffFFD100' .. arg:GetFrameStrata() .. '|r')
+        print('Level: |cffFFD100' .. arg:GetFrameLevel() .. '|r')
+
+        if relativeTo and relativeTo:GetName() then
+            print('Point: |cffFFD100 "' .. point .. '", ' .. relativeTo:GetName() .. ', "' .. relativePoint .. '"' ..
+                      '|r')
+        end
+        if xOfs then
+            print('X: |cffFFD100' .. format('%.2f', xOfs) .. '|r')
+        end
+        if yOfs then
+            print('Y: |cffFFD100' .. format('%.2f', yOfs) .. '|r')
+        end
+        print(C.LineString)
+    elseif arg == nil then
+        print('Invalid frame name')
+    else
+        print('Could not find frame info')
+    end
 end
-SLASH_EVENTTRACE1 = '/et'
+_G.SLASH_FRAME1 = '/frame'
 
-SlashCmdList.DEV = function()
-	UIParentLoadAddOn('Blizzard_Console')
-	DeveloperConsole:Toggle()
+_G.SlashCmdList['FSTACK'] = function()
+    UIParentLoadAddOn('Blizzard_DebugTools')
+    FrameStackTooltip_Toggle(false, true, true)
 end
-SLASH_DEV1 = '/dev'
+_G.SLASH_FSTACK1 = '/fs'
+_G.SLASH_FRAMESTK1 = nil -- fix LFGFilter
 
-
-SlashCmdList['INSTANCEID'] = function()
-	local name, instanceType, difficultyID, difficultyName, _, _, _, instanceMapID = GetInstanceInfo()
-	print(C.LineString)
-	F:Print(C.InfoColor..'Name '..C.RedColor..name)
-	F:Print(C.InfoColor..'instanceType '..C.RedColor..instanceType)
-	F:Print(C.InfoColor..'difficultyID '..C.RedColor..difficultyID)
-	F:Print(C.InfoColor..'difficultyName '..C.RedColor..difficultyName)
-	F:Print(C.InfoColor..'instanceMapID '..C.RedColor..instanceMapID)
-	print(C.LineString)
+_G.SlashCmdList['FRAMENAME'] = function()
+    local frame = EnumerateFrames()
+    while frame do
+        if (frame:IsVisible() and MouseIsOver(frame)) then
+            print(frame:GetName() or string.format(UNKNOWN .. ': [%s]', tostring(frame)))
+        end
+        frame = EnumerateFrames(frame)
+    end
 end
-SLASH_INSTANCEID1 = '/getinstid'
+_G.SLASH_FRAMENAME1 = '/fsn'
 
-SlashCmdList['QUESTCHECK'] = function(id)
-	if id == '' then
-		F:Print(C.RedColor..'Please enter a Quest ID.|r')
-	else
-		local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(id)
-		F:Print(C.BlueColor..'Quest ID |r |Hquest:'..id..'|h['..id..']|h')
-
-		if isCompleted == true then
-			F:Print(C.InfoColor..'Complete|r (YES)')
-		else
-			F:Print(C.InfoColor..'Complete|r (NO)')
-		end
-	end
+_G.SlashCmdList['EVENTTRACE'] = function(msg)
+    UIParentLoadAddOn('Blizzard_DebugTools')
+    EventTraceFrame_HandleSlashCmd(msg)
 end
-SLASH_QUESTCHECK1 = '/qc'
+_G.SLASH_EVENTTRACE1 = '/et'
 
-SlashCmdList['UISCALECHECK'] = function()
-	print(C.LineString)
-	F:Print('C.ScreenWidth '..C.ScreenWidth)
-	F:Print('C.ScreenHeight '..C.ScreenHeight)
-	F:Print('C.Mult '..C.Mult)
-	F:Print('uiScale '..FREE_ADB.UIScale)
-	F:Print('UIParentScale '..UIParent:GetScale())
-	print(C.LineString)
+_G.SlashCmdList['INSTANCEINFO'] = function()
+    local name, instanceType, difficultyID, difficultyName, _, _, _, instanceMapID = GetInstanceInfo()
+    print(C.LineString)
+    print(C.InfoColor .. 'Name ' .. C.RedColor .. name)
+    print(C.InfoColor .. 'instanceType ' .. C.RedColor .. instanceType)
+    print(C.InfoColor .. 'difficultyID ' .. C.RedColor .. difficultyID)
+    print(C.InfoColor .. 'difficultyName ' .. C.RedColor .. difficultyName)
+    print(C.InfoColor .. 'instanceMapID ' .. C.RedColor .. instanceMapID)
+    print(C.LineString)
 end
-SLASH_UISCALECHECK1 = '/getuiscale'
+_G.SLASH_INSTANCEINFO1 = '/getinstinfo'
 
-SlashCmdList['ITEMINFO'] = function(id)
-	if id == '' then
-		F:Print(C.RedColor..'Please enter a item ID.|r')
-	else
-		local name, link, rarity, level, minLevel, type, subType, stackCount, equipLoc, icon, sellPrice, classID, subClassID, bindType  = GetItemInfo(id)
+_G.SlashCmdList['QUESTINFO'] = function(id)
+    if id == '' then
+        print(C.RedColor .. 'Please enter a Quest ID.|r')
+    else
+        local isCompleted = C_QuestLog.IsQuestFlaggedCompleted(id)
+        print(C.BlueColor .. 'Quest ID |r |Hquest:' .. id .. '|h[' .. id .. ']|h')
 
-		print(C.LineString)
-		F:Print('Name: '.. name)
-		F:Print('Link: '.. link)
-		F:Print('Rarity: '.. rarity)
-		F:Print('Level: '.. level)
-		F:Print('MinLevel: '.. minLevel)
-		F:Print('Type: '.. type)
-		F:Print('SubType: '.. subType)
-		F:Print('ClassID: '.. classID)
-		F:Print('SubClassID: '.. subClassID)
-		F:Print('BindType: '.. bindType)
-		print(C.LineString)
-	end
+        if isCompleted == true then
+            print(C.InfoColor .. 'Complete|r (YES)')
+        else
+            print(C.InfoColor .. 'Complete|r (NO)')
+        end
+    end
 end
-SLASH_ITEMINFO1 = '/getiteminfo'
+_G.SLASH_QUESTINFO1 = '/getquestinfo'
 
+_G.SlashCmdList['UISCALE'] = function()
+    print(C.LineString)
+    print('C.ScreenWidth ' .. C.ScreenWidth)
+    print('C.ScreenHeight ' .. C.ScreenHeight)
+    print('C.Mult ' .. C.Mult)
+    print('uiScale ' .. _G.FREE_ADB.UIScale)
+    print('UIParentScale ' .. _G.UIParent:GetScale())
+    print(C.LineString)
+end
+_G.SLASH_UISCALE1 = '/getuiscale'
 
+_G.SlashCmdList['ITEMINFO'] = function(id)
+    if id == '' then
+        print(C.RedColor .. 'Please enter a item ID.|r')
+    else
+        local name, link, rarity, level, minLevel, type, subType, _, _, _, _, classID, subClassID, bindType =
+            GetItemInfo(id)
 
+        print(C.LineString)
+        print('Name: ' .. name)
+        print('Link: ' .. link)
+        print('Rarity: ' .. rarity)
+        print('Level: ' .. level)
+        print('MinLevel: ' .. minLevel)
+        print('Type: ' .. type)
+        print('SubType: ' .. subType)
+        print('ClassID: ' .. classID)
+        print('SubClassID: ' .. subClassID)
+        print('BindType: ' .. bindType)
+        print(C.LineString)
+    end
+end
+_G.SLASH_ITEMINFO1 = '/getiteminfo'
 
+-- Test DBM
+_G.SlashCmdList.DBMTEST = function()
+    if IsAddOnLoaded('DBM-Core') then
+        _G.DBM:DemoMode()
+    end
+end
+_G.SLASH_DBMTEST1 = '/dbmtest'

@@ -1,12 +1,15 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="core.lua"/>
-	<Script file="uiscale.lua"/>
-	<Script file="constants.lua"/>
-	<Script file="configs.lua"/>
-	<Script file="functions.lua"/>
-	<Script file="animation.lua"/>
-	<Script file="logo.lua"/>
-	<Script file="mover.lua"/>
-	<Script file="slash.lua"/>
-	<Script file="dev.lua"/>
+    <Script file="core.lua"/>
+    <Script file="uiscale.lua"/>
+    <Script file="constants.lua"/>
+    <Script file="configs.lua"/>
+    <Script file="functions.lua"/>
+    <Script file="animation.lua"/>
+    <Script file="layout.lua"/>
+    <Script file="logo.lua"/>
+    <Script file="slash.lua"/>
+
+    <!--@debug@-->
+    <Script file="dev.lua"/>
+    <!--@end-debug@-->
 </Ui>

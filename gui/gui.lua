@@ -3,6 +3,7 @@ local unpack = unpack
 local select = select
 local tinsert = tinsert
 local CreateFrame = CreateFrame
+local ReloadUI = ReloadUI
 local InCombatLockdown = InCombatLockdown
 local HideUIPanel = HideUIPanel
 local PlaySound = PlaySound
@@ -12,6 +13,7 @@ local StaticPopup_Show = StaticPopup_Show
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 local CLOSE = CLOSE
 local APPLY = APPLY
+local CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON
 
 local F, C, L = unpack(select(2, ...))
 local GUI = F.GUI
@@ -65,6 +67,18 @@ GUI.TexturesList = {
     [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L.GUI.GENERAL.TEXTURE_NORM},
     [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L.GUI.GENERAL.TEXTURE_GRAD},
     [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.GENERAL.TEXTURE_FLAT},
+}
+
+_G.StaticPopupDialogs.FREEUI_RELOAD = {
+    text = L.GUI.RELOAD,
+    button1 = APPLY,
+    button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
+    OnAccept = function()
+        ReloadUI()
+    end,
+    timeout = 0,
+    whileDead = 1,
+    hideOnEscape = true,
 }
 
 local function AddTextureToOption(parent, index)

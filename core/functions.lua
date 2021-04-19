@@ -1118,7 +1118,7 @@ do
         self:DisableDrawLayer('BACKGROUND')
 
         local bg = F.CreateBDFrame(self)
-        bg:SetPoint('TOPLEFT', 8, -3)
+        bg:SetPoint('TOPLEFT', 10, -3)
         bg:SetPoint('BOTTOMRIGHT', -10, 0)
         F.CreateSD(bg)
         self.bg = bg
