@@ -1,4 +1,4 @@
-local F = unpack(select(2, ...))
+local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 
 local TIER = 9
@@ -17,8 +17,10 @@ local function RegisterSeasonSpells(INSTANCE)
     end
 end
 
-INSTANCE = 1194 -- 塔扎维什，帷纱集市
-RegisterSeasonSpells(INSTANCE)
+if C.IsNewPatch then
+    INSTANCE = 1194 -- 塔扎维什，帷纱集市
+    RegisterSeasonSpells(INSTANCE)
+end
 
 INSTANCE = 1187 -- 伤逝剧场
 RegisterSeasonSpells(INSTANCE)
