@@ -13,7 +13,9 @@ local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
 
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
-local OUF = F.OUF
+local OUF = F.Libs.oUF
+
+local LLL = F.Libs.ACL:GetLocale('FreeUI')
 
 local function tagsOnEnter(self)
     self.HealthValue:Show()
@@ -61,7 +63,7 @@ function UNITFRAME:SpawnPlayer()
         player:HookScript('OnEnter', tagsOnEnter)
         player:HookScript('OnLeave', tagsOnLeave)
     end
-    F.Mover(player, L.MOVER.PLAYER, 'PlayerFrame',
+    F.Mover(player, LLL['Player Frame'], 'PlayerFrame',
             {'CENTER', _G.UIParent, 'CENTER', 0, -180}, player:GetWidth(),
             player:GetHeight())
 end

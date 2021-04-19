@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('INFOBAR')
+local INFOBAR = F.INFOBAR
 
 local time, date = time, date
 local strfind, format, floor, strmatch = strfind, format, floor, strmatch

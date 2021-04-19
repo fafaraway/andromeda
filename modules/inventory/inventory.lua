@@ -68,10 +68,12 @@ local COLLECTIONS = COLLECTIONS
 local PREFERENCES = PREFERENCES
 local AUCTION_CATEGORY_TRADE_GOODS = AUCTION_CATEGORY_TRADE_GOODS
 local QUESTS_LABEL = QUESTS_LABEL
+local YES = YES
+local NO = NO
 
 local F, C, L = unpack(select(2, ...))
 local INVENTORY = F.INVENTORY
-local cargBags = F.cargBags
+local cargBags = F.Libs.cargBags
 
 local icons = {
     ['restore'] = C.AssetsPath .. 'inventory\\restore',
@@ -608,6 +610,18 @@ local function favouriteOnClick(self)
         INVENTORY:UpdateAllBags()
     end
 end
+
+_G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
+    text = L.GUI.RESET_JUNK_LIST,
+    button1 = YES,
+    button2 = NO,
+    OnAccept = function()
+        wipe(_G.FREE_ADB.CustomJunkList)
+    end,
+    timeout = 0,
+    whileDead = 1,
+    hideOnEscape = true,
+}
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()

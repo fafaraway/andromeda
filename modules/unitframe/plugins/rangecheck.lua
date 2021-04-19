@@ -12,8 +12,8 @@ local IsSpellInRange = IsSpellInRange
 local GetSpellInfo = GetSpellInfo
 
 local F, C = unpack(select(2, ...))
-local OUF = F.OUF
-local LibRangeCheck = F.Libs.RangeCheck
+local OUF = F.Libs.oUF
+local LRC = F.Libs.LRC
 
 local updateFrequency = 0.25
 local _FRAMES = {}
@@ -163,7 +163,7 @@ local function IsUnitInRange(unit)
             end
         end
         if canAttack then
-            minRange, maxRange = LibRangeCheck:GetRange(unit, true)
+            minRange, maxRange = LRC:GetRange(unit, true)
             if not maxRange then
                 maxRange = minRange
             end
@@ -172,7 +172,7 @@ local function IsUnitInRange(unit)
             end
         end
         if canHelp then
-            minRange, maxRange = LibRangeCheck:GetRange(unit, true)
+            minRange, maxRange = LRC:GetRange(unit, true)
             if not maxRange then
                 maxRange = minRange
             end

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP = F:GetModule('MAP')
+local MAP = F.MAP
 
 
 local select = select

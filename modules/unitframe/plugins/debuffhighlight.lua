@@ -7,7 +7,7 @@ local GetSpecialization = GetSpecialization
 local DebuffTypeColor = DebuffTypeColor
 
 local F, C = unpack(select(2, ...))
-local OUF = F.OUF
+local OUF = F.Libs.oUF
 
 local canDispel = {
     DRUID = {Magic = false, Curse = true, Poison = true},

@@ -7,7 +7,7 @@ local GetNumGroupMembers = GetNumGroupMembers
 local GetSpellTexture = GetSpellTexture
 
 local F = unpack(select(2, ...))
-local OUF = F.OUF
+local OUF = F.Libs.oUF
 
 local function Update(self, event, unit, _, spellID)
     if unit ~= self.unit then

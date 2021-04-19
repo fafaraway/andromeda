@@ -48,7 +48,8 @@ local YOU = YOU
 local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 local NAMEPLATE = F.NAMEPLATE
-local OUF = F.OUF
+local OUF = F.Libs.oUF
+local LBG = F.Libs.LBG
 
 --[[ Backdrop ]]
 
@@ -476,7 +477,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     local isParty = style == 'party'
 
     button.bg = F.CreateBDFrame(button)
-    button.glow = F.CreateSD(button.bg, .25, 3, 3)
+    button.glow = F.CreateSD(button.bg)
 
     element.disableCooldown = true
     button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -1174,9 +1175,9 @@ function UNITFRAME:PostCastStart(unit)
         UpdateNameTimeVisibility(self, unit)
         -- Major spells
         if C.DB.Nameplate.MajorSpellsGlow and NAMEPLATE.MajorSpellsList[self.spellID] then
-            F.ShowOverlayGlow(self.glowFrame)
+            LBG.ShowOverlayGlow(self.glowFrame)
         else
-            F.HideOverlayGlow(self.glowFrame)
+            LBG.HideOverlayGlow(self.glowFrame)
         end
 
         -- Spell target

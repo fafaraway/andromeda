@@ -27,7 +27,7 @@ local UIDropDownMenu_GetSelectedID = UIDropDownMenu_GetSelectedID
 local NUM_CHAT_WINDOWS = NUM_CHAT_WINDOWS
 
 local F, C = unpack(select(2, ...))
-local OUF = F.OUF
+local OUF = F.Libs.oUF
 
 -- Colors
 local function classColor(class, showRGB)

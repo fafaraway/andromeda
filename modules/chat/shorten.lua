@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local CHAT = F:GetModule('CHAT')
+local CHAT = F.CHAT
 
 
 local gsub, strfind, strmatch = string.gsub, string.find, string.match

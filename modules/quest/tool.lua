@@ -11,6 +11,7 @@ local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 
 local F, C = unpack(select(2, ...))
 local QUEST = F.QUEST
+local LBG = F.Libs.LBG
 
 local hasFound
 local function resetActionButtons()
@@ -36,9 +37,9 @@ local function OnEvent(_, msg)
         local _, spellID = GetActionInfo(button.action)
         local name = spellID and GetSpellInfo(spellID)
         if name and name == msg then
-            F.ShowOverlayGlow(button)
+            LBG.ShowOverlayGlow(button)
         else
-            F.HideOverlayGlow(button)
+            LBG.HideOverlayGlow(button)
         end
     end
 

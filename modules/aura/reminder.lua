@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA = F:GetModule('AURA')
+local AURA = F.AURA
 
 local pairs, tinsert, next = pairs, table.insert, next
 local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown

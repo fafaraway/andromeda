@@ -53,7 +53,7 @@ local INTERRUPTED = INTERRUPTED
 local F, C = unpack(select(2, ...))
 local NAMEPLATE = F.NAMEPLATE
 local UNITFRAME = F.UNITFRAME
-local OUF = F.OUF
+local OUF = F.Libs.oUF
 
 --[[ CVars ]]
 

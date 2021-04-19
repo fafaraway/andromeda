@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('TOOLTIP')
+local TOOLTIP = F.TOOLTIP
 
 
 local strmatch, strsplit, tonumber = string.match, string.split, tonumber

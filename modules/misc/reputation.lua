@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F:GetModule('MISC')
+local MISC = F.MISC
 
 -- #TODO
 local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon

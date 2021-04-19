@@ -9,7 +9,8 @@ local UnitCanAttack = UnitCanAttack
 local UnitAura = UnitAura
 
 local F, C = unpack(select(2, ...))
-local OUF = F.OUF
+local OUF = F.Libs.oUF
+local LBG = F.Libs.LBG
 
 local RaidDebuffsIgnore = {}
 local invalidPrio = -1
@@ -116,9 +117,9 @@ local function UpdateDebuffFrame(self, name, icon, count, debuffType, duration, 
 
             if rd.glowFrame then
                 if rd.priority == 6 then
-                    F.ShowOverlayGlow(rd.glowFrame)
+                    LBG.ShowOverlayGlow(rd.glowFrame)
                 else
-                    F.HideOverlayGlow(rd.glowFrame)
+                    LBG.HideOverlayGlow(rd.glowFrame)
                 end
             end
         end

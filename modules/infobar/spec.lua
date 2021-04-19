@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INFOBAR = F:GetModule('INFOBAR')
+local INFOBAR = F.INFOBAR
 
 
 local format, wipe, select, next = string.format, table.wipe, select, next

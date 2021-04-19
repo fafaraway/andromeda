@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F:GetModule('MISC')
+local MISC = F.MISC
 
 local LFGTimer = CreateFrame('Frame', nil, _G.LFGDungeonReadyDialog)
 local PVPTimer = CreateFrame('Frame', nil, _G.PVPReadyDialog)

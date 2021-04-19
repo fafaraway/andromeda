@@ -15,7 +15,7 @@ local EasyMenu = EasyMenu
 local RAID_TARGET_NONE = RAID_TARGET_NONE
 
 local F, C = unpack(select(2, ...))
-local COMBAT = F:GetModule('COMBAT')
+local COMBAT = F.COMBAT
 
 local menuList = {
     {

@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('TOOLTIP')
+local TOOLTIP = F.TOOLTIP
 
 local wipe, tinsert, tconcat = table.wipe, table.insert, table.concat
 local IsInGroup, IsInRaid, GetNumGroupMembers = IsInGroup, IsInRaid, GetNumGroupMembers

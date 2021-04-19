@@ -5,7 +5,7 @@ local select = select
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 
-local colors = F.OUF.colors
+local colors = F.Libs.oUF.colors
 
 function UNITFRAME:UpdateHealthColor()
     local color = C.DB.unitframe.HealthColor

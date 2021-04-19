@@ -10,7 +10,7 @@ local SetOverrideBindingClick = SetOverrideBindingClick
 
 local F, C = unpack(select(2, ...))
 local COMBAT = F.COMBAT
-local OUF = F.OUF
+local OUF = F.Libs.oUF
 
 local modifier
 local mouseButton = '1' -- 1 = left, 2 = right, 3 = middle, 4 and 5 = thumb buttons if there are any

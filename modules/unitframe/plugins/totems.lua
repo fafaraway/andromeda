@@ -5,7 +5,7 @@ local GetTime = GetTime
 local GetTotemInfo = GetTotemInfo
 
 local F = unpack(select(2, ...))
-local OUF = F.OUF
+local OUF = F.Libs.oUF
 
 local function UpdateTooltip(totem)
     _G.GameTooltip:SetTotem(totem:GetID())

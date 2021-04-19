@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local AURA = F:GetModule('AURA')
+local AURA = F.AURA
 
 
 local format, floor, strmatch, select, unpack = format, floor, strmatch, select, unpack

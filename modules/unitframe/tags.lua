@@ -40,9 +40,9 @@ local LEVEL = LEVEL
 
 local F, C = unpack(select(2, ...))
 
-local colors = F.OUF.colors
-local tags = F.OUF.Tags.Methods
-local tagEvents = F.OUF.Tags.Events
+local colors = F.Libs.oUF.colors
+local tags = F.Libs.oUF.Tags.Methods
+local tagEvents = F.Libs.oUF.Tags.Events
 
 tags['free:health'] = function(unit)
     if not UnitIsConnected(unit) or UnitIsDead(unit) or UnitIsGhost(unit) then

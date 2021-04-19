@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local COMBAT = F:GetModule('COMBAT')
+local COMBAT = F.COMBAT
 
 --[[
 	Auto change Tab key to only target enemy players
