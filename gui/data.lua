@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local GUI = F:GetModule('GUI')
+local GUI = F.GUI
 local LibBase64 = F.Libs.Base64
 
 local dataFrame
