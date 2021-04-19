@@ -770,13 +770,3 @@ TOOLTIP:RegisterTooltips(
 		CalendarInviteStatusContextMenu:HookScript('OnShow', TOOLTIP.ReskinTooltip)
 	end
 )
-
-TOOLTIP:RegisterTooltips(
-	'Blizzard_IslandsQueueUI',
-	function()
-		local tooltip = IslandsQueueFrameTooltip:GetParent()
-		tooltip.IconBorder:SetAlpha(0)
-		tooltip.Icon:SetTexCoord(unpack(C.TexCoord))
-		tooltip:GetParent():HookScript('OnShow', TOOLTIP.ReskinTooltip)
-	end
-)

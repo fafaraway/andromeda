@@ -1,13 +1,5 @@
 local F, C = unpack(select(2, ...))
 
-local function HideIconBG(frame)
-	frame.IconHitBox.bg:SetAlpha(0)
-end
-
-local function ShowIconBG(anim)
-	anim.__owner.IconHitBox.bg:SetAlpha(1)
-end
-
 tinsert(C.BlizzThemes, function()
 	if not _G.FREE_ADB.ReskinBlizz then return end
 
@@ -110,16 +102,14 @@ tinsert(C.BlizzThemes, function()
 
 	-- Bossbanner
 	hooksecurefunc("BossBanner_ConfigureLootFrame", function(lootFrame)
-		if not lootFrame.bg then
-			local iconHitBox = lootFrame.IconHitBox
-			iconHitBox.bg = F.ReskinIcon(lootFrame.Icon)
-			iconHitBox.bg:SetAlpha(0)
-			iconHitBox.IconBorder:SetTexture(nil)
+		local iconHitBox = lootFrame.IconHitBox
+		if not iconHitBox.bg then
+			iconHitBox.bg = F.CreateBDFrame(iconHitBox)
+			iconHitBox.bg:SetOutside(lootFrame.Icon)
+			lootFrame.Icon:SetTexCoord(unpack(C.TexCoord))
 			F.ReskinIconBorder(iconHitBox.IconBorder, true)
-
-			lootFrame.Anim.__owner = lootFrame
-			lootFrame.Anim:HookScript("OnFinished", ShowIconBG)
-            lootFrame:HookScript("OnHide", HideIconBG)
 		end
+
+        iconHitBox.IconBorder:SetTexture(nil)
 	end)
 end)
