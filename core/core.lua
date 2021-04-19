@@ -4,10 +4,9 @@ local unpack = unpack
 local CreateFrame = CreateFrame
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 
-local addonName, engine = ...
+local _, engine = ...
 local F = unpack(engine)
 
-_G[addonName] = engine
 
 --[[ Events ]]
 
@@ -75,18 +74,15 @@ function F:GetModule(name)
 end
 
 do
-    F.OUF = engine.oUF
-    F.cargBags = engine.cargBags
-
-    F:RegisterModule('INSTALL')
+    F:RegisterModule('Tutorial')
     F:RegisterModule('GUI')
-    F:RegisterModule('MOVER')
+    F:RegisterModule('Layout')
     F:RegisterModule('LOGO')
-    F:RegisterModule('THEME')
-    F:RegisterModule('BLIZZARD')
-    F:RegisterModule('MISC')
-    F:RegisterModule('ACTIONBAR')
-    F:RegisterModule('COOLDOWN')
+    F:RegisterModule('Theme')
+    F:RegisterModule('Blizzard')
+    F:RegisterModule('General')
+    F:RegisterModule('Actionbar')
+    F:RegisterModule('Cooldown')
     F:RegisterModule('AURA')
     F:RegisterModule('CHAT')
     F:RegisterModule('COMBAT')
@@ -102,15 +98,17 @@ do
 end
 
 do
-    F.INSTALL = F:GetModule('INSTALL')
+    F.Modules = {}
+
+    F.INSTALL = F:GetModule('Tutorial')
     F.GUI = F:GetModule('GUI')
-    F.MOVER = F:GetModule('MOVER')
+    F.MOVER = F:GetModule('Layout')
     F.LOGO = F:GetModule('LOGO')
-    F.THEME = F:GetModule('THEME')
-    F.BLIZZARD = F:GetModule('BLIZZARD')
-    F.MISC = F:GetModule('MISC')
-    F.ACTIONBAR = F:GetModule('ACTIONBAR')
-    F.COOLDOWN = F:GetModule('COOLDOWN')
+    F.THEME = F:GetModule('Theme')
+    F.BLIZZARD = F:GetModule('Blizzard')
+    F.MISC = F:GetModule('General')
+    F.ACTIONBAR = F:GetModule('Actionbar')
+    F.COOLDOWN = F:GetModule('Cooldown')
     F.AURA = F:GetModule('AURA')
     F.CHAT = F:GetModule('CHAT')
     F.COMBAT = F:GetModule('COMBAT')
@@ -125,27 +123,9 @@ do
     F.QUEST = F:GetModule('QUEST')
 end
 
-do
-    F.Libs = {}
-    F.LibsMinor = {}
 
-    function F:AddLib(name, major, minor)
-        if not name then
-            return
-        end
 
-        -- in this case: `major` is the lib table and `minor` is the minor version
-        if type(major) == 'table' and type(minor) == 'number' then
-            F.Libs[name], F.LibsMinor[name] = major, minor
-        else -- in this case: `major` is the lib name and `minor` is the silent switch
-            F.Libs[name], F.LibsMinor[name] = _G.LibStub(major, minor)
-        end
-    end
 
-    F:AddLib('RangeCheck', 'LibRangeCheck-2.0')
-    F:AddLib('Base64', 'LibBase64-1.0')
-    F:AddLib('LibDropDown', 'LibDropDown')
-end
 
 F:RegisterEvent('PLAYER_LOGIN', function()
     for _, module in next, initQueue do
