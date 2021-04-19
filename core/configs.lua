@@ -1403,7 +1403,7 @@ C.CharacterSettings = {
         Bar5 = false,
         PetBar = true,
         StanceBar = false,
-        VehicleBar = true,
+        VehicleBar = false,
 
         DynamicFade = true,
         FadeOutAlpha = 0,
