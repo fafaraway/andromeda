@@ -44,7 +44,7 @@ C.Themes["Blizzard_TalentUI"] = function()
 
 			tab:ClearAllPoints()
 			if i == 1 then
-				tab:SetPoint(a1, p, a2, x, 2)
+				tab:SetPoint(a1, p, a2, x, 1)
 			else
 				tab:SetPoint('LEFT', "PlayerTalentFrameTab"..i-1, 'RIGHT', -10, 0)
 			end
@@ -68,15 +68,15 @@ C.Themes["Blizzard_TalentUI"] = function()
 			local bu = frame["specButton"..i]
 			local _, _, _, icon, role = GetSpecializationInfo(i, false, frame.isPet)
 			F.StripTextures(bu)
-			F.Reskin(bu, true)
+			F.Reskin(bu)
 
 			bu.selectedTex:SetColorTexture(r, g, b, .25)
 			bu.selectedTex:SetDrawLayer("BACKGROUND")
 			bu.selectedTex:SetInside(bu.__bg)
 
 			bu.specIcon:SetTexture(icon)
-			bu.specIcon:SetSize(58, 58)
-			bu.specIcon:SetPoint("LEFT", bu, "LEFT")
+			bu.specIcon:SetSize(56, 56)
+			bu.specIcon:SetPoint("LEFT", bu, "LEFT", 2, 0)
 			F.ReskinIcon(bu.specIcon)
 
 			local roleIcon = bu.roleIcon

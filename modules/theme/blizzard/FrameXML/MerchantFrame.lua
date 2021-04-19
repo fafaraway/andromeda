@@ -17,8 +17,7 @@ tinsert(C.BlizzThemes, function()
 	BuybackBG:SetAlpha(0)
 
 	MerchantFrameTab1:ClearAllPoints()
-	MerchantFrameTab1:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 50, -14)
-	MerchantFrameTab2:SetPoint("LEFT", MerchantFrameTab1, "RIGHT", -15, 0)
+	MerchantFrameTab1:SetPoint("TOPLEFT", MerchantFrame, "BOTTOMLEFT", 10, 1)
 
 	for i = 1, 2 do
 		F.ReskinTab(_G["MerchantFrameTab"..i])

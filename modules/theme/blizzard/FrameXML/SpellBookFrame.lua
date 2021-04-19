@@ -6,9 +6,7 @@ tinsert(C.BlizzThemes, function()
 	F.ReskinPortraitFrame(SpellBookFrame)
 	SpellBookFrame:DisableDrawLayer("BACKGROUND")
 	SpellBookFrameTabButton1:ClearAllPoints()
-	SpellBookFrameTabButton1:SetPoint("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", 0, 2)
-	SpellBookFrameTabButton2:ClearAllPoints()
-	SpellBookFrameTabButton2:SetPoint("LEFT", SpellBookFrameTabButton1, "RIGHT", -10, 0)
+	SpellBookFrameTabButton1:SetPoint("TOPLEFT", SpellBookFrame, "BOTTOMLEFT", 0, 0)
 
 	for i = 1, 5 do
 		F.ReskinTab(_G["SpellBookFrameTabButton"..i])

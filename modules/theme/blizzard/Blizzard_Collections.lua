@@ -6,7 +6,11 @@ C.Themes["Blizzard_Collections"] = function()
 	-- [[ General ]]
 
 	CollectionsJournal.bg = F.ReskinPortraitFrame(CollectionsJournal) -- need this for Rematch skin
-	for i = 1, 5 do
+
+    CollectionsJournalTab1:ClearAllPoints()
+	CollectionsJournalTab1:SetPoint('TOPLEFT', CollectionsJournal, 'BOTTOMLEFT', 10, 1)
+
+    for i = 1, 5 do
 		local tab = _G["CollectionsJournalTab"..i]
 		F.ReskinTab(tab)
 		if i > 1 then

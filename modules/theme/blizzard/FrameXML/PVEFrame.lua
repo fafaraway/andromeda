@@ -9,8 +9,8 @@ tinsert(C.BlizzThemes, function()
 	PVEFrameBlueBg:SetAlpha(0)
 	PVEFrame.shadows:SetAlpha(0)
 
-	PVEFrameTab2:SetPoint("LEFT", PVEFrameTab1, "RIGHT", -15, 0)
-	PVEFrameTab3:SetPoint("LEFT", PVEFrameTab2, "RIGHT", -15, 0)
+	PVEFrameTab1:ClearAllPoints()
+	PVEFrameTab1:SetPoint('TOPLEFT', PVEFrame, 'BOTTOMLEFT', 10, 0)
 
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")

@@ -12,10 +12,8 @@ tinsert(C.BlizzThemes, function()
 		F.ReskinTab(_G["CharacterFrameTab"..i])
 	end
 
-	CharacterFrameTab2:ClearAllPoints()
-	CharacterFrameTab2:SetPoint('LEFT', CharacterFrameTab1, 'RIGHT', -10, 0)
-	CharacterFrameTab3:ClearAllPoints()
-	CharacterFrameTab3:SetPoint('LEFT', CharacterFrameTab2, 'RIGHT', -10, 0)
+    CharacterFrameTab1:ClearAllPoints()
+	CharacterFrameTab1:SetPoint('TOPLEFT', CharacterFrame, 'BOTTOMLEFT', 10, 1)
 
 	CharacterModelFrame:DisableDrawLayer("BACKGROUND")
 	CharacterModelFrame:DisableDrawLayer("BORDER")

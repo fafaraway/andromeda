@@ -73,6 +73,9 @@ C.Themes["Blizzard_AchievementUI"] = function()
 		end
 	end
 
+    AchievementFrameTab1:ClearAllPoints()
+	AchievementFrameTab1:SetPoint('TOPLEFT', AchievementFrame, 'BOTTOMLEFT', 10, 1)
+
 	for i = 1, 7 do
 		local bu = _G["AchievementFrameAchievementsContainerButton"..i]
 		F.StripTextures(bu, true)

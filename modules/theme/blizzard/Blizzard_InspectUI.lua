@@ -80,6 +80,8 @@ C.Themes["Blizzard_InspectUI"] = function()
 		end
 	end)
 
+    InspectFrameTab1:ClearAllPoints()
+	InspectFrameTab1:SetPoint('TOPLEFT', InspectFrame, 'BOTTOMLEFT', 10, 1)
 	for i = 1, 4 do
 		local tab = _G["InspectFrameTab"..i]
 		F.ReskinTab(tab)
