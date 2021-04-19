@@ -996,6 +996,7 @@ C.CharacterSettings = {
         TradeTabs = true,
         PetFilter = true,
         MawThreatBar = true,
+        EnhancedMenu = true,
 
         NakedButton = true,
         MissingStats = true,

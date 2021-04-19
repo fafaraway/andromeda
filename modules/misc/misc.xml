@@ -3,6 +3,7 @@
     <Script file="afk.lua"/>
     <Script file="alreadyknown.lua"/>
     <Script file="cursor.lua"/>
+    <Script file="enhancedmenu.lua"/>
     <Script file="dragemall.lua"/>
     <Script file="grouptool.lua"/>
     <Script file="itemlevel.lua"/>

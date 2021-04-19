@@ -353,64 +353,6 @@ function CHAT:AutoToggleChatBubble()
     end
 end
 
--- alt + left click for group invite
--- ctrl + left click for guild invite
-function CHAT:ClickToInvite(link, _, button)
-    local type, value = link:match('(%a+):(.+)')
-    local hide
-
-    if button == 'LeftButton' and IsModifierKeyDown() then
-        if type == 'player' then
-            local unit = value:match('([^:]+)')
-
-            if IsAltKeyDown() then
-                C_PartyInfo_InviteUnit(unit)
-
-                hide = true
-            elseif IsControlKeyDown() then
-                GuildInvite(unit)
-
-                hide = true
-            end
-        elseif type == 'BNplayer' then
-            local _, bnID = value:match('([^:]*):([^:]*):')
-            if not bnID then
-                return
-            end
-
-            local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
-            if not accountInfo then
-                return
-            end
-
-            local gameAccountInfo = accountInfo.gameAccountInfo
-            local gameID = gameAccountInfo.gameAccountID
-
-            if gameID and CanCooperateWithGameAccount(accountInfo) then
-                if IsAltKeyDown() then
-                    BNInviteFriend(gameID)
-
-                    hide = true
-                elseif IsControlKeyDown() then
-                    local charName = gameAccountInfo.characterName
-                    local realmName = gameAccountInfo.realmName
-
-                    GuildInvite(charName .. '-' .. realmName)
-
-                    hide = true
-                end
-            end
-        end
-    else
-
-        return
-    end
-
-    if hide then
-        ChatEdit_ClearChat(_G.ChatFrame1.editBox)
-    end
-end
-
 -- Autoinvite by whisper
 local whisperList = {}
 function CHAT:UpdateWhisperList()
@@ -597,7 +539,6 @@ function CHAT:OnLogin()
         self:UpdateChatSize()
     end
 
-    hooksecurefunc('ChatFrame_OnHyperlinkShow', CHAT.ClickToInvite)
     hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
 
     CHAT:UpdateEditBoxBorderColor()
