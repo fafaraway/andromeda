@@ -32,6 +32,19 @@ local function ReskinSessionDialog(_, dialog)
 	end
 end
 
+local function ReskinAWQHeader()
+	if IsAddOnLoaded("AngrierWorldQuests") then
+		local button = _G["AngrierWorldQuestsHeader"]
+		if button and not button.styled then
+			F.ReskinCollapse(button, true)
+			button:GetPushedTexture():SetAlpha(0)
+			button:GetHighlightTexture():SetAlpha(0)
+
+			button.styled = true
+		end
+	end
+end
+
 tinsert(C.BlizzThemes, function()
 	if not _G.FREE_ADB.ReskinBlizz then return end
 
@@ -103,6 +116,8 @@ tinsert(C.BlizzThemes, function()
 		for header in QuestScrollFrame.covenantCallingsHeaderFramePool:EnumerateActive() do
 			ReskinQuestHeader(header, true)
 		end
+
+        ReskinAWQHeader()
 	end)
 
 	-- Complete quest frame

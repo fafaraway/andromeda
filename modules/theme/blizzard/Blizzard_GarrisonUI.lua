@@ -1061,77 +1061,65 @@ C.Themes["Blizzard_GarrisonUI"] = function()
 		end)
 	end
 
-	-- VenturePlan
+	-- VenturePlan, 4.12a and higher
 	if IsAddOnLoaded("VenturePlan") then
-		local VenturePlanFrame
-
-		local function reskinVenturePlan(self)
-			local missions = self.MissionList.Missions
-			for i = 1, #missions do
-				local mission = missions[i]
-				if not mission.styled then
-					reskinWidgetFont(mission.Description, .8, .8, .8)
-					if mission.CDTDisplay.GetFontString then
-						reskinWidgetFont(mission.CDTDisplay:GetFontString(), 1, .8, 0)
-					else
-						reskinWidgetFont(mission.CDTDisplay, 1, .8, 0)
-					end
-					F.Reskin(mission.ViewButton)
-
-					for j = 1, mission.statLine:GetNumRegions() do
-						local stat = select(j, mission.statLine:GetRegions())
-						if stat and stat:IsObjectType("FontString") then
-							reskinWidgetFont(stat, 1, 1, 1)
-						end
-					end
-
-					mission.styled = true
+		function VPEX_OnUIObjectCreated(otype, widget, peek)
+			if widget:IsObjectType("Frame") then
+				if otype == "MissionButton" then
+					F.Reskin(peek("ViewButton"))
+					F.Reskin(peek("DoomRunButton"))
+					F.Reskin(peek("TentativeClear"))
+					reskinWidgetFont(peek("Description"), .8, .8, .8)
+					reskinWidgetFont(peek("enemyHP"), 1, 1, 1)
+					reskinWidgetFont(peek("enemyATK"), 1, 1, 1)
+					reskinWidgetFont(peek("animaCost"), .6, .8, 1)
+					reskinWidgetFont(peek("duration"), 1, .8, 0)
+					reskinWidgetFont(widget.CDTDisplay:GetFontString(), 1, .8, 0)
+				elseif otype == "CopyBoxUI" then
+					F.Reskin(widget.ResetButton)
+					F.ReskinClose(widget.CloseButton2)
+					reskinWidgetFont(widget.Intro, 1, 1, 1)
+					F.ReskinEditBox(widget.FirstInputBox)
+					reskinWidgetFont(widget.FirstInputBoxLabel, 1, .8, 0)
+					F.ReskinEditBox(widget.SecondInputBox)
+					reskinWidgetFont(widget.SecondInputBoxLabel, 1, .8, 0)
+					reskinWidgetFont(widget.VersionText, 1, 1, 1)
+				elseif otype == "MissionList" then
+					F.StripTextures(widget)
+					local background = widget:GetChildren()
+					F.StripTextures(background)
+					F.CreateBDFrame(background, .25)
+				elseif otype == "MissionPage" then
+					F.StripTextures(widget)
+					F.Reskin(peek("UnButton"))
+				elseif otype == "ILButton" then
+					widget:DisableDrawLayer("BACKGROUND")
+					local bg = F.CreateBDFrame(widget, .25)
+					bg:SetPoint("TOPLEFT", -3, 1)
+					bg:SetPoint("BOTTOMRIGHT", 2, -2)
+					F.CreateBDFrame(widget.Icon, .25)
+				elseif otype == "IconButton" then
+					F.ReskinIcon(widget:GetNormalTexture())
+					widget:SetHighlightTexture(nil)
+					widget:SetPushedTexture(C.Assets.button_pushed)
+					widget.Icon:SetTexCoord(unpack(C.TexCoord))
+				elseif otype == "FollowerList" then
+					F.StripTextures(widget)
+					F.CreateBDFrame(widget, .25)
+				elseif otype == "FollowerListButton" then
+					peek("TextLabel"):SetFontObject("Game12Font")
+				elseif otype == "ProgressBar" then
+					F.StripTextures(widget)
+					F.CreateBDFrame(widget, 1)
+				elseif otype == "MissionToast" then
+					F.SetBD(widget)
+                    if widget.Icon then widget.Icon:Show() end
+					if widget.Background then widget.Background:Hide() end
+					if widget.Detail then widget.Detail:SetFontObject("Game13Font") end
+					if widget.Outcome then widget.Outcome:SetFontObject("Game13Font") end
 				end
 			end
 		end
-
-		local function SearchMissionBoard()
-			local missionTab = CovenantMissionFrame.MissionTab
-			for i = 1, missionTab:GetNumChildren() do
-				local child = select(i, missionTab:GetChildren())
-				if child and child.MissionList then
-					VenturePlanFrame = child
-					break
-				end
-			end
-			if not VenturePlanFrame then return end
-
-			reskinVenturePlan(VenturePlanFrame)
-			VenturePlanFrame:HookScript("OnShow", reskinVenturePlan)
-
-			local copyBox = VenturePlanFrame.CopyBox
-			F.Reskin(copyBox.ResetButton)
-			F.ReskinClose(copyBox.CloseButton2)
-			reskinWidgetFont(copyBox.Intro, 1, 1, 1)
-			reskinWidgetFont(copyBox.FirstInputBoxLabel, 1, .8, 0)
-			reskinWidgetFont(copyBox.SecondInputBoxLabel, 1, .8, 0)
-			reskinWidgetFont(copyBox.VersionText, 1, 1, 1)
-
-			local missionBoard = CovenantMissionFrame.MissionTab.MissionPage.Board
-			for i = 1, missionBoard:GetNumChildren() do
-				local child = select(i, missionBoard:GetChildren())
-				if child and child:IsObjectType("Button") then
-					F.ReskinIcon(child:GetNormalTexture())
-					child:SetHighlightTexture(nil)
-					child:SetPushedTexture(C.Assets.button_pushed)
-					local texture = select(4, child:GetRegions())
-					if texture then
-						texture:SetTexCoord(unpack(C.TexCoord))
-					end
-					break
-				end
-			end
-		end
-		CovenantMissionFrame:HookScript("OnShow", function()
-			if not VenturePlanFrame then
-				C_Timer.After(.1, SearchMissionBoard)
-			end
-		end)
 	end
 end
 
