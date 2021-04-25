@@ -6,7 +6,6 @@
     <Script file="functions.lua"/>
     <Script file="animation.lua"/>
     <Script file="layout.lua"/>
-    <Script file="logo.lua"/>
     <Script file="slash.lua"/>
 
     <!--@debug@-->

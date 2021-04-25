@@ -8,7 +8,7 @@ local InCombatLockdown = InCombatLockdown
 local GetScreenHeight = GetScreenHeight
 
 local F, C = unpack(select(2, ...))
-local LOGO = F.LOGO
+local LOGO = F:RegisterModule('Logo')
 
 local needAnimation
 
