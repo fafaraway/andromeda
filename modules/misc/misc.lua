@@ -65,11 +65,9 @@ function MISC:OnLogin()
     end
 
     MISC:ForceWarning()
-    MISC:SmoothZooming()
-    MISC:ActionCam()
+
     MISC:AutoScreenshot()
     MISC:FasterLoot()
-    MISC:FasterMovieSkip()
     MISC:LFDFix()
     MISC:BuyStack()
     MISC:MawWidgetFrame()
@@ -119,52 +117,9 @@ function MISC:ForceWarning()
     end
 end
 
--- Camera smooth zooming
-function MISC:SmoothZooming()
-    if not C.DB.General.SmoothZooming then
-        return
-    end
 
-    local oldZoomIn = CameraZoomIn
-    local oldZoomOut = CameraZoomOut
-    local oldVehicleZoomIn = VehicleCameraZoomIn
-    local oldVehicleZoomOut = VehicleCameraZoomOut
-    local newZoomSpeed = 4
 
-    function CameraZoomIn(distance)
-        oldZoomIn(newZoomSpeed)
-    end
 
-    function CameraZoomOut(distance)
-        oldZoomOut(newZoomSpeed)
-    end
-
-    function VehicleCameraZoomIn(distance)
-        oldVehicleZoomIn(newZoomSpeed)
-    end
-
-    function VehicleCameraZoomOut(distance)
-        oldVehicleZoomOut(newZoomSpeed)
-    end
-end
-
--- Camera action mode
-local function setActionCam(cmd)
-    ConsoleExec('ActionCam ' .. cmd)
-end
-
-local function updateActionCamera()
-    if C.DB.General.ActionMode then
-        setActionCam('basic')
-    else
-        setActionCam('off')
-    end
-end
-
-function MISC:ActionCam()
-    _G.UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
-    F:RegisterEvent('PLAYER_ENTERING_WORLD', updateActionCamera)
-end
 
 -- Faster loot
 local lootDelay = 0
@@ -189,42 +144,7 @@ function MISC:FasterLoot()
     end
 end
 
--- Faster movie skip
-function MISC:FasterMovieSkip()
-    if not C.DB.General.FasterMovieSkip then
-        return
-    end
 
-    local cf = _G.CinematicFrame
-    local cfd = _G.CinematicFrameCloseDialog
-    local cfb = _G.CinematicFrameCloseDialogConfirmButton
-    local mf = _G.MovieFrame
-
-    -- Allow space bar, escape key and enter key to cancel cinematic without confirmation
-    cf:HookScript('OnKeyDown', function(self, key)
-        if key == 'ESCAPE' then
-            if cf:IsShown() and cf.closeDialog and cfb then
-                cfd:Hide()
-            end
-        end
-    end)
-
-    cf:HookScript('OnKeyUp', function(self, key)
-        if key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
-            if cf:IsShown() and cf.closeDialog and cfb then
-                cfb:Click()
-            end
-        end
-    end)
-
-    mf:HookScript('OnKeyUp', function(self, key)
-        if key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
-            if mf:IsShown() and mf.CloseDialog and mf.CloseDialog.ConfirmButton then
-                mf.CloseDialog.ConfirmButton:Click()
-            end
-        end
-    end)
-end
 
 -- Auto screenshot
 local function achievementEarned(...)
@@ -431,7 +351,7 @@ end
 -- Get visual id and source id from WardrobeCollectionFrame
 -- Credit silverwind
 -- https://github.com/silverwind/idTip
-do
+do -- #FIXME
     local kinds = {item = 'ItemID', visual = 'VisualID', source = 'SourceID'}
 
     local function contains(table, element)

@@ -2,9 +2,9 @@
     Extends popup menus
     Based on EnhancedMenu by enderneko
     https://github.com/enderneko/EnhancedMenu
- ]]
+]]
 
- local _G = _G
+local _G = _G
 local unpack = unpack
 local select = select
 local wipe = wipe
