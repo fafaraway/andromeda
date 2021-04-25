@@ -209,6 +209,7 @@ lootFrame.LOOT_OPENED = function(self, event, autoloot)
                 slot.isQuestItem = isQuestItem
 
                 slot.name:SetText(lootName)
+                slot.name:SetWordWrap(false)
                 slot.icon:SetTexture(lootIcon)
 
                 maxQuality = math.max(maxQuality, lootQuality)
