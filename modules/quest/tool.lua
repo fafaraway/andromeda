@@ -19,7 +19,7 @@ local function resetActionButtons()
         return
     end
     for i = 1, 3 do
-        F.HideOverlayGlow(_G['ActionButton' .. i])
+        LBG.HideOverlayGlow(_G['ActionButton' .. i])
     end
     hasFound = nil
 end
