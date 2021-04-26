@@ -7,6 +7,10 @@ local CreateFrame = CreateFrame
 local RegisterStateDriver = RegisterStateDriver
 local NUM_ACTIONBAR_BUTTONS = NUM_ACTIONBAR_BUTTONS
 local GetActionTexture = GetActionTexture
+local GetOverrideBarSkin = GetOverrideBarSkin
+local HasVehicleActionBar = HasVehicleActionBar
+local UnitVehicleSkin = UnitVehicleSkin
+local HasOverrideActionBar = HasOverrideActionBar
 
 local F, C, L = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
@@ -65,7 +69,19 @@ local function SetFrameSize(frame, size, num)
     end
 end
 
+local function UpdateBarShadow()
+    if ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')) then
+        ACTIONBAR.bTex:Hide()
+        ACTIONBAR.tTex:Hide()
+    else
+        ACTIONBAR.bTex:Show()
+        ACTIONBAR.tTex:Show()
+    end
+end
+
 function ACTIONBAR:CreateBarShadow()
+    if ACTIONBAR.BarShadow then return end
+
     local bar1 = _G.FreeUI_ActionBar1
     local bar2 = _G.FreeUI_ActionBar2
     local bar3 = _G.FreeUI_ActionBar3
@@ -87,6 +103,17 @@ function ACTIONBAR:CreateBarShadow()
     tTex:SetSize(width, height)
     tTex:SetTexture(C.Assets.glow_tex)
     tTex:SetVertexColor(0, 0, 0, .5)
+
+    ACTIONBAR.bTex = bTex
+    ACTIONBAR.tTex = tTex
+
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateBarShadow)
+    F:RegisterEvent('UPDATE_BONUS_ACTIONBAR', UpdateBarShadow)
+    F:RegisterEvent('UPDATE_VEHICLE_ACTIONBAR', UpdateBarShadow)
+    F:RegisterEvent('UPDATE_OVERRIDE_ACTIONBAR', UpdateBarShadow)
+    F:RegisterEvent('ACTIONBAR_PAGE_CHANGED', UpdateBarShadow)
+
+    ACTIONBAR.BarShadow = true
 end
 
 function ACTIONBAR:CreateBar1()
@@ -129,13 +156,13 @@ function ACTIONBAR:CreateBar1()
     frame:Execute(([[
         buttons = table.new()
         for i = 1, %d do
-            tinsert(buttons, self:GetFrameRef("%s"..i))
+            tinsert(buttons, self:GetFrameRef('%s'..i))
         end
     ]]):format(num, buttonName))
 
     frame:SetAttribute('_onstate-page', [[
         for _, button in next, buttons do
-            button:SetAttribute("actionpage", newstate)
+            button:SetAttribute('actionpage', newstate)
         end
     ]])
     RegisterStateDriver(frame, 'page', actionPage)
@@ -171,6 +198,8 @@ function ACTIONBAR:OnLogin()
     end
 
     ACTIONBAR.buttons = {}
+
+
 
     ACTIONBAR:CreateBar1()
     ACTIONBAR:CreateBar2()
