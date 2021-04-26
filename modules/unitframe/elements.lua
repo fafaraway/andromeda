@@ -1315,7 +1315,7 @@ function UNITFRAME:AddCastBar(self)
             castbar.Backdrop:SetBackdropColor(0, 0, 0, 0)
             castbar.Border:SetBackdropBorderColor(color.r, color.g, color.b, .45)
 
-            icon:SetSize(self:GetHeight() + 6, self:GetHeight() + 6)
+            icon:SetSize(self:GetHeight() + 10, self:GetHeight() + 10)
             icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
         else
             castbar:SetSize(self:GetWidth(), 4)
