@@ -22,16 +22,6 @@ function ANNOUNCEMENT:Interrupt(sourceGUID, sourceName, destName, spellId, extra
         return
     end
 
-    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
-    if not checkGroupAndInstance then
-        return
-    end
-
-    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
-    if not isGroupMember then
-        return
-    end
-
     if not (spellId and extraSpellId) then
         return
     end
@@ -40,7 +30,7 @@ function ANNOUNCEMENT:Interrupt(sourceGUID, sourceName, destName, spellId, extra
         return
     end
 
-    ANNOUNCEMENT:SendMessage(FormatMessage(L.ANNOUNCEMENT.INTERRUPT,sourceName, destName, spellId, extraSpellId), ANNOUNCEMENT:GetChannel())
+    ANNOUNCEMENT:SendMessage(FormatMessage(L['Interrupted %target%\'s %target_spell%!'], sourceName, destName, spellId, extraSpellId), ANNOUNCEMENT:GetChannel())
 end
 
 function ANNOUNCEMENT:Dispel(sourceGUID, sourceName, destName, spellId, extraSpellId)
@@ -48,16 +38,6 @@ function ANNOUNCEMENT:Dispel(sourceGUID, sourceName, destName, spellId, extraSpe
         return
     end
 
-    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
-    if not checkGroupAndInstance then
-        return
-    end
-
-    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
-    if not isGroupMember then
-        return
-    end
-
     if not (spellId and extraSpellId) then
         return
     end
@@ -66,7 +46,7 @@ function ANNOUNCEMENT:Dispel(sourceGUID, sourceName, destName, spellId, extraSpe
         return
     end
 
-    ANNOUNCEMENT:SendMessage(FormatMessage(L.ANNOUNCEMENT.DISPEL, sourceName, destName, spellId, extraSpellId), ANNOUNCEMENT:GetChannel())
+    ANNOUNCEMENT:SendMessage(FormatMessage(L['Dispelled %target%\'s %target_spell%!'], sourceName, destName, spellId, extraSpellId), ANNOUNCEMENT:GetChannel())
 end
 
 function ANNOUNCEMENT:Stolen(sourceGUID, sourceName, destName, spellId, extraSpellId)
@@ -74,16 +54,6 @@ function ANNOUNCEMENT:Stolen(sourceGUID, sourceName, destName, spellId, extraSpe
         return
     end
 
-    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
-    if not checkGroupAndInstance then
-        return
-    end
-
-    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
-    if not isGroupMember then
-        return
-    end
-
     if not (spellId and extraSpellId) then
         return
     end
@@ -92,5 +62,5 @@ function ANNOUNCEMENT:Stolen(sourceGUID, sourceName, destName, spellId, extraSpe
         return
     end
 
-    ANNOUNCEMENT:SendMessage(FormatMessage(L.ANNOUNCEMENT.STOLEN, sourceName, destName, spellId, extraSpellId), ANNOUNCEMENT:GetChannel())
+    ANNOUNCEMENT:SendMessage(FormatMessage(L['Stolen %target%\'s %target_spell%!'], sourceName, destName, spellId, extraSpellId), ANNOUNCEMENT:GetChannel())
 end

@@ -115,7 +115,7 @@ local function TryAnnounce(spellId, sourceName, id, list, type)
     sourceName = sourceName:gsub('%-[^|]+', '')
 
     if (id and spellId == id) or (type and list[spellId]) then
-        ANNOUNCEMENT:SendMessage(FormatMessage(L.ANNOUNCEMENT.CAST, sourceName, spellId), ANNOUNCEMENT:GetChannel())
+        ANNOUNCEMENT:SendMessage(FormatMessage(L['%player% casted %spell%!'], sourceName, spellId), ANNOUNCEMENT:GetChannel())
 
         return true
     end
@@ -128,17 +128,7 @@ function ANNOUNCEMENT:Utility(event, sourceName, spellId)
         return
     end
 
-    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
-    if not checkGroupAndInstance then
-        return
-    end
-
     if not event or not spellId or not sourceName then
-        return
-    end
-
-    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
-    if not isGroupMember then
         return
     end
 

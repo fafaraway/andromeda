@@ -29,21 +29,11 @@ function ANNOUNCEMENT:BattleRez(sourceName, destName, spellId)
         return
     end
 
-    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
-    if not checkGroupAndInstance then
-        return
-    end
-
     if not sourceName or not destName then
         return
     end
 
-    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
-    if not isGroupMember then
-        return
-    end
-
     if spellList[spellId] then
-        ANNOUNCEMENT:SendMessage(FormatMessage(L.ANNOUNCEMENT.BATTLE_REZ, sourceName, destName, spellId), ANNOUNCEMENT:GetChannel())
+        ANNOUNCEMENT:SendMessage(FormatMessage(L['%player% casted %spell% on %target%!'], sourceName, destName, spellId), ANNOUNCEMENT:GetChannel())
     end
 end

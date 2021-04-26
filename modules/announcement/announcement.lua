@@ -40,22 +40,22 @@ function ANNOUNCEMENT:IsGroupMember(name)
 end
 
 function ANNOUNCEMENT:GetChannel()
-    if IsPartyLFG() or IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(_G.LE_PARTY_CATEGORY_INSTANCE) then
-        return 'INSTANCE_CHAT'
-    elseif IsInRaid(_G.LE_PARTY_CATEGORY_HOME) then
-        return 'RAID'
-    elseif IsInGroup(_G.LE_PARTY_CATEGORY_HOME) then
-        return 'PARTY'
-    elseif C.DB.Announcement.Solo then
-        return 'SELF'
-    end
+    -- if IsPartyLFG() or IsInGroup(_G.LE_PARTY_CATEGORY_INSTANCE) or IsInRaid(_G.LE_PARTY_CATEGORY_INSTANCE) then
+    --     return 'INSTANCE_CHAT'
+    -- elseif IsInRaid(_G.LE_PARTY_CATEGORY_HOME) then
+    --     return 'RAID'
+    -- elseif IsInGroup(_G.LE_PARTY_CATEGORY_HOME) then
+    --     return 'PARTY'
+    -- elseif C.DB.Announcement.Solo then
+    --     return 'SELF'
+    -- end
 
     return 'NONE'
 end
 
 function ANNOUNCEMENT:SendMessage(text, channel, raidWarning, whisperTarget)
     if channel == 'NONE' then
-        return
+        channel = 'SAY'
     end
 
     if channel == 'SELF' then
@@ -81,6 +81,16 @@ end
 
 function ANNOUNCEMENT:OnEvent()
     local _, event, _, sourceGUID, sourceName, _, _, _, destName, _, _, spellId, _, _, extraSpellId2 = CombatLogGetCurrentEventInfo()
+
+    local checkGroupAndInstance = ANNOUNCEMENT:CheckGroupAndInstance()
+    if not checkGroupAndInstance then
+        return
+    end
+
+    local isGroupMember = ANNOUNCEMENT:IsGroupMember(sourceName)
+    if not isGroupMember then
+        return
+    end
 
     if event == 'SPELL_CAST_SUCCESS' then
         ANNOUNCEMENT:Utility(event, sourceName, spellId)
