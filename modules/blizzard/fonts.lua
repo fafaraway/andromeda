@@ -272,7 +272,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
     SetFont(_G.QuestFont, NORMAL, 15)
 
     -- Registering fonts in LibSharedMedia
-    local LSM = _G.LibStub and _G.LibStub:GetLibrary('LibSharedMedia-3.0', true)
+    local LSM = F.Libs.LSM
 
     local LOCALE_MASK = 0
     if C.GameLocale == 'koKR' then
