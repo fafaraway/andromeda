@@ -6,30 +6,31 @@ local atlasColors = {
 	["UI-Frame-Bar-Fill-Red"] = {.9, .2, .2},
 	["UI-Frame-Bar-Fill-Yellow"] = {1, .6, 0},
 	["objectivewidget-bar-fill-left"] = {.2, .6, 1},
-	["objectivewidget-bar-fill-right"] = {.9, .2, .2}
+	["objectivewidget-bar-fill-right"] = {.9, .2, .2},
+	["EmberCourtScenario-Tracker-barfill"] = {.9, .2, .2},
 }
 
-local function updateBarTexture(self, atlas)
+function F:ReplaceWidgetBarTexture(atlas)
 	if atlasColors[atlas] then
 		self:SetStatusBarTexture(C.Assets.norm_tex)
 		self:SetStatusBarColor(unpack(atlasColors[atlas]))
 	end
 end
 
-local function ReskinWidgetStatusBar(self)
-	local bar = self.Bar
-	local atlas = bar:GetStatusBarAtlas()
-	updateBarTexture(bar, atlas)
-
-	if not bar.styled then
-		bar.BGLeft:SetAlpha(0)
-		bar.BGRight:SetAlpha(0)
-		bar.BGCenter:SetAlpha(0)
-		bar.BorderLeft:SetAlpha(0)
-		bar.BorderRight:SetAlpha(0)
-		bar.BorderCenter:SetAlpha(0)
-		bar.Spark:SetAlpha(0)
+local function ReskinWidgetStatusBar(bar)
+	if bar and not bar.styled then
+		if bar.BG then bar.BG:SetAlpha(0) end
+		if bar.BGLeft then bar.BGLeft:SetAlpha(0) end
+		if bar.BGRight then bar.BGRight:SetAlpha(0) end
+		if bar.BGCenter then bar.BGCenter:SetAlpha(0) end
+		if bar.BorderLeft then bar.BorderLeft:SetAlpha(0) end
+		if bar.BorderRight then bar.BorderRight:SetAlpha(0) end
+		if bar.BorderCenter then bar.BorderCenter:SetAlpha(0) end
+		if bar.Spark then bar.Spark:SetAlpha(0) end
+		if bar.SparkGlow then bar.SparkGlow:SetAlpha(0) end
+		if bar.BorderGlow then bar.BorderGlow:SetAlpha(0) end
 		F.SetBD(bar)
+		hooksecurefunc(bar, "SetStatusBarAtlas", F.ReplaceWidgetBarTexture)
 
 		bar.styled = true
 	end
@@ -44,17 +45,8 @@ local function ReskinWidgetFrames()
 		local widgetType = widgetFrame.widgetType
 		if widgetType == Type_DoubleStatusBar then
 			if not widgetFrame.styled then
-				for _, bar in pairs({widgetFrame.LeftBar, widgetFrame.RightBar}) do
-					bar.BG:SetAlpha(0)
-					bar.BorderLeft:SetAlpha(0)
-					bar.BorderRight:SetAlpha(0)
-					bar.BorderCenter:SetAlpha(0)
-					bar.Spark:SetAlpha(0)
-					bar.SparkGlow:SetAlpha(0)
-					bar.BorderGlow:SetAlpha(0)
-					F.SetBD(bar)
-					hooksecurefunc(bar, "SetStatusBarAtlas", updateBarTexture)
-				end
+				ReskinWidgetStatusBar(widgetFrame.LeftBar)
+				ReskinWidgetStatusBar(widgetFrame.RightBar)
 
 				widgetFrame.styled = true
 			end
@@ -69,7 +61,7 @@ local function ReskinWidgetFrames()
 				widgetFrame.styled = true
 			end
 		elseif widgetType == Type_StatusBar then
-			ReskinWidgetStatusBar(widgetFrame)
+			ReskinWidgetStatusBar(widgetFrame.Bar)
 		end
 	end
 end
@@ -80,7 +72,9 @@ tinsert(C.BlizzThemes, function()
 	F:RegisterEvent("PLAYER_ENTERING_WORLD", ReskinWidgetFrames)
 	F:RegisterEvent("UPDATE_ALL_UI_WIDGETS", ReskinWidgetFrames)
 
-	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", ReskinWidgetStatusBar)
+	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
+		ReskinWidgetStatusBar(self.Bar)
+	end)
 
 	hooksecurefunc(_G.UIWidgetTemplateCaptureBarMixin, "Setup", function(self)
 		self.LeftLine:SetAlpha(0)

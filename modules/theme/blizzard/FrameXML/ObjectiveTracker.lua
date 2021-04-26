@@ -185,19 +185,17 @@ tinsert(C.BlizzThemes, function()
 
 	hooksecurefunc(SCENARIO_CONTENT_TRACKER_MODULE, "Update", function()
 		local widgetContainer = ScenarioStageBlock.WidgetContainer
-		if not widgetContainer then return end
+		if widgetContainer.widgetFrames then
+			for _, widgetFrame in pairs(widgetContainer.widgetFrames) do
+				if widgetFrame.Frame then widgetFrame.Frame:SetAlpha(0) end
 
-		local widgetFrame = widgetContainer:GetChildren()
-		if widgetFrame and widgetFrame.Frame then
-			widgetFrame.Frame:SetAlpha(0)
+				local bar = widgetFrame.TimerBar
+				if bar and not bar.styled then
+					F:SmoothBar(bar)
+					F.CreateBDFrame(bar, .25)
+					hooksecurefunc(bar, "SetStatusBarAtlas", F.ReplaceWidgetBarTexture)
 
-			if widgetFrame.CurrencyContainer then -- this may be removed, needs review
-				for i = 1, widgetFrame.CurrencyContainer:GetNumChildren() do
-					local bu = select(i, widgetFrame.CurrencyContainer:GetChildren())
-					if bu and bu.Icon and not bu.styled then
-						F.ReskinIcon(bu.Icon)
-						bu.styled = true
-					end
+					bar.styled = true
 				end
 			end
 		end
