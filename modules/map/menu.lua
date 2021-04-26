@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP = F.MAP
+local MAP = F:GetModule('Minimap')
 
 local menuList = {
 	-- 標題

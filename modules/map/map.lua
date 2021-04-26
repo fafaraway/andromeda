@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MAP = F.MAP
+local MAP = F:RegisterModule('WorldMap')
 
 
 local select = select
@@ -136,5 +136,4 @@ function MAP:OnLogin()
 	self:WorldMapScale()
 	self:AddCoords()
 	self:MapReveal()
-	self:Minimap()
 end
