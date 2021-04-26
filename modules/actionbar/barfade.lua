@@ -8,6 +8,10 @@ local UnitHasVehicleUI = UnitHasVehicleUI
 local UnitExists = UnitExists
 local hooksecurefunc = hooksecurefunc
 local ActionButton1Cooldown = ActionButton1Cooldown
+local GetOverrideBarSkin = GetOverrideBarSkin
+local HasVehicleActionBar = HasVehicleActionBar
+local UnitVehicleSkin = UnitVehicleSkin
+local HasOverrideActionBar = HasOverrideActionBar
 
 local F, C = unpack(select(2, ...))
 local ACTIONBAR = F.ACTIONBAR
@@ -43,7 +47,7 @@ function ACTIONBAR:FadeParent_OnEvent()
     local isTargeting = (UnitExists('target') or UnitExists('focus')) and C.DB.Actionbar.ConditionTarget
     local isInPvPArea = (instanceType == 'pvp' or instanceType == 'arena') and C.DB.Actionbar.ConditionPvP
     local isInDungeon = (instanceType == 'party' or instanceType == 'raid') and C.DB.Actionbar.ConditionDungeon
-    local isInVehicle = UnitHasVehicleUI('player') and C.DB.Actionbar.ConditionVehicle
+    local isInVehicle = ((HasVehicleActionBar() and UnitVehicleSkin('player') and UnitVehicleSkin('player') ~= '') or (HasOverrideActionBar() and GetOverrideBarSkin() and GetOverrideBarSkin() ~= '')) and C.DB.Actionbar.ConditionVehicle
 
     if isCombating or isTargeting or isInPvPArea or isInDungeon or isInVehicle then
         self.mouseLock = true
@@ -108,9 +112,11 @@ function ACTIONBAR:UpdateActionBarFade()
     end
 
     if C.DB.Actionbar.ConditionVehicle then
-        ACTIONBAR.fadeParent:RegisterEvent('UNIT_ENTERED_VEHICLE')
-        ACTIONBAR.fadeParent:RegisterEvent('UNIT_EXITED_VEHICLE')
-        ACTIONBAR.fadeParent:RegisterEvent('VEHICLE_UPDATE')
+        ACTIONBAR.fadeParent:RegisterEvent('PLAYER_ENTERING_WORLD')
+        ACTIONBAR.fadeParent:RegisterEvent('UPDATE_BONUS_ACTIONBAR')
+        ACTIONBAR.fadeParent:RegisterEvent('UPDATE_VEHICLE_ACTIONBAR')
+        ACTIONBAR.fadeParent:RegisterEvent('UPDATE_OVERRIDE_ACTIONBAR')
+        ACTIONBAR.fadeParent:RegisterEvent('ACTIONBAR_PAGE_CHANGED')
     end
 
     ACTIONBAR.HookActionBar()
