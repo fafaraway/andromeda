@@ -44,6 +44,7 @@ function THEME:OnLogin()
     self:ReskinDBM()
     self:ReskinPGF()
     self:ReskinREHack()
+    self:ReskinExtVendor()
 end
 
 function THEME:LoadWithAddOn(addonName, value, func)
