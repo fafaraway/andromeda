@@ -2,6 +2,7 @@
     <Script file="LibStub.lua"/>
     <Script file="CallbackHandler-1.0.lua"/>
     <Script file="AceLocale-3.0.lua"/>
+    <Script file="AceTimer-3.0.lua"/>
     <Script file="LibBase64-1.0.lua"/>
     <Script file="LibButtonGlow-1.0.lua"/>
     <Script file="LibRangeCheck-2.0.lua"/>
