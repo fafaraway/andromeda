@@ -59,5 +59,4 @@ function QUEST:OnLogin()
     end
 
     QUEST:CompleteSound()
-    QUEST:WorldQuestTool()
 end
