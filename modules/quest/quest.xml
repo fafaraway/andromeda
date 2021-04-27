@@ -5,5 +5,5 @@
     <Script file="betterworldquests.lua"/>
     <Script file="extraquestbutton.lua"/>
     <Script file="quickquest.lua"/>
-    <Script file="tool.lua"/>
+    <Script file="helper.lua"/>
 </Ui>
