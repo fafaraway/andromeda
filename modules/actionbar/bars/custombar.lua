@@ -25,7 +25,7 @@ function ACTIONBAR:CustomBar(anchor)
     frame:SetPoint(unpack(anchor))
 
     if C.DB.Actionbar.CustomBar then
-        frame.mover = F.Mover(frame, L.MOVER.CUSTOM_BAR, 'CustomBar', anchor)
+        frame.mover = F.Mover(frame, L[name], 'CustomBar', anchor)
     end
 
     frame.buttons = {}
@@ -39,7 +39,7 @@ function ACTIONBAR:CustomBar(anchor)
         button:SetSize(size, size)
         button.id = (page - 1) * 12 + i
         button.isCustomButton = true
-        button.commandName = L.ACTIONBAR.CUSTOM_BAR .. i
+        button.commandName = L[name] .. i
         button:SetAttribute('action', button.id)
         frame.buttons[i] = button
         tinsert(buttonList, button)

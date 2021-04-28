@@ -24,7 +24,7 @@ local function SetFrameSize(frame, size, num)
 
     if not frame.mover then
         if C.DB.Actionbar.VehicleBar then
-            frame.mover = F.Mover(frame, L.MOVER.VEHICLE_BAR, 'LeaveVehicle', frame.Pos)
+            frame.mover = F.Mover(frame, L['Leave Vehicle Button'], 'LeaveVehicle', frame.Pos)
         end
     else
         frame.mover:SetSize(frame:GetSize())

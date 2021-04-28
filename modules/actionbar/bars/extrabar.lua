@@ -21,7 +21,7 @@ function ACTIONBAR:CreateExtrabar()
     frame:SetWidth(size + 2 * padding)
     frame:SetHeight(size + 2 * padding)
     frame.Pos = {'CENTER', _G.UIParent, 'CENTER', 0, 300}
-    frame.mover = F.Mover(frame, L.MOVER.EXTRA_BAR, 'Extrabar', frame.Pos)
+    frame.mover = F.Mover(frame, L['Extra Button'], 'Extrabar', frame.Pos)
 
     _G.ExtraActionBarFrame:EnableMouse(false)
     _G.ExtraAbilityContainer:SetParent(frame)
@@ -42,7 +42,7 @@ function ACTIONBAR:CreateExtrabar()
     zoneFrame:SetWidth(size + 2 * padding)
     zoneFrame:SetHeight(size + 2 * padding)
     zoneFrame.Pos = {'CENTER', _G.UIParent, 'CENTER', 0, 250}
-    zoneFrame.mover = F.Mover(zoneFrame, L.MOVER.ZONE_ABILITY, 'ZoneAbility', zoneFrame.Pos)
+    zoneFrame.mover = F.Mover(zoneFrame, L['Zone Ability Button'], 'ZoneAbility', zoneFrame.Pos)
 
     ZoneAbilityFrame:SetParent(zoneFrame)
     ZoneAbilityFrame:ClearAllPoints()

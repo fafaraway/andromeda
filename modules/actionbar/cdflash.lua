@@ -237,7 +237,7 @@ function ACTIONBAR:CooldownFlash()
     frame.bg = F.SetBD(frame)
     icon:SetTexCoord(unpack(C.TexCoord))
 
-    local mover = F.Mover(anchor, L.MOVER.COOLDOWN_FLASH, 'CooldownFlash', {'CENTER', _G.UIParent, 0, 100}, iconSize, iconSize)
+    local mover = F.Mover(anchor, L['Cooldown Icon'], 'CooldownFlash', {'CENTER', _G.UIParent, 0, 100}, iconSize, iconSize)
     anchor:ClearAllPoints()
     anchor:SetPoint('CENTER', mover)
 

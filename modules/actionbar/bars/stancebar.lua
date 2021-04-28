@@ -19,7 +19,7 @@ local function SetFrameSize(frame, size, num)
 
     if not frame.mover then
         if C.DB.Actionbar.StanceBar then
-            frame.mover = F.Mover(frame, L.MOVER.STANCE_BAR, 'StanceBar', frame.Pos)
+            frame.mover = F.Mover(frame, L['Stance Bar'], 'StanceBar', frame.Pos)
         end
     else
         frame.mover:SetSize(frame:GetSize())

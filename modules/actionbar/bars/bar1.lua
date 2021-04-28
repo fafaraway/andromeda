@@ -57,7 +57,7 @@ local function SetFrameSize(frame, size, num)
     frame:SetHeight(size + 2 * padding)
 
     if not frame.mover then
-        frame.mover = F.Mover(frame, L.MOVER.MAIN_BAR, 'Bar1', frame.Pos)
+        frame.mover = F.Mover(frame, L['Main Bar'], 'Bar1', frame.Pos)
     else
         frame.mover:SetSize(frame:GetSize())
     end

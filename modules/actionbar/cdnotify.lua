@@ -47,9 +47,9 @@ function ACTIONBAR:SendCurrentSpell(thisTime, spellID)
     local spellLink = GetSpellLink(spellID)
     if start and duration > 0 then
         local remain = start + duration - thisTime
-        SendNotifyMessage(format(L.ACTIONBAR.CD_REMAINING, spellLink, GetRemainTime(remain)))
+        SendNotifyMessage(format(L['%s cooldown remaining %s.'], spellLink, GetRemainTime(remain)))
     else
-        SendNotifyMessage(format(L.ACTIONBAR.CD_FINISHED, spellLink))
+        SendNotifyMessage(format(L['%s is now available.'], spellLink))
     end
 end
 
@@ -57,9 +57,9 @@ function ACTIONBAR:SendCurrentItem(thisTime, itemID, itemLink)
     local start, duration = GetItemCooldown(itemID)
     if start and duration > 0 then
         local remain = start + duration - thisTime
-        SendNotifyMessage(format(L.ACTIONBAR.CD_REMAINING, itemLink, GetRemainTime(remain)))
+        SendNotifyMessage(format(L['%s cooldown remaining %s.'], itemLink, GetRemainTime(remain)))
     else
-        SendNotifyMessage(format(L.ACTIONBAR.CD_FINISHED, itemLink))
+        SendNotifyMessage(format(L['%s is now available.'], itemLink))
     end
 end
 
