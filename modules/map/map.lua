@@ -49,9 +49,9 @@ function MAP:UpdateCoords(elapsed)
 	if self.elapsed > 0.1 then
 		local cursorX, cursorY = MAP:GetCursorCoords()
 		if cursorX and cursorY then
-			cursorCoords:SetFormattedText(CoordsFormat(L['MAP_CURSOR']), 100 * cursorX, 100 * cursorY)
+			cursorCoords:SetFormattedText(CoordsFormat(L['Cursor']), 100 * cursorX, 100 * cursorY)
 		else
-			cursorCoords:SetText(CoordsFormat(L['MAP_CURSOR'], true))
+			cursorCoords:SetText(CoordsFormat(L['Cursor'], true))
 		end
 
 		if not currentMapID then
