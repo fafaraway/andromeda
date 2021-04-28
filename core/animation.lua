@@ -1,20 +1,34 @@
+--[[
+    Animation functions
+    Credits Elvui ElvUI_WindTool RayUI
+]]
+
 local _G = _G
 local unpack = unpack
 local select = select
 local random = random
 local strsub = strsub
 local getn = getn
+local max = max
+local abs = abs
 local CreateFrame = CreateFrame
 
 local F = unpack(select(2, ...))
 
-local animShake = {{-9, 7, -7, 12}, {-5, 9, -9, 5}, {-5, 7, -7, 5}, {-9, 9, -9, 9}, {-5, 7, -7, 5}, {-9, 7, -9, 5}}
+-- From ElvUI
+
+local animShake = {
+    {-9, 7, -7, 12},
+    {-5, 9, -9, 5},
+    {-5, 7, -7, 5},
+    {-9, 9, -9, 9},
+    {-5, 7, -7, 5},
+    {-9, 7, -9, 5},
+}
 local animShakeH = {-5, 5, -2, 5, -2, 5}
 
 function F:FlashLoopFinished(requested)
-    if not requested then
-        self:Play()
-    end
+    if not requested then self:Play() end
 end
 
 function F:RandomAnimShake(index)
@@ -23,9 +37,7 @@ function F:RandomAnimShake(index)
 end
 
 function F:SetUpAnimGroup(obj, Type, ...)
-    if not Type then
-        Type = 'Flash'
-    end
+    if not Type then Type = 'Flash' end
 
     if strsub(Type, 1, 5) == 'Flash' then
         obj.anim = obj:CreateAnimationGroup('Flash')
@@ -39,9 +51,7 @@ function F:SetUpAnimGroup(obj, Type, ...)
         obj.anim.fadeout:SetToAlpha(0)
         obj.anim.fadeout:SetOrder(1)
 
-        if Type == 'FlashLoop' then
-            obj.anim:SetScript('OnFinished', F.FlashLoopFinished)
-        end
+        if Type == 'FlashLoop' then obj.anim:SetScript('OnFinished', F.FlashLoopFinished) end
     elseif strsub(Type, 1, 5) == 'Shake' then
         local shake = obj:CreateAnimationGroup(Type)
         shake:SetLooping('REPEAT')
@@ -71,7 +81,8 @@ function F:SetUpAnimGroup(obj, Type, ...)
 
         for i = 1, 4 do
             local anim = obj.elastic:CreateAnimation(i < 3 and 'width' or 'height')
-            anim:SetChange((i == 1 and width * 0.45) or (i == 2 and width) or (i == 3 and height * 0.45) or height)
+            anim:SetChange((i == 1 and width * 0.45) or (i == 2 and width) or
+                               (i == 3 and height * 0.45) or height)
             anim:SetEasing('inout-elastic')
             anim:SetDuration(duration)
             obj.elastic[i] = anim
@@ -87,15 +98,11 @@ function F:SetUpAnimGroup(obj, Type, ...)
         end)
         obj.elastic[2]:SetScript('OnFinished', function(anim)
             anim:Stop()
-            if loop then
-                obj.elastic[1]:Play()
-            end
+            if loop then obj.elastic[1]:Play() end
         end)
         obj.elastic[4]:SetScript('OnFinished', function(anim)
             anim:Stop()
-            if loop then
-                obj.elastic[3]:Play()
-            end
+            if loop then obj.elastic[3]:Play() end
         end)
     elseif Type == 'Number' then
         local endingNumber, duration = ...
@@ -106,9 +113,7 @@ function F:SetUpAnimGroup(obj, Type, ...)
         obj.NumberAnim:SetDuration(duration)
     else
         local x, y, duration, customName = ...
-        if not customName then
-            customName = 'anim'
-        end
+        if not customName then customName = 'anim' end
 
         local anim = obj:CreateAnimationGroup('Move_In')
         obj[customName] = anim
@@ -139,12 +144,8 @@ end
 
 function F:Elasticize(obj, width, height)
     if not obj.elastic then
-        if not width then
-            width = obj:GetWidth()
-        end
-        if not height then
-            height = obj:GetHeight()
-        end
+        if not width then width = obj:GetWidth() end
+        if not height then height = obj:GetHeight() end
         F:SetUpAnimGroup(obj, 'Elastic', width, height, 2, false)
     end
 
@@ -160,37 +161,27 @@ function F:StopElasticize(obj)
 end
 
 function F:Shake(obj)
-    if not obj.shake then
-        F:SetUpAnimGroup(obj, 'Shake')
-    end
+    if not obj.shake then F:SetUpAnimGroup(obj, 'Shake') end
 
     obj.shake:Play()
 end
 
 function F:StopShake(obj)
-    if obj.shake then
-        obj.shake:Finish()
-    end
+    if obj.shake then obj.shake:Finish() end
 end
 
 function F:ShakeHorizontal(obj)
-    if not obj.shakeh then
-        F:SetUpAnimGroup(obj, 'ShakeH')
-    end
+    if not obj.shakeh then F:SetUpAnimGroup(obj, 'ShakeH') end
 
     obj.shakeh:Play()
 end
 
 function F:StopShakeHorizontal(obj)
-    if obj.shakeh then
-        obj.shakeh:Finish()
-    end
+    if obj.shakeh then obj.shakeh:Finish() end
 end
 
 function F:Flash(obj, duration, loop)
-    if not obj.anim then
-        F:SetUpAnimGroup(obj, loop and 'FlashLoop' or 'Flash')
-    end
+    if not obj.anim then F:SetUpAnimGroup(obj, loop and 'FlashLoop' or 'Flash') end
 
     if not obj.anim:IsPlaying() then
         obj.anim.fadein:SetDuration(duration)
@@ -200,18 +191,12 @@ function F:Flash(obj, duration, loop)
 end
 
 function F:StopFlash(obj)
-    if obj.anim and obj.anim:IsPlaying() then
-        obj.anim:Stop()
-    end
+    if obj.anim and obj.anim:IsPlaying() then obj.anim:Stop() end
 end
 
 function F:SlideIn(obj, customName)
-    if not customName then
-        customName = 'anim'
-    end
-    if not obj[customName] then
-        return
-    end
+    if not customName then customName = 'anim' end
+    if not obj[customName] then return end
 
     obj[customName].out1:Stop()
     obj[customName]:Play()
@@ -219,12 +204,8 @@ function F:SlideIn(obj, customName)
 end
 
 function F:SlideOut(obj, customName)
-    if not customName then
-        customName = 'anim'
-    end
-    if not obj[customName] then
-        return
-    end
+    if not customName then customName = 'anim' end
+    if not obj[customName] then return end
 
     obj[customName]:Finish()
     obj[customName]:Stop()
@@ -252,9 +233,11 @@ function F:UIFrameFade_OnUpdate(elapsed)
             -- If the fadeTimer is less then the desired fade time then set the alpha otherwise hold the fade state, call the finished function, or just finish the fade
             if info.fadeTimer < info.timeToFade then
                 if info.mode == 'IN' then
-                    frame:SetAlpha((info.fadeTimer / info.timeToFade) * info.diffAlpha + info.startAlpha)
+                    frame:SetAlpha((info.fadeTimer / info.timeToFade) * info.diffAlpha +
+                                       info.startAlpha)
                 else
-                    frame:SetAlpha(((info.timeToFade - info.fadeTimer) / info.timeToFade) * info.diffAlpha + info.endAlpha)
+                    frame:SetAlpha(((info.timeToFade - info.fadeTimer) / info.timeToFade) *
+                                       info.diffAlpha + info.endAlpha)
                 end
             else
                 frame:SetAlpha(info.endAlpha)
@@ -270,7 +253,9 @@ function F:UIFrameFade_OnUpdate(elapsed)
                         if info.finishedArgs then
                             info.finishedFunc(unpack(info.finishedArgs))
                         else -- optional method
-                            info.finishedFunc(info.finishedArg1, info.finishedArg2, info.finishedArg3, info.finishedArg4, info.finishedArg5)
+                            info.finishedFunc(info.finishedArg1, info.finishedArg2,
+                                              info.finishedArg3, info.finishedArg4,
+                                              info.finishedArg5)
                         end
 
                         if not info.finishedFuncKeep then
@@ -281,51 +266,31 @@ function F:UIFrameFade_OnUpdate(elapsed)
             end
         end
 
-        if not next(FADEFRAMES) then
-            FADEMANAGER:SetScript('OnUpdate', nil)
-        end
+        if not next(FADEFRAMES) then FADEMANAGER:SetScript('OnUpdate', nil) end
     end
 end
 
 -- Generic fade function
 function F:UIFrameFade(frame, info)
-    if not frame or frame:IsForbidden() then
-        return
-    end
+    if not frame or frame:IsForbidden() then return end
 
     frame.fadeInfo = info
 
-    if not info.mode then
-        info.mode = 'IN'
-    end
+    if not info.mode then info.mode = 'IN' end
 
     if info.mode == 'IN' then
-        if not info.startAlpha then
-            info.startAlpha = 0
-        end
-        if not info.endAlpha then
-            info.endAlpha = 1
-        end
-        if not info.diffAlpha then
-            info.diffAlpha = info.endAlpha - info.startAlpha
-        end
+        if not info.startAlpha then info.startAlpha = 0 end
+        if not info.endAlpha then info.endAlpha = 1 end
+        if not info.diffAlpha then info.diffAlpha = info.endAlpha - info.startAlpha end
     else
-        if not info.startAlpha then
-            info.startAlpha = 1
-        end
-        if not info.endAlpha then
-            info.endAlpha = 0
-        end
-        if not info.diffAlpha then
-            info.diffAlpha = info.startAlpha - info.endAlpha
-        end
+        if not info.startAlpha then info.startAlpha = 1 end
+        if not info.endAlpha then info.endAlpha = 0 end
+        if not info.diffAlpha then info.diffAlpha = info.startAlpha - info.endAlpha end
     end
 
     frame:SetAlpha(info.startAlpha)
 
-    if not frame:IsProtected() then
-        frame:Show()
-    end
+    if not frame:IsProtected() then frame:Show() end
 
     if not FADEFRAMES[frame] then
         FADEFRAMES[frame] = info -- read below comment
@@ -337,9 +302,7 @@ end
 
 -- Convenience function to do a simple fade in
 function F:UIFrameFadeIn(frame, timeToFade, startAlpha, endAlpha)
-    if not frame or frame:IsForbidden() then
-        return
-    end
+    if not frame or frame:IsForbidden() then return end
 
     if frame.FadeObject then
         frame.FadeObject.fadeTimer = nil
@@ -358,9 +321,7 @@ end
 
 -- Convenience function to do a simple fade out
 function F:UIFrameFadeOut(frame, timeToFade, startAlpha, endAlpha)
-    if not frame or frame:IsForbidden() then
-        return
-    end
+    if not frame or frame:IsForbidden() then return end
 
     if frame.FadeObject then
         frame.FadeObject.fadeTimer = nil
@@ -379,37 +340,67 @@ end
 
 function F:UIFrameFadeRemoveFrame(frame)
     if frame and FADEFRAMES[frame] then
-        if frame.FadeObject then
-            frame.FadeObject.fadeTimer = nil
-        end
+        if frame.FadeObject then frame.FadeObject.fadeTimer = nil end
 
         FADEFRAMES[frame] = nil
     end
 end
 
+-- From RayUI
+
+local function Smooth(mode, x, y, z)
+    return mode == true and 1 or max((10 + abs(x - y)) / (88.88888 * z), .2) * 1.1
+end
+
+function F.Simple_Move(self, t)
+    self.pos = self.pos + t * self.speed * Smooth(self.smode, self.limit, self.pos, .5)
+    self:SetPoint(self.point_1, self.parent, self.point_2, self.hor and self.pos or self.alt or 0,
+                  not (self.hor) and self.pos or self.alt or 0)
+    if self.pos * self.mod >= self.limit * self.mod then
+        self:SetPoint(self.point_1, self.parent, self.point_2,
+                      self.hor and self.limit or self.alt or 0,
+                      not (self.hor) and self.limit or self.alt or 0)
+        self.pos = self.limit
+        self:SetScript('OnUpdate', nil)
+        if self.finish_hide then self:Hide() end
+        if self.finish_function then self:finish_function() end
+    end
+end
+
+function F:Slide(frame, direction, length, speed)
+    local p1, rel, p2, x, y = frame:GetPoint()
+    frame.mod = (direction == 'LEFT' or direction == 'DOWN') and -1 or 1
+    frame.hor = (direction == 'LEFT' or direction == 'RIGHT') and true or false
+    frame.pos = frame.hor and x or y
+    frame.alt = frame.hor and y or x
+    frame.limit = (frame.hor and x or y) + frame.mod * length
+    frame.speed = frame.mod * speed
+    frame.point_1 = p1
+    frame.point_2 = p2
+    frame:SetScript('OnUpdate', F.Simple_Move)
+end
+
+-- From ElvUI_WindTool
+
 --[[
-	创建动画窗体
-	@param {string} [name] 动画窗体名
-	@param {object} [parent=ElvUIParent] 父窗体
-	@param {strata} [string] 窗体层级
-	@param {level} [number] 窗体等级
-	@param {hidden} [boolean] 窗体创建后隐藏
-	@param {texture} [string] 材质路径
-	@param {isMirror} [boolean] 使材质沿 y 轴翻折
-	@returns object 创建的窗体
+    创建动画窗体
+    @param {string} [name] 动画窗体名
+    @param {object} [parent=ElvUIParent] 父窗体
+    @param {strata} [string] 窗体层级
+    @param {level} [number] 窗体等级
+    @param {hidden} [boolean] 窗体创建后隐藏
+    @param {texture} [string] 材质路径
+    @param {isMirror} [boolean] 使材质沿 y 轴翻折
+    @returns object 创建的窗体
 ]]
 function F.CreateAnimationFrame(name, parent, strata, level, hidden, texture, isMirror, color)
     parent = parent or _G.UIParent
 
     local frame = CreateFrame('Frame', name, parent)
 
-    if strata then
-        frame:SetFrameStrata(strata)
-    end
+    if strata then frame:SetFrameStrata(strata) end
 
-    if level then
-        frame:SetFrameLevel(level)
-    end
+    if level then frame:SetFrameLevel(level) end
 
     if hidden then
         frame:SetAlpha(0)
@@ -425,9 +416,7 @@ function F.CreateAnimationFrame(name, parent, strata, level, hidden, texture, is
             tex:SetTexCoord(URx, URy, LRx, LRy, ULx, ULy, LLx, LLy)
         end
 
-        if color then
-            tex:SetVertexColor(unpack(color))
-        end
+        if color then tex:SetVertexColor(unpack(color)) end
 
         tex:SetAllPoints()
         frame.texture = tex
@@ -437,10 +426,10 @@ function F.CreateAnimationFrame(name, parent, strata, level, hidden, texture, is
 end
 
 --[[
-	创建动画组
-	@param {object} parent 父窗体
-	@param {string} [name] 动画组名
-	@returns object 生成的动画组
+    创建动画组
+    @param {object} parent 父窗体
+    @param {string} [name] 动画组名
+    @returns object 生成的动画组
 ]]
 function F.CreateAnimationGroup(frame, name)
     if not frame then
@@ -457,14 +446,12 @@ function F.CreateAnimationGroup(frame, name)
 end
 
 --[[
-	添加移动动画
-	@param {object} animationGroup 从属动画组
-	@param {string} name 动画索引名
+    添加移动动画
+    @param {object} animationGroup 从属动画组
+    @param {string} name 动画索引名
 ]]
 function F.AddTranslation(animationGroup, name)
-    if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
-        return
-    end
+    if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then return end
     if not name then
         F:DebugMessage('动画', '[1]动画名缺失')
         return
@@ -476,9 +463,9 @@ function F.AddTranslation(animationGroup, name)
 end
 
 --[[
-	添加渐入动画
-	@param {object} animationGroup 从属动画组
-	@param {string} name 动画索引名
+    添加渐入动画
+    @param {object} animationGroup 从属动画组
+    @param {string} name 动画索引名
 ]]
 function F.AddFadeIn(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
@@ -500,9 +487,9 @@ function F.AddFadeIn(animationGroup, name)
 end
 
 --[[
-	添加渐隐动画
-	@param {object} animationGroup 从属动画组
-	@param {string} name 动画索引名
+    添加渐隐动画
+    @param {object} animationGroup 从属动画组
+    @param {string} name 动画索引名
 ]]
 function F.AddFadeOut(animationGroup, name)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
@@ -524,11 +511,11 @@ function F.AddFadeOut(animationGroup, name)
 end
 
 --[[
-	添加缩放动画
-	@param {object} animationGroup 从属动画组
-	@param {string} name 动画索引名
-	@param {number[2]} fromScale 原尺寸 x, y
-	@param {number[2]} toScale 动画后尺寸 x, y
+    添加缩放动画
+    @param {object} animationGroup 从属动画组
+    @param {string} name 动画索引名
+    @param {number[2]} fromScale 原尺寸 x, y
+    @param {number[2]} toScale 动画后尺寸 x, y
 ]]
 function F.AddScale(animationGroup, name, fromScale, toScale)
     if not (animationGroup and animationGroup:IsObjectType('AnimationGroup')) then
@@ -559,9 +546,9 @@ function F.AddScale(animationGroup, name, fromScale, toScale)
 end
 
 --[[
-	设定动画随显示属性而播放
-	@param {object} frame 动画窗体
-	@param {object} animationGroup 动画组
+    设定动画随显示属性而播放
+    @param {object} frame 动画窗体
+    @param {object} animationGroup 动画组
 ]]
 function F.PlayAnimationOnShow(frame, animationGroup)
     if not animationGroup or type(animationGroup) == 'string' then
@@ -579,10 +566,10 @@ function F.PlayAnimationOnShow(frame, animationGroup)
 end
 
 --[[
-	设定动画随显示属性而播放
-	@param {object} frame 动画窗体
-	@param {object} animationGroup 动画组
-	@param {function} [callback] 结束时的回调
+    设定动画随显示属性而播放
+    @param {object} frame 动画窗体
+    @param {object} animationGroup 动画组
+    @param {function} [callback] 结束时的回调
 ]]
 function F.CloseAnimationOnHide(frame, animationGroup, callback)
     if not animationGroup or type(animationGroup) == 'string' then
@@ -596,16 +583,14 @@ function F.CloseAnimationOnHide(frame, animationGroup, callback)
 
     animationGroup:SetScript('OnFinished', function()
         frame:Hide()
-        if callback then
-            callback()
-        end
+        if callback then callback() end
     end)
 end
 
 --[[
-	调整动画组速度
-	@param {object} animationGroup 动画组
-	@param {number} speed 相较于原速度的倍数
+    调整动画组速度
+    @param {object} animationGroup 动画组
+    @param {number} speed 相较于原速度的倍数
 ]]
 function F.SpeedAnimationGroup(animationGroup, speed)
     if not speed or type(speed) ~= 'number' then
