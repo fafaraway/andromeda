@@ -14,7 +14,7 @@ local ActionBarButtonEventsFrameMixin = ActionBarButtonEventsFrameMixin
 local F, C = unpack(select(2, ...))
 local COOLDOWN = F.COOLDOWN
 
-local FONT_SIZE = 20
+local FONT_SIZE = 26
 local MIN_DURATION = 2.5
 local MIN_SCALE = 0.5
 local ICON_SIZE = 36
@@ -40,7 +40,7 @@ function COOLDOWN:OnSizeChanged(width, height)
     if fontScale < MIN_SCALE then
         self:Hide()
     else
-        self.text:SetFont(C.Assets.Fonts.Bold, fontScale * FONT_SIZE, 'OUTLINE')
+        self.text:SetFont(C.Assets.Fonts.Square, fontScale * FONT_SIZE, 'OUTLINE')
         self.text:SetShadowColor(0, 0, 0, 1)
 
         if self.enabled then
