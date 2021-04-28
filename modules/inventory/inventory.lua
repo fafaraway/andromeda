@@ -196,7 +196,7 @@ function INVENTORY:CreateRestoreButton(f)
         f.reagent:SetPoint('BOTTOMLEFT', f.bank)
         PlaySound(SOUNDKIT_IG_MINIMAP_OPEN)
     end)
-    bu.title = L['INVENTORY_ANCHOR_RESET']
+    bu.title = L['Reset position']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -269,7 +269,7 @@ function INVENTORY:CreateDepositButton()
         end
     end)
     bu.title = REAGENTBANK_DEPOSIT
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_AUTO_DEPOSIT'], 'BLUE')
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto deposit'], 'BLUE')
     updateDepositButtonStatus(bu)
     return bu
 end
@@ -288,7 +288,7 @@ function INVENTORY:CreateBagToggle()
         end
     end)
 
-    bu.title = L['INVENTORY_BAGS']
+    bu.title = L['Toggle bags bar']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -299,7 +299,7 @@ function INVENTORY:CreateSortButton(name)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
     bu:SetScript('OnClick', function()
         if C.DB.inventory.sort_mode == 3 then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['INVENTORY_SORT_DISABLED'])
+            _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Inventory sort disabled!'])
             return
         end
 
@@ -322,7 +322,7 @@ function INVENTORY:CreateSortButton(name)
             end
         end
     end)
-    bu.title = L['INVENTORY_SORT']
+    bu.title = L['Inventory sort']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -331,12 +331,12 @@ end
 local function updateRepairButtonStatus(bu)
     if C.DB.inventory.auto_repair then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-        bu.text = L['INVENTORY_AUTO_REPAIR_TIP']
-        bu.title = L['INVENTORY_AUTO_REPAIR'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
+        bu.text = L['Auto repair enabled']
+        bu.title = L['Auto repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
         bu.text = nil
-        bu.title = L['INVENTORY_AUTO_REPAIR'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
     end
 end
 
@@ -349,8 +349,8 @@ function INVENTORY:CreateRepairButton()
         self:GetScript('OnEnter')(self)
     end)
 
-    bu.title = L['INVENTORY_AUTO_REPAIR']
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_AUTO_REPAIR_TIP'], 'BLUE')
+    bu.title = L['Auto repair']
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto repair enabled'], 'BLUE')
     updateRepairButtonStatus(bu)
     return bu
 end
@@ -358,12 +358,12 @@ end
 local function updateSellButtonStatus(bu)
     if C.DB.inventory.auto_sell_junk then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-        bu.text = L['INVENTORY_SELL_JUNK_TIP']
-        bu.title = L['INVENTORY_SELL_JUNK'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
+        bu.text = L['Auto sell junk enabled']
+        bu.title = L['Auto sell junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
         bu.text = nil
-        bu.title = L['INVENTORY_SELL_JUNK'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto sell junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
     end
 end
 
@@ -376,8 +376,8 @@ function INVENTORY:CreateSellButton()
         self:GetScript('OnEnter')(self)
     end)
 
-    bu.title = L['INVENTORY_SELL_JUNK']
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['INVENTORY_SELL_JUNK_TIP'], 'BLUE')
+    bu.title = L['Auto sell junk']
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto sell junk enabled'], 'BLUE')
     updateSellButtonStatus(bu)
     return bu
 end
@@ -386,7 +386,7 @@ function INVENTORY:CreateSearchButton()
     local bu = F.CreateButton(self, 16, 16, true, icons.search)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
 
-    bu.title = L['INVENTORY_SEARCH']
+    bu.title = L['Search']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     local searchBar = self:SpawnPlugin('SearchBar', bu)
@@ -395,7 +395,7 @@ function INVENTORY:CreateSearchButton()
     searchBar:SetPoint('RIGHT', bu, 'RIGHT', -6, 0)
     searchBar:SetSize(80, 26)
     searchBar:DisableDrawLayer('BACKGROUND')
-    F.AddTooltip(searchBar, 'ANCHOR_TOP', L['INVENTORY_SEARCH_ENABLED'], 'info')
+    F.AddTooltip(searchBar, 'ANCHOR_TOP', L['Type item name to search'], 'BLUE')
 
     local bg = F.CreateBDFrame(searchBar, 0, true)
     bg:SetPoint('TOPLEFT', -5, -5)
@@ -472,7 +472,7 @@ function INVENTORY:CreateFreeSlots()
 
     slot:SetScript('OnMouseUp', INVENTORY.FreeSlotOnDrop)
     slot:SetScript('OnReceiveDrag', INVENTORY.FreeSlotOnDrop)
-    F.AddTooltip(slot, 'ANCHOR_RIGHT', L['INVENTORY_FREE_SLOTS'])
+    F.AddTooltip(slot, 'ANCHOR_RIGHT', L['Free slots'])
     slot.__name = name
 
     local tag = self:SpawnPlugin('TagDisplay', '[space]', slot)
@@ -499,12 +499,12 @@ local function saveSplitCount(self)
 end
 
 function INVENTORY:CreateSplitButton()
-    local enabledText = C.BlueColor .. L['INVENTORY_SPLIT_MODE_ENABLED']
+    local enabledText = C.BlueColor .. L['Quick split enabled']
 
     local splitFrame = CreateFrame('Frame', nil, self)
     splitFrame:SetSize(100, 50)
     splitFrame:SetPoint('TOPRIGHT', self, 'TOPLEFT', -5, 0)
-    F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['INVENTORY_SPLIT_COUNT'], 'YELLOW',
+    F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['Split count'], 'YELLOW',
                'THICK', 'TOP', 1, -5)
     F.SetBD(splitFrame)
     splitFrame:Hide()
@@ -535,7 +535,7 @@ function INVENTORY:CreateSplitButton()
         self:GetScript('OnEnter')(self)
     end)
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['INVENTORY_QUICK_SPLIT']
+    bu.title = L['Quick split']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[1] = bu
@@ -563,7 +563,7 @@ end
 
 local favouriteEnable
 function INVENTORY:CreateFavouriteButton()
-    local enabledText = C.BlueColor .. L['INVENTORY_PICK_FAVOURITE_ENABLED']
+    local enabledText = C.BlueColor .. L['Mark favourite enabled']
 
     local bu = F.CreateButton(self, 16, 16, true, icons.favourite)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -585,7 +585,7 @@ function INVENTORY:CreateFavouriteButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['INVENTORY_PICK_FAVOURITE']
+    bu.title = L['Mark favourite']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[2] = bu
@@ -625,7 +625,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
-    local enabledText = C.RedColor .. L['INVENTORY_MARK_JUNK_ENABLED']
+    local enabledText = C.RedColor .. L['Mark junk enabled']
 
     local bu = F.CreateButton(self, 16, 16, true, icons.junk)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -653,7 +653,7 @@ function INVENTORY:CreateCustomJunkButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['INVENTORY_MARK_JUNK']
+    bu.title = L['Mark junk']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[3] = bu
@@ -681,7 +681,7 @@ end
 
 local deleteEnable
 function INVENTORY:CreateDeleteButton()
-    local enabledText = C.RedColor .. L['INVENTORY_QUICK_DELETE_ENABLED']
+    local enabledText = C.RedColor .. L['Quick delete enabled']
 
     local bu = F.CreateButton(self, 16, 16, true, icons.delete)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -704,7 +704,7 @@ function INVENTORY:CreateDeleteButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['INVENTORY_QUICK_DELETE']
+    bu.title = L['Quick delete']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[4] = bu
@@ -1185,7 +1185,7 @@ function INVENTORY:OnLogin()
 
         local label
         if strmatch(name, 'AzeriteItem$') then
-            label = L['INVENTORY_AZERITEARMOR']
+            label = L['Azerite armor']
         elseif strmatch(name, 'Equipment$') then
             label = BAG_FILTER_EQUIPMENT
         elseif strmatch(name, 'EquipSet$') then
