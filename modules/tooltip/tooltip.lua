@@ -22,8 +22,8 @@ local C_PetBattles_GetNumAuras, C_PetBattles_GetAuraInfo = C_PetBattles.GetNumAu
 local targetTable = {}
 local classification = {
 	elite = ' |cffcc8800' .. ELITE .. '|r',
-	rare = ' |cffff99cc' .. L['TOOLTIP_RARE'] .. '|r',
-	rareelite = ' |cffff99cc' .. L['TOOLTIP_RARE'] .. '|r ' .. '|cffcc8800' .. ELITE .. '|r',
+	rare = ' |cffff99cc' .. L['Rare'] .. '|r',
+	rareelite = ' |cffff99cc' .. L['Rare'] .. '|r ' .. '|cffcc8800' .. ELITE .. '|r',
 	worldboss = ' |cffff0000' .. BOSS .. '|r'
 }
 
@@ -310,7 +310,7 @@ function TOOLTIP:ScanTargets()
 	end
 
 	if #targetTable > 0 then
-		GameTooltip:AddLine(L['TOOLTIP_TARGETED'] .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. tconcat(targetTable, ', '), nil, nil, nil, 1)
+		GameTooltip:AddLine(L['TargetedBy'] .. ': ' .. C.InfoColor .. '(' .. #targetTable .. ')|r ' .. tconcat(targetTable, ', '), nil, nil, nil, 1)
 	end
 end
 
@@ -335,7 +335,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 		self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
 	else
 		if not mover then
-			mover = F.Mover(self, L['TOOLTIP_MOVER'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, 260}, 240, 120)
+			mover = F.Mover(self, L['Tooltip'], 'GameTooltip', {'BOTTOMRIGHT', UIParent, 'BOTTOMRIGHT', -C.UIGap, 260}, 240, 120)
 		end
 		self:SetOwner(parent, 'ANCHOR_NONE')
 		self:ClearAllPoints()
@@ -509,7 +509,6 @@ function TOOLTIP:OnLogin()
 	TOOLTIP:LinkHover()
 	TOOLTIP:ExtraInfo()
 	TOOLTIP:TargetedInfo()
-	TOOLTIP:AzeriteArmor()
 	TOOLTIP:ConduitCollectionData()
 end
 

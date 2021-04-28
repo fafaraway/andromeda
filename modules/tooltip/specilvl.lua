@@ -11,7 +11,7 @@ local GetSpecialization, GetSpecializationInfo, GetInspectSpecialization, GetSpe
 local HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM = HEIRLOOMS, LE_ITEM_QUALITY_ARTIFACT, LE_ITEM_QUALITY_HEIRLOOM
 
 local specPrefix = SPECIALIZATION..': '..C.InfoColor
-local levelPrefix = L['TOOLTIP_ILVL']..': '..C.InfoColor
+local levelPrefix = L['iLvl']..': '..C.InfoColor
 local isPending = LFG_LIST_LOADING
 local resetTime, frequency = 900, .5
 local cache, weapon, currentUNIT, currentGUID = {}, {}

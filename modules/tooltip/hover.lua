@@ -55,7 +55,7 @@ function TOOLTIP:HyperLink_SetJournal(link)
 		local info = TOOLTIP:HyperLink_GetSectionInfo(id)
 		name, description, icon = info.title, info.description, info.abilityIcon
 		name = icon and '|T'..icon..':20:20:0:0:64:64:5:59:5:59:20|t '..name or name
-		idString = L['TOOLTIP_SECTION']..'ID:'
+		idString = L['Section']..'ID:'
 	end
 	if not name then return end
 

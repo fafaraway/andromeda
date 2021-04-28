@@ -68,12 +68,9 @@ function TOOLTIP:AddLineForID(id, linkType, noadd)
 			self:AddDoubleLine(BAGSLOT .. ':', C.BlueColor .. bagCount)
 		end
 		if itemStackCount and itemStackCount > 1 then
-			self:AddDoubleLine(L['TOOLTIP_STACK_CAP'] .. ':', C.BlueColor .. itemStackCount)
+			self:AddDoubleLine(L['Stack'] .. ':', C.BlueColor .. itemStackCount)
 		end
 
-		-- if itemSellPrice and itemSellPrice ~= 0 then
-		-- 	self:AddDoubleLine(L['TOOLTIP_SELL_PRICE'] .. ':', C.WhiteColor .. GetMoneyString(itemSellPrice))
-		-- end
 	end
 
 	--self:AddDoubleLine(linkType, format('%s', C.WhiteColor .. id))
@@ -119,7 +116,7 @@ function TOOLTIP:UpdateSpellCaster(...)
 	if unitCaster then
 		local name = GetUnitName(unitCaster, true)
 		local hexColor = F:RGBToHex(F:UnitColor(unitCaster))
-		self:AddDoubleLine(L['TOOLTIP_AURA_FROM'] .. ':', hexColor .. name)
+		self:AddDoubleLine(L['CastBy'] .. ':', hexColor .. name)
 		self:Show()
 	end
 end
