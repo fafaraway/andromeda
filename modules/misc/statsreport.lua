@@ -24,8 +24,24 @@ local GetMeleeHaste = GetMeleeHaste
 local GetMasteryEffect = GetMasteryEffect
 local GetCombatRatingBonus = GetCombatRatingBonus
 local GetVersatilityBonus = GetVersatilityBonus
+local CLASS = CLASS
+local CLUB_FINDER_SPEC = CLUB_FINDER_SPEC
+local ITEM_UPGRADE_STAT_AVERAGE_ITEM_LEVEL = ITEM_UPGRADE_STAT_AVERAGE_ITEM_LEVEL
+local PET_BATTLE_STAT_HEALTH = PET_BATTLE_STAT_HEALTH
+local PRIMARY_STAT1_TOOLTIP_NAME = PRIMARY_STAT1_TOOLTIP_NAME
+local PRIMARY_STAT2_TOOLTIP_NAME = PRIMARY_STAT2_TOOLTIP_NAME
+local PRIMARY_STAT4_TOOLTIP_NAME = PRIMARY_STAT4_TOOLTIP_NAME
+local PRIMARY_STAT3_TOOLTIP_NAME = PRIMARY_STAT3_TOOLTIP_NAME
+local STAT_ARMOR = STAT_ARMOR
+local STAT_DODGE = STAT_DODGE
+local STAT_PARRY = STAT_PARRY
+local STAT_BLOCK = STAT_BLOCK
+local STAT_CRITICAL_STRIKE = STAT_CRITICAL_STRIKE
+local STAT_HASTE = STAT_HASTE
+local STAT_MASTERY = STAT_MASTERY
+local STAT_VERSATILITY = STAT_VERSATILITY
 
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local SR = F:RegisterModule('StatsReport')
 
 local function GetSpec()
@@ -53,15 +69,16 @@ end
 
 local function GenerateBasicInfo()
     local basicStats = ''
-    basicStats = basicStats .. ('StatsReport: |n')
-    basicStats = basicStats .. ('Class: %s|n'):format(UnitClass('player'))
-    basicStats = basicStats .. ('Specialization: %s|n'):format(GetSpec())
-    basicStats = basicStats .. ('ItemLevel: %.1f / %.1f|n'):format(GetAverageItemLevel())
-    basicStats = basicStats .. ('Health: %s'):format(UnitHealthMax('player'))
+    basicStats = basicStats .. (L['Stats report'] .. '|n')
+    basicStats = basicStats .. (CLASS .. ': %s '):format(UnitClass('player'))
+    basicStats = basicStats .. (CLUB_FINDER_SPEC .. ': %s'):format(GetSpec())
+    basicStats = basicStats .. ('|n' .. ITEM_UPGRADE_STAT_AVERAGE_ITEM_LEVEL .. ': %.1f / %.1f'):format(GetAverageItemLevel())
 
     if C_Covenants_GetActiveCovenantID() ~= 0 then
-        basicStats = basicStats .. ('|nCovenant: %s SoulBinds: %s'):format(GetCovenant(), GetSoulBind())
+        basicStats = basicStats .. ('|n' .. L['Covenant: %s Soulbinds: %s']):format(GetCovenant(), GetSoulBind())
     end
+
+    basicStats = basicStats .. ('|n' .. PET_BATTLE_STAT_HEALTH .. ': %s '):format(UnitHealthMax('player'))
 
     return basicStats
 end
@@ -88,20 +105,20 @@ local function GenerateDpsInfo()
     local _, className = UnitClass('player')
     local classSpecArr = specAttr[className]
 
-    dpsStats[1] = ('strength: %s '):format(UnitStat('player', 1))
-    dpsStats[2] = ('Agility: %s '):format(UnitStat('player', 2))
-    dpsStats[3] = ('intellect: %s '):format(UnitStat('player', 4))
+    dpsStats[1] = (PRIMARY_STAT1_TOOLTIP_NAME .. ': %s '):format(UnitStat('player', 1))
+    dpsStats[2] = (PRIMARY_STAT2_TOOLTIP_NAME .. ': %s '):format(UnitStat('player', 2))
+    dpsStats[3] = (PRIMARY_STAT4_TOOLTIP_NAME .. ': %s '):format(UnitStat('player', 4))
 
     return dpsStats[classSpecArr[specId]]
 end
 
 local function GenerateTankInfo()
     local tankStats = ''
-    tankStats = tankStats .. ('stamina: %s '):format(UnitStat('player', 3))
-    tankStats = tankStats .. ('Armor: %s '):format(select(3, UnitArmor('player')))
-    tankStats = tankStats .. ('Dodge: %.0f%% '):format(GetDodgeChance())
-    tankStats = tankStats .. ('Parry: %.0f%% '):format(GetParryChance())
-    tankStats = tankStats .. ('Block: %.0f%% '):format(GetBlockChance())
+    tankStats = tankStats .. (PRIMARY_STAT3_TOOLTIP_NAME .. ': %s '):format(UnitStat('player', 3))
+    tankStats = tankStats .. (STAT_ARMOR .. ': %s '):format(select(3, UnitArmor('player')))
+    tankStats = tankStats .. (STAT_DODGE .. ': %.0f%% '):format(GetDodgeChance())
+    tankStats = tankStats .. (STAT_PARRY .. ': %.0f%% '):format(GetParryChance())
+    tankStats = tankStats .. (STAT_BLOCK .. ': %.0f%% '):format(GetBlockChance())
     return tankStats
 end
 
@@ -117,10 +134,10 @@ local function GenerateExtraInfo()
     local cvdd = _G.CR_VERSATILITY_DAMAGE_DONE
     local extraStats = ''
 
-    extraStats = extraStats .. ('Crit: %.0f%% '):format(GetCritChance())
-    extraStats = extraStats .. ('Haste: %.0f%% '):format(GetMeleeHaste())
-    extraStats = extraStats .. ('Mastery: %.0f%% '):format(GetMasteryEffect())
-    extraStats = extraStats .. ('Versatility: %.0f%% '):format(GetCombatRatingBonus(cvdd) + GetVersatilityBonus(cvdd))
+    extraStats = extraStats .. (STAT_CRITICAL_STRIKE .. ': %.0f%% '):format(GetCritChance())
+    extraStats = extraStats .. (STAT_HASTE .. ': %.0f%% '):format(GetMeleeHaste())
+    extraStats = extraStats .. (STAT_MASTERY .. ': %.0f%% '):format(GetMasteryEffect())
+    extraStats = extraStats .. (STAT_VERSATILITY .. ': %.0f%% '):format(GetCombatRatingBonus(cvdd) + GetVersatilityBonus(cvdd))
 
     return extraStats
 end
@@ -133,11 +150,11 @@ function SR:GenerateStatsInfo()
     local myStats = ''
 
     if C.MyRole == 'Healer' then
-        myStats = myStats .. '|n' .. GenerateBasicInfo() .. '|n' .. GenerateDpsInfo() .. '|n' .. GenerateHealerInfo() .. '|n' .. GenerateExtraInfo()
+        myStats = myStats .. GenerateBasicInfo() .. GenerateDpsInfo() .. GenerateHealerInfo() .. GenerateExtraInfo()
     elseif C.MyRole == 'Tank' then
-        myStats = myStats .. '|n' .. GenerateBasicInfo() .. '|n' .. GenerateDpsInfo() .. '|n' .. GenerateTankInfo() .. '|n' .. GenerateExtraInfo()
+        myStats = myStats .. GenerateBasicInfo() .. GenerateDpsInfo() .. GenerateTankInfo() .. GenerateExtraInfo()
     else
-        myStats = myStats .. '|n' .. GenerateBasicInfo() .. '|n' .. GenerateDpsInfo() .. '|n' .. GenerateExtraInfo()
+        myStats = myStats .. GenerateBasicInfo() .. GenerateDpsInfo() .. GenerateExtraInfo()
     end
 
     return myStats

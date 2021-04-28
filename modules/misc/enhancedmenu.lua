@@ -39,10 +39,8 @@ local YES = YES
 local NO = NO
 local CHAT_GUILD_INVITE_SEND = CHAT_GUILD_INVITE_SEND
 
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local EM = F:RegisterModule('EnhancedMenu')
-
-local LLL = F.Libs.ACL:GetLocale('FreeUI')
 local LRI = F.Libs.LRI
 
 local EnhancedMenu_Func = {}
@@ -57,12 +55,12 @@ local EnhancedMenu_ItemOrder = {
 }
 
 local EnhancedMenu_Items = {
-    ['ENHANCED_MENU'] = {text = LLL['Enhanced Menu'], isTitle = true, notCheckable = 1},
-    ['GUILD_INVITE'] = {text = LLL['Guild Invite'], notCheckable = 1},
-    ['COPY_NAME'] = {text = LLL['Copy Name'], notCheckable = 1},
-    ['SEND_WHO'] = {text = LLL['Who'], notCheckable = 1},
-    ['ARMORY_URL'] = {text = LLL['Armory'], notCheckable = 1},
-    ['RAIDER_IO'] = {text = LLL['Raider.IO'], notCheckable = 1},
+    ['ENHANCED_MENU'] = {text = L['Enhanced Menu'], isTitle = true, notCheckable = 1},
+    ['GUILD_INVITE'] = {text = L['Guild Invite'], notCheckable = 1},
+    ['COPY_NAME'] = {text = L['Copy Name'], notCheckable = 1},
+    ['SEND_WHO'] = {text = L['Who'], notCheckable = 1},
+    ['ARMORY_URL'] = {text = L['Armory'], notCheckable = 1},
+    ['RAIDER_IO'] = {text = L['Raider.IO'], notCheckable = 1},
 }
 
 EnhancedMenu_Which['GUILD_INVITE'] = {

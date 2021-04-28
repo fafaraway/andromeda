@@ -40,9 +40,8 @@ SpellBinder:SetWidth(300)
 local header = CreateFrame('Frame', nil, SpellBinder)
 header:SetSize(260, 20)
 header:SetPoint('TOP')
-header.text = F.CreateFS(header, C.Assets.Fonts.Regular, 14, true, L.UNITFRAME.BINDER_TITLE,
-                         'SYSTEM', nil, 'TOP', 0, -10)
-header.tip = L.UNITFRAME.BINDER_TIP
+header.text = F.CreateFS(header, C.Assets.Fonts.Regular, 14, true, L['Configure Spell Binding'],
+                         'YELLOW', nil, 'TOP', 0, -10)
 F.AddTooltip(header, 'ANCHOR_TOP', header.tip, 'BLUE')
 
 SpellBinder:Hide()
@@ -341,7 +340,8 @@ function UNITFRAME:ClickCast()
         self:SetScript('OnEnter', function()
             _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
             _G.GameTooltip:ClearLines()
-            _G.GameTooltip:AddLine(L.UNITFRAME.BINDER_OPEN, .6, .8, 1, 1)
+            _G.GameTooltip:AddLine(L['Click to cast'], 1, .8, 0, 1)
+            _G.GameTooltip:AddLine(L['Click to cast tip'], .6, .8, 1, 1)
             _G.GameTooltip:Show()
         end)
         self:SetScript('OnLeave', function()
@@ -391,7 +391,7 @@ function UNITFRAME:ClickCast()
         end
     end)
 
-    DB = _G.FREE_SPELLBINDING
+    DB = _G.FREE_DB.SpellBinding
     DB.spells = DB.spells or {}
     DB.keys = DB.keys or {}
     SpellBinder.frames = SpellBinder.frames or {}

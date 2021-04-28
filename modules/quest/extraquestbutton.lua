@@ -233,7 +233,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
         if _G.FreeUI_ActionBarExtra then
             self:SetPoint('CENTER', _G.FreeUI_ActionBarExtra)
         else
-            F.Mover(self, L.MOVER.QUEST_ITEM_BUTTON, 'QuestButton',
+            F.Mover(self, L['Quest Item Button'], 'QuestButton',
                     {'CENTER', _G.UIParent, 'CENTER', 0, 300})
         end
     end

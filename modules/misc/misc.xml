@@ -8,6 +8,7 @@
     <Script file="dragemall.lua"/>
     <Script file="grouptool.lua"/>
     <Script file="itemlevel.lua"/>
+    <Script file="logo.lua"/>
     <Script file="movieskip.lua"/>
     <Script file="proposaltimer.lua"/>
     <Script file="statsreport.lua"/>

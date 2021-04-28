@@ -19,7 +19,7 @@ local BLIZZARD = F.BLIZZARD
 function BLIZZARD:ObjectiveTrackerMover()
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)
     frame:SetSize(240, 50)
-    F.Mover(frame, L.MOVER.OBJECTIVE_TRACKER, 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UIGap, -60})
+    F.Mover(frame, L['Objective Tracker'], 'QuestTracker', {'TOPRIGHT', _G.UIParent, 'TOPRIGHT', -C.UIGap, -60})
 
     local tracker = _G.ObjectiveTrackerFrame
     tracker:ClearAllPoints()

@@ -31,7 +31,7 @@ local function ConstructFrame()
     frame:SetFrameStrata('HIGH')
     F.CreateMF(frame)
     F.SetBD(frame)
-    F.CreateFS(frame, C.Assets.Fonts.Bold, 18, nil, L.NOTIFICATION.INCOMPATIBLE_ADDON, 'RED', true, 'TOPLEFT', 10, -10)
+    F.CreateFS(frame, C.Assets.Fonts.Bold, 18, nil, L['Incompatible AddOns:'], 'RED', true, 'TOPLEFT', 10, -10)
 
     local offset = 0
     for _, addon in pairs(IncompatibleList) do
@@ -46,7 +46,7 @@ local function ConstructFrame()
         frame:Hide()
     end)
 
-    local disable = F.CreateButton(frame, 150, 25, L.NOTIFICATION.DISABLE_ALL)
+    local disable = F.CreateButton(frame, 150, 25, L['Disable Incompatible Addons'])
     disable:SetPoint('BOTTOM', 0, 10)
     disable.text:SetTextColor(1, .8, 0)
     disable:SetScript('OnClick', function()

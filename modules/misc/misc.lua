@@ -305,7 +305,7 @@ function MISC:MawWidgetFrame()
     F:SmoothBar(bar)
     MISC.MawBar = bar
 
-    F.Mover(bar, L.MOVER.MAW_THREAT_BAR, 'MawThreatBar', {'TOP', _G.UIParent, 0, -80})
+    F.Mover(bar, L['Maw Threat Bar'], 'MawThreatBar', {'TOP', _G.UIParent, 0, -80})
 
     bar:SetScript('OnEnter', function(self)
         local rank = GetMawBarValue()

@@ -71,13 +71,14 @@ local function CreateCheckBox()
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(-5, -5, -5, -5)
     F.ReskinCheck(bu, true)
-    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L.QUEST.AUTOMATION, 'YELLOW', true,
+    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['Automation'], 'YELLOW', true,
                          'LEFT', 22, 0)
     bu:SetChecked(C.DB.Quest.Automation)
     bu:SetScript('OnClick', function(self)
         C.DB.Quest.Automation = self:GetChecked()
     end)
-    F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L.QUEST.AUTOMATION_TIP, 'BLUE')
+    bu.title = L['Automation']
+    F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['|nAutomatically accept and deliver quests.|nHold SHIFT key to STOP automation.'], 'BLUE')
 
     created = true
 end

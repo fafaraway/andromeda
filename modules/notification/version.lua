@@ -51,7 +51,7 @@ function NOTIFICATION:VersionCheck_Init()
         local status = NOTIFICATION:VersionCheck_Compare(_G.FREE_ADB.DetectVersion, C.AddonVersion)
         if status == 'IsNew' then
             local release = gsub(_G.FREE_ADB.DetectVersion, '(%d+)$', '0')
-            NOTIFICATION:VersionCheck_Create(format(L.NOTIFICATION.VERSION_EXPIRED, release))
+            NOTIFICATION:VersionCheck_Create(format(L['Addon has been out of date, the latest release is |cffff0000%s|r.'], release))
         elseif status == 'IsOld' then
             _G.FREE_ADB.DetectVersion = C.AddonVersion
         end

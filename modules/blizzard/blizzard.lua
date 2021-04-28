@@ -34,7 +34,6 @@ function BLIZZARD:OnLogin()
     self:ToggleBossEmote()
 
     self:TradeTargetInfo()
-    self:EasyDelete()
     self:TicketStatusMover()
     self:VehicleIndicatorMover()
     self:DurabilityFrameMover()
@@ -84,16 +83,20 @@ function BLIZZARD:TradeTargetInfo()
     hooksecurefunc('TradeFrame_Update', updateColor)
 end
 
-function BLIZZARD:EasyDelete()
-    hooksecurefunc(_G.StaticPopupDialogs['DELETE_GOOD_ITEM'], 'OnShow', function(self)
-        self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
-    end)
+
+do
+    local deleteDialog = _G.StaticPopupDialogs['DELETE_GOOD_ITEM']
+    if deleteDialog.OnShow then
+        hooksecurefunc(deleteDialog, 'OnShow', function(self)
+            self.editBox:SetText(DELETE_ITEM_CONFIRM_STRING)
+        end)
+    end
 end
 
 function BLIZZARD:VehicleIndicatorMover()
     local frame = CreateFrame('Frame', 'FreeUIVehicleIndicatorMover', _G.UIParent)
     frame:SetSize(100, 100)
-    F.Mover(frame, L.MOVER.VEHICLE_INDICATOR, 'VehicleIndicator', {'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0})
+    F.Mover(frame, L['Vehicle Indicator'], 'VehicleIndicator', {'BOTTOMRIGHT', _G.Minimap, 'TOPRIGHT', 0, 0})
 
     hooksecurefunc(VehicleSeatIndicator, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
@@ -107,7 +110,7 @@ end
 function BLIZZARD:DurabilityFrameMover()
     local frame = CreateFrame('Frame', 'FreeUIDurabilityFrameMover', _G.UIParent)
     frame:SetSize(100, 100)
-    F.Mover(frame, L.MOVER.DURABILITY_FRAME, 'DurabilityFrame', {'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
+    F.Mover(frame, L['Durability Indicator'], 'DurabilityFrame', {'TOPRIGHT', _G.ObjectiveTrackerFrame, 'TOPLEFT', -10, 0})
 
     hooksecurefunc(_G.DurabilityFrame, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
@@ -130,7 +133,7 @@ end
 function BLIZZARD:UIWidgetMover()
     local frame = CreateFrame('Frame', 'FreeUI_UIWidgetMover', _G.UIParent)
     frame:SetSize(200, 50)
-    F.Mover(frame, L.MOVER.UI_WIDGET, 'UIWidgetFrame', {'TOP', 0, -80})
+    F.Mover(frame, L['Widget Frame'], 'UIWidgetFrame', {'TOP', 0, -80})
 
     hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, 'SetPoint', function(self, _, parent)
         if parent == 'MinimapCluster' or parent == _G.MinimapCluster then
