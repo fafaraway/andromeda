@@ -47,9 +47,9 @@ local ACCEPT = ACCEPT
 local CANCEL = CANCEL
 
 local F, C, L = unpack(select(2, ...))
-local INSTALL = F.INSTALL
+local INSTALL = F.Modules.Tutorial
 local ACTIONBAR = F.ACTIONBAR
-local LLL = F.Libs.ACL:GetLocale('FreeUI')
+
 
 _G.SlashCmdList.RELOADUI = function()
     ReloadUI()
@@ -111,7 +111,7 @@ _G.SlashCmdList.DISABLE_ADDON = function(addon)
         DisableAddOn(addon)
         ReloadUI()
     else
-        print('|cffffff00' .. LLL['addon'] .. '\'' .. addon .. '\'' .. LLL['not found'] .. '|r')
+        print('|cffffff00' .. L['Addon'] .. '\'' .. addon .. '\'' .. L['not found'] .. '|r')
     end
 end
 _G.SLASH_DISABLE_ADDON1 = '/dis'
@@ -124,7 +124,7 @@ _G.SlashCmdList.ENABLE_ADDON = function(addon)
         LoadAddOn(addon)
         ReloadUI()
     else
-        print('|cffffff00' .. LLL['addon'] .. '\'' .. addon .. '\'' .. LLL['not found'] .. '|r')
+        print('|cffffff00' .. L['Addon'] .. ' \'' .. addon .. '\' ' .. L['not found'] .. '|r')
     end
 end
 _G.SLASH_ENABLE_ADDON1 = '/en'
@@ -149,7 +149,7 @@ local function DisbandRaidGroup()
         return
     end
     if UnitInRaid('player') then
-        SendChatMessage(LLL['Disbanding group'], 'RAID')
+        SendChatMessage(L['Disbanding group'] .. ' ...', 'RAID')
         for i = 1, GetNumGroupMembers() do
             local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
             if online and name ~= C.MyName then
@@ -157,7 +157,7 @@ local function DisbandRaidGroup()
             end
         end
     else
-        SendChatMessage(LLL['Disbanding group'], 'PARTY')
+        SendChatMessage(L['Disbanding group'] .. ' ...', 'PARTY')
         for i = _G.MAX_PARTY_MEMBERS, 1, -1 do
             if GetNumGroupMembers(i) then
                 UninviteUnit(UnitName('party' .. i))
@@ -168,7 +168,7 @@ local function DisbandRaidGroup()
 end
 
 _G.StaticPopupDialogs.DISBAND_RAID = {
-    text = LLL['Are you sure you want to disband the group?'],
+    text = L['Are you sure you want to disband the group?'],
     button1 = ACCEPT,
     button2 = CANCEL,
     OnAccept = DisbandRaidGroup,

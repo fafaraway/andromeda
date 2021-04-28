@@ -22,7 +22,7 @@ local CANCEL = CANCEL
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
 local F, C, L = unpack(select(2, ...))
-local MOVER = F.MOVER
+local MOVER = F.Modules.Layout
 
 -- Grids
 local toggle = 0
@@ -280,7 +280,7 @@ function MOVER:LockElements()
 end
 
 _G.StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
-    text = L.MOVER.RESET_WARNING,
+    text = L['Are you sure to reset all frame\'s position?'],
     button1 = OKAY,
     button2 = CANCEL,
     OnAccept = function()
@@ -303,9 +303,9 @@ local function CreateConsole()
     f:SetSize(260, 70)
     F.CreateBD(f)
     F.CreateSD(f)
-    F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L.MOVER.TITLE, 'YELLOW', nil, 'TOP', 0, -10)
+    F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L['Layout'], 'YELLOW', nil, 'TOP', 0, -10)
 
-    local bu, text = {}, {LOCK, L.MOVER.GRID, RESET}
+    local bu, text = {}, {LOCK, L['Grids'], RESET}
 
     for i = 1, 3 do
         bu[i] = F.CreateButton(f, 80, 24, text[i])
@@ -342,8 +342,8 @@ local function CreateConsole()
     header:SetSize(260, 30)
     header:SetPoint('TOP')
     F.CreateMF(header, f)
-    local tips = '|nCTRL +' .. C.Assets.mouse_right .. L.MOVER.RESET_ELEMENT .. '|nSHIFT +' .. C.Assets.mouse_right .. L.MOVER.HIDE_ELEMENT
-    header.title = L.MOVER.TITLE
+    local tips = '|nCTRL +' .. C.Assets.mouse_right .. L['Reset default anchor'] .. '|nSHIFT +' .. C.Assets.mouse_right .. L['Hide the frame']
+    header.title = L['Layout']
     F.AddTooltip(header, 'ANCHOR_TOP', tips, 'BLUE')
 
     local frame = CreateFrame('Frame', nil, f, 'BackdropTemplate')
