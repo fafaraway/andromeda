@@ -1360,19 +1360,19 @@ function UNITFRAME:AddCastBar(self)
         else
             if style == 'player' then
                 castbar:SetSize(playerWidth, playerHeight)
-                CreateCastBarMover(castbar, L.MOVER.PLAYER_CASTBAR, 'PlayerCastbar', cbPosition.player)
+                CreateCastBarMover(castbar, L['Player Castbar'], 'PlayerCastbar', cbPosition.player)
 
                 icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
                 icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
             elseif style == 'target' then
                 castbar:SetSize(targetWidth, targetHeight)
-                CreateCastBarMover(castbar, L.MOVER.TARGET_CASTBAR, 'TargetCastbar', cbPosition.target)
+                CreateCastBarMover(castbar, L['Target Castbar'], 'TargetCastbar', cbPosition.target)
 
                 icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
                 icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)
             elseif style == 'focus' then
                 castbar:SetSize(focusWidth, focusHeight)
-                CreateCastBarMover(castbar, L.MOVER.FOCUS_CASTBAR, 'FocusCastbar', cbPosition.focus)
+                CreateCastBarMover(castbar, L['Focus Castbar'], 'FocusCastbar', cbPosition.focus)
 
                 icon:SetSize(castbar:GetHeight() + 8, castbar:GetHeight() + 8)
                 icon:SetPoint('RIGHT', castbar, 'LEFT', -4, 0)

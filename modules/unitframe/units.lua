@@ -15,14 +15,25 @@ local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F.UNITFRAME
 local OUF = F.Libs.oUF
 
-local LLL = F.Libs.ACL:GetLocale('FreeUI')
+local unitsPos = {
+    player = {'CENTER', _G.UIParent, 'CENTER', 0, -180},
+    pet = {'RIGHT', 'oUF_Player', 'LEFT', -6, 0},
+    target = {'LEFT', _G.UIParent, 'CENTER', 120, -140},
+    tot = {'LEFT', 'oUF_Target', 'RIGHT', 6, 0},
+    focus = {'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220},
+    tof = {'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0},
+    boss = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
+    arena = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
+    party = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
+    raid = {'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -44},
+}
 
-local function tagsOnEnter(self)
+local function Player_OnEnter(self)
     self.HealthValue:Show()
     self.PowerValue:Show()
 end
 
-local function tagsOnLeave(self)
+local function Player_OnLeave(self)
     self.HealthValue:Hide()
     self.PowerValue:Hide()
 end
@@ -60,12 +71,10 @@ function UNITFRAME:SpawnPlayer()
     if C.DB.unitframe.player_hide_tags then
         player.HealthValue:Hide()
         player.PowerValue:Hide()
-        player:HookScript('OnEnter', tagsOnEnter)
-        player:HookScript('OnLeave', tagsOnLeave)
+        player:HookScript('OnEnter', Player_OnEnter)
+        player:HookScript('OnLeave', Player_OnLeave)
     end
-    F.Mover(player, LLL['Player Frame'], 'PlayerFrame',
-            {'CENTER', _G.UIParent, 'CENTER', 0, -180}, player:GetWidth(),
-            player:GetHeight())
+    F.Mover(player, L['Player Frame'], 'PlayerFrame', unitsPos.player, player:GetWidth(), player:GetHeight())
 end
 
 local function CreatePetStyle(self)
@@ -87,12 +96,10 @@ function UNITFRAME:SpawnPet()
     OUF:SetActiveStyle 'Pet'
 
     local pet = OUF:Spawn('pet', 'oUF_Pet')
-    F.Mover(pet, L.MOVER.PET, 'PetFrame',
-            {'RIGHT', 'oUF_Player', 'LEFT', -6, 0}, pet:GetWidth(),
-            pet:GetHeight())
+    F.Mover(pet, L['Pet Frame'], 'PetFrame', unitsPos.pet, pet:GetWidth(), pet:GetHeight())
 end
 
-local function targetSound(self, event)
+local function Target_OnEvent(self, event)
     if event == 'PLAYER_TARGET_CHANGED' then
         if UnitExists(self.unit) then
             if UnitIsEnemy(self.unit, 'player') then
@@ -124,9 +131,9 @@ local function CreateTargetStyle(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddRangeCheck(self)
 
-    self:RegisterEvent('PLAYER_TARGET_CHANGED', targetSound)
+    self:RegisterEvent('PLAYER_TARGET_CHANGED', Target_OnEvent)
     self.Health:SetScript('OnShow', function()
-        targetSound(self, 'PLAYER_TARGET_CHANGED')
+        Target_OnEvent(self, 'PLAYER_TARGET_CHANGED')
     end)
 end
 
@@ -135,15 +142,12 @@ function UNITFRAME:SpawnTarget()
     OUF:SetActiveStyle 'Target'
 
     local target = OUF:Spawn('target', 'oUF_Target')
-    F.Mover(target, L.MOVER.TARGET, 'TargetFrame',
-            {'LEFT', _G.UIParent, 'CENTER', 120, -140}, target:GetWidth(),
-            target:GetHeight())
+    F.Mover(target, L['Target Frame'], 'TargetFrame', unitsPos.target, target:GetWidth(), target:GetHeight())
 end
 
 local function CreateTargetTargetStyle(self)
     self.unitStyle = 'targettarget'
-    self:SetSize(C.DB.unitframe.target_target_width,
-                 C.DB.unitframe.target_target_height)
+    self:SetSize(C.DB.unitframe.target_target_width, C.DB.unitframe.target_target_height)
 
     UNITFRAME:AddBackDrop(self)
     UNITFRAME:AddHealthBar(self)
@@ -158,12 +162,10 @@ function UNITFRAME:SpawnTargetTarget()
     OUF:SetActiveStyle 'TargetTarget'
 
     local targettarget = OUF:Spawn('targettarget', 'oUF_TargetTarget')
-    F.Mover(targettarget, L.MOVER.TARGETTARGET, 'TargetTargetFrame',
-            {'LEFT', 'oUF_Target', 'RIGHT', 6, 0}, targettarget:GetWidth(),
-            targettarget:GetHeight())
+    F.Mover(targettarget, L['Target of Target Frame'], 'TargetTargetFrame', unitsPos.tot, targettarget:GetWidth(), targettarget:GetHeight())
 end
 
-local function focusSound(self, event)
+local function Focus_OnEvent(self, event)
     if event == 'PLAYER_FOCUS_CHANGED' then
         if UnitExists(self.unit) then
             if UnitIsEnemy(self.unit, 'player') then
@@ -193,9 +195,9 @@ local function CreateFocusStyle(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddRangeCheck(self)
 
-    self:RegisterEvent('PLAYER_FOCUS_CHANGED', focusSound)
+    self:RegisterEvent('PLAYER_FOCUS_CHANGED', Focus_OnEvent)
     self.Health:SetScript('OnShow', function()
-        focusSound(self, 'PLAYER_FOCUS_CHANGED')
+        Focus_OnEvent(self, 'PLAYER_FOCUS_CHANGED')
     end)
 end
 
@@ -204,15 +206,12 @@ function UNITFRAME:SpawnFocus()
     OUF:SetActiveStyle 'Focus'
 
     local focus = OUF:Spawn('focus', 'oUF_Focus')
-    F.Mover(focus, L.MOVER.FOCUS, 'FocusFrame',
-            {'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220}, focus:GetWidth(),
-            focus:GetHeight())
+    F.Mover(focus, L['Focus Frame'], 'FocusFrame', unitsPos.focus, focus:GetWidth(), focus:GetHeight())
 end
 
 local function CreateFocusTargetStyle(self)
     self.unitStyle = 'focustarget'
-    self:SetSize(C.DB.unitframe.focus_target_width,
-                 C.DB.unitframe.focus_target_height)
+    self:SetSize(C.DB.unitframe.focus_target_width, C.DB.unitframe.focus_target_height)
 
     UNITFRAME:AddBackDrop(self)
     UNITFRAME:AddHealthBar(self)
@@ -228,9 +227,7 @@ function UNITFRAME:SpawnFocusTarget()
     OUF:SetActiveStyle 'FocusTarget'
 
     local focustarget = OUF:Spawn('focustarget', 'oUF_FocusTarget')
-    F.Mover(focustarget, L.MOVER.FOCUSTARGET, 'FocusTargetFrame',
-            {'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0}, focustarget:GetWidth(),
-            focustarget:GetHeight())
+    F.Mover(focustarget, L['Target of Focus Frame'], 'FocusTargetFrame', unitsPos.tof, focustarget:GetWidth(), focustarget:GetHeight())
 end
 
 local function CreateBossStyle(self)
@@ -260,13 +257,9 @@ function UNITFRAME:SpawnBoss()
     for i = 1, MAX_BOSS_FRAMES do
         boss[i] = OUF:Spawn('boss' .. i, 'oUF_Boss' .. i)
         if i == 1 then
-            boss[i].mover = F.Mover(boss[i], L.MOVER.BOSS, 'BossFrame',
-                                    {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
-                                    C.DB.unitframe.boss_width,
-                                    C.DB.unitframe.boss_height)
+            boss[i].mover = F.Mover(boss[i], L['Boss Frame'], 'BossFrame', unitsPos.boss, C.DB.unitframe.boss_width, C.DB.unitframe.boss_height)
         else
-            boss[i]:SetPoint('BOTTOM', boss[i - 1], 'TOP', 0,
-                             C.DB.unitframe.boss_gap)
+            boss[i]:SetPoint('BOTTOM', boss[i - 1], 'TOP', 0, C.DB.unitframe.boss_gap)
         end
     end
 end
@@ -294,16 +287,9 @@ function UNITFRAME:SpawnArena()
     for i = 1, 5 do
         arena[i] = OUF:Spawn('arena' .. i, 'oUF_Arena' .. i)
         if i == 1 then
-            arena[i].mover = F.Mover(arena[i], L.MOVER.ARENA, 'ArenaFrame', {
-                'RIGHT',
-                'oUF_Player',
-                'LEFT',
-                -300,
-                300,
-            }, C.DB.unitframe.arena_width, C.DB.unitframe.arena_height)
+            arena[i].mover = F.Mover(arena[i], L['Arena Frame'], 'ArenaFrame', unitsPos.arena, C.DB.unitframe.arena_width, C.DB.unitframe.arena_height)
         else
-            arena[i]:SetPoint('BOTTOM', arena[i - 1], 'TOP', 0,
-                              C.DB.unitframe.arena_gap)
+            arena[i]:SetPoint('BOTTOM', arena[i - 1], 'TOP', 0, C.DB.unitframe.arena_gap)
         end
     end
 end
@@ -342,34 +328,23 @@ function UNITFRAME:SpawnParty()
     OUF:RegisterStyle('Party', CreatePartyStyle)
     OUF:SetActiveStyle 'Party'
 
-    local partyWidth, partyHeight = C.DB.unitframe.party_width,
-                                    C.DB.unitframe.party_height
+    local partyWidth, partyHeight = C.DB.unitframe.party_width, C.DB.unitframe.party_height
     local partyHorizon = C.DB.unitframe.party_horizon
     local partyReverse = C.DB.unitframe.party_reverse
     local partyGap = C.DB.unitframe.party_gap
     local showSolo = C.DB.unitframe.show_solo
-    local groupingOrder = partyHorizon and 'TANK,HEALER,DAMAGER,NONE' or
-                              'TANK,HEALER,DAMAGER,NONE'
-    local moverWidth = partyHorizon and partyWidth * 5 + partyGap * 4 or
-                           partyWidth
-    local moverHeight = partyHorizon and partyHeight or partyHeight * 5 +
-                            partyGap * 4
+    local groupingOrder = partyHorizon and 'TANK,HEALER,DAMAGER,NONE' or 'TANK,HEALER,DAMAGER,NONE'
+    local moverWidth = partyHorizon and partyWidth * 5 + partyGap * 4 or partyWidth
+    local moverHeight = partyHorizon and partyHeight or partyHeight * 5 + partyGap * 4
     local partyMover
-    local party = OUF:SpawnHeader('oUF_Party', nil, 'solo,party', 'showPlayer',
-                                  true, 'showSolo', showSolo, 'showParty', true,
-                                  'showRaid', false, 'xoffset', partyGap,
-                                  'yoffset', partyGap, 'point',
-                                  partyHorizon and 'LEFT' or 'BOTTOM',
-                                  'groupingOrder', groupingOrder, 'groupBy',
-                                  'ASSIGNEDROLE', 'sortMethod', 'NAME',
-                                  'oUF-initialConfigFunction', ([[
+    local party = OUF:SpawnHeader('oUF_Party', nil, 'solo,party', 'showPlayer', true, 'showSolo', showSolo, 'showParty', true, 'showRaid', false, 'xoffset',
+                                  partyGap, 'yoffset', partyGap, 'point', partyHorizon and 'LEFT' or 'BOTTOM', 'groupingOrder', groupingOrder, 'groupBy',
+                                  'ASSIGNEDROLE', 'sortMethod', 'NAME', 'oUF-initialConfigFunction', ([[
 
             self:SetWidth(%d)
             self:SetHeight(%d)
             ]]):format(partyWidth, partyHeight))
-    partyMover = F.Mover(party, L.MOVER.PARTY, 'PartyFrame',
-                         {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
-                         moverWidth, moverHeight)
+    partyMover = F.Mover(party, L['Party Frame'], 'PartyFrame', unitsPos.party, moverWidth, moverHeight)
     party:ClearAllPoints()
     party:SetPoint('BOTTOMLEFT', partyMover)
     UNITFRAME.PartyMover = partyMover
@@ -413,18 +388,10 @@ function UNITFRAME:SpawnRaid()
     local raidMover
 
     local function CreateRaid(name, i)
-        local raid = OUF:SpawnHeader(name, nil, 'solo,raid', 'showPlayer', true,
-                                     'showSolo', showSolo, 'showParty', true,
-                                     'showRaid', true, 'xoffset', raidGap,
-                                     'yOffset', -raidGap, 'groupFilter',
-                                     tostring(i), 'groupingOrder',
-                                     '1,2,3,4,5,6,7,8', 'groupBy', 'GROUP',
-                                     'sortMethod', 'INDEX', 'maxColumns', 1,
-                                     'unitsPerColumn', 5, 'columnSpacing',
-                                     raidGap, 'point',
-                                     raidHorizon and 'LEFT' or 'TOP',
-                                     'columnAnchorPoint', 'LEFT',
-                                     'oUF-initialConfigFunction', ([[
+        local raid = OUF:SpawnHeader(name, nil, 'solo,raid', 'showPlayer', true, 'showSolo', showSolo, 'showParty', true, 'showRaid', true, 'xoffset', raidGap,
+                                     'yOffset', -raidGap, 'groupFilter', tostring(i), 'groupingOrder', '1,2,3,4,5,6,7,8', 'groupBy', 'GROUP', 'sortMethod',
+                                     'INDEX', 'maxColumns', 1, 'unitsPerColumn', 5, 'columnSpacing', raidGap, 'point', raidHorizon and 'LEFT' or 'TOP',
+                                     'columnAnchorPoint', 'LEFT', 'oUF-initialConfigFunction', ([[
 
             self:SetWidth(%d)
             self:SetHeight(%d)
@@ -437,27 +404,13 @@ function UNITFRAME:SpawnRaid()
         groups[i] = CreateRaid('oUF_Raid' .. i, i)
         if i == 1 then
             if raidHorizon then
-                raidMover = F.Mover(groups[i], L.MOVER.RAID, 'RaidFrame', {
-                    'TOPRIGHT',
-                    'Minimap',
-                    'TOPLEFT',
-                    -6,
-                    -44,
-                }, (raidWidth + raidGap) * 5 - raidGap, (raidHeight + raidGap) *
-                                        numGroups - raidGap)
+                raidMover = F.Mover(groups[i], L['Raid Frame'], 'RaidFrame', unitsPos.raid, (raidWidth + raidGap) * 5 - raidGap, (raidHeight + raidGap) * numGroups - raidGap)
                 if raidReverse then
                     groups[i]:ClearAllPoints()
                     groups[i]:SetPoint('BOTTOMLEFT', raidMover)
                 end
             else
-                raidMover = F.Mover(groups[i], L.MOVER.RAID, 'RaidFrame', {
-                    'TOPRIGHT',
-                    'Minimap',
-                    'TOPLEFT',
-                    -6,
-                    -44,
-                }, (raidWidth + raidGap) * numGroups - raidGap,
-                                    (raidHeight + raidGap) * 5 - raidGap)
+                raidMover = F.Mover(groups[i], L['Raid Frame'], 'RaidFrame', unitsPos.raid, (raidWidth + raidGap) * numGroups - raidGap, (raidHeight + raidGap) * 5 - raidGap)
                 if raidReverse then
                     groups[i]:ClearAllPoints()
                     groups[i]:SetPoint('TOPRIGHT', raidMover)
@@ -466,19 +419,15 @@ function UNITFRAME:SpawnRaid()
         else
             if raidHorizon then
                 if raidReverse then
-                    groups[i]:SetPoint('BOTTOMLEFT', groups[i - 1], 'TOPLEFT',
-                                       0, raidGap)
+                    groups[i]:SetPoint('BOTTOMLEFT', groups[i - 1], 'TOPLEFT', 0, raidGap)
                 else
-                    groups[i]:SetPoint('TOPLEFT', groups[i - 1], 'BOTTOMLEFT',
-                                       0, -raidGap)
+                    groups[i]:SetPoint('TOPLEFT', groups[i - 1], 'BOTTOMLEFT', 0, -raidGap)
                 end
             else
                 if raidReverse then
-                    groups[i]:SetPoint('TOPRIGHT', groups[i - 1], 'TOPLEFT',
-                                       -raidGap, 0)
+                    groups[i]:SetPoint('TOPRIGHT', groups[i - 1], 'TOPLEFT', -raidGap, 0)
                 else
-                    groups[i]:SetPoint('TOPLEFT', groups[i - 1], 'TOPRIGHT',
-                                       raidGap, 0)
+                    groups[i]:SetPoint('TOPLEFT', groups[i - 1], 'TOPRIGHT', raidGap, 0)
                 end
             end
         end
