@@ -79,27 +79,6 @@ function MAP:ExpBar_Update()
 		self:SetMinMaxValues(0, barMax)
 		self:SetValue(current)
 		self:Show()
-	elseif IsAzeriteAvailable() then
-		local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
-		local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
-		self:SetStatusBarColor(.9, .8, .6)
-		self:SetMinMaxValues(0, totalLevelXP)
-		self:SetValue(xp)
-		self:Show()
-	elseif HasArtifactEquipped() then
-		if C_ArtifactUI_IsEquippedArtifactDisabled() then
-			self:SetStatusBarColor(.6, .6, .6)
-			self:SetMinMaxValues(0, 1)
-			self:SetValue(1)
-		else
-			local _, _, _, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI_GetEquippedArtifactInfo()
-			local _, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-			xp = xpForNextPoint == 0 and 0 or xp
-			self:SetStatusBarColor(.9, .8, .6)
-			self:SetMinMaxValues(0, xpForNextPoint)
-			self:SetValue(xp)
-		end
-		self:Show()
 	else
 		self:Hide()
 	end
@@ -153,7 +132,7 @@ function MAP:ExpBar_UpdateTooltip()
 			local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
 			local paraCount = floor(currentValue / threshold)
 			currentValue = mod(currentValue, threshold)
-			GameTooltip:AddDoubleLine(L['MAP_PARAGON'] .. paraCount, currentValue .. ' / ' .. threshold .. ' (' .. floor(currentValue / threshold * 100) .. '%)', .6, .8, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L['Paragon'] .. '(' .. paraCount .. ')', currentValue .. ' / ' .. threshold .. ' (' .. floor(currentValue / threshold * 100) .. '%)', .6, .8, 1, 1, 1, 1)
 		end
 
 		if factionID == 2465 then -- 荒猎团
@@ -175,37 +154,6 @@ function MAP:ExpBar_UpdateTooltip()
 		GameTooltip:AddDoubleLine(LEVEL .. ' ' .. level, current .. ' / ' .. barMax, .8, .2, 0, 1, 1, 1)
 	end
 
-	if IsAzeriteAvailable() then
-		local azeriteItemLocation = C_AzeriteItem_FindActiveAzeriteItem()
-		local azeriteItem = Item:CreateFromItemLocation(azeriteItemLocation)
-		local xp, totalLevelXP = C_AzeriteItem_GetAzeriteItemXPInfo(azeriteItemLocation)
-		local currentLevel = C_AzeriteItem_GetPowerLevel(azeriteItemLocation)
-		azeriteItem:ContinueWithCancelOnItemLoad(
-			function()
-				GameTooltip:AddLine(' ')
-				GameTooltip:AddLine(azeriteItem:GetItemName() .. ' (' .. format(SPELLBOOK_AVAILABLE_AT, currentLevel) .. ')', 0, .6, 1)
-				GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(xp) .. ' / ' .. BreakUpLargeNumbers(totalLevelXP) .. ' (' .. floor(xp / totalLevelXP * 100) .. '%)', .6, .8, 1, 1, 1, 1)
-			end
-		)
-	end
-
-	if HasArtifactEquipped() then
-		local _, _, name, _, totalXP, pointsSpent, _, _, _, _, _, _, artifactTier = C_ArtifactUI_GetEquippedArtifactInfo()
-		local num, xp, xpForNextPoint = ArtifactBarGetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
-		GameTooltip:AddLine(' ')
-		if C_ArtifactUI_IsEquippedArtifactDisabled() then
-			GameTooltip:AddLine(name, 0, .6, 1)
-			GameTooltip:AddLine(ARTIFACT_RETIRED, .6, .8, 1, 1)
-		else
-			GameTooltip:AddLine(name .. ' (' .. format(SPELLBOOK_AVAILABLE_AT, pointsSpent) .. ')', 0, .6, 1)
-			local numText = num > 0 and ' (' .. num .. ')' or ''
-			GameTooltip:AddDoubleLine(ARTIFACT_POWER, BreakUpLargeNumbers(totalXP) .. numText, .6, .8, 1, 1, 1, 1)
-			if xpForNextPoint ~= 0 then
-				local perc = ' (' .. floor(xp / xpForNextPoint * 100) .. '%)'
-				GameTooltip:AddDoubleLine(L['MAP_NEXT_TRAIT'], BreakUpLargeNumbers(xp) .. ' / ' .. BreakUpLargeNumbers(xpForNextPoint) .. perc, .6, .8, 1, 1, 1, 1)
-			end
-		end
-	end
 	GameTooltip:Show()
 end
 
@@ -261,7 +209,7 @@ function MAP:ProgressBar()
 	bar:SetPoint('TOPRIGHT', -1, -(Minimap:GetHeight() / 8) - 1)
 	bar:SetHeight(4)
 	bar:SetStatusBarTexture(C.Assets.norm_tex)
-	bar.bg = F.CreateBDFrame(bar, .6)
+	bar.bg = F.CreateBDFrame(bar)
 
 	bar:SetFrameLevel(Minimap:GetFrameLevel() + 2)
 
@@ -293,7 +241,7 @@ function MAP:HookParagonRep()
 				local currentValue, threshold = C_Reputation_GetFactionParagonInfo(factionID)
 				if currentValue then
 					local barValue = mod(currentValue, threshold)
-					local factionStandingtext = L['MAP_PARAGON'] .. floor(currentValue / threshold)
+					local factionStandingtext = L['Paragon'] .. floor(currentValue / threshold)
 
 					factionBar:SetMinMaxValues(0, threshold)
 					factionBar:SetValue(barValue)
