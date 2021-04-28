@@ -130,9 +130,9 @@ function CHAT:CreateChannelBar()
 	combat:SetAttribute('macrotext', '/combatlog')
 
 	-- WORLD CHANNEL
-	if GetCVar('portal') == 'CN' then
+	if C.IsCNPortal then
 		local channelName, channelID, channels = C.IsChinses and '大脚世界频道' or 'BigfootWorldChannel'
-		local wc = AddButton(0, .8, 1, L['CHAT_WORLD_CHANNEL'])
+		local wc = AddButton(0, .8, 1, L['World channel'])
 
 		local function updateChannelInfo()
 			local id = GetChannelName(channelName)
@@ -148,7 +148,7 @@ function CHAT:CreateChannelBar()
 		end
 
 		local function isInChannel(event)
-			C_Timer.After(.2, updateChannelInfo)
+			F:Delay(.2, updateChannelInfo)
 
 			if event == 'PLAYER_ENTERING_WORLD' then
 				F:UnregisterEvent(event, isInChannel)

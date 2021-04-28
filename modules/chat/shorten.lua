@@ -49,7 +49,7 @@ end
 function CHAT:UpdateChannelNames(text, ...)
 	-- Make whisper color different
 	local r, g, b = ...
-	if strfind(text, L['CHAT_WHISPER_TELL']..' |H[BN]*player.+%]') then
+	if strfind(text, L['Tell']..' |H[BN]*player.+%]') then
 		r, g, b = r*.7, g*.7, b*.7
 	end
 
@@ -89,10 +89,10 @@ function CHAT:Abbreviate()
 	ERR_FRIEND_OFFLINE_S = gsub(ERR_FRIEND_OFFLINE_S, '%%s', '%%s|cffff7f50')
 
 	--whisper
-	CHAT_WHISPER_INFORM_GET = L['CHAT_WHISPER_TELL']..' %s '
-	CHAT_WHISPER_GET = L['CHAT_WHISPER_FROM']..' %s '
-	CHAT_BN_WHISPER_INFORM_GET = L['CHAT_WHISPER_TELL']..' %s '
-	CHAT_BN_WHISPER_GET = L['CHAT_WHISPER_FROM']..' %s '
+	CHAT_WHISPER_INFORM_GET = L['Tell']..' %s '
+	CHAT_WHISPER_GET = L['From']..' %s '
+	CHAT_BN_WHISPER_INFORM_GET = L['Tell']..' %s '
+	CHAT_BN_WHISPER_GET = L['From']..' %s '
 
 	--say / yell
 	CHAT_SAY_GET = '%s '

@@ -1,8 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="chat.lua"/>
-	<Script file="channelbar.lua"/>
-	<Script file="copy.lua"/>
-	<Script file="filter.lua"/>
-	<Script file="shorten.lua"/>
-	<Script file="spamagemeter.lua"/>
+    <Script file="chat.lua"/>
+    <Script file="channelbar.lua"/>
+    <Script file="copy.lua"/>
+    <Script file="filter.lua"/>
+    <Script file="shorten.lua"/>
+    <Script file="spamagemeter.lua"/>
 </Ui>
