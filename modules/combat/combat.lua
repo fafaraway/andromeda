@@ -193,7 +193,7 @@ function COMBAT:UpdateTextFrame()
 
 	f:Hide()
 	f.text:SetFont(C.Assets.Fonts.Combat, 28)
-	f.text:SetText(L['COMBAT_ENTER'])
+	f.text:SetText(L['Enter Combat'])
 	f:SetSize(f.text:GetStringWidth(), f.text:GetStringHeight())
 
 	f.enter.moveUp:SetOffset(0, moveUpOffset)
@@ -265,10 +265,10 @@ function COMBAT:ShowAlert(alertType)
 		--end
 
 		--if self.db.text then
-			-- t.text:SetText(L['COMBAT_ENTER'])
+			-- t.text:SetText(L['Enter Combat'])
 			--F.SetFontColorWithDB(t.text, self.db.enterColor)
 			-- t.text:SetTextColor(1, 0, 0)
-			F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['COMBAT_ENTER'], 'RED', 'THICK')
+			F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['Enter Combat'], 'RED', 'THICK')
 			t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
 			t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetEnter)
 			t:Show()
@@ -288,9 +288,9 @@ function COMBAT:ShowAlert(alertType)
 		--end
 
 		--if self.db.text then
-			--t.text:SetText(L['COMBAT_LEAVE'])
+			--t.text:SetText(L['Leave Combat'])
 			--F.SetFontColorWithDB(t.text, self.db.leaveColor)
-			F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['COMBAT_LEAVE'], 'GREEN', 'THICK')
+			F:SetFS(t.text, C.Assets.Fonts.Combat, 26, nil, L['Leave Combat'], 'GREEN', 'THICK')
 			t:SetSize(t.text:GetStringWidth(), t.text:GetStringHeight())
 			t:SetPoint('TOP', self.animationFrame or _G.UIParent, 'BOTTOM', 0, textOffsetLeave)
 			t:Show()

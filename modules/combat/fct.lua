@@ -191,12 +191,12 @@ function COMBAT:FloatingCombatText()
     if not C.DB.combat.fct then return end
 
     if C.DB.combat.fct_in then
-        F.Mover(inFrame, L['COMBAT_MOVER_IN'], 'FCTInFrame',
+        F.Mover(inFrame, L['Combat Text Incoming'], 'FCTInFrame',
                 {'RIGHT', _G.UIParent, 'CENTER', -300, 0}, inFrame:GetWidth(), inFrame:GetHeight())
     end
 
     if C.DB.combat.fct_out then
-        F.Mover(outFrame, L['COMBAT_MOVER_OUT'], 'FCTOutFrame',
+        F.Mover(outFrame, L['Combat Text Outgoing'], 'FCTOutFrame',
                 {'LEFT', _G.UIParent, 'CENTER', 300, 140}, outFrame:GetWidth(), outFrame:GetHeight())
     end
 
