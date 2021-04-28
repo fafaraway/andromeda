@@ -31,12 +31,12 @@ function AURA:OnLogin()
 	F.HideObject(_G.TemporaryEnchantFrame)
 
 	AURA.BuffFrame = AURA:CreateAuraHeader('HELPFUL')
-	AURA.BuffFrame.mover = F.Mover(AURA.BuffFrame, L['AURA_MOVER_BUFFS'], 'BuffAnchor', {'TOPLEFT', UIParent, 'TOPLEFT', C.UIGap, -C.UIGap})
+	AURA.BuffFrame.mover = F.Mover(AURA.BuffFrame, L['Buff Frame'], 'BuffAnchor', {'TOPLEFT', UIParent, 'TOPLEFT', C.UIGap, -C.UIGap})
 	AURA.BuffFrame:ClearAllPoints()
 	AURA.BuffFrame:SetPoint('TOPRIGHT', AURA.BuffFrame.mover)
 
 	AURA.DebuffFrame = AURA:CreateAuraHeader('HARMFUL')
-	AURA.DebuffFrame.mover = F.Mover(AURA.DebuffFrame, L['AURA_MOVER_DEBUFFS'], 'DebuffAnchor', {'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 0})
+	AURA.DebuffFrame.mover = F.Mover(AURA.DebuffFrame, L['Debuff Frame'], 'DebuffAnchor', {'TOPLEFT', AURA.BuffFrame.mover, 'BOTTOMLEFT', 0, 30})
 	AURA.DebuffFrame:ClearAllPoints()
 	AURA.DebuffFrame:SetPoint('TOPRIGHT', AURA.DebuffFrame.mover)
 
