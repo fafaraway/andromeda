@@ -11,5 +11,6 @@
     <Script file="movieskip.lua"/>
     <Script file="proposaltimer.lua"/>
     <Script file="statsreport.lua"/>
+    <Script file="talent_manager.lua"/>
     <Script file="vignette.lua"/>
 </Ui>
