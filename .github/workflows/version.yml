@@ -9,23 +9,22 @@ jobs:
   run:
     runs-on: ubuntu-latest
 
-    env:
-      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
-
     steps:
       - name: Clone project
         uses: actions/checkout@v2
 
       - name: Update TOC Interface version
         uses: p3lim/toc-interface-updater@v1
-        with:
-          base: retail
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v3
         with:
           title: Update Interface version
+          body:
           commit-message: Update Interface version
           branch: interface-version
           delete-branch: true
+
+    env:
+      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
