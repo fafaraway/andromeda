@@ -196,7 +196,7 @@ function INVENTORY:CreateRestoreButton(f)
         f.reagent:SetPoint('BOTTOMLEFT', f.bank)
         PlaySound(SOUNDKIT_IG_MINIMAP_OPEN)
     end)
-    bu.title = L['Reset position']
+    bu.title = L['Reset Position']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -269,7 +269,7 @@ function INVENTORY:CreateDepositButton()
         end
     end)
     bu.title = REAGENTBANK_DEPOSIT
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto deposit'], 'BLUE')
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['Deposit Reagent'], 'BLUE')
     updateDepositButtonStatus(bu)
     return bu
 end
@@ -288,7 +288,7 @@ function INVENTORY:CreateBagToggle()
         end
     end)
 
-    bu.title = L['Toggle bags bar']
+    bu.title = L['Toggle Bags']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -322,7 +322,7 @@ function INVENTORY:CreateSortButton(name)
             end
         end
     end)
-    bu.title = L['Inventory sort']
+    bu.title = L['Inventory Sort']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -332,11 +332,11 @@ local function updateRepairButtonStatus(bu)
     if C.DB.inventory.auto_repair then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
         bu.text = L['Auto repair enabled']
-        bu.title = L['Auto repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
         bu.text = nil
-        bu.title = L['Auto repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
     end
 end
 
@@ -349,7 +349,7 @@ function INVENTORY:CreateRepairButton()
         self:GetScript('OnEnter')(self)
     end)
 
-    bu.title = L['Auto repair']
+    bu.title = L['Auto Repair']
     F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto repair enabled'], 'BLUE')
     updateRepairButtonStatus(bu)
     return bu
@@ -359,11 +359,11 @@ local function updateSellButtonStatus(bu)
     if C.DB.inventory.auto_sell_junk then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
         bu.text = L['Auto sell junk enabled']
-        bu.title = L['Auto sell junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
         bu.text = nil
-        bu.title = L['Auto sell junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
     end
 end
 
@@ -376,7 +376,7 @@ function INVENTORY:CreateSellButton()
         self:GetScript('OnEnter')(self)
     end)
 
-    bu.title = L['Auto sell junk']
+    bu.title = L['Auto Sell Junk']
     F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto sell junk enabled'], 'BLUE')
     updateSellButtonStatus(bu)
     return bu
@@ -504,7 +504,7 @@ function INVENTORY:CreateSplitButton()
     local splitFrame = CreateFrame('Frame', nil, self)
     splitFrame:SetSize(100, 50)
     splitFrame:SetPoint('TOPRIGHT', self, 'TOPLEFT', -5, 0)
-    F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['Split count'], 'YELLOW',
+    F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['Split Count'], 'YELLOW',
                'THICK', 'TOP', 1, -5)
     F.SetBD(splitFrame)
     splitFrame:Hide()
@@ -535,7 +535,7 @@ function INVENTORY:CreateSplitButton()
         self:GetScript('OnEnter')(self)
     end)
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['Quick split']
+    bu.title = L['Quick Split']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[1] = bu
@@ -585,7 +585,7 @@ function INVENTORY:CreateFavouriteButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['Mark favourite']
+    bu.title = L['Mark Favourite']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[2] = bu
@@ -653,7 +653,7 @@ function INVENTORY:CreateCustomJunkButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['Mark junk']
+    bu.title = L['Mark Junk']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[3] = bu
@@ -704,7 +704,7 @@ function INVENTORY:CreateDeleteButton()
     end)
 
     bu:SetScript('OnHide', bu.__turnOff)
-    bu.title = L['Quick delete']
+    bu.title = L['Quick Delete']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     toggleButtons[4] = bu
