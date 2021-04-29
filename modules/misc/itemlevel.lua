@@ -116,42 +116,6 @@ local function GetSlotItemLocation(id)
     return itemLocation
 end
 
-function MISC:ItemLevel_UpdateTraits(button, id, link)
-    if not C.DB.General.AzeriteTrait then
-        return
-    end
-
-    local empoweredItemLocation = GetSlotItemLocation(id)
-    if not empoweredItemLocation then
-        return
-    end
-
-    local allTierInfo = TOOLTIP:Azerite_UpdateTier(link)
-    if not allTierInfo then
-        return
-    end
-
-    for i = 1, 2 do
-        local powerIDs = allTierInfo[i] and allTierInfo[i].azeritePowerIDs
-        if not powerIDs or powerIDs[1] == 13 then
-            break
-        end
-
-        for _, powerID in pairs(powerIDs) do
-            local selected = C_AzeriteEmpoweredItem_IsPowerSelected(empoweredItemLocation, powerID)
-            if selected then
-                local spellID = TOOLTIP:Azerite_PowerToSpell(powerID)
-                local name, _, icon = GetSpellInfo(spellID)
-                local texture = button['textureIcon' .. i]
-                if name and texture then
-                    texture:SetTexture(icon)
-                    texture.bg:Show()
-                end
-            end
-        end
-    end
-end
-
 function MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
     local infoType = type(info)
     local level
@@ -242,10 +206,6 @@ function MISC:ItemLevel_SetupLevel(frame, strType, unit)
                     MISC:ItemLevel_RefreshInfo(link, unit, index, slotFrame)
                 else
                     MISC:ItemLevel_UpdateInfo(slotFrame, info, quality)
-                end
-
-                if strType == 'Character' then
-                    MISC:ItemLevel_UpdateTraits(slotFrame, index, link)
                 end
             end
         end
