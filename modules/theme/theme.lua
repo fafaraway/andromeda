@@ -80,7 +80,8 @@ local function ReskinTimerBar(bar)
         bar:SetStatusBarTexture(C.Assets.norm_tex)
     end
 
-    F.SetBD(bar)
+    bar.bg = F.SetBD(bar)
+    bar.bg:SetBackdropBorderColor(0, 0, 0)
 end
 
 local function UpdateTimerTracker()
@@ -126,7 +127,10 @@ function THEME:OnLogin()
     self:ReskinREHack()
     self:ReskinExtVendor()
 
-    ReskinMirrorBars()
+    if not _G.FREE_ADB.ReskinBlizz then
+        return
+    end
 
+    ReskinMirrorBars()
     F:RegisterEvent('START_TIMER', UpdateTimerTracker)
 end
