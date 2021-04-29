@@ -4,13 +4,13 @@ local unpack = unpack
 local CreateFrame = CreateFrame
 
 local F, C = unpack(select(2, ...))
-local MISC = F.MISC
+local VIGNETTE = F:RegisterModule('Vignette')
 
-function MISC:Vignetting()
-    if not C.DB.General.Vignetting then
+function VIGNETTE:OnLogin()
+    if not C.DB.General.Vignette then
         return
     end
-    if C.DB.General.VignettingAlpha == 0 then
+    if C.DB.General.VignetteAlpha == 0 then
         return
     end
 
@@ -23,7 +23,5 @@ function MISC:Vignetting()
     f.tex:SetTexture(C.Assets.vig_tex)
     f.tex:SetAllPoints(f)
 
-    f:SetAlpha(C.DB.General.VignettingAlpha)
+    f:SetAlpha(C.DB.General.VignetteAlpha)
 end
-
-MISC:RegisterMisc('Vignetting', MISC.Vignetting)

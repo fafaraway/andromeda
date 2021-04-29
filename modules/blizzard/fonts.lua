@@ -1,40 +1,41 @@
 local _G = _G
 local unpack = unpack
 local select = select
-local CreateFrame = CreateFrame
 
 local F, C = unpack(select(2, ...))
 
-if C.IsDeveloper then
-    C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
-    C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
-    C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
-    C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
-    C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
-elseif C.GameLocale == 'zhCN' then
-    C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
-    C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
-    C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
-    C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
-    C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
-elseif C.GameLocale == 'zhTW' then
-    C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
-    C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
-    C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
-    C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
-    C.Assets.Fonts.Combat = 'Fonts\\bKAI00M.ttf'
-elseif C.GameLocale == 'koKR' then
-    C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
-    C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
-    C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
-    C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
-    C.Assets.Fonts.Combat = 'Fonts\\K_Damage.ttf'
-elseif C.GameLocale == 'ruRU' then
-    C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
-    C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
-    C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
-    C.Assets.Fonts.Header = 'Fonts\\FRIZQT___CYR.ttf'
-    C.Assets.Fonts.Combat = 'Fonts\\FRIZQT___CYR.ttf'
+do
+    if C.IsDeveloper then
+        C.Assets.Fonts.Regular = 'Fonts\\FreeUI\\regular.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\FreeUI\\condensed.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\FreeUI\\bold.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\FreeUI\\header.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\FreeUI\\combat.ttf'
+    elseif C.GameLocale == 'zhCN' then
+        C.Assets.Fonts.Regular = 'Fonts\\ARKai_T.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\ARKai_T.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\ARHei.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\ARKai_T.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\ARKai_C.ttf'
+    elseif C.GameLocale == 'zhTW' then
+        C.Assets.Fonts.Regular = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\blei00d.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\bKAI00M.ttf'
+    elseif C.GameLocale == 'koKR' then
+        C.Assets.Fonts.Regular = 'Fonts\\2002.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\2002.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\2002B.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\2002.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\K_Damage.ttf'
+    elseif C.GameLocale == 'ruRU' then
+        C.Assets.Fonts.Regular = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Condensed = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Bold = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Header = 'Fonts\\FRIZQT___CYR.ttf'
+        C.Assets.Fonts.Combat = 'Fonts\\FRIZQT___CYR.ttf'
+    end
 end
 
 local NORMAL = C.Assets.Fonts.Regular
@@ -61,6 +62,7 @@ local function SetFont(obj, font, size, flag, shadow)
     obj:SetFont(font, size, outline and 'OUTLINE')
 
     obj:SetShadowColor(0, 0, 0, outline and 0 or 1)
+    obj:SetShadowOffset(2, -2)
 
     -- if type(shadow) == 'string' and shadow == 'THICK' then
     --     obj:SetShadowColor(0, 0, 0, 1)
@@ -75,13 +77,7 @@ local function SetFont(obj, font, size, flag, shadow)
     -- end
 end
 
-local loader = CreateFrame('Frame')
-loader:RegisterEvent('ADDON_LOADED')
-loader:SetScript('OnEvent', function(self, _, addon)
-    if addon ~= 'FreeUI' then
-        return
-    end
-
+local function ReskinBlizzFonts()
     if not _G.FREE_ADB.ReskinBlizz then
         return
     end
@@ -270,45 +266,7 @@ loader:SetScript('OnEvent', function(self, _, addon)
 
     SetFont(_G.GameFontNormal, NORMAL, 13)
     SetFont(_G.QuestFont, NORMAL, 15)
+end
 
-    -- Registering fonts in LibSharedMedia
-    local LSM = F.Libs.LSM
+F:RegisterEvent('ADDON_LOADED', ReskinBlizzFonts)
 
-    local LOCALE_MASK = 0
-    if C.GameLocale == 'koKR' then
-        LOCALE_MASK = 1
-    elseif C.GameLocale == 'ruRU' then
-        LOCALE_MASK = 2
-    elseif C.GameLocale == 'zhCN' then
-        LOCALE_MASK = 4
-    elseif C.GameLocale == 'zhTW' then
-        LOCALE_MASK = 8
-    else
-        LOCALE_MASK = 128
-    end
-
-    if LSM then
-        LSM:Register(LSM.MediaType.FONT, '!Free_Regular', C.Assets.Fonts.Regular, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Condensed', C.Assets.Fonts.Condensed, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Bold', C.Assets.Fonts.Bold, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Header', C.Assets.Fonts.Header, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Combat', C.Assets.Fonts.Combat, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Pixel', C.Assets.Fonts.Pixel, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Square', C.Assets.Fonts.Square, LOCALE_MASK)
-        LSM:Register(LSM.MediaType.FONT, '!Free_Roadway', C.Assets.Fonts.Roadway, LOCALE_MASK)
-
-        LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Normal', C.Assets.norm_tex)
-        LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Gradient', C.Assets.grad_tex)
-        LSM:Register(LSM.MediaType.STATUSBAR, '!Free_Flat', C.Assets.flat_tex)
-
-        LSM:Register(LSM.MediaType.SOUND, '!Free_1', C.AssetsPath .. 'sounds\\ding.ogg')
-        LSM:Register(LSM.MediaType.SOUND, '!Free_2', C.AssetsPath .. 'sounds\\proc.ogg')
-        LSM:Register(LSM.MediaType.SOUND, '!Free_3', C.AssetsPath .. 'sounds\\warning.ogg')
-        LSM:Register(LSM.MediaType.SOUND, '!Free_4', C.AssetsPath .. 'sounds\\execute.ogg')
-        LSM:Register(LSM.MediaType.SOUND, '!Free_5', C.AssetsPath .. 'sounds\\health.ogg')
-        LSM:Register(LSM.MediaType.SOUND, '!Free_6', C.AssetsPath .. 'sounds\\forthehorde.mp3')
-    end
-
-    self:SetScript('OnEvent', nil)
-    self:UnregisterAllEvents()
-end)

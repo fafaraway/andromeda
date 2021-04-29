@@ -76,7 +76,7 @@ function MISC:OnLogin()
 end
 
 -- Force warning
-local function forceWarningOnEvent(_, event)
+local function ForceWarning_OnEvent(_, event)
     if event == 'UPDATE_BATTLEFIELD_STATUS' then
         for i = 1, GetMaxBattlefieldID() do
             local status = GetBattlefieldStatus(i)
@@ -95,26 +95,19 @@ local function forceWarningOnEvent(_, event)
     end
 end
 
-local function readyCheckHook(_, initiator)
+local function ReadyCheckHook(_, initiator)
     if initiator ~= 'player' then
         PlaySound(SOUNDKIT_READY_CHECK, 'Master')
     end
 end
 
 function MISC:ForceWarning()
-    if C.DB.General.ForceWarning then
-        F:RegisterEvent('UPDATE_BATTLEFIELD_STATUS', forceWarningOnEvent)
-        F:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH', forceWarningOnEvent)
-        F:RegisterEvent('LFG_PROPOSAL_SHOW', forceWarningOnEvent)
-        F:RegisterEvent('RESURRECT_REQUEST', forceWarningOnEvent)
+    F:RegisterEvent('UPDATE_BATTLEFIELD_STATUS', ForceWarning_OnEvent)
+    F:RegisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH', ForceWarning_OnEvent)
+    F:RegisterEvent('LFG_PROPOSAL_SHOW', ForceWarning_OnEvent)
+    F:RegisterEvent('RESURRECT_REQUEST', ForceWarning_OnEvent)
 
-        hooksecurefunc('ShowReadyCheck', readyCheckHook)
-    else
-        F:UnregisterEvent('UPDATE_BATTLEFIELD_STATUS', forceWarningOnEvent)
-        F:UnregisterEvent('PET_BATTLE_QUEUE_PROPOSE_MATCH', forceWarningOnEvent)
-        F:UnregisterEvent('LFG_PROPOSAL_SHOW', forceWarningOnEvent)
-        F:UnregisterEvent('RESURRECT_REQUEST', forceWarningOnEvent)
-    end
+    hooksecurefunc('ShowReadyCheck', ReadyCheckHook)
 end
 
 
