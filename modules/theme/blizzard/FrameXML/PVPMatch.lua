@@ -46,6 +46,7 @@ tinsert(C.BlizzThemes, function()
 
 	-- match results
 	F.SetBD(PVPMatchResults)
+    PVPMatchResults.overlay:Hide()
 	PVPMatchResults:HookScript("OnShow", stripBorders)
 	F.ReskinClose(PVPMatchResults.CloseButton)
 	F.StripTextures(PVPMatchResults.overlay)
