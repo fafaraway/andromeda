@@ -30,7 +30,6 @@
 	<Script file="LossOfControlFrame.lua"/>
 	<Script file="MailFrame.lua"/>
 	<Script file="MerchantFrame.lua"/>
-	<Script file="MirrorTimer.lua"/>
 	<Script file="ModelPreviewFrame.lua"/>
 	<Script file="MovieFrame.lua"/>
 	<Script file="NavigationBar.lua"/>
@@ -54,7 +53,6 @@
 	<Script file="TabardFrame.lua"/>
 	<Script file="TaxiFrame.lua"/>
 	<Script file="TimeManager.lua"/>
-	<Script file="TimeTracker.lua"/>
 	<Script file="TradeFrame.lua"/>
 	<Script file="TutorialFrame.lua"/>
 	<Script file="UIDropDownMenu.lua"/>

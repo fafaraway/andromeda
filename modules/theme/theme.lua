@@ -12,11 +12,15 @@ C.Themes = {}
 C.BlizzThemes = {}
 
 function THEME:LoadDefaultSkins()
-    for _, func in pairs(C.BlizzThemes) do func() end
+    for _, func in pairs(C.BlizzThemes) do
+        func()
+    end
 
     wipe(C.BlizzThemes)
 
-    if not _G.FREE_ADB.ReskinBlizz then return end
+    if not _G.FREE_ADB.ReskinBlizz then
+        return
+    end
 
     for addonName, func in pairs(C.Themes) do
         local isLoaded, isFinished = IsAddOnLoaded(addonName)
@@ -57,12 +61,53 @@ function THEME:LoadWithAddOn(addonName, value, func)
     F:RegisterEvent('ADDON_LOADED', loadFunc)
 end
 
-
-
 THEME.SkinList = {}
-
 function THEME:RegisterSkin(name, func)
-    if not THEME.SkinList[name] then THEME.SkinList[name] = func end
+    if not THEME.SkinList[name] then
+        THEME.SkinList[name] = func
+    end
+end
+
+local function ReskinTimerBar(bar)
+    bar:SetSize(200, 18)
+    F.StripTextures(bar)
+
+    local statusbar = _G[bar:GetName() .. 'StatusBar']
+    if statusbar then
+        statusbar:SetAllPoints()
+        statusbar:SetStatusBarTexture(C.Assets.norm_tex)
+    else
+        bar:SetStatusBarTexture(C.Assets.norm_tex)
+    end
+
+    F.SetBD(bar)
+end
+
+local function UpdateTimerTracker()
+    for _, timer in pairs(_G.TimerTracker.timerList) do
+        if timer.bar and not timer.bar.styled then
+            ReskinTimerBar(timer.bar)
+
+            timer.bar.styled = true
+        end
+    end
+end
+
+local function ReskinMirrorBars()
+    local previous
+    for i = 1, 3 do
+        local bar = _G['MirrorTimer' .. i]
+        ReskinTimerBar(bar)
+
+        local text = _G['MirrorTimer' .. i .. 'Text']
+        text:ClearAllPoints()
+        text:SetPoint('CENTER', bar)
+
+        if previous then
+            bar:SetPoint('TOP', previous, 'BOTTOM', 0, -5)
+        end
+        previous = bar
+    end
 end
 
 function THEME:OnLogin()
@@ -80,4 +125,8 @@ function THEME:OnLogin()
     self:ReskinPGF()
     self:ReskinREHack()
     self:ReskinExtVendor()
+
+    ReskinMirrorBars()
+
+    F:RegisterEvent('START_TIMER', UpdateTimerTracker)
 end
