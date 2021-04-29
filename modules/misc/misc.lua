@@ -195,7 +195,7 @@ function MISC:BuyStack()
     local itemLink, id
 
     _G.StaticPopupDialogs['FREEUI_BUY_STACK'] = {
-        text = L.GENERAL.BUY_STACK_WARNING,
+        text = L['Are you sure to buy |cffff0000a stack|r of these?'],
         button1 = YES,
         button2 = NO,
         OnAccept = function()

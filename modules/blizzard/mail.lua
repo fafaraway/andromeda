@@ -32,7 +32,7 @@ local function OnEvent()
         end
         cash = cash + money
     end
-    text:SetText(C.InfoColor .. format('%d ' .. L.GENERAL.GOLD .. ' %d ' .. ITEMS, floor(cash * 0.0001), items))
+    text:SetText(C.InfoColor .. format('%d ' .. _G.WORLD_QUEST_REWARD_FILTERS_GOLD  .. ' %d ' .. ITEMS, floor(cash * 0.0001), items))
 
     if (processing) then
         if (num == 0) then

@@ -72,7 +72,7 @@ function BLIZZARD:TradeTargetInfo()
         if not guid then
             return
         end
-        local text = C.RedColor .. L.GENERAL.STRANGER
+        local text = C.RedColor .. L['Stranger']
         if C_BattleNet_GetGameAccountInfoByGUID(guid) or C_FriendList_IsFriend(guid) then
             text = C.GreenColor .. FRIEND
         elseif IsGuildMember(guid) then

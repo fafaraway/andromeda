@@ -347,7 +347,7 @@ function MISC:RaidTool_BuffChecker(parent)
     frame.tex:SetTexCoord(.5, 1, 0, .5)
     F.Reskin(frame)
 
-    local BuffName = {L.GENERAL.FLASK, L.GENERAL.FOOD, SPELL_STAT4_NAME, RAID_BUFF_2, RAID_BUFF_3, RUNES}
+    local BuffName = {L['Flask'], _G.POWER_TYPE_FOOD, SPELL_STAT4_NAME, RAID_BUFF_2, RAID_BUFF_3, RUNES}
     local NoBuff, numGroups, numPlayer = {}, 6, 0
     for i = 1, numGroups do
         NoBuff[i] = {}
@@ -366,11 +366,11 @@ function MISC:RaidTool_BuffChecker(parent)
         local count = #NoBuff[i]
         if count > 0 then
             if count >= numPlayer then
-                sendMsg(L.GENERAL.LACK .. BuffName[i] .. ': ' .. ALL .. PLAYER)
+                sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. ALL .. PLAYER)
             elseif count >= 5 and i > 2 then
-                sendMsg(L.GENERAL.LACK .. BuffName[i] .. ': ' .. format(L.GENERAL.PLAYER_COUNT, count))
+                sendMsg(L['Lack of'] .. BuffName[i] .. ': ' .. format(L['%s players'], count))
             else
-                local str = L.GENERAL.LACK .. BuffName[i] .. ': '
+                local str = L['Lack of'] .. BuffName[i] .. ': '
                 for j = 1, count do
                     str = str .. NoBuff[i][j] .. (j < #NoBuff[i] and ', ' or '')
                     if #str > 230 then
@@ -420,9 +420,9 @@ function MISC:RaidTool_BuffChecker(parent)
 
         if #NoBuff[1] == 0 and #NoBuff[2] == 0 and #NoBuff[3] == 0 and #NoBuff[4] == 0 and #NoBuff[5] == 0 and
             #NoBuff[6] == 0 then
-            sendMsg(L.GENERAL.BUFFS_READY)
+            sendMsg(L['All Buffs Ready!'])
         else
-            sendMsg(L.GENERAL.RAID_BUFF_CHECK)
+            sendMsg(L['Raid Buff Checker:'])
             for i = 1, 5 do
                 sendResult(i)
             end
@@ -440,10 +440,10 @@ function MISC:RaidTool_BuffChecker(parent)
         _G.GameTooltip:AddLine(L['Group Tool'])
         _G.GameTooltip:AddLine(' ')
         _G.GameTooltip:AddLine(C.Assets.mouse_left .. READY_CHECK, 0, .6, 1)
-        _G.GameTooltip:AddLine(C.Assets.mouse_middle .. L.GENERAL.COUNTDOWN, 0, .6, 1)
-        _G.GameTooltip:AddLine(C.Assets.mouse_right .. C.RedColor .. '(Ctrl)|r ' .. L.GENERAL.CHECK_STATUS, 0, .6, 1)
+        _G.GameTooltip:AddLine(C.Assets.mouse_middle .. L['Start/Cancel count down'], 0, .6, 1)
+        _G.GameTooltip:AddLine(C.Assets.mouse_right .. C.RedColor .. '(Ctrl)|r ' .. L['Check Flask & Food'], 0, .6, 1)
         if potionCheck then
-            _G.GameTooltip:AddLine(C.Assets.mouse_right .. C.RedColor .. '(Alt)|r ' .. L.GENERAL.EXRT_POTION_CHECK, 0,
+            _G.GameTooltip:AddLine(C.Assets.mouse_right .. C.RedColor .. '(Alt)|r ' .. L['ExRT Potion Check'], 0,
                                    .6, 1)
         end
         _G.GameTooltip:Show()
@@ -492,7 +492,7 @@ function MISC:RaidTool_BuffChecker(parent)
                     end
                     reset = not reset
                 else
-                    _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GENERAL.ADDON_REQUIRED)
+                    _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You can not do it without DBM or BigWigs!'])
                 end
             else
                 _G.UIErrorsFrame:AddMessage(C.RedColor .. ERR_NOT_LEADER)
@@ -525,7 +525,7 @@ function MISC:RaidTool_CreateMenu(parent)
     end)
 
     _G.StaticPopupDialogs['Group_Disband'] = {
-        text = L.GENERAL.DISBAND_CHECK,
+        text = L['Are you sure to |cffff0000disband|r your group?'],
         button1 = YES,
         button2 = NO,
         OnAccept = function()
@@ -534,7 +534,7 @@ function MISC:RaidTool_CreateMenu(parent)
                 return
             end
             if IsInRaid() then
-                SendChatMessage(L.GENERAL.DISBAND_PROCESS, 'RAID')
+                SendChatMessage(L['Raid Disbanding'], 'RAID')
                 for i = 1, GetNumGroupMembers() do
                     local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
                     if online and name ~= C.MyName then

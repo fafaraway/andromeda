@@ -166,7 +166,7 @@ function BLIZZARD:NakedButton()
     bu:SetSize(31, 33)
     bu:SetPoint('RIGHT', _G.PaperDollSidebarTab1, 'LEFT', -4, -3)
     F.PixelIcon(bu, 'Interface\\ICONS\\UI_Calendar_FreeTShirtDay', true)
-    F.AddTooltip(bu, 'ANCHOR_RIGHT', L.GENERAL.GET_NAKED)
+    F.AddTooltip(bu, 'ANCHOR_RIGHT', L['Double click to unequip all gears'])
 
     local function UnequipItemInSlot(i)
         local action = EquipmentManager_UnequipItemInSlot(i)
