@@ -187,7 +187,7 @@ function BLIZZARD:KeystoneInfo_Create()
         _G.GameTooltip:ClearLines()
         _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
         _G.GameTooltip:AddLine(L.GENERAL.KEYSTONES)
-        for name, info in pairs(_G.FREE_KEYSTONE) do
+        for name, info in pairs(_G.FREE_ADB.KeystoneInfo) do
             local name = Ambiguate(name, 'none')
             local mapID, level, class, faction = strsplit(':', info)
             local color = F:RGBToHex(F:ClassColor(class))
@@ -208,7 +208,7 @@ function BLIZZARD:KeystoneInfo_Create()
             end
             F:TogglePanel(_G.WeeklyRewardsFrame)
         elseif btn == 'MiddleButton' then
-            wipe(_G.FREE_KEYSTONE)
+            wipe(_G.FREE_ADB.KeystoneInfo)
         end
     end)
 end
@@ -223,9 +223,9 @@ end
 function BLIZZARD:KeystoneInfo_Update()
     local mapID, keystoneLevel = BLIZZARD:KeystoneInfo_UpdateBag()
     if mapID then
-        _G.FREE_KEYSTONE[C.MyFullName] = mapID .. ':' .. keystoneLevel .. ':' .. C.MyClass .. ':' .. C.MyFaction
+        _G.FREE_ADB['KeystoneInfo'][C.MyFullName] = mapID .. ':' .. keystoneLevel .. ':' .. C.MyClass .. ':' .. C.MyFaction
     else
-        _G.FREE_KEYSTONE[C.MyFullName] = nil
+        _G.FREE_ADB['KeystoneInfo'][C.MyFullName] = nil
     end
 end
 

@@ -1,5 +1,5 @@
-local F, _, L = unpack(select(2, ...))
-local GUI = F.GUI
+local F, C, L = unpack(select(2, ...))
+local GUI = F.Modules.GUI
 local UNITFRAME = F.UNITFRAME
 local NAMEPLATE = F.NAMEPLATE
 local DISABLE = DISABLE
@@ -131,52 +131,54 @@ local function SetupCustomClassColor()
     GUI:SetupCustomClassColor(GUI.Page[1])
 end
 
-local function SetupVignettingAlpha()
-    GUI:SetupVignettingAlpha(GUI.Page[1])
+-- Theme
+local function UpdateBackdropAlpha()
+    for _, frame in pairs(C.Frames) do
+        frame:SetBackdropColor(0, 0, 0, _G.FREE_ADB.BackdropAlpha)
+    end
 end
-
 
 
 -- Options
 GUI.OptionsList = {
     [1] = {
-        {1, 'General', 'CursorTrail', L.GUI.GENERAL.CURSOR_TRAIL, nil, nil, nil, L.GUI.GENERAL.CURSOR_TRAIL_TIP},
-        {1, 'General', 'Vignetting', L.GUI.GENERAL.VIGNETTING, true, SetupVignettingAlpha, nil, L.GUI.GENERAL.VIGNETTING_TIP},
+        {1, 'General', 'CursorTrail', L['Cursor trail'], nil, nil, nil, L.GUI.GENERAL.CURSOR_TRAIL_TIP},
+        {1, 'General', 'Vignette', L['Vignette'], nil, nil, nil, L.GUI.GENERAL.VIGNETTING_TIP},
+
+        {3, 'General', 'VignetteAlpha', L.GUI.GENERAL.VIGNETTING_ALPHA, true, {0, 1, .1}},
+
+
+
+
         {1, 'ACCOUNT', 'UseCustomClassColor', L.GUI.GENERAL.USE_CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor, nil, L.GUI.GENERAL.USE_CUSTOM_CLASS_COLOR_TIP},
-        {1, 'ACCOUNT', 'FontOutline', L.GUI.GENERAL.FONT_OUTLINE, true, nil, nil, L.GUI.GENERAL.FONT_OUTLINE_TIP},
+        {1, 'ACCOUNT', 'FontOutline', L.GUI.GENERAL.FONT_OUTLINE, nil, nil, nil, L.GUI.GENERAL.FONT_OUTLINE_TIP},
+
+        {3, 'ACCOUNT', 'UIScale', L.GUI.GENERAL.UI_SCALE, true, {.5, 2, .01}, nil, L.GUI.GENERAL.UI_SCALE_TIP},
+
         {1, 'General', 'HideTalkingHead', L.GUI.GENERAL.HIDE_TALKINGHEAD},
-        {1, 'General', 'HideBossBanner', L.GUI.GENERAL.HIDE_BOSS_BANNER, true},
+        {1, 'General', 'HideBossBanner', L.GUI.GENERAL.HIDE_BOSS_BANNER, nil},
+
+
+
         {1, 'General', 'HideBossEmote', L.GUI.GENERAL.HIDE_BOSS_EMOTE},
-        {1, 'General', 'SimplifyErrors', L.GUI.GENERAL.SIMPLIFY_ERRORS, true, nil, nil, L.GUI.GENERAL.SIMPLIFY_ERRORS_TIP},
-        {1, 'General', 'EnhancedFriendsList', L.GUI.GENERAL.ENHANCED_FRIENDS_LIST},
-        {1, 'General', 'EnhancedMailButton', L.GUI.GENERAL.ENHANCED_MAIL_BUTTON, true},
-        {1, 'General', 'EnhancedDressup', L.GUI.GENERAL.ENHANCED_DRESSUP},
-        {1, 'General', 'TradeTabs', L.GUI.GENERAL.TRADE_TABS, true, nil, nil, L.GUI.GENERAL.TRADE_TABS_TIP},
-        {1, 'General', 'PetFilter', L.GUI.GENERAL.PET_FILTER},
-        {1, 'General', 'OrderHallIcon', L.GUI.GENERAL.ORDERHALL_ICON, true},
+        {1, 'General', 'SimplifyErrors', L.GUI.GENERAL.SIMPLIFY_ERRORS, nil, nil, nil, L.GUI.GENERAL.SIMPLIFY_ERRORS_TIP},
+
+
+
         {1, 'General', 'FasterLoot', L.GUI.GENERAL.FASTER_LOOT},
         {1, 'General', 'FasterMovieSkip', L.GUI.GENERAL.FASTER_MOVIE_SKIP, true, nil, nil, L.GUI.GENERAL.FASTER_MOVIE_SKIP_TIP},
         {1, 'General', 'SmoothZooming', L.GUI.GENERAL.SMOOTH_ZOOMING, nil, nil, nil, L.GUI.GENERAL.SMOOTH_ZOOMING_TIP},
         {1, 'General', 'ActionMode', L.GUI.GENERAL.ACTION_MODE, true, nil, nil, L.GUI.GENERAL.ACTION_MODE_TIP},
-        {1, 'General', 'MawThreatBar', L.GUI.GENERAL.MAW_THREAT_BAR},
-        {1, 'General', 'ScreenSaver', L.GUI.GENERAL.SCREEN_SAVER, true},
-        {1, 'General', 'AutoTakeScreenshot', L.GUI.GENERAL.AUTO_TAKE_SCREENSHOT, nil, SetupAutoTakeScreenshot},
+
+        {1, 'General', 'ScreenSaver', L.GUI.GENERAL.SCREEN_SAVER},
+        {1, 'General', 'AutoTakeScreenshot', L.GUI.GENERAL.AUTO_TAKE_SCREENSHOT, true, SetupAutoTakeScreenshot},
+
+        {4, 'ACCOUNT', 'NumberFormat', L.GUI.GENERAL.NUMBER_FORMAT, nil, {L.GUI.GENERAL.NUMBER_TYPE1, L.GUI.GENERAL.NUMBER_TYPE2, L.GUI.GENERAL.NUMBER_TYPE3}},
+        {4, 'ACCOUNT', 'TextureStyle', L.GUI.GENERAL.TEXTURE_STYLE, true, {}},
 
 
 
-        {1, 'General', 'NakedButton', L.GUI.GENERAL.NAKED_BUTTON, nil, nil, nil, L.GUI.GENERAL.NAKED_BUTTON_TIP},
-        {1, 'General', 'MissingStats', L.GUI.GENERAL.MISSING_STATS, true, nil, nil, L.GUI.GENERAL.MISSING_STATS_TIP},
-        {1, 'General', 'ItemLevel', L.GUI.GENERAL.ITEM_LEVEL, nil, nil, nil, L.GUI.GENERAL.ITEM_LEVEL_TIP},
-        {1, 'General', 'GemEnchant', L.GUI.GENERAL.GEM_ENCHANT, true, nil, nil, L.GUI.GENERAL.GEM_ENCHANT_TIP},
-        {1, 'General', 'AzeriteTrait', L.GUI.GENERAL.AZERITE_TRAIT, nil, nil, nil, L.GUI.GENERAL.AZERITE_TRAIT_TIP},
-        {},
-        {1, 'General', 'GroupTool', L.GUI.GENERAL.GROUP_TOOL, nil, nil, nil, L.GUI.GENERAL.GROUP_TOOL_TIP},
-        {1, 'General', 'RuneCheck', L.GUI.GENERAL.RUNE_CHECK, nil, nil, nil, L.GUI.GENERAL.RUNE_CHECK_TIP},
-        --{3, 'General', 'Countdown', L.GUI.GENERAL.COUNTDOWN, true, {5, 20, 1}, nil, L.GUI.GENERAL.COUNTDOWN_TIP},
-        {},
-        {4, 'ACCOUNT', 'TextureStyle', L.GUI.GENERAL.TEXTURE_STYLE, false, {}},
-        {4, 'ACCOUNT', 'NumberFormat', L.GUI.GENERAL.NUMBER_FORMAT, true, {L.GUI.GENERAL.NUMBER_TYPE1, L.GUI.GENERAL.NUMBER_TYPE2, L.GUI.GENERAL.NUMBER_TYPE3}},
-        {3, 'ACCOUNT', 'UIScale', L.GUI.GENERAL.UI_SCALE, nil, {.5, 2, .01}, nil, L.GUI.GENERAL.UI_SCALE_TIP},
+
     },
     [2] = {
         {1, 'Notification', 'Enable', L.GUI.NOTIFICATION.ENABLE},
@@ -452,15 +454,14 @@ GUI.OptionsList = {
         {2, 'Nameplate', 'CustomUnitList', L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST, true, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST_TIP},
 
     },
-    [15] = {
-        -- appearance
+    [15] = { -- theme
         {1, 'ACCOUNT', 'ShadowOutline', L.GUI.APPEARANCE.SHADOW_OUTLINE, nil, nil, nil, L.GUI.APPEARANCE.SHADOW_OUTLINE_TIP},
         {1, 'ACCOUNT', 'GradientStyle', L.GUI.APPEARANCE.GRADIENT_STYLE, true, nil, nil, L.GUI.APPEARANCE.GRADIENT_STYLE_TIP},
         {1, 'ACCOUNT', 'ReskinBlizz', L.GUI.APPEARANCE.RESKIN_BLIZZ, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_BLIZZ_TIP},
         {5, 'ACCOUNT', 'BackdropColor', L.GUI.APPEARANCE.BACKDROP_COLOR},
         {5, 'ACCOUNT', 'BorderColor', L.GUI.APPEARANCE.BORDER_COLOR, 1},
         {5, 'ACCOUNT', 'ButtonBackdropColor', L.GUI.APPEARANCE.BUTTON_BACKDROP_COLOR, 2},
-        {3, 'ACCOUNT', 'BackdropAlpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, nil, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
+        {3, 'ACCOUNT', 'BackdropAlpha', L.GUI.APPEARANCE.BACKDROP_ALPHA, nil, {0, 1, .01}, UpdateBackdropAlpha, L.GUI.APPEARANCE.BACKDROP_ALPHA_TIP},
         {3, 'ACCOUNT', 'ButtonBackdropAlhpa', L.GUI.APPEARANCE.BUTTON_BACKDROP_ALHPA, true, {0, 1, .01}, nil, L.GUI.APPEARANCE.BUTTON_BACKDROP_ALHPA_TIP},
         {},
         {1, 'ACCOUNT', 'ReskinDBM', L.GUI.APPEARANCE.RESKIN_DBM, nil, nil, nil, L.GUI.APPEARANCE.RESKIN_DBM_TIP},

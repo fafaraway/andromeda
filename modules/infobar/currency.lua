@@ -34,12 +34,12 @@ StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
 	button2 = NO,
 	OnAccept = function()
 		for _, realm in pairs(crossRealms) do
-			if FREE_GOLDCOUNT[realm] then
-				wipe(FREE_GOLDCOUNT[realm])
+			if FREE_ADB['GoldStatistic'][realm] then
+				wipe(FREE_ADB['GoldStatistic'][realm])
 			end
 		end
 
-		FREE_GOLDCOUNT[C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
+		FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
 	end,
 	timeout = 0,
 	whileDead = 1,
@@ -84,14 +84,14 @@ function INFOBAR:Currency()
 
 			self.Text:SetText(formatTextMoney(newMoney))
 
-			if not FREE_GOLDCOUNT[C.MyRealm] then
-				FREE_GOLDCOUNT[C.MyRealm] = {}
+			if not FREE_ADB['GoldStatistic'][C.MyRealm] then
+				FREE_ADB['GoldStatistic'][C.MyRealm] = {}
 			end
-			if not FREE_GOLDCOUNT[C.MyRealm][C.MyName] then
-				FREE_GOLDCOUNT[C.MyRealm][C.MyName] = {}
+			if not FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] then
+				FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] = {}
 			end
-			FREE_GOLDCOUNT[C.MyRealm][C.MyName][1] = GetMoney()
-			FREE_GOLDCOUNT[C.MyRealm][C.MyName][2] = C.MyClass
+			FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName][1] = GetMoney()
+			FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName][2] = C.MyClass
 
 			oldMoney = newMoney
 		end
@@ -140,7 +140,7 @@ function INFOBAR:Currency()
 			GameTooltip:AddLine(CHARACTER, .6, .8, 1)
 
 			for _, realm in pairs(crossRealms) do
-				local thisRealmList = FREE_GOLDCOUNT[realm]
+				local thisRealmList = FREE_ADB['GoldStatistic'][realm]
 				if thisRealmList then
 					for k, v in pairs(thisRealmList) do
 						local name = Ambiguate(k .. '-' .. realm, 'none')

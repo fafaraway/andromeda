@@ -6,7 +6,7 @@ local CreateFrame = CreateFrame
 local C_EncounterJournal_GetSectionInfo = C_EncounterJournal.GetSectionInfo
 
 local F, C = unpack(select(2, ...))
-local GUI = F.GUI
+local GUI = F.Modules.GUI
 
 C.ReminderBuffsList = {
     ITEMS = {
@@ -982,6 +982,9 @@ C.CharacterSettings = {
     InstallationComplete = false,
     UIAnchor = {},
     UIAnchorTemp = {},
+    SpellBinding = {},
+
+    TalentManager = {},
 
     General = {
         HideTalkingHead = true,
@@ -1010,14 +1013,14 @@ C.CharacterSettings = {
         PlayerLevelUp = false,
         PlayerDead = false,
 
-        SmoothZooming = true,
-        ActionMode = false,
+        FasterZooming = true,
+        ActionCamera = false,
 
         CursorTrail = true,
-        Vignetting = true,
-        VignettingAlpha = .85,
+        Vignette = true,
+        VignetteAlpha = .85,
 
-        ForceWarning = true,
+
         FasterLoot = false,
         FasterMovieSkip = true,
         ScreenSaver = true,
@@ -1088,7 +1091,7 @@ C.CharacterSettings = {
         ['item_level_to_show'] = 1,
         ['new_item_flash'] = true,
         ['bind_type'] = true,
-        ['combine_free_slots'] = false,
+        ['combine_free_slots'] = true,
         ['split_count'] = 1,
         ['auto_deposit'] = false,
         ['special_color'] = true,
@@ -1310,7 +1313,7 @@ C.CharacterSettings = {
         ['hide_realm'] = true,
         ['hide_rank'] = true,
         ['hide_in_combat'] = false,
-        ['border_color'] = false,
+        ['border_color'] = true,
         ['spec_ilvl'] = true,
         ['azerite_armor'] = true,
         ['link_hover'] = true,
@@ -1446,6 +1449,7 @@ C.AccountSettings = {
     DetectVersion = C.AddonVersion,
     VersionCheck = true,
     UIScale = 1,
+    GoldStatistic = {},
     ShadowOutline = true,
     BackdropColor = {r = .1, g = .1, b = .1},
     BackdropAlpha = .75,
@@ -1461,6 +1465,8 @@ C.AccountSettings = {
     ReskinActionBarProfiles = true,
     ReskinImmersion = true,
     ReskinREHack = true,
+    ReskinExtVendor = true,
+    ReskinMogPartialSets = true,
     TextureStyle = 1,
     NumberFormat = 1,
     FontOutline = false,
@@ -1473,6 +1479,7 @@ C.AccountSettings = {
     NPMajorSpells = {},
     CornerSpellsList = {},
     PartySpellsList = {},
+    KeystoneInfo = {},
     ProfileIndex = {},
     ProfileNames = {},
     UseCustomClassColor = true,

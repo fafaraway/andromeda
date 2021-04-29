@@ -25,7 +25,7 @@ local RAID = RAID
 local KEY_NUMLOCK_MAC = KEY_NUMLOCK_MAC
 
 local F, C, L = unpack(select(2, ...))
-local GUI = F.GUI
+local GUI = F.Modules.GUI
 local UNITFRAME = F.UNITFRAME
 local NAMEPLATE = F.NAMEPLATE
 
@@ -1675,24 +1675,5 @@ function GUI:SetupCustomClassColor(parent)
     end
 end
 
-function GUI:SetupVignettingAlpha(parent)
-    local guiName = 'FreeUI_GUI_VignettingAlpha'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.GENERAL.CUSTOM_CLASS_COLOR)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local datas = {
-        text = L.GUI.GENERAL.VIGNETTING_ALPHA,
-        key = 'VignettingAlpha',
-        value = C.CharacterSettings.General.VignettingAlpha,
-    }
-
-
-    CreateSlider(scroll, 'General', datas.key, datas.text, 0, 1, .1, datas.value, 20, -30)
-end
 
 

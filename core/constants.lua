@@ -152,7 +152,7 @@ function F.UpdateCustomClassColors()
     C.b = C.ClassColors[C.MyClass].b
 
     C.MyColor = format('|cff%02x%02x%02x', C.r * 255, C.g * 255, C.b * 255)
-    C.AddonName = '|cffe6e6e6Free|r' .. C.MyColor .. 'UI|r'
+    C.AddonName = 'Free' .. C.MyColor ..'UI|r'
 end
 F:RegisterEvent('ADDON_LOADED', F.UpdateCustomClassColors)
 

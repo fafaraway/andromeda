@@ -94,14 +94,14 @@ end
 
 function MM:CreateDifficultyFlag()
     local diffFlag = CreateFrame('Frame', nil, map)
-    diffFlag:SetSize(40, 40)
-    diffFlag:SetPoint('TOPLEFT', map, 0, -offset)
+    diffFlag:SetSize(70, 40)
+    diffFlag:SetPoint('TOPLEFT', map, 0, -offset - 6)
     diffFlag:SetFrameLevel(map:GetFrameLevel() + 2)
     diffFlag.texture = diffFlag:CreateTexture(nil, 'OVERLAY')
     diffFlag.texture:SetAllPoints(diffFlag)
     diffFlag.texture:SetTexture(C.Assets.diff_tex)
-    diffFlag.texture:SetVertexColor(C.r, C.g, C.b)
-    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 10, nil, '', nil, 'THICK', 'CENTER', 0, 0)
+    diffFlag.texture:SetVertexColor(0, 0, 0)
+    diffFlag.text = F.CreateFS(diffFlag, C.Assets.Fonts.Bold, 9, nil, '', nil, 'THICK', 'CENTER', 0, 0)
     diffFlag.text:SetJustifyH('CENTER')
     map.DiffFlag = diffFlag
     map.DiffText = diffFlag.text

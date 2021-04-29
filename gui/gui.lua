@@ -16,7 +16,7 @@ local APPLY = APPLY
 local CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON
 
 local F, C, L = unpack(select(2, ...))
-local GUI = F.GUI
+local GUI = F.Modules.GUI
 
 local guiTab = {}
 local guiPage = {}

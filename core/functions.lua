@@ -53,6 +53,7 @@ local LE_ITEM_QUALITY_ARTIFACT = LE_ITEM_QUALITY_ARTIFACT
 local LE_ITEM_QUALITY_HEIRLOOM = LE_ITEM_QUALITY_HEIRLOOM
 local ColorPicker_GetPreviousValues = ColorPicker_GetPreviousValues
 local EnumerateFrames = EnumerateFrames
+local BaudErrorFrameHandler = BaudErrorFrameHandler
 
 local F, C, L = unpack(select(2, ...))
 local assets = C.Assets
@@ -74,15 +75,25 @@ do
     end
 
     function F:Print(...)
-        print(C.AddonName .. C.GreyColor .. ':|r', ...)
+        _G.DEFAULT_CHAT_FRAME:AddMessage(C.AddonName .. C.GreyColor .. ':|r ' .. format(...))
     end
 
     function F:Debug(...)
-        if not C.IsDeveloper then
-            return
-        end
+        if not C.IsDeveloper then return end
 
-        print('Debug: ', ...)
+        _G.DEFAULT_CHAT_FRAME:AddMessage('Debug: ' .. format(...))
+    end
+
+    function F:ThrowError(err, msg)
+        if not err then return end
+
+        err = format('FreeUI: %s Error\n%s', msg, err)
+
+        if BaudErrorFrameHandler then
+            BaudErrorFrameHandler(err)
+        else
+            _G.ScriptErrorsFrame:OnError(err, false, false)
+        end
     end
 end
 
@@ -282,9 +293,9 @@ do
         if s >= day then
             return format('|cffbebfb3%d|r', s / day), s % day -- grey
         elseif s >= hour then
-            return format('|cffffffff%d|r', s / hour), s % hour -- white
+            return format('|cff4fcd35%d|r', s / hour), s % hour -- white
         elseif s >= minute then
-            return format('|cff1e84d0%d|r', s / minute), s % minute -- blue
+            return format('|cff21c8de%d|r', s / minute), s % minute -- blue
         elseif s > 3 then
             return format('|cffffe700%d|r', s), s - floor(s) -- yellow
         else
@@ -362,6 +373,8 @@ do
         local id = tonumber(strmatch((guid or ''), '%-(%d-)%-%x-$'))
         return id
     end
+
+
 
     function F:WaitFunc(elapse)
         local i = 1
@@ -762,16 +775,16 @@ do
     end
 
     C.Frames = {}
-    function F:CreateBD(a)
-        local color = _G.FREE_ADB.BackdropColor
-        local alpha = _G.FREE_ADB.BackdropAlpha
+    function F:CreateBD(alpha)
+        local backdropColor = _G.FREE_ADB.BackdropColor
+        local backdropAlpha = _G.FREE_ADB.BackdropAlpha
 
         self:SetBackdrop({bgFile = assets.bd_tex, edgeFile = assets.bd_tex, edgeSize = C.Mult})
-        self:SetBackdropColor(color.r, color.g, color.b, a or alpha)
+        self:SetBackdropColor(backdropColor.r, backdropColor.g, backdropColor.b, alpha or backdropAlpha)
 
         F.SetBorderColor(self)
 
-        if not a then
+        if not alpha then
             tinsert(C.Frames, self)
         end
     end
@@ -890,6 +903,7 @@ do
     function F:ReskinIcon(shadow)
         self:SetTexCoord(unpack(C.TexCoord))
         local bg = F.CreateBDFrame(self)
+        bg:SetBackdropBorderColor(0, 0, 0)
         if shadow then
             F.CreateSD(bg)
         end
@@ -898,6 +912,7 @@ do
 
     function F:PixelIcon(texture, highlight)
         self.bg = F.CreateBDFrame(self)
+        self.bg:SetBackdropBorderColor(0, 0, 0)
         self.bg:SetAllPoints()
         self.Icon = self:CreateTexture(nil, 'ARTWORK')
         self.Icon:SetInside()
@@ -1149,7 +1164,7 @@ do
         local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
 
         thumb.bg:SetBackdropColor(C.r, C.g, C.b, alpha)
-        thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        -- thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
     local function Scroll_OnLeave(self)
@@ -1291,7 +1306,7 @@ do
     function F:ReskinArrow(direction)
         self:SetSize(16, 16)
 
-        F.Reskin(self, true)
+        F.StripTextures(self)
 
         self:SetDisabledTexture(assets.bd_tex)
         local dis = self:GetDisabledTexture()

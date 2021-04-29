@@ -1,10 +1,10 @@
 ## Interface: 90005
 ## Author: Solor
 ## Version: @project-version@
-## Title: |cffffffffFree|r|cffb2b2b2UI|r
+## Title: |cffffffffFreeUI|r
 ## Notes: A user interface replacement for World of Warcraft. Minimalistic, elegant, yet also efficient and practical.
-## SavedVariables: FREE_ADB, FREE_PDB, FREE_GOLDCOUNT, FREE_KEYSTONE
-## SavedVariablesPerCharacter: FREE_DB, FREE_SPELLBINDING
+## SavedVariables: FREE_ADB, FREE_PDB
+## SavedVariablesPerCharacter: FREE_DB
 
 ## X-oUF: oUFembed
 ## X-Website: https://github.com/Solor/FreeUI
@@ -15,8 +15,8 @@
 
 taintless.xml
 libs\libs.xml
-init.lua
 locales\locales.xml
+init.lua
 core\core.xml
 gui\gui.xml
 modules\modules.xml

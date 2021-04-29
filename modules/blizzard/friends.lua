@@ -1,3 +1,8 @@
+--[[
+    Enhanced friends list
+    Credit ElvUI_WindTool
+]]
+
 local _G = _G
 local unpack = unpack
 local select = select
@@ -32,11 +37,11 @@ local GetQuestDifficultyColor = GetQuestDifficultyColor
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 
 local F, C = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local EFL = F:RegisterModule('EnhancedFriendsList')
 
 local mediaPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
 
-local GameIcons = {
+local gameIcons = {
     ['Alliance'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\Alliance'},
     ['Horde'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\Horde'},
     ['Neutral'] = {Default = BNet_GetClientTexture(BNET_CLIENT_WOW), Modern = mediaPath .. 'game_icons\\WoW'},
@@ -57,16 +62,19 @@ local GameIcons = {
     [BNET_CLIENT_WC3] = {Default = BNet_GetClientTexture(BNET_CLIENT_WC3), Modern = mediaPath .. 'game_icons\\WC3'},
 }
 
-local StatusIcons = {
+local statusIcons = {
     ['Online'] = FRIENDS_TEXTURE_ONLINE,
     ['Offline'] = FRIENDS_TEXTURE_OFFLINE,
     ['DND'] = FRIENDS_TEXTURE_DND,
     ['AFK'] = FRIENDS_TEXTURE_AFK
 }
 
-local MaxLevel = {[BNET_CLIENT_WOW .. 'C'] = 60, [BNET_CLIENT_WOW] = C.MaxLevel}
+local MaxLevel = {
+    [BNET_CLIENT_WOW .. 'C'] = 60,
+    [BNET_CLIENT_WOW] = C.MaxLevel
+}
 
-local BNColor = {
+local clientColor = {
     [BNET_CLIENT_CLNT] = {r = 0.509, g = 0.772, b = 1}, -- 未知
     [BNET_CLIENT_APP] = {r = 0.509, g = 0.772, b = 1}, -- 战网
     [BNET_CLIENT_WC3] = {r = 0.796, g = 0.247, b = 0.145}, -- 魔兽争霸重置版 3
@@ -153,14 +161,14 @@ local function UpdateFriendButton(button)
 
     -- 状态图标
     if status then
-        button.status:SetTexture(StatusIcons[status])
+        button.status:SetTexture(statusIcons[status])
     end
 
     if game and game ~= '' then
         local buttonTitle, buttonText
 
         -- 名字
-        local realIDString = realID and F:CreateColorString(realID, BNColor[game]) or realID
+        local realIDString = realID and F:CreateColorString(realID, clientColor[game]) or realID
 
         local nameString = name
         local classColor = GetClassColor(class)
@@ -194,8 +202,9 @@ local function UpdateFriendButton(button)
         end
 
         -- 游戏图标
-        local iconGroup = faction or game
-        local iconTex = GameIcons[iconGroup]['Modern'] or BNet_GetClientTexture(game)
+        -- local iconGroup = faction or game
+        local iconGroup = game
+        local iconTex = gameIcons[iconGroup]['Modern'] or BNet_GetClientTexture(game)
         button.gameIcon:SetTexture(iconTex)
         button.gameIcon:Show() -- 普通角色好友暴雪隐藏了
 
@@ -216,11 +225,6 @@ local function UpdateFriendButton(button)
     end
 end
 
-function BLIZZARD:EnhancedFriendsList()
-    if not C.DB.General.EnhancedFriendsList then
-        return
-    end
-
+function EFL:OnLogin()
     hooksecurefunc('FriendsFrame_UpdateFriendButton', UpdateFriendButton)
 end
-BLIZZARD:RegisterBlizz('EnhancedFriendsList', BLIZZARD.EnhancedFriendsList)

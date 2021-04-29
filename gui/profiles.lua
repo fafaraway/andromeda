@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local GUI = F.GUI
+local GUI = F.Modules.GUI
 
 local pairs, strsplit, Ambiguate = pairs, strsplit, Ambiguate
 local strfind, tostring, select = strfind, tostring, select
@@ -90,8 +90,8 @@ StaticPopupDialogs['FREEUI_DELETE_UNIT_PROFILE'] = {
 	button2 = NO,
 	OnAccept = function(self)
 		local name, realm = strsplit('-', self.text.text_arg1)
-		if FREE_GOLDCOUNT[realm] and FREE_GOLDCOUNT[realm][name] then
-			FREE_GOLDCOUNT[realm][name] = nil
+		if FREE_ADB['GoldStatistic'][realm] and FREE_ADB['GoldStatistic'][realm][name] then
+			FREE_ADB['GoldStatistic'][realm][name] = nil
 		end
 		FREE_ADB['ProfileIndex'][self.text.text_arg1] = nil
 	end,
@@ -142,8 +142,8 @@ end
 
 function GUI:GetClassFromGoldInfo(name, realm)
 	local class = 'NONE'
-	if FREE_GOLDCOUNT[realm] and FREE_GOLDCOUNT[realm][name] then
-		class = FREE_GOLDCOUNT[realm][name][2]
+	if FREE_ADB['GoldStatistic'][realm] and FREE_ADB['GoldStatistic'][realm][name] then
+		class = FREE_ADB['GoldStatistic'][realm][name][2]
 	end
 
 	return class
@@ -297,7 +297,7 @@ function GUI:Delete_OnEnter()
 		self:SetText(text)
 	end
 
-	if FREE_ADB['ProfileIndex'][text] or (FREE_GOLDCOUNT[realm] and FREE_GOLDCOUNT[realm][name]) then
+	if FREE_ADB['ProfileIndex'][text] or (FREE_ADB['GoldStatistic'][realm] and FREE_ADB['GoldStatistic'][realm][name]) then
 		StaticPopup_Show('FREEUI_DELETE_UNIT_PROFILE', text, GUI:GetClassFromGoldInfo(name, realm))
 	else
 		UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.PROFILE.INCORRECT_UNIT_NAME)
