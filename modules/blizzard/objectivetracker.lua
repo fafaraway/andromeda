@@ -33,68 +33,9 @@ function BLIZZARD:ObjectiveTrackerMover()
     end
 end
 
---[[ Generate wowhead link ]]
 
-local LINK_START = 'Wowhead'
-local LINK_QUEST = 'http://www.wowhead.com/quest=%d'
-local LINK_ACHIEVEMENT = 'http://www.wowhead.com/achievement=%d'
 
-_G.StaticPopupDialogs['WATCHFRAME_URL'] = {
-    text = LINK_START .. ' link',
-    button1 = OKAY,
-    timeout = 0,
-    whileDead = true,
-    hasEditBox = true,
-    editBoxWidth = 325,
-    OnShow = function(self)
-        self.editBox:SetFocus()
-    end,
-    EditBoxOnEnterPressed = function(self)
-        self:GetParent():Hide()
-    end,
-    EditBoxOnEscapePressed = function(self)
-        self:GetParent():Hide()
-    end,
-}
 
-local function CreateQuestLink(self)
-    local b, i, info, questID
-    b = self.activeFrame
-    questID = b.id
-    info = UIDropDownMenu_CreateInfo()
-    info.text = LINK_START .. '-Link'
-    info.func = function(id)
-        local inputBox = StaticPopup_Show('WATCHFRAME_URL')
-        inputBox.editBox:SetText(LINK_QUEST:format(questID))
-        inputBox.editBox:HighlightText()
-    end
-    info.arg1 = questID
-    info.notCheckable = true
-    UIDropDownMenu_AddButton(info, UIDROPDOWN_MENU_LEVEL)
-end
-
-local function CreateAchievementLink(self)
-    local b, i, info
-    b = self.activeFrame
-    i = b.id
-    info = UIDropDownMenu_CreateInfo()
-    info.text = LINK_START .. '-Link'
-    info.func = function(_, i)
-        local inputBox = StaticPopup_Show('WATCHFRAME_URL')
-        inputBox.editBox:SetText(LINK_ACHIEVEMENT:format(i))
-        inputBox.editBox:HighlightText()
-    end
-    info.arg1 = i
-    info.noClickSound = 1
-    info.isNotRadio = true
-    info.notCheckable = 1
-    UIDropDownMenu_AddButton(info, UIDROPDOWN_MENU_LEVEL)
-end
-
-function BLIZZARD:GenerateWowHeadLink()
-    hooksecurefunc('QuestObjectiveTracker_OnOpenDropDown', CreateQuestLink)
-    hooksecurefunc('AchievementObjectiveTracker_OnOpenDropDown', CreateAchievementLink)
-end
 
 --[[ Restyle objective tracker text ]]
 
@@ -312,7 +253,7 @@ end
 
 function BLIZZARD:EnhancedObjectiveTracker()
     BLIZZARD:ObjectiveTrackerMover()
-    BLIZZARD:GenerateWowHeadLink()
+
     BLIZZARD:RestyleObjectiveTrackerText()
 
     -- Kill reward animation when finished dungeon or bonus objectives
