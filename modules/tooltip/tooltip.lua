@@ -164,8 +164,8 @@ function TOOLTIP:OnTooltipSetUnit()
                     guildName = guildName .. '-' .. guildRealm
                 end
                 --[[ if cfg.hideJunkGuild and not isShiftKeyDown then
-					if strlen(guildName) > 31 then guildName = '...' end
-				end ]]
+                    if strlen(guildName) > 31 then guildName = '...' end
+                end ]]
                 _G.GameTooltipTextLeft2:SetText('<' .. guildName .. '> ' .. rank)
             end
         end
@@ -193,8 +193,7 @@ function TOOLTIP:OnTooltipSetUnit()
             local tiptextLevel = TOOLTIP.GetLevelLine(self)
             if tiptextLevel then
                 local pvpFlag = isPlayer and UnitIsPVP(unit) and format(' |cffff0000%s|r', _G.PVP) or ''
-                local unitClass = isPlayer and format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or
-                                      ''
+                local unitClass = isPlayer and format('%s %s', UnitRace(unit) or '', hexColor .. (UnitClass(unit) or '') .. '|r') or UnitCreatureType(unit) or ''
                 tiptextLevel:SetFormattedText(('%s%s %s %s'), textLevel, pvpFlag, unitClass, (not alive and '|cffCCCCCC' .. _G.DEAD .. '|r' or ''))
             end
         end
@@ -347,7 +346,7 @@ function TOOLTIP:TargetedInfo()
     _G.GameTooltip:HookScript('OnTooltipSetUnit', TOOLTIP.ScanTargets)
 end
 
--- Fix comparison error on cursor
+-- Fix comparison position
 function TOOLTIP:GameTooltip_ComparisonFix(anchorFrame, shoppingTooltip1, shoppingTooltip2, _, secondaryItemShown)
     local point = shoppingTooltip1:GetPoint(2)
     if secondaryItemShown then
