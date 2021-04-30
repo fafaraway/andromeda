@@ -1,8 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="tooltip.lua"/>
+    <Script file="achievement.lua"/>
     <Script file="conduit.lua"/>
     <Script file="extra.lua"/>
-    <Script file="hover.lua"/>
+    <Script file="hyper_link.lua"/>
     <Script file="icon.lua"/>
-    <Script file="specilvl.lua"/>
+    <Script file="multi_itemref.lua"/>
+    <Script file="spec_ilvl.lua"/>
+    <Script file="style.lua"/>
 </Ui>

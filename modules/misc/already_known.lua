@@ -1,6 +1,3 @@
-local F = unpack(select(2, ...))
-local TOOLTIP = F.TOOLTIP
-
 local _G = _G
 local mod = mod
 local format = format
@@ -33,7 +30,14 @@ local NUM_SLOTS_PER_GUILDBANK_GROUP = NUM_SLOTS_PER_GUILDBANK_GROUP
 local ITEM_SPELL_KNOWN = ITEM_SPELL_KNOWN
 local COLLECTED = COLLECTED
 
-local COLOR = {r = .1, g = 1, b = .1}
+local F = unpack(select(2, ...))
+local TOOLTIP = F:GetModule('Tooltip')
+
+local COLOR = {
+    r = .1,
+    g = 1,
+    b = .1
+}
 local knowables = {
     [LE_ITEM_CLASS_CONSUMABLE] = true,
     [LE_ITEM_CLASS_RECIPE] = true,

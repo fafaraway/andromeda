@@ -26,7 +26,7 @@ do
 
     F:RegisterModule('Notification')
     F:RegisterModule('Announcement')
-    F:RegisterModule('Tooltip')
+
     F:RegisterModule('Unitframe')
     F:RegisterModule('Nameplate')
     F:RegisterModule('Quest')
@@ -52,7 +52,7 @@ do
 
     F.NOTIFICATION = F:GetModule('Notification')
     F.ANNOUNCEMENT = F:GetModule('Announcement')
-    F.TOOLTIP = F:GetModule('Tooltip')
+
     F.UNITFRAME = F:GetModule('Unitframe')
     F.NAMEPLATE = F:GetModule('Nameplate')
     F.QUEST = F:GetModule('Quest')

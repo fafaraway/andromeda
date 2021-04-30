@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local TOOLTIP = F.TOOLTIP
+local TOOLTIP = F:GetModule('Tooltip')
 
 C.Themes["Blizzard_BarbershopUI"] = function()
 	local frame = BarberShopFrame
