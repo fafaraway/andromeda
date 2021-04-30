@@ -31,14 +31,14 @@ local function CameraZoom(func, increment)
     end
 end
 
-local oldZoomIn = CameraZoomIn
-local oldZoomOut = CameraZoomOut
+local oldZoomIn = _G.CameraZoomIn
+local oldZoomOut = _G.CameraZoomOut
 
-function CameraZoomIn(v)
+function _G.CameraZoomIn(v)
     CameraZoom(oldZoomIn, v)
 end
 
-function CameraZoomOut(v)
+function _G.CameraZoomOut(v)
     CameraZoom(oldZoomOut, v)
 end
 
