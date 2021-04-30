@@ -168,7 +168,7 @@ function MM:UpdateDifficultyFlag()
             diffText:SetText(format('|cffff7d0aH|r%s', 'WF'))
         end
     elseif instanceType == 'pvp' or instanceType == 'arena' then
-        diffText:SetText(format('|cffFFFF00%s|r', 'PvP'))
+        diffText:SetText(format('|cffff0007%s|r', 'PvP'))
     else
         diffText:SetText('')
     end
