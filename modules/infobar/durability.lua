@@ -79,9 +79,9 @@ local function onEvent(self)
 	local numSlots = getItemDurability()
 
 	if numSlots > 0 then
-		self.Text:SetText(format(gsub(L['INFOBAR_DURABILITY'] .. ': [color]%d|r%%', '%[color%]', (gradientColor(floor(localSlots[1][3] * 100) / 100))), floor(localSlots[1][3] * 100)))
+		self.Text:SetText(format(gsub(L['Durability'] .. ': [color]%d|r%%', '%[color%]', (gradientColor(floor(localSlots[1][3] * 100) / 100))), floor(localSlots[1][3] * 100)))
 	else
-		self.Text:SetText(L['INFOBAR_DURABILITY'] .. ': ' .. C.InfoColor .. NONE)
+		self.Text:SetText(L['Durability'] .. ': ' .. C.InfoColor .. NONE)
 	end
 end
 
@@ -115,7 +115,7 @@ local function onEnter(self)
 		end
 	end
 	GameTooltip:AddDoubleLine(' ', C.LineString)
-	GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['INFOBAR_OPEN_CHARACTER_PANEL'] .. ' ', 1, 1, 1, .9, .8, .6)
+	GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Character Panel'] .. ' ', 1, 1, 1, .9, .8, .6)
 	GameTooltip:Show()
 end
 

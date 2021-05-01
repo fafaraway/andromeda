@@ -79,27 +79,31 @@ function INFOBAR:Guild()
 	FreeUIGuildButton:RegisterEvent('PLAYER_ENTERING_WORLD')
 	FreeUIGuildButton:SetScript('OnEvent', function(self, event, ...)
 		if not IsInGuild() then
-			self.Text:SetText(L['INFOBAR_GUILD']..": "..C.InfoColor..L['INFOBAR_GUILD_NONE'])
+			self.Text:SetText(L['Guild']..": "..C.InfoColor..L['None'])
 			return
 		end
 
 		--GuildRoster()
 
 		totalOnline = select(3, GetNumGuildMembers())
-		self.Text:SetText(L['INFOBAR_GUILD']..": "..C.InfoColor..totalOnline)
+		self.Text:SetText(L['Guild']..": "..C.InfoColor..totalOnline)
 	end)
 
 	FreeUIGuildButton.onMouseUp = function(self, btn)
 		if InCombatLockdown() then UIErrorsFrame:AddMessage(C.InfoColor..ERR_NOT_IN_COMBAT) return end
 
-		if IsInGuild() then
-			if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
-			GuildFrame_Toggle()
-			GuildFrame_TabClicked(GuildFrameTab2)
-		else
-			if not LookingForGuildFrame then LoadAddOn("Blizzard_LookingForGuildUI") end
-			LookingForGuildFrame_Toggle()
-		end
+        if btn == 'LeftButton' then
+            if IsInGuild() then
+                if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end
+                GuildFrame_Toggle()
+                GuildFrame_TabClicked(GuildFrameTab2)
+            else
+                if not LookingForGuildFrame then LoadAddOn("Blizzard_LookingForGuildUI") end
+                LookingForGuildFrame_Toggle()
+            end
+        elseif btn == 'RightButton' then
+            ToggleCommunitiesFrame()
+        end
 	end
 	FreeUIGuildButton:HookScript('OnMouseUp', FreeUIGuildButton.onMouseUp)
 
@@ -180,7 +184,8 @@ function INFOBAR:Guild()
 
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['INFOBAR_OPEN_GUILD_PANEL']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['Toggle Guild Panel']..' ', 1,1,1, .9, .8, .6)
+        GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['Toggle Communities Panel']..' ', 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

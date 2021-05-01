@@ -77,12 +77,12 @@ local function checkTexture(texture)
 end
 
 local questlist = {
-	{name = L['INFOBAR_BLINGTRON'], id = 34774},
-	{name = L['INFOBAR_MEAN_ONE'], id = 6983},
-	{name = L['INFOBAR_TIMEWARPED'], id = 40168, texture = 1129674}, -- TBC
-	{name = L['INFOBAR_TIMEWARPED'], id = 40173, texture = 1129686}, -- WotLK
-	{name = L['INFOBAR_TIMEWARPED'], id = 40786, texture = 1304688}, -- Cata
-	{name = L['INFOBAR_TIMEWARPED'], id = 45799, texture = 1530590} -- MoP
+	{name = L['Blingtron Daily Pack'], id = 34774},
+	{name = L['Winter Veil Daily'], id = 6983},
+	{name = L['Timewarped Badge Reward'], id = 40168, texture = 1129674}, -- TBC
+	{name = L['Timewarped Badge Reward'], id = 40173, texture = 1129686}, -- WotLK
+	{name = L['Timewarped Badge Reward'], id = 40786, texture = 1304688}, -- Cata
+	{name = L['Timewarped Badge Reward'], id = 45799, texture = 1530590} -- MoP
 }
 
 local lesserVisions = {58151, 58155, 58156, 58167, 58168}
@@ -110,8 +110,8 @@ local bfaZoneTime = {
 }
 
 local invIndex = {
-	[1] = {title = L['INFOBAR_INVASION_LEG'], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime['CN']},
-	[2] = {title = L['INFOBAR_INVASION_BFA'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or bfaZoneTime['CN']}
+	[1] = {title = L['Legion Invasion'], duration = 66600, maps = {630, 641, 650, 634}, timeTable = {}, baseTime = legionZoneTime[region] or legionZoneTime['CN']},
+	[2] = {title = L['Faction Assaults'], duration = 68400, maps = {862, 863, 864, 896, 942, 895}, timeTable = {4, 1, 6, 2, 5, 3}, baseTime = bfaZoneTime[region] or bfaZoneTime['CN']}
 }
 
 local mapAreaPoiIDs = {
@@ -205,7 +205,7 @@ function INFOBAR:Report()
 
 	FreeUIReportButton =
 		INFOBAR:addButton(
-		L['INFOBAR_REPORT'],
+		L['Daily/Weekly'],
 		INFOBAR.POSITION_RIGHT,
 		100,
 		function(self, button)
@@ -242,7 +242,7 @@ function INFOBAR:Report()
 		local r, g, b
 		GameTooltip:SetOwner(self, (C.DB.infobar.anchor_top and 'ANCHOR_BOTTOM') or 'ANCHOR_TOP', 0, (C.DB.infobar.anchor_top and -6) or 6)
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(L['INFOBAR_REPORT'], .9, .8, .6)
+		GameTooltip:AddLine(L['Daily/Weekly'], .9, .8, .6)
 
 		-- World bosses
 		title = false
@@ -339,7 +339,7 @@ function INFOBAR:Report()
 			for _, id in pairs(lesserVisions) do
 				if IsQuestFlaggedCompleted(id) then
 					addTitle(QUESTS_LABEL)
-					GameTooltip:AddDoubleLine(L['INFOBAR_LESSER_VISION'], QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
+					GameTooltip:AddDoubleLine(L['Lesser Vision of N\'Zoth'], QUEST_COMPLETE, 1, 1, 1, 0, 1, 0)
 					break
 				end
 			end
@@ -367,20 +367,20 @@ function INFOBAR:Report()
 					else
 						r, g, b = 0, 1, 0
 					end
-					GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_CURRENT'] .. zoneName, format('%.2d:%.2d', timeLeft / 60, timeLeft % 60), 1, 1, 1, r, g, b)
+					GameTooltip:AddDoubleLine(L['Current'] .. ': ' .. zoneName, format('%.2d:%.2d', timeLeft / 60, timeLeft % 60), 1, 1, 1, r, g, b)
 				end
 				local nextLocation = GetNextLocation(nextTime, index)
-				GameTooltip:AddDoubleLine(L['INFOBAR_INVASION_NEXT'] .. nextLocation, date('%m/%d %H:%M', nextTime), 1, 1, 1, 1, 1, 1)
+				GameTooltip:AddDoubleLine(L['Next'] .. ': ' .. nextLocation, date('%m/%d %H:%M', nextTime), 1, 1, 1, 1, 1, 1)
 			end
 		else
 			GameTooltip:AddLine(' ')
-			GameTooltip:AddLine(L['INFOBAR_HOLD_SHIFT'], .6, .8, 1)
+			GameTooltip:AddLine(L['Hold SHIFT for details'], .6, .8, 1)
 		end
 
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['INFOBAR_TOGGLE_CALENDAR'], 1, 1, 1, .9, .8, .6)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['INFOBAR_TOGGLE_WEEKLY_REWARDS'], 1, 1, 1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left .. L['Toggle Calendar Panel'], 1, 1, 1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['Toggle Great Vault Panel'], 1, 1, 1, .9, .8, .6)
 
 		GameTooltip:Show()
 

@@ -1,304 +1,228 @@
-local _G = _G
-local unpack = unpack
-local select = select
 
-local _, _, L = unpack(select(2, ...))
+local L = _G.LibStub('AceLocale-3.0'):NewLocale('FreeUI', 'enUS', true, true)
 
---[[ Binding ]]
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
 
-_G.BINDING_HEADER_FREEUI = 'FreeUI'
-_G.BINDING_NAME_TOGGLE_FREEUI_GUI = 'Toggle FreeUI Config Panel'
+L['Player Frame'] = true
+L['Pet Frame'] = true
+L['Target Frame'] = true
+L['Target of Target Frame'] = true
+L['Focus Frame'] = true
+L['Target of Focus Frame'] = true
+L['Boss Frame'] = true
+L['Arena Frame'] = true
+L['Party Frame'] = true
+L['Raid Frame'] = true
+L['FreeUI_CustomBar'] = 'CustomBar'
+L['Buff Frame'] = true
+L['Debuff Frame'] = true
+L['Combat Text Incoming'] = true
+L['Combat Text Outgoing'] = true
+L['Main Bar'] = true
+L['Pet Bar'] = true
+L['Stance Bar'] = true
+L['Leave Vehicle Button'] = true
+L['Extra Button'] = true
+L['Zone Ability Button'] = true
+L['Cooldown Icon'] = true
+L['Player Castbar'] = true
+L['Target Castbar'] = true
+L['Focus Castbar'] = true
+L['Alert Frame'] = true
+L['Vehicle Indicator'] = true
+L['Widget Frame'] = true
+L['Durability Indicator'] = true
+L['Quest Item Button'] = true
+L['Maw Threat Bar'] = true
+L['Group Tool'] = true
+L['Objective Tracker'] = true
+L['Tooltip'] = true
 
---[[ Actionbar ]]
+L['Addon'] = true
+L['not found'] = true
+L['Disbanding group'] = true
+L['Are you sure you want to disband the group?'] = true
+L['Commands list'] = true
 
-L.ACTIONBAR = {
-    CD_REMAINING = '%s cooldown remaining %s.',
-    CD_FINISHED = '%s is now available.',
-    CUSTOM_BAR = 'CustomBar',
-    UNBIND_TIP = 'Press the escape key or right click to unbind this action.',
-    KEY_INDEX = 'Index',
-    KEY_BINDING = 'Key',
-    KEY_BOUND_TO = ' bound to',
-    SAVE_KEYBINDS = 'Keybinds saved.',
-    DISCARD_KEYBINDS = 'Keybinds discarded.',
-    CLEAR_BINDS = '|cff20ff20All keybinds cleared for|r %s.',
-}
+L['Enhanced Menu'] = true
+L['Guild Invite'] = true
+L['Copy Name'] = true
+L['Who'] = true
+L['Armory'] = true
+L['Raider.IO'] = true
 
---[[ Announcement ]]
+L['Stats report:'] = true
+L['Covenant: %s Soulbinds: %s'] = true
 
-L.ANNOUNCEMENT = {
-    INTERRUPT = 'Interrupted %target%\'s %target_spell%!',
-    DISPEL = 'Dispelled %target%\'s %target_spell%!',
-    STOLEN = 'Stolen %target%\'s %target_spell%!',
-    BATTLE_REZ = '%player% casted %spell% on %target%!',
-    CAST = '%player% casted %spell%!',
-    CAST_TARGET = '%player% casted %spell% on %target%!',
-    QUEST_ACCEPT = 'Quest accept:',
-    QUEST_ANNOUNCE = 'Quest announce',
-    QUEST_ANNOUNCE_TIP = 'Let your teammates know the progress of quests.',
-    RESET_SUCCESS = '%s has been reset.',
-    RESET_FAILED = 'Cannot reset %s, there are players still inside the instance.',
-    RESET_FAILED_ZONING = 'Cannot reset %s, there are players in your party attempting to zone into an instance.',
-    RESET_FAILED_OFFLINE = 'Cannot reset %s, there are players offline in your party.',
-}
+L['Interrupted %target%\'s %target_spell%!'] = true
+L['Dispelled %target%\'s %target_spell%!'] = true
+L['Stolen %target%\'s %target_spell%!'] = true
+L['%player% casted %spell% on %target%!'] = true
+L['%player% casted %spell%!'] = true
+L['Quest accept:'] = true
+L['Announcement'] = true
+L['|nLet your teammates know the progress of quests.'] = true
+L['%s has been reset.'] = true
+L['Can not reset %s, there are players still inside the instance.'] = true
+L['Can not reset %s, there are players in your party attempting to zone into an instance.'] = true
+L['Can not reset %s, there are players offline in your party.'] = true
 
---[[ Quest ]]
+L['Automatic'] = true
+L['|nAutomatically accept and deliver quests.|nHold SHIFT key to STOP automation.'] = true
 
-L.QUEST = {
-    AUTOMATION = 'Quest automation',
-    AUTOMATION_TIP = '|nAutomatically accept and deliver quests.|nHold SHIFT key to STOP automation.',
-}
+L['%s cooldown remaining %s.'] = true
+L['%s is now available.'] = true
 
---[[ Unitframe ]]
+L['Press the escape key or right click to unbind this action.'] = true
+L['Index'] = true
+L['Key'] = true
+L['bound to'] = true
+L['Keybinds saved.'] = true
+L['Keybinds discarded.'] = true
+L['All keybinds cleared for %s.'] = true
 
-L.UNITFRAME = {
-    BINDER_OPEN = 'Open spell binding',
-    BINDER_TITLE = 'Spell Binding',
-    BINDER_TIP = 'Ctrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.',
-}
+L['Addon has been out of date, the latest release is |cffff0000%s|r.'] = true
+L['Incompatible AddOns:'] = true
+L['Disable Incompatible Addons'] = true
 
---[[ General ]]
+L['Click to cast'] = true
+L['Click to cast tip'] = '|nCtrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.|nPay attention to avoid key conflict if you enabled \'Easy Focus\' feature.'
+L['Configure Spell Binding'] = true
 
-L.GENERAL = {
-    UNDRESS = 'Undress',
-    UNDRESS_TIP = '%sUndress all|n%sUndress tabard',
-    USE_VELLUM = 'Right click to use vellum',
-    STRANGER = 'Stranger',
-    KEYSTONES = 'Keystones',
-    KEYSTONES_RESET = 'Delete keystones info',
-    GET_NAKED = 'Double click to unequip all gears',
-    ORDERHALL_TIP = 'Hold SHIFT for details',
-    GOLD = 'Gold',
+L['lacking'] = true
 
-    BUY_STACK_WARNING = 'Are you sure to buy |cffff0000a stack|r of these?',
+L['World channel'] = true
+L['Join world channel'] = true
+L['Leave world channel'] = true
+L['Show chat frame'] = true
+L['Hide chat frame'] = true
+L['Copy chat content'] = true
+L['Tell'] = true
+L['From'] = true
 
-    GROUP_TOOL = 'Group tool',
-    FOOD = 'Food',
-    FLASK = 'Flask',
-    LACK = 'Lack ',
-    PLAYER_COUNT = '%s players',
-    COUNTDOWN = 'Start/Cancel Countdown',
-    CHECK_STATUS = 'Check Flask & Food',
-    BUFFS_READY = 'All Buffs Ready!',
-    RAID_BUFF_CHECK = 'Raid Buff Checking:',
-    EXRT_POTION_CHECK = 'ExRT Potion Check',
-    ADDON_REQUIRED = 'You do not have DBM or BigWigs installed',
-    DISBAND_CHECK = 'Are you sure to |cffff0000disband|r your group?',
-    DISBAND_PROCESS = 'Raid Disbanding',
-}
+L['Stand in circle and spam <SpaceBar> to complete!'] = true
 
-L.NOTIFICATION = {
-    VERSION_EXPIRED = 'Addon has been out of date, the latest release is |cffff0000%s|r.',
-    INCOMPATIBLE_ADDON = 'Incompatible AddOns:',
-    DISABLE_ALL = 'Disable All!',
-}
+L['Paragon'] = true
+L['Cursor'] = true
 
---[[ Infobar ]]
+L['Enter Combat'] = true
+L['Leave Combat'] = true
 
-do
-    L['INFOBAR_DURABILITY'] = 'Durability'
-    L['INFOBAR_OPEN_CHARACTER_PANEL'] = 'Toggle character panel'
+L['Layout'] = true
+L['Grids'] = true
+L['Reset default anchor'] = true
+L['Hide the frame'] = true
+L['Are you sure to reset all frame\'s position?'] = true
 
-    L['INFOBAR_FRIENDS'] = 'Friends'
-    L['INFOBAR_OPEN_FRIENDS_PANEL'] = 'Toggle friends panel'
-    L['INFOBAR_ADD_FRIEND'] = 'Add friend'
+L['Rare'] = true
+L['CastBy'] = true
+L['Stack'] = true
+L['Section'] = true
+L['TargetedBy'] = true
+L['iLvl'] = true
 
-    L['INFOBAR_GUILD'] = 'Guild'
-    L['INFOBAR_GUILD_NONE'] = 'None'
-    L['INFOBAR_OPEN_GUILD_PANEL'] = 'Toggle guild & communities panel'
+L['Inventory Sort'] = true
+L['Inventory sort disabled!'] = true
+L['Reset Position'] = true
+L['Toggle Bags'] = true
+L['Free slots'] = true
+L['Azerite armor'] = true
+L['Quick delete enabled'] = '|nYou can destroy item by holding CTRL + ALT.|nThe item can be heirlooms or its quality lower then rare (blue).'
+L['Quick Delete'] = true
+L['Mark favourite enabled'] = '|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk.'
+L['Mark Favourite'] = true
+L['Auto Repair'] = true
+L['Auto repair enabled'] = '|nRepair your equipment automatically when you visit an able vendor.'
+L['Auto Sell Junk'] = true
+L['Auto sell junk enabled'] = '|nSell junk items automtically when you visit an able vendor.'
+L['Type item name to search'] = true
+L['Search'] = true
+L['Mark junk enabled'] = '|nClick to tag item as junk.|nIf \'Auto sell junk\' enabled, these items would be sold as well.|nThe list is saved account-wide, and won\'t be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list.'
+L['Mark Junk'] = true
+L['Quick split enabled'] = '|nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.'
+L['Quick Split'] = true
+L['Split Count'] = true
+L['Deposit Reagent'] = '|nLeft click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'
 
-    L['INFOBAR_REPORT'] = 'Daily/weekly'
-    L['INFOBAR_BLINGTRON'] = 'Blingtron daily pack'
-    L['INFOBAR_MEAN_ONE'] = 'Winter veil daily'
-    L['INFOBAR_TIMEWARPED'] = 'Timewarped badge reward'
-    L['INFOBAR_INVASION_LEG'] = 'Legion invasion'
-    L['INFOBAR_INVASION_BFA'] = 'Faction assaults'
-    L['INFOBAR_INVASION_CURRENT'] = 'Current: '
-    L['INFOBAR_INVASION_NEXT'] = 'Next: '
-    L['INFOBAR_LESSER_VISION'] = 'N\'Zoth assaults'
-    L['INFOBAR_ISLAND'] = 'Island'
+L['Talent Manager'] = true
+L['Too many sets here, please delete one of them and try again.'] = true
+L['Already have a set named %s.'] = true
+L['Not set'] = true
+L['Set Name'] = true
+L['Ignored'] = true
+L['You must enter a set name.'] = true
+L['Talent Set'] = true
 
-    L['INFOBAR_TOGGLE_WEEKLY_REWARDS'] = 'Toggle great vault panel'
-    L['INFOBAR_TOGGLE_CALENDAR'] = 'Toggle calendar panel'
-    L['INFOBAR_HOLD_SHIFT'] = 'Hold shift for more info'
+L['Wowhead link'] = true
 
-    L['INFOBAR_SPEC'] = 'Spec'
-    L['INFOBAR_LOOT'] = 'Loot'
-    L['INFOBAR_OPEN_SPEC_PANEL'] = 'Toggle talent panel'
-    L['INFOBAR_CHANGE_SPEC'] = 'Switch specialization & loot'
+L['Undress'] = true
+L['%sUndress all|n%sUndress tabard'] = true
+L['Right click to use vellum'] = true
+L['Stranger'] = true
+L['Account Keystones'] = true
+L['Delete keystones info'] = true
+L['Double click to unequip all gears'] = true
+L['Hold SHIFT for details'] = true
+L['Are you sure to buy |cffff0000a stack|r of these?'] = true
+L['Flask'] = true
+L['Lack of'] = true
+L['%s players'] = true
+L['Start/Cancel count down'] = true
+L['Check Flask & Food'] = true
+L['All Buffs Ready!'] = true
+L['Raid Buff Checker:'] = true
+L['ExRT Potion Check'] = true
+L['You can not do it without DBM or BigWigs!'] = true
+L['Are you sure to |cffff0000disband|r your group?'] = true
+L['Raid Disbanding'] = true
 
-    L['INFOBAR_LOCAL_TIME'] = 'Local time'
-    L['INFOBAR_REALM_TIME'] = 'Realm time'
-    L['INFOBAR_OPEN_ADDON_PANEL'] = 'Toggle addons list panel'
-    L['INFOBAR_OPEN_TIMER_TRACKER'] = 'Toggle timer panel'
-
-    L['INFOBAR_EARNED'] = 'Earned'
-    L['INFOBAR_SPENT'] = 'Spent'
-    L['INFOBAR_DEFICIT'] = 'Deficit'
-    L['INFOBAR_PROFIT'] = 'Profit'
-    L['INFOBAR_SESSION'] = 'Session'
-    L['INFOBAR_OPEN_CURRENCY_PANEL'] = 'Toggle currency panel'
-    L['INFOBAR_OPEN_STORE_PANEL'] = 'Toggle store panel'
-    L['INFOBAR_RESET_GOLD_COUNT'] = 'Reset gold count'
-end
-
---[[ Chat ]]
-
-do
-    L['CHAT_TOGGLE_PANEL'] = 'Hide/show chat frame'
-    L['CHAT_TOGGLE_WC'] = 'Join/leave world channel'
-    L['CHAT_COPY'] = 'Copy chat contents'
-    L['CHAT_WHISPER_TELL'] = 'Tell'
-    L['CHAT_WHISPER_FROM'] = 'From'
-    L['CHAT_WORLD_CHANNEL'] = 'World Channel'
-end
-
---[[ Aura ]]
-
-do
-    L['AURA_MOVER_BUFFS'] = 'Buffs'
-    L['AURA_MOVER_DEBUFFS'] = 'Debuffs'
-    L['AURA_LACK'] = 'Lack'
-end
-
---[[ Combat ]]
-
-do
-    L['COMBAT_ENTER'] = 'Enter Combat'
-    L['COMBAT_LEAVE'] = 'Leave Combat'
-    L['COMBAT_MOVER_IN'] = 'FCT Incoming'
-    L['COMBAT_MOVER_OUT'] = 'FCT Outgoing'
-
-    L['COMBAT_ENABLE_COMBAT'] = '启用战斗模块'
-    L['COMBAT_COMBAT_ALERT'] = '进出战斗提示'
-    L['COMBAT_HEALTH_ALERT'] = '低血量提示'
-    L['COMBAT_HEALTH_ALERT_THRESHOLD'] = '血量阈值'
-    L['COMBAT_SPELL_ALERT'] = '特殊技能提示'
-    L['COMBAT_PVP_SOUND'] = '击杀音效'
-    L['COMBAT_EASY_TAB'] = '自动切换Tab逻辑'
-    L['COMBAT_EASY_FOCUS'] = '快速设定焦点'
-    L['COMBAT_EASY_MARK'] = '快速设定标记'
-    L['COMBAT_FCT'] = '滚动战斗信息'
-    L['COMBAT_FCT_IN'] = '受到的伤害和治疗'
-    L['COMBAT_FCT_OUT'] = '输出的伤害和治疗'
-    L['COMBAT_FCT_PET'] = '宠物伤害'
-    L['COMBAT_FCT_PERIODIC'] = '周期性伤害'
-    L['COMBAT_FCT_MERGE'] = '合并数据'
-end
-
---[[ Inventory ]]
-
-
-do
-    L['INVENTORY_NOTIFICATION_HEADER'] = 'Bag'
-    L['INVENTORY_SORT'] = 'Sort'
-    L['INVENTORY_ANCHOR_RESET'] = 'Reset position'
-    L['INVENTORY_BAGS'] = 'Toggle bags'
-    L['INVENTORY_FREE_SLOTS'] = 'Free slots'
-    L['INVENTORY_SORT_DISABLED'] = '背包整理已被禁用'
-    L['INVENTORY_AZERITEARMOR'] = 'Azerite armor'
-    L['INVENTORY_QUICK_DELETE_ENABLED'] = '|nYou can destroy container item by holding CTRL+ALT. The item can be heirlooms or its quality lower then rare (blue).'
-    L['INVENTORY_QUICK_DELETE'] = 'Quick delete'
-    L['INVENTORY_PICK_FAVOURITE_ENABLED'] = '|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to trash.'
-    L['INVENTORY_PICK_FAVOURITE'] = 'Favourite'
-    L['INVENTORY_AUTO_REPAIR'] = 'Auto repair'
-    L['INVENTORY_AUTO_REPAIR_TIP'] = '|nIf the button is highlight, you will sell junk items automtically when you visit an able vendor.'
-    L['INVENTORY_REPAIR_ERROR'] = 'Oh my goodness, you are running out of gold!'
-    L['INVENTORY_REPAIR_COST'] = 'Auto repair cost (%s)'
-    L['INVENTORY_SELL_JUNK'] = 'Auto sell junk'
-    L['INVENTORY_SELL_JUNK_TIP'] = '|nIf the button is highlight, you will repair your equipment automatically when you visit an able vendor.'
-    L['INVENTORY_SELL_JUNK_EARN'] = 'Auto sell junk earned (%s)'
-    L['INVENTORY_SEARCH'] = 'Search'
-    L['INVENTORY_SEARCH_ENABLED'] = 'Type item name to search'
-    L['INVENTORY_MARK_JUNK'] = 'Mark junk'
-    L['INVENTORY_MARK_JUNK_ENABLED'] =
-        '|nClick to tag item as junk.|nIf \'Auto sell junk\' enabled, these items would be sold as well.|nThe list is saved account-wide, and won\'t be in the export data.|nYou can hold CTRL+ALT and click to wipe the custom junk list.'
-    L['INVENTORY_QUICK_SPLIT'] = 'Quick split'
-    L['INVENTORY_SPLIT_COUNT'] = 'Split count'
-    L['INVENTORY_SPLIT_MODE_ENABLED'] = '|nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.'
-
-    L['INVENTORY_AUTO_DEPOSIT'] =
-        '|nLeft click to deposit reagents, right click to switch auto deposit.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'
-    L['INVENTORY_EQUIPEMENT_SET'] = 'Equipement set'
-end
-
---[[ Map ]]
-
-do
-    L['MAP_MOVER_MINIMAP'] = 'Minimap'
-    L['MAP_CURSOR'] = 'Cursor'
-    L['MAP_REVEAL'] = '清除地图迷雾'
-    L['MAP_PARAGON'] = 'Paragon'
-    L['MAP_NEXT_TRAIT'] = 'Next Trait'
-    L['MAP_NEW_MAIL'] = '<New Mail>'
-    L['MAP_CALENDAR'] = 'Calendar'
-end
-
--- Tooltip
-
-do
-    L['TOOLTIP_MOVER'] = 'Tooltip'
-    L['TOOLTIP_RARE'] = 'Rare'
-    L['TOOLTIP_AURA_FROM'] = 'Castby'
-    L['TOOLTIP_SELL_PRICE'] = 'Price'
-    L['TOOLTIP_STACK_CAP'] = 'Stack'
-    L['TOOLTIP_ID_AZERITE_TRAIT'] = 'Azerite trait'
-    L['TOOLTIP_BAG'] = 'Bag'
-    L['TOOLTIP_ID_SPELL'] = 'SpellID'
-    L['TOOLTIP_ID_ITEM'] = 'ItemID'
-    L['TOOLTIP_ID_COMPANION'] = 'CompanionID'
-    L['TOOLTIP_ID_QUEST'] = 'QuestID'
-    L['TOOLTIP_ID_TALENT'] = 'TalentID'
-    L['TOOLTIP_ID_ACHIEVEMENT'] = 'AchievementID'
-    L['TOOLTIP_ID_CURRENCY'] = 'CurrencyID'
-    L['TOOLTIP_ID_VISUAL'] = 'Visual'
-    L['TOOLTIP_ID_SOURCE'] = 'Source'
-    L['TOOLTIP_SECTION'] = 'Section'
-    L['TOOLTIP_TARGETED'] = 'TargetBy'
-    L['TOOLTIP_ILVL'] = 'iLvl'
-end
+L['Durability'] = true
+L['Toggle Character Panel'] = true
+L['Friends'] = true
+L['Toggle Friends Panel'] = true
+L['Add Friend'] = true
+L['Guild'] = true
+L['None'] = true
+L['Toggle Guild Panel'] = true
+L['Toggle Communities Panel'] = true
+L['Toggle Talent Panel'] = true
+L['Change Specialization & Loot'] = true
+L['Daily/Weekly'] = true
+L['Blingtron Daily Pack'] = true
+L['Winter Veil Daily'] = true
+L['Timewarped Badge Reward'] = true
+L['Legion Invasion'] = true
+L['Faction Assaults'] = true
+L['Current'] = true
+L['Next'] = true
+L['Lesser Vision of N\'Zoth'] = true
+L['Toggle Great Vault Panel'] = true
+L['Toggle Calendar Panel'] = true
+L['Local Time'] = true
+L['Realm Time'] = true
+L['Toggle Addons Panel'] = true
+L['Toggle Timer Panel'] = true
+L['Earned'] = true
+L['Spent'] = true
+L['Deficit'] = true
+L['Profit'] = true
+L['Session'] = true
+L['Toggle Currency Panel'] = true
+L['Toggle Store Panel'] = true
+L['Reset Gold Statistics'] = true
 
 
 
---[[ Mover ]]
 
-L.MOVER = {
-    TITLE = 'UI Mover',
-    GRID = 'Grid',
-    RESET_ELEMENT = 'Reset this frame\'s position',
-    HIDE_ELEMENT = 'Hide this frame',
-    RESET_WARNING = 'Are you sure to reset all frame\'s position?',
-    MAIN_BAR = 'Main Bar',
-    PET_BAR = 'Pet Bar',
-    STANCE_BAR = 'Stance Bar',
-    VEHICLE_BAR = 'Leave Vehicle Button',
-    EXTRA_BAR = 'Extra Button',
-    ZONE_ABILITY = 'Zone Ability Button',
-    CUSTOM_BAR = 'Additional Actionbar',
-    COOLDOWN_FLASH = 'Cooldown Flash',
-    PLAYER_CASTBAR = 'Player Castbar',
-    TARGET_CASTBAR = 'Target Castbar',
-    FOCUS_CASTBAR = 'Focus Castbar',
-    ALERT_FRAME = 'Alert Frame',
-    VEHICLE_INDICATOR = 'Vehicle Indicator',
-    UI_WIDGET = 'UI Widget',
-    DURABILITY_FRAME = 'Durability Indicator',
-    QUEST_ITEM_BUTTON = 'Quest Item Button',
-    MAW_THREAT_BAR = 'Maw Threat Bar',
-    GROUP_TOOL = 'Group Tool',
-    OBJECTIVE_TRACKER = 'Quest Tracker',
 
-    PLAYER = 'Player Frame',
-    PET = 'Pet Frame',
-    TARGET = 'Target Frame',
-    TARGETTARGET = 'Target Target Frame',
-    FOCUS = 'Focus',
-    FOCUSTARGET = 'Focus Target Frame',
-    BOSS = 'Boss Frame',
-    ARENA = 'Arena Frame',
-    PARTY = 'Party Frame',
-    RAID = 'Raid Frame',
-}
+
+
+
+
+
+
+
+
 
 --[[ GUI ]]
 
@@ -967,18 +891,4 @@ L.GUI = {
     },
 }
 
--- Slash commands
-L['COMMANDS_LIST_HINT'] = 'Available Commands：'
-L['COMMANDS_LIST'] = {
-    '/free install - Open installation panel',
-    '/free config - Open config panel',
-    '/free unlock - Unlock the interface to let you easily move elements',
-    '/free reset - Reset all saved options to their default values.',
-    '/rl - Reload interface',
-    '/ss - Take a Screenshot',
-    '/rc - Ready check',
-    '/rp - Role poll',
-    '/lg - Leave group',
-    '/rs - Reset instance',
-    '/bind - Launch quick keybind mode',
-}
+

@@ -126,13 +126,13 @@ function INFOBAR:Currency()
 			GameTooltip:AddLine(CURRENCY, .9, .8, .6)
 			GameTooltip:AddLine(' ')
 
-			GameTooltip:AddLine(L['INFOBAR_SESSION'], .6, .8, 1)
-			GameTooltip:AddDoubleLine(L['INFOBAR_EARNED'], GetMoneyString(profit), 1, 1, 1, 1, 1, 1)
-			GameTooltip:AddDoubleLine(L['INFOBAR_SPENT'], GetMoneyString(spent), 1, 1, 1, 1, 1, 1)
+			GameTooltip:AddLine(L['Session'], .6, .8, 1)
+			GameTooltip:AddDoubleLine(L['Earned'], GetMoneyString(profit), 1, 1, 1, 1, 1, 1)
+			GameTooltip:AddDoubleLine(L['Spent'], GetMoneyString(spent), 1, 1, 1, 1, 1, 1)
 			if profit < spent then
-				GameTooltip:AddDoubleLine(L['INFOBAR_DEFICIT'], GetMoneyString(spent - profit), 1, 0, 0, 1, 1, 1)
+				GameTooltip:AddDoubleLine(L['Deficit'], GetMoneyString(spent - profit), 1, 0, 0, 1, 1, 1)
 			elseif profit > spent then
-				GameTooltip:AddDoubleLine(L['INFOBAR_PROFIT'], GetMoneyString(profit - spent), 0, 1, 0, 1, 1, 1)
+				GameTooltip:AddDoubleLine(L['Profit'], GetMoneyString(profit - spent), 0, 1, 0, 1, 1, 1)
 			end
 			GameTooltip:AddLine(' ')
 
@@ -182,9 +182,9 @@ function INFOBAR:Currency()
 			end
 
 			GameTooltip:AddDoubleLine(' ', C.LineString)
-			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['INFOBAR_OPEN_CURRENCY_PANEL']..' ', 1,1,1, .9, .8, .6)
-			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['INFOBAR_OPEN_STORE_PANEL']..' ', 1,1,1, .9, .8, .6)
-			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle..L['INFOBAR_RESET_GOLD_COUNT']..' ', 1,1,1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['Toggle Currency Panel']..' ', 1,1,1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['Toggle Store Panel']..' ', 1,1,1, .9, .8, .6)
+			GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle..L['Reset Gold Statistics']..' ', 1,1,1, .9, .8, .6)
 			GameTooltip:Show()
 
 		end

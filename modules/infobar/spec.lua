@@ -91,9 +91,9 @@ function INFOBAR:SpecTalent()
 			local lootrole = GetSpecializationRoleByID(lootSpecID)
 
 			if not lootname or name == lootname then
-				self.Text:SetText(format(L['INFOBAR_SPEC']..': '..C.MyColor..'%s  |r'..L['INFOBAR_LOOT']..':'..C.MyColor..' %s', name, name))
+				self.Text:SetText(format(L['Spec']..': '..C.MyColor..'%s  |r'..L['Loot']..':'..C.MyColor..' %s', name, name))
 			else
-				self.Text:SetText(format(L['INFOBAR_SPEC']..': '..C.MyColor..'%s  |r'..L['INFOBAR_LOOT']..':'..C.MyColor..' %s', name, lootname))
+				self.Text:SetText(format(L['Spec']..': '..C.MyColor..'%s  |r'..L['Loot']..':'..C.MyColor..' %s', name, lootname))
 			end
 
 			INFOBAR:showButton(self)
@@ -138,8 +138,8 @@ function INFOBAR:SpecTalent()
 		end
 
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['INFOBAR_OPEN_SPEC_PANEL']..' ', 1,1,1, .9, .8, .6)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['INFOBAR_CHANGE_SPEC']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['Toggle Talent Panel']..' ', 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['Change Specialization & Loot'] ..' ', 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

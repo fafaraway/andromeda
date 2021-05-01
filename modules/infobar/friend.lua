@@ -165,7 +165,7 @@ function INFOBAR:Friends()
 	FreeUIFriendsButton:RegisterEvent("BATTLETAG_INVITE_SHOW")
 	FreeUIFriendsButton:SetScript('OnEvent', function(self, event)
 		if not BNConnected() then
-			self.Text:SetText(format('%s: '..C.InfoColor..'%d', L['INFOBAR_FRIENDS'], NOT_APPLICABLE))
+			self.Text:SetText(format('%s: '..C.InfoColor..'%d', L['Friends'], NOT_APPLICABLE))
 			return
 		end
 
@@ -180,7 +180,7 @@ function INFOBAR:Friends()
 
 		local onlineFriends = C_FriendList.GetNumOnlineFriends()
 		local _, onlineBNet = BNGetNumFriends()
-		self.Text:SetText(format('%s: '..C.InfoColor..'%d', L['INFOBAR_FRIENDS'], BNTotalOnline))
+		self.Text:SetText(format('%s: '..C.InfoColor..'%d', L['Friends'], BNTotalOnline))
 
 	end)
 
@@ -299,8 +299,8 @@ function INFOBAR:Friends()
 
 		GameTooltip:AddLine(' ')
 		GameTooltip:AddDoubleLine(' ', C.LineString)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['INFOBAR_OPEN_FRIENDS_PANEL'], 1,1,1, .9, .8, .6)
-		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['INFOBAR_ADD_FRIEND'], 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_left..L['Toggle Friends Panel'], 1,1,1, .9, .8, .6)
+		GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right..L['Add Friend'], 1,1,1, .9, .8, .6)
 		GameTooltip:Show()
 	end)
 

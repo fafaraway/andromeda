@@ -1531,9 +1531,9 @@ local function InitializeSettings(source, target, fullClean)
     end
 end
 
-local f = CreateFrame('Frame')
-f:RegisterEvent('ADDON_LOADED')
-f:SetScript('OnEvent', function(self, _, addon)
+local loader = CreateFrame('Frame')
+loader:RegisterEvent('ADDON_LOADED')
+loader:SetScript('OnEvent', function(self, _, addon)
     if addon ~= 'FreeUI' then
         return
     end
