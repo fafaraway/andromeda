@@ -33,7 +33,12 @@ local function ReskinWidgetStatusBar(bar)
 		if bar.Spark then bar.Spark:SetAlpha(0) end
 		if bar.SparkGlow then bar.SparkGlow:SetAlpha(0) end
 		if bar.BorderGlow then bar.BorderGlow:SetAlpha(0) end
+        if bar.Label then
+			bar.Label:SetPoint("CENTER", 0, -5)
+			bar.Label:SetFontObject(Game12Font)
+		end
 		F.SetBD(bar)
+        F.ReplaceWidgetBarTexture(bar, bar:GetStatusBarAtlas())
 		hooksecurefunc(bar, "SetStatusBarAtlas", F.ReplaceWidgetBarTexture)
 
 		bar.styled = true
@@ -49,7 +54,7 @@ local function ReskinDoubleStatusBarWidget(self)
 	end
 end
 
-local function ReskinCaptureBarWidget(self)
+local function ReskinPVPCaptureBar(self)
 	self.LeftBar:SetTexture(C.Assets.norm_tex)
 	self.NeutralBar:SetTexture(C.Assets.norm_tex)
 	self.RightBar:SetTexture(C.Assets.norm_tex)
@@ -58,14 +63,14 @@ local function ReskinCaptureBarWidget(self)
 	self.NeutralBar:SetVertexColor(.8, .8, .8)
 	self.RightBar:SetVertexColor(.9, .2, .2)
 
-	if not self.bg then
-		self.LeftLine:SetAlpha(0)
-		self.RightLine:SetAlpha(0)
-		self.BarBackground:SetAlpha(0)
-		self.Glow1:SetAlpha(0)
-		self.Glow2:SetAlpha(0)
-		self.Glow3:SetAlpha(0)
+	self.LeftLine:SetAlpha(0)
+	self.RightLine:SetAlpha(0)
+	self.BarBackground:SetAlpha(0)
+	self.Glow1:SetAlpha(0)
+	self.Glow2:SetAlpha(0)
+	self.Glow3:SetAlpha(0)
 
+	if not self.bg then
 		self.bg = F.SetBD(self)
 		self.bg:SetPoint("TOPLEFT", self.LeftBar, -2, 2)
 		self.bg:SetPoint("BOTTOMRIGHT", self.RightBar, 2, -2)
@@ -84,36 +89,44 @@ local function ReskinSpellDisplayWidget(self)
 	end
 end
 
-local function ReskinWidgetFrames()
-	for _, widgetFrame in pairs(_G.UIWidgetTopCenterContainerFrame.widgetFrames) do
-		local widgetType = widgetFrame.widgetType
-		if widgetType == Type_DoubleStatusBar then
-			ReskinDoubleStatusBarWidget(widgetFrame)
-		elseif widgetType == Type_SpellDisplay then
-			ReskinSpellDisplayWidget(widgetFrame)
-		elseif widgetType == Type_StatusBar then
-			ReskinWidgetStatusBar(widgetFrame.Bar)
-		end
-	end
-
-    for _, widgetFrame in pairs(_G.UIWidgetBelowMinimapContainerFrame.widgetFrames) do
-		if widgetFrame.widgetType == Type_CaptureBar then
-			ReskinCaptureBarWidget(widgetFrame)
-		end
-	end
-end
+local ignoredWidgetIDs = {
+	[3273] = true, -- Torghast progressbar
+}
 
 tinsert(C.BlizzThemes, function()
 	if not _G.FREE_ADB.ReskinBlizz then return end
 
-	F:RegisterEvent("PLAYER_ENTERING_WORLD", ReskinWidgetFrames)
-	F:RegisterEvent("UPDATE_ALL_UI_WIDGETS", ReskinWidgetFrames)
-
-	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
-		ReskinWidgetStatusBar(self.Bar)
+	hooksecurefunc(_G.UIWidgetTopCenterContainerFrame, "UpdateWidgetLayout", function(self)
+		for _, widgetFrame in pairs(self.widgetFrames) do
+			local widgetType = widgetFrame.widgetType
+			if widgetType == Type_DoubleStatusBar then
+				ReskinDoubleStatusBarWidget(widgetFrame)
+			elseif widgetType == Type_SpellDisplay then
+				ReskinSpellDisplayWidget(widgetFrame)
+			elseif widgetType == Type_StatusBar then
+				ReskinWidgetStatusBar(widgetFrame.Bar)
+			end
+		end
 	end)
 
-	hooksecurefunc(_G.UIWidgetTemplateCaptureBarMixin, "Setup", ReskinCaptureBarWidget)
-	hooksecurefunc(_G.UIWidgetTemplateSpellDisplayMixin, "Setup", ReskinSpellDisplayWidget)
-	hooksecurefunc(_G.UIWidgetTemplateDoubleStatusBarMixin, "Setup", ReskinDoubleStatusBarWidget)
+	hooksecurefunc(_G.UIWidgetBelowMinimapContainerFrame, "UpdateWidgetLayout", function(self)
+		for _, widgetFrame in pairs(self.widgetFrames) do
+			if widgetFrame.widgetType == Type_CaptureBar then
+				ReskinPVPCaptureBar(widgetFrame)
+			end
+		end
+	end)
+
+	hooksecurefunc(_G.UIWidgetPowerBarContainerFrame, "UpdateWidgetLayout", function(self)
+		for _, widgetFrame in pairs(self.widgetFrames) do
+			if widgetFrame.widgetType == Type_StatusBar then
+				ReskinWidgetStatusBar(widgetFrame.Bar)
+			end
+		end
+	end)
+
+	hooksecurefunc(_G.UIWidgetTemplateStatusBarMixin, "Setup", function(self)
+        if ignoredWidgetIDs[self.widgetID] then return end
+		ReskinWidgetStatusBar(self.Bar)
+	end)
 end)
