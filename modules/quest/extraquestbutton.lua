@@ -128,6 +128,7 @@ local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent,
                                      'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
+ExtraQuestButton:Hide()
 ExtraQuestButton:SetScript('OnEvent', function(self, event, ...)
     if self[event] then
         self[event](self, event, ...)
@@ -240,7 +241,6 @@ function ExtraQuestButton:PLAYER_LOGIN()
 
     self.updateTimer = 0
     self.rangeTimer = 0
-    self:Hide()
 
     self:SetPushedTexture(C.Assets.button_pushed)
     local push = self:GetPushedTexture()
