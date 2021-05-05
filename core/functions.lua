@@ -1250,6 +1250,7 @@ do
         self:SetPoint('TOPRIGHT', parent, 'TOPRIGHT', xOffset, yOffset)
 
         F.StripTextures(self)
+        if self.Border then self.Border:SetAlpha(0) end
         local bg = F.CreateBDFrame(self, 0, true)
         bg:SetAllPoints()
 
@@ -1793,7 +1794,7 @@ do
         return bu
     end
 
-    function F:CreateCheckBox(flat)
+    function F:CreateCheckbox(flat)
         local cb = CreateFrame('CheckButton', nil, self, 'InterfaceOptionsCheckButtonTemplate')
         F.ReskinCheck(cb, flat, true, true)
 
