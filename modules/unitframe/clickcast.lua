@@ -27,7 +27,7 @@ local BOOKTYPE_PROFESSION = BOOKTYPE_PROFESSION
 local BOOKTYPE_PET = BOOKTYPE_PET
 
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
+local UNITFRAME = F:GetModule('Unitframe')
 
 -- #TODO need cleanup
 
@@ -307,13 +307,13 @@ SpellBinder.UpdateAll = function()
 end
 
 function UNITFRAME:ClickCast()
-    if not C.DB.unitframe.enable then
+    if not C.DB.Unitframe.Enable then
         return
     end
-    if not C.DB.unitframe.enable_group then
+    if not C.DB.Unitframe.Group then
         return
     end
-    if not C.DB.unitframe.group_click_cast then
+    if not C.DB.Unitframe.ClickToCast then
         return
     end
 
@@ -341,7 +341,7 @@ function UNITFRAME:ClickCast()
             _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
             _G.GameTooltip:ClearLines()
             _G.GameTooltip:AddLine(L['Click to cast'], 1, .8, 0, 1)
-            _G.GameTooltip:AddLine(L['Click to cast tip'], .6, .8, 1, 1)
+            _G.GameTooltip:AddLine(L['|nCtrl/Alt/Shift + any mouse button to binds spells.|nCast spells on party or raid frames with binded click set.|nPay attention to avoid key conflict if you enabled \'Easy Focus\' feature.'], .6, .8, 1, 1)
             _G.GameTooltip:Show()
         end)
         self:SetScript('OnLeave', function()

@@ -51,8 +51,8 @@ local LE_SCENARIO_TYPE_CHALLENGE_MODE = LE_SCENARIO_TYPE_CHALLENGE_MODE
 local INTERRUPTED = INTERRUPTED
 
 local F, C = unpack(select(2, ...))
-local NAMEPLATE = F.NAMEPLATE
-local UNITFRAME = F.UNITFRAME
+local NAMEPLATE = F:GetModule('Nameplate')
+local UNITFRAME = F:GetModule('Unitframe')
 local OUF = F.Libs.oUF
 
 --[[ CVars ]]
@@ -96,6 +96,8 @@ function NAMEPLATE:UpdatePlateHorizontalSpacing()
 end
 
 function NAMEPLATE:SetupCVars()
+    if not C.DB.Nameplate.ControlCVars then return end
+
     NAMEPLATE:PlateInsideView()
 
     NAMEPLATE:UpdatePlateVerticalSpacing()
@@ -237,7 +239,6 @@ function NAMEPLATE:UpdateColor(_, unit)
     local hostileClassColor = C.DB.Nameplate.HostileClassColor
     local friendlyClassColor = C.DB.Nameplate.FriendlyClassColor
     local tankMode = C.DB.Nameplate.TankMode
-    local executeIndicator = C.DB.Nameplate.ExecuteIndicator
     local executeRatio = C.DB.Nameplate.ExecuteRatio
     local healthPerc = UnitHealth(unit) / (UnitHealthMax(unit) + .0001) * 100
     local r, g, b
@@ -303,7 +304,7 @@ function NAMEPLATE:UpdateColor(_, unit)
         end
     end
 
-    if executeIndicator and executeRatio > 0 and healthPerc <= executeRatio then
+    if executeRatio > 0 and healthPerc <= executeRatio then
         self.Name:SetTextColor(1, 0, 0)
     else
         self.Name:SetTextColor(1, 1, 1)
@@ -686,6 +687,27 @@ function NAMEPLATE:AddInterruptInfo()
 end
 
 -- Major spells glow
+function NAMEPLATE:InitializeMajorSpells()
+    for spellID in pairs(C.NPMajorSpellsList) do
+        local name = GetSpellInfo(spellID)
+        if name then
+            if _G.FREE_ADB['NPMajorSpells'][spellID] then
+                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+            end
+        else
+            if C.IsDeveloper then
+                print('Invalid nameplate major spell ID: ' .. spellID)
+            end
+        end
+    end
+
+    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
+        if value == false and C.NPMajorSpellsList[spellID] == nil then
+            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
+        end
+    end
+end
+
 NAMEPLATE.MajorSpellsList = {}
 function NAMEPLATE:RefreshMajorSpells()
     wipe(NAMEPLATE.MajorSpellsList)
@@ -855,7 +877,7 @@ function NAMEPLATE:CreateNameplateStyle()
     self.npcTitle = title
 
     UNITFRAME:AddNameText(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateHealthPrediction(self)
     NAMEPLATE:AddTargetIndicator(self)
     NAMEPLATE:AddHighlight(self)
     NAMEPLATE:AddClassifyIndicator(self)
@@ -863,7 +885,7 @@ function NAMEPLATE:CreateNameplateStyle()
     NAMEPLATE:AddQuestIndicator(self)
     UNITFRAME:AddCastBar(self)
     UNITFRAME:AddRaidTargetIndicator(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     NAMEPLATE:AddSpitefulIndicator(self)
     NAMEPLATE:AddDungeonProgress(self)
 

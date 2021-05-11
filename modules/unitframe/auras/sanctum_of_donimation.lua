@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
+local UNITFRAME = F:GetModule('Unitframe')
 
 if not C.IsNewPatch then return end
 

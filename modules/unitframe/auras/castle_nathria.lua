@@ -1,5 +1,5 @@
 local F = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
+local UNITFRAME = F:GetModule('Unitframe')
 
 local TIER = 9
 local INSTANCE = 1190 -- 纳斯利亚堡

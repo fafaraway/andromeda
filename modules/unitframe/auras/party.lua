@@ -1,5 +1,5 @@
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
+local UNITFRAME = F:GetModule('Unitframe')
 
 local TIER = 9
 local INSTANCE -- 5人本

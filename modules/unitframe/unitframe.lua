@@ -1,164 +1,123 @@
 local _G = _G
 local unpack = unpack
 local select = select
-local GetSpellInfo = GetSpellInfo
 local GetSpecialization = GetSpecialization
-local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CompactRaidFrameManager = CompactRaidFrameManager
 
 local F, C = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
+local UNITFRAME = F:RegisterModule('Unitframe')
+local NAMEPLATE = F:RegisterModule('Nameplate')
 
-local raidDebuffsList = {}
-function UNITFRAME:RegisterDebuff(_, instID, _, spellID, level)
-    local instName = EJ_GetInstanceInfo(instID)
-    if not instName then
-        if C.IsDeveloper then
-            print('Invalid instance ID: ' .. instID)
-        end
+
+--[[ Backdrop ]]
+
+local function UF_OnEnter(self)
+    UnitFrame_OnEnter(self)
+    self.Highlight:Show()
+end
+
+local function UF_OnLeave(self)
+    UnitFrame_OnLeave(self)
+    self.Highlight:Hide()
+end
+
+function UNITFRAME:CreateBackdrop(self)
+    local highlight = self:CreateTexture(nil, 'OVERLAY')
+    highlight:SetAllPoints()
+    highlight:SetTexture('Interface\\PETBATTLES\\PetBattle-SelectedPetGlow')
+    highlight:SetTexCoord(0, 1, .5, 1)
+    highlight:SetVertexColor(.6, .6, .6)
+    highlight:SetBlendMode('BLEND')
+    highlight:Hide()
+    self.Highlight = highlight
+
+    self:RegisterForClicks('AnyUp')
+    self:HookScript('OnEnter', UF_OnEnter)
+    self:HookScript('OnLeave', UF_OnLeave)
+
+    F.CreateTex(self)
+
+    local bg = F.CreateBDFrame(self)
+    bg:SetBackdropBorderColor(0, 0, 0, 1)
+    bg:SetBackdropColor(0, 0, 0, 0)
+    self.Bg = bg
+
+    local glow = F.CreateSD(self.Bg)
+    self.Glow = glow
+
+    if not self.unitStyle == 'player' then
         return
     end
 
-    if not raidDebuffsList[instName] then
-        raidDebuffsList[instName] = {}
-    end
-    if not level then
-        level = 2
-    end
-    if level > 6 then
-        level = 6
-    end
+    local width = C.DB.Unitframe.PlayerWidth
+    local height = C.DB.Unitframe.ClassPowerBarHeight
 
-    raidDebuffsList[instName][spellID] = level
+    local classPowerBarHolder = CreateFrame('Frame', nil, self)
+    classPowerBarHolder:SetSize(width, height)
+    classPowerBarHolder:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
+
+    self.ClassPowerBarHolder = classPowerBarHolder
 end
 
-function UNITFRAME:CheckPartySpells()
-    for spellID, duration in pairs(C.PartySpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
-            if modDuration and modDuration == duration then
-                _G.FREE_ADB['PartySpellsList'][spellID] = nil
-            end
-        else
-            if C.IsDeveloper then
-                print('Invalid partyspell ID: ' .. spellID)
-            end
-        end
+--[[ Selected border ]]
+
+local function UpdateSelectedBorder(self)
+    if UnitIsUnit('target', self.unit) then
+        self.Border:Show()
+    else
+        self.Border:Hide()
     end
 end
 
-function UNITFRAME:CheckCornerSpells()
-    if not _G.FREE_ADB['CornerSpellsList'][C.MyClass] then
-        _G.FREE_ADB['CornerSpellsList'][C.MyClass] = {}
-    end
-    local data = C.CornerSpellsList[C.MyClass]
-    if not data then
-        return
-    end
+function UNITFRAME:CreateSelectedBorder(self)
+    local border = F.CreateBDFrame(self.Bg)
+    border:SetBackdropBorderColor(1, 1, 1, 1)
+    border:SetBackdropColor(0, 0, 0, 0)
+    border:SetFrameLevel(self:GetFrameLevel() + 5)
+    border:Hide()
 
-    for spellID, _ in pairs(data) do
-        local name = GetSpellInfo(spellID)
-        if not name then
-            if C.IsDeveloper then
-                print('Invalid cornerspell ID: ' .. spellID)
-            end
-        end
-    end
-
-    for spellID, value in pairs(_G.FREE_ADB['CornerSpellsList'][C.MyClass]) do
-        if not next(value) and C.CornerSpellsList[C.MyClass][spellID] == nil or C.BloodlustList[spellID] then
-            _G.FREE_ADB['CornerSpellsList'][C.MyClass][spellID] = nil
-        end
-    end
+    self.Border = border
+    self:RegisterEvent('PLAYER_TARGET_CHANGED', UpdateSelectedBorder, true)
+    self:RegisterEvent('GROUP_ROSTER_UPDATE', UpdateSelectedBorder, true)
 end
 
-function UNITFRAME:CheckMajorSpells()
-    for spellID in pairs(C.NPMajorSpellsList) do
-        local name = GetSpellInfo(spellID)
-        if name then
-            if _G.FREE_ADB['NPMajorSpells'][spellID] then
-                _G.FREE_ADB['NPMajorSpells'][spellID] = nil
-            end
-        else
-            if C.IsDeveloper then
-                print('Invalid nameplate major spell ID: ' .. spellID)
-            end
-        end
-    end
-
-    for spellID, value in pairs(_G.FREE_ADB['NPMajorSpells']) do
-        if value == false and C.NPMajorSpellsList[spellID] == nil then
-            _G.FREE_ADB['NPMajorSpells'][spellID] = nil
-        end
-    end
-end
-
-function UNITFRAME:UpdateAuras()
-    for instName, value in pairs(raidDebuffsList) do
-        for spell, priority in pairs(value) do
-            if _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spell] and
-                _G.FREE_ADB['RaidDebuffs'][instName][spell] == priority then
-                _G.FREE_ADB['RaidDebuffsList'][instName][spell] = nil
-            end
-        end
-    end
-    for instName, value in pairs(_G.FREE_ADB['RaidDebuffsList']) do
-        if not next(value) then
-            _G.FREE_ADB['RaidDebuffsList'][instName] = nil
-        end
-    end
-
-    C.RaidDebuffsList = raidDebuffsList
-
-    UNITFRAME:CheckPartySpells()
-    UNITFRAME:CheckCornerSpells()
-    UNITFRAME:CheckMajorSpells()
-end
 
 function UNITFRAME:OnLogin()
+    if not C.DB.Unitframe.Enable then
+        return
+    end
+
     F:SetSmoothingAmount(.3)
 
     UNITFRAME:UpdateHealthColor()
     UNITFRAME:UpdateClassColor()
-    UNITFRAME:UpdateAuras()
+    UNITFRAME:InitializeRaidDebuffs()
+    UNITFRAME:InitializePartySpells()
+    UNITFRAME:InitializeCornerSpells()
+    NAMEPLATE:InitializeMajorSpells()
 
-    if not C.DB.unitframe.enable then
-        return
-    end
 
-    if C.DB.unitframe.enable_player then
-        self:SpawnPlayer()
-    end
+    self:SpawnPlayer()
+    self:SpawnPet()
+    self:SpawnTarget()
+    self:SpawnTargetTarget()
+    self:SpawnFocus()
+    self:SpawnFocusTarget()
 
-    if C.DB.unitframe.enable_pet then
-        self:SpawnPet()
-    end
+    self:SpawnBoss()
 
-    if C.DB.unitframe.enable_target then
-        self:SpawnTarget()
-        self:SpawnTargetTarget()
-    end
 
-    if C.DB.unitframe.enable_focus then
-        self:SpawnFocus()
-        self:SpawnFocusTarget()
-    end
-
-    if C.DB.unitframe.enable_boss then
-        self:SpawnBoss()
-    end
-
-    if C.DB.unitframe.enable_arena then
+    if C.DB.Unitframe.Arena then
         self:SpawnArena()
     end
 
-    if not C.DB.unitframe.enable_group then
+    if not C.DB.Unitframe.Group then
         return
     end
 
-    if CompactRaidFrameManager_SetSetting then -- get rid of blizz raid frame
+    -- get rid of blizz raid frame
+    if CompactRaidFrameManager_SetSetting then
         CompactRaidFrameManager_SetSetting('IsShown', '0')
         _G.UIParent:UnregisterEvent('GROUP_ROSTER_UPDATE')
         CompactRaidFrameManager:UnregisterAllEvents()
@@ -169,7 +128,7 @@ function UNITFRAME:OnLogin()
     self:SpawnRaid()
     self:ClickCast()
 
-    if C.DB.unitframe.spec_position then
+    if C.DB.Unitframe.PositionBySpec then
         local function UpdateSpecPos(event, ...)
             local unit, _, spellID = ...
             if (event == 'UNIT_SPELLCAST_SUCCEEDED' and unit == 'player' and spellID == 200749) or event == 'ON_LOGIN' then

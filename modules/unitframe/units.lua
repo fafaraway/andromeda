@@ -1,6 +1,7 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local format = format
 local UnitExists = UnitExists
 local UnitIsFriend = UnitIsFriend
 local UnitIsEnemy = UnitIsEnemy
@@ -12,7 +13,7 @@ local SOUNDKIT_INTERFACE_SOUND_LOST_TARGET_UNIT = SOUNDKIT.INTERFACE_SOUND_LOST_
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
 
 local F, C, L = unpack(select(2, ...))
-local UNITFRAME = F.UNITFRAME
+local UNITFRAME = F:GetModule('Unitframe')
 local OUF = F.Libs.oUF
 
 local unitsPos = {
@@ -31,6 +32,7 @@ local unitsPos = {
 local function Player_OnEnter(self)
     self.HealthValue:Show()
     self.PowerValue:Show()
+    self:UpdateTags()
 end
 
 local function Player_OnLeave(self)
@@ -40,11 +42,11 @@ end
 
 local function CreatePlayerStyle(self)
     self.unitStyle = 'player'
-    self:SetSize(C.DB.unitframe.player_width, C.DB.unitframe.player_height)
+    self:SetSize(C.DB.Unitframe.PlayerWidth, C.DB.Unitframe.PlayerHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
+    UNITFRAME:CreateHealthPrediction(self)
     UNITFRAME:AddHealthValueText(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddPowerValueText(self)
@@ -57,10 +59,10 @@ local function CreatePlayerStyle(self)
     UNITFRAME:AddEmergencyIndicator(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddGCDIndicator(self)
-    UNITFRAME:AddCombatFader(self)
+    UNITFRAME:CreateFader(self)
     UNITFRAME:AddClassPowerBar(self)
-    UNITFRAME:AddStagger(self)
-    UNITFRAME:AddTotems(self)
+    UNITFRAME:CreateStagger(self)
+    UNITFRAME:CreateTotemsBar(self)
 end
 
 function UNITFRAME:SpawnPlayer()
@@ -68,7 +70,7 @@ function UNITFRAME:SpawnPlayer()
     OUF:SetActiveStyle 'Player'
 
     local player = OUF:Spawn('player', 'oUF_Player')
-    if C.DB.unitframe.player_hide_tags then
+    if C.DB.Unitframe.HidePlayerTags then
         player.HealthValue:Hide()
         player.PowerValue:Hide()
         player:HookScript('OnEnter', Player_OnEnter)
@@ -79,15 +81,15 @@ end
 
 local function CreatePetStyle(self)
     self.unitStyle = 'pet'
-    self:SetSize(C.DB.unitframe.pet_width, C.DB.unitframe.pet_height)
+    self:SetSize(C.DB.Unitframe.PetWidth, C.DB.Unitframe.PetHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
+    UNITFRAME:CreateHealthPrediction(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddPortrait(self)
     UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     UNITFRAME:AddRaidTargetIndicator(self)
 end
 
@@ -117,17 +119,17 @@ end
 
 local function CreateTargetStyle(self)
     self.unitStyle = 'target'
-    self:SetSize(C.DB.unitframe.target_width, C.DB.unitframe.target_height)
+    self:SetSize(C.DB.Unitframe.TargetWidth, C.DB.Unitframe.TargetHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
+    UNITFRAME:CreateHealthPrediction(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddPortrait(self)
     UNITFRAME:AddNameText(self)
     UNITFRAME:AddHealthValueText(self)
     UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddRangeCheck(self)
 
@@ -147,10 +149,10 @@ end
 
 local function CreateTargetTargetStyle(self)
     self.unitStyle = 'targettarget'
-    self:SetSize(C.DB.unitframe.target_target_width, C.DB.unitframe.target_target_height)
+    self:SetSize(C.DB.Unitframe.ToTWidth, C.DB.Unitframe.ToTHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddNameText(self)
     UNITFRAME:AddRaidTargetIndicator(self)
@@ -183,15 +185,15 @@ end
 
 local function CreateFocusStyle(self)
     self.unitStyle = 'focus'
-    self:SetSize(C.DB.unitframe.focus_width, C.DB.unitframe.focus_height)
+    self:SetSize(C.DB.Unitframe.FocusWidth, C.DB.Unitframe.FocusHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
+    UNITFRAME:CreateHealthPrediction(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddNameText(self)
     UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddRangeCheck(self)
 
@@ -211,13 +213,13 @@ end
 
 local function CreateFocusTargetStyle(self)
     self.unitStyle = 'focustarget'
-    self:SetSize(C.DB.unitframe.focus_target_width, C.DB.unitframe.focus_target_height)
+    self:SetSize(C.DB.Unitframe.ToFWidth, C.DB.Unitframe.ToFHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddNameText(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME:AddRangeCheck(self)
 end
@@ -232,10 +234,10 @@ end
 
 local function CreateBossStyle(self)
     self.unitStyle = 'boss'
-    self:SetSize(C.DB.unitframe.boss_width, C.DB.unitframe.boss_height)
+    self:SetSize(C.DB.Unitframe.BossWidth, C.DB.Unitframe.BossHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
     UNITFRAME:AddHealthValueText(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddAlternativePowerBar(self)
@@ -243,10 +245,10 @@ local function CreateBossStyle(self)
     UNITFRAME:AddPortrait(self)
     UNITFRAME:AddNameText(self)
     UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     UNITFRAME:AddRangeCheck(self)
     UNITFRAME:AddRaidTargetIndicator(self)
-    UNITFRAME:AddSelectedBorder(self)
+    UNITFRAME:CreateSelectedBorder(self)
 end
 
 function UNITFRAME:SpawnBoss()
@@ -257,26 +259,26 @@ function UNITFRAME:SpawnBoss()
     for i = 1, MAX_BOSS_FRAMES do
         boss[i] = OUF:Spawn('boss' .. i, 'oUF_Boss' .. i)
         if i == 1 then
-            boss[i].mover = F.Mover(boss[i], L['Boss Frame'], 'BossFrame', unitsPos.boss, C.DB.unitframe.boss_width, C.DB.unitframe.boss_height)
+            boss[i].mover = F.Mover(boss[i], L['Boss Frame'], 'BossFrame', unitsPos.boss, C.DB.Unitframe.boss_width, C.DB.Unitframe.boss_height)
         else
-            boss[i]:SetPoint('BOTTOM', boss[i - 1], 'TOP', 0, C.DB.unitframe.boss_gap)
+            boss[i]:SetPoint('BOTTOM', boss[i - 1], 'TOP', 0, C.DB.Unitframe.BossGap)
         end
     end
 end
 
 local function CreateArenaStyle(self)
     self.unitStyle = 'arena'
-    self:SetSize(C.DB.unitframe.arena_width, C.DB.unitframe.arena_height)
+    self:SetSize(C.DB.Unitframe.ArenaWidth, C.DB.Unitframe.ArenaHeight)
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddNameText(self)
     UNITFRAME:AddHealthValueText(self)
     UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddAuras(self)
+    UNITFRAME:CreateAuras(self)
     UNITFRAME:AddRangeCheck(self)
-    UNITFRAME:AddSelectedBorder(self)
+    UNITFRAME:CreateSelectedBorder(self)
 end
 
 function UNITFRAME:SpawnArena()
@@ -287,9 +289,48 @@ function UNITFRAME:SpawnArena()
     for i = 1, 5 do
         arena[i] = OUF:Spawn('arena' .. i, 'oUF_Arena' .. i)
         if i == 1 then
-            arena[i].mover = F.Mover(arena[i], L['Arena Frame'], 'ArenaFrame', unitsPos.arena, C.DB.unitframe.arena_width, C.DB.unitframe.arena_height)
+            arena[i].mover = F.Mover(arena[i], L['Arena Frame'], 'ArenaFrame', unitsPos.arena, C.DB.Unitframe.ArenaWidth, C.DB.Unitframe.ArenaHeight)
         else
-            arena[i]:SetPoint('BOTTOM', arena[i - 1], 'TOP', 0, C.DB.unitframe.arena_gap)
+            arena[i]:SetPoint('BOTTOM', arena[i - 1], 'TOP', 0, C.DB.Unitframe.ArenaGap)
+        end
+    end
+end
+
+local function GetPartyVisibility()
+    local visibility = '[group:party,nogroup:raid] show;hide'
+
+    if C.DB.Unitframe.SmartRaid then
+        visibility = '[@raid6,noexists,group] show;hide'
+    end
+
+    if C.DB.Unitframe.ShowSolo then
+        visibility = '[nogroup] show;'..visibility
+    end
+
+    return visibility
+end
+
+local function GetRaidVisibility()
+    local visibility
+
+    if C.DB.Unitframe.SmartRaid then
+        visibility = '[@raid6,exists] show;hide'
+    else
+        visibility = '[group:raid] show;hide'
+    end
+
+    return visibility
+end
+
+UNITFRAME.headers = {}
+function UNITFRAME:UpdateAllHeaders()
+    if not UNITFRAME.headers then return end
+
+    for _, header in pairs(UNITFRAME.headers) do
+        if header.groupType == 'party' then
+            RegisterStateDriver(header, 'visibility', GetPartyVisibility())
+        elseif header.groupType == 'raid' then
+            RegisterStateDriver(header, 'visibility', GetRaidVisibility())
         end
     end
 end
@@ -297,9 +338,9 @@ end
 local function CreatePartyStyle(self)
     self.unitStyle = 'party'
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
+    UNITFRAME:CreateHealthPrediction(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddPortrait(self)
     UNITFRAME:AddGroupNameText(self)
@@ -310,14 +351,17 @@ local function CreatePartyStyle(self)
     UNITFRAME:AddGroupRoleIndicator(self)
     UNITFRAME:AddPhaseIndicator(self)
     UNITFRAME:AddSummonIndicator(self)
-    UNITFRAME:AddThreatIndicator(self)
-    UNITFRAME:AddSelectedBorder(self)
+    UNITFRAME:CreateThreatIndicator(self)
+    UNITFRAME:CreateSelectedBorder(self)
     UNITFRAME:AddRangeCheck(self)
-    UNITFRAME:AddAuras(self)
-    UNITFRAME:AddCornerIndicator(self)
+    --UNITFRAME:CreateAuras(self)
+    UNITFRAME:CreateBuffs(self)
+    UNITFRAME:CreateDebuffs(self)
+    UNITFRAME:RefreshAurasByCombat(self)
+    UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:AddRaidDebuffs(self)
-    UNITFRAME:AddDebuffHighlight(self)
-    UNITFRAME:AddPartySpells(self)
+    UNITFRAME:CreateDebuffHighlight(self)
+    UNITFRAME:CreatePartyWatcher(self)
 end
 
 function UNITFRAME:SpawnParty()
@@ -328,22 +372,31 @@ function UNITFRAME:SpawnParty()
     OUF:RegisterStyle('Party', CreatePartyStyle)
     OUF:SetActiveStyle 'Party'
 
-    local partyWidth, partyHeight = C.DB.unitframe.party_width, C.DB.unitframe.party_height
-    local partyHorizon = C.DB.unitframe.party_horizon
-    local partyReverse = C.DB.unitframe.party_reverse
-    local partyGap = C.DB.unitframe.party_gap
-    local showSolo = C.DB.unitframe.show_solo
+    local partyWidth, partyHeight = C.DB.Unitframe.PartyWidth, C.DB.Unitframe.PartyHeight
+    local partyHorizon = C.DB.Unitframe.PartyHorizon
+    local partyReverse = C.DB.Unitframe.PartyReverse
+    local partyGap = C.DB.Unitframe.PartyGap
     local groupingOrder = partyHorizon and 'TANK,HEALER,DAMAGER,NONE' or 'TANK,HEALER,DAMAGER,NONE'
     local moverWidth = partyHorizon and partyWidth * 5 + partyGap * 4 or partyWidth
     local moverHeight = partyHorizon and partyHeight or partyHeight * 5 + partyGap * 4
     local partyMover
-    local party = OUF:SpawnHeader('oUF_Party', nil, 'solo,party', 'showPlayer', true, 'showSolo', showSolo, 'showParty', true, 'showRaid', false, 'xoffset',
-                                  partyGap, 'yoffset', partyGap, 'point', partyHorizon and 'LEFT' or 'BOTTOM', 'groupingOrder', groupingOrder, 'groupBy',
-                                  'ASSIGNEDROLE', 'sortMethod', 'NAME', 'oUF-initialConfigFunction', ([[
+    local party = OUF:SpawnHeader('oUF_Party', nil, nil,
+        'showPlayer', true,
+        'showSolo', true,
+        'showParty', true,
+        'showRaid', true,
+        'xoffset', partyGap,
+        'yoffset', partyGap,
+        'point', partyHorizon and 'LEFT' or 'BOTTOM',
+        'groupingOrder', groupingOrder,
+        'groupBy', 'ASSIGNEDROLE',
+        'sortMethod', 'NAME',
+        'oUF-initialConfigFunction', format('self:SetWidth(%d); self:SetHeight(%d);', partyWidth, partyHeight))
 
-            self:SetWidth(%d)
-            self:SetHeight(%d)
-            ]]):format(partyWidth, partyHeight))
+    party.groupType = 'party'
+    tinsert(UNITFRAME.headers, party)
+    RegisterStateDriver(party, 'visibility', GetPartyVisibility())
+
     partyMover = F.Mover(party, L['Party Frame'], 'PartyFrame', unitsPos.party, moverWidth, moverHeight)
     party:ClearAllPoints()
     party:SetPoint('BOTTOMLEFT', partyMover)
@@ -353,9 +406,9 @@ end
 local function CreateRaidStyle(self)
     self.unitStyle = 'raid'
 
-    UNITFRAME:AddBackDrop(self)
-    UNITFRAME:AddHealthBar(self)
-    UNITFRAME:AddHealthPrediction(self)
+    UNITFRAME:CreateBackdrop(self)
+    UNITFRAME:CreateHealthBar(self)
+    UNITFRAME:CreateHealthPrediction(self)
     UNITFRAME:AddPowerBar(self)
     UNITFRAME:AddGroupNameText(self)
     UNITFRAME:AddLeaderIndicator(self)
@@ -365,11 +418,14 @@ local function CreateRaidStyle(self)
     UNITFRAME:AddGroupRoleIndicator(self)
     UNITFRAME:AddPhaseIndicator(self)
     UNITFRAME:AddSummonIndicator(self)
-    UNITFRAME:AddSelectedBorder(self)
+    UNITFRAME:CreateSelectedBorder(self)
     UNITFRAME:AddRangeCheck(self)
-    UNITFRAME:AddCornerIndicator(self)
+    UNITFRAME:CreateCornerIndicator(self)
     UNITFRAME:AddRaidDebuffs(self)
-    UNITFRAME:AddDebuffHighlight(self)
+    UNITFRAME:CreateBuffs(self)
+    UNITFRAME:CreateDebuffs(self)
+    UNITFRAME:RefreshAurasByCombat(self)
+    UNITFRAME:CreateDebuffHighlight(self)
 end
 
 function UNITFRAME:SpawnRaid()
@@ -378,30 +434,56 @@ function UNITFRAME:SpawnRaid()
     OUF:RegisterStyle('Raid', CreateRaidStyle)
     OUF:SetActiveStyle 'Raid'
 
-    local raidWidth = C.DB.unitframe.raid_width
-    local raidHeight = C.DB.unitframe.raid_height
-    local raidHorizon = C.DB.unitframe.raid_horizon
-    local raidReverse = C.DB.unitframe.raid_reverse
-    local raidGap = C.DB.unitframe.raid_gap
-    local showSolo = C.DB.unitframe.show_solo
-    local numGroups = C.DB.unitframe.group_filter
+    local raidWidth = C.DB.Unitframe.RaidWidth
+    local raidHeight = C.DB.Unitframe.RaidHeight
+    local raidHorizon = C.DB.Unitframe.RaidHorizon
+    local raidReverse = C.DB.Unitframe.RaidReverse
+    local raidGap = C.DB.Unitframe.RaidGap
+    local numGroups = C.DB.Unitframe.GroupFilter
     local raidMover
 
     local function CreateRaid(name, i)
-        local raid = OUF:SpawnHeader(name, nil, 'solo,raid', 'showPlayer', true, 'showSolo', showSolo, 'showParty', true, 'showRaid', true, 'xoffset', raidGap,
-                                     'yOffset', -raidGap, 'groupFilter', tostring(i), 'groupingOrder', '1,2,3,4,5,6,7,8', 'groupBy', 'GROUP', 'sortMethod',
-                                     'INDEX', 'maxColumns', 1, 'unitsPerColumn', 5, 'columnSpacing', raidGap, 'point', raidHorizon and 'LEFT' or 'TOP',
-                                     'columnAnchorPoint', 'LEFT', 'oUF-initialConfigFunction', ([[
+        local raid = OUF:SpawnHeader(name, nil, nil,
+            'showPlayer', true,
+            'showSolo', true,
+            'showParty', true,
+            'showRaid', true,
+            'xoffset', raidGap,
+            'yOffset', -raidGap,
+            'groupFilter', tostring(i),
+            'groupingOrder', '1,2,3,4,5,6,7,8',
+            'groupBy', 'GROUP',
+            'sortMethod', 'INDEX',
+            'maxColumns', 1,
+            'unitsPerColumn', 5,
+            'columnSpacing', raidGap,
+            'point', raidHorizon and 'LEFT' or 'TOP',
+            'columnAnchorPoint', 'LEFT',
+            'oUF-initialConfigFunction', format('self:SetWidth(%d); self:SetHeight(%d);', raidWidth, raidHeight))
 
-            self:SetWidth(%d)
-            self:SetHeight(%d)
-            ]]):format(raidWidth, raidHeight))
         return raid
+    end
+
+    local groupFilter
+    if numGroups == 4 then
+        groupFilter = '1,2,3,4'
+    elseif numGroups == 5 then
+        groupFilter = '1,2,3,4,5'
+    elseif numGroups == 6 then
+        groupFilter = '1,2,3,4,5,6'
+    elseif numGroups == 7 then
+        groupFilter = '1,2,3,4,5,6,7'
+    elseif numGroups == 8 then
+        groupFilter = '1,2,3,4,5,6,7,8'
     end
 
     local groups = {}
     for i = 1, numGroups do
         groups[i] = CreateRaid('oUF_Raid' .. i, i)
+        groups[i].groupType = 'raid'
+        tinsert(UNITFRAME.headers, groups[i])
+        RegisterStateDriver(groups[i], 'visibility', GetRaidVisibility())
+
         if i == 1 then
             if raidHorizon then
                 raidMover = F.Mover(groups[i], L['Raid Frame'], 'RaidFrame', unitsPos.raid, (raidWidth + raidGap) * 5 - raidGap, (raidHeight + raidGap) * numGroups - raidGap)

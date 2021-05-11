@@ -1,5 +1,5 @@
 <Ui xmlns='http://www.blizzard.com/wow/ui/'>
     <Script file="party.lua"/>
-    <Script file="nathria.lua"/>
-    <Script file="donimation.lua"/>
+    <Script file="castle_nathria.lua"/>
+    <Script file="sanctum_of_donimation.lua"/>
 </Ui>

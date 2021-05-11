@@ -39,6 +39,7 @@ local ELITE = ELITE
 local LEVEL = LEVEL
 
 local F, C = unpack(select(2, ...))
+local UNITFRAME = F:GetModule('Unitframe')
 
 local colors = F.Libs.oUF.colors
 local tags = F.Libs.oUF.Tags.Methods
@@ -145,7 +146,7 @@ end
 tagEvents['free:offline'] = 'UNIT_HEALTH UNIT_CONNECTION'
 
 tags['free:name'] = function(unit)
-    local useAbbr = C.DB.unitframe.abbr_name
+    local useAbbr = C.DB.Unitframe.AbbreviatedName
     local str = UnitName(unit)
     local abbrName = F:AbbreviateString(str)
 
@@ -159,7 +160,7 @@ end
 tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
-    local groupName = C.DB.unitframe.GroupName
+    local groupName = C.DB.Unitframe.GroupShowName
     local str = UnitName(unit)
 
     if not UnitIsConnected(unit) then
@@ -223,3 +224,103 @@ tags['free:tarname'] = function(unit)
     end
 end
 tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH'
+
+
+
+local font = C.Assets.Fonts.Condensed
+
+function UNITFRAME:AddGroupNameText(self)
+    local outline = _G.FREE_ADB.FontOutline
+    local groupName = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+
+    self:Tag(groupName, '[free:groupname]')
+    self.GroupName = groupName
+end
+
+function UNITFRAME:AddNameText(self)
+    local style = self.unitStyle
+    local outline = _G.FREE_ADB.FontOutline
+
+    local name = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+
+    if style == 'target' then
+        name:SetJustifyH('RIGHT')
+        name:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+    elseif style == 'arena' or style == 'boss' then
+        name:SetJustifyH('LEFT')
+        name:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+    elseif style == 'nameplate' then
+        name:SetJustifyH('CENTER')
+        name:SetPoint('BOTTOM', self, 'TOP', 0, -3)
+    else
+        name:SetJustifyH('CENTER')
+        name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
+    end
+
+    self:Tag(name, '[free:name] [arenaspec]')
+    self.Name = name
+end
+
+function UNITFRAME:AddHealthValueText(self)
+    local style = self.unitStyle
+    local outline = _G.FREE_ADB.FontOutline
+
+    local healthValue = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    healthValue:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0, 3)
+
+    if style == 'player' or style == 'playerplate' then
+        self:Tag(healthValue, '[free:health] [free:pvp]')
+    elseif style == 'target' then
+        self:Tag(healthValue, '[free:dead][free:offline][free:health] [free:healthpercentage]')
+    elseif style == 'boss' then
+        healthValue:ClearAllPoints()
+        healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+        healthValue:SetJustifyH('RIGHT')
+        self:Tag(healthValue, '[free:dead][free:health] [free:healthpercentage]')
+    elseif style == 'arena' then
+        healthValue:ClearAllPoints()
+        healthValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+        healthValue:SetJustifyH('RIGHT')
+        self:Tag(healthValue, '[free:dead][free:offline][free:health]')
+    end
+
+    self.HealthValue = healthValue
+end
+
+function UNITFRAME:AddPowerValueText(self)
+    local style = self.unitStyle
+    local outline = _G.FREE_ADB.FontOutline
+
+    local powerValue = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+    powerValue:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
+
+    if style == 'target' then
+        powerValue:ClearAllPoints()
+        powerValue:SetPoint('BOTTOMLEFT', self.HealthValue, 'BOTTOMRIGHT', 4, 0)
+    elseif style == 'boss' then
+        powerValue:ClearAllPoints()
+        powerValue:SetPoint('BOTTOMRIGHT', self.HealthValue, 'BOTTOMLEFT', -4, 0)
+    end
+
+    self:Tag(powerValue, '[powercolor][free:power]')
+    powerValue.frequentUpdates = true
+
+    self.PowerValue = powerValue
+end
+
+function UNITFRAME:AddAlternativePowerValueText(self)
+    local style = self.unitStyle
+    local outline = _G.FREE_ADB.FontOutline
+
+    local altPowerValue = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
+
+    if style == 'boss' then
+        altPowerValue:SetPoint('LEFT', self, 'RIGHT', 2, 0)
+    else
+        altPowerValue:SetPoint('BOTTOM', self.Health, 'TOP', 0, 3)
+    end
+
+    self:Tag(altPowerValue, '[free:altpower]')
+
+    self.AlternativePowerValue = altPowerValue
+end
