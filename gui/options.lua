@@ -1,8 +1,7 @@
 local F, C, L = unpack(select(2, ...))
 local GUI = F.Modules.GUI
-local UNITFRAME = F.UNITFRAME
-local NAMEPLATE = F.NAMEPLATE
-local DISABLE = DISABLE
+local UNITFRAME = F:GetModule('Unitframe')
+local NAMEPLATE = F:GetModule('Nameplate')
 
 
 -- Inventory
@@ -59,6 +58,10 @@ end
 
 -- Nameplate
 
+local function SetupNameplateCVars()
+    GUI:SetupNameplateCVars(GUI.Page[14])
+end
+
 local function setupNamePlate()
     GUI:SetupNamePlate(GUI.Page[14])
 end
@@ -104,23 +107,27 @@ local function SetupCastbar()
     GUI:SetupCastbar(GUI.Page[12])
 end
 
-
-
-local function SetupPartySpellCooldown()
-    GUI:SetupPartySpellCooldown(GUI.Page[13])
+local function UpdateRaidDebuffSize()
+    UNITFRAME:UpdateRaidDebuffSize()
 end
 
-local function SetupGroupDebuffs()
-    GUI:SetupGroupDebuffs(GUI.Page[13])
+local function UpdateRaidAuras()
+    UNITFRAME:UpdateRaidAuras()
 end
 
-local function toggleGCDIndicator()
-    UNITFRAME:ToggleGCDIndicator()
+local function SetupPartyWatcher()
+    GUI:SetupPartyWatcher(GUI.Page[13])
 end
 
-local function updateRaidTargetIndicator()
-    UNITFRAME:UpdateRaidTargetIndicator()
+local function SetupRaidDebuffs()
+    GUI:SetupRaidDebuffs(GUI.Page[13])
 end
+
+local function UpdateAllHeaders()
+    UNITFRAME:UpdateAllHeaders()
+end
+
+
 
 -- General
 local function SetupAutoTakeScreenshot()
@@ -356,102 +363,104 @@ GUI.OptionsList = {
         {1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR},
         {1, 'tooltip', 'health_value', L.GUI.TOOLTIP.HEALTH_VALUE, true},
     },
-    [12] = {
-        -- unitframes
-        {1, 'unitframe', 'enable', L.GUI.UNITFRAME.ENABLE, nil, SetupUnitFrameSize},
-        {1, 'unitframe', 'transparent_mode', L.GUI.UNITFRAME.TRANSPARENT_MODE},
-        {4, 'unitframe', 'color_style', L.GUI.UNITFRAME.COLOR_STYLE, true, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-        {1, 'unitframe', 'portrait', L.GUI.UNITFRAME.PORTRAIT},
-        {1, 'unitframe', 'fade', L.GUI.UNITFRAME.FADE, true, SetupUnitFrameFader},
-        {1, 'unitframe', 'range_check', L.GUI.UNITFRAME.RANGE_CHECK},
-        {1, 'unitframe', 'abbr_name', L.GUI.UNITFRAME.ABBR_NAME, true, nil, nil, L.GUI.NAMEPLATE.ABBR_NAME_TIP},
-        {1, 'unitframe', 'player_combat_indicator', L.GUI.UNITFRAME.PLAYER_COMBAT_INDICATOR},
-        {1, 'unitframe', 'player_resting_indicator', L.GUI.UNITFRAME.PLAYER_RESTING_INDICATOR, true},
-        {1, 'unitframe', 'RaidTargetIndicator', L.GUI.UNITFRAME.RAID_TARGET_INDICATOR},
-        {1, 'unitframe', 'heal_prediction', L.GUI.UNITFRAME.HEAL_PREDICTION, true},
-        {1, 'unitframe', 'GCDIndicator', L.GUI.UNITFRAME.GCD_INDICATOR, nil, nil, toggleGCDIndicator},
-        {1, 'unitframe', 'class_power_bar', L.GUI.UNITFRAME.CLASS_POWER_BAR},
-        {1, 'unitframe', 'stagger_bar', L.GUI.UNITFRAME.STAGGER_BAR, true},
-        {1, 'unitframe', 'totems_bar', L.GUI.UNITFRAME.TOTEMS_BAR},
-        {1, 'unitframe', 'debuffs_by_player', L.GUI.UNITFRAME.DEBUFFS_BY_PLAYER},
-        {1, 'unitframe', 'debuff_type', L.GUI.UNITFRAME.DEBUFF_TYPE, true},
-        {1, 'unitframe', 'stealable_buffs', L.GUI.UNITFRAME.STEALABLE_BUFFS},
+    [12] = { -- unitframe
+        {1, 'Unitframe', 'Enable', L['Enable unitframes'], nil, SetupUnitFrameSize},
+        {1, 'Unitframe', 'Transparent', L['Transparent mode']},
+        {4, 'Unitframe', 'ColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
+        {1, 'Unitframe', 'Portrait', L['Portrait']},
+        {1, 'Unitframe', 'RangeCheck', L['Range check']},
+        {3, 'Unitframe', 'RangeCheckAlpha', L['Ouf of range alpha'], true, {.2, 1, .1}},
+        {1, 'Unitframe', 'AbbreviatedName', L['Abbreviated name']},
+        {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
+        {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
+        {1, 'Unitframe', 'CombatIndicator', L['Combat indicator']},
+        {1, 'Unitframe', 'RestingIndicator', L['Resting indicator'], true},
+        {1, 'Unitframe', 'RaidTargetIndicator', L['Raid target indicator']},
+        {1, 'Unitframe', 'GCDIndicator', L['GCD indicator'], true},
+        {1, 'Unitframe', 'ClassPowerBar', L['Class power bar']},
+
+        {1, 'Unitframe', 'TotemsBar', L['Shaman totems bar']},
+        {3, 'Unitframe', 'ClassPowerBarHeight', L['Class Power Bar Height'], true, {1, 10, 1}},
+        {1, 'Unitframe', 'RunesTimer', L['DK runes timer']},
+        {1, 'Unitframe', 'StaggerBar', L['Monk stagger bar']},
         {},
-        {1, 'unitframe', 'EnableCastbar', L.GUI.UNITFRAME.ENABLE_CASTBAR, nil, SetupCastbar},
-        {1, 'unitframe', 'CastbarCompact', L.GUI.UNITFRAME.CASTBAR_COMPACT, true},
-        {1, 'unitframe', 'CastbarSpellName', L.GUI.UNITFRAME.CASTBAR_SPELL_NAME},
-        {1, 'unitframe', 'CastbarSpellTime', L.GUI.UNITFRAME.CASTBAR_SPELL_TIME, true},
-        {5, 'unitframe', 'CastbarCastingColor', L.GUI.UNITFRAME.CASTING_COLOR},
-        {5, 'unitframe', 'CastbarCompleteColor', L.GUI.UNITFRAME.COMPLETE_COLOR, 1},
-        {5, 'unitframe', 'CastbarFailColor', L.GUI.UNITFRAME.FAIL_COLOR, 2},
-        {5, 'unitframe', 'CastbarUninterruptibleColor', L.GUI.UNITFRAME.UNINTERRUPTIBLE_COLOR, 3},
+        {1, 'Unitframe', 'Castbar', L['Enable castbar'], nil, SetupCastbar},
+        {1, 'Unitframe', 'CompactCastbar', L['Compact style'], true},
+        {1, 'Unitframe', 'SpellName', L['Spell name']},
+        {1, 'Unitframe', 'SpellTime', L['Spell timer'], true},
+        {5, 'Unitframe', 'CastingColor', L['Normal']},
+        {5, 'Unitframe', 'CompleteColor', L['Complete'], 1},
+        {5, 'Unitframe', 'FailColor', L['Fail'], 2},
+        {5, 'Unitframe', 'UninterruptibleColor', L['Uninterruptible'], 3},
         {},
-        {1, 'unitframe', 'enable_boss', L.GUI.UNITFRAME.ENABLE_BOSS},
-        --{4, 'unitframe', 'boss_color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-        {1, 'unitframe', 'enable_arena', L.GUI.UNITFRAME.ENABLE_ARENA, true},
+        {1, 'Unitframe', 'Boss', L['Enable boss frames']},
+        {1, 'Unitframe', 'Arena', L['Enable arena frames'], true},
     },
-    [13] = {
-        -- groupframes
-        {1, 'unitframe', 'enable_group', L.GUI.GROUPFRAME.ENABLE_GROUP, nil, SetupGroupFrameSize},
-        {1, 'unitframe', 'GroupName', L.GUI.GROUPFRAME.GROUP_NAME},
-        {1, 'unitframe', 'group_click_cast', L.GUI.GROUPFRAME.GROUP_CLICK_CAST, true, nil, nil, L.GUI.GROUPFRAME.GROUP_CLICK_CAST_TIP},
-        {1, 'unitframe', 'spec_position', L.GUI.GROUPFRAME.SPEC_POSITION},
-        {1, 'unitframe', 'group_threat_indicator', L.GUI.GROUPFRAME.GROUP_THREAT_INDICATOR, true},
-        {1, 'unitframe', 'instance_auras', L.GUI.GROUPFRAME.INSTANCE_AURAS, nil, SetupGroupDebuffs, nil, L.GUI.GROUPFRAME.INSTANCE_AURAS_TIP},
-        {1, 'unitframe', 'auras_click_through', L.GUI.GROUPFRAME.AURAS_CLICK_THROUGH, true},
-        {1, 'unitframe', 'group_debuff_highlight', L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT, nil, nil, nil, L.GUI.GROUPFRAME.GROUP_DEBUFF_HIGHLIGHT_TIP},
-        {1, 'unitframe', 'corner_indicator', L.GUI.GROUPFRAME.CORNER_INDICATOR, true},
-        {},
-        {1, 'unitframe', 'party_horizon', L.GUI.GROUPFRAME.PARTY_HORIZON},
-        {1, 'unitframe', 'party_reverse', L.GUI.GROUPFRAME.PARTY_REVERSE, true},
-        {1, 'unitframe', 'party_spell_watcher', L.GUI.GROUPFRAME.PARTY_SPELL_WATCHER, nil, SetupPartySpellCooldown},
-        {1, 'unitframe', 'party_spell_sync', L.GUI.GROUPFRAME.PARTY_SPELL_SYNC, true, nil, nil, L.GUI.GROUPFRAME.PARTY_SPELL_SYNC_TIP},
-        {},
-        {1, 'unitframe', 'raid_horizon', L.GUI.GROUPFRAME.RAID_HORIZON},
-        {1, 'unitframe', 'raid_reverse', L.GUI.GROUPFRAME.RAID_REVERSE, true},
-        {},
-        {4, 'unitframe', 'group_color_style', L.GUI.UNITFRAME.COLOR_STYLE, nil, {L.GUI.UNITFRAME.COLOR_STYLE_DEFAULT, L.GUI.UNITFRAME.COLOR_STYLE_CLASS, L.GUI.UNITFRAME.COLOR_STYLE_GRADIENT}},
-        {3, 'unitframe', 'group_filter', L.GUI.GROUPFRAME.GROUP_FILTER, true, {1, 8, 1}},
+    [13] = { -- groupframe
+        {1, 'Unitframe', 'Group', L['Enable group frames'], nil, SetupGroupFrameSize},
+        {1, 'Unitframe', 'SmartRaid', L['Smart layout'], nil, nil, UpdateAllHeaders, L['|nOnly show raid frames if there are more than 5 members in your group.|nIf disabled, show raid frames when in raid, show party frames when in party.']},
+        {1, 'Unitframe', 'GroupShowName', L['Show names']},
+        {4, 'Unitframe', 'GroupColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
+        {1, 'Unitframe', 'ClickToCast', L['Enable click to cast'], nil, nil, nil, L['|nOpen your spell book to configure click to cast.']},
+        {1, 'Unitframe', 'PositionBySpec', L['Save postion by spec']},
+        {3, 'Unitframe', 'GroupFilter', L['Group filter'], true, {1, 8, 1}},
+        {1, 'Unitframe', 'DebuffHighlight', L['Dispellable debuff highlight']},
+        {1, 'Unitframe', 'InstanceAuras', L['Show raid debuffs'], nil, SetupRaidDebuffs, nil, L['|nShow custom major debuffs in raid and dungeons.']},
+        {1, 'Unitframe', 'DispellableOnly', L['Show dispellable debuffs only'], true},
+        {1, 'Unitframe', 'ShowRaidDebuff', L['Show debuffs'] , nil, nil, UpdateRaidAuras, L['|nShow debuffs on group frame by blizzard default logic, up to 3 icons.']},
+        {1, 'Unitframe', 'ShowRaidBuff', L['Show buffs'], true, nil, UpdateRaidAuras, L['|nShow buffs on group frame by blizzard default logic, up to 3 icons.|nBetter not to use this with Corner Indicator.']},
+        {1, 'Unitframe', 'AurasClickThrough', L['Disable auras tooltip']},
+        {1, 'Unitframe', 'CornerIndicator', L['Enable corner indicator']},
+        {1, 'Unitframe', 'ThreatIndicator', L['Threat indicator'], true},
+        {1, 'Unitframe', 'PartyWatcher', L['Enable party watcher'], nil, SetupPartyWatcher},
+        {1, 'Unitframe', 'PartyWatcherSync', L['Sync party watcher'], true, nil, nil, L['|nIf enabled, the cooldown status would sync with players who using party watcher or ZenTracker(WA).|nThis might decrease your performance.']},
+        {1, 'Unitframe', 'PartyHorizon', L['Horizontal party frames']},
+        {1, 'Unitframe', 'PartyReverse', L['Party frames reverse grow'], true},
+        {1, 'Unitframe', 'RaidHorizon', L['Horizontal raid frames']},
+        {1, 'Unitframe', 'RaidReverse', L['Raid frames reverse grow'], true},
     },
-    [14] = {
-        -- nameplate
-        {1, 'Nameplate', 'Enable', L.GUI.NAMEPLATE.ENABLE, nil, setupNamePlate},
-        {1, 'Nameplate', 'NameOnly', L.GUI.NAMEPLATE.NAME_ONLY, nil, nil, nil, L.GUI.NAMEPLATE.NAME_ONLY_TIP},
-        {1, 'Nameplate', 'TargetIndicator', L.GUI.NAMEPLATE.TARGET_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.TARGET_INDICATOR_TIP},
-        {4, 'Nameplate', 'AuraFilterMode', L.GUI.NAMEPLATE.AURA_FILTER_MODE, true, {L.GUI.NAMEPLATE.BLACK_WHITE, L.GUI.NAMEPLATE.PLAYER_ONLY, L.GUI.NAMEPLATE.INCLUDE_CROWD_CONTROL}, nil, L.GUI.NAMEPLATE.AURA_FILTER_MODE_TIP},
-        {1, 'Nameplate', 'QuestIndicator', L.GUI.NAMEPLATE.QUEST_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
-        {1, 'Nameplate', 'ClassifyIndicator', L.GUI.NAMEPLATE.CLASSIFY_INDICATOR, true, nil, nil, L.GUI.NAMEPLATE.CLASSIFY_INDICATOR_TIP},
-        {1, 'Nameplate', 'ExecuteIndicator', L.GUI.NAMEPLATE.EXECUTE_INDICATOR, nil, setupNPExecuteRatio, nil, L.GUI.NAMEPLATE.EXECUTE_INDICATOR_TIP},
-        {1, 'Nameplate', 'RaidTargetIndicator', L.GUI.NAMEPLATE.RAID_TARGET_INDICATOR, true, setupNPRaidTargetIndicator},
-        {1, 'Nameplate', 'ThreatIndicator', L.GUI.NAMEPLATE.THREAT_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.THREAT_INDICATOR_TIP},
-        {1, 'Nameplate', 'InterruptIndicator', L.GUI.NAMEPLATE.INTERRUPT_INDICATOR},
-        {1, 'Nameplate', 'TotemIcon', L.GUI.NAMEPLATE.TOTEM_ICON, true, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
+    [14] = { -- nameplate
+        {1, 'Nameplate', 'Enable', L['Enable nameplate'], nil, setupNamePlate},
+        {1, 'Nameplate', 'NameOnly', L['Name only style'], nil, nil, nil, L.GUI.NAMEPLATE.NAME_ONLY_TIP},
+        {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}, nil, L.GUI.NAMEPLATE.AURA_FILTER_MODE_TIP},
+        {1, 'Nameplate', 'ControlCVars', L['Control CVars'], nil, SetupNameplateCVars},
+        {1, 'Nameplate', 'TargetIndicator', L['Target indicator'], nil, nil, nil, L.GUI.NAMEPLATE.TARGET_INDICATOR_TIP},
+
+        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator'], nil, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
+
+        {3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], true, {1, 90, 1}},
+
+        {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator'], nil, nil, nil, L.GUI.NAMEPLATE.CLASSIFY_INDICATOR_TIP},
+
+        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid target indicator'], nil, setupNPRaidTargetIndicator},
+        {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true, nil, nil, L.GUI.NAMEPLATE.THREAT_INDICATOR_TIP},
+        {1, 'Nameplate', 'TotemIcon', L['Totmes icon'], nil, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
+
+
+        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator'], nil, setupNPExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
+        {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
         {},
-        {1, 'Nameplate', 'AKProgress', L.GUI.NAMEPLATE.AK_PROGRESS, nil, nil, nil, L.GUI.NAMEPLATE.AK_PROGRESS_TIP},
-        {1, 'Nameplate', 'ExplosiveIndicator', L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR, true, setupNPExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
-        {1, 'Nameplate', 'SpitefulIndicator', L.GUI.NAMEPLATE.SPITEFUL_INDICATOR, nil, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
+        {1, 'Nameplate', 'CastbarCompact', L['Compact style']},
+        {1, 'Nameplate', 'MajorSpellsGlow', L['Major spell glow'], true, setupMajorSpellsGlow, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
+        {1, 'Nameplate', 'CastbarSpellName', L['Spell name']},
+        {1, 'Nameplate', 'CastbarSpellTime', L['Spell timer'], true},
+        {1, 'Nameplate', 'SpellTarget', L['Spell target'], nil, nil, nil, L.GUI.NAMEPLATE.SPELL_TARGET_TIP},
         {},
-        {1, 'Nameplate', 'CastbarCompact', L.GUI.NAMEPLATE.CASTBAR_COMPACT},
-        {1, 'Nameplate', 'MajorSpellsGlow', L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW, true, setupMajorSpellsGlow, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
-        {1, 'Nameplate', 'CastbarSpellName', L.GUI.NAMEPLATE.CASTBAR_SPELL_NAME},
-        {1, 'Nameplate', 'CastbarSpellTime', L.GUI.NAMEPLATE.CASTBAR_SPELL_TIME, true},
-        {1, 'Nameplate', 'SpellTarget', L.GUI.NAMEPLATE.SPELL_TARGET, nil, nil, nil, L.GUI.NAMEPLATE.SPELL_TARGET_TIP},
-        {},
-        {1, 'Nameplate', 'FriendlyClassColor', L.GUI.NAMEPLATE.FRIENDLY_CLASS_COLOR},
-        {1, 'Nameplate', 'HostileClassColor', L.GUI.NAMEPLATE.HOSTILE_CLASS_COLOR, true},
-        {1, 'Nameplate', 'ColoredTarget', L.GUI.NAMEPLATE.COLORED_TARGET, nil, nil, nil, L.GUI.NAMEPLATE.COLORED_TARGET_TIP},
-        {5, 'Nameplate', 'TargetColor', L.GUI.NAMEPLATE.TARGET_COLOR, 2},
-        {1, 'Nameplate', 'ColoredFocus', L.GUI.NAMEPLATE.COLORED_FOCUS, nil, nil, nil, L.GUI.NAMEPLATE.COLORED_FOCUS_TIP},
-        {5, 'Nameplate', 'FocusColor', L.GUI.NAMEPLATE.FOCUS_COLOR, 2},
-        {1, 'Nameplate', 'TankMode', L.GUI.NAMEPLATE.TANK_MODE, nil, nil, nil, L.GUI.NAMEPLATE.TANK_MODE_TIP},
-        {1, 'Nameplate', 'RevertThreat', L.GUI.NAMEPLATE.REVERT_THREAT, true, nil, nil, L.GUI.NAMEPLATE.REVERT_THREAT_TIP},
-        {5, 'Nameplate', 'SecureColor', L.GUI.NAMEPLATE.SECURE_COLOR},
-        {5, 'Nameplate', 'TransColor', L.GUI.NAMEPLATE.TRANS_COLOR, 1},
-        {5, 'Nameplate', 'InsecureColor', L.GUI.NAMEPLATE.INSECURE_COLOR, 2},
-        {5, 'Nameplate', 'OffTankColor', L.GUI.NAMEPLATE.OFF_TANK_COLOR, 3},
-        {1, 'Nameplate', 'CustomUnitColor', L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT, nil, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT_TIP},
-        {5, 'Nameplate', 'CustomColor', L.GUI.NAMEPLATE.CUSTOM_COLOR},
-        {2, 'Nameplate', 'CustomUnitList', L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST, true, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST_TIP},
+        {1, 'Nameplate', 'FriendlyClassColor', L['Friendly unit colored by class']},
+        {1, 'Nameplate', 'HostileClassColor', L['Hostile unit colored by class'], true},
+        {1, 'Nameplate', 'ColoredTarget', L['Target unit colored'], nil, nil, nil, L.GUI.NAMEPLATE.COLORED_TARGET_TIP},
+        {5, 'Nameplate', 'TargetColor', L['Target color'], 2},
+        {1, 'Nameplate', 'ColoredFocus', L['Focus unit colored'], nil, nil, nil, L.GUI.NAMEPLATE.COLORED_FOCUS_TIP},
+        {5, 'Nameplate', 'FocusColor', L['Focus color'], 2},
+        {1, 'Nameplate', 'TankMode', L['Tank mode'], nil, nil, nil, L.GUI.NAMEPLATE.TANK_MODE_TIP},
+        {1, 'Nameplate', 'RevertThreat', L['Revert threat'], true, nil, nil, L.GUI.NAMEPLATE.REVERT_THREAT_TIP},
+        {5, 'Nameplate', 'SecureColor', L['Secure']},
+        {5, 'Nameplate', 'TransColor', L['Transition'], 1},
+        {5, 'Nameplate', 'InsecureColor', L['Insecure'], 2},
+        {5, 'Nameplate', 'OffTankColor', L['Off-Tank'], 3},
+        {1, 'Nameplate', 'CustomUnitColor', L['Custom unit colored'], nil, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT_TIP},
+        {5, 'Nameplate', 'CustomColor', L['Custom color']},
+        {2, 'Nameplate', 'CustomUnitList', L['Custom unit list'], true, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST_TIP},
 
     },
     [15] = { -- theme

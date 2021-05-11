@@ -432,9 +432,8 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     end
 
     -- leave vehicle
-    if C.DB.unitframe.enable and C.DB.unitframe.fade then
-        ACTIONBAR:StyleActionButton(_G['FreeUI_LeaveVehicleButton'], cfg)
-    end
+    ACTIONBAR:StyleActionButton(_G['FreeUI_LeaveVehicleButton'], cfg)
+
 
     -- extra action button
     ACTIONBAR:StyleExtraActionButton(cfg)

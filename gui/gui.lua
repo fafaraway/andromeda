@@ -35,9 +35,9 @@ local tabsList = {
     L.GUI.INVENTORY.NAME,
     L.GUI.MAP.NAME,
     L.GUI.TOOLTIP.NAME,
-    L.GUI.UNITFRAME.NAME,
-    L.GUI.GROUPFRAME.NAME,
-    L.GUI.NAMEPLATE.NAME,
+    L['Unitframe'],
+    L['Groupframe'],
+    L['Nameplate'],
     L.GUI.APPEARANCE.NAME,
     L.GUI.PROFILE.NAME,
     L.GUI.CREDITS.NAME,
@@ -196,7 +196,7 @@ local function CreateOption(i)
     for _, option in pairs(GUI.OptionsList[i]) do
         local optType, key, value, name, horizon, data, callback, tip = unpack(option)
         if optType == 1 then -- checkbox
-            local cb = F.CreateCheckBox(parent, true, nil, true)
+            local cb = F.CreateCheckbox(parent, true, nil, true)
             cb:SetSize(20, 20)
             cb:SetHitRectInsets(-5, -5, -5, -5)
 
@@ -262,9 +262,9 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 240, -offset + 40
+                x, y = 240, -offset + 30
             else
-                x, y = 10, -offset - 30
+                x, y = 10, -offset - 40
                 offset = offset + 70
             end
 
@@ -297,9 +297,9 @@ local function CreateOption(i)
 
             local dd = F.CreateDropDown(parent, 160, 20, data)
             if horizon then
-                dd:SetPoint('TOPLEFT', 254, -offset + 35)
+                dd:SetPoint('TOPLEFT', 254, -offset + 30)
             else
-                dd:SetPoint('TOPLEFT', 26, -offset - 35)
+                dd:SetPoint('TOPLEFT', 26, -offset - 40)
                 offset = offset + 70
             end
 

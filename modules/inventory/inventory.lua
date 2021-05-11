@@ -269,7 +269,7 @@ function INVENTORY:CreateDepositButton()
         end
     end)
     bu.title = REAGENTBANK_DEPOSIT
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Deposit Reagent'], 'BLUE')
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['|nLeft click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'], 'BLUE')
     updateDepositButtonStatus(bu)
     return bu
 end
@@ -331,7 +331,7 @@ end
 local function updateRepairButtonStatus(bu)
     if C.DB.inventory.auto_repair then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-        bu.text = L['Auto repair enabled']
+        bu.text = L['|nRepair your equipment automatically when you visit an able vendor.']
         bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -350,7 +350,7 @@ function INVENTORY:CreateRepairButton()
     end)
 
     bu.title = L['Auto Repair']
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto repair enabled'], 'BLUE')
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['|nRepair your equipment automatically when you visit an able vendor.'], 'BLUE')
     updateRepairButtonStatus(bu)
     return bu
 end
@@ -358,7 +358,7 @@ end
 local function updateSellButtonStatus(bu)
     if C.DB.inventory.auto_sell_junk then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-        bu.text = L['Auto sell junk enabled']
+        bu.text = L['|nSell junk items automtically when you visit an able vendor.']
         bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -377,7 +377,7 @@ function INVENTORY:CreateSellButton()
     end)
 
     bu.title = L['Auto Sell Junk']
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['Auto sell junk enabled'], 'BLUE')
+    F.AddTooltip(bu, 'ANCHOR_TOP', L['|nSell junk items automtically when you visit an able vendor.'], 'BLUE')
     updateSellButtonStatus(bu)
     return bu
 end
@@ -499,7 +499,7 @@ local function saveSplitCount(self)
 end
 
 function INVENTORY:CreateSplitButton()
-    local enabledText = C.BlueColor .. L['Quick split enabled']
+    local enabledText = C.BlueColor .. L['|nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.']
 
     local splitFrame = CreateFrame('Frame', nil, self)
     splitFrame:SetSize(100, 50)
@@ -563,7 +563,7 @@ end
 
 local favouriteEnable
 function INVENTORY:CreateFavouriteButton()
-    local enabledText = C.BlueColor .. L['Mark favourite enabled']
+    local enabledText = C.BlueColor .. L['|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk.']
 
     local bu = F.CreateButton(self, 16, 16, true, icons.favourite)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -625,7 +625,7 @@ _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
-    local enabledText = C.RedColor .. L['Mark junk enabled']
+    local enabledText = C.RedColor .. L['|nClick to tag item as junk.|nIf \'Auto sell junk\' enabled, these items would be sold as well.|nThe list is saved account-wide, and won\'t be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list.']
 
     local bu = F.CreateButton(self, 16, 16, true, icons.junk)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -681,7 +681,7 @@ end
 
 local deleteEnable
 function INVENTORY:CreateDeleteButton()
-    local enabledText = C.RedColor .. L['Quick delete enabled']
+    local enabledText = C.RedColor .. L['|nYou can destroy item by holding CTRL + ALT.|nThe item can be heirlooms or its quality lower then rare (blue).']
 
     local bu = F.CreateButton(self, 16, 16, true, icons.delete)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)

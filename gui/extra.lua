@@ -26,8 +26,8 @@ local KEY_NUMLOCK_MAC = KEY_NUMLOCK_MAC
 
 local F, C, L = unpack(select(2, ...))
 local GUI = F.Modules.GUI
-local UNITFRAME = F.UNITFRAME
-local NAMEPLATE = F.NAMEPLATE
+local UNITFRAME = F:GetModule('Unitframe')
+local NAMEPLATE = F:GetModule('Nameplate')
 
 local extraGUIs = {}
 local function TogglePanel(guiName)
@@ -84,8 +84,8 @@ end
 local function CreateGroupTitle(parent, text, offset)
     if parent.groupTitle then return end
 
-    F.CreateFS(parent, C.Assets.Fonts.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
-    local line = F.SetGradient(parent, 'H', .5, .5, .5, .25, .25, 200, C.Mult)
+    F.CreateFS(parent.child, C.Assets.Fonts.Regular, 13, nil, text, 'YELLOW', true, 'TOP', 0, offset)
+    local line = F.SetGradient(parent.child, 'H', .5, .5, .5, .25, .25, 200, C.Mult)
     line:SetPoint('TOPLEFT', 10, offset-20)
 
     parent.groupTitle = true
@@ -93,7 +93,7 @@ end
 
 -- deprecated
 local function createOptionCheck(parent, offset, text)
-    local box = F.CreateCheckBox(parent, true)
+    local box = F.CreateCheckbox(parent, true)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, -offset)
@@ -102,15 +102,15 @@ local function createOptionCheck(parent, offset, text)
 end
 
 -- new
-local function CheckBoxOnClick(self)
+local function Checkbox_OnClick(self)
     local key = self.__key
     local value = self.__value
     C.DB[key][value] = not C.DB[key][value]
     self:SetChecked(C.DB[key][value])
 end
 
-local function CreateCheckBox(parent, offset, key, value, text)
-    local box = F.CreateCheckBox(parent, true)
+local function CreateCheckbox(parent, offset, key, value, text)
+    local box = F.CreateCheckbox(parent.child, true)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
     box:SetPoint('TOPLEFT', 10, offset)
@@ -119,7 +119,7 @@ local function CreateCheckBox(parent, offset, key, value, text)
     box:SetChecked(C.DB[key][value])
     box.__value = value
     box.__key = key
-    box:SetScript('OnClick', CheckBoxOnClick)
+    box:SetScript('OnClick', Checkbox_OnClick)
 
     return box
 end
@@ -171,8 +171,8 @@ local function LabelOnEnter(self)
 end
 
 local function CreateLabel(parent, text, tip)
-    local label = F.CreateFS(parent, C.Assets.Fonts.Regular, 12, nil, text, 'YELLOW', true,
-                             'CENTER', 0, 22)
+    local font = C.Assets.Fonts.Regular
+    local label = F.CreateFS(parent, font, 11, nil, text, 'YELLOW', true, 'CENTER', 0, 22)
     if not tip then
         return
     end
@@ -332,7 +332,7 @@ local function createOptionsSlider(parent, title, minV, maxV, step, defaultV, x,
 end
 
 -- new
-local function SliderOnValueChanged(self, v)
+local function Slider_OnValueChanged(self, v)
     local current
     if self.__step < 1 then
         current = tonumber(format('%.1f', v))
@@ -346,7 +346,7 @@ local function SliderOnValueChanged(self, v)
 end
 
 local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func)
-    local slider = F.CreateSlider(parent, text, minV, maxV, step, x, y, 180)
+    local slider = F.CreateSlider(parent.child, text, minV, maxV, step, x, y, 180)
     slider:SetValue(C.DB[key][value])
     slider.value:SetText(C.DB[key][value])
     slider.__key = key
@@ -354,13 +354,13 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider.__update = func
     slider.__default = defaultV
     slider.__step = step
-    slider:SetScript('OnValueChanged', SliderOnValueChanged)
+    slider:SetScript('OnValueChanged', Slider_OnValueChanged)
 end
 
 --[[ Static Popup ]]
 
 StaticPopupDialogs['FREEUI_RESET_MAJOR_SPELLS'] = {
-    text = C.RedColor..L.GUI.RESET_LIST,
+    text = C.RedColor..L['Are you sure to restore default list?'],
     button1 = YES,
     button2 = NO,
     OnAccept = function()
@@ -371,18 +371,18 @@ StaticPopupDialogs['FREEUI_RESET_MAJOR_SPELLS'] = {
 }
 
 StaticPopupDialogs['FREEUI_RESET_PARTY_SPELLS'] = {
-    text = C.RedColor..L.GUI.RESET_LIST,
+    text = C.RedColor..L['Are you sure to restore default list?'],
     button1 = YES,
     button2 = NO,
     OnAccept = function()
-        wipe(_G.FREE_ADB['party_spells_list'])
+        wipe(_G.FREE_ADB['PartySpellsList'])
         ReloadUI()
     end,
     whileDead = 1,
 }
 
 StaticPopupDialogs['FREEUI_RESET_GROUP_DEBUFFS'] = {
-    text = C.RedColor..L.GUI.RESET_LIST,
+    text = C.RedColor..L['Are you sure to restore default list?'],
     button1 = YES,
     button2 = NO,
     OnAccept = function()
@@ -582,7 +582,7 @@ function GUI:SetupActionbarFade(parent)
     local offset = - 10
     for _, v in ipairs(conditions) do
         CreateGroupTitle(scroll, L.GUI.ACTIONBAR.CONDITION, offset)
-        CreateCheckBox(scroll, offset - 30, 'Actionbar', v.value, v.text)
+        CreateCheckbox(scroll, offset - 30, 'Actionbar', v.value, v.text)
         offset = offset - 35
     end
 
@@ -752,7 +752,7 @@ function GUI:SetupMajorSpellsGlow(parent)
     end
 
     local function refreshMajorSpells()
-        F.NAMEPLATE:RefreshMajorSpells()
+        NAMEPLATE:RefreshMajorSpells()
     end
 
     local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.CASTBAR_GLOW_SETTING, true)
@@ -887,44 +887,73 @@ function GUI:SetupNPRaidTargetIndicator(parent)
 
 end
 
-function GUI:SetupNPExecuteRatio(parent)
-    local guiName = 'FreeUI_GUI_NamePlate_ExecutRatio_Setup'
+function GUI:SetupNameplateCVars(parent)
+    local guiName = 'FreeUI_GUI_Nameplate_CVars'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.EXECUT_RATIO_SETTING)
+    local cvarsDatas = {
+        [1] = {
+            key = 'MinScale',
+            value = .7,
+            text = L['MinScale'],
+            min = .5,
+            max = 1,
+            step = .1
+        },
+        [2] = {
+            key = 'TargetScale',
+            value = 1,
+            text = L['TargetScale'],
+            min = 1,
+            max = 2,
+            step = .1
+        },
+        [3] = {
+            key = 'MinAlpha',
+            value = .6,
+            text = L['TargetScale'],
+            min = .5,
+            max = 1,
+            step = .1
+        },
+        [4] = {
+            key = 'OccludedAlpha',
+            value = .2,
+            text = L['OccludedAlpha'],
+            min = .2,
+            max = 1,
+            step = .1
+        },
+        [5] = {
+            key = 'VerticalSpacing',
+            value = .7,
+            text = L['VerticalSpacing'],
+            min = .3,
+            max = 3,
+            step = .1
+        },
+        [6] = {
+            key = 'HorizontalSpacing',
+            value = .3,
+            text = L['HorizontalSpacing'],
+            min = .3,
+            max = 3,
+            step = .1
+        },
+    }
+
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    -- LuaFormatter off
-    local data = {
-        {'ExecuteRatio', 0, 0, 1, .1},
-    }
-    -- LuaFormatter on
-
-    createOptionsSlider(scroll.child, L.GUI.NAMEPLATE.EXECUTE_RATIO, data[1][3], data[1][4],
-                        data[1][5], data[1][2], 20, -30, 'Nameplate', data[1][1], updateNameplates)
-end
-
-function GUI:SetupNPExplosiveScale(parent)
-    local guiName = 'FreeUI_GUI_NamePlate_ExplosiveScale_Setup'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
+    local offset = -10
+    for _, v in ipairs(cvarsDatas) do
+        CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        offset = offset - 65
     end
-
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_SETTING)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    -- LuaFormatter off
-    local data = {
-        {'ExplosiveScale', 1.5, 1, 3, .1},
-    }
-    -- LuaFormatter on
-
-    createOptionsSlider(scroll.child, L.GUI.NAMEPLATE.SCALE, data[1][3], data[1][4], data[1][5],
-                        data[1][2], 20, -30, 'Nameplate', data[1][1], updateNameplates)
 end
 
 --[[ Unitframe ]]
@@ -936,54 +965,182 @@ function GUI:SetupUnitFrameSize(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.UNITFRAME_SIZE_SETTING_HEADER)
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local sliderRange = {
-        ['player'] = {50, 300},
-        ['target'] = {50, 300},
-        ['focus'] = {50, 300},
-        ['pet'] = {50, 300},
-        ['boss'] = {50, 300},
-        ['arena'] = {50, 300},
+    local playerDatas = {
+        [1] = {
+            key = 'PlayerWidth',
+            value = '160',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'PlayerHeight',
+            value = '6',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
     }
 
-    local defaultValue = {
-        ['player'] = {120, 8},
-        ['target'] = {160, 8},
-        ['focus'] = {60, 8},
-        ['pet'] = {50, 8},
-        ['boss'] = {120, 20},
-        ['arena'] = {120, 16},
+    local petDatas = {
+        [1] = {
+            key = 'PetWidth',
+            value = '60',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'PetHeight',
+            value = '6',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
     }
 
-    local function UpdateSize(self, unit)
+    local targetDatas = {
+        [1] = {
+            key = 'TargetWidth',
+            value = '160',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'TargetHeight',
+            value = '6',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
+    }
+
+    local totDatas = {
+        [1] = {
+            key = 'ToTWidth',
+            value = '60',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'ToTHeight',
+            value = '6',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
+    }
+
+    local focusDatas = {
+        [1] = {
+            key = 'FocusWidth',
+            value = '60',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'FocusHeight',
+            value = '6',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
+    }
+
+    local tofDatas = {
+        [1] = {
+            key = 'ToFWidth',
+            value = '60',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'ToFHeight',
+            value = '6',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
+    }
+
+    local powerDatas = {
+        [1] = {
+            key = 'PowerBarHeight',
+            value = '2',
+            text = L['Power Height'],
+            min = 1,
+            max = 10,
+        },
+        [2] = {
+            key = 'AlternativePowerBarHeight',
+            value = '2',
+            text = L['Alternat Power Height'],
+            min = 1,
+            max = 10,
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(playerDatas) do
+        CreateGroupTitle(scroll, L['Player Frame'], offset)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
     end
 
-    local function createOptionGroup(parent, title, offset, value, func)
-        createOptionTitle(parent, title, offset)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_WIDTH, sliderRange[value][1],
-                           sliderRange[value][2], 1, defaultValue[value][1], 20, offset - 60,
-                           value .. '_width', func)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_HEIGHT, 4, 20, 1, defaultValue[value][2], 20,
-                           offset - 130, value .. '_height', func)
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(petDatas) do
+        CreateGroupTitle(scroll, L['Pet Frame'], offset - 50)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        offset = offset - 65
     end
 
-    local function createPowerOptionGroup(parent, title, offset, value, func)
-        createOptionTitle(parent, title, offset)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_POWER_HEIGHT, 1, 10, 1, 1, 20, offset - 60,
-                           'power_bar_height', func)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_ALT_POWER_HEIGHT, 1, 10, 1, 2, 20,
-                           offset - 130, 'alt_power_height', func)
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(targetDatas) do
+        CreateGroupTitle(scroll, L['Target Frame'], offset - 100)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150)
+        offset = offset - 65
     end
 
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_PLAYER, -10, 'player', UpdateSize)
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_TARGET, -210, 'target', UpdateSize)
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_FOCUS, -410, 'focus', UpdateSize)
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_PET, -610, 'pet', UpdateSize)
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_BOSS, -810, 'boss', UpdateSize)
-    createOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_ARENA, -1010, 'arena', UpdateSize)
-    createPowerOptionGroup(scroll.child, L.GUI.UNITFRAME.CAT_POWER, -1210, nil, UpdateSize)
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(totDatas) do
+        CreateGroupTitle(scroll, L['Target of Target Frame'], offset - 150)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 200)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(focusDatas) do
+        CreateGroupTitle(scroll, L['Focus Frame'], offset - 200)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 250)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(tofDatas) do
+        CreateGroupTitle(scroll, L['Target of Focus Frame'], offset - 250)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 300)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(powerDatas) do
+        CreateGroupTitle(scroll, L['Power Bar'], offset - 300)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 350)
+        offset = offset - 65
+    end
 end
 
 function GUI:SetupGroupFrameSize(parent)
@@ -993,30 +1150,71 @@ function GUI:SetupGroupFrameSize(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.GROUPFRAME_SIZE_SETTING_HEADER)
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local sliderRange = {['party'] = {20, 100}, ['raid'] = {20, 100}}
+    local partyDatas = {
+        [1] = {
+            key = 'PartyWidth',
+            value = '62',
+            text = L['Width'],
+            min = 10,
+            max = 200,
+        },
+        [2] = {
+            key = 'PartyHeight',
+            value = '28',
+            text = L['Height'],
+            min = 10,
+            max = 200,
+        },
+        [3] = {
+            key = 'PartyGap',
+            value = '6',
+            text = L['Gap'],
+            min = 4,
+            max = 20,
+        },
+    }
 
-    local defaultValue = {['party'] = {62, 28, 6}, ['raid'] = {28, 20, 5}}
+    local raidDatas = {
+        [1] = {
+            key = 'RaidWidth',
+            value = '38',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'RaidHeight',
+            value = '30',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
+        [3] = {
+            key = 'RaidGap',
+            value = '5',
+            text = L['Gap'],
+            min = 4,
+            max = 20,
+        },
+    }
 
-    local function UpdateSize(self, unit)
+    local offset = -10
+    for _, v in ipairs(partyDatas) do
+        CreateGroupTitle(scroll, L['Party Frame'], offset)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
     end
 
-    local function createOptionGroup(parent, title, offset, value, func)
-        createOptionTitle(parent, title, offset)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_WIDTH, sliderRange[value][1],
-                           sliderRange[value][2], 1, defaultValue[value][1], 20, offset - 60,
-                           value .. '_width', func)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_HEIGHT, sliderRange[value][1],
-                           sliderRange[value][2], 1, defaultValue[value][2], 20, offset - 130,
-                           value .. '_height', func)
-        createOptionSlider(parent, L.GUI.UNITFRAME.SET_GAP, 5, 10, 1, defaultValue[value][3], 20,
-                           offset - 200, value .. '_gap', func)
-    end
+    scroll.groupTitle = nil
 
-    createOptionGroup(scroll.child, L.GUI.GROUPFRAME.CAT_PARTY, -10, 'party', UpdateSize)
-    createOptionGroup(scroll.child, L.GUI.GROUPFRAME.CAT_RAID, -280, 'raid', UpdateSize)
+    for _, v in ipairs(raidDatas) do
+        CreateGroupTitle(scroll, L['Raid Frame'], offset - 50)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        offset = offset - 65
+    end
 end
 
 function GUI:SetupUnitFrameFader(parent)
@@ -1026,50 +1224,81 @@ function GUI:SetupUnitFrameFader(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.FADER_SETTING_HEADER)
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local faderValues = {0, 1, .3, .3}
-
-    local function Update()
-    end
-
-    local filterOptions = {
-        [1] = 'condition_combat',
-        [2] = 'condition_target',
-        [3] = 'condition_instance',
-        [4] = 'condition_arena',
-        [5] = 'condition_casting',
-        [6] = 'condition_injured',
-        [7] = 'condition_mana',
-        [8] = 'condition_power',
+    local checkboxDatas = {
+        [1] = {
+            value = 'InInstance',
+            text = L['Inside dungeon'],
+        },
+        [2] = {
+            value = 'InPvP',
+            text = L['Inside battlefield or arena'],
+        },
+        [3] = {
+            value = 'InCombat',
+            text = L['Enter combat'],
+        },
+        [4] = {
+            value = 'Targeting',
+            text = L['Have target or focus'],
+        },
+        [5] = {
+            value = 'Casting',
+            text = L['Casting'],
+        },
+        [6] = {
+            value = 'Injured',
+            text = L['Injured'],
+        },
+        [7] = {
+            value = 'ManaNotFull',
+            text = L['Mana not full'],
+        },
+        [8] = {
+            value = 'HavePower',
+            text = L['Have power(rage/energy)'],
+        },
     }
 
-    local function filterOnClick(self)
-        local value = self.__value
-        C.DB['unitframe'][value] = not C.DB['unitframe'][value]
-        self:SetChecked(C.DB['unitframe'][value])
-        GUI.UpdateInventoryStatus()
+    local sliderDatas = {
+        [1] = {
+            key = 'MinAlpha',
+            value = '0',
+            text = L['Fade out alpha'],
+        },
+        [2] = {
+            key = 'MaxAlpha',
+            value = '1',
+            text = L['Fade in alpha'],
+        },
+        [3] = {
+            key = 'OutDuration',
+            value = '.3',
+            text = L['Fade out duration'],
+        },
+        [4] = {
+            key = 'InDuration',
+            value = '.3',
+            text = L['Fade in duration'],
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(checkboxDatas) do
+        CreateGroupTitle(scroll, L['Condition'], offset)
+        CreateCheckbox(scroll, offset - 30, 'Unitframe', v.value, v.text)
+        offset = offset - 35
     end
 
-    local offset = 20
-    for _, value in ipairs(filterOptions) do
-        local box = createOptionCheck(scroll.child, offset, L.GUI.UNITFRAME[strupper(value)])
-        box:SetChecked(C.DB['unitframe'][value])
-        box.__value = value
-        box:SetScript('OnClick', filterOnClick)
+    scroll.groupTitle = nil
 
-        offset = offset + 35
+    for _, v in ipairs(sliderDatas) do
+        CreateGroupTitle(scroll, L['Fading'], offset - 30)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, 0, 1, .1, v.value, 20, offset - 80)
+        offset = offset - 65
     end
-
-    createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_OUT_ALPHA, 0, 1, .1, faderValues[1], 20,
-                       -offset - 20, 'fade_out_alpha', Update)
-    createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_IN_ALPHA, 0, 1, .1, faderValues[2], 20,
-                       -offset - 100, 'fade_in_alpha', Update)
-    createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_OUT_DURATION, 0, 1, .1, faderValues[3],
-                       20, -offset - 180, 'fade_out_duration', Update)
-    createOptionSlider(scroll.child, L.GUI.UNITFRAME.FADE_IN_DURATION, 0, 1, .1, faderValues[4], 20,
-                       -offset - 260, 'fade_in_duration', Update)
 end
 
 function GUI:SetupCastbar(parent)
@@ -1079,105 +1308,97 @@ function GUI:SetupCastbar(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.UNITFRAME.CASTBAR_SIZE_SETTING)
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local data = {
+    local playerDatas = {
         [1] = {
-            label = L.GUI.WIDTH,
-            minV = 100,
-            maxV = 300,
-            step = 1,
-            defaultV = 160,
-            x = 20,
-            y = -20,
-            key = 'unitframe',
-            value = 'CastbarPlayerWidth',
-            func = '',
+            key = 'PlayerCastbarWidth',
+            value = '200',
+            text = L['Width'],
+            min = 60,
+            max = 400,
         },
         [2] = {
-            label = L.GUI.HEIGHT,
-            minV = 8,
-            maxV = 30,
-            step = 1,
-            defaultV = 16,
-            x = 20,
-            y = -90,
-            key = 'unitframe',
-            value = 'CastbarPlayerHeight',
-            func = '',
-        },
-
-        [3] = {
-            label = L.GUI.WIDTH,
-            minV = 100,
-            maxV = 300,
-            step = 1,
-            defaultV = 160,
-            x = 20,
-            y = -160,
-            key = 'unitframe',
-            value = 'CastbarTargetWidth',
-            func = '',
-        },
-        [4] = {
-            label = L.GUI.HEIGHT,
-            minV = 8,
-            maxV = 30,
-            step = 1,
-            defaultV = 16,
-            x = 20,
-            y = -230,
-            key = 'unitframe',
-            value = 'CastbarTargetHeight',
-            func = '',
-        },
-
-        [5] = {
-            label = L.GUI.WIDTH,
-            minV = 100,
-            maxV = 300,
-            step = 1,
-            defaultV = 160,
-            x = 20,
-            y = -300,
-            key = 'unitframe',
-            value = 'CastbarFocusWidth',
-            func = '',
-        },
-        [6] = {
-            label = L.GUI.HEIGHT,
-            minV = 8,
-            maxV = 30,
-            step = 1,
-            defaultV = 16,
-            x = 20,
-            y = -370,
-            key = 'unitframe',
-            value = 'CastbarFocusHeight',
-            func = '',
+            key = 'PlayerCastbarHeight',
+            value = '16',
+            text = L['Height'],
+            min = 6,
+            max = 40,
         },
     }
 
-    for k, v in ipairs(data) do
-        --createOptionTitle(parent, title, offset)
-        createOptionsSlider(scroll.child, v.label, v.minV, v.maxV, v.step, v.defaultV, v.x, v.y, v.key, v.value, v.func)
+    local targetDatas = {
+        [1] = {
+            key = 'TargetCastbarWidth',
+            value = '160',
+            text = L['Width'],
+            min = 60,
+            max = 400,
+        },
+        [2] = {
+            key = 'TargetCastbarHeight',
+            value = '10',
+            text = L['Height'],
+            min = 6,
+            max = 40,
+        },
+    }
+
+    local focusDatas = {
+        [1] = {
+            key = 'FocusCastbarWidth',
+            value = '200',
+            text = L['Width'],
+            min = 60,
+            max = 400,
+        },
+        [2] = {
+            key = 'FocusCastbarHeight',
+            value = '16',
+            text = L['Height'],
+            min = 6,
+            max = 40,
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(playerDatas) do
+        CreateGroupTitle(scroll, L['Player castbar'], offset)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(targetDatas) do
+        CreateGroupTitle(scroll, L['Target castbar'], offset - 50)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(focusDatas) do
+        CreateGroupTitle(scroll, L['Focus castbar'], offset - 100)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 150)
+        offset = offset - 65
     end
 end
 
-function GUI:SetupPartySpellCooldown(parent)
+local function UpdatePartyWatcherSpells()
+    UNITFRAME:UpdatePartyWatcherSpells()
+end
+
+function GUI:SetupPartyWatcher(parent)
     local guiName = 'FreeUI_GUI_PartySpell_Setup'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local function updatePartyWatcherSpells()
-        UNITFRAME:UpdatePartyWatcherSpells()
-    end
-
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.GROUPFRAME.PARTY_SPELL_SETTING_HEADER, true)
-    panel:SetScript('OnHide', updatePartyWatcherSpells)
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    panel:SetScript('OnHide', UpdatePartyWatcherSpells)
 
     local barTable = {}
     local ARCANE_TORRENT = GetSpellInfo(25046)
@@ -1190,30 +1411,29 @@ function GUI:SetupPartySpellCooldown(parent)
         local texture = GetSpellTexture(spellID)
 
         local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
-        bar:SetSize(180, 30)
-        F.CreateBD(bar, .3)
+        bar:SetSize(200, 30)
+        F.CreateBD(bar, .25)
         barTable[spellID] = bar
 
         local icon, close = GUI:CreateBarWidgets(bar, texture)
-        F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID, 'system')
+        F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID)
         close:SetScript('OnClick', function()
             bar:Hide()
             if C.PartySpellsList[spellID] then
-                _G.FREE_ADB['party_spells_list'][spellID] = 0
+                _G.FREE_ADB['PartySpellsList'][spellID] = 0
             else
-                _G.FREE_ADB['party_spells_list'][spellID] = nil
+                _G.FREE_ADB['PartySpellsList'][spellID] = nil
             end
             barTable[spellID] = nil
             SortBars(barTable)
         end)
 
-        local name = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, spellName, nil, true, 'LEFT',
-                                30, 0)
+        local font = C.Assets.Fonts.Regular
+        local name = F.CreateFS(bar, font, 12, nil, spellName, nil, true, 'LEFT', 30, 0)
         name:SetWidth(120)
         name:SetJustifyH('LEFT')
 
-        local timer = F.CreateFS(bar, C.Assets.Fonts.Regular, 12, nil, duration, nil, true, 'RIGHT',
-                                 -30, 0)
+        local timer = F.CreateFS(bar, font, 12, nil, duration, nil, true, 'RIGHT', -30, 0)
         timer:SetWidth(60)
         timer:SetJustifyH('RIGHT')
         timer:SetTextColor(0, 1, 0)
@@ -1224,15 +1444,14 @@ function GUI:SetupPartySpellCooldown(parent)
     local frame = panel.bg
     local options = {}
 
-    options[1] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_ID, 10, -30,
-                                   L.GUI.GROUPFRAME.SPELL_ID_TIP, 90, 24)
-    options[2] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_COOLDOWN, 120, -30,
-                                   L.GUI.GROUPFRAME.SPELL_COOLDOWN_TIP, 90, 24)
+    options[1] = GUI:CreateEditbox(frame, L['Spell ID'], 10, -30, L['|nEnter spell ID, must be a number.|nYou can get ID on spell\'s tooltip.|nSpell name is not supported.'], 107, 24)
+    options[2] = GUI:CreateEditbox(frame, L['Spell Cooldown'], 122, -30, L['|nEnter the spell\'s cooldown duration.|nParty watcher only support regular spells and abilities.For spells like \'Aspect of the Wild\' (BM Hunter), you need to sync cooldown with your party members.'], 108, 24)
 
-    local scroll = GUI:CreateScroll(frame, 200, 430)
+    local scroll = GUI:CreateScroll(frame, 200, 440)
     scroll:ClearAllPoints()
-    scroll:SetPoint('TOPLEFT', 10, -90)
-    scroll.reset = F.CreateButton(frame, 46, 24, RESET)
+    scroll:SetPoint('TOPLEFT', 10, -94)
+
+    scroll.reset = F.CreateButton(frame, 51, 24, RESET, 11)
     scroll.reset:SetPoint('TOPLEFT', 10, -60)
     scroll.reset.text:SetTextColor(1, 0, 0)
 
@@ -1252,35 +1471,31 @@ function GUI:SetupPartySpellCooldown(parent)
             return
         end
 
-        local modDuration = _G.FREE_ADB['party_spells_list'][spellID]
+        local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
 
         if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
             _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
             return
         end
 
-        _G.FREE_ADB['party_spells_list'][spellID] = duration
+        _G.FREE_ADB['PartySpellsList'][spellID] = duration
         createBar(scroll.child, spellID, duration)
         ClearEdit(options)
     end
 
-    scroll.add = F.CreateButton(frame, 46, 24, ADD)
-    scroll.add:SetPoint('TOPRIGHT', -30, -60)
+    scroll.add = F.CreateButton(frame, 51, 24, ADD, 11)
+    scroll.add:SetPoint('TOPRIGHT', -10, -60)
     scroll.add:SetScript('OnClick', function()
         addClick(scroll, options)
     end)
 
-    scroll.clear = F.CreateButton(frame, 46, 24, KEY_NUMLOCK_MAC)
+    scroll.clear = F.CreateButton(frame, 51, 24, KEY_NUMLOCK_MAC, 11)
     scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.clear:SetScript('OnClick', function()
         ClearEdit(options)
     end)
 
     local menuList = {}
-    local function addIcon(texture)
-        texture = texture and '|T' .. texture .. ':12:12:0:0:50:50:4:46:4:46|t ' or ''
-        return texture
-    end
     local function AddSpellFromPreset(_, spellID, duration)
         options[1]:SetText(spellID)
         options[2]:SetText(duration)
@@ -1317,9 +1532,8 @@ function GUI:SetupPartySpellCooldown(parent)
         end
         index = index + 1
     end
-    scroll.preset = F.CreateButton(frame, 46, 24, L.GUI.GROUPFRAME.PARTY_SPELL_PRESET)
+    scroll.preset = F.CreateButton(frame, 51, 24, L['Preset'], 11)
     scroll.preset:SetPoint('RIGHT', scroll.clear, 'LEFT', -5, 0)
-    scroll.preset.text:SetTextColor(1, .8, 0)
     scroll.preset:SetScript('OnClick', function(self)
         EasyMenu(menuList, F.EasyMenu, self, -100, 100, 'MENU', 1)
     end)
@@ -1329,27 +1543,25 @@ function GUI:SetupPartySpellCooldown(parent)
     end
 end
 
-function GUI:SetupGroupDebuffs(parent)
-    local guiName = 'NDuiGUI_RaidDebuffs'
+local function UpdateRaidDebuffs()
+    UNITFRAME:UpdateRaidDebuffs()
+end
+
+function GUI:SetupRaidDebuffs(parent)
+    local guiName = 'FreeUI_GUI_RaidDebuffs'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local function UpdateRaidDebuffs()
-        UNITFRAME:UpdateRaidDebuffs()
-    end
-
-    local panel =
-        CreateExtraGUI(parent, guiName, L.GUI.GROUPFRAME.GROUP_DEBUFF_SETTING_HEADER, true)
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
     panel:SetScript('OnHide', UpdateRaidDebuffs)
 
     local setupBars
     local frame = panel.bg
     local bars, options = {}, {}
 
-    local iType = GUI:CreateDropdown(frame, L.GUI.GROUPFRAME.TYPE, 10, -30, {DUNGEONS, RAID},
-                                     L.GUI.GROUPFRAME.TYPE_TIP, 90, 24)
+    local iType = GUI:CreateDropdown(frame, L['Type'], 10, -30, {DUNGEONS, RAID}, nil, 107, 24)
     for i = 1, 2 do
         iType.options[i]:HookScript('OnClick', function()
             for j = 1, 2 do
@@ -1383,16 +1595,13 @@ function GUI:SetupGroupDebuffs(parent)
         tinsert(dungeons, newInst)
     end
 
-    options[1] = GUI:CreateDropdown(frame, DUNGEONS, 120, -30, dungeons,
-                                    L.GUI.GROUPFRAME.DUNGEON_TIP, 90, 24)
+    options[1] = GUI:CreateDropdown(frame, DUNGEONS, 123, -30, dungeons, nil, 107, 24)
     options[1]:Hide()
-    options[2] = GUI:CreateDropdown(frame, RAID, 120, -30, raids, L.GUI.GROUPFRAME.RAID_TIP, 90, 24)
+    options[2] = GUI:CreateDropdown(frame, RAID, 123, -30, raids, nil, 107, 24)
     options[2]:Hide()
 
-    options[3] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.SPELL_ID, 10, -90,
-                                   L.GUI.GROUPFRAME.SPELL_ID_TIP, 90, 24)
-    options[4] = GUI:CreateEditbox(frame, L.GUI.GROUPFRAME.PRIORITY, 120, -90,
-                                   L.GUI.GROUPFRAME.PRIORITY_TIP, 90, 24)
+    options[3] = GUI:CreateEditbox(frame, L['Spell ID'], 10, -90, L['|nEnter spell ID, must be a number.|nYou can get ID on spell\'s tooltip.|nSpell name is not supported.'], 107, 24)
+    options[4] = GUI:CreateEditbox(frame, L['Priority'], 123, -90, L['|nSpell\'s priority when visible.|nWhen multiple spells exist, it only remain the one that owns highest priority.|nDefault priority is 2, if you leave it blank.|nThe maximun priority is 6, and the icon would flash if you set so.'], 107, 24)
 
     local function analyzePrio(priority)
         priority = priority or 2
@@ -1406,8 +1615,7 @@ function GUI:SetupGroupDebuffs(parent)
         print(spellID)
         print(C.RaidDebuffsList[instName][spellID])
         local localPrio = C.RaidDebuffsList[instName][spellID]
-        local savedPrio = _G.FREE_ADB['RaidDebuffsList'][instName] and
-                              _G.FREE_ADB['RaidDebuffsList'][instName][spellID]
+        local savedPrio = _G.FREE_ADB['RaidDebuffsList'][instName] and _G.FREE_ADB['RaidDebuffsList'][instName][spellID]
         if (localPrio and savedPrio and savedPrio == 0) or (not localPrio and not savedPrio) then
             return false
         end
@@ -1415,21 +1623,21 @@ function GUI:SetupGroupDebuffs(parent)
     end
 
     local function addClick(options)
-        local dungeonName, raidName, spellID, priority = options[1].Text:GetText(),
-                                                         options[2].Text:GetText(),
-                                                         tonumber(options[3]:GetText()),
-                                                         tonumber(options[4]:GetText())
+        local dungeonName = options[1].Text:GetText()
+        local raidName = options[2].Text:GetText()
+        local spellID = tonumber(options[3]:GetText())
+        local priority = tonumber(options[4]:GetText())
         local instName = dungeonName or raidName
         if not instName or not spellID then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You need to complete all optinos.'])
             return
         end
         if spellID and not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Incorrect SpellID.'])
             return
         end
         if isAuraExisted(instName, spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
             return
         end
 
@@ -1446,19 +1654,19 @@ function GUI:SetupGroupDebuffs(parent)
     local scroll = GUI:CreateScroll(frame, 200, 380)
     scroll:ClearAllPoints()
     scroll:SetPoint('TOPLEFT', 10, -150)
-    scroll.reset = F.CreateButton(frame, 60, 24, RESET)
+    scroll.reset = F.CreateButton(frame, 70, 24, RESET)
     scroll.reset:SetPoint('TOPLEFT', 10, -120)
-
+    scroll.reset.text:SetTextColor(1, 0, 0)
     scroll.reset:SetScript('OnClick', function()
         StaticPopup_Show('FREEUI_RESET_GROUP_DEBUFFS')
     end)
-    scroll.add = F.CreateButton(frame, 60, 24, ADD)
-    scroll.add:SetPoint('TOPRIGHT', -30, -120)
+    scroll.add = F.CreateButton(frame, 70, 24, ADD)
+    scroll.add:SetPoint('TOPRIGHT', -10, -120)
     scroll.add:SetScript('OnClick', function()
         addClick(options)
     end)
-    scroll.clear = F.CreateButton(frame, 60, 24, KEY_NUMLOCK_MAC)
-    scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -10, 0)
+    scroll.clear = F.CreateButton(frame, 70, 24, KEY_NUMLOCK_MAC)
+    scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.clear:SetScript('OnClick', function()
         ClearEdit(options)
     end)
@@ -1476,8 +1684,8 @@ function GUI:SetupGroupDebuffs(parent)
 
     local function createBar(index, texture)
         local bar = CreateFrame('Frame', nil, scroll.child, 'BackdropTemplate')
-        bar:SetSize(180, 30)
-        F.CreateBD(bar, .3)
+        bar:SetSize(200, 30)
+        F.CreateBD(bar, .25)
         bar.index = index
 
         local icon, close = GUI:CreateBarWidgets(bar, texture)
@@ -1498,8 +1706,7 @@ function GUI:SetupGroupDebuffs(parent)
             setupBars(bar.instName)
         end)
 
-        local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT',
-                                     26, 0)
+        local spellName = F.CreateFS(bar, C.Assets.Fonts.Regular, 11, nil, '', nil, true, 'LEFT', 26, 0)
         spellName:SetWidth(120)
         spellName:SetJustifyH('LEFT')
         bar.spellName = spellName
@@ -1521,7 +1728,8 @@ function GUI:SetupGroupDebuffs(parent)
             _G.FREE_ADB['RaidDebuffsList'][bar.instName][bar.spellID] = prio
             self:SetText(prio)
         end)
-        F.AddTooltip(prioBox, 'ANCHOR_RIGHT', L.GUI.GROUPFRAME.PRIORITY_EDITBOX_TIP, 'BLUE')
+        prioBox.title = L['Priority']
+        F.AddTooltip(prioBox, 'ANCHOR_RIGHT', L['|nPriority limit in 1-6.|nPress ENTER KEY when you finish typing.'], 'BLUE')
         bar.prioBox = prioBox
 
         return bar
@@ -1571,7 +1779,7 @@ function GUI:SetupGroupDebuffs(parent)
         end
 
         for i = 1, index do
-            bars[i]:SetPoint('TOPLEFT', 10, -10 - 35 * (i - 1))
+            bars[i]:SetPoint('TOPLEFT', 0, - 35 * (i - 1))
         end
     end
 
@@ -1635,7 +1843,7 @@ function GUI:SetupAutoTakeScreenshot(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateCheckBox(scroll, offset, 'General', data.value, data.text)
+        CreateCheckbox(scroll, offset, 'General', data.value, data.text)
         offset = offset - 35
     end
 end

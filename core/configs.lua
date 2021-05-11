@@ -160,6 +160,8 @@ C.GroupBuffsCheckList = {
 
 C.BloodlustList = {57723, 57724, 80354, 264689}
 
+-- Corner indicator spells
+-- [spellID] = {anchor, {r, g, b}, ALL}
 C.CornerSpellsList = {
     ['PRIEST'] = {
         [194384] = {'TOPRIGHT', {1, 1, .66}}, -- 救赎
@@ -174,14 +176,14 @@ C.CornerSpellsList = {
     },
     ['DRUID'] = {
         [774] = {'TOPRIGHT', {.8, .4, .8}}, -- 回春
-        [155777] = {'RIGHT', {.8, .4, .8}}, -- 萌芽
-        [8936] = {'BOTTOMLEFT', {.2, .8, .2}}, -- 愈合
+        [155777] = {'RIGHT', {.6, .4, .8}}, -- 萌芽
+        [8936] = {'LEFT', {.2, .8, .2}}, -- 愈合
         [33763] = {'TOPLEFT', {.4, .8, .2}}, -- 生命绽放
         [188550] = {'TOPLEFT', {.4, .8, .2}}, -- 生命绽放，橙装
         [48438] = {'BOTTOMRIGHT', {.8, .4, 0}}, -- 野性成长
-        [207386] = {'TOP', {.4, .2, .8}}, -- 春暖花开
-        [102351] = {'LEFT', {.2, .8, .8}}, -- 结界
-        [102352] = {'LEFT', {.2, .8, .8}}, -- 结界(HoT)
+        [29166] = {'TOP', {0, .4, 1}}, -- 激活
+        [102351] = {'BOTTOM', {.2, .8, .8}}, -- 结界
+        [102352] = {'BOTTOM', {.2, .8, .8}}, -- 结界(HoT)
         [200389] = {'BOTTOM', {1, 1, .4}}, -- 栽培
     },
     ['PALADIN'] = {
@@ -190,22 +192,19 @@ C.CornerSpellsList = {
         [156910] = {'TOPRIGHT', {.7, .3, .7}}, -- 信仰道标
         [200025] = {'TOPRIGHT', {.7, .3, .7}}, -- 美德道标
         [1022] = {'BOTTOMRIGHT', {.2, .2, 1}, true}, -- 保护
-        [1044] = {'BOTTOMRIGHT', {.89, .45, 0}, true},
-        -- 自由
-        [6940] = {'BOTTOMRIGHT', {.89, .1, .1}, true},
-        -- 牺牲
-        [223306] = {'BOTTOMLEFT', {.7, .7, .3}}, -- 赋予信仰
+        [1044] = {'BOTTOMRIGHT', {.89, .45, 0}, true}, -- 自由
+        [6940] = {'BOTTOMRIGHT', {.89, .1, .1}, true}, -- 牺牲
+        [223306] = {'BOTTOM', {.7, .7, .3}}, -- 赋予信仰
         [25771] = {'TOP', {.86, .11, .11}, true}, -- 自律
     },
     ['SHAMAN'] = {
         [61295] = {'TOPRIGHT', {.2, .8, .8}}, -- 激流
         [974] = {'BOTTOMRIGHT', {1, .8, 0}}, -- 大地之盾
-        [207400] = {'BOTTOMLEFT', {.6, .8, 1}}, -- 先祖活力
     },
     ['MONK'] = {
         [119611] = {'TOPLEFT', {.3, .8, .6}}, -- 复苏之雾
-        [116849] = {'TOPRIGHT', {.2, .8, .2}, true}, -- 作茧缚命
-        [124682] = {'BOTTOMLEFT', {.8, .8, .25}}, -- 氤氲之雾
+        [116849] = {'TOP', {.2, .8, .2}, true}, -- 作茧缚命
+        [124682] = {'TOPRIGHT', {.8, .8, .25}}, -- 氤氲之雾
         [191840] = {'BOTTOMRIGHT', {.27, .62, .7}}, -- 精华之泉
     },
     ['ROGUE'] = {
@@ -468,10 +467,12 @@ C.PartySpellsList = {
     [123904] = 120, -- 白虎下凡
     [192249] = 150, -- 风元素
     [198067] = 150, -- 火元素
+    [13750]  = 180, -- 冲动
     [186265] = 180, -- 灵龟守护
     [102560] = 180, -- 鸟德化身
     [194223] = 180, -- 超凡之盟
     [204018] = 180, -- 破咒祝福
+    [316958] = 240, -- 红烬圣土，温西尔
     [1022] = 300, -- 保护祝福
 
     [25046] = 120, -- 奥术洪流
@@ -1020,7 +1021,6 @@ C.CharacterSettings = {
         Vignette = true,
         VignetteAlpha = .85,
 
-
         FasterLoot = false,
         FasterMovieSkip = true,
         ScreenSaver = true,
@@ -1110,137 +1110,137 @@ C.CharacterSettings = {
         ['auto_sell_junk'] = true,
         ['auto_repair'] = true,
     },
-    ['unitframe'] = {
-        ['enable'] = true,
-        ['color_style'] = 2,
+
+    Unitframe = {
+        Enable = true,
+        ColorStyle = 2,
         HealthColor = {r = .81, g = .81, b = .81},
-        ['transparent_mode'] = true,
-        ['fade'] = true,
-        ['fade_out_alpha'] = 0,
-        ['fade_in_alpha'] = 1,
-        ['fade_out_duration'] = .3,
-        ['fade_in_duration'] = .3,
-        ['condition_arena'] = true,
-        ['condition_instance'] = true,
-        ['condition_hover'] = false,
-        ['condition_combat'] = true,
-        ['condition_target'] = true,
-        ['condition_casting'] = true,
-        ['condition_injured'] = true,
-        ['condition_mana'] = false,
-        ['condition_power'] = false,
-        ['range_check'] = true,
-        ['range_check_alpha'] = 0.4,
-        ['portrait'] = true,
-        ['portrait_saturation'] = true,
-        ['heal_prediction'] = true,
+        Transparent = true,
+        Fader = true,
+            MinAlpha = 0,
+            MaxAlpha = 1,
+            OutDuration = .3,
+            InDuration = .3,
+            InPvP = true,
+            InInstance = true,
+            MouseOver = false,
+            InCombat = true,
+            Targeting = true,
+            Casting = true,
+            Injured = true,
+            ManaNotFull = false,
+            HavePower = false,
+        RangeCheck = true,
+            RangeCheckAlpha = .4,
+        Portrait = true,
+
+        PowerBarHeight = 2,
+        AlternativePowerBarHeight = 2,
 
         GCDIndicator = true,
 
         RaidTargetIndicator = true,
-        RaidTargetIndicatorAlpha = .6,
-        RaidTargetIndicatorSize = 16,
+            RaidTargetIndicatorAlpha = .6,
+            RaidTargetIndicatorSize = 16,
 
-        ['power_bar'] = true,
-        ['power_bar_height'] = 2,
-        ['alt_power'] = true,
-        ['alt_power_height'] = 2,
-        ['class_power_bar'] = true,
-        ['class_power_bar_height'] = 2,
-        ['runes_timer'] = false,
-        ['stagger_bar'] = true,
-        ['totems_bar'] = true,
-        ['debuff_type'] = true,
-        ['stealable_buffs'] = true,
-        ['debuffs_by_player'] = true,
-        ['abbr_name'] = false,
+        CombatIndicator = true,
+        RestingIndicator = true,
+        HidePlayerTags = true,
 
+        ClassPowerBar = true,
+            ClassPowerBarHeight = 2,
+        RunesTimer = false,
+        StaggerBar = true,
+        TotemsBar = true,
+            TotemsBarHeight = 2,
 
-        EnableCastbar = true,
-        CastbarCompact = true,
+        OnlyShowPlayer = true,
 
-        CastbarCastingColor = {r = .31, g = .48, b = .85},
-        CastbarUninterruptibleColor = {r = .66, g = .65, b = .65},
-        CastbarCompleteColor = {r = .25, g = .63, b = .49},
-        CastbarFailColor = {r = .73, g = .39, b = .43},
+        AbbreviatedName = false,
 
-        CastbarSpellName = false,
-        CastbarSpellTime = false,
+        Castbar = true,
+            CompactCastbar = true,
+            CastingColor = {r = .31, g = .48, b = .85},
+            UninterruptibleColor = {r = .66, g = .65, b = .65},
+            CompleteColor = {r = .25, g = .63, b = .49},
+            FailColor = {r = .73, g = .39, b = .43},
+            SpellName = false,
+            SpellTime = false,
+            PlayerCastbarWidth = 200,
+            PlayerCastbarHeight = 16,
+            TargetCastbarWidth = 160,
+            TargetCastbarHeight = 10,
+            FocusCastbarWidth = 200,
+            FocusCastbarHeight = 16,
 
-        CastbarPlayerWidth = 200,
-        CastbarPlayerHeight = 16,
-        CastbarTargetWidth = 160,
-        CastbarTargetHeight = 10,
-        CastbarFocusWidth = 200,
-        CastbarFocusHeight = 16,
+        PlayerWidth = 160,
+        PlayerHeight = 6,
 
-        ['enable_player'] = true,
-        ['player_width'] = 160,
-        ['player_height'] = 6,
-        ['player_auras'] = false,
-        ['player_combat_indicator'] = true,
-        ['player_resting_indicator'] = true,
-        ['player_hide_tags'] = true,
-        ['enable_pet'] = true,
-        ['pet_width'] = 50,
-        ['pet_height'] = 6,
-        ['pet_auras_per_row'] = 3,
-        ['enable_target'] = true,
-        ['target_width'] = 160,
-        ['target_height'] = 6,
-        ['target_auras_per_row'] = 6,
-        ['target_target_width'] = 60,
-        ['target_target_height'] = 6,
-        ['enable_focus'] = true,
-        ['focus_width'] = 60,
-        ['focus_height'] = 6,
-        ['focus_auras_per_row'] = 3,
-        ['focus_target_width'] = 60,
-        ['focus_target_height'] = 6,
-        ['enable_group'] = true,
-        GroupName = false,
+        PetWidth = 60,
+        PetHeight = 6,
+        PetAurasPerRow = 3,
 
-        ['group_color_style'] = 2,
-        ['group_filter'] = 6,
-        ['show_solo'] = false,
-        ['spec_position'] = false,
-        ['group_by_role'] = true,
-        ['group_reverse'] = false,
-        ['group_health_frequen'] = false,
-        ['group_health_frequency'] = .2,
-        ['group_click_cast'] = true,
-        ['group_debuff_highlight'] = true,
-        ['corner_indicator'] = true,
-        ['corner_indicator_scale'] = 1,
-        ['instance_auras'] = true,
-        ['raid_debuffs_scale'] = 1,
-        ['auras_click_through'] = true,
-        ['party_spell_watcher'] = true,
-        ['party_spell_sync'] = false,
-        ['group_threat_indicator'] = true,
-        ['group_leader_indicator'] = true,
-        ['party_width'] = 62,
-        ['party_height'] = 28,
-        ['party_gap'] = 6,
-        ['party_horizon'] = false,
-        ['party_reverse'] = false,
-        ['raid_width'] = 38,
-        ['raid_height'] = 30,
-        ['raid_gap'] = 5,
-        ['raid_horizon'] = false,
-        ['raid_reverse'] = true,
-        ['enable_boss'] = true,
-        ['boss_color_style'] = 3,
-        ['boss_width'] = 120,
-        ['boss_height'] = 18,
-        ['boss_gap'] = 60,
-        ['boss_auras'] = true,
-        ['boss_auras_per_row'] = 6,
-        ['enable_arena'] = true,
-        ['arena_width'] = 120,
-        ['arena_height'] = 18,
-        ['arena_gap'] = 80,
-        ['arena_auras_per_row'] = 6,
+        TargetWidth = 160,
+        TargetHeight = 6,
+        TargetAurasPerRow = 6,
+        ToTWidth = 60,
+        ToTHeight = 6,
+
+        FocusWidth = 60,
+        FocusHeight = 6,
+        FocusAurasPerRow = 3,
+        ToFWidth = 60,
+        ToFHeight = 6,
+
+        Group = true,
+            GroupShowName = false,
+            ShowSolo = false,
+            SmartRaid = true,
+            ShowRaidBuff = false,
+            DispellableOnly = false,
+            RaidBuffSize = 8,
+            ShowRaidDebuff = false,
+            RaidDebuffSize = 12,
+
+            GroupColorStyle = 2,
+            GroupFilter = 6,
+            PositionBySpec = false,
+
+            ClickToCast = true,
+            DebuffHighlight = true,
+            CornerIndicator = true,
+            CornerIndicatorScale = 1,
+            InstanceAuras = true,
+            RaidDebuffsScale = 1,
+            AurasClickThrough = true,
+
+            PartyWatcher = true,
+            PartyWatcherSync = false,
+            ThreatIndicator = true,
+
+            PartyWidth = 62,
+            PartyHeight = 28,
+            PartyGap = 6,
+            PartyHorizon = false,
+            PartyReverse = false,
+
+            RaidWidth = 38,
+            RaidHeight = 30,
+            RaidGap = 5,
+            RaidHorizon = false,
+            RaidReverse = true,
+
+        Boss = true,
+            BossWidth = 120,
+            BossHeight = 18,
+            BossGap = 60,
+            BossAurasPerRow = 6,
+
+        Arena = true,
+            ArenaWidth = 120,
+            ArenaHeight = 18,
+            ArenaGap = 80,
+            ArenaAurasPerRow = 6,
     },
 
     Nameplate = {
@@ -1248,6 +1248,7 @@ C.CharacterSettings = {
         Width = 100,
         Height = 8,
 
+        ControlCVars = true,
         NameOnly = true,
 
         TargetIndicator = true,
@@ -1438,9 +1439,8 @@ C.CharacterSettings = {
     },
 
     Quest = {
-        Enable = true,
         Automation = false,
-        CompleteSound = true,
+        CompleteSound = true
     },
 
 }

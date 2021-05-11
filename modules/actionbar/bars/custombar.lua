@@ -16,7 +16,7 @@ function ACTIONBAR:CustomBar(anchor)
     local margin = C.DB.Actionbar.CBMargin
     local size = C.DB.Actionbar.CBButtonSize
     local num = 12
-    local name = 'FreeUI_CustomBar'
+    local name = 'CustomBar'
     local page = 8
 
     local frame = CreateFrame('Frame', name, _G.UIParent, 'SecureHandlerStateTemplate')
