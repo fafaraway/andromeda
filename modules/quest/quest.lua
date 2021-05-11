@@ -54,9 +54,5 @@ function QUEST:CompleteSound()
 end
 
 function QUEST:OnLogin()
-    if not C.DB.Quest.Enable then
-        return
-    end
-
     QUEST:CompleteSound()
 end
