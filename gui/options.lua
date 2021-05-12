@@ -66,16 +66,12 @@ local function setupNamePlate()
     GUI:SetupNamePlate(GUI.Page[14])
 end
 
-local function setupAuraFilter()
+local function SetupAuraFilter()
     GUI:SetupNPAuraFilter(GUI.Page[14])
 end
 
 local function setupMajorSpellsGlow()
     GUI:SetupMajorSpellsGlow(GUI.Page[14])
-end
-
-local function setupNPExecuteRatio()
-    GUI:SetupNPExecuteRatio(GUI.Page[14])
 end
 
 local function setupNPExplosiveScale()
@@ -399,11 +395,11 @@ GUI.OptionsList = {
     [13] = { -- groupframe
         {1, 'Unitframe', 'Group', L['Enable group frames'], nil, SetupGroupFrameSize},
         {1, 'Unitframe', 'SmartRaid', L['Smart layout'], nil, nil, UpdateAllHeaders, L['|nOnly show raid frames if there are more than 5 members in your group.|nIf disabled, show raid frames when in raid, show party frames when in party.']},
-        {1, 'Unitframe', 'GroupShowName', L['Show names']},
         {4, 'Unitframe', 'GroupColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
+        {1, 'Unitframe', 'GroupShowName', L['Show names']},
         {1, 'Unitframe', 'ClickToCast', L['Enable click to cast'], nil, nil, nil, L['|nOpen your spell book to configure click to cast.']},
+        {3, 'Unitframe', 'GroupFilter', L['Group filter'], true, {4, 8, 1}},
         {1, 'Unitframe', 'PositionBySpec', L['Save postion by spec']},
-        {3, 'Unitframe', 'GroupFilter', L['Group filter'], true, {1, 8, 1}},
         {1, 'Unitframe', 'DebuffHighlight', L['Dispellable debuff highlight']},
         {1, 'Unitframe', 'InstanceAuras', L['Show raid debuffs'], nil, SetupRaidDebuffs, nil, L['|nShow custom major debuffs in raid and dungeons.']},
         {1, 'Unitframe', 'DispellableOnly', L['Show dispellable debuffs only'], true},
@@ -421,22 +417,18 @@ GUI.OptionsList = {
     },
     [14] = { -- nameplate
         {1, 'Nameplate', 'Enable', L['Enable nameplate'], nil, setupNamePlate},
-        {1, 'Nameplate', 'NameOnly', L['Name only style'], nil, nil, nil, L.GUI.NAMEPLATE.NAME_ONLY_TIP},
+
+        {1, 'Nameplate', 'ShowAura', L['Show auras'], nil, SetupAuraFilter},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}, nil, L.GUI.NAMEPLATE.AURA_FILTER_MODE_TIP},
         {1, 'Nameplate', 'ControlCVars', L['Control CVars'], nil, SetupNameplateCVars},
         {1, 'Nameplate', 'TargetIndicator', L['Target indicator'], nil, nil, nil, L.GUI.NAMEPLATE.TARGET_INDICATOR_TIP},
-
-        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator'], nil, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
-
         {3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], true, {1, 90, 1}},
-
+        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator'], nil, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator'], nil, nil, nil, L.GUI.NAMEPLATE.CLASSIFY_INDICATOR_TIP},
-
         {1, 'Nameplate', 'RaidTargetIndicator', L['Raid target indicator'], nil, setupNPRaidTargetIndicator},
         {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true, nil, nil, L.GUI.NAMEPLATE.THREAT_INDICATOR_TIP},
         {1, 'Nameplate', 'TotemIcon', L['Totmes icon'], nil, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
-
-
+        {1, 'Nameplate', 'NameOnly', L['Name only style'], nil, nil, nil, L.GUI.NAMEPLATE.NAME_ONLY_TIP},
         {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator'], nil, setupNPExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
         {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
         {},
