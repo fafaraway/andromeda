@@ -55,6 +55,8 @@ local NAMEPLATE = F:GetModule('Nameplate')
 local UNITFRAME = F:GetModule('Unitframe')
 local OUF = F.Libs.oUF
 
+local guidToPlate = {}
+
 --[[ CVars ]]
 
 function NAMEPLATE:PlateInsideView()
@@ -661,31 +663,6 @@ function NAMEPLATE:CheckExplosives()
     F:RegisterEvent('PLAYER_ENTERING_WORLD', checkAffixes)
 end
 
--- Interrupt info on castbars
-local guidToPlate = {}
-function NAMEPLATE:UpdateCastbarInterrupt(...)
-    local _, eventType, _, sourceGUID, sourceName, _, _, destGUID = ...
-    if eventType == 'SPELL_INTERRUPT' and destGUID and sourceName and sourceName ~= '' then
-        local nameplate = guidToPlate[destGUID]
-        if nameplate and nameplate.Castbar then
-            local _, class = GetPlayerInfoByGUID(sourceGUID)
-            local r, g, b = F:ClassColor(class)
-            local color = F:RGBToHex(r, g, b)
-            sourceName = Ambiguate(sourceName, 'short')
-            nameplate.Castbar.Text:Show()
-            nameplate.Castbar.Text:SetText(color .. sourceName .. '|r ' .. INTERRUPTED)
-        end
-    end
-end
-
-function NAMEPLATE:AddInterruptInfo()
-    if not C.DB.Nameplate.InterruptIndicator then
-        return
-    end
-
-    F:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', self.UpdateCastbarInterrupt)
-end
-
 -- Major spells glow
 function NAMEPLATE:InitializeMajorSpells()
     for spellID in pairs(C.NPMajorSpellsList) do
@@ -1096,7 +1073,6 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CreateUnitTable()
     NAMEPLATE:CreatePowerUnitTable()
     NAMEPLATE:CheckExplosives()
-    NAMEPLATE:AddInterruptInfo()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateOnFactionChanged()
     NAMEPLATE:RefreshMajorSpells()
