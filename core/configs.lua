@@ -1066,18 +1066,19 @@ C.CharacterSettings = {
         Solo = false,
     },
 
-    ['aura'] = {
-        ['enable'] = true,
-        ['margin'] = 6,
-        ['offset'] = 12,
-        ['buff_size'] = 40,
-        ['buffs_per_row'] = 12,
-        ['reverse_buffs'] = true,
-        ['debuff_size'] = 50,
-        ['debuffs_per_row'] = 12,
-        ['reverse_debuffs'] = true,
-        ['reminder'] = true,
+    Aura = {
+        Enable = true,
+        Margin = 6,
+        Offset = 12,
+        BuffSize = 40,
+        BuffPerRow = 12,
+        BuffReverse = true,
+        DebuffSize = 50,
+        DebuffPerRow = 12,
+        DebuffReverse = true,
+        Reminder = true,
     },
+
     ['inventory'] = {
         ['enable'] = true,
         ['scale'] = 1,
@@ -1282,6 +1283,7 @@ C.CharacterSettings = {
         CustomUnitList = '',
         ShowPowerList = '',
 
+        ShowAura = true,
         AuraFilterMode = 3,
         AuraPerRow = 6,
         AuraSize = 22,

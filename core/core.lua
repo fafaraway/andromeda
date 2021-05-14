@@ -17,7 +17,7 @@ do
     F:RegisterModule('General')
     F:RegisterModule('Actionbar')
     F:RegisterModule('Cooldown')
-    F:RegisterModule('Aura')
+
     F:RegisterModule('Chat')
     F:RegisterModule('Combat')
     F:RegisterModule('Infobar')
@@ -43,7 +43,7 @@ do
     F.MISC = F:GetModule('General')
     F.ACTIONBAR = F:GetModule('Actionbar')
     F.COOLDOWN = F:GetModule('Cooldown')
-    F.AURA = F:GetModule('Aura')
+
     F.CHAT = F:GetModule('Chat')
     F.COMBAT = F:GetModule('Combat')
     F.INFOBAR = F:GetModule('Infobar')

@@ -24,23 +24,23 @@ GUI.Tab = guiTab
 GUI.Page = guiPage
 
 local tabsList = {
-    L.GUI.GENERAL.NAME,
-    L.GUI.NOTIFICATION.NAME,
-    L.GUI.INFOBAR.NAME,
-    L.GUI.CHAT.NAME,
-    L.GUI.AURA.NAME,
-    L.GUI.ACTIONBAR.NAME,
-    L.GUI.COMBAT.NAME,
-    L.GUI.ANNOUNCEMENT.NAME,
-    L.GUI.INVENTORY.NAME,
-    L.GUI.MAP.NAME,
-    L.GUI.TOOLTIP.NAME,
+    L['General'],
+    L['Notification'],
+    L['Infobar'],
+    L['Chat'],
+    L['Aura'],
+    L['Actionbar'],
+    L['Combat'],
+    L['Announcement'],
+    L['Backpack'],
+    L['Map'],
+    L['Tooltip'],
     L['Unitframe'],
     L['Groupframe'],
     L['Nameplate'],
-    L.GUI.APPEARANCE.NAME,
-    L.GUI.PROFILE.NAME,
-    L.GUI.CREDITS.NAME,
+    L['Theme'],
+    L['Profile'],
+    L['Credit'],
 }
 
 local iconsList = {

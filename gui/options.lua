@@ -4,6 +4,11 @@ local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
 
 
+-- Auta
+local function SetupAuraSize()
+    GUI:SetupAuraSize(GUI.Page[5])
+end
+
 -- Inventory
 function GUI:UpdateInventoryStatus()
     F.INVENTORY:UpdateAllBags()
@@ -57,29 +62,20 @@ local function UpdateMinimapScale()
 end
 
 -- Nameplate
-
 local function SetupNameplateCVars()
     GUI:SetupNameplateCVars(GUI.Page[14])
 end
 
-local function setupNamePlate()
-    GUI:SetupNamePlate(GUI.Page[14])
+local function SetupNameplateSize()
+    GUI:SetupNameplateSize(GUI.Page[14])
 end
 
 local function SetupAuraFilter()
     GUI:SetupNPAuraFilter(GUI.Page[14])
 end
 
-local function setupMajorSpellsGlow()
-    GUI:SetupMajorSpellsGlow(GUI.Page[14])
-end
-
-local function setupNPExplosiveScale()
-    GUI:SetupNPExplosiveScale(GUI.Page[14])
-end
-
-local function setupNPRaidTargetIndicator()
-    GUI:SetupNPRaidTargetIndicator(GUI.Page[14])
+local function SetupMajorSpells()
+    GUI:SetupMajorSpells(GUI.Page[14])
 end
 
 local function UpdateCustomUnitList()
@@ -91,16 +87,17 @@ local function SetupUnitFrameSize()
     GUI:SetupUnitFrameSize(GUI.Page[12])
 end
 
-local function SetupGroupFrameSize()
-    GUI:SetupGroupFrameSize(GUI.Page[13])
-end
-
 local function SetupUnitFrameFader()
     GUI:SetupUnitFrameFader(GUI.Page[12])
 end
 
 local function SetupCastbar()
     GUI:SetupCastbar(GUI.Page[12])
+end
+
+-- Groupframe
+local function SetupGroupFrameSize()
+    GUI:SetupGroupFrameSize(GUI.Page[13])
 end
 
 local function UpdateRaidDebuffSize()
@@ -122,8 +119,6 @@ end
 local function UpdateAllHeaders()
     UNITFRAME:UpdateAllHeaders()
 end
-
-
 
 -- General
 local function SetupAutoTakeScreenshot()
@@ -242,19 +237,11 @@ GUI.OptionsList = {
         {1, 'chat', 'guild_only', L.GUI.CHAT.GUILD_ONLY},
         {2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList},
     },
-    [5] = {
-        -- aura
-        {1, 'aura', 'enable', L.GUI.AURA.ENABLE, nil, nil, nil, L.GUI.AURA.ENABLE_TIP},
-        {1, 'aura', 'reverse_buffs', L.GUI.AURA.REVERSE_BUFFS},
-        {1, 'aura', 'reverse_debuffs', L.GUI.AURA.REVERSE_DEBUFFS, true},
-        {1, 'aura', 'reminder', L.GUI.AURA.REMINDER, nil, nil, nil, L.GUI.AURA.REMINDER_TIP},
-        {},
-        {3, 'aura', 'margin', L.GUI.AURA.MARGIN, nil, {3, 10, 1}},
-        {3, 'aura', 'offset', L.GUI.AURA.OFFSET, true, {3, 10, 1}},
-        {3, 'aura', 'buff_size', L.GUI.AURA.BUFF_SIZE, nil, {20, 50, 1}},
-        {3, 'aura', 'debuff_size', L.GUI.AURA.DEBUFF_SIZE, true, {20, 50, 1}},
-        {3, 'aura', 'buffs_per_row', L.GUI.AURA.BUFFS_PER_ROW, nil, {6, 12, 1}},
-        {3, 'aura', 'debuffs_per_row', L.GUI.AURA.DEBUFFS_PER_ROW, true, {6, 12, 1}},
+    [5] = { -- aura
+        {1, 'Aura', 'Enable', L['Enable aura'], nil, SetupAuraSize},
+        {1, 'Aura', 'BuffReverse', L['Buff reverse growth']},
+        {1, 'Aura', 'DebuffReverse', L['Debuff reverse growth'], true},
+        {1, 'Aura', 'Reminder', L['Buff missing reminder'], nil, nil, nil, L['|nRemind you when lack of your own class spell.|nSupport: Stamina, Poisons, Arcane Intellect, Battle Shout.']},
     },
     [6] = {
         {1, 'Actionbar', 'Enable', L.GUI.ACTIONBAR.ENABLE},
@@ -416,7 +403,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'RaidReverse', L['Raid frames reverse grow'], true},
     },
     [14] = { -- nameplate
-        {1, 'Nameplate', 'Enable', L['Enable nameplate'], nil, setupNamePlate},
+        {1, 'Nameplate', 'Enable', L['Enable nameplate'], nil, SetupNameplateSize},
 
         {1, 'Nameplate', 'ShowAura', L['Show auras'], nil, SetupAuraFilter},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}, nil, L.GUI.NAMEPLATE.AURA_FILTER_MODE_TIP},
@@ -425,15 +412,15 @@ GUI.OptionsList = {
         {3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], true, {1, 90, 1}},
         {1, 'Nameplate', 'QuestIndicator', L['Quest indicator'], nil, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
         {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator'], nil, nil, nil, L.GUI.NAMEPLATE.CLASSIFY_INDICATOR_TIP},
-        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid target indicator'], nil, setupNPRaidTargetIndicator},
+        {1, 'Nameplate', 'RaidTargetIndicator', L['Raid target indicator']},
         {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true, nil, nil, L.GUI.NAMEPLATE.THREAT_INDICATOR_TIP},
         {1, 'Nameplate', 'TotemIcon', L['Totmes icon'], nil, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
         {1, 'Nameplate', 'NameOnly', L['Name only style'], nil, nil, nil, L.GUI.NAMEPLATE.NAME_ONLY_TIP},
-        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator'], nil, setupNPExplosiveScale, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
+        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator'], nil, nil, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
         {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
         {},
         {1, 'Nameplate', 'CastbarCompact', L['Compact style']},
-        {1, 'Nameplate', 'MajorSpellsGlow', L['Major spell glow'], true, setupMajorSpellsGlow, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
+        {1, 'Nameplate', 'MajorSpellsGlow', L['Major spell glow'], true, SetupMajorSpells, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
         {1, 'Nameplate', 'CastbarSpellName', L['Spell name']},
         {1, 'Nameplate', 'CastbarSpellTime', L['Spell timer'], true},
         {1, 'Nameplate', 'SpellTarget', L['Spell target'], nil, nil, nil, L.GUI.NAMEPLATE.SPELL_TARGET_TIP},

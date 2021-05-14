@@ -107,9 +107,10 @@ local function Checkbox_OnClick(self)
     local value = self.__value
     C.DB[key][value] = not C.DB[key][value]
     self:SetChecked(C.DB[key][value])
+    self.__func()
 end
 
-local function CreateCheckbox(parent, offset, key, value, text)
+local function CreateCheckbox(parent, offset, key, value, text, func)
     local box = F.CreateCheckbox(parent.child, true)
     box:SetSize(20, 20)
     box:SetHitRectInsets(-5, -5, -5, -5)
@@ -120,6 +121,7 @@ local function CreateCheckbox(parent, offset, key, value, text)
     box.__value = value
     box.__key = key
     box:SetScript('OnClick', Checkbox_OnClick)
+    box.__func = func
 
     return box
 end
@@ -392,6 +394,68 @@ StaticPopupDialogs['FREEUI_RESET_GROUP_DEBUFFS'] = {
     whileDead = 1,
 }
 
+--[[ Aura ]]
+
+function GUI:SetupAuraSize(parent)
+    local guiName = 'FreeUI_GUI_Aura'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local buffDatas = {
+        [1] = {
+            key = 'BuffSize',
+            value = '40',
+            text = L['Size'],
+            min = 20,
+            max = 60,
+        },
+        [2] = {
+            key = 'BuffPerRow',
+            value = '12',
+            text = L['Per Row'],
+            min = 6,
+            max = 20,
+        },
+    }
+
+    local debuffDatas = {
+        [1] = {
+            key = 'DebuffSize',
+            value = '50',
+            text = L['Size'],
+            min = 20,
+            max = 60,
+        },
+        [2] = {
+            key = 'DebuffPerRow',
+            value = '12',
+            text = L['Per Row'],
+            min = 6,
+            max = 20,
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(buffDatas) do
+        CreateGroupTitle(scroll, L['Buff Icon'], offset)
+        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
+    end
+
+    scroll.groupTitle = nil
+
+    for _, v in ipairs(debuffDatas) do
+        CreateGroupTitle(scroll, L['Debuff Icon'], offset - 50)
+        CreateSlider(scroll, 'Aura', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 100)
+        offset = offset - 65
+    end
+end
+
 --[[ Inventory ]]
 
 function GUI:SetupInventoryFilter(parent)
@@ -438,86 +502,6 @@ function GUI:SetupInventoryFilter(parent)
 end
 
 --[[ Actionbar ]]
-
---[[ function GUI:SetupActionbarFade(parent)
-    local guiName = 'FreeUI_GUI_Actionbar_Fade'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.ACTIONBAR.FADER)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    local function OnUpdate()
-        F.ACTIONBAR:UpdateActionBarFade()
-    end
-
-    local checkKeysList = {
-        [1] = 'ConditionCombat',
-        [2] = 'ConditionTarget',
-        [3] = 'ConditionDungeon',
-        [4] = 'ConditionPvP',
-        [5] = 'ConditionVehicle',
-    }
-
-    local sliderKeysList = {
-        [1] = 'FadeOutAlpha',
-        [2] = 'FadeInAlpha',
-        [3] = 'FadeOutDuration',
-        [4] = 'FadeInDuration',
-    }
-
-    local sliderValuesList = {[1] = 0, [2] = 1, [3] = 1, [4] = .3}
-
-    local sliderRangesList = {
-        [1] = {0, 1, .1},
-        [2] = {0, 1, .1},
-        [3] = {0, 1, .1},
-        [4] = {0, 1, .1},
-    }
-
-    local checkNamesList = {
-        [1] = L.GUI.ACTIONBAR.CONDITION_COMBATING,
-        [2] = L.GUI.ACTIONBAR.CONDITION_TARGETING,
-        [3] = L.GUI.ACTIONBAR.CONDITION_DUNGEON,
-        [4] = L.GUI.ACTIONBAR.CONDITION_PVP,
-        [5] = L.GUI.ACTIONBAR.CONDITION_VEHICLE,
-    }
-
-    local sliderNamesList = {
-        [1] = L.GUI.ACTIONBAR.FADE_OUT_ALPHA,
-        [2] = L.GUI.ACTIONBAR.FADE_IN_ALPHA,
-        [3] = L.GUI.ACTIONBAR.FADE_OUT_DURATION,
-        [4] = L.GUI.ACTIONBAR.FADE_IN_DURATION,
-    }
-
-    local function OnClick(self)
-        local value = self.__value
-        C.DB['Actionbar'][value] = not C.DB['Actionbar'][value]
-        self:SetChecked(C.DB['Actionbar'][value])
-    end
-
-    local offset = 20
-    for index, value in ipairs(checkKeysList) do
-        local box = createOptionCheck(scroll.child, offset, checkNamesList[index])
-        box:SetChecked(C.DB['Actionbar'][value])
-        box.__value = value
-        box:SetScript('OnClick', OnClick)
-
-        offset = offset + 35
-    end
-
-    for index, key in ipairs(sliderKeysList) do
-        local slider = createOptionsSlider(scroll.child, sliderNamesList[index],
-                                           sliderRangesList[index][1], sliderRangesList[index][2],
-                                           sliderRangesList[index][3], sliderValuesList[index], 20,
-                                           -offset - 20, 'Actionbar', sliderKeysList[index],
-                                           OnUpdate)
-
-        offset = offset + 65
-    end
-end ]]
 
 function GUI:SetupActionbarFade(parent)
     local guiName = 'FreeUI_GUI_Actionbar_Fade'
@@ -582,7 +566,7 @@ function GUI:SetupActionbarFade(parent)
     local offset = - 10
     for _, v in ipairs(conditions) do
         CreateGroupTitle(scroll, L.GUI.ACTIONBAR.CONDITION, offset)
-        CreateCheckbox(scroll, offset - 30, 'Actionbar', v.value, v.text)
+        CreateCheckbox(scroll, offset - 30, 'Actionbar', v.value, v.text, OnUpdate)
         offset = offset - 35
     end
 
@@ -590,7 +574,7 @@ function GUI:SetupActionbarFade(parent)
 
     for _, v in ipairs(sliders) do
         CreateGroupTitle(scroll, L.GUI.ACTIONBAR.FADE, offset - 30)
-        CreateSlider(scroll, 'Actionbar', v.key, v.text,  0, 1, .1, v.value, 20, offset - 80)
+        CreateSlider(scroll, 'Actionbar', v.key, v.text,  0, 1, .1, v.value, 20, offset - 80, OnUpdate)
         offset = offset - 65
     end
 end
@@ -744,7 +728,7 @@ function GUI:SetupNPAuraFilter(parent)
     end
 end
 
-function GUI:SetupMajorSpellsGlow(parent)
+function GUI:SetupMajorSpells(parent)
     local guiName = 'FreeUI_GUI_NamePlate_Castbar_Glow'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
@@ -800,91 +784,48 @@ function GUI:SetupMajorSpellsGlow(parent)
     end
 end
 
-local function updateNameplates()
-    NAMEPLATE:RefreshAllPlates()
-end
-
-local function updateCVars()
-    NAMEPLATE:UpdatePlateVerticalSpacing()
-    NAMEPLATE:UpdatePlateHorizontalSpacing()
-    NAMEPLATE:UpdatePlateAlpha()
-    NAMEPLATE:UpdatePlateOccludedAlpha()
-    NAMEPLATE:UpdatePlateScale()
-    NAMEPLATE:UpdatePlateTargetScale()
-end
-
-function GUI:SetupNamePlate(parent)
+function GUI:SetupNameplateSize(parent)
     local guiName = 'FreeUI_GUI_NamePlate_Setup'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.BASIC_SETTING)
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
 
-    local data = {
-        {'Width', 100, 60, 200, 1},
-        {'Height', 8, 6, 30, 1},
-        {'MinScale', .7, .5, 1, .1},
-        {'TargetScale', 1, 1, 2, .1},
-        {'MinAlpha', .6, .6, 1, .1},
-        {'OccludedAlpha', .2, .2, 1, .1},
-        {'VerticalSpacing', .7, .3, 3, .1},
-        {'HorizontalSpacing', .3, .3, 3, .1},
+    local datas = {
+        [1] = {
+            key = 'Width',
+            value = '100',
+            text = L['Width'],
+            min = 40,
+            max = 400,
+        },
+        [2] = {
+            key = 'Height',
+            value = '8',
+            text = L['Height'],
+            min = 4,
+            max = 40,
+        },
     }
 
-    local function createSizeGroup(parent, title, offset, key, func)
-        createOptionTitle(parent, title, offset)
-        createOptionsSlider(parent, L.GUI.WIDTH, data[1][3], data[1][4], data[1][5], data[1][2], 20,
-                            offset - 60, key, data[1][1], func)
-        createOptionsSlider(parent, L.GUI.HEIGHT, data[2][3], data[2][4], data[2][5], data[2][2],
-                            20, offset - 130, key, data[2][1], func)
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Nameplate Size'], offset)
+        CreateSlider(scroll, 'Unitframe', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50)
+        offset = offset - 65
     end
-
-    local function createCVarGroup(parent, title, offset, key, func)
-        createOptionTitle(parent, title, offset)
-        createOptionsSlider(parent, L.GUI.NAMEPLATE.MIN_SCALE, data[3][3], data[3][4], data[3][5],
-                            data[3][2], 20, offset - 60, key, data[3][1], func)
-        createOptionsSlider(parent, L.GUI.NAMEPLATE.TARGET_SCALE, data[4][3], data[4][4],
-                            data[4][5], data[4][2], 20, offset - 130, key, data[4][1], func)
-        createOptionsSlider(parent, L.GUI.NAMEPLATE.MIN_ALPHA, data[5][3], data[5][4], data[5][5],
-                            data[5][2], 20, offset - 200, key, data[5][1], func)
-        createOptionsSlider(parent, L.GUI.NAMEPLATE.OCCLUDED_ALPHA, data[6][3], data[6][4],
-                            data[6][5], data[6][2], 20, offset - 270, key, data[6][1], func)
-        createOptionsSlider(parent, L.GUI.NAMEPLATE.VERTICAL_SPACING, data[7][3], data[7][4],
-                            data[7][5], data[7][2], 20, offset - 340, key, data[7][1], func)
-        createOptionsSlider(parent, L.GUI.NAMEPLATE.HORIZONTAL_SPACING, data[8][3], data[8][4],
-                            data[8][5], data[8][2], 20, offset - 410, key, data[8][1], func)
-    end
-
-    createSizeGroup(scroll.child, L.GUI.NAMEPLATE.SIZE, -10, 'Nameplate', updateNameplates)
-    createCVarGroup(scroll.child, L.GUI.NAMEPLATE.CVAR, -210, 'Nameplate', updateCVars)
-
 end
 
-function GUI:SetupNPRaidTargetIndicator(parent)
-    local guiName = 'FreeUI_GUI_NamePlate_RaidTargetIndicator_Setup'
-    TogglePanel(guiName)
-    if extraGUIs[guiName] then
-        return
-    end
-
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.RAID_TARGET_INDICATOR_SETTING)
-    local scroll = GUI:CreateScroll(panel, 220, 540)
-
-    -- LuaFormatter off
-    local data = {
-        {'RaidTargetIndicatorSize', 24, 16, 40, 1},
-        {'RaidTargetIndicatorAlpha', .8, .5, 1, .1}
-    }
-    -- LuaFormatter on
-
-    createOptionsSlider(scroll.child, L.GUI.SIZE, data[1][3], data[1][4], data[1][5], data[1][2],
-                        20, -30, 'Nameplate', data[1][1], updateNameplates)
-    createOptionsSlider(scroll.child, L.GUI.ALPHA, data[2][3], data[2][4], data[2][5], data[2][2],
-                        20, -100, 'Nameplate', data[2][1], updateNameplates)
-
+local function UpdateCVars()
+    NAMEPLATE:UpdatePlateVerticalSpacing()
+    NAMEPLATE:UpdatePlateHorizontalSpacing()
+    NAMEPLATE:UpdatePlateAlpha()
+    NAMEPLATE:UpdatePlateOccludedAlpha()
+    NAMEPLATE:UpdatePlateScale()
+    NAMEPLATE:UpdatePlateTargetScale()
 end
 
 function GUI:SetupNameplateCVars(parent)
@@ -951,7 +892,7 @@ function GUI:SetupNameplateCVars(parent)
     local offset = -10
     for _, v in ipairs(cvarsDatas) do
         CreateGroupTitle(scroll, L['Nameplate CVars'], offset)
-        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        CreateSlider(scroll, 'Nameplate', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50, UpdateCVars)
         offset = offset - 65
     end
 end

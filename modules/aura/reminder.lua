@@ -1,170 +1,185 @@
-local F, C, L = unpack(select(2, ...))
-local AURA = F.AURA
+local _G = _G
+local unpack = unpack
+local select = select
+local tinsert = tinsert
+local CreateFrame = CreateFrame
+local IsInInstance = IsInInstance
+local IsEquippedItem = IsEquippedItem
+local GetItemCount = GetItemCount
+local GetItemCooldown = GetItemCooldown
+local IsPlayerSpell = IsPlayerSpell
+local GetSpecialization = GetSpecialization
+local InCombatLockdown = InCombatLockdown
+local GetZonePVPInfo = GetZonePVPInfo
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+local UnitInVehicle = UnitInVehicle
+local UnitBuff = UnitBuff
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local GetSpellTexture = GetSpellTexture
+local GetItemIcon = GetItemIcon
 
-local pairs, tinsert, next = pairs, table.insert, next
-local GetSpecialization, GetZonePVPInfo, GetItemCooldown = GetSpecialization, GetZonePVPInfo, GetItemCooldown
-local UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown = UnitIsDeadOrGhost, UnitInVehicle, InCombatLockdown
-local IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture = IsInInstance, IsPlayerSpell, UnitBuff, GetSpellTexture
-local GetWeaponEnchantInfo, IsEquippedItem = GetWeaponEnchantInfo, IsEquippedItem
+local F, C, L = unpack(select(2, ...))
+local AURA = F:GetModule('Aura')
 
 local groups = C.ReminderBuffsList[C.MyClass]
 local iconSize = 36
 local frames, parentFrame = {}
 
 function AURA:Reminder_Update(cfg)
-	local frame = cfg.frame
-	local depend = cfg.depend
-	local spec = cfg.spec
-	local combat = cfg.combat
-	local instance = cfg.instance
-	local pvp = cfg.pvp
-	local itemID = cfg.itemID
-	local equip = cfg.equip
-	local isPlayerSpell, isRightSpec, isEquipped, isInCombat, isInInst, isInPVP = true, true, true
-	local inInst, instType = IsInInstance()
-	local weaponIndex = cfg.weaponIndex
+    local frame = cfg.frame
+    local depend = cfg.depend
+    local spec = cfg.spec
+    local combat = cfg.combat
+    local instance = cfg.instance
+    local pvp = cfg.pvp
+    local itemID = cfg.itemID
+    local equip = cfg.equip
+    local isPlayerSpell, isRightSpec, isEquipped, isInCombat, isInInst, isInPVP = true, true, true
+    local inInst, instType = IsInInstance()
+    local weaponIndex = cfg.weaponIndex
 
-	if itemID then
-		if equip and not IsEquippedItem(itemID) then isEquipped = false end
-		if GetItemCount(itemID) == 0 or (not isEquipped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
-			frame:Hide()
-			return
-		end
-	end
+    if itemID then
+        if equip and not IsEquippedItem(itemID) then
+            isEquipped = false
+        end
+        if GetItemCount(itemID) == 0 or (not isEquipped) or GetItemCooldown(itemID) > 0 then -- check item cooldown
+            frame:Hide()
+            return
+        end
+    end
 
-	if depend and not IsPlayerSpell(depend) then
-		isPlayerSpell = false
-	end
-	if spec and spec ~= GetSpecialization() then
-		isRightSpec = false
-	end
-	if combat and InCombatLockdown() then
-		isInCombat = true
-	end
-	if instance and inInst and (instType == 'scenario' or instType == 'party' or instType == 'raid') then
-		isInInst = true
-	end
-	if pvp and (instType == 'arena' or instType == 'pvp' or GetZonePVPInfo() == 'combat') then
-		isInPVP = true
-	end
-	if not combat and not instance and not pvp then
-		isInCombat, isInInst, isInPVP = true, true, true
-	end
+    if depend and not IsPlayerSpell(depend) then
+        isPlayerSpell = false
+    end
+    if spec and spec ~= GetSpecialization() then
+        isRightSpec = false
+    end
+    if combat and InCombatLockdown() then
+        isInCombat = true
+    end
+    if instance and inInst and (instType == 'scenario' or instType == 'party' or instType == 'raid') then
+        isInInst = true
+    end
+    if pvp and (instType == 'arena' or instType == 'pvp' or GetZonePVPInfo() == 'combat') then
+        isInPVP = true
+    end
+    if not combat and not instance and not pvp then
+        isInCombat, isInInst, isInPVP = true, true, true
+    end
 
-	frame:Hide()
-	if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') and not UnitIsDeadOrGhost('player') then
-		if weaponIndex then
-			local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
-			if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
-				frame:Hide()
-				return
-			end
-		else
-			for i = 1, 32 do
-				local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
-				if not name then
-					break
-				end
-				if name and cfg.spells[spellID] then
-					frame:Hide()
-					return
-				end
-			end
-		end
-		frame:Show()
-	end
+    frame:Hide()
+    if isPlayerSpell and isRightSpec and (isInCombat or isInInst or isInPVP) and not UnitInVehicle('player') and not UnitIsDeadOrGhost('player') then
+        if weaponIndex then
+            local hasMainHandEnchant, _, _, _, hasOffHandEnchant = GetWeaponEnchantInfo()
+            if (hasMainHandEnchant and weaponIndex == 1) or (hasOffHandEnchant and weaponIndex == 2) then
+                frame:Hide()
+                return
+            end
+        else
+            for i = 1, 32 do
+                local name, _, _, _, _, _, _, _, _, spellID = UnitBuff('player', i)
+                if not name then
+                    break
+                end
+                if name and cfg.spells[spellID] then
+                    frame:Hide()
+                    return
+                end
+            end
+        end
+        frame:Show()
+    end
 end
 
 function AURA:Reminder_Create(cfg)
-	local frame = CreateFrame('Frame', nil, parentFrame)
-	frame:SetSize(iconSize, iconSize)
-	F.PixelIcon(frame)
-	F.CreateSD(frame)
-	local texture = cfg.texture
-	if frame.__shadow then
-		frame.__shadow:SetBackdropBorderColor(1, 0, 0, .35)
-	end
-	if not texture then
-		for spellID in pairs(cfg.spells) do
-			texture = GetSpellTexture(spellID)
-			break
-		end
-	end
-	frame.Icon:SetTexture(texture)
-	frame.text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, L['lacking'], 'RED', 'THICK', 'TOP', 1, 15)
-	frame:Hide()
-	cfg.frame = frame
+    local frame = CreateFrame('Frame', nil, parentFrame)
+    frame:SetSize(iconSize, iconSize)
+    F.PixelIcon(frame)
+    F.CreateSD(frame)
+    local texture = cfg.texture
+    if not texture then
+        for spellID in pairs(cfg.spells) do
+            texture = GetSpellTexture(spellID)
+            break
+        end
+    end
+    frame.Icon:SetTexture(texture)
+    frame.text = F.CreateFS(frame, C.Assets.Fonts.Regular, 12, nil, L['lacking'], 'RED', 'THICK', 'TOP', 1, 15)
+    frame:Hide()
+    cfg.frame = frame
 
-	tinsert(frames, frame)
+    tinsert(frames, frame)
 end
 
 function AURA:Reminder_UpdateAnchor()
-	local index = 0
-	local offset = iconSize + 5
-	for _, frame in next, frames do
-		if frame:IsShown() then
-			frame:SetPoint('LEFT', offset * index, 0)
-			index = index + 1
-		end
-	end
-	parentFrame:SetWidth(offset * index)
+    local index = 0
+    local offset = iconSize + 5
+    for _, frame in next, frames do
+        if frame:IsShown() then
+            frame:SetPoint('LEFT', offset * index, 0)
+            index = index + 1
+        end
+    end
+    parentFrame:SetWidth(offset * index)
 end
 
 function AURA:Reminder_OnEvent()
-	for _, cfg in pairs(groups) do
-		if not cfg.frame then
-			AURA:Reminder_Create(cfg)
-		end
-		AURA:Reminder_Update(cfg)
-	end
-	AURA:Reminder_UpdateAnchor()
+    for _, cfg in pairs(groups) do
+        if not cfg.frame then
+            AURA:Reminder_Create(cfg)
+        end
+        AURA:Reminder_Update(cfg)
+    end
+    AURA:Reminder_UpdateAnchor()
 end
 
 function AURA:Reminder_AddItemGroup()
-	for _, value in pairs(C.ReminderBuffsList['ITEMS']) do
-		if not value.disable and GetItemCount(value.itemID) > 0 then
-			if not value.texture then
-				value.texture = GetItemIcon(value.itemID)
-			end
-			if not groups then groups = {} end
-			tinsert(groups, value)
-		end
-	end
+    for _, value in pairs(C.ReminderBuffsList['ITEMS']) do
+        if not value.disable and GetItemCount(value.itemID) > 0 then
+            if not value.texture then
+                value.texture = GetItemIcon(value.itemID)
+            end
+            if not groups then
+                groups = {}
+            end
+            tinsert(groups, value)
+        end
+    end
 end
 
 function AURA:InitReminder()
-	AURA:Reminder_AddItemGroup()
+    AURA:Reminder_AddItemGroup()
 
-	if not groups or not next(groups) then
-		return
-	end
+    if not groups or not next(groups) then
+        return
+    end
 
-	if C.DB.aura.reminder then
-		if not parentFrame then
-			parentFrame = CreateFrame('Frame', nil, UIParent)
-			parentFrame:SetPoint('TOP', 0, -100)
-			parentFrame:SetSize(iconSize, iconSize)
-		end
-		parentFrame:Show()
+    if C.DB.Aura.Reminder then
+        if not parentFrame then
+            parentFrame = CreateFrame('Frame', nil, _G.UIParent)
+            parentFrame:SetPoint('TOP', 0, -100)
+            parentFrame:SetSize(iconSize, iconSize)
+        end
+        parentFrame:Show()
 
-		AURA:Reminder_OnEvent()
-		F:RegisterEvent('UNIT_AURA', AURA.Reminder_OnEvent, 'player')
-		F:RegisterEvent('UNIT_EXITED_VEHICLE', AURA.Reminder_OnEvent)
-		F:RegisterEvent('UNIT_ENTERED_VEHICLE', AURA.Reminder_OnEvent)
-		F:RegisterEvent('PLAYER_REGEN_ENABLED', AURA.Reminder_OnEvent)
-		F:RegisterEvent('PLAYER_REGEN_DISABLED', AURA.Reminder_OnEvent)
-		F:RegisterEvent('ZONE_CHANGED_NEW_AREA', AURA.Reminder_OnEvent)
-		F:RegisterEvent('PLAYER_ENTERING_WORLD', AURA.Reminder_OnEvent)
-	else
-		if parentFrame then
-			parentFrame:Hide()
-			F:UnregisterEvent('UNIT_AURA', AURA.Reminder_OnEvent)
-			F:UnregisterEvent('UNIT_EXITED_VEHICLE', AURA.Reminder_OnEvent)
-			F:UnregisterEvent('UNIT_ENTERED_VEHICLE', AURA.Reminder_OnEvent)
-			F:UnregisterEvent('PLAYER_REGEN_ENABLED', AURA.Reminder_OnEvent)
-			F:UnregisterEvent('PLAYER_REGEN_DISABLED', AURA.Reminder_OnEvent)
-			F:UnregisterEvent('ZONE_CHANGED_NEW_AREA', AURA.Reminder_OnEvent)
-			F:UnregisterEvent('PLAYER_ENTERING_WORLD', AURA.Reminder_OnEvent)
-		end
-	end
+        AURA:Reminder_OnEvent()
+        F:RegisterEvent('UNIT_AURA', AURA.Reminder_OnEvent, 'player')
+        F:RegisterEvent('UNIT_EXITED_VEHICLE', AURA.Reminder_OnEvent)
+        F:RegisterEvent('UNIT_ENTERED_VEHICLE', AURA.Reminder_OnEvent)
+        F:RegisterEvent('PLAYER_REGEN_ENABLED', AURA.Reminder_OnEvent)
+        F:RegisterEvent('PLAYER_REGEN_DISABLED', AURA.Reminder_OnEvent)
+        F:RegisterEvent('ZONE_CHANGED_NEW_AREA', AURA.Reminder_OnEvent)
+        F:RegisterEvent('PLAYER_ENTERING_WORLD', AURA.Reminder_OnEvent)
+    else
+        if parentFrame then
+            parentFrame:Hide()
+            F:UnregisterEvent('UNIT_AURA', AURA.Reminder_OnEvent)
+            F:UnregisterEvent('UNIT_EXITED_VEHICLE', AURA.Reminder_OnEvent)
+            F:UnregisterEvent('UNIT_ENTERED_VEHICLE', AURA.Reminder_OnEvent)
+            F:UnregisterEvent('PLAYER_REGEN_ENABLED', AURA.Reminder_OnEvent)
+            F:UnregisterEvent('PLAYER_REGEN_DISABLED', AURA.Reminder_OnEvent)
+            F:UnregisterEvent('ZONE_CHANGED_NEW_AREA', AURA.Reminder_OnEvent)
+            F:UnregisterEvent('PLAYER_ENTERING_WORLD', AURA.Reminder_OnEvent)
+        end
+    end
 end
