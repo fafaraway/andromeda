@@ -1,6 +1,9 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local wipe = wipe
+local CreateFrame = CreateFrame
+local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -81,9 +84,9 @@ local function buttonOnEnter(self)
     _G.GameTooltip:Show()
 end
 
-function UNITFRAME:AddRaidDebuffs(self)
+function UNITFRAME:CreateRaidDebuff(self)
     local bu = CreateFrame('Frame', nil, self)
-    bu:Size(self:GetHeight() * .5)
+    bu:Size(self:GetHeight() * .6)
     bu:SetPoint('CENTER')
     bu:SetFrameLevel(self.Health:GetFrameLevel() + 2)
     bu.bg = F.CreateBDFrame(bu)
@@ -101,8 +104,8 @@ function UNITFRAME:AddRaidDebuffs(self)
     parentFrame:SetAllPoints()
     parentFrame:SetFrameLevel(bu:GetFrameLevel() + 6)
 
-    bu.count = F.CreateFS(parentFrame, C.Assets.Fonts.Square, 11, nil, '', nil, true, 'TOPRIGHT', 2, 4)
-    bu.timer = F.CreateFS(bu, C.Assets.Fonts.Square, 11, nil, '', nil, true, 'BOTTOMLEFT', 2, -4)
+    bu.count = F.CreateFS(parentFrame, C.Assets.Fonts.Square, 12, true, '', nil, true, 'TOPRIGHT', 2, 4)
+    bu.timer = F.CreateFS(bu, C.Assets.Fonts.Square, 12, true, '', nil, true, 'BOTTOMLEFT', 2, -4)
 
     bu.glowFrame = F.CreateGlowFrame(bu, bu:GetHeight())
 

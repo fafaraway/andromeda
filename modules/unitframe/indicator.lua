@@ -1,11 +1,15 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local rad = rad
+local CreateFrame = CreateFrame
+local GetSpellCooldown = GetSpellCooldown
+local GetTime = GetTime
+local IsResting = IsResting
+local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-
---[[ Indicatiors ]]
 
 function UNITFRAME:UpdateGCDIndicator()
     local start, duration = GetSpellCooldown(61304)
@@ -31,7 +35,7 @@ function UNITFRAME:ToggleGCDIndicator()
     ticker:SetShown(C.DB.Unitframe.GCDIndicator)
 end
 
-function UNITFRAME:AddGCDIndicator(self)
+function UNITFRAME:CreateGCDIndicator(self)
     local ticker = CreateFrame('StatusBar', nil, self)
     ticker:SetFrameLevel(self.Health:GetFrameLevel() + 4)
     ticker:SetStatusBarTexture(C.Assets.norm_tex)
@@ -80,7 +84,7 @@ local function CombatIndicatorPostUpdate(self, inCombat)
     end
 end
 
-function UNITFRAME:AddCombatIndicator(self)
+function UNITFRAME:CreateCombatIndicator(self)
     if not C.DB.Unitframe.CombatIndicator then
         return
     end
@@ -96,7 +100,7 @@ function UNITFRAME:AddCombatIndicator(self)
     self.CombatIndicator.PostUpdate = CombatIndicatorPostUpdate
 end
 
-function UNITFRAME:AddRestingIndicator(self)
+function UNITFRAME:CreateRestingIndicator(self)
     if not C.DB.Unitframe.RestingIndicator then
         return
     end
@@ -111,7 +115,7 @@ function UNITFRAME:AddRestingIndicator(self)
     self.RestingIndicator = restingIndicator
 end
 
-function UNITFRAME:AddEmergencyIndicator(self)
+function UNITFRAME:CreateEmergencyIndicator(self)
     local emergencyIndicator = self:CreateTexture(nil, 'OVERLAY')
     emergencyIndicator:SetPoint('TOPLEFT', self, 'BOTTOMLEFT')
     emergencyIndicator:SetPoint('TOPRIGHT', self, 'BOTTOMRIGHT')
@@ -155,7 +159,7 @@ function UNITFRAME:UpdateRaidTargetIndicator()
     end
 end
 
-function UNITFRAME:AddRaidTargetIndicator(self)
+function UNITFRAME:CreateRaidTargetIndicator(self)
     local icon = self.Health:CreateTexture(nil, 'OVERLAY')
     icon:SetPoint('CENTER')
     icon:SetAlpha(1)
@@ -167,7 +171,7 @@ function UNITFRAME:AddRaidTargetIndicator(self)
     UNITFRAME.UpdateRaidTargetIndicator(self)
 end
 
-function UNITFRAME:AddReadyCheckIndicator(self)
+function UNITFRAME:CreateReadyCheckIndicator(self)
     local readyCheckIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
     readyCheckIndicator:SetPoint('CENTER', self.Health)
     readyCheckIndicator:SetSize(16, 16)
@@ -192,7 +196,7 @@ local function updateGroupRoleIndicator(self, event)
     end
 end
 
-function UNITFRAME:AddGroupRoleIndicator(self)
+function UNITFRAME:CreateGroupRoleIndicator(self)
     local font = C.Assets.Fonts.Pixel
 
     local groupRoleIndicator = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME')
@@ -201,7 +205,7 @@ function UNITFRAME:AddGroupRoleIndicator(self)
     self.GroupRoleIndicator = groupRoleIndicator
 end
 
-function UNITFRAME:AddLeaderIndicator(self)
+function UNITFRAME:CreateLeaderIndicator(self)
     local font = C.Assets.Fonts.Pixel
 
     local leaderIndicator = F.CreateFS(self.Health, font, 8, 'OUTLINE, MONOCHROME', '!')
@@ -209,7 +213,7 @@ function UNITFRAME:AddLeaderIndicator(self)
     self.LeaderIndicator = leaderIndicator
 end
 
-function UNITFRAME:AddPhaseIndicator(self)
+function UNITFRAME:CreatePhaseIndicator(self)
     local phase = CreateFrame('Frame', nil, self)
     phase:SetSize(16, 16)
     phase:SetPoint('CENTER', self)
@@ -221,7 +225,7 @@ function UNITFRAME:AddPhaseIndicator(self)
     self.PhaseIndicator = phase
 end
 
-function UNITFRAME:AddSummonIndicator(self)
+function UNITFRAME:CreateSummonIndicator(self)
     local summonIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
     summonIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
     summonIndicator:SetPoint('CENTER')
@@ -229,7 +233,7 @@ function UNITFRAME:AddSummonIndicator(self)
     self.SummonIndicator = summonIndicator
 end
 
-function UNITFRAME:AddResurrectIndicator(self)
+function UNITFRAME:CreateResurrectIndicator(self)
     local resurrectIndicator = self.Health:CreateTexture(nil, 'OVERLAY')
     resurrectIndicator:SetSize(self:GetHeight() * .8, self:GetHeight() * .8)
     resurrectIndicator:SetPoint('CENTER')

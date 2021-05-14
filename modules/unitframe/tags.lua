@@ -5,8 +5,6 @@ local floor = floor
 local unpack = unpack
 local select = select
 local strfind = strfind
-local strlen = strlen
-local gsub = gsub
 local UnitName = UnitName
 local UnitLevel = UnitLevel
 local UnitClass = UnitClass
@@ -24,7 +22,6 @@ local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 local UnitStagger = UnitStagger
 local UnitIsUnit = UnitIsUnit
-local UnitInRaid = UnitInRaid
 local UnitExists = UnitExists
 local UnitClassification = UnitClassification
 local UnitSelectionColor = UnitSelectionColor
@@ -229,7 +226,7 @@ tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_
 
 local font = C.Assets.Fonts.Condensed
 
-function UNITFRAME:AddGroupNameText(self)
+function UNITFRAME:CreateGroupNameText(self)
     local outline = _G.FREE_ADB.FontOutline
     local groupName = F.CreateFS(self.Health, font, 11, outline, nil, nil, outline or 'THICK')
 
@@ -237,7 +234,7 @@ function UNITFRAME:AddGroupNameText(self)
     self.GroupName = groupName
 end
 
-function UNITFRAME:AddNameText(self)
+function UNITFRAME:CreateNameText(self)
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 
@@ -261,7 +258,7 @@ function UNITFRAME:AddNameText(self)
     self.Name = name
 end
 
-function UNITFRAME:AddHealthValueText(self)
+function UNITFRAME:CreateHealthValueText(self)
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 
@@ -287,7 +284,7 @@ function UNITFRAME:AddHealthValueText(self)
     self.HealthValue = healthValue
 end
 
-function UNITFRAME:AddPowerValueText(self)
+function UNITFRAME:CreatePowerValueText(self)
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 
@@ -308,7 +305,7 @@ function UNITFRAME:AddPowerValueText(self)
     self.PowerValue = powerValue
 end
 
-function UNITFRAME:AddAlternativePowerValueText(self)
+function UNITFRAME:CreateAlternativePowerValueText(self)
     local style = self.unitStyle
     local outline = _G.FREE_ADB.FontOutline
 

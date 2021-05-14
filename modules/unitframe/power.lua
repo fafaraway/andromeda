@@ -1,6 +1,15 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local format = format
+local CreateFrame = CreateFrame
+local UnitIsConnected = UnitIsConnected
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
+local UnitHasVehicleUI = UnitHasVehicleUI
+local GetSpecialization = GetSpecialization
+local IsUsableSpell = IsUsableSpell
+local GetUnitPowerBarStringsByID = GetUnitPowerBarStringsByID
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -13,6 +22,8 @@ local function PostUpdatePower(power, unit, _, _, max)
 end
 
 local function UpdatePowerColor(power, unit)
+    if not C.IsDeveloper then return end
+
     if unit ~= 'player' or UnitHasVehicleUI('player') then
         return
     end
@@ -51,7 +62,7 @@ local function UpdatePowerColor(power, unit)
     end
 end
 
-function UNITFRAME:AddPowerBar(self)
+function UNITFRAME:CreatePowerBar(self)
     local style = self.unitStyle
 
     local power = CreateFrame('StatusBar', nil, self)
@@ -138,7 +149,7 @@ local function PostUpdateAltPower(self, _, cur, _, max)
     end
 end
 
-function UNITFRAME:AddAlternativePowerBar(self)
+function UNITFRAME:CreateAlternativePowerBar(self)
     local altPower = CreateFrame('StatusBar', nil, self)
     altPower:SetStatusBarTexture(C.Assets.statusbar_tex)
     altPower:SetPoint('TOP', self.Power, 'BOTTOM', 0, -2)

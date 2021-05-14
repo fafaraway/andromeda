@@ -1,11 +1,17 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local floor = floor
+local CreateFrame = CreateFrame
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsConnected = UnitIsConnected
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
+local UnitIsTapDenied = UnitIsTapDenied
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-
---[[ Health ]]
 
 local function OverrideHealth(self, event, unit)
     if not C.DB.Unitframe.Transparent then
@@ -39,13 +45,13 @@ local function PostUpdateHealth(self, unit, cur, max)
     local style = self.__owner.unitStyle
     local perhp = floor(UnitHealth('player') / max * 100 + .5)
 
-    -- if style == 'player' and parent.EmergencyIndicator then
-    --     if perhp < 35 then
-    --         parent.EmergencyIndicator:Show()
-    --     else
-    --         parent.EmergencyIndicator:Hide()
-    --     end
-    -- end
+    if style == 'player' and parent.EmergencyIndicator then
+        if perhp < 35 then
+            parent.EmergencyIndicator:Show()
+        else
+            parent.EmergencyIndicator:Hide()
+        end
+    end
 
     local isOffline = not UnitIsConnected(unit)
     local isDead = UnitIsDead(unit)
@@ -125,8 +131,7 @@ function UNITFRAME:CreateHealthBar(self)
     self.Health.PostUpdate = PostUpdateHealth
 end
 
---[[ Health prediction ]]
-
+-- Prediction
 function UNITFRAME:CreateHealthPrediction(self)
     local trans = C.DB.Unitframe.Transparent
     local colors = C.ClassColors[C.MyClass] or C.ClassColors['PRIEST']

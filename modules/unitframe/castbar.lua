@@ -1,8 +1,20 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local format = format
+local strupper = strupper
+local CreateFrame = CreateFrame
+local IsPlayerSpell = IsPlayerSpell
+local GetTime = GetTime
+local IsInInstance = IsInInstance
+local IsInGroup = IsInGroup
+local GetNumGroupMembers = GetNumGroupMembers
+local UnitExists = UnitExists
+local UnitIsUnit = UnitIsUnit
+local UnitName = UnitName
+local UnitInVehicle = UnitInVehicle
 
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
 local LBG = F.Libs.LBG
@@ -28,7 +40,7 @@ local channelingTicks = {
     [257044] = 7, -- 急速射击
     [291944] = 6, -- 再生，赞达拉巨魔
     [314791] = 4, -- 变易幻能
-    [324631] = 8, -- 血肉铸造，盟约
+    [324631] = 8 -- 血肉铸造，盟约
 }
 
 if C.MyClass == 'PRIEST' then
@@ -80,8 +92,7 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
 
         if self.__owner.unit == 'player' then
             if self.delay ~= 0 then
-                self.Time:SetFormattedText(decimal .. ' | |cffff0000' .. decimal, duration,
-                                           self.casting and self.max + self.delay or self.max - self.delay)
+                self.Time:SetFormattedText(decimal .. ' | |cffff0000' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
             else
                 self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.max)
                 if self.Lag and self.SafeZone and self.SafeZone.timeDiff and self.SafeZone.timeDiff ~= 0 then
@@ -92,8 +103,7 @@ function UNITFRAME:OnCastbarUpdate(elapsed)
             if duration > 1e4 then
                 self.Time:SetText('∞ | ∞')
             else
-                self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration,
-                                           self.casting and self.max + self.delay or self.max - self.delay)
+                self.Time:SetFormattedText(decimal .. ' | ' .. decimal, duration, self.casting and self.max + self.delay or self.max - self.delay)
             end
         end
 
@@ -125,7 +135,9 @@ function UNITFRAME:OnCastSent()
 end
 
 local function UpdateNameTimeVisibility(self, unit)
-    if not unit then return end
+    if not unit then
+        return
+    end
 
     if self.Text then
         self.Text:SetShown(C.DB.Nameplate.CastbarSpellName)
@@ -141,7 +153,9 @@ local function UpdateSpellTarget(self, unit)
         return
     end
 
-    if not (IsInInstance() and IsInGroup() and GetNumGroupMembers() > 1) then return end
+    if not (IsInInstance() and IsInGroup() and GetNumGroupMembers() > 1) then
+        return
+    end
 
     if not self.SpellTarget or not unit then
         return
@@ -234,7 +248,6 @@ function UNITFRAME:PostCastStart(unit)
         -- Spell target
         UpdateSpellTarget(self, unit)
     end
-
 end
 
 function UNITFRAME:PostCastUpdate(unit)
@@ -300,10 +313,10 @@ end
 local cbPosition = {
     player = {'CENTER', _G.UIParent, 'CENTER', 0, -280},
     target = {'LEFT', _G.UIParent, 'CENTER', 113, -152},
-    focus = {'CENTER', _G.UIParent, 'CENTER', 0, 120},
+    focus = {'CENTER', _G.UIParent, 'CENTER', 0, 120}
 }
 
-function UNITFRAME:AddCastBar(self)
+function UNITFRAME:CreateCastBar(self)
     if not C.DB.Unitframe.Castbar then
         return
     end
@@ -433,14 +446,14 @@ function UNITFRAME:AddCastBar(self)
         end
     end
 
-    --if style == 'player' then
+    if style == 'player' then
         local safeZone = castbar:CreateTexture(nil, 'OVERLAY')
         safeZone:SetTexture(C.Assets.statusbar_tex)
         safeZone:SetVertexColor(.87, .25, .42, .6)
         safeZone:SetPoint('TOPRIGHT')
         safeZone:SetPoint('BOTTOMRIGHT')
         castbar.SafeZone = safeZone
-    --end
+    end
 
     castbar.OnUpdate = UNITFRAME.OnCastbarUpdate
     castbar.PostCastStart = UNITFRAME.PostCastStart

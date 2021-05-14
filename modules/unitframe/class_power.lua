@@ -1,14 +1,16 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local CreateFrame = CreateFrame
+local GetRuneCooldown = GetRuneCooldown
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
---[[ Class power ]]
-
 local function SetLastBarColor(element, max, powerType)
-    if not element or not max then return end
+    if not element or not max then
+        return
+    end
 
     local color = element.__owner.colors.power.max[powerType]
 
@@ -67,7 +69,7 @@ local function PostUpdateRunes(element, runemap)
     end
 end
 
-function UNITFRAME:AddClassPowerBar(self)
+function UNITFRAME:CreateClassPowerBar(self)
     if not C.DB.Unitframe.ClassPowerBar then
         return
     end

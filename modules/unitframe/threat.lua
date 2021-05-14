@@ -1,11 +1,11 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local UnitThreatSituation = UnitThreatSituation
+local GetThreatStatusColor = GetThreatStatusColor
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-
---[[ Threat ]]
 
 local function UpdateThreat(self, event, unit)
     if not self.Glow or self.unit ~= unit then

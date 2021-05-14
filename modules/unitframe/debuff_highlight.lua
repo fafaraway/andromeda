@@ -5,8 +5,6 @@ local select = select
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
---[[ Debuff highlight ]]
-
 function UNITFRAME:CreateDebuffHighlight(self)
     if not C.DB.Unitframe.DebuffHighlight then
         return

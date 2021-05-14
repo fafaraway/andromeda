@@ -321,7 +321,7 @@ function NAMEPLATE:UpdateThreatColor(_, unit)
     NAMEPLATE.UpdateColor(self, _, unit)
 end
 
-function NAMEPLATE:AddThreatIndicator(self)
+function NAMEPLATE:CreateThreatIndicator(self)
     if not C.DB.Nameplate.ThreatIndicator then
         return
     end
@@ -382,7 +382,7 @@ function NAMEPLATE:UpdateTargetIndicator()
     end
 end
 
-function NAMEPLATE:AddTargetIndicator(self)
+function NAMEPLATE:CreateTargetIndicator(self)
     if not C.DB.Nameplate.TargetIndicator then
         return
     end
@@ -408,7 +408,7 @@ function NAMEPLATE:AddTargetIndicator(self)
     frame.nameGlow:SetTexture('Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64')
     frame.nameGlow:SetVertexColor(0, .6, 1)
     frame.nameGlow:SetBlendMode('ADD')
-    frame.nameGlow:SetPoint('CENTER', self, 'BOTTOM')
+    frame.nameGlow:SetPoint('CENTER', 0, 14)
 
     self.TargetIndicator = frame
     self:RegisterEvent('PLAYER_TARGET_CHANGED', NAMEPLATE.UpdateTargetChange, true)
@@ -440,7 +440,7 @@ function NAMEPLATE:UpdateMouseoverShown()
     end
 end
 
-function NAMEPLATE:AddHighlight(self)
+function NAMEPLATE:CreateHighlight(self)
     local highlight = CreateFrame('Frame', nil, self.Health)
     highlight:SetAllPoints(self)
     highlight:Hide()
@@ -476,7 +476,7 @@ local classify = {
     worldboss = {'VignetteKillElite'}
 }
 
-function NAMEPLATE:AddClassifyIndicator(self)
+function NAMEPLATE:CreateClassifyIndicator(self)
     if not C.DB.Nameplate.ClassifyIndicator then
         return
     end
@@ -596,7 +596,7 @@ function NAMEPLATE:UpdateQuestUnit(_, unit)
     end
 end
 
-function NAMEPLATE:AddQuestIndicator(self)
+function NAMEPLATE:CreateQuestIndicator(self)
     if not C.DB.Nameplate.QuestIndicator then
         return
     end
@@ -707,7 +707,7 @@ function NAMEPLATE:RefreshMajorSpells()
 end
 
 -- Spiteful indicator
-function NAMEPLATE:AddSpitefulIndicator(self)
+function NAMEPLATE:CreateSpitefulIndicator(self)
     local font = C.Assets.Fonts.Condensed
     local outline = _G.FREE_ADB.FontOutline
 
@@ -730,7 +730,7 @@ end
 
 -- M+ progress
 -- AngryKeystones REQUIRED
-function NAMEPLATE:AddDungeonProgress(self)
+function NAMEPLATE:CreateDungeonProgress(self)
     if not C.DB.Nameplate.AKProgress then
         return
     end
@@ -837,34 +837,34 @@ function NAMEPLATE:CreateNameplateStyle()
     self.Health = health
     self.Health.UpdateColor = NAMEPLATE.UpdateColor
 
-    local name = F.CreateFS(self, C.Assets.Fonts.Header, 16, true, nil, nil, true)
+    local name = F.CreateFS(self, C.Assets.Fonts.Header, 16, nil, nil, nil, 'THICK')
     name:SetJustifyH('CENTER')
     name:ClearAllPoints()
-    name:SetPoint('CENTER')
+    name:SetPoint('CENTER', 0, 14)
     name:Hide()
     self:Tag(name, '[free:color][name]')
     self.nameOnlyName = name
 
-    local title = F.CreateFS(self, C.Assets.Fonts.Bold, 12, true, nil, nil, true)
+    local title = F.CreateFS(self, C.Assets.Fonts.Condensed, 11, nil, nil, nil, 'THICK')
     title:SetJustifyH('CENTER')
     title:ClearAllPoints()
-    title:SetPoint('TOP', self, 'BOTTOM', 0, -10)
+    title:SetPoint('TOP', name, 'BOTTOM', 0, -4)
     title:Hide()
     self:Tag(title, '[free:title]')
     self.npcTitle = title
 
-    UNITFRAME:AddNameText(self)
+    UNITFRAME:CreateNameText(self)
     UNITFRAME:CreateHealthPrediction(self)
-    NAMEPLATE:AddTargetIndicator(self)
-    NAMEPLATE:AddHighlight(self)
-    NAMEPLATE:AddClassifyIndicator(self)
-    NAMEPLATE:AddThreatIndicator(self)
-    NAMEPLATE:AddQuestIndicator(self)
-    UNITFRAME:AddCastBar(self)
-    UNITFRAME:AddRaidTargetIndicator(self)
+    NAMEPLATE:CreateTargetIndicator(self)
+    NAMEPLATE:CreateHighlight(self)
+    NAMEPLATE:CreateClassifyIndicator(self)
+    NAMEPLATE:CreateThreatIndicator(self)
+    NAMEPLATE:CreateQuestIndicator(self)
+    UNITFRAME:CreateCastBar(self)
+    UNITFRAME:CreateRaidTargetIndicator(self)
     UNITFRAME:CreateAuras(self)
-    NAMEPLATE:AddSpitefulIndicator(self)
-    NAMEPLATE:AddDungeonProgress(self)
+    NAMEPLATE:CreateSpitefulIndicator(self)
+    NAMEPLATE:CreateDungeonProgress(self)
 
     self:RegisterEvent('PLAYER_FOCUS_CHANGED', NAMEPLATE.UpdateFocusColor, true)
 
@@ -1035,6 +1035,10 @@ function NAMEPLATE:PostUpdatePlates(event, unit)
 
             if self.Name then
                 self.Name:Hide()
+            end
+        else
+            if self.Name then
+                self.Name:Show()
             end
         end
 

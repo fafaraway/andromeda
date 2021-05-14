@@ -1,6 +1,10 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local wipe = wipe
+local CreateFrame = CreateFrame
+local GetSpellInfo = GetSpellInfo
+local UnitAura = UnitAura
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')

@@ -5,8 +5,6 @@ local select = select
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
 
---[[ Fader ]]
-
 function UNITFRAME:CreateFader(self)
     if not C.DB.Unitframe.Fader then
         return

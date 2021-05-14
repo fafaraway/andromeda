@@ -1,11 +1,10 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local CreateFrame = CreateFrame
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
-
---[[ Totems ]]
 
 local totemsColor = {
     {0.71, 0.29, 0.13}, -- red

@@ -1,6 +1,15 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local CreateFrame = CreateFrame
+local InCombatLockdown = InCombatLockdown
+local CancelUnitBuff = CancelUnitBuff
+local UnitAura = UnitAura
+local UnitIsPlayer = UnitIsPlayer
+local SpellGetVisibilityInfo = SpellGetVisibilityInfo
+local SpellIsSelfBuff = SpellIsSelfBuff
+local UnitAffectingCombat = UnitAffectingCombat
+local SpellIsPriorityAura = SpellIsPriorityAura
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -46,22 +55,25 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.HL:SetColorTexture(1, 1, 1, .25)
     button.HL:SetAllPoints()
 
-    button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, nil, true)
+    button.count = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, true, nil, nil, true)
     button.count:ClearAllPoints()
     button.count:SetPoint('TOPRIGHT', button, 2, 4)
 
-    button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, 'OUTLINE', nil, nil, true)
+    button.timer = F.CreateFS(button, C.Assets.Fonts.Roadway, 12, true, nil, nil, true)
     button.timer:ClearAllPoints()
     button.timer:SetPoint('BOTTOMLEFT', button, 2, -4)
 
     button.UpdateTooltip = UpdateAuraTooltip
     button:SetScript('OnEnter', Aura_OnEnter)
     button:SetScript('OnLeave', Aura_OnLeave)
-    button:SetScript('OnClick', function(self, button)
-        if not InCombatLockdown() and button == 'RightButton' then
-            CancelUnitBuff('player', self:GetID(), self.filter)
+    button:SetScript(
+        'OnClick',
+        function(self, button)
+            if not InCombatLockdown() and button == 'RightButton' then
+                CancelUnitBuff('player', self:GetID(), self.filter)
+            end
         end
-    end)
+    )
 end
 
 function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, expiration, debuffType)
@@ -77,7 +89,8 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     local isParty = style == 'party'
     local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-    button:SetSize(element.size, isParty and element.size or element.size * .75)
+    -- button:SetSize(element.size, isParty and element.size or element.size * .75)
+    button:SetSize(element.size, element.size * .75)
 
     if button.isDebuff and F:MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
         button.icon:SetDesaturated(true)
@@ -173,7 +186,7 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         else
             return false
         end
-    elseif style == 'nameplate' or style == 'boss' or style == 'arena' then
+    elseif (style == 'nameplate' and C.DB.Nameplate.ShowAura) or style == 'arena' then
         if _G.FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
             return false
         elseif element.showStealableBuffs and isStealable and not UnitIsPlayer(unit) then
@@ -183,6 +196,12 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         else
             local auraFilter = C.DB.Nameplate.AuraFilterMode
             return (auraFilter == 3 and nameplateShowAll) or (auraFilter ~= 1 and isMine)
+        end
+    elseif style == 'boss' then
+        if element.onlyShowPlayer and button.isDebuff then
+            return isMine
+        else
+            return true
         end
     elseif (element.onlyShowPlayer and button.isPlayer) or (not element.onlyShowPlayer and name) then
         return true
@@ -200,7 +219,7 @@ end
 function UNITFRAME:UpdateAuraContainer(parent, element, maxAuras)
     local width = parent:GetWidth()
     local iconsPerRow = element.iconsPerRow
-    local maxLines = iconsPerRow and F:Round(maxAuras/iconsPerRow) or 2
+    local maxLines = iconsPerRow and F:Round(maxAuras / iconsPerRow) or 2
     element.size = iconsPerRow and GetIconSize(width, iconsPerRow, element.spacing) or element.size
     element:SetWidth(width)
     element:SetHeight((element.size + element.spacing) * maxLines)
@@ -221,7 +240,7 @@ function UNITFRAME.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spell
 end
 
 local debuffBlackList = {
-    [206151] = true, -- Challenger's Burden
+    [206151] = true -- Challenger's Burden
 }
 
 function UNITFRAME.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
@@ -392,10 +411,14 @@ end
 
 local function RefreshAurasElements(self)
     local buffs = self.Buffs
-    if buffs then buffs:ForceUpdate() end
+    if buffs then
+        buffs:ForceUpdate()
+    end
 
     local debuffs = self.Debuffs
-    if debuffs then debuffs:ForceUpdate() end
+    if debuffs then
+        debuffs:ForceUpdate()
+    end
 end
 
 function UNITFRAME:RefreshAurasByCombat(self)

@@ -1,9 +1,13 @@
 local _G = _G
 local unpack = unpack
 local select = select
+local CreateFrame = CreateFrame
+local UnitFrame_OnEnter = UnitFrame_OnEnter
+local UnitFrame_OnLeave = UnitFrame_OnLeave
 local GetSpecialization = GetSpecialization
 local CompactRaidFrameManager_SetSetting = CompactRaidFrameManager_SetSetting
 local CompactRaidFrameManager = CompactRaidFrameManager
+local UnitIsUnit = UnitIsUnit
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:RegisterModule('Unitframe')
