@@ -11,7 +11,7 @@ local F, C = unpack(select(2, ...))
 local THEME = F.THEME
 local TOOLTIP = F:GetModule('Tooltip')
 
-local buttonSize = 24
+local buttonSize = 18
 
 local function ReskinIcon(icon, frame)
     if not icon then
@@ -75,7 +75,7 @@ local function ApplyStyle(self)
     end
 
     frame:SetScale(1)
-    frame:SetHeight(buttonSize / 2)
+    frame:SetHeight(buttonSize * .6)
 
     ReskinIcon(icon1, frame)
     ReskinIcon(icon2, frame)
@@ -86,18 +86,16 @@ local function ApplyStyle(self)
     end
 
     name:ClearAllPoints()
-    name:SetPoint('LEFT', frame, 'LEFT', 2, 8)
-    name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * .85, 8)
-    name:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
+    name:SetPoint('LEFT', frame, 'LEFT', 2, 6)
+    name:SetPoint('RIGHT', frame, 'LEFT', tbar:GetWidth() * .85, 6)
+    name:SetFont(C.Assets.Fonts.Condensed, 12, nil, nil, nil, nil, 'THICK')
     name:SetJustifyH('LEFT')
     name:SetWordWrap(false)
-    name:SetShadowColor(0, 0, 0, 0)
 
     timer:ClearAllPoints()
-    timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 8)
-    timer:SetFont(C.Assets.Fonts.Condensed, 12, 'OUTLINE')
+    timer:SetPoint('RIGHT', frame, 'RIGHT', -2, 6)
+    timer:SetFont(C.Assets.Fonts.Condensed, 12, nil, nil, nil, nil, 'THICK')
     timer:SetJustifyH('RIGHT')
-    timer:SetShadowColor(0, 0, 0, 0)
 end
 
 local function ForceSetting()
@@ -117,8 +115,8 @@ local function ForceSetting()
         _G.DBT_AllPersistentOptions['Default'] = {}
     end
 
-    _G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 20
-    _G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 20
+    _G.DBT_AllPersistentOptions['Default']['DBM'].BarYOffset = 10
+    _G.DBT_AllPersistentOptions['Default']['DBM'].HugeBarYOffset = 10
     _G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwards = true
     _G.DBT_AllPersistentOptions['Default']['DBM'].ExpandUpwardsLarge = true
 end
