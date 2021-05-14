@@ -2,7 +2,6 @@ local _G = _G
 local unpack = unpack
 local select = select
 local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
 local GetQuestItemInfo = GetQuestItemInfo
 local GetQuestCurrencyID = GetQuestCurrencyID
 local GetQuestCurrencyInfo = GetQuestCurrencyInfo
@@ -118,6 +117,20 @@ local function ReskinProgress(self)
     ReskinItemButton(self.TalkBox.Elements.Progress.Buttons)
 end
 
+local function ReskinTooltip(self)
+    for tooltip in self.Inspector.tooltipFramePool:EnumerateActive() do
+        if not tooltip.styled then
+            F.StripTextures(tooltip)
+            local bg = F.SetBD(tooltip)
+            bg:SetPoint('TOPLEFT', 0, 0)
+            bg:SetPoint('BOTTOMRIGHT', 6, 0)
+            tooltip.Icon.Border:SetAlpha(0)
+            tooltip.Hilite:SetOutside(bg, 2, 2)
+            tooltip.styled = true
+        end
+    end
+end
+
 local function ReskinImmersion()
     local cr, cg, cb = C.r, C.g, C.b
 
@@ -169,6 +182,7 @@ local function ReskinImmersion()
 
     hooksecurefunc(_G.ImmersionFrame, 'AddQuestInfo', ReskinReward)
     hooksecurefunc(_G.ImmersionFrame, 'QUEST_PROGRESS', ReskinProgress)
+    hooksecurefunc(_G.ImmersionFrame, 'ShowItems', ReskinTooltip)
 end
 
 THEME:LoadWithAddOn('Immersion', 'ReskinImmersion', ReskinImmersion)
