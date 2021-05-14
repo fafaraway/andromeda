@@ -51,13 +51,13 @@ local function CreateCheckBox()
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(-5, -5, -5, -5)
     F.ReskinCheck(bu, true)
-    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['Announcement'], 'YELLOW', true, 'LEFT', 22, 0)
+    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['Announce progress'], 'YELLOW', true, 'LEFT', 22, 0)
     bu:SetChecked(C.DB.Announcement.Quest)
     bu:SetScript('OnClick', function(self)
         C.DB.Announcement.Quest = self:GetChecked()
         ANNOUNCEMENT:QuestNotification()
     end)
-    bu.title = L['Announcement']
+    bu.title = L['Announce progress']
     F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['|nLet your teammates know the progress of quests.'], 'BLUE')
 
     created = true

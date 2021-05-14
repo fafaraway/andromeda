@@ -9,7 +9,7 @@ local next = next
 local ipairs = ipairs
 local CreateFrame = CreateFrame
 local UnitGUID = UnitGUID
-local IsShiftKeyDown = IsShiftKeyDown
+local IsAltKeyDown = IsAltKeyDown
 local GetItemInfoFromHyperlink = GetItemInfoFromHyperlink
 local GetNumTrackingTypes = GetNumTrackingTypes
 local GetTrackingInfo = GetTrackingInfo
@@ -71,14 +71,14 @@ local function CreateCheckBox()
     bu:SetSize(20, 20)
     bu:SetHitRectInsets(-5, -5, -5, -5)
     F.ReskinCheck(bu, true)
-    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['Automatic'], 'YELLOW', true,
+    bu.text = F.CreateFS(bu, C.Assets.Fonts.Regular, 11, nil, L['Auto turn-in'], 'YELLOW', true,
                          'LEFT', 22, 0)
     bu:SetChecked(C.DB.Quest.Automation)
     bu:SetScript('OnClick', function(self)
         C.DB.Quest.Automation = self:GetChecked()
     end)
-    bu.title = L['Automatic']
-    F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['|nAutomatically accept and deliver quests.|nHold SHIFT key to STOP automation.'], 'BLUE')
+    bu.title = L['Auto turn-in']
+    F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['|nAutomatically accept and deliver quests.|nHold ALT key to STOP automation.'], 'BLUE')
 
     created = true
 end
@@ -93,7 +93,7 @@ end)
 function QuickQuest:Register(event, func)
     self:RegisterEvent(event)
     self[event] = function(...)
-        if C.DB.Quest.Automation and not IsShiftKeyDown() then
+        if C.DB.Quest.Automation and not IsAltKeyDown() then
             func(...)
         end
     end
