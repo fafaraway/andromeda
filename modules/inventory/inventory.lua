@@ -101,7 +101,7 @@ local function CheckBoundStatus(itemLink, bagID, slotID, string)
         tip:SetHyperlink(itemLink)
     end
 
-    for i = 2, 5 do
+    for i = 2, 6 do
         local line = _G[tip:GetName() .. 'TextLeft' .. i]
         if line then
             local text = line:GetText() or ''
