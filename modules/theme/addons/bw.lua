@@ -5,7 +5,7 @@ local hooksecurefunc = hooksecurefunc
 local IsAddOnLoaded = IsAddOnLoaded
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
+local THEME = F:GetModule('Theme')
 
 local function RemoveStyle(bar)
     bar.candyBarBackdrop:Hide()

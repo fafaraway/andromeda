@@ -4,7 +4,7 @@ local unpack = unpack
 local IsAddOnLoaded = IsAddOnLoaded
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
+local THEME = F:GetModule('Theme')
 
 function THEME:ReskinABP()
     if not _G.FREE_ADB.ReskinActionBarProfiles then

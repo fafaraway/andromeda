@@ -6,8 +6,7 @@ local IsAddOnLoaded = IsAddOnLoaded
 local hooksecurefunc = hooksecurefunc
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
-local TOOLTIP = F:GetModule('Tooltip')
+local THEME = F:GetModule('Theme')
 
 function THEME:ReskinPGF()
     if not _G.FREE_ADB.ReskinPremadeGroupsFilter then
@@ -26,7 +25,7 @@ function THEME:ReskinPGF()
         for i = 1, _G.PremadeGroupsFilterDialog:GetNumChildren() do
             local child = select(i, _G.PremadeGroupsFilterDialog:GetChildren())
             if child and child.Shadow then
-                TOOLTIP.ReskinTooltip(child)
+                F:GetModule('Tooltip').ReskinTooltip(child)
                 tipStyled = true
                 break
             end

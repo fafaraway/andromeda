@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('Tooltip')
 
 C.Themes["Blizzard_BarbershopUI"] = function()
 	local frame = BarberShopFrame
@@ -15,7 +14,7 @@ local function ReskinCustomizeButton(button)
 end
 
 local function ReskinCustomizeTooltip(tooltip)
-	TOOLTIP.ReskinTooltip(tooltip)
+	F:GetModule('Tooltip').ReskinTooltip(tooltip)
 	tooltip:SetScale(UIParent:GetScale())
 end
 

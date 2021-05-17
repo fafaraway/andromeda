@@ -9,7 +9,7 @@ local GetNumRewardSpells = GetNumRewardSpells
 local CurrencyContainerUtil = CurrencyContainerUtil
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
+local THEME = F:GetModule('Theme')
 
 local function UpdateItemBorder(self)
     if not self.bg then

@@ -5,7 +5,7 @@ local pairs = pairs
 local hooksecurefunc = hooksecurefunc
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
+local THEME = F:GetModule('Theme')
 
 local function IconBgOnUpdate(self)
     self:SetAlpha(self.__icon:GetAlpha())

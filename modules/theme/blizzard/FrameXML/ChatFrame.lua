@@ -137,7 +137,7 @@ tinsert(C.BlizzThemes, function()
 
     -- TextToSpeech
 	if C.IsNewPatch then
-		TextToSpeechButton:DisableDrawLayer("BACKGROUND")
+		F.StripTextures(TextToSpeechButton, 5)
 
 		F.StripTextures(TextToSpeechFrame)
 		F.SetBD(TextToSpeechFrame)

@@ -6,7 +6,7 @@ local format = format
 local IsAddOnLoaded = IsAddOnLoaded
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
+local THEME = F:RegisterModule('Theme')
 
 C.Themes = {}
 C.BlizzThemes = {}

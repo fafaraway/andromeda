@@ -61,7 +61,7 @@ tinsert(C.BlizzThemes, function()
 			"Graphics_ProjectedTexturesDropDown",
 			"Graphics_ShadowsDropDown",
 			"Graphics_LiquidDetailDropDown",
-			"Graphics_SunshaftsDropDown",
+			"Graphics_SunshaftsDropDown",	-- isNewPatch, removed in 38627
 			"Graphics_ParticleDensityDropDown",
 			"Graphics_SSAODropDown",
 			"Graphics_DepthEffectsDropDown",
@@ -71,7 +71,7 @@ tinsert(C.BlizzThemes, function()
 			"RaidGraphics_ProjectedTexturesDropDown",
 			"RaidGraphics_ShadowsDropDown",
 			"RaidGraphics_LiquidDetailDropDown",
-			"RaidGraphics_SunshaftsDropDown",
+			"RaidGraphics_SunshaftsDropDown",	-- isNewPatch, removed in 38627
 			"RaidGraphics_ParticleDensityDropDown",
 			"RaidGraphics_SSAODropDown",
 			"RaidGraphics_DepthEffectsDropDown",
@@ -96,6 +96,12 @@ tinsert(C.BlizzThemes, function()
 			"InterfaceOptionsLanguagesPanelLocaleDropDown",
 			"InterfaceOptionsLanguagesPanelAudioLocaleDropDown"
 		}
+        if C.IsNewPatch then
+			tinsert(dropdowns, "Graphics_ComputeEffectsDropDown")
+			tinsert(dropdowns, "RaidGraphics_ComputeEffectsDropDown")
+			tremove(dropdowns, 11)
+			tremove(dropdowns, 20)
+		end
 		for i = 1, #dropdowns do
 			local dropdown = _G[dropdowns[i]]
 			if not dropdown then

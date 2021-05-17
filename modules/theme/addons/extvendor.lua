@@ -4,7 +4,7 @@ local select = select
 local IsAddOnLoaded = IsAddOnLoaded
 
 local F = unpack(select(2, ...))
-local THEME = F.THEME
+local THEME = F:GetModule('Theme')
 
 function THEME:ReskinExtVendor()
     if not IsAddOnLoaded('ExtVendor') then

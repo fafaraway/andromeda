@@ -8,8 +8,7 @@ local IsAddOnLoaded = IsAddOnLoaded
 local hooksecurefunc = hooksecurefunc
 
 local F, C = unpack(select(2, ...))
-local THEME = F.THEME
-local TOOLTIP = F:GetModule('Tooltip')
+local THEME = F:GetModule('Theme')
 
 local buttonSize = 18
 
@@ -161,12 +160,12 @@ function THEME:ReskinDBM()
 
     hooksecurefunc(_G.DBM.RangeCheck, 'Show', function()
         if _G.DBMRangeCheckRadar and not _G.DBMRangeCheckRadar.styled then
-            TOOLTIP.ReskinTooltip(_G.DBMRangeCheckRadar)
+            F:GetModule('Tooltip').ReskinTooltip(_G.DBMRangeCheckRadar)
             _G.DBMRangeCheckRadar.styled = true
         end
 
         if _G.DBMRangeCheck and not _G.DBMRangeCheck.styled then
-            TOOLTIP.ReskinTooltip(_G.DBMRangeCheck)
+            F:GetModule('Tooltip').ReskinTooltip(_G.DBMRangeCheck)
             _G.DBMRangeCheck.styled = true
         end
     end)
@@ -174,7 +173,7 @@ function THEME:ReskinDBM()
     if _G.DBM.InfoFrame then
         _G.DBM.InfoFrame:Show(5, 'test')
         _G.DBM.InfoFrame:Hide()
-        _G.DBMInfoFrame:HookScript('OnShow', TOOLTIP.ReskinTooltip)
+        _G.DBMInfoFrame:HookScript('OnShow', F:GetModule('Tooltip').ReskinTooltip)
     end
 
     ForceSetting()

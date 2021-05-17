@@ -1,5 +1,4 @@
 local F, C = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('Tooltip')
 
 local function updateSelectedTexture(texture, shown)
 	local button = texture.__owner
@@ -70,5 +69,5 @@ C.Themes["Blizzard_RuneforgeUI"] = function()
 	F.ReskinArrow(pageControl.BackwardButton, "left")
 	F.ReskinArrow(pageControl.ForwardButton, "right")
 
-	TOOLTIP.ReskinTooltip(frame.ResultTooltip)
+	F:GetModule('Tooltip').ReskinTooltip(frame.ResultTooltip)
 end
