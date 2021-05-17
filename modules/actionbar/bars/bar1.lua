@@ -13,7 +13,7 @@ local UnitVehicleSkin = UnitVehicleSkin
 local HasOverrideActionBar = HasOverrideActionBar
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:RegisterModule('Actionbar')
 
 local margin, padding = 3, 3
 
@@ -211,11 +211,13 @@ function ACTIONBAR:OnLogin()
     ACTIONBAR:CreateExtrabar()
     ACTIONBAR:CreateLeaveVehicleBar()
     ACTIONBAR:CreateCustomBar()
+    ACTIONBAR:CreateBarShadow()
     ACTIONBAR:RemoveBlizzArt()
     ACTIONBAR:RestyleButtons()
     ACTIONBAR:UpdateAllScale()
     ACTIONBAR:UpdateActionBarFade()
     ACTIONBAR:CooldownNotify()
-    ACTIONBAR:CooldownFlash()
-    ACTIONBAR:CreateBarShadow()
+    ACTIONBAR:CooldownPulse()
+    ACTIONBAR:CooldownDesaturate()
+    ACTIONBAR:ButtonFlash()
 end

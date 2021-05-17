@@ -10,11 +10,12 @@
     <Script file="bars\extrabar.lua"/>
     <Script file="bars\leavevehiclebar.lua"/>
     <Script file="bars\removeblizzart.lua"/>
-    <Script file="barfade.lua"/>
     <Script file="bind.lua"/>
-    <Script file="buttonrange.lua"/>
-    <Script file="buttonstyle.lua"/>
-    <Script file="cdflash.lua"/>
-    <Script file="cdnotify.lua"/>
-    <Script file="cooldown.lua"/>
+    <Script file="button_flash.lua"/>
+    <Script file="button_range.lua"/>
+    <Script file="button_style.lua"/>
+    <Script file="cooldown_desaturate.lua"/>
+    <Script file="cooldown_notify.lua"/>
+    <Script file="cooldown_pulse.lua"/>
+    <Script file="fader.lua"/>
 </Ui>

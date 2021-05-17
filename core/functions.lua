@@ -299,7 +299,7 @@ do
         elseif s > 3 then
             return format('|cffffe700%d|r', s), s - floor(s) -- yellow
         else
-            if C.DB.Actionbar.DecimalCD then
+            if C.DB.Cooldown.Decimal then
                 return format('|cfffd3612%.1f|r', s), s - format('%.1f', s) -- red
             else
                 return format('|cfffd3612%d|r', s + .5), s - floor(s)

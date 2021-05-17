@@ -24,7 +24,7 @@ local OverrideActionBarPowerBar = OverrideActionBarPowerBar
 local OverrideActionBarPitchFrame = OverrideActionBarPitchFrame
 
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 local scripts = {
     'OnShow',

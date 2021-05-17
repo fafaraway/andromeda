@@ -25,7 +25,7 @@ local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE
 local hooksecurefunc = hooksecurefunc
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 local fadeInTime, fadeOutTime, maxAlpha, elapsed, runtimer = 0.3, 0.7, 1, 0, 0
 local animScale, iconSize, holdTime, threshold = 1.5, 32, 0, 3
@@ -229,8 +229,8 @@ function frame:PLAYER_ENTERING_WORLD()
     end
 end
 
-function ACTIONBAR:CooldownFlash()
-    if not C.DB.Actionbar.CDFlash then
+function ACTIONBAR:CooldownPulse()
+    if not C.DB.Actionbar.CooldownPulse then
         return
     end
 

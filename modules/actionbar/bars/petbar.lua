@@ -6,7 +6,7 @@ local CreateFrame = CreateFrame
 local RegisterStateDriver = RegisterStateDriver
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 local margin, padding = 3, 3
 

@@ -9,14 +9,14 @@ local CreateFrame = CreateFrame
 local RegisterStateDriver = RegisterStateDriver
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 function ACTIONBAR:CustomBar(anchor)
     local padding = C.DB.Actionbar.CBPadding
     local margin = C.DB.Actionbar.CBMargin
     local size = C.DB.Actionbar.CBButtonSize
     local num = 12
-    local name = 'CustomBar'
+    local name = 'FreeUI_CustomBar'
     local page = 8
 
     local frame = CreateFrame('Frame', name, _G.UIParent, 'SecureHandlerStateTemplate')
@@ -24,9 +24,7 @@ function ACTIONBAR:CustomBar(anchor)
     frame:SetHeight(size + 2 * padding)
     frame:SetPoint(unpack(anchor))
 
-    if C.DB.Actionbar.CustomBar then
-        frame.mover = F.Mover(frame, L[name], 'CustomBar', anchor)
-    end
+    frame.mover = F.Mover(frame, L[name], 'CustomBar', anchor)
 
     frame.buttons = {}
 

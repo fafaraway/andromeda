@@ -15,7 +15,7 @@ local CAPSLOCK_KEY_TEXT = CAPSLOCK_KEY_TEXT
 local RANGE_INDICATOR = RANGE_INDICATOR
 
 local F, C = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 local function CallButtonFunctionByName(button, func, ...)
     if button and func and button[func] then
@@ -234,7 +234,7 @@ function ACTIONBAR:UpdateHotKey()
     if text == RANGE_INDICATOR then
         hotkey:SetText('')
     else
-        hotkey:SetText(text)
+        hotkey:SetText('|cffffffff' .. text)
     end
 end
 

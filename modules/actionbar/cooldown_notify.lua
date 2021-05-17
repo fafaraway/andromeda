@@ -17,13 +17,13 @@ local IsPartyLFG = IsPartyLFG
 local IsInRaid = IsInRaid
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 local debugMode = false
 
 local function SendNotifyMessage(msg)
     if debugMode and C.IsDeveloper then
-        print(msg)
+        F:Debug(msg)
     elseif IsPartyLFG() then
         SendChatMessage(msg, 'INSTANCE_CHAT')
     elseif IsInRaid() then
@@ -64,7 +64,7 @@ function ACTIONBAR:SendCurrentItem(thisTime, itemID, itemLink)
 end
 
 function ACTIONBAR:AnalyzeButtonCooldown()
-    if not C.DB.Actionbar.CDNotify then
+    if not C.DB.Actionbar.CooldownNotify then
         return
     end
     if not IsInGroup() then
