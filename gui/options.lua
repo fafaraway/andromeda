@@ -1,8 +1,8 @@
 local F, C, L = unpack(select(2, ...))
-local GUI = F.Modules.GUI
+local GUI = F:GetModule('GUI')
 local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
-
+local ACTIONBAR = F:GetModule('Actionbar')
 
 -- Auta
 local function SetupAuraSize()
@@ -28,7 +28,7 @@ local function SetupAdditionalbar()
 end
 
 local function UpdateHotkeys()
-    local Bar = F.ACTIONBAR
+    local Bar = ACTIONBAR
     for _, button in pairs(Bar.buttons) do
         if button.UpdateHotkeys then
             button:UpdateHotkeys(button.buttonType)
@@ -139,66 +139,46 @@ end
 
 -- Options
 GUI.OptionsList = {
-    [1] = {
-        {1, 'General', 'CursorTrail', L['Cursor trail'], nil, nil, nil, L.GUI.GENERAL.CURSOR_TRAIL_TIP},
-        {1, 'General', 'Vignette', L['Vignette'], nil, nil, nil, L.GUI.GENERAL.VIGNETTING_TIP},
-
-        {3, 'General', 'VignetteAlpha', L.GUI.GENERAL.VIGNETTING_ALPHA, true, {0, 1, .1}},
-
-
-
-
-        {1, 'ACCOUNT', 'UseCustomClassColor', L.GUI.GENERAL.USE_CUSTOM_CLASS_COLOR, nil, SetupCustomClassColor, nil, L.GUI.GENERAL.USE_CUSTOM_CLASS_COLOR_TIP},
-        {1, 'ACCOUNT', 'FontOutline', L.GUI.GENERAL.FONT_OUTLINE, nil, nil, nil, L.GUI.GENERAL.FONT_OUTLINE_TIP},
-
-        {3, 'ACCOUNT', 'UIScale', L.GUI.GENERAL.UI_SCALE, true, {.5, 2, .01}, nil, L.GUI.GENERAL.UI_SCALE_TIP},
-
-        {1, 'General', 'HideTalkingHead', L.GUI.GENERAL.HIDE_TALKINGHEAD},
-        {1, 'General', 'HideBossBanner', L.GUI.GENERAL.HIDE_BOSS_BANNER, nil},
-
-
-
-        {1, 'General', 'HideBossEmote', L.GUI.GENERAL.HIDE_BOSS_EMOTE},
-        {1, 'General', 'SimplifyErrors', L.GUI.GENERAL.SIMPLIFY_ERRORS, nil, nil, nil, L.GUI.GENERAL.SIMPLIFY_ERRORS_TIP},
-
-
-
-        {1, 'General', 'FasterLoot', L.GUI.GENERAL.FASTER_LOOT},
-        {1, 'General', 'FasterMovieSkip', L.GUI.GENERAL.FASTER_MOVIE_SKIP, true, nil, nil, L.GUI.GENERAL.FASTER_MOVIE_SKIP_TIP},
-        {1, 'General', 'SmoothZooming', L.GUI.GENERAL.SMOOTH_ZOOMING, nil, nil, nil, L.GUI.GENERAL.SMOOTH_ZOOMING_TIP},
-        {1, 'General', 'ActionMode', L.GUI.GENERAL.ACTION_MODE, true, nil, nil, L.GUI.GENERAL.ACTION_MODE_TIP},
-
-        {1, 'General', 'ScreenSaver', L.GUI.GENERAL.SCREEN_SAVER},
-        {1, 'General', 'AutoTakeScreenshot', L.GUI.GENERAL.AUTO_TAKE_SCREENSHOT, true, SetupAutoTakeScreenshot},
-
-        {4, 'ACCOUNT', 'NumberFormat', L.GUI.GENERAL.NUMBER_FORMAT, nil, {L.GUI.GENERAL.NUMBER_TYPE1, L.GUI.GENERAL.NUMBER_TYPE2, L.GUI.GENERAL.NUMBER_TYPE3}},
-        {4, 'ACCOUNT', 'TextureStyle', L.GUI.GENERAL.TEXTURE_STYLE, true, {}},
-
-
-
-
+    [1] = { -- general
+        {1, 'General', 'CursorTrail', L['Cursor trail']},
+        {1, 'General', 'Vignette', L['Vignette'], nil, nil, nil, L['|nAdd shadowed overlay to screen corner.']},
+        {3, 'General', 'VignetteAlpha', L['Vignette Alpha'], true, {0, 1, .1}},
+        {1, 'ACCOUNT', 'UseCustomClassColor', L['Custom class color'], nil, SetupCustomClassColor},
+        {1, 'ACCOUNT', 'FontOutline', L['Font outline'], nil, nil, nil, L['|nAdd font outline globally, enable this if you run game on low resolution.']},
+        {3, 'ACCOUNT', 'UIScale', L['UI scale'], true, {.5, 2, .01}, nil, L['|nChange global scale for whole interface.|nRecommend 1080P set to 1, 1440P set to 1.2-1.4, 2160P set to 2.']},
+        {1, 'General', 'HideTalkingHead', L['Hide talking head']},
+        {1, 'General', 'HideBossBanner', L['Hide boss banner'], nil},
+        {1, 'General', 'HideBossEmote', L['Hide boss emote'], true},
+        {1, 'General', 'SimplifyErrors', L['Simplify Errors'], nil, nil, nil, L['|nSimplify standard error messages when you in combat. It\'s the red text in the middle of your screen that constantly annoys you with things like, \'Your too far away!\', \'Not enough mana.\', etc.']},
+        {1, 'General', 'FasterLoot', L['Faster auto looting'], nil, nil, nil, L['|nLoot instantly. |nNo more waiting for the loot window to be populated.']},
+        {1, 'General', 'FasterMovieSkip', L['Faster movie skip'], true, nil, nil, L['|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
+        {1, 'General', 'SmoothZooming', L['Camera faster zooming'], nil, nil, nil, L['|nFaster and smoother camera zooming.']},
+        {1, 'General', 'ActionMode', L['Camera action mode'], true, nil, nil, L['|nEnable blizzard action camera.']},
+        {1, 'General', 'ScreenSaver', L['Screen saver']},
+        {1, 'General', 'AutoScreenshot', L['Auto screenshot'], true, SetupAutoTakeScreenshot, nil, L['|nTake screenshots automatically based on specific events.']},
+        {4, 'ACCOUNT', 'NumberFormat', L['Number Format'], nil, {L['Standard: b/m/k'], L['Asian: y/w'], L['Full digitals']}},
+        {4, 'ACCOUNT', 'TextureStyle', L['Texture Style'], true, {}},
     },
-    [2] = {
-        {1, 'Notification', 'Enable', L.GUI.NOTIFICATION.ENABLE},
-        {1, 'Notification', 'BagFull', L.GUI.NOTIFICATION.BAG_FULL},
-        {1, 'Notification', 'NewMail', L.GUI.NOTIFICATION.NEW_MAIL, true},
-        {1, 'Notification', 'RareFound', L.GUI.NOTIFICATION.RARE_FOUND},
-        {1, 'Notification', 'LowDurability', L.GUI.NOTIFICATION.LOW_DURABILITY, true},
-        {1, 'Notification', 'Paragon', L.GUI.NOTIFICATION.PARAGON},
-        {1, 'ACCOUNT', 'VersionCheck', L.GUI.NOTIFICATION.VERSION_CHECK, true},
+    [2] = { -- notification
+        {1, 'Notification', 'Enable', L['Enable Notification']},
+        {1, 'Notification', 'BagFull', L['Backpack full']},
+        {1, 'Notification', 'NewMail', L['New mail'], true},
+        {1, 'Notification', 'RareFound', L['Rare found']},
+        {1, 'Notification', 'LowDurability', L['Durability low'], true},
+        {1, 'Notification', 'ParagonChest', L['Paragon chest']},
+        {1, 'ACCOUNT', 'VersionCheck', L['Addon outdated'], true},
     },
-    [3] = {
-        -- infobar
-        {1, 'infobar', 'enable', L.GUI.INFOBAR.ENABLE},
-        {1, 'infobar', 'anchor_top', L.GUI.INFOBAR.ANCHOR_TOP},
-        {1, 'infobar', 'mouseover', L.GUI.INFOBAR.MOUSEOVER, true},
-        {1, 'infobar', 'stats', L.GUI.INFOBAR.STATS},
-        {1, 'infobar', 'spec', L.GUI.INFOBAR.SPEC, true},
-        {1, 'infobar', 'durability', L.GUI.INFOBAR.DURABILITY},
-        {1, 'infobar', 'guild', L.GUI.INFOBAR.GUILD, true},
-        {1, 'infobar', 'friends', L.GUI.INFOBAR.FRIENDS},
-        {1, 'infobar', 'report', L.GUI.INFOBAR.REPORT, true},
-        {1, 'infobar', 'currency', L.GUI.INFOBAR.CURRENCY},
+    [3] = { -- infobar
+        {1, 'Infobar', 'Enable', L['Enable Infobar']},
+        {1, 'Infobar', 'AnchorTop', L['Anchor to top'], nil, nil, nil, L['|nInfobar will be anchored to the bottom of the screen if the option is disabled.']},
+        {1, 'Infobar', 'Mouseover', L['Show blocks by mouseover'], true},
+        {1, 'Infobar', 'Stats', L['System stats']},
+        {1, 'Infobar', 'Report', L['Daily/weekly infomation'], true},
+        {1, 'Infobar', 'Friends', L['Friends']},
+        {1, 'Infobar', 'Guild', L['Guild'], true},
+        {1, 'Infobar', 'Durability', L['Equipment durability']},
+        {1, 'Infobar', 'Currencies', L['Currencies stats'], true},
+        {1, 'Infobar', 'Spec', L['Specialization']},
     },
     [4] = {
         -- chat
@@ -238,34 +218,36 @@ GUI.OptionsList = {
         {2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList},
     },
     [5] = { -- aura
-        {1, 'Aura', 'Enable', L['Enable aura'], nil, SetupAuraSize},
+        {1, 'Aura', 'Enable', L['Enable Aura'], nil, SetupAuraSize},
         {1, 'Aura', 'BuffReverse', L['Buff reverse growth']},
         {1, 'Aura', 'DebuffReverse', L['Debuff reverse growth'], true},
         {1, 'Aura', 'Reminder', L['Buff missing reminder'], nil, nil, nil, L['|nRemind you when lack of your own class spell.|nSupport: Stamina, Poisons, Arcane Intellect, Battle Shout.']},
     },
-    [6] = {
-        {1, 'Actionbar', 'Enable', L.GUI.ACTIONBAR.ENABLE},
-        {1, 'Actionbar', 'Hotkey', L.GUI.ACTIONBAR.HOTKEY, nil, nil, UpdateHotkeys},
-        {4, 'Actionbar', 'Layout', L.GUI.ACTIONBAR.LAYOUT, true, {L.GUI.ACTIONBAR.LAYOUT_1, L.GUI.ACTIONBAR.LAYOUT_2, L.GUI.ACTIONBAR.LAYOUT_3, L.GUI.ACTIONBAR.LAYOUT_4}},
-        {1, 'Actionbar', 'MacroName', L.GUI.ACTIONBAR.MACRO_NAME},
-        {1, 'Actionbar', 'CountNumber', L.GUI.ACTIONBAR.COUNT_NUMBER},
-        {3, 'Actionbar', 'Scale', L.GUI.ACTIONBAR.SCALE, true, {.5, 2, .1}},
-        {1, 'Actionbar', 'ClassColor', L.GUI.ACTIONBAR.CLASS_COLOR},
-        {1, 'Actionbar', 'DynamicFade', L.GUI.ACTIONBAR.DYNAMIC_FADE, nil, SetupActionbarFade, nil, L.GUI.ACTIONBAR.DYNAMIC_FADE_TIP},
+    [6] = { -- actionbar
+        {1, 'Actionbar', 'Enable', L['Enable Actionbar']},
+        {1, 'Actionbar', 'Hotkey', L['Show hotkey'], nil, nil, UpdateHotkeys},
+        {4, 'Actionbar', 'Layout', L['Actionbar Layout'], true, {'1 * 12', '2 * 12', '3 * 12', '2 * 18'}},
+        {1, 'Actionbar', 'MacroName', L['Show macro name']},
+        {1, 'Actionbar', 'CountNumber', L['Show charge count']},
+        {3, 'Actionbar', 'Scale', L['Actionbar Scale'], true, {.5, 2, .1}},
+        {1, 'Actionbar', 'ClassColor', L['Colored by class']},
+        {1, 'Actionbar', 'DynamicFade', L['Conditional fader'], nil, SetupActionbarFade},
+        {1, 'Actionbar', 'CooldownNotify', L['Cooldown notify'], true, nil, nil, L['|nYou can mouse wheel on actionbar button, and send its cooldown status to your group.']},
+        {1, 'Actionbar', 'CooldownPulse', L['Cooldown pulse'], nil, nil, nil, L['|nTrack your spell cooldown using a pulse icon in the center of the screen.']},
+        {1, 'Actionbar', 'CooldownDesaturate', L['Cooldown desaturate'], true, nil, nil, L['|nShow the action bar icons desaturated when they are on cooldown.']},
+        {1, 'Actionbar', 'ButtonFlash', L['Button flash'], nil, nil, nil, L['|nAdd flash animation to pressed spell button.']},
         {},
-        {1, 'Actionbar', 'Bar4', L.GUI.ACTIONBAR.BAR4},
-        {1, 'Actionbar', 'Bar5', L.GUI.ACTIONBAR.BAR5, true},
-        {1, 'Actionbar', 'PetBar', L.GUI.ACTIONBAR.PET_BAR},
-        {1, 'Actionbar', 'StanceBar', L.GUI.ACTIONBAR.STANCE_BAR, true},
-        {1, 'Actionbar', 'VehicleBar', L.GUI.ACTIONBAR.LEAVE_VEHICLE_BAR},
-        {1, 'Actionbar', 'CustomBar', L.GUI.ACTIONBAR.CUSTOM_BAR, true, SetupAdditionalbar, nil, L.GUI.ACTIONBAR.CUSTOM_BAR_TIP},
+        {1, 'Actionbar', 'Bar4', L['Enable sidebar 1']},
+        {1, 'Actionbar', 'Bar5', L['Enable sidebar 2'], true},
+        {1, 'Actionbar', 'PetBar', L['Enable pet bar']},
+        {1, 'Actionbar', 'StanceBar', L['Enable stance bar'], true},
+        {1, 'Actionbar', 'VehicleBar', L['Enable leave vehicle button']},
+        {1, 'Actionbar', 'CustomBar', L['Enable additional bar'], true, SetupAdditionalbar, nil, L['|nAdd an additional actionbar for you to customize.']},
         {},
-        {1, 'Actionbar', 'CooldownCount', L.GUI.ACTIONBAR.COOLDOWN_COUNT},
-        {1, 'Actionbar', 'DecimalCD', L.GUI.ACTIONBAR.DECIMAL_CD},
-        {1, 'Actionbar', 'OverrideWA', L.GUI.ACTIONBAR.OVERRIDE_WA, true},
-        {1, 'Actionbar', 'CDNotify', L.GUI.ACTIONBAR.CD_NOTIFY, nil, nil, nil, L.GUI.ACTIONBAR.CD_NOTIFY_TIP},
-        {1, 'Actionbar', 'CDFlash', L.GUI.ACTIONBAR.CD_FLASH, true, nil, nil, L.GUI.ACTIONBAR.CD_FLASH_TIP},
-        {1, 'Actionbar', 'DesaturatedIcon', L.GUI.ACTIONBAR.DESATURATED_ICON, nil, nil, nil, L.GUI.ACTIONBAR.DESATURATED_ICON_TIP},
+        {1, 'Cooldown', 'Enable', L['Enable cooldown count']},
+        {1, 'Cooldown', 'Decimal', L['Decimal timer']},
+        {1, 'Cooldown', 'OverrideWA', L['Override weakauras'], true},
+
     },
     [7] = {
         -- combat
@@ -347,7 +329,7 @@ GUI.OptionsList = {
         {1, 'tooltip', 'health_value', L.GUI.TOOLTIP.HEALTH_VALUE, true},
     },
     [12] = { -- unitframe
-        {1, 'Unitframe', 'Enable', L['Enable unitframes'], nil, SetupUnitFrameSize},
+        {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
         {1, 'Unitframe', 'Transparent', L['Transparent mode']},
         {4, 'Unitframe', 'ColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
         {1, 'Unitframe', 'Portrait', L['Portrait']},
@@ -367,7 +349,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'RunesTimer', L['DK runes timer']},
         {1, 'Unitframe', 'StaggerBar', L['Monk stagger bar']},
         {},
-        {1, 'Unitframe', 'Castbar', L['Enable castbar'], nil, SetupCastbar},
+        {1, 'Unitframe', 'Castbar', L['Enable Castbar'], nil, SetupCastbar},
         {1, 'Unitframe', 'CompactCastbar', L['Compact style'], true},
         {1, 'Unitframe', 'SpellName', L['Spell name']},
         {1, 'Unitframe', 'SpellTime', L['Spell timer'], true},
@@ -380,7 +362,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'Arena', L['Enable arena frames'], true},
     },
     [13] = { -- groupframe
-        {1, 'Unitframe', 'Group', L['Enable group frames'], nil, SetupGroupFrameSize},
+        {1, 'Unitframe', 'Group', L['Enable Groupframes'], nil, SetupGroupFrameSize},
         {1, 'Unitframe', 'SmartRaid', L['Smart layout'], nil, nil, UpdateAllHeaders, L['|nOnly show raid frames if there are more than 5 members in your group.|nIf disabled, show raid frames when in raid, show party frames when in party.']},
         {4, 'Unitframe', 'GroupColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
         {1, 'Unitframe', 'GroupShowName', L['Show names']},
@@ -403,7 +385,7 @@ GUI.OptionsList = {
         {1, 'Unitframe', 'RaidReverse', L['Raid frames reverse grow'], true},
     },
     [14] = { -- nameplate
-        {1, 'Nameplate', 'Enable', L['Enable nameplate'], nil, SetupNameplateSize},
+        {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize},
 
         {1, 'Nameplate', 'ShowAura', L['Show auras'], nil, SetupAuraFilter},
         {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}, nil, L.GUI.NAMEPLATE.AURA_FILTER_MODE_TIP},
