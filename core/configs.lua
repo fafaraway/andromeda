@@ -6,7 +6,7 @@ local CreateFrame = CreateFrame
 local C_EncounterJournal_GetSectionInfo = C_EncounterJournal.GetSectionInfo
 
 local F, C = unpack(select(2, ...))
-local GUI = F.Modules.GUI
+local GUI = F:RegisterModule('GUI')
 
 C.ReminderBuffsList = {
     ITEMS = {
@@ -1008,7 +1008,7 @@ C.CharacterSettings = {
         GemEnchant = true,
         AzeriteTrait = true,
 
-        AutoTakeScreenshot = true,
+        AutoScreenshot = true,
         EarnedNewAchievement = true,
         ChallengeModeCompleted = true,
         PlayerLevelUp = false,
@@ -1240,7 +1240,7 @@ C.CharacterSettings = {
         Arena = true,
             ArenaWidth = 120,
             ArenaHeight = 18,
-            ArenaGap = 80,
+            ArenaGap = 60,
             ArenaAurasPerRow = 6,
     },
 
@@ -1335,18 +1335,19 @@ C.CharacterSettings = {
         ['who_pings'] = true,
         ['progress_bar'] = true,
     },
-    ['infobar'] = {
-        ['enable'] = true,
-        ['anchor_top'] = true,
-        ['bar_height'] = 14,
-        ['mouseover'] = true,
-        ['stats'] = true,
-        ['spec'] = true,
-        ['durability'] = true,
-        ['guild'] = true,
-        ['friends'] = true,
-        ['report'] = true,
-        ['currency'] = true,
+
+    Infobar = {
+        Enable = true,
+        AnchorTop = true,
+        Height = 14,
+        Mouseover = true,
+        Stats = true,
+        Spec = true,
+        Durability = true,
+        Guild = true,
+        Friends = true,
+        Report = true,
+        Currencies = true,
     },
 
     Notification = {
@@ -1355,7 +1356,7 @@ C.CharacterSettings = {
         NewMail = true,
         LowDurability = true,
         RareFound = true,
-        Paragon = true,
+        ParagonChest = true,
     },
 
     ['chat'] = {
@@ -1401,6 +1402,8 @@ C.CharacterSettings = {
         CountNumber = true,
         ClassColor = false,
 
+        ButtonFlash = true,
+
         Layout = 4, -- 1*12 2*12 3*12 2*18
 
         Bar4 = false,
@@ -1427,15 +1430,17 @@ C.CharacterSettings = {
         CBButtonNumber = 12,
         CBButtonPerRow = 6,
 
-        CDNotify = true,
-        CDFlash = true,
-
-        CooldownCount = true,
-        DecimalCD = true,
-        OverrideWA = false,
-        DesaturatedIcon = true,
+        CooldownNotify = true,
+        CooldownPulse = true,
+        CooldownDesaturate = true,
 
         BindType = 1,
+    },
+
+    Cooldown = {
+        Enable = true,
+        Decimal = true,
+        OverrideWA = false,
     },
 
     Quest = {
@@ -1456,6 +1461,8 @@ C.AccountSettings = {
     BorderColor = {r = .24, g = .24, b = .24},
     ButtonBackdropColor = {r = .12, g = .12, b = .12},
     ButtonBackdropAlhpa = .25,
+    GuildSortBy = 1,
+    GuildSortOrder = true,
     GradientStyle = true,
     ReskinBlizz = true,
     ReskinDBM = true,
