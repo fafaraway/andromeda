@@ -46,7 +46,7 @@ local COMBAT = C.Assets.Fonts.Combat
 local function SetFont(obj, font, size, flag, shadow)
     if not font then
         if C.IsDeveloper then
-            print('UNKNOWN FONT.')
+            F:Debug('UNKNOWN FONT.')
         end
         return
     end
@@ -62,7 +62,7 @@ local function SetFont(obj, font, size, flag, shadow)
     obj:SetFont(font, size, outline and 'OUTLINE')
 
     obj:SetShadowColor(0, 0, 0, outline and 0 or 1)
-    obj:SetShadowOffset(2, -2)
+    obj:SetShadowOffset(1, -1)
 
     -- if type(shadow) == 'string' and shadow == 'THICK' then
     --     obj:SetShadowColor(0, 0, 0, 1)

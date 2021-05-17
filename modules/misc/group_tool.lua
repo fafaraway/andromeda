@@ -62,7 +62,7 @@ local ROLE_POLL = ROLE_POLL
 local RAID_CONTROL = RAID_CONTROL
 
 local F, C, L = unpack(select(2, ...))
-local MISC = F.MISC
+local MISC = F:GetModule('General')
 
 function MISC:RaidTool_Visibility(frame)
     if IsInGroup() then

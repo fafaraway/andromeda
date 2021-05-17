@@ -14,7 +14,7 @@ local UIDROPDOWN_MENU_LEVEL = UIDROPDOWN_MENU_LEVEL
 local OKAY = OKAY
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:ObjectiveTrackerMover()
     local frame = CreateFrame('Frame', 'ObjectiveTrackerMover', _G.UIParent)

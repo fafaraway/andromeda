@@ -13,7 +13,7 @@ local GUILD = GUILD
 local DELETE_ITEM_CONFIRM_STRING = DELETE_ITEM_CONFIRM_STRING
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:RegisterModule('Blizzard')
 
 local BLIZZARD_LIST = {}
 

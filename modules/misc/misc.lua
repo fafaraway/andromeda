@@ -47,7 +47,7 @@ local YES = YES
 local NO = NO
 
 local F, C, L = unpack(select(2, ...))
-local MISC = F.MISC
+local MISC = F:RegisterModule('General')
 
 local MISC_LIST = {}
 

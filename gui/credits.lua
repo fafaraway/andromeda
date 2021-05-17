@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local GUI = F.Modules.GUI
+local GUI = F:GetModule('GUI')
 
 
 local function ResetUrlBox(self)

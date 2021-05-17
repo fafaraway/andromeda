@@ -9,7 +9,7 @@ local GetServerTime = GetServerTime
 local SecondsToClock = SecondsToClock
 
 local F, C = unpack(select(2, ...))
-local MISC = F.MISC
+local MISC = F:GetModule('General')
 
 local afkStart
 local function UpdateTimer(self)

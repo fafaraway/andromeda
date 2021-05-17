@@ -31,7 +31,6 @@ local ITEM_SPELL_KNOWN = ITEM_SPELL_KNOWN
 local COLLECTED = COLLECTED
 
 local F = unpack(select(2, ...))
-local TOOLTIP = F:GetModule('Tooltip')
 
 local COLOR = {
     r = .1,
@@ -75,7 +74,7 @@ local function IsAlreadyKnown(link, index)
         if itemClassID == LE_ITEM_CLASS_BATTLEPET and index then
             local speciesID = F.ScanTip:SetGuildBankItem(GetCurrentGuildBankTab(), index)
             return isPetCollected(speciesID)
-        elseif TOOLTIP.ConduitData[linkID] and TOOLTIP.ConduitData[linkID] >= level then
+        elseif F:GetModule('Tooltip').ConduitData[linkID] and F:GetModule('Tooltip').ConduitData[linkID] >= level then
             return true
         else
             if knowns[link] then

@@ -28,7 +28,7 @@ local WEAPON_SPEED = WEAPON_SPEED
 local ATTACK_SPEED = ATTACK_SPEED
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:MissingStats()
     if not C.DB.General.MissingStats then

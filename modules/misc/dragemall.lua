@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local MISC = F.MISC
+local MISC = F:GetModule('General')
 
 
 local _G = getfenv(0)
@@ -51,7 +51,7 @@ local frames = {
 local function IsFrameExists()
 	for k in pairs(frames) do
 		local name = _G[k]
-		if not name and DB.IsDeveloper then print('Frame not found:', k) end
+		if not name and C.IsDeveloper then F:Debug('Frame not found:', k) end
 	end
 end
 

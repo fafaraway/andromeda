@@ -5,7 +5,7 @@ local format = format
 local CreateFrame = CreateFrame
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:CreatButton(parent, width, height, text, anchor)
     local button = CreateFrame('Button', nil, parent, 'UIPanelButtonTemplate')

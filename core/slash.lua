@@ -47,8 +47,6 @@ local ACCEPT = ACCEPT
 local CANCEL = CANCEL
 
 local F, C, L = unpack(select(2, ...))
-local INSTALL = F.Modules.Tutorial
-local ACTIONBAR = F.ACTIONBAR
 
 
 _G.SlashCmdList.RELOADUI = function()
@@ -88,7 +86,7 @@ _G.SlashCmdList.FREEUI = function(str)
     if cmd == 'reset' then
         StaticPopup_Show('FREEUI_RESET')
     elseif cmd == 'install' then
-        INSTALL:HelloWorld()
+        F:GetModule('Tutorial'):HelloWorld()
     elseif cmd == 'unlock' then
         F:MoverConsole()
     elseif cmd == 'config' then
@@ -168,7 +166,7 @@ local function DisbandRaidGroup()
 end
 
 _G.StaticPopupDialogs.DISBAND_RAID = {
-    text = L['Are you sure you want to disband the group?'],
+    text = L['Are you sure to |cffff0000disband|r your group?'],
     button1 = ACCEPT,
     button2 = CANCEL,
     OnAccept = DisbandRaidGroup,

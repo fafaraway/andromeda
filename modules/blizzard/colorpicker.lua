@@ -9,7 +9,7 @@ local CALENDAR_COPY_EVENT = CALENDAR_COPY_EVENT
 local CALENDAR_PASTE_EVENT = CALENDAR_PASTE_EVENT
 
 local F = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 local colorBuffer = {}
 local editingText

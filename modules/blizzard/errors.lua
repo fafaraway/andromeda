@@ -6,7 +6,7 @@ local InCombatLockdown = InCombatLockdown
 local FadingFrame_Show = FadingFrame_Show
 
 local F, C = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 local holdtime = .52
 local fadeintime = .08

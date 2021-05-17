@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INSTALL = F.Modules.Tutorial
+local INSTALL = F:RegisterModule('Tutorial')
 local CHAT = F.CHAT
 
 

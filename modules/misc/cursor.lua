@@ -7,7 +7,7 @@ local GetScaledCursorPosition = GetScaledCursorPosition
 local C_Timer_NewTicker = C_Timer.NewTicker
 
 local F, C = unpack(select(2, ...))
-local MISC = F.MISC
+local MISC = F:GetModule('General')
 
 local pollingRate, numLines = 0.05, 15
 local lines = {}

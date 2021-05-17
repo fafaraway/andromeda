@@ -22,7 +22,7 @@ local CANCEL = CANCEL
 local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
 local F, C, L = unpack(select(2, ...))
-local MOVER = F.Modules.Layout
+local MOVER = F:RegisterModule('Layout')
 
 -- Grids
 local toggle = 0

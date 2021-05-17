@@ -11,7 +11,7 @@ local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local SOUNDKIT_ALARM_CLOCK_WARNING_3 = SOUNDKIT.ALARM_CLOCK_WARNING_3
 
 local F, C = unpack(select(2, ...))
-local QUEST = F.QUEST
+local QUEST = F:RegisterModule('Quest')
 
 local completedQuest = {}
 local initComplete

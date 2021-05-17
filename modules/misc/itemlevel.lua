@@ -19,8 +19,7 @@ local ItemLocation = ItemLocation
 local EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION = EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION
 
 local F, C = unpack(select(2, ...))
-local MISC = F.MISC
-local TOOLTIP = F:GetModule('Tooltip')
+local MISC = F:GetModule('General')
 
 -- LuaFormatter off
 local inspectSlots = {

@@ -42,7 +42,7 @@ local ExtraActionButton1 = ExtraActionButton1
 local MAX_DISTANCE_YARDS = 1e5
 
 local F, C, L = unpack(select(2, ...))
-local ACTIONBAR = F.ACTIONBAR
+local ACTIONBAR = F:GetModule('Actionbar')
 
 local onlyCurrentZone = true
 

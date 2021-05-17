@@ -32,7 +32,7 @@ local C_TradeSkillUI_GetRecipeInfo = C_TradeSkillUI.GetRecipeInfo
 local C_TradeSkillUI_GetTradeSkillLine = C_TradeSkillUI.GetTradeSkillLine
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 local RUNEFORGING_ID = 53428
 local PICK_LOCK = 1804

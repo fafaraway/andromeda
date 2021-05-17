@@ -59,7 +59,7 @@ local function ParagonNotify(event, questID)
 end
 
 function NOTIFICATION:ParagonNotify()
-    if not C.DB.Notification.Paragon then
+    if not C.DB.Notification.ParagonChest then
         return
     end
 

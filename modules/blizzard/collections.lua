@@ -11,7 +11,7 @@ local C_PetJournal_IsPetTypeChecked = C_PetJournal.IsPetTypeChecked
 local C_PetJournal_SetAllPetTypesChecked = C_PetJournal.SetAllPetTypesChecked
 
 local F, C = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:PetTabs_Click(button)
     local activeCount = 0

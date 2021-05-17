@@ -27,7 +27,7 @@ local GUILD = GUILD
 local GREAT_VAULT_REWARDS = GREAT_VAULT_REWARDS
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 local hasAngryKeystones
 local frame

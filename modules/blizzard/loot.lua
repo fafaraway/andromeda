@@ -20,7 +20,7 @@ local ToggleDropDownMenu = ToggleDropDownMenu
 local MasterLooterFrame_UpdatePlayers = MasterLooterFrame_UpdatePlayers
 
 local F, C = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 local iconsize = 32
 local width = 140

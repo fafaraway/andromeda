@@ -15,7 +15,7 @@ local LE_GARRISON_TYPE_7_0 = Enum.GarrisonType.Type_7_0
 local LE_FOLLOWER_TYPE_GARRISON_7_0 = Enum.GarrisonFollowerType.FollowerType_7_0
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 function BLIZZARD:OrderHall_CreateIcon()
     local hall = CreateFrame('Frame', 'FreeUI_OrderHallIcon', _G.UIParent)

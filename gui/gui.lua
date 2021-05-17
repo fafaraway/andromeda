@@ -16,7 +16,7 @@ local APPLY = APPLY
 local CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON
 
 local F, C, L = unpack(select(2, ...))
-local GUI = F.Modules.GUI
+local GUI = F:GetModule('GUI')
 
 local guiTab = {}
 local guiPage = {}
@@ -64,9 +64,9 @@ local iconsList = {
 }
 
 GUI.TexturesList = {
-    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L.GUI.GENERAL.TEXTURE_NORM},
-    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L.GUI.GENERAL.TEXTURE_GRAD},
-    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L.GUI.GENERAL.TEXTURE_FLAT},
+    [1] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\norm_tex', name = L['Default']},
+    [2] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\grad_tex', name = L['Gradient']},
+    [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L['Flat']},
 }
 
 _G.StaticPopupDialogs.FREEUI_RELOAD = {

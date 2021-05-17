@@ -8,7 +8,7 @@ local hooksecurefunc = hooksecurefunc
 local IsAddOnLoaded = IsAddOnLoaded
 
 local F, C, L = unpack(select(2, ...))
-local BLIZZARD = F.BLIZZARD
+local BLIZZARD = F:GetModule('Blizzard')
 
 local POSITION, ANCHOR_POINT, YOFFSET = 'TOP', 'BOTTOM', -10
 local parentFrame
