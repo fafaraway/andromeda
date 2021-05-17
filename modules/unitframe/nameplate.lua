@@ -673,7 +673,7 @@ function NAMEPLATE:InitializeMajorSpells()
             end
         else
             if C.IsDeveloper then
-                print('Invalid nameplate major spell ID: ' .. spellID)
+                F:Debug('Invalid nameplate major spell ID: ' .. spellID)
             end
         end
     end

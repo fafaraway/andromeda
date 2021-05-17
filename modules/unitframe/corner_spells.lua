@@ -23,7 +23,7 @@ function UNITFRAME:InitializeCornerSpells()
         local name = GetSpellInfo(spellID)
         if not name then
             if C.IsDeveloper then
-                print('Invalid cornerspell ID: ' .. spellID)
+                F:Debug('Invalid cornerspell ID: ' .. spellID)
             end
         end
     end
