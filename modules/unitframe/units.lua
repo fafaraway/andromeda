@@ -25,7 +25,7 @@ local unitsPos = {
     focus = {'BOTTOM', _G.UIParent, 'BOTTOM', -240, 220},
     tof = {'TOPLEFT', 'oUF_Focus', 'TOPRIGHT', 6, 0},
     boss = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
-    arena = {'RIGHT', 'oUF_Player', 'LEFT', -300, 300},
+    arena = {'LEFT', 'oUF_Target', 'RIGHT', 120, 120},
     party = {'BOTTOMRIGHT', 'oUF_Player', 'TOPLEFT', -100, 60},
     raid = {'TOPRIGHT', 'Minimap', 'TOPLEFT', -6, -44},
 }
