@@ -1,195 +1,184 @@
-﻿local F, C, L = unpack(select(2, ...))
-local INFOBAR = F.INFOBAR
+﻿local _G = _G
+local unpack = unpack
+local select = select
+local tinsert = tinsert
+local CreateFrame = CreateFrame
+local RegisterStateDriver = RegisterStateDriver
 
+local F, C = unpack(select(2, ...))
+local INFOBAR = F:RegisterModule('Infobar')
 
+INFOBAR.Buttons = {}
 local barAlpha, buttonAlpha
 
-local bar = CreateFrame('Frame', 'FreeUI_Infobar', UIParent, 'BackdropTemplate')
-bar.buttons = {}
-
-INFOBAR.POSITION_LEFT, INFOBAR.POSITION_MIDDLE, INFOBAR.POSITION_RIGHT = 1, 2, 3
-
-local function onEvent(event)
-	if event == 'PLAYER_REGEN_DISABLED' then
-		bar.bg:SetBackdropBorderColor(1, 0, 0, 1)
-	else
-		bar.bg:SetBackdropBorderColor(0, 0, 0, 0)
-	end
+local function UpdateBorderColor(event)
+    local bar = INFOBAR.Bar
+    if event == 'PLAYER_REGEN_DISABLED' then
+        bar.bg:SetBackdropBorderColor(1, 0, 0, 1)
+    else
+        bar.bg:SetBackdropBorderColor(0, 0, 0, 0)
+    end
 end
 
-local function fadeIn(self, elapsed)
-	if barAlpha < 0.5 then
-		barAlpha = barAlpha + elapsed
-		buttonAlpha = buttonAlpha + (elapsed * 4)
-	else
-		barAlpha = 0.5
-		buttonAlpha = 1
-		self:SetScript('OnUpdate', nil)
-	end
+function INFOBAR:CreateInfoBar()
+    local mouseover = C.DB.Infobar.Mouseover
+    local anchorTop = C.DB.Infobar.AnchorTop
 
-	self.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    local bar = CreateFrame('Frame', 'FreeUI_Infobar', _G.UIParent, 'BackdropTemplate')
+    bar:SetFrameStrata('BACKGROUND')
+    bar:SetHeight(C.DB.Infobar.Height)
+    bar:SetPoint(anchorTop and 'TOPLEFT' or 'BOTTOMLEFT', 0, 0)
+    bar:SetPoint(anchorTop and 'TOPRIGHT' or 'BOTTOMRIGHT', 0, 0)
 
-	for _, button in pairs(bar.buttons) do
-		button:SetAlpha(buttonAlpha)
-	end
-end
-
-local function fadeOut(self, elapsed)
-	if barAlpha > .25 then
-		barAlpha = barAlpha - elapsed
-		buttonAlpha = buttonAlpha - (elapsed * 4)
-	else
-		barAlpha = .25
-		buttonAlpha = 0
-		self:SetScript('OnUpdate', nil)
-	end
-
-	self.bg:SetBackdropColor(0, 0, 0, barAlpha)
-
-	for _, button in pairs(bar.buttons) do
-		button:SetAlpha(buttonAlpha)
-	end
-end
-
-local function showBar()
-	bar:SetScript('OnUpdate', fadeIn)
-	bar:SetFrameStrata('HIGH')
-end
-bar.showBar = showBar
-
-local function hideBar()
-	bar:SetScript('OnUpdate', fadeOut)
-	bar:SetFrameStrata('BACKGROUND')
-end
-bar.hideBar = hideBar
-
-local function buttonOnEnterNoFade(self)
-	self:SetBackdropColor(C.r, C.g, C.b, .4)
-end
-
-local function buttonOnLeaveNoFade(self)
-	self:SetBackdropColor(0, 0, 0, .1)
-end
-
-local function buttonOnEnter(self)
-	if C.DB.infobar.mouseover then
-		showBar()
-	end
-	self:SetBackdropColor(C.r, C.g, C.b, .4)
-end
-
-local function buttonOnLeave(self)
-	if C.DB.infobar.mouseover then
-		hideBar()
-	end
-	self:SetBackdropColor(0, 0, 0, .1)
-end
-
-local function reanchorButtons()
-	local leftOffset, rightOffset = 0, 0
-
-	for i = 1, #bar.buttons do
-		local bu = bar.buttons[i]
-
-		if bu:IsShown() then
-			if bu.position == INFOBAR.POSITION_LEFT then
-				bu:SetPoint('LEFT', bar, 'LEFT', leftOffset, 0)
-				leftOffset = leftOffset + (bu:GetWidth() - C.Mult)
-			elseif bu.position == INFOBAR.POSITION_RIGHT then
-				bu:SetPoint('RIGHT', bar, 'RIGHT', rightOffset, 0)
-				rightOffset = rightOffset - (bu:GetWidth() - C.Mult)
-			else
-				bu:SetPoint('CENTER', bar)
-			end
-		end
-	end
-end
-
-function INFOBAR:showButton(button)
-	button:Show()
-	reanchorButtons()
-end
-
-function INFOBAR:hideButton(button)
-	button:Hide()
-	reanchorButtons()
-end
-
-function INFOBAR:addButton(text, position, width, clickFunc)
-	local bu = CreateFrame('Button', nil, bar, 'BackdropTemplate')
-	bu:SetPoint('TOP', bar, 'TOP')
-	bu:SetPoint('BOTTOM', bar, 'BOTTOM')
-	bu:SetWidth(width)
-	F.CreateBD(bu)
-    bu:SetBackdropColor(0, 0, 0, .1)
-    bu:SetBackdropBorderColor(0, 0, 0, 0)
-
-	if C.DB.infobar.mouseover then
-		bu:SetAlpha(0)
-	end
-
-	local buText = F.CreateFS(bu, C.Assets.Fonts.Condensed, 11, nil, text, nil, true, 'CENTER', 0, 0)
-	bu.Text = buText
-
-	bu:SetScript('OnMouseUp', clickFunc)
-	bu:SetScript('OnEnter', buttonOnEnter)
-	bu:SetScript('OnLeave', buttonOnLeave)
-
-	bu.position = position
-
-	tinsert(bar.buttons, bu)
-
-	reanchorButtons()
-
-	return bu
-end
-
-
-
-function INFOBAR:OnLogin()
-	if not C.DB.infobar.enable then return end
-
-	if C.DB.infobar.mouseover then
-		barAlpha = 0.25
-		buttonAlpha = 0
-	else
-		barAlpha = 0.65
-		buttonAlpha = 1
-	end
-
-	if C.DB.infobar.anchor_top then
-		bar:SetPoint('TOPLEFT', 0, 0)
-		bar:SetPoint('TOPRIGHT', 0, 0)
-	else
-		bar:SetPoint('BOTTOMLEFT', 0, 0)
-		bar:SetPoint('BOTTOMRIGHT', 0, 0)
-	end
-
-	bar:SetFrameStrata('BACKGROUND')
-	bar:SetHeight(C.DB.infobar.bar_height)
-	bar.bg = F.CreateBDFrame(bar, barAlpha)
-    bar.bg:SetBackdropColor(0, 0, 0, barAlpha)
+    bar.bg = F.CreateBDFrame(bar)
+    bar.bg:SetBackdropColor(0, 0, 0, mouseover and .25 or .65)
     bar.bg:SetBackdropBorderColor(0, 0, 0, 0)
 
-	RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
+    barAlpha = mouseover and .25 or .65
+    buttonAlpha = mouseover and 0 or 1
 
-	F:RegisterEvent('PLAYER_REGEN_DISABLED', onEvent)
-	F:RegisterEvent('PLAYER_REGEN_ENABLED', onEvent)
+    bar:SetScript('OnEnter', INFOBAR.ShowBar)
+    bar:SetScript('OnLeave', INFOBAR.HideBar)
 
-	if C.DB.infobar.mouseover then
-		bar:SetScript('OnEnter', showBar)
-		bar:SetScript('OnLeave', hideBar)
-	end
+    RegisterStateDriver(bar, 'visibility', '[petbattle] hide; show')
 
-	self:Stats()
-	self:SpecTalent()
-	self:CreateDurabilityButton()
-	self:Guild()
-	self:Friends()
-	self:Report()
-	self:Currency()
+    INFOBAR.Bar = bar
+
+    F:RegisterEvent('PLAYER_REGEN_DISABLED', UpdateBorderColor)
+    F:RegisterEvent('PLAYER_REGEN_ENABLED', UpdateBorderColor)
 end
 
+function INFOBAR:FadeIn(elapsed)
+    if barAlpha < 0.5 then
+        barAlpha = barAlpha + elapsed
+        buttonAlpha = buttonAlpha + (elapsed * 4)
+    else
+        barAlpha = 0.5
+        buttonAlpha = 1
+        self:SetScript('OnUpdate', nil)
+    end
 
+    self.bg:SetBackdropColor(0, 0, 0, barAlpha)
 
+    for _, button in pairs(INFOBAR.Buttons) do
+        button:SetAlpha(buttonAlpha)
+    end
+end
 
+function INFOBAR:FadeOut(elapsed)
+    if barAlpha > .25 then
+        barAlpha = barAlpha - elapsed
+        buttonAlpha = buttonAlpha - (elapsed * 4)
+    else
+        barAlpha = .25
+        buttonAlpha = 0
+        self:SetScript('OnUpdate', nil)
+    end
+
+    self.bg:SetBackdropColor(0, 0, 0, barAlpha)
+
+    for _, button in pairs(INFOBAR.Buttons) do
+        button:SetAlpha(buttonAlpha)
+    end
+end
+
+function INFOBAR:ShowBar()
+    if not C.DB.Infobar.Mouseover then
+        return
+    end
+    local bar = INFOBAR.Bar
+    bar:SetScript('OnUpdate', INFOBAR.FadeIn)
+end
+
+function INFOBAR:HideBar()
+    if not C.DB.Infobar.Mouseover then
+        return
+    end
+    local bar = INFOBAR.Bar
+    bar:SetScript('OnUpdate', INFOBAR.FadeOut)
+end
+
+function INFOBAR:Button_OnEnter()
+    INFOBAR.ShowBar()
+    self:SetBackdropColor(C.r, C.g, C.b, .25)
+end
+
+function INFOBAR:Button_OnLeave()
+    INFOBAR.HideBar()
+    self:SetBackdropColor(0, 0, 0, 0)
+end
+
+local function ReanchorButtons()
+    local bar = INFOBAR.Bar
+    local leftOffset, rightOffset = 0, 0
+
+    for i = 1, #INFOBAR.Buttons do
+        local bu = INFOBAR.Buttons[i]
+
+        if bu:IsShown() then
+            if bu.position == 'LEFT' then
+                bu:SetPoint('LEFT', bar, 'LEFT', leftOffset, 0)
+                leftOffset = leftOffset + (bu:GetWidth() - C.Mult)
+            elseif bu.position == 'RIGHT' then
+                bu:SetPoint('RIGHT', bar, 'RIGHT', rightOffset, 0)
+                rightOffset = rightOffset - (bu:GetWidth() - C.Mult)
+            else
+                bu:SetPoint('CENTER', bar)
+            end
+        end
+    end
+end
+
+function INFOBAR:ShowButton(button)
+    button:Show()
+    ReanchorButtons()
+end
+
+function INFOBAR:HideButton(button)
+    button:Hide()
+    ReanchorButtons()
+end
+
+function INFOBAR:AddBlock(text, position, width)
+    local bar = INFOBAR.Bar
+    local bu = CreateFrame('Button', nil, bar, 'BackdropTemplate')
+    bu:SetPoint('TOP', bar, 'TOP')
+    bu:SetPoint('BOTTOM', bar, 'BOTTOM')
+    bu:SetWidth(width)
+    F.CreateBD(bu)
+    bu:SetBackdropColor(0, 0, 0, 0)
+    bu:SetBackdropBorderColor(0, 0, 0, 0)
+
+    if C.DB.Infobar.Mouseover then
+        bu:SetAlpha(0)
+    end
+
+    local text = F.CreateFS(bu, C.Assets.Fonts.Condensed, 11, nil, text, nil, true, 'CENTER', 0, 0)
+    bu.Text = text
+
+    bu:SetScript('OnEnter', INFOBAR.Button_OnEnter)
+    bu:SetScript('OnLeave', INFOBAR.Button_OnLeave)
+
+    bu.position = position
+
+    tinsert(INFOBAR.Buttons, bu)
+
+    ReanchorButtons()
+
+    return bu
+end
+
+function INFOBAR:OnLogin()
+    if not C.DB.Infobar.Enable then
+        return
+    end
+
+    INFOBAR:CreateInfoBar()
+    INFOBAR:CreateStatsBlock()
+    INFOBAR:CreateSpecBlock()
+    INFOBAR:CreateDurabilityBlock()
+    INFOBAR:CreateGuildBlock()
+    INFOBAR:CreateFriendsBlock()
+    INFOBAR:CreateReportBlock()
+    INFOBAR:CreateCurrenciesBlock()
+end
