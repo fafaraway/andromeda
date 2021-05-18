@@ -1,6 +1,5 @@
 local F, C, L = unpack(select(2, ...))
 local INSTALL = F:RegisterModule('Tutorial')
-local CHAT = F.CHAT
 
 
 local function SetupCVars()
@@ -156,7 +155,7 @@ local function SetupActionbars()
 end
 
 local function SetupChatFrame()
-	CHAT:UpdateChatSize()
+	F:GetModule('Chat'):UpdateChatSize()
 
 	for i = 1, _G.NUM_CHAT_WINDOWS do
 		local cf = _G['ChatFrame'..i]

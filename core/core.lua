@@ -15,7 +15,7 @@ do
 
 
 
-    F:RegisterModule('Chat')
+
     F:RegisterModule('Combat')
 
     F:RegisterModule('Inventory')
@@ -35,8 +35,6 @@ do
 
 
 
-
-    F.CHAT = F:GetModule('Chat')
     F.COMBAT = F:GetModule('Combat')
 
     F.INVENTORY = F:GetModule('Inventory')

@@ -1,7 +1,6 @@
-local F, C = unpack(select(2, ...))
-local CHAT = F.CHAT
-
 local _G = _G
+local unpack = unpack
+local select = select
 local tostring = tostring
 local pairs = pairs
 local ipairs = ipairs
@@ -11,13 +10,10 @@ local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 local IsPartyLFG = IsPartyLFG
 local IsInGuild = IsInGuild
-local IsAltKeyDown = IsAltKeyDown
 local IsShiftKeyDown = IsShiftKeyDown
 local IsControlKeyDown = IsControlKeyDown
-local IsModifierKeyDown = IsModifierKeyDown
 local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
-local ChatEdit_ClearChat = ChatEdit_ClearChat
 local ChatTypeInfo = ChatTypeInfo
 local GetChatWindowInfo = GetChatWindowInfo
 local GetChannelName = GetChannelName
@@ -41,14 +37,16 @@ local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local GeneralDockManager = GeneralDockManager
 local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
-local GuildInvite = GuildInvite
 local hooksecurefunc = hooksecurefunc
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local ConsoleExec = ConsoleExec
 
+local F, C = unpack(select(2, ...))
+local CHAT = F:RegisterModule('Chat')
+
 local isScaling = false
 function CHAT:UpdateChatSize()
-    if not C.DB.chat.lock_position then
+    if not C.DB.Chat.LockPosition then
         return
     end
     if isScaling then
@@ -66,7 +64,7 @@ function CHAT:UpdateChatSize()
 
     _G.ChatFrame1:ClearAllPoints()
     _G.ChatFrame1:SetPoint('BOTTOMLEFT', _G.UIParent, 'BOTTOMLEFT', C.UIGap, C.UIGap)
-    _G.ChatFrame1:SetSize(C.DB.chat.window_width, C.DB.chat.window_height)
+    _G.ChatFrame1:SetSize(C.DB.Chat.Width, C.DB.Chat.Height)
 
     isScaling = false
 end
@@ -114,10 +112,10 @@ function CHAT:RestyleChatFrame()
     local name = self:GetName()
     local maxLines = 1024
 
-    if C.DB.chat.fade_out then
+    if C.DB.Chat.FadeOut then
         self:SetFading(true)
-        self:SetTimeVisible(C.DB.chat.fading_visible)
-        self:SetFadeDuration(C.DB.chat.fading_duration)
+        self:SetTimeVisible(C.DB.Chat.TimeVisible)
+        self:SetFadeDuration(C.DB.Chat.FadeDuration)
     end
 
     local font = C.Assets.Fonts.Bold
@@ -152,8 +150,8 @@ function CHAT:RestyleChatFrame()
 
     local tab = _G[name .. 'Tab']
     tab:SetAlpha(1)
-    tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.chat.outline and 'OUTLINE')
-    tab.Text:SetShadowColor(0, 0, 0, C.DB.chat.outline and 0 or 1)
+    tab.Text:SetFont(C.Assets.Fonts.Bold, 12, C.DB.Chat.FontOutline and 'OUTLINE')
+    tab.Text:SetShadowColor(0, 0, 0, C.DB.Chat.FontOutline and 0 or 1)
     tab.Text:SetShadowOffset(2, -2)
     F.StripTextures(tab, 7)
     hooksecurefunc(tab, 'SetAlpha', CHAT.TabSetAlpha)
@@ -167,7 +165,7 @@ function CHAT:RestyleChatFrame()
     F.HideObject(_G.ChatFrameMenuButton)
     F.HideObject(_G.QuickJoinToastButton)
 
-    if C.DB.chat.voice_button then
+    if C.DB.Chat.VoiceButton then
         _G.ChatFrameChannelButton:ClearAllPoints()
         _G.ChatFrameChannelButton:SetPoint('TOPRIGHT', _G.ChatFrame1, 'TOPLEFT', -6, -26)
         _G.ChatFrameChannelButton:SetParent(_G.UIParent)
@@ -276,7 +274,7 @@ local cycles = {
 }
 
 function CHAT:UpdateTabChannelSwitch()
-    if not C.DB.chat.tab_cycle then
+    if not C.DB.Chat.EasyChannelSwitch then
         return
     end
     if strsub(tostring(self:GetText()), 1, 1) == '/' then
@@ -346,7 +344,7 @@ local function UpdateChatBubble()
 end
 
 function CHAT:AutoToggleChatBubble()
-    if C.DB.chat.smart_bubble then
+    if C.DB.Chat.SmartChatBubble then
         F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
     else
         F:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
@@ -356,7 +354,7 @@ end
 -- Autoinvite by whisper
 local whisperList = {}
 function CHAT:UpdateWhisperList()
-    F:SplitList(whisperList, C.DB.chat.invite_keyword, true)
+    F:SplitList(whisperList, C.DB.Chat.InviteKeyword, true)
 end
 
 function CHAT:IsUnitInGuild(unitName)
@@ -387,13 +385,13 @@ function CHAT.OnChatWhisper(event, ...)
                         local charName = gameAccountInfo.characterName
                         local realmName = gameAccountInfo.realmName
                         if CanCooperateWithGameAccount(accountInfo) and
-                            (not C.DB.chat.guild_only or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
+                            (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
                             BNInviteFriend(gameID)
                         end
                     end
                 end
             else
-                if not C.DB.chat.guild_only or IsGuildMember(guid) then
+                if not C.DB.Chat.GuildOnly or IsGuildMember(guid) then
                     C_PartyInfo_InviteUnit(author)
                 end
             end
@@ -402,7 +400,7 @@ function CHAT.OnChatWhisper(event, ...)
 end
 
 function CHAT:WhisperInvite()
-    if not C.DB.chat.whisper_invite then
+    if not C.DB.Chat.WhisperInvite then
         return
     end
     self:UpdateWhisperList()
@@ -412,7 +410,7 @@ end
 
 -- Whisper sound
 function CHAT:PlayWhisperSound(event)
-    if not C.DB.chat.whisper_sound then
+    if not C.DB.Chat.WhisperSound then
         return
     end
 
@@ -421,18 +419,18 @@ function CHAT:PlayWhisperSound(event)
         if not self.soundTimer or currentTime > self.soundTimer then
             PlaySoundFile(C.Assets.Sounds.whisper, 'Master')
         end
-        self.soundTimer = currentTime + C.DB.chat.sound_timer
+        self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     elseif event == 'CHAT_MSG_BN_WHISPER' then
         if not self.soundTimer or currentTime > self.soundTimer then
             PlaySoundFile(C.Assets.Sounds.whisperBN, 'Master')
         end
-        self.soundTimer = currentTime + C.DB.chat.sound_timer
+        self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     end
 end
 
 -- Whisper sticky
 function CHAT:WhisperSticky()
-    if C.DB.chat.whisper_sticky then
+    if C.DB.Chat.WhisperSticky then
         ChatTypeInfo['WHISPER'].sticky = 1
         ChatTypeInfo['BN_WHISPER'].sticky = 1
     else
@@ -493,7 +491,7 @@ local function getColoredName(event, arg1, arg2, ...)
 end
 
 function CHAT:OnLogin()
-    if not C.DB.chat.enable then
+    if not C.DB.Chat.Enable then
         return
     end
 
@@ -514,7 +512,7 @@ function CHAT:OnLogin()
     hooksecurefunc('FloatingChatFrame_OnEvent', CHAT.UpdateTabEventColors)
     hooksecurefunc('ChatFrame_ConfigEventHandler', CHAT.PlayWhisperSound)
 
-    if C.DB.chat.RoleIcon then
+    if C.DB.Chat.GroupRoleIcon then
         _G.GetColoredName = getColoredName
     end
 
@@ -533,7 +531,7 @@ function CHAT:OnLogin()
     _G.CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
 
     -- Lock chatframe
-    if C.DB.chat.lock_position then
+    if C.DB.Chat.LockPosition then
         hooksecurefunc('FCF_SavePositionAndDimensions', self.UpdateChatSize)
         F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
         self:UpdateChatSize()
@@ -553,7 +551,7 @@ function CHAT:OnLogin()
     CHAT:WhisperInvite()
     CHAT:CreateChannelBar()
 
-    -- ProfanityFilter
+    -- Profanity filter
     if not BNFeaturesEnabledAndConnected() then
         return
     end

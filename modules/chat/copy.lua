@@ -34,7 +34,7 @@ local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat
 
 local F, C, L = unpack(select(2, ...))
-local CHAT = F.CHAT
+local CHAT = F:GetModule('Chat')
 
 local lines, frame, editBox = {}
 
@@ -93,18 +93,18 @@ local function IsInChannel(event)
 end
 
 function CHAT:ChatCopy_OnClick(btn)
-    if C.IsCNPortal and not C.DB.chat.channel_bar and btn == 'MiddleButton' then
+    if C.IsCNPortal and not C.DB.Chat.ChannelBar and btn == 'MiddleButton' then
         if CHAT.CopyButton.inChannel then
             LeaveChannelByName(channelName)
 
-            F:Print(C.RedColor .. L['Leave world channel'])
+            F:Print(format(C.RedColor .. L['Leave'] .. '|r %s', channelName))
             CHAT.CopyButton.inChannel = false
 
         else
             JoinPermanentChannel(channelName, nil, 1)
             ChatFrame_AddChannel(_G.ChatFrame1, channelName)
 
-            F:Print(C.GreenColor .. L['Join world channel'])
+            F:Print(format(C.GreenColor .. L['Join'] .. '|r %s', channelName))
             CHAT.CopyButton.inChannel = true
         end
     end
@@ -217,7 +217,7 @@ function CHAT:ChatCopy_Create()
 
         _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_right .. L['Copy chat content'] .. ' ', 1, 1, 1, .9, .8, .6)
 
-        if C.IsCNPortal and not C.DB.chat.channel_bar then
+        if C.IsCNPortal and not C.DB.Chat.ChannelBar then
             if CHAT.CopyButton.inChannel then
                 _G.GameTooltip:AddDoubleLine(' ', C.Assets.mouse_middle .. L['Leave world channel'] .. ' ', 1, 1, 1, .9, .8, .6)
             else
@@ -237,7 +237,7 @@ function CHAT:ChatCopy_Create()
 end
 
 function CHAT:ChatCopy()
-    if not C.DB.chat.copy_button then
+    if not C.DB.Chat.CopyButton then
         return
     end
 
@@ -391,7 +391,7 @@ function CHAT:UrlCopy()
     end
 
     local orig = _G.ItemRefTooltip.SetHyperlink
-    function ItemRefTooltip:SetHyperlink(link, ...)
+    function _G.ItemRefTooltip:SetHyperlink(link, ...)
         if link and strsub(link, 0, 3) == 'url' then
             return
         end

@@ -3,6 +3,7 @@ local GUI = F:GetModule('GUI')
 local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('Actionbar')
+local CHAT = F:GetModule('Chat')
 
 -- Auta
 local function SetupAuraSize()
@@ -38,25 +39,26 @@ end
 
 -- Chat
 local function UpdateWhisperSticky()
-    F.CHAT:ChatWhisperSticky()
+    CHAT:ChatWhisperSticky()
 end
 
 local function UpdateWhisperList()
-    F.CHAT:UpdateWhisperList()
+    CHAT:UpdateWhisperList()
 end
 
 local function UpdateFilterList()
-    F.CHAT:UpdateFilterList()
+    CHAT:UpdateFilterList()
 end
 
 local function UpdateFilterWhiteList()
-    F.CHAT:UpdateFilterWhiteList()
+    CHAT:UpdateFilterWhiteList()
 end
 
-local function UpdateChatSize()
-    F.CHAT:UpdateChatSize()
+local function SetupChatSize()
+    GUI:SetupChatSize(GUI.Page[4])
 end
 
+-- Minimap
 local function UpdateMinimapScale()
     F.MAP:UpdateMinimapScale()
 end
@@ -180,42 +182,42 @@ GUI.OptionsList = {
         {1, 'Infobar', 'Currencies', L['Currencies stats'], true},
         {1, 'Infobar', 'Spec', L['Specialization']},
     },
-    [4] = {
-        -- chat
-        {1, 'chat', 'enable', L.GUI.CHAT.ENABLE},
-        {1, 'chat', 'lock_position', L.GUI.CHAT.LOCK_POSITION, nil, nil, nil, L.GUI.CHAT.LOCK_POSITION_TIP},
-        {1, 'chat', 'channel_bar', L.GUI.CHAT.CHANNEL_BAR, true},
-        {1, 'chat', 'fade_out', L.GUI.CHAT.FADE_OUT, nil, nil, nil, L.GUI.CHAT.FADE_OUT_TIP},
-        {1, 'chat', 'abbr_channel_names', L.GUI.CHAT.ABBR_CHANNEL_NAMES, true},
-        {1, 'chat', 'voice_button', L.GUI.CHAT.VOICE_BUTTON},
-        {1, 'chat', 'tab_cycle', L.GUI.CHAT.TAB_CYCLE, true, nil, nil, L.GUI.CHAT.TAB_CYCLE_TIP},
-        {1, 'chat', 'smart_bubble', L.GUI.CHAT.SMART_BUBBLE, nil, nil, nil, L.GUI.CHAT.SMART_BUBBLE_TIP},
-        {1, 'chat', 'whisper_sticky', L.GUI.CHAT.WHISPER_STICKY, true, nil, UpdateWhisperSticky},
-        {1, 'chat', 'whisper_sound', L.GUI.CHAT.WHISPER_SOUND},
-        {1, 'chat', 'item_links', L.GUI.CHAT.ITEM_LINKS, true},
-        {},
-        {1, 'chat', 'use_filter', L.GUI.CHAT.USE_FILTER},
-        {1, 'chat', 'block_addon_spam', L.GUI.CHAT.BLOCK_ADDON_SPAM},
-        {2, 'ACCOUNT', 'ChatFilterWhiteList', L.GUI.CHAT.WHITE_LIST, true, nil, UpdateFilterWhiteList, L.GUI.CHAT.WHITE_LIST_TIP},
-        {1, 'chat', 'allow_friends_spam', L.GUI.CHAT.ALLOW_FRIENDS_SPAM, nil, nil, nil, L.GUI.CHAT.ALLOW_FRIENDS_SPAM_TIP},
-        {1, 'chat', 'block_stranger_whisper', L.GUI.CHAT.BLOCK_STRANGER_WHISPER},
-        {2, 'ACCOUNT', 'ChatFilterBlackList', L.GUI.CHAT.BLACK_LIST, true, nil, UpdateFilterList, L.GUI.CHAT.BLACK_LIST_TIP},
-        {1, 'chat', 'damage_meter_filter', L.GUI.CHAT.DAMAGE_METER_FILTER},
+    [4] = { -- chat
+        {1, 'Chat', 'Enable', L['Enable Chat']},
+        {1, 'Chat', 'LockPosition', L['Lock position and size'], nil, SetupChatSize, nil, L['|nLock postion and size of chat frame.|nDisable this if you want to adjust chat frame.']},
+        {1, 'Chat', 'FadeOut', L['Message fading'], true, nil, nil, L['|nThe text will fade out after not receiving a new message for 2 minutes.']},
 
-        {1, 'chat', 'group_loot_filter', L.GUI.CHAT.GROUP_LOOT_FILTER},
-        {
-            4,
-            'chat',
-            'group_loot_threshold',
-            L.GUI.CHAT.GROUP_LOOT_THRESHOLD,
-            true,
-            {L.GUI.CHAT.GROUP_LOOT_COMMON, L.GUI.CHAT.GROUP_LOOT_UNCOMMON, L.GUI.CHAT.GROUP_LOOT_RARE, L.GUI.CHAT.GROUP_LOOT_EPIC, L.GUI.CHAT.GROUP_LOOT_LEGENDARY, L.GUI.CHAT.GROUP_LOOT_ARTIFACT, L.GUI.CHAT.GROUP_LOOT_HEIRLOOM, L.GUI.CHAT.GROUP_LOOT_ALL},
-        },
-        {3, 'chat', 'matche_number', L.GUI.CHAT.MATCHE_NUMBER, nil, {1, 3, 1}},
+        {1, 'Chat', 'CopyButton', L['Copy button']},
+        {1, 'Chat', 'VoiceButton', L['Voice button'], true},
+
+        {1, 'Chat', 'ShortenChannelName', L['Shorten channel name'], nil, nil, nil, L['|nSimplify channels name.|ne.g. [1: General] to [1] [Guild] to [G]']},
+        {1, 'Chat', 'EasyChannelSwitch', L['Easy channel switch'], true, nil, nil, L['|nYou can use TAB key to cycle channels after the input box is activated.']},
+        {1, 'Chat', 'ChannelBar', L['Channel bar']},
+        {1, 'Chat', 'GroupRoleIcon', L['Group role icon'], true},
+
+        {1, 'Chat', 'WhisperSticky', L['Whisper sticky'], nil, nil, UpdateWhisperSticky},
+        {1, 'Chat', 'WhisperSound', L['Whisper sound'], true},
+
+        {1, 'Chat', 'SmartChatBubble', L['Smart bubble'], nil, nil, nil, L['|nOnly show chat bubbles in raid.']},
+        {1, 'Chat', 'ExtendItemLink', L['Extend item link'], true, nil, nil, L['|nModifies displayed item links in chat to show the it\'s level and slot inline.']},
+
+
         {},
-        {1, 'chat', 'whisper_invite', L.GUI.CHAT.WHISPER_INVITE},
-        {1, 'chat', 'guild_only', L.GUI.CHAT.GUILD_ONLY},
-        {2, 'chat', 'invite_keyword', L.GUI.CHAT.INVITE_KEYWORD, true, nil, UpdateWhisperList},
+        {1, 'Chat', 'SpamFilter', L['Spam filter']},
+        {1, 'Chat', 'BlockAddonSpam', L['Block addon spam']},
+        {2, 'ACCOUNT', 'ChatFilterWhiteList', L['White List Mode'], true, nil, UpdateFilterWhiteList, L['|nOnly show messages that match the words below. Disabled if empty. Use key SPACE between multi words.']},
+        {1, 'Chat', 'IgnoreFriends', L['Allow friends\' spam'], nil, nil, nil, L['|nAllow spam messages from friends, party members and guild members.']},
+        {1, 'Chat', 'BlockStrangerWhisper', L['Block stranger whisper'], nil, nil, nil, L['|nOnly accept whispers from party or raid members, friends and guild members.']},
+        {2, 'ACCOUNT', 'ChatFilterBlackList', L['Filter List'], true, nil, UpdateFilterList, L['|nFilter messages that match the words blow. Use key SPACE between multi words.']},
+        {1, 'Chat', 'DamageMeterFilter', L['Damage meter filter'], nil, nil, nil, L['|nSimplify chat messages from damage meters like Details and instead provides a chat-link to provide the blocked damage statistics in a popup.']},
+
+        {1, 'Chat', 'GroupLootFilter', L['Group loot filter'], nil, nil, nil, L['|nFilter the loot messages of teammates based on the quality of the items.']},
+        {4, 'Chat', 'GroupLootThreshold', L['Quality Threshold'], true, {_G.ITEM_QUALITY1_DESC, _G.ITEM_QUALITY2_DESC, _G.ITEM_QUALITY3_DESC, _G.ITEM_QUALITY4_DESC, _G.ITEM_QUALITY5_DESC, _G.ITEM_QUALITY6_DESC, _G.ITEM_QUALITY7_DESC, _G.SPELL_SCHOOLALL}},
+
+        {},
+        {1, 'Chat', 'WhisperInvite', L['Whisper invite'], nil, nil, nil, L['|nAutomatically invite whisperers based on specific keywords.']},
+        {1, 'Chat', 'GuildOnly', L['Only invite guild members']},
+        {2, 'Chat', 'InviteKeyword', L['Invite Keyword'], true, nil, UpdateWhisperList, L['|nSetup whisper invite keywords. If you have more than one word, press key SPACE in between.']},
     },
     [5] = { -- aura
         {1, 'Aura', 'Enable', L['Enable Aura'], nil, SetupAuraSize},

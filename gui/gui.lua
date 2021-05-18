@@ -229,7 +229,7 @@ local function CreateOption(i)
                 F.AddTooltip(cb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 2 then -- editbox
-            local eb = F.CreateEditBox(parent, 150, 24)
+            local eb = F.CreateEditBox(parent, 170, 24)
             eb:SetMaxLetters(999)
 
             eb.label = F.CreateFS(eb, C.Assets.Fonts.Regular, 11, nil, name, nil, true, 'CENTER', 0, 20)
@@ -255,6 +255,7 @@ local function CreateOption(i)
             end)
 
             if tip then
+                eb.title = name
                 F.AddTooltip(eb, 'ANCHOR_TOPLEFT', tip, 'BLUE')
             end
         elseif optType == 3 then -- slider
@@ -295,11 +296,11 @@ local function CreateOption(i)
                 end
             end
 
-            local dd = F.CreateDropDown(parent, 160, 20, data)
+            local dd = F.CreateDropDown(parent, 170, 20, data)
             if horizon then
-                dd:SetPoint('TOPLEFT', 254, -offset + 30)
+                dd:SetPoint('TOPLEFT', 260, -offset + 40)
             else
-                dd:SetPoint('TOPLEFT', 26, -offset - 40)
+                dd:SetPoint('TOPLEFT', 26, -offset - 30)
                 offset = offset + 70
             end
 

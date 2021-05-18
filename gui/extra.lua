@@ -29,6 +29,7 @@ local GUI = F:GetModule('GUI')
 local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('Actionbar')
+local CHAT = F:GetModule('Chat')
 
 local extraGUIs = {}
 
@@ -1819,5 +1820,45 @@ function GUI:SetupCustomClassColor(parent)
         CreateColorSwatch(scroll, v.value, v.text, C.AccountSettings.CustomClassColors[v.text], offset - 30)
 
         offset = offset - 30
+    end
+end
+
+--[[ Chat ]]
+local function UpdateChatSize()
+    CHAT:UpdateChatSize()
+end
+
+function GUI:SetupChatSize(parent)
+    local guiName = 'FreeUI_GUI_Chat_Size'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local datas = {
+        [1] = {
+            key = 'Width',
+            value = '300',
+            text = L['Width'],
+            min = 50,
+            max = 500
+        },
+        [2] = {
+            key = 'Height',
+            value = '100',
+            text = L['Height'],
+            min = 50,
+            max = 500
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Chat Window Size'], offset)
+        CreateSlider(scroll, 'Chat', v.key, v.text, v.min, v.max, 1, v.value, 20, offset - 50, UpdateChatSize)
+        offset = offset - 65
     end
 end
