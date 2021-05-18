@@ -396,6 +396,7 @@ function INFOBAR:FriendsPanel_CreateButton(parent, index)
     button.name:SetPoint('RIGHT', button, 'LEFT', 230, 0)
     button.name:SetJustifyH('LEFT')
     button.name:SetTextColor(.5, .7, 1)
+    button.name:SetWordWrap(false)
 
     button.zone = F.CreateFS(button, C.Assets.Fonts.Regular, 13, nil, 'Zone', nil, true, 'RIGHT', -28, 0)
     button.zone:SetPoint('LEFT', button, 'RIGHT', -130, 0)
