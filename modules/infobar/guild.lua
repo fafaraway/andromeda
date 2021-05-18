@@ -349,7 +349,9 @@ local function Button_OnMouseUp(self, btn)
         return
     end
 
-    infoFrame:Hide()
+    if infoFrame then
+        infoFrame:Hide()
+    end
 
     if btn == 'LeftButton' then
         if IsInGuild() then
