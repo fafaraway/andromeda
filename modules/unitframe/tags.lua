@@ -217,7 +217,7 @@ tags['free:tarname'] = function(unit)
     local tarUnit = unit .. 'target'
     if UnitExists(tarUnit) then
         local tarClass = select(2, UnitClass(tarUnit))
-        return F:RGBToHex(colors.class[tarClass]) .. UnitName(tarUnit)
+        return '<' .. F:RGBToHex(colors.class[tarClass]) .. UnitName(tarUnit) .. '>'
     end
 end
 tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH'

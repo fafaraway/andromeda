@@ -167,7 +167,7 @@ local function UpdateSpellTarget(self, unit)
         if UnitIsUnit(unitTarget, 'player') then
             nameString = format('|cffff0000%s|r', '>' .. strupper(_G.YOU) .. '<')
         else
-            nameString = F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget)
+            nameString = '<' .. F:RGBToHex(F:UnitColor(unitTarget)) .. UnitName(unitTarget) .. '>'
         end
         self.SpellTarget:SetText(nameString)
     end
@@ -368,8 +368,8 @@ function UNITFRAME:CreateCastBar(self)
     castbar.Icon = icon
 
     if style == 'nameplate' then
-        -- text:SetShown(spellName)
-        -- time:SetShown(spellTime)
+        text:SetShown(spellName)
+        time:SetShown(spellTime)
 
         if npCompact then
             castbar:SetStatusBarColor(0, 0, 0, 0)
@@ -395,7 +395,7 @@ function UNITFRAME:CreateCastBar(self)
         castbar.glowFrame = F.CreateGlowFrame(castbar, icon:GetHeight())
         castbar.glowFrame:SetPoint('CENTER', castbar.Icon)
 
-        local spellTarget = F.CreateFS(castbar, font, 11, outline, '', nil, outline or 'THICK')
+        local spellTarget = F.CreateFS(castbar, font, 12, outline, '', nil, outline or 'THICK')
         spellTarget:ClearAllPoints()
         spellTarget:SetJustifyH('CENTER')
         spellTarget:SetPoint('TOP', self, 'BOTTOM', 0, -3)
@@ -407,9 +407,10 @@ function UNITFRAME:CreateCastBar(self)
         end
 
         castbar.SpellTarget = spellTarget
+
     else
-        -- text:SetShown(C.DB.Unitframe.SpellName)
-        -- time:SetShown(C.DB.Unitframe.SpellTime)
+        text:SetShown(C.DB.Unitframe.SpellName)
+        time:SetShown(C.DB.Unitframe.SpellTime)
 
         if compact then
             castbar:SetStatusBarColor(0, 0, 0, 0)
