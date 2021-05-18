@@ -365,7 +365,7 @@ local function Button_OnMouseUp(self, btn)
             if not _G.LookingForGuildFrame then
                 LoadAddOn('Blizzard_LookingForGuildUI')
             end
-            LookingForGuildFrame_Toggle()
+            _G.LookingForGuildFrame_Toggle()
         end
     elseif btn == 'RightButton' then
         ToggleCommunitiesFrame()
