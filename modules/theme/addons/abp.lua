@@ -7,7 +7,7 @@ local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
 function THEME:ReskinABP()
-    if not _G.FREE_ADB.ReskinActionBarProfiles then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
 

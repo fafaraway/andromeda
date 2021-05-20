@@ -11,7 +11,7 @@ function THEME:ReskinExtVendor()
         return
     end
 
-    if not _G.FREE_ADB.ReskinExtVendor then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
 

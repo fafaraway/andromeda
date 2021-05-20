@@ -9,7 +9,7 @@ local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
 function THEME:ReskinPGF()
-    if not _G.FREE_ADB.ReskinPremadeGroupsFilter then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
 

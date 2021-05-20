@@ -103,4 +103,4 @@ local function ReskinWA()
     end
 end
 
-THEME:LoadWithAddOn('WeakAuras', 'ReskinWeakAura', ReskinWA)
+THEME:LoadWithAddOn('WeakAuras', ReskinWA)

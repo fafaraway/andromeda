@@ -142,7 +142,7 @@ function THEME:ReskinDBM()
         return
     end
 
-    if not _G.FREE_ADB.ReskinDBM then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
 

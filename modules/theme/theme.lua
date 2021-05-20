@@ -39,11 +39,11 @@ function THEME:LoadDefaultSkins()
     end)
 end
 
-function THEME:LoadWithAddOn(addonName, value, func)
+function THEME:LoadWithAddOn(addonName, func)
     local function loadFunc(event, addon)
-        -- if not _G.FREE_ADB[value] then
-        --     return
-        -- end
+        if not _G.FREE_ADB.ReskinAddons then
+            return
+        end
 
         if event == 'PLAYER_ENTERING_WORLD' then
             F:UnregisterEvent(event, loadFunc)

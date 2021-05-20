@@ -185,4 +185,4 @@ local function ReskinImmersion()
     hooksecurefunc(_G.ImmersionFrame, 'ShowItems', ReskinTooltip)
 end
 
-THEME:LoadWithAddOn('Immersion', 'ReskinImmersion', ReskinImmersion)
+THEME:LoadWithAddOn('Immersion', ReskinImmersion)

@@ -758,12 +758,13 @@ do
         local gradTex = C.AssetsPath .. 'textures\\gradient'
         local normTex = C.Assets.bd_tex
         local color = _G.FREE_ADB.ButtonBackdropColor
+        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
 
         local tex = self:CreateTexture(nil, 'BORDER')
         tex:SetPoint('TOPLEFT', 1, -1)
         tex:SetPoint('BOTTOMRIGHT', -1, 1)
         tex:SetTexture(gradStyle and gradTex or normTex)
-        tex:SetVertexColor(color.r, color.g, color.b, .35)
+        tex:SetVertexColor(color.r, color.g, color.b, alpha)
 
         return tex
     end
@@ -1044,7 +1045,7 @@ do
 
     local function Button_OnLeave(self)
         local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
 
         self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
         F.SetBorderColor(self.__bg)
@@ -1113,7 +1114,7 @@ do
         F.CreateBDFrame(self, .25, true)
 
         local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
         self.__bg:SetBackdropColor(color.r, color.g, color.b, alpha)
         F.SetBorderColor(self.__bg)
 
@@ -1161,7 +1162,7 @@ do
             return
         end
 
-        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
 
         thumb.bg:SetBackdropColor(C.r, C.g, C.b, alpha)
         -- thumb.bg:SetBackdropBorderColor(C.r, C.g, C.b)
@@ -1174,7 +1175,7 @@ do
         end
 
         local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlhpa
+        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
         thumb.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
         F.SetBorderColor(thumb.bg)
     end
@@ -1363,13 +1364,19 @@ do
 
     -- Handle checkbox and radio
     local function CheckBox_OnEnter(self)
-        --self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
-        self.shadow:SetBackdropBorderColor(C.r, C.g, C.b, .25)
+        if self.shadow then
+            self.shadow:SetBackdropBorderColor(C.r, C.g, C.b, .25)
+        else
+            self.bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        end
     end
 
     local function CheckBox_OnLeave(self)
-        --F.SetBorderColor(self.bg)
-        self.shadow:SetBackdropBorderColor(0, 0, 0, .25)
+        if self.shadow then
+            self.shadow:SetBackdropBorderColor(0, 0, 0, .25)
+        else
+            F.SetBorderColor(self.bg)
+        end
     end
 
     function F:ReskinCheck(flat, forceSaturation)

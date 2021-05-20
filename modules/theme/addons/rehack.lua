@@ -7,7 +7,7 @@ local F, C = unpack(select(2, ...))
 local THEME = F:GetModule('Theme')
 
 function THEME:ReskinREHack()
-    if not _G.FREE_ADB.ReskinREHack then
+    if not _G.FREE_ADB.ReskinAddons then
         return
     end
 
