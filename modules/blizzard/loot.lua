@@ -188,10 +188,14 @@ lootFrame.LOOT_OPENED = function(self, event, autoloot)
 
                 if lootQuality == 0 or lootQuality == 1 then
                     slot.iconFrame.bg:SetBackdropBorderColor(0, 0, 0)
-                    slot.iconFrame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
+                    if slot.iconFrame.bg.__shadow then
+                        slot.iconFrame.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
+                    end
                 else
                     slot.iconFrame.bg:SetBackdropBorderColor(r, g, b)
-                    slot.iconFrame.bg.__shadow:SetBackdropBorderColor(r, g, b, .25)
+                    if slot.iconFrame.bg.__shadow then
+                        slot.iconFrame.bg.__shadow:SetBackdropBorderColor(r, g, b, .25)
+                    end
                 end
 
                 if questID and not isActive then
