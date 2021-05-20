@@ -1031,15 +1031,14 @@ C.CharacterSettings = {
         Countdown = '10',
     },
 
-    ['combat'] = {
-        ['enable'] = true,
-        ['combat_alert'] = true,
-        ['alert_animation'] = true,
-        ['alert_scale'] = .4,
-        ['alert_speed'] = 1,
-        ['spell_sound'] = true,
-        ['pvp_sound'] = true,
-        ['easy_tab'] = true,
+    Combat = {
+        Enable = true,
+        CombatAlert = true,
+        AlertScale = .4,
+        AlertSpeed = 1,
+        SpellSound = true,
+        PvPSound = true,
+        SmartTab = true,
 
         EasyMark = true,
         EasyMarkKey = 1,
@@ -1047,12 +1046,12 @@ C.CharacterSettings = {
         EasyFocusKey = 3,
         EasyFocusOnUnitframe = false,
 
-        ['fct'] = true,
-        ['fct_pet'] = true,
-        ['fct_periodic'] = true,
-        ['fct_merge'] = true,
-        ['fct_in'] = true,
-        ['fct_out'] = false,
+        SimpleFloatingCombatText = true,
+            Pet = true,
+            Periodic = true,
+            Merge = true,
+            Incoming = true,
+            Outgoing = false,
     },
 
     Announcement = {
@@ -1468,6 +1467,9 @@ C.AccountSettings = {
     TextureStyle = 1,
     NumberFormat = 1,
     FontOutline = false,
+    WorldTextScale = 1,
+    FloatingCombatText = true,
+    FloatingCombatTextOldStyle = true,
     ChatFilterBlackList = '',
     ChatFilterWhiteList = '',
     CustomJunkList = {},

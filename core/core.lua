@@ -16,7 +16,7 @@ do
 
 
 
-    F:RegisterModule('Combat')
+
 
     F:RegisterModule('Inventory')
 
@@ -35,7 +35,7 @@ do
 
 
 
-    F.COMBAT = F:GetModule('Combat')
+
 
     F.INVENTORY = F:GetModule('Inventory')
 

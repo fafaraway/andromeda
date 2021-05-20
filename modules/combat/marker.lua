@@ -15,7 +15,7 @@ local EasyMenu = EasyMenu
 local RAID_TARGET_NONE = RAID_TARGET_NONE
 
 local F, C = unpack(select(2, ...))
-local COMBAT = F.COMBAT
+local COMBAT = F:GetModule('Combat')
 
 local menuList = {
     {
@@ -75,7 +75,7 @@ local menuList = {
 }
 
 local function getModifiedKey()
-    local index = C.DB.combat.EasyMarkKey
+    local index = C.DB.Combat.EasyMarkKey
     if index == 1 then
         return IsControlKeyDown()
     elseif index == 2 then
@@ -87,8 +87,8 @@ local function getModifiedKey()
     end
 end
 
-function COMBAT:Marker()
-    if not C.DB.combat.EasyMark then
+function COMBAT:EasyMark()
+    if not C.DB.Combat.EasyMark then
         return
     end
 

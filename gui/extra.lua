@@ -1862,3 +1862,46 @@ function GUI:SetupChatSize(parent)
         offset = offset - 65
     end
 end
+
+
+--[[ Combat ]]
+function GUI:SetupSimpleFloatingCombatText(parent)
+    local guiName = 'FreeUI_GUI_FCT'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local datas = {
+        [1] = {
+            value = 'Incoming',
+            text = L['Incoming']
+        },
+        [2] = {
+            value = 'Outgoing',
+            text = L['Outgoing']
+        },
+        [3] = {
+            value = 'Pet',
+            text = L['Pet']
+        },
+        [4] = {
+            value = 'Periodic',
+            text = L['Periodic']
+        },
+        [5] = {
+            value = 'Merge',
+            text = L['Merge']
+        }
+    }
+
+    local offset = -10
+    for _, data in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Simple FCT'], offset)
+        CreateCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
+        offset = offset - 35
+    end
+end

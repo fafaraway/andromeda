@@ -9,7 +9,7 @@ local InCombatLockdown = InCombatLockdown
 local SetOverrideBindingClick = SetOverrideBindingClick
 
 local F, C = unpack(select(2, ...))
-local COMBAT = F.COMBAT
+local COMBAT = F:GetModule('Combat')
 local OUF = F.Libs.oUF
 
 local modifier
@@ -21,12 +21,12 @@ function COMBAT:Focuser_Setup()
         return
     end
 
-    if self:GetName() and (not C.DB.combat.EasyFocusOnUnitframe and strmatch(self:GetName(), 'oUF_')) then
+    if self:GetName() and (not C.DB.Combat.EasyFocusOnUnitframe and strmatch(self:GetName(), 'oUF_')) then
         return
     end
 
     if not InCombatLockdown() then
-        local index = C.DB.combat.EasyFocusKey
+        local index = C.DB.Combat.EasyFocusKey
         if index == 1 then
             modifier = 'control'
         elseif index == 2 then
@@ -66,12 +66,12 @@ function COMBAT.Focuser_OnEvent(event)
     end
 end
 
-function COMBAT:Focuser()
-    if not C.DB.combat.EasyFocus then
+function COMBAT:EasyFocus()
+    if not C.DB.Combat.EasyFocus then
         return
     end
 
-    local index = C.DB.combat.EasyFocusKey
+    local index = C.DB.Combat.EasyFocusKey
     if index == 1 then
         modifier = 'control'
     elseif index == 2 then

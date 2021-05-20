@@ -138,6 +138,27 @@ local function UpdateBackdropAlpha()
     end
 end
 
+-- Combat
+local function UpdateWorldTextScale()
+    SetCVar('WorldTextScale', _G.FREE_ADB.WorldTextScale)
+end
+
+local function UpdateBlizzardFloatingCombatText()
+    local enable = _G.FREE_ADB.FloatingCombatText
+    local oldStyle = _G.FREE_ADB.FloatingCombatTextOldStyle
+
+    SetCVar('floatingCombatTextCombatDamage', enable and 1 or 0) -- 黄色伤害数字
+    SetCVar('floatingCombatTextCombatHealing', enable and 1 or 0) -- 绿色治疗数字
+
+    SetCVar('floatingCombatTextCombatDamageDirectionalScale', oldStyle and 0 or 1) -- 0 旧式向上垂直 1-5 新式
+    SetCVar('floatingCombatTextFloatMode', oldStyle and 1 or 3) -- 1 向上 2 向下 3 四散
+    SetCVar('floatingCombatTextCombatDamageDirectionalOffset', 4)
+end
+
+local function SetupSimpleFloatingCombatText()
+    GUI:SetupSimpleFloatingCombatText(GUI.Page[7])
+end
+
 
 -- Options
 GUI.OptionsList = {
@@ -251,27 +272,19 @@ GUI.OptionsList = {
         {1, 'Cooldown', 'OverrideWA', L['Override weakauras'], true},
 
     },
-    [7] = {
-        -- combat
-        {1, 'combat', 'enable', L.GUI.COMBAT.ENABLE},
-        {1, 'combat', 'combat_alert', L.GUI.COMBAT.COMBAT_ALERT, nil, nil, nil, L.GUI.COMBAT.COMBAT_ALERT_TIP},
-        {1, 'combat', 'spell_sound', L.GUI.COMBAT.SPELL_SOUND, true, nil, nil, L.GUI.COMBAT.SPELL_SOUND_TIP},
-
-        {1, 'combat', 'EasyFocusOnUnitframe', L.GUI.COMBAT.EASY_FOCUS_ON_UNITFRAME, nil, nil, nil, L.GUI.COMBAT.EASY_FOCUS_ON_UNITFRAME_TIP},
-
-        {4, 'combat', 'EasyFocusKey', L.GUI.COMBAT.EASY_FOCUS, nil, {'CTRL', 'ALT', 'SHIFT', DISABLE}, nil, L.GUI.COMBAT.EASY_FOCUS_TIP},
-
-        {4, 'combat', 'EasyMarkKey', L.GUI.COMBAT.EASY_MARK, true, {'CTRL', 'ALT', 'SHIFT', DISABLE}, nil, L.GUI.COMBAT.EASY_MARK_TIP},
-
-        {1, 'combat', 'easy_tab', L.GUI.COMBAT.EASY_TAB, nil, nil, nil, L.GUI.COMBAT.EASY_TAB_TIP},
-        {1, 'combat', 'pvp_sound', L.GUI.COMBAT.PVP_SOUND, nil, nil, nil, L.GUI.COMBAT.PVP_SOUND_TIP},
-        {},
-        {1, 'combat', 'fct', L.GUI.COMBAT.FCT, nil, nil, nil, L.GUI.COMBAT.FCT_TIP},
-        {1, 'combat', 'fct_in', L.GUI.COMBAT.FCT_IN},
-        {1, 'combat', 'fct_out', L.GUI.COMBAT.FCT_OUT, true},
-        {1, 'combat', 'fct_pet', L.GUI.COMBAT.FCT_PET},
-        {1, 'combat', 'fct_periodic', L.GUI.COMBAT.FCT_PERIODIC, true},
-        {1, 'combat', 'fct_merge', L.GUI.COMBAT.FCT_MERGE},
+    [7] = { -- combat
+        {1, 'Combat', 'Enable', L['Enable Combat']},
+        {1, 'ACCOUNT', 'FloatingCombatText', L['Show blizzard combat text'], nil, nil, UpdateBlizzardFloatingCombatText, L['|nShow blizzard combat text of damage and healing.']},
+        {3, 'ACCOUNT', 'WorldTextScale', L['Combat Text Scale'], true, {1, 3, .1}, UpdateWorldTextScale},
+        {1, 'ACCOUNT', 'FloatingCombatTextOldStyle', L['Use old style combat text'], nil, nil, UpdateBlizzardFloatingCombatText, L['|nCombat text vertical up over nameplate instead of arc.']},
+        {1, 'Combat', 'CombatAlert', L['Combat alert'], nil, nil, nil, L['|nShow an animated alert when you enter/leave combat.']},
+        {1, 'Combat', 'SpellSound', L['Spell sound'], true, nil, nil, L['|nPlay a sound when you successfully interrup or dispel.']},
+        {1, 'Combat', 'SmartTab', L['Smart TAB target'], nil, nil, nil, L['|nChange TAB binding to only target enemy players automatically when in PvP zones.']},
+        {1, 'Combat', 'PvPSound', L['PvP sound'], true, nil, nil, L['|nPlay DotA-like sounds on PvP killing blows.']},
+        {1, 'Combat', 'SimpleFloatingCombatText', L['Simple floating combat text'], nil, SetupSimpleFloatingCombatText, nil, L['|nProvides necessary combat infomation, including damage healing and events (dodge, parry, absorb etc...).']},
+        {1, 'Combat', 'EasyFocusOnUnitframe', L['Easy focus on unitframes'], true},
+        {4, 'Combat', 'EasyFocusKey', L['Easy Focus'], nil, {'CTRL', 'ALT', 'SHIFT', _G.DISABLE}},
+        {4, 'Combat', 'EasyMarkKey', L['Easy Mark'], true, {'CTRL', 'ALT', 'SHIFT', _G.DISABLE}},
     },
     [8] = {
         -- announcement
@@ -435,7 +448,7 @@ GUI.OptionsList = {
         {5, 'ACCOUNT', 'BorderColor', L['Border color'], 1},
         {5, 'ACCOUNT', 'ButtonBackdropColor', L['Button backdrop color'], 2},
         {3, 'ACCOUNT', 'BackdropAlpha', L['Backdrop Alpha'], nil, {0, 1, .01}, UpdateBackdropAlpha},
-        {3, 'ACCOUNT', 'ButtonBackdropAlpha', L['Button Backdrop Alpha'], true, {0, 1, .01}, nil},
+        {3, 'ACCOUNT', 'ButtonBackdropAlpha', L['Button Backdrop Alpha'], true, {0, 1, .01}},
     },
     [16] = {},
     [17] = {},
