@@ -22,9 +22,9 @@ local function ReskinIcon(icon, frame)
         icon.SetSize = F.Dummy
 
         local bg = F.ReskinIcon(icon, true)
-        bg.icon = bg:CreateTexture(nil, 'BACKGROUND')
+        bg.icon = bg:CreateTexture(nil, 'ARTWORK')
         bg.icon:SetInside()
-        bg.icon:SetTexture('Interface\\Icons\\Spell_Nature_WispSplode')
+        bg.icon:SetTexture(icon:GetTexture())
         bg.icon:SetTexCoord(unpack(C.TexCoord))
 
         icon.styled = true

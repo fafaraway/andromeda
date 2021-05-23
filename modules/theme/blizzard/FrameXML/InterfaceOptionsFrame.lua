@@ -33,6 +33,9 @@ tinsert(C.BlizzThemes, function()
 			"InterfaceOptionsSocialPanelTwitterLoginButton",
 			"InterfaceOptionsDisplayPanelResetTutorials",
 		}
+        if C.IsNewPatch then
+			tinsert(buttons, "InterfaceOptionsAccessibilityPanelConfigureTextToSpeech")
+		end
 		for _, buttonName in pairs(buttons) do
 			local button = _G[buttonName]
 			if not button then
@@ -104,13 +107,16 @@ tinsert(C.BlizzThemes, function()
 			"InterfaceOptionsAccessibilityPanelMovePad",
 			"InterfaceOptionsAccessibilityPanelCinematicSubtitles",
 			"InterfaceOptionsAccessibilityPanelOverrideFadeOut",
-			"InterfaceOptionsAccessibilityPanelColorblindMode",
+			"InterfaceOptionsAccessibilityPanelColorblindMode",	-- isNewPatch, removed in 38709
 		}
         if C.IsNewPatch then
 			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelSpeechToText")
 			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelTextToSpeech")
 			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelRemoteTextToSpeech")
 			tremove(checkboxes, 17)
+            tremove(checkboxes, 61)
+			tinsert(checkboxes, "InterfaceOptionsColorblindPanelColorblindMode")
+			tinsert(checkboxes, "InterfaceOptionsAccessibilityPanelQuestTextContrast")
 		end
 		for _, boxName in pairs(checkboxes) do
 			local checkbox = _G[boxName]
@@ -137,10 +143,14 @@ tinsert(C.BlizzThemes, function()
 			"InterfaceOptionsNamesPanelUnitNameplatesMotionDropDown",
 			"InterfaceOptionsCameraPanelStyleDropDown",
 			"InterfaceOptionsMousePanelClickMoveStyleDropDown",
-			"InterfaceOptionsAccessibilityPanelColorFilterDropDown",
+			"InterfaceOptionsAccessibilityPanelColorFilterDropDown", -- isNewPatch, removed in 38709
 			"InterfaceOptionsAccessibilityPanelMotionSicknessDropdown",
 			"InterfaceOptionsAccessibilityPanelShakeIntensityDropdown",
 		}
+        if C.IsNewPatch then
+			tremove(dropdowns, 16)
+			tinsert(dropdowns, "InterfaceOptionsColorblindPanelColorFilterDropDown")
+		end
 		for _, ddName in pairs(dropdowns) do
 			local dropdown = _G[ddName]
 			if not dropdown then
@@ -155,8 +165,12 @@ tinsert(C.BlizzThemes, function()
 			"InterfaceOptionsCameraPanelFollowSpeedSlider",
 			"InterfaceOptionsMousePanelMouseSensitivitySlider",
 			"InterfaceOptionsMousePanelMouseLookSpeedSlider",
-			"InterfaceOptionsAccessibilityPanelColorblindStrengthSlider",
+			"InterfaceOptionsAccessibilityPanelColorblindStrengthSlider", -- isNewPatch, removed in 38709
 		}
+        if C.IsNewPatch then
+			tremove(sliders, 5)
+			tinsert(sliders, "InterfaceOptionsColorblindPanelColorblindStrengthSlider")
+		end
 		for _, sliderName in pairs(sliders) do
 			local slider = _G[sliderName]
 			if not slider then

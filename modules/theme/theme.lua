@@ -126,6 +126,7 @@ function THEME:OnLogin()
     self:ReskinPGF()
     self:ReskinREHack()
     self:ReskinExtVendor()
+    self:ReskinFriendGroups()
 
     if not _G.FREE_ADB.ReskinBlizz then
         return

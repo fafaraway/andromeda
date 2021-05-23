@@ -180,5 +180,29 @@ tinsert(C.BlizzThemes, function()
 				end
 			end
 		end)
+
+        -- voice picker
+		local voicePicker = TextToSpeechFramePanelContainer.VoicePicker
+		local customFrame = voicePicker:GetChildren()
+		F.StripTextures(customFrame)
+		F.SetBD(customFrame)
+
+		voicePicker:HookScript("OnShow", function(self)
+			for i = 1, self.ScrollBox.ScrollTarget:GetNumChildren() do
+				local child = select(i, self.ScrollBox.ScrollTarget:GetChildren())
+				if not child.styled then
+					child.UnCheck:SetTexture(nil)
+					child.Highlight:SetColorTexture(r, g, b, .25)
+
+					local check = child.Check
+					check:SetColorTexture(r, g, b, .6)
+					check:SetSize(10, 10)
+					check:SetPoint("LEFT", 2, 0)
+					F.CreateBDFrame(check, .25)
+
+					child.styled = true
+				end
+			end
+		end)
 	end
 end)
