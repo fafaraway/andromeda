@@ -106,15 +106,14 @@ C.Assets = {
 
     Sounds = {
         Intro = C.AssetsPath .. 'sounds\\intro.mp3',
-
-        whisper = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
-        whisperBN = C.AssetsPath .. 'sounds\\whisper_bn.ogg',
-        notification = C.AssetsPath .. 'sounds\\notification.ogg',
-        feast = C.AssetsPath .. 'sounds\\feast.ogg',
-        health = C.AssetsPath .. 'sounds\\health.ogg',
-        mana = C.AssetsPath .. 'sounds\\mana.ogg',
-        interrupt = C.AssetsPath .. 'sounds\\interrupt.ogg',
-        dispel = C.AssetsPath .. 'sounds\\dispel.ogg',
+        Whisper = C.AssetsPath .. 'sounds\\whisper1.ogg',
+        WhisperBN = C.AssetsPath .. 'sounds\\whisper2.ogg',
+        Notification = C.AssetsPath .. 'sounds\\notification.ogg',
+        LowHealth = C.AssetsPath .. 'sounds\\lowhealth.ogg',
+        LowMana = C.AssetsPath .. 'sounds\\lowmana.ogg',
+        Interrupt = C.AssetsPath .. 'sounds\\interrupt.ogg',
+        Dispel = C.AssetsPath .. 'sounds\\dispel.ogg',
+        Missed = C.AssetsPath .. 'sounds\\missed.ogg',
     },
 
     Fonts = {
