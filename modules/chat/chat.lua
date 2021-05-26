@@ -4,8 +4,9 @@ local select = select
 local tostring = tostring
 local pairs = pairs
 local ipairs = ipairs
-local strsub = string.sub
-local strlower = string.lower
+local strsub = strsub
+local strlower = strlower
+local strfind = strfind
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 local IsPartyLFG = IsPartyLFG
@@ -14,6 +15,7 @@ local IsShiftKeyDown = IsShiftKeyDown
 local IsControlKeyDown = IsControlKeyDown
 local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
+local ChatEdit_AddHistory = ChatEdit_AddHistory
 local ChatTypeInfo = ChatTypeInfo
 local GetChatWindowInfo = GetChatWindowInfo
 local GetChannelName = GetChannelName
@@ -40,6 +42,8 @@ local FCF_SavePositionAndDimensions = FCF_SavePositionAndDimensions
 local hooksecurefunc = hooksecurefunc
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local ConsoleExec = ConsoleExec
+local GetItemIcon = GetItemIcon
+local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 
 local F, C = unpack(select(2, ...))
 local CHAT = F:RegisterModule('Chat')
@@ -193,55 +197,80 @@ function CHAT:RestyleChatFrame()
 end
 
 function CHAT:UpdateEditBoxBorderColor()
-    hooksecurefunc('ChatEdit_UpdateHeader', function()
-        local editBox = ChatEdit_ChooseBoxForSend()
-        local mType = editBox:GetAttribute('chatType')
-        if mType == 'CHANNEL' then
-            local id = GetChannelName(editBox:GetAttribute('channelTarget'))
-            if id == 0 then
+    hooksecurefunc(
+        'ChatEdit_UpdateHeader',
+        function()
+            local editBox = ChatEdit_ChooseBoxForSend()
+            local mType = editBox:GetAttribute('chatType')
+            if mType == 'CHANNEL' then
+                local id = GetChannelName(editBox:GetAttribute('channelTarget'))
+                if id == 0 then
+                    editBox.bd:SetBackdropBorderColor(0, 0, 0)
+                else
+                    editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType .. id].r, ChatTypeInfo[mType .. id].g, ChatTypeInfo[mType .. id].b)
+                end
+            elseif mType == 'SAY' then
                 editBox.bd:SetBackdropBorderColor(0, 0, 0)
             else
-                editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType .. id].r, ChatTypeInfo[mType .. id].g,
-                    ChatTypeInfo[mType .. id].b)
+                editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r, ChatTypeInfo[mType].g, ChatTypeInfo[mType].b)
             end
-        elseif mType == 'SAY' then
-            editBox.bd:SetBackdropBorderColor(0, 0, 0)
-        else
-            editBox.bd:SetBackdropBorderColor(ChatTypeInfo[mType].r, ChatTypeInfo[mType].g, ChatTypeInfo[mType].b)
         end
-    end)
+    )
 end
 
+function CHAT:ResizeChatFrame()
+    _G.ChatFrame1Tab:HookScript(
+        'OnMouseDown',
+        function(_, btn)
+            if btn == 'LeftButton' then
+                if select(8, GetChatWindowInfo(1)) then
+                    _G.ChatFrame1:StartSizing('TOP')
+                end
+            end
+        end
+    )
+    _G.ChatFrame1Tab:SetScript(
+        'OnMouseUp',
+        function(_, btn)
+            if btn == 'LeftButton' then
+                _G.ChatFrame1:StopMovingOrSizing()
+                FCF_SavePositionAndDimensions(_G.ChatFrame1)
+            end
+        end
+    )
+end
+
+-- Swith channels by Tab
 local cycles = {
     {
         chatType = 'SAY',
         use = function()
             return 1
-        end,
+        end
     },
     {
         chatType = 'PARTY',
         use = function()
             return IsInGroup()
-        end,
+        end
     },
     {
         chatType = 'RAID',
         use = function()
             return IsInRaid()
-        end,
+        end
     },
     {
         chatType = 'INSTANCE_CHAT',
         use = function()
             return IsPartyLFG()
-        end,
+        end
     },
     {
         chatType = 'GUILD',
         use = function()
             return IsInGuild()
-        end,
+        end
     },
     {
         chatType = 'CHANNEL',
@@ -263,14 +292,14 @@ local cycles = {
             else
                 return false
             end
-        end,
+        end
     },
     {
         chatType = 'SAY',
         use = function()
             return 1
-        end,
-    },
+        end
+    }
 }
 
 function CHAT:UpdateTabChannelSwitch()
@@ -298,6 +327,7 @@ function CHAT:UpdateTabChannelSwitch()
     end
 end
 
+-- Quick scroll
 function CHAT:QuickMouseScroll(dir)
     if dir > 0 then
         if IsShiftKeyDown() then
@@ -317,26 +347,10 @@ function CHAT:QuickMouseScroll(dir)
 end
 hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
 
-function CHAT:ResizeChatFrame()
-    _G.ChatFrame1Tab:HookScript('OnMouseDown', function(_, btn)
-        if btn == 'LeftButton' then
-            if select(8, GetChatWindowInfo(1)) then
-                _G.ChatFrame1:StartSizing('TOP')
-            end
-        end
-    end)
-    _G.ChatFrame1Tab:SetScript('OnMouseUp', function(_, btn)
-        if btn == 'LeftButton' then
-            _G.ChatFrame1:StopMovingOrSizing()
-            FCF_SavePositionAndDimensions(_G.ChatFrame1)
-        end
-    end)
-end
-
+-- Smart bubble
 local function UpdateChatBubble()
     local name, instType = GetInstanceInfo()
-    if name and
-        (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
+    if name and (instType == 'raid' or instType == 'party' or instType == 'scenario' or instType == 'pvp' or instType == 'arena') then
         SetCVar('chatBubbles', 1)
     else
         SetCVar('chatBubbles', 0)
@@ -374,8 +388,7 @@ end
 function CHAT.OnChatWhisper(event, ...)
     local msg, author, _, _, _, _, _, _, _, _, _, guid, presenceID = ...
     for word in pairs(whisperList) do
-        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) ==
-            strlower(word) then
+        if (not IsInGroup() or UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) and strlower(msg) == strlower(word) then
             if event == 'CHAT_MSG_BN_WHISPER' then
                 local accountInfo = C_BattleNet_GetAccountInfoByID(presenceID)
                 if accountInfo then
@@ -384,8 +397,7 @@ function CHAT.OnChatWhisper(event, ...)
                     if gameID then
                         local charName = gameAccountInfo.characterName
                         local realmName = gameAccountInfo.realmName
-                        if CanCooperateWithGameAccount(accountInfo) and
-                            (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
+                        if CanCooperateWithGameAccount(accountInfo) and (not C.DB.Chat.GuildOnly or CHAT:IsUnitInGuild(charName .. '-' .. realmName)) then
                             BNInviteFriend(gameID)
                         end
                     end
@@ -417,12 +429,12 @@ function CHAT:PlayWhisperSound(event)
     local currentTime = GetTime()
     if event == 'CHAT_MSG_WHISPER' then
         if not self.soundTimer or currentTime > self.soundTimer then
-            PlaySoundFile(C.Assets.Sounds.whisper, 'Master')
+            PlaySoundFile(C.Assets.Sounds.Whisper, 'Master')
         end
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     elseif event == 'CHAT_MSG_BN_WHISPER' then
         if not self.soundTimer or currentTime > self.soundTimer then
-            PlaySoundFile(C.Assets.Sounds.whisperBN, 'Master')
+            PlaySoundFile(C.Assets.Sounds.WhisperBN, 'Master')
         end
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     end
@@ -441,17 +453,35 @@ end
 
 -- (、) -> (/)
 function CHAT:PauseToSlash()
-    hooksecurefunc('ChatEdit_OnTextChanged', function(self, userInput)
-        local text = self:GetText()
-        if userInput then
-            if text == '、' then
-                self:SetText('/')
+    hooksecurefunc(
+        'ChatEdit_OnTextChanged',
+        function(self, userInput)
+            local text = self:GetText()
+            if userInput then
+                if text == '、' then
+                    self:SetText('/')
+                end
             end
         end
-    end)
+    )
 end
 
--- role icon
+-- Save slash command typo
+local function TypoHistory_Posthook_AddMessage(chat, text)
+    if text and strfind(text, _G.HELP_TEXT_SIMPLE) then
+        ChatEdit_AddHistory(chat.editBox)
+    end
+end
+
+function CHAT:SaveSlashCommandTypo()
+    for i = 1, _G.NUM_CHAT_WINDOWS do
+        if i ~= 2 then
+            hooksecurefunc(_G['ChatFrame' .. i], 'AddMessage', TypoHistory_Posthook_AddMessage)
+        end
+    end
+end
+
+-- Role icon
 local msgEvents = {
     CHAT_MSG_SAY = 1,
     CHAT_MSG_YELL = 1,
@@ -463,14 +493,14 @@ local msgEvents = {
     CHAT_MSG_INSTANCE_CHAT_LEADER = 1,
     CHAT_MSG_RAID = 1,
     CHAT_MSG_RAID_LEADER = 1,
-    CHAT_MSG_RAID_WARNING = 1,
+    CHAT_MSG_RAID_WARNING = 1
 }
 
 local texPath = 'Interface\\AddOns\\FreeUI\\assets\\textures\\'
 local roleIcons = {
     TANK = '\124T' .. texPath .. 'roles_tank.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
     HEALER = '\124T' .. texPath .. 'roles_healer.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
-    DAMAGER = '\124T' .. texPath .. 'roles_dps.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t',
+    DAMAGER = '\124T' .. texPath .. 'roles_dps.tga' .. ':12:12:0:0:64:64:5:59:5:59\124t'
 }
 
 local GetColoredName_orig = _G.GetColoredName
@@ -490,6 +520,25 @@ local function getColoredName(event, arg1, arg2, ...)
     return ret
 end
 
+-- Loot icon
+local function GetIcon(link)
+    local texture = GetItemIcon(link)
+
+    return ' \124T' .. texture .. ':12:12:0:0:64:64:5:59:5:59\124t' .. link
+end
+
+local function AddLootIcon(_, _, message, ...)
+    message = message:gsub('(\124c%x+\124Hitem:.-\124h\124r)', GetIcon)
+
+    return false, message, ...
+end
+
+-- Disable pet battle tab
+local old = _G.FCFManager_GetNumDedicatedFrames
+function _G.FCFManager_GetNumDedicatedFrames(...)
+    return select(1, ...) ~= 'PET_BATTLE_COMBAT_LOG' and old(...) or 1
+end
+
 function CHAT:OnLogin()
     if not C.DB.Chat.Enable then
         return
@@ -499,21 +548,30 @@ function CHAT:OnLogin()
         self.RestyleChatFrame(_G['ChatFrame' .. i])
     end
 
-    hooksecurefunc('FCF_OpenTemporaryWindow', function()
-        for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
-            local frame = _G[chatFrameName]
-            if frame.isTemporary then
-                self.RestyleChatFrame(frame)
+    hooksecurefunc(
+        'FCF_OpenTemporaryWindow',
+        function()
+            for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
+                local frame = _G[chatFrameName]
+                if frame.isTemporary then
+                    self.RestyleChatFrame(frame)
+                end
             end
         end
-    end)
+    )
 
     hooksecurefunc('FCFTab_UpdateColors', CHAT.UpdateTabColors)
     hooksecurefunc('FloatingChatFrame_OnEvent', CHAT.UpdateTabEventColors)
     hooksecurefunc('ChatFrame_ConfigEventHandler', CHAT.PlayWhisperSound)
 
+
+
     if C.DB.Chat.GroupRoleIcon then
         _G.GetColoredName = getColoredName
+    end
+
+    if C.DB.Chat.LootIcon then
+        ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', AddLootIcon)
     end
 
     -- Font size
@@ -539,6 +597,8 @@ function CHAT:OnLogin()
 
     hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
 
+
+
     CHAT:UpdateEditBoxBorderColor()
     CHAT:ResizeChatFrame()
     CHAT:ChatFilter()
@@ -548,8 +608,11 @@ function CHAT:OnLogin()
     CHAT:WhisperSticky()
     CHAT:AutoToggleChatBubble()
     CHAT:PauseToSlash()
+    CHAT:SaveSlashCommandTypo()
     CHAT:WhisperInvite()
     CHAT:CreateChannelBar()
+
+
 
     -- Profanity filter
     if not BNFeaturesEnabledAndConnected() then

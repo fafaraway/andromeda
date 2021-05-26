@@ -3,6 +3,7 @@
     <Script file="channelbar.lua"/>
     <Script file="copy.lua"/>
     <Script file="filter.lua"/>
+    <Script file="itemlink.lua"/>
     <Script file="shorten.lua"/>
     <Script file="spamagemeter.lua"/>
 </Ui>

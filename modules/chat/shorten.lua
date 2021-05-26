@@ -73,7 +73,7 @@ function CHAT:UpdateChannelNames(text, ...)
         text = gsub(text, '|h%[(%d+)%. BigfootWorldChannel%]|h', '|h%[WC%]|h') ]]
 
         -- Shorten other channel name
-        text = gsub(text, '|h%[(%d+)%. .-%]|h', '|h[%1]|h')
+        text = gsub(text, '|h%[(%d+)%. .-%]|h', '|h%1.|h')
     end
 
     -- Remove brackets from player name
@@ -128,6 +128,8 @@ function CHAT:Abbreviate()
     -- instance
     _G.CHAT_INSTANCE_CHAT_GET = '|Hchannel:INSTANCE|h[I]|h %s '
     _G.CHAT_INSTANCE_CHAT_LEADER_GET = '|Hchannel:INSTANCE|h[IL]|h %s '
+
+    _G.CHAT_CHANNEL_GET = '%s: '
 
     -- flags
     _G.CHAT_FLAG_AFK = '|cff808080[AFK]|r '
