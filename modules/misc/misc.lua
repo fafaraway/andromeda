@@ -69,7 +69,7 @@ function MISC:OnLogin()
     MISC:AutoScreenshot()
     MISC:FasterLoot()
     MISC:LFDFix()
-    MISC:BuyStack()
+
     MISC:MawWidgetFrame()
     MISC:MuteTrainSound()
 
@@ -182,59 +182,6 @@ function MISC:AutoScreenshot()
     F:RegisterEvent('CHALLENGE_MODE_COMPLETED', challengeModeCompleted)
     F:RegisterEvent('PLAYER_LEVEL_UP', playerLevelUp)
     F:RegisterEvent('PLAYER_DEAD', playerDead)
-end
-
--- Auto buy stack
-function MISC:BuyStack()
-    local cache = {}
-    local itemLink, id
-
-    _G.StaticPopupDialogs['FREEUI_BUY_STACK'] = {
-        text = L['Are you sure to buy |cffff0000a stack|r of these?'],
-        button1 = YES,
-        button2 = NO,
-        OnAccept = function()
-            if not itemLink then
-                return
-            end
-            BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-            cache[itemLink] = true
-            itemLink = nil
-        end,
-        hideOnEscape = 1,
-        hasItemFrame = 1,
-    }
-
-    local _MerchantItemButton_OnModifiedClick = MerchantItemButton_OnModifiedClick
-    function MerchantItemButton_OnModifiedClick(self, ...)
-        if IsAltKeyDown() then
-            id = self:GetID()
-            itemLink = GetMerchantItemLink(id)
-
-            if not itemLink then
-                return
-            end
-
-            local name, _, quality, _, _, _, _, maxStack, _, texture = GetItemInfo(itemLink)
-            if maxStack and maxStack > 1 then
-                if not cache[itemLink] then
-                    local r, g, b = GetItemQualityColor(quality or 1)
-                    StaticPopup_Show('FREEUI_BUY_STACK', ' ', ' ', {
-                        ['texture'] = texture,
-                        ['name'] = name,
-                        ['color'] = {r, g, b, 1},
-                        ['link'] = itemLink,
-                        ['index'] = id,
-                        ['count'] = maxStack,
-                    })
-                else
-                    BuyMerchantItem(id, GetMerchantItemMaxStack(id))
-                end
-            end
-        end
-
-        _MerchantItemButton_OnModifiedClick(self, ...)
-    end
 end
 
 -- Maw threat bar
