@@ -35,7 +35,7 @@ local DAILY = DAILY
 local QUEST_COMPLETE = QUEST_COMPLETE
 
 local F, C, L = unpack(select(2, ...))
-local ANNOUNCEMENT = F.ANNOUNCEMENT
+local ANNOUNCEMENT = F:GetModule('Announcement')
 
 local debugMode = false
 local completedQuest = {}
@@ -55,7 +55,7 @@ local function CreateCheckBox()
     bu:SetChecked(C.DB.Announcement.Quest)
     bu:SetScript('OnClick', function(self)
         C.DB.Announcement.Quest = self:GetChecked()
-        ANNOUNCEMENT:QuestNotification()
+        ANNOUNCEMENT:AnnounceQuest()
     end)
     bu.title = L['Announce progress']
     F.AddTooltip(bu, 'ANCHOR_TOPRIGHT', L['|nLet your teammates know the progress of quests.'], 'BLUE')
@@ -174,7 +174,7 @@ function ANNOUNCEMENT:FindWorldQuestComplete(questID)
     end
 end
 
-function ANNOUNCEMENT:QuestNotification()
+function ANNOUNCEMENT:AnnounceQuest()
     if C.DB.Announcement.Quest then
         F:RegisterEvent('QUEST_ACCEPTED', ANNOUNCEMENT.FindQuestAccept)
         F:RegisterEvent('QUEST_LOG_UPDATE', ANNOUNCEMENT.FindQuestComplete)

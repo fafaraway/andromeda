@@ -1,8 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="announcement.lua"/>
-	<Script file="battlerez.lua"/>
-	<Script file="instancereset.lua"/>
-	<Script file="interrupt.lua"/>
+	<Script file="reset.lua"/>
 	<Script file="quest.lua"/>
-	<Script file="utility.lua"/>
 </Ui>

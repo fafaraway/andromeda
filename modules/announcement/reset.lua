@@ -4,9 +4,14 @@ local select = select
 local strmatch = strmatch
 local gsub = gsub
 local format = format
+local IsPartyLFG = IsPartyLFG
+local IsInRaid = IsInRaid
+local IsInGroup = IsInGroup
+local SendChatMessage = SendChatMessage
 
 local F, C, L = unpack(select(2, ...))
-local ANNOUNCEMENT = F.ANNOUNCEMENT
+local ANNOUNCEMENT = F:GetModule('Announcement')
+
 local debugMode = false
 
 local msgList = {
@@ -28,26 +33,27 @@ local function SendMessage(msg)
     end
 end
 
-local function AnnounceReset(text)
+local function InstanceReset(text)
     for systemMessage, friendlyMessage in pairs(msgList) do
         systemMessage = _G[systemMessage]
         if (strmatch(text, gsub(systemMessage, '%%s', '.+'))) then
             local instance = strmatch(text, gsub(systemMessage, '%%s', '(.+)'))
 
-            --ANNOUNCEMENT:SendMessage(format(friendlyMessage, instance), ANNOUNCEMENT:GetChannel())
-
             SendMessage(format(friendlyMessage, instance))
+
             return
         end
     end
 end
 
-function ANNOUNCEMENT:InstanceReset()
+local function OnEvent(event, text)
+    InstanceReset(text)
+end
+
+function ANNOUNCEMENT:AnnounceReset()
     if not C.DB.Announcement.Reset then
         return
     end
 
-    F:RegisterEvent('CHAT_MSG_SYSTEM', function(event, text)
-        AnnounceReset(text)
-    end)
+    F:RegisterEvent('CHAT_MSG_SYSTEM', OnEvent)
 end
