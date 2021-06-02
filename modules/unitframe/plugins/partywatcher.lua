@@ -3,7 +3,7 @@ local unpack = unpack
 local select = select
 local wipe = wipe
 local GetTime = GetTime
-local GetNumGroupMembers = GetNumGroupMembers
+local UnitGUID = UnitGUID
 local GetSpellTexture = GetSpellTexture
 
 local F = unpack(select(2, ...))
@@ -53,7 +53,6 @@ end
 local function ResetButtons(self)
     local element = self.PartyWatcher
     element.index = 0
-    element.lastCount = nil
     wipe(element.spellToButton)
     for i = 1, element.__max do
         local button = element[i]
@@ -64,10 +63,10 @@ end
 
 local function ResetButtonsWithCheck(self)
     local element = self.PartyWatcher
-    local numMembers = GetNumGroupMembers()
-    if not element.lastCount or element.lastCount ~= numMembers then
+    local currentGUID = UnitGUID(self.unit)
+    if not element.lastGUID or element.lastGUID ~= currentGUID then
         ResetButtons(self)
-        element.lastCount = numMembers
+        element.lastGUID = currentGUID
     end
 end
 
