@@ -158,6 +158,12 @@ local function isQuestItem(item)
 	--return item.classID == LE_ITEM_CLASS_QUESTITEM
 end
 
+local function isAnimaItem(item)
+	if not C.DB.inventory.item_filter then return end
+	if not C.DB.inventory.FilterAnima then return end
+	return item.id and C_Item.IsAnimaItemByID(item.id)
+end
+
 function INVENTORY:GetFilters()
 	local filters = {}
 
@@ -224,6 +230,9 @@ function INVENTORY:GetFilters()
 	filters.bankQuest = function(item)
 		return isItemInBank(item) and isQuestItem(item)
 	end
+
+    filters.bagAnima = function(item) return isItemInBag(item) and isAnimaItem(item) end
+	filters.bankAnima = function(item) return isItemInBank(item) and isAnimaItem(item) end
 
 	return filters
 end

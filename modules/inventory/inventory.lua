@@ -800,29 +800,31 @@ function INVENTORY:OnLogin()
     function Backpack:OnInit()
         local MyContainer = self:GetContainerClass()
 
-        AddNewContainer('Bag', 9, 'Junk', filters.bagsJunk)
-        AddNewContainer('Bag', 8, 'BagFavourite', filters.bagFavourite)
+        AddNewContainer('Bag', 10, 'Junk', filters.bagsJunk)
+        AddNewContainer("Bag", 7, "BagAnima", filters.bagAnima)
+        AddNewContainer('Bag', 9, 'BagFavourite', filters.bagFavourite)
         AddNewContainer('Bag', 3, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 1, 'AzeriteItem', filters.bagAzeriteItem)
         AddNewContainer('Bag', 2, 'Equipment', filters.bagEquipment)
         AddNewContainer('Bag', 4, 'BagCollection', filters.bagCollection)
         AddNewContainer('Bag', 6, 'Consumable', filters.bagConsumable)
         AddNewContainer('Bag', 5, 'BagGoods', filters.bagGoods)
-        AddNewContainer('Bag', 7, 'BagQuest', filters.bagQuest)
+        AddNewContainer('Bag', 8, 'BagQuest', filters.bagQuest)
 
         f.main = MyContainer:New('Bag', {Columns = bagsWidth, Bags = 'bags'})
         f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
         f.main:SetFilter(filters.onlyBags, true)
 
-        AddNewContainer('Bank', 9, 'BankFavourite', filters.bankFavourite)
+        AddNewContainer("Bank", 7, "BankAnima", filters.bankAnima)
+        AddNewContainer('Bank', 10, 'BankFavourite', filters.bankFavourite)
         AddNewContainer('Bank', 3, 'BankEquipSet', filters.bankEquipSet)
         AddNewContainer('Bank', 1, 'BankAzeriteItem', filters.bankAzeriteItem)
         AddNewContainer('Bank', 4, 'BankLegendary', filters.bankLegendary)
         AddNewContainer('Bank', 2, 'BankEquipment', filters.bankEquipment)
         AddNewContainer('Bank', 5, 'BankCollection', filters.bankCollection)
-        AddNewContainer('Bank', 7, 'BankConsumable', filters.bankConsumable)
+        AddNewContainer('Bank', 8, 'BankConsumable', filters.bankConsumable)
         AddNewContainer('Bank', 6, 'BankGoods', filters.bankGoods)
-        AddNewContainer('Bank', 8, 'BankQuest', filters.bankQuest)
+        AddNewContainer('Bank', 9, 'BankQuest', filters.bankQuest)
 
         f.bank = MyContainer:New('Bank', {Columns = bankWidth, Bags = 'bank'})
         f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
@@ -1204,6 +1206,8 @@ function INVENTORY:OnLogin()
             label = AUCTION_CATEGORY_TRADE_GOODS
         elseif strmatch(name, 'Quest') then
             label = QUESTS_LABEL
+        elseif strmatch(name, "Anima") then
+			label = ANIMA
         end
 
         if label then
