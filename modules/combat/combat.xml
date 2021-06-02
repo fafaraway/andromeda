@@ -5,6 +5,5 @@
     <Script file="focuser.lua"/>
     <Script file="marker.lua"/>
     <Script file="pvp_sound.lua"/>
-    <Script file="spell_sound.lua"/>
     <Script file="tabber.lua"/>
 </Ui>
