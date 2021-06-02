@@ -24,10 +24,10 @@ local function ReplacePowerColor(name, index, color)
     colors.power[index] = colors.power[name]
 end
 
-ReplacePowerColor('MANA', 0, {87 / 255, 165 / 255, 208 / 255})
+ReplacePowerColor('MANA', 0, {54 / 255, 127 / 255, 212 / 255})
 ReplacePowerColor('RAGE', 1, {255 / 255, 26 / 255, 48 / 255})
 ReplacePowerColor('FOCUS', 2, {255 / 255, 128 / 255, 64 / 255})
-ReplacePowerColor('ENERGY', 3, {174 / 255, 34 / 255, 45 / 255})
+ReplacePowerColor('ENERGY', 3, {238 / 255, 212 / 255, 78 / 255})
 ReplacePowerColor('COMBO_POINTS', 4, {199 / 255, 171 / 255, 90 / 255})
 ReplacePowerColor('RUNES', 5, {0 / 255, 200 / 255, 255 / 255})
 ReplacePowerColor('RUNIC_POWER', 6, {135 / 255, 214 / 255, 194 / 255})
@@ -38,7 +38,7 @@ ReplacePowerColor('MAELSTROM', 11, {0 / 255, 200 / 255, 255 / 255})
 ReplacePowerColor('CHI', 12, {0, 204 / 255, 153 / 255})
 ReplacePowerColor('INSANITY', 13, {179 / 255, 96 / 255, 244 / 255})
 ReplacePowerColor('ARCANE_CHARGES', 16, {125 / 255, 75 / 255, 250 / 255})
-ReplacePowerColor('FURY', 17, {255 / 255, 50 / 255, 50 / 255})
+ReplacePowerColor('FURY', 17, {220 / 255, 11 / 255, 217 / 255})
 ReplacePowerColor('PAIN', 18, {255 / 255, 156 / 255, 0 / 255})
 
 colors.power.max = {
@@ -65,15 +65,15 @@ colors.debuff = {
 }
 
 colors.reaction = {
-    [1] = {182 / 255, 34 / 255, 32 / 255}, -- Hated / Enemy
-    [2] = {182 / 255, 34 / 255, 32 / 255},
-    [3] = {182 / 255, 92 / 255, 32 / 255},
-    [4] = {220 / 225, 180 / 255, 52 / 255},
-    [5] = {132 / 255, 181 / 255, 26 / 255},
-    [6] = {132 / 255, 181 / 255, 26 / 255},
-    [7] = {132 / 255, 181 / 255, 26 / 255},
-    [8] = {132 / 255, 181 / 255, 26 / 255},
-    [9] = {0 / 255, 110 / 255, 255 / 255} -- Paragon (Reputation)
+    [1] = {223 / 255, 54 / 255, 15 / 255}, -- Hated / Enemy
+    [2] = {223 / 255, 54 / 255, 15 / 255},
+    [3] = {223 / 255, 54 / 255, 15 / 255},
+    [4] = {232 / 255, 190 / 255, 54 / 255},
+    [5] = {74 / 255, 209 / 255, 68 / 255},
+    [6] = {74 / 255, 209 / 255, 68 / 255},
+    [7] = {74 / 255, 209 / 255, 68 / 255},
+    [8] = {74 / 255, 209 / 255, 68 / 255},
+    [9] = {69 / 255, 209 / 255, 155 / 255} -- Paragon (Reputation)
 }
 
 colors.smooth = {1, 0, 0, 1, 1, 0, 0, 1, 0}

@@ -265,8 +265,7 @@ function NAMEPLATE:UpdateColor(_, unit)
         elseif UnitIsTapDenied(unit) and not UnitPlayerControlled(unit) then
             r, g, b = unpack(OUF.colors.tapped)
         else
-            -- r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
-            r, g, b = UnitSelectionColor(unit, true)
+            r, g, b = unpack(OUF.colors.reaction[UnitReaction(unit, 'player') or 5])
             if status and (tankMode or C.MyRole == 'Tank') then
                 if status == 3 then
                     if C.MyRole ~= 'Tank' and revertThreat then
@@ -731,9 +730,9 @@ end
 -- M+ progress
 -- AngryKeystones REQUIRED
 function NAMEPLATE:CreateDungeonProgress(self)
-    if not C.DB.Nameplate.AKProgress then
-        return
-    end
+    -- if not C.DB.Nameplate.AKProgress then
+    --     return
+    -- end
 
     self.progressText = F.CreateFS(self, C.Assets.Fonts.Regular, 11, true, '', nil, true)
     self.progressText:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', 0, 3)
@@ -1079,6 +1078,7 @@ function NAMEPLATE:OnLogin()
     NAMEPLATE:CheckExplosives()
     NAMEPLATE:UpdateGroupRoles()
     NAMEPLATE:RefreshPlateOnFactionChanged()
+    NAMEPLATE:InitializeMajorSpells()
     NAMEPLATE:RefreshMajorSpells()
 
     OUF:RegisterStyle('Nameplate', NAMEPLATE.CreateNameplateStyle)

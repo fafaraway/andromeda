@@ -99,7 +99,7 @@ function UNITFRAME:OnLogin()
     UNITFRAME:InitializeRaidDebuffs()
     UNITFRAME:InitializePartySpells()
     UNITFRAME:InitializeCornerSpells()
-    NAMEPLATE:InitializeMajorSpells()
+
 
 
     self:SpawnPlayer()

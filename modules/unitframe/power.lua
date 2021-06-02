@@ -94,16 +94,16 @@ function UNITFRAME:CreatePowerBar(self)
     power.colorTapping = true
     power.colorDisconnected = true
 
-    if C.DB.Unitframe.Transparent and style ~= 'player' then
-        power.colorClass = true
-        power.colorReaction = true
-    else
+    -- if C.DB.Unitframe.Transparent and style ~= 'player' then
+    --     power.colorClass = true
+    --     power.colorReaction = true
+    -- else
         power.colorPower = true
-    end
+    -- end
 
     self.Power.PostUpdate = PostUpdatePower
 
-    if style == 'player' or style == 'playerplate' then
+    if style == 'player' then
         self.Power.PostUpdateColor = UpdatePowerColor
     end
 end

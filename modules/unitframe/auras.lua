@@ -180,12 +180,14 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
         else
             return true
         end
-    elseif style == 'focus' or style == 'focustarget' or style == 'pet' then
+    elseif style == 'focus' or style == 'focustarget' then
         if button.isDebuff then
             return true
         else
             return false
         end
+    elseif style == 'pet' then
+        return true
     elseif (style == 'nameplate' and C.DB.Nameplate.ShowAura) or style == 'arena' then
         if _G.FREE_ADB['NPAuraFilter'][2][spellID] or C.AuraBlackList[spellID] then
             return false
@@ -240,7 +242,8 @@ function UNITFRAME.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spell
 end
 
 local debuffBlackList = {
-    [206151] = true -- Challenger's Burden
+    [206151] = true, -- Challenger's Burden
+    [331154] = true,
 }
 
 function UNITFRAME.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)

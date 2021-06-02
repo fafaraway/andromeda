@@ -28,12 +28,6 @@ local UnitSelectionColor = UnitSelectionColor
 local IsResting = IsResting
 local GetCVarBool = GetCVarBool
 local ALTERNATE_POWER_INDEX = Enum.PowerType.Alternate
-local YOU = YOU
-local BOSS = BOSS
-local RARE = RARE
-local RAREELITE = RAREELITE
-local ELITE = ELITE
-local LEVEL = LEVEL
 
 local F, C = unpack(select(2, ...))
 local UNITFRAME = F:GetModule('Unitframe')
@@ -104,7 +98,7 @@ tags['free:title'] = function(unit)
     F.ScanTip:SetUnit(unit)
 
     local title = _G[format('FreeUI_ScanTooltipTextLeft%d', GetCVarBool('colorblindmode') and 3 or 2)]:GetText()
-    if title and not strfind(title, '^' .. LEVEL) then
+    if title and not strfind(title, '^' .. _G.LEVEL) then
         return title
     end
 end
@@ -146,15 +140,35 @@ tags['free:name'] = function(unit)
     local useAbbr = C.DB.Unitframe.AbbreviatedName
     local str = UnitName(unit)
     local abbrName = F:AbbreviateString(str)
+    local r, g, b
 
-    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or
-        (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
-        return C.RedColor .. '<' .. YOU .. '>'
+    if UnitIsPlayer(unit) then
+        local _, class = UnitClass(unit)
+        r, g, b = unpack(colors.class[class])
+    else
+        r, g, b = unpack(colors.reaction[UnitReaction(unit, 'player') or 5])
+    end
+
+    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+        return C.RedColor .. '<' .. _G.YOU .. '>'
+    else
+        return format('|cff%02x%02x%02x%s|r', r * 255, g * 255, b * 255, F:ShortenString(useAbbr and abbrName or str, C.IsChinses and 6 or 8, true))
+    end
+end
+tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
+
+tags['free:npname'] = function(unit)
+    local useAbbr = C.DB.Unitframe.AbbreviatedName
+    local str = UnitName(unit)
+    local abbrName = F:AbbreviateString(str)
+
+    if (unit == 'targettarget' and UnitIsUnit('targettarget', 'player')) or (unit == 'focustarget' and UnitIsUnit('focustarget', 'player')) then
+        return C.RedColor .. '<' .. _G.YOU .. '>'
     else
         return F:ShortenString(useAbbr and abbrName or str, C.IsChinses and 6 or 8, true)
     end
 end
-tagEvents['free:name'] = 'UNIT_NAME_UPDATE'
+tagEvents['free:npname'] = 'UNIT_NAME_UPDATE'
 
 tags['free:groupname'] = function(unit)
     local groupName = C.DB.Unitframe.GroupShowName
@@ -184,13 +198,13 @@ tagEvents['free:resting'] = 'PLAYER_UPDATE_RESTING'
 tags['free:classification'] = function(unit)
     local class, level = UnitClassification(unit), UnitLevel(unit)
     if (class == 'worldboss' or level == -1) then
-        return '|cff9D2933' .. BOSS .. '|r'
+        return '|cff9D2933' .. _G.BOSS .. '|r'
     elseif (class == 'rare') then
-        return '|cffFF99FF' .. RARE .. '|r'
+        return '|cffFF99FF' .. _G.RARE .. '|r'
     elseif (class == 'rareelite') then
-        return '|cffFF0099' .. RAREELITE .. '|r'
+        return '|cffFF0099' .. _G.RAREELITE .. '|r'
     elseif (class == 'elite') then
-        return '|cffCC3300' .. ELITE .. '|r'
+        return '|cffCC3300' .. _G.ELITE .. '|r'
     else
         return ''
     end
@@ -217,12 +231,10 @@ tags['free:tarname'] = function(unit)
     local tarUnit = unit .. 'target'
     if UnitExists(tarUnit) then
         local tarClass = select(2, UnitClass(tarUnit))
-        return '<' .. F:RGBToHex(colors.class[tarClass]) .. UnitName(tarUnit) .. '>'
+        return '<' .. F:RGBToHex(colors.class[tarClass]) .. UnitName(tarUnit) .. '|r>'
     end
 end
 tagEvents['free:tarname'] = 'UNIT_NAME_UPDATE UNIT_THREAT_SITUATION_UPDATE UNIT_HEALTH'
-
-
 
 local font = C.Assets.Fonts.Condensed
 
@@ -254,7 +266,14 @@ function UNITFRAME:CreateNameText(self)
         name:SetPoint('BOTTOM', self, 'TOP', 0, 3)
     end
 
-    self:Tag(name, '[free:name] [arenaspec]')
+    if style == 'nameplate' then
+        self:Tag(name, '[free:npname]')
+    elseif style == 'arena' then
+        self:Tag(name, '[free:name] [arenaspec]')
+    else
+        self:Tag(name, '[free:name]')
+    end
+
     self.Name = name
 end
 
