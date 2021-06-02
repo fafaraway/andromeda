@@ -91,7 +91,6 @@ end
 
 local ignoredWidgetIDs = {
     [3246] = true, -- Torghast progressbar
-	[3273] = true, -- Torghast progressbar
 }
 
 tinsert(C.BlizzThemes, function()

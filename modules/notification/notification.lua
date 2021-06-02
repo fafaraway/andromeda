@@ -136,7 +136,7 @@ local function Display(name, message, clickFunc, texture)
     ShowBanner()
 
     if playSounds then
-        PlaySoundFile(C.Assets.Sounds.notification)
+        PlaySoundFile(C.Assets.Sounds.Notification)
     end
 end
 

@@ -36,7 +36,7 @@ local scripts = {
     'OnValueChanged',
     'OnClick',
     'OnMouseDown',
-    'OnMouseUp',
+    'OnMouseUp'
 }
 
 local framesToHide = {
@@ -56,7 +56,7 @@ local framesToDisable = {
     OverrideActionBarExpBar,
     OverrideActionBarHealthBar,
     OverrideActionBarPowerBar,
-    OverrideActionBarPitchFrame,
+    OverrideActionBarPitchFrame
 }
 
 local function DisableAllScripts(frame)
@@ -120,6 +120,11 @@ function ACTIONBAR:RemoveBlizzArt()
     for _, frame in next, framesToDisable do
         frame:UnregisterAllEvents()
         DisableAllScripts(frame)
+    end
+
+    -- Fix maw block anchor
+    if C.IsNewPatch then
+        MainMenuBarVehicleLeaveButton:RegisterEvent('PLAYER_ENTERING_WORLD')
     end
 
     -- Update button grid

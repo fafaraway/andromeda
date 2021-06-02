@@ -48,7 +48,7 @@ local classification = {
     elite = ' |cffcc8800' .. _G.ELITE .. '|r',
     rare = ' |cffff99cc' .. L['Rare'] .. '|r',
     rareelite = ' |cffff99cc' .. L['Rare'] .. '|r ' .. '|cffcc8800' .. _G.ELITE .. '|r',
-    worldboss = ' |cffff0000' .. _G.BOSS .. '|r',
+    worldboss = ' |cffff0000' .. _G.BOSS .. '|r'
 }
 
 function TOOLTIP:GetUnit()
@@ -424,4 +424,3 @@ function TOOLTIP:OnLogin()
     TOOLTIP:ConduitCollectionData()
     TOOLTIP:Achievement()
 end
-
