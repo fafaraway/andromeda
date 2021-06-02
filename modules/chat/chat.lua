@@ -7,6 +7,7 @@ local ipairs = ipairs
 local strsub = strsub
 local strlower = strlower
 local strfind = strfind
+local strmatch = strmatch
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 local IsPartyLFG = IsPartyLFG
@@ -16,6 +17,7 @@ local IsControlKeyDown = IsControlKeyDown
 local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend
 local ChatEdit_AddHistory = ChatEdit_AddHistory
+local ChatEdit_OnEscapePressed = ChatEdit_OnEscapePressed
 local ChatTypeInfo = ChatTypeInfo
 local GetChatWindowInfo = GetChatWindowInfo
 local GetChannelName = GetChannelName
@@ -44,6 +46,7 @@ local UnitGroupRolesAssigned = UnitGroupRolesAssigned
 local ConsoleExec = ConsoleExec
 local GetItemIcon = GetItemIcon
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+local IsAltKeyDown = IsAltKeyDown
 
 local F, C = unpack(select(2, ...))
 local CHAT = F:RegisterModule('Chat')
@@ -108,7 +111,7 @@ function CHAT:UpdateTabEventColors(event)
     end
 end
 
-function CHAT:RestyleChatFrame()
+local function SetupChatFrame(self)
     if not self or self.styled then
         return
     end
@@ -139,7 +142,6 @@ function CHAT:RestyleChatFrame()
     eb:ClearAllPoints()
     eb:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 4, 26)
     eb:SetPoint('TOPRIGHT', self, 'TOPRIGHT', -17, 50)
-
     eb.bd = F.SetBD(eb)
 
     for i = 3, 8 do
@@ -162,6 +164,18 @@ function CHAT:RestyleChatFrame()
 
     F.StripTextures(self)
 
+    if _G.CHAT_OPTIONS then
+        _G.CHAT_OPTIONS.HIDE_FRAME_ALERTS = true
+    end -- only flash whisper
+    SetCVar('chatStyle', 'classic')
+    SetCVar('whisperMode', 'inline') -- blizz reset this on NPE
+    F.HideOption(_G.InterfaceOptionsSocialPanelChatStyle)
+    _G.CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
+
+    for i = 1, 15 do
+        _G.CHAT_FONT_HEIGHTS[i] = i + 9
+    end
+
     F.HideObject(self.buttonFrame)
     F.HideObject(self.ScrollBar)
     F.HideObject(self.ScrollToBottomButton)
@@ -179,6 +193,12 @@ function CHAT:RestyleChatFrame()
         F.HideObject(_G.ChatFrameToggleVoiceMuteButton)
     end
 
+    self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
+
+    self.styled = true
+end
+
+function CHAT:SetupToastFrame()
     _G.BNToastFrame:SetClampedToScreen(true)
     _G.BNToastFrame:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
 
@@ -190,10 +210,25 @@ function CHAT:RestyleChatFrame()
 
     _G.ChatAlertFrame:SetClampedToScreen(true)
     _G.ChatAlertFrame:SetClampRectInsets(-C.UIGap, C.UIGap, C.UIGap, -C.UIGap)
+end
 
-    self.oldAlpha = self.oldAlpha or 0 -- fix blizz error, need reviewed
+function CHAT:SetupChatFrame()
+    for i = 1, _G.NUM_CHAT_WINDOWS do
+        SetupChatFrame(_G['ChatFrame' .. i])
+    end
+end
 
-    self.styled = true
+local function SetupTemporaryWindow()
+    for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
+        local frame = _G[chatFrameName]
+        if frame.isTemporary then
+            CHAT.SetupChatFrame(frame)
+        end
+    end
+end
+
+function CHAT:SetupTemporaryWindow()
+    hooksecurefunc('FCF_OpenTemporaryWindow', SetupTemporaryWindow)
 end
 
 function CHAT:UpdateEditBoxBorderColor()
@@ -238,6 +273,16 @@ function CHAT:ResizeChatFrame()
             end
         end
     )
+end
+
+function CHAT:UpdateChatFrame()
+    if not C.DB.Chat.LockPosition then
+        return
+    end
+
+    hooksecurefunc('FCF_SavePositionAndDimensions', CHAT.UpdateChatSize)
+    F:RegisterEvent('UI_SCALE_CHANGED', CHAT.UpdateChatSize)
+    CHAT:UpdateChatSize()
 end
 
 -- Swith channels by Tab
@@ -345,7 +390,6 @@ function CHAT:QuickMouseScroll(dir)
         end
     end
 end
-hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
 
 -- Smart bubble
 local function UpdateChatBubble()
@@ -358,14 +402,12 @@ local function UpdateChatBubble()
 end
 
 function CHAT:AutoToggleChatBubble()
-    if C.DB.Chat.SmartChatBubble then
-        F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
-    else
-        F:UnregisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
-    end
+    if not C.DB.Chat.SmartChatBubble then return end
+
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
 end
 
--- Autoinvite by whisper
+-- Auto invite by whisper
 local whisperList = {}
 function CHAT:UpdateWhisperList()
     F:SplitList(whisperList, C.DB.Chat.InviteKeyword, true)
@@ -451,6 +493,29 @@ function CHAT:WhisperSticky()
     end
 end
 
+-- Alt+Click to Invite player
+function CHAT:AltClickToInvite(link)
+    if IsAltKeyDown() then
+        local ChatFrameEditBox = ChatEdit_ChooseBoxForSend()
+        local player = link:match('^player:([^:]+)')
+        local bplayer = link:match('^BNplayer:([^:]+)')
+        if player then
+            C_PartyInfo_InviteUnit(player)
+        elseif bplayer then
+            local _, value = strmatch(link, '(%a+):(.+)')
+            local _, bnID = strmatch(value, '([^:]*):([^:]*):')
+            if not bnID then
+                return
+            end
+            local accountInfo = C_BattleNet_GetAccountInfoByID(bnID)
+            if accountInfo.gameAccountInfo.clientProgram == _G.BNET_CLIENT_WOW and CanCooperateWithGameAccount(accountInfo) then
+                BNInviteFriend(accountInfo.gameAccountInfo.gameAccountID)
+            end
+        end
+        ChatEdit_OnEscapePressed(ChatFrameEditBox) -- Secure hook opens whisper, so closing it.
+    end
+end
+
 -- (、) -> (/)
 function CHAT:PauseToSlash()
     hooksecurefunc(
@@ -520,6 +585,14 @@ local function getColoredName(event, arg1, arg2, ...)
     return ret
 end
 
+function CHAT:AddRoleIcon()
+    if not C.DB.Chat.GroupRoleIcon then
+        return
+    end
+
+    _G.GetColoredName = getColoredName
+end
+
 -- Loot icon
 local function GetIcon(link)
     local texture = GetItemIcon(link)
@@ -527,10 +600,18 @@ local function GetIcon(link)
     return ' \124T' .. texture .. ':12:12:0:0:64:64:5:59:5:59\124t' .. link
 end
 
-local function AddLootIcon(_, _, message, ...)
+local function ReplaceLootString(_, _, message, ...)
     message = message:gsub('(\124c%x+\124Hitem:.-\124h\124r)', GetIcon)
 
     return false, message, ...
+end
+
+function CHAT:AddLootIcon()
+    if not C.DB.Chat.LootIcon then
+        return
+    end
+
+    ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', ReplaceLootString)
 end
 
 -- Disable pet battle tab
@@ -539,68 +620,36 @@ function _G.FCFManager_GetNumDedicatedFrames(...)
     return select(1, ...) ~= 'PET_BATTLE_COMBAT_LOG' and old(...) or 1
 end
 
+-- Disable profanity filter
+function CHAT:DisableProfanityFilter()
+    if not BNFeaturesEnabledAndConnected() then
+        return
+    end
+
+    if C.IsCNPortal then
+        ConsoleExec('portal TW')
+    end
+    SetCVar('profanityFilter', 0)
+end
+
 function CHAT:OnLogin()
     if not C.DB.Chat.Enable then
         return
     end
 
-    for i = 1, _G.NUM_CHAT_WINDOWS do
-        self.RestyleChatFrame(_G['ChatFrame' .. i])
-    end
-
-    hooksecurefunc(
-        'FCF_OpenTemporaryWindow',
-        function()
-            for _, chatFrameName in ipairs(_G.CHAT_FRAMES) do
-                local frame = _G[chatFrameName]
-                if frame.isTemporary then
-                    self.RestyleChatFrame(frame)
-                end
-            end
-        end
-    )
-
     hooksecurefunc('FCFTab_UpdateColors', CHAT.UpdateTabColors)
     hooksecurefunc('FloatingChatFrame_OnEvent', CHAT.UpdateTabEventColors)
+    hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
     hooksecurefunc('ChatFrame_ConfigEventHandler', CHAT.PlayWhisperSound)
-
-
-
-    if C.DB.Chat.GroupRoleIcon then
-        _G.GetColoredName = getColoredName
-    end
-
-    if C.DB.Chat.LootIcon then
-        ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', AddLootIcon)
-    end
-
-    -- Font size
-    for i = 1, 15 do
-        _G.CHAT_FONT_HEIGHTS[i] = i + 9
-    end
-
-    -- Default
-    if _G.CHAT_OPTIONS then
-        _G.CHAT_OPTIONS.HIDE_FRAME_ALERTS = true
-    end -- only flash whisper
-    SetCVar('chatStyle', 'classic')
-    SetCVar('whisperMode', 'inline') -- blizz reset this on NPE
-    F.HideOption(_G.InterfaceOptionsSocialPanelChatStyle)
-    _G.CombatLogQuickButtonFrame_CustomTexture:SetTexture(nil)
-
-    -- Lock chatframe
-    if C.DB.Chat.LockPosition then
-        hooksecurefunc('FCF_SavePositionAndDimensions', self.UpdateChatSize)
-        F:RegisterEvent('UI_SCALE_CHANGED', self.UpdateChatSize)
-        self:UpdateChatSize()
-    end
-
     hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
+    hooksecurefunc('SetItemRef', CHAT.AltClickToInvite)
 
-
-
-    CHAT:UpdateEditBoxBorderColor()
+    CHAT:SetupChatFrame()
+    CHAT:SetupToastFrame()
+    CHAT:SetupTemporaryWindow()
     CHAT:ResizeChatFrame()
+    CHAT:UpdateChatFrame()
+    CHAT:UpdateEditBoxBorderColor()
     CHAT:ChatFilter()
     CHAT:Abbreviate()
     CHAT:ChatCopy()
@@ -611,16 +660,8 @@ function CHAT:OnLogin()
     CHAT:SaveSlashCommandTypo()
     CHAT:WhisperInvite()
     CHAT:CreateChannelBar()
-
-
-
-    -- Profanity filter
-    if not BNFeaturesEnabledAndConnected() then
-        return
-    end
-
-    if C.IsCNPortal then
-        ConsoleExec('portal TW')
-    end
-    SetCVar('profanityFilter', 0)
+    CHAT:RealLink()
+    CHAT:AddLootIcon()
+    CHAT:AddRoleIcon()
+    CHAT:DisableProfanityFilter()
 end

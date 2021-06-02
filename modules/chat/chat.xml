@@ -4,6 +4,7 @@
     <Script file="copy.lua"/>
     <Script file="filter.lua"/>
     <Script file="itemlink.lua"/>
+    <Script file="reallink.lua"/>
     <Script file="shorten.lua"/>
     <Script file="spamagemeter.lua"/>
 </Ui>

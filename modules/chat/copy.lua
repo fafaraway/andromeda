@@ -93,7 +93,7 @@ local function IsInChannel(event)
 end
 
 function CHAT:ChatCopy_OnClick(btn)
-    if C.IsCNPortal and not C.DB.Chat.ChannelBar and btn == 'MiddleButton' then
+    --[[ if C.IsCNPortal and not C.DB.Chat.ChannelBar and btn == 'MiddleButton' then
         if CHAT.CopyButton.inChannel then
             LeaveChannelByName(channelName)
 
@@ -107,7 +107,7 @@ function CHAT:ChatCopy_OnClick(btn)
             F:Print(format(C.GreenColor .. L['Join'] .. '|r %s', channelName))
             CHAT.CopyButton.inChannel = true
         end
-    end
+    end ]]
 
     if btn == 'LeftButton' then
         if CHAT.isHidden then
@@ -141,6 +141,9 @@ function CHAT:ChatCopy_OnClick(btn)
         else
             frame:Hide()
         end
+    else
+        local SR = F:GetModule('StatsReport')
+        SR:SendStatsInfo()
     end
 
     self:GetScript('OnEnter')(self)
