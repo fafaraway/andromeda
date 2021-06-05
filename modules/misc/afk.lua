@@ -1,97 +1,157 @@
+--[[
+    ScreenSaver
+    Credit: Zork
+]]
+
 local _G = _G
 local unpack = unpack
 local select = select
 local CreateFrame = CreateFrame
-local PlaySound = PlaySound
 local UnitIsAFK = UnitIsAFK
-local UnitAffectingCombat = UnitAffectingCombat
 local GetServerTime = GetServerTime
 local SecondsToClock = SecondsToClock
 
-local F, C = unpack(select(2, ...))
-local MISC = F:GetModule('General')
+local F, C, L = unpack(select(2, ...))
+local SS = F:RegisterModule('ScreenSaver')
 
-local afkStart
-local function UpdateTimer(self)
+function SS:Enable()
+    local self = SS.Frame
+    if self.isActive then
+        return
+    end
+    self.isActive = true
+    self:Show()
+    self.fadeIn:Play()
+end
+
+function SS:Disable()
+    local self = SS.Frame
+    if not self.isActive then
+        return
+    end
+    self.isActive = false
+    self.fadeOut:Play()
+end
+
+local afkCount
+function SS:OnEvent(event)
     if UnitIsAFK('player') then
-        if not afkStart then
-            afkStart = GetServerTime()
-            MISC.AFK.alphaIn:Play()
-        end
+        afkCount = GetServerTime()
+        SS:Enable()
     else
-        afkStart = nil
-        MISC.AFK.alphaOut:Play()
+        afkCount = nil
+        SS:Disable()
     end
 end
 
-local function CreateScreenSaver(self)
-    local frame = CreateFrame('Frame', nil, _G.UIParent, 'BackdropTemplate')
-    frame:SetPoint('TOPLEFT', 0, -300)
-    frame:SetPoint('TOPRIGHT', 0, -300)
-    frame:SetHeight(80)
-    F.SetBD(frame, .65)
+function SS:OnDoubleClick()
+    SS:Disable()
+end
 
-    frame:SetScript('OnUpdate', function()
-        if afkStart then
-            local timeStr = SecondsToClock(GetServerTime() - afkStart)
-            frame.time:SetText(timeStr)
+function SS:CreateAnimation()
+    local self = SS.Frame
+
+    self.fadeIn = self:CreateAnimationGroup()
+    self.fadeIn.anim = self.fadeIn:CreateAnimation('Alpha')
+    self.fadeIn.anim:SetDuration(1)
+    self.fadeIn.anim:SetSmoothing('OUT')
+    self.fadeIn.anim:SetFromAlpha(0)
+    self.fadeIn.anim:SetToAlpha(1)
+    self.fadeIn:HookScript(
+        'OnFinished',
+        function(self)
+            self:GetParent():SetAlpha(1)
         end
-    end)
+    )
 
-    local alphaIn = frame:CreateAnimationGroup()
-    alphaIn:SetScript('OnPlay', function()
-        frame:Show()
-    end)
-
-    alphaIn:SetScript('OnFinished', function()
-        frame:SetAlpha(1)
-    end)
-
-    local animIn = alphaIn:CreateAnimation('Alpha')
-    animIn:SetDuration(.5)
-    animIn:SetFromAlpha(0)
-    animIn:SetToAlpha(1)
-    frame.alphaIn = alphaIn
-
-    local alphaOut = frame:CreateAnimationGroup()
-    alphaOut:SetScript('OnPlay', function()
-        frame.time:SetText('')
-    end)
-
-    alphaOut:SetScript('OnFinished', function()
-        frame:SetAlpha(0)
-        frame:Hide()
-    end)
-
-    local animOut = alphaOut:CreateAnimation('Alpha')
-    animOut:SetDuration(.5)
-    animOut:SetFromAlpha(1)
-    animOut:SetToAlpha(0)
-    frame.alphaOut = alphaOut
-
-    local bg = frame:CreateTexture(nil, 'BACKGROUND')
-    bg:SetColorTexture(0, 0, 0, .85)
-    bg:SetAllPoints(_G.UIParent)
-
-    local font = C.Assets.Fonts.Header
-    frame.text = F.CreateFS(frame, font, 42, 'OUTLINE', 'You are now away', 'GREY', true, 'CENTER', 0, 0)
-    frame.time = F.CreateFS(frame, font, 36, 'OUTLINE', '', 'CLASS', true, 'CENTER', 0, -60)
-
-    MISC.AFK = frame
+    self.fadeOut = self:CreateAnimationGroup()
+    self.fadeOut.anim = self.fadeOut:CreateAnimation('Alpha')
+    self.fadeOut.anim:SetDuration(1)
+    self.fadeOut.anim:SetSmoothing('OUT')
+    self.fadeOut.anim:SetFromAlpha(1)
+    self.fadeOut.anim:SetToAlpha(0)
+    self.fadeOut:HookScript(
+        'OnFinished',
+        function(self)
+            self:GetParent():SetAlpha(0)
+            self:GetParent():Hide()
+        end
+    )
 end
 
-local function Refresh()
-    UpdateTimer('Refresh')
+function SS:CreateBackdrop()
+    local self = SS.Frame
+    self.bg = self:CreateTexture(nil, 'BACKGROUND', nil, -8)
+    self.bg:SetColorTexture(1, 1, 1)
+    self.bg:SetVertexColor(0, 0, 0, 1)
+    self.bg:SetAllPoints()
 end
 
-function MISC:ScreenSaver()
+function SS:CreateGalaxy()
+    local self = SS.Frame
+    self.galaxy = CreateFrame('PlayerModel', nil, self)
+    self.galaxy:SetDisplayInfo(67918)
+    self.galaxy:SetCamDistanceScale(2.4)
+    --self.galaxy:SetRotation(math.rad(180))
+    self.galaxy:SetAllPoints()
+end
+
+function SS:CreatePlayerModel()
+    local self = SS.Frame
+    local height = self:GetHeight()
+    self.model = CreateFrame('PlayerModel', nil, self.galaxy)
+    self.model:SetUnit('player')
+    self.model:SetRotation(math.rad(-30))
+    self.model:SetAnimation(96)
+    self.model:SetSize(height, height * 1.5)
+    self.model:SetPoint('BOTTOMRIGHT', height * .25, -height * .2)
+end
+
+_G.MINUTES_SECONDS = '%.2d : %.2d'
+function SS:UpdateTimer()
+    local self = SS.Frame
+    if afkCount then
+        local timeStr = SecondsToClock(GetServerTime() - afkCount)
+        self.timer:SetText(timeStr)
+    end
+end
+
+function SS:CreateText()
+    local self = SS.Frame
+    local font = C.Assets.Fonts.Combat
+    self.text = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', L['Double click to unlock!'], 'GREY', nil, 'TOPLEFT', 20, -20)
+    self.timer = F.CreateFS(self.galaxy, font, 18, 'OUTLINE', '', 'CLASS', nil, 'TOPLEFT', 20, -40)
+end
+
+function SS:SetupScreenSaver()
+    local f = CreateFrame('Button', nil, _G.UIParent)
+    f:SetFrameStrata('FULLSCREEN')
+    f:SetAllPoints()
+    f:EnableMouse(true)
+    f:SetAlpha(0)
+    f:Hide()
+
+    f:SetScript('OnUpdate', SS.UpdateTimer)
+    f:SetScript('OnEvent', SS.OnEvent)
+    f:SetScript('OnDoubleClick', SS.OnDoubleClick)
+
+    f:RegisterEvent('PLAYER_FLAGS_CHANGED')
+    f:RegisterEvent('PLAYER_ENTERING_WORLD')
+    f:RegisterEvent('PLAYER_LEAVING_WORLD')
+
+    SS.Frame = f
+
+    SS:CreateAnimation()
+    SS:CreateBackdrop()
+    SS:CreateGalaxy()
+    SS:CreatePlayerModel()
+    SS:CreateText()
+end
+
+function SS:OnLogin()
     if not C.DB.General.ScreenSaver then
         return
     end
 
-    CreateScreenSaver()
-    Refresh()
-
-    F:RegisterEvent('PLAYER_FLAGS_CHANGED', UpdateTimer)
+    SS:SetupScreenSaver()
 end
-MISC:RegisterMisc('ScreenSaver', MISC.ScreenSaver)
