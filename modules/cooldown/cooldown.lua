@@ -14,10 +14,11 @@ local ActionBarButtonEventsFrameMixin = ActionBarButtonEventsFrameMixin
 local F, C = unpack(select(2, ...))
 local COOLDOWN = F:RegisterModule('Cooldown')
 
-local FONT_SIZE = 26
-local MIN_DURATION = 2.5
-local MIN_SCALE = 0.5
-local ICON_SIZE = 36
+local fontSize = 18
+local iconSize = 36
+local minDuration = 2.5
+local minScale = 0.5
+
 local hideNumbers, active, hooked = {}, {}, {}
 
 function COOLDOWN:StopTimer()
@@ -31,17 +32,18 @@ function COOLDOWN:ForceUpdate()
 end
 
 function COOLDOWN:OnSizeChanged(width, height)
-    local fontScale = F:Round((width + height) / 2) / ICON_SIZE
+    local fontScale = F:Round((width + height) / 2) / iconSize
     if fontScale == self.fontScale then
         return
     end
     self.fontScale = fontScale
 
-    if fontScale < MIN_SCALE then
+    local font, size, flag = self.text:GetFont()
+
+    if fontScale < minScale then
         self:Hide()
     else
-        self.text:SetFont(C.Assets.Fonts.Square, fontScale * FONT_SIZE, 'OUTLINE')
-        self.text:SetShadowColor(0, 0, 0, 1)
+        self.text:SetFont(font, size * fontScale, flag)
 
         if self.enabled then
             COOLDOWN.ForceUpdate(self)
@@ -80,7 +82,12 @@ function COOLDOWN:OnCreate()
     timer:SetScript('OnUpdate', COOLDOWN.TimerOnUpdate)
     scaler.timer = timer
 
+    local outline = _G.FREE_ADB.FontOutline
+    local font = C.Assets.Fonts.Bold
     local text = timer:CreateFontString(nil, 'BACKGROUND')
+    text:SetFont(font, fontSize, outline and 'OUTLINE' or nil)
+    text:SetShadowColor(0, 0, 0, outline and 0 or 1)
+    text:SetShadowOffset(2, -2)
     text:SetPoint('CENTER', 1, 0)
     text:SetJustifyH('CENTER')
     timer.text = text
@@ -110,7 +117,7 @@ function COOLDOWN:StartTimer(start, duration)
         return
     end
 
-    if start > 0 and duration > MIN_DURATION then
+    if start > 0 and duration > minDuration then
         local timer = self.timer or COOLDOWN.OnCreate(self)
         timer.start = start
         timer.duration = duration
@@ -125,7 +132,7 @@ function COOLDOWN:StartTimer(start, duration)
             COOLDOWN.StopTimer(chargeTimer)
         end
 
-        if timer.fontScale >= MIN_SCALE then
+        if timer.fontScale >= minScale then
             timer:Show()
         end
     elseif self.timer then
