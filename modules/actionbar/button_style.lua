@@ -5,6 +5,7 @@ local gsub = gsub
 local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
 local GetBindingKey = GetBindingKey
+local IsEquippedAction = IsEquippedAction
 local KEY_BUTTON4 = KEY_BUTTON4
 local KEY_NUMPAD1 = KEY_NUMPAD1
 local KEY_BUTTON3 = KEY_BUTTON3
@@ -184,11 +185,13 @@ local function SetupBackdrop(icon)
     local bg = F.SetBD(icon, .25)
     if C.DB.Actionbar.ClassColor then
         bg:SetBackdropColor(C.r, C.g, C.b, .25)
-        bg:SetBackdropBorderColor(C.r, C.g, C.b)
+        -- bg:SetBackdropBorderColor(C.r, C.g, C.b)
     else
         bg:SetBackdropColor(.1, .1, .1, .25)
-        bg:SetBackdropBorderColor(0, 0, 0)
+        -- bg:SetBackdropBorderColor(0, 0, 0)
     end
+
+    icon:GetParent().__bg = bg
 end
 
 local keyButton = gsub(KEY_BUTTON4, '%d', '')
@@ -212,7 +215,7 @@ local replaces = {
     {'(SHIFT%-)', 's'},
     {'MOUSEWHEELUP', 'MU'},
     {'MOUSEWHEELDOWN', 'MD'},
-    {'SPACE', 'Sp'},
+    {'SPACE', 'Sp'}
 }
 
 function ACTIONBAR:UpdateHotKey()
@@ -245,6 +248,25 @@ function ACTIONBAR:HookHotKey(button)
     end
 end
 
+function ACTIONBAR:UpdateEquipItemColor()
+    if not self.__bg then
+        return
+    end
+
+    if C.DB.Actionbar.EquipColor and IsEquippedAction(self.action) then
+        self.__bg:SetBackdropBorderColor(0, .7, .1)
+    else
+        self.__bg:SetBackdropBorderColor(0, 0, 0)
+    end
+end
+
+function ACTIONBAR:EquipItemColor(button)
+    if not button.Update then
+        return
+    end
+    hooksecurefunc(button, 'Update', ACTIONBAR.UpdateEquipItemColor)
+end
+
 function ACTIONBAR:StyleActionButton(button, cfg)
     if not button then
         return
@@ -268,8 +290,10 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     local normalTexture = button:GetNormalTexture()
     local pushedTexture = button:GetPushedTexture()
     local highlightTexture = button:GetHighlightTexture()
-    -- normal buttons do not have a checked texture, but checkbuttons do and normal actionbuttons are checkbuttons
-    local checkedTexture = nil
+
+    -- normal buttons do not have a checked texture
+    -- but checkbuttons do and normal actionbuttons are checkbuttons
+    local checkedTexture
     if button.GetCheckedTexture then
         checkedTexture = button:GetCheckedTexture()
     end
@@ -286,6 +310,7 @@ function ACTIONBAR:StyleActionButton(button, cfg)
 
     -- backdrop
     SetupBackdrop(icon)
+    ACTIONBAR:EquipItemColor(button)
 
     -- textures
     SetupTexture(icon, cfg.icon, 'SetTexture', icon)
@@ -296,10 +321,15 @@ function ACTIONBAR:StyleActionButton(button, cfg)
     SetupTexture(normalTexture, cfg.normalTexture, 'SetNormalTexture', button)
     SetupTexture(pushedTexture, cfg.pushedTexture, 'SetPushedTexture', button)
     SetupTexture(highlightTexture, cfg.highlightTexture, 'SetHighlightTexture', button)
-    SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
+    -- SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
 
     -- checkedTexture:SetColorTexture(1, .8, 0, .35)
     -- highlightTexture:SetColorTexture(1, 1, 1, .25)
+
+    if checkedTexture then
+        SetupTexture(checkedTexture, cfg.checkedTexture, 'SetCheckedTexture', button)
+        checkedTexture:SetColorTexture(1, .8, 0, .35)
+    end
 
     -- cooldown
     SetupCooldown(cooldown, cfg.cooldown)
@@ -434,7 +464,6 @@ function ACTIONBAR:StyleAllActionButtons(cfg)
     -- leave vehicle
     ACTIONBAR:StyleActionButton(_G['FreeUI_LeaveVehicleButton'], cfg)
 
-
     -- extra action button
     ACTIONBAR:StyleExtraActionButton(cfg)
 
@@ -463,18 +492,18 @@ function ACTIONBAR:RestyleButtons()
         normalTexture = {
             file = C.Assets.button_normal,
             color = {.3, .3, .3},
-            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}},
+            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
         },
         flash = {file = C.Assets.button_flash},
         pushedTexture = {
             file = C.Assets.button_pushed,
             color = {C.r, C.g, C.b},
-            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}},
+            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
         },
         checkedTexture = {
             file = C.Assets.button_checked,
             color = {.2, 1, .2},
-            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}},
+            points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}
         },
         highlightTexture = {file = '', points = {{'TOPLEFT', C.Mult, -C.Mult}, {'BOTTOMRIGHT', -C.Mult, C.Mult}}},
         cooldown = {points = {{'TOPLEFT', 0, 0}, {'BOTTOMRIGHT', 0, 0}}},
@@ -482,21 +511,21 @@ function ACTIONBAR:RestyleButtons()
             font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
             points = {{'BOTTOMLEFT', 0, 2}},
             color = {.5, .5, .5},
-            shadow = {0, 0, 0, 1, 1, -1},
+            shadow = {0, 0, 0, 1, 1, -1}
         },
         hotkey = {
             font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
             points = {{'TOPRIGHT', -2, -2}},
             color = {1, 1, 1},
-            shadow = {0, 0, 0, 1, 1, -1},
+            shadow = {0, 0, 0, 1, 1, -1}
         },
         count = {
             font = {C.Assets.Fonts.Condensed, 10, 'OUTLINE'},
             points = {{'BOTTOMLEFT', 2, 2}},
             color = {.19, .75, 1},
-            shadow = {0, 0, 0, 1, 1, -1},
+            shadow = {0, 0, 0, 1, 1, -1}
         },
-        buttonstyle = {file = ''},
+        buttonstyle = {file = ''}
     }
 
     ACTIONBAR:StyleAllActionButtons(cfg)
