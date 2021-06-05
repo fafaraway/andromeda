@@ -76,7 +76,7 @@ local inaccurateQuestAreas = {
     [25798] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
     [25799] = 64, -- Thousand Needles (TODO: test if we need to associate the item with the zone instead)
     [34461] = 590, -- Horde Garrison
-    [60004] = 118, -- 前夕任务：英勇之举
+    [60004] = 118 -- 前夕任务：英勇之举
 }
 
 -- items that should be used for a quest but aren't (questID = itemID)
@@ -121,50 +121,53 @@ local questItems = {
     [51646] = 154878, -- Tiragarde Sound
     [60649] = 180170, -- Ardenweald
     [60609] = 180008, -- Ardenweald
-    [60188] = 178464, -- Ardenweald
+    [60188] = 178464 -- Ardenweald
 }
 
-local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent,
-                                     'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
+local ExtraQuestButton = CreateFrame('Button', 'ExtraQuestButton', _G.UIParent, 'SecureActionButtonTemplate, SecureHandlerStateTemplate, SecureHandlerAttributeTemplate')
 ExtraQuestButton:SetMovable(true)
 ExtraQuestButton:RegisterEvent('PLAYER_LOGIN')
 ExtraQuestButton:Hide()
-ExtraQuestButton:SetScript('OnEvent', function(self, event, ...)
-    if self[event] then
-        self[event](self, event, ...)
-    else
-        self:Update()
+ExtraQuestButton:SetScript(
+    'OnEvent',
+    function(self, event, ...)
+        if self[event] then
+            self[event](self, event, ...)
+        else
+            self:Update()
+        end
     end
-end)
+)
 
 local visibilityState = '[extrabar][petbattle] hide; show'
-local onAttributeChanged = [[
-	if name == 'item' then
-		if value and not self:IsShown() and not HasExtraActionBar() then
-			self:Show()
-		elseif not value then
-			self:Hide()
-			self:ClearBindings()
-		end
-	elseif name == 'state-visible' then
-		if value == 'show' then
-			self:Show()
-			self:CallMethod('Update')
-		else
-			self:Hide()
-			self:ClearBindings()
-		end
-	end
-	if self:IsShown() then
-		self:ClearBindings()
-		local key1, key2 = GetBindingKey('EXTRAACTIONBUTTON1')
-		if key1 then
-			self:SetBindingClick(1, key1, self, 'LeftButton')
-		end
-		if key2 then
-			self:SetBindingClick(2, key2, self, 'LeftButton')
-		end
-	end
+local onAttributeChanged =
+    [[
+    if name == 'item' then
+        if value and not self:IsShown() and not HasExtraActionBar() then
+            self:Show()
+        elseif not value then
+            self:Hide()
+            self:ClearBindings()
+        end
+    elseif name == 'state-visible' then
+        if value == 'show' then
+            self:Show()
+            self:CallMethod('Update')
+        else
+            self:Hide()
+            self:ClearBindings()
+        end
+    end
+    if self:IsShown() then
+        self:ClearBindings()
+        local key1, key2 = GetBindingKey('EXTRAACTIONBUTTON1')
+        if key1 then
+            self:SetBindingClick(1, key1, self, 'LeftButton')
+        end
+        if key2 then
+            self:SetBindingClick(2, key2, self, 'LeftButton')
+        end
+    end
 ]]
 
 function ExtraQuestButton:BAG_UPDATE_COOLDOWN()
@@ -237,8 +240,7 @@ function ExtraQuestButton:PLAYER_LOGIN()
         if _G.FreeUI_ActionBarExtra then
             self:SetPoint('CENTER', _G.FreeUI_ActionBarExtra)
         else
-            F.Mover(self, L['Quest Item Button'], 'QuestButton',
-                    {'CENTER', _G.UIParent, 'CENTER', 0, 300})
+            F.Mover(self, L['Quest Item Button'], 'QuestButton', {'CENTER', _G.UIParent, 'CENTER', 0, 300})
         end
     end
 
@@ -258,12 +260,14 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self.HL:SetAllPoints(Icon)
     self.Icon = Icon
 
-    local HotKey = self:CreateFontString('$parentHotKey', nil, 'NumberFontNormal')
-    HotKey:SetPoint('TOP', 0, -5)
+    local HotKey = self:CreateFontString('$parentHotKey')
+    HotKey:SetFont(C.Assets.Fonts.Condensed, 10, 'OUTLINE')
+    HotKey:SetPoint('TOPRIGHT', -2, -2)
     self.HotKey = HotKey
 
-    local Count = self:CreateFontString('$parentCount', nil, 'NumberFont_Shadow_Med')
-    Count:SetPoint('BOTTOMRIGHT', -3, 3)
+    local Count = self:CreateFontString('$parentCount')
+    Count:SetFont(C.Assets.Fonts.Condensed, 10, 'OUTLINE')
+    Count:SetPoint('BOTTOMLEFT', 2, 2)
     self.Count = Count
 
     local Cooldown = CreateFrame('Cooldown', '$parentCooldown', self, 'CooldownFrameTemplate')
@@ -272,11 +276,11 @@ function ExtraQuestButton:PLAYER_LOGIN()
     Cooldown:Hide()
     self.Cooldown = Cooldown
 
-    local Artwork = self:CreateTexture('$parentArtwork', 'OVERLAY')
+    --[[ local Artwork = self:CreateTexture('$parentArtwork', 'OVERLAY')
     Artwork:SetPoint('BOTTOMLEFT', -1, -3)
     Artwork:SetSize(20, 20)
     Artwork:SetAtlas('adventureguide-microbutton-alert')
-    self.Artwork = Artwork
+    self.Artwork = Artwork ]]
 
     self:RegisterEvent('UPDATE_BINDINGS')
     self:RegisterEvent('BAG_UPDATE_COOLDOWN')
@@ -289,75 +293,87 @@ function ExtraQuestButton:PLAYER_LOGIN()
     self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 end
 
-ExtraQuestButton:SetScript('OnEnter', function(self)
-    if not self.itemLink then
-        return
+ExtraQuestButton:SetScript(
+    'OnEnter',
+    function(self)
+        if not self.itemLink then
+            return
+        end
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+        _G.GameTooltip:SetHyperlink(self.itemLink)
     end
-    _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
-    _G.GameTooltip:SetHyperlink(self.itemLink)
-end)
+)
 
-ExtraQuestButton:SetScript('OnUpdate', function(self, elapsed)
-    if self.updateRange then
-        if (self.rangeTimer or 0) > TOOLTIP_UPDATE_TIME then
-            local HotKey = self.HotKey
-            local Icon = self.Icon
+ExtraQuestButton:SetScript(
+    'OnUpdate',
+    function(self, elapsed)
+        if self.updateRange then
+            if (self.rangeTimer or 0) > TOOLTIP_UPDATE_TIME then
+                local HotKey = self.HotKey
+                local Icon = self.Icon
 
-            -- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
-            local inRange = IsItemInRange(self.itemLink, 'target')
-            if HotKey:GetText() == RANGE_INDICATOR then
-                if inRange == false then
-                    HotKey:SetTextColor(1, .1, .1)
-                    HotKey:Show()
-                    Icon:SetVertexColor(1, .1, .1)
-                elseif inRange then
-                    HotKey:SetTextColor(.6, .6, .6)
-                    HotKey:Show()
-                    Icon:SetVertexColor(1, 1, 1)
+                -- BUG: IsItemInRange() is broken versus friendly npcs (and possibly others)
+                local inRange = IsItemInRange(self.itemLink, 'target')
+                if HotKey:GetText() == RANGE_INDICATOR then
+                    if inRange == false then
+                        HotKey:SetTextColor(1, .1, .1)
+                        HotKey:Show()
+                        Icon:SetVertexColor(1, .1, .1)
+                    elseif inRange then
+                        HotKey:SetTextColor(.6, .6, .6)
+                        HotKey:Show()
+                        Icon:SetVertexColor(1, 1, 1)
+                    else
+                        HotKey:Hide()
+                    end
                 else
-                    HotKey:Hide()
+                    if inRange == false then
+                        HotKey:SetTextColor(1, .1, .1)
+                        Icon:SetVertexColor(1, .1, .1)
+                    else
+                        HotKey:SetTextColor(.6, .6, .6)
+                        Icon:SetVertexColor(1, 1, 1)
+                    end
                 end
+
+                self.rangeTimer = 0
             else
-                if inRange == false then
-                    HotKey:SetTextColor(1, .1, .1)
-                    Icon:SetVertexColor(1, .1, .1)
-                else
-                    HotKey:SetTextColor(.6, .6, .6)
-                    Icon:SetVertexColor(1, 1, 1)
-                end
+                self.rangeTimer = (self.rangeTimer or 0) + elapsed
             end
+        end
 
-            self.rangeTimer = 0
+        if (self.updateTimer or 0) > 5 then
+            self:Update()
+            self.updateTimer = 0
         else
-            self.rangeTimer = (self.rangeTimer or 0) + elapsed
+            self.updateTimer = (self.updateTimer or 0) + elapsed
         end
     end
+)
 
-    if (self.updateTimer or 0) > 5 then
+ExtraQuestButton:SetScript(
+    'OnEnable',
+    function(self)
+        RegisterStateDriver(self, 'visible', visibilityState)
+        self:SetAttribute('_onattributechanged', onAttributeChanged)
         self:Update()
-        self.updateTimer = 0
-    else
-        self.updateTimer = (self.updateTimer or 0) + elapsed
+        self:SetItem()
     end
-end)
+)
 
-ExtraQuestButton:SetScript('OnEnable', function(self)
-    RegisterStateDriver(self, 'visible', visibilityState)
-    self:SetAttribute('_onattributechanged', onAttributeChanged)
-    self:Update()
-    self:SetItem()
-end)
+ExtraQuestButton:SetScript(
+    'OnDisable',
+    function(self)
+        if not self:IsMovable() then
+            self:SetMovable(true)
+        end
 
-ExtraQuestButton:SetScript('OnDisable', function(self)
-    if not self:IsMovable() then
-        self:SetMovable(true)
+        RegisterStateDriver(self, 'visible', 'show')
+        self:SetAttribute('_onattributechanged', nil)
+        self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
+        self.HotKey:Hide()
     end
-
-    RegisterStateDriver(self, 'visible', 'show')
-    self:SetAttribute('_onattributechanged', nil)
-    self.Icon:SetTexture([[Interface\Icons\INV_Misc_Wrench_01]])
-    self.HotKey:Hide()
-end)
+)
 
 function ExtraQuestButton:SetItem(itemLink)
     if HasExtraActionBar() then
