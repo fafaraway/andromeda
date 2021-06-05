@@ -10,7 +10,7 @@ local C_VignetteInfo_GetVignetteInfo = C_VignetteInfo.GetVignetteInfo
 local GARRISON_MISSION_RARE = GARRISON_MISSION_RARE
 
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION = F.NOTIFICATION
+local NOTIFICATION = F:GetModule('Notification')
 
 local cache = {}
 

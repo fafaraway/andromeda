@@ -7,7 +7,7 @@ local INVTYPE_BAG = INVTYPE_BAG
 local TUTORIAL_TITLE58 = TUTORIAL_TITLE58
 
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION = F.NOTIFICATION
+local NOTIFICATION = F:GetModule('Notification')
 
 local alertBagsFull
 local shouldAlertBags = false

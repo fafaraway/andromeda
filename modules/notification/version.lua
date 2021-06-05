@@ -14,7 +14,7 @@ local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION = F.NOTIFICATION
+local NOTIFICATION = F:GetModule('Notification')
 
 local function CheckChannel()
     return IsPartyLFG() and 'INSTANCE_CHAT' or IsInRaid() and 'RAID' or 'PARTY'

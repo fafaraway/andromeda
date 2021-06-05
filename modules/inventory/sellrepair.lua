@@ -1,5 +1,5 @@
 local F, C, L = unpack(select(2, ...))
-local INVENTORY = F.INVENTORY
+local INVENTORY = F:GetModule('Inventory')
 
 
 local format, wipe = string.format, table.wipe

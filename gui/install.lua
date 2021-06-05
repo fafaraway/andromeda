@@ -159,7 +159,7 @@ local function SetupChatFrame()
 	end
 	FCF_SavePositionAndDimensions(ChatFrame1)
 
-	C.DB.chat.lock_position = true
+	C.DB.Chat.LockPosition = true
 end
 
 local function SetupDBM()

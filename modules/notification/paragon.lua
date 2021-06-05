@@ -7,7 +7,7 @@ local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local UNKNOWN = UNKNOWN
 
 local F, C = unpack(select(2, ...))
-local NOTIFICATION = F.NOTIFICATION
+local NOTIFICATION = F:GetModule('Notification')
 
 local idList = {
     -- [questID] = {factionID}

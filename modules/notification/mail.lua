@@ -6,7 +6,7 @@ local MAIL_LABEL = MAIL_LABEL
 local HAVE_MAIL = HAVE_MAIL
 
 local F, C = unpack(select(2, ...))
-local NOTIFICATION = F.NOTIFICATION
+local NOTIFICATION = F:GetModule('Notification')
 
 local hasMail = false
 local function NewMailNotify()

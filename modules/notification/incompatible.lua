@@ -8,7 +8,7 @@ local DisableAddOn = DisableAddOn
 local ReloadUI = ReloadUI
 
 local F, C, L = unpack(select(2, ...))
-local NOTIFICATION = F.NOTIFICATION
+local NOTIFICATION = F:GetModule('Notification')
 
 local IncompatibleAddOns = {
     ['BigFoot'] = true,

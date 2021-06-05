@@ -72,7 +72,7 @@ local YES = YES
 local NO = NO
 
 local F, C, L = unpack(select(2, ...))
-local INVENTORY = F.INVENTORY
+local INVENTORY = F:RegisterModule('Inventory')
 local cargBags = F.Libs.cargBags
 
 local icons = {
