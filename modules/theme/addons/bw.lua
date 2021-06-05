@@ -70,32 +70,43 @@ local function ReskinBar(bar)
     bar.candyBarDuration:SetPoint('LEFT', bar.candyBarBar, 'LEFT', 2, 8)
 end
 
+local styleData = {
+    apiVersion = 1,
+    version = 3,
+    GetSpacing = function(bar)
+        return bar:GetHeight() + 5
+    end,
+    ApplyStyle = ReskinBar,
+    BarStopped = RemoveStyle,
+    fontSizeNormal = 13,
+    fontSizeEmphasized = 14,
+    fontOutline = 'OUTLINE',
+    GetStyleName = function()
+        return 'FreeUI'
+    end
+}
+
 local function RegisterStyle()
     if not _G.BigWigsAPI then
         return
     end
-    _G.BigWigsAPI:RegisterBarStyle('FreeUI', {
-        apiVersion = 1,
-        version = 3,
-        GetSpacing = function(bar)
-            return bar:GetHeight() + 10
-        end,
-        ApplyStyle = ReskinBar,
-        BarStopped = RemoveStyle,
-        fontSizeNormal = 12,
-        fontSizeEmphasized = 14,
-        fontOutline = 'OUTLINE',
-        GetStyleName = function()
-            return 'FreeUI'
-        end,
-    })
 
-    local bars = _G.BigWigs:GetPlugin('Bars', true)
-    hooksecurefunc(bars, 'SetBarStyle', function(self, style)
-        if style ~= 'FreeUI' then
-            self:SetBarStyle('FreeUI')
+    _G.BigWigsAPI:RegisterBarStyle('FreeUI', styleData)
+
+    -- Force to use FreeUI style
+    local pending = true
+    hooksecurefunc(
+        _G.BigWigsAPI,
+        'GetBarStyle',
+        function(_, key)
+            if pending then
+                _G.BigWigsAPI.GetBarStyle = function()
+                    return styleData
+                end
+                pending = nil
+            end
         end
-    end)
+    )
 end
 
 function THEME:ReskinBigWigs()
