@@ -12,7 +12,6 @@ local InCombatLockdown = InCombatLockdown
 
 local F, C, L = unpack(select(2, ...))
 local INFOBAR = F:GetModule('Infobar')
-local NOTIFICATION = F:GetModule('Notification')
 
 local showRepair = true
 local slots = {
@@ -72,18 +71,11 @@ local function ResetRepairNotify()
     showRepair = true
 end
 
-local function RepairNotify()
+function INFOBAR:RepairNotify()
     if showRepair and IsLowDurability() then
         showRepair = false
         F:Delay(180, ResetRepairNotify)
         F:CreateNotification(_G.MINIMAP_TRACKING_REPAIR, L['The durability of the equipment is low.'], nil, 'Interface\\ICONS\\Ability_Repair')
-    end
-end
-
-function NOTIFICATION:RepairNotify()
-    if C.DB.Notification.LowDurability then
-        F:RegisterEvent('PLAYER_ENTERING_WORLD', RepairNotify)
-        F:RegisterEvent('PLAYER_REGEN_ENABLED', RepairNotify)
     end
 end
 
