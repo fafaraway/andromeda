@@ -1,4 +1,4 @@
-local _G= _G
+local _G = _G
 local pairs = pairs
 local wipe = wipe
 local ipairs = ipairs
@@ -26,7 +26,7 @@ local C_Timer_After = C_Timer.After
 local C_AzeriteEmpoweredItem_IsAzeriteEmpoweredItemByID = C_AzeriteEmpoweredItem.IsAzeriteEmpoweredItemByID
 local C_Soulbinds_IsItemConduitByItemInfo = C_Soulbinds.IsItemConduitByItemInfo
 local IsCosmeticItem = IsCosmeticItem
-local IsControlKeyDown  = IsControlKeyDown
+local IsControlKeyDown = IsControlKeyDown
 local IsAltKeyDown = IsAltKeyDown
 local DeleteCursorItem = DeleteCursorItem
 local GetItemInfo = GetItemInfo
@@ -50,26 +50,7 @@ local SOUNDKIT_IG_CHARACTER_INFO_TAB = SOUNDKIT.IG_CHARACTER_INFO_TAB
 local IsReagentBankUnlocked = IsReagentBankUnlocked
 local StaticPopup_Show = StaticPopup_Show
 local DepositReagentBank = DepositReagentBank
-local REAGENT_BANK = REAGENT_BANK
-local BANK = BANK
-local REAGENTBANK_DEPOSIT = REAGENTBANK_DEPOSIT
-local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
-local VIDEO_OPTIONS_ENABLED = VIDEO_OPTIONS_ENABLED
-local VIDEO_OPTIONS_DISABLED = VIDEO_OPTIONS_DISABLED
-local ITEM_BNETACCOUNTBOUND = ITEM_BNETACCOUNTBOUND
-local ITEM_SOULBOUND = ITEM_SOULBOUND
-local ITEM_BIND_TO_BNETACCOUNT = ITEM_BIND_TO_BNETACCOUNT
-local ITEM_ACCOUNTBOUND = ITEM_ACCOUNTBOUND
-local BAG_FILTER_EQUIPMENT = BAG_FILTER_EQUIPMENT
-local LOOT_JOURNAL_LEGENDARIES = LOOT_JOURNAL_LEGENDARIES
-local BAG_FILTER_CONSUMABLES = BAG_FILTER_CONSUMABLES
-local BAG_FILTER_JUNK = BAG_FILTER_JUNK
-local COLLECTIONS = COLLECTIONS
-local PREFERENCES = PREFERENCES
-local AUCTION_CATEGORY_TRADE_GOODS = AUCTION_CATEGORY_TRADE_GOODS
-local QUESTS_LABEL = QUESTS_LABEL
-local YES = YES
-local NO = NO
+
 
 local F, C, L = unpack(select(2, ...))
 local INVENTORY = F:RegisterModule('Inventory')
@@ -122,8 +103,7 @@ function INVENTORY:ReverseSort()
         local numSlots = GetContainerNumSlots(bag)
         for slot = 1, numSlots do
             local texture, _, locked = GetContainerItemInfo(bag, slot)
-            if (slot <= numSlots / 2) and texture and not locked and
-                not sortCache['b' .. bag .. 's' .. slot] then
+            if (slot <= numSlots / 2) and texture and not locked and not sortCache['b' .. bag .. 's' .. slot] then
                 PickupContainerItem(bag, slot)
                 PickupContainerItem(bag, numSlots + 1 - slot)
                 sortCache['b' .. bag .. 's' .. slot] = true
@@ -184,18 +164,21 @@ end
 function INVENTORY:CreateRestoreButton(f)
     local bu = F.CreateButton(self, 16, 16, true, icons.restore)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
-    bu:SetScript('OnClick', function()
-        C.DB['UIAnchorTemp'][f.main:GetName()] = nil
-        C.DB['UIAnchorTemp'][f.bank:GetName()] = nil
-        C.DB['UIAnchorTemp'][f.reagent:GetName()] = nil
-        f.main:ClearAllPoints()
-        f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
-        f.bank:ClearAllPoints()
-        f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
-        f.reagent:ClearAllPoints()
-        f.reagent:SetPoint('BOTTOMLEFT', f.bank)
-        PlaySound(SOUNDKIT_IG_MINIMAP_OPEN)
-    end)
+    bu:SetScript(
+        'OnClick',
+        function()
+            C.DB['UIAnchorTemp'][f.main:GetName()] = nil
+            C.DB['UIAnchorTemp'][f.bank:GetName()] = nil
+            C.DB['UIAnchorTemp'][f.reagent:GetName()] = nil
+            f.main:ClearAllPoints()
+            f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
+            f.bank:ClearAllPoints()
+            f.bank:SetPoint('BOTTOMRIGHT', f.main, 'BOTTOMLEFT', -10, 0)
+            f.reagent:ClearAllPoints()
+            f.reagent:SetPoint('BOTTOMLEFT', f.bank)
+            PlaySound(SOUNDKIT_IG_MINIMAP_OPEN)
+        end
+    )
     bu.title = L['Reset Position']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
@@ -206,21 +189,24 @@ function INVENTORY:CreateReagentButton(f)
     local bu = F.CreateButton(self, 16, 16, true, icons.reagen)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
     bu:RegisterForClicks('AnyUp')
-    bu:SetScript('OnClick', function(_, btn)
-        if not IsReagentBankUnlocked() then
-            StaticPopup_Show('CONFIRM_BUY_REAGENTBANK_TAB')
-        else
-            PlaySound(SOUNDKIT_IG_CHARACTER_INFO_TAB)
-            _G.ReagentBankFrame:Show()
-            _G.BankFrame.selectedTab = 2
-            f.reagent:Show()
-            f.bank:Hide()
-            if btn == 'RightButton' then
-                DepositReagentBank()
+    bu:SetScript(
+        'OnClick',
+        function(_, btn)
+            if not IsReagentBankUnlocked() then
+                StaticPopup_Show('CONFIRM_BUY_REAGENTBANK_TAB')
+            else
+                PlaySound(SOUNDKIT_IG_CHARACTER_INFO_TAB)
+                _G.ReagentBankFrame:Show()
+                _G.BankFrame.selectedTab = 2
+                f.reagent:Show()
+                f.bank:Hide()
+                if btn == 'RightButton' then
+                    DepositReagentBank()
+                end
             end
         end
-    end)
-    bu.title = REAGENT_BANK
+    )
+    bu.title = _G.REAGENT_BANK
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
@@ -229,21 +215,24 @@ end
 function INVENTORY:CreateBankButton(f)
     local bu = F.CreateButton(self, 16, 16, true, icons.reagen)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
-    bu:SetScript('OnClick', function()
-        PlaySound(SOUNDKIT_IG_CHARACTER_INFO_TAB)
-        _G.ReagentBankFrame:Hide()
-        _G.BankFrame.selectedTab = 1
-        f.reagent:Hide()
-        f.bank:Show()
-    end)
-    bu.title = BANK
+    bu:SetScript(
+        'OnClick',
+        function()
+            PlaySound(SOUNDKIT_IG_CHARACTER_INFO_TAB)
+            _G.ReagentBankFrame:Hide()
+            _G.BankFrame.selectedTab = 1
+            f.reagent:Hide()
+            f.bank:Show()
+        end
+    )
+    bu.title = _G.BANK
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
     return bu
 end
 
 local function updateDepositButtonStatus(bu)
-    if C.DB.inventory.auto_deposit then
+    if C.DB.Inventory.AutoDeposit then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -251,7 +240,7 @@ local function updateDepositButtonStatus(bu)
 end
 
 function INVENTORY:AutoDeposit()
-    if C.DB.inventory.auto_deposit then
+    if C.DB.Inventory.AutoDeposit then
         DepositReagentBank()
     end
 end
@@ -260,16 +249,24 @@ function INVENTORY:CreateDepositButton()
     local bu = F.CreateButton(self, 16, 16, true, icons.deposit)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
     bu:RegisterForClicks('AnyUp')
-    bu:SetScript('OnClick', function(_, btn)
-        if btn == 'RightButton' then
-            C.DB.inventory.auto_deposit = not C.DB.inventory.auto_deposit
-            updateDepositButtonStatus(bu)
-        else
-            DepositReagentBank()
+    bu:SetScript(
+        'OnClick',
+        function(_, btn)
+            if btn == 'RightButton' then
+                C.DB.Inventory.AutoDeposit = not C.DB.Inventory.AutoDeposit
+                updateDepositButtonStatus(bu)
+            else
+                DepositReagentBank()
+            end
         end
-    end)
-    bu.title = REAGENTBANK_DEPOSIT
-    F.AddTooltip(bu, 'ANCHOR_TOP', L['|nLeft click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'], 'BLUE')
+    )
+    bu.title = _G.REAGENTBANK_DEPOSIT
+    F.AddTooltip(
+        bu,
+        'ANCHOR_TOP',
+        L['|nLeft click to deposit reagents, right click to switch deposit mode.|nIf the button is highlight, the reagents from your bags would auto deposit once you open the bank.'],
+        'BLUE'
+    )
     updateDepositButtonStatus(bu)
     return bu
 end
@@ -277,16 +274,19 @@ end
 function INVENTORY:CreateBagToggle()
     local bu = F.CreateButton(self, 16, 16, true, icons.toggle)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
-    bu:SetScript('OnClick', function()
-        ToggleFrame(self.BagBar)
-        if self.BagBar:IsShown() then
-            bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-            PlaySound(SOUNDKIT_IG_BACKPACK_OPEN)
-        else
-            bu.Icon:SetVertexColor(.5, .5, .5, 1)
-            PlaySound(SOUNDKIT_IG_BACKPACK_CLOSE)
+    bu:SetScript(
+        'OnClick',
+        function()
+            ToggleFrame(self.BagBar)
+            if self.BagBar:IsShown() then
+                bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+                PlaySound(SOUNDKIT_IG_BACKPACK_OPEN)
+            else
+                bu.Icon:SetVertexColor(.5, .5, .5, 1)
+                PlaySound(SOUNDKIT_IG_BACKPACK_CLOSE)
+            end
         end
-    end)
+    )
 
     bu.title = L['Toggle Bags']
     F.AddTooltip(bu, 'ANCHOR_TOP')
@@ -297,31 +297,34 @@ end
 function INVENTORY:CreateSortButton(name)
     local bu = F.CreateButton(self, 16, 16, true, icons.sort)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
-    bu:SetScript('OnClick', function()
-        if C.DB.inventory.sort_mode == 3 then
-            _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Inventory sort disabled!'])
-            return
-        end
+    bu:SetScript(
+        'OnClick',
+        function()
+            if C.DB.Inventory.SortMode == 3 then
+                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Inventory sort disabled!'])
+                return
+            end
 
-        if name == 'Bank' then
-            SortBankBags()
-        elseif name == 'Reagent' then
-            SortReagentBankBags()
-        else
-            if C.DB.inventory.sort_mode == 1 then
-                SortBags()
-            elseif C.DB.inventory.sort_mode == 2 then
-                if InCombatLockdown() then
-                    _G.UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
-                else
+            if name == 'Bank' then
+                SortBankBags()
+            elseif name == 'Reagent' then
+                SortReagentBankBags()
+            else
+                if C.DB.Inventory.SortMode == 1 then
                     SortBags()
-                    wipe(sortCache)
-                    INVENTORY.Bags.isSorting = true
-                    C_Timer_After(.5, INVENTORY.ReverseSort)
+                elseif C.DB.Inventory.SortMode == 2 then
+                    if InCombatLockdown() then
+                        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
+                    else
+                        SortBags()
+                        wipe(sortCache)
+                        INVENTORY.Bags.isSorting = true
+                        C_Timer_After(.5, INVENTORY.ReverseSort)
+                    end
                 end
             end
         end
-    end)
+    )
     bu.title = L['Inventory Sort']
     F.AddTooltip(bu, 'ANCHOR_TOP')
 
@@ -329,25 +332,28 @@ function INVENTORY:CreateSortButton(name)
 end
 
 local function updateRepairButtonStatus(bu)
-    if C.DB.inventory.auto_repair then
+    if C.DB.Inventory.AutoRepair then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
         bu.text = L['|nRepair your equipment automatically when you visit an able vendor.']
-        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
         bu.text = nil
-        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto Repair'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_DISABLED
     end
 end
 
 function INVENTORY:CreateRepairButton()
     local bu = F.CreateButton(self, 16, 16, true, icons.repair)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
-    bu:SetScript('OnClick', function(self)
-        C.DB.inventory.auto_repair = not C.DB.inventory.auto_repair
-        updateRepairButtonStatus(bu)
-        self:GetScript('OnEnter')(self)
-    end)
+    bu:SetScript(
+        'OnClick',
+        function(self)
+            C.DB.Inventory.AutoRepair = not C.DB.Inventory.AutoRepair
+            updateRepairButtonStatus(bu)
+            self:GetScript('OnEnter')(self)
+        end
+    )
 
     bu.title = L['Auto Repair']
     F.AddTooltip(bu, 'ANCHOR_TOP', L['|nRepair your equipment automatically when you visit an able vendor.'], 'BLUE')
@@ -356,25 +362,28 @@ function INVENTORY:CreateRepairButton()
 end
 
 local function updateSellButtonStatus(bu)
-    if C.DB.inventory.auto_sell_junk then
+    if C.DB.Inventory.AutoSellJunk then
         bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
         bu.text = L['|nSell junk items automtically when you visit an able vendor.']
-        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_ENABLED
+        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_ENABLED
     else
         bu.Icon:SetVertexColor(.5, .5, .5, 1)
         bu.text = nil
-        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. VIDEO_OPTIONS_DISABLED
+        bu.title = L['Auto Sell Junk'] .. ': ' .. C.GreenColor .. _G.VIDEO_OPTIONS_DISABLED
     end
 end
 
 function INVENTORY:CreateSellButton()
     local bu = F.CreateButton(self, 16, 16, true, icons.sell)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
-    bu:SetScript('OnClick', function(self)
-        C.DB.inventory.auto_sell_junk = not C.DB.inventory.auto_sell_junk
-        updateSellButtonStatus(bu)
-        self:GetScript('OnEnter')(self)
-    end)
+    bu:SetScript(
+        'OnClick',
+        function(self)
+            C.DB.Inventory.AutoSellJunk = not C.DB.Inventory.AutoSellJunk
+            updateSellButtonStatus(bu)
+            self:GetScript('OnEnter')(self)
+        end
+    )
 
     bu.title = L['Auto Sell Junk']
     F.AddTooltip(bu, 'ANCHOR_TOP', L['|nSell junk items automtically when you visit an able vendor.'], 'BLUE')
@@ -401,13 +410,19 @@ function INVENTORY:CreateSearchButton()
     bg:SetPoint('TOPLEFT', -5, -5)
     bg:SetPoint('BOTTOMRIGHT', 5, 5)
 
-    searchBar:SetScript('OnShow', function()
-        bu:SetSize(80, 26)
-    end)
+    searchBar:SetScript(
+        'OnShow',
+        function()
+            bu:SetSize(80, 26)
+        end
+    )
 
-    searchBar:SetScript('OnHide', function()
-        bu:SetSize(16, 16)
-    end)
+    searchBar:SetScript(
+        'OnHide',
+        function()
+            bu:SetSize(16, 16)
+        end
+    )
 
     return bu
 end
@@ -495,17 +510,16 @@ end
 local splitEnable
 local function saveSplitCount(self)
     local count = self:GetText() or ''
-    C.DB.inventory.split_count = tonumber(count) or 1
+    C.DB.Inventory.SplitCount = tonumber(count) or 1
 end
 
 function INVENTORY:CreateSplitButton()
-    local enabledText = C.BlueColor .. L['|nClick to split stacked items in your bags.|nYou can change \'split count\' for each click thru the editbox.']
+    local enabledText = C.BlueColor .. L["|nClick to split stacked items in your bags.|nYou can change 'split count' for each click thru the editbox."]
 
     local splitFrame = CreateFrame('Frame', nil, self)
     splitFrame:SetSize(100, 50)
     splitFrame:SetPoint('TOPRIGHT', self, 'TOPLEFT', -5, 0)
-    F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['Split Count'], 'YELLOW',
-               'THICK', 'TOP', 1, -5)
+    F.CreateFS(splitFrame, C.Assets.Fonts.Regular, 12, nil, L['Split Count'], 'YELLOW', 'THICK', 'TOP', 1, -5)
     F.SetBD(splitFrame)
     splitFrame:Hide()
     local editbox = F.CreateEditBox(splitFrame, 90, 20)
@@ -521,19 +535,22 @@ function INVENTORY:CreateSplitButton()
         splitFrame:Hide()
         splitEnable = nil
     end
-    bu:SetScript('OnClick', function(self)
-        INVENTORY:SelectToggleButton(1)
-        splitEnable = not splitEnable
-        if splitEnable then
-            bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-            self.text = enabledText
-            splitFrame:Show()
-            editbox:SetText(C.DB.inventory.split_count)
-        else
-            self.__turnOff()
+    bu:SetScript(
+        'OnClick',
+        function(self)
+            INVENTORY:SelectToggleButton(1)
+            splitEnable = not splitEnable
+            if splitEnable then
+                bu.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+                self.text = enabledText
+                splitFrame:Show()
+                editbox:SetText(C.DB.Inventory.SplitCount)
+            else
+                self.__turnOff()
+            end
+            self:GetScript('OnEnter')(self)
         end
-        self:GetScript('OnEnter')(self)
-    end)
+    )
     bu:SetScript('OnHide', bu.__turnOff)
     bu.title = L['Quick Split']
     F.AddTooltip(bu, 'ANCHOR_TOP')
@@ -551,8 +568,8 @@ local function splitOnClick(self)
     PickupContainerItem(self.bagID, self.slotID)
 
     local texture, itemCount, locked = GetContainerItemInfo(self.bagID, self.slotID)
-    if texture and not locked and itemCount and itemCount > C.DB.inventory.split_count then
-        SplitContainerItem(self.bagID, self.slotID, C.DB.inventory.split_count)
+    if texture and not locked and itemCount and itemCount > C.DB.Inventory.SplitCount then
+        SplitContainerItem(self.bagID, self.slotID, C.DB.Inventory.SplitCount)
 
         local bagID, slotID = INVENTORY:GetEmptySlot('Bag')
         if slotID then
@@ -563,7 +580,7 @@ end
 
 local favouriteEnable
 function INVENTORY:CreateFavouriteButton()
-    local enabledText = C.BlueColor .. L['|nYou can now star items.|nIf \'Item Filter\' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk.']
+    local enabledText = C.BlueColor .. L["|nYou can now star items.|nIf 'Item Filter' enabled, the item you starred will add to Preferences filter slots.|nThis is not available to junk."]
 
     local bu = F.CreateButton(self, 16, 16, true, icons.favourite)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -572,17 +589,20 @@ function INVENTORY:CreateFavouriteButton()
         bu.text = nil
         favouriteEnable = nil
     end
-    bu:SetScript('OnClick', function(self)
-        INVENTORY:SelectToggleButton(2)
-        favouriteEnable = not favouriteEnable
-        if favouriteEnable then
-            self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-            self.text = enabledText
-        else
-            self.__turnOff()
+    bu:SetScript(
+        'OnClick',
+        function(self)
+            INVENTORY:SelectToggleButton(2)
+            favouriteEnable = not favouriteEnable
+            if favouriteEnable then
+                self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+                self.text = enabledText
+            else
+                self.__turnOff()
+            end
+            self:GetScript('OnEnter')(self)
         end
-        self:GetScript('OnEnter')(self)
-    end)
+    )
 
     bu:SetScript('OnHide', bu.__turnOff)
     bu.title = L['Mark Favourite']
@@ -598,13 +618,12 @@ local function favouriteOnClick(self)
         return
     end
 
-    local texture, _, _, quality, _, _, _, _, _, itemID =
-        GetContainerItemInfo(self.bagID, self.slotID)
+    local texture, _, _, quality, _, _, _, _, _, itemID = GetContainerItemInfo(self.bagID, self.slotID)
     if texture and quality > LE_ITEM_QUALITY_POOR then
-        if C.DB.inventory.favourite_items[itemID] then
-            C.DB.inventory.favourite_items[itemID] = nil
+        if C.DB.Inventory.FavItemsList[itemID] then
+            C.DB.Inventory.FavItemsList[itemID] = nil
         else
-            C.DB.inventory.favourite_items[itemID] = true
+            C.DB.Inventory.FavItemsList[itemID] = true
         end
         ClearCursor()
         INVENTORY:UpdateAllBags()
@@ -612,20 +631,24 @@ local function favouriteOnClick(self)
 end
 
 _G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
-    text = L.GUI.RESET_JUNK_LIST,
-    button1 = YES,
-    button2 = NO,
+    text = L['|cffff2020Are you sure to reset Junk Items List?|r'],
+    button1 = _G.YES,
+    button2 = _G.NO,
     OnAccept = function()
         wipe(_G.FREE_ADB.CustomJunkList)
     end,
     timeout = 0,
     whileDead = 1,
-    hideOnEscape = true,
+    hideOnEscape = true
 }
 
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
-    local enabledText = C.RedColor .. L['|nClick to tag item as junk.|nIf \'Auto sell junk\' enabled, these items would be sold as well.|nThe list is saved account-wide, and won\'t be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list.']
+    local enabledText =
+        C.RedColor ..
+        L[
+            "|nClick to tag item as junk.|nIf 'Auto sell junk' enabled, these items would be sold as well.|nThe list is saved account-wide, and won't be in the export data.|nYou can hold CTRL + ALT and click to wipe the custom junk list."
+        ]
 
     local bu = F.CreateButton(self, 16, 16, true, icons.junk)
     bu.Icon:SetVertexColor(.5, .5, .5, 1)
@@ -634,23 +657,26 @@ function INVENTORY:CreateCustomJunkButton()
         bu.text = nil
         customJunkEnable = nil
     end
-    bu:SetScript('OnClick', function(self)
-        if IsAltKeyDown() and IsControlKeyDown() then
-            StaticPopup_Show('FREEUI_RESET_JUNK_LIST')
-            return
-        end
+    bu:SetScript(
+        'OnClick',
+        function(self)
+            if IsAltKeyDown() and IsControlKeyDown() then
+                StaticPopup_Show('FREEUI_RESET_JUNK_LIST')
+                return
+            end
 
-        INVENTORY:SelectToggleButton(3)
-        customJunkEnable = not customJunkEnable
-        if customJunkEnable then
-            self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-            self.text = enabledText
-        else
-            bu.__turnOff()
+            INVENTORY:SelectToggleButton(3)
+            customJunkEnable = not customJunkEnable
+            if customJunkEnable then
+                self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+                self.text = enabledText
+            else
+                bu.__turnOff()
+            end
+            INVENTORY:UpdateAllBags()
+            self:GetScript('OnEnter')(self)
         end
-        INVENTORY:UpdateAllBags()
-        self:GetScript('OnEnter')(self)
-    end)
+    )
 
     bu:SetScript('OnHide', bu.__turnOff)
     bu.title = L['Mark Junk']
@@ -690,18 +716,21 @@ function INVENTORY:CreateDeleteButton()
         bu.text = nil
         deleteEnable = nil
     end
-    bu:SetScript('OnClick', function(self)
-        INVENTORY:SelectToggleButton(4)
-        deleteEnable = not deleteEnable
-        if deleteEnable then
-            self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
-            self.text = enabledText
-        else
-            bu.__turnOff()
-        end
+    bu:SetScript(
+        'OnClick',
+        function(self)
+            INVENTORY:SelectToggleButton(4)
+            deleteEnable = not deleteEnable
+            if deleteEnable then
+                self.Icon:SetVertexColor(C.r, C.g, C.b, 1)
+                self.text = enabledText
+            else
+                bu.__turnOff()
+            end
 
-        self:GetScript('OnEnter')(self)
-    end)
+            self:GetScript('OnEnter')(self)
+        end
+    )
 
     bu:SetScript('OnHide', bu.__turnOff)
     bu.title = L['Quick Delete']
@@ -718,8 +747,7 @@ local function deleteButtonOnClick(self)
     end
 
     local texture, _, _, quality = GetContainerItemInfo(self.bagID, self.slotID)
-    if IsControlKeyDown() and IsAltKeyDown() and texture and
-        (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
+    if IsControlKeyDown() and IsAltKeyDown() and texture and (quality < LE_ITEM_QUALITY_RARE or quality == LE_ITEM_QUALITY_HEIRLOOM) then
         PickupContainerItem(self.bagID, self.slotID)
         DeleteCursorItem()
     end
@@ -750,30 +778,36 @@ function INVENTORY:CloseBags()
 end
 
 function INVENTORY:OnLogin()
-    if not C.DB.inventory.enable then
+    if not C.DB.Inventory.Enable then
         return
     end
 
     INVENTORY:AutoSellJunk()
     INVENTORY:AutoRepair()
 
-    local bagsScale = C.DB.inventory.scale
-    local bagsWidth = C.DB.inventory.bag_columns
-    local bankWidth = C.DB.inventory.bank_columns
-    local iconSize = C.DB.inventory.slot_size
-    local showNewItem = C.DB.inventory.new_item_flash
+    local bagsScale = C.DB.Inventory.Scale
+    local bagsWidth = C.DB.Inventory.BagColumns
+    local bankWidth = C.DB.Inventory.BankColumns
+    local iconSize = C.DB.Inventory.SlotSize
+    local showNewItem = C.DB.Inventory.NewItemFlash
     local hasCanIMogIt = IsAddOnLoaded('CanIMogIt')
     local hasPawn = IsAddOnLoaded('Pawn')
 
     local Backpack = cargBags:NewImplementation('FreeUI_Backpack')
     Backpack:RegisterBlizzard()
     Backpack:SetScale(bagsScale)
-    Backpack:HookScript('OnShow', function()
-        PlaySound(SOUNDKIT_IG_BACKPACK_OPEN)
-    end)
-    Backpack:HookScript('OnHide', function()
-        PlaySound(SOUNDKIT_IG_BACKPACK_CLOSE)
-    end)
+    Backpack:HookScript(
+        'OnShow',
+        function()
+            PlaySound(SOUNDKIT_IG_BACKPACK_OPEN)
+        end
+    )
+    Backpack:HookScript(
+        'OnHide',
+        function()
+            PlaySound(SOUNDKIT_IG_BACKPACK_CLOSE)
+        end
+    )
 
     INVENTORY.Bags = Backpack
     INVENTORY.BagsType = {}
@@ -801,7 +835,7 @@ function INVENTORY:OnLogin()
         local MyContainer = self:GetContainerClass()
 
         AddNewContainer('Bag', 10, 'Junk', filters.bagsJunk)
-        AddNewContainer("Bag", 7, "BagAnima", filters.bagAnima)
+        AddNewContainer('Bag', 7, 'BagAnima', filters.bagAnima)
         AddNewContainer('Bag', 9, 'BagFavourite', filters.bagFavourite)
         AddNewContainer('Bag', 3, 'EquipSet', filters.bagEquipSet)
         AddNewContainer('Bag', 1, 'AzeriteItem', filters.bagAzeriteItem)
@@ -815,7 +849,7 @@ function INVENTORY:OnLogin()
         f.main:SetPoint('BOTTOMRIGHT', -C.UIGap, C.UIGap)
         f.main:SetFilter(filters.onlyBags, true)
 
-        AddNewContainer("Bank", 7, "BankAnima", filters.bankAnima)
+        AddNewContainer('Bank', 7, 'BankAnima', filters.bankAnima)
         AddNewContainer('Bank', 10, 'BankFavourite', filters.bankFavourite)
         AddNewContainer('Bank', 3, 'BankEquipSet', filters.bankEquipSet)
         AddNewContainer('Bank', 1, 'BankAzeriteItem', filters.bankAzeriteItem)
@@ -877,8 +911,7 @@ function INVENTORY:OnLogin()
 
         self.Icon:SetInside()
         self.Icon:SetTexCoord(unpack(C.TexCoord))
-        F:SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2,
-                2)
+        F:SetFS(self.Count, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
         self.Cooldown:SetInside()
         self.IconOverlay:SetInside()
         self.IconOverlay2:SetInside()
@@ -902,10 +935,8 @@ function INVENTORY:OnLogin()
         self.Quest:SetSize(24, 24)
         self.Quest:SetPoint('TOPLEFT', -2, -2)
 
-        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true,
-                               'BOTTOMRIGHT', -2, 2)
-        self.BindType = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true,
-                                   'TOPLEFT', 2, -2)
+        self.iLvl = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'BOTTOMRIGHT', -2, 2)
+        self.BindType = F.CreateFS(self, C.Assets.Fonts.Regular, 11, 'OUTLINE', '', nil, true, 'TOPLEFT', 2, -2)
 
         local flash = self:CreateTexture(nil, 'ARTWORK')
         flash:SetTexture('Interface\\Cooldown\\star4')
@@ -929,11 +960,14 @@ function INVENTORY:OnLogin()
         anim.fader2:SetToAlpha(0)
         anim.fader2:SetDuration(1.2)
         anim.fader2:SetSmoothing('OUT')
-        self:HookScript('OnHide', function()
-            if anim:IsPlaying() then
-                anim:Stop()
+        self:HookScript(
+            'OnHide',
+            function()
+                if anim:IsPlaying() then
+                    anim:Stop()
+                end
             end
-        end)
+        )
         self.anim = anim
 
         self.ShowNewItems = showNewItem
@@ -943,8 +977,7 @@ function INVENTORY:OnLogin()
         if hasCanIMogIt then
             self.canIMogIt = parentFrame:CreateTexture(nil, 'OVERLAY')
             self.canIMogIt:SetSize(13, 13)
-            self.canIMogIt:SetPoint(unpack(
-                                        _G.CanIMogIt.ICON_LOCATIONS[_G.CanIMogItOptions['iconLocation']]))
+            self.canIMogIt:SetPoint(unpack(_G.CanIMogIt.ICON_LOCATIONS[_G.CanIMogItOptions['iconLocation']]))
         end
     end
 
@@ -971,9 +1004,7 @@ function INVENTORY:OnLogin()
     }
 
     local function isItemNeedsLevel(item)
-        return item.link and item.level and item.rarity > 1 and
-                   (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID ==
-                       LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
+        return item.link and item.level and item.rarity > 1 and (item.subType == EJ_LOOT_SLOT_FILTER_ARTIFACT_RELIC or item.classID == LE_ITEM_CLASS_WEAPON or item.classID == LE_ITEM_CLASS_ARMOR)
     end
 
     local function isItemExist(item)
@@ -1023,9 +1054,7 @@ function INVENTORY:OnLogin()
 
     function MyButton:OnUpdate(item)
         if self.JunkIcon then
-            if (_G.MerchantFrame:IsShown() or customJunkEnable) and
-                (item.rarity == LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and
-                item.sellPrice > 0 then
+            if (_G.MerchantFrame:IsShown() or customJunkEnable) and (item.rarity == LE_ITEM_QUALITY_POOR or _G.FREE_ADB['CustomJunkList'][item.id]) and item.sellPrice > 0 then
                 self.JunkIcon:Show()
             else
                 self.JunkIcon:Hide()
@@ -1048,7 +1077,7 @@ function INVENTORY:OnLogin()
             end
         end
 
-        if C.DB.inventory.favourite_items[item.id] then
+        if C.DB.Inventory.FavItemsList[item.id] then
             self.Favourite:Show()
         else
             self.Favourite:Hide()
@@ -1065,17 +1094,17 @@ function INVENTORY:OnLogin()
         end
 
         self.iLvl:SetText('')
-        if C.DB.inventory.item_level and isItemNeedsLevel(item) then
+        if C.DB.Inventory.ItemLevel and isItemNeedsLevel(item) then
             local level = F:GetItemLevel(item.link, item.bagID, item.slotID) or item.level
 
-            if level > C.DB.inventory.item_level_to_show then
+            if level > C.DB.Inventory.MinItemLevelToShow then
                 local color = C.QualityColors[item.rarity]
                 self.iLvl:SetText(level)
                 self.iLvl:SetTextColor(color.r, color.g, color.b)
             end
         end
 
-        if C.DB.inventory.special_color then
+        if C.DB.Inventory.SpecialBagsColor then
             local bagType = INVENTORY.BagsType[item.bagID]
             local color = bagTypeColor[bagType] or bagTypeColor[0]
             self:SetBackdropColor(unpack(color))
@@ -1083,17 +1112,16 @@ function INVENTORY:OnLogin()
             self:SetBackdropColor(0, 0, 0, .25)
         end
 
-        if C.DB.inventory.bind_type and isItemExist(item) then
+        if C.DB.Inventory.BindType and isItemExist(item) then
             local itemLink = GetContainerItemLink(item.bagID, item.slotID)
             if not itemLink then
                 return
             end
 
             local isBOA =
-                CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BNETACCOUNTBOUND) or
-                    CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_BIND_TO_BNETACCOUNT) or
-                    CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_ACCOUNTBOUND)
-            local isSoulBound = CheckBoundStatus(item.link, item.bagID, item.slotID, ITEM_SOULBOUND)
+                CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_BNETACCOUNTBOUND) or CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_BIND_TO_BNETACCOUNT) or
+                CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_ACCOUNTBOUND)
+            local isSoulBound = CheckBoundStatus(item.link, item.bagID, item.slotID, _G.ITEM_SOULBOUND)
             local _, _, itemRarity, _, _, _, _, _, _, _, _, _, _, bindType = GetItemInfo(itemLink)
 
             if isBOA or itemRarity == 7 or itemRarity == 8 then
@@ -1140,14 +1168,14 @@ function INVENTORY:OnLogin()
         self:SortButtons('bagSlot')
 
         local columns = self.Settings.Columns
-        local offset = C.DB.inventory.offset
-        local spacing = C.DB.inventory.spacing
+        local offset = C.DB.Inventory.Offset
+        local spacing = C.DB.Inventory.Spacing
         local xOffset = 5
         local yOffset = -offset + xOffset
         local _, height = self:LayoutButtons('grid', columns, spacing, xOffset, yOffset)
         local width = columns * (iconSize + spacing) - spacing
         if self.freeSlot then
-            if C.DB.inventory.combine_free_slots then
+            if C.DB.Inventory.CombineFreeSlots then
                 local numSlots = #self.buttons + 1
                 local row = ceil(numSlots / columns)
                 local col = numSlots % columns
@@ -1189,30 +1217,29 @@ function INVENTORY:OnLogin()
         if strmatch(name, 'AzeriteItem$') then
             label = L['Azerite armor']
         elseif strmatch(name, 'Equipment$') then
-            label = BAG_FILTER_EQUIPMENT
+            label = _G.BAG_FILTER_EQUIPMENT
         elseif strmatch(name, 'EquipSet$') then
-            label = L.GUI.INVENTORY.ITEM_FILTER_GEAR_SET
+            label = L['Equip set']
         elseif name == 'BankLegendary' then
-            label = LOOT_JOURNAL_LEGENDARIES
+            label = _G.LOOT_JOURNAL_LEGENDARIES
         elseif strmatch(name, 'Consumable$') then
-            label = BAG_FILTER_CONSUMABLES
+            label = _G.BAG_FILTER_CONSUMABLES
         elseif name == 'Junk' then
-            label = BAG_FILTER_JUNK
+            label = _G.BAG_FILTER_JUNK
         elseif strmatch(name, 'Collection') then
-            label = COLLECTIONS
+            label = _G.COLLECTIONS
         elseif strmatch(name, 'Favourite') then
-            label = PREFERENCES
+            label = _G.PREFERENCES
         elseif strmatch(name, 'Goods') then
-            label = AUCTION_CATEGORY_TRADE_GOODS
+            label = _G.AUCTION_CATEGORY_TRADE_GOODS
         elseif strmatch(name, 'Quest') then
-            label = QUESTS_LABEL
-        elseif strmatch(name, "Anima") then
-			label = ANIMA
+            label = _G.QUESTS_LABEL
+        elseif strmatch(name, 'Anima') then
+            label = _G.ANIMA
         end
 
         if label then
-            self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK',
-                                    'TOPLEFT', 5, -4)
+            self.label = F.CreateFS(self, C.Assets.Fonts.Regular, 12, nil, label, nil, 'THICK', 'TOPLEFT', 5, -4)
             return
         end
 
@@ -1274,9 +1301,7 @@ function INVENTORY:OnLogin()
     function BagButton:OnUpdate()
         self:SetBackdropBorderColor(0, 0, 0)
 
-        local id = GetInventoryItemID('player',
-                                      (self.GetInventorySlot and self:GetInventorySlot()) or
-                                          self.invID)
+        local id = GetInventoryItemID('player', (self.GetInventorySlot and self:GetInventorySlot()) or self.invID)
         if not id then
             return
         end
@@ -1299,7 +1324,7 @@ function INVENTORY:OnLogin()
     end
 
     -- Sort order
-    SetSortBagsRightToLeft(C.DB.inventory.sort_mode == 1)
+    SetSortBagsRightToLeft(C.DB.Inventory.SortMode == 1)
     SetInsertItemsLeftToRight(false)
 
     -- Init
