@@ -73,7 +73,7 @@ function TOOLTIP:ReskinRewardIcon()
 end
 
 function TOOLTIP:ReskinTooltipIcons()
-    if not C.DB.tooltip.tip_icon then
+    if not C.DB.Tooltip.Icon then
         return
     end
 

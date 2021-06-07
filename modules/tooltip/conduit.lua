@@ -51,10 +51,6 @@ function TOOLTIP:ConduitCollectionData()
     end
     F:RegisterEvent('SOULBIND_CONDUIT_COLLECTION_UPDATED', TOOLTIP.Conduit_UpdateCollection)
 
-    if not C.DB.tooltip.conduit_info then
-        return
-    end
-
     _G.GameTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
     _G.ItemRefTooltip:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)
     _G.ShoppingTooltip1:HookScript('OnTooltipSetItem', TOOLTIP.Conduit_CheckStatus)

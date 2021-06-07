@@ -101,7 +101,7 @@ function TOOLTIP:OnTooltipSetUnit()
     if self:IsForbidden() then
         return
     end
-    if C.DB.tooltip.hide_in_combat and InCombatLockdown() then
+    if C.DB.Tooltip.HideInCombat and InCombatLockdown() then
         self:Hide()
         return
     end
@@ -127,11 +127,11 @@ function TOOLTIP:OnTooltipSetUnit()
             local name, realm = UnitName(unit)
             local pvpName = UnitPVPName(unit)
             local relationship = UnitRealmRelationship(unit)
-            if not C.DB.tooltip.hide_title and pvpName then
+            if not C.DB.Tooltip.HideTitle and pvpName then
                 name = pvpName
             end
             if realm and realm ~= '' then
-                if isShiftKeyDown or not C.DB.tooltip.hide_realm then
+                if isShiftKeyDown or not C.DB.Tooltip.HideRealm then
                     name = name .. '-' .. realm
                 elseif relationship == _G.LE_REALM_RELATION_COALESCED then
                     name = name .. _G.FOREIGN_SERVER_LABEL
@@ -157,7 +157,7 @@ function TOOLTIP:OnTooltipSetUnit()
                 end
 
                 rankIndex = rankIndex + 1
-                if C.DB.tooltip.hide_rank then
+                if C.DB.Tooltip.HideGuildRank then
                     rank = ''
                 end
                 if guildRealm and isShiftKeyDown then
@@ -240,7 +240,7 @@ function TOOLTIP:GameTooltip_OnUpdate(elapsed)
 end
 
 function TOOLTIP:StatusBar_OnValueChanged(value)
-    if not C.DB.tooltip.health_value then
+    if not C.DB.Tooltip.HealthValue then
         return
     end
 
@@ -310,9 +310,6 @@ function TOOLTIP:GameTooltip_ShowProgressBar()
 end
 
 function TOOLTIP:ScanTargets()
-    if not C.DB.tooltip.target_by then
-        return
-    end
     if not IsInGroup() then
         return
     end
@@ -339,7 +336,7 @@ function TOOLTIP:ScanTargets()
 end
 
 function TOOLTIP:TargetedInfo()
-    if not C.DB.tooltip.target_by then
+    if not C.DB.Tooltip.TargetBy then
         return
     end
 
@@ -381,7 +378,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
         return
     end
 
-    if C.DB.tooltip.follow_cursor then
+    if C.DB.Tooltip.FollowCursor then
         self:SetOwner(parent, 'ANCHOR_CURSOR_RIGHT')
     else
         if not mover then
@@ -394,7 +391,7 @@ function TOOLTIP:GameTooltip_SetDefaultAnchor(parent)
 end
 
 function TOOLTIP:OnLogin()
-    if not C.DB.tooltip.enable then
+    if not C.DB.Tooltip.Enable then
         return
     end
 
@@ -408,7 +405,7 @@ function TOOLTIP:OnLogin()
     hooksecurefunc('SharedTooltip_SetBackdropStyle', TOOLTIP.SharedTooltip_SetBackdropStyle)
     hooksecurefunc('GameTooltip_AnchorComparisonTooltips', TOOLTIP.GameTooltip_ComparisonFix)
 
-    if C.DB.tooltip.disable_fading then
+    if C.DB.Tooltip.DisableFading then
         _G.GameTooltip:HookScript('OnTooltipCleared', TOOLTIP.OnTooltipCleared)
         _G.GameTooltip:HookScript('OnUpdate', TOOLTIP.GameTooltip_OnUpdate)
         _G.GameTooltip.FadeOut = function(self)

@@ -115,10 +115,6 @@ local function HookCommunitiesFrame(event, addon)
 end
 
 function TOOLTIP:LinkHover()
-    if not C.DB.tooltip.link_hover then
-        return
-    end
-
     for i = 1, _G.NUM_CHAT_WINDOWS do
         local frame = _G['ChatFrame' .. i]
         orig1[frame] = frame:GetScript('OnHyperlinkEnter')

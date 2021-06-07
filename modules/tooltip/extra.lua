@@ -138,7 +138,7 @@ function TOOLTIP:RemoveMoneyLine() -- #TODO
 end
 
 function TOOLTIP:ExtraInfo()
-    if not C.DB.tooltip.extra_info then
+    if not C.DB.Tooltip.ExtraInfo then
         return
     end
 

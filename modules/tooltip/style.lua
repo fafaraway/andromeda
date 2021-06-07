@@ -13,7 +13,6 @@ local GameTooltip_ClearMoney = GameTooltip_ClearMoney
 local F, C = unpack(select(2, ...))
 local TOOLTIP = F:GetModule('Tooltip')
 
--- Tooltip skin
 local fakeBg = CreateFrame('Frame', nil, _G.UIParent, 'BackdropTemplate')
 fakeBg:SetBackdrop({bgFile = C.Assets.bd_tex, edgeFile = C.Assets.bd_tex, edgeSize = 1})
 local function __GetBackdrop()
@@ -21,7 +20,8 @@ local function __GetBackdrop()
 end
 local function __GetBackdropColor()
     local color = _G.FREE_ADB.BackdropColor
-    return color.r, color.g, color.b, .65
+    local alpha = C.DB.Tooltip.BackdropAlpha
+    return color.r, color.g, color.b, alpha
 end
 local function __GetBackdropBorderColor()
     return 0, 0, 0
@@ -62,13 +62,14 @@ function TOOLTIP:ReskinTooltip()
     end
 
     local color = _G.FREE_ADB.BackdropColor
-    self.bg:SetBackdropColor(color.r, color.g, color.b, .65)
+    local alpha = C.DB.Tooltip.BackdropAlpha
+    self.bg:SetBackdropColor(color.r, color.g, color.b, alpha)
     F.SetBorderColor(self.bg)
     if self.bg.__shadow then
         self.bg.__shadow:SetBackdropBorderColor(0, 0, 0, .25)
     end
 
-    if C.DB.tooltip.border_color and self.GetItem then
+    if C.DB.Tooltip.BorderColor and self.GetItem then
         local _, item = self:GetItem()
         if item then
             local quality = select(3, GetItemInfo(item))
@@ -127,7 +128,7 @@ function TOOLTIP:SetTooltipFonts()
     end
 end
 
--- Tooltip Skin Registration
+-- Tooltip Registration
 local tipTable = {}
 function TOOLTIP:RegisterTooltips(addon, func)
     tipTable[addon] = func

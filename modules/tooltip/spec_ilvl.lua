@@ -62,7 +62,7 @@ updater:SetScript('OnUpdate', TOOLTIP.InspectOnUpdate)
 updater:Hide()
 
 function TOOLTIP:ResetUnit(btn)
-    if btn == 'ALT' and UnitExists('mouseover') then
+    if btn == 'LSHIFT' and UnitExists('mouseover') then
         _G.GameTooltip:SetUnit('mouseover')
     end
 end
@@ -273,16 +273,19 @@ function TOOLTIP:InspectUnit(unit, forced)
         level = currentDB.level
         self:SetupSpecLevel(spec, level)
 
-        if IsShiftKeyDown() then
+        if not C.DB.Tooltip.SpecIlvlByAlt and IsAltKeyDown() then
             forced = true
         end
+
         if spec and level and not forced and (GetTime() - currentDB.getTime < resetTime) then
             updater.elapsed = frequency
             return
         end
+
         if not UnitIsVisible(unit) or UnitIsDeadOrGhost('player') or UnitOnTaxi('player') then
             return
         end
+
         if _G.InspectFrame and _G.InspectFrame:IsShown() then
             return
         end
@@ -293,7 +296,10 @@ function TOOLTIP:InspectUnit(unit, forced)
 end
 
 function TOOLTIP:InspectUnitSpecAndLevel()
-    if not C.DB.tooltip.spec_ilvl or not IsAltKeyDown() then
+    if not C.DB.Tooltip.SpecIlvl then
+        return
+    end
+    if C.DB.Tooltip.SpecIlvlByAlt and not IsAltKeyDown() then
         return
     end
 
