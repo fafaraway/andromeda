@@ -1,209 +1,265 @@
+local _G = _G
+local unpack = unpack
+local select = select
+local tinsert = tinsert
+local hooksecurefunc = hooksecurefunc
+local GetPlayerInfoByGUID = GetPlayerInfoByGUID
+
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
-	if not _G.FREE_ADB.ReskinBlizz then return end
+local function scrollOnEnter(self)
+    self.thumbBG:SetBackdropColor(C.r, C.g, C.b, .25)
+    self.thumbBG:SetBackdropBorderColor(C.r, C.g, C.b)
+end
 
-	local r, g, b = C.r, C.g, C.b
+local function scrollOnLeave(self)
+    self.thumbBG:SetBackdropColor(0, 0, 0, 0)
+    self.thumbBG:SetBackdropBorderColor(0, 0, 0)
+end
 
-	-- Battlenet toast frame
-	BNToastFrame:SetBackdrop(nil)
-	F.SetBD(BNToastFrame)
-	BNToastFrame.TooltipFrame:SetBackdrop(nil)
-	F.SetBD(BNToastFrame.TooltipFrame)
-	F.ReskinClose(BNToastFrame.CloseButton)
+local function ReskinChatScroll(self)
+    local bu = _G[self:GetName() .. 'ThumbTexture']
+    bu:SetAlpha(0)
+    bu:SetWidth(16)
+    local bg = F.CreateBDFrame(bu, 0, true)
+    local down = self.ScrollToBottomButton
+    F.ReskinArrow(down, 'down')
+    down:SetPoint('BOTTOMRIGHT', _G[self:GetName() .. 'ResizeButton'], 'TOPRIGHT', -4, -2)
 
-	-- Battletag invite frame
-	local border, send, cancel = BattleTagInviteFrame:GetChildren()
-	border:Hide()
-	F.Reskin(send)
-	F.Reskin(cancel)
-	F.SetBD(BattleTagInviteFrame)
+    self.ScrollBar.thumbBG = bg
+    self.ScrollBar:HookScript('OnEnter', scrollOnEnter)
+    self.ScrollBar:HookScript('OnLeave', scrollOnLeave)
+end
 
-	local friendTex = "Interface\\HELPFRAME\\ReportLagIcon-Chat"
-	local queueTex = "Interface\\HELPFRAME\\HelpIcon-ItemRestoration"
-	local homeTex = "Interface\\Buttons\\UI-HomeButton"
+local function reskinPickerOptions(self)
+    local scrollTarget = self.ScrollBox.ScrollTarget
+    if scrollTarget then
+        for i = 1, scrollTarget:GetNumChildren() do
+            local child = select(i, scrollTarget:GetChildren())
+            if not child.styled then
+                child.UnCheck:SetTexture(nil)
+                child.Highlight:SetColorTexture(C.r, C.g, C.b, .25)
 
-	QuickJoinToastButton.FriendsButton:SetTexture(friendTex)
-	QuickJoinToastButton.QueueButton:SetTexture(queueTex)
-	QuickJoinToastButton:SetHighlightTexture("")
-	hooksecurefunc(QuickJoinToastButton, "ToastToFriendFinished", function(self)
-		self.FriendsButton:SetShown(not self.displayedToast)
-	end)
-	hooksecurefunc(QuickJoinToastButton, "UpdateQueueIcon", function(self)
-		if not self.displayedToast then return end
-		self.QueueButton:SetTexture(queueTex)
-		self.FlashingLayer:SetTexture(queueTex)
-		self.FriendsButton:SetShown(false)
-	end)
-	QuickJoinToastButton:HookScript("OnMouseDown", function(self)
-		self.FriendsButton:SetTexture(friendTex)
-	end)
-	QuickJoinToastButton:HookScript("OnMouseUp", function(self)
-		self.FriendsButton:SetTexture(friendTex)
-	end)
-	QuickJoinToastButton.Toast.Background:SetTexture("")
-	local bg = F.SetBD(QuickJoinToastButton.Toast)
-	bg:SetPoint("TOPLEFT", 10, -1)
-	bg:SetPoint("BOTTOMRIGHT", 0, 3)
-	bg:Hide()
-	hooksecurefunc(QuickJoinToastButton, "ShowToast", function() bg:Show() end)
-	hooksecurefunc(QuickJoinToastButton, "HideToast", function() bg:Hide() end)
+                local check = child.Check
+                check:SetColorTexture(C.r, C.g, C.b, .6)
+                check:SetSize(10, 10)
+                check:SetPoint('LEFT', 2, 0)
+                F.CreateBDFrame(check, .25)
 
-	F.Reskin(ChatFrameChannelButton)
-	ChatFrameChannelButton:SetSize(20, 20)
-	F.Reskin(ChatFrameToggleVoiceDeafenButton)
-	ChatFrameToggleVoiceDeafenButton:SetSize(20, 20)
-	F.Reskin(ChatFrameToggleVoiceMuteButton)
-	ChatFrameToggleVoiceMuteButton:SetSize(20, 20)
-	F.Reskin(ChatFrameMenuButton)
-	ChatFrameMenuButton:SetSize(20, 20)
-	ChatFrameMenuButton:SetNormalTexture(homeTex)
-	ChatFrameMenuButton:SetPushedTexture(homeTex)
+                child.styled = true
+            end
+        end
+    end
+end
 
-	local function scrollOnEnter(self)
-		self.thumbBG:SetBackdropColor(r, g, b, .25)
-		self.thumbBG:SetBackdropBorderColor(r, g, b)
-	end
+local function ReskinVoicePicker(voicePicker)
+    local customFrame = voicePicker:GetChildren()
+    F.StripTextures(customFrame)
+    F.SetBD(customFrame, .7)
+    voicePicker:HookScript('OnShow', reskinPickerOptions)
+end
 
-	local function scrollOnLeave(self)
-		self.thumbBG:SetBackdropColor(0, 0, 0, 0)
-		self.thumbBG:SetBackdropBorderColor(0, 0, 0)
-	end
+tinsert(
+    C.BlizzThemes,
+    function()
+        -- Battlenet toast frame
+        _G.BNToastFrame:SetBackdrop(nil)
+        F.SetBD(_G.BNToastFrame)
+        _G.BNToastFrame.TooltipFrame:SetBackdrop(nil)
+        F.SetBD(_G.BNToastFrame.TooltipFrame)
+        F.ReskinClose(_G.BNToastFrame.CloseButton)
 
-	local function reskinScroll(self)
-		local bu = _G[self:GetName().."ThumbTexture"]
-		bu:SetAlpha(0)
-		bu:SetWidth(16)
-		local bg = F.CreateBDFrame(bu, 0, true)
-		local down = self.ScrollToBottomButton
-		F.ReskinArrow(down, "down")
-		down:SetPoint("BOTTOMRIGHT", _G[self:GetName().."ResizeButton"], "TOPRIGHT", -4, -2)
+        -- Battletag invite frame
+        local border, send, cancel = _G.BattleTagInviteFrame:GetChildren()
+        border:Hide()
+        F.Reskin(send)
+        F.Reskin(cancel)
+        F.SetBD(_G.BattleTagInviteFrame)
 
-		self.ScrollBar.thumbBG = bg
-		self.ScrollBar:HookScript("OnEnter", scrollOnEnter)
-		self.ScrollBar:HookScript("OnLeave", scrollOnLeave)
-	end
+        local friendTex = 'Interface\\HELPFRAME\\ReportLagIcon-Chat'
+        local queueTex = 'Interface\\HELPFRAME\\HelpIcon-ItemRestoration'
+        local homeTex = 'Interface\\Buttons\\UI-HomeButton'
 
-	for i = 1, NUM_CHAT_WINDOWS do
-		reskinScroll(_G["ChatFrame"..i])
-	end
+        _G.QuickJoinToastButton.FriendsButton:SetTexture(friendTex)
+        _G.QuickJoinToastButton.QueueButton:SetTexture(queueTex)
+        _G.QuickJoinToastButton:SetHighlightTexture('')
+        hooksecurefunc(
+            _G.QuickJoinToastButton,
+            'ToastToFriendFinished',
+            function(self)
+                self.FriendsButton:SetShown(not self.displayedToast)
+            end
+        )
+        hooksecurefunc(
+            _G.QuickJoinToastButton,
+            'UpdateQueueIcon',
+            function(self)
+                if not self.displayedToast then
+                    return
+                end
+                self.QueueButton:SetTexture(queueTex)
+                self.FlashingLayer:SetTexture(queueTex)
+                self.FriendsButton:SetShown(false)
+            end
+        )
+        _G.QuickJoinToastButton:HookScript(
+            'OnMouseDown',
+            function(self)
+                self.FriendsButton:SetTexture(friendTex)
+            end
+        )
+        _G.QuickJoinToastButton:HookScript(
+            'OnMouseUp',
+            function(self)
+                self.FriendsButton:SetTexture(friendTex)
+            end
+        )
+        _G.QuickJoinToastButton.Toast.Background:SetTexture('')
+        local bg = F.SetBD(_G.QuickJoinToastButton.Toast)
+        bg:SetPoint('TOPLEFT', 10, -1)
+        bg:SetPoint('BOTTOMRIGHT', 0, 3)
+        bg:Hide()
+        hooksecurefunc(
+            _G.QuickJoinToastButton,
+            'ShowToast',
+            function()
+                bg:Show()
+            end
+        )
+        hooksecurefunc(
+            _G.QuickJoinToastButton,
+            'HideToast',
+            function()
+                bg:Hide()
+            end
+        )
 
-	-- ChannelFrame
-	F.ReskinPortraitFrame(ChannelFrame)
-	F.Reskin(ChannelFrame.NewButton)
-	F.Reskin(ChannelFrame.SettingsButton)
-	F.ReskinScroll(ChannelFrame.ChannelList.ScrollBar)
-	F.ReskinScroll(ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
+        -- ChatFrame
+        F.Reskin(_G.ChatFrameChannelButton)
+        _G.ChatFrameChannelButton:SetSize(20, 20)
+        F.Reskin(_G.ChatFrameToggleVoiceDeafenButton)
+        _G.ChatFrameToggleVoiceDeafenButton:SetSize(20, 20)
+        F.Reskin(_G.ChatFrameToggleVoiceMuteButton)
+        _G.ChatFrameToggleVoiceMuteButton:SetSize(20, 20)
+        F.Reskin(_G.ChatFrameMenuButton)
+        _G.ChatFrameMenuButton:SetSize(20, 20)
+        _G.ChatFrameMenuButton:SetNormalTexture(homeTex)
+        _G.ChatFrameMenuButton:SetPushedTexture(homeTex)
 
-	hooksecurefunc(ChannelFrame.ChannelList, "Update", function(self)
-		for i = 1, self.Child:GetNumChildren() do
-			local tab = select(i, self.Child:GetChildren())
-			if not tab.styled and tab:IsHeader() then
-				tab:SetNormalTexture("")
-				tab.bg = F.CreateBDFrame(tab, .25)
-				tab.bg:SetAllPoints()
+        for i = 1, _G.NUM_CHAT_WINDOWS do
+            ReskinChatScroll(_G['ChatFrame' .. i])
+        end
 
-				tab.styled = true
-			end
-		end
-	end)
+        -- ChannelFrame
+        F.ReskinPortraitFrame(_G.ChannelFrame)
+        F.Reskin(_G.ChannelFrame.NewButton)
+        F.Reskin(_G.ChannelFrame.SettingsButton)
+        F.ReskinScroll(_G.ChannelFrame.ChannelList.ScrollBar)
+        F.ReskinScroll(_G.ChannelFrame.ChannelRoster.ScrollFrame.scrollBar)
 
-	F.StripTextures(CreateChannelPopup)
-	F.SetBD(CreateChannelPopup)
-	F.Reskin(CreateChannelPopup.OKButton)
-	F.Reskin(CreateChannelPopup.CancelButton)
-	F.ReskinClose(CreateChannelPopup.CloseButton)
-	F.ReskinInput(CreateChannelPopup.Name)
-	F.ReskinInput(CreateChannelPopup.Password)
+        hooksecurefunc(
+            _G.ChannelFrame.ChannelList,
+            'Update',
+            function(self)
+                for i = 1, self.Child:GetNumChildren() do
+                    local tab = select(i, self.Child:GetChildren())
+                    if not tab.styled and tab:IsHeader() then
+                        tab:SetNormalTexture('')
+                        tab.bg = F.CreateBDFrame(tab, .25)
+                        tab.bg:SetAllPoints()
 
-	F.SetBD(VoiceChatPromptActivateChannel)
-	F.Reskin(VoiceChatPromptActivateChannel.AcceptButton)
-	VoiceChatChannelActivatedNotification:SetBackdrop(nil)
-	F.SetBD(VoiceChatChannelActivatedNotification)
+                        tab.styled = true
+                    end
+                end
+            end
+        )
 
-	F.ReskinSlider(UnitPopupVoiceMicrophoneVolume.Slider)
-	F.ReskinSlider(UnitPopupVoiceSpeakerVolume.Slider)
+        F.StripTextures(_G.CreateChannelPopup)
+        F.SetBD(_G.CreateChannelPopup)
+        F.Reskin(_G.CreateChannelPopup.OKButton)
+        F.Reskin(_G.CreateChannelPopup.CancelButton)
+        F.ReskinClose(_G.CreateChannelPopup.CloseButton)
+        F.ReskinInput(_G.CreateChannelPopup.Name)
+        F.ReskinInput(_G.CreateChannelPopup.Password)
 
-	-- VoiceActivityManager
-	hooksecurefunc(VoiceActivityManager, "LinkFrameNotificationAndGuid", function(_, _, notification, guid)
-		local class = select(2, GetPlayerInfoByGUID(guid))
-		if class then
-			local color = C.ClassColors[class]
-			if notification.Name then
-				notification.Name:SetTextColor(color.r, color.g, color.b)
-			end
-		end
-	end)
+        F.SetBD(_G.VoiceChatPromptActivateChannel)
+        F.Reskin(_G.VoiceChatPromptActivateChannel.AcceptButton)
+        _G.VoiceChatChannelActivatedNotification:SetBackdrop(nil)
+        F.SetBD(_G.VoiceChatChannelActivatedNotification)
 
-    -- TextToSpeech
-	if C.IsNewPatch then
-		F.StripTextures(TextToSpeechButton, 5)
+        F.ReskinSlider(_G.UnitPopupVoiceMicrophoneVolume.Slider)
+        F.ReskinSlider(_G.UnitPopupVoiceSpeakerVolume.Slider)
 
-		F.StripTextures(TextToSpeechFrame)
-		F.SetBD(TextToSpeechFrame)
-		F.StripTextures(TextToSpeechFrame.Header)
+        -- VoiceActivityManager
+        hooksecurefunc(
+            _G.VoiceActivityManager,
+            'LinkFrameNotificationAndGuid',
+            function(_, _, notification, guid)
+                local class = select(2, GetPlayerInfoByGUID(guid))
+                if class then
+                    local color = C.ClassColors[class]
+                    if notification.Name then
+                        notification.Name:SetTextColor(color.r, color.g, color.b)
+                    end
+                end
+            end
+        )
 
-		TextToSpeechFramePanelContainer:SetBackdrop(nil)
-		F.CreateBDFrame(TextToSpeechFramePanelContainer, .25)
-		TextToSpeechFramePanelContainerChatTypeContainer:SetBackdrop(nil)
-		F.CreateBDFrame(TextToSpeechFramePanelContainerChatTypeContainer, .25)
+        -- TextToSpeech
+        if C.IsNewPatch then
+            F.StripTextures(_G.TextToSpeechButton, 5)
 
-		F.Reskin(TextToSpeechFramePlaySampleButton)
-		F.Reskin(TextToSpeechFrameDefaults)
-		F.Reskin(TextToSpeechFrameOkay)
+            F.StripTextures(_G.TextToSpeechFrame)
+            F.SetBD(_G.TextToSpeechFrame)
+            F.StripTextures(_G.TextToSpeechFrame.Header)
 
-		F.ReskinDropDown(TextToSpeechFrameTtsVoiceDropdown)
-		F.ReskinSlider(TextToSpeechFrameAdjustRateSlider)
-		F.ReskinSlider(TextToSpeechFrameAdjustVolumeSlider)
+            _G.TextToSpeechFramePanelContainer:SetBackdrop(nil)
+            F.CreateBDFrame(_G.TextToSpeechFramePanelContainer, .25)
+            _G.TextToSpeechFramePanelContainerChatTypeContainer:SetBackdrop(nil)
+            F.CreateBDFrame(_G.TextToSpeechFramePanelContainerChatTypeContainer, .25)
 
-		local checkboxes = {
-			"PlayActivitySoundWhenNotFocusedCheckButton",
-			"PlaySoundSeparatingChatLinesCheckButton",
-			"AddCharacterNameToSpeechCheckButton",
-			"UseAlternateVoiceForSystemMessagesCheckButton",
-		}
-		for _, checkbox in pairs(checkboxes) do
-			F.ReskinCheck(TextToSpeechFramePanelContainer[checkbox])
-		end
+            F.Reskin(_G.TextToSpeechFramePlaySampleButton)
+            F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
+            F.Reskin(_G.TextToSpeechFrameDefaults)
+            F.Reskin(_G.TextToSpeechFrameOkay)
 
-		hooksecurefunc("TextToSpeechFrame_Update", function()
-			local checkBoxNameString = "TextToSpeechFramePanelContainerChatTypeContainerCheckBox"
-			local checkBoxName, checkBox
-			local checkBoxTable = TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable
-			if checkBoxTable then
-				for index, value in ipairs(checkBoxTable) do
-					checkBoxName = checkBoxNameString..index
-					checkBox = _G[checkBoxName]
-					if checkBox and not checkBox.styled then
-						F.ReskinCheck(checkBox)
-						checkBox.styled = true
-					end
-				end
-			end
-		end)
+            F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
+            F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
+            F.ReskinSlider(_G.TextToSpeechFrameAdjustRateSlider)
+            F.ReskinSlider(_G.TextToSpeechFrameAdjustVolumeSlider)
 
-        -- voice picker
-		local voicePicker = TextToSpeechFramePanelContainer.VoicePicker
-		local customFrame = voicePicker:GetChildren()
-		F.StripTextures(customFrame)
-		F.SetBD(customFrame)
+            local checkboxes = {
+                'PlayActivitySoundWhenNotFocusedCheckButton',
+                'PlaySoundSeparatingChatLinesCheckButton',
+                'AddCharacterNameToSpeechCheckButton',
+                'UseAlternateVoiceForSystemMessagesCheckButton'
+            }
+            for _, checkbox in pairs(checkboxes) do
+                F.ReskinCheck(_G.TextToSpeechFramePanelContainer[checkbox])
+            end
 
-		voicePicker:HookScript("OnShow", function(self)
-			for i = 1, self.ScrollBox.ScrollTarget:GetNumChildren() do
-				local child = select(i, self.ScrollBox.ScrollTarget:GetChildren())
-				if not child.styled then
-					child.UnCheck:SetTexture(nil)
-					child.Highlight:SetColorTexture(r, g, b, .25)
+            hooksecurefunc(
+                'TextToSpeechFrame_Update',
+                function()
+                    local checkBoxTable = _G.TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable
+                    if checkBoxTable then
+                        local checkBoxNameString = 'TextToSpeechFramePanelContainerChatTypeContainerCheckBox'
+                        local checkBoxName, checkBox
+                        for index, _ in ipairs(checkBoxTable) do
+                            checkBoxName = checkBoxNameString .. index
+                            checkBox = _G[checkBoxName]
+                            if checkBox and not checkBox.styled then
+                                F.ReskinCheck(checkBox)
+                                checkBox.styled = true
+                            end
+                        end
+                    end
+                end
+            )
 
-					local check = child.Check
-					check:SetColorTexture(r, g, b, .6)
-					check:SetSize(10, 10)
-					check:SetPoint("LEFT", 2, 0)
-					F.CreateBDFrame(check, .25)
-
-					child.styled = true
-				end
-			end
-		end)
-	end
-end)
+            -- voice pickers
+            ReskinVoicePicker(_G.TextToSpeechFrameTtsVoicePicker)
+            ReskinVoicePicker(_G.TextToSpeechFrameTtsVoiceAlternatePicker)
+        end
+    end
+)

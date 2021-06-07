@@ -1,114 +1,126 @@
+local _G = _G
+local unpack = unpack
+local select = select
+local tinsert = tinsert
+local hooksecurefunc = hooksecurefunc
+local CanGuildBankRepair = CanGuildBankRepair
+
 local F, C = unpack(select(2, ...))
 
-tinsert(C.BlizzThemes, function()
-	if not _G.FREE_ADB.ReskinBlizz then return end
+local function reskinMerchantItem(item)
+    local name = item.Name
+    local button = item.ItemButton
+    local icon = button.icon
+    local moneyFrame = _G[item:GetName() .. 'MoneyFrame']
 
-	F.ReskinPortraitFrame(MerchantFrame)
-	F.ReskinDropDown(MerchantFrameLootFilter)
-	F.StripTextures(MerchantPrevPageButton)
-	F.ReskinArrow(MerchantPrevPageButton, "left")
-	F.StripTextures(MerchantNextPageButton)
-	F.ReskinArrow(MerchantNextPageButton, "right")
-	MerchantMoneyInset:Hide()
-	MerchantMoneyBg:Hide()
-	MerchantNameText:SetDrawLayer("ARTWORK")
-	MerchantExtraCurrencyBg:SetAlpha(0)
-	MerchantExtraCurrencyInset:SetAlpha(0)
-	BuybackBG:SetAlpha(0)
+    F.StripTextures(item)
+    F.CreateBDFrame(item, .25)
 
-	MerchantFrameTab1:ClearAllPoints()
-	MerchantFrameTab1:SetPoint("TOPLEFT", MerchantFrame, "BOTTOMLEFT", 10, 1)
+    F.StripTextures(button)
+    button:ClearAllPoints()
+    button:SetPoint('LEFT', item, 4, 0)
+    local hl = button:GetHighlightTexture()
+    hl:SetColorTexture(1, 1, 1, .25)
+    hl:SetInside()
 
-	for i = 1, 2 do
-		F.ReskinTab(_G["MerchantFrameTab"..i])
-	end
+    icon:SetInside()
+    button.bg = F.ReskinIcon(icon)
+    F.ReskinIconBorder(button.IconBorder)
+    button.IconOverlay:SetInside()
+    button.IconOverlay2:SetInside()
 
-	local function reskinMerchantItem(item)
-		local name = item.Name
-		local button = item.ItemButton
-		local icon = button.icon
-		local moneyFrame = _G[item:GetName().."MoneyFrame"]
+    name:SetFontObject(_G.Number12Font)
+    name:SetPoint('LEFT', button, 'RIGHT', 2, 9)
+    moneyFrame:SetPoint('BOTTOMLEFT', button, 'BOTTOMRIGHT', 3, 0)
+end
 
-		F.StripTextures(item)
-		F.CreateBDFrame(item, .25)
+local function reskinMerchantInteract(button)
+    button:SetPushedTexture('')
+    button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
+    F.CreateBDFrame(button)
+end
 
-		F.StripTextures(button)
-		button:ClearAllPoints()
-		button:SetPoint("LEFT", item, 4, 0)
-		local hl = button:GetHighlightTexture()
-		hl:SetColorTexture(1, 1, 1, .25)
-		hl:SetInside()
+tinsert(
+    C.BlizzThemes,
+    function()
+        F.ReskinPortraitFrame(_G.MerchantFrame)
+        F.ReskinDropDown(_G.MerchantFrameLootFilter)
+        F.StripTextures(_G.MerchantPrevPageButton)
+        F.ReskinArrow(_G.MerchantPrevPageButton, 'left')
+        F.StripTextures(_G.MerchantNextPageButton)
+        F.ReskinArrow(_G.MerchantNextPageButton, 'right')
+        _G.MerchantMoneyInset:Hide()
+        _G.MerchantMoneyBg:Hide()
+        _G.MerchantNameText:SetDrawLayer('ARTWORK')
+        _G.MerchantExtraCurrencyBg:SetAlpha(0)
+        _G.MerchantExtraCurrencyInset:SetAlpha(0)
+        _G.BuybackBG:SetAlpha(0)
 
-		icon:SetInside()
-		button.bg = F.ReskinIcon(icon)
-		F.ReskinIconBorder(button.IconBorder)
-		button.IconOverlay:SetInside()
-		button.IconOverlay2:SetInside()
+        _G.MerchantFrameTab1:ClearAllPoints()
+        _G.MerchantFrameTab1:SetPoint('TOPLEFT', _G.MerchantFrame, 'BOTTOMLEFT', 10, 1)
 
-		name:SetFontObject(Number12Font)
-		name:SetPoint("LEFT", button, "RIGHT", 2, 9)
-		moneyFrame:SetPoint("BOTTOMLEFT", button, "BOTTOMRIGHT", 3, 0)
-	end
+        for i = 1, 2 do
+            F.ReskinTab(_G['MerchantFrameTab' .. i])
+        end
 
-	for i = 1, BUYBACK_ITEMS_PER_PAGE do
-		local item = _G["MerchantItem"..i]
-		reskinMerchantItem(item)
+        for i = 1, _G.BUYBACK_ITEMS_PER_PAGE do
+            local item = _G['MerchantItem' .. i]
+            reskinMerchantItem(item)
 
-		for j = 1, 3 do
-			local currency = _G["MerchantItem"..i.."AltCurrencyFrameItem"..j]
-			local texture = _G["MerchantItem"..i.."AltCurrencyFrameItem"..j.."Texture"]
-			currency:SetPoint("BOTTOMLEFT", item.ItemButton, "BOTTOMRIGHT", 3, 0)
-			F.ReskinIcon(texture)
-		end
-	end
+            for j = 1, 3 do
+                local currency = _G['MerchantItem' .. i .. 'AltCurrencyFrameItem' .. j]
+                local texture = _G['MerchantItem' .. i .. 'AltCurrencyFrameItem' .. j .. 'Texture']
+                currency:SetPoint('BOTTOMLEFT', item.ItemButton, 'BOTTOMRIGHT', 3, 0)
+                F.ReskinIcon(texture)
+            end
+        end
 
-	MerchantBuyBackItem:SetHeight(44)
-	reskinMerchantItem(MerchantBuyBackItem)
+        _G.MerchantBuyBackItem:SetHeight(44)
+        reskinMerchantItem(_G.MerchantBuyBackItem)
 
-	local function reskinMerchantInteract(button)
-		button:SetPushedTexture("")
-		button:GetHighlightTexture():SetColorTexture(1, 1, 1, .25)
-		F.CreateBDFrame(button)
-	end
+        reskinMerchantInteract(_G.MerchantGuildBankRepairButton)
+        _G.MerchantGuildBankRepairButtonIcon:SetTexCoord(.595, .8075, .05, .52)
 
-	reskinMerchantInteract(MerchantGuildBankRepairButton)
-	MerchantGuildBankRepairButtonIcon:SetTexCoord(.595, .8075, .05, .52)
+        reskinMerchantInteract(_G.MerchantRepairAllButton)
+        _G.MerchantRepairAllIcon:SetTexCoord(.31375, .53, .06, .52)
 
-	reskinMerchantInteract(MerchantRepairAllButton)
-	MerchantRepairAllIcon:SetTexCoord(.31375, .53, .06, .52)
+        reskinMerchantInteract(_G.MerchantRepairItemButton)
+        local ic = _G.MerchantRepairItemButton:GetRegions()
+        ic:SetTexture('Interface\\Icons\\INV_Hammer_20')
+        ic:SetTexCoord(unpack(C.TexCoord))
 
-	reskinMerchantInteract(MerchantRepairItemButton)
-	local ic = MerchantRepairItemButton:GetRegions()
-	ic:SetTexture("Interface\\Icons\\INV_Hammer_20")
-	ic:SetTexCoord(unpack(C.TexCoord))
+        hooksecurefunc(
+            'MerchantFrame_UpdateCurrencies',
+            function()
+                for i = 1, _G.MAX_MERCHANT_CURRENCIES do
+                    local bu = _G['MerchantToken' .. i]
+                    if bu and not bu.styled then
+                        local icon = _G['MerchantToken' .. i .. 'Icon']
+                        local count = _G['MerchantToken' .. i .. 'Count']
+                        count:SetPoint('TOPLEFT', bu, 'TOPLEFT', -2, 0)
+                        F.ReskinIcon(icon)
 
-	hooksecurefunc("MerchantFrame_UpdateCurrencies", function()
-		for i = 1, MAX_MERCHANT_CURRENCIES do
-			local bu = _G["MerchantToken"..i]
-			if bu and not bu.styled then
-				local icon = _G["MerchantToken"..i.."Icon"]
-				local count = _G["MerchantToken"..i.."Count"]
-				count:SetPoint("TOPLEFT", bu, "TOPLEFT", -2, 0)
-				F.ReskinIcon(icon)
+                        bu.styled = true
+                    end
+                end
+            end
+        )
 
-				bu.styled = true
-			end
-		end
-	end)
+        hooksecurefunc(
+            'MerchantFrame_UpdateRepairButtons',
+            function()
+                if CanGuildBankRepair() then
+                    _G.MerchantRepairText:SetPoint('CENTER', _G.MerchantFrame, 'BOTTOMLEFT', 65, 73)
+                end
+            end
+        )
 
-	hooksecurefunc("MerchantFrame_UpdateRepairButtons", function()
-		if CanGuildBankRepair() then
-			MerchantRepairText:SetPoint("CENTER", MerchantFrame, "BOTTOMLEFT", 65, 73)
-		end
-	end)
-
-	-- StackSplitFrame
-
-	local StackSplitFrame = StackSplitFrame
-	F.StripTextures(StackSplitFrame)
-	F.SetBD(StackSplitFrame)
-	F.Reskin(StackSplitFrame.OkayButton)
-	F.Reskin(StackSplitFrame.CancelButton)
-	F.ReskinArrow(StackSplitFrame.LeftButton, "left")
-	F.ReskinArrow(StackSplitFrame.RightButton, "right")
-end)
+        -- StackSplitFrame
+        F.StripTextures(_G.StackSplitFrame)
+        F.SetBD(_G.StackSplitFrame)
+        F.Reskin(_G.StackSplitFrame.OkayButton)
+        F.Reskin(_G.StackSplitFrame.CancelButton)
+        F.ReskinArrow(_G.StackSplitFrame.LeftButton, 'left')
+        F.ReskinArrow(_G.StackSplitFrame.RightButton, 'right')
+    end
+)
