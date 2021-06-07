@@ -361,6 +361,10 @@ function MISC:MuteTrainSound()
         --[[Zandalari]]
         '1903049',
         '1903522',
+
+        -- 闷燃之心
+        '2066602',
+        '2066605',
     }
     for _, soundID in pairs(trainSounds) do
         MuteSoundFile(soundID)
