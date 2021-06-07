@@ -84,7 +84,7 @@ end
 _G.SlashCmdList.FREEUI = function(str)
     local cmd, _ = strsplit(' ', str:lower(), 2)
     if cmd == 'reset' then
-        StaticPopup_Show('FREEUI_RESET')
+        StaticPopup_Show('FREEUI_RESET_ALL')
     elseif cmd == 'install' then
         F:GetModule('Tutorial'):HelloWorld()
     elseif cmd == 'unlock' then
@@ -142,42 +142,8 @@ _G.SLASH_ONLY_UI1 = '/onlyfree'
 -- [[ group ]] --
 
 --	Disband party or raid
-local function DisbandRaidGroup()
-    if InCombatLockdown() then
-        return
-    end
-    if UnitInRaid('player') then
-        SendChatMessage(L['Disbanding group'] .. ' ...', 'RAID')
-        for i = 1, GetNumGroupMembers() do
-            local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-            if online and name ~= C.MyName then
-                UninviteUnit(name)
-            end
-        end
-    else
-        SendChatMessage(L['Disbanding group'] .. ' ...', 'PARTY')
-        for i = _G.MAX_PARTY_MEMBERS, 1, -1 do
-            if GetNumGroupMembers(i) then
-                UninviteUnit(UnitName('party' .. i))
-            end
-        end
-    end
-    C_PartyInfo_LeaveParty()
-end
-
-_G.StaticPopupDialogs.DISBAND_RAID = {
-    text = L['Are you sure to |cffff0000disband|r your group?'],
-    button1 = ACCEPT,
-    button2 = CANCEL,
-    OnAccept = DisbandRaidGroup,
-    timeout = 0,
-    whileDead = 1,
-    hideOnEscape = true,
-    preferredIndex = 5,
-}
-
 _G.SlashCmdList.GROUPDISBAND = function()
-    StaticPopup_Show('DISBAND_RAID')
+    StaticPopup_Show('FREEUI_DISBAND_GROUP')
 end
 _G.SLASH_GROUPDISBAND1 = '/disband'
 

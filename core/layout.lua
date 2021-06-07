@@ -15,11 +15,6 @@ local PlaySound = PlaySound
 local InCombatLockdown = InCombatLockdown
 local StaticPopup_Show = StaticPopup_Show
 local SOUNDKIT_IG_MAINMENU_OPTION_CHECKBOX_ON = SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
-local LOCK = LOCK
-local RESET = RESET
-local OKAY = OKAY
-local CANCEL = CANCEL
-local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
 
 local F, C, L = unpack(select(2, ...))
 local MOVER = F:RegisterModule('Layout')
@@ -279,19 +274,6 @@ function MOVER:LockElements()
     clear()
 end
 
-_G.StaticPopupDialogs['FREEUI_RESET_ANCHOR'] = {
-    text = L['Are you sure to reset all frame\'s position?'],
-    button1 = OKAY,
-    button2 = CANCEL,
-    OnAccept = function()
-        wipe(C.DB.UIAnchor)
-        ReloadUI()
-    end,
-    timeout = 0,
-    whileDead = 1,
-    hideOnEscape = false,
-}
-
 -- Mover Console
 local function CreateConsole()
     if f then
@@ -305,7 +287,7 @@ local function CreateConsole()
     F.CreateSD(f)
     F.CreateFS(f, C.Assets.Fonts.Regular, 12, true, L['Layout'], 'YELLOW', nil, 'TOP', 0, -10)
 
-    local bu, text = {}, {LOCK, L['Grids'], RESET}
+    local bu, text = {}, {_G.LOCK, L['Grids'], _G.RESET}
 
     for i = 1, 3 do
         bu[i] = F.CreateButton(f, 80, 24, text[i])
@@ -335,7 +317,7 @@ local function CreateConsole()
 
     -- Reset
     bu[3]:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RESET_ANCHOR')
+        StaticPopup_Show('FREEUI_RESET_LAYOUT')
     end)
 
     local header = CreateFrame('Frame', nil, f)
@@ -426,7 +408,7 @@ end
 
 function F:MoverConsole()
     if InCombatLockdown() then
-        _G.UIErrorsFrame:AddMessage(C.InfoColor .. ERR_NOT_IN_COMBAT)
+        _G.UIErrorsFrame:AddMessage(C.InfoColor .. _G.ERR_NOT_IN_COMBAT)
         return
     end
     CreateConsole()

@@ -524,42 +524,12 @@ function MISC:RaidTool_CreateMenu(parent)
         self:SetScript('OnUpdate', updateDelay)
     end)
 
-    _G.StaticPopupDialogs['Group_Disband'] = {
-        text = L['Are you sure to |cffff0000disband|r your group?'],
-        button1 = YES,
-        button2 = NO,
-        OnAccept = function()
-            if InCombatLockdown() then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. ERR_NOT_IN_COMBAT)
-                return
-            end
-            if IsInRaid() then
-                SendChatMessage(L['Raid Disbanding'], 'RAID')
-                for i = 1, GetNumGroupMembers() do
-                    local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
-                    if online and name ~= C.MyName then
-                        UninviteUnit(name)
-                    end
-                end
-            else
-                for i = _G.MAX_PARTY_MEMBERS, 1, -1 do
-                    if UnitExists('party' .. i) then
-                        UninviteUnit(UnitName('party' .. i))
-                    end
-                end
-            end
-            LeaveParty()
-        end,
-        timeout = 0,
-        whileDead = 1,
-    }
-
     local buttons = {
         {
             TEAM_DISBAND,
             function()
                 if UnitIsGroupLeader('player') then
-                    StaticPopup_Show('Group_Disband')
+                    StaticPopup_Show('FREEUI_DISBAND_GROUP')
                 else
                     _G.UIErrorsFrame:AddMessage(C.RedColor .. ERR_NOT_LEADER)
                 end

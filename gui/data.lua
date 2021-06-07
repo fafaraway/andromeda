@@ -205,19 +205,6 @@ local function UpdateTooltip()
 	end
 end
 
-StaticPopupDialogs['FREEUI_IMPORT'] = {
-	text = L.GUI.PROFILE.IMPORT_WARNING,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		GUI:ImportData()
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false,
-}
-
 function GUI:CreateDataFrame()
 	if dataFrame then dataFrame:Show() return end
 
@@ -252,7 +239,7 @@ function GUI:CreateDataFrame()
 	accept:SetPoint('BOTTOM', 0, 10)
 	accept:SetScript('OnClick', function(self)
 		if self.text:GetText() ~= OKAY and dataFrame.editBox:GetText() ~= '' then
-			StaticPopup_Show('FREEUI_IMPORT')
+			StaticPopup_Show('FREEUI_IMPORT_PROFILE')
 		end
 		dataFrame:Hide()
 	end)

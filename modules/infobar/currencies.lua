@@ -38,24 +38,6 @@ if not crossRealms or #crossRealms == 0 then
     crossRealms = {[1] = C.MyRealm}
 end
 
-_G.StaticPopupDialogs['FREEUI_RESET_GOLD'] = {
-    text = L['Are you sure to reset all gold statistic?'],
-    button1 = _G.YES,
-    button2 = _G.NO,
-    OnAccept = function()
-        for _, realm in pairs(crossRealms) do
-            if _G.FREE_ADB['GoldStatistic'][realm] then
-                wipe(_G.FREE_ADB['GoldStatistic'][realm])
-            end
-        end
-
-        _G.FREE_ADB['GoldStatistic'][C.MyRealm][C.MyName] = {GetMoney(), C.MyClass}
-    end,
-    timeout = 0,
-    whileDead = 1,
-    hideOnEscape = true
-}
-
 local profit, spent, oldMoney = 0, 0, 0
 
 local function Button_OnEvent(self, event)

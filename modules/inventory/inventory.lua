@@ -630,18 +630,6 @@ local function favouriteOnClick(self)
     end
 end
 
-_G.StaticPopupDialogs.FREEUI_RESET_JUNK_LIST = {
-    text = L['|cffff2020Are you sure to reset Junk Items List?|r'],
-    button1 = _G.YES,
-    button2 = _G.NO,
-    OnAccept = function()
-        wipe(_G.FREE_ADB.CustomJunkList)
-    end,
-    timeout = 0,
-    whileDead = 1,
-    hideOnEscape = true
-}
-
 local customJunkEnable
 function INVENTORY:CreateCustomJunkButton()
     local enabledText =

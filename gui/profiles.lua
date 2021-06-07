@@ -6,110 +6,6 @@ local strfind, tostring, select = strfind, tostring, select
 local SetPortraitTexture, StaticPopup_Show = SetPortraitTexture, StaticPopup_Show
 local myFullName = C.MyFullName
 
--- Static popups
-StaticPopupDialogs['FREEUI_RESET'] = {
-	text = L.GUI.PROFILE.RESET_WARNING,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		FREE_DB = {}
-		FREE_ADB = {}
-		FREE_PDB = {}
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
-StaticPopupDialogs['FREEUI_RESET_PROFILE'] = {
-	text = L.GUI.PROFILE.RESET_PROFILE_WARNING,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		wipe(C.DB)
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
-StaticPopupDialogs['FREEUI_APPLY_PROFILE'] = {
-	text = L.GUI.PROFILE.APPLY_SELECTED_PROFILE,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		FREE_ADB['ProfileIndex'][myFullName] = GUI.currentProfile
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
-StaticPopupDialogs['FREEUI_DOWNLOAD_PROFILE'] = {
-	text = L.GUI.PROFILE.DOWNLOAD_SELECTED_PROFILE,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		local profileIndex = FREE_ADB['ProfileIndex'][myFullName]
-		if GUI.currentProfile == 1 then
-			FREE_PDB[profileIndex - 1] = FREE_DB
-		elseif profileIndex == 1 then
-			FREE_DB = FREE_PDB[GUI.currentProfile - 1]
-		else
-			FREE_PDB[profileIndex - 1] = FREE_PDB[GUI.currentProfile - 1]
-		end
-		ReloadUI()
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
-StaticPopupDialogs['FREEUI_UPLOAD_PROFILE'] = {
-	text = L.GUI.PROFILE.UPLOAD_CURRENT_PROFILE,
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function()
-		if GUI.currentProfile == 1 then
-			FREE_DB = C.DB
-		else
-			FREE_PDB[GUI.currentProfile - 1] = C.DB
-		end
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
-StaticPopupDialogs['FREEUI_DELETE_UNIT_PROFILE'] = {
-	text = '',
-	button1 = YES,
-	button2 = NO,
-	OnAccept = function(self)
-		local name, realm = strsplit('-', self.text.text_arg1)
-		if FREE_ADB['GoldStatistic'][realm] and FREE_ADB['GoldStatistic'][realm][name] then
-			FREE_ADB['GoldStatistic'][realm][name] = nil
-		end
-		FREE_ADB['ProfileIndex'][self.text.text_arg1] = nil
-	end,
-	OnShow = function(self)
-		local r, g, b
-		local class = self.text.text_arg2
-		if class == 'NONE' then
-			r, g, b = .5, .5, .5
-		else
-			r, g, b = F:ClassColor(class)
-		end
-		self.text:SetText(format(L.GUI.PROFILE.DELETE_UNIT_PROFILE_WARNING, F.HexRGB(r, g, b), self.text.text_arg1))
-	end,
-	timeout = 0,
-	whileDead = 1,
-	hideOnEscape = false
-}
-
 function GUI:CreateProfileIcon(bar, index, texture, title, description)
 	local button = CreateFrame('Button', nil, bar)
 	button:SetSize(32, 32)
@@ -122,7 +18,7 @@ function GUI:CreateProfileIcon(bar, index, texture, title, description)
 end
 
 function GUI:Reset_OnClick()
-	StaticPopup_Show('FREEUI_RESET_PROFILE')
+	StaticPopup_Show('FREEUI_RESET_CURRENT_PROFILE')
 end
 
 function GUI:Apply_OnClick()
@@ -132,12 +28,12 @@ end
 
 function GUI:Download_OnClick()
 	GUI.currentProfile = self:GetParent().index
-	StaticPopup_Show('FREEUI_DOWNLOAD_PROFILE')
+	StaticPopup_Show('FREEUI_REPLACE_CURRENT_PROFILE')
 end
 
 function GUI:Upload_OnClick()
 	GUI.currentProfile = self:GetParent().index
-	StaticPopup_Show('FREEUI_UPLOAD_PROFILE')
+	StaticPopup_Show('FREEUI_REPLACE_SELECTED_PROFILE')
 end
 
 function GUI:GetClassFromGoldInfo(name, realm)
@@ -314,7 +210,7 @@ function GUI:CreateProfileGUI(parent)
 	reset:SetScript(
 		'OnClick',
 		function()
-			StaticPopup_Show('FREEUI_RESET')
+			StaticPopup_Show('FREEUI_RESET_ALL')
 		end
 	)
 	F.AddTooltip(reset, 'ANCHOR_TOP', F:StyleAddonName(L.GUI.PROFILE.RESET_TIP), 'RED')
