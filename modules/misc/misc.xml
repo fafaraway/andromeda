@@ -11,6 +11,7 @@
     <Script file="logo.lua"/>
     <Script file="merchant.lua"/>
     <Script file="movie_skip.lua"/>
+    <Script file="mute_sounds.lua"/>
     <Script file="proposal_timer.lua"/>
     <Script file="shared_media.lua"/>
     <Script file="stats_report.lua"/>
