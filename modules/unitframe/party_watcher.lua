@@ -140,7 +140,7 @@ function UNITFRAME:CreatePartyWatcher(self)
 
     local buttons = {}
     local maxIcons = 4
-    local iconSize = C.DB.Unitframe.PartyHeight * .7
+    local iconSize = C.DB.Unitframe.PartyHeight * .75
     local partyHorizon = C.DB.Unitframe.PartyHorizon
 
     for i = 1, maxIcons do
@@ -150,15 +150,15 @@ function UNITFRAME:CreatePartyWatcher(self)
         bu.CD:SetReverse(false)
         if i == 1 then
             if partyHorizon then
-                bu:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -5)
+                bu:SetPoint('TOPLEFT', self, 'BOTTOMLEFT', 0, -3)
             else
-                bu:SetPoint('RIGHT', self, 'LEFT', -5, 0)
+                bu:SetPoint('RIGHT', self, 'LEFT', -3, 0)
             end
         else
             if partyHorizon then
-                bu:SetPoint('LEFT', buttons[i - 1], 'RIGHT', 4, 0)
+                bu:SetPoint('LEFT', buttons[i - 1], 'RIGHT', 3, 0)
             else
-                bu:SetPoint('RIGHT', buttons[i - 1], 'LEFT', -4, 0)
+                bu:SetPoint('RIGHT', buttons[i - 1], 'LEFT', -3, 0)
             end
         end
         bu:Hide()

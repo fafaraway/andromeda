@@ -878,8 +878,8 @@ function NAMEPLATE:UpdateClickableSize()
     local width = C.DB.Nameplate.Width
     local height = C.DB.Nameplate.Height
     local scale = _G.FREE_ADB.UIScale
-    C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 10)
-    C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 10)
+    C_NamePlate_SetNamePlateEnemySize(width * scale, height * scale + 4)
+    C_NamePlate_SetNamePlateFriendlySize(width * scale, height * scale + 4)
 end
 
 function NAMEPLATE:UpdateNameplateAuras()

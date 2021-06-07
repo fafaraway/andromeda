@@ -34,13 +34,12 @@ end
 
 function UNITFRAME.PostCreateIcon(element, button)
     local style = element.__owner.unitStyle
-    local isParty = style == 'party'
 
     button.bg = F.CreateBDFrame(button)
 
-    if style ~= 'party' and style ~= 'raid' then
+    --if style ~= 'party' and style ~= 'raid' then
         button.glow = F.CreateSD(button.bg)
-    end
+    --end
 
     element.disableCooldown = true
     button:SetFrameLevel(element:GetFrameLevel() + 4)
@@ -49,7 +48,7 @@ function UNITFRAME.PostCreateIcon(element, button)
     button.stealable:SetTexture(nil)
     button.cd:SetReverse(true)
     button.icon:SetDrawLayer('ARTWORK')
-    button.icon:SetTexCoord(.08, .92, isParty and .08 or .25, isParty and .92 or .85)
+    button.icon:SetTexCoord(unpack(C.TexCoord))
 
     button.HL = button:CreateTexture(nil, 'HIGHLIGHT')
     button.HL:SetColorTexture(1, 1, 1, .25)
@@ -89,8 +88,8 @@ function UNITFRAME.PostUpdateIcon(element, unit, button, index, _, duration, exp
     local isParty = style == 'party'
     local _, _, _, _, _, _, _, canStealOrPurge = UnitAura(unit, index, button.filter)
 
-    -- button:SetSize(element.size, isParty and element.size or element.size * .75)
-    button:SetSize(element.size, element.size * .75)
+    button:SetSize(element.size, isParty and element.size or element.size * .75)
+    -- button:SetSize(element.size, element.size * .75)
 
     if button.isDebuff and F:MultiCheck(style, 'target', 'boss', 'arena') and not button.isPlayer then
         button.icon:SetDesaturated(true)
@@ -162,17 +161,10 @@ function UNITFRAME.CustomFilter(element, unit, button, name, _, _, _, _, _, cast
             return true
         end
     elseif style == 'party' then
-        if C.RaidBuffsList[spellID] then
+        if C.PartyAurasList[spellID] then
             return true
         else
             return false
-        end
-    elseif style == 'raid' then
-        if C.RaidBuffsList['ALL'][spellID] or _G.FREE_ADB['RaidAuraWatch'][spellID] then
-            element.__owner.rawSpellID = spellID
-            return true
-        else
-            element.__owner.rawSpellID = nil
         end
     elseif style == 'target' then
         if element.onlyShowPlayer and button.isDebuff then
@@ -241,15 +233,10 @@ function UNITFRAME.RaidBuffFilter(_, _, _, _, _, _, _, _, _, caster, _, _, spell
     end
 end
 
-local debuffBlackList = {
-    [206151] = true, -- Challenger's Burden
-    [331154] = true,
-}
-
 function UNITFRAME.RaidDebuffFilter(element, _, _, _, _, _, _, _, _, caster, _, _, spellID, _, isBossAura)
     local parent = element.__owner
 
-    if debuffBlackList[spellID] then
+    if C.RaidDebuffsBlackList[spellID] then
         return false
     elseif (C.DB.Unitframe.CornerIndicator and UNITFRAME.CornerSpellsList[spellID]) or parent.RaidDebuffs.spellID == spellID or parent.rawSpellID == spellID then
         return false
@@ -344,7 +331,7 @@ function UNITFRAME:CreateBuffs(self)
     bu:SetPoint('TOPLEFT', self, 'TOPLEFT', 2, -2)
     bu.initialAnchor = 'TOPLEFT'
     bu['growth-x'] = 'RIGHT'
-    bu.spacing = 3
+    bu.spacing = 4
     bu.size = C.DB.Unitframe.RaidBuffSize
     bu.num = C.DB.Unitframe.ShowRaidBuff and 3 or 0
     bu.showStealableBuffs = true
@@ -367,7 +354,7 @@ end
 
 function UNITFRAME:CreateDebuffs(self)
     local bu = CreateFrame('Frame', nil, self)
-    bu.spacing = 3
+    bu.spacing = 4
     bu.initialAnchor = 'TOPRIGHT'
     bu['growth-x'] = 'LEFT'
     bu['growth-y'] = 'DOWN'
