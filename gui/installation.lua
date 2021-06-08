@@ -19,7 +19,7 @@ local function SetupCVars()
     SetCVar('WorldTextScale', 1)
     SetCVar('missingTransmogSourceInItemTooltips', 1)
     SetCVar('movieSubtitle', 1)
-    SetCVar('scriptErrors', 0)
+    SetCVar('scriptErrors', C.IsDeveloper and 0 or 1)
 
     -- map
     SetCVar('rotateMinimap', 0)
