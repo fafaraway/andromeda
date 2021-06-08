@@ -86,7 +86,7 @@ _G.SlashCmdList.FREEUI = function(str)
     if cmd == 'reset' then
         StaticPopup_Show('FREEUI_RESET_ALL')
     elseif cmd == 'install' then
-        F:GetModule('Tutorial'):HelloWorld()
+        F:GetModule('Installation'):HelloWorld()
     elseif cmd == 'unlock' then
         F:MoverConsole()
     elseif cmd == 'config' then

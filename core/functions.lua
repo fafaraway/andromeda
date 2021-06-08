@@ -61,6 +61,10 @@ local assets = C.Assets
 --[[ Functions ]]
 
 do
+    function F.HelpInfoAcknowledge(callbackArg)
+        _G.FREE_ADB['HelpTips'][callbackArg] = true
+    end
+
     function F:Dummy()
         return
     end
@@ -757,14 +761,11 @@ do
         local gradStyle = _G.FREE_ADB.GradientStyle
         local gradTex = C.AssetsPath .. 'textures\\gradient'
         local normTex = C.Assets.bd_tex
-        local color = _G.FREE_ADB.ButtonBackdropColor
-        local alpha = _G.FREE_ADB.ButtonBackdropAlpha
 
         local tex = self:CreateTexture(nil, 'BORDER')
-        tex:SetPoint('TOPLEFT', 1, -1)
-        tex:SetPoint('BOTTOMRIGHT', -1, 1)
+        tex:SetAllPoints(self)
         tex:SetTexture(gradStyle and gradTex or normTex)
-        tex:SetVertexColor(color.r, color.g, color.b, alpha)
+        tex:SetVertexColor(.065, .065, .065, .35)
 
         return tex
     end
@@ -1039,7 +1040,7 @@ do
             return
         end
 
-        self.__bg:SetBackdropColor(C.r, C.g, C.b, .65)
+        self.__bg:SetBackdropColor(C.r, C.g, C.b, .45)
         self.__bg:SetBackdropBorderColor(C.r, C.g, C.b)
     end
 
@@ -1111,7 +1112,7 @@ do
         end
 
         F.CreateTex(self)
-        F.CreateBDFrame(self, .25, true)
+        self.__bg = F.CreateBDFrame(self, .25, true)
 
         local color = _G.FREE_ADB.ButtonBackdropColor
         local alpha = _G.FREE_ADB.ButtonBackdropAlpha
@@ -1749,7 +1750,7 @@ do
         bu.Icon:SetTexture(616343)
         bu:SetHighlightTexture(616343)
         if tooltip then
-            bu.title = L.GUI.HINT
+            bu.title = L['Hint']
             F.AddTooltip(bu, 'ANCHOR_BOTTOMLEFT', tooltip, 'BLUE')
         end
 
@@ -2357,7 +2358,7 @@ end
 
 do
     local iLvlDB = {}
-    local itemLevelString = gsub(ITEM_LEVEL, '%%d', '')
+    local itemLevelString = '^' .. gsub(ITEM_LEVEL, '%%d', '')
     local enchantString = gsub(ENCHANTED_TOOLTIP_LINE, '%%s', '(.+)')
     local essenceTextureID = 2975691
     local essenceDescription = GetSpellDescription(277253)

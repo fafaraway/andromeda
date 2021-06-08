@@ -1,22 +1,32 @@
+local _G = _G
+local unpack = unpack
+local select = select
+local SetCVar = SetCVar
+
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
 local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('Actionbar')
+local INVENTORY = F:GetModule('Inventory')
 local CHAT = F:GetModule('Chat')
 
--- Auta
+-- Aura
 local function SetupAuraSize()
     GUI:SetupAuraSize(GUI.Page[5])
 end
 
 -- Inventory
 function GUI:UpdateInventoryStatus()
-    F.INVENTORY:UpdateAllBags()
+    INVENTORY:UpdateAllBags()
 end
 
 local function SetupInventoryFilter()
     GUI:SetupInventoryFilter(GUI.Page[9])
+end
+
+local function SetupInventorySize()
+    GUI:SetupInventorySize(GUI.Page[9])
 end
 
 -- Actionbar
@@ -29,10 +39,17 @@ local function SetupAdditionalbar()
 end
 
 local function UpdateHotkeys()
-    local Bar = ACTIONBAR
-    for _, button in pairs(Bar.buttons) do
+    for _, button in pairs(ACTIONBAR.buttons) do
         if button.UpdateHotkeys then
             button:UpdateHotkeys(button.buttonType)
+        end
+    end
+end
+
+local function UpdateEquipColor()
+    for _, button in pairs(ACTIONBAR.buttons) do
+        if button.Border and button.Update then
+            ACTIONBAR.UpdateEquipItemColor(button)
         end
     end
 end
@@ -59,8 +76,8 @@ local function SetupChatSize()
 end
 
 -- Minimap
-local function UpdateMinimapScale()
-    F.MAP:UpdateMinimapScale()
+local function SetupMapScale()
+    GUI:SetupMapScale(GUI.Page[10])
 end
 
 -- Nameplate
@@ -159,6 +176,10 @@ local function SetupSimpleFloatingCombatText()
     GUI:SetupSimpleFloatingCombatText(GUI.Page[7])
 end
 
+-- Announcement
+local function SetupAnnounceSpells()
+    GUI:SetupAnnounceSpells(GUI.Page[8])
+end
 
 -- Options
 GUI.OptionsList = {
@@ -175,7 +196,7 @@ GUI.OptionsList = {
         {1, 'General', 'SimplifyErrors', L['Simplify Errors'], nil, nil, nil, L['|nSimplify standard error messages when you in combat. It\'s the red text in the middle of your screen that constantly annoys you with things like, \'Your too far away!\', \'Not enough mana.\', etc.']},
         {1, 'General', 'FasterLoot', L['Faster auto looting'], nil, nil, nil, L['|nLoot instantly. |nNo more waiting for the loot window to be populated.']},
         {1, 'General', 'FasterMovieSkip', L['Faster movie skip'], true, nil, nil, L['|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
-        {1, 'General', 'SmoothZooming', L['Camera faster zooming'], nil, nil, nil, L['|nFaster and smoother camera zooming.']},
+        {1, 'General', 'FasterZooming', L['Camera faster zooming'], nil, nil, nil, L['|nFaster and smoother camera zooming.']},
         {1, 'General', 'ActionMode', L['Camera action mode'], true, nil, nil, L['|nEnable blizzard action camera.']},
         {1, 'General', 'ScreenSaver', L['Screen saver']},
         {1, 'General', 'AutoScreenshot', L['Auto screenshot'], true, SetupAutoTakeScreenshot, nil, L['|nTake screenshots automatically based on specific events.']},
@@ -251,9 +272,11 @@ GUI.OptionsList = {
         {1, 'Actionbar', 'Hotkey', L['Show hotkey'], nil, nil, UpdateHotkeys},
         {4, 'Actionbar', 'Layout', L['Actionbar Layout'], true, {'1 * 12', '2 * 12', '3 * 12', '2 * 18'}},
         {1, 'Actionbar', 'MacroName', L['Show macro name']},
-        {1, 'Actionbar', 'CountNumber', L['Show charge count']},
         {3, 'Actionbar', 'Scale', L['Actionbar Scale'], true, {.5, 2, .1}},
-        {1, 'Actionbar', 'ClassColor', L['Colored by class']},
+        {1, 'Actionbar', 'CountNumber', L['Show charge count']},
+
+        {1, 'Actionbar', 'EquipColor', L['Equipped item border'], nil, nil, UpdateEquipColor},
+        {1, 'Actionbar', 'ClassColor', L['Background colored by class'], true},
         {1, 'Actionbar', 'DynamicFade', L['Conditional fader'], nil, SetupActionbarFade},
         {1, 'Actionbar', 'CooldownNotify', L['Cooldown notify'], true, nil, nil, L['|nYou can mouse wheel on actionbar button, and send its cooldown status to your group.']},
         {1, 'Actionbar', 'CooldownPulse', L['Cooldown pulse'], nil, nil, nil, L['|nTrack your spell cooldown using a pulse icon in the center of the screen.']},
@@ -286,70 +309,70 @@ GUI.OptionsList = {
         {4, 'Combat', 'EasyFocusKey', L['Easy Focus'], nil, {'CTRL', 'ALT', 'SHIFT', _G.DISABLE}},
         {4, 'Combat', 'EasyMarkKey', L['Easy Mark'], true, {'CTRL', 'ALT', 'SHIFT', _G.DISABLE}},
     },
-    [8] = {
-        -- announcement
-        {1, 'Announcement', 'Enable', L.GUI.ANNOUNCEMENT.ENABLE, nil, nil, nil, L.GUI.ANNOUNCEMENT.ENABLE_TIP},
-        {1, 'Announcement', 'Interrupt', L.GUI.ANNOUNCEMENT.INTERRUPT, nil, nil, nil, L.GUI.ANNOUNCEMENT.INTERRUPT_TIP},
-        {1, 'Announcement', 'Dispel', L.GUI.ANNOUNCEMENT.DISPEL, true, nil, nil, L.GUI.ANNOUNCEMENT.DISPEL_TIP},
-        {1, 'Announcement', 'BattleRez', L.GUI.ANNOUNCEMENT.BATTLEREZ, nil, nil, nil, L.GUI.ANNOUNCEMENT.BATTLEREZ_TIP},
-        {1, 'Announcement', 'Utility', L.GUI.ANNOUNCEMENT.UTILITY, true, nil, nil, L.GUI.ANNOUNCEMENT.UTILITY_TIP},
-        {1, 'Announcement', 'Reset', L.GUI.ANNOUNCEMENT.RESET, nil, nil, nil, L.GUI.ANNOUNCEMENT.RESET_TIP},
+    [8] = { -- announcement
+        {1, 'Announcement', 'Enable', L['Enable Announcement']},
+        {1, 'Announcement', 'PersonalMajorSpell', L['Personal major spells'], nil, SetupAnnounceSpells},
+        {4, 'Announcement', 'Channel', _G.CHANNEL, true, {_G.CHAT_MSG_PARTY .. '/' .. _G.CHAT_MSG_RAID, _G.YELL, _G.EMOTE, _G.SAY}},
+        {1, 'Announcement', 'Interrupt', L['Interrupt']},
+        {1, 'Announcement', 'Dispel', L['Dispel'], true},
+        {1, 'Announcement', 'Stolen', L['Steal']},
+        {1, 'Announcement', 'Reflect', L['Reflect'], true},
+        {1, 'Announcement', 'BattleRez', L['Battle resurrection']},
+        {1, 'Announcement', 'Feast', L['Feast']},
+        {1, 'Announcement', 'Cauldron', L['Cauldron'], true},
+        {1, 'Announcement', 'RefreshmentTable', L['Refreshment table']},
+        {1, 'Announcement', 'Soulwell', L['Soulwell'], true},
+        {1, 'Announcement', 'Bot', L['Bot']},
+        {1, 'Announcement', 'Codex', L['Codex'], true},
+        {1, 'Announcement', 'RitualofSummoning', L['Ritual of summoning']},
+        {1, 'Announcement', 'Mailbox', L['Mailbox'], true},
+        {1, 'Announcement', 'Portal', L['Portal']},
+        {1, 'Announcement', 'Toy', L['Toy'], true},
+        {1, 'Announcement', 'Quest', L['Quest progress']},
+        {1, 'Announcement', 'Reset', L['Instance reset'], true},
     },
-    [9] = {
-        -- inventory
-        {1, 'inventory', 'enable', L.GUI.INVENTORY.ENABLE, nil, nil, nil, L.GUI.INVENTORY.ENABLE_TIP},
-        {1, 'inventory', 'new_item_flash', L.GUI.INVENTORY.NEW_ITEM_FLASH, nil, nil, nil, L.GUI.INVENTORY.NEW_ITEM_FLASH_TIP},
-        {1, 'inventory', 'combine_free_slots', L.GUI.INVENTORY.COMBINE_FREE_SLOTS, true, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.COMBINE_FREE_SLOTS_TIP},
-        {1, 'inventory', 'bind_type', L.GUI.INVENTORY.BIND_TYPE, nil, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.BIND_TYPE_TIP},
-        {1, 'inventory', 'item_level', L.GUI.INVENTORY.ITEM_LEVEL, true, nil, GUI.UpdateInventoryStatus},
-        {1, 'inventory', 'item_filter', L.GUI.INVENTORY.ITEM_FILTER, nil, SetupInventoryFilter, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.ITEM_FILTER_TIP},
-        {1, 'inventory', 'special_color', L.GUI.INVENTORY.SPECIAL_COLOR, true, nil, GUI.UpdateInventoryStatus, L.GUI.INVENTORY.SPECIAL_COLOR_TIP},
-        {},
-        {3, 'inventory', 'slot_size', L.GUI.INVENTORY.SLOT_SIZE, nil, {20, 60, 1}},
-        {3, 'inventory', 'spacing', L.GUI.INVENTORY.SPACING, true, {3, 10, 1}},
-        {3, 'inventory', 'bag_columns', L.GUI.INVENTORY.BAG_COLUMNS, nil, {8, 20, 1}},
-        {3, 'inventory', 'bank_columns', L.GUI.INVENTORY.BANK_COLUMNS, true, {8, 20, 1}},
-        {3, 'inventory', 'item_level_to_show', L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW, nil, {1, 200, 1}, nil, L.GUI.INVENTORY.ITEM_LEVEL_TO_SHOW_TIP},
-        {},
-        {4, 'inventory', 'sort_mode', L.GUI.INVENTORY.SORT_MODE, nil, {L.GUI.INVENTORY.SORT_TO_TOP, L.GUI.INVENTORY.SORT_TO_BOTTOM, DISABLE}, nil, L.GUI.INVENTORY.SORT_TIP},
+    [9] = { -- inventory
+        {1, 'Inventory', 'Enable', L['Enable Inventory'], nil, SetupInventorySize},
+        {1, 'Inventory', 'NewItemFlash', L['Flash new items']},
+        {4, 'Inventory', 'SortMode', L['Sort Mode'], true, {L['Forward'], L['Backward'], _G.DISABLE}},
+        {1, 'Inventory', 'ItemLevel', L['Show item level'], nil, nil, GUI.UpdateInventoryStatus},
+        {3, 'Inventory', 'MinItemLevelToShow', L['Item Level Threshold'], true, {1, 200, 1}, nil, L['|nOnly show iLvl info if higher than threshold.']},
+        {1, 'Inventory', 'CombineFreeSlots', L['Combine free slots'], nil, nil, GUI.UpdateInventoryStatus},
+        {1, 'Inventory', 'BindType', L['Show BOE indicator'], nil, nil, GUI.UpdateInventoryStatus},
+        {1, 'Inventory', 'SpecialBagsColor', L['Colorized special bags'], true, nil, GUI.UpdateInventoryStatus, L['|nShow color for Herb bag, Mining bag, Gem bag, Enchanted mageweave pouch.']},
+        {1, 'Inventory', 'ItemFilter', L['Filter items'], nil, SetupInventoryFilter, GUI.UpdateInventoryStatus},
     },
-    [10] = {
-        -- map
-        {1, 'map', 'enable', L.GUI.MAP.ENABLE, nil, nil, nil, L.GUI.MAP.ENABLE_TIP},
-        {1, 'map', 'remove_fog', L.GUI.MAP.REMOVE_FOG},
-        {1, 'map', 'coords', L.GUI.MAP.COORDS, true},
-        {1, 'map', 'who_pings', L.GUI.MAP.WHO_PINGS},
-        {1, 'map', 'progress_bar', L.GUI.MAP.PROGRESS_BAR, true, nil, nil, L.GUI.MAP.PROGRESS_BAR_TIP},
-        {},
-        {3, 'map', 'worldmap_scale', L.GUI.MAP.WORLDMAP_SCALE, nil, {.5, 2, .1}},
-        {3, 'map', 'max_worldmap_scale', L.GUI.MAP.MAX_WORLDMAP_SCALE, true, {.5, 1, .1}},
-        {3, 'map', 'minimap_scale', L.GUI.MAP.MINIMAP_SCALE, nil, {.5, 1, .1}, UpdateMinimapScale},
+    [10] = { -- map
+        {1, 'Map', 'Enable', L['Enable Map'], nil, SetupMapScale},
+        {1, 'Map', 'RemoveFog', L['Remove map fog']},
+        {1, 'Map', 'Coords', L['Show coords'], true},
+        {1, 'Map', 'WhoPings', L['Show who pings']},
+        {1, 'Map', 'ExpBar', L['Progress bar'], true},
     },
-    [11] = {
-        -- tooltip
-        {1, 'tooltip', 'enable', L.GUI.TOOLTIP.ENABLE, nil, nil, nil, L.GUI.TOOLTIP.ENABLE_TIP},
-        {1, 'tooltip', 'follow_cursor', L.GUI.TOOLTIP.FOLLOW_CURSOR, nil, nil, nil, L.GUI.TOOLTIP.FOLLOW_CURSOR_TIP},
-        {1, 'tooltip', 'hide_in_combat', L.GUI.TOOLTIP.HIDE_IN_COMBAT, true},
-        {1, 'tooltip', 'disable_fading', L.GUI.TOOLTIP.DISABLE_FADING},
-        {1, 'tooltip', 'tip_icon', L.GUI.TOOLTIP.TIP_ICON, true},
-        {1, 'tooltip', 'target_by', L.GUI.TOOLTIP.TARGET_BY},
-        {1, 'tooltip', 'extra_info', L.GUI.TOOLTIP.EXTRA_INFO, true, nil, nil, L.GUI.TOOLTIP.EXTRA_INFO_TIP},
-        {1, 'tooltip', 'azerite_armor', L.GUI.TOOLTIP.AZERITE_ARMOR},
-        {1, 'tooltip', 'conduit_info', L.GUI.TOOLTIP.CONDUIT_INFO, true},
-        {1, 'tooltip', 'spec_ilvl', L.GUI.TOOLTIP.SPEC_ILVL, nil, nil, nil, L.GUI.TOOLTIP.SPEC_ILVL_TIP},
-        {1, 'tooltip', 'hide_realm', L.GUI.TOOLTIP.HIDE_REALM, true},
-        {1, 'tooltip', 'hide_title', L.GUI.TOOLTIP.HIDE_TITLE},
-        {1, 'tooltip', 'hide_rank', L.GUI.TOOLTIP.HIDE_RANK, true},
-        {1, 'tooltip', 'border_color', L.GUI.TOOLTIP.BORDER_COLOR},
-        {1, 'tooltip', 'health_value', L.GUI.TOOLTIP.HEALTH_VALUE, true},
+    [11] = { -- tooltip
+        {1, 'Tooltip', 'Enable', L['Enable Tooltip']},
+        {1, 'Tooltip', 'FollowCursor', L['Follow cursor']},
+        {3, 'Tooltip', 'BackdropAlpha', L['Backdrop Alpha'], true, {.1, 1, .1}},
+        {1, 'Tooltip', 'HideInCombat', L['Hide in combat']},
+        {1, 'Tooltip', 'DisableFading', L['Disable fading']},
+        {1, 'Tooltip', 'Icon', L['Show icon'], true},
+        {1, 'Tooltip', 'BorderColor', L['Border colored by item quality']},
+        {1, 'Tooltip', 'HealthValue', L['Show health value'], true},
+        {1, 'Tooltip', 'TargetBy', L['Show unit targeted by']},
+        {1, 'Tooltip', 'ExtraInfo', L['Show extra info'], true},
+        {1, 'Tooltip', 'SpecIlvl', L['Show spec&ilvl']},
+        {1, 'Tooltip', 'SpecIlvlByAlt', L['Show spec&ilvl by holding ALT key'], true},
+        {1, 'Tooltip', 'HideRealm', L['Hide realm']},
+        {1, 'Tooltip', 'HideTitle', L['Hide title'], true},
+        {1, 'Tooltip', 'HideGuildRank', L['Hide guild rank']},
     },
     [12] = { -- unitframe
         {1, 'Unitframe', 'Enable', L['Enable Unitframes'], nil, SetupUnitFrameSize},
         {1, 'Unitframe', 'Transparent', L['Transparent mode']},
         {4, 'Unitframe', 'ColorStyle', L['Health bar style'], true, {L['Default white'], L['Class colored'], L['Percentage gradient']}},
-        {1, 'Unitframe', 'Portrait', L['Portrait']},
         {1, 'Unitframe', 'RangeCheck', L['Range check']},
         {3, 'Unitframe', 'RangeCheckAlpha', L['Ouf of range alpha'], true, {.2, 1, .1}},
+        {1, 'Unitframe', 'Portrait', L['Portrait']},
         {1, 'Unitframe', 'AbbreviatedName', L['Abbreviated name']},
         {1, 'Unitframe', 'Fader', L['Conditional fader'], nil, SetupUnitFrameFader},
         {1, 'Unitframe', 'OnlyShowPlayer', L['Shows only debuffs created by player'], true},
@@ -401,49 +424,48 @@ GUI.OptionsList = {
     },
     [14] = { -- nameplate
         {1, 'Nameplate', 'Enable', L['Enable Nameplate'], nil, SetupNameplateSize},
-
         {1, 'Nameplate', 'ShowAura', L['Show auras'], nil, SetupAuraFilter},
-        {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}, nil, L.GUI.NAMEPLATE.AURA_FILTER_MODE_TIP},
+        {4, 'Nameplate', 'AuraFilterMode', L['Aura filter mode'], true, {L['BlackNWhite'], L['PlayerOnly'], L['IncludeCrowdControl']}},
         {1, 'Nameplate', 'ControlCVars', L['Control CVars'], nil, SetupNameplateCVars},
-        {1, 'Nameplate', 'TargetIndicator', L['Target indicator'], nil, nil, nil, L.GUI.NAMEPLATE.TARGET_INDICATOR_TIP},
+        {1, 'Nameplate', 'TargetIndicator', L['Target indicator']},
         {3, 'Nameplate', 'ExecuteRatio', L['Excute ratio'], true, {1, 90, 1}},
-        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator'], nil, nil, nil, L.GUI.NAMEPLATE.QUEST_INDICATOR_TIP},
-        {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator'], nil, nil, nil, L.GUI.NAMEPLATE.CLASSIFY_INDICATOR_TIP},
+        {1, 'Nameplate', 'QuestIndicator', L['Quest indicator']},
+        {1, 'Nameplate', 'ClassifyIndicator', L['Classify indicator']},
         {1, 'Nameplate', 'RaidTargetIndicator', L['Raid target indicator']},
-        {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true, nil, nil, L.GUI.NAMEPLATE.THREAT_INDICATOR_TIP},
-        {1, 'Nameplate', 'TotemIcon', L['Totmes icon'], nil, nil, nil, L.GUI.NAMEPLATE.TOTEM_ICON_TIP},
-        {1, 'Nameplate', 'NameOnly', L['Name only style'], nil, nil, nil, L.GUI.NAMEPLATE.NAME_ONLY_TIP},
-        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator'], nil, nil, nil, L.GUI.NAMEPLATE.EXPLOSIVE_INDICATOR_TIP},
-        {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true, nil, nil, L.GUI.NAMEPLATE.SPITEFUL_INDICATOR_TIP},
+        {1, 'Nameplate', 'ThreatIndicator', L['Threat indicator'], true},
+        {1, 'Nameplate', 'TotemIcon', L['Totmes icon']},
+        {1, 'Nameplate', 'NameOnly', L['Name only style']},
+        {1, 'Nameplate', 'ExplosiveIndicator', L['Explosive indicator']},
+        {1, 'Nameplate', 'SpitefulIndicator', L['Spiteful indicator'], true},
         {},
         {1, 'Nameplate', 'CastbarCompact', L['Compact style']},
-        {1, 'Nameplate', 'MajorSpellsGlow', L['Major spell glow'], true, SetupMajorSpells, nil, L.GUI.NAMEPLATE.MAJOR_SPELLS_GLOW_TIP},
+        {1, 'Nameplate', 'MajorSpellsGlow', L['Major spell glow'], true, SetupMajorSpells},
         {1, 'Nameplate', 'CastbarSpellName', L['Spell name']},
         {1, 'Nameplate', 'CastbarSpellTime', L['Spell timer'], true},
-        {1, 'Nameplate', 'SpellTarget', L['Spell target'], nil, nil, nil, L.GUI.NAMEPLATE.SPELL_TARGET_TIP},
+        {1, 'Nameplate', 'SpellTarget', L['Spell target']},
         {},
         {1, 'Nameplate', 'FriendlyClassColor', L['Friendly unit colored by class']},
         {1, 'Nameplate', 'HostileClassColor', L['Hostile unit colored by class'], true},
-        {1, 'Nameplate', 'ColoredTarget', L['Target unit colored'], nil, nil, nil, L.GUI.NAMEPLATE.COLORED_TARGET_TIP},
+        {1, 'Nameplate', 'ColoredTarget', L['Target unit colored']},
         {5, 'Nameplate', 'TargetColor', L['Target color'], 2},
-        {1, 'Nameplate', 'ColoredFocus', L['Focus unit colored'], nil, nil, nil, L.GUI.NAMEPLATE.COLORED_FOCUS_TIP},
+        {1, 'Nameplate', 'ColoredFocus', L['Focus unit colored']},
         {5, 'Nameplate', 'FocusColor', L['Focus color'], 2},
-        {1, 'Nameplate', 'TankMode', L['Tank mode'], nil, nil, nil, L.GUI.NAMEPLATE.TANK_MODE_TIP},
-        {1, 'Nameplate', 'RevertThreat', L['Revert threat'], true, nil, nil, L.GUI.NAMEPLATE.REVERT_THREAT_TIP},
+        {1, 'Nameplate', 'TankMode', L['Tank mode']},
+        {1, 'Nameplate', 'RevertThreat', L['Revert threat'], true},
         {5, 'Nameplate', 'SecureColor', L['Secure']},
         {5, 'Nameplate', 'TransColor', L['Transition'], 1},
         {5, 'Nameplate', 'InsecureColor', L['Insecure'], 2},
         {5, 'Nameplate', 'OffTankColor', L['Off-Tank'], 3},
-        {1, 'Nameplate', 'CustomUnitColor', L['Custom unit colored'], nil, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.COLORED_CUSTOM_UNIT_TIP},
+        {1, 'Nameplate', 'CustomUnitColor', L['Custom unit colored'], nil, nil, UpdateCustomUnitList},
         {5, 'Nameplate', 'CustomColor', L['Custom color']},
-        {2, 'Nameplate', 'CustomUnitList', L['Custom unit list'], true, nil, UpdateCustomUnitList, L.GUI.NAMEPLATE.CUSTOM_UNIT_LIST_TIP},
+        {2, 'Nameplate', 'CustomUnitList', L['Custom unit list'], true, nil, UpdateCustomUnitList},
 
     },
     [15] = { -- theme
         {1, 'ACCOUNT', 'ShadowOutline', L['Shadow outline']},
         {1, 'ACCOUNT', 'GradientStyle', L['Button gradient style'], true},
         {1, 'ACCOUNT', 'ReskinBlizz', L['Restyle blizzard frames']},
-        {1, 'ACCOUNT', 'ReskinAddons', L['Restyle other addons'], true, nil, nil, L['|nRestyle other addons, including DBM, BigWigs, WeakAuras, Immersion, PremadeGroupsFilter, etc.']},
+        {1, 'ACCOUNT', 'ReskinAddons', L['Restyle other addons'], true, nil, nil, L['|nCurrently supports DBM, BigWigs, WeakAuras, Immersion, PremadeGroupsFilter, ActionBarProfiles, ExtendedVendor, FriendGroups, REHack, etc.']},
         {5, 'ACCOUNT', 'BackdropColor', L['Backdrop color']},
         {5, 'ACCOUNT', 'BorderColor', L['Border color'], 1},
         {5, 'ACCOUNT', 'ButtonBackdropColor', L['Button backdrop color'], 2},

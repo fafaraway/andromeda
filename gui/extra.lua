@@ -1,28 +1,19 @@
 local _G = _G
+local unpack = unpack
+local select = select
 local min = min
 local max = max
-local wipe = wipe
 local tinsert = tinsert
 local format = format
 local tonumber = tonumber
-local strupper = strupper
 local CreateFrame = CreateFrame
 local GetSpellInfo = GetSpellInfo
 local GetSpellTexture = GetSpellTexture
 local GetInstanceInfo = GetInstanceInfo
-local ReloadUI = ReloadUI
 local StaticPopup_Show = StaticPopup_Show
 local EasyMenu = EasyMenu
 local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
 local EJ_GetInstanceInfo = EJ_GetInstanceInfo
-local StaticPopupDialogs = StaticPopupDialogs
-local ADD = ADD
-local RESET = RESET
-local YES = YES
-local NO = NO
-local DUNGEONS = DUNGEONS
-local RAID = RAID
-local KEY_NUMLOCK_MAC = KEY_NUMLOCK_MAC
 
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
@@ -30,6 +21,8 @@ local UNITFRAME = F:GetModule('Unitframe')
 local NAMEPLATE = F:GetModule('Nameplate')
 local ACTIONBAR = F:GetModule('Actionbar')
 local CHAT = F:GetModule('Chat')
+local ANNOUNCEMENT = F:GetModule('Announcement')
+local MAP = F:GetModule('Minimap')
 
 local extraGUIs = {}
 
@@ -84,14 +77,14 @@ local function SortBars(barTable)
     end
 end
 
-local function createBarTest(parent, spellID, barTable, key)
+local function createBarTest(parent, spellID, table1, table2, table3)
     local spellName = GetSpellInfo(spellID)
     local texture = GetSpellTexture(spellID)
 
-    local bar = CreateFrame('Frame', nil, parent, 'BackdropTemplate')
+    local bar = CreateFrame('Frame', nil, parent.child, 'BackdropTemplate')
     bar:SetSize(200, 32)
     F.CreateBD(bar, .5)
-    barTable[spellID] = bar
+    table1[spellID] = bar
 
     local icon, close = GUI:CreateBarWidgets(bar, texture)
     F.AddTooltip(icon, 'ANCHOR_RIGHT', spellID, 'BLUE')
@@ -99,13 +92,13 @@ local function createBarTest(parent, spellID, barTable, key)
         'OnClick',
         function()
             bar:Hide()
-            barTable[spellID] = nil
-            if C.NPMajorSpellsList[spellID] then
-                _G.FREE_ADB[key][spellID] = false
+            table1[spellID] = nil
+            if C[table2][spellID] then
+                _G.FREE_ADB[table3][spellID] = false
             else
-                _G.FREE_ADB[key][spellID] = nil
+                _G.FREE_ADB[table3][spellID] = nil
             end
-            SortBars(barTable)
+            SortBars(table1)
         end
     )
 
@@ -113,10 +106,10 @@ local function createBarTest(parent, spellID, barTable, key)
     name:SetWidth(120)
     name:SetJustifyH('LEFT')
 
-    SortBars(barTable)
+    SortBars(table1)
 end
 
-local function LabelOnEnter(self)
+local function Label_OnEnter(self)
     _G.GameTooltip:ClearLines()
     _G.GameTooltip:SetOwner(self:GetParent(), 'ANCHOR_RIGHT', 0, 3)
     _G.GameTooltip:AddLine(self.text)
@@ -134,7 +127,7 @@ local function CreateLabel(parent, text, tip)
     frame:SetAllPoints(label)
     frame.text = text
     frame.tip = tip
-    frame:SetScript('OnEnter', LabelOnEnter)
+    frame:SetScript('OnEnter', Label_OnEnter)
     frame:SetScript('OnLeave', F.HideTooltip)
 end
 
@@ -270,7 +263,10 @@ local function Slider_OnValueChanged(self, v)
 
     self.value:SetText(current)
     C.DB[self.__key][self.__value] = current
-    self.__update()
+
+    if self.__update then
+        self.__update()
+    end
 end
 
 local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV, x, y, func)
@@ -284,40 +280,6 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider.__step = step
     slider:SetScript('OnValueChanged', Slider_OnValueChanged)
 end
-
---[[ Static Popup ]]
-StaticPopupDialogs['FREEUI_RESET_MAJOR_SPELLS'] = {
-    text = C.RedColor .. L['Are you sure to restore default list?'],
-    button1 = YES,
-    button2 = NO,
-    OnAccept = function()
-        _G.FREE_ADB['NPMajorSpells'] = {}
-        ReloadUI()
-    end,
-    whileDead = 1
-}
-
-StaticPopupDialogs['FREEUI_RESET_PARTY_SPELLS'] = {
-    text = C.RedColor .. L['Are you sure to restore default list?'],
-    button1 = YES,
-    button2 = NO,
-    OnAccept = function()
-        wipe(_G.FREE_ADB['PartySpellsList'])
-        ReloadUI()
-    end,
-    whileDead = 1
-}
-
-StaticPopupDialogs['FREEUI_RESET_RAID_DEBUFFS'] = {
-    text = C.RedColor .. L['Are you sure to restore default list?'],
-    button1 = YES,
-    button2 = NO,
-    OnAccept = function()
-        _G.FREE_ADB['RaidDebuffsList'] = {}
-        ReloadUI()
-    end,
-    whileDead = 1
-}
 
 --[[ Aura ]]
 function GUI:SetupAuraSize(parent)
@@ -388,39 +350,120 @@ function GUI:SetupInventoryFilter(parent)
         return
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.INVENTORY.FILTER_SETUP)
+    local panel = CreateExtraGUI(parent, guiName)
     local scroll = GUI:CreateScroll(panel, 220, 540)
-    scroll:ClearAllPoints()
-    scroll:SetPoint('TOPLEFT', 10, -50)
 
-    local filterOptions = {
-        [1] = 'item_filter_junk',
-        [2] = 'item_filter_consumable',
-        [3] = 'item_filter_azerite',
-        [4] = 'item_filter_equipment',
-        [5] = 'item_filter_gear_set',
-        [6] = 'item_filter_legendary',
-        [7] = 'item_filter_collection',
-        [8] = 'item_filter_favourite',
-        [9] = 'item_filter_trade',
-        [10] = 'item_filter_quest'
+    local datas = {
+        [1] = {
+            value = 'FilterJunk',
+            text = _G.BAG_FILTER_JUNK
+        },
+        [2] = {
+            value = 'FilterQuestItem',
+            text = _G.QUESTS_LABEL
+        },
+        [3] = {
+            value = 'FilterTradeGoods',
+            text = _G.AUCTION_CATEGORY_TRADE_GOODS
+        },
+        [4] = {
+            value = 'FilterConsumable',
+            text = _G.BAG_FILTER_CONSUMABLES
+        },
+        [5] = {
+            value = 'FilterAnima',
+            text = _G.ANIMA
+        },
+        [6] = {
+            value = 'FilterEquipment',
+            text = _G.BAG_FILTER_EQUIPMENT
+        },
+        [7] = {
+            value = 'FilterEquipSet',
+            text = L['Equipement set']
+        },
+        [8] = {
+            value = 'FilterLegendary',
+            text = _G.LOOT_JOURNAL_LEGENDARIES
+        },
+        [9] = {
+            value = 'FilterCollection',
+            text = _G.COLLECTIONS
+        },
+        [10] = {
+            value = 'FilterFavourite',
+            text = _G.PREFERENCES
+        },
     }
 
-    local function filterOnClick(self)
-        local value = self.__value
-        C.DB['inventory'][value] = not C.DB['inventory'][value]
-        self:SetChecked(C.DB['inventory'][value])
-        GUI.UpdateInventoryStatus()
+    local offset = -10
+    for _, data in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Item Filter'], offset)
+        CreateCheckbox(scroll, offset - 30, 'Inventory', data.value, data.text)
+        offset = offset - 35
+    end
+end
+
+function GUI:SetupInventorySize(parent)
+    local guiName = 'FreeUI_GUI_Inventory'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
     end
 
-    local offset = 20
-    for _, value in ipairs(filterOptions) do
-        local box = createOptionCheck(scroll, offset, L.GUI.INVENTORY[strupper(value)])
-        box:SetChecked(C.DB['inventory'][value])
-        box.__value = value
-        box:SetScript('OnClick', filterOnClick)
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
 
-        offset = offset + 35
+    local values = C.DB.Inventory
+
+    local datas = {
+        [1] = {
+            key = 'SlotSize',
+            value = values.SlotSize,
+            text = L['Slot Size'],
+            min = 20,
+            max = 60,
+            step = 1,
+        },
+        [2] = {
+            key = 'Spacing',
+            value = values.Spacing,
+            text = L['Slot Spacing'],
+            min = 3,
+            max = 6,
+            step = 1,
+        },
+        [3] = {
+            key = 'BagColumns',
+            value = values.BagColumns,
+            text = L['Bag Columns'],
+            min = 8,
+            max = 20,
+            step = 1,
+        },
+        [4] = {
+            key = 'BankColumns',
+            value = values.BagColumns,
+            text = L['Bank Columns'],
+            min = 8,
+            max = 20,
+            step = 1,
+        },
+        [5] = {
+            key = 'Scale',
+            value = values.Scale,
+            text = L['Inventory Scale'],
+            min = .5,
+            max = 2,
+            step = .1,
+        }
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Inventory Size'], offset)
+        CreateSlider(scroll, 'Inventory', v.key, v.text, v.min, v.max, v.step, v.value, 20, offset - 50)
+        offset = offset - 65
     end
 end
 
@@ -573,14 +616,14 @@ function GUI:SetupNPAuraFilter(parent)
 
     local frameData = {
         [1] = {
-            text = L.GUI.NAMEPLATE.AURA_WHITE_LIST,
-            tip = L.GUI.NAMEPLATE.AURA_WHITE_LIST_TIP,
+            text = L['White List'],
+            tip = L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'],
             offset = -25,
             barList = {}
         },
         [2] = {
-            text = L.GUI.NAMEPLATE.AURA_BLACK_LIST,
-            tip = L.GUI.NAMEPLATE.AURA_BLACK_LIST_TIP,
+            text = L['Black List'],
+            tip = L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'],
             offset = -315,
             barList = {}
         }
@@ -618,11 +661,11 @@ function GUI:SetupNPAuraFilter(parent)
     local function addClick(parent, index)
         local spellID = tonumber(parent.box:GetText())
         if not spellID or not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_INCORRECT_ID)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Incorrect SpellID.'])
             return
         end
         if _G.FREE_ADB['NPAuraFilter'][index][spellID] then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.NAMEPLATE.AURA_EXISTING_ID)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
             return
         end
 
@@ -647,7 +690,7 @@ function GUI:SetupNPAuraFilter(parent)
         scroll.box = F.CreateEditBox(frame, 145, 25)
         scroll.box:SetPoint('TOPLEFT', 10, -10)
         F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', value.tip, 'BLUE')
-        scroll.add = F.CreateButton(frame, 70, 25, ADD)
+        scroll.add = F.CreateButton(frame, 70, 25, _G.ADD)
         scroll.add:SetPoint('TOPRIGHT', -8, -10)
         scroll.add:SetScript(
             'OnClick',
@@ -673,19 +716,20 @@ function GUI:SetupMajorSpells(parent)
         NAMEPLATE:RefreshMajorSpells()
     end
 
-    local panel = CreateExtraGUI(parent, guiName, L.GUI.NAMEPLATE.CASTBAR_GLOW_SETTING, true)
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
     panel:SetScript('OnHide', refreshMajorSpells)
     parent.panel = panel
 
-    local frame = panel.bg
-    local scroll = GUI:CreateScroll(frame, 200, 480)
-    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
-    scroll.box.title = L.GUI.SPELL_ID
-    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L.GUI.SPELL_ID_TIP, 'BLUE')
-
     local barTable = {}
 
-    scroll.add = F.CreateButton(frame, 50, 24, ADD)
+    local frame = panel.bg
+    local scroll = GUI:CreateScroll(frame, 200, 480)
+    parent.scroll = scroll
+    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
+    scroll.box.title = L['SpellID']
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'], 'BLUE')
+
+    scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
     scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
     scroll.add.__owner = scroll
     scroll.add:SetScript(
@@ -694,21 +738,21 @@ function GUI:SetupMajorSpells(parent)
             local parent = button.__owner
             local spellID = tonumber(parent.box:GetText())
             if not spellID or not GetSpellInfo(spellID) then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.INCORRECT_ID)
+                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Incorrect SpellID'])
                 return
             end
             local modValue = _G.FREE_ADB['NPMajorSpells'][spellID]
             if modValue or modValue == nil and C.NPMajorSpellsList[spellID] then
-                _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.EXISTING_ID)
+                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Existing ID'])
                 return
             end
             _G.FREE_ADB['NPMajorSpells'][spellID] = true
-            createBarTest(parent.child, spellID, barTable, 'NPMajorSpells')
+            createBarTest(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
             parent.box:SetText('')
         end
     )
 
-    scroll.reset = F.CreateButton(frame, 50, 24, RESET)
+    scroll.reset = F.CreateButton(frame, 50, 24, _G.RESET)
     scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 5, 0)
     scroll.reset:SetScript(
         'OnClick',
@@ -719,7 +763,7 @@ function GUI:SetupMajorSpells(parent)
 
     for spellID, value in pairs(NAMEPLATE.MajorSpellsList) do
         if value then
-            createBarTest(scroll.child, spellID, barTable, 'NPMajorSpells')
+            createBarTest(scroll, spellID, barTable, 'NPMajorSpellsList', 'NPMajorSpells')
         end
     end
 end
@@ -1327,16 +1371,14 @@ function GUI:SetupPartyWatcher(parent)
     local frame = panel.bg
     local options = {}
 
-    options[1] = GUI:CreateEditbox(frame, L['Spell ID'], 10, -30, L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
+    options[1] = GUI:CreateEditbox(frame, L['SpellID'], 10, -30, L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
     options[2] =
         GUI:CreateEditbox(
         frame,
         L['Spell Cooldown'],
         122,
         -30,
-        L[
-            "|nEnter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.For spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."
-        ],
+        L["|nEnter the spell's cooldown duration.|nParty watcher only support regular spells and abilities.For spells like 'Aspect of the Wild' (BM Hunter), you need to sync cooldown with your party members."],
         108,
         24
     )
@@ -1345,7 +1387,7 @@ function GUI:SetupPartyWatcher(parent)
     scroll:ClearAllPoints()
     scroll:SetPoint('TOPLEFT', 10, -94)
 
-    scroll.reset = F.CreateButton(frame, 51, 24, RESET, 11)
+    scroll.reset = F.CreateButton(frame, 51, 24, _G.RESET, 11)
     scroll.reset:SetPoint('TOPLEFT', 10, -60)
     scroll.reset.text:SetTextColor(1, 0, 0)
 
@@ -1359,19 +1401,19 @@ function GUI:SetupPartyWatcher(parent)
     local function addClick(scroll, options)
         local spellID, duration = tonumber(options[1]:GetText()), tonumber(options[2]:GetText())
         if not spellID or not duration then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCOMPLETE_INPUT)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['You need to complete all * optinos.'])
             return
         end
 
         if not GetSpellInfo(spellID) then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.INCORRECT_SPELLID)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['Incorrect SpellID.'])
             return
         end
 
         local modDuration = _G.FREE_ADB['PartySpellsList'][spellID]
 
         if modDuration and modDuration ~= 0 or C.PartySpellsList[spellID] and not modDuration then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. L.GUI.GROUPFRAME.EXISTING_ID)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. L['The SpellID is existed.'])
             return
         end
 
@@ -1380,7 +1422,7 @@ function GUI:SetupPartyWatcher(parent)
         ClearEdit(options)
     end
 
-    scroll.add = F.CreateButton(frame, 51, 24, ADD, 11)
+    scroll.add = F.CreateButton(frame, 51, 24, _G.ADD, 11)
     scroll.add:SetPoint('TOPRIGHT', -10, -60)
     scroll.add:SetScript(
         'OnClick',
@@ -1389,7 +1431,7 @@ function GUI:SetupPartyWatcher(parent)
         end
     )
 
-    scroll.clear = F.CreateButton(frame, 51, 24, KEY_NUMLOCK_MAC, 11)
+    scroll.clear = F.CreateButton(frame, 51, 24, _G.KEY_NUMLOCK_MAC, 11)
     scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.clear:SetScript(
         'OnClick',
@@ -1470,7 +1512,7 @@ function GUI:SetupRaidDebuffs(parent)
     local frame = panel.bg
     local bars, options = {}, {}
 
-    local iType = GUI:CreateDropdown(frame, L['Type'], 10, -30, {DUNGEONS, RAID}, nil, 107, 24)
+    local iType = GUI:CreateDropdown(frame, L['Type'], 10, -30, {_G.DUNGEONS, _G.RAID}, nil, 107, 24)
     for i = 1, 2 do
         iType.options[i]:HookScript(
             'OnClick',
@@ -1507,12 +1549,12 @@ function GUI:SetupRaidDebuffs(parent)
         tinsert(dungeons, newInst)
     end
 
-    options[1] = GUI:CreateDropdown(frame, DUNGEONS, 123, -30, dungeons, nil, 107, 24)
+    options[1] = GUI:CreateDropdown(frame, _G.DUNGEONS, 123, -30, dungeons, nil, 107, 24)
     options[1]:Hide()
-    options[2] = GUI:CreateDropdown(frame, RAID, 123, -30, raids, nil, 107, 24)
+    options[2] = GUI:CreateDropdown(frame, _G.RAID, 123, -30, raids, nil, 107, 24)
     options[2]:Hide()
 
-    options[3] = GUI:CreateEditbox(frame, L['Spell ID'], 10, -90, L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
+    options[3] = GUI:CreateEditbox(frame, L['SpellID'], 10, -90, L["|nEnter spell ID, must be a number.|nYou can get ID on spell's tooltip.|nSpell name is not supported."], 107, 24)
     options[4] =
         GUI:CreateEditbox(
         frame,
@@ -1577,7 +1619,7 @@ function GUI:SetupRaidDebuffs(parent)
     local scroll = GUI:CreateScroll(frame, 200, 380)
     scroll:ClearAllPoints()
     scroll:SetPoint('TOPLEFT', 10, -150)
-    scroll.reset = F.CreateButton(frame, 70, 24, RESET)
+    scroll.reset = F.CreateButton(frame, 70, 24, _G.RESET)
     scroll.reset:SetPoint('TOPLEFT', 10, -120)
     scroll.reset.text:SetTextColor(1, 0, 0)
     scroll.reset:SetScript(
@@ -1586,7 +1628,7 @@ function GUI:SetupRaidDebuffs(parent)
             StaticPopup_Show('FREEUI_RESET_RAID_DEBUFFS')
         end
     )
-    scroll.add = F.CreateButton(frame, 70, 24, ADD)
+    scroll.add = F.CreateButton(frame, 70, 24, _G.ADD)
     scroll.add:SetPoint('TOPRIGHT', -10, -120)
     scroll.add:SetScript(
         'OnClick',
@@ -1594,7 +1636,7 @@ function GUI:SetupRaidDebuffs(parent)
             addClick(options)
         end
     )
-    scroll.clear = F.CreateButton(frame, 70, 24, KEY_NUMLOCK_MAC)
+    scroll.clear = F.CreateButton(frame, 70, 24, _G.KEY_NUMLOCK_MAC)
     scroll.clear:SetPoint('RIGHT', scroll.add, 'LEFT', -5, 0)
     scroll.clear:SetScript(
         'OnClick',
@@ -1863,7 +1905,6 @@ function GUI:SetupChatSize(parent)
     end
 end
 
-
 --[[ Combat ]]
 function GUI:SetupSimpleFloatingCombatText(parent)
     local guiName = 'FreeUI_GUI_FCT'
@@ -1900,8 +1941,123 @@ function GUI:SetupSimpleFloatingCombatText(parent)
 
     local offset = -10
     for _, data in ipairs(datas) do
-        CreateGroupTitle(scroll, L['Simple FCT'], offset)
+        CreateGroupTitle(scroll, L['Simple floating combat text'], offset)
         CreateCheckbox(scroll, offset - 30, 'Combat', data.value, data.text)
         offset = offset - 35
+    end
+end
+
+--[[ Announcement ]]
+local function RefreshAnnounceSpells()
+    ANNOUNCEMENT:RefreshSpells()
+end
+
+function GUI:SetupAnnounceSpells(parent)
+    local guiName = 'FreeUI_GUI_AnnounceSpells'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName, nil, true)
+    panel:SetScript('OnHide', RefreshAnnounceSpells)
+    parent.panel = panel
+
+    local barTable = {}
+
+    local frame = panel.bg
+    local scroll = GUI:CreateScroll(frame, 200, 480)
+    scroll.box = GUI:CreateEditbox(frame, nil, 10, -10, nil, 110, 24)
+    scroll.box.title = L['SpellID']
+    F.AddTooltip(scroll.box, 'ANCHOR_RIGHT', L['|nFill in SpellID, must be a number.|nYou can get ID from spell\'s GameTooltip.|nSpell name is not supported.'], 'BLUE')
+
+    scroll.add = F.CreateButton(frame, 50, 24, _G.ADD)
+    scroll.add:SetPoint('LEFT', scroll.box, 'RIGHT', 5, 0)
+    scroll.add.__owner = scroll
+    scroll.add:SetScript(
+        'OnClick',
+        function(button)
+            local parent = button.__owner
+            local spellID = tonumber(parent.box:GetText())
+
+            if not spellID or not GetSpellInfo(spellID) then
+                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Incorrect SpellID'])
+                return
+            end
+
+            local modValue = _G.FREE_ADB['AnnounceSpells'][spellID]
+            if modValue or modValue == nil and C.AnnounceSpells[spellID] then
+                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Existing ID'])
+                return
+            end
+
+            _G.FREE_ADB['AnnounceSpells'][spellID] = true
+            createBarTest(scroll, spellID, barTable, 'AnnounceSpells', 'AnnounceSpells')
+            parent.box:SetText('')
+        end
+    )
+
+    scroll.reset = F.CreateButton(frame, 50, 24, _G.RESET)
+    scroll.reset:SetPoint('LEFT', scroll.add, 'RIGHT', 5, 0)
+    scroll.reset:SetScript(
+        'OnClick',
+        function()
+            StaticPopup_Show('FREEUI_RESET_ANNOUNCE_SPELLS')
+        end
+    )
+
+    for spellID, value in pairs(ANNOUNCEMENT.AnnounceSpellsList) do
+        if value then
+            createBarTest(scroll, spellID, barTable, 'AnnounceSpells', 'AnnounceSpells')
+        end
+    end
+end
+
+--[[ Map ]]
+local function UpdateMapScale()
+    MAP:UpdateMinimapScale()
+end
+
+function GUI:SetupMapScale(parent)
+    local guiName = 'FreeUI_GUI_Map_Scale'
+    TogglePanel(guiName)
+    if extraGUIs[guiName] then
+        return
+    end
+
+    local panel = CreateExtraGUI(parent, guiName)
+    local scroll = GUI:CreateScroll(panel, 220, 540)
+
+    local values = C.DB.Map
+
+    local datas = {
+        [1] = {
+            key = 'WorldMapScale',
+            value = values.WorldMapScale,
+            text = L['World Map Scale'],
+            min = .5,
+            max = 2,
+        },
+        [2] = {
+            key = 'MaxWorldMapScale',
+            value = values.MaxWorldMapScale,
+            text = L['Max World Map Scale'],
+            min = .5,
+            max = 1,
+        },
+        [3] = {
+            key = 'MinimapScale',
+            value = values.MinimapScale,
+            text = L['Minimap Scale'],
+            min = .5,
+            max = 2,
+        },
+    }
+
+    local offset = -10
+    for _, v in ipairs(datas) do
+        CreateGroupTitle(scroll, L['Map Scale'], offset)
+        CreateSlider(scroll, 'Map', v.key, v.text, v.min, v.max, .1, v.value, 20, offset - 50, UpdateMapScale)
+        offset = offset - 65
     end
 end

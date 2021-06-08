@@ -69,18 +69,6 @@ GUI.TexturesList = {
     [3] = {texture = 'Interface\\AddOns\\FreeUI\\assets\\textures\\flat_tex', name = L['Flat']},
 }
 
-_G.StaticPopupDialogs.FREEUI_RELOAD = {
-    text = L.GUI.RELOAD,
-    button1 = APPLY,
-    button2 = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON,
-    OnAccept = function()
-        ReloadUI()
-    end,
-    timeout = 0,
-    whileDead = 1,
-    hideOnEscape = true,
-}
-
 local function AddTextureToOption(parent, index)
     local tex = parent[index]:CreateTexture()
     tex:SetInside(nil, 4, 4)
@@ -138,7 +126,7 @@ local function SelectTab(i)
 
     for num = 1, #tabsList do
         if num == i then
-            guiTab[num].__gradient:SetVertexColor(r / 2, g / 2, b / 2)
+            guiTab[num].__gradient:SetVertexColor(r, g, b)
             guiTab[num].checked = true
             guiPage[num]:Show()
         else
@@ -263,9 +251,9 @@ local function CreateOption(i)
 
             local x, y
             if horizon then
-                x, y = 240, -offset + 30
+                x, y = 250, -offset + 25
             else
-                x, y = 10, -offset - 40
+                x, y = 10, -offset - 45
                 offset = offset + 70
             end
 
@@ -408,7 +396,7 @@ local function CreateGUI()
     btnApply:SetText(APPLY)
     -- btnApply:Disable()
     btnApply:SetScript('OnClick', function()
-        StaticPopup_Show('FREEUI_RELOAD')
+        StaticPopup_Show('FREEUI_RELOADUI')
         guiFrame:Hide()
     end)
     F.Reskin(btnApply)
