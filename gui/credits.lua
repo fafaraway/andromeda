@@ -34,11 +34,11 @@ function GUI:CreateCreditsFrame(parent)
 
     F.CreateFS(credit, C.Assets.Fonts.Header, 22, nil, L['Haleth, siweia'], 'BLUE', true, 'TOP', 0, -50)
     F.CreateFS(credit, C.Assets.Fonts.Condensed, 16, nil, L['Alza, Tukz, Gethe, Elv|nHaste, Lightspark, Zork, Allez|nAlleyKat, Caellian, p3lim, Shantalya|ntekkub, Tuller, Wildbreath, aduth|nsilverwind, Nibelheim, humfras, aliluya555|nPaojy, Rubgrsch, EKE, fang2hou|nlilbitz95, Djamy, Hacktivist'], 'GREEN', true, 'TOP', 0, -90)
-    F.CreateFS(credit, C.Assets.Fonts.Regular, 14, nil, L['NDui, ShestakUI, RealUI, ElvUI, ElvUI_WindTools'], 'YELLOW', true, 'TOP', 0, -160)
+    F.CreateFS(credit, C.Assets.Fonts.Regular, 14, nil, L['NDui, ShestakUI, RealUI, ElvUI, ElvUI_WindTools'], 'GREY', true, 'TOP', 0, -220)
 
     local feedback = CreateFrame('Frame', nil, parent)
     feedback:SetSize(360, 200)
-    feedback:SetPoint('TOP', 0, -260)
+    feedback:SetPoint('TOP', 0, -300)
 
     F.CreateFS(feedback, C.Assets.Fonts.Bold, 14, nil, L['Feedback'], nil, true, 'TOP', 0, -10)
     local fll = F.SetGradient(feedback, 'H', .7, .7, .7, 0, .5, 160, C.Mult)

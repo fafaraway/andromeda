@@ -1207,7 +1207,7 @@ function INVENTORY:OnLogin()
         elseif strmatch(name, 'Equipment$') then
             label = _G.BAG_FILTER_EQUIPMENT
         elseif strmatch(name, 'EquipSet$') then
-            label = L['Equip set']
+            label = L['Equipement set']
         elseif name == 'BankLegendary' then
             label = _G.LOOT_JOURNAL_LEGENDARIES
         elseif strmatch(name, 'Consumable$') then
