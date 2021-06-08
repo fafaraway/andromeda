@@ -1,7 +1,7 @@
 local L = _G.LibStub('AceLocale-3.0'):NewLocale('FreeUI', 'zhCN')
 if not L then return end
 
---@localization(locale="zhCN", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
+--@localization(locale="zhCN", format="lua_additive_table", handle-unlocalized="comment")@
 
 L['Player Frame'] = '玩家框体'
 L['Pet Frame'] = '宠物框体'
