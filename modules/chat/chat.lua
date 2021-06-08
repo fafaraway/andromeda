@@ -48,7 +48,7 @@ local GetItemIcon = GetItemIcon
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 local IsAltKeyDown = IsAltKeyDown
 
-local F, C = unpack(select(2, ...))
+local F, C, L = unpack(select(2, ...))
 local CHAT = F:RegisterModule('Chat')
 
 local isScaling = false
@@ -373,7 +373,18 @@ function CHAT:UpdateTabChannelSwitch()
 end
 
 -- Quick scroll
-function CHAT:QuickMouseScroll(dir)
+local chatScrollTip = {
+    text = L['Scroll multi-lines by holding Ctrl key, and scroll to top or bottom by holding Shift key.'],
+    buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
+    targetPoint = _G.HelpTip.Point.RightEdgeCenter,
+    onAcknowledgeCallback = F.HelpInfoAcknowledge,
+    callbackArg = "ChatScroll",
+}
+function CHAT:OnMouseScroll(dir)
+    if not _G.FREE_ADB.HelpTips.ChatScroll then
+        _G.HelpTip:Show(_G.ChatFrame1, chatScrollTip)
+    end
+
     if dir > 0 then
         if IsShiftKeyDown() then
             self:ScrollToTop()
@@ -390,6 +401,7 @@ function CHAT:QuickMouseScroll(dir)
         end
     end
 end
+hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.OnMouseScroll)
 
 -- Smart bubble
 local function UpdateChatBubble()
@@ -639,7 +651,6 @@ function CHAT:OnLogin()
 
     hooksecurefunc('FCFTab_UpdateColors', CHAT.UpdateTabColors)
     hooksecurefunc('FloatingChatFrame_OnEvent', CHAT.UpdateTabEventColors)
-    hooksecurefunc('FloatingChatFrame_OnMouseScroll', CHAT.QuickMouseScroll)
     hooksecurefunc('ChatFrame_ConfigEventHandler', CHAT.PlayWhisperSound)
     hooksecurefunc('ChatEdit_CustomTabPressed', CHAT.UpdateTabChannelSwitch)
     hooksecurefunc('SetItemRef', CHAT.AltClickToInvite)
