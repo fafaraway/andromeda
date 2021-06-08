@@ -225,183 +225,105 @@ C.CornerSpellsList = {
     ['DEATHKNIGHT'] = {},
 }
 
-C.RaidBuffsList = {
-    -- Paladin
-    [642] = true, -- 圣盾术
-    [204018] = true, -- 破咒祝福
-    [1022] = true, -- 保护祝福
-    [1044] = true, -- 自由祝福
-    [6940] = true, -- Blessing of Sacrifice
-    [31884] = true, -- 复仇之怒
-    [231895] = true, -- 征伐
-    [105809] = true, -- 神圣复仇者
-    [31850] = true, -- 炽热防御者
-    [205191] = true, -- 以眼还眼
-    [184662] = true, -- 复仇之盾
-    [86659] = true, -- 远古列王守卫
-    [212641] = true, -- Guardian of Ancient Kings (Glyph)
-    [228049] = true, -- 被遗忘的女王护卫
-    [216331] = true, -- 复仇十字军
-    [210294] = true, -- 神恩术
-    [498] = true, -- 圣佑术
-    [215652] = true, -- 美德之盾
-    -- Warrior
-    [871] = true, -- 盾墙
-    [118038] = true, -- 剑在人在
-    [184364] = true, -- 狂怒回复
-    [18499] = true, -- 狂暴之怒
-    [1719] = true, -- Recklessness (Fury)
-    [262228] = true, -- Deadly Calm (Arms)
-    [107574] = true, -- Avatar
-    [197690] = true, -- 防御姿态
-    [23920] = true, -- SpellReflection
-    [330279] = true, -- Overwatch PvP talent
-    [236273] = true, -- 决斗
-    [260708] = true, -- Sweeping Strikes
-    [202147] = true, -- Second Wind
-    [12975] = true, -- 破釜沉舟
-    [223658] = true, -- 捍卫
-    -- Priest
-    [27827] = true, -- 救赎之魂
-    [33206] = true, -- 痛苦压制
-    [47585] = true, -- 消散
-    [47788] = true, -- 守护之魂
-    [10060] = true, -- 能量灌注
-    [197862] = true, -- 天使长
-    [197871] = true, -- 黑暗天使长
-    [200183] = true, -- 神圣化身
-    [213610] = true, -- 神圣守卫
-    [197268] = true, -- 希望之光
-    [193223] = true, -- 疯入膏肓
-    [319952] = true, -- 疯入膏肓
-    [47536] = true, -- 全神贯注
-    [109964] = true, -- 灵魂护壳
-    [194249] = true, -- 虚空形态
-    [218413] = true, -- 虚空形态
-    [15286] = true, -- 吸血鬼的拥抱
-    [213602] = true, -- 强化渐隐术
-    -- Druid
-    [102342] = true, -- 铁木树皮
-    [102560] = true, -- 化身：艾露恩之眷
-    [102543] = true, -- 化身：丛林之王
-    [102558] = true, -- 化身：乌索克的守护者
-    [33891] = true, -- 化身：生命之树
-    [61336] = true, -- 生存本能
-    [22812] = true, -- 树皮术
-    [106951] = true, -- 狂暴
-    [69369] = true, -- 掠食者的迅捷
-    [194223] = true, -- 超凡之盟
-    [102351] = true, -- 塞纳里奥结界
-    [155835] = true, -- 鬃毛倒竖
-    [29166] = true, -- 激活
-    [236696] = true, -- 荆棘术
-    [305497] = true, -- 荆棘术
-    [108291] = true, -- 野性之心
-    [108292] = true, -- 野性之心
-    [108293] = true, -- 野性之心
-    [108294] = true, -- 野性之心
-    [323546] = true, -- 饕餮狂乱
-    -- Warlock
-    [104773] = true, -- 不灭决心
-    [108416] = true, -- DarkPact
-    [196098] = true, -- Soul Harvest (Legion's Version)
-    [113860] = true, -- Dark Soul: Misery (Affliction)
-    [113858] = true, -- Dark Soul: Instability (Destruction)
-    [212295] = true, -- NetherWard
-    -- Shaman
-    [108271] = true, -- 星界转移
-    [204288] = true, -- 大地之盾
-    [79206] = true, -- 灵魂行者的恩赐
-    [114050] = true, -- 升腾
-    [114051] = true, -- 升腾
-    [114052] = true, -- 升腾
-    [210918] = true, -- 灵体形态
-    [204293] = true, -- 灵魂链接
-    [20608] = true, -- Reincarnation
-    [207654] = true, -- Servant of the Queen
-    -- Monk
-    [122278] = true, -- 躯不坏
-    [122783] = true, -- 散魔功
-    [115203] = true, -- 壮胆酒
-    [201318] = true, -- 壮胆酒
-    [243435] = true, -- 壮胆酒
-    [115176] = true, -- 禅悟冥想
-    [116849] = true, -- 作茧缚命
-    [152173] = true, -- 屏气凝神
-    [197908] = true, -- 法力茶
-    [209584] = true, -- 禅意聚神茶
-    [202335] = true, -- 醉上加醉
-    [310454] = true, -- 精序兵戈
-    -- Hunter
-    [186265] = true, -- 灵龟守护
-    [19263] = true, -- 威慑
-    [53271] = true, -- 主人的召唤
-    [53480] = true, -- 牺牲咆哮
-    [186257] = true, -- 猎豹守护
-    [212640] = true, -- 治疗绷带
-    [193530] = true, -- 野性守护
-    [266779] = true, -- 协同进攻
-    [186289] = true, -- 雄鹰守护
-    [202748] = true, -- 生存战术
-    [212704] = true, -- 野兽之心
-    [264735] = true, -- 优胜劣汰
-    -- Mage
-    [45438] = true, -- 冰箱
-    [113862] = true, -- Greater Invisibility
-    [87023] = true, -- 灸灼
-    [86949] = true, -- Cauterize
-    [87024] = true, -- Cauterize
-    [12042] = true, -- ArcanePower
-    [12472] = true, -- IcyVeins
-    [198111] = true, -- TemporalShield
-    [198144] = true, -- IceForm
-    [190319] = true, -- Combustion
-    [110909] = true, -- AlterTime
-    [342246] = true, -- AlterTime
-    [108978] = true, -- AlterTime
-    [324220] = true, -- Necrolord
-    -- Rogue
-    [2983] = true, -- Sprint
-    [31224] = true, -- Cloak
-    [5277] = true, -- Evasion
-    [121471] = true, -- 暗影之刃
-    [199754] = true, -- 还击
-    [31230] = true, -- CheatDeath
-    [45182] = true, -- CheatDeath
-    [343142] = true, -- 恐惧之刃
-    [207736] = true, -- 暗影决斗
-    [1966] = true, -- Feint
-    [114018] = true, -- Shroud of Concealment
-    [115834] = true, -- Shroud of Concealment
-    -- DK
-    [123981] = true, -- 永劫不复
-    [48792] = true, -- 冰封之韧
-    [55233] = true, -- 吸血鬼之血
-    [51271] = true, -- 冰霜之柱
-    [48707] = true, -- 反魔法护罩
+-- Party defensive aura
+C.PartyAurasList = {
+    -- Immunities
+    [196555] = true, -- Netherwalk (Demon Hunter)
+    [186265] = true, -- Aspect of the Turtle (Hunter)
+    [45438] = true,  -- Ice Block (Mage)
+    [125174] = true, -- Touch of Karma (Monk)
+    [228050] = true, -- Divine Shield (Prot Paladin PVP)
+    [642] = true,    -- Divine Shield (Paladin)
+    [199448] = true, -- Blessing of Ultimate Sacrifice (Paladin)
+    [1022] = true,   -- Blessing of Protection (Paladin)
+    [47788] = true,  -- Guardian Spirit (Priest)
+    [31224] = true,  -- Cloak of Shadows (Rogue)
+    [210918] = true, -- Ethereal Form (Shaman)
+
+    -- Death Knight
+    [48707] = true,  -- Anti-Magic Shell
+    [48792] = true,  -- Icebound Fortitude
+    [287081] = true, -- Lichborne
+    [55233] = true,  -- Vampiric Blood
+    [194679] = true, -- Rune Tap
     [145629] = true, -- Anti-Magic Zone
-    [219809] = true, -- 墓石
-    [194679] = true, -- 符文分流
-    [194844] = true, -- 白骨风暴
-    [207319] = true, -- 血肉之盾
-    [116888] = true, -- 炼狱蔽体
-    [49039] = true, -- 巫妖之躯
-    [288977] = true, -- 鲜血灌注
-    [315443] = true, -- 憎恶附肢
-    [311648] = true, -- 云集之雾
-    -- DH
-    [209261] = true, -- 未被污染的邪能
-    [196555] = true, -- 虚空行走
-    [198589] = true, -- Blur
-    [212800] = true, -- Blur
-    [162264] = true, -- Metamorphosis
+    [81256] = true,  -- Dancing Rune Weapon
+
+    -- Demon Hunter
+    [206804] = true, -- Rain from Above
     [187827] = true, -- Metamorphosis (Vengeance)
-    [207811] = true, -- Nether Bond (DH)
-    [207810] = true, -- Nether Bond (Target)
+    [212800] = true, -- Blur
     [263648] = true, -- Soul Barrier
-    [209426] = true, -- Darkness
-    [196718] = true, -- Darkness
-    [203819] = true, -- Demon Spikes
+
+    -- Druid
+    [102342] = true, -- Ironbark
+    [22812] = true,  -- Barkskin
+    [61336] = true,  -- Survival Instincts
+    [203554] = true, -- Focused Growth (Druid)
+
+    -- Hunter
+    [53480] = true,  -- Roar of Sacrifice
+    [264735] = true, -- Survival of the Fittest (Pet Ability)
+    [281195] = true, -- Survival of the Fittest (Lone Wolf)
+
+    -- Mage
+    [198111] = true, -- Temporal Shield
+    [113862] = true, -- Greater Invisibility
+
+    -- Monk
+    [120954] = true, -- Fortifying Brew (Brewmaster)
+    [243435] = true, -- Fortifying Brew (Mistweaver)
+    [201318] = true, -- Fortifying Brew (Windwalker)
+    [115176] = true, -- Zen Meditation
+    [116849] = true, -- Life Cocoon
+    [122278] = true, -- Dampen Harm
+    [122783] = true, -- Diffuse Magic
+
+    -- Paladin
+    [1044] = true, -- Blessing of Freedom
+    [204018] = true, -- Blessing of Spellwarding
+    [6940] = true,   -- Blessing of Sacrifice
+    [498] = true,    -- Divine Protection
+    [31850] = true,  -- Ardent Defender
+    [86659] = true,  -- Guardian of Ancient Kings
+    [212641] = true, -- Guardian of Ancient Kings (Glyph)
+    [205191] = true, -- Eye for an Eye
+
+    -- Priest
+    [47585] = true,  -- Dispersion
+    [33206] = true,  -- Pain Suppression
+    [213602] = true, -- Greater Fade
+    [81782] = true,  -- Power Word: Barrier
+    [271466] = true, -- Luminous Barrier
+
+    -- Rogue
+    [45182] = true,  -- Cheating Death
+    [5277] = true,   -- Evasion
+    [199754] = true, -- Riposte
+    [1966] = true,   -- Feint
+
+    -- Shaman
+    [108271] = true, -- Astral Shift
+    [118337] = true, -- Harden Skin
+
+    -- Warlock
+    [212195] = true, -- Nether Ward
+    [104773] = true, -- Unending Resolve
+    [108416] = true, -- Dark Pact
+
+    -- Warrior
+    [190456] = true, -- Ignore Pain
+    [118038] = true, -- Die by the Sword
+    [871] = true,    -- Shield Wall
+    [213915] = true, -- Mass Spell Reflection
+    [23920] = true,  -- Spell Reflection (Prot)
+    [216890] = true, -- Spell Reflection (Arms/Fury)
+    [184364] = true, -- Enraged Regeneration
+    [97463] = true,  -- Rallying Cry
+    [12975] = true,  -- Last Stand
+
+    -- Other
+    [185710] = true, -- Sugar-Crusted Fish Feast
     -- Covenant
     [319217] = true, -- 灵茧守护者
     [320224] = true, -- 灵茧守护者
@@ -430,6 +352,13 @@ C.RaidBuffsList = {
     [292686] = true, -- 制皮鼓
 }
 
+-- Ignore these debuffs on RaidFrames #TODO
+C.RaidDebuffsBlackList = {
+    [206151] = true, -- Challenger's Burden
+    [331154] = true,
+}
+
+-- Party offensive cooldown
 C.PartySpellsList = {
     [57994] = 12, -- 风剪
     [1766] = 15, -- 脚踢
@@ -978,6 +907,16 @@ C.NPMajorSpellsList = {
     [328400] = true, -- 凋魂，软泥浪潮
 }
 
+C.AnnounceSpells = {
+    [1044] = true, -- Blessing of Freedom
+    [204018] = true, -- Blessing of Spellwarding
+    [6940] = true,   -- Blessing of Sacrifice
+    [498] = true,    -- Divine Protection
+    [31850] = true,  -- Ardent Defender
+    [86659] = true,  -- Guardian of Ancient Kings
+    [212641] = true, -- Guardian of Ancient Kings (Glyph)
+}
+
 C.CharacterSettings = {
     ShadowLands = false,
     InstallationComplete = false,
@@ -1056,13 +995,30 @@ C.CharacterSettings = {
 
     Announcement = {
         Enable = true,
+
+        Channel = 4,
+        PersonalMajorSpell = true,
+
         Interrupt = true,
         Dispel = true,
+        Stolen = true,
+        Reflect = true,
         BattleRez = true,
-        Utility = true,
+
+        Feast = true,
+        Cauldron = true,
+        Soulwell = true,
+        RefreshmentTable = true,
+        RitualofSummoning = true,
+        Bot = true,
+        Codex = true,
+        Mailbox = true,
+        Portal = true,
+        Toy = true,
+
         Quest = false,
         Reset = true,
-        Solo = false,
+
     },
 
     Aura = {
@@ -1078,37 +1034,40 @@ C.CharacterSettings = {
         Reminder = true,
     },
 
-    ['inventory'] = {
-        ['enable'] = true,
-        ['scale'] = 1,
-        ['offset'] = 26,
-        ['spacing'] = 3,
-        ['slot_size'] = 44,
-        ['bag_columns'] = 14,
-        ['bank_columns'] = 14,
-        ['sort_mode'] = 2,
-        ['item_level'] = true,
-        ['item_level_to_show'] = 1,
-        ['new_item_flash'] = true,
-        ['bind_type'] = true,
-        ['combine_free_slots'] = true,
-        ['split_count'] = 1,
-        ['auto_deposit'] = false,
-        ['special_color'] = true,
-        ['favourite_items'] = {},
-        ['item_filter'] = true,
-        ['item_filter_gear_set'] = true,
-        ['item_filter_trade'] = true,
-        ['item_filter_quest'] = true,
-        ['item_filter_junk'] = true,
-        ['item_filter_azerite'] = true,
-        ['item_filter_equipment'] = true,
-        ['item_filter_consumable'] = true,
-        ['item_filter_legendary'] = true,
-        ['item_filter_collection'] = true,
-        ['item_filter_favourite'] = true,
-        ['auto_sell_junk'] = true,
-        ['auto_repair'] = true,
+    Inventory = {
+        Enable = true,
+        Scale = 1,
+        Offset = 26,
+        Spacing = 3,
+        SlotSize = 44,
+        BagColumns = 14,
+        BankColumns = 14,
+        SortMode = 2,
+        ItemLevel = true,
+        MinItemLevelToShow = 1,
+        NewItemFlash = true,
+        BindType = true,
+        CombineFreeSlots = true,
+        SplitCount = 1,
+        AutoDeposit = false,
+        SpecialBagsColor = true,
+        FavItemsList = {},
+
+        ItemFilter = true,
+        FilterEquipSet = true,
+        FilterTradeGoods = true,
+        FilterQuestItem = true,
+        FilterJunk = true,
+        FilterAzeriteArmor = true,
+        FilterEquipment = true,
+        FilterConsumable = true,
+        FilterLegendary = true,
+        FilterCollection = true,
+        FilterFavourite = true,
+        FilterAnima = true,
+
+        AutoSellJunk = true,
+        AutoRepair = true,
     },
 
     Unitframe = {
@@ -1305,34 +1264,33 @@ C.CharacterSettings = {
 
     },
 
-    ['tooltip'] = {
-        ['enable'] = true,
-        ['follow_cursor'] = false,
-        ['disable_fading'] = true,
-        ['hide_title'] = true,
-        ['hide_realm'] = true,
-        ['hide_rank'] = true,
-        ['hide_in_combat'] = false,
-        ['border_color'] = true,
-        ['spec_ilvl'] = true,
-        ['azerite_armor'] = true,
-        ['link_hover'] = true,
-        ['tip_icon'] = true,
-        ['target_by'] = true,
-        ['extra_info'] = true,
-        ['aura_source'] = true,
-        ['conduit_info'] = true,
-        ['health_value'] = false,
+    Tooltip = {
+        Enable = true,
+        BackdropAlpha = .65,
+        FollowCursor = false,
+        DisableFading = true,
+        HideTitle = true,
+        HideRealm = true,
+        HideGuildRank = true,
+        HideInCombat = false,
+        BorderColor = true,
+        SpecIlvl = true,
+        SpecIlvlByAlt = true,
+        Icon = true,
+        TargetBy = true,
+        ExtraInfo = true,
+        HealthValue = false,
     },
-    ['map'] = {
-        ['enable'] = true,
-        ['worldmap_scale'] = 1,
-        ['max_worldmap_scale'] = 1,
-        ['remove_fog'] = true,
-        ['coords'] = true,
-        ['minimap_scale'] = 1,
-        ['who_pings'] = true,
-        ['progress_bar'] = true,
+
+    Map = {
+        Enable = true,
+        WorldMapScale = 1,
+        MaxWorldMapScale = 1,
+        RemoveFog = true,
+        Coords = true,
+        MinimapScale = 1,
+        WhoPings = true,
+        ExpBar = true,
     },
 
     Infobar = {
@@ -1379,6 +1337,7 @@ C.CharacterSettings = {
         WhisperSound = true,
         SoundThreshold = 60,
         ExtendItemLink = true,
+        LootIcon = true,
         DamageMeterFilter = true,
         SpamFilter = true,
         Matches = 1,
@@ -1399,6 +1358,7 @@ C.CharacterSettings = {
         MacroName = true,
         CountNumber = true,
         ClassColor = false,
+        EquipColor = true,
 
         ButtonFlash = true,
 
@@ -1408,7 +1368,7 @@ C.CharacterSettings = {
         Bar5 = false,
         PetBar = true,
         StanceBar = false,
-        VehicleBar = false,
+        VehicleBar = true,
 
         DynamicFade = true,
         FadeOutAlpha = 0,
@@ -1452,12 +1412,13 @@ C.AccountSettings = {
     DetectVersion = C.AddonVersion,
     VersionCheck = true,
     UIScale = 1,
+    HelpTips = {},
     GoldStatistic = {},
     ShadowOutline = true,
     BackdropColor = {r = .1, g = .1, b = .1},
     BackdropAlpha = .75,
     BorderColor = {r = .24, g = .24, b = .24},
-    ButtonBackdropColor = {r = .12, g = .12, b = .12},
+    ButtonBackdropColor = {r = .05, g = .05, b = .05},
     ButtonBackdropAlpha = .25,
     GuildSortBy = 1,
     GuildSortOrder = true,
@@ -1479,6 +1440,7 @@ C.AccountSettings = {
     NPMajorSpells = {},
     CornerSpellsList = {},
     PartySpellsList = {},
+    AnnounceSpells = {},
     KeystoneInfo = {},
     ProfileIndex = {},
     ProfileNames = {},
