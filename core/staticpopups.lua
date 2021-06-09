@@ -18,7 +18,6 @@ local LeaveParty = LeaveParty
 local SendChatMessage = SendChatMessage
 
 local F, C, L = unpack(select(2, ...))
-local GUI = F:GetModule('GUI')
 
 --[[ Layout ]]
 _G.StaticPopupDialogs.FREEUI_RESET_LAYOUT = {
@@ -97,6 +96,7 @@ _G.StaticPopupDialogs.FREEUI_IMPORT_PROFILE = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
+        local GUI = F:GetModule('GUI')
         GUI:ImportData()
         ReloadUI()
     end,
@@ -138,6 +138,7 @@ _G.StaticPopupDialogs.FREEUI_APPLY_PROFILE = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
+        local GUI = F:GetModule('GUI')
         _G.FREE_ADB['ProfileIndex'][C.MyFullName] = GUI.currentProfile
         ReloadUI()
     end,
@@ -151,6 +152,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_CURRENT_PROFILE = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
+        local GUI = F:GetModule('GUI')
         local profileIndex = _G.FREE_ADB['ProfileIndex'][C.MyFullName]
         if GUI.currentProfile == 1 then
             _G.FREE_PDB[profileIndex - 1] = _G.FREE_DB
@@ -171,6 +173,7 @@ _G.StaticPopupDialogs.FREEUI_REPLACE_SELECTED_PROFILE = {
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
+        local GUI = F:GetModule('GUI')
         if GUI.currentProfile == 1 then
             _G.FREE_DB = C.DB
         else
