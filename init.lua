@@ -62,7 +62,7 @@ do
     F.Libs.oUF = ns.oUF
     F.Libs.cargBags = ns.cargBags
 
-    _G.LibStub('AceTimer-3.0'):Embed(F)
+    LibStub('AceTimer-3.0'):Embed(F)
 end
 
 --[[ Events ]]

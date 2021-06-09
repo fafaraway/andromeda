@@ -3,17 +3,12 @@ local unpack = unpack
 local select = select
 local tinsert = tinsert
 local CreateFrame = CreateFrame
-local ReloadUI = ReloadUI
 local InCombatLockdown = InCombatLockdown
 local HideUIPanel = HideUIPanel
 local PlaySound = PlaySound
 local SOUNDKIT_GS_TITLE_OPTION_OK = SOUNDKIT.GS_TITLE_OPTION_OK
 local SOUNDKIT_IG_MAINMENU_OPTION = SOUNDKIT.IG_MAINMENU_OPTION
 local StaticPopup_Show = StaticPopup_Show
-local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
-local CLOSE = CLOSE
-local APPLY = APPLY
-local CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON = CLASS_TRIAL_THANKS_DIALOG_CLOSE_BUTTON
 
 local F, C, L = unpack(select(2, ...))
 local GUI = F:GetModule('GUI')
@@ -383,7 +378,7 @@ local function CreateGUI()
     local btnClose = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
     btnClose:SetPoint('BOTTOMRIGHT', -6, 6)
     btnClose:SetSize(80, 24)
-    btnClose:SetText(CLOSE)
+    btnClose:SetText(_G.CLOSE)
     btnClose:SetScript('OnClick', function()
         PlaySound(SOUNDKIT_IG_MAINMENU_OPTION)
         guiFrame:Hide()
@@ -393,7 +388,7 @@ local function CreateGUI()
     local btnApply = CreateFrame('Button', nil, guiFrame, 'UIPanelButtonTemplate')
     btnApply:SetPoint('RIGHT', btnClose, 'LEFT', -6, 0)
     btnApply:SetSize(80, 24)
-    btnApply:SetText(APPLY)
+    btnApply:SetText(_G.APPLY)
     -- btnApply:Disable()
     btnApply:SetScript('OnClick', function()
         StaticPopup_Show('FREEUI_RELOADUI')
@@ -475,7 +470,7 @@ function GUI:OnLogin()
 
     bu:SetScript('OnClick', function()
         if InCombatLockdown() then
-            _G.UIErrorsFrame:AddMessage(C.RedColor .. ERR_NOT_IN_COMBAT)
+            _G.UIErrorsFrame:AddMessage(C.RedColor .. _G.ERR_NOT_IN_COMBAT)
             return
         end
         CreateGUI()
