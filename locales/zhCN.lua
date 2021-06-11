@@ -494,6 +494,8 @@ L['Only invite guild members'] = '只邀请公会成员'
 L['Invite Keyword'] = '关键字'
 L['|nSetup whisper invite keywords. If you have more than one word, press key SPACE in between.'] = '|n为密语自动邀请设置关键词。对于多个关键词，以空格隔开。'
 L['Chat Window Size'] = '聊天框大小'
+L['Disable profanity filter'] = '关闭语言过滤器'
+L["You need to uncheck Profanity Filter in GUI and restart your game client to get access into CN battleNet support."] = '需要在控制台取消关闭语言过滤器，并重启游戏后才可以正常连接国服战网支持。'
 
 L['Shadow outline'] = '阴影边框'
 L['Button gradient style'] = '渐变样式按钮'

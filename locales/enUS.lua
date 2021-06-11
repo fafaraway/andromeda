@@ -332,6 +332,7 @@ L['Widget Frame'] = true
 L['Winter Veil Daily'] = true
 L['World channel'] = true
 L['Wowhead link'] = true
+L['You need to uncheck Profanity Filter in GUI and restart your game client to get access into CN battleNet support.'] = true
 L['Zone Ability Button'] = true
 L['iLvl'] = true
 L['|nAdd an additional actionbar for you to customize.'] = true

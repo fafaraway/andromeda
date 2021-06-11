@@ -1347,6 +1347,7 @@ C.CharacterSettings = {
         GroupLootFilter = true,
         GroupLootThreshold = 2,
         GroupRoleIcon = true,
+        DisableProfanityFilter = true,
     },
 
     Actionbar = {

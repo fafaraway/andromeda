@@ -378,7 +378,7 @@ local chatScrollTip = {
     buttonStyle = _G.HelpTip.ButtonStyle.GotIt,
     targetPoint = _G.HelpTip.Point.RightEdgeCenter,
     onAcknowledgeCallback = F.HelpInfoAcknowledge,
-    callbackArg = "ChatScroll",
+    callbackArg = 'ChatScroll'
 }
 function CHAT:OnMouseScroll(dir)
     if not _G.FREE_ADB.HelpTips.ChatScroll then
@@ -414,7 +414,9 @@ local function UpdateChatBubble()
 end
 
 function CHAT:AutoToggleChatBubble()
-    if not C.DB.Chat.SmartChatBubble then return end
+    if not C.DB.Chat.SmartChatBubble then
+        return
+    end
 
     F:RegisterEvent('PLAYER_ENTERING_WORLD', UpdateChatBubble)
 end
@@ -634,12 +636,23 @@ end
 
 -- Disable profanity filter
 function CHAT:DisableProfanityFilter()
+    if not C.DB.Chat.DisableProfanityFilter then
+        return
+    end
+
     if not BNFeaturesEnabledAndConnected() then
         return
     end
 
     if C.IsCNPortal then
         ConsoleExec('portal TW')
+
+        _G.HelpFrame:HookScript(
+            'OnShow',
+            function()
+                _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['You need to uncheck Profanity Filter in GUI and restart your game client to get access into CN battleNet support.'])
+            end
+        )
     end
     SetCVar('profanityFilter', 0)
 end
