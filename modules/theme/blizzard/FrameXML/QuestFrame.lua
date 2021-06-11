@@ -3,8 +3,27 @@ local unpack = unpack
 local select = select
 local tinsert = tinsert
 local hooksecurefunc = hooksecurefunc
+local GetQuestItemInfo = GetQuestItemInfo
+local GetQuestCurrencyInfo = GetQuestCurrencyInfo
 
 local F, C = unpack(select(2, ...))
+
+local function UpdateProgressItemQuality(self)
+    local button = self.__owner
+    local index = button.__id
+    local buttonType = button.type
+    local objectType = button.objectType
+
+    local quality
+    if objectType == 'item' then
+        quality = select(4, GetQuestItemInfo(buttonType, index))
+    elseif objectType == 'currency' then
+        quality = select(4, GetQuestCurrencyInfo(buttonType, index))
+    end
+
+    local color = C.QualityColors[quality or 1]
+    button.bg:SetBackdropBorderColor(color.r, color.g, color.b)
+end
 
 tinsert(
     C.BlizzThemes,
@@ -18,10 +37,12 @@ tinsert(
         _G.QuestFrameDetailPanel:DisableDrawLayer('BORDER')
         _G.QuestFrameRewardPanel:DisableDrawLayer('BORDER')
         _G.QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
+
         _G.QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
         _G.QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
         _G.QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
         _G.QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
+
         hooksecurefunc(
             'QuestFrame_SetMaterial',
             function(frame)
@@ -46,8 +67,15 @@ tinsert(
 
         for i = 1, _G.MAX_REQUIRED_ITEMS do
             local button = _G['QuestProgressItem' .. i]
-            F.ReskinIcon(button.Icon)
             button.NameFrame:Hide()
+            button.bg = F.ReskinIcon(button.Icon)
+            button.__id = i
+            button.Icon.__owner = button
+            hooksecurefunc(button.Icon, 'SetTexture', UpdateProgressItemQuality)
+
+            local bg = F.CreateBDFrame(button, .25)
+            bg:SetPoint('TOPLEFT', button.bg, 'TOPRIGHT', 2, 0)
+            bg:SetPoint('BOTTOMRIGHT', button.bg, 100, 0)
         end
 
         _G.QuestDetailScrollFrame:SetWidth(302) -- else these buttons get cut off
@@ -64,11 +92,13 @@ tinsert(
             end
         )
 
-        for _, questButton in pairs(
-            {'QuestFrameAcceptButton', 'QuestFrameDeclineButton', 'QuestFrameCompleteQuestButton', 'QuestFrameCompleteButton', 'QuestFrameGoodbyeButton', 'QuestFrameGreetingGoodbyeButton'}
-        ) do
-            F.Reskin(_G[questButton])
-        end
+        F.Reskin(_G.QuestFrameAcceptButton)
+        F.Reskin(_G.QuestFrameDeclineButton)
+        F.Reskin(_G.QuestFrameCompleteQuestButton)
+        F.Reskin(_G.QuestFrameCompleteButton)
+        F.Reskin(_G.QuestFrameGoodbyeButton)
+        F.Reskin(_G.QuestFrameGreetingGoodbyeButton)
+
         F.ReskinScroll(_G.QuestProgressScrollFrameScrollBar)
         F.ReskinScroll(_G.QuestRewardScrollFrameScrollBar)
         F.ReskinScroll(_G.QuestDetailScrollFrameScrollBar)

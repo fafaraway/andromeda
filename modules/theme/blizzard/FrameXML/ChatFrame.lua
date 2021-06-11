@@ -31,34 +31,6 @@ local function ReskinChatScroll(self)
     self.ScrollBar:HookScript('OnLeave', scrollOnLeave)
 end
 
-local function reskinPickerOptions(self)
-    local scrollTarget = self.ScrollBox.ScrollTarget
-    if scrollTarget then
-        for i = 1, scrollTarget:GetNumChildren() do
-            local child = select(i, scrollTarget:GetChildren())
-            if not child.styled then
-                child.UnCheck:SetTexture(nil)
-                child.Highlight:SetColorTexture(C.r, C.g, C.b, .25)
-
-                local check = child.Check
-                check:SetColorTexture(C.r, C.g, C.b, .6)
-                check:SetSize(10, 10)
-                check:SetPoint('LEFT', 2, 0)
-                F.CreateBDFrame(check, .25)
-
-                child.styled = true
-            end
-        end
-    end
-end
-
-local function ReskinVoicePicker(voicePicker)
-    local customFrame = voicePicker:GetChildren()
-    F.StripTextures(customFrame)
-    F.SetBD(customFrame, .7)
-    voicePicker:HookScript('OnShow', reskinPickerOptions)
-end
-
 tinsert(
     C.BlizzThemes,
     function()
@@ -204,62 +176,5 @@ tinsert(
                 end
             end
         )
-
-        -- TextToSpeech
-        if C.IsNewPatch then
-            F.StripTextures(_G.TextToSpeechButton, 5)
-
-            F.StripTextures(_G.TextToSpeechFrame)
-            F.SetBD(_G.TextToSpeechFrame)
-            F.StripTextures(_G.TextToSpeechFrame.Header)
-
-            _G.TextToSpeechFramePanelContainer:SetBackdrop(nil)
-            F.CreateBDFrame(_G.TextToSpeechFramePanelContainer, .25)
-            _G.TextToSpeechFramePanelContainerChatTypeContainer:SetBackdrop(nil)
-            F.CreateBDFrame(_G.TextToSpeechFramePanelContainerChatTypeContainer, .25)
-
-            F.Reskin(_G.TextToSpeechFramePlaySampleButton)
-            F.Reskin(_G.TextToSpeechFramePlaySampleAlternateButton)
-            F.Reskin(_G.TextToSpeechFrameDefaults)
-            F.Reskin(_G.TextToSpeechFrameOkay)
-
-            F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceDropdown)
-            F.ReskinDropDown(_G.TextToSpeechFrameTtsVoiceAlternateDropdown)
-            F.ReskinSlider(_G.TextToSpeechFrameAdjustRateSlider)
-            F.ReskinSlider(_G.TextToSpeechFrameAdjustVolumeSlider)
-
-            local checkboxes = {
-                'PlayActivitySoundWhenNotFocusedCheckButton',
-                'PlaySoundSeparatingChatLinesCheckButton',
-                'AddCharacterNameToSpeechCheckButton',
-                'UseAlternateVoiceForSystemMessagesCheckButton'
-            }
-            for _, checkbox in pairs(checkboxes) do
-                F.ReskinCheck(_G.TextToSpeechFramePanelContainer[checkbox])
-            end
-
-            hooksecurefunc(
-                'TextToSpeechFrame_Update',
-                function()
-                    local checkBoxTable = _G.TextToSpeechFramePanelContainerChatTypeContainer.checkBoxTable
-                    if checkBoxTable then
-                        local checkBoxNameString = 'TextToSpeechFramePanelContainerChatTypeContainerCheckBox'
-                        local checkBoxName, checkBox
-                        for index, _ in ipairs(checkBoxTable) do
-                            checkBoxName = checkBoxNameString .. index
-                            checkBox = _G[checkBoxName]
-                            if checkBox and not checkBox.styled then
-                                F.ReskinCheck(checkBox)
-                                checkBox.styled = true
-                            end
-                        end
-                    end
-                end
-            )
-
-            -- voice pickers
-            ReskinVoicePicker(_G.TextToSpeechFrameTtsVoicePicker)
-            ReskinVoicePicker(_G.TextToSpeechFrameTtsVoiceAlternatePicker)
-        end
     end
 )
