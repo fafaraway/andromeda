@@ -26,6 +26,9 @@ local MAP = F:GetModule('Minimap')
 
 local extraGUIs = {}
 
+
+--[[ Functions ]]
+
 local function TogglePanel(guiName)
     for name, frame in pairs(extraGUIs) do
         if name == guiName then
@@ -136,6 +139,9 @@ local function ClearEdit(options)
         GUI:ClearEdit(options[i])
     end
 end
+
+
+--[[ Widgets ]]
 
 function GUI:CreateDropdown(parent, text, x, y, data, tip, width, height)
     local dd = F.CreateDropDown(parent, width or 90, height or 30, data)
@@ -281,7 +287,10 @@ local function CreateSlider(parent, key, value, text, minV, maxV, step, defaultV
     slider:SetScript('OnValueChanged', Slider_OnValueChanged)
 end
 
---[[ Aura ]]
+
+--[[ Module Extra GUI ]]
+
+-- Aura
 function GUI:SetupAuraSize(parent)
     local guiName = 'FreeUI_GUI_Aura'
     TogglePanel(guiName)
@@ -342,7 +351,7 @@ function GUI:SetupAuraSize(parent)
     end
 end
 
---[[ Inventory ]]
+-- Inventory
 function GUI:SetupInventoryFilter(parent)
     local guiName = 'FreeUI_GUI_Inventory_Filter'
     TogglePanel(guiName)
@@ -467,7 +476,7 @@ function GUI:SetupInventorySize(parent)
     end
 end
 
---[[ Actionbar ]]
+-- Actionbar
 function GUI:SetupActionbarFade(parent)
     local guiName = 'FreeUI_GUI_Actionbar_Fade'
     TogglePanel(guiName)
@@ -604,7 +613,7 @@ function GUI:SetupAdditionalbar(parent)
     end
 end
 
---[[ Nameplate ]]
+-- Nameplate
 function GUI:SetupNPAuraFilter(parent)
     local guiName = 'FreeUI_GUI_NamePlate_Aura_Filter'
     TogglePanel(guiName)
@@ -881,7 +890,7 @@ function GUI:SetupNameplateCVars(parent)
     end
 end
 
---[[ Unitframe ]]
+-- Unitframe
 function GUI:SetupUnitFrameSize(parent)
     local guiName = 'FreeUI_GUI_Unitframe_Setup'
     TogglePanel(guiName)
@@ -1791,7 +1800,7 @@ function GUI:SetupRaidDebuffs(parent)
     panel:HookScript('OnShow', autoSelectInstance)
 end
 
---[[ General ]]
+-- General
 function GUI:SetupAutoTakeScreenshot(parent)
     local guiName = 'FreeUI_GUI_Auto_Screenshot'
     TogglePanel(guiName)
@@ -1865,7 +1874,7 @@ function GUI:SetupCustomClassColor(parent)
     end
 end
 
---[[ Chat ]]
+-- Chat
 local function UpdateChatSize()
     CHAT:UpdateChatSize()
 end
@@ -1905,7 +1914,7 @@ function GUI:SetupChatSize(parent)
     end
 end
 
---[[ Combat ]]
+-- Combat
 function GUI:SetupSimpleFloatingCombatText(parent)
     local guiName = 'FreeUI_GUI_FCT'
     TogglePanel(guiName)
@@ -1947,7 +1956,7 @@ function GUI:SetupSimpleFloatingCombatText(parent)
     end
 end
 
---[[ Announcement ]]
+-- Announcement
 local function RefreshAnnounceSpells()
     ANNOUNCEMENT:RefreshSpells()
 end
@@ -2013,7 +2022,7 @@ function GUI:SetupAnnounceSpells(parent)
     end
 end
 
---[[ Map ]]
+-- Map
 local function UpdateMapScale()
     MAP:UpdateMinimapScale()
 end
