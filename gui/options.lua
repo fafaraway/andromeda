@@ -148,6 +148,11 @@ local function SetupCustomClassColor()
     GUI:SetupCustomClassColor(GUI.Page[1])
 end
 
+local function UpdateActionCamera()
+    local EC = F:GetModule('EnhancedCamera')
+    EC:UpdateActionCamera()
+end
+
 -- Theme
 local function UpdateBackdropAlpha()
     for _, frame in pairs(C.Frames) do
@@ -197,7 +202,7 @@ GUI.OptionsList = {
         {1, 'General', 'FasterLoot', L['Faster auto looting'], nil, nil, nil, L['|nLoot instantly. |nNo more waiting for the loot window to be populated.']},
         {1, 'General', 'FasterMovieSkip', L['Faster movie skip'], true, nil, nil, L['|nIf enabled, allow space bar, escape key and enter key to cancel cinematic without confirmation.']},
         {1, 'General', 'FasterZooming', L['Camera faster zooming'], nil, nil, nil, L['|nFaster and smoother camera zooming.']},
-        {1, 'General', 'ActionMode', L['Camera action mode'], true, nil, nil, L['|nEnable blizzard action camera.']},
+        {1, 'General', 'ActionCamera', L['Camera action mode'], true, nil, UpdateActionCamera, L['|nEnable blizzard action camera.']},
         {1, 'General', 'ScreenSaver', L['Screen saver']},
         {1, 'General', 'AutoScreenshot', L['Auto screenshot'], true, SetupAutoTakeScreenshot, nil, L['|nTake screenshots automatically based on specific events.']},
         {4, 'ACCOUNT', 'NumberFormat', L['Number Format'], nil, {L['Standard: b/m/k'], L['Asian: y/w'], L['Full digitals']}},

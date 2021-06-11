@@ -11,7 +11,7 @@ local GetCameraZoom = GetCameraZoom
 local SetCVar = SetCVar
 
 local F, C = unpack(select(2, ...))
-local FC = F:RegisterModule('FasterCamera')
+local EC = F:RegisterModule('EnhancedCamera')
 
 local datas = {
     increment = 4,
@@ -42,7 +42,10 @@ function _G.CameraZoomOut(v)
     CameraZoom(oldZoomOut, v)
 end
 
-function FC:OnEvent(event)
+function EC:OnEvent(event)
+    if not C.DB.General.FasterZooming then
+        return
+    end
     F:Delay(1, function()
         -- not actually necessary to override from savedvars
         -- but better to do this if other addons also set it
@@ -53,10 +56,26 @@ function FC:OnEvent(event)
     -- self:UnregisterEvent(event)
 end
 
-function FC:OnLogin()
-    if not C.DB.General.FasterZooming then
-        return
-    end
+-- Camera action mode
+local function Exec(cmd)
+    ConsoleExec('ActionCam ' .. cmd)
+end
 
-    F:RegisterEvent('ADDON_LOADED', FC.OnEvent)
+function EC:UpdateActionCamera()
+    if C.DB.General.ActionCamera then
+        Exec('basic')
+    else
+        Exec('off')
+    end
+end
+
+function EC:ActionCamera()
+    _G.UIParent:UnregisterEvent('EXPERIMENTAL_CVAR_CONFIRMATION_NEEDED')
+
+    EC:UpdateActionCamera()
+end
+
+function EC:OnLogin()
+    F:RegisterEvent('ADDON_LOADED', EC.OnEvent)
+    F:RegisterEvent('PLAYER_ENTERING_WORLD', EC.ActionCamera)
 end
