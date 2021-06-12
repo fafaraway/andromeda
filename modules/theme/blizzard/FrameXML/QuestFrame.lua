@@ -30,28 +30,10 @@ tinsert(
     function()
         F.ReskinPortraitFrame(_G.QuestFrame)
 
-        _G.QuestFrameDetailPanel:DisableDrawLayer('BACKGROUND')
-        _G.QuestFrameProgressPanel:DisableDrawLayer('BACKGROUND')
-        _G.QuestFrameRewardPanel:DisableDrawLayer('BACKGROUND')
-        _G.QuestFrameGreetingPanel:DisableDrawLayer('BACKGROUND')
-        _G.QuestFrameDetailPanel:DisableDrawLayer('BORDER')
-        _G.QuestFrameRewardPanel:DisableDrawLayer('BORDER')
-        _G.QuestLogPopupDetailFrame.SealMaterialBG:SetAlpha(0)
-
-        _G.QuestFrameProgressPanelMaterialTopLeft:SetAlpha(0)
-        _G.QuestFrameProgressPanelMaterialTopRight:SetAlpha(0)
-        _G.QuestFrameProgressPanelMaterialBotLeft:SetAlpha(0)
-        _G.QuestFrameProgressPanelMaterialBotRight:SetAlpha(0)
-
-        hooksecurefunc(
-            'QuestFrame_SetMaterial',
-            function(frame)
-                _G[frame:GetName() .. 'MaterialTopLeft']:Hide()
-                _G[frame:GetName() .. 'MaterialTopRight']:Hide()
-                _G[frame:GetName() .. 'MaterialBotLeft']:Hide()
-                _G[frame:GetName() .. 'MaterialBotRight']:Hide()
-            end
-        )
+        F.StripTextures(_G.QuestFrameDetailPanel, 0)
+        F.StripTextures(_G.QuestFrameRewardPanel, 0)
+        F.StripTextures(_G.QuestFrameProgressPanel, 0)
+        F.StripTextures(_G.QuestFrameGreetingPanel, 0)
 
         local line = _G.QuestFrameGreetingPanel:CreateTexture()
         line:SetColorTexture(1, 1, 1, .25)
@@ -125,9 +107,9 @@ tinsert(
         -- Quest NPC model
 
         F.StripTextures(_G.QuestModelScene)
-        F.SetBD(_G.QuestModelScene)
         F.StripTextures(_G.QuestNPCModelTextFrame)
-        F.SetBD(_G.QuestNPCModelTextFrame)
+        local bg = F.SetBD(_G.QuestModelScene)
+        bg:SetOutside(nil, nil, nil, _G.QuestNPCModelTextFrame)
 
         if C.IsNewPatch then
             hooksecurefunc(
