@@ -12,22 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
       WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
       CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
 
     steps:
       - name: Clone project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Package and release
         uses: BigWigsMods/packager@master
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: FreeUI
-          path: .release/
 
       - name: Send status to Discord
         uses: nebularg/actions-discord-webhook@v1

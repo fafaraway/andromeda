@@ -15,16 +15,10 @@ jobs:
 
     steps:
       - name: Clone project
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Package and release
         uses: BigWigsMods/packager@master
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: FreeUI
-          path: .release/
 
       - name: Send status to Discord
         uses: nebularg/actions-discord-webhook@v1
