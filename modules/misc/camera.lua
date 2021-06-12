@@ -9,6 +9,7 @@ local unpack = unpack
 local select = select
 local GetCameraZoom = GetCameraZoom
 local SetCVar = SetCVar
+local ConsoleExec = ConsoleExec
 
 local F, C = unpack(select(2, ...))
 local EC = F:RegisterModule('EnhancedCamera')
