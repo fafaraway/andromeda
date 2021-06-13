@@ -1,16 +1,19 @@
-name: Pre-release
+name: Stable-Release
 
 on:
   push:
     tags:
-      - '**-alpha**'
-      - '**-beta**'
+      - '*'
+      - '!**-beta**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
+      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
       GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
