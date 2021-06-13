@@ -23,12 +23,6 @@ local LE_ITEM_CLASS_RECIPE = LE_ITEM_CLASS_RECIPE
 local LE_ITEM_CLASS_MISCELLANEOUS = LE_ITEM_CLASS_MISCELLANEOUS
 local LE_ITEM_CLASS_ITEM_ENHANCEMENT = LE_ITEM_CLASS_ITEM_ENHANCEMENT
 local LE_ITEM_CLASS_BATTLEPET = LE_ITEM_CLASS_BATTLEPET
-local MERCHANT_ITEMS_PER_PAGE = MERCHANT_ITEMS_PER_PAGE
-local BUYBACK_ITEMS_PER_PAGE = BUYBACK_ITEMS_PER_PAGE
-local MAX_GUILDBANK_SLOTS_PER_TAB = MAX_GUILDBANK_SLOTS_PER_TAB
-local NUM_SLOTS_PER_GUILDBANK_GROUP = NUM_SLOTS_PER_GUILDBANK_GROUP
-local ITEM_SPELL_KNOWN = ITEM_SPELL_KNOWN
-local COLLECTED = COLLECTED
 
 local F = unpack(select(2, ...))
 
@@ -88,7 +82,7 @@ local function IsAlreadyKnown(link, index)
             F.ScanTip:SetHyperlink(link)
             for i = 1, F.ScanTip:NumLines() do
                 local text = _G['FreeUI_ScanTooltipTextLeft' .. i]:GetText() or ''
-                if strfind(text, COLLECTED) or text == ITEM_SPELL_KNOWN then
+                if strfind(text, _G.COLLECTED) or text == _G.ITEM_SPELL_KNOWN then
                     knowns[link] = true
                     return true
                 end
@@ -100,8 +94,8 @@ end
 -- merchant frame
 local function Hook_UpdateMerchantInfo()
     local numItems = GetMerchantNumItems()
-    for i = 1, MERCHANT_ITEMS_PER_PAGE do
-        local index = (_G.MerchantFrame.page - 1) * MERCHANT_ITEMS_PER_PAGE + i
+    for i = 1, _G.MERCHANT_ITEMS_PER_PAGE do
+        local index = (_G.MerchantFrame.page - 1) * _G.MERCHANT_ITEMS_PER_PAGE + i
         if index > numItems then
             return
         end
@@ -123,7 +117,7 @@ hooksecurefunc('MerchantFrame_UpdateMerchantInfo', Hook_UpdateMerchantInfo)
 
 local function Hook_UpdateBuybackInfo()
     local numItems = GetNumBuybackItems()
-    for index = 1, BUYBACK_ITEMS_PER_PAGE do
+    for index = 1, _G.BUYBACK_ITEMS_PER_PAGE do
         if index > numItems then
             return
         end
@@ -153,8 +147,7 @@ local function Hook_UpdateAuctionHouse(self)
             if button.rowData.itemKey.itemID then
                 local itemLink
                 if button.rowData.itemKey.itemID == 82800 then -- BattlePet
-                    itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h',
-                                      button.rowData.itemKey.battlePetSpeciesID)
+                    itemLink = format('|Hbattlepet:%d::::::|h[Dummy]|h', button.rowData.itemKey.battlePetSpeciesID)
                 else -- Normal item
                     itemLink = format('item:%d', button.rowData.itemKey.itemID)
                 end
@@ -186,15 +179,13 @@ local function Hook_GuildBankUpdate()
     end
 
     local tab = GetCurrentGuildBankTab()
-    for i = 1, MAX_GUILDBANK_SLOTS_PER_TAB do
-        local index = mod(i, NUM_SLOTS_PER_GUILDBANK_GROUP)
+    for i = 1, _G.MAX_GUILDBANK_SLOTS_PER_TAB do
+        local index = mod(i, _G.NUM_SLOTS_PER_GUILDBANK_GROUP)
         if index == 0 then
-            index = NUM_SLOTS_PER_GUILDBANK_GROUP
+            index = _G.NUM_SLOTS_PER_GUILDBANK_GROUP
         end
 
-        local button =
-            _G['GuildBankColumn' .. math.ceil((i - .5) / NUM_SLOTS_PER_GUILDBANK_GROUP) .. 'Button' ..
-                index]
+        local button = _G['GuildBankColumn' .. math.ceil((i - .5) / _G.NUM_SLOTS_PER_GUILDBANK_GROUP) .. 'Button' .. index]
         if button and button:IsShown() then
             local texture, _, locked = GetGuildBankItemInfo(tab, i)
             if texture and not locked then
@@ -211,17 +202,19 @@ end
 local hookCount = 0
 local f = CreateFrame('Frame')
 f:RegisterEvent('ADDON_LOADED')
-f:SetScript('OnEvent', function(_, event, addon)
-    if addon == 'Blizzard_AuctionHouseUI' then
-        hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame',
-                       Hook_UpdateAuctionHouse)
-        hookCount = hookCount + 1
-    elseif addon == 'Blizzard_GuildBankUI' then
-        hooksecurefunc('GuildBankFrame_Update', Hook_GuildBankUpdate)
-        hookCount = hookCount + 1
-    end
+f:SetScript(
+    'OnEvent',
+    function(_, event, addon)
+        if addon == 'Blizzard_AuctionHouseUI' then
+            hooksecurefunc(_G.AuctionHouseFrame.BrowseResultsFrame.ItemList, 'RefreshScrollFrame', Hook_UpdateAuctionHouse)
+            hookCount = hookCount + 1
+        elseif addon == 'Blizzard_GuildBankUI' then
+            hooksecurefunc('GuildBankFrame_Update', Hook_GuildBankUpdate)
+            hookCount = hookCount + 1
+        end
 
-    if hookCount >= 2 then
-        f:UnregisterEvent(event)
+        if hookCount >= 2 then
+            f:UnregisterEvent(event)
+        end
     end
-end)
+)
