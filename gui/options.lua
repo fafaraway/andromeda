@@ -182,8 +182,8 @@ local function SetupSimpleFloatingCombatText()
 end
 
 -- Announcement
-local function SetupAnnounceSpells()
-    GUI:SetupAnnounceSpells(GUI.Page[8])
+local function SetupAnnounceableSpells()
+    GUI:SetupAnnounceableSpells(GUI.Page[8])
 end
 
 -- Options
@@ -309,7 +309,7 @@ GUI.OptionsList = {
     },
     [8] = { -- announcement
         {1, 'Announcement', 'Enable', L['Enable Announcement']},
-        {1, 'Announcement', 'PersonalMajorSpell', L['Personal major spells'], nil, SetupAnnounceSpells},
+        {1, 'Announcement', 'PersonalMajorSpell', L['Personal major spells'], nil, SetupAnnounceableSpells},
         {4, 'Announcement', 'Channel', _G.CHANNEL, true, {_G.CHAT_MSG_PARTY .. '/' .. _G.CHAT_MSG_RAID, _G.YELL, _G.EMOTE, _G.SAY}},
         {1, 'Announcement', 'Interrupt', L['Interrupt']},
         {1, 'Announcement', 'Dispel', L['Dispel'], true},

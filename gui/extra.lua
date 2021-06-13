@@ -1957,19 +1957,19 @@ function GUI:SetupSimpleFloatingCombatText(parent)
 end
 
 -- Announcement
-local function RefreshAnnounceSpells()
+local function RefreshAnnounceableSpells()
     ANNOUNCEMENT:RefreshSpells()
 end
 
-function GUI:SetupAnnounceSpells(parent)
-    local guiName = 'FreeUI_GUI_AnnounceSpells'
+function GUI:SetupAnnounceableSpells(parent)
+    local guiName = 'FreeUI_GUI_AnnounceableSpells'
     TogglePanel(guiName)
     if extraGUIs[guiName] then
         return
     end
 
     local panel = CreateExtraGUI(parent, guiName, nil, true)
-    panel:SetScript('OnHide', RefreshAnnounceSpells)
+    panel:SetScript('OnHide', RefreshAnnounceableSpells)
     parent.panel = panel
 
     local barTable = {}
@@ -1994,14 +1994,14 @@ function GUI:SetupAnnounceSpells(parent)
                 return
             end
 
-            local modValue = _G.FREE_ADB['AnnounceSpells'][spellID]
-            if modValue or modValue == nil and C.AnnounceSpells[spellID] then
+            local modValue = _G.FREE_ADB['AnnounceableSpellsList'][spellID]
+            if modValue or modValue == nil and C.AnnounceableSpellsList[spellID] then
                 _G.UIErrorsFrame:AddMessage(C.InfoColor .. L['Existing ID'])
                 return
             end
 
-            _G.FREE_ADB['AnnounceSpells'][spellID] = true
-            createBarTest(scroll, spellID, barTable, 'AnnounceSpells', 'AnnounceSpells')
+            _G.FREE_ADB['AnnounceableSpellsList'][spellID] = true
+            createBarTest(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
             parent.box:SetText('')
         end
     )
@@ -2011,13 +2011,13 @@ function GUI:SetupAnnounceSpells(parent)
     scroll.reset:SetScript(
         'OnClick',
         function()
-            StaticPopup_Show('FREEUI_RESET_ANNOUNCE_SPELLS')
+            StaticPopup_Show('FREEUI_RESET_ANNOUNCEABLE_SPELLS')
         end
     )
 
-    for spellID, value in pairs(ANNOUNCEMENT.AnnounceSpellsList) do
+    for spellID, value in pairs(ANNOUNCEMENT.AnnounceableSpellsList) do
         if value then
-            createBarTest(scroll, spellID, barTable, 'AnnounceSpells', 'AnnounceSpells')
+            createBarTest(scroll, spellID, barTable, 'AnnounceableSpellsList', 'AnnounceableSpellsList')
         end
     end
 end

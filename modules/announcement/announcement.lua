@@ -122,11 +122,11 @@ local rezList = {
 }
 
 function ANNOUNCEMENT:InitSpells()
-    for spellID in pairs(C.AnnounceSpells) do
+    for spellID in pairs(C.AnnounceableSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            if _G.FREE_ADB['AnnounceSpells'][spellID] then
-                _G.FREE_ADB['AnnounceSpells'][spellID] = nil
+            if _G.FREE_ADB['AnnounceableSpellsList'][spellID] then
+                _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
             end
         else
             if C.IsDeveloper then
@@ -135,30 +135,30 @@ function ANNOUNCEMENT:InitSpells()
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['AnnounceSpells']) do
-        if value == false and C.AnnounceSpells[spellID] == nil then
-            _G.FREE_ADB['AnnounceSpells'][spellID] = nil
+    for spellID, value in pairs(_G.FREE_ADB['AnnounceableSpellsList']) do
+        if value == false and C.AnnounceableSpellsList[spellID] == nil then
+            _G.FREE_ADB['AnnounceableSpellsList'][spellID] = nil
         end
     end
 end
 
-ANNOUNCEMENT.AnnounceSpellsList = {}
+ANNOUNCEMENT.AnnounceableSpellsList = {}
 function ANNOUNCEMENT:RefreshSpells()
-    wipe(ANNOUNCEMENT.AnnounceSpellsList)
+    wipe(ANNOUNCEMENT.AnnounceableSpellsList)
 
-    for spellID in pairs(C.AnnounceSpells) do
+    for spellID in pairs(C.AnnounceableSpellsList) do
         local name = GetSpellInfo(spellID)
         if name then
-            local modValue = _G.FREE_ADB['AnnounceSpells'][spellID]
+            local modValue = _G.FREE_ADB['AnnounceableSpellsList'][spellID]
             if modValue == nil then
-                ANNOUNCEMENT.AnnounceSpellsList[spellID] = true
+                ANNOUNCEMENT.AnnounceableSpellsList[spellID] = true
             end
         end
     end
 
-    for spellID, value in pairs(_G.FREE_ADB['AnnounceSpells']) do
+    for spellID, value in pairs(_G.FREE_ADB['AnnounceableSpellsList']) do
         if value then
-            ANNOUNCEMENT.AnnounceSpellsList[spellID] = true
+            ANNOUNCEMENT.AnnounceableSpellsList[spellID] = true
         end
     end
 end
@@ -215,11 +215,19 @@ function ANNOUNCEMENT:OnEvent()
                 return
             end
 
-            if (rezList[spellID] and C.DB.Announcement.BattleRez) or ANNOUNCEMENT.AnnounceSpellsList[spellID] then
+            if rezList[spellID] and C.DB.Announcement.BattleRez then
                 if destName == nil then
-                    ANNOUNCEMENT:Announce(format(L['%s has casted %s'], srcName, GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                    ANNOUNCEMENT:Announce(format(L['I have casted %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
                 else
-                    ANNOUNCEMENT:Announce(format(L['%s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                    ANNOUNCEMENT:Announce(format(L['I have casted %s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
+                end
+            end
+
+            if ANNOUNCEMENT.AnnounceableSpellsList[spellID] and C.DB.Announcement.PersonalMajorSpell then
+                if destName == nil then
+                    ANNOUNCEMENT:Announce(format(L['I have casted %s'], GetSpellLink(spellID)), ANNOUNCEMENT:GetChannel())
+                else
+                    ANNOUNCEMENT:Announce(format(L['I have casted %s → %s'], GetSpellLink(spellID), destName), ANNOUNCEMENT:GetChannel())
                 end
             end
         end

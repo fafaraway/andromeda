@@ -907,14 +907,17 @@ C.NPMajorSpellsList = {
     [328400] = true, -- 凋魂，软泥浪潮
 }
 
-C.AnnounceSpells = {
-    [1044] = true, -- Blessing of Freedom
+C.AnnounceableSpellsList = {
+    -- Paladin
+    [1044] = true,   -- Blessing of Freedom
     [204018] = true, -- Blessing of Spellwarding
     [6940] = true,   -- Blessing of Sacrifice
+    [1022] = true,   -- Blessing of Protection
     [498] = true,    -- Divine Protection
     [31850] = true,  -- Ardent Defender
     [86659] = true,  -- Guardian of Ancient Kings
     [212641] = true, -- Guardian of Ancient Kings (Glyph)
+    [642] = true,    -- Divine Shield
 }
 
 C.CharacterSettings = {
@@ -1441,7 +1444,7 @@ C.AccountSettings = {
     NPMajorSpells = {},
     CornerSpellsList = {},
     PartySpellsList = {},
-    AnnounceSpells = {},
+    AnnounceableSpellsList = {},
     KeystoneInfo = {},
     ProfileIndex = {},
     ProfileNames = {},

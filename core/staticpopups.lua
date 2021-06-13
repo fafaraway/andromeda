@@ -57,12 +57,12 @@ _G.StaticPopupDialogs.FREEUI_RESET_MAJOR_SPELLS = {
     whileDead = 1
 }
 
-_G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCE_SPELLS = {
-    text = C.RedColor .. L['|cffff2020Are you sure to restore default Announce Spells List?|r'],
+_G.StaticPopupDialogs.FREEUI_RESET_ANNOUNCEABLE_SPELLS = {
+    text = C.RedColor .. L['|cffff2020Are you sure to restore default Announceable Spells List?|r'],
     button1 = _G.YES,
     button2 = _G.NO,
     OnAccept = function()
-        _G.FREE_ADB['AnnounceSpells'] = {}
+        _G.FREE_ADB['AnnounceableSpellsList'] = {}
         ReloadUI()
     end,
     whileDead = 1
