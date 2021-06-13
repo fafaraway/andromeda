@@ -5,9 +5,8 @@
 <img src="https://img.shields.io/badge/WOW-Shadowlands-orange" />
 <img src="https://img.shields.io/discord/242811601260904450?color=7289DA&label=Discord" />
 <img src="https://img.shields.io/github/workflow/status/Solor/FreeUI/Release" />
-<img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/Solor/FreeUI?color=2a7af3">
-
-<img alt="GitHub tag (latest SemVer pre-release)" src="https://img.shields.io/github/v/tag/Solor/FreeUI?color=ea4160&include_prereleases&label=pre-release">
+<img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/Solor/FreeUI">
+<img alt="GitHub Release Date" src="https://img.shields.io/github/release-date/Solor/FreeUI">
 </div>
 <br />
 <br />
