@@ -102,18 +102,27 @@ C.Assets = {
     ['mouse_right'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:333:410|t ',
     ['mouse_middle'] = ' |TInterface\\TUTORIALFRAME\\UI-TUTORIAL-FRAME:13:11:0:-1:512:512:12:66:127:204|t ',
 
-    Textures = {},
+    Textures = {}, -- #TODO
 
     Sounds = {
-        Intro = C.AssetsPath .. 'sounds\\intro.mp3',
-        Whisper = C.AssetsPath .. 'sounds\\whisper1.ogg',
-        WhisperBN = C.AssetsPath .. 'sounds\\whisper2.ogg',
+        Intro = C.AssetsPath .. 'sounds\\intro.ogg',
+        Whisper = C.AssetsPath .. 'sounds\\whisper_normal.ogg',
+        WhisperBN = C.AssetsPath .. 'sounds\\whisper_battlenet.ogg',
         Notification = C.AssetsPath .. 'sounds\\notification.ogg',
         LowHealth = C.AssetsPath .. 'sounds\\lowhealth.ogg',
         LowMana = C.AssetsPath .. 'sounds\\lowmana.ogg',
         Interrupt = C.AssetsPath .. 'sounds\\interrupt.ogg',
         Dispel = C.AssetsPath .. 'sounds\\dispel.ogg',
         Missed = C.AssetsPath .. 'sounds\\missed.ogg',
+        Proc = C.AssetsPath .. 'sounds\\proc.ogg',
+        Exec = C.AssetsPath .. 'sounds\\exec.ogg',
+        Pulse = C.AssetsPath .. 'sounds\\pulse.ogg',
+        Error = C.AssetsPath .. 'sounds\\error.ogg',
+        Warning = C.AssetsPath .. 'sounds\\warning.ogg',
+        ForTheHorde = C.AssetsPath .. 'sounds\\forthehorde.ogg',
+        Mario = C.AssetsPath .. 'sounds\\mario.ogg',
+        Alarm = C.AssetsPath .. 'sounds\\alarm.ogg',
+        Ding = C.AssetsPath .. 'sounds\\ding.ogg',
     },
 
     Fonts = {

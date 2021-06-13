@@ -490,7 +490,7 @@ function CHAT:PlayWhisperSound(event)
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     elseif event == 'CHAT_MSG_BN_WHISPER' then
         if not self.soundTimer or currentTime > self.soundTimer then
-            PlaySoundFile(C.Assets.Sounds.WhisperBN, 'Master')
+            PlaySoundFile(C.Assets.Sounds.WhisperBattleNet, 'Master')
         end
         self.soundTimer = currentTime + C.DB.Chat.SoundThreshold
     end
