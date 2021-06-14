@@ -13,7 +13,7 @@
 
 ## Introduction
 **FreeUI** is an user interface replacement for World of Warcraft.  
-**Minimalistic**, **elegant**, yet also **efficient** and **practical**.
+**Minimalist**, **elegant**, yet also **efficient** and **practical**.
 
 ## Screenshots
 *  https://imgur.com/a/0JfIGql
