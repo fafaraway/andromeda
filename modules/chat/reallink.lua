@@ -7,7 +7,7 @@ local _G = _G
 local unpack = unpack
 local select = select
 local insert = insert
-local split = split
+local strsplit = strsplit
 local gsub = gsub
 local gmatch = gmatch
 local GetItemInfo = GetItemInfo
@@ -24,7 +24,7 @@ local CHAT = F:GetModule('Chat')
 local queuedMessages = {}
 
 local function GetLinkColor(data)
-    local type, arg1, arg2, arg3 = split(':', data)
+    local type, arg1, arg2, arg3 = strsplit(':', data)
     if type == 'item' then
         local _, _, quality = GetItemInfo(arg1)
         if quality then
