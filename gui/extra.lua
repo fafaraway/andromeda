@@ -1801,7 +1801,7 @@ function GUI:SetupRaidDebuffs(parent)
 end
 
 -- General
-function GUI:SetupAutoTakeScreenshot(parent)
+function GUI:SetupAutoScreenshot(parent)
     local guiName = 'FreeUI_GUI_Auto_Screenshot'
     TogglePanel(guiName)
     if extraGUIs[guiName] then

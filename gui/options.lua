@@ -140,8 +140,8 @@ local function UpdateAllHeaders()
 end
 
 -- General
-local function SetupAutoTakeScreenshot()
-    GUI:SetupAutoTakeScreenshot(GUI.Page[1])
+local function SetupAutoScreenshot()
+    GUI:SetupAutoScreenshot(GUI.Page[1])
 end
 
 local function SetupCustomClassColor()
@@ -204,7 +204,7 @@ GUI.OptionsList = {
         {1, 'General', 'FasterZooming', L['Camera faster zooming'], nil, nil, nil, L['|nFaster and smoother camera zooming.']},
         {1, 'General', 'ActionCamera', L['Camera action mode'], true, nil, UpdateActionCamera, L['|nEnable blizzard action camera.']},
         {1, 'General', 'ScreenSaver', L['Screen saver']},
-        {1, 'General', 'AutoScreenshot', L['Auto screenshot'], true, SetupAutoTakeScreenshot, nil, L['|nTake screenshots automatically based on specific events.']},
+        {1, 'General', 'AutoScreenshot', L['Auto screenshot'], true, SetupAutoScreenshot, nil, L['|nTake screenshots automatically based on specific events.']},
         {4, 'ACCOUNT', 'NumberFormat', L['Number Format'], nil, {L['Standard: b/m/k'], L['Asian: y/w'], L['Full digitals']}},
         {4, 'ACCOUNT', 'TextureStyle', L['Texture Style'], true, {}},
     },
