@@ -8,4 +8,5 @@
     <Script file="multi_itemref.lua"/>
     <Script file="spec_ilvl.lua"/>
     <Script file="style.lua"/>
+    <Script file="wardrobe.lua"/>
 </Ui>
